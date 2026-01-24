@@ -1,0 +1,274 @@
+// ============================================
+// 레슨 6: 문자열 메서드
+// ============================================
+import { LessonData } from './types'
+
+export const lesson6Data: LessonData = {
+  id: "6",
+  title: "문자열 메서드",
+  emoji: "🔧",
+  description: "문자열을 다루는 다양한 방법을 배워요!",
+  chapters: [
+    {
+      id: "ch1",
+      title: "대소문자 변환",
+      emoji: "🔤",
+      steps: [
+        {
+          id: "intro",
+          type: "explain",
+          title: "🔧 메서드란?",
+          content: `**메서드** = 문자열에 붙여서 사용하는 기능
+
+\`\`\`python
+text = "hello"
+print(text.upper())  # HELLO
+\`\`\`
+
+\`문자열.메서드()\` 형태로 사용해요!`
+        },
+        {
+          id: "upper-lower",
+          type: "explain",
+          title: "🔤 upper()와 lower()",
+          content: `**upper()** - 모두 대문자로
+**lower()** - 모두 소문자로
+
+\`\`\`python
+text = "Hello World"
+
+print(text.upper())  # HELLO WORLD
+print(text.lower())  # hello world
+\`\`\`
+
+⚠️ 원본은 바뀌지 않아요!
+\`\`\`python
+text = "Hello"
+text.upper()
+print(text)  # Hello (그대로!)
+\`\`\``
+        },
+        {
+          id: "try1",
+          type: "tryit",
+          title: "🖥️ 직접 해보기!",
+          task: "문자열을 대문자로 변환하세요!",
+          initialCode: "text = \"python\"\nprint(text.upper())",
+          expectedOutput: "PYTHON",
+          hint: ".upper() 메서드 사용!",
+          hint2: "text.upper()"
+        },
+        {
+          id: "try2",
+          type: "tryit",
+          title: "🖥️ 소문자로 변환!",
+          task: "문자열을 소문자로 변환하세요!",
+          initialCode: "text = \"HELLO\"\nprint(text.lower())",
+          expectedOutput: "hello",
+          hint: ".lower() 메서드 사용!",
+          hint2: "text.lower()"
+        },
+        {
+          id: "quiz1",
+          type: "quiz",
+          title: "❓ 퀴즈!",
+          content: "\"PyThOn\".lower()의 결과는?",
+          options: ["PYTHON", "python", "PyThOn", "에러"],
+          answer: 1,
+          explanation: "lower()는 모든 글자를 소문자로 바꿔요!"
+        }
+      ]
+    },
+    {
+      id: "ch2",
+      title: "공백 제거와 치환",
+      emoji: "✂️",
+      steps: [
+        {
+          id: "strip-explain",
+          type: "explain",
+          title: "✂️ strip() - 공백 제거",
+          content: `**strip()** - 앞뒤 공백 제거
+
+\`\`\`python
+text = "   안녕하세요   "
+print(text.strip())  # "안녕하세요"
+\`\`\`
+
+**lstrip()** - 왼쪽 공백만 제거
+**rstrip()** - 오른쪽 공백만 제거
+
+\`\`\`python
+text = "   Hello   "
+print(text.lstrip())  # "Hello   "
+print(text.rstrip())  # "   Hello"
+\`\`\``
+        },
+        {
+          id: "try3",
+          type: "tryit",
+          title: "🖥️ 직접 해보기!",
+          task: "앞뒤 공백을 제거하세요!",
+          initialCode: "text = \"   파이썬   \"\nprint(text.strip())",
+          expectedOutput: "파이썬",
+          hint: ".strip() 메서드 사용!",
+          hint2: "text.strip()"
+        },
+        {
+          id: "replace-explain",
+          type: "explain",
+          title: "🔄 replace() - 문자 치환",
+          content: `**replace(old, new)** - 문자열 바꾸기
+
+\`\`\`python
+text = "Hello World"
+print(text.replace("World", "Python"))
+# Hello Python
+
+text2 = "바나나 바나나"
+print(text2.replace("바나나", "사과"))
+# 사과 사과
+\`\`\`
+
+모든 일치하는 부분이 바뀌어요!`
+        },
+        {
+          id: "try4",
+          type: "tryit",
+          title: "🖥️ 직접 해보기!",
+          task: "'사과'를 '포도'로 바꾸세요!",
+          initialCode: "text = \"사과가 맛있다\"\nprint(text.replace(\"사과\", \"포도\"))",
+          expectedOutput: "포도가 맛있다",
+          hint: ".replace(\"사과\", \"포도\")",
+          hint2: "text.replace(\"사과\", \"포도\")"
+        }
+      ]
+    },
+    {
+      id: "ch3",
+      title: "검색과 길이",
+      emoji: "🔍",
+      steps: [
+        {
+          id: "find-explain",
+          type: "explain",
+          title: "🔍 find()와 count()",
+          content: `**find()** - 위치 찾기 (없으면 -1)
+\`\`\`python
+text = "Hello World"
+print(text.find("World"))  # 6
+print(text.find("Python")) # -1 (없음)
+\`\`\`
+
+**count()** - 개수 세기
+\`\`\`python
+text = "banana"
+print(text.count("a"))  # 3
+\`\`\``
+        },
+        {
+          id: "try5",
+          type: "tryit",
+          title: "🖥️ 직접 해보기!",
+          task: "'a'가 몇 개인지 세보세요!",
+          initialCode: "text = \"abracadabra\"\nprint(text.count(\"a\"))",
+          expectedOutput: "5",
+          hint: ".count(\"a\") 메서드 사용!",
+          hint2: "text.count(\"a\")"
+        },
+        {
+          id: "len-explain",
+          type: "explain",
+          title: "📏 len() - 길이 구하기",
+          content: `**len()** 함수로 문자열 길이를 구해요!
+
+\`\`\`python
+text = "Hello"
+print(len(text))  # 5
+
+name = "파이썬"
+print(len(name))  # 3
+\`\`\`
+
+⚠️ len()은 메서드가 아니라 **함수**예요!
+\`\`\`python
+len(text)    # ✅ 함수
+text.len()   # ❌ 에러!
+\`\`\``
+        },
+        {
+          id: "try6",
+          type: "tryit",
+          title: "🖥️ 직접 해보기!",
+          task: "문자열 길이를 구하세요!",
+          initialCode: "text = \"Python\"\nprint(len(text))",
+          expectedOutput: "6",
+          hint: "len(text) 함수 사용!",
+          hint2: "len(text)"
+        },
+        {
+          id: "quiz2",
+          type: "quiz",
+          title: "❓ 퀴즈!",
+          content: "len(\"안녕하세요\")의 결과는?",
+          options: ["5", "10", "15", "에러"],
+          answer: 0,
+          explanation: "한글도 글자 하나당 1로 세요! 5글자 = 5"
+        }
+      ]
+    },
+    {
+      id: "ch4",
+      title: "최종 미션",
+      emoji: "🏆",
+      steps: [
+        {
+          id: "more-methods",
+          type: "explain",
+          title: "📝 더 많은 메서드",
+          content: `**startswith() / endswith()** - 시작/끝 확인
+\`\`\`python
+text = "Hello World"
+print(text.startswith("Hello"))  # True
+print(text.endswith("World"))    # True
+\`\`\`
+
+**isdigit()** - 숫자로만 구성?
+\`\`\`python
+"123".isdigit()   # True
+"12a".isdigit()   # False
+\`\`\`
+
+**capitalize()** - 첫 글자만 대문자
+\`\`\`python
+"hello".capitalize()  # Hello
+\`\`\``
+        },
+        {
+          id: "mission1",
+          type: "mission",
+          title: "🏆 최종 미션!",
+          task: "아이디 검사기를 완성하세요!",
+          initialCode: "user_id = \"  PyThOn_User  \"\n\n# 1. 공백 제거\nclean_id = user_id.strip()\n# 2. 소문자로 변환\nlower_id = clean_id.lower()\n# 3. 길이 확인\nlength = len(lower_id)\n\nprint(\"원본:\", user_id)\nprint(\"정리:\", lower_id)\nprint(\"길이:\", length)",
+          expectedOutput: "원본:   PyThOn_User  \n정리: python_user\n길이: 11",
+          hint: "strip() → lower() → len() 순서로!",
+          hint2: "user_id.strip().lower()"
+        },
+        {
+          id: "complete",
+          type: "explain",
+          title: "🎉 완료!",
+          content: `## 오늘 배운 것
+
+✅ **upper(), lower()** - 대소문자 변환
+✅ **strip()** - 공백 제거
+✅ **replace()** - 문자 치환
+✅ **find(), count()** - 검색
+✅ **len()** - 길이 구하기
+
+다음 시간에는 **print() 옵션**을 배워서 출력을 더 멋지게 꾸밀 거예요! 🚀`
+        }
+      ]
+    }
+  ]
+}
