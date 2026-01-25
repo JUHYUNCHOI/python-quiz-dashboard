@@ -3,6 +3,7 @@
 import { useState, useRef } from "react"
 import { Plus, Minus, RefreshCw, Lock, Key, Search, Shuffle, ScanSearch, Hash, Edit3 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { SetAnimationYoutube } from "./set-youtube"
 
 // ============================================
 // 공통 타입 및 유틸
@@ -32,6 +33,38 @@ const FOOD_ITEMS = [
 ]
 
 let uniqueIdCounter = 100
+
+// ============================================
+// 공통 오버레이 컴포넌트
+// ============================================
+interface OverlayProps {
+  emoji: string
+  text: string
+  subtext?: string
+  type?: 'info' | 'success' | 'warning' | 'error'
+}
+
+function AnimationOverlay({ emoji, text, subtext, type = 'info' }: OverlayProps) {
+  const bgColor = type === 'error' ? 'bg-red-500/95' 
+    : type === 'success' ? 'bg-green-500/95' 
+    : type === 'warning' ? 'bg-amber-500/95'
+    : 'bg-blue-500/95'
+  
+  return (
+    <div className={cn(
+      "absolute inset-0 rounded-lg z-20 flex items-center justify-center",
+      bgColor
+    )}>
+      <div className="text-center text-white px-4">
+        <div className="text-5xl mb-2 animate-bounce">{emoji}</div>
+        <div className="text-xl font-black">{text}</div>
+        {subtext && (
+          <div className="text-base mt-1 opacity-90">{subtext}</div>
+        )}
+      </div>
+    </div>
+  )
+}
 
 // ============================================
 // 문제 상황 카드 컴포넌트 (재사용)
@@ -200,8 +233,8 @@ function FridgeSlot({
 // ============================================
 // 사물함 컴포넌트 (Dict용)
 // ============================================
-function Locker({ label, content, isOpen = false, isHighlighted = false, onClick, disabled = false }: {
-  label: string; content: string; isOpen?: boolean; isHighlighted?: boolean; onClick?: () => void; disabled?: boolean;
+function Locker({ label, content, isOpen = false, isHighlighted = false, isScanning = false, hideLabel = false, onClick, disabled = false }: {
+  label: string; content: string; isOpen?: boolean; isHighlighted?: boolean; isScanning?: boolean; hideLabel?: boolean; onClick?: () => void; disabled?: boolean;
 }) {
   return (
     <button
@@ -217,7 +250,8 @@ function Locker({ label, content, isOpen = false, isHighlighted = false, onClick
       <div className={cn(
         "w-24 h-36 rounded-sm border-2 shadow-lg relative",
         "bg-gradient-to-b from-slate-500 to-slate-600 border-slate-400",
-        isHighlighted && "ring-4 ring-green-500 scale-110 shadow-2xl"
+        isHighlighted && "ring-4 ring-green-500 scale-110 shadow-2xl",
+        isScanning && "ring-4 ring-yellow-400"
       )}>
         {/* 통풍구 */}
         <div className="absolute top-2 left-1/2 -translate-x-1/2 flex gap-1 z-10">
@@ -240,9 +274,9 @@ function Locker({ label, content, isOpen = false, isHighlighted = false, onClick
         >
           {/* 문 외부 */}
           <div className="absolute inset-0 bg-gradient-to-b from-amber-300 via-amber-200 to-amber-300 border border-amber-400 shadow-lg">
-            {/* 이름표 */}
+            {/* 이름표 - hideLabel이면 ?로 표시 */}
             <div className="absolute top-2 left-1/2 -translate-x-1/2 px-3 py-1 rounded bg-amber-500 text-white text-xs font-bold shadow-md">
-              {label}
+              {hideLabel ? "?" : label}
             </div>
             {/* 문 패널 */}
             <div className="absolute top-10 bottom-2 left-1 right-1 border-2 border-amber-400/50 rounded-sm" />
@@ -271,6 +305,7 @@ export function ListAnimation() {
   const [shiftingIndices, setShiftingIndices] = useState<number[]>([])
   const [shiftDirection, setShiftDirection] = useState<'left' | 'right' | null>(null)
   const [highlightIndex, setHighlightIndex] = useState<number | null>(null)
+  const [overlay, setOverlay] = useState<{ emoji: string; text: string; subtext?: string } | null>(null)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
   const showMsg = (text: string, type: 'info' | 'warning' | 'success' | 'error') => {
@@ -290,38 +325,58 @@ export function ListAnimation() {
     // 뒤에서 2번째 아이템을 찾음 (최소 3개 열어봐야 찾는 느낌)
     const targetIndex = items.length - 2
     const targetEmoji = items[targetIndex].emoji
+    const targetName = FOOD_ITEMS.find(f => f.emoji === targetEmoji)?.name || "음식"
     
     setMode("searching")
-    showMsg(`🔍 "${targetEmoji}" 어디 있지? 0번부터 하나씩 열어봐야 해...`, 'warning')
     setScanIndex(-1)
     setFoundIndex(null)
     
-    let currentScan = 0
-    intervalRef.current = setInterval(() => {
-      if (currentScan > 0) setOpenIndex(null)
+    // 1단계: 시작 오버레이
+    setOverlay({ emoji: targetEmoji, text: `${targetName}을 찾아볼게요!`, subtext: "0번부터 하나씩 열어봐야 해요..." })
+    
+    setTimeout(() => {
+      setOverlay(null)
+      
       setTimeout(() => {
-        setScanIndex(currentScan)
-        setOpenIndex(currentScan)
-        
-        // 현재 스캔 위치의 이모지가 찾는 이모지와 같으면 찾음!
-        if (items[currentScan].emoji === targetEmoji) {
-          clearInterval(intervalRef.current!)
-          setFoundIndex(currentScan)
-          showMsg(`✅ 찾았다! #${currentScan}번에서 "${targetEmoji}" 발견! (${currentScan + 1}개 열어봄 😓)`, 'success')
-          setTimeout(() => { setMode("normal"); setScanIndex(-1); setFoundIndex(null); setOpenIndex(null) }, 3000)
-        } else {
-          showMsg(`🔍 #${currentScan}번 열어보는 중... "${items[currentScan].emoji}" 아니네!`, 'warning')
-          currentScan++
-          
-          // 마지막까지 못 찾으면 (이런 경우는 없어야 하지만 안전장치)
-          if (currentScan >= items.length) {
-            clearInterval(intervalRef.current!)
-            showMsg(`❌ 못 찾았어요...`, 'error')
-            setTimeout(() => { setMode("normal"); setScanIndex(-1); setFoundIndex(null); setOpenIndex(null) }, 2000)
-          }
-        }
-      }, 200)
-    }, 800)
+        let currentScan = 0
+        intervalRef.current = setInterval(() => {
+          if (currentScan > 0) setOpenIndex(null)
+          setTimeout(() => {
+            setScanIndex(currentScan)
+            setOpenIndex(currentScan)
+            
+            // 현재 스캔 위치의 이모지가 찾는 이모지와 같으면 찾음!
+            if (items[currentScan].emoji === targetEmoji) {
+              clearInterval(intervalRef.current!)
+              setFoundIndex(currentScan)
+              showMsg(`✅ #${currentScan}번에서 "${targetEmoji}" 발견!`, 'success')
+              
+              // 결과 오버레이
+              setTimeout(() => {
+                setOpenIndex(null)
+                setOverlay({ emoji: "😓", text: `${currentScan + 1}개나 열어봤어요!`, subtext: "번호로 찾으니까 처음부터 하나씩..." })
+                
+                setTimeout(() => {
+                  setOverlay(null)
+                  setMode("normal")
+                  setScanIndex(-1)
+                  setFoundIndex(null)
+                }, 2500)
+              }, 1000)
+            } else {
+              showMsg(`🔍 #${currentScan}번 열어보는 중... "${items[currentScan].emoji}" 아니네!`, 'warning')
+              currentScan++
+              
+              if (currentScan >= items.length) {
+                clearInterval(intervalRef.current!)
+                showMsg(`❌ 못 찾았어요...`, 'error')
+                setTimeout(() => { setMode("normal"); setScanIndex(-1); setFoundIndex(null); setOpenIndex(null) }, 2000)
+              }
+            }
+          }, 200)
+        }, 800)
+      }, 500)
+    }, 2000)
   }
 
   // 중간 삽입 - 완전한 단계별 애니메이션
@@ -588,7 +643,7 @@ export function ListAnimation() {
     setMovingIndex(null); setPlaceholderAt(null); setSlidingRight(false); setPendingInsert(null)
     setNewItemAnimating(false); setLabelOverrides(null); setShiftedIndices([]); setDisableTransition(false)
     setDeletingIndex(null); setSlidingLeft(false); setEmptySlotAt(null)
-    setShiftedLeftIndices([]); setDeletedEmoji(null)
+    setShiftedLeftIndices([]); setDeletedEmoji(null); setOverlay(null)
   }
 
   return (
@@ -633,7 +688,23 @@ export function ListAnimation() {
             </div>
           )}
 
-          <div className="bg-gradient-to-b from-slate-100 to-slate-200 rounded-xl p-4 border-4 border-slate-300 shadow-inner">
+          <div className="bg-gradient-to-b from-slate-100 to-slate-200 rounded-xl p-4 border-4 border-slate-300 shadow-inner relative">
+            {/* 오버레이 */}
+            {overlay && (
+              <div className={cn(
+                "absolute inset-0 rounded-lg z-30 flex items-center justify-center",
+                overlay.emoji === "😓" ? "bg-red-500/95" : "bg-blue-500/95"
+              )}>
+                <div className="text-center text-white">
+                  <div className="text-6xl mb-2 animate-bounce">{overlay.emoji}</div>
+                  <div className="text-2xl font-black">{overlay.text}</div>
+                  {overlay.subtext && (
+                    <div className="text-lg mt-1 opacity-90">{overlay.subtext}</div>
+                  )}
+                </div>
+              </div>
+            )}
+            
             <div className="bg-blue-50 rounded-lg p-4 border-2 border-blue-200 min-h-[140px] overflow-x-auto">
               <div className="relative flex gap-2 items-end justify-start">
                 {/* 슬롯 레이어: 점선 빈칸들 (배경) */}
@@ -801,23 +872,124 @@ export function ListAnimation() {
 // 2. Tuple 애니메이션
 // ============================================
 export function TupleAnimation() {
-  const [items] = useState([{ emoji: "🔴", value: 255 }, { emoji: "🟢", value: 128 }, { emoji: "🔵", value: 64 }])
+  // 더 많은 아이템으로 검색 시간 체감되게
+  const [items] = useState([
+    { emoji: "🔴", name: "빨강", value: 255 }, 
+    { emoji: "🟠", name: "주황", value: 200 }, 
+    { emoji: "🟡", name: "노랑", value: 180 }, 
+    { emoji: "🟢", name: "초록", value: 128 }, 
+    { emoji: "🔵", name: "파랑", value: 64 }
+  ])
   const [openIndex, setOpenIndex] = useState<number | null>(null)
   const [shakeIndex, setShakeIndex] = useState<number | null>(null)
   const [message, setMessage] = useState("")
   const [showProblem, setShowProblem] = useState(true)
+  const [mode, setMode] = useState<"normal" | "searching">("normal")
+  const [scanIndex, setScanIndex] = useState(-1)
+  const [foundIndex, setFoundIndex] = useState<number | null>(null)
+  const [overlay, setOverlay] = useState<{ emoji: string; text: string; subtext?: string } | null>(null)
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
   const readItem = (index: number) => {
+    if (mode !== "normal") return
     setOpenIndex(index)
-    setMessage(`✅ 읽기 OK! ${items[index].emoji} = ${items[index].value}`)
+    setMessage(`✅ #${index}번 바로 읽기! ${items[index].emoji} ${items[index].name} = ${items[index].value}`)
     setTimeout(() => setOpenIndex(null), 2000)
   }
 
   const tryModify = () => {
+    if (mode !== "normal") return
     const index = Math.floor(Math.random() * items.length)
     setShakeIndex(index)
-    setMessage(`❌ 수정 불가! 색상값 바뀌면 다른 색이 돼요!`)
+    setMessage(`❌ 수정 불가! 튜플은 한 번 만들면 바꿀 수 없어요!`)
     setTimeout(() => setShakeIndex(null), 600)
+  }
+
+  // 삽입 시도 - 실패!
+  const tryInsert = () => {
+    if (mode !== "normal") return
+    const index = 1 // 중간에 삽입 시도
+    setShakeIndex(index)
+    setMessage(`❌ 삽입 불가! 튜플은 중간에 추가할 수 없어요!`)
+    setTimeout(() => setShakeIndex(null), 600)
+  }
+
+  // 삭제 시도 - 실패!
+  const tryDelete = () => {
+    if (mode !== "normal") return
+    const index = 1 // 중간 삭제 시도
+    setShakeIndex(index)
+    setMessage(`❌ 삭제 불가! 튜플은 중간에서 삭제할 수 없어요!`)
+    setTimeout(() => setShakeIndex(null), 600)
+  }
+
+  // 값으로 찾기 - 리스트처럼 앞에서부터 하나씩!
+  const searchByValue = () => {
+    if (mode !== "normal") return
+    
+    // 맨 뒤 아이템을 찾음 (모든 칸 열어봐야 함)
+    const targetIndex = items.length - 1
+    const target = items[targetIndex]
+    
+    setMode("searching")
+    setScanIndex(-1)
+    setFoundIndex(null)
+    setMessage("")
+    
+    // 1단계: 시작 오버레이
+    setOverlay({ emoji: target.emoji, text: `${target.name}을 찾아볼게요!`, subtext: "0번부터 하나씩 확인해야 해요..." })
+    
+    setTimeout(() => {
+      setOverlay(null)
+      
+      setTimeout(() => {
+        let currentScan = 0
+        intervalRef.current = setInterval(() => {
+          if (currentScan > 0) setOpenIndex(null)
+          
+          setTimeout(() => {
+            setScanIndex(currentScan)
+            setOpenIndex(currentScan)
+            
+            if (currentScan === targetIndex) {
+              // 찾았다!
+              clearInterval(intervalRef.current!)
+              setFoundIndex(currentScan)
+              setMessage(`✅ #${currentScan}번에서 "${target.emoji} ${target.name}" 발견!`)
+              
+              // 결과 오버레이
+              setTimeout(() => {
+                setOpenIndex(null)
+                setOverlay({ emoji: "😓", text: `${currentScan + 1}개나 확인했어요!`, subtext: "튜플도 리스트처럼 처음부터 찾아야..." })
+                
+                setTimeout(() => {
+                  setOverlay(null)
+                  setMode("normal")
+                  setScanIndex(-1)
+                  setFoundIndex(null)
+                  setMessage("")
+                }, 2500)
+              }, 1000)
+            } else {
+              setMessage(`🔍 #${currentScan}번... "${items[currentScan].emoji} ${items[currentScan].name}"? 아니야!`)
+              currentScan++
+            }
+          }, 150)
+        }, 700)
+      }, 500)
+    }, 2000)
+  }
+
+  const reset = () => {
+    if (intervalRef.current) clearInterval(intervalRef.current)
+    setOpenIndex(null)
+    setShakeIndex(null)
+    setMessage("")
+    setShowProblem(true)
+    setMode("normal")
+    setScanIndex(-1)
+    setFoundIndex(null)
+    setOverlay(null)
   }
 
   return (
@@ -842,79 +1014,156 @@ export function TupleAnimation() {
             emoji: "🔒",
             title: "튜플은 수정이 안 돼요!",
             subtitle: "실수로 바꿀 일이 없어요!",
-            code: 'color = (255, 128, 64)  # 튜플!'
+            code: 'color = (255, 200, 180, 128, 64)  # 튜플!'
           }}
           buttonColor="bg-purple-500 hover:bg-purple-600"
           onContinue={() => setShowProblem(false)}
         />
       ) : (
         <>
+          {/* 핵심 설명 - 리스트와 비슷함 강조 */}
           <div className="bg-purple-100 border-2 border-purple-300 rounded-lg px-4 py-2">
-            <p className="text-sm text-purple-800">🎨 <strong>RGB 색상</strong> = 바뀌면 안 되는 값! 읽기만 OK</p>
+            <p className="text-sm text-purple-800">
+              🔒 <strong>튜플 = 리스트랑 비슷!</strong> 순서 있고, 번호로 읽기 OK<br/>
+              <span className="text-purple-600">❌ 단, 추가/삭제/수정 불가! (찾기도 리스트처럼 느림)</span>
+            </p>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="w-16 h-16 rounded-lg shadow-lg border-2 border-gray-300"
-              style={{ backgroundColor: `rgb(${items[0].value}, ${items[1].value}, ${items[2].value})` }} />
-            <div className="text-sm">
-              <p className="font-bold text-purple-800">현재 색상</p>
-              <p className="text-gray-600 font-mono">({items[0].value}, {items[1].value}, {items[2].value})</p>
+          {/* 메시지 */}
+          {message && (
+            <div className={cn(
+              "px-4 py-3 rounded-xl text-sm font-bold border-2",
+              message.includes("✅") && "bg-green-100 text-green-800 border-green-400",
+              message.includes("🔍") && "bg-yellow-100 text-yellow-800 border-yellow-400",
+              message.includes("❌") && "bg-red-100 text-red-800 border-red-400"
+            )}>
+              {message.includes("❌") && <Lock className="w-4 h-4 inline mr-1" />}
+              {message}
             </div>
-          </div>
+          )}
 
-          <div className="bg-gradient-to-b from-slate-100 to-slate-200 rounded-xl p-4 border-4 border-slate-300 shadow-inner">
-            <div className="flex gap-4 flex-wrap justify-center">
+          {/* 튜플 시각화 - 리스트처럼 보이게 */}
+          <div className="bg-gradient-to-b from-slate-100 to-slate-200 rounded-xl p-4 border-4 border-slate-300 shadow-inner relative">
+            {/* 오버레이 */}
+            {overlay && (
+              <div className={cn(
+                "absolute inset-0 rounded-lg z-20 flex items-center justify-center",
+                overlay.emoji === "😓" ? "bg-red-500/95" : "bg-purple-500/95"
+              )}>
+                <div className="text-center text-white">
+                  <div className="text-6xl mb-2 animate-bounce">{overlay.emoji}</div>
+                  <div className="text-2xl font-black">{overlay.text}</div>
+                  {overlay.subtext && (
+                    <div className="text-lg mt-1 opacity-90">{overlay.subtext}</div>
+                  )}
+                </div>
+              </div>
+            )}
+            
+            <div className="flex gap-2 flex-wrap justify-center">
               {items.map((item, index) => (
-                <button key={index} onClick={() => readItem(index)}
-                  className={cn("relative transition-all duration-300 hover:scale-105", shakeIndex === index && "animate-shake")}>
+                <button 
+                  key={index} 
+                  onClick={() => readItem(index)}
+                  disabled={mode !== "normal"}
+                  className={cn(
+                    "relative transition-all duration-300",
+                    mode === "normal" && "hover:scale-105 cursor-pointer",
+                    mode !== "normal" && "cursor-default",
+                    shakeIndex === index && "animate-shake"
+                  )}
+                >
                   <div className={cn(
-                    "w-20 h-28 rounded border-2 shadow-lg relative overflow-hidden",
+                    "w-16 h-24 rounded-lg border-2 shadow-lg relative overflow-hidden",
                     "bg-gradient-to-b from-purple-100 to-purple-200 border-purple-300",
-                    openIndex === index && "ring-4 ring-green-500 scale-110"
+                    openIndex === index && "ring-4 ring-green-500 scale-110",
+                    scanIndex === index && foundIndex !== index && "ring-4 ring-yellow-400",
+                    foundIndex === index && "ring-4 ring-green-500 scale-110"
                   )}>
-                    <div className="absolute top-1 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded text-xs font-bold bg-purple-500 text-white">#{index}</div>
-                    <div className="absolute top-8 bottom-2 left-1 right-1 bg-white/80 rounded flex flex-col items-center justify-center">
-                      <span className="text-2xl">{item.emoji}</span>
-                      <span className="text-xs font-mono font-bold">{item.value}</span>
+                    {/* 번호표 */}
+                    <div className={cn(
+                      "absolute top-1 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded text-xs font-bold text-white z-10",
+                      foundIndex === index ? "bg-green-500" :
+                      scanIndex === index ? "bg-yellow-500" : "bg-purple-500"
+                    )}>
+                      #{index}
                     </div>
-                    <div className="absolute top-8 bottom-2 left-0 right-0 transition-all duration-500 origin-left bg-purple-200/60 border border-purple-300 flex items-center justify-center"
-                      style={{ transform: openIndex === index ? "rotateY(-100deg)" : "rotateY(0deg)" }}>
-                      <Lock className="w-5 h-5 text-purple-500" />
+                    
+                    {/* 내용 */}
+                    <div className="absolute top-7 bottom-1 left-1 right-1 bg-white/80 rounded flex flex-col items-center justify-center">
+                      <span className="text-xl">{item.emoji}</span>
+                      <span className="text-[10px] font-bold text-gray-600">{item.name}</span>
+                      <span className="text-[10px] font-mono text-gray-500">{item.value}</span>
+                    </div>
+                    
+                    {/* 자물쇠 문 */}
+                    <div 
+                      className="absolute top-7 bottom-1 left-0 right-0 transition-all duration-500 origin-left bg-purple-200/70 border border-purple-300 flex items-center justify-center rounded-sm"
+                      style={{ transform: openIndex === index || foundIndex === index ? "rotateY(-100deg)" : "rotateY(0deg)" }}
+                    >
+                      <Lock className="w-4 h-4 text-purple-500" />
                     </div>
                   </div>
+                  
+                  {/* 수정 시도 시 빨간 오버레이 */}
                   {shakeIndex === index && (
-                    <div className="absolute inset-0 bg-red-500/80 rounded flex items-center justify-center z-20">
-                      <Lock className="w-8 h-8 text-white" />
+                    <div className="absolute inset-0 bg-red-500/80 rounded-lg flex items-center justify-center z-20">
+                      <Lock className="w-6 h-6 text-white" />
                     </div>
                   )}
                 </button>
               ))}
             </div>
-            <p className="text-xs text-slate-500 mt-3 text-center">👆 읽기 OK | ❌ 수정 불가</p>
+            <p className="text-xs text-slate-500 mt-3 text-center">👆 번호로 바로 읽기 OK | 🔒 추가/삭제/수정 불가</p>
           </div>
 
-          {message && (
-            <div className={cn("px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2",
-              message.includes("✅") ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800")}>
-              {message.includes("❌") && <Lock className="w-4 h-4" />}{message}
-            </div>
-          )}
-
+          {/* 버튼들 - 리스트와 똑같은 구성으로 비교 */}
           <div className="flex gap-2 flex-wrap">
-            <button onClick={tryModify} className="flex items-center gap-1 px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-medium">
+            <button 
+              onClick={searchByValue} 
+              disabled={mode !== "normal"}
+              className="flex items-center gap-1 px-3 py-2 bg-yellow-500 hover:bg-yellow-600 disabled:bg-gray-300 text-white rounded-lg text-sm font-bold shadow"
+            >
+              <ScanSearch className="w-4 h-4" /> 값으로 찾기 (느림!)
+            </button>
+            <button 
+              onClick={tryInsert} 
+              disabled={mode !== "normal"}
+              className="flex items-center gap-1 px-3 py-2 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 text-white rounded-lg text-sm font-bold shadow"
+            >
+              <Plus className="w-4 h-4" /> 중간 삽입 시도
+            </button>
+          </div>
+          <div className="flex gap-2 flex-wrap">
+            <button 
+              onClick={tryModify} 
+              disabled={mode !== "normal"}
+              className="flex items-center gap-1 px-3 py-2 bg-red-500 hover:bg-red-600 disabled:bg-gray-300 text-white rounded-lg text-sm font-bold shadow"
+            >
               <Edit3 className="w-4 h-4" /> 수정 시도
             </button>
-            <button onClick={() => setShowProblem(true)} className="flex items-center gap-1 px-3 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg text-sm font-medium">
+            <button 
+              onClick={tryDelete} 
+              disabled={mode !== "normal"}
+              className="flex items-center gap-1 px-3 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-300 text-white rounded-lg text-sm font-bold shadow"
+            >
+              <Minus className="w-4 h-4" /> 중간 삭제 시도
+            </button>
+            <button 
+              onClick={reset} 
+              className="flex items-center gap-1 px-3 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg text-sm font-bold shadow"
+            >
               <RefreshCw className="w-4 h-4" /> 리셋
             </button>
           </div>
 
+          {/* 코드 + 리스트와 비교 */}
           <div className="bg-gray-900 rounded-lg p-3 font-mono text-sm">
-            <span className="text-gray-400"># 튜플 = 순서O, 중복O, 수정X</span><br />
-            <span className="text-purple-400">color</span><span className="text-white"> = (</span>
-            <span className="text-red-400">255</span><span className="text-white">, </span>
-            <span className="text-green-400">128</span><span className="text-white">, </span>
-            <span className="text-blue-400">64</span><span className="text-white">)</span>
+            <span className="text-gray-400"># 튜플 = 리스트와 비슷! (순서O, 중복O)</span><br />
+            <span className="text-gray-400"># 단, 수정 불가! 찾기도 리스트처럼 느림 🐢</span><br />
+            <span className="text-purple-400">colors</span><span className="text-white"> = (</span>
+            <span className="text-yellow-300">"{items.map(i => i.emoji).join('", "')}"</span>
+            <span className="text-white">)</span>
           </div>
         </>
       )}
@@ -931,41 +1180,125 @@ export function TupleAnimation() {
 // 3. Dictionary 애니메이션
 // ============================================
 export function DictAnimation() {
-  const [items] = useState([{ key: "철수", emoji: "⚽" }, { key: "영희", emoji: "🎒" }, { key: "민수", emoji: "🍱" }])
+  const [items] = useState([
+    { key: "철수", emoji: "⚽" }, 
+    { key: "영희", emoji: "🎒" }, 
+    { key: "민수", emoji: "🍱" },
+    { key: "지민", emoji: "📚" },
+    { key: "현우", emoji: "📱" }  // 핸드폰 찾기 타겟!
+  ])
   const [openKey, setOpenKey] = useState<string | null>(null)
   const [message, setMessage] = useState("")
   const [showProblem, setShowProblem] = useState(true)
   const [searchingList, setSearchingList] = useState(false)
   const [listScanIndex, setListScanIndex] = useState(-1)
+  const [foundIndex, setFoundIndex] = useState<number | null>(null)
+  const [overlay, setOverlay] = useState<{ emoji: string; text: string; subtext?: string } | null>(null)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
+  // 타겟: "현우의 핸드폰" 찾기!
+  const targetEmoji = "📱"
+  const targetName = "현우의 핸드폰"
+  const targetKey = "현우"
+  const targetIndex = items.findIndex(i => i.key === targetKey)
+
   const searchByKey = (key: string) => {
-    setOpenKey(key)
-    const item = items.find(i => i.key === key)
-    if (item) setMessage(`⚡ "${key}" → 바로 열기! "${item.emoji}" (즉시!)`)
-    setTimeout(() => setOpenKey(null), 2000)
+    if (searchingList) return
+    setMessage("")
+    
+    // 1단계: 시작 오버레이
+    setOverlay({ emoji: targetEmoji, text: `${targetName}을 찾아볼게요!`, subtext: `"현우" 이름표가 보이니까...` })
+    
+    setTimeout(() => {
+      setOverlay(null)
+      
+      // 2단계: 바로 열기
+      setTimeout(() => {
+        setOpenKey(key)
+        const item = items.find(i => i.key === key)
+        if (item) {
+          setMessage(`⚡ "현우" 이름표 클릭! → ${item.emoji} ${targetName} 발견!`)
+        }
+        
+        // 3단계: 결과 오버레이
+        setTimeout(() => {
+          setOpenKey(null)
+          setOverlay({ emoji: "⚡", text: "딱 1번에 찾았다!", subtext: "이름표가 있으니까 바로!" })
+          
+          setTimeout(() => {
+            setOverlay(null)
+            setMessage("")
+          }, 2000)
+        }, 1500)
+      }, 300)
+    }, 1500)
   }
 
-  const showListProblem = () => {
-    setSearchingList(true); setListScanIndex(-1)
-    setMessage(`🔍 리스트로 "민수" 찾기... 처음부터 확인해야 해요`)
-    let idx = 0
-    intervalRef.current = setInterval(() => {
-      setListScanIndex(idx)
-      if (idx === 0) setMessage(`🔍 #0 "철수"... 아니네!`)
-      else if (idx === 1) setMessage(`🔍 #1 "영희"... 아니네!`)
-      else if (idx === 2) {
-        setMessage(`✅ #2 "민수" 찾았다! (3번 확인함 😓)`)
-        clearInterval(intervalRef.current!)
-        setTimeout(() => { setSearchingList(false); setListScanIndex(-1) }, 2000)
-      }
-      idx++
-    }, 800)
+  const searchWithoutLabel = () => {
+    setSearchingList(true)
+    setListScanIndex(-1)
+    setOpenKey(null)
+    setFoundIndex(null)
+    setMessage("")
+    
+    // 1단계: 시작 오버레이
+    setOverlay({ emoji: targetEmoji, text: `${targetName}을 찾아볼게요!`, subtext: "이름표가 없어서... 처음부터!" })
+    
+    // 2단계: 2초 후 오버레이 사라지고 검색 시작
+    setTimeout(() => {
+      setOverlay(null)
+      
+      // 0.5초 후 검색 시작
+      setTimeout(() => {
+        let idx = 0
+        intervalRef.current = setInterval(() => {
+          // 이전 문 닫기
+          if (idx > 0) {
+            setOpenKey(null)
+          }
+          
+          setTimeout(() => {
+            setListScanIndex(idx)
+            // 현재 문 열기
+            setOpenKey(items[idx].key)
+            
+            if (idx < targetIndex) {
+              setMessage(`🔍 ${idx + 1}번째 열어보는 중... ${items[idx].emoji}? ${targetName} 아니네!`)
+              idx++
+            } else if (idx === targetIndex) {
+              setFoundIndex(idx)
+              setMessage(`✅ ${idx + 1}번째에서 ${targetEmoji} ${targetName} 찾았다!`)
+              clearInterval(intervalRef.current!)
+              
+              // 3단계: 결과 오버레이
+              setTimeout(() => {
+                setOpenKey(null)
+                setOverlay({ emoji: "😓", text: `${idx + 1}개나 열어봤어요!`, subtext: "이름표가 없으니까 처음부터 하나씩..." })
+                
+                setTimeout(() => { 
+                  setOverlay(null)
+                  setSearchingList(false)
+                  setListScanIndex(-1)
+                  setFoundIndex(null)
+                  setMessage("")
+                }, 2500)
+              }, 1000)
+            }
+          }, 100)
+        }, 800)
+      }, 500)
+    }, 2000)
   }
 
   const reset = () => {
     if (intervalRef.current) clearInterval(intervalRef.current)
-    setMessage(""); setOpenKey(null); setShowProblem(true); setSearchingList(false); setListScanIndex(-1)
+    setMessage("")
+    setOpenKey(null)
+    setShowProblem(true)
+    setSearchingList(false)
+    setListScanIndex(-1)
+    setFoundIndex(null)
+    setOverlay(null)
   }
 
   return (
@@ -982,58 +1315,97 @@ export function DictAnimation() {
         <ProblemCard
           problem={{
             emoji: "😱",
-            title: '리스트로 "민수 물건" 찾으면?',
-            subtitle: "몇 번째인지 찾아봐야...",
-            code: ['students = ["철수", "영희", "민수"]', 'items = ["⚽", "🎒", "🍱"]', '# "민수"가 몇 번째지? 🤔']
+            title: '리스트로 "현우 물건" 찾으면?',
+            subtitle: "처음부터 하나씩 열어봐야...",
+            code: ['students = ["철수", "영희", "민수", "지민", "현우"]', 'items = ["⚽", "🎒", "🍱", "📚", "🎮"]', '# "현우"가 몇 번째지? 5개 다 확인? 🤔']
           }}
           solution={{
             emoji: "🏷️",
             title: "딕셔너리는 이름으로 바로!",
-            subtitle: "찾을 필요 없이 즉시!",
-            code: 'locker["민수"]  # → "🍱" 바로!'
+            subtitle: "몇 개든 즉시 찾기!",
+            code: 'locker["현우"]  # → "🎮" 바로!'
           }}
           buttonColor="bg-amber-500 hover:bg-amber-600"
           onContinue={() => setShowProblem(false)}
         />
       ) : (
         <>
-          <div className="bg-amber-100 border-2 border-amber-300 rounded-lg px-4 py-2">
-            <p className="text-sm text-amber-800">🏫 <strong>사물함</strong> = 이름표 보고 바로 찾기!</p>
+          {/* 목표 안내 */}
+          <div className="bg-amber-100 border-2 border-amber-300 rounded-lg px-4 py-3">
+            <p className="text-sm text-amber-800">
+              🎯 <strong>목표: {targetEmoji} {targetName} 찾기!</strong><br/>
+              <span className="text-amber-600">
+                🐢 이름표 없으면 → 처음부터 하나씩 열어봐야 해요<br/>
+                ⚡ 이름표 있으면 → "현우" 클릭하면 바로!
+              </span>
+            </p>
           </div>
 
-          <div className="bg-gradient-to-b from-slate-200 to-slate-300 rounded-xl p-4 border-4 border-slate-400 shadow-inner">
-            <div className="flex gap-4 flex-wrap justify-center">
+          {/* 사물함들 */}
+          <div className="bg-gradient-to-b from-slate-200 to-slate-300 rounded-xl p-4 border-4 border-slate-400 shadow-inner relative">
+            {/* 오버레이 */}
+            {overlay && (
+              <div className={cn(
+                "absolute inset-0 rounded-lg z-20 flex items-center justify-center",
+                overlay.emoji === "😓" ? "bg-red-500/95" : 
+                overlay.emoji === "⚡" ? "bg-green-500/95" : "bg-amber-500/95"
+              )}>
+                <div className="text-center text-white">
+                  <div className="text-6xl mb-2 animate-bounce">{overlay.emoji}</div>
+                  <div className="text-2xl font-black">{overlay.text}</div>
+                  {overlay.subtext && (
+                    <div className="text-lg mt-1 opacity-90">{overlay.subtext}</div>
+                  )}
+                </div>
+              </div>
+            )}
+            
+            <div className="flex gap-3 flex-wrap justify-center">
               {items.map((item, idx) => (
                 <div key={item.key} className="relative">
-                  <Locker label={item.key} content={item.emoji} isOpen={openKey === item.key}
-                    isHighlighted={openKey === item.key || listScanIndex === idx}
-                    onClick={() => !searchingList && searchByKey(item.key)} disabled={searchingList} />
-                  {listScanIndex === idx && (
-                    <div className="absolute -top-2 -right-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full">#{idx}</div>
+                  <Locker 
+                    label={item.key} 
+                    content={item.emoji} 
+                    isOpen={openKey === item.key}
+                    isHighlighted={foundIndex === idx}
+                    isScanning={listScanIndex === idx && foundIndex !== idx}
+                    hideLabel={searchingList}
+                    onClick={() => searchByKey(item.key)} 
+                    disabled={searchingList} 
+                  />
+                  {searchingList && listScanIndex === idx && (
+                    <div className="absolute -top-2 -right-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full animate-pulse z-10">#{idx}</div>
                   )}
                 </div>
               ))}
             </div>
-            <p className="text-xs text-slate-500 mt-3 text-center">👆 이름표 클릭 → 바로!</p>
+            <p className="text-xs text-slate-500 mt-3 text-center">
+              {searchingList 
+                ? "🔍 이름표가 없어서... 하나씩 열어봐야 해요!" 
+                : "👆 이름표 클릭하면 바로 열 수 있어요!"}
+            </p>
           </div>
 
           {message && (
-            <div className={cn("px-4 py-2 rounded-lg text-sm font-medium",
-              message.includes("⚡") && "bg-green-100 text-green-800",
-              message.includes("🔍") && "bg-yellow-100 text-yellow-800",
-              message.includes("✅") && "bg-green-100 text-green-800")}>
+            <div className={cn(
+              "px-4 py-3 rounded-xl text-sm font-bold border-2",
+              message.includes("⚡") && "bg-green-100 text-green-800 border-green-400",
+              message.includes("🔍") && "bg-yellow-100 text-yellow-800 border-yellow-400",
+              message.includes("🎯") && "bg-amber-100 text-amber-800 border-amber-400",
+              message.includes("✅") && "bg-green-100 text-green-800 border-green-400"
+            )}>
               {message}
             </div>
           )}
 
           <div className="flex gap-2 flex-wrap">
-            <button onClick={showListProblem} disabled={searchingList} className="flex items-center gap-1 px-3 py-2 bg-red-500 hover:bg-red-600 disabled:bg-gray-300 text-white rounded-lg text-sm font-medium">
-              <Search className="w-4 h-4" /> 리스트로 찾기 (느림)
+            <button onClick={searchWithoutLabel} disabled={searchingList || overlay !== null} className="flex items-center gap-1 px-3 py-2 bg-red-500 hover:bg-red-600 disabled:bg-gray-300 text-white rounded-lg text-sm font-bold shadow">
+              <Search className="w-4 h-4" /> 이름표 없이 찾기 🐢
             </button>
-            <button onClick={() => searchByKey("민수")} disabled={searchingList} className="flex items-center gap-1 px-3 py-2 bg-green-500 hover:bg-green-600 disabled:bg-gray-300 text-white rounded-lg text-sm font-medium">
-              <Key className="w-4 h-4" /> 딕셔너리로 찾기 (빠름)
+            <button onClick={() => searchByKey(targetKey)} disabled={searchingList || overlay !== null} className="flex items-center gap-1 px-3 py-2 bg-green-500 hover:bg-green-600 disabled:bg-gray-300 text-white rounded-lg text-sm font-bold shadow">
+              <Key className="w-4 h-4" /> 이름표로 찾기 ⚡
             </button>
-            <button onClick={reset} className="flex items-center gap-1 px-3 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg text-sm font-medium">
+            <button onClick={reset} className="flex items-center gap-1 px-3 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg text-sm font-bold shadow">
               <RefreshCw className="w-4 h-4" /> 리셋
             </button>
           </div>
@@ -1060,35 +1432,61 @@ export function SetAnimation() {
   const [bounceItem, setBounceItem] = useState<string | null>(null)
   const [rejectItem, setRejectItem] = useState<string | null>(null)
   const [showProblem, setShowProblem] = useState(true)
+  const [overlay, setOverlay] = useState<{ emoji: string; text: string; subtext?: string } | null>(null)
 
   const addItem = () => {
+    if (overlay) return
     const allStudents = ["철수", "영희", "민수", "지민", "수진", "현우"]
     const tryDuplicate = Math.random() > 0.5 && items.length > 0
     if (tryDuplicate) {
       const existing = items[Math.floor(Math.random() * items.length)]
       setRejectItem(existing); setBounceItem(existing)
-      setMessage(`❌ "${existing}" 이미 출석! 중복 불가!`)
-      setTimeout(() => { setRejectItem(null); setBounceItem(null) }, 1000)
+      
+      // 중복 시도 오버레이
+      setOverlay({ emoji: "❌", text: `"${existing}" 이미 있어요!`, subtext: "집합은 중복 불가!" })
+      
+      setTimeout(() => {
+        setOverlay(null)
+        setRejectItem(null)
+        setBounceItem(null)
+      }, 1500)
     } else {
       const available = allStudents.filter(s => !items.includes(s))
       if (available.length > 0) {
         const newStudent = available[Math.floor(Math.random() * available.length)]
         setItems([...items, newStudent])
-        setMessage(`✅ "${newStudent}" 출석!`)
-      } else setMessage("⚠️ 모두 출석!")
+        setBounceItem(newStudent)
+        
+        // 추가 성공 오버레이
+        setOverlay({ emoji: "✅", text: `"${newStudent}" 출석!`, subtext: "새로운 학생 추가!" })
+        
+        setTimeout(() => {
+          setOverlay(null)
+          setBounceItem(null)
+        }, 1500)
+      } else {
+        setOverlay({ emoji: "🎉", text: "모두 출석!", subtext: "더 이상 추가할 학생이 없어요" })
+        setTimeout(() => setOverlay(null), 1500)
+      }
     }
   }
 
   const checkMembership = () => {
-    if (items.length === 0) return
+    if (items.length === 0 || overlay) return
     const student = items[Math.floor(Math.random() * items.length)]
     setBounceItem(student)
-    setMessage(`⚡ "${student}" 왔나? → Yes! (즉시 확인!)`)
-    setTimeout(() => setBounceItem(null), 1000)
+    
+    // 멤버십 확인 오버레이
+    setOverlay({ emoji: "⚡", text: `"${student}" 왔나요?`, subtext: "Yes! 바로 확인!" })
+    
+    setTimeout(() => {
+      setOverlay(null)
+      setBounceItem(null)
+    }, 1500)
   }
 
   const reset = () => {
-    setItems(["철수", "영희", "민수"]); setMessage(""); setBounceItem(null); setRejectItem(null); setShowProblem(true)
+    setItems(["철수", "영희", "민수"]); setMessage(""); setBounceItem(null); setRejectItem(null); setShowProblem(true); setOverlay(null)
   }
 
   return (
@@ -1125,6 +1523,23 @@ export function SetAnimation() {
           </div>
 
           <div className="bg-gradient-to-b from-slate-100 to-slate-200 rounded-xl p-4 border-4 border-slate-300 shadow-inner relative overflow-hidden">
+            {/* 오버레이 */}
+            {overlay && (
+              <div className={cn(
+                "absolute inset-0 rounded-lg z-20 flex items-center justify-center",
+                overlay.emoji === "❌" ? "bg-red-500/95" : 
+                overlay.emoji === "⚡" ? "bg-blue-500/95" : "bg-green-500/95"
+              )}>
+                <div className="text-center text-white">
+                  <div className="text-6xl mb-2 animate-bounce">{overlay.emoji}</div>
+                  <div className="text-2xl font-black">{overlay.text}</div>
+                  {overlay.subtext && (
+                    <div className="text-lg mt-1 opacity-90">{overlay.subtext}</div>
+                  )}
+                </div>
+              </div>
+            )}
+            
             <div className="bg-white rounded-lg p-4">
               <p className="text-xs text-gray-500 mb-2">📋 출석 명단</p>
               <div className="flex items-center gap-2 flex-wrap">
@@ -1145,16 +1560,8 @@ export function SetAnimation() {
                 )}
               </div>
             </div>
-            <p className="text-xs text-slate-500 mt-3 text-center">❌ 순서 없음 | ❌ 중복 불가</p>
+            <p className="text-xs text-slate-500 mt-3 text-center">❌ 순서 없음 | ❌ 중복 불가 | ⚡ 멤버십 확인 빠름</p>
           </div>
-
-          {message && (
-            <div className={cn("px-4 py-2 rounded-lg text-sm font-medium",
-              message.includes("❌") ? "bg-red-100 text-red-800" : 
-              message.includes("⚡") ? "bg-blue-100 text-blue-800" : "bg-green-100 text-green-800")}>
-              {message}
-            </div>
-          )}
 
           <div className="flex gap-2 flex-wrap">
             <button onClick={addItem} className="flex items-center gap-1 px-3 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg text-sm font-medium">
@@ -1194,7 +1601,7 @@ export function DataStructuresComparison() {
     { id: "list" as const, label: "List", emoji: "🧊", bgColor: "bg-blue-500", bgLight: "bg-blue-100", textColor: "text-blue-700" },
     { id: "tuple" as const, label: "Tuple", emoji: "🔒", bgColor: "bg-purple-500", bgLight: "bg-purple-100", textColor: "text-purple-700" },
     { id: "dict" as const, label: "Dict", emoji: "🏷️", bgColor: "bg-amber-500", bgLight: "bg-amber-100", textColor: "text-amber-700" },
-    { id: "set" as const, label: "Set", emoji: "✋", bgColor: "bg-green-500", bgLight: "bg-green-100", textColor: "text-green-700" },
+    { id: "set" as const, label: "Set", emoji: "👍", bgColor: "bg-red-500", bgLight: "bg-red-100", textColor: "text-red-700" },
   ]
 
   return (
@@ -1213,7 +1620,7 @@ export function DataStructuresComparison() {
         {activeTab === "list" && <ListAnimation />}
         {activeTab === "tuple" && <TupleAnimation />}
         {activeTab === "dict" && <DictAnimation />}
-        {activeTab === "set" && <SetAnimation />}
+        {activeTab === "set" && <SetAnimationYoutube />}
       </div>
 
       <div className="bg-white rounded-xl p-4 shadow-sm">

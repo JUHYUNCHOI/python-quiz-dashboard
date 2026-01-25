@@ -1,9 +1,17 @@
 // ============================================
 // 레슨 데이터 타입
 // ============================================
+
+export interface TestCase {
+  input?: string
+  expectedOutput?: string
+  expectedVariable?: { name: string; value: any }
+  description?: string
+}
+
 export interface LessonStep {
   id: string
-  type: "explain" | "tryit" | "mission" | "quiz" | "interactive"
+  type: "explain" | "tryit" | "mission" | "quiz" | "interactive" | "coding"
   title: string
   content?: string
   code?: string
@@ -18,6 +26,10 @@ export interface LessonStep {
   // interactive 타입용
   component?: "dataStructures"
   description?: string
+  // coding 타입용
+  starterCode?: string
+  testCases?: TestCase[]
+  hints?: string[]
 }
 
 export interface Chapter {

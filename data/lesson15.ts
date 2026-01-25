@@ -72,6 +72,24 @@ students = ["철수", "영희", "민수"]
           title: "🎮 직접 체험하기!",
           component: "dataStructures",
           description: "각 탭을 눌러서 List, Tuple, Dict, Set의 차이를 체험해보세요!"
+        },
+        {
+          id: "coding-dict",
+          type: "coding",
+          title: "📝 딕셔너리 직접 만들어보기",
+          description: "사물함처럼 이름으로 찾는 딕셔너리를 만들어보세요!",
+          starterCode: `# 사물함 딕셔너리를 만들어보세요!\n# 철수: 축구공, 영희: 가방\n\nlocker = {\n    # 여기에 코드를 작성하세요\n}\n\nprint(locker["철수"])`,
+          testCases: [
+            {
+              expectedOutput: "축구공",
+              description: "철수의 사물함에는 축구공이 있어요!"
+            }
+          ],
+          hints: [
+            "딕셔너리는 { } 안에 '이름': '값' 형태로 쓰세요",
+            "'철수': '축구공', '영희': '가방' 이렇게 쓰면 돼요!",
+            "정답: locker = { '철수': '축구공', '영희': '가방' }"
+          ]
         }
       ]
     },

@@ -87,9 +87,14 @@ const curriculumData = [
   {
     id: "part5",
     title: "Part 5: 함수",
-    description: "코드를 재사용하고 정리하는 함수를 배워요!",
-    comingSoon: true,
-    lessons: [],
+    description: "코드를 재사용하고 정리하는 함수를 배워요! Level 2 시험의 핵심!",
+    lessons: [
+      { id: 29, title: "29. 함수란?", description: "def로 함수 만들기, return으로 결과 반환", duration: "25분", hasQuiz: true },
+      { id: 30, title: "30. 매개변수와 반환값", description: "기본값, 여러 값 반환, 키워드 인자", duration: "25분", hasQuiz: true },
+      { id: 31, title: "31. 함수 활용", description: "지역변수, 전역변수, 람다 함수", duration: "25분", hasQuiz: true },
+      { id: 32, title: "32. 내장함수 총정리", description: "len, sum, max, min, sorted, map", duration: "30분", hasQuiz: true },
+      { id: 33, title: "33. 함수 문제 30", description: "함수 마스터를 위한 30문제!", duration: "40분", hasQuiz: true },
+    ],
   },
   {
     id: "part6",
@@ -123,7 +128,7 @@ const curriculumData = [
 
 export default function CurriculumPage() {
   const [completedLessons, setCompletedLessons] = useState<Set<number | string>>(new Set())
-  const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set(["part1", "part2", "part3", "part3-advanced"]))
+  const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set(["part1", "part2", "part3", "part3-advanced", "part5"]))
 
   useEffect(() => {
     const saved = localStorage.getItem("completedLessons")

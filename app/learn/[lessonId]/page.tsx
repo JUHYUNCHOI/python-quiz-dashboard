@@ -25,6 +25,9 @@ import type { LessonData } from "./data/types"
 // 인터랙티브 애니메이션 컴포넌트
 import { DataStructuresComparison } from "@/components/animations"
 
+// Python 코드 실행 컴포넌트
+import { PythonRunner } from "@/components/code-runner/PythonRunner"
+
 // ============================================================
 // 로컬 타입 정의 (컴포넌트 전용)
 // ============================================================
@@ -1396,6 +1399,26 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
               <DataStructuresComparison />
             )}
 
+            <Button 
+              onClick={next}
+              className="w-full py-6 md:py-7 text-xl md:text-2xl bg-indigo-600 hover:bg-indigo-500 rounded-2xl border-0 font-bold text-white shadow-xl"
+            >
+              다음 단계로 <ChevronRight className="w-6 h-6 md:w-7 md:h-7 ml-2" />
+            </Button>
+          </div>
+        )}
+
+        {/* 코딩 연습 (Python 실행) */}
+        {current.type === "coding" && (
+          <div className="pt-4 md:pt-6 space-y-4 md:space-y-6 animate-fadeIn">
+            <PythonRunner
+              title={current.content.title}
+              description={current.content.description}
+              starterCode={current.content.starterCode || ""}
+              testCases={current.content.testCases || []}
+              hints={current.content.hints || []}
+            />
+            
             <Button 
               onClick={next}
               className="w-full py-6 md:py-7 text-xl md:text-2xl bg-indigo-600 hover:bg-indigo-500 rounded-2xl border-0 font-bold text-white shadow-xl"

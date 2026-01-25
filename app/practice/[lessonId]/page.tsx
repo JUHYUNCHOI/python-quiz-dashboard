@@ -28,7 +28,8 @@ import {
   lesson11Data, lesson12Data, lesson13Data, lesson14Data, lesson15Data,
   lesson16Data, lesson17Data, lesson18Data, lesson19Data, lesson20Data,
   lesson21Data, lesson22Data, lesson23Data, lesson24Data, lesson25Data,
-  lesson26Data, lessonP1Data, lessonP2Data, lessonP3Data 
+  lesson26Data, lesson29Data, lesson30Data, lesson31Data, lesson32Data,
+  lesson33Data, lessonP1Data, lessonP2Data, lessonP3Data 
 } from "@/data"
 
 // ============================================
@@ -177,6 +178,11 @@ const lessonsData: Record<string, LessonData> = {
   "24": lesson24Data,
   "25": lesson25Data,
   "26": lesson26Data,
+  "29": lesson29Data,
+  "30": lesson30Data,
+  "31": lesson31Data,
+  "32": lesson32Data,
+  "33": lesson33Data,
   "p1": lessonP1Data,
   "p2": lessonP2Data,
   "p3": lessonP3Data,
@@ -768,33 +774,35 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
           </div>
         </div>
 
-        {/* 하단 여백 */}
-        <div className="h-[80px] md:h-[90px]" />
+        {/* 하단 여백 - 네비게이션 버튼 높이만큼 */}
+        <div className="h-[70px] md:h-[90px] lg:h-[110px]" />
       </div>
 
       {/* 네비게이션 버튼 */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-lg z-20 pb-0 md:pb-[140px]">
-        <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-3 md:py-4">
-          <div className="flex gap-4 md:gap-6 justify-center">
+      <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-lg z-20">
+        <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-2 md:py-3 lg:py-4">
+          <div className="flex gap-3 md:gap-4 lg:gap-6 justify-center">
             <button
               onClick={goPrev}
               disabled={currentStep === 0 && currentChapter === 0}
               className={cn(
-                "flex flex-col items-center justify-center rounded-2xl font-bold transition-colors w-[80px] h-[80px] md:w-[100px] md:h-[100px]",
+                "flex flex-col items-center justify-center rounded-xl md:rounded-2xl font-bold transition-colors",
+                "w-[60px] h-[50px] md:w-[80px] md:h-[70px] lg:w-[100px] lg:h-[80px]",
                 (currentStep > 0 || currentChapter > 0)
                   ? "bg-gray-100 hover:bg-gray-200 text-gray-700"
                   : "invisible"
               )}
             >
-              <ChevronLeft className="w-7 h-7 md:w-8 md:h-8" />
-              <span className="text-sm md:text-base mt-1">이전</span>
+              <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" />
+              <span className="text-xs md:text-sm lg:text-base">이전</span>
             </button>
             
             <button
               onClick={goNext}
               disabled={!canGoNext()}
               className={cn(
-                "flex flex-col items-center justify-center rounded-2xl font-bold transition-colors w-[80px] h-[80px] md:w-[100px] md:h-[100px]",
+                "flex flex-col items-center justify-center rounded-xl md:rounded-2xl font-bold transition-colors",
+                "w-[60px] h-[50px] md:w-[80px] md:h-[70px] lg:w-[100px] lg:h-[80px]",
                 canGoNext()
                   ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg"
                   : "bg-gray-200 text-gray-400 cursor-not-allowed"
@@ -802,13 +810,13 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             >
               {canGoNext() ? (
                 <>
-                  <ChevronRight className="w-7 h-7 md:w-8 md:h-8" />
-                  <span className="text-sm md:text-base mt-1">다음</span>
+                  <ChevronRight className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" />
+                  <span className="text-xs md:text-sm lg:text-base">다음</span>
                 </>
               ) : (
                 <>
-                  <Lock className="w-6 h-6 md:w-7 md:h-7" />
-                  <span className="text-xs md:text-sm mt-1">완료 필요</span>
+                  <Lock className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" />
+                  <span className="text-[10px] md:text-xs lg:text-sm">완료 필요</span>
                 </>
               )}
             </button>
