@@ -132,6 +132,16 @@ for i in range(1, 6):
 **continue**: 이번만 건너뜀`
         },
         {
+          id: "try3",
+          type: "tryit",
+          title: "🖥️ continue 연습!",
+          task: "3을 건너뛰고 1~5 출력하세요!",
+          initialCode: "num = 0\nwhile num < 5:\n    num = num + 1\n    if num == 3:\n        continue  # 3은 건너뜀\n    print(num)",
+          expectedOutput: "1\n2\n4\n5",
+          hint: "continue는 이번 반복만 건너뛰어요!",
+          hint2: "num == 3일 때 continue"
+        },
+        {
           id: "quiz2",
           type: "quiz",
           title: "❓ 퀴즈!",
@@ -175,7 +185,7 @@ while money > 0:     # 돈이 있는 동안
 \`\`\``
         },
         {
-          id: "try3",
+          id: "try4",
           type: "tryit",
           title: "🖥️ 카운트다운!",
           task: "5부터 1까지 카운트다운 후 '발사!'",
@@ -185,7 +195,7 @@ while money > 0:     # 돈이 있는 동안
           hint2: "count = count - 1로 감소!"
         },
         {
-          id: "try4",
+          id: "try5",
           type: "tryit",
           title: "🖥️ 합이 100 넘을 때까지!",
           task: "1부터 더해서 합이 100을 넘으면 멈추세요!",
@@ -202,14 +212,35 @@ while money > 0:     # 돈이 있는 동안
       emoji: "🏆",
       steps: [
         {
+          id: "mission-explain",
+          type: "explain",
+          title: "🎮 숫자 맞추기 게임 원리",
+          content: `숫자 맞추기 게임은 이렇게 동작해요:
+
+\`\`\`python
+secret = 7  # 정답
+
+while guess != secret:
+    guess = 입력받기
+    if guess < secret:
+        print("더 크게!")
+    elif guess > secret:
+        print("더 작게!")
+
+print("정답!")
+\`\`\`
+
+실습에서는 input() 대신 **미리 정해진 시도 목록**으로 연습해요!`
+        },
+        {
           id: "mission1",
           type: "mission",
           title: "🏆 최종 미션!",
-          task: "숫자 맞추기 게임의 핵심 로직!",
-          initialCode: "secret = 7\nguess = 0\nattempts = 0\n\nwhile guess != secret:\n    guess = int(input(\"숫자를 맞춰보세요: \"))\n    attempts = attempts + 1\n    \n    if guess < secret:\n        print(\"더 큰 숫자!\")\n    elif guess > secret:\n        print(\"더 작은 숫자!\")\n\nprint(f\"정답! {attempts}번 만에 맞췄어요!\")",
-          expectedOutput: "",
-          hint: "guess != secret일 동안 반복!",
-          hint2: "맞추면 while 조건이 False가 돼서 종료!"
+          task: "숫자 맞추기 시뮬레이션!",
+          initialCode: "secret = 7\n\n# input() 대신 미리 정해진 추측들\nguesses = [3, 5, 9, 7]  # 3, 5, 9 시도 후 7에서 정답!\n\nattempts = 0\n\nfor guess in guesses:\n    attempts = attempts + 1\n    print(f\"시도 {attempts}: {guess}\")\n    \n    if guess < secret:\n        print(\"→ 더 큰 숫자!\")\n    elif guess > secret:\n        print(\"→ 더 작은 숫자!\")\n    else:\n        print(f\"→ 정답! {attempts}번 만에 맞췄어요!\")\n        break",
+          expectedOutput: "시도 1: 3\n→ 더 큰 숫자!\n시도 2: 5\n→ 더 큰 숫자!\n시도 3: 9\n→ 더 작은 숫자!\n시도 4: 7\n→ 정답! 4번 만에 맞췄어요!",
+          hint: "guess < secret, guess > secret 비교!",
+          hint2: "정답이면 break로 탈출!"
         },
         {
           id: "complete",

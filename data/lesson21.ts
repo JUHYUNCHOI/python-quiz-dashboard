@@ -37,11 +37,11 @@ print(names)  # {'철수', '영희'}
           id: "try1",
           type: "tryit",
           title: "🖥️ 직접 해보기!",
-          task: "중복된 숫자를 제거하세요!",
-          initialCode: "numbers = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4]\nunique = set(numbers)\nprint(unique)",
-          expectedOutput: "{1, 2, 3, 4}",
+          task: "중복을 제거하고 개수를 세보세요!",
+          initialCode: "numbers = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4]\nunique = set(numbers)\nprint(f\"중복 제거 후 개수: {len(unique)}개\")",
+          expectedOutput: "중복 제거 후 개수: 4개",
           hint: "set()으로 리스트를 집합으로!",
-          hint2: "set(리스트)"
+          hint2: "len()으로 개수 확인"
         },
         {
           id: "quiz1",
@@ -81,9 +81,9 @@ print(fruits)  # {'사과', '딸기'}
           id: "try2",
           type: "tryit",
           title: "🖥️ 요소 추가하기!",
-          task: "집합에 '오렌지'를 추가하세요!",
-          initialCode: "fruits = {\"사과\", \"바나나\"}\nfruits.add(\"오렌지\")\nprint(fruits)",
-          expectedOutput: "",
+          task: "집합에 '오렌지'를 추가하고 개수를 확인하세요!",
+          initialCode: "fruits = {\"사과\", \"바나나\"}\nfruits.add(\"오렌지\")\nprint(f\"과일 개수: {len(fruits)}개\")",
+          expectedOutput: "과일 개수: 3개",
           hint: "add()로 추가!",
           hint2: "fruits.add(\"오렌지\")"
         },
@@ -141,11 +141,21 @@ print(A - B)  # {1, 2}
           id: "try4",
           type: "tryit",
           title: "🖥️ 교집합 구하기!",
-          task: "두 집합의 공통 요소를 찾으세요!",
-          initialCode: "A = {1, 2, 3, 4, 5}\nB = {4, 5, 6, 7, 8}\nprint(A & B)",
-          expectedOutput: "{4, 5}",
+          task: "두 집합의 공통 요소 개수를 구하세요!",
+          initialCode: "A = {1, 2, 3, 4, 5}\nB = {4, 5, 6, 7, 8}\ncommon = A & B\nprint(f\"공통 요소 개수: {len(common)}개\")",
+          expectedOutput: "공통 요소 개수: 2개",
           hint: "& 연산자로 교집합!",
-          hint2: "A & B"
+          hint2: "len()으로 개수"
+        },
+        {
+          id: "try5",
+          type: "tryit",
+          title: "🖥️ 차집합 구하기!",
+          task: "A에만 있는 요소 개수를 구하세요!",
+          initialCode: "A = {1, 2, 3, 4, 5}\nB = {4, 5, 6, 7, 8}\nonly_A = A - B\nprint(f\"A에만 있는 요소 개수: {len(only_A)}개\")",
+          expectedOutput: "A에만 있는 요소 개수: 3개",
+          hint: "- 연산자로 차집합!",
+          hint2: "A - B"
         },
         {
           id: "quiz2",
@@ -167,11 +177,11 @@ print(A - B)  # {1, 2}
           id: "mission1",
           type: "mission",
           title: "🏆 최종 미션!",
-          task: "두 반의 공통 학생을 찾으세요!",
-          initialCode: "class_a = {\"철수\", \"영희\", \"민수\", \"지영\"}\nclass_b = {\"영희\", \"민수\", \"준호\", \"수진\"}\n\ncommon = class_a & class_b\nprint(\"공통 학생:\", common)",
-          expectedOutput: "공통 학생: {'영희', '민수'}",
-          hint: "& 연산자로 교집합!",
-          hint2: "class_a & class_b"
+          task: "두 반의 공통 학생 수와 전체 학생 수를 구하세요!",
+          initialCode: "class_a = {\"철수\", \"영희\", \"민수\", \"지영\"}\nclass_b = {\"영희\", \"민수\", \"준호\", \"수진\"}\n\n# 공통 학생 (교집합)\ncommon = class_a & class_b\n\n# 전체 학생 (합집합)\nall_students = class_a | class_b\n\nprint(f\"A반 학생 수: {len(class_a)}명\")\nprint(f\"B반 학생 수: {len(class_b)}명\")\nprint(f\"공통 학생 수: {len(common)}명\")\nprint(f\"전체 학생 수: {len(all_students)}명\")",
+          expectedOutput: "A반 학생 수: 4명\nB반 학생 수: 4명\n공통 학생 수: 2명\n전체 학생 수: 6명",
+          hint: "& 는 교집합, | 는 합집합!",
+          hint2: "len()으로 개수 확인"
         },
         {
           id: "complete",

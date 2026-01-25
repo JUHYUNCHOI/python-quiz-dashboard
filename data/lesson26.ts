@@ -91,11 +91,11 @@ export const lesson26Data: LessonData = {
         {
           id: "try1",
           type: "tryit",
-          title: "🖥️ 검색 성능 비교!",
-          task: "리스트 vs 집합 검색 성능을 비교하세요!",
-          initialCode: "import time\n\n# 10만 개 데이터\ndata_list = list(range(100000))\ndata_set = set(range(100000))\ntarget = 99999  # 마지막 숫자 찾기\n\n# 리스트 검색\nstart = time.time()\nfor _ in range(1000):\n    _ = target in data_list\nlist_time = time.time() - start\n\n# 집합 검색  \nstart = time.time()\nfor _ in range(1000):\n    _ = target in data_set\nset_time = time.time() - start\n\nprint(f\"리스트 검색: {list_time:.4f}초\")\nprint(f\"집합 검색: {set_time:.6f}초\")\nprint(f\"집합이 {list_time/set_time:.0f}배 빠름!\")",
-          expectedOutput: "",
-          hint: "집합은 해시로 O(1) 검색!",
+          title: "🖥️ 검색 성능 원리!",
+          task: "리스트 vs 집합 검색 원리를 이해하세요!",
+          initialCode: "# 리스트: 처음부터 하나씩 확인 (O(n))\nmy_list = [10, 20, 30, 40, 50]\ntarget = 40\n\n# 리스트 검색 과정\nprint(\"리스트 검색:\")\nfor i, val in enumerate(my_list):\n    print(f\"  {i}번째: {val} 확인\", end=\"\")\n    if val == target:\n        print(\" → 찾았다!\")\n        break\n    print()\n\n# 집합: 해시로 바로 접근 (O(1))\nmy_set = {10, 20, 30, 40, 50}\nprint(f\"\\n집합 검색:\")\nprint(f\"  {target} in 집합? {target in my_set} (바로 찾음!)\")",
+          expectedOutput: "리스트 검색:\n  0번째: 10 확인\n  1번째: 20 확인\n  2번째: 30 확인\n  3번째: 40 확인 → 찾았다!\n\n집합 검색:\n  40 in 집합? True (바로 찾음!)",
+          hint: "리스트는 순차 탐색, 집합은 해시 탐색!",
           hint2: "데이터가 많을수록 차이가 커짐"
         },
         {
@@ -164,7 +164,7 @@ b = [4, 5, 6, 7, 8]
           type: "tryit",
           title: "🖥️ 공통 요소 찾기!",
           task: "두 가지 방법을 비교하세요!",
-          initialCode: "# 방법 1: 이중 for문 - O(n²)\ndef common_slow(a, b):\n    result = []\n    for x in a:\n        if x in b:  # O(n)\n            result.append(x)\n    return result\n\n# 방법 2: 집합 - O(n)\ndef common_fast(a, b):\n    return list(set(a) & set(b))\n\na = [1, 2, 3, 4, 5]\nb = [4, 5, 6, 7, 8]\n\nprint(\"느린 방법:\", common_slow(a, b))\nprint(\"빠른 방법:\", common_fast(a, b))",
+          initialCode: "# 방법 1: 이중 for문 - O(n²)\ndef common_slow(a, b):\n    result = []\n    for x in a:\n        if x in b:  # O(n)\n            result.append(x)\n    return result\n\n# 방법 2: 집합 - O(n)\ndef common_fast(a, b):\n    return list(set(a) & set(b))\n\na = [1, 2, 3, 4, 5]\nb = [4, 5, 6, 7, 8]\n\nprint(\"느린 방법:\", common_slow(a, b))\nprint(\"빠른 방법:\", sorted(common_fast(a, b)))",
           expectedOutput: "느린 방법: [4, 5]\n빠른 방법: [4, 5]",
           hint: "집합의 & 연산은 O(n)!",
           hint2: "데이터가 많으면 차이가 엄청남"
@@ -193,8 +193,8 @@ counts = Counter(text)
           type: "tryit",
           title: "🖥️ 빈도수 세기!",
           task: "두 가지 방법으로 빈도수를 세보세요!",
-          initialCode: "from collections import Counter\n\ntext = \"hello world\"\n\n# 방법 1: 직접 딕셔너리\ncounts1 = {}\nfor char in text:\n    counts1[char] = counts1.get(char, 0) + 1\nprint(\"딕셔너리:\", counts1)\n\n# 방법 2: Counter\ncounts2 = Counter(text)\nprint(\"Counter:\", dict(counts2))\n\n# 가장 많은 문자\nprint(\"\\n가장 많은 2개:\", counts2.most_common(2))",
-          expectedOutput: "딕셔너리: {'h': 1, 'e': 1, 'l': 3, 'o': 2, ' ': 1, 'w': 1, 'r': 1, 'd': 1}\nCounter: {'h': 1, 'e': 1, 'l': 3, 'o': 2, ' ': 1, 'w': 1, 'r': 1, 'd': 1}\n\n가장 많은 2개: [('l', 3), ('o', 2)]",
+          initialCode: "from collections import Counter\n\ntext = \"hello\"\n\n# 방법 1: 직접 딕셔너리\ncounts1 = {}\nfor char in text:\n    counts1[char] = counts1.get(char, 0) + 1\nprint(\"딕셔너리:\", counts1)\n\n# 방법 2: Counter\ncounts2 = Counter(text)\nprint(\"Counter:\", dict(counts2))\n\n# 가장 많은 문자\nprint(\"가장 많은 문자:\", counts2.most_common(1))",
+          expectedOutput: "딕셔너리: {'h': 1, 'e': 1, 'l': 2, 'o': 1}\nCounter: {'h': 1, 'e': 1, 'l': 2, 'o': 1}\n가장 많은 문자: [('l', 2)]",
           hint: "Counter는 딕셔너리의 서브클래스!",
           hint2: "most_common()으로 순위 확인 가능"
         },
@@ -231,8 +231,8 @@ counts = Counter(text)
           type: "mission",
           title: "🏆 최종 미션: 종합 문제!",
           task: "적절한 자료구조를 선택해서 문제를 해결하세요!",
-          initialCode: "from collections import deque, Counter\n\n# 문제 1: 중복 제거\nnumbers = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4]\nunique = list(set(numbers))  # 집합 사용!\nprint(\"1. 중복 제거:\", sorted(unique))\n\n# 문제 2: 단어 빈도수 Top 3\nwords = \"apple banana apple cherry banana apple\".split()\nword_count = Counter(words)  # Counter 사용!\nprint(\"2. Top 3:\", word_count.most_common(3))\n\n# 문제 3: 두 집합의 차이\nset_a = {1, 2, 3, 4, 5}\nset_b = {4, 5, 6, 7, 8}\nonly_a = set_a - set_b  # 집합 연산!\nprint(\"3. A에만 있는 것:\", only_a)\n\n# 문제 4: 최근 검색어 3개 유지\nrecent = deque(maxlen=3)  # 덱 사용!\nfor query in [\"파이썬\", \"자바\", \"C++\", \"자바스크립트\", \"Go\"]:\n    recent.append(query)\nprint(\"4. 최근 검색어:\", list(recent))",
-          expectedOutput: "1. 중복 제거: [1, 2, 3, 4]\n2. Top 3: [('apple', 3), ('banana', 2), ('cherry', 1)]\n3. A에만 있는 것: {1, 2, 3}\n4. 최근 검색어: ['C++', '자바스크립트', 'Go']",
+          initialCode: "from collections import deque, Counter\n\n# 문제 1: 중복 제거\nnumbers = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4]\nunique = list(set(numbers))  # 집합 사용!\nprint(\"1. 중복 제거:\", sorted(unique))\n\n# 문제 2: 단어 빈도수 Top 3\nwords = \"apple banana apple cherry banana apple\".split()\nword_count = Counter(words)  # Counter 사용!\nprint(\"2. Top 3:\", word_count.most_common(3))\n\n# 문제 3: 두 집합의 차이\nset_a = {1, 2, 3, 4, 5}\nset_b = {4, 5, 6, 7, 8}\nonly_a = set_a - set_b  # 집합 연산!\nprint(\"3. A에만 있는 것:\", sorted(only_a))\n\n# 문제 4: 최근 검색어 3개 유지\nrecent = deque(maxlen=3)  # 덱 사용!\nfor query in [\"파이썬\", \"자바\", \"C++\", \"자바스크립트\", \"Go\"]:\n    recent.append(query)\nprint(\"4. 최근 검색어:\", list(recent))",
+          expectedOutput: "1. 중복 제거: [1, 2, 3, 4]\n2. Top 3: [('apple', 3), ('banana', 2), ('cherry', 1)]\n3. A에만 있는 것: [1, 2, 3]\n4. 최근 검색어: ['C++', '자바스크립트', 'Go']",
           hint: "각 문제에 맞는 자료구조를 선택!",
           hint2: "집합, Counter, 덱 활용"
         },

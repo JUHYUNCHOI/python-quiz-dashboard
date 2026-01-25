@@ -21,7 +21,9 @@ import {
 import { cn } from "@/lib/utils"
 import { PythonRunner } from "@/components/python/python-runner"
 import { CodeBlock } from "@/components/ui/code-block"
-import { DataStructuresComparison } from "@/components/animations"
+import { DataStructuresComparison, FunctionVisualizer, FunctionStructure, ParameterStructure, ReturnStructure } from "@/components/animations"
+import { useLanguage } from "@/contexts/language-context"
+import { LanguageToggle } from "@/components/language-toggle"
 import { 
   lesson1Data, lesson2Data, lesson3Data, lesson4Data, lesson5Data, 
   lesson6Data, lesson7Data, lesson8Data, lesson9Data, lesson10Data, 
@@ -29,7 +31,8 @@ import {
   lesson16Data, lesson17Data, lesson18Data, lesson19Data, lesson20Data,
   lesson21Data, lesson22Data, lesson23Data, lesson24Data, lesson25Data,
   lesson26Data, lesson29Data, lesson30Data, lesson31Data, lesson32Data,
-  lesson33Data, lessonP1Data, lessonP2Data, lessonP3Data 
+  lesson33Data, lesson29EnData, lesson30EnData, lesson31EnData, lesson32EnData,
+  lesson33EnData, lessonP1Data, lessonP2Data, lessonP3Data 
 } from "@/data"
 
 // ============================================
@@ -188,6 +191,15 @@ const lessonsData: Record<string, LessonData> = {
   "p3": lessonP3Data,
 }
 
+// 양언어 지원 레슨 (Part 5: 함수)
+const bilingualLessons: Record<string, { ko: LessonData, en: LessonData }> = {
+  "29": { ko: lesson29Data, en: lesson29EnData },
+  "30": { ko: lesson30Data, en: lesson30EnData },
+  "31": { ko: lesson31Data, en: lesson31EnData },
+  "32": { ko: lesson32Data, en: lesson32EnData },
+  "33": { ko: lesson33Data, en: lesson33EnData },
+}
+
 // ============================================
 // 메인 컴포넌트
 // ============================================
@@ -195,8 +207,13 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const resolvedParams = use(params)
   const lessonId = resolvedParams.lessonId
   const router = useRouter()
+  const { lang, t } = useLanguage()
   
-  const lesson = lessonsData[lessonId]
+  // 양언어 지원 레슨인지 확인 후 언어에 따라 선택
+  const isBilingual = lessonId in bilingualLessons
+  const lesson = isBilingual 
+    ? bilingualLessons[lessonId][lang]
+    : lessonsData[lessonId]
   
   // 현재 위치: 챕터 인덱스 + 스텝 인덱스
   const [currentChapter, setCurrentChapter] = useState(0)
@@ -223,7 +240,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   // 다음 버튼 활성화 조건
   const canGoNext = () => {
     if (!step) return false
-    if (step.type === "explain" || step.type === "interactive") return true
+    if (step.type === "explain" || step.type === "interactive" || step.type === "tryit") return true
     return isCurrentStepCompleted
   }
 
@@ -508,9 +525,14 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                 <X className="w-5 h-5 text-gray-600" />
               </button>
               
-              <div className="flex items-center gap-1.5 bg-amber-100 px-3 py-1.5 rounded-full">
-                <Sparkles className="w-4 h-4 text-amber-600" />
-                <span className="font-bold text-amber-700 text-sm">{score}</span>
+              <div className="flex items-center gap-3">
+                {/* 양언어 레슨일 때만 토글 표시 */}
+                {isBilingual && <LanguageToggle />}
+                
+                <div className="flex items-center gap-1.5 bg-amber-100 px-3 py-1.5 rounded-full">
+                  <Sparkles className="w-4 h-4 text-amber-600" />
+                  <span className="font-bold text-amber-700 text-sm">{score}</span>
+                </div>
               </div>
             </div>
             
@@ -644,12 +666,12 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
               <div>
                 <PythonRunner
                   initialCode={step.initialCode || ""}
-                  expectedOutput={step.expectedOutput}
+                  expectedOutput={step.type === "mission" ? step.expectedOutput : undefined}
                   task={step.task}
                   hint={step.hint}
                   onSuccess={handleSuccess}
                   showExpectedOutput={step.type === "mission"}
-                  minHeight={step.type === "mission" ? "160px" : "100px"}
+                  minHeight={step.type === "mission" ? "160px" : "140px"}
                 />
               </div>
             </div>
@@ -767,6 +789,26 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
               {/* 데이터 구조 애니메이션 */}
               {step.component === "dataStructures" && (
                 <DataStructuresComparison />
+              )}
+
+              {/* 함수 시각화 */}
+              {step.component === "functionVisualizer" && (
+                <FunctionVisualizer {...(step as any).componentProps} />
+              )}
+
+              {/* 함수 구조 다이어그램 */}
+              {step.component === "functionStructure" && (
+                <FunctionStructure lang={lang} />
+              )}
+
+              {/* 파라미터 구조 다이어그램 */}
+              {step.component === "parameterStructure" && (
+                <ParameterStructure lang={lang} />
+              )}
+
+              {/* 리턴 구조 다이어그램 */}
+              {step.component === "returnStructure" && (
+                <ReturnStructure lang={lang} />
               )}
             </div>
           )}

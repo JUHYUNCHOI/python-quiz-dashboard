@@ -36,12 +36,19 @@ export { lesson24Data } from './lesson24' // 큐 (Queue)
 export { lesson25Data } from './lesson25' // 덱 (Deque)
 export { lesson26Data } from './lesson26' // 자료구조 비교와 선택
 
-// Part 5: 함수 (레슨 29-33)
+// Part 5: 함수 (레슨 29-33) - 한국어
 export { lesson29Data } from './lesson29' // 함수란?
 export { lesson30Data } from './lesson30' // 매개변수와 반환값
 export { lesson31Data } from './lesson31' // 함수 활용
 export { lesson32Data } from './lesson32' // 내장함수 총정리
 export { lesson33Data } from './lesson33' // 함수 문제 30
+
+// Part 5: Functions (Lessons 29-33) - English
+export { lesson29EnData } from './lesson29-en' // What is a Function?
+export { lesson30EnData } from './lesson30-en' // Parameters & Return Values
+export { lesson31EnData } from './lesson31-en' // Function Usage
+export { lesson32EnData } from './lesson32-en' // Built-in Functions
+export { lesson33EnData } from './lesson33-en' // Function Problems 30
 
 // 프로젝트 레슨
 export { lessonP1Data } from './lessonP1' // Part 1 프로젝트: 미니 계산기
