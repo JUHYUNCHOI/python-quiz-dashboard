@@ -1,18 +1,20 @@
 "use client"
 
-import type React from "react"
-
-import { useState, useEffect, useRef } from "react"
 import { X, Clock, ChevronLeft, ChevronRight, Check, AlertCircle, Coffee } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { CodeDisplay } from "@/components/code-display"
 import { CelebrationScreen } from "@/components/celebration-screen"
 import { ExplanationPanel } from "@/components/explanation-panel"
-import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
+import { useQuizState } from "@/hooks/use-quiz-state"
+import type { QuizQuestion } from "@/hooks/use-quiz-state"
+import { useQuizTimer } from "@/hooks/use-quiz-timer"
+import { useFocusTracker } from "@/hooks/use-focus-tracker"
+import { useSwipe } from "@/hooks/use-swipe"
+import { useQuizKeyboard } from "@/hooks/use-quiz-keyboard"
 
-const quizQuestions = [
+const quizQuestions: QuizQuestion[] = [
   {
     id: 1,
     difficulty: "쉬움",
@@ -62,270 +64,46 @@ const quizQuestions = [
 ]
 
 export default function QuizPage() {
-  const router = useRouter()
-  const [currentQuestion, setCurrentQuestion] = useState(0)
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
-  const [showResult, setShowResult] = useState(false)
-  const [isCorrect, setIsCorrect] = useState(false)
-  const [timeLeft, setTimeLeft] = useState(300)
-  const [score, setScore] = useState(0)
-  const [touchStart, setTouchStart] = useState<number | null>(null)
-  const [touchEnd, setTouchEnd] = useState<number | null>(null)
-  const [showCelebration, setShowCelebration] = useState(false)
-  const [showExplanation, setShowExplanation] = useState(false)
-  const [streak, setStreak] = useState(5)
-  const [showToast, setShowToast] = useState(false)
-  const [reviewCount, setReviewCount] = useState(0)
+  const quiz = useQuizState(quizQuestions)
+  const { isFocused, justReturnedFocus } = useFocusTracker()
 
-  const [quizSettings, setQuizSettings] = useState({ questionCount: 20, difficulty: "mixed", startTime: Date.now() })
-  const [questionStartTime, setQuestionStartTime] = useState(Date.now())
-  const [wrongAnswerStreak, setWrongAnswerStreak] = useState(0)
-  const [showPauseScreen, setShowPauseScreen] = useState(false)
-  const [showMidCheckIn, setShowMidCheckIn] = useState(false)
-  const [isFocused, setIsFocused] = useState(true)
-  const [focusedTime, setFocusedTime] = useState(0)
-  const [totalTime, setTotalTime] = useState(0)
-  const [showQuickAnswerWarning, setShowQuickAnswerWarning] = useState(false)
-  const focusTimeRef = useRef(0)
-  const totalTimeRef = useRef(0)
+  const { formattedTime, isLowTime } = useQuizTimer({
+    initialTime: 300,
+    isPaused: quiz.showResult || !isFocused,
+  })
 
-  useEffect(() => {
-    const settings = sessionStorage.getItem("quizSettings")
-    if (settings) {
-      setQuizSettings(JSON.parse(settings))
-    } else {
-      router.push("/quiz/setup")
-    }
-  }, [router])
-
-  useEffect(() => {
-    const handleFocus = () => {
-      setIsFocused(true)
-      setShowToast(true)
-      setTimeout(() => setShowToast(false), 3000)
-    }
-
-    const handleBlur = () => {
-      setIsFocused(false)
-    }
-
-    window.addEventListener("focus", handleFocus)
-    window.addEventListener("blur", handleBlur)
-
-    return () => {
-      window.removeEventListener("focus", handleFocus)
-      window.removeEventListener("blur", handleBlur)
-    }
-  }, [])
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      totalTimeRef.current += 1
-      setTotalTime(totalTimeRef.current)
-
-      if (isFocused && !showResult) {
-        focusTimeRef.current += 1
-        setFocusedTime(focusTimeRef.current)
+  const swipeHandlers = useSwipe({
+    onSwipeLeft: () => {
+      if (!quiz.showResult && quiz.selectedAnswer !== null) {
+        quiz.handleNext()
       }
-    }, 1000)
+    },
+    onSwipeRight: () => {
+      quiz.handlePrevious()
+    },
+  })
 
-    return () => clearInterval(interval)
-  }, [isFocused, showResult])
+  useQuizKeyboard({
+    selectedAnswer: quiz.selectedAnswer,
+    showResult: quiz.showResult,
+    showExplanation: quiz.showExplanation,
+    onSubmit: quiz.handleNext,
+    onExit: quiz.handleExit,
+    onCloseExplanation: quiz.handleExplanationClose,
+    onSelectAnswer: quiz.handleAnswerSelect,
+  })
 
-  useEffect(() => {
-    if (currentQuestion === Math.floor(quizSettings.questionCount / 2) && !showMidCheckIn) {
-      setShowMidCheckIn(true)
-      setTimeout(() => setShowMidCheckIn(false), 3000)
-    }
-  }, [currentQuestion, quizSettings.questionCount, showMidCheckIn])
-
-  useEffect(() => {
-    setQuestionStartTime(Date.now())
-  }, [currentQuestion])
-
-  useEffect(() => {
-    if (timeLeft > 0 && !showResult && isFocused) {
-      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000)
-      return () => clearTimeout(timer)
-    }
-  }, [timeLeft, showResult, isFocused])
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60)
-    const secs = seconds % 60
-    return `${mins}:${secs.toString().padStart(2, "0")}`
-  }
-
-  const handleAnswerSelect = (index: number) => {
-    if (!showResult) {
-      setSelectedAnswer(index)
-    }
-  }
-
-  const handleNext = () => {
-    if (selectedAnswer === null) return
-
-    const timeSpent = (Date.now() - questionStartTime) / 1000
-    if (timeSpent < 3) {
-      setShowQuickAnswerWarning(true)
-      setTimeout(() => setShowQuickAnswerWarning(false), 3000)
-      return
-    }
-
-    const correct = selectedAnswer === quizQuestions[currentQuestion].correctAnswer
-    setIsCorrect(correct)
-    setShowResult(true)
-
-    if (correct) {
-      setScore(score + 1)
-      setWrongAnswerStreak(0) // Reset wrong answer streak
-      setShowCelebration(true)
-      setTimeout(() => {
-        setShowCelebration(false)
-        if (currentQuestion < quizSettings.questionCount - 1) {
-          setCurrentQuestion(currentQuestion + 1)
-          setSelectedAnswer(null)
-          setShowResult(false)
-        } else {
-          router.push("/quiz/session-complete")
-        }
-      }, 2000)
-    } else {
-      const newStreak = wrongAnswerStreak + 1
-      setWrongAnswerStreak(newStreak)
-
-      if (newStreak >= 5) {
-        setShowPauseScreen(true)
-        return
-      }
-
-      setShowToast(true)
-      setReviewCount(reviewCount + 1)
-      setTimeout(() => setShowToast(false), 3000)
-      setShowExplanation(true)
-    }
-  }
-
-  const handleSkip = () => {
-    if (currentQuestion < quizQuestions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1)
-      setSelectedAnswer(null)
-      setShowResult(false)
-    } else {
-      router.push("/quiz/results")
-    }
-  }
-
-  const handleExit = () => {
-    const completed = currentQuestion + 1
-    const percentage = (completed / quizSettings.questionCount) * 100
-
-    if (percentage < 80) {
-      const remaining = quizSettings.questionCount - completed
-      if (
-        confirm(
-          `아직 ${remaining}문제 남았어요. 끝까지 해볼까요?\n\n"확인"을 누르면 계속 진행하고, "취소"를 누르면 진행 상황을 저장하고 나갑니다.`,
-        )
-      ) {
-        return
-      }
-    }
-
-    router.push("/")
-  }
-
-  const handleLowerDifficulty = () => {
-    setShowPauseScreen(false)
-    setWrongAnswerStreak(0)
-    // In a real app, you would adjust the difficulty here
-  }
-
-  const handleTakeBreak = () => {
-    router.push("/")
-  }
-
-  const handleContinue = () => {
-    setShowPauseScreen(false)
-    setWrongAnswerStreak(0)
-  }
-
-  const progress = ((currentQuestion + 1) / quizSettings.questionCount) * 100
-  const estimatedRemainingTime = Math.ceil((quizSettings.questionCount - currentQuestion - 1) * 1)
-
-  const onTouchStart = (e: React.TouchEvent) => {
-    setTouchEnd(null)
-    setTouchStart(e.targetTouches[0].clientX)
-  }
-
-  const onTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX)
-  }
-
-  const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return
-    const distance = touchStart - touchEnd
-    const isLeftSwipe = distance > 50
-    const isRightSwipe = distance < -50
-
-    if (isLeftSwipe && !showResult && selectedAnswer !== null) {
-      handleNext()
-    }
-    if (isRightSwipe && currentQuestion > 0 && !showResult) {
-      setCurrentQuestion(currentQuestion - 1)
-      setSelectedAnswer(null)
-    }
-  }
-
-  useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.key === "Enter" && selectedAnswer !== null && !showResult) {
-        handleNext()
-      }
-      if (e.key === "Escape") {
-        if (showExplanation) {
-          handleExplanationClose()
-        } else {
-          handleExit()
-        }
-      }
-      if (e.key >= "1" && e.key <= "4" && !showResult) {
-        handleAnswerSelect(Number.parseInt(e.key) - 1)
-      }
-    }
-
-    window.addEventListener("keydown", handleKeyPress)
-    return () => window.removeEventListener("keydown", handleKeyPress)
-  }, [selectedAnswer, showResult, currentQuestion, showExplanation])
-
-  const handleExplanationClose = () => {
-    setShowExplanation(false)
-    if (currentQuestion < quizSettings.questionCount - 1) {
-      setCurrentQuestion(currentQuestion + 1)
-      setSelectedAnswer(null)
-      setShowResult(false)
-    } else {
-      router.push("/quiz/results")
-    }
-  }
-
-  const handlePracticeSimilar = () => {
-    setShowExplanation(false)
-    setSelectedAnswer(null)
-    setShowResult(false)
-  }
-
-  const question = quizQuestions[currentQuestion % quizQuestions.length]
+  const question = quiz.question
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-mint-50">
       {/* Top Bar */}
       <div className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-10">
-        {/* 상단 바 - 학습 페이지: max-w-[1300px] */}
         <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-3 md:py-4">
           <div className="flex items-center justify-between gap-2 md:gap-4">
             <div className="flex items-center gap-2 md:gap-4 flex-1">
               <button
-                onClick={handleExit}
+                onClick={quiz.handleExit}
                 className="rounded-full p-2 md:p-2 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors hover:bg-gray-100"
                 aria-label="나가기"
               >
@@ -334,38 +112,38 @@ export default function QuizPage() {
               <div className="flex-1 max-w-xs md:max-w-md">
                 <div className="mb-1 flex items-center justify-between text-xs md:text-sm text-gray-600">
                   <span>
-                    문제 {currentQuestion + 1}/{quizSettings.questionCount}
+                    문제 {quiz.currentQuestion + 1}/{quiz.quizSettings.questionCount}
                   </span>
-                  <span className="hidden sm:inline">{Math.round(progress)}% 완료</span>
+                  <span className="hidden sm:inline">{Math.round(quiz.progress)}% 완료</span>
                 </div>
                 <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
                   <div
                     className="h-full bg-gradient-to-r from-orange-400 to-orange-500 transition-all duration-500"
-                    style={{ width: `${progress}%` }}
+                    style={{ width: `${quiz.progress}%` }}
                   />
                 </div>
-                <div className="mt-1 text-xs text-gray-500 text-center">약 {estimatedRemainingTime}분 남음</div>
+                <div className="mt-1 text-xs text-gray-500 text-center">약 {quiz.estimatedRemainingTime}분 남음</div>
               </div>
             </div>
 
             <div className="flex items-center gap-2">
-              {reviewCount > 0 && (
+              {quiz.reviewCount > 0 && (
                 <div className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs md:text-sm font-semibold">
-                  복습 대기 {reviewCount}
+                  복습 대기 {quiz.reviewCount}
                 </div>
               )}
 
               <div
                 className={cn(
                   "flex items-center gap-2 rounded-full px-3 py-2 md:px-4 transition-colors",
-                  timeLeft < 30 ? "bg-red-100 animate-pulse" : "bg-orange-100",
+                  isLowTime ? "bg-red-100 animate-pulse" : "bg-orange-100",
                 )}
               >
-                <Clock className={cn("h-4 w-4", timeLeft < 30 ? "text-red-600" : "text-orange-600")} />
+                <Clock className={cn("h-4 w-4", isLowTime ? "text-red-600" : "text-orange-600")} />
                 <span
-                  className={cn("font-mono text-sm font-semibold", timeLeft < 30 ? "text-red-600" : "text-orange-600")}
+                  className={cn("font-mono text-sm font-semibold", isLowTime ? "text-red-600" : "text-orange-600")}
                 >
-                  {formatTime(timeLeft)}
+                  {formattedTime}
                 </span>
               </div>
             </div>
@@ -373,7 +151,7 @@ export default function QuizPage() {
         </div>
       </div>
 
-      {showQuickAnswerWarning && (
+      {quiz.showQuickAnswerWarning && (
         <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 animate-slide-in-down">
           <Card className="bg-yellow-50 border-2 border-yellow-300 shadow-xl p-4 max-w-sm">
             <div className="flex items-start gap-3">
@@ -387,7 +165,7 @@ export default function QuizPage() {
         </div>
       )}
 
-      {showToast && isFocused && (
+      {justReturnedFocus && isFocused && (
         <div className="fixed top-20 right-4 z-50 animate-slide-in-right">
           <Card className="bg-white shadow-xl border-2 border-mint-200 p-4 max-w-sm">
             <div className="flex items-start gap-3">
@@ -401,20 +179,20 @@ export default function QuizPage() {
         </div>
       )}
 
-      {showMidCheckIn && (
+      {quiz.showMidCheckIn && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
           <Card className="bg-white p-8 max-w-md mx-4 text-center animate-bounce-in">
             <div className="text-6xl mb-4">🦒💪</div>
             <h3 className="text-2xl font-bold text-gray-800 mb-2">절반 왔어요!</h3>
             <p className="text-lg text-gray-600 mb-2">잘하고 있어요!</p>
             <p className="text-sm text-gray-500">
-              지금까지 {Math.round((score / (currentQuestion + 1)) * 100)}% 정답률!
+              지금까지 {Math.round((quiz.score / (quiz.currentQuestion + 1)) * 100)}% 정답률!
             </p>
           </Card>
         </div>
       )}
 
-      {showPauseScreen && (
+      {quiz.showPauseScreen && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <Card className="bg-white p-8 max-w-md w-full">
             <div className="text-center mb-6">
@@ -424,20 +202,20 @@ export default function QuizPage() {
             </div>
             <div className="space-y-3">
               <Button
-                onClick={handleLowerDifficulty}
+                onClick={quiz.handleLowerDifficulty}
                 className="w-full bg-green-500 hover:bg-green-600 text-white py-6 text-lg"
               >
                 난이도 낮추기
               </Button>
               <Button
-                onClick={handleTakeBreak}
+                onClick={quiz.handleTakeBreak}
                 className="w-full bg-blue-500 hover:bg-blue-600 text-white py-6 text-lg flex items-center justify-center gap-2"
               >
                 <Coffee className="h-5 w-5" />
                 쉬었다가 하기
               </Button>
               <Button
-                onClick={handleContinue}
+                onClick={quiz.handleContinue}
                 className="w-full bg-orange-500 hover:bg-orange-600 text-white py-6 text-lg"
               >
                 계속 하기
@@ -447,18 +225,18 @@ export default function QuizPage() {
         </div>
       )}
 
-      {/* Main Content - 학습 페이지: max-w-[1300px] */}
+      {/* Main Content */}
       <main
         className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8"
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={onTouchEnd}
+        onTouchStart={swipeHandlers.onTouchStart}
+        onTouchMove={swipeHandlers.onTouchMove}
+        onTouchEnd={swipeHandlers.onTouchEnd}
       >
         <div className="max-w-4xl mx-auto">
           <Card
             className={cn(
               "overflow-hidden border-2 transition-all duration-500",
-              showResult && !isCorrect && "animate-shake border-red-300",
+              quiz.showResult && !quiz.isCorrect && "animate-shake border-red-300",
             )}
           >
             <div className="p-4 md:p-6 lg:p-8">
@@ -482,7 +260,7 @@ export default function QuizPage() {
                 {question.question}
               </h3>
 
-              {/* Code Block with enhanced display */}
+              {/* Code Block */}
               <div className="mb-6">
                 <CodeDisplay code={question.code} />
               </div>
@@ -490,58 +268,55 @@ export default function QuizPage() {
               {/* Options */}
               <div className="space-y-3">
                 {question.options.map((option, index) => {
-                  const isSelected = selectedAnswer === index
+                  const isSelected = quiz.selectedAnswer === index
                   const isCorrectAnswer = index === question.correctAnswer
-                  const showCorrect = showResult && isCorrectAnswer
-                  const showWrong = showResult && isSelected && !isCorrect
+                  const showCorrect = quiz.showResult && isCorrectAnswer
+                  const showWrong = quiz.showResult && isSelected && !quiz.isCorrect
 
                   return (
                     <button
                       key={index}
-                      onClick={() => handleAnswerSelect(index)}
-                      disabled={showResult}
+                      onClick={() => quiz.handleAnswerSelect(index)}
+                      disabled={quiz.showResult}
                       className={cn(
                         "group relative w-full rounded-xl border-2 p-4 md:p-5 text-left transition-all duration-300 min-h-[56px]",
                         "hover:shadow-md hover:scale-[1.02] active:scale-[0.98]",
-                        !showResult &&
+                        !quiz.showResult &&
                           !isSelected &&
                           "border-gray-200 bg-white hover:border-orange-300 hover:bg-orange-50",
-                        !showResult && isSelected && "border-orange-400 bg-orange-50 shadow-lg scale-[1.02]",
+                        !quiz.showResult && isSelected && "border-orange-400 bg-orange-50 shadow-lg scale-[1.02]",
                         showCorrect && "border-green-400 bg-green-50 shadow-lg",
                         showWrong && "border-red-400 bg-red-50",
-                        showResult && "cursor-not-allowed",
+                        quiz.showResult && "cursor-not-allowed",
                       )}
                     >
-                      {/* Ripple effect on click */}
                       <div className="absolute inset-0 overflow-hidden rounded-xl">
-                        {isSelected && !showResult && (
+                        {isSelected && !quiz.showResult && (
                           <div className="absolute inset-0 bg-orange-400/20 animate-ripple rounded-xl" />
                         )}
                       </div>
 
                       <div className="flex items-center gap-3 md:gap-4 relative z-10">
-                        {/* Radio Button */}
                         <div
                           className={cn(
                             "flex h-6 w-6 md:h-7 md:w-7 shrink-0 items-center justify-center rounded-full border-2 transition-all",
-                            !showResult && !isSelected && "border-gray-300 bg-white",
-                            !showResult && isSelected && "border-orange-500 bg-orange-500",
+                            !quiz.showResult && !isSelected && "border-gray-300 bg-white",
+                            !quiz.showResult && isSelected && "border-orange-500 bg-orange-500",
                             showCorrect && "border-green-500 bg-green-500",
                             showWrong && "border-red-500 bg-red-500",
                           )}
                         >
-                          {isSelected && !showResult && (
+                          {isSelected && !quiz.showResult && (
                             <div className="h-2 w-2 md:h-2.5 md:w-2.5 rounded-full bg-white" />
                           )}
                           {showCorrect && <Check className="h-4 w-4 md:h-5 md:w-5 text-white" />}
                           {showWrong && <X className="h-4 w-4 md:h-5 md:w-5 text-white" />}
                         </div>
 
-                        {/* Option Text */}
                         <span
                           className={cn(
                             "flex-1 font-mono text-sm md:text-base lg:text-lg font-medium transition-colors",
-                            !showResult && "text-gray-700",
+                            !quiz.showResult && "text-gray-700",
                             showCorrect && "text-green-700",
                             showWrong && "text-red-700",
                           )}
@@ -559,13 +334,9 @@ export default function QuizPage() {
           {/* Bottom Actions */}
           <div className="mt-6 flex items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              {currentQuestion > 0 && (
+              {quiz.currentQuestion > 0 && (
                 <button
-                  onClick={() => {
-                    setCurrentQuestion(currentQuestion - 1)
-                    setSelectedAnswer(null)
-                    setShowResult(false)
-                  }}
+                  onClick={quiz.handlePrevious}
                   className="hidden md:flex items-center gap-1 text-sm text-gray-500 transition-colors hover:text-gray-700 min-h-[44px]"
                 >
                   <ChevronLeft className="h-4 w-4" />
@@ -573,7 +344,7 @@ export default function QuizPage() {
                 </button>
               )}
               <button
-                onClick={handleSkip}
+                onClick={quiz.handleSkip}
                 className="text-sm text-gray-500 transition-colors hover:text-gray-700 min-h-[44px] px-2"
               >
                 건너뛰기
@@ -581,8 +352,8 @@ export default function QuizPage() {
             </div>
 
             <Button
-              onClick={handleNext}
-              disabled={selectedAnswer === null}
+              onClick={quiz.handleNext}
+              disabled={quiz.selectedAnswer === null}
               className="min-w-[120px] md:min-w-32 rounded-full bg-gradient-to-r from-orange-400 to-orange-500 px-6 md:px-8 py-5 md:py-6 text-base md:text-lg font-semibold text-white shadow-lg transition-all hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:hover:scale-100 min-h-[44px]"
             >
               다음
@@ -596,20 +367,20 @@ export default function QuizPage() {
         </div>
       </main>
 
-      <CelebrationScreen show={showCelebration} points={10} streak={streak} />
+      <CelebrationScreen show={quiz.showCelebration} points={10} streak={quiz.streak} />
 
       <ExplanationPanel
-        show={showExplanation}
-        yourAnswer={selectedAnswer !== null ? question.options[selectedAnswer] : ""}
+        show={quiz.showExplanation}
+        yourAnswer={quiz.selectedAnswer !== null ? question.options[quiz.selectedAnswer] : ""}
         correctAnswer={question.options[question.correctAnswer]}
         explanation={question.explanation}
         keyConceptTitle={question.keyConceptTitle}
         keyConceptDescription={question.keyConceptDescription}
         codeComparison={question.codeComparison}
         relatedTopics={question.relatedTopics}
-        onClose={handleExplanationClose}
-        onPracticeSimilar={handlePracticeSimilar}
-        onNext={handleExplanationClose}
+        onClose={quiz.handleExplanationClose}
+        onPracticeSimilar={quiz.handlePracticeSimilar}
+        onNext={quiz.handleExplanationClose}
       />
     </div>
   )

@@ -6,7 +6,7 @@
 // ============================================================
 
 interface RunResult {
-  result: string
+  result?: string
   error?: string
 }
 
@@ -329,11 +329,12 @@ function executeFunction(
   argsStr: string, 
   globalVars: Map<string, Variable>,
   functions: Map<string, FunctionDef>
-): { 
-  output?: string[], 
-  returnValue?: any, 
+): {
+  result?: string,
+  output?: string[],
+  returnValue?: any,
   returnType?: 'string' | 'number' | 'none',
-  error?: string 
+  error?: string
 } {
   // 인자 파싱
   const args = parseArguments(argsStr)

@@ -24,7 +24,7 @@ export interface LessonStep {
   answer?: number
   explanation?: string
   // interactive 타입용
-  component?: "dataStructures" | "functionVisualizer" | "functionStructure" | "parameterStructure" | "returnStructure" | "functionBuilder" | "repetitiveTyping" | "patternDiscovery" | "typeAlong" | "fillInBlank"
+  component?: string
   componentProps?: {
     funcName?: string
     params?: string[]

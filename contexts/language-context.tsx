@@ -1,13 +1,17 @@
 "use client"
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { translations, type TranslationKey } from './translations'
 
-type Language = 'ko' | 'en'
+export type Language = 'ko' | 'en'
 
 interface LanguageContextType {
   lang: Language
   setLang: (lang: Language) => void
+  /** 인라인 번역: t("한국어", "English") */
   t: (ko: string, en: string) => string
+  /** 키 기반 번역: tk("common.next") */
+  tk: (key: TranslationKey) => string
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
@@ -17,7 +21,9 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const saved = localStorage.getItem('language') as Language
-    if (saved) setLangState(saved)
+    if (saved && (saved === 'ko' || saved === 'en')) {
+      setLangState(saved)
+    }
   }, [])
 
   const setLang = (newLang: Language) => {
@@ -25,11 +31,17 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('language', newLang)
   }
 
-  // 간단한 번역 헬퍼
+  // 인라인 번역 헬퍼 (기존 호환)
   const t = (ko: string, en: string) => lang === 'ko' ? ko : en
 
+  // 키 기반 번역 헬퍼
+  const tk = (key: TranslationKey): string => {
+    const entry = translations[key]
+    return entry[lang]
+  }
+
   return (
-    <LanguageContext.Provider value={{ lang, setLang, t }}>
+    <LanguageContext.Provider value={{ lang, setLang, t, tk }}>
       {children}
     </LanguageContext.Provider>
   )

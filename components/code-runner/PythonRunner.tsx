@@ -4,12 +4,7 @@ import { useState, useRef, useEffect } from "react"
 import { Play, Check, X, Loader2, RotateCcw } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-// Pyodide 타입
-declare global {
-  interface Window {
-    loadPyodide: () => Promise<any>
-  }
-}
+// Pyodide 타입 - Window 확장은 python-runner.tsx에서 선언됨
 
 interface TestCase {
   input?: string

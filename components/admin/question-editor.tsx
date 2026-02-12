@@ -17,7 +17,7 @@ interface QuestionEditorProps {
 
 export function QuestionEditor({ question, onClose, onSave }: QuestionEditorProps) {
   const [questionText, setQuestionText] = useState(question?.question || "")
-  const [options, setOptions] = useState(question?.options || ["", "", "", ""])
+  const [options, setOptions] = useState<string[]>(question?.options || ["", "", "", ""])
   const [correctAnswer, setCorrectAnswer] = useState(question?.correctAnswer || 0)
   const [difficulty, setDifficulty] = useState(question?.difficulty || "초급")
   const [category, setCategory] = useState(question?.category || "")

@@ -3,7 +3,7 @@
 // ============================================
 export interface LessonStep {
   id: string
-  type: "explain" | "tryit" | "mission" | "quiz" | "interactive" | "animation"
+  type: "explain" | "tryit" | "mission" | "quiz" | "interactive" | "animation" | "coding"
   title: string
   content?: string
   code?: string

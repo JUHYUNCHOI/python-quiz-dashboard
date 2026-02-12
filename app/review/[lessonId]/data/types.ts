@@ -29,9 +29,10 @@ export interface PracticeContent {
   task: string;
   guide?: string;
   hint?: string;
-  template: { before: string; after: string } | null;
+  template: string | { before: string; after: string } | null;
   answer: string;
   alternateAnswers?: string[];
+  blanksAnswer?: string[];
   expect: string;
 }
 
@@ -54,9 +55,10 @@ export interface InterleavingContent {
   message: string;
   task: string;
   hint?: string;
-  template: { before: string; after: string } | null;
+  template: string | { before: string; after: string } | null;
   answer: string;
   alternateAnswers?: string[];
+  blanksAnswer?: string[];
   expect: string;
 }
 
@@ -103,7 +105,8 @@ export type StepContent =
   | { type: "summary"; content: SummaryContent }
   | { type: "project"; content: ProjectContent }
   | { type: "done"; content: DoneContent }
-  | { type: "interactive"; content: InteractiveContent };
+  | { type: "interactive"; content: InteractiveContent }
+  | { type: "coding"; content: any };
 
 export interface LessonData {
   id: string;

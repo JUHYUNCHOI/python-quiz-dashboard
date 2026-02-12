@@ -20,6 +20,7 @@ interface ExplanationPanelProps {
   }
   relatedTopics?: string[]
   onClose: () => void
+  onPracticeSimilar?: () => void
   onNext: () => void
 }
 

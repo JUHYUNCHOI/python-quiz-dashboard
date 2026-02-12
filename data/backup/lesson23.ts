@@ -1,7 +1,7 @@
 // ============================================
 // 레슨 23: 슬라이싱
 // ============================================
-import { LessonData } from './types'
+import { LessonData } from '../types'
 
 export const lesson23Data: LessonData = {
   id: "23",

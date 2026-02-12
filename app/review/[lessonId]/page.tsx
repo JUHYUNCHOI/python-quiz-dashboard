@@ -190,6 +190,8 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   const current = lesson?.steps[step]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const c = current?.content as any
   const progress = lesson ? ((step + 1) / lesson.steps.length) * 100 : 0
 
   // ============================================================
@@ -230,7 +232,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
     if (!current) return
     if (["practice", "project", "interleaving"].includes(current.type)) {
       setTimeout(() => {
-        if (current.content.template) {
+        if (c.template) {
           inputRef.current?.focus()
         } else {
           textareaRef.current?.focus()
@@ -268,8 +270,8 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
   // 문자열 template의 빈칸 수에 맞게 blanks 초기화
   useEffect(() => {
     if (!current) return
-    if (["practice", "interleaving"].includes(current.type) && typeof current.content.template === 'string') {
-      const count = (current.content.template.match(/___/g) || []).length
+    if (["practice", "interleaving"].includes(current.type) && typeof c.template === 'string') {
+      const count = (c.template.match(/___/g) || []).length
       setBlanks(new Array(count).fill(""))
     }
   }, [step, current])
@@ -302,7 +304,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
 
   // 현재 줄의 글자 타이핑 애니메이션
   useEffect(() => {
-    if (current?.type !== "explain" || !current.content.code) return
+    if (current?.type !== "explain" || !c.code) return
     if (typingComplete) return
     if (visibleLines <= 0 || visibleLines > codeLines.length) return
     if (lineFullyTyped) return  // 이미 이 줄 완성
@@ -344,7 +346,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
 
   // 탭 → 현재 줄 즉시 완성 or 다음 줄
   const handleCodeClick = useCallback(() => {
-    if (!current?.content?.code) return
+    if (!c?.code) return
     if (typingComplete) return
     clearSeqTimer()
     
@@ -381,8 +383,8 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
   useEffect(() => {
     if (current?.type !== "explain") return
     
-    const headlines = current.content.lines || []
-    const code = current.content.code
+    const headlines = c.lines || []
+    const code = c.code
     const lines = code ? code.split('\n') : []
     setCodeLines(lines)
     
@@ -437,8 +439,8 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
   // 코드 타이핑 완료 → result 표시 (예측 퀴즈 없을 때)
   useEffect(() => {
     if (!typingComplete) return
-    if (!current?.content?.result) return
-    if (current.content.predict) return
+    if (!c?.result) return
+    if (c.predict) return
     if (showResult) return
     
     const timer = setTimeout(() => setShowResult(true), 500)
@@ -448,7 +450,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
   // result 표시 → pause → note 표시
   useEffect(() => {
     if (!showResult) return
-    if (!current?.content?.note) return
+    if (!c?.note) return
     if (showNote) return
     
     const timer = setTimeout(() => setShowNote(true), 1500)  // 1.5초 생각 시간
@@ -482,7 +484,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
     
     if (e.key === "Enter" && !e.shiftKey) {
       // explain에서 예측 퀴즈가 있고 아직 안 풀었으면 Enter 무시
-      if (current?.type === "explain" && current.content.predict && !predictAnswered) {
+      if (current?.type === "explain" && c.predict && !predictAnswered) {
         return
       }
       
@@ -508,7 +510,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
     if (predictSelected !== null) return
     setPredictSelected(idx)
     
-    const isCorrect = idx === current.content.predict.answer
+    const isCorrect = idx === c.predict.answer
     setPredictAnswered(true)
     
     if (isCorrect) {
@@ -544,7 +546,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
   // ============================================================
   const insertSymbol = (symbol: string) => {
     setInput(prev => prev + symbol)
-    if (current.content.template) {
+    if (c.template) {
       inputRef.current?.focus()
     } else {
       textareaRef.current?.focus()
@@ -646,17 +648,18 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
   }
 
   const check = () => {
-    const c = showReview ? {
+    const sc = showReview ? {
       task: wrongAnswers[reviewIndex].task,
       answer: wrongAnswers[reviewIndex].answer,
       expect: wrongAnswers[reviewIndex].expect,
       template: null
-    } : current.content
-    
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any : c
+
     // 문자열 template인 경우: blanks 값을 정답과 직접 비교
-    if (typeof c.template === 'string' && c.blanksAnswer) {
+    if (typeof sc.template === 'string' && sc.blanksAnswer) {
       const normalize = (s: string) => s.replace(/\s+/g, '').trim().toLowerCase()
-      const allCorrect = c.blanksAnswer.every((ans: string, idx: number) => {
+      const allCorrect = sc.blanksAnswer.every((ans: string, idx: number) => {
         const userVal = (blanks[idx] || '').trim()
         // 여러 정답이 가능한 경우 (| 구분)
         const answers = ans.split('|').map((a: string) => a.trim())
@@ -664,7 +667,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
       })
       
       if (allCorrect) {
-        setOutput(c.expect || '정답!')
+        setOutput(sc.expect || '정답!')
         setErrorMsg("")
         setPhase("correct")
         setPraise(getRandomPraise())
@@ -692,7 +695,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
         return
       } else {
         // 어떤 빈칸이 틀렸는지 피드백
-        const wrongIdx = c.blanksAnswer.findIndex((ans: string, idx: number) => {
+        const wrongIdx = sc.blanksAnswer.findIndex((ans: string, idx: number) => {
           const userVal = (blanks[idx] || '').trim()
           const answers = ans.split('|').map((a: string) => a.trim())
           return !answers.some(a => normalize(userVal) === normalize(a))
@@ -708,9 +711,9 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
         if (newTries === 1 && !showReview) {
           setWrongAnswers(prev => [...prev, {
             stepIndex: step,
-            task: c.task,
-            answer: c.answer,
-            expect: c.expect || ''
+            task: sc.task,
+            answer: sc.answer,
+            expect: sc.expect || ''
           }])
         }
         setTimeout(() => setPhase("input"), 800)
@@ -719,20 +722,20 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
     }
 
     let code = ""
-    const hasTemplate = !!c.template
-    if (typeof c.template === 'string') {
+    const hasTemplate = !!sc.template
+    if (typeof sc.template === 'string') {
       let blankIdx = 0
-      code = c.template.replace(/___/g, () => blanks[blankIdx++] || '')
-    } else if (c.template) {
-      code = c.template.before + input + c.template.after
+      code = sc.template.replace(/___/g, () => blanks[blankIdx++] || '')
+    } else if (sc.template) {
+      code = sc.template.before + input + sc.template.after
     } else {
       code = input
     }
-    
+
     // 함수 정의가 포함된 코드면 새 파서 사용, 아니면 기존 파서 사용
-    const useNewParser = code.includes('def ') || current.content.useNewParser
+    const useNewParser = code.includes('def ') || sc.useNewParser
     const { result, error } = useNewParser ? runPythonCode(code) : runCode(code, hasTemplate)
-    
+
     if (error) {
       setOutput("")
       setErrorMsg(error)
@@ -740,42 +743,42 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
       const newTries = tries + 1
       setTries(newTries)
       setStreak(0)
-      
+
       if (newTries >= 1) setShowHint(Math.min(showHint + 1, 3))
-      
+
       if (newTries === 1 && !showReview) {
         setWrongAnswers(prev => [...prev, {
           stepIndex: step,
-          task: c.task,
-          answer: c.answer,
-          expect: c.expect || c.target
+          task: sc.task,
+          answer: sc.answer,
+          expect: sc.expect || sc.target
         }])
       }
-      
+
       setTimeout(() => setPhase("input"), 800)
       return
     }
-    
-    setOutput(result)
+
+    setOutput(result || "")
     setErrorMsg("")
-    
-    const target = c.target || c.expect
+
+    const target = sc.target || sc.expect
     const normalize = (s: string) => s.replace(/\s+/g, ' ').trim().toLowerCase()
-    
-    if (normalize(result) !== normalize(target)) {
+
+    if (normalize(result || "") !== normalize(target)) {
       setPhase("wrong")
       const newTries = tries + 1
       setTries(newTries)
       setStreak(0)
-      
+
       if (newTries >= 1) setShowHint(Math.min(showHint + 1, 3))
-      
+
       if (newTries === 1 && !showReview) {
         setWrongAnswers(prev => [...prev, {
           stepIndex: step,
-          task: c.task,
-          answer: c.answer,
-          expect: c.expect || c.target
+          task: sc.task,
+          answer: sc.answer,
+          expect: sc.expect || sc.target
         }])
       }
       
@@ -814,7 +817,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
   const selectQuiz = (idx: number) => {
     if (selected !== null) return
     setSelected(idx)
-    if (idx === current.content.answer) {
+    if (idx === c.answer) {
       setPhase("correct")
       setScore(score + 10)
       setStreak(streak + 1)
@@ -833,7 +836,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
   const selectErrorQuiz = (idx: number) => {
     if (selected !== null) return
     setSelected(idx)
-    if (idx === current.content.answer) {
+    if (idx === c.answer) {
       setPhase("correct")
       setScore(score + 15)
       setStreak(streak + 1)
@@ -869,12 +872,13 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
   }
 
   const renderHint = () => {
-    const c = showReview ? {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const hc: any = showReview ? {
       hint: null,
       guide: null,
       answer: wrongAnswers[reviewIndex]?.answer
-    } : current.content
-    
+    } : c
+
     if (errorMsg && showHint === 0) {
       return (
         <div className="bg-red-600 rounded-2xl p-4 animate-fadeIn">
@@ -885,33 +889,33 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
         </div>
       )
     }
-    
+
     if (showHint === 0) return null
-    
+
     if (showHint === 1) {
       return (
         <div className="bg-amber-500 rounded-2xl p-4 animate-fadeIn">
           <p className="text-white text-base md:text-lg font-bold">
-            💡 {errorMsg || c.hint || c.guide || "천천히 다시 확인해봐!"}
+            💡 {errorMsg || hc.hint || hc.guide || "천천히 다시 확인해봐!"}
           </p>
         </div>
       )
     }
-    
-    if (showHint === 2 && c.hint) {
+
+    if (showHint === 2 && hc.hint) {
       return (
         <div className="bg-purple-600 rounded-2xl p-4 animate-fadeIn">
           <p className="text-white text-base md:text-lg mb-2 font-bold">💡 이렇게 써봐</p>
-          <p className="text-white font-mono text-base md:text-lg bg-purple-800 p-3 rounded-xl">{c.hint}</p>
+          <p className="text-white font-mono text-base md:text-lg bg-purple-800 p-3 rounded-xl">{hc.hint}</p>
         </div>
       )
     }
-    
-    if (showHint >= 3 || (showHint >= 2 && !c.hint)) {
+
+    if (showHint >= 3 || (showHint >= 2 && !hc.hint)) {
       return (
         <div className="bg-pink-600 rounded-2xl p-4 animate-fadeIn">
           <p className="text-white text-base md:text-lg mb-2 font-bold">🎯 정답 보고 직접 써봐</p>
-          <p className="text-white font-mono text-base md:text-lg bg-pink-800 p-3 rounded-xl select-none">{c.answer}</p>
+          <p className="text-white font-mono text-base md:text-lg bg-pink-800 p-3 rounded-xl select-none">{hc.answer}</p>
         </div>
       )
     }
@@ -1117,13 +1121,13 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
         {current.type === "chapter" && (
           <div className="pt-16 md:pt-24 text-center space-y-6 md:space-y-8 animate-fadeIn">
             <div className="inline-block px-6 py-3 bg-indigo-600 rounded-full shadow-xl">
-              <span className="text-white font-bold text-xl md:text-2xl">📚 Chapter {current.content.num}</span>
+              <span className="text-white font-bold text-xl md:text-2xl">📚 Chapter {c.num}</span>
             </div>
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900">
-              {current.content.title}
+              {c.title}
             </h1>
             <p className="text-gray-600 text-xl md:text-2xl font-medium">
-              {current.content.desc}
+              {c.desc}
             </p>
             <Button 
               onClick={next}
@@ -1139,10 +1143,10 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
         {current.type === "reward" && (
           <div className="pt-16 md:pt-24 text-center space-y-8 md:space-y-10 animate-fadeIn">
             <div className="text-8xl md:text-[10rem] animate-bounce">
-              {current.content.emoji}
+              {c.emoji}
             </div>
             <h2 className="text-3xl md:text-5xl font-bold text-gray-900">
-              {current.content.message}
+              {c.message}
             </h2>
             <div className="inline-flex items-center gap-3 bg-amber-500 px-8 py-4 rounded-full shadow-xl">
               <Sparkles className="w-8 h-8 text-white" />
@@ -1163,19 +1167,19 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
         {current.type === "summary" && (
           <div className="pt-12 md:pt-16 text-center space-y-6 md:space-y-8 animate-fadeIn">
             <div className="text-7xl md:text-8xl">
-              {current.content.emoji}
+              {c.emoji}
             </div>
             <div className="space-y-2">
-              <p className="text-indigo-600 font-bold text-xl md:text-2xl">Chapter {current.content.num} 완료!</p>
+              <p className="text-indigo-600 font-bold text-xl md:text-2xl">Chapter {c.num} 완료!</p>
               <h2 className="text-3xl md:text-5xl font-bold text-gray-900">
-                {current.content.title} 마스터!
+                {c.title} 마스터!
               </h2>
             </div>
             
             <div className="bg-white rounded-3xl p-6 md:p-8 shadow-xl border-4 border-indigo-200 text-left">
               <p className="text-indigo-600 font-bold text-lg md:text-xl mb-4">📝 오늘 배운 것</p>
               <ul className="space-y-3">
-                {current.content.learned.map((item: string, i: number) => (
+                {c.learned.map((item: string, i: number) => (
                   <li key={i} className="flex items-start gap-3">
                     <span className="text-green-500 text-xl">✓</span>
                     <span className="text-gray-700 text-lg md:text-xl font-medium">{item}</span>
@@ -1186,7 +1190,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
             
             <div className="bg-green-100 rounded-2xl p-5 md:p-6 border-4 border-green-300">
               <p className="text-green-700 text-xl md:text-2xl font-bold">
-                🎯 {current.content.canDo}
+                🎯 {c.canDo}
               </p>
             </div>
             
@@ -1230,14 +1234,14 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
         {current.type === "explain" && (
           <div className="pt-8 md:pt-12 space-y-6 md:space-y-8">
             <div className="space-y-2">
-              {current.content.lines.map((line: string, i: number) => (
+              {c.lines.map((line: string, i: number) => (
                 <p key={i} className="text-gray-900 text-2xl md:text-4xl font-bold text-center">
                   {line}
                 </p>
               ))}
             </div>
 
-            {current.content.code && (
+            {c.code && (
               <div 
                 className={cn(
                   "bg-white rounded-3xl overflow-hidden shadow-xl border-4 border-indigo-200",
@@ -1274,18 +1278,18 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                 )}
                 
                 {/* 결과 영역 - 예측 퀴즈가 있으면 맞춘 후에만 표시 */}
-                {current.content.result && (
+                {c.result && (
                   <div className={cn(
                     "px-6 py-4 md:px-8 md:py-5 transition-all duration-300",
                     showResult 
-                      ? (current.content.isError ? "bg-red-600" : "bg-green-600")
+                      ? (c.isError ? "bg-red-600" : "bg-green-600")
                       : "bg-gray-900"
                   )}>
                     <p className={cn(
                       "font-mono text-center text-xl md:text-2xl font-bold transition-opacity duration-300",
                       showResult ? "text-white opacity-100" : "opacity-0"
                     )}>
-                      → {current.content.result}
+                      → {c.result}
                     </p>
                   </div>
                 )}
@@ -1293,13 +1297,13 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
             )}
 
             {/* 예측 퀴즈 */}
-            {current.content.predict && typingComplete && !predictAnswered && (
+            {c.predict && typingComplete && !predictAnswered && (
               <div className="space-y-4 animate-fadeIn">
                 <p className="text-center text-xl md:text-2xl font-bold text-amber-600">
-                  🤔 {current.content.predict.question || "결과가 뭘까?"}
+                  🤔 {c.predict.question || "결과가 뭘까?"}
                 </p>
                 <div className="space-y-3">
-                  {current.content.predict.options.map((opt: string, idx: number) => (
+                  {c.predict.options.map((opt: string, idx: number) => (
                     <button
                       key={idx}
                       onClick={() => selectPredict(idx)}
@@ -1315,38 +1319,38 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
             )}
 
             {/* 예측 결과 피드백 */}
-            {current.content.predict && predictAnswered && !showResult && (
+            {c.predict && predictAnswered && !showResult && (
               <div className={cn(
                 "rounded-2xl p-4 animate-fadeIn text-center",
-                predictSelected === current.content.predict.answer 
+                predictSelected === c.predict.answer 
                   ? "bg-green-600" 
                   : "bg-red-500"
               )}>
                 <p className="text-white text-xl md:text-2xl font-bold">
-                  {predictSelected === current.content.predict.answer 
+                  {predictSelected === c.predict.answer 
                     ? "정답! 👏 +5점" 
-                    : `아쉬워! 정답은 "${current.content.predict.options[current.content.predict.answer]}"`
+                    : `아쉬워! 정답은 "${c.predict.options[c.predict.answer]}"`
                   }
                 </p>
-                {current.content.predict.feedback && predictSelected !== current.content.predict.answer && (
+                {c.predict.feedback && predictSelected !== c.predict.answer && (
                   <p className="text-white/90 text-base md:text-lg mt-2">
-                    💡 {current.content.predict.feedback}
+                    💡 {c.predict.feedback}
                   </p>
                 )}
               </div>
             )}
 
-            {current.content.note && (
+            {c.note && (
               <p className={cn(
                 "text-gray-600 text-center text-lg md:text-xl font-medium transition-opacity duration-300",
-                (current.content.predict ? showResult : typingComplete) ? "opacity-100" : "opacity-0"
+                (c.predict ? showResult : typingComplete) ? "opacity-100" : "opacity-0"
               )}>
-                💬 {current.content.note}
+                💬 {c.note}
               </p>
             )}
             
             {/* 예측 퀴즈가 있으면 맞춰야 다음 버튼 활성화 */}
-            {(!current.content.predict || predictAnswered) && (
+            {(!c.predict || predictAnswered) && (
               <>
                 <Button 
                   onClick={next}
@@ -1370,13 +1374,13 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
             </div>
             
             <p className="text-gray-900 text-2xl md:text-4xl font-bold text-center">
-              {current.content.question}
+              {c.question}
             </p>
             
             <div className="bg-white rounded-3xl overflow-hidden shadow-xl border-4 border-red-200">
               <div className="p-6 md:p-8 bg-gray-900">
                 <div className="font-mono text-lg md:text-2xl whitespace-pre text-left font-bold leading-relaxed">
-                  {current.content.code.split('\n').map((codeLine: string, i: number) => (
+                  {c.code.split('\n').map((codeLine: string, i: number) => (
                     <div key={i}>{highlightPythonLine(codeLine)}</div>
                   ))}
                 </div>
@@ -1389,9 +1393,9 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
             </div>
             
             <div className="space-y-4 md:space-y-5">
-              {current.content.options.map((opt: string, idx: number) => {
+              {c.options.map((opt: string, idx: number) => {
                 const isSelected = selected === idx
-                const isAnswer = idx === current.content.answer
+                const isAnswer = idx === c.answer
                 const showResultState = selected !== null
                 
                 return (
@@ -1415,10 +1419,10 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
               })}
             </div>
 
-            {showExplanation && current.content.explanation && (
+            {showExplanation && c.explanation && (
               <div className="bg-green-600 rounded-2xl p-5 animate-fadeIn">
                 <p className="text-white text-lg md:text-xl font-bold">
-                  💡 {current.content.explanation}
+                  💡 {c.explanation}
                 </p>
               </div>
             )}
@@ -1435,22 +1439,22 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
             </div>
             
             <p className="text-purple-600 text-xl md:text-2xl font-bold text-center">
-              {current.content.message}
+              {c.message}
             </p>
 
             <p className="text-gray-900 text-2xl md:text-4xl font-bold text-center">
-              {current.content.task}
+              {c.task}
             </p>
 
-            {!current.content.template && <SymbolButtons />}
+            {!c.template && <SymbolButtons />}
 
-            {typeof current.content.template === 'string' ? (
+            {typeof c.template === 'string' ? (
               /* 여러 빈칸 template */
               <div className="bg-white rounded-3xl overflow-hidden shadow-xl border-4 border-purple-200">
                 <div className="p-5 md:p-7 bg-gray-900">
                   <div className="font-mono text-base md:text-xl whitespace-pre text-left font-bold leading-loose">
                     {(() => {
-                      const parts = current.content.template.split('___')
+                      const parts = c.template.split('___')
                       let blankIdx = 0
                       return parts.map((part: string, i: number) => {
                         const lines = part.split('\n')
@@ -1539,7 +1543,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
             {phase !== "correct" && renderHint()}
 
             {phase !== "correct" && (() => {
-              const hasInput = typeof current.content.template === 'string'
+              const hasInput = typeof c.template === 'string'
                 ? blanks.some(b => b.trim())
                 : input.trim()
               return (
@@ -1563,36 +1567,36 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
         {/* 연습 */}
         {current.type === "practice" && (
           <div className="pt-8 md:pt-12 space-y-5 md:space-y-6 animate-fadeIn">
-            {current.content.level && (
+            {c.level && (
               <div className="flex justify-center">
                 <span className={cn(
                   "px-6 py-2 rounded-full text-lg md:text-xl font-bold shadow-lg",
-                  getLevelBadge(current.content.level).color
+                  getLevelBadge(c.level).color
                 )}>
-                  {getLevelBadge(current.content.level).label}
+                  {getLevelBadge(c.level).label}
                 </span>
               </div>
             )}
 
             <p className="text-gray-900 text-2xl md:text-4xl font-bold text-center">
-              {current.content.task}
+              {c.task}
             </p>
 
-            {current.content.guide && (
+            {c.guide && (
               <p className="text-indigo-600 text-lg md:text-xl text-center font-bold">
-                💡 {current.content.guide}
+                💡 {c.guide}
               </p>
             )}
 
-            {!current.content.template && <SymbolButtons />}
+            {!c.template && <SymbolButtons />}
 
-            {typeof current.content.template === 'string' ? (
+            {typeof c.template === 'string' ? (
               /* 여러 빈칸 template: 코드 블록 + 인라인 input */
               <div className="bg-white rounded-3xl overflow-hidden shadow-xl border-4 border-indigo-200">
                 <div className="p-5 md:p-7 bg-gray-900">
                   <div className="font-mono text-base md:text-xl whitespace-pre text-left font-bold leading-loose">
                     {(() => {
-                      const parts = current.content.template.split('___')
+                      const parts = c.template.split('___')
                       let blankIdx = 0
                       return parts.map((part: string, i: number) => {
                         const lines = part.split('\n')
@@ -1648,10 +1652,10 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                   </div>
                 </div>
               </div>
-            ) : current.content.template ? (
+            ) : c.template ? (
               <div className="bg-white rounded-3xl p-5 md:p-8 shadow-xl border-4 border-indigo-200">
                 <div className="flex items-center justify-center gap-1 font-mono text-xl md:text-3xl flex-wrap">
-                  <span className="text-gray-500 font-bold">{current.content.template.before}</span>
+                  <span className="text-gray-500 font-bold">{c.template.before}</span>
                   <input
                     ref={inputRef}
                     value={input}
@@ -1663,11 +1667,11 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                       phase === "wrong" && "ring-4 ring-red-500 border-red-500 animate-shake",
                       phase === "input" && !input && "animate-pulse-border"
                     )}
-                    style={{ width: `${Math.max(120, current.content.answer.length * 20 + 60)}px` }}
+                    style={{ width: `${Math.max(120, c.answer.length * 20 + 60)}px` }}
                     autoComplete="off"
                     spellCheck={false}
                   />
-                  <span className="text-gray-500 font-bold">{current.content.template.after}</span>
+                  <span className="text-gray-500 font-bold">{c.template.after}</span>
                 </div>
               </div>
             ) : (
@@ -1703,7 +1707,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
             {phase !== "correct" && renderHint()}
 
             {phase !== "correct" && (() => {
-              const hasInput = typeof current.content.template === 'string'
+              const hasInput = typeof c.template === 'string'
                 ? blanks.some(b => b.trim())
                 : input.trim()
               return (
@@ -1728,13 +1732,13 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
         {current.type === "quiz" && (
           <div className="pt-8 md:pt-12 space-y-6 md:space-y-8 animate-fadeIn">
             <p className="text-gray-900 text-2xl md:text-4xl font-bold text-center">
-              🤔 {current.content.question}
+              🤔 {c.question}
             </p>
             
             <div className="space-y-4 md:space-y-5">
-              {current.content.options.map((opt: string, idx: number) => {
+              {c.options.map((opt: string, idx: number) => {
                 const isSelected = selected === idx
-                const isAnswer = idx === current.content.answer
+                const isAnswer = idx === c.answer
                 const showResultState = selected !== null
                 
                 return (
@@ -1758,10 +1762,10 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
               })}
             </div>
 
-            {showExplanation && current.content.explanation && (
+            {showExplanation && c.explanation && (
               <div className="bg-indigo-600 rounded-2xl p-4 animate-fadeIn">
                 <p className="text-white text-lg md:text-xl font-bold">
-                  💡 {current.content.explanation}
+                  💡 {c.explanation}
                 </p>
               </div>
             )}
@@ -1772,23 +1776,23 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
         {current.type === "project" && (
           <div className="pt-6 md:pt-10 space-y-5 md:space-y-6 animate-fadeIn">
             <div className="flex items-center justify-center gap-3 md:gap-4">
-              {Array.from({ length: current.content.total }).map((_, i) => (
+              {Array.from({ length: c.total }).map((_, i) => (
                 <div
                   key={i}
                   className={cn(
                     "h-4 md:h-5 rounded-full transition-all",
-                    i < current.content.step ? "w-12 md:w-16 bg-indigo-600" : "w-6 md:w-8 bg-gray-300"
+                    i < c.step ? "w-12 md:w-16 bg-indigo-600" : "w-6 md:w-8 bg-gray-300"
                   )}
                 />
               ))}
               <span className="text-gray-600 text-lg md:text-xl ml-2 font-bold">
-                {current.content.step}/{current.content.total}
+                {c.step}/{c.total}
               </span>
             </div>
 
-            {current.content.done.length > 0 && (
+            {c.done.length > 0 && (
               <div className="bg-gray-100 rounded-2xl p-4 md:p-5 border-4 border-gray-200">
-                {current.content.done.map((line: string, i: number) => (
+                {c.done.map((line: string, i: number) => (
                   <p key={i} className="text-green-700 font-mono text-base md:text-lg font-medium">{line}</p>
                 ))}
               </div>
@@ -1796,10 +1800,10 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
 
             <div className="text-center space-y-2">
               <p className="text-gray-900 text-xl md:text-3xl font-bold">
-                🎯 {current.content.task}
+                🎯 {c.task}
               </p>
               <p className="text-indigo-600 font-mono text-lg md:text-xl font-bold">
-                → {current.content.target}
+                → {c.target}
               </p>
             </div>
 
@@ -1859,26 +1863,26 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
           <div className="pt-4 md:pt-6 space-y-4 md:space-y-6 animate-fadeIn">
             <div className="text-center space-y-2">
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-                {current.content.title}
+                {c.title}
               </h2>
-              {current.content.description && (
+              {c.description && (
                 <p className="text-gray-600 text-base md:text-lg">
-                  {current.content.description}
+                  {c.description}
                 </p>
               )}
             </div>
 
             {/* 데이터 구조 애니메이션 */}
-            {current.content.component === "dataStructures" && (
+            {c.component === "dataStructures" && (
               <DataStructuresComparison />
             )}
 
             {/* 함수 구조 빌더 */}
-            {current.content.component === "functionBuilder" && (
+            {c.component === "functionBuilder" && (
               <FunctionBuilder onComplete={next} />
             )}
 
-            {current.content.component !== "functionBuilder" && (
+            {c.component !== "functionBuilder" && (
               <Button 
                 onClick={next}
                 className="w-full py-6 md:py-7 text-xl md:text-2xl bg-indigo-600 hover:bg-indigo-500 rounded-2xl border-0 font-bold text-white shadow-xl"
@@ -1893,11 +1897,11 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
         {current.type === "coding" && (
           <div className="pt-4 md:pt-6 space-y-4 md:space-y-6 animate-fadeIn">
             <PythonRunner
-              title={current.content.title}
-              description={current.content.description}
-              starterCode={current.content.starterCode || ""}
-              testCases={current.content.testCases || []}
-              hints={current.content.hints || []}
+              title={c.title}
+              description={c.description}
+              starterCode={c.starterCode || ""}
+              testCases={c.testCases || []}
+              hints={c.hints || []}
             />
             
             <Button 
