@@ -24,7 +24,7 @@ export interface LessonStep {
   answer?: number
   explanation?: string
   // interactive 타입용
-  component?: "dataStructures" | "functionVisualizer" | "functionStructure" | "parameterStructure" | "returnStructure"
+  component?: "dataStructures" | "functionVisualizer" | "functionStructure" | "parameterStructure" | "returnStructure" | "functionBuilder" | "repetitiveTyping" | "patternDiscovery" | "typeAlong" | "fillInBlank"
   componentProps?: {
     funcName?: string
     params?: string[]
@@ -33,6 +33,14 @@ export interface LessonStep {
     output?: string
   }
   description?: string
+  // typeAlong 컴포넌트용
+  targetCode?: string
+  targetTitle?: string
+  targetDescription?: string
+  // fillInBlank 컴포넌트용
+  codeTemplate?: string
+  blanks?: { id: string; answer: string; hint?: string }[]
+  choices?: string[]
   // coding 타입용
   starterCode?: string
   testCases?: TestCase[]

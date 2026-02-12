@@ -17,6 +17,19 @@ import {
 } from "lucide-react"
 
 // ============================================================
+// /review에 실제 레슨이 있는 ID 목록 (게임형 복습)
+// ============================================================
+const lessonsInReview = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 29, 30, 31, 32, 33, 34, 35])
+
+// 복습 경로 결정: /review에 있으면 review, 없으면 learn으로 fallback
+const getReviewPath = (lessonId: number | string) => {
+  if (typeof lessonId === 'number' && lessonsInReview.has(lessonId)) {
+    return `/review/${lessonId}`
+  }
+  return `/learn/${lessonId}`
+}
+
+// ============================================================
 // 웹앱용 커리큘럼 (새 번호 체계)
 // ============================================================
 const curriculumData = [
@@ -99,9 +112,13 @@ const curriculumData = [
   {
     id: "part6",
     title: "Part 6: 에러와 파일",
-    description: "에러를 처리하고 파일을 다뤄요.",
-    comingSoon: true,
-    lessons: [],
+    description: "에러를 처리하고 파일을 다뤄요! 게임 세이브 시스템을 만들어요.",
+    lessons: [
+      { id: 34, title: "34. 에러 처리하기", description: "try-except로 에러 잡기", duration: "25분", hasQuiz: true },
+      { id: 35, title: "35. 파일 읽고 쓰기", description: "파일로 데이터 저장하기", duration: "25분", hasQuiz: true },
+      { id: 36, title: "36. 게임 세이브", description: "RPG 게임 저장/불러오기", duration: "30분", hasQuiz: true },
+      { id: 37, title: "37. Part 6 문제 20", description: "에러와 파일 연습 문제", duration: "40분", hasQuiz: true },
+    ],
   },
   {
     id: "part7",
@@ -128,7 +145,7 @@ const curriculumData = [
 
 export default function CurriculumPage() {
   const [completedLessons, setCompletedLessons] = useState<Set<number | string>>(new Set())
-  const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set(["part1", "part2", "part3", "part3-advanced", "part5"]))
+  const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set(["part1", "part2", "part3", "part3-advanced", "part5", "part6"]))
 
   useEffect(() => {
     const saved = localStorage.getItem("completedLessons")
@@ -200,7 +217,7 @@ export default function CurriculumPage() {
               {/* 다음 수업 버튼 */}
               {nextLessonInfo && (
                 <Link
-                  href={`/practice/${nextLessonInfo.lesson.id}`}
+                  href={`/learn/${nextLessonInfo.lesson.id}`}
                   className="bg-green-500 text-white px-6 py-3 rounded-xl border-2 border-black font-bold hover:bg-green-600 transition-colors flex items-center justify-center gap-2 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
                 >
                   <Sparkles className="h-5 w-5" />
@@ -342,13 +359,13 @@ export default function CurriculumPage() {
                                 {/* 버튼들 */}
                                 <div className="flex gap-2 flex-shrink-0">
                                   <Link
-                                    href={`/practice/${lesson.id}`}
+                                    href={`/learn/${lesson.id}`}
                                     className="px-3 sm:px-4 py-2 rounded-lg border-2 border-black font-bold bg-green-500 text-white hover:bg-green-600 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-xs sm:text-sm"
                                   >
                                     📺 수업
                                   </Link>
                                   <Link
-                                    href={`/learn/${lesson.id}`}
+                                    href={getReviewPath(lesson.id)}
                                     className={`px-3 sm:px-4 py-2 rounded-lg border-2 border-black font-bold text-xs sm:text-sm ${
                                       isCompleted
                                         ? "bg-gray-100 text-gray-600 hover:bg-gray-200"

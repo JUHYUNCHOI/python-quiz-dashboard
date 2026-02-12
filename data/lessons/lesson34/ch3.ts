@@ -1,0 +1,82 @@
+import { Chapter } from '../types'
+
+export const ch3: Chapter = {
+  id: "ch3",
+  title: "에러 종류 알아보기",
+  emoji: "📋",
+  steps: [
+    {
+      id: "ch3-0",
+      type: "interactive",
+      title: "📋 에러 종류 카드!",
+      description: "카드를 클릭해서 각 에러가 언제 발생하는지 알아보세요!",
+      component: "errorTypesCards"
+    },
+    {
+      id: "ch3-1",
+      type: "explain",
+      title: "🎯 특정 에러만 잡기!",
+      content: `## except 뒤에 에러 이름!
+
+\`\`\`python
+# ValueError만 잡기
+try:
+    숫자 = int('abc')
+except ValueError:
+    print('숫자로 바꿀 수 없어요!')
+
+# ZeroDivisionError만 잡기
+try:
+    결과 = 10 / 0
+except ZeroDivisionError:
+    print('0으로 나눌 수 없어요!')
+\`\`\`
+
+출력:
+- \`숫자로 바꿀 수 없어요!\`
+- \`0으로 나눌 수 없어요!\``
+    },
+    {
+      id: "ch3-2",
+      type: "interactive",
+      title: "✏️ 특정 에러 잡기 따라치기!",
+      description: "ValueError를 잡는 코드를 직접 써보세요!",
+      component: "typeAlong",
+      targetTitle: "ValueError 잡기",
+      targetDescription: "except 뒤에 에러 이름을 써요",
+      targetCode: "try:\n    숫자 = int('abc')\nexcept ValueError:\n    print('숫자가 아니에요!')",
+      expectedOutput: "숫자가 아니에요!"
+    },
+    {
+      id: "ch3-3",
+      type: "interactive",
+      title: "빈칸 채우기: 특정 에러",
+      description: "0으로 나누는 에러를 잡아보세요!",
+      component: "fillInBlank",
+      codeTemplate: "try:\n    print(10 / 0)\nexcept ___1___:\n    print('0으로 못 나눠요!')",
+      blanks: [
+        { id: "1", answer: "ZeroDivisionError", hint: "0으로 나눌 때 나는 에러!" }
+      ],
+      choices: ["ZeroDivisionError", "ValueError", "FileNotFoundError", "Error"],
+      expectedOutput: "0으로 못 나눠요!"
+    },
+    {
+      id: "ch3-4",
+      type: "quiz",
+      title: "퀴즈!",
+      content: "int('hello')는 어떤 에러?",
+      options: ["ZeroDivisionError", "ValueError", "FileNotFoundError", "에러 없음"],
+      answer: 1,
+      explanation: "'hello'는 숫자가 아니라서 ValueError!"
+    },
+    {
+      id: "ch3-5",
+      type: "quiz",
+      title: "퀴즈!",
+      content: "10 / 0은 어떤 에러?",
+      options: ["ValueError", "ZeroDivisionError", "FileNotFoundError", "에러 없음"],
+      answer: 1,
+      explanation: "0으로 나누면 ZeroDivisionError!"
+    }
+  ]
+}

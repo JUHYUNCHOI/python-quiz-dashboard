@@ -82,10 +82,10 @@ def 함수():
 print(x)
 \`\`\``,
           options: [
-            "10\\n10",
-            "5\\n5",
-            "10\\n5",
-            "5\\n10"
+            "10\n10",
+            "5\n5",
+            "10\n5",
+            "5\n10"
           ],
           answer: 2,
           explanation: "함수 안의 x는 지역변수(10), 바깥의 x는 전역변수(5)! 서로 다른 변수예요."
@@ -226,8 +226,8 @@ print(double(7))
 print(triple(5))
 print(triple(10))`,
           expectedOutput: "15\n30",
-          hint: "x를 3배로 만드려면 x * 3",
-          hint2: "lambda x: x * 3"
+          hint: "x를 3배로 만드려면?",
+          hint2: "곱하기 연산자 *를 사용하세요"
         }
       ]
     },
@@ -315,8 +315,8 @@ print(정렬)`,
 
 print(정렬)`,
           expectedOutput: "['hi', 'cat', 'apple', 'banana']",
-          hint: "key=lambda x: len(x)로 길이 기준 정렬",
-          hint2: "sorted(단어들, key=lambda x: len(x))"
+          hint: "key에 길이를 구하는 함수를 넣으세요",
+          hint2: "len() 함수를 lambda로 감싸세요"
         }
       ]
     },
@@ -418,8 +418,8 @@ f, c = 온도변환(100)
 print(f'100°C = {f}°F')
 print(f'{f}°F = {c}°C')`,
           expectedOutput: "100°C = 212.0°F\n212.0°F = 100.0°C",
-          hint: "return 화씨, 다시섭씨",
-          hint2: "return 화씨, 다시섭씨"
+          hint: "두 값을 쉼표로 구분해서 반환하세요",
+          hint2: "return에 변수 두 개를 나열하면 돼요"
         }
       ]
     }

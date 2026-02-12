@@ -120,7 +120,7 @@ function highlightPython(code: string): React.ReactNode[] {
     // 주석 추가
     if (comment) {
       tokens.push(
-        <span key={keyIndex++} className="text-gray-500 italic">
+        <span key={keyIndex++} className="text-green-500 italic">
           {comment}
         </span>
       )

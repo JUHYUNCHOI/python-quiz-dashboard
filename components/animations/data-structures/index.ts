@@ -1,0 +1,5 @@
+export { ListAnimation } from './list-animation'
+export { TupleAnimation } from './tuple-animation'
+export { DictAnimation } from './dict-animation'
+export { SetAnimation } from './set-animation'
+export { DataStructuresComparison } from './comparison'

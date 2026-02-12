@@ -1,59 +1,169 @@
 // ============================================
-// 레슨 데이터 중앙 관리
+// 레슨 데이터 자동 레지스트리
+// 새 레슨 추가 시 여기에 한 줄만 추가하면 끝!
 // ============================================
 
-// Part 1: 기초 (레슨 1-10)
-export { lesson1Data } from './lesson1'   // print() 출력
-export { lesson2Data } from './lesson2'   // 데이터 타입
-export { lesson3Data } from './lesson3'   // 변수
-export { lesson4Data } from './lesson4'   // 연산자
-export { lesson5Data } from './lesson5'   // 문자열 연산
-export { lesson6Data } from './lesson6'   // 문자열 메서드
-export { lesson7Data } from './lesson7'   // print() 옵션
-export { lesson8Data } from './lesson8'   // f-string
-export { lesson9Data } from './lesson9'   // 타입 변환
-export { lesson10Data } from './lesson10' // input() 입력
+import type { LessonData } from './types'
 
-// Part 2: 제어문 (레슨 11-14)
-export { lesson11Data } from './lesson11' // 조건문 (if)
-export { lesson12Data } from './lesson12' // 조건문 심화
-export { lesson13Data } from './lesson13' // 반복문 (for)
-export { lesson14Data } from './lesson14' // 반복문 (while)
+// [레슨ID, () => import, export명, 영어버전?]
+type LessonEntry = {
+  load: () => Promise<Record<string, any>>
+  exportName: string
+  enLoad?: () => Promise<Record<string, any>>
+  enExportName?: string
+}
 
-// Part 3: 자료구조 (레슨 15-22)
-export { lesson15Data } from './lesson15' // 자료구조 개요
-export { lesson16Data } from './lesson16' // 리스트 기초
-export { lesson17Data } from './lesson17' // 리스트와 반복문
-export { lesson18Data } from './lesson18' // split()과 join()
-export { lesson19Data } from './lesson19' // 튜플
-export { lesson20Data } from './lesson20' // 딕셔너리
-export { lesson21Data } from './lesson21' // 집합 (set)
-export { lesson22Data } from './lesson22' // 슬라이싱
+// ============================================
+// 레슨 등록부 - 새 레슨은 여기에 한 줄 추가
+// ============================================
+const registry: Record<string, LessonEntry> = {
+  // Part 1: 기초 (1-10)
+  "1":  { load: () => import('./lesson1'),  exportName: 'lesson1Data' },
+  "2":  { load: () => import('./lesson2'),  exportName: 'lesson2Data' },
+  "3":  { load: () => import('./lesson3'),  exportName: 'lesson3Data' },
+  "4":  { load: () => import('./lesson4'),  exportName: 'lesson4Data' },
+  "5":  { load: () => import('./lesson5'),  exportName: 'lesson5Data' },
+  "6":  { load: () => import('./lesson6'),  exportName: 'lesson6Data' },
+  "7":  { load: () => import('./lesson7'),  exportName: 'lesson7Data' },
+  "8":  { load: () => import('./lesson8'),  exportName: 'lesson8Data' },
+  "9":  { load: () => import('./lesson9'),  exportName: 'lesson9Data' },
+  "10": { load: () => import('./lesson10'), exportName: 'lesson10Data' },
 
-// Part 3 심화: 고급 자료구조 (레슨 23-26)
-export { lesson23Data } from './lesson23' // 스택 (Stack)
-export { lesson24Data } from './lesson24' // 큐 (Queue)
-export { lesson25Data } from './lesson25' // 덱 (Deque)
-export { lesson26Data } from './lesson26' // 자료구조 비교와 선택
+  // Part 2: 제어문 (11-14)
+  "11": { load: () => import('./lesson11'), exportName: 'lesson11Data' },
+  "12": { load: () => import('./lesson12'), exportName: 'lesson12Data' },
+  "13": { load: () => import('./lesson13'), exportName: 'lesson13Data' },
+  "14": { load: () => import('./lesson14'), exportName: 'lesson14Data' },
 
-// Part 5: 함수 (레슨 29-33) - 한국어
-export { lesson29Data } from './lesson29' // 함수란?
-export { lesson30Data } from './lesson30' // 매개변수와 반환값
-export { lesson31Data } from './lesson31' // 함수 활용
-export { lesson32Data } from './lesson32' // 내장함수 총정리
-export { lesson33Data } from './lesson33' // 함수 문제 30
+  // Part 3: 자료구조 (15-22)
+  "15": { load: () => import('./lesson15'), exportName: 'lesson15Data' },
+  "16": { load: () => import('./lesson16'), exportName: 'lesson16Data' },
+  "17": { load: () => import('./lesson17'), exportName: 'lesson17Data' },
+  "18": { load: () => import('./lesson18'), exportName: 'lesson18Data' },
+  "19": { load: () => import('./lesson19'), exportName: 'lesson19Data' },
+  "20": { load: () => import('./lesson20'), exportName: 'lesson20Data' },
+  "21": { load: () => import('./lesson21'), exportName: 'lesson21Data' },
+  "22": { load: () => import('./lesson22'), exportName: 'lesson22Data' },
 
-// Part 5: Functions (Lessons 29-33) - English
-export { lesson29EnData } from './lesson29-en' // What is a Function?
-export { lesson30EnData } from './lesson30-en' // Parameters & Return Values
-export { lesson31EnData } from './lesson31-en' // Function Usage
-export { lesson32EnData } from './lesson32-en' // Built-in Functions
-export { lesson33EnData } from './lesson33-en' // Function Problems 30
+  // Part 3 심화: 고급 자료구조 (23-26)
+  "23": { load: () => import('./lesson23'), exportName: 'lesson23Data' },
+  "24": { load: () => import('./lesson24'), exportName: 'lesson24Data' },
+  "25": { load: () => import('./lesson25'), exportName: 'lesson25Data' },
+  "26": { load: () => import('./lesson26'), exportName: 'lesson26Data' },
 
-// 프로젝트 레슨
-export { lessonP1Data } from './lessonP1' // Part 1 프로젝트: 미니 계산기
-export { lessonP2Data } from './lessonP2' // Part 2 프로젝트: 숫자 맞추기
-export { lessonP3Data } from './lessonP3' // Part 3 프로젝트: Hangman
+  // Part 5: 함수 (29-33) - 양언어
+  "29": {
+    load: () => import('./lesson29'), exportName: 'lesson29Data',
+    enLoad: () => import('./lesson29-en'), enExportName: 'lesson29EnData',
+  },
+  "30": {
+    load: () => import('./lesson30'), exportName: 'lesson30Data',
+    enLoad: () => import('./lesson30-en'), enExportName: 'lesson30EnData',
+  },
+  "31": {
+    load: () => import('./lesson31'), exportName: 'lesson31Data',
+    enLoad: () => import('./lesson31-en'), enExportName: 'lesson31EnData',
+  },
+  "32": {
+    load: () => import('./lesson32'), exportName: 'lesson32Data',
+    enLoad: () => import('./lesson32-en'), enExportName: 'lesson32EnData',
+  },
+  "33": {
+    load: () => import('./lesson33'), exportName: 'lesson33Data',
+    enLoad: () => import('./lesson33-en'), enExportName: 'lesson33EnData',
+  },
 
-// 타입 정의
+  // Part 6: 에러와 파일 (34-37)
+  "34": { load: () => import('./lessons/lesson34'), exportName: 'lesson34' },
+  "35": { load: () => import('./lesson35'), exportName: 'lesson35' },
+  "36": { load: () => import('./lessons/lesson36'), exportName: 'lesson36' },
+  "37": { load: () => import('./lessons/lesson37'), exportName: 'lesson37' },
+
+  // 프로젝트 레슨
+  "p1": { load: () => import('./lessonP1'), exportName: 'lessonP1Data' },
+  "p2": { load: () => import('./lessonP2'), exportName: 'lessonP2Data' },
+  "p3": { load: () => import('./lessonP3'), exportName: 'lessonP3Data' },
+}
+
+// ============================================
+// API: 레슨 로딩 함수들
+// ============================================
+
+/** 레슨 하나 로드 (동적 import) */
+export async function loadLesson(id: string, lang: "ko" | "en" = "ko"): Promise<LessonData | null> {
+  const entry = registry[id]
+  if (!entry) return null
+
+  if (lang === "en" && entry.enLoad && entry.enExportName) {
+    const mod = await entry.enLoad()
+    return mod[entry.enExportName] as LessonData
+  }
+
+  const mod = await entry.load()
+  return mod[entry.exportName] as LessonData
+}
+
+/** 양언어 지원 여부 확인 */
+export function isBilingual(id: string): boolean {
+  return !!registry[id]?.enLoad
+}
+
+/** 등록된 모든 레슨 ID 목록 */
+export function getAllLessonIds(): string[] {
+  return Object.keys(registry)
+}
+
+/** 양언어 레슨 ID 목록 */
+export function getBilingualLessonIds(): string[] {
+  return Object.keys(registry).filter(id => registry[id].enLoad)
+}
+
+// ============================================
+// 하위 호환: 기존 static import 유지
+// lesson-registry.ts에서 사용 중
+// ============================================
+export { lesson1Data } from './lesson1'
+export { lesson2Data } from './lesson2'
+export { lesson3Data } from './lesson3'
+export { lesson4Data } from './lesson4'
+export { lesson5Data } from './lesson5'
+export { lesson6Data } from './lesson6'
+export { lesson7Data } from './lesson7'
+export { lesson8Data } from './lesson8'
+export { lesson9Data } from './lesson9'
+export { lesson10Data } from './lesson10'
+export { lesson11Data } from './lesson11'
+export { lesson12Data } from './lesson12'
+export { lesson13Data } from './lesson13'
+export { lesson14Data } from './lesson14'
+export { lesson15Data } from './lesson15'
+export { lesson16Data } from './lesson16'
+export { lesson17Data } from './lesson17'
+export { lesson18Data } from './lesson18'
+export { lesson19Data } from './lesson19'
+export { lesson20Data } from './lesson20'
+export { lesson21Data } from './lesson21'
+export { lesson22Data } from './lesson22'
+export { lesson23Data } from './lesson23'
+export { lesson24Data } from './lesson24'
+export { lesson25Data } from './lesson25'
+export { lesson26Data } from './lesson26'
+export { lesson29Data } from './lesson29'
+export { lesson30Data } from './lesson30'
+export { lesson31Data } from './lesson31'
+export { lesson32Data } from './lesson32'
+export { lesson33Data } from './lesson33'
+export { lesson29EnData } from './lesson29-en'
+export { lesson30EnData } from './lesson30-en'
+export { lesson31EnData } from './lesson31-en'
+export { lesson32EnData } from './lesson32-en'
+export { lesson33EnData } from './lesson33-en'
+export { lesson34 } from './lesson34'
+export { lesson35 } from './lesson35'
+export { lesson36 } from './lesson36'
+export { lesson37 } from './lesson37'
+export { lessonP1Data } from './lessonP1'
+export { lessonP2Data } from './lessonP2'
+export { lessonP3Data } from './lessonP3'
+
 export type { LessonData, LessonStep, Chapter } from './types'

@@ -96,8 +96,8 @@ print(결과)
 print(square(5))
 print(square(3))`,
           expectedOutput: "25\n9",
-          hint: "return n ** 2",
-          hint2: "return n ** 2"
+          hint: "제곱은 숫자를 두 번 곱하는 거예요",
+          hint2: "** 연산자를 사용하세요"
         },
         {
           id: "ch1-6",
@@ -111,8 +111,8 @@ print(square(3))`,
 print(average(10, 20))
 print(average(3, 7))`,
           expectedOutput: "15.0\n5.0",
-          hint: "return (a + b) / 2",
-          hint2: "return (a + b) / 2"
+          hint: "평균 = 두 수를 더하고 2로 나누기",
+          hint2: "덧셈과 나눗셈 연산자를 사용하세요"
         },
         {
           id: "ch1-7",
@@ -172,8 +172,8 @@ print(x, y)
 print(is_even(4))
 print(is_even(7))`,
           expectedOutput: "True\nFalse",
-          hint: "n % 2 == 0",
-          hint2: "return n % 2 == 0"
+          hint: "짝수는 2로 나누면 나머지가 0이에요",
+          hint2: "% 연산자로 나머지를 확인하세요"
         }
       ]
     },
@@ -386,8 +386,8 @@ print(결과)`,
 
 print(결과)`,
           expectedOutput: "[('a', 3), ('c', 2), ('b', 1)]",
-          hint: "sorted(데이터, key=lambda x: x[1], reverse=True)",
-          hint2: "sorted(데이터, key=lambda x: x[1], reverse=True)"
+          hint: "key에 두 번째 요소를 반환하는 람다를 넣으세요",
+          hint2: "reverse=True로 내림차순!"
         }
       ]
     },

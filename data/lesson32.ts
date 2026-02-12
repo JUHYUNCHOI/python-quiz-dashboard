@@ -86,8 +86,8 @@ print(sum([1, 2, 3, 4, 5]))
 
 print(f'평균: {평균}')`,
           expectedOutput: "평균: 84.0",
-          hint: "sum(숫자들) / len(숫자들)",
-          hint2: "sum(숫자들) / len(숫자들)"
+          hint: "합계를 개수로 나누면 평균!",
+          hint2: "sum()과 len()을 조합하세요"
         }
       ]
     },
@@ -240,6 +240,13 @@ print(결과[0][0])`,
       title: "map() - 변환",
       emoji: "🔄",
       steps: [
+        {
+          id: "ch4-0",
+          type: "interactive",
+          title: "🏭 map() 공장 체험!",
+          description: "map()이 어떻게 작동하는지 눈으로 확인해보세요!",
+          component: "mapFactory"
+        },
         {
           id: "ch4-1",
           type: "explain",

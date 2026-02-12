@@ -1,0 +1,1999 @@
+"use client"
+
+import { useState, useEffect, useRef, use, useCallback } from "react"
+import { useRouter } from "next/navigation"
+import { Button } from "@/components/ui/button"
+import { 
+  ChevronRight, 
+  Sparkles,
+  X,
+  Play,
+  Check,
+  Trophy,
+  RotateCcw,
+  Flame,
+  Zap
+} from "lucide-react"
+import { cn } from "@/lib/utils"
+
+// ============================================================
+// 외부 파일에서 레슨 데이터 import
+// ============================================================
+import { lessonsData } from "./data/lessons"
+import type { LessonData } from "./data/types"
+
+// 인터랙티브 애니메이션 컴포넌트
+import { DataStructuresComparison, FunctionBuilder } from "@/components/animations"
+
+// Python 코드 실행 컴포넌트
+import { PythonRunner } from "@/components/code-runner/PythonRunner"
+
+// 커스텀 Python 파서 (함수 지원)
+import { runPythonCode } from "./utils/pythonRunner"
+
+// ============================================================
+// Python Syntax Highlighting (경량 토크나이저)
+// ============================================================
+const PY_KEYWORDS = new Set([
+  'try','except','finally','if','elif','else','while','for','in',
+  'def','return','break','continue','import','from','as','class',
+  'pass','raise','with','and','or','not','is','None','True','False'
+])
+const PY_BUILTINS = new Set([
+  'print','input','int','float','str','len','range','open','type'
+])
+
+function highlightPythonLine(line: string): React.ReactNode[] {
+  if (!line || !line.trim()) return [<span key={0}>{'\u00A0'}</span>]
+  
+  const tokens: React.ReactNode[] = []
+  let pos = 0
+  let key = 0
+
+  const push = (text: string, cls: string) => {
+    tokens.push(<span key={key++} className={cls}>{text}</span>)
+  }
+
+  while (pos < line.length) {
+    const ch = line[pos]
+
+    // 1) 공백 (들여쓰기 포함)
+    if (ch === ' ' || ch === '\t') {
+      let end = pos
+      while (end < line.length && (line[end] === ' ' || line[end] === '\t')) end++
+      push(line.slice(pos, end), "")
+      pos = end
+      continue
+    }
+
+    // 2) 주석
+    if (ch === '#') {
+      push(line.slice(pos), "text-gray-500 italic")
+      break
+    }
+
+    // 3) 문자열 — f-string 포함
+    if (ch === "'" || ch === '"' || ((ch === 'f' || ch === 'F') && pos + 1 < line.length && (line[pos+1] === "'" || line[pos+1] === '"'))) {
+      let start = pos
+      if (ch === 'f' || ch === 'F') pos++
+      const q = line[pos]
+      pos++
+      while (pos < line.length && line[pos] !== q) {
+        if (line[pos] === '\\') pos++
+        pos++
+      }
+      if (pos < line.length) pos++
+      push(line.slice(start, pos), "text-green-400")
+      continue
+    }
+
+    // 4) 숫자
+    if (/[0-9]/.test(ch)) {
+      let end = pos
+      while (end < line.length && /[0-9.]/.test(line[end])) end++
+      push(line.slice(pos, end), "text-orange-300")
+      pos = end
+      continue
+    }
+
+    // 5) 식별자 / 키워드 (영문, 한글, _)
+    if (/[a-zA-Z_\u3131-\u318E\uAC00-\uD7A3]/.test(ch)) {
+      let end = pos
+      while (end < line.length && /[a-zA-Z0-9_\u3131-\u318E\uAC00-\uD7A3]/.test(line[end])) end++
+      const word = line.slice(pos, end)
+      if (PY_KEYWORDS.has(word)) {
+        push(word, "text-purple-400")
+      } else if (PY_BUILTINS.has(word)) {
+        push(word, "text-yellow-300")
+      } else {
+        push(word, "text-blue-300")
+      }
+      pos = end
+      continue
+    }
+
+    // 6) 연산자 / 구두점
+    if ('()[]{}:=+-*/%<>!,.@'.includes(ch)) {
+      push(ch, "text-gray-400")
+      pos++
+      continue
+    }
+
+    // 7) 기타 (이모지 등)
+    push(ch, "text-gray-300")
+    pos++
+  }
+
+  return tokens
+}
+
+// ============================================================
+// 로컬 타입 정의 (컴포넌트 전용)
+// ============================================================
+interface Step {
+  type: string
+  content: any
+}
+
+interface WrongAnswer {
+  stepIndex: number
+  task: string
+  answer: string
+  expect: string
+}
+
+// ============================================================
+// 메인 컴포넌트
+// ============================================================
+export default function LearnPage({ params }: { params: Promise<{ lessonId: string }> }) {
+  const resolvedParams = use(params)
+  const lessonId = resolvedParams.lessonId
+  const router = useRouter()
+  
+  const lesson = lessonsData[lessonId]
+  
+  const [step, setStep] = useState(0)
+  const [input, setInput] = useState("")
+  const [phase, setPhase] = useState<"input" | "correct" | "wrong">("input")
+  const [score, setScore] = useState(0)
+  const [tries, setTries] = useState(0)
+  const [selected, setSelected] = useState<number | null>(null)
+  const [output, setOutput] = useState("")
+  const [errorMsg, setErrorMsg] = useState("")
+  const [showHint, setShowHint] = useState(0)
+  const [showExplanation, setShowExplanation] = useState(false)
+  const [wrongAnswers, setWrongAnswers] = useState<WrongAnswer[]>([])
+  const [isTransitioning, setIsTransitioning] = useState(false)
+  const [showReview, setShowReview] = useState(false)
+  const [reviewIndex, setReviewIndex] = useState(0)
+  const [streak, setStreak] = useState(0)
+  const [showStreakBonus, setShowStreakBonus] = useState(false)
+  const [praise, setPraise] = useState("")
+  const [blanks, setBlanks] = useState<string[]>([])  // 여러 빈칸 template용
+  const [typedCode, setTypedCode] = useState("")  // 하위호환 (코드 없는 explain용)
+  const [showResult, setShowResult] = useState(false)
+  const [typingComplete, setTypingComplete] = useState(false)
+  const [showNote, setShowNote] = useState(false)
+  
+  // 시퀀스 타이핑 상태
+  const [visibleLines, setVisibleLines] = useState(0)       // 코드 줄 수
+  const [codeLines, setCodeLines] = useState<string[]>([])
+  const [typedChars, setTypedChars] = useState(0)            // 현재 줄의 타이핑된 글자 수
+  const [lineFullyTyped, setLineFullyTyped] = useState(false) // 현재 줄 타이핑 완료
+  const [visibleHeadlines, setVisibleHeadlines] = useState(0) // lines(headlines) 순차 등장
+  
+  // 예측 퀴즈 상태
+  const [predictSelected, setPredictSelected] = useState<number | null>(null)
+  const [predictAnswered, setPredictAnswered] = useState(false)
+  
+  const inputRef = useRef<HTMLInputElement>(null)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  const current = lesson?.steps[step]
+  const progress = lesson ? ((step + 1) / lesson.steps.length) * 100 : 0
+
+  // ============================================================
+  // 진행 상황 로드/저장
+  // ============================================================
+  useEffect(() => {
+    if (!lesson) return
+    const saved = localStorage.getItem(`lesson-${lessonId}`)
+    if (saved) {
+      try {
+        const data = JSON.parse(saved)
+        if (data.step < lesson.steps.length) {
+          setStep(data.step)
+          setScore(data.score || 0)
+          setWrongAnswers(data.wrongAnswers || [])
+          setStreak(data.streak || 0)
+        }
+      } catch (e) {
+        console.error('Failed to load progress', e)
+      }
+    }
+  }, [lessonId, lesson])
+
+  useEffect(() => {
+    if (!lesson) return
+    localStorage.setItem(`lesson-${lessonId}`, JSON.stringify({
+      step,
+      score,
+      wrongAnswers,
+      streak
+    }))
+  }, [step, score, wrongAnswers, streak, lessonId, lesson])
+
+  // ============================================================
+  // 입력 포커스
+  // ============================================================
+  useEffect(() => {
+    if (!current) return
+    if (["practice", "project", "interleaving"].includes(current.type)) {
+      setTimeout(() => {
+        if (current.content.template) {
+          inputRef.current?.focus()
+        } else {
+          textareaRef.current?.focus()
+        }
+      }, 300)
+    }
+  }, [step, current, showReview])
+
+  // ============================================================
+  // 상태 리셋
+  // ============================================================
+  useEffect(() => {
+    setInput("")
+    setPhase("input")
+    setTries(0)
+    setSelected(null)
+    setOutput("")
+    setErrorMsg("")
+    setShowHint(0)
+    setShowExplanation(false)
+    setTypedCode("")
+    setShowResult(false)
+    setTypingComplete(false)
+    setShowNote(false)
+    setVisibleLines(0)
+    setCodeLines([])
+    setTypedChars(0)
+    setLineFullyTyped(false)
+    setVisibleHeadlines(0)
+    setPredictSelected(null)
+    setPredictAnswered(false)
+    setBlanks([])
+  }, [step, reviewIndex])
+
+  // 문자열 template의 빈칸 수에 맞게 blanks 초기화
+  useEffect(() => {
+    if (!current) return
+    if (["practice", "interleaving"].includes(current.type) && typeof current.content.template === 'string') {
+      const count = (current.content.template.match(/___/g) || []).length
+      setBlanks(new Array(count).fill(""))
+    }
+  }, [step, current])
+
+  // ============================================================
+  // 시퀀스 타이핑 시스템 (explain 타입)
+  // 흐름: headlines 순차 등장 → 코드 글자 타이핑 → result 등장 → pause → note 등장
+  // 탭하면 현재 줄 즉시 완성 or 다음 단계로
+  // ============================================================
+  const seqTimerRef = useRef<NodeJS.Timeout | null>(null)
+  
+  const clearSeqTimer = useCallback(() => {
+    if (seqTimerRef.current) {
+      clearTimeout(seqTimerRef.current)
+      seqTimerRef.current = null
+    }
+  }, [])
+
+  // 글자 타이핑 속도 (ms per char)
+  const CHAR_SPEED = 35
+  // 줄 완성 후 다음 줄까지 대기 시간
+  const getLinePause = (line: string) => {
+    const trimmed = line.trim()
+    if (trimmed === "") return 400
+    if (trimmed.startsWith('#')) return 1200  // 주석은 읽을 시간
+    if (trimmed.length <= 10) return 600
+    if (trimmed.length <= 25) return 800
+    return 1000
+  }
+
+  // 현재 줄의 글자 타이핑 애니메이션
+  useEffect(() => {
+    if (current?.type !== "explain" || !current.content.code) return
+    if (typingComplete) return
+    if (visibleLines <= 0 || visibleLines > codeLines.length) return
+    if (lineFullyTyped) return  // 이미 이 줄 완성
+    
+    const currentLine = codeLines[visibleLines - 1] || ""
+    if (typedChars >= currentLine.length) {
+      // 이 줄 타이핑 끝
+      setLineFullyTyped(true)
+      return
+    }
+    
+    seqTimerRef.current = setTimeout(() => {
+      setTypedChars(prev => prev + 1)
+    }, CHAR_SPEED)
+    
+    return clearSeqTimer
+  }, [current, typingComplete, visibleLines, codeLines, typedChars, lineFullyTyped, clearSeqTimer])
+  
+  // 줄 타이핑 끝나면 → 다음 줄 예약 or 전체 완료
+  useEffect(() => {
+    if (!lineFullyTyped) return
+    if (typingComplete) return
+    if (visibleLines >= codeLines.length) {
+      // 모든 줄 완료
+      setTypingComplete(true)
+      setTypedCode(codeLines.join('\n'))
+      return
+    }
+    
+    const pause = getLinePause(codeLines[visibleLines - 1] || "")
+    seqTimerRef.current = setTimeout(() => {
+      setVisibleLines(prev => prev + 1)
+      setTypedChars(0)
+      setLineFullyTyped(false)
+    }, pause)
+    
+    return clearSeqTimer
+  }, [lineFullyTyped, typingComplete, visibleLines, codeLines, clearSeqTimer])
+
+  // 탭 → 현재 줄 즉시 완성 or 다음 줄
+  const handleCodeClick = useCallback(() => {
+    if (!current?.content?.code) return
+    if (typingComplete) return
+    clearSeqTimer()
+    
+    const currentLine = codeLines[visibleLines - 1] || ""
+    
+    if (!lineFullyTyped) {
+      // 현재 줄 즉시 완성
+      setTypedChars(currentLine.length)
+      setLineFullyTyped(true)
+    } else if (visibleLines < codeLines.length) {
+      // 다음 줄 시작
+      setVisibleLines(prev => prev + 1)
+      setTypedChars(0)
+      setLineFullyTyped(false)
+    } else {
+      // 전체 완료
+      setTypingComplete(true)
+      setTypedCode(codeLines.join('\n'))
+    }
+  }, [current, typingComplete, visibleLines, codeLines, lineFullyTyped, clearSeqTimer])
+
+  // 챕터 직후 첫 explain인지 판별
+  const isFirstExplainAfterChapter = (() => {
+    if (!lesson || !current || current.type !== "explain") return false
+    // 이전 스텝이 chapter이면 첫 설명
+    if (step > 0 && lesson.steps[step - 1]?.type === "chapter") return true
+    // step 0이 explain이면 첫 설명
+    if (step === 0) return true
+    return false
+  })()
+
+  // headlines 순차 등장 → 코드 타이핑 시작
+  // 챕터 직후 첫 explain이면 headlines 즉시 전부 표시 + 코드 바로 시작
+  useEffect(() => {
+    if (current?.type !== "explain") return
+    
+    const headlines = current.content.lines || []
+    const code = current.content.code
+    const lines = code ? code.split('\n') : []
+    setCodeLines(lines)
+    
+    // 첫 headline은 항상 즉시 표시
+    const startIdx = headlines.length > 0 ? 1 : 0
+    setVisibleHeadlines(startIdx)
+    
+    // 나머지 headlines 순차 등장 → 코드 타이핑 시작
+    let idx = startIdx
+    const showNext = () => {
+      idx++
+      setVisibleHeadlines(idx)
+      if (idx < headlines.length) {
+        seqTimerRef.current = setTimeout(showNext, 800)
+      } else {
+        // headlines 다 나오면 코드 타이핑 시작
+        if (lines.length > 0) {
+          const codeDelay = isFirstExplainAfterChapter ? 100 : 600
+          seqTimerRef.current = setTimeout(() => {
+            setVisibleLines(1)
+            setTypedChars(0)
+            setLineFullyTyped(false)
+          }, codeDelay)
+        } else {
+          // 코드 없으면 바로 완료
+          setTypingComplete(true)
+        }
+      }
+    }
+    
+    if (idx < headlines.length) {
+      // 아직 더 보여줄 headline이 있으면 순차 시작
+      const firstDelay = isFirstExplainAfterChapter ? 300 : 300
+      seqTimerRef.current = setTimeout(showNext, firstDelay)
+    } else {
+      // headline이 0~1개면 바로 코드 시작
+      if (lines.length > 0) {
+        const codeDelay = isFirstExplainAfterChapter ? 100 : 600
+        seqTimerRef.current = setTimeout(() => {
+          setVisibleLines(1)
+          setTypedChars(0)
+          setLineFullyTyped(false)
+        }, codeDelay)
+      } else {
+        setTypingComplete(true)
+      }
+    }
+    
+    return clearSeqTimer
+  }, [step, current, clearSeqTimer, isFirstExplainAfterChapter])
+  
+  // 코드 타이핑 완료 → result 표시 (예측 퀴즈 없을 때)
+  useEffect(() => {
+    if (!typingComplete) return
+    if (!current?.content?.result) return
+    if (current.content.predict) return
+    if (showResult) return
+    
+    const timer = setTimeout(() => setShowResult(true), 500)
+    return () => clearTimeout(timer)
+  }, [typingComplete, current, showResult])
+  
+  // result 표시 → pause → note 표시
+  useEffect(() => {
+    if (!showResult) return
+    if (!current?.content?.note) return
+    if (showNote) return
+    
+    const timer = setTimeout(() => setShowNote(true), 1500)  // 1.5초 생각 시간
+    return () => clearTimeout(timer)
+  }, [showResult, current, showNote])
+
+  // ============================================================
+  // 네비게이션
+  // ============================================================
+  const next = useCallback(() => {
+    setIsTransitioning(true)
+    setTimeout(() => {
+      if (step + 1 < (lesson?.steps.length || 0)) {
+        setStep(step + 1)
+      } else {
+        localStorage.removeItem(`lesson-${lessonId}`)
+        router.push("/curriculum")
+      }
+      setIsTransitioning(false)
+    }, 200)
+  }, [step, lesson, lessonId, router])
+
+  // ============================================================
+  // 키보드 이벤트
+  // ============================================================
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === "Escape") {
+      router.push("/curriculum")
+      return
+    }
+    
+    if (e.key === "Enter" && !e.shiftKey) {
+      // explain에서 예측 퀴즈가 있고 아직 안 풀었으면 Enter 무시
+      if (current?.type === "explain" && current.content.predict && !predictAnswered) {
+        return
+      }
+      
+      if (current?.type === "explain" || 
+          current?.type === "reward" || 
+          current?.type === "chapter" ||
+          current?.type === "summary") {
+        e.preventDefault()
+        next()
+      }
+    }
+  }, [current, router, next, predictAnswered])
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [handleKeyDown])
+
+  // ============================================================
+  // 예측 퀴즈 선택
+  // ============================================================
+  const selectPredict = (idx: number) => {
+    if (predictSelected !== null) return
+    setPredictSelected(idx)
+    
+    const isCorrect = idx === current.content.predict.answer
+    setPredictAnswered(true)
+    
+    if (isCorrect) {
+      setScore(score + 5) // 예측 맞추면 보너스
+      setStreak(streak + 1)
+    } else {
+      setStreak(0)
+    }
+    
+    // 정답/오답 관계없이 결과 표시
+    setTimeout(() => {
+      setShowResult(true)
+    }, 800)
+  }
+
+  // ============================================================
+  // 레슨 없음 처리
+  // ============================================================
+  if (!lesson || !current) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-6xl mb-4">🚧</p>
+          <p className="text-gray-600 mb-4">아직 준비 중인 레슨이에요</p>
+          <Button onClick={() => router.push("/curriculum")} className="bg-blue-600 hover:bg-blue-700 text-white font-bold">돌아가기</Button>
+        </div>
+      </div>
+    )
+  }
+
+  // ============================================================
+  // 유틸리티 함수들
+  // ============================================================
+  const insertSymbol = (symbol: string) => {
+    setInput(prev => prev + symbol)
+    if (current.content.template) {
+      inputRef.current?.focus()
+    } else {
+      textareaRef.current?.focus()
+    }
+  }
+
+  const runCode = (code: string, hasTemplate: boolean = false): { result: string, error?: string } => {
+    try {
+      code = code.trim()
+      
+      if (!hasTemplate) {
+        const printTypos = ['pirnt', 'prnt', 'prnit', 'pritn', 'printt', 'prit', 'prrint']
+        for (const typo of printTypos) {
+          if (code.toLowerCase().includes(typo)) {
+            return { result: "", error: `오타! ${typo} → print` }
+          }
+        }
+        
+        if (/\bprin\s*\(/i.test(code) && !/\bprint\s*\(/i.test(code)) {
+          return { result: "", error: "오타! prin → print" }
+        }
+      }
+      
+      const m = code.match(/print\s*\(\s*([\s\S]*)\s*\)/i)
+      if (!m) {
+        if (code.toLowerCase().includes('print')) {
+          return { result: "", error: "print() 괄호 확인해봐!" }
+        }
+        return { result: "", error: "print()를 써봐!" }
+      }
+      
+      const inside = m[1].trim()
+      if (!inside) return { result: "", error: "print() 안에 뭔가 넣어봐!" }
+      
+      const parts: string[] = []
+      let curr = ""
+      let inQuote = false
+      let quoteChar = ""
+      
+      for (let i = 0; i < inside.length; i++) {
+        const char = inside[i]
+        if ((char === "'" || char === '"') && !inQuote) {
+          inQuote = true
+          quoteChar = char
+          curr += char
+        } else if (char === quoteChar && inQuote) {
+          inQuote = false
+          quoteChar = ""
+          curr += char
+        } else if (char === "," && !inQuote) {
+          parts.push(curr.trim())
+          curr = ""
+        } else {
+          curr += char
+        }
+      }
+      if (curr.trim()) parts.push(curr.trim())
+      
+      if (inQuote) {
+        return { result: "", error: "따옴표를 닫아봐! ' 또는 \"" }
+      }
+      
+      const results: string[] = []
+      for (const part of parts) {
+        const strMatch = part.match(/^(['"])(.*)\1$/)
+        if (strMatch) {
+          results.push(strMatch[2])
+          continue
+        }
+        
+        if ((part.startsWith("'") && part.endsWith('"')) || 
+            (part.startsWith('"') && part.endsWith("'"))) {
+          return { result: "", error: "따옴표 종류를 맞춰봐! ' 또는 \" 하나로" }
+        }
+        
+        if (/^[\d\s+\-*/().]+$/.test(part)) {
+          try {
+            const calc = Function('return ' + part)()
+            const numResult = Number.isInteger(calc) ? String(calc) : String(Math.round(calc * 100) / 100)
+            results.push(numResult)
+            continue
+          } catch {
+            return { result: "", error: "계산식 확인해봐!" }
+          }
+        }
+        
+        if (/[a-zA-Z가-힣]/.test(part)) {
+          const word = part.match(/[a-zA-Z가-힣]+/)?.[0]
+          return { result: "", error: `${word}에 따옴표 붙여봐! '${word}'` }
+        }
+        
+        results.push(part)
+      }
+      
+      return { result: results.join(' ') }
+    } catch { 
+      return { result: "", error: "다시 확인해봐!" } 
+    }
+  }
+
+  const check = () => {
+    const c = showReview ? {
+      task: wrongAnswers[reviewIndex].task,
+      answer: wrongAnswers[reviewIndex].answer,
+      expect: wrongAnswers[reviewIndex].expect,
+      template: null
+    } : current.content
+    
+    // 문자열 template인 경우: blanks 값을 정답과 직접 비교
+    if (typeof c.template === 'string' && c.blanksAnswer) {
+      const normalize = (s: string) => s.replace(/\s+/g, '').trim().toLowerCase()
+      const allCorrect = c.blanksAnswer.every((ans: string, idx: number) => {
+        const userVal = (blanks[idx] || '').trim()
+        // 여러 정답이 가능한 경우 (| 구분)
+        const answers = ans.split('|').map((a: string) => a.trim())
+        return answers.some(a => normalize(userVal) === normalize(a))
+      })
+      
+      if (allCorrect) {
+        setOutput(c.expect || '정답!')
+        setErrorMsg("")
+        setPhase("correct")
+        setPraise(getRandomPraise())
+        const newStreak = streak + 1
+        setStreak(newStreak)
+        let points = tries === 0 ? 10 : tries === 1 ? 7 : tries === 2 ? 5 : 3
+        if (newStreak > 0 && newStreak % 5 === 0) {
+          points += 20
+          setShowStreakBonus(true)
+          setTimeout(() => setShowStreakBonus(false), 2000)
+        }
+        setScore(score + points)
+        setTimeout(() => {
+          if (showReview) {
+            if (reviewIndex + 1 < wrongAnswers.length) {
+              setReviewIndex(reviewIndex + 1)
+            } else {
+              setShowReview(false)
+              next()
+            }
+          } else {
+            next()
+          }
+        }, 1500)
+        return
+      } else {
+        // 어떤 빈칸이 틀렸는지 피드백
+        const wrongIdx = c.blanksAnswer.findIndex((ans: string, idx: number) => {
+          const userVal = (blanks[idx] || '').trim()
+          const answers = ans.split('|').map((a: string) => a.trim())
+          return !answers.some(a => normalize(userVal) === normalize(a))
+        })
+        const wrongBlank = blanks[wrongIdx] || ''
+        setOutput("")
+        setErrorMsg(wrongBlank ? `${wrongIdx + 1}번 빈칸을 다시 확인해봐!` : `${wrongIdx + 1}번 빈칸을 채워봐!`)
+        setPhase("wrong")
+        const newTries = tries + 1
+        setTries(newTries)
+        setStreak(0)
+        if (newTries >= 1) setShowHint(Math.min(showHint + 1, 3))
+        if (newTries === 1 && !showReview) {
+          setWrongAnswers(prev => [...prev, {
+            stepIndex: step,
+            task: c.task,
+            answer: c.answer,
+            expect: c.expect || ''
+          }])
+        }
+        setTimeout(() => setPhase("input"), 800)
+        return
+      }
+    }
+
+    let code = ""
+    const hasTemplate = !!c.template
+    if (typeof c.template === 'string') {
+      let blankIdx = 0
+      code = c.template.replace(/___/g, () => blanks[blankIdx++] || '')
+    } else if (c.template) {
+      code = c.template.before + input + c.template.after
+    } else {
+      code = input
+    }
+    
+    // 함수 정의가 포함된 코드면 새 파서 사용, 아니면 기존 파서 사용
+    const useNewParser = code.includes('def ') || current.content.useNewParser
+    const { result, error } = useNewParser ? runPythonCode(code) : runCode(code, hasTemplate)
+    
+    if (error) {
+      setOutput("")
+      setErrorMsg(error)
+      setPhase("wrong")
+      const newTries = tries + 1
+      setTries(newTries)
+      setStreak(0)
+      
+      if (newTries >= 1) setShowHint(Math.min(showHint + 1, 3))
+      
+      if (newTries === 1 && !showReview) {
+        setWrongAnswers(prev => [...prev, {
+          stepIndex: step,
+          task: c.task,
+          answer: c.answer,
+          expect: c.expect || c.target
+        }])
+      }
+      
+      setTimeout(() => setPhase("input"), 800)
+      return
+    }
+    
+    setOutput(result)
+    setErrorMsg("")
+    
+    const target = c.target || c.expect
+    const normalize = (s: string) => s.replace(/\s+/g, ' ').trim().toLowerCase()
+    
+    if (normalize(result) !== normalize(target)) {
+      setPhase("wrong")
+      const newTries = tries + 1
+      setTries(newTries)
+      setStreak(0)
+      
+      if (newTries >= 1) setShowHint(Math.min(showHint + 1, 3))
+      
+      if (newTries === 1 && !showReview) {
+        setWrongAnswers(prev => [...prev, {
+          stepIndex: step,
+          task: c.task,
+          answer: c.answer,
+          expect: c.expect || c.target
+        }])
+      }
+      
+      setTimeout(() => setPhase("input"), 800)
+    } else {
+      setPhase("correct")
+      setPraise(getRandomPraise())
+      const newStreak = streak + 1
+      setStreak(newStreak)
+      
+      let points = tries === 0 ? 10 : tries === 1 ? 7 : tries === 2 ? 5 : 3
+      
+      if (newStreak > 0 && newStreak % 5 === 0) {
+        points += 20
+        setShowStreakBonus(true)
+        setTimeout(() => setShowStreakBonus(false), 2000)
+      }
+      
+      setScore(score + points)
+      
+      setTimeout(() => {
+        if (showReview) {
+          if (reviewIndex + 1 < wrongAnswers.length) {
+            setReviewIndex(reviewIndex + 1)
+          } else {
+            setShowReview(false)
+            next()
+          }
+        } else {
+          next()
+        }
+      }, 1500)
+    }
+  }
+
+  const selectQuiz = (idx: number) => {
+    if (selected !== null) return
+    setSelected(idx)
+    if (idx === current.content.answer) {
+      setPhase("correct")
+      setScore(score + 10)
+      setStreak(streak + 1)
+      setShowExplanation(true)
+      setTimeout(next, 2500)
+    } else {
+      setPhase("wrong")
+      setStreak(0)
+      setTimeout(() => {
+        setSelected(null)
+        setPhase("input")
+      }, 1000)
+    }
+  }
+
+  const selectErrorQuiz = (idx: number) => {
+    if (selected !== null) return
+    setSelected(idx)
+    if (idx === current.content.answer) {
+      setPhase("correct")
+      setScore(score + 15)
+      setStreak(streak + 1)
+      setShowExplanation(true)
+      setTimeout(next, 3000)
+    } else {
+      setPhase("wrong")
+      setStreak(0)
+      setTimeout(() => {
+        setSelected(null)
+        setPhase("input")
+      }, 1000)
+    }
+  }
+
+  const startReview = () => {
+    if (wrongAnswers.length > 0) {
+      setShowReview(true)
+      setReviewIndex(0)
+    } else {
+      next()
+    }
+  }
+
+  const getLevelBadge = (level: number) => {
+    if (level === 1) return { label: "⭐ 쉬움", color: "bg-green-600 text-white" }
+    if (level === 1.5) return { label: "⭐ 쉬움+", color: "bg-teal-600 text-white" }
+    if (level === 2) return { label: "⭐⭐ 보통", color: "bg-blue-600 text-white" }
+    if (level === 2.5) return { label: "⭐⭐ 보통+", color: "bg-indigo-600 text-white" }
+    if (level === 3) return { label: "⭐⭐⭐ 도전", color: "bg-purple-600 text-white" }
+    if (level === 4) return { label: "🔥 혼자!", color: "bg-rose-600 text-white" }
+    return { label: "", color: "" }
+  }
+
+  const renderHint = () => {
+    const c = showReview ? {
+      hint: null,
+      guide: null,
+      answer: wrongAnswers[reviewIndex]?.answer
+    } : current.content
+    
+    if (errorMsg && showHint === 0) {
+      return (
+        <div className="bg-red-600 rounded-2xl p-4 animate-fadeIn">
+          <p className="text-white text-base md:text-lg font-bold">
+            ❌ {errorMsg}
+          </p>
+          <p className="text-red-200 text-sm mt-1">괜찮아! 다시 해보자 💪</p>
+        </div>
+      )
+    }
+    
+    if (showHint === 0) return null
+    
+    if (showHint === 1) {
+      return (
+        <div className="bg-amber-500 rounded-2xl p-4 animate-fadeIn">
+          <p className="text-white text-base md:text-lg font-bold">
+            💡 {errorMsg || c.hint || c.guide || "천천히 다시 확인해봐!"}
+          </p>
+        </div>
+      )
+    }
+    
+    if (showHint === 2 && c.hint) {
+      return (
+        <div className="bg-purple-600 rounded-2xl p-4 animate-fadeIn">
+          <p className="text-white text-base md:text-lg mb-2 font-bold">💡 이렇게 써봐</p>
+          <p className="text-white font-mono text-base md:text-lg bg-purple-800 p-3 rounded-xl">{c.hint}</p>
+        </div>
+      )
+    }
+    
+    if (showHint >= 3 || (showHint >= 2 && !c.hint)) {
+      return (
+        <div className="bg-pink-600 rounded-2xl p-4 animate-fadeIn">
+          <p className="text-white text-base md:text-lg mb-2 font-bold">🎯 정답 보고 직접 써봐</p>
+          <p className="text-white font-mono text-base md:text-lg bg-pink-800 p-3 rounded-xl select-none">{c.answer}</p>
+        </div>
+      )
+    }
+    
+    return null
+  }
+
+  const SymbolButtons = () => (
+    <div className="flex justify-center gap-2 mb-4 flex-wrap">
+      {["'", '"', '(', ')', ',', ':', '+', '-', '*', '/'].map(symbol => (
+        <button
+          key={symbol}
+          onClick={() => insertSymbol(symbol)}
+          className="w-12 h-12 md:w-14 md:h-14 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 rounded-xl font-mono text-white text-xl md:text-2xl transition-all shadow-lg font-bold"
+        >
+          {symbol}
+        </button>
+      ))}
+    </div>
+  )
+
+  const getRandomPraise = () => {
+    const praises = [
+      "정답! 🎉", "완벽해! ✨", "천재?! 🧠", "멋져! 🔥", "빠르다! ⚡",
+      "대단해! 💪", "좋았어! 👍", "잘했어! 🌟", "굿! 👏", "역시! 😎"
+    ]
+    return praises[Math.floor(Math.random() * praises.length)]
+  }
+
+  const StreakDisplay = () => {
+    if (streak < 2) return null
+    return (
+      <div className="flex items-center gap-1 bg-orange-500 px-3 py-1 rounded-full shadow-lg animate-pulse">
+        <Flame className="w-5 h-5 text-white" />
+        <span className="font-bold text-white">{streak}</span>
+      </div>
+    )
+  }
+
+  const StreakBonus = () => {
+    if (!showStreakBonus) return null
+    return (
+      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 animate-bounce">
+        <div className="bg-orange-500 text-white px-8 py-4 rounded-2xl shadow-2xl text-center">
+          <div className="text-4xl mb-2">🔥</div>
+          <div className="text-2xl font-bold">{streak}연속 정답!</div>
+          <div className="text-lg">+20 보너스!</div>
+        </div>
+      </div>
+    )
+  }
+
+  // ============================================================
+  // 복습 화면
+  // ============================================================
+  if (showReview && wrongAnswers.length > 0) {
+    const reviewItem = wrongAnswers[reviewIndex]
+    
+    return (
+      <div className="min-h-screen bg-orange-50">
+        <div className="p-4 md:p-6 flex items-center gap-3 md:gap-4 max-w-[1300px] mx-auto">
+          <button 
+            onClick={() => setShowReview(false)}
+            className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gray-700 flex items-center justify-center shadow-lg"
+          >
+            <X className="w-6 h-6 md:w-7 md:h-7 text-white" />
+          </button>
+          
+          <div className="flex-1 h-5 md:h-6 bg-gray-300 rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-orange-500 transition-all"
+              style={{ width: `${((reviewIndex + 1) / wrongAnswers.length) * 100}%` }}
+            />
+          </div>
+          
+          <div className="flex items-center gap-2 bg-orange-500 px-4 py-2 rounded-full shadow-lg">
+            <RotateCcw className="w-5 h-5 md:w-6 md:h-6 text-white" />
+            <span className="font-bold text-lg md:text-xl text-white">{reviewIndex + 1}/{wrongAnswers.length}</span>
+          </div>
+        </div>
+
+        <div className="max-w-[1300px] mx-auto px-5 md:px-8 pb-8">
+          <div className="pt-8 md:pt-12 space-y-5 md:space-y-6">
+            <div className="flex justify-center">
+              <span className="px-6 py-2 rounded-full text-lg md:text-xl font-bold bg-orange-500 text-white shadow-lg">
+                🔄 복습
+              </span>
+            </div>
+
+            <p className="text-gray-900 text-2xl md:text-4xl font-bold text-center">
+              {reviewItem.task}
+            </p>
+
+            <SymbolButtons />
+
+            <div className="bg-white rounded-3xl p-5 md:p-8 shadow-xl border-4 border-indigo-200">
+              <textarea
+                ref={textareaRef}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                disabled={phase === "correct"}
+                placeholder="여기에 코드 입력!"
+                className={cn(
+                  "w-full h-24 md:h-28 bg-indigo-50 text-indigo-900 font-mono font-bold p-4 md:p-5 rounded-2xl text-xl md:text-2xl focus:outline-none focus:ring-4 focus:ring-orange-400 resize-none placeholder:text-indigo-300 border-4 border-indigo-200",
+                  phase === "wrong" && "ring-4 ring-red-500 border-red-500"
+                )}
+                spellCheck={false}
+              />
+            </div>
+
+            {phase === "correct" && (
+              <div className="bg-green-600 rounded-2xl p-4 animate-fadeIn">
+                <p className="text-white text-2xl md:text-3xl font-bold text-center mb-2">{praise}</p>
+                <div className="flex items-center justify-center gap-2">
+                  <Check className="w-6 h-6 text-white" />
+                  <span className="text-white font-mono text-lg md:text-xl">→ {output}</span>
+                </div>
+              </div>
+            )}
+
+            {phase !== "correct" && renderHint()}
+
+            {phase !== "correct" && (
+              <Button 
+                onClick={check}
+                disabled={!input.trim()}
+                className={cn(
+                  "w-full py-7 md:py-8 text-xl md:text-2xl rounded-2xl transition-all font-bold shadow-xl",
+                  input.trim() 
+                    ? "bg-orange-500 hover:bg-orange-400 text-white animate-button-ready" 
+                    : "bg-gray-300 text-gray-500"
+                )}
+              >
+                <Play className="w-6 h-6 mr-2" /> 실행하기
+              </Button>
+            )}
+          </div>
+        </div>
+
+        <style jsx global>{`
+          @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+          }
+          .animate-shake { animation: shake 0.3s ease-in-out; }
+          
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          .animate-fadeIn { animation: fadeIn 0.3s ease-out forwards; }
+        `}</style>
+      </div>
+    )
+  }
+
+  // ============================================================
+  // 메인 화면
+  // ============================================================
+  return (
+    <div className={cn(
+      "min-h-screen transition-all duration-300",
+      phase === "correct" ? "bg-green-100" :
+      phase === "wrong" ? "bg-red-100" :
+      "bg-indigo-50",
+      isTransitioning && "opacity-50"
+    )}>
+      <StreakBonus />
+      
+      {/* 상단 바 - 학습 페이지: max-w-[1300px] */}
+      <div className="p-4 md:p-6 flex items-center gap-3 md:gap-4 max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8">
+        <button 
+          onClick={() => router.push("/curriculum")}
+          className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gray-700 flex items-center justify-center hover:bg-gray-600 transition-colors shadow-lg"
+          title="나가기 (Esc)"
+        >
+          <X className="w-6 h-6 md:w-7 md:h-7 text-white" />
+        </button>
+        
+        <div className="flex-1 h-5 md:h-6 bg-gray-300 rounded-full overflow-hidden">
+          <div 
+            className="h-full bg-indigo-600 transition-all duration-500"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+        
+        <StreakDisplay />
+        
+        <div className="flex items-center gap-2 bg-amber-500 px-4 py-2 rounded-full shadow-lg">
+          <Sparkles className="w-5 h-5 md:w-6 md:h-6 text-white" />
+          <span className="font-bold text-lg md:text-xl text-white">{score}</span>
+        </div>
+      </div>
+
+      {/* 메인 콘텐츠 - 학습 페이지: max-w-[1300px] */}
+      <div className={cn(
+        "max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 pb-8 transition-opacity duration-200",
+        isTransitioning ? "opacity-0" : "opacity-100"
+      )}>
+
+        {/* 챕터 시작 */}
+        {current.type === "chapter" && (
+          <div className="pt-16 md:pt-24 text-center space-y-6 md:space-y-8 animate-fadeIn">
+            <div className="inline-block px-6 py-3 bg-indigo-600 rounded-full shadow-xl">
+              <span className="text-white font-bold text-xl md:text-2xl">📚 Chapter {current.content.num}</span>
+            </div>
+            <h1 className="text-4xl md:text-6xl font-bold text-gray-900">
+              {current.content.title}
+            </h1>
+            <p className="text-gray-600 text-xl md:text-2xl font-medium">
+              {current.content.desc}
+            </p>
+            <Button 
+              onClick={next}
+              className="px-12 py-8 md:py-10 text-2xl md:text-3xl bg-indigo-600 hover:bg-indigo-500 rounded-2xl border-0 font-bold text-white shadow-xl"
+            >
+              시작! <ChevronRight className="w-8 h-8 ml-2" />
+            </Button>
+            <p className="text-gray-400 text-base">Enter로 계속</p>
+          </div>
+        )}
+
+        {/* 보상 */}
+        {current.type === "reward" && (
+          <div className="pt-16 md:pt-24 text-center space-y-8 md:space-y-10 animate-fadeIn">
+            <div className="text-8xl md:text-[10rem] animate-bounce">
+              {current.content.emoji}
+            </div>
+            <h2 className="text-3xl md:text-5xl font-bold text-gray-900">
+              {current.content.message}
+            </h2>
+            <div className="inline-flex items-center gap-3 bg-amber-500 px-8 py-4 rounded-full shadow-xl">
+              <Sparkles className="w-8 h-8 text-white" />
+              <span className="text-4xl md:text-5xl font-bold text-white">{score}점</span>
+            </div>
+            <div className="pt-4">
+              <Button 
+                onClick={next}
+                className="w-full max-w-md mx-auto px-12 py-8 md:py-10 text-2xl md:text-3xl bg-indigo-600 hover:bg-indigo-500 rounded-2xl border-0 font-bold text-white shadow-xl"
+              >
+                계속하기 <ChevronRight className="w-8 h-8 ml-2" />
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* 요약 */}
+        {current.type === "summary" && (
+          <div className="pt-12 md:pt-16 text-center space-y-6 md:space-y-8 animate-fadeIn">
+            <div className="text-7xl md:text-8xl">
+              {current.content.emoji}
+            </div>
+            <div className="space-y-2">
+              <p className="text-indigo-600 font-bold text-xl md:text-2xl">Chapter {current.content.num} 완료!</p>
+              <h2 className="text-3xl md:text-5xl font-bold text-gray-900">
+                {current.content.title} 마스터!
+              </h2>
+            </div>
+            
+            <div className="bg-white rounded-3xl p-6 md:p-8 shadow-xl border-4 border-indigo-200 text-left">
+              <p className="text-indigo-600 font-bold text-lg md:text-xl mb-4">📝 오늘 배운 것</p>
+              <ul className="space-y-3">
+                {current.content.learned.map((item: string, i: number) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <span className="text-green-500 text-xl">✓</span>
+                    <span className="text-gray-700 text-lg md:text-xl font-medium">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            
+            <div className="bg-green-100 rounded-2xl p-5 md:p-6 border-4 border-green-300">
+              <p className="text-green-700 text-xl md:text-2xl font-bold">
+                🎯 {current.content.canDo}
+              </p>
+            </div>
+            
+            <div className="inline-flex items-center gap-3 bg-amber-500 px-8 py-4 rounded-full shadow-xl">
+              <Trophy className="w-8 h-8 text-white" />
+              <span className="text-3xl md:text-4xl font-bold text-white">{score}점</span>
+            </div>
+            
+            {wrongAnswers.length > 0 ? (
+              <div className="space-y-4">
+                <p className="text-orange-600 font-bold text-xl md:text-2xl">
+                  틀린 문제 {wrongAnswers.length}개 복습할까?
+                </p>
+                <div className="flex gap-4 justify-center">
+                  <Button 
+                    onClick={startReview}
+                    className="px-8 py-6 text-xl bg-orange-500 hover:bg-orange-400 rounded-xl border-0 font-bold text-white shadow-lg"
+                  >
+                    <RotateCcw className="w-6 h-6 mr-2" /> 복습하기
+                  </Button>
+                  <Button 
+                    onClick={next}
+                    className="px-8 py-6 text-xl rounded-xl border-4 border-gray-400 text-gray-600 hover:bg-gray-100 font-bold bg-white"
+                  >
+                    건너뛰기
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <Button 
+                onClick={next}
+                className="px-12 py-8 md:py-10 text-2xl md:text-3xl bg-indigo-600 hover:bg-indigo-500 rounded-2xl border-0 font-bold text-white shadow-xl"
+              >
+                다음으로 <ChevronRight className="w-8 h-8 ml-2" />
+              </Button>
+            )}
+          </div>
+        )}
+
+        {/* 설명 (예측 퀴즈 포함) */}
+        {current.type === "explain" && (
+          <div className="pt-8 md:pt-12 space-y-6 md:space-y-8">
+            <div className="space-y-2">
+              {current.content.lines.map((line: string, i: number) => (
+                <p key={i} className="text-gray-900 text-2xl md:text-4xl font-bold text-center">
+                  {line}
+                </p>
+              ))}
+            </div>
+
+            {current.content.code && (
+              <div 
+                className={cn(
+                  "bg-white rounded-3xl overflow-hidden shadow-xl border-4 border-indigo-200",
+                  !typingComplete && "cursor-pointer"
+                )}
+                onClick={handleCodeClick}
+              >
+                <div className="p-6 md:p-8 bg-gray-900 min-h-[80px] md:min-h-[100px]">
+                  <div className="font-mono text-lg md:text-2xl whitespace-pre text-left font-bold leading-relaxed">
+                    {codeLines.map((line, i) => (
+                      <div
+                        key={i}
+                        className={cn(
+                          "transition-all duration-300",
+                          i < visibleLines 
+                            ? "opacity-100 translate-y-0" 
+                            : "opacity-0 translate-y-2 h-0 overflow-hidden"
+                        )}
+                      >
+                        {highlightPythonLine(line)}
+                      </div>
+                    ))}
+                    {!typingComplete && (
+                      <span className="inline-block w-3 h-5 md:h-7 bg-purple-400 ml-1 align-middle animate-blink" />
+                    )}
+                  </div>
+                </div>
+                
+                {/* 클릭 안내 - 아직 줄이 남아있을 때 */}
+                {!typingComplete && visibleLines > 0 && (
+                  <div className="px-4 py-2 bg-gray-800 text-center">
+                    <span className="text-gray-500 text-sm">탭해서 다음 줄 보기</span>
+                  </div>
+                )}
+                
+                {/* 결과 영역 - 예측 퀴즈가 있으면 맞춘 후에만 표시 */}
+                {current.content.result && (
+                  <div className={cn(
+                    "px-6 py-4 md:px-8 md:py-5 transition-all duration-300",
+                    showResult 
+                      ? (current.content.isError ? "bg-red-600" : "bg-green-600")
+                      : "bg-gray-900"
+                  )}>
+                    <p className={cn(
+                      "font-mono text-center text-xl md:text-2xl font-bold transition-opacity duration-300",
+                      showResult ? "text-white opacity-100" : "opacity-0"
+                    )}>
+                      → {current.content.result}
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* 예측 퀴즈 */}
+            {current.content.predict && typingComplete && !predictAnswered && (
+              <div className="space-y-4 animate-fadeIn">
+                <p className="text-center text-xl md:text-2xl font-bold text-amber-600">
+                  🤔 {current.content.predict.question || "결과가 뭘까?"}
+                </p>
+                <div className="space-y-3">
+                  {current.content.predict.options.map((opt: string, idx: number) => (
+                    <button
+                      key={idx}
+                      onClick={() => selectPredict(idx)}
+                      className="w-full p-4 md:p-5 rounded-2xl font-mono text-lg md:text-xl font-bold shadow-lg border-4 bg-white hover:bg-amber-50 text-gray-800 border-amber-200 hover:border-amber-400 transition-all"
+                    >
+                      {opt.split('\n').map((line, i) => (
+                        <span key={i}>{line}{i < opt.split('\n').length - 1 && <br />}</span>
+                      ))}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* 예측 결과 피드백 */}
+            {current.content.predict && predictAnswered && !showResult && (
+              <div className={cn(
+                "rounded-2xl p-4 animate-fadeIn text-center",
+                predictSelected === current.content.predict.answer 
+                  ? "bg-green-600" 
+                  : "bg-red-500"
+              )}>
+                <p className="text-white text-xl md:text-2xl font-bold">
+                  {predictSelected === current.content.predict.answer 
+                    ? "정답! 👏 +5점" 
+                    : `아쉬워! 정답은 "${current.content.predict.options[current.content.predict.answer]}"`
+                  }
+                </p>
+                {current.content.predict.feedback && predictSelected !== current.content.predict.answer && (
+                  <p className="text-white/90 text-base md:text-lg mt-2">
+                    💡 {current.content.predict.feedback}
+                  </p>
+                )}
+              </div>
+            )}
+
+            {current.content.note && (
+              <p className={cn(
+                "text-gray-600 text-center text-lg md:text-xl font-medium transition-opacity duration-300",
+                (current.content.predict ? showResult : typingComplete) ? "opacity-100" : "opacity-0"
+              )}>
+                💬 {current.content.note}
+              </p>
+            )}
+            
+            {/* 예측 퀴즈가 있으면 맞춰야 다음 버튼 활성화 */}
+            {(!current.content.predict || predictAnswered) && (
+              <>
+                <Button 
+                  onClick={next}
+                  className="w-full py-7 md:py-8 text-xl md:text-2xl bg-indigo-600 hover:bg-indigo-500 rounded-2xl border-0 font-bold text-white shadow-xl"
+                >
+                  다음 <ChevronRight className="w-6 h-6 md:w-7 md:h-7 ml-2" />
+                </Button>
+                <p className="text-gray-400 text-base text-center">Enter로 계속</p>
+              </>
+            )}
+          </div>
+        )}
+
+        {/* 에러 퀴즈 */}
+        {current.type === "errorQuiz" && (
+          <div className="pt-8 md:pt-12 space-y-6 md:space-y-8 animate-fadeIn">
+            <div className="flex justify-center">
+              <span className="px-6 py-2 rounded-full text-lg font-bold bg-red-500 text-white shadow-lg">
+                🔍 에러 탐정
+              </span>
+            </div>
+            
+            <p className="text-gray-900 text-2xl md:text-4xl font-bold text-center">
+              {current.content.question}
+            </p>
+            
+            <div className="bg-white rounded-3xl overflow-hidden shadow-xl border-4 border-red-200">
+              <div className="p-6 md:p-8 bg-gray-900">
+                <div className="font-mono text-lg md:text-2xl whitespace-pre text-left font-bold leading-relaxed">
+                  {current.content.code.split('\n').map((codeLine: string, i: number) => (
+                    <div key={i}>{highlightPythonLine(codeLine)}</div>
+                  ))}
+                </div>
+              </div>
+              <div className="px-6 py-3 bg-red-600">
+                <p className="font-mono text-center text-lg text-white font-bold">
+                  ❌ Error!
+                </p>
+              </div>
+            </div>
+            
+            <div className="space-y-4 md:space-y-5">
+              {current.content.options.map((opt: string, idx: number) => {
+                const isSelected = selected === idx
+                const isAnswer = idx === current.content.answer
+                const showResultState = selected !== null
+                
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => selectErrorQuiz(idx)}
+                    disabled={selected !== null}
+                    className={cn(
+                      "w-full p-5 md:p-6 rounded-2xl text-left text-lg md:text-xl transition-all font-bold shadow-lg border-4",
+                      !showResultState && "bg-white hover:bg-red-50 text-gray-800 border-red-200 hover:border-red-400",
+                      showResultState && isAnswer && "bg-green-600 text-white border-green-600",
+                      showResultState && isSelected && !isAnswer && "bg-red-600 text-white border-red-600",
+                      showResultState && !isSelected && !isAnswer && "bg-gray-200 text-gray-400 border-gray-200"
+                    )}
+                  >
+                    {opt.split('\n').map((line, i) => (
+                      <span key={i}>{line}{i < opt.split('\n').length - 1 && <br />}</span>
+                    ))}
+                  </button>
+                )
+              })}
+            </div>
+
+            {showExplanation && current.content.explanation && (
+              <div className="bg-green-600 rounded-2xl p-5 animate-fadeIn">
+                <p className="text-white text-lg md:text-xl font-bold">
+                  💡 {current.content.explanation}
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* 인터리빙 */}
+        {current.type === "interleaving" && (
+          <div className="pt-8 md:pt-12 space-y-5 md:space-y-6 animate-fadeIn">
+            <div className="flex justify-center">
+              <span className="px-6 py-2 rounded-full text-lg font-bold bg-purple-500 text-white shadow-lg">
+                <Zap className="w-5 h-5 inline mr-1" /> 복습
+              </span>
+            </div>
+            
+            <p className="text-purple-600 text-xl md:text-2xl font-bold text-center">
+              {current.content.message}
+            </p>
+
+            <p className="text-gray-900 text-2xl md:text-4xl font-bold text-center">
+              {current.content.task}
+            </p>
+
+            {!current.content.template && <SymbolButtons />}
+
+            {typeof current.content.template === 'string' ? (
+              /* 여러 빈칸 template */
+              <div className="bg-white rounded-3xl overflow-hidden shadow-xl border-4 border-purple-200">
+                <div className="p-5 md:p-7 bg-gray-900">
+                  <div className="font-mono text-base md:text-xl whitespace-pre text-left font-bold leading-loose">
+                    {(() => {
+                      const parts = current.content.template.split('___')
+                      let blankIdx = 0
+                      return parts.map((part: string, i: number) => {
+                        const lines = part.split('\n')
+                        const elements: React.ReactNode[] = []
+                        lines.forEach((line: string, li: number) => {
+                          if (li > 0) elements.push(<br key={`br-${i}-${li}`} />)
+                          elements.push(
+                            <span key={`text-${i}-${li}`}>
+                              {highlightPythonLine(line)}
+                            </span>
+                          )
+                        })
+                        if (i < parts.length - 1) {
+                          const idx = blankIdx++
+                          elements.push(
+                            <input
+                              key={`blank-${idx}`}
+                              ref={idx === 0 ? inputRef : undefined}
+                              value={blanks[idx] || ''}
+                              onChange={(e) => {
+                                const newBlanks = [...blanks]
+                                newBlanks[idx] = e.target.value
+                                setBlanks(newBlanks)
+                              }}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Tab' && !e.shiftKey) {
+                                  e.preventDefault()
+                                  const nextInput = document.querySelector(`[data-blank-idx="${idx + 1}"]`) as HTMLInputElement
+                                  nextInput?.focus()
+                                }
+                                if (e.key === 'Enter' && blanks.every(b => b.trim())) {
+                                  check()
+                                }
+                              }}
+                              data-blank-idx={idx}
+                              disabled={phase === "correct"}
+                              placeholder={`${idx + 1}`}
+                              className={cn(
+                                "inline-block bg-amber-400/20 text-amber-300 font-mono font-bold px-2 py-1 mx-0.5 rounded-lg text-center focus:outline-none focus:ring-2 focus:ring-amber-400 transition-all border-2 border-amber-500/50 border-dashed",
+                                phase === "wrong" && "ring-2 ring-red-500 border-red-500 animate-shake",
+                                phase === "correct" && "bg-green-400/20 text-green-300 border-green-500/50",
+                                phase === "input" && !blanks[idx] && "animate-pulse-border"
+                              )}
+                              style={{ width: `${Math.max(60, (blanks[idx]?.length || 2) * 12 + 30)}px` }}
+                              autoComplete="off"
+                              spellCheck={false}
+                            />
+                          )
+                        }
+                        return elements
+                      })
+                    })()}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className={cn(
+                "bg-white rounded-3xl p-5 md:p-8 shadow-xl border-4 border-purple-200",
+                phase === "input" && !input && "animate-glow"
+              )}>
+                <textarea
+                  ref={textareaRef}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  disabled={phase === "correct"}
+                  placeholder="여기에 코드 입력!"
+                  className={cn(
+                    "w-full h-24 md:h-28 bg-purple-50 text-purple-900 font-mono font-bold p-4 md:p-5 rounded-2xl text-xl md:text-2xl focus:outline-none focus:ring-4 focus:ring-purple-400 resize-none placeholder:text-purple-300 border-4 border-purple-200",
+                    phase === "wrong" && "ring-4 ring-red-500 border-red-500"
+                  )}
+                  spellCheck={false}
+                />
+              </div>
+            )}
+
+            {phase === "correct" && (
+              <div className="bg-green-600 rounded-2xl p-4 animate-fadeIn">
+                <p className="text-white text-2xl md:text-3xl font-bold text-center mb-2">{praise}</p>
+                <div className="flex items-center justify-center gap-2">
+                  <Check className="w-6 h-6 text-white" />
+                  <span className="text-white font-mono text-lg md:text-xl">→ {output}</span>
+                </div>
+              </div>
+            )}
+
+            {phase !== "correct" && renderHint()}
+
+            {phase !== "correct" && (() => {
+              const hasInput = typeof current.content.template === 'string'
+                ? blanks.some(b => b.trim())
+                : input.trim()
+              return (
+                <Button 
+                  onClick={check}
+                  disabled={!hasInput}
+                  className={cn(
+                    "w-full py-7 md:py-8 text-xl md:text-2xl rounded-2xl transition-all font-bold shadow-xl",
+                    hasInput 
+                      ? "bg-purple-600 hover:bg-purple-500 text-white animate-button-ready" 
+                      : "bg-gray-300 text-gray-500"
+                  )}
+                >
+                  <Play className="w-6 h-6 mr-2" /> 실행하기
+                </Button>
+              )
+            })()}
+          </div>
+        )}
+
+        {/* 연습 */}
+        {current.type === "practice" && (
+          <div className="pt-8 md:pt-12 space-y-5 md:space-y-6 animate-fadeIn">
+            {current.content.level && (
+              <div className="flex justify-center">
+                <span className={cn(
+                  "px-6 py-2 rounded-full text-lg md:text-xl font-bold shadow-lg",
+                  getLevelBadge(current.content.level).color
+                )}>
+                  {getLevelBadge(current.content.level).label}
+                </span>
+              </div>
+            )}
+
+            <p className="text-gray-900 text-2xl md:text-4xl font-bold text-center">
+              {current.content.task}
+            </p>
+
+            {current.content.guide && (
+              <p className="text-indigo-600 text-lg md:text-xl text-center font-bold">
+                💡 {current.content.guide}
+              </p>
+            )}
+
+            {!current.content.template && <SymbolButtons />}
+
+            {typeof current.content.template === 'string' ? (
+              /* 여러 빈칸 template: 코드 블록 + 인라인 input */
+              <div className="bg-white rounded-3xl overflow-hidden shadow-xl border-4 border-indigo-200">
+                <div className="p-5 md:p-7 bg-gray-900">
+                  <div className="font-mono text-base md:text-xl whitespace-pre text-left font-bold leading-loose">
+                    {(() => {
+                      const parts = current.content.template.split('___')
+                      let blankIdx = 0
+                      return parts.map((part: string, i: number) => {
+                        const lines = part.split('\n')
+                        const elements: React.ReactNode[] = []
+                        lines.forEach((line: string, li: number) => {
+                          if (li > 0) elements.push(<br key={`br-${i}-${li}`} />)
+                          elements.push(
+                            <span key={`text-${i}-${li}`}>
+                              {highlightPythonLine(line)}
+                            </span>
+                          )
+                        })
+                        if (i < parts.length - 1) {
+                          const idx = blankIdx++
+                          elements.push(
+                            <input
+                              key={`blank-${idx}`}
+                              ref={idx === 0 ? inputRef : undefined}
+                              value={blanks[idx] || ''}
+                              onChange={(e) => {
+                                const newBlanks = [...blanks]
+                                newBlanks[idx] = e.target.value
+                                setBlanks(newBlanks)
+                              }}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Tab' && !e.shiftKey) {
+                                  e.preventDefault()
+                                  const nextInput = document.querySelector(`[data-blank-idx="${idx + 1}"]`) as HTMLInputElement
+                                  nextInput?.focus()
+                                }
+                                if (e.key === 'Enter' && blanks.every(b => b.trim())) {
+                                  check()
+                                }
+                              }}
+                              data-blank-idx={idx}
+                              disabled={phase === "correct"}
+                              placeholder={`${idx + 1}`}
+                              className={cn(
+                                "inline-block bg-amber-400/20 text-amber-300 font-mono font-bold px-2 py-1 mx-0.5 rounded-lg text-center focus:outline-none focus:ring-2 focus:ring-amber-400 transition-all border-2 border-amber-500/50 border-dashed",
+                                phase === "wrong" && "ring-2 ring-red-500 border-red-500 animate-shake",
+                                phase === "correct" && "bg-green-400/20 text-green-300 border-green-500/50",
+                                phase === "input" && !blanks[idx] && "animate-pulse-border"
+                              )}
+                              style={{ width: `${Math.max(60, (blanks[idx]?.length || 2) * 12 + 30)}px` }}
+                              autoComplete="off"
+                              spellCheck={false}
+                            />
+                          )
+                        }
+                        return elements
+                      })
+                    })()}
+                  </div>
+                </div>
+              </div>
+            ) : current.content.template ? (
+              <div className="bg-white rounded-3xl p-5 md:p-8 shadow-xl border-4 border-indigo-200">
+                <div className="flex items-center justify-center gap-1 font-mono text-xl md:text-3xl flex-wrap">
+                  <span className="text-gray-500 font-bold">{current.content.template.before}</span>
+                  <input
+                    ref={inputRef}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && input && check()}
+                    disabled={phase === "correct"}
+                    className={cn(
+                      "bg-indigo-100 text-indigo-900 font-mono font-bold px-4 py-3 md:px-6 md:py-4 rounded-xl text-center focus:outline-none focus:ring-4 focus:ring-indigo-400 transition-all border-4 border-indigo-300",
+                      phase === "wrong" && "ring-4 ring-red-500 border-red-500 animate-shake",
+                      phase === "input" && !input && "animate-pulse-border"
+                    )}
+                    style={{ width: `${Math.max(120, current.content.answer.length * 20 + 60)}px` }}
+                    autoComplete="off"
+                    spellCheck={false}
+                  />
+                  <span className="text-gray-500 font-bold">{current.content.template.after}</span>
+                </div>
+              </div>
+            ) : (
+              <div className={cn(
+                "bg-white rounded-3xl p-5 md:p-8 shadow-xl border-4 border-indigo-200",
+                phase === "input" && !input && "animate-glow"
+              )}>
+                <textarea
+                  ref={textareaRef}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  disabled={phase === "correct"}
+                  placeholder="여기에 코드 입력!"
+                  className={cn(
+                    "w-full h-24 md:h-28 bg-indigo-50 text-indigo-900 font-mono font-bold p-4 md:p-5 rounded-2xl text-xl md:text-2xl focus:outline-none focus:ring-4 focus:ring-indigo-400 resize-none placeholder:text-indigo-300 border-4 border-indigo-200",
+                    phase === "wrong" && "ring-4 ring-red-500 border-red-500"
+                  )}
+                  spellCheck={false}
+                />
+              </div>
+            )}
+
+            {phase === "correct" && (
+              <div className="bg-green-600 rounded-2xl p-4 animate-fadeIn">
+                <p className="text-white text-2xl md:text-3xl font-bold text-center mb-2">{praise}</p>
+                <div className="flex items-center justify-center gap-2">
+                  <Check className="w-6 h-6 text-white" />
+                  <span className="text-white font-mono text-lg md:text-xl">→ {output}</span>
+                </div>
+              </div>
+            )}
+
+            {phase !== "correct" && renderHint()}
+
+            {phase !== "correct" && (() => {
+              const hasInput = typeof current.content.template === 'string'
+                ? blanks.some(b => b.trim())
+                : input.trim()
+              return (
+                <Button 
+                  onClick={check}
+                  disabled={!hasInput}
+                  className={cn(
+                    "w-full py-7 md:py-8 text-xl md:text-2xl rounded-2xl transition-all font-bold shadow-xl",
+                    hasInput 
+                      ? "bg-indigo-600 hover:bg-indigo-500 text-white animate-button-ready" 
+                      : "bg-gray-300 text-gray-500"
+                  )}
+                >
+                  <Play className="w-6 h-6 mr-2" /> 실행하기
+                </Button>
+              )
+            })()}
+          </div>
+        )}
+
+        {/* 퀴즈 */}
+        {current.type === "quiz" && (
+          <div className="pt-8 md:pt-12 space-y-6 md:space-y-8 animate-fadeIn">
+            <p className="text-gray-900 text-2xl md:text-4xl font-bold text-center">
+              🤔 {current.content.question}
+            </p>
+            
+            <div className="space-y-4 md:space-y-5">
+              {current.content.options.map((opt: string, idx: number) => {
+                const isSelected = selected === idx
+                const isAnswer = idx === current.content.answer
+                const showResultState = selected !== null
+                
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => selectQuiz(idx)}
+                    disabled={selected !== null}
+                    className={cn(
+                      "w-full p-5 md:p-6 rounded-2xl font-mono text-left text-lg md:text-xl transition-all font-bold shadow-lg border-4",
+                      !showResultState && "bg-white hover:bg-indigo-50 text-gray-800 border-indigo-200 hover:border-indigo-400",
+                      showResultState && isAnswer && "bg-green-600 text-white border-green-600",
+                      showResultState && isSelected && !isAnswer && "bg-red-600 text-white border-red-600",
+                      showResultState && !isSelected && !isAnswer && "bg-gray-200 text-gray-400 border-gray-200"
+                    )}
+                  >
+                    {opt.split('\n').map((line, i) => (
+                      <span key={i}>{line}{i < opt.split('\n').length - 1 && <br />}</span>
+                    ))}
+                  </button>
+                )
+              })}
+            </div>
+
+            {showExplanation && current.content.explanation && (
+              <div className="bg-indigo-600 rounded-2xl p-4 animate-fadeIn">
+                <p className="text-white text-lg md:text-xl font-bold">
+                  💡 {current.content.explanation}
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* 프로젝트 */}
+        {current.type === "project" && (
+          <div className="pt-6 md:pt-10 space-y-5 md:space-y-6 animate-fadeIn">
+            <div className="flex items-center justify-center gap-3 md:gap-4">
+              {Array.from({ length: current.content.total }).map((_, i) => (
+                <div
+                  key={i}
+                  className={cn(
+                    "h-4 md:h-5 rounded-full transition-all",
+                    i < current.content.step ? "w-12 md:w-16 bg-indigo-600" : "w-6 md:w-8 bg-gray-300"
+                  )}
+                />
+              ))}
+              <span className="text-gray-600 text-lg md:text-xl ml-2 font-bold">
+                {current.content.step}/{current.content.total}
+              </span>
+            </div>
+
+            {current.content.done.length > 0 && (
+              <div className="bg-gray-100 rounded-2xl p-4 md:p-5 border-4 border-gray-200">
+                {current.content.done.map((line: string, i: number) => (
+                  <p key={i} className="text-green-700 font-mono text-base md:text-lg font-medium">{line}</p>
+                ))}
+              </div>
+            )}
+
+            <div className="text-center space-y-2">
+              <p className="text-gray-900 text-xl md:text-3xl font-bold">
+                🎯 {current.content.task}
+              </p>
+              <p className="text-indigo-600 font-mono text-lg md:text-xl font-bold">
+                → {current.content.target}
+              </p>
+            </div>
+
+            <SymbolButtons />
+
+            <div className={cn(
+              "bg-white rounded-3xl p-5 md:p-8 shadow-xl border-4 border-indigo-200",
+              phase === "input" && !input && "animate-glow"
+            )}>
+              <input
+                ref={inputRef}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && input && check()}
+                disabled={phase === "correct"}
+                placeholder="여기에 코드 입력!"
+                className={cn(
+                  "w-full bg-indigo-50 text-indigo-900 font-mono font-bold px-5 py-5 md:px-6 md:py-6 rounded-2xl text-center text-lg md:text-xl focus:outline-none focus:ring-4 focus:ring-indigo-400 placeholder:text-indigo-300 border-4 border-indigo-200",
+                  phase === "wrong" && "ring-4 ring-red-500 border-red-500 animate-shake"
+                )}
+                autoComplete="off"
+                spellCheck={false}
+              />
+            </div>
+
+            {phase === "correct" && (
+              <div className="bg-green-600 rounded-2xl p-4 animate-fadeIn">
+                <p className="text-white text-2xl md:text-3xl font-bold text-center mb-2">{praise}</p>
+                <div className="flex items-center justify-center gap-2">
+                  <Check className="w-6 h-6 text-white" />
+                  <span className="text-white font-mono text-lg md:text-xl">→ {output}</span>
+                </div>
+              </div>
+            )}
+
+            {phase !== "correct" && renderHint()}
+
+            {phase !== "correct" && (
+              <Button 
+                onClick={check}
+                disabled={!input.trim()}
+                className={cn(
+                  "w-full py-7 md:py-8 text-xl md:text-2xl rounded-2xl font-bold shadow-xl",
+                  input.trim() 
+                    ? "bg-indigo-600 hover:bg-indigo-500 text-white animate-button-ready" 
+                    : "bg-gray-300 text-gray-500"
+                )}
+              >
+                <Play className="w-6 h-6 mr-2" /> 실행하기
+              </Button>
+            )}
+          </div>
+        )}
+
+        {/* 인터랙티브 애니메이션 */}
+        {current.type === "interactive" && (
+          <div className="pt-4 md:pt-6 space-y-4 md:space-y-6 animate-fadeIn">
+            <div className="text-center space-y-2">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+                {current.content.title}
+              </h2>
+              {current.content.description && (
+                <p className="text-gray-600 text-base md:text-lg">
+                  {current.content.description}
+                </p>
+              )}
+            </div>
+
+            {/* 데이터 구조 애니메이션 */}
+            {current.content.component === "dataStructures" && (
+              <DataStructuresComparison />
+            )}
+
+            {/* 함수 구조 빌더 */}
+            {current.content.component === "functionBuilder" && (
+              <FunctionBuilder onComplete={next} />
+            )}
+
+            {current.content.component !== "functionBuilder" && (
+              <Button 
+                onClick={next}
+                className="w-full py-6 md:py-7 text-xl md:text-2xl bg-indigo-600 hover:bg-indigo-500 rounded-2xl border-0 font-bold text-white shadow-xl"
+              >
+                다음 단계로 <ChevronRight className="w-6 h-6 md:w-7 md:h-7 ml-2" />
+              </Button>
+            )}
+          </div>
+        )}
+
+        {/* 코딩 연습 (Python 실행) */}
+        {current.type === "coding" && (
+          <div className="pt-4 md:pt-6 space-y-4 md:space-y-6 animate-fadeIn">
+            <PythonRunner
+              title={current.content.title}
+              description={current.content.description}
+              starterCode={current.content.starterCode || ""}
+              testCases={current.content.testCases || []}
+              hints={current.content.hints || []}
+            />
+            
+            <Button 
+              onClick={next}
+              className="w-full py-6 md:py-7 text-xl md:text-2xl bg-indigo-600 hover:bg-indigo-500 rounded-2xl border-0 font-bold text-white shadow-xl"
+            >
+              다음 단계로 <ChevronRight className="w-6 h-6 md:w-7 md:h-7 ml-2" />
+            </Button>
+          </div>
+        )}
+
+        {/* 완료 */}
+        {current.type === "done" && (
+          <div className="pt-10 md:pt-16 space-y-8 md:space-y-10 animate-fadeIn">
+            <div className="text-center">
+              <div className="text-8xl md:text-[10rem] mb-6">🏆</div>
+              <p className="text-indigo-600 font-bold mb-2 text-2xl md:text-3xl">레슨 완료!</p>
+              <p className="text-gray-500 text-lg md:text-xl mb-2">최종 점수</p>
+              <p className="text-7xl md:text-9xl font-bold text-amber-500">
+                {score}
+              </p>
+            </div>
+
+            <div className="bg-white rounded-3xl p-6 md:p-8 shadow-xl border-4 border-indigo-200">
+              <p className="text-gray-600 text-lg md:text-xl mb-4 font-bold">🍗 내가 만든 것</p>
+              <pre className="text-green-700 font-mono text-lg md:text-xl whitespace-pre-wrap font-bold bg-green-100 p-5 rounded-xl">
+{`=== 치킨 계산기 ===
+치킨: 19000 원
+콜라: 2000 원
+총합: 21000 원`}
+              </pre>
+            </div>
+            
+            <div className="bg-indigo-100 rounded-2xl p-5 md:p-6 border-4 border-indigo-300">
+              <p className="text-indigo-700 text-lg md:text-xl font-bold text-center">
+                🎯 print()로 원하는 것을 출력하고 계산할 수 있어!
+              </p>
+            </div>
+            
+            <Button 
+              onClick={() => {
+                localStorage.removeItem(`lesson-${lessonId}`)
+                router.push("/curriculum")
+              }}
+              className="w-full py-8 md:py-10 text-2xl md:text-3xl bg-indigo-600 hover:bg-indigo-500 rounded-2xl border-0 font-bold text-white shadow-xl"
+            >
+              완료! <ChevronRight className="w-8 h-8 ml-2" />
+            </Button>
+          </div>
+        )}
+      </div>
+
+      <style jsx global>{`
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          25% { transform: translateX(-6px); }
+          75% { transform: translateX(6px); }
+        }
+        .animate-shake { animation: shake 0.3s ease-in-out; }
+        
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(8px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn { animation: fadeIn 0.3s ease-out forwards; }
+        
+        @keyframes pulse-border {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+          50% { box-shadow: 0 0 0 8px rgba(99, 102, 241, 0); }
+        }
+        .animate-pulse-border { animation: pulse-border 1.5s ease-in-out infinite; }
+        
+        @keyframes glow {
+          0%, 100% { box-shadow: 0 0 5px rgba(99, 102, 241, 0.5); }
+          50% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.8), 0 0 30px rgba(99, 102, 241, 0.4); }
+        }
+        .animate-glow { animation: glow 1.5s ease-in-out infinite; }
+        
+        @keyframes button-ready {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.02); }
+        }
+        .animate-button-ready { animation: button-ready 0.8s ease-in-out infinite; }
+        
+        @keyframes blink {
+          0%, 50% { opacity: 1; }
+          51%, 100% { opacity: 0; }
+        }
+        .animate-blink { animation: blink 0.8s step-end infinite; }
+        
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slideUp { animation: slideUp 0.4s ease-out forwards; }
+      `}</style>
+    </div>
+  )
+}

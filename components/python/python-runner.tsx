@@ -73,7 +73,7 @@ export function PythonRunner({
   minHeight = "100px",
   requireCodeChange = true
 }: PythonRunnerProps) {
-  const [code, setCode] = useState("")  // 빈 문자열로 시작
+  const [code, setCode] = useState(initialCode)  // initialCode를 실제 초기값으로
   const [output, setOutput] = useState("")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -82,10 +82,8 @@ export function PythonRunner({
   const [showHint, setShowHint] = useState(false)
   const [attempts, setAttempts] = useState(0)
   const [isFocused, setIsFocused] = useState(false)
+  const [hasEdited, setHasEdited] = useState(false)  // 유저가 수정했는지 추적
   const textareaRef = useRef<HTMLTextAreaElement>(null)
-
-  // placeholder로 보여줄 초기 코드가 있는지
-  const showPlaceholder = initialCode && !code && !isFocused
 
   useEffect(() => {
     loadPyodideInstance()
@@ -111,6 +109,12 @@ export function PythonRunner({
     // 코드가 비어있으면 실행 안 함
     if (!code.trim()) {
       setError("❌ 코드를 직접 작성해보세요!")
+      return
+    }
+
+    // 초기 코드와 똑같으면 수정 안내
+    if (requireCodeChange && initialCode && code.trim() === initialCode.trim()) {
+      setError("✏️ 코드를 수정해야 해요! 주석을 참고해서 try-except를 추가해보세요!")
       return
     }
 
@@ -191,11 +195,12 @@ export function PythonRunner({
   }
 
   const reset = () => {
-    setCode("")
+    setCode(initialCode)
     setOutput("")
     setError("")
     setIsCorrect(null)
     setShowHint(false)
+    setHasEdited(false)
     textareaRef.current?.focus()
   }
 
@@ -227,25 +232,29 @@ export function PythonRunner({
         </div>
         
         <div className="relative">
-          {/* Placeholder로 보이는 초기 코드 */}
-          {showPlaceholder && (
-            <div 
-              className="absolute inset-0 p-2 md:p-3 font-mono text-xs md:text-sm text-gray-500 pointer-events-none whitespace-pre-wrap"
-              style={{ minHeight }}
-            >
-              {initialCode}
+          {/* 초기 코드가 있고 아직 수정 안 했을 때: 수정해야 할 부분 표시 */}
+          {initialCode && !hasEdited && code === initialCode && (
+            <div className="absolute top-0 right-0 z-20 m-2">
+              <span className="text-[10px] md:text-xs bg-amber-400 text-amber-900 px-2 py-0.5 rounded-full font-bold animate-pulse">
+                ← 코드를 수정해보세요!
+              </span>
             </div>
           )}
           
           <textarea
             ref={textareaRef}
             value={code}
-            onChange={(e) => setCode(e.target.value)}
+            onChange={(e) => {
+              setCode(e.target.value)
+              if (e.target.value !== initialCode) {
+                setHasEdited(true)
+              }
+            }}
             onKeyDown={handleKeyDown}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             disabled={readOnly || isLoading}
-            placeholder={!initialCode ? "Python 코드 입력..." : ""}
+            placeholder="Python 코드 입력..."
             className={cn(
               "w-full bg-transparent text-yellow-300 font-mono p-2 md:p-3 resize-none focus:outline-none placeholder:text-gray-600 relative z-10",
               "text-xs md:text-sm leading-relaxed"

@@ -1,0 +1,22 @@
+"use client"
+
+import { TryExceptFlow, ErrorTypesCards } from "@/components/animations"
+import { LessonStep } from "./types"
+
+interface AnimationStepProps {
+  step: LessonStep
+}
+
+export function AnimationStep({ step }: AnimationStepProps) {
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center gap-2">
+        <span className="px-3 py-1 rounded-full text-sm font-bold bg-cyan-100 text-cyan-700">🎬 애니메이션</span>
+      </div>
+      <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{step.question || step.title}</h1>
+      {step.instruction && <p className="text-gray-600 text-lg">{step.instruction}</p>}
+      {step.animationType === "tryExceptFlow" && <TryExceptFlow />}
+      {step.animationType === "errorTypes" && <ErrorTypesCards />}
+    </div>
+  )
+}
