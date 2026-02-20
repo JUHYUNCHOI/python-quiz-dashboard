@@ -3,6 +3,7 @@
 import { Code, Trophy, Lightbulb, Eye } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { PythonRunner } from "@/components/python/python-runner"
+import { BlankCodeRunner } from "@/components/python/blank-code-runner"
 import { LessonStep } from "./types"
 
 interface TryItStepProps {
@@ -14,6 +15,8 @@ interface TryItStepProps {
 }
 
 export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onSuccess }: TryItStepProps) {
+  const hasBlanks = !!(step.initialCode && step.initialCode.includes('___'))
+
   return (
     <div className="space-y-6">
       <div className="space-y-4">
@@ -25,7 +28,8 @@ export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onS
           {isCompleted && <span className="px-2 py-0.5 rounded text-xs bg-green-100 text-green-700 font-medium">✅ 완료!</span>}
         </div>
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{step.title}</h1>
-        {!isCompleted && (
+        {/* 빈칸 모드가 아닐 때만 외부 힌트 UI 표시 (BlankCodeRunner는 자체 힌트 시스템 사용) */}
+        {!hasBlanks && !isCompleted && (
           <div className="space-y-2">
             {hintLevel === 0 && (
               <button onClick={() => onHintLevelChange(1)} className="text-sm text-indigo-600 hover:text-indigo-700 flex items-center gap-1">
@@ -51,7 +55,30 @@ export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onS
         )}
       </div>
       <div>
-        <PythonRunner key={step.id} initialCode={step.initialCode || ""} expectedOutput={step.expectedOutput} task={step.task} hint={step.hint} onSuccess={onSuccess} showExpectedOutput={step.type === "mission"} minHeight={step.type === "mission" ? "160px" : "140px"} requireCodeChange={!!(step.initialCode && step.initialCode.includes('___'))} />
+        {hasBlanks ? (
+          <BlankCodeRunner
+            key={step.id}
+            initialCode={step.initialCode || ""}
+            expectedOutput={step.expectedOutput}
+            task={step.task}
+            hint={step.hint}
+            hint2={step.hint2}
+            onSuccess={onSuccess}
+            minHeight={step.type === "mission" ? "160px" : "140px"}
+          />
+        ) : (
+          <PythonRunner
+            key={step.id}
+            initialCode={step.initialCode || ""}
+            expectedOutput={step.expectedOutput}
+            task={step.task}
+            hint={step.hint}
+            onSuccess={onSuccess}
+            showExpectedOutput={step.type === "mission"}
+            minHeight={step.type === "mission" ? "160px" : "140px"}
+            requireCodeChange={false}
+          />
+        )}
       </div>
     </div>
   )
