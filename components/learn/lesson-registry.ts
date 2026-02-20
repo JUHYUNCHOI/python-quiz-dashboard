@@ -11,6 +11,7 @@ import {
   lesson27, lesson28,
   lesson39, lesson40, lesson41,
   lesson42, lesson43, lesson44, lesson45,
+  lesson46, lesson47, lesson48, lesson49,
   lessonP4Data, lessonP4EnData
 } from "@/data"
 import { loadLesson, isBilingual, getAllLessonIds, getBilingualLessonIds } from "@/data"
@@ -32,6 +33,7 @@ export const lessonsData: Record<string, LessonData> = {
   "38": lesson38 as any,
   "39": lesson39 as any, "40": lesson40 as any, "41": lesson41 as any,
   "42": lesson42 as any, "43": lesson43 as any, "44": lesson44 as any, "45": lesson45 as any,
+  "46": lesson46 as any, "47": lesson47 as any, "48": lesson48 as any, "49": lesson49 as any,
   "p1": lessonP1Data, "p2": lessonP2Data, "p3": lessonP3Data, "p4": lessonP4Data,
 }
 

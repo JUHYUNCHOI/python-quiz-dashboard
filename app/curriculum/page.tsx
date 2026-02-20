@@ -155,6 +155,10 @@ const curriculumData: {
     title: "Part 9: 종합 프로젝트",
     description: "모든 것을 활용한 대형 프로젝트!",
     lessons: [
+      { id: 46, title: "46. 텍스트 RPG: 게임 설계", description: "클래스 구조 설계와 게임 흐름", duration: "30분", hasQuiz: true },
+      { id: 47, title: "47. 텍스트 RPG: 핵심 시스템", description: "캐릭터, 몬스터, 아이템 구현", duration: "45분", hasQuiz: true },
+      { id: 48, title: "48. 텍스트 RPG: 게임 완성", description: "상점, 세이브, 게임 루프 통합", duration: "45분", hasQuiz: true },
+      { id: 49, title: "49. 텍스트 RPG: 업그레이드", description: "치명타, 퀘스트, 스킬 추가", duration: "40분", hasQuiz: true },
       { id: "p4", title: "🐍 Snake Game", description: "turtle, 클래스, 모듈로 뱀 게임 만들기", duration: "60분", isProject: true },
     ],
   },

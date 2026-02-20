@@ -95,6 +95,12 @@ const registry: Record<string, LessonEntry> = {
   "44": { load: () => import('./lessons/lesson44'), exportName: 'lesson44' },
   "45": { load: () => import('./lessons/lesson45'), exportName: 'lesson45' },
 
+  // Part 9: 텍스트 RPG (46-49)
+  "46": { load: () => import('./lessons/lesson46'), exportName: 'lesson46' },
+  "47": { load: () => import('./lessons/lesson47'), exportName: 'lesson47' },
+  "48": { load: () => import('./lessons/lesson48'), exportName: 'lesson48' },
+  "49": { load: () => import('./lessons/lesson49'), exportName: 'lesson49' },
+
   // 프로젝트 레슨
   "p1": { load: () => import('./lessonP1'), exportName: 'lessonP1Data' },
   "p2": { load: () => import('./lessonP2'), exportName: 'lessonP2Data' },
@@ -192,6 +198,10 @@ export { lesson42 } from './lessons/lesson42'
 export { lesson43 } from './lessons/lesson43'
 export { lesson44 } from './lessons/lesson44'
 export { lesson45 } from './lessons/lesson45'
+export { lesson46 } from './lessons/lesson46'
+export { lesson47 } from './lessons/lesson47'
+export { lesson48 } from './lessons/lesson48'
+export { lesson49 } from './lessons/lesson49'
 export { lessonP1Data } from './lessonP1'
 export { lessonP2Data } from './lessonP2'
 export { lessonP3Data } from './lessonP3'
