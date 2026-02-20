@@ -19,6 +19,8 @@ export const ch1: Chapter = {
       title: "💭 생각해보기: 컴퓨터의 선택",
       content: `![컴퓨터의 선택](/lessons/l27/ch1-1-computer-choice.png)
 
+💭 사람은 직접 고르면 되는데... **컴퓨터**는 어떻게 '가위', '바위', '보' 중 하나를 고를까?
+
 \`\`\`python
 choices = ['가위', '바위', '보']
 computer = choices[0]  # 첫 번째 = '가위'
@@ -50,6 +52,8 @@ print(f'컴퓨터: {___}')`,
       type: "explain",
       title: "💭 생각해보기: 승패 판정",
       content: `![승패 판정](/lessons/l27/ch1-3-judge.png)
+
+💭 둘 다 냈어! 가위 vs 보! **누가 이겼는지** 어떻게 판단하면 될까?
 
 - ✊ 같으면 → **무승부**
 - ✌️ 가위 vs 보 → **승리!**
@@ -88,6 +92,8 @@ print(f'{player} vs {computer} → {result}')`,
       type: "explain",
       title: "💭 생각해보기: 여러 번 대결",
       content: `![여러 번 대결](/lessons/l27/ch1-5-repeat.png)
+
+💭 한 판만 하면 재미없지! **5판** 하려면 어떻게 해야 할까? 같은 코드를 5번 복붙할 순 없잖아...
 
 \`\`\`python
 wins = 0
@@ -141,6 +147,8 @@ print(f'\\n=== 결과: {wins}승 {losses}패 {draws}무 ===')`,
       type: "explain",
       title: "💭 생각해보기: 연승 기록",
       content: `![연승 기록](/lessons/l27/ch1-7-streak.png)
+
+💭 게임하다 보면 "3연승!" 이런 거 있잖아. **연속으로** 이긴 횟수는 어떻게 세지? 총 승수랑은 다른데...
 
 \`\`\`python
 streak = 0       # 현재 연승

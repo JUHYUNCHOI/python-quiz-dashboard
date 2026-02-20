@@ -115,6 +115,27 @@ export function renderContent(content: string) {
       continue
     }
 
+    // 💭 생각해보기 (thought bubble)
+    if (line.startsWith('💭 ')) {
+      const text = line.slice(2).trim()
+      const parts = text.split(/(\*\*[^*]+\*\*)/g)
+      elements.push(
+        <div key={key++} className="my-4 bg-indigo-50 border-2 border-indigo-200 rounded-2xl px-4 py-3 md:px-5 md:py-4">
+          <p className="text-sm md:text-base text-indigo-800 leading-relaxed">
+            <span className="text-lg md:text-xl mr-1">🤔</span>
+            {parts.map((part, j) => {
+              if (part.startsWith('**') && part.endsWith('**')) {
+                return <strong key={j} className="font-bold text-indigo-700">{part.slice(2, -2)}</strong>
+              }
+              return part
+            })}
+          </p>
+        </div>
+      )
+      i++
+      continue
+    }
+
     if (line.startsWith('## ')) {
       elements.push(<h2 key={key++} className="text-lg md:text-xl font-bold text-gray-900 mt-6 md:mt-8 mb-3 md:mb-4">{line.slice(3)}</h2>)
       i++
