@@ -11,7 +11,21 @@ import { lesson9 } from './lesson9';
 import { lesson10 } from './lesson10';
 import { lesson11 } from './lesson11';
 import { lesson12 } from './lesson12';
+import { lesson13 } from './lesson13';
+import { lesson14 } from './lesson14';
 import { lesson15 } from './lesson15';
+import { lesson16 } from './lesson16';
+import { lesson17 } from './lesson17';
+import { lesson18 } from './lesson18';
+import { lesson19 } from './lesson19';
+import { lesson20 } from './lesson20';
+import { lesson21 } from './lesson21';
+import { lesson22 } from './lesson22';
+import { lesson23 } from './lesson23';
+import { lesson24 } from './lesson24';
+import { lesson25 } from './lesson25';
+import { lesson26 } from './lesson26';
+import { lesson38 } from './lesson38';
 import { lesson29 } from './lesson29';
 import { lesson30 } from './lesson30';
 import { lesson31 } from './lesson31';
@@ -54,21 +68,22 @@ export const lessonsData: Record<string, LessonData> = {
   "10": lesson10,
   "11": lesson11,
   "12": lesson12,
-  // 새 레슨들 (복습 모드 준비 중)
-  "13": createDummyLesson("13", "반복문 (for)"),
-  "14": createDummyLesson("14", "반복문 (while)"),
+  "13": lesson13,
+  "14": lesson14,
   "15": lesson15,
-  "16": createDummyLesson("16", "리스트 기초"),
-  "17": createDummyLesson("17", "리스트와 반복문"),
-  "18": createDummyLesson("18", "split()과 join()"),
-  "19": createDummyLesson("19", "튜플"),
-  "20": createDummyLesson("20", "딕셔너리"),
-  "21": createDummyLesson("21", "집합 (set)"),
-  "22": createDummyLesson("22", "슬라이싱"),
-  "23": createDummyLesson("23", "스택 (Stack)"),
-  "24": createDummyLesson("24", "큐 (Queue)"),
-  "25": createDummyLesson("25", "덱 (Deque)"),
-  "26": createDummyLesson("26", "자료구조 비교와 선택"),
+  "16": lesson16,
+  "17": lesson17,
+  "18": lesson18,
+  "19": lesson19,
+  "20": lesson20,
+  "21": lesson21,
+  "22": lesson22,
+  "23": lesson23,
+  "24": lesson24,
+  "25": lesson25,
+  "26": lesson26,
+  // Part 7: 클래스
+  "38": lesson38,
   // Part 5: 함수
   "29": lesson29,
   "30": lesson30,

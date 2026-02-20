@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <rect width="400" height="400" rx="16" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/>
+  <text x="200" y="36" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#1e293b">🧭 setheading() 각도</text>
+  <!-- Circle -->
+  <circle cx="200" cy="215" r="120" fill="none" stroke="#e2e8f0" stroke-width="2"/>
+  <circle cx="200" cy="215" r="5" fill="#6366f1"/>
+  <!-- 0° right -->
+  <line x1="200" y1="215" x2="320" y2="215" stroke="#10b981" stroke-width="3"/>
+  <circle cx="320" cy="215" r="8" fill="#10b981"/>
+  <text x="338" y="220" font-family="monospace" font-size="16" font-weight="700" fill="#10b981">0°</text>
+  <text x="338" y="238" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">오른쪽 →</text>
+  <!-- 90° up -->
+  <line x1="200" y1="215" x2="200" y2="95" stroke="#f43f5e" stroke-width="3"/>
+  <circle cx="200" cy="95" r="8" fill="#f43f5e"/>
+  <text x="210" y="85" font-family="monospace" font-size="16" font-weight="700" fill="#f43f5e">90°</text>
+  <text x="210" y="70" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">위쪽 ↑</text>
+  <!-- 180° left -->
+  <line x1="200" y1="215" x2="80" y2="215" stroke="#f59e0b" stroke-width="3"/>
+  <circle cx="80" cy="215" r="8" fill="#f59e0b"/>
+  <text x="38" y="220" font-family="monospace" font-size="16" font-weight="700" fill="#f59e0b">180°</text>
+  <text x="35" y="238" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">← 왼쪽</text>
+  <!-- 270° down -->
+  <line x1="200" y1="215" x2="200" y2="335" stroke="#3b82f6" stroke-width="3"/>
+  <circle cx="200" cy="335" r="8" fill="#3b82f6"/>
+  <text x="210" y="350" font-family="monospace" font-size="16" font-weight="700" fill="#3b82f6">270°</text>
+  <text x="210" y="368" font-family="system-ui,sans-serif" font-size="12" fill="#64748b">아래쪽 ↓</text>
+  <!-- Note -->
+  <text x="200" y="392" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#64748b">시계 3시 방향이 0도! 반시계 방향으로 증가 ⏰</text>
+</svg>

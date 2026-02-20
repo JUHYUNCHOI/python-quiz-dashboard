@@ -51,10 +51,10 @@ while count < 5:
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "1부터 5까지 출력하세요!",
-          initialCode: "num = 1\nwhile num <= 5:\n    print(num)\n    num = num + 1",
+          initialCode: "num = 1\n# num이 5 이하인 동안 반복\nwhile ___:\n    print(num)\n    num = num + 1",
           expectedOutput: "1\n2\n3\n4\n5",
-          hint: "num <= 5일 동안 반복!",
-          hint2: "num = num + 1로 증가!"
+          hint: "num이 5 이하인 조건을 쓰세요!",
+          hint2: "while num <= 5:"
         },
         {
           id: "quiz1",
@@ -108,11 +108,11 @@ while True:  # 일부러 무한 루프
           id: "try2",
           type: "tryit",
           title: "🖥️ 직접 해보기!",
-          task: "5를 찾으면 멈추세요!",
-          initialCode: "numbers = [1, 3, 5, 7, 9]\ni = 0\n\nwhile i < len(numbers):\n    if numbers[i] == 5:\n        print(\"5를 찾았다!\")\n        break\n    i = i + 1",
-          expectedOutput: "5를 찾았다!",
+          task: "3의 배수를 찾으면 멈추세요!",
+          initialCode: "num = 1\n\nwhile num <= 20:\n    if num % 3 == 0:\n        print(f\"{num}은 3의 배수! 멈춤!\")\n        ___  # 반복문 탈출!\n    num = num + 1",
+          expectedOutput: "3은 3의 배수! 멈춤!",
           hint: "if로 조건 확인 후 break!",
-          hint2: "break로 반복문 탈출!"
+          hint2: "break"
         },
         {
           id: "continue-explain",
@@ -136,7 +136,7 @@ for i in range(1, 6):
           type: "tryit",
           title: "🖥️ continue 연습!",
           task: "3을 건너뛰고 1~5 출력하세요!",
-          initialCode: "num = 0\nwhile num < 5:\n    num = num + 1\n    if num == 3:\n        continue  # 3은 건너뜀\n    print(num)",
+          initialCode: "num = 0\nwhile num < 5:\n    num = num + 1\n    if num == 3:\n        ___  # 3은 건너뜀\n    print(num)",
           expectedOutput: "1\n2\n4\n5",
           hint: "continue는 이번 반복만 건너뛰어요!",
           hint2: "num == 3일 때 continue"
@@ -189,7 +189,7 @@ while money > 0:     # 돈이 있는 동안
           type: "tryit",
           title: "🖥️ 카운트다운!",
           task: "5부터 1까지 카운트다운 후 '발사!'",
-          initialCode: "count = 5\nwhile count > 0:\n    print(count)\n    count = count - 1\nprint(\"발사!\")",
+          initialCode: "count = 5\nwhile count > 0:\n    print(count)\n    count = ___\nprint(\"발사!\")",
           expectedOutput: "5\n4\n3\n2\n1\n발사!",
           hint: "count > 0일 동안 반복!",
           hint2: "count = count - 1로 감소!"
@@ -199,10 +199,10 @@ while money > 0:     # 돈이 있는 동안
           type: "tryit",
           title: "🖥️ 합이 100 넘을 때까지!",
           task: "1부터 더해서 합이 100을 넘으면 멈추세요!",
-          initialCode: "total = 0\nnum = 1\n\nwhile total <= 100:\n    total = total + num\n    num = num + 1\n\nprint(f\"합계: {total}\")\nprint(f\"마지막 숫자: {num - 1}\")",
+          initialCode: "total = 0\nnum = 1\n\n# 합계가 100 이하인 동안 반복\nwhile ___:\n    total = total + num\n    num = num + 1\n\nprint(f\"합계: {total}\")\nprint(f\"마지막 숫자: {num - 1}\")",
           expectedOutput: "합계: 105\n마지막 숫자: 14",
-          hint: "total <= 100일 동안 반복!",
-          hint2: "1+2+...+14 = 105 (100 초과)"
+          hint: "total이 100 이하인 조건을 쓰세요!",
+          hint2: "while total <= 100:"
         }
       ]
     },
@@ -237,10 +237,10 @@ print("정답!")
           type: "mission",
           title: "🏆 최종 미션!",
           task: "숫자 맞추기 시뮬레이션!",
-          initialCode: "secret = 7\n\n# input() 대신 미리 정해진 추측들\nguesses = [3, 5, 9, 7]  # 3, 5, 9 시도 후 7에서 정답!\n\nattempts = 0\n\nfor guess in guesses:\n    attempts = attempts + 1\n    print(f\"시도 {attempts}: {guess}\")\n    \n    if guess < secret:\n        print(\"→ 더 큰 숫자!\")\n    elif guess > secret:\n        print(\"→ 더 작은 숫자!\")\n    else:\n        print(f\"→ 정답! {attempts}번 만에 맞췄어요!\")\n        break",
+          initialCode: "secret = 7\nguesses = [3, 5, 9, 7]\n\nattempts = 0\n\nfor guess in guesses:\n    attempts = attempts + 1\n    print(f\"시도 {attempts}: {guess}\")\n    \n    if ___:\n        print(\"→ 더 큰 숫자!\")\n    elif ___:\n        print(\"→ 더 작은 숫자!\")\n    else:\n        print(f\"→ 정답! {attempts}번 만에 맞췄어요!\")\n        ___",
           expectedOutput: "시도 1: 3\n→ 더 큰 숫자!\n시도 2: 5\n→ 더 큰 숫자!\n시도 3: 9\n→ 더 작은 숫자!\n시도 4: 7\n→ 정답! 4번 만에 맞췄어요!",
-          hint: "guess < secret, guess > secret 비교!",
-          hint2: "정답이면 break로 탈출!"
+          hint: "guess와 secret을 비교하는 조건을 쓰세요!",
+          hint2: "guess < secret / guess > secret / break"
         },
         {
           id: "complete",

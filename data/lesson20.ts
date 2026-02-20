@@ -88,8 +88,8 @@ print(person)
           task: "딕셔너리에 '취미'를 추가하세요!",
           initialCode: "person = {\"이름\": \"철수\", \"나이\": 15}\nperson[\"취미\"] = \"게임\"\nprint(person)",
           expectedOutput: "{'이름': '철수', '나이': 15, '취미': '게임'}",
-          hint: "person[\"취미\"] = \"게임\"",
-          hint2: "새 키를 넣으면 추가돼요!"
+          hint: "새 키를 넣으면 추가돼요!",
+          hint2: "person[\"취미\"] = \"게임\""
         },
         {
           id: "del-explain",
@@ -114,8 +114,8 @@ name = person.pop("이름")
           task: "'나이' 키를 삭제하세요!",
           initialCode: "person = {\"이름\": \"철수\", \"나이\": 15, \"학교\": \"중학교\"}\ndel person[\"나이\"]\nprint(person)",
           expectedOutput: "{'이름': '철수', '학교': '중학교'}",
-          hint: "del person[\"나이\"]",
-          hint2: "del 딕셔너리[키]"
+          hint: "del 딕셔너리[키] 형태로 삭제!",
+          hint2: "del person[\"나이\"]"
         }
       ]
     },
@@ -155,6 +155,26 @@ print(person.get("직업"))  # None (에러 안 남!)
           expectedOutput: "국어: 90점\n영어: 85점\n수학: 95점",
           hint: "items()로 키-값 쌍을 순회!",
           hint2: "for key, value in dict.items():"
+        },
+        {
+          id: "try5",
+          type: "tryit",
+          title: "🖥️ keys, values, get!",
+          task: "딕셔너리 메서드를 다양하게 사용해보세요!",
+          initialCode: "menu = {'치킨': 18000, '피자': 20000, '햄버거': 7000, '떡볶이': 4000}\n\n# 메뉴 이름만 (keys)\nprint('=== 메뉴 목록 ===')\nfor name in menu.keys():\n    print(f'  {name}')\n\n# 가격만 (values)\nprices = list(menu.values())\nprint(f'\\n평균 가격: {sum(prices)//len(prices)}원')\n\n# 안전하게 찾기 (get)\nprint(f'\\n치킨: {menu.get(\"치킨\")}원')\nprint(f'초밥: {menu.get(\"초밥\", \"없는 메뉴\")}')",
+          expectedOutput: "=== 메뉴 목록 ===\n  치킨\n  피자\n  햄버거\n  떡볶이\n\n평균 가격: 12250원\n\n치킨: 18000원\n초밥: 없는 메뉴",
+          hint: "keys()는 키들, values()는 값들, get()은 없어도 에러 안 나요!",
+          hint2: "코드를 그대로 실행하세요!"
+        },
+        {
+          id: "mission-method",
+          type: "mission",
+          title: "🎯 미션: 딕셔너리 메서드!",
+          task: "빈칸 3개를 채워서 성적 분석을 완성하세요!",
+          initialCode: "grades = {'철수': 85, '영희': 92, '민수': 78, '지연': 96}\n\n# 모든 학생 이름 출력\nfor name in grades.___():\n    print(f'학생: {name}')\n\n# 모든 점수로 평균 계산\nscores = list(grades.___())\navg = sum(scores) // len(scores)\nprint(f'\\n평균: {avg}점')\n\n# 없는 학생 안전하게 찾기\nresult = grades.___(\"동수\", \"없는 학생\")\nprint(f'동수: {result}')",
+          expectedOutput: "학생: 철수\n학생: 영희\n학생: 민수\n학생: 지연\n\n평균: 87점\n\n동수: 없는 학생",
+          hint: "keys()로 이름, values()로 점수, get()으로 안전 접근!",
+          hint2: "keys / values / get"
         }
       ]
     },
@@ -167,8 +187,8 @@ print(person.get("직업"))  # None (에러 안 남!)
           id: "mission1",
           type: "mission",
           title: "🏆 최종 미션!",
-          task: "단어장을 만들어보세요!",
-          initialCode: "dictionary = {\n    \"apple\": \"사과\",\n    \"banana\": \"바나나\",\n    \"cherry\": \"체리\"\n}\n\nword = \"apple\"\nif word in dictionary:\n    print(f\"{word} = {dictionary[word]}\")\nelse:\n    print(\"단어를 찾을 수 없습니다\")",
+          task: "단어장에서 단어를 찾아보세요!",
+          initialCode: "dictionary = {\n    \"apple\": \"사과\",\n    \"banana\": \"바나나\",\n    \"cherry\": \"체리\"\n}\n\nword = \"apple\"\nif word ___ dictionary:\n    print(f\"{word} = {dictionary[___]}\")\nelse:\n    print(\"단어를 찾을 수 없습니다\")",
           expectedOutput: "apple = 사과",
           hint: "in으로 키 존재 여부 확인!",
           hint2: "word in dictionary"

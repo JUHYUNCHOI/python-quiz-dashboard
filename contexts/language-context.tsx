@@ -20,15 +20,19 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Language>('ko')
 
   useEffect(() => {
-    const saved = localStorage.getItem('language') as Language
-    if (saved && (saved === 'ko' || saved === 'en')) {
-      setLangState(saved)
+    try {
+      const saved = localStorage.getItem('language') as Language
+      if (saved && (saved === 'ko' || saved === 'en')) {
+        setLangState(saved)
+      }
+    } catch {
+      // localStorage 접근 불가 시 기본값(ko) 유지
     }
   }, [])
 
   const setLang = (newLang: Language) => {
     setLangState(newLang)
-    localStorage.setItem('language', newLang)
+    try { localStorage.setItem('language', newLang) } catch {}
   }
 
   // 인라인 번역 헬퍼 (기존 호환)

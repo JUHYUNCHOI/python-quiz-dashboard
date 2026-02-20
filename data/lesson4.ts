@@ -32,7 +32,7 @@ print(10 / 3)   # 나누기 → 3.333...
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "19000 * 3 을 계산해서 출력하세요!",
-          initialCode: "print(19000 * 3)",
+          initialCode: "# 19000 * 3을 계산하세요\nprint(___)",
           expectedOutput: "57000",
           hint: "곱하기는 * 기호예요",
           hint2: "print(19000 * 3)"
@@ -55,7 +55,7 @@ print(2 ** 3)   # 거듭제곱 → 8
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "17을 5로 나눈 나머지를 출력하세요!",
-          initialCode: "print(17 % 5)",
+          initialCode: "# 나머지 연산자 %를 사용하세요\nprint(17 ___ 5)",
           expectedOutput: "2",
           hint: "나머지는 % 기호예요",
           hint2: "print(17 % 5)"
@@ -94,7 +94,7 @@ print(10 <= 5)   # 작거나 같다 → False
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "100 > 50 의 결과를 출력하세요!",
-          initialCode: "print(100 > 50)",
+          initialCode: "print(100 ___ 50)",
           expectedOutput: "True",
           hint: "> 는 '크다'를 비교해요",
           hint2: "print(100 > 50)"
@@ -158,7 +158,7 @@ print(not True)        # False
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "(10 > 5) and (3 < 7) 의 결과를 출력하세요!",
-          initialCode: "print((10 > 5) and (3 < 7))",
+          initialCode: "print((10 > 5) ___ (3 < 7))",
           expectedOutput: "True",
           hint: "둘 다 True면 and 결과도 True!",
           hint2: "print((10 > 5) and (3 < 7))"
@@ -198,7 +198,7 @@ score += 10         # 짧은 방법 (같은 의미!)
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "hp = 100에서 hp -= 30 후 출력하세요!",
-          initialCode: "hp = 100\nhp -= 30\nprint(hp)",
+          initialCode: "hp = 100\nhp ___ 30\nprint(hp)",
           expectedOutput: "70",
           hint: "-= 는 빼고 저장해요",
           hint2: "hp = 100\nhp -= 30\nprint(hp)"
@@ -207,11 +207,11 @@ score += 10         # 짧은 방법 (같은 의미!)
           id: "mission1",
           type: "mission",
           title: "🏆 최종 미션!",
-          task: "점수 계산: 0점 → +100점 → +50점 → -30점 후 출력!",
-          initialCode: "score = 0\nscore += 100\nscore += 50\nscore -= 30\nprint(f'최종 점수: {score}')",
-          expectedOutput: "최종 점수: 120",
-          hint: "+= 와 -= 를 사용해요",
-          hint2: "score += 100"
+          task: "가격 계산기를 완성하세요! (단가 15000원, 3개, 10% 할인)",
+          initialCode: "price = 15000\ncount = 3\n# 합계를 계산하세요\ntotal = ___\n# 10% 할인 계산\ndiscount = ___\n# 최종 가격\nfinal = ___\n\nprint(f'단가: {price}원')\nprint(f'수량: {count}개')\nprint(f'합계: {total}원')\nprint(f'할인: {discount}원')\nprint(f'최종: {final}원')",
+          expectedOutput: "단가: 15000원\n수량: 3개\n합계: 45000원\n할인: 4500.0원\n최종: 40500.0원",
+          hint: "total = price * count, discount = total * 0.1",
+          hint2: "final = total - discount"
         },
         {
           id: "complete",
@@ -224,7 +224,7 @@ score += 10         # 짧은 방법 (같은 의미!)
 ✅ **논리 연산자**: and, or, not
 ✅ **복합 대입**: +=, -=, *=, /=
 
-다음 시간에는 **input()**을 배워서 사용자 입력을 받아봐요! 🚀`
+다음 시간에는 **문자열 연산**을 배워서 글자를 더하고 곱해봐요! 🚀`
         }
       ]
     }

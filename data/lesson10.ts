@@ -54,8 +54,8 @@ answer = input('질문 내용')
           id: "try1",
           type: "tryit",
           title: "🖥️ input() 흉내내기!",
-          task: "name 변수에 이름을 저장하고 인사하세요!",
-          initialCode: "# input() 대신 직접 값을 넣어요\nname = '홍길동'\nprint(f'안녕, {name}!')",
+          task: "name에 '홍길동'을 저장하고 인사하세요!",
+          initialCode: "# input() 대신 직접 값을 넣어요\nname = ___\nprint(f'안녕, {name}!')",
           expectedOutput: "안녕, 홍길동!",
           hint: "name = '이름'으로 저장!",
           hint2: "name = '홍길동'"
@@ -113,7 +113,7 @@ age = int(input('나이: '))
           type: "tryit",
           title: "🖥️ 문자열 → 숫자 변환!",
           task: "문자열 숫자를 정수로 변환해서 계산하세요!",
-          initialCode: "# input() 대신 문자열로 받았다고 가정\nage_str = '15'\n\n# 정수로 변환\nage = int(age_str)\n\n# 1년 후 나이\nprint(f'내년 나이: {age + 1}살')",
+          initialCode: "# input() 대신 문자열로 받았다고 가정\nage_str = '15'\n\n# 정수로 변환하세요\nage = ___(age_str)\n\n# 1년 후 나이\nprint(f'내년 나이: {age + 1}살')",
           expectedOutput: "내년 나이: 16살",
           hint: "int()로 문자열을 숫자로 변환!",
           hint2: "age = int(age_str)"
@@ -123,10 +123,10 @@ age = int(input('나이: '))
           type: "tryit",
           title: "🖥️ 두 숫자 더하기!",
           task: "두 숫자를 더한 결과를 출력하세요!",
-          initialCode: "# input()으로 받았다고 가정\na_str = '25'\nb_str = '17'\n\n# 정수로 변환해서 계산\na = int(a_str)\nb = int(b_str)\n\nprint(f'{a} + {b} = {a + b}')",
+          initialCode: "# input()으로 받았다고 가정\na_str = '25'\nb_str = '17'\n\n# 정수로 변환하세요\na = ___(a_str)\nb = ___(b_str)\n\nprint(f'{a} + {b} = {a + b}')",
           expectedOutput: "25 + 17 = 42",
-          hint: "int()로 각각 변환 후 더하기!",
-          hint2: "a + b"
+          hint: "int()로 문자열을 정수로 변환!",
+          hint2: "a = int(a_str)"
         },
         {
           id: "quiz2",
@@ -165,7 +165,7 @@ print(f'키: {height}cm')
           type: "tryit",
           title: "🖥️ 실수 변환 연습!",
           task: "키(cm)를 m로 변환해서 출력하세요!",
-          initialCode: "# input()으로 받았다고 가정\nheight_str = '175.5'\n\n# 실수로 변환\ncm = float(height_str)\n\n# m로 변환 (100으로 나누기)\nm = cm / 100\n\nprint(f'{cm}cm = {m}m')",
+          initialCode: "# input()으로 받았다고 가정\nheight_str = '175.5'\n\n# 실수로 변환하세요\ncm = ___(height_str)\n\n# m로 변환 (100으로 나누기)\nm = cm / 100\n\nprint(f'{cm}cm = {m}m')",
           expectedOutput: "175.5cm = 1.755m",
           hint: "float()로 실수 변환 후 100으로 나눠요",
           hint2: "cm / 100"
@@ -191,10 +191,10 @@ print(f'키: {height}cm')
           type: "mission",
           title: "🏆 최종 미션!",
           task: "치킨 가격과 수량으로 총 가격을 계산하세요!",
-          initialCode: "# input()으로 받았다고 가정\nprice_str = '19000'\ncount_str = '3'\n\n# 정수로 변환\nprice = int(price_str)\ncount = int(count_str)\n\n# 총 가격 계산\ntotal = price * count\n\nprint(f'치킨 {count}마리')\nprint(f'총 가격: {total:,}원')",
+          initialCode: "# input()으로 받았다고 가정\nprice_str = '19000'\ncount_str = '3'\n\n# 정수로 변환\nprice = ___(price_str)\ncount = ___(count_str)\n\n# 총 가격 계산\ntotal = ___\n\nprint(f'치킨 {count}마리')\nprint(f'총 가격: {total:,}원')",
           expectedOutput: "치킨 3마리\n총 가격: 57,000원",
-          hint: "가격 * 수량 = 총 가격!",
-          hint2: "total = price * count"
+          hint: "int()로 변환 후 곱하기!",
+          hint2: "int(price_str) / price * count"
         },
         {
           id: "complete",

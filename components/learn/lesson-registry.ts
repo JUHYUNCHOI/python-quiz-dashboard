@@ -1,13 +1,17 @@
-import { 
-  lesson1Data, lesson2Data, lesson3Data, lesson4Data, lesson5Data, 
-  lesson6Data, lesson7Data, lesson8Data, lesson9Data, lesson10Data, 
+import {
+  lesson1Data, lesson2Data, lesson3Data, lesson4Data, lesson5Data,
+  lesson6Data, lesson7Data, lesson8Data, lesson9Data, lesson10Data,
   lesson11Data, lesson12Data, lesson13Data, lesson14Data, lesson15Data,
   lesson16Data, lesson17Data, lesson18Data, lesson19Data, lesson20Data,
   lesson21Data, lesson22Data, lesson23Data, lesson24Data, lesson25Data,
   lesson26Data, lesson29Data, lesson30Data, lesson31Data, lesson32Data,
   lesson33Data, lesson29EnData, lesson30EnData, lesson31EnData, lesson32EnData,
   lesson33EnData, lessonP1Data, lessonP2Data, lessonP3Data,
-  lesson34, lesson35
+  lesson34, lesson35, lesson36, lesson37, lesson38,
+  lesson27, lesson28,
+  lesson39, lesson40, lesson41,
+  lesson42, lesson43, lesson44, lesson45,
+  lessonP4Data, lessonP4EnData
 } from "@/data"
 import { loadLesson, isBilingual, getAllLessonIds, getBilingualLessonIds } from "@/data"
 import type { LessonData } from "./types"
@@ -23,8 +27,12 @@ export const lessonsData: Record<string, LessonData> = {
   "19": lesson19Data, "20": lesson20Data, "21": lesson21Data, "22": lesson22Data,
   "23": lesson23Data, "24": lesson24Data, "25": lesson25Data, "26": lesson26Data,
   "29": lesson29Data, "30": lesson30Data, "31": lesson31Data, "32": lesson32Data, "33": lesson33Data,
-  "34": lesson34 as any, "35": lesson35 as any,
-  "p1": lessonP1Data, "p2": lessonP2Data, "p3": lessonP3Data,
+  "27": lesson27 as any, "28": lesson28 as any,
+  "34": lesson34 as any, "35": lesson35 as any, "36": lesson36 as any, "37": lesson37 as any,
+  "38": lesson38 as any,
+  "39": lesson39 as any, "40": lesson40 as any, "41": lesson41 as any,
+  "42": lesson42 as any, "43": lesson43 as any, "44": lesson44 as any, "45": lesson45 as any,
+  "p1": lessonP1Data, "p2": lessonP2Data, "p3": lessonP3Data, "p4": lessonP4Data,
 }
 
 // 양언어 지원 레슨
@@ -34,6 +42,7 @@ export const bilingualLessons: Record<string, { ko: LessonData, en: LessonData }
   "31": { ko: lesson31Data, en: lesson31EnData },
   "32": { ko: lesson32Data, en: lesson32EnData },
   "33": { ko: lesson33Data, en: lesson33EnData },
+  "p4": { ko: lessonP4Data, en: lessonP4EnData },
 }
 
 // ============================================

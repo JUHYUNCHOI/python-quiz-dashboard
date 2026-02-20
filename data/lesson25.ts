@@ -230,10 +230,10 @@ print(d)  # [3, 4, 5] 최근 3개만!
           type: "mission",
           title: "🏆 최종 미션: 최근 검색어!",
           task: "최근 검색어 기능을 덱으로 구현하세요!",
-          initialCode: "from collections import deque\n\nclass RecentSearches:\n    def __init__(self, max_size=5):\n        self.searches = deque(maxlen=max_size)\n    \n    def add(self, query):\n        # 이미 있으면 제거 후 맨 앞에 추가\n        if query in self.searches:\n            self.searches.remove(query)\n        self.searches.appendleft(query)\n        print(f\"검색: '{query}'\")\n    \n    def show(self):\n        print(\"최근 검색어:\", list(self.searches))\n    \n    def clear(self):\n        self.searches.clear()\n        print(\"검색 기록 삭제됨\")\n\n# 테스트\nrecent = RecentSearches(max_size=5)\nrecent.add(\"파이썬\")\nrecent.add(\"자료구조\")\nrecent.add(\"알고리즘\")\nrecent.add(\"덱\")\nrecent.add(\"스택\")\nrecent.show()\n\nrecent.add(\"큐\")  # 오래된 '파이썬' 삭제됨\nrecent.show()\n\nrecent.add(\"자료구조\")  # 중복! 맨 앞으로\nrecent.show()",
+          initialCode: "from collections import deque\n\nclass RecentSearches:\n    def __init__(self, max_size=5):\n        self.searches = deque(___=max_size)\n    \n    def add(self, query):\n        # 이미 있으면 제거 후 맨 앞에 추가\n        if query in self.searches:\n            self.searches.remove(query)\n        self.searches.___(query)\n        print(f\"검색: '{query}'\")\n    \n    def show(self):\n        print(\"최근 검색어:\", list(self.searches))\n    \n    def clear(self):\n        self.searches.clear()\n        print(\"검색 기록 삭제됨\")\n\n# 테스트\nrecent = RecentSearches(max_size=5)\nrecent.add(\"파이썬\")\nrecent.add(\"자료구조\")\nrecent.add(\"알고리즘\")\nrecent.add(\"덱\")\nrecent.add(\"스택\")\nrecent.show()\n\nrecent.add(\"큐\")  # 오래된 '파이썬' 삭제됨\nrecent.show()\n\nrecent.add(\"자료구조\")  # 중복! 맨 앞으로\nrecent.show()",
           expectedOutput: "검색: '파이썬'\n검색: '자료구조'\n검색: '알고리즘'\n검색: '덱'\n검색: '스택'\n최근 검색어: ['스택', '덱', '알고리즘', '자료구조', '파이썬']\n검색: '큐'\n최근 검색어: ['큐', '스택', '덱', '알고리즘', '자료구조']\n검색: '자료구조'\n최근 검색어: ['자료구조', '큐', '스택', '덱', '알고리즘']",
-          hint: "maxlen으로 최대 개수 제한!",
-          hint2: "중복 검색어는 제거 후 맨 앞에 추가"
+          hint: "deque의 최대 길이 제한과 앞에 추가하는 메서드를 사용해요!",
+          hint2: "maxlen과 appendleft를 넣으세요!"
         },
         {
           id: "complete",

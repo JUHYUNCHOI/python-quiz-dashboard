@@ -18,7 +18,7 @@ export const lesson18Data: LessonData = {
           id: "intro",
           type: "explain",
           title: "✂️ 문자열을 리스트로!",
-          content: `input()으로 여러 값을 한 번에 받고 싶어요!
+          content: `여러 값을 한 번에 처리하고 싶을 때가 있어요!
 
 \`\`\`python
 text = "사과 바나나 딸기"
@@ -96,8 +96,8 @@ print(nums)  # [10, 20, 30] (정수!)
           task: "문자열 숫자를 정수 리스트로 변환하세요!",
           initialCode: "text = \"10 20 30 40 50\"\nnums = list(map(int, text.split()))\nprint(nums)\nprint(f\"합계: {sum(nums)}\")",
           expectedOutput: "[10, 20, 30, 40, 50]\n합계: 150",
-          hint: "map(int, text.split())",
-          hint2: "list()로 감싸면 리스트가 돼요!"
+          hint: "list()로 감싸면 리스트가 돼요!",
+          hint2: "list(map(int, text.split()))"
         },
         {
           id: "quiz1",
@@ -142,8 +142,8 @@ print(result)  # "사과,바나나,딸기"
           task: "리스트를 - 로 연결하세요!",
           initialCode: "words = ['2024', '01', '15']\ndate = '-'.join(words)\nprint(date)",
           expectedOutput: "2024-01-15",
-          hint: "'-'.join(words)",
-          hint2: "구분자.join(리스트)"
+          hint: "구분자.join(리스트) 형태예요!",
+          hint2: "'-'.join(words)"
         },
         {
           id: "try5",
@@ -167,7 +167,7 @@ print(result)  # "사과,바나나,딸기"
           type: "mission",
           title: "🏆 최종 미션!",
           task: "단어 순서를 뒤집어서 출력하세요!",
-          initialCode: "text = \"Hello World Python\"\nwords = text.split()\nwords.reverse()\nresult = ' '.join(words)\nprint(result)",
+          initialCode: "text = \"Hello World Python\"\nwords = text.___()\nwords.___()\nresult = ' '.___(words)\nprint(result)",
           expectedOutput: "Python World Hello",
           hint: "split() → reverse() → join()",
           hint2: "words.reverse()로 순서 뒤집기!"

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, use, useCallback } from "react"
 import { useRouter } from "next/navigation"
-import { ChevronRight, ChevronLeft, X, Sparkles, Lock, PartyPopper } from "lucide-react"
+import { ChevronRight, ChevronLeft, X, Sparkles, Lock, PartyPopper, List } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
 import { LanguageToggle } from "@/components/language-toggle"
@@ -31,11 +31,13 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
   const [showExplanation, setShowExplanation] = useState(false)
   const [showChapterComplete, setShowChapterComplete] = useState(false)
+  const [showLessonComplete, setShowLessonComplete] = useState(false)
   const [showConfetti, setShowConfetti] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
   const [successMessage, setSuccessMessage] = useState("")
   const [hintLevel, setHintLevel] = useState(0)
   const [quizAttempts, setQuizAttempts] = useState(0)
+  const [showChapterList, setShowChapterList] = useState(false)
   
   const chapter = lesson?.chapters[currentChapter]
   const step = chapter?.steps[currentStep]
@@ -75,7 +77,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
         <div className="text-center">
           <p className="text-5xl mb-4">🚧</p>
           <p className="text-gray-600 mb-4">준비 중인 레슨이에요</p>
-          <button onClick={() => router.push("/curriculum")} className="px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-bold">
+          <button onClick={() => router.push(`/curriculum#lesson-${lessonId}`)} className="px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-bold">
             돌아가기
           </button>
         </div>
@@ -101,10 +103,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       setTimeout(() => setShowConfetti(false), 3000)
     } else {
       setShowConfetti(true)
-      setTimeout(() => {
-        localStorage.removeItem(`practice-v2-${lessonId}`)
-        router.push("/curriculum")
-      }, 2000)
+      setShowLessonComplete(true)
+      setTimeout(() => setShowConfetti(false), 3000)
     }
   }
 
@@ -113,6 +113,15 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     setCurrentChapter(currentChapter + 1)
     setCurrentStep(0)
     resetStepState()
+  }
+
+  const goToChapter = (chIdx: number) => {
+    setCurrentChapter(chIdx)
+    setCurrentStep(0)
+    resetStepState()
+    setShowChapterList(false)
+    setShowChapterComplete(false)
+    setShowLessonComplete(false)
   }
 
   const goPrev = () => {
@@ -166,6 +175,31 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const currentStepIndex = lesson.chapters.slice(0, currentChapter).reduce((sum, ch) => sum + ch.steps.length, 0) + currentStep + 1
 
   // 챕터 완료 화면
+  if (showLessonComplete) {
+    const totalPoints = score
+    return (
+      <>
+        <Confetti show={showConfetti} />
+        <div className="min-h-screen bg-gradient-to-b from-indigo-600 to-purple-700 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl">
+            <div className="w-24 h-24 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
+              <span className="text-5xl">{lesson.emoji}</span>
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">레슨 완료!</h1>
+            <p className="text-lg text-gray-600 mb-2">{lesson.title}</p>
+            <p className="text-gray-500 mb-6">모든 챕터를 끝냈어요!</p>
+            <div className="bg-amber-50 rounded-2xl p-4 mb-6">
+              <p className="text-amber-800 font-bold text-lg">총 {totalPoints}점 획득!</p>
+            </div>
+            <button onClick={() => { localStorage.removeItem(`practice-v2-${lessonId}`); router.push(`/curriculum#lesson-${lessonId}`) }} className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-lg transition-colors">
+              돌아가기
+            </button>
+          </div>
+        </div>
+      </>
+    )
+  }
+
   if (showChapterComplete) {
     const chapterPoints = chapter.steps.filter(s => s.type !== "explain" && completedSteps.has(s.id)).length * 10
     return (
@@ -176,10 +210,10 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             <div className="w-20 h-20 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
               <PartyPopper className="w-10 h-10 text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">챕터 {currentChapter + 1} 완료! 🎉</h1>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">챕터 {currentChapter + 1} 완료!</h1>
             <p className="text-lg text-gray-600 mb-6">{chapter.emoji} {chapter.title}</p>
             <div className="bg-amber-50 rounded-2xl p-4 mb-6">
-              <p className="text-amber-800 font-bold text-lg">⭐ {chapterPoints}점 획득!</p>
+              <p className="text-amber-800 font-bold text-lg">{chapterPoints}점 획득!</p>
             </div>
             <button onClick={goToNextChapter} className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-lg transition-colors">
               다음 챕터로 →
@@ -200,12 +234,16 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
         <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-lg border-b border-gray-200 shadow-sm">
           <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-2 md:py-3">
             <div className="flex items-center justify-between">
-              <button onClick={() => router.push("/curriculum")} className="flex items-center gap-1 text-gray-500 hover:text-gray-700 transition-colors">
+              <button onClick={() => router.push(`/curriculum#lesson-${lessonId}`)} className="flex items-center gap-1 text-gray-500 hover:text-gray-700 transition-colors">
                 <X className="w-5 h-5 md:w-6 md:h-6" />
               </button>
               <div className="flex-1 mx-3 md:mx-4 lg:mx-6">
                 <div className="flex items-center gap-2 md:gap-3 mb-1">
-                  <span className="text-xs md:text-sm text-gray-500">{currentStepIndex}/{totalSteps}</span>
+                  <button onClick={() => setShowChapterList(!showChapterList)} className="flex items-center gap-1 text-xs md:text-sm text-gray-500 hover:text-indigo-600 transition-colors shrink-0">
+                    <List className="w-4 h-4" />
+                    <span className="hidden sm:inline">{chapter.emoji} {chapter.title}</span>
+                    <span className="sm:hidden">{currentStepIndex}/{totalSteps}</span>
+                  </button>
                   <div className="flex-1 h-2 md:h-2.5 bg-gray-200 rounded-full overflow-hidden">
                     <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-500"
                       style={{ width: `${(currentStepIndex / totalSteps) * 100}%` }} />
@@ -221,6 +259,29 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             </div>
           </div>
         </div>
+
+        {/* 챕터 목록 드롭다운 */}
+        {showChapterList && (
+          <div className="sticky top-[52px] md:top-[60px] z-20">
+            <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="bg-white rounded-b-2xl shadow-lg border border-t-0 border-gray-200 p-3 md:p-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                  {lesson.chapters.map((ch, idx) => (
+                    <button key={ch.id} onClick={() => goToChapter(idx)}
+                      className={cn("flex items-center gap-2 px-3 py-2.5 rounded-xl text-left text-sm font-medium transition-all",
+                        idx === currentChapter
+                          ? "bg-indigo-100 text-indigo-700 ring-2 ring-indigo-300"
+                          : "bg-gray-50 hover:bg-indigo-50 text-gray-700 hover:text-indigo-600"
+                      )}>
+                      <span className="text-lg">{ch.emoji}</span>
+                      <span className="truncate">{ch.title}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* 메인 콘텐츠 */}
         <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6">

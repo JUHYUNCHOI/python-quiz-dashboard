@@ -21,18 +21,17 @@ export const lessonP1Data: LessonData = {
           content: `Part 1에서 배운 것을 모두 활용해서
 **미니 계산기**를 만들어요!
 
+💡 웹 환경에서는 input()을 쓸 수 없어서,
+변수에 직접 값을 넣어서 사용해요!
+
 \`\`\`
 === 🧮 미니 계산기 ===
-첫 번째 숫자: 10
-두 번째 숫자: 3
-연산자 (+, -, *, /): +
 결과: 10 + 3 = 13
 \`\`\`
 
 **사용할 개념:**
 - print() 출력
-- input() 입력
-- 변수
+- 변수에 값 저장
 - 연산자
 - 데이터 타입 변환`
         },
@@ -40,14 +39,15 @@ export const lessonP1Data: LessonData = {
           id: "review",
           type: "explain",
           title: "📚 복습!",
-          content: `**1. input()으로 입력받기**
+          content: `**1. 변수에 값 저장하기**
 \`\`\`python
-name = input('이름: ')
+num1 = 10
+num2 = 3
 \`\`\`
 
-**2. int()로 숫자 변환**
+**2. int()로 문자열 → 숫자 변환**
 \`\`\`python
-num = int(input('숫자: '))
+num = int('15')  # 15
 \`\`\`
 
 **3. 계산하기**
@@ -72,30 +72,53 @@ print(f'결과: {result}')
           type: "tryit",
           title: "1️⃣ 숫자 2개 입력받기",
           task: "두 숫자를 입력받아 출력하세요!",
-          initialCode: "num1 = int(input('첫 번째 숫자: '))\nnum2 = int(input('두 번째 숫자: '))\nprint(f'입력: {num1}, {num2}')",
-          expectedOutput: "",
-          hint: "int()로 숫자로 변환!",
-          hint2: "num1 = int(input('첫 번째 숫자: '))"
+          initialCode: "# input() 대신 직접 값을 넣어요\nnum1 = 10\nnum2 = 3\n# f-string으로 두 숫자를 출력하세요\nprint(f'입력: {___}, {___}')",
+          expectedOutput: "입력: 10, 3",
+          hint: "f-string 안에 변수 이름을 넣으세요!",
+          hint2: "print(f'입력: {num1}, {num2}')"
         },
         {
           id: "step2",
           type: "tryit",
           title: "2️⃣ 덧셈 계산기",
           task: "두 숫자의 합을 계산하세요!",
-          initialCode: "num1 = int(input('첫 번째 숫자: '))\nnum2 = int(input('두 번째 숫자: '))\nresult = num1 + num2\nprint(f'{num1} + {num2} = {result}')",
-          expectedOutput: "",
-          hint: "result = num1 + num2",
-          hint2: "print(f'{num1} + {num2} = {result}')"
+          initialCode: "# input() 대신 직접 값을 넣어요\nnum1 = 10\nnum2 = 3\n# 두 숫자를 더하세요\nresult = ___\nprint(f'{num1} + {num2} = {result}')",
+          expectedOutput: "10 + 3 = 13",
+          hint: "두 변수를 더해서 result에 저장!",
+          hint2: "result = num1 + num2"
+        },
+        {
+          id: "step2-5",
+          type: "explain",
+          title: "💡 if-elif 미리보기!",
+          content: `계산기는 +, -, *, / 중 **어떤 연산을 할지 골라야** 해요.
+이때 사용하는 게 \`if\`와 \`elif\`예요!
+
+\`\`\`python
+op = '+'
+
+if op == '+':
+    print('더하기!')
+elif op == '-':
+    print('빼기!')
+\`\`\`
+
+- \`if 조건:\` → 조건이 맞으면 실행!
+- \`elif 조건:\` → 위의 if가 아니면, 이 조건을 확인!
+- \`else:\` → 위의 모든 조건이 아니면 실행!
+
+💡 \`if-elif-else\`는 **Part 2에서 자세히** 배워요!
+지금은 "조건에 따라 다른 코드를 실행한다"는 것만 이해하면 OK!`
         },
         {
           id: "step3",
           type: "tryit",
           title: "3️⃣ 연산자 선택",
           task: "연산자를 입력받아 계산하세요!",
-          initialCode: "num1 = int(input('첫 번째 숫자: '))\nnum2 = int(input('두 번째 숫자: '))\nop = input('연산자 (+, -, *, /): ')\n\nif op == '+':\n    result = num1 + num2\nelif op == '-':\n    result = num1 - num2\nelif op == '*':\n    result = num1 * num2\nelif op == '/':\n    result = num1 / num2\n\nprint(f'{num1} {op} {num2} = {result}')",
-          expectedOutput: "",
-          hint: "if-elif로 연산자 구분!",
-          hint2: "if op == '+': result = num1 + num2"
+          initialCode: "# input() 대신 직접 값을 넣어요\nnum1 = 10\nnum2 = 3\nop = '+'\n\nif op == '+':\n    result = num1 + num2\nelif op == '-':\n    result = num1 - num2\n# 나머지 연산자도 추가하세요\nelif op == '*':\n    result = ___\nelif op == '/':\n    result = ___\n\nprint(f'{num1} {op} {num2} = {result}')",
+          expectedOutput: "10 + 3 = 13",
+          hint: "곱하기는 num1 * num2, 나누기는 num1 / num2",
+          hint2: "result = num1 * num2"
         }
       ]
     },
@@ -109,10 +132,10 @@ print(f'결과: {result}')
           type: "mission",
           title: "🏆 완성된 계산기!",
           task: "제목과 함께 완성된 계산기를 만드세요!",
-          initialCode: "print('=== 🧮 미니 계산기 ===')\n\nnum1 = int(input('첫 번째 숫자: '))\nnum2 = int(input('두 번째 숫자: '))\nop = input('연산자 (+, -, *, /): ')\n\nif op == '+':\n    result = num1 + num2\nelif op == '-':\n    result = num1 - num2\nelif op == '*':\n    result = num1 * num2\nelif op == '/':\n    result = num1 / num2\nelse:\n    result = '오류'\n\nprint(f'결과: {num1} {op} {num2} = {result}')",
-          expectedOutput: "",
-          hint: "else로 잘못된 연산자 처리!",
-          hint2: "else: result = '오류'"
+          initialCode: "print('=== 🧮 미니 계산기 ===')\n\n# input() 대신 직접 값을 넣어요\nnum1 = 10\nnum2 = 3\nop = '+'\n\nif op == '+':\n    result = ___\nelif op == '-':\n    result = ___\nelif op == '*':\n    result = ___\nelif op == '/':\n    result = ___\nelse:\n    result = '오류'\n\nprint(f'결과: {num1} {op} {num2} = {result}')",
+          expectedOutput: "=== 🧮 미니 계산기 ===\n결과: 10 + 3 = 13",
+          hint: "각 연산자에 맞는 계산식을 넣으세요!",
+          hint2: "result = num1 + num2"
         },
         {
           id: "complete",

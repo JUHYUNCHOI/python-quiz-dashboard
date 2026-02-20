@@ -158,6 +158,16 @@ print(A - B)  # {1, 2}
           hint2: "A - B"
         },
         {
+          id: "mission-ops",
+          type: "mission",
+          title: "🎯 미션: 집합 연산 마스터!",
+          task: "빈칸 3개를 채워서 집합 연산을 완성하세요!",
+          initialCode: "fruits_a = {'사과', '바나나', '포도', '딸기'}\nfruits_b = {'바나나', '딸기', '망고', '키위'}\n\n# 두 가게 모두 파는 과일 (교집합)\nboth = fruits_a ___ fruits_b\nprint(f'둘 다: {both}')\n\n# A가게만 파는 과일 (차집합)\nonly_a = fruits_a ___ fruits_b\nprint(f'A만: {only_a}')\n\n# 전체 과일 (합집합)\nall_fruits = fruits_a ___ fruits_b\nprint(f'전체: {len(all_fruits)}종류')",
+          expectedOutput: "둘 다: {'바나나', '딸기'}\nA만: {'사과', '포도'}\n전체: 6종류",
+          hint: "교집합 &, 차집합 -, 합집합 |",
+          hint2: "& / - / |"
+        },
+        {
           id: "quiz2",
           type: "quiz",
           title: "❓ 퀴즈!",
@@ -178,7 +188,7 @@ print(A - B)  # {1, 2}
           type: "mission",
           title: "🏆 최종 미션!",
           task: "두 반의 공통 학생 수와 전체 학생 수를 구하세요!",
-          initialCode: "class_a = {\"철수\", \"영희\", \"민수\", \"지영\"}\nclass_b = {\"영희\", \"민수\", \"준호\", \"수진\"}\n\n# 공통 학생 (교집합)\ncommon = class_a & class_b\n\n# 전체 학생 (합집합)\nall_students = class_a | class_b\n\nprint(f\"A반 학생 수: {len(class_a)}명\")\nprint(f\"B반 학생 수: {len(class_b)}명\")\nprint(f\"공통 학생 수: {len(common)}명\")\nprint(f\"전체 학생 수: {len(all_students)}명\")",
+          initialCode: "class_a = {\"철수\", \"영희\", \"민수\", \"지영\"}\nclass_b = {\"영희\", \"민수\", \"준호\", \"수진\"}\n\n# 공통 학생 (교집합)\ncommon = class_a ___ class_b\n\n# 전체 학생 (합집합)\nall_students = class_a ___ class_b\n\nprint(f\"A반 학생 수: {len(class_a)}명\")\nprint(f\"B반 학생 수: {len(class_b)}명\")\nprint(f\"공통 학생 수: {len(common)}명\")\nprint(f\"전체 학생 수: {len(all_students)}명\")",
           expectedOutput: "A반 학생 수: 4명\nB반 학생 수: 4명\n공통 학생 수: 2명\n전체 학생 수: 6명",
           hint: "& 는 교집합, | 는 합집합!",
           hint2: "len()으로 개수 확인"

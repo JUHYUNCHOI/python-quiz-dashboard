@@ -53,7 +53,7 @@ print(text)  # Hello (그대로!)
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "문자열을 대문자로 변환하세요!",
-          initialCode: "text = \"python\"\nprint(text.upper())",
+          initialCode: "text = \"python\"\n# 대문자로 변환하는 메서드를 사용하세요\nprint(text.___())",
           expectedOutput: "PYTHON",
           hint: ".upper() 메서드 사용!",
           hint2: "text.upper()"
@@ -63,7 +63,7 @@ print(text)  # Hello (그대로!)
           type: "tryit",
           title: "🖥️ 소문자로 변환!",
           task: "문자열을 소문자로 변환하세요!",
-          initialCode: "text = \"HELLO\"\nprint(text.lower())",
+          initialCode: "text = \"HELLO\"\nprint(text.___())",
           expectedOutput: "hello",
           hint: ".lower() 메서드 사용!",
           hint2: "text.lower()"
@@ -109,7 +109,7 @@ print(text.rstrip())  # "   Hello"
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "앞뒤 공백을 제거하세요!",
-          initialCode: "text = \"   파이썬   \"\nprint(text.strip())",
+          initialCode: "text = \"   파이썬   \"\n# 공백을 제거하는 메서드를 사용하세요\nprint(text.___())",
           expectedOutput: "파이썬",
           hint: ".strip() 메서드 사용!",
           hint2: "text.strip()"
@@ -137,7 +137,7 @@ print(text2.replace("바나나", "사과"))
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "'사과'를 '포도'로 바꾸세요!",
-          initialCode: "text = \"사과가 맛있다\"\nprint(text.replace(\"사과\", \"포도\"))",
+          initialCode: "text = \"사과가 맛있다\"\nprint(text.replace(___, ___))",
           expectedOutput: "포도가 맛있다",
           hint: ".replace(\"사과\", \"포도\")",
           hint2: "text.replace(\"사과\", \"포도\")"
@@ -171,7 +171,7 @@ print(text.count("a"))  # 3
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "'a'가 몇 개인지 세보세요!",
-          initialCode: "text = \"abracadabra\"\nprint(text.count(\"a\"))",
+          initialCode: "text = \"abracadabra\"\nprint(text.___(\"a\"))",
           expectedOutput: "5",
           hint: ".count(\"a\") 메서드 사용!",
           hint2: "text.count(\"a\")"
@@ -201,7 +201,7 @@ text.len()   # ❌ 에러!
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "문자열 길이를 구하세요!",
-          initialCode: "text = \"Python\"\nprint(len(text))",
+          initialCode: "text = \"Python\"\n# 길이를 구하는 함수를 사용하세요\nprint(___(text))",
           expectedOutput: "6",
           hint: "len(text) 함수 사용!",
           hint2: "len(text)"
@@ -249,10 +249,10 @@ print(text.endswith("World"))    # True
           type: "mission",
           title: "🏆 최종 미션!",
           task: "아이디 검사기를 완성하세요!",
-          initialCode: "user_id = \"  PyThOn_User  \"\n\n# 1. 공백 제거\nclean_id = user_id.strip()\n# 2. 소문자로 변환\nlower_id = clean_id.lower()\n# 3. 길이 확인\nlength = len(lower_id)\n\nprint(\"원본:\", user_id)\nprint(\"정리:\", lower_id)\nprint(\"길이:\", length)",
+          initialCode: "user_id = \"  PyThOn_User  \"\n\n# 1. 공백 제거\nclean_id = user_id.___()\n# 2. 소문자로 변환\nlower_id = clean_id.___()\n# 3. 길이 확인\nlength = ___(lower_id)\n\nprint(\"원본:\", user_id)\nprint(\"정리:\", lower_id)\nprint(\"길이:\", length)",
           expectedOutput: "원본:   PyThOn_User  \n정리: python_user\n길이: 11",
           hint: "strip() → lower() → len() 순서로!",
-          hint2: "user_id.strip().lower()"
+          hint2: "strip(), lower(), len()"
         },
         {
           id: "complete",

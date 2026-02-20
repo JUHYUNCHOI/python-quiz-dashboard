@@ -51,6 +51,10 @@ const registry: Record<string, LessonEntry> = {
   "25": { load: () => import('./lesson25'), exportName: 'lesson25Data' },
   "26": { load: () => import('./lesson26'), exportName: 'lesson26Data' },
 
+  // Part 4: 프로젝트 & 도전 (27-28)
+  "27": { load: () => import('./lessons/lesson27'), exportName: 'lesson27' },
+  "28": { load: () => import('./lessons/lesson28'), exportName: 'lesson28' },
+
   // Part 5: 함수 (29-33) - 양언어
   "29": {
     load: () => import('./lesson29'), exportName: 'lesson29Data',
@@ -79,10 +83,26 @@ const registry: Record<string, LessonEntry> = {
   "36": { load: () => import('./lessons/lesson36'), exportName: 'lesson36' },
   "37": { load: () => import('./lessons/lesson37'), exportName: 'lesson37' },
 
+  // Part 7: 클래스 (38-41)
+  "38": { load: () => import('./lessons/lesson38'), exportName: 'lesson38' },
+  "39": { load: () => import('./lessons/lesson39'), exportName: 'lesson39' },
+  "40": { load: () => import('./lessons/lesson40'), exportName: 'lesson40' },
+  "41": { load: () => import('./lessons/lesson41'), exportName: 'lesson41' },
+
+  // Part 8: 모듈과 패키지 (42-45)
+  "42": { load: () => import('./lessons/lesson42'), exportName: 'lesson42' },
+  "43": { load: () => import('./lessons/lesson43'), exportName: 'lesson43' },
+  "44": { load: () => import('./lessons/lesson44'), exportName: 'lesson44' },
+  "45": { load: () => import('./lessons/lesson45'), exportName: 'lesson45' },
+
   // 프로젝트 레슨
   "p1": { load: () => import('./lessonP1'), exportName: 'lessonP1Data' },
   "p2": { load: () => import('./lessonP2'), exportName: 'lessonP2Data' },
   "p3": { load: () => import('./lessonP3'), exportName: 'lessonP3Data' },
+  "p4": {
+    load: () => import('./lessonP4'), exportName: 'lessonP4Data',
+    enLoad: () => import('./lessonP4-en'), enExportName: 'lessonP4EnData',
+  },
 }
 
 // ============================================
@@ -162,8 +182,20 @@ export { lesson34 } from './lesson34'
 export { lesson35 } from './lesson35'
 export { lesson36 } from './lesson36'
 export { lesson37 } from './lesson37'
+export { lesson27 } from './lessons/lesson27'
+export { lesson28 } from './lessons/lesson28'
+export { lesson38 } from './lessons/lesson38'
+export { lesson39 } from './lessons/lesson39'
+export { lesson40 } from './lessons/lesson40'
+export { lesson41 } from './lessons/lesson41'
+export { lesson42 } from './lessons/lesson42'
+export { lesson43 } from './lessons/lesson43'
+export { lesson44 } from './lessons/lesson44'
+export { lesson45 } from './lessons/lesson45'
 export { lessonP1Data } from './lessonP1'
 export { lessonP2Data } from './lessonP2'
 export { lessonP3Data } from './lessonP3'
+export { lessonP4Data } from './lessonP4'
+export { lessonP4EnData } from './lessonP4-en'
 
 export type { LessonData, LessonStep, Chapter } from './types'

@@ -50,7 +50,7 @@ if age >= 13 and age < 19:
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "점수가 80 이상 100 이하인지 확인하세요!",
-          initialCode: "score = 85\n\nif score >= 80 and score <= 100:\n    print(\"합격!\")\nelse:\n    print(\"불합격\")",
+          initialCode: "score = 85\n\n# 두 조건을 and로 연결하세요\nif score >= 80 ___ score <= 100:\n    print(\"합격!\")\nelse:\n    print(\"불합격\")",
           expectedOutput: "합격!",
           hint: "and로 두 조건을 연결!",
           hint2: "score >= 80 and score <= 100"
@@ -79,7 +79,7 @@ if day == "토요일" or day == "일요일":
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "VIP이거나 쿠폰이 있으면 할인!",
-          initialCode: "is_vip = False\nhas_coupon = True\n\nif is_vip or has_coupon:\n    print(\"10% 할인!\")\nelse:\n    print(\"정가\")",
+          initialCode: "is_vip = False\nhas_coupon = True\n\n# or로 연결하세요\nif is_vip ___ has_coupon:\n    print(\"10% 할인!\")\nelse:\n    print(\"정가\")",
           expectedOutput: "10% 할인!",
           hint: "or로 두 조건 중 하나만 참이면 됨!",
           hint2: "is_vip or has_coupon"
@@ -122,9 +122,9 @@ if not is_raining:
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "로그인 안 했으면 메시지 출력!",
-          initialCode: "is_logged_in = False\n\nif not is_logged_in:\n    print(\"로그인이 필요합니다\")",
+          initialCode: "is_logged_in = False\n\n# not으로 조건을 반대로!\nif ___ is_logged_in:\n    print(\"로그인이 필요합니다\")",
           expectedOutput: "로그인이 필요합니다",
-          hint: "not으로 조건을 반대로!",
+          hint: "조건을 반대로 만드는 연산자를 사용하세요!",
           hint2: "not is_logged_in"
         },
         {
@@ -153,8 +153,8 @@ if age < 18 or not has_license:
           id: "try4",
           type: "tryit",
           title: "🖥️ 직접 해보기!",
-          task: "복합 조건을 사용해보세요!",
-          initialCode: "age = 20\nis_student = True\n\n# 청소년(13~19)이거나 학생이면 할인\nif (age >= 13 and age <= 19) or is_student:\n    print(\"할인 적용!\")\nelse:\n    print(\"정가\")",
+          task: "13~19세이거나 학생이면 '할인 적용!' 출력!",
+          initialCode: "age = 20\nis_student = True\n\n# 청소년(13~19)이거나 학생이면 할인\nif (age >= 13 ___ age <= 19) ___ is_student:\n    print(\"할인 적용!\")\nelse:\n    print(\"정가\")",
           expectedOutput: "할인 적용!",
           hint: "괄호로 조건을 묶어서 명확하게!",
           hint2: "(age >= 13 and age <= 19) or is_student"
@@ -198,24 +198,24 @@ else:
 if "a" in "apple":
     print("a가 있어요!")  # 출력됨
 
-# 리스트에서
-fruits = ["사과", "바나나", "딸기"]
-if "바나나" in fruits:
-    print("바나나 있음!")  # 출력됨
+if "python" in "I love python":
+    print("포함!")  # 출력됨
 \`\`\`
 
 **not in** = 포함 안 됨
 \`\`\`python
-if "포도" not in fruits:
-    print("포도 없음!")
-\`\`\``
+if "z" not in "hello":
+    print("z가 없어요!")  # 출력됨
+\`\`\`
+
+💡 \`in\`은 리스트에서도 쓸 수 있어요! 리스트는 다음 시간에 배울 거예요.`
         },
         {
           id: "try5",
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "in 연산자로 포함 여부 확인!",
-          initialCode: "word = \"python\"\n\nif \"y\" in word:\n    print(\"y가 포함되어 있어요!\")\nelse:\n    print(\"y가 없어요\")",
+          initialCode: "word = \"python\"\n\n# in으로 포함 여부 확인\nif \"y\" ___ word:\n    print(\"y가 포함되어 있어요!\")\nelse:\n    print(\"y가 없어요\")",
           expectedOutput: "y가 포함되어 있어요!",
           hint: "in으로 문자 포함 여부 확인!",
           hint2: "\"y\" in word"
@@ -241,10 +241,10 @@ if "포도" not in fruits:
           type: "mission",
           title: "🏆 최종 미션!",
           task: "로그인 시스템을 만들어보세요!",
-          initialCode: "username = \"admin\"\npassword = \"1234\"\nis_active = True\n\n# 조건: username이 맞고, password가 맞고, 계정이 활성화\nif username == \"admin\" and password == \"1234\" and is_active:\n    print(\"로그인 성공!\")\nelse:\n    print(\"로그인 실패\")",
+          initialCode: "username = \"admin\"\npassword = \"1234\"\nis_active = True\n\n# 조건: username이 맞고, password가 맞고, 계정이 활성화\nif username == \"admin\" ___ password == \"1234\" ___ is_active:\n    print(\"로그인 성공!\")\nelse:\n    print(\"로그인 실패\")",
           expectedOutput: "로그인 성공!",
-          hint: "and로 세 조건을 모두 연결!",
-          hint2: "username == \"admin\" and password == \"1234\" and is_active"
+          hint: "세 조건을 모두 만족해야 하니 and로 연결!",
+          hint2: "and"
         },
         {
           id: "complete",

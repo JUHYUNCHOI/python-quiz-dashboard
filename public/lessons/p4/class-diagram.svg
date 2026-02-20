@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 340" width="480" height="340">
+  <rect width="480" height="340" rx="16" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/>
+  <text x="240" y="36" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#1e293b">🏗️ 클래스 = 설계도</text>
+  <!-- Bungeoppang analogy -->
+  <!-- Class box (mold) -->
+  <rect x="30" y="60" width="180" height="200" rx="12" fill="#ede9fe" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="120" y="88" text-anchor="middle" font-family="system-ui,sans-serif" font-size="15" font-weight="700" fill="#7c3aed">📐 클래스 (설계도)</text>
+  <line x1="40" y1="98" x2="200" y2="98" stroke="#8b5cf6" stroke-width="1"/>
+  <text x="50" y="122" font-family="monospace" font-size="13" fill="#5b21b6">class Head:</text>
+  <text x="60" y="145" font-family="monospace" font-size="12" fill="#6d28d9">  shape = "circle"</text>
+  <text x="60" y="165" font-family="monospace" font-size="12" fill="#6d28d9">  color = "red"</text>
+  <line x1="40" y1="178" x2="200" y2="178" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="4,4"/>
+  <text x="60" y="198" font-family="monospace" font-size="12" fill="#6d28d9">  move()</text>
+  <text x="60" y="218" font-family="monospace" font-size="12" fill="#6d28d9">  go_up()</text>
+  <text x="60" y="238" font-family="monospace" font-size="12" fill="#6d28d9">  go_down()</text>
+  <!-- Arrow -->
+  <text x="230" y="140" font-family="system-ui,sans-serif" font-size="28" fill="#6366f1">→</text>
+  <text x="224" y="165" font-family="system-ui,sans-serif" font-size="11" fill="#64748b">만들기!</text>
+  <!-- Object boxes -->
+  <rect x="270" y="60" width="180" height="100" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+  <text x="360" y="88" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#059669">🔴 head1 (객체)</text>
+  <line x1="280" y1="98" x2="440" y2="98" stroke="#10b981" stroke-width="1"/>
+  <text x="290" y="120" font-family="monospace" font-size="12" fill="#047857">위치: (0, 0)</text>
+  <text x="290" y="140" font-family="monospace" font-size="12" fill="#047857">방향: 90° (위)</text>
+
+  <rect x="270" y="175" width="180" height="100" rx="12" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+  <text x="360" y="203" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#d97706">🔵 head2 (객체)</text>
+  <line x1="280" y1="213" x2="440" y2="213" stroke="#f59e0b" stroke-width="1"/>
+  <text x="290" y="235" font-family="monospace" font-size="12" fill="#b45309">위치: (100, 50)</text>
+  <text x="290" y="255" font-family="monospace" font-size="12" fill="#b45309">방향: 0° (오른쪽)</text>
+
+  <!-- Bottom note -->
+  <text x="240" y="310" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#64748b">같은 설계도(클래스)로 여러 객체를 만들 수 있어요! 🏭</text>
+  <text x="240" y="330" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#94a3b8">head1 = Head()    head2 = Head()</text>
+</svg>

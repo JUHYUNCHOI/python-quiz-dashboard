@@ -39,8 +39,8 @@ for fruit in fruits:
           task: "리스트의 모든 요소를 출력하세요!",
           initialCode: "numbers = [10, 20, 30, 40, 50]\n\nfor num in numbers:\n    print(num)",
           expectedOutput: "10\n20\n30\n40\n50",
-          hint: "for num in numbers:",
-          hint2: "numbers의 각 요소가 num에 들어가요!"
+          hint: "numbers의 각 요소가 num에 들어가요!",
+          hint2: "for num in numbers:"
         },
         {
           id: "calc-explain",
@@ -136,8 +136,8 @@ print(numbers)  # [2, 4, 6]
           task: "모든 점수에 10점씩 더하세요!",
           initialCode: "scores = [70, 80, 90]\n\nfor i in range(len(scores)):\n    scores[i] = scores[i] + 10\n\nprint(scores)",
           expectedOutput: "[80, 90, 100]",
-          hint: "scores[i] = scores[i] + 10",
-          hint2: "또는 scores[i] += 10"
+          hint: "인덱스로 접근해서 10을 더해요!",
+          hint2: "scores[i] = scores[i] + 10"
         }
       ]
     },
@@ -168,18 +168,18 @@ for num in numbers:
           task: "80점 이상인 점수만 출력하세요!",
           initialCode: "scores = [65, 80, 72, 95, 88, 55, 90]\n\nfor score in scores:\n    if score >= 80:\n        print(score)",
           expectedOutput: "80\n95\n88\n90",
-          hint: "if score >= 80:",
-          hint2: "for 안에 if를 넣어요!"
+          hint: "for 안에 if를 넣어요!",
+          hint2: "if score >= 80:"
         },
         {
           id: "mission1",
           type: "mission",
           title: "🎯 미션!",
           task: "합격자(60점 이상) 수를 세세요!",
-          initialCode: "scores = [45, 80, 55, 90, 70, 30, 85]\npass_count = 0\n\nfor score in scores:\n    if score >= 60:\n        pass_count += 1\n\nprint(f\"합격자: {pass_count}명\")",
+          initialCode: "scores = [45, 80, 55, 90, 70, 30, 85]\npass_count = 0\n\nfor score in scores:\n    if score >= ___:\n        pass_count += ___\n\nprint(f\"합격자: {pass_count}명\")",
           expectedOutput: "합격자: 4명",
-          hint: "if score >= 60: pass_count += 1",
-          hint2: "60점 이상이면 count 증가!"
+          hint: "60점 이상이면 count를 증가시키세요!",
+          hint2: "if score >= 60: pass_count += 1"
         }
       ]
     },
@@ -193,7 +193,7 @@ for num in numbers:
           type: "mission",
           title: "🏆 최종 미션!",
           task: "성적표를 출력하세요!",
-          initialCode: "names = [\"철수\", \"영희\", \"민수\"]\nscores = [85, 92, 78]\n\nprint(\"=== 성적표 ===\")\nfor i in range(len(names)):\n    if scores[i] >= 90:\n        grade = \"A\"\n    elif scores[i] >= 80:\n        grade = \"B\"\n    else:\n        grade = \"C\"\n    print(f\"{names[i]}: {scores[i]}점 ({grade})\")",
+          initialCode: "names = [\"철수\", \"영희\", \"민수\"]\nscores = [85, 92, 78]\n\nprint(\"=== 성적표 ===\")\nfor i in range(len(___)):\n    if scores[i] >= 90:\n        grade = ___\n    elif scores[i] >= 80:\n        grade = ___\n    else:\n        grade = ___\n    print(f\"{names[i]}: {scores[i]}점 ({grade})\")",
           expectedOutput: "=== 성적표 ===\n철수: 85점 (B)\n영희: 92점 (A)\n민수: 78점 (C)",
           hint: "range(len(names))로 인덱스 순회!",
           hint2: "names[i]와 scores[i]를 같이 사용!"

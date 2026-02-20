@@ -233,10 +233,10 @@ LIFO 특성을 활용한 뒤집기!`
           type: "mission",
           title: "🏆 최종 미션: 브라우저 뒤로가기!",
           task: "브라우저 히스토리를 스택으로 구현하세요!",
-          initialCode: "class Browser:\n    def __init__(self):\n        self.history = []\n        self.current = \"홈\"\n    \n    def visit(self, page):\n        self.history.append(self.current)\n        self.current = page\n        print(f\"방문: {page}\")\n    \n    def back(self):\n        if self.history:\n            self.current = self.history.pop()\n            print(f\"뒤로가기: {self.current}\")\n        else:\n            print(\"더 이상 뒤로 갈 수 없습니다\")\n    \n    def show(self):\n        print(f\"현재 페이지: {self.current}\")\n\n# 테스트\nbrowser = Browser()\nbrowser.visit(\"네이버\")\nbrowser.visit(\"구글\")\nbrowser.visit(\"유튜브\")\nbrowser.show()\nbrowser.back()\nbrowser.back()\nbrowser.show()",
+          initialCode: "class Browser:\n    def __init__(self):\n        self.history = []\n        self.current = \"홈\"\n    \n    def visit(self, page):\n        self.history.___(self.current)\n        self.current = page\n        print(f\"방문: {page}\")\n    \n    def back(self):\n        if self.history:\n            self.current = self.history.___()\n            print(f\"뒤로가기: {self.current}\")\n        else:\n            print(\"더 이상 뒤로 갈 수 없습니다\")\n    \n    def show(self):\n        print(f\"현재 페이지: {self.current}\")\n\n# 테스트\nbrowser = Browser()\nbrowser.visit(\"네이버\")\nbrowser.visit(\"구글\")\nbrowser.visit(\"유튜브\")\nbrowser.show()\nbrowser.back()\nbrowser.back()\nbrowser.show()",
           expectedOutput: "방문: 네이버\n방문: 구글\n방문: 유튜브\n현재 페이지: 유튜브\n뒤로가기: 구글\n뒤로가기: 네이버\n현재 페이지: 네이버",
-          hint: "visit할 때 이전 페이지를 history에 push!",
-          hint2: "back할 때 history에서 pop!"
+          hint: "스택은 append()로 push하고 pop()으로 꺼내요!",
+          hint2: "visit에는 append, back에는 pop을 넣으세요!"
         },
         {
           id: "complete",

@@ -114,7 +114,7 @@ export function PythonRunner({
 
     // 초기 코드와 똑같으면 수정 안내
     if (requireCodeChange && initialCode && code.trim() === initialCode.trim()) {
-      setError("✏️ 코드를 수정해야 해요! 주석을 참고해서 try-except를 추가해보세요!")
+      setError("✏️ 코드를 수정해야 해요! 주석을 참고해서 코드를 완성해보세요!")
       return
     }
 
@@ -139,10 +139,10 @@ export function PythonRunner({
       if (expectedOutput) {
         const normalize = (s: string) => s.trim().toLowerCase().replace(/\s+/g, " ")
         const isMatch = normalize(result) === normalize(expectedOutput)
-        
+
         setIsCorrect(isMatch)
         setAttempts(prev => prev + 1)
-        
+
         if (isMatch) {
           onSuccess?.()
         } else {
@@ -151,6 +151,10 @@ export function PythonRunner({
             setShowHint(true)
           }
         }
+      } else {
+        // expectedOutput이 없으면 실행만 하면 성공 (run-only 모드)
+        setIsCorrect(true)
+        onSuccess?.()
       }
     } catch (err: any) {
       let errorMsg = err.message || "에러!"
@@ -188,9 +192,22 @@ export function PythonRunner({
   }, [code, isPyodideReady, expectedOutput, onSuccess, onError, attempts, hint])
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey && code.trim()) {
+    // Shift+Enter 또는 Ctrl/Cmd+Enter로 실행
+    if (e.key === "Enter" && (e.shiftKey || e.ctrlKey || e.metaKey) && code.trim()) {
       e.preventDefault()
       runCode()
+    }
+    // Tab 키로 들여쓰기
+    if (e.key === "Tab") {
+      e.preventDefault()
+      const textarea = textareaRef.current
+      if (textarea) {
+        const start = textarea.selectionStart
+        const end = textarea.selectionEnd
+        const newCode = code.substring(0, start) + "    " + code.substring(end)
+        setCode(newCode)
+        setTimeout(() => { textarea.selectionStart = textarea.selectionEnd = start + 4 }, 0)
+      }
     }
   }
 

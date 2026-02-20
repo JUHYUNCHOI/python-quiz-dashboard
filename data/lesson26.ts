@@ -231,10 +231,10 @@ counts = Counter(text)
           type: "mission",
           title: "🏆 최종 미션: 종합 문제!",
           task: "적절한 자료구조를 선택해서 문제를 해결하세요!",
-          initialCode: "from collections import deque, Counter\n\n# 문제 1: 중복 제거\nnumbers = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4]\nunique = list(set(numbers))  # 집합 사용!\nprint(\"1. 중복 제거:\", sorted(unique))\n\n# 문제 2: 단어 빈도수 Top 3\nwords = \"apple banana apple cherry banana apple\".split()\nword_count = Counter(words)  # Counter 사용!\nprint(\"2. Top 3:\", word_count.most_common(3))\n\n# 문제 3: 두 집합의 차이\nset_a = {1, 2, 3, 4, 5}\nset_b = {4, 5, 6, 7, 8}\nonly_a = set_a - set_b  # 집합 연산!\nprint(\"3. A에만 있는 것:\", sorted(only_a))\n\n# 문제 4: 최근 검색어 3개 유지\nrecent = deque(maxlen=3)  # 덱 사용!\nfor query in [\"파이썬\", \"자바\", \"C++\", \"자바스크립트\", \"Go\"]:\n    recent.append(query)\nprint(\"4. 최근 검색어:\", list(recent))",
+          initialCode: "from collections import deque, Counter\n\n# 문제 1: 중복 제거\nnumbers = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4]\nunique = list(___(numbers))  # 어떤 자료구조?\nprint(\"1. 중복 제거:\", sorted(unique))\n\n# 문제 2: 단어 빈도수 Top 3\nwords = \"apple banana apple cherry banana apple\".split()\nword_count = ___(words)  # 어떤 도구?\nprint(\"2. Top 3:\", word_count.most_common(3))\n\n# 문제 3: 두 집합의 차이\nset_a = {1, 2, 3, 4, 5}\nset_b = {4, 5, 6, 7, 8}\nonly_a = set_a ___ set_b  # 어떤 연산?\nprint(\"3. A에만 있는 것:\", sorted(only_a))\n\n# 문제 4: 최근 검색어 3개 유지\nrecent = deque(___=3)  # 어떤 옵션?\nfor query in [\"파이썬\", \"자바\", \"C++\", \"자바스크립트\", \"Go\"]:\n    recent.append(query)\nprint(\"4. 최근 검색어:\", list(recent))",
           expectedOutput: "1. 중복 제거: [1, 2, 3, 4]\n2. Top 3: [('apple', 3), ('banana', 2), ('cherry', 1)]\n3. A에만 있는 것: [1, 2, 3]\n4. 최근 검색어: ['C++', '자바스크립트', 'Go']",
-          hint: "각 문제에 맞는 자료구조를 선택!",
-          hint2: "집합, Counter, 덱 활용"
+          hint: "중복 제거는 set, 개수 세기는 Counter, 차집합은 -, 최근 N개는 deque의 maxlen!",
+          hint2: "set, Counter, -, maxlen을 넣으세요!"
         },
         {
           id: "cheatsheet",

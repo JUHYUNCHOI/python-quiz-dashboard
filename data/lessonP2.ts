@@ -21,23 +21,30 @@ export const lessonP2Data: LessonData = {
           content: `Part 2에서 배운 것을 모두 활용해서
 **숫자 맞추기 게임**을 만들어요!
 
+> 웹 환경에서는 \`input()\`을 쓸 수 없어서,
+> **추측 목록(리스트)**을 미리 만들어 사용해요!
+
 \`\`\`
 === 🎯 숫자 맞추기 게임 ===
-1~100 사이의 숫자를 맞춰보세요!
 
-추측: 50
-⬆️ 더 큰 숫자예요!
-추측: 75
-⬇️ 더 작은 숫자예요!
-추측: 62
-🎉 정답! 3번 만에 맞췄어요!
+시도 1: 10
+→ ⬇️ 더 작은 숫자예요!
+시도 2: 4
+→ ⬆️ 더 큰 숫자예요!
+시도 3: 8
+→ ⬇️ 더 작은 숫자예요!
+시도 4: 6
+→ ⬆️ 더 큰 숫자예요!
+시도 5: 7
+→ 🎉 정답! 5번 만에 맞췄어요!
+게임 종료!
 \`\`\`
 
 **사용할 개념:**
 - 조건문 (if-elif-else)
-- 반복문 (while)
+- 반복문 (for)
 - 비교 연산자
-- random 모듈`
+- break (반복 탈출)`
         },
         {
           id: "random",
@@ -45,22 +52,29 @@ export const lessonP2Data: LessonData = {
           title: "🎲 random 모듈",
           content: `컴퓨터가 랜덤 숫자를 만들게 해요!
 
+**import** = 파이썬에 내장된 기능을 가져오는 것!
 \`\`\`python
-import random
+import random  # random 기능을 가져와!
+\`\`\`
 
+이제 \`random.randint()\`로 랜덤 숫자를 만들 수 있어요:
+\`\`\`python
 # 1~100 사이 랜덤 숫자
 secret = random.randint(1, 100)
 print(secret)  # 매번 다른 숫자!
 \`\`\`
 
-**randint(a, b)**: a 이상 b 이하의 정수`
+**randint(a, b)**: a 이상 b 이하의 정수
+
+> 연습에서는 결과를 확인하기 위해
+> **정답을 고정**해서 사용해요!`
         },
         {
           id: "try-random",
           type: "tryit",
           title: "🖥️ 랜덤 숫자 만들기",
           task: "1~10 사이의 랜덤 숫자를 출력하세요!",
-          initialCode: "import random\n\nsecret = random.randint(1, 10)\nprint(f'비밀 숫자: {secret}')",
+          initialCode: "import random\n\n# 1~10 사이 랜덤 숫자를 만드세요\nsecret = random.randint(___, ___)\nprint(f'비밀 숫자: {secret}')",
           expectedOutput: "",
           hint: "randint(1, 10)은 1~10 사이!",
           hint2: "random.randint(1, 10)"
@@ -77,29 +91,29 @@ print(secret)  # 매번 다른 숫자!
           type: "tryit",
           title: "1️⃣ 한 번 추측하기",
           task: "추측이 정답인지 확인하세요!",
-          initialCode: "import random\n\nsecret = random.randint(1, 10)\nprint(f'(정답: {secret})')\n\nguess = int(input('추측: '))\n\nif guess == secret:\n    print('🎉 정답!')\nelif guess < secret:\n    print('⬆️ 더 큰 숫자예요!')\nelse:\n    print('⬇️ 더 작은 숫자예요!')",
-          expectedOutput: "",
+          initialCode: "import random\n\nsecret = 7  # 정답을 미리 정해둬요\n\n# input() 대신 직접 값을 넣어요\nguess = 5\n\nif guess == secret:\n    print('🎉 정답!')\n# 정답보다 작으면? 크면?\n___ guess < secret:\n    print('⬆️ 더 큰 숫자예요!')\n___:\n    print('⬇️ 더 작은 숫자예요!')",
+          expectedOutput: "⬆️ 더 큰 숫자예요!",
           hint: "if-elif-else로 비교!",
-          hint2: "if guess == secret:"
+          hint2: "elif guess < secret:"
         },
         {
           id: "step2",
           type: "tryit",
           title: "2️⃣ 반복해서 추측하기",
           task: "정답을 맞출 때까지 반복하세요!",
-          initialCode: "import random\n\nsecret = random.randint(1, 10)\nprint('1~10 사이의 숫자를 맞춰보세요!')\n\nwhile True:\n    guess = int(input('추측: '))\n    \n    if guess == secret:\n        print('🎉 정답!')\n        break\n    elif guess < secret:\n        print('⬆️ 더 큰 숫자예요!')\n    else:\n        print('⬇️ 더 작은 숫자예요!')",
-          expectedOutput: "",
-          hint: "while True + break 조합!",
-          hint2: "if guess == secret: break"
+          initialCode: "secret = 7\n# input() 대신 추측 목록으로!\nguesses = [3, 5, 9, 7]\n\nfor guess in guesses:\n    if guess == secret:\n        print(f'🎉 정답! {guess}!')\n        ___  # 반복문 탈출!\n    elif guess < secret:\n        print(f'{guess}: ⬆️ 더 큰 숫자예요!')\n    else:\n        print(f'{guess}: ⬇️ 더 작은 숫자예요!')",
+          expectedOutput: "3: ⬆️ 더 큰 숫자예요!\n5: ⬆️ 더 큰 숫자예요!\n9: ⬇️ 더 작은 숫자예요!\n🎉 정답! 7!",
+          hint: "정답이면 break로 탈출!",
+          hint2: "break"
         },
         {
           id: "step3",
           type: "tryit",
           title: "3️⃣ 시도 횟수 세기",
           task: "몇 번 만에 맞췄는지 세세요!",
-          initialCode: "import random\n\nsecret = random.randint(1, 10)\nprint('1~10 사이의 숫자를 맞춰보세요!')\n\ncount = 0\n\nwhile True:\n    guess = int(input('추측: '))\n    count = count + 1\n    \n    if guess == secret:\n        print(f'🎉 정답! {count}번 만에 맞췄어요!')\n        break\n    elif guess < secret:\n        print('⬆️ 더 큰 숫자예요!')\n    else:\n        print('⬇️ 더 작은 숫자예요!')",
-          expectedOutput: "",
-          hint: "count 변수로 횟수 세기!",
+          initialCode: "secret = 7\nguesses = [3, 5, 9, 7]\n\ncount = 0\n\nfor guess in guesses:\n    count = ___  # 횟수 증가!\n    \n    if guess == secret:\n        print(f'🎉 정답! {count}번 만에 맞췄어요!')\n        break\n    elif guess < secret:\n        print(f'{guess}: ⬆️ 더 큰 숫자예요!')\n    else:\n        print(f'{guess}: ⬇️ 더 작은 숫자예요!')",
+          expectedOutput: "3: ⬆️ 더 큰 숫자예요!\n5: ⬆️ 더 큰 숫자예요!\n9: ⬇️ 더 작은 숫자예요!\n🎉 정답! 4번 만에 맞췄어요!",
+          hint: "count를 1씩 증가시키세요!",
           hint2: "count = count + 1"
         }
       ]
@@ -114,10 +128,10 @@ print(secret)  # 매번 다른 숫자!
           type: "mission",
           title: "🏆 완성된 게임!",
           task: "제목, 범위 안내, 시도 횟수가 있는 완성된 게임을 만드세요!",
-          initialCode: "import random\n\nprint('=== 🎯 숫자 맞추기 게임 ===')\nprint('1~100 사이의 숫자를 맞춰보세요!')\nprint()\n\nsecret = random.randint(1, 100)\ncount = 0\n\nwhile True:\n    guess = int(input('추측: '))\n    count += 1\n    \n    if guess == secret:\n        print(f'🎉 정답! {count}번 만에 맞췄어요!')\n        break\n    elif guess < secret:\n        print('⬆️ 더 큰 숫자예요!')\n    else:\n        print('⬇️ 더 작은 숫자예요!')\n\nprint('게임 종료!')",
-          expectedOutput: "",
-          hint: "count += 1은 count = count + 1과 같아요!",
-          hint2: "if guess == secret: print(...); break"
+          initialCode: "print('=== 🎯 숫자 맞추기 게임 ===')\n\nsecret = 7\nguesses = [10, 4, 8, 6, 7]\n\ncount = 0\n\nfor guess in guesses:\n    count += 1\n    print(f'시도 {count}: {guess}')\n    \n    if guess == secret:\n        print(f'→ 🎉 정답! {count}번 만에 맞췄어요!')\n        ___  # 반복문 탈출!\n    elif ___:\n        print('→ ⬆️ 더 큰 숫자예요!')\n    else:\n        print('→ ⬇️ 더 작은 숫자예요!')\n\nprint('게임 종료!')",
+          expectedOutput: "=== 🎯 숫자 맞추기 게임 ===\n시도 1: 10\n→ ⬇️ 더 작은 숫자예요!\n시도 2: 4\n→ ⬆️ 더 큰 숫자예요!\n시도 3: 8\n→ ⬇️ 더 작은 숫자예요!\n시도 4: 6\n→ ⬆️ 더 큰 숫자예요!\n시도 5: 7\n→ 🎉 정답! 5번 만에 맞췄어요!\n게임 종료!",
+          hint: "break로 탈출, guess < secret로 비교!",
+          hint2: "break / guess < secret"
         },
         {
           id: "complete",
@@ -128,9 +142,9 @@ print(secret)  # 매번 다른 숫자!
 **숫자 맞추기 게임**을 완성했어요!
 
 ### 사용한 개념:
-✅ import random - 랜덤 숫자
+✅ 리스트 - 추측 목록
 ✅ if-elif-else - 조건 비교
-✅ while True - 무한 반복
+✅ for 반복문 - 목록 순회
 ✅ break - 반복 탈출
 ✅ 비교 연산자 (<, >, ==)
 ✅ 카운터 변수 - 횟수 세기

@@ -29,7 +29,7 @@ export const lesson2Data: LessonData = {
         {
           id: "types-explain",
           type: "explain",
-          title: "📋 3가지 기본 타입",
+          title: "📋 4가지 기본 타입",
           content: `**1. 정수 (int)** - 소수점 없는 숫자
 \`\`\`python
 10, -5, 0, 1000
@@ -84,7 +84,7 @@ print(type(True))     # <class 'bool'>
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "100의 타입을 확인해보세요!",
-          initialCode: "print(type(100))",
+          initialCode: "print(type(___))",
           expectedOutput: "<class 'int'>",
           hint: "type() 안에 값을 넣어요",
           hint2: "print(type(100))"
@@ -94,7 +94,7 @@ print(type(True))     # <class 'bool'>
           type: "tryit",
           title: "🖥️ 문자열 타입 확인!",
           task: "'파이썬'의 타입을 확인해보세요!",
-          initialCode: "print(type('파이썬'))",
+          initialCode: "print(type(___))",
           expectedOutput: "<class 'str'>",
           hint: "문자열은 str!",
           hint2: "print(type('파이썬'))"
@@ -141,7 +141,7 @@ print(10 < 5)   # False
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "10 > 5의 결과를 출력하세요!",
-          initialCode: "print(10 > 5)",
+          initialCode: "print(___ > ___)",
           expectedOutput: "True",
           hint: "비교 결과는 True 또는 False!",
           hint2: "print(10 > 5)"
@@ -151,7 +151,7 @@ print(10 < 5)   # False
           type: "tryit",
           title: "🖥️ False도 해봐요!",
           task: "3 > 7의 결과를 출력하세요!",
-          initialCode: "print(3 > 7)",
+          initialCode: "print(___ > ___)",
           expectedOutput: "False",
           hint: "3은 7보다 작죠?",
           hint2: "print(3 > 7)"
@@ -185,10 +185,10 @@ print(10 < 5)   # False
           type: "mission",
           title: "🏆 최종 미션!",
           task: "여러 타입의 데이터와 type()을 출력하세요!",
-          initialCode: "print(42, type(42))\nprint(3.14, type(3.14))\nprint('Hello', type('Hello'))\nprint(True, type(True))",
+          initialCode: "print(42, type(___))\nprint(3.14, type(___))\nprint('Hello', type(___))\nprint(True, type(___))",
           expectedOutput: "42 <class 'int'>\n3.14 <class 'float'>\nHello <class 'str'>\nTrue <class 'bool'>",
-          hint: "값과 type()을 같이 출력!",
-          hint2: "print(값, type(값))"
+          hint: "type() 안에 앞의 값과 같은 값을 넣으세요!",
+          hint2: "type(42), type(3.14), type('Hello'), type(True)"
         },
         {
           id: "complete",

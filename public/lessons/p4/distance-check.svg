@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 280" width="420" height="280">
+  <style>
+    text { font-family: 'Segoe UI', system-ui, sans-serif; }
+  </style>
+
+  <!-- Background -->
+  <rect width="420" height="280" rx="16" fill="#f0f4f8"/>
+
+  <!-- Title -->
+  <text x="210" y="28" text-anchor="middle" font-size="16" font-weight="bold" fill="#1e293b">distance() &lt; 20 먹이 판정</text>
+
+  <!-- LEFT: Too far -->
+  <g transform="translate(20, 50)">
+    <text x="90" y="0" text-anchor="middle" font-size="13" fill="#dc2626" font-weight="bold">거리 = 50 (너무 멀어!)</text>
+
+    <!-- Head -->
+    <circle cx="40" cy="80" r="18" fill="#587e76"/>
+    <text x="40" y="85" text-anchor="middle" font-size="10" fill="white" font-weight="bold">HEAD</text>
+
+    <!-- Distance line -->
+    <line x1="58" y1="80" x2="122" y2="80" stroke="#dc2626" stroke-width="2" stroke-dasharray="5"/>
+    <text x="90" y="73" text-anchor="middle" font-size="11" fill="#dc2626" font-weight="bold">50</text>
+
+    <!-- Food -->
+    <g transform="translate(140, 65)">
+      <polygon points="15,0 19,10 30,12 22,20 24,30 15,25 6,30 8,20 0,12 11,10" fill="#22c55e"/>
+    </g>
+    <text x="155" y="108" text-anchor="middle" font-size="10" fill="#16a34a" font-weight="bold">FOOD</text>
+
+    <!-- X mark -->
+    <text x="90" y="150" text-anchor="middle" font-size="28" fill="#dc2626">✗</text>
+    <text x="90" y="172" text-anchor="middle" font-size="12" fill="#dc2626">못 먹음!</text>
+  </g>
+
+  <!-- RIGHT: Close enough -->
+  <g transform="translate(230, 50)">
+    <text x="90" y="0" text-anchor="middle" font-size="13" fill="#16a34a" font-weight="bold">거리 = 15 (가까워!)</text>
+
+    <!-- Head -->
+    <circle cx="60" cy="80" r="18" fill="#587e76"/>
+    <text x="60" y="85" text-anchor="middle" font-size="10" fill="white" font-weight="bold">HEAD</text>
+
+    <!-- Distance line -->
+    <line x1="78" y1="80" x2="97" y2="80" stroke="#16a34a" stroke-width="2" stroke-dasharray="5"/>
+    <text x="88" y="73" text-anchor="middle" font-size="11" fill="#16a34a" font-weight="bold">15</text>
+
+    <!-- Food (overlapping) -->
+    <g transform="translate(95, 65)">
+      <polygon points="15,0 19,10 30,12 22,20 24,30 15,25 6,30 8,20 0,12 11,10" fill="#22c55e"/>
+    </g>
+    <text x="110" y="108" text-anchor="middle" font-size="10" fill="#16a34a" font-weight="bold">FOOD</text>
+
+    <!-- Check mark -->
+    <text x="90" y="150" text-anchor="middle" font-size="28" fill="#16a34a">✓</text>
+    <text x="90" y="172" text-anchor="middle" font-size="12" fill="#16a34a">먹었다!</text>
+  </g>
+
+  <!-- Bottom formula -->
+  <rect x="60" y="230" width="300" height="36" rx="10" fill="#e0e7ff"/>
+  <text x="210" y="254" text-anchor="middle" font-size="13" fill="#4338ca" font-weight="bold">거리 &lt; 20 이면 → 먹이 먹기 성공! 🎉</text>
+</svg>

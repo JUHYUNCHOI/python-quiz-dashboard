@@ -149,7 +149,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
   const resolvedParams = use(params)
   const lessonId = resolvedParams.lessonId
   const router = useRouter()
-  
+
   const lesson = lessonsData[lessonId]
   
   const [step, setStep] = useState(0)
@@ -173,14 +173,11 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
   const [typedCode, setTypedCode] = useState("")  // 하위호환 (코드 없는 explain용)
   const [showResult, setShowResult] = useState(false)
   const [typingComplete, setTypingComplete] = useState(false)
-  const [showNote, setShowNote] = useState(false)
   
-  // 시퀀스 타이핑 상태
-  const [visibleLines, setVisibleLines] = useState(0)       // 코드 줄 수
+  // 시퀀스 표시 상태
+  const [visibleLines, setVisibleLines] = useState(0)       // 보이는 코드 줄 수
   const [codeLines, setCodeLines] = useState<string[]>([])
-  const [typedChars, setTypedChars] = useState(0)            // 현재 줄의 타이핑된 글자 수
-  const [lineFullyTyped, setLineFullyTyped] = useState(false) // 현재 줄 타이핑 완료
-  const [visibleHeadlines, setVisibleHeadlines] = useState(0) // lines(headlines) 순차 등장
+  const [visibleHeadlines, setVisibleHeadlines] = useState(0) // headlines 표시 수
   
   // 예측 퀴즈 상태
   const [predictSelected, setPredictSelected] = useState<number | null>(null)
@@ -199,30 +196,39 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
   // ============================================================
   useEffect(() => {
     if (!lesson) return
-    const saved = localStorage.getItem(`lesson-${lessonId}`)
-    if (saved) {
-      try {
+    try {
+      const saved = localStorage.getItem(`lesson-${lessonId}`)
+      if (saved) {
         const data = JSON.parse(saved)
-        if (data.step < lesson.steps.length) {
-          setStep(data.step)
-          setScore(data.score || 0)
-          setWrongAnswers(data.wrongAnswers || [])
-          setStreak(data.streak || 0)
+        const savedStep = typeof data.step === 'number' ? data.step : 0
+        if (savedStep > 0 && savedStep < lesson.steps.length) {
+          setStep(savedStep)
+          setScore(typeof data.score === 'number' ? data.score : 0)
+          setWrongAnswers(Array.isArray(data.wrongAnswers) ? data.wrongAnswers : [])
+          setStreak(typeof data.streak === 'number' ? data.streak : 0)
+        } else if (savedStep >= lesson.steps.length) {
+          // 저장된 step이 범위 밖이면 초기화
+          localStorage.removeItem(`lesson-${lessonId}`)
         }
-      } catch (e) {
-        console.error('Failed to load progress', e)
       }
+    } catch (e) {
+      console.error('Failed to load progress', e)
+      try { localStorage.removeItem(`lesson-${lessonId}`) } catch {}
     }
   }, [lessonId, lesson])
 
   useEffect(() => {
     if (!lesson) return
-    localStorage.setItem(`lesson-${lessonId}`, JSON.stringify({
-      step,
-      score,
-      wrongAnswers,
-      streak
-    }))
+    try {
+      localStorage.setItem(`lesson-${lessonId}`, JSON.stringify({
+        step,
+        score,
+        wrongAnswers,
+        streak
+      }))
+    } catch {
+      // localStorage 접근 불가 시 무시
+    }
   }, [step, score, wrongAnswers, streak, lessonId, lesson])
 
   // ============================================================
@@ -256,11 +262,8 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
     setTypedCode("")
     setShowResult(false)
     setTypingComplete(false)
-    setShowNote(false)
     setVisibleLines(0)
     setCodeLines([])
-    setTypedChars(0)
-    setLineFullyTyped(false)
     setVisibleHeadlines(0)
     setPredictSelected(null)
     setPredictAnswered(false)
@@ -290,172 +293,72 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
     }
   }, [])
 
-  // 글자 타이핑 속도 (ms per char)
-  const CHAR_SPEED = 35
-  // 줄 완성 후 다음 줄까지 대기 시간
-  const getLinePause = (line: string) => {
-    const trimmed = line.trim()
-    if (trimmed === "") return 400
-    if (trimmed.startsWith('#')) return 1200  // 주석은 읽을 시간
-    if (trimmed.length <= 10) return 600
-    if (trimmed.length <= 25) return 800
-    return 1000
-  }
+  // 초기화: headlines 즉시 전부 + 첫 코드 줄 표시
+  // codeLines와 visibleLines를 한 번에 셋팅해서 race condition 방지
+  useEffect(() => {
+    if (current?.type !== "explain") return
 
-  // 현재 줄의 글자 타이핑 애니메이션
+    const headlines = c.lines || []
+    const code = c.code
+    const lines = code ? code.split('\n') : []
+
+    // headlines 즉시 전체 표시
+    setVisibleHeadlines(headlines.length)
+    setCodeLines(lines)
+
+    if (lines.length > 0) {
+      // 첫 번째 코드 줄만 즉시 표시 (나머지는 탭/클릭으로)
+      setVisibleLines(1)
+      // 1줄짜리 코드면 바로 완료
+      if (lines.length === 1) {
+        setTypingComplete(true)
+        setTypedCode(lines.join('\n'))
+      }
+    } else {
+      // 코드 없으면 바로 완료
+      setTypingComplete(true)
+    }
+
+    return clearSeqTimer
+  }, [step, current, clearSeqTimer])
+
+  // 줄이 추가될 때 전체 완료 체크 (2줄 이상일 때만 동작)
   useEffect(() => {
     if (current?.type !== "explain" || !c.code) return
     if (typingComplete) return
-    if (visibleLines <= 0 || visibleLines > codeLines.length) return
-    if (lineFullyTyped) return  // 이미 이 줄 완성
-    
-    const currentLine = codeLines[visibleLines - 1] || ""
-    if (typedChars >= currentLine.length) {
-      // 이 줄 타이핑 끝
-      setLineFullyTyped(true)
-      return
-    }
-    
-    seqTimerRef.current = setTimeout(() => {
-      setTypedChars(prev => prev + 1)
-    }, CHAR_SPEED)
-    
-    return clearSeqTimer
-  }, [current, typingComplete, visibleLines, codeLines, typedChars, lineFullyTyped, clearSeqTimer])
-  
-  // 줄 타이핑 끝나면 → 다음 줄 예약 or 전체 완료
-  useEffect(() => {
-    if (!lineFullyTyped) return
-    if (typingComplete) return
+    if (codeLines.length <= 1) return  // 1줄은 초기화에서 처리
+    if (visibleLines <= 0) return
+
     if (visibleLines >= codeLines.length) {
-      // 모든 줄 완료
       setTypingComplete(true)
       setTypedCode(codeLines.join('\n'))
-      return
     }
-    
-    const pause = getLinePause(codeLines[visibleLines - 1] || "")
-    seqTimerRef.current = setTimeout(() => {
-      setVisibleLines(prev => prev + 1)
-      setTypedChars(0)
-      setLineFullyTyped(false)
-    }, pause)
-    
-    return clearSeqTimer
-  }, [lineFullyTyped, typingComplete, visibleLines, codeLines, clearSeqTimer])
+  }, [current, typingComplete, visibleLines, codeLines])
 
-  // 탭 → 현재 줄 즉시 완성 or 다음 줄
+  // 탭/클릭 → 다음 줄 즉시 표시
   const handleCodeClick = useCallback(() => {
     if (!c?.code) return
     if (typingComplete) return
     clearSeqTimer()
-    
-    const currentLine = codeLines[visibleLines - 1] || ""
-    
-    if (!lineFullyTyped) {
-      // 현재 줄 즉시 완성
-      setTypedChars(currentLine.length)
-      setLineFullyTyped(true)
-    } else if (visibleLines < codeLines.length) {
-      // 다음 줄 시작
+
+    if (visibleLines < codeLines.length) {
       setVisibleLines(prev => prev + 1)
-      setTypedChars(0)
-      setLineFullyTyped(false)
-    } else {
-      // 전체 완료
-      setTypingComplete(true)
-      setTypedCode(codeLines.join('\n'))
     }
-  }, [current, typingComplete, visibleLines, codeLines, lineFullyTyped, clearSeqTimer])
-
-  // 챕터 직후 첫 explain인지 판별
-  const isFirstExplainAfterChapter = (() => {
-    if (!lesson || !current || current.type !== "explain") return false
-    // 이전 스텝이 chapter이면 첫 설명
-    if (step > 0 && lesson.steps[step - 1]?.type === "chapter") return true
-    // step 0이 explain이면 첫 설명
-    if (step === 0) return true
-    return false
-  })()
-
-  // headlines 순차 등장 → 코드 타이핑 시작
-  // 챕터 직후 첫 explain이면 headlines 즉시 전부 표시 + 코드 바로 시작
-  useEffect(() => {
-    if (current?.type !== "explain") return
-    
-    const headlines = c.lines || []
-    const code = c.code
-    const lines = code ? code.split('\n') : []
-    setCodeLines(lines)
-    
-    // 첫 headline은 항상 즉시 표시
-    const startIdx = headlines.length > 0 ? 1 : 0
-    setVisibleHeadlines(startIdx)
-    
-    // 나머지 headlines 순차 등장 → 코드 타이핑 시작
-    let idx = startIdx
-    const showNext = () => {
-      idx++
-      setVisibleHeadlines(idx)
-      if (idx < headlines.length) {
-        seqTimerRef.current = setTimeout(showNext, 800)
-      } else {
-        // headlines 다 나오면 코드 타이핑 시작
-        if (lines.length > 0) {
-          const codeDelay = isFirstExplainAfterChapter ? 100 : 600
-          seqTimerRef.current = setTimeout(() => {
-            setVisibleLines(1)
-            setTypedChars(0)
-            setLineFullyTyped(false)
-          }, codeDelay)
-        } else {
-          // 코드 없으면 바로 완료
-          setTypingComplete(true)
-        }
-      }
-    }
-    
-    if (idx < headlines.length) {
-      // 아직 더 보여줄 headline이 있으면 순차 시작
-      const firstDelay = isFirstExplainAfterChapter ? 300 : 300
-      seqTimerRef.current = setTimeout(showNext, firstDelay)
-    } else {
-      // headline이 0~1개면 바로 코드 시작
-      if (lines.length > 0) {
-        const codeDelay = isFirstExplainAfterChapter ? 100 : 600
-        seqTimerRef.current = setTimeout(() => {
-          setVisibleLines(1)
-          setTypedChars(0)
-          setLineFullyTyped(false)
-        }, codeDelay)
-      } else {
-        setTypingComplete(true)
-      }
-    }
-    
-    return clearSeqTimer
-  }, [step, current, clearSeqTimer, isFirstExplainAfterChapter])
+  }, [current, typingComplete, visibleLines, codeLines, clearSeqTimer])
   
-  // 코드 타이핑 완료 → result 표시 (예측 퀴즈 없을 때)
+  // 코드 타이핑 완료 → result + note 즉시 표시 (예측 퀴즈 없을 때)
   useEffect(() => {
     if (!typingComplete) return
     if (!c?.result) return
     if (c.predict) return
     if (showResult) return
-    
-    const timer = setTimeout(() => setShowResult(true), 500)
+
+    // 짧은 fade-in만 (0.15초)
+    const timer = setTimeout(() => {
+      setShowResult(true)
+    }, 150)
     return () => clearTimeout(timer)
   }, [typingComplete, current, showResult])
-  
-  // result 표시 → pause → note 표시
-  useEffect(() => {
-    if (!showResult) return
-    if (!c?.note) return
-    if (showNote) return
-    
-    const timer = setTimeout(() => setShowNote(true), 1500)  // 1.5초 생각 시간
-    return () => clearTimeout(timer)
-  }, [showResult, current, showNote])
 
   // ============================================================
   // 네비게이션
@@ -466,7 +369,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
       if (step + 1 < (lesson?.steps.length || 0)) {
         setStep(step + 1)
       } else {
-        localStorage.removeItem(`lesson-${lessonId}`)
+        try { localStorage.removeItem(`lesson-${lessonId}`) } catch {}
         router.push("/curriculum")
       }
       setIsTransitioning(false)
@@ -481,22 +384,29 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
       router.push("/curriculum")
       return
     }
-    
-    if (e.key === "Enter" && !e.shiftKey) {
-      // explain에서 예측 퀴즈가 있고 아직 안 풀었으면 Enter 무시
+
+    if ((e.key === "Enter" || e.key === " ") && !e.shiftKey) {
+      // explain에서 예측 퀴즈가 있고 아직 안 풀었으면 무시
       if (current?.type === "explain" && c.predict && !predictAnswered) {
         return
       }
-      
-      if (current?.type === "explain" || 
-          current?.type === "reward" || 
+
+      // explain에서 코드가 아직 다 안 보였으면 → 다음 줄 표시
+      if (current?.type === "explain" && c.code && !typingComplete) {
+        e.preventDefault()
+        handleCodeClick()
+        return
+      }
+
+      if (current?.type === "explain" ||
+          current?.type === "reward" ||
           current?.type === "chapter" ||
           current?.type === "summary") {
         e.preventDefault()
         next()
       }
     }
-  }, [current, router, next, predictAnswered])
+  }, [current, router, next, predictAnswered, typingComplete, handleCodeClick])
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown)
@@ -1234,7 +1144,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
         {current.type === "explain" && (
           <div className="pt-8 md:pt-12 space-y-6 md:space-y-8">
             <div className="space-y-2">
-              {c.lines.map((line: string, i: number) => (
+              {(c.lines || []).map((line: string, i: number) => (
                 <p key={i} className="text-gray-900 text-2xl md:text-4xl font-bold text-center">
                   {line}
                 </p>
@@ -1255,10 +1165,9 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                       <div
                         key={i}
                         className={cn(
-                          "transition-all duration-300",
-                          i < visibleLines 
-                            ? "opacity-100 translate-y-0" 
-                            : "opacity-0 translate-y-2 h-0 overflow-hidden"
+                          i < visibleLines
+                            ? "animate-codeLine"
+                            : "opacity-0 h-0 overflow-hidden"
                         )}
                       >
                         {highlightPythonLine(line)}
@@ -1273,7 +1182,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                 {/* 클릭 안내 - 아직 줄이 남아있을 때 */}
                 {!typingComplete && visibleLines > 0 && (
                   <div className="px-4 py-2 bg-gray-800 text-center">
-                    <span className="text-gray-500 text-sm">탭해서 다음 줄 보기</span>
+                    <span className="text-gray-500 text-sm">탭 / Enter / Space 로 다음 줄</span>
                   </div>
                 )}
                 
@@ -1309,8 +1218,8 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                       onClick={() => selectPredict(idx)}
                       className="w-full p-4 md:p-5 rounded-2xl font-mono text-lg md:text-xl font-bold shadow-lg border-4 bg-white hover:bg-amber-50 text-gray-800 border-amber-200 hover:border-amber-400 transition-all"
                     >
-                      {opt.split('\n').map((line, i) => (
-                        <span key={i}>{line}{i < opt.split('\n').length - 1 && <br />}</span>
+                      {opt.split(/\\n|\n/).map((line, i, arr) => (
+                        <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
                       ))}
                     </button>
                   ))}
@@ -1411,8 +1320,8 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                       showResultState && !isSelected && !isAnswer && "bg-gray-200 text-gray-400 border-gray-200"
                     )}
                   >
-                    {opt.split('\n').map((line, i) => (
-                      <span key={i}>{line}{i < opt.split('\n').length - 1 && <br />}</span>
+                    {opt.split(/\\n|\n/).map((line, i, arr) => (
+                      <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
                     ))}
                   </button>
                 )
@@ -1754,8 +1663,8 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                       showResultState && !isSelected && !isAnswer && "bg-gray-200 text-gray-400 border-gray-200"
                     )}
                   >
-                    {opt.split('\n').map((line, i) => (
-                      <span key={i}>{line}{i < opt.split('\n').length - 1 && <br />}</span>
+                    {opt.split(/\\n|\n/).map((line, i, arr) => (
+                      <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
                     ))}
                   </button>
                 )
@@ -1943,7 +1852,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
             
             <Button 
               onClick={() => {
-                localStorage.removeItem(`lesson-${lessonId}`)
+                try { localStorage.removeItem(`lesson-${lessonId}`) } catch {}
                 router.push("/curriculum")
               }}
               className="w-full py-8 md:py-10 text-2xl md:text-3xl bg-indigo-600 hover:bg-indigo-500 rounded-2xl border-0 font-bold text-white shadow-xl"
@@ -1997,6 +1906,12 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
           to { opacity: 1; transform: translateY(0); }
         }
         .animate-slideUp { animation: slideUp 0.4s ease-out forwards; }
+
+        @keyframes codeLine {
+          from { opacity: 0; transform: translateY(6px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-codeLine { animation: codeLine 0.2s ease-out forwards; }
       `}</style>
     </div>
   )

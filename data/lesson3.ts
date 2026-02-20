@@ -51,7 +51,7 @@ gold = 5000
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "변수 age에 15를 저장하고 출력해보세요!",
-          initialCode: "age = 15\nprint(age)",
+          initialCode: "age = ___\nprint(age)",
           expectedOutput: "15",
           hint: "변수이름 = 값 으로 저장해요",
           hint2: "age = 15\nprint(age)"
@@ -96,7 +96,7 @@ print(price + 2000) # 21000
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "chicken에 19000을 저장하고, chicken + 2000을 출력하세요!",
-          initialCode: "chicken = 19000\nprint(chicken + 2000)",
+          initialCode: "chicken = ___\nprint(chicken + 2000)",
           expectedOutput: "21000",
           hint: "변수에 저장 후 계산해요",
           hint2: "chicken = 19000\nprint(chicken + 2000)"
@@ -122,7 +122,7 @@ print(hp)  # 80
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "score를 0으로 시작해서 100으로 바꾸고 출력하세요!",
-          initialCode: "score = 0\nscore = 100\nprint(score)",
+          initialCode: "score = 0\nscore = ___\nprint(score)",
           expectedOutput: "100",
           hint: "같은 변수에 새 값을 넣으면 됩니다",
           hint2: "score = 0\nscore = 100\nprint(score)"
@@ -184,16 +184,19 @@ print(f'이름: {name}, 체력: {hp}')
 # 결과: 이름: 용사, 체력: 100
 \`\`\`
 
-\`f'...{변수}...'\` 형태로 쓰면 변수가 자동으로 들어가요!`
+\`f'...{변수}...'\` 형태로 쓰면 변수가 자동으로 들어가요!
+
+💡 **지금은 맛보기!** f-string의 더 다양한 기능은 나중에 자세히 배울 거예요.
+지금은 \`f'...{변수}...'\` 이것만 기억하면 OK!`
         },
         {
           id: "try4",
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "name='홍길동', age=15로 f-string 출력해보세요!",
-          initialCode: "name = '홍길동'\nage = 15\nprint(f'이름: {name}, 나이: {age}')",
+          initialCode: "name = '홍길동'\nage = 15\n# f-string으로 이름과 나이를 출력하세요\nprint(f'이름: {___}, 나이: {___}')",
           expectedOutput: "이름: 홍길동, 나이: 15",
-          hint: "f'...{변수}...' 형태로!",
+          hint: "중괄호 안에 변수 이름을 넣으세요!",
           hint2: "print(f'이름: {name}, 나이: {age}')"
         }
       ]
@@ -207,11 +210,11 @@ print(f'이름: {name}, 체력: {hp}')
           id: "mission1",
           type: "mission",
           title: "🏆 최종 미션!",
-          task: "게임 캐릭터 정보를 출력하세요! (이름: 용사, 레벨: 10, 골드: 5000)",
-          initialCode: "name = '용사'\nlevel = 10\ngold = 5000\nprint(f'=== 캐릭터 정보 ===')\nprint(f'이름: {name}')\nprint(f'레벨: {level}')\nprint(f'골드: {gold}')",
-          expectedOutput: "=== 캐릭터 정보 ===\n이름: 용사\n레벨: 10\n골드: 5000",
-          hint: "변수에 저장 후 f-string으로 출력!",
-          hint2: "print(f'이름: {name}')"
+          task: "자기소개를 완성하세요! (이름: 홍길동, 나이: 15, 취미: 게임)",
+          initialCode: "name = '홍길동'\nage = ___\nhobby = '게임'\n\nprint(f'=== 자기소개 ===')\nprint(f'이름: {name}')\nprint(f'나이: {___}살')\nprint(f'취미: {hobby}')\nprint(f'{name}의 {age}살 생일을 축하해!')",
+          expectedOutput: "=== 자기소개 ===\n이름: 홍길동\n나이: 15살\n취미: 게임\n홍길동의 15살 생일을 축하해!",
+          hint: "age에 15를 저장하고 f-string에서 변수를 사용하세요!",
+          hint2: "age = 15 / {age}"
         },
         {
           id: "complete",

@@ -23,17 +23,15 @@ export const lessonP3Data: LessonData = {
 
 \`\`\`
 === 🎮 Hangman 게임 ===
-단어를 맞춰보세요! (5번 기회)
+힌트: 5글자 단어
 
 _ _ _ _ _   (남은 기회: 5)
-글자 입력: a
+글자: a
 🎉 맞았어요!
 
 a _ _ _ _   (남은 기회: 5)
-글자 입력: e
-❌ 틀렸어요!
-
-a _ _ _ _   (남은 기회: 4)
+글자: e
+🎉 맞았어요!
 ...
 🎉 정답! 단어는 'apple'이었어요!
 \`\`\`
@@ -51,15 +49,16 @@ a _ _ _ _   (남은 기회: 4)
           title: "📚 게임 구조",
           content: `**게임 흐름:**
 
-1. 단어 리스트에서 랜덤 선택
+1. 단어 리스트에서 단어 선택
 2. 밑줄로 숨긴 단어 표시
-3. 글자 입력받기
+3. 미리 정한 글자 리스트로 추측
 4. 맞으면 글자 공개, 틀리면 기회 감소
 5. 단어 완성 or 기회 소진까지 반복
 
 **필요한 변수:**
 - \`words\`: 단어 리스트
 - \`secret\`: 맞출 단어
+- \`guesses\`: 추측할 글자 리스트
 - \`guessed\`: 맞춘 글자 리스트
 - \`chances\`: 남은 기회`
         }
@@ -74,11 +73,11 @@ a _ _ _ _   (남은 기회: 4)
           id: "step1",
           type: "tryit",
           title: "1️⃣ 단어 선택하기",
-          task: "리스트에서 랜덤 단어를 선택하세요!",
-          initialCode: "import random\n\nwords = ['apple', 'banana', 'cherry', 'orange', 'grape']\nsecret = random.choice(words)\n\nprint(f'선택된 단어: {secret}')\nprint(f'글자 수: {len(secret)}')",
-          expectedOutput: "",
-          hint: "random.choice()로 리스트에서 선택!",
-          hint2: "secret = random.choice(words)"
+          task: "리스트에서 단어를 선택하세요!",
+          initialCode: "words = ['apple', 'banana', 'cherry', 'orange', 'grape']\nsecret = words[0]  # 'apple' 고정\n\nprint(f'선택된 단어: {secret}')\nprint(f'글자 수: {len(secret)}')",
+          expectedOutput: "선택된 단어: apple\n글자 수: 5",
+          hint: "리스트의 인덱스로 단어 선택!",
+          hint2: "secret = words[0]"
         },
         {
           id: "step2",
@@ -95,8 +94,8 @@ a _ _ _ _   (남은 기회: 4)
           type: "tryit",
           title: "3️⃣ 글자 맞추기",
           task: "글자를 입력받아 맞는지 확인하세요!",
-          initialCode: "secret = 'apple'\nguessed = ['a']  # 이미 a를 맞춤\n\nguess = input('글자 입력: ')\n\nif guess in secret:\n    print('🎉 맞았어요!')\n    guessed.append(guess)\nelse:\n    print('❌ 틀렸어요!')\n\nprint(f'맞춘 글자: {guessed}')",
-          expectedOutput: "",
+          initialCode: "secret = 'apple'\nguessed = ['a']  # 이미 a를 맞춤\n\n# input() 대신 직접 글자를 넣어요\nguess = 'p'\n\nif guess in secret:\n    print('🎉 맞았어요!')\n    guessed.append(guess)\nelse:\n    print('❌ 틀렸어요!')\n\nprint(f'맞춘 글자: {guessed}')",
+          expectedOutput: "🎉 맞았어요!\n맞춘 글자: ['a', 'p']",
           hint: "in으로 글자가 있는지 확인!",
           hint2: "if guess in secret:"
         },
@@ -122,10 +121,10 @@ a _ _ _ _   (남은 기회: 4)
           type: "tryit",
           title: "5️⃣ 게임 루프 만들기",
           task: "승리/패배까지 반복하는 게임을 만드세요!",
-          initialCode: "import random\n\nwords = ['apple', 'banana', 'cherry']\nsecret = random.choice(words)\nguessed = []\nchances = 5\n\nprint('=== 🎮 Hangman 게임 ===')\nprint(f'힌트: {len(secret)}글자 단어')\n\nwhile chances > 0:\n    # 현재 상태 표시\n    display = ''\n    for letter in secret:\n        if letter in guessed:\n            display += letter + ' '\n        else:\n            display += '_ '\n    print(f'\\n{display}  (남은 기회: {chances})')\n    \n    # 승리 확인\n    all_found = True\n    for letter in secret:\n        if letter not in guessed:\n            all_found = False\n            break\n    \n    if all_found:\n        print(f'🎉 정답! 단어는 \\'{secret}\\'이었어요!')\n        break\n    \n    # 글자 입력\n    guess = input('글자 입력: ').lower()\n    \n    if guess in guessed:\n        print('이미 입력한 글자예요!')\n        continue\n    \n    if guess in secret:\n        print('🎉 맞았어요!')\n        guessed.append(guess)\n    else:\n        print('❌ 틀렸어요!')\n        chances -= 1\n\nif chances == 0:\n    print(f'\\n😢 게임 오버! 정답은 \\'{secret}\\'이었어요.')",
+          initialCode: "secret = 'apple'\nguesses = ['a', 'e', 'x', 'p', 'l']  # 미리 정한 추측\nguessed = []\nchances = 5\n\nprint('=== 🎮 Hangman 게임 ===')\nprint(f'힌트: {len(secret)}글자 단어')\n\nfor guess in guesses:\n    # 현재 상태 표시\n    display = ''\n    for letter in secret:\n        if letter in guessed:\n            display += letter + ' '\n        else:\n            display += '_ '\n    print(f'\\n{display}  (남은 기회: {chances})')\n    \n    # 승리 확인\n    all_found = True\n    for letter in secret:\n        if letter not in guessed:\n            all_found = False\n            break\n    \n    if all_found:\n        print(f'🎉 정답! 단어는 \\'{secret}\\'이었어요!')\n        break\n    \n    print(f'글자: {guess}')\n    \n    if guess in guessed:\n        print('이미 입력한 글자예요!')\n        continue\n    \n    if guess in secret:\n        print('🎉 맞았어요!')\n        guessed.append(guess)\n    else:\n        print('❌ 틀렸어요!')\n        chances -= 1\n\n# 마지막 상태 확인\nif chances > 0:\n    display = ''\n    for letter in secret:\n        if letter in guessed:\n            display += letter + ' '\n        else:\n            display += '_ '\n    if '_ ' not in display:\n        print(f'\\n{display}')\n        print(f'🎉 정답! 단어는 \\'{secret}\\'이었어요!')",
           expectedOutput: "",
-          hint: "while + break 조합!",
-          hint2: "while chances > 0:"
+          hint: "for문으로 미리 정한 글자들을 하나씩 시도!",
+          hint2: "for guess in guesses:"
         }
       ]
     },
@@ -139,10 +138,10 @@ a _ _ _ _   (남은 기회: 4)
           type: "mission",
           title: "🏆 업그레이드된 Hangman!",
           task: "딕셔너리로 카테고리별 단어를 관리하세요!",
-          initialCode: "import random\n\n# 카테고리별 단어 딕셔너리\nword_categories = {\n    '과일': ['apple', 'banana', 'cherry', 'orange', 'grape'],\n    '동물': ['tiger', 'elephant', 'rabbit', 'dolphin', 'penguin'],\n    '나라': ['korea', 'japan', 'france', 'brazil', 'canada']\n}\n\nprint('=== 🎮 Hangman 게임 ===')\nprint('카테고리:', list(word_categories.keys()))\n\ncategory = input('카테고리 선택: ')\n\nif category in word_categories:\n    words = word_categories[category]\n    secret = random.choice(words)\n    guessed = []\n    chances = 6\n    \n    print(f'\\n{category}에서 {len(secret)}글자 단어!')\n    \n    while chances > 0:\n        display = ' '.join([c if c in guessed else '_' for c in secret])\n        print(f'\\n{display}  (기회: {chances})')\n        \n        if '_' not in display.replace(' ', '_'):\n            print(f'🎉 정답! \\'{secret}\\'!')\n            break\n        \n        guess = input('글자: ').lower()\n        \n        if guess in guessed:\n            print('이미 입력!')\n        elif guess in secret:\n            print('🎉 정답!')\n            guessed.append(guess)\n        else:\n            print('❌ 오답!')\n            guessed.append(guess)\n            chances -= 1\n    \n    if chances == 0:\n        print(f'😢 게임오버! 정답: {secret}')\nelse:\n    print('잘못된 카테고리!')",
+          initialCode: "# 카테고리별 단어 딕셔너리\nword_categories = {\n    '과일': ['apple', 'banana', 'cherry'],\n    '동물': ['tiger', 'rabbit', 'dolphin'],\n    '나라': ['korea', 'japan', 'france']\n}\n\ncategory = '과일'\nwords = word_categories[category]\nsecret = words[0]  # 'apple'\nguesses = ['a', 'x', 'p', 'l', 'e']\nguessed = []\nchances = 5\n\nprint(f'=== 🎮 Hangman: {category} ===')\nprint(f'{len(secret)}글자 단어를 맞춰보세요!')\n\nfor guess in guesses:\n    display = ''\n    for letter in secret:\n        if letter ___ guessed:\n            display += letter + ' '\n        else:\n            display += '_ '\n    print(f'\\n{display}  (기회: {chances})')\n    \n    if '_' not in display:\n        print(f'🎉 정답! \\'{secret}\\'!')\n        break\n    \n    print(f'글자: {guess}')\n    if guess in secret:\n        print('🎉 정답!')\n        guessed.___(guess)\n    else:\n        print('❌ 오답!')\n        chances ___ 1",
           expectedOutput: "",
-          hint: "딕셔너리의 키로 카테고리 선택!",
-          hint2: "words = word_categories[category]"
+          hint: "in으로 포함 여부 확인!",
+          hint2: "in / append / -= 1"
         },
         {
           id: "complete",
@@ -153,13 +152,12 @@ a _ _ _ _   (남은 기회: 4)
 **Hangman 게임**을 완성했어요!
 
 ### 사용한 개념:
-✅ 리스트 - 단어 저장, 맞춘 글자 저장
+✅ 리스트 - 단어 저장, 맞춘 글자 저장, 추측 글자 저장
 ✅ 딕셔너리 - 카테고리별 단어 관리
-✅ for문 - 글자 순회
-✅ while문 - 게임 루프
+✅ for문 - 글자 순회, 게임 루프
 ✅ if-elif-else - 조건 처리
 ✅ in 연산자 - 포함 여부 확인
-✅ 문자열 메서드 - lower()
+✅ 문자열 포매팅 - f-string
 
 ### 도전 과제 💪
 - Hangman 그림 추가 (ASCII Art)

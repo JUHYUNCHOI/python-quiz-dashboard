@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 300" width="460" height="300">
+  <style>
+    text { font-family: 'Segoe UI', system-ui, sans-serif; }
+  </style>
+
+  <!-- Background -->
+  <rect width="460" height="300" rx="16" fill="#f0f4f8"/>
+
+  <!-- Title -->
+  <text x="230" y="28" text-anchor="middle" font-size="16" font-weight="bold" fill="#1e293b">import로 파일 연결하기</text>
+
+  <!-- main.py (center) -->
+  <rect x="155" y="100" width="150" height="80" rx="12" fill="#6366f1" stroke="#4338ca" stroke-width="2"/>
+  <text x="230" y="128" text-anchor="middle" font-size="15" fill="white" font-weight="bold">main.py</text>
+  <text x="230" y="148" text-anchor="middle" font-size="11" fill="#c7d2fe">화면, 키보드, 게임 루프</text>
+  <text x="230" y="165" text-anchor="middle" font-size="11" fill="#c7d2fe">(총괄 감독!)</text>
+
+  <!-- snake.py (left) -->
+  <rect x="10" y="50" width="120" height="110" rx="12" fill="#059669" stroke="#047857" stroke-width="2"/>
+  <text x="70" y="76" text-anchor="middle" font-size="14" fill="white" font-weight="bold">snake.py</text>
+  <text x="70" y="96" text-anchor="middle" font-size="11" fill="#a7f3d0">Head 클래스</text>
+  <text x="70" y="112" text-anchor="middle" font-size="11" fill="#a7f3d0">Tail 클래스</text>
+  <text x="70" y="128" text-anchor="middle" font-size="11" fill="#a7f3d0">Tails 클래스</text>
+  <text x="70" y="148" text-anchor="middle" font-size="10" fill="#6ee7b7">🐍 뱀 관련 코드</text>
+
+  <!-- food.py (right) -->
+  <rect x="330" y="70" width="120" height="80" rx="12" fill="#d97706" stroke="#b45309" stroke-width="2"/>
+  <text x="390" y="96" text-anchor="middle" font-size="14" fill="white" font-weight="bold">food.py</text>
+  <text x="390" y="116" text-anchor="middle" font-size="11" fill="#fde68a">Food 클래스</text>
+  <text x="390" y="136" text-anchor="middle" font-size="10" fill="#fcd34d">🐢 먹이 관련 코드</text>
+
+  <!-- Arrow: main -> snake -->
+  <line x1="155" y1="125" x2="134" y2="115" stroke="#818cf8" stroke-width="3" marker-end="url(#arrowPurple)"/>
+  <text x="130" y="140" text-anchor="middle" font-size="10" fill="#6366f1" font-weight="bold">import snake</text>
+
+  <!-- Arrow: main -> food -->
+  <line x1="305" y1="125" x2="326" y2="115" stroke="#818cf8" stroke-width="3" marker-end="url(#arrowPurple)"/>
+  <text x="335" y="155" text-anchor="middle" font-size="10" fill="#6366f1" font-weight="bold">import food</text>
+
+  <!-- Usage examples at bottom -->
+  <rect x="30" y="210" width="400" height="75" rx="10" fill="white" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="230" y="232" text-anchor="middle" font-size="12" fill="#64748b" font-weight="bold">main.py에서 사용하는 법:</text>
+  <text x="230" y="252" text-anchor="middle" font-size="12" fill="#059669" font-family="monospace">head = snake.Head()</text>
+  <text x="230" y="272" text-anchor="middle" font-size="12" fill="#d97706" font-family="monospace">food = food.Food()</text>
+
+  <defs>
+    <marker id="arrowPurple" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#818cf8"/>
+    </marker>
+  </defs>
+</svg>

@@ -19,7 +19,7 @@ import {
 // ============================================================
 // /review에 실제 레슨이 있는 ID 목록 (게임형 복습)
 // ============================================================
-const lessonsInReview = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 29, 30, 31, 32, 33, 34, 35])
+const lessonsInReview = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45])
 
 // 복습 경로 결정: /review에 있으면 review, 없으면 learn으로 fallback
 const getReviewPath = (lessonId: number | string) => {
@@ -32,7 +32,13 @@ const getReviewPath = (lessonId: number | string) => {
 // ============================================================
 // 웹앱용 커리큘럼 (새 번호 체계)
 // ============================================================
-const curriculumData = [
+const curriculumData: {
+  id: string
+  title: string
+  description: string
+  comingSoon?: boolean
+  lessons: { id: number | string; title: string; description: string; duration: string; hasQuiz?: boolean; isProject?: boolean }[]
+}[] = [
   {
     id: "part1",
     title: "Part 1: 기초",
@@ -94,8 +100,10 @@ const curriculumData = [
     id: "part4",
     title: "Part 4: 프로젝트 & 도전",
     description: "Part 1~3에서 배운 모든 것을 활용! 프로젝트를 만들고 다양한 문제를 풀어요.",
-    comingSoon: true,
-    lessons: [],
+    lessons: [
+      { id: 27, title: "27. 미니 프로젝트 모음", description: "가위바위보, 로또, 단어장, 성적관리", duration: "40분", hasQuiz: true },
+      { id: 28, title: "28. 종합 문제 모음", description: "기초부터 자료구조까지 30문제!", duration: "50분", hasQuiz: true },
+    ],
   },
   {
     id: "part5",
@@ -123,34 +131,56 @@ const curriculumData = [
   {
     id: "part7",
     title: "Part 7: 클래스",
-    description: "객체지향 프로그래밍의 기초를 배워요.",
-    comingSoon: true,
-    lessons: [],
+    description: "객체지향 프로그래밍의 기초를 배워요. 붕어빵 틀처럼 객체를 찍어내요!",
+    lessons: [
+      { id: 38, title: "38. 클래스 기초", description: "클래스와 객체 만들기", duration: "25분", hasQuiz: true },
+      { id: 39, title: "39. 메서드와 속성", description: "메서드 만들기와 변수 종류", duration: "25분", hasQuiz: true },
+      { id: 40, title: "40. RPG 게임", description: "클래스로 RPG 게임 만들기", duration: "30분", hasQuiz: true },
+      { id: 41, title: "41. Part 7 문제 20", description: "클래스 연습 문제", duration: "40분", hasQuiz: true },
+    ],
   },
   {
     id: "part8",
     title: "Part 8: 모듈과 패키지",
     description: "다른 사람이 만든 코드를 활용해요.",
-    comingSoon: true,
-    lessons: [],
+    lessons: [
+      { id: 42, title: "42. 모듈 기초", description: "import와 내장 모듈 사용법", duration: "25분", hasQuiz: true },
+      { id: 43, title: "43. 패키지와 pip", description: "패키지 개념과 내장 모듈 활용", duration: "25분", hasQuiz: true },
+      { id: 44, title: "44. 날씨 앱", description: "모듈로 날씨 앱 만들기", duration: "30분", hasQuiz: true },
+      { id: 45, title: "45. Part 8 문제 20", description: "모듈과 패키지 연습 문제", duration: "40분", hasQuiz: true },
+    ],
   },
   {
     id: "part9",
     title: "Part 9: 종합 프로젝트",
     description: "모든 것을 활용한 대형 프로젝트!",
-    comingSoon: true,
-    lessons: [],
+    lessons: [
+      { id: "p4", title: "🐍 Snake Game", description: "turtle, 클래스, 모듈로 뱀 게임 만들기", duration: "60분", isProject: true },
+    ],
   },
 ]
 
 export default function CurriculumPage() {
   const [completedLessons, setCompletedLessons] = useState<Set<number | string>>(new Set())
-  const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set(["part1", "part2", "part3", "part3-advanced", "part5", "part6"]))
+  const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set(["part1", "part2", "part3", "part3-advanced", "part4", "part5", "part6", "part7", "part8", "part9"]))
 
   useEffect(() => {
     const saved = localStorage.getItem("completedLessons")
     if (saved) {
       setCompletedLessons(new Set(JSON.parse(saved)))
+    }
+  }, [])
+
+  // URL hash로 해당 레슨 위치로 스크롤
+  useEffect(() => {
+    const hash = window.location.hash
+    if (hash) {
+      setTimeout(() => {
+        const el = document.querySelector(hash)
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "center" })
+        }
+      }, 300)
     }
   }, [])
 
@@ -318,6 +348,7 @@ export default function CurriculumPage() {
                           return (
                             <div
                               key={lesson.id}
+                              id={`lesson-${lesson.id}`}
                               className="bg-white rounded-xl p-3 sm:p-4 border-2 border-black hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
                             >
                               <div className="flex items-center gap-3">

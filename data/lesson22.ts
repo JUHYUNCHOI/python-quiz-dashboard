@@ -179,8 +179,8 @@ print(text[::-1])   # "dlroW olleH"
           id: "mission1",
           type: "mission",
           title: "🏆 최종 미션!",
-          task: "전화번호를 파싱하세요!",
-          initialCode: "phone = \"010-1234-5678\"\n\narea = phone[:3]\nmiddle = phone[4:8]\nlast = phone[-4:]\n\nprint(f\"전체: {phone}\")\nprint(f\"앞자리: {area}\")\nprint(f\"중간: {middle}\")\nprint(f\"뒷자리: {last}\")",
+          task: "전화번호에서 앞자리, 중간, 뒷자리를 분리하세요!",
+          initialCode: "phone = \"010-1234-5678\"\n\narea = phone[:___]\nmiddle = phone[___:___]\nlast = phone[-___:]\n\nprint(f\"전체: {phone}\")\nprint(f\"앞자리: {area}\")\nprint(f\"중간: {middle}\")\nprint(f\"뒷자리: {last}\")",
           expectedOutput: "전체: 010-1234-5678\n앞자리: 010\n중간: 1234\n뒷자리: 5678",
           hint: "[:3], [4:8], [-4:]",
           hint2: "문자열도 슬라이싱 가능!"

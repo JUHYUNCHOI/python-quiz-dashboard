@@ -40,7 +40,7 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
                 showResult && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800",
                 showResult && !isSelected && !isCorrect && "bg-gray-100 border-gray-200 text-gray-400"
               )}>
-              {option.split('\n').map((line, i) => (<span key={i}>{line}{i < option.split('\n').length - 1 && <br />}</span>))}
+              {option.split(/\\n|\n/).map((line, i, arr) => (<span key={i}>{line}{i < arr.length - 1 && <br />}</span>))}
               {showResult && isCorrect && <Check className="w-5 h-5 inline ml-2 text-green-600" />}
               {showResult && isSelected && !isCorrect && <X className="w-5 h-5 inline ml-2 text-red-600" />}
             </button>

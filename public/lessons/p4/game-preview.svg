@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500">
+  <defs>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <!-- Game screen background -->
+  <rect width="400" height="500" rx="16" fill="#0f172a" stroke="#6366f1" stroke-width="3"/>
+  <!-- Title bar -->
+  <rect x="0" y="0" width="400" height="44" rx="16" fill="#1e293b"/>
+  <rect x="0" y="30" width="400" height="14" fill="#1e293b"/>
+  <text x="200" y="30" text-anchor="middle" font-family="system-ui,sans-serif" font-size="16" font-weight="700" fill="#e2e8f0">🐍 Snake Game</text>
+  <!-- Score -->
+  <text x="20" y="478" font-family="monospace" font-size="14" fill="#94a3b8">Score: 3</text>
+  <!-- Snake head (red circle) -->
+  <circle cx="200" cy="250" r="12" fill="#f43f5e" filter="url(#glow)"/>
+  <!-- Snake body segments (green) -->
+  <circle cx="180" cy="250" r="10" fill="#10b981" opacity="0.9"/>
+  <circle cx="160" cy="250" r="10" fill="#10b981" opacity="0.8"/>
+  <circle cx="140" cy="250" r="10" fill="#10b981" opacity="0.7"/>
+  <!-- Food (yellow star) -->
+  <circle cx="300" cy="150" r="10" fill="#fbbf24" filter="url(#glow)"/>
+  <text x="300" y="155" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14">⭐</text>
+  <!-- Direction arrow -->
+  <text x="224" y="255" font-family="system-ui,sans-serif" font-size="16" fill="#f43f5e">→</text>
+  <!-- Labels -->
+  <text x="200" y="82" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#6366f1">⌨️ 화살표 키로 조종!</text>
+  <!-- Keyboard hint -->
+  <rect x="120" y="420" width="40" height="30" rx="6" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+  <text x="140" y="440" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#e2e8f0">←</text>
+  <rect x="170" y="420" width="40" height="30" rx="6" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+  <text x="190" y="440" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#e2e8f0">↓</text>
+  <rect x="220" y="420" width="40" height="30" rx="6" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+  <text x="240" y="440" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#e2e8f0">→</text>
+  <rect x="170" y="385" width="40" height="30" rx="6" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+  <text x="190" y="405" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#e2e8f0">↑</text>
+</svg>

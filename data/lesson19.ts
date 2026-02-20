@@ -43,6 +43,16 @@ colors[0] = "녹색"  # ❌ 에러!
           hint2: "point[0], point[1]"
         },
         {
+          id: "try1b",
+          type: "tryit",
+          title: "🖥️ 리스트 vs 튜플!",
+          task: "리스트와 튜플의 차이를 직접 확인해보세요!",
+          initialCode: "# 리스트 - 수정 가능!\nfruits = ['사과', '바나나', '포도']\nfruits[0] = '딸기'\nfruits.append('망고')\nprint(f'리스트: {fruits}')\n\n# 튜플 - 수정 불가! (하지만 안전!)\ncolors = ('빨강', '파랑', '초록')\nprint(f'튜플: {colors}')\nprint(f'길이: {len(colors)}')\nprint(f'포함? {\"파랑\" in colors}')\n\n# 여러 타입도 OK!\nmixed = ('철수', 15, True, 3.14)\nfor item in mixed:\n    print(f'  {item} ({type(item).__name__})')",
+          expectedOutput: "리스트: ['딸기', '바나나', '포도', '망고']\n튜플: ('빨강', '파랑', '초록')\n길이: 3\n포함? True\n  철수 (str)\n  15 (int)\n  True (bool)\n  3.14 (float)",
+          hint: "튜플은 수정은 안 되지만 읽기, 반복, in 연산은 가능!",
+          hint2: "코드를 그대로 실행하세요!"
+        },
+        {
           id: "quiz1",
           type: "quiz",
           title: "❓ 퀴즈!",
@@ -78,8 +88,8 @@ print(y)  # 20
           task: "RGB 값을 언패킹하세요!",
           initialCode: "rgb = (255, 128, 0)\nr, g, b = rgb\nprint(f\"R: {r}, G: {g}, B: {b}\")",
           expectedOutput: "R: 255, G: 128, B: 0",
-          hint: "r, g, b = rgb로 한 번에!",
-          hint2: "변수 개수와 요소 개수가 같아야 해요"
+          hint: "변수 개수와 요소 개수가 같아야 해요",
+          hint2: "r, g, b = rgb로 한 번에!"
         },
         {
           id: "swap-explain",
@@ -102,8 +112,8 @@ print(b)  # 10
           task: "x와 y의 값을 교환하세요!",
           initialCode: "x = 100\ny = 200\nprint(f\"교환 전: x={x}, y={y}\")\nx, y = y, x\nprint(f\"교환 후: x={x}, y={y}\")",
           expectedOutput: "교환 전: x=100, y=200\n교환 후: x=200, y=100",
-          hint: "x, y = y, x 한 줄로!",
-          hint2: "임시 변수 없이 교환!"
+          hint: "임시 변수 없이 교환!",
+          hint2: "x, y = y, x 한 줄로!"
         }
       ]
     },
@@ -117,7 +127,7 @@ print(b)  # 10
           type: "mission",
           title: "🏆 최종 미션!",
           task: "학생 정보를 튜플로 관리하세요!",
-          initialCode: "students = [\n    (\"철수\", 85),\n    (\"영희\", 92),\n    (\"민수\", 78)\n]\n\nfor name, score in students:\n    print(f\"{name}: {score}점\")",
+          initialCode: "students = [\n    (\"철수\", 85),\n    (\"영희\", 92),\n    (\"민수\", 78)\n]\n\nfor ___, ___ in students:\n    print(f\"{name}: {score}점\")",
           expectedOutput: "철수: 85점\n영희: 92점\n민수: 78점",
           hint: "for문에서 바로 언패킹!",
           hint2: "for name, score in students:"

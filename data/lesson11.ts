@@ -50,10 +50,10 @@ if score >= 100:
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "hp가 0이면 '게임 오버!'를 출력하세요!",
-          initialCode: "hp = 0\nif hp == 0:\n    print('게임 오버!')",
+          initialCode: "hp = 0\n# hp가 0이면 '게임 오버!' 출력\nif ___:\n    print('게임 오버!')",
           expectedOutput: "게임 오버!",
-          hint: "if hp == 0: 다음 줄에 들여쓰기!",
-          hint2: "if hp == 0:\n    print('게임 오버!')"
+          hint: "hp가 0인지 확인하는 조건을 쓰세요!",
+          hint2: "if hp == 0:"
         },
         {
           id: "quiz1",
@@ -93,9 +93,9 @@ else:
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "점수가 60점 이상이면 '합격', 아니면 '불합격' 출력!",
-          initialCode: "score = 75\nif score >= 60:\n    print('합격')\nelse:\n    print('불합격')",
+          initialCode: "score = 75\n# 60점 이상이면 '합격', 아니면 '불합격'\nif ___:\n    print('합격')\nelse:\n    print('불합격')",
           expectedOutput: "합격",
-          hint: "if-else 구조를 사용해요",
+          hint: "score가 60 이상인 조건을 쓰세요!",
           hint2: "if score >= 60:"
         },
         {
@@ -140,10 +140,10 @@ else:
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "점수에 따른 등급을 출력하세요! (95점 → A)",
-          initialCode: "score = 95\nif score >= 90:\n    print('A')\nelif score >= 80:\n    print('B')\nelse:\n    print('C')",
+          initialCode: "score = 95\nif score >= 90:\n    print('A')\n___:\n    print('B')\nelse:\n    print('C')",
           expectedOutput: "A",
-          hint: "if-elif-else 구조!",
-          hint2: "if score >= 90:"
+          hint: "80점 이상인 조건을 elif로 쓰세요!",
+          hint2: "elif score >= 80:"
         },
         {
           id: "quiz3",
@@ -166,10 +166,10 @@ else:
           type: "mission",
           title: "🏆 최종 미션!",
           task: "나이에 따른 요금을 출력하세요! (8세: 어린이 500원)",
-          initialCode: "age = 8\nif age <= 7:\n    print('무료')\nelif age <= 12:\n    print('어린이 500원')\nelif age <= 18:\n    print('청소년 1000원')\nelse:\n    print('성인 1500원')",
+          initialCode: "age = 8\nif age <= 7:\n    print('무료')\nelif ___:\n    print('어린이 500원')\nelif ___:\n    print('청소년 1000원')\nelse:\n    print('성인 1500원')",
           expectedOutput: "어린이 500원",
-          hint: "나이 범위를 elif로 나눠요",
-          hint2: "elif age <= 12:"
+          hint: "나이 범위에 맞는 조건을 쓰세요!",
+          hint2: "age <= 12 / age <= 18"
         },
         {
           id: "complete",

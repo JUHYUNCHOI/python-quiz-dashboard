@@ -33,6 +33,27 @@ export function renderContent(content: string) {
       continue
     }
     
+    // 이미지: ![alt](src)
+    const imgMatch = line.trim().match(/^!\[([^\]]*)\]\(([^)]+)\)$/)
+    if (imgMatch) {
+      const alt = imgMatch[1]
+      const src = imgMatch[2]
+      const isSvg = src.endsWith('.svg')
+      elements.push(
+        <div key={key++} className="my-4 flex justify-center">
+          {isSvg ? (
+            <object data={src} type="image/svg+xml" aria-label={alt}
+              className="max-w-full rounded-xl border border-gray-200 shadow-sm"
+              style={{ maxHeight: '400px', width: '100%' }} />
+          ) : (
+            <img src={src} alt={alt} className="max-w-full rounded-xl border border-gray-200 shadow-sm" style={{ maxHeight: '360px' }} />
+          )}
+        </div>
+      )
+      i++
+      continue
+    }
+
     if (line.startsWith('## ')) {
       elements.push(<h2 key={key++} className="text-lg md:text-xl font-bold text-gray-900 mt-6 md:mt-8 mb-3 md:mb-4">{line.slice(3)}</h2>)
       i++

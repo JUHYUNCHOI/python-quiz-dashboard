@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 320" width="380" height="320">
+  <rect width="380" height="320" rx="16" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/>
+  <text x="190" y="36" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#1e293b">📁 프로젝트 구조</text>
+  <!-- Folder -->
+  <rect x="40" y="60" width="300" height="240" rx="12" fill="#1e1e2e"/>
+  <!-- snake_game/ folder -->
+  <text x="60" y="92" font-family="monospace" font-size="16" fill="#fbbf24">📂 snake_game/</text>
+  <!-- main.py -->
+  <rect x="80" y="108" width="240" height="56" rx="8" fill="#1e293b" stroke="#6366f1" stroke-width="1.5"/>
+  <text x="96" y="130" font-family="monospace" font-size="15" font-weight="600" fill="#6366f1">🐍 main.py</text>
+  <text x="96" y="152" font-family="system-ui,sans-serif" font-size="12" fill="#94a3b8">게임 실행, 화면 설정, 게임 루프</text>
+  <!-- snake.py -->
+  <rect x="80" y="174" width="240" height="56" rx="8" fill="#1e293b" stroke="#10b981" stroke-width="1.5"/>
+  <text x="96" y="196" font-family="monospace" font-size="15" font-weight="600" fill="#10b981">🐍 snake.py</text>
+  <text x="96" y="218" font-family="system-ui,sans-serif" font-size="12" fill="#94a3b8">Head 클래스, Tail 클래스</text>
+  <!-- food.py -->
+  <rect x="80" y="240" width="240" height="48" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="96" y="262" font-family="monospace" font-size="15" font-weight="600" fill="#f59e0b">🐍 food.py</text>
+  <text x="96" y="280" font-family="system-ui,sans-serif" font-size="12" fill="#94a3b8">Food 클래스</text>
+</svg>

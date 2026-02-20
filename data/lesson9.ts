@@ -18,7 +18,8 @@ export const lesson9Data: LessonData = {
           id: "intro",
           type: "explain",
           title: "🔄 왜 타입 변환이 필요해?",
-          content: `input()으로 받은 값은 항상 **문자열**이에요!
+          content: `다음 시간에 배울 \`input()\`은 사용자에게 입력을 받는 함수예요.
+그런데 입력받은 값은 항상 **문자열**이에요!
 
 \`\`\`python
 age = input("나이: ")  # "15" (문자열!)
@@ -30,7 +31,9 @@ print(age + 1)         # ❌ 에러!
 \`\`\`python
 age = int(input("나이: "))  # 15 (정수!)
 print(age + 1)               # ✅ 16
-\`\`\``
+\`\`\`
+
+💡 \`input()\`은 다음 시간에 자세히 배워요! 지금은 **타입 변환이 왜 필요한지**만 이해하면 OK!`
         },
         {
           id: "int-explain",
@@ -56,7 +59,7 @@ age = int(input("나이: "))
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "문자열을 정수로 변환하세요!",
-          initialCode: "text = \"100\"\nnum = int(text)\nprint(num + 50)",
+          initialCode: "text = \"100\"\n# 문자열을 정수로 변환하세요\nnum = ___(text)\nprint(num + 50)",
           expectedOutput: "150",
           hint: "int(text)로 변환!",
           hint2: "int(\"100\")"
@@ -66,7 +69,7 @@ age = int(input("나이: "))
           type: "tryit",
           title: "🖥️ 실수를 정수로!",
           task: "실수를 정수로 변환하세요!",
-          initialCode: "pi = 3.14159\nprint(int(pi))",
+          initialCode: "pi = 3.14159\nprint(___(pi))",
           expectedOutput: "3",
           hint: "int()는 소수점을 버려요!",
           hint2: "int(3.14159) = 3"
@@ -111,7 +114,7 @@ height = float(input("키(cm): "))
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "문자열을 실수로 변환하세요!",
-          initialCode: "text = \"3.14\"\nnum = float(text)\nprint(num * 2)",
+          initialCode: "text = \"3.14\"\nnum = ___(text)\nprint(num * 2)",
           expectedOutput: "6.28",
           hint: "float(text)로 변환!",
           hint2: "float(\"3.14\")"
@@ -139,7 +142,7 @@ print("원주율: " + text)  # 원주율: 3.14
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "숫자를 문자열로 변환하세요!",
-          initialCode: "score = 95\ntext = str(score)\nprint(\"점수: \" + text + \"점\")",
+          initialCode: "score = 95\ntext = ___(score)\nprint(\"점수: \" + text + \"점\")",
           expectedOutput: "점수: 95점",
           hint: "str(score)로 변환!",
           hint2: "str(95)"
@@ -162,7 +165,6 @@ print("원주율: " + text)  # 원주율: 3.14
 bool(0)       # False
 bool(0.0)     # False
 bool("")      # False (빈 문자열)
-bool([])      # False (빈 리스트)
 bool(None)    # False
 \`\`\`
 
@@ -171,15 +173,16 @@ bool(None)    # False
 bool(1)       # True
 bool(-1)      # True
 bool("hello") # True
-bool([1, 2])  # True
-\`\`\``
+\`\`\`
+
+💡 빈 리스트 \`[]\`도 False가 돼요! 리스트는 나중에 배울 거예요.`
         },
         {
           id: "try5",
           type: "tryit",
           title: "🖥️ 직접 해보기!",
-          task: "여러 값의 bool 변환 결과를 확인하세요!",
-          initialCode: "print(bool(0))\nprint(bool(1))\nprint(bool(\"\"))\nprint(bool(\"hello\"))",
+          task: "0과 빈 문자열의 bool 값을 확인하세요!",
+          initialCode: "# 각 값의 bool 결과를 예측해보세요\nprint(bool(___))\nprint(bool(___))\nprint(bool(___))\nprint(bool(___))",
           expectedOutput: "False\nTrue\nFalse\nTrue",
           hint: "0과 빈 문자열은 False!",
           hint2: "bool(0) = False"
@@ -208,10 +211,10 @@ print(num)  # 3
           id: "quiz2",
           type: "quiz",
           title: "❓ 퀴즈!",
-          content: "bool([])의 결과는?",
-          options: ["True", "False", "[]", "에러"],
+          content: "bool(\"\")의 결과는?",
+          options: ["True", "False", "\"\"", "에러"],
           answer: 1,
-          explanation: "빈 리스트 []는 False! 비어있으면 거짓이에요."
+          explanation: "빈 문자열 \"\"은 False! 비어있으면 거짓이에요."
         }
       ]
     },
@@ -243,10 +246,10 @@ print(num)  # 3
           type: "mission",
           title: "🏆 최종 미션!",
           task: "간단한 계산기를 만들어보세요!",
-          initialCode: "# 문자열로 주어진 숫자들\nnum1 = \"25\"\nnum2 = \"17\"\n\n# 정수로 변환해서 계산\na = int(num1)\nb = int(num2)\n\nprint(f\"{a} + {b} = {a + b}\")\nprint(f\"{a} - {b} = {a - b}\")\nprint(f\"{a} × {b} = {a * b}\")",
-          expectedOutput: "25 + 17 = 42\n25 - 17 = 8\n25 × 17 = 425",
+          initialCode: "a = '25'\nb = '17'\n\n# 문자열을 숫자로 변환\nnum_a = ___(a)\nnum_b = ___(b)\n\nprint(f'{num_a} + {num_b} = {num_a + num_b}')\nprint(f'{num_a} × {num_b} = {num_a * num_b}')\nprint(f'합계의 타입: {type(num_a + num_b)}')",
+          expectedOutput: "25 + 17 = 42\n25 × 17 = 425\n합계의 타입: <class 'int'>",
           hint: "int()로 문자열을 정수로 변환!",
-          hint2: "a = int(num1)"
+          hint2: "int(a)"
         },
         {
           id: "complete",

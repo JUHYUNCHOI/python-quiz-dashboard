@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 540" width="480" height="540">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#6366f1"/>
+    </marker>
+  </defs>
+  <!-- Background -->
+  <rect width="480" height="540" rx="16" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/>
+  <!-- Title -->
+  <text x="240" y="36" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#1e293b">🖥️ turtle 좌표계 (400×500)</text>
+  <!-- Screen area -->
+  <rect x="40" y="55" width="400" height="450" rx="8" fill="#1e1e2e" stroke="#6366f1" stroke-width="2"/>
+  <!-- Grid lines -->
+  <line x1="240" y1="55" x2="240" y2="505" stroke="#4b5563" stroke-width="1" stroke-dasharray="6,4"/>
+  <line x1="40" y1="280" x2="440" y2="280" stroke="#4b5563" stroke-width="1" stroke-dasharray="6,4"/>
+  <!-- X axis -->
+  <line x1="55" y1="280" x2="425" y2="280" stroke="#6366f1" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <!-- Y axis -->
+  <line x1="240" y1="490" x2="240" y2="70" stroke="#6366f1" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <!-- Origin -->
+  <circle cx="240" cy="280" r="6" fill="#f43f5e"/>
+  <text x="255" y="298" font-family="monospace" font-size="16" font-weight="700" fill="#f43f5e">(0, 0)</text>
+  <!-- Labels -->
+  <text x="420" y="270" font-family="monospace" font-size="14" font-weight="600" fill="#22d3ee">x+</text>
+  <text x="248" y="80" font-family="monospace" font-size="14" font-weight="600" fill="#22d3ee">y+</text>
+  <!-- Coordinate labels -->
+  <text x="425" y="298" font-family="monospace" font-size="13" fill="#a5b4fc">(200, 0)</text>
+  <text x="43" y="298" font-family="monospace" font-size="13" fill="#a5b4fc">(-200, 0)</text>
+  <text x="248" y="72" font-family="monospace" font-size="13" fill="#a5b4fc">(0, 250)</text>
+  <text x="248" y="500" font-family="monospace" font-size="13" fill="#a5b4fc">(0, -250)</text>
+  <!-- Corner labels -->
+  <circle cx="440" cy="280" r="4" fill="#a5b4fc"/>
+  <circle cx="40" cy="280" r="4" fill="#a5b4fc"/>
+  <circle cx="240" cy="55" r="4" fill="#a5b4fc"/>
+  <circle cx="240" cy="505" r="4" fill="#a5b4fc"/>
+  <!-- Bottom note -->
+  <text x="240" y="530" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#64748b">화면 중심이 (0, 0)! 수학 좌표랑 같아요 📐</text>
+</svg>

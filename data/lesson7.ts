@@ -50,7 +50,7 @@ print("철수", "영희", "민수", sep=", ")
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "날짜를 -로 구분해서 출력하세요!",
-          initialCode: "print(\"2024\", \"01\", \"15\", sep=\"-\")",
+          initialCode: "print(\"2024\", \"01\", \"15\", sep=___)",
           expectedOutput: "2024-01-15",
           hint: "sep=\"-\" 옵션 사용!",
           hint2: "print(\"2024\", \"01\", \"15\", sep=\"-\")"
@@ -60,7 +60,7 @@ print("철수", "영희", "민수", sep=", ")
           type: "tryit",
           title: "🖥️ 구분자 없애기!",
           task: "공백 없이 ABC를 붙여서 출력하세요!",
-          initialCode: "print(\"A\", \"B\", \"C\", sep=\"\")",
+          initialCode: "print(\"A\", \"B\", \"C\", sep=___)",
           expectedOutput: "ABC",
           hint: "sep=\"\" (빈 문자열)로 설정!",
           hint2: "sep=\"\""
@@ -106,7 +106,7 @@ print("하세요")
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "두 print를 한 줄에 출력하세요!",
-          initialCode: "print(\"Hello\", end=\" \")\nprint(\"World\")",
+          initialCode: "print(\"Hello\", end=___)\nprint(\"World\")",
           expectedOutput: "Hello World",
           hint: "end=\" \"로 줄바꿈 대신 공백!",
           hint2: "print(\"Hello\", end=\" \")"
@@ -116,7 +116,7 @@ print("하세요")
           type: "tryit",
           title: "🖥️ 화살표로 연결!",
           task: "A → B → C 형태로 출력하세요!",
-          initialCode: "print(\"A\", end=\" → \")\nprint(\"B\", end=\" → \")\nprint(\"C\")",
+          initialCode: "print(\"A\", end=___)\nprint(\"B\", end=___)\nprint(\"C\")",
           expectedOutput: "A → B → C",
           hint: "end=\" → \"로 설정!",
           hint2: "print(\"A\", end=\" → \")"
@@ -159,7 +159,7 @@ print("A", "B", end="!", sep="-")  # 같은 결과
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "sep과 end를 모두 사용하세요!",
-          initialCode: "print(\"가\", \"나\", \"다\", sep=\"/\", end=\".\\n\")",
+          initialCode: "print(\"가\", \"나\", \"다\", sep=___, end=___)",
           expectedOutput: "가/나/다.",
           hint: "sep=\"/\", end=\".\\n\"",
           hint2: "print(\"가\", \"나\", \"다\", sep=\"/\", end=\".\\n\")"
@@ -169,10 +169,10 @@ print("A", "B", end="!", sep="-")  # 같은 결과
           type: "mission",
           title: "🎯 미션!",
           task: "로딩 표시를 만들어보세요!",
-          initialCode: "print(\"Loading\", end=\"\")\nprint(\".\", end=\"\")\nprint(\".\", end=\"\")\nprint(\".\", end=\"\")\nprint(\" Done!\")",
+          initialCode: "print(\"Loading\", end=___)\nprint(\".\", end=___)\nprint(\".\", end=___)\nprint(\".\", end=___)\nprint(\" Done!\")",
           expectedOutput: "Loading... Done!",
           hint: "end=\"\"로 줄바꿈 없이 이어붙이기!",
-          hint2: "print(\".\", end=\"\")"
+          hint2: "end=\"\""
         }
       ]
     },
@@ -207,10 +207,10 @@ print("A", "B", sep="-", end="!")  # A-B!
           type: "mission",
           title: "🏆 최종 미션!",
           task: "예쁜 진행바를 만들어보세요!",
-          initialCode: "print(\"[\", end=\"\")\nprint(\"#\", \"#\", \"#\", \"#\", \"#\", sep=\"\", end=\"\")\nprint(\"]\", \"100%\", sep=\" \")",
+          initialCode: "print(\"[\", end=___)\nprint(\"#\", \"#\", \"#\", \"#\", \"#\", sep=___, end=___)\nprint(\"]\", \"100%\", sep=\" \")",
           expectedOutput: "[#####] 100%",
           hint: "end=\"\"로 이어붙이고, sep=\"\"로 공백 없이!",
-          hint2: "print(\"#\", \"#\", \"#\", sep=\"\", end=\"\")"
+          hint2: "end=\"\", sep=\"\""
         },
         {
           id: "complete",

@@ -51,7 +51,7 @@ export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onS
         )}
       </div>
       <div>
-        <PythonRunner initialCode={step.initialCode || ""} expectedOutput={step.type === "mission" ? step.expectedOutput : undefined} task={step.task} hint={step.hint} onSuccess={onSuccess} showExpectedOutput={step.type === "mission"} minHeight={step.type === "mission" ? "160px" : "140px"} />
+        <PythonRunner key={step.id} initialCode={step.initialCode || ""} expectedOutput={step.type === "mission" ? step.expectedOutput : undefined} task={step.task} hint={step.hint} onSuccess={onSuccess} showExpectedOutput={step.type === "mission"} minHeight={step.type === "mission" ? "160px" : "140px"} requireCodeChange={step.type === "mission"} />
       </div>
     </div>
   )

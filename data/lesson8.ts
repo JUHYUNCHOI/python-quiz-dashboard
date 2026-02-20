@@ -54,7 +54,7 @@ print(f"가격: {price}원")  # 가격: 19000원
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "f-string으로 이름을 출력하세요!",
-          initialCode: "name = \"민수\"\nprint(f\"안녕, {name}!\")",
+          initialCode: "name = \"민수\"\n# f-string으로 name 변수를 넣으세요\nprint(f\"안녕, {___}!\")",
           expectedOutput: "안녕, 민수!",
           hint: "f\"...{변수}...\" 형태로!",
           hint2: "f\"안녕, {name}!\""
@@ -64,7 +64,7 @@ print(f"가격: {price}원")  # 가격: 19000원
           type: "tryit",
           title: "🖥️ 여러 변수 사용!",
           task: "이름과 나이를 f-string으로 출력하세요!",
-          initialCode: "name = \"영희\"\nage = 14\nprint(f\"{name}는 {age}살입니다\")",
+          initialCode: "name = \"영희\"\nage = 14\nprint(f\"{___}는 {___}살입니다\")",
           expectedOutput: "영희는 14살입니다",
           hint: "{name}와 {age} 둘 다 넣으면 돼요!",
           hint2: "f\"{name}는 {age}살입니다\""
@@ -106,7 +106,7 @@ print(f"{a} × {b} = {a * b}")
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "f-string 안에서 계산하세요!",
-          initialCode: "price = 19000\ncount = 3\nprint(f\"총 금액: {price * count}원\")",
+          initialCode: "price = 19000\ncount = 3\n# {} 안에서 계산할 수 있어요\nprint(f\"총 금액: {___}원\")",
           expectedOutput: "총 금액: 57000원",
           hint: "{price * count}로 계산!",
           hint2: "f\"총 금액: {price * count}원\""
@@ -132,7 +132,7 @@ print(f"정리: '{text.strip()}'")
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "f-string 안에서 upper()를 사용하세요!",
-          initialCode: "lang = \"python\"\nprint(f\"나는 {lang.upper()}을 배운다!\")",
+          initialCode: "lang = \"python\"\n# {} 안에서 메서드도 쓸 수 있어요\nprint(f\"나는 {___}을 배운다!\")",
           expectedOutput: "나는 PYTHON을 배운다!",
           hint: "{lang.upper()}",
           hint2: "f\"나는 {lang.upper()}을 배운다!\""
@@ -164,7 +164,7 @@ print(f"원주율: {pi:.4f}")   # 3.1416 (소수점 4자리)
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "소수점 1자리까지 출력하세요!",
-          initialCode: "score = 85.7777\nprint(f\"평균: {score:.1f}점\")",
+          initialCode: "score = 85.7777\n# :.1f 로 소수점 1자리\nprint(f\"평균: {score:___}점\")",
           expectedOutput: "평균: 85.8점",
           hint: "{score:.1f}",
           hint2: "f\"평균: {score:.1f}점\""
@@ -192,7 +192,7 @@ print(f"월급: {salary:,}원")
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "천 단위 쉼표를 넣어서 출력하세요!",
-          initialCode: "money = 50000000\nprint(f\"잔고: {money:,}원\")",
+          initialCode: "money = 50000000\n# :, 로 천 단위 쉼표\nprint(f\"잔고: {money:___}원\")",
           expectedOutput: "잔고: 50,000,000원",
           hint: "{money:,}",
           hint2: "f\"잔고: {money:,}원\""
@@ -240,11 +240,11 @@ f"{price:,}"     # 천 단위 쉼표
           id: "mission1",
           type: "mission",
           title: "🏆 최종 미션!",
-          task: "영수증을 f-string으로 만들어보세요!",
-          initialCode: "item = \"치킨\"\nprice = 19000\nqty = 2\ntotal = price * qty\n\nprint(f\"=== 영수증 ===\")\nprint(f\"품목: {item}\")\nprint(f\"단가: {price:,}원\")\nprint(f\"수량: {qty}개\")\nprint(f\"합계: {total:,}원\")",
-          expectedOutput: "=== 영수증 ===\n품목: 치킨\n단가: 19,000원\n수량: 2개\n합계: 38,000원",
-          hint: "f-string과 :, 포맷을 사용!",
-          hint2: "f\"합계: {total:,}원\""
+          task: "카페 메뉴판을 f-string으로 만들어보세요!",
+          initialCode: "items = ['아메리카노', '카페라떼', '초코케이크']\nprices = [4500, 5000, 6500]\ncount = len(items)\n\nprint('=' * 25)\nprint(f'{\"☕ 카페 메뉴\":^25}')\nprint('=' * 25)\n\nfor i in range(count):\n    print(f'{items[i]:<12} {prices[i]:>___,}원')\n\nprint('-' * 25)\ntotal = sum(prices)\nprint(f'{\"합계\":<12} {total:>___,}원')\nprint('=' * 25)",
+          expectedOutput: "=========================\n       ☕ 카페 메뉴       \n=========================\n아메리카노          4,500원\n카페라떼           5,000원\n초코케이크          6,500원\n-------------------------\n합계            16,000원\n=========================",
+          hint: "숫자 정렬 너비를 지정하세요!",
+          hint2: "8"
         },
         {
           id: "complete",
