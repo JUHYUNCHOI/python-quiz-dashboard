@@ -9,7 +9,7 @@ interface CodeBlockProps {
 }
 
 // Python syntax highlighting
-function highlightPython(code: string): React.ReactNode[] {
+export function highlightPython(code: string): React.ReactNode[] {
   const lines = code.split('\n')
   
   return lines.map((line, lineIndex) => {

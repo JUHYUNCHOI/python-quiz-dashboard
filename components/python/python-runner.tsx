@@ -1,8 +1,9 @@
 "use client"
 
-import { useState, useEffect, useRef, useCallback } from "react"
+import { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import { Play, Loader2, RotateCcw, Check, X, Lightbulb } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { highlightPython } from "@/components/ui/code-block"
 
 // Pyodide 타입 정의
 declare global {
@@ -84,6 +85,8 @@ export function PythonRunner({
   const [isFocused, setIsFocused] = useState(false)
   const [hasEdited, setHasEdited] = useState(false)  // 유저가 수정했는지 추적
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const highlightRef = useRef<HTMLDivElement>(null)
+  const highlightedCode = useMemo(() => highlightPython(code), [code])
 
   useEffect(() => {
     loadPyodideInstance()
@@ -99,6 +102,14 @@ export function PythonRunner({
     setOutput("")
     setError("")
   }, [code])
+
+  // 스크롤 동기화
+  const handleScroll = useCallback(() => {
+    if (textareaRef.current && highlightRef.current) {
+      highlightRef.current.scrollTop = textareaRef.current.scrollTop
+      highlightRef.current.scrollLeft = textareaRef.current.scrollLeft
+    }
+  }, [])
 
   const runCode = useCallback(async () => {
     if (!isPyodideReady || !pyodideInstance) {
@@ -257,7 +268,20 @@ export function PythonRunner({
               </span>
             </div>
           )}
-          
+
+          {/* Syntax highlighted 배경 레이어 */}
+          <div
+            ref={highlightRef}
+            aria-hidden="true"
+            className="absolute inset-0 font-mono p-2 md:p-3 overflow-hidden pointer-events-none text-xs md:text-sm leading-relaxed whitespace-pre-wrap break-words"
+            style={{ minHeight }}
+          >
+            <pre className="font-mono text-xs md:text-sm leading-relaxed m-0 p-0 whitespace-pre-wrap break-words">
+              {highlightedCode}
+            </pre>
+          </div>
+
+          {/* 투명 textarea (입력용) */}
           <textarea
             ref={textareaRef}
             value={code}
@@ -268,13 +292,14 @@ export function PythonRunner({
               }
             }}
             onKeyDown={handleKeyDown}
+            onScroll={handleScroll}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             disabled={readOnly || isLoading}
             placeholder="Python 코드 입력..."
             className={cn(
-              "w-full bg-transparent text-yellow-300 font-mono p-2 md:p-3 resize-none focus:outline-none placeholder:text-gray-600 relative z-10",
-              "text-xs md:text-sm leading-relaxed"
+              "w-full bg-transparent font-mono p-2 md:p-3 resize-none focus:outline-none placeholder:text-gray-600 relative z-10",
+              "text-xs md:text-sm leading-relaxed text-transparent caret-white selection:bg-blue-500/40"
             )}
             style={{ minHeight }}
             spellCheck={false}
