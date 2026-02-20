@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react"
 import { Play, Loader2, RotateCcw, Check, X, Lightbulb } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { highlightPython } from "@/components/ui/code-block"
+import { highlightPythonInline } from "@/components/ui/code-block"
 
 // Pyodide 타입 정의
 declare global {
@@ -244,9 +244,7 @@ export function BlankCodeRunner({
           const beforeText = line.slice(lastIndex, match.index)
           parts.push(
             <span key={`code-${lineIdx}-${lastIndex}`}>
-              {highlightPython(beforeText).map((node, i) => (
-                <span key={i} className="inline">{node}</span>
-              ))}
+              {highlightPythonInline(beforeText)}
             </span>
           )
         }
@@ -313,9 +311,7 @@ export function BlankCodeRunner({
         const afterText = line.slice(lastIndex)
         parts.push(
           <span key={`code-${lineIdx}-end`}>
-            {highlightPython(afterText).map((node, i) => (
-              <span key={i} className="inline">{node}</span>
-            ))}
+            {highlightPythonInline(afterText)}
           </span>
         )
       }
