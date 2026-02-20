@@ -54,6 +54,67 @@ export function renderContent(content: string) {
       continue
     }
 
+    // 대화 말풍선: @선생님: / @학생: / @핵심:
+    const chatMatch = line.match(/^@(선생님|학생|핵심):\s*(.+)$/)
+    if (chatMatch) {
+      const role = chatMatch[1]
+      const text = chatMatch[2]
+
+      // 텍스트 내 인라인 코드와 볼드 처리
+      const renderInline = (t: string) => {
+        const parts = t.split(/(`[^`]+`)/g)
+        return parts.map((part, j) => {
+          if (part.startsWith('`') && part.endsWith('`')) {
+            return (
+              <code key={j} className="bg-white/30 px-1 py-0.5 rounded font-mono text-sm font-bold">
+                {part.slice(1, -1)}
+              </code>
+            )
+          }
+          const boldParts = part.split(/(\*\*[^*]+\*\*)/g)
+          return boldParts.map((bp, k) => {
+            if (bp.startsWith('**') && bp.endsWith('**')) {
+              return <strong key={`${j}-${k}`} className="font-bold">{bp.slice(2, -2)}</strong>
+            }
+            return bp
+          })
+        })
+      }
+
+      if (role === '선생님') {
+        elements.push(
+          <div key={key++} className="flex items-start gap-2 my-2">
+            <div className="flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-full bg-blue-500 flex items-center justify-center text-lg md:text-xl">
+              🧑‍🏫
+            </div>
+            <div className="bg-blue-50 border border-blue-200 rounded-2xl rounded-tl-sm px-3 py-2 md:px-4 md:py-2.5 max-w-[85%]">
+              <p className="text-sm md:text-base text-blue-900 leading-relaxed">{renderInline(text)}</p>
+            </div>
+          </div>
+        )
+      } else if (role === '학생') {
+        elements.push(
+          <div key={key++} className="flex items-start gap-2 my-2 flex-row-reverse">
+            <div className="flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-full bg-green-500 flex items-center justify-center text-lg md:text-xl">
+              🧒
+            </div>
+            <div className="bg-green-50 border border-green-200 rounded-2xl rounded-tr-sm px-3 py-2 md:px-4 md:py-2.5 max-w-[85%]">
+              <p className="text-sm md:text-base text-green-900 leading-relaxed">{renderInline(text)}</p>
+            </div>
+          </div>
+        )
+      } else if (role === '핵심') {
+        elements.push(
+          <div key={key++} className="my-3 bg-amber-50 border-2 border-amber-300 rounded-xl px-3 py-2.5 md:px-4 md:py-3 text-center">
+            <p className="text-sm md:text-base text-amber-900 font-bold leading-relaxed">💡 {renderInline(text)}</p>
+          </div>
+        )
+      }
+
+      i++
+      continue
+    }
+
     if (line.startsWith('## ')) {
       elements.push(<h2 key={key++} className="text-lg md:text-xl font-bold text-gray-900 mt-6 md:mt-8 mb-3 md:mb-4">{line.slice(3)}</h2>)
       i++
