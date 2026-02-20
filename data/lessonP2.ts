@@ -74,8 +74,8 @@ print(secret)  # 매번 다른 숫자!
           type: "tryit",
           title: "🖥️ 랜덤 숫자 만들기",
           task: "1~10 사이의 랜덤 숫자를 출력하세요!",
-          initialCode: "import random\n\n# 1~10 사이 랜덤 숫자를 만드세요\nsecret = random.randint(___, ___)\nprint(f'비밀 숫자: {secret}')",
-          expectedOutput: "",
+          initialCode: "import random\nrandom.seed(42)\n\n# 1~10 사이 랜덤 숫자를 만드세요\nsecret = random.randint(___, ___)\nprint(f'비밀 숫자: {secret}')",
+          expectedOutput: "비밀 숫자: 2",
           hint: "randint(1, 10)은 1~10 사이!",
           hint2: "random.randint(1, 10)"
         }
