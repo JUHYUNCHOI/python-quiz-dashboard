@@ -2,132 +2,93 @@ import { Chapter } from '../types'
 
 export const ch2: Chapter = {
   id: "ch2",
-  title: "클래스 만들기",
-  emoji: "🔨",
+  title: "파일에 쓰기",
+  emoji: "📝",
   steps: [
     {
       id: "ch2-0",
       type: "explain",
-      title: "📦 가장 간단한 클래스",
-      content: `## 빈 클래스부터!
+      title: "📝 파일 쓰기 기본!",
+      content: `## 파일 열기 → 쓰기 → 닫기
 
 \`\`\`python
-# 클래스 정의 (틀 만들기)
-class Character:
-    pass  # 아무 기능 없음
-
-# 객체 생성 (붕어빵 찍기)
-hero = Character()
-villain = Character()
-
-print(type(hero))
+파일 = open('test.txt', 'w')  # w = write (쓰기)
+파일.write('안녕하세요!')
+파일.close()
 \`\`\`
 
-**결과:**
-\`<class '__main__.Character'>\`
+test.txt 파일이 생기고 "안녕하세요!"가 저장됨!
 
-⚠️ 클래스 이름은 **대문자**로 시작!
-- 함수: \`print()\`, \`input()\` (소문자)
-- 클래스: \`Character()\`, \`Monster()\` (대문자)`
+**'w' = write = 쓰기 모드**`
     },
     {
       id: "ch2-1",
       type: "explain",
-      title: "🍩 __init__: 속을 채우자!",
-      content: `## 빈 붕어빵은 재미없죠? 속을 채워봅시다!
+      title: "✨ with문으로 더 안전하게!",
+      content: `## with문 = 자동으로 파일 닫아줌!
 
 \`\`\`python
-class Character:
-    def __init__(s, char_name, char_hp):
-        s.char_name = char_name
-        s.char_hp = char_hp
-        print(f'{char_name} 캐릭터가 생성되었습니다!')
-
-# 객체 생성
-hero = Character('용사', 100)
-print(f'이름: {hero.char_name}')
-print(f'HP: {hero.char_hp}')
+with open('test.txt', 'w') as f:
+    f.write('안녕하세요!')
+# 여기서 자동으로 close()
 \`\`\`
 
-**결과:**
-\`\`\`
-용사 캐릭터가 생성되었습니다!
-이름: 용사
-HP: 100
-\`\`\`
-
-💡 \`__init__\` = initialize(초기화)의 줄임말!
-→ 객체를 만들 때 **자동으로** 실행돼요!`
+**with문 쓰면 close() 안 해도 됨!** 앞으로 with문만 쓸 거예요.`
     },
     {
       id: "ch2-2",
-      type: "quiz",
-      title: "퀴즈!",
-      content: "`__init__`은 언제 실행되나요?",
-      options: [
-        "프로그램 시작할 때",
-        "클래스를 정의할 때",
-        "객체를 만들 때 (Character() 호출 시)",
-        "print() 할 때"
-      ],
-      answer: 2,
-      explanation: "`Character('용사', 100)` 이렇게 객체를 만들 때 자동으로 실행돼요!"
+      type: "interactive",
+      title: "✏️ 파일 쓰기 따라치기!",
+      description: "with문으로 파일에 쓰는 코드를 직접 써보세요!",
+      component: "typeAlong",
+      targetTitle: "파일 쓰기 기본",
+      targetDescription: "with open으로 파일에 쓰기",
+      targetCode: "with open('hi.txt', 'w') as f:\n    f.write('안녕!')",
+      expectedOutput: ""
     },
     {
       id: "ch2-3",
-      type: "explain",
-      title: "🤔 s(self)가 뭘까?",
-      content: `## 가장 헷갈리는 부분!
-
-\`\`\`python
-class Character:
-    def __init__(s, char_name):
-        print(f's는 누구? {s}')
-        s.char_name = char_name
-
-hero = Character('용사')
-print(f'hero는 누구? {hero}')
-\`\`\`
-
-**결과:**
-\`\`\`
-s는 누구? <__main__.Character object at 0x123abc>
-hero는 누구? <__main__.Character object at 0x123abc>
-\`\`\`
-
-→ **주소가 같아요!** s와 hero는 같은 객체!
-
-🍩 붕어빵 틀에서 붕어빵이 찍힐 때:
-- \`s\` = "지금 만들어지고 있는 이 붕어빵"
-- \`hero\` = "완성된 붕어빵의 이름표"
-
-⚠️ 보통 \`self\`라고 쓰지만, 이 교재에서는 \`s\`를 써요!`
+      type: "interactive",
+      title: "빈칸 채우기: 파일 쓰기",
+      description: "파일에 데이터를 저장하세요!",
+      component: "fillInBlank",
+      codeTemplate: "with ___1___('data.txt', 'w') as f:\n    f.___2___('Hello!')",
+      blanks: [
+        { id: "1", answer: "open", hint: "파일을 여는 함수!" },
+        { id: "2", answer: "write", hint: "파일에 쓰는 메서드!" }
+      ],
+      choices: ["open", "write", "read", "close", "file", "save"],
+      expectedOutput: ""
     },
     {
       id: "ch2-4",
-      type: "interactive",
-      title: "✏️ 클래스 따라치기!",
-      description: "Character 클래스를 직접 만들어보세요!",
-      component: "typeAlong",
-      targetTitle: "캐릭터 클래스 만들기",
-      targetDescription: "class와 __init__으로 캐릭터 생성",
-      targetCode: "class Character:\n    def __init__(s, name, hp):\n        s.name = name\n        s.hp = hp\n\nhero = Character('용사', 100)\nprint(f'{hero.name}: HP {hero.hp}')",
-      expectedOutput: "용사: HP 100"
+      type: "quiz",
+      title: "예측해보세요!",
+      content: `파일 내용은?
+
+\`\`\`python
+with open('a.txt', 'w') as f:
+    f.write('A')
+    f.write('B')
+    f.write('C')
+\`\`\``,
+      options: ["A\\nB\\nC", "ABC", "A B C", "CBA"],
+      answer: 1,
+      explanation: "\\n 없으면 줄바꿈 없이 이어서 써요! ABC"
     },
     {
       id: "ch2-5",
-      type: "interactive",
-      title: "빈칸 채우기: 클래스 기본",
-      description: "클래스를 완성하세요!",
-      component: "fillInBlank",
-      codeTemplate: "___1___ Dog:\n    def ___2___(s, name):\n        ___3___.name = name\n\ndog = Dog('멍멍이')\nprint(dog.name)",
-      blanks: [
-        { id: "1", answer: "class", hint: "클래스 정의!" },
-        { id: "2", answer: "__init__", hint: "초기화 함수!" },
-        { id: "3", answer: "s", hint: "자기 자신!" }
+      type: "quiz",
+      title: "퀴즈!",
+      content: "'w' 모드로 파일 열면?",
+      options: [
+        "기존 내용 뒤에 추가",
+        "기존 내용 지우고 새로 씀",
+        "읽기만 가능",
+        "에러 발생"
       ],
-      choices: ["class", "def", "__init__", "__main__", "s", "self", "dog"],
-      expectedOutput: "멍멍이"
+      answer: 1,
+      explanation: "'w'는 덮어쓰기! 기존 내용이 사라져요!"
     }
   ]
 }

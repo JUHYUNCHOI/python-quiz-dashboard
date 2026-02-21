@@ -1,12 +1,12 @@
 // ============================================
-// Lesson 31: Function Usage
+// Lesson 34: Function Usage
 // Part 5: Functions - Basics (English)
 // ============================================
 
 import { LessonData } from './types'
 
-export const lesson31EnData: LessonData = {
-  id: "31en",
+export const lesson34EnData: LessonData = {
+  id: "34en",
   title: "Function Usage",
   emoji: "⚡",
   description: "Learn local/global variables and lambda functions!",

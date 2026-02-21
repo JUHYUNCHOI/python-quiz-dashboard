@@ -2,133 +2,83 @@ import { Chapter } from '../types'
 
 export const ch1: Chapter = {
   id: "ch1",
-  title: "패키지란? + pip 기본",
-  emoji: "📦",
+  title: "캐릭터 클래스 만들기",
+  emoji: "🦸",
   steps: [
     {
       id: "ch1-0",
       type: "explain",
-      title: "📁 모듈 vs 패키지",
-      content: `## 모듈과 패키지의 차이!
+      title: "🎮 RPG 게임 만들기 프로젝트!",
+      content: `## 오늘의 목표
 
-**모듈 = 하나의 .py 파일**
+클래스를 활용해서 **RPG 전투 게임**을 만들어요!
+
+### 4단계로 완성:
+1. 🦸 **캐릭터 클래스** — 기본 속성
+2. 👹 **몬스터 클래스** — 적 만들기
+3. ⚔️ **전투 시스템** — 턴제 배틀
+4. 🏆 **레벨업 시스템** — 성장
+
 \`\`\`python
-# math.py = 모듈 하나
-import math
-print(math.sqrt(16))  # 4.0
+# 최종 목표!
+hero = Hero('용사', 100, 20)
+monster = Monster('드래곤', 80, 15)
+battle(hero, monster)  # 자동 전투!
 \`\`\`
 
-**패키지 = 여러 모듈을 묶은 폴더**
-\`\`\`
-requests/          # 패키지 폴더
-    __init__.py
-    api.py         # 모듈 1
-    models.py      # 모듈 2
-    utils.py       # 모듈 3
-\`\`\`
-
-**정리:**
-| 구분 | 설명 | 예시 |
-|------|------|------|
-| 모듈 | .py 파일 하나 | math, json |
-| 패키지 | 모듈 여러 개 묶음 | requests, pandas |
-
-파이썬에는 **내장 모듈**(기본 포함)과 **외부 패키지**(따로 설치)가 있어요!`
+Let's go! 🚀`
     },
     {
       id: "ch1-1",
-      type: "explain",
-      title: "🔧 pip 기본 명령어",
-      content: `## pip = 패키지 설치 도구!
+      type: "tryit",
+      title: "💻 1단계: 캐릭터 기본 클래스",
+      task: "Character 클래스의 기본 구조를 실행해보세요!",
+      initialCode: `class Character:
+    def __init__(s, name, hp, atk):
+        s.name = name
+        s.hp = hp
+        s.max_hp = hp
+        s.atk = atk
+        s.alive = True
 
-pip은 **P**ackage **I**nstaller for **P**ython의 줄임말이에요.
+    def status(s):
+        bar_len = 10
+        filled = int(s.hp / s.max_hp * bar_len)
+        bar = '#' * filled + '-' * (bar_len - filled)
+        state = 'O' if s.alive else 'X'
+        print(f'[{state}] {s.name}: [{bar}] HP {s.hp}/{s.max_hp} ATK {s.atk}')
 
-\`\`\`bash
-# 패키지 설치
-pip install 패키지이름
-
-# 패키지 삭제
-pip uninstall 패키지이름
-
-# 설치된 패키지 목록 보기
-pip list
-
-# 특정 패키지 정보 보기
-pip show 패키지이름
-
-# 패키지 업그레이드
-pip install --upgrade 패키지이름
-\`\`\`
-
-> **참고:** pip 명령어는 터미널에서 실행해요!
-> 이 웹 환경에서는 실행할 수 없지만, 명령어를 꼭 기억하세요!`
+hero = Character('용사', 100, 20)
+mage = Character('마법사', 80, 30)
+hero.status()
+mage.status()`,
+      expectedOutput: `[O] 용사: [##########] HP 100/100 ATK 20\n[O] 마법사: [##########] HP 80/80 ATK 30`,
+      hint: "HP 바는 현재 체력 비율로 만들어요!",
+      hint2: "filled = int(s.hp / s.max_hp * bar_len)으로 비율 계산!"
     },
     {
       id: "ch1-2",
-      type: "quiz",
-      title: "퀴즈!",
-      content: "패키지를 설치하는 명령어는?",
-      options: [
-        "python install 패키지",
-        "pip install 패키지",
-        "import install 패키지",
-        "download 패키지"
-      ],
-      answer: 1,
-      explanation: "pip install이 패키지 설치 명령어예요!"
-    },
-    {
-      id: "ch1-3",
-      type: "quiz",
-      title: "퀴즈!",
-      content: "모듈과 패키지의 차이점은?",
-      options: [
-        "모듈이 패키지보다 크다",
-        "패키지 = 여러 모듈 묶음",
-        "차이 없다",
-        "패키지 = 함수 하나"
-      ],
-      answer: 1,
-      explanation: "모듈 = 하나의 .py 파일, 패키지 = 여러 모듈을 묶은 폴더!"
-    },
-    {
-      id: "ch1-4",
-      type: "tryit",
-      title: "💻 내장 vs 외부 구분하기!",
-      task: "내장 모듈은 바로 import 가능! 실행해보세요!",
-      initialCode: `# 내장 모듈 = 설치 없이 바로 사용!
-import math
-import json
-import string
+      type: "mission",
+      title: "🎯 미션: 캐릭터에 방어력 추가!",
+      task: "Character 클래스에 defense(방어력) 속성을 추가하세요! 빈칸 2개를 채우세요!",
+      initialCode: `class Character:
+    def __init__(s, name, hp, atk, defense):
+        s.name = name
+        s.hp = hp
+        s.max_hp = hp
+        s.atk = atk
+        s.___ = defense
+        s.alive = True
 
-print('=== 내장 모듈 테스트 ===')
-print(f'math.sqrt(49) = {math.sqrt(49)}')
-print(f'json.dumps({{"a": 1}}) = {json.dumps({"a": 1})}')
-print(f'string.digits = {string.digits}')
+    def status(s):
+        state = 'O' if s.alive else 'X'
+        print(f'[{state}] {s.name}: HP {s.hp}/{s.max_hp} ATK {s.atk} DEF {s.___}')
 
-# 외부 패키지는 pip install 필요!
-# 이 웹에서는 설치 불가, 실제 컴퓨터에서 해보세요!
-print('\\n=== 외부 패키지 (설치 필요) ===')
-print('pip install requests  → 웹 요청')
-print('pip install pandas    → 데이터 분석')
-print('pip install pygame    → 게임 개발')`,
-      expectedOutput: `=== 내장 모듈 테스트 ===\nmath.sqrt(49) = 7.0\njson.dumps({"a": 1}) = {"a": 1}\nstring.digits = 0123456789\n\n=== 외부 패키지 (설치 필요) ===\npip install requests  → 웹 요청\npip install pandas    → 데이터 분석\npip install pygame    → 게임 개발`,
-      hint: "내장 모듈은 import만 하면 바로 사용 가능!",
-      hint2: "코드를 그대로 실행하세요!"
-    },
-    {
-      id: "ch1-5",
-      type: "quiz",
-      title: "퀴즈!",
-      content: "설치된 패키지 목록을 보는 명령어는?",
-      options: [
-        "pip show all",
-        "pip list",
-        "pip packages",
-        "pip installed"
-      ],
-      answer: 1,
-      explanation: "pip list로 설치된 모든 패키지 목록을 확인할 수 있어요!"
+hero = Character('용사', 100, 20, 10)
+hero.status()`,
+      expectedOutput: `[O] 용사: HP 100/100 ATK 20 DEF 10`,
+      hint: "방어력도 다른 속성처럼 s.xxx로 저장해요!",
+      hint2: "defense / defense"
     }
   ]
 }

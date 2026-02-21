@@ -2,122 +2,127 @@ import { Chapter } from '../types'
 
 export const ch2: Chapter = {
   id: "ch2",
-  title: "내장 모듈 활용",
-  emoji: "🧰",
+  title: "몬스터 & 전투 메서드",
+  emoji: "👹",
   steps: [
     {
       id: "ch2-0",
-      type: "explain",
-      title: "🧰 설치 없이 쓸 수 있는 모듈들!",
-      content: `## 파이썬 내장 모듈
+      type: "tryit",
+      title: "👹 2단계: 몬스터 만들기!",
+      task: "Character 클래스에 attack, take_damage, heal 메서드를 추가한 전투 시스템을 실행하세요!",
+      initialCode: `class Character:
+    def __init__(s, name, hp, atk, defense):
+        s.name = name
+        s.hp = hp
+        s.max_hp = hp
+        s.atk = atk
+        s.defense = defense
+        s.alive = True
 
-| 모듈 | 기능 | 예시 |
-|------|------|------|
-| math | 수학 계산 | sqrt(), ceil(), pi |
-| json | JSON 데이터 처리 | dumps(), loads() |
-| string | 문자열 상수 | ascii_lowercase |
-| random | 랜덤 값 | randint(), choice() |
-| datetime | 날짜/시간 | now(), date() |
+    def take_damage(s, damage):
+        actual = damage - s.defense
+        if actual < 1:
+            actual = 1
+        s.hp = s.hp - actual
+        if s.hp <= 0:
+            s.hp = 0
+            s.alive = False
+        return actual
 
-\`\`\`python
-import math       # 설치 필요 없음!
-import json        # 설치 필요 없음!
-import string      # 설치 필요 없음!
-\`\`\`
+    def attack(s, target):
+        if not s.alive:
+            return
+        actual = target.take_damage(s.atk)
+        print(f'{s.name} -> {target.name} ({actual} 데미지)')
+        if not target.alive:
+            print(f'{target.name} 쓰러짐!')
 
-내장 모듈은 \`pip install\` 없이 바로 \`import\`할 수 있어요!`
+    def heal(s, amount):
+        if not s.alive:
+            return
+        s.hp = min(s.hp + amount, s.max_hp)
+        print(f'{s.name} 회복! HP: {s.hp}/{s.max_hp}')
+
+    def status(s):
+        state = 'O' if s.alive else 'X'
+        print(f'[{state}] {s.name}: HP {s.hp}/{s.max_hp}')
+
+# 캐릭터 생성
+hero = Character('용사', 100, 25, 8)
+slime = Character('슬라임', 40, 12, 3)
+
+print('=== 캐릭터 생성 ===')
+hero.status()
+slime.status()
+
+print('\\n=== 전투! ===')
+hero.attack(slime)
+slime.attack(hero)
+hero.attack(slime)
+
+print('\\n=== 결과 ===')
+hero.status()
+slime.status()`,
+      expectedOutput: `=== 캐릭터 생성 ===\n[O] 용사: HP 100/100\n[O] 슬라임: HP 40/40\n\n=== 전투! ===\n용사 -> 슬라임 (22 데미지)\n슬라임 -> 용사 (4 데미지)\n용사 -> 슬라임 (22 데미지)\n슬라임 쓰러짐!\n\n=== 결과 ===\n[O] 용사: HP 96/100\n[X] 슬라임: HP 0/40`,
+      hint: "take_damage에서 방어력만큼 데미지를 줄여요!",
+      hint2: "actual = damage - defense, 최소 1 데미지는 들어가요!"
+    },
+    {
+      id: "ch2-0b",
+      type: "mission",
+      title: "🎯 미션: 전투 메서드 완성!",
+      task: "빈칸 3개를 채워서 전투 시스템을 완성하세요!",
+      initialCode: `class Character:
+    def __init__(s, name, hp, atk, defense):
+        s.name = name
+        s.hp = hp
+        s.atk = atk
+        s.defense = defense
+
+    def take_damage(s, damage):
+        actual = damage - s.___
+        if actual < 1:
+            actual = 1
+        s.hp = s.hp - actual
+        return actual
+
+    def attack(s, target):
+        actual = target.___(s.atk)
+        print(f'{s.name} -> {target.name} ({actual} 데미지)')
+
+    def status(s):
+        print(f'{s.name}: HP {s.hp}')
+
+hero = Character('용사', 100, 25, 8)
+slime = Character('슬라임', 30, 10, 2)
+
+hero.status()
+slime.status()
+
+print('\\n--- 전투! ---')
+hero.___(slime)
+slime.attack(hero)
+
+print('\\n--- 결과 ---')
+hero.status()
+slime.status()`,
+      expectedOutput: `용사: HP 100\n슬라임: HP 30\n\n--- 전투! ---\n용사 -> 슬라임 (23 데미지)\n슬라임 -> 용사 (2 데미지)\n\n--- 결과 ---\n용사: HP 98\n슬라임: HP 7`,
+      hint: "방어력으로 데미지 감소, take_damage로 피해 적용, attack으로 공격!",
+      hint2: "defense / take_damage / attack"
     },
     {
       id: "ch2-1",
-      type: "tryit",
-      title: "💻 json 모듈 활용!",
-      task: "json 모듈로 데이터를 변환해보세요!",
-      initialCode: `import json
-
-# 딕셔너리를 JSON 문자열로
-data = {
-    'name': '용사',
-    'hp': 100,
-    'items': ['검', '방패', '포션']
-}
-
-json_str = json.dumps(data, ensure_ascii=False, indent=2)
-print('=== JSON 변환 ===')
-print(json_str)
-
-# JSON 문자열을 딕셔너리로
-parsed = json.loads(json_str)
-print(f'\\n이름: {parsed["name"]}')
-print(f'아이템: {parsed["items"]}')`,
-      expectedOutput: `=== JSON 변환 ===\n{\n  "name": "용사",\n  "hp": 100,\n  "items": [\n    "검",\n    "방패",\n    "포션"\n  ]\n}\n\n이름: 용사\n아이템: ['검', '방패', '포션']`,
-      hint: "dumps = 딕셔너리를 문자열로, loads = 문자열을 딕셔너리로",
-      hint2: "코드를 그대로 실행하세요!"
-    },
-    {
-      id: "ch2-2",
-      type: "tryit",
-      title: "💻 string 모듈 활용!",
-      task: "string 모듈의 상수들을 확인하세요!",
-      initialCode: `import string
-
-print('소문자:', string.ascii_lowercase)
-print('대문자:', string.ascii_uppercase)
-print('숫자:', string.digits)
-print('특수문자:', string.punctuation[:10])`,
-      expectedOutput: `소문자: abcdefghijklmnopqrstuvwxyz\n대문자: ABCDEFGHIJKLMNOPQRSTUVWXYZ\n숫자: 0123456789\n특수문자: !"#$%&'()*`,
-      hint: "string 모듈에는 문자 종류별 상수가 있어요",
-      hint2: "코드를 그대로 실행하세요!"
-    },
-    {
-      id: "ch2-3",
-      type: "mission",
-      title: "🎯 미션: 비밀번호 검증기!",
-      task: "빈칸 3개를 채워서 string 모듈로 비밀번호 검증기를 완성하세요!",
-      initialCode: `import string
-
-def check_password(pw):
-    has_lower = False
-    has_upper = False
-    has_digit = False
-
-    for ch in pw:
-        if ch in string.ascii___:
-            has_lower = True
-        elif ch in string.ascii___:
-            has_upper = True
-        elif ch in string.___:
-            has_digit = True
-
-    print(f'비밀번호: {pw}')
-    print(f'  소문자: {"✅" if has_lower else "❌"}')
-    print(f'  대문자: {"✅" if has_upper else "❌"}')
-    print(f'  숫자: {"✅" if has_digit else "❌"}')
-
-    if has_lower and has_upper and has_digit:
-        print('  → 강한 비밀번호!')
-    else:
-        print('  → 약한 비밀번호!')
-
-check_password('Hello123')
-print()
-check_password('hello')`,
-      expectedOutput: `비밀번호: Hello123\n  소문자: ✅\n  대문자: ✅\n  숫자: ✅\n  → 강한 비밀번호!\n\n비밀번호: hello\n  소문자: ✅\n  대문자: ❌\n  숫자: ❌\n  → 약한 비밀번호!`,
-      hint: "string 모듈의 소문자, 대문자, 숫자 상수를 사용해요!",
-      hint2: "lowercase / uppercase / digits"
-    },
-    {
-      id: "ch2-4",
       type: "quiz",
       title: "퀴즈!",
-      content: "`json.dumps()`의 역할은?",
+      content: "방어력이 10이고 공격력 8인 공격을 받으면?\n\n```python\ndef take_damage(s, damage):\n    actual = damage - s.defense\n    if actual < 1:\n        actual = 1\n```",
       options: [
-        "JSON 파일 삭제",
-        "딕셔너리 → JSON 문자열",
-        "JSON → 파이썬 실행",
-        "JSON 파일 열기"
+        "0 데미지 (무시)",
+        "1 데미지 (최소)",
+        "8 데미지 (그대로)",
+        "에러"
       ],
       answer: 1,
-      explanation: "dumps = dump string! 딕셔너리를 JSON 문자열로 변환해요!"
+      explanation: "8 - 10 = -2지만, 최소 1 데미지는 들어가요!"
     }
   ]
 }

@@ -1,11 +1,12 @@
 import { LessonData } from '../types'
 import { ch1 } from './ch1'
 import { ch2 } from './ch2'
+import { ch3 } from './ch3'
 
 export const lesson46: LessonData = {
   id: "46",
-  title: "텍스트 RPG: 게임 설계",
-  emoji: "📋",
-  description: "클래스 구조와 게임 흐름을 설계해요!",
-  chapters: [ch1, ch2]
+  title: "패키지와 pip",
+  emoji: "📦",
+  description: "세계 개발자들이 만든 코드를 설치하고 사용해요!",
+  chapters: [ch1, ch2, ch3]
 }

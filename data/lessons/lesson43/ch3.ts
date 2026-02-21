@@ -2,153 +2,205 @@ import { Chapter } from '../types'
 
 export const ch3: Chapter = {
   id: "ch3",
-  title: "종합 실습",
-  emoji: "🎮",
+  title: "턴제 전투 시스템",
+  emoji: "⚔️",
   steps: [
     {
-      id: "ch3-0",
+      id: "ch3-intro",
       type: "explain",
-      title: "🌍 인기 외부 패키지 소개",
-      content: `## 세계 개발자들이 만든 유명 패키지!
+      title: "⚔️ 턴제 전투란?",
+      content: `## 턴제 전투 시스템
 
-| 패키지 | 용도 | 설치 명령어 |
-|--------|------|-------------|
-| requests | 웹 요청 | pip install requests |
-| pandas | 데이터 분석 | pip install pandas |
-| pygame | 게임 개발 | pip install pygame |
-| flask | 웹 서버 | pip install flask |
-| matplotlib | 그래프 | pip install matplotlib |
+실시간이 아닌, **번갈아가며** 행동하는 전투!
 
-**PyPI (pypi.org)** = 파이썬 패키지 저장소
-- **40만 개** 이상의 패키지가 있어요!
-
-\`\`\`bash
-# 사용 흐름
-pip install requests    # 1. 설치
-import requests         # 2. 불러오기
-requests.get(url)       # 3. 사용!
+### 흐름
+\`\`\`
+1턴: 용사 행동 → 몬스터 행동
+2턴: 용사 행동 → 몬스터 행동
+3턴: ...  (누군가 쓰러질 때까지!)
 \`\`\`
 
-> 이 웹 환경에서는 외부 패키지를 설치할 수 없지만,
-> 실제 컴퓨터에서는 pip으로 자유롭게 설치할 수 있어요!`
+### input() 대신 리스트!
+\`\`\`python
+# 이 웹에서는 input()을 쓸 수 없으니...
+actions = ['attack', 'heal', 'attack']
+
+for action in actions:
+    if action == 'attack':
+        hero.attack(monster)
+    elif action == 'heal':
+        hero.heal(20)
+\`\`\`
+
+→ **리스트로 행동을 미리 정해두면** 자동 전투가 돼요!`
+    },
+    {
+      id: "ch3-0",
+      type: "tryit",
+      title: "⚔️ 3단계: 턴제 전투!",
+      task: "actions 리스트로 자동 전투하는 시스템을 실행해보세요!",
+      initialCode: `class Character:
+    def __init__(s, name, hp, atk, defense):
+        s.name = name
+        s.hp = hp
+        s.max_hp = hp
+        s.atk = atk
+        s.defense = defense
+        s.alive = True
+
+    def take_damage(s, damage):
+        actual = damage - s.defense
+        if actual < 1:
+            actual = 1
+        s.hp = s.hp - actual
+        if s.hp <= 0:
+            s.hp = 0
+            s.alive = False
+        return actual
+
+    def attack(s, target):
+        if not s.alive:
+            return
+        actual = target.take_damage(s.atk)
+        print(f'  {s.name} -> {target.name} ({actual} 데미지)')
+        if not target.alive:
+            print(f'  {target.name} 쓰러짐!')
+
+    def heal(s, amount):
+        if not s.alive:
+            return
+        s.hp = min(s.hp + amount, s.max_hp)
+        print(f'  {s.name} 회복! HP: {s.hp}/{s.max_hp}')
+
+    def status(s):
+        state = 'O' if s.alive else 'X'
+        print(f'  [{state}] {s.name}: HP {s.hp}/{s.max_hp}')
+
+# 캐릭터 생성
+hero = Character('용사', 100, 25, 8)
+goblin = Character('고블린', 60, 18, 5)
+
+# 행동 리스트 (input() 대신!)
+actions = ['attack', 'attack', 'heal', 'attack', 'attack']
+
+print('=== RPG 전투 시작! ===')
+hero.status()
+goblin.status()
+
+turn = 1
+for action in actions:
+    if not hero.alive or not goblin.alive:
+        break
+
+    print(f'\\n--- {turn}턴 ---')
+
+    if action == 'attack':
+        hero.attack(goblin)
+    elif action == 'heal':
+        hero.heal(20)
+
+    if goblin.alive:
+        goblin.attack(hero)
+
+    turn = turn + 1
+
+print('\\n=== 전투 종료! ===')
+hero.status()
+goblin.status()
+if hero.alive:
+    print('승리!')
+else:
+    print('패배...')`,
+      expectedOutput: `=== RPG 전투 시작! ===\n  [O] 용사: HP 100/100\n  [O] 고블린: HP 60/60\n\n--- 1턴 ---\n  용사 -> 고블린 (20 데미지)\n  고블린 -> 용사 (10 데미지)\n\n--- 2턴 ---\n  용사 -> 고블린 (20 데미지)\n  고블린 -> 용사 (10 데미지)\n\n--- 3턴 ---\n  용사 회복! HP: 100/100\n  고블린 -> 용사 (10 데미지)\n\n--- 4턴 ---\n  용사 -> 고블린 (20 데미지)\n  고블린 쓰러짐!\n\n=== 전투 종료! ===\n  [O] 용사: HP 90/100\n  [X] 고블린: HP 0/60\n승리!`,
+      hint: "actions 리스트로 input() 없이 행동을 정해요!",
+      hint2: "for action in actions로 한 턴씩 진행해요!"
     },
     {
       id: "ch3-1",
-      type: "tryit",
-      title: "💻 여러 내장 모듈 함께 사용!",
-      task: "math + json 모듈을 함께 사용하세요!",
-      initialCode: `import math
-import json
+      type: "mission",
+      title: "🎯 미션: 전투 행동 추가!",
+      task: "빈칸 3개를 채워서 'defend' 행동을 추가하세요!",
+      initialCode: `class Character:
+    def __init__(s, name, hp, atk, defense):
+        s.name = name
+        s.hp = hp
+        s.max_hp = hp
+        s.atk = atk
+        s.defense = defense
+        s.alive = True
+        s.defending = False
 
-# 게임 캐릭터 데이터
-characters = [
-    {'name': '용사', 'hp': 100, 'atk': 25},
-    {'name': '마법사', 'hp': 80, 'atk': 35},
-    {'name': '궁수', 'hp': 90, 'atk': 30}
-]
+    def take_damage(s, damage):
+        actual = damage - s.defense
+        if s.defending:
+            actual = actual // 2
+            s.defending = False
+        if actual < 1:
+            actual = 1
+        s.hp = s.hp - actual
+        if s.hp <= 0:
+            s.hp = 0
+            s.alive = False
+        return actual
 
-# 평균 공격력 계산
-total_atk = sum(c['atk'] for c in characters)
-avg_atk = total_atk / len(characters)
+    def attack(s, target):
+        actual = target.take_damage(s.atk)
+        print(f'  {s.name} -> {target.name} ({actual} 데미지)')
 
-print(f'평균 공격력: {avg_atk:.1f}')
-print(f'올림: {math.ceil(avg_atk)}')
-print(f'캐릭터 수: {len(characters)}명')
+    def defend(s):
+        s.___ = True
+        print(f'  {s.name} 방어 자세! (다음 데미지 절반)')
 
-# JSON으로 저장 형식
-save_data = json.dumps(characters, ensure_ascii=False)
-print(f'\\n저장 데이터: {save_data}')`,
-      expectedOutput: `평균 공격력: 30.0\n올림: 30\n캐릭터 수: 3명\n\n저장 데이터: [{"name": "용사", "hp": 100, "atk": 25}, {"name": "마법사", "hp": 80, "atk": 35}, {"name": "궁수", "hp": 90, "atk": 30}]`,
-      hint: "math는 계산, json은 데이터 변환에 사용",
-      hint2: "코드를 그대로 실행하세요!"
-    },
-    {
-      id: "ch3-1b",
-      type: "tryit",
-      title: "💻 json으로 설정 파일 만들기!",
-      task: "json 모듈로 게임 설정을 관리해보세요!",
-      initialCode: `import json
+    def heal(s, amount):
+        s.hp = min(s.hp + amount, s.max_hp)
+        print(f'  {s.name} 회복! HP: {s.hp}/{s.max_hp}')
 
-# 게임 설정 만들기
-settings = {
-    'volume': 80,
-    'difficulty': '보통',
-    'language': '한국어',
-    'controls': {
-        'jump': 'space',
-        'attack': 'z',
-        'defend': 'x'
-    }
-}
+    def status(s):
+        state = 'O' if s.alive else 'X'
+        print(f'  [{state}] {s.name}: HP {s.hp}/{s.max_hp}')
 
-# 설정 저장 (JSON으로 변환)
-settings_json = json.dumps(settings, ensure_ascii=False, indent=2)
-print('=== 설정 저장 ===')
-print(settings_json)
+hero = Character('용사', 80, 22, 5)
+orc = Character('오크', 50, 20, 3)
 
-# 설정 불러오기 (JSON에서 복원)
-loaded = json.loads(settings_json)
-print(f'\\n=== 설정 확인 ===')
-print(f'볼륨: {loaded["volume"]}')
-print(f'난이도: {loaded["difficulty"]}')
-print(f'점프 키: {loaded["controls"]["jump"]}')
+# defend를 사용해보자!
+actions = ['defend', 'attack', '___', 'attack']
 
-# 설정 변경
-loaded['volume'] = 50
-loaded['difficulty'] = '어려움'
-new_json = json.dumps(loaded, ensure_ascii=False, indent=2)
-print(f'\\n=== 변경된 설정 ===')
-print(f'볼륨: {loaded["volume"]}')
-print(f'난이도: {loaded["difficulty"]}')`,
-      expectedOutput: `=== 설정 저장 ===\n{\n  "volume": 80,\n  "difficulty": "보통",\n  "language": "한국어",\n  "controls": {\n    "jump": "space",\n    "attack": "z",\n    "defend": "x"\n  }\n}\n\n=== 설정 확인 ===\n볼륨: 80\n난이도: 보통\n점프 키: space\n\n=== 변경된 설정 ===\n볼륨: 50\n난이도: 어려움`,
-      hint: "json.dumps로 저장, json.loads로 불러오기!",
-      hint2: "코드를 그대로 실행하세요!"
+print('=== 전투 시작! ===')
+turn = 1
+for action in actions:
+    if not hero.alive or not orc.alive:
+        break
+    print(f'\\n--- {turn}턴 ---')
+    if action == 'attack':
+        hero.attack(orc)
+    elif action == 'defend':
+        hero.defend()
+    elif action == 'heal':
+        hero.___(15)
+    if orc.alive:
+        orc.attack(hero)
+    turn = turn + 1
+
+print('\\n=== 결과 ===')
+hero.status()
+orc.status()`,
+      expectedOutput: `=== 전투 시작! ===\n\n--- 1턴 ---\n  용사 방어 자세! (다음 데미지 절반)\n  오크 -> 용사 (7 데미지)\n\n--- 2턴 ---\n  용사 -> 오크 (19 데미지)\n  오크 -> 용사 (15 데미지)\n\n--- 3턴 ---\n  용사 회복! HP: 73/80\n  오크 -> 용사 (15 데미지)\n\n--- 4턴 ---\n  용사 -> 오크 (19 데미지)\n  오크 -> 용사 (15 데미지)\n\n=== 결과 ===\n  [O] 용사: HP 43/80\n  [O] 오크: HP 12/50`,
+      hint: "defending 속성을 True로, heal 행동을 리스트에, heal 메서드 호출!",
+      hint2: "defending / heal / heal"
     },
     {
       id: "ch3-2",
-      type: "mission",
-      title: "🎯 게임 세이브/로드 시스템!",
-      task: "빈칸 3개를 채워서 게임 세이브/로드 시스템을 완성하세요!",
-      initialCode: `import ___
-
-# 게임 세이브 데이터
-save = {
-    'player': '용사',
-    'level': 5,
-    'hp': 150,
-    'items': ['불꽃검', '강철방패', '회복포션'],
-    'gold': 2500
-}
-
-# 세이브 (딕셔너리 → JSON 문자열)
-save_str = json.___(save, ensure_ascii=False, indent=2)
-print('=== 게임 저장 ===')
-print(save_str)
-
-# 로드 (JSON 문자열 → 딕셔너리)
-loaded = json.___(save_str)
-print(f'\\n=== 게임 로드 ===')
-print(f'플레이어: {loaded["player"]}')
-print(f'레벨: {loaded["level"]}')
-print(f'아이템: {", ".join(loaded["items"])}')
-print(f'골드: {loaded["gold"]}G')`,
-      expectedOutput: `=== 게임 저장 ===\n{\n  "player": "용사",\n  "level": 5,\n  "hp": 150,\n  "items": [\n    "불꽃검",\n    "강철방패",\n    "회복포션"\n  ],\n  "gold": 2500\n}\n\n=== 게임 로드 ===\n플레이어: 용사\n레벨: 5\n아이템: 불꽃검, 강철방패, 회복포션\n골드: 2500G`,
-      hint: "json 모듈의 dumps(저장)와 loads(불러오기)를 사용해요!",
-      hint2: "json / dumps / loads"
-    },
-    {
-      id: "ch3-3",
       type: "quiz",
-      title: "최종 퀴즈!",
-      content: "외부 패키지를 사용하려면 어떤 순서로 해야 하나요?",
+      title: "퀴즈: 턴제 전투!",
+      content: "defend() 후 데미지를 받으면 어떻게 되나요?\n\n```python\ndef take_damage(s, damage):\n    actual = damage - s.defense\n    if s.defending:\n        actual = actual // 2\n```",
       options: [
-        "import → pip install → 사용",
-        "pip install → import → 사용",
-        "사용 → pip install → import",
-        "import만 하면 됨"
+        "데미지 0",
+        "데미지 변화 없음",
+        "데미지가 절반으로 줄어듦",
+        "에러 발생"
       ],
-      answer: 1,
-      explanation: "먼저 pip install로 설치하고, import로 불러온 뒤, 사용할 수 있어요!"
+      answer: 2,
+      explanation: "defending이 True면 actual // 2로 데미지가 절반! 방어의 힘!"
     }
   ]
 }

@@ -2,75 +2,88 @@ import { Chapter } from '../types'
 
 export const ch4: Chapter = {
   id: "ch4",
-  title: "🎉 Part 6 완료!",
-  emoji: "🏆",
+  title: "여러 에러 처리하기",
+  emoji: "🎯",
   steps: [
     {
       id: "ch4-0",
       type: "explain",
-      title: "🏆 Part 6 총정리!",
-      content: `## 에러처리와 파일 입출력 마스터!
+      title: "🎯 에러별로 다른 메시지!",
+      content: `## except를 여러 개 쓰면!
 
-### 에러 처리
 \`\`\`python
 try:
-    위험한_코드()
-except 에러이름:
-    처리_코드()
-finally:
-    항상_실행()
+    숫자a = int(input('첫 번째 숫자: '))
+    숫자b = int(input('두 번째 숫자: '))
+    결과 = 숫자a / 숫자b
+    print(f'결과: {결과}')
+except ValueError:
+    print('숫자를 입력하세요!')
+except ZeroDivisionError:
+    print('0으로 나눌 수 없어요!')
 \`\`\`
 
-### 에러 종류
-| 에러 | 원인 |
-|------|------|
-| **ValueError** | 잘못된 값 (int('abc')) |
-| **ZeroDivisionError** | 0으로 나누기 |
-| **FileNotFoundError** | 파일 없음 |
-| **IndexError** | 인덱스 범위 초과 |
-
-### 파일 다루기
-- **'w'** = 쓰기 (덮어씀)
-- **'r'** = 읽기
-- **'a'** = 추가
-
-### 핵심 패턴
-- **while True + try-except** = 안전한 입력
-- **try + with open('r')** = 안전한 파일 읽기
-- **함수로 정리** = 깔끔한 코드`
+- 'abc' 입력 → \`숫자를 입력하세요!\`
+- 0 입력 → \`0으로 나눌 수 없어요!\``
     },
     {
       id: "ch4-1",
-      type: "quiz",
-      title: "마지막 퀴즈!",
-      content: "Part 6에서 가장 중요한 패턴은?",
-      options: [
-        "print()만 잘 쓰면 됨",
-        "try-except로 에러 처리 + with open으로 파일 다루기",
-        "변수만 잘 쓰면 됨",
-        "for문만 잘 쓰면 됨"
-      ],
-      answer: 1,
-      explanation: "try-except + with open = Part 6의 핵심!"
+      type: "interactive",
+      title: "🎯 여러 except 흐름 체험!",
+      description: "입력값에 따라 어떤 except가 실행되는지 직접 확인해보세요!",
+      component: "multiExceptFlow"
     },
     {
       id: "ch4-2",
-      type: "explain",
-      title: "🚀 다음 파트!",
-      content: `## Part 7: 클래스
-
-붕어빵 틀처럼 **객체를 찍어내는 클래스**를 배워요!
+      type: "interactive",
+      title: "빈칸 채우기: 여러 except",
+      description: "두 가지 에러를 각각 잡아보세요!",
+      component: "fillInBlank",
+      codeTemplate: "try:\n    x = int(input())\n    print(10 / x)\nexcept ___1___:\n    print('숫자 아님!')\nexcept ___2___:\n    print('0 안돼!')",
+      blanks: [
+        { id: "1", answer: "ValueError", hint: "숫자가 아닌 걸 변환할 때!" },
+        { id: "2", answer: "ZeroDivisionError", hint: "0으로 나눌 때!" }
+      ],
+      choices: ["ValueError", "ZeroDivisionError", "FileNotFoundError", "TypeError"],
+      expectedOutput: ""
+    },
+    {
+      id: "ch4-3",
+      type: "quiz",
+      title: "예측해보세요!",
+      content: `'abc' 입력하면?
 
 \`\`\`python
-class 캐릭터:
-    def __init__(self, 이름, HP):
-        self.이름 = 이름
-        self.HP = HP
+try:
+    x = int(input())  # 'abc' 입력
+    print(10 / x)
+except ValueError:
+    print('A')
+except ZeroDivisionError:
+    print('B')
+\`\`\``,
+      options: ["A", "B", "A와 B 둘 다", "에러"],
+      answer: 0,
+      explanation: "'abc'는 숫자가 아니라 ValueError → 'A' 출력!"
+    },
+    {
+      id: "ch4-4",
+      type: "quiz",
+      title: "예측해보세요!",
+      content: `'0' 입력하면?
 
-용사 = 캐릭터('용사', 100)
-\`\`\`
-
-기대하세요! 🎉`
+\`\`\`python
+try:
+    x = int(input())  # '0' 입력
+    print(10 / x)
+except ValueError:
+    print('A')
+except ZeroDivisionError:
+    print('B')
+\`\`\``,
+      options: ["A", "B", "10", "에러"],
+      answer: 1,
+      explanation: "0으로 나누면 ZeroDivisionError → 'B' 출력!"
     }
   ]
 }

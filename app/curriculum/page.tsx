@@ -19,7 +19,7 @@ import {
 // ============================================================
 // /review에 실제 레슨이 있는 ID 목록 (게임형 복습)
 // ============================================================
-const lessonsInReview = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45])
+const lessonsInReview = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48])
 
 // 복습 경로 결정: /review에 있으면 review, 없으면 learn으로 fallback
 const getReviewPath = (lessonId: number | string) => {
@@ -101,8 +101,11 @@ const curriculumData: {
     title: "Part 4: 프로젝트 & 도전",
     description: "Part 1~3에서 배운 모든 것을 활용! 프로젝트를 만들고 다양한 문제를 풀어요.",
     lessons: [
-      { id: 27, title: "27. 미니 프로젝트 모음", description: "가위바위보, 로또, 단어장, 성적관리", duration: "40분", hasQuiz: true },
-      { id: 28, title: "28. 종합 문제 모음", description: "기초부터 자료구조까지 30문제!", duration: "50분", hasQuiz: true },
+      { id: 27, title: "27. 가위바위보 게임", description: "리스트, 조건문, 반복문으로 가위바위보!", duration: "25분", hasQuiz: true },
+      { id: 28, title: "28. 로또 번호 생성기", description: "random 모듈과 리스트로 로또 만들기", duration: "25분", hasQuiz: true },
+      { id: 29, title: "29. 단어장 프로그램", description: "딕셔너리로 나만의 단어장!", duration: "25분", hasQuiz: true },
+      { id: 30, title: "30. 성적 관리 시스템", description: "리스트와 딕셔너리로 성적 관리", duration: "25분", hasQuiz: true },
+      { id: 31, title: "31. 종합 문제 모음", description: "기초부터 자료구조까지 30문제!", duration: "50분", hasQuiz: true },
     ],
   },
   {
@@ -110,11 +113,11 @@ const curriculumData: {
     title: "Part 5: 함수",
     description: "코드를 재사용하고 정리하는 함수를 배워요! Level 2 시험의 핵심!",
     lessons: [
-      { id: 29, title: "29. 함수란?", description: "def로 함수 만들기, return으로 결과 반환", duration: "25분", hasQuiz: true },
-      { id: 30, title: "30. 매개변수와 반환값", description: "기본값, 여러 값 반환, 키워드 인자", duration: "25분", hasQuiz: true },
-      { id: 31, title: "31. 함수 활용", description: "지역변수, 전역변수, 람다 함수", duration: "25분", hasQuiz: true },
-      { id: 32, title: "32. 내장함수 총정리", description: "len, sum, max, min, sorted, map", duration: "30분", hasQuiz: true },
-      { id: 33, title: "33. 함수 문제 30", description: "함수 마스터를 위한 30문제!", duration: "40분", hasQuiz: true },
+      { id: 32, title: "32. 함수란?", description: "def로 함수 만들기, return으로 결과 반환", duration: "25분", hasQuiz: true },
+      { id: 33, title: "33. 매개변수와 반환값", description: "기본값, 여러 값 반환, 키워드 인자", duration: "25분", hasQuiz: true },
+      { id: 34, title: "34. 함수 활용", description: "지역변수, 전역변수, 람다 함수", duration: "25분", hasQuiz: true },
+      { id: 35, title: "35. 내장함수 총정리", description: "len, sum, max, min, sorted, map", duration: "30분", hasQuiz: true },
+      { id: 36, title: "36. 함수 문제 30", description: "함수 마스터를 위한 30문제!", duration: "40분", hasQuiz: true },
     ],
   },
   {
@@ -122,10 +125,10 @@ const curriculumData: {
     title: "Part 6: 에러와 파일",
     description: "에러를 처리하고 파일을 다뤄요! 게임 세이브 시스템을 만들어요.",
     lessons: [
-      { id: 34, title: "34. 에러 처리하기", description: "try-except로 에러 잡기", duration: "25분", hasQuiz: true },
-      { id: 35, title: "35. 파일 읽고 쓰기", description: "파일로 데이터 저장하기", duration: "25분", hasQuiz: true },
-      { id: 36, title: "36. 게임 세이브", description: "RPG 게임 저장/불러오기", duration: "30분", hasQuiz: true },
-      { id: 37, title: "37. Part 6 문제 20", description: "에러와 파일 연습 문제", duration: "40분", hasQuiz: true },
+      { id: 37, title: "37. 에러 처리하기", description: "try-except로 에러 잡기", duration: "25분", hasQuiz: true },
+      { id: 38, title: "38. 파일 읽고 쓰기", description: "파일로 데이터 저장하기", duration: "25분", hasQuiz: true },
+      { id: 39, title: "39. 게임 세이브", description: "RPG 게임 저장/불러오기", duration: "30분", hasQuiz: true },
+      { id: 40, title: "40. Part 6 문제 20", description: "에러와 파일 연습 문제", duration: "40분", hasQuiz: true },
     ],
   },
   {
@@ -133,10 +136,10 @@ const curriculumData: {
     title: "Part 7: 클래스",
     description: "객체지향 프로그래밍의 기초를 배워요. 붕어빵 틀처럼 객체를 찍어내요!",
     lessons: [
-      { id: 38, title: "38. 클래스 기초", description: "클래스와 객체 만들기", duration: "25분", hasQuiz: true },
-      { id: 39, title: "39. 메서드와 속성", description: "메서드 만들기와 변수 종류", duration: "25분", hasQuiz: true },
-      { id: 40, title: "40. RPG 게임", description: "클래스로 RPG 게임 만들기", duration: "30분", hasQuiz: true },
-      { id: 41, title: "41. Part 7 문제 20", description: "클래스 연습 문제", duration: "40분", hasQuiz: true },
+      { id: 41, title: "41. 클래스 기초", description: "클래스와 객체 만들기", duration: "25분", hasQuiz: true },
+      { id: 42, title: "42. 메서드와 속성", description: "메서드 만들기와 변수 종류", duration: "25분", hasQuiz: true },
+      { id: 43, title: "43. RPG 게임", description: "클래스로 RPG 게임 만들기", duration: "30분", hasQuiz: true },
+      { id: 44, title: "44. Part 7 문제 20", description: "클래스 연습 문제", duration: "40분", hasQuiz: true },
     ],
   },
   {
@@ -144,10 +147,10 @@ const curriculumData: {
     title: "Part 8: 모듈과 패키지",
     description: "다른 사람이 만든 코드를 활용해요.",
     lessons: [
-      { id: 42, title: "42. 모듈 기초", description: "import와 내장 모듈 사용법", duration: "25분", hasQuiz: true },
-      { id: 43, title: "43. 패키지와 pip", description: "패키지 개념과 내장 모듈 활용", duration: "25분", hasQuiz: true },
-      { id: 44, title: "44. 날씨 앱", description: "모듈로 날씨 앱 만들기", duration: "30분", hasQuiz: true },
-      { id: 45, title: "45. Part 8 문제 20", description: "모듈과 패키지 연습 문제", duration: "40분", hasQuiz: true },
+      { id: 45, title: "45. 모듈 기초", description: "import와 내장 모듈 사용법", duration: "25분", hasQuiz: true },
+      { id: 46, title: "46. 패키지와 pip", description: "패키지 개념과 내장 모듈 활용", duration: "25분", hasQuiz: true },
+      { id: 47, title: "47. 날씨 앱", description: "모듈로 날씨 앱 만들기", duration: "30분", hasQuiz: true },
+      { id: 48, title: "48. Part 8 문제 20", description: "모듈과 패키지 연습 문제", duration: "40분", hasQuiz: true },
     ],
   },
   {
@@ -155,10 +158,10 @@ const curriculumData: {
     title: "Part 9: 종합 프로젝트",
     description: "모든 것을 활용한 대형 프로젝트!",
     lessons: [
-      { id: 46, title: "46. 텍스트 RPG: 게임 설계", description: "클래스 구조 설계와 게임 흐름", duration: "30분", hasQuiz: true },
-      { id: 47, title: "47. 텍스트 RPG: 핵심 시스템", description: "캐릭터, 몬스터, 아이템 구현", duration: "45분", hasQuiz: true },
-      { id: 48, title: "48. 텍스트 RPG: 게임 완성", description: "상점, 세이브, 게임 루프 통합", duration: "45분", hasQuiz: true },
-      { id: 49, title: "49. 텍스트 RPG: 업그레이드", description: "치명타, 퀘스트, 스킬 추가", duration: "40분", hasQuiz: true },
+      { id: 49, title: "49. 텍스트 RPG: 게임 설계", description: "클래스 구조 설계와 게임 흐름", duration: "30분", hasQuiz: true },
+      { id: 50, title: "50. 텍스트 RPG: 핵심 시스템", description: "캐릭터, 몬스터, 아이템 구현", duration: "45분", hasQuiz: true },
+      { id: 51, title: "51. 텍스트 RPG: 게임 완성", description: "상점, 세이브, 게임 루프 통합", duration: "45분", hasQuiz: true },
+      { id: 52, title: "52. 텍스트 RPG: 업그레이드", description: "치명타, 퀘스트, 스킬 추가", duration: "40분", hasQuiz: true },
       { id: "p4", title: "🐍 Snake Game", description: "turtle, 클래스, 모듈로 뱀 게임 만들기", duration: "60분", isProject: true },
     ],
   },

@@ -2,91 +2,98 @@ import { Chapter } from '../types'
 
 export const ch4: Chapter = {
   id: "ch4",
-  title: "미니 전투 & 미션",
-  emoji: "🎮",
+  title: "메인 메뉴 & 몬스터",
+  emoji: "⚔️",
   steps: [
     {
       id: "ch4-0",
-      type: "tryit",
-      title: "⚔️ 미니 전투 시스템!",
-      task: "alive 속성을 활용한 전투 시스템을 실행해보세요!",
-      initialCode: `class Character:
-    def __init__(s, char_name, hp, atk):
-        s.char_name = char_name
-        s.hp = hp
-        s.atk = atk
-        s.alive = True
+      type: "explain",
+      title: "🎮 메인 메뉴 구조!",
+      content: `## while + try-except로 안전한 메뉴!
 
-    def attack(s, target):
-        if not s.alive:
-            print(f'{s.char_name}은(는) 사망했습니다!')
-            return
-        print(f'{s.char_name} -> {target.char_name} 공격! (-{s.atk})')
-        target.hp = target.hp - s.atk
-        if target.hp <= 0:
-            target.hp = 0
-            target.alive = False
-            print(f'{target.char_name} 사망!')
-        else:
-            print(f'{target.char_name} 남은 HP: {target.hp}')
+\`\`\`python
+while True:
+    print('\\n=== RPG 게임 ===')
+    print('1. 새 게임  2. 이어하기  3. 저장')
+    print('4. 몬스터잡기  5. 상태보기  6. 종료')
+    try:
+        선택 = int(input('선택: '))
+        if 선택 == 1: 새게임()
+        elif 선택 == 2: 불러오기()
+        elif 선택 == 3: 저장하기()
+        elif 선택 == 4: 몬스터잡기()
+        elif 선택 == 5: 상태보기()
+        elif 선택 == 6:
+            print('다음에 또 만나요!')
+            break
+    except ValueError:
+        print('숫자를 입력해주세요!')
+\`\`\`
 
-    def status(s):
-        state = 'O' if s.alive else 'X'
-        print(f'[{state}] {s.char_name}: HP {s.hp}')
-
-hero = Character('용사', 100, 25)
-slime = Character('슬라임', 40, 10)
-
-print('=== 전투 시작! ===')
-hero.status()
-slime.status()
-
-print('\\n--- 1턴 ---')
-hero.attack(slime)
-
-print('\\n--- 2턴 ---')
-hero.attack(slime)
-
-print('\\n=== 결과 ===')
-hero.status()
-slime.status()`,
-      expectedOutput: `=== 전투 시작! ===\n[O] 용사: HP 100\n[O] 슬라임: HP 40\n\n--- 1턴 ---\n용사 -> 슬라임 공격! (-25)\n슬라임 남은 HP: 15\n\n--- 2턴 ---\n용사 -> 슬라임 공격! (-25)\n슬라임 사망!\n\n=== 결과 ===\n[O] 용사: HP 100\n[X] 슬라임: HP 0`,
-      hint: "alive가 True면 살아있고, False면 사망!",
-      hint2: "target.hp <= 0이면 target.alive = False로 사망 처리!"
+**try-except로 숫자 아닌 입력도 안전 처리!**`
     },
     {
       id: "ch4-1",
-      type: "mission",
-      title: "🏦 미션: 은행 계좌 클래스!",
-      task: "BankAccount 클래스의 빈칸(___) 3개를 채워서 입금, 출금, 잔액 조회 기능을 완성하세요!",
-      initialCode: `class BankAccount:
-    def __init__(s, owner, balance):
-        s.owner = owner
-        s.balance = balance
+      type: "explain",
+      title: "⚔️ 몬스터 잡기!",
+      content: `## random으로 전투!
 
-    def deposit(s, amount):
-        s.balance = s.balance ___ amount
-        print(f'{amount}원 입금! 잔액: {s.balance}원')
+\`\`\`python
+import random
 
-    def withdraw(s, amount):
-        if s.balance ___ amount:
-            s.balance = s.balance - amount
-            print(f'{amount}원 출금! 잔액: {s.balance}원')
-        else:
-            print(f'잔액 부족! 현재: {s.balance}원')
+def 몬스터잡기():
+    몬스터HP = random.randint(20, 40)
+    print(f'고블린이 나타났다! (HP: {몬스터HP})')
+    
+    while 몬스터HP > 0:
+        input('공격하려면 Enter!')
+        데미지 = random.randint(10, 캐릭터['공격력'])
+        몬스터HP -= 데미지
+        print(f'공격! 데미지 {데미지}')
+        
+        if 몬스터HP <= 0:
+            경험치 = random.randint(20, 40)
+            캐릭터['경험치'] += 경험치
+            print(f'고블린을 물리쳤다! 경험치 +{경험치}')
+            
+            if 캐릭터['경험치'] >= 100:
+                캐릭터['레벨'] += 1
+                캐릭터['경험치'] -= 100
+                캐릭터['공격력'] += 5
+                print(f'🎉 레벨 업! Lv.{캐릭터["레벨"]}')
+\`\`\`
 
-    def show_balance(s):
-        print(f'{s.owner}님 잔액: {s.___}원')
-
-account = BankAccount('철수', 10000)
-account.show_balance()
-account.deposit(5000)
-account.withdraw(3000)
-account.withdraw(20000)
-account.show_balance()`,
-      expectedOutput: `철수님 잔액: 10000원\n5000원 입금! 잔액: 15000원\n3000원 출금! 잔액: 12000원\n잔액 부족! 현재: 12000원\n철수님 잔액: 12000원`,
-      hint: "입금은 더하기, 출금 조건은 잔액 비교!",
-      hint2: "+ / >= / balance"
+random + while + if = 간단한 전투 시스템!`
+    },
+    {
+      id: "ch4-2",
+      type: "interactive",
+      title: "빈칸 채우기: 메인 루프",
+      description: "메인 메뉴의 핵심 구조를 완성하세요!",
+      component: "fillInBlank",
+      codeTemplate: "___1___ True:\n    print('1.시작 2.종료')\n    ___2___:\n        선택 = int(input('선택: '))\n        if 선택 == 2:\n            ___3___\n    except ___4___:\n        print('숫자만!')",
+      blanks: [
+        { id: "1", answer: "while", hint: "무한 반복!" },
+        { id: "2", answer: "try", hint: "에러 감싸기!" },
+        { id: "3", answer: "break", hint: "반복문 탈출!" },
+        { id: "4", answer: "ValueError", hint: "잘못된 값 에러!" }
+      ],
+      choices: ["while", "for", "try", "except", "break", "continue", "ValueError", "FileNotFoundError"],
+      expectedOutput: ""
+    },
+    {
+      id: "ch4-3",
+      type: "quiz",
+      title: "퀴즈!",
+      content: "메인 메뉴에서 try-except를 쓰는 이유는?",
+      options: [
+        "더 빠르게 실행하려고",
+        "파일을 저장하려고",
+        "숫자 아닌 입력을 해도 안 꺼지게",
+        "메뉴를 예쁘게 보여주려고"
+      ],
+      answer: 2,
+      explanation: "'abc' 같은 입력 → int() 에러 → except가 잡아줌!"
     }
   ]
 }

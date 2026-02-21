@@ -1,14 +1,10 @@
 import { LessonData } from '../types'
 import { ch1 } from './ch1'
-import { ch2 } from './ch2'
-import { ch3 } from './ch3'
-import { ch4 } from './ch4'
-import { ch5 } from './ch5'
 
-export const lesson29Data: LessonData = {
+export const lesson29: LessonData = {
   id: "29",
-  title: "함수란?",
-  emoji: "🎁",
-  description: "코드를 재사용하는 마법, 함수를 배워요!",
-  chapters: [ch1, ch2, ch3, ch4, ch5]
+  title: "단어장 프로그램",
+  emoji: "📖",
+  description: "딕셔너리로 단어장을 만들어요! 추가, 검색, 삭제까지!",
+  chapters: [ch1]
 }

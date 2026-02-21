@@ -25,16 +25,16 @@ import { lesson23 } from './lesson23';
 import { lesson24 } from './lesson24';
 import { lesson25 } from './lesson25';
 import { lesson26 } from './lesson26';
-import { lesson38 } from './lesson38';
-import { lesson29 } from './lesson29';
-import { lesson30 } from './lesson30';
-import { lesson31 } from './lesson31';
 import { lesson32 } from './lesson32';
 import { lesson33 } from './lesson33';
 import { lesson34 } from './lesson34';
 import { lesson35 } from './lesson35';
 import { lesson36 } from './lesson36';
 import { lesson37 } from './lesson37';
+import { lesson38 } from './lesson38';
+import { lesson39 } from './lesson39';
+import { lesson40 } from './lesson40';
+import { lesson41 } from './lesson41';
 
 import { LessonData } from '../types';
 
@@ -82,19 +82,19 @@ export const lessonsData: Record<string, LessonData> = {
   "24": lesson24,
   "25": lesson25,
   "26": lesson26,
-  // Part 7: 클래스
-  "38": lesson38,
   // Part 5: 함수
-  "29": lesson29,
-  "30": lesson30,
-  "31": lesson31,
   "32": lesson32,
   "33": lesson33,
-  // Part 6: 에러와 파일
   "34": lesson34,
   "35": lesson35,
   "36": lesson36,
+  // Part 6: 에러와 파일
   "37": lesson37,
+  "38": lesson38,
+  "39": lesson39,
+  "40": lesson40,
+  // Part 7: 클래스
+  "41": lesson41,
   // 프로젝트
   "p1": createDummyLesson("p1", "미니 계산기"),
   "p2": createDummyLesson("p2", "숫자 맞추기 게임"),

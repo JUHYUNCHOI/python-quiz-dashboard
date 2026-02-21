@@ -2,121 +2,132 @@ import { Chapter } from '../types'
 
 export const ch2: Chapter = {
   id: "ch2",
-  title: "⭐⭐ 보통 (9~14)",
-  emoji: "⭐",
+  title: "클래스 만들기",
+  emoji: "🔨",
   steps: [
     {
       id: "ch2-0",
-      type: "mission",
-      title: "문제 9: Calculator 클래스",
-      task: "빈칸을 채워서 Calculator 클래스를 완성하세요!",
-      initialCode: `class Calculator:
-    def add(s, a, b):
-        ___
-    def multiply(s, a, b):
-        ___
+      type: "explain",
+      title: "📦 가장 간단한 클래스",
+      content: `## 빈 클래스부터!
 
-calc = Calculator()
-print(calc.add(3, 5))
-print(calc.multiply(4, 6))`,
-      expectedOutput: "8\n24",
-      hint: "메서드는 s 다음에 매개변수를 받아요",
-      hint2: "return a + b / return a * b"
+\`\`\`python
+# 클래스 정의 (틀 만들기)
+class Character:
+    pass  # 아무 기능 없음
+
+# 객체 생성 (붕어빵 찍기)
+hero = Character()
+villain = Character()
+
+print(type(hero))
+\`\`\`
+
+**결과:**
+\`<class '__main__.Character'>\`
+
+⚠️ 클래스 이름은 **대문자**로 시작!
+- 함수: \`print()\`, \`input()\` (소문자)
+- 클래스: \`Character()\`, \`Monster()\` (대문자)`
     },
     {
       id: "ch2-1",
-      type: "mission",
-      title: "문제 10: 사각형 클래스",
-      task: "빈칸을 채워서 Rectangle 클래스의 area와 perimeter를 완성하세요!",
-      initialCode: `class Rectangle:
-    def __init__(s, width, height):
-        s.width = width
-        s.height = height
-    def area(s):
-        ___
-    def perimeter(s):
-        ___
+      type: "explain",
+      title: "🍩 __init__: 속을 채우자!",
+      content: `## 빈 붕어빵은 재미없죠? 속을 채워봅시다!
 
-rect = Rectangle(5, 3)
-print(f'넓이: {rect.area()}')
-print(f'둘레: {rect.perimeter()}')`,
-      expectedOutput: "넓이: 15\n둘레: 16",
-      hint: "넓이 = 가로 × 세로, 둘레 = (가로 + 세로) × 2",
-      hint2: "return s.width * s.height / return (s.width + s.height) * 2"
+\`\`\`python
+class Character:
+    def __init__(s, char_name, char_hp):
+        s.char_name = char_name
+        s.char_hp = char_hp
+        print(f'{char_name} 캐릭터가 생성되었습니다!')
+
+# 객체 생성
+hero = Character('용사', 100)
+print(f'이름: {hero.char_name}')
+print(f'HP: {hero.char_hp}')
+\`\`\`
+
+**결과:**
+\`\`\`
+용사 캐릭터가 생성되었습니다!
+이름: 용사
+HP: 100
+\`\`\`
+
+💡 \`__init__\` = initialize(초기화)의 줄임말!
+→ 객체를 만들 때 **자동으로** 실행돼요!`
     },
     {
       id: "ch2-2",
       type: "quiz",
-      title: "문제 11",
-      content: "출력 결과는?\n\n```python\nclass Animal:\n    total = 0\n    def __init__(s, species):\n        s.species = species\n        Animal.total += 1\ncat = Animal('고양이')\ndog = Animal('강아지')\nprint(f'{cat.species}, {dog.species}')\nprint(f'총: {Animal.total}마리')\n```",
+      title: "퀴즈!",
+      content: "`__init__`은 언제 실행되나요?",
       options: [
-        "고양이, 강아지\\n총: 1마리",
-        "고양이, 강아지\\n총: 2마리",
-        "강아지, 고양이\\n총: 2마리",
-        "에러"
+        "프로그램 시작할 때",
+        "클래스를 정의할 때",
+        "객체를 만들 때 (Character() 호출 시)",
+        "print() 할 때"
       ],
-      answer: 1,
-      explanation: "Animal()을 2번 호출 → total = 2! 각 객체는 자기 species를 가져요!"
+      answer: 2,
+      explanation: "`Character('용사', 100)` 이렇게 객체를 만들 때 자동으로 실행돼요!"
     },
     {
       id: "ch2-3",
-      type: "mission",
-      title: "문제 12: 학생 성적 클래스",
-      task: "빈칸을 채워서 Student 클래스의 add_score와 average를 완성하세요!",
-      initialCode: `class Student:
-    def __init__(s, name):
-        s.name = name
-        s.scores = []
-    def add_score(s, score):
-        ___
-    def average(s):
-        ___
+      type: "explain",
+      title: "🤔 s(self)가 뭘까?",
+      content: `## 가장 헷갈리는 부분!
 
-student = Student('민수')
-student.add_score(85)
-student.add_score(92)
-student.add_score(78)
-print(f'{student.name}의 평균: {student.average():.1f}')`,
-      expectedOutput: "민수의 평균: 85.0",
-      hint: "append로 점수 추가, sum/len으로 평균 계산!",
-      hint2: "s.scores.append(score) / return sum(s.scores) / len(s.scores)"
+\`\`\`python
+class Character:
+    def __init__(s, char_name):
+        print(f's는 누구? {s}')
+        s.char_name = char_name
+
+hero = Character('용사')
+print(f'hero는 누구? {hero}')
+\`\`\`
+
+**결과:**
+\`\`\`
+s는 누구? <__main__.Character object at 0x123abc>
+hero는 누구? <__main__.Character object at 0x123abc>
+\`\`\`
+
+→ **주소가 같아요!** s와 hero는 같은 객체!
+
+🍩 붕어빵 틀에서 붕어빵이 찍힐 때:
+- \`s\` = "지금 만들어지고 있는 이 붕어빵"
+- \`hero\` = "완성된 붕어빵의 이름표"
+
+⚠️ 보통 \`self\`라고 쓰지만, 이 교재에서는 \`s\`를 써요!`
     },
     {
       id: "ch2-4",
-      type: "quiz",
-      title: "문제 13",
-      content: "`hero.attack(monster)`에서 `s`에 들어가는 것은?\n\n```python\nclass Character:\n    def attack(s, target):\n        print(f'{s.name} → {target.name}')\n```",
-      options: ["monster", "hero", "attack", "None"],
-      answer: 1,
-      explanation: "메서드를 호출한 객체(hero)가 s에 들어가요!"
+      type: "interactive",
+      title: "✏️ 클래스 따라치기!",
+      description: "Character 클래스를 직접 만들어보세요!",
+      component: "typeAlong",
+      targetTitle: "캐릭터 클래스 만들기",
+      targetDescription: "class와 __init__으로 캐릭터 생성",
+      targetCode: "class Character:\n    def __init__(s, name, hp):\n        s.name = name\n        s.hp = hp\n\nhero = Character('용사', 100)\nprint(f'{hero.name}: HP {hero.hp}')",
+      expectedOutput: "용사: HP 100"
     },
     {
       id: "ch2-5",
-      type: "tryit",
-      title: "문제 14: 자판기 클래스",
-      task: "VendingMachine 클래스를 실행하고 결과를 확인하세요!",
-      initialCode: `class VendingMachine:
-    def __init__(s):
-        s.items = {'콜라': 1200, '사이다': 1000, '주스': 1500}
-    def show_menu(s):
-        for name, price in s.items.items():
-            print(f'{name}: {price}원')
-    def buy(s, item, money):
-        if item not in s.items:
-            print('없는 상품!')
-        elif money < s.items[item]:
-            print(f'돈 부족! {s.items[item] - money}원 더 필요')
-        else:
-            change = money - s.items[item]
-            print(f'{item} 구매! 거스름돈: {change}원')
-
-vm = VendingMachine()
-vm.show_menu()
-vm.buy('콜라', 2000)
-vm.buy('주스', 1000)`,
-      expectedOutput: "콜라: 1200원\n사이다: 1000원\n주스: 1500원\n콜라 구매! 거스름돈: 800원\n돈 부족! 500원 더 필요",
-      hint: "딕셔너리의 .items()로 이름과 가격을 가져와요",
-      hint2: "조건문으로 상품 존재, 금액 부족, 구매 성공을 분기해요"
+      type: "interactive",
+      title: "빈칸 채우기: 클래스 기본",
+      description: "클래스를 완성하세요!",
+      component: "fillInBlank",
+      codeTemplate: "___1___ Dog:\n    def ___2___(s, name):\n        ___3___.name = name\n\ndog = Dog('멍멍이')\nprint(dog.name)",
+      blanks: [
+        { id: "1", answer: "class", hint: "클래스 정의!" },
+        { id: "2", answer: "__init__", hint: "초기화 함수!" },
+        { id: "3", answer: "s", hint: "자기 자신!" }
+      ],
+      choices: ["class", "def", "__init__", "__main__", "s", "self", "dog"],
+      expectedOutput: "멍멍이"
     }
   ]
 }

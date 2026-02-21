@@ -2,149 +2,147 @@ import { Chapter } from '../types'
 
 export const ch1: Chapter = {
   id: "ch1",
-  title: "⭐ 쉬움 (1~8)",
-  emoji: "⭐",
+  title: "모듈이란? import 기본",
+  emoji: "📦",
   steps: [
     {
       id: "ch1-0",
       type: "explain",
-      title: "🎯 Part 8 문제 20!",
-      content: `## 목표: 20문제 중 16문제 이상 맞추기!
+      title: "📦 모듈이란?",
+      content: `## 모듈 = 미리 만들어진 도구 상자!
 
-| 난이도 | 문제 수 |
-|--------|---------|
-| ⭐ 쉬움 | 8문제 |
-| ⭐⭐ 보통 | 6문제 |
-| ⭐⭐⭐ 도전 | 6문제 |
+프로그래밍할 때 모든 걸 직접 만들 필요 없어요!
 
-모듈과 패키지 총정리! 🚀`
+\`\`\`python
+# 제곱근을 직접 계산? 너무 어려워요!
+# → math 모듈을 쓰면 한 줄!
+import math
+print(math.sqrt(16))  # 4.0
+\`\`\`
+
+## 모듈 = .py 파일
+
+모듈은 함수와 변수가 들어있는 **파이썬 파일**이에요!
+
+| 모듈 | 설명 | 대표 기능 |
+|------|------|-----------|
+| math | 수학 계산 | sqrt, ceil, floor, pi |
+| json | JSON 처리 | dumps, loads |
+| string | 문자열 상수 | ascii_lowercase |
+| random | 랜덤 값 | randint, choice |
+| datetime | 날짜/시간 | now, date |
+
+> 파이썬에는 200개 이상의 내장 모듈이 있어요!`
     },
     {
       id: "ch1-1",
-      type: "quiz",
-      title: "문제 1",
-      content: "모듈을 가져오는 키워드는?",
-      options: ["include", "require", "import", "using"],
-      answer: 2,
-      explanation: "파이썬에서 모듈은 import 키워드로 가져와요!"
+      type: "explain",
+      title: "📥 import 방법 4가지!",
+      content: `## import 방법 비교
+
+### 1. 전체 import
+\`\`\`python
+import math
+print(math.sqrt(16))  # 모듈명.함수()
+\`\`\`
+
+### 2. 특정 기능만 import
+\`\`\`python
+from math import sqrt
+print(sqrt(16))  # 바로 함수()
+\`\`\`
+
+### 3. 여러 개 import
+\`\`\`python
+from math import sqrt, ceil, floor
+\`\`\`
+
+### 4. 별명 붙이기
+\`\`\`python
+import math as m
+print(m.sqrt(16))  # 별명.함수()
+\`\`\`
+
+⚠️ **from math import *** 는 비추!
+→ 이름 충돌 위험이 있어요!`
     },
     {
       id: "ch1-2",
-      type: "quiz",
-      title: "문제 2",
-      content: "`from math import sqrt` 후 사용법은?",
-      options: ["math.sqrt(16)", "sqrt(16)", "math(sqrt(16))", "import.sqrt(16)"],
-      answer: 1,
-      explanation: "from...import로 가져오면 모듈명 없이 바로 사용!"
+      type: "tryit",
+      title: "💻 import 방법 체험!",
+      task: "다양한 import 방법을 실행해보세요!",
+      initialCode: `# 방법 1: 전체 import
+import math
+print(f'sqrt(25) = {math.sqrt(25)}')
+
+# 방법 2: 특정 기능만
+from math import pi, ceil
+print(f'pi = {pi:.4f}')
+print(f'ceil(3.2) = {ceil(3.2)}')
+
+# 방법 3: 별명
+import math as m
+print(f'floor(3.9) = {m.floor(3.9)}')`,
+      expectedOutput: `sqrt(25) = 5.0\npi = 3.1416\nceil(3.2) = 4\nfloor(3.9) = 3`,
+      hint: "import math은 math.함수(), from math import는 바로 함수()!",
+      hint2: "코드를 그대로 실행하세요!"
     },
     {
       id: "ch1-3",
-      type: "quiz",
-      title: "문제 3",
-      content: "`math.ceil(3.1)`의 결과는?",
-      options: ["3", "4", "3.1", "에러"],
-      answer: 1,
-      explanation: "ceil = 올림! 3.1을 올리면 4!"
+      type: "tryit",
+      title: "💻 from import로 깔끔하게!",
+      task: "from import로 필요한 함수만 가져와서 사용해보세요!",
+      initialCode: `# 필요한 것만 가져오기!
+from math import sqrt, pi, ceil, floor
+
+# 모듈명 없이 바로 사용!
+print(f'sqrt(64) = {sqrt(64)}')
+print(f'pi = {pi:.4f}')
+print(f'ceil(7.3) = {ceil(7.3)}')
+print(f'floor(7.9) = {floor(7.9)}')
+
+# 별명 붙이기
+import math as m
+print(f'\\nm.pow(3, 4) = {m.pow(3, 4)}')
+print(f'm.factorial(6) = {m.factorial(6)}')`,
+      expectedOutput: `sqrt(64) = 8.0\npi = 3.1416\nceil(7.3) = 8\nfloor(7.9) = 7\n\nm.pow(3, 4) = 81.0\nm.factorial(6) = 720`,
+      hint: "from import하면 모듈명 없이 바로 함수 이름만!",
+      hint2: "코드를 그대로 실행하세요!"
     },
     {
       id: "ch1-4",
-      type: "quiz",
-      title: "문제 4",
-      content: "`math.floor(7.9)`의 결과는?",
-      options: ["7", "8", "7.9", "에러"],
-      answer: 0,
-      explanation: "floor = 내림! 7.9를 내리면 7!"
-    },
-    {
-      id: "ch1-4b",
-      type: "tryit",
-      title: "💻 문제 4.5: math 직접 체험!",
-      task: "math 모듈의 함수들을 직접 실행해보세요!",
-      initialCode: `import math
+      type: "mission",
+      title: "🎯 미션: import 방법 골라쓰기!",
+      task: "빈칸 3개를 채워서 다양한 import 방법을 완성하세요!",
+      initialCode: `# 방법 1: 전체 import
+import math
+print(f'sqrt(100) = {math.sqrt(100)}')
 
-# 올림 / 내림 / 반올림
-numbers = [3.2, 5.7, 8.5, 1.1]
+# 방법 2: 특정 함수만 import
+___ math import ceil, floor
+print(f'ceil(2.1) = {ceil(2.1)}')
+print(f'floor(2.9) = {floor(2.9)}')
 
-for n in numbers:
-    print(f'{n} → 올림:{math.ceil(n)} 내림:{math.floor(n)} 반올림:{round(n)}')
-
-# 절대값과 제곱근
-print(f'\\nabs(-15) = {abs(-15)}')
-print(f'sqrt(144) = {math.sqrt(144)}')
-print(f'pi = {math.pi:.4f}')`,
-      expectedOutput: `3.2 → 올림:4 내림:3 반올림:3\n5.7 → 올림:6 내림:5 반올림:6\n8.5 → 올림:9 내림:8 반올림:8\n1.1 → 올림:2 내림:1 반올림:1\n\nabs(-15) = 15\nsqrt(144) = 12.0\npi = 3.1416`,
-      hint: "ceil=올림, floor=내림, round=반올림!",
-      hint2: "코드를 그대로 실행하세요!"
+# 방법 3: 별명
+import math ___ m
+print(f'pi = {m.___:.2f}')`,
+      expectedOutput: `sqrt(100) = 10.0\nceil(2.1) = 3\nfloor(2.9) = 2\npi = 3.14`,
+      hint: "from으로 함수만, as로 별명, pi는 math의 상수!",
+      hint2: "from / as / pi"
     },
     {
       id: "ch1-5",
       type: "quiz",
-      title: "문제 5",
-      content: "패키지를 설치하는 명령어는?",
-      options: ["python install", "pip install", "import install", "module install"],
-      answer: 1,
-      explanation: "pip install 패키지이름 으로 설치해요!"
-    },
-    {
-      id: "ch1-6",
-      type: "quiz",
-      title: "문제 6",
-      content: "모듈과 패키지의 관계는?",
+      title: "퀴즈!",
+      content: "`from math import sqrt`로 가져온 후 사용법은?",
       options: [
-        "같은 것이다",
-        "모듈 = 여러 패키지",
-        "패키지 = 여러 모듈",
-        "관계 없다"
-      ],
-      answer: 2,
-      explanation: "패키지는 여러 모듈을 묶은 폴더예요!"
-    },
-    {
-      id: "ch1-7",
-      type: "quiz",
-      title: "문제 7",
-      content: "`import math as m` 후 pi를 사용하려면?",
-      options: ["math.pi", "m.pi", "pi", "as.pi"],
-      answer: 1,
-      explanation: "as m으로 별명을 붙였으니 m.pi로 사용해요!"
-    },
-    {
-      id: "ch1-7b",
-      type: "mission",
-      title: "🎯 문제 7.5: import 미션!",
-      task: "빈칸 3개를 채워서 모듈 사용법을 완성하세요!",
-      initialCode: `# 1. 특정 함수만 가져오기
-___ math import sqrt, pi
-
-# 2. 별명 붙이기
-import json ___ j
-
-# 3. 사용하기
-radius = 5
-area = pi * radius ** 2
-print(f'반지름 {radius}의 원 넓이: {area:.2f}')
-print(f'제곱근: {___(area):.2f}')
-
-# json 별명으로 사용
-data = j.dumps({'area': round(area, 2)})
-print(f'JSON: {data}')`,
-      expectedOutput: `반지름 5의 원 넓이: 78.54\n제곱근: 8.86\nJSON: {"area": 78.54}`,
-      hint: "from으로 함수만, as로 별명, sqrt로 제곱근!",
-      hint2: "from / as / sqrt"
-    },
-    {
-      id: "ch1-8",
-      type: "quiz",
-      title: "문제 8",
-      content: "`json.dumps()`는 무엇을 하나요?",
-      options: [
-        "JSON 파일 삭제",
-        "딕셔너리 → JSON 문자열",
-        "JSON 문자열 → 딕셔너리",
-        "JSON 파일 열기"
+        "math.sqrt(16)",
+        "sqrt(16)",
+        "import.sqrt(16)",
+        "math(sqrt(16))"
       ],
       answer: 1,
-      explanation: "dumps = dump string! 딕셔너리를 문자열로 변환!"
+      explanation: "from...import로 가져오면 모듈명 없이 바로 sqrt(16)!"
     }
   ]
 }

@@ -2,429 +2,566 @@ import type { LessonData } from '../types'
 
 export const lesson35: LessonData = {
   id: "35",
-  title: "파일 읽고 쓰기",
-  description: "파일로 데이터를 저장하고 불러와요!",
+  title: "내장함수 총정리",
+  description: "Level 2 필수 내장함수를 정리해요!",
   steps: [
     // ============================================
-    // Chapter 1: 파일 쓰기
+    // Chapter 1: len(), sum()
     // ============================================
     {
       type: "chapter",
       content: {
         num: 1,
-        title: "파일 쓰기",
-        desc: "데이터를 파일에 저장해요!"
+        title: "len()과 sum()",
+        desc: "길이와 합계를 구해요!"
       }
     },
     
+    // 빠른 복습
     {
       type: "explain",
       content: {
-        lines: ["📝 파일 쓰기 기본!"],
-        code: "# with문 = 자동으로 파일 닫아줌!\nwith open('test.txt', 'w') as f:  # w = write\n    f.write('안녕하세요!')\n    f.write('\\n')  # 줄바꿈\n    f.write('반갑습니다!')\n\n# test.txt 내용:\n# 안녕하세요!\n# 반갑습니다!",
-        result: "'w' = 쓰기 모드, \\n = 줄바꿈",
-        note: "with문 쓰면 close() 안 해도 OK!"
+        lines: ["📏 len() = 몇 개? sum() = 다 더하면?"],
+        code: `과자 = ['새우깡', '포카칩', '꼬깔콘']
+점수 = [80, 90, 70]
+
+print(len(과자))   # 과자 몇 개?
+print(sum(점수))   # 점수 다 더하면?
+print(sum(점수) / len(점수))  # 평균!`,
+        result: "3\n240\n80.0",
+        note: "평균 = 합계 ÷ 개수 → sum() / len()!"
       }
     },
     
+    // 예측 퀴즈
     {
       type: "explain",
       content: {
-        lines: ["🧠 파일 내용은?"],
-        code: "with open('a.txt', 'w') as f:\n    f.write('A')\n    f.write('B')\n    f.write('C')",
+        lines: ["🧠 sum() 시작값 예측!"],
+        code: `print(sum([1, 2, 3], 100))`,
         predict: {
-          question: "a.txt 내용은?",
-          options: ["A\\nB\\nC", "ABC", "A B C", "CBA"],
+          question: "출력 결과는?",
+          options: ["6", "106", "[100, 1, 2, 3]", "에러"],
           answer: 1,
-          feedback: "\\n 없으면 줄바꿈 없이 이어서! ABC"
+          feedback: "100부터 시작해서 더함! 100+1+2+3 = 106"
         },
-        result: "ABC"
+        result: "106"
       }
     },
     
-    // ⭐ 연습 1 (빈칸 1개: 쓰기 모드)
+    // ⭐ 연습 1: 평균 구하기
     {
       type: "practice",
       content: {
         level: 1,
-        task: "___ 자리에 알맞은 글자를 넣어보세요!",
-        guide: "파일에 쓰려면 어떤 모드?",
-        hint: "write의 첫 글자!",
-        template: "with open('player.txt', '___') as f:\n    f.write('홍길동\\n')\n    f.write('100')\nprint('저장 완료!')",
-        blanksAnswer: ["w"],
-        answer: "with open('player.txt', 'w') as f:\n    f.write('홍길동\\n')\n    f.write('100')\nprint('저장 완료!')",
-        alternateAnswers: [],
-        expect: "저장 완료!"
+        task: "점수 리스트의 평균을 구하세요",
+        guide: "sum() / len() 사용!",
+        hint: "합계를 개수로 나누면 평균!",
+        template: null,
+        answer: "점수 = [80, 90, 70, 85, 95]\n\n평균 = sum(점수) / len(점수)\nprint(f'평균: {평균}')",
+        alternateAnswers: [
+          "점수 = [80, 90, 70, 85, 95]\n평균 = sum(점수) / len(점수)\nprint(f'평균: {평균}')"
+        ],
+        expect: "평균: 84.0"
       }
     },
     
+    // 보상
     {
       type: "reward",
       content: {
-        emoji: "📝",
-        message: "파일 쓰기 완료!"
+        emoji: "📏",
+        message: "기본 함수 OK!"
       }
     },
     
     // ============================================
-    // Chapter 2: 파일 읽기
+    // Chapter 2: max(), min()
     // ============================================
     {
       type: "chapter",
       content: {
         num: 2,
-        title: "파일 읽기",
-        desc: "저장한 데이터를 불러와요!"
+        title: "max()와 min()",
+        desc: "최대최소를 찾아요!"
       }
     },
     
+    // 설명
     {
       type: "explain",
       content: {
-        lines: ["📖 파일 읽기 3가지!"],
-        code: "# 1. read() - 전체를 문자열로\nwith open('a.txt', 'r') as f:\n    전체 = f.read()  # \"ABC\"\n\n# 2. readline() - 한 줄씩\nwith open('a.txt', 'r') as f:\n    첫줄 = f.readline()\n\n# 3. readlines() - 전체를 리스트로\nwith open('a.txt', 'r') as f:\n    줄들 = f.readlines()  # ['A\\n', 'B\\n', 'C']",
-        result: "'r' = read = 읽기 모드",
-        note: "read()는 문자열, readlines()는 리스트!"
+        lines: ["🔝 가장 큰 거! 가장 작은 거!"],
+        code: `점수 = [85, 92, 78, 95, 88]
+
+print(f'1등: {max(점수)}점')
+print(f'꼴등: {min(점수)}점')
+print(f'점수 차이: {max(점수) - min(점수)}점')`,
+        result: "1등: 95점\n꼴등: 78점\n점수 차이: 17점",
+        note: "max() - min()으로 범위도 알 수 있어요!"
       }
     },
     
+    // 예측 퀴즈
     {
-      type: "quiz",
+      type: "explain",
       content: {
-        question: "read()와 readlines()의 차이는?",
-        options: [
-          "차이 없음",
-          "read()는 문자열, readlines()는 리스트",
-          "read()는 한 줄, readlines()는 전체",
-          "read()는 숫자, readlines()는 문자"
-        ],
-        answer: 1,
-        explanation: "read()는 전체를 문자열로, readlines()는 줄별로 리스트로!"
+        lines: ["🧠 문자열도 가능?"],
+        code: `print(max('apple', 'banana', 'cat'))
+print(min('apple', 'banana', 'cat'))`,
+        predict: {
+          question: "출력 결과는?",
+          options: ["banana\napple", "cat\napple", "apple\ncat", "에러"],
+          answer: 1,
+          feedback: "알파벳 순! a < b < c 니까 max는 cat, min은 apple"
+        },
+        result: "cat\napple"
       }
     },
     
-    // ⭐ 연습 2 (빈칸 2개: open + 읽기 모드)
+    // ⭐ 연습 2: 최대최소 활용
     {
       type: "practice",
       content: {
-        level: 1.5,
-        task: "___ 자리를 채워서 파일을 읽어보세요!",
-        guide: "파일을 여는 함수와 읽기 모드는?",
-        hint: "파일 여는 함수: open / 읽기 모드: 'r'",
-        template: "with ___('player.txt', '___') as f:\n    내용 = f.read()\n    print(내용)",
-        blanksAnswer: ["open", "r"],
-        answer: "with open('player.txt', 'r') as f:\n    내용 = f.read()\n    print(내용)",
-        alternateAnswers: [],
-        expect: "홍길동\n100"
+        level: 1,
+        task: "리스트에서 최대값과 최소값의 차이를 출력하세요",
+        guide: "max() - min() 사용!",
+        hint: "가장 큰 값에서 가장 작은 값을 빼면?",
+        template: null,
+        answer: "숫자 = [15, 8, 23, 4, 16]\n\nprint(max(숫자) - min(숫자))",
+        alternateAnswers: [
+          "숫자 = [15, 8, 23, 4, 16]\nprint(max(숫자) - min(숫자))"
+        ],
+        expect: "19"
       }
     },
     
+    // 보상
     {
       type: "reward",
       content: {
-        emoji: "📖",
-        message: "파일 읽기 완료!"
+        emoji: "🔝",
+        message: "최대최소 마스터!"
       }
     },
     
     // ============================================
-    // Chapter 3: 파일 모드
+    // Chapter 3: sorted()
     // ============================================
     {
       type: "chapter",
       content: {
         num: 3,
-        title: "파일 모드",
-        desc: "w, r, a 차이점!"
+        title: "sorted() 정렬",
+        desc: "줄 세우기!"
       }
     },
     
+    // 비유로 설명
     {
       type: "explain",
       content: {
-        lines: ["📊 파일 모드 비교!"],
-        code: "# 'w' - write (쓰기)\n# → 파일 없으면 생성\n# → 파일 있으면 내용 지우고 새로 씀\n\n# 'r' - read (읽기)\n# → 파일 없으면 에러!\n# → 파일 있으면 읽기만 가능\n\n# 'a' - append (추가)\n# → 파일 없으면 생성\n# → 파일 있으면 끝에 추가",
-        result: "w = 덮어쓰기, r = 읽기, a = 추가",
-        note: "기록 쌓으려면 'a' 모드!"
+        lines: ["📊 줄 세우기! 키 순? 이름 순?"],
+        code: `숫자 = [3, 1, 4, 1, 5, 9]
+
+# 작은 순 (오름차순)
+print(sorted(숫자))
+
+# 큰 순 (내림차순)
+print(sorted(숫자, reverse=True))`,
+        result: "[1, 1, 3, 4, 5, 9]\n[9, 5, 4, 3, 1, 1]",
+        note: "reverse=True면 거꾸로!"
       }
     },
     
-    {
-      type: "quiz",
-      content: {
-        question: "랭킹을 계속 기록하려면?",
-        options: ["'w' 모드", "'r' 모드", "'a' 모드", "'x' 모드"],
-        answer: 2,
-        explanation: "'a' 모드로 열면 기존 기록 유지하면서 새 기록 추가!"
-      }
-    },
-    
-    // 예측 퀴즈 — w 덮어쓰기 확인
+    // 예측 퀴즈
     {
       type: "explain",
       content: {
-        lines: ["🧠 'w'로 두 번 쓰면?"],
-        code: "with open('a.txt', 'w') as f:\n    f.write('X')\n\nwith open('a.txt', 'w') as f:\n    f.write('Y')\n\nwith open('a.txt', 'r') as f:\n    print(f.read())",
+        lines: ["🧠 점수로 줄 세우기!"],
+        code: `학생 = [('철수', 85), ('영희', 92), ('민수', 78)]
+결과 = sorted(학생, key=lambda x: x[1])
+print(결과[0][0])`,
         predict: {
-          question: "출력 결과는?",
-          options: ["XY", "X", "Y", "에러"],
+          question: "맨 앞 학생 이름은?",
+          options: ["철수", "영희", "민수", "78"],
           answer: 2,
-          feedback: "'w'는 매번 덮어쓰기! 두 번째 'Y'만 남아요!"
+          feedback: "점수 오름차순 → 78점 민수가 맨 앞!"
         },
-        result: "Y"
+        result: "민수"
       }
     },
     
-    // ⭐ 연습 3 (빈칸 2개: 추가 모드 + write)
+    // ⭐ 연습 3: 정렬 활용
     {
       type: "practice",
       content: {
         level: 2,
-        task: "___ 자리를 채워서 기록을 추가하세요!",
-        guide: "기존 내용 유지하면서 추가하려면?",
-        hint: "추가 모드: 'a' / 쓰는 함수: write",
-        template: "with open('scores.txt', '___') as f:\n    f.___('150점\\n')\nprint('점수 추가!')",
-        blanksAnswer: ["a", "write"],
-        answer: "with open('scores.txt', 'a') as f:\n    f.write('150점\\n')\nprint('점수 추가!')",
-        alternateAnswers: [],
-        expect: "점수 추가!"
+        task: "점수 내림차순으로 1등의 이름을 출력하세요",
+        guide: "reverse=True로 내림차순!",
+        hint: "정렬 후 [0][0]으로 1등 이름!",
+        template: null,
+        answer: "학생 = [('철수', 85), ('영희', 92), ('민수', 78)]\n\n결과 = sorted(학생, key=lambda x: x[1], reverse=True)\nprint(f'1등: {결과[0][0]}')",
+        alternateAnswers: [
+          "학생 = [('철수', 85), ('영희', 92), ('민수', 78)]\n결과 = sorted(학생, key=lambda x: x[1], reverse=True)\nprint(f'1등: {결과[0][0]}')"
+        ],
+        expect: "1등: 영희"
       }
     },
     
-    // 인터리빙 1 (빈칸 2개: 읽기 복습)
-    {
-      type: "interleaving",
-      content: {
-        message: "🔄 잠깐! 읽기 복습!",
-        task: "___ 자리를 채워서 파일을 읽으세요!",
-        hint: "읽기 모드: 'r' / 전체 읽기: read()",
-        template: "with open('memo.txt', '___') as f:\n    내용 = f.___()\n    print(내용)",
-        blanksAnswer: ["r", "read"],
-        answer: "with open('memo.txt', 'r') as f:\n    내용 = f.read()\n    print(내용)",
-        alternateAnswers: [],
-        expect: ""
-      }
-    },
-    
+    // 보상
     {
       type: "reward",
       content: {
         emoji: "📊",
-        message: "파일 모드 이해!"
+        message: "정렬 고수!"
       }
     },
     
     // ============================================
-    // Chapter 4: 에러 처리
+    // Chapter 4: map()
     // ============================================
     {
       type: "chapter",
       content: {
         num: 4,
-        title: "파일 에러 처리",
-        desc: "파일이 없으면?"
+        title: "map() 변환",
+        desc: "한 번에 다 바꾸기!"
       }
     },
     
+    // 비유로 설명
     {
       type: "explain",
       content: {
-        lines: ["⚠️ 파일 없으면 에러!"],
-        code: "# 없는 파일 읽으려면?\ntry:\n    with open('save.txt', 'r') as f:\n        데이터 = f.read()\n        print(f'불러오기: {데이터}')\nexcept FileNotFoundError:\n    print('저장 파일이 없어요!')",
-        result: "FileNotFoundError = 파일 없음!",
-        note: "try-except로 에러 처리!"
+        lines: ["🏭 공장처럼 한 번에 변환!"],
+        code: `# 문자열 숫자를 진짜 숫자로!
+# '1', '2', '3' → 1, 2, 3
+
+문자 = ['1', '2', '3']
+숫자 = list(map(int, 문자))
+
+print(숫자)
+print(sum(숫자))`,
+        result: "[1, 2, 3]\n6",
+        note: "map(함수, 리스트) → 모든 요소에 함수 적용!"
       }
     },
     
+    // 예측 퀴즈
     {
       type: "explain",
       content: {
-        lines: ["🧠 파일이 없을 때?"],
-        code: "try:\n    with open('없는파일.txt', 'r') as f:\n        print('A')\nexcept FileNotFoundError:\n    print('B')\nprint('C')",
+        lines: ["🧠 map() 예측!"],
+        code: `숫자 = ['10', '20', '30']
+결과 = list(map(int, 숫자))
+print(sum(결과))`,
         predict: {
           question: "출력 결과는?",
-          options: ["A C", "B C", "A B C", "에러"],
+          options: ["'102030'", "60", "[10, 20, 30]", "에러"],
           answer: 1,
-          feedback: "파일 없음 → except → 'B' → 프로그램 계속 → 'C'"
+          feedback: "문자→정수 변환 후 합계: 10+20+30=60"
         },
-        result: "B\nC"
+        result: "60"
       }
     },
     
-    // ⭐ 연습 4 (빈칸 3개: try + 읽기 모드 + 에러명)
+    // ⭐ 연습 4: map() 활용
     {
       type: "practice",
       content: {
-        level: 2,
-        task: "___ 자리를 채워서 파일을 안전하게 읽으세요!",
-        guide: "파일이 없으면 '저장 없음!' 출력!",
-        hint: "try로 감싸고, 읽기 모드 'r', 파일 없는 에러는 FileNotFoundError!",
-        template: "___:\n    with open('score.txt', '___') as f:\n        점수 = f.read()\n        print(f'점수: {점수}')\nexcept ___:\n    print('저장 없음!')",
-        blanksAnswer: ["try", "r", "FileNotFoundError"],
-        answer: "try:\n    with open('score.txt', 'r') as f:\n        점수 = f.read()\n        print(f'점수: {점수}')\nexcept FileNotFoundError:\n    print('저장 없음!')",
-        alternateAnswers: [],
-        expect: "저장 없음!"
+        level: 1.5,
+        task: "문자열 숫자를 정수로 변환 후 평균을 구하세요",
+        guide: "map() + sum() / len()",
+        hint: "list(map(int, ...))로 변환!",
+        template: null,
+        answer: "문자 = ['80', '90', '70']\n\n숫자 = list(map(int, 문자))\nprint(sum(숫자) / len(숫자))",
+        alternateAnswers: [
+          "문자 = ['80', '90', '70']\n숫자 = list(map(int, 문자))\nprint(sum(숫자) / len(숫자))"
+        ],
+        expect: "80.0"
       }
     },
     
-    // 인터리빙 2 (빈칸 3개: 쓰기 + str 변환 복습)
+    // 인터리빙
     {
       type: "interleaving",
       content: {
-        message: "🔄 쓰기 복습!",
-        task: "___ 자리를 채워서 점수를 저장하세요!",
-        hint: "쓰기 모드: 'w' / 쓰는 함수: write / 숫자를 문자로: str()",
-        template: "점수 = 100\nwith open('score.txt', '___') as f:\n    f.___(___(\uc810\uc218))\nprint('저장!')",
-        blanksAnswer: ["w", "write", "str"],
-        answer: "점수 = 100\nwith open('score.txt', 'w') as f:\n    f.write(str(점수))\nprint('저장!')",
-        alternateAnswers: [],
-        expect: "저장!"
+        message: "🔄 잠깐! max/min 복습!",
+        task: "리스트에서 최대값과 최소값의 곱을 출력하세요",
+        hint: "max() * min()",
+        template: null,
+        answer: "숫자 = [2, 5, 1, 8, 3]\n\nprint(max(숫자) * min(숫자))",
+        alternateAnswers: [
+          "숫자 = [2, 5, 1, 8, 3]\nprint(max(숫자) * min(숫자))"
+        ],
+        expect: "8"
       }
     },
     
-    // ⭐ 연습 5 (빈칸 3개: 추가 모드 + write + str)
-    {
-      type: "practice",
-      content: {
-        level: 2.5,
-        task: "___ 자리를 채워서 랭킹 기록을 추가하세요!",
-        guide: "기존 기록 유지 + 새 이름과 점수 추가!",
-        hint: "추가 모드: 'a', 쓰기: write, 숫자를 문자로: str",
-        template: "이름 = '홍길동'\n점수 = 100\nwith open('ranking.txt', '___') as f:\n    f.___(이름 + ': ' + ___(점수) + '\\n')\nprint('랭킹 추가!')",
-        blanksAnswer: ["a", "write", "str"],
-        answer: "이름 = '홍길동'\n점수 = 100\nwith open('ranking.txt', 'a') as f:\n    f.write(이름 + ': ' + str(점수) + '\\n')\nprint('랭킹 추가!')",
-        alternateAnswers: [],
-        expect: "랭킹 추가!"
-      }
-    },
-    
-    // 인터리빙 3 (빈칸 3개: 에러 처리 복습)
-    {
-      type: "interleaving",
-      content: {
-        message: "🔄 에러 처리 복습!",
-        task: "___ 자리를 채워서 파일을 안전하게 읽으세요!",
-        hint: "try로 감싸고, read()로 읽고, 파일 없으면 FileNotFoundError!",
-        template: "___:\n    with open('data.txt', 'r') as f:\n        print(f.___())\nexcept ___:\n    print('파일 없음!')",
-        blanksAnswer: ["try", "read", "FileNotFoundError"],
-        answer: "try:\n    with open('data.txt', 'r') as f:\n        print(f.read())\nexcept FileNotFoundError:\n    print('파일 없음!')",
-        alternateAnswers: [],
-        expect: "파일 없음!"
-      }
-    },
-
+    // 보상
     {
       type: "reward",
       content: {
-        emoji: "✅",
-        message: "에러 처리 완료!"
+        emoji: "🏭",
+        message: "map() 마스터!"
       }
     },
     
     // ============================================
-    // Chapter 5: 에러 탐정
+    // Chapter 5: filter, enumerate, zip
     // ============================================
     {
       type: "chapter",
       content: {
         num: 5,
-        title: "에러 탐정",
-        desc: "실수 찾기!"
+        title: "filter, enumerate, zip",
+        desc: "더 강력한 내장함수!"
       }
     },
     
+    // filter 설명
     {
-      type: "errorQuiz",
+      type: "explain",
       content: {
-        question: "이 코드의 문제점은?",
-        code: "with open('test.txt', 'w') as f\n    f.write('hello')",
-        options: [
-          "with문 뒤에 : 빠짐",
-          "write 오류",
-          "파일명 오류",
-          "문제 없음"
-        ],
-        answer: 0,
-        explanation: "with문 끝에 콜론(:)이 필요해요!"
+        lines: ["🔍 filter() = 조건에 맞는 것만 골라!"],
+        code: `숫자 = [1, -2, 3, -4, 5]
+
+# 양수만 골라!
+양수 = list(filter(lambda x: x > 0, 숫자))
+print(양수)`,
+        result: "[1, 3, 5]",
+        note: "filter(조건함수, 리스트) → 조건 통과한 것만!"
       }
     },
+    
+    // 예측 퀴즈: filter
     {
-      type: "errorQuiz",
+      type: "explain",
       content: {
-        question: "이 코드의 문제점은?",
-        code: "with open('data.txt', 'r') as f:\n    f.write('hello')",
-        options: [
-          "파일명 오류",
-          "'r' 모드에서 write 불가",
-          "close() 필요",
-          "문제 없음"
-        ],
-        answer: 1,
-        explanation: "'r'는 읽기 전용! 쓰려면 'w'나 'a' 모드 필요!"
+        lines: ["🧠 filter() 예측!"],
+        code: `숫자 = [5, 12, 8, 3, 15, 7]
+결과 = list(filter(lambda x: x >= 10, 숫자))
+print(결과)`,
+        predict: {
+          question: "출력 결과는?",
+          options: ["[5, 8, 3, 7]", "[12, 15]", "[5, 12, 8, 3, 15, 7]", "에러"],
+          answer: 1,
+          feedback: "10 이상인 것만! 12, 15가 통과!"
+        },
+        result: "[12, 15]"
       }
     },
+    
+    // ⭐ 연습 5: filter 활용
     {
-      type: "errorQuiz",
+      type: "practice",
       content: {
-        question: "이 코드의 문제점은?",
-        code: "f = open('test.txt', 'w')\nf.write('hello')\n# f.close() 안 함",
-        options: [
-          "open 오류",
-          "write 오류",
-          "close() 안 해서 데이터 손실 가능",
-          "문제 없음"
+        level: 2,
+        task: "양수만 골라서 합계를 구하세요",
+        guide: "filter() + sum()",
+        hint: "lambda x: x > 0 조건 사용!",
+        template: null,
+        answer: "숫자 = [3, -1, 4, -2, 5]\n\n양수 = list(filter(lambda x: x > 0, 숫자))\nprint(sum(양수))",
+        alternateAnswers: [
+          "숫자 = [3, -1, 4, -2, 5]\n양수 = list(filter(lambda x: x > 0, 숫자))\nprint(sum(양수))"
         ],
-        answer: 2,
-        explanation: "with문 쓰면 자동 close()! with문 권장!"
+        expect: "12"
       }
     },
+    
+    // enumerate 설명
     {
-      type: "errorQuiz",
+      type: "explain",
       content: {
-        question: "이 코드의 출력은?",
-        code: "with open('a.txt', 'w') as f:\n    f.write('A')\nwith open('a.txt', 'w') as f:\n    f.write('B')\nwith open('a.txt', 'r') as f:\n    print(f.read())",
-        options: [
-          "A",
-          "B",
-          "AB",
-          "BA"
+        lines: ["🔢 enumerate() = 번호표 붙여!"],
+        code: `과일 = ['사과', '바나나', '체리']
+
+for i, f in enumerate(과일):
+    print(f'{i}번: {f}')`,
+        result: "0번: 사과\n1번: 바나나\n2번: 체리",
+        note: "인덱스랑 값을 같이 받을 수 있어요!"
+      }
+    },
+    
+    // ⭐ 연습 6: enumerate 활용
+    {
+      type: "practice",
+      content: {
+        level: 1.5,
+        task: "enumerate로 1번부터 순위 출력하세요",
+        guide: "enumerate(리스트, 1)로 1부터 시작!",
+        hint: "두 번째 인자로 시작 번호 지정!",
+        template: null,
+        answer: "학생 = ['철수', '영희', '민수']\n\nfor i, name in enumerate(학생, 1):\n    print(f'{i}등: {name}')",
+        alternateAnswers: [
+          "학생 = ['철수', '영희', '민수']\nfor i, name in enumerate(학생, 1):\n    print(f'{i}등: {name}')"
         ],
-        answer: 1,
-        explanation: "'w' 모드는 덮어쓰기! 두 번째 'B'만 남아요!"
+        expect: "1등: 철수\n2등: 영희\n3등: 민수"
+      }
+    },
+    
+    // zip 설명
+    {
+      type: "explain",
+      content: {
+        lines: ["🤐 zip() = 두 줄을 하나로 묶어!"],
+        code: `이름 = ['철수', '영희', '민수']
+점수 = [85, 92, 78]
+
+# 이름과 점수를 짝지어!
+for name, score in zip(이름, 점수):
+    print(f'{name}: {score}점')`,
+        result: "철수: 85점\n영희: 92점\n민수: 78점",
+        note: "두 리스트를 병렬로 처리할 때 딱!"
+      }
+    },
+    
+    // ⭐ 연습 7: zip 활용
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "zip으로 두 리스트를 딕셔너리로 만드세요",
+        guide: "dict(zip(키들, 값들))",
+        hint: "zip을 dict()로 감싸면 딕셔너리!",
+        template: null,
+        answer: "과목 = ['국어', '영어', '수학']\n점수 = [90, 85, 95]\n\n성적표 = dict(zip(과목, 점수))\nprint(성적표)",
+        alternateAnswers: [
+          "과목 = ['국어', '영어', '수학']\n점수 = [90, 85, 95]\n성적표 = dict(zip(과목, 점수))\nprint(성적표)"
+        ],
+        expect: "{'국어': 90, '영어': 85, '수학': 95}"
+      }
+    },
+    
+    // 보상
+    {
+      type: "reward",
+      content: {
+        emoji: "🧰",
+        message: "고급 함수 마스터!"
       }
     },
     
     // ============================================
-    // Chapter 6: 마무리
+    // Chapter 6: 에러 탐정
     // ============================================
     {
       type: "chapter",
       content: {
         num: 6,
-        title: "마무리",
-        desc: "파일 다루기 총정리!"
+        title: "에러 탐정",
+        desc: "자주 하는 실수를 찾아요!"
       }
     },
     
+    // 에러 퀴즈 1: map() 인덱싱
+    {
+      type: "errorQuiz",
+      content: {
+        question: "이 코드의 문제점은?",
+        code: `결과 = map(int, ['1', '2', '3'])
+print(결과[0])`,
+        options: [
+          "map 문법 오류",
+          "map 객체는 인덱싱 불가",
+          "정수 변환 오류",
+          "문제 없음"
+        ],
+        answer: 1,
+        explanation: "map()은 map 객체 반환! list()로 감싸야 인덱싱 가능!"
+      }
+    },
+    
+    // 에러 퀴즈 2: sort() vs sorted()
+    {
+      type: "errorQuiz",
+      content: {
+        question: "이 코드의 문제점은?",
+        code: `숫자 = [3, 1, 4]
+결과 = 숫자.sort()
+print(결과)`,
+        options: [
+          "sort() 문법 오류",
+          "sort()는 None을 반환함",
+          "리스트 오류",
+          "문제 없음"
+        ],
+        answer: 1,
+        explanation: "sort()는 원본을 바꾸고 None 반환! sorted()는 새 리스트 반환!"
+      }
+    },
+    
+    // 에러 퀴즈 3: 빈 리스트
+    {
+      type: "errorQuiz",
+      content: {
+        question: "이 코드의 문제점은?",
+        code: `리스트 = []
+print(sum(리스트) / len(리스트))`,
+        options: [
+          "sum() 오류",
+          "len() 오류",
+          "0으로 나누기 오류",
+          "문제 없음"
+        ],
+        answer: 2,
+        explanation: "빈 리스트의 len()은 0! 0으로 나누면 에러! 💥"
+      }
+    },
+    
+    // 에러 퀴즈 4: filter도 list() 필요
+    {
+      type: "errorQuiz",
+      content: {
+        question: "이 코드의 문제점은?",
+        code: `결과 = filter(lambda x: x > 0, [1, -2, 3])
+print(결과[0])`,
+        options: [
+          "lambda 문법 오류",
+          "filter 객체는 인덱싱 불가",
+          "조건식 오류",
+          "문제 없음"
+        ],
+        answer: 1,
+        explanation: "filter()도 map()처럼 filter 객체 반환! list()로 감싸야 해요!"
+      }
+    },
+    
+    // ============================================
+    // Chapter 7: 마무리
+    // ============================================
+    {
+      type: "chapter",
+      content: {
+        num: 7,
+        title: "마무리",
+        desc: "내장함수 총정리!"
+      }
+    },
+    
+    // 요약
     {
       type: "summary",
       content: {
         num: 1,
-        title: "파일 읽고 쓰기",
-        emoji: "📁",
+        title: "내장함수",
+        emoji: "📚",
         learned: [
-          "with open('파일', '모드') as f: 로 열기",
-          "'w' = 쓰기 (덮어씀)",
-          "'r' = 읽기",
-          "'a' = 추가",
-          "read() = 전체 문자열",
-          "readlines() = 줄별 리스트",
-          "FileNotFoundError = 파일 없음"
+          "len(): 몇 개?",
+          "sum(): 다 더하면?",
+          "max(), min(): 가장 큰/작은 거!",
+          "sorted(): 줄 세우기 (reverse=True면 거꾸로)",
+          "map(): 한 번에 다 변환! (list() 필수)",
+          "filter(): 조건에 맞는 것만! (list() 필수)",
+          "enumerate(): 번호표 붙이기",
+          "zip(): 두 줄을 하나로!"
         ],
-        canDo: "게임 데이터를 저장하고 불러올 수 있어요!"
+        canDo: "내장함수로 데이터를 자유자재로 다룰 수 있어요!"
       }
     },
     
+    // 완료
     {
       type: "done",
       content: {}

@@ -1,409 +1,451 @@
 // ============================================
-// Lesson 32: Built-in Functions Summary
-// Part 5: Functions - Built-in (English)
+// Lesson 32: What is a Function?
+// Part 5: Functions - Basics (English)
 // ============================================
 
 import { LessonData } from './types'
 
 export const lesson32EnData: LessonData = {
   id: "32en",
-  title: "Built-in Functions",
-  emoji: "📚",
-  description: "Master the essential Python built-in functions!",
+  title: "What is a Function?",
+  emoji: "🎁",
+  description: "Learn the magic of reusing code with functions!",
   chapters: [
     // ============================================
-    // Chapter 1: len(), sum()
+    // Chapter 1: Why Functions?
     // ============================================
     {
       id: "ch1",
-      title: "len() and sum()",
-      emoji: "📏",
+      title: "Why Functions?",
+      emoji: "🤔",
       steps: [
         {
           id: "ch1-1",
           type: "explain",
-          title: "Essential Built-in Functions!",
-          content: `## ⭐ Master These 5!
+          title: "Why Do We Need Functions?",
+          content: `## 🤔 Think About It
 
-1. \`len()\` - Length
-2. \`sum()\` - Sum total
-3. \`max()\`, \`min()\` - Maximum/Minimum
-4. \`sorted()\` - Sort
-5. \`map()\` - Transform
+You need to send birthday messages to 10 friends.
 
-Know these 5 well and you're set!`
+Copying **"Happy birthday! Have a great day!"** and changing just the name each time... so tedious!
+
+**Function = Automatic Message Machine!**
+Just put in a name and it creates the message for you.`
         },
         {
           id: "ch1-2",
-          type: "tryit",
-          title: "len() - Length",
-          task: "Check various lengths with len()",
-          initialCode: `print(len([1, 2, 3]))       # List length
-print(len('Hello'))         # String length
-print(len({'a': 1, 'b': 2}))  # Dictionary key count`,
-          expectedOutput: "3\n5\n2",
-          hint: "3 items, 5 characters, 2 keys"
+          type: "explain",
+          title: "Coding Without Functions...",
+          content: `### 😱 Repetition Hell
+
+\`\`\`python
+print('=' * 20)
+print('Hello, Tom!')
+print('=' * 20)
+
+print('=' * 20)
+print('Hello, Jane!')
+print('=' * 20)
+
+print('=' * 20)
+print('Hello, Mike!')
+print('=' * 20)
+\`\`\`
+
+Same code repeated over and over! **9 lines!**`
         },
         {
           id: "ch1-3",
-          type: "tryit",
-          title: "sum() - Total",
-          task: "Calculate sums with sum()",
-          initialCode: `print(sum([1, 2, 3, 4, 5]))   # Basic
-print(sum([10, 20, 30]))      # Basic
+          type: "explain",
+          title: "With Functions!",
+          content: `### ✨ Clean with Functions!
 
-# Starting value
-print(sum([1, 2, 3], 10))     # Start from 10`,
-          expectedOutput: "15\n60\n16",
-          hint: "Third one: 10 + 1 + 2 + 3 = 16"
+\`\`\`python
+def greet(name):
+    print('=' * 20)
+    print(f'Hello, {name}!')
+    print('=' * 20)
+
+greet('Tom')
+greet('Jane')
+greet('Mike')
+\`\`\`
+
+Down to **7 lines!** And changes only need to be made in one place!
+
+**Function** = Code bundled together with a name!
+Call it by name whenever you need it.`
         },
         {
           id: "ch1-4",
           type: "quiz",
-          title: "Understanding sum()",
-          content: `What is the output?
-\`\`\`python
-print(sum([1, 2, 3, 4, 5]))
-\`\`\``,
+          title: "Benefits of Functions",
+          content: "What is the main reason for using functions?",
           options: [
-            "12345",
-            "15",
-            "[1, 2, 3, 4, 5]",
-            "Error occurs"
+            "Programs run slower",
+            "Reuse code and reduce repetition",
+            "File size increases",
+            "More errors occur"
           ],
           answer: 1,
-          explanation: "sum() adds all numbers in the list. 1+2+3+4+5 = 15"
-        },
-        {
-          id: "ch1-5",
-          type: "mission",
-          title: "Calculate Average",
-          task: "Use sum() and len() to calculate average",
-          initialCode: `numbers = [80, 90, 70, 85, 95]
-
-# average = sum / count
-average = # Write code here
-
-print(f'Average: {average}')`,
-          expectedOutput: "Average: 84.0",
-          hint: "sum(numbers) / len(numbers)",
-          hint2: "sum(numbers) / len(numbers)"
+          explanation: "Functions let you reuse code and reduce repetition of the same code!"
         }
       ]
     },
     // ============================================
-    // Chapter 2: max(), min()
+    // Chapter 2: Creating Functions (def)
     // ============================================
     {
       id: "ch2",
-      title: "max() and min()",
-      emoji: "🔝",
+      title: "Creating Functions (def)",
+      emoji: "🔨",
       steps: [
         {
           id: "ch2-1",
-          type: "tryit",
-          title: "max(), min() Basics",
-          task: "Find maximum and minimum values",
-          initialCode: `print(max([3, 7, 1, 9]))    # Max from list
-print(min([3, 7, 1, 9]))    # Min from list
-
-# Can also use multiple arguments
-print(max(3, 7, 1, 9))      # Max of values
-print(min(3, 7, 1, 9))      # Min of values`,
-          expectedOutput: "9\n1\n9\n1",
-          hint: "9 is largest, 1 is smallest"
+          type: "interactive",
+          title: "Function Structure",
+          description: "See how a function is structured!",
+          component: "functionStructure"
         },
         {
           id: "ch2-2",
-          type: "quiz",
-          title: "Understanding max()",
-          content: `What is the output?
+          type: "explain",
+          title: "Basic Format",
+          content: `## Creating with def
+
 \`\`\`python
-print(max([3, 7, 1, 9, 2]))
-\`\`\``,
-          options: [
-            "1",
-            "3",
-            "7",
-            "9"
-          ],
-          answer: 3,
-          explanation: "max() returns the largest value. 9 is the maximum!"
+def function_name():
+    code to run
+\`\`\`
+
+**Rules:**
+- \`def\` = short for "define"
+- \`()\` after function name is required!
+- **Indentation** after \`:\` is required!`
         },
         {
           id: "ch2-3",
+          type: "interactive",
+          title: "Experience Function Execution",
+          description: "Press the button to see how a function runs!",
+          component: "functionVisualizer",
+          componentProps: {
+            funcName: "greet",
+            params: ["name"],
+            body: 'print(f"Hello, {name}!")',
+            callArgs: ["Tom"],
+            output: "Hello, Tom!"
+          }
+        },
+        {
+          id: "ch2-4",
+          type: "tryit",
+          title: "Simplest Function",
+          task: "Define and call a function",
+          initialCode: `def say_hello():
+    print('Hello!')
+
+# Call the function
+say_hello()`,
+          expectedOutput: "Hello!",
+          hint: "Just run the code!"
+        },
+        {
+          id: "ch2-5",
+          type: "quiz",
+          title: "Understanding Function Calls",
+          content: `What is the output of this code?
+\`\`\`python
+def say_hello():
+    print('Hello!')
+
+say_hello()
+say_hello()
+\`\`\``,
+          options: [
+            "Hello!",
+            "Hello!\\nHello!",
+            "Nothing is printed",
+            "Error occurs"
+          ],
+          answer: 1,
+          explanation: "say_hello() is called twice, so 'Hello!' is printed twice!"
+        },
+        {
+          id: "ch2-6",
           type: "mission",
-          title: "Score Analysis",
-          task: "Use max(), min(), sum(), len() to analyze",
-          initialCode: `scores = [85, 92, 78, 95, 88]
+          title: "My First Function",
+          task: "Create a function fun() that prints 'Python is fun!' and call it",
+          initialCode: `# Define the fun function
+def fun():
+    # Write your code here
 
-highest = max(scores)
-lowest = min(scores)
-average = sum(scores) / len(scores)
 
-print(f'Highest: {highest}')
-print(f'Lowest: {lowest}')
-print(f'Average: {average}')`,
-          expectedOutput: "Highest: 95\nLowest: 78\nAverage: 87.6",
-          hint: "Just run the code as is!"
+# Call the function
+fun()`,
+          expectedOutput: "Python is fun!",
+          hint: "Write print('Python is fun!') inside the function",
+          hint2: "def fun():\\n    print('Python is fun!')"
         }
       ]
     },
     // ============================================
-    // Chapter 3: sorted()
+    // Chapter 3: Parameters
     // ============================================
     {
       id: "ch3",
-      title: "sorted() - Sort",
-      emoji: "📊",
+      title: "Parameters",
+      emoji: "📦",
       steps: [
         {
           id: "ch3-1",
-          type: "tryit",
-          title: "Basic Sorting",
-          task: "Try ascending and descending sort",
-          initialCode: `numbers = [3, 1, 4, 1, 5, 9]
-
-print(sorted(numbers))                    # Ascending
-print(sorted(numbers, reverse=True))     # Descending`,
-          expectedOutput: "[1, 1, 3, 4, 5, 9]\n[9, 5, 4, 3, 1, 1]",
-          hint: "reverse=True for descending"
+          type: "interactive",
+          title: "What are Parameters?",
+          description: "See how to pass values to a function!",
+          component: "parameterStructure"
         },
         {
           id: "ch3-2",
-          type: "quiz",
-          title: "sorted() Descending",
-          content: `What is the output?
-\`\`\`python
-print(sorted([3, 1, 4, 1, 5], reverse=True))
-\`\`\``,
-          options: [
-            "[1, 1, 3, 4, 5]",
-            "[5, 4, 3, 1, 1]",
-            "[1, 1, 4, 3, 5]",
-            "Error occurs"
-          ],
-          answer: 1,
-          explanation: "reverse=True is descending! 5, 4, 3, 1, 1 order."
+          type: "tryit",
+          title: "Function with Name",
+          task: "Pass a name to the function",
+          initialCode: `def greet(name):
+    print(f'Hello, {name}!')
+
+greet('Tom')
+greet('Jane')`,
+          expectedOutput: "Hello, Tom!\nHello, Jane!",
+          hint: "'Tom' and 'Jane' are passed to the name parameter"
         },
         {
           id: "ch3-3",
-          type: "explain",
-          title: "⭐ Sort with key",
-          content: `## Common Exam Pattern!
-
+          type: "quiz",
+          title: "Understanding Parameters",
+          content: `What is the output of this code?
 \`\`\`python
-words = ['apple', 'pie', 'banana']
+def greet(name):
+    print(f'Hi {name}!')
 
-# Sort by length
-print(sorted(words, key=len))
-# ['pie', 'apple', 'banana']
-\`\`\`
-
-Each word's length: apple=5, pie=3, banana=6
-Sorted by length: 3, 5, 6 → pie, apple, banana`
+greet('Mike')
+\`\`\``,
+          options: [
+            "Hi name!",
+            "Hi Mike!",
+            "Hi!",
+            "Error occurs"
+          ],
+          answer: 1,
+          explanation: "'Mike' is passed to the name parameter, so 'Hi Mike!' is printed!"
         },
         {
           id: "ch3-4",
           type: "tryit",
-          title: "Sort Tuple List",
-          task: "Sort by score",
-          initialCode: `students = [('Tom', 85), ('Jane', 92), ('Mike', 78)]
+          title: "Multiple Parameters",
+          task: "Run a function that takes name and age",
+          initialCode: `def introduce(name, age):
+    print(f"I'm {name}, {age} years old.")
 
-# Sort by score (second element)
-print(sorted(students, key=lambda x: x[1]))`,
-          expectedOutput: "[('Mike', 78), ('Tom', 85), ('Jane', 92)]",
-          hint: "x[1] is score! 78, 85, 92 order"
+introduce('Tom', 15)
+introduce('Jane', 14)`,
+          expectedOutput: "I'm Tom, 15 years old.\nI'm Jane, 14 years old.",
+          hint: "Name and age are passed to each parameter"
         },
         {
           id: "ch3-5",
           type: "mission",
-          title: "Find Top Student",
-          task: "Sort by score descending and print the top student's name",
-          initialCode: `students = [('Tom', 85), ('Jane', 92), ('Mike', 78)]
+          title: "Food Order Function",
+          task: "Create an order function that prints '[food] please!'",
+          initialCode: `def order(food):
+    # Write your code here
 
-# Sort by score descending
-result = sorted(students, key=lambda x: x[1], reverse=True)
 
-# Print top student's name
-print(result[0][0])`,
-          expectedOutput: "Jane",
-          hint: "result[0] is top student, result[0][0] is their name"
+order('pizza')
+order('chicken')`,
+          expectedOutput: "pizza please!\nchicken please!",
+          hint: "Use f-string: f'{food} please!'",
+          hint2: "print(f'{food} please!')"
         }
       ]
     },
     // ============================================
-    // Chapter 4: map()
+    // Chapter 4: Return Values
     // ============================================
     {
       id: "ch4",
-      title: "map() - Transform",
-      emoji: "🔄",
+      title: "Return Values",
+      emoji: "🎁",
       steps: [
         {
           id: "ch4-1",
-          type: "explain",
-          title: "What is map()?",
-          content: `## 🔄 Apply function to all elements!
-
-\`\`\`
-['1', '2', '3']  ── map(int, ...) ──→  [1, 2, 3]
-   strings              transform!      integers
-\`\`\`
-
-**Basic usage:**
-\`\`\`python
-# Convert string numbers to integers
-strings = ['1', '2', '3']
-numbers = list(map(int, strings))
-print(numbers)  # [1, 2, 3]
-\`\`\`
-
-🚨 **Note!** \`map()\` returns a map object!
-Wrap with \`list()\` to get a list.`
+          type: "interactive",
+          title: "What is return?",
+          description: "See how functions return results!",
+          component: "returnStructure"
         },
         {
           id: "ch4-2",
           type: "tryit",
-          title: "map() Basics",
-          task: "Convert strings to integers",
-          initialCode: `strings = ['1', '2', '3']
-numbers = list(map(int, strings))
-print(numbers)`,
-          expectedOutput: "[1, 2, 3]",
-          hint: "map(int, ...) converts each to int"
+          title: "Addition Function",
+          task: "Receive a result using return",
+          initialCode: `def add(a, b):
+    return a + b
+
+result = add(3, 5)
+print(result)`,
+          expectedOutput: "8",
+          hint: "3 + 5 = 8 is returned and stored in result!"
         },
         {
           id: "ch4-3",
           type: "quiz",
-          title: "Understanding map()",
-          content: `What is the output?
+          title: "Understanding return",
+          content: `What is the output of this code?
 \`\`\`python
-nums = ['3', '1', '4']
-result = list(map(int, nums))
-print(sum(result))
+def calc(a, b):
+    return a * b
+
+result = calc(4, 5)
+print(result)
 \`\`\``,
           options: [
-            "'314'",
-            "8",
-            "[3, 1, 4]",
+            "9",
+            "20",
+            "45",
             "Error occurs"
           ],
           answer: 1,
-          explanation: "['3','1','4'] → [3,1,4] → sum = 3+1+4 = 8"
+          explanation: "4 × 5 = 20 is returned and stored in result!"
         },
         {
           id: "ch4-4",
           type: "explain",
-          title: "⭐⭐ map() for Input (Essential!)",
-          content: `## Reading Multiple Numbers
+          title: "return vs print Difference",
+          content: `## ⚠️ Don't Confuse Them!
 
 \`\`\`python
-# Read multiple numbers on one line
-a, b, c = map(int, input().split())
+# Function with only print
+def greet():
+    print('Hello!')
 
-# Read as list
-numbers = list(map(int, input().split()))
+result1 = greet()    # 'Hello!' printed
+print(result1)       # None (nothing)
+
+# Function with return
+def add(a, b):
+    return a + b
+
+result2 = add(3, 5)
+print(result2)       # 8
+print(result2 * 2)   # 16 - can use in calculations!
 \`\`\`
 
-💡 This pattern appears on almost every exam!`
+**Key Point:**
+- \`print()\`: Just shows on screen → Can't use elsewhere
+- \`return\`: Returns the value → Can store in variable, use in calculations`
         },
         {
           id: "ch4-5",
+          type: "quiz",
+          title: "Code After return",
+          content: `What is the output of this code?
+\`\`\`python
+def test():
+    print('A')
+    return 'B'
+    print('C')
+
+result = test()
+print(result)
+\`\`\``,
+          options: [
+            "A\\nB\\nC",
+            "A\\nB",
+            "B",
+            "Error occurs"
+          ],
+          answer: 1,
+          explanation: "Code after return (print('C')) never runs! A is printed, then 'B' is returned."
+        },
+        {
+          id: "ch4-6",
           type: "mission",
-          title: "Convert and Sum",
-          task: "Combine map() and sum()",
-          initialCode: `string_nums = ['10', '20', '30', '40']
+          title: "Multiply Function",
+          task: "Complete the multiply function that returns the product of two numbers",
+          initialCode: `def multiply(a, b):
+    # Write your code here
 
-# 1. Convert to integers
-numbers = list(map(int, string_nums))
 
-# 2. Print sum
-print(sum(numbers))`,
-          expectedOutput: "100",
-          hint: "10 + 20 + 30 + 40 = 100"
+print(multiply(3, 4))
+print(multiply(5, 6))`,
+          expectedOutput: "12\n30",
+          hint: "Use return a * b",
+          hint2: "return a * b"
         }
       ]
     },
     // ============================================
-    // Chapter 5: Other Useful Functions
+    // Chapter 5: Project
     // ============================================
     {
       id: "ch5",
-      title: "Other Useful Functions",
-      emoji: "🧰",
+      title: "Project: Greeting Machine",
+      emoji: "🎉",
       steps: [
         {
           id: "ch5-1",
-          type: "tryit",
-          title: "abs(), round()",
-          task: "Try absolute value and rounding",
-          initialCode: `# abs() - Absolute value
-print(abs(-5))
-print(abs(5))
+          type: "explain",
+          title: "What We'll Make!",
+          content: `## 🎉 Let's Make a Greeting Machine!
 
-# round() - Rounding
-print(round(3.7))
-print(round(3.14159, 2))  # 2 decimal places`,
-          expectedOutput: "5\n5\n4\n3.14",
-          hint: "abs() for absolute value, round() for rounding"
+\`\`\`
+=== Greeting Machine ===
+====================
+Hello, Tom!
+====================
+====================
+Hello, Jane!
+====================
+====================
+Hello, Mike!
+====================
+\`\`\`
+
+Let's make it clean using functions!`
         },
         {
           id: "ch5-2",
-          type: "tryit",
-          title: "filter() - Filter",
-          task: "Keep only elements that match condition",
-          initialCode: `numbers = [1, -2, 3, -4, 5]
+          type: "mission",
+          title: "Complete the Greeting Machine",
+          task: "Complete the greet function and greet 3 people",
+          initialCode: `# Define greet function
+def greet(name):
+    print('=' * 20)
+    print(f'Hello, {name}!')
+    print('=' * 20)
 
-# Keep only positive numbers
-positives = list(filter(lambda x: x > 0, numbers))
-print(positives)`,
-          expectedOutput: "[1, 3, 5]",
-          hint: "Only x > 0 ones remain"
+# Run greeting machine
+print('=== Greeting Machine ===')
+greet('Tom')
+greet('Jane')
+greet('Mike')`,
+          expectedOutput: "=== Greeting Machine ===\n====================\nHello, Tom!\n====================\n====================\nHello, Jane!\n====================\n====================\nHello, Mike!\n====================",
+          hint: "Just run the code as is!"
         },
         {
           id: "ch5-3",
-          type: "quiz",
-          title: "Understanding filter()",
-          content: `What is the output?
-\`\`\`python
-numbers = [1, -2, 3, -4, 5]
-result = list(filter(lambda x: x > 0, numbers))
-print(sum(result))
-\`\`\``,
-          options: [
-            "3",
-            "9",
-            "-2",
-            "15"
-          ],
-          answer: 1,
-          explanation: "Filter positives: [1, 3, 5] → 1+3+5 = 9"
-        },
-        {
-          id: "ch5-4",
-          type: "tryit",
-          title: "enumerate() - Index and Value",
-          task: "Print index with value",
-          initialCode: `fruits = ['apple', 'banana', 'cherry']
+          type: "mission",
+          title: "🏆 Challenge: Add Message",
+          task: "Create a function that takes name and message and prints them",
+          initialCode: `# Function that takes name and message
+def greet(name, message):
+    # Write your code here
 
-for i, f in enumerate(fruits):
-    print(f'{i}: {f}')`,
-          expectedOutput: "0: apple\n1: banana\n2: cherry",
-          hint: "enumerate() gives both index and value"
-        },
-        {
-          id: "ch5-5",
-          type: "tryit",
-          title: "zip() - Combine",
-          task: "Combine two lists into one",
-          initialCode: `names = ['Tom', 'Jane']
-scores = [85, 92]
 
-result = list(zip(names, scores))
-print(result)`,
-          expectedOutput: "[('Tom', 85), ('Jane', 92)]",
-          hint: "zip() combines lists into tuples"
+greet('Tom', 'Nice to meet you')
+greet('Jane', 'Good morning')`,
+          expectedOutput: "Nice to meet you, Tom!\nGood morning, Jane!",
+          hint: "Print f'{message}, {name}!'",
+          hint2: "print(f'{message}, {name}!')"
         }
       ]
     }

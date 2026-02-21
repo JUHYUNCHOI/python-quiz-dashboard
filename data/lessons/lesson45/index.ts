@@ -5,8 +5,8 @@ import { ch3 } from './ch3'
 
 export const lesson45: LessonData = {
   id: "45",
-  title: "Part 8 문제 20",
-  emoji: "📝",
-  description: "모듈과 패키지 연습 문제 20개!",
+  title: "모듈 기초",
+  emoji: "📦",
+  description: "math, json 등 유용한 모듈을 배워요!",
   chapters: [ch1, ch2, ch3]
 }

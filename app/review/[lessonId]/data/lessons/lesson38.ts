@@ -2,431 +2,432 @@ import type { LessonData } from '../types'
 
 export const lesson38: LessonData = {
   id: "38",
-  title: "클래스 기초",
-  description: "붕어빵 틀처럼 객체를 찍어내자!",
+  title: "파일 읽고 쓰기",
+  description: "파일로 데이터를 저장하고 불러와요!",
   steps: [
     // ============================================
-    // Chapter 1: 왜 클래스가 필요할까?
+    // Chapter 1: 파일 쓰기
     // ============================================
     {
       type: "chapter",
       content: {
         num: 1,
-        title: "왜 클래스가 필요할까?",
-        desc: "변수 30개 vs 클래스 1개!"
+        title: "파일 쓰기",
+        desc: "데이터를 파일에 저장해요!"
       }
     },
-
+    
     {
       type: "explain",
       content: {
-        lines: ["캐릭터 3명을 변수로 만들면...", "변수가 너무 많아! 😩"],
-        code: `# 변수로 캐릭터 만들기
-char1_name = '용사'
-char1_hp = 100
-char1_atk = 20
-
-char2_name = '마법사'
-char2_hp = 80
-char2_atk = 30
-
-# 10명이면 변수가 30개!`,
-        isPreview: true,
-        note: "클래스를 쓰면 한 줄로 캐릭터 하나!"
+        lines: ["📝 파일 쓰기 기본!"],
+        code: "# with문 = 자동으로 파일 닫아줌!\nwith open('test.txt', 'w') as f:  # w = write\n    f.write('안녕하세요!')\n    f.write('\\n')  # 줄바꿈\n    f.write('반갑습니다!')\n\n# test.txt 내용:\n# 안녕하세요!\n# 반갑습니다!",
+        result: "'w' = 쓰기 모드, \\n = 줄바꿈",
+        note: "with문 쓰면 close() 안 해도 OK!"
       }
     },
-
+    
     {
       type: "explain",
       content: {
-        lines: ["클래스를 쓰면 이렇게 간단해요!"],
-        code: `hero = Character('용사', 100, 20)
-mage = Character('마법사', 80, 30)
-archer = Character('궁수', 90, 25)`,
-        note: "클래스 = 붕어빵 틀, 객체 = 붕어빵!"
+        lines: ["🧠 파일 내용은?"],
+        code: "with open('a.txt', 'w') as f:\n    f.write('A')\n    f.write('B')\n    f.write('C')",
+        predict: {
+          question: "a.txt 내용은?",
+          options: ["A\\nB\\nC", "ABC", "A B C", "CBA"],
+          answer: 1,
+          feedback: "\\n 없으면 줄바꿈 없이 이어서! ABC"
+        },
+        result: "ABC"
       }
     },
-
+    
+    // ⭐ 연습 1 (빈칸 1개: 쓰기 모드)
     {
-      type: "quiz",
+      type: "practice",
       content: {
-        question: "클래스와 객체의 관계를 붕어빵에 비유하면?",
-        options: [
-          "클래스 = 붕어빵, 객체 = 틀",
-          "클래스 = 붕어빵 틀, 객체 = 붕어빵",
-          "클래스 = 가게, 객체 = 손님",
-          "클래스 = 속재료, 객체 = 붕어빵"
-        ],
-        answer: 1,
-        explanation: "클래스(틀)로 객체(붕어빵)를 찍어내요! 틀 하나로 여러 개를 만들 수 있어요!"
+        level: 1,
+        task: "___ 자리에 알맞은 글자를 넣어보세요!",
+        guide: "파일에 쓰려면 어떤 모드?",
+        hint: "write의 첫 글자!",
+        template: "with open('player.txt', '___') as f:\n    f.write('홍길동\\n')\n    f.write('100')\nprint('저장 완료!')",
+        blanksAnswer: ["w"],
+        answer: "with open('player.txt', 'w') as f:\n    f.write('홍길동\\n')\n    f.write('100')\nprint('저장 완료!')",
+        alternateAnswers: [],
+        expect: "저장 완료!"
       }
     },
-
-    { type: "reward", content: { emoji: "🍩", message: "붕어빵 틀 개념 이해 완료!" } },
-
+    
+    {
+      type: "reward",
+      content: {
+        emoji: "📝",
+        message: "파일 쓰기 완료!"
+      }
+    },
+    
     // ============================================
-    // Chapter 2: 클래스 만들기
+    // Chapter 2: 파일 읽기
     // ============================================
     {
       type: "chapter",
       content: {
         num: 2,
-        title: "클래스 만들기",
-        desc: "class, __init__, s(self)!"
+        title: "파일 읽기",
+        desc: "저장한 데이터를 불러와요!"
       }
     },
-
+    
     {
       type: "explain",
       content: {
-        lines: ["가장 간단한 클래스부터!"],
-        code: `class Character:
-    pass  # 아무 기능 없음
-
-hero = Character()
-print(type(hero))`,
-        result: "<class '__main__.Character'>",
-        note: "⚠️ 클래스 이름은 대문자로 시작!"
+        lines: ["📖 파일 읽기 3가지!"],
+        code: "# 1. read() - 전체를 문자열로\nwith open('a.txt', 'r') as f:\n    전체 = f.read()  # \"ABC\"\n\n# 2. readline() - 한 줄씩\nwith open('a.txt', 'r') as f:\n    첫줄 = f.readline()\n\n# 3. readlines() - 전체를 리스트로\nwith open('a.txt', 'r') as f:\n    줄들 = f.readlines()  # ['A\\n', 'B\\n', 'C']",
+        result: "'r' = read = 읽기 모드",
+        note: "read()는 문자열, readlines()는 리스트!"
       }
     },
-
-    {
-      type: "explain",
-      content: {
-        lines: ["빈 붕어빵은 재미없지?", "__init__으로 속을 채우자!"],
-        code: `class Character:
-    def __init__(s, name, hp):
-        s.name = name
-        s.hp = hp
-
-hero = Character('용사', 100)
-print(hero.name)
-print(hero.hp)`,
-        predict: {
-          question: "출력 결과는?",
-          options: ["용사\\n100", "Character\\n100", "에러", "name\\nhp"],
-          answer: 0,
-          feedback: "hero.name은 '용사', hero.hp는 100!"
-        },
-        result: "용사\n100"
-      }
-    },
-
+    
     {
       type: "quiz",
       content: {
-        question: "__init__은 언제 실행되나요?",
+        question: "read()와 readlines()의 차이는?",
         options: [
-          "프로그램 시작할 때",
-          "클래스를 정의할 때",
-          "객체를 만들 때 (Character() 호출 시)",
-          "print() 할 때"
+          "차이 없음",
+          "read()는 문자열, readlines()는 리스트",
+          "read()는 한 줄, readlines()는 전체",
+          "read()는 숫자, readlines()는 문자"
         ],
-        answer: 2,
-        explanation: "Character('용사', 100) 이렇게 객체를 만들 때 자동으로 실행돼요!"
+        answer: 1,
+        explanation: "read()는 전체를 문자열로, readlines()는 줄별로 리스트로!"
       }
     },
-
-    {
-      type: "explain",
-      content: {
-        lines: ["s(self)가 뭘까? 🤔", "s = 지금 만들어지고 있는 이 객체!"],
-        code: `class Character:
-    def __init__(s, name):
-        s.name = name  # s = 자기 자신
-
-hero = Character('용사')
-# hero.name == '용사'
-# s와 hero는 같은 객체!`,
-        note: "보통 self라고 쓰지만 여기서는 s를 써요!"
-      }
-    },
-
-    // 빈칸 연습: 클래스 기본 구조
+    
+    // ⭐ 연습 2 (빈칸 2개: open + 읽기 모드)
     {
       type: "practice",
       content: {
-        level: 1,
-        task: "___ 자리를 채우세요!",
-        guide: "클래스 정의 기본 구조",
-        hint: "클래스를 정의하는 키워드!",
-        template: "___ Dog:\n    def __init__(s, name):\n        s.name = name\n\ndog = Dog('멍멍이')\nprint(dog.name)",
-        blanksAnswer: ["class"],
-        answer: "class Dog:\n    def __init__(s, name):\n        s.name = name\n\ndog = Dog('멍멍이')\nprint(dog.name)",
+        level: 1.5,
+        task: "___ 자리를 채워서 파일을 읽어보세요!",
+        guide: "파일을 여는 함수와 읽기 모드는?",
+        hint: "파일 여는 함수: open / 읽기 모드: 'r'",
+        template: "with ___('player.txt', '___') as f:\n    내용 = f.read()\n    print(내용)",
+        blanksAnswer: ["open", "r"],
+        answer: "with open('player.txt', 'r') as f:\n    내용 = f.read()\n    print(내용)",
         alternateAnswers: [],
-        expect: "멍멍이"
+        expect: "홍길동\n100"
       }
     },
-
+    
     {
-      type: "practice",
+      type: "reward",
       content: {
-        level: 1,
-        task: "___ 자리를 채우세요!",
-        guide: "초기화 함수 이름은?",
-        hint: "두 개의 밑줄로 감싸는 특별한 함수!",
-        template: "class Cat:\n    def ___(s, name):\n        s.name = name\n\ncat = Cat('냥이')\nprint(cat.name)",
-        blanksAnswer: ["__init__"],
-        answer: "class Cat:\n    def __init__(s, name):\n        s.name = name\n\ncat = Cat('냥이')\nprint(cat.name)",
-        alternateAnswers: [],
-        expect: "냥이"
+        emoji: "📖",
+        message: "파일 읽기 완료!"
       }
     },
-
-    { type: "reward", content: { emoji: "🔨", message: "클래스 기본 구조 마스터!" } },
-
+    
     // ============================================
-    // Chapter 3: 여러 객체 만들기
+    // Chapter 3: 파일 모드
     // ============================================
     {
       type: "chapter",
       content: {
         num: 3,
-        title: "여러 객체 만들기",
-        desc: "클래스의 진짜 힘!"
+        title: "파일 모드",
+        desc: "w, r, a 차이점!"
       }
     },
-
+    
     {
       type: "explain",
       content: {
-        lines: ["같은 클래스로 여러 객체를 만들어요!"],
-        code: `class Character:
-    def __init__(s, name, hp, atk):
-        s.name = name
-        s.hp = hp
-        s.atk = atk
-
-hero = Character('용사', 100, 20)
-mage = Character('마법사', 80, 35)
-print(f'{hero.name}: HP {hero.hp}')
-print(f'{mage.name}: HP {mage.hp}')`,
-        result: "용사: HP 100\n마법사: HP 80",
-        note: "각 객체는 독립적! 서로 영향 없음!"
+        lines: ["📊 파일 모드 비교!"],
+        code: "# 'w' - write (쓰기)\n# → 파일 없으면 생성\n# → 파일 있으면 내용 지우고 새로 씀\n\n# 'r' - read (읽기)\n# → 파일 없으면 에러!\n# → 파일 있으면 읽기만 가능\n\n# 'a' - append (추가)\n# → 파일 없으면 생성\n# → 파일 있으면 끝에 추가",
+        result: "w = 덮어쓰기, r = 읽기, a = 추가",
+        note: "기록 쌓으려면 'a' 모드!"
       }
     },
-
+    
+    {
+      type: "quiz",
+      content: {
+        question: "랭킹을 계속 기록하려면?",
+        options: ["'w' 모드", "'r' 모드", "'a' 모드", "'x' 모드"],
+        answer: 2,
+        explanation: "'a' 모드로 열면 기존 기록 유지하면서 새 기록 추가!"
+      }
+    },
+    
+    // 예측 퀴즈 — w 덮어쓰기 확인
     {
       type: "explain",
       content: {
-        lines: ["객체의 속성은 바꿀 수 있어요!"],
-        code: `class Character:
-    def __init__(s, name, hp):
-        s.name = name
-        s.hp = hp
-
-hero = Character('용사', 100)
-hero.hp = hero.hp - 30
-print(hero.hp)`,
+        lines: ["🧠 'w'로 두 번 쓰면?"],
+        code: "with open('a.txt', 'w') as f:\n    f.write('X')\n\nwith open('a.txt', 'w') as f:\n    f.write('Y')\n\nwith open('a.txt', 'r') as f:\n    print(f.read())",
         predict: {
           question: "출력 결과는?",
-          options: ["100", "70", "30", "에러"],
-          answer: 1,
-          feedback: "100 - 30 = 70! 속성 값을 직접 바꿀 수 있어요!"
+          options: ["XY", "X", "Y", "에러"],
+          answer: 2,
+          feedback: "'w'는 매번 덮어쓰기! 두 번째 'Y'만 남아요!"
         },
-        result: "70"
+        result: "Y"
       }
     },
-
-    {
-      type: "explain",
-      content: {
-        lines: ["그럼 이건 어떨까?", "a의 hp를 바꾸면 b도 바뀔까?"],
-        code: `class Character:
-    def __init__(s, name, hp):
-        s.name = name
-        s.hp = hp
-
-a = Character('용사', 100)
-b = Character('마법사', 80)
-a.hp = a.hp - 20
-print(a.hp, b.hp)`,
-        predict: {
-          question: "출력 결과는?",
-          options: ["80 80", "100 80", "80 60", "80 80"],
-          answer: 0,
-          feedback: "a와 b는 서로 다른 객체! a.hp만 줄어들어요!"
-        },
-        result: "80 80"
-      }
-    },
-
-    // 빈칸 연습: 여러 객체 만들기
+    
+    // ⭐ 연습 3 (빈칸 2개: 추가 모드 + write)
     {
       type: "practice",
       content: {
         level: 2,
-        task: "___ 자리를 채우세요!",
-        guide: "Item 클래스로 아이템 만들기",
-        hint: "클래스 이름으로 객체를 만들어요!",
-        template: "class Item:\n    def __init__(s, name, price):\n        s.name = name\n        s.price = price\n\nsword = ___('검', 500)\nprint(sword.name)",
-        blanksAnswer: ["Item"],
-        answer: "class Item:\n    def __init__(s, name, price):\n        s.name = name\n        s.price = price\n\nsword = Item('검', 500)\nprint(sword.name)",
+        task: "___ 자리를 채워서 기록을 추가하세요!",
+        guide: "기존 내용 유지하면서 추가하려면?",
+        hint: "추가 모드: 'a' / 쓰는 함수: write",
+        template: "with open('scores.txt', '___') as f:\n    f.___('150점\\n')\nprint('점수 추가!')",
+        blanksAnswer: ["a", "write"],
+        answer: "with open('scores.txt', 'a') as f:\n    f.write('150점\\n')\nprint('점수 추가!')",
         alternateAnswers: [],
-        expect: "검"
+        expect: "점수 추가!"
       }
     },
-
+    
+    // 인터리빙 1 (빈칸 2개: 읽기 복습)
     {
-      type: "practice",
+      type: "interleaving",
       content: {
-        level: 2,
-        task: "___ 자리를 채우세요!",
-        guide: "객체의 속성에 접근하려면?",
-        hint: "점(.)으로 속성에 접근!",
-        template: "class Pet:\n    def __init__(s, name, age):\n        s.name = name\n        s.age = age\n\ndog = Pet('멍멍이', 3)\nprint(dog.___)",
-        blanksAnswer: ["name"],
-        answer: "class Pet:\n    def __init__(s, name, age):\n        s.name = name\n        s.age = age\n\ndog = Pet('멍멍이', 3)\nprint(dog.name)",
+        message: "🔄 잠깐! 읽기 복습!",
+        task: "___ 자리를 채워서 파일을 읽으세요!",
+        hint: "읽기 모드: 'r' / 전체 읽기: read()",
+        template: "with open('memo.txt', '___') as f:\n    내용 = f.___()\n    print(내용)",
+        blanksAnswer: ["r", "read"],
+        answer: "with open('memo.txt', 'r') as f:\n    내용 = f.read()\n    print(내용)",
         alternateAnswers: [],
-        expect: "멍멍이"
+        expect: ""
       }
     },
-
-    { type: "reward", content: { emoji: "👥", message: "여러 객체 만들기 클리어!" } },
-
+    
+    {
+      type: "reward",
+      content: {
+        emoji: "📊",
+        message: "파일 모드 이해!"
+      }
+    },
+    
     // ============================================
-    // Chapter 4: 종합 복습
+    // Chapter 4: 에러 처리
     // ============================================
     {
       type: "chapter",
       content: {
         num: 4,
-        title: "종합 복습",
-        desc: "클래스 기초 총정리!"
+        title: "파일 에러 처리",
+        desc: "파일이 없으면?"
       }
     },
-
-    // 예측 퀴즈들
+    
     {
       type: "explain",
       content: {
-        lines: ["📝 문제 1: 결과를 맞춰보세요!"],
-        code: `class Fruit:
-    def __init__(s, name):
-        s.name = name
-
-apple = Fruit('사과')
-banana = Fruit('바나나')
-print(apple.name)`,
-        predict: {
-          question: "출력 결과는?",
-          options: ["사과", "바나나", "Fruit", "에러"],
-          answer: 0,
-          feedback: "apple 객체의 name은 '사과'!"
-        },
-        result: "사과"
+        lines: ["⚠️ 파일 없으면 에러!"],
+        code: "# 없는 파일 읽으려면?\ntry:\n    with open('save.txt', 'r') as f:\n        데이터 = f.read()\n        print(f'불러오기: {데이터}')\nexcept FileNotFoundError:\n    print('저장 파일이 없어요!')",
+        result: "FileNotFoundError = 파일 없음!",
+        note: "try-except로 에러 처리!"
       }
     },
-
+    
     {
       type: "explain",
       content: {
-        lines: ["📝 문제 2: __init__의 매개변수 순서!"],
-        code: `class Student:
-    def __init__(s, name, grade):
-        s.name = name
-        s.grade = grade
-
-s1 = Student('영희', 2)
-print(f'{s1.name}: {s1.grade}학년')`,
+        lines: ["🧠 파일이 없을 때?"],
+        code: "try:\n    with open('없는파일.txt', 'r') as f:\n        print('A')\nexcept FileNotFoundError:\n    print('B')\nprint('C')",
         predict: {
           question: "출력 결과는?",
-          options: ["영희: 2학년", "2: 영희학년", "Student: 2학년", "에러"],
-          answer: 0,
-          feedback: "name='영희', grade=2 순서대로 저장!"
+          options: ["A C", "B C", "A B C", "에러"],
+          answer: 1,
+          feedback: "파일 없음 → except → 'B' → 프로그램 계속 → 'C'"
         },
-        result: "영희: 2학년"
+        result: "B\nC"
+      }
+    },
+    
+    // ⭐ 연습 4 (빈칸 3개: try + 읽기 모드 + 에러명)
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "___ 자리를 채워서 파일을 안전하게 읽으세요!",
+        guide: "파일이 없으면 '저장 없음!' 출력!",
+        hint: "try로 감싸고, 읽기 모드 'r', 파일 없는 에러는 FileNotFoundError!",
+        template: "___:\n    with open('score.txt', '___') as f:\n        점수 = f.read()\n        print(f'점수: {점수}')\nexcept ___:\n    print('저장 없음!')",
+        blanksAnswer: ["try", "r", "FileNotFoundError"],
+        answer: "try:\n    with open('score.txt', 'r') as f:\n        점수 = f.read()\n        print(f'점수: {점수}')\nexcept FileNotFoundError:\n    print('저장 없음!')",
+        alternateAnswers: [],
+        expect: "저장 없음!"
+      }
+    },
+    
+    // 인터리빙 2 (빈칸 3개: 쓰기 + str 변환 복습)
+    {
+      type: "interleaving",
+      content: {
+        message: "🔄 쓰기 복습!",
+        task: "___ 자리를 채워서 점수를 저장하세요!",
+        hint: "쓰기 모드: 'w' / 쓰는 함수: write / 숫자를 문자로: str()",
+        template: "점수 = 100\nwith open('score.txt', '___') as f:\n    f.___(___(\uc810\uc218))\nprint('저장!')",
+        blanksAnswer: ["w", "write", "str"],
+        answer: "점수 = 100\nwith open('score.txt', 'w') as f:\n    f.write(str(점수))\nprint('저장!')",
+        alternateAnswers: [],
+        expect: "저장!"
+      }
+    },
+    
+    // ⭐ 연습 5 (빈칸 3개: 추가 모드 + write + str)
+    {
+      type: "practice",
+      content: {
+        level: 2.5,
+        task: "___ 자리를 채워서 랭킹 기록을 추가하세요!",
+        guide: "기존 기록 유지 + 새 이름과 점수 추가!",
+        hint: "추가 모드: 'a', 쓰기: write, 숫자를 문자로: str",
+        template: "이름 = '홍길동'\n점수 = 100\nwith open('ranking.txt', '___') as f:\n    f.___(이름 + ': ' + ___(점수) + '\\n')\nprint('랭킹 추가!')",
+        blanksAnswer: ["a", "write", "str"],
+        answer: "이름 = '홍길동'\n점수 = 100\nwith open('ranking.txt', 'a') as f:\n    f.write(이름 + ': ' + str(점수) + '\\n')\nprint('랭킹 추가!')",
+        alternateAnswers: [],
+        expect: "랭킹 추가!"
+      }
+    },
+    
+    // 인터리빙 3 (빈칸 3개: 에러 처리 복습)
+    {
+      type: "interleaving",
+      content: {
+        message: "🔄 에러 처리 복습!",
+        task: "___ 자리를 채워서 파일을 안전하게 읽으세요!",
+        hint: "try로 감싸고, read()로 읽고, 파일 없으면 FileNotFoundError!",
+        template: "___:\n    with open('data.txt', 'r') as f:\n        print(f.___())\nexcept ___:\n    print('파일 없음!')",
+        blanksAnswer: ["try", "read", "FileNotFoundError"],
+        answer: "try:\n    with open('data.txt', 'r') as f:\n        print(f.read())\nexcept FileNotFoundError:\n    print('파일 없음!')",
+        alternateAnswers: [],
+        expect: "파일 없음!"
       }
     },
 
     {
-      type: "explain",
+      type: "reward",
       content: {
-        lines: ["📝 문제 3: s를 빼먹으면?"],
-        code: `class Character:
-    def __init__(s, name):
-        name = name  # s.name이 아님!
-
-hero = Character('용사')
-print(hero.name)`,
-        predict: {
-          question: "출력 결과는?",
-          options: ["용사", "name", "None", "에러 (AttributeError)"],
-          answer: 3,
-          feedback: "s.name을 안 했으니 hero에 name 속성이 없어요!"
-        },
-        isError: true,
-        result: "AttributeError: 'Character' object has no attribute 'name'"
+        emoji: "✅",
+        message: "에러 처리 완료!"
       }
     },
-
+    
+    // ============================================
+    // Chapter 5: 에러 탐정
+    // ============================================
     {
-      type: "quiz",
+      type: "chapter",
       content: {
-        question: "다음 중 올바른 클래스 정의는?",
+        num: 5,
+        title: "에러 탐정",
+        desc: "실수 찾기!"
+      }
+    },
+    
+    {
+      type: "errorQuiz",
+      content: {
+        question: "이 코드의 문제점은?",
+        code: "with open('test.txt', 'w') as f\n    f.write('hello')",
         options: [
-          "class character:\n    def __init__(name):",
-          "class Character:\n    def __init__(s, name):\n        s.name = name",
-          "def Character:\n    def __init__(s, name):",
-          "class Character:\n    __init__(s, name):"
+          "with문 뒤에 : 빠짐",
+          "write 오류",
+          "파일명 오류",
+          "문제 없음"
+        ],
+        answer: 0,
+        explanation: "with문 끝에 콜론(:)이 필요해요!"
+      }
+    },
+    {
+      type: "errorQuiz",
+      content: {
+        question: "이 코드의 문제점은?",
+        code: "with open('data.txt', 'r') as f:\n    f.write('hello')",
+        options: [
+          "파일명 오류",
+          "'r' 모드에서 write 불가",
+          "close() 필요",
+          "문제 없음"
         ],
         answer: 1,
-        explanation: "class로 시작, __init__에 s(self)가 첫 번째 매개변수, s.으로 속성 저장!"
+        explanation: "'r'는 읽기 전용! 쓰려면 'w'나 'a' 모드 필요!"
       }
     },
-
-    // 빈칸 연습: 종합
     {
-      type: "practice",
+      type: "errorQuiz",
       content: {
-        level: 3,
-        task: "___ 자리 2개를 채우세요!",
-        guide: "Monster 클래스 완성하기",
-        hint: "s.속성 = 매개변수 형태!",
-        template: "class Monster:\n    def __init__(s, name, hp):\n        ___ = name\n        ___ = hp\n\nslime = Monster('슬라임', 30)\nprint(f'{slime.name}: HP {slime.hp}')",
-        blanksAnswer: ["s.name", "s.hp"],
-        answer: "class Monster:\n    def __init__(s, name, hp):\n        s.name = name\n        s.hp = hp\n\nslime = Monster('슬라임', 30)\nprint(f'{slime.name}: HP {slime.hp}')",
-        alternateAnswers: [],
-        expect: "슬라임: HP 30"
+        question: "이 코드의 문제점은?",
+        code: "f = open('test.txt', 'w')\nf.write('hello')\n# f.close() 안 함",
+        options: [
+          "open 오류",
+          "write 오류",
+          "close() 안 해서 데이터 손실 가능",
+          "문제 없음"
+        ],
+        answer: 2,
+        explanation: "with문 쓰면 자동 close()! with문 권장!"
       }
     },
-
     {
-      type: "practice",
+      type: "errorQuiz",
       content: {
-        level: 3,
-        task: "___ 자리 3개를 채우세요!",
-        guide: "처음부터 클래스 만들기!",
-        hint: "class, __init__, s!",
-        template: "___ Book:\n    def ___(s, title, author):\n        ___.title = title\n        s.author = author\n\nb = Book('해리포터', 'J.K.롤링')\nprint(f'{b.title} - {b.author}')",
-        blanksAnswer: ["class", "__init__", "s"],
-        answer: "class Book:\n    def __init__(s, title, author):\n        s.title = title\n        s.author = author\n\nb = Book('해리포터', 'J.K.롤링')\nprint(f'{b.title} - {b.author}')",
-        alternateAnswers: [],
-        expect: "해리포터 - J.K.롤링"
+        question: "이 코드의 출력은?",
+        code: "with open('a.txt', 'w') as f:\n    f.write('A')\nwith open('a.txt', 'w') as f:\n    f.write('B')\nwith open('a.txt', 'r') as f:\n    print(f.read())",
+        options: [
+          "A",
+          "B",
+          "AB",
+          "BA"
+        ],
+        answer: 1,
+        explanation: "'w' 모드는 덮어쓰기! 두 번째 'B'만 남아요!"
       }
     },
-
-    { type: "reward", content: { emoji: "🎉", message: "클래스 기초 완전 정복!" } },
-
-    // 요약
+    
+    // ============================================
+    // Chapter 6: 마무리
+    // ============================================
+    {
+      type: "chapter",
+      content: {
+        num: 6,
+        title: "마무리",
+        desc: "파일 다루기 총정리!"
+      }
+    },
+    
     {
       type: "summary",
       content: {
-        num: 38,
-        title: "클래스 기초",
+        num: 1,
+        title: "파일 읽고 쓰기",
+        emoji: "📁",
         learned: [
-          "클래스 = 붕어빵 틀, 객체 = 붕어빵",
-          "class 키워드로 클래스를 정의",
-          "__init__으로 객체 초기화 (자동 실행)",
-          "s(self)는 자기 자신을 가리킴",
-          "같은 클래스로 여러 독립적 객체 생성 가능",
-          "객체.속성으로 값에 접근"
+          "with open('파일', '모드') as f: 로 열기",
+          "'w' = 쓰기 (덮어씀)",
+          "'r' = 읽기",
+          "'a' = 추가",
+          "read() = 전체 문자열",
+          "readlines() = 줄별 리스트",
+          "FileNotFoundError = 파일 없음"
         ],
-        canDo: "클래스를 정의하고 여러 객체를 만들 수 있어요!",
-        emoji: "🍩"
+        canDo: "게임 데이터를 저장하고 불러올 수 있어요!"
       }
     },
-
-    { type: "done", content: {} }
+    
+    {
+      type: "done",
+      content: {}
+    }
   ]
 }

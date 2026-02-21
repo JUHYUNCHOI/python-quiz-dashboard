@@ -2,11 +2,12 @@ import { LessonData } from '../types'
 import { ch1 } from './ch1'
 import { ch2 } from './ch2'
 import { ch3 } from './ch3'
+import { ch4 } from './ch4'
 
 export const lesson41: LessonData = {
   id: "41",
-  title: "Part 7 문제 20",
-  emoji: "📝",
-  description: "클래스와 메서드 연습 문제 20개!",
-  chapters: [ch1, ch2, ch3]
+  title: "클래스 기초",
+  emoji: "🍩",
+  description: "붕어빵 틀처럼 객체를 찍어내는 클래스를 배워요!",
+  chapters: [ch1, ch2, ch3, ch4]
 }

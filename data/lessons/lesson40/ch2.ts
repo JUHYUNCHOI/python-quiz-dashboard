@@ -2,127 +2,90 @@ import { Chapter } from '../types'
 
 export const ch2: Chapter = {
   id: "ch2",
-  title: "몬스터 & 전투 메서드",
-  emoji: "👹",
+  title: "⭐⭐ 보통 (8~14)",
+  emoji: "⭐⭐",
   steps: [
     {
       id: "ch2-0",
-      type: "tryit",
-      title: "👹 2단계: 몬스터 만들기!",
-      task: "Character 클래스에 attack, take_damage, heal 메서드를 추가한 전투 시스템을 실행하세요!",
-      initialCode: `class Character:
-    def __init__(s, name, hp, atk, defense):
-        s.name = name
-        s.hp = hp
-        s.max_hp = hp
-        s.atk = atk
-        s.defense = defense
-        s.alive = True
-
-    def take_damage(s, damage):
-        actual = damage - s.defense
-        if actual < 1:
-            actual = 1
-        s.hp = s.hp - actual
-        if s.hp <= 0:
-            s.hp = 0
-            s.alive = False
-        return actual
-
-    def attack(s, target):
-        if not s.alive:
-            return
-        actual = target.take_damage(s.atk)
-        print(f'{s.name} -> {target.name} ({actual} 데미지)')
-        if not target.alive:
-            print(f'{target.name} 쓰러짐!')
-
-    def heal(s, amount):
-        if not s.alive:
-            return
-        s.hp = min(s.hp + amount, s.max_hp)
-        print(f'{s.name} 회복! HP: {s.hp}/{s.max_hp}')
-
-    def status(s):
-        state = 'O' if s.alive else 'X'
-        print(f'[{state}] {s.name}: HP {s.hp}/{s.max_hp}')
-
-# 캐릭터 생성
-hero = Character('용사', 100, 25, 8)
-slime = Character('슬라임', 40, 12, 3)
-
-print('=== 캐릭터 생성 ===')
-hero.status()
-slime.status()
-
-print('\\n=== 전투! ===')
-hero.attack(slime)
-slime.attack(hero)
-hero.attack(slime)
-
-print('\\n=== 결과 ===')
-hero.status()
-slime.status()`,
-      expectedOutput: `=== 캐릭터 생성 ===\n[O] 용사: HP 100/100\n[O] 슬라임: HP 40/40\n\n=== 전투! ===\n용사 -> 슬라임 (22 데미지)\n슬라임 -> 용사 (4 데미지)\n용사 -> 슬라임 (22 데미지)\n슬라임 쓰러짐!\n\n=== 결과 ===\n[O] 용사: HP 96/100\n[X] 슬라임: HP 0/40`,
-      hint: "take_damage에서 방어력만큼 데미지를 줄여요!",
-      hint2: "actual = damage - defense, 최소 1 데미지는 들어가요!"
-    },
-    {
-      id: "ch2-0b",
-      type: "mission",
-      title: "🎯 미션: 전투 메서드 완성!",
-      task: "빈칸 3개를 채워서 전투 시스템을 완성하세요!",
-      initialCode: `class Character:
-    def __init__(s, name, hp, atk, defense):
-        s.name = name
-        s.hp = hp
-        s.atk = atk
-        s.defense = defense
-
-    def take_damage(s, damage):
-        actual = damage - s.___
-        if actual < 1:
-            actual = 1
-        s.hp = s.hp - actual
-        return actual
-
-    def attack(s, target):
-        actual = target.___(s.atk)
-        print(f'{s.name} -> {target.name} ({actual} 데미지)')
-
-    def status(s):
-        print(f'{s.name}: HP {s.hp}')
-
-hero = Character('용사', 100, 25, 8)
-slime = Character('슬라임', 30, 10, 2)
-
-hero.status()
-slime.status()
-
-print('\\n--- 전투! ---')
-hero.___(slime)
-slime.attack(hero)
-
-print('\\n--- 결과 ---')
-hero.status()
-slime.status()`,
-      expectedOutput: `용사: HP 100\n슬라임: HP 30\n\n--- 전투! ---\n용사 -> 슬라임 (23 데미지)\n슬라임 -> 용사 (2 데미지)\n\n--- 결과 ---\n용사: HP 98\n슬라임: HP 7`,
-      hint: "방어력으로 데미지 감소, take_damage로 피해 적용, attack으로 공격!",
-      hint2: "defense / take_damage / attack"
+      type: "quiz",
+      title: "문제 8",
+      content: `출력 결과는?\n\n\`\`\`python\ntry:\n    x = int('10')\n    print(x + 5)\nexcept ValueError:\n    print('A')\nfinally:\n    print('C')\n\`\`\``,
+      options: ["A C", "15 C", "15만", "A만"],
+      answer: 1,
+      explanation: "int('10')은 성공! → 15 출력 → finally 항상 실행 → C"
     },
     {
       id: "ch2-1",
       type: "quiz",
-      title: "퀴즈!",
-      content: "방어력이 10이고 공격력 8인 공격을 받으면?\n\n```python\ndef take_damage(s, damage):\n    actual = damage - s.defense\n    if actual < 1:\n        actual = 1\n```",
-      options: [
-        "0 데미지 (무시)",
-        "1 데미지 (최소)",
-        "8 데미지 (그대로)",
-        "에러"
-      ],
+      title: "문제 9",
+      content: `출력 결과는?\n\n\`\`\`python\ntry:\n    nums = [1, 2, 3]\n    print(nums[5])\nexcept IndexError:\n    print('A')\nexcept:\n    print('B')\n\`\`\``,
+      options: ["A", "B", "A B", "에러"],
+      answer: 0,
+      explanation: "인덱스 5 없음 → IndexError → 더 구체적인 except 'A'가 먼저!"
+    },
+    {
+      id: "ch2-2",
+      type: "quiz",
+      title: "문제 10",
+      content: `실행 후 test.txt는 몇 줄?\n\n\`\`\`python\nwith open('test.txt', 'w') as f:\n    f.write('A\\nB\\nC')\n\`\`\``,
+      options: ["1줄", "3줄 (A, B, C)", "2줄", "빈 파일"],
       answer: 1,
-      explanation: "8 - 10 = -2지만, 최소 1 데미지는 들어가요!"
+      explanation: "\\n = 줄바꿈! A, B, C가 각각 한 줄씩 3줄!"
+    },
+    {
+      id: "ch2-3",
+      type: "interactive",
+      title: "문제 11: 없는 파일 에러 처리",
+      description: "파일이 없을 때 에러 처리 코드를 완성하세요!",
+      component: "fillInBlank",
+      codeTemplate: "___1___:\n    with open('x.txt', '___2___') as f:\n        print(f.read())\nexcept ___3___:\n    print('파일 없음!')",
+      blanks: [
+        { id: "1", answer: "try", hint: "시도!" },
+        { id: "2", answer: "r", hint: "읽기 모드!" },
+        { id: "3", answer: "FileNotFoundError", hint: "파일 없을 때 에러!" }
+      ],
+      choices: ["try", "except", "r", "w", "a", "FileNotFoundError", "ValueError", "IndexError"],
+      expectedOutput: "파일 없음!"
+    },
+    {
+      id: "ch2-4",
+      type: "interactive",
+      title: "문제 12: 리스트를 파일에 저장",
+      description: "리스트를 파일에 한 줄씩 저장하세요!",
+      component: "fillInBlank",
+      codeTemplate: "names = ['철수', '영희', '민수']\nwith open('names.txt', '___1___') as f:\n    for name in names:\n        f.___2___(name + '___3___')",
+      blanks: [
+        { id: "1", answer: "w", hint: "쓰기 모드!" },
+        { id: "2", answer: "write", hint: "파일에 쓰기!" },
+        { id: "3", answer: "\\n", hint: "줄바꿈!" }
+      ],
+      choices: ["w", "r", "a", "write", "read", "\\n", "\\t", " "],
+      expectedOutput: ""
+    },
+    {
+      id: "ch2-5",
+      type: "quiz",
+      title: "문제 13",
+      content: `입력이 0일 때 출력은?\n\n\`\`\`python\ntry:\n    x = int(input())  # 0\n    y = 10 / x\n    print(y)\nexcept ValueError:\n    print('A')\nexcept ZeroDivisionError:\n    print('B')\n\`\`\``,
+      options: ["A", "B", "0", "에러"],
+      answer: 1,
+      explanation: "int(0)은 성공! → 10/0 → ZeroDivisionError → 'B'"
+    },
+    {
+      id: "ch2-6",
+      type: "interactive",
+      title: "문제 14: 숫자만 입력받기",
+      description: "제대로 입력할 때까지 반복하는 코드!",
+      component: "fillInBlank",
+      codeTemplate: "___1___ True:\n    ___2___:\n        x = int(input('숫자: '))\n        ___3___\n    except ___4___:\n        print('숫자를 입력하세요!')",
+      blanks: [
+        { id: "1", answer: "while", hint: "무한 반복!" },
+        { id: "2", answer: "try", hint: "시도!" },
+        { id: "3", answer: "break", hint: "성공하면 탈출!" },
+        { id: "4", answer: "ValueError", hint: "잘못된 값 에러!" }
+      ],
+      choices: ["while", "for", "try", "except", "break", "continue", "ValueError", "TypeError"],
+      expectedOutput: ""
     }
   ]
 }

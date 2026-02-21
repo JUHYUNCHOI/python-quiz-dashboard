@@ -7,10 +7,10 @@ import { ch5 } from './ch5'
 import { ch6 } from './ch6'
 import { ch7 } from './ch7'
 
-export const lesson34: LessonData = {
-  id: "34",
-  title: "에러 처리하기",
-  emoji: "🛡️",
-  description: "게임에서 버그가 나도 안 꺼지게 만들어요!",
+export const lesson33Data: LessonData = {
+  id: "33",
+  title: "매개변수와 반환값",
+  emoji: "📦",
+  description: "함수에 값을 주고, 결과를 받아요!",
   chapters: [ch1, ch2, ch3, ch4, ch5, ch6, ch7]
 }

@@ -2,225 +2,149 @@ import { Chapter } from '../types'
 
 export const ch1: Chapter = {
   id: "ch1",
-  title: "상점 시스템",
-  emoji: "🏪",
+  title: "⭐ 쉬움 (1~8)",
+  emoji: "⭐",
   steps: [
     {
       id: "ch1-0",
       type: "explain",
-      title: "🏪 상점 = 딕셔너리!",
-      content: `## 상점 구조
+      title: "🎯 Part 8 문제 20!",
+      content: `## 목표: 20문제 중 16문제 이상 맞추기!
 
-\`\`\`python
-shop_items = {
-    '물약':     Item('물약', 'heal', 30, 50),
-    '큰 물약':  Item('큰 물약', 'heal', 60, 100),
-    '힘의 물약': Item('힘의 물약', 'atk', 5, 80),
-}
-\`\`\`
+| 난이도 | 문제 수 |
+|--------|---------|
+| ⭐ 쉬움 | 8문제 |
+| ⭐⭐ 보통 | 6문제 |
+| ⭐⭐⭐ 도전 | 6문제 |
 
-### 상점 기능:
-1. **목록 보기** — 이름, 효과, 가격
-2. **구매** — 골드 확인 → 차감 → 인벤토리에 추가
-3. **잔액 부족** — "골드가 부족합니다!"
-
-→ **딕셔너리**로 상품 관리!`
+모듈과 패키지 총정리! 🚀`
     },
     {
       id: "ch1-1",
-      type: "tryit",
-      title: "💻 상점 만들기!",
-      task: "상점에서 아이템을 구매하는 시스템을 실행하세요!",
-      initialCode: `class Item:
-    def __init__(s, name, item_type, value, price):
-        s.name = name
-        s.item_type = item_type
-        s.value = value
-        s.price = price
-
-class Character:
-    def __init__(s, name):
-        s.name = name
-        s.hp, s.max_hp = 100, 100
-        s.atk = 15
-        s.gold = 200
-        s.inventory = []
-
-    def add_item(s, item):
-        s.inventory.append(item)
-
-# 상점!
-shop_items = {
-    'potion':     Item('물약', 'heal', 30, 50),
-    'big_potion': Item('큰 물약', 'heal', 60, 100),
-    'power':      Item('힘의 물약', 'atk', 5, 80),
-}
-
-def show_shop():
-    print('=== 상점 ===')
-    for key, item in shop_items.items():
-        types = {'heal': '회복', 'atk': '공격력'}
-        print(f'  {item.name}: {types[item.item_type]} +{item.value} ({item.price}골드)')
-
-def buy_item(hero, item_key):
-    if item_key not in shop_items:
-        print('  없는 상품!')
-        return
-    item = shop_items[item_key]
-    if hero.gold < item.price:
-        print(f'  골드 부족! (보유: {hero.gold}, 필요: {item.price})')
-        return
-    hero.gold -= item.price
-    # 새 아이템 객체 생성!
-    new_item = Item(item.name, item.item_type, item.value, item.price)
-    hero.add_item(new_item)
-    print(f'  {item.name} 구매! (-{item.price}골드, 잔액: {hero.gold})')
-
-# 테스트!
-hero = Character('용사')
-print(f'보유 골드: {hero.gold}')
-
-show_shop()
-
-# actions 패턴으로 구매!
-buy_actions = ['potion', 'potion', 'power', 'big_potion']
-
-print('\\n--- 쇼핑! ---')
-for action in buy_actions:
-    buy_item(hero, action)
-
-print(f'\\n잔액: {hero.gold}골드')
-print(f'인벤토리: {len(hero.inventory)}개')
-for item in hero.inventory:
-    print(f'  - {item.name}')`,
-      expectedOutput: `보유 골드: 200\n=== 상점 ===\n  물약: 회복 +30 (50골드)\n  큰 물약: 회복 +60 (100골드)\n  힘의 물약: 공격력 +5 (80골드)\n\n--- 쇼핑! ---\n  물약 구매! (-50골드, 잔액: 150)\n  물약 구매! (-50골드, 잔액: 100)\n  힘의 물약 구매! (-80골드, 잔액: 20)\n  골드 부족! (보유: 20, 필요: 100)\n\n잔액: 20골드\n인벤토리: 3개\n  - 물약\n  - 물약\n  - 힘의 물약`,
-      hint: "골드 확인 → 차감 → 인벤토리에 추가!",
-      hint2: "코드를 그대로 실행하세요!"
+      type: "quiz",
+      title: "문제 1",
+      content: "모듈을 가져오는 키워드는?",
+      options: ["include", "require", "import", "using"],
+      answer: 2,
+      explanation: "파이썬에서 모듈은 import 키워드로 가져와요!"
     },
     {
       id: "ch1-2",
-      type: "mission",
-      title: "🎯 미션: 상점 완성!",
-      task: "빈칸 3개를 채워서 상점 시스템을 완성하세요!",
-      initialCode: `class Item:
-    def __init__(s, name, price):
-        s.name = name
-        s.price = price
-
-shop = {
-    'sword': Item('검', 150),
-    'shield': Item('방패', 120),
-}
-
-gold = 200
-
-def buy(item_key):
-    global gold
-    item = shop[item_key]
-    if gold ___ item.price:
-        print(f'골드 부족!')
-        return False
-    gold -= item.___
-    print(f'{item.name} 구매! (잔액: {gold})')
-    return True
-
-print(f'골드: {gold}')
-buy('sword')
-buy('___')
-print(f'남은 골드: {gold}')`,
-      expectedOutput: `골드: 200\n검 구매! (잔액: 50)\n골드 부족!\n남은 골드: 50`,
-      hint: "골드 비교, 가격 차감, 방패 구매!",
-      hint2: "< / price / shield"
+      type: "quiz",
+      title: "문제 2",
+      content: "`from math import sqrt` 후 사용법은?",
+      options: ["math.sqrt(16)", "sqrt(16)", "math(sqrt(16))", "import.sqrt(16)"],
+      answer: 1,
+      explanation: "from...import로 가져오면 모듈명 없이 바로 사용!"
     },
     {
       id: "ch1-3",
-      type: "tryit",
-      title: "💻 전투 → 보상 → 상점!",
-      task: "전투 승리 후 골드를 얻고 상점에서 쇼핑하세요!",
-      initialCode: `class Character:
-    def __init__(s, name, hp, atk, defense):
-        s.name = name
-        s.hp, s.max_hp = hp, hp
-        s.atk = atk
-        s.defense = defense
-        s.gold = 0
-        s.inventory = []
-        s.alive = True
-
-    def take_damage(s, damage):
-        actual = damage - s.defense
-        if actual < 1:
-            actual = 1
-        s.hp -= actual
-        if s.hp <= 0:
-            s.hp = 0
-            s.alive = False
-        return actual
-
-class Monster:
-    def __init__(s, name, hp, atk, defense, gold):
-        s.name = name
-        s.hp = hp
-        s.atk = atk
-        s.defense = defense
-        s.gold_reward = gold
-        s.alive = True
-
-    def take_damage(s, damage):
-        actual = damage - s.defense
-        if actual < 1:
-            actual = 1
-        s.hp -= actual
-        if s.hp <= 0:
-            s.hp = 0
-            s.alive = False
-        return actual
-
-# 간단한 전투!
-hero = Character('용사', 120, 20, 10)
-goblin = Monster('고블린', 40, 12, 3, 50)
-
-print('=== 전투! ===')
-while hero.alive and goblin.alive:
-    dmg = goblin.take_damage(hero.atk)
-    print(f'  용사 -> 고블린 ({dmg})')
-    if goblin.alive:
-        dmg = hero.take_damage(goblin.atk)
-        print(f'  고블린 -> 용사 ({dmg})')
-
-print(f'\\n고블린 처치! +{goblin.gold_reward}골드')
-hero.gold += goblin.gold_reward
-
-# 상점!
-print(f'\\n=== 상점 (보유: {hero.gold}골드) ===')
-print(f'  물약: 30골드')
-# 물약 구매
-hero.gold -= 30
-hero.inventory.append('물약')
-print(f'  물약 구매! (잔액: {hero.gold})')
-
-# 물약 사용
-hero.hp = min(hero.hp + 30, hero.max_hp)
-hero.inventory.pop(0)
-print(f'\\n물약 사용! HP: {hero.hp}/{hero.max_hp}')
-print(f'남은 골드: {hero.gold}')`,
-      expectedOutput: `=== 전투! ===\n  용사 -> 고블린 (17)\n  고블린 -> 용사 (2)\n  용사 -> 고블린 (17)\n  고블린 -> 용사 (2)\n  용사 -> 고블린 (17)\n\n고블린 처치! +50골드\n\n=== 상점 (보유: 50골드) ===\n  물약: 30골드\n  물약 구매! (잔액: 20)\n\n물약 사용! HP: 120/120\n남은 골드: 20`,
-      hint: "전투 → 보상 → 상점 → 아이템 사용, 자연스러운 흐름!",
-      hint2: "코드를 그대로 실행하세요!"
+      type: "quiz",
+      title: "문제 3",
+      content: "`math.ceil(3.1)`의 결과는?",
+      options: ["3", "4", "3.1", "에러"],
+      answer: 1,
+      explanation: "ceil = 올림! 3.1을 올리면 4!"
     },
     {
       id: "ch1-4",
       type: "quiz",
-      title: "❓ 퀴즈!",
-      content: "보유 골드가 80이고 물약이 100골드일 때 올바른 처리는?",
+      title: "문제 4",
+      content: "`math.floor(7.9)`의 결과는?",
+      options: ["7", "8", "7.9", "에러"],
+      answer: 0,
+      explanation: "floor = 내림! 7.9를 내리면 7!"
+    },
+    {
+      id: "ch1-4b",
+      type: "tryit",
+      title: "💻 문제 4.5: math 직접 체험!",
+      task: "math 모듈의 함수들을 직접 실행해보세요!",
+      initialCode: `import math
+
+# 올림 / 내림 / 반올림
+numbers = [3.2, 5.7, 8.5, 1.1]
+
+for n in numbers:
+    print(f'{n} → 올림:{math.ceil(n)} 내림:{math.floor(n)} 반올림:{round(n)}')
+
+# 절대값과 제곱근
+print(f'\\nabs(-15) = {abs(-15)}')
+print(f'sqrt(144) = {math.sqrt(144)}')
+print(f'pi = {math.pi:.4f}')`,
+      expectedOutput: `3.2 → 올림:4 내림:3 반올림:3\n5.7 → 올림:6 내림:5 반올림:6\n8.5 → 올림:9 내림:8 반올림:8\n1.1 → 올림:2 내림:1 반올림:1\n\nabs(-15) = 15\nsqrt(144) = 12.0\npi = 3.1416`,
+      hint: "ceil=올림, floor=내림, round=반올림!",
+      hint2: "코드를 그대로 실행하세요!"
+    },
+    {
+      id: "ch1-5",
+      type: "quiz",
+      title: "문제 5",
+      content: "패키지를 설치하는 명령어는?",
+      options: ["python install", "pip install", "import install", "module install"],
+      answer: 1,
+      explanation: "pip install 패키지이름 으로 설치해요!"
+    },
+    {
+      id: "ch1-6",
+      type: "quiz",
+      title: "문제 6",
+      content: "모듈과 패키지의 관계는?",
       options: [
-        "그냥 구매 (마이너스 골드)",
-        "에러 발생",
-        "'골드 부족!' 메시지 출력",
-        "자동으로 할인"
+        "같은 것이다",
+        "모듈 = 여러 패키지",
+        "패키지 = 여러 모듈",
+        "관계 없다"
       ],
       answer: 2,
-      explanation: "if gold < price: 로 체크해서 부족하면 구매를 막아요!"
+      explanation: "패키지는 여러 모듈을 묶은 폴더예요!"
+    },
+    {
+      id: "ch1-7",
+      type: "quiz",
+      title: "문제 7",
+      content: "`import math as m` 후 pi를 사용하려면?",
+      options: ["math.pi", "m.pi", "pi", "as.pi"],
+      answer: 1,
+      explanation: "as m으로 별명을 붙였으니 m.pi로 사용해요!"
+    },
+    {
+      id: "ch1-7b",
+      type: "mission",
+      title: "🎯 문제 7.5: import 미션!",
+      task: "빈칸 3개를 채워서 모듈 사용법을 완성하세요!",
+      initialCode: `# 1. 특정 함수만 가져오기
+___ math import sqrt, pi
+
+# 2. 별명 붙이기
+import json ___ j
+
+# 3. 사용하기
+radius = 5
+area = pi * radius ** 2
+print(f'반지름 {radius}의 원 넓이: {area:.2f}')
+print(f'제곱근: {___(area):.2f}')
+
+# json 별명으로 사용
+data = j.dumps({'area': round(area, 2)})
+print(f'JSON: {data}')`,
+      expectedOutput: `반지름 5의 원 넓이: 78.54\n제곱근: 8.86\nJSON: {"area": 78.54}`,
+      hint: "from으로 함수만, as로 별명, sqrt로 제곱근!",
+      hint2: "from / as / sqrt"
+    },
+    {
+      id: "ch1-8",
+      type: "quiz",
+      title: "문제 8",
+      content: "`json.dumps()`는 무엇을 하나요?",
+      options: [
+        "JSON 파일 삭제",
+        "딕셔너리 → JSON 문자열",
+        "JSON 문자열 → 딕셔너리",
+        "JSON 파일 열기"
+      ],
+      answer: 1,
+      explanation: "dumps = dump string! 딕셔너리를 문자열로 변환!"
     }
   ]
 }

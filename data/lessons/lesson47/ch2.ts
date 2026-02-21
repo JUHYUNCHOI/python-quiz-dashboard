@@ -2,287 +2,152 @@ import { Chapter } from '../types'
 
 export const ch2: Chapter = {
   id: "ch2",
-  title: "Monster + 전투",
-  emoji: "👹",
+  title: "검색 기능 만들기",
+  emoji: "🔍",
   steps: [
     {
       id: "ch2-0",
-      type: "explain",
-      title: "👹 몬스터 종류!",
-      content: `## 3가지 몬스터
+      type: "tryit",
+      title: "🔍 2단계: 날씨 검색 함수!",
+      task: "함수로 날씨 검색 기능을 만들어보세요!",
+      initialCode: `weather_db = {
+    '서울': {'temp': 22, 'humidity': 55, 'condition': '맑음', 'wind': 3.2},
+    '부산': {'temp': 25, 'humidity': 70, 'condition': '구름', 'wind': 5.1},
+    '제주': {'temp': 27, 'humidity': 80, 'condition': '비', 'wind': 7.8},
+    '인천': {'temp': 21, 'humidity': 60, 'condition': '맑음', 'wind': 4.5},
+    '대전': {'temp': 23, 'humidity': 50, 'condition': '흐림', 'wind': 2.1},
+}
 
-| 몬스터 | HP | ATK | DEF | EXP | 골드 |
-|--------|----|-----|-----|-----|------|
-| **슬라임** | 30 | 8 | 2 | 30 | 20 |
-| **고블린** | 50 | 15 | 5 | 60 | 40 |
-| **드래곤** | 100 | 25 | 10 | 150 | 100 |
+# 날씨 이모지 매핑
+emoji_map = {'맑음': '☀️', '구름': '⛅', '비': '🌧️', '흐림': '☁️', '눈': '❄️'}
 
-\`\`\`python
-def create_monster(name):
-    monsters = {
-        'slime':  Monster('슬라임', 30, 8, 2, 30, 20),
-        'goblin': Monster('고블린', 50, 15, 5, 60, 40),
-        'dragon': Monster('드래곤', 100, 25, 10, 150, 100),
-    }
-    return monsters[name]
-\`\`\`
+def get_weather(city):
+    if city not in weather_db:
+        print(f'{city}: 검색 결과 없음')
+        return
+    info = weather_db[city]
+    emoji = emoji_map.get(info['condition'], '🌍')
+    print(f'{emoji} {city} 날씨')
+    print(f'  기온: {info["temp"]}도')
+    print(f'  습도: {info["humidity"]}%')
+    print(f'  상태: {info["condition"]}')
+    print(f'  풍속: {info["wind"]}m/s')
 
-→ **딕셔너리**로 몬스터 팩토리 패턴!`
+def compare_weather(city1, city2):
+    if city1 not in weather_db or city2 not in weather_db:
+        print('도시를 찾을 수 없어요!')
+        return
+    t1 = weather_db[city1]['temp']
+    t2 = weather_db[city2]['temp']
+    diff = abs(t1 - t2)
+    hotter = city1 if t1 > t2 else city2
+    print(f'{city1}({t1}도) vs {city2}({t2}도)')
+    print(f'  {hotter}이(가) {diff}도 더 따뜻!')
+
+# 검색 테스트
+cities_to_search = ['서울', '제주', '뉴욕']
+for city in cities_to_search:
+    get_weather(city)
+    print()
+
+# 비교
+compare_weather('서울', '부산')`,
+      expectedOutput: `☀️ 서울 날씨\n  기온: 22도\n  습도: 55%\n  상태: 맑음\n  풍속: 3.2m/s\n\n🌧️ 제주 날씨\n  기온: 27도\n  습도: 80%\n  상태: 비\n  풍속: 7.8m/s\n\n뉴욕: 검색 결과 없음\n\n서울(22도) vs 부산(25도)\n  부산이(가) 3도 더 따뜻!`,
+      hint: "함수로 기능을 나누면 코드가 깔끔해요!",
+      hint2: "get_weather는 단일 조회, compare_weather는 비교!"
+    },
+    {
+      id: "ch2-0b",
+      type: "tryit",
+      title: "💻 날씨 추천 시스템!",
+      task: "날씨에 따라 옷차림을 추천하는 시스템을 실행해보세요!",
+      initialCode: `weather_db = {
+    '서울': {'temp': 22, 'humidity': 55, 'condition': '맑음', 'wind': 3.2},
+    '부산': {'temp': 25, 'humidity': 70, 'condition': '구름', 'wind': 5.1},
+    '제주': {'temp': 27, 'humidity': 80, 'condition': '비', 'wind': 7.8},
+    '인천': {'temp': 21, 'humidity': 60, 'condition': '맑음', 'wind': 4.5},
+    '대전': {'temp': 23, 'humidity': 50, 'condition': '흐림', 'wind': 2.1},
+}
+
+def recommend(city):
+    if city not in weather_db:
+        return f'{city}: 데이터 없음'
+
+    info = weather_db[city]
+    temp = info['temp']
+    cond = info['condition']
+
+    # 기온별 옷차림
+    if temp >= 28:
+        clothes = '반팔, 반바지'
+    elif temp >= 23:
+        clothes = '얇은 긴팔'
+    elif temp >= 17:
+        clothes = '가디건, 얇은 자켓'
+    else:
+        clothes = '두꺼운 외투'
+
+    # 날씨별 소지품
+    items = []
+    if cond == '비':
+        items.append('우산')
+    if cond in ['맑음'] and temp >= 25:
+        items.append('선크림')
+    if info['wind'] >= 5:
+        items.append('바람막이')
+
+    result = f'🌡️ {city} ({temp}도, {cond})'
+    result += f'\\n  옷차림: {clothes}'
+    if items:
+        result += f'\\n  준비물: {", ".join(items)}'
+    return result
+
+for city in ['서울', '제주', '부산']:
+    print(recommend(city))
+    print()`,
+      expectedOutput: `🌡️ 서울 (22도, 맑음)\n  옷차림: 가디건, 얇은 자켓\n\n🌡️ 제주 (27도, 비)\n  옷차림: 얇은 긴팔\n  준비물: 우산, 바람막이\n\n🌡️ 부산 (25도, 구름)\n  옷차림: 얇은 긴팔\n  준비물: 바람막이\n`,
+      hint: "조건문으로 기온과 날씨에 따라 다른 추천을 해요!",
+      hint2: "코드를 그대로 실행하세요!"
     },
     {
       id: "ch2-1",
-      type: "tryit",
-      title: "💻 Monster 클래스!",
-      task: "Monster 클래스와 팩토리 함수를 실행해보세요!",
-      initialCode: `class Monster:
-    def __init__(s, name, hp, atk, defense, exp, gold):
-        s.name = name
-        s.hp = hp
-        s.max_hp = hp
-        s.atk = atk
-        s.defense = defense
-        s.exp_reward = exp
-        s.gold_reward = gold
-        s.alive = True
-
-    def take_damage(s, damage):
-        actual = damage - s.defense
-        if actual < 1:
-            actual = 1
-        s.hp -= actual
-        if s.hp <= 0:
-            s.hp = 0
-            s.alive = False
-        return actual
-
-    def show(s):
-        state = 'O' if s.alive else 'X'
-        print(f'[{state}] {s.name}: HP {s.hp}/{s.max_hp}')
-
-def create_monster(name):
-    data = {
-        'slime':  ('슬라임', 30, 8, 2, 30, 20),
-        'goblin': ('고블린', 50, 15, 5, 60, 40),
-        'dragon': ('드래곤', 100, 25, 10, 150, 100),
-    }
-    d = data[name]
-    return Monster(d[0], d[1], d[2], d[3], d[4], d[5])
-
-# 몬스터 생성!
-print('=== 몬스터 도감 ===')
-for key in ['slime', 'goblin', 'dragon']:
-    m = create_monster(key)
-    m.show()
-    print(f'  보상: EXP {m.exp_reward}, 골드 {m.gold_reward}')`,
-      expectedOutput: `=== 몬스터 도감 ===\n[O] 슬라임: HP 30/30\n  보상: EXP 30, 골드 20\n[O] 고블린: HP 50/50\n  보상: EXP 60, 골드 40\n[O] 드래곤: HP 100/100\n  보상: EXP 150, 골드 100`,
-      hint: "딕셔너리로 몬스터 데이터를 관리해요!",
-      hint2: "코드를 그대로 실행하세요!"
-    },
-    {
-      id: "ch2-2",
-      type: "explain",
-      title: "⚔️ 전투 흐름!",
-      content: `## 전투 = 턴제!
-
-\`\`\`
-[전투 시작]
-  │
-  ├→ 플레이어 턴
-  │    ├→ attack (공격)
-  │    ├→ heal (회복)
-  │    └→ run (도망)
-  │
-  ├→ 몬스터 턴
-  │    └→ 자동 공격
-  │
-  ├→ 승리? → 보상!
-  └→ 패배? → 게임 오버
-\`\`\`
-
-**데미지 공식:**
-\`\`\`python
-actual = attacker.atk - target.defense
-if actual < 1:
-    actual = 1  # 최소 1 데미지!
-\`\`\``
-    },
-    {
-      id: "ch2-3",
-      type: "tryit",
-      title: "💻 자동 전투!",
-      task: "actions 리스트로 자동 전투를 실행하세요!",
-      initialCode: `class Character:
-    def __init__(s, name, job):
-        s.name = name
-        s.job = job
-        s.alive = True
-        s.exp = 0
-        s.gold = 0
-        if job == 'warrior':
-            s.hp, s.max_hp = 120, 120
-            s.atk, s.defense = 15, 12
-        elif job == 'mage':
-            s.hp, s.max_hp = 80, 80
-            s.atk, s.defense = 25, 5
-        else:
-            s.hp, s.max_hp = 100, 100
-            s.atk, s.defense = 20, 8
-
-    def take_damage(s, damage):
-        actual = damage - s.defense
-        if actual < 1:
-            actual = 1
-        s.hp -= actual
-        if s.hp <= 0:
-            s.hp = 0
-            s.alive = False
-        return actual
-
-    def attack_target(s, target):
-        actual = target.take_damage(s.atk)
-        print(f'  {s.name} -> {target.name} ({actual} 데미지)')
-
-    def heal_self(s, amount):
-        s.hp = min(s.hp + amount, s.max_hp)
-        print(f'  {s.name} 회복! HP: {s.hp}/{s.max_hp}')
-
-class Monster:
-    def __init__(s, name, hp, atk, defense, exp, gold):
-        s.name = name
-        s.hp = hp
-        s.atk = atk
-        s.defense = defense
-        s.exp_reward = exp
-        s.gold_reward = gold
-        s.alive = True
-
-    def take_damage(s, damage):
-        actual = damage - s.defense
-        if actual < 1:
-            actual = 1
-        s.hp -= actual
-        if s.hp <= 0:
-            s.hp = 0
-            s.alive = False
-        return actual
-
-    def attack_target(s, target):
-        actual = target.take_damage(s.atk)
-        print(f'  {s.name} -> {target.name} ({actual} 데미지)')
-
-# 전투!
-hero = Character('용사', 'warrior')
-goblin = Monster('고블린', 50, 15, 5, 60, 40)
-
-actions = ['attack', 'attack', 'heal', 'attack', 'attack', 'attack']
-
-print('=== 전투 시작! ===')
-print(f'{hero.name}: HP {hero.hp}/{hero.max_hp}')
-print(f'{goblin.name}: HP {goblin.hp}/50')
-
-turn = 1
-for action in actions:
-    if not hero.alive or not goblin.alive:
-        break
-
-    print(f'\\n--- {turn}턴 ---')
-
-    if action == 'attack':
-        hero.attack_target(goblin)
-    elif action == 'heal':
-        hero.heal_self(30)
-
-    if goblin.alive:
-        goblin.attack_target(hero)
-
-    print(f'  [{hero.name} HP:{hero.hp}] [{goblin.name} HP:{goblin.hp}]')
-    turn += 1
-
-print('\\n=== 전투 종료! ===')
-if not goblin.alive:
-    hero.exp += goblin.exp_reward
-    hero.gold += goblin.gold_reward
-    print(f'{goblin.name} 처치!')
-    print(f'+{goblin.exp_reward} EXP, +{goblin.gold_reward} 골드')
-    print(f'{hero.name}: EXP {hero.exp}, 골드 {hero.gold}')
-elif not hero.alive:
-    print('패배...')`,
-      expectedOutput: `=== 전투 시작! ===\n용사: HP 120/120\n고블린: HP 50/50\n\n--- 1턴 ---\n  용사 -> 고블린 (10 데미지)\n  고블린 -> 용사 (3 데미지)\n  [용사 HP:117] [고블린 HP:40]\n\n--- 2턴 ---\n  용사 -> 고블린 (10 데미지)\n  고블린 -> 용사 (3 데미지)\n  [용사 HP:114] [고블린 HP:30]\n\n--- 3턴 ---\n  용사 회복! HP: 120/120\n  고블린 -> 용사 (3 데미지)\n  [용사 HP:117] [고블린 HP:30]\n\n--- 4턴 ---\n  용사 -> 고블린 (10 데미지)\n  고블린 -> 용사 (3 데미지)\n  [용사 HP:114] [고블린 HP:20]\n\n--- 5턴 ---\n  용사 -> 고블린 (10 데미지)\n  고블린 -> 용사 (3 데미지)\n  [용사 HP:111] [고블린 HP:10]\n\n--- 6턴 ---\n  용사 -> 고블린 (10 데미지)\n  [용사 HP:111] [고블린 HP:0]\n\n=== 전투 종료! ===\n고블린 처치!\n+60 EXP, +40 골드\n용사: EXP 60, 골드 40`,
-      hint: "actions 리스트로 턴마다 행동을 정해요!",
-      hint2: "코드를 그대로 실행하세요!"
-    },
-    {
-      id: "ch2-4",
       type: "mission",
-      title: "🎯 미션: 전투 함수!",
-      task: "빈칸 3개를 채워서 전투 함수를 완성하세요!",
-      initialCode: `class Character:
-    def __init__(s, name, hp, atk, defense):
-        s.name = name
-        s.hp = hp
-        s.atk = atk
-        s.defense = defense
-        s.alive = True
+      title: "🎯 미션: 날씨 알림 함수!",
+      task: "빈칸 3개를 채워서 날씨 알림 함수를 완성하세요!",
+      initialCode: `weather_db = {
+    '서울': {'temp': 22, 'humidity': 55, 'condition': '맑음', 'wind': 3.2},
+    '부산': {'temp': 25, 'humidity': 70, 'condition': '구름', 'wind': 5.1},
+    '제주': {'temp': 27, 'humidity': 80, 'condition': '비', 'wind': 7.8},
+}
 
-    def take_damage(s, damage):
-        actual = damage - s.defense
-        if actual < 1:
-            actual = 1
-        s.hp -= actual
-        if s.hp <= 0:
-            s.hp = 0
-            s.alive = False
-        return actual
+def weather_alert(city):
+    if city not in weather_db:
+        print(f'{city}: 데이터 없음')
+        return
 
-class Monster:
-    def __init__(s, name, hp, atk, defense, exp, gold):
-        s.name = name
-        s.hp = hp
-        s.atk = atk
-        s.defense = defense
-        s.exp_reward = exp
-        s.gold_reward = gold
-        s.alive = True
+    info = weather_db[city]
+    alerts = []
 
-    def take_damage(s, damage):
-        actual = damage - s.defense
-        if actual < 1:
-            actual = 1
-        s.hp -= actual
-        if s.hp <= 0:
-            s.hp = 0
-            s.alive = False
-        return actual
+    if info['temp'] ___ 30:
+        alerts.append('폭염 주의!')
+    if info['humidity'] >= ___:
+        alerts.append('습도 높음!')
+    if info['___'] >= 7.0:
+        alerts.append('강풍 주의!')
 
-def battle(hero, monster, actions):
-    print(f'{monster.name} 등장!')
-    for action in actions:
-        if not hero.alive or not monster.___:
-            break
-        if action == 'attack':
-            dmg = monster.take_damage(hero.___)
-            print(f'  {hero.name} -> {monster.name} ({dmg})')
-        if monster.alive:
-            dmg = hero.___(monster.atk)
-            print(f'  {monster.name} -> {hero.name} ({dmg})')
+    print(f'=== {city} 알림 ===')
+    if alerts:
+        for alert in alerts:
+            print(f'  ⚠️ {alert}')
+    else:
+        print('  ✅ 특이사항 없음')
 
-hero = Character('영희', 100, 20, 8)
-slime = Monster('슬라임', 30, 8, 2, 30, 20)
-
-battle(hero, slime, ['attack', 'attack', 'attack'])
-print(f'\\n결과: {hero.name} HP {hero.hp}')`,
-      expectedOutput: `슬라임 등장!\n  영희 -> 슬라임 (18)\n  슬라임 -> 영희 (1)\n  영희 -> 슬라임 (18)\n\n결과: 영희 HP 99`,
-      hint: "alive 체크, atk로 공격, take_damage로 피해!",
-      hint2: "alive / atk / take_damage"
-    },
-    {
-      id: "ch2-5",
-      type: "quiz",
-      title: "❓ 퀴즈!",
-      content: "용사(ATK 15)가 고블린(DEF 5)을 공격하면 데미지는?",
-      options: ["5", "10", "15", "20"],
-      answer: 1,
-      explanation: "15 - 5 = 10 데미지! 방어력만큼 깎여요!"
+weather_alert('서울')
+weather_alert('제주')
+weather_alert('부산')`,
+      expectedOutput: `=== 서울 알림 ===\n  ✅ 특이사항 없음\n=== 제주 알림 ===\n  ⚠️ 습도 높음!\n  ⚠️ 강풍 주의!\n=== 부산 알림 ===\n  ✅ 특이사항 없음`,
+      hint: "기온 30도 이상, 습도 75% 이상, 풍속 7.0 이상이면 알림!",
+      hint2: ">= / 75 / wind"
     }
   ]
 }

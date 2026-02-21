@@ -6,8 +6,8 @@ import { ch4 } from './ch4'
 
 export const lesson40: LessonData = {
   id: "40",
-  title: "미니 프로젝트: RPG 게임",
-  emoji: "🎮",
-  description: "클래스로 RPG 캐릭터를 만들고 전투해요!",
+  title: "Part 6 문제 20",
+  emoji: "📝",
+  description: "에러처리와 파일 총정리 문제!",
   chapters: [ch1, ch2, ch3, ch4]
 }

@@ -2,119 +2,88 @@ import { Chapter } from '../types'
 
 export const ch1: Chapter = {
   id: "ch1",
-  title: "기초 문제 (1~10)",
-  emoji: "⭐",
+  title: "로또 번호 생성기",
+  emoji: "🎱",
   steps: [
     {
       id: "ch1-0",
       type: "explain",
-      title: "🏆 종합 도전!",
-      content: `## Part 1~3 총정리!
+      title: "💭 생각해보기: 랜덤 번호 뽑기",
+      content: `![랜덤 번호 뽑기](/lessons/l28/ch1-0-random.png)
 
-| 파트 | 문제 수 |
-|------|---------|
-| ⭐ 기초 | 10문제 |
-| ⭐⭐ 자료구조 | 10문제 |
-| ⭐⭐⭐ 종합 | 10문제 |
+💭 로또는 1~45 중에서 6개를 뽑잖아. 근데 **같은 번호가 두 번** 나오면 안 되는데... 어떻게 중복 없이 뽑지?
 
-총 30문제! 24문제 이상 맞추면 합격! 🎯`
+\`\`\`python
+import random
+random.seed(42)  # 항상 같은 결과!
+
+numbers = []
+while len(numbers) < 6:
+    n = random.randint(1, 45)
+    if n not in numbers:  # 중복 체크!
+        numbers.append(n)
+\`\`\`
+
+@핵심: \`not in\`으로 중복 체크하면서 6개가 될 때까지 반복!`
     },
     {
       id: "ch1-1",
-      type: "quiz",
-      title: "문제 1",
-      content: "출력 결과는?\n\n```python\nprint(10 // 3)\n```",
-      options: ["3", "3.33", "3.0", "4"],
-      answer: 0,
-      explanation: "//는 몫 연산! 10 나누기 3의 몫은 3!"
+      type: "tryit",
+      title: "🎱 로또 번호 만들기!",
+      task: "빈칸을 채워서 로또 번호를 뽑아보세요!",
+      initialCode: `import random
+random.seed(42)
+
+numbers = []
+while len(numbers) < 6:
+    n = random.randint(1, 45)
+    if n ___ in numbers:
+        numbers.___(n)
+
+numbers.sort()
+
+print('=== 로또 번호 ===')
+print(f'번호: {___}')`,
+      expectedOutput: `=== 로또 번호 ===\n번호: [3, 14, 25, 30, 40, 45]`,
+      hint: "중복이 아닌 것만! not in으로 체크, append로 추가!",
+      hint2: "not / append / numbers"
     },
     {
       id: "ch1-2",
-      type: "quiz",
-      title: "문제 2",
-      content: "출력 결과는?\n\n```python\nprint(10 % 3)\n```",
-      options: ["3", "1", "0", "3.33"],
-      answer: 1,
-      explanation: "%는 나머지 연산! 10 나누기 3의 나머지는 1!"
+      type: "explain",
+      title: "💭 생각해보기: 여러 세트 뽑기",
+      content: `![여러 세트 뽑기](/lessons/l28/ch1-2-multi.png)
+
+💭 로또 1장만 사면 아쉽지! **5세트**를 뽑으려면? 번호 뽑는 코드를 5번 반복하면 되겠지?
+
+\`\`\`python
+for game in range(1, 6):
+    numbers = []  # 매 세트마다 새로!
+    # ... 6개 뽑기 ...
+    numbers.sort()  # 정렬!
+\`\`\`
+
+@핵심: \`for\`문으로 5번 반복! 매번 빈 리스트로 시작하고 \`sort()\`로 정렬!`
     },
     {
       id: "ch1-3",
-      type: "quiz",
-      title: "문제 3",
-      content: "출력 결과는?\n\n```python\nx = '파이썬'\nprint(x * 3)\n```",
-      options: ["에러", "파이썬3", "파이썬파이썬파이썬", "9"],
-      answer: 2,
-      explanation: "문자열 * 숫자 = 반복! '파이썬' × 3 = '파이썬파이썬파이썬'!"
-    },
-    {
-      id: "ch1-4",
-      type: "quiz",
-      title: "문제 4",
-      content: "출력 결과는?\n\n```python\nfor i in range(3):\n    print(i, end=' ')\n```",
-      options: ["1 2 3 ", "0 1 2 ", "0 1 2 3 ", "1 2 "],
-      answer: 1,
-      explanation: "range(3)은 0, 1, 2! end=' '로 한 줄에 출력!"
-    },
-    {
-      id: "ch1-5",
-      type: "quiz",
-      title: "문제 5",
-      content: "출력 결과는?\n\n```python\nx = 15\nif x > 20:\n    print('A')\nelif x > 10:\n    print('B')\nelse:\n    print('C')\n```",
-      options: ["A", "B", "C", "AB"],
-      answer: 1,
-      explanation: "15 > 20? X → 15 > 10? O → 'B'!"
-    },
-    {
-      id: "ch1-6",
-      type: "tryit",
-      title: "문제 6: 구구단",
-      task: "7단을 출력하는 코드를 실행하세요!",
-      initialCode: `for i in range(1, 10):
-    print(f'7 x {i} = {7 * i}')`,
-      expectedOutput: `7 x 1 = 7\n7 x 2 = 14\n7 x 3 = 21\n7 x 4 = 28\n7 x 5 = 35\n7 x 6 = 42\n7 x 7 = 49\n7 x 8 = 56\n7 x 9 = 63`,
-      hint: "range(1, 10)은 1~9!",
-      hint2: "7 * i로 곱셈 결과를 구해요!"
-    },
-    {
-      id: "ch1-7",
-      type: "quiz",
-      title: "문제 7",
-      content: "출력 결과는?\n\n```python\ntext = 'Hello World'\nprint(text[0:5])\n```",
-      options: ["Hello", "Hello ", "Hello World", "H"],
-      answer: 0,
-      explanation: "text[0:5]는 인덱스 0~4! 'Hello'!"
-    },
-    {
-      id: "ch1-8",
       type: "mission",
-      title: "문제 8: 짝수 합",
-      task: "빈칸 2개를 채워서 1~20 사이 짝수의 합을 구하세요!",
-      initialCode: `total = 0
-for i in range(1, ___):
-    if i ___ 2 == 0:
-        total += i
-print(f'1~20 짝수의 합: {total}')`,
-      expectedOutput: `1~20 짝수의 합: 110`,
-      hint: "range(1, 21)로 1~20, % 2 == 0이면 짝수!",
-      hint2: "21 / %"
-    },
-    {
-      id: "ch1-9",
-      type: "quiz",
-      title: "문제 9",
-      content: "출력 결과는?\n\n```python\nresult = ''\nfor ch in 'Python':\n    if ch.isupper():\n        result += ch\nprint(result)\n```",
-      options: ["Python", "P", "PYTHON", "python"],
-      answer: 1,
-      explanation: "'Python'에서 대문자는 'P' 하나뿐!"
-    },
-    {
-      id: "ch1-10",
-      type: "quiz",
-      title: "문제 10",
-      content: "출력 결과는?\n\n```python\nnums = [3, 1, 4, 1, 5]\nnums.sort()\nprint(nums[-1])\n```",
-      options: ["3", "5", "1", "에러"],
-      answer: 1,
-      explanation: "sort()로 정렬 → [1, 1, 3, 4, 5], [-1]은 마지막 = 5!"
+      title: "🎯 미션: 로또 5세트!",
+      task: "빈칸 3개를 채워서 5세트를 만드세요!",
+      initialCode: `import random
+random.seed(100)
+
+for game in range(1, 6):
+    numbers = []
+    while len(numbers) < ___:
+        n = random.randint(1, 45)
+        if n not ___ numbers:
+            numbers.append(n)
+    numbers.___()
+    print(f'{game}세트: {numbers}')`,
+      expectedOutput: `1세트: [5, 6, 12, 17, 27, 28]\n2세트: [2, 16, 21, 26, 34, 44]\n3세트: [2, 12, 21, 24, 36, 43]\n4세트: [6, 7, 15, 16, 24, 37]\n5세트: [3, 4, 7, 18, 34, 37]`,
+      hint: "6개 뽑기, 중복 체크, 정렬!",
+      hint2: "6 / in / sort"
     }
   ]
 }

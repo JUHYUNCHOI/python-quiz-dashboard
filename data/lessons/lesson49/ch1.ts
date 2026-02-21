@@ -2,269 +2,230 @@ import { Chapter } from '../types'
 
 export const ch1: Chapter = {
   id: "ch1",
-  title: "쉬운 도전",
-  emoji: "⭐",
+  title: "클래스 설계",
+  emoji: "📋",
   steps: [
     {
       id: "ch1-0",
       type: "explain",
-      title: "⭐ 업그레이드 도전!",
-      content: `## 게임에 새 기능을 추가해보자!
+      title: "🎮 텍스트 RPG를 만들자!",
+      content: `## 우리가 만들 게임!
 
-| 난이도 | 도전 |
-|--------|------|
-| ⭐ 쉬움 | 휴식 기능, 치명타, 장비 |
-| ⭐⭐ 보통 | 퀘스트, 스킬 |
-| ⭐⭐⭐ 어려움 | 업적, 몬스터 드롭 |
+\`\`\`
+=== 텍스트 RPG ===
+직업을 선택하세요: 용사
+용사 탄생! HP:120 ATK:15 DEF:10
 
-각 도전을 **하나씩 추가**하면서 게임을 발전시켜요!`
+--- 1턴 ---
+슬라임 등장! HP:30
+> 공격!
+용사 -> 슬라임 (12 데미지)
+슬라임 -> 용사 (3 데미지)
+...
+슬라임 처치! +50 골드, +30 경험치
+레벨 업! Lv.1 -> Lv.2
+
+> 상점
+물약 50골드 -> 구매!
+
+> 세이브
+저장 완료!
+\`\`\`
+
+**Part 7-8에서 배운 클래스, 모듈, JSON을 총동원!**`
     },
     {
       id: "ch1-1",
-      type: "tryit",
-      title: "💻 ① 휴식 기능!",
-      task: "전투 사이에 HP를 회복하는 휴식 기능을 실행해보세요!",
-      initialCode: `class Character:
-    def __init__(s, name, hp, atk, defense):
-        s.name = name
-        s.hp = hp
-        s.max_hp = hp
-        s.atk = atk
-        s.defense = defense
+      type: "explain",
+      title: "📋 필요한 클래스 3개!",
+      content: `## 게임에 필요한 것들
 
-    def rest(s):
-        # 최대 HP의 30% 회복!
-        heal_amount = int(s.max_hp * 0.3)
-        s.hp = min(s.hp + heal_amount, s.max_hp)
-        print(f'{s.name} 휴식! +{heal_amount} HP -> {s.hp}/{s.max_hp}')
+| 클래스 | 역할 | 속성 |
+|--------|------|------|
+| **Character** | 플레이어 | 이름, HP, 공격력, 방어력, 직업, 레벨, 골드 |
+| **Monster** | 적 | 이름, HP, 공격력, 방어력, 경험치, 골드 |
+| **Item** | 아이템 | 이름, 종류, 효과, 가격 |
 
-    def take_damage(s, damage):
-        actual = damage - s.defense
-        if actual < 1:
-            actual = 1
-        s.hp -= actual
-        return actual
+\`\`\`python
+# 클래스 3개로 게임 전체를 만들어요!
+class Character:  # 플레이어
+    ...
+class Monster:    # 적
+    ...
+class Item:       # 아이템
+    ...
+\`\`\`
 
-# 테스트!
-hero = Character('용사', 120, 15, 10)
-
-# 전투로 데미지를 입음
-hero.take_damage(20)
-hero.take_damage(25)
-print(f'전투 후: HP {hero.hp}/{hero.max_hp}')
-
-# 휴식!
-print()
-hero.rest()
-hero.rest()
-hero.rest()  # 최대HP 넘어가면?
-
-print(f'\\n최종: HP {hero.hp}/{hero.max_hp}')`,
-      expectedOutput: `전투 후: HP 95/120\n\n용사 휴식! +36 HP -> 120/120\n용사 휴식! +36 HP -> 120/120\n용사 휴식! +36 HP -> 120/120\n\n최종: HP 120/120`,
-      hint: "max_hp의 30%를 회복, min으로 최대 제한!",
-      hint2: "코드를 그대로 실행하세요!"
+→ L38-39에서 배운 클래스를 **실전에 활용**!`
     },
     {
       id: "ch1-2",
-      type: "mission",
-      title: "🎯 미션: 휴식 추가!",
-      task: "빈칸 3개를 채워서 휴식 기능을 완성하세요!",
-      initialCode: `class Character:
-    def __init__(s, name, hp):
-        s.name = name
-        s.hp = hp
-        s.___ = hp
+      type: "explain",
+      title: "🦸 Character 속성 설계",
+      content: `## Character 클래스에 필요한 것
 
-    def rest(s):
-        heal = int(s.max_hp * 0.3)
-        s.hp = ___(s.hp + heal, s.max_hp)
-        print(f'휴식! HP: {s.hp}/{s.max_hp}')
+\`\`\`python
+class Character:
+    def __init__(s, name, job):
+        # 기본 정보
+        s.name = name      # 이름
+        s.job = job        # 직업
 
-hero = Character('용사', 100)
-hero.hp = 50
-print(f'현재 HP: {hero.hp}')
-hero.___()
-print(f'회복 후: {hero.hp}')`,
-      expectedOutput: `현재 HP: 50\n휴식! HP: 80/100\n회복 후: 80`,
-      hint: "max_hp 저장, min으로 최대 제한, rest 호출!",
-      hint2: "max_hp / min / rest"
+        # 스탯 (직업마다 다름!)
+        s.hp = 100         # 체력
+        s.max_hp = 100
+        s.atk = 15         # 공격력
+        s.defense = 10     # 방어력
+
+        # 성장
+        s.level = 1        # 레벨
+        s.exp = 0          # 경험치
+        s.gold = 0         # 골드
+
+        # 장비
+        s.inventory = []   # 인벤토리
+\`\`\`
+
+→ **직업에 따라 스탯이 달라지게** 만들 거예요!`
     },
     {
       id: "ch1-3",
       type: "tryit",
-      title: "💻 ② 치명타 시스템!",
-      task: "20% 확률로 1.5배 데미지를 주는 치명타를 실행해보세요!",
-      initialCode: `import random
-random.seed(42)
-
-class Character:
-    def __init__(s, name, hp, atk, defense):
+      title: "💻 Character 기본 만들기!",
+      task: "Character 클래스를 만들고 캐릭터 정보를 출력해보세요!",
+      initialCode: `class Character:
+    def __init__(s, name, job):
         s.name = name
-        s.hp = hp
-        s.atk = atk
-        s.defense = defense
-        s.crit_rate = 0.2   # 20% 확률
-        s.crit_damage = 1.5  # 1.5배
+        s.job = job
+        s.hp = 100
+        s.max_hp = 100
+        s.atk = 15
+        s.defense = 10
+        s.level = 1
+        s.exp = 0
+        s.gold = 0
+        s.inventory = []
 
-    def attack_target(s, target):
-        damage = s.atk
+    def status(s):
+        print(f'=== {s.name} ===')
+        print(f'직업: {s.job}')
+        print(f'HP: {s.hp}/{s.max_hp}')
+        print(f'ATK: {s.atk} | DEF: {s.defense}')
+        print(f'Lv.{s.level} | EXP: {s.exp}')
+        print(f'골드: {s.gold}')
 
-        # 치명타 판정!
-        is_crit = random.random() < s.crit_rate
-        if is_crit:
-            damage = int(damage * s.crit_damage)
-
-        actual = damage - target.defense
-        if actual < 1:
-            actual = 1
-        target.hp -= actual
-
-        if is_crit:
-            print(f'  ★ 크리티컬! {s.name} -> {target.name} ({actual} 데미지!)')
-        else:
-            print(f'  {s.name} -> {target.name} ({actual} 데미지)')
-
-class Monster:
-    def __init__(s, name, hp, atk, defense):
-        s.name = name
-        s.hp = hp
-        s.atk = atk
-        s.defense = defense
-
-# 테스트! (seed 고정으로 결과 동일)
-hero = Character('용사', 120, 20, 10)
-goblin = Monster('고블린', 100, 12, 5)
-
-print('=== 치명타 테스트 (5번 공격) ===')
-for i in range(5):
-    hero.attack_target(goblin)
-    print(f'    고블린 HP: {goblin.hp}')`,
-      expectedOutput: `=== 치명타 테스트 (5번 공격) ===\n  용사 -> 고블린 (15 데미지)\n    고블린 HP: 85\n  ★ 크리티컬! 용사 -> 고블린 (25 데미지!)\n    고블린 HP: 60\n  용사 -> 고블린 (15 데미지)\n    고블린 HP: 45\n  용사 -> 고블린 (15 데미지)\n    고블린 HP: 30\n  ★ 크리티컬! 용사 -> 고블린 (25 데미지!)\n    고블린 HP: 5`,
-      hint: "random.random() < 0.2 면 치명타! 데미지 1.5배!",
+# 캐릭터 만들기!
+hero = Character('철수', '용사')
+hero.status()`,
+      expectedOutput: `=== 철수 ===\n직업: 용사\nHP: 100/100\nATK: 15 | DEF: 10\nLv.1 | EXP: 0\n골드: 0`,
+      hint: "클래스로 캐릭터의 모든 정보를 관리해요!",
       hint2: "코드를 그대로 실행하세요!"
     },
     {
       id: "ch1-4",
-      type: "mission",
-      title: "🎯 미션: 치명타 추가!",
-      task: "빈칸 3개를 채워서 치명타를 구현하세요!",
-      initialCode: `import random
-random.seed(10)
+      type: "explain",
+      title: "👹 Monster & Item 설계",
+      content: `## Monster 클래스
 
-class Fighter:
-    def __init__(s, name, atk):
+\`\`\`python
+class Monster:
+    def __init__(s, name, hp, atk, defense, exp, gold):
         s.name = name
+        s.hp = hp
         s.atk = atk
-        s.crit_rate = 0.3  # 30%
+        s.defense = defense
+        s.exp_reward = exp    # 처치 시 경험치
+        s.gold_reward = gold  # 처치 시 골드
+\`\`\`
 
-    def attack(s):
-        damage = s.atk
-        is_crit = random.___() < s.crit_rate
-        if ___:
-            damage = int(damage * 2)
-            print(f'★ 크리티컬! {s.name}: {damage} 데미지!')
-        else:
-            print(f'{s.name}: {___} 데미지')
+## Item 클래스
 
-hero = Fighter('용사', 10)
-for i in range(4):
-    hero.attack()`,
-      expectedOutput: `용사: 10 데미지\n★ 크리티컬! 용사: 20 데미지!\n용사: 10 데미지\n★ 크리티컬! 용사: 20 데미지!`,
-      hint: "random.random()으로 확률, is_crit 조건, damage 출력!",
-      hint2: "random / is_crit / damage"
+\`\`\`python
+class Item:
+    def __init__(s, name, item_type, value, price):
+        s.name = name
+        s.item_type = item_type  # 'heal', 'atk', 'def'
+        s.value = value          # 효과 수치
+        s.price = price          # 가격
+\`\`\`
+
+→ Monster는 **처치 보상**이, Item은 **종류와 효과**가 핵심!`
     },
     {
       id: "ch1-5",
       type: "tryit",
-      title: "💻 ③ 장비 시스템!",
-      task: "무기와 방어구를 장착하면 스탯이 변하는 시스템을 실행해보세요!",
-      initialCode: `class Equipment:
-    def __init__(s, name, slot, atk_bonus, def_bonus):
+      title: "💻 3개 클래스 모두 만들기!",
+      task: "Character, Monster, Item 클래스를 모두 만들어보세요!",
+      initialCode: `class Character:
+    def __init__(s, name, job):
         s.name = name
-        s.slot = slot  # 'weapon' or 'armor'
-        s.atk_bonus = atk_bonus
-        s.def_bonus = def_bonus
+        s.job = job
+        s.hp = 100
+        s.max_hp = 100
+        s.atk = 15
+        s.defense = 10
+        s.level = 1
 
-class Character:
-    def __init__(s, name, hp, atk, defense):
+    def show(s):
+        print(f'[{s.job}] {s.name}: HP {s.hp}/{s.max_hp}, ATK {s.atk}, DEF {s.defense}')
+
+class Monster:
+    def __init__(s, name, hp, atk, defense, exp, gold):
         s.name = name
-        s.hp, s.max_hp = hp, hp
-        s.base_atk = atk
-        s.base_def = defense
-        s.weapon = None
-        s.armor = None
+        s.hp = hp
+        s.atk = atk
+        s.defense = defense
+        s.exp_reward = exp
+        s.gold_reward = gold
 
-    def equip(s, equipment):
-        if equipment.slot == 'weapon':
-            if s.weapon:
-                print(f'  {s.weapon.name} 해제')
-            s.weapon = equipment
-            print(f'  {equipment.name} 장착!')
-        elif equipment.slot == 'armor':
-            if s.armor:
-                print(f'  {s.armor.name} 해제')
-            s.armor = equipment
-            print(f'  {equipment.name} 장착!')
+    def show(s):
+        print(f'[몬스터] {s.name}: HP {s.hp}, ATK {s.atk}, DEF {s.defense}')
 
-    def get_atk(s):
-        bonus = s.weapon.atk_bonus if s.weapon else 0
-        return s.base_atk + bonus
+class Item:
+    def __init__(s, name, item_type, value, price):
+        s.name = name
+        s.item_type = item_type
+        s.value = value
+        s.price = price
 
-    def get_def(s):
-        bonus = s.armor.def_bonus if s.armor else 0
-        return s.base_def + bonus
+    def show(s):
+        types = {'heal': '회복', 'atk': '공격력', 'def': '방어력'}
+        print(f'[{types[s.item_type]}] {s.name}: +{s.value}, {s.price}골드')
 
-    def status(s):
-        w = s.weapon.name if s.weapon else '없음'
-        a = s.armor.name if s.armor else '없음'
-        print(f'{s.name}: ATK {s.get_atk()} (기본 {s.base_atk}), DEF {s.get_def()} (기본 {s.base_def})')
-        print(f'  무기: {w}, 방어구: {a}')
+# 생성!
+hero = Character('영희', '마법사')
+slime = Monster('슬라임', 30, 8, 2, 20, 30)
+potion = Item('물약', 'heal', 30, 50)
 
-# 장비!
-wooden_sword = Equipment('나무검', 'weapon', 3, 0)
-iron_sword = Equipment('철검', 'weapon', 8, 0)
-leather = Equipment('가죽갑옷', 'armor', 0, 5)
-iron_armor = Equipment('철갑옷', 'armor', 0, 10)
-
-# 테스트!
-hero = Character('용사', 120, 15, 10)
-print('=== 장비 전 ===')
-hero.status()
-
-print('\\n--- 나무검 + 가죽갑옷 ---')
-hero.equip(wooden_sword)
-hero.equip(leather)
-hero.status()
-
-print('\\n--- 철검으로 업그레이드! ---')
-hero.equip(iron_sword)
-hero.status()`,
-      expectedOutput: `=== 장비 전 ===\n용사: ATK 15 (기본 15), DEF 10 (기본 10)\n  무기: 없음, 방어구: 없음\n\n--- 나무검 + 가죽갑옷 ---\n  나무검 장착!\n  가죽갑옷 장착!\n용사: ATK 18 (기본 15), DEF 15 (기본 10)\n  무기: 나무검, 방어구: 가죽갑옷\n\n--- 철검으로 업그레이드! ---\n  나무검 해제\n  철검 장착!\n용사: ATK 23 (기본 15), DEF 15 (기본 10)\n  무기: 철검, 방어구: 가죽갑옷`,
-      hint: "base_atk + weapon.atk_bonus = 실제 공격력!",
+hero.show()
+slime.show()
+potion.show()`,
+      expectedOutput: `[마법사] 영희: HP 100/100, ATK 15, DEF 10\n[몬스터] 슬라임: HP 30, ATK 8, DEF 2\n[회복] 물약: +30, 50골드`,
+      hint: "3개 클래스로 게임의 모든 요소를 표현!",
       hint2: "코드를 그대로 실행하세요!"
     },
     {
       id: "ch1-6",
       type: "quiz",
       title: "❓ 퀴즈!",
-      content: "`random.random() < 0.2`가 True일 확률은?",
-      options: ["2%", "20%", "80%", "항상 True"],
-      answer: 1,
-      explanation: "random.random()은 0~1 사이 실수! 그 값이 0.2보다 작을 확률 = 20%! 치명타 확률로 딱이에요."
+      content: "RPG 게임에서 Monster 클래스에 꼭 필요하지 않은 속성은?",
+      options: ["hp (체력)", "atk (공격력)", "inventory (인벤토리)", "exp_reward (경험치 보상)"],
+      answer: 2,
+      explanation: "인벤토리는 플레이어(Character)의 속성! 몬스터는 HP, 공격력, 보상이 핵심이에요."
     },
     {
       id: "ch1-7",
       type: "quiz",
       title: "❓ 퀴즈!",
-      content: "장비 시스템에서 `base_atk`와 `get_atk()`를 분리하는 이유는?",
+      content: "`s.max_hp = hp`에서 max_hp를 따로 저장하는 이유는?",
       options: [
-        "파이썬 규칙이라서",
-        "장비를 바꿔도 기본 스탯은 유지하려고",
         "메모리를 아끼려고",
-        "코드를 길게 만들려고"
+        "회복할 때 최대치를 알기 위해",
+        "파이썬 문법이 그래서",
+        "몬스터도 사용하려고"
       ],
       answer: 1,
-      explanation: "기본 공격력(base_atk)은 고정! 장비 보너스는 장착/해제 시 자동 계산! 분리해야 깔끔해요."
+      explanation: "HP가 줄었다가 회복할 때, max_hp보다 넘지 않게 제한해야 해요! `min(hp + heal, max_hp)` 패턴!"
     }
   ]
 }

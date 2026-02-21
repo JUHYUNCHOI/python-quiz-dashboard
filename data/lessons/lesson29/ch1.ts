@@ -2,71 +2,115 @@ import { Chapter } from '../types'
 
 export const ch1: Chapter = {
   id: "ch1",
-  title: "함수가 뭐예요?",
-  emoji: "🤔",
+  title: "단어장 프로그램",
+  emoji: "📖",
   steps: [
     {
-      id: "ch1-1",
+      id: "ch1-0",
       type: "explain",
-      title: "오늘의 미션!",
-      content: `## 🎂 생일 축하 메시지 보내기
+      title: "💭 생각해보기: 단어 저장",
+      content: `![단어 저장](/lessons/l29/ch1-0-vocab.png)
 
-친구 10명에게 생일 축하 메시지를 보내야 해요.
+💭 영어 단어장을 만들고 싶어! apple은 사과, banana는 바나나... **단어**와 **뜻**을 짝지어 저장하려면 뭘 써야 할까?
 
-> "생일 축하해! 행복한 하루 보내!"
+\`\`\`python
+vocab = {}
+vocab['apple'] = '사과'
+vocab['banana'] = '바나나'
+print(vocab['apple'])  # 사과
+\`\`\`
 
-이 메시지를 **10명**에게 보내려면...
+@핵심: **딕셔너리**로 단어:뜻을 짝지어 저장!`
+    },
+    {
+      id: "ch1-1",
+      type: "tryit",
+      title: "📖 단어 추가하기!",
+      task: "빈칸을 채워서 단어장에 단어를 추가하고 검색해보세요!",
+      initialCode: `vocab = {}
 
-어떻게 해야 할까요?`
+# 단어 추가
+vocab['apple'] = '사과'
+vocab['banana'] = '바나나'
+vocab[___] = '체리'
+
+# 단어 검색
+word = 'apple'
+if word ___ vocab:
+    print(f'{word} = {vocab[___]}')
+else:
+    print(f'{word} 없음')
+
+print(f'단어장: {len(vocab)}개')`,
+      expectedOutput: `apple = 사과\n단어장: 3개`,
+      hint: "딕셔너리에 키로 저장! in으로 있는지 확인!",
+      hint2: "'cherry' / in / word"
     },
     {
       id: "ch1-2",
-      type: "interactive",
-      title: "직접 코드로 써보면...",
-      description: "타이핑을 지켜보세요...",
-      component: "repetitiveTyping"
+      type: "explain",
+      title: "💭 생각해보기: 추가/검색/삭제",
+      content: `![단어장 기능](/lessons/l29/ch1-2-crud.png)
+
+💭 단어장에 **추가**만 하면 뭐해! **검색**도 하고, 틀린 단어는 **삭제**도 해야지. 이 기능들을 어떻게 구분하지?
+
+\`\`\`python
+# 명령어로 구분!
+action = 'add'      # 추가
+action = 'search'   # 검색
+action = 'delete'   # 삭제
+action = 'list'     # 전체 보기
+
+# if/elif로 분기!
+\`\`\`
+
+@핵심: 명령어를 \`if/elif\`로 분기해서 추가/검색/삭제/목록 처리!`
     },
     {
       id: "ch1-3",
-      type: "interactive",
-      title: "방법이 있어요!",
-      description: "반복되는 부분을 찾아봐요!",
-      component: "patternDiscovery"
-    },
-    {
-      id: "ch1-4",
-      type: "explain",
-      title: "반복되는 부분을 상자에 담자!",
-      content: `## 📦 상자에 담고 이름을 붙이면?
+      type: "mission",
+      title: "🎯 미션: 단어장 완성!",
+      task: "빈칸 3개를 채워서 단어장 프로그램을 완성하세요!",
+      initialCode: `vocab = {}
 
-반복되는 코드를 **상자**에 넣고, **이름**을 붙여요:
+commands = [
+    ('add', 'apple', '사과'),
+    ('add', 'banana', '바나나'),
+    ('add', 'cherry', '체리'),
+    ('search', 'apple', ''),
+    ('search', 'grape', ''),
+    ('delete', 'banana', ''),
+    ('list', '', ''),
+]
 
-\`\`\`python
-def 축하(이름):
-    print(f"생일 축하해! 행복한 하루 보내, {이름}!")
-\`\`\`
+for cmd in commands:
+    action = cmd[0]
 
-- **def** = "상자를 만들 거야!"
-- **축하** = 상자의 이름
-- **이름** = 상자에 넣을 재료 (달라지는 부분!)
+    if action == 'add':
+        word, meaning = cmd[1], cmd[2]
+        vocab[word] = ___
+        print(f'+ {word}: {meaning}')
 
-이렇게 만든 상자를 **함수**라고 해요!`
-    },
-    {
-      id: "ch1-5",
-      type: "interactive",
-      title: "함수 구조 배우기",
-      description: "클릭하면서 함수가 어떻게 생겼는지 배워봐요!",
-      component: "functionBuilder"
-    },
-    {
-      id: "ch1-6",
-      type: "quiz",
-      title: "개념 확인!",
-      content: "함수를 만들 때 맨 앞에 쓰는 키워드는?",
-      options: ["print", "def", "return", "function"],
-      answer: 1,
-      explanation: "def는 'define(정의하다)'의 줄임말이에요! 함수를 정의할 때 씁니다."
+    elif action == 'search':
+        word = cmd[1]
+        if word ___ vocab:
+            print(f'O {word} = {vocab[word]}')
+        else:
+            print(f'X {word} 없음')
+
+    elif action == 'delete':
+        word = cmd[1]
+        if word in vocab:
+            ___ vocab[word]
+            print(f'- {word} 삭제')
+
+    elif action == 'list':
+        print(f'--- 단어장 ({len(vocab)}개) ---')
+        for w, m in vocab.items():
+            print(f'  {w}: {m}')`,
+      expectedOutput: `+ apple: 사과\n+ banana: 바나나\n+ cherry: 체리\nO apple = 사과\nX grape 없음\n- banana 삭제\n--- 단어장 (2개) ---\n  apple: 사과\n  cherry: 체리`,
+      hint: "뜻을 저장, in으로 검색, del로 삭제!",
+      hint2: "meaning / in / del"
     }
   ]
 }

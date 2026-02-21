@@ -2,195 +2,117 @@ import { Chapter } from '../types'
 
 export const ch3: Chapter = {
   id: "ch3",
-  title: "random & datetime 개념",
-  emoji: "🎲",
+  title: "인스턴스 변수 vs 클래스 변수",
+  emoji: "🔀",
   steps: [
     {
       id: "ch3-0",
       type: "explain",
-      title: "🎲 random 모듈",
-      content: `## random 모듈 = 랜덤 값 생성!
+      title: "🔀 두 종류의 변수!",
+      content: `## 인스턴스 변수 vs 클래스 변수
+
+### 인스턴스 변수 (s.xxx)
+- 각 객체마다 **따로** 가지는 값
+- \`s.char_name\`, \`s.hp\` 등
+- 용사의 HP ≠ 마법사의 HP
+
+### 클래스 변수
+- **모든 객체가 공유**하는 값
+- 클래스 안, 메서드 밖에 선언
+- \`Character.game_title\` 처럼 접근
 
 \`\`\`python
-import random
+class Character:
+    game_title = 'RPG 용사 게임'   # 클래스 변수 (공유!)
 
-# 정수 랜덤
-random.randint(1, 6)    # 주사위: 1~6 중 하나
-
-# 리스트에서 선택
-random.choice(['가위', '바위', '보'])
-
-# 리스트 섞기
-cards = [1, 2, 3, 4, 5]
-random.shuffle(cards)
-
-# 0~1 사이 실수
-random.random()  # 0.7432... 등
-\`\`\`
-
-⚠️ **주의**: random은 실행할 때마다 결과가 달라요!
-→ 이 웹에서는 결과를 예측할 수 없어서
-   **개념 설명 + 퀴즈**로 학습해요!
-
-💡 **seed**를 지정하면 같은 결과를 얻을 수 있어요:
-\`\`\`python
-random.seed(42)  # 시드 고정
-random.randint(1, 10)  # 항상 같은 값!
+    def __init__(s, char_name, hp):
+        s.char_name = char_name     # 인스턴스 변수 (각자!)
+        s.hp = hp                   # 인스턴스 변수 (각자!)
 \`\`\``
     },
     {
       id: "ch3-1",
-      type: "quiz",
-      title: "퀴즈: random!",
-      content: "`random.randint(1, 10)`의 결과로 나올 수 **없는** 값은?",
-      options: ["1", "5", "10", "11"],
-      answer: 3,
-      explanation: "randint(1, 10)은 1~10 사이! 11은 나올 수 없어요!"
+      type: "tryit",
+      title: "💻 클래스 변수 체험!",
+      task: "클래스 변수와 인스턴스 변수의 차이를 확인해보세요!",
+      initialCode: `class Character:
+    game_title = 'RPG 용사 게임'
+    total_count = 0
+
+    def __init__(s, char_name, hp):
+        s.char_name = char_name
+        s.hp = hp
+        Character.total_count = Character.total_count + 1
+        print(f'{char_name} 생성! (현재 총 {Character.total_count}명)')
+
+hero = Character('용사', 100)
+mage = Character('마법사', 80)
+archer = Character('궁수', 90)
+
+print(f'\\n게임 제목: {Character.game_title}')
+print(f'캐릭터 수: {Character.total_count}명')
+print(f'{hero.char_name}의 HP: {hero.hp}')
+print(f'{mage.char_name}의 HP: {mage.hp}')`,
+      expectedOutput: `용사 생성! (현재 총 1명)\n마법사 생성! (현재 총 2명)\n궁수 생성! (현재 총 3명)\n\n게임 제목: RPG 용사 게임\n캐릭터 수: 3명\n용사의 HP: 100\n마법사의 HP: 80`,
+      hint: "Character.total_count는 모든 객체가 공유하지만, s.hp는 각자 달라요!",
+      hint2: "클래스 변수는 Character.변수명으로, 인스턴스 변수는 s.변수명으로 접근!"
+    },
+    {
+      id: "ch3-1b",
+      type: "mission",
+      title: "🎯 미션: 클래스 변수 활용!",
+      task: "빈칸 3개를 채워서 팀 시스템을 완성하세요!",
+      initialCode: `class TeamMember:
+    team_name = 'RPG 모험단'
+    member_count = ___
+
+    def __init__(s, name, role):
+        s.name = name
+        s.role = role
+        TeamMember.member_count = TeamMember.___ + 1
+
+    def introduce(s):
+        print(f'[{TeamMember.team_name}] {s.name} ({s.role})')
+
+m1 = TeamMember('용사', '전사')
+m2 = TeamMember('린', '궁수')
+m3 = TeamMember('소피아', '힐러')
+
+m1.introduce()
+m2.introduce()
+m3.introduce()
+print(f'\\n팀원 수: {TeamMember.___}명')`,
+      expectedOutput: `[RPG 모험단] 용사 (전사)\n[RPG 모험단] 린 (궁수)\n[RPG 모험단] 소피아 (힐러)\n\n팀원 수: 3명`,
+      hint: "클래스 변수는 0으로 시작, member_count를 1씩 증가!",
+      hint2: "0 / member_count / member_count"
     },
     {
       id: "ch3-2",
       type: "quiz",
-      title: "퀴즈: random.choice!",
-      content: "`random.choice(['a', 'b', 'c'])`는 무엇을 하나요?",
+      title: "퀴즈: 변수 구분!",
+      content: "다음 중 **클래스 변수**에 대한 설명으로 옳은 것은?",
       options: [
-        "항상 'a'를 반환",
-        "리스트에서 랜덤으로 하나 선택",
-        "리스트를 정렬",
-        "리스트를 섞음"
+        "각 객체마다 다른 값을 가진다",
+        "s.xxx 형태로 선언한다",
+        "모든 객체가 같은 값을 공유한다",
+        "__init__ 안에서만 만들 수 있다"
       ],
-      answer: 1,
-      explanation: "choice는 리스트에서 랜덤으로 하나를 골라요!"
+      answer: 2,
+      explanation: "클래스 변수는 모든 객체가 공유해요! 클래스 안, 메서드 밖에 선언해요!"
     },
     {
       id: "ch3-3",
-      type: "explain",
-      title: "📅 datetime 모듈",
-      content: `## datetime 모듈 = 날짜와 시간!
-
-\`\`\`python
-import datetime
-
-# 현재 날짜/시간
-now = datetime.datetime.now()
-print(now)  # 2024-03-15 14:30:00.123456
-
-# 특정 날짜 만들기
-birthday = datetime.date(2010, 5, 20)
-print(birthday)  # 2010-05-20
-
-# 날짜 차이 계산
-d1 = datetime.date(2024, 1, 1)
-d2 = datetime.date(2024, 12, 31)
-diff = d2 - d1
-print(diff.days)  # 365
-\`\`\`
-
-### 자주 쓰는 기능
-| 기능 | 설명 |
-|------|------|
-| datetime.now() | 현재 시간 |
-| date(년, 월, 일) | 날짜 만들기 |
-| d2 - d1 | 날짜 차이 |
-| .year, .month, .day | 년/월/일 꺼내기 |
-
-⚠️ datetime.now()는 실행 시점마다 달라져요!`
-    },
-    {
-      id: "ch3-4",
-      type: "tryit",
-      title: "💻 datetime 고정값 실습!",
-      task: "고정 날짜로 날짜 계산을 실행해보세요!",
-      initialCode: `import datetime
-
-# 고정 날짜로 실습
-birthday = datetime.date(2010, 5, 20)
-school_start = datetime.date(2024, 3, 4)
-today = datetime.date(2024, 6, 15)
-
-# 날짜 정보 꺼내기
-print(f'생일: {birthday.year}년 {birthday.month}월 {birthday.day}일')
-
-# 날짜 차이 계산
-age_days = today - birthday
-school_days = today - school_start
-
-print(f'태어난 지 {age_days.days}일')
-print(f'개학한 지 {school_days.days}일')
-
-# 비교
-if today > birthday:
-    print('생일이 지났어요!')`,
-      expectedOutput: `생일: 2010년 5월 20일\n태어난 지 5139일\n개학한 지 103일\n생일이 지났어요!`,
-      hint: "날짜끼리 빼면 차이(일수)가 나와요!",
-      hint2: ".days로 일수를 가져와요!"
-    },
-    {
-      id: "ch3-5",
       type: "quiz",
-      title: "퀴즈!",
-      content: "두 날짜의 차이를 구하려면?",
+      title: "퀴즈: 코드 예측!",
+      content: "다음 코드의 결과는?\n\n```python\nclass Pet:\n    count = 0\n    \n    def __init__(s, name):\n        s.name = name\n        Pet.count = Pet.count + 1\n\na = Pet('멍멍이')\nb = Pet('냥냥이')\nc = Pet('짹짹이')\nprint(Pet.count, a.name)\n```",
       options: [
-        "date.diff(d1, d2)",
-        "d2 - d1",
-        "datetime.between(d1, d2)",
-        "d1.diff(d2)"
+        "1 멍멍이",
+        "3 멍멍이",
+        "3 짹짹이",
+        "에러"
       ],
       answer: 1,
-      explanation: "파이썬에서는 날짜끼리 빼기(-)가 가능해요! 결과의 .days로 일수를 얻어요!"
-    },
-    {
-      id: "ch3-6",
-      type: "tryit",
-      title: "🎲 seed로 랜덤 고정하기!",
-      task: "random.seed()로 랜덤 결과를 고정해서 실행해보세요!",
-      initialCode: `import random
-
-# seed 고정하면 매번 같은 결과!
-random.seed(42)
-print('=== 주사위 5번 ===')
-for i in range(5):
-    roll = random.randint(1, 6)
-    print(f'{i+1}번째: {roll}')
-
-# 리스트에서 랜덤 선택
-random.seed(42)
-foods = ['치킨', '피자', '햄버거', '떡볶이', '김밥']
-for i in range(3):
-    pick = random.choice(foods)
-    print(f'\\n오늘의 메뉴 {i+1}: {pick}')`,
-      expectedOutput: `=== 주사위 5번 ===\n1번째: 1\n2번째: 1\n3번째: 6\n4번째: 6\n5번째: 6\n\n오늘의 메뉴 1: 치킨\n오늘의 메뉴 2: 치킨\n오늘의 메뉴 3: 김밥`,
-      hint: "seed(42)를 설정하면 항상 같은 순서의 랜덤값이 나와요!",
-      hint2: "코드를 그대로 실행하세요!"
-    },
-    {
-      id: "ch3-7",
-      type: "mission",
-      title: "🎯 미션: 모듈 종합 활용!",
-      task: "빈칸 3개를 채워서 세 가지 모듈을 활용하는 프로그램을 완성하세요!",
-      initialCode: `import math
-import random
-import datetime
-
-# 1. math로 계산
-scores = [85, 92, 78, 96, 88]
-avg = sum(scores) / len(scores)
-print(f'평균: {avg}')
-print(f'올림: {math.___(avg)}')
-
-# 2. random으로 랜덤 (seed 고정)
-random.seed(100)
-items = ['검', '방패', '포션', '마법서']
-prize = random.___(items)
-print(f'\\n오늘의 보상: {prize}')
-
-# 3. datetime으로 날짜
-start = datetime.date(2024, 3, 1)
-end = datetime.date(2024, 12, 31)
-diff = end - start
-print(f'\\n남은 날: {diff.___}일')`,
-      expectedOutput: `평균: 87.8\n올림: 88\n\n오늘의 보상: 방패\n\n남은 날: 305일`,
-      hint: "올림 함수, 랜덤 선택 함수, 날짜 차이 속성!",
-      hint2: "ceil / choice / days"
+      explanation: "Pet.count는 클래스 변수라 3마리를 만들면 3이 돼요! a.name은 '멍멍이' 그대로!"
     }
   ]
 }

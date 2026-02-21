@@ -2,145 +2,195 @@ import { Chapter } from '../types'
 
 export const ch3: Chapter = {
   id: "ch3",
-  title: "⭐⭐⭐ 도전 (15~20)",
-  emoji: "⭐",
+  title: "random & datetime 개념",
+  emoji: "🎲",
   steps: [
     {
       id: "ch3-0",
-      type: "tryit",
-      title: "문제 15: string 모듈",
-      task: "string 모듈로 비밀번호 검증기를 만들어보세요!",
-      initialCode: `import string
+      type: "explain",
+      title: "🎲 random 모듈",
+      content: `## random 모듈 = 랜덤 값 생성!
 
-def check_password(pw):
-    has_lower = False
-    has_upper = False
-    has_digit = False
+\`\`\`python
+import random
 
-    for ch in pw:
-        if ch in string.ascii_lowercase:
-            has_lower = True
-        if ch in string.ascii_uppercase:
-            has_upper = True
-        if ch in string.digits:
-            has_digit = True
+# 정수 랜덤
+random.randint(1, 6)    # 주사위: 1~6 중 하나
 
-    results = []
-    if len(pw) >= 8:
-        results.append('O 길이 8자 이상')
-    else:
-        results.append('X 길이 8자 미만')
+# 리스트에서 선택
+random.choice(['가위', '바위', '보'])
 
-    results.append(f'{"O" if has_lower else "X"} 소문자')
-    results.append(f'{"O" if has_upper else "X"} 대문자')
-    results.append(f'{"O" if has_digit else "X"} 숫자')
+# 리스트 섞기
+cards = [1, 2, 3, 4, 5]
+random.shuffle(cards)
 
-    return results
+# 0~1 사이 실수
+random.random()  # 0.7432... 등
+\`\`\`
 
-passwords = ['abc', 'Hello123!', 'PASSWORD']
-for pw in passwords:
-    print(f'--- {pw} ---')
-    for r in check_password(pw):
-        print(f'  {r}')`,
-      expectedOutput: `--- abc ---\n  X 길이 8자 미만\n  O 소문자\n  X 대문자\n  X 숫자\n--- Hello123! ---\n  O 길이 8자 이상\n  O 소문자\n  O 대문자\n  O 숫자\n--- PASSWORD ---\n  O 길이 8자 이상\n  X 소문자\n  O 대문자\n  X 숫자`,
-      hint: "string.ascii_lowercase, ascii_uppercase, digits로 검사!",
-      hint2: "in 연산자로 각 문자가 어느 카테고리인지 확인해요!"
+⚠️ **주의**: random은 실행할 때마다 결과가 달라요!
+→ 이 웹에서는 결과를 예측할 수 없어서
+   **개념 설명 + 퀴즈**로 학습해요!
+
+💡 **seed**를 지정하면 같은 결과를 얻을 수 있어요:
+\`\`\`python
+random.seed(42)  # 시드 고정
+random.randint(1, 10)  # 항상 같은 값!
+\`\`\``
     },
     {
       id: "ch3-1",
       type: "quiz",
-      title: "문제 16",
-      content: "`datetime.date(2024, 12, 25) - datetime.date(2024, 1, 1)`의 `.days`는?",
-      options: ["359", "365", "360", "에러"],
-      answer: 0,
-      explanation: "1월 1일부터 12월 25일까지는 359일!"
+      title: "퀴즈: random!",
+      content: "`random.randint(1, 10)`의 결과로 나올 수 **없는** 값은?",
+      options: ["1", "5", "10", "11"],
+      answer: 3,
+      explanation: "randint(1, 10)은 1~10 사이! 11은 나올 수 없어요!"
     },
     {
       id: "ch3-2",
-      type: "mission",
-      title: "문제 17: math + json 종합",
-      task: "빈칸 3개를 채워서 성적 통계 시스템을 완성하세요!",
-      initialCode: `import math
-import json
-
-students = [
-    {'name': '철수', 'score': 85},
-    {'name': '영희', 'score': 92},
-    {'name': '민수', 'score': 78},
-    {'name': '지영', 'score': 95},
-]
-
-scores = [s['score'] for s in students]
-avg = sum(scores) / ___(scores)
-
-print(f'평균: {avg:.1f}')
-print(f'올림: {math.ceil(___)}')
-
-# JSON 저장
-save = json.dumps(students, ___=False)
-print(f'저장: {save}')`,
-      expectedOutput: `평균: 87.5\n올림: 88\n저장: [{"name": "철수", "score": 85}, {"name": "영희", "score": 92}, {"name": "민수", "score": 78}, {"name": "지영", "score": 95}]`,
-      hint: "len으로 개수, avg를 올림, ensure_ascii로 한글!",
-      hint2: "len / avg / ensure_ascii"
+      type: "quiz",
+      title: "퀴즈: random.choice!",
+      content: "`random.choice(['a', 'b', 'c'])`는 무엇을 하나요?",
+      options: [
+        "항상 'a'를 반환",
+        "리스트에서 랜덤으로 하나 선택",
+        "리스트를 정렬",
+        "리스트를 섞음"
+      ],
+      answer: 1,
+      explanation: "choice는 리스트에서 랜덤으로 하나를 골라요!"
     },
     {
       id: "ch3-3",
-      type: "quiz",
-      title: "문제 18",
-      content: "`random.choice(['사과', '바나나', '포도'])`는?",
-      options: [
-        "항상 '사과'",
-        "리스트에서 랜덤 선택",
-        "리스트 전체 반환",
-        "리스트 정렬"
-      ],
-      answer: 1,
-      explanation: "choice는 리스트에서 하나를 랜덤으로 골라요!"
+      type: "explain",
+      title: "📅 datetime 모듈",
+      content: `## datetime 모듈 = 날짜와 시간!
+
+\`\`\`python
+import datetime
+
+# 현재 날짜/시간
+now = datetime.datetime.now()
+print(now)  # 2024-03-15 14:30:00.123456
+
+# 특정 날짜 만들기
+birthday = datetime.date(2010, 5, 20)
+print(birthday)  # 2010-05-20
+
+# 날짜 차이 계산
+d1 = datetime.date(2024, 1, 1)
+d2 = datetime.date(2024, 12, 31)
+diff = d2 - d1
+print(diff.days)  # 365
+\`\`\`
+
+### 자주 쓰는 기능
+| 기능 | 설명 |
+|------|------|
+| datetime.now() | 현재 시간 |
+| date(년, 월, 일) | 날짜 만들기 |
+| d2 - d1 | 날짜 차이 |
+| .year, .month, .day | 년/월/일 꺼내기 |
+
+⚠️ datetime.now()는 실행 시점마다 달라져요!`
     },
     {
       id: "ch3-4",
-      type: "quiz",
-      title: "문제 19",
-      content: "외부 패키지 사용 순서로 올바른 것은?",
-      options: [
-        "import → pip install → 사용",
-        "사용 → pip install → import",
-        "pip install → import → 사용",
-        "pip install만 하면 됨"
-      ],
-      answer: 2,
-      explanation: "pip install(설치) → import(불러오기) → 사용! 순서 중요!"
+      type: "tryit",
+      title: "💻 datetime 고정값 실습!",
+      task: "고정 날짜로 날짜 계산을 실행해보세요!",
+      initialCode: `import datetime
+
+# 고정 날짜로 실습
+birthday = datetime.date(2010, 5, 20)
+school_start = datetime.date(2024, 3, 4)
+today = datetime.date(2024, 6, 15)
+
+# 날짜 정보 꺼내기
+print(f'생일: {birthday.year}년 {birthday.month}월 {birthday.day}일')
+
+# 날짜 차이 계산
+age_days = today - birthday
+school_days = today - school_start
+
+print(f'태어난 지 {age_days.days}일')
+print(f'개학한 지 {school_days.days}일')
+
+# 비교
+if today > birthday:
+    print('생일이 지났어요!')`,
+      expectedOutput: `생일: 2010년 5월 20일\n태어난 지 5139일\n개학한 지 103일\n생일이 지났어요!`,
+      hint: "날짜끼리 빼면 차이(일수)가 나와요!",
+      hint2: ".days로 일수를 가져와요!"
     },
     {
       id: "ch3-5",
+      type: "quiz",
+      title: "퀴즈!",
+      content: "두 날짜의 차이를 구하려면?",
+      options: [
+        "date.diff(d1, d2)",
+        "d2 - d1",
+        "datetime.between(d1, d2)",
+        "d1.diff(d2)"
+      ],
+      answer: 1,
+      explanation: "파이썬에서는 날짜끼리 빼기(-)가 가능해요! 결과의 .days로 일수를 얻어요!"
+    },
+    {
+      id: "ch3-6",
+      type: "tryit",
+      title: "🎲 seed로 랜덤 고정하기!",
+      task: "random.seed()로 랜덤 결과를 고정해서 실행해보세요!",
+      initialCode: `import random
+
+# seed 고정하면 매번 같은 결과!
+random.seed(42)
+print('=== 주사위 5번 ===')
+for i in range(5):
+    roll = random.randint(1, 6)
+    print(f'{i+1}번째: {roll}')
+
+# 리스트에서 랜덤 선택
+random.seed(42)
+foods = ['치킨', '피자', '햄버거', '떡볶이', '김밥']
+for i in range(3):
+    pick = random.choice(foods)
+    print(f'\\n오늘의 메뉴 {i+1}: {pick}')`,
+      expectedOutput: `=== 주사위 5번 ===\n1번째: 1\n2번째: 1\n3번째: 6\n4번째: 6\n5번째: 6\n\n오늘의 메뉴 1: 치킨\n오늘의 메뉴 2: 치킨\n오늘의 메뉴 3: 김밥`,
+      hint: "seed(42)를 설정하면 항상 같은 순서의 랜덤값이 나와요!",
+      hint2: "코드를 그대로 실행하세요!"
+    },
+    {
+      id: "ch3-7",
       type: "mission",
-      title: "문제 20: 모듈 종합 미션!",
-      task: "빈칸 3개를 채워서 게임 아이템 상점을 완성하세요!",
+      title: "🎯 미션: 모듈 종합 활용!",
+      task: "빈칸 3개를 채워서 세 가지 모듈을 활용하는 프로그램을 완성하세요!",
       initialCode: `import math
-import ___
+import random
+import datetime
 
-shop_items = {
-    '검': {'price': 1500, 'atk': 20},
-    '방패': {'price': 1200, 'atk': 0},
-    '지팡이': {'price': 2000, 'atk': 35},
-}
+# 1. math로 계산
+scores = [85, 92, 78, 96, 88]
+avg = sum(scores) / len(scores)
+print(f'평균: {avg}')
+print(f'올림: {math.___(avg)}')
 
-# 가격 통계
-prices = [item['price'] for item in shop_items.___()]
-avg_price = sum(prices) / len(prices)
+# 2. random으로 랜덤 (seed 고정)
+random.seed(100)
+items = ['검', '방패', '포션', '마법서']
+prize = random.___(items)
+print(f'\\n오늘의 보상: {prize}')
 
-print('=== 아이템 상점 ===')
-for name, info in shop_items.items():
-    print(f'  {name}: {info["price"]}G (ATK +{info["atk"]})')
-
-print(f'\\n평균 가격: {math.___(avg_price)}G (올림)')
-
-# JSON 저장
-save = json.dumps(shop_items, ensure_ascii=False)
-print(f'세이브 데이터 크기: {len(save)}자')`,
-      expectedOutput: `=== 아이템 상점 ===\n  검: 1500G (ATK +20)\n  방패: 1200G (ATK +0)\n  지팡이: 2000G (ATK +35)\n\n평균 가격: 1567G (올림)\n세이브 데이터 크기: 96자`,
-      hint: "json 모듈, values()로 값 가져오기, ceil로 올림!",
-      hint2: "json / values / ceil"
+# 3. datetime으로 날짜
+start = datetime.date(2024, 3, 1)
+end = datetime.date(2024, 12, 31)
+diff = end - start
+print(f'\\n남은 날: {diff.___}일')`,
+      expectedOutput: `평균: 87.8\n올림: 88\n\n오늘의 보상: 방패\n\n남은 날: 305일`,
+      hint: "올림 함수, 랜덤 선택 함수, 날짜 차이 속성!",
+      hint2: "ceil / choice / days"
     }
   ]
 }
