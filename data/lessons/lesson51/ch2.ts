@@ -8,10 +8,8 @@ export const ch2: Chapter = {
     {
       id: "ch2-0",
       type: "explain",
-      title: "💾 JSON으로 세이브!",
-      content: `## 게임 데이터를 저장하려면?
-
-캐릭터 정보를 **딕셔너리 → JSON 문자열**로 변환!
+      title: "💭 게임 데이터를 저장하려면 어떻게?",
+      content: `💭 캐릭터 이름, 레벨, 골드... 이걸 **문자열로 바꿔서 저장**할 수 있는 방법은 없을까?
 
 \`\`\`python
 import json
@@ -35,7 +33,7 @@ loaded = json.loads(json_str)
 # {'name': '용사', 'job': 'warrior', ...}
 \`\`\`
 
-→ L37에서 배운 **json 모듈** 활용!`
+@핵심: **json.dumps()** = 딕셔너리를 문자열로 저장, **json.loads()** = 문자열을 딕셔너리로 복원!`
     },
     {
       id: "ch2-1",

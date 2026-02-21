@@ -8,8 +8,8 @@ export const ch2: Chapter = {
     {
       id: "ch2-0",
       type: "explain",
-      title: "📦 가장 간단한 클래스",
-      content: `## 빈 클래스부터!
+      title: "💭 클래스를 만드는 코드, 어떻게 생겼을까?",
+      content: `💭 붕어빵 틀을 코드로 만들려면? **class**라는 키워드를 써요!
 
 \`\`\`python
 # 클래스 정의 (틀 만들기)
@@ -28,13 +28,15 @@ print(type(hero))
 
 ⚠️ 클래스 이름은 **대문자**로 시작!
 - 함수: \`print()\`, \`input()\` (소문자)
-- 클래스: \`Character()\`, \`Monster()\` (대문자)`
+- 클래스: \`Character()\`, \`Monster()\` (대문자)
+
+@핵심: \`class 이름:\`으로 틀을 만들고, \`이름()\`으로 객체를 찍어낸다!`
     },
     {
       id: "ch2-1",
       type: "explain",
-      title: "🍩 __init__: 속을 채우자!",
-      content: `## 빈 붕어빵은 재미없죠? 속을 채워봅시다!
+      title: "💭 빈 붕어빵에 속을 넣으려면?",
+      content: `💭 빈 클래스는 아무 정보가 없어요. 이름이랑 HP를 넣으려면 **어떤 함수**가 필요할까?
 
 \`\`\`python
 class Character:
@@ -56,8 +58,7 @@ print(f'HP: {hero.char_hp}')
 HP: 100
 \`\`\`
 
-💡 \`__init__\` = initialize(초기화)의 줄임말!
-→ 객체를 만들 때 **자동으로** 실행돼요!`
+@핵심: \`__init__\`은 객체를 만들 때 **자동 실행**되는 초기화 함수!`
     },
     {
       id: "ch2-2",
@@ -76,8 +77,8 @@ HP: 100
     {
       id: "ch2-3",
       type: "explain",
-      title: "🤔 s(self)가 뭘까?",
-      content: `## 가장 헷갈리는 부분!
+      title: "💭 __init__의 s는 대체 누구일까?",
+      content: `💭 \`def __init__(s, char_name)\`에서 **s**는 뭘까? 어디서 온 거지?
 
 \`\`\`python
 class Character:
@@ -101,7 +102,9 @@ hero는 누구? <__main__.Character object at 0x123abc>
 - \`s\` = "지금 만들어지고 있는 이 붕어빵"
 - \`hero\` = "완성된 붕어빵의 이름표"
 
-⚠️ 보통 \`self\`라고 쓰지만, 이 교재에서는 \`s\`를 써요!`
+⚠️ 보통 \`self\`라고 쓰지만, 이 교재에서는 \`s\`를 써요!
+
+@핵심: **s(self)는 "나 자신"** — 만들어지고 있는 그 객체를 가리킨다!`
     },
     {
       id: "ch2-4",

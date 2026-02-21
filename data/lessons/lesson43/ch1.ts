@@ -8,10 +8,8 @@ export const ch1: Chapter = {
     {
       id: "ch1-0",
       type: "explain",
-      title: "🎮 RPG 게임 만들기 프로젝트!",
-      content: `## 오늘의 목표
-
-클래스를 활용해서 **RPG 전투 게임**을 만들어요!
+      title: "💭 클래스로 진짜 RPG 게임을 만들 수 있을까?",
+      content: `💭 지금까지 배운 클래스, 메서드, 속성을 조합하면... **진짜 RPG 전투 게임**을 만들 수 있을까?
 
 ### 4단계로 완성:
 1. 🦸 **캐릭터 클래스** — 기본 속성
@@ -26,7 +24,7 @@ monster = Monster('드래곤', 80, 15)
 battle(hero, monster)  # 자동 전투!
 \`\`\`
 
-Let's go! 🚀`
+@핵심: 클래스 + 메서드 + 속성 = **RPG 게임**까지 만들 수 있다!`
     },
     {
       id: "ch1-1",

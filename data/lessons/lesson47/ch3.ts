@@ -91,16 +91,9 @@ weather_app()`,
     {
       id: "ch3-2",
       type: "explain",
-      title: "🎉 프로젝트 완성!",
-      content: `## 날씨 앱에서 배운 것
+      title: "💭 이걸 진짜 날씨 API에 연결하면 어떻게 될까?",
+      content: `💭 지금은 모의 데이터를 썼지만... **진짜 날씨 서버**에서 실시간 데이터를 가져오려면 어떻게 해야 할까?
 
-### 사용한 개념
-- **딕셔너리 중첩** — 도시별 날씨 데이터
-- **함수** — 검색, 비교, 알림, 통계
-- **math 모듈** — ceil, floor
-- **json 모듈** — dumps, loads
-
-### 실제 날씨 앱이라면?
 \`\`\`python
 # requests 패키지로 API 호출
 import requests
@@ -108,8 +101,13 @@ response = requests.get('https://api.weather.com/...')
 data = response.json()
 \`\`\`
 
-> 나중에 requests 패키지를 배우면
-> 진짜 날씨 데이터를 가져올 수 있어요! 🌍`
+@핵심: requests 패키지를 배우면 진짜 API에서 실시간 날씨 데이터를 가져올 수 있어!
+
+이번 프로젝트에서 사용한 개념 정리:
+- **딕셔너리 중첩** — 도시별 날씨 데이터
+- **함수** — 검색, 비교, 알림, 통계
+- **math 모듈** — ceil, floor
+- **json 모듈** — dumps, loads`
     }
   ]
 }

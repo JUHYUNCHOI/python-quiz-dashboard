@@ -15,8 +15,8 @@ export const ch5: Chapter = {
     {
       id: "ch5-1",
       type: "explain",
-      title: "❌ 에러 처리 없는 게임",
-      content: `## 문제: 잘못된 입력으로 게임 종료!
+      title: "💭 게임에서 에러 처리 안 하면?",
+      content: `💭 숫자 맞추기 게임을 만들었는데... 사용자가 **'abc'**를 입력하면? 게임이 그냥 **꺼져버릴까?**
 
 \`\`\`python
 import random
@@ -31,13 +31,15 @@ while True:
 
 **'abc' 입력하면?**
 - ValueError!
-- 게임 끝! 💥`
+- 게임 끝! 💥
+
+@핵심: 에러 처리 없으면 **잘못된 입력 한 번에 게임 종료!**`
     },
     {
       id: "ch5-2",
       type: "explain",
-      title: "✅ 에러 처리 있는 게임",
-      content: `## try-except로 감싸면!
+      title: "💭 게임이 안 꺼지게 하려면?",
+      content: `💭 잘못된 입력을 해도 게임이 **계속 돌아가게** 하고 싶어! while 안에서 try-except를 쓰면 어떻게 될까?
 
 \`\`\`python
 import random
@@ -59,7 +61,9 @@ while True:
 
 **'abc' 입력해도:**
 - \`숫자만 입력해주세요!\` 출력
-- 게임 계속! ✅`
+- 게임 계속! ✅
+
+@핵심: **while + try-except** = 잘못 입력해도 게임이 안 꺼지고 계속!`
     },
     {
       id: "ch5-3",

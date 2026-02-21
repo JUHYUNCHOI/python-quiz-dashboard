@@ -8,8 +8,8 @@ export const ch3: Chapter = {
     {
       id: "ch3-0",
       type: "explain",
-      title: "🎮 게임 루프 = while + actions!",
-      content: `## 전체 게임 구조
+      title: "💭 전투, 상점, 세이브를 어떻게 하나로 묶을까?",
+      content: `💭 전투도 하고 상점도 가고 세이브도 하고... 이 **모든 기능을 while 루프 하나**로 돌릴 수 있을까?
 
 \`\`\`python
 actions = ['warrior', 'battle', 'battle', 'shop',
@@ -32,7 +32,7 @@ while True:
     ...
 \`\`\`
 
-→ **actions 리스트가 곧 게임 시나리오!**`
+@핵심: **actions 리스트가 곧 게임 시나리오!** while + if/elif로 행동별 분기!`
     },
     {
       id: "ch3-1",
@@ -338,8 +338,8 @@ for job in ['warrior', 'mage', 'archer']:
     {
       id: "ch3-6",
       type: "explain",
-      title: "🎉 텍스트 RPG 완성!",
-      content: `## 축하해요! 🎉
+      title: "💭 지금까지 어떤 개념을 총동원했을까?",
+      content: `💭 클래스, 딕셔너리, 리스트, JSON, 반복문... 텍스트 RPG에 **몇 가지 개념**이 들어갔을까?
 
 ### 만든 것들:
 - **Character** — 3직업, 레벨업, 전투, 인벤토리
@@ -359,7 +359,7 @@ for job in ['warrior', 'mage', 'archer']:
 | **반복문** | Part 2 | 게임 루프, 전투 |
 | **조건문** | Part 2 | 행동 분기, 데미지 계산 |
 
-다음 레슨에서 **업그레이드 도전**을 해볼까요? 🚀`
+@핵심: **6가지 핵심 개념**을 총동원해서 텍스트 RPG 하나를 완성했어!`
     }
   ]
 }

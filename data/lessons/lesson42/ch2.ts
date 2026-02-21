@@ -8,11 +8,8 @@ export const ch2: Chapter = {
     {
       id: "ch2-0",
       type: "explain",
-      title: "⚔️ 공격 메서드 만들기!",
-      content: `## 메서드에 매개변수 추가!
-
-인사 메서드는 매개변수가 s 뿐이었죠?
-공격은 **누구를** 공격할지 알아야 해요!
+      title: "💭 용사가 슬라임을 공격하려면 뭘 알아야 할까?",
+      content: `💭 인사 메서드는 혼자 했는데... 공격은 **상대방**이 필요하잖아? 메서드에 상대를 어떻게 전달하지?
 
 \`\`\`python
 def attack(s, target):  # target = 공격 대상!
@@ -20,7 +17,9 @@ def attack(s, target):  # target = 공격 대상!
     target.hp = target.hp - s.atk  # 상대 HP 감소!
 \`\`\`
 
-💡 **target**도 객체라서 \`target.char_name\`, \`target.hp\` 사용 가능!`
+💡 **target**도 객체라서 \`target.char_name\`, \`target.hp\` 사용 가능!
+
+@핵심: 메서드에 **다른 객체를 매개변수**로 넘기면 상대방의 속성도 바꿀 수 있다!`
     },
     {
       id: "ch2-1",

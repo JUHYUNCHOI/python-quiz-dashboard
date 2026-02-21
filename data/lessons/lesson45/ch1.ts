@@ -8,10 +8,8 @@ export const ch1: Chapter = {
     {
       id: "ch1-0",
       type: "explain",
-      title: "📦 모듈이란?",
-      content: `## 모듈 = 미리 만들어진 도구 상자!
-
-프로그래밍할 때 모든 걸 직접 만들 필요 없어요!
+      title: "💭 제곱근 계산... 직접 만들어야 할까?",
+      content: `💭 제곱근, 올림, 내림... 이런 복잡한 계산을 매번 **직접 코딩**해야 할까? 누가 미리 만들어놓은 **도구 상자**가 있다면?
 
 \`\`\`python
 # 제곱근을 직접 계산? 너무 어려워요!
@@ -20,9 +18,7 @@ import math
 print(math.sqrt(16))  # 4.0
 \`\`\`
 
-## 모듈 = .py 파일
-
-모듈은 함수와 변수가 들어있는 **파이썬 파일**이에요!
+@핵심: **모듈** = 함수와 변수가 들어있는 .py 파일! import로 가져다 쓸 수 있어!
 
 | 모듈 | 설명 | 대표 기능 |
 |------|------|-----------|
@@ -37,34 +33,27 @@ print(math.sqrt(16))  # 4.0
     {
       id: "ch1-1",
       type: "explain",
-      title: "📥 import 방법 4가지!",
-      content: `## import 방법 비교
+      title: "💭 import하는 방법이 하나뿐일까?",
+      content: `💭 모듈을 가져올 때 매번 **모듈이름.함수()** 이렇게 길게 써야 할까? 더 **짧고 편한** 방법은 없을까?
 
-### 1. 전체 import
 \`\`\`python
+# 1. 전체 import
 import math
 print(math.sqrt(16))  # 모듈명.함수()
-\`\`\`
 
-### 2. 특정 기능만 import
-\`\`\`python
+# 2. 특정 기능만 import
 from math import sqrt
 print(sqrt(16))  # 바로 함수()
-\`\`\`
 
-### 3. 여러 개 import
-\`\`\`python
+# 3. 여러 개 import
 from math import sqrt, ceil, floor
-\`\`\`
 
-### 4. 별명 붙이기
-\`\`\`python
+# 4. 별명 붙이기
 import math as m
 print(m.sqrt(16))  # 별명.함수()
 \`\`\`
 
-⚠️ **from math import *** 는 비추!
-→ 이름 충돌 위험이 있어요!`
+@핵심: **import** 4가지 방법 = 전체, from...import, 여러 개, as 별명! 상황에 맞게 골라 써!`
     },
     {
       id: "ch1-2",

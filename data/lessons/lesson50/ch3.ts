@@ -8,8 +8,8 @@ export const ch3: Chapter = {
     {
       id: "ch3-0",
       type: "explain",
-      title: "🧪 아이템 종류!",
-      content: `## 3가지 아이템 타입
+      title: "💭 아이템 종류를 어떻게 구분할까?",
+      content: `💭 물약은 HP 회복, 힘의 물약은 공격력 증가... 아이템마다 **효과가 다른데 어떻게 구분**하지?
 
 | 종류 | 효과 | 예시 |
 |------|------|------|
@@ -26,7 +26,7 @@ class Item:
         s.price = price      # 50
 \`\`\`
 
-→ **item_type**으로 어떤 효과인지 구분!`
+@핵심: **item_type** 속성으로 'heal', 'atk', 'def'를 구분해서 효과를 다르게 적용!`
     },
     {
       id: "ch3-1",

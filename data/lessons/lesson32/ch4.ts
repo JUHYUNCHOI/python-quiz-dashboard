@@ -8,17 +8,8 @@ export const ch4: Chapter = {
     {
       id: "ch4-1",
       type: "explain",
-      title: "return이 뭐예요?",
-      content: `## 🎁 return = 결과를 돌려줘!
-
-지금까지는 함수가 **화면에 출력**만 했어요.
-
-\`\`\`python
-def 인사(이름):
-    print(f"안녕, {이름}!")  # 화면에 보여주기만
-\`\`\`
-
-**return**을 쓰면 **결과를 돌려줄** 수 있어요!
+      title: "💭 결과를 저장하고 싶다면?",
+      content: `💭 함수가 계산한 결과를 **변수에 저장**하고 싶어! print는 화면에 보여주기만 하잖아... 결과를 **돌려받는** 방법은?
 
 \`\`\`python
 def 더하기(a, b):
@@ -26,7 +17,9 @@ def 더하기(a, b):
 
 결과 = 더하기(3, 5)   # 8이 결과에 저장됨
 print(결과)           # 8
-\`\`\``
+\`\`\`
+
+@핵심: **return** = 결과를 돌려줘! 변수에 저장하거나 계산에 쓸 수 있어!`
     },
     {
       id: "ch4-2",
@@ -63,19 +56,19 @@ print(결과)`,
     {
       id: "ch4-5",
       type: "explain",
-      title: "print vs return",
-      content: `## ⚠️ 차이점!
+      title: "💭 print랑 return이 뭐가 다르지?",
+      content: `💭 둘 다 결과를 보여주는 거 아닌가? **print**로 충분하지 않을까? 차이가 뭘까?
 
-**print** = 화면에 보여주기만
+**print** = 화면에 보여주기만 (저장 X)
 \`\`\`python
 def 인사():
     print("안녕!")
 
 x = 인사()    # "안녕!" 출력됨
-print(x)      # None (비어있음)
+print(x)      # None (비어있음 😱)
 \`\`\`
 
-**return** = 값을 돌려줌
+**return** = 값을 돌려줌 (저장 O)
 \`\`\`python
 def 더하기(a, b):
     return a + b
@@ -85,7 +78,7 @@ print(x)      # 8
 print(x * 2)  # 16 - 계산에도 사용 가능!
 \`\`\`
 
-결과를 **저장하거나 계산**에 쓰려면 **return**!`
+@핵심: **print**는 보여주기만, **return**은 돌려줘서 저장/계산 가능!`
     },
     {
       id: "ch4-6",

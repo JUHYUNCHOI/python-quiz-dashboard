@@ -8,8 +8,8 @@ export const ch1: Chapter = {
     {
       id: "ch1-0",
       type: "explain",
-      title: "🎮 텍스트 RPG를 만들자!",
-      content: `## 우리가 만들 게임!
+      title: "💭 클래스로 뭘 만들 수 있을까?",
+      content: `💭 클래스, 딕셔너리, JSON... 이걸 다 합치면 **진짜 게임**을 만들 수 있지 않을까?
 
 \`\`\`
 === 텍스트 RPG ===
@@ -32,13 +32,13 @@ export const ch1: Chapter = {
 저장 완료!
 \`\`\`
 
-**Part 7-8에서 배운 클래스, 모듈, JSON을 총동원!**`
+@핵심: Part 7-8에서 배운 **클래스, 모듈, JSON**을 총동원해서 텍스트 RPG를 만들 거예요!`
     },
     {
       id: "ch1-1",
       type: "explain",
-      title: "📋 필요한 클래스 3개!",
-      content: `## 게임에 필요한 것들
+      title: "💭 게임에 필요한 설계도는 몇 개?",
+      content: `💭 RPG에는 플레이어, 몬스터, 아이템이 있어. 이걸 **클래스 몇 개**로 표현할 수 있을까?
 
 | 클래스 | 역할 | 속성 |
 |--------|------|------|
@@ -56,13 +56,13 @@ class Item:       # 아이템
     ...
 \`\`\`
 
-→ L38-39에서 배운 클래스를 **실전에 활용**!`
+@핵심: **클래스 3개**(Character, Monster, Item)로 게임의 모든 요소를 설계할 수 있어!`
     },
     {
       id: "ch1-2",
       type: "explain",
-      title: "🦸 Character 속성 설계",
-      content: `## Character 클래스에 필요한 것
+      title: "💭 캐릭터에 어떤 정보가 필요할까?",
+      content: `💭 RPG 캐릭터를 만들려면 이름, HP, 공격력... **어떤 속성들을 __init__에 넣어야** 할까?
 
 \`\`\`python
 class Character:
@@ -86,7 +86,7 @@ class Character:
         s.inventory = []   # 인벤토리
 \`\`\`
 
-→ **직업에 따라 스탯이 달라지게** 만들 거예요!`
+@핵심: __init__에 **기본 정보 + 스탯 + 성장 + 장비**를 전부 넣어서 캐릭터를 완성해!`
     },
     {
       id: "ch1-3",
@@ -124,8 +124,8 @@ hero.status()`,
     {
       id: "ch1-4",
       type: "explain",
-      title: "👹 Monster & Item 설계",
-      content: `## Monster 클래스
+      title: "💭 몬스터와 아이템은 어떻게 설계할까?",
+      content: `💭 몬스터는 처치하면 **보상**을 줘야 하고, 아이템은 **종류별로 효과**가 달라야 해. 어떤 속성이 필요할까?
 
 \`\`\`python
 class Monster:
@@ -138,8 +138,6 @@ class Monster:
         s.gold_reward = gold  # 처치 시 골드
 \`\`\`
 
-## Item 클래스
-
 \`\`\`python
 class Item:
     def __init__(s, name, item_type, value, price):
@@ -149,7 +147,7 @@ class Item:
         s.price = price          # 가격
 \`\`\`
 
-→ Monster는 **처치 보상**이, Item은 **종류와 효과**가 핵심!`
+@핵심: Monster는 **처치 보상(exp, gold)**, Item은 **종류(item_type)와 효과(value)**가 핵심!`
     },
     {
       id: "ch1-5",

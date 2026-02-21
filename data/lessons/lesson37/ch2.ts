@@ -8,8 +8,8 @@ export const ch2: Chapter = {
     {
       id: "ch2-1",
       type: "explain",
-      title: "🛡️ try-except 기본 구조",
-      content: `## try = 시도, except = 에러나면!
+      title: "💭 try-except는 어떤 구조일까?",
+      content: `💭 에러를 잡으려면 코드를 **어떤 구조**로 감싸야 할까? "시도해보고, 에러나면 이거 해!"를 코드로 쓰면?
 
 \`\`\`python
 try:
@@ -21,8 +21,7 @@ except:
     print('에러 발생!')
 \`\`\`
 
-- **try** = "시도해봐"
-- **except** = "에러나면 이거 해"`
+@핵심: **try** = "시도해봐", **except** = "에러나면 이거 해!"`
     },
     {
       id: "ch2-2",

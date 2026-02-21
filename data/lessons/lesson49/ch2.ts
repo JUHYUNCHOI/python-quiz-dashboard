@@ -8,8 +8,8 @@ export const ch2: Chapter = {
     {
       id: "ch2-0",
       type: "explain",
-      title: "🔄 게임 흐름!",
-      content: `## 텍스트 RPG 흐름도
+      title: "💭 게임은 어떤 순서로 흘러갈까?",
+      content: `💭 직업을 고르고, 싸우고, 아이템 사고... 이 흐름을 **코드로 어떻게 반복**시킬까?
 
 \`\`\`
 [시작]
@@ -28,15 +28,13 @@ export const ch2: Chapter = {
   └→ [게임 오버 or 클리어!]
 \`\`\`
 
-→ **while 반복문** 안에서 행동을 선택하는 구조!`
+@핵심: **while 반복문** 안에서 행동을 선택하는 구조 = 게임 루프!`
     },
     {
       id: "ch2-1",
       type: "explain",
-      title: "📋 input() 대신 actions 리스트!",
-      content: `## 웹에서는 input()을 쓸 수 없어요!
-
-대신 **actions 리스트**로 행동을 미리 정해둬요:
+      title: "💭 웹에서 input() 없이 어떻게 행동을 정할까?",
+      content: `💭 웹에서는 input()을 쓸 수 없어! 그러면 플레이어의 행동을 **어떻게 미리 정해둘** 수 있을까?
 
 \`\`\`python
 # 원래 게임 (input 사용)
@@ -55,7 +53,7 @@ def next_action():
     return 'quit'
 \`\`\`
 
-→ **자동 시나리오 재현!** 마치 게임 리플레이처럼!`
+@핵심: **actions 리스트**에 행동을 미리 넣어두고, next_action()으로 하나씩 꺼내면 자동 시나리오!`
     },
     {
       id: "ch2-2",
@@ -221,8 +219,8 @@ while True:
     {
       id: "ch2-7",
       type: "explain",
-      title: "🎉 게임 설계 완료!",
-      content: `## 설계 완료!
+      title: "💭 지금까지 설계한 것을 정리하면?",
+      content: `💭 클래스 3개, 게임 흐름, actions 패턴... 이걸 한눈에 정리하면 어떤 모습일까?
 
 ### 만들 클래스 3개:
 - **Character** — 직업별 스탯, 레벨업, 인벤토리
@@ -239,7 +237,7 @@ while True:
 actions = ['warrior', 'attack', 'shop', 'save']
 \`\`\`
 
-다음 레슨에서 **실제로 구현**해요! 🚀`
+@핵심: **클래스 3개 + while 루프 + actions 리스트** = 텍스트 RPG 설계 완료!`
     }
   ]
 }

@@ -8,29 +8,27 @@ export const ch7: Chapter = {
     {
       id: "ch7-0",
       type: "explain",
-      title: "📋 파일 다루기 정리!",
-      content: `## 기본 패턴
+      title: "💭 오늘 배운 파일 다루기, 한눈에 정리하면?",
+      content: `💭 파일 쓰기, 읽기, 추가, 에러 처리... 다 배웠는데! **핵심 패턴**만 정리하면 어떤 모습일까?
 
 \`\`\`python
-with open('파일.txt', '모드') as f:
-    # 작업
+# 쓰기
+with open('파일.txt', 'w') as f:
+    f.write('데이터')
+
+# 읽기
+with open('파일.txt', 'r') as f:
+    내용 = f.read()
 \`\`\`
 
-## 파일 모드
 - **'w'** — 쓰기 (덮어씀)
 - **'r'** — 읽기
 - **'a'** — 추가
-
-## 읽기 메서드
 - \`f.read()\` → 전체를 문자열로
-- \`f.readline()\` → 한 줄만 문자열로
 - \`f.readlines()\` → 전체를 리스트로
+- 파일 없음 → FileNotFoundError → try-except!
 
-### 🎯 핵심!
-- with문으로 안전하게 열기
-- w = 덮어쓰기, r = 읽기, a = 추가
-- 파일 없음 → FileNotFoundError
-- try-except로 에러 처리!`
+@핵심: **with open + 모드(w/r/a)** = 파일 다루기의 기본! 에러는 try-except!`
     },
     {
       id: "ch7-1",

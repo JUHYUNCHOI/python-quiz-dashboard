@@ -8,8 +8,8 @@ export const ch5: Chapter = {
     {
       id: "ch5-0",
       type: "explain",
-      title: "❌ 파일이 없으면 에러!",
-      content: `## 없는 파일 읽으려고 하면?
+      title: "💭 없는 파일을 열려고 하면?",
+      content: `💭 파일을 읽으려고 했는데... 그 파일이 **존재하지 않으면** 어떻게 될까? 프로그램이 멈출까?
 
 \`\`\`python
 with open('없는파일.txt', 'r') as f:
@@ -17,13 +17,13 @@ with open('없는파일.txt', 'r') as f:
 \`\`\`
 
 \`\`\`
-FileNotFoundError: 
+FileNotFoundError:
 No such file or directory: '없는파일.txt'
 \`\`\`
 
-**FileNotFoundError = 파일 없음!**
+try-except로 처리할 수 있어요!
 
-lesson 34에서 배운 try-except로 처리할 수 있어요!`
+@핵심: 없는 파일 읽기 → **FileNotFoundError!** try-except로 잡자!`
     },
     {
       id: "ch5-1",

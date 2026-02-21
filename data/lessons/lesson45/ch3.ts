@@ -8,8 +8,8 @@ export const ch3: Chapter = {
     {
       id: "ch3-0",
       type: "explain",
-      title: "🎲 random 모듈",
-      content: `## random 모듈 = 랜덤 값 생성!
+      title: "💭 주사위 굴리기를 코드로 만들려면?",
+      content: `💭 게임에서 **주사위 굴리기**, **가위바위보 랜덤 선택**... 이런 걸 코드로 어떻게 만들까? 매번 다른 값이 나오게 하려면?
 
 \`\`\`python
 import random
@@ -28,10 +28,9 @@ random.shuffle(cards)
 random.random()  # 0.7432... 등
 \`\`\`
 
-⚠️ **주의**: random은 실행할 때마다 결과가 달라요!
-→ 이 웹에서는 결과를 예측할 수 없어서
-   **개념 설명 + 퀴즈**로 학습해요!
+@핵심: **random** 모듈 = randint(범위 정수), choice(리스트에서 하나), shuffle(섞기)!
 
+⚠️ random은 실행할 때마다 결과가 달라요!
 💡 **seed**를 지정하면 같은 결과를 얻을 수 있어요:
 \`\`\`python
 random.seed(42)  # 시드 고정
@@ -64,8 +63,8 @@ random.randint(1, 10)  # 항상 같은 값!
     {
       id: "ch3-3",
       type: "explain",
-      title: "📅 datetime 모듈",
-      content: `## datetime 모듈 = 날짜와 시간!
+      title: "💭 생일까지 며칠 남았는지 계산하려면?",
+      content: `💭 **오늘 날짜**를 알고 싶거나, 두 날짜 사이의 **며칠 차이**를 계산하고 싶을 때... 직접 빼기를 하기엔 복잡한데?
 
 \`\`\`python
 import datetime
@@ -85,15 +84,7 @@ diff = d2 - d1
 print(diff.days)  # 365
 \`\`\`
 
-### 자주 쓰는 기능
-| 기능 | 설명 |
-|------|------|
-| datetime.now() | 현재 시간 |
-| date(년, 월, 일) | 날짜 만들기 |
-| d2 - d1 | 날짜 차이 |
-| .year, .month, .day | 년/월/일 꺼내기 |
-
-⚠️ datetime.now()는 실행 시점마다 달라져요!`
+@핵심: **datetime** 모듈 = 날짜 만들기(date), 현재 시간(now), 날짜끼리 빼기(-)로 차이 계산!`
     },
     {
       id: "ch3-4",

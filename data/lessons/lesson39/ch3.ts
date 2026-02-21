@@ -8,8 +8,8 @@ export const ch3: Chapter = {
     {
       id: "ch3-0",
       type: "explain",
-      title: "📂 불러오기 = 읽기 + 에러 처리!",
-      content: `## 파일에서 캐릭터 데이터 불러오기
+      title: "💭 저장한 데이터를 다시 불러오려면?",
+      content: `💭 파일에 저장은 했는데... 이걸 다시 읽어서 **딕셔너리에 넣으려면?** 그리고 세이브 파일이 **없을 때**는 어떡하지?
 
 \`\`\`python
 def 불러오기():
@@ -26,11 +26,7 @@ def 불러오기():
         print('세이브 파일이 없어요!')
 \`\`\`
 
-### 핵심 포인트
-- **try-except**로 파일 없음 처리
-- **readlines()**로 줄별로 읽기
-- **strip()**으로 \\n 제거
-- **int()**로 숫자 변환`
+@핵심: **try-except + readlines() + strip() + int()** = 안전한 불러오기!`
     },
     {
       id: "ch3-1",

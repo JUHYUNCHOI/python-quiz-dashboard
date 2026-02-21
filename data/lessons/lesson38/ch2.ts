@@ -8,8 +8,8 @@ export const ch2: Chapter = {
     {
       id: "ch2-0",
       type: "explain",
-      title: "📝 파일 쓰기 기본!",
-      content: `## 파일 열기 → 쓰기 → 닫기
+      title: "💭 파일에 글자를 저장하려면?",
+      content: `💭 파일에 데이터를 **저장**하고 싶어! 파이썬에서 파일을 **열고 → 쓰고 → 닫는** 방법은?
 
 \`\`\`python
 파일 = open('test.txt', 'w')  # w = write (쓰기)
@@ -19,13 +19,13 @@ export const ch2: Chapter = {
 
 test.txt 파일이 생기고 "안녕하세요!"가 저장됨!
 
-**'w' = write = 쓰기 모드**`
+@핵심: **open('파일', 'w')** → **write()** → **close()** = 파일 쓰기 3단계!`
     },
     {
       id: "ch2-1",
       type: "explain",
-      title: "✨ with문으로 더 안전하게!",
-      content: `## with문 = 자동으로 파일 닫아줌!
+      title: "💭 close() 깜빡하면 어쩌지?",
+      content: `💭 매번 close()를 써야 하는데... **깜빡 잊으면** 문제가 생길 수도 있잖아! 자동으로 닫아주는 방법은 없을까?
 
 \`\`\`python
 with open('test.txt', 'w') as f:
@@ -33,7 +33,9 @@ with open('test.txt', 'w') as f:
 # 여기서 자동으로 close()
 \`\`\`
 
-**with문 쓰면 close() 안 해도 됨!** 앞으로 with문만 쓸 거예요.`
+앞으로 with문만 쓸 거예요!
+
+@핵심: **with문** 쓰면 close() 자동! 안전하고 편리해!`
     },
     {
       id: "ch2-2",

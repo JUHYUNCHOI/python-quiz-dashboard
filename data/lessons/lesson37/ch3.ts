@@ -15,8 +15,8 @@ export const ch3: Chapter = {
     {
       id: "ch3-1",
       type: "explain",
-      title: "🎯 특정 에러만 잡기!",
-      content: `## except 뒤에 에러 이름!
+      title: "💭 에러 종류별로 다르게 잡으려면?",
+      content: `💭 에러가 여러 종류인데... **특정 에러만 골라서** 잡을 수는 없을까? except 뒤에 뭔가를 써주면?
 
 \`\`\`python
 # ValueError만 잡기
@@ -34,7 +34,9 @@ except ZeroDivisionError:
 
 출력:
 - \`숫자로 바꿀 수 없어요!\`
-- \`0으로 나눌 수 없어요!\``
+- \`0으로 나눌 수 없어요!\`
+
+@핵심: **except 에러이름:** 으로 특정 에러만 골라서 잡을 수 있어!`
     },
     {
       id: "ch3-2",

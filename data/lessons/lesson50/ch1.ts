@@ -8,8 +8,8 @@ export const ch1: Chapter = {
     {
       id: "ch1-0",
       type: "explain",
-      title: "🦸 3가지 직업!",
-      content: `## 직업별 특징
+      title: "💭 직업마다 스탯을 다르게 하려면?",
+      content: `💭 용사는 튼튼하고, 마법사는 공격력이 높고... **직업에 따라 다른 값을 설정**하려면 어떻게 해야 할까?
 
 | 직업 | HP | ATK | DEF | 특징 |
 |------|----|-----|-----|------|
@@ -26,7 +26,7 @@ elif job == 'archer':
     s.hp, s.atk, s.defense = 100, 20, 8
 \`\`\`
 
-→ **if/elif**로 직업 분기!`
+@핵심: **if/elif**로 직업별 분기해서 서로 다른 스탯을 설정!`
     },
     {
       id: "ch1-1",

@@ -8,8 +8,8 @@ export const ch3: Chapter = {
     {
       id: "ch3-0",
       type: "explain",
-      title: "📖 파일 읽기 기본!",
-      content: `## read() = 파일 전체를 한 번에!
+      title: "💭 저장한 파일을 다시 읽으려면?",
+      content: `💭 파일에 데이터를 저장했으니까... 이제 **다시 읽어오는** 방법이 필요해! 'w'가 쓰기였으면 읽기는 뭘까?
 
 \`\`\`python
 with open('memo.txt', 'r') as f:
@@ -24,7 +24,7 @@ with open('memo.txt', 'r') as f:
 세 번째 줄
 \`\`\`
 
-**'r' = read = 읽기 모드**`
+@핵심: **'r' = read = 읽기 모드!** read()로 파일 전체를 한 번에 읽어!`
     },
     {
       id: "ch3-1",

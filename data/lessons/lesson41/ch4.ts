@@ -8,8 +8,8 @@ export const ch4: Chapter = {
     {
       id: "ch4-0",
       type: "explain",
-      title: "🎮 미션: 몬스터 클래스!",
-      content: `## Monster 클래스를 만들어보세요!
+      title: "💭 Monster 클래스, 어떻게 만들까?",
+      content: `💭 Character 클래스를 배웠으니까... **Monster 클래스**도 비슷하게 만들 수 있겠지? 어떤 속성이 필요할까?
 
 **요구사항:**
 - 속성: char_name, hp, atk
@@ -18,12 +18,14 @@ export const ch4: Chapter = {
 
 ⏱️ 5분 도전!
 
-### 💡 힌트
+### 힌트
 \`\`\`python
 class Monster:
     def __init__(s, char_name, hp, atk):
         # s.xxx = xxx 형태로 3개 저장!
-\`\`\``
+\`\`\`
+
+@핵심: 클래스 구조는 같다 — \`class 이름: → __init__ → s.속성 = 값\`!`
     },
     {
       id: "ch4-1",
@@ -64,8 +66,8 @@ class Monster:
     {
       id: "ch4-4",
       type: "explain",
-      title: "🎯 정리!",
-      content: `## 클래스 기초 정리
+      title: "💭 오늘 배운 걸 한눈에 정리하면?",
+      content: `💭 class, __init__, s... 오늘 배운 것들을 **표 하나**로 정리할 수 있을까?
 
 | 코드 | 설명 | 예시 |
 |------|------|------|
@@ -81,8 +83,7 @@ class Monster:
 - □ __init__이 언제 실행되는지 안다
 - □ s(self)가 뭔지 이해했다
 
-## 🚀 다음 시간: 메서드와 속성
-클래스에 기능(메서드)을 추가해서 캐릭터가 공격하고 회복하게!`
+@핵심: 클래스는 **틀**, 객체는 **찍어낸 것**, s는 **나 자신**!`
     }
   ]
 }

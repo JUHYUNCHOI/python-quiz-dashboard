@@ -8,8 +8,8 @@ export const ch1: Chapter = {
     {
       id: "ch1-0",
       type: "explain",
-      title: "🎯 Part 6 문제 20!",
-      content: `## 목표: 20문제 중 16문제 이상 맞추기!
+      title: "💭 Part 6 내용 얼마나 기억날까?",
+      content: `💭 에러 처리(try-except)와 파일 읽고 쓰기(with open)를 배웠는데... **20문제**로 실력을 확인해보자!
 
 | 난이도 | 문제 수 |
 |--------|---------|
@@ -17,7 +17,7 @@ export const ch1: Chapter = {
 | ⭐⭐ 보통 | 7문제 |
 | ⭐⭐⭐ 어려움 | 6문제 |
 
-Let's go! 🚀`
+@핵심: 목표는 **16문제 이상** 맞추기! Let's go!`
     },
     {
       id: "ch1-1",

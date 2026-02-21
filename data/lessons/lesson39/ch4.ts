@@ -8,8 +8,8 @@ export const ch4: Chapter = {
     {
       id: "ch4-0",
       type: "explain",
-      title: "🎮 메인 메뉴 구조!",
-      content: `## while + try-except로 안전한 메뉴!
+      title: "💭 메뉴를 만들고 안전하게 입력받으려면?",
+      content: `💭 메뉴를 보여주고 번호를 입력받는데... 사용자가 **"abc"** 같은 걸 입력해도 안 꺼지게 하려면? while + try-except 조합!
 
 \`\`\`python
 while True:
@@ -30,13 +30,13 @@ while True:
         print('숫자를 입력해주세요!')
 \`\`\`
 
-**try-except로 숫자 아닌 입력도 안전 처리!**`
+@핵심: **while True + try-except** = 잘못 입력해도 안 꺼지는 안전한 메뉴!`
     },
     {
       id: "ch4-1",
       type: "explain",
-      title: "⚔️ 몬스터 잡기!",
-      content: `## random으로 전투!
+      title: "💭 random으로 전투 시스템을 만들면?",
+      content: `💭 몬스터를 잡으면 경험치를 얻고, 경험치가 쌓이면 **레벨 업!** random + while + if로 전투를 만들면?
 
 \`\`\`python
 import random
@@ -44,18 +44,18 @@ import random
 def 몬스터잡기():
     몬스터HP = random.randint(20, 40)
     print(f'고블린이 나타났다! (HP: {몬스터HP})')
-    
+
     while 몬스터HP > 0:
         input('공격하려면 Enter!')
         데미지 = random.randint(10, 캐릭터['공격력'])
         몬스터HP -= 데미지
         print(f'공격! 데미지 {데미지}')
-        
+
         if 몬스터HP <= 0:
             경험치 = random.randint(20, 40)
             캐릭터['경험치'] += 경험치
             print(f'고블린을 물리쳤다! 경험치 +{경험치}')
-            
+
             if 캐릭터['경험치'] >= 100:
                 캐릭터['레벨'] += 1
                 캐릭터['경험치'] -= 100
@@ -63,7 +63,7 @@ def 몬스터잡기():
                 print(f'🎉 레벨 업! Lv.{캐릭터["레벨"]}')
 \`\`\`
 
-random + while + if = 간단한 전투 시스템!`
+@핵심: **random + while + if** = 간단한 전투 + 레벨업 시스템 완성!`
     },
     {
       id: "ch4-2",

@@ -8,8 +8,8 @@ export const ch3: Chapter = {
     {
       id: "ch3-0",
       type: "explain",
-      title: "👥 캐릭터 3명 만들기!",
-      content: `## 클래스의 진짜 힘!
+      title: "💭 같은 클래스로 다른 캐릭터를 만들 수 있을까?",
+      content: `💭 Character 클래스 하나로 **용사, 마법사, 궁수**를 각각 만들 수 있을까? 값이 섞이지 않을까?
 
 \`\`\`python
 class Character:
@@ -35,7 +35,7 @@ print(f'{archer.char_name}: HP {archer.hp}, 공격력 {archer.atk}')
 궁수: HP 90, 공격력 25
 \`\`\`
 
-🎉 변수 9개 대신 클래스 1개로 해결!`
+@핵심: 클래스 1개로 여러 객체를 만들어도 각자 **자기만의 값**을 가진다!`
     },
     {
       id: "ch3-1",
@@ -49,8 +49,8 @@ print(f'{archer.char_name}: HP {archer.hp}, 공격력 {archer.atk}')
     {
       id: "ch3-2",
       type: "explain",
-      title: "✏️ 속성 바꾸기",
-      content: `## 객체의 속성은 언제든 바꿀 수 있어요!
+      title: "💭 한번 정한 HP를 나중에 바꿀 수 있을까?",
+      content: `💭 용사의 HP가 100인데, 데미지를 받으면? 객체를 새로 만들어야 할까, 아니면 **값만 바꿀 수** 있을까?
 
 \`\`\`python
 class Character:
@@ -75,7 +75,9 @@ print(f'회복 후 HP: {hero.hp}')
 초기 HP: 100
 데미지 후 HP: 70
 회복 후 HP: 120
-\`\`\``
+\`\`\`
+
+@핵심: \`객체.속성 = 새값\`으로 언제든 속성을 바꿀 수 있다!`
     },
     {
       id: "ch3-3",

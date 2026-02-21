@@ -8,8 +8,17 @@ export const ch3: Chapter = {
     {
       id: "ch3-0",
       type: "explain",
-      title: "🌍 인기 외부 패키지 소개",
-      content: `## 세계 개발자들이 만든 유명 패키지!
+      title: "💭 웹 크롤링, 게임 개발도 파이썬으로 할 수 있다고?",
+      content: `💭 파이썬으로 **웹 요청**, **게임 개발**, **데이터 분석**까지 할 수 있대! 근데 이런 기능은 기본 내장이 아닌데... 어디서 가져올 수 있을까?
+
+\`\`\`bash
+# 사용 흐름
+pip install requests    # 1. 설치
+import requests         # 2. 불러오기
+requests.get(url)       # 3. 사용!
+\`\`\`
+
+@핵심: **PyPI(pypi.org)** = 40만 개 이상의 외부 패키지 저장소! pip install로 설치해서 사용!
 
 | 패키지 | 용도 | 설치 명령어 |
 |--------|------|-------------|
@@ -18,16 +27,6 @@ export const ch3: Chapter = {
 | pygame | 게임 개발 | pip install pygame |
 | flask | 웹 서버 | pip install flask |
 | matplotlib | 그래프 | pip install matplotlib |
-
-**PyPI (pypi.org)** = 파이썬 패키지 저장소
-- **40만 개** 이상의 패키지가 있어요!
-
-\`\`\`bash
-# 사용 흐름
-pip install requests    # 1. 설치
-import requests         # 2. 불러오기
-requests.get(url)       # 3. 사용!
-\`\`\`
 
 > 이 웹 환경에서는 외부 패키지를 설치할 수 없지만,
 > 실제 컴퓨터에서는 pip으로 자유롭게 설치할 수 있어요!`

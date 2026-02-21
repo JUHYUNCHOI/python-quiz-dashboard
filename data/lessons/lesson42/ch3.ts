@@ -8,8 +8,8 @@ export const ch3: Chapter = {
     {
       id: "ch3-0",
       type: "explain",
-      title: "🔀 두 종류의 변수!",
-      content: `## 인스턴스 변수 vs 클래스 변수
+      title: "💭 모든 캐릭터가 공유하는 값은 어디에 저장할까?",
+      content: `💭 용사의 HP와 마법사의 HP는 각각 달라야 하는데... **게임 제목**은 모두 같잖아? 이건 어디에 저장하지?
 
 ### 인스턴스 변수 (s.xxx)
 - 각 객체마다 **따로** 가지는 값
@@ -28,7 +28,9 @@ class Character:
     def __init__(s, char_name, hp):
         s.char_name = char_name     # 인스턴스 변수 (각자!)
         s.hp = hp                   # 인스턴스 변수 (각자!)
-\`\`\``
+\`\`\`
+
+@핵심: **인스턴스 변수(s.xxx)**는 각자, **클래스 변수**는 모두 공유!`
     },
     {
       id: "ch3-1",
