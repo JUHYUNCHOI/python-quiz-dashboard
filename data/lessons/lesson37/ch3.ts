@@ -15,28 +15,36 @@ export const ch3: Chapter = {
     {
       id: "ch3-1",
       type: "explain",
-      title: "💭 에러 종류별로 다르게 잡으려면?",
-      content: `💭 에러가 여러 종류인데... **특정 에러만 골라서** 잡을 수는 없을까? except 뒤에 뭔가를 써주면?
+      title: "💭 특정 에러만 골라서 잡으려면?",
+      content: `💭 에러가 여러 종류인데... **내가 원하는 에러만** 잡을 수는 없을까?
 
 \`\`\`python
-# ValueError만 잡기
 try:
     숫자 = int('abc')
-except ValueError:
+except ValueError:       # 👈 에러 이름 지정!
     print('숫자로 바꿀 수 없어요!')
+\`\`\`
 
-# ZeroDivisionError만 잡기
+→ except 뒤에 **에러 이름**을 쓰면 그 에러만 잡아요!
+
+@핵심: \`except ValueError:\` 처럼 **에러 이름을 지정**하면 특정 에러만 잡을 수 있어!`
+    },
+    {
+      id: "ch3-1a",
+      type: "explain",
+      title: "💭 다른 에러도 같은 방법으로?",
+      content: `💭 ValueError를 잡는 법을 알았어! 그러면 **0으로 나누기** 에러도 같은 방식으로 잡을 수 있을까?
+
+\`\`\`python
 try:
     결과 = 10 / 0
-except ZeroDivisionError:
+except ZeroDivisionError:  # 👈 0나누기 에러!
     print('0으로 나눌 수 없어요!')
 \`\`\`
 
-출력:
-- \`숫자로 바꿀 수 없어요!\`
-- \`0으로 나눌 수 없어요!\`
+→ 에러 이름만 바꾸면 **다른 에러도 같은 패턴**으로 잡아!
 
-@핵심: **except 에러이름:** 으로 특정 에러만 골라서 잡을 수 있어!`
+@핵심: 에러 종류마다 이름이 달라! **ValueError**, **ZeroDivisionError** 등!`
     },
     {
       id: "ch3-2",

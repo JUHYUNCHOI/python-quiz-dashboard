@@ -33,16 +33,26 @@ export const ch2: Chapter = {
     {
       id: "ch2-1",
       type: "explain",
-      title: "💭 웹에서 input() 없이 어떻게 행동을 정할까?",
-      content: `💭 웹에서는 input()을 쓸 수 없어! 그러면 플레이어의 행동을 **어떻게 미리 정해둘** 수 있을까?
+      title: "💭 input() 대신 리스트에 미리 넣어두면?",
+      content: `💭 웹에서는 input()을 쓸 수 없어! 그러면 플레이어의 행동을 **미리 리스트에** 넣어두면 어떨까?
 
 \`\`\`python
-# 원래 게임 (input 사용)
+# 원래 게임 (input 사용 - 웹에선 불가!)
 action = input('행동? ')
 
-# 우리 방식 (리스트 사용!)
+# 우리 방식 (리스트에 미리 넣기!)
 actions = ['attack', 'attack', 'heal', 'shop']
+\`\`\`
 
+@핵심: 행동을 **리스트에 미리** 넣어두면 input() 없이도 게임 시나리오를 만들 수 있어!`
+    },
+    {
+      id: "ch2-1a",
+      type: "explain",
+      title: "💭 리스트에서 하나씩 순서대로 꺼내려면?",
+      content: `💭 리스트에 행동을 넣었는데... **순서대로 하나씩** 꺼내는 함수가 필요하지 않을까?
+
+\`\`\`python
 idx = 0
 def next_action():
     global idx
@@ -50,10 +60,12 @@ def next_action():
         a = actions[idx]
         idx += 1
         return a
-    return 'quit'
+    return 'quit'  # 다 쓰면 종료!
 \`\`\`
 
-@핵심: **actions 리스트**에 행동을 미리 넣어두고, next_action()으로 하나씩 꺼내면 자동 시나리오!`
+💡 idx가 0부터 시작해서 호출할 때마다 +1 → 리스트의 다음 행동을 꺼내!
+
+@핵심: **next_action()** 함수로 리스트에서 행동을 하나씩 꺼내면 자동 시나리오 완성!`
     },
     {
       id: "ch2-2",

@@ -35,30 +35,40 @@ print(type(hero))
     {
       id: "ch2-1",
       type: "explain",
-      title: "💭 빈 붕어빵에 속을 넣으려면?",
-      content: `💭 빈 클래스는 아무 정보가 없어요. 이름이랑 HP를 넣으려면 **어떤 함수**가 필요할까?
+      title: "💭 빈 붕어빵에 이름을 넣으려면?",
+      content: `💭 빈 클래스는 아무 정보가 없어요. 이름이라도 넣으려면 **어떤 함수**가 필요할까?
+
+\`\`\`python
+class Character:
+    def __init__(s, char_name):
+        s.char_name = char_name
+        print(f'{char_name} 생성!')
+\`\`\`
+
+💡 \`__init__\`은 객체를 만들 때 **자동 실행**되는 초기화 함수예요!
+
+@핵심: \`__init__\`에 이름을 넣으면 빈 붕어빵에 속이 들어간다!`
+    },
+    {
+      id: "ch2-1a",
+      type: "explain",
+      title: "💭 이름 말고 HP도 넣으면?",
+      content: `💭 이름만으로는 부족해! **HP**도 넣어서 캐릭터를 완성하면?
 
 \`\`\`python
 class Character:
     def __init__(s, char_name, char_hp):
         s.char_name = char_name
         s.char_hp = char_hp
-        print(f'{char_name} 캐릭터가 생성되었습니다!')
 
-# 객체 생성
 hero = Character('용사', 100)
 print(f'이름: {hero.char_name}')
 print(f'HP: {hero.char_hp}')
 \`\`\`
 
-**결과:**
-\`\`\`
-용사 캐릭터가 생성되었습니다!
-이름: 용사
-HP: 100
-\`\`\`
+**결과:** \`이름: 용사\` / \`HP: 100\`
 
-@핵심: \`__init__\`은 객체를 만들 때 **자동 실행**되는 초기화 함수!`
+@핵심: 매개변수를 늘려서 **원하는 정보를 얼마든지** __init__에 넣을 수 있다!`
     },
     {
       id: "ch2-2",

@@ -8,25 +8,40 @@ export const ch3: Chapter = {
     {
       id: "ch3-0",
       type: "explain",
-      title: "💭 저장한 데이터를 다시 불러오려면?",
-      content: `💭 파일에 저장은 했는데... 이걸 다시 읽어서 **딕셔너리에 넣으려면?** 그리고 세이브 파일이 **없을 때**는 어떡하지?
+      title: "💭 파일에서 줄들을 읽으려면?",
+      content: `💭 저장할 때 한 줄씩 썼으니까... 읽을 때도 **줄 단위로** 읽어야겠지? 근데 줄 끝에 붙은 **\\n**은 어떡하지?
 
 \`\`\`python
-def 불러오기():
-    try:
-        with open('save.txt', 'r') as 파일:
-            줄들 = 파일.readlines()
-            캐릭터['이름'] = 줄들[0].strip()
-            캐릭터['HP'] = int(줄들[1].strip())
-            캐릭터['공격력'] = int(줄들[2].strip())
-            캐릭터['레벨'] = int(줄들[3].strip())
-            캐릭터['경험치'] = int(줄들[4].strip())
-        print(f'{캐릭터["이름"]}님, 다시 오셨군요!')
-    except FileNotFoundError:
-        print('세이브 파일이 없어요!')
+with open('save.txt', 'r') as 파일:
+    줄들 = 파일.readlines()
+    캐릭터['이름'] = 줄들[0].strip()
+    # strip() = 줄 끝의 \\n 제거!
 \`\`\`
 
-@핵심: **try-except + readlines() + strip() + int()** = 안전한 불러오기!`
+→ readlines()는 **줄 리스트**로 읽어! \`['용사\\n', '100\\n', ...]\`
+
+@핵심: **readlines()로 줄 리스트** → **strip()으로 \\n 제거** → 깨끗한 데이터!`
+    },
+    {
+      id: "ch3-0a",
+      type: "explain",
+      title: "💭 문자열을 숫자로 바꾸고, 파일이 없으면?",
+      content: `💭 이름은 문자열이라 바로 쓸 수 있는데... **HP, 공격력은 숫자**잖아! 그리고 세이브 파일이 **없을 때**는?
+
+\`\`\`python
+# 숫자 데이터는 int()로 변환!
+캐릭터['HP'] = int(줄들[1].strip())
+캐릭터['공격력'] = int(줄들[2].strip())
+
+# 파일이 없을 수도 있으니 try-except!
+try:
+    with open('save.txt', 'r') as 파일:
+        # 읽기 코드...
+except FileNotFoundError:
+    print('세이브 파일이 없어요!')
+\`\`\`
+
+@핵심: **int()로 숫자 변환** + **try-except로 파일 없음 대비** = 안전한 불러오기!`
     },
     {
       id: "ch3-1",

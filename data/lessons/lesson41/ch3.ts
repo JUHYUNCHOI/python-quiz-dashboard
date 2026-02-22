@@ -8,8 +8,8 @@ export const ch3: Chapter = {
     {
       id: "ch3-0",
       type: "explain",
-      title: "💭 같은 클래스로 다른 캐릭터를 만들 수 있을까?",
-      content: `💭 Character 클래스 하나로 **용사, 마법사, 궁수**를 각각 만들 수 있을까? 값이 섞이지 않을까?
+      title: "💭 같은 틀로 다른 캐릭터를 만들 수 있을까?",
+      content: `💭 Character 틀 하나로 **용사도, 마법사도** 만들 수 있을까?
 
 \`\`\`python
 class Character:
@@ -18,22 +18,30 @@ class Character:
         s.hp = hp
         s.atk = atk
 
-# 캐릭터 3명 생성!
 hero = Character('용사', 100, 20)
 mage = Character('마법사', 80, 35)
-archer = Character('궁수', 90, 25)
+\`\`\`
 
-print(f'{hero.char_name}: HP {hero.hp}, 공격력 {hero.atk}')
-print(f'{mage.char_name}: HP {mage.hp}, 공격력 {mage.atk}')
-print(f'{archer.char_name}: HP {archer.hp}, 공격력 {archer.atk}')
+@핵심: 같은 클래스로 **다른 값**을 넣어서 여러 객체를 만들 수 있어!`
+    },
+    {
+      id: "ch3-0a",
+      type: "explain",
+      title: "💭 각각 다른 값이 들어있는지 확인해볼까?",
+      content: `💭 용사와 마법사에 **진짜 다른 값**이 들어있을까? 값이 섞이지는 않을까?
+
+\`\`\`python
+print(f'{hero.char_name}: HP {hero.hp}, ATK {hero.atk}')
+print(f'{mage.char_name}: HP {mage.hp}, ATK {mage.atk}')
 \`\`\`
 
 **결과:**
 \`\`\`
-용사: HP 100, 공격력 20
-마법사: HP 80, 공격력 35
-궁수: HP 90, 공격력 25
+용사: HP 100, ATK 20
+마법사: HP 80, ATK 35
 \`\`\`
+
+→ 값이 안 섞여요! 각 객체는 **독립적인 자기만의 값**을 가져요!
 
 @핵심: 클래스 1개로 여러 객체를 만들어도 각자 **자기만의 값**을 가진다!`
     },
@@ -49,35 +57,40 @@ print(f'{archer.char_name}: HP {archer.hp}, 공격력 {archer.atk}')
     {
       id: "ch3-2",
       type: "explain",
-      title: "💭 한번 정한 HP를 나중에 바꿀 수 있을까?",
-      content: `💭 용사의 HP가 100인데, 데미지를 받으면? 객체를 새로 만들어야 할까, 아니면 **값만 바꿀 수** 있을까?
+      title: "💭 만든 후에 HP를 바꿀 수 있을까?",
+      content: `💭 용사의 HP가 100인데 **데미지를 받으면?** 새로 만들어야 할까, 값만 바꿀 수 있을까?
 
 \`\`\`python
-class Character:
-    def __init__(s, char_name, hp):
-        s.char_name = char_name
-        s.hp = hp
-
 hero = Character('용사', 100)
 print(f'초기 HP: {hero.hp}')
 
-# 데미지를 받았다!
 hero.hp = hero.hp - 30
 print(f'데미지 후 HP: {hero.hp}')
-
-# 회복 포션을 먹었다!
-hero.hp = hero.hp + 50
-print(f'회복 후 HP: {hero.hp}')
 \`\`\`
 
-**결과:**
-\`\`\`
-초기 HP: 100
-데미지 후 HP: 70
-회복 후 HP: 120
-\`\`\`
+**결과:** \`초기 HP: 100\` → \`데미지 후 HP: 70\`
 
 @핵심: \`객체.속성 = 새값\`으로 언제든 속성을 바꿀 수 있다!`
+    },
+    {
+      id: "ch3-2a",
+      type: "explain",
+      title: "💭 한 캐릭터를 바꾸면 다른 캐릭터도 바뀔까?",
+      content: `💭 용사의 HP를 깎았는데... 혹시 마법사의 HP도 같이 줄어들까?
+
+\`\`\`python
+hero = Character('용사', 100)
+mage = Character('마법사', 80)
+
+hero.hp = hero.hp - 30  # 용사만 데미지!
+
+print(f'용사 HP: {hero.hp}')   # 70
+print(f'마법사 HP: {mage.hp}') # 80 (안 바뀜!)
+\`\`\`
+
+→ 다른 객체에는 영향 없어요! 각 객체는 **완전히 독립적**이에요!
+
+@핵심: 한 객체의 속성을 바꿔도 **다른 객체에는 영향 없다!**`
     },
     {
       id: "ch3-3",

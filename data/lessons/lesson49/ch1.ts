@@ -61,35 +61,72 @@ class Item:       # 아이템
     {
       id: "ch1-2",
       type: "explain",
-      title: "💭 캐릭터에 어떤 정보가 필요할까?",
-      content: `💭 RPG 캐릭터를 만들려면 이름, HP, 공격력... **어떤 속성들을 __init__에 넣어야** 할까?
+      title: "💭 캐릭터의 기본 정보부터! 이름과 직업은?",
+      content: `💭 RPG 캐릭터를 만들려면 **이름**과 **직업**은 당연히 필요하지? 여기서부터 시작해보자!
 
 \`\`\`python
 class Character:
     def __init__(s, name, job):
-        # 기본 정보
-        s.name = name      # 이름
-        s.job = job        # 직업
+        s.name = name   # 이름
+        s.job = job     # 직업
+\`\`\`
 
-        # 스탯 (직업마다 다름!)
-        s.hp = 100         # 체력
-        s.max_hp = 100
+@핵심: 클래스의 __init__에 **이름과 직업**을 먼저 넣어요! 가장 기본적인 정보부터!`
+    },
+    {
+      id: "ch1-3",
+      type: "explain",
+      title: "💭 전투를 하려면 체력과 공격력이 필요해!",
+      content: `💭 이름과 직업만으로는 싸울 수가 없어! **체력(HP)**이 있어야 맞을 수 있고, **공격력**이 있어야 때릴 수 있지?
+
+\`\`\`python
+        # 스탯 (직업마다 다르게 설정 가능!)
+        s.hp = 100         # 현재 체력
+        s.max_hp = 100     # 최대 체력 (회복 한도!)
         s.atk = 15         # 공격력
         s.defense = 10     # 방어력
+\`\`\`
 
+💡 **max_hp를 따로 저장하는 이유**: 체력이 줄었다 회복할 때, 최대치를 넘지 않게 제한해야 해요!
+
+@핵심: **hp, max_hp, atk, defense** 4가지로 전투 능력치 완성!`
+    },
+    {
+      id: "ch1-4",
+      type: "explain",
+      title: "💭 성장하려면 레벨, 경험치, 아이템 가방도!",
+      content: `💭 몬스터를 잡으면 경험치를 얻고 **레벨업**! 골드로 **아이템 구매**! 이것도 속성으로 넣어야겠지?
+
+\`\`\`python
         # 성장
         s.level = 1        # 레벨
         s.exp = 0          # 경험치
         s.gold = 0         # 골드
 
         # 장비
-        s.inventory = []   # 인벤토리
+        s.inventory = []   # 인벤토리 (리스트!)
 \`\`\`
 
-@핵심: __init__에 **기본 정보 + 스탯 + 성장 + 장비**를 전부 넣어서 캐릭터를 완성해!`
+**전체 합치면:**
+\`\`\`python
+class Character:
+    def __init__(s, name, job):
+        s.name = name      # 기본 정보
+        s.job = job
+        s.hp = 100         # 스탯
+        s.max_hp = 100
+        s.atk = 15
+        s.defense = 10
+        s.level = 1        # 성장
+        s.exp = 0
+        s.gold = 0
+        s.inventory = []   # 장비
+\`\`\`
+
+@핵심: 기본정보 + 스탯 + 성장 + 장비 = **__init__ 완성!** 차근차근 쌓으면 복잡하지 않아요!`
     },
     {
-      id: "ch1-3",
+      id: "ch1-5",
       type: "tryit",
       title: "💻 Character 기본 만들기!",
       task: "Character 클래스를 만들고 캐릭터 정보를 출력해보세요!",
@@ -122,10 +159,10 @@ hero.status()`,
       hint2: "코드를 그대로 실행하세요!"
     },
     {
-      id: "ch1-4",
+      id: "ch1-6",
       type: "explain",
-      title: "💭 몬스터와 아이템은 어떻게 설계할까?",
-      content: `💭 몬스터는 처치하면 **보상**을 줘야 하고, 아이템은 **종류별로 효과**가 달라야 해. 어떤 속성이 필요할까?
+      title: "💭 몬스터는 어떤 속성이 필요할까?",
+      content: `💭 몬스터도 HP와 공격력이 필요해! 그리고 잡았을 때 **보상**도 줘야 하지?
 
 \`\`\`python
 class Monster:
@@ -138,6 +175,14 @@ class Monster:
         s.gold_reward = gold  # 처치 시 골드
 \`\`\`
 
+@핵심: 몬스터는 전투 스탯 + **처치 보상(exp, gold)**이 핵심!`
+    },
+    {
+      id: "ch1-7",
+      type: "explain",
+      title: "💭 아이템은 종류별로 효과가 다르잖아!",
+      content: `💭 물약은 **회복**, 검은 **공격력 증가**, 방패는 **방어력 증가**... 종류별로 효과가 달라야 해!
+
 \`\`\`python
 class Item:
     def __init__(s, name, item_type, value, price):
@@ -147,10 +192,10 @@ class Item:
         s.price = price          # 가격
 \`\`\`
 
-@핵심: Monster는 **처치 보상(exp, gold)**, Item은 **종류(item_type)와 효과(value)**가 핵심!`
+@핵심: Item은 **종류(item_type)**로 구분하고, **효과(value)**와 **가격(price)**을 저장!`
     },
     {
-      id: "ch1-5",
+      id: "ch1-8",
       type: "tryit",
       title: "💻 3개 클래스 모두 만들기!",
       task: "Character, Monster, Item 클래스를 모두 만들어보세요!",
@@ -203,7 +248,7 @@ potion.show()`,
       hint2: "코드를 그대로 실행하세요!"
     },
     {
-      id: "ch1-6",
+      id: "ch1-9",
       type: "quiz",
       title: "❓ 퀴즈!",
       content: "RPG 게임에서 Monster 클래스에 꼭 필요하지 않은 속성은?",
@@ -212,7 +257,7 @@ potion.show()`,
       explanation: "인벤토리는 플레이어(Character)의 속성! 몬스터는 HP, 공격력, 보상이 핵심이에요."
     },
     {
-      id: "ch1-7",
+      id: "ch1-10",
       type: "quiz",
       title: "❓ 퀴즈!",
       content: "`s.max_hp = hp`에서 max_hp를 따로 저장하는 이유는?",

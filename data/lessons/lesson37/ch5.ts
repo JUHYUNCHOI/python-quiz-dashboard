@@ -38,32 +38,43 @@ while True:
     {
       id: "ch5-2",
       type: "explain",
-      title: "💭 게임이 안 꺼지게 하려면?",
-      content: `💭 잘못된 입력을 해도 게임이 **계속 돌아가게** 하고 싶어! while 안에서 try-except를 쓰면 어떻게 될까?
+      title: "💭 while 안에 try를 넣으면?",
+      content: `💭 잘못 입력해도 게임이 계속 돌아가게 하고 싶어! **while 안에 try-except**를 넣으면?
 
 \`\`\`python
-import random
-정답 = random.randint(1, 10)
+while True:
+    try:
+        추측 = int(input('숫자: '))
+        # 게임 로직...
+    except ValueError:
+        print('숫자만 입력해주세요!')
+\`\`\`
 
+→ 에러가 나면 except로 가고, **while이 다시 반복**!
+
+@핵심: **while + try-except** = 에러가 나도 루프가 계속 돌아간다!`
+    },
+    {
+      id: "ch5-2a",
+      type: "explain",
+      title: "💭 숫자 맞추기 게임에 적용하면?",
+      content: `💭 이 패턴을 실제 게임에 적용하면 어떤 모습일까?
+
+\`\`\`python
 while True:
     try:
         추측 = int(input('1-10 숫자: '))
         if 추측 == 정답:
             print('정답!')
             break
-        elif 추측 < 정답:
-            print('UP!')
-        else:
-            print('DOWN!')
+        print('UP!' if 추측 < 정답 else 'DOWN!')
     except ValueError:
         print('숫자만 입력해주세요!')
 \`\`\`
 
-**'abc' 입력해도:**
-- \`숫자만 입력해주세요!\` 출력
-- 게임 계속! ✅
+'abc' 입력해도 → \`숫자만 입력해주세요!\` → 게임 계속! ✅
 
-@핵심: **while + try-except** = 잘못 입력해도 게임이 안 꺼지고 계속!`
+@핵심: 사용자 입력을 받는 게임에서는 **반드시** while + try-except!`
     },
     {
       id: "ch5-3",

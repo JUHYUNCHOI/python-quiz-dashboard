@@ -8,25 +8,38 @@ export const ch4: Chapter = {
     {
       id: "ch4-0",
       type: "explain",
-      title: "💭 에러마다 다른 메시지를 보여주려면?",
-      content: `💭 "abc" 입력하면 "숫자를 입력하세요!", 0 입력하면 "0으로 못 나눠요!"... **에러별로 다른 메시지**를 보여주고 싶은데?
+      title: "💭 한 코드에서 에러가 두 종류 날 수 있다면?",
+      content: `💭 숫자를 입력받아 나누는 코드에서... 'abc' 입력하면 **ValueError**, 0 입력하면 **ZeroDivisionError**! 둘 다 잡아야 하는데?
 
 \`\`\`python
 try:
-    숫자a = int(input('첫 번째 숫자: '))
-    숫자b = int(input('두 번째 숫자: '))
-    결과 = 숫자a / 숫자b
-    print(f'결과: {결과}')
+    숫자 = int(input('숫자: '))
+    결과 = 10 / 숫자
 except ValueError:
     print('숫자를 입력하세요!')
-except ZeroDivisionError:
+\`\`\`
+
+→ 이러면 ValueError만 잡히고 **0 입력하면 여전히 에러!**
+
+@핵심: try 안에 **여러 종류의 에러**가 날 수 있어! except 하나론 부족할 수 있어!`
+    },
+    {
+      id: "ch4-0a",
+      type: "explain",
+      title: "💭 except를 여러 개 쓰면 해결!",
+      content: `💭 except를 **하나 더 추가**하면 두 에러 다 잡을 수 있을까?
+
+\`\`\`python
+except ValueError:
+    print('숫자를 입력하세요!')
+except ZeroDivisionError:       # 👈 추가!
     print('0으로 나눌 수 없어요!')
 \`\`\`
 
 - 'abc' 입력 → \`숫자를 입력하세요!\`
 - 0 입력 → \`0으로 나눌 수 없어요!\`
 
-@핵심: **except를 여러 개** 쓰면 에러별로 다른 처리가 가능해!`
+@핵심: **except를 여러 개** 쓰면 에러별로 다른 메시지를 보여줄 수 있어!`
     },
     {
       id: "ch4-1",
