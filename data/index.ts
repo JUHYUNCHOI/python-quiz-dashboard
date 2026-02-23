@@ -213,5 +213,6 @@ export { lessonP2Data } from './lessonP2'
 export { lessonP3Data } from './lessonP3'
 export { lessonP4Data } from './lessonP4'
 export { lessonP4EnData } from './lessonP4-en'
+export { lessonP4PygameData } from './lessonP4-pygame'
 
 export type { LessonData, LessonStep, Chapter } from './types'

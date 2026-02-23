@@ -12,7 +12,7 @@ import {
   lesson42, lesson43, lesson44,
   lesson45, lesson46, lesson47, lesson48,
   lesson49, lesson50, lesson51, lesson52,
-  lessonP4Data, lessonP4EnData
+  lessonP4Data, lessonP4EnData, lessonP4PygameData
 } from "@/data"
 import { loadLesson, isBilingual, getAllLessonIds, getBilingualLessonIds } from "@/data"
 import type { LessonData } from "./types"
@@ -35,6 +35,14 @@ export const lessonsData: Record<string, LessonData> = {
   "45": lesson45 as any, "46": lesson46 as any, "47": lesson47 as any, "48": lesson48 as any,
   "49": lesson49 as any, "50": lesson50 as any, "51": lesson51 as any, "52": lesson52 as any,
   "p1": lessonP1Data, "p2": lessonP2Data, "p3": lessonP3Data, "p4": lessonP4Data,
+}
+
+// 라이브러리 변형 (turtle/pygame 등)
+export const lessonVariants: Record<string, Record<string, LessonData>> = {
+  "p4": {
+    "turtle": lessonP4Data,
+    "pygame": lessonP4PygameData,
+  }
 }
 
 // 양언어 지원 레슨

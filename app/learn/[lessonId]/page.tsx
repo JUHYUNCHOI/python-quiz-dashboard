@@ -6,23 +6,39 @@ import { ChevronRight, ChevronLeft, X, Sparkles, Lock, PartyPopper, List } from 
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
 import { LanguageToggle } from "@/components/language-toggle"
+import { LibraryToggle, type LibraryVariant } from "@/components/library-toggle"
 
 // 분리된 컴포넌트
 import { Confetti } from "@/components/learn/confetti"
 import { SuccessOverlay } from "@/components/learn/success-overlay"
 import { StepRenderer } from "@/components/learn/step-renderer"
-import { lessonsData, bilingualLessons } from "@/components/learn/lesson-registry"
+import { lessonsData, bilingualLessons, lessonVariants } from "@/components/learn/lesson-registry"
 
 export default function PracticePage({ params }: { params: Promise<{ lessonId: string }> }) {
   const resolvedParams = use(params)
   const lessonId = resolvedParams.lessonId
   const router = useRouter()
   const { lang, t } = useLanguage()
-  
+
   const isBilingual = lessonId in bilingualLessons
-  const lesson = isBilingual 
-    ? bilingualLessons[lessonId][lang]
-    : lessonsData[lessonId]
+  const hasVariants = lessonId in lessonVariants
+
+  // 라이브러리 변형 상태 (turtle/pygame)
+  const [variant, setVariant] = useState<LibraryVariant>(() => {
+    if (typeof window === 'undefined') return 'turtle'
+    try { return (localStorage.getItem(`library-variant-${lessonId}`) as LibraryVariant) || 'turtle' } catch { return 'turtle' }
+  })
+
+  // 레슨 데이터 선택: variant + bilingual 조합 처리
+  // turtle variant일 때만 bilingual(한/영) 지원, pygame은 한국어만
+  const lesson = hasVariants
+    ? (isBilingual && variant === 'turtle'
+        ? bilingualLessons[lessonId][lang]
+        : lessonVariants[lessonId][variant])
+    : (isBilingual ? bilingualLessons[lessonId][lang] : lessonsData[lessonId])
+
+  // 진행상황 키: variant가 있으면 분리
+  const progressKey = hasVariants ? `practice-v2-${lessonId}-${variant}` : `practice-v2-${lessonId}`
   
   const [currentChapter, setCurrentChapter] = useState(0)
   const [currentStep, setCurrentStep] = useState(0)
@@ -50,8 +66,26 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     return isCurrentStepCompleted
   }
 
+  // 기존 진행상황 마이그레이션 (practice-v2-p4 → practice-v2-p4-turtle)
   useEffect(() => {
-    const saved = localStorage.getItem(`practice-v2-${lessonId}`)
+    if (!hasVariants) return
+    const oldKey = `practice-v2-${lessonId}`
+    const newKey = `practice-v2-${lessonId}-turtle`
+    if (localStorage.getItem(oldKey) && !localStorage.getItem(newKey)) {
+      localStorage.setItem(newKey, localStorage.getItem(oldKey)!)
+      localStorage.removeItem(oldKey)
+    }
+  }, [lessonId, hasVariants])
+
+  // variant localStorage 저장
+  useEffect(() => {
+    if (hasVariants) {
+      localStorage.setItem(`library-variant-${lessonId}`, variant)
+    }
+  }, [variant, lessonId, hasVariants])
+
+  useEffect(() => {
+    const saved = localStorage.getItem(progressKey)
     if (saved) {
       try {
         const data = JSON.parse(saved)
@@ -61,15 +95,15 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
         setCompletedSteps(new Set(data.completed || []))
       } catch {}
     }
-  }, [lessonId])
+  }, [progressKey])
 
   useEffect(() => {
     if (!lesson) return
-    localStorage.setItem(`practice-v2-${lessonId}`, JSON.stringify({
+    localStorage.setItem(progressKey, JSON.stringify({
       chapter: currentChapter, step: currentStep, score,
       completed: Array.from(completedSteps)
     }))
-  }, [currentChapter, currentStep, score, completedSteps, lessonId, lesson])
+  }, [currentChapter, currentStep, score, completedSteps, progressKey, lesson])
 
   if (!lesson || !chapter || !step) {
     return (
@@ -83,6 +117,26 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
         </div>
       </div>
     )
+  }
+
+  // variant 전환 시 진행상황 로드
+  const handleVariantChange = (newVariant: LibraryVariant) => {
+    setVariant(newVariant)
+    const saved = localStorage.getItem(`practice-v2-${lessonId}-${newVariant}`)
+    if (saved) {
+      try {
+        const data = JSON.parse(saved)
+        setCurrentChapter(data.chapter || 0)
+        setCurrentStep(data.step || 0)
+        setScore(data.score || 0)
+        setCompletedSteps(new Set(data.completed || []))
+      } catch {
+        setCurrentChapter(0); setCurrentStep(0); setScore(0); setCompletedSteps(new Set())
+      }
+    } else {
+      setCurrentChapter(0); setCurrentStep(0); setScore(0); setCompletedSteps(new Set())
+    }
+    resetStepState()
   }
 
   const resetStepState = () => {
@@ -191,7 +245,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             <div className="bg-amber-50 rounded-2xl p-4 mb-6">
               <p className="text-amber-800 font-bold text-lg">총 {totalPoints}점 획득!</p>
             </div>
-            <button onClick={() => { localStorage.removeItem(`practice-v2-${lessonId}`); router.push(`/curriculum#lesson-${lessonId}`) }} className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-lg transition-colors">
+            <button onClick={() => { localStorage.removeItem(progressKey); router.push(`/curriculum#lesson-${lessonId}`) }} className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-lg transition-colors">
               돌아가기
             </button>
           </div>
@@ -251,6 +305,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                 </div>
               </div>
               <div className="flex items-center gap-2 md:gap-3">
+                {hasVariants && <LibraryToggle variant={variant} setVariant={handleVariantChange} />}
                 {isBilingual && <LanguageToggle />}
                 <span className="flex items-center gap-1 text-sm md:text-base font-bold text-amber-600">
                   <Sparkles className="w-4 h-4 md:w-5 md:h-5" /> {score}
