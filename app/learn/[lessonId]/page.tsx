@@ -29,12 +29,9 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     try { return (localStorage.getItem(`library-variant-${lessonId}`) as LibraryVariant) || 'turtle' } catch { return 'turtle' }
   })
 
-  // 레슨 데이터 선택: variant + bilingual 조합 처리
-  // turtle variant일 때만 bilingual(한/영) 지원, pygame은 한국어만
+  // 레슨 데이터 선택: variant가 있으면 variant[lang], 아니면 bilingual 또는 기본
   const lesson = hasVariants
-    ? (isBilingual && variant === 'turtle'
-        ? bilingualLessons[lessonId][lang]
-        : lessonVariants[lessonId][variant])
+    ? lessonVariants[lessonId][variant][lang]
     : (isBilingual ? bilingualLessons[lessonId][lang] : lessonsData[lessonId])
 
   // 진행상황 키: variant가 있으면 분리
