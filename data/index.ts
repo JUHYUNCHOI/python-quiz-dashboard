@@ -18,45 +18,138 @@ type LessonEntry = {
 // ============================================
 const registry: Record<string, LessonEntry> = {
   // Part 1: 기초 (1-10)
-  "1":  { load: () => import('./lesson1'),  exportName: 'lesson1Data' },
-  "2":  { load: () => import('./lesson2'),  exportName: 'lesson2Data' },
-  "3":  { load: () => import('./lesson3'),  exportName: 'lesson3Data' },
-  "4":  { load: () => import('./lesson4'),  exportName: 'lesson4Data' },
-  "5":  { load: () => import('./lesson5'),  exportName: 'lesson5Data' },
-  "6":  { load: () => import('./lesson6'),  exportName: 'lesson6Data' },
-  "7":  { load: () => import('./lesson7'),  exportName: 'lesson7Data' },
-  "8":  { load: () => import('./lesson8'),  exportName: 'lesson8Data' },
-  "9":  { load: () => import('./lesson9'),  exportName: 'lesson9Data' },
-  "10": { load: () => import('./lesson10'), exportName: 'lesson10Data' },
+  "1": {
+    load: () => import('./lesson1'), exportName: 'lesson1Data',
+    enLoad: () => import('./lesson1-en'), enExportName: 'lesson1EnData',
+  },
+  "2": {
+    load: () => import('./lesson2'), exportName: 'lesson2Data',
+    enLoad: () => import('./lesson2-en'), enExportName: 'lesson2EnData',
+  },
+  "3": {
+    load: () => import('./lesson3'), exportName: 'lesson3Data',
+    enLoad: () => import('./lesson3-en'), enExportName: 'lesson3EnData',
+  },
+  "4": {
+    load: () => import('./lesson4'), exportName: 'lesson4Data',
+    enLoad: () => import('./lesson4-en'), enExportName: 'lesson4EnData',
+  },
+  "5": {
+    load: () => import('./lesson5'), exportName: 'lesson5Data',
+    enLoad: () => import('./lesson5-en'), enExportName: 'lesson5EnData',
+  },
+  "6": {
+    load: () => import('./lesson6'), exportName: 'lesson6Data',
+    enLoad: () => import('./lesson6-en'), enExportName: 'lesson6EnData',
+  },
+  "7": {
+    load: () => import('./lesson7'), exportName: 'lesson7Data',
+    enLoad: () => import('./lesson7-en'), enExportName: 'lesson7EnData',
+  },
+  "8": {
+    load: () => import('./lesson8'), exportName: 'lesson8Data',
+    enLoad: () => import('./lesson8-en'), enExportName: 'lesson8EnData',
+  },
+  "9": {
+    load: () => import('./lesson9'), exportName: 'lesson9Data',
+    enLoad: () => import('./lesson9-en'), enExportName: 'lesson9EnData',
+  },
+  "10": {
+    load: () => import('./lesson10'), exportName: 'lesson10Data',
+    enLoad: () => import('./lesson10-en'), enExportName: 'lesson10EnData',
+  },
 
   // Part 2: 제어문 (11-14)
-  "11": { load: () => import('./lesson11'), exportName: 'lesson11Data' },
-  "12": { load: () => import('./lesson12'), exportName: 'lesson12Data' },
-  "13": { load: () => import('./lesson13'), exportName: 'lesson13Data' },
-  "14": { load: () => import('./lesson14'), exportName: 'lesson14Data' },
+  "11": {
+    load: () => import('./lesson11'), exportName: 'lesson11Data',
+    enLoad: () => import('./lesson11-en'), enExportName: 'lesson11EnData',
+  },
+  "12": {
+    load: () => import('./lesson12'), exportName: 'lesson12Data',
+    enLoad: () => import('./lesson12-en'), enExportName: 'lesson12EnData',
+  },
+  "13": {
+    load: () => import('./lesson13'), exportName: 'lesson13Data',
+    enLoad: () => import('./lesson13-en'), enExportName: 'lesson13EnData',
+  },
+  "14": {
+    load: () => import('./lesson14'), exportName: 'lesson14Data',
+    enLoad: () => import('./lesson14-en'), enExportName: 'lesson14EnData',
+  },
 
   // Part 3: 자료구조 (15-22)
-  "15": { load: () => import('./lesson15'), exportName: 'lesson15Data' },
-  "16": { load: () => import('./lesson16'), exportName: 'lesson16Data' },
-  "17": { load: () => import('./lesson17'), exportName: 'lesson17Data' },
-  "18": { load: () => import('./lesson18'), exportName: 'lesson18Data' },
-  "19": { load: () => import('./lesson19'), exportName: 'lesson19Data' },
-  "20": { load: () => import('./lesson20'), exportName: 'lesson20Data' },
-  "21": { load: () => import('./lesson21'), exportName: 'lesson21Data' },
-  "22": { load: () => import('./lesson22'), exportName: 'lesson22Data' },
+  "15": {
+    load: () => import('./lesson15'), exportName: 'lesson15Data',
+    enLoad: () => import('./lesson15-en'), enExportName: 'lesson15EnData',
+  },
+  "16": {
+    load: () => import('./lesson16'), exportName: 'lesson16Data',
+    enLoad: () => import('./lesson16-en'), enExportName: 'lesson16EnData',
+  },
+  "17": {
+    load: () => import('./lesson17'), exportName: 'lesson17Data',
+    enLoad: () => import('./lesson17-en'), enExportName: 'lesson17EnData',
+  },
+  "18": {
+    load: () => import('./lesson18'), exportName: 'lesson18Data',
+    enLoad: () => import('./lesson18-en'), enExportName: 'lesson18EnData',
+  },
+  "19": {
+    load: () => import('./lesson19'), exportName: 'lesson19Data',
+    enLoad: () => import('./lesson19-en'), enExportName: 'lesson19EnData',
+  },
+  "20": {
+    load: () => import('./lesson20'), exportName: 'lesson20Data',
+    enLoad: () => import('./lesson20-en'), enExportName: 'lesson20EnData',
+  },
+  "21": {
+    load: () => import('./lesson21'), exportName: 'lesson21Data',
+    enLoad: () => import('./lesson21-en'), enExportName: 'lesson21EnData',
+  },
+  "22": {
+    load: () => import('./lesson22'), exportName: 'lesson22Data',
+    enLoad: () => import('./lesson22-en'), enExportName: 'lesson22EnData',
+  },
 
   // Part 3 심화: 고급 자료구조 (23-26)
-  "23": { load: () => import('./lesson23'), exportName: 'lesson23Data' },
-  "24": { load: () => import('./lesson24'), exportName: 'lesson24Data' },
-  "25": { load: () => import('./lesson25'), exportName: 'lesson25Data' },
-  "26": { load: () => import('./lesson26'), exportName: 'lesson26Data' },
+  "23": {
+    load: () => import('./lesson23'), exportName: 'lesson23Data',
+    enLoad: () => import('./lesson23-en'), enExportName: 'lesson23EnData',
+  },
+  "24": {
+    load: () => import('./lesson24'), exportName: 'lesson24Data',
+    enLoad: () => import('./lesson24-en'), enExportName: 'lesson24EnData',
+  },
+  "25": {
+    load: () => import('./lesson25'), exportName: 'lesson25Data',
+    enLoad: () => import('./lesson25-en'), enExportName: 'lesson25EnData',
+  },
+  "26": {
+    load: () => import('./lesson26'), exportName: 'lesson26Data',
+    enLoad: () => import('./lesson26-en'), enExportName: 'lesson26EnData',
+  },
 
   // Part 4: 프로젝트 & 도전 (27-31)
-  "27": { load: () => import('./lessons/lesson27'), exportName: 'lesson27' },
-  "28": { load: () => import('./lessons/lesson28'), exportName: 'lesson28' },
-  "29": { load: () => import('./lessons/lesson29'), exportName: 'lesson29' },
-  "30": { load: () => import('./lessons/lesson30'), exportName: 'lesson30' },
-  "31": { load: () => import('./lessons/lesson31'), exportName: 'lesson31' },
+  "27": {
+    load: () => import('./lessons/lesson27'), exportName: 'lesson27',
+    enLoad: () => import('./lesson27-en'), enExportName: 'lesson27EnData',
+  },
+  "28": {
+    load: () => import('./lessons/lesson28'), exportName: 'lesson28',
+    enLoad: () => import('./lesson28-en'), enExportName: 'lesson28EnData',
+  },
+  "29": {
+    load: () => import('./lessons/lesson29'), exportName: 'lesson29',
+    enLoad: () => import('./lesson29-en'), enExportName: 'lesson29EnData',
+  },
+  "30": {
+    load: () => import('./lessons/lesson30'), exportName: 'lesson30',
+    enLoad: () => import('./lesson30-en'), enExportName: 'lesson30EnData',
+  },
+  "31": {
+    load: () => import('./lessons/lesson31'), exportName: 'lesson31',
+    enLoad: () => import('./lesson31-en'), enExportName: 'lesson31EnData',
+  },
 
   // Part 5: 함수 (32-36) - 양언어
   "32": {
@@ -81,33 +174,90 @@ const registry: Record<string, LessonEntry> = {
   },
 
   // Part 6: 에러와 파일 (37-40)
-  "37": { load: () => import('./lessons/lesson37'), exportName: 'lesson37' },
-  "38": { load: () => import('./lesson38'), exportName: 'lesson38' },
-  "39": { load: () => import('./lessons/lesson39'), exportName: 'lesson39' },
-  "40": { load: () => import('./lessons/lesson40'), exportName: 'lesson40' },
+  "37": {
+    load: () => import('./lessons/lesson37'), exportName: 'lesson37',
+    enLoad: () => import('./lesson37-en'), enExportName: 'lesson37EnData',
+  },
+  "38": {
+    load: () => import('./lesson38'), exportName: 'lesson38',
+    enLoad: () => import('./lesson38-en'), enExportName: 'lesson38EnData',
+  },
+  "39": {
+    load: () => import('./lessons/lesson39'), exportName: 'lesson39',
+    enLoad: () => import('./lesson39-en'), enExportName: 'lesson39EnData',
+  },
+  "40": {
+    load: () => import('./lessons/lesson40'), exportName: 'lesson40',
+    enLoad: () => import('./lesson40-en'), enExportName: 'lesson40EnData',
+  },
 
   // Part 7: 클래스 (41-44)
-  "41": { load: () => import('./lessons/lesson41'), exportName: 'lesson41' },
-  "42": { load: () => import('./lessons/lesson42'), exportName: 'lesson42' },
-  "43": { load: () => import('./lessons/lesson43'), exportName: 'lesson43' },
-  "44": { load: () => import('./lessons/lesson44'), exportName: 'lesson44' },
+  "41": {
+    load: () => import('./lessons/lesson41'), exportName: 'lesson41',
+    enLoad: () => import('./lesson41-en'), enExportName: 'lesson41EnData',
+  },
+  "42": {
+    load: () => import('./lessons/lesson42'), exportName: 'lesson42',
+    enLoad: () => import('./lesson42-en'), enExportName: 'lesson42EnData',
+  },
+  "43": {
+    load: () => import('./lessons/lesson43'), exportName: 'lesson43',
+    enLoad: () => import('./lesson43-en'), enExportName: 'lesson43EnData',
+  },
+  "44": {
+    load: () => import('./lessons/lesson44'), exportName: 'lesson44',
+    enLoad: () => import('./lesson44-en'), enExportName: 'lesson44EnData',
+  },
 
   // Part 8: 모듈과 패키지 (45-48)
-  "45": { load: () => import('./lessons/lesson45'), exportName: 'lesson45' },
-  "46": { load: () => import('./lessons/lesson46'), exportName: 'lesson46' },
-  "47": { load: () => import('./lessons/lesson47'), exportName: 'lesson47' },
-  "48": { load: () => import('./lessons/lesson48'), exportName: 'lesson48' },
+  "45": {
+    load: () => import('./lessons/lesson45'), exportName: 'lesson45',
+    enLoad: () => import('./lesson45-en'), enExportName: 'lesson45EnData',
+  },
+  "46": {
+    load: () => import('./lessons/lesson46'), exportName: 'lesson46',
+    enLoad: () => import('./lesson46-en'), enExportName: 'lesson46EnData',
+  },
+  "47": {
+    load: () => import('./lessons/lesson47'), exportName: 'lesson47',
+    enLoad: () => import('./lesson47-en'), enExportName: 'lesson47EnData',
+  },
+  "48": {
+    load: () => import('./lessons/lesson48'), exportName: 'lesson48',
+    enLoad: () => import('./lesson48-en'), enExportName: 'lesson48EnData',
+  },
 
   // Part 9: 텍스트 RPG (49-52)
-  "49": { load: () => import('./lessons/lesson49'), exportName: 'lesson49' },
-  "50": { load: () => import('./lessons/lesson50'), exportName: 'lesson50' },
-  "51": { load: () => import('./lessons/lesson51'), exportName: 'lesson51' },
-  "52": { load: () => import('./lessons/lesson52'), exportName: 'lesson52' },
+  "49": {
+    load: () => import('./lessons/lesson49'), exportName: 'lesson49',
+    enLoad: () => import('./lesson49-en'), enExportName: 'lesson49EnData',
+  },
+  "50": {
+    load: () => import('./lessons/lesson50'), exportName: 'lesson50',
+    enLoad: () => import('./lesson50-en'), enExportName: 'lesson50EnData',
+  },
+  "51": {
+    load: () => import('./lessons/lesson51'), exportName: 'lesson51',
+    enLoad: () => import('./lesson51-en'), enExportName: 'lesson51EnData',
+  },
+  "52": {
+    load: () => import('./lessons/lesson52'), exportName: 'lesson52',
+    enLoad: () => import('./lesson52-en'), enExportName: 'lesson52EnData',
+  },
 
   // 프로젝트 레슨
-  "p1": { load: () => import('./lessonP1'), exportName: 'lessonP1Data' },
-  "p2": { load: () => import('./lessonP2'), exportName: 'lessonP2Data' },
-  "p3": { load: () => import('./lessonP3'), exportName: 'lessonP3Data' },
+  "p1": {
+    load: () => import('./lessonP1'), exportName: 'lessonP1Data',
+    enLoad: () => import('./lessonP1-en'), enExportName: 'lessonP1EnData',
+  },
+  "p2": {
+    load: () => import('./lessonP2'), exportName: 'lessonP2Data',
+    enLoad: () => import('./lessonP2-en'), enExportName: 'lessonP2EnData',
+  },
+  "p3": {
+    load: () => import('./lessonP3'), exportName: 'lessonP3Data',
+    enLoad: () => import('./lessonP3-en'), enExportName: 'lessonP3EnData',
+  },
   "p4": {
     load: () => import('./lessonP4'), exportName: 'lessonP4Data',
     enLoad: () => import('./lessonP4-en'), enExportName: 'lessonP4EnData',
@@ -151,6 +301,8 @@ export function getBilingualLessonIds(): string[] {
 // 하위 호환: 기존 static import 유지
 // lesson-registry.ts에서 사용 중
 // ============================================
+
+// Korean lessons
 export { lesson1Data } from './lesson1'
 export { lesson2Data } from './lesson2'
 export { lesson3Data } from './lesson3'
@@ -187,11 +339,6 @@ export { lesson33Data } from './lesson33'
 export { lesson34Data } from './lesson34'
 export { lesson35Data } from './lesson35'
 export { lesson36Data } from './lesson36'
-export { lesson32EnData } from './lesson32-en'
-export { lesson33EnData } from './lesson33-en'
-export { lesson34EnData } from './lesson34-en'
-export { lesson35EnData } from './lesson35-en'
-export { lesson36EnData } from './lesson36-en'
 export { lesson37 } from './lesson37'
 export { lesson38 } from './lesson38'
 export { lesson39 } from './lessons/lesson39'
@@ -212,8 +359,65 @@ export { lessonP1Data } from './lessonP1'
 export { lessonP2Data } from './lessonP2'
 export { lessonP3Data } from './lessonP3'
 export { lessonP4Data } from './lessonP4'
-export { lessonP4EnData } from './lessonP4-en'
 export { lessonP4PygameData } from './lessonP4-pygame'
+
+// English lessons
+export { lesson1EnData } from './lesson1-en'
+export { lesson2EnData } from './lesson2-en'
+export { lesson3EnData } from './lesson3-en'
+export { lesson4EnData } from './lesson4-en'
+export { lesson5EnData } from './lesson5-en'
+export { lesson6EnData } from './lesson6-en'
+export { lesson7EnData } from './lesson7-en'
+export { lesson8EnData } from './lesson8-en'
+export { lesson9EnData } from './lesson9-en'
+export { lesson10EnData } from './lesson10-en'
+export { lesson11EnData } from './lesson11-en'
+export { lesson12EnData } from './lesson12-en'
+export { lesson13EnData } from './lesson13-en'
+export { lesson14EnData } from './lesson14-en'
+export { lesson15EnData } from './lesson15-en'
+export { lesson16EnData } from './lesson16-en'
+export { lesson17EnData } from './lesson17-en'
+export { lesson18EnData } from './lesson18-en'
+export { lesson19EnData } from './lesson19-en'
+export { lesson20EnData } from './lesson20-en'
+export { lesson21EnData } from './lesson21-en'
+export { lesson22EnData } from './lesson22-en'
+export { lesson23EnData } from './lesson23-en'
+export { lesson24EnData } from './lesson24-en'
+export { lesson25EnData } from './lesson25-en'
+export { lesson26EnData } from './lesson26-en'
+export { lesson27EnData } from './lesson27-en'
+export { lesson28EnData } from './lesson28-en'
+export { lesson29EnData } from './lesson29-en'
+export { lesson30EnData } from './lesson30-en'
+export { lesson31EnData } from './lesson31-en'
+export { lesson32EnData } from './lesson32-en'
+export { lesson33EnData } from './lesson33-en'
+export { lesson34EnData } from './lesson34-en'
+export { lesson35EnData } from './lesson35-en'
+export { lesson36EnData } from './lesson36-en'
+export { lesson37EnData } from './lesson37-en'
+export { lesson38EnData } from './lesson38-en'
+export { lesson39EnData } from './lesson39-en'
+export { lesson40EnData } from './lesson40-en'
+export { lesson41EnData } from './lesson41-en'
+export { lesson42EnData } from './lesson42-en'
+export { lesson43EnData } from './lesson43-en'
+export { lesson44EnData } from './lesson44-en'
+export { lesson45EnData } from './lesson45-en'
+export { lesson46EnData } from './lesson46-en'
+export { lesson47EnData } from './lesson47-en'
+export { lesson48EnData } from './lesson48-en'
+export { lesson49EnData } from './lesson49-en'
+export { lesson50EnData } from './lesson50-en'
+export { lesson51EnData } from './lesson51-en'
+export { lesson52EnData } from './lesson52-en'
+export { lessonP1EnData } from './lessonP1-en'
+export { lessonP2EnData } from './lessonP2-en'
+export { lessonP3EnData } from './lessonP3-en'
+export { lessonP4EnData } from './lessonP4-en'
 export { lessonP4PygameEnData } from './lessonP4-pygame-en'
 
 export type { LessonData, LessonStep, Chapter } from './types'
