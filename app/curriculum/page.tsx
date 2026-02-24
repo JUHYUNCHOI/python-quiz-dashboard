@@ -410,7 +410,7 @@ export default function CurriculumPage() {
                                         : "bg-orange-400 text-white hover:bg-orange-500 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                                     }`}
                                   >
-                                    🎮 복습
+                                    🎮 퀴즈
                                   </Link>
                                 </div>
                               </div>

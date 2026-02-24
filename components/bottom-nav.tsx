@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 
 const navItems = [
   { icon: Home, label: "홈", href: "/" },
-  { icon: BookOpen, label: "학습", href: "/quiz" },
+  { icon: BookOpen, label: "수업", href: "/curriculum" },
   { icon: Trophy, label: "랭킹", href: "/ranking" },
   { icon: User, label: "내정보", href: "/profile" },
 ]
