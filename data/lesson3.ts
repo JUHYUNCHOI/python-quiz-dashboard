@@ -60,7 +60,7 @@ gold = 5000
           id: "quiz1",
           type: "quiz",
           title: "❓ 퀴즈!",
-          content: "x = 10 에서 = 의 의미는?",
+          content: "`x = 10` 에서 `=` 의 의미는?",
           options: [
             "x와 10이 같다",
             "10을 x에 저장한다",
@@ -131,7 +131,7 @@ print(hp)  # 80
           id: "quiz2",
           type: "quiz",
           title: "❓ 퀴즈!",
-          content: "x = 5, x = x + 3 후 x의 값은?",
+          content: "`x = 5`, `x = x + 3` 후 x의 값은?",
           options: ["5", "3", "8", "에러"],
           answer: 2,
           explanation: "x = x + 3은 현재 x값(5)에 3을 더해서 다시 x에 저장해요!"

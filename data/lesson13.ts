@@ -61,7 +61,7 @@ for i in range(5):
           id: "quiz1",
           type: "quiz",
           title: "❓ 퀴즈!",
-          content: "for i in range(4):의 반복 횟수는?",
+          content: "`for i in range(4):`의 반복 횟수는?",
           options: ["3번", "4번", "5번", "에러"],
           answer: 1,
           explanation: "range(4)는 0, 1, 2, 3으로 4번 반복해요!"
@@ -119,7 +119,7 @@ for i in range(0, 10, 2):
           id: "quiz2",
           type: "quiz",
           title: "❓ 퀴즈!",
-          content: "range(1, 10, 3)이 생성하는 숫자들은?",
+          content: "`range(1, 10, 3)`이 생성하는 숫자들은?",
           options: ["1, 2, 3", "1, 4, 7", "1, 4, 7, 10", "3, 6, 9"],
           answer: 1,
           explanation: "1부터 시작해서 3씩 증가! 1, 4, 7 (10 미포함)"

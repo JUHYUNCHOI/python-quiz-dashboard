@@ -73,7 +73,7 @@ print(f"가격: {price}원")  # 가격: 19000원
           id: "quiz1",
           type: "quiz",
           title: "❓ 퀴즈!",
-          content: "x = 10일 때, f\"x = {x}\"의 결과는?",
+          content: "`x = 10`일 때, `f\"x = {x}\"`의 결과는?",
           options: ["x = {x}", "x = 10", "{x} = 10", "에러"],
           answer: 1,
           explanation: "{x}가 변수 값 10으로 바뀌어요!"
@@ -201,7 +201,7 @@ print(f"월급: {salary:,}원")
           id: "quiz2",
           type: "quiz",
           title: "❓ 퀴즈!",
-          content: "x = 3.14159일 때, f\"{x:.2f}\"의 결과는?",
+          content: "`x = 3.14159`일 때, `f\"{x:.2f}\"`의 결과는?",
           options: ["3.14159", "3.14", "3.1", "3"],
           answer: 1,
           explanation: ".2f는 소수점 둘째 자리까지! 반올림해서 3.14"

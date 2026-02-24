@@ -102,7 +102,7 @@ else:
           id: "quiz2",
           type: "quiz",
           title: "❓ Quiz!",
-          content: "When x = 5, what is the output of: if x > 10: print('A') else: print('B')?",
+          content: "What is the output?\n\n```python\nx = 5\nif x > 10:\n    print('A')\nelse:\n    print('B')\n```",
           options: ["A", "B", "AB", "Nothing is printed"],
           answer: 1,
           explanation: "5 > 10 is False, so 'B' from the else branch is printed!"

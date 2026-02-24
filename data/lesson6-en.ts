@@ -210,7 +210,7 @@ text.len()   # ❌ Error!
           id: "quiz2",
           type: "quiz",
           title: "❓ Quiz!",
-          content: "What is the result of len(\"Hello\")?",
+          content: "What is the result of `len(\"Hello\")`?",
           options: ["5", "10", "15", "Error"],
           answer: 0,
           explanation: "Each character counts as 1! 5 characters = 5"

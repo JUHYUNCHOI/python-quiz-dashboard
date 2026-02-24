@@ -73,7 +73,7 @@ print(f"Price: {price} won")  # Price: 19000 won
           id: "quiz1",
           type: "quiz",
           title: "❓ Quiz!",
-          content: "When x = 10, what is the result of f\"x = {x}\"?",
+          content: "When `x = 10`, what is the result of `f\"x = {x}\"`?",
           options: ["x = {x}", "x = 10", "{x} = 10", "Error"],
           answer: 1,
           explanation: "{x} gets replaced with the variable value 10!"
@@ -201,7 +201,7 @@ print(f"Salary: {salary:,}")
           id: "quiz2",
           type: "quiz",
           title: "❓ Quiz!",
-          content: "When x = 3.14159, what is the result of f\"{x:.2f}\"?",
+          content: "When `x = 3.14159`, what is the result of `f\"{x:.2f}\"`?",
           options: ["3.14159", "3.14", "3.1", "3"],
           answer: 1,
           explanation: ".2f means up to 2 decimal places! Rounded to 3.14"

@@ -69,7 +69,7 @@ The default value is \`sep=" "\` (a space)!`
           id: "quiz1",
           type: "quiz",
           title: "❓ Quiz!",
-          content: "What is the result of print(1, 2, 3, sep=\"★\")?",
+          content: "What is the result of `print(1, 2, 3, sep=\"★\")`?",
           options: ["1 2 3", "1★2★3", "★1★2★3★", "123"],
           answer: 1,
           explanation: "sep goes 'between' the values! 1★2★3"
@@ -125,7 +125,7 @@ print("World")
           id: "quiz2",
           type: "quiz",
           title: "❓ Quiz!",
-          content: "If print(\"A\", end=\"\") is followed by another print, what happens?",
+          content: "If `print(\"A\", end=\"\")` is followed by another print, what happens?",
           options: ["Prints on a new line", "Prints right after", "Causes an error", "Prints after a space"],
           answer: 1,
           explanation: "end=\"\" prints nothing at the end, so the next output continues right after!"

@@ -102,7 +102,7 @@ else:
           id: "quiz2",
           type: "quiz",
           title: "❓ 퀴즈!",
-          content: "x = 5일 때, if x > 10: print('A') else: print('B')의 출력은?",
+          content: "출력 결과는?\n\n```python\nx = 5\nif x > 10:\n    print('A')\nelse:\n    print('B')\n```",
           options: ["A", "B", "AB", "아무것도 안 나옴"],
           answer: 1,
           explanation: "5 > 10은 False니까 else의 'B'가 출력돼요!"

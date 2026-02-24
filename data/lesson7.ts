@@ -69,7 +69,7 @@ print("철수", "영희", "민수", sep=", ")
           id: "quiz1",
           type: "quiz",
           title: "❓ 퀴즈!",
-          content: "print(1, 2, 3, sep=\"★\")의 결과는?",
+          content: "`print(1, 2, 3, sep=\"★\")`의 결과는?",
           options: ["1 2 3", "1★2★3", "★1★2★3★", "123"],
           answer: 1,
           explanation: "sep은 값들 '사이'에 들어가요! 1★2★3"
@@ -125,7 +125,7 @@ print("하세요")
           id: "quiz2",
           type: "quiz",
           title: "❓ 퀴즈!",
-          content: "print(\"A\", end=\"\")의 결과 뒤에 다음 print가 오면?",
+          content: "`print(\"A\", end=\"\")`의 결과 뒤에 다음 print가 오면?",
           options: ["줄바꿈 후 출력", "바로 이어서 출력", "에러 발생", "공백 후 출력"],
           answer: 1,
           explanation: "end=\"\"는 아무것도 출력 안 하니까 바로 이어져요!"

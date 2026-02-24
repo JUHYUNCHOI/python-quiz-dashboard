@@ -68,7 +68,7 @@ print('Hello!')
           id: "quiz1",
           type: "quiz",
           title: "❓ Quiz!",
-          content: "What is the output of print('파이썬')?",
+          content: "What is the output of `print('파이썬')`?",
           options: ["print('파이썬')", "'파이썬'", "파이썬", "Error"],
           answer: 2,
           explanation: "Only the content inside the quotes gets printed!"
@@ -118,7 +118,7 @@ Python automatically calculates and displays the result! 🧮`
           id: "quiz2",
           type: "quiz",
           title: "❓ Quiz!",
-          content: "What is the difference between print('100') and print(100)?",
+          content: "What is the difference between `print('100')` and `print(100)`?",
           options: [
             "No difference",
             "'100' is text, 100 is a number",

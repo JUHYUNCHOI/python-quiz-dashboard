@@ -118,7 +118,7 @@ print(10 != 5)   # 다르다 → True
           id: "quiz2",
           type: "quiz",
           title: "❓ 퀴즈!",
-          content: "x = 10 과 x == 10 의 차이는?",
+          content: "`x = 10` 과 `x == 10` 의 차이는?",
           options: [
             "둘 다 같다",
             "= 는 저장, == 는 비교",

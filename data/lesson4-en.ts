@@ -118,7 +118,7 @@ print(10 != 5)   # Not equal → True
           id: "quiz2",
           type: "quiz",
           title: "❓ Quiz!",
-          content: "What is the difference between x = 10 and x == 10?",
+          content: "What is the difference between `x = 10` and `x == 10`?",
           options: [
             "They are the same",
             "= is assignment, == is comparison",

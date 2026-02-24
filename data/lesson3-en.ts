@@ -60,7 +60,7 @@ gold = 5000
           id: "quiz1",
           type: "quiz",
           title: "❓ Quiz!",
-          content: "What does = mean in x = 10?",
+          content: "What does `=` mean in `x = 10`?",
           options: [
             "x and 10 are equal",
             "Store 10 in x",
@@ -131,7 +131,7 @@ When you assign a new value to the same variable, it gets overwritten!`
           id: "quiz2",
           type: "quiz",
           title: "❓ Quiz!",
-          content: "What is the value of x after x = 5, x = x + 3?",
+          content: "What is the value of x after `x = 5`, `x = x + 3`?",
           options: ["5", "3", "8", "Error"],
           answer: 2,
           explanation: "x = x + 3 takes the current value of x (5), adds 3, and stores it back in x!"

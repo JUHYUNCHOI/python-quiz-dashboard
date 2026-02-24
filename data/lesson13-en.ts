@@ -61,7 +61,7 @@ This code prints "Hello" **5 times**!
           id: "quiz1",
           type: "quiz",
           title: "❓ Quiz!",
-          content: "How many times does for i in range(4): repeat?",
+          content: "How many times does `for i in range(4):` repeat?",
           options: ["3 times", "4 times", "5 times", "Error"],
           answer: 1,
           explanation: "range(4) gives 0, 1, 2, 3 — so it repeats 4 times!"
@@ -119,7 +119,7 @@ for i in range(0, 10, 2):
           id: "quiz2",
           type: "quiz",
           title: "❓ Quiz!",
-          content: "What numbers does range(1, 10, 3) generate?",
+          content: "What numbers does `range(1, 10, 3)` generate?",
           options: ["1, 2, 3", "1, 4, 7", "1, 4, 7, 10", "3, 6, 9"],
           answer: 1,
           explanation: "Starting from 1, increment by 3! 1, 4, 7 (10 is not included)"

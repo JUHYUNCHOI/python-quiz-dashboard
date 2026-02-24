@@ -210,7 +210,7 @@ text.len()   # ❌ 에러!
           id: "quiz2",
           type: "quiz",
           title: "❓ 퀴즈!",
-          content: "len(\"안녕하세요\")의 결과는?",
+          content: "`len(\"안녕하세요\")`의 결과는?",
           options: ["5", "10", "15", "에러"],
           answer: 0,
           explanation: "한글도 글자 하나당 1로 세요! 5글자 = 5"

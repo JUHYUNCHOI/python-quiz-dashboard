@@ -68,7 +68,7 @@ print('안녕하세요!')
           id: "quiz1",
           type: "quiz",
           title: "❓ 퀴즈!",
-          content: "print('파이썬')의 출력 결과는?",
+          content: "`print('파이썬')`의 출력 결과는?",
           options: ["print('파이썬')", "'파이썬'", "파이썬", "에러"],
           answer: 2,
           explanation: "따옴표 안의 내용만 출력돼요!"
@@ -118,7 +118,7 @@ print(100 + 50) # 계산도 가능!
           id: "quiz2",
           type: "quiz",
           title: "❓ 퀴즈!",
-          content: "print('100')과 print(100)의 차이는?",
+          content: "`print('100')`과 `print(100)`의 차이는?",
           options: [
             "차이 없음",
             "'100'은 문자, 100은 숫자",
