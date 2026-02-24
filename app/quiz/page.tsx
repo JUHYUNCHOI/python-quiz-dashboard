@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect } from "react"
 import { X, Clock, ChevronLeft, ChevronRight, Check, AlertCircle, Coffee } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -13,6 +14,8 @@ import { useQuizTimer } from "@/hooks/use-quiz-timer"
 import { useFocusTracker } from "@/hooks/use-focus-tracker"
 import { useSwipe } from "@/hooks/use-swipe"
 import { useQuizKeyboard } from "@/hooks/use-quiz-keyboard"
+import { useSoundEffect } from "@/hooks/use-sound-effect"
+import { SoundToggle } from "@/components/sound-toggle"
 
 const quizQuestions: QuizQuestion[] = [
   {
@@ -65,6 +68,7 @@ const quizQuestions: QuizQuestion[] = [
 
 export default function QuizPage() {
   const quiz = useQuizState(quizQuestions)
+  const { play, isMuted, toggleMute } = useSoundEffect()
   const { isFocused, justReturnedFocus } = useFocusTracker()
 
   const { formattedTime, isLowTime } = useQuizTimer({
@@ -92,6 +96,15 @@ export default function QuizPage() {
     onCloseExplanation: quiz.handleExplanationClose,
     onSelectAnswer: quiz.handleAnswerSelect,
   })
+
+  // 사운드 효과: 정답/오답 반응
+  useEffect(() => {
+    if (quiz.showCelebration) play("correct")
+  }, [quiz.showCelebration, play])
+
+  useEffect(() => {
+    if (quiz.showResult && !quiz.isCorrect) play("wrong")
+  }, [quiz.showResult, quiz.isCorrect, play])
 
   const question = quiz.question
 
@@ -127,6 +140,7 @@ export default function QuizPage() {
             </div>
 
             <div className="flex items-center gap-2">
+              <SoundToggle isMuted={isMuted} onToggle={toggleMute} />
               {quiz.reviewCount > 0 && (
                 <div className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs md:text-sm font-semibold">
                   복습 대기 {quiz.reviewCount}

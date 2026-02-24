@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
 import { LanguageToggle } from "@/components/language-toggle"
 import { LibraryToggle, type LibraryVariant } from "@/components/library-toggle"
+import { SoundToggle } from "@/components/sound-toggle"
+import { useSoundEffect } from "@/hooks/use-sound-effect"
 
 // 분리된 컴포넌트
 import { Confetti } from "@/components/learn/confetti"
@@ -19,6 +21,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const lessonId = resolvedParams.lessonId
   const router = useRouter()
   const { lang, t } = useLanguage()
+  const { play, isMuted, toggleMute } = useSoundEffect()
 
   const isBilingual = lessonId in bilingualLessons
   const hasVariants = lessonId in lessonVariants
@@ -151,10 +154,12 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     } else if (currentChapter < lesson.chapters.length - 1) {
       setShowConfetti(true)
       setShowChapterComplete(true)
+      play("chapterComplete")
       setTimeout(() => setShowConfetti(false), 3000)
     } else {
       setShowConfetti(true)
       setShowLessonComplete(true)
+      play("lessonComplete")
       setTimeout(() => setShowConfetti(false), 3000)
     }
   }
@@ -194,9 +199,10 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       setShowConfetti(true)
       setSuccessMessage("잘했어요! 🎉")
       setShowSuccess(true)
+      play("codeSuccess")
       setTimeout(() => setShowConfetti(false), 2000)
     }
-  }, [completedSteps, step?.id])
+  }, [completedSteps, step?.id, play])
 
   const handleQuizAnswer = (idx: number) => {
     if (selectedAnswer !== null) return
@@ -204,6 +210,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     setShowExplanation(true)
     setQuizAttempts(prev => prev + 1)
     if (idx === step.answer) {
+      play("correct")
       if (!completedSteps.has(step.id)) {
         setScore(score + 10)
         setCompletedSteps(new Set([...completedSteps, step.id]))
@@ -212,6 +219,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
         setShowSuccess(true)
         setTimeout(() => setShowConfetti(false), 2000)
       }
+    } else {
+      play("wrong")
     }
   }
 
@@ -304,6 +313,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
               <div className="flex items-center gap-2 md:gap-3">
                 {hasVariants && <LibraryToggle variant={variant} setVariant={handleVariantChange} />}
                 {isBilingual && <LanguageToggle />}
+                <SoundToggle isMuted={isMuted} onToggle={toggleMute} />
                 <span className="flex items-center gap-1 text-sm md:text-base font-bold text-amber-600">
                   <Sparkles className="w-4 h-4 md:w-5 md:h-5" /> {score}
                 </span>
