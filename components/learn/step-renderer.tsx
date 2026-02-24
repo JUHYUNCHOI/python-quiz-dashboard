@@ -21,12 +21,13 @@ interface StepRendererProps {
   quizAttempts: number
   onQuizAnswer: (idx: number) => void
   onQuizAcknowledge: () => void
+  isReview?: boolean
 }
 
 export function StepRenderer({
   step, lang, isCompleted,
   hintLevel, onHintLevelChange, onSuccess,
-  selectedAnswer, showExplanation, quizAttempts, onQuizAnswer, onQuizAcknowledge
+  selectedAnswer, showExplanation, quizAttempts, onQuizAnswer, onQuizAcknowledge, isReview
 }: StepRendererProps) {
   switch (step.type) {
     case "explain":
@@ -54,6 +55,7 @@ export function StepRenderer({
           quizAttempts={quizAttempts}
           onAnswer={onQuizAnswer}
           onAcknowledge={onQuizAcknowledge}
+          isReview={isReview}
         />
       )
 

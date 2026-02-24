@@ -2,7 +2,7 @@
 
 import { useState, useEffect, use, useCallback } from "react"
 import { useRouter } from "next/navigation"
-import { ChevronRight, ChevronLeft, X, Lock, PartyPopper } from "lucide-react"
+import { ChevronRight, ChevronLeft, X, Lock, PartyPopper, RotateCcw } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
 import { LanguageToggle } from "@/components/language-toggle"
@@ -15,6 +15,7 @@ import { Confetti } from "@/components/learn/confetti"
 import { SuccessOverlay } from "@/components/learn/success-overlay"
 import { StepRenderer } from "@/components/learn/step-renderer"
 import { lessonsData, bilingualLessons, lessonVariants } from "@/components/learn/lesson-registry"
+import type { LessonStep } from "@/components/learn/types"
 
 export default function PracticePage({ params }: { params: Promise<{ lessonId: string }> }) {
   const resolvedParams = use(params)
@@ -54,14 +55,20 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const [hintLevel, setHintLevel] = useState(0)
   const [quizAttempts, setQuizAttempts] = useState(0)
   const [showChapterList, setShowChapterList] = useState(false)
-  
+  // 복습 모드: 틀린 퀴즈를 챕터 끝에서 다시 출제
+  const [wrongQueue, setWrongQueue] = useState<LessonStep[]>([])
+  const [reviewIndex, setReviewIndex] = useState(0)
+  const isReviewMode = wrongQueue.length > 0 && reviewIndex < wrongQueue.length
+
   const chapter = lesson?.chapters[currentChapter]
-  const step = chapter?.steps[currentStep]
-  
+  // 복습 모드면 wrongQueue에서 스텝을 꺼냄, 아니면 일반 진행
+  const step = isReviewMode ? wrongQueue[reviewIndex] : chapter?.steps[currentStep]
+
   const isCurrentStepCompleted = step ? completedSteps.has(step.id) : false
   
   const canGoNext = () => {
     if (!step) return false
+    if (isReviewMode) return false // 복습 모드에서는 "확인" 버튼으로만 이동
     if (step.type === "explain" || step.type === "interactive" || step.type === "tryit" || step.type === "animation") return true
     return isCurrentStepCompleted
   }
@@ -136,6 +143,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     } else {
       setCurrentChapter(0); setCurrentStep(0); setScore(0); setCompletedSteps(new Set())
     }
+    setWrongQueue([])
+    setReviewIndex(0)
     resetStepState()
   }
 
@@ -146,12 +155,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     setQuizAttempts(0)
   }
 
-  const goNext = () => {
-    if (!canGoNext()) return
-    if (currentStep < chapter.steps.length - 1) {
-      setCurrentStep(currentStep + 1)
-      resetStepState()
-    } else if (currentChapter < lesson.chapters.length - 1) {
+  const finishChapter = () => {
+    if (currentChapter < lesson.chapters.length - 1) {
       setShowConfetti(true)
       setShowChapterComplete(true)
       play("chapterComplete")
@@ -164,16 +169,34 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     }
   }
 
+  const goNext = () => {
+    if (!canGoNext()) return
+    if (currentStep < chapter.steps.length - 1) {
+      setCurrentStep(currentStep + 1)
+      resetStepState()
+    } else if (wrongQueue.length > 0 && !isReviewMode) {
+      // 일반 스텝 끝 + 틀린 문제 있음 → 복습 모드 진입
+      setReviewIndex(0)
+      resetStepState()
+    } else {
+      finishChapter()
+    }
+  }
+
   const goToNextChapter = () => {
     setShowChapterComplete(false)
     setCurrentChapter(currentChapter + 1)
     setCurrentStep(0)
+    setWrongQueue([])
+    setReviewIndex(0)
     resetStepState()
   }
 
   const goToChapter = (chIdx: number) => {
     setCurrentChapter(chIdx)
     setCurrentStep(0)
+    setWrongQueue([])
+    setReviewIndex(0)
     resetStepState()
     setShowChapterList(false)
     setShowChapterComplete(false)
@@ -181,6 +204,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   }
 
   const goPrev = () => {
+    if (isReviewMode) return // 복습 모드에서는 뒤로 못감
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1)
       resetStepState()
@@ -211,38 +235,74 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     setQuizAttempts(prev => prev + 1)
     if (idx === step.answer) {
       play("correct")
-      if (!completedSteps.has(step.id)) {
-        setScore(score + 10)
-        setCompletedSteps(new Set([...completedSteps, step.id]))
+      if (isReviewMode) {
+        // 복습 모드에서 정답: 큐에서 제거 → 남은 게 있으면 다음, 없으면 챕터 완료
+        const newQueue = wrongQueue.filter((_, i) => i !== reviewIndex)
+        setWrongQueue(newQueue)
+        if (!completedSteps.has(step.id)) {
+          setScore(score + 10)
+          setCompletedSteps(new Set([...completedSteps, step.id]))
+        }
         setShowConfetti(true)
-        setSuccessMessage("정답! 🎉")
+        setSuccessMessage("이번엔 맞았어요! 🎉")
         setShowSuccess(true)
         setTimeout(() => setShowConfetti(false), 2000)
+        // 1초 후 자동 진행
+        setTimeout(() => {
+          if (newQueue.length === 0) {
+            finishChapter()
+          } else {
+            // reviewIndex 조정: 현재보다 뒤 요소가 제거되었으므로
+            setReviewIndex(prev => prev >= newQueue.length ? 0 : prev)
+            resetStepState()
+          }
+        }, 1200)
+      } else {
+        if (!completedSteps.has(step.id)) {
+          setScore(score + 10)
+          setCompletedSteps(new Set([...completedSteps, step.id]))
+          setShowConfetti(true)
+          setSuccessMessage("정답! 🎉")
+          setShowSuccess(true)
+          setTimeout(() => setShowConfetti(false), 2000)
+        }
       }
     } else {
       play("wrong")
+      if (!isReviewMode) {
+        // 일반 모드에서 오답: wrongQueue에 추가
+        setWrongQueue(prev => [...prev, step])
+      }
     }
   }
 
   const acknowledgeQuiz = () => {
-    // 듀오링고 스타일: 오답이어도 확인 후 다음으로 넘어감
+    // 오답 확인 후 다음으로 이동
     if (!completedSteps.has(step.id)) {
       setCompletedSteps(new Set([...completedSteps, step.id]))
     }
-    // goNext()는 canGoNext()를 체크하지만 setState가 비동기이므로 직접 이동
+
+    if (isReviewMode) {
+      // 복습 모드에서 또 틀림: 큐 끝으로 다시 추가
+      const failedStep = wrongQueue[reviewIndex]
+      const newQueue = wrongQueue.filter((_, i) => i !== reviewIndex)
+      newQueue.push(failedStep)
+      setWrongQueue(newQueue)
+      // reviewIndex 그대로 (다음 문제가 앞으로 밀림)
+      resetStepState()
+      return
+    }
+
+    // 일반 모드: 다음 스텝으로
     if (currentStep < chapter.steps.length - 1) {
       setCurrentStep(currentStep + 1)
       resetStepState()
-    } else if (currentChapter < lesson.chapters.length - 1) {
-      setShowConfetti(true)
-      setShowChapterComplete(true)
-      play("chapterComplete")
-      setTimeout(() => setShowConfetti(false), 3000)
+    } else if (wrongQueue.length > 0) {
+      // 일반 스텝 다 끝남 + 틀린 문제 있음 → 복습 모드 진입
+      setReviewIndex(0)
+      resetStepState()
     } else {
-      setShowConfetti(true)
-      setShowLessonComplete(true)
-      play("lessonComplete")
-      setTimeout(() => setShowConfetti(false), 3000)
+      finishChapter()
     }
   }
 
@@ -315,13 +375,28 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
               <button onClick={() => router.push(`/curriculum#lesson-${lessonId}`)} className="text-gray-400 hover:text-gray-600 transition-colors" aria-label="나가기">
                 <X className="w-5 h-5 md:w-6 md:h-6" />
               </button>
-              <div className="flex-1 h-2.5 md:h-3 bg-gray-200 rounded-full overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-500"
-                  style={{ width: `${(currentStepIndex / totalSteps) * 100}%` }} />
-              </div>
-              <span className="text-sm md:text-base font-bold text-gray-500 tabular-nums shrink-0">
-                {currentStepIndex}<span className="text-gray-300">/</span>{totalSteps}
-              </span>
+              {isReviewMode ? (
+                <>
+                  <div className="flex-1 h-2.5 md:h-3 bg-amber-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-amber-400 to-orange-500 rounded-full transition-all duration-500"
+                      style={{ width: `${((reviewIndex + 1) / wrongQueue.length) * 100}%` }} />
+                  </div>
+                  <span className="text-sm md:text-base font-bold text-amber-500 tabular-nums shrink-0 flex items-center gap-1">
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    {reviewIndex + 1}<span className="text-amber-300">/</span>{wrongQueue.length}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <div className="flex-1 h-2.5 md:h-3 bg-gray-200 rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-500"
+                      style={{ width: `${(currentStepIndex / totalSteps) * 100}%` }} />
+                  </div>
+                  <span className="text-sm md:text-base font-bold text-gray-500 tabular-nums shrink-0">
+                    {currentStepIndex}<span className="text-gray-300">/</span>{totalSteps}
+                  </span>
+                </>
+              )}
             </div>
             {/* 2줄: 챕터 이름 + 토글들 */}
             <div className="flex items-center justify-between mt-1.5">
@@ -376,6 +451,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
               quizAttempts={quizAttempts}
               onQuizAnswer={handleQuizAnswer}
               onQuizAcknowledge={acknowledgeQuiz}
+              isReview={isReviewMode}
             />
           </div>
         </div>
@@ -389,6 +465,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
           <div className="flex gap-3 md:gap-4 lg:gap-6 justify-center">
             <button onClick={goPrev} disabled={currentStep === 0 && currentChapter === 0}
               className={cn("flex flex-col items-center justify-center rounded-xl md:rounded-2xl font-bold transition-colors", "w-[60px] h-[50px] md:w-[80px] md:h-[70px] lg:w-[100px] lg:h-[80px]",
+                isReviewMode ? "invisible" :
                 (currentStep > 0 || currentChapter > 0) ? "bg-gray-100 hover:bg-gray-200 text-gray-700" : "invisible")}>
               <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" />
               <span className="text-xs md:text-sm lg:text-base">이전</span>
