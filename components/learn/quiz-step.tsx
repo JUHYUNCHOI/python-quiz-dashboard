@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { HelpCircle, Check, X, Lightbulb, ArrowRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { LessonStep } from "./types"
@@ -16,6 +17,17 @@ interface QuizStepProps {
 }
 
 export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, quizAttempts, onAnswer, onAcknowledge }: QuizStepProps) {
+  // 오답 시 "확인" 버튼을 1.5초 후에 보여줌 (설명을 읽게 유도)
+  const [showAckButton, setShowAckButton] = useState(false)
+
+  useEffect(() => {
+    if (showExplanation && selectedAnswer !== null && selectedAnswer !== step.answer) {
+      setShowAckButton(false)
+      const timer = setTimeout(() => setShowAckButton(true), 1500)
+      return () => clearTimeout(timer)
+    }
+  }, [showExplanation, selectedAnswer, step.answer])
+
   return (
     <div className="space-y-6">
       <div className="space-y-4">
@@ -56,9 +68,13 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
             </div>
             <p className={cn("text-sm", selectedAnswer === step.answer ? "text-green-800" : "text-amber-800")}>{step.explanation}</p>
             {selectedAnswer !== step.answer && (
-              <button onClick={onAcknowledge} className="mt-3 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2">
-                확인했어요 <ArrowRight className="w-5 h-5" />
-              </button>
+              showAckButton ? (
+                <button onClick={onAcknowledge} className="mt-3 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 animate-fade-in">
+                  확인했어요 <ArrowRight className="w-5 h-5" />
+                </button>
+              ) : (
+                <p className="mt-3 text-center text-xs text-amber-500 animate-pulse">설명을 읽어보세요...</p>
+              )
             )}
           </div>
         )}
