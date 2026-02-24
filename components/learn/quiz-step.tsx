@@ -56,9 +56,12 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
             </div>
             <p className={cn("text-sm", selectedAnswer === step.answer ? "text-green-800" : "text-amber-800")}>{step.explanation}</p>
             {selectedAnswer !== step.answer && (
-              <button onClick={onRetry} className="mt-3 flex items-center gap-1 text-sm font-medium text-amber-700 hover:text-amber-800">
-                <RotateCcw className="w-4 h-4" /> 다시 시도하기
-              </button>
+              <>
+                <p className="text-xs text-amber-600 mt-2">정답을 맞춰야 다음으로 넘어갈 수 있어요!</p>
+                <button onClick={onRetry} className="mt-3 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2">
+                  <RotateCcw className="w-5 h-5" /> 다시 도전하기! 💪
+                </button>
+              </>
             )}
           </div>
         )}
