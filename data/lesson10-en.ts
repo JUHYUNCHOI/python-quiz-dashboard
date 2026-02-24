@@ -64,7 +64,7 @@ So in our exercises, we'll practice by assigning values directly to variables.`
           id: "quiz1",
           type: "quiz",
           title: "❓ Quiz!",
-          content: "What type does input() always return?",
+          content: "What type does `input()` always return?",
           options: ["int (integer)", "float (decimal)", "str (string)", "It depends on the input"],
           answer: 2,
           explanation: "input() always returns a string (str)!"
@@ -132,7 +132,7 @@ age = int(input('Age: '))
           id: "quiz2",
           type: "quiz",
           title: "❓ Quiz!",
-          content: "What is the result of int('123')?",
+          content: "What is the result of `int('123')`?",
           options: ["'123' (string)", "123 (integer)", "Error", "123.0 (float)"],
           answer: 1,
           explanation: "int() converts the string '123' to the integer 123!"
@@ -174,7 +174,7 @@ print(f'Height: {height}cm')
           id: "quiz3",
           type: "quiz",
           title: "❓ Quiz!",
-          content: "What is the result of int('3.14')?",
+          content: "What is the result of `int('3.14')`?",
           options: ["3", "3.14", "Error", "'3'"],
           answer: 2,
           explanation: "int() can't directly convert a decimal string! You need to use float() first."

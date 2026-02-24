@@ -226,7 +226,7 @@ Just change the error name and you can catch **any error** with the same pattern
           id: "ch3-4",
           type: "quiz",
           title: "Quiz!",
-          content: "What error does int('hello') cause?",
+          content: "What error does `int('hello')` cause?",
           options: ["ZeroDivisionError", "ValueError", "FileNotFoundError", "No error"],
           answer: 1,
           explanation: "'hello' isn't a number, so it's a ValueError!"

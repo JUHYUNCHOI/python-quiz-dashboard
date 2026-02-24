@@ -74,7 +74,7 @@ except ZeroDivisionError:  # 👈 0나누기 에러!
       id: "ch3-4",
       type: "quiz",
       title: "퀴즈!",
-      content: "int('hello')는 어떤 에러?",
+      content: "`int('hello')`는 어떤 에러?",
       options: ["ZeroDivisionError", "ValueError", "FileNotFoundError", "에러 없음"],
       answer: 1,
       explanation: "'hello'는 숫자가 아니라서 ValueError!"

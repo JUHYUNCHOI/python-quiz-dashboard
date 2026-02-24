@@ -78,7 +78,7 @@ age = int(input("Age: "))
           id: "quiz1",
           type: "quiz",
           title: "❓ Quiz!",
-          content: "What is the result of int(\"3.14\")?",
+          content: "What is the result of `int(\"3.14\")`?",
           options: ["3", "3.14", "Error", "\"3\""],
           answer: 2,
           explanation: "The string \"3.14\" can't be directly converted to int! You need to convert it to float first."

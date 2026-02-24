@@ -78,7 +78,7 @@ age = int(input("나이: "))
           id: "quiz1",
           type: "quiz",
           title: "❓ 퀴즈!",
-          content: "int(\"3.14\")의 결과는?",
+          content: "`int(\"3.14\")`의 결과는?",
           options: ["3", "3.14", "에러", "\"3\""],
           answer: 2,
           explanation: "문자열 \"3.14\"는 바로 int로 변환 안 돼요! 먼저 float로 바꿔야 해요."

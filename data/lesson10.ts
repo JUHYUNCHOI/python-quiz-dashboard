@@ -64,7 +64,7 @@ answer = input('질문 내용')
           id: "quiz1",
           type: "quiz",
           title: "❓ 퀴즈!",
-          content: "input()의 결과는 항상 어떤 타입일까요?",
+          content: "`input()`의 결과는 항상 어떤 타입일까요?",
           options: ["int (정수)", "float (실수)", "str (문자열)", "입력에 따라 다름"],
           answer: 2,
           explanation: "input()은 항상 문자열(str)을 반환해요!"
@@ -132,7 +132,7 @@ age = int(input('나이: '))
           id: "quiz2",
           type: "quiz",
           title: "❓ 퀴즈!",
-          content: "int('123')의 결과는?",
+          content: "`int('123')`의 결과는?",
           options: ["'123' (문자열)", "123 (정수)", "에러", "123.0 (실수)"],
           answer: 1,
           explanation: "int()는 문자열 '123'을 정수 123으로 변환해요!"
@@ -174,7 +174,7 @@ print(f'키: {height}cm')
           id: "quiz3",
           type: "quiz",
           title: "❓ 퀴즈!",
-          content: "int('3.14')의 결과는?",
+          content: "`int('3.14')`의 결과는?",
           options: ["3", "3.14", "에러", "'3'"],
           answer: 2,
           explanation: "int()는 소수점 문자열을 바로 변환 못 해요! float()를 먼저 써야 해요."

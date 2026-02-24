@@ -103,7 +103,7 @@ print(nums)  # [10, 20, 30] (정수!)
           id: "quiz1",
           type: "quiz",
           title: "❓ 퀴즈!",
-          content: "\"1 2 3\".split()의 결과는?",
+          content: "`\"1 2 3\".split()`의 결과는?",
           options: ["[1, 2, 3]", "['1', '2', '3']", "'1 2 3'", "에러"],
           answer: 1,
           explanation: "split()은 항상 문자열 리스트를 반환해요!"

@@ -103,7 +103,7 @@ print(nums)  # [10, 20, 30] (integers!)
           id: "quiz1",
           type: "quiz",
           title: "❓ Quiz!",
-          content: "What is the result of \"1 2 3\".split()?",
+          content: "What is the result of `\"1 2 3\".split()`?",
           options: ["[1, 2, 3]", "['1', '2', '3']", "'1 2 3'", "Error"],
           answer: 1,
           explanation: "split() always returns a list of strings!"

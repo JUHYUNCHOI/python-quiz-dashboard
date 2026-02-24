@@ -204,7 +204,7 @@ while True:
       id: "ch2-5",
       type: "quiz",
       title: "❓ 퀴즈!",
-      content: "웹 환경(Pyodide)에서 input() 대신 사용하는 방법은?",
+      content: "웹 환경(Pyodide)에서 `input()` 대신 사용하는 방법은?",
       options: [
         "prompt() 함수 사용",
         "actions 리스트에 미리 행동을 넣어두기",

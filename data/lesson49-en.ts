@@ -482,7 +482,7 @@ while True:
           id: "ch2-5",
           type: "quiz",
           title: "Quiz!",
-          content: "In a web environment (Pyodide), what do we use instead of input()?",
+          content: "In a web environment (Pyodide), what do we use instead of `input()`?",
           options: [
             "Use the prompt() function",
             "Pre-load actions into a list",
