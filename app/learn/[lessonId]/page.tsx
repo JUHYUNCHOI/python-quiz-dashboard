@@ -2,7 +2,7 @@
 
 import { useState, useEffect, use, useCallback } from "react"
 import { useRouter } from "next/navigation"
-import { ChevronRight, ChevronLeft, X, Sparkles, Lock, PartyPopper, List } from "lucide-react"
+import { ChevronRight, ChevronLeft, X, Lock, PartyPopper } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
 import { LanguageToggle } from "@/components/language-toggle"
@@ -292,31 +292,30 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-white to-indigo-50/30">
         {/* 상단 헤더 */}
         <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-lg border-b border-gray-200 shadow-sm">
-          <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-2 md:py-3">
-            <div className="flex items-center justify-between">
-              <button onClick={() => router.push(`/curriculum#lesson-${lessonId}`)} className="flex items-center gap-1 text-gray-500 hover:text-gray-700 transition-colors">
+          <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 md:py-3">
+            {/* 1줄: 나가기 | 프로그레스바 | 스텝 카운터 */}
+            <div className="flex items-center gap-3 md:gap-4">
+              <button onClick={() => router.push(`/curriculum#lesson-${lessonId}`)} className="text-gray-400 hover:text-gray-600 transition-colors" aria-label="나가기">
                 <X className="w-5 h-5 md:w-6 md:h-6" />
               </button>
-              <div className="flex-1 mx-3 md:mx-4 lg:mx-6">
-                <div className="flex items-center gap-2 md:gap-3 mb-1">
-                  <button onClick={() => setShowChapterList(!showChapterList)} className="flex items-center gap-1 text-xs md:text-sm text-gray-500 hover:text-indigo-600 transition-colors shrink-0">
-                    <List className="w-4 h-4" />
-                    <span className="hidden sm:inline">{chapter.emoji} {chapter.title}</span>
-                    <span className="sm:hidden">{currentStepIndex}/{totalSteps}</span>
-                  </button>
-                  <div className="flex-1 h-2 md:h-2.5 bg-gray-200 rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-500"
-                      style={{ width: `${(currentStepIndex / totalSteps) * 100}%` }} />
-                  </div>
-                </div>
+              <div className="flex-1 h-2.5 md:h-3 bg-gray-200 rounded-full overflow-hidden">
+                <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-500"
+                  style={{ width: `${(currentStepIndex / totalSteps) * 100}%` }} />
               </div>
-              <div className="flex items-center gap-2 md:gap-3">
+              <span className="text-sm md:text-base font-bold text-gray-500 tabular-nums shrink-0">
+                {currentStepIndex}<span className="text-gray-300">/</span>{totalSteps}
+              </span>
+            </div>
+            {/* 2줄: 챕터 이름 + 토글들 */}
+            <div className="flex items-center justify-between mt-1.5">
+              <button onClick={() => setShowChapterList(!showChapterList)} className="flex items-center gap-1.5 text-xs md:text-sm text-gray-500 hover:text-indigo-600 transition-colors">
+                <span>{chapter.emoji} {chapter.title}</span>
+                <ChevronRight className={cn("w-3.5 h-3.5 transition-transform", showChapterList && "rotate-90")} />
+              </button>
+              <div className="flex items-center gap-2">
                 {hasVariants && <LibraryToggle variant={variant} setVariant={handleVariantChange} />}
                 {isBilingual && <LanguageToggle />}
                 <SoundToggle isMuted={isMuted} onToggle={toggleMute} />
-                <span className="flex items-center gap-1 text-sm md:text-base font-bold text-amber-600">
-                  <Sparkles className="w-4 h-4 md:w-5 md:h-5" /> {score}
-                </span>
               </div>
             </div>
           </div>
@@ -324,7 +323,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
 
         {/* 챕터 목록 드롭다운 */}
         {showChapterList && (
-          <div className="sticky top-[52px] md:top-[60px] z-20">
+          <div className="sticky top-[68px] md:top-[76px] z-20">
             <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8">
               <div className="bg-white rounded-b-2xl shadow-lg border border-t-0 border-gray-200 p-3 md:p-4">
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
