@@ -16,14 +16,22 @@ const STORAGE_KEY = "sound-muted"
 
 export function useSoundEffect() {
   const audioRefs = useRef<Record<string, HTMLAudioElement>>({})
-  const [isMuted, setIsMuted] = useState(true) // 기본 뮤트 (autoplay 정책 대응)
+  const isMutedRef = useRef(true)
+  const [isMuted, setIsMuted] = useState(true)
+
+  // ref 동기화 — play()가 항상 최신 뮤트 상태를 읽도록
+  useEffect(() => {
+    isMutedRef.current = isMuted
+  }, [isMuted])
 
   // localStorage에서 뮤트 상태 복원
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY)
       if (saved !== null) {
-        setIsMuted(saved === "true")
+        const muted = saved === "true"
+        setIsMuted(muted)
+        isMutedRef.current = muted
       }
     } catch {}
   }, [])
@@ -33,7 +41,7 @@ export function useSoundEffect() {
     Object.entries(SOUND_FILES).forEach(([key, src]) => {
       const audio = new Audio(src)
       audio.preload = "auto"
-      audio.volume = 0.5
+      audio.volume = 0.8
       audioRefs.current[key] = audio
     })
     return () => {
@@ -45,18 +53,20 @@ export function useSoundEffect() {
     }
   }, [])
 
+  // ref를 사용해서 stale closure 방지
   const play = useCallback((name: SoundName) => {
-    if (isMuted) return
+    if (isMutedRef.current) return
     const audio = audioRefs.current[name]
     if (audio) {
       audio.currentTime = 0
-      audio.play().catch(() => {}) // autoplay 정책 에러 무시
+      audio.play().catch(() => {})
     }
-  }, [isMuted])
+  }, [])
 
   const toggleMute = useCallback(() => {
     setIsMuted((prev) => {
       const next = !prev
+      isMutedRef.current = next
       try {
         localStorage.setItem(STORAGE_KEY, String(next))
       } catch {}
