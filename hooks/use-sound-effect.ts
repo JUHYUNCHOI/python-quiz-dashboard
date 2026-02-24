@@ -8,6 +8,11 @@ const SOUND_FILES = {
   codeSuccess: "/sounds/code-success.mp3",
   chapterComplete: "/sounds/chapter-complete.mp3",
   lessonComplete: "/sounds/lesson-complete.mp3",
+  combo3: "/sounds/combo3.mp3",
+  combo5: "/sounds/combo5.mp3",
+  combo10: "/sounds/combo10.mp3",
+  heartbreak: "/sounds/heartbreak.mp3",
+  levelup: "/sounds/levelup.mp3",
 } as const
 
 type SoundName = keyof typeof SOUND_FILES
@@ -21,6 +26,11 @@ const VIBRATION_PATTERNS: Record<string, number | number[]> = {
   codeSuccess: [30, 20, 30],
   chapterComplete: [50, 30, 50, 30, 80],
   lessonComplete: [60, 40, 60, 40, 60, 40, 100],
+  combo3: [30, 15, 30, 15, 30],
+  combo5: [40, 20, 40, 20, 40, 20, 40],
+  combo10: [50, 25, 50, 25, 50, 25, 50, 25, 100],
+  heartbreak: [100, 50, 150],
+  levelup: [50, 30, 50, 30, 50, 30, 50, 30, 50, 30, 100],
 }
 
 export function useSoundEffect() {

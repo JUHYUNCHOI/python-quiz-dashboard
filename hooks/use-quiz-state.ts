@@ -26,6 +26,38 @@ export interface QuizSettings {
   startTime: number
 }
 
+export interface SessionData {
+  totalQuestions: number
+  correctAnswers: number
+  maxCombo: number
+  heartsRemaining: number
+  timeElapsedMs: number
+  endReason: "completed" | "hearts"
+}
+
+// -------- Combo Tier System --------
+export type ComboTier = "base" | "good" | "fire" | "insane" | "legend"
+
+export interface ComboTierInfo {
+  tier: ComboTier
+  xpPerCorrect: number
+  label: string
+  emoji: string
+  glowClass: string
+}
+
+export function getComboTier(combo: number): ComboTierInfo {
+  if (combo >= 10)
+    return { tier: "legend", xpPerCorrect: 30, label: "전설!", emoji: "👑", glowClass: "combo-glow-rainbow" }
+  if (combo >= 8)
+    return { tier: "insane", xpPerCorrect: 25, label: "미쳤다!", emoji: "🌟", glowClass: "combo-glow-golden" }
+  if (combo >= 5)
+    return { tier: "fire", xpPerCorrect: 20, label: "불타는 중!", emoji: "🔥", glowClass: "combo-glow-orange" }
+  if (combo >= 3)
+    return { tier: "good", xpPerCorrect: 15, label: "3연속!", emoji: "⚡", glowClass: "combo-glow-blue" }
+  return { tier: "base", xpPerCorrect: 10, label: "", emoji: "", glowClass: "" }
+}
+
 const DEFAULT_SETTINGS: QuizSettings = {
   questionCount: 20,
   difficulty: "mixed",
@@ -41,7 +73,15 @@ export function useQuizState(questions: QuizQuestion[]) {
   const [isCorrect, setIsCorrect] = useState(false)
   const [score, setScore] = useState(0)
   const [reviewCount, setReviewCount] = useState(0)
-  const [streak, setStreak] = useState(5)
+
+  // Combo system
+  const [combo, setCombo] = useState(0)
+  const [maxCombo, setMaxCombo] = useState(0)
+
+  // Hearts system
+  const [hearts, setHearts] = useState(5)
+  const [sessionOver, setSessionOver] = useState(false)
+  const [lastHeartLost, setLastHeartLost] = useState(false)
 
   // Wrong answer streak & pause
   const [wrongAnswerStreak, setWrongAnswerStreak] = useState(0)
@@ -82,20 +122,41 @@ export function useQuizState(questions: QuizQuestion[]) {
   // Reset question start time on question change
   useEffect(() => {
     setQuestionStartTime(Date.now())
+    setLastHeartLost(false)
   }, [currentQuestion])
 
   const question = questions[currentQuestion % questions.length]
   const progress = ((currentQuestion + 1) / quizSettings.questionCount) * 100
   const estimatedRemainingTime = Math.ceil((quizSettings.questionCount - currentQuestion - 1) * 1)
 
-  const handleAnswerSelect = useCallback((index: number) => {
-    if (!showResult) {
-      setSelectedAnswer(index)
-    }
-  }, [showResult])
+  // Save session data to sessionStorage before navigation
+  const saveSessionData = useCallback(
+    (endReason: "completed" | "hearts", currentScore: number) => {
+      const elapsed = Date.now() - quizSettings.startTime
+      const data: SessionData = {
+        totalQuestions: endReason === "hearts" ? currentQuestion + 1 : quizSettings.questionCount,
+        correctAnswers: currentScore,
+        maxCombo,
+        heartsRemaining: hearts,
+        timeElapsedMs: elapsed,
+        endReason,
+      }
+      sessionStorage.setItem("quizSessionData", JSON.stringify(data))
+    },
+    [quizSettings, currentQuestion, maxCombo, hearts],
+  )
+
+  const handleAnswerSelect = useCallback(
+    (index: number) => {
+      if (!showResult && !sessionOver) {
+        setSelectedAnswer(index)
+      }
+    },
+    [showResult, sessionOver],
+  )
 
   const handleNext = useCallback(() => {
-    if (selectedAnswer === null) return
+    if (selectedAnswer === null || sessionOver) return
 
     const timeSpent = (Date.now() - questionStartTime) / 1000
     if (timeSpent < 3) {
@@ -109,8 +170,15 @@ export function useQuizState(questions: QuizQuestion[]) {
     setShowResult(true)
 
     if (correct) {
-      setScore((s) => s + 1)
+      const newScore = score + 1
+      setScore(newScore)
       setWrongAnswerStreak(0)
+
+      // Combo logic
+      const newCombo = combo + 1
+      setCombo(newCombo)
+      setMaxCombo((prev) => Math.max(prev, newCombo))
+
       setShowCelebration(true)
       setTimeout(() => {
         setShowCelebration(false)
@@ -119,10 +187,28 @@ export function useQuizState(questions: QuizQuestion[]) {
           setSelectedAnswer(null)
           setShowResult(false)
         } else {
+          saveSessionData("completed", newScore)
           router.push("/quiz/session-complete")
         }
       }, 2000)
     } else {
+      // Reset combo on wrong
+      setCombo(0)
+
+      // Hearts logic
+      const newHearts = hearts - 1
+      setHearts(newHearts)
+      setLastHeartLost(true)
+
+      if (newHearts <= 0) {
+        setSessionOver(true)
+        saveSessionData("hearts", score)
+        setTimeout(() => {
+          router.push("/quiz/session-complete?reason=hearts")
+        }, 1500)
+        return
+      }
+
       const newStreak = wrongAnswerStreak + 1
       setWrongAnswerStreak(newStreak)
 
@@ -136,7 +222,20 @@ export function useQuizState(questions: QuizQuestion[]) {
       setTimeout(() => setShowWrongToast(false), 3000)
       setShowExplanation(true)
     }
-  }, [selectedAnswer, questionStartTime, question, currentQuestion, quizSettings.questionCount, wrongAnswerStreak, router])
+  }, [
+    selectedAnswer,
+    questionStartTime,
+    question,
+    currentQuestion,
+    quizSettings.questionCount,
+    wrongAnswerStreak,
+    router,
+    combo,
+    hearts,
+    sessionOver,
+    score,
+    saveSessionData,
+  ])
 
   const handleSkip = useCallback(() => {
     if (currentQuestion < questions.length - 1) {
@@ -144,9 +243,10 @@ export function useQuizState(questions: QuizQuestion[]) {
       setSelectedAnswer(null)
       setShowResult(false)
     } else {
-      router.push("/quiz/results")
+      saveSessionData("completed", score)
+      router.push("/quiz/session-complete")
     }
-  }, [currentQuestion, questions.length, router])
+  }, [currentQuestion, questions.length, router, saveSessionData, score])
 
   const handleExit = useCallback(() => {
     const completed = currentQuestion + 1
@@ -194,9 +294,10 @@ export function useQuizState(questions: QuizQuestion[]) {
       setSelectedAnswer(null)
       setShowResult(false)
     } else {
-      router.push("/quiz/results")
+      saveSessionData("completed", score)
+      router.push("/quiz/session-complete")
     }
-  }, [currentQuestion, quizSettings.questionCount, router])
+  }, [currentQuestion, quizSettings.questionCount, router, saveSessionData, score])
 
   const handlePracticeSimilar = useCallback(() => {
     setShowExplanation(false)
@@ -213,10 +314,16 @@ export function useQuizState(questions: QuizQuestion[]) {
     isCorrect,
     score,
     reviewCount,
-    streak,
     progress,
     estimatedRemainingTime,
     quizSettings,
+
+    // Combo & Hearts
+    combo,
+    maxCombo,
+    hearts,
+    sessionOver,
+    lastHeartLost,
 
     // UI state
     showCelebration,

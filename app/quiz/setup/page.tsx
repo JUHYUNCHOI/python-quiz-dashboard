@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Minus, Plus, Flame, Calendar, Clock, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useGamification } from "@/hooks/use-gamification"
 
 const difficultyOptions = [
   { id: "beginner", label: "초급", color: "green", description: "기초 문법과 개념" },
@@ -16,6 +17,7 @@ const difficultyOptions = [
 
 export default function QuizSetupPage() {
   const router = useRouter()
+  const gamification = useGamification()
   const [questionCount, setQuestionCount] = useState(20)
   const [selectedDifficulty, setSelectedDifficulty] = useState("mixed")
   const [showCustomInput, setShowCustomInput] = useState(false)
@@ -90,7 +92,7 @@ export default function QuizSetupPage() {
             </div>
             <div className="flex items-center gap-2 bg-orange-100 text-orange-700 px-3 py-1 rounded-full font-semibold">
               <Flame className="h-4 w-4" />
-              <span>5일 연속 학습 중!</span>
+              <span>{gamification.dailyStreak > 0 ? `${gamification.dailyStreak}일 연속 학습 중!` : "오늘 첫 학습!"}</span>
             </div>
           </div>
         </div>

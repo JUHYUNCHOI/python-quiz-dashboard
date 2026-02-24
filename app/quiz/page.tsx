@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useCallback } from "react"
 import { X, Clock, ChevronLeft, ChevronRight, Check, AlertCircle, Coffee } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -8,7 +8,7 @@ import { CodeDisplay } from "@/components/code-display"
 import { CelebrationScreen } from "@/components/celebration-screen"
 import { ExplanationPanel } from "@/components/explanation-panel"
 import { cn } from "@/lib/utils"
-import { useQuizState } from "@/hooks/use-quiz-state"
+import { useQuizState, getComboTier } from "@/hooks/use-quiz-state"
 import type { QuizQuestion } from "@/hooks/use-quiz-state"
 import { useQuizTimer } from "@/hooks/use-quiz-timer"
 import { useFocusTracker } from "@/hooks/use-focus-tracker"
@@ -16,6 +16,7 @@ import { useSwipe } from "@/hooks/use-swipe"
 import { useQuizKeyboard } from "@/hooks/use-quiz-keyboard"
 import { useSoundEffect } from "@/hooks/use-sound-effect"
 import { SoundToggle } from "@/components/sound-toggle"
+import { useGamification } from "@/hooks/use-gamification"
 
 const quizQuestions: QuizQuestion[] = [
   {
@@ -69,7 +70,9 @@ const quizQuestions: QuizQuestion[] = [
 export default function QuizPage() {
   const quiz = useQuizState(quizQuestions)
   const { play, isMuted, toggleMute } = useSoundEffect()
+  const gamification = useGamification()
   const { isFocused, justReturnedFocus } = useFocusTracker()
+  const comboTier = getComboTier(quiz.combo)
 
   const { formattedTime, isLowTime } = useQuizTimer({
     initialTime: 300,
@@ -97,13 +100,26 @@ export default function QuizPage() {
     onSelectAnswer: quiz.handleAnswerSelect,
   })
 
-  // 사운드 효과: 정답/오답 반응
-  useEffect(() => {
-    if (quiz.showCelebration) play("correct")
-  }, [quiz.showCelebration, play])
+  // 콤보 연동 사운드: 정답
+  const playCorrectSound = useCallback(
+    (currentCombo: number) => {
+      if (currentCombo >= 10) play("combo10")
+      else if (currentCombo >= 5) play("combo5")
+      else if (currentCombo >= 3) play("combo3")
+      else play("correct")
+    },
+    [play],
+  )
 
   useEffect(() => {
-    if (quiz.showResult && !quiz.isCorrect) play("wrong")
+    if (quiz.showCelebration) playCorrectSound(quiz.combo)
+  }, [quiz.showCelebration, quiz.combo, playCorrectSound])
+
+  // 오답 사운드 + 하트 깨지는 사운드
+  useEffect(() => {
+    if (quiz.showResult && !quiz.isCorrect) {
+      play("heartbreak")
+    }
   }, [quiz.showResult, quiz.isCorrect, play])
 
   const question = quiz.question
@@ -114,10 +130,11 @@ export default function QuizPage() {
       <div className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-3 md:py-4">
           <div className="flex items-center justify-between gap-2 md:gap-4">
-            <div className="flex items-center gap-2 md:gap-4 flex-1">
+            {/* Left: Exit + Progress */}
+            <div className="flex items-center gap-2 md:gap-3 flex-1">
               <button
                 onClick={quiz.handleExit}
-                className="rounded-full p-2 md:p-2 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors hover:bg-gray-100"
+                className="rounded-full p-2 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors hover:bg-gray-100"
                 aria-label="나가기"
               >
                 <X className="h-5 w-5 md:h-6 md:w-6 text-gray-600" />
@@ -131,32 +148,66 @@ export default function QuizPage() {
                 </div>
                 <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
                   <div
-                    className="h-full bg-gradient-to-r from-orange-400 to-orange-500 transition-all duration-500"
+                    className={cn(
+                      "h-full transition-all duration-500 rounded-full",
+                      quiz.combo >= 5
+                        ? "bg-gradient-to-r from-orange-400 via-red-500 to-orange-400 animate-pulse"
+                        : "bg-gradient-to-r from-orange-400 to-orange-500",
+                    )}
                     style={{ width: `${quiz.progress}%` }}
                   />
                 </div>
-                <div className="mt-1 text-xs text-gray-500 text-center">약 {quiz.estimatedRemainingTime}분 남음</div>
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              <SoundToggle isMuted={isMuted} onToggle={toggleMute} />
-              {quiz.reviewCount > 0 && (
-                <div className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs md:text-sm font-semibold">
-                  복습 대기 {quiz.reviewCount}
+            {/* Center: Hearts */}
+            <div className="flex items-center gap-0.5">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <span
+                  key={i}
+                  className={cn(
+                    "text-base md:text-lg transition-all duration-300",
+                    i < quiz.hearts
+                      ? quiz.hearts <= 2
+                        ? "animate-heart-danger"
+                        : ""
+                      : "scale-75 grayscale opacity-40",
+                    i === quiz.hearts && quiz.lastHeartLost && "animate-heartbreak",
+                  )}
+                >
+                  {i < quiz.hearts ? "❤️" : "🖤"}
+                </span>
+              ))}
+            </div>
+
+            {/* Right: Combo + Sound + Timer */}
+            <div className="flex items-center gap-1.5 md:gap-2">
+              {/* Combo badge */}
+              {quiz.combo >= 3 && (
+                <div
+                  className={cn(
+                    "flex items-center gap-1 rounded-full px-2 py-1 text-xs md:text-sm font-bold animate-scale-in",
+                    comboTier.tier === "good" && "bg-blue-100 text-blue-700",
+                    comboTier.tier === "fire" && "bg-orange-100 text-orange-700 animate-pulse",
+                    comboTier.tier === "insane" && "bg-yellow-100 text-yellow-700 combo-glow-golden",
+                    comboTier.tier === "legend" && "bg-purple-100 text-purple-700 combo-glow-rainbow",
+                  )}
+                >
+                  <span>{comboTier.emoji}</span>
+                  <span>{quiz.combo}x</span>
                 </div>
               )}
 
+              <SoundToggle isMuted={isMuted} onToggle={toggleMute} />
+
               <div
                 className={cn(
-                  "flex items-center gap-2 rounded-full px-3 py-2 md:px-4 transition-colors",
+                  "flex items-center gap-1.5 rounded-full px-3 py-1.5",
                   isLowTime ? "bg-red-100 animate-pulse" : "bg-orange-100",
                 )}
               >
                 <Clock className={cn("h-4 w-4", isLowTime ? "text-red-600" : "text-orange-600")} />
-                <span
-                  className={cn("font-mono text-sm font-semibold", isLowTime ? "text-red-600" : "text-orange-600")}
-                >
+                <span className={cn("font-mono text-sm font-semibold", isLowTime ? "text-red-600" : "text-orange-600")}>
                   {formattedTime}
                 </span>
               </div>
@@ -239,6 +290,20 @@ export default function QuizPage() {
         </div>
       )}
 
+      {/* Hearts depleted overlay */}
+      {quiz.sessionOver && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <Card className="bg-white p-8 max-w-md w-full text-center animate-bounce-in">
+            <div className="text-7xl mb-4">💔</div>
+            <h3 className="text-2xl font-bold text-gray-800 mb-2">하트가 다 떨어졌어요!</h3>
+            <p className="text-gray-600 mb-6">
+              {quiz.score}문제 맞혔어요. 다음엔 더 잘할 수 있을 거예요!
+            </p>
+            <div className="text-5xl mb-4">🦒💪</div>
+          </Card>
+        </div>
+      )}
+
       {/* Main Content */}
       <main
         className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8"
@@ -251,6 +316,7 @@ export default function QuizPage() {
             className={cn(
               "overflow-hidden border-2 transition-all duration-500",
               quiz.showResult && !quiz.isCorrect && "animate-shake border-red-300",
+              quiz.combo >= 5 && !quiz.showResult && comboTier.glowClass,
             )}
           >
             <div className="p-4 md:p-6 lg:p-8">
@@ -381,7 +447,13 @@ export default function QuizPage() {
         </div>
       </main>
 
-      <CelebrationScreen show={quiz.showCelebration} points={10} streak={quiz.streak} />
+      <CelebrationScreen
+        show={quiz.showCelebration}
+        points={comboTier.xpPerCorrect}
+        streak={gamification.dailyStreak}
+        comboTier={comboTier}
+        combo={quiz.combo}
+      />
 
       <ExplanationPanel
         show={quiz.showExplanation}

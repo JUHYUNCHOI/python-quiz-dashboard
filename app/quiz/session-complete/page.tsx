@@ -1,174 +1,382 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Trophy, Clock, Target, Zap, Award, Home, RotateCcw } from "lucide-react"
+import { Suspense, useEffect, useState, useRef, useCallback } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { cn } from "@/lib/utils"
+import { useGamification } from "@/hooks/use-gamification"
+import { useSoundEffect } from "@/hooks/use-sound-effect"
+import type { SessionData } from "@/hooks/use-quiz-state"
 
-export default function SessionCompletePage() {
-  const router = useRouter()
-  const [showBadge, setShowBadge] = useState(false)
-
-  // Mock data - in real app, get from session storage or API
-  const sessionData = {
-    completed: 20,
-    total: 20,
-    totalTime: "22분 15초",
-    avgTimePerQuestion: "1분 7초",
-    focusedTime: "21분 30초",
-    accuracy: 85,
-    correct: 17,
-    comparison: "평균보다 3분 빠르고 정답률 +5% 높아요!",
-    engagementQuality: 95,
-    achievements: [
-      { id: 1, title: "첫 20문제 완료!", icon: "🎯", unlocked: true },
-      { id: 2, title: "3일 연속 학습!", icon: "🔥", unlocked: true },
-      { id: 3, title: "집중력 챔피언!", icon: "⚡", unlocked: true },
-    ],
-  }
+// -------- CountUp animation --------
+function CountUp({ end, duration = 800, prefix = "", suffix = "", className = "" }: {
+  end: number; duration?: number; prefix?: string; suffix?: string; className?: string
+}) {
+  const [value, setValue] = useState(0)
+  const frameRef = useRef<number>(0)
 
   useEffect(() => {
-    setTimeout(() => setShowBadge(true), 500)
+    const start = performance.now()
+    const tick = (now: number) => {
+      const elapsed = now - start
+      const progress = Math.min(elapsed / duration, 1)
+      // ease-out cubic
+      const eased = 1 - Math.pow(1 - progress, 3)
+      setValue(Math.round(eased * end))
+      if (progress < 1) {
+        frameRef.current = requestAnimationFrame(tick)
+      }
+    }
+    frameRef.current = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(frameRef.current)
+  }, [end, duration])
+
+  return <span className={className}>{prefix}{value}{suffix}</span>
+}
+
+// -------- XP Row (slide in) --------
+function XpRow({ emoji, label, xp, visible, delay }: {
+  emoji: string; label: string; xp: number; visible: boolean; delay: number
+}) {
+  if (!visible || xp === 0) return null
+  return (
+    <div
+      className="flex items-center justify-between px-4 py-3 bg-white/60 backdrop-blur-sm rounded-xl animate-fly-in-right"
+      style={{ animationDelay: `${delay}ms` }}
+    >
+      <div className="flex items-center gap-2">
+        <span className="text-xl">{emoji}</span>
+        <span className="text-base font-semibold text-gray-700">{label}</span>
+      </div>
+      <span className="text-lg font-bold text-orange-600">+{xp} XP</span>
+    </div>
+  )
+}
+
+// -------- Level Progress Bar --------
+function LevelBar({ level, xpInLevel, xpPerLevel, visible, isLevelUp }: {
+  level: number; xpInLevel: number; xpPerLevel: number; visible: boolean; isLevelUp: boolean
+}) {
+  const [barWidth, setBarWidth] = useState(0)
+
+  useEffect(() => {
+    if (visible) {
+      const timer = setTimeout(() => {
+        setBarWidth((xpInLevel / xpPerLevel) * 100)
+      }, 200)
+      return () => clearTimeout(timer)
+    }
+  }, [visible, xpInLevel, xpPerLevel])
+
+  if (!visible) return null
+
+  return (
+    <div className={cn("space-y-2 animate-fly-in-right", isLevelUp && "animate-level-up")}>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className={cn("text-2xl font-black", isLevelUp ? "text-yellow-500" : "text-orange-500")}>
+            Lv.{level}
+          </span>
+          {isLevelUp && (
+            <span className="px-2 py-0.5 bg-yellow-100 text-yellow-700 text-xs font-bold rounded-full animate-number-pop">
+              레벨 업! 🎉
+            </span>
+          )}
+        </div>
+        <span className="text-sm text-gray-500">{xpInLevel}/{xpPerLevel} XP</span>
+      </div>
+      <div className="h-4 w-full bg-gray-200 rounded-full overflow-hidden">
+        <div
+          className={cn(
+            "h-full rounded-full transition-all duration-1000 ease-out",
+            isLevelUp
+              ? "bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400"
+              : "bg-gradient-to-r from-orange-400 to-orange-500",
+          )}
+          style={{ width: `${barWidth}%` }}
+        />
+      </div>
+    </div>
+  )
+}
+
+// -------- Main Page --------
+export default function SessionCompletePageWrapper() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-b from-orange-50 via-mint-50 to-lavender-50 flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="text-6xl animate-bounce">🦒</div>
+          <p className="text-xl text-gray-600">결과를 불러오는 중...</p>
+        </div>
+      </div>
+    }>
+      <SessionCompletePage />
+    </Suspense>
+  )
+}
+
+function SessionCompletePage() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const endReason = searchParams.get("reason") === "hearts" ? "hearts" : "completed"
+  const gamification = useGamification()
+  const { play } = useSoundEffect()
+
+  // Session data from sessionStorage
+  const [sessionData, setSessionData] = useState<SessionData | null>(null)
+  const [xpCommitted, setXpCommitted] = useState(false)
+
+  // Animation phase (0–7)
+  const [phase, setPhase] = useState(-1)
+
+  // Load session data
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem("quizSessionData")
+      if (raw) {
+        setSessionData(JSON.parse(raw))
+      }
+    } catch {}
   }, [])
 
-  const handleGoHome = () => {
+  // Calculate XP breakdown
+  const breakdown = sessionData
+    ? gamification.calculateXpBreakdown(sessionData.correctAnswers, sessionData.totalQuestions, sessionData.maxCombo)
+    : null
+
+  // Previous level (before commit)
+  const [prevLevel, setPrevLevel] = useState(gamification.level)
+
+  // Commit XP once
+  useEffect(() => {
+    if (breakdown && !xpCommitted) {
+      setPrevLevel(gamification.level)
+      gamification.commitSessionXp(breakdown)
+      setXpCommitted(true)
+    }
+  }, [breakdown, xpCommitted, gamification])
+
+  // Staggered phase reveal
+  useEffect(() => {
+    if (!sessionData) return
+    const timers: NodeJS.Timeout[] = []
+    for (let i = 0; i <= 7; i++) {
+      timers.push(setTimeout(() => setPhase(i), 400 + i * 600))
+    }
+    // Play sound at the right time
+    timers.push(setTimeout(() => play("chapterComplete"), 500))
+    if (breakdown && breakdown.perfectBonus > 0) {
+      timers.push(setTimeout(() => play("combo10"), 400 + 4 * 600))
+    }
+    return () => timers.forEach(clearTimeout)
+  }, [sessionData]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Level up sound
+  const isLevelUp = xpCommitted && gamification.level > prevLevel
+  useEffect(() => {
+    if (isLevelUp) {
+      const t = setTimeout(() => play("levelup"), 400 + 6 * 600 + 300)
+      return () => clearTimeout(t)
+    }
+  }, [isLevelUp]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handlePlayAgain = useCallback(() => {
+    sessionStorage.removeItem("quizSessionData")
+    router.push("/quiz/setup")
+  }, [router])
+
+  const handleGoHome = useCallback(() => {
+    sessionStorage.removeItem("quizSessionData")
     router.push("/")
+  }, [router])
+
+  // Format time
+  const formatTime = (ms: number) => {
+    const totalSec = Math.floor(ms / 1000)
+    const min = Math.floor(totalSec / 60)
+    const sec = totalSec % 60
+    return min > 0 ? `${min}분 ${sec}초` : `${sec}초`
   }
 
-  const handleReview = () => {
-    router.push("/quiz/results")
+  // Loading state
+  if (!sessionData || !breakdown) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-orange-50 via-mint-50 to-lavender-50 flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="text-6xl animate-bounce">🦒</div>
+          <p className="text-xl text-gray-600">결과를 불러오는 중...</p>
+        </div>
+      </div>
+    )
   }
+
+  const accuracy = Math.round((sessionData.correctAnswers / sessionData.totalQuestions) * 100)
+  const isHeartsDepleted = endReason === "hearts"
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 via-mint-50 to-lavender-50">
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
-        {/* Celebration Header */}
-        <div className="text-center mb-8">
-          <div className="text-8xl mb-4 animate-bounce-in">🦒🎉</div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-3">
-            {sessionData.completed}/{sessionData.total} 문제 완료!
-          </h1>
-          <p className="text-xl text-gray-600">정말 잘했어요!</p>
-        </div>
+      <main className="container mx-auto px-4 py-8 max-w-lg">
 
-        {/* Results Summary */}
-        <Card className="p-6 md:p-8 mb-6 border-2 border-orange-200 shadow-lg">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-            <Trophy className="h-6 w-6 text-orange-500" />
-            학습 결과
-          </h2>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div className="text-center p-4 bg-orange-50 rounded-xl">
-              <Clock className="h-6 w-6 text-orange-500 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-gray-800">{sessionData.totalTime}</div>
-              <div className="text-xs text-gray-600">총 시간</div>
+        {/* === Phase 0: Header with giraffe + score === */}
+        {phase >= 0 && (
+          <div className="text-center mb-8 animate-scale-in">
+            {/* Giraffe */}
+            <div className="text-7xl md:text-8xl mb-3 animate-bounce-celebration">
+              {isHeartsDepleted ? "🦒💔" : accuracy === 100 ? "🦒👑" : "🦒🎉"}
             </div>
 
-            <div className="text-center p-4 bg-mint-50 rounded-xl">
-              <Target className="h-6 w-6 text-mint-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-gray-800">{sessionData.avgTimePerQuestion}</div>
-              <div className="text-xs text-gray-600">문제당 평균</div>
-            </div>
+            {/* Score headline */}
+            <h1 className="text-4xl md:text-5xl font-black text-gray-800 mb-1">
+              <CountUp end={sessionData.correctAnswers} duration={1200} />
+              <span className="text-gray-400">/{sessionData.totalQuestions}</span>
+              <span className="ml-2 text-3xl">정답!</span>
+            </h1>
 
-            <div className="text-center p-4 bg-lavender-50 rounded-xl">
-              <Zap className="h-6 w-6 text-lavender-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-gray-800">{sessionData.focusedTime}</div>
-              <div className="text-xs text-gray-600">집중 시간</div>
-            </div>
+            {isHeartsDepleted && (
+              <p className="text-lg text-red-500 font-semibold mt-2 animate-fade-in-delay">
+                하트가 모두 소진되었어요 💔
+              </p>
+            )}
 
-            <div className="text-center p-4 bg-green-50 rounded-xl">
-              <Award className="h-6 w-6 text-green-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-gray-800">{sessionData.accuracy}%</div>
-              <div className="text-xs text-gray-600">정답률</div>
+            {/* Sub stats */}
+            <div className="flex items-center justify-center gap-4 mt-3 text-sm text-gray-500">
+              <span>⏱ {formatTime(sessionData.timeElapsedMs)}</span>
+              <span>🎯 {accuracy}%</span>
+              {sessionData.maxCombo >= 3 && <span>⚡ 최대 {sessionData.maxCombo}연속</span>}
             </div>
           </div>
-
-          <div className="text-center p-4 bg-gradient-to-r from-orange-100 to-mint-100 rounded-xl">
-            <p className="text-sm font-semibold text-gray-800">{sessionData.comparison}</p>
-          </div>
-        </Card>
-
-        {/* Achievements */}
-        {showBadge && (
-          <Card className="p-6 md:p-8 mb-6 border-2 border-yellow-200 shadow-lg animate-bounce-in">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-              <Award className="h-6 w-6 text-yellow-500" />
-              업적 달성!
-            </h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {sessionData.achievements.map((achievement) => (
-                <div
-                  key={achievement.id}
-                  className={cn(
-                    "p-4 rounded-xl text-center transition-all",
-                    achievement.unlocked
-                      ? "bg-gradient-to-br from-yellow-100 to-orange-100 border-2 border-yellow-300 shadow-lg"
-                      : "bg-gray-100 opacity-50",
-                  )}
-                >
-                  <div className="text-4xl mb-2">{achievement.icon}</div>
-                  <div className="text-sm font-semibold text-gray-800">{achievement.title}</div>
-                </div>
-              ))}
-            </div>
-          </Card>
         )}
 
-        {/* Honesty Indicators */}
-        <Card className="p-6 md:p-8 mb-8 border-2 border-mint-200 shadow-lg">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">학습 품질</h2>
+        {/* === XP Breakdown Card === */}
+        <div className="bg-white/40 backdrop-blur-md rounded-2xl border border-orange-200/50 p-5 space-y-3 mb-6">
+          <h2 className={cn(
+            "text-lg font-bold text-gray-700 mb-2 transition-opacity duration-500",
+            phase >= 1 ? "opacity-100" : "opacity-0"
+          )}>
+            📊 XP 획득 내역
+          </h2>
 
-          <div className="mb-4">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-gray-600">진심도</span>
-              <span className="text-lg font-bold text-mint-600">{sessionData.engagementQuality}%</span>
-            </div>
-            <div className="h-3 w-full bg-gray-200 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-mint-400 to-mint-500 transition-all duration-1000"
-                style={{ width: `${sessionData.engagementQuality}%` }}
-              />
-            </div>
-          </div>
+          {/* Phase 1: Base XP */}
+          <XpRow
+            emoji="📝"
+            label={`기본 점수 (${sessionData.correctAnswers}×10)`}
+            xp={breakdown.baseXp}
+            visible={phase >= 1}
+            delay={0}
+          />
 
-          <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
-            <div>
-              <span className="font-semibold">문제당 평균 시간:</span> {sessionData.avgTimePerQuestion}
-            </div>
-            <div>
-              <span className="font-semibold">집중 시간 비율:</span> {sessionData.engagementQuality}%
-            </div>
-          </div>
+          {/* Phase 2: Combo bonus */}
+          <XpRow
+            emoji="⚡"
+            label={`콤보 보너스 (최대 ${sessionData.maxCombo}연속)`}
+            xp={breakdown.comboBonus}
+            visible={phase >= 2}
+            delay={0}
+          />
 
-          {sessionData.engagementQuality >= 90 && (
-            <div className="mt-4 p-3 bg-green-50 rounded-lg text-center">
-              <p className="text-sm font-semibold text-green-700">완벽한 집중력이에요! 👏</p>
+          {/* Phase 3: Streak bonus */}
+          <XpRow
+            emoji="🔥"
+            label={`연속 학습 보너스 (${gamification.dailyStreak}일)`}
+            xp={breakdown.streakBonus}
+            visible={phase >= 3}
+            delay={0}
+          />
+
+          {/* Phase 4: Perfect bonus */}
+          {breakdown.perfectBonus > 0 && phase >= 4 && (
+            <div
+              className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-300 rounded-xl animate-scale-in shadow-lg"
+            >
+              <div className="flex items-center gap-2">
+                <span className="text-xl">👑</span>
+                <span className="text-base font-bold text-yellow-700">퍼펙트 보너스!</span>
+              </div>
+              <span className="text-lg font-black text-yellow-600">+{breakdown.perfectBonus} XP</span>
             </div>
           )}
-        </Card>
 
-        {/* Action Buttons */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Button
-            onClick={handleGoHome}
-            className="py-6 text-lg font-semibold bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white rounded-xl shadow-lg hover:shadow-xl transition-all hover:scale-105 flex items-center justify-center gap-2"
-          >
-            <Home className="h-5 w-5" />
-            홈으로
-          </Button>
-
-          <Button
-            onClick={handleReview}
-            className="py-6 text-lg font-semibold bg-gradient-to-r from-mint-400 to-mint-500 hover:from-mint-500 hover:to-mint-600 text-white rounded-xl shadow-lg hover:shadow-xl transition-all hover:scale-105 flex items-center justify-center gap-2"
-          >
-            <RotateCcw className="h-5 w-5" />
-            틀린 문제 복습
-          </Button>
+          {/* Phase 5: Total */}
+          {phase >= 5 && (
+            <div className="pt-3 border-t-2 border-orange-200/60">
+              <div className="flex items-center justify-between">
+                <span className="text-xl font-black text-gray-800">총 획득</span>
+                <span className="text-3xl font-black text-orange-600 animate-number-pop">
+                  +<CountUp end={breakdown.totalXp} duration={1000} /> XP
+                </span>
+              </div>
+            </div>
+          )}
         </div>
+
+        {/* === Phase 6: Level progress === */}
+        <div className="mb-8">
+          <LevelBar
+            level={gamification.level}
+            xpInLevel={gamification.xpInCurrentLevel}
+            xpPerLevel={100}
+            visible={phase >= 6}
+            isLevelUp={isLevelUp}
+          />
+        </div>
+
+        {/* === Phase 7: Action buttons === */}
+        {phase >= 7 && (
+          <div className="space-y-3 animate-fade-in-delay">
+            {/* Play again - big CTA */}
+            <button
+              onClick={handlePlayAgain}
+              className="w-full py-4 rounded-2xl text-xl font-black text-white bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-95"
+            >
+              한 판 더? 🔥
+            </button>
+
+            {/* Go home - subtle text */}
+            <button
+              onClick={handleGoHome}
+              className="w-full py-3 text-base font-medium text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              그만하기
+            </button>
+
+            {/* Daily streak badge */}
+            {gamification.dailyStreak > 0 && (
+              <div className="flex items-center justify-center gap-2 pt-2">
+                <span className="text-2xl animate-flame">🔥</span>
+                <span className="text-sm font-bold text-orange-600">
+                  {gamification.dailyStreak}일 연속 학습 중!
+                </span>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Confetti for perfect score */}
+        {accuracy === 100 && phase >= 4 && (
+          <div className="fixed inset-0 pointer-events-none overflow-hidden z-50">
+            {[...Array(40)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute animate-confetti-fall"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `-${Math.random() * 10}%`,
+                  animationDelay: `${Math.random() * 1}s`,
+                  animationDuration: `${2 + Math.random() * 2}s`,
+                }}
+              >
+                <div
+                  className={cn(
+                    "w-2 h-2 md:w-3 md:h-3",
+                    ["bg-orange-400", "bg-yellow-400", "bg-mint-400", "bg-lavender-400", "bg-pink-400"][i % 5],
+                    i % 3 === 0 && "rounded-full",
+                    i % 3 === 1 && "rotate-45",
+                  )}
+                />
+              </div>
+            ))}
+          </div>
+        )}
       </main>
     </div>
   )
