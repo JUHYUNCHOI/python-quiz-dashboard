@@ -224,9 +224,26 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     }
   }
 
-  const retryQuiz = () => {
-    setSelectedAnswer(null)
-    setShowExplanation(false)
+  const acknowledgeQuiz = () => {
+    // 듀오링고 스타일: 오답이어도 확인 후 다음으로 넘어감
+    if (!completedSteps.has(step.id)) {
+      setCompletedSteps(new Set([...completedSteps, step.id]))
+    }
+    // goNext()는 canGoNext()를 체크하지만 setState가 비동기이므로 직접 이동
+    if (currentStep < chapter.steps.length - 1) {
+      setCurrentStep(currentStep + 1)
+      resetStepState()
+    } else if (currentChapter < lesson.chapters.length - 1) {
+      setShowConfetti(true)
+      setShowChapterComplete(true)
+      play("chapterComplete")
+      setTimeout(() => setShowConfetti(false), 3000)
+    } else {
+      setShowConfetti(true)
+      setShowLessonComplete(true)
+      play("lessonComplete")
+      setTimeout(() => setShowConfetti(false), 3000)
+    }
   }
 
   const closeSuccessOverlay = useCallback(() => { setShowSuccess(false) }, [])
@@ -358,7 +375,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
               showExplanation={showExplanation}
               quizAttempts={quizAttempts}
               onQuizAnswer={handleQuizAnswer}
-              onQuizRetry={retryQuiz}
+              onQuizAcknowledge={acknowledgeQuiz}
             />
           </div>
         </div>

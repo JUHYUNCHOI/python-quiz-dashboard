@@ -1,6 +1,6 @@
 "use client"
 
-import { HelpCircle, Check, X, Lightbulb, RotateCcw } from "lucide-react"
+import { HelpCircle, Check, X, Lightbulb, ArrowRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { LessonStep } from "./types"
 import { renderContent } from "./render-content"
@@ -12,10 +12,10 @@ interface QuizStepProps {
   showExplanation: boolean
   quizAttempts: number
   onAnswer: (idx: number) => void
-  onRetry: () => void
+  onAcknowledge: () => void
 }
 
-export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, quizAttempts, onAnswer, onRetry }: QuizStepProps) {
+export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, quizAttempts, onAnswer, onAcknowledge }: QuizStepProps) {
   return (
     <div className="space-y-6">
       <div className="space-y-4">
@@ -56,12 +56,9 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
             </div>
             <p className={cn("text-sm", selectedAnswer === step.answer ? "text-green-800" : "text-amber-800")}>{step.explanation}</p>
             {selectedAnswer !== step.answer && (
-              <>
-                <p className="text-xs text-amber-600 mt-2">정답을 맞춰야 다음으로 넘어갈 수 있어요!</p>
-                <button onClick={onRetry} className="mt-3 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2">
-                  <RotateCcw className="w-5 h-5" /> 다시 도전하기! 💪
-                </button>
-              </>
+              <button onClick={onAcknowledge} className="mt-3 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2">
+                확인했어요 <ArrowRight className="w-5 h-5" />
+              </button>
             )}
           </div>
         )}
