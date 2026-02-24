@@ -14,6 +14,15 @@ type SoundName = keyof typeof SOUND_FILES
 
 const STORAGE_KEY = "sound-muted"
 
+// 모바일 진동 패턴 (ms) — 소리 꺼도 진동은 항상 작동
+const VIBRATION_PATTERNS: Record<string, number | number[]> = {
+  correct: 50,
+  wrong: [80, 40, 80],
+  codeSuccess: [30, 20, 30],
+  chapterComplete: [50, 30, 50, 30, 80],
+  lessonComplete: [60, 40, 60, 40, 60, 40, 100],
+}
+
 export function useSoundEffect() {
   const audioRefs = useRef<Record<string, HTMLAudioElement>>({})
   const [isMuted, setIsMuted] = useState(() => {
@@ -51,6 +60,12 @@ export function useSoundEffect() {
 
   // ref를 사용해서 stale closure 방지
   const play = useCallback((name: SoundName) => {
+    // 모바일 진동 — 소리 꺼져 있어도 항상 작동
+    try {
+      const pattern = VIBRATION_PATTERNS[name]
+      if (pattern && navigator.vibrate) navigator.vibrate(pattern)
+    } catch {}
+
     if (isMutedRef.current) return
     const audio = audioRefs.current[name]
     if (audio) {
