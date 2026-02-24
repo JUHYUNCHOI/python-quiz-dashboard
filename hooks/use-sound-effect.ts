@@ -16,25 +16,21 @@ const STORAGE_KEY = "sound-muted"
 
 export function useSoundEffect() {
   const audioRefs = useRef<Record<string, HTMLAudioElement>>({})
-  const isMutedRef = useRef(true)
-  const [isMuted, setIsMuted] = useState(true)
+  const [isMuted, setIsMuted] = useState(() => {
+    if (typeof window === "undefined") return false
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY)
+      return saved === "true"
+    } catch {
+      return false
+    }
+  })
+  const isMutedRef = useRef(isMuted)
 
   // ref 동기화 — play()가 항상 최신 뮤트 상태를 읽도록
   useEffect(() => {
     isMutedRef.current = isMuted
   }, [isMuted])
-
-  // localStorage에서 뮤트 상태 복원
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY)
-      if (saved !== null) {
-        const muted = saved === "true"
-        setIsMuted(muted)
-        isMutedRef.current = muted
-      }
-    } catch {}
-  }, [])
 
   // 사운드 프리로드
   useEffect(() => {
