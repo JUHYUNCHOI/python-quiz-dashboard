@@ -1,6 +1,8 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
+import { useAuth } from "@/contexts/auth-context"
+import { createClient } from "@/lib/supabase/client"
 
 // -------- Types --------
 export interface GamificationState {
@@ -84,9 +86,75 @@ export function useGamification() {
     return loadState()
   })
 
+  // Supabase 동기화
+  const { user } = useAuth()
+  const debounceRef = useRef<NodeJS.Timeout | null>(null)
+
   useEffect(() => {
     setState(loadState())
   }, [])
+
+  // 로그인 시 Supabase에서 데이터 로드 (있으면 덮어쓰기)
+  useEffect(() => {
+    if (!user) return
+
+    const loadFromSupabase = async () => {
+      try {
+        const supabase = createClient()
+        const { data, error } = await supabase
+          .from("gamification_data")
+          .select("*")
+          .eq("user_id", user.id)
+          .single()
+
+        if (!error && data && data.total_xp > 0) {
+          const totalXp = data.total_xp
+          const level = Math.floor(totalXp / XP_PER_LEVEL) + 1
+          const xpInCurrentLevel = totalXp % XP_PER_LEVEL
+          const today = todayStr()
+          const sessionsToday = data.last_active_date === today ? data.sessions_today : 0
+
+          const newState: GamificationState = {
+            totalXp,
+            level,
+            xpInCurrentLevel,
+            dailyStreak: data.daily_streak,
+            lastActiveDate: data.last_active_date,
+            sessionsToday,
+          }
+          setState(newState)
+          persistState(newState) // localStorage도 업데이트
+        }
+      } catch {
+        // Supabase 로드 실패 시 localStorage 유지
+      }
+    }
+
+    loadFromSupabase()
+  }, [user])
+
+  // Supabase에 debounce 저장
+  const syncToSupabase = useCallback((s: GamificationState) => {
+    if (!user) return
+
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const supabase = createClient()
+        await supabase.from("gamification_data").upsert({
+          user_id: user.id,
+          total_xp: s.totalXp,
+          daily_streak: s.dailyStreak,
+          last_active_date: s.lastActiveDate,
+          sessions_today: s.sessionsToday,
+          updated_at: new Date().toISOString(),
+        }, { onConflict: "user_id" })
+      } catch {
+        // 저장 실패 시 무시
+      }
+    }, 1000)
+  }, [user])
 
   const calculateXpBreakdown = useCallback(
     (correctAnswers: number, totalQuestions: number, maxCombo: number): XpBreakdown => {
@@ -136,9 +204,10 @@ export function useGamification() {
       }
 
       persistState(next)
+      syncToSupabase(next) // Supabase에도 저장
       return next
     })
-  }, [])
+  }, [syncToSupabase])
 
   return {
     ...state,

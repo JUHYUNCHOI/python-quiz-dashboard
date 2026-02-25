@@ -232,7 +232,7 @@ export default function CurriculumPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-mint-50">
-      <Header studentName="학습자" level={1} />
+      <Header />
 
       {/* 커리큘럼: 넓은 레이아웃 + 양쪽 여백 */}
       <main className="w-full px-4 sm:px-6 lg:px-12 xl:px-20 pb-24">

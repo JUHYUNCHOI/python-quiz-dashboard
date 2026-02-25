@@ -14,7 +14,7 @@ export default function ProgressPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-mint-50 to-lavender-50">
-      <Header studentName="지민" level={5} />
+      <Header />
 
       {/* 학습 페이지: max-w-[1300px] + 중앙 정렬 */}
       <main className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 pb-24 pt-6">

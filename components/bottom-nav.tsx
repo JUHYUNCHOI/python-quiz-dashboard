@@ -1,11 +1,26 @@
 "use client"
 
-import { Home, BookOpen, Trophy, User } from "lucide-react"
+import { Home, BookOpen, Trophy, User, LayoutDashboard, Users } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
+import { useAuth } from "@/contexts/auth-context"
 
-const navItems = [
+const studentNav = [
+  { icon: Home, label: "홈", href: "/" },
+  { icon: BookOpen, label: "수업", href: "/curriculum" },
+  { icon: Users, label: "내 반", href: "/join" },
+  { icon: User, label: "내정보", href: "/profile" },
+]
+
+const teacherNav = [
+  { icon: Home, label: "홈", href: "/" },
+  { icon: BookOpen, label: "수업", href: "/curriculum" },
+  { icon: LayoutDashboard, label: "대시보드", href: "/teacher" },
+  { icon: User, label: "내정보", href: "/profile" },
+]
+
+const guestNav = [
   { icon: Home, label: "홈", href: "/" },
   { icon: BookOpen, label: "수업", href: "/curriculum" },
   { icon: Trophy, label: "랭킹", href: "/ranking" },
@@ -14,13 +29,20 @@ const navItems = [
 
 export function BottomNav() {
   const pathname = usePathname()
+  const { profile, isAuthenticated } = useAuth()
+
+  const navItems = !isAuthenticated
+    ? guestNav
+    : profile?.role === "teacher"
+      ? teacherNav
+      : studentNav
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 border-t border-gray-200 bg-white/95 backdrop-blur-sm z-50 safe-area-inset-bottom">
       <div className="container mx-auto flex justify-around px-2 py-2 md:py-3 max-w-2xl">
         {navItems.map((item) => {
           const Icon = item.icon
-          const isActive = pathname === item.href
+          const isActive = pathname === item.href || pathname.startsWith(item.href + "/")
 
           return (
             <Link
