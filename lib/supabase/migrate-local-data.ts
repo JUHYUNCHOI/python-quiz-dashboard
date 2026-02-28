@@ -65,9 +65,15 @@ export async function migrateLocalStorageToSupabase(userId: string) {
 
         const data = JSON.parse(raw)
         // key 형식: "practice-v2-{lessonId}" 또는 "practice-v2-{lessonId}-{variant}"
-        const parts = key.replace("practice-v2-", "").split("-")
-        const lessonId = parts[0]
-        const variant = parts.length > 1 ? parts.slice(1).join("-") : null
+        // lessonId는 "1", "p1", "cpp-1" 등 다양한 형태
+        // variant는 "turtle", "pygame" 등 알려진 이름만 해당
+        const remainder = key.replace("practice-v2-", "")
+        const knownVariants = ["turtle", "pygame"]
+        const lastDash = remainder.lastIndexOf("-")
+        const possibleVariant = lastDash > 0 ? remainder.substring(lastDash + 1) : ""
+        const isVariant = knownVariants.includes(possibleVariant)
+        const lessonId = isVariant ? remainder.substring(0, lastDash) : remainder
+        const variant = isVariant ? possibleVariant : null
 
         await supabase.from("lesson_progress").upsert({
           user_id: userId,

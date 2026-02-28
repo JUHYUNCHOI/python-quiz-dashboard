@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" width="480" height="320">
+  <rect width="480" height="320" rx="16" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="240" y="30" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#334155">C++ Data Types</text>
+
+  <!-- Row 1: int, double, string -->
+  <!-- int box -->
+  <rect x="20" y="50" width="138" height="110" rx="12" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <rect x="20" y="50" width="138" height="30" rx="12" fill="#3b82f6"/>
+  <rect x="20" y="68" width="138" height="12" fill="#3b82f6"/>
+  <text x="89" y="72" text-anchor="middle" font-family="monospace" font-size="14" font-weight="700" fill="white">int</text>
+  <text x="89" y="102" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#64748b">Integer</text>
+  <text x="89" y="126" text-anchor="middle" font-family="monospace" font-size="13" font-weight="600" fill="#1e40af">14</text>
+  <text x="89" y="148" text-anchor="middle" font-family="monospace" font-size="9" fill="#94a3b8">int age = 14;</text>
+
+  <!-- double box -->
+  <rect x="172" y="50" width="138" height="110" rx="12" fill="#fff7ed" stroke="#f97316" stroke-width="2"/>
+  <rect x="172" y="50" width="138" height="30" rx="12" fill="#f97316"/>
+  <rect x="172" y="68" width="138" height="12" fill="#f97316"/>
+  <text x="241" y="72" text-anchor="middle" font-family="monospace" font-size="14" font-weight="700" fill="white">double</text>
+  <text x="241" y="102" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#64748b">Decimal</text>
+  <text x="241" y="126" text-anchor="middle" font-family="monospace" font-size="13" font-weight="600" fill="#c2410c">3.14</text>
+  <text x="241" y="148" text-anchor="middle" font-family="monospace" font-size="9" fill="#94a3b8">double pi = 3.14;</text>
+
+  <!-- string box -->
+  <rect x="324" y="50" width="138" height="110" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+  <rect x="324" y="50" width="138" height="30" rx="12" fill="#10b981"/>
+  <rect x="324" y="68" width="138" height="12" fill="#10b981"/>
+  <text x="393" y="72" text-anchor="middle" font-family="monospace" font-size="14" font-weight="700" fill="white">string</text>
+  <text x="393" y="102" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#64748b">Text</text>
+  <text x="393" y="126" text-anchor="middle" font-family="monospace" font-size="13" font-weight="600" fill="#047857">"Hello"</text>
+  <text x="393" y="148" text-anchor="middle" font-family="monospace" font-size="9" fill="#94a3b8">string s = "Hello";</text>
+
+  <!-- Row 2: char, bool -->
+  <!-- char box -->
+  <rect x="96" y="180" width="138" height="110" rx="12" fill="#fdf4ff" stroke="#a855f7" stroke-width="2"/>
+  <rect x="96" y="180" width="138" height="30" rx="12" fill="#a855f7"/>
+  <rect x="96" y="198" width="138" height="12" fill="#a855f7"/>
+  <text x="165" y="202" text-anchor="middle" font-family="monospace" font-size="14" font-weight="700" fill="white">char</text>
+  <text x="165" y="232" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#64748b">Single char</text>
+  <text x="165" y="256" text-anchor="middle" font-family="monospace" font-size="13" font-weight="600" fill="#7e22ce">'A'</text>
+  <text x="165" y="278" text-anchor="middle" font-family="monospace" font-size="9" fill="#94a3b8">char g = 'A';</text>
+
+  <!-- bool box -->
+  <rect x="248" y="180" width="138" height="110" rx="12" fill="#fef2f2" stroke="#ef4444" stroke-width="2"/>
+  <rect x="248" y="180" width="138" height="30" rx="12" fill="#ef4444"/>
+  <rect x="248" y="198" width="138" height="12" fill="#ef4444"/>
+  <text x="317" y="202" text-anchor="middle" font-family="monospace" font-size="14" font-weight="700" fill="white">bool</text>
+  <text x="317" y="232" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#64748b">True / False</text>
+  <text x="317" y="256" text-anchor="middle" font-family="monospace" font-size="13" font-weight="600" fill="#dc2626">true</text>
+  <text x="317" y="278" text-anchor="middle" font-family="monospace" font-size="9" fill="#94a3b8">bool ok = true;</text>
+
+  <!-- Bottom note -->
+  <text x="240" y="312" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#94a3b8">int, double, string, bool — 4 most used types!</text>
+</svg>

@@ -112,6 +112,7 @@ export interface LessonData {
   id: string;
   title: string;
   description: string;
+  language?: "python" | "cpp";
   steps: StepContent[];
 }
 

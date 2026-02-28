@@ -262,6 +262,106 @@ const registry: Record<string, LessonEntry> = {
     load: () => import('./lessonP4'), exportName: 'lessonP4Data',
     enLoad: () => import('./lessonP4-en'), enExportName: 'lessonP4EnData',
   },
+
+  // C++ Part 1: 기초 (cpp-1 ~ cpp-8)
+  "cpp-1": {
+    load: () => import('./cpp/lesson1'), exportName: 'cppLesson1Data',
+    enLoad: () => import('./cpp/lesson1-en'), enExportName: 'cppLesson1EnData',
+  },
+  "cpp-2": {
+    load: () => import('./cpp/lesson2'), exportName: 'cppLesson2Data',
+    enLoad: () => import('./cpp/lesson2-en'), enExportName: 'cppLesson2EnData',
+  },
+  "cpp-3": {
+    load: () => import('./cpp/lesson3'), exportName: 'cppLesson3Data',
+    enLoad: () => import('./cpp/lesson3-en'), enExportName: 'cppLesson3EnData',
+  },
+  "cpp-4": {
+    load: () => import('./cpp/lesson4'), exportName: 'cppLesson4Data',
+    enLoad: () => import('./cpp/lesson4-en'), enExportName: 'cppLesson4EnData',
+  },
+  "cpp-5": {
+    load: () => import('./cpp/lesson5'), exportName: 'cppLesson5Data',
+    enLoad: () => import('./cpp/lesson5-en'), enExportName: 'cppLesson5EnData',
+  },
+  "cpp-6": {
+    load: () => import('./cpp/lesson6'), exportName: 'cppLesson6Data',
+    enLoad: () => import('./cpp/lesson6-en'), enExportName: 'cppLesson6EnData',
+  },
+  "cpp-7": {
+    load: () => import('./cpp/lesson7'), exportName: 'cppLesson7Data',
+    enLoad: () => import('./cpp/lesson7-en'), enExportName: 'cppLesson7EnData',
+  },
+  "cpp-8": {
+    load: () => import('./cpp/lesson8'), exportName: 'cppLesson8Data',
+    enLoad: () => import('./cpp/lesson8-en'), enExportName: 'cppLesson8EnData',
+  },
+
+  // C++ Part 2: 더 깊은 C++ (cpp-9 ~ cpp-14)
+  "cpp-9": {
+    load: () => import('./cpp/lesson9'), exportName: 'cppLesson9Data',
+    enLoad: () => import('./cpp/lesson9-en'), enExportName: 'cppLesson9EnData',
+  },
+  "cpp-10": {
+    load: () => import('./cpp/lesson10'), exportName: 'cppLesson10Data',
+    enLoad: () => import('./cpp/lesson10-en'), enExportName: 'cppLesson10EnData',
+  },
+  "cpp-11": {
+    load: () => import('./cpp/lesson11'), exportName: 'cppLesson11Data',
+    enLoad: () => import('./cpp/lesson11-en'), enExportName: 'cppLesson11EnData',
+  },
+  "cpp-12": {
+    load: () => import('./cpp/lesson12'), exportName: 'cppLesson12Data',
+    enLoad: () => import('./cpp/lesson12-en'), enExportName: 'cppLesson12EnData',
+  },
+  "cpp-13": {
+    load: () => import('./cpp/lesson13'), exportName: 'cppLesson13Data',
+    enLoad: () => import('./cpp/lesson13-en'), enExportName: 'cppLesson13EnData',
+  },
+  "cpp-14": {
+    load: () => import('./cpp/lesson14'), exportName: 'cppLesson14Data',
+    enLoad: () => import('./cpp/lesson14-en'), enExportName: 'cppLesson14EnData',
+  },
+
+  // C++ Part 3: USACO 준비 (cpp-15 ~ cpp-20)
+  "cpp-15": {
+    load: () => import('./cpp/lesson15'), exportName: 'cppLesson15Data',
+    enLoad: () => import('./cpp/lesson15-en'), enExportName: 'cppLesson15EnData',
+  },
+  "cpp-16": {
+    load: () => import('./cpp/lesson16'), exportName: 'cppLesson16Data',
+    enLoad: () => import('./cpp/lesson16-en'), enExportName: 'cppLesson16EnData',
+  },
+  "cpp-17": {
+    load: () => import('./cpp/lesson17'), exportName: 'cppLesson17Data',
+    enLoad: () => import('./cpp/lesson17-en'), enExportName: 'cppLesson17EnData',
+  },
+  "cpp-18": {
+    load: () => import('./cpp/lesson18'), exportName: 'cppLesson18Data',
+    enLoad: () => import('./cpp/lesson18-en'), enExportName: 'cppLesson18EnData',
+  },
+  "cpp-19": {
+    load: () => import('./cpp/lesson19'), exportName: 'cppLesson19Data',
+    enLoad: () => import('./cpp/lesson19-en'), enExportName: 'cppLesson19EnData',
+  },
+  "cpp-20": {
+    load: () => import('./cpp/lesson20'), exportName: 'cppLesson20Data',
+    enLoad: () => import('./cpp/lesson20-en'), enExportName: 'cppLesson20EnData',
+  },
+
+  // C++ 프로젝트 레슨
+  "cpp-p1": {
+    load: () => import('./cpp/lessonP1'), exportName: 'cppLessonP1Data',
+    enLoad: () => import('./cpp/lessonP1-en'), enExportName: 'cppLessonP1EnData',
+  },
+  "cpp-p2": {
+    load: () => import('./cpp/lessonP2'), exportName: 'cppLessonP2Data',
+    enLoad: () => import('./cpp/lessonP2-en'), enExportName: 'cppLessonP2EnData',
+  },
+  "cpp-p3": {
+    load: () => import('./cpp/lessonP3'), exportName: 'cppLessonP3Data',
+    enLoad: () => import('./cpp/lessonP3-en'), enExportName: 'cppLessonP3EnData',
+  },
 }
 
 // ============================================
@@ -419,5 +519,55 @@ export { lessonP2EnData } from './lessonP2-en'
 export { lessonP3EnData } from './lessonP3-en'
 export { lessonP4EnData } from './lessonP4-en'
 export { lessonP4PygameEnData } from './lessonP4-pygame-en'
+
+// C++ Korean lessons
+export { cppLesson1Data } from './cpp/lesson1'
+export { cppLesson2Data } from './cpp/lesson2'
+export { cppLesson3Data } from './cpp/lesson3'
+export { cppLesson4Data } from './cpp/lesson4'
+export { cppLesson5Data } from './cpp/lesson5'
+export { cppLesson6Data } from './cpp/lesson6'
+export { cppLesson7Data } from './cpp/lesson7'
+export { cppLesson8Data } from './cpp/lesson8'
+export { cppLesson9Data } from './cpp/lesson9'
+export { cppLesson10Data } from './cpp/lesson10'
+export { cppLesson11Data } from './cpp/lesson11'
+export { cppLesson12Data } from './cpp/lesson12'
+export { cppLesson13Data } from './cpp/lesson13'
+export { cppLesson14Data } from './cpp/lesson14'
+export { cppLesson15Data } from './cpp/lesson15'
+export { cppLesson16Data } from './cpp/lesson16'
+export { cppLesson17Data } from './cpp/lesson17'
+export { cppLesson18Data } from './cpp/lesson18'
+export { cppLesson19Data } from './cpp/lesson19'
+export { cppLesson20Data } from './cpp/lesson20'
+export { cppLessonP1Data } from './cpp/lessonP1'
+export { cppLessonP2Data } from './cpp/lessonP2'
+export { cppLessonP3Data } from './cpp/lessonP3'
+
+// C++ English lessons
+export { cppLesson1EnData } from './cpp/lesson1-en'
+export { cppLesson2EnData } from './cpp/lesson2-en'
+export { cppLesson3EnData } from './cpp/lesson3-en'
+export { cppLesson4EnData } from './cpp/lesson4-en'
+export { cppLesson5EnData } from './cpp/lesson5-en'
+export { cppLesson6EnData } from './cpp/lesson6-en'
+export { cppLesson7EnData } from './cpp/lesson7-en'
+export { cppLesson8EnData } from './cpp/lesson8-en'
+export { cppLesson9EnData } from './cpp/lesson9-en'
+export { cppLesson10EnData } from './cpp/lesson10-en'
+export { cppLesson11EnData } from './cpp/lesson11-en'
+export { cppLesson12EnData } from './cpp/lesson12-en'
+export { cppLesson13EnData } from './cpp/lesson13-en'
+export { cppLesson14EnData } from './cpp/lesson14-en'
+export { cppLesson15EnData } from './cpp/lesson15-en'
+export { cppLesson16EnData } from './cpp/lesson16-en'
+export { cppLesson17EnData } from './cpp/lesson17-en'
+export { cppLesson18EnData } from './cpp/lesson18-en'
+export { cppLesson19EnData } from './cpp/lesson19-en'
+export { cppLesson20EnData } from './cpp/lesson20-en'
+export { cppLessonP1EnData } from './cpp/lessonP1-en'
+export { cppLessonP2EnData } from './cpp/lessonP2-en'
+export { cppLessonP3EnData } from './cpp/lessonP3-en'
 
 export type { LessonData, LessonStep, Chapter } from './types'

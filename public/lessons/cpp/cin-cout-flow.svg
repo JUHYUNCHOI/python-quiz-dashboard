@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 200" width="480" height="200">
+  <rect width="480" height="200" rx="16" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/>
+
+  <!-- Keyboard icon -->
+  <rect x="20" y="55" width="80" height="55" rx="10" fill="#ede9fe" stroke="#8b5cf6" stroke-width="2"/>
+  <rect x="30" y="64" width="12" height="10" rx="2" fill="#c4b5fd" stroke="#7c3aed" stroke-width="1"/>
+  <rect x="46" y="64" width="12" height="10" rx="2" fill="#c4b5fd" stroke="#7c3aed" stroke-width="1"/>
+  <rect x="62" y="64" width="12" height="10" rx="2" fill="#c4b5fd" stroke="#7c3aed" stroke-width="1"/>
+  <rect x="30" y="78" width="12" height="10" rx="2" fill="#c4b5fd" stroke="#7c3aed" stroke-width="1"/>
+  <rect x="46" y="78" width="12" height="10" rx="2" fill="#c4b5fd" stroke="#7c3aed" stroke-width="1"/>
+  <rect x="62" y="78" width="12" height="10" rx="2" fill="#c4b5fd" stroke="#7c3aed" stroke-width="1"/>
+  <rect x="35" y="92" width="32" height="8" rx="2" fill="#c4b5fd" stroke="#7c3aed" stroke-width="1"/>
+  <text x="60" y="46" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#7c3aed" font-weight="600">Keyboard</text>
+
+  <!-- Arrow 1: keyboard → cin -->
+  <line x1="102" y1="82" x2="130" y2="82" stroke="#6366f1" stroke-width="2"/>
+  <polygon points="130,77 140,82 130,87" fill="#6366f1"/>
+
+  <!-- cin >> box -->
+  <rect x="142" y="62" width="68" height="40" rx="8" fill="#e0e7ff" stroke="#6366f1" stroke-width="2"/>
+  <text x="176" y="79" text-anchor="middle" font-family="monospace" font-size="12" font-weight="700" fill="#4338ca">cin &gt;&gt;</text>
+  <text x="176" y="92" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9" fill="#6366f1">input</text>
+
+  <!-- Arrow 2: cin → variable -->
+  <line x1="212" y1="82" x2="236" y2="82" stroke="#6366f1" stroke-width="2"/>
+  <polygon points="236,77 246,82 236,87" fill="#6366f1"/>
+
+  <!-- Variable box -->
+  <rect x="248" y="56" width="58" height="52" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+  <text x="277" y="78" text-anchor="middle" font-family="monospace" font-size="12" font-weight="700" fill="#b45309">x</text>
+  <text x="277" y="96" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9" fill="#b45309">variable</text>
+
+  <!-- Arrow 3: variable → cout -->
+  <line x1="308" y1="82" x2="330" y2="82" stroke="#10b981" stroke-width="2"/>
+  <polygon points="330,77 340,82 330,87" fill="#10b981"/>
+
+  <!-- cout << box -->
+  <rect x="342" y="62" width="68" height="40" rx="8" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+  <text x="376" y="79" text-anchor="middle" font-family="monospace" font-size="11" font-weight="700" fill="#047857">cout &lt;&lt;</text>
+  <text x="376" y="92" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9" fill="#10b981">output</text>
+
+  <!-- Arrow 4: cout → screen -->
+  <line x1="412" y1="82" x2="424" y2="82" stroke="#10b981" stroke-width="2"/>
+  <polygon points="424,77 434,82 424,87" fill="#10b981"/>
+
+  <!-- Screen icon -->
+  <rect x="436" y="55" width="30" height="22" rx="3" fill="#a7f3d0" stroke="#059669" stroke-width="1.5"/>
+  <rect x="439" y="58" width="24" height="16" rx="1" fill="#d1fae5"/>
+  <line x1="451" y1="77" x2="451" y2="82" stroke="#059669" stroke-width="2"/>
+  <line x1="444" y1="82" x2="458" y2="82" stroke="#059669" stroke-width="2" stroke-linecap="round"/>
+  <text x="451" y="46" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#059669" font-weight="600">Screen</text>
+
+  <!-- Direction labels -->
+  <text x="130" y="126" text-anchor="middle" font-family="monospace" font-size="11" font-weight="700" fill="#6366f1">&gt;&gt;</text>
+  <text x="130" y="140" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9" fill="#6366f1">into variable</text>
+
+  <text x="350" y="126" text-anchor="middle" font-family="monospace" font-size="11" font-weight="700" fill="#10b981">&lt;&lt;</text>
+  <text x="350" y="140" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9" fill="#10b981">to screen</text>
+
+  <!-- Bottom note -->
+  <text x="240" y="170" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#64748b">&gt;&gt; arrows point INTO variable, &lt;&lt; arrows point TO screen</text>
+  <text x="240" y="188" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#94a3b8">Arrow direction = data flow direction!</text>
+</svg>

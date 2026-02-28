@@ -11,7 +11,7 @@ export interface TestCase {
 
 export interface LessonStep {
   id: string
-  type: "explain" | "tryit" | "mission" | "quiz" | "interactive" | "coding"
+  type: "explain" | "tryit" | "mission" | "quiz" | "interactive" | "coding" | "fillblank" | "predict" | "practice"
   title: string
   content?: string
   code?: string
@@ -41,6 +41,8 @@ export interface LessonStep {
   codeTemplate?: string
   blanks?: { id: string; answer: string; hint?: string }[]
   choices?: string[]
+  // fillblank 타입용
+  fillBlanks?: { id: number; answer: string; options: string[] }[]
   // coding 타입용
   starterCode?: string
   testCases?: TestCase[]

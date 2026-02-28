@@ -17,28 +17,49 @@ import {
 } from "lucide-react"
 
 // ============================================================
-// /review에 실제 레슨이 있는 ID 목록 (게임형 복습)
+// 코스 타입
+// ============================================================
+type CourseType = "python" | "cpp"
+
+// ============================================================
+// /review에 실제 레슨이 있는 ID 목록 (게임형 복습) — Python 전용
 // ============================================================
 const lessonsInReview = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48])
+
+// C++ 복습이 있는 레슨 ID 목록
+const cppReviewIds = new Set([
+  "cpp-1", "cpp-2", "cpp-3", "cpp-4", "cpp-5", "cpp-6", "cpp-7", "cpp-8",
+  "cpp-9", "cpp-10", "cpp-11", "cpp-12", "cpp-13", "cpp-14",
+  "cpp-15", "cpp-16", "cpp-17", "cpp-18", "cpp-19", "cpp-20",
+  "cpp-p1", "cpp-p2", "cpp-p3"
+])
 
 // 복습 경로 결정: /review에 있으면 review, 없으면 learn으로 fallback
 const getReviewPath = (lessonId: number | string) => {
   if (typeof lessonId === 'number' && lessonsInReview.has(lessonId)) {
     return `/review/${lessonId}`
   }
+  if (typeof lessonId === 'string' && cppReviewIds.has(lessonId)) {
+    return `/review/${lessonId}`
+  }
   return `/learn/${lessonId}`
 }
 
 // ============================================================
-// 웹앱용 커리큘럼 (새 번호 체계)
+// 파트 데이터 타입
 // ============================================================
-const curriculumData: {
+type PartData = {
   id: string
   title: string
   description: string
   comingSoon?: boolean
   lessons: { id: number | string; title: string; description: string; duration: string; hasQuiz?: boolean; isProject?: boolean }[]
-}[] = [
+}
+
+// ============================================================
+// 🐍 Python 커리큘럼
+// ============================================================
+const pythonCurriculumData: PartData[] = [
   {
     id: "part1",
     title: "Part 1: 기초",
@@ -167,16 +188,79 @@ const curriculumData: {
   },
 ]
 
+// ============================================================
+// ⚡ C++ 커리큘럼
+// ============================================================
+const cppCurriculumData: PartData[] = [
+  {
+    id: "cpp-part1",
+    title: "Part 1: C++ 기초",
+    description: "파이썬을 아는 학생을 위한 C++ 입문! 두 언어의 차이부터 시작해서 기본 문법을 배워요.",
+    lessons: [
+      { id: "cpp-1", title: "1. 파이썬 vs C++", description: "인터프리터 vs 컴파일러, 핵심 차이", duration: "20분", hasQuiz: true },
+      { id: "cpp-3", title: "2. 변수와 타입", description: "int, double, string 직접 선언", duration: "20분", hasQuiz: true },
+      { id: "cpp-2", title: "3. cout 심화 & namespace", description: "숫자·수식 출력, 이스케이프, using namespace std", duration: "20분", hasQuiz: true },
+      { id: "cpp-4", title: "4. cin 입력", description: "cin >>으로 입력받기", duration: "20분", hasQuiz: true },
+      { id: "cpp-5", title: "5. 연산자", description: "정수 나눗셈, ++, &&, || 연산자", duration: "20분", hasQuiz: true },
+      { id: "cpp-6", title: "6. 조건문 (if/else)", description: "중괄호 {}와 switch/case", duration: "20분", hasQuiz: true },
+      { id: "cpp-7", title: "7. 반복문 (for/while)", description: "for(int i=0; i<n; i++)", duration: "20분", hasQuiz: true },
+      { id: "cpp-8", title: "8. 함수", description: "반환 타입, void, 함수 오버로딩", duration: "20분", hasQuiz: true },
+      { id: "cpp-p1", title: "🎮 숫자 맞추기 게임", description: "Part 1 복습 프로젝트", duration: "25분", isProject: true },
+    ],
+  },
+  {
+    id: "cpp-part2",
+    title: "Part 2: 더 깊은 C++",
+    description: "배열, 벡터, 참조, 포인터, 클래스까지! C++만의 강력한 기능을 배워요.",
+    lessons: [
+      { id: "cpp-9", title: "9. 배열 & 벡터", description: "int arr[5], vector<int>, push_back", duration: "25분", hasQuiz: true },
+      { id: "cpp-10", title: "10. Range-for & auto", description: "for(auto x : vec), 타입 추론", duration: "20분", hasQuiz: true },
+      { id: "cpp-11", title: "11. 문자열 심화", description: "substr, find, replace, 비교", duration: "20분", hasQuiz: true },
+      { id: "cpp-12", title: "12. 참조와 함수", description: "int& ref, call by reference", duration: "25분", hasQuiz: true },
+      { id: "cpp-13", title: "13. 포인터 기초", description: "int* ptr, &, *, nullptr", duration: "25분", hasQuiz: true },
+      { id: "cpp-14", title: "14. 구조체 & 클래스", description: "struct, class, 생성자", duration: "25분", hasQuiz: true },
+      { id: "cpp-p2", title: "⚔️ RPG 캐릭터 관리", description: "Part 2 복습 프로젝트", duration: "30분", isProject: true },
+    ],
+  },
+  {
+    id: "cpp-part3",
+    title: "Part 3: USACO 준비",
+    description: "대회 프로그래밍(CP)에 필요한 STL 컨테이너, 알고리즘, Fast I/O, 비트 연산을 마스터해요!",
+    lessons: [
+      { id: "cpp-15", title: "15. pair & 정렬", description: "pair<int,int>, sort(), 커스텀 비교", duration: "25분", hasQuiz: true },
+      { id: "cpp-16", title: "16. map & set", description: "map, unordered_map, set", duration: "25분", hasQuiz: true },
+      { id: "cpp-17", title: "17. STL 알고리즘", description: "sort, find, lower_bound, accumulate", duration: "25분", hasQuiz: true },
+      { id: "cpp-18", title: "18. stack, queue & deque", description: "STL 컨테이너, priority_queue", duration: "25분", hasQuiz: true },
+      { id: "cpp-19", title: "19. 파일 I/O & Fast I/O", description: "freopen, ifstream, sync_with_stdio", duration: "25분", hasQuiz: true },
+      { id: "cpp-20", title: "20. CP 실전 팁", description: "bits/stdc++.h, typedef, 비트 연산", duration: "25분", hasQuiz: true },
+      { id: "cpp-p3", title: "🏆 USACO 모의전", description: "Part 3 복습 프로젝트", duration: "30분", isProject: true },
+    ],
+  },
+]
+
 export default function CurriculumPage() {
   const [completedLessons, setCompletedLessons] = useState<Set<number | string>>(new Set())
-  const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set(["part1", "part2", "part3", "part3-advanced", "part4", "part5", "part6", "part7", "part8", "part9"]))
+  const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set(["part1", "part2", "part3", "part3-advanced", "part4", "part5", "part6", "part7", "part8", "part9", "cpp-part1", "cpp-part2", "cpp-part3"]))
+  const [selectedCourse, setSelectedCourse] = useState<CourseType>("python")
 
   useEffect(() => {
     const saved = localStorage.getItem("completedLessons")
     if (saved) {
       setCompletedLessons(new Set(JSON.parse(saved)))
     }
+    const savedCourse = localStorage.getItem("selectedCourse") as CourseType
+    if (savedCourse === "python" || savedCourse === "cpp") {
+      setSelectedCourse(savedCourse)
+    }
   }, [])
+
+  const handleCourseChange = (course: CourseType) => {
+    setSelectedCourse(course)
+    localStorage.setItem("selectedCourse", course)
+  }
+
+  const curriculumData = selectedCourse === "python" ? pythonCurriculumData : cppCurriculumData
+  const isCpp = selectedCourse === "cpp"
 
   // URL hash로 해당 레슨 위치로 스크롤
   useEffect(() => {
@@ -237,17 +321,47 @@ export default function CurriculumPage() {
       {/* 커리큘럼: 넓은 레이아웃 + 양쪽 여백 */}
       <main className="w-full px-4 sm:px-6 lg:px-12 xl:px-20 pb-24">
         
+        {/* 코스 선택 탭 */}
+        <div className="max-w-[1600px] mx-auto mb-4">
+          <div className="flex gap-2">
+            <button
+              onClick={() => handleCourseChange("python")}
+              className={`flex items-center gap-2 px-5 py-3 rounded-xl border-3 border-black font-bold text-base transition-all ${
+                selectedCourse === "python"
+                  ? "bg-orange-400 text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
+                  : "bg-white text-gray-600 hover:bg-orange-50"
+              }`}
+            >
+              🐍 Python
+            </button>
+            <button
+              onClick={() => handleCourseChange("cpp")}
+              className={`flex items-center gap-2 px-5 py-3 rounded-xl border-3 border-black font-bold text-base transition-all ${
+                selectedCourse === "cpp"
+                  ? "bg-blue-500 text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
+                  : "bg-white text-gray-600 hover:bg-blue-50"
+              }`}
+            >
+              ⚡ C++
+            </button>
+          </div>
+        </div>
+
         {/* 상단 진도 바 */}
         <div className="max-w-[1600px] mx-auto">
-          <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-6 border-4 border-black">
+          <div className={`bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-6 border-4 border-black`}>
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4">
               <div className="flex items-center gap-4">
-                <div className="bg-orange-100 p-3 rounded-xl border-2 border-black">
-                  <BookOpen className="h-8 w-8 text-orange-500" />
+                <div className={`${isCpp ? 'bg-blue-100' : 'bg-orange-100'} p-3 rounded-xl border-2 border-black`}>
+                  <BookOpen className={`h-8 w-8 ${isCpp ? 'text-blue-500' : 'text-orange-500'}`} />
                 </div>
                 <div>
-                  <h1 className="text-2xl sm:text-3xl font-bold">파이썬 기초 마스터</h1>
-                  <p className="text-gray-600 text-sm sm:text-base">웹에서 바로 배우는 파이썬! 🚀</p>
+                  <h1 className="text-2xl sm:text-3xl font-bold">
+                    {isCpp ? "C++ 기초 (파이썬 → C++)" : "파이썬 기초 마스터"}
+                  </h1>
+                  <p className="text-gray-600 text-sm sm:text-base">
+                    {isCpp ? "파이썬을 아는 학생을 위한 C++ 입문! ⚡" : "웹에서 바로 배우는 파이썬! 🚀"}
+                  </p>
                 </div>
               </div>
               
@@ -269,13 +383,13 @@ export default function CurriculumPage() {
               <div className="flex-1">
                 <div className="h-4 sm:h-5 bg-gray-200 rounded-full border-2 border-black overflow-hidden">
                   <div
-                    className="h-full bg-gradient-to-r from-orange-400 to-orange-500 transition-all duration-500"
+                    className={`h-full transition-all duration-500 ${isCpp ? 'bg-gradient-to-r from-blue-400 to-blue-500' : 'bg-gradient-to-r from-orange-400 to-orange-500'}`}
                     style={{ width: `${progress}%` }}
                   />
                 </div>
               </div>
               <div className="text-right flex-shrink-0">
-                <span className="text-xl sm:text-2xl font-bold text-orange-500">{progress}%</span>
+                <span className={`text-xl sm:text-2xl font-bold ${isCpp ? 'text-blue-500' : 'text-orange-500'}`}>{progress}%</span>
                 <span className="text-gray-500 ml-1 text-sm">({completedCount}/{totalCount})</span>
               </div>
             </div>
@@ -328,11 +442,11 @@ export default function CurriculumPage() {
                             <span className="text-xs font-semibold text-gray-500">
                               {partCompletedCount}/{partLessons.length} 완료
                             </span>
-                            <span className="text-xs font-bold text-orange-500">{partProgress}%</span>
+                            <span className={`text-xs font-bold ${isCpp ? 'text-blue-500' : 'text-orange-500'}`}>{partProgress}%</span>
                           </div>
                           <div className="h-2 bg-gray-200 rounded-full border border-black overflow-hidden">
                             <div
-                              className="h-full bg-gradient-to-r from-orange-400 to-orange-500 transition-all duration-300"
+                              className={`h-full transition-all duration-300 ${isCpp ? 'bg-gradient-to-r from-blue-400 to-blue-500' : 'bg-gradient-to-r from-orange-400 to-orange-500'}`}
                               style={{ width: `${partProgress}%` }}
                             />
                           </div>
@@ -398,20 +512,24 @@ export default function CurriculumPage() {
                                 <div className="flex gap-2 flex-shrink-0">
                                   <Link
                                     href={`/learn/${lesson.id}`}
-                                    className="px-3 sm:px-4 py-2 rounded-lg border-2 border-black font-bold bg-green-500 text-white hover:bg-green-600 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-xs sm:text-sm"
+                                    className={`px-3 sm:px-4 py-2 rounded-lg border-2 border-black font-bold text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-xs sm:text-sm ${
+                                      isCpp ? "bg-blue-500 hover:bg-blue-600" : "bg-green-500 hover:bg-green-600"
+                                    }`}
                                   >
                                     📺 수업
                                   </Link>
-                                  <Link
-                                    href={getReviewPath(lesson.id)}
-                                    className={`px-3 sm:px-4 py-2 rounded-lg border-2 border-black font-bold text-xs sm:text-sm ${
-                                      isCompleted
-                                        ? "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                                        : "bg-orange-400 text-white hover:bg-orange-500 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
-                                    }`}
-                                  >
-                                    🎮 퀴즈
-                                  </Link>
+                                  {(!isCpp || cppReviewIds.has(String(lesson.id))) && (
+                                    <Link
+                                      href={getReviewPath(lesson.id)}
+                                      className={`px-3 sm:px-4 py-2 rounded-lg border-2 border-black font-bold text-xs sm:text-sm ${
+                                        isCompleted
+                                          ? "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                                          : "bg-orange-400 text-white hover:bg-orange-500 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                                      }`}
+                                    >
+                                      🎮 퀴즈
+                                    </Link>
+                                  )}
                                 </div>
                               </div>
                             </div>

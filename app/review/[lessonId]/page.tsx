@@ -31,6 +31,9 @@ import { PythonRunner } from "@/components/code-runner/PythonRunner"
 // 커스텀 Python 파서 (함수 지원)
 import { runPythonCode } from "./utils/pythonRunner"
 
+// Supabase 진도 동기화
+import { useLessonSync } from "@/hooks/use-lesson-sync"
+
 // ============================================================
 // Python Syntax Highlighting (경량 토크나이저)
 // ============================================================
@@ -128,6 +131,138 @@ function highlightPythonLine(line: string): React.ReactNode[] {
 }
 
 // ============================================================
+// C++ Syntax Highlighting (경량 토크나이저)
+// ============================================================
+const CPP_KEYWORDS = new Set([
+  'if','else','while','for','do','switch','case','break','continue',
+  'return','int','float','double','char','string','bool','void','auto',
+  'const','static','class','struct','public','private','protected',
+  'using','namespace','include','true','false','endl','cout','cin',
+  'nullptr','new','delete','template','typename','virtual','override'
+])
+const CPP_PREPROCESSOR = new Set(['#include','#define','#ifdef','#ifndef','#endif','#pragma'])
+
+function highlightCppLine(line: string): React.ReactNode[] {
+  if (!line || !line.trim()) return [<span key={0}>{'\u00A0'}</span>]
+
+  const tokens: React.ReactNode[] = []
+  let pos = 0
+  let key = 0
+
+  const push = (text: string, cls: string) => {
+    tokens.push(<span key={key++} className={cls}>{text}</span>)
+  }
+
+  while (pos < line.length) {
+    const ch = line[pos]
+
+    // 1) 공백
+    if (ch === ' ' || ch === '\t') {
+      let end = pos
+      while (end < line.length && (line[end] === ' ' || line[end] === '\t')) end++
+      push(line.slice(pos, end), "")
+      pos = end
+      continue
+    }
+
+    // 2) 전처리기 지시문 (#include 등)
+    if (ch === '#') {
+      let end = pos + 1
+      while (end < line.length && /[a-zA-Z]/.test(line[end])) end++
+      const directive = line.slice(pos, end)
+      if (CPP_PREPROCESSOR.has(directive)) {
+        push(directive, "text-purple-400")
+        pos = end
+        // #include 뒤의 <...> 처리
+        if (directive === '#include') {
+          // 공백 건너뛰기
+          while (pos < line.length && line[pos] === ' ') {
+            push(' ', "")
+            pos++
+          }
+          if (pos < line.length && line[pos] === '<') {
+            let endBracket = pos + 1
+            while (endBracket < line.length && line[endBracket] !== '>') endBracket++
+            if (endBracket < line.length) endBracket++
+            push(line.slice(pos, endBracket), "text-green-400")
+            pos = endBracket
+          }
+        }
+        continue
+      }
+      push(ch, "text-gray-400")
+      pos++
+      continue
+    }
+
+    // 3) 주석 (//)
+    if (ch === '/' && pos + 1 < line.length && line[pos + 1] === '/') {
+      push(line.slice(pos), "text-gray-500 italic")
+      break
+    }
+
+    // 4) 문자열
+    if (ch === '"' || ch === "'") {
+      let start = pos
+      const q = ch
+      pos++
+      while (pos < line.length && line[pos] !== q) {
+        if (line[pos] === '\\') pos++
+        pos++
+      }
+      if (pos < line.length) pos++
+      push(line.slice(start, pos), "text-green-400")
+      continue
+    }
+
+    // 5) 숫자
+    if (/[0-9]/.test(ch)) {
+      let end = pos
+      while (end < line.length && /[0-9.]/.test(line[end])) end++
+      push(line.slice(pos, end), "text-orange-300")
+      pos = end
+      continue
+    }
+
+    // 6) 식별자 / 키워드
+    if (/[a-zA-Z_]/.test(ch)) {
+      let end = pos
+      while (end < line.length && /[a-zA-Z0-9_]/.test(line[end])) end++
+      const word = line.slice(pos, end)
+      if (CPP_KEYWORDS.has(word)) {
+        push(word, "text-purple-400")
+      } else if (word === 'std' || word === 'main') {
+        push(word, "text-yellow-300")
+      } else {
+        push(word, "text-blue-300")
+      }
+      pos = end
+      continue
+    }
+
+    // 7) << >> 연산자
+    if ((ch === '<' || ch === '>') && pos + 1 < line.length && line[pos + 1] === ch) {
+      push(ch + ch, "text-gray-400")
+      pos += 2
+      continue
+    }
+
+    // 8) 연산자 / 구두점
+    if ('()[]{}:=+-*/%<>!,.;@&|^~'.includes(ch)) {
+      push(ch, "text-gray-400")
+      pos++
+      continue
+    }
+
+    // 9) 기타
+    push(ch, "text-gray-300")
+    pos++
+  }
+
+  return tokens
+}
+
+// ============================================================
 // 로컬 타입 정의 (컴포넌트 전용)
 // ============================================================
 interface Step {
@@ -151,7 +286,11 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
   const router = useRouter()
 
   const lesson = lessonsData[lessonId]
-  
+  const highlightLine = lesson?.language === "cpp" ? highlightCppLine : highlightPythonLine
+
+  // Supabase 진도 동기화
+  const { syncProgress, syncCompletion, loadFromCloud } = useLessonSync(lessonId, null, "review")
+
   const [step, setStep] = useState(0)
   const [input, setInput] = useState("")
   const [phase, setPhase] = useState<"input" | "correct" | "wrong">("input")
@@ -207,29 +346,39 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
           setWrongAnswers(Array.isArray(data.wrongAnswers) ? data.wrongAnswers : [])
           setStreak(typeof data.streak === 'number' ? data.streak : 0)
         } else if (savedStep >= lesson.steps.length) {
-          // 저장된 step이 범위 밖이면 초기화
           localStorage.removeItem(`lesson-${lessonId}`)
         }
+      } else {
+        // localStorage 비어있으면 Supabase에서 복구 시도
+        loadFromCloud().then(data => {
+          if (data && lesson) {
+            const savedStep = typeof data.step === 'number' ? data.step as number : 0
+            if (savedStep > 0 && savedStep < lesson.steps.length) {
+              setStep(savedStep)
+              setScore(typeof data.score === 'number' ? data.score as number : 0)
+              setWrongAnswers(Array.isArray(data.wrongAnswers) ? data.wrongAnswers as typeof wrongAnswers : [])
+              setStreak(typeof data.streak === 'number' ? data.streak as number : 0)
+            }
+          }
+        })
       }
     } catch (e) {
       console.error('Failed to load progress', e)
       try { localStorage.removeItem(`lesson-${lessonId}`) } catch {}
     }
-  }, [lessonId, lesson])
+  }, [lessonId, lesson, loadFromCloud])
 
   useEffect(() => {
     if (!lesson) return
+    const progressData = { step, score, wrongAnswers, streak }
     try {
-      localStorage.setItem(`lesson-${lessonId}`, JSON.stringify({
-        step,
-        score,
-        wrongAnswers,
-        streak
-      }))
+      localStorage.setItem(`lesson-${lessonId}`, JSON.stringify(progressData))
     } catch {
       // localStorage 접근 불가 시 무시
     }
-  }, [step, score, wrongAnswers, streak, lessonId, lesson])
+    // Supabase에도 동기화 (debounced, fire-and-forget)
+    syncProgress(progressData)
+  }, [step, score, wrongAnswers, streak, lessonId, lesson, syncProgress])
 
   // ============================================================
   // 입력 포커스
@@ -369,12 +518,13 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
       if (step + 1 < (lesson?.steps.length || 0)) {
         setStep(step + 1)
       } else {
+        syncCompletion(score)
         try { localStorage.removeItem(`lesson-${lessonId}`) } catch {}
         router.push("/curriculum")
       }
       setIsTransitioning(false)
     }, 200)
-  }, [step, lesson, lessonId, router])
+  }, [step, score, lesson, lessonId, router, syncCompletion])
 
   // ============================================================
   // 키보드 이벤트
@@ -640,6 +790,66 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
       code = sc.template.before + input + sc.template.after
     } else {
       code = input
+    }
+
+    // C++: 코드 실행 불가 → 문자열 비교
+    if (lesson?.language === "cpp") {
+      const target = sc.target || sc.expect
+      const normalize = (s: string) => s.replace(/\s+/g, ' ').trim().toLowerCase()
+      const normalizeStrict = (s: string) => s.replace(/\s+/g, '').trim().toLowerCase()
+
+      // 정답 비교: answer 또는 expect와 코드 비교
+      const codeNorm = normalizeStrict(code)
+      const answerMatch = normalizeStrict(sc.answer || '') === codeNorm
+        || normalizeStrict(target) === normalizeStrict(code)
+        || (sc.alternateAnswers || []).some((alt: string) => normalizeStrict(alt) === codeNorm)
+
+      if (answerMatch) {
+        setOutput(target)
+        setErrorMsg("")
+        setPhase("correct")
+        setPraise(getRandomPraise())
+        const newStreak = streak + 1
+        setStreak(newStreak)
+        let points = tries === 0 ? 10 : tries === 1 ? 7 : tries === 2 ? 5 : 3
+        if (newStreak > 0 && newStreak % 5 === 0) {
+          points += 20
+          setShowStreakBonus(true)
+          setTimeout(() => setShowStreakBonus(false), 2000)
+        }
+        setScore(score + points)
+        setTimeout(() => {
+          if (showReview) {
+            if (reviewIndex + 1 < wrongAnswers.length) {
+              setReviewIndex(reviewIndex + 1)
+            } else {
+              setShowReview(false)
+              next()
+            }
+          } else {
+            next()
+          }
+        }, 1500)
+        return
+      } else {
+        setOutput("")
+        setErrorMsg("다시 확인해봐!")
+        setPhase("wrong")
+        const newTries = tries + 1
+        setTries(newTries)
+        setStreak(0)
+        if (newTries >= 1) setShowHint(Math.min(showHint + 1, 3))
+        if (newTries === 1 && !showReview) {
+          setWrongAnswers(prev => [...prev, {
+            stepIndex: step,
+            task: sc.task,
+            answer: sc.answer,
+            expect: sc.expect || sc.target
+          }])
+        }
+        setTimeout(() => setPhase("input"), 800)
+        return
+      }
     }
 
     // 함수 정의가 포함된 코드면 새 파서 사용, 아니면 기존 파서 사용
@@ -1170,7 +1380,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                             : "opacity-0 h-0 overflow-hidden"
                         )}
                       >
-                        {highlightPythonLine(line)}
+                        {highlightLine(line)}
                       </div>
                     ))}
                     {!typingComplete && (
@@ -1182,7 +1392,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                 {/* 클릭 안내 - 아직 줄이 남아있을 때 */}
                 {!typingComplete && visibleLines > 0 && (
                   <div className="px-4 py-2 bg-gray-800 text-center">
-                    <span className="text-gray-500 text-sm">탭 / Enter / Space 로 다음 줄</span>
+                    <span className="text-gray-500 text-sm">👆 탭하면 다음 줄이 나와요!</span>
                   </div>
                 )}
                 
@@ -1290,7 +1500,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
               <div className="p-6 md:p-8 bg-gray-900">
                 <div className="font-mono text-lg md:text-2xl whitespace-pre text-left font-bold leading-relaxed">
                   {c.code.split('\n').map((codeLine: string, i: number) => (
-                    <div key={i}>{highlightPythonLine(codeLine)}</div>
+                    <div key={i}>{highlightLine(codeLine)}</div>
                   ))}
                 </div>
               </div>
@@ -1372,7 +1582,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                           if (li > 0) elements.push(<br key={`br-${i}-${li}`} />)
                           elements.push(
                             <span key={`text-${i}-${li}`}>
-                              {highlightPythonLine(line)}
+                              {highlightLine(line)}
                             </span>
                           )
                         })
@@ -1514,7 +1724,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                           if (li > 0) elements.push(<br key={`br-${i}-${li}`} />)
                           elements.push(
                             <span key={`text-${i}-${li}`}>
-                              {highlightPythonLine(line)}
+                              {highlightLine(line)}
                             </span>
                           )
                         })
@@ -1850,8 +2060,10 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
               </p>
             </div>
             
-            <Button 
+            <Button
               onClick={() => {
+                // Supabase에 완료 기록
+                syncCompletion(score)
                 try { localStorage.removeItem(`lesson-${lessonId}`) } catch {}
                 router.push("/curriculum")
               }}

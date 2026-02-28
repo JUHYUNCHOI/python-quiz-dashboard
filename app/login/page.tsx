@@ -81,7 +81,7 @@ function LoginContent() {
         {/* 로고 */}
         <div className="text-center">
           <div className="text-[80px] leading-none mb-2">🦒</div>
-          <h1 className="text-2xl font-bold text-gray-800">기린 퀴즈</h1>
+          <h1 className="text-2xl font-bold text-gray-800">파이린</h1>
           <p className="text-sm text-gray-500 mt-1">재미있게 배우는 파이썬</p>
         </div>
 

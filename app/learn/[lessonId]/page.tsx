@@ -9,6 +9,7 @@ import { LanguageToggle } from "@/components/language-toggle"
 import { LibraryToggle, type LibraryVariant } from "@/components/library-toggle"
 import { SoundToggle } from "@/components/sound-toggle"
 import { useSoundEffect } from "@/hooks/use-sound-effect"
+import { useLessonSync } from "@/hooks/use-lesson-sync"
 
 // 분리된 컴포넌트
 import { Confetti } from "@/components/learn/confetti"
@@ -32,6 +33,11 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     if (typeof window === 'undefined') return 'turtle'
     try { return (localStorage.getItem(`library-variant-${lessonId}`) as LibraryVariant) || 'turtle' } catch { return 'turtle' }
   })
+
+  // Supabase 진도 동기화
+  const { syncProgress, syncCompletion, loadFromCloud } = useLessonSync(
+    lessonId, hasVariants ? variant : null, "learn"
+  )
 
   // 레슨 데이터 선택: variant가 있으면 variant[lang], 아니면 bilingual 또는 기본
   const lesson = hasVariants
@@ -69,7 +75,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const canGoNext = () => {
     if (!step) return false
     if (isReviewMode) return false // 복습 모드에서는 "확인" 버튼으로만 이동
-    if (step.type === "explain" || step.type === "interactive" || step.type === "tryit" || step.type === "animation") return true
+    if (step.type === "explain" || step.type === "interactive" || step.type === "tryit" || step.type === "animation" || step.type === "practice") return true
     return isCurrentStepCompleted
   }
 
@@ -101,16 +107,29 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
         setScore(data.score || 0)
         setCompletedSteps(new Set(data.completed || []))
       } catch {}
+    } else {
+      // localStorage 비어있으면 Supabase에서 복구 시도
+      loadFromCloud().then(data => {
+        if (data) {
+          setCurrentChapter((data.chapter as number) || 0)
+          setCurrentStep((data.step as number) || 0)
+          setScore((data.score as number) || 0)
+          setCompletedSteps(new Set((data.completed as string[]) || []))
+        }
+      })
     }
-  }, [progressKey])
+  }, [progressKey, loadFromCloud])
 
   useEffect(() => {
     if (!lesson) return
-    localStorage.setItem(progressKey, JSON.stringify({
+    const progressData = {
       chapter: currentChapter, step: currentStep, score,
       completed: Array.from(completedSteps)
-    }))
-  }, [currentChapter, currentStep, score, completedSteps, progressKey, lesson])
+    }
+    localStorage.setItem(progressKey, JSON.stringify(progressData))
+    // Supabase에도 동기화 (debounced, fire-and-forget)
+    syncProgress(progressData)
+  }, [currentChapter, currentStep, score, completedSteps, progressKey, lesson, syncProgress])
 
   if (!lesson || !chapter || !step) {
     return (
@@ -162,6 +181,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       play("chapterComplete")
       setTimeout(() => setShowConfetti(false), 3000)
     } else {
+      // 마지막 챕터 완료 → Supabase에 완료 기록
+      syncCompletion(score)
       setShowConfetti(true)
       setShowLessonComplete(true)
       play("lessonComplete")
@@ -273,6 +294,70 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
         // 일반 모드에서 오답: wrongQueue에 추가
         setWrongQueue(prev => [...prev, step])
       }
+    }
+  }
+
+  // fillblank 등 새 인터랙티브 스텝용 핸들러
+  const handleStepComplete = (correct: boolean) => {
+    if (correct) {
+      play("correct")
+      if (isReviewMode) {
+        const newQueue = wrongQueue.filter((_, i) => i !== reviewIndex)
+        setWrongQueue(newQueue)
+        if (!completedSteps.has(step.id)) {
+          setScore(score + 10)
+          setCompletedSteps(new Set([...completedSteps, step.id]))
+        }
+        setShowConfetti(true)
+        setSuccessMessage("이번엔 맞았어요! 🎉")
+        setShowSuccess(true)
+        setTimeout(() => setShowConfetti(false), 2000)
+        setTimeout(() => {
+          if (newQueue.length === 0) {
+            finishChapter()
+          } else {
+            setReviewIndex(prev => prev >= newQueue.length ? 0 : prev)
+            resetStepState()
+          }
+        }, 1200)
+      } else {
+        if (!completedSteps.has(step.id)) {
+          setScore(score + 10)
+          setCompletedSteps(new Set([...completedSteps, step.id]))
+          setShowConfetti(true)
+          setSuccessMessage("정답! 🎉")
+          setShowSuccess(true)
+          setTimeout(() => setShowConfetti(false), 2000)
+        }
+      }
+    } else {
+      play("wrong")
+      if (!isReviewMode) {
+        setWrongQueue(prev => [...prev, step])
+      }
+    }
+  }
+
+  const handleStepAcknowledge = () => {
+    if (!completedSteps.has(step.id)) {
+      setCompletedSteps(new Set([...completedSteps, step.id]))
+    }
+    if (isReviewMode) {
+      const failedStep = wrongQueue[reviewIndex]
+      const newQueue = wrongQueue.filter((_, i) => i !== reviewIndex)
+      newQueue.push(failedStep)
+      setWrongQueue(newQueue)
+      resetStepState()
+      return
+    }
+    if (currentStep < chapter.steps.length - 1) {
+      setCurrentStep(currentStep + 1)
+      resetStepState()
+    } else if (wrongQueue.length > 0) {
+      setReviewIndex(0)
+      resetStepState()
+    } else {
+      finishChapter()
     }
   }
 
@@ -451,6 +536,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
               quizAttempts={quizAttempts}
               onQuizAnswer={handleQuizAnswer}
               onQuizAcknowledge={acknowledgeQuiz}
+              onStepComplete={handleStepComplete}
+              onStepAcknowledge={handleStepAcknowledge}
               isReview={isReviewMode}
             />
           </div>

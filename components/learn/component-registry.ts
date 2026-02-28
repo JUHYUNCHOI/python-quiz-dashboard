@@ -139,6 +139,43 @@ const registry: Record<string, ComponentEntry> = {
     exportName: "ClassBoonguhAnimation",
   },
 
+  // C++ 레슨: 컴파일 시뮬레이터
+  compileVisualizer: {
+    load: () => import("@/components/animations/compile-visualizer"),
+    exportName: "CompileVisualizer",
+    props: (_step: any, lang: string) => ({
+      lang,
+    }),
+  },
+
+  // C++ 레슨: 문법 차이 찾기 게임
+  syntaxSpotter: {
+    load: () => import("@/components/animations/syntax-spotter"),
+    exportName: "SyntaxSpotter",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+
+  // C++ 레슨: Hello World 조립 퍼즐
+  helloWorldBuilder: {
+    load: () => import("@/components/animations/hello-world-builder"),
+    exportName: "HelloWorldBuilder",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+
+  // C++ 레슨: 게임 캐릭터 cout 미션
+  coutMission: {
+    load: () => import("@/components/animations/cout-mission"),
+    exportName: "CoutMission",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+
+  // C++ 레슨: 빌드-실행 플로우 애니메이션
+  buildRunFlow: {
+    load: () => import("@/components/animations/build-run-flow"),
+    exportName: "BuildRunFlow",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+
   // Lesson 35: 파일 읽고 쓰기
   memoryVsFile: {
     load: () => import("@/components/animations/file-io"),

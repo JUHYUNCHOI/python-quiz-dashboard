@@ -185,6 +185,181 @@ for num in numbers:
     },
     {
       id: "ch4",
+      title: "zip으로 묶기",
+      emoji: "🤝",
+      steps: [
+        {
+          id: "zip-explain",
+          type: "explain",
+          title: "🤝 zip() — 두 리스트를 짝짓기!",
+          content: `두 개의 리스트를 하나로 묶고 싶을 때:
+
+\`\`\`python
+names = ["철수", "영희", "민수"]
+scores = [85, 92, 78]
+
+for name, score in zip(names, scores):
+    print(f"{name}: {score}점")
+# 철수: 85점
+# 영희: 92점
+# 민수: 78점
+\`\`\`
+
+| 방법 | 코드 | 느낌 |
+|------|------|------|
+| range(len()) | \`for i in range(len(names)): names[i], scores[i]\` | 복잡 😵 |
+| **zip()** | \`for name, score in zip(names, scores)\` | 깔끔! ✨ |
+
+💡 zip = 지퍼처럼 두 리스트를 "쭉" 묶는 거예요!`
+        },
+        {
+          id: "zip-pred1",
+          type: "predict",
+          title: "이 코드의 출력은?",
+          content: "zip이 두 리스트를 어떻게 묶을지 생각해봐요!",
+          code: "fruits = ['사과', '바나나']\nprices = [1000, 2000]\n\nfor fruit, price in zip(fruits, prices):\n    print(f'{fruit}={price}원')",
+          options: ["사과=1000원\n바나나=2000원", "사과 바나나\n1000 2000", "에러", "(사과, 1000)\n(바나나, 2000)"],
+          answer: 0,
+          explanation: "zip()이 (사과,1000), (바나나,2000)으로 짝지어줘서 f-string으로 출력돼요!"
+        },
+        {
+          id: "zip-pred2",
+          type: "predict",
+          title: "길이가 다르면?",
+          content: "두 리스트 길이가 다를 때 zip은 어떻게 할까요?",
+          code: "a = [1, 2, 3]\nb = ['x', 'y']\n\nfor num, letter in zip(a, b):\n    print(num, letter)",
+          options: ["1 x\n2 y", "1 x\n2 y\n3 None", "에러", "1 x\n2 y\n3"],
+          answer: 0,
+          explanation: "zip()은 짧은 쪽에 맞춰서 끝나요! 3은 짝이 없으니 무시돼요. 안전하죠!"
+        },
+        {
+          id: "zip-quiz",
+          type: "quiz",
+          title: "zip 이해하기!",
+          content: "`zip(['a','b'], [1,2])`의 결과를 for문으로 순회하면?",
+          options: [
+            "('a',1), ('b',2) 순서로 나옴",
+            "('a','b'), (1,2) 순서로 나옴",
+            "[('a',1), ('b',2)] 리스트가 반환됨",
+            "에러 발생"
+          ],
+          answer: 0,
+          explanation: "zip은 같은 위치끼리 짝지어요! 첫번째끼리 ('a',1), 두번째끼리 ('b',2)!"
+        }
+      ]
+    },
+    {
+      id: "ch5",
+      title: "리스트 컴프리헨션",
+      emoji: "⚡",
+      steps: [
+        {
+          id: "comp-explain",
+          type: "explain",
+          title: "⚡ 리스트 컴프리헨션 — 한 줄의 마법!",
+          content: `for문으로 새 리스트 만들기, 이렇게 하고 있었죠?
+
+\`\`\`python
+# 기존 방법: 4줄 😐
+numbers = [1, 2, 3, 4, 5]
+doubled = []
+for num in numbers:
+    doubled.append(num * 2)
+# [2, 4, 6, 8, 10]
+\`\`\`
+
+**리스트 컴프리헨션으로 한 줄!** 🚀
+\`\`\`python
+# 컴프리헨션: 1줄! ⚡
+doubled = [num * 2 for num in numbers]
+# [2, 4, 6, 8, 10]
+\`\`\`
+
+**공식:** \`[표현식 for 변수 in 리스트]\`
+
+| 기존 | 컴프리헨션 |
+|------|-----------|
+| 4줄 코드 | 1줄 코드 |
+| 느림 | 빠름 |
+| 명확 | 파이썬스러움! ✨ |`
+        },
+        {
+          id: "comp-pred1",
+          type: "predict",
+          title: "이 코드의 결과는?",
+          content: "리스트 컴프리헨션이 어떤 리스트를 만들지 생각해봐요!",
+          code: "names = ['alice', 'bob', 'charlie']\nresult = [name.upper() for name in names]\nprint(result)",
+          options: ["['ALICE', 'BOB', 'CHARLIE']", "['alice', 'bob', 'charlie']", "ALICE BOB CHARLIE", "에러"],
+          answer: 0,
+          explanation: "각 name에 .upper()를 적용해서 대문자 리스트가 만들어져요!"
+        },
+        {
+          id: "comp-fillblank",
+          type: "fillblank" as const,
+          title: "빈칸을 채워주세요",
+          content: "1~5의 제곱 리스트를 컴프리헨션으로 만들어요!",
+          code: "squares = [___ for ___ in range(1, ___)]",
+          fillBlanks: [
+            { id: 0, answer: "x**2", options: ["x**2", "x*2", "x+2", "x^2"] },
+            { id: 1, answer: "x", options: ["x", "i", "num", "n"] },
+            { id: 2, answer: "6", options: ["6", "5", "4", "10"] }
+          ],
+          explanation: "[x**2 for x in range(1, 6)]은 [1, 4, 9, 16, 25]를 만들어요! range(1,6)은 1~5!"
+        },
+        {
+          id: "comp-if-explain",
+          type: "explain",
+          title: "🔍 조건부 컴프리헨션!",
+          content: `if를 추가하면 필터링도 한 줄!
+
+\`\`\`python
+numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+# 짝수만 골라서 제곱!
+even_squares = [n**2 for n in numbers if n % 2 == 0]
+# [4, 16, 36, 64, 100]
+\`\`\`
+
+**공식:** \`[표현식 for 변수 in 리스트 if 조건]\`
+
+\`\`\`python
+# 이것과 같은 뜻:
+even_squares = []
+for n in numbers:
+    if n % 2 == 0:
+        even_squares.append(n**2)
+\`\`\`
+
+💡 **순서**: for → if → 표현식 (읽는 순서대로!)`
+        },
+        {
+          id: "comp-pred2",
+          type: "predict",
+          title: "조건부 컴프리헨션 결과는?",
+          content: "어떤 단어들만 남을까요?",
+          code: "words = ['hi', 'hello', 'hey', 'python', 'ha']\nresult = [w for w in words if len(w) > 2]\nprint(result)",
+          options: ["['hello', 'hey', 'python']", "['hi', 'hello', 'hey', 'python', 'ha']", "['hi', 'ha']", "에러"],
+          answer: 0,
+          explanation: "len(w) > 2인 것만! hi(2), ha(2)는 탈락, hello(5), hey(3), python(6)만 남아요!"
+        },
+        {
+          id: "comp-quiz",
+          type: "quiz",
+          title: "컴프리헨션 마스터!",
+          content: "`[x for x in range(10) if x % 3 == 0]`의 결과는?",
+          options: [
+            "[0, 3, 6, 9]",
+            "[3, 6, 9]",
+            "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]",
+            "[1, 2, 3]"
+          ],
+          answer: 0,
+          explanation: "range(10)에서 3의 배수만! 0÷3=0✅, 3÷3=1✅, 6÷3=2✅, 9÷3=3✅ → [0, 3, 6, 9]"
+        }
+      ]
+    },
+    {
+      id: "ch6",
       title: "최종 미션",
       emoji: "🏆",
       steps: [
@@ -208,6 +383,8 @@ for num in numbers:
 ✅ **enumerate()** - 인덱스와 함께
 ✅ **range(len())** - 인덱스로 접근
 ✅ **for + if** - 조건 필터링
+✅ **zip()** - 두 리스트 짝짓기
+✅ **리스트 컴프리헨션** - 한 줄로 리스트 만들기
 
 다음 시간에는 **split()과 join()**을 배워요! 🚀`
         }

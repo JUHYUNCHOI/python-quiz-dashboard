@@ -438,6 +438,174 @@ account.show_balance()`,
           hint2: "+ / >= / balance"
         }
       ]
+    },
+    {
+      id: "ch5",
+      title: "Inheritance — Reusing Code!",
+      emoji: "👪",
+      steps: [
+        {
+          id: "ch5-0",
+          type: "explain",
+          title: "👪 What is Inheritance? Getting Powers from Parents!",
+          content: `In RPGs, "Warrior", "Mage", "Archer" are all **Characters**, right?
+They share common things (name, HP, attack), only special abilities differ!
+
+\`\`\`python
+# ❌ Repeating the same code 3 times...
+class Warrior:
+    def __init__(s, name, hp):
+        s.name = name
+        s.hp = hp
+    def attack(s): ...
+
+class Mage:
+    def __init__(s, name, hp):  # Same code again!
+        s.name = name
+        s.hp = hp
+    def attack(s): ...
+\`\`\`
+
+\`\`\`python
+# ✅ Solved with inheritance!
+class Character:            # Parent class
+    def __init__(s, name, hp):
+        s.name = name
+        s.hp = hp
+
+class Warrior(Character):   # Child: inherits Character!
+    pass                    # Uses parent's __init__ as-is
+
+class Mage(Character):      # Child: inherits Character!
+    pass
+\`\`\`
+
+**class Child(Parent):** — just put the parent in parentheses!
+
+| Term | Meaning | Example |
+|------|---------|---------|
+| Parent class | Common features | Character |
+| Child class | Parent + special features | Warrior, Mage |`
+        },
+        {
+          id: "ch5-pred1",
+          type: "predict",
+          title: "What's the output?",
+          content: "Can a child use the parent's methods?",
+          code: "class Animal:\n    def __init__(s, name):\n        s.name = name\n    def speak(s):\n        print(f'{s.name}: ...')\n\nclass Dog(Animal):\n    pass\n\nd = Dog('Buddy')\nd.speak()",
+          options: ["Buddy: ...", "Error: Dog has no speak", "None", "Animal: ..."],
+          answer: 0,
+          explanation: "Dog inherits from Animal so it can use speak()! We wrote zero code but it works!"
+        },
+        {
+          id: "ch5-1",
+          type: "explain",
+          title: "🔧 Method Overriding — Make It Your Own!",
+          content: `A child can **override** (replace) parent methods!
+
+\`\`\`python
+class Animal:
+    def speak(s):
+        print("...")
+
+class Dog(Animal):
+    def speak(s):        # Override with same name!
+        print("Woof!")
+
+class Cat(Animal):
+    def speak(s):        # Cat does it differently!
+        print("Meow!")
+\`\`\`
+
+\`\`\`python
+animals = [Dog(), Cat(), Animal()]
+for a in animals:
+    a.speak()
+# Woof!
+# Meow!
+# ...
+\`\`\`
+
+Same speak() but **different behavior per object** — this is called **polymorphism**!`
+        },
+        {
+          id: "ch5-pred2",
+          type: "predict",
+          title: "Which method gets called?",
+          content: "When both parent and child have the same method?",
+          code: "class Parent:\n    def greet(s):\n        print('Hi from Parent')\n\nclass Child(Parent):\n    def greet(s):\n        print('Hi from Child')\n\nc = Child()\nc.greet()",
+          options: ["Hi from Child", "Hi from Parent", "Hi from Parent\nHi from Child", "Error"],
+          answer: 0,
+          explanation: "When the child has the same method, the child's version wins! That's overriding."
+        },
+        {
+          id: "ch5-2",
+          type: "explain",
+          title: "📞 super() — Calling Parent Methods!",
+          content: `Want to **call the parent's method** from the child? Use super()!
+
+\`\`\`python
+class Character:
+    def __init__(s, name, hp):
+        s.name = name
+        s.hp = hp
+
+class Warrior(Character):
+    def __init__(s, name, hp, weapon):
+        super().__init__(name, hp)  # Call parent's __init__!
+        s.weapon = weapon           # Warrior-only attribute
+
+w = Warrior("Hero", 100, "Sword")
+print(f"{w.name} HP:{w.hp} Weapon:{w.weapon}")
+# Hero HP:100 Weapon:Sword
+\`\`\`
+
+**super()** = refers to the parent class!
+- \`super().__init__()\` → calls parent's constructor
+- Combine what the parent does + what you want to add!`
+        },
+        {
+          id: "ch5-fb1",
+          type: "fillblank" as const,
+          title: "Fill in the blanks",
+          content: "Make Mage inherit from Character and add a magic attribute!",
+          code: "class Character:\n    def __init__(s, name, hp):\n        s.name = name\n        s.hp = hp\n\nclass Mage(___):\n    def __init__(s, name, hp, magic):\n        ___.__init__(name, hp)\n        s.magic = ___",
+          fillBlanks: [
+            { id: 0, answer: "Character", options: ["Character", "Object", "Base", "Parent"] },
+            { id: 1, answer: "super()", options: ["super()", "self", "Character", "parent()"] },
+            { id: 2, answer: "magic", options: ["magic", "mp", "spell", "power"] }
+          ],
+          explanation: "class Mage(Character) to inherit! super().__init__() to call parent constructor! s.magic = magic for the extra attribute!"
+        },
+        {
+          id: "ch5-quiz1",
+          type: "quiz",
+          title: "Understanding Inheritance!",
+          content: "Which statement about inheritance is **WRONG**?",
+          options: [
+            "A child class can use parent's methods",
+            "A child class can override parent's methods",
+            "A child class must have fewer attributes than parent",
+            "super() can call parent's methods"
+          ],
+          answer: 2,
+          explanation: "Children inherit all parent attributes and can add MORE! There's no rule about having fewer."
+        },
+        {
+          id: "ch5-quiz2",
+          type: "quiz",
+          title: "Code Prediction!",
+          content: "What's the output?\n\n```python\nclass A:\n    def say(s):\n        print('A')\n\nclass B(A):\n    pass\n\nclass C(B):\n    def say(s):\n        print('C')\n\nC().say()\n```",
+          options: [
+            "C",
+            "A",
+            "B",
+            "Error"
+          ],
+          answer: 0,
+          explanation: "C has its own say(), so it uses that! B doesn't have one but A does. Since C has it directly, C's version wins!"
+        }
+      ]
     }
   ]
 }

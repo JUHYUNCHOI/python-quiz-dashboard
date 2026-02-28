@@ -36,7 +36,27 @@ import {
   lesson49EnData, lesson50EnData, lesson51EnData, lesson52EnData,
   // English project lessons
   lessonP1EnData, lessonP2EnData, lessonP3EnData,
-  lessonP4EnData, lessonP4PygameEnData
+  lessonP4EnData, lessonP4PygameEnData,
+  // C++ Korean lessons
+  cppLesson1Data, cppLesson2Data, cppLesson3Data, cppLesson4Data,
+  cppLesson5Data, cppLesson6Data, cppLesson7Data, cppLesson8Data,
+  cppLesson9Data, cppLesson10Data, cppLesson11Data, cppLesson12Data,
+  cppLesson13Data, cppLesson14Data,
+  // C++ Korean lessons 15-20
+  cppLesson15Data, cppLesson16Data, cppLesson17Data, cppLesson18Data,
+  cppLesson19Data, cppLesson20Data,
+  // C++ project lessons
+  cppLessonP1Data, cppLessonP2Data, cppLessonP3Data,
+  // C++ English lessons
+  cppLesson1EnData, cppLesson2EnData, cppLesson3EnData, cppLesson4EnData,
+  cppLesson5EnData, cppLesson6EnData, cppLesson7EnData, cppLesson8EnData,
+  cppLesson9EnData, cppLesson10EnData, cppLesson11EnData, cppLesson12EnData,
+  cppLesson13EnData, cppLesson14EnData,
+  // C++ English lessons 15-20
+  cppLesson15EnData, cppLesson16EnData, cppLesson17EnData, cppLesson18EnData,
+  cppLesson19EnData, cppLesson20EnData,
+  // C++ English project lessons
+  cppLessonP1EnData, cppLessonP2EnData, cppLessonP3EnData,
 } from "@/data"
 import { loadLesson, isBilingual, getAllLessonIds, getBilingualLessonIds } from "@/data"
 import type { LessonData } from "./types"
@@ -59,6 +79,17 @@ export const lessonsData: Record<string, LessonData> = {
   "45": lesson45 as any, "46": lesson46 as any, "47": lesson47 as any, "48": lesson48 as any,
   "49": lesson49 as any, "50": lesson50 as any, "51": lesson51 as any, "52": lesson52 as any,
   "p1": lessonP1Data, "p2": lessonP2Data, "p3": lessonP3Data, "p4": lessonP4Data,
+  // C++ Part 1
+  "cpp-1": cppLesson1Data, "cpp-2": cppLesson2Data, "cpp-3": cppLesson3Data, "cpp-4": cppLesson4Data,
+  "cpp-5": cppLesson5Data, "cpp-6": cppLesson6Data, "cpp-7": cppLesson7Data, "cpp-8": cppLesson8Data,
+  // C++ Part 2
+  "cpp-9": cppLesson9Data, "cpp-10": cppLesson10Data, "cpp-11": cppLesson11Data, "cpp-12": cppLesson12Data,
+  "cpp-13": cppLesson13Data, "cpp-14": cppLesson14Data,
+  // C++ Part 3
+  "cpp-15": cppLesson15Data, "cpp-16": cppLesson16Data, "cpp-17": cppLesson17Data, "cpp-18": cppLesson18Data,
+  "cpp-19": cppLesson19Data, "cpp-20": cppLesson20Data,
+  // C++ projects
+  "cpp-p1": cppLessonP1Data, "cpp-p2": cppLessonP2Data, "cpp-p3": cppLessonP3Data,
 }
 
 // 라이브러리 변형 (turtle/pygame 등) — 양언어 지원
@@ -138,6 +169,33 @@ export const bilingualLessons: Record<string, { ko: LessonData, en: LessonData }
   "p2": { ko: lessonP2Data, en: lessonP2EnData },
   "p3": { ko: lessonP3Data, en: lessonP3EnData },
   "p4": { ko: lessonP4Data, en: lessonP4EnData },
+  // C++ Part 1
+  "cpp-1": { ko: cppLesson1Data, en: cppLesson1EnData },
+  "cpp-2": { ko: cppLesson2Data, en: cppLesson2EnData },
+  "cpp-3": { ko: cppLesson3Data, en: cppLesson3EnData },
+  "cpp-4": { ko: cppLesson4Data, en: cppLesson4EnData },
+  "cpp-5": { ko: cppLesson5Data, en: cppLesson5EnData },
+  "cpp-6": { ko: cppLesson6Data, en: cppLesson6EnData },
+  "cpp-7": { ko: cppLesson7Data, en: cppLesson7EnData },
+  "cpp-8": { ko: cppLesson8Data, en: cppLesson8EnData },
+  // C++ Part 2
+  "cpp-9": { ko: cppLesson9Data, en: cppLesson9EnData },
+  "cpp-10": { ko: cppLesson10Data, en: cppLesson10EnData },
+  "cpp-11": { ko: cppLesson11Data, en: cppLesson11EnData },
+  "cpp-12": { ko: cppLesson12Data, en: cppLesson12EnData },
+  "cpp-13": { ko: cppLesson13Data, en: cppLesson13EnData },
+  "cpp-14": { ko: cppLesson14Data, en: cppLesson14EnData },
+  // C++ Part 3
+  "cpp-15": { ko: cppLesson15Data, en: cppLesson15EnData },
+  "cpp-16": { ko: cppLesson16Data, en: cppLesson16EnData },
+  "cpp-17": { ko: cppLesson17Data, en: cppLesson17EnData },
+  "cpp-18": { ko: cppLesson18Data, en: cppLesson18EnData },
+  "cpp-19": { ko: cppLesson19Data, en: cppLesson19EnData },
+  "cpp-20": { ko: cppLesson20Data, en: cppLesson20EnData },
+  // C++ projects
+  "cpp-p1": { ko: cppLessonP1Data, en: cppLessonP1EnData },
+  "cpp-p2": { ko: cppLessonP2Data, en: cppLessonP2EnData },
+  "cpp-p3": { ko: cppLessonP3Data, en: cppLessonP3EnData },
 }
 
 // ============================================

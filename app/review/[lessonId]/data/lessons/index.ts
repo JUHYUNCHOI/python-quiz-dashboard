@@ -35,6 +35,29 @@ import { lesson38 } from './lesson38';
 import { lesson39 } from './lesson39';
 import { lesson40 } from './lesson40';
 import { lesson41 } from './lesson41';
+import { lessonCpp1 } from './lessonCpp1';
+import { lessonCpp2 } from './lessonCpp2';
+import { lessonCpp3 } from './lessonCpp3';
+import { lessonCpp4 } from './lessonCpp4';
+import { lessonCpp5 } from './lessonCpp5';
+import { lessonCpp6 } from './lessonCpp6';
+import { lessonCpp7 } from './lessonCpp7';
+import { lessonCpp8 } from './lessonCpp8';
+import { lessonCpp9 } from './lessonCpp9';
+import { lessonCpp10 } from './lessonCpp10';
+import { lessonCpp11 } from './lessonCpp11';
+import { lessonCpp12 } from './lessonCpp12';
+import { lessonCpp13 } from './lessonCpp13';
+import { lessonCpp14 } from './lessonCpp14';
+import { lessonCpp15 } from './lessonCpp15';
+import { lessonCpp16 } from './lessonCpp16';
+import { lessonCpp17 } from './lessonCpp17';
+import { lessonCpp18 } from './lessonCpp18';
+import { lessonCpp19 } from './lessonCpp19';
+import { lessonCpp20 } from './lessonCpp20';
+import { lessonCppP1 } from './lessonCppP1';
+import { lessonCppP2 } from './lessonCppP2';
+import { lessonCppP3 } from './lessonCppP3';
 
 import { LessonData } from '../types';
 
@@ -95,6 +118,31 @@ export const lessonsData: Record<string, LessonData> = {
   "40": lesson40,
   // Part 7: 클래스
   "41": lesson41,
+  // C++ 레슨
+  "cpp-1": lessonCpp1,
+  "cpp-2": lessonCpp2,
+  "cpp-3": lessonCpp3,
+  "cpp-4": lessonCpp4,
+  "cpp-5": lessonCpp5,
+  "cpp-6": lessonCpp6,
+  "cpp-7": lessonCpp7,
+  "cpp-8": lessonCpp8,
+  "cpp-9": lessonCpp9,
+  "cpp-10": lessonCpp10,
+  "cpp-11": lessonCpp11,
+  "cpp-12": lessonCpp12,
+  "cpp-13": lessonCpp13,
+  "cpp-14": lessonCpp14,
+  "cpp-15": lessonCpp15,
+  "cpp-16": lessonCpp16,
+  "cpp-17": lessonCpp17,
+  "cpp-18": lessonCpp18,
+  "cpp-19": lessonCpp19,
+  "cpp-20": lessonCpp20,
+  // C++ 프로젝트
+  "cpp-p1": lessonCppP1,
+  "cpp-p2": lessonCppP2,
+  "cpp-p3": lessonCppP3,
   // 프로젝트
   "p1": createDummyLesson("p1", "미니 계산기"),
   "p2": createDummyLesson("p2", "숫자 맞추기 게임"),

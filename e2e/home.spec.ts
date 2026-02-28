@@ -6,7 +6,7 @@ test.describe("홈 대시보드", () => {
   })
 
   test("대시보드가 정상 렌더링된다", async ({ page }) => {
-    await expect(page).toHaveTitle(/기린 퀴즈/)
+    await expect(page).toHaveTitle(/파이린/)
     await expect(page.getByText("강의 커리큘럼")).toBeVisible()
     await expect(page.getByText("퀴즈 시작")).toBeVisible()
   })

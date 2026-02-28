@@ -6,6 +6,9 @@ import { TryItStep } from "./tryit-step"
 import { QuizStep } from "./quiz-step"
 import { InteractiveStep } from "./interactive-step"
 import { AnimationStep } from "./animation-step"
+import { FillBlankStep } from "./fillblank-step"
+import { PredictStep } from "./predict-step"
+import { PracticeStep } from "./practice-step"
 
 interface StepRendererProps {
   step: LessonStep
@@ -15,19 +18,23 @@ interface StepRendererProps {
   hintLevel: number
   onHintLevelChange: (level: number) => void
   onSuccess: () => void
-  // quiz
+  // quiz + predict
   selectedAnswer: number | null
   showExplanation: boolean
   quizAttempts: number
   onQuizAnswer: (idx: number) => void
   onQuizAcknowledge: () => void
+  // fillblank
+  onStepComplete?: (correct: boolean) => void
+  onStepAcknowledge?: () => void
   isReview?: boolean
 }
 
 export function StepRenderer({
   step, lang, isCompleted,
   hintLevel, onHintLevelChange, onSuccess,
-  selectedAnswer, showExplanation, quizAttempts, onQuizAnswer, onQuizAcknowledge, isReview
+  selectedAnswer, showExplanation, quizAttempts, onQuizAnswer, onQuizAcknowledge,
+  onStepComplete, onStepAcknowledge, isReview
 }: StepRendererProps) {
   switch (step.type) {
     case "explain":
@@ -59,11 +66,39 @@ export function StepRenderer({
         />
       )
 
+    case "predict":
+      return (
+        <PredictStep
+          step={step}
+          isCompleted={isCompleted}
+          selectedAnswer={selectedAnswer}
+          showExplanation={showExplanation}
+          quizAttempts={quizAttempts}
+          onAnswer={onQuizAnswer}
+          onAcknowledge={onQuizAcknowledge}
+          isReview={isReview}
+        />
+      )
+
+    case "fillblank":
+      return (
+        <FillBlankStep
+          step={step}
+          isCompleted={isCompleted}
+          onComplete={onStepComplete!}
+          onAcknowledge={onStepAcknowledge!}
+          isReview={isReview}
+        />
+      )
+
     case "interactive":
       return <InteractiveStep step={step} lang={lang} onSuccess={onSuccess} />
 
     case "animation":
       return <AnimationStep step={step} />
+
+    case "practice":
+      return <PracticeStep step={step} lang={lang} />
 
     default:
       return <div className="text-gray-500">알 수 없는 스텝 타입: {step.type}</div>

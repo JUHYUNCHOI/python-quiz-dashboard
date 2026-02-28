@@ -3,11 +3,12 @@ import { ch1 } from './ch1'
 import { ch2 } from './ch2'
 import { ch3 } from './ch3'
 import { ch4 } from './ch4'
+import { ch5 } from './ch5'
 
 export const lesson42: LessonData = {
   id: "42",
   title: "메서드와 속성",
   emoji: "⚔️",
   description: "클래스에 공격, 회복 같은 기능을 추가해요!",
-  chapters: [ch1, ch2, ch3, ch4]
+  chapters: [ch1, ch2, ch3, ch4, ch5]
 }
