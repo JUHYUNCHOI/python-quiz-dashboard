@@ -30,8 +30,13 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // /teacher 경로는 로그인 필수
-  if (request.nextUrl.pathname.startsWith("/teacher") && !user) {
+  // /teacher 경로는 로그인 필수 (register는 제외 - 학생이 접근해야 함)
+  const path = request.nextUrl.pathname
+  if (
+    path.startsWith("/teacher") &&
+    path !== "/teacher/register" &&
+    !user
+  ) {
     const url = request.nextUrl.clone()
     url.pathname = "/login"
     return NextResponse.redirect(url)
