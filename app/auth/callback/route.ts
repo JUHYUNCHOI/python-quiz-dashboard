@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { createClient } from "@/lib/supabase/server"
+import { createServerClient } from "@supabase/ssr"
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
@@ -7,21 +7,63 @@ export async function GET(request: Request) {
   const next = searchParams.get("next") ?? "/"
 
   if (code) {
-    const supabase = await createClient()
+    // 쿠키를 redirect 응답에 직접 붙이기 위해 수동으로 관리
+    const cookiesToSet: { name: string; value: string; options: Record<string, unknown> }[] = []
+
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            // request에서 기존 쿠키 읽기
+            const cookieHeader = request.headers.get("cookie") || ""
+            return cookieHeader
+              .split(";")
+              .map((c) => c.trim())
+              .filter(Boolean)
+              .map((c) => {
+                const [name, ...rest] = c.split("=")
+                return { name: name.trim(), value: rest.join("=").trim() }
+              })
+          },
+          setAll(cookies) {
+            // 나중에 redirect 응답에 붙일 수 있도록 저장
+            cookiesToSet.push(
+              ...cookies.map(({ name, value, options }) => ({
+                name,
+                value,
+                options: options as Record<string, unknown>,
+              }))
+            )
+          },
+        },
+      }
+    )
+
     const { error } = await supabase.auth.exchangeCodeForSession(code)
 
     if (!error) {
-      // Vercel 등 로드밸런서 뒤에서는 x-forwarded-host 사용
       const forwardedHost = request.headers.get("x-forwarded-host")
       const isLocalEnv = process.env.NODE_ENV === "development"
 
+      let redirectUrl: string
       if (isLocalEnv) {
-        return NextResponse.redirect(`${origin}${next}`)
+        redirectUrl = `${origin}${next}`
       } else if (forwardedHost) {
-        return NextResponse.redirect(`https://${forwardedHost}${next}`)
+        redirectUrl = `https://${forwardedHost}${next}`
       } else {
-        return NextResponse.redirect(`${origin}${next}`)
+        redirectUrl = `${origin}${next}`
       }
+
+      const response = NextResponse.redirect(redirectUrl)
+
+      // 세션 쿠키를 redirect 응답에 직접 설정
+      cookiesToSet.forEach(({ name, value, options }) => {
+        response.cookies.set(name, value, options as Record<string, unknown>)
+      })
+
+      return response
     }
   }
 
