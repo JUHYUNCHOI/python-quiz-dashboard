@@ -5,12 +5,15 @@ import { useGamification } from "@/hooks/use-gamification"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { Card } from "@/components/ui/card"
-import { LogOut, Trophy, Flame, Zap, ShieldCheck, Users, LogIn } from "lucide-react"
+import { LogOut, Trophy, Flame, Zap, ShieldCheck, Users, LogIn, Globe } from "lucide-react"
 import Link from "next/link"
+import { LanguageToggle } from "@/components/language-toggle"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function ProfilePage() {
   const { user, profile, isAuthenticated, isLoading } = useAuth()
   const { level, totalXp, dailyStreak, xpInCurrentLevel } = useGamification()
+  const { t } = useLanguage()
 
   if (isLoading) {
     return (
@@ -96,6 +99,17 @@ export default function ProfilePage() {
               <p className="text-lg font-bold text-red-600">{dailyStreak}일</p>
               <p className="text-xs text-gray-500">연속 학습</p>
             </div>
+          </div>
+        </Card>
+
+        {/* 언어 설정 */}
+        <Card className="p-4 border-2 border-gray-100">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Globe className="w-5 h-5 text-gray-500" />
+              <span className="font-medium text-gray-700">{t("언어", "Language")}</span>
+            </div>
+            <LanguageToggle className="bg-gray-50" />
           </div>
         </Card>
 

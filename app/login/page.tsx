@@ -6,6 +6,8 @@ import { createClient } from "@/lib/supabase/client"
 import Link from "next/link"
 import { Suspense } from "react"
 import { Mail } from "lucide-react"
+import { LanguageToggle } from "@/components/language-toggle"
+import { useLanguage } from "@/contexts/language-context"
 
 function LoginContent() {
   const [isLoading, setIsLoading] = useState<string | null>(null)
@@ -17,6 +19,7 @@ function LoginContent() {
   const [emailSuccess, setEmailSuccess] = useState("")
   const searchParams = useSearchParams()
   const error = searchParams.get("error")
+  const { t } = useLanguage()
 
   const handleOAuthLogin = async (provider: "kakao" | "google") => {
     setIsLoading(provider)
@@ -78,11 +81,16 @@ function LoginContent() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-yellow-50 flex items-center justify-center p-4">
       <div className="w-full max-w-sm space-y-8">
+        {/* 언어 선택 */}
+        <div className="flex justify-center">
+          <LanguageToggle />
+        </div>
+
         {/* 로고 */}
         <div className="text-center">
           <div className="text-[80px] leading-none mb-2">🦒</div>
-          <h1 className="text-2xl font-bold text-gray-800">파이린</h1>
-          <p className="text-sm text-gray-500 mt-1">재미있게 배우는 파이썬</p>
+          <h1 className="text-2xl font-bold text-gray-800">{t("파이린", "Pyrin")}</h1>
+          <p className="text-sm text-gray-500 mt-1">{t("재미있게 배우는 코딩", "Learn coding the fun way")}</p>
         </div>
 
         {/* 에러 메시지 */}
@@ -108,7 +116,7 @@ function LoginContent() {
               <path d="M4.42 11.89A6.01 6.01 0 0 1 4.1 10c0-.66.11-1.3.32-1.89V5.53H1.08A9.99 9.99 0 0 0 0 10c0 1.61.39 3.14 1.08 4.47l3.34-2.58Z" fill="#FBBC05"/>
               <path d="M10 3.96c1.47 0 2.78.5 3.82 1.5l2.86-2.86C14.96.99 12.7 0 10 0A9.99 9.99 0 0 0 1.08 5.53l3.34 2.58C5.2 5.72 7.4 3.96 10 3.96Z" fill="#EA4335"/>
             </svg>
-            {isLoading === "google" ? "로그인 중..." : "Google로 시작하기"}
+            {isLoading === "google" ? t("로그인 중...", "Signing in...") : t("Google로 시작하기", "Continue with Google")}
           </button>
 
           {/* 이메일 로그인 토글 */}
@@ -118,7 +126,7 @@ function LoginContent() {
               className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium text-gray-500 bg-gray-50 border border-gray-200 hover:bg-gray-100 transition-all"
             >
               <Mail className="w-4 h-4" />
-              이메일로 로그인
+              {t("이메일로 로그인", "Sign in with email")}
             </button>
           ) : (
             <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
@@ -129,7 +137,7 @@ function LoginContent() {
                     emailMode === "login" ? "bg-orange-500 text-white" : "bg-gray-100 text-gray-500"
                   }`}
                 >
-                  로그인
+                  {t("로그인", "Login")}
                 </button>
                 <button
                   onClick={() => { setEmailMode("signup"); setEmailError("") }}
@@ -137,7 +145,7 @@ function LoginContent() {
                     emailMode === "signup" ? "bg-orange-500 text-white" : "bg-gray-100 text-gray-500"
                   }`}
                 >
-                  회원가입
+                  {t("회원가입", "Sign up")}
                 </button>
               </div>
 
@@ -146,7 +154,7 @@ function LoginContent() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="이메일"
+                  placeholder={t("이메일", "Email")}
                   className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-orange-400 focus:ring-2 focus:ring-orange-100 outline-none text-sm"
                   required
                 />
@@ -154,7 +162,7 @@ function LoginContent() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="비밀번호 (6자 이상)"
+                  placeholder={t("비밀번호 (6자 이상)", "Password (min 6 chars)")}
                   minLength={6}
                   className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-orange-400 focus:ring-2 focus:ring-orange-100 outline-none text-sm"
                   required
@@ -173,8 +181,8 @@ function LoginContent() {
                   className="w-full py-2.5 rounded-lg font-bold text-white bg-orange-500 hover:bg-orange-600 disabled:opacity-50 transition-all text-sm"
                 >
                   {isLoading === "email"
-                    ? "처리 중..."
-                    : emailMode === "login" ? "로그인" : "회원가입"
+                    ? t("처리 중...", "Processing...")
+                    : emailMode === "login" ? t("로그인", "Login") : t("회원가입", "Sign up")
                   }
                 </button>
               </form>
@@ -186,13 +194,17 @@ function LoginContent() {
             href="/"
             className="block w-full text-center px-6 py-3 rounded-xl font-medium text-gray-500 bg-white border border-gray-200 hover:bg-gray-50 transition-all"
           >
-            로그인 없이 둘러보기
+            {t("로그인 없이 둘러보기", "Browse without login")}
           </Link>
         </div>
 
         <p className="text-xs text-center text-gray-400">
-          로그인하면 학습 기록이 저장되고<br />
-          다른 기기에서도 이어할 수 있어요
+          {t(
+            "로그인하면 학습 기록이 저장되고\n다른 기기에서도 이어할 수 있어요",
+            "Sign in to save your progress\nand continue on any device"
+          ).split('\n').map((line, i) => (
+            <span key={i}>{line}{i === 0 && <br />}</span>
+          ))}
         </p>
       </div>
     </div>
