@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils"
 import { LessonStep } from "./types"
 import { highlightCppInline } from "@/components/ui/code-block"
 import { motion, AnimatePresence } from "framer-motion"
+import { useLanguage } from "@/contexts/language-context"
 
 interface FillBlankStepProps {
   step: LessonStep
@@ -17,6 +18,7 @@ interface FillBlankStepProps {
 
 export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, isReview }: FillBlankStepProps) {
   const blanks: { id: number; answer: string; options: string[] }[] = step.fillBlanks || []
+  const { t } = useLanguage()
   const [filledValues, setFilledValues] = useState<Record<number, string>>({})
   const [currentBlankIndex, setCurrentBlankIndex] = useState(0)
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -156,15 +158,15 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
       <div className="space-y-4">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="px-3 py-1 rounded-full text-sm font-bold bg-violet-100 text-violet-700">
-            <PenLine className="w-4 h-4 inline mr-1" />빈칸 채우기
+            <PenLine className="w-4 h-4 inline mr-1" />{t("빈칸 채우기", "Fill in the Blanks")}
           </span>
           {isReview && (
             <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-orange-100 text-orange-600 animate-pulse">
-              🔄 아까 틀린 문제
+              {t("🔄 아까 틀린 문제", "🔄 Review")}
             </span>
           )}
           {isCompleted && !isReview && (
-            <span className="px-2 py-0.5 rounded text-xs bg-green-100 text-green-700 font-medium">✅ 완료</span>
+            <span className="px-2 py-0.5 rounded text-xs bg-green-100 text-green-700 font-medium">{t("✅ 완료", "✅ Done")}</span>
           )}
         </div>
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{step.title}</h1>
@@ -182,7 +184,7 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
       {!isSubmitted && currentBlank && (
         <div className="space-y-3">
           <p className="text-sm text-gray-500 font-medium">
-            빈칸 {currentBlankIndex + 1}/{blanks.length} 선택:
+            {t(`빈칸 ${currentBlankIndex + 1}/${blanks.length} 선택:`, `Blank ${currentBlankIndex + 1}/${blanks.length}:`)}
           </p>
           <div className="flex flex-wrap gap-2">
             {currentBlank.options.map((option, idx) => {
@@ -217,7 +219,7 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
       {/* 리셋 버튼 (채점 전) */}
       {!isSubmitted && Object.keys(filledValues).length > 0 && (
         <button onClick={handleReset} className="text-sm text-gray-400 hover:text-gray-600 flex items-center gap-1">
-          <RotateCcw className="w-3.5 h-3.5" /> 다시 하기
+          <RotateCcw className="w-3.5 h-3.5" /> {t("다시 하기", "Reset")}
         </button>
       )}
 
@@ -235,7 +237,7 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
             <div className="flex items-center gap-2 mb-1">
               <Lightbulb className={cn("w-4 h-4", isCorrect ? "text-green-600" : "text-amber-600")} />
               <span className={cn("font-bold text-sm", isCorrect ? "text-green-700" : "text-amber-700")}>
-                {isCorrect ? "정답! 🎉" : "틀렸어요!"}
+                {isCorrect ? t("정답! 🎉", "Correct! 🎉") : t("틀렸어요!", "Wrong!")}
               </span>
             </div>
             <p className={cn("text-sm", isCorrect ? "text-green-800" : "text-amber-800")}>
@@ -245,7 +247,7 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
             {/* 오답 시 정답 표시 */}
             {!isCorrect && (
               <div className="mt-2 p-2 bg-white/60 rounded-lg">
-                <p className="text-xs text-amber-700 font-medium mb-1">정답:</p>
+                <p className="text-xs text-amber-700 font-medium mb-1">{t("정답:", "Answer:")}</p>
                 <div className="flex flex-wrap gap-1">
                   {blanks.map((b, i) => (
                     <span key={i} className="px-2 py-0.5 bg-amber-200/50 rounded text-xs font-mono font-semibold text-amber-800">
@@ -259,16 +261,16 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
             {!isCorrect && (
               showAckButton ? (
                 <>
-                  {!isReview && <p className="mt-2 text-xs text-amber-600 font-medium text-center">🔄 이 문제는 나중에 다시 나와요!</p>}
+                  {!isReview && <p className="mt-2 text-xs text-amber-600 font-medium text-center">{t("🔄 이 문제는 나중에 다시 나와요!", "🔄 This question will come up again later!")}</p>}
                   <button
                     onClick={handleAcknowledge}
                     className="mt-2 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 animate-fade-in"
                   >
-                    확인했어요 <ArrowRight className="w-5 h-5" />
+                    {t("확인했어요", "Got it")} <ArrowRight className="w-5 h-5" />
                   </button>
                 </>
               ) : (
-                <p className="mt-3 text-center text-xs text-amber-500 animate-pulse">설명을 읽어보세요...</p>
+                <p className="mt-3 text-center text-xs text-amber-500 animate-pulse">{t("설명을 읽어보세요...", "Read the explanation...")}</p>
               )
             )}
           </motion.div>

@@ -9,6 +9,7 @@ import { AnimationStep } from "./animation-step"
 import { FillBlankStep } from "./fillblank-step"
 import { PredictStep } from "./predict-step"
 import { PracticeStep } from "./practice-step"
+import { useLanguage } from "@/contexts/language-context"
 
 interface StepRendererProps {
   step: LessonStep
@@ -36,6 +37,7 @@ export function StepRenderer({
   selectedAnswer, showExplanation, quizAttempts, onQuizAnswer, onQuizAcknowledge,
   onStepComplete, onStepAcknowledge, isReview
 }: StepRendererProps) {
+  const { t } = useLanguage()
   switch (step.type) {
     case "explain":
       return <ExplainStep step={step} />
@@ -101,6 +103,6 @@ export function StepRenderer({
       return <PracticeStep step={step} lang={lang} />
 
     default:
-      return <div className="text-gray-500">알 수 없는 스텝 타입: {step.type}</div>
+      return <div className="text-gray-500">{t("알 수 없는 스텝 타입:", "Unknown step type:")} {step.type}</div>
   }
 }

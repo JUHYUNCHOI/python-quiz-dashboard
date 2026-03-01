@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react"
 import registry from "./component-registry"
 import { LessonStep } from "./types"
+import { useLanguage } from "@/contexts/language-context"
 
 interface InteractiveRendererProps {
   step: LessonStep
@@ -11,6 +12,7 @@ interface InteractiveRendererProps {
 }
 
 export function InteractiveRenderer({ step, lang, onSuccess }: InteractiveRendererProps) {
+  const { t } = useLanguage()
   const [Component, setComponent] = useState<React.ComponentType<any> | null>(null)
   const [error, setError] = useState<string | null>(null)
 
@@ -24,7 +26,7 @@ export function InteractiveRenderer({ step, lang, onSuccess }: InteractiveRender
 
     const entry = registry[componentName]
     if (!entry) {
-      setError(`알 수 없는 컴포넌트: "${componentName}"`)
+      setError(t(`알 수 없는 컴포넌트: "${componentName}"`, `Unknown component: "${componentName}"`))
       return
     }
 
@@ -39,14 +41,14 @@ export function InteractiveRenderer({ step, lang, onSuccess }: InteractiveRender
           : (mod as any).default
         
         if (!Comp) {
-          setError(`"${entry.exportName || 'default'}" export를 찾을 수 없습니다`)
+          setError(t(`"${entry.exportName || 'default'}" export를 찾을 수 없습니다`, `Cannot find "${entry.exportName || 'default'}" export`))
           return
         }
         setComponent(() => Comp)
       })
       .catch((err) => {
         if (!cancelled) {
-          setError(`로딩 실패: ${err.message}`)
+          setError(t(`로딩 실패: ${err.message}`, `Loading failed: ${err.message}`))
         }
       })
 
@@ -67,7 +69,7 @@ export function InteractiveRenderer({ step, lang, onSuccess }: InteractiveRender
     return (
       <div className="flex items-center justify-center py-8">
         <div className="animate-spin w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full" />
-        <span className="ml-2 text-gray-500 text-sm">로딩 중...</span>
+        <span className="ml-2 text-gray-500 text-sm">{t("로딩 중...", "Loading...")}</span>
       </div>
     )
   }

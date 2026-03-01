@@ -2,6 +2,7 @@
 
 import React from "react"
 import { CodeBlock } from "@/components/ui/code-block"
+import { useLanguage } from "@/contexts/language-context"
 
 // ============================================
 // 인라인 마크다운 헬퍼: `code` + **bold** 처리
@@ -52,6 +53,7 @@ function renderChatInline(text: string, keyPrefix: string = ""): React.ReactNode
 // ============================================
 function CopyButton({ code }: { code: string }) {
   const [copied, setCopied] = React.useState(false)
+  const { t } = useLanguage()
   return (
     <button
       onClick={() => {
@@ -61,7 +63,7 @@ function CopyButton({ code }: { code: string }) {
       }}
       className="absolute top-2 right-2 px-2 py-1 rounded-lg bg-gray-700/60 hover:bg-gray-600/80 text-gray-200 text-xs opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1"
     >
-      {copied ? "✓ 복사됨" : "📋 복사"}
+      {copied ? t("✓ 복사됨", "✓ Copied") : t("📋 복사", "📋 Copy")}
     </button>
   )
 }

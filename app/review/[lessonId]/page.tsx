@@ -34,6 +34,9 @@ import { runPythonCode } from "./utils/pythonRunner"
 // Supabase 진도 동기화
 import { useLessonSync } from "@/hooks/use-lesson-sync"
 
+// 다국어 지원
+import { useLanguage } from "@/contexts/language-context"
+
 // ============================================================
 // Python Syntax Highlighting (경량 토크나이저)
 // ============================================================
@@ -284,6 +287,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
   const resolvedParams = use(params)
   const lessonId = resolvedParams.lessonId
   const router = useRouter()
+  const { t, lang } = useLanguage()
 
   const lesson = lessonsData[lessonId]
   const highlightLine = lesson?.language === "cpp" ? highlightCppLine : highlightPythonLine
@@ -594,8 +598,8 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <p className="text-6xl mb-4">🚧</p>
-          <p className="text-gray-600 mb-4">아직 준비 중인 레슨이에요</p>
-          <Button onClick={() => router.push("/curriculum")} className="bg-blue-600 hover:bg-blue-700 text-white font-bold">돌아가기</Button>
+          <p className="text-gray-600 mb-4">{t("아직 준비 중인 레슨이에요", "This lesson is not ready yet")}</p>
+          <Button onClick={() => router.push("/curriculum")} className="bg-blue-600 hover:bg-blue-700 text-white font-bold">{t("돌아가기", "Go Back")}</Button>
         </div>
       </div>
     )
@@ -621,25 +625,25 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
         const printTypos = ['pirnt', 'prnt', 'prnit', 'pritn', 'printt', 'prit', 'prrint']
         for (const typo of printTypos) {
           if (code.toLowerCase().includes(typo)) {
-            return { result: "", error: `오타! ${typo} → print` }
+            return { result: "", error: t(`오타! ${typo} → print`, `Typo! ${typo} → print`) }
           }
         }
         
         if (/\bprin\s*\(/i.test(code) && !/\bprint\s*\(/i.test(code)) {
-          return { result: "", error: "오타! prin → print" }
+          return { result: "", error: t("오타! prin → print", "Typo! prin → print") }
         }
       }
       
       const m = code.match(/print\s*\(\s*([\s\S]*)\s*\)/i)
       if (!m) {
         if (code.toLowerCase().includes('print')) {
-          return { result: "", error: "print() 괄호 확인해봐!" }
+          return { result: "", error: t("print() 괄호 확인해봐!", "Check print() brackets!") }
         }
-        return { result: "", error: "print()를 써봐!" }
+        return { result: "", error: t("print()를 써봐!", "Try using print()!") }
       }
       
       const inside = m[1].trim()
-      if (!inside) return { result: "", error: "print() 안에 뭔가 넣어봐!" }
+      if (!inside) return { result: "", error: t("print() 안에 뭔가 넣어봐!", "Put something inside print()!") }
       
       const parts: string[] = []
       let curr = ""
@@ -666,7 +670,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
       if (curr.trim()) parts.push(curr.trim())
       
       if (inQuote) {
-        return { result: "", error: "따옴표를 닫아봐! ' 또는 \"" }
+        return { result: "", error: t('따옴표를 닫아봐! \' 또는 "', 'Close the quote! \' or "') }
       }
       
       const results: string[] = []
@@ -679,7 +683,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
         
         if ((part.startsWith("'") && part.endsWith('"')) || 
             (part.startsWith('"') && part.endsWith("'"))) {
-          return { result: "", error: "따옴표 종류를 맞춰봐! ' 또는 \" 하나로" }
+          return { result: "", error: t("따옴표 종류를 맞춰봐!", "Match your quote types!") }
         }
         
         if (/^[\d\s+\-*/().]+$/.test(part)) {
@@ -689,21 +693,21 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
             results.push(numResult)
             continue
           } catch {
-            return { result: "", error: "계산식 확인해봐!" }
+            return { result: "", error: t("계산식 확인해봐!", "Check your expression!") }
           }
         }
         
         if (/[a-zA-Z가-힣]/.test(part)) {
           const word = part.match(/[a-zA-Z가-힣]+/)?.[0]
-          return { result: "", error: `${word}에 따옴표 붙여봐! '${word}'` }
+          return { result: "", error: t(`${word}에 따옴표 붙여봐! '${word}'`, `Add quotes to ${word}! '${word}'`) }
         }
         
         results.push(part)
       }
       
       return { result: results.join(' ') }
-    } catch { 
-      return { result: "", error: "다시 확인해봐!" } 
+    } catch {
+      return { result: "", error: t("다시 확인해봐!", "Try again!") }
     }
   }
 
@@ -727,7 +731,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
       })
       
       if (allCorrect) {
-        setOutput(sc.expect || '정답!')
+        setOutput(sc.expect || t("정답!", "Correct!"))
         setErrorMsg("")
         setPhase("correct")
         setPraise(getRandomPraise())
@@ -762,7 +766,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
         })
         const wrongBlank = blanks[wrongIdx] || ''
         setOutput("")
-        setErrorMsg(wrongBlank ? `${wrongIdx + 1}번 빈칸을 다시 확인해봐!` : `${wrongIdx + 1}번 빈칸을 채워봐!`)
+        setErrorMsg(wrongBlank ? t(`${wrongIdx + 1}번 빈칸을 다시 확인해봐!`, `Check blank #${wrongIdx + 1} again!`) : t(`${wrongIdx + 1}번 빈칸을 채워봐!`, `Fill in blank #${wrongIdx + 1}!`))
         setPhase("wrong")
         const newTries = tries + 1
         setTries(newTries)
@@ -833,7 +837,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
         return
       } else {
         setOutput("")
-        setErrorMsg("다시 확인해봐!")
+        setErrorMsg(t("다시 확인해봐!", "Try again!"))
         setPhase("wrong")
         const newTries = tries + 1
         setTries(newTries)
@@ -982,12 +986,12 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
   }
 
   const getLevelBadge = (level: number) => {
-    if (level === 1) return { label: "⭐ 쉬움", color: "bg-green-600 text-white" }
-    if (level === 1.5) return { label: "⭐ 쉬움+", color: "bg-teal-600 text-white" }
-    if (level === 2) return { label: "⭐⭐ 보통", color: "bg-blue-600 text-white" }
-    if (level === 2.5) return { label: "⭐⭐ 보통+", color: "bg-indigo-600 text-white" }
-    if (level === 3) return { label: "⭐⭐⭐ 도전", color: "bg-purple-600 text-white" }
-    if (level === 4) return { label: "🔥 혼자!", color: "bg-rose-600 text-white" }
+    if (level === 1) return { label: t("⭐ 쉬움", "⭐ Easy"), color: "bg-green-600 text-white" }
+    if (level === 1.5) return { label: t("⭐ 쉬움+", "⭐ Easy+"), color: "bg-teal-600 text-white" }
+    if (level === 2) return { label: t("⭐⭐ 보통", "⭐⭐ Normal"), color: "bg-blue-600 text-white" }
+    if (level === 2.5) return { label: t("⭐⭐ 보통+", "⭐⭐ Normal+"), color: "bg-indigo-600 text-white" }
+    if (level === 3) return { label: t("⭐⭐⭐ 도전", "⭐⭐⭐ Challenge"), color: "bg-purple-600 text-white" }
+    if (level === 4) return { label: t("🔥 혼자!", "🔥 Solo!"), color: "bg-rose-600 text-white" }
     return { label: "", color: "" }
   }
 
@@ -1005,7 +1009,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
           <p className="text-white text-base md:text-lg font-bold">
             ❌ {errorMsg}
           </p>
-          <p className="text-red-200 text-sm mt-1">괜찮아! 다시 해보자 💪</p>
+          <p className="text-red-200 text-sm mt-1">{t("괜찮아! 다시 해보자 💪", "It's okay! Try again 💪")}</p>
         </div>
       )
     }
@@ -1016,7 +1020,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
       return (
         <div className="bg-amber-500 rounded-2xl p-4 animate-fadeIn">
           <p className="text-white text-base md:text-lg font-bold">
-            💡 {errorMsg || hc.hint || hc.guide || "천천히 다시 확인해봐!"}
+            💡 {errorMsg || hc.hint || hc.guide || t("천천히 다시 확인해봐!", "Take your time and try again!")}
           </p>
         </div>
       )
@@ -1025,7 +1029,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
     if (showHint === 2 && hc.hint) {
       return (
         <div className="bg-purple-600 rounded-2xl p-4 animate-fadeIn">
-          <p className="text-white text-base md:text-lg mb-2 font-bold">💡 이렇게 써봐</p>
+          <p className="text-white text-base md:text-lg mb-2 font-bold">{t("💡 이렇게 써봐", "💡 Try it like this")}</p>
           <p className="text-white font-mono text-base md:text-lg bg-purple-800 p-3 rounded-xl">{hc.hint}</p>
         </div>
       )
@@ -1034,7 +1038,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
     if (showHint >= 3 || (showHint >= 2 && !hc.hint)) {
       return (
         <div className="bg-pink-600 rounded-2xl p-4 animate-fadeIn">
-          <p className="text-white text-base md:text-lg mb-2 font-bold">🎯 정답 보고 직접 써봐</p>
+          <p className="text-white text-base md:text-lg mb-2 font-bold">{t("🎯 정답 보고 직접 써봐", "🎯 Look at the answer and type it")}</p>
           <p className="text-white font-mono text-base md:text-lg bg-pink-800 p-3 rounded-xl select-none">{hc.answer}</p>
         </div>
       )
@@ -1058,10 +1062,9 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
   )
 
   const getRandomPraise = () => {
-    const praises = [
-      "정답! 🎉", "완벽해! ✨", "천재?! 🧠", "멋져! 🔥", "빠르다! ⚡",
-      "대단해! 💪", "좋았어! 👍", "잘했어! 🌟", "굿! 👏", "역시! 😎"
-    ]
+    const praises = lang === 'en'
+      ? ["Correct! 🎉", "Perfect! ✨", "Genius?! 🧠", "Amazing! 🔥", "Fast! ⚡", "Great! 💪", "Nice! 👍", "Well done! 🌟", "Good! 👏", "Awesome! 😎"]
+      : ["정답! 🎉", "완벽해! ✨", "천재?! 🧠", "멋져! 🔥", "빠르다! ⚡", "대단해! 💪", "좋았어! 👍", "잘했어! 🌟", "굿! 👏", "역시! 😎"]
     return praises[Math.floor(Math.random() * praises.length)]
   }
 
@@ -1081,8 +1084,8 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
       <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 animate-bounce">
         <div className="bg-orange-500 text-white px-8 py-4 rounded-2xl shadow-2xl text-center">
           <div className="text-4xl mb-2">🔥</div>
-          <div className="text-2xl font-bold">{streak}연속 정답!</div>
-          <div className="text-lg">+20 보너스!</div>
+          <div className="text-2xl font-bold">{t(`${streak}연속 정답!`, `${streak} in a row!`)}</div>
+          <div className="text-lg">{t("+20 보너스!", "+20 Bonus!")}</div>
         </div>
       </div>
     )
@@ -1121,7 +1124,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
           <div className="pt-8 md:pt-12 space-y-5 md:space-y-6">
             <div className="flex justify-center">
               <span className="px-6 py-2 rounded-full text-lg md:text-xl font-bold bg-orange-500 text-white shadow-lg">
-                🔄 복습
+                {t("🔄 복습", "🔄 Review")}
               </span>
             </div>
 
@@ -1137,7 +1140,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 disabled={phase === "correct"}
-                placeholder="여기에 코드 입력!"
+                placeholder={t("여기에 코드 입력!", "Type your code here!")}
                 className={cn(
                   "w-full h-24 md:h-28 bg-indigo-50 text-indigo-900 font-mono font-bold p-4 md:p-5 rounded-2xl text-xl md:text-2xl focus:outline-none focus:ring-4 focus:ring-orange-400 resize-none placeholder:text-indigo-300 border-4 border-indigo-200",
                   phase === "wrong" && "ring-4 ring-red-500 border-red-500"
@@ -1159,17 +1162,17 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
             {phase !== "correct" && renderHint()}
 
             {phase !== "correct" && (
-              <Button 
+              <Button
                 onClick={check}
                 disabled={!input.trim()}
                 className={cn(
                   "w-full py-7 md:py-8 text-xl md:text-2xl rounded-2xl transition-all font-bold shadow-xl",
-                  input.trim() 
-                    ? "bg-orange-500 hover:bg-orange-400 text-white animate-button-ready" 
+                  input.trim()
+                    ? "bg-orange-500 hover:bg-orange-400 text-white animate-button-ready"
                     : "bg-gray-300 text-gray-500"
                 )}
               >
-                <Play className="w-6 h-6 mr-2" /> 실행하기
+                <Play className="w-6 h-6 mr-2" /> {t("실행하기", "Run")}
               </Button>
             )}
           </div>
@@ -1253,9 +1256,9 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
               onClick={next}
               className="px-12 py-8 md:py-10 text-2xl md:text-3xl bg-indigo-600 hover:bg-indigo-500 rounded-2xl border-0 font-bold text-white shadow-xl"
             >
-              시작! <ChevronRight className="w-8 h-8 ml-2" />
+              {t("시작!", "Start!")} <ChevronRight className="w-8 h-8 ml-2" />
             </Button>
-            <p className="text-gray-400 text-base">Enter로 계속</p>
+            <p className="text-gray-400 text-base">{t("Enter로 계속", "Press Enter to continue")}</p>
           </div>
         )}
 
@@ -1270,14 +1273,14 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
             </h2>
             <div className="inline-flex items-center gap-3 bg-amber-500 px-8 py-4 rounded-full shadow-xl">
               <Sparkles className="w-8 h-8 text-white" />
-              <span className="text-4xl md:text-5xl font-bold text-white">{score}점</span>
+              <span className="text-4xl md:text-5xl font-bold text-white">{score}{t("점", "pts")}</span>
             </div>
             <div className="pt-4">
               <Button 
                 onClick={next}
                 className="w-full max-w-md mx-auto px-12 py-8 md:py-10 text-2xl md:text-3xl bg-indigo-600 hover:bg-indigo-500 rounded-2xl border-0 font-bold text-white shadow-xl"
               >
-                계속하기 <ChevronRight className="w-8 h-8 ml-2" />
+                {t("계속하기", "Continue")} <ChevronRight className="w-8 h-8 ml-2" />
               </Button>
             </div>
           </div>
@@ -1290,14 +1293,14 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
               {c.emoji}
             </div>
             <div className="space-y-2">
-              <p className="text-indigo-600 font-bold text-xl md:text-2xl">Chapter {c.num} 완료!</p>
+              <p className="text-indigo-600 font-bold text-xl md:text-2xl">Chapter {c.num} {t("완료!", "Complete!")}</p>
               <h2 className="text-3xl md:text-5xl font-bold text-gray-900">
-                {c.title} 마스터!
+                {c.title} {t("마스터!", "Mastered!")}
               </h2>
             </div>
             
             <div className="bg-white rounded-3xl p-6 md:p-8 shadow-xl border-4 border-indigo-200 text-left">
-              <p className="text-indigo-600 font-bold text-lg md:text-xl mb-4">📝 오늘 배운 것</p>
+              <p className="text-indigo-600 font-bold text-lg md:text-xl mb-4">{t("📝 오늘 배운 것", "📝 What you learned")}</p>
               <ul className="space-y-3">
                 {c.learned.map((item: string, i: number) => (
                   <li key={i} className="flex items-start gap-3">
@@ -1316,26 +1319,26 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
             
             <div className="inline-flex items-center gap-3 bg-amber-500 px-8 py-4 rounded-full shadow-xl">
               <Trophy className="w-8 h-8 text-white" />
-              <span className="text-3xl md:text-4xl font-bold text-white">{score}점</span>
+              <span className="text-3xl md:text-4xl font-bold text-white">{score}{t("점", "pts")}</span>
             </div>
             
             {wrongAnswers.length > 0 ? (
               <div className="space-y-4">
                 <p className="text-orange-600 font-bold text-xl md:text-2xl">
-                  틀린 문제 {wrongAnswers.length}개 복습할까?
+                  {t(`틀린 문제 ${wrongAnswers.length}개 복습할까?`, `Review ${wrongAnswers.length} wrong answers?`)}
                 </p>
                 <div className="flex gap-4 justify-center">
                   <Button 
                     onClick={startReview}
                     className="px-8 py-6 text-xl bg-orange-500 hover:bg-orange-400 rounded-xl border-0 font-bold text-white shadow-lg"
                   >
-                    <RotateCcw className="w-6 h-6 mr-2" /> 복습하기
+                    <RotateCcw className="w-6 h-6 mr-2" /> {t("복습하기", "Review")}
                   </Button>
                   <Button 
                     onClick={next}
                     className="px-8 py-6 text-xl rounded-xl border-4 border-gray-400 text-gray-600 hover:bg-gray-100 font-bold bg-white"
                   >
-                    건너뛰기
+                    {t("건너뛰기", "Skip")}
                   </Button>
                 </div>
               </div>
@@ -1344,7 +1347,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                 onClick={next}
                 className="px-12 py-8 md:py-10 text-2xl md:text-3xl bg-indigo-600 hover:bg-indigo-500 rounded-2xl border-0 font-bold text-white shadow-xl"
               >
-                다음으로 <ChevronRight className="w-8 h-8 ml-2" />
+                {t("다음으로", "Next")} <ChevronRight className="w-8 h-8 ml-2" />
               </Button>
             )}
           </div>
@@ -1392,7 +1395,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                 {/* 클릭 안내 - 아직 줄이 남아있을 때 */}
                 {!typingComplete && visibleLines > 0 && (
                   <div className="px-4 py-2 bg-gray-800 text-center">
-                    <span className="text-gray-500 text-sm">👆 탭하면 다음 줄이 나와요!</span>
+                    <span className="text-gray-500 text-sm">{t("👆 탭하면 다음 줄이 나와요!", "👆 Tap to show the next line!")}</span>
                   </div>
                 )}
                 
@@ -1419,7 +1422,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
             {c.predict && typingComplete && !predictAnswered && (
               <div className="space-y-4 animate-fadeIn">
                 <p className="text-center text-xl md:text-2xl font-bold text-amber-600">
-                  🤔 {c.predict.question || "결과가 뭘까?"}
+                  🤔 {c.predict.question || t("결과가 뭘까?", "What's the result?")}
                 </p>
                 <div className="space-y-3">
                   {c.predict.options.map((opt: string, idx: number) => (
@@ -1446,9 +1449,9 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                   : "bg-red-500"
               )}>
                 <p className="text-white text-xl md:text-2xl font-bold">
-                  {predictSelected === c.predict.answer 
-                    ? "정답! 👏 +5점" 
-                    : `아쉬워! 정답은 "${c.predict.options[c.predict.answer]}"`
+                  {predictSelected === c.predict.answer
+                    ? t("정답! 👏 +5점", "Correct! 👏 +5pts")
+                    : t(`아쉬워! 정답은 "${c.predict.options[c.predict.answer]}"`, `Close! The answer was "${c.predict.options[c.predict.answer]}"`)
                   }
                 </p>
                 {c.predict.feedback && predictSelected !== c.predict.answer && (
@@ -1475,9 +1478,9 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                   onClick={next}
                   className="w-full py-7 md:py-8 text-xl md:text-2xl bg-indigo-600 hover:bg-indigo-500 rounded-2xl border-0 font-bold text-white shadow-xl"
                 >
-                  다음 <ChevronRight className="w-6 h-6 md:w-7 md:h-7 ml-2" />
+                  {t("다음", "Next")} <ChevronRight className="w-6 h-6 md:w-7 md:h-7 ml-2" />
                 </Button>
-                <p className="text-gray-400 text-base text-center">Enter로 계속</p>
+                <p className="text-gray-400 text-base text-center">{t("Enter로 계속", "Press Enter to continue")}</p>
               </>
             )}
           </div>
@@ -1488,7 +1491,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
           <div className="pt-8 md:pt-12 space-y-6 md:space-y-8 animate-fadeIn">
             <div className="flex justify-center">
               <span className="px-6 py-2 rounded-full text-lg font-bold bg-red-500 text-white shadow-lg">
-                🔍 에러 탐정
+                {t("🔍 에러 탐정", "🔍 Error Detective")}
               </span>
             </div>
             
@@ -1639,7 +1642,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   disabled={phase === "correct"}
-                  placeholder="여기에 코드 입력!"
+                  placeholder={t("여기에 코드 입력!", "Type your code here!")}
                   className={cn(
                     "w-full h-24 md:h-28 bg-purple-50 text-purple-900 font-mono font-bold p-4 md:p-5 rounded-2xl text-xl md:text-2xl focus:outline-none focus:ring-4 focus:ring-purple-400 resize-none placeholder:text-purple-300 border-4 border-purple-200",
                     phase === "wrong" && "ring-4 ring-red-500 border-red-500"
@@ -1676,7 +1679,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                       : "bg-gray-300 text-gray-500"
                   )}
                 >
-                  <Play className="w-6 h-6 mr-2" /> 실행하기
+                  <Play className="w-6 h-6 mr-2" /> {t("실행하기", "Run")}
                 </Button>
               )
             })()}
@@ -1803,7 +1806,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   disabled={phase === "correct"}
-                  placeholder="여기에 코드 입력!"
+                  placeholder={t("여기에 코드 입력!", "Type your code here!")}
                   className={cn(
                     "w-full h-24 md:h-28 bg-indigo-50 text-indigo-900 font-mono font-bold p-4 md:p-5 rounded-2xl text-xl md:text-2xl focus:outline-none focus:ring-4 focus:ring-indigo-400 resize-none placeholder:text-indigo-300 border-4 border-indigo-200",
                     phase === "wrong" && "ring-4 ring-red-500 border-red-500"
@@ -1830,17 +1833,17 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                 ? blanks.some(b => b.trim())
                 : input.trim()
               return (
-                <Button 
+                <Button
                   onClick={check}
                   disabled={!hasInput}
                   className={cn(
                     "w-full py-7 md:py-8 text-xl md:text-2xl rounded-2xl transition-all font-bold shadow-xl",
-                    hasInput 
-                      ? "bg-indigo-600 hover:bg-indigo-500 text-white animate-button-ready" 
+                    hasInput
+                      ? "bg-indigo-600 hover:bg-indigo-500 text-white animate-button-ready"
                       : "bg-gray-300 text-gray-500"
                   )}
                 >
-                  <Play className="w-6 h-6 mr-2" /> 실행하기
+                  <Play className="w-6 h-6 mr-2" /> {t("실행하기", "Run")}
                 </Button>
               )
             })()}
@@ -1938,7 +1941,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && input && check()}
                 disabled={phase === "correct"}
-                placeholder="여기에 코드 입력!"
+                placeholder={t("여기에 코드 입력!", "Type your code here!")}
                 className={cn(
                   "w-full bg-indigo-50 text-indigo-900 font-mono font-bold px-5 py-5 md:px-6 md:py-6 rounded-2xl text-center text-lg md:text-xl focus:outline-none focus:ring-4 focus:ring-indigo-400 placeholder:text-indigo-300 border-4 border-indigo-200",
                   phase === "wrong" && "ring-4 ring-red-500 border-red-500 animate-shake"
@@ -1961,17 +1964,17 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
             {phase !== "correct" && renderHint()}
 
             {phase !== "correct" && (
-              <Button 
+              <Button
                 onClick={check}
                 disabled={!input.trim()}
                 className={cn(
                   "w-full py-7 md:py-8 text-xl md:text-2xl rounded-2xl font-bold shadow-xl",
-                  input.trim() 
-                    ? "bg-indigo-600 hover:bg-indigo-500 text-white animate-button-ready" 
+                  input.trim()
+                    ? "bg-indigo-600 hover:bg-indigo-500 text-white animate-button-ready"
                     : "bg-gray-300 text-gray-500"
                 )}
               >
-                <Play className="w-6 h-6 mr-2" /> 실행하기
+                <Play className="w-6 h-6 mr-2" /> {t("실행하기", "Run")}
               </Button>
             )}
           </div>

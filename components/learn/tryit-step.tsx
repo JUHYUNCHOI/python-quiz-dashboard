@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils"
 import { PythonRunner } from "@/components/python/python-runner"
 import { BlankCodeRunner } from "@/components/python/blank-code-runner"
 import { LessonStep } from "./types"
+import { useLanguage } from "@/contexts/language-context"
 
 interface TryItStepProps {
   step: LessonStep
@@ -16,16 +17,17 @@ interface TryItStepProps {
 
 export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onSuccess }: TryItStepProps) {
   const hasBlanks = !!(step.initialCode && step.initialCode.includes('___'))
+  const { t } = useLanguage()
 
   return (
     <div className="space-y-6">
       <div className="space-y-4">
         <div className="flex items-center gap-2 flex-wrap">
           <span className={cn("px-3 py-1 rounded-full text-sm font-bold", step.type === "tryit" ? "bg-green-100 text-green-700" : "bg-purple-100 text-purple-700")}>
-            {step.type === "tryit" && <><Code className="w-4 h-4 inline mr-1" />실습</>}
-            {step.type === "mission" && <><Trophy className="w-4 h-4 inline mr-1" />미션</>}
+            {step.type === "tryit" && <><Code className="w-4 h-4 inline mr-1" />{t("실습", "Practice")}</>}
+            {step.type === "mission" && <><Trophy className="w-4 h-4 inline mr-1" />{t("미션", "Mission")}</>}
           </span>
-          {isCompleted && <span className="px-2 py-0.5 rounded text-xs bg-green-100 text-green-700 font-medium">✅ 완료!</span>}
+          {isCompleted && <span className="px-2 py-0.5 rounded text-xs bg-green-100 text-green-700 font-medium">{t("✅ 완료!", "✅ Done!")}</span>}
         </div>
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{step.title}</h1>
         {/* 빈칸 모드가 아닐 때만 외부 힌트 UI 표시 (BlankCodeRunner는 자체 힌트 시스템 사용) */}
@@ -33,22 +35,22 @@ export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onS
           <div className="space-y-2">
             {hintLevel === 0 && (
               <button onClick={() => onHintLevelChange(1)} className="text-sm text-indigo-600 hover:text-indigo-700 flex items-center gap-1">
-                <Lightbulb className="w-4 h-4" /> 힌트 보기
+                <Lightbulb className="w-4 h-4" /> {t("힌트 보기", "Show Hint")}
               </button>
             )}
             {hintLevel >= 1 && step.hint && (
               <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-                <p className="text-sm text-amber-800"><Lightbulb className="w-4 h-4 inline mr-1 text-amber-600" /> 힌트 1: {step.hint}</p>
+                <p className="text-sm text-amber-800"><Lightbulb className="w-4 h-4 inline mr-1 text-amber-600" /> {t("힌트 1: ", "Hint 1: ")}{step.hint}</p>
                 {hintLevel === 1 && step.hint2 && (
                   <button onClick={() => onHintLevelChange(2)} className="text-xs text-amber-600 hover:text-amber-700 mt-2 flex items-center gap-1">
-                    <Eye className="w-3 h-3" /> 정답에 가까운 힌트 보기
+                    <Eye className="w-3 h-3" /> {t("정답에 가까운 힌트 보기", "Show answer hint")}
                   </button>
                 )}
               </div>
             )}
             {hintLevel >= 2 && step.hint2 && (
               <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
-                <p className="text-sm text-orange-800 font-mono"><Eye className="w-4 h-4 inline mr-1 text-orange-600" /> 힌트 2: {step.hint2}</p>
+                <p className="text-sm text-orange-800 font-mono"><Eye className="w-4 h-4 inline mr-1 text-orange-600" /> {t("힌트 2: ", "Hint 2: ")}{step.hint2}</p>
               </div>
             )}
           </div>

@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils"
 import { LessonStep } from "./types"
 import { CodeBlock } from "@/components/ui/code-block"
 import { motion, AnimatePresence } from "framer-motion"
+import { useLanguage } from "@/contexts/language-context"
 
 interface PredictStepProps {
   step: LessonStep
@@ -56,6 +57,7 @@ function TerminalOutput({ output, show }: { output: string; show: boolean }) {
 
 export function PredictStep({ step, isCompleted, selectedAnswer, showExplanation, quizAttempts, onAnswer, onAcknowledge, isReview }: PredictStepProps) {
   const [showAckButton, setShowAckButton] = useState(false)
+  const { t } = useLanguage()
 
   useEffect(() => {
     if (showExplanation && selectedAnswer !== null && selectedAnswer !== step.answer) {
@@ -74,15 +76,15 @@ export function PredictStep({ step, isCompleted, selectedAnswer, showExplanation
       <div className="space-y-4">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="px-3 py-1 rounded-full text-sm font-bold bg-emerald-100 text-emerald-700">
-            <Terminal className="w-4 h-4 inline mr-1" />출력 예측
+            <Terminal className="w-4 h-4 inline mr-1" />{t("출력 예측", "Predict Output")}
           </span>
           {isReview && (
             <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-orange-100 text-orange-600 animate-pulse">
-              🔄 아까 틀린 문제
+              {t("🔄 아까 틀린 문제", "🔄 Review")}
             </span>
           )}
           {isCompleted && !isReview && (
-            <span className="px-2 py-0.5 rounded text-xs bg-green-100 text-green-700 font-medium">✅ 정답!</span>
+            <span className="px-2 py-0.5 rounded text-xs bg-green-100 text-green-700 font-medium">{t("✅ 정답!", "✅ Correct!")}</span>
           )}
         </div>
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{step.title}</h1>
@@ -97,7 +99,7 @@ export function PredictStep({ step, isCompleted, selectedAnswer, showExplanation
 
       {/* 프롬프트 */}
       <p className="text-base md:text-lg font-semibold text-gray-700 text-center">
-        {step.content || "이 코드를 실행하면 어떤 결과가 나올까요?"}
+        {step.content || t("이 코드를 실행하면 어떤 결과가 나올까요?", "What will be the output of this code?")}
       </p>
 
       {/* 선택지 */}
@@ -146,7 +148,7 @@ export function PredictStep({ step, isCompleted, selectedAnswer, showExplanation
           <div className="flex items-center gap-2 mb-1">
             <Lightbulb className={cn("w-4 h-4", selectedAnswer === step.answer ? "text-green-600" : "text-amber-600")} />
             <span className={cn("font-bold text-sm", selectedAnswer === step.answer ? "text-green-700" : "text-amber-700")}>
-              {selectedAnswer === step.answer ? "정답! 🎉" : "틀렸어요!"}
+              {selectedAnswer === step.answer ? t("정답! 🎉", "Correct! 🎉") : t("틀렸어요!", "Wrong!")}
             </span>
           </div>
           <p className={cn("text-sm", selectedAnswer === step.answer ? "text-green-800" : "text-amber-800")}>
@@ -155,16 +157,16 @@ export function PredictStep({ step, isCompleted, selectedAnswer, showExplanation
           {selectedAnswer !== step.answer && (
             showAckButton ? (
               <>
-                {!isReview && <p className="mt-2 text-xs text-amber-600 font-medium text-center">🔄 이 문제는 나중에 다시 나와요!</p>}
+                {!isReview && <p className="mt-2 text-xs text-amber-600 font-medium text-center">{t("🔄 이 문제는 나중에 다시 나와요!", "🔄 This question will come up again later!")}</p>}
                 <button
                   onClick={onAcknowledge}
                   className="mt-2 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 animate-fade-in"
                 >
-                  확인했어요 <ArrowRight className="w-5 h-5" />
+                  {t("확인했어요", "Got it")} <ArrowRight className="w-5 h-5" />
                 </button>
               </>
             ) : (
-              <p className="mt-3 text-center text-xs text-amber-500 animate-pulse">설명을 읽어보세요...</p>
+              <p className="mt-3 text-center text-xs text-amber-500 animate-pulse">{t("설명을 읽어보세요...", "Read the explanation...")}</p>
             )
           )}
         </motion.div>
