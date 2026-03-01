@@ -1,10 +1,15 @@
+"use client"
+
 import { GiraffeHero } from "@/components/giraffe-hero"
 import { QuizCard } from "@/components/quiz-card"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { GraduationCap } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function DashboardPage() {
+  const { t } = useLanguage()
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-mint-50">
       <Header />
@@ -19,8 +24,8 @@ export default function DashboardPage() {
         {/* 메뉴 카드 */}
         <div className="grid gap-4 grid-cols-1">
           <QuizCard
-            title="수업 & 퀴즈"
-            description="커리큘럼을 따라 학습하세요"
+            title={t("수업 & 퀴즈", "Lessons & Quizzes")}
+            description={t("커리큘럼을 따라 학습하세요", "Follow the curriculum to learn")}
             icon={<GraduationCap className="h-8 w-8 lg:h-10 lg:w-10" />}
             color="lavender"
             href="/curriculum"

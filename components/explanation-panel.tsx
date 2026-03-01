@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import { CodeDisplay } from "./code-display"
+import { useLanguage } from "@/contexts/language-context"
 
 interface ExplanationPanelProps {
   show: boolean
@@ -36,6 +37,7 @@ export function ExplanationPanel({
   onClose,
   onNext,
 }: ExplanationPanelProps) {
+  const { t } = useLanguage()
   const [isBookmarked, setIsBookmarked] = useState(false)
   const [showRelated, setShowRelated] = useState(false)
 
@@ -52,8 +54,8 @@ export function ExplanationPanel({
           <div className="flex items-center gap-3">
             <div className="text-4xl md:text-5xl">🦒💭</div>
             <div>
-              <h3 className="text-lg md:text-xl font-bold text-gray-800">함께 다시 볼까요?</h3>
-              <p className="text-sm text-gray-500">차근차근 이해해봐요</p>
+              <h3 className="text-lg md:text-xl font-bold text-gray-800">{t("함께 다시 볼까요?", "Let's review together!")}</h3>
+              <p className="text-sm text-gray-500">{t("차근차근 이해해봐요", "Let's understand step by step")}</p>
             </div>
           </div>
           <Button variant="ghost" size="sm" onClick={onClose} className="rounded-full min-h-[44px] min-w-[44px]">
@@ -68,7 +70,7 @@ export function ExplanationPanel({
                 <span className="text-white text-xl md:text-2xl">❌</span>
               </div>
               <div className="flex-1">
-                <h4 className="font-bold text-red-900 mb-2 text-base md:text-lg">선택한 답</h4>
+                <h4 className="font-bold text-red-900 mb-2 text-base md:text-lg">{t("선택한 답", "Your Answer")}</h4>
                 <p className="font-mono text-sm md:text-base text-red-800 mb-3 bg-white/70 rounded-lg p-3">
                   {yourAnswer}
                 </p>
@@ -83,7 +85,7 @@ export function ExplanationPanel({
                 <span className="text-white text-xl md:text-2xl">✓</span>
               </div>
               <div className="flex-1">
-                <h4 className="font-bold text-green-900 mb-2 text-base md:text-lg">정답</h4>
+                <h4 className="font-bold text-green-900 mb-2 text-base md:text-lg">{t("정답", "Correct Answer")}</h4>
                 <p className="font-mono text-sm md:text-base text-green-800 bg-white/70 rounded-lg p-3">
                   {correctAnswer}
                 </p>
@@ -96,15 +98,15 @@ export function ExplanationPanel({
             <div className="space-y-3">
               <h4 className="font-bold text-gray-800 flex items-center gap-2 text-base md:text-lg">
                 <BookOpen className="h-5 w-5 text-orange-500" />
-                코드 비교
+                {t("코드 비교", "Code Comparison")}
               </h4>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <div className="text-sm font-semibold text-red-600 mb-2">틀린 이해</div>
+                  <div className="text-sm font-semibold text-red-600 mb-2">{t("틀린 이해", "Wrong approach")}</div>
                   <CodeDisplay code={codeComparison.wrong} showLineNumbers={false} maxHeight={300} />
                 </div>
                 <div>
-                  <div className="text-sm font-semibold text-green-600 mb-2">올바른 이해</div>
+                  <div className="text-sm font-semibold text-green-600 mb-2">{t("올바른 이해", "Correct approach")}</div>
                   <CodeDisplay code={codeComparison.correct} showLineNumbers={false} maxHeight={300} />
                 </div>
               </div>
@@ -115,7 +117,7 @@ export function ExplanationPanel({
             <div className="flex items-start gap-3">
               <div className="text-3xl md:text-4xl">💡</div>
               <div className="flex-1">
-                <h4 className="font-bold text-yellow-900 mb-2 text-base md:text-lg">기억하세요!</h4>
+                <h4 className="font-bold text-yellow-900 mb-2 text-base md:text-lg">{t("기억하세요!", "Remember!")}</h4>
                 <p className="font-semibold text-yellow-800 mb-2">{keyConceptTitle}</p>
                 <p className="text-sm md:text-base text-yellow-700 leading-relaxed">{keyConceptDescription}</p>
               </div>
@@ -131,7 +133,7 @@ export function ExplanationPanel({
               >
                 <span className="flex items-center gap-2">
                   <BookOpen className="h-5 w-5 text-mint-500" />
-                  이것도 알아두세요
+                  {t("이것도 알아두세요", "Good to know")}
                 </span>
                 {showRelated ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
               </button>
@@ -157,7 +159,7 @@ export function ExplanationPanel({
               onClick={onNext}
               className="flex-1 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white font-bold py-6 md:py-7 text-base md:text-lg rounded-xl shadow-lg hover:shadow-xl transition-all min-h-[56px]"
             >
-              이해했어요, 다음 문제로
+              {t("이해했어요, 다음 문제로", "Got it, next question")}
             </Button>
             <Button
               onClick={() => setIsBookmarked(!isBookmarked)}
@@ -172,7 +174,7 @@ export function ExplanationPanel({
             </Button>
           </div>
 
-          <p className="text-center text-sm text-gray-600 py-2">비슷한 문제가 나중에 다시 나올 거예요 ✨</p>
+          <p className="text-center text-sm text-gray-600 py-2">{t("비슷한 문제가 나중에 다시 나올 거예요 ✨", "Similar questions will come up again later ✨")}</p>
         </div>
       </div>
     </>

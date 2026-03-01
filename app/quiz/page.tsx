@@ -17,6 +17,7 @@ import { useQuizKeyboard } from "@/hooks/use-quiz-keyboard"
 import { useSoundEffect } from "@/hooks/use-sound-effect"
 import { SoundToggle } from "@/components/sound-toggle"
 import { useGamification } from "@/hooks/use-gamification"
+import { useLanguage } from "@/contexts/language-context"
 
 const quizQuestions: QuizQuestion[] = [
   {
@@ -71,6 +72,7 @@ export default function QuizPage() {
   const quiz = useQuizState(quizQuestions)
   const { play, isMuted, toggleMute } = useSoundEffect()
   const gamification = useGamification()
+  const { t } = useLanguage()
   const { isFocused, justReturnedFocus } = useFocusTracker()
   const comboTier = getComboTier(quiz.combo)
 
@@ -142,9 +144,9 @@ export default function QuizPage() {
               <div className="flex-1 max-w-xs md:max-w-md">
                 <div className="mb-1 flex items-center justify-between text-xs md:text-sm text-gray-600">
                   <span>
-                    문제 {quiz.currentQuestion + 1}/{quiz.quizSettings.questionCount}
+                    {t("문제", "Q")} {quiz.currentQuestion + 1}/{quiz.quizSettings.questionCount}
                   </span>
-                  <span className="hidden sm:inline">{Math.round(quiz.progress)}% 완료</span>
+                  <span className="hidden sm:inline">{Math.round(quiz.progress)}% {t("완료", "Done")}</span>
                 </div>
                 <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
                   <div
@@ -222,8 +224,8 @@ export default function QuizPage() {
             <div className="flex items-start gap-3">
               <AlertCircle className="h-6 w-6 text-yellow-600 flex-shrink-0" />
               <div>
-                <p className="text-sm font-semibold text-gray-800 mb-1">너무 빨리 풀었어요</p>
-                <p className="text-xs text-gray-600">다시 한번 확인해볼까요?</p>
+                <p className="text-sm font-semibold text-gray-800 mb-1">{t("너무 빨리 풀었어요", "Too fast!")}</p>
+                <p className="text-xs text-gray-600">{t("다시 한번 확인해볼까요?", "Want to double-check?")}</p>
               </div>
             </div>
           </Card>
@@ -236,8 +238,8 @@ export default function QuizPage() {
             <div className="flex items-start gap-3">
               <div className="text-3xl">🦒</div>
               <div>
-                <p className="text-sm font-semibold text-gray-800 mb-1">다시 돌아왔네요!</p>
-                <p className="text-xs text-gray-600">이어서 할까요?</p>
+                <p className="text-sm font-semibold text-gray-800 mb-1">{t("다시 돌아왔네요!", "Welcome back!")}</p>
+                <p className="text-xs text-gray-600">{t("이어서 할까요?", "Shall we continue?")}</p>
               </div>
             </div>
           </Card>
@@ -248,10 +250,13 @@ export default function QuizPage() {
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
           <Card className="bg-white p-8 max-w-md mx-4 text-center animate-bounce-in">
             <div className="text-6xl mb-4">🦒💪</div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-2">절반 왔어요!</h3>
-            <p className="text-lg text-gray-600 mb-2">잘하고 있어요!</p>
+            <h3 className="text-2xl font-bold text-gray-800 mb-2">{t("절반 왔어요!", "Halfway there!")}</h3>
+            <p className="text-lg text-gray-600 mb-2">{t("잘하고 있어요!", "You're doing great!")}</p>
             <p className="text-sm text-gray-500">
-              지금까지 {Math.round((quiz.score / (quiz.currentQuestion + 1)) * 100)}% 정답률!
+              {t(
+                `지금까지 ${Math.round((quiz.score / (quiz.currentQuestion + 1)) * 100)}% 정답률!`,
+                `${Math.round((quiz.score / (quiz.currentQuestion + 1)) * 100)}% accuracy so far!`
+              )}
             </p>
           </Card>
         </div>
@@ -262,28 +267,28 @@ export default function QuizPage() {
           <Card className="bg-white p-8 max-w-md w-full">
             <div className="text-center mb-6">
               <div className="text-6xl mb-4">🦒💭</div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-2">괜찮아요?</h3>
-              <p className="text-gray-600">너무 어려운가요?</p>
+              <h3 className="text-2xl font-bold text-gray-800 mb-2">{t("괜찮아요?", "Are you okay?")}</h3>
+              <p className="text-gray-600">{t("너무 어려운가요?", "Is it too hard?")}</p>
             </div>
             <div className="space-y-3">
               <Button
                 onClick={quiz.handleLowerDifficulty}
                 className="w-full bg-green-500 hover:bg-green-600 text-white py-6 text-lg"
               >
-                난이도 낮추기
+                {t("난이도 낮추기", "Lower difficulty")}
               </Button>
               <Button
                 onClick={quiz.handleTakeBreak}
                 className="w-full bg-blue-500 hover:bg-blue-600 text-white py-6 text-lg flex items-center justify-center gap-2"
               >
                 <Coffee className="h-5 w-5" />
-                쉬었다가 하기
+                {t("쉬었다가 하기", "Take a break")}
               </Button>
               <Button
                 onClick={quiz.handleContinue}
                 className="w-full bg-orange-500 hover:bg-orange-600 text-white py-6 text-lg"
               >
-                계속 하기
+                {t("계속 하기", "Continue")}
               </Button>
             </div>
           </Card>
@@ -295,9 +300,12 @@ export default function QuizPage() {
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <Card className="bg-white p-8 max-w-md w-full text-center animate-bounce-in">
             <div className="text-7xl mb-4">💔</div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-2">하트가 다 떨어졌어요!</h3>
+            <h3 className="text-2xl font-bold text-gray-800 mb-2">{t("하트가 다 떨어졌어요!", "Out of hearts!")}</h3>
             <p className="text-gray-600 mb-6">
-              {quiz.score}문제 맞혔어요. 다음엔 더 잘할 수 있을 거예요!
+              {t(
+                `${quiz.score}문제 맞혔어요. 다음엔 더 잘할 수 있을 거예요!`,
+                `You got ${quiz.score} right. You'll do better next time!`
+              )}
             </p>
             <div className="text-5xl mb-4">🦒💪</div>
           </Card>
@@ -332,7 +340,7 @@ export default function QuizPage() {
                 >
                   {question.difficulty}
                 </span>
-                <span className="text-xs md:text-sm text-gray-500">문제 #{question.id}</span>
+                <span className="text-xs md:text-sm text-gray-500">{t("문제", "Q")} #{question.id}</span>
               </div>
 
               {/* Question Text */}
@@ -420,14 +428,14 @@ export default function QuizPage() {
                   className="hidden md:flex items-center gap-1 text-sm text-gray-500 transition-colors hover:text-gray-700 min-h-[44px]"
                 >
                   <ChevronLeft className="h-4 w-4" />
-                  이전
+                  {t("이전", "Prev")}
                 </button>
               )}
               <button
                 onClick={quiz.handleSkip}
                 className="text-sm text-gray-500 transition-colors hover:text-gray-700 min-h-[44px] px-2"
               >
-                건너뛰기
+                {t("건너뛰기", "Skip")}
               </button>
             </div>
 
@@ -436,13 +444,13 @@ export default function QuizPage() {
               disabled={quiz.selectedAnswer === null}
               className="min-w-[120px] md:min-w-32 rounded-full bg-gradient-to-r from-orange-400 to-orange-500 px-6 md:px-8 py-5 md:py-6 text-base md:text-lg font-semibold text-white shadow-lg transition-all hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:hover:scale-100 min-h-[44px]"
             >
-              다음
+              {t("다음", "Next")}
               <ChevronRight className="ml-1 h-4 w-4 md:h-5 md:w-5" />
             </Button>
           </div>
 
           <p className="mt-4 text-center text-xs text-gray-400 md:hidden">
-            좌우로 스와이프하여 이동하세요 • 1-4 키로 답변 선택
+            {t("좌우로 스와이프하여 이동하세요 • 1-4 키로 답변 선택", "Swipe to navigate • Press 1-4 to select")}
           </p>
         </div>
       </main>

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { Card } from "@/components/ui/card"
 import { ArrowRight, Sparkles } from "lucide-react"
 import Link from "next/link"
+import { useLanguage } from "@/contexts/language-context"
 
 interface LastProgress {
   lessonId: string
@@ -15,6 +16,7 @@ interface LastProgress {
 export function GiraffeHero() {
   const [lastProgress, setLastProgress] = useState<LastProgress | null>(null)
   const [mounted, setMounted] = useState(false)
+  const { t } = useLanguage()
 
   useEffect(() => {
     setMounted(true)
@@ -46,7 +48,7 @@ export function GiraffeHero() {
   }, [])
 
   const ctaHref = lastProgress ? `/learn/${lastProgress.lessonId}` : "/curriculum"
-  const ctaText = lastProgress ? "이어서 학습하기" : "학습 시작하기"
+  const ctaText = lastProgress ? t("이어서 학습하기", "Continue Learning") : t("학습 시작하기", "Start Learning")
 
   return (
     <Card className="overflow-hidden border-2 border-orange-200 bg-gradient-to-br from-yellow-50 via-orange-50 to-amber-50">
@@ -60,10 +62,10 @@ export function GiraffeHero() {
         {/* 텍스트 + CTA */}
         <div className="flex-1 min-w-0">
           <h2 className="text-lg md:text-xl font-bold text-gray-800 mb-1">
-            안녕! 오늘도 함께 배워요
+            {t("안녕! 오늘도 함께 배워요", "Hi! Let's learn together")}
           </h2>
           <p className="text-sm text-gray-500 mb-3">
-            파이썬 마스터가 되는 그날까지 🐍
+            {t("코딩 마스터가 되는 그날까지", "Until you become a coding master")} 🐍
           </p>
 
           {mounted && (

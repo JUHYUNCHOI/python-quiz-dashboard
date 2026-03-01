@@ -136,9 +136,9 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white flex items-center justify-center">
         <div className="text-center">
           <p className="text-5xl mb-4">🚧</p>
-          <p className="text-gray-600 mb-4">준비 중인 레슨이에요</p>
+          <p className="text-gray-600 mb-4">{t("준비 중인 레슨이에요", "This lesson is coming soon")}</p>
           <button onClick={() => router.push(`/curriculum#lesson-${lessonId}`)} className="px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-bold">
-            돌아가기
+            {t("돌아가기", "Go Back")}
           </button>
         </div>
       </div>
@@ -242,7 +242,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       setScore(prev => prev + 10)
       setCompletedSteps(prev => new Set([...prev, step.id]))
       setShowConfetti(true)
-      setSuccessMessage("잘했어요! 🎉")
+      setSuccessMessage(t("잘했어요! 🎉", "Great job! 🎉"))
       setShowSuccess(true)
       play("codeSuccess")
       setTimeout(() => setShowConfetti(false), 2000)
@@ -265,7 +265,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
           setCompletedSteps(new Set([...completedSteps, step.id]))
         }
         setShowConfetti(true)
-        setSuccessMessage("이번엔 맞았어요! 🎉")
+        setSuccessMessage(t("이번엔 맞았어요! 🎉", "Got it this time! 🎉"))
         setShowSuccess(true)
         setTimeout(() => setShowConfetti(false), 2000)
         // 1초 후 자동 진행
@@ -283,7 +283,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
           setScore(score + 10)
           setCompletedSteps(new Set([...completedSteps, step.id]))
           setShowConfetti(true)
-          setSuccessMessage("정답! 🎉")
+          setSuccessMessage(t("정답! 🎉", "Correct! 🎉"))
           setShowSuccess(true)
           setTimeout(() => setShowConfetti(false), 2000)
         }
@@ -309,7 +309,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
           setCompletedSteps(new Set([...completedSteps, step.id]))
         }
         setShowConfetti(true)
-        setSuccessMessage("이번엔 맞았어요! 🎉")
+        setSuccessMessage(t("이번엔 맞았어요! 🎉", "Got it this time! 🎉"))
         setShowSuccess(true)
         setTimeout(() => setShowConfetti(false), 2000)
         setTimeout(() => {
@@ -325,7 +325,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
           setScore(score + 10)
           setCompletedSteps(new Set([...completedSteps, step.id]))
           setShowConfetti(true)
-          setSuccessMessage("정답! 🎉")
+          setSuccessMessage(t("정답! 🎉", "Correct! 🎉"))
           setShowSuccess(true)
           setTimeout(() => setShowConfetti(false), 2000)
         }
@@ -407,14 +407,14 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             <div className="w-24 h-24 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
               <span className="text-5xl">{lesson.emoji}</span>
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">레슨 완료!</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">{t("레슨 완료!", "Lesson Complete!")}</h1>
             <p className="text-lg text-gray-600 mb-2">{lesson.title}</p>
-            <p className="text-gray-500 mb-6">모든 챕터를 끝냈어요!</p>
+            <p className="text-gray-500 mb-6">{t("모든 챕터를 끝냈어요!", "All chapters finished!")}</p>
             <div className="bg-amber-50 rounded-2xl p-4 mb-6">
-              <p className="text-amber-800 font-bold text-lg">총 {totalPoints}점 획득!</p>
+              <p className="text-amber-800 font-bold text-lg">{t(`총 ${totalPoints}점 획득!`, `${totalPoints} points earned!`)}</p>
             </div>
             <button onClick={() => { localStorage.removeItem(progressKey); router.push(`/curriculum#lesson-${lessonId}`) }} className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-lg transition-colors">
-              돌아가기
+              {t("돌아가기", "Go Back")}
             </button>
           </div>
         </div>
@@ -432,13 +432,13 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             <div className="w-20 h-20 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
               <PartyPopper className="w-10 h-10 text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">챕터 {currentChapter + 1} 완료!</h1>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">{t(`챕터 ${currentChapter + 1} 완료!`, `Chapter ${currentChapter + 1} Complete!`)}</h1>
             <p className="text-lg text-gray-600 mb-6">{chapter.emoji} {chapter.title}</p>
             <div className="bg-amber-50 rounded-2xl p-4 mb-6">
-              <p className="text-amber-800 font-bold text-lg">{chapterPoints}점 획득!</p>
+              <p className="text-amber-800 font-bold text-lg">{t(`${chapterPoints}점 획득!`, `${chapterPoints} points earned!`)}</p>
             </div>
             <button onClick={goToNextChapter} className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-lg transition-colors">
-              다음 챕터로 →
+              {t("다음 챕터로 →", "Next Chapter →")}
             </button>
           </div>
         </div>
@@ -555,15 +555,15 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                 isReviewMode ? "invisible" :
                 (currentStep > 0 || currentChapter > 0) ? "bg-gray-100 hover:bg-gray-200 text-gray-700" : "invisible")}>
               <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" />
-              <span className="text-xs md:text-sm lg:text-base">이전</span>
+              <span className="text-xs md:text-sm lg:text-base">{t("이전", "Prev")}</span>
             </button>
             <button onClick={goNext} disabled={!canGoNext()}
               className={cn("flex flex-col items-center justify-center rounded-xl md:rounded-2xl font-bold transition-colors", "w-[60px] h-[50px] md:w-[80px] md:h-[70px] lg:w-[100px] lg:h-[80px]",
                 canGoNext() ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg" : "bg-gray-200 text-gray-400 cursor-not-allowed")}>
               {canGoNext() ? (
-                <><ChevronRight className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" /><span className="text-xs md:text-sm lg:text-base">다음</span></>
+                <><ChevronRight className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" /><span className="text-xs md:text-sm lg:text-base">{t("다음", "Next")}</span></>
               ) : (
-                <><Lock className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" /><span className="text-[10px] md:text-xs lg:text-sm">완료 필요</span></>
+                <><Lock className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" /><span className="text-[10px] md:text-xs lg:text-sm">{t("완료 필요", "Complete first")}</span></>
               )}
             </button>
           </div>

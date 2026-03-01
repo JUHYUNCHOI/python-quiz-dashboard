@@ -3,6 +3,7 @@
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { useState, useEffect } from "react"
+import { useLanguage } from "@/contexts/language-context"
 import Link from "next/link"
 import {
   CheckCircle2,
@@ -239,6 +240,7 @@ const cppCurriculumData: PartData[] = [
 ]
 
 export default function CurriculumPage() {
+  const { t } = useLanguage()
   const [completedLessons, setCompletedLessons] = useState<Set<number | string>>(new Set())
   const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set(["part1", "part2", "part3", "part3-advanced", "part4", "part5", "part6", "part7", "part8", "part9", "cpp-part1", "cpp-part2", "cpp-part3"]))
   const [selectedCourse, setSelectedCourse] = useState<CourseType>("python")
@@ -357,10 +359,10 @@ export default function CurriculumPage() {
                 </div>
                 <div>
                   <h1 className="text-2xl sm:text-3xl font-bold">
-                    {isCpp ? "C++ 기초 (파이썬 → C++)" : "파이썬 기초 마스터"}
+                    {isCpp ? t("C++ 기초 (파이썬 → C++)", "C++ Basics (Python → C++)") : t("파이썬 기초 마스터", "Python Basics Master")}
                   </h1>
                   <p className="text-gray-600 text-sm sm:text-base">
-                    {isCpp ? "파이썬을 아는 학생을 위한 C++ 입문! ⚡" : "웹에서 바로 배우는 파이썬! 🚀"}
+                    {isCpp ? t("파이썬을 아는 학생을 위한 C++ 입문! ⚡", "C++ for Python students! ⚡") : t("웹에서 바로 배우는 파이썬! 🚀", "Learn Python on the web! 🚀")}
                   </p>
                 </div>
               </div>
@@ -372,7 +374,7 @@ export default function CurriculumPage() {
                   className="bg-green-500 text-white px-6 py-3 rounded-xl border-2 border-black font-bold hover:bg-green-600 transition-colors flex items-center justify-center gap-2 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
                 >
                   <Sparkles className="h-5 w-5" />
-                  <span className="hidden sm:inline">다음:</span> {nextLessonInfo.lesson.title}
+                  <span className="hidden sm:inline">{t("다음:", "Next:")}</span> {nextLessonInfo.lesson.title}
                   <Play className="h-5 w-5" />
                 </Link>
               )}
@@ -430,7 +432,7 @@ export default function CurriculumPage() {
                         <h2 className="text-lg sm:text-xl font-bold text-gray-900">{part.title}</h2>
                         {isComingSoon && (
                           <span className="px-2 py-0.5 bg-gray-200 text-gray-600 rounded-full text-xs font-bold">
-                            준비중
+                            {t("준비중", "Coming Soon")}
                           </span>
                         )}
                       </div>
@@ -440,7 +442,7 @@ export default function CurriculumPage() {
                         <div className="mt-3">
                           <div className="flex justify-between items-center mb-1">
                             <span className="text-xs font-semibold text-gray-500">
-                              {partCompletedCount}/{partLessons.length} 완료
+                              {partCompletedCount}/{partLessons.length} {t("완료", "done")}
                             </span>
                             <span className={`text-xs font-bold ${isCpp ? 'text-blue-500' : 'text-orange-500'}`}>{partProgress}%</span>
                           </div>
@@ -497,12 +499,12 @@ export default function CurriculumPage() {
                                     </span>
                                     {lesson.hasQuiz && (
                                       <span className="px-1.5 py-0.5 bg-orange-100 text-orange-600 rounded text-xs font-bold">
-                                        퀴즈
+                                        {t("퀴즈", "Quiz")}
                                       </span>
                                     )}
                                     {lesson.isProject && (
                                       <span className="px-1.5 py-0.5 bg-purple-100 text-purple-600 rounded text-xs font-bold">
-                                        프로젝트
+                                        {t("프로젝트", "Project")}
                                       </span>
                                     )}
                                   </div>
@@ -516,7 +518,7 @@ export default function CurriculumPage() {
                                       isCpp ? "bg-blue-500 hover:bg-blue-600" : "bg-green-500 hover:bg-green-600"
                                     }`}
                                   >
-                                    📺 수업
+                                    {t("📺 수업", "📺 Lesson")}
                                   </Link>
                                   {(!isCpp || cppReviewIds.has(String(lesson.id))) && (
                                     <Link
@@ -527,7 +529,7 @@ export default function CurriculumPage() {
                                           : "bg-orange-400 text-white hover:bg-orange-500 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                                       }`}
                                     >
-                                      🎮 퀴즈
+                                      {t("🎮 퀴즈", "🎮 Quiz")}
                                     </Link>
                                   )}
                                 </div>

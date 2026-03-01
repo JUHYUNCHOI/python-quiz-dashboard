@@ -5,30 +5,32 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/contexts/auth-context"
-
-const studentNav = [
-  { icon: Home, label: "홈", href: "/" },
-  { icon: BookOpen, label: "수업", href: "/curriculum" },
-  { icon: Users, label: "내 반", href: "/join" },
-  { icon: User, label: "내정보", href: "/profile" },
-]
-
-const teacherNav = [
-  { icon: Home, label: "홈", href: "/" },
-  { icon: BookOpen, label: "수업", href: "/curriculum" },
-  { icon: LayoutDashboard, label: "대시보드", href: "/teacher" },
-  { icon: User, label: "내정보", href: "/profile" },
-]
-
-const guestNav = [
-  { icon: Home, label: "홈", href: "/" },
-  { icon: BookOpen, label: "수업", href: "/curriculum" },
-  { icon: User, label: "내정보", href: "/profile" },
-]
+import { useLanguage } from "@/contexts/language-context"
 
 export function BottomNav() {
   const pathname = usePathname()
   const { profile, isAuthenticated } = useAuth()
+  const { t } = useLanguage()
+
+  const studentNav = [
+    { icon: Home, label: t("홈", "Home"), href: "/" },
+    { icon: BookOpen, label: t("수업", "Lessons"), href: "/curriculum" },
+    { icon: Users, label: t("내 반", "My Class"), href: "/join" },
+    { icon: User, label: t("내정보", "Profile"), href: "/profile" },
+  ]
+
+  const teacherNav = [
+    { icon: Home, label: t("홈", "Home"), href: "/" },
+    { icon: BookOpen, label: t("수업", "Lessons"), href: "/curriculum" },
+    { icon: LayoutDashboard, label: t("대시보드", "Dashboard"), href: "/teacher" },
+    { icon: User, label: t("내정보", "Profile"), href: "/profile" },
+  ]
+
+  const guestNav = [
+    { icon: Home, label: t("홈", "Home"), href: "/" },
+    { icon: BookOpen, label: t("수업", "Lessons"), href: "/curriculum" },
+    { icon: User, label: t("내정보", "Profile"), href: "/profile" },
+  ]
 
   const navItems = !isAuthenticated
     ? guestNav
