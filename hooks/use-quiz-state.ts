@@ -26,6 +26,15 @@ export interface QuizSettings {
   startTime: number
 }
 
+export interface QuestionResult {
+  question_id: number
+  question_text: string
+  time_taken_ms: number
+  selected_answer: number
+  correct_answer: number
+  is_correct: boolean
+}
+
 export interface SessionData {
   totalQuestions: number
   correctAnswers: number
@@ -33,6 +42,9 @@ export interface SessionData {
   heartsRemaining: number
   timeElapsedMs: number
   endReason: "completed" | "hearts"
+  questionDetails: QuestionResult[]
+  startedAt: number
+  difficulty: string
 }
 
 // -------- Combo Tier System --------
@@ -94,6 +106,9 @@ export function useQuizState(questions: QuizQuestion[]) {
   // Mid check-in
   const [showMidCheckIn, setShowMidCheckIn] = useState(false)
 
+  // Per-question result tracking
+  const [questionResults, setQuestionResults] = useState<QuestionResult[]>([])
+
   // Quick answer warning
   const [questionStartTime, setQuestionStartTime] = useState(Date.now())
   const [showQuickAnswerWarning, setShowQuickAnswerWarning] = useState(false)
@@ -140,10 +155,13 @@ export function useQuizState(questions: QuizQuestion[]) {
         heartsRemaining: hearts,
         timeElapsedMs: elapsed,
         endReason,
+        questionDetails: questionResults,
+        startedAt: quizSettings.startTime,
+        difficulty: quizSettings.difficulty,
       }
       sessionStorage.setItem("quizSessionData", JSON.stringify(data))
     },
-    [quizSettings, currentQuestion, maxCombo, hearts],
+    [quizSettings, currentQuestion, maxCombo, hearts, questionResults],
   )
 
   const handleAnswerSelect = useCallback(
@@ -168,6 +186,17 @@ export function useQuizState(questions: QuizQuestion[]) {
     const correct = selectedAnswer === question.correctAnswer
     setIsCorrect(correct)
     setShowResult(true)
+
+    // Record per-question result
+    const timeTakenMs = Date.now() - questionStartTime
+    setQuestionResults(prev => [...prev, {
+      question_id: question.id,
+      question_text: question.question.slice(0, 50),
+      time_taken_ms: timeTakenMs,
+      selected_answer: selectedAnswer,
+      correct_answer: question.correctAnswer,
+      is_correct: correct,
+    }])
 
     if (correct) {
       const newScore = score + 1
@@ -238,6 +267,16 @@ export function useQuizState(questions: QuizQuestion[]) {
   ])
 
   const handleSkip = useCallback(() => {
+    // Record skipped question
+    setQuestionResults(prev => [...prev, {
+      question_id: question.id,
+      question_text: question.question.slice(0, 50),
+      time_taken_ms: Date.now() - questionStartTime,
+      selected_answer: -1,
+      correct_answer: question.correctAnswer,
+      is_correct: false,
+    }])
+
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion((q) => q + 1)
       setSelectedAnswer(null)
@@ -246,7 +285,7 @@ export function useQuizState(questions: QuizQuestion[]) {
       saveSessionData("completed", score)
       router.push("/quiz/session-complete")
     }
-  }, [currentQuestion, questions.length, router, saveSessionData, score])
+  }, [currentQuestion, questions.length, router, saveSessionData, score, question, questionStartTime])
 
   const handleExit = useCallback(() => {
     const completed = currentQuestion + 1

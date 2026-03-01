@@ -53,3 +53,30 @@ export interface UserPreferences {
   library_variants: Record<string, string>
   updated_at: string
 }
+
+export interface QuestionDetail {
+  question_id: number
+  question_text: string
+  time_taken_ms: number
+  selected_answer: number
+  correct_answer: number
+  is_correct: boolean
+}
+
+export interface QuizSession {
+  id: string
+  user_id: string
+  difficulty: string
+  total_questions: number
+  correct_answers: number
+  max_combo: number
+  hearts_remaining: number
+  time_elapsed_ms: number
+  end_reason: "completed" | "hearts"
+  xp_earned: number
+  question_details: QuestionDetail[]
+  quick_answer_count: number
+  slow_answer_count: number
+  started_at: string
+  completed_at: string
+}

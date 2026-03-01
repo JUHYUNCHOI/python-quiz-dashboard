@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { useGamification } from "@/hooks/use-gamification"
 import { useSoundEffect } from "@/hooks/use-sound-effect"
+import { useQuizSessionSync } from "@/hooks/use-quiz-session-sync"
 import type { SessionData } from "@/hooks/use-quiz-state"
 
 // -------- CountUp animation --------
@@ -121,6 +122,7 @@ function SessionCompletePage() {
   const endReason = searchParams.get("reason") === "hearts" ? "hearts" : "completed"
   const gamification = useGamification()
   const { play } = useSoundEffect()
+  const { saveQuizSession } = useQuizSessionSync()
 
   // Session data from sessionStorage
   const [sessionData, setSessionData] = useState<SessionData | null>(null)
@@ -147,14 +149,15 @@ function SessionCompletePage() {
   // Previous level (before commit)
   const [prevLevel, setPrevLevel] = useState(gamification.level)
 
-  // Commit XP once
+  // Commit XP once + save quiz session to Supabase
   useEffect(() => {
-    if (breakdown && !xpCommitted) {
+    if (breakdown && !xpCommitted && sessionData) {
       setPrevLevel(gamification.level)
       gamification.commitSessionXp(breakdown)
+      saveQuizSession(sessionData, breakdown.totalXp)
       setXpCommitted(true)
     }
-  }, [breakdown, xpCommitted, gamification])
+  }, [breakdown, xpCommitted, gamification, sessionData, saveQuizSession])
 
   // Staggered phase reveal
   useEffect(() => {

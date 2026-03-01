@@ -5,11 +5,14 @@ import { useParams } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
 import { createClient } from "@/lib/supabase/client"
 import type { Class, Profile, GamificationData } from "@/lib/supabase/types"
+import type { QuizSession } from "@/lib/supabase/types"
 import { Card } from "@/components/ui/card"
-import { ArrowLeft, Copy, Check, Users, Trophy, Flame, BookOpen, ChevronDown, Clock } from "lucide-react"
+import { ArrowLeft, Copy, Check, Users, Trophy, Flame, BookOpen, ChevronDown, Clock, ClipboardCheck } from "lucide-react"
 import Link from "next/link"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
+import { StudentQuizReport } from "@/components/teacher/student-quiz-report"
+import { StudentConsistency } from "@/components/teacher/student-consistency"
 import { cn } from "@/lib/utils"
 
 interface LessonProgressRow {
@@ -30,6 +33,7 @@ interface StudentRow {
   lastActive: string
   activeToday: boolean
   lessonProgress: LessonProgressRow[]
+  quizSessions: QuizSession[]
 }
 
 // 레슨 ID → 표시 이름 매핑
@@ -76,6 +80,7 @@ export default function ClassDetailPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [sortBy, setSortBy] = useState<"name" | "xp" | "lessons" | "streak">("name")
   const [expandedStudent, setExpandedStudent] = useState<string | null>(null)
+  const [activeTab, setActiveTab] = useState<"lessons" | "quizzes" | "consistency">("lessons")
 
   useEffect(() => {
     if (!user || !classId) return
@@ -125,9 +130,23 @@ export default function ClassDetailPage() {
       .select("user_id, lesson_id, progress_type, completed, score, updated_at")
       .in("user_id", studentIds)
 
+    // 퀴즈 세션
+    const { data: quizSessions } = await supabase
+      .from("quiz_sessions")
+      .select("*")
+      .in("user_id", studentIds)
+      .order("completed_at", { ascending: false })
+
     // 조합
     const profileMap = new Map((profiles || []).map(p => [p.id, p]))
     const gamMap = new Map((gamification || []).map((g: GamificationData) => [g.user_id, g]))
+
+    // 유저별 퀴즈 세션
+    const quizMap = new Map<string, QuizSession[]>()
+    for (const qs of quizSessions || []) {
+      if (!quizMap.has(qs.user_id)) quizMap.set(qs.user_id, [])
+      quizMap.get(qs.user_id)!.push(qs as QuizSession)
+    }
 
     // 유저별 진도 계산
     const progressMap = new Map<string, LessonProgressRow[]>()
@@ -175,6 +194,7 @@ export default function ClassDetailPage() {
         lastActive: gam?.last_active_date || "-",
         activeToday: activeTodaySet.has(sid),
         lessonProgress,
+        quizSessions: quizMap.get(sid) || [],
       }
     })
 
@@ -307,6 +327,9 @@ export default function ClassDetailPage() {
                         <span className="flex items-center gap-1 text-orange-600" title="총 XP">
                           <Trophy className="w-3.5 h-3.5" /> {student.totalXp}
                         </span>
+                        <span className="flex items-center gap-1 text-blue-600" title="퀴즈 세션">
+                          <ClipboardCheck className="w-3.5 h-3.5" /> {student.quizSessions.length}
+                        </span>
                         <span className="flex items-center gap-1 text-red-500" title="연속일">
                           <Flame className="w-3.5 h-3.5" /> {student.dailyStreak}
                         </span>
@@ -319,49 +342,79 @@ export default function ClassDetailPage() {
                       )} />
                     </button>
 
-                    {/* 펼친 상세 진도 */}
+                    {/* 펼친 상세: 탭 UI */}
                     {expandedStudent === student.id && (
                       <div className="px-4 pb-4 border-t border-gray-100">
-                        {student.lessonProgress.length === 0 ? (
-                          <p className="text-sm text-gray-400 py-3 text-center">아직 학습 기록이 없어요</p>
-                        ) : (
-                          <div className="mt-3 space-y-1.5">
-                            {student.lessonProgress.map((lp, i) => (
-                              <div key={`${lp.lesson_id}-${lp.progress_type}-${i}`}
-                                className="flex items-center gap-2 text-sm py-1.5 px-2 rounded-lg bg-gray-50"
-                              >
-                                {/* 상태 아이콘 */}
-                                {lp.completed ? (
-                                  <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
-                                ) : (
-                                  <Clock className="w-4 h-4 text-amber-400 flex-shrink-0" />
-                                )}
+                        {/* 탭 버튼 */}
+                        <div className="flex gap-1 mt-3 mb-1">
+                          {([
+                            { key: "lessons" as const, label: "레슨 진도" },
+                            { key: "quizzes" as const, label: "퀴즈 리포트" },
+                            { key: "consistency" as const, label: "꾸준함" },
+                          ]).map(({ key, label }) => (
+                            <button
+                              key={key}
+                              onClick={() => setActiveTab(key)}
+                              className={cn(
+                                "px-3 py-1.5 rounded-lg text-xs font-medium transition-all",
+                                activeTab === key
+                                  ? "bg-orange-500 text-white"
+                                  : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+                              )}
+                            >
+                              {label}
+                            </button>
+                          ))}
+                        </div>
 
-                                {/* 레슨 이름 + 타입 */}
-                                <span className="flex-1 text-gray-700 truncate">
-                                  {getLessonName(lp.lesson_id)}
-                                  <span className="text-xs text-gray-400 ml-1">
-                                    ({lp.progress_type === "learn" ? "실습" : "복습"})
-                                  </span>
-                                </span>
-
-                                {/* 점수 */}
-                                <span className={cn(
-                                  "text-xs font-bold px-2 py-0.5 rounded-full",
-                                  lp.completed
-                                    ? "bg-green-100 text-green-700"
-                                    : "bg-amber-100 text-amber-700"
-                                )}>
-                                  {lp.score}점
-                                </span>
-
-                                {/* 날짜 */}
-                                <span className="text-xs text-gray-400 w-10 text-right">
-                                  {formatDate(lp.updated_at)}
-                                </span>
+                        {/* 레슨 진도 탭 */}
+                        {activeTab === "lessons" && (
+                          <>
+                            {student.lessonProgress.length === 0 ? (
+                              <p className="text-sm text-gray-400 py-3 text-center">아직 학습 기록이 없어요</p>
+                            ) : (
+                              <div className="mt-3 space-y-1.5">
+                                {student.lessonProgress.map((lp, i) => (
+                                  <div key={`${lp.lesson_id}-${lp.progress_type}-${i}`}
+                                    className="flex items-center gap-2 text-sm py-1.5 px-2 rounded-lg bg-gray-50"
+                                  >
+                                    {lp.completed ? (
+                                      <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
+                                    ) : (
+                                      <Clock className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                                    )}
+                                    <span className="flex-1 text-gray-700 truncate">
+                                      {getLessonName(lp.lesson_id)}
+                                      <span className="text-xs text-gray-400 ml-1">
+                                        ({lp.progress_type === "learn" ? "실습" : "복습"})
+                                      </span>
+                                    </span>
+                                    <span className={cn(
+                                      "text-xs font-bold px-2 py-0.5 rounded-full",
+                                      lp.completed
+                                        ? "bg-green-100 text-green-700"
+                                        : "bg-amber-100 text-amber-700"
+                                    )}>
+                                      {lp.score}점
+                                    </span>
+                                    <span className="text-xs text-gray-400 w-10 text-right">
+                                      {formatDate(lp.updated_at)}
+                                    </span>
+                                  </div>
+                                ))}
                               </div>
-                            ))}
-                          </div>
+                            )}
+                          </>
+                        )}
+
+                        {/* 퀴즈 리포트 탭 */}
+                        {activeTab === "quizzes" && (
+                          <StudentQuizReport quizSessions={student.quizSessions} />
+                        )}
+
+                        {/* 꾸준함 탭 */}
+                        {activeTab === "consistency" && (
+                          <StudentConsistency quizSessions={student.quizSessions} />
                         )}
                       </div>
                     )}
