@@ -33,6 +33,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (!error && data) {
         setProfile(data as Profile)
+      } else if (error?.code === "PGRST116") {
+        // 프로필이 없는 경우 (DB 재생성 등) 자동 생성
+        const { data: { user: currentUser } } = await supabase.auth.getUser()
+        if (currentUser) {
+          const meta = currentUser.user_metadata || {}
+          const { data: newProfile } = await supabase
+            .from("profiles")
+            .upsert({
+              id: userId,
+              display_name: meta.name || meta.full_name || "학습자",
+              avatar_url: meta.avatar_url || meta.picture || null,
+            })
+            .select()
+            .single()
+
+          if (newProfile) {
+            setProfile(newProfile as Profile)
+          }
+        }
       }
     } catch {
       // 프로필 조회 실패 시 무시 (Supabase 미설정 등)

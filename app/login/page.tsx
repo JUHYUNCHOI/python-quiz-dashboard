@@ -96,24 +96,6 @@ function LoginContent() {
 
         {/* 로그인 버튼들 */}
         <div className="space-y-3">
-          {/* 카카오 */}
-          <button
-            onClick={() => handleOAuthLogin("kakao")}
-            disabled={!!isLoading}
-            className="w-full flex items-center justify-center gap-3 px-6 py-3.5 rounded-xl font-bold text-[#191919] transition-all hover:brightness-95 active:scale-[0.98] disabled:opacity-50"
-            style={{ backgroundColor: "#FEE500" }}
-          >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M10 2C5.029 2 1 5.13 1 8.97c0 2.47 1.634 4.634 4.09 5.87-.132.476-.853 3.065-.882 3.257 0 0-.017.144.076.2.093.054.202.012.202.012.267-.037 3.094-2.03 3.58-2.373.3.042.607.064.934.064 4.971 0 9-3.13 9-6.97S14.971 2 10 2"
-                fill="#191919"
-              />
-            </svg>
-            {isLoading === "kakao" ? "로그인 중..." : "카카오로 시작하기"}
-          </button>
-
           {/* 구글 */}
           <button
             onClick={() => handleOAuthLogin("google")}
