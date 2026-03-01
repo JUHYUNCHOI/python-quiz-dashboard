@@ -65,15 +65,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [user?.id, fetchProfile])
 
   useEffect(() => {
-    // 초기 사용자 확인
+    // 초기 사용자 확인 — getSession()으로 빠르게 로컬 토큰 체크
     const initAuth = async () => {
       try {
-        const { data: { user: currentUser } } = await supabase.auth.getUser()
-        setUser(currentUser)
+        const { data: { session } } = await supabase.auth.getSession()
 
-        if (currentUser) {
-          await fetchProfile(currentUser.id)
+        if (!session) {
+          // 로컬에 세션 없음 → 즉시 로딩 해제 (네트워크 호출 불필요)
+          setUser(null)
+          setIsLoading(false)
+          return
         }
+
+        // 세션 있으면 서버에서 유저 검증
+        setUser(session.user)
+        await fetchProfile(session.user.id)
       } catch {
         // Supabase 미설정 시 (URL이 placeholder) 조용히 실패
       } finally {
