@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card"
 import { ArrowRight, Sparkles } from "lucide-react"
 import Link from "next/link"
 import { useLanguage } from "@/contexts/language-context"
+import { getCompletedLessons, pythonParts, cppParts } from "@/lib/curriculum-data"
 
 interface LastProgress {
   lessonId: string
@@ -50,7 +51,26 @@ export function GiraffeHero() {
     }
   }, [])
 
-  const ctaHref = lastProgress ? `/learn/${lastProgress.lessonId}` : "/curriculum"
+  // 잠금 체크: lastProgress의 수업이 잠겨 있으면 다음 미완료 수업으로 이동
+  const ctaHref = (() => {
+    if (!lastProgress) return "/curriculum"
+    const completed = getCompletedLessons()
+    const isCpp = lastProgress.lessonId.startsWith("cpp-")
+    const trackParts = isCpp ? cppParts : pythonParts
+    const trackIds = trackParts.flatMap(p => p.lessonIds)
+    const idNormalized: (number | string) = /^\d+$/.test(lastProgress.lessonId) ? Number(lastProgress.lessonId) : lastProgress.lessonId
+    const idx = trackIds.indexOf(idNormalized)
+    // 잠금 여부 확인
+    if (idx > 0) {
+      for (let i = 0; i < idx; i++) {
+        if (!completed.has(trackIds[i])) {
+          // 잠겨있음 → 이전 미완료 수업으로 이동
+          return `/learn/${trackIds[i]}`
+        }
+      }
+    }
+    return `/learn/${lastProgress.lessonId}`
+  })()
   const ctaText = lastProgress ? t("이어서 학습하기", "Continue Learning") : t("학습 시작하기", "Start Learning")
 
   return (

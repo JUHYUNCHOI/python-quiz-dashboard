@@ -11,6 +11,9 @@ import { SoundToggle } from "@/components/sound-toggle"
 import { useSoundEffect } from "@/hooks/use-sound-effect"
 import { useLessonSync } from "@/hooks/use-lesson-sync"
 import { markLessonComplete } from "@/lib/mark-lesson-complete"
+import { useGamification } from "@/hooks/use-gamification"
+import { logActivity } from "@/lib/activity-log"
+import { getCompletedLessons, pythonParts, cppParts } from "@/lib/curriculum-data"
 
 // 분리된 컴포넌트
 import { Confetti } from "@/components/learn/confetti"
@@ -35,6 +38,9 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     try { return (localStorage.getItem(`library-variant-${lessonId}`) as LibraryVariant) || 'turtle' } catch { return 'turtle' }
   })
 
+  // 게이미피케이션
+  const gamification = useGamification()
+
   // Supabase 진도 동기화
   const { syncProgress, syncCompletion, loadFromCloud } = useLessonSync(
     lessonId, hasVariants ? variant : null, "learn"
@@ -52,6 +58,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const [currentStep, setCurrentStep] = useState(0)
   const [score, setScore] = useState(0)
   const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set())
+  const [progressLoaded, setProgressLoaded] = useState(false)
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
   const [showExplanation, setShowExplanation] = useState(false)
   const [showChapterComplete, setShowChapterComplete] = useState(false)
@@ -119,10 +126,12 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
         }
       })
     }
+    // 로드 완료 후에만 저장 이펙트 활성화 (초기 state 덮어쓰기 방지)
+    setProgressLoaded(true)
   }, [progressKey, loadFromCloud])
 
   useEffect(() => {
-    if (!lesson) return
+    if (!lesson || !progressLoaded) return
     const progressData = {
       chapter: currentChapter, step: currentStep, score,
       completed: Array.from(completedSteps)
@@ -130,7 +139,39 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     localStorage.setItem(progressKey, JSON.stringify(progressData))
     // Supabase에도 동기화 (debounced, fire-and-forget)
     syncProgress(progressData)
-  }, [currentChapter, currentStep, score, completedSteps, progressKey, lesson, syncProgress])
+  }, [currentChapter, currentStep, score, completedSteps, progressKey, lesson, syncProgress, progressLoaded])
+
+  // 잠금 체크: 같은 트랙(Python/C++) 내에서 이전 수업 완료해야 접근 가능
+  const isLocked = (() => {
+    if (typeof window === "undefined") return false
+    const completed = getCompletedLessons()
+    const idNormalized: (number | string) = /^\d+$/.test(lessonId) ? Number(lessonId) : lessonId
+    // Python과 C++ 트랙을 분리하여 잠금 체크
+    const isCpp = String(lessonId).startsWith("cpp-")
+    const trackParts = isCpp ? cppParts : pythonParts
+    const trackIds = trackParts.flatMap(p => p.lessonIds)
+    const idx = trackIds.indexOf(idNormalized)
+    if (idx <= 0) return false // 첫 수업 또는 알 수 없는 ID → 열림
+    // 이전 수업이 모두 완료되었는지 확인
+    for (let i = 0; i < idx; i++) {
+      if (!completed.has(trackIds[i])) return true
+    }
+    return false
+  })()
+
+  if (isLocked) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-5xl mb-4">🔒</p>
+          <p className="text-gray-600 mb-4">{t("이전 수업을 먼저 완료해주세요!", "Please complete previous lessons first!")}</p>
+          <button onClick={() => router.push("/curriculum")} className="px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-bold">
+            {t("수업 목록으로", "Go to Curriculum")}
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   if (!lesson || !chapter || !step) {
     return (
@@ -185,6 +226,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       // 마지막 챕터 완료 → Supabase + localStorage에 완료 기록
       syncCompletion(score)
       markLessonComplete(lessonId)
+      gamification.addDirectXp(30) // +30 XP for lesson completion
+      logActivity("lesson")
       setShowConfetti(true)
       setShowLessonComplete(true)
       play("lessonComplete")
@@ -412,8 +455,12 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             <h1 className="text-3xl font-bold text-gray-900 mb-2">{t("레슨 완료!", "Lesson Complete!")}</h1>
             <p className="text-lg text-gray-600 mb-2">{lesson.title}</p>
             <p className="text-gray-500 mb-6">{t("모든 챕터를 끝냈어요!", "All chapters finished!")}</p>
-            <div className="bg-amber-50 rounded-2xl p-4 mb-6">
+            <div className="bg-amber-50 rounded-2xl p-4 mb-4">
               <p className="text-amber-800 font-bold text-lg">{t(`총 ${totalPoints}점 획득!`, `${totalPoints} points earned!`)}</p>
+            </div>
+            <div className="bg-orange-50 rounded-2xl p-4 mb-6">
+              <p className="text-orange-600 font-bold text-lg">+30 XP {t("획득!", "earned!")}</p>
+              <p className="text-orange-500 text-sm mt-1">Lv.{gamification.level} ({gamification.xpInCurrentLevel}/100)</p>
             </div>
             <button onClick={() => { localStorage.removeItem(progressKey); router.push(`/curriculum#lesson-${lessonId}`) }} className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-lg transition-colors">
               {t("돌아가기", "Go Back")}

@@ -1,6 +1,6 @@
 "use client"
 
-import { Home, BookOpen, Trophy, User, LayoutDashboard, Users } from "lucide-react"
+import { Home, BookOpen, BarChart3, User, LayoutDashboard } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
@@ -15,7 +15,7 @@ export function BottomNav() {
   const studentNav = [
     { icon: Home, label: t("홈", "Home"), href: "/" },
     { icon: BookOpen, label: t("수업", "Lessons"), href: "/curriculum" },
-    { icon: Users, label: t("내 반", "My Class"), href: "/join" },
+    { icon: BarChart3, label: t("진도", "Progress"), href: "/progress" },
     { icon: User, label: t("내정보", "Profile"), href: "/profile" },
   ]
 
@@ -29,6 +29,7 @@ export function BottomNav() {
   const guestNav = [
     { icon: Home, label: t("홈", "Home"), href: "/" },
     { icon: BookOpen, label: t("수업", "Lessons"), href: "/curriculum" },
+    { icon: BarChart3, label: t("진도", "Progress"), href: "/progress" },
     { icon: User, label: t("내정보", "Profile"), href: "/profile" },
   ]
 

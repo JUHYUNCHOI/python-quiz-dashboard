@@ -8,6 +8,8 @@ import { useSoundEffect } from "@/hooks/use-sound-effect"
 import { useQuizSessionSync } from "@/hooks/use-quiz-session-sync"
 import type { SessionData } from "@/hooks/use-quiz-state"
 import { useLanguage } from "@/contexts/language-context"
+import { addQuizHistoryEntry } from "@/lib/quiz-history"
+import { logActivity } from "@/lib/activity-log"
 
 // -------- CountUp animation --------
 function CountUp({ end, duration = 800, prefix = "", suffix = "", className = "" }: {
@@ -134,15 +136,20 @@ function SessionCompletePage() {
   // Animation phase (0–7)
   const [phase, setPhase] = useState(-1)
 
-  // Load session data
+  // Load session data — 데이터 없으면 퀴즈 홈으로
   useEffect(() => {
     try {
       const raw = sessionStorage.getItem("quizSessionData")
       if (raw) {
         setSessionData(JSON.parse(raw))
+      } else {
+        // 세션 데이터 없음 → 리다이렉트
+        router.replace("/quiz")
       }
-    } catch {}
-  }, [])
+    } catch {
+      router.replace("/quiz")
+    }
+  }, [router])
 
   // Calculate XP breakdown
   const breakdown = sessionData
@@ -152,12 +159,42 @@ function SessionCompletePage() {
   // Previous level (before commit)
   const [prevLevel, setPrevLevel] = useState(gamification.level)
 
-  // Commit XP once + save quiz session to Supabase
+  // Commit XP once + save quiz session to Supabase + save quiz history to localStorage
   useEffect(() => {
     if (breakdown && !xpCommitted && sessionData) {
       setPrevLevel(gamification.level)
       gamification.commitSessionXp(breakdown)
       saveQuizSession(sessionData, breakdown.totalXp)
+
+      // 퀴즈 이력 localStorage 저장
+      const topicMap = new Map<string, { correct: number; total: number }>()
+      for (const qr of sessionData.questionDetails) {
+        const topics = qr.related_topics?.length ? qr.related_topics : ["일반"]
+        for (const topic of topics) {
+          const prev = topicMap.get(topic) || { correct: 0, total: 0 }
+          topicMap.set(topic, {
+            correct: prev.correct + (qr.is_correct ? 1 : 0),
+            total: prev.total + 1,
+          })
+        }
+      }
+      const topicResults = Array.from(topicMap.entries()).map(([topic, { correct, total }]) => ({ topic, correct, total }))
+
+      addQuizHistoryEntry({
+        date: new Date().toISOString().slice(0, 10),
+        timestamp: Date.now(),
+        totalQuestions: sessionData.totalQuestions,
+        correctAnswers: sessionData.correctAnswers,
+        accuracy: Math.round((sessionData.correctAnswers / sessionData.totalQuestions) * 100),
+        maxCombo: sessionData.maxCombo,
+        timeElapsedMs: sessionData.timeElapsedMs,
+        difficulty: sessionData.difficulty,
+        endReason: sessionData.endReason,
+        xpEarned: breakdown.totalXp,
+        topicResults,
+      })
+      logActivity("quiz")
+
       setXpCommitted(true)
     }
   }, [breakdown, xpCommitted, gamification, sessionData, saveQuizSession])

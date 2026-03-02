@@ -12,7 +12,7 @@ import { useLanguage } from "@/contexts/language-context"
 export default function QuizSetupPage() {
   const router = useRouter()
   const gamification = useGamification()
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
 
   const difficultyOptions = [
     { id: "beginner", label: t("초급", "Beginner"), color: "green", description: t("기초 문법과 개념", "Basic grammar and concepts") },
@@ -25,7 +25,7 @@ export default function QuizSetupPage() {
   const [showCustomInput, setShowCustomInput] = useState(false)
   const [customValue, setCustomValue] = useState("")
 
-  const currentDate = new Date().toLocaleDateString("ko-KR", {
+  const currentDate = new Date().toLocaleDateString(lang === "en" ? "en-US" : "ko-KR", {
     year: "numeric",
     month: "long",
     day: "numeric",

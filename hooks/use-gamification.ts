@@ -51,12 +51,17 @@ function isYesterday(dateStr: string): boolean {
   return dateStr === yesterday.toISOString().slice(0, 10)
 }
 
+function safeParseInt(value: string | null, fallback: number): number {
+  const parsed = parseInt(value || String(fallback), 10)
+  return isNaN(parsed) || parsed < 0 ? fallback : parsed
+}
+
 function loadState(): GamificationState {
   try {
-    const totalXp = parseInt(localStorage.getItem(STORAGE_KEYS.totalXp) || "0", 10)
-    const dailyStreak = parseInt(localStorage.getItem(STORAGE_KEYS.dailyStreak) || "0", 10)
+    const totalXp = safeParseInt(localStorage.getItem(STORAGE_KEYS.totalXp), 0)
+    const dailyStreak = safeParseInt(localStorage.getItem(STORAGE_KEYS.dailyStreak), 0)
     const lastActiveDate = localStorage.getItem(STORAGE_KEYS.lastActiveDate) || ""
-    const sessionsToday = parseInt(localStorage.getItem(STORAGE_KEYS.sessionsToday) || "0", 10)
+    const sessionsToday = safeParseInt(localStorage.getItem(STORAGE_KEYS.sessionsToday), 0)
     const level = Math.floor(totalXp / XP_PER_LEVEL) + 1
     const xpInCurrentLevel = totalXp % XP_PER_LEVEL
     const today = todayStr()
@@ -173,6 +178,42 @@ export function useGamification() {
     [state.dailyStreak],
   )
 
+  const addDirectXp = useCallback((amount: number) => {
+    setState((prev) => {
+      const today = todayStr()
+      const isNewDay = prev.lastActiveDate !== today
+
+      let newStreak = prev.dailyStreak
+      if (isNewDay) {
+        if (isYesterday(prev.lastActiveDate)) {
+          newStreak = prev.dailyStreak + 1
+        } else if (prev.lastActiveDate === "") {
+          newStreak = 1
+        } else {
+          newStreak = 1
+        }
+      }
+
+      const newTotalXp = prev.totalXp + amount
+      const newLevel = Math.floor(newTotalXp / XP_PER_LEVEL) + 1
+      const xpInCurrentLevel = newTotalXp % XP_PER_LEVEL
+      const newSessionsToday = isNewDay ? 1 : prev.sessionsToday + 1
+
+      const next: GamificationState = {
+        totalXp: newTotalXp,
+        level: newLevel,
+        xpInCurrentLevel,
+        dailyStreak: newStreak,
+        lastActiveDate: today,
+        sessionsToday: newSessionsToday,
+      }
+
+      persistState(next)
+      syncToSupabase(next)
+      return next
+    })
+  }, [syncToSupabase])
+
   const commitSessionXp = useCallback((xpBreakdown: XpBreakdown) => {
     setState((prev) => {
       const today = todayStr()
@@ -213,5 +254,6 @@ export function useGamification() {
     ...state,
     calculateXpBreakdown,
     commitSessionXp,
+    addDirectXp,
   }
 }

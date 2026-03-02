@@ -1,10 +1,35 @@
 "use client"
 
 import { cn } from "@/lib/utils"
+import { useLanguage } from "@/contexts/language-context"
+import { useEffect, useState } from "react"
+import { getActivityMap } from "@/lib/activity-log"
 
-// Generate last 12 weeks of data
-const generateHeatmapData = () => {
-  const data = []
+const getActivityColor = (level: number) => {
+  if (level === 0) return "bg-gray-100"
+  if (level === 1) return "bg-mint-200"
+  if (level === 2) return "bg-mint-400"
+  if (level >= 3) return "bg-orange-400"
+  return "bg-gray-100"
+}
+
+function getActivityLevel(count: number): number {
+  if (count === 0) return 0
+  if (count === 1) return 1
+  if (count <= 3) return 2
+  return 3
+}
+
+export function StudyHeatmap() {
+  const { t } = useLanguage()
+  const [activityMap, setActivityMap] = useState<Record<string, number>>({})
+
+  useEffect(() => {
+    setActivityMap(getActivityMap())
+  }, [])
+
+  // Generate last 12 weeks of data
+  const heatmapData = []
   const today = new Date()
 
   for (let week = 11; week >= 0; week--) {
@@ -12,25 +37,14 @@ const generateHeatmapData = () => {
     for (let day = 0; day < 7; day++) {
       const date = new Date(today)
       date.setDate(date.getDate() - week * 7 - (6 - day))
-      const activity = Math.floor(Math.random() * 5) // 0-4 activity level
-      weekData.push({ date, activity })
+      const dateStr = date.toISOString().slice(0, 10)
+      const count = activityMap[dateStr] || 0
+      weekData.push({ date, dateStr, count, level: getActivityLevel(count) })
     }
-    data.push(weekData)
+    heatmapData.push(weekData)
   }
-  return data
-}
 
-const getActivityColor = (level: number) => {
-  if (level === 0) return "bg-gray-100"
-  if (level === 1) return "bg-mint-100"
-  if (level === 2) return "bg-mint-400"
-  if (level === 3) return "bg-orange-400"
-  return "bg-lavender-400"
-}
-
-export function StudyHeatmap() {
-  const heatmapData = generateHeatmapData()
-  const days = ["일", "월", "화", "수", "목", "금", "토"]
+  const days = t("일,월,화,수,목,금,토", "S,M,T,W,T,F,S").split(",")
 
   return (
     <div className="overflow-x-auto">
@@ -53,9 +67,9 @@ export function StudyHeatmap() {
                   key={dayIndex}
                   className={cn(
                     "group relative h-3 w-3 rounded-sm transition-all duration-200 hover:scale-150 hover:shadow-md",
-                    getActivityColor(day.activity),
+                    getActivityColor(day.level),
                   )}
-                  title={`${day.date.toLocaleDateString()}: ${day.activity} 문제`}
+                  title={`${day.date.toLocaleDateString()}: ${day.count > 0 ? t(`${day.count}건 활동`, `${day.count} activities`) : t("활동 없음", "No activity")}`}
                 />
               ))}
             </div>
@@ -65,13 +79,13 @@ export function StudyHeatmap() {
 
       {/* Legend */}
       <div className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
-        <span>적음</span>
+        <span>{t("적음", "Less")}</span>
         <div className="flex gap-1">
-          {[0, 1, 2, 3, 4].map((level) => (
+          {[0, 1, 2, 3].map((level) => (
             <div key={level} className={cn("h-3 w-3 rounded-sm", getActivityColor(level))} />
           ))}
         </div>
-        <span>많음</span>
+        <span>{t("많음", "More")}</span>
       </div>
     </div>
   )

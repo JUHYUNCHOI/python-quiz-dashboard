@@ -250,7 +250,8 @@ export default function CurriculumPage() {
   useEffect(() => {
     const saved = localStorage.getItem("completedLessons")
     if (saved) {
-      setCompletedLessons(new Set(JSON.parse(saved)))
+      const arr: (string | number)[] = JSON.parse(saved)
+      setCompletedLessons(new Set(arr.map(id => typeof id === "string" && /^\d+$/.test(id) ? Number(id) : id)))
     }
     const savedCourse = localStorage.getItem("selectedCourse") as CourseType
     if (savedCourse === "python" || savedCourse === "cpp") {

@@ -33,6 +33,7 @@ export interface QuestionResult {
   selected_answer: number
   correct_answer: number
   is_correct: boolean
+  related_topics?: string[]
 }
 
 export interface SessionData {
@@ -210,6 +211,7 @@ export function useQuizState(questions: QuizQuestion[]) {
       selected_answer: selectedAnswer,
       correct_answer: question.correctAnswer,
       is_correct: correct,
+      related_topics: question.relatedTopics,
     }])
 
     if (correct) {
@@ -289,6 +291,7 @@ export function useQuizState(questions: QuizQuestion[]) {
       selected_answer: -1,
       correct_answer: question.correctAnswer,
       is_correct: false,
+      related_topics: question.relatedTopics,
     }])
 
     if (currentQuestion < quizSettings.questionCount - 1) {
