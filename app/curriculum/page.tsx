@@ -57,190 +57,185 @@ type PartData = {
   lessons: { id: number | string; title: string; description: string; duration: string; hasQuiz?: boolean; isProject?: boolean }[]
 }
 
-// ============================================================
-// 🐍 Python 커리큘럼
-// ============================================================
-const pythonCurriculumData: PartData[] = [
-  {
-    id: "part1",
-    title: "Part 1: 기초",
-    description: "파이썬 설치부터 기본적인 입출력까지! 이 파트를 끝내면 간단한 계산 프로그램을 만들 수 있어요.",
-    lessons: [
-      { id: 1, title: "1. print() 출력", description: "화면에 글자와 숫자 출력하기", duration: "15분", hasQuiz: true },
-      { id: 2, title: "2. 데이터 타입", description: "숫자, 문자열, 불리언의 차이", duration: "15분", hasQuiz: true },
-      { id: 3, title: "3. 변수", description: "데이터를 저장하는 상자", duration: "20분", hasQuiz: true },
-      { id: 4, title: "4. 연산자", description: "계산하고 비교하기", duration: "20분", hasQuiz: true },
-      { id: 5, title: "5. 문자열 연산", description: "문자열 더하고 곱하기", duration: "15분", hasQuiz: true },
-      { id: 6, title: "6. 문자열 메서드", description: "upper, lower, strip 등", duration: "20분", hasQuiz: true },
-      { id: 7, title: "7. print() 옵션", description: "sep, end로 출력 꾸미기", duration: "15분", hasQuiz: true },
-      { id: 8, title: "8. f-string", description: "편리한 문자열 포맷팅", duration: "15분", hasQuiz: true },
-      { id: 9, title: "9. 타입 변환", description: "int, float, str 변환", duration: "15분", hasQuiz: true },
-      { id: 10, title: "10. input() 입력", description: "사용자에게 입력받기", duration: "15분", hasQuiz: true },
-      { id: "p1", title: "🎮 미니 계산기", description: "Part 1 복습 프로젝트", duration: "20분", isProject: true },
-    ],
-  },
-  {
-    id: "part2",
-    title: "Part 2: 제어문",
-    description: "프로그램에 판단력과 반복 능력을 주는 제어문! 조건에 따라 다르게 동작하고, 반복 작업을 자동화해요.",
-    lessons: [
-      { id: 11, title: "11. 조건문 (if)", description: "조건에 따라 다르게 실행", duration: "25분", hasQuiz: true },
-      { id: 12, title: "12. 조건문 심화", description: "and, or, not 논리 연산자", duration: "20분", hasQuiz: true },
-      { id: 13, title: "13. 반복문 (for)", description: "정해진 횟수만큼 반복", duration: "25분", hasQuiz: true },
-      { id: 14, title: "14. 반복문 (while)", description: "조건이 참인 동안 반복", duration: "25분", hasQuiz: true },
-      { id: "p2", title: "🎮 숫자 맞추기 게임", description: "Part 2 복습 프로젝트", duration: "25분", isProject: true },
-    ],
-  },
-  {
-    id: "part3",
-    title: "Part 3: 자료구조",
-    description: "데이터를 효율적으로 저장하고 관리하는 방법! 리스트, 튜플, 딕셔너리, 집합을 활용해요.",
-    lessons: [
-      { id: 15, title: "15. 자료구조 개요", description: "4가지 자료구조 소개", duration: "15분", hasQuiz: true },
-      { id: 16, title: "16. 리스트 기초", description: "여러 데이터를 한 번에 저장", duration: "25분", hasQuiz: true },
-      { id: 17, title: "17. 리스트와 반복문", description: "for문으로 리스트 순회", duration: "20분", hasQuiz: true },
-      { id: 18, title: "18. split()과 join()", description: "문자열 쪼개고 합치기", duration: "20분", hasQuiz: true },
-      { id: 19, title: "19. 튜플", description: "수정할 수 없는 리스트", duration: "15분", hasQuiz: true },
-      { id: 20, title: "20. 딕셔너리", description: "키-값 쌍으로 데이터 저장", duration: "25분", hasQuiz: true },
-      { id: 21, title: "21. 집합 (set)", description: "중복 없는 집합", duration: "20분", hasQuiz: true },
-      { id: 22, title: "22. 슬라이싱", description: "리스트/문자열 일부 추출", duration: "20분", hasQuiz: true },
-      { id: "p3", title: "🎮 Hangman 게임", description: "Part 3 복습 프로젝트", duration: "40분", isProject: true },
-    ],
-  },
-  {
-    id: "part3-advanced",
-    title: "Part 3+: 자료구조 심화 ⭐",
-    description: "스택, 큐, 덱을 배우고 코딩테스트에 자주 나오는 자료구조를 마스터해요!",
-    lessons: [
-      { id: 23, title: "23. 스택 (Stack)", description: "LIFO! 마지막이 먼저 나오는 자료구조", duration: "25분", hasQuiz: true },
-      { id: 24, title: "24. 큐 (Queue)", description: "FIFO! 먼저 온 게 먼저 나오는 자료구조", duration: "25분", hasQuiz: true },
-      { id: 25, title: "25. 덱 (Deque)", description: "양쪽에서 넣고 빼는 자료구조", duration: "25분", hasQuiz: true },
-      { id: 26, title: "26. 자료구조 비교와 선택", description: "상황에 맞는 자료구조 고르기", duration: "30분", hasQuiz: true },
-    ],
-  },
-  {
-    id: "part4",
-    title: "Part 4: 프로젝트 & 도전",
-    description: "Part 1~3에서 배운 모든 것을 활용! 프로젝트를 만들고 다양한 문제를 풀어요.",
-    lessons: [
-      { id: 27, title: "27. 가위바위보 게임", description: "리스트, 조건문, 반복문으로 가위바위보!", duration: "25분", hasQuiz: true },
-      { id: 28, title: "28. 로또 번호 생성기", description: "random 모듈과 리스트로 로또 만들기", duration: "25분", hasQuiz: true },
-      { id: 29, title: "29. 단어장 프로그램", description: "딕셔너리로 나만의 단어장!", duration: "25분", hasQuiz: true },
-      { id: 30, title: "30. 성적 관리 시스템", description: "리스트와 딕셔너리로 성적 관리", duration: "25분", hasQuiz: true },
-      { id: 31, title: "31. 종합 문제 모음", description: "기초부터 자료구조까지 30문제!", duration: "50분", hasQuiz: true },
-    ],
-  },
-  {
-    id: "part5",
-    title: "Part 5: 함수",
-    description: "코드를 재사용하고 정리하는 함수를 배워요! Level 2 시험의 핵심!",
-    lessons: [
-      { id: 32, title: "32. 함수란?", description: "def로 함수 만들기, return으로 결과 반환", duration: "25분", hasQuiz: true },
-      { id: 33, title: "33. 매개변수와 반환값", description: "기본값, 여러 값 반환, 키워드 인자", duration: "25분", hasQuiz: true },
-      { id: 34, title: "34. 함수 활용", description: "지역변수, 전역변수, 람다 함수", duration: "25분", hasQuiz: true },
-      { id: 35, title: "35. 내장함수 총정리", description: "len, sum, max, min, sorted, map", duration: "30분", hasQuiz: true },
-      { id: 36, title: "36. 함수 문제 30", description: "함수 마스터를 위한 30문제!", duration: "40분", hasQuiz: true },
-    ],
-  },
-  {
-    id: "part6",
-    title: "Part 6: 에러와 파일",
-    description: "에러를 처리하고 파일을 다뤄요! 게임 세이브 시스템을 만들어요.",
-    lessons: [
-      { id: 37, title: "37. 에러 처리하기", description: "try-except로 에러 잡기", duration: "25분", hasQuiz: true },
-      { id: 38, title: "38. 파일 읽고 쓰기", description: "파일로 데이터 저장하기", duration: "25분", hasQuiz: true },
-      { id: 39, title: "39. 게임 세이브", description: "RPG 게임 저장/불러오기", duration: "30분", hasQuiz: true },
-      { id: 40, title: "40. Part 6 문제 20", description: "에러와 파일 연습 문제", duration: "40분", hasQuiz: true },
-    ],
-  },
-  {
-    id: "part7",
-    title: "Part 7: 클래스",
-    description: "객체지향 프로그래밍의 기초를 배워요. 붕어빵 틀처럼 객체를 찍어내요!",
-    lessons: [
-      { id: 41, title: "41. 클래스 기초", description: "클래스와 객체 만들기", duration: "25분", hasQuiz: true },
-      { id: 42, title: "42. 메서드와 속성", description: "메서드 만들기와 변수 종류", duration: "25분", hasQuiz: true },
-      { id: 43, title: "43. RPG 게임", description: "클래스로 RPG 게임 만들기", duration: "30분", hasQuiz: true },
-      { id: 44, title: "44. Part 7 문제 20", description: "클래스 연습 문제", duration: "40분", hasQuiz: true },
-    ],
-  },
-  {
-    id: "part8",
-    title: "Part 8: 모듈과 패키지",
-    description: "다른 사람이 만든 코드를 활용해요.",
-    lessons: [
-      { id: 45, title: "45. 모듈 기초", description: "import와 내장 모듈 사용법", duration: "25분", hasQuiz: true },
-      { id: 46, title: "46. 패키지와 pip", description: "패키지 개념과 내장 모듈 활용", duration: "25분", hasQuiz: true },
-      { id: 47, title: "47. 날씨 앱", description: "모듈로 날씨 앱 만들기", duration: "30분", hasQuiz: true },
-      { id: 48, title: "48. Part 8 문제 20", description: "모듈과 패키지 연습 문제", duration: "40분", hasQuiz: true },
-    ],
-  },
-  {
-    id: "part9",
-    title: "Part 9: 종합 프로젝트",
-    description: "모든 것을 활용한 대형 프로젝트!",
-    lessons: [
-      { id: 49, title: "49. 텍스트 RPG: 게임 설계", description: "클래스 구조 설계와 게임 흐름", duration: "30분", hasQuiz: true },
-      { id: 50, title: "50. 텍스트 RPG: 핵심 시스템", description: "캐릭터, 몬스터, 아이템 구현", duration: "45분", hasQuiz: true },
-      { id: 51, title: "51. 텍스트 RPG: 게임 완성", description: "상점, 세이브, 게임 루프 통합", duration: "45분", hasQuiz: true },
-      { id: 52, title: "52. 텍스트 RPG: 업그레이드", description: "치명타, 퀘스트, 스킬 추가", duration: "40분", hasQuiz: true },
-      { id: "p4", title: "🐍 Snake Game", description: "turtle, 클래스, 모듈로 뱀 게임 만들기", duration: "60분", isProject: true },
-    ],
-  },
-]
-
-// ============================================================
-// ⚡ C++ 커리큘럼
-// ============================================================
-const cppCurriculumData: PartData[] = [
-  {
-    id: "cpp-part1",
-    title: "Part 1: C++ 기초",
-    description: "파이썬을 아는 학생을 위한 C++ 입문! 두 언어의 차이부터 시작해서 기본 문법을 배워요.",
-    lessons: [
-      { id: "cpp-1", title: "1. 파이썬 vs C++", description: "인터프리터 vs 컴파일러, 핵심 차이", duration: "20분", hasQuiz: true },
-      { id: "cpp-2", title: "2. cout 심화 & namespace", description: "숫자·수식 출력, 이스케이프, using namespace std", duration: "20분", hasQuiz: true },
-      { id: "cpp-3", title: "3. 변수와 타입", description: "int, double, string 직접 선언", duration: "20분", hasQuiz: true },
-      { id: "cpp-4", title: "4. cin 입력", description: "cin >>으로 입력받기", duration: "20분", hasQuiz: true },
-      { id: "cpp-5", title: "5. 연산자", description: "정수 나눗셈, ++, &&, || 연산자", duration: "20분", hasQuiz: true },
-      { id: "cpp-6", title: "6. 조건문 (if/else)", description: "중괄호 {}와 switch/case", duration: "20분", hasQuiz: true },
-      { id: "cpp-7", title: "7. 반복문 (for/while)", description: "for(int i=0; i<n; i++)", duration: "20분", hasQuiz: true },
-      { id: "cpp-8", title: "8. 함수", description: "반환 타입, void, 함수 오버로딩", duration: "20분", hasQuiz: true },
-      { id: "cpp-p1", title: "🎮 숫자 맞추기 게임", description: "Part 1 복습 프로젝트", duration: "25분", isProject: true },
-    ],
-  },
-  {
-    id: "cpp-part2",
-    title: "Part 2: 더 깊은 C++",
-    description: "배열, 벡터, 참조, 포인터, 클래스까지! C++만의 강력한 기능을 배워요.",
-    lessons: [
-      { id: "cpp-9", title: "9. 배열 & 벡터", description: "int arr[5], vector<int>, push_back", duration: "25분", hasQuiz: true },
-      { id: "cpp-10", title: "10. Range-for & auto", description: "for(auto x : vec), 타입 추론", duration: "20분", hasQuiz: true },
-      { id: "cpp-11", title: "11. 문자열 심화", description: "substr, find, replace, 비교", duration: "20분", hasQuiz: true },
-      { id: "cpp-12", title: "12. 참조와 함수", description: "int& ref, call by reference", duration: "25분", hasQuiz: true },
-      { id: "cpp-13", title: "13. 포인터 기초", description: "int* ptr, &, *, nullptr", duration: "25분", hasQuiz: true },
-      { id: "cpp-14", title: "14. 구조체 & 클래스", description: "struct, class, 생성자", duration: "25분", hasQuiz: true },
-      { id: "cpp-p2", title: "⚔️ RPG 캐릭터 관리", description: "Part 2 복습 프로젝트", duration: "30분", isProject: true },
-    ],
-  },
-  {
-    id: "cpp-part3",
-    title: "Part 3: USACO 준비",
-    description: "대회 프로그래밍(CP)에 필요한 STL 컨테이너, 알고리즘, Fast I/O, 비트 연산을 마스터해요!",
-    lessons: [
-      { id: "cpp-15", title: "15. pair & 정렬", description: "pair<int,int>, sort(), 커스텀 비교", duration: "25분", hasQuiz: true },
-      { id: "cpp-16", title: "16. map & set", description: "map, unordered_map, set", duration: "25분", hasQuiz: true },
-      { id: "cpp-17", title: "17. STL 알고리즘", description: "sort, find, lower_bound, accumulate", duration: "25분", hasQuiz: true },
-      { id: "cpp-18", title: "18. stack, queue & deque", description: "STL 컨테이너, priority_queue", duration: "25분", hasQuiz: true },
-      { id: "cpp-19", title: "19. 파일 I/O & Fast I/O", description: "freopen, ifstream, sync_with_stdio", duration: "25분", hasQuiz: true },
-      { id: "cpp-20", title: "20. CP 실전 팁", description: "bits/stdc++.h, typedef, 비트 연산", duration: "25분", hasQuiz: true },
-      { id: "cpp-p3", title: "🏆 USACO 모의전", description: "Part 3 복습 프로젝트", duration: "30분", isProject: true },
-    ],
-  },
-]
-
 export default function CurriculumPage() {
   const { t } = useLanguage()
+
+  const pythonCurriculumData: PartData[] = [
+    {
+      id: "part1",
+      title: t("Part 1: 기초", "Part 1: Basics"),
+      description: t("파이썬 설치부터 기본적인 입출력까지! 이 파트를 끝내면 간단한 계산 프로그램을 만들 수 있어요.", "From installing Python to basic I/O! After this part, you can build a simple calculator."),
+      lessons: [
+        { id: 1, title: t("1. print() 출력", "1. print() Output"), description: t("화면에 글자와 숫자 출력하기", "Printing text and numbers to the screen"), duration: t("15분", "15 min"), hasQuiz: true },
+        { id: 2, title: t("2. 데이터 타입", "2. Data Types"), description: t("숫자, 문자열, 불리언의 차이", "Differences between numbers, strings, and booleans"), duration: t("15분", "15 min"), hasQuiz: true },
+        { id: 3, title: t("3. 변수", "3. Variables"), description: t("데이터를 저장하는 상자", "A box that stores data"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: 4, title: t("4. 연산자", "4. Operators"), description: t("계산하고 비교하기", "Calculating and comparing"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: 5, title: t("5. 문자열 연산", "5. String Operations"), description: t("문자열 더하고 곱하기", "Adding and multiplying strings"), duration: t("15분", "15 min"), hasQuiz: true },
+        { id: 6, title: t("6. 문자열 메서드", "6. String Methods"), description: t("upper, lower, strip 등", "upper, lower, strip, etc."), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: 7, title: t("7. print() 옵션", "7. print() Options"), description: t("sep, end로 출력 꾸미기", "Formatting output with sep and end"), duration: t("15분", "15 min"), hasQuiz: true },
+        { id: 8, title: "8. f-string", description: t("편리한 문자열 포맷팅", "Convenient string formatting"), duration: t("15분", "15 min"), hasQuiz: true },
+        { id: 9, title: t("9. 타입 변환", "9. Type Conversion"), description: t("int, float, str 변환", "Converting int, float, str"), duration: t("15분", "15 min"), hasQuiz: true },
+        { id: 10, title: t("10. input() 입력", "10. input() Input"), description: t("사용자에게 입력받기", "Getting user input"), duration: t("15분", "15 min"), hasQuiz: true },
+        { id: "p1", title: t("🎮 미니 계산기", "🎮 Mini Calculator"), description: t("Part 1 복습 프로젝트", "Part 1 Review Project"), duration: t("20분", "20 min"), isProject: true },
+      ],
+    },
+    {
+      id: "part2",
+      title: t("Part 2: 제어문", "Part 2: Control Flow"),
+      description: t("프로그램에 판단력과 반복 능력을 주는 제어문! 조건에 따라 다르게 동작하고, 반복 작업을 자동화해요.", "Control flow gives your program decision-making and looping! Act differently based on conditions and automate repetitive tasks."),
+      lessons: [
+        { id: 11, title: t("11. 조건문 (if)", "11. Conditionals (if)"), description: t("조건에 따라 다르게 실행", "Execute differently based on conditions"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: 12, title: t("12. 조건문 심화", "12. Advanced Conditionals"), description: t("and, or, not 논리 연산자", "and, or, not logical operators"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: 13, title: t("13. 반복문 (for)", "13. Loops (for)"), description: t("정해진 횟수만큼 반복", "Repeat a set number of times"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: 14, title: t("14. 반복문 (while)", "14. Loops (while)"), description: t("조건이 참인 동안 반복", "Repeat while condition is true"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "p2", title: t("🎮 숫자 맞추기 게임", "🎮 Number Guessing Game"), description: t("Part 2 복습 프로젝트", "Part 2 Review Project"), duration: t("25분", "25 min"), isProject: true },
+      ],
+    },
+    {
+      id: "part3",
+      title: t("Part 3: 자료구조", "Part 3: Data Structures"),
+      description: t("데이터를 효율적으로 저장하고 관리하는 방법! 리스트, 튜플, 딕셔너리, 집합을 활용해요.", "Store and manage data efficiently! Learn lists, tuples, dictionaries, and sets."),
+      lessons: [
+        { id: 15, title: t("15. 자료구조 개요", "15. Data Structures Overview"), description: t("4가지 자료구조 소개", "Introduction to 4 data structures"), duration: t("15분", "15 min"), hasQuiz: true },
+        { id: 16, title: t("16. 리스트 기초", "16. List Basics"), description: t("여러 데이터를 한 번에 저장", "Store multiple data at once"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: 17, title: t("17. 리스트와 반복문", "17. Lists & Loops"), description: t("for문으로 리스트 순회", "Iterating lists with for loops"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: 18, title: t("18. split()과 join()", "18. split() & join()"), description: t("문자열 쪼개고 합치기", "Splitting and joining strings"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: 19, title: t("19. 튜플", "19. Tuples"), description: t("수정할 수 없는 리스트", "Immutable lists"), duration: t("15분", "15 min"), hasQuiz: true },
+        { id: 20, title: t("20. 딕셔너리", "20. Dictionaries"), description: t("키-값 쌍으로 데이터 저장", "Store data as key-value pairs"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: 21, title: t("21. 집합 (set)", "21. Sets"), description: t("중복 없는 집합", "Collections without duplicates"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: 22, title: t("22. 슬라이싱", "22. Slicing"), description: t("리스트/문자열 일부 추출", "Extract parts of lists/strings"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "p3", title: t("🎮 Hangman 게임", "🎮 Hangman Game"), description: t("Part 3 복습 프로젝트", "Part 3 Review Project"), duration: t("40분", "40 min"), isProject: true },
+      ],
+    },
+    {
+      id: "part3-advanced",
+      title: t("Part 3+: 자료구조 심화 ⭐", "Part 3+: Advanced Data Structures ⭐"),
+      description: t("스택, 큐, 덱을 배우고 코딩테스트에 자주 나오는 자료구조를 마스터해요!", "Learn stacks, queues, and deques — master data structures common in coding tests!"),
+      lessons: [
+        { id: 23, title: t("23. 스택 (Stack)", "23. Stack"), description: t("LIFO! 마지막이 먼저 나오는 자료구조", "LIFO! Last in, first out data structure"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: 24, title: t("24. 큐 (Queue)", "24. Queue"), description: t("FIFO! 먼저 온 게 먼저 나오는 자료구조", "FIFO! First in, first out data structure"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: 25, title: t("25. 덱 (Deque)", "25. Deque"), description: t("양쪽에서 넣고 빼는 자료구조", "Add and remove from both ends"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: 26, title: t("26. 자료구조 비교와 선택", "26. Comparing Data Structures"), description: t("상황에 맞는 자료구조 고르기", "Choosing the right data structure"), duration: t("30분", "30 min"), hasQuiz: true },
+      ],
+    },
+    {
+      id: "part4",
+      title: t("Part 4: 프로젝트 & 도전", "Part 4: Projects & Challenges"),
+      description: t("Part 1~3에서 배운 모든 것을 활용! 프로젝트를 만들고 다양한 문제를 풀어요.", "Apply everything from Parts 1–3! Build projects and solve various problems."),
+      lessons: [
+        { id: 27, title: t("27. 가위바위보 게임", "27. Rock Paper Scissors"), description: t("리스트, 조건문, 반복문으로 가위바위보!", "Build RPS with lists, conditionals, and loops!"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: 28, title: t("28. 로또 번호 생성기", "28. Lotto Number Generator"), description: t("random 모듈과 리스트로 로또 만들기", "Create lotto numbers with random and lists"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: 29, title: t("29. 단어장 프로그램", "29. Vocabulary App"), description: t("딕셔너리로 나만의 단어장!", "Build your own vocab app with dictionaries!"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: 30, title: t("30. 성적 관리 시스템", "30. Grade Manager"), description: t("리스트와 딕셔너리로 성적 관리", "Manage grades with lists and dictionaries"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: 31, title: t("31. 종합 문제 모음", "31. Mixed Problems"), description: t("기초부터 자료구조까지 30문제!", "30 problems from basics to data structures!"), duration: t("50분", "50 min"), hasQuiz: true },
+      ],
+    },
+    {
+      id: "part5",
+      title: t("Part 5: 함수", "Part 5: Functions"),
+      description: t("코드를 재사용하고 정리하는 함수를 배워요! Level 2 시험의 핵심!", "Learn functions to reuse and organize code! Key for Level 2 exams!"),
+      lessons: [
+        { id: 32, title: t("32. 함수란?", "32. What is a Function?"), description: t("def로 함수 만들기, return으로 결과 반환", "Create with def, return results"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: 33, title: t("33. 매개변수와 반환값", "33. Parameters & Return Values"), description: t("기본값, 여러 값 반환, 키워드 인자", "Defaults, multiple returns, keyword args"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: 34, title: t("34. 함수 활용", "34. Using Functions"), description: t("지역변수, 전역변수, 람다 함수", "Local/global variables, lambda functions"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: 35, title: t("35. 내장함수 총정리", "35. Built-in Functions"), description: "len, sum, max, min, sorted, map", duration: t("30분", "30 min"), hasQuiz: true },
+        { id: 36, title: t("36. 함수 문제 30", "36. 30 Function Problems"), description: t("함수 마스터를 위한 30문제!", "30 problems to master functions!"), duration: t("40분", "40 min"), hasQuiz: true },
+      ],
+    },
+    {
+      id: "part6",
+      title: t("Part 6: 에러와 파일", "Part 6: Errors & Files"),
+      description: t("에러를 처리하고 파일을 다뤄요! 게임 세이브 시스템을 만들어요.", "Handle errors and work with files! Build a game save system."),
+      lessons: [
+        { id: 37, title: t("37. 에러 처리하기", "37. Error Handling"), description: t("try-except로 에러 잡기", "Catch errors with try-except"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: 38, title: t("38. 파일 읽고 쓰기", "38. Reading & Writing Files"), description: t("파일로 데이터 저장하기", "Save data to files"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: 39, title: t("39. 게임 세이브", "39. Game Save"), description: t("RPG 게임 저장/불러오기", "Save/load RPG game data"), duration: t("30분", "30 min"), hasQuiz: true },
+        { id: 40, title: t("40. Part 6 문제 20", "40. Part 6: 20 Problems"), description: t("에러와 파일 연습 문제", "Practice problems for errors and files"), duration: t("40분", "40 min"), hasQuiz: true },
+      ],
+    },
+    {
+      id: "part7",
+      title: t("Part 7: 클래스", "Part 7: Classes"),
+      description: t("객체지향 프로그래밍의 기초를 배워요. 붕어빵 틀처럼 객체를 찍어내요!", "Learn the basics of OOP. Create objects like a cookie cutter!"),
+      lessons: [
+        { id: 41, title: t("41. 클래스 기초", "41. Class Basics"), description: t("클래스와 객체 만들기", "Creating classes and objects"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: 42, title: t("42. 메서드와 속성", "42. Methods & Attributes"), description: t("메서드 만들기와 변수 종류", "Creating methods and variable types"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: 43, title: t("43. RPG 게임", "43. RPG Game"), description: t("클래스로 RPG 게임 만들기", "Build an RPG game with classes"), duration: t("30분", "30 min"), hasQuiz: true },
+        { id: 44, title: t("44. Part 7 문제 20", "44. Part 7: 20 Problems"), description: t("클래스 연습 문제", "Practice problems for classes"), duration: t("40분", "40 min"), hasQuiz: true },
+      ],
+    },
+    {
+      id: "part8",
+      title: t("Part 8: 모듈과 패키지", "Part 8: Modules & Packages"),
+      description: t("다른 사람이 만든 코드를 활용해요.", "Use code made by others."),
+      lessons: [
+        { id: 45, title: t("45. 모듈 기초", "45. Module Basics"), description: t("import와 내장 모듈 사용법", "How to use import and built-in modules"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: 46, title: t("46. 패키지와 pip", "46. Packages & pip"), description: t("패키지 개념과 내장 모듈 활용", "Package concepts and built-in modules"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: 47, title: t("47. 날씨 앱", "47. Weather App"), description: t("모듈로 날씨 앱 만들기", "Build a weather app with modules"), duration: t("30분", "30 min"), hasQuiz: true },
+        { id: 48, title: t("48. Part 8 문제 20", "48. Part 8: 20 Problems"), description: t("모듈과 패키지 연습 문제", "Practice problems for modules and packages"), duration: t("40분", "40 min"), hasQuiz: true },
+      ],
+    },
+    {
+      id: "part9",
+      title: t("Part 9: 종합 프로젝트", "Part 9: Final Projects"),
+      description: t("모든 것을 활용한 대형 프로젝트!", "Big projects using everything you've learned!"),
+      lessons: [
+        { id: 49, title: t("49. 텍스트 RPG: 게임 설계", "49. Text RPG: Game Design"), description: t("클래스 구조 설계와 게임 흐름", "Class structure design and game flow"), duration: t("30분", "30 min"), hasQuiz: true },
+        { id: 50, title: t("50. 텍스트 RPG: 핵심 시스템", "50. Text RPG: Core Systems"), description: t("캐릭터, 몬스터, 아이템 구현", "Implement characters, monsters, and items"), duration: t("45분", "45 min"), hasQuiz: true },
+        { id: 51, title: t("51. 텍스트 RPG: 게임 완성", "51. Text RPG: Complete Game"), description: t("상점, 세이브, 게임 루프 통합", "Integrate shop, save, and game loop"), duration: t("45분", "45 min"), hasQuiz: true },
+        { id: 52, title: t("52. 텍스트 RPG: 업그레이드", "52. Text RPG: Upgrades"), description: t("치명타, 퀘스트, 스킬 추가", "Add critical hits, quests, and skills"), duration: t("40분", "40 min"), hasQuiz: true },
+        { id: "p4", title: "🐍 Snake Game", description: t("turtle, 클래스, 모듈로 뱀 게임 만들기", "Build Snake with turtle, classes, and modules"), duration: t("60분", "60 min"), isProject: true },
+      ],
+    },
+  ]
+
+  const cppCurriculumData: PartData[] = [
+    {
+      id: "cpp-part1",
+      title: t("Part 1: C++ 기초", "Part 1: C++ Basics"),
+      description: t("파이썬을 아는 학생을 위한 C++ 입문! 두 언어의 차이부터 시작해서 기본 문법을 배워요.", "C++ intro for Python students! Start with language differences and learn basic syntax."),
+      lessons: [
+        { id: "cpp-1", title: t("1. 파이썬 vs C++", "1. Python vs C++"), description: t("인터프리터 vs 컴파일러, 핵심 차이", "Interpreter vs compiler, key differences"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "cpp-2", title: t("2. cout 심화 & namespace", "2. Advanced cout & namespace"), description: t("숫자·수식 출력, 이스케이프, using namespace std", "Number/expression output, escape chars, using namespace std"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "cpp-3", title: t("3. 변수와 타입", "3. Variables & Types"), description: t("int, double, string 직접 선언", "Declaring int, double, string"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "cpp-4", title: t("4. cin 입력", "4. cin Input"), description: t("cin >>으로 입력받기", "Getting input with cin >>"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "cpp-5", title: t("5. 연산자", "5. Operators"), description: t("정수 나눗셈, ++, &&, || 연산자", "Integer division, ++, &&, || operators"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "cpp-6", title: t("6. 조건문 (if/else)", "6. Conditionals (if/else)"), description: t("중괄호 {}와 switch/case", "Curly braces {} and switch/case"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "cpp-7", title: t("7. 반복문 (for/while)", "7. Loops (for/while)"), description: "for(int i=0; i<n; i++)", duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "cpp-8", title: t("8. 함수", "8. Functions"), description: t("반환 타입, void, 함수 오버로딩", "Return types, void, function overloading"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "cpp-p1", title: t("🎮 숫자 맞추기 게임", "🎮 Number Guessing Game"), description: t("Part 1 복습 프로젝트", "Part 1 Review Project"), duration: t("25분", "25 min"), isProject: true },
+      ],
+    },
+    {
+      id: "cpp-part2",
+      title: t("Part 2: 더 깊은 C++", "Part 2: Deeper C++"),
+      description: t("배열, 벡터, 참조, 포인터, 클래스까지! C++만의 강력한 기능을 배워요.", "Arrays, vectors, references, pointers, and classes! Learn C++'s powerful features."),
+      lessons: [
+        { id: "cpp-9", title: t("9. 배열 & 벡터", "9. Arrays & Vectors"), description: "int arr[5], vector<int>, push_back", duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-10", title: "10. Range-for & auto", description: t("for(auto x : vec), 타입 추론", "for(auto x : vec), type inference"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "cpp-11", title: t("11. 문자열 심화", "11. Advanced Strings"), description: t("substr, find, replace, 비교", "substr, find, replace, comparison"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "cpp-12", title: t("12. 참조와 함수", "12. References & Functions"), description: "int& ref, call by reference", duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-13", title: t("13. 포인터 기초", "13. Pointer Basics"), description: "int* ptr, &, *, nullptr", duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-14", title: t("14. 구조체 & 클래스", "14. Structs & Classes"), description: t("struct, class, 생성자", "struct, class, constructors"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-p2", title: t("⚔️ RPG 캐릭터 관리", "⚔️ RPG Character Manager"), description: t("Part 2 복습 프로젝트", "Part 2 Review Project"), duration: t("30분", "30 min"), isProject: true },
+      ],
+    },
+    {
+      id: "cpp-part3",
+      title: t("Part 3: USACO 준비", "Part 3: USACO Prep"),
+      description: t("대회 프로그래밍(CP)에 필요한 STL 컨테이너, 알고리즘, Fast I/O, 비트 연산을 마스터해요!", "Master STL containers, algorithms, Fast I/O, and bitwise operations for competitive programming!"),
+      lessons: [
+        { id: "cpp-15", title: t("15. pair & 정렬", "15. pair & Sorting"), description: t("pair<int,int>, sort(), 커스텀 비교", "pair<int,int>, sort(), custom comparison"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-16", title: "16. map & set", description: "map, unordered_map, set", duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-17", title: t("17. STL 알고리즘", "17. STL Algorithms"), description: "sort, find, lower_bound, accumulate", duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-18", title: "18. stack, queue & deque", description: t("STL 컨테이너, priority_queue", "STL containers, priority_queue"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-19", title: t("19. 파일 I/O & Fast I/O", "19. File I/O & Fast I/O"), description: "freopen, ifstream, sync_with_stdio", duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-20", title: t("20. CP 실전 팁", "20. CP Practical Tips"), description: t("bits/stdc++.h, typedef, 비트 연산", "bits/stdc++.h, typedef, bitwise operations"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-p3", title: t("🏆 USACO 모의전", "🏆 USACO Mock Contest"), description: t("Part 3 복습 프로젝트", "Part 3 Review Project"), duration: t("30분", "30 min"), isProject: true },
+      ],
+    },
+  ]
+
   const [completedLessons, setCompletedLessons] = useState<Set<number | string>>(new Set())
   const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set(["part1", "part2", "part3", "part3-advanced", "part4", "part5", "part6", "part7", "part8", "part9", "cpp-part1", "cpp-part2", "cpp-part3"]))
   const [selectedCourse, setSelectedCourse] = useState<CourseType>("python")
