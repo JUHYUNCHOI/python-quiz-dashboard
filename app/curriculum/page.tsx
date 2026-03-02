@@ -239,7 +239,9 @@ export default function CurriculumPage() {
   const [completedLessons, setCompletedLessons] = useState<Set<number | string>>(new Set())
   const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set(["part1", "part2", "part3", "part3-advanced", "part4", "part5", "part6", "part7", "part8", "part9", "cpp-part1", "cpp-part2", "cpp-part3"]))
   const [selectedCourse, setSelectedCourse] = useState<CourseType>("python")
+  const [loaded, setLoaded] = useState(false)
 
+  // 초기 로드: localStorage에서 진도/코스 복원
   useEffect(() => {
     const saved = localStorage.getItem("completedLessons")
     if (saved) {
@@ -249,7 +251,41 @@ export default function CurriculumPage() {
     if (savedCourse === "python" || savedCourse === "cpp") {
       setSelectedCourse(savedCourse)
     }
+    setLoaded(true)
   }, [])
+
+  // 로드 완료 후 다음 수업으로 자동 스크롤
+  useEffect(() => {
+    if (!loaded) return
+
+    // URL hash가 있으면 hash 기반 스크롤 우선
+    const hash = window.location.hash
+    if (hash) {
+      setTimeout(() => {
+        const el = document.querySelector(hash)
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "center" })
+        }
+      }, 400)
+      return
+    }
+
+    // 다음 미완료 수업으로 스크롤
+    const data = selectedCourse === "python" ? pythonCurriculumData : cppCurriculumData
+    for (const part of data) {
+      for (const lesson of part.lessons) {
+        if (!completedLessons.has(lesson.id)) {
+          setTimeout(() => {
+            const el = document.getElementById(`lesson-${lesson.id}`)
+            if (el) {
+              el.scrollIntoView({ behavior: "smooth", block: "center" })
+            }
+          }, 400)
+          return
+        }
+      }
+    }
+  }, [loaded]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleCourseChange = (course: CourseType) => {
     setSelectedCourse(course)
@@ -258,19 +294,6 @@ export default function CurriculumPage() {
 
   const curriculumData = selectedCourse === "python" ? pythonCurriculumData : cppCurriculumData
   const isCpp = selectedCourse === "cpp"
-
-  // URL hash로 해당 레슨 위치로 스크롤
-  useEffect(() => {
-    const hash = window.location.hash
-    if (hash) {
-      setTimeout(() => {
-        const el = document.querySelector(hash)
-        if (el) {
-          el.scrollIntoView({ behavior: "smooth", block: "center" })
-        }
-      }, 300)
-    }
-  }, [])
 
   const allLessons = curriculumData.flatMap((part) => part.lessons)
   const totalCount = allLessons.length
@@ -462,12 +485,17 @@ export default function CurriculumPage() {
                       <div className="space-y-2 sm:space-y-3">
                         {partLessons.map((lesson) => {
                           const isCompleted = completedLessons.has(lesson.id)
+                          const isNextLesson = nextLessonInfo?.lesson.id === lesson.id
 
                           return (
                             <div
                               key={lesson.id}
                               id={`lesson-${lesson.id}`}
-                              className="bg-white rounded-xl p-3 sm:p-4 border-2 border-black hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
+                              className={`bg-white rounded-xl p-3 sm:p-4 border-2 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all ${
+                                isNextLesson
+                                  ? `border-orange-400 ring-2 ${isCpp ? 'ring-blue-400' : 'ring-orange-400'} ring-offset-1 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]`
+                                  : 'border-black'
+                              }`}
                             >
                               <div className="flex items-center gap-3">
                                 {/* 체크박스 */}
@@ -484,9 +512,16 @@ export default function CurriculumPage() {
 
                                 {/* 레슨 정보 */}
                                 <div className="flex-1 min-w-0">
-                                  <h3 className={`font-bold text-sm sm:text-base ${isCompleted ? "line-through text-gray-400" : "text-gray-900"}`}>
-                                    {lesson.title}
-                                  </h3>
+                                  <div className="flex items-center gap-2">
+                                    <h3 className={`font-bold text-sm sm:text-base ${isCompleted ? "line-through text-gray-400" : "text-gray-900"}`}>
+                                      {lesson.title}
+                                    </h3>
+                                    {isNextLesson && (
+                                      <span className={`px-2 py-0.5 rounded-full text-xs font-bold text-white animate-pulse ${isCpp ? 'bg-blue-500' : 'bg-orange-500'}`}>
+                                        ▶ {t("다음", "Next")}
+                                      </span>
+                                    )}
+                                  </div>
                                   <div className="flex items-center gap-2 mt-1 flex-wrap">
                                     <span className="flex items-center gap-1 text-gray-500 text-xs">
                                       <Clock className="h-3 w-3" />

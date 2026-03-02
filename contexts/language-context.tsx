@@ -18,6 +18,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Language>('ko')
+  const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
     try {
@@ -28,6 +29,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     } catch {
       // localStorage 접근 불가 시 기본값(ko) 유지
     }
+    setIsLoaded(true)
   }, [])
 
   const setLang = (newLang: Language) => {
@@ -46,6 +48,9 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     const entry = translations[key]
     return entry[lang]
   }
+
+  // localStorage에서 언어 설정 로드될 때까지 렌더링 방지 (깜빡임 방지)
+  if (!isLoaded) return null
 
   return (
     <LanguageContext.Provider value={{ lang, setLang, t, tk }}>
