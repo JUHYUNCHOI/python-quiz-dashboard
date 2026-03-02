@@ -73,15 +73,18 @@ export function useSupabaseSync() {
           ...extraColumns,
         }
 
-        await supabase
+        const { error } = await supabase
           .from(table)
           .upsert(upsertData, {
             onConflict: table === "gamification_data" || table === "user_preferences"
               ? "user_id"
               : `user_id,${Object.keys(matchColumns).join(",")}`,
           })
-      } catch {
-        // Supabase 저장 실패 시 무시 (localStorage에는 이미 저장됨)
+        if (error) {
+          console.error(`[SupabaseSync] ${table} upsert failed:`, error.message, error.code)
+        }
+      } catch (e) {
+        console.error(`[SupabaseSync] ${table} network error:`, e)
       }
     }, debounceMs)
 
@@ -127,15 +130,18 @@ export function useSupabaseSync() {
 
     const timer = setTimeout(async () => {
       try {
-        await supabase
+        const { error } = await supabase
           .from(table)
           .upsert({
             user_id: user.id,
             ...data,
             updated_at: new Date().toISOString(),
           }, { onConflict: "user_id" })
-      } catch {
-        // 저장 실패 시 무시
+        if (error) {
+          console.error(`[SupabaseSync] ${table} row upsert failed:`, error.message, error.code)
+        }
+      } catch (e) {
+        console.error(`[SupabaseSync] ${table} row network error:`, e)
       }
     }, debounceMs)
 

@@ -24,13 +24,14 @@ export async function migrateLocalStorageToSupabase(userId: string) {
     const sessionsToday = parseInt(localStorage.getItem("gamification-sessions-today") || "0", 10)
 
     if (totalXp > 0 || dailyStreak > 0) {
-      await supabase.from("gamification_data").upsert({
+      const { error: gError } = await supabase.from("gamification_data").upsert({
         user_id: userId,
         total_xp: totalXp,
         daily_streak: dailyStreak,
         last_active_date: lastActiveDate,
         sessions_today: sessionsToday,
       }, { onConflict: "user_id" })
+      if (gError) console.error("[Migration] gamification upsert failed:", gError.message, gError.code)
     }
 
     // 2. 완료한 레슨
@@ -48,9 +49,10 @@ export async function migrateLocalStorageToSupabase(userId: string) {
       }))
 
       if (progressRows.length > 0) {
-        await supabase.from("lesson_progress").upsert(progressRows, {
+        const { error: lpError } = await supabase.from("lesson_progress").upsert(progressRows, {
           onConflict: "user_id,lesson_id,variant,progress_type",
         })
+        if (lpError) console.error("[Migration] lesson_progress upsert failed:", lpError.message, lpError.code)
       }
     }
 

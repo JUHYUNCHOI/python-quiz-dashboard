@@ -30,19 +30,26 @@ export function useLessonSync(
       debounceRef.current = setTimeout(async () => {
         try {
           const supabase = createClient()
-          await supabase.from("lesson_progress").upsert(
-            {
-              user_id: user.id,
-              lesson_id: lessonId,
-              variant: variant || null,
-              progress_type: progressType,
-              progress_data: progressData,
-              updated_at: new Date().toISOString(),
-            },
+          const payload = {
+            user_id: user.id,
+            lesson_id: lessonId,
+            variant: variant || null,
+            progress_type: progressType,
+            progress_data: progressData,
+            updated_at: new Date().toISOString(),
+          }
+          const { error } = await supabase.from("lesson_progress").upsert(
+            payload,
             { onConflict: "user_id,lesson_id,variant,progress_type" }
           )
-        } catch {
-          // fire-and-forget: 실패 시 무시
+          if (error) {
+            console.error("[LessonSync] progress upsert failed:", error.message, error.code, { lessonId, progressType })
+            // 1회 재시도
+            const { error: retryError } = await supabase.from("lesson_progress").upsert(payload, { onConflict: "user_id,lesson_id,variant,progress_type" })
+            if (retryError) console.error("[LessonSync] retry failed:", retryError.message)
+          }
+        } catch (e) {
+          console.error("[LessonSync] network error:", e)
         }
       }, 1500)
     },
@@ -64,21 +71,27 @@ export function useLessonSync(
 
       try {
         const supabase = createClient()
-        await supabase.from("lesson_progress").upsert(
-          {
-            user_id: user.id,
-            lesson_id: lessonId,
-            variant: variant || null,
-            progress_type: progressType,
-            progress_data: {},
-            completed: true,
-            score,
-            updated_at: new Date().toISOString(),
-          },
+        const payload = {
+          user_id: user.id,
+          lesson_id: lessonId,
+          variant: variant || null,
+          progress_type: progressType,
+          progress_data: {},
+          completed: true,
+          score,
+          updated_at: new Date().toISOString(),
+        }
+        const { error } = await supabase.from("lesson_progress").upsert(
+          payload,
           { onConflict: "user_id,lesson_id,variant,progress_type" }
         )
-      } catch {
-        // fire-and-forget
+        if (error) {
+          console.error("[LessonSync] completion upsert failed:", error.message, error.code, { lessonId, score })
+          const { error: retryError } = await supabase.from("lesson_progress").upsert(payload, { onConflict: "user_id,lesson_id,variant,progress_type" })
+          if (retryError) console.error("[LessonSync] completion retry failed:", retryError.message)
+        }
+      } catch (e) {
+        console.error("[LessonSync] completion network error:", e)
       }
     },
     [user, lessonId, variant, progressType]

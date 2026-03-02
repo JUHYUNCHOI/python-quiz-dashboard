@@ -112,6 +112,10 @@ export function useGamification() {
           .eq("user_id", user.id)
           .single()
 
+        if (error && error.code !== "PGRST116") {
+          console.error("[Gamification Load] read failed:", error.message, error.code)
+        }
+
         if (!error && data && data.total_xp > 0) {
           const totalXp = data.total_xp
           const level = Math.floor(totalXp / XP_PER_LEVEL) + 1
@@ -147,16 +151,23 @@ export function useGamification() {
     debounceRef.current = setTimeout(async () => {
       try {
         const supabase = createClient()
-        await supabase.from("gamification_data").upsert({
+        const payload = {
           user_id: user.id,
           total_xp: s.totalXp,
           daily_streak: s.dailyStreak,
           last_active_date: s.lastActiveDate,
           sessions_today: s.sessionsToday,
           updated_at: new Date().toISOString(),
-        }, { onConflict: "user_id" })
-      } catch {
-        // 저장 실패 시 무시
+        }
+        const { error } = await supabase.from("gamification_data").upsert(payload, { onConflict: "user_id" })
+        if (error) {
+          console.error("[Gamification Sync] upsert failed:", error.message, error.code, payload)
+          // 1회 재시도
+          const { error: retryError } = await supabase.from("gamification_data").upsert(payload, { onConflict: "user_id" })
+          if (retryError) console.error("[Gamification Sync] retry failed:", retryError.message)
+        }
+      } catch (e) {
+        console.error("[Gamification Sync] network error:", e)
       }
     }, 1000)
   }, [user])

@@ -23,7 +23,7 @@ export function useQuizSessionSync() {
 
       try {
         const supabase = createClient()
-        await supabase.from("quiz_sessions").insert({
+        const payload = {
           user_id: user.id,
           difficulty: sessionData.difficulty || "mixed",
           total_questions: sessionData.totalQuestions,
@@ -38,9 +38,15 @@ export function useQuizSessionSync() {
           slow_answer_count: slowCount,
           started_at: new Date(sessionData.startedAt).toISOString(),
           completed_at: new Date().toISOString(),
-        })
-      } catch {
-        // fire-and-forget: 실패 시 무시
+        }
+        const { error } = await supabase.from("quiz_sessions").insert(payload)
+        if (error) {
+          console.error("[QuizSync] insert failed:", error.message, error.code)
+          const { error: retryError } = await supabase.from("quiz_sessions").insert(payload)
+          if (retryError) console.error("[QuizSync] retry failed:", retryError.message)
+        }
+      } catch (e) {
+        console.error("[QuizSync] network error:", e)
       }
     },
     [user]
