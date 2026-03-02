@@ -94,6 +94,7 @@ export function useGamification() {
   // Supabase 동기화
   const { user } = useAuth()
   const debounceRef = useRef<NodeJS.Timeout | null>(null)
+  const pendingPayloadRef = useRef<Record<string, unknown> | null>(null)
 
   useEffect(() => {
     setState(loadState())
@@ -142,35 +143,55 @@ export function useGamification() {
     loadFromSupabase()
   }, [user])
 
+  // Supabase에 즉시 전송 (내부 헬퍼)
+  const doSync = useCallback(async (payload: Record<string, unknown>) => {
+    try {
+      const supabase = createClient()
+      const { error } = await supabase.from("gamification_data").upsert(payload, { onConflict: "user_id" })
+      if (error) {
+        console.error("[Gamification Sync] upsert failed:", error.message, error.code)
+        const { error: retryError } = await supabase.from("gamification_data").upsert(payload, { onConflict: "user_id" })
+        if (retryError) console.error("[Gamification Sync] retry failed:", retryError.message)
+      }
+      pendingPayloadRef.current = null
+    } catch (e) {
+      console.error("[Gamification Sync] network error:", e)
+    }
+  }, [])
+
   // Supabase에 debounce 저장
   const syncToSupabase = useCallback((s: GamificationState) => {
     if (!user) return
 
     if (debounceRef.current) clearTimeout(debounceRef.current)
 
-    debounceRef.current = setTimeout(async () => {
-      try {
-        const supabase = createClient()
-        const payload = {
-          user_id: user.id,
-          total_xp: s.totalXp,
-          daily_streak: s.dailyStreak,
-          last_active_date: s.lastActiveDate,
-          sessions_today: s.sessionsToday,
-          updated_at: new Date().toISOString(),
+    const payload = {
+      user_id: user.id,
+      total_xp: s.totalXp,
+      daily_streak: s.dailyStreak,
+      last_active_date: s.lastActiveDate,
+      sessions_today: s.sessionsToday,
+      updated_at: new Date().toISOString(),
+    }
+    pendingPayloadRef.current = payload
+
+    debounceRef.current = setTimeout(() => { doSync(payload) }, 1000)
+  }, [user, doSync])
+
+  // 페이지 숨김 시 미전송 데이터 즉시 flush
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden && pendingPayloadRef.current) {
+        if (debounceRef.current) {
+          clearTimeout(debounceRef.current)
+          debounceRef.current = null
         }
-        const { error } = await supabase.from("gamification_data").upsert(payload, { onConflict: "user_id" })
-        if (error) {
-          console.error("[Gamification Sync] upsert failed:", error.message, error.code, payload)
-          // 1회 재시도
-          const { error: retryError } = await supabase.from("gamification_data").upsert(payload, { onConflict: "user_id" })
-          if (retryError) console.error("[Gamification Sync] retry failed:", retryError.message)
-        }
-      } catch (e) {
-        console.error("[Gamification Sync] network error:", e)
+        doSync(pendingPayloadRef.current)
       }
-    }, 1000)
-  }, [user])
+    }
+    document.addEventListener("visibilitychange", handleVisibilityChange)
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange)
+  }, [doSync])
 
   const calculateXpBreakdown = useCallback(
     (correctAnswers: number, totalQuestions: number, maxCombo: number): XpBreakdown => {

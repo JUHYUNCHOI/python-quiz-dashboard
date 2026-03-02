@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useRef } from "react"
+import { useCallback, useRef, useEffect } from "react"
 import { useAuth } from "@/contexts/auth-context"
 import { createClient } from "@/lib/supabase/client"
 
@@ -9,6 +9,7 @@ import { createClient } from "@/lib/supabase/client"
  * - localStorage는 그대로 유지 (오프라인/빠른 응답)
  * - Supabase는 영속 백업 (fire-and-forget)
  * - 비로그인 시 아무 동작 안 함
+ * - visibilitychange 시 미전송 데이터 즉시 flush
  */
 export function useLessonSync(
   lessonId: string,
@@ -17,6 +18,41 @@ export function useLessonSync(
 ) {
   const { user } = useAuth()
   const debounceRef = useRef<NodeJS.Timeout | null>(null)
+  const pendingPayloadRef = useRef<Record<string, unknown> | null>(null)
+
+  // 즉시 전송 헬퍼
+  const doSync = useCallback(async (payload: Record<string, unknown>) => {
+    try {
+      const supabase = createClient()
+      const { error } = await supabase.from("lesson_progress").upsert(
+        payload,
+        { onConflict: "user_id,lesson_id,variant,progress_type" }
+      )
+      if (error) {
+        console.error("[LessonSync] progress upsert failed:", error.message, error.code, { lessonId, progressType })
+        const { error: retryError } = await supabase.from("lesson_progress").upsert(payload, { onConflict: "user_id,lesson_id,variant,progress_type" })
+        if (retryError) console.error("[LessonSync] retry failed:", retryError.message)
+      }
+      pendingPayloadRef.current = null
+    } catch (e) {
+      console.error("[LessonSync] network error:", e)
+    }
+  }, [lessonId, progressType])
+
+  // 페이지 숨김 시 미전송 데이터 즉시 flush
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden && pendingPayloadRef.current) {
+        if (debounceRef.current) {
+          clearTimeout(debounceRef.current)
+          debounceRef.current = null
+        }
+        doSync(pendingPayloadRef.current)
+      }
+    }
+    document.addEventListener("visibilitychange", handleVisibilityChange)
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange)
+  }, [doSync])
 
   /**
    * 진행 상황을 Supabase에 upsert (debounced, fire-and-forget)
@@ -27,33 +63,19 @@ export function useLessonSync(
 
       if (debounceRef.current) clearTimeout(debounceRef.current)
 
-      debounceRef.current = setTimeout(async () => {
-        try {
-          const supabase = createClient()
-          const payload = {
-            user_id: user.id,
-            lesson_id: lessonId,
-            variant: variant || null,
-            progress_type: progressType,
-            progress_data: progressData,
-            updated_at: new Date().toISOString(),
-          }
-          const { error } = await supabase.from("lesson_progress").upsert(
-            payload,
-            { onConflict: "user_id,lesson_id,variant,progress_type" }
-          )
-          if (error) {
-            console.error("[LessonSync] progress upsert failed:", error.message, error.code, { lessonId, progressType })
-            // 1회 재시도
-            const { error: retryError } = await supabase.from("lesson_progress").upsert(payload, { onConflict: "user_id,lesson_id,variant,progress_type" })
-            if (retryError) console.error("[LessonSync] retry failed:", retryError.message)
-          }
-        } catch (e) {
-          console.error("[LessonSync] network error:", e)
-        }
-      }, 1500)
+      const payload = {
+        user_id: user.id,
+        lesson_id: lessonId,
+        variant: variant || null,
+        progress_type: progressType,
+        progress_data: progressData,
+        updated_at: new Date().toISOString(),
+      }
+      pendingPayloadRef.current = payload
+
+      debounceRef.current = setTimeout(() => { doSync(payload) }, 1500)
     },
-    [user, lessonId, variant, progressType]
+    [user, lessonId, variant, progressType, doSync]
   )
 
   /**
@@ -68,6 +90,7 @@ export function useLessonSync(
         clearTimeout(debounceRef.current)
         debounceRef.current = null
       }
+      pendingPayloadRef.current = null
 
       try {
         const supabase = createClient()
