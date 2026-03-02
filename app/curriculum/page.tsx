@@ -199,8 +199,8 @@ const cppCurriculumData: PartData[] = [
     description: "파이썬을 아는 학생을 위한 C++ 입문! 두 언어의 차이부터 시작해서 기본 문법을 배워요.",
     lessons: [
       { id: "cpp-1", title: "1. 파이썬 vs C++", description: "인터프리터 vs 컴파일러, 핵심 차이", duration: "20분", hasQuiz: true },
-      { id: "cpp-3", title: "2. 변수와 타입", description: "int, double, string 직접 선언", duration: "20분", hasQuiz: true },
-      { id: "cpp-2", title: "3. cout 심화 & namespace", description: "숫자·수식 출력, 이스케이프, using namespace std", duration: "20분", hasQuiz: true },
+      { id: "cpp-2", title: "2. cout 심화 & namespace", description: "숫자·수식 출력, 이스케이프, using namespace std", duration: "20분", hasQuiz: true },
+      { id: "cpp-3", title: "3. 변수와 타입", description: "int, double, string 직접 선언", duration: "20분", hasQuiz: true },
       { id: "cpp-4", title: "4. cin 입력", description: "cin >>으로 입력받기", duration: "20분", hasQuiz: true },
       { id: "cpp-5", title: "5. 연산자", description: "정수 나눗셈, ++, &&, || 연산자", duration: "20분", hasQuiz: true },
       { id: "cpp-6", title: "6. 조건문 (if/else)", description: "중괄호 {}와 switch/case", duration: "20분", hasQuiz: true },
