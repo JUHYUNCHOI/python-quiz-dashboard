@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
+import { useLanguage } from "@/contexts/language-context"
 import { registerAsTeacher } from "../actions"
 import { Card } from "@/components/ui/card"
 import { ShieldCheck, ArrowLeft } from "lucide-react"
@@ -13,15 +14,16 @@ export default function TeacherRegisterPage() {
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const { isAuthenticated, profile, refreshProfile } = useAuth()
+  const { t } = useLanguage()
   const router = useRouter()
 
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-orange-50 to-yellow-50 flex items-center justify-center p-4">
         <Card className="p-6 max-w-sm w-full text-center">
-          <p className="text-gray-600 mb-4">선생님 등록을 위해 먼저 로그인해주세요.</p>
+          <p className="text-gray-600 mb-4">{t("선생님 등록을 위해 먼저 로그인해주세요.", "Please login first to register as a teacher.")}</p>
           <Link href="/login" className="text-orange-600 font-bold hover:underline">
-            로그인하기
+            {t("로그인하기", "Login")}
           </Link>
         </Card>
       </div>
@@ -33,9 +35,9 @@ export default function TeacherRegisterPage() {
       <div className="min-h-screen bg-gradient-to-b from-orange-50 to-yellow-50 flex items-center justify-center p-4">
         <Card className="p-6 max-w-sm w-full text-center">
           <ShieldCheck className="w-12 h-12 text-green-500 mx-auto mb-3" />
-          <h2 className="text-lg font-bold mb-2">이미 선생님으로 등록되어 있어요!</h2>
+          <h2 className="text-lg font-bold mb-2">{t("이미 선생님으로 등록되어 있어요!", "You're already registered as a teacher!")}</h2>
           <Link href="/teacher" className="text-orange-600 font-bold hover:underline">
-            대시보드로 가기
+            {t("대시보드로 가기", "Go to Dashboard")}
           </Link>
         </Card>
       </div>
@@ -62,13 +64,13 @@ export default function TeacherRegisterPage() {
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-yellow-50 flex items-center justify-center p-4">
       <Card className="p-6 max-w-sm w-full">
         <Link href="/" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-4">
-          <ArrowLeft className="w-4 h-4" /> 홈으로
+          <ArrowLeft className="w-4 h-4" /> {t("홈으로", "Home")}
         </Link>
 
         <div className="text-center mb-6">
           <ShieldCheck className="w-12 h-12 text-orange-500 mx-auto mb-3" />
-          <h1 className="text-xl font-bold text-gray-800">선생님 등록</h1>
-          <p className="text-sm text-gray-500 mt-1">등록 코드를 입력해주세요</p>
+          <h1 className="text-xl font-bold text-gray-800">{t("선생님 등록", "Teacher Registration")}</h1>
+          <p className="text-sm text-gray-500 mt-1">{t("등록 코드를 입력해주세요", "Enter the registration code")}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -76,7 +78,7 @@ export default function TeacherRegisterPage() {
             type="text"
             value={code}
             onChange={(e) => setCode(e.target.value)}
-            placeholder="등록 코드 입력"
+            placeholder={t("등록 코드 입력", "Enter registration code")}
             className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-orange-400 focus:ring-2 focus:ring-orange-100 outline-none text-center text-lg tracking-widest"
             required
           />
@@ -90,7 +92,7 @@ export default function TeacherRegisterPage() {
             disabled={isLoading || !code}
             className="w-full py-3 rounded-xl font-bold text-white bg-orange-500 hover:bg-orange-600 disabled:opacity-50 transition-all"
           >
-            {isLoading ? "확인 중..." : "등록하기"}
+            {isLoading ? t("확인 중...", "Checking...") : t("등록하기", "Register")}
           </button>
         </form>
       </Card>

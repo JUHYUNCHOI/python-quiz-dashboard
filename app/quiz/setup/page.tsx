@@ -7,17 +7,19 @@ import { Button } from "@/components/ui/button"
 import { Minus, Plus, Flame, Calendar, Clock, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useGamification } from "@/hooks/use-gamification"
-
-const difficultyOptions = [
-  { id: "beginner", label: "초급", color: "green", description: "기초 문법과 개념" },
-  { id: "intermediate", label: "중급", color: "orange", description: "실전 문제 해결" },
-  { id: "advanced", label: "고급", color: "red", description: "심화 알고리즘" },
-  { id: "mixed", label: "혼합", color: "rainbow", description: "모든 난이도 섞어서", default: true },
-]
+import { useLanguage } from "@/contexts/language-context"
 
 export default function QuizSetupPage() {
   const router = useRouter()
   const gamification = useGamification()
+  const { t } = useLanguage()
+
+  const difficultyOptions = [
+    { id: "beginner", label: t("초급", "Beginner"), color: "green", description: t("기초 문법과 개념", "Basic grammar and concepts") },
+    { id: "intermediate", label: t("중급", "Intermediate"), color: "orange", description: t("실전 문제 해결", "Practical problem solving") },
+    { id: "advanced", label: t("고급", "Advanced"), color: "red", description: t("심화 알고리즘", "Advanced algorithms") },
+    { id: "mixed", label: t("혼합", "Mixed"), color: "rainbow", description: t("모든 난이도 섞어서", "Mix all difficulty levels"), default: true },
+  ]
   const [questionCount, setQuestionCount] = useState(20)
   const [selectedDifficulty, setSelectedDifficulty] = useState("mixed")
   const [showCustomInput, setShowCustomInput] = useState(false)
@@ -84,7 +86,7 @@ export default function QuizSetupPage() {
           <div className="flex justify-center mb-4">
             <div className="text-8xl animate-wave">🦒</div>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-3">오늘도 함께 공부해볼까요?</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-3">{t("오늘도 함께 공부해볼까요?", "Ready to study together today?")}</h1>
           <div className="flex items-center justify-center gap-4 text-sm text-gray-600">
             <div className="flex items-center gap-2">
               <Calendar className="h-4 w-4" />
@@ -92,21 +94,21 @@ export default function QuizSetupPage() {
             </div>
             <div className="flex items-center gap-2 bg-orange-100 text-orange-700 px-3 py-1 rounded-full font-semibold">
               <Flame className="h-4 w-4" />
-              <span>{gamification.dailyStreak > 0 ? `${gamification.dailyStreak}일 연속 학습 중!` : "오늘 첫 학습!"}</span>
+              <span>{gamification.dailyStreak > 0 ? t(`${gamification.dailyStreak}일 연속 학습 중!`, `${gamification.dailyStreak}-day streak!`) : t("오늘 첫 학습!", "First session today!")}</span>
             </div>
           </div>
         </div>
 
         {/* Question Count Selector */}
         <Card className="p-6 md:p-8 mb-6 border-2 border-orange-200 shadow-lg">
-          <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-6 text-center">오늘 풀 문제 개수</h2>
+          <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-6 text-center">{t("오늘 풀 문제 개수", "Number of problems today")}</h2>
 
           <div className="flex items-center justify-center gap-4 mb-6">
             <button
               onClick={handleDecrement}
               disabled={questionCount <= 5}
               className="w-14 h-14 rounded-full bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center text-2xl font-bold text-gray-700 transition-all hover:scale-110 active:scale-95"
-              aria-label="문제 수 감소"
+              aria-label={t("문제 수 감소", "Decrease count")}
             >
               <Minus className="h-6 w-6" />
             </button>
@@ -119,7 +121,7 @@ export default function QuizSetupPage() {
               onClick={handleIncrement}
               disabled={questionCount >= 100}
               className="w-14 h-14 rounded-full bg-orange-500 hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center text-2xl font-bold text-white transition-all hover:scale-110 active:scale-95"
-              aria-label="문제 수 증가"
+              aria-label={t("문제 수 증가", "Increase count")}
             >
               <Plus className="h-6 w-6" />
             </button>
@@ -138,14 +140,14 @@ export default function QuizSetupPage() {
                     : "bg-white text-gray-700 border-2 border-gray-200 hover:border-orange-300",
                 )}
               >
-                {count}개
+                {t(`${count}개`, `${count} questions`)}
               </button>
             ))}
             <button
               onClick={handleCustomInput}
               className="px-4 py-2 rounded-full font-semibold bg-white text-gray-700 border-2 border-gray-200 hover:border-orange-300 transition-all hover:scale-105"
             >
-              직접 입력
+              {t("직접 입력", "Custom")}
             </button>
           </div>
 
@@ -161,7 +163,7 @@ export default function QuizSetupPage() {
                 className="w-24 px-3 py-2 border-2 border-orange-300 rounded-lg text-center font-semibold"
               />
               <Button onClick={handleCustomSubmit} className="bg-orange-500 hover:bg-orange-600">
-                확인
+                {t("확인", "OK")}
               </Button>
             </div>
           )}
@@ -169,7 +171,7 @@ export default function QuizSetupPage() {
           {/* Estimated Time */}
           <div className="flex items-center justify-center gap-2 text-gray-600">
             <Clock className="h-5 w-5" />
-            <span className="text-lg font-semibold">약 {estimatedTime}분 소요</span>
+            <span className="text-lg font-semibold">{t(`약 ${estimatedTime}분 소요`, `About ${estimatedTime} min`)}</span>
           </div>
         </Card>
 
@@ -177,13 +179,13 @@ export default function QuizSetupPage() {
         <Card className="p-6 mb-6 border-2 border-mint-200 shadow-lg">
           <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-mint-500" />
-            오늘의 목표
+            {t("오늘의 목표", "Today's Goal")}
           </h3>
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-3xl font-bold text-gray-800 mb-1">0/{questionCount} 완료</div>
-              <p className="text-sm text-gray-600 mb-2">오늘도 끝까지 해보자!</p>
-              <p className="text-xs text-gray-500">어제 15/20 완료 (75%)</p>
+              <div className="text-3xl font-bold text-gray-800 mb-1">{t(`0/${questionCount} 완료`, `0/${questionCount} completed`)}</div>
+              <p className="text-sm text-gray-600 mb-2">{t("오늘도 끝까지 해보자!", "Let's finish today!")}</p>
+              <p className="text-xs text-gray-500">{t("어제 15/20 완료 (75%)", "Yesterday 15/20 completed (75%)")}</p>
             </div>
             <div className="relative w-24 h-24">
               <svg className="transform -rotate-90 w-24 h-24">
@@ -208,7 +210,7 @@ export default function QuizSetupPage() {
 
         {/* Difficulty Selection */}
         <Card className="p-6 mb-8 border-2 border-lavender-200 shadow-lg">
-          <h3 className="text-lg font-bold text-gray-800 mb-4">난이도 선택</h3>
+          <h3 className="text-lg font-bold text-gray-800 mb-4">{t("난이도 선택", "Select Difficulty")}</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {difficultyOptions.map((option) => (
               <button
@@ -240,11 +242,11 @@ export default function QuizSetupPage() {
 
           {selectedDifficulty === "mixed" && (
             <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-              <p className="text-sm text-gray-600 mb-2">문제 분포:</p>
+              <p className="text-sm text-gray-600 mb-2">{t("문제 분포:", "Distribution:")}</p>
               <div className="flex gap-2">
-                <div className="flex-1 h-2 bg-green-400 rounded" title="초급 33%" />
-                <div className="flex-1 h-2 bg-orange-400 rounded" title="중급 33%" />
-                <div className="flex-1 h-2 bg-red-400 rounded" title="고급 34%" />
+                <div className="flex-1 h-2 bg-green-400 rounded" title={t("초급 33%", "Beginner 33%")} />
+                <div className="flex-1 h-2 bg-orange-400 rounded" title={t("중급 33%", "Intermediate 33%")} />
+                <div className="flex-1 h-2 bg-red-400 rounded" title={t("고급 34%", "Advanced 34%")} />
               </div>
             </div>
           )}
@@ -257,12 +259,12 @@ export default function QuizSetupPage() {
           className="w-full py-8 text-xl font-bold bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white rounded-2xl shadow-xl hover:shadow-2xl transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed group"
         >
           <span className="flex items-center justify-center gap-2">
-            시작하기
+            {t("시작하기", "Start")}
             <span className="text-2xl group-hover:animate-bounce">🚀</span>
           </span>
         </Button>
 
-        <p className="text-center text-sm text-gray-500 mt-4">최소 80% 이상 완료해야 목표 달성으로 인정돼요</p>
+        <p className="text-center text-sm text-gray-500 mt-4">{t("최소 80% 이상 완료해야 목표 달성으로 인정돼요", "Complete at least 80% to achieve your goal")}</p>
       </main>
     </div>
   )

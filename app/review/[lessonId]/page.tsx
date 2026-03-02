@@ -33,6 +33,7 @@ import { runPythonCode } from "./utils/pythonRunner"
 
 // Supabase 진도 동기화
 import { useLessonSync } from "@/hooks/use-lesson-sync"
+import { markLessonComplete } from "@/lib/mark-lesson-complete"
 
 // 다국어 지원
 import { useLanguage } from "@/contexts/language-context"
@@ -523,6 +524,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
         setStep(step + 1)
       } else {
         syncCompletion(score)
+        markLessonComplete(lessonId)
         try { localStorage.removeItem(`lesson-${lessonId}`) } catch {}
         router.push("/curriculum")
       }
@@ -2065,14 +2067,14 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
             
             <Button
               onClick={() => {
-                // Supabase에 완료 기록
                 syncCompletion(score)
+                markLessonComplete(lessonId)
                 try { localStorage.removeItem(`lesson-${lessonId}`) } catch {}
                 router.push("/curriculum")
               }}
               className="w-full py-8 md:py-10 text-2xl md:text-3xl bg-indigo-600 hover:bg-indigo-500 rounded-2xl border-0 font-bold text-white shadow-xl"
             >
-              완료! <ChevronRight className="w-8 h-8 ml-2" />
+              {t("완료!", "Done!")} <ChevronRight className="w-8 h-8 ml-2" />
             </Button>
           </div>
         )}

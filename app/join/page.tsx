@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
+import { useLanguage } from "@/contexts/language-context"
 import { joinClassByCode } from "../teacher/actions"
 import { Card } from "@/components/ui/card"
 import { Users, ArrowLeft, Check } from "lucide-react"
@@ -14,6 +15,7 @@ export default function JoinClassPage() {
   const [success, setSuccess] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const { isAuthenticated } = useAuth()
+  const { t } = useLanguage()
   const router = useRouter()
 
   if (!isAuthenticated) {
@@ -21,9 +23,9 @@ export default function JoinClassPage() {
       <div className="min-h-screen bg-gradient-to-b from-orange-50 to-yellow-50 flex items-center justify-center p-4">
         <Card className="p-6 max-w-sm w-full text-center">
           <Users className="w-12 h-12 text-orange-400 mx-auto mb-3" />
-          <p className="text-gray-600 mb-4">반에 참가하려면 먼저 로그인해주세요.</p>
+          <p className="text-gray-600 mb-4">{t("반에 참가하려면 먼저 로그인해주세요.", "Please login first to join a class.")}</p>
           <Link href="/login" className="text-orange-600 font-bold hover:underline">
-            로그인하기
+            {t("로그인하기", "Login")}
           </Link>
         </Card>
       </div>
@@ -53,8 +55,8 @@ export default function JoinClassPage() {
           <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
             <Check className="w-8 h-8 text-green-500" />
           </div>
-          <h2 className="text-lg font-bold text-gray-800 mb-1">참가 완료!</h2>
-          <p className="text-sm text-gray-500">학습 페이지로 이동합니다...</p>
+          <h2 className="text-lg font-bold text-gray-800 mb-1">{t("참가 완료!", "Joined!")}</h2>
+          <p className="text-sm text-gray-500">{t("학습 페이지로 이동합니다...", "Moving to learning page...")}</p>
         </Card>
       </div>
     )
@@ -64,13 +66,13 @@ export default function JoinClassPage() {
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-yellow-50 flex items-center justify-center p-4">
       <Card className="p-6 max-w-sm w-full">
         <Link href="/" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-4">
-          <ArrowLeft className="w-4 h-4" /> 홈으로
+          <ArrowLeft className="w-4 h-4" /> {t("홈으로", "Home")}
         </Link>
 
         <div className="text-center mb-6">
           <Users className="w-12 h-12 text-orange-500 mx-auto mb-3" />
-          <h1 className="text-xl font-bold text-gray-800">반 참가하기</h1>
-          <p className="text-sm text-gray-500 mt-1">선생님이 알려준 코드를 입력하세요</p>
+          <h1 className="text-xl font-bold text-gray-800">{t("반 참가하기", "Join Class")}</h1>
+          <p className="text-sm text-gray-500 mt-1">{t("선생님이 알려준 코드를 입력하세요", "Enter the code from your teacher")}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -78,7 +80,7 @@ export default function JoinClassPage() {
             type="text"
             value={code}
             onChange={(e) => setCode(e.target.value.toUpperCase())}
-            placeholder="참가 코드 6자리"
+            placeholder={t("참가 코드 6자리", "6-digit join code")}
             maxLength={6}
             className="w-full px-4 py-4 rounded-xl border border-gray-200 focus:border-orange-400 focus:ring-2 focus:ring-orange-100 outline-none text-center text-2xl font-mono font-bold tracking-[0.3em] uppercase"
             required
@@ -93,7 +95,7 @@ export default function JoinClassPage() {
             disabled={isLoading || code.length < 6}
             className="w-full py-3 rounded-xl font-bold text-white bg-orange-500 hover:bg-orange-600 disabled:opacity-50 transition-all"
           >
-            {isLoading ? "참가 중..." : "참가하기"}
+            {isLoading ? t("참가 중...", "Joining...") : t("참가하기", "Join")}
           </button>
         </form>
       </Card>

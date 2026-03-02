@@ -160,7 +160,7 @@ export function useGamification() {
     (correctAnswers: number, totalQuestions: number, maxCombo: number): XpBreakdown => {
       const baseXp = correctAnswers * 10
       const comboBonus = calcComboBonus(maxCombo)
-      const streakBonus = state.dailyStreak > 3 ? 10 : 0
+      const streakBonus = state.dailyStreak >= 3 ? 10 : 0
       const perfectBonus = correctAnswers === totalQuestions ? 50 : 0
       return {
         baseXp,

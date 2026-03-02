@@ -68,8 +68,21 @@ const quizQuestions: QuizQuestion[] = [
   },
 ]
 
+// 셔플 (Fisher-Yates)
+function shuffleArray<T>(arr: T[]): T[] {
+  const a = [...arr]
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
+// 세션마다 한 번만 셔플 (컴포넌트 밖에서 고정)
+const shuffled = shuffleArray(quizQuestions)
+
 export default function QuizPage() {
-  const quiz = useQuizState(quizQuestions)
+  const quiz = useQuizState(shuffled)
   const { play, isMuted, toggleMute } = useSoundEffect()
   const gamification = useGamification()
   const { t } = useLanguage()

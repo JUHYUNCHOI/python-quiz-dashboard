@@ -10,6 +10,7 @@ import { LibraryToggle, type LibraryVariant } from "@/components/library-toggle"
 import { SoundToggle } from "@/components/sound-toggle"
 import { useSoundEffect } from "@/hooks/use-sound-effect"
 import { useLessonSync } from "@/hooks/use-lesson-sync"
+import { markLessonComplete } from "@/lib/mark-lesson-complete"
 
 // 분리된 컴포넌트
 import { Confetti } from "@/components/learn/confetti"
@@ -181,8 +182,9 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       play("chapterComplete")
       setTimeout(() => setShowConfetti(false), 3000)
     } else {
-      // 마지막 챕터 완료 → Supabase에 완료 기록
+      // 마지막 챕터 완료 → Supabase + localStorage에 완료 기록
       syncCompletion(score)
+      markLessonComplete(lessonId)
       setShowConfetti(true)
       setShowLessonComplete(true)
       play("lessonComplete")

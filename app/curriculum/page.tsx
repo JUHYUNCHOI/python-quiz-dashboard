@@ -4,6 +4,7 @@ import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { useState, useEffect } from "react"
 import { useLanguage } from "@/contexts/language-context"
+import { useAuth } from "@/contexts/auth-context"
 import Link from "next/link"
 import {
   CheckCircle2,
@@ -15,6 +16,7 @@ import {
   ChevronRight,
   Play,
   Sparkles,
+  Lock,
 } from "lucide-react"
 
 // ============================================================
@@ -236,6 +238,9 @@ export default function CurriculumPage() {
     },
   ]
 
+  const { profile } = useAuth()
+  const isTeacher = profile?.role === "teacher"
+
   const [completedLessons, setCompletedLessons] = useState<Set<number | string>>(new Set())
   const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set(["part1", "part2", "part3", "part3-advanced", "part4", "part5", "part6", "part7", "part8", "part9", "cpp-part1", "cpp-part2", "cpp-part3"]))
   const [selectedCourse, setSelectedCourse] = useState<CourseType>("python")
@@ -299,6 +304,17 @@ export default function CurriculumPage() {
   const totalCount = allLessons.length
   const completedCount = allLessons.filter((lesson) => completedLessons.has(lesson.id)).length
   const progress = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0
+
+  // 학생: 순서대로만 열림 (완료한 곳 + 바로 다음 1개). 선생님: 전부 열림
+  const unlockedLessons = new Set<number | string>()
+  if (isTeacher) {
+    allLessons.forEach((l) => unlockedLessons.add(l.id))
+  } else {
+    for (const lesson of allLessons) {
+      unlockedLessons.add(lesson.id)
+      if (!completedLessons.has(lesson.id)) break // 첫 미완료까지만
+    }
+  }
 
   const toggleCompletion = (id: number | string) => {
     const newCompleted = new Set(completedLessons)
@@ -486,81 +502,102 @@ export default function CurriculumPage() {
                         {partLessons.map((lesson) => {
                           const isCompleted = completedLessons.has(lesson.id)
                           const isNextLesson = nextLessonInfo?.lesson.id === lesson.id
+                          const isLocked = !unlockedLessons.has(lesson.id)
 
                           return (
                             <div
                               key={lesson.id}
                               id={`lesson-${lesson.id}`}
-                              className={`bg-white rounded-xl p-3 sm:p-4 border-2 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all ${
-                                isNextLesson
-                                  ? `border-orange-400 ring-2 ${isCpp ? 'ring-blue-400' : 'ring-orange-400'} ring-offset-1 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]`
-                                  : 'border-black'
+                              className={`rounded-xl p-3 sm:p-4 border-2 transition-all ${
+                                isLocked
+                                  ? 'bg-gray-100 border-gray-300 opacity-60'
+                                  : isNextLesson
+                                    ? `bg-white border-orange-400 ring-2 ${isCpp ? 'ring-blue-400' : 'ring-orange-400'} ring-offset-1 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]`
+                                    : 'bg-white border-black hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]'
                               }`}
                             >
                               <div className="flex items-center gap-3">
-                                {/* 체크박스 */}
-                                <button
-                                  onClick={() => toggleCompletion(lesson.id)}
-                                  className="flex-shrink-0"
-                                >
-                                  {isCompleted ? (
-                                    <CheckCircle2 className="h-6 w-6 sm:h-7 sm:w-7 text-green-500" />
-                                  ) : (
-                                    <Circle className="h-6 w-6 sm:h-7 sm:w-7 text-gray-300 hover:text-gray-400" />
-                                  )}
-                                </button>
+                                {/* 체크박스 또는 잠금 아이콘 */}
+                                {isLocked ? (
+                                  <Lock className="h-6 w-6 sm:h-7 sm:w-7 text-gray-400 flex-shrink-0" />
+                                ) : (
+                                  <button
+                                    onClick={() => toggleCompletion(lesson.id)}
+                                    className="flex-shrink-0"
+                                  >
+                                    {isCompleted ? (
+                                      <CheckCircle2 className="h-6 w-6 sm:h-7 sm:w-7 text-green-500" />
+                                    ) : (
+                                      <Circle className="h-6 w-6 sm:h-7 sm:w-7 text-gray-300 hover:text-gray-400" />
+                                    )}
+                                  </button>
+                                )}
 
                                 {/* 레슨 정보 */}
                                 <div className="flex-1 min-w-0">
-                                  <div className="flex items-center gap-2">
-                                    <h3 className={`font-bold text-sm sm:text-base ${isCompleted ? "line-through text-gray-400" : "text-gray-900"}`}>
-                                      {lesson.title}
-                                    </h3>
-                                    {isNextLesson && (
-                                      <span className={`px-2 py-0.5 rounded-full text-xs font-bold text-white animate-pulse ${isCpp ? 'bg-blue-500' : 'bg-orange-500'}`}>
+                                  <h3 className={`font-bold text-sm sm:text-base ${isLocked ? "text-gray-400" : isCompleted ? "line-through text-gray-400" : "text-gray-900"}`}>
+                                    {lesson.title}
+                                  </h3>
+                                  <div className="flex items-center gap-2 mt-1 flex-wrap">
+                                    {isNextLesson && !isLocked && (
+                                      <span className={`whitespace-nowrap px-2 py-0.5 rounded-full text-xs font-bold text-white animate-pulse ${isCpp ? 'bg-blue-500' : 'bg-orange-500'}`}>
                                         ▶ {t("다음", "Next")}
                                       </span>
                                     )}
-                                  </div>
-                                  <div className="flex items-center gap-2 mt-1 flex-wrap">
-                                    <span className="flex items-center gap-1 text-gray-500 text-xs">
-                                      <Clock className="h-3 w-3" />
-                                      {lesson.duration}
-                                    </span>
-                                    {lesson.hasQuiz && (
-                                      <span className="px-1.5 py-0.5 bg-orange-100 text-orange-600 rounded text-xs font-bold">
-                                        {t("퀴즈", "Quiz")}
+                                    {isLocked ? (
+                                      <span className="text-xs text-gray-400 italic">
+                                        {t("이전 수업을 완료하면 열려요", "Complete the previous lesson to unlock")}
                                       </span>
-                                    )}
-                                    {lesson.isProject && (
-                                      <span className="px-1.5 py-0.5 bg-purple-100 text-purple-600 rounded text-xs font-bold">
-                                        {t("프로젝트", "Project")}
-                                      </span>
+                                    ) : (
+                                      <>
+                                        <span className="flex items-center gap-1 text-gray-500 text-xs">
+                                          <Clock className="h-3 w-3" />
+                                          {lesson.duration}
+                                        </span>
+                                        {lesson.hasQuiz && (
+                                          <span className="px-1.5 py-0.5 bg-orange-100 text-orange-600 rounded text-xs font-bold">
+                                            {t("퀴즈", "Quiz")}
+                                          </span>
+                                        )}
+                                        {lesson.isProject && (
+                                          <span className="px-1.5 py-0.5 bg-purple-100 text-purple-600 rounded text-xs font-bold">
+                                            {t("프로젝트", "Project")}
+                                          </span>
+                                        )}
+                                      </>
                                     )}
                                   </div>
                                 </div>
 
-                                {/* 버튼들 */}
+                                {/* 버튼들: 잠긴 수업은 비활성화 */}
                                 <div className="flex gap-2 flex-shrink-0">
-                                  <Link
-                                    href={`/learn/${lesson.id}`}
-                                    className={`px-3 sm:px-4 py-2 rounded-lg border-2 border-black font-bold text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-xs sm:text-sm ${
-                                      isCpp ? "bg-blue-500 hover:bg-blue-600" : "bg-green-500 hover:bg-green-600"
-                                    }`}
-                                  >
-                                    {t("📺 수업", "📺 Lesson")}
-                                  </Link>
-                                  {(!isCpp || cppReviewIds.has(String(lesson.id))) && (
-                                    <Link
-                                      href={getReviewPath(lesson.id)}
-                                      className={`px-3 sm:px-4 py-2 rounded-lg border-2 border-black font-bold text-xs sm:text-sm ${
-                                        isCompleted
-                                          ? "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                                          : "bg-orange-400 text-white hover:bg-orange-500 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
-                                      }`}
-                                    >
-                                      {t("🎮 퀴즈", "🎮 Quiz")}
-                                    </Link>
+                                  {isLocked ? (
+                                    <span className="px-3 sm:px-4 py-2 rounded-lg border-2 border-gray-300 font-bold text-gray-400 text-xs sm:text-sm cursor-not-allowed">
+                                      🔒
+                                    </span>
+                                  ) : (
+                                    <>
+                                      <Link
+                                        href={`/learn/${lesson.id}`}
+                                        className={`px-3 sm:px-4 py-2 rounded-lg border-2 border-black font-bold text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-xs sm:text-sm ${
+                                          isCpp ? "bg-blue-500 hover:bg-blue-600" : "bg-green-500 hover:bg-green-600"
+                                        }`}
+                                      >
+                                        {t("📺 수업", "📺 Lesson")}
+                                      </Link>
+                                      {(!isCpp || cppReviewIds.has(String(lesson.id))) && (
+                                        <Link
+                                          href={getReviewPath(lesson.id)}
+                                          className={`px-3 sm:px-4 py-2 rounded-lg border-2 border-black font-bold text-xs sm:text-sm ${
+                                            isCompleted
+                                              ? "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                                              : "bg-orange-400 text-white hover:bg-orange-500 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                                          }`}
+                                        >
+                                          {t("🎮 퀴즈", "🎮 Quiz")}
+                                        </Link>
+                                      )}
+                                    </>
                                   )}
                                 </div>
                               </div>

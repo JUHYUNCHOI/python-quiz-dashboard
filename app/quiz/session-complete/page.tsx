@@ -7,6 +7,7 @@ import { useGamification } from "@/hooks/use-gamification"
 import { useSoundEffect } from "@/hooks/use-sound-effect"
 import { useQuizSessionSync } from "@/hooks/use-quiz-session-sync"
 import type { SessionData } from "@/hooks/use-quiz-state"
+import { useLanguage } from "@/contexts/language-context"
 
 // -------- CountUp animation --------
 function CountUp({ end, duration = 800, prefix = "", suffix = "", className = "" }: {
@@ -54,8 +55,8 @@ function XpRow({ emoji, label, xp, visible, delay }: {
 }
 
 // -------- Level Progress Bar --------
-function LevelBar({ level, xpInLevel, xpPerLevel, visible, isLevelUp }: {
-  level: number; xpInLevel: number; xpPerLevel: number; visible: boolean; isLevelUp: boolean
+function LevelBar({ level, xpInLevel, xpPerLevel, visible, isLevelUp, t }: {
+  level: number; xpInLevel: number; xpPerLevel: number; visible: boolean; isLevelUp: boolean; t: (ko: string, en: string) => string
 }) {
   const [barWidth, setBarWidth] = useState(0)
 
@@ -79,7 +80,7 @@ function LevelBar({ level, xpInLevel, xpPerLevel, visible, isLevelUp }: {
           </span>
           {isLevelUp && (
             <span className="px-2 py-0.5 bg-yellow-100 text-yellow-700 text-xs font-bold rounded-full animate-number-pop">
-              레벨 업! 🎉
+              {t("레벨 업! 🎉", "Level Up! 🎉")}
             </span>
           )}
         </div>
@@ -102,12 +103,13 @@ function LevelBar({ level, xpInLevel, xpPerLevel, visible, isLevelUp }: {
 
 // -------- Main Page --------
 export default function SessionCompletePageWrapper() {
+  const { t } = useLanguage()
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-gradient-to-b from-orange-50 via-mint-50 to-lavender-50 flex items-center justify-center">
         <div className="text-center space-y-4">
           <div className="text-6xl animate-bounce">🦒</div>
-          <p className="text-xl text-gray-600">결과를 불러오는 중...</p>
+          <p className="text-xl text-gray-600">{t("결과를 불러오는 중...", "Loading results...")}</p>
         </div>
       </div>
     }>
@@ -123,6 +125,7 @@ function SessionCompletePage() {
   const gamification = useGamification()
   const { play } = useSoundEffect()
   const { saveQuizSession } = useQuizSessionSync()
+  const { t } = useLanguage()
 
   // Session data from sessionStorage
   const [sessionData, setSessionData] = useState<SessionData | null>(null)
@@ -178,8 +181,8 @@ function SessionCompletePage() {
   const isLevelUp = xpCommitted && gamification.level > prevLevel
   useEffect(() => {
     if (isLevelUp) {
-      const t = setTimeout(() => play("levelup"), 400 + 6 * 600 + 300)
-      return () => clearTimeout(t)
+      const timer = setTimeout(() => play("levelup"), 400 + 6 * 600 + 300)
+      return () => clearTimeout(timer)
     }
   }, [isLevelUp]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -198,7 +201,7 @@ function SessionCompletePage() {
     const totalSec = Math.floor(ms / 1000)
     const min = Math.floor(totalSec / 60)
     const sec = totalSec % 60
-    return min > 0 ? `${min}분 ${sec}초` : `${sec}초`
+    return min > 0 ? `${min}${t("분", "min")} ${sec}${t("초", "sec")}` : `${sec}${t("초", "sec")}`
   }
 
   // Loading state
@@ -207,7 +210,7 @@ function SessionCompletePage() {
       <div className="min-h-screen bg-gradient-to-b from-orange-50 via-mint-50 to-lavender-50 flex items-center justify-center">
         <div className="text-center space-y-4">
           <div className="text-6xl animate-bounce">🦒</div>
-          <p className="text-xl text-gray-600">결과를 불러오는 중...</p>
+          <p className="text-xl text-gray-600">{t("결과를 불러오는 중...", "Loading results...")}</p>
         </div>
       </div>
     )
@@ -232,12 +235,12 @@ function SessionCompletePage() {
             <h1 className="text-4xl md:text-5xl font-black text-gray-800 mb-1">
               <CountUp end={sessionData.correctAnswers} duration={1200} />
               <span className="text-gray-400">/{sessionData.totalQuestions}</span>
-              <span className="ml-2 text-3xl">정답!</span>
+              <span className="ml-2 text-3xl">{t("정답!", "Correct!")}</span>
             </h1>
 
             {isHeartsDepleted && (
               <p className="text-lg text-red-500 font-semibold mt-2 animate-fade-in-delay">
-                하트가 모두 소진되었어요 💔
+                {t("하트가 모두 소진되었어요 💔", "All hearts depleted 💔")}
               </p>
             )}
 
@@ -245,7 +248,7 @@ function SessionCompletePage() {
             <div className="flex items-center justify-center gap-4 mt-3 text-sm text-gray-500">
               <span>⏱ {formatTime(sessionData.timeElapsedMs)}</span>
               <span>🎯 {accuracy}%</span>
-              {sessionData.maxCombo >= 3 && <span>⚡ 최대 {sessionData.maxCombo}연속</span>}
+              {sessionData.maxCombo >= 3 && <span>⚡ {t(`최대 ${sessionData.maxCombo}연속`, `Max ${sessionData.maxCombo} combo`)}</span>}
             </div>
           </div>
         )}
@@ -256,13 +259,13 @@ function SessionCompletePage() {
             "text-lg font-bold text-gray-700 mb-2 transition-opacity duration-500",
             phase >= 1 ? "opacity-100" : "opacity-0"
           )}>
-            📊 XP 획득 내역
+            {t("📊 XP 획득 내역", "📊 XP Breakdown")}
           </h2>
 
           {/* Phase 1: Base XP */}
           <XpRow
             emoji="📝"
-            label={`기본 점수 (${sessionData.correctAnswers}×10)`}
+            label={t(`기본 점수 (${sessionData.correctAnswers}×10)`, `Base score (${sessionData.correctAnswers}×10)`)}
             xp={breakdown.baseXp}
             visible={phase >= 1}
             delay={0}
@@ -271,7 +274,7 @@ function SessionCompletePage() {
           {/* Phase 2: Combo bonus */}
           <XpRow
             emoji="⚡"
-            label={`콤보 보너스 (최대 ${sessionData.maxCombo}연속)`}
+            label={t(`콤보 보너스 (최대 ${sessionData.maxCombo}연속)`, `Combo bonus (max ${sessionData.maxCombo} combo)`)}
             xp={breakdown.comboBonus}
             visible={phase >= 2}
             delay={0}
@@ -280,7 +283,7 @@ function SessionCompletePage() {
           {/* Phase 3: Streak bonus */}
           <XpRow
             emoji="🔥"
-            label={`연속 학습 보너스 (${gamification.dailyStreak}일)`}
+            label={t(`연속 학습 보너스 (${gamification.dailyStreak}일)`, `Streak bonus (${gamification.dailyStreak} days)`)}
             xp={breakdown.streakBonus}
             visible={phase >= 3}
             delay={0}
@@ -293,7 +296,7 @@ function SessionCompletePage() {
             >
               <div className="flex items-center gap-2">
                 <span className="text-xl">👑</span>
-                <span className="text-base font-bold text-yellow-700">퍼펙트 보너스!</span>
+                <span className="text-base font-bold text-yellow-700">{t("퍼펙트 보너스!", "Perfect bonus!")}</span>
               </div>
               <span className="text-lg font-black text-yellow-600">+{breakdown.perfectBonus} XP</span>
             </div>
@@ -303,7 +306,7 @@ function SessionCompletePage() {
           {phase >= 5 && (
             <div className="pt-3 border-t-2 border-orange-200/60">
               <div className="flex items-center justify-between">
-                <span className="text-xl font-black text-gray-800">총 획득</span>
+                <span className="text-xl font-black text-gray-800">{t("총 획득", "Total earned")}</span>
                 <span className="text-3xl font-black text-orange-600 animate-number-pop">
                   +<CountUp end={breakdown.totalXp} duration={1000} /> XP
                 </span>
@@ -320,6 +323,7 @@ function SessionCompletePage() {
             xpPerLevel={100}
             visible={phase >= 6}
             isLevelUp={isLevelUp}
+            t={t}
           />
         </div>
 
@@ -331,7 +335,7 @@ function SessionCompletePage() {
               onClick={handlePlayAgain}
               className="w-full py-4 rounded-2xl text-xl font-black text-white bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-95"
             >
-              한 판 더? 🔥
+              {t("한 판 더? 🔥", "One more? 🔥")}
             </button>
 
             {/* Go home - subtle text */}
@@ -339,7 +343,7 @@ function SessionCompletePage() {
               onClick={handleGoHome}
               className="w-full py-3 text-base font-medium text-gray-400 hover:text-gray-600 transition-colors"
             >
-              그만하기
+              {t("그만하기", "Quit")}
             </button>
 
             {/* Daily streak badge */}
@@ -347,7 +351,7 @@ function SessionCompletePage() {
               <div className="flex items-center justify-center gap-2 pt-2">
                 <span className="text-2xl animate-flame">🔥</span>
                 <span className="text-sm font-bold text-orange-600">
-                  {gamification.dailyStreak}일 연속 학습 중!
+                  {t(`${gamification.dailyStreak}일 연속 학습 중!`, `${gamification.dailyStreak}-day streak!`)}
                 </span>
               </div>
             )}

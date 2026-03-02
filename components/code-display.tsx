@@ -47,50 +47,75 @@ export function CodeDisplay({
 
   const highlightSyntax = (line: string) => {
     const isDark = theme === "dark"
+    const colors = {
+      keyword: isDark ? "text-[#FF6B6B]" : "text-[#D63031]",
+      string: isDark ? "text-[#51CF66]" : "text-[#00B894]",
+      comment: isDark ? "text-[#ADB5BD]" : "text-[#636E72]",
+      builtin: isDark ? "text-[#BA68C8]" : "text-[#6C5CE7]",
+      func: isDark ? "text-[#FFD43B]" : "text-[#FDCB6E]",
+      number: isDark ? "text-[#748FFC]" : "text-[#0984E3]",
+    }
 
-    // Keywords - bright red-orange
-    let highlighted = line.replace(
-      /\b(def|class|if|elif|else|for|while|return|import|from|as|try|except|finally|with|lambda|yield|async|await|pass|break|continue|raise|assert|del|global|nonlocal|in|is|not|and|or)\b/g,
-      `<span class="${isDark ? "text-[#FF6B6B]" : "text-[#D63031]"}">$1</span>`,
-    )
+    const keywords = new Set(["def","class","if","elif","else","for","while","return","import","from","as","try","except","finally","with","lambda","yield","async","await","pass","break","continue","raise","assert","del","global","nonlocal","in","is","not","and","or","True","False","None"])
+    const builtins = new Set(["print","len","range","str","int","float","list","dict","set","tuple","type","isinstance","input","open","enumerate","zip","map","filter","sum","max","min","abs","round","sorted","reversed"])
 
-    // Strings - bright green
-    highlighted = highlighted.replace(
-      /(["'`])((?:\\.|(?!\1).)*?)\1/g,
-      `<span class="${isDark ? "text-[#51CF66]" : "text-[#00B894]"}">$1$2$1</span>`,
-    )
+    // Single-pass tokenizer to avoid regex cascade corruption
+    const tokens: string[] = []
+    let i = 0
+    const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
 
-    // Comments - medium gray
-    highlighted = highlighted.replace(
-      /(#.*$)/g,
-      `<span class="${isDark ? "text-[#ADB5BD]" : "text-[#636E72]"}">$1</span>`,
-    )
+    while (i < line.length) {
+      // Comment
+      if (line[i] === "#") {
+        tokens.push(`<span class="${colors.comment}">${esc(line.slice(i))}</span>`)
+        break
+      }
+      // String
+      if (line[i] === '"' || line[i] === "'") {
+        const q = line[i]
+        let j = i + 1
+        while (j < line.length && line[j] !== q) {
+          if (line[j] === "\\") j++
+          j++
+        }
+        j++ // include closing quote
+        tokens.push(`<span class="${colors.string}">${esc(line.slice(i, j))}</span>`)
+        i = j
+        continue
+      }
+      // Word (keyword / builtin / function / identifier)
+      if (/[a-zA-Z_]/.test(line[i])) {
+        let j = i
+        while (j < line.length && /[a-zA-Z0-9_]/.test(line[j])) j++
+        const word = line.slice(i, j)
+        // Check if followed by '(' for function call coloring
+        const nextNonSpace = line.slice(j).match(/^\s*\(/)
+        if (keywords.has(word)) {
+          tokens.push(`<span class="${colors.keyword}">${esc(word)}</span>`)
+        } else if (builtins.has(word)) {
+          tokens.push(`<span class="${colors.builtin}">${esc(word)}</span>`)
+        } else if (nextNonSpace) {
+          tokens.push(`<span class="${colors.func}">${esc(word)}</span>`)
+        } else {
+          tokens.push(esc(word))
+        }
+        i = j
+        continue
+      }
+      // Number
+      if (/\d/.test(line[i])) {
+        let j = i
+        while (j < line.length && /[\d.]/.test(line[j])) j++
+        tokens.push(`<span class="${colors.number}">${esc(line.slice(i, j))}</span>`)
+        i = j
+        continue
+      }
+      // Other character
+      tokens.push(esc(line[i]))
+      i++
+    }
 
-    // Built-ins (print, len, etc.) - bright purple
-    highlighted = highlighted.replace(
-      /\b(print|len|range|str|int|float|list|dict|set|tuple|type|isinstance|input|open|enumerate|zip|map|filter|sum|max|min|abs|round|sorted|reversed)\b/g,
-      `<span class="${isDark ? "text-[#BA68C8]" : "text-[#6C5CE7]"}">$1</span>`,
-    )
-
-    // Functions - bright yellow
-    highlighted = highlighted.replace(
-      /\b([a-zA-Z_][a-zA-Z0-9_]*)\s*\(/g,
-      `<span class="${isDark ? "text-[#FFD43B]" : "text-[#FDCB6E]"}">$1</span>(`,
-    )
-
-    // Numbers - bright blue
-    highlighted = highlighted.replace(
-      /\b(\d+\.?\d*)\b/g,
-      `<span class="${isDark ? "text-[#748FFC]" : "text-[#0984E3]"}">$1</span>`,
-    )
-
-    // True/False/None - special values
-    highlighted = highlighted.replace(
-      /\b(True|False|None)\b/g,
-      `<span class="${isDark ? "text-[#FF6B6B]" : "text-[#D63031]"}">$1</span>`,
-    )
-
-    return highlighted
+    return tokens.join("")
   }
 
   const bgColor = theme === "dark" ? "bg-[#1A1A1A]" : "bg-[#F8F9FA]"

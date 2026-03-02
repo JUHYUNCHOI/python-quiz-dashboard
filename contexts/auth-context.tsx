@@ -25,11 +25,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const fetchProfile = useCallback(async (userId: string) => {
     try {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", userId)
-        .single()
+      const { data, error } = await Promise.race([
+        supabase.from("profiles").select("*").eq("id", userId).single(),
+        new Promise<never>((_, reject) => setTimeout(() => reject(new Error("timeout")), 4000)),
+      ])
 
       if (!error && data) {
         setProfile(data as Profile)
@@ -54,7 +53,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       }
     } catch {
-      // 프로필 조회 실패 시 무시 (Supabase 미설정 등)
+      // 프로필 조회 실패 또는 타임아웃 시 무시
     }
   }, [supabase])
 
@@ -89,6 +88,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     initAuth()
 
+    // 안전장치: 5초 후에도 로딩 중이면 강제 해제
+    const timeout = setTimeout(() => setIsLoading(false), 5000)
+
     // Auth 상태 변경 리스너
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
@@ -112,6 +114,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     return () => {
       subscription.unsubscribe()
+      clearTimeout(timeout)
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 

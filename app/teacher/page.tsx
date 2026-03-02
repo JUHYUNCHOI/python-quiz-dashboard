@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useAuth } from "@/contexts/auth-context"
+import { useLanguage } from "@/contexts/language-context"
 import { createClient } from "@/lib/supabase/client"
 import { createClass } from "./actions"
 import type { Class } from "@/lib/supabase/types"
@@ -13,6 +14,7 @@ import { BottomNav } from "@/components/bottom-nav"
 
 export default function TeacherDashboardPage() {
   const { user, profile } = useAuth()
+  const { t } = useLanguage()
   const [classes, setClasses] = useState<(Class & { memberCount: number })[]>([])
   const [isCreating, setIsCreating] = useState(false)
   const [newClassName, setNewClassName] = useState("")
@@ -66,7 +68,7 @@ export default function TeacherDashboardPage() {
     setTimeout(() => setCopiedCode(null), 2000)
   }
 
-  const displayName = profile?.display_name || "선생님"
+  const displayName = profile?.display_name || t("선생님", "Teacher")
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-mint-50">
@@ -74,12 +76,12 @@ export default function TeacherDashboardPage() {
 
       <main className="w-full px-4 sm:px-6 pb-24 pt-6 max-w-2xl mx-auto">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-xl font-bold text-gray-800">내 반 관리</h1>
+          <h1 className="text-xl font-bold text-gray-800">{t("내 반 관리", "Manage My Classes")}</h1>
           <button
             onClick={() => setIsCreating(true)}
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold text-white bg-orange-500 hover:bg-orange-600 transition-all"
           >
-            <Plus className="w-4 h-4" /> 새 반 만들기
+            <Plus className="w-4 h-4" /> {t("새 반 만들기", "Create New Class")}
           </button>
         </div>
 
@@ -91,7 +93,7 @@ export default function TeacherDashboardPage() {
                 type="text"
                 value={newClassName}
                 onChange={(e) => setNewClassName(e.target.value)}
-                placeholder="반 이름 (예: 1학년 3반)"
+                placeholder={t("반 이름 (예: 1학년 3반)", "Class name (e.g., Grade 1 Class 3)")}
                 className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 focus:border-orange-400 focus:ring-2 focus:ring-orange-100 outline-none"
                 autoFocus
               />
@@ -99,14 +101,14 @@ export default function TeacherDashboardPage() {
                 type="submit"
                 className="px-4 py-2.5 rounded-xl font-bold text-white bg-orange-500 hover:bg-orange-600"
               >
-                만들기
+                {t("만들기", "Create")}
               </button>
               <button
                 type="button"
                 onClick={() => setIsCreating(false)}
                 className="px-4 py-2.5 rounded-xl font-bold text-gray-500 bg-gray-100 hover:bg-gray-200"
               >
-                취소
+                {t("취소", "Cancel")}
               </button>
             </form>
           </Card>
@@ -114,12 +116,12 @@ export default function TeacherDashboardPage() {
 
         {/* 반 목록 */}
         {isLoading ? (
-          <div className="text-center py-12 text-gray-400">불러오는 중...</div>
+          <div className="text-center py-12 text-gray-400">{t("불러오는 중...", "Loading...")}</div>
         ) : classes.length === 0 ? (
           <Card className="p-8 text-center border-2 border-dashed border-gray-200">
             <Users className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500 mb-1">아직 만든 반이 없어요</p>
-            <p className="text-sm text-gray-400">&quot;새 반 만들기&quot;를 눌러 시작하세요</p>
+            <p className="text-gray-500 mb-1">{t("아직 만든 반이 없어요", "No classes created yet")}</p>
+            <p className="text-sm text-gray-400">{t("\"새 반 만들기\"를 눌러 시작하세요", "Press \"Create New Class\" to start")}</p>
           </Card>
         ) : (
           <div className="space-y-3">
@@ -131,12 +133,12 @@ export default function TeacherDashboardPage() {
                       <div className="flex items-center gap-2 mb-1">
                         <h3 className="font-bold text-gray-800">{cls.name}</h3>
                         {!cls.is_active && (
-                          <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">비활성</span>
+                          <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">{t("비활성", "Inactive")}</span>
                         )}
                       </div>
                       <div className="flex items-center gap-3 text-sm text-gray-500">
                         <span className="flex items-center gap-1">
-                          <Users className="w-3.5 h-3.5" /> {cls.memberCount}명
+                          <Users className="w-3.5 h-3.5" /> {t(`${cls.memberCount}명`, `${cls.memberCount} members`)}
                         </span>
                         <button
                           onClick={(e) => {
@@ -147,9 +149,9 @@ export default function TeacherDashboardPage() {
                           className="flex items-center gap-1 hover:text-orange-600 transition-colors"
                         >
                           {copiedCode === cls.join_code ? (
-                            <><Check className="w-3.5 h-3.5 text-green-500" /> 복사됨</>
+                            <><Check className="w-3.5 h-3.5 text-green-500" /> {t("복사됨", "Copied")}</>
                           ) : (
-                            <><Copy className="w-3.5 h-3.5" /> 코드: {cls.join_code}</>
+                            <><Copy className="w-3.5 h-3.5" /> {t("코드", "Code")}: {cls.join_code}</>
                           )}
                         </button>
                       </div>

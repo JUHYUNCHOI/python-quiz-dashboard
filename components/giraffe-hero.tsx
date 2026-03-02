@@ -25,13 +25,16 @@ export function GiraffeHero() {
       const keys = Object.keys(localStorage)
       const progressKeys = keys.filter(k => k.startsWith("practice-v2-"))
 
+      // 모든 진행 중인 수업 중 가장 높은 진도(chapter+step)의 수업을 찾기
       let latest: LastProgress | null = null
+      let highestProgress = -1
       for (const key of progressKeys) {
         const data = JSON.parse(localStorage.getItem(key) || "{}")
         if (data.chapter !== undefined && data.step !== undefined) {
           const lessonId = key.replace("practice-v2-", "")
-          // 가장 최근 진행 중인 것을 찾기 (완료되지 않은 것 우선)
-          if (!latest) {
+          const progressScore = data.chapter * 100 + data.step
+          if (progressScore > highestProgress) {
+            highestProgress = progressScore
             latest = {
               lessonId,
               lessonTitle: "",

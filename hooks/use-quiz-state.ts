@@ -105,6 +105,7 @@ export function useQuizState(questions: QuizQuestion[]) {
 
   // Mid check-in
   const [showMidCheckIn, setShowMidCheckIn] = useState(false)
+  const [midCheckInShown, setMidCheckInShown] = useState(false)
 
   // Per-question result tracking
   const [questionResults, setQuestionResults] = useState<QuestionResult[]>([])
@@ -116,23 +117,26 @@ export function useQuizState(questions: QuizQuestion[]) {
   // Toast for wrong answer
   const [showWrongToast, setShowWrongToast] = useState(false)
 
-  // Load settings from session storage
+  // Load settings from session storage (cap questionCount to available questions)
   useEffect(() => {
     const settings = sessionStorage.getItem("quizSettings")
     if (settings) {
-      setQuizSettings(JSON.parse(settings))
+      const parsed = JSON.parse(settings) as QuizSettings
+      parsed.questionCount = Math.min(parsed.questionCount, questions.length)
+      setQuizSettings(parsed)
     } else {
       router.push("/quiz/setup")
     }
-  }, [router])
+  }, [router, questions.length])
 
   // Mid check-in at 50%
   useEffect(() => {
-    if (currentQuestion === Math.floor(quizSettings.questionCount / 2) && !showMidCheckIn) {
+    if (currentQuestion === Math.floor(quizSettings.questionCount / 2) && !midCheckInShown) {
+      setMidCheckInShown(true)
       setShowMidCheckIn(true)
       setTimeout(() => setShowMidCheckIn(false), 3000)
     }
-  }, [currentQuestion, quizSettings.questionCount, showMidCheckIn])
+  }, [currentQuestion, quizSettings.questionCount, midCheckInShown])
 
   // Reset question start time on question change
   useEffect(() => {
@@ -140,7 +144,17 @@ export function useQuizState(questions: QuizQuestion[]) {
     setLastHeartLost(false)
   }, [currentQuestion])
 
-  const question = questions[currentQuestion % questions.length]
+  // Warn before closing tab during quiz
+  useEffect(() => {
+    if (currentQuestion === 0 && !showResult) return
+    const handler = (e: BeforeUnloadEvent) => {
+      e.preventDefault()
+    }
+    window.addEventListener("beforeunload", handler)
+    return () => window.removeEventListener("beforeunload", handler)
+  }, [currentQuestion, showResult])
+
+  const question = questions[currentQuestion] ?? questions[0]
   const progress = ((currentQuestion + 1) / quizSettings.questionCount) * 100
   const estimatedRemainingTime = Math.ceil((quizSettings.questionCount - currentQuestion - 1) * 1)
 
@@ -277,7 +291,7 @@ export function useQuizState(questions: QuizQuestion[]) {
       is_correct: false,
     }])
 
-    if (currentQuestion < questions.length - 1) {
+    if (currentQuestion < quizSettings.questionCount - 1) {
       setCurrentQuestion((q) => q + 1)
       setSelectedAnswer(null)
       setShowResult(false)
@@ -285,7 +299,7 @@ export function useQuizState(questions: QuizQuestion[]) {
       saveSessionData("completed", score)
       router.push("/quiz/session-complete")
     }
-  }, [currentQuestion, questions.length, router, saveSessionData, score, question, questionStartTime])
+  }, [currentQuestion, quizSettings.questionCount, router, saveSessionData, score, question, questionStartTime])
 
   const handleExit = useCallback(() => {
     const completed = currentQuestion + 1
