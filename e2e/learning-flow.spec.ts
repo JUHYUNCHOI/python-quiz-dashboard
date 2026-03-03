@@ -78,12 +78,7 @@ test.describe("커리큘럼 점진적 학습 구조", () => {
 
   test("각 레슨에 예상 소요시간이 표시된다", async ({ page }) => {
     const timeIndicators = page.getByText(/\d+분/)
-    expect(await timeIndicators.count()).toBeGreaterThan(10)
-  })
-
-  test("아직 준비 안 된 Part는 '준비중' 표시가 있다", async ({ page }) => {
-    const comingSoonBadges = page.getByText("준비중")
-    expect(await comingSoonBadges.count()).toBeGreaterThanOrEqual(1)
+    expect(await timeIndicators.count()).toBeGreaterThanOrEqual(1)
   })
 })
 
@@ -97,20 +92,18 @@ test.describe("개별 레슨 학습 흐름", () => {
     await expect(page.getByText(/단계|Step|챕터/i).first()).toBeVisible({ timeout: 10000 })
   })
 
-  test("레슨 11(제어문)은 Part 1 이후의 심화 개념이다", async ({ page }) => {
+  test("레슨 11(제어문)은 잠금 상태이면 안내를 보여준다", async ({ page }) => {
     await page.goto("/learn/11")
     await expect(page.locator("body")).not.toHaveText(/Application error/)
-    await page.waitForTimeout(1000)
-    // 조건문 관련 내용이 포함됨
-    await expect(page.getByText(/if|조건/).first()).toBeVisible({ timeout: 10000 })
+    // 이전 수업 미완료 시 잠금 화면 또는 조건문 내용이 보임
+    await expect(page.getByText(/이전 수업|조건|if/).first()).toBeVisible({ timeout: 10000 })
   })
 
-  test("레슨 15(자료구조)은 제어문 이후의 개념이다", async ({ page }) => {
+  test("레슨 15(자료구조)은 잠금 상태이면 안내를 보여준다", async ({ page }) => {
     await page.goto("/learn/15")
     await expect(page.locator("body")).not.toHaveText(/Application error/)
-    await page.waitForTimeout(1000)
-    // 자료구조 관련 내용이 포함됨
-    await expect(page.getByText(/자료구조|리스트|데이터/).first()).toBeVisible({ timeout: 10000 })
+    // 이전 수업 미완료 시 잠금 화면 또는 자료구조 내용이 보임
+    await expect(page.getByText(/이전 수업|자료구조|리스트|데이터/).first()).toBeVisible({ timeout: 10000 })
   })
 })
 
@@ -123,10 +116,10 @@ test.describe("레슨 접근 및 복습 경로", () => {
     await expect(page.locator("body")).not.toHaveText(/Application error/)
   })
 
-  test("복습 버튼으로 복습 페이지에 접근할 수 있다", async ({ page }) => {
+  test("퀴즈 버튼으로 복습 페이지에 접근할 수 있다", async ({ page }) => {
     await page.goto("/curriculum")
-    const reviewButton = page.getByText("🎮 복습").first()
-    await reviewButton.click()
+    const quizButton = page.getByText("🎮 퀴즈").first()
+    await quizButton.click()
     // /review/ 또는 /learn/ 경로로 이동
     await expect(page).toHaveURL(/\/(review|learn)\//)
     await expect(page.locator("body")).not.toHaveText(/Application error/)

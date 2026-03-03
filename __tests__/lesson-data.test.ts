@@ -28,9 +28,11 @@ describe("Lesson Registry", () => {
     }
   })
 
-  it("should not mark non-bilingual lessons as bilingual", () => {
-    expect(isBilingual("1")).toBe(false)
-    expect(isBilingual("10")).toBe(false)
+  it("all registered lessons should be bilingual", () => {
+    const allIds = getAllLessonIds()
+    for (const id of allIds) {
+      expect(isBilingual(id)).toBe(true)
+    }
   })
 
   it("should include project lessons", () => {
@@ -74,7 +76,7 @@ describe("Lesson Data Validation", () => {
       for (const step of chapter.steps) {
         expect(step.id).toBeTruthy()
         expect(step.title).toBeTruthy()
-        expect(["explain", "tryit", "mission", "quiz", "interactive", "coding"]).toContain(step.type)
+        expect(["explain", "tryit", "mission", "quiz", "interactive", "coding", "fillblank", "predict", "practice"]).toContain(step.type)
       }
     }
   })
