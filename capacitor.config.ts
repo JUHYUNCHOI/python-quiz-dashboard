@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.pyrin.app',
-  appName: '파이린',
+  appId: 'com.coderin.app',
+  appName: '코드린',
   webDir: 'out'
 };
 

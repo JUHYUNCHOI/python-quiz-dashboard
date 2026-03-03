@@ -19,7 +19,7 @@ export function Header() {
         <Link href="/" className="flex items-center gap-2">
           <div className="text-2xl md:text-3xl">🦒</div>
           <div>
-            <h1 className="text-base md:text-lg font-bold text-gray-800">{t("파이린", "Pyrin")}</h1>
+            <h1 className="text-base md:text-lg font-bold text-gray-800">{t("코드린", "Coderin")}</h1>
             <p className="text-xs md:text-sm text-gray-600">{displayName}{t("님", "")}</p>
           </div>
         </Link>

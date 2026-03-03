@@ -7,8 +7,8 @@ import { LanguageProvider } from "@/contexts/language-context"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "파이린 - 재미있게 배우는 파이썬",
-  description: "파이린과 함께 재미있게 배우는 파이썬 학습 플랫폼",
+  title: "코드린 - 재미있게 배우는 코딩",
+  description: "코드린과 함께 재미있게 배우는 코딩 학습 플랫폼",
   generator: "v0.app",
 }
 

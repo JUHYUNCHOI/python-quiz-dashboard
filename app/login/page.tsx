@@ -89,7 +89,7 @@ function LoginContent() {
         {/* 로고 */}
         <div className="text-center">
           <div className="text-[80px] leading-none mb-2">🦒</div>
-          <h1 className="text-2xl font-bold text-gray-800">{t("파이린", "Pyrin")}</h1>
+          <h1 className="text-2xl font-bold text-gray-800">{t("코드린", "Coderin")}</h1>
           <p className="text-sm text-gray-500 mt-1">{t("재미있게 배우는 코딩", "Learn coding the fun way")}</p>
         </div>
 

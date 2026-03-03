@@ -1,30 +1,26 @@
-# Python quiz dashboard
+# 코드린 (Coderin) 🦒
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+재미있게 배우는 코딩 학습 플랫폼 — Code + 기린(Giraffe)
 
 [![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/juliajuhyun-gmailcoms-projects/v0-python-quiz-dashboard)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/vCrsmDhXua1)
 
 ## Overview
 
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+Python과 C++ 코딩을 재미있게 배울 수 있는 학습 플랫폼입니다.
+웹(Next.js) + 모바일(Capacitor iOS/Android) 지원.
 
-## Deployment
+## Getting Started
 
-Your project is live at:
+```bash
+npm install
+npm run dev        # 웹 개발 서버
+npm run build      # 정적 빌드
+npm run build:mobile  # 모바일 빌드 (build + cap sync)
+```
 
-**[https://vercel.com/juliajuhyun-gmailcoms-projects/v0-python-quiz-dashboard](https://vercel.com/juliajuhyun-gmailcoms-projects/v0-python-quiz-dashboard)**
+## Tech Stack
 
-## Build your app
-
-Continue building your app on:
-
-**[https://v0.app/chat/vCrsmDhXua1](https://v0.app/chat/vCrsmDhXua1)**
-
-## How It Works
-
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+- **Frontend**: Next.js 16, React 19, TypeScript, Tailwind CSS
+- **Backend**: Supabase (Auth, Database)
+- **Mobile**: Capacitor (iOS, Android)
+- **Testing**: Vitest, Playwright
