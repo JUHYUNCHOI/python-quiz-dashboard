@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
 import { createClient } from "@/lib/supabase/client"
 import type { Class, Profile, GamificationData } from "@/lib/supabase/types"
@@ -71,8 +71,8 @@ function formatDate(dateStr: string): string {
 }
 
 export default function ClassDetailPage() {
-  const params = useParams()
-  const classId = params.classId as string
+  const searchParams = useSearchParams()
+  const classId = searchParams.get("id") || ""
   const { user, profile: teacherProfile } = useAuth()
   const [classInfo, setClassInfo] = useState<Class | null>(null)
   const [students, setStudents] = useState<StudentRow[]>([])

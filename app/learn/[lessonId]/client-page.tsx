@@ -1,0 +1,622 @@
+"use client"
+
+import { useState, useEffect, use, useCallback } from "react"
+import { useRouter } from "next/navigation"
+import { ChevronRight, ChevronLeft, X, Lock, PartyPopper, RotateCcw } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { useLanguage } from "@/contexts/language-context"
+import { LanguageToggle } from "@/components/language-toggle"
+import { LibraryToggle, type LibraryVariant } from "@/components/library-toggle"
+import { SoundToggle } from "@/components/sound-toggle"
+import { useSoundEffect } from "@/hooks/use-sound-effect"
+import { useLessonSync } from "@/hooks/use-lesson-sync"
+import { markLessonComplete } from "@/lib/mark-lesson-complete"
+import { useGamification } from "@/hooks/use-gamification"
+import { logActivity } from "@/lib/activity-log"
+import { getCompletedLessons, pythonParts, cppParts } from "@/lib/curriculum-data"
+
+// 분리된 컴포넌트
+import { Confetti } from "@/components/learn/confetti"
+import { SuccessOverlay } from "@/components/learn/success-overlay"
+import { StepRenderer } from "@/components/learn/step-renderer"
+import { lessonsData, bilingualLessons, lessonVariants } from "@/components/learn/lesson-registry"
+import type { LessonStep } from "@/components/learn/types"
+export default function PracticePage({ params }: { params: Promise<{ lessonId: string }> }) {
+  const resolvedParams = use(params)
+  const lessonId = resolvedParams.lessonId
+  const router = useRouter()
+  const { lang, t } = useLanguage()
+  const { play, isMuted, toggleMute } = useSoundEffect()
+
+  const isBilingual = lessonId in bilingualLessons
+  const hasVariants = lessonId in lessonVariants
+
+  // 라이브러리 변형 상태 (turtle/pygame)
+  const [variant, setVariant] = useState<LibraryVariant>(() => {
+    if (typeof window === 'undefined') return 'turtle'
+    try { return (localStorage.getItem(`library-variant-${lessonId}`) as LibraryVariant) || 'turtle' } catch { return 'turtle' }
+  })
+
+  // 게이미피케이션
+  const gamification = useGamification()
+
+  // Supabase 진도 동기화
+  const { syncProgress, syncCompletion, loadFromCloud } = useLessonSync(
+    lessonId, hasVariants ? variant : null, "learn"
+  )
+
+  // 레슨 데이터 선택: variant가 있으면 variant[lang], 아니면 bilingual 또는 기본
+  const lesson = hasVariants
+    ? lessonVariants[lessonId][variant][lang]
+    : (isBilingual ? bilingualLessons[lessonId][lang] : lessonsData[lessonId])
+
+  // 진행상황 키: variant가 있으면 분리
+  const progressKey = hasVariants ? `practice-v2-${lessonId}-${variant}` : `practice-v2-${lessonId}`
+  
+  const [currentChapter, setCurrentChapter] = useState(0)
+  const [currentStep, setCurrentStep] = useState(0)
+  const [score, setScore] = useState(0)
+  const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set())
+  const [progressLoaded, setProgressLoaded] = useState(false)
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
+  const [showExplanation, setShowExplanation] = useState(false)
+  const [showChapterComplete, setShowChapterComplete] = useState(false)
+  const [showLessonComplete, setShowLessonComplete] = useState(false)
+  const [showConfetti, setShowConfetti] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
+  const [successMessage, setSuccessMessage] = useState("")
+  const [hintLevel, setHintLevel] = useState(0)
+  const [quizAttempts, setQuizAttempts] = useState(0)
+  const [showChapterList, setShowChapterList] = useState(false)
+  // 복습 모드: 틀린 퀴즈를 챕터 끝에서 다시 출제
+  const [wrongQueue, setWrongQueue] = useState<LessonStep[]>([])
+  const [reviewIndex, setReviewIndex] = useState(0)
+  const isReviewMode = wrongQueue.length > 0 && reviewIndex < wrongQueue.length
+
+  const chapter = lesson?.chapters[currentChapter]
+  // 복습 모드면 wrongQueue에서 스텝을 꺼냄, 아니면 일반 진행
+  const step = isReviewMode ? wrongQueue[reviewIndex] : chapter?.steps[currentStep]
+
+  const isCurrentStepCompleted = step ? completedSteps.has(step.id) : false
+  
+  const canGoNext = () => {
+    if (!step) return false
+    if (isReviewMode) return false // 복습 모드에서는 "확인" 버튼으로만 이동
+    if (step.type === "explain" || step.type === "interactive" || step.type === "tryit" || step.type === "animation" || step.type === "practice") return true
+    return isCurrentStepCompleted
+  }
+
+  // 기존 진행상황 마이그레이션 (practice-v2-p4 → practice-v2-p4-turtle)
+  useEffect(() => {
+    if (!hasVariants) return
+    const oldKey = `practice-v2-${lessonId}`
+    const newKey = `practice-v2-${lessonId}-turtle`
+    if (localStorage.getItem(oldKey) && !localStorage.getItem(newKey)) {
+      localStorage.setItem(newKey, localStorage.getItem(oldKey)!)
+      localStorage.removeItem(oldKey)
+    }
+  }, [lessonId, hasVariants])
+
+  // variant localStorage 저장
+  useEffect(() => {
+    if (hasVariants) {
+      localStorage.setItem(`library-variant-${lessonId}`, variant)
+    }
+  }, [variant, lessonId, hasVariants])
+
+  useEffect(() => {
+    const saved = localStorage.getItem(progressKey)
+    if (saved) {
+      try {
+        const data = JSON.parse(saved)
+        setCurrentChapter(data.chapter || 0)
+        setCurrentStep(data.step || 0)
+        setScore(data.score || 0)
+        setCompletedSteps(new Set(data.completed || []))
+      } catch {}
+    } else {
+      // localStorage 비어있으면 Supabase에서 복구 시도
+      loadFromCloud().then(data => {
+        if (data) {
+          setCurrentChapter((data.chapter as number) || 0)
+          setCurrentStep((data.step as number) || 0)
+          setScore((data.score as number) || 0)
+          setCompletedSteps(new Set((data.completed as string[]) || []))
+        }
+      })
+    }
+    // 로드 완료 후에만 저장 이펙트 활성화 (초기 state 덮어쓰기 방지)
+    setProgressLoaded(true)
+  }, [progressKey, loadFromCloud])
+
+  useEffect(() => {
+    if (!lesson || !progressLoaded) return
+    const progressData = {
+      chapter: currentChapter, step: currentStep, score,
+      completed: Array.from(completedSteps)
+    }
+    localStorage.setItem(progressKey, JSON.stringify(progressData))
+    // Supabase에도 동기화 (debounced, fire-and-forget)
+    syncProgress(progressData)
+  }, [currentChapter, currentStep, score, completedSteps, progressKey, lesson, syncProgress, progressLoaded])
+
+  // 잠금 체크: 같은 트랙(Python/C++) 내에서 이전 수업 완료해야 접근 가능
+  const isLocked = (() => {
+    if (typeof window === "undefined") return false
+    const completed = getCompletedLessons()
+    const idNormalized: (number | string) = /^\d+$/.test(lessonId) ? Number(lessonId) : lessonId
+    // Python과 C++ 트랙을 분리하여 잠금 체크
+    const isCpp = String(lessonId).startsWith("cpp-")
+    const trackParts = isCpp ? cppParts : pythonParts
+    const trackIds = trackParts.flatMap(p => p.lessonIds)
+    const idx = trackIds.indexOf(idNormalized)
+    if (idx <= 0) return false // 첫 수업 또는 알 수 없는 ID → 열림
+    // 이전 수업이 모두 완료되었는지 확인
+    for (let i = 0; i < idx; i++) {
+      if (!completed.has(trackIds[i])) return true
+    }
+    return false
+  })()
+
+  if (isLocked) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-5xl mb-4">🔒</p>
+          <p className="text-gray-600 mb-4">{t("이전 수업을 먼저 완료해주세요!", "Please complete previous lessons first!")}</p>
+          <button onClick={() => router.push("/curriculum")} className="px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-bold">
+            {t("수업 목록으로", "Go to Curriculum")}
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  if (!lesson || !chapter || !step) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-5xl mb-4">🚧</p>
+          <p className="text-gray-600 mb-4">{t("준비 중인 레슨이에요", "This lesson is coming soon")}</p>
+          <button onClick={() => router.push(`/curriculum#lesson-${lessonId}`)} className="px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-bold">
+            {t("돌아가기", "Go Back")}
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // variant 전환 시 진행상황 로드
+  const handleVariantChange = (newVariant: LibraryVariant) => {
+    setVariant(newVariant)
+    const saved = localStorage.getItem(`practice-v2-${lessonId}-${newVariant}`)
+    if (saved) {
+      try {
+        const data = JSON.parse(saved)
+        setCurrentChapter(data.chapter || 0)
+        setCurrentStep(data.step || 0)
+        setScore(data.score || 0)
+        setCompletedSteps(new Set(data.completed || []))
+      } catch {
+        setCurrentChapter(0); setCurrentStep(0); setScore(0); setCompletedSteps(new Set())
+      }
+    } else {
+      setCurrentChapter(0); setCurrentStep(0); setScore(0); setCompletedSteps(new Set())
+    }
+    setWrongQueue([])
+    setReviewIndex(0)
+    resetStepState()
+  }
+
+  const resetStepState = () => {
+    setSelectedAnswer(null)
+    setShowExplanation(false)
+    setHintLevel(0)
+    setQuizAttempts(0)
+  }
+
+  const finishChapter = () => {
+    if (currentChapter < lesson.chapters.length - 1) {
+      setShowConfetti(true)
+      setShowChapterComplete(true)
+      play("chapterComplete")
+      setTimeout(() => setShowConfetti(false), 3000)
+    } else {
+      // 마지막 챕터 완료 → Supabase + localStorage에 완료 기록
+      syncCompletion(score)
+      markLessonComplete(lessonId)
+      gamification.addDirectXp(30) // +30 XP for lesson completion
+      logActivity("lesson")
+      setShowConfetti(true)
+      setShowLessonComplete(true)
+      play("lessonComplete")
+      setTimeout(() => setShowConfetti(false), 3000)
+    }
+  }
+
+  const goNext = () => {
+    if (!canGoNext()) return
+    if (currentStep < chapter.steps.length - 1) {
+      setCurrentStep(currentStep + 1)
+      resetStepState()
+    } else if (wrongQueue.length > 0 && !isReviewMode) {
+      // 일반 스텝 끝 + 틀린 문제 있음 → 복습 모드 진입
+      setReviewIndex(0)
+      resetStepState()
+    } else {
+      finishChapter()
+    }
+  }
+
+  const goToNextChapter = () => {
+    setShowChapterComplete(false)
+    setCurrentChapter(currentChapter + 1)
+    setCurrentStep(0)
+    setWrongQueue([])
+    setReviewIndex(0)
+    resetStepState()
+  }
+
+  const goToChapter = (chIdx: number) => {
+    setCurrentChapter(chIdx)
+    setCurrentStep(0)
+    setWrongQueue([])
+    setReviewIndex(0)
+    resetStepState()
+    setShowChapterList(false)
+    setShowChapterComplete(false)
+    setShowLessonComplete(false)
+  }
+
+  const goPrev = () => {
+    if (isReviewMode) return // 복습 모드에서는 뒤로 못감
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1)
+      resetStepState()
+    } else if (currentChapter > 0) {
+      const prevChapter = lesson.chapters[currentChapter - 1]
+      setCurrentChapter(currentChapter - 1)
+      setCurrentStep(prevChapter.steps.length - 1)
+      resetStepState()
+    }
+  }
+
+  const handleSuccess = useCallback(() => {
+    if (!completedSteps.has(step.id)) {
+      setScore(prev => prev + 10)
+      setCompletedSteps(prev => new Set([...prev, step.id]))
+      setShowConfetti(true)
+      setSuccessMessage(t("잘했어요! 🎉", "Great job! 🎉"))
+      setShowSuccess(true)
+      play("codeSuccess")
+      setTimeout(() => setShowConfetti(false), 2000)
+    }
+  }, [completedSteps, step?.id, play])
+
+  const handleQuizAnswer = (idx: number) => {
+    if (selectedAnswer !== null) return
+    setSelectedAnswer(idx)
+    setShowExplanation(true)
+    setQuizAttempts(prev => prev + 1)
+    if (idx === step.answer) {
+      play("correct")
+      if (isReviewMode) {
+        // 복습 모드에서 정답: 큐에서 제거 → 남은 게 있으면 다음, 없으면 챕터 완료
+        const newQueue = wrongQueue.filter((_, i) => i !== reviewIndex)
+        setWrongQueue(newQueue)
+        if (!completedSteps.has(step.id)) {
+          setScore(score + 10)
+          setCompletedSteps(new Set([...completedSteps, step.id]))
+        }
+        setShowConfetti(true)
+        setSuccessMessage(t("이번엔 맞았어요! 🎉", "Got it this time! 🎉"))
+        setShowSuccess(true)
+        setTimeout(() => setShowConfetti(false), 2000)
+        // 1초 후 자동 진행
+        setTimeout(() => {
+          if (newQueue.length === 0) {
+            finishChapter()
+          } else {
+            // reviewIndex 조정: 현재보다 뒤 요소가 제거되었으므로
+            setReviewIndex(prev => prev >= newQueue.length ? 0 : prev)
+            resetStepState()
+          }
+        }, 1200)
+      } else {
+        if (!completedSteps.has(step.id)) {
+          setScore(score + 10)
+          setCompletedSteps(new Set([...completedSteps, step.id]))
+          setShowConfetti(true)
+          setSuccessMessage(t("정답! 🎉", "Correct! 🎉"))
+          setShowSuccess(true)
+          setTimeout(() => setShowConfetti(false), 2000)
+        }
+      }
+    } else {
+      play("wrong")
+      if (!isReviewMode) {
+        // 일반 모드에서 오답: wrongQueue에 추가
+        setWrongQueue(prev => [...prev, step])
+      }
+    }
+  }
+
+  // fillblank 등 새 인터랙티브 스텝용 핸들러
+  const handleStepComplete = (correct: boolean) => {
+    if (correct) {
+      play("correct")
+      if (isReviewMode) {
+        const newQueue = wrongQueue.filter((_, i) => i !== reviewIndex)
+        setWrongQueue(newQueue)
+        if (!completedSteps.has(step.id)) {
+          setScore(score + 10)
+          setCompletedSteps(new Set([...completedSteps, step.id]))
+        }
+        setShowConfetti(true)
+        setSuccessMessage(t("이번엔 맞았어요! 🎉", "Got it this time! 🎉"))
+        setShowSuccess(true)
+        setTimeout(() => setShowConfetti(false), 2000)
+        setTimeout(() => {
+          if (newQueue.length === 0) {
+            finishChapter()
+          } else {
+            setReviewIndex(prev => prev >= newQueue.length ? 0 : prev)
+            resetStepState()
+          }
+        }, 1200)
+      } else {
+        if (!completedSteps.has(step.id)) {
+          setScore(score + 10)
+          setCompletedSteps(new Set([...completedSteps, step.id]))
+          setShowConfetti(true)
+          setSuccessMessage(t("정답! 🎉", "Correct! 🎉"))
+          setShowSuccess(true)
+          setTimeout(() => setShowConfetti(false), 2000)
+        }
+      }
+    } else {
+      play("wrong")
+      if (!isReviewMode) {
+        setWrongQueue(prev => [...prev, step])
+      }
+    }
+  }
+
+  const handleStepAcknowledge = () => {
+    if (!completedSteps.has(step.id)) {
+      setCompletedSteps(new Set([...completedSteps, step.id]))
+    }
+    if (isReviewMode) {
+      const failedStep = wrongQueue[reviewIndex]
+      const newQueue = wrongQueue.filter((_, i) => i !== reviewIndex)
+      newQueue.push(failedStep)
+      setWrongQueue(newQueue)
+      resetStepState()
+      return
+    }
+    if (currentStep < chapter.steps.length - 1) {
+      setCurrentStep(currentStep + 1)
+      resetStepState()
+    } else if (wrongQueue.length > 0) {
+      setReviewIndex(0)
+      resetStepState()
+    } else {
+      finishChapter()
+    }
+  }
+
+  const acknowledgeQuiz = () => {
+    // 오답 확인 후 다음으로 이동
+    if (!completedSteps.has(step.id)) {
+      setCompletedSteps(new Set([...completedSteps, step.id]))
+    }
+
+    if (isReviewMode) {
+      // 복습 모드에서 또 틀림: 큐 끝으로 다시 추가
+      const failedStep = wrongQueue[reviewIndex]
+      const newQueue = wrongQueue.filter((_, i) => i !== reviewIndex)
+      newQueue.push(failedStep)
+      setWrongQueue(newQueue)
+      // reviewIndex 그대로 (다음 문제가 앞으로 밀림)
+      resetStepState()
+      return
+    }
+
+    // 일반 모드: 다음 스텝으로
+    if (currentStep < chapter.steps.length - 1) {
+      setCurrentStep(currentStep + 1)
+      resetStepState()
+    } else if (wrongQueue.length > 0) {
+      // 일반 스텝 다 끝남 + 틀린 문제 있음 → 복습 모드 진입
+      setReviewIndex(0)
+      resetStepState()
+    } else {
+      finishChapter()
+    }
+  }
+
+  const closeSuccessOverlay = useCallback(() => { setShowSuccess(false) }, [])
+
+  const totalSteps = lesson.chapters.reduce((sum, ch) => sum + ch.steps.length, 0)
+  const currentStepIndex = lesson.chapters.slice(0, currentChapter).reduce((sum, ch) => sum + ch.steps.length, 0) + currentStep + 1
+
+  // 챕터 완료 화면
+  if (showLessonComplete) {
+    const totalPoints = score
+    return (
+      <>
+        <Confetti show={showConfetti} />
+        <div className="min-h-screen bg-gradient-to-b from-indigo-600 to-purple-700 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl">
+            <div className="w-24 h-24 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
+              <span className="text-5xl">{lesson.emoji}</span>
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">{t("레슨 완료!", "Lesson Complete!")}</h1>
+            <p className="text-lg text-gray-600 mb-2">{lesson.title}</p>
+            <p className="text-gray-500 mb-6">{t("모든 챕터를 끝냈어요!", "All chapters finished!")}</p>
+            <div className="bg-amber-50 rounded-2xl p-4 mb-4">
+              <p className="text-amber-800 font-bold text-lg">{t(`총 ${totalPoints}점 획득!`, `${totalPoints} points earned!`)}</p>
+            </div>
+            <div className="bg-orange-50 rounded-2xl p-4 mb-6">
+              <p className="text-orange-600 font-bold text-lg">+30 XP {t("획득!", "earned!")}</p>
+              <p className="text-orange-500 text-sm mt-1">Lv.{gamification.level} ({gamification.xpInCurrentLevel}/100)</p>
+            </div>
+            <button onClick={() => { localStorage.removeItem(progressKey); router.push(`/curriculum#lesson-${lessonId}`) }} className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-lg transition-colors">
+              {t("돌아가기", "Go Back")}
+            </button>
+          </div>
+        </div>
+      </>
+    )
+  }
+
+  if (showChapterComplete) {
+    const chapterPoints = chapter.steps.filter(s => s.type !== "explain" && completedSteps.has(s.id)).length * 10
+    return (
+      <>
+        <Confetti show={showConfetti} />
+        <div className="min-h-screen bg-gradient-to-b from-indigo-600 to-purple-700 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl">
+            <div className="w-20 h-20 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
+              <PartyPopper className="w-10 h-10 text-white" />
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">{t(`챕터 ${currentChapter + 1} 완료!`, `Chapter ${currentChapter + 1} Complete!`)}</h1>
+            <p className="text-lg text-gray-600 mb-6">{chapter.emoji} {chapter.title}</p>
+            <div className="bg-amber-50 rounded-2xl p-4 mb-6">
+              <p className="text-amber-800 font-bold text-lg">{t(`${chapterPoints}점 획득!`, `${chapterPoints} points earned!`)}</p>
+            </div>
+            <button onClick={goToNextChapter} className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-lg transition-colors">
+              {t("다음 챕터로 →", "Next Chapter →")}
+            </button>
+          </div>
+        </div>
+      </>
+    )
+  }
+
+  return (
+    <>
+      <Confetti show={showConfetti} />
+      <SuccessOverlay show={showSuccess} message={successMessage} onClose={closeSuccessOverlay} />
+      
+      <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-white to-indigo-50/30">
+        {/* 상단 헤더 */}
+        <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-lg border-b border-gray-200 shadow-sm">
+          <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 md:py-3">
+            {/* 1줄: 나가기 | 프로그레스바 | 스텝 카운터 */}
+            <div className="flex items-center gap-3 md:gap-4">
+              <button onClick={() => router.push(`/curriculum#lesson-${lessonId}`)} className="text-gray-400 hover:text-gray-600 transition-colors" aria-label="나가기">
+                <X className="w-5 h-5 md:w-6 md:h-6" />
+              </button>
+              {isReviewMode ? (
+                <>
+                  <div className="flex-1 h-2.5 md:h-3 bg-amber-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-amber-400 to-orange-500 rounded-full transition-all duration-500"
+                      style={{ width: `${((reviewIndex + 1) / wrongQueue.length) * 100}%` }} />
+                  </div>
+                  <span className="text-sm md:text-base font-bold text-amber-500 tabular-nums shrink-0 flex items-center gap-1">
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    {reviewIndex + 1}<span className="text-amber-300">/</span>{wrongQueue.length}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <div className="flex-1 h-2.5 md:h-3 bg-gray-200 rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-500"
+                      style={{ width: `${(currentStepIndex / totalSteps) * 100}%` }} />
+                  </div>
+                  <span className="text-sm md:text-base font-bold text-gray-500 tabular-nums shrink-0">
+                    {currentStepIndex}<span className="text-gray-300">/</span>{totalSteps}
+                  </span>
+                </>
+              )}
+            </div>
+            {/* 2줄: 챕터 이름 + 토글들 */}
+            <div className="flex items-center justify-between mt-1.5">
+              <button onClick={() => setShowChapterList(!showChapterList)} className="flex items-center gap-1.5 text-xs md:text-sm text-gray-500 hover:text-indigo-600 transition-colors">
+                <span>{chapter.emoji} {chapter.title}</span>
+                <ChevronRight className={cn("w-3.5 h-3.5 transition-transform", showChapterList && "rotate-90")} />
+              </button>
+              <div className="flex items-center gap-2">
+                {hasVariants && <LibraryToggle variant={variant} setVariant={handleVariantChange} />}
+                {isBilingual && <LanguageToggle />}
+                <SoundToggle isMuted={isMuted} onToggle={toggleMute} />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 챕터 목록 드롭다운 */}
+        {showChapterList && (
+          <div className="sticky top-[68px] md:top-[76px] z-20">
+            <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="bg-white rounded-b-2xl shadow-lg border border-t-0 border-gray-200 p-3 md:p-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                  {lesson.chapters.map((ch, idx) => (
+                    <button key={ch.id} onClick={() => goToChapter(idx)}
+                      className={cn("flex items-center gap-2 px-3 py-2.5 rounded-xl text-left text-sm font-medium transition-all",
+                        idx === currentChapter
+                          ? "bg-indigo-100 text-indigo-700 ring-2 ring-indigo-300"
+                          : "bg-gray-50 hover:bg-indigo-50 text-gray-700 hover:text-indigo-600"
+                      )}>
+                      <span className="text-lg">{ch.emoji}</span>
+                      <span className="truncate">{ch.title}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 메인 콘텐츠 */}
+        <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6">
+          <div className="bg-white rounded-2xl p-6 md:p-10 shadow-sm">
+            <StepRenderer
+              step={step}
+              lang={lang}
+              isCompleted={isCurrentStepCompleted}
+              hintLevel={hintLevel}
+              onHintLevelChange={setHintLevel}
+              onSuccess={handleSuccess}
+              selectedAnswer={selectedAnswer}
+              showExplanation={showExplanation}
+              quizAttempts={quizAttempts}
+              onQuizAnswer={handleQuizAnswer}
+              onQuizAcknowledge={acknowledgeQuiz}
+              onStepComplete={handleStepComplete}
+              onStepAcknowledge={handleStepAcknowledge}
+              isReview={isReviewMode}
+            />
+          </div>
+        </div>
+
+        <div className="h-[70px] md:h-[90px] lg:h-[110px]" />
+      </div>
+
+      {/* 네비게이션 버튼 */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-lg z-20">
+        <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-2 md:py-3 lg:py-4">
+          <div className="flex gap-3 md:gap-4 lg:gap-6 justify-center">
+            <button onClick={goPrev} disabled={currentStep === 0 && currentChapter === 0}
+              className={cn("flex flex-col items-center justify-center rounded-xl md:rounded-2xl font-bold transition-colors", "w-[60px] h-[50px] md:w-[80px] md:h-[70px] lg:w-[100px] lg:h-[80px]",
+                isReviewMode ? "invisible" :
+                (currentStep > 0 || currentChapter > 0) ? "bg-gray-100 hover:bg-gray-200 text-gray-700" : "invisible")}>
+              <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" />
+              <span className="text-xs md:text-sm lg:text-base">{t("이전", "Prev")}</span>
+            </button>
+            <button onClick={goNext} disabled={!canGoNext()}
+              className={cn("flex flex-col items-center justify-center rounded-xl md:rounded-2xl font-bold transition-colors", "w-[60px] h-[50px] md:w-[80px] md:h-[70px] lg:w-[100px] lg:h-[80px]",
+                canGoNext() ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg" : "bg-gray-200 text-gray-400 cursor-not-allowed")}>
+              {canGoNext() ? (
+                <><ChevronRight className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" /><span className="text-xs md:text-sm lg:text-base">{t("다음", "Next")}</span></>
+              ) : (
+                <><Lock className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" /><span className="text-[10px] md:text-xs lg:text-sm">{t("완료 필요", "Complete first")}</span></>
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}

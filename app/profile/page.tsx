@@ -210,15 +210,17 @@ export default function ProfilePage() {
         </div>
 
         {/* 로그아웃 */}
-        <form action="/auth/signout" method="POST">
-          <button
-            type="submit"
-            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-red-500 bg-red-50 hover:bg-red-100 font-medium transition-all"
-          >
-            <LogOut className="w-4 h-4" />
-            {t("로그아웃", "Logout")}
-          </button>
-        </form>
+        <button
+          onClick={async () => {
+            const supabase = createClient()
+            await supabase.auth.signOut()
+            window.location.href = "/login"
+          }}
+          className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-red-500 bg-red-50 hover:bg-red-100 font-medium transition-all"
+        >
+          <LogOut className="w-4 h-4" />
+          {t("로그아웃", "Logout")}
+        </button>
       </main>
 
       <BottomNav />

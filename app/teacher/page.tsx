@@ -126,7 +126,7 @@ export default function TeacherDashboardPage() {
         ) : (
           <div className="space-y-3">
             {classes.map((cls) => (
-              <Link key={cls.id} href={`/teacher/class/${cls.id}`}>
+              <Link key={cls.id} href={`/teacher/class?id=${cls.id}`}>
                 <Card className="p-4 border-2 border-gray-100 hover:border-orange-200 hover:shadow-md transition-all cursor-pointer">
                   <div className="flex items-center justify-between">
                     <div className="flex-1">

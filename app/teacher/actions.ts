@@ -1,15 +1,17 @@
-"use server"
+"use client"
 
-import { createClient } from "@/lib/supabase/server"
+import { createClient } from "@/lib/supabase/client"
 
 // 선생님 등록 (비밀 코드 확인)
+// NOTE: 정적 빌드에서는 서버 환경변수 접근 불가
+// TEACHER_SECRET_CODE 검증을 Supabase Edge Function으로 이동하는 것을 권장
 export async function registerAsTeacher(secretCode: string) {
-  const expectedCode = process.env.TEACHER_SECRET_CODE
+  const expectedCode = process.env.NEXT_PUBLIC_TEACHER_SECRET_CODE
   if (!expectedCode || secretCode !== expectedCode) {
     return { error: "잘못된 등록 코드입니다" }
   }
 
-  const supabase = await createClient()
+  const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: "로그인이 필요합니다" }
 
@@ -24,7 +26,7 @@ export async function registerAsTeacher(secretCode: string) {
 
 // 반 생성
 export async function createClass(name: string) {
-  const supabase = await createClient()
+  const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: "로그인이 필요합니다" }
 
@@ -56,7 +58,7 @@ export async function createClass(name: string) {
 
 // 반 비활성화/활성화 토글
 export async function toggleClassActive(classId: string) {
-  const supabase = await createClient()
+  const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: "로그인이 필요합니다" }
 
@@ -79,7 +81,7 @@ export async function toggleClassActive(classId: string) {
 
 // 반 참가 (학생)
 export async function joinClassByCode(code: string) {
-  const supabase = await createClient()
+  const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: "로그인이 필요합니다" }
 
