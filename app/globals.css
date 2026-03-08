@@ -3,6 +3,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* 모바일 iOS 자동 줌 방지 (font-size < 16px일 때 줌인됨) */
+input, textarea, select {
+  font-size: 16px;
+}
+
 :root {
   --background: #fffbf5;
   --foreground: #1a1a1a;
