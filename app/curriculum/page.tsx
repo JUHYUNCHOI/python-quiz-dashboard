@@ -260,6 +260,19 @@ export default function CurriculumPage() {
     setLoaded(true)
   }, [])
 
+  // 클라우드 복원 완료 시 진도 갱신
+  useEffect(() => {
+    const handler = () => {
+      const saved = localStorage.getItem("completedLessons")
+      if (saved) {
+        const arr: (string | number)[] = JSON.parse(saved)
+        setCompletedLessons(new Set(arr.map(id => typeof id === "string" && /^\d+$/.test(id) ? Number(id) : id)))
+      }
+    }
+    window.addEventListener("cloud-data-restored", handler)
+    return () => window.removeEventListener("cloud-data-restored", handler)
+  }, [])
+
   // 로드 완료 후 다음 수업으로 자동 스크롤
   useEffect(() => {
     if (!loaded) return

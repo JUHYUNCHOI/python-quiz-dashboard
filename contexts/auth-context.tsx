@@ -102,7 +102,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           await fetchProfile(currentUser.id)
 
           // 로그인 시 양방향 동기화
-          if (event === "SIGNED_IN") {
+          if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
             // localStorage → Supabase (기존 로컬 데이터 업로드)
             migrateLocalStorageToSupabase(currentUser.id).catch(() => {})
             // Supabase → localStorage (클라우드 데이터 복원)

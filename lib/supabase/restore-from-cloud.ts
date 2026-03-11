@@ -52,6 +52,10 @@ export async function restoreFromCloud(userId: string) {
     if (prefResult.status === "fulfilled" && prefResult.value.data) {
       restorePreferences(prefResult.value.data)
     }
+    // 복원 완료 알림 → 커리큘럼 등 UI 갱신 트리거
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new Event("cloud-data-restored"))
+    }
   } catch (error) {
     console.error("[RestoreFromCloud] error:", error)
   }

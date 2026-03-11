@@ -135,10 +135,7 @@ create policy "Teachers see own classes"
   using ((select auth.uid()) = teacher_id);
 create policy "Students see classes they belong to"
   on public.classes for select to authenticated
-  using (id in (
-    select class_id from public.class_members
-    where student_id = (select auth.uid())
-  ));
+  using (id in (select public.get_my_class_ids()));
 create policy "Teachers create classes"
   on public.classes for insert to authenticated
   with check (
@@ -158,10 +155,7 @@ create policy "Students see own memberships"
   using ((select auth.uid()) = student_id);
 create policy "Teachers see members of own classes"
   on public.class_members for select to authenticated
-  using (class_id in (
-    select id from public.classes
-    where teacher_id = (select auth.uid())
-  ));
+  using (class_id in (select public.get_teacher_class_ids()));
 create policy "Students can join classes"
   on public.class_members for insert to authenticated
   with check ((select auth.uid()) = student_id);
@@ -175,11 +169,7 @@ create policy "Users see own progress"
   using ((select auth.uid()) = user_id);
 create policy "Teachers see student progress"
   on public.lesson_progress for select to authenticated
-  using (user_id in (
-    select cm.student_id from public.class_members cm
-    join public.classes c on cm.class_id = c.id
-    where c.teacher_id = (select auth.uid())
-  ));
+  using (user_id in (select public.get_my_student_ids()));
 create policy "Users insert own progress"
   on public.lesson_progress for insert to authenticated
   with check ((select auth.uid()) = user_id);
@@ -196,11 +186,7 @@ create policy "Users see own gamification"
   using ((select auth.uid()) = user_id);
 create policy "Teachers see student gamification"
   on public.gamification_data for select to authenticated
-  using (user_id in (
-    select cm.student_id from public.class_members cm
-    join public.classes c on cm.class_id = c.id
-    where c.teacher_id = (select auth.uid())
-  ));
+  using (user_id in (select public.get_my_student_ids()));
 create policy "Users insert own gamification"
   on public.gamification_data for insert to authenticated
   with check ((select auth.uid()) = user_id);
@@ -225,17 +211,38 @@ create policy "Users see own quiz sessions"
   using ((select auth.uid()) = user_id);
 create policy "Teachers see student quiz sessions"
   on public.quiz_sessions for select to authenticated
-  using (user_id in (
-    select cm.student_id from public.class_members cm
-    join public.classes c on cm.class_id = c.id
-    where c.teacher_id = (select auth.uid())
-  ));
+  using (user_id in (select public.get_my_student_ids()));
 create policy "Users insert own quiz sessions"
   on public.quiz_sessions for insert to authenticated
   with check ((select auth.uid()) = user_id);
 
 
 -- ======== STEP 4: 함수 + 트리거 ========
+
+-- RLS 순환참조 방지용 SECURITY DEFINER 헬퍼 함수
+-- (classes ↔ class_members 간 상호 참조 시 infinite recursion 방지)
+create or replace function public.get_my_class_ids()
+returns setof uuid language sql security definer stable
+set search_path = public
+as $$
+  select class_id from public.class_members where student_id = auth.uid();
+$$;
+
+create or replace function public.get_teacher_class_ids()
+returns setof uuid language sql security definer stable
+set search_path = public
+as $$
+  select id from public.classes where teacher_id = auth.uid();
+$$;
+
+create or replace function public.get_my_student_ids()
+returns setof uuid language sql security definer stable
+set search_path = public
+as $$
+  select cm.student_id from public.class_members cm
+  join public.classes c on cm.class_id = c.id
+  where c.teacher_id = auth.uid();
+$$;
 
 -- 카카오 가입 시 자동 프로필 생성
 create or replace function public.handle_new_user()
