@@ -14,6 +14,7 @@ import { markLessonComplete } from "@/lib/mark-lesson-complete"
 import { useGamification } from "@/hooks/use-gamification"
 import { logActivity } from "@/lib/activity-log"
 import { getCompletedLessons, pythonParts, cppParts } from "@/lib/curriculum-data"
+import { useAuth } from "@/contexts/auth-context"
 
 // 분리된 컴포넌트
 import { Confetti } from "@/components/learn/confetti"
@@ -39,6 +40,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
 
   // 게이미피케이션
   const gamification = useGamification()
+  const { profile } = useAuth()
+  const isTeacher = profile?.role === "teacher"
 
   // Supabase 진도 동기화
   const { syncProgress, syncCompletion, loadFromCloud } = useLessonSync(
@@ -140,9 +143,10 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     syncProgress(progressData)
   }, [currentChapter, currentStep, score, completedSteps, progressKey, lesson, syncProgress, progressLoaded])
 
-  // 잠금 체크: 같은 트랙(Python/C++) 내에서 이전 수업 완료해야 접근 가능
+  // 잠금 체크: 같은 트랙(Python/C++) 내에서 이전 수업 완료해야 접근 가능 (선생님은 전부 열림)
   const isLocked = (() => {
     if (typeof window === "undefined") return false
+    if (isTeacher) return false
     const completed = getCompletedLessons()
     const idNormalized: (number | string) = /^\d+$/.test(lessonId) ? Number(lessonId) : lessonId
     // Python과 C++ 트랙을 분리하여 잠금 체크
