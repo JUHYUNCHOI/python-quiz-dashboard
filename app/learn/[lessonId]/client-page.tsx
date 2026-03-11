@@ -6,6 +6,7 @@ import { ChevronRight, ChevronLeft, X, Lock, PartyPopper, RotateCcw } from "luci
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
 import { LanguageToggle } from "@/components/language-toggle"
+import { ProgrammingLanguageToggle } from "@/components/programming-language-toggle"
 import { LibraryToggle, type LibraryVariant } from "@/components/library-toggle"
 import { SoundToggle } from "@/components/sound-toggle"
 import { useSoundEffect } from "@/hooks/use-sound-effect"
@@ -31,6 +32,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
 
   const isBilingual = lessonId in bilingualLessons
   const hasVariants = lessonId in lessonVariants
+  const currentProgrammingLang = lessonId.startsWith("cpp-") ? "cpp" as const : "python" as const
 
   // 라이브러리 변형 상태 (turtle/pygame)
   const [variant, setVariant] = useState<LibraryVariant>(() => {
@@ -507,6 +509,11 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
         {/* 상단 헤더 */}
         <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-lg border-b border-gray-200 shadow-sm">
           <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 md:py-3">
+            {/* 0줄: 프로그래밍 언어 | UI 언어 */}
+            <div className="flex items-center justify-between mb-1.5">
+              <ProgrammingLanguageToggle current={currentProgrammingLang} />
+              <LanguageToggle />
+            </div>
             {/* 1줄: 나가기 | 프로그레스바 | 스텝 카운터 */}
             <div className="flex items-center gap-3 md:gap-4">
               <button onClick={() => router.push(`/curriculum#lesson-${lessonId}`)} className="text-gray-400 hover:text-gray-600 transition-colors" aria-label="나가기">
@@ -543,7 +550,6 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
               </button>
               <div className="flex items-center gap-2">
                 {hasVariants && <LibraryToggle variant={variant} setVariant={handleVariantChange} />}
-                {isBilingual && <LanguageToggle />}
                 <SoundToggle isMuted={isMuted} onToggle={toggleMute} />
               </div>
             </div>
@@ -552,7 +558,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
 
         {/* 챕터 목록 드롭다운 */}
         {showChapterList && (
-          <div className="sticky top-[68px] md:top-[76px] z-20">
+          <div className="sticky top-[100px] md:top-[110px] z-20">
             <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8">
               <div className="bg-white rounded-b-2xl shadow-lg border border-t-0 border-gray-200 p-3 md:p-4">
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
