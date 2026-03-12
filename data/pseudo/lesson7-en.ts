@@ -239,20 +239,6 @@ NEXT i
           answer: 0,
           explanation: 'When i=1, inner loop runs 1 time (one star). When i=2, inner loop runs 2 times (two stars). When i=3, inner loop runs 3 times (three stars). This creates a **triangle pattern**!'
         },
-        {
-          id: "ch2-quiz1",
-          type: "quiz",
-          title: "🧠 Which Loop?",
-          content: 'A menu system asks the user to pick an option, and should keep showing the menu until they choose "exit". Which loop is best?',
-          options: [
-            'FOR loop',
-            'WHILE loop',
-            'REPEAT...UNTIL loop',
-            'No loop needed'
-          ],
-          answer: 2,
-          explanation: 'The menu must show **at least once** before checking the user\'s choice. **REPEAT...UNTIL** is perfect because it always runs at least once, then checks if the user chose "exit".'
-        }
       ]
     }
   ]

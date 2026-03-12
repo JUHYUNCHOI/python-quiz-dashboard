@@ -51,20 +51,6 @@ OUTPUT "Hello, World!"
 
 수도코드가 제일 읽기 쉽죠? 😊`
         },
-        {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 퀴즈!",
-          content: '화면에 "안녕하세요"를 출력하려면?',
-          options: [
-            'OUTPUT "안녕하세요"',
-            'PRINT "안녕하세요"',
-            'DISPLAY "안녕하세요"',
-            'SHOW "안녕하세요"'
-          ],
-          answer: 0,
-          explanation: 'CIE 수도코드에서는 **OUTPUT**을 사용해서 화면에 출력해요!'
-        },
       ]
     },
     {

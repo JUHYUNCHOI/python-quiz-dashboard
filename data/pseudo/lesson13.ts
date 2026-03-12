@@ -69,20 +69,6 @@ CLOSEFILE "names.txt"
 파일을 열었으면 **반드시 닫아야** 해요!`
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 퀴즈!",
-          content: '파일에서 데이터를 읽을 때 올바른 순서는?',
-          options: [
-            'OPENFILE → READFILE → CLOSEFILE',
-            'READFILE → OPENFILE → CLOSEFILE',
-            'OPENFILE → CLOSEFILE → READFILE',
-            'CLOSEFILE → OPENFILE → READFILE'
-          ],
-          answer: 0,
-          explanation: '파일 처리의 순서는 항상 **열기(OPENFILE) → 읽기/쓰기(READFILE) → 닫기(CLOSEFILE)**예요. 문을 열고, 안에서 작업하고, 문을 닫는 것과 같아요!'
-        },
-        {
           id: "ch1-readall",
           type: "explain",
           title: "🔄 파일 전체 읽기",
@@ -219,20 +205,6 @@ WRITE로 "기록3"을 쓰면:
 기록3
 \`\`\`
 (기록1, 기록2가 사라져요!)`
-        },
-        {
-          id: "ch2-quiz1",
-          type: "quiz",
-          title: "🧠 퀴즈!",
-          content: '기존 파일 내용을 유지하면서 새 데이터를 추가하려면 어떤 모드를 써야 할까요?',
-          options: [
-            'APPEND',
-            'WRITE',
-            'READ',
-            'ADD'
-          ],
-          answer: 0,
-          explanation: '**APPEND** 모드는 기존 내용 뒤에 새 데이터를 **추가**해요. WRITE 모드는 기존 내용을 **삭제**하고 새로 쓰므로 주의해야 해요!'
         },
         {
           id: "ch2-example",

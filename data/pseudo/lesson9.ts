@@ -74,20 +74,6 @@ ENDCASE
 \`OTHERWISE\`는 생략할 수도 있지만, 예상치 못한 값을 처리하기 위해 넣는 것이 좋아요!`
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 퀴즈!",
-          content: 'CASE문을 끝낼 때 사용하는 키워드는?',
-          options: [
-            'ENDCASE',
-            'END CASE',
-            'ENDIF',
-            'ENDSWITCH'
-          ],
-          answer: 0,
-          explanation: 'CIE 수도코드에서 CASE문은 반드시 **ENDCASE**로 끝내요. 한 단어로 붙여 쓰는 것이 중요해요!'
-        },
-        {
           id: "ch1-example",
           type: "explain",
           title: "🎯 CASE문 예제",
@@ -176,20 +162,6 @@ ENDCASE
 
 정수 값으로도 CASE문을 사용할 수 있어요!
 각 숫자에 맞는 동작을 깔끔하게 정리할 수 있답니다.`
-        },
-        {
-          id: "ch2-quiz1",
-          type: "quiz",
-          title: "🧠 퀴즈!",
-          content: 'CASE문에서 어떤 값에도 해당하지 않을 때 실행되는 부분은?',
-          options: [
-            'OTHERWISE',
-            'DEFAULT',
-            'ELSE',
-            'NONE'
-          ],
-          answer: 0,
-          explanation: 'CIE 수도코드에서는 **OTHERWISE**를 사용해요. 프로그래밍 언어의 default나 else와 비슷한 역할이에요!'
         },
         {
           id: "ch2-grade",

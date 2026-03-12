@@ -60,20 +60,6 @@ DECLARE prices : ARRAY[1:10] OF REAL
 \`\`\``
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz!",
-          content: "Which correctly declares an array of 4 strings?",
-          options: [
-            'DECLARE words : ARRAY[1:4] OF STRING',
-            'DECLARE words : ARRAY[4] OF STRING',
-            'DECLARE words : STRING[1:4]',
-            'ARRAY words : [1:4] OF STRING'
-          ],
-          answer: 0,
-          explanation: 'The CIE format is **DECLARE name : ARRAY[lower:upper] OF type**. So `DECLARE words : ARRAY[1:4] OF STRING` is correct!'
-        },
-        {
           id: "ch1-fill1",
           type: "fillblank",
           title: "✏️ Fill in the blanks!",

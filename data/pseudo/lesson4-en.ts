@@ -56,20 +56,6 @@ Think of it like choosing the right container:
 Each type has its own rules. Let's explore them one by one!`
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz!",
-          content: "Why do we need to specify a data type when declaring a variable?",
-          options: [
-            "So the computer knows what kind of data to expect",
-            "To make the code look prettier",
-            "Data types are optional in pseudocode",
-            "To make the variable run faster"
-          ],
-          answer: 0,
-          explanation: "Data types tell the computer **what kind of data** the variable will hold, so it knows how much memory to use and what operations are allowed."
-        },
-        {
           id: "ch1-fill1",
           type: "fillblank",
           title: "✏️ Fill in the blank!",

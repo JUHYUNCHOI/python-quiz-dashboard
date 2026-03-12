@@ -5,6 +5,7 @@ import { Terminal, Lightbulb, ArrowRight, Check, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { LessonStep } from "./types"
 import { CodeBlock } from "@/components/ui/code-block"
+import { renderContent } from "./render-content"
 import { motion, AnimatePresence } from "framer-motion"
 import { useLanguage } from "@/contexts/language-context"
 
@@ -98,9 +99,17 @@ export function PredictStep({ step, isCompleted, selectedAnswer, showExplanation
       )}
 
       {/* 프롬프트 */}
-      <p className="text-base md:text-lg font-semibold text-gray-700 text-center">
-        {step.content || t("이 코드를 실행하면 어떤 결과가 나올까요?", "What will be the output of this code?")}
-      </p>
+      {step.content ? (
+        step.content.includes('```') ? (
+          <div className="text-base md:text-lg text-gray-800">{renderContent(step.content)}</div>
+        ) : (
+          <p className="text-base md:text-lg font-semibold text-gray-700 text-center">{step.content}</p>
+        )
+      ) : (
+        <p className="text-base md:text-lg font-semibold text-gray-700 text-center">
+          {t("이 코드를 실행하면 어떤 결과가 나올까요?", "What will be the output of this code?")}
+        </p>
+      )}
 
       {/* 선택지 */}
       <div className="space-y-3">

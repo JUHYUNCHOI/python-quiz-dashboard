@@ -74,20 +74,6 @@ DECLARE map : ARRAY[1:10, 1:10] OF CHAR      // 게임 맵
 \`\`\``
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 퀴즈!",
-          content: '5명의 학생이 3번의 시험 점수를 저장하는 2D 배열의 올바른 선언은?',
-          options: [
-            'DECLARE scores : ARRAY[1:5, 1:3] OF INTEGER',
-            'DECLARE scores : ARRAY[1:5][1:3] OF INTEGER',
-            'DECLARE scores : ARRAY[5, 3] OF INTEGER',
-            'DECLARE scores : ARRAY[1:5] OF ARRAY[1:3] OF INTEGER'
-          ],
-          answer: 0,
-          explanation: 'CIE 2D 배열은 **ARRAY[행시작:행끝, 열시작:열끝]** 형식이에요. 학생 5명(행) x 시험 3번(열)이므로 **ARRAY[1:5, 1:3]**이 맞아요!'
-        },
-        {
           id: "ch1-access",
           type: "explain",
           title: "🔢 2D 배열 값 넣기와 읽기",
@@ -232,20 +218,6 @@ NEXT student
 \`\`\`
 
 바깥쪽 FOR는 **학생 번호**, 안쪽 FOR는 **과목 번호**를 순회해요!`
-        },
-        {
-          id: "ch2-quiz1",
-          type: "quiz",
-          title: "🧠 퀴즈!",
-          content: '3행 5열의 2D 배열을 모두 순회하면 중첩 FOR 반복문의 안쪽 코드는 총 몇 번 실행될까요?',
-          options: [
-            '15번',
-            '8번',
-            '3번',
-            '5번'
-          ],
-          answer: 0,
-          explanation: '바깥쪽 FOR가 3번 반복하고, 각각에 대해 안쪽 FOR가 5번 반복하므로 3 x 5 = **15번** 실행돼요!'
         },
         {
           id: "ch2-predict1",

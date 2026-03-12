@@ -247,20 +247,6 @@ ENDWHILE
           answer: 0,
           explanation: 'x starts at 10 and decreases by 3 each time: 10, 7, 4, 1. When x becomes -2, the condition (x > 0) is FALSE, so the loop stops. Output: **10 7 4 1**.'
         },
-        {
-          id: "ch2-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz Time!",
-          content: 'What happens if a WHILE loop\'s condition is FALSE from the very beginning?',
-          options: [
-            'The loop runs once',
-            'The loop runs forever',
-            'The loop body never runs',
-            'It causes an error'
-          ],
-          answer: 2,
-          explanation: 'A WHILE loop checks the condition **before** running. If it is FALSE from the start, the loop body is **skipped entirely** and never runs!'
-        }
       ]
     }
   ]

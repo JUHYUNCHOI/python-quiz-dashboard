@@ -61,20 +61,6 @@ OUTPUT LENGTH(name)
 결과: **5**`
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 퀴즈!",
-          content: 'LENGTH("Good Morning")의 결과는?',
-          options: [
-            '12',
-            '11',
-            '13',
-            '10'
-          ],
-          answer: 0,
-          explanation: '"Good Morning"은 G-o-o-d-(공백)-M-o-r-n-i-n-g, 총 **12글자**예요. 공백도 한 글자로 세는 것을 잊지 마세요!'
-        },
-        {
           id: "ch1-ucase-lcase",
           type: "explain",
           title: "🔠 UCASE()와 LCASE()",
@@ -165,20 +151,6 @@ SUBSTRING("Hello", 4, 2)   → "lo"
 | 글자 | H | e | l | l | o |
 
 \`SUBSTRING("Hello", 2, 3)\`은 **2번째 위치부터 3글자** → "ell"`
-        },
-        {
-          id: "ch2-quiz1",
-          type: "quiz",
-          title: "🧠 퀴즈!",
-          content: 'SUBSTRING("Computer", 4, 3)의 결과는?',
-          options: [
-            '"put"',
-            '"mpu"',
-            '"put"',
-            '"com"'
-          ],
-          answer: 0,
-          explanation: '"Computer"에서 4번째 위치는 "p"이고, 거기서 3글자를 꺼내면 "put"이에요! (C=1, o=2, m=3, p=4, u=5, t=6, e=7, r=8)'
         },
         {
           id: "ch2-concat",

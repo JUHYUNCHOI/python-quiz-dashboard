@@ -63,20 +63,6 @@ DECLARE grades : ARRAY[1:10] OF REAL
 - 📌 \`OF\` 뒤에 자료형(INTEGER, STRING 등)을 써요`
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 퀴즈!",
-          content: '학생 20명의 이름을 저장하는 배열을 올바르게 선언한 것은?',
-          options: [
-            'DECLARE students : ARRAY[1:20] OF STRING',
-            'DECLARE students : ARRAY[0:20] OF STRING',
-            'DECLARE students : ARRAY(1,20) OF STRING',
-            'DECLARE students[20] : STRING'
-          ],
-          answer: 0,
-          explanation: 'CIE 수도코드에서 배열은 **DECLARE 이름 : ARRAY[시작:끝] OF 자료형** 형식으로 선언해요. 보통 1부터 시작하고, 대괄호 안에 콜론(:)을 써요!'
-        },
-        {
           id: "ch1-index",
           type: "explain",
           title: "🔢 인덱스란?",

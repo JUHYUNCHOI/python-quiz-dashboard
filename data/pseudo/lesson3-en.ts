@@ -53,20 +53,6 @@ What happens step by step:
 Without the OUTPUT message, the user would see a blank screen and not know what to do!`
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz!",
-          content: "Which keyword lets the user type a value into a variable?",
-          options: [
-            "INPUT",
-            "OUTPUT",
-            "DECLARE",
-            "READ"
-          ],
-          answer: 0,
-          explanation: "**INPUT** reads a value from the user and stores it in a variable. OUTPUT displays things on screen, and DECLARE creates a variable."
-        },
-        {
           id: "ch1-fill1",
           type: "fillblank",
           title: "✏️ Fill in the blank!",

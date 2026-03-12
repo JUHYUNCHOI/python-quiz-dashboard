@@ -74,20 +74,6 @@ The WHILE loop shifts elements right to make room for the key. It stops when:
 - We find an element that is **not greater** than the key`
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz!",
-          content: "Why does the FOR loop in insertion sort start at **i = 2** instead of **i = 1**?",
-          options: [
-            'Because CIE arrays start at index 2',
-            'Because the first element is already considered sorted by itself',
-            'Because we need to compare with the previous element',
-            'Because starting at 1 would cause an error'
-          ],
-          answer: 1,
-          explanation: 'A single element is always sorted! We start at index 2 because the first element forms a "sorted section" of one element. We then insert element 2 into this sorted section, then element 3, and so on.'
-        },
-        {
           id: "ch1-fill1",
           type: "fillblank",
           title: "✏️ Fill in the blanks!",

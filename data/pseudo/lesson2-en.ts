@@ -82,20 +82,6 @@ Now \`name\` holds the text **"Alice"** and \`age\` holds the number **15**.
 | \`age ← 15\` | The value 15 is placed in the box |`
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz!",
-          content: "Which keyword is used to create a new variable in CIE pseudocode?",
-          options: [
-            "DECLARE",
-            "CREATE",
-            "VAR",
-            "NEW"
-          ],
-          answer: 0,
-          explanation: "In CIE pseudocode, we use **DECLARE** to create a new variable. For example: `DECLARE x : INTEGER`."
-        },
-        {
           id: "ch1-fill1",
           type: "fillblank",
           title: "✏️ Fill in the blank!",

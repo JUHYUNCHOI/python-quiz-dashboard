@@ -69,20 +69,6 @@ Trace Table을 그리는 규칙:
 - 값이 변하지 않은 변수는 **빈칸으로 두거나 이전 값**을 그대로 써요`
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 퀴즈!",
-          content: 'Trace Table에서 열(column)에 들어가는 것은?',
-          options: [
-            '프로그램에서 사용되는 각 변수와 OUTPUT',
-            '코드의 각 줄 번호',
-            '프로그램의 실행 시간',
-            '오류 메시지'
-          ],
-          answer: 0,
-          explanation: 'Trace Table의 각 열은 **변수 하나**를 나타내요. 그리고 OUTPUT 열도 추가해서 출력값을 기록해요. 행은 실행 단계를 나타내요!'
-        },
-        {
           id: "ch1-practice",
           type: "predict",
           title: "🔮 Trace Table을 따라가 봐요!",

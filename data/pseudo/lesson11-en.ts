@@ -63,20 +63,6 @@ What happened:
 Think of it like **photocopying** a document - writing on the photocopy does not change the original!`
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz!",
-          content: 'When a parameter is passed BYVAL, what happens to the original variable?',
-          options: [
-            'It stays the same (unchanged)',
-            'It is changed by the procedure',
-            'It is deleted',
-            'It becomes zero'
-          ],
-          answer: 0,
-          explanation: 'BYVAL sends a **copy** of the value. The procedure works with the copy, so the **original variable stays the same**. This is the safe, default way to pass data.'
-        },
-        {
           id: "ch1-predict1",
           type: "predict",
           title: "🔮 Predict the output!",
@@ -148,20 +134,6 @@ This time, \`x\` changed to 15!
 The procedure received a **reference** (link) to the original variable. When it changed \`num\`, it was actually changing \`x\` directly.
 
 Think of it like giving someone the **key to your house** - they can rearrange the furniture, and you will see the changes!`
-        },
-        {
-          id: "ch2-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz!",
-          content: 'When a parameter is passed BYREF, what happens to the original variable?',
-          options: [
-            'It can be changed by the procedure',
-            'It stays the same (unchanged)',
-            'It is deleted after the procedure ends',
-            'A copy is made automatically'
-          ],
-          answer: 0,
-          explanation: 'BYREF passes a **reference** to the original variable. Any changes made inside the procedure **directly affect** the original variable!'
         },
         {
           id: "ch2-example",

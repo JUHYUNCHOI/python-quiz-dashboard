@@ -76,20 +76,6 @@ OUTPUT b
 - Work through the code **in order**, one line at a time`
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz!",
-          content: "What is the main purpose of a trace table?",
-          options: [
-            'To make code run faster',
-            'To track variable values as code executes line by line',
-            'To write pseudocode more efficiently',
-            'To convert pseudocode to a programming language'
-          ],
-          answer: 1,
-          explanation: 'A trace table **tracks the values of variables** step by step as the code runs. It helps you understand, debug, and predict what a program will do. This is a key skill for the IGCSE Computer Science exam!'
-        },
-        {
           id: "ch1-predict1",
           type: "predict",
           title: "🔮 Predict the output!",

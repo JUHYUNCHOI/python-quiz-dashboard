@@ -63,20 +63,6 @@ Important rules:
 - APPEND mode **keeps** old content and adds new data at the end`
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz!",
-          content: 'Which file mode should you use to add new data to the end of an existing file WITHOUT deleting old data?',
-          options: [
-            'APPEND',
-            'WRITE',
-            'READ',
-            'ADD'
-          ],
-          answer: 0,
-          explanation: '**APPEND** mode adds new data to the end of the file while keeping all existing content. WRITE mode would **erase** the old content first!'
-        },
-        {
           id: "ch1-fill1",
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
@@ -166,20 +152,6 @@ CLOSEFILE "names.txt"
 \`\`\`
 
 **EOF("filename")** returns TRUE when there are no more lines to read.`
-        },
-        {
-          id: "ch2-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz!",
-          content: 'What does `EOF("data.txt")` return?',
-          options: [
-            'TRUE when all lines have been read (end of file reached)',
-            'The last line of the file',
-            'The number of lines in the file',
-            'FALSE when the file is empty'
-          ],
-          answer: 0,
-          explanation: '**EOF** stands for "End Of File". It returns **TRUE** when there are no more lines to read. It is used in a WHILE loop condition to read through an entire file.'
         },
         {
           id: "ch2-predict1",

@@ -74,20 +74,6 @@ Important rules:
 \`OTHERWISE\` is optional, but it is good practice to include it so unexpected values are handled!`
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz!",
-          content: 'Which keyword ends a CASE statement in CIE pseudocode?',
-          options: [
-            'ENDCASE',
-            'END CASE',
-            'ENDIF',
-            'ENDSWITCH'
-          ],
-          answer: 0,
-          explanation: 'In CIE pseudocode, the CASE statement must end with **ENDCASE** (one word, no space). Don\'t confuse it with ENDIF!'
-        },
-        {
           id: "ch1-example",
           type: "explain",
           title: "🎯 CASE Example: Traffic Light",
@@ -175,20 +161,6 @@ ENDCASE
 
 You can use CASE with integer values too, not just strings!
 Each number maps cleanly to an action.`
-        },
-        {
-          id: "ch2-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz!",
-          content: 'In a CASE statement, which keyword handles values that do NOT match any listed case?',
-          options: [
-            'OTHERWISE',
-            'DEFAULT',
-            'ELSE',
-            'NONE'
-          ],
-          answer: 0,
-          explanation: 'In CIE pseudocode, **OTHERWISE** is the keyword used in CASE statements for values that don\'t match any case. It is similar to "default" in other languages.'
         },
         {
           id: "ch2-grade",

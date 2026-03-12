@@ -68,20 +68,6 @@ export const pseudoLesson17Data: LessonData = {
 최종 결과: **[1, 3, 5, 8]** 정렬 완료!`
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 퀴즈!",
-          content: '버블 정렬에서 1회차(첫 번째 pass)가 끝나면 어떤 일이 일어날까요?',
-          options: [
-            '가장 큰 값이 맨 뒤로 이동한다',
-            '가장 작은 값이 맨 앞으로 이동한다',
-            '모든 값이 정렬된다',
-            '중간값이 중간 위치로 간다'
-          ],
-          answer: 0,
-          explanation: '버블 정렬의 1회차에서는 큰 값이 계속 오른쪽으로 밀려나면서, 결국 **가장 큰 값**이 배열의 **맨 뒤**에 위치하게 돼요!'
-        },
-        {
           id: "ch1-predict1",
           type: "predict",
           title: "🔮 1회차 결과를 예측해봐요!",
@@ -102,20 +88,6 @@ export const pseudoLesson17Data: LessonData = {
           answer: 0,
           explanation: '1회차에서 6>2 교환, 6<9 유지, 9>4 교환이 이루어져서 **[2, 6, 4, 9]**가 돼요. 가장 큰 값 9가 맨 뒤로 갔어요!'
         },
-        {
-          id: "ch1-quiz2",
-          type: "quiz",
-          title: "🧠 교환의 핵심!",
-          content: '두 값의 자리를 바꾸려면(swap) 무엇이 필요할까요?',
-          options: [
-            '임시 변수(temp)가 필요하다',
-            '값을 직접 바꾸면 된다',
-            '새 배열이 필요하다',
-            '세 번째 변수는 필요 없다'
-          ],
-          answer: 0,
-          explanation: '두 값을 바꾸려면 **임시 변수(temp)**가 필요해요! temp에 하나를 임시 저장하고, 교환한 후 temp의 값을 넣어요. 컵 두 개의 물을 바꾸려면 빈 컵이 필요한 것과 같아요!'
-        }
       ]
     },
     {

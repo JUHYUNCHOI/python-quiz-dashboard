@@ -73,20 +73,6 @@ Output: **70**
 The format is always: \`arrayName[row, column]\``
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz!",
-          content: 'Which correctly declares a 2D array with 4 rows and 5 columns of strings?',
-          options: [
-            'DECLARE table : ARRAY[1:4, 1:5] OF STRING',
-            'DECLARE table : ARRAY[4, 5] OF STRING',
-            'DECLARE table : ARRAY[1:4] OF ARRAY[1:5] OF STRING',
-            'DECLARE table[4][5] : STRING'
-          ],
-          answer: 0,
-          explanation: 'The CIE format for 2D arrays is `DECLARE name : ARRAY[1:rows, 1:cols] OF type`. So `ARRAY[1:4, 1:5]` creates 4 rows and 5 columns.'
-        },
-        {
           id: "ch1-predict1",
           type: "predict",
           title: "🔮 Predict the output!",
@@ -190,20 +176,6 @@ Row 2, Col 3 = 95
 \`\`\`
 
 The nested loop visits elements in order: all columns of row 1, then all columns of row 2.`
-        },
-        {
-          id: "ch2-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz!",
-          content: 'To visit every element in a 2D array with 3 rows and 5 columns, how many total iterations occur?',
-          options: [
-            '15 (3 x 5)',
-            '8 (3 + 5)',
-            '5 (just the columns)',
-            '3 (just the rows)'
-          ],
-          answer: 0,
-          explanation: 'The outer loop runs 3 times (rows), and for each row the inner loop runs 5 times (columns). Total iterations: 3 x 5 = **15**. Every element is visited once!'
         },
         {
           id: "ch2-predict2",

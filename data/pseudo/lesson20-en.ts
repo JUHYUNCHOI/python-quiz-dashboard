@@ -59,20 +59,6 @@ Examples:
 - **Format check:** A date must follow the pattern DD/MM/YYYY`
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz!",
-          content: 'A user enters an age of 25, but their real age is 35. Which statement is correct?',
-          options: [
-            'The validation check failed',
-            'The data passes validation but is not verified as correct',
-            'The data fails both validation and verification',
-            'The verification check failed but validation passed'
-          ],
-          answer: 1,
-          explanation: '25 is a **reasonable** age (passes validation - it is between 0 and 120). However, it is not the **correct** value (fails verification - the user made a mistake). This shows why validation alone is not enough! Validation checks if data is reasonable, not if it is correct.'
-        },
-        {
           id: "ch1-fill1",
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
@@ -195,20 +181,6 @@ OUTPUT "Accepted: ", mark
             { id: 3, answer: "UNTIL", options: ["UNTIL", "WHILE", "ENDREPEAT", "NEXT"] }
           ]
         },
-        {
-          id: "ch2-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz!",
-          content: 'Why is REPEAT...UNTIL better than WHILE for validation?',
-          options: [
-            'REPEAT...UNTIL is faster',
-            'WHILE cannot check conditions',
-            'The user must enter data at least once before we can check it',
-            'REPEAT...UNTIL uses less memory'
-          ],
-          answer: 2,
-          explanation: 'REPEAT...UNTIL executes the code block **at least once** before checking the condition. This is perfect for validation because we need the user to **enter data first** before we can validate it. A WHILE loop checks the condition first, which does not make sense when we have no data yet!'
-        },
       ]
     },
     {
@@ -259,20 +231,6 @@ ENDIF
 \`\`\`
 
 Double entry is used for things like **passwords** and **emails**. Visual check is used for **names**, **addresses**, and other data.`
-        },
-        {
-          id: "ch3-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz!",
-          content: 'Which verification method asks the user to type the same data twice?',
-          options: [
-            'Visual check',
-            'Range check',
-            'Double entry',
-            'Presence check'
-          ],
-          answer: 2,
-          explanation: '**Double entry** requires the user to enter the same data **twice**. The computer then compares both entries - if they match, the data is accepted. This is commonly used for passwords and email addresses to catch typing mistakes!'
         },
         {
           id: "ch3-predict1",

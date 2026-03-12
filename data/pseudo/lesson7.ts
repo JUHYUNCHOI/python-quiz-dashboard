@@ -64,20 +64,6 @@ OUTPUT "로그인 성공!"
 **UNTIL 조건이 참이 되면** 멈춰요!`
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 퀴즈!",
-          content: 'WHILE 반복문과 REPEAT...UNTIL 반복문의 가장 큰 차이는?',
-          options: [
-            'REPEAT가 더 빠르다',
-            'WHILE은 조건을 먼저 확인하고, REPEAT는 코드를 먼저 실행한다',
-            'REPEAT는 무한 반복만 가능하다',
-            'WHILE은 숫자만, REPEAT는 문자열만 비교할 수 있다'
-          ],
-          answer: 1,
-          explanation: '**WHILE**은 조건을 **먼저** 확인하고(거짓이면 한 번도 실행 안 됨), **REPEAT**는 코드를 **먼저 실행**한 후 조건을 확인해요(최소 1번 실행)!'
-        },
-        {
           id: "ch1-predict1",
           type: "predict",
           title: "🔮 결과를 예측해봐요!",
@@ -197,20 +183,6 @@ NEXT dan
 \`\`\`
 
 바깥 반복(dan)이 **단**을 정하고, 안쪽 반복(num)이 **곱하는 수**를 바꿔요!`
-        },
-        {
-          id: "ch2-quiz1",
-          type: "quiz",
-          title: "🧠 어떤 반복문을 쓸까요?",
-          content: '다음 상황에 가장 적절한 반복문은?\n\n"사용자가 올바른 값을 입력할 때까지 다시 입력받기"',
-          options: [
-            'FOR...TO...NEXT',
-            'WHILE...ENDWHILE',
-            'REPEAT...UNTIL',
-            'IF...THEN...ENDIF'
-          ],
-          answer: 2,
-          explanation: '입력을 **최소 한 번은 받아야** 하고, 올바른 값이 나올 **때까지** 반복해야 하므로 **REPEAT...UNTIL**이 가장 적절해요!'
         },
         {
           id: "ch2-fill1",

@@ -60,20 +60,6 @@ score가 85이니까 \`85 >= 60\`은 **참**! → **"합격!"**이 출력돼요.
 만약 score가 50이면? 조건이 **거짓**이니까 아무것도 출력되지 않아요.`
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 퀴즈!",
-          content: '다음 중 IF 조건문의 올바른 형태는?',
-          options: [
-            'IF score >= 60 THEN\n    OUTPUT "합격!"\nENDIF',
-            'IF score >= 60\n    OUTPUT "합격!"\nEND',
-            'IF score >= 60 DO\n    OUTPUT "합격!"\nENDIF',
-            'WHEN score >= 60 THEN\n    OUTPUT "합격!"\nENDWHEN'
-          ],
-          answer: 0,
-          explanation: 'CIE 수도코드에서는 **IF 조건 THEN ... ENDIF** 형태를 사용해요! THEN을 꼭 써야 하고, ENDIF로 끝내야 해요.'
-        },
-        {
           id: "ch1-predict1",
           type: "predict",
           title: "🔮 결과를 예측해봐요!",
@@ -177,20 +163,6 @@ ENDIF
             { id: 1, answer: "ELSE", options: ["ELSE", "OTHERWISE", "OR", "ELIF"] },
             { id: 2, answer: "ENDIF", options: ["ENDIF", "END", "END IF", "DONE"] }
           ]
-        },
-        {
-          id: "ch2-quiz1",
-          type: "quiz",
-          title: "🧠 퀴즈!",
-          content: 'IF...THEN...ELSE...ENDIF 문에서 반드시 참인 것은?',
-          options: [
-            'IF 부분과 ELSE 부분이 둘 다 실행된다',
-            'IF 부분과 ELSE 부분 중 하나만 실행된다',
-            'ELSE 부분은 항상 실행된다',
-            'IF 부분은 항상 실행된다'
-          ],
-          answer: 1,
-          explanation: '조건이 **참**이면 IF 부분만, **거짓**이면 ELSE 부분만 실행돼요. 둘 중 **하나만** 반드시 실행됩니다!'
         },
         {
           id: "ch2-predict2",

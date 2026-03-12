@@ -50,20 +50,6 @@ Compare with other languages:
 
 Pseudocode is the easiest to read! 😊`
         },
-        {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz!",
-          content: 'How do you display "Hello" on screen?',
-          options: [
-            'OUTPUT "Hello"',
-            'PRINT "Hello"',
-            'DISPLAY "Hello"',
-            'SHOW "Hello"'
-          ],
-          answer: 0,
-          explanation: 'In CIE pseudocode, we use **OUTPUT** to display things on screen!'
-        },
       ]
     },
     {

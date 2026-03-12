@@ -111,20 +111,6 @@ NEXT i
             { id: 2, answer: "TO", options: ["TO", "UNTIL", "UPTO", "THROUGH"] }
           ]
         },
-        {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 퀴즈!",
-          content: '다음 코드에서 "Hello"는 몇 번 출력될까요?\n\nFOR i ← 3 TO 7\n    OUTPUT "Hello"\nNEXT i',
-          options: [
-            '3번',
-            '4번',
-            '5번',
-            '7번'
-          ],
-          answer: 2,
-          explanation: 'i가 3, 4, 5, 6, 7로 총 **5번** 반복돼요! (3부터 7까지 포함이니까 7 - 3 + 1 = 5번)'
-        },
       ]
     },
     {
@@ -232,20 +218,6 @@ ENDWHILE
 | 반복 횟수 | 미리 정해짐 | 조건에 따라 다름 |
 | 카운터 변수 | 자동 관리 | 직접 관리 |
 | 사용 시기 | 횟수를 알 때 | 조건만 알 때 |`
-        },
-        {
-          id: "ch2-quiz1",
-          type: "quiz",
-          title: "🏆 마무리 퀴즈!",
-          content: '사용자가 비밀번호를 맞출 때까지 반복 입력받으려면 어떤 반복문이 가장 적절할까요?',
-          options: [
-            'FOR 반복문',
-            'WHILE 반복문',
-            '둘 다 상관없다',
-            '반복문 없이 IF문으로 가능하다'
-          ],
-          answer: 1,
-          explanation: '비밀번호를 몇 번 만에 맞출지 **미리 알 수 없으므로** **WHILE 반복문**이 적절해요! 조건(비밀번호가 틀린 동안)에 따라 반복 횟수가 달라지니까요.'
         },
       ]
     },

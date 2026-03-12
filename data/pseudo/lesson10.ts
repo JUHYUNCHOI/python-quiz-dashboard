@@ -118,20 +118,6 @@ CALL ShowInfo("철수", 15)
 결과: **철수님은 15살입니다**`
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 퀴즈!",
-          content: 'CIE 수도코드에서 프로시저를 호출할 때 사용하는 키워드는?',
-          options: [
-            'CALL',
-            'RUN',
-            'EXECUTE',
-            'DO'
-          ],
-          answer: 0,
-          explanation: 'CIE 수도코드에서 프로시저를 호출할 때는 **CALL** 키워드를 사용해요. 예: CALL Greet("Alice")'
-        },
-        {
           id: "ch1-predict1",
           type: "predict",
           title: "🔮 결과를 예측해봐요!",
@@ -269,20 +255,6 @@ FALSE
 \`\`\`
 
 함수는 INTEGER, STRING, BOOLEAN, REAL 등 어떤 자료형이든 반환할 수 있어요!`
-        },
-        {
-          id: "ch2-quiz1",
-          type: "quiz",
-          title: "🧠 퀴즈!",
-          content: '함수 정의에서 반환할 값의 자료형을 지정하는 키워드는?',
-          options: [
-            'RETURNS',
-            'RETURN',
-            'OUTPUT',
-            'GIVES'
-          ],
-          answer: 0,
-          explanation: '**RETURNS**는 함수 정의에서 반환 자료형을 지정해요. **RETURN**은 함수 안에서 실제로 값을 돌려줄 때 써요. 둘을 구분하세요!'
         },
         {
           id: "ch2-predict1",

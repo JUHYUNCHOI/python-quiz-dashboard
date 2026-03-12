@@ -66,20 +66,6 @@ How it works:
 The **temp variable** is essential for swapping - without it, you would lose one of the values!`
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz!",
-          content: "Why do we need a **temp** variable to swap two values?",
-          options: [
-            'To make the code run faster',
-            'Because CIE pseudocode requires it',
-            'Without it, one value would be overwritten and lost',
-            'To save memory space'
-          ],
-          answer: 2,
-          explanation: 'If we wrote `a ← b` then `b ← a`, the original value of `a` is **lost** after the first line! We need `temp ← a` first to save the original value, then `a ← b`, then `b ← temp`. This is the standard **three-step swap**.'
-        },
-        {
           id: "ch1-fill1",
           type: "fillblank",
           title: "✏️ Fill in the blanks!",

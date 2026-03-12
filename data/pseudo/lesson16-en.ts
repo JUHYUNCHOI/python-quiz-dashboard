@@ -79,20 +79,6 @@ Key points:
 - Loop ends when low > high (target not found)`
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz!",
-          content: "What is the **essential requirement** for binary search to work?",
-          options: [
-            'The array must contain only integers',
-            'The array must be sorted in order',
-            'The array must have an odd number of elements',
-            'The array must not contain duplicates'
-          ],
-          answer: 1,
-          explanation: 'Binary search **requires the array to be sorted**! Without sorted order, checking the middle element tells us nothing about which half contains the target. This is the most important prerequisite for binary search.'
-        },
-        {
           id: "ch1-fill1",
           type: "fillblank",
           title: "✏️ Fill in the blanks!",

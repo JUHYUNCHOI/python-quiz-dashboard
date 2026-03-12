@@ -82,20 +82,6 @@ CALL PrintSum(3, 7)
 Output: **10**`
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz!",
-          content: 'How do you run a procedure called `DrawBox` in CIE pseudocode?',
-          options: [
-            'CALL DrawBox()',
-            'RUN DrawBox()',
-            'DrawBox()',
-            'EXECUTE DrawBox()'
-          ],
-          answer: 0,
-          explanation: 'In CIE pseudocode, you must use the **CALL** keyword to run a procedure. So the correct syntax is `CALL DrawBox()`.'
-        },
-        {
           id: "ch1-fill1",
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
@@ -212,20 +198,6 @@ ENDIF
 Output: **4 is even!**
 
 Functions can return any type: INTEGER, REAL, STRING, BOOLEAN, etc.`
-        },
-        {
-          id: "ch2-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz!",
-          content: 'What is the main difference between a PROCEDURE and a FUNCTION?',
-          options: [
-            'A function returns a value; a procedure does not',
-            'A procedure can have parameters; a function cannot',
-            'A function is faster than a procedure',
-            'There is no difference'
-          ],
-          answer: 0,
-          explanation: 'The key difference is that a **FUNCTION returns a value** (using RETURN), while a **PROCEDURE does not**. Procedures perform actions; functions calculate and return results.'
         },
         {
           id: "ch2-fill2",

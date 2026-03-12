@@ -97,20 +97,6 @@ UNTIL age >= 1 AND age <= 120
 이렇게 하면 사용자에게 **왜 다시 입력해야 하는지** 알려줄 수 있어요!`
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 퀴즈!",
-          content: '"비밀번호는 8자 이상이어야 합니다"는 어떤 종류의 Validation인가요?',
-          options: [
-            'Length Check',
-            'Range Check',
-            'Type Check',
-            'Presence Check'
-          ],
-          answer: 0,
-          explanation: '비밀번호의 **길이(length)**를 확인하는 것이므로 **Length Check**예요! Range Check는 숫자의 범위를 확인하는 것이고, Type Check는 자료형을 확인하는 거예요.'
-        },
-        {
           id: "ch1-quiz2",
           type: "quiz",
           title: "🧠 퀴즈!",
@@ -227,20 +213,6 @@ OUTPUT "비밀번호가 설정되었습니다!"
 - \`<>\`는 "같지 않다"는 뜻이에요 (CIE 수도코드)
 
 이렇게 하면 오타로 잘못된 비밀번호가 설정되는 것을 막을 수 있어요!`
-        },
-        {
-          id: "ch2-quiz1",
-          type: "quiz",
-          title: "🧠 퀴즈!",
-          content: 'Validation과 Verification의 차이점으로 올바른 것은?',
-          options: [
-            'Validation은 데이터가 합리적인지, Verification은 의도한 대로 입력했는지 확인한다',
-            'Validation은 사용자가 확인하고, Verification은 컴퓨터가 확인한다',
-            'Validation과 Verification은 같은 의미이다',
-            'Validation은 출력을 확인하고, Verification은 입력을 확인한다'
-          ],
-          answer: 0,
-          explanation: '**Validation** = 데이터가 합리적(reasonable)인지 확인 (예: 나이가 1~120 사이인지). **Verification** = 사용자가 의도한 대로 입력했는지 확인 (예: 비밀번호 두 번 입력). 이 차이를 꼭 기억하세요!'
         },
         {
           id: "ch2-quiz2",
@@ -374,20 +346,6 @@ UNTIL age >= 1 AND age <= 120
           fillBlanks: [
             { id: 1, answer: "LENGTH", options: ["LENGTH", "SIZE", "COUNT", "LEN"] }
           ]
-        },
-        {
-          id: "ch3-quiz1",
-          type: "quiz",
-          title: "🧠 시험 스타일 퀴즈!",
-          content: '다음 코드에서 어떤 종류의 validation이 사용되었나요?\n\nREPEAT\n    INPUT score\nUNTIL score >= 0 AND score <= 100',
-          options: [
-            'Range Check',
-            'Length Check',
-            'Type Check',
-            'Format Check'
-          ],
-          answer: 0,
-          explanation: 'score가 **0 이상 100 이하**의 범위 안에 있는지 확인하고 있으므로 **Range Check**예요! Length Check는 문자열의 길이를, Type Check는 자료형을, Format Check는 형식(패턴)을 확인하는 거예요.'
         },
         {
           id: "ch3-fill2",

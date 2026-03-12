@@ -61,20 +61,6 @@ How it works:
 The \`RETURN i\` inside the loop is called an **early return** - we stop searching as soon as we find the answer!`
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz!",
-          content: "What does a linear search return if the target is **not found** in the array?",
-          options: [
-            '0',
-            '-1',
-            'The last index of the array',
-            'An error message'
-          ],
-          answer: 1,
-          explanation: 'By convention, we return **-1** to indicate that the target was not found. Since valid array indices are positive numbers, -1 is a clear signal that the search failed.'
-        },
-        {
           id: "ch1-fill1",
           type: "fillblank",
           title: "✏️ Fill in the blanks!",

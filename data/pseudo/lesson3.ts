@@ -64,20 +64,6 @@ INPUT age
 | 화면에 보여주기 | 키보드로 입력받기 |`
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 퀴즈!",
-          content: '사용자에게 이름을 입력받아 `name` 변수에 저장하려면?',
-          options: [
-            'INPUT name',
-            'OUTPUT name',
-            'INPUT "name"',
-            'GET name'
-          ],
-          answer: 0,
-          explanation: '**INPUT 변수이름** 형식으로 사용자의 입력을 받아요! `INPUT name`이라고 쓰면 사용자가 입력한 값이 `name`에 저장돼요.'
-        },
-        {
           id: "ch1-fill1",
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",

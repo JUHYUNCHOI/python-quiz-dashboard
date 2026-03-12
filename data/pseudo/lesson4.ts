@@ -58,20 +58,6 @@ DECLARE name : STRING
 - STRING은 큰따옴표 **" "**, CHAR는 작은따옴표 **' '**
 - BOOLEAN은 **TRUE** 아니면 **FALSE** 딱 두 가지만!`
         },
-        {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 퀴즈!",
-          content: '소수점이 있는 숫자(예: 3.14)를 저장하려면 어떤 자료형을 써야 할까요?',
-          options: [
-            'INTEGER',
-            'REAL',
-            'STRING',
-            'CHAR'
-          ],
-          answer: 1,
-          explanation: '**REAL**은 실수, 즉 소수점이 있는 숫자를 저장해요! INTEGER는 정수(소수점 없는 숫자)만 저장할 수 있어요.'
-        },
       ]
     },
     {
@@ -247,20 +233,6 @@ DECLARE pass : BOOLEAN
             { id: 2, answer: "STRING", options: ["STRING", "CHAR", "INTEGER", "BOOLEAN"] },
             { id: 3, answer: '"코드린"', options: ['"코드린"', "'코드린'", "코드린", "TRUE"] }
           ]
-        },
-        {
-          id: "ch3-quiz3",
-          type: "quiz",
-          title: "🏆 마무리 퀴즈!",
-          content: '다음 중 자료형에 대한 설명으로 **틀린** 것은?',
-          options: [
-            'INTEGER는 소수점 없는 정수를 저장한다',
-            'STRING은 큰따옴표로 감싼 글자를 저장한다',
-            'BOOLEAN은 TRUE, FALSE, MAYBE 세 가지 값을 가진다',
-            'CHAR는 작은따옴표로 감싼 한 글자를 저장한다'
-          ],
-          answer: 2,
-          explanation: 'BOOLEAN은 **TRUE와 FALSE** 딱 두 가지 값만 가져요! MAYBE는 없어요. 참 아니면 거짓, 둘 중 하나만 가능합니다!'
         },
       ]
     },

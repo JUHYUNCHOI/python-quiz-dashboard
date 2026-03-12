@@ -56,20 +56,6 @@ LENGTH is useful for:
 - Looping through each character`
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz!",
-          content: 'What does `LENGTH("Good morning")` return?',
-          options: [
-            '12',
-            '11',
-            '4',
-            '2'
-          ],
-          answer: 0,
-          explanation: '"Good morning" has 12 characters: G-o-o-d-(space)-m-o-r-n-i-n-g. Remember, **spaces count** as characters!'
-        },
-        {
           id: "ch1-case",
           type: "explain",
           title: "🔠 UCASE() and LCASE()",
@@ -174,20 +160,6 @@ Let's visualize the positions:
 - \`SUBSTRING(word, 4, 5)\` starts at position 4, takes 5 chars: **PUTER**
 
 **Important:** CIE uses **1-based indexing**, so the first character is at position **1**, not 0!`
-        },
-        {
-          id: "ch2-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz!",
-          content: 'What does `SUBSTRING("PROGRAMMING", 4, 4)` return?',
-          options: [
-            '"GRAM"',
-            '"GRAMS"',
-            '"OGRA"',
-            '"PROG"'
-          ],
-          answer: 0,
-          explanation: 'Starting at position 4 (G) and taking 4 characters: G-R-A-M = **"GRAM"**. Remember, CIE starts counting at position 1!'
         },
         {
           id: "ch2-examples",

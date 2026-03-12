@@ -61,20 +61,6 @@ What if \`score\` was **40**?
 Always remember to close with **ENDIF**!`
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 Quick Quiz!",
-          content: `What keyword ends an IF statement in CIE pseudocode?`,
-          options: [
-            "END",
-            "ENDIF",
-            "FI",
-            "STOP"
-          ],
-          answer: 1,
-          explanation: "In CIE pseudocode, every **IF** must be closed with **ENDIF**!"
-        },
-        {
           id: "ch1-predict1",
           type: "predict",
           title: "🔮 Predict the Output!",
@@ -189,20 +175,6 @@ ENDIF
             { id: 1, answer: "ELSE", options: ["ELSE", "OTHERWISE", "ELIF", "OR"] }
           ]
         },
-        {
-          id: "ch2-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz Time!",
-          content: 'In CIE pseudocode, which symbol means "not equal to"?',
-          options: [
-            '!=',
-            '<>',
-            '=/=',
-            '!=='
-          ],
-          answer: 1,
-          explanation: 'In CIE pseudocode, **<>** means "not equal to". For example: `IF x <> 0 THEN ...`'
-        }
       ]
     },
     {

@@ -53,20 +53,6 @@ DECLARE name : STRING
 변수를 사용하기 전에 먼저 **DECLARE**로 선언해야 해요! 📋`
         },
         {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "🧠 퀴즈!",
-          content: '정수(숫자)를 저장할 변수 `score`를 만들려면?',
-          options: [
-            'DECLARE score : INTEGER',
-            'DECLARE score : STRING',
-            'CREATE score : INTEGER',
-            'SET score : INTEGER'
-          ],
-          answer: 0,
-          explanation: '변수를 만들 때는 **DECLARE**를 사용해요! 정수를 저장하려면 자료형은 **INTEGER**예요.'
-        },
-        {
           id: "ch1-fill1",
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
@@ -197,20 +183,6 @@ OUTPUT x
 - 의미가 잘 드러나는 이름을 써요
 - \`x\`보다 \`score\`가 알아보기 쉽죠!
 - 여러 단어는 **camelCase**로: \`myScore\`, \`userName\``
-        },
-        {
-          id: "ch3-quiz1",
-          type: "quiz",
-          title: "🧠 퀴즈!",
-          content: '다음 중 변수 이름으로 **사용할 수 없는** 것은?',
-          options: [
-            'myAge',
-            'score1',
-            '2ndPlace',
-            'totalSum'
-          ],
-          answer: 2,
-          explanation: '변수 이름은 **숫자로 시작할 수 없어요!** `2ndPlace`는 숫자 2로 시작하므로 사용할 수 없어요. `secondPlace`로 바꿔야 해요!'
         },
         {
           id: "ch3-predict2",
