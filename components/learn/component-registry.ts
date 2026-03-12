@@ -14,6 +14,13 @@ type ComponentEntry = {
 }
 
 const registry: Record<string, ComponentEntry> = {
+  // 프로시저 & 함수 흐름 애니메이션
+  procedureFlow: {
+    load: () => import("@/components/animations/procedure-flow"),
+    exportName: "ProcedureFlow",
+    props: (step, _lang) => ({ ...step.componentProps, lang: _lang }),
+  },
+
   // 데이터 구조
   dataStructures: {
     load: () => import("@/components/animations/data-structures"),

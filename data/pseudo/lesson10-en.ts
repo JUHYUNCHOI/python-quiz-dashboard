@@ -82,6 +82,20 @@ CALL PrintSum(3, 7)
 Output: **10**`
         },
         {
+          id: "ch1-flow",
+          type: "interactive",
+          component: "procedureFlow",
+          title: "🎬 PROCEDURE Call Flow",
+          description: "See how CALL works step by step!",
+          componentProps: {
+            mode: "procedure",
+            procName: "Greet",
+            procParams: "name : STRING",
+            procBody: 'OUTPUT "Hello, " & name & "!"',
+            callCode: 'CALL Greet("Alice")',
+          }
+        },
+        {
           id: "ch1-fill1",
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
@@ -200,6 +214,22 @@ Output: **4 is even!**
 Functions can return any type: INTEGER, REAL, STRING, BOOLEAN, etc.`
         },
         {
+          id: "ch2-flow",
+          type: "interactive",
+          component: "procedureFlow",
+          title: "🎬 FUNCTION Return Flow",
+          description: "See how RETURN sends back a value!",
+          componentProps: {
+            mode: "function",
+            funcName: "Square",
+            funcParams: "n : INTEGER",
+            funcBody: "RETURN n * n",
+            funcReturns: "INTEGER",
+            callAssign: "result ← Square(4)",
+            returnValue: "16",
+          }
+        },
+        {
           id: "ch2-fill2",
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
@@ -285,6 +315,16 @@ DECLARE g : STRING
 g ← CalcGrade(95)
 OUTPUT g
 \`\`\``
+        },
+        {
+          id: "ch3-flow",
+          type: "interactive",
+          component: "procedureFlow",
+          title: "🎬 PROCEDURE vs FUNCTION Comparison",
+          description: "Compare them side by side!",
+          componentProps: {
+            mode: "compare",
+          }
         },
         {
           id: "ch3-exam",

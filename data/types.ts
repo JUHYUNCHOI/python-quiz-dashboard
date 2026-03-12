@@ -25,13 +25,7 @@ export interface LessonStep {
   explanation?: string
   // interactive 타입용
   component?: string
-  componentProps?: {
-    funcName?: string
-    params?: string[]
-    body?: string
-    callArgs?: string[]
-    output?: string
-  }
+  componentProps?: Record<string, any>
   description?: string
   // typeAlong 컴포넌트용
   targetCode?: string

@@ -118,6 +118,20 @@ CALL ShowInfo("철수", 15)
 결과: **철수님은 15살입니다**`
         },
         {
+          id: "ch1-flow",
+          type: "interactive",
+          component: "procedureFlow",
+          title: "🎬 PROCEDURE 호출 흐름",
+          description: "CALL이 어떻게 작동하는지 봐봐요!",
+          componentProps: {
+            mode: "procedure",
+            procName: "Greet",
+            procParams: "name : STRING",
+            procBody: 'OUTPUT "안녕하세요, " & name & "님!"',
+            callCode: 'CALL Greet("민수")',
+          }
+        },
+        {
           id: "ch1-predict1",
           type: "predict",
           title: "🔮 결과를 예측해봐요!",
@@ -257,6 +271,22 @@ FALSE
 함수는 INTEGER, STRING, BOOLEAN, REAL 등 어떤 자료형이든 반환할 수 있어요!`
         },
         {
+          id: "ch2-flow",
+          type: "interactive",
+          component: "procedureFlow",
+          title: "🎬 FUNCTION 반환 흐름",
+          description: "RETURN이 어떻게 값을 돌려주는지 봐봐요!",
+          componentProps: {
+            mode: "function",
+            funcName: "Square",
+            funcParams: "n : INTEGER",
+            funcBody: "RETURN n * n",
+            funcReturns: "INTEGER",
+            callAssign: "result ← Square(4)",
+            returnValue: "16",
+          }
+        },
+        {
           id: "ch2-predict1",
           type: "predict",
           title: "🔮 결과를 예측해봐요!",
@@ -328,6 +358,16 @@ ENDFUNCTION
 DECLARE a : INTEGER
 a ← Area(4, 5)
 \`\`\``
+        },
+        {
+          id: "ch3-flow",
+          type: "interactive",
+          component: "procedureFlow",
+          title: "🎬 PROCEDURE vs FUNCTION 비교",
+          description: "두 개를 나란히 비교해봐요!",
+          componentProps: {
+            mode: "compare",
+          }
         },
         {
           id: "ch3-exam",
