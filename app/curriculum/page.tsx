@@ -292,13 +292,30 @@ export default function CurriculumPage() {
         { id: "pseudo-p3", title: t("📋 종합 프로젝트 3", "📋 Combined Project 3"), description: t("Part 3 복습 프로젝트", "Part 3 Review Project"), duration: t("30분", "30 min"), isProject: true },
       ],
     },
+    {
+      id: "pseudo-part4",
+      title: t("Part 4: 시험 대비", "Part 4: Exam Prep"),
+      description: t(
+        "플로우차트, 레코드 타입, SQL, 불리언 로직까지! IGCSE Paper 2 시험의 나머지 핵심 주제를 완벽하게 마무리해요.",
+        "Flowcharts, record types, SQL, and Boolean logic! Complete all remaining IGCSE Paper 2 exam topics."
+      ),
+      lessons: [
+        { id: "pseudo-21", title: t("21. 플로우차트 기초", "21. Flowchart Basics"), description: t("기호, 읽기, 수도코드 변환", "Symbols, reading, pseudocode conversion"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "pseudo-22", title: t("22. 플로우차트 실전", "22. Flowchart Practice"), description: t("Trace Table, 설계, 시험 연습", "Trace tables, design, exam practice"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "pseudo-23", title: t("23. 레코드 타입", "23. Record Types"), description: "TYPE...ENDTYPE, ARRAY OF records", duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-24", title: t("24. SQL 기초", "24. SQL Basics"), description: "SELECT, FROM, WHERE", duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-25", title: t("25. SQL 심화", "25. SQL Advanced"), description: "ORDER BY, COUNT, SUM, AVG", duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-26", title: t("26. 불리언 로직 1", "26. Boolean Logic 1"), description: t("AND, OR, NOT 게이트와 진리표", "AND, OR, NOT gates & truth tables"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "pseudo-27", title: t("27. 불리언 로직 2", "27. Boolean Logic 2"), description: t("NAND, NOR, XOR과 논리 회로", "NAND, NOR, XOR & logic circuits"), duration: t("25분", "25 min"), hasQuiz: true },
+      ],
+    },
   ]
 
   const { profile } = useAuth()
   const isTeacher = profile?.role === "teacher"
 
   const [completedLessons, setCompletedLessons] = useState<Set<number | string>>(new Set())
-  const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set(["part1", "part2", "part3", "part3-advanced", "part4", "part5", "part6", "part7", "part8", "part9", "cpp-part1", "cpp-part2", "cpp-part3", "pseudo-part1", "pseudo-part2", "pseudo-part3"]))
+  const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set(["part1", "part2", "part3", "part3-advanced", "part4", "part5", "part6", "part7", "part8", "part9", "cpp-part1", "cpp-part2", "cpp-part3", "pseudo-part1", "pseudo-part2", "pseudo-part3", "pseudo-part4"]))
   const [selectedCourse, setSelectedCourse] = useState<CourseType>("python")
   const [loaded, setLoaded] = useState(false)
 

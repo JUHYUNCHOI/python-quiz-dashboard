@@ -64,6 +64,8 @@ import {
   pseudoLesson13Data, pseudoLesson14Data,
   pseudoLesson15Data, pseudoLesson16Data, pseudoLesson17Data, pseudoLesson18Data,
   pseudoLesson19Data, pseudoLesson20Data,
+  pseudoLesson21Data, pseudoLesson22Data, pseudoLesson23Data, pseudoLesson24Data,
+  pseudoLesson25Data, pseudoLesson26Data, pseudoLesson27Data,
   pseudoLessonP1Data, pseudoLessonP2Data, pseudoLessonP3Data,
   // Pseudocode English lessons
   pseudoLesson1EnData, pseudoLesson2EnData, pseudoLesson3EnData, pseudoLesson4EnData,
@@ -72,6 +74,8 @@ import {
   pseudoLesson13EnData, pseudoLesson14EnData,
   pseudoLesson15EnData, pseudoLesson16EnData, pseudoLesson17EnData, pseudoLesson18EnData,
   pseudoLesson19EnData, pseudoLesson20EnData,
+  pseudoLesson21EnData, pseudoLesson22EnData, pseudoLesson23EnData, pseudoLesson24EnData,
+  pseudoLesson25EnData, pseudoLesson26EnData, pseudoLesson27EnData,
   pseudoLessonP1EnData, pseudoLessonP2EnData, pseudoLessonP3EnData,
 } from "@/data"
 import { loadLesson, isBilingual, getAllLessonIds, getBilingualLessonIds } from "@/data"
@@ -116,6 +120,9 @@ export const lessonsData: Record<string, LessonData> = {
   // Pseudocode Part 3
   "pseudo-15": pseudoLesson15Data, "pseudo-16": pseudoLesson16Data, "pseudo-17": pseudoLesson17Data, "pseudo-18": pseudoLesson18Data,
   "pseudo-19": pseudoLesson19Data, "pseudo-20": pseudoLesson20Data, "pseudo-p3": pseudoLessonP3Data,
+  // Pseudocode Part 4
+  "pseudo-21": pseudoLesson21Data, "pseudo-22": pseudoLesson22Data, "pseudo-23": pseudoLesson23Data, "pseudo-24": pseudoLesson24Data,
+  "pseudo-25": pseudoLesson25Data, "pseudo-26": pseudoLesson26Data, "pseudo-27": pseudoLesson27Data,
 }
 
 // 라이브러리 변형 (turtle/pygame 등) — 양언어 지원
@@ -248,6 +255,14 @@ export const bilingualLessons: Record<string, { ko: LessonData, en: LessonData }
   "pseudo-19": { ko: pseudoLesson19Data, en: pseudoLesson19EnData },
   "pseudo-20": { ko: pseudoLesson20Data, en: pseudoLesson20EnData },
   "pseudo-p3": { ko: pseudoLessonP3Data, en: pseudoLessonP3EnData },
+  // Pseudocode Part 4: 시험 대비
+  "pseudo-21": { ko: pseudoLesson21Data, en: pseudoLesson21EnData },
+  "pseudo-22": { ko: pseudoLesson22Data, en: pseudoLesson22EnData },
+  "pseudo-23": { ko: pseudoLesson23Data, en: pseudoLesson23EnData },
+  "pseudo-24": { ko: pseudoLesson24Data, en: pseudoLesson24EnData },
+  "pseudo-25": { ko: pseudoLesson25Data, en: pseudoLesson25EnData },
+  "pseudo-26": { ko: pseudoLesson26Data, en: pseudoLesson26EnData },
+  "pseudo-27": { ko: pseudoLesson27Data, en: pseudoLesson27EnData },
 }
 
 // ============================================

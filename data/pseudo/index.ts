@@ -28,6 +28,15 @@ export { pseudoLesson18Data } from './lesson18'
 export { pseudoLesson19Data } from './lesson19'
 export { pseudoLesson20Data } from './lesson20'
 
+// Korean - Part 4 (시험 대비)
+export { pseudoLesson21Data } from './lesson21'
+export { pseudoLesson22Data } from './lesson22'
+export { pseudoLesson23Data } from './lesson23'
+export { pseudoLesson24Data } from './lesson24'
+export { pseudoLesson25Data } from './lesson25'
+export { pseudoLesson26Data } from './lesson26'
+export { pseudoLesson27Data } from './lesson27'
+
 // Korean projects
 export { pseudoLessonP1Data } from './lessonP1'
 export { pseudoLessonP2Data } from './lessonP2'
@@ -58,6 +67,15 @@ export { pseudoLesson17EnData } from './lesson17-en'
 export { pseudoLesson18EnData } from './lesson18-en'
 export { pseudoLesson19EnData } from './lesson19-en'
 export { pseudoLesson20EnData } from './lesson20-en'
+
+// English - Part 4 (Exam Prep)
+export { pseudoLesson21EnData } from './lesson21-en'
+export { pseudoLesson22EnData } from './lesson22-en'
+export { pseudoLesson23EnData } from './lesson23-en'
+export { pseudoLesson24EnData } from './lesson24-en'
+export { pseudoLesson25EnData } from './lesson25-en'
+export { pseudoLesson26EnData } from './lesson26-en'
+export { pseudoLesson27EnData } from './lesson27-en'
 
 // English projects
 export { pseudoLessonP1EnData } from './lessonP1-en'

@@ -461,6 +461,36 @@ const registry: Record<string, LessonEntry> = {
     load: () => import('./pseudo/lessonP3'), exportName: 'pseudoLessonP3Data',
     enLoad: () => import('./pseudo/lessonP3-en'), enExportName: 'pseudoLessonP3EnData',
   },
+
+  // Pseudocode Part 4: 시험 대비 (pseudo-21 ~ pseudo-27)
+  "pseudo-21": {
+    load: () => import('./pseudo/lesson21'), exportName: 'pseudoLesson21Data',
+    enLoad: () => import('./pseudo/lesson21-en'), enExportName: 'pseudoLesson21EnData',
+  },
+  "pseudo-22": {
+    load: () => import('./pseudo/lesson22'), exportName: 'pseudoLesson22Data',
+    enLoad: () => import('./pseudo/lesson22-en'), enExportName: 'pseudoLesson22EnData',
+  },
+  "pseudo-23": {
+    load: () => import('./pseudo/lesson23'), exportName: 'pseudoLesson23Data',
+    enLoad: () => import('./pseudo/lesson23-en'), enExportName: 'pseudoLesson23EnData',
+  },
+  "pseudo-24": {
+    load: () => import('./pseudo/lesson24'), exportName: 'pseudoLesson24Data',
+    enLoad: () => import('./pseudo/lesson24-en'), enExportName: 'pseudoLesson24EnData',
+  },
+  "pseudo-25": {
+    load: () => import('./pseudo/lesson25'), exportName: 'pseudoLesson25Data',
+    enLoad: () => import('./pseudo/lesson25-en'), enExportName: 'pseudoLesson25EnData',
+  },
+  "pseudo-26": {
+    load: () => import('./pseudo/lesson26'), exportName: 'pseudoLesson26Data',
+    enLoad: () => import('./pseudo/lesson26-en'), enExportName: 'pseudoLesson26EnData',
+  },
+  "pseudo-27": {
+    load: () => import('./pseudo/lesson27'), exportName: 'pseudoLesson27Data',
+    enLoad: () => import('./pseudo/lesson27-en'), enExportName: 'pseudoLesson27EnData',
+  },
 }
 
 // ============================================
@@ -690,6 +720,13 @@ export { pseudoLesson17Data } from './pseudo/lesson17'
 export { pseudoLesson18Data } from './pseudo/lesson18'
 export { pseudoLesson19Data } from './pseudo/lesson19'
 export { pseudoLesson20Data } from './pseudo/lesson20'
+export { pseudoLesson21Data } from './pseudo/lesson21'
+export { pseudoLesson22Data } from './pseudo/lesson22'
+export { pseudoLesson23Data } from './pseudo/lesson23'
+export { pseudoLesson24Data } from './pseudo/lesson24'
+export { pseudoLesson25Data } from './pseudo/lesson25'
+export { pseudoLesson26Data } from './pseudo/lesson26'
+export { pseudoLesson27Data } from './pseudo/lesson27'
 export { pseudoLessonP1Data } from './pseudo/lessonP1'
 export { pseudoLessonP2Data } from './pseudo/lessonP2'
 export { pseudoLessonP3Data } from './pseudo/lessonP3'
@@ -715,6 +752,13 @@ export { pseudoLesson17EnData } from './pseudo/lesson17-en'
 export { pseudoLesson18EnData } from './pseudo/lesson18-en'
 export { pseudoLesson19EnData } from './pseudo/lesson19-en'
 export { pseudoLesson20EnData } from './pseudo/lesson20-en'
+export { pseudoLesson21EnData } from './pseudo/lesson21-en'
+export { pseudoLesson22EnData } from './pseudo/lesson22-en'
+export { pseudoLesson23EnData } from './pseudo/lesson23-en'
+export { pseudoLesson24EnData } from './pseudo/lesson24-en'
+export { pseudoLesson25EnData } from './pseudo/lesson25-en'
+export { pseudoLesson26EnData } from './pseudo/lesson26-en'
+export { pseudoLesson27EnData } from './pseudo/lesson27-en'
 export { pseudoLessonP1EnData } from './pseudo/lessonP1-en'
 export { pseudoLessonP2EnData } from './pseudo/lessonP2-en'
 export { pseudoLessonP3EnData } from './pseudo/lessonP3-en'
