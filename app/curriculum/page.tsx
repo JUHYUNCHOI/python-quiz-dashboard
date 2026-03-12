@@ -22,7 +22,7 @@ import {
 // ============================================================
 // 코스 타입
 // ============================================================
-type CourseType = "python" | "cpp"
+type CourseType = "python" | "cpp" | "pseudo"
 
 // ============================================================
 // /review에 실제 레슨이 있는 ID 목록 (게임형 복습) — Python 전용
@@ -238,11 +238,33 @@ export default function CurriculumPage() {
     },
   ]
 
+  const pseudoCurriculumData: PartData[] = [
+    {
+      id: "pseudo-part1",
+      title: t("Part 1: 수도코드 기초", "Part 1: Pseudocode Basics"),
+      description: t(
+        "프로그래밍 언어 없이 알고리즘 사고력을 키워요! CIE 수도코드로 논리적으로 생각하는 법을 배워요.",
+        "Build algorithmic thinking without any programming language! Learn to think logically with CIE pseudocode."
+      ),
+      lessons: [
+        { id: "pseudo-1", title: t("1. OUTPUT 출력", "1. OUTPUT"), description: t("화면에 글자를 출력해요!", "Display text on screen!"), duration: t("15분", "15 min"), hasQuiz: true },
+        { id: "pseudo-2", title: t("2. 변수", "2. Variables"), description: t("데이터를 저장하는 상자 SET ←", "A box that stores data SET ←"), duration: t("15분", "15 min"), hasQuiz: true },
+        { id: "pseudo-3", title: t("3. INPUT 입력", "3. INPUT"), description: t("사용자에게 입력받기", "Getting input from the user"), duration: t("15분", "15 min"), hasQuiz: true },
+        { id: "pseudo-4", title: t("4. 자료형", "4. Data Types"), description: "INTEGER, REAL, STRING, BOOLEAN", duration: t("15분", "15 min"), hasQuiz: true },
+        { id: "pseudo-5", title: t("5. 조건문", "5. Conditionals"), description: "IF...THEN...ELSE...ENDIF", duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-6", title: t("6. 반복문 1", "6. Loops 1"), description: t("FOR...TO...NEXT, WHILE", "FOR...TO...NEXT, WHILE"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-7", title: t("7. 반복문 2", "7. Loops 2"), description: t("REPEAT...UNTIL, 중첩 반복", "REPEAT...UNTIL, nested loops"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-8", title: t("8. 배열", "8. Arrays"), description: t("DECLARE 배열, 인덱싱", "DECLARE arrays, indexing"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-p1", title: t("📋 종합 프로젝트", "📋 Combined Project"), description: t("Part 1 복습 프로젝트", "Part 1 Review Project"), duration: t("25분", "25 min"), isProject: true },
+      ],
+    },
+  ]
+
   const { profile } = useAuth()
   const isTeacher = profile?.role === "teacher"
 
   const [completedLessons, setCompletedLessons] = useState<Set<number | string>>(new Set())
-  const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set(["part1", "part2", "part3", "part3-advanced", "part4", "part5", "part6", "part7", "part8", "part9", "cpp-part1", "cpp-part2", "cpp-part3"]))
+  const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set(["part1", "part2", "part3", "part3-advanced", "part4", "part5", "part6", "part7", "part8", "part9", "cpp-part1", "cpp-part2", "cpp-part3", "pseudo-part1"]))
   const [selectedCourse, setSelectedCourse] = useState<CourseType>("python")
   const [loaded, setLoaded] = useState(false)
 
@@ -254,7 +276,7 @@ export default function CurriculumPage() {
       setCompletedLessons(new Set(arr.map(id => typeof id === "string" && /^\d+$/.test(id) ? Number(id) : id)))
     }
     const savedCourse = localStorage.getItem("selectedCourse") as CourseType
-    if (savedCourse === "python" || savedCourse === "cpp") {
+    if (savedCourse === "python" || savedCourse === "cpp" || savedCourse === "pseudo") {
       setSelectedCourse(savedCourse)
     }
     setLoaded(true)
@@ -290,7 +312,7 @@ export default function CurriculumPage() {
     }
 
     // 다음 미완료 수업으로 스크롤
-    const data = selectedCourse === "python" ? pythonCurriculumData : cppCurriculumData
+    const data = selectedCourse === "python" ? pythonCurriculumData : selectedCourse === "cpp" ? cppCurriculumData : pseudoCurriculumData
     for (const part of data) {
       for (const lesson of part.lessons) {
         if (!completedLessons.has(lesson.id)) {
@@ -311,8 +333,9 @@ export default function CurriculumPage() {
     localStorage.setItem("selectedCourse", course)
   }
 
-  const curriculumData = selectedCourse === "python" ? pythonCurriculumData : cppCurriculumData
+  const curriculumData = selectedCourse === "python" ? pythonCurriculumData : selectedCourse === "cpp" ? cppCurriculumData : pseudoCurriculumData
   const isCpp = selectedCourse === "cpp"
+  const isPseudo = selectedCourse === "pseudo"
 
   const allLessons = curriculumData.flatMap((part) => part.lessons)
   const totalCount = allLessons.length
@@ -394,6 +417,16 @@ export default function CurriculumPage() {
             >
               ⚡ C++
             </button>
+            <button
+              onClick={() => handleCourseChange("pseudo")}
+              className={`flex items-center gap-2 px-5 py-3 rounded-xl border-3 border-black font-bold text-base transition-all ${
+                selectedCourse === "pseudo"
+                  ? "bg-green-500 text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
+                  : "bg-white text-gray-600 hover:bg-green-50"
+              }`}
+            >
+              📋 Pseudo
+            </button>
           </div>
         </div>
 
@@ -402,15 +435,15 @@ export default function CurriculumPage() {
           <div className={`bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-6 border-4 border-black`}>
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4">
               <div className="flex items-center gap-4">
-                <div className={`${isCpp ? 'bg-blue-100' : 'bg-orange-100'} p-3 rounded-xl border-2 border-black`}>
-                  <BookOpen className={`h-8 w-8 ${isCpp ? 'text-blue-500' : 'text-orange-500'}`} />
+                <div className={`${isPseudo ? 'bg-green-100' : isCpp ? 'bg-blue-100' : 'bg-orange-100'} p-3 rounded-xl border-2 border-black`}>
+                  <BookOpen className={`h-8 w-8 ${isPseudo ? 'text-green-500' : isCpp ? 'text-blue-500' : 'text-orange-500'}`} />
                 </div>
                 <div>
                   <h1 className="text-2xl sm:text-3xl font-bold">
-                    {isCpp ? t("C++ 기초 (파이썬 → C++)", "C++ Basics (Python → C++)") : t("파이썬 기초 마스터", "Python Basics Master")}
+                    {isPseudo ? t("수도코드 기초", "Pseudocode Basics") : isCpp ? t("C++ 기초 (파이썬 → C++)", "C++ Basics (Python → C++)") : t("파이썬 기초 마스터", "Python Basics Master")}
                   </h1>
                   <p className="text-gray-600 text-sm sm:text-base">
-                    {isCpp ? t("파이썬을 아는 학생을 위한 C++ 입문! ⚡", "C++ for Python students! ⚡") : t("웹에서 바로 배우는 파이썬! 🚀", "Learn Python on the web! 🚀")}
+                    {isPseudo ? t("알고리즘 사고력을 키워요! 📋", "Build algorithmic thinking! 📋") : isCpp ? t("파이썬을 아는 학생을 위한 C++ 입문! ⚡", "C++ for Python students! ⚡") : t("웹에서 바로 배우는 파이썬! 🚀", "Learn Python on the web! 🚀")}
                   </p>
                 </div>
               </div>
@@ -433,13 +466,13 @@ export default function CurriculumPage() {
               <div className="flex-1">
                 <div className="h-4 sm:h-5 bg-gray-200 rounded-full border-2 border-black overflow-hidden">
                   <div
-                    className={`h-full transition-all duration-500 ${isCpp ? 'bg-gradient-to-r from-blue-400 to-blue-500' : 'bg-gradient-to-r from-orange-400 to-orange-500'}`}
+                    className={`h-full transition-all duration-500 ${isPseudo ? 'bg-gradient-to-r from-green-400 to-green-500' : isCpp ? 'bg-gradient-to-r from-blue-400 to-blue-500' : 'bg-gradient-to-r from-orange-400 to-orange-500'}`}
                     style={{ width: `${progress}%` }}
                   />
                 </div>
               </div>
               <div className="text-right flex-shrink-0">
-                <span className={`text-xl sm:text-2xl font-bold ${isCpp ? 'text-blue-500' : 'text-orange-500'}`}>{progress}%</span>
+                <span className={`text-xl sm:text-2xl font-bold ${isPseudo ? 'text-green-500' : isCpp ? 'text-blue-500' : 'text-orange-500'}`}>{progress}%</span>
                 <span className="text-gray-500 ml-1 text-sm">({completedCount}/{totalCount})</span>
               </div>
             </div>
@@ -492,11 +525,11 @@ export default function CurriculumPage() {
                             <span className="text-xs font-semibold text-gray-500">
                               {partCompletedCount}/{partLessons.length} {t("완료", "done")}
                             </span>
-                            <span className={`text-xs font-bold ${isCpp ? 'text-blue-500' : 'text-orange-500'}`}>{partProgress}%</span>
+                            <span className={`text-xs font-bold ${isPseudo ? 'text-green-500' : isCpp ? 'text-blue-500' : 'text-orange-500'}`}>{partProgress}%</span>
                           </div>
                           <div className="h-2 bg-gray-200 rounded-full border border-black overflow-hidden">
                             <div
-                              className={`h-full transition-all duration-300 ${isCpp ? 'bg-gradient-to-r from-blue-400 to-blue-500' : 'bg-gradient-to-r from-orange-400 to-orange-500'}`}
+                              className={`h-full transition-all duration-300 ${isPseudo ? 'bg-gradient-to-r from-green-400 to-green-500' : isCpp ? 'bg-gradient-to-r from-blue-400 to-blue-500' : 'bg-gradient-to-r from-orange-400 to-orange-500'}`}
                               style={{ width: `${partProgress}%` }}
                             />
                           </div>
@@ -526,7 +559,7 @@ export default function CurriculumPage() {
                                 isLocked
                                   ? 'bg-gray-100 border-gray-300 opacity-60'
                                   : isNextLesson
-                                    ? `bg-white border-orange-400 ring-2 ${isCpp ? 'ring-blue-400' : 'ring-orange-400'} ring-offset-1 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]`
+                                    ? `bg-white border-orange-400 ring-2 ${isPseudo ? 'ring-green-400' : isCpp ? 'ring-blue-400' : 'ring-orange-400'} ring-offset-1 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]`
                                     : 'bg-white border-black hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]'
                               }`}
                             >
@@ -554,7 +587,7 @@ export default function CurriculumPage() {
                                   </h3>
                                   <div className="flex items-center gap-2 mt-1 flex-wrap">
                                     {isNextLesson && !isLocked && (
-                                      <span className={`whitespace-nowrap px-2 py-0.5 rounded-full text-xs font-bold text-white animate-pulse ${isCpp ? 'bg-blue-500' : 'bg-orange-500'}`}>
+                                      <span className={`whitespace-nowrap px-2 py-0.5 rounded-full text-xs font-bold text-white animate-pulse ${isPseudo ? 'bg-green-500' : isCpp ? 'bg-blue-500' : 'bg-orange-500'}`}>
                                         ▶ {t("다음", "Next")}
                                       </span>
                                     )}
@@ -594,12 +627,12 @@ export default function CurriculumPage() {
                                       <Link
                                         href={`/learn/${lesson.id}`}
                                         className={`px-3 sm:px-4 py-2 rounded-lg border-2 border-black font-bold text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-xs sm:text-sm ${
-                                          isCpp ? "bg-blue-500 hover:bg-blue-600" : "bg-green-500 hover:bg-green-600"
+                                          isPseudo ? "bg-green-500 hover:bg-green-600" : isCpp ? "bg-blue-500 hover:bg-blue-600" : "bg-green-500 hover:bg-green-600"
                                         }`}
                                       >
                                         {t("📺 수업", "📺 Lesson")}
                                       </Link>
-                                      {(!isCpp || cppReviewIds.has(String(lesson.id))) && (
+                                      {!isPseudo && (!isCpp || cppReviewIds.has(String(lesson.id))) && (
                                         <Link
                                           href={getReviewPath(lesson.id)}
                                           className={`px-3 sm:px-4 py-2 rounded-lg border-2 border-black font-bold text-xs sm:text-sm ${

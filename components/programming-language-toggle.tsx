@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
 
-type ProgrammingLanguage = "python" | "cpp"
+type ProgrammingLanguage = "python" | "cpp" | "pseudo"
 
 interface Props {
   current: ProgrammingLanguage
@@ -44,6 +44,17 @@ export function ProgrammingLanguageToggle({ current, className }: Props) {
         )}
       >
         ⚡ C++
+      </button>
+      <button
+        onClick={() => handleSwitch("pseudo")}
+        className={cn(
+          "px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium transition-all",
+          current === "pseudo"
+            ? "bg-white text-green-600 shadow-sm"
+            : "text-gray-500 hover:text-gray-700"
+        )}
+      >
+        📋 Pseudo
       </button>
     </div>
   )

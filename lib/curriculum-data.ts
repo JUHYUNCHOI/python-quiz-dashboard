@@ -29,6 +29,10 @@ export const cppParts: PartMeta[] = [
   { id: "cpp-part3", title: "Part 3: USACO 준비", titleEn: "Part 3: USACO Prep", lessonIds: ["cpp-15", "cpp-16", "cpp-17", "cpp-18", "cpp-19", "cpp-20", "cpp-p3"] },
 ]
 
+export const pseudoParts: PartMeta[] = [
+  { id: "pseudo-part1", title: "Part 1: 수도코드 기초", titleEn: "Part 1: Pseudocode Basics", lessonIds: ["pseudo-1", "pseudo-2", "pseudo-3", "pseudo-4", "pseudo-5", "pseudo-6", "pseudo-7", "pseudo-8", "pseudo-p1"] },
+]
+
 /** 완료된 레슨 Set을 localStorage에서 로드 */
 export function getCompletedLessons(): Set<number | string> {
   try {

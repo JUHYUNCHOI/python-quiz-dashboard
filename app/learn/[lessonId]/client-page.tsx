@@ -14,7 +14,7 @@ import { useLessonSync } from "@/hooks/use-lesson-sync"
 import { markLessonComplete } from "@/lib/mark-lesson-complete"
 import { useGamification } from "@/hooks/use-gamification"
 import { logActivity } from "@/lib/activity-log"
-import { getCompletedLessons, pythonParts, cppParts } from "@/lib/curriculum-data"
+import { getCompletedLessons, pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
 import { useAuth } from "@/contexts/auth-context"
 
 // 분리된 컴포넌트
@@ -32,7 +32,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
 
   const isBilingual = lessonId in bilingualLessons
   const hasVariants = lessonId in lessonVariants
-  const currentProgrammingLang = lessonId.startsWith("cpp-") ? "cpp" as const : "python" as const
+  const currentProgrammingLang = lessonId.startsWith("pseudo-") ? "pseudo" as const : lessonId.startsWith("cpp-") ? "cpp" as const : "python" as const
 
   // 라이브러리 변형 상태 (turtle/pygame)
   const [variant, setVariant] = useState<LibraryVariant>(() => {
@@ -153,7 +153,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     const idNormalized: (number | string) = /^\d+$/.test(lessonId) ? Number(lessonId) : lessonId
     // Python과 C++ 트랙을 분리하여 잠금 체크
     const isCpp = String(lessonId).startsWith("cpp-")
-    const trackParts = isCpp ? cppParts : pythonParts
+    const isPseudo = String(lessonId).startsWith("pseudo-")
+    const trackParts = isPseudo ? pseudoParts : isCpp ? cppParts : pythonParts
     const trackIds = trackParts.flatMap(p => p.lessonIds)
     const idx = trackIds.indexOf(idNormalized)
     if (idx <= 0) return false // 첫 수업 또는 알 수 없는 ID → 열림

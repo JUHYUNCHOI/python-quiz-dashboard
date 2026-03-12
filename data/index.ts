@@ -362,6 +362,45 @@ const registry: Record<string, LessonEntry> = {
     load: () => import('./cpp/lessonP3'), exportName: 'cppLessonP3Data',
     enLoad: () => import('./cpp/lessonP3-en'), enExportName: 'cppLessonP3EnData',
   },
+
+  // Pseudocode Part 1: 수도코드 기초 (pseudo-1 ~ pseudo-8)
+  "pseudo-1": {
+    load: () => import('./pseudo/lesson1'), exportName: 'pseudoLesson1Data',
+    enLoad: () => import('./pseudo/lesson1-en'), enExportName: 'pseudoLesson1EnData',
+  },
+  "pseudo-2": {
+    load: () => import('./pseudo/lesson2'), exportName: 'pseudoLesson2Data',
+    enLoad: () => import('./pseudo/lesson2-en'), enExportName: 'pseudoLesson2EnData',
+  },
+  "pseudo-3": {
+    load: () => import('./pseudo/lesson3'), exportName: 'pseudoLesson3Data',
+    enLoad: () => import('./pseudo/lesson3-en'), enExportName: 'pseudoLesson3EnData',
+  },
+  "pseudo-4": {
+    load: () => import('./pseudo/lesson4'), exportName: 'pseudoLesson4Data',
+    enLoad: () => import('./pseudo/lesson4-en'), enExportName: 'pseudoLesson4EnData',
+  },
+  "pseudo-5": {
+    load: () => import('./pseudo/lesson5'), exportName: 'pseudoLesson5Data',
+    enLoad: () => import('./pseudo/lesson5-en'), enExportName: 'pseudoLesson5EnData',
+  },
+  "pseudo-6": {
+    load: () => import('./pseudo/lesson6'), exportName: 'pseudoLesson6Data',
+    enLoad: () => import('./pseudo/lesson6-en'), enExportName: 'pseudoLesson6EnData',
+  },
+  "pseudo-7": {
+    load: () => import('./pseudo/lesson7'), exportName: 'pseudoLesson7Data',
+    enLoad: () => import('./pseudo/lesson7-en'), enExportName: 'pseudoLesson7EnData',
+  },
+  "pseudo-8": {
+    load: () => import('./pseudo/lesson8'), exportName: 'pseudoLesson8Data',
+    enLoad: () => import('./pseudo/lesson8-en'), enExportName: 'pseudoLesson8EnData',
+  },
+  // Pseudocode 프로젝트 레슨
+  "pseudo-p1": {
+    load: () => import('./pseudo/lessonP1'), exportName: 'pseudoLessonP1Data',
+    enLoad: () => import('./pseudo/lessonP1-en'), enExportName: 'pseudoLessonP1EnData',
+  },
 }
 
 // ============================================
@@ -569,5 +608,27 @@ export { cppLesson20EnData } from './cpp/lesson20-en'
 export { cppLessonP1EnData } from './cpp/lessonP1-en'
 export { cppLessonP2EnData } from './cpp/lessonP2-en'
 export { cppLessonP3EnData } from './cpp/lessonP3-en'
+
+// Pseudocode Korean lessons
+export { pseudoLesson1Data } from './pseudo/lesson1'
+export { pseudoLesson2Data } from './pseudo/lesson2'
+export { pseudoLesson3Data } from './pseudo/lesson3'
+export { pseudoLesson4Data } from './pseudo/lesson4'
+export { pseudoLesson5Data } from './pseudo/lesson5'
+export { pseudoLesson6Data } from './pseudo/lesson6'
+export { pseudoLesson7Data } from './pseudo/lesson7'
+export { pseudoLesson8Data } from './pseudo/lesson8'
+export { pseudoLessonP1Data } from './pseudo/lessonP1'
+
+// Pseudocode English lessons
+export { pseudoLesson1EnData } from './pseudo/lesson1-en'
+export { pseudoLesson2EnData } from './pseudo/lesson2-en'
+export { pseudoLesson3EnData } from './pseudo/lesson3-en'
+export { pseudoLesson4EnData } from './pseudo/lesson4-en'
+export { pseudoLesson5EnData } from './pseudo/lesson5-en'
+export { pseudoLesson6EnData } from './pseudo/lesson6-en'
+export { pseudoLesson7EnData } from './pseudo/lesson7-en'
+export { pseudoLesson8EnData } from './pseudo/lesson8-en'
+export { pseudoLessonP1EnData } from './pseudo/lessonP1-en'
 
 export type { LessonData, LessonStep, Chapter } from './types'

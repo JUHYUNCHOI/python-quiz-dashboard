@@ -57,6 +57,14 @@ import {
   cppLesson19EnData, cppLesson20EnData,
   // C++ English project lessons
   cppLessonP1EnData, cppLessonP2EnData, cppLessonP3EnData,
+  // Pseudocode Korean lessons
+  pseudoLesson1Data, pseudoLesson2Data, pseudoLesson3Data, pseudoLesson4Data,
+  pseudoLesson5Data, pseudoLesson6Data, pseudoLesson7Data, pseudoLesson8Data,
+  pseudoLessonP1Data,
+  // Pseudocode English lessons
+  pseudoLesson1EnData, pseudoLesson2EnData, pseudoLesson3EnData, pseudoLesson4EnData,
+  pseudoLesson5EnData, pseudoLesson6EnData, pseudoLesson7EnData, pseudoLesson8EnData,
+  pseudoLessonP1EnData,
 } from "@/data"
 import { loadLesson, isBilingual, getAllLessonIds, getBilingualLessonIds } from "@/data"
 import type { LessonData } from "./types"
@@ -90,6 +98,10 @@ export const lessonsData: Record<string, LessonData> = {
   "cpp-19": cppLesson19Data, "cpp-20": cppLesson20Data,
   // C++ projects
   "cpp-p1": cppLessonP1Data, "cpp-p2": cppLessonP2Data, "cpp-p3": cppLessonP3Data,
+  // Pseudocode Part 1
+  "pseudo-1": pseudoLesson1Data, "pseudo-2": pseudoLesson2Data, "pseudo-3": pseudoLesson3Data, "pseudo-4": pseudoLesson4Data,
+  "pseudo-5": pseudoLesson5Data, "pseudo-6": pseudoLesson6Data, "pseudo-7": pseudoLesson7Data, "pseudo-8": pseudoLesson8Data,
+  "pseudo-p1": pseudoLessonP1Data,
 }
 
 // 라이브러리 변형 (turtle/pygame 등) — 양언어 지원
@@ -196,6 +208,16 @@ export const bilingualLessons: Record<string, { ko: LessonData, en: LessonData }
   "cpp-p1": { ko: cppLessonP1Data, en: cppLessonP1EnData },
   "cpp-p2": { ko: cppLessonP2Data, en: cppLessonP2EnData },
   "cpp-p3": { ko: cppLessonP3Data, en: cppLessonP3EnData },
+  // Pseudocode Part 1
+  "pseudo-1": { ko: pseudoLesson1Data, en: pseudoLesson1EnData },
+  "pseudo-2": { ko: pseudoLesson2Data, en: pseudoLesson2EnData },
+  "pseudo-3": { ko: pseudoLesson3Data, en: pseudoLesson3EnData },
+  "pseudo-4": { ko: pseudoLesson4Data, en: pseudoLesson4EnData },
+  "pseudo-5": { ko: pseudoLesson5Data, en: pseudoLesson5EnData },
+  "pseudo-6": { ko: pseudoLesson6Data, en: pseudoLesson6EnData },
+  "pseudo-7": { ko: pseudoLesson7Data, en: pseudoLesson7EnData },
+  "pseudo-8": { ko: pseudoLesson8Data, en: pseudoLesson8EnData },
+  "pseudo-p1": { ko: pseudoLessonP1Data, en: pseudoLessonP1EnData },
 }
 
 // ============================================

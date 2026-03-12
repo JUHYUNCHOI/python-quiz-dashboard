@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card"
 import { ArrowRight, Sparkles } from "lucide-react"
 import Link from "next/link"
 import { useLanguage } from "@/contexts/language-context"
-import { getCompletedLessons, pythonParts, cppParts } from "@/lib/curriculum-data"
+import { getCompletedLessons, pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
 
 interface LastProgress {
   lessonId: string
@@ -56,7 +56,8 @@ export function GiraffeHero() {
     if (!lastProgress) return "/curriculum"
     const completed = getCompletedLessons()
     const isCpp = lastProgress.lessonId.startsWith("cpp-")
-    const trackParts = isCpp ? cppParts : pythonParts
+    const isPseudo = lastProgress.lessonId.startsWith("pseudo-")
+    const trackParts = isPseudo ? pseudoParts : isCpp ? cppParts : pythonParts
     const trackIds = trackParts.flatMap(p => p.lessonIds)
     const idNormalized: (number | string) = /^\d+$/.test(lastProgress.lessonId) ? Number(lastProgress.lessonId) : lastProgress.lessonId
     const idx = trackIds.indexOf(idNormalized)
