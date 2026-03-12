@@ -161,10 +161,10 @@ UNTIL mark >= 0 AND mark <= 100
 OUTPUT "Accepted: ", mark
 \`\`\``,
           options: [
-            'Invalid! / Invalid! / Accepted: 75',
+            'Invalid!\nInvalid!\nAccepted: 75',
             'Invalid! / Accepted: -5',
             'Accepted: 150',
-            'Invalid! / Invalid! / Invalid!'
+            'Invalid!\nInvalid!\nInvalid!'
           ],
           answer: 0,
           explanation: 'Input 150: 150 > 100, so "Invalid!" and loop again. Input -5: -5 < 0, so "Invalid!" and loop again. Input 75: 75 >= 0 AND 75 <= 100, so the UNTIL condition is TRUE - loop exits. Output: "Accepted: 75".'
@@ -255,13 +255,13 @@ UNTIL pw1 = pw2
 OUTPUT "Password set!"
 \`\`\``,
           options: [
-            'No match! / Password set!',
+            'No match!\nPassword set!',
             'Password set!',
             'No match! / No match!',
-            'No match! / No match! / Password set!'
+            'No match!\nNo match!\nPassword set!'
           ],
           answer: 0,
-          explanation: 'First attempt: pw1="hello", pw2="helo". They do not match → "No match!" Second attempt: pw1="hello", pw2="hello". They match → UNTIL condition is TRUE, loop exits → "Password set!" Output: **No match! / Password set!**'
+          explanation: 'First attempt: pw1="hello", pw2="helo". They do not match → "No match!" Second attempt: pw1="hello", pw2="hello". They match → UNTIL condition is TRUE, loop exits → "Password set!" Output: **No match!** then **Password set!**'
         },
         {
           id: "ch3-fill1",

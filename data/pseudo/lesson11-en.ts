@@ -269,8 +269,8 @@ OUTPUT x
 OUTPUT y
 \`\`\``,
           options: [
-            '5  then  15',
-            '15  then  15',
+            '5\n15',
+            '15\n15',
             '5  then  5',
             '15  then  5'
           ],

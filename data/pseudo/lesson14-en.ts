@@ -301,10 +301,10 @@ OUTPUT grid[2, 3]
 OUTPUT grid[3, 1]
 \`\`\``,
           options: [
-            '5  then  4',
+            '5\n4',
             '6  then  3',
             '5  then  3',
-            '6  then  4'
+            '6\n4'
           ],
           answer: 0,
           explanation: '`grid[2, 3] = 2 + 3 = 5`. `grid[3, 1] = 3 + 1 = 4`. The output is **5** then **4**.'

@@ -210,8 +210,8 @@ OUTPUT SUBSTRING(word, 1, 1)
 OUTPUT SUBSTRING(word, 4, 3)
 \`\`\``,
           options: [
-            'S  then  ENC',
-            'SC  then  ENC',
+            'S\nENC',
+            'SC\nENC',
             'S  then  NCE',
             'S  then  EN'
           ],
@@ -305,10 +305,10 @@ OUTPUT UCASE(username)
 OUTPUT LENGTH(email)
 \`\`\``,
           options: [
-            'USER  then  13',
-            'user  then  13',
+            'USER\n13',
+            'user\n13',
             'USER@  then  12',
-            'user@test  then  13'
+            'user@test\n13'
           ],
           answer: 0,
           explanation: '`SUBSTRING(email, 1, 4)` extracts "user" (positions 1 to 4, since atPos - 1 = 4). `UCASE("user")` gives **"USER"**. `LENGTH("user@test.com")` is **13** characters.'

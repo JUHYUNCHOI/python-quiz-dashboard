@@ -358,7 +358,7 @@ REPEAT
 UNTIL guess = secret
 \`\`\``,
           options: [
-            'Too low! / Too high! / Correct!',
+            'Too low!\nToo high!\nCorrect!',
             'Too high! / Too low! / Correct!',
             'Correct!',
             'Too low! / Too low! / Correct!'
