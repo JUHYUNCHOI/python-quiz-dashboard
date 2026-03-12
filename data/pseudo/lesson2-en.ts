@@ -86,7 +86,7 @@ Now \`name\` holds the text **"Alice"** and \`age\` holds the number **15**.
           type: "fillblank",
           title: "✏️ Fill in the blank!",
           content: "Complete the code to declare a variable called `score` that holds whole numbers.",
-          codeTemplate: "___ score : INTEGER",
+          code: "___ score : INTEGER",
           fillBlanks: [
             { id: 1, answer: "DECLARE", options: ["DECLARE", "CREATE", "SET", "INPUT"] }
           ]
@@ -181,7 +181,7 @@ OUTPUT x
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: "Complete the code to store \"Hello\" in a variable and display it.",
-          codeTemplate: "DECLARE greeting : STRING\ngreeting ___ \"Hello\"\n___ greeting",
+          code: "DECLARE greeting : STRING\ngreeting ___ \"Hello\"\n___ greeting",
           fillBlanks: [
             { id: 1, answer: "←", options: ["←", "=", "==", ":"] },
             { id: 2, answer: "OUTPUT", options: ["OUTPUT", "PRINT", "DISPLAY", "SHOW"] }

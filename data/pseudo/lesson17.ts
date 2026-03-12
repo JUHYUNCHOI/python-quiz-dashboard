@@ -190,7 +190,7 @@ ENDPROCEDURE
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '버블 정렬에서 두 값을 교환하는 코드를 완성하세요.',
-          codeTemplate: 'IF arr[j] > arr[j + 1] THEN\n    ___ ← arr[j]\n    arr[j] ← arr[j + 1]\n    arr[j + 1] ← temp\nENDIF',
+          code: 'IF arr[j] > arr[j + 1] THEN\n    ___ ← arr[j]\n    arr[j] ← arr[j + 1]\n    arr[j + 1] ← temp\nENDIF',
           fillBlanks: [
             { id: 1, answer: "temp", options: ["temp", "arr[j]", "swap", "mid"] }
           ]
@@ -200,7 +200,7 @@ ENDPROCEDURE
           type: "fillblank",
           title: "✏️ 안쪽 반복문 완성!",
           content: '버블 정렬의 안쪽 반복문 범위를 완성하세요. 이미 정렬된 뒷부분을 건너뛰어야 해요.',
-          codeTemplate: 'FOR i ← 1 TO n - 1\n    FOR j ← 1 TO n - ___\n        IF arr[j] > arr[j + 1] THEN',
+          code: 'FOR i ← 1 TO n - 1\n    FOR j ← 1 TO n - ___\n        IF arr[j] > arr[j + 1] THEN',
           fillBlanks: [
             { id: 1, answer: "i", options: ["i", "j", "1", "n"] }
           ]

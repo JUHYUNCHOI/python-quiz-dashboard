@@ -98,7 +98,7 @@ fruits[4] ← "딸기"
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '5개의 정수를 저장하는 배열을 선언하세요.',
-          codeTemplate: 'DECLARE scores : ___[1:5] OF INTEGER',
+          code: 'DECLARE scores : ___[1:5] OF INTEGER',
           fillBlanks: [
             { id: 1, answer: "ARRAY", options: ["ARRAY", "LIST", "SET", "TABLE"] }
           ]
@@ -201,7 +201,7 @@ NEXT i
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '배열의 모든 값을 출력하는 코드를 완성하세요.',
-          codeTemplate: 'DECLARE ages : ARRAY[1:4] OF INTEGER\nages[1] ← 12\nages[2] ← 15\nages[3] ← 11\nages[4] ← 14\n\nFOR i ← 1 ___ 4\n    OUTPUT ages[i]\nNEXT i',
+          code: 'DECLARE ages : ARRAY[1:4] OF INTEGER\nages[1] ← 12\nages[2] ← 15\nages[3] ← 11\nages[4] ← 14\n\nFOR i ← 1 ___ 4\n    OUTPUT ages[i]\nNEXT i',
           fillBlanks: [
             { id: 1, answer: "TO", options: ["TO", "UNTIL", "WHILE", "IN"] }
           ]

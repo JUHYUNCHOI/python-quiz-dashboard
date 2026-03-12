@@ -322,7 +322,7 @@ Option B is wrong because it checks the password before asking for input. Option
           type: "fillblank",
           title: "✏️ Complete the flowchart!",
           content: 'Complete this flowchart description that counts how many numbers (out of 10 inputs) are greater than 50.',
-          codeTemplate: 'Start\n  ↓\nCount ← 0\n  ↓\ni ← ___\n  ↓\n[Is i > 10?] Yes → OUTPUT Count → Stop\n  ↓ No\nINPUT Num\n  ↓\n[Is Num ___ 50?] Yes → Count ← Count + ___\n  ↓\ni ← i + 1\n  ↓\nloop back to decision',
+          code: 'Start\n  ↓\nCount ← 0\n  ↓\ni ← ___\n  ↓\n[Is i > 10?] Yes → OUTPUT Count → Stop\n  ↓ No\nINPUT Num\n  ↓\n[Is Num ___ 50?] Yes → Count ← Count + ___\n  ↓\ni ← i + 1\n  ↓\nloop back to decision',
           fillBlanks: [
             { id: 1, answer: "1", options: ["1", "0", "10", "50"] },
             { id: 2, answer: ">", options: [">", ">=", "<", "="] },

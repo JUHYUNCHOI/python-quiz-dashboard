@@ -298,7 +298,7 @@ What is the value of X?`,
           type: "fillblank",
           title: "\u270F\uFE0F Complete the Expression!",
           content: 'The output is 1 when A is 1 OR when B is 0. Complete the Boolean expression.',
-          codeTemplate: 'X \u2190 A ___ ___ B',
+          code: 'X \u2190 A ___ ___ B',
           fillBlanks: [
             { id: 1, answer: "OR", options: ["OR", "AND", "XOR", "NOR"] },
             { id: 2, answer: "NOT", options: ["NOT", "AND", "OR", "TRUE"] }
@@ -436,7 +436,7 @@ What is the missing value?`,
           type: "fillblank",
           title: "\u270F\uFE0F Fill the Truth Table!",
           content: 'Complete the missing output values for the expression X = A AND B.',
-          codeTemplate: 'A=0, B=0  \u2192  X = ___\nA=0, B=1  \u2192  X = ___\nA=1, B=0  \u2192  X = ___\nA=1, B=1  \u2192  X = ___',
+          code: 'A=0, B=0  \u2192  X = ___\nA=0, B=1  \u2192  X = ___\nA=1, B=0  \u2192  X = ___\nA=1, B=1  \u2192  X = ___',
           fillBlanks: [
             { id: 1, answer: "0", options: ["0", "1"] },
             { id: 2, answer: "0", options: ["0", "1"] },

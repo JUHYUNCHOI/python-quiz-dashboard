@@ -63,7 +63,7 @@ Examples:
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Match each scenario to the correct validation check type.',
-          codeTemplate: '// A test score must be between 0 and 100 → ___ check\n// A username must be at least 3 characters → ___ check\n// The email field cannot be left empty → ___ check',
+          code: '// A test score must be between 0 and 100 → ___ check\n// A username must be at least 3 characters → ___ check\n// The email field cannot be left empty → ___ check',
           fillBlanks: [
             { id: 1, answer: "Range", options: ["Range", "Length", "Type", "Presence"] },
             { id: 2, answer: "Length", options: ["Length", "Range", "Format", "Type"] },
@@ -174,7 +174,7 @@ OUTPUT "Accepted: ", mark
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the range check validation loop.',
-          codeTemplate: '___\n    OUTPUT "Enter age (0-120): "\n    INPUT age\n    IF age < 0 ___ age > 120 THEN\n        OUTPUT "Invalid age!"\n    ENDIF\n___ age >= 0 AND age <= 120',
+          code: '___\n    OUTPUT "Enter age (0-120): "\n    INPUT age\n    IF age < 0 ___ age > 120 THEN\n        OUTPUT "Invalid age!"\n    ENDIF\n___ age >= 0 AND age <= 120',
           fillBlanks: [
             { id: 1, answer: "REPEAT", options: ["REPEAT", "WHILE", "FOR", "LOOP"] },
             { id: 2, answer: "OR", options: ["OR", "AND", "NOT", "XOR"] },
@@ -268,7 +268,7 @@ OUTPUT "Password set!"
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the double entry verification for an email.',
-          codeTemplate: 'REPEAT\n    OUTPUT "Enter email: "\n    INPUT email1\n    OUTPUT "Confirm email: "\n    INPUT email2\n    IF email1 ___ email2 THEN\n        OUTPUT "Emails do not match!"\n    ENDIF\n___ email1 ___ email2',
+          code: 'REPEAT\n    OUTPUT "Enter email: "\n    INPUT email1\n    OUTPUT "Confirm email: "\n    INPUT email2\n    IF email1 ___ email2 THEN\n        OUTPUT "Emails do not match!"\n    ENDIF\n___ email1 ___ email2',
           fillBlanks: [
             { id: 1, answer: "<>", options: ["<>", "=", ">", "<"] },
             { id: 2, answer: "UNTIL", options: ["UNTIL", "WHILE", "REPEAT", "NEXT"] },

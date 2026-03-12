@@ -362,7 +362,7 @@ Trace: Total = 3+6+9 = 18, Average = 18/3 = 6
   ↓           ↓               |
   └──→ [i ← i + 1] ──────────┘
 \`\`\``,
-          codeTemplate: 'i ← 1\nWHILE i <= 10 DO\n    IF i ___ 2 = 0 THEN\n        OUTPUT i\n    ENDIF\n    i ← i + 1\nENDWHILE',
+          code: 'i ← 1\nWHILE i <= 10 DO\n    IF i ___ 2 = 0 THEN\n        OUTPUT i\n    ENDIF\n    i ← i + 1\nENDWHILE',
           fillBlanks: [
             { id: 1, answer: "MOD", options: ["MOD", "DIV", "/", "*"] }
           ]

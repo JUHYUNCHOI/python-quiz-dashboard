@@ -67,7 +67,7 @@ Important rules:
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Open a file for reading, then close it properly.',
-          codeTemplate: '___ "scores.txt" ___ READ\n// ... read data ...\n___ "scores.txt"',
+          code: '___ "scores.txt" ___ READ\n// ... read data ...\n___ "scores.txt"',
           fillBlanks: [
             { id: 1, answer: "OPENFILE", options: ["OPENFILE", "OPEN", "FILE", "READFILE"] },
             { id: 2, answer: "FOR", options: ["FOR", "IN", "AS", "TO"] },
@@ -188,7 +188,7 @@ CLOSEFILE "colors.txt"
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the code to read all lines from a file.',
-          codeTemplate: 'DECLARE line : STRING\nOPENFILE "data.txt" FOR ___\nWHILE NOT ___(\"data.txt\")\n    ___ "data.txt", line\n    OUTPUT line\nENDWHILE\nCLOSEFILE "data.txt"',
+          code: 'DECLARE line : STRING\nOPENFILE "data.txt" FOR ___\nWHILE NOT ___(\"data.txt\")\n    ___ "data.txt", line\n    OUTPUT line\nENDWHILE\nCLOSEFILE "data.txt"',
           fillBlanks: [
             { id: 1, answer: "READ", options: ["READ", "WRITE", "APPEND", "OPEN"] },
             { id: 2, answer: "EOF", options: ["EOF", "END", "DONE", "EMPTY"] },
@@ -285,7 +285,7 @@ CLOSEFILE "output.txt"
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the code to save 5 scores to a file.',
-          codeTemplate: 'DECLARE scores : ARRAY[1:5] OF INTEGER\nscores[1] ← 85\nscores[2] ← 92\nscores[3] ← 78\nscores[4] ← 95\nscores[5] ← 88\n\n___ "scores.txt" FOR ___\nFOR i ← 1 TO 5\n    ___ "scores.txt", scores[i]\nNEXT i\nCLOSEFILE "scores.txt"',
+          code: 'DECLARE scores : ARRAY[1:5] OF INTEGER\nscores[1] ← 85\nscores[2] ← 92\nscores[3] ← 78\nscores[4] ← 95\nscores[5] ← 88\n\n___ "scores.txt" FOR ___\nFOR i ← 1 TO 5\n    ___ "scores.txt", scores[i]\nNEXT i\nCLOSEFILE "scores.txt"',
           fillBlanks: [
             { id: 1, answer: "OPENFILE", options: ["OPENFILE", "OPEN", "FILE", "CREATE"] },
             { id: 2, answer: "WRITE", options: ["WRITE", "READ", "APPEND", "SAVE"] },

@@ -125,7 +125,7 @@ ENDCASE
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: 'CASE문의 기본 구조를 완성하세요.',
-          codeTemplate: '___ OF season\n    "봄" : OUTPUT "꽃이 피어요"\n    "여름" : OUTPUT "바다에 가요"\n    "가을" : OUTPUT "단풍이 예뻐요"\n    "겨울" : OUTPUT "눈이 와요"\n    OTHERWISE : OUTPUT "알 수 없는 계절"\nENDCASE',
+          code: '___ OF season\n    "봄" : OUTPUT "꽃이 피어요"\n    "여름" : OUTPUT "바다에 가요"\n    "가을" : OUTPUT "단풍이 예뻐요"\n    "겨울" : OUTPUT "눈이 와요"\n    OTHERWISE : OUTPUT "알 수 없는 계절"\nENDCASE',
           fillBlanks: [
             { id: 1, answer: "CASE", options: ["CASE", "SWITCH", "SELECT", "CHECK"] }
           ]
@@ -231,7 +231,7 @@ OUTPUT result & "요일입니다"
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '방향키에 따라 캐릭터를 이동시키는 CASE문을 완성하세요.',
-          codeTemplate: 'CASE OF direction\n    "up"    : y ← y - 1\n    "down"  : y ← y + 1\n    "left"  : x ← x - 1\n    "right" : x ← x + 1\n    ___ : OUTPUT "잘못된 방향"\nENDCASE',
+          code: 'CASE OF direction\n    "up"    : y ← y - 1\n    "down"  : y ← y + 1\n    "left"  : x ← x - 1\n    "right" : x ← x + 1\n    ___ : OUTPUT "잘못된 방향"\nENDCASE',
           fillBlanks: [
             { id: 1, answer: "OTHERWISE", options: ["OTHERWISE", "DEFAULT", "ELSE", "OTHER"] }
           ]

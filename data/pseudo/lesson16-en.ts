@@ -83,7 +83,7 @@ Key points:
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the binary search algorithm.',
-          codeTemplate: 'low ← 1\nhigh ← size\n\nWHILE low <= high\n    mid ← (low + high) ___ 2\n    IF items[mid] = target THEN\n        RETURN mid\n    ELSE\n        IF items[mid] ___ target THEN\n            low ← mid ___ 1\n        ELSE\n            high ← mid - 1\n        ENDIF\n    ENDIF\nENDWHILE',
+          code: 'low ← 1\nhigh ← size\n\nWHILE low <= high\n    mid ← (low + high) ___ 2\n    IF items[mid] = target THEN\n        RETURN mid\n    ELSE\n        IF items[mid] ___ target THEN\n            low ← mid ___ 1\n        ELSE\n            high ← mid - 1\n        ENDIF\n    ENDIF\nENDWHILE',
           fillBlanks: [
             { id: 1, answer: "DIV", options: ["DIV", "/", "MOD", "*"] },
             { id: 2, answer: "<", options: ["<", ">", "=", "<>"] },
@@ -265,7 +265,7 @@ But there is a trade-off:
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the comparison between linear and binary search.',
-          codeTemplate: '// Linear search: checks ___ element from start to end\n// Time: O(n) - worst case checks all n elements\n\n// Binary search: ___ the search area in half each time\n// Time: O(log n) - requires array to be ___',
+          code: '// Linear search: checks ___ element from start to end\n// Time: O(n) - worst case checks all n elements\n\n// Binary search: ___ the search area in half each time\n// Time: O(log n) - requires array to be ___',
           fillBlanks: [
             { id: 1, answer: "each", options: ["each", "half", "random", "last"] },
             { id: 2, answer: "divides", options: ["divides", "doubles", "removes", "copies"] },

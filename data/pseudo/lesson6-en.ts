@@ -134,7 +134,7 @@ OUTPUT total
           type: "fillblank",
           title: "✏️ Fill in the Blank!",
           content: 'Complete the FOR loop to print numbers 1 through 10.',
-          codeTemplate: 'FOR i ← 1 ___ 10\n    OUTPUT i\n___ i',
+          code: 'FOR i ← 1 ___ 10\n    OUTPUT i\n___ i',
           fillBlanks: [
             { id: 1, answer: "TO", options: ["TO", "UNTIL", "UPTO", "THROUGH"] },
             { id: 2, answer: "NEXT", options: ["NEXT", "END", "LOOP", "CONTINUE"] }

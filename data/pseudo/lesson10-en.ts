@@ -86,7 +86,7 @@ Output: **10**`
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the procedure definition and its call.',
-          codeTemplate: '___ PrintMessage(msg : STRING)\n    OUTPUT msg\n___\n\n___ PrintMessage("Welcome!")',
+          code: '___ PrintMessage(msg : STRING)\n    OUTPUT msg\n___\n\n___ PrintMessage("Welcome!")',
           fillBlanks: [
             { id: 1, answer: "PROCEDURE", options: ["PROCEDURE", "FUNCTION", "DEF", "SUB"] },
             { id: 2, answer: "ENDPROCEDURE", options: ["ENDPROCEDURE", "ENDFUNCTION", "END", "RETURN"] },
@@ -204,7 +204,7 @@ Functions can return any type: INTEGER, REAL, STRING, BOOLEAN, etc.`
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the function that calculates the square of a number.',
-          codeTemplate: '___ Square(n : INTEGER) ___ INTEGER\n    ___ n * n\nENDFUNCTION',
+          code: '___ Square(n : INTEGER) ___ INTEGER\n    ___ n * n\nENDFUNCTION',
           fillBlanks: [
             { id: 1, answer: "FUNCTION", options: ["FUNCTION", "PROCEDURE", "DEF", "SUB"] },
             { id: 2, answer: "RETURNS", options: ["RETURNS", "RETURN", "GIVES", "OUTPUT"] },
@@ -333,7 +333,7 @@ CALL ShowResult("Result", answer)
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the function and procedure working together.',
-          codeTemplate: 'FUNCTION CalcArea(w : INTEGER, h : INTEGER) RETURNS INTEGER\n    ___ w * h\nENDFUNCTION\n\nPROCEDURE DisplayArea(w : INTEGER, h : INTEGER)\n    DECLARE area : INTEGER\n    area ← ___(w, h)\n    OUTPUT "Area = " & area\n___\n\nCALL DisplayArea(5, 3)',
+          code: 'FUNCTION CalcArea(w : INTEGER, h : INTEGER) RETURNS INTEGER\n    ___ w * h\nENDFUNCTION\n\nPROCEDURE DisplayArea(w : INTEGER, h : INTEGER)\n    DECLARE area : INTEGER\n    area ← ___(w, h)\n    OUTPUT "Area = " & area\n___\n\nCALL DisplayArea(5, 3)',
           fillBlanks: [
             { id: 1, answer: "RETURN", options: ["RETURN", "OUTPUT", "GIVE", "SEND"] },
             { id: 2, answer: "CalcArea", options: ["CalcArea", "CALL CalcArea", "Area", "FUNCTION"] },

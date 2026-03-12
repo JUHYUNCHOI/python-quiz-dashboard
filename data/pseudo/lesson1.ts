@@ -122,7 +122,7 @@ OUTPUT "10 + 5"
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '화면에 "수도코드는 재미있어!" 를 출력하는 코드를 완성하세요.',
-          codeTemplate: '___ "수도코드는 재미있어!"',
+          code: '___ "수도코드는 재미있어!"',
           fillBlanks: [
             { id: 1, answer: "OUTPUT", options: ["OUTPUT", "PRINT", "INPUT", "DISPLAY"] }
           ]

@@ -104,7 +104,7 @@ OUTPUT a
           type: "fillblank",
           title: "✏️ Trace Table 빈칸 채우기!",
           content: 'x ← 4, y ← 6, x ← x + y를 실행하면 x의 값은?',
-          codeTemplate: 'x ← 4\ny ← 6\nx ← x + y\n\n// x의 최종 값: ___',
+          code: 'x ← 4\ny ← 6\nx ← x + y\n\n// x의 최종 값: ___',
           fillBlanks: [
             { id: 1, answer: "10", options: ["10", "6", "4", "24"] }
           ]
@@ -246,7 +246,7 @@ ENDWHILE
           type: "fillblank",
           title: "✏️ Trace Table 완성하기!",
           content: 'FOR i ← 1 TO 3, sum ← sum + i*i를 실행할 때, i = 3일 때 sum의 값은? (초기값 sum ← 0)',
-          codeTemplate: 'sum ← 0\nFOR i ← 1 TO 3\n    sum ← sum + i * i\nNEXT i\n\n// i=1: sum = 0+1 = 1\n// i=2: sum = 1+4 = 5\n// i=3: sum = 5+9 = ___',
+          code: 'sum ← 0\nFOR i ← 1 TO 3\n    sum ← sum + i * i\nNEXT i\n\n// i=1: sum = 0+1 = 1\n// i=2: sum = 1+4 = 5\n// i=3: sum = 5+9 = ___',
           fillBlanks: [
             { id: 1, answer: "14", options: ["14", "9", "6", "15"] }
           ]

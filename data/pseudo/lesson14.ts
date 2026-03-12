@@ -135,7 +135,7 @@ OUTPUT table[2, 1] + table[1, 3]
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '2D 배열에서 2행 3열의 값을 5로 설정하는 코드를 완성하세요.',
-          codeTemplate: 'DECLARE grid : ARRAY[1:3, 1:4] OF INTEGER\ngrid[___, ___] ← 5',
+          code: 'DECLARE grid : ARRAY[1:3, 1:4] OF INTEGER\ngrid[___, ___] ← 5',
           fillBlanks: [
             { id: 1, answer: "2", options: ["2", "3", "1", "4"] },
             { id: 2, answer: "3", options: ["3", "2", "4", "1"] }
@@ -257,7 +257,7 @@ OUTPUT total
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '3행 4열의 2D 배열을 모두 0으로 초기화하는 코드를 완성하세요.',
-          codeTemplate: 'DECLARE grid : ARRAY[1:3, 1:4] OF INTEGER\n\nFOR row ← 1 TO 3\n    FOR col ← 1 ___ 4\n        grid[row, ___] ← 0\n    NEXT col\nNEXT row',
+          code: 'DECLARE grid : ARRAY[1:3, 1:4] OF INTEGER\n\nFOR row ← 1 TO 3\n    FOR col ← 1 ___ 4\n        grid[row, ___] ← 0\n    NEXT col\nNEXT row',
           fillBlanks: [
             { id: 1, answer: "TO", options: ["TO", "UNTIL", "WHILE", "IN"] },
             { id: 2, answer: "col", options: ["col", "row", "i", "grid"] }

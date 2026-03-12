@@ -103,7 +103,7 @@ OUTPUT grid[2, 2]
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Declare a 2D array and assign a value to row 3, column 2.',
-          codeTemplate: 'DECLARE board : ___[1:3, 1:3] OF INTEGER\nboard[___, ___] ← 99',
+          code: 'DECLARE board : ___[1:3, 1:3] OF INTEGER\nboard[___, ___] ← 99',
           fillBlanks: [
             { id: 1, answer: "ARRAY", options: ["ARRAY", "TABLE", "GRID", "MATRIX"] },
             { id: 2, answer: "3", options: ["3", "1", "2", "0"] },
@@ -213,7 +213,7 @@ OUTPUT total
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the nested loop to print all elements of a 3x3 grid.',
-          codeTemplate: 'FOR row ← 1 ___ 3\n    ___ col ← 1 TO 3\n        OUTPUT grid[___, col]\n    NEXT col\nNEXT row',
+          code: 'FOR row ← 1 ___ 3\n    ___ col ← 1 TO 3\n        OUTPUT grid[___, col]\n    NEXT col\nNEXT row',
           fillBlanks: [
             { id: 1, answer: "TO", options: ["TO", "UNTIL", "BY", "THROUGH"] },
             { id: 2, answer: "FOR", options: ["FOR", "WHILE", "REPEAT", "LOOP"] },
@@ -314,7 +314,7 @@ OUTPUT grid[3, 1]
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the code to find the largest value in a 2D array.',
-          codeTemplate: 'DECLARE grid : ARRAY[1:3, 1:3] OF INTEGER\nDECLARE maxVal : INTEGER\nmaxVal ← grid[1, 1]\n\nFOR row ← 1 TO 3\n    FOR col ← 1 TO 3\n        ___ grid[row, col] > maxVal ___\n            maxVal ← grid[___, col]\n        ENDIF\n    NEXT col\nNEXT row\nOUTPUT maxVal',
+          code: 'DECLARE grid : ARRAY[1:3, 1:3] OF INTEGER\nDECLARE maxVal : INTEGER\nmaxVal ← grid[1, 1]\n\nFOR row ← 1 TO 3\n    FOR col ← 1 TO 3\n        ___ grid[row, col] > maxVal ___\n            maxVal ← grid[___, col]\n        ENDIF\n    NEXT col\nNEXT row\nOUTPUT maxVal',
           fillBlanks: [
             { id: 1, answer: "IF", options: ["IF", "WHILE", "WHEN", "CHECK"] },
             { id: 2, answer: "THEN", options: ["THEN", "DO", "BEGIN", "RUN"] },

@@ -189,7 +189,7 @@ OUTPUT UCASE("Park Jihoon") & " : " & grade
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '학생의 이름에서 성(첫 3글자)만 추출하고 대문자로 바꾸는 코드를 완성하세요. (이름: "Kim Minjun")',
-          codeTemplate: 'DECLARE name : STRING\nname ← "Kim Minjun"\nDECLARE lastName : STRING\nlastName ← SUBSTRING(name, 1, 3)\nOUTPUT ___(lastName)',
+          code: 'DECLARE name : STRING\nname ← "Kim Minjun"\nDECLARE lastName : STRING\nlastName ← SUBSTRING(name, 1, 3)\nOUTPUT ___(lastName)',
           fillBlanks: [
             { id: 1, answer: "UCASE", options: ["UCASE", "LCASE", "LENGTH", "SUBSTRING"] }
           ]
@@ -274,7 +274,7 @@ OUTPUT LENGTH(result)
           type: "fillblank",
           title: "✏️ 파일 처리 복습!",
           content: '점수를 파일에서 읽어서 출력하는 코드를 완성하세요.',
-          codeTemplate: 'DECLARE line : STRING\n___ "scores.txt" FOR READ\nWHILE NOT ___("scores.txt")\n    READFILE "scores.txt", line\n    OUTPUT line\nENDWHILE\nCLOSEFILE "scores.txt"',
+          code: 'DECLARE line : STRING\n___ "scores.txt" FOR READ\nWHILE NOT ___("scores.txt")\n    READFILE "scores.txt", line\n    OUTPUT line\nENDWHILE\nCLOSEFILE "scores.txt"',
           fillBlanks: [
             { id: 1, answer: "OPENFILE", options: ["OPENFILE", "READFILE", "WRITEFILE", "LOADFILE"] },
             { id: 2, answer: "EOF", options: ["EOF", "END", "DONE", "EMPTY"] }
@@ -319,7 +319,7 @@ NEXT row
           type: "fillblank",
           title: "✏️ 종합 실력 테스트!",
           content: '등급을 RETURN하는 FUNCTION의 빈칸을 완성하세요.',
-          codeTemplate: '___ CalcGrade(score : INTEGER) RETURNS STRING\n    IF score >= 90 THEN\n        ___ "A"\n    ELSE\n        RETURN "B"\n    ENDIF\nENDFUNCTION',
+          code: '___ CalcGrade(score : INTEGER) RETURNS STRING\n    IF score >= 90 THEN\n        ___ "A"\n    ELSE\n        RETURN "B"\n    ENDIF\nENDFUNCTION',
           fillBlanks: [
             { id: 1, answer: "FUNCTION", options: ["FUNCTION", "PROCEDURE", "DECLARE", "DEFINE"] },
             { id: 2, answer: "RETURN", options: ["RETURN", "OUTPUT", "GIVE", "SEND"] }

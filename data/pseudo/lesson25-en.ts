@@ -130,7 +130,7 @@ SELECT Name FROM Student ORDER BY Age DESC, Name ASC
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the query to show names and ages of Year 11 students, sorted from oldest to youngest.',
-          codeTemplate: 'SELECT Name, Age FROM Student ___ Year = 11 ORDER BY Age ___',
+          code: 'SELECT Name, Age FROM Student ___ Year = 11 ORDER BY Age ___',
           fillBlanks: [
             { id: 1, answer: "WHERE", options: ["WHERE", "WHEN", "IF", "HAVING"] },
             { id: 2, answer: "DESC", options: ["DESC", "ASC", "DOWN", "REVERSE"] }
@@ -272,7 +272,7 @@ SELECT AVG(Mark) FROM Exam WHERE Subject = 'Maths'
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the query to find the total number of students and the highest mark in Science exams.',
-          codeTemplate: 'SELECT ___(*)  , ___(Mark) FROM Exam WHERE Subject = ___',
+          code: 'SELECT ___(*)  , ___(Mark) FROM Exam WHERE Subject = ___',
           fillBlanks: [
             { id: 1, answer: "COUNT", options: ["COUNT", "SUM", "TOTAL", "NUM"] },
             { id: 2, answer: "MAX", options: ["MAX", "MIN", "TOP", "HIGHEST"] },

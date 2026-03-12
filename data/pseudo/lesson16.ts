@@ -164,7 +164,7 @@ BinarySearch(arr, 25)
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '이진 검색에서 중간 위치를 계산하는 코드를 완성하세요.',
-          codeTemplate: 'mid ← (low + high) ___ 2',
+          code: 'mid ← (low + high) ___ 2',
           fillBlanks: [
             { id: 1, answer: "DIV", options: ["DIV", "MOD", "/", "*"] }
           ]
@@ -291,7 +291,7 @@ result ← BinarySearch(arr, 35)
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '이진 검색에서 찾는 값이 중간값보다 클 때, 검색 범위를 오른쪽 반으로 좁히는 코드를 완성하세요.',
-          codeTemplate: 'IF arr[mid] < target THEN\n    ___ ← mid + 1',
+          code: 'IF arr[mid] < target THEN\n    ___ ← mid + 1',
           fillBlanks: [
             { id: 1, answer: "low", options: ["low", "high", "mid", "target"] }
           ]

@@ -100,7 +100,7 @@ OUTPUT myNum
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '값을 복사해서 전달하는 프로시저를 완성하세요.',
-          codeTemplate: 'PROCEDURE Show(___ n : INTEGER)\n    OUTPUT n\nENDPROCEDURE',
+          code: 'PROCEDURE Show(___ n : INTEGER)\n    OUTPUT n\nENDPROCEDURE',
           fillBlanks: [
             { id: 1, answer: "BYVAL", options: ["BYVAL", "BYREF", "VALUE", "COPY"] }
           ]
@@ -265,7 +265,7 @@ OUTPUT y
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '원본 값을 직접 수정하는 프로시저를 완성하세요.',
-          codeTemplate: 'PROCEDURE ResetToZero(___ n : INTEGER)\n    n ← 0\nENDPROCEDURE\n\nDECLARE score : INTEGER\nscore ← 85\nCALL ResetToZero(score)\nOUTPUT score',
+          code: 'PROCEDURE ResetToZero(___ n : INTEGER)\n    n ← 0\nENDPROCEDURE\n\nDECLARE score : INTEGER\nscore ← 85\nCALL ResetToZero(score)\nOUTPUT score',
           fillBlanks: [
             { id: 1, answer: "BYREF", options: ["BYREF", "BYVAL", "REF", "VAL"] }
           ]

@@ -84,7 +84,7 @@ Each row represents a student, each column is a subject.`
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Declare the 2D array for 3 students and 4 subjects.',
-          codeTemplate: 'DECLARE names : ARRAY[1:3] OF STRING\nDECLARE scores : ___[1:3, ___] OF ___',
+          code: 'DECLARE names : ARRAY[1:3] OF STRING\nDECLARE scores : ___[1:3, ___] OF ___',
           fillBlanks: [
             { id: 1, answer: "ARRAY", options: ["ARRAY", "TABLE", "GRID", "LIST"] },
             { id: 2, answer: "1:4", options: ["1:4", "4", "1:3", "0:3"] },
@@ -201,7 +201,7 @@ OUTPUT grade
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the function that returns a grade based on the average.',
-          codeTemplate: '___ GetGrade(average : REAL) ___ STRING\n    DECLARE tens : INTEGER\n    tens ← average DIV 10\n    CASE OF tens\n        10 : RETURN "A+"\n        9  : RETURN "A"\n        8  : RETURN "B"\n        OTHERWISE : RETURN "C"\n    ___\nENDFUNCTION',
+          code: '___ GetGrade(average : REAL) ___ STRING\n    DECLARE tens : INTEGER\n    tens ← average DIV 10\n    CASE OF tens\n        10 : RETURN "A+"\n        9  : RETURN "A"\n        8  : RETURN "B"\n        OTHERWISE : RETURN "C"\n    ___\nENDFUNCTION',
           fillBlanks: [
             { id: 1, answer: "FUNCTION", options: ["FUNCTION", "PROCEDURE", "DEF", "SUB"] },
             { id: 2, answer: "RETURNS", options: ["RETURNS", "RETURN", "GIVES", "TYPE"] },
@@ -358,7 +358,7 @@ CALL ShowInitials("alice", "bob")
           type: "fillblank",
           title: "✏️ Final Fill-in!",
           content: 'Complete the procedure that loads student names from a file into an array.',
-          codeTemplate: 'PROCEDURE LoadNames(BYREF names : ARRAY)\n    DECLARE count : INTEGER\n    count ← 0\n    ___ "students.txt" FOR READ\n    WHILE NOT ___("students.txt")\n        count ← count + 1\n        ___ "students.txt", names[count]\n    ENDWHILE\n    CLOSEFILE "students.txt"\nENDPROCEDURE',
+          code: 'PROCEDURE LoadNames(BYREF names : ARRAY)\n    DECLARE count : INTEGER\n    count ← 0\n    ___ "students.txt" FOR READ\n    WHILE NOT ___("students.txt")\n        count ← count + 1\n        ___ "students.txt", names[count]\n    ENDWHILE\n    CLOSEFILE "students.txt"\nENDPROCEDURE',
           fillBlanks: [
             { id: 1, answer: "OPENFILE", options: ["OPENFILE", "OPEN", "FILE", "READ"] },
             { id: 2, answer: "EOF", options: ["EOF", "END", "DONE", "EMPTY"] },

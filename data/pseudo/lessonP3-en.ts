@@ -85,7 +85,7 @@ Key features:
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the validation loop for score input.',
-          codeTemplate: '___\n    OUTPUT "Enter score (0-100): "\n    INPUT tempScore\n    IF tempScore < 0 ___ tempScore > 100 THEN\n        OUTPUT "Invalid score!"\n    ENDIF\nUNTIL tempScore >= 0 ___ tempScore <= 100',
+          code: '___\n    OUTPUT "Enter score (0-100): "\n    INPUT tempScore\n    IF tempScore < 0 ___ tempScore > 100 THEN\n        OUTPUT "Invalid score!"\n    ENDIF\nUNTIL tempScore >= 0 ___ tempScore <= 100',
           fillBlanks: [
             { id: 1, answer: "REPEAT", options: ["REPEAT", "WHILE", "FOR", "DO"] },
             { id: 2, answer: "OR", options: ["OR", "AND", "NOT", "THEN"] },
@@ -203,7 +203,7 @@ Step 1: mid = (1+5) DIV 2 = 3
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Choose the right search for each situation.',
-          codeTemplate: '// Array is NOT sorted → use ___ search\n// Array IS sorted and has 1000 elements → use ___ search\n// Binary search on sorted array: max comparisons for 1000 elements ≈ ___',
+          code: '// Array is NOT sorted → use ___ search\n// Array IS sorted and has 1000 elements → use ___ search\n// Binary search on sorted array: max comparisons for 1000 elements ≈ ___',
           fillBlanks: [
             { id: 1, answer: "linear", options: ["linear", "binary", "bubble", "insertion"] },
             { id: 2, answer: "binary", options: ["binary", "linear", "bubble", "insertion"] },
@@ -332,7 +332,7 @@ OUTPUT pos
           type: "fillblank",
           title: "✏️ Final Fill!",
           content: 'Complete this summary of Part 3 concepts.',
-          codeTemplate: '// Linear search: O(n) - checks ___ element\n// Binary search: O(log n) - requires ___ array\n// Bubble sort: swap ___ elements if wrong order',
+          code: '// Linear search: O(n) - checks ___ element\n// Binary search: O(log n) - requires ___ array\n// Bubble sort: swap ___ elements if wrong order',
           fillBlanks: [
             { id: 1, answer: "each", options: ["each", "half", "first", "random"] },
             { id: 2, answer: "sorted", options: ["sorted", "large", "small", "integer"] },

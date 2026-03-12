@@ -114,7 +114,7 @@ OUTPUT average
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '평균을 계산하는 핵심 코드를 완성하세요.',
-          codeTemplate: 'total ← 0\n\nFOR i ← 1 TO 5\n    INPUT numbers[i]\n    total ← total + numbers[i]\nNEXT i\n\naverage ← total ___ 5',
+          code: 'total ← 0\n\nFOR i ← 1 TO 5\n    INPUT numbers[i]\n    total ← total + numbers[i]\nNEXT i\n\naverage ← total ___ 5',
           fillBlanks: [
             { id: 1, answer: "/", options: ["/", "*", "+", "-"] }
           ]
@@ -230,7 +230,7 @@ OUTPUT max
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '최대값 찾기의 핵심 조건문을 완성하세요.',
-          codeTemplate: 'max ← scores[1]\n\nFOR i ← 2 TO 5\n    IF scores[i] ___ max THEN\n        max ← scores[i]\n    ENDIF\nNEXT i',
+          code: 'max ← scores[1]\n\nFOR i ← 2 TO 5\n    IF scores[i] ___ max THEN\n        max ← scores[i]\n    ENDIF\nNEXT i',
           fillBlanks: [
             { id: 1, answer: ">", options: [">", "<", "=", ">="] }
           ]
@@ -354,7 +354,7 @@ UNTIL guess = secret
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '숫자 맞추기 게임의 반복 조건을 완성하세요.',
-          codeTemplate: 'REPEAT\n    INPUT guess\n    IF guess > secret THEN\n        OUTPUT "너무 커요!"\n    ELSE\n        IF guess < secret THEN\n            OUTPUT "너무 작아요!"\n        ELSE\n            OUTPUT "정답!"\n        ENDIF\n    ENDIF\n___ guess = secret',
+          code: 'REPEAT\n    INPUT guess\n    IF guess > secret THEN\n        OUTPUT "너무 커요!"\n    ELSE\n        IF guess < secret THEN\n            OUTPUT "너무 작아요!"\n        ELSE\n            OUTPUT "정답!"\n        ENDIF\n    ENDIF\n___ guess = secret',
           fillBlanks: [
             { id: 1, answer: "UNTIL", options: ["UNTIL", "WHILE", "WHEN", "FOR"] }
           ]

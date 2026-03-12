@@ -114,7 +114,7 @@ OUTPUT LCASE(text)
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Use string functions to check the length and convert to uppercase.',
-          codeTemplate: 'DECLARE name : STRING\nname ← "computer"\nOUTPUT ___(name)\nOUTPUT ___(name)',
+          code: 'DECLARE name : STRING\nname ← "computer"\nOUTPUT ___(name)\nOUTPUT ___(name)',
           fillBlanks: [
             { id: 1, answer: "LENGTH", options: ["LENGTH", "LEN", "SIZE", "COUNT"] },
             { id: 2, answer: "UCASE", options: ["UCASE", "UPPER", "TOUPPER", "CAPS"] }
@@ -223,7 +223,7 @@ OUTPUT SUBSTRING(word, 4, 3)
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Extract the first 3 characters and convert them to uppercase.',
-          codeTemplate: 'DECLARE text : STRING\ntext ← "python"\nDECLARE first3 : STRING\nfirst3 ← ___(text, ___, 3)\nOUTPUT UCASE(first3)',
+          code: 'DECLARE text : STRING\ntext ← "python"\nDECLARE first3 : STRING\nfirst3 ← ___(text, ___, 3)\nOUTPUT UCASE(first3)',
           fillBlanks: [
             { id: 1, answer: "SUBSTRING", options: ["SUBSTRING", "MID", "EXTRACT", "SLICE"] },
             { id: 2, answer: "1", options: ["1", "0", "3", "text"] }
@@ -318,7 +318,7 @@ OUTPUT LENGTH(email)
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the code to extract and display the last 3 characters of a word in uppercase.',
-          codeTemplate: 'DECLARE word : STRING\nword ← "coding"\nDECLARE len : INTEGER\nlen ← ___(word)\nDECLARE last3 : STRING\nlast3 ← SUBSTRING(word, len - 2, ___)\nOUTPUT ___(last3)',
+          code: 'DECLARE word : STRING\nword ← "coding"\nDECLARE len : INTEGER\nlen ← ___(word)\nDECLARE last3 : STRING\nlast3 ← SUBSTRING(word, len - 2, ___)\nOUTPUT ___(last3)',
           fillBlanks: [
             { id: 1, answer: "LENGTH", options: ["LENGTH", "LEN", "SIZE", "COUNT"] },
             { id: 2, answer: "3", options: ["3", "2", "len", "1"] },

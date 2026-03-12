@@ -118,7 +118,7 @@ Which field is the most suitable **primary key**, and why?`,
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Identify the correct data types for each field in a Product table.',
-          codeTemplate: '// ProductID (e.g., 101, 102, 103) → ___\n// ProductName (e.g., "Laptop", "Mouse") → ___\n// Price (e.g., 299.99, 14.50) → ___\n// InStock (e.g., TRUE, FALSE) → ___',
+          code: '// ProductID (e.g., 101, 102, 103) → ___\n// ProductName (e.g., "Laptop", "Mouse") → ___\n// Price (e.g., 299.99, 14.50) → ___\n// InStock (e.g., TRUE, FALSE) → ___',
           fillBlanks: [
             { id: 1, answer: "INTEGER", options: ["INTEGER", "TEXT", "REAL", "BOOLEAN"] },
             { id: 2, answer: "TEXT", options: ["TEXT", "INTEGER", "CHAR", "BOOLEAN"] },
@@ -293,7 +293,7 @@ SELECT Name, Price FROM Product WHERE Category = 'Electronics'
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the SQL query to find the names and prices of all products that cost more than 50.',
-          codeTemplate: '___ Name, Price ___ Product ___ Price > 50',
+          code: '___ Name, Price ___ Product ___ Price > 50',
           fillBlanks: [
             { id: 1, answer: "SELECT", options: ["SELECT", "GET", "FIND", "SHOW"] },
             { id: 2, answer: "FROM", options: ["FROM", "IN", "OF", "TABLE"] },
@@ -454,7 +454,7 @@ SELECT Name FROM Student WHERE Age >= 16 AND Year = 11
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the WHERE clause to find students who are in Year 10 AND have a grade of A or B.',
-          codeTemplate: 'SELECT Name FROM Student WHERE Year = 10 ___ (Grade = \'A\' ___ Grade = \'B\')',
+          code: 'SELECT Name FROM Student WHERE Year = 10 ___ (Grade = \'A\' ___ Grade = \'B\')',
           fillBlanks: [
             { id: 1, answer: "AND", options: ["AND", "OR", "NOT", "WHERE"] },
             { id: 2, answer: "OR", options: ["OR", "AND", "NOT", "LIKE"] }

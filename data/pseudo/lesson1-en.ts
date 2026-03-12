@@ -121,7 +121,7 @@ OUTPUT "10 + 5"
           type: "fillblank",
           title: "✏️ Fill in the blank!",
           content: 'Complete the code to display "Pseudocode is fun!" on screen.',
-          codeTemplate: '___ "Pseudocode is fun!"',
+          code: '___ "Pseudocode is fun!"',
           fillBlanks: [
             { id: 1, answer: "OUTPUT", options: ["OUTPUT", "PRINT", "INPUT", "DISPLAY"] }
           ]

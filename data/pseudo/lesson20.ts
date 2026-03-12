@@ -115,7 +115,7 @@ UNTIL age >= 1 AND age <= 120
           type: "fillblank",
           title: "✏️ Range Check 빈칸 채우기!",
           content: '온도를 -50에서 50 사이로 입력받는 코드를 완성하세요.',
-          codeTemplate: 'REPEAT\n    OUTPUT "Enter temperature (-50 to 50): "\n    INPUT temp\nUNTIL temp >= -50 ___ temp <= 50',
+          code: 'REPEAT\n    OUTPUT "Enter temperature (-50 to 50): "\n    INPUT temp\nUNTIL temp >= -50 ___ temp <= 50',
           fillBlanks: [
             { id: 1, answer: "AND", options: ["AND", "OR", "NOT", "THEN"] }
           ]
@@ -233,7 +233,7 @@ OUTPUT "비밀번호가 설정되었습니다!"
           type: "fillblank",
           title: "✏️ Double Entry 빈칸 채우기!",
           content: 'Double Entry로 이메일을 확인하는 코드를 완성하세요.',
-          codeTemplate: 'INPUT email1\nINPUT email2\n\nIF email1 ___ email2 THEN\n    OUTPUT "이메일이 일치하지 않습니다!"\nENDIF',
+          code: 'INPUT email1\nINPUT email2\n\nIF email1 ___ email2 THEN\n    OUTPUT "이메일이 일치하지 않습니다!"\nENDIF',
           fillBlanks: [
             { id: 1, answer: "<>", options: ["<>", "=", ">", "<"] }
           ]
@@ -342,7 +342,7 @@ UNTIL age >= 1 AND age <= 120
           type: "fillblank",
           title: "✏️ Length Check 빈칸 채우기!",
           content: '사용자명이 3자 이상인지 확인하는 코드를 완성하세요.',
-          codeTemplate: 'REPEAT\n    OUTPUT "사용자명 (3자 이상): "\n    INPUT username\nUNTIL ___(username) >= 3',
+          code: 'REPEAT\n    OUTPUT "사용자명 (3자 이상): "\n    INPUT username\nUNTIL ___(username) >= 3',
           fillBlanks: [
             { id: 1, answer: "LENGTH", options: ["LENGTH", "SIZE", "COUNT", "LEN"] }
           ]
@@ -352,7 +352,7 @@ UNTIL age >= 1 AND age <= 120
           type: "fillblank",
           title: "✏️ 종합 빈칸 채우기!",
           content: 'Double Entry 비밀번호 확인 코드를 완성하세요.',
-          codeTemplate: 'REPEAT\n    INPUT password1\n    INPUT password2\n    IF password1 <> password2 THEN\n        OUTPUT "비밀번호 불일치!"\n    ENDIF\n___ password1 = password2',
+          code: 'REPEAT\n    INPUT password1\n    INPUT password2\n    IF password1 <> password2 THEN\n        OUTPUT "비밀번호 불일치!"\n    ENDIF\n___ password1 = password2',
           fillBlanks: [
             { id: 1, answer: "UNTIL", options: ["UNTIL", "WHILE", "ENDWHILE", "NEXT"] }
           ]

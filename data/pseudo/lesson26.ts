@@ -334,7 +334,7 @@ X의 값은?
 | 1 | 1 |  0   |
 
 출력이 1이 되려면 A는 1이고 B는 0이어야 해요.`,
-          codeTemplate: 'X = A ___ NOT B',
+          code: 'X = A ___ NOT B',
           fillBlanks: [
             { id: 1, answer: "AND", options: ["AND", "OR", "NOT", "XOR"] }
           ]
@@ -510,7 +510,7 @@ A = 1, B = 0일 때 Q의 값은?
 | 1 | 1 |    1    |       ?       |
 
 A=1, B=1일 때 NOT (A AND B)의 값은?`,
-          codeTemplate: 'NOT (A AND B) = NOT (1 AND 1) = NOT 1 = ___',
+          code: 'NOT (A AND B) = NOT (1 AND 1) = NOT 1 = ___',
           fillBlanks: [
             { id: 1, answer: "0", options: ["0", "1", "2", "TRUE"] }
           ]

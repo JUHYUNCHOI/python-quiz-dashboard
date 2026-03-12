@@ -57,7 +57,7 @@ DECLARE name : STRING
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '문자열(글자)을 저장할 변수 `city`를 선언하세요.',
-          codeTemplate: '___ city : ___',
+          code: '___ city : ___',
           fillBlanks: [
             { id: 1, answer: "DECLARE", options: ["DECLARE", "CREATE", "SET", "OUTPUT"] },
             { id: 2, answer: "STRING", options: ["STRING", "INTEGER", "TEXT", "CHAR"] }
@@ -150,7 +150,7 @@ OUTPUT x
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '변수 `score`에 100을 넣고 출력하는 코드를 완성하세요.',
-          codeTemplate: 'DECLARE score : INTEGER\nscore ___ 100\n___ score',
+          code: 'DECLARE score : INTEGER\nscore ___ 100\n___ score',
           fillBlanks: [
             { id: 1, answer: "←", options: ["←", "=", "->", ":"] },
             { id: 2, answer: "OUTPUT", options: ["OUTPUT", "PRINT", "DISPLAY", "SHOW"] }

@@ -70,7 +70,7 @@ The **temp variable** is essential for swapping - without it, you would lose one
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the swap operation in bubble sort.',
-          codeTemplate: 'IF items[j] > items[j + 1] THEN\n    ___ ← items[j]\n    items[j] ← items[j + 1]\n    items[j + 1] ← ___\nENDIF',
+          code: 'IF items[j] > items[j + 1] THEN\n    ___ ← items[j]\n    items[j] ← items[j + 1]\n    items[j + 1] ← ___\nENDIF',
           fillBlanks: [
             { id: 1, answer: "temp", options: ["temp", "items[j]", "items[j + 1]", "swap"] },
             { id: 2, answer: "temp", options: ["temp", "items[j]", "items[j + 1]", "swap"] }
@@ -167,7 +167,7 @@ NEXT j
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the bubble sort with nested loops.',
-          codeTemplate: 'FOR i ← 1 TO size - 1\n    FOR j ← 1 TO size ___ i\n        IF items[j] ___ items[j + 1] THEN\n            temp ← items[j]\n            items[j] ← items[j + 1]\n            items[j + 1] ← temp\n        ___\n    NEXT j\nNEXT i',
+          code: 'FOR i ← 1 TO size - 1\n    FOR j ← 1 TO size ___ i\n        IF items[j] ___ items[j + 1] THEN\n            temp ← items[j]\n            items[j] ← items[j + 1]\n            items[j + 1] ← temp\n        ___\n    NEXT j\nNEXT i',
           fillBlanks: [
             { id: 1, answer: "-", options: ["-", "+", "*", "DIV"] },
             { id: 2, answer: ">", options: [">", "<", "=", "<>"] },
@@ -272,7 +272,7 @@ OUTPUT swapCount
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the optimized bubble sort with the early exit.',
-          codeTemplate: 'FOR i ← 1 TO size - 1\n    swapped ← ___\n    FOR j ← 1 TO size - i\n        IF items[j] > items[j + 1] THEN\n            // swap items[j] and items[j+1]\n            swapped ← TRUE\n        ENDIF\n    NEXT j\n    IF swapped = ___ THEN\n        ___\n    ENDIF\nNEXT i',
+          code: 'FOR i ← 1 TO size - 1\n    swapped ← ___\n    FOR j ← 1 TO size - i\n        IF items[j] > items[j + 1] THEN\n            // swap items[j] and items[j+1]\n            swapped ← TRUE\n        ENDIF\n    NEXT j\n    IF swapped = ___ THEN\n        ___\n    ENDIF\nNEXT i',
           fillBlanks: [
             { id: 1, answer: "FALSE", options: ["FALSE", "TRUE", "0", "NULL"] },
             { id: 2, answer: "FALSE", options: ["FALSE", "TRUE", "0", "NULL"] },

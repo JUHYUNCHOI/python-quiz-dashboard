@@ -104,7 +104,7 @@ OUTPUT y
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the trace table for: a ← 5, b ← 3, a ← a * b, b ← a + b.',
-          codeTemplate: '// a ← 5     → a = 5, b = -\n// b ← 3     → a = 5, b = 3\n// a ← a * b → a = ___, b = 3\n// b ← a + b → a = 15, b = ___\n// OUTPUT a + b → ___',
+          code: '// a ← 5     → a = 5, b = -\n// b ← 3     → a = 5, b = 3\n// a ← a * b → a = ___, b = 3\n// b ← a + b → a = 15, b = ___\n// OUTPUT a + b → ___',
           fillBlanks: [
             { id: 1, answer: "15", options: ["15", "8", "5", "3"] },
             { id: 2, answer: "18", options: ["18", "15", "8", "20"] },
@@ -233,7 +233,7 @@ OUTPUT x
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the trace table for this FOR loop.',
-          codeTemplate: '// FOR i ← 1 TO 3\n//     result ← result * i\n// NEXT i\n// result starts at 1\n\n// i=1: result = 1 * 1 = ___\n// i=2: result = 1 * 2 = ___\n// i=3: result = 2 * 3 = ___',
+          code: '// FOR i ← 1 TO 3\n//     result ← result * i\n// NEXT i\n// result starts at 1\n\n// i=1: result = 1 * 1 = ___\n// i=2: result = 1 * 2 = ___\n// i=3: result = 2 * 3 = ___',
           fillBlanks: [
             { id: 1, answer: "1", options: ["1", "0", "2", "3"] },
             { id: 2, answer: "2", options: ["2", "3", "4", "1"] },
@@ -360,7 +360,7 @@ OUTPUT maxPos
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the trace table values for binary search. Array: [2, 5, 8, 12, 16], target = 5.',
-          codeTemplate: '// Step 1: low=1, high=5, mid=(1+5) DIV 2 = ___\n//   arr[3]=8, 8 > 5, so high = mid - 1 = ___\n// Step 2: low=1, high=2, mid=(1+2) DIV 2 = ___\n//   arr[1]=2, 2 < 5, so low = mid + 1 = 2\n// Step 3: low=2, high=2, mid=2, arr[2]=5, FOUND!',
+          code: '// Step 1: low=1, high=5, mid=(1+5) DIV 2 = ___\n//   arr[3]=8, 8 > 5, so high = mid - 1 = ___\n// Step 2: low=1, high=2, mid=(1+2) DIV 2 = ___\n//   arr[1]=2, 2 < 5, so low = mid + 1 = 2\n// Step 3: low=2, high=2, mid=2, arr[2]=5, FOUND!',
           fillBlanks: [
             { id: 1, answer: "3", options: ["3", "2", "4", "5"] },
             { id: 2, answer: "2", options: ["2", "3", "4", "1"] },

@@ -161,7 +161,7 @@ OUTPUT myBook.fiction
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the TYPE declaration for an Employee record with a name, salary, and department.',
-          codeTemplate: '___ Employee\n    DECLARE name : STRING\n    DECLARE salary : ___\n    DECLARE department : STRING\n___',
+          code: '___ Employee\n    DECLARE name : STRING\n    DECLARE salary : ___\n    DECLARE department : STRING\n___',
           fillBlanks: [
             { id: 1, answer: "TYPE", options: ["TYPE", "RECORD", "STRUCT", "CLASS"] },
             { id: 2, answer: "REAL", options: ["REAL", "INTEGER", "STRING", "NUMBER"] },
@@ -346,7 +346,7 @@ DECLARE students : ARRAY[1:30] OF Student
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the function that searches an array of records to find a product by its ID.',
-          codeTemplate: 'FUNCTION FindProduct(products : ARRAY, size : INTEGER, searchID : INTEGER) RETURNS INTEGER\n    FOR i ← 1 TO ___\n        IF products[i].___ = searchID THEN\n            RETURN ___\n        ENDIF\n    NEXT i\n    RETURN -1\nENDFUNCTION',
+          code: 'FUNCTION FindProduct(products : ARRAY, size : INTEGER, searchID : INTEGER) RETURNS INTEGER\n    FOR i ← 1 TO ___\n        IF products[i].___ = searchID THEN\n            RETURN ___\n        ENDIF\n    NEXT i\n    RETURN -1\nENDFUNCTION',
           fillBlanks: [
             { id: 1, answer: "size", options: ["size", "products", "searchID", "LENGTH"] },
             { id: 2, answer: "productID", options: ["productID", "name", "ID", "product"] },

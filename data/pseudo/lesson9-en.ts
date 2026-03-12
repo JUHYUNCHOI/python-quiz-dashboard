@@ -123,7 +123,7 @@ ENDCASE
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the basic CASE statement structure.',
-          codeTemplate: '___ OF season\n    "spring" : OUTPUT "Flowers bloom"\n    "summer" : OUTPUT "Time for the beach"\n    "autumn" : OUTPUT "Leaves are falling"\n    "winter" : OUTPUT "It is snowing"\n    OTHERWISE : OUTPUT "Unknown season"\n___',
+          code: '___ OF season\n    "spring" : OUTPUT "Flowers bloom"\n    "summer" : OUTPUT "Time for the beach"\n    "autumn" : OUTPUT "Leaves are falling"\n    "winter" : OUTPUT "It is snowing"\n    OTHERWISE : OUTPUT "Unknown season"\n___',
           fillBlanks: [
             { id: 1, answer: "CASE", options: ["CASE", "SWITCH", "SELECT", "CHECK"] },
             { id: 2, answer: "ENDCASE", options: ["ENDCASE", "END CASE", "ENDIF", "END"] }
@@ -231,7 +231,7 @@ OUTPUT result & "day"
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the CASE statement for a direction-based movement system.',
-          codeTemplate: 'CASE OF direction\n    "up"    : y ← y - 1\n    "down"  : y ← y + 1\n    "left"  : x ← x - 1\n    "right" : x ← x + 1\n    ___ : OUTPUT "Invalid direction"\n___',
+          code: 'CASE OF direction\n    "up"    : y ← y - 1\n    "down"  : y ← y + 1\n    "left"  : x ← x - 1\n    "right" : x ← x + 1\n    ___ : OUTPUT "Invalid direction"\n___',
           fillBlanks: [
             { id: 1, answer: "OTHERWISE", options: ["OTHERWISE", "DEFAULT", "ELSE", "OTHER"] },
             { id: 2, answer: "ENDCASE", options: ["ENDCASE", "ENDIF", "END", "ENDSWITCH"] }

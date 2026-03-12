@@ -113,7 +113,7 @@ OUTPUT LENGTH(word)
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '사용자 입력을 대문자로 바꿔서 비교하는 코드를 완성하세요.',
-          codeTemplate: 'DECLARE reply : STRING\nINPUT reply\nIF ___(reply) = "YES" THEN\n    OUTPUT "확인!"\nENDIF',
+          code: 'DECLARE reply : STRING\nINPUT reply\nIF ___(reply) = "YES" THEN\n    OUTPUT "확인!"\nENDIF',
           fillBlanks: [
             { id: 1, answer: "UCASE", options: ["UCASE", "LCASE", "LENGTH", "SUBSTRING"] }
           ]
@@ -214,7 +214,7 @@ OUTPUT UCASE(username)
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '"Programming"에서 "gram"을 추출하는 코드를 완성하세요. (P=1, r=2, o=3, g=4, r=5, a=6, m=7, m=8, i=9, n=10, g=11)',
-          codeTemplate: 'DECLARE word : STRING\nword ← "Programming"\nOUTPUT SUBSTRING(word, ___, 4)',
+          code: 'DECLARE word : STRING\nword ← "Programming"\nOUTPUT SUBSTRING(word, ___, 4)',
           fillBlanks: [
             { id: 1, answer: "4", options: ["4", "3", "5", "6"] }
           ]
@@ -249,7 +249,7 @@ OUTPUT LENGTH(text)
           type: "fillblank",
           title: "✏️ 문자열 연결!",
           content: '이름과 성을 합쳐서 전체 이름을 만드는 코드를 완성하세요.',
-          codeTemplate: 'DECLARE firstName : STRING\nDECLARE lastName : STRING\nfirstName ← "Minjun"\nlastName ← "Kim"\nOUTPUT lastName ___ " " ___ firstName',
+          code: 'DECLARE firstName : STRING\nDECLARE lastName : STRING\nfirstName ← "Minjun"\nlastName ← "Kim"\nOUTPUT lastName ___ " " ___ firstName',
           fillBlanks: [
             { id: 1, answer: "&", options: ["&", "+", ",", "."] },
             { id: 2, answer: "&", options: ["&", "+", ",", "."] }

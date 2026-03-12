@@ -147,7 +147,7 @@ CALL PrintStars(3)
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '프로시저를 정의하고 호출하는 코드를 완성하세요.',
-          codeTemplate: 'PROCEDURE SayHello(name : STRING)\n    OUTPUT "Hello, " & name\nENDPROCEDURE\n\n___ SayHello("Alice")',
+          code: 'PROCEDURE SayHello(name : STRING)\n    OUTPUT "Hello, " & name\nENDPROCEDURE\n\n___ SayHello("Alice")',
           fillBlanks: [
             { id: 1, answer: "CALL", options: ["CALL", "RUN", "DO", "EXEC"] }
           ]
@@ -285,7 +285,7 @@ OUTPUT x + Double(3)
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '두 정수의 합을 반환하는 함수를 완성하세요.',
-          codeTemplate: 'FUNCTION Add(a : INTEGER, b : INTEGER) ___ INTEGER\n    RETURN a + b\nENDFUNCTION',
+          code: 'FUNCTION Add(a : INTEGER, b : INTEGER) ___ INTEGER\n    RETURN a + b\nENDFUNCTION',
           fillBlanks: [
             { id: 1, answer: "RETURNS", options: ["RETURNS", "RETURN", "OUTPUT", "GIVES"] }
           ]
@@ -376,7 +376,7 @@ CALL ShowResult(answer)
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '함수의 결과를 프로시저로 출력하는 코드를 완성하세요.',
-          codeTemplate: 'FUNCTION Triple(n : INTEGER) RETURNS INTEGER\n    ___ n * 3\nENDFUNCTION\n\nOUTPUT Triple(7)',
+          code: 'FUNCTION Triple(n : INTEGER) RETURNS INTEGER\n    ___ n * 3\nENDFUNCTION\n\nOUTPUT Triple(7)',
           fillBlanks: [
             { id: 1, answer: "RETURN", options: ["RETURN", "RETURNS", "OUTPUT", "GIVE"] }
           ]

@@ -120,7 +120,7 @@ Student 테이블에서 기본 키는 뭘까요?
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '각 필드에 알맞은 자료형을 선택하세요. 학생의 키(Height)를 소수점으로 저장하려면?',
-          codeTemplate: 'StudentID : INTEGER\nName : TEXT\nHeight : ___\nEnrolled : BOOLEAN',
+          code: 'StudentID : INTEGER\nName : TEXT\nHeight : ___\nEnrolled : BOOLEAN',
           fillBlanks: [
             { id: 1, answer: "REAL", options: ["REAL", "INTEGER", "TEXT", "BOOLEAN"] }
           ]
@@ -286,7 +286,7 @@ WHERE Year = 10
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '학년(Grade)이 "A"인 학생의 이름을 조회하는 SQL을 완성하세요.',
-          codeTemplate: 'SELECT Name\n___ Student\nWHERE Grade = \'A\'',
+          code: 'SELECT Name\n___ Student\nWHERE Grade = \'A\'',
           fillBlanks: [
             { id: 1, answer: "FROM", options: ["FROM", "IN", "OF", "TABLE"] }
           ]
@@ -434,7 +434,7 @@ WHERE Grade = 'A' AND Age >= 15
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: 'Year 11이면서 Grade가 "A"가 아닌 학생의 이름을 조회하는 SQL을 완성하세요.',
-          codeTemplate: 'SELECT Name\nFROM Student\nWHERE Year = 11 ___ Grade <> \'A\'',
+          code: 'SELECT Name\nFROM Student\nWHERE Year = 11 ___ Grade <> \'A\'',
           fillBlanks: [
             { id: 1, answer: "AND", options: ["AND", "OR", "NOT", "BUT"] }
           ]

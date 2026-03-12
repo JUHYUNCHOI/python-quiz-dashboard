@@ -161,7 +161,7 @@ OUTPUT myCar.year
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '영화(Movie) 레코드 타입을 완성하세요.',
-          codeTemplate: '___ Movie\n    DECLARE title : STRING\n    DECLARE director : STRING\n    DECLARE rating : REAL\nENDTYPE',
+          code: '___ Movie\n    DECLARE title : STRING\n    DECLARE director : STRING\n    DECLARE rating : REAL\nENDTYPE',
           fillBlanks: [
             { id: 1, answer: "TYPE", options: ["TYPE", "RECORD", "DEFINE", "CLASS"] }
           ]
@@ -318,7 +318,7 @@ OUTPUT total
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '이름이 "김코딩"인 학생을 찾아서 학년을 출력하는 코드를 완성하세요.',
-          codeTemplate: 'FOR i ← 1 TO 30\n    IF students[i].___ = "김코딩" THEN\n        OUTPUT students[i].grade\n    ENDIF\nNEXT i',
+          code: 'FOR i ← 1 TO 30\n    IF students[i].___ = "김코딩" THEN\n        OUTPUT students[i].grade\n    ENDIF\nNEXT i',
           fillBlanks: [
             { id: 1, answer: "name", options: ["name", "grade", "age", "student"] }
           ]

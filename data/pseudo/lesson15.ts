@@ -147,7 +147,7 @@ NEXT i
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '선형 검색 함수의 빈칸을 완성하세요.',
-          codeTemplate: 'FUNCTION LinearSearch(arr : ARRAY, target : INTEGER) RETURNS INTEGER\n    FOR i ← 1 TO ___(arr)\n        IF arr[i] = target THEN\n            RETURN i\n        ENDIF\n    NEXT i\n    RETURN -1\nENDFUNCTION',
+          code: 'FUNCTION LinearSearch(arr : ARRAY, target : INTEGER) RETURNS INTEGER\n    FOR i ← 1 TO ___(arr)\n        IF arr[i] = target THEN\n            RETURN i\n        ENDIF\n    NEXT i\n    RETURN -1\nENDFUNCTION',
           fillBlanks: [
             { id: 1, answer: "LENGTH", options: ["LENGTH", "SIZE", "COUNT", "MAX"] }
           ]

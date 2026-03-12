@@ -105,7 +105,7 @@ NEXT i
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '1부터 10까지 숫자를 출력하는 반복문을 완성하세요.',
-          codeTemplate: '___ i ← 1 ___ 10\n    OUTPUT i\nNEXT i',
+          code: '___ i ← 1 ___ 10\n    OUTPUT i\nNEXT i',
           fillBlanks: [
             { id: 1, answer: "FOR", options: ["FOR", "WHILE", "REPEAT", "LOOP"] },
             { id: 2, answer: "TO", options: ["TO", "UNTIL", "UPTO", "THROUGH"] }
@@ -183,7 +183,7 @@ ENDWHILE
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: 'count가 10보다 작은 동안 반복하는 코드를 완성하세요.',
-          codeTemplate: 'count ← 0\n___ count < 10\n    OUTPUT count\n    count ← count + 1\n___',
+          code: 'count ← 0\n___ count < 10\n    OUTPUT count\n    count ← count + 1\n___',
           fillBlanks: [
             { id: 1, answer: "WHILE", options: ["WHILE", "FOR", "IF", "REPEAT"] },
             { id: 2, answer: "ENDWHILE", options: ["ENDWHILE", "ENDIF", "END", "NEXT"] }

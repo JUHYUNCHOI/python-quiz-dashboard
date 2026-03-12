@@ -57,7 +57,7 @@ Without the OUTPUT message, the user would see a blank screen and not know what 
           type: "fillblank",
           title: "✏️ Fill in the blank!",
           content: "Complete the code so the user can type their name into the variable.",
-          codeTemplate: "DECLARE name : STRING\nOUTPUT \"What is your name?\"\n___ name",
+          code: "DECLARE name : STRING\nOUTPUT \"What is your name?\"\n___ name",
           fillBlanks: [
             { id: 1, answer: "INPUT", options: ["INPUT", "OUTPUT", "DECLARE", "GET"] }
           ]
@@ -124,7 +124,7 @@ Each INPUT stores a value in a different variable!`
           id: "ch2-predict1",
           type: "predict",
           title: "🔮 Predict the output!",
-          content: `The user types **7** when asked. What is the final output?
+          content: `The user types **7** when asked. What is **all the output** shown on screen?
 
 \`\`\`
 DECLARE num : INTEGER
@@ -134,20 +134,20 @@ num ← num * 2
 OUTPUT "Double is: " & num
 \`\`\``,
           options: [
+            "Enter a number:\nDouble is: 14",
             "Double is: 14",
-            "Double is: 7",
-            "Double is: num * 2",
-            "Error"
+            "Enter a number:\nDouble is: 7",
+            "Enter a number:\nDouble is: num * 2"
           ],
           answer: 0,
-          explanation: "The user inputs **7**, so `num` is 7. Then `num ← num * 2` makes `num` equal to **14**. The output is **Double is: 14**."
+          explanation: "First OUTPUT shows **Enter a number:**. The user inputs **7**, so `num` is 7. Then `num ← num * 2` makes `num` equal to **14**. The second OUTPUT shows **Double is: 14**. Two OUTPUTs = two lines!"
         },
         {
           id: "ch2-fill2",
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: "Complete the code to ask for a city name and display a greeting.",
-          codeTemplate: "DECLARE city : STRING\n___ \"Where do you live?\"\nINPUT city\nOUTPUT \"Welcome to \" ___ city",
+          code: "DECLARE city : STRING\n___ \"Where do you live?\"\nINPUT city\nOUTPUT \"Welcome to \" ___ city",
           fillBlanks: [
             { id: 1, answer: "OUTPUT", options: ["OUTPUT", "INPUT", "DECLARE", "PRINT"] },
             { id: 2, answer: "&", options: ["&", "+", ",", "."] }

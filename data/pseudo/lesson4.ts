@@ -180,7 +180,7 @@ DECLARE pass : BOOLEAN
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '각 변수에 알맞은 자료형을 선택하세요.',
-          codeTemplate: 'DECLARE score : ___\nDECLARE average : ___\nDECLARE isWinner : ___',
+          code: 'DECLARE score : ___\nDECLARE average : ___\nDECLARE isWinner : ___',
           fillBlanks: [
             { id: 1, answer: "INTEGER", options: ["INTEGER", "REAL", "STRING", "BOOLEAN"] },
             { id: 2, answer: "REAL", options: ["INTEGER", "REAL", "STRING", "BOOLEAN"] },
@@ -227,7 +227,7 @@ DECLARE pass : BOOLEAN
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '이름을 저장하는 변수를 선언하고 값을 넣으세요.',
-          codeTemplate: '___ userName : ___\nuserName ← ___',
+          code: '___ userName : ___\nuserName ← ___',
           fillBlanks: [
             { id: 1, answer: "DECLARE", options: ["DECLARE", "SET", "CREATE", "INPUT"] },
             { id: 2, answer: "STRING", options: ["STRING", "CHAR", "INTEGER", "BOOLEAN"] },

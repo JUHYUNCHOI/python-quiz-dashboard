@@ -167,7 +167,7 @@ i = 3: key = 65
           type: "fillblank",
           title: "✏️ 검색 코드 빈칸 채우기!",
           content: '선형 검색에서 학생을 찾는 조건을 완성하세요.',
-          codeTemplate: 'FOR i ← 1 TO 5\n    IF scores[i] ___ searchScore THEN\n        OUTPUT names[i]\n        found ← TRUE\n    ENDIF\nNEXT i',
+          code: 'FOR i ← 1 TO 5\n    IF scores[i] ___ searchScore THEN\n        OUTPUT names[i]\n        found ← TRUE\n    ENDIF\nNEXT i',
           fillBlanks: [
             { id: 1, answer: "=", options: ["=", "<>", ">", "<"] }
           ]
@@ -332,7 +332,7 @@ i = 3: key = 3
           type: "fillblank",
           title: "✏️ 종합 빈칸 채우기!",
           content: '삽입 정렬에서 key를 올바른 위치에 삽입하는 코드를 완성하세요.',
-          codeTemplate: 'FOR i ← 2 TO LENGTH(arr)\n    key ← arr[i]\n    j ← i - 1\n    WHILE j >= 1 AND arr[j] > key\n        arr[j + 1] ← arr[j]\n        j ← j - 1\n    ENDWHILE\n    arr[j + 1] ← ___\nNEXT i',
+          code: 'FOR i ← 2 TO LENGTH(arr)\n    key ← arr[i]\n    j ← i - 1\n    WHILE j >= 1 AND arr[j] > key\n        arr[j + 1] ← arr[j]\n        j ← j - 1\n    ENDWHILE\n    arr[j + 1] ← ___\nNEXT i',
           fillBlanks: [
             { id: 1, answer: "key", options: ["key", "arr[j]", "arr[i]", "j"] }
           ]
@@ -342,7 +342,7 @@ i = 3: key = 3
           type: "fillblank",
           title: "✏️ 검증 빈칸 채우기!",
           content: 'Range Check로 점수(0~100)를 입력받는 코드를 완성하세요.',
-          codeTemplate: 'REPEAT\n    OUTPUT "점수를 입력하세요 (0-100): "\n    INPUT score\n___ score >= 0 AND score <= 100',
+          code: 'REPEAT\n    OUTPUT "점수를 입력하세요 (0-100): "\n    INPUT score\n___ score >= 0 AND score <= 100',
           fillBlanks: [
             { id: 1, answer: "UNTIL", options: ["UNTIL", "WHILE", "IF", "ENDWHILE"] }
           ]

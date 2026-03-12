@@ -90,7 +90,7 @@ UNTIL num > 10
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '사용자가 "종료"를 입력할 때까지 반복하는 코드를 완성하세요.',
-          codeTemplate: '___\n    OUTPUT "명령어를 입력하세요:"\n    INPUT command\n___ command = "종료"',
+          code: '___\n    OUTPUT "명령어를 입력하세요:"\n    INPUT command\n___ command = "종료"',
           fillBlanks: [
             { id: 1, answer: "REPEAT", options: ["REPEAT", "WHILE", "FOR", "DO"] },
             { id: 2, answer: "UNTIL", options: ["UNTIL", "ENDWHILE", "WHILE", "ENDREPEAT"] }
@@ -189,7 +189,7 @@ NEXT dan
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '중첩 FOR 반복문의 빈칸을 채워 구구단 5단을 완성하세요.',
-          codeTemplate: 'FOR num ← 1 ___ 9\n    OUTPUT 5, " x ", num, " = ", 5 * ___\nNEXT ___',
+          code: 'FOR num ← 1 ___ 9\n    OUTPUT 5, " x ", num, " = ", 5 * ___\nNEXT ___',
           fillBlanks: [
             { id: 1, answer: "TO", options: ["TO", "UNTIL", "UPTO", "BY"] },
             { id: 2, answer: "num", options: ["num", "5", "i", "9"] },

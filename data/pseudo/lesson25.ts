@@ -145,7 +145,7 @@ ORDER BY Age DESC
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '학생을 나이가 많은 순서대로 정렬하는 SQL을 완성하세요.',
-          codeTemplate: 'SELECT Name, Age\nFROM Student\nORDER BY Age ___',
+          code: 'SELECT Name, Age\nFROM Student\nORDER BY Age ___',
           fillBlanks: [
             { id: 1, answer: "DESC", options: ["DESC", "ASC", "DOWN", "REVERSE"] }
           ]
@@ -321,7 +321,7 @@ WHERE Category = '문구'
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '문구(Category가 "문구") 상품의 총 가격을 구하는 SQL을 완성하세요.',
-          codeTemplate: 'SELECT ___(Price)\nFROM Product\nWHERE Category = \'문구\'',
+          code: 'SELECT ___(Price)\nFROM Product\nWHERE Category = \'문구\'',
           fillBlanks: [
             { id: 1, answer: "SUM", options: ["SUM", "AVG", "COUNT", "TOTAL"] }
           ]

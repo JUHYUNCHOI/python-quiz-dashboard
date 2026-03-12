@@ -283,7 +283,7 @@ Decision 기호가 **2개** 있는 것이 보이죠? 중첩 IF문과 같아요!`
 [OUTPUT       [OUTPUT
  "합격"]       "불합격"]
 \`\`\``,
-          codeTemplate: '◇ Is Score ___ 50? ◇\n  |Yes → OUTPUT "합격"\n  |No  → OUTPUT "불합격"',
+          code: '◇ Is Score ___ 50? ◇\n  |Yes → OUTPUT "합격"\n  |No  → OUTPUT "불합격"',
           fillBlanks: [
             { id: 1, answer: ">=", options: [">=", ">", "<=", "="] }
           ]
@@ -466,7 +466,7 @@ Total + Num]     ↓                  |
 \`\`\`
 
 수도코드:`,
-          codeTemplate: 'Total ← 0\nINPUT Num\n___ Num <> -1 DO\n    Total ← Total + Num\n    INPUT Num\nENDWHILE\nOUTPUT Total',
+          code: 'Total ← 0\nINPUT Num\n___ Num <> -1 DO\n    Total ← Total + Num\n    INPUT Num\nENDWHILE\nOUTPUT Total',
           fillBlanks: [
             { id: 1, answer: "WHILE", options: ["WHILE", "REPEAT", "FOR", "IF"] }
           ]

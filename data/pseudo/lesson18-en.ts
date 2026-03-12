@@ -78,7 +78,7 @@ The WHILE loop shifts elements right to make room for the key. It stops when:
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the insertion sort algorithm.',
-          codeTemplate: 'FOR i ← 2 TO size\n    key ← items[i]\n    j ← i - 1\n\n    ___ j >= 1 AND items[j] > key\n        items[j + 1] ← items[___]\n        j ← j - 1\n    ENDWHILE\n\n    items[___] ← key\nNEXT i',
+          code: 'FOR i ← 2 TO size\n    key ← items[i]\n    j ← i - 1\n\n    ___ j >= 1 AND items[j] > key\n        items[j + 1] ← items[___]\n        j ← j - 1\n    ENDWHILE\n\n    items[___] ← key\nNEXT i',
           fillBlanks: [
             { id: 1, answer: "WHILE", options: ["WHILE", "FOR", "IF", "REPEAT"] },
             { id: 2, answer: "j", options: ["j", "j + 1", "i", "key"] },
@@ -193,7 +193,7 @@ How many shifts happen?`,
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Trace insertion sort: when i=3 on array [3, 5, 1, 4], key=1.',
-          codeTemplate: '// Array before: [3, 5, 1, 4]\n// key = 1, j starts at ___\n\n// j=2: items[2]=5, 5 > 1? Yes → shift 5 right\n// j=1: items[1]=3, 3 > 1? Yes → shift 3 right\n// j=0: stop (j < 1)\n// Insert key at position j+1 = ___\n// Array after: [___, 3, 5, 4]',
+          code: '// Array before: [3, 5, 1, 4]\n// key = 1, j starts at ___\n\n// j=2: items[2]=5, 5 > 1? Yes → shift 5 right\n// j=1: items[1]=3, 3 > 1? Yes → shift 3 right\n// j=0: stop (j < 1)\n// Insert key at position j+1 = ___\n// Array after: [___, 3, 5, 4]',
           fillBlanks: [
             { id: 1, answer: "2", options: ["2", "1", "3", "0"] },
             { id: 2, answer: "1", options: ["1", "2", "0", "3"] },
@@ -269,7 +269,7 @@ Starting: [6, 3, 8, 1, 5]
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Match each sort with its description.',
-          codeTemplate: '// ___ sort: compare ADJACENT elements, swap if wrong order\n// ___ sort: take each element, INSERT into correct position\n// Both have worst case: O(___)',
+          code: '// ___ sort: compare ADJACENT elements, swap if wrong order\n// ___ sort: take each element, INSERT into correct position\n// Both have worst case: O(___)',
           fillBlanks: [
             { id: 1, answer: "Bubble", options: ["Bubble", "Insertion", "Binary", "Linear"] },
             { id: 2, answer: "Insertion", options: ["Insertion", "Bubble", "Selection", "Merge"] },

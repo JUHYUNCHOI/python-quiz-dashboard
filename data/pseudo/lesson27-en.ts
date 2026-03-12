@@ -139,7 +139,7 @@ R \u2190 A XOR B
           type: "fillblank",
           title: "\u270F\uFE0F Complete the XOR Truth Table!",
           content: 'Fill in the missing XOR output values.',
-          codeTemplate: 'A=0, B=0  \u2192  A XOR B = ___\nA=0, B=1  \u2192  A XOR B = ___\nA=1, B=0  \u2192  A XOR B = ___\nA=1, B=1  \u2192  A XOR B = ___',
+          code: 'A=0, B=0  \u2192  A XOR B = ___\nA=0, B=1  \u2192  A XOR B = ___\nA=1, B=0  \u2192  A XOR B = ___\nA=1, B=1  \u2192  A XOR B = ___',
           fillBlanks: [
             { id: 1, answer: "0", options: ["0", "1"] },
             { id: 2, answer: "1", options: ["0", "1"] },
@@ -294,7 +294,7 @@ Which Boolean expression matches this circuit?`,
           type: "fillblank",
           title: "\u270F\uFE0F Write the Expression!",
           content: 'A circuit has: inputs A and B go into an OR gate (output P), then P and input C go into an AND gate (output X). Write the expression.',
-          codeTemplate: 'P \u2190 A ___ B\nX \u2190 P ___ C\n// Simplified: X \u2190 (A ___ B) AND C',
+          code: 'P \u2190 A ___ B\nX \u2190 P ___ C\n// Simplified: X \u2190 (A ___ B) AND C',
           fillBlanks: [
             { id: 1, answer: "OR", options: ["OR", "AND", "XOR", "NOT"] },
             { id: 2, answer: "AND", options: ["AND", "OR", "NAND", "NOR"] },

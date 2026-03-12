@@ -122,7 +122,7 @@ UNTIL count <= 0
           type: "fillblank",
           title: "✏️ Fill in the Blank!",
           content: 'Complete the loop so it keeps asking for input until the user types "yes".',
-          codeTemplate: '___\n    OUTPUT "Continue? (yes/no)"\n    INPUT response\n___ response = "yes"',
+          code: '___\n    OUTPUT "Continue? (yes/no)"\n    INPUT response\n___ response = "yes"',
           fillBlanks: [
             { id: 1, answer: "REPEAT", options: ["REPEAT", "WHILE", "FOR", "LOOP"] },
             { id: 2, answer: "UNTIL", options: ["UNTIL", "ENDWHILE", "ENDREPEAT", "WHILE"] }

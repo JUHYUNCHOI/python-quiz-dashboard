@@ -68,7 +68,7 @@ INPUT age
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '사용자에게 나이를 입력받는 코드를 완성하세요.',
-          codeTemplate: 'DECLARE age : INTEGER\n___ age',
+          code: 'DECLARE age : INTEGER\n___ age',
           fillBlanks: [
             { id: 1, answer: "INPUT", options: ["INPUT", "OUTPUT", "GET", "READ"] }
           ]
@@ -139,7 +139,7 @@ OUTPUT "당신의 점수는 " & score & "점입니다!"
           id: "ch2-predict1",
           type: "predict",
           title: "🔮 결과를 예측해봐요!",
-          content: `사용자가 **"피자"**를 입력했을 때 결과는?
+          content: `사용자가 **"피자"**를 입력했을 때 **화면에 나오는 모든 출력**은?
 
 \`\`\`
 DECLARE food : STRING
@@ -148,20 +148,20 @@ INPUT food
 OUTPUT "나는 " & food & "를 좋아해요!"
 \`\`\``,
           options: [
+            '좋아하는 음식: \n나는 피자를 좋아해요!',
             '나는 피자를 좋아해요!',
-            '나는 food를 좋아해요!',
-            '나는 "피자"를 좋아해요!',
-            '에러'
+            '좋아하는 음식: \n나는 food를 좋아해요!',
+            '좋아하는 음식: 피자\n나는 피자를 좋아해요!'
           ],
           answer: 0,
-          explanation: '사용자가 "피자"를 입력하면 `food`에 "피자"가 저장돼요. `OUTPUT "나는 " & food & "를 좋아해요!"`에서 `food` 자리에 값이 들어가서 **나는 피자를 좋아해요!**가 출력돼요!'
+          explanation: '첫 번째 OUTPUT이 "좋아하는 음식: "을 출력하고, 사용자가 "피자"를 입력하면 `food`에 저장돼요. 두 번째 OUTPUT에서 **나는 피자를 좋아해요!**가 출력돼요. OUTPUT이 2개니까 출력도 2줄이에요!'
         },
         {
           id: "ch2-fill2",
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '사용자에게 색깔을 입력받고, "좋아하는 색: ○○"를 출력하는 코드를 완성하세요.',
-          codeTemplate: 'DECLARE color : STRING\n___ color\nOUTPUT "좋아하는 색: " ___ color',
+          code: 'DECLARE color : STRING\n___ color\nOUTPUT "좋아하는 색: " ___ color',
           fillBlanks: [
             { id: 1, answer: "INPUT", options: ["INPUT", "OUTPUT", "GET", "DECLARE"] },
             { id: 2, answer: "&", options: ["&", "+", ",", "."] }

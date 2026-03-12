@@ -87,7 +87,7 @@ Key details:
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the key part of the average calculator.',
-          codeTemplate: 'DECLARE numbers : ARRAY[1:5] OF INTEGER\nDECLARE total : INTEGER\ntotal ← 0\n\nFOR i ← 1 ___ 5\n    total ← total ___ numbers[i]\nNEXT i\n\naverage ← total ___ 5',
+          code: 'DECLARE numbers : ARRAY[1:5] OF INTEGER\nDECLARE total : INTEGER\ntotal ← 0\n\nFOR i ← 1 ___ 5\n    total ← total ___ numbers[i]\nNEXT i\n\naverage ← total ___ 5',
           fillBlanks: [
             { id: 1, answer: "TO", options: ["TO", "UNTIL", "BY", "FOR"] },
             { id: 2, answer: "+", options: ["+", "-", "*", "/"] },
@@ -204,7 +204,7 @@ Let's trace through: max starts at 34. Then 72 > 34, so max becomes 72. Then 15 
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the Find Maximum algorithm.',
-          codeTemplate: 'max ← values[1]\n\nFOR i ← 2 TO 5\n    ___ values[i] > max ___\n        max ← ___\n    ENDIF\nNEXT i',
+          code: 'max ← values[1]\n\nFOR i ← 2 TO 5\n    ___ values[i] > max ___\n        max ← ___\n    ENDIF\nNEXT i',
           fillBlanks: [
             { id: 1, answer: "IF", options: ["IF", "WHILE", "WHEN", "CHECK"] },
             { id: 2, answer: "THEN", options: ["THEN", "DO", "BEGIN", "RUN"] },
@@ -328,7 +328,7 @@ Key details:
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the core loop of the guessing game.',
-          codeTemplate: '___\n    OUTPUT "Enter your guess: "\n    INPUT guess\n    IF guess > secret THEN\n        OUTPUT "Too high!"\n    ENDIF\n___ guess ___ secret',
+          code: '___\n    OUTPUT "Enter your guess: "\n    INPUT guess\n    IF guess > secret THEN\n        OUTPUT "Too high!"\n    ENDIF\n___ guess ___ secret',
           fillBlanks: [
             { id: 1, answer: "REPEAT", options: ["REPEAT", "WHILE", "FOR", "LOOP"] },
             { id: 2, answer: "UNTIL", options: ["UNTIL", "WHILE", "ENDREPEAT", "NEXT"] },

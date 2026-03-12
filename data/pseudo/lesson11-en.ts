@@ -92,7 +92,7 @@ OUTPUT score
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the procedure that receives a value by copy.',
-          codeTemplate: 'PROCEDURE ShowDouble(___ num : INTEGER)\n    num ← num * 2\n    OUTPUT num\nENDPROCEDURE\n\nDECLARE x : INTEGER\nx ← 10\n___ ShowDouble(x)\nOUTPUT x',
+          code: 'PROCEDURE ShowDouble(___ num : INTEGER)\n    num ← num * 2\n    OUTPUT num\nENDPROCEDURE\n\nDECLARE x : INTEGER\nx ← 10\n___ ShowDouble(x)\nOUTPUT x',
           fillBlanks: [
             { id: 1, answer: "BYVAL", options: ["BYVAL", "BYREF", "COPY", "VALUE"] },
             { id: 2, answer: "CALL", options: ["CALL", "RUN", "EXEC", "DO"] }
@@ -198,7 +198,7 @@ OUTPUT total
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the procedure that resets a variable to zero using BYREF.',
-          codeTemplate: 'PROCEDURE ResetToZero(___ value : INTEGER)\n    value ← ___\nENDPROCEDURE\n\nDECLARE score : INTEGER\nscore ← 100\nCALL ResetToZero(score)\nOUTPUT score',
+          code: 'PROCEDURE ResetToZero(___ value : INTEGER)\n    value ← ___\nENDPROCEDURE\n\nDECLARE score : INTEGER\nscore ← 100\nCALL ResetToZero(score)\nOUTPUT score',
           fillBlanks: [
             { id: 1, answer: "BYREF", options: ["BYREF", "BYVAL", "REF", "VAL"] },
             { id: 2, answer: "0", options: ["0", "100", "score", "NULL"] }
@@ -282,7 +282,7 @@ OUTPUT y
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Choose the correct parameter passing method for each parameter.',
-          codeTemplate: 'PROCEDURE ProcessScore(___ score : INTEGER, ___ result : STRING)\n    IF score >= 50 THEN\n        result ← "Pass"\n    ELSE\n        result ← "Fail"\n    ENDIF\nENDPROCEDURE',
+          code: 'PROCEDURE ProcessScore(___ score : INTEGER, ___ result : STRING)\n    IF score >= 50 THEN\n        result ← "Pass"\n    ELSE\n        result ← "Fail"\n    ENDIF\nENDPROCEDURE',
           fillBlanks: [
             { id: 1, answer: "BYVAL", options: ["BYVAL", "BYREF", "VALUE", "REF"] },
             { id: 2, answer: "BYREF", options: ["BYREF", "BYVAL", "VALUE", "REF"] }

@@ -65,7 +65,7 @@ The \`RETURN i\` inside the loop is called an **early return** - we stop searchi
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the linear search function.',
-          codeTemplate: 'FUNCTION LinearSearch(items : ARRAY, target : INTEGER) RETURNS INTEGER\n    ___ i ← 1 TO LENGTH(items)\n        IF items[i] ___ target THEN\n            ___ i\n        ENDIF\n    NEXT i\n    RETURN -1\nENDFUNCTION',
+          code: 'FUNCTION LinearSearch(items : ARRAY, target : INTEGER) RETURNS INTEGER\n    ___ i ← 1 TO LENGTH(items)\n        IF items[i] ___ target THEN\n            ___ i\n        ENDIF\n    NEXT i\n    RETURN -1\nENDFUNCTION',
           fillBlanks: [
             { id: 1, answer: "FOR", options: ["FOR", "WHILE", "REPEAT", "LOOP"] },
             { id: 2, answer: "=", options: ["=", "<>", ">", "<"] },
@@ -205,7 +205,7 @@ OUTPUT count
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete this linear search that uses an early RETURN to stop as soon as the item is found.',
-          codeTemplate: 'FUNCTION FindItem(arr : ARRAY, size : INTEGER, target : INTEGER) RETURNS INTEGER\n    FOR i ← 1 ___ size\n        IF arr[i] = target ___\n            RETURN ___\n        ENDIF\n    NEXT i\n    RETURN -1\nENDFUNCTION',
+          code: 'FUNCTION FindItem(arr : ARRAY, size : INTEGER, target : INTEGER) RETURNS INTEGER\n    FOR i ← 1 ___ size\n        IF arr[i] = target ___\n            RETURN ___\n        ENDIF\n    NEXT i\n    RETURN -1\nENDFUNCTION',
           fillBlanks: [
             { id: 1, answer: "TO", options: ["TO", "UNTIL", "BY", "THROUGH"] },
             { id: 2, answer: "THEN", options: ["THEN", "DO", "BEGIN", "NEXT"] },

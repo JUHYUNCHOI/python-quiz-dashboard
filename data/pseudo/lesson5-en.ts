@@ -87,7 +87,7 @@ OUTPUT "Have a nice day!"
           type: "fillblank",
           title: "✏️ Fill in the Blank!",
           content: 'Complete the code so it outputs "Welcome!" when age is 18 or above.',
-          codeTemplate: 'IF age >= 18 ___\n    OUTPUT "Welcome!"\n___',
+          code: 'IF age >= 18 ___\n    OUTPUT "Welcome!"\n___',
           fillBlanks: [
             { id: 1, answer: "THEN", options: ["THEN", "DO", "BEGIN", "RUN"] },
             { id: 2, answer: "ENDIF", options: ["ENDIF", "END", "STOP", "DONE"] }
@@ -170,7 +170,7 @@ ENDIF
           type: "fillblank",
           title: "✏️ Fill in the Blank!",
           content: 'Complete the code to output "Pass" if score >= 50, otherwise output "Fail".',
-          codeTemplate: 'IF score >= 50 THEN\n    OUTPUT "Pass"\n___\n    OUTPUT "Fail"\nENDIF',
+          code: 'IF score >= 50 THEN\n    OUTPUT "Pass"\n___\n    OUTPUT "Fail"\nENDIF',
           fillBlanks: [
             { id: 1, answer: "ELSE", options: ["ELSE", "OTHERWISE", "ELIF", "OR"] }
           ]
@@ -289,7 +289,7 @@ ENDIF
           type: "fillblank",
           title: "✏️ Fill in the Blank!",
           content: 'Complete the code to check if a number is between 1 and 100 (inclusive).',
-          codeTemplate: 'IF num >= 1 ___ num <= 100 THEN\n    OUTPUT "Valid range!"\nENDIF',
+          code: 'IF num >= 1 ___ num <= 100 THEN\n    OUTPUT "Valid range!"\nENDIF',
           fillBlanks: [
             { id: 1, answer: "AND", options: ["AND", "OR", "NOT", "THEN"] }
           ]

@@ -64,7 +64,7 @@ DECLARE prices : ARRAY[1:10] OF REAL
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Declare an array called `scores` that holds 6 integers (index 1 to 6).',
-          codeTemplate: '___ scores : ___[1:6] OF ___',
+          code: '___ scores : ___[1:6] OF ___',
           fillBlanks: [
             { id: 1, answer: "DECLARE", options: ["DECLARE", "CREATE", "ARRAY", "SET"] },
             { id: 2, answer: "ARRAY", options: ["ARRAY", "LIST", "SET", "GROUP"] },
@@ -183,7 +183,7 @@ This is much better than writing 5 separate OUTPUT statements!`
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: 'Complete the loop to output all 4 elements of the array.',
-          codeTemplate: 'DECLARE names : ARRAY[1:4] OF STRING\nnames[1] ← "Alice"\nnames[2] ← "Bob"\nnames[3] ← "Carol"\nnames[4] ← "Dave"\n\n___ i ← 1 ___ 4\n    OUTPUT names[___]\nNEXT i',
+          code: 'DECLARE names : ARRAY[1:4] OF STRING\nnames[1] ← "Alice"\nnames[2] ← "Bob"\nnames[3] ← "Carol"\nnames[4] ← "Dave"\n\n___ i ← 1 ___ 4\n    OUTPUT names[___]\nNEXT i',
           fillBlanks: [
             { id: 1, answer: "FOR", options: ["FOR", "WHILE", "REPEAT", "LOOP"] },
             { id: 2, answer: "TO", options: ["TO", "UNTIL", "UPTO", "THROUGH"] },

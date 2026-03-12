@@ -86,7 +86,7 @@ OUTPUT "프로그램 끝"
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '온도가 30도 이상이면 "더워요!"를 출력하는 조건문을 완성하세요.',
-          codeTemplate: 'temp ← 35\n___ temp >= 30 ___ \n    OUTPUT "더워요!"\nENDIF',
+          code: 'temp ← 35\n___ temp >= 30 ___ \n    OUTPUT "더워요!"\nENDIF',
           fillBlanks: [
             { id: 1, answer: "IF", options: ["IF", "WHEN", "CHECK", "WHILE"] },
             { id: 2, answer: "THEN", options: ["THEN", "DO", "RUN", "START"] }
@@ -158,7 +158,7 @@ ENDIF
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '점수에 따라 합격/불합격을 출력하는 코드를 완성하세요.',
-          codeTemplate: 'score ← 45\nIF score >= 60 THEN\n    OUTPUT "합격"\n___\n    OUTPUT "불합격"\n___',
+          code: 'score ← 45\nIF score >= 60 THEN\n    OUTPUT "합격"\n___\n    OUTPUT "불합격"\n___',
           fillBlanks: [
             { id: 1, answer: "ELSE", options: ["ELSE", "OTHERWISE", "OR", "ELIF"] },
             { id: 2, answer: "ENDIF", options: ["ENDIF", "END", "END IF", "DONE"] }

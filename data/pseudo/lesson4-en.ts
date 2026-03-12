@@ -60,7 +60,7 @@ Each type has its own rules. Let's explore them one by one!`
           type: "fillblank",
           title: "✏️ Fill in the blank!",
           content: "Complete the declaration to store a decimal number like 3.14.",
-          codeTemplate: "DECLARE pi : ___",
+          code: "DECLARE pi : ___",
           fillBlanks: [
             { id: 1, answer: "REAL", options: ["REAL", "INTEGER", "STRING", "BOOLEAN"] }
           ]
@@ -190,7 +190,7 @@ initial ← 'B'
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
           content: "Declare a variable for a student's name and whether they passed the exam.",
-          codeTemplate: "DECLARE studentName : ___\nDECLARE passed : ___",
+          code: "DECLARE studentName : ___\nDECLARE passed : ___",
           fillBlanks: [
             { id: 1, answer: "STRING", options: ["STRING", "CHAR", "INTEGER", "BOOLEAN"] },
             { id: 2, answer: "BOOLEAN", options: ["BOOLEAN", "STRING", "INTEGER", "REAL"] }

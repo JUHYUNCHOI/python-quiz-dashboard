@@ -99,7 +99,7 @@ CLOSEFILE "scores.txt"
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '파일의 모든 내용을 읽어서 출력하는 코드를 완성하세요.',
-          codeTemplate: 'DECLARE line : STRING\nOPENFILE "data.txt" FOR ___\n\nWHILE NOT EOF("data.txt")\n    READFILE "data.txt", line\n    OUTPUT line\nENDWHILE\n\n___ "data.txt"',
+          code: 'DECLARE line : STRING\nOPENFILE "data.txt" FOR ___\n\nWHILE NOT EOF("data.txt")\n    READFILE "data.txt", line\n    OUTPUT line\nENDWHILE\n\n___ "data.txt"',
           fillBlanks: [
             { id: 1, answer: "READ", options: ["READ", "WRITE", "APPEND", "OPEN"] },
             { id: 2, answer: "CLOSEFILE", options: ["CLOSEFILE", "ENDFILE", "CLOSE", "STOP"] }
@@ -269,7 +269,7 @@ CLOSEFILE "result.txt"
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '기존 로그 파일에 새로운 기록을 추가하는 코드를 완성하세요.',
-          codeTemplate: 'OPENFILE "log.txt" FOR ___\n___ "log.txt", "새 기록 추가"\nCLOSEFILE "log.txt"',
+          code: 'OPENFILE "log.txt" FOR ___\n___ "log.txt", "새 기록 추가"\nCLOSEFILE "log.txt"',
           fillBlanks: [
             { id: 1, answer: "APPEND", options: ["APPEND", "WRITE", "READ", "ADD"] },
             { id: 2, answer: "WRITEFILE", options: ["WRITEFILE", "READFILE", "APPENDFILE", "ADDFILE"] }
