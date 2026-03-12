@@ -636,15 +636,30 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
               <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" />
               <span className="text-xs md:text-sm lg:text-base">{t("이전", "Prev")}</span>
             </button>
-            <button onClick={goNext} disabled={!canGoNext()}
-              className={cn("flex flex-col items-center justify-center rounded-xl md:rounded-2xl font-bold transition-colors", "w-[60px] h-[50px] md:w-[80px] md:h-[70px] lg:w-[100px] lg:h-[80px]",
-                canGoNext() ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg" : "bg-gray-200 text-gray-400 cursor-not-allowed")}>
-              {canGoNext() ? (
-                <><ChevronRight className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" /><span className="text-xs md:text-sm lg:text-base">{t("다음", "Next")}</span></>
-              ) : (
-                <><Lock className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" /><span className="text-[10px] md:text-xs lg:text-sm">{t("완료 필요", "Complete first")}</span></>
-              )}
-            </button>
+            {(() => {
+              const isLastStepOfLastChapter = currentChapter === lesson.chapters.length - 1 && currentStep === chapter.steps.length - 1 && !isReviewMode
+              const isLastStepOfChapter = currentStep === chapter.steps.length - 1 && !isReviewMode
+              return (
+                <button onClick={goNext} disabled={!canGoNext()}
+                  className={cn("flex flex-col items-center justify-center rounded-xl md:rounded-2xl font-bold transition-colors",
+                    isLastStepOfLastChapter && canGoNext()
+                      ? "w-[100px] h-[50px] md:w-[130px] md:h-[70px] lg:w-[160px] lg:h-[80px] bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white shadow-lg animate-pulse"
+                      : cn("w-[60px] h-[50px] md:w-[80px] md:h-[70px] lg:w-[100px] lg:h-[80px]",
+                          canGoNext() ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg" : "bg-gray-200 text-gray-400 cursor-not-allowed"))}>
+                  {canGoNext() ? (
+                    isLastStepOfLastChapter ? (
+                      <><span className="text-base md:text-lg lg:text-xl">🎉</span><span className="text-xs md:text-sm lg:text-base">{t("레슨 완료!", "Finish!")}</span></>
+                    ) : isLastStepOfChapter ? (
+                      <><ChevronRight className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" /><span className="text-xs md:text-sm lg:text-base">{t("챕터 완료", "End Chapter")}</span></>
+                    ) : (
+                      <><ChevronRight className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" /><span className="text-xs md:text-sm lg:text-base">{t("다음", "Next")}</span></>
+                    )
+                  ) : (
+                    <><Lock className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" /><span className="text-[10px] md:text-xs lg:text-sm">{t("완료 필요", "Complete first")}</span></>
+                  )}
+                </button>
+              )
+            })()}
           </div>
         </div>
       </div>
