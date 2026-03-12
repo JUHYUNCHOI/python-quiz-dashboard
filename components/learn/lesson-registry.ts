@@ -60,11 +60,19 @@ import {
   // Pseudocode Korean lessons
   pseudoLesson1Data, pseudoLesson2Data, pseudoLesson3Data, pseudoLesson4Data,
   pseudoLesson5Data, pseudoLesson6Data, pseudoLesson7Data, pseudoLesson8Data,
-  pseudoLessonP1Data,
+  pseudoLesson9Data, pseudoLesson10Data, pseudoLesson11Data, pseudoLesson12Data,
+  pseudoLesson13Data, pseudoLesson14Data,
+  pseudoLesson15Data, pseudoLesson16Data, pseudoLesson17Data, pseudoLesson18Data,
+  pseudoLesson19Data, pseudoLesson20Data,
+  pseudoLessonP1Data, pseudoLessonP2Data, pseudoLessonP3Data,
   // Pseudocode English lessons
   pseudoLesson1EnData, pseudoLesson2EnData, pseudoLesson3EnData, pseudoLesson4EnData,
   pseudoLesson5EnData, pseudoLesson6EnData, pseudoLesson7EnData, pseudoLesson8EnData,
-  pseudoLessonP1EnData,
+  pseudoLesson9EnData, pseudoLesson10EnData, pseudoLesson11EnData, pseudoLesson12EnData,
+  pseudoLesson13EnData, pseudoLesson14EnData,
+  pseudoLesson15EnData, pseudoLesson16EnData, pseudoLesson17EnData, pseudoLesson18EnData,
+  pseudoLesson19EnData, pseudoLesson20EnData,
+  pseudoLessonP1EnData, pseudoLessonP2EnData, pseudoLessonP3EnData,
 } from "@/data"
 import { loadLesson, isBilingual, getAllLessonIds, getBilingualLessonIds } from "@/data"
 import type { LessonData } from "./types"
@@ -102,6 +110,12 @@ export const lessonsData: Record<string, LessonData> = {
   "pseudo-1": pseudoLesson1Data, "pseudo-2": pseudoLesson2Data, "pseudo-3": pseudoLesson3Data, "pseudo-4": pseudoLesson4Data,
   "pseudo-5": pseudoLesson5Data, "pseudo-6": pseudoLesson6Data, "pseudo-7": pseudoLesson7Data, "pseudo-8": pseudoLesson8Data,
   "pseudo-p1": pseudoLessonP1Data,
+  // Pseudocode Part 2
+  "pseudo-9": pseudoLesson9Data, "pseudo-10": pseudoLesson10Data, "pseudo-11": pseudoLesson11Data, "pseudo-12": pseudoLesson12Data,
+  "pseudo-13": pseudoLesson13Data, "pseudo-14": pseudoLesson14Data, "pseudo-p2": pseudoLessonP2Data,
+  // Pseudocode Part 3
+  "pseudo-15": pseudoLesson15Data, "pseudo-16": pseudoLesson16Data, "pseudo-17": pseudoLesson17Data, "pseudo-18": pseudoLesson18Data,
+  "pseudo-19": pseudoLesson19Data, "pseudo-20": pseudoLesson20Data, "pseudo-p3": pseudoLessonP3Data,
 }
 
 // 라이브러리 변형 (turtle/pygame 등) — 양언어 지원
@@ -218,6 +232,22 @@ export const bilingualLessons: Record<string, { ko: LessonData, en: LessonData }
   "pseudo-7": { ko: pseudoLesson7Data, en: pseudoLesson7EnData },
   "pseudo-8": { ko: pseudoLesson8Data, en: pseudoLesson8EnData },
   "pseudo-p1": { ko: pseudoLessonP1Data, en: pseudoLessonP1EnData },
+  // Pseudocode Part 2
+  "pseudo-9": { ko: pseudoLesson9Data, en: pseudoLesson9EnData },
+  "pseudo-10": { ko: pseudoLesson10Data, en: pseudoLesson10EnData },
+  "pseudo-11": { ko: pseudoLesson11Data, en: pseudoLesson11EnData },
+  "pseudo-12": { ko: pseudoLesson12Data, en: pseudoLesson12EnData },
+  "pseudo-13": { ko: pseudoLesson13Data, en: pseudoLesson13EnData },
+  "pseudo-14": { ko: pseudoLesson14Data, en: pseudoLesson14EnData },
+  "pseudo-p2": { ko: pseudoLessonP2Data, en: pseudoLessonP2EnData },
+  // Pseudocode Part 3
+  "pseudo-15": { ko: pseudoLesson15Data, en: pseudoLesson15EnData },
+  "pseudo-16": { ko: pseudoLesson16Data, en: pseudoLesson16EnData },
+  "pseudo-17": { ko: pseudoLesson17Data, en: pseudoLesson17EnData },
+  "pseudo-18": { ko: pseudoLesson18Data, en: pseudoLesson18EnData },
+  "pseudo-19": { ko: pseudoLesson19Data, en: pseudoLesson19EnData },
+  "pseudo-20": { ko: pseudoLesson20Data, en: pseudoLesson20EnData },
+  "pseudo-p3": { ko: pseudoLessonP3Data, en: pseudoLessonP3EnData },
 }
 
 // ============================================

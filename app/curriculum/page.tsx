@@ -258,13 +258,47 @@ export default function CurriculumPage() {
         { id: "pseudo-p1", title: t("📋 종합 프로젝트", "📋 Combined Project"), description: t("Part 1 복습 프로젝트", "Part 1 Review Project"), duration: t("25분", "25 min"), isProject: true },
       ],
     },
+    {
+      id: "pseudo-part2",
+      title: t("Part 2: 중급", "Part 2: Intermediate"),
+      description: t(
+        "CASE 선택문, 프로시저/함수, 문자열 처리, 파일 처리, 2D 배열까지! IGCSE 시험 핵심 주제를 마스터해요.",
+        "CASE statements, procedures/functions, string handling, file handling, 2D arrays! Master key IGCSE exam topics."
+      ),
+      lessons: [
+        { id: "pseudo-9", title: t("9. CASE 선택문", "9. CASE Statement"), description: "CASE...OF...OTHERWISE...ENDCASE", duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-10", title: t("10. 프로시저 & 함수", "10. Procedures & Functions"), description: "PROCEDURE, FUNCTION, CALL, RETURN", duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "pseudo-11", title: t("11. 매개변수", "11. Parameters"), description: t("BYVAL, BYREF 전달 방식", "BYVAL, BYREF passing modes"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-12", title: t("12. 문자열 처리", "12. String Handling"), description: "LENGTH, SUBSTRING, UCASE, LCASE", duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-13", title: t("13. 파일 처리", "13. File Handling"), description: "OPENFILE, READFILE, WRITEFILE, CLOSEFILE", duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-14", title: t("14. 2D 배열", "14. 2D Arrays"), description: t("2차원 배열 선언과 사용", "Declaring and using 2D arrays"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-p2", title: t("📋 종합 프로젝트 2", "📋 Combined Project 2"), description: t("Part 2 복습 프로젝트", "Part 2 Review Project"), duration: t("30분", "30 min"), isProject: true },
+      ],
+    },
+    {
+      id: "pseudo-part3",
+      title: t("Part 3: 알고리즘", "Part 3: Algorithms"),
+      description: t(
+        "검색, 정렬, Trace Table, 검증까지! IGCSE 시험에 나오는 알고리즘을 수도코드로 완벽하게 익혀요.",
+        "Searching, sorting, trace tables, and validation! Master exam algorithms in pseudocode."
+      ),
+      lessons: [
+        { id: "pseudo-15", title: t("15. 선형 검색", "15. Linear Search"), description: t("처음부터 끝까지 하나씩 찾기", "Find by checking one by one"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-16", title: t("16. 이진 검색", "16. Binary Search"), description: t("반씩 나눠서 빠르게 찾기", "Find quickly by halving"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-17", title: t("17. 버블 정렬", "17. Bubble Sort"), description: t("이웃한 값을 비교하여 정렬", "Sort by comparing adjacent values"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "pseudo-18", title: t("18. 삽입 정렬", "18. Insertion Sort"), description: t("올바른 위치에 삽입하여 정렬", "Sort by inserting into correct position"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "pseudo-19", title: t("19. Trace Table", "19. Trace Table"), description: t("코드를 한 줄씩 추적하기", "Trace code line by line"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "pseudo-20", title: t("20. 검증과 확인", "20. Validation & Verification"), description: t("데이터 검증 기법들", "Data validation techniques"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-p3", title: t("📋 종합 프로젝트 3", "📋 Combined Project 3"), description: t("Part 3 복습 프로젝트", "Part 3 Review Project"), duration: t("30분", "30 min"), isProject: true },
+      ],
+    },
   ]
 
   const { profile } = useAuth()
   const isTeacher = profile?.role === "teacher"
 
   const [completedLessons, setCompletedLessons] = useState<Set<number | string>>(new Set())
-  const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set(["part1", "part2", "part3", "part3-advanced", "part4", "part5", "part6", "part7", "part8", "part9", "cpp-part1", "cpp-part2", "cpp-part3", "pseudo-part1"]))
+  const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set(["part1", "part2", "part3", "part3-advanced", "part4", "part5", "part6", "part7", "part8", "part9", "cpp-part1", "cpp-part2", "cpp-part3", "pseudo-part1", "pseudo-part2", "pseudo-part3"]))
   const [selectedCourse, setSelectedCourse] = useState<CourseType>("python")
   const [loaded, setLoaded] = useState(false)
 
@@ -440,7 +474,7 @@ export default function CurriculumPage() {
                 </div>
                 <div>
                   <h1 className="text-2xl sm:text-3xl font-bold">
-                    {isPseudo ? t("수도코드 기초", "Pseudocode Basics") : isCpp ? t("C++ 기초 (파이썬 → C++)", "C++ Basics (Python → C++)") : t("파이썬 기초 마스터", "Python Basics Master")}
+                    {isPseudo ? t("수도코드 마스터", "Pseudocode Master") : isCpp ? t("C++ 기초 (파이썬 → C++)", "C++ Basics (Python → C++)") : t("파이썬 기초 마스터", "Python Basics Master")}
                   </h1>
                   <p className="text-gray-600 text-sm sm:text-base">
                     {isPseudo ? t("알고리즘 사고력을 키워요! 📋", "Build algorithmic thinking! 📋") : isCpp ? t("파이썬을 아는 학생을 위한 C++ 입문! ⚡", "C++ for Python students! ⚡") : t("웹에서 바로 배우는 파이썬! 🚀", "Learn Python on the web! 🚀")}
