@@ -287,6 +287,45 @@ OUTPUT g
 \`\`\``
         },
         {
+          id: "ch3-exam",
+          type: "explain",
+          title: "📝 Key Exam Points!",
+          content: `Here are the **most commonly tested points** about PROCEDURE vs FUNCTION on IGCSE Paper 2:
+
+**1) FUNCTION must return a value**
+- Must declare \`RETURNS type\`
+- Must contain \`RETURN value\` inside
+- The returned value can be stored or used directly
+
+\`\`\`
+// All valid ways to use a function's return value
+result ← CalcArea(5, 3)
+OUTPUT CalcArea(5, 3)
+IF CalcArea(5, 3) > 10 THEN
+\`\`\`
+
+**2) PROCEDURE uses CALL, FUNCTION does not**
+\`\`\`
+CALL PrintReport(scores)     // Procedure
+average ← GetAverage(scores) // Function
+\`\`\`
+
+**3) When to use PROCEDURE vs FUNCTION?**
+
+This question comes up often in exams!
+
+- **PROCEDURE**: for **actions** — printing to screen, writing to file, modifying arrays
+- **FUNCTION**: for **values** — calculations, lookups, true/false checks
+
+**4) Common exam mistakes**
+- Forgetting RETURN in a FUNCTION
+- Adding RETURNS to a PROCEDURE
+- Using CALL with a FUNCTION
+- Not indenting code inside the block!
+
+💡 **Why indentation matters**: You can **lose marks** on the exam for not indenting! All code inside PROCEDURE/FUNCTION must be indented.`
+        },
+        {
           id: "ch3-quiz1",
           type: "quiz",
           title: "🧠 Quiz!",

@@ -111,15 +111,15 @@ export const pseudoLesson18Data: LessonData = {
 
 \`\`\`
 PROCEDURE InsertionSort(BYREF arr : ARRAY)
-  FOR i ← 2 TO LENGTH(arr)
-    key ← arr[i]
-    j ← i - 1
-    WHILE j >= 1 AND arr[j] > key
-      arr[j + 1] ← arr[j]
-      j ← j - 1
-    ENDWHILE
-    arr[j + 1] ← key
-  NEXT i
+    FOR i ← 2 TO LENGTH(arr)
+        key ← arr[i]
+        j ← i - 1
+        WHILE j >= 1 AND arr[j] > key
+            arr[j + 1] ← arr[j]
+            j ← j - 1
+        ENDWHILE
+        arr[j + 1] ← key
+    NEXT i
 ENDPROCEDURE
 \`\`\`
 
@@ -178,15 +178,15 @@ arr[0 + 1] = arr[1] <- 1
 
 \`\`\`
 PROCEDURE InsertionSort(BYREF arr : ARRAY)
-  FOR i ← 2 TO LENGTH(arr)
-    key ← arr[i]
-    j ← i - 1
-    WHILE j >= 1 AND arr[j] > key
-      arr[j + 1] ← arr[j]
-      j ← j - 1
-    ENDWHILE
-    arr[j + 1] ← key
-  NEXT i
+    FOR i ← 2 TO LENGTH(arr)
+        key ← arr[i]
+        j ← i - 1
+        WHILE j >= 1 AND arr[j] > key
+            arr[j + 1] ← arr[j]
+            j ← j - 1
+        ENDWHILE
+        arr[j + 1] ← key
+    NEXT i
 ENDPROCEDURE
 \`\`\``,
           options: [
@@ -206,15 +206,15 @@ ENDPROCEDURE
 
 \`\`\`
 PROCEDURE InsertionSort(BYREF arr : ARRAY)
-  FOR i ← 2 TO LENGTH(arr)
-    key ← arr[i]
-    j ← i - 1
-    WHILE j >= 1 AND arr[j] > key
-      arr[j + 1] ← arr[j]
-      j ← j - 1
-    ENDWHILE
-    arr[j + 1] ← key
-  NEXT i
+    FOR i ← 2 TO LENGTH(arr)
+        key ← arr[i]
+        j ← i - 1
+        WHILE j >= 1 AND arr[j] > key
+            arr[j + 1] ← arr[j]
+            j ← j - 1
+        ENDWHILE
+        arr[j + 1] ← key
+    NEXT i
 ENDPROCEDURE
 \`\`\``,
           options: [
@@ -231,7 +231,7 @@ ENDPROCEDURE
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: '삽입 정렬 수도코드의 핵심 부분을 완성하세요.',
-          code: 'FOR i ← 2 TO LENGTH(arr)\n  key ← arr[i]\n  j ← i - 1\n  WHILE j >= 1 AND arr[j] > ___\n    arr[j + 1] ← arr[j]\n    j ← j - 1\n  ENDWHILE\n  arr[j + 1] ← key\nNEXT i',
+          code: 'FOR i ← 2 TO LENGTH(arr)\n    key ← arr[i]\n    j ← i - 1\n    WHILE j >= 1 AND arr[j] > ___\n        arr[j + 1] ← arr[j]\n        j ← j - 1\n    ENDWHILE\n    arr[j + 1] ← key\nNEXT i',
           fillBlanks: [
             { id: 1, answer: "key", options: ["key", "arr[i]", "arr[j]", "i"] }
           ]
@@ -241,7 +241,7 @@ ENDPROCEDURE
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",
           content: 'WHILE 루프가 끝난 후 key를 올바른 위치에 삽입하는 코드를 완성하세요.',
-          code: 'WHILE j >= 1 AND arr[j] > key\n  arr[j + 1] ← arr[j]\n  j ← j - 1\nENDWHILE\narr[___] ← key',
+          code: 'WHILE j >= 1 AND arr[j] > key\n    arr[j + 1] ← arr[j]\n    j ← j - 1\nENDWHILE\narr[___] ← key',
           fillBlanks: [
             { id: 1, answer: "j + 1", options: ["j + 1", "j", "j - 1", "i"] }
           ]

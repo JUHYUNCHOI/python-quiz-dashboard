@@ -330,6 +330,48 @@ a ← Area(4, 5)
 \`\`\``
         },
         {
+          id: "ch3-exam",
+          type: "explain",
+          title: "📝 시험에 자주 나오는 포인트!",
+          content: `IGCSE Paper 2에서 PROCEDURE와 FUNCTION 관련 **자주 출제되는 포인트**를 정리해 볼게요!
+
+**1) FUNCTION은 반드시 값을 반환해야 해요**
+- \`RETURNS 자료형\` 선언 필수
+- 내부에 \`RETURN 값\` 문장 필수
+- 반환된 값은 변수에 저장하거나 바로 사용 가능
+
+\`\`\`
+// 올바른 사용법
+result ← CalcArea(5, 3)
+OUTPUT CalcArea(5, 3)
+IF CalcArea(5, 3) > 10 THEN
+\`\`\`
+
+**2) PROCEDURE는 CALL로 호출해요**
+- \`CALL 프로시저이름(인자)\`
+- FUNCTION은 CALL 없이 호출!
+
+\`\`\`
+CALL PrintReport(scores)     // 프로시저
+average ← GetAverage(scores) // 함수
+\`\`\`
+
+**3) 언제 PROCEDURE? 언제 FUNCTION?**
+
+시험에서 "PROCEDURE와 FUNCTION 중 어떤 것을 써야 하나요?" 라는 질문이 나와요!
+
+- **PROCEDURE**: 화면에 출력, 파일에 저장, 배열 수정 등 **동작**을 수행할 때
+- **FUNCTION**: 계산 결과, 검색 결과, 참/거짓 판별 등 **값이 필요**할 때
+
+**4) 시험에서 자주 틀리는 실수**
+- FUNCTION인데 RETURN을 빠뜨림
+- PROCEDURE인데 RETURNS를 씀
+- FUNCTION 호출할 때 CALL을 붙임
+- 들여쓰기를 안 해서 감점!
+
+💡 **들여쓰기가 중요한 이유**: 시험에서 코드를 작성할 때 들여쓰기를 안 하면 **감점**될 수 있어요! PROCEDURE/FUNCTION 안의 모든 코드는 **반드시 들여쓰기**해야 해요.`
+        },
+        {
           id: "ch3-quiz1",
           type: "quiz",
           title: "🧠 퀴즈!",
