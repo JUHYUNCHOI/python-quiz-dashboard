@@ -222,6 +222,21 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     setQuizAttempts(0)
   }
 
+  // 레슨 처음부터 다시 시작
+  const restartLesson = () => {
+    setCurrentChapter(0)
+    setCurrentStep(0)
+    setScore(0)
+    setCompletedSteps(new Set())
+    setWrongQueue([])
+    setReviewIndex(0)
+    setShowChapterComplete(false)
+    setShowLessonComplete(false)
+    setShowChapterList(false)
+    resetStepState()
+    localStorage.removeItem(progressKey)
+  }
+
   const finishChapter = () => {
     if (currentChapter < lesson.chapters.length - 1) {
       setShowConfetti(true)
@@ -575,6 +590,11 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                     </button>
                   ))}
                 </div>
+                <button onClick={restartLesson}
+                  className="mt-2 w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-sm font-medium bg-red-50 hover:bg-red-100 text-red-600 transition-all">
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  {t("처음부터 다시 시작", "Restart from beginning")}
+                </button>
               </div>
             </div>
           </div>
