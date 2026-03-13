@@ -256,6 +256,7 @@ export default function CurriculumPage() {
         { id: "pseudo-6", title: t("7. 반복문 1", "7. Loops 1"), description: t("FOR...TO...NEXT, WHILE", "FOR...TO...NEXT, WHILE"), duration: t("20분", "20 min"), hasQuiz: true },
         { id: "pseudo-7", title: t("8. 반복문 2", "8. Loops 2"), description: t("REPEAT...UNTIL, 중첩 반복", "REPEAT...UNTIL, nested loops"), duration: t("20분", "20 min"), hasQuiz: true },
         { id: "pseudo-8", title: t("9. 배열", "9. Arrays"), description: t("DECLARE 배열, 인덱싱", "DECLARE arrays, indexing"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-p1", title: t("📝 기출문제 연습 1", "📝 Past Paper Practice 1"), description: t("Part 1 기출 스타일 연습", "Part 1 Exam Practice"), duration: t("25분", "25 min"), isProject: true },
       ],
     },
     {
@@ -272,6 +273,7 @@ export default function CurriculumPage() {
         { id: "pseudo-12", title: t("13. 문자열 처리", "13. String Handling"), description: "LENGTH, SUBSTRING, UCASE, LCASE", duration: t("20분", "20 min"), hasQuiz: true },
         { id: "pseudo-13", title: t("14. 파일 처리", "14. File Handling"), description: "OPENFILE, READFILE, WRITEFILE, CLOSEFILE", duration: t("20분", "20 min"), hasQuiz: true },
         { id: "pseudo-14", title: t("15. 2D 배열", "15. 2D Arrays"), description: t("2차원 배열 선언과 사용", "Declaring and using 2D arrays"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-p2", title: t("📝 기출문제 연습 2", "📝 Past Paper Practice 2"), description: t("Part 2 기출 스타일 연습", "Part 2 Exam Practice"), duration: t("30분", "30 min"), isProject: true },
       ],
     },
     {
@@ -288,6 +290,7 @@ export default function CurriculumPage() {
         { id: "pseudo-18", title: t("19. 삽입 정렬", "19. Insertion Sort"), description: t("올바른 위치에 삽입하여 정렬", "Sort by inserting into correct position"), duration: t("25분", "25 min"), hasQuiz: true },
         { id: "pseudo-19", title: t("20. Trace Table", "20. Trace Table"), description: t("코드를 한 줄씩 추적하기", "Trace code line by line"), duration: t("25분", "25 min"), hasQuiz: true },
         { id: "pseudo-20", title: t("21. 검증과 확인", "21. Validation & Verification"), description: t("데이터 검증 기법들", "Data validation techniques"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-p3", title: t("📝 기출문제 연습 3", "📝 Past Paper Practice 3"), description: t("Part 3 기출 스타일 연습", "Part 3 Exam Practice"), duration: t("30분", "30 min"), isProject: true },
       ],
     },
     {
@@ -318,16 +321,6 @@ export default function CurriculumPage() {
       ],
     },
     {
-      id: "igcse-pseudocode",
-      title: t("기출: Pseudocode", "Past Papers: Pseudocode"),
-      description: t("IGCSE Paper 2 수도코드 기출 스타일 연습! 배열, 반복문, 알고리즘 등.", "IGCSE Paper 2 pseudocode past paper practice! Arrays, loops, algorithms, etc."),
-      lessons: [
-        { id: "pseudo-p1", title: t("📝 기출문제 연습 1", "📝 Past Paper Practice 1"), description: t("Part 1 기출 스타일 연습", "Part 1 Exam Practice"), duration: t("25분", "25 min"), isProject: true },
-        { id: "pseudo-p2", title: t("📝 기출문제 연습 2", "📝 Past Paper Practice 2"), description: t("Part 2 기출 스타일 연습", "Part 2 Exam Practice"), duration: t("30분", "30 min"), isProject: true },
-        { id: "pseudo-p3", title: t("📝 기출문제 연습 3", "📝 Past Paper Practice 3"), description: t("Part 3 기출 스타일 연습", "Part 3 Exam Practice"), duration: t("30분", "30 min"), isProject: true },
-      ],
-    },
-    {
       id: "igcse-sql",
       title: t("기출: SQL", "Past Papers: SQL"),
       description: t("IGCSE Paper 2 SQL 기출 연습! SELECT, WHERE, ORDER BY, 집계함수, GROUP BY.", "IGCSE Paper 2 SQL past paper practice! SELECT, WHERE, ORDER BY, aggregate functions, GROUP BY."),
@@ -350,7 +343,7 @@ export default function CurriculumPage() {
   const isTeacher = profile?.role === "teacher"
 
   const [completedLessons, setCompletedLessons] = useState<Set<number | string>>(new Set())
-  const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set(["part1", "part2", "part3", "part3-advanced", "part4", "part5", "part6", "part7", "part8", "part9", "cpp-part1", "cpp-part2", "cpp-part3", "pseudo-part1", "pseudo-part2", "pseudo-part3", "pseudo-part4", "pseudo-part5", "igcse-pseudocode", "igcse-sql", "igcse-logic"]))
+  const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set(["part1", "part2", "part3", "part3-advanced", "part4", "part5", "part6", "part7", "part8", "part9", "cpp-part1", "cpp-part2", "cpp-part3", "pseudo-part1", "pseudo-part2", "pseudo-part3", "pseudo-part4", "pseudo-part5", "igcse-sql", "igcse-logic"]))
   const [selectedCourse, setSelectedCourse] = useState<CourseType>("python")
   const [loaded, setLoaded] = useState(false)
 
