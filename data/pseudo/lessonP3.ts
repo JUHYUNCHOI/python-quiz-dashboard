@@ -1,376 +1,539 @@
 // ============================================
-// 수도코드 종합 프로젝트: Part 3 복습
-// 검색, 정렬, Trace Table, 검증 종합
+// 수도코드 기출문제 연습: Part 3
+// Trace Table, 정렬, 확장 프로그래밍
+// IGCSE 0478 Paper 2 스타일
 // ============================================
 
 import { LessonData } from '../types'
 
 export const pseudoLessonP3Data: LessonData = {
   id: "pseudo-p3",
-  title: "Part 3 종합 프로젝트",
-  emoji: "🏆",
-  description: "Part 3 복습 프로젝트!",
+  title: "기출문제 연습 3",
+  emoji: "📝",
+  description: "Part 3 기출문제 스타일 연습!",
   chapters: [
     {
       id: "ch1",
-      title: "학생 점수 정렬 & 검색 시스템",
-      emoji: "🎓",
+      title: "Trace Table",
+      emoji: "📊",
       steps: [
         {
           id: "ch1-intro",
           type: "explain",
-          title: "🎓 프로젝트: 학생 점수 관리 시스템",
-          content: `지금까지 배운 모든 것을 합쳐서 **학생 점수 관리 시스템**을 만들어 볼게요!
+          title: "📊 Trace Table이란?",
+          content: `IGCSE Paper 2에서 **Q6a / Q7a**에 자주 나오는 문제 유형이에요!
 
-이 시스템은 다음 기능이 있어요:
-1. **입력 검증** (Validation) - 점수가 0~100 사이인지 확인
-2. **삽입 정렬** (Insertion Sort) - 점수를 오름차순으로 정렬
-3. **선형 검색** (Linear Search) - 특정 점수를 가진 학생 찾기
-4. **Trace Table** - 각 단계를 추적
+**Trace Table**은 프로그램이 실행될 때 변수의 값이 **어떻게 변하는지** 한 줄씩 추적하는 표예요.
 
-실제 IGCSE 시험에서도 이런 종합 문제가 나와요!
+간단한 예시를 볼게요:
 
-사용할 데이터:
 \`\`\`
-학생 이름: ["민수", "지영", "태호", "서연", "준혁"]
-학생 점수: [78, 92, 65, 88, 45]
-\`\`\``
+Count ← 0
+FOR i ← 1 TO 3
+    Count ← Count + 2
+NEXT i
+OUTPUT Count
+\`\`\`
+
+| i | Count |
+|---|-------|
+|   | 0     |
+| 1 | 2     |
+| 2 | 4     |
+| 3 | 6     |
+
+➡️ OUTPUT: **6**
+
+Trace Table 작성 팁:
+- 📌 **모든 변수**를 열(column)으로 만들기
+- 📌 값이 **바뀔 때마다** 새 행(row)에 기록
+- 📌 반복문은 **매 반복마다** 새 행 추가
+- 📌 조건문 결과도 추적하면 좋아요!`
         },
         {
-          id: "ch1-validation",
+          id: "ch1-code",
           type: "explain",
-          title: "🛡️ 1단계: 점수 입력 & 검증",
-          content: `먼저 학생 5명의 점수를 입력받으면서 **Validation**을 해요!
+          title: "📋 Trace Table 문제",
+          content: `다음 수도코드를 분석해 봐요. 시험에서 이런 코드를 주고 Trace Table을 작성하라고 해요!
 
 \`\`\`
-DECLARE names : ARRAY[1:5] OF STRING
-DECLARE scores : ARRAY[1:5] OF INTEGER
-
-names[1] ← "민수"
-names[2] ← "지영"
-names[3] ← "태호"
-names[4] ← "서연"
-names[5] ← "준혁"
-
-FOR i ← 1 TO 5
-    REPEAT
-        OUTPUT names[i], "의 점수를 입력하세요 (0-100): "
-        INPUT scores[i]
-        IF scores[i] < 0 OR scores[i] > 100 THEN
-            OUTPUT "오류: 점수는 0에서 100 사이여야 합니다!"
-        ENDIF
-    UNTIL scores[i] >= 0 AND scores[i] <= 100
-NEXT i
+DECLARE X : INTEGER
+DECLARE Y : INTEGER
+DECLARE Z : INTEGER
+X ← 5
+Y ← 3
+Z ← 0
+WHILE X > 0
+    Z ← Z + Y
+    X ← X - 1
+ENDWHILE
+OUTPUT Z
 \`\`\`
 
-여기서 사용된 개념:
-- **배열**: 이름과 점수를 저장
-- **FOR 반복문**: 5명의 학생에 대해 반복
-- **REPEAT...UNTIL**: Range Check (0~100)
-- **IF문**: 오류 메시지 출력`
+Trace Table:
+
+| 반복 | X | Y | Z | X > 0? |
+|------|---|---|---|--------|
+| 초기 | 5 | 3 | 0 |        |
+| 1회  | 4 | 3 | 3 | TRUE   |
+| 2회  | 3 | 3 | 6 | TRUE   |
+| 3회  | 2 | 3 | 9 | TRUE   |
+| 4회  | 1 | 3 | 12| TRUE   |
+| 5회  | 0 | 3 | 15| TRUE   |
+| 종료 |   |   |   | FALSE  |
+
+한 줄씩 천천히 따라가 봐요! 🔍`
         },
         {
-          id: "ch1-sort",
-          type: "explain",
-          title: "📥 2단계: 삽입 정렬로 점수 정렬",
-          content: `점수를 오름차순으로 정렬해 볼게요!
-
-이름도 함께 이동해야 하니까, 점수를 옮길 때 **이름도 같이** 옮겨야 해요!
+          id: "ch1-q1",
+          type: "quiz",
+          title: "🧠 1회 반복 후 Z의 값",
+          content: `위의 수도코드에서 **1번째 반복이 끝난 후** Z의 값은?
 
 \`\`\`
-FOR i ← 2 TO 5
-    keyScore ← scores[i]
-    keyName ← names[i]
-    j ← i - 1
-    WHILE j >= 1 AND scores[j] > keyScore
-        scores[j + 1] ← scores[j]
-        names[j + 1] ← names[j]
-        j ← j - 1
-    ENDWHILE
-    scores[j + 1] ← keyScore
-    names[j + 1] ← keyName
-NEXT i
-\`\`\`
+X ← 5, Y ← 3, Z ← 0
 
-정렬 과정 (Trace Table):
+WHILE X > 0
+    Z ← Z + Y    ← Z = 0 + 3 = ?
+    X ← X - 1
+ENDWHILE
+\`\`\``,
+          options: [
+            '3',
+            '0',
+            '5',
+            '8'
+          ],
+          answer: 0,
+          explanation: `1번째 반복:
+- Z ← Z + Y = 0 + 3 = **3**
+- X ← X - 1 = 5 - 1 = 4
 
-| i | keyScore | keyName | 정렬 후 scores | 정렬 후 names |
-|---|----------|---------|---------------|--------------|
-| 초기 | | | [78,92,65,88,45] | [민수,지영,태호,서연,준혁] |
-| 2 | 92 | 지영 | [78,92,65,88,45] | [민수,지영,태호,서연,준혁] |
-| 3 | 65 | 태호 | [65,78,92,88,45] | [태호,민수,지영,서연,준혁] |
-| 4 | 88 | 서연 | [65,78,88,92,45] | [태호,민수,서연,지영,준혁] |
-| 5 | 45 | 준혁 | [45,65,78,88,92] | [준혁,태호,민수,서연,지영] |
-
-최종 결과: **45, 65, 78, 88, 92** (오름차순 정렬 완료!)`
+Z는 매 반복마다 Y(= 3)씩 증가해요!`
         },
         {
-          id: "ch1-search",
-          type: "explain",
-          title: "🔍 3단계: 선형 검색으로 학생 찾기",
-          content: `정렬된 배열에서 특정 점수를 가진 학생을 찾아 볼게요!
+          id: "ch1-q2",
+          type: "quiz",
+          title: "🧠 3회 반복 후 X의 값",
+          content: `**3번째 반복이 끝난 후** X의 값은?
+
+힌트: X는 매 반복마다 1씩 감소해요.
 
 \`\`\`
-OUTPUT "검색할 점수를 입력하세요: "
-INPUT searchScore
+초기: X = 5
+1회 후: X = 4
+2회 후: X = 3
+3회 후: X = ?
+\`\`\``,
+          options: [
+            '2',
+            '3',
+            '1',
+            '0'
+          ],
+          answer: 0,
+          explanation: `X는 매 반복마다 1씩 감소해요:
+- 초기: X = 5
+- 1회 후: X = 4
+- 2회 후: X = 3
+- 3회 후: X = **2**
 
-found ← FALSE
-
-FOR i ← 1 TO 5
-    IF scores[i] = searchScore THEN
-        OUTPUT names[i], "의 점수가 ", searchScore, "점입니다!"
-        found ← TRUE
-    ENDIF
-NEXT i
-
-IF found = FALSE THEN
-    OUTPUT "해당 점수를 가진 학생이 없습니다."
-ENDIF
-\`\`\`
-
-예시: searchScore = 78을 검색하면?
-
-| i | scores[i] | scores[i] = 78? | 결과 |
-|---|-----------|-----------------|------|
-| 1 | 45 | No | |
-| 2 | 65 | No | |
-| 3 | 78 | Yes | "민수의 점수가 78점입니다!" |
-| 4 | 88 | No | |
-| 5 | 92 | No | |
-
-3번째 비교에서 찾았어요!`
+X가 0이 되면 WHILE X > 0 조건이 FALSE가 되어 멈춰요!`
         },
         {
           id: "ch1-predict1",
           type: "predict",
-          title: "🔮 정렬 결과를 예측해봐요!",
-          content: `점수 [78, 92, 65, 88, 45]를 삽입 정렬할 때, i = 3 (key = 65) 단계가 끝난 후의 배열은?
+          title: "🔮 최종 출력 예측",
+          content: `다음 코드의 **최종 OUTPUT**은?
 
 \`\`\`
-i = 2 후: [78, 92, 65, 88, 45]  (92 > 78이라 변화 없음)
-i = 3: key = 65
-  j = 2: 92 > 65 → 92를 밀기
-  j = 1: 78 > 65 → 78을 밀기
-  j = 0 → 종료, arr[1] ← 65
-\`\`\``,
+X ← 5
+Y ← 3
+Z ← 0
+WHILE X > 0
+    Z ← Z + Y
+    X ← X - 1
+ENDWHILE
+OUTPUT Z
+\`\`\`
+
+Trace Table을 완성해 보세요:
+
+| 반복 | X | Z |
+|------|---|---|
+| 초기 | 5 | 0 |
+| 1회  | 4 | 3 |
+| 2회  | 3 | 6 |
+| 3회  | 2 | 9 |
+| 4회  | 1 | 12 |
+| 5회  | 0 | ? |`,
           options: [
-            '[65, 78, 92, 88, 45]',
-            '[78, 65, 92, 88, 45]',
-            '[65, 92, 78, 88, 45]',
-            '[78, 92, 65, 88, 45]'
+            '15',
+            '12',
+            '18',
+            '5'
           ],
           answer: 0,
-          explanation: 'key = 65는 92와 78보다 작으므로 둘 다 오른쪽으로 밀려요. 65는 맨 앞(인덱스 1)에 삽입돼요. 결과: **[65, 78, 92, 88, 45]**'
+          explanation: `5회 반복 후:
+- Z = 0 + 3 + 3 + 3 + 3 + 3 = **15**
+
+Z는 Y(= 3)를 X(= 5)번 더한 거예요.
+즉, 3 × 5 = **15**!`
         },
         {
-          id: "ch1-fill1",
-          type: "fillblank",
-          title: "✏️ 검색 코드 빈칸 채우기!",
-          content: '선형 검색에서 학생을 찾는 조건을 완성하세요.',
-          code: 'FOR i ← 1 TO 5\n    IF scores[i] ___ searchScore THEN\n        OUTPUT names[i]\n        found ← TRUE\n    ENDIF\nNEXT i',
-          fillBlanks: [
-            { id: 1, answer: "=", options: ["=", "<>", ">", "<"] }
-          ]
+          id: "ch1-q3",
+          type: "quiz",
+          title: "🧠 알고리즘의 기능",
+          content: `이 알고리즘은 결과적으로 **어떤 연산**을 수행하는 건가요?
+
+\`\`\`
+X ← 5, Y ← 3, Z ← 0
+WHILE X > 0
+    Z ← Z + Y
+    X ← X - 1
+ENDWHILE
+OUTPUT Z    // 결과: 15
+\`\`\`
+
+💡 Y를 X번 반복해서 더하면...?`,
+          options: [
+            'X * Y (반복 덧셈으로 곱셈 계산)',
+            'X + Y (두 수의 합)',
+            'X ^ Y (거듭제곱)',
+            'X MOD Y (나머지)'
+          ],
+          answer: 0,
+          explanation: `Y를 X번 반복해서 더하는 것은 **곱셈(Multiplication)**이에요!
+
+Z = Y + Y + Y + ... (X번)
+Z = Y × X = 3 × 5 = **15**
+
+이것을 **반복 덧셈에 의한 곱셈(multiplication by repeated addition)**이라고 해요.
+
+⚠️ 시험에서 "이 알고리즘의 목적(purpose)을 설명하세요"라는 문제가 자주 나와요!`
         }
       ]
     },
     {
       id: "ch2",
-      title: "종합 퀴즈",
-      emoji: "📝",
+      title: "정렬 알고리즘",
+      emoji: "🔄",
       steps: [
         {
           id: "ch2-intro",
           type: "explain",
-          title: "📝 Part 3 종합 복습!",
-          content: `Part 3에서 배운 내용을 모두 복습해 볼게요!
+          title: "🔄 정렬 알고리즘 분석 (IGCSE Q6 스타일)",
+          content: `IGCSE 시험에서는 **의미 없는 변수명(non-meaningful identifiers)**으로 된 코드를 주고 분석하라고 해요!
 
-**배운 주제들:**
-- 선형 검색 (Linear Search)
-- 버블 정렬 (Bubble Sort)
-- 삽입 정렬 (Insertion Sort)
-- Trace Table (추적 표)
-- Validation (데이터 검증)
-- Verification (데이터 확인)
-
-지금부터 종합 퀴즈로 실력을 확인해 볼 거예요!
-
-시험 대비 핵심 포인트:
-1. 검색과 정렬 알고리즘의 **수도코드를 읽고 쓸 수 있어야** 해요
-2. **Trace Table**을 정확하게 그릴 수 있어야 해요
-3. **Validation과 Verification의 차이**를 설명할 수 있어야 해요
-
-준비됐나요? 시작할게요!`
-        },
-        {
-          id: "ch2-quiz1",
-          type: "quiz",
-          title: "🧠 종합 퀴즈 1 - 검색",
-          content: '선형 검색(Linear Search)에서 배열에 10개의 원소가 있고 찾는 값이 마지막에 있다면, 비교는 몇 번 필요한가요?',
-          options: [
-            '10번',
-            '1번',
-            '5번',
-            '100번'
-          ],
-          answer: 0,
-          explanation: '선형 검색은 **처음부터 끝까지 하나씩** 확인해요. 찾는 값이 마지막(10번째)에 있으면 **10번** 비교해야 해요. 이것이 선형 검색의 **최악의 경우(worst case)**예요!'
-        },
-        {
-          id: "ch2-quiz2",
-          type: "quiz",
-          title: "🧠 종합 퀴즈 2 - 정렬",
-          content: '버블 정렬과 삽입 정렬의 공통점은?',
-          options: [
-            '둘 다 인접한 원소들을 비교하면서 정렬한다',
-            '둘 다 배열을 반으로 나누어 정렬한다',
-            '둘 다 항상 같은 횟수의 비교를 한다',
-            '둘 다 추가 배열이 필요하다'
-          ],
-          answer: 0,
-          explanation: '버블 정렬은 인접한 원소를 비교해서 교환하고, 삽입 정렬은 정렬된 부분에서 올바른 위치를 찾기 위해 인접한 원소들을 비교해요. 둘 다 **원본 배열 안에서(in-place)** 정렬하기 때문에 추가 배열이 필요 없어요!'
-        },
-        {
-          id: "ch2-predict1",
-          type: "predict",
-          title: "🔮 종합 퀴즈 3 - Trace Table",
-          content: `다음 코드의 OUTPUT은?
+다음 수도코드를 분석해 보세요:
 
 \`\`\`
-x ← 1
-total ← 0
-WHILE x <= 4
-    total ← total + x
-    x ← x + 1
-ENDWHILE
-OUTPUT total
+01 DECLARE A[1:10] : STRING
+02 DECLARE T : STRING
+03 DECLARE C, L : INTEGER
+04 L ← 10
+05 FOR C ← 1 TO L
+06     FOR J ← 1 TO L - 1
+07         IF A[J] > A[J + 1]
+08             THEN
+09                 T ← A[J]
+10                 A[J] ← A[J + 1]
+11                 A[J + 1] ← T
+12             ENDIF
+13     NEXT J
+14 NEXT C
+15 FOR C ← 1 TO L
+16     OUTPUT A[C]
+17 NEXT C
 \`\`\`
 
-Trace Table:
+이 코드가 무엇을 하는지 단계별로 분석해 봐요! 🔍
 
-| x | total | x <= 4? |
-|---|-------|---------|
-| 1 | 0 | |
-| | 1 | Yes |
-| 2 | | |
-| | 3 | Yes |
-| 3 | | |
-| | 6 | Yes |
-| 4 | | |
-| | 10 | Yes |
-| 5 | | No |`,
-          options: [
-            '10',
-            '4',
-            '15',
-            '6'
-          ],
-          answer: 0,
-          explanation: 'Trace Table을 따라가면: total = 0+1=1, 1+2=3, 3+3=6, 6+4=**10**. x = 5가 되면 x <= 4가 거짓이 되어 반복 종료! 총합은 1+2+3+4 = **10**이에요.'
+핵심 포인트:
+- 📌 \`A[J] > A[J + 1]\` → **인접한 원소를 비교**
+- 📌 09~11줄 → **교환(swap)** 작업
+- 📌 이중 FOR 반복문 → 여러 번 반복`
         },
         {
-          id: "ch2-quiz3",
+          id: "ch2-q1",
           type: "quiz",
-          title: "🧠 종합 퀴즈 4 - Validation",
-          content: '회원가입 시 "이메일 주소에 @ 기호가 포함되어야 합니다"는 어떤 종류의 검증인가요?',
+          title: "🧠 알고리즘의 목적",
+          content: `위의 수도코드(01~17줄)의 **목적(purpose)**은 무엇인가요?
+
+힌트:
+- \`A[J] > A[J + 1]\`로 인접한 원소를 비교해요
+- 조건이 맞으면 **교환(swap)**해요
+- 이것을 여러 번 반복해요`,
           options: [
-            'Format Check',
-            'Range Check',
-            'Presence Check',
-            'Verification'
+            '문자열을 오름차순(알파벳순)으로 정렬',
+            '문자열에서 특정 값을 검색',
+            '배열의 합계를 계산',
+            '배열에서 중복 값을 제거'
           ],
           answer: 0,
-          explanation: '이메일의 **형식(format)**이 올바른지 확인하는 것이므로 **Format Check**예요! @ 기호가 있는지, "xxx@xxx.xxx" 형태인지 등 정해진 패턴을 확인하는 거예요.'
+          explanation: `이것은 **버블 정렬(Bubble Sort)** 알고리즘이에요!
+
+A는 STRING 배열이고, \`A[J] > A[J + 1]\`에서 ">"는 **알파벳순 비교**를 해요.
+
+큰 값을 뒤로 보내면서 **오름차순(ascending / alphabetical order)**으로 정렬해요.
+
+15~17줄은 정렬된 결과를 **출력**하는 부분이에요.`
         },
         {
-          id: "ch2-predict2",
-          type: "predict",
-          title: "🔮 종합 퀴즈 5 - 삽입 정렬 Trace",
-          content: `배열 [4, 1, 3]에 삽입 정렬을 적용하면 최종 결과는?
+          id: "ch2-q2",
+          type: "quiz",
+          title: "🧠 4가지 프로세스",
+          content: `이 알고리즘은 4가지 주요 프로세스를 수행해요.
 
-단계별 추적:
 \`\`\`
-초기: [4, 1, 3]
+01 DECLARE A[1:10] : STRING    ← 데이터 저장
+05-14 이중 FOR 반복문           ← 정렬 과정
+07 IF A[J] > A[J + 1]          ← ???
+09-11 T ← A[J] ...             ← ???
+15-17 FOR ... OUTPUT A[C]      ← 출력
+\`\`\`
 
-i = 2: key = 1
-  j = 1: arr[1]=4 > 1 → 4를 밀기
-  j = 0 → 종료
-  arr[1] ← 1
-  결과: [1, 4, 3]
-
-i = 3: key = 3
-  j = 2: arr[2]=4 > 3 → 4를 밀기
-  j = 1: arr[1]=1 > 3? No → 종료
-  arr[2] ← 3
-  결과: ?
-\`\`\``,
+07줄의 프로세스는?`,
           options: [
-            '[1, 3, 4]',
-            '[3, 1, 4]',
-            '[1, 4, 3]',
-            '[4, 3, 1]'
+            '인접한 두 원소를 비교 (compare adjacent elements)',
+            '배열의 길이를 확인',
+            '변수 T에 값을 저장',
+            '반복문을 종료'
           ],
           answer: 0,
-          explanation: 'i = 2에서 1이 맨 앞으로 → [1, 4, 3]. i = 3에서 key = 3, 4 > 3이므로 4를 밀고, 1 < 3이므로 멈춤 → arr[2] ← 3. 최종: **[1, 3, 4]**!'
+          explanation: `07줄 \`IF A[J] > A[J + 1]\`은 **인접한 두 원소를 비교**하는 과정이에요!
+
+4가지 프로세스:
+1. 📥 **입력/저장** - 이름을 배열에 저장
+2. 🔍 **비교** - 인접한 원소를 비교 (07줄)
+3. 🔄 **교환** - 순서가 잘못되면 swap (09~11줄)
+4. 📤 **출력** - 정렬된 결과를 출력 (15~17줄)`
         },
         {
-          id: "ch2-quiz4",
+          id: "ch2-q3",
           type: "quiz",
-          title: "🧠 종합 퀴즈 6 - Verification",
-          content: '다음 중 Verification(확인) 방법이 아닌 것은?',
+          title: "🏷️ 의미 있는 식별자 - 배열 A",
+          content: `배열 \`A\`는 10개의 **STRING** 값을 저장하고 정렬하는 배열이에요.
+
+\`A\`에 적합한 **의미 있는 식별자(meaningful identifier)**는?`,
           options: [
-            'Range Check로 나이가 1~120인지 확인',
-            'Double Entry로 이메일을 두 번 입력받아 비교',
-            'Screen Check로 입력한 정보를 화면에 보여주고 확인',
-            '비밀번호를 두 번 입력해서 일치하는지 확인'
+            'Names',
+            'Data',
+            'Array1',
+            'X'
           ],
           answer: 0,
-          explanation: 'Range Check는 **Validation(검증)**이에요! 데이터가 합리적인 범위에 있는지 **컴퓨터가 자동으로** 확인하는 것이죠. 나머지는 모두 사용자가 **의도한 데이터가 맞는지 확인**하는 Verification 방법이에요.'
+          explanation: `**Names**가 가장 적합해요!
+
+STRING 배열이고 정렬하는 대상이니까, "Names"(이름들)이 가장 명확해요.
+
+💡 시험에서 meaningful identifier를 제안할 때:
+- ❌ 한 글자 (A, T, C) → 의미 없음
+- ❌ 너무 일반적 (Data, Array1) → 구체적이지 않음
+- ✅ 구체적이고 설명적 (Names, StudentNames) → 좋음!`
+        },
+        {
+          id: "ch2-q4",
+          type: "quiz",
+          title: "🏷️ 의미 있는 식별자 - 변수 T",
+          content: `변수 \`T\`는 교환(swap) 과정에서 값을 **임시로 저장**하는 역할이에요.
+
+\`\`\`
+09  T ← A[J]           // A[J]를 임시 저장
+10  A[J] ← A[J + 1]    // A[J+1]을 A[J]로
+11  A[J + 1] ← T       // 임시 저장한 값을 A[J+1]로
+\`\`\`
+
+\`T\`에 적합한 **의미 있는 식별자**는?`,
+          options: [
+            'Temp',
+            'Store',
+            'Hold',
+            'Buffer'
+          ],
+          answer: 0,
+          explanation: `**Temp** (또는 TempName)이 가장 적합해요!
+
+교환할 때 값을 **임시(temporary)**로 보관하는 변수니까요.
+
+전체 변수 이름 개선:
+- A → **Names**
+- T → **Temp** (또는 TempName)
+- C → **Counter** (또는 Pass)
+- L → **ListLength** (또는 NumberOfNames)
+- J → **Index** (또는 Position)`
         },
         {
           id: "ch2-fill1",
           type: "fillblank",
-          title: "✏️ 종합 빈칸 채우기!",
-          content: '삽입 정렬에서 key를 올바른 위치에 삽입하는 코드를 완성하세요.',
-          code: 'FOR i ← 2 TO LENGTH(arr)\n    key ← arr[i]\n    j ← i - 1\n    WHILE j >= 1 AND arr[j] > key\n        arr[j + 1] ← arr[j]\n        j ← j - 1\n    ENDWHILE\n    arr[j + 1] ← ___\nNEXT i',
+          title: "✏️ 교환(Swap) 코드 완성",
+          content: `버블 정렬에서 **교환(swap)** 작업을 완성하세요!
+
+A[J]와 A[J+1]을 교환하려면 임시 변수 T가 필요해요.`,
+          code: 'T ← A[J]\nA[J] ← A[___]\nA[J + 1] ← ___',
           fillBlanks: [
-            { id: 1, answer: "key", options: ["key", "arr[j]", "arr[i]", "j"] }
+            { id: 1, answer: "J + 1", options: ["J + 1", "J - 1", "J", "L"] },
+            { id: 2, answer: "T", options: ["T", "A[J]", "A[J + 1]", "C"] }
           ]
         },
         {
-          id: "ch2-fill2",
-          type: "fillblank",
-          title: "✏️ 검증 빈칸 채우기!",
-          content: 'Range Check로 점수(0~100)를 입력받는 코드를 완성하세요.',
-          code: 'REPEAT\n    OUTPUT "점수를 입력하세요 (0-100): "\n    INPUT score\n___ score >= 0 AND score <= 100',
-          fillBlanks: [
-            { id: 1, answer: "UNTIL", options: ["UNTIL", "WHILE", "IF", "ENDWHILE"] }
-          ]
-        },
-        {
-          id: "ch2-predict3",
-          type: "predict",
-          title: "🔮 최종 도전 문제!",
-          content: `다음 코드에서 사용자가 순서대로 200, -5, 75를 입력하면, "Invalid!"는 몇 번 출력될까요?
+          id: "ch2-q5",
+          type: "quiz",
+          title: "🧠 코드 이해도 향상 방법",
+          content: `이 알고리즘을 **더 쉽게 이해**할 수 있게 만드는 방법 **두 가지**는?
 
 \`\`\`
-REPEAT
-    OUTPUT "Enter score (0-100): "
-    INPUT score
-    IF score < 0 OR score > 100 THEN
-        OUTPUT "Invalid!"
-    ENDIF
-UNTIL score >= 0 AND score <= 100
-OUTPUT "Score accepted: ", score
+DECLARE A[1:10] : STRING
+DECLARE T : STRING
+DECLARE C, L : INTEGER
 \`\`\``,
           options: [
-            '2번 (200과 -5에서)',
-            '1번 (200에서만)',
-            '3번 (모든 입력에서)',
-            '0번 (출력되지 않음)'
+            '의미 있는 식별자 사용 + 주석(comments) 추가',
+            '변수를 더 많이 선언 + 줄 번호 추가',
+            '모든 변수를 대문자로 + 공백 제거',
+            'FOR문을 WHILE문으로 변경 + 들여쓰기 제거'
           ],
           answer: 0,
-          explanation: '1번째 입력 200: 200 > 100이므로 "Invalid!" 출력. 2번째 입력 -5: -5 < 0이므로 "Invalid!" 출력. 3번째 입력 75: 0 <= 75 <= 100이므로 조건 만족, 반복 종료! **"Invalid!"는 2번** 출력되고, 마지막에 "Score accepted: 75"가 출력돼요.'
+          explanation: `두 가지 방법:
+
+1. ✅ **의미 있는 식별자(Meaningful Identifiers)** 사용
+   - A → Names, T → Temp, C → Counter
+
+2. ✅ **주석(Comments)** 추가
+   - \`// 인접한 이름을 비교하여 교환\`
+   - \`// 정렬된 이름 목록 출력\`
+
+⚠️ 시험에서 "State two ways to make this algorithm easier to understand"라는 문제가 자주 나와요!`
+        }
+      ]
+    },
+    {
+      id: "ch3",
+      title: "확장 프로그래밍",
+      emoji: "🚀",
+      steps: [
+        {
+          id: "ch3-intro",
+          type: "explain",
+          title: "🚀 확장 프로그래밍 문제 (Q10/Q11 스타일)",
+          content: `IGCSE Paper 2의 **Q10/Q11**에서는 시나리오를 주고 수도코드를 **작성하거나 완성**하라고 해요!
+
+📋 **시나리오:**
+학교에서 학생 5명의 시험 점수를 관리하려고 해요.
+1D 배열 \`Scores[1:5]\`에 점수를 저장해요.
+
+프로그램은 다음을 수행해야 해요:
+1. 📥 점수를 **입력**받고 **검증** (0~100 범위)
+2. 📊 **평균(Average)** 계산
+3. 🏆 **최고 점수(Max)** 찾기
+4. 📤 결과 **출력**
+
+각 단계를 하나씩 구현해 볼게요!
+
+💡 시험 팁: 이런 문제에서는 **입력 검증**, **합계/평균 계산**, **최대값 찾기**가 자주 출제돼요!`
+        },
+        {
+          id: "ch3-fill1",
+          type: "fillblank",
+          title: "✏️ 입력 검증 코드 완성",
+          content: `학생 5명의 점수를 입력받되, **0 이상 100 이하**인 값만 받아들이는 코드를 완성하세요.
+
+REPEAT...UNTIL 구조를 사용해요!`,
+          code: 'FOR i ← 1 TO 5\n    REPEAT\n        OUTPUT "Enter score for student ", i\n        INPUT Scores[i]\n    ___ Scores[i] >= 0 ___ Scores[i] <= 100\nNEXT i',
+          fillBlanks: [
+            { id: 1, answer: "UNTIL", options: ["UNTIL", "WHILE", "IF", "ENDWHILE"] },
+            { id: 2, answer: "AND", options: ["AND", "OR", "NOT", "THEN"] }
+          ]
+        },
+        {
+          id: "ch3-fill2",
+          type: "fillblank",
+          title: "✏️ 평균 & 최고 점수 코드 완성",
+          content: `합계(Total), 최고 점수(Max), 평균(Average)을 구하는 코드를 완성하세요.
+
+💡 포인트:
+- Max는 Scores[1]로 초기화해요
+- 각 점수를 Max와 비교해요
+- 평균 = 합계 / 개수`,
+          code: 'Total ← 0\nMax ← Scores[1]\nFOR i ← 1 TO 5\n    Total ← Total + Scores[i]\n    IF Scores[i] ___ Max THEN\n        Max ← ___\n    ENDIF\nNEXT i\nAverage ← Total ___ 5',
+          fillBlanks: [
+            { id: 1, answer: ">", options: [">", "<", ">=", "="] },
+            { id: 2, answer: "Scores[i]", options: ["Scores[i]", "Total", "Max", "i"] },
+            { id: 3, answer: "/", options: ["/", "*", "DIV", "MOD"] }
+          ]
+        },
+        {
+          id: "ch3-predict1",
+          type: "predict",
+          title: "🔮 평균 계산 결과 예측",
+          content: `점수가 다음과 같을 때 **Average**의 값은?
+
+\`\`\`
+Scores[1] = 80
+Scores[2] = 65
+Scores[3] = 92
+Scores[4] = 45
+Scores[5] = 78
+\`\`\`
+
+계산:
+\`\`\`
+Total = 0
+Total = 0 + 80 = 80
+Total = 80 + 65 = 145
+Total = 145 + 92 = 237
+Total = 237 + 45 = 282
+Total = 282 + 78 = 360
+Average = 360 / 5 = ?
+\`\`\``,
+          options: [
+            '72',
+            '360',
+            '92',
+            '65'
+          ],
+          answer: 0,
+          explanation: `Total = 80 + 65 + 92 + 45 + 78 = **360**
+Average = 360 / 5 = **72**
+
+💡 시험에서는 계산 과정을 보여달라고 할 수도 있어요.
+반드시 **Total을 먼저 구하고** 나눗셈하는 순서를 지켜야 해요!`
+        },
+        {
+          id: "ch3-q1",
+          type: "quiz",
+          title: "🧠 Max 초기값의 이유",
+          content: `왜 \`Max ← Scores[1]\`로 초기화하나요?
+
+\`Max ← 0\`으로 해도 될까요?
+
+\`\`\`
+Max ← Scores[1]    // 왜 이렇게?
+FOR i ← 1 TO 5
+    IF Scores[i] > Max THEN
+        Max ← Scores[i]
+    ENDIF
+NEXT i
+\`\`\``,
+          options: [
+            'Max가 항상 배열의 실제 값으로 시작해야 하므로 (더 안정적)',
+            'Scores[1]이 항상 가장 큰 값이므로',
+            '0으로 초기화하면 오류가 발생하므로',
+            '특별한 이유 없이 관례적으로'
+          ],
+          answer: 0,
+          explanation: `\`Max ← Scores[1]\`로 초기화하면 Max는 **항상 배열에 있는 실제 값**으로 시작해요.
+
+\`Max ← 0\`으로 하면 문제가 생길 수 있어요:
+- 만약 모든 점수가 **음수**라면? (이론적으로)
+- Max = 0이 실제 점수보다 클 수 있어요!
+
+배열의 첫 번째 값으로 초기화하면:
+- ✅ 항상 **실제 데이터**에서 시작
+- ✅ 어떤 값이 들어와도 올바르게 동작
+- ✅ 더 **안정적(robust)**인 방법!
+
+💡 시험에서 "Why is Max set to the first element?"라고 물어볼 수 있어요!`
         }
       ]
     }

@@ -32,7 +32,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
 
   const isBilingual = lessonId in bilingualLessons
   const hasVariants = lessonId in lessonVariants
-  const currentProgrammingLang = lessonId.startsWith("pseudo-") ? "pseudo" as const : lessonId.startsWith("cpp-") ? "cpp" as const : "python" as const
+  const currentProgrammingLang = lessonId.startsWith("pseudo-") || lessonId.startsWith("igcse-") ? "pseudo" as const : lessonId.startsWith("cpp-") ? "cpp" as const : "python" as const
 
   // 라이브러리 변형 상태 (turtle/pygame)
   const [variant, setVariant] = useState<LibraryVariant>(() => {
@@ -154,7 +154,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     // Python과 C++ 트랙을 분리하여 잠금 체크
     const isCpp = String(lessonId).startsWith("cpp-")
     const isPseudo = String(lessonId).startsWith("pseudo-")
-    if (isPseudo) return false // 수도코드는 자유롭게 이동 가능
+    const isIgcse = String(lessonId).startsWith("igcse-")
+    if (isPseudo || isIgcse) return false // 수도코드/IGCSE는 자유롭게 이동 가능
     const trackParts = isCpp ? cppParts : pythonParts
     const trackIds = trackParts.flatMap(p => p.lessonIds)
     const idx = trackIds.indexOf(idNormalized)

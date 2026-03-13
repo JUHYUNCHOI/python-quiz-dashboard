@@ -495,6 +495,20 @@ const registry: Record<string, LessonEntry> = {
     load: () => import('./pseudo/lesson28'), exportName: 'pseudoLesson28Data',
     enLoad: () => import('./pseudo/lesson28-en'), enExportName: 'pseudoLesson28EnData',
   },
+
+  // IGCSE Past Paper lessons
+  "igcse-sql1": {
+    load: () => import('./igcse/lessonSql1'), exportName: 'igcseLessonSql1Data',
+    enLoad: () => import('./igcse/lessonSql1-en'), enExportName: 'igcseLessonSql1EnData',
+  },
+  "igcse-sql2": {
+    load: () => import('./igcse/lessonSql2'), exportName: 'igcseLessonSql2Data',
+    enLoad: () => import('./igcse/lessonSql2-en'), enExportName: 'igcseLessonSql2EnData',
+  },
+  "igcse-logic1": {
+    load: () => import('./igcse/lessonLogic1'), exportName: 'igcseLessonLogic1Data',
+    enLoad: () => import('./igcse/lessonLogic1-en'), enExportName: 'igcseLessonLogic1EnData',
+  },
 }
 
 // ============================================
@@ -768,5 +782,15 @@ export { pseudoLesson28EnData } from './pseudo/lesson28-en'
 export { pseudoLessonP1EnData } from './pseudo/lessonP1-en'
 export { pseudoLessonP2EnData } from './pseudo/lessonP2-en'
 export { pseudoLessonP3EnData } from './pseudo/lessonP3-en'
+
+// IGCSE Korean lessons
+export { igcseLessonSql1Data } from './igcse/lessonSql1'
+export { igcseLessonSql2Data } from './igcse/lessonSql2'
+export { igcseLessonLogic1Data } from './igcse/lessonLogic1'
+
+// IGCSE English lessons
+export { igcseLessonSql1EnData } from './igcse/lessonSql1-en'
+export { igcseLessonSql2EnData } from './igcse/lessonSql2-en'
+export { igcseLessonLogic1EnData } from './igcse/lessonLogic1-en'
 
 export type { LessonData, LessonStep, Chapter } from './types'

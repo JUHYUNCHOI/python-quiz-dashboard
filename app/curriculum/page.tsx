@@ -251,11 +251,11 @@ export default function CurriculumPage() {
         { id: "pseudo-2", title: t("2. 변수", "2. Variables"), description: t("데이터를 저장하는 상자 SET ←", "A box that stores data SET ←"), duration: t("15분", "15 min"), hasQuiz: true },
         { id: "pseudo-3", title: t("3. INPUT 입력", "3. INPUT"), description: t("사용자에게 입력받기", "Getting input from the user"), duration: t("15분", "15 min"), hasQuiz: true },
         { id: "pseudo-4", title: t("4. 자료형", "4. Data Types"), description: "INTEGER, REAL, STRING, BOOLEAN", duration: t("15분", "15 min"), hasQuiz: true },
-        { id: "pseudo-5", title: t("5. 조건문", "5. Conditionals"), description: "IF...THEN...ELSE...ENDIF", duration: t("20분", "20 min"), hasQuiz: true },
-        { id: "pseudo-6", title: t("6. 반복문 1", "6. Loops 1"), description: t("FOR...TO...NEXT, WHILE", "FOR...TO...NEXT, WHILE"), duration: t("20분", "20 min"), hasQuiz: true },
-        { id: "pseudo-7", title: t("7. 반복문 2", "7. Loops 2"), description: t("REPEAT...UNTIL, 중첩 반복", "REPEAT...UNTIL, nested loops"), duration: t("20분", "20 min"), hasQuiz: true },
-        { id: "pseudo-8", title: t("8. 배열", "8. Arrays"), description: t("DECLARE 배열, 인덱싱", "DECLARE arrays, indexing"), duration: t("20분", "20 min"), hasQuiz: true },
-        { id: "pseudo-p1", title: t("📋 종합 프로젝트", "📋 Combined Project"), description: t("Part 1 복습 프로젝트", "Part 1 Review Project"), duration: t("25분", "25 min"), isProject: true },
+        { id: "pseudo-28", title: t("5. 연산자 & 필수 표현", "5. Operators & Exam Essentials"), description: t("DIV, MOD, 짝수/홀수, 내장 함수 총정리", "DIV, MOD, even/odd, built-in functions"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "pseudo-5", title: t("6. 조건문", "6. Conditionals"), description: "IF...THEN...ELSE...ENDIF", duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-6", title: t("7. 반복문 1", "7. Loops 1"), description: t("FOR...TO...NEXT, WHILE", "FOR...TO...NEXT, WHILE"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-7", title: t("8. 반복문 2", "8. Loops 2"), description: t("REPEAT...UNTIL, 중첩 반복", "REPEAT...UNTIL, nested loops"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-8", title: t("9. 배열", "9. Arrays"), description: t("DECLARE 배열, 인덱싱", "DECLARE arrays, indexing"), duration: t("20분", "20 min"), hasQuiz: true },
       ],
     },
     {
@@ -266,13 +266,12 @@ export default function CurriculumPage() {
         "CASE statements, procedures/functions, string handling, file handling, 2D arrays! Master key IGCSE exam topics."
       ),
       lessons: [
-        { id: "pseudo-9", title: t("9. CASE 선택문", "9. CASE Statement"), description: "CASE...OF...OTHERWISE...ENDCASE", duration: t("20분", "20 min"), hasQuiz: true },
-        { id: "pseudo-10", title: t("10. 프로시저 & 함수", "10. Procedures & Functions"), description: "PROCEDURE, FUNCTION, CALL, RETURN", duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "pseudo-11", title: t("11. 매개변수", "11. Parameters"), description: t("BYVAL, BYREF 전달 방식", "BYVAL, BYREF passing modes"), duration: t("20분", "20 min"), hasQuiz: true },
-        { id: "pseudo-12", title: t("12. 문자열 처리", "12. String Handling"), description: "LENGTH, SUBSTRING, UCASE, LCASE", duration: t("20분", "20 min"), hasQuiz: true },
-        { id: "pseudo-13", title: t("13. 파일 처리", "13. File Handling"), description: "OPENFILE, READFILE, WRITEFILE, CLOSEFILE", duration: t("20분", "20 min"), hasQuiz: true },
-        { id: "pseudo-14", title: t("14. 2D 배열", "14. 2D Arrays"), description: t("2차원 배열 선언과 사용", "Declaring and using 2D arrays"), duration: t("20분", "20 min"), hasQuiz: true },
-        { id: "pseudo-p2", title: t("📋 종합 프로젝트 2", "📋 Combined Project 2"), description: t("Part 2 복습 프로젝트", "Part 2 Review Project"), duration: t("30분", "30 min"), isProject: true },
+        { id: "pseudo-9", title: t("10. CASE 선택문", "10. CASE Statement"), description: "CASE...OF...OTHERWISE...ENDCASE", duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-10", title: t("11. 프로시저 & 함수", "11. Procedures & Functions"), description: "PROCEDURE, FUNCTION, CALL, RETURN", duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "pseudo-11", title: t("12. 매개변수", "12. Parameters"), description: t("BYVAL, BYREF 전달 방식", "BYVAL, BYREF passing modes"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-12", title: t("13. 문자열 처리", "13. String Handling"), description: "LENGTH, SUBSTRING, UCASE, LCASE", duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-13", title: t("14. 파일 처리", "14. File Handling"), description: "OPENFILE, READFILE, WRITEFILE, CLOSEFILE", duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-14", title: t("15. 2D 배열", "15. 2D Arrays"), description: t("2차원 배열 선언과 사용", "Declaring and using 2D arrays"), duration: t("20분", "20 min"), hasQuiz: true },
       ],
     },
     {
@@ -283,31 +282,66 @@ export default function CurriculumPage() {
         "Searching, sorting, trace tables, and validation! Master exam algorithms in pseudocode."
       ),
       lessons: [
-        { id: "pseudo-15", title: t("15. 선형 검색", "15. Linear Search"), description: t("처음부터 끝까지 하나씩 찾기", "Find by checking one by one"), duration: t("20분", "20 min"), hasQuiz: true },
-        { id: "pseudo-16", title: t("16. 이진 검색", "16. Binary Search"), description: t("반씩 나눠서 빠르게 찾기", "Find quickly by halving"), duration: t("20분", "20 min"), hasQuiz: true },
-        { id: "pseudo-17", title: t("17. 버블 정렬", "17. Bubble Sort"), description: t("이웃한 값을 비교하여 정렬", "Sort by comparing adjacent values"), duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "pseudo-18", title: t("18. 삽입 정렬", "18. Insertion Sort"), description: t("올바른 위치에 삽입하여 정렬", "Sort by inserting into correct position"), duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "pseudo-19", title: t("19. Trace Table", "19. Trace Table"), description: t("코드를 한 줄씩 추적하기", "Trace code line by line"), duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "pseudo-20", title: t("20. 검증과 확인", "20. Validation & Verification"), description: t("데이터 검증 기법들", "Data validation techniques"), duration: t("20분", "20 min"), hasQuiz: true },
-        { id: "pseudo-p3", title: t("📋 종합 프로젝트 3", "📋 Combined Project 3"), description: t("Part 3 복습 프로젝트", "Part 3 Review Project"), duration: t("30분", "30 min"), isProject: true },
+        { id: "pseudo-15", title: t("16. 선형 검색", "16. Linear Search"), description: t("처음부터 끝까지 하나씩 찾기", "Find by checking one by one"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-16", title: t("17. 이진 검색", "17. Binary Search"), description: t("반씩 나눠서 빠르게 찾기", "Find quickly by halving"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-17", title: t("18. 버블 정렬", "18. Bubble Sort"), description: t("이웃한 값을 비교하여 정렬", "Sort by comparing adjacent values"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "pseudo-18", title: t("19. 삽입 정렬", "19. Insertion Sort"), description: t("올바른 위치에 삽입하여 정렬", "Sort by inserting into correct position"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "pseudo-19", title: t("20. Trace Table", "20. Trace Table"), description: t("코드를 한 줄씩 추적하기", "Trace code line by line"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "pseudo-20", title: t("21. 검증과 확인", "21. Validation & Verification"), description: t("데이터 검증 기법들", "Data validation techniques"), duration: t("20분", "20 min"), hasQuiz: true },
       ],
     },
     {
       id: "pseudo-part4",
       title: t("Part 4: 시험 대비", "Part 4: Exam Prep"),
       description: t(
-        "플로우차트, 레코드 타입, SQL, 불리언 로직까지! IGCSE Paper 2 시험의 나머지 핵심 주제를 완벽하게 마무리해요.",
-        "Flowcharts, record types, SQL, and Boolean logic! Complete all remaining IGCSE Paper 2 exam topics."
+        "플로우차트와 레코드 타입! IGCSE Paper 2 수도코드 심화 주제를 마스터해요.",
+        "Flowcharts and record types! Master advanced pseudocode topics for IGCSE Paper 2."
       ),
       lessons: [
-        { id: "pseudo-21", title: t("21. 플로우차트 기초", "21. Flowchart Basics"), description: t("기호, 읽기, 수도코드 변환", "Symbols, reading, pseudocode conversion"), duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "pseudo-22", title: t("22. 플로우차트 실전", "22. Flowchart Practice"), description: t("Trace Table, 설계, 시험 연습", "Trace tables, design, exam practice"), duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "pseudo-23", title: t("23. 레코드 타입", "23. Record Types"), description: "TYPE...ENDTYPE, ARRAY OF records", duration: t("20분", "20 min"), hasQuiz: true },
-        { id: "pseudo-24", title: t("24. SQL 기초", "24. SQL Basics"), description: "SELECT, FROM, WHERE", duration: t("20분", "20 min"), hasQuiz: true },
-        { id: "pseudo-25", title: t("25. SQL 심화", "25. SQL Advanced"), description: "ORDER BY, COUNT, SUM, AVG", duration: t("20분", "20 min"), hasQuiz: true },
-        { id: "pseudo-26", title: t("26. 불리언 로직 1", "26. Boolean Logic 1"), description: t("AND, OR, NOT 게이트와 진리표", "AND, OR, NOT gates & truth tables"), duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "pseudo-27", title: t("27. 불리언 로직 2", "27. Boolean Logic 2"), description: t("NAND, NOR, XOR과 논리 회로", "NAND, NOR, XOR & logic circuits"), duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "pseudo-28", title: t("28. 연산자 & 필수 표현", "28. Operators & Exam Essentials"), description: t("DIV, MOD, 짝수/홀수, 내장 함수 총정리", "DIV, MOD, even/odd, built-in functions"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "pseudo-21", title: t("22. 플로우차트 기초", "22. Flowchart Basics"), description: t("기호, 읽기, 수도코드 변환", "Symbols, reading, pseudocode conversion"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "pseudo-22", title: t("23. 플로우차트 실전", "23. Flowchart Practice"), description: t("Trace Table, 설계, 시험 연습", "Trace tables, design, exam practice"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "pseudo-23", title: t("24. 레코드 타입", "24. Record Types"), description: "TYPE...ENDTYPE, ARRAY OF records", duration: t("20분", "20 min"), hasQuiz: true },
+      ],
+    },
+    {
+      id: "pseudo-part5",
+      title: t("Part 5: CS 이론", "Part 5: CS Theory"),
+      description: t(
+        "SQL과 불리언 로직! 수도코드는 아니지만 IGCSE Paper 2에 나오는 CS 이론 주제를 배워요.",
+        "SQL and Boolean logic! CS theory topics that appear on IGCSE Paper 2, beyond pseudocode."
+      ),
+      lessons: [
+        { id: "pseudo-24", title: t("25. SQL 기초", "25. SQL Basics"), description: "SELECT, FROM, WHERE", duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-25", title: t("26. SQL 심화", "26. SQL Advanced"), description: "ORDER BY, COUNT, SUM, AVG", duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "pseudo-26", title: t("27. 불리언 로직 1", "27. Boolean Logic 1"), description: t("AND, OR, NOT 게이트와 진리표", "AND, OR, NOT gates & truth tables"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "pseudo-27", title: t("28. 불리언 로직 2", "28. Boolean Logic 2"), description: t("NAND, NOR, XOR과 논리 회로", "NAND, NOR, XOR & logic circuits"), duration: t("25분", "25 min"), hasQuiz: true },
+      ],
+    },
+    {
+      id: "igcse-pseudocode",
+      title: t("기출: Pseudocode", "Past Papers: Pseudocode"),
+      description: t("IGCSE Paper 2 수도코드 기출 스타일 연습! 배열, 반복문, 알고리즘 등.", "IGCSE Paper 2 pseudocode past paper practice! Arrays, loops, algorithms, etc."),
+      lessons: [
+        { id: "pseudo-p1", title: t("📝 기출문제 연습 1", "📝 Past Paper Practice 1"), description: t("Part 1 기출 스타일 연습", "Part 1 Exam Practice"), duration: t("25분", "25 min"), isProject: true },
+        { id: "pseudo-p2", title: t("📝 기출문제 연습 2", "📝 Past Paper Practice 2"), description: t("Part 2 기출 스타일 연습", "Part 2 Exam Practice"), duration: t("30분", "30 min"), isProject: true },
+        { id: "pseudo-p3", title: t("📝 기출문제 연습 3", "📝 Past Paper Practice 3"), description: t("Part 3 기출 스타일 연습", "Part 3 Exam Practice"), duration: t("30분", "30 min"), isProject: true },
+      ],
+    },
+    {
+      id: "igcse-sql",
+      title: t("기출: SQL", "Past Papers: SQL"),
+      description: t("IGCSE Paper 2 SQL 기출 연습! SELECT, WHERE, ORDER BY, 집계함수, GROUP BY.", "IGCSE Paper 2 SQL past paper practice! SELECT, WHERE, ORDER BY, aggregate functions, GROUP BY."),
+      lessons: [
+        { id: "igcse-sql1", title: t("🗃️ SQL 기출 1", "🗃️ SQL Practice 1"), description: t("SELECT, WHERE, ORDER BY", "SELECT, WHERE, ORDER BY"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "igcse-sql2", title: t("🗃️ SQL 기출 2", "🗃️ SQL Practice 2"), description: t("COUNT, SUM, AVG, GROUP BY, LIKE", "COUNT, SUM, AVG, GROUP BY, LIKE"), duration: t("30분", "30 min"), hasQuiz: true },
+      ],
+    },
+    {
+      id: "igcse-logic",
+      title: t("기출: Logic Gates", "Past Papers: Logic Gates"),
+      description: t("IGCSE Paper 2 Logic Gates 기출 연습! AND, OR, NOT, XOR, 진리표, 논리식.", "IGCSE Paper 2 Logic Gates past paper practice! AND, OR, NOT, XOR, truth tables, logic expressions."),
+      lessons: [
+        { id: "igcse-logic1", title: t("🔌 Logic Gates 기출", "🔌 Logic Gates Practice"), description: t("AND, OR, NOT, NAND, NOR, XOR, 진리표", "AND, OR, NOT, NAND, NOR, XOR, truth tables"), duration: t("30분", "30 min"), hasQuiz: true },
       ],
     },
   ]
@@ -316,7 +350,7 @@ export default function CurriculumPage() {
   const isTeacher = profile?.role === "teacher"
 
   const [completedLessons, setCompletedLessons] = useState<Set<number | string>>(new Set())
-  const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set(["part1", "part2", "part3", "part3-advanced", "part4", "part5", "part6", "part7", "part8", "part9", "cpp-part1", "cpp-part2", "cpp-part3", "pseudo-part1", "pseudo-part2", "pseudo-part3", "pseudo-part4"]))
+  const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set(["part1", "part2", "part3", "part3-advanced", "part4", "part5", "part6", "part7", "part8", "part9", "cpp-part1", "cpp-part2", "cpp-part3", "pseudo-part1", "pseudo-part2", "pseudo-part3", "pseudo-part4", "pseudo-part5", "igcse-pseudocode", "igcse-sql", "igcse-logic"]))
   const [selectedCourse, setSelectedCourse] = useState<CourseType>("python")
   const [loaded, setLoaded] = useState(false)
 
@@ -330,6 +364,9 @@ export default function CurriculumPage() {
     const savedCourse = localStorage.getItem("selectedCourse") as CourseType
     if (savedCourse === "python" || savedCourse === "cpp" || savedCourse === "pseudo") {
       setSelectedCourse(savedCourse)
+    } else if (savedCourse === "igcse") {
+      setSelectedCourse("pseudo")
+      localStorage.setItem("selectedCourse", "pseudo")
     }
     setLoaded(true)
   }, [])
@@ -397,7 +434,7 @@ export default function CurriculumPage() {
   // 학생: 순서대로만 열림 (완료한 곳 + 바로 다음 1개). 선생님: 전부 열림
   const unlockedLessons = new Set<number | string>()
   if (isTeacher || isPseudo) {
-    // 선생님이거나 수도코드 트랙이면 전부 열림
+    // 선생님이거나 IGCSE 트랙이면 전부 열림
     allLessons.forEach((l) => unlockedLessons.add(l.id))
   } else {
     for (const lesson of allLessons) {
@@ -478,7 +515,7 @@ export default function CurriculumPage() {
                   : "bg-white text-gray-600 hover:bg-green-50"
               }`}
             >
-              📋 Pseudo
+              📄 IGCSE
             </button>
           </div>
         </div>
@@ -493,10 +530,10 @@ export default function CurriculumPage() {
                 </div>
                 <div>
                   <h1 className="text-2xl sm:text-3xl font-bold">
-                    {isPseudo ? t("수도코드 마스터", "Pseudocode Master") : isCpp ? t("C++ 기초 (파이썬 → C++)", "C++ Basics (Python → C++)") : t("파이썬 기초 마스터", "Python Basics Master")}
+                    {isPseudo ? t("IGCSE 0478 마스터", "IGCSE 0478 Master") : isCpp ? t("C++ 기초 (파이썬 → C++)", "C++ Basics (Python → C++)") : t("파이썬 기초 마스터", "Python Basics Master")}
                   </h1>
                   <p className="text-gray-600 text-sm sm:text-base">
-                    {isPseudo ? t("알고리즘 사고력을 키워요! 📋", "Build algorithmic thinking! 📋") : isCpp ? t("파이썬을 아는 학생을 위한 C++ 입문! ⚡", "C++ for Python students! ⚡") : t("웹에서 바로 배우는 파이썬! 🚀", "Learn Python on the web! 🚀")}
+                    {isPseudo ? t("수도코드, SQL, Logic Gates까지! 📄", "Pseudocode, SQL, Logic Gates & more! 📄") : isCpp ? t("파이썬을 아는 학생을 위한 C++ 입문! ⚡", "C++ for Python students! ⚡") : t("웹에서 바로 배우는 파이썬! 🚀", "Learn Python on the web! 🚀")}
                   </p>
                 </div>
               </div>

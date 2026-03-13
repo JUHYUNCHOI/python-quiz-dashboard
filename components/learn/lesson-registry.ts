@@ -18,6 +18,8 @@ import {
   // Korean project lessons
   lessonP1Data, lessonP2Data, lessonP3Data,
   lessonP4Data, lessonP4PygameData,
+  // IGCSE Korean lessons
+  igcseLessonSql1Data, igcseLessonSql2Data, igcseLessonLogic1Data,
   // English lessons 1-26
   lesson1EnData, lesson2EnData, lesson3EnData, lesson4EnData, lesson5EnData,
   lesson6EnData, lesson7EnData, lesson8EnData, lesson9EnData, lesson10EnData,
@@ -37,6 +39,8 @@ import {
   // English project lessons
   lessonP1EnData, lessonP2EnData, lessonP3EnData,
   lessonP4EnData, lessonP4PygameEnData,
+  // IGCSE English lessons
+  igcseLessonSql1EnData, igcseLessonSql2EnData, igcseLessonLogic1EnData,
   // C++ Korean lessons
   cppLesson1Data, cppLesson2Data, cppLesson3Data, cppLesson4Data,
   cppLesson5Data, cppLesson6Data, cppLesson7Data, cppLesson8Data,
@@ -124,6 +128,10 @@ export const lessonsData: Record<string, LessonData> = {
   "pseudo-21": pseudoLesson21Data, "pseudo-22": pseudoLesson22Data, "pseudo-23": pseudoLesson23Data, "pseudo-24": pseudoLesson24Data,
   "pseudo-25": pseudoLesson25Data, "pseudo-26": pseudoLesson26Data, "pseudo-27": pseudoLesson27Data,
   "pseudo-28": pseudoLesson28Data,
+  // IGCSE lessons
+  "igcse-sql1": igcseLessonSql1Data,
+  "igcse-sql2": igcseLessonSql2Data,
+  "igcse-logic1": igcseLessonLogic1Data,
 }
 
 // 라이브러리 변형 (turtle/pygame 등) — 양언어 지원
@@ -265,6 +273,10 @@ export const bilingualLessons: Record<string, { ko: LessonData, en: LessonData }
   "pseudo-26": { ko: pseudoLesson26Data, en: pseudoLesson26EnData },
   "pseudo-27": { ko: pseudoLesson27Data, en: pseudoLesson27EnData },
   "pseudo-28": { ko: pseudoLesson28Data, en: pseudoLesson28EnData },
+  // IGCSE lessons
+  "igcse-sql1": { ko: igcseLessonSql1Data, en: igcseLessonSql1EnData },
+  "igcse-sql2": { ko: igcseLessonSql2Data, en: igcseLessonSql2EnData },
+  "igcse-logic1": { ko: igcseLessonLogic1Data, en: igcseLessonLogic1EnData },
 }
 
 // ============================================

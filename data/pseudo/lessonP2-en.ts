@@ -1,368 +1,457 @@
 // ============================================
-// Pseudocode Lesson P2: Combined Project 2 (English)
-// CIE Style Pseudocode - Student Grade Management System!
+// Pseudocode Past Paper Practice: Part 2 (English)
+// CASE, PROCEDURE/FUNCTION, Parameters (BYVAL/BYREF),
+// String Functions, File Handling, 2D Arrays
+// IGCSE 0478 Paper 2 Style
 // ============================================
 
 import { LessonData } from '../types'
 
 export const pseudoLessonP2EnData: LessonData = {
   id: "pseudo-p2",
-  title: "Combined Project 2",
-  emoji: "🏆",
-  description: "Student grade management system!",
+  title: "Past Paper Practice 2",
+  emoji: "\u{1F4DD}",
+  description: "Part 2 Past Paper Practice!",
   chapters: [
     {
       id: "ch1",
-      title: "Grade Management System",
-      emoji: "🎓",
+      title: "Procedures & Functions",
+      emoji: "\u{1F527}",
       steps: [
         {
           id: "ch1-intro",
           type: "explain",
-          title: "🎓 The Project: Student Grade Manager",
-          content: `Let's build a **Student Grade Management System** that combines everything from Part 2!
+          title: "\u{1F527} PROCEDURE & FUNCTION Exam Question Types",
+          content: `**PROCEDURE/FUNCTION** questions frequently appear in IGCSE Paper 2!
 
-The system will:
-1. Store student names and scores in a **2D structure**
-2. Use a **CASE statement** for menu navigation
-3. Use **procedures and functions** for organization
-4. Use **string handling** to format output
-5. Use **file handling** to save and load data
-6. Use **BYREF parameters** to modify data
+Common question types:
+- \u{1F50D} Distinguishing between **PROCEDURE and FUNCTION**
+- \u{1F4E5} **BYVAL vs BYREF** parameter passing methods
+- \u{1F4DD} Writing **CALL** code for PROCEDURE/FUNCTION
+- \u{1F52E} Predicting **RETURN values** of FUNCTIONS
 
-This is a realistic project that ties together all Part 2 concepts!`
+Key summary:
+- **PROCEDURE**: Only performs a task, does NOT return a value
+- **FUNCTION**: Always RETURNS a value
+- **BYVAL**: Passes a copy of the value (original NOT changed \u274C)
+- **BYREF**: Passes a reference to the original variable (original IS changed \u2B55)
+
+Are you ready? \u{1F4AA}`
         },
         {
-          id: "ch1-structure",
-          type: "explain",
-          title: "📋 Data Structure",
-          content: `We'll use a 2D array to store scores for 3 students across 4 subjects:
-
-\`\`\`
-DECLARE names : ARRAY[1:3] OF STRING
-DECLARE scores : ARRAY[1:3, 1:4] OF INTEGER
-
-names[1] ← "Alice"
-names[2] ← "Bob"
-names[3] ← "Carol"
-
-// Alice's scores
-scores[1, 1] ← 85
-scores[1, 2] ← 92
-scores[1, 3] ← 78
-scores[1, 4] ← 90
-// Bob's scores
-scores[2, 1] ← 70
-scores[2, 2] ← 65
-scores[2, 3] ← 80
-scores[2, 4] ← 75
-// Carol's scores
-scores[3, 1] ← 95
-scores[3, 2] ← 88
-scores[3, 3] ← 92
-scores[3, 4] ← 97
-\`\`\`
-
-Each row represents a student, each column is a subject.`
-        },
-        {
-          id: "ch1-quiz1",
+          id: "ch1-q1",
           type: "quiz",
-          title: "🧠 Quiz!",
-          content: 'In the grade management system, what does `scores[2, 3]` represent?',
+          title: "\u{1F9E0} PROCEDURE Definition",
+          content: `Which of the following is a subroutine that **may not RETURN a value**?`,
           options: [
-            'Bob\'s 3rd subject score (80)',
-            'Carol\'s 2nd subject score (88)',
-            'Alice\'s 3rd subject score (78)',
-            'Bob\'s 2nd subject score (65)'
+            'PROCEDURE',
+            'FUNCTION',
+            'VARIABLE',
+            'ARRAY'
           ],
           answer: 0,
-          explanation: 'Row 2 is Bob, column 3 is the 3rd subject. So `scores[2, 3]` is **Bob\'s 3rd subject score**, which is **80**.'
+          explanation: `A **PROCEDURE** does not return a value.
+
+It only performs a task and then finishes.
+
+\`\`\`
+PROCEDURE PrintMessage()
+    OUTPUT "Hello!"
+ENDPROCEDURE
+\`\`\`
+
+In contrast, a FUNCTION **always** returns a value!`
+        },
+        {
+          id: "ch1-q2",
+          type: "quiz",
+          title: "\u{1F9E0} FUNCTION Definition",
+          content: `Which of the following is a subroutine that **always RETURNS a value**?`,
+          options: [
+            'FUNCTION',
+            'PROCEDURE',
+            'LOOP',
+            'MODULE'
+          ],
+          answer: 0,
+          explanation: `A **FUNCTION** always returns a value.
+
+\`\`\`
+FUNCTION Double(n : INTEGER) RETURNS INTEGER
+    RETURN n * 2
+ENDFUNCTION
+\`\`\`
+
+A FUNCTION:
+- Specifies the return data type with the **RETURNS** keyword
+- Returns a value with the **RETURN** keyword
+- Can be stored in a variable or used in an OUTPUT when called`
+        },
+        {
+          id: "ch1-q3",
+          type: "quiz",
+          title: "\u{1F9E0} BYVAL vs BYREF",
+          content: `Which parameter passing method can **change the value of the original variable**?
+
+\`\`\`
+PROCEDURE Swap(BYREF x : INTEGER, BYREF y : INTEGER)
+    DECLARE temp : INTEGER
+    temp \u2190 x
+    x \u2190 y
+    y \u2190 temp
+ENDPROCEDURE
+\`\`\``,
+          options: [
+            'BYREF',
+            'BYVAL',
+            'BYNAME',
+            'BYTYPE'
+          ],
+          answer: 0,
+          explanation: `**BYREF** (By Reference) passes a **reference** to the original variable.
+
+If you change the value inside the subroutine, **the original variable also changes!**
+
+Comparison:
+- **BYVAL**: Passes a copy of the value \u2192 original NOT changed \u274C
+- **BYREF**: Passes a reference to the original \u2192 original IS changed \u2B55
+
+\u{1F4A1} Exam tip: "The value needs to change" \u2192 BYREF!`
         },
         {
           id: "ch1-fill1",
           type: "fillblank",
-          title: "✏️ Fill in the blanks!",
-          content: 'Declare the 2D array for 3 students and 4 subjects.',
-          code: 'DECLARE names : ARRAY[1:3] OF STRING\nDECLARE scores : ___[1:3, ___] OF ___',
+          title: "\u{270F}\u{FE0F} Calling a PROCEDURE",
+          content: `Complete the code to call the procedure \`Average\` with the values 25 and 50.`,
+          code: '___ Average(25, 50)',
           fillBlanks: [
-            { id: 1, answer: "ARRAY", options: ["ARRAY", "TABLE", "GRID", "LIST"] },
-            { id: 2, answer: "1:4", options: ["1:4", "4", "1:3", "0:3"] },
-            { id: 3, answer: "INTEGER", options: ["INTEGER", "REAL", "STRING", "NUMBER"] }
+            { id: 1, answer: "CALL", options: ["CALL", "RUN", "EXECUTE", "START"] }
           ]
+        },
+        {
+          id: "ch1-predict1",
+          type: "predict",
+          title: "\u{1F52E} Predict the FUNCTION Result",
+          content: `What is the result of the following FUNCTION call?
+
+\`\`\`
+FUNCTION CalcArea(length : INTEGER,
+                  width : INTEGER)
+                  RETURNS INTEGER
+    RETURN length * width
+ENDFUNCTION
+
+OUTPUT CalcArea(5, 3) + CalcArea(2, 4)
+\`\`\``,
+          options: [
+            '23',
+            '15',
+            '8',
+            '30'
+          ],
+          answer: 0,
+          explanation: `Let's calculate step by step:
+
+1. CalcArea(5, 3) = 5 * 3 = **15**
+2. CalcArea(2, 4) = 2 * 4 = **8**
+3. 15 + 8 = **23**
+
+Since FUNCTIONS return a value, they can be used directly in expressions! \u{1F3AF}`
         }
       ]
     },
     {
       id: "ch2",
-      title: "Functions and Procedures",
-      emoji: "🔧",
+      title: "Strings & File Handling",
+      emoji: "\u{1F4C1}",
       steps: [
         {
-          id: "ch2-average",
+          id: "ch2-intro",
           type: "explain",
-          title: "🔧 Average Calculation Function",
-          content: `Let's create a function to calculate a student's average:
+          title: "\u{1F4C1} String & File Handling Exam Question Types",
+          content: `**String functions** and **file handling** questions frequently appear in IGCSE Paper 2!
 
-\`\`\`
-FUNCTION CalcAverage(scores : ARRAY, student : INTEGER) RETURNS REAL
-    DECLARE total : INTEGER
-    total ← 0
-    FOR col ← 1 TO 4
-        total ← total + scores[student, col]
-    NEXT col
-    RETURN total / 4
-ENDFUNCTION
-\`\`\`
+Common string functions:
+- \u{1F4CF} **LENGTH("Hello")** \u2192 5 (number of characters)
+- \u2702\u{FE0F} **SUBSTRING("Computer", 1, 4)** \u2192 "Comp" (substring extraction)
+- \u{1F520} **UCASE("hello")** \u2192 "HELLO" (convert to uppercase)
+- \u{1F521} **LCASE("HELLO")** \u2192 "hello" (convert to lowercase)
 
-And a function to determine the grade letter:
+File handling keywords:
+- \u{1F4C2} **OPENFILE** "filename" FOR READ/WRITE/APPEND
+- \u{1F4D6} **READFILE** "filename", variable
+- \u{270D}\u{FE0F} **WRITEFILE** "filename", data
+- \u{1F512} **CLOSEFILE** "filename"
 
-\`\`\`
-FUNCTION GetGrade(average : REAL) RETURNS STRING
-    DECLARE tens : INTEGER
-    tens ← average DIV 10
-    CASE OF tens
-        10 : RETURN "A+"
-        9  : RETURN "A"
-        8  : RETURN "B"
-        7  : RETURN "C"
-        6  : RETURN "D"
-        OTHERWISE : RETURN "F"
-    ENDCASE
-ENDFUNCTION
-\`\`\`
-
-Notice how the **CASE statement** makes the grade logic clean, and the **FUNCTION** returns a value we can use elsewhere!`
+Especially important: **SUBSTRING** indexing and distinguishing **file modes** (READ/WRITE/APPEND)! \u{1F4A1}`
         },
         {
-          id: "ch2-procedure",
-          type: "explain",
-          title: "📋 Display Procedure",
-          content: `Now a procedure to display one student's report:
-
-\`\`\`
-PROCEDURE ShowReport(names : ARRAY, scores : ARRAY, student : INTEGER)
-    DECLARE avg : REAL
-    avg ← CalcAverage(scores, student)
-    DECLARE grade : STRING
-    grade ← GetGrade(avg)
-
-    OUTPUT "=========================="
-    OUTPUT "Student: " & UCASE(names[student])
-    OUTPUT "Scores: " & scores[student, 1] & ", " & scores[student, 2] & ", " & scores[student, 3] & ", " & scores[student, 4]
-    OUTPUT "Average: " & avg
-    OUTPUT "Grade: " & grade
-    OUTPUT "=========================="
-ENDPROCEDURE
-\`\`\`
-
-Notice:
-- The procedure **calls** the CalcAverage function
-- It also **calls** the GetGrade function
-- \`UCASE()\` converts the student name to uppercase for display
-- A procedure is used because we just display (no return value needed)`
-        },
-        {
-          id: "ch2-quiz1",
+          id: "ch2-q1",
           type: "quiz",
-          title: "🧠 Quiz!",
-          content: 'Why is CalcAverage a FUNCTION and ShowReport a PROCEDURE?',
+          title: "\u{1F4CF} LENGTH Function",
+          content: `What is the result of the following code?
+
+\`\`\`
+OUTPUT LENGTH("Hello World")
+\`\`\``,
           options: [
-            'CalcAverage needs to return a value (the average); ShowReport just displays output',
-            'Procedures are faster than functions',
-            'Functions cannot use OUTPUT statements',
-            'There is no specific reason; they could be swapped'
+            '11',
+            '10',
+            '12',
+            '5'
           ],
           answer: 0,
-          explanation: '**CalcAverage** calculates and **returns** a number (REAL), so it must be a FUNCTION. **ShowReport** only displays information (no value to return), so it is a PROCEDURE.'
+          explanation: `**LENGTH("Hello World")** = **11**
+
+Let's count the characters in "Hello World":
+H-e-l-l-o-( )-W-o-r-l-d
+1-2-3-4-5-6-7-8-9-10-11
+
+\u{1F4A1} Spaces count as a character too!`
         },
         {
           id: "ch2-predict1",
           type: "predict",
-          title: "🔮 Predict the output!",
-          content: `Given Alice's scores: 85, 92, 78, 90. What does GetGrade return for Alice?
+          title: "\u{1F52E} Predict the SUBSTRING Result",
+          content: `What is the output of the following code?
 
 \`\`\`
-average ← (85 + 92 + 78 + 90) / 4
-grade ← GetGrade(average)
-OUTPUT grade
-\`\`\``,
+DECLARE Word : STRING
+Word \u2190 "Computer"
+OUTPUT SUBSTRING(Word, 1, 4)
+\`\`\`
+
+\u{1F4A1} SUBSTRING(string, start position, length)`,
           options: [
-            'B',
-            'A',
-            'C',
-            'A+'
+            'Comp',
+            'Compu',
+            'ompu',
+            'pute'
           ],
           answer: 0,
-          explanation: 'Alice\'s total is 85 + 92 + 78 + 90 = 345. Average = 345 / 4 = 86.25. `tens = 86.25 DIV 10 = 8`. CASE matches 8, so the grade is **"B"**.'
+          explanation: `**SUBSTRING("Computer", 1, 4)** = **"Comp"**
+
+Starting from position 1, extract 4 characters:
+\`C-o-m-p\`-u-t-e-r
+ 1-2-3-4
+
+SUBSTRING(string, **start position**, **length**)
+- Start position: 1 (from the first character)
+- Length: 4 (extract 4 characters)`
         },
         {
-          id: "ch2-fill2",
+          id: "ch2-fill1",
           type: "fillblank",
-          title: "✏️ Fill in the blanks!",
-          content: 'Complete the function that returns a grade based on the average.',
-          code: '___ GetGrade(average : REAL) ___ STRING\n    DECLARE tens : INTEGER\n    tens ← average DIV 10\n    CASE OF tens\n        10 : RETURN "A+"\n        9  : RETURN "A"\n        8  : RETURN "B"\n        OTHERWISE : RETURN "C"\n    ___\nENDFUNCTION',
+          title: "\u{270F}\u{FE0F} File Reading + String Processing",
+          content: `Complete the code that reads a string from "Quotation.txt", outputs it in uppercase, and also outputs its length.`,
+          code: 'DECLARE MyString : STRING\nOPENFILE "Quotation.txt" FOR ___\nREADFILE "Quotation.txt", ___\n___ "Quotation.txt"\nOUTPUT UCASE(MyString)\nOUTPUT LENGTH(MyString)',
           fillBlanks: [
-            { id: 1, answer: "FUNCTION", options: ["FUNCTION", "PROCEDURE", "DEF", "SUB"] },
-            { id: 2, answer: "RETURNS", options: ["RETURNS", "RETURN", "GIVES", "TYPE"] },
-            { id: 3, answer: "ENDCASE", options: ["ENDCASE", "ENDIF", "END", "ENDFUNCTION"] }
+            { id: 1, answer: "READ", options: ["READ", "WRITE", "APPEND", "INPUT"] },
+            { id: 2, answer: "MyString", options: ["MyString", "Quotation", "File", "Line"] },
+            { id: 3, answer: "CLOSEFILE", options: ["CLOSEFILE", "ENDFILE", "CLOSE", "STOPFILE"] }
           ]
+        },
+        {
+          id: "ch2-q2",
+          type: "quiz",
+          title: "\u{1F9E0} Advantages of File Storage",
+          content: `Why is it useful to store data in a **file** instead of a **variable**?`,
+          options: [
+            'Because data persists even after the program ends',
+            'Because files are faster than variables',
+            'Because files do not use memory',
+            'Because storing in files prevents errors'
+          ],
+          answer: 0,
+          explanation: `Storing data in a file means it **remains even after the program ends**!
+
+Variables disappear when the program finishes, but files are **persistent**.
+
+Advantages of file storage:
+- \u{1F4CC} Data persists after the program terminates
+- \u{1F4BE} Can be read again the next time the program runs
+- \u{1F4E4} Data can be shared with other programs
+
+\u{1F4A1} Common exam keyword: **"data persists after the program ends"**`
+        },
+        {
+          id: "ch2-predict2",
+          type: "predict",
+          title: "\u{1F52E} Combined String Functions",
+          content: `What is the output of the following code?
+
+\`\`\`
+DECLARE Text : STRING
+Text \u2190 "Cambridge"
+OUTPUT UCASE(SUBSTRING(Text, 4, 3))
+OUTPUT LENGTH(Text)
+\`\`\`
+
+\u{1F4A1} SUBSTRING(string, start position, length)`,
+          options: [
+            'BRI\n9',
+            'bri\n9',
+            'CAM\n9',
+            'BRI\n6'
+          ],
+          answer: 0,
+          explanation: `Let's solve it step by step:
+
+1. Text = "Cambridge"
+2. SUBSTRING("Cambridge", 4, 3)
+   - 3 characters starting from position 4: "bri"
+   C-a-m-**b-r-i**-d-g-e
+   1-2-3-**4-5-6**-7-8-9
+3. UCASE("bri") = **"BRI"**
+4. LENGTH("Cambridge") = **9**
+
+Output: **BRI** and **9**`
         }
       ]
     },
     {
       id: "ch3",
-      title: "Comprehensive Review",
-      emoji: "📝",
+      title: "Finding & Fixing Errors",
+      emoji: "\u{1F41B}",
       steps: [
         {
-          id: "ch3-menu",
+          id: "ch3-intro",
           type: "explain",
-          title: "📝 The Menu System",
-          content: `Here is the main menu using a CASE statement and REPEAT loop:
+          title: "\u{1F41B} Pseudocode with Errors",
+          content: `The following pseudocode is a program that keeps accepting **positive numbers** and adds them to a total, then **stops when 0 is entered**.
+
+However, it contains **4 errors**! \u{1F50D}
 
 \`\`\`
-DECLARE choice : INTEGER
-
-REPEAT
-    OUTPUT "=== Grade Manager ==="
-    OUTPUT "1. View student report"
-    OUTPUT "2. Find highest scorer"
-    OUTPUT "3. Save data to file"
-    OUTPUT "4. Exit"
-    OUTPUT "Enter choice: "
-    INPUT choice
-
-    CASE OF choice
-        1 : CALL ShowReport(names, scores, 1)
-        2 : CALL FindHighest(names, scores)
-        3 : CALL SaveToFile(names, scores)
-        4 : OUTPUT "Goodbye!"
-        OTHERWISE : OUTPUT "Invalid choice!"
-    ENDCASE
-UNTIL choice = 4
+01 Exit \u2190 1
+02 WHILE Exit <> 0 DO
+03     INPUT Number
+04     IF Number < 0
+05         THEN
+06             Total \u2190 Total + Number
+07         ELSE
+08             IF Number = 0
+09                 THEN
+10                     Exit \u2190 1
+11             ENDIF
+12     ENDIF
+13 ENDWHILE
+14 OUTPUT "The total of your numbers is ", Number
 \`\`\`
 
-This combines:
-- **REPEAT...UNTIL** loop for the menu cycle
-- **CASE** statement for clean menu selection
-- **CALL** to run different procedures
-- **INPUT/OUTPUT** for user interaction`
+The intended behavior:
+- If a positive number is entered, add it to Total
+- If 0 is entered, stop the loop
+- At the end, output the total
+
+Can you spot the errors? \u{1F914}`
         },
         {
-          id: "ch3-save",
-          type: "explain",
-          title: "💾 Saving Data to a File",
-          content: `Here is the procedure to save all student data to a file:
-
-\`\`\`
-PROCEDURE SaveToFile(names : ARRAY, scores : ARRAY)
-    OPENFILE "grades.txt" FOR WRITE
-    FOR student ← 1 TO 3
-        WRITEFILE "grades.txt", names[student]
-        FOR col ← 1 TO 4
-            WRITEFILE "grades.txt", scores[student, col]
-        NEXT col
-    NEXT student
-    CLOSEFILE "grades.txt"
-    OUTPUT "Data saved successfully!"
-ENDPROCEDURE
-\`\`\`
-
-This writes to the file:
-\`\`\`
-Alice
-85
-92
-78
-90
-Bob
-70
-...
-\`\`\`
-
-Each student's name is followed by their 4 scores, using **nested loops** and **file handling** together.`
-        },
-        {
-          id: "ch3-quiz1",
+          id: "ch3-q1",
           type: "quiz",
-          title: "🧠 Quiz!",
-          content: 'In the SaveToFile procedure, how many total lines are written to the file for 3 students with 4 scores each?',
-          options: [
-            '15 lines (3 names + 12 scores)',
-            '12 lines (just the scores)',
-            '3 lines (just the names)',
-            '7 lines (3 + 4)'
-          ],
-          answer: 0,
-          explanation: 'For each of the 3 students, we write 1 name + 4 scores = 5 lines. Total: 3 x 5 = **15 lines**.'
-        },
-        {
-          id: "ch3-quiz2",
-          type: "quiz",
-          title: "🧠 Part 2 Review: BYVAL vs BYREF",
-          content: 'A procedure updates a student\'s score. Which parameter passing method is needed?',
-          options: [
-            'BYREF, because the original score must be changed',
-            'BYVAL, because we only need to read the score',
-            'Either one works the same way',
-            'BYREF for reading, BYVAL for writing'
-          ],
-          answer: 0,
-          explanation: 'To **update** the original score, we need **BYREF** so changes inside the procedure affect the original variable. BYVAL would only change a copy!'
-        },
-        {
-          id: "ch3-quiz3",
-          type: "quiz",
-          title: "🧠 Part 2 Review: String Functions",
-          content: 'What does `SUBSTRING(UCASE("computer"), 1, 4)` return?',
-          options: [
-            '"COMP"',
-            '"comp"',
-            '"COMPUTER"',
-            '"Computer"'
-          ],
-          answer: 0,
-          explanation: 'First, `UCASE("computer")` gives "COMPUTER". Then `SUBSTRING("COMPUTER", 1, 4)` extracts the first 4 characters: **"COMP"**. Remember: CIE uses 1-based indexing!'
-        },
-        {
-          id: "ch3-predict2",
-          type: "predict",
-          title: "🔮 Final Challenge!",
-          content: `What does this combined pseudocode output?
+          title: "\u{1F41B} Error 1: Line 04",
+          content: `What is the error on line 04: \`IF Number < 0\`?
 
+The intended behavior: If the number is **positive**, it should be added to Total.`,
+          options: [
+            '< should be changed to > (since we are checking for positive numbers)',
+            '< should be changed to =',
+            '0 should be 1 instead',
+            'No error'
+          ],
+          answer: 0,
+          explanation: `To check for **positive** numbers, it should be \`Number > 0\`!
+
+Currently \`Number < 0\` checks for **negative** numbers.
+
+Fix: \`IF Number > 0\`
+
+\u{1F4A1} Pay close attention to the direction of inequality signs!`
+        },
+        {
+          id: "ch3-q2",
+          type: "quiz",
+          title: "\u{1F41B} Error 2: Line 10",
+          content: `What is the error on line 10: \`Exit \u2190 1\`?
+
+The intended behavior: When 0 is entered, the **loop should stop**.
+Line 02: \`WHILE Exit <> 0 DO\` (loop while Exit is not 0)`,
+          options: [
+            'Exit \u2190 1 should be changed to Exit \u2190 0',
+            'Exit should be replaced with Number',
+            '1 should be -1 instead',
+            'No error'
+          ],
+          answer: 0,
+          explanation: `Since the WHILE condition is \`Exit <> 0\`, Exit must be set to **0** to stop the loop!
+
+Currently Exit \u2190 1 keeps Exit at 1, so **the loop never stops!**
+
+Fix: \`Exit \u2190 0\`
+
+\u{1F4A1} Look carefully at the WHILE condition to determine which value stops the loop!`
+        },
+        {
+          id: "ch3-q3",
+          type: "quiz",
+          title: "\u{1F41B} Error 3: Line 14",
+          content: `What is the error on line 14: \`OUTPUT "The total of your numbers is ", Number\`?
+
+The intended behavior: Output the **total** at the end.`,
+          options: [
+            'Number should be replaced with Total',
+            'OUTPUT should be replaced with PRINT',
+            'The comma should be replaced with &',
+            'No error'
+          ],
+          answer: 0,
+          explanation: `Since we need to output the total, we should output **Total**!
+
+Number holds the last value entered (0),
+while **Total** stores the accumulated sum.
+
+Fix: \`OUTPUT "The total of your numbers is ", Total\`
+
+\u{1F4A1} Be careful not to confuse similarly named variables!`
+        },
+        {
+          id: "ch3-q4",
+          type: "quiz",
+          title: "\u{1F41B} Error 4: Missing Code",
+          content: `The code above is **missing an important piece of code**.
+
+What needs to be done before using Total?`,
+          options: [
+            'Total must be initialized with Total \u2190 0',
+            'Total does not need to be DECLAREd',
+            'Total needs to be PRINTed',
+            'Total should be assigned the value 1'
+          ],
+          answer: 0,
+          explanation: `The initialization **Total \u2190 0** is missing!
+
+Before adding values to Total, it must be **initialized to 0**.
+Without initialization, Total may contain a garbage value.
+
+Code to add:
 \`\`\`
-FUNCTION GetInitial(name : STRING) RETURNS STRING
-    RETURN UCASE(SUBSTRING(name, 1, 1))
-ENDFUNCTION
+DECLARE Total : INTEGER
+Total \u2190 0
+\`\`\`
 
-PROCEDURE ShowInitials(BYVAL name1 : STRING, BYVAL name2 : STRING)
-    DECLARE result : STRING
-    result ← GetInitial(name1) & GetInitial(name2)
-    OUTPUT result
-ENDPROCEDURE
-
-CALL ShowInitials("alice", "bob")
-\`\`\``,
-          options: [
-            'AB',
-            'ab',
-            'Alice Bob',
-            'aAbB'
-          ],
-          answer: 0,
-          explanation: '`GetInitial("alice")` extracts "a" then UCASE gives "A". `GetInitial("bob")` extracts "b" then UCASE gives "B". Concatenated: **"AB"**. This combines FUNCTION, PROCEDURE, SUBSTRING, UCASE, and BYVAL!'
+\u{1F4A1} Always **initialize to 0** before using a total (Total) or counter (Count)!`
         },
         {
-          id: "ch3-fill3",
+          id: "ch3-fill1",
           type: "fillblank",
-          title: "✏️ Final Fill-in!",
-          content: 'Complete the procedure that loads student names from a file into an array.',
-          code: 'PROCEDURE LoadNames(BYREF names : ARRAY)\n    DECLARE count : INTEGER\n    count ← 0\n    ___ "students.txt" FOR READ\n    WHILE NOT ___("students.txt")\n        count ← count + 1\n        ___ "students.txt", names[count]\n    ENDWHILE\n    CLOSEFILE "students.txt"\nENDPROCEDURE',
+          title: "\u{270F}\u{FE0F} Complete the Corrected Code",
+          content: `Complete the code with all 4 errors fixed.`,
+          code: 'DECLARE Total : INTEGER\nDECLARE Number : INTEGER\nDECLARE Exit : INTEGER\nTotal \u2190 ___\nExit \u2190 1\nWHILE Exit <> 0 DO\n    INPUT Number\n    IF Number ___ 0\n        THEN\n            Total \u2190 Total + Number\n        ELSE\n            IF Number = 0\n                THEN\n                    Exit \u2190 ___\n            ENDIF\n    ENDIF\nENDWHILE\nOUTPUT "The total of your numbers is ", ___',
           fillBlanks: [
-            { id: 1, answer: "OPENFILE", options: ["OPENFILE", "OPEN", "FILE", "READ"] },
-            { id: 2, answer: "EOF", options: ["EOF", "END", "DONE", "EMPTY"] },
-            { id: 3, answer: "READFILE", options: ["READFILE", "READ", "INPUT", "GETLINE"] }
+            { id: 1, answer: "0", options: ["0", "1", "10", "-1"] },
+            { id: 2, answer: ">", options: [">", "<", "=", ">="] },
+            { id: 3, answer: "0", options: ["0", "1", "-1", "2"] },
+            { id: 4, answer: "Total", options: ["Total", "Number", "Exit", "0"] }
           ]
         }
       ]

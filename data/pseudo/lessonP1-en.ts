@@ -1,372 +1,442 @@
 // ============================================
-// Pseudocode Lesson P1: Combined Project (English)
-// CIE Style Pseudocode - Review Project Part 1!
+// Pseudocode Past Paper Practice: Part 1 (English)
+// Data Types, Operators, Validation, Variables, Conditionals, Loops, Arrays
+// IGCSE 0478 Paper 2 Style
 // ============================================
 
 import { LessonData } from '../types'
 
 export const pseudoLessonP1EnData: LessonData = {
   id: "pseudo-p1",
-  title: "Combined Project",
-  emoji: "🏆",
-  description: "Part 1 Review Project!",
+  title: "Past Paper Practice",
+  emoji: "\u{1F4DD}",
+  description: "Part 1 Past Paper Practice!",
   chapters: [
     {
       id: "ch1",
-      title: "Average Calculator",
-      emoji: "🧮",
+      title: "Fundamental Concept Questions",
+      emoji: "\u{1F4CB}",
       steps: [
         {
           id: "ch1-intro",
           type: "explain",
-          title: "🧮 The Problem: Average Calculator",
-          content: `Let's build an algorithm that **inputs 5 numbers** from the user and **calculates their average**!
+          title: "\u{1F4DD} Introduction to Past Paper Question Types",
+          content: `Let's practice **fundamental concept questions** that frequently appear in IGCSE Computer Science Paper 2!
 
-This project combines:
-- **Arrays** to store the 5 numbers
-- **Loops** to input values and calculate the sum
-- **INPUT / OUTPUT** for user interaction
-- **Variables** and **arithmetic** for the calculation
+These are the types of questions you'll encounter:
+- \u{1F50D} **Validation** type identification
+- \u{1F4CA} **Data Type** matching
+- \u{2795} **Operator** classification
+- \u{1F4DD} **Code reading** & output prediction
 
-The plan:
-1. Declare an array of 5 integers
-2. Use a loop to INPUT each number
-3. Use another loop to calculate the total
-4. Divide the total by 5 to get the average
-5. OUTPUT the result
-
-Let's see the full solution!`
+Each question follows a format similar to the actual exam. Are you ready? \u{1F4AA}`
         },
         {
-          id: "ch1-solution",
-          type: "explain",
-          title: "📋 The Solution",
-          content: `Here is the complete pseudocode:
-
-\`\`\`
-DECLARE numbers : ARRAY[1:5] OF INTEGER
-DECLARE total : INTEGER
-DECLARE average : REAL
-
-total ← 0
-
-FOR i ← 1 TO 5
-    OUTPUT "Enter number ", i
-    INPUT numbers[i]
-NEXT i
-
-FOR i ← 1 TO 5
-    total ← total + numbers[i]
-NEXT i
-
-average ← total / 5
-OUTPUT "The average is: ", average
-\`\`\`
-
-Key details:
-- \`average\` is **REAL** (not INTEGER) because dividing may give a decimal
-- We initialize \`total ← 0\` before adding to it
-- The first loop **collects** data, the second loop **processes** it`
-        },
-        {
-          id: "ch1-quiz1",
+          id: "ch1-q1",
           type: "quiz",
-          title: "🧠 Quiz!",
-          content: 'Why is `average` declared as **REAL** instead of **INTEGER**?',
+          title: "\u{1F50D} Validation Check",
+          content: `What type of validation check verifies whether an email address contains the '@' symbol?
+
+e.g. Checking if '@' exists in \`user@email.com\``,
           options: [
-            'Because REAL is faster than INTEGER',
-            'Because the result of division can be a decimal number',
-            'Because INPUT always gives REAL values',
-            'Because arrays require REAL data types'
+            'format check',
+            'range check',
+            'length check',
+            'presence check'
           ],
-          answer: 1,
-          explanation: 'When you divide, the result can have a decimal (e.g., 17 / 5 = 3.4). **REAL** stores decimal numbers, while **INTEGER** only stores whole numbers. Using INTEGER would lose the decimal part!'
+          answer: 0,
+          explanation: `A **format check** verifies whether data follows a **specified format (pattern)**.
+
+Checking if an email contains '@' is a **format check**.
+
+Other validation types:
+- **Range check**: whether a value is within a range (e.g. 1 to 100)
+- **Length check**: whether a string's length is correct (e.g. password at least 8 characters)
+- **Presence check**: whether a field is not empty`
         },
         {
-          id: "ch1-fill1",
-          type: "fillblank",
-          title: "✏️ Fill in the blanks!",
-          content: 'Complete the key part of the average calculator.',
-          code: 'DECLARE numbers : ARRAY[1:5] OF INTEGER\nDECLARE total : INTEGER\ntotal ← 0\n\nFOR i ← 1 ___ 5\n    total ← total ___ numbers[i]\nNEXT i\n\naverage ← total ___ 5',
-          fillBlanks: [
-            { id: 1, answer: "TO", options: ["TO", "UNTIL", "BY", "FOR"] },
-            { id: 2, answer: "+", options: ["+", "-", "*", "/"] },
-            { id: 3, answer: "/", options: ["/", "*", "+", "MOD"] }
-          ]
+          id: "ch1-q2",
+          type: "quiz",
+          title: "\u{1F4CA} Data Type Matching",
+          content: `Which data type is appropriate for storing a "number with a decimal point" (e.g. 3.14, 9.8)?`,
+          options: [
+            'REAL',
+            'INTEGER',
+            'STRING',
+            'BOOLEAN'
+          ],
+          answer: 0,
+          explanation: `**REAL** stores numbers with decimal points.
+
+Data type summary:
+- **INTEGER**: whole numbers (42, -7)
+- **REAL**: decimal numbers (3.14, -0.5)
+- **STRING**: text ("Hello")
+- **BOOLEAN**: true/false (TRUE, FALSE)
+- **CHAR**: a single character ('A', '3')`
+        },
+        {
+          id: "ch1-q3",
+          type: "quiz",
+          title: "\u{1F4CA} Data Type Matching 2",
+          content: `What is the most appropriate data type for storing "a single character"?
+
+e.g. 'A', 'Z', '5'`,
+          options: [
+            'CHAR',
+            'STRING',
+            'INTEGER',
+            'BOOLEAN'
+          ],
+          answer: 0,
+          explanation: `**CHAR** stores exactly one character.
+
+STRING can also store a single character, but when you need **exactly one character**, CHAR is more appropriate.
+
+Common exam matchings:
+- whole number \u2192 INTEGER
+- single letter \u2192 CHAR
+- word or phrase \u2192 STRING
+- number with decimal \u2192 REAL`
+        },
+        {
+          id: "ch1-q4",
+          type: "quiz",
+          title: "\u{2795} Operator Classification",
+          content: `Classify the following operator.
+
+What type of operator is \`DIV\`?
+
+(Note: DIV performs integer division, e.g. 7 DIV 2 = 3)`,
+          options: [
+            'Arithmetic operator',
+            'Comparison operator',
+            'Logical operator',
+            'Assignment operator'
+          ],
+          answer: 0,
+          explanation: `**DIV** is an **arithmetic operator**. It performs integer division.
+
+Operator classification:
+- **Arithmetic**: +, -, *, /, DIV, MOD
+- **Comparison**: =, <>, <, >, <=, >=
+- **Logical**: AND, OR, NOT
+- **Assignment**: \u2190`
+        },
+        {
+          id: "ch1-q5",
+          type: "quiz",
+          title: "\u{2795} Operator Classification 2",
+          content: `Which of the following is a **logical operator**?`,
+          options: [
+            'AND',
+            '>=',
+            'MOD',
+            'DIV'
+          ],
+          answer: 0,
+          explanation: `**AND** is a logical operator. It returns TRUE when both conditions are true.
+
+- **>=** is a comparison operator (greater than or equal to)
+- **MOD** is an arithmetic operator (remainder)
+- **DIV** is an arithmetic operator (integer division)`
         },
         {
           id: "ch1-predict1",
           type: "predict",
-          title: "🔮 Predict the output!",
-          content: `If the user enters the numbers 10, 20, 30, 40, 50, what does this output?
+          title: "\u{1F52E} Predict the Output",
+          content: `What is the output of the following pseudocode?
 
 \`\`\`
-DECLARE numbers : ARRAY[1:5] OF INTEGER
-DECLARE total : INTEGER
-DECLARE average : REAL
-total ← 0
+DECLARE x : INTEGER
+DECLARE y : INTEGER
 
-FOR i ← 1 TO 5
-    INPUT numbers[i]
-NEXT i
+x \u2190 17
+y \u2190 x MOD 5
+x \u2190 x DIV 5
 
-FOR i ← 1 TO 5
-    total ← total + numbers[i]
-NEXT i
-
-average ← total / 5
-OUTPUT average
+OUTPUT y
+OUTPUT x
 \`\`\``,
           options: [
-            '150',
-            '30',
-            '50',
-            '10'
+            '2\n3',
+            '3\n2',
+            '5\n3',
+            '2\n5'
           ],
-          answer: 1,
-          explanation: 'The total is 10 + 20 + 30 + 40 + 50 = **150**. Then average = 150 / 5 = **30**. The OUTPUT shows the average, which is 30.'
-        },
+          answer: 0,
+          explanation: `Let's trace through line by line:
+
+1. x \u2190 17
+2. y \u2190 17 MOD 5 = **2** (remainder)
+3. x \u2190 17 DIV 5 = **3** (integer division)
+4. OUTPUT y \u2192 **2**
+5. OUTPUT x \u2192 **3**
+
+\u{1F4A1} MOD gives the remainder, DIV gives the quotient!`
+        }
       ]
     },
     {
       id: "ch2",
-      title: "Find Maximum",
-      emoji: "🔍",
+      title: "Reading Pseudocode & Finding Errors",
+      emoji: "\u{1F50D}",
       steps: [
         {
           id: "ch2-intro",
           type: "explain",
-          title: "🔍 The Problem: Find the Maximum",
-          content: `Now let's build an algorithm that **finds the largest value** in an array!
-
-This is a classic algorithm problem. The strategy:
-1. Start by **assuming** the first element is the biggest
-2. **Loop** through the rest of the array
-3. If any element is **larger** than the current max, update the max
-4. After the loop, the max holds the largest value
-
-This combines:
-- **Arrays** for data storage
-- **FOR loop** to check each element
-- **IF conditional** to compare values
-- **Variables** to track the maximum`
-        },
-        {
-          id: "ch2-solution",
-          type: "explain",
-          title: "📋 The Solution",
-          content: `Here is the complete pseudocode:
+          title: "\u{1F50D} Pseudocode with Errors",
+          content: `The following pseudocode is intended to input a random number of values (between 1 and 10), then calculate the total and average.
+However, it contains **4 errors**!
 
 \`\`\`
-DECLARE values : ARRAY[1:5] OF INTEGER
-DECLARE max : INTEGER
-
-values[1] ← 34
-values[2] ← 72
-values[3] ← 15
-values[4] ← 98
-values[5] ← 43
-
-max ← values[1]
-
-FOR i ← 2 TO 5
-    IF values[i] > max THEN
-        max ← values[i]
-    ENDIF
-NEXT i
-
-OUTPUT "The maximum value is: ", max
+01 DECLARE Count : STRING
+02 DECLARE Limit : INTEGER
+03 DECLARE Value : REAL
+04 DECLARE Total : REAL
+05 Total \u2190 0
+06 Limit \u2190 ROUND(RANDOM() * 9, 0) + 1
+07 IF Count \u2190 1 TO Limit
+08     OUTPUT "Enter a number"
+09     INPUT Count
+10     Total \u2190 Total * Value
+11 NEXT Count
+12 OUTPUT "Total is ", Total
+13 OUTPUT "Average is ", Total / Limit
 \`\`\`
 
-Key details:
-- We set \`max ← values[1]\` (start with the first element)
-- The loop starts at **2** (no need to compare element 1 with itself)
-- Inside the loop, we only update \`max\` when we find something **bigger**
-
-Let's trace through: max starts at 34. Then 72 > 34, so max becomes 72. Then 15 is not > 72. Then 98 > 72, so max becomes 98. Then 43 is not > 98. Final answer: **98**!`
+Can you spot the errors? \u{1F914}`
         },
         {
-          id: "ch2-quiz1",
+          id: "ch2-q1",
           type: "quiz",
-          title: "🧠 Quiz!",
-          content: 'In the Find Maximum algorithm, why does the FOR loop start at **2** instead of **1**?',
+          title: "\u{1F41B} Find Error 1",
+          content: `What is wrong with line 01: \`DECLARE Count : STRING\`?`,
           options: [
-            'Because CIE arrays must start at index 2',
-            'Because max is already set to values[1], so we skip it',
-            'Because the first element is always the largest',
-            'Because FOR loops cannot start at 1'
+            'Count is used as a loop counter, so it should be INTEGER',
+            'Count should be replaced with Loop',
+            'STRING should be REAL instead',
+            'No error'
           ],
-          answer: 1,
-          explanation: 'We set `max ← values[1]` before the loop, so element 1 is already accounted for. Starting the loop at **2** avoids an unnecessary comparison of the first element with itself!'
+          answer: 0,
+          explanation: `Count is used as a **counter variable** in a FOR loop.
+
+Counter variables must always be **INTEGER**!
+
+Fix: \`DECLARE Count : INTEGER\``
         },
         {
-          id: "ch2-fill2",
+          id: "ch2-q2",
+          type: "quiz",
+          title: "\u{1F41B} Find Error 2",
+          content: `What is wrong with line 07: \`IF Count \u2190 1 TO Limit\`?`,
+          options: [
+            'IF should be replaced with FOR',
+            '\u2190 should be replaced with =',
+            'TO should be replaced with UNTIL',
+            'No error'
+          ],
+          answer: 0,
+          explanation: `To repeat a set number of times, you need a **FOR** loop!
+
+IF is a conditional statement, not a loop.
+
+Fix: \`FOR Count \u2190 1 TO Limit\``
+        },
+        {
+          id: "ch2-q3",
+          type: "quiz",
+          title: "\u{1F41B} Find Error 3",
+          content: `What is wrong with line 09: \`INPUT Count\`?`,
+          options: [
+            'Count should be replaced with Value',
+            'INPUT should be replaced with OUTPUT',
+            'Count should have 1 added to it',
+            'No error'
+          ],
+          answer: 0,
+          explanation: `Count is the **loop counter**. The value entered by the user should be stored in **Value**!
+
+If you input into Count, the loop will break.
+
+Fix: \`INPUT Value\``
+        },
+        {
+          id: "ch2-q4",
+          type: "quiz",
+          title: "\u{1F41B} Find Error 4",
+          content: `What is wrong with line 10: \`Total \u2190 Total * Value\`?`,
+          options: [
+            '* should be replaced with + (since we are calculating a total)',
+            'Total should be replaced with Value',
+            'Value should be replaced with Count',
+            'No error'
+          ],
+          answer: 0,
+          explanation: `To calculate a total, you need **addition (+)**!
+
+Using multiplication (*) would give a product, not a total.
+
+Fix: \`Total \u2190 Total + Value\``
+        },
+        {
+          id: "ch2-fill1",
           type: "fillblank",
-          title: "✏️ Fill in the blanks!",
-          content: 'Complete the Find Maximum algorithm.',
-          code: 'max ← values[1]\n\nFOR i ← 2 TO 5\n    ___ values[i] > max ___\n        max ← ___\n    ENDIF\nNEXT i',
+          title: "\u{270F}\u{FE0F} Complete the Corrected Code",
+          content: 'Complete the code with all errors fixed.',
+          code: 'DECLARE Count : INTEGER\nDECLARE Limit : INTEGER\nDECLARE Value : REAL\nDECLARE Total : REAL\nTotal \u2190 0\nLimit \u2190 ROUND(RANDOM() * 9, 0) + 1\n___ Count \u2190 1 TO Limit\n    OUTPUT "Enter a number"\n    INPUT ___\n    Total \u2190 Total ___ Value\nNEXT Count',
           fillBlanks: [
-            { id: 1, answer: "IF", options: ["IF", "WHILE", "WHEN", "CHECK"] },
-            { id: 2, answer: "THEN", options: ["THEN", "DO", "BEGIN", "RUN"] },
-            { id: 3, answer: "values[i]", options: ["values[i]", "max", "i", "values[5]"] }
+            { id: 1, answer: "FOR", options: ["FOR", "IF", "WHILE", "REPEAT"] },
+            { id: 2, answer: "Value", options: ["Value", "Count", "Total", "Limit"] },
+            { id: 3, answer: "+", options: ["+", "*", "-", "/"] }
           ]
         },
         {
-          id: "ch2-predict2",
+          id: "ch2-predict1",
           type: "predict",
-          title: "🔮 Predict the output!",
-          content: `What does this pseudocode output?
+          title: "\u{1F52E} Predict the Corrected Code Output",
+          content: `In the corrected code, if Limit = 3 and
+the user enters 10, 20, 30, what is the output?
 
 \`\`\`
-DECLARE data : ARRAY[1:4] OF INTEGER
-data[1] ← 55
-data[2] ← 12
-data[3] ← 87
-data[4] ← 43
-
-DECLARE max : INTEGER
-max ← data[1]
-
-FOR i ← 2 TO 4
-    IF data[i] > max THEN
-        max ← data[i]
-    ENDIF
-NEXT i
-
-OUTPUT max
+Total \u2190 0
+FOR Count \u2190 1 TO 3
+    INPUT Value
+    Total \u2190 Total + Value
+NEXT Count
+OUTPUT "Total is ", Total
+OUTPUT "Average is ", Total / Limit
 \`\`\``,
           options: [
-            '55',
-            '12',
-            '87',
-            '43'
+            'Total is 60\nAverage is 20',
+            'Total is 60\nAverage is 30',
+            'Total is 30\nAverage is 10',
+            'Total is 20\nAverage is 60'
           ],
-          answer: 2,
-          explanation: 'Let us trace: max starts at 55. Then 12 is not > 55 (no change). Then 87 > 55, so max becomes 87. Then 43 is not > 87 (no change). The output is **87**.'
-        },
+          answer: 0,
+          explanation: `Calculation steps:
+- Iteration 1: Total = 0 + 10 = 10
+- Iteration 2: Total = 10 + 20 = 30
+- Iteration 3: Total = 30 + 30 = **60**
+- Average = 60 / 3 = **20**`
+        }
       ]
     },
     {
       id: "ch3",
-      title: "Number Guessing Game",
-      emoji: "🎲",
+      title: "Writing Pseudocode",
+      emoji: "\u{270D}\u{FE0F}",
       steps: [
         {
           id: "ch3-intro",
           type: "explain",
-          title: "🎲 The Problem: Number Guessing Game",
-          content: `Let's design a **Number Guessing Game**! The computer picks a secret number, and the player keeps guessing until they get it right.
+          title: "\u{270D}\u{FE0F} Writing Pseudocode Questions",
+          content: `Now let's practice **writing** pseudocode!
 
-This combines:
-- **Variables** to store the secret number and guess
-- **INPUT / OUTPUT** for player interaction
-- **REPEAT...UNTIL** loop (keep going until correct)
-- **IF...THEN...ELSE** conditionals for feedback
+Common writing question types in the exam:
+- Using **CASE statements**
+- **Input validation**
+- **Processing data with loops**
+- Suggesting **meaningful identifiers**
 
-The game flow:
-1. Set a secret number
-2. Ask the player to guess
-3. Tell them if the guess is too high or too low
-4. Repeat until they guess correctly
-5. Congratulate them!`
+Are you ready? \u{270D}\u{FE0F}`
         },
         {
-          id: "ch3-solution",
-          type: "explain",
-          title: "📋 The Solution",
-          content: `Here is the complete pseudocode:
-
-\`\`\`
-DECLARE secret : INTEGER
-DECLARE guess : INTEGER
-DECLARE attempts : INTEGER
-
-secret ← 42
-attempts ← 0
-
-REPEAT
-    OUTPUT "Enter your guess: "
-    INPUT guess
-    attempts ← attempts + 1
-
-    IF guess > secret THEN
-        OUTPUT "Too high! Try lower."
-    ELSE
-        IF guess < secret THEN
-            OUTPUT "Too low! Try higher."
-        ELSE
-            OUTPUT "Correct!"
-        ENDIF
-    ENDIF
-UNTIL guess = secret
-
-OUTPUT "You got it in ", attempts, " attempts!"
-\`\`\`
-
-Key details:
-- **REPEAT...UNTIL** runs the block **at least once**, then checks the condition
-- We use **nested IF** statements: first check too high, then too low, else correct
-- \`attempts\` counts how many guesses the player made
-- The loop ends when \`guess = secret\` becomes TRUE`
+          id: "ch3-fill1",
+          type: "fillblank",
+          title: "\u{270F}\u{FE0F} Writing a CASE Statement",
+          content: `Complete the code that takes an integer between 1 and 4 as input and processes it with a CASE statement.
+- 1 to 4: output the corresponding word
+- Otherwise: output "ERROR"`,
+          code: 'INPUT Number\n___ OF Number\n    1: OUTPUT "One"\n    2: OUTPUT "Two"\n    3: OUTPUT "Three"\n    4: OUTPUT "Four"\n    ___: OUTPUT "ERROR"\n___',
+          fillBlanks: [
+            { id: 1, answer: "CASE", options: ["CASE", "IF", "SELECT", "SWITCH"] },
+            { id: 2, answer: "OTHERWISE", options: ["OTHERWISE", "ELSE", "DEFAULT", "OTHER"] },
+            { id: 3, answer: "ENDCASE", options: ["ENDCASE", "ENDIF", "END", "NEXT"] }
+          ]
         },
         {
-          id: "ch3-quiz1",
+          id: "ch3-fill2",
+          type: "fillblank",
+          title: "\u{270F}\u{FE0F} Writing Input Validation",
+          content: `Complete the validation code that only accepts numbers between 1 and 500.
+If the input is out of range, it should prompt for input again.`,
+          code: 'REPEAT\n    OUTPUT "Enter a number (1-500): "\n    INPUT Number\n___ Number < 1 ___ Number > 500',
+          fillBlanks: [
+            { id: 1, answer: "UNTIL", options: ["UNTIL", "WHILE", "IF", "FOR"] },
+            { id: 2, answer: "AND", options: ["AND", "OR", "NOT", "XOR"] }
+          ]
+        },
+        {
+          id: "ch3-q1",
           type: "quiz",
-          title: "🧠 Quiz!",
-          content: 'Why is **REPEAT...UNTIL** a better choice than **WHILE** for this game?',
+          title: "\u{1F9E0} Validation Loop Condition",
+          content: `In the validation code above, why is the UNTIL condition \`Number >= 1 AND Number <= 500\`?
+
+REPEAT...UNTIL stops when the condition becomes **TRUE**.`,
           options: [
-            'REPEAT is faster than WHILE',
-            'WHILE cannot check conditions',
-            'The player must guess at least once before we can check if they are correct',
-            'REPEAT...UNTIL is the only loop in CIE pseudocode'
+            'To stop the loop when a valid value between 1 and 500 is entered',
+            'To stop the loop when the value is less than 1 or greater than 500',
+            'Because REPEAT always requires AND',
+            'No particular reason, just convention'
           ],
-          answer: 2,
-          explanation: '**REPEAT...UNTIL** runs the code **at least once** before checking the condition. This is perfect here because the player must make at least one guess before we can check if it matches the secret number!'
+          answer: 0,
+          explanation: `REPEAT...UNTIL **stops** when the condition becomes **TRUE**.
+
+Since the loop should stop when a valid input (1 to 500) is entered:
+\`UNTIL Number >= 1 AND Number <= 500\`
+
+\u{26A0}\u{FE0F} Conversely, if using a WHILE loop:
+\`WHILE Number < 1 OR Number > 500\`
+(keep looping while the input is invalid)`
         },
         {
           id: "ch3-fill3",
           type: "fillblank",
-          title: "✏️ Fill in the blanks!",
-          content: 'Complete the core loop of the guessing game.',
-          code: '___\n    OUTPUT "Enter your guess: "\n    INPUT guess\n    IF guess > secret THEN\n        OUTPUT "Too high!"\n    ENDIF\n___ guess ___ secret',
+          title: "\u{270F}\u{FE0F} Array Total Calculation",
+          content: `Complete the code that calculates the total of 5 scores in an array and counts how many values are 0.`,
+          code: 'DECLARE Scores : ARRAY[1:5] OF INTEGER\nDECLARE Total : INTEGER\nDECLARE ZeroCount : INTEGER\n\nTotal \u2190 0\nZeroCount \u2190 0\n\nFOR i \u2190 1 ___ 5\n    IF Scores[i] = 0 THEN\n        ZeroCount \u2190 ZeroCount ___ 1\n    ENDIF\n    Total \u2190 ___ + Scores[i]\nNEXT i\n\nOUTPUT "Total: ", Total\nOUTPUT "Zeros: ", ZeroCount',
           fillBlanks: [
-            { id: 1, answer: "REPEAT", options: ["REPEAT", "WHILE", "FOR", "LOOP"] },
-            { id: 2, answer: "UNTIL", options: ["UNTIL", "WHILE", "ENDREPEAT", "NEXT"] },
-            { id: 3, answer: "=", options: ["=", "<>", ">", "<"] }
+            { id: 1, answer: "TO", options: ["TO", "UNTIL", "WHILE", "BY"] },
+            { id: 2, answer: "+", options: ["+", "-", "*", "/"] },
+            { id: 3, answer: "Total", options: ["Total", "Scores[i]", "ZeroCount", "i"] }
           ]
         },
         {
-          id: "ch3-predict3",
-          type: "predict",
-          title: "🔮 Predict the output!",
-          content: `The secret number is 7. The player enters: 3, then 9, then 7.
-What messages does the player see (in order)?
+          id: "ch3-q2",
+          type: "quiz",
+          title: "\u{1F3F7}\u{FE0F} Meaningful Identifiers",
+          content: `In the following pseudocode, variable names are not meaningful.
 
 \`\`\`
-secret ← 7
-REPEAT
-    INPUT guess
-    IF guess > secret THEN
-        OUTPUT "Too high!"
-    ELSE
-        IF guess < secret THEN
-            OUTPUT "Too low!"
-        ELSE
-            OUTPUT "Correct!"
-        ENDIF
-    ENDIF
-UNTIL guess = secret
-\`\`\``,
+DECLARE A : ARRAY[1:10] OF STRING
+DECLARE T : STRING
+DECLARE C : INTEGER
+DECLARE L : INTEGER
+L \u2190 10
+\`\`\`
+
+If this code is a **bubble sort algorithm for 10 names**,
+what would be a suitable meaningful identifier for the array \`A\`?`,
           options: [
-            'Too low!\nToo high!\nCorrect!',
-            'Too high! / Too low! / Correct!',
-            'Correct!',
-            'Too low! / Too low! / Correct!'
+            'Names',
+            'Data',
+            'List',
+            'Array1'
           ],
           answer: 0,
-          explanation: 'Guess 3: 3 < 7, so "Too low!". Guess 9: 9 > 7, so "Too high!". Guess 7: 7 = 7, so "Correct!". The loop then stops because `guess = secret` is TRUE.'
-        },
+          explanation: `**Names** is the most appropriate!
+
+Since the array stores names, "Names" is the clearest choice.
+
+The other variables could also be renamed:
+- T (temporary storage) \u2192 **Temp** or **TempName**
+- C (counter) \u2192 **Counter** or **OuterLoop**
+- L (array length) \u2192 **NumberOfNames** or **ListLength**
+
+\u{1F4A1} Questions asking for **meaningful identifiers** appear frequently in exams!`
+        }
       ]
-    },
+    }
   ]
 }

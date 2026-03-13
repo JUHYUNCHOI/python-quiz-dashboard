@@ -1,345 +1,541 @@
 // ============================================
-// Pseudocode Lesson P3: Combined Project 3 (English)
-// CIE Style Pseudocode - Student Score System!
+// Pseudocode Past Paper Practice: Part 3 (English)
+// Trace Table, Sorting, Extended Programming
+// IGCSE 0478 Paper 2 Style
 // ============================================
 
 import { LessonData } from '../types'
 
 export const pseudoLessonP3EnData: LessonData = {
   id: "pseudo-p3",
-  title: "Combined Project 3",
-  emoji: "🏆",
-  description: "Student score sorting & searching system!",
+  title: "Past Paper Practice 3",
+  emoji: "📝",
+  description: "Part 3 Past Paper Practice!",
   chapters: [
     {
       id: "ch1",
-      title: "Student Score System",
-      emoji: "🎓",
+      title: "Trace Table",
+      emoji: "📊",
       steps: [
         {
           id: "ch1-intro",
           type: "explain",
-          title: "🎓 The Problem: Student Score System",
-          content: `Let's build a complete **student score management system** that combines everything from Part 3!
+          title: "📊 What is a Trace Table?",
+          content: `This is a question type that frequently appears in **Q6a / Q7a** of IGCSE Paper 2!
 
-The system will:
-1. **Validate** student scores on input (0-100)
-2. **Store** scores in an array
-3. **Sort** scores using bubble sort
-4. **Search** for a specific score using linear and binary search
-5. Use **trace tables** to verify correctness
+A **Trace Table** is a table that tracks how variable values **change** line by line as a program executes.
 
-This project combines:
-- **Validation** (range check with REPEAT...UNTIL)
-- **Arrays** for data storage
-- **Bubble Sort** to order the scores
-- **Linear Search** and **Binary Search** to find scores
-- **Trace table** thinking throughout
-
-Let's build it step by step!`
-        },
-        {
-          id: "ch1-input",
-          type: "explain",
-          title: "📥 Step 1: Input with Validation",
-          content: `First, we input scores with **range check validation**:
+Let's look at a simple example:
 
 \`\`\`
-DECLARE scores : ARRAY[1:5] OF INTEGER
-DECLARE tempScore : INTEGER
-
-FOR i ← 1 TO 5
-    REPEAT
-        OUTPUT "Enter score for student ", i, " (0-100): "
-        INPUT tempScore
-        IF tempScore < 0 OR tempScore > 100 THEN
-            OUTPUT "Invalid! Score must be 0-100."
-        ENDIF
-    UNTIL tempScore >= 0 AND tempScore <= 100
-    scores[i] ← tempScore
+Count ← 0
+FOR i ← 1 TO 3
+    Count ← Count + 2
 NEXT i
+OUTPUT Count
 \`\`\`
 
-Key features:
-- **Nested loops**: FOR loop for each student, REPEAT loop for validation
-- The REPEAT loop keeps asking until a **valid** score (0-100) is entered
-- Once valid, the score is stored in the array
-- Error message tells the user **what went wrong**`
+| i | Count |
+|---|-------|
+|   | 0     |
+| 1 | 2     |
+| 2 | 4     |
+| 3 | 6     |
+
+➡️ OUTPUT: **6**
+
+Tips for creating a Trace Table:
+- 📌 Create a **column** for every variable
+- 📌 Write a new **row** every time a value changes
+- 📌 Add a **new row for each iteration** of a loop
+- 📌 It's also helpful to track condition results!`
         },
         {
-          id: "ch1-quiz1",
+          id: "ch1-code",
+          type: "explain",
+          title: "📋 Trace Table Problem",
+          content: `Let's analyze the following pseudocode. In the exam, you'll be given code like this and asked to create a Trace Table!
+
+\`\`\`
+DECLARE X : INTEGER
+DECLARE Y : INTEGER
+DECLARE Z : INTEGER
+X ← 5
+Y ← 3
+Z ← 0
+WHILE X > 0
+    Z ← Z + Y
+    X ← X - 1
+ENDWHILE
+OUTPUT Z
+\`\`\`
+
+Trace Table:
+
+| Iteration | X | Y | Z | X > 0? |
+|-----------|---|---|---|--------|
+| Initial   | 5 | 3 | 0 |        |
+| 1st       | 4 | 3 | 3 | TRUE   |
+| 2nd       | 3 | 3 | 6 | TRUE   |
+| 3rd       | 2 | 3 | 9 | TRUE   |
+| 4th       | 1 | 3 | 12| TRUE   |
+| 5th       | 0 | 3 | 15| TRUE   |
+| End       |   |   |   | FALSE  |
+
+Follow along one line at a time! 🔍`
+        },
+        {
+          id: "ch1-q1",
           type: "quiz",
-          title: "🧠 Quiz!",
-          content: 'In the input code, what happens if a user enters 105 for student 1?',
+          title: "🧠 Value of Z After 1st Iteration",
+          content: `In the pseudocode above, what is the value of Z **after the 1st iteration**?
+
+\`\`\`
+X ← 5, Y ← 3, Z ← 0
+
+WHILE X > 0
+    Z ← Z + Y    ← Z = 0 + 3 = ?
+    X ← X - 1
+ENDWHILE
+\`\`\``,
           options: [
-            '105 is stored in scores[1]',
-            'The program crashes',
-            'The user sees "Invalid!" and must enter again',
-            '105 is changed to 100 automatically'
+            '3',
+            '0',
+            '5',
+            '8'
           ],
-          answer: 2,
-          explanation: '105 > 100, so the IF condition is true and "Invalid! Score must be 0-100." is displayed. The UNTIL condition (tempScore >= 0 AND tempScore <= 100) is FALSE, so the REPEAT loop runs again. The user must enter a valid score to continue!'
+          answer: 0,
+          explanation: `1st iteration:
+- Z ← Z + Y = 0 + 3 = **3**
+- X ← X - 1 = 5 - 1 = 4
+
+Z increases by Y (= 3) with each iteration!`
         },
         {
-          id: "ch1-fill1",
-          type: "fillblank",
-          title: "✏️ Fill in the blanks!",
-          content: 'Complete the validation loop for score input.',
-          code: '___\n    OUTPUT "Enter score (0-100): "\n    INPUT tempScore\n    IF tempScore < 0 ___ tempScore > 100 THEN\n        OUTPUT "Invalid score!"\n    ENDIF\nUNTIL tempScore >= 0 ___ tempScore <= 100',
-          fillBlanks: [
-            { id: 1, answer: "REPEAT", options: ["REPEAT", "WHILE", "FOR", "DO"] },
-            { id: 2, answer: "OR", options: ["OR", "AND", "NOT", "THEN"] },
-            { id: 3, answer: "AND", options: ["AND", "OR", "NOT", "THEN"] }
-          ]
+          id: "ch1-q2",
+          type: "quiz",
+          title: "🧠 Value of X After 3rd Iteration",
+          content: `What is the value of X **after the 3rd iteration**?
+
+Hint: X decreases by 1 with each iteration.
+
+\`\`\`
+Initial: X = 5
+After 1st: X = 4
+After 2nd: X = 3
+After 3rd: X = ?
+\`\`\``,
+          options: [
+            '2',
+            '3',
+            '1',
+            '0'
+          ],
+          answer: 0,
+          explanation: `X decreases by 1 with each iteration:
+- Initial: X = 5
+- After 1st: X = 4
+- After 2nd: X = 3
+- After 3rd: X = **2**
+
+When X reaches 0, the condition WHILE X > 0 becomes FALSE and the loop stops!`
         },
+        {
+          id: "ch1-predict1",
+          type: "predict",
+          title: "🔮 Predict the Final Output",
+          content: `What is the **final OUTPUT** of the following code?
+
+\`\`\`
+X ← 5
+Y ← 3
+Z ← 0
+WHILE X > 0
+    Z ← Z + Y
+    X ← X - 1
+ENDWHILE
+OUTPUT Z
+\`\`\`
+
+Complete the Trace Table:
+
+| Iteration | X | Z |
+|-----------|---|---|
+| Initial   | 5 | 0 |
+| 1st       | 4 | 3 |
+| 2nd       | 3 | 6 |
+| 3rd       | 2 | 9 |
+| 4th       | 1 | 12 |
+| 5th       | 0 | ? |`,
+          options: [
+            '15',
+            '12',
+            '18',
+            '5'
+          ],
+          answer: 0,
+          explanation: `After 5 iterations:
+- Z = 0 + 3 + 3 + 3 + 3 + 3 = **15**
+
+Z adds Y (= 3) a total of X (= 5) times.
+In other words, 3 × 5 = **15**!`
+        },
+        {
+          id: "ch1-q3",
+          type: "quiz",
+          title: "🧠 Purpose of the Algorithm",
+          content: `What **operation** does this algorithm ultimately perform?
+
+\`\`\`
+X ← 5, Y ← 3, Z ← 0
+WHILE X > 0
+    Z ← Z + Y
+    X ← X - 1
+ENDWHILE
+OUTPUT Z    // Result: 15
+\`\`\`
+
+💡 If you repeatedly add Y a total of X times...?`,
+          options: [
+            'X * Y (multiplication by repeated addition)',
+            'X + Y (sum of two numbers)',
+            'X ^ Y (exponentiation)',
+            'X MOD Y (remainder)'
+          ],
+          answer: 0,
+          explanation: `Repeatedly adding Y a total of X times is **multiplication**!
+
+Z = Y + Y + Y + ... (X times)
+Z = Y × X = 3 × 5 = **15**
+
+This is called **multiplication by repeated addition**.
+
+⚠️ The question "Describe the purpose of this algorithm" appears frequently in exams!`
+        }
       ]
     },
     {
       id: "ch2",
-      title: "Sort & Search",
+      title: "Sorting Algorithm",
       emoji: "🔄",
       steps: [
         {
-          id: "ch2-sort",
+          id: "ch2-intro",
           type: "explain",
-          title: "🔄 Step 2: Sort the Scores",
-          content: `After collecting all scores, we sort them using **bubble sort**:
+          title: "🔄 Sorting Algorithm Analysis (IGCSE Q6 Style)",
+          content: `In the IGCSE exam, you'll be given code with **non-meaningful identifiers** and asked to analyze it!
+
+Analyze the following pseudocode:
 
 \`\`\`
-// Scores entered: [85, 42, 97, 63, 78]
-
-DECLARE temp : INTEGER
-
-FOR i ← 1 TO 4
-    FOR j ← 1 TO 5 - i
-        IF scores[j] > scores[j + 1] THEN
-            temp ← scores[j]
-            scores[j] ← scores[j + 1]
-            scores[j + 1] ← temp
-        ENDIF
-    NEXT j
-NEXT i
-
-// After sorting: [42, 63, 78, 85, 97]
+01 DECLARE A[1:10] : STRING
+02 DECLARE T : STRING
+03 DECLARE C, L : INTEGER
+04 L ← 10
+05 FOR C ← 1 TO L
+06     FOR J ← 1 TO L - 1
+07         IF A[J] > A[J + 1]
+08             THEN
+09                 T ← A[J]
+10                 A[J] ← A[J + 1]
+11                 A[J + 1] ← T
+12             ENDIF
+13     NEXT J
+14 NEXT C
+15 FOR C ← 1 TO L
+16     OUTPUT A[C]
+17 NEXT C
 \`\`\`
 
-Let's trace the first pass:
+Let's analyze step by step what this code does! 🔍
 
-| j | scores[j] | scores[j+1] | Swap? | Array |
-|---|---|---|---|---|
-| 1 | 85 | 42 | Yes | [42, 85, 97, 63, 78] |
-| 2 | 85 | 97 | No | [42, 85, 97, 63, 78] |
-| 3 | 97 | 63 | Yes | [42, 85, 63, 97, 78] |
-| 4 | 97 | 78 | Yes | [42, 85, 63, 78, 97] |
-
-After pass 1: 97 (the largest) is in its correct position at the end!`
+Key points:
+- 📌 \`A[J] > A[J + 1]\` → **Compares adjacent elements**
+- 📌 Lines 09-11 → **Swap** operation
+- 📌 Nested FOR loops → Repeats multiple times`
         },
         {
-          id: "ch2-search",
-          type: "explain",
-          title: "🔍 Step 3: Search for a Score",
-          content: `Now the array is sorted: **[42, 63, 78, 85, 97]**
+          id: "ch2-q1",
+          type: "quiz",
+          title: "🧠 Purpose of the Algorithm",
+          content: `What is the **purpose** of the pseudocode above (lines 01-17)?
 
-We can use **both** search methods!
-
-**Linear Search** (works on any array):
-\`\`\`
-DECLARE target : INTEGER
-OUTPUT "Enter score to find: "
-INPUT target
-
-FOR i ← 1 TO 5
-    IF scores[i] = target THEN
-        OUTPUT "Found at position ", i
-    ENDIF
-NEXT i
-\`\`\`
-
-**Binary Search** (faster, requires sorted array):
-\`\`\`
-DECLARE low, high, mid : INTEGER
-low ← 1
-high ← 5
-
-WHILE low <= high
-    mid ← (low + high) DIV 2
-    IF scores[mid] = target THEN
-        OUTPUT "Found at position ", mid
-        low ← high + 1
-    ELSE
-        IF scores[mid] < target THEN
-            low ← mid + 1
-        ELSE
-            high ← mid - 1
-        ENDIF
-    ENDIF
-ENDWHILE
-\`\`\`
-
-Since our array is **sorted**, binary search is the better choice! For 5 elements: linear search takes up to 5 comparisons, binary search takes at most 3.`
-        },
-        {
-          id: "ch2-predict1",
-          type: "predict",
-          title: "🔮 Predict the output!",
-          content: `Binary search on sorted array [42, 63, 78, 85, 97]. Target = 78. How many comparisons are needed?
-
-\`\`\`
-low ← 1, high ← 5
-Step 1: mid = (1+5) DIV 2 = 3
-        scores[3] = 78 = target?
-\`\`\``,
+Hints:
+- \`A[J] > A[J + 1]\` compares adjacent elements
+- If the condition is met, a **swap** is performed
+- This is repeated multiple times`,
           options: [
-            '1 comparison - found immediately!',
-            '2 comparisons',
-            '3 comparisons',
-            '5 comparisons'
+            'Sort strings in ascending (alphabetical) order',
+            'Search for a specific value in the strings',
+            'Calculate the total of the array',
+            'Remove duplicate values from the array'
           ],
           answer: 0,
-          explanation: 'mid = 3, and scores[3] = 78 which equals our target! Binary search found it in just **1 comparison** because the target happened to be the middle element. This is the **best case** scenario!'
+          explanation: `This is a **Bubble Sort** algorithm!
+
+A is a STRING array, and in \`A[J] > A[J + 1]\`, the ">" performs an **alphabetical comparison**.
+
+It pushes larger values to the back, sorting in **ascending (alphabetical) order**.
+
+Lines 15-17 **output** the sorted result.`
+        },
+        {
+          id: "ch2-q2",
+          type: "quiz",
+          title: "🧠 Four Processes",
+          content: `This algorithm performs 4 key processes.
+
+\`\`\`
+01 DECLARE A[1:10] : STRING    ← Store data
+05-14 Nested FOR loops          ← Sorting process
+07 IF A[J] > A[J + 1]          ← ???
+09-11 T ← A[J] ...             ← ???
+15-17 FOR ... OUTPUT A[C]      ← Output
+\`\`\`
+
+What is the process at line 07?`,
+          options: [
+            'Compare adjacent elements',
+            'Check the length of the array',
+            'Store a value in variable T',
+            'Terminate the loop'
+          ],
+          answer: 0,
+          explanation: `Line 07 \`IF A[J] > A[J + 1]\` is the process of **comparing two adjacent elements**!
+
+The 4 processes:
+1. 📥 **Input/Store** - Store names in the array
+2. 🔍 **Compare** - Compare adjacent elements (line 07)
+3. 🔄 **Swap** - Swap if in wrong order (lines 09-11)
+4. 📤 **Output** - Output the sorted result (lines 15-17)`
+        },
+        {
+          id: "ch2-q3",
+          type: "quiz",
+          title: "🏷️ Meaningful Identifier - Array A",
+          content: `Array \`A\` stores and sorts 10 **STRING** values.
+
+What is a suitable **meaningful identifier** for \`A\`?`,
+          options: [
+            'Names',
+            'Data',
+            'Array1',
+            'X'
+          ],
+          answer: 0,
+          explanation: `**Names** is the most suitable!
+
+Since it's a STRING array that's being sorted, "Names" is the clearest choice.
+
+💡 When suggesting meaningful identifiers in the exam:
+- ❌ Single letter (A, T, C) → Not meaningful
+- ❌ Too generic (Data, Array1) → Not specific enough
+- ✅ Specific and descriptive (Names, StudentNames) → Good!`
+        },
+        {
+          id: "ch2-q4",
+          type: "quiz",
+          title: "🏷️ Meaningful Identifier - Variable T",
+          content: `Variable \`T\` is used to **temporarily store** a value during the swap process.
+
+\`\`\`
+09  T ← A[J]           // Temporarily store A[J]
+10  A[J] ← A[J + 1]    // Move A[J+1] to A[J]
+11  A[J + 1] ← T       // Move temp value to A[J+1]
+\`\`\`
+
+What is a suitable **meaningful identifier** for \`T\`?`,
+          options: [
+            'Temp',
+            'Store',
+            'Hold',
+            'Buffer'
+          ],
+          answer: 0,
+          explanation: `**Temp** (or TempName) is the most suitable!
+
+Because it's a variable that **temporarily** holds a value during a swap.
+
+Improved variable names for the full code:
+- A → **Names**
+- T → **Temp** (or TempName)
+- C → **Counter** (or Pass)
+- L → **ListLength** (or NumberOfNames)
+- J → **Index** (or Position)`
         },
         {
           id: "ch2-fill1",
           type: "fillblank",
-          title: "✏️ Fill in the blanks!",
-          content: 'Choose the right search for each situation.',
-          code: '// Array is NOT sorted → use ___ search\n// Array IS sorted and has 1000 elements → use ___ search\n// Binary search on sorted array: max comparisons for 1000 elements ≈ ___',
+          title: "✏️ Complete the Swap Code",
+          content: `Complete the **swap** operation in the bubble sort!
+
+A temporary variable T is needed to swap A[J] and A[J+1].`,
+          code: 'T ← A[J]\nA[J] ← A[___]\nA[J + 1] ← ___',
           fillBlanks: [
-            { id: 1, answer: "linear", options: ["linear", "binary", "bubble", "insertion"] },
-            { id: 2, answer: "binary", options: ["binary", "linear", "bubble", "insertion"] },
-            { id: 3, answer: "10", options: ["10", "500", "1000", "100"] }
+            { id: 1, answer: "J + 1", options: ["J + 1", "J - 1", "J", "L"] },
+            { id: 2, answer: "T", options: ["T", "A[J]", "A[J + 1]", "C"] }
           ]
         },
         {
-          id: "ch2-quiz1",
+          id: "ch2-q5",
           type: "quiz",
-          title: "🧠 Quiz!",
-          content: 'After bubble sorting [85, 42, 97, 63, 78], what is the array after 2 complete passes?',
+          title: "🧠 How to Improve Code Understanding",
+          content: `What are **two ways** to make this algorithm **easier to understand**?
+
+\`\`\`
+DECLARE A[1:10] : STRING
+DECLARE T : STRING
+DECLARE C, L : INTEGER
+\`\`\``,
           options: [
-            '[42, 63, 78, 85, 97]',
-            '[42, 85, 63, 78, 97]',
-            '[42, 63, 78, 97, 85]',
-            '[42, 63, 85, 78, 97]'
+            'Use meaningful identifiers + add comments',
+            'Declare more variables + add line numbers',
+            'Make all variables uppercase + remove whitespace',
+            'Change FOR to WHILE + remove indentation'
           ],
           answer: 0,
-          explanation: 'Pass 1: [85,42,97,63,78] → swap 85,42 → swap 97,63 → swap 97,78 → [42,85,63,78,97]. Pass 2: [42,85,63,78,97] → no swap 42,85 → swap 85,63 → swap 85,78 → [42,63,78,85,97]. After 2 passes the array is already fully sorted: **[42, 63, 78, 85, 97]**!'
-        },
+          explanation: `Two methods:
+
+1. ✅ Use **Meaningful Identifiers**
+   - A → Names, T → Temp, C → Counter
+
+2. ✅ Add **Comments**
+   - \`// Compare adjacent names and swap\`
+   - \`// Output the sorted list of names\`
+
+⚠️ The question "State two ways to make this algorithm easier to understand" appears frequently in exams!`
+        }
       ]
     },
     {
       id: "ch3",
-      title: "Part 3 Review",
-      emoji: "📝",
+      title: "Extended Programming",
+      emoji: "🚀",
       steps: [
         {
-          id: "ch3-review",
+          id: "ch3-intro",
           type: "explain",
-          title: "📝 Part 3 Summary",
-          content: `Here is everything we learned in Part 3:
+          title: "🚀 Extended Programming Problems (Q10/Q11 Style)",
+          content: `In **Q10/Q11** of IGCSE Paper 2, you'll be given a scenario and asked to **write or complete** pseudocode!
 
-**Searching Algorithms:**
-- **Linear Search** - checks each element one by one, O(n), works on any array
-- **Binary Search** - divides in half each time, O(log n), requires sorted array
+📋 **Scenario:**
+A school wants to manage exam scores for 5 students.
+The scores are stored in a 1D array \`Scores[1:5]\`.
 
-**Sorting Algorithms:**
-- **Bubble Sort** - compares adjacent elements, swaps if wrong order, uses temp variable
-- **Insertion Sort** - inserts each element into correct position, shifts elements right
+The program should:
+1. 📥 **Input** scores with **validation** (range 0-100)
+2. 📊 Calculate the **Average**
+3. 🏆 Find the **Maximum score (Max)**
+4. 📤 **Output** the results
 
-**Trace Tables:**
-- Track variable values line by line
-- Essential for understanding and debugging algorithms
-- Common IGCSE exam question format
+Let's implement each step one at a time!
 
-**Validation & Verification:**
-- **Validation**: Range, Length, Type, Presence, Format checks
-- **Verification**: Double entry, Visual check
-- Validation = reasonable, Verification = accurate
-
-These are **core IGCSE topics** - make sure you can trace, write, and explain each algorithm!`
-        },
-        {
-          id: "ch3-quiz1",
-          type: "quiz",
-          title: "🧠 Review Quiz 1!",
-          content: 'What is the key difference between validation and verification?',
-          options: [
-            'Validation is done by humans, verification by computers',
-            'Validation checks data is reasonable, verification checks data is what was intended',
-            'Validation is only for numbers, verification is only for text',
-            'There is no difference - they mean the same thing'
-          ],
-          answer: 1,
-          explanation: '**Validation** checks if data is reasonable and sensible (e.g., age is 0-120). **Verification** checks if data is what the user actually meant to enter (e.g., double entry for passwords). Validation is automatic; verification often involves the user.'
-        },
-        {
-          id: "ch3-quiz2",
-          type: "quiz",
-          title: "🧠 Review Quiz 2!",
-          content: 'You have a SORTED array of 1,000,000 names. About how many comparisons does binary search need in the worst case?',
-          options: [
-            'About 20',
-            'About 100',
-            'About 1,000',
-            'About 500,000'
-          ],
-          answer: 0,
-          explanation: 'Binary search halves the search area each time. log2(1,000,000) is approximately **20**. So binary search can find any name in about 20 comparisons! Linear search would need up to 1,000,000. This massive difference shows why binary search is so powerful for large sorted datasets.'
-        },
-        {
-          id: "ch3-predict1",
-          type: "predict",
-          title: "🔮 Final Challenge!",
-          content: `Trace this complete program. What is the final output?
-
-\`\`\`
-DECLARE arr : ARRAY[1:4] OF INTEGER
-arr[1] ← 30
-arr[2] ← 10
-arr[3] ← 40
-arr[4] ← 20
-
-// Bubble sort (one pass only)
-FOR j ← 1 TO 3
-    IF arr[j] > arr[j + 1] THEN
-        temp ← arr[j]
-        arr[j] ← arr[j + 1]
-        arr[j + 1] ← temp
-    ENDIF
-NEXT j
-
-// Linear search for 40
-DECLARE pos : INTEGER
-pos ← -1
-FOR i ← 1 TO 4
-    IF arr[i] = 40 THEN
-        pos ← i
-    ENDIF
-NEXT i
-
-OUTPUT pos
-\`\`\``,
-          options: [
-            '3',
-            '4',
-            '-1',
-            '2'
-          ],
-          answer: 1,
-          explanation: 'Bubble sort one pass: [30,10,40,20] → swap 30,10 → [10,30,40,20] → 30<40 no swap → swap 40,20 → [10,30,20,40]. Now search for 40: arr[1]=10 no, arr[2]=30 no, arr[3]=20 no, arr[4]=40 yes! pos=4. Output: **4**.'
+💡 Exam tip: Questions about **input validation**, **total/average calculation**, and **finding the maximum** appear frequently in these problems!`
         },
         {
           id: "ch3-fill1",
           type: "fillblank",
-          title: "✏️ Final Fill!",
-          content: 'Complete this summary of Part 3 concepts.',
-          code: '// Linear search: O(n) - checks ___ element\n// Binary search: O(log n) - requires ___ array\n// Bubble sort: swap ___ elements if wrong order',
+          title: "✏️ Complete the Input Validation Code",
+          content: `Complete the code that inputs scores for 5 students, accepting only values **between 0 and 100 inclusive**.
+
+This uses a REPEAT...UNTIL structure!`,
+          code: 'FOR i ← 1 TO 5\n    REPEAT\n        OUTPUT "Enter score for student ", i\n        INPUT Scores[i]\n    ___ Scores[i] >= 0 ___ Scores[i] <= 100\nNEXT i',
           fillBlanks: [
-            { id: 1, answer: "each", options: ["each", "half", "first", "random"] },
-            { id: 2, answer: "sorted", options: ["sorted", "large", "small", "integer"] },
-            { id: 3, answer: "adjacent", options: ["adjacent", "random", "first", "all"] }
+            { id: 1, answer: "UNTIL", options: ["UNTIL", "WHILE", "IF", "ENDWHILE"] },
+            { id: 2, answer: "AND", options: ["AND", "OR", "NOT", "THEN"] }
           ]
         },
+        {
+          id: "ch3-fill2",
+          type: "fillblank",
+          title: "✏️ Complete the Average & Max Score Code",
+          content: `Complete the code to find the Total, Max, and Average.
+
+💡 Key points:
+- Max is initialized to Scores[1]
+- Each score is compared against Max
+- Average = Total / Count`,
+          code: 'Total ← 0\nMax ← Scores[1]\nFOR i ← 1 TO 5\n    Total ← Total + Scores[i]\n    IF Scores[i] ___ Max THEN\n        Max ← ___\n    ENDIF\nNEXT i\nAverage ← Total ___ 5',
+          fillBlanks: [
+            { id: 1, answer: ">", options: [">", "<", ">=", "="] },
+            { id: 2, answer: "Scores[i]", options: ["Scores[i]", "Total", "Max", "i"] },
+            { id: 3, answer: "/", options: ["/", "*", "DIV", "MOD"] }
+          ]
+        },
+        {
+          id: "ch3-predict1",
+          type: "predict",
+          title: "🔮 Predict the Average Calculation Result",
+          content: `Given the following scores, what is the value of **Average**?
+
+\`\`\`
+Scores[1] = 80
+Scores[2] = 65
+Scores[3] = 92
+Scores[4] = 45
+Scores[5] = 78
+\`\`\`
+
+Calculation:
+\`\`\`
+Total = 0
+Total = 0 + 80 = 80
+Total = 80 + 65 = 145
+Total = 145 + 92 = 237
+Total = 237 + 45 = 282
+Total = 282 + 78 = 360
+Average = 360 / 5 = ?
+\`\`\``,
+          options: [
+            '72',
+            '360',
+            '92',
+            '65'
+          ],
+          answer: 0,
+          explanation: `Total = 80 + 65 + 92 + 45 + 78 = **360**
+Average = 360 / 5 = **72**
+
+💡 The exam may ask you to show the working out.
+Make sure to always **calculate the Total first** and then divide!`
+        },
+        {
+          id: "ch3-q1",
+          type: "quiz",
+          title: "🧠 Why Initialize Max This Way",
+          content: `Why do we initialize with \`Max ← Scores[1]\`?
+
+Would \`Max ← 0\` also work?
+
+\`\`\`
+Max ← Scores[1]    // Why this way?
+FOR i ← 1 TO 5
+    IF Scores[i] > Max THEN
+        Max ← Scores[i]
+    ENDIF
+NEXT i
+\`\`\``,
+          options: [
+            'So Max always starts with an actual value from the array (more robust)',
+            'Because Scores[1] is always the largest value',
+            'Because initializing to 0 would cause an error',
+            'No particular reason, just convention'
+          ],
+          answer: 0,
+          explanation: `Initializing with \`Max ← Scores[1]\` ensures Max always starts with an **actual value from the array**.
+
+Using \`Max ← 0\` could cause problems:
+- What if all scores were **negative**? (theoretically)
+- Max = 0 could be larger than all actual scores!
+
+Initializing with the first element of the array:
+- ✅ Always starts with **real data**
+- ✅ Works correctly regardless of what values are entered
+- ✅ A more **robust** approach!
+
+💡 The exam may ask "Why is Max set to the first element?"!`
+        }
       ]
-    },
+    }
   ]
 }

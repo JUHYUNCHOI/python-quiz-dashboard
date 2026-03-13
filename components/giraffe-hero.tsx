@@ -57,7 +57,8 @@ export function GiraffeHero() {
     const completed = getCompletedLessons()
     const isCpp = lastProgress.lessonId.startsWith("cpp-")
     const isPseudo = lastProgress.lessonId.startsWith("pseudo-")
-    const trackParts = isPseudo ? pseudoParts : isCpp ? cppParts : pythonParts
+    const isIgcse = lastProgress.lessonId.startsWith("igcse-")
+    const trackParts = (isPseudo || isIgcse) ? pseudoParts : isCpp ? cppParts : pythonParts
     const trackIds = trackParts.flatMap(p => p.lessonIds)
     const idNormalized: (number | string) = /^\d+$/.test(lastProgress.lessonId) ? Number(lastProgress.lessonId) : lastProgress.lessonId
     const idx = trackIds.indexOf(idNormalized)
