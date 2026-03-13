@@ -395,7 +395,8 @@ export default function CurriculumPage() {
 
   // 학생: 순서대로만 열림 (완료한 곳 + 바로 다음 1개). 선생님: 전부 열림
   const unlockedLessons = new Set<number | string>()
-  if (isTeacher) {
+  if (isTeacher || isPseudo) {
+    // 선생님이거나 수도코드 트랙이면 전부 열림
     allLessons.forEach((l) => unlockedLessons.add(l.id))
   } else {
     for (const lesson of allLessons) {

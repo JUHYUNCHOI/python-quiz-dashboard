@@ -154,7 +154,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     // Python과 C++ 트랙을 분리하여 잠금 체크
     const isCpp = String(lessonId).startsWith("cpp-")
     const isPseudo = String(lessonId).startsWith("pseudo-")
-    const trackParts = isPseudo ? pseudoParts : isCpp ? cppParts : pythonParts
+    if (isPseudo) return false // 수도코드는 자유롭게 이동 가능
+    const trackParts = isCpp ? cppParts : pythonParts
     const trackIds = trackParts.flatMap(p => p.lessonIds)
     const idx = trackIds.indexOf(idNormalized)
     if (idx <= 0) return false // 첫 수업 또는 알 수 없는 ID → 열림
