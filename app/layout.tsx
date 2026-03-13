@@ -26,8 +26,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ko">
-      <body className="font-sans antialiased">
+    <html lang="ko" translate="no" suppressHydrationWarning>
+      <head>
+        <meta name="google" content="notranslate" />
+      </head>
+      <body className="font-sans antialiased notranslate" suppressHydrationWarning>
         <AuthProvider>
           <LanguageProvider>
             {children}
