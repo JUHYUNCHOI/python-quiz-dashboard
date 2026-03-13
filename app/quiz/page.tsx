@@ -453,6 +453,40 @@ export default function QuizPage() {
         onPracticeSimilar={quiz.handlePracticeSimilar}
         onNext={quiz.handleExplanationClose}
       />
+
+      {/* Exit Confirmation Modal */}
+      {quiz.showExitConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="mx-4 w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl animate-in fade-in zoom-in duration-200">
+            <div className="text-center mb-2">
+              <span className="text-4xl">🦒</span>
+            </div>
+            <h3 className="text-lg font-bold text-gray-800 text-center mb-2">
+              {t("아직 문제가 남아있어요!", "You still have questions left!")}
+            </h3>
+            <p className="text-sm text-gray-500 text-center mb-6">
+              {t(
+                `${quiz.quizSettings.questionCount - quiz.currentQuestion - 1}문제 더 남았어요. 어떻게 할까요?`,
+                `${quiz.quizSettings.questionCount - quiz.currentQuestion - 1} questions remaining. What would you like to do?`
+              )}
+            </p>
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={quiz.cancelExit}
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-orange-400 to-orange-500 text-white font-bold text-base shadow-lg hover:shadow-xl hover:scale-105 transition-all"
+              >
+                {t("계속 풀기", "Keep Going")}
+              </button>
+              <button
+                onClick={quiz.confirmExit}
+                className="w-full py-3 rounded-xl border-2 border-gray-200 text-gray-500 font-medium text-sm hover:bg-gray-50 transition-all"
+              >
+                {t("그만하기", "Quit")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -48,16 +48,16 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
           const isCorrect = idx === step.answer
           const showResult = selectedAnswer !== null
           return (
-            <button key={idx} onClick={() => onAnswer(idx)} disabled={selectedAnswer !== null}
-              className={cn("w-full p-3 md:p-4 rounded-lg md:rounded-xl text-left font-medium text-sm md:text-base transition-all border-2",
+            <button key={`${idx}-${selectedAnswer}`} onClick={() => onAnswer(idx)} disabled={selectedAnswer !== null}
+              className={cn("w-full p-3 md:p-4 rounded-lg md:rounded-xl text-left font-medium text-sm md:text-base transition-all border-2 flex items-center",
                 !showResult && "bg-white hover:bg-indigo-50 border-gray-200 hover:border-indigo-400",
                 showResult && isCorrect && "bg-green-100 border-green-500 text-green-800",
                 showResult && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800",
                 showResult && !isSelected && !isCorrect && "bg-gray-100 border-gray-200 text-gray-400"
               )}>
-              {option.split(/\\n|\n/).map((line, i, arr) => (<span key={i}>{line}{i < arr.length - 1 && <br />}</span>))}
-              {showResult && isCorrect && <Check className="w-5 h-5 inline ml-2 text-green-600" />}
-              {showResult && isSelected && !isCorrect && <X className="w-5 h-5 inline ml-2 text-red-600" />}
+              <span className="flex-1">{option.split(/\\n|\n/).map((line, i, arr) => (<span key={i}>{line}{i < arr.length - 1 && <br />}</span>))}</span>
+              {showResult && isCorrect && <Check className="w-5 h-5 shrink-0 ml-2 text-green-600" />}
+              {showResult && isSelected && !isCorrect && <X className="w-5 h-5 shrink-0 ml-2 text-red-600" />}
             </button>
           )
         })}

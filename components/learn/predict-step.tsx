@@ -119,21 +119,21 @@ export function PredictStep({ step, isCompleted, selectedAnswer, showExplanation
           const showResult = selectedAnswer !== null
           return (
             <motion.button
-              key={idx}
+              key={`${idx}-${selectedAnswer}`}
               whileTap={{ scale: 0.97 }}
               onClick={() => onAnswer(idx)}
               disabled={selectedAnswer !== null}
               className={cn(
-                "w-full p-3 md:p-4 rounded-lg md:rounded-xl text-left font-mono text-sm md:text-base transition-all border-2 whitespace-pre-line",
+                "w-full p-3 md:p-4 rounded-lg md:rounded-xl text-left font-mono text-sm md:text-base transition-all border-2 whitespace-pre-line flex items-center",
                 !showResult && "bg-white hover:bg-emerald-50 border-gray-200 hover:border-emerald-400",
                 showResult && isCorrect && "bg-green-100 border-green-500 text-green-800",
                 showResult && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800",
                 showResult && !isSelected && !isCorrect && "bg-gray-100 border-gray-200 text-gray-400"
               )}
             >
-              {option}
-              {showResult && isCorrect && <Check className="w-5 h-5 inline ml-2 text-green-600" />}
-              {showResult && isSelected && !isCorrect && <X className="w-5 h-5 inline ml-2 text-red-600" />}
+              <span className="flex-1">{option}</span>
+              {showResult && isCorrect && <Check className="w-5 h-5 shrink-0 ml-2 text-green-600" />}
+              {showResult && isSelected && !isCorrect && <X className="w-5 h-5 shrink-0 ml-2 text-red-600" />}
             </motion.button>
           )
         })}

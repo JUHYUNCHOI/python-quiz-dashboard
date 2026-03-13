@@ -115,10 +115,10 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
 
           parts.push(
             <motion.span
-              key={`blank-${blank.id}`}
+              key={`blank-${blank.id}-${isSubmitted}`}
               layout
               className={cn(
-                "inline-block min-w-[3.5rem] px-2 py-0.5 mx-0.5 rounded text-center font-mono text-sm transition-all",
+                "inline-flex items-center min-w-[3.5rem] px-2 py-0.5 mx-0.5 rounded text-center font-mono text-sm transition-all",
                 !isFilled && !isSubmitted && "border-2 border-dashed border-slate-400 text-slate-400",
                 !isFilled && isActive && "border-amber-400 bg-amber-50 animate-pulse",
                 isFilled && !isSubmitted && "bg-violet-100 border-2 border-violet-400 text-violet-700 font-semibold",
@@ -126,9 +126,9 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
                 isWrong && "bg-red-100 border-2 border-red-400 text-red-700 line-through"
               )}
             >
-              {isFilled ? filledValues[blank.id] : `${blankCounter + 1}`}
-              {isRight && <Check className="w-3 h-3 inline ml-1 text-green-400" />}
-              {isWrong && <X className="w-3 h-3 inline ml-1 text-red-400" />}
+              <span>{isFilled ? filledValues[blank.id] : `${blankCounter + 1}`}</span>
+              {isRight && <Check className="w-3 h-3 ml-1 text-green-400" />}
+              {isWrong && <X className="w-3 h-3 ml-1 text-red-400" />}
             </motion.span>
           )
         }

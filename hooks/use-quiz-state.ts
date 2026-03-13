@@ -118,6 +118,9 @@ export function useQuizState(questions: QuizQuestion[]) {
   // Toast for wrong answer
   const [showWrongToast, setShowWrongToast] = useState(false)
 
+  // Exit confirmation modal
+  const [showExitConfirm, setShowExitConfirm] = useState(false)
+
   // Load settings from session storage (cap questionCount to available questions)
   useEffect(() => {
     const settings = sessionStorage.getItem("quizSettings")
@@ -309,18 +312,21 @@ export function useQuizState(questions: QuizQuestion[]) {
     const percentage = (completed / quizSettings.questionCount) * 100
 
     if (percentage < 80) {
-      const remaining = quizSettings.questionCount - completed
-      if (
-        confirm(
-          `아직 ${remaining}문제 남았어요. 끝까지 해볼까요?\n\n"확인"을 누르면 계속 진행하고, "취소"를 누르면 진행 상황을 저장하고 나갑니다.`,
-        )
-      ) {
-        return
-      }
+      setShowExitConfirm(true)
+      return
     }
 
     router.push("/")
   }, [currentQuestion, quizSettings.questionCount, router])
+
+  const confirmExit = useCallback(() => {
+    setShowExitConfirm(false)
+    router.push("/")
+  }, [router])
+
+  const cancelExit = useCallback(() => {
+    setShowExitConfirm(false)
+  }, [])
 
   const handlePrevious = useCallback(() => {
     if (currentQuestion > 0 && !showResult) {
@@ -388,12 +394,15 @@ export function useQuizState(questions: QuizQuestion[]) {
     showMidCheckIn,
     showQuickAnswerWarning,
     showWrongToast,
+    showExitConfirm,
 
     // Actions
     handleAnswerSelect,
     handleNext,
     handleSkip,
     handleExit,
+    confirmExit,
+    cancelExit,
     handlePrevious,
     handleLowerDifficulty,
     handleTakeBreak,

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Minus, Plus, Flame, Calendar, Clock, Sparkles } from "lucide-react"
+import { BottomNav } from "@/components/bottom-nav"
 import { cn } from "@/lib/utils"
 import { useGamification } from "@/hooks/use-gamification"
 import { useLanguage } from "@/contexts/language-context"
@@ -290,8 +291,10 @@ export default function QuizSetupPage() {
           </span>
         </Button>
 
-        <p className="text-center text-sm text-gray-500 mt-4">{t("최소 80% 이상 완료해야 목표 달성으로 인정돼요", "Complete at least 80% to achieve your goal")}</p>
+        <p className="text-center text-sm text-gray-500 mt-4 pb-20">{t("최소 80% 이상 완료해야 목표 달성으로 인정돼요", "Complete at least 80% to achieve your goal")}</p>
       </main>
+
+      <BottomNav />
     </div>
   )
 }

@@ -33,6 +33,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const isBilingual = lessonId in bilingualLessons
   const hasVariants = lessonId in lessonVariants
   const currentProgrammingLang = lessonId.startsWith("pseudo-") || lessonId.startsWith("igcse-") ? "pseudo" as const : lessonId.startsWith("cpp-") ? "cpp" as const : "python" as const
+  const isIGCSE = currentProgrammingLang === "pseudo"
 
   // 라이브러리 변형 상태 (turtle/pygame)
   const [variant, setVariant] = useState<LibraryVariant>(() => {
@@ -241,20 +242,20 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
 
   const finishChapter = () => {
     if (currentChapter < lesson.chapters.length - 1) {
-      setShowConfetti(true)
+      if (!isIGCSE) setShowConfetti(true)
       setShowChapterComplete(true)
       play("chapterComplete")
-      setTimeout(() => setShowConfetti(false), 3000)
+      if (!isIGCSE) setTimeout(() => setShowConfetti(false), 3000)
     } else {
       // 마지막 챕터 완료 → Supabase + localStorage에 완료 기록
       syncCompletion(score)
       markLessonComplete(lessonId)
-      gamification.addDirectXp(30) // +30 XP for lesson completion
+      if (!isIGCSE) gamification.addDirectXp(30)
       logActivity("lesson")
-      setShowConfetti(true)
+      if (!isIGCSE) setShowConfetti(true)
       setShowLessonComplete(true)
       play("lessonComplete")
-      setTimeout(() => setShowConfetti(false), 3000)
+      if (!isIGCSE) setTimeout(() => setShowConfetti(false), 3000)
     }
   }
 
@@ -307,15 +308,20 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
 
   const handleSuccess = useCallback(() => {
     if (!completedSteps.has(step.id)) {
-      setScore(prev => prev + 10)
       setCompletedSteps(prev => new Set([...prev, step.id]))
-      setShowConfetti(true)
-      setSuccessMessage(t("잘했어요! 🎉", "Great job! 🎉"))
-      setShowSuccess(true)
-      play("codeSuccess")
-      setTimeout(() => setShowConfetti(false), 2000)
+      if (isIGCSE) {
+        // IGCSE: 포인트/축하 없이 바로 진행
+        play("codeSuccess")
+      } else {
+        setScore(prev => prev + 10)
+        setShowConfetti(true)
+        setSuccessMessage(t("잘했어요! 🎉", "Great job! 🎉"))
+        setShowSuccess(true)
+        play("codeSuccess")
+        setTimeout(() => setShowConfetti(false), 2000)
+      }
     }
-  }, [completedSteps, step?.id, play])
+  }, [completedSteps, step?.id, play, isIGCSE])
 
   const handleQuizAnswer = (idx: number) => {
     if (selectedAnswer !== null) return
@@ -325,41 +331,41 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     if (idx === step.answer) {
       play("correct")
       if (isReviewMode) {
-        // 복습 모드에서 정답: 큐에서 제거 → 남은 게 있으면 다음, 없으면 챕터 완료
         const newQueue = wrongQueue.filter((_, i) => i !== reviewIndex)
         setWrongQueue(newQueue)
         if (!completedSteps.has(step.id)) {
-          setScore(score + 10)
+          if (!isIGCSE) setScore(score + 10)
           setCompletedSteps(new Set([...completedSteps, step.id]))
         }
-        setShowConfetti(true)
-        setSuccessMessage(t("이번엔 맞았어요! 🎉", "Got it this time! 🎉"))
-        setShowSuccess(true)
-        setTimeout(() => setShowConfetti(false), 2000)
-        // 1초 후 자동 진행
+        if (!isIGCSE) {
+          setShowConfetti(true)
+          setSuccessMessage(t("이번엔 맞았어요! 🎉", "Got it this time! 🎉"))
+          setShowSuccess(true)
+          setTimeout(() => setShowConfetti(false), 2000)
+        }
         setTimeout(() => {
           if (newQueue.length === 0) {
             finishChapter()
           } else {
-            // reviewIndex 조정: 현재보다 뒤 요소가 제거되었으므로
             setReviewIndex(prev => prev >= newQueue.length ? 0 : prev)
             resetStepState()
           }
-        }, 1200)
+        }, isIGCSE ? 600 : 1200)
       } else {
         if (!completedSteps.has(step.id)) {
-          setScore(score + 10)
+          if (!isIGCSE) setScore(score + 10)
           setCompletedSteps(new Set([...completedSteps, step.id]))
-          setShowConfetti(true)
-          setSuccessMessage(t("정답! 🎉", "Correct! 🎉"))
-          setShowSuccess(true)
-          setTimeout(() => setShowConfetti(false), 2000)
+          if (!isIGCSE) {
+            setShowConfetti(true)
+            setSuccessMessage(t("정답! 🎉", "Correct! 🎉"))
+            setShowSuccess(true)
+            setTimeout(() => setShowConfetti(false), 2000)
+          }
         }
       }
     } else {
       play("wrong")
       if (!isReviewMode) {
-        // 일반 모드에서 오답: wrongQueue에 추가
         setWrongQueue(prev => [...prev, step])
       }
     }
@@ -373,13 +379,15 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
         const newQueue = wrongQueue.filter((_, i) => i !== reviewIndex)
         setWrongQueue(newQueue)
         if (!completedSteps.has(step.id)) {
-          setScore(score + 10)
+          if (!isIGCSE) setScore(score + 10)
           setCompletedSteps(new Set([...completedSteps, step.id]))
         }
-        setShowConfetti(true)
-        setSuccessMessage(t("이번엔 맞았어요! 🎉", "Got it this time! 🎉"))
-        setShowSuccess(true)
-        setTimeout(() => setShowConfetti(false), 2000)
+        if (!isIGCSE) {
+          setShowConfetti(true)
+          setSuccessMessage(t("이번엔 맞았어요! 🎉", "Got it this time! 🎉"))
+          setShowSuccess(true)
+          setTimeout(() => setShowConfetti(false), 2000)
+        }
         setTimeout(() => {
           if (newQueue.length === 0) {
             finishChapter()
@@ -387,15 +395,17 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             setReviewIndex(prev => prev >= newQueue.length ? 0 : prev)
             resetStepState()
           }
-        }, 1200)
+        }, isIGCSE ? 600 : 1200)
       } else {
         if (!completedSteps.has(step.id)) {
-          setScore(score + 10)
+          if (!isIGCSE) setScore(score + 10)
           setCompletedSteps(new Set([...completedSteps, step.id]))
-          setShowConfetti(true)
-          setSuccessMessage(t("정답! 🎉", "Correct! 🎉"))
-          setShowSuccess(true)
-          setTimeout(() => setShowConfetti(false), 2000)
+          if (!isIGCSE) {
+            setShowConfetti(true)
+            setSuccessMessage(t("정답! 🎉", "Correct! 🎉"))
+            setShowSuccess(true)
+            setTimeout(() => setShowConfetti(false), 2000)
+          }
         }
       }
     } else {
@@ -469,7 +479,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     const totalPoints = score
     return (
       <>
-        <Confetti show={showConfetti} />
+        {!isIGCSE && <Confetti show={showConfetti} />}
         <div className="min-h-screen bg-gradient-to-b from-indigo-600 to-purple-700 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl">
             <div className="w-24 h-24 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
@@ -478,13 +488,17 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             <h1 className="text-3xl font-bold text-gray-900 mb-2">{t("레슨 완료!", "Lesson Complete!")}</h1>
             <p className="text-lg text-gray-600 mb-2">{lesson.title}</p>
             <p className="text-gray-500 mb-6">{t("모든 챕터를 끝냈어요!", "All chapters finished!")}</p>
-            <div className="bg-amber-50 rounded-2xl p-4 mb-4">
-              <p className="text-amber-800 font-bold text-lg">{t(`총 ${totalPoints}점 획득!`, `${totalPoints} points earned!`)}</p>
-            </div>
-            <div className="bg-orange-50 rounded-2xl p-4 mb-4">
-              <p className="text-orange-600 font-bold text-lg">+30 XP {t("획득!", "earned!")}</p>
-              <p className="text-orange-500 text-sm mt-1">Lv.{gamification.level} ({gamification.xpInCurrentLevel}/100)</p>
-            </div>
+            {!isIGCSE && (
+              <>
+                <div className="bg-amber-50 rounded-2xl p-4 mb-4">
+                  <p className="text-amber-800 font-bold text-lg">{t(`총 ${totalPoints}점 획득!`, `${totalPoints} points earned!`)}</p>
+                </div>
+                <div className="bg-orange-50 rounded-2xl p-4 mb-4">
+                  <p className="text-orange-600 font-bold text-lg">+30 XP {t("획득!", "earned!")}</p>
+                  <p className="text-orange-500 text-sm mt-1">Lv.{gamification.level} ({gamification.xpInCurrentLevel}/100)</p>
+                </div>
+              </>
+            )}
             {!isAuthenticated && (
               <div className="bg-green-50 border border-green-200 rounded-2xl p-4 mb-4 text-left">
                 <p className="text-sm font-bold text-green-800 mb-1">🦒 {t("로그인하면 진도가 안전하게 저장돼요!", "Login to safely save your progress!")}</p>
@@ -511,7 +525,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     const chapterPoints = chapter.steps.filter(s => s.type !== "explain" && completedSteps.has(s.id)).length * 10
     return (
       <>
-        <Confetti show={showConfetti} />
+        {!isIGCSE && <Confetti show={showConfetti} />}
         <div className="min-h-screen bg-gradient-to-b from-indigo-600 to-purple-700 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl">
             <div className="w-20 h-20 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
@@ -519,9 +533,11 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             </div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">{t(`챕터 ${currentChapter + 1} 완료!`, `Chapter ${currentChapter + 1} Complete!`)}</h1>
             <p className="text-lg text-gray-600 mb-6">{chapter.emoji} {chapter.title}</p>
-            <div className="bg-amber-50 rounded-2xl p-4 mb-6">
-              <p className="text-amber-800 font-bold text-lg">{t(`${chapterPoints}점 획득!`, `${chapterPoints} points earned!`)}</p>
-            </div>
+            {!isIGCSE && (
+              <div className="bg-amber-50 rounded-2xl p-4 mb-6">
+                <p className="text-amber-800 font-bold text-lg">{t(`${chapterPoints}점 획득!`, `${chapterPoints} points earned!`)}</p>
+              </div>
+            )}
             {!isAuthenticated && (
               <div className="bg-orange-50 border border-orange-200 rounded-2xl p-4 mb-4 text-left">
                 <p className="text-sm font-bold text-orange-800 mb-1">🦒 {t("로그인하면 진도가 저장돼요!", "Login to save your progress!")}</p>
