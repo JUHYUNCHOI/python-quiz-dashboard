@@ -8,19 +8,30 @@ export default function AuthCallbackPage() {
   const router = useRouter()
 
   useEffect(() => {
+    let handled = false
     const handleCallback = async () => {
+      if (handled) return
+      handled = true
+
       const supabase = createClient()
       const { error } = await supabase.auth.exchangeCodeForSession(
         window.location.href
       )
+
       if (error) {
-        router.replace("/login?error=auth_failed")
-      } else {
-        // 로그인 전 페이지로 복귀
-        const returnTo = sessionStorage.getItem("loginReturnTo")
-        sessionStorage.removeItem("loginReturnTo")
-        router.replace(returnTo || "/")
+        // exchangeCodeForSession 실패해도 세션이 이미 있을 수 있음
+        // (StrictMode 더블 렌더링, PKCE 코드 재사용 등)
+        const { data: { session } } = await supabase.auth.getSession()
+        if (!session) {
+          router.replace("/login?error=auth_failed")
+          return
+        }
       }
+
+      // 로그인 전 페이지로 복귀
+      const returnTo = sessionStorage.getItem("loginReturnTo")
+      sessionStorage.removeItem("loginReturnTo")
+      router.replace(returnTo || "/")
     }
     handleCallback()
   }, [router])
