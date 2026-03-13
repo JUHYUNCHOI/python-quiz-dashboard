@@ -491,6 +491,10 @@ const registry: Record<string, LessonEntry> = {
     load: () => import('./pseudo/lesson27'), exportName: 'pseudoLesson27Data',
     enLoad: () => import('./pseudo/lesson27-en'), enExportName: 'pseudoLesson27EnData',
   },
+  "pseudo-28": {
+    load: () => import('./pseudo/lesson28'), exportName: 'pseudoLesson28Data',
+    enLoad: () => import('./pseudo/lesson28-en'), enExportName: 'pseudoLesson28EnData',
+  },
 }
 
 // ============================================
@@ -727,6 +731,7 @@ export { pseudoLesson24Data } from './pseudo/lesson24'
 export { pseudoLesson25Data } from './pseudo/lesson25'
 export { pseudoLesson26Data } from './pseudo/lesson26'
 export { pseudoLesson27Data } from './pseudo/lesson27'
+export { pseudoLesson28Data } from './pseudo/lesson28'
 export { pseudoLessonP1Data } from './pseudo/lessonP1'
 export { pseudoLessonP2Data } from './pseudo/lessonP2'
 export { pseudoLessonP3Data } from './pseudo/lessonP3'
@@ -759,6 +764,7 @@ export { pseudoLesson24EnData } from './pseudo/lesson24-en'
 export { pseudoLesson25EnData } from './pseudo/lesson25-en'
 export { pseudoLesson26EnData } from './pseudo/lesson26-en'
 export { pseudoLesson27EnData } from './pseudo/lesson27-en'
+export { pseudoLesson28EnData } from './pseudo/lesson28-en'
 export { pseudoLessonP1EnData } from './pseudo/lessonP1-en'
 export { pseudoLessonP2EnData } from './pseudo/lessonP2-en'
 export { pseudoLessonP3EnData } from './pseudo/lessonP3-en'

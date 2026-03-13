@@ -307,6 +307,7 @@ export default function CurriculumPage() {
         { id: "pseudo-25", title: t("25. SQL 심화", "25. SQL Advanced"), description: "ORDER BY, COUNT, SUM, AVG", duration: t("20분", "20 min"), hasQuiz: true },
         { id: "pseudo-26", title: t("26. 불리언 로직 1", "26. Boolean Logic 1"), description: t("AND, OR, NOT 게이트와 진리표", "AND, OR, NOT gates & truth tables"), duration: t("25분", "25 min"), hasQuiz: true },
         { id: "pseudo-27", title: t("27. 불리언 로직 2", "27. Boolean Logic 2"), description: t("NAND, NOR, XOR과 논리 회로", "NAND, NOR, XOR & logic circuits"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "pseudo-28", title: t("28. 연산자 & 필수 표현", "28. Operators & Exam Essentials"), description: t("DIV, MOD, 짝수/홀수, 내장 함수 총정리", "DIV, MOD, even/odd, built-in functions"), duration: t("25분", "25 min"), hasQuiz: true },
       ],
     },
   ]

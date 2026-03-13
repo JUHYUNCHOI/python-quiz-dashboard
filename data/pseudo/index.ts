@@ -36,6 +36,7 @@ export { pseudoLesson24Data } from './lesson24'
 export { pseudoLesson25Data } from './lesson25'
 export { pseudoLesson26Data } from './lesson26'
 export { pseudoLesson27Data } from './lesson27'
+export { pseudoLesson28Data } from './lesson28'
 
 // Korean projects
 export { pseudoLessonP1Data } from './lessonP1'
@@ -76,6 +77,7 @@ export { pseudoLesson24EnData } from './lesson24-en'
 export { pseudoLesson25EnData } from './lesson25-en'
 export { pseudoLesson26EnData } from './lesson26-en'
 export { pseudoLesson27EnData } from './lesson27-en'
+export { pseudoLesson28EnData } from './lesson28-en'
 
 // English projects
 export { pseudoLessonP1EnData } from './lessonP1-en'

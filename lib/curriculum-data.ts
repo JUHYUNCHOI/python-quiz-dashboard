@@ -33,7 +33,7 @@ export const pseudoParts: PartMeta[] = [
   { id: "pseudo-part1", title: "Part 1: 수도코드 기초", titleEn: "Part 1: Pseudocode Basics", lessonIds: ["pseudo-1", "pseudo-2", "pseudo-3", "pseudo-4", "pseudo-5", "pseudo-6", "pseudo-7", "pseudo-8", "pseudo-p1"] },
   { id: "pseudo-part2", title: "Part 2: 중급", titleEn: "Part 2: Intermediate", lessonIds: ["pseudo-9", "pseudo-10", "pseudo-11", "pseudo-12", "pseudo-13", "pseudo-14", "pseudo-p2"] },
   { id: "pseudo-part3", title: "Part 3: 알고리즘", titleEn: "Part 3: Algorithms", lessonIds: ["pseudo-15", "pseudo-16", "pseudo-17", "pseudo-18", "pseudo-19", "pseudo-20", "pseudo-p3"] },
-  { id: "pseudo-part4", title: "Part 4: 시험 대비", titleEn: "Part 4: Exam Prep", lessonIds: ["pseudo-21", "pseudo-22", "pseudo-23", "pseudo-24", "pseudo-25", "pseudo-26", "pseudo-27"] },
+  { id: "pseudo-part4", title: "Part 4: 시험 대비", titleEn: "Part 4: Exam Prep", lessonIds: ["pseudo-21", "pseudo-22", "pseudo-23", "pseudo-24", "pseudo-25", "pseudo-26", "pseudo-27", "pseudo-28"] },
 ]
 
 /** 완료된 레슨 Set을 localStorage에서 로드 */
