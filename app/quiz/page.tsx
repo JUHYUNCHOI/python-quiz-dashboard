@@ -18,55 +18,8 @@ import { useSoundEffect } from "@/hooks/use-sound-effect"
 import { SoundToggle } from "@/components/sound-toggle"
 import { useGamification } from "@/hooks/use-gamification"
 import { useLanguage } from "@/contexts/language-context"
-
-const quizQuestions: QuizQuestion[] = [
-  {
-    id: 1,
-    difficulty: "쉬움",
-    question: "다음 코드의 출력 결과는 무엇인가요?",
-    code: `x = 5\ny = 3\nprint(x + y)`,
-    options: ["5", "8", "53", "오류"],
-    correctAnswer: 1,
-    explanation: "문자열이 아닌 숫자를 더하면 산술 연산이 수행됩니다.",
-    keyConceptTitle: "산술 연산자",
-    keyConceptDescription: "Python에서 + 연산자는 숫자 타입에서는 덧셈을, 문자열에서는 연결을 수행합니다.",
-    relatedTopics: ["문자열 연결", "타입 변환", "연산자 우선순위"],
-  },
-  {
-    id: 2,
-    difficulty: "보통",
-    question: "리스트에서 마지막 요소를 가져오는 올바른 방법은?",
-    code: `my_list = [1, 2, 3, 4, 5]\n# 마지막 요소를 가져오려면?`,
-    options: ["my_list[-1]", "my_list[5]", "my_list.last()", "my_list[end]"],
-    correctAnswer: 0,
-    explanation: "Python 리스트는 음수 인덱스를 지원하며, -1은 마지막 요소를 의미합니다.",
-    keyConceptTitle: "음수 인덱싱",
-    keyConceptDescription: "Python에서 -1은 마지막 요소, -2는 마지막에서 두 번째 요소를 나타냅니다.",
-    codeComparison: {
-      wrong: `my_list = [1, 2, 3, 4, 5]\nprint(my_list[5])  # IndexError!`,
-      correct: `my_list = [1, 2, 3, 4, 5]\nprint(my_list[-1])  # 5`,
-    },
-    relatedTopics: ["리스트 슬라이싱", "인덱스 에러", "시퀀스 타입"],
-  },
-  {
-    id: 3,
-    difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
-    code: `def func(x=[]):\n    x.append(1)\n    return x\n\nprint(func())\nprint(func())`,
-    options: ["[1] [1]", "[1] [1, 1]", "[1, 1] [1, 1]", "오류"],
-    correctAnswer: 1,
-    explanation:
-      "기본 인자는 함수 정의 시 한 번만 생성되므로, 가변 객체를 기본값으로 사용하면 호출 간에 상태가 공유됩니다.",
-    keyConceptTitle: "가변 기본 인자의 함정",
-    keyConceptDescription:
-      "Python에서 기본 인자는 함수가 정의될 때 한 번만 평가됩니다. 리스트나 딕셔너리 같은 가변 객체를 기본값으로 사용하면 모든 호출이 같은 객체를 공유하게 됩니다.",
-    codeComparison: {
-      wrong: `def func(x=[]):\n    x.append(1)\n    return x`,
-      correct: `def func(x=None):\n    if x is None:\n        x = []\n    x.append(1)\n    return x`,
-    },
-    relatedTopics: ["함수 기본값", "가변 vs 불변 객체", "함수 정의 시점"],
-  },
-]
+import { pythonQuestions } from "@/data/questions/python-questions"
+import { cppQuestions } from "@/data/questions/cpp-questions"
 
 // 셔플 (Fisher-Yates)
 function shuffleArray<T>(arr: T[]): T[] {
@@ -78,8 +31,19 @@ function shuffleArray<T>(arr: T[]): T[] {
   return a
 }
 
-// 세션마다 한 번만 셔플 (컴포넌트 밖에서 고정)
-const shuffled = shuffleArray(quizQuestions)
+function getQuestionsForCourse(): QuizQuestion[] {
+  try {
+    const raw = sessionStorage.getItem("quizSettings")
+    if (raw) {
+      const parsed = JSON.parse(raw)
+      if (parsed.course === "cpp") return shuffleArray(cppQuestions)
+    }
+  } catch {}
+  return shuffleArray(pythonQuestions)
+}
+
+// 세션마다 한 번만 셔플
+const shuffled = typeof window !== "undefined" ? getQuestionsForCourse() : pythonQuestions
 
 export default function QuizPage() {
   const quiz = useQuizState(shuffled)

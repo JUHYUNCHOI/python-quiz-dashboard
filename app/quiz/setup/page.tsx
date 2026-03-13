@@ -20,6 +20,11 @@ export default function QuizSetupPage() {
     { id: "advanced", label: t("고급", "Advanced"), color: "red", description: t("심화 알고리즘", "Advanced algorithms") },
     { id: "mixed", label: t("혼합", "Mixed"), color: "rainbow", description: t("모든 난이도 섞어서", "Mix all difficulty levels"), default: true },
   ]
+  const courseOptions = [
+    { id: "python", label: "🐍 Python", color: "orange" },
+    { id: "cpp", label: "⚡ C++", color: "blue" },
+  ]
+  const [selectedCourse, setSelectedCourse] = useState("python")
   const [questionCount, setQuestionCount] = useState(20)
   const [selectedDifficulty, setSelectedDifficulty] = useState("mixed")
   const [showCustomInput, setShowCustomInput] = useState(false)
@@ -71,6 +76,7 @@ export default function QuizSetupPage() {
       JSON.stringify({
         questionCount,
         difficulty: selectedDifficulty,
+        course: selectedCourse,
         startTime: Date.now(),
       }),
     )
@@ -97,6 +103,26 @@ export default function QuizSetupPage() {
               <span>{gamification.dailyStreak > 0 ? t(`${gamification.dailyStreak}일 연속 학습 중!`, `${gamification.dailyStreak}-day streak!`) : t("오늘 첫 학습!", "First session today!")}</span>
             </div>
           </div>
+        </div>
+
+        {/* Course Selector */}
+        <div className="flex justify-center gap-3 mb-6">
+          {courseOptions.map((course) => (
+            <button
+              key={course.id}
+              onClick={() => setSelectedCourse(course.id)}
+              className={cn(
+                "px-6 py-3 rounded-2xl font-bold text-lg transition-all hover:scale-105 border-2",
+                selectedCourse === course.id
+                  ? course.color === "orange"
+                    ? "bg-orange-500 text-white border-orange-500 shadow-lg"
+                    : "bg-blue-500 text-white border-blue-500 shadow-lg"
+                  : "bg-white text-gray-600 border-gray-200 hover:border-gray-400",
+              )}
+            >
+              {course.label}
+            </button>
+          ))}
         </div>
 
         {/* Question Count Selector */}
