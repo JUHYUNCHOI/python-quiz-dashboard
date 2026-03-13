@@ -16,7 +16,10 @@ export default function AuthCallbackPage() {
       if (error) {
         router.replace("/login?error=auth_failed")
       } else {
-        router.replace("/")
+        // 로그인 전 페이지로 복귀
+        const returnTo = sessionStorage.getItem("loginReturnTo")
+        sessionStorage.removeItem("loginReturnTo")
+        router.replace(returnTo || "/")
       }
     }
     handleCallback()

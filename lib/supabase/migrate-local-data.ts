@@ -7,29 +7,34 @@ import { createClient } from "./client"
 export async function migrateLocalStorageToSupabase(userId: string) {
   const supabase = createClient()
 
-  // 이미 마이그레이션 했는지 체크 (gamification_data 존재 여부)
+  // 클라우드 gamification 데이터 조회 (스마트 머지용)
   const { data: existing } = await supabase
     .from("gamification_data")
-    .select("user_id")
+    .select("total_xp, daily_streak, last_active_date, sessions_today")
     .eq("user_id", userId)
     .single()
 
-  if (existing) return // 이미 마이그레이션 완료
-
   try {
-    // 1. Gamification 데이터
+    // 1. Gamification 데이터 (로컬 vs 클라우드 중 큰 값 사용)
     const totalXp = parseInt(localStorage.getItem("gamification-total-xp") || "0", 10)
     const dailyStreak = parseInt(localStorage.getItem("gamification-daily-streak") || "0", 10)
     const lastActiveDate = localStorage.getItem("gamification-last-active-date") || ""
     const sessionsToday = parseInt(localStorage.getItem("gamification-sessions-today") || "0", 10)
 
-    if (totalXp > 0 || dailyStreak > 0) {
+    const mergedXp = Math.max(totalXp, existing?.total_xp || 0)
+    const mergedStreak = Math.max(dailyStreak, existing?.daily_streak || 0)
+    const mergedSessions = Math.max(sessionsToday, existing?.sessions_today || 0)
+    // last_active_date: 더 최근 날짜 사용
+    const cloudDate = existing?.last_active_date || ""
+    const mergedDate = lastActiveDate > cloudDate ? lastActiveDate : cloudDate
+
+    if (mergedXp > 0 || mergedStreak > 0) {
       const { error: gError } = await supabase.from("gamification_data").upsert({
         user_id: userId,
-        total_xp: totalXp,
-        daily_streak: dailyStreak,
-        last_active_date: lastActiveDate,
-        sessions_today: sessionsToday,
+        total_xp: mergedXp,
+        daily_streak: mergedStreak,
+        last_active_date: mergedDate,
+        sessions_today: mergedSessions,
       }, { onConflict: "user_id" })
       if (gError) console.error("[Migration] gamification upsert failed:", gError.message, gError.code)
     }

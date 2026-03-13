@@ -19,11 +19,17 @@ function LoginContent() {
   const [emailSuccess, setEmailSuccess] = useState("")
   const searchParams = useSearchParams()
   const error = searchParams.get("error")
+  const returnTo = searchParams.get("returnTo")
   const { t } = useLanguage()
 
   const handleOAuthLogin = async (provider: "kakao" | "google") => {
     setIsLoading(provider)
     const supabase = createClient()
+
+    // OAuth는 외부 사이트를 거치므로 sessionStorage에 복귀 URL 저장
+    if (returnTo) {
+      sessionStorage.setItem("loginReturnTo", returnTo)
+    }
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
@@ -71,7 +77,7 @@ function LoginContent() {
             : error.message
         )
       } else {
-        window.location.href = "/"
+        window.location.href = returnTo || "/"
       }
     }
 

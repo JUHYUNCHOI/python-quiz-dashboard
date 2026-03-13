@@ -5,11 +5,13 @@ import { useAuth } from "@/contexts/auth-context"
 import { useGamification } from "@/hooks/use-gamification"
 import { useLanguage } from "@/contexts/language-context"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 export function Header() {
   const { profile, isAuthenticated, isLoading } = useAuth()
   const { level, dailyStreak } = useGamification()
   const { lang, setLang, t } = useLanguage()
+  const pathname = usePathname()
 
   const displayName = profile?.display_name || t("학습자", "Learner")
 
@@ -36,7 +38,7 @@ export function Header() {
 
           {!isLoading && !isAuthenticated ? (
             <Link
-              href="/login"
+              href={`/login?returnTo=${encodeURIComponent(pathname)}`}
               className="flex items-center gap-1.5 rounded-full bg-orange-100 px-3 py-2 min-h-[44px] hover:bg-orange-200 transition-colors"
             >
               <LogIn className="h-4 w-4 text-orange-600" />

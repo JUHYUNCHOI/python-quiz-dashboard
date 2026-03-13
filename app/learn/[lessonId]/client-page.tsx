@@ -42,7 +42,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
 
   // 게이미피케이션
   const gamification = useGamification()
-  const { profile } = useAuth()
+  const { profile, isAuthenticated } = useAuth()
   const isTeacher = profile?.role === "teacher"
 
   // Supabase 진도 동기화
@@ -481,10 +481,23 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             <div className="bg-amber-50 rounded-2xl p-4 mb-4">
               <p className="text-amber-800 font-bold text-lg">{t(`총 ${totalPoints}점 획득!`, `${totalPoints} points earned!`)}</p>
             </div>
-            <div className="bg-orange-50 rounded-2xl p-4 mb-6">
+            <div className="bg-orange-50 rounded-2xl p-4 mb-4">
               <p className="text-orange-600 font-bold text-lg">+30 XP {t("획득!", "earned!")}</p>
               <p className="text-orange-500 text-sm mt-1">Lv.{gamification.level} ({gamification.xpInCurrentLevel}/100)</p>
             </div>
+            {!isAuthenticated && (
+              <div className="bg-green-50 border border-green-200 rounded-2xl p-4 mb-4 text-left">
+                <p className="text-sm font-bold text-green-800 mb-1">🦒 {t("로그인하면 진도가 안전하게 저장돼요!", "Login to safely save your progress!")}</p>
+                <p className="text-xs text-green-600 mb-3">{t("지금까지 푼 내용이 클라우드에 저장되고, 다른 기기에서도 이어할 수 있어요", "Your work will be saved to the cloud and synced across devices")}</p>
+                <button
+                  onClick={() => { router.push(`/login?returnTo=${encodeURIComponent(`/learn/${lessonId}`)}`) }}
+                  className="w-full py-2.5 bg-white border border-green-300 hover:bg-green-50 text-green-700 rounded-xl font-bold text-sm transition-colors flex items-center justify-center gap-2"
+                >
+                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M19.6 10.23c0-.68-.06-1.36-.17-2.02H10v3.83h5.38a4.6 4.6 0 0 1-2 3.02v2.5h3.24c1.89-1.74 2.98-4.3 2.98-7.33Z" fill="#4285F4"/><path d="M10 20c2.7 0 4.96-.9 6.62-2.44l-3.24-2.5c-.9.6-2.04.95-3.38.95-2.6 0-4.8-1.76-5.58-4.12H1.08v2.58A9.99 9.99 0 0 0 10 20Z" fill="#34A853"/><path d="M4.42 11.89A6.01 6.01 0 0 1 4.1 10c0-.66.11-1.3.32-1.89V5.53H1.08A9.99 9.99 0 0 0 0 10c0 1.61.39 3.14 1.08 4.47l3.34-2.58Z" fill="#FBBC05"/><path d="M10 3.96c1.47 0 2.78.5 3.82 1.5l2.86-2.86C14.96.99 12.7 0 10 0A9.99 9.99 0 0 0 1.08 5.53l3.34 2.58C5.2 5.72 7.4 3.96 10 3.96Z" fill="#EA4335"/></svg>
+                  {t("Google로 로그인", "Login with Google")}
+                </button>
+              </div>
+            )}
             <button onClick={() => { localStorage.removeItem(progressKey); router.push(`/curriculum#lesson-${lessonId}`) }} className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-lg transition-colors">
               {t("돌아가기", "Go Back")}
             </button>
@@ -509,6 +522,19 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             <div className="bg-amber-50 rounded-2xl p-4 mb-6">
               <p className="text-amber-800 font-bold text-lg">{t(`${chapterPoints}점 획득!`, `${chapterPoints} points earned!`)}</p>
             </div>
+            {!isAuthenticated && (
+              <div className="bg-orange-50 border border-orange-200 rounded-2xl p-4 mb-4 text-left">
+                <p className="text-sm font-bold text-orange-800 mb-1">🦒 {t("로그인하면 진도가 저장돼요!", "Login to save your progress!")}</p>
+                <p className="text-xs text-orange-600 mb-3">{t("새로고침해도, 다른 기기에서도 이어할 수 있어요", "Continue on any device, even after refresh")}</p>
+                <button
+                  onClick={() => { router.push(`/login?returnTo=${encodeURIComponent(`/learn/${lessonId}`)}`) }}
+                  className="w-full py-2.5 bg-white border border-orange-300 hover:bg-orange-50 text-orange-700 rounded-xl font-bold text-sm transition-colors flex items-center justify-center gap-2"
+                >
+                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M19.6 10.23c0-.68-.06-1.36-.17-2.02H10v3.83h5.38a4.6 4.6 0 0 1-2 3.02v2.5h3.24c1.89-1.74 2.98-4.3 2.98-7.33Z" fill="#4285F4"/><path d="M10 20c2.7 0 4.96-.9 6.62-2.44l-3.24-2.5c-.9.6-2.04.95-3.38.95-2.6 0-4.8-1.76-5.58-4.12H1.08v2.58A9.99 9.99 0 0 0 10 20Z" fill="#34A853"/><path d="M4.42 11.89A6.01 6.01 0 0 1 4.1 10c0-.66.11-1.3.32-1.89V5.53H1.08A9.99 9.99 0 0 0 0 10c0 1.61.39 3.14 1.08 4.47l3.34-2.58Z" fill="#FBBC05"/><path d="M10 3.96c1.47 0 2.78.5 3.82 1.5l2.86-2.86C14.96.99 12.7 0 10 0A9.99 9.99 0 0 0 1.08 5.53l3.34 2.58C5.2 5.72 7.4 3.96 10 3.96Z" fill="#EA4335"/></svg>
+                  {t("Google로 로그인", "Login with Google")}
+                </button>
+              </div>
+            )}
             <button onClick={goToNextChapter} className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-lg transition-colors">
               {t("다음 챕터로 →", "Next Chapter →")}
             </button>
