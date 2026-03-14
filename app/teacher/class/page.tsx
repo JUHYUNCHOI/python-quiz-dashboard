@@ -7,12 +7,13 @@ import { createClient } from "@/lib/supabase/client"
 import type { Class, Profile, GamificationData } from "@/lib/supabase/types"
 import type { QuizSession } from "@/lib/supabase/types"
 import { Card } from "@/components/ui/card"
-import { ArrowLeft, Copy, Check, Users, Trophy, Flame, BookOpen, ChevronDown, Clock, ClipboardCheck } from "lucide-react"
+import { ArrowLeft, Copy, Check, Users, Trophy, Flame, BookOpen, ChevronDown, ClipboardCheck } from "lucide-react"
 import Link from "next/link"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { StudentQuizReport } from "@/components/teacher/student-quiz-report"
 import { StudentConsistency } from "@/components/teacher/student-consistency"
+import { StudentProgress } from "@/components/teacher/student-progress"
 import { cn } from "@/lib/utils"
 
 interface LessonProgressRow {
@@ -36,29 +37,6 @@ interface StudentRow {
   quizSessions: QuizSession[]
 }
 
-// 레슨 ID → 표시 이름 매핑
-const LESSON_NAMES: Record<string, string> = {
-  "p1": "Python 1: 출력",
-  "p2": "Python 2: 변수",
-  "p3": "Python 3: 입력",
-  "p4": "Python 4: 조건문",
-  "p5": "Python 5: 반복문",
-  "p6": "Python 6: 리스트",
-  "p7": "Python 7: 함수",
-  "p8": "Python 8: 딕셔너리",
-  "cpp-1": "C++ 1: 출력",
-  "cpp-2": "C++ 2: 변수",
-  "cpp-3": "C++ 3: 입력",
-  "cpp-4": "C++ 4: 조건문",
-  "cpp-5": "C++ 5: 반복문",
-  "cpp-6": "C++ 6: 배열",
-  "cpp-7": "C++ 7: 문자열",
-  "cpp-8": "C++ 8: 함수",
-}
-
-function getLessonName(lessonId: string): string {
-  return LESSON_NAMES[lessonId] || lessonId
-}
 
 function formatDate(dateStr: string): string {
   if (!dateStr || dateStr === "-") return "-"
@@ -90,14 +68,19 @@ export default function ClassDetailPage() {
   const loadClassData = async () => {
     const supabase = createClient()
 
-    // 반 정보
+    // 반 정보 (소유권 확인: 본인 반만 접근)
     const { data: cls } = await supabase
       .from("classes")
       .select("*")
       .eq("id", classId)
+      .eq("teacher_id", user!.id)
       .single()
 
-    if (cls) setClassInfo(cls)
+    if (!cls) {
+      setIsLoading(false)
+      return
+    }
+    setClassInfo(cls)
 
     // 학생 목록
     const { data: members } = await supabase
@@ -369,42 +352,7 @@ export default function ClassDetailPage() {
 
                         {/* 레슨 진도 탭 */}
                         {activeTab === "lessons" && (
-                          <>
-                            {student.lessonProgress.length === 0 ? (
-                              <p className="text-sm text-gray-400 py-3 text-center">아직 학습 기록이 없어요</p>
-                            ) : (
-                              <div className="mt-3 space-y-1.5">
-                                {student.lessonProgress.map((lp, i) => (
-                                  <div key={`${lp.lesson_id}-${lp.progress_type}-${i}`}
-                                    className="flex items-center gap-2 text-sm py-1.5 px-2 rounded-lg bg-gray-50"
-                                  >
-                                    {lp.completed ? (
-                                      <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
-                                    ) : (
-                                      <Clock className="w-4 h-4 text-amber-400 flex-shrink-0" />
-                                    )}
-                                    <span className="flex-1 text-gray-700 truncate">
-                                      {getLessonName(lp.lesson_id)}
-                                      <span className="text-xs text-gray-400 ml-1">
-                                        ({lp.progress_type === "learn" ? "실습" : "복습"})
-                                      </span>
-                                    </span>
-                                    <span className={cn(
-                                      "text-xs font-bold px-2 py-0.5 rounded-full",
-                                      lp.completed
-                                        ? "bg-green-100 text-green-700"
-                                        : "bg-amber-100 text-amber-700"
-                                    )}>
-                                      {lp.score}점
-                                    </span>
-                                    <span className="text-xs text-gray-400 w-10 text-right">
-                                      {formatDate(lp.updated_at)}
-                                    </span>
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                          </>
+                          <StudentProgress lessonProgress={student.lessonProgress} />
                         )}
 
                         {/* 퀴즈 리포트 탭 */}

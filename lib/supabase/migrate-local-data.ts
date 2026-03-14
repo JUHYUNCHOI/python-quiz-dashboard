@@ -7,6 +7,17 @@ import { createClient } from "./client"
 export async function migrateLocalStorageToSupabase(userId: string) {
   const supabase = createClient()
 
+  // 레거시 null variant → '' 정리 (UNIQUE 제약조건 호환성)
+  try {
+    await supabase
+      .from("lesson_progress")
+      .update({ variant: "" })
+      .eq("user_id", userId)
+      .is("variant", null)
+  } catch {
+    // variant 정리 실패 시 무시 — 이후 upsert가 새 행으로 생성됨
+  }
+
   // 클라우드 gamification 데이터 조회 (스마트 머지용)
   const { data: existing } = await supabase
     .from("gamification_data")
@@ -46,7 +57,7 @@ export async function migrateLocalStorageToSupabase(userId: string) {
       const progressRows = completedLessons.map(lessonId => ({
         user_id: userId,
         lesson_id: String(lessonId),
-        variant: null,
+        variant: "",
         progress_type: "learn" as const,
         progress_data: {},
         completed: true,
@@ -80,7 +91,7 @@ export async function migrateLocalStorageToSupabase(userId: string) {
         const possibleVariant = lastDash > 0 ? remainder.substring(lastDash + 1) : ""
         const isVariant = knownVariants.includes(possibleVariant)
         const lessonId = isVariant ? remainder.substring(0, lastDash) : remainder
-        const variant = isVariant ? possibleVariant : null
+        const variant = isVariant ? possibleVariant : ""
 
         await supabase.from("lesson_progress").upsert({
           user_id: userId,
@@ -110,7 +121,7 @@ export async function migrateLocalStorageToSupabase(userId: string) {
         await supabase.from("lesson_progress").upsert({
           user_id: userId,
           lesson_id: lessonId,
-          variant: null,
+          variant: "",
           progress_type: "review",
           progress_data: data,
           completed: false,

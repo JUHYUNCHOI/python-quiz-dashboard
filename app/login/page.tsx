@@ -9,6 +9,14 @@ import { Mail } from "lucide-react"
 import { LanguageToggle } from "@/components/language-toggle"
 import { useLanguage } from "@/contexts/language-context"
 
+/** 상대 경로(/)로 시작하는 URL만 허용 — open redirect 방지 */
+function safeReturnTo(url: string | null): string {
+  if (!url) return "/"
+  // 상대 경로만 허용 (프로토콜, //, 외부 도메인 차단)
+  if (url.startsWith("/") && !url.startsWith("//")) return url
+  return "/"
+}
+
 function LoginContent() {
   const [isLoading, setIsLoading] = useState<string | null>(null)
   const [showEmailForm, setShowEmailForm] = useState(false)
@@ -19,7 +27,7 @@ function LoginContent() {
   const [emailSuccess, setEmailSuccess] = useState("")
   const searchParams = useSearchParams()
   const error = searchParams.get("error")
-  const returnTo = searchParams.get("returnTo")
+  const returnTo = safeReturnTo(searchParams.get("returnTo"))
   const { t } = useLanguage()
 
   const handleOAuthLogin = async (provider: "kakao" | "google") => {

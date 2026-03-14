@@ -3,13 +3,14 @@
 import { useCallback, useRef, useEffect } from "react"
 import { useAuth } from "@/contexts/auth-context"
 import { createClient } from "@/lib/supabase/client"
+import { flushToSupabase } from "@/lib/supabase/keepalive-flush"
 
 /**
  * 이벤트 기반 Supabase 학습 진도 저장 훅
  * - localStorage는 그대로 유지 (오프라인/빠른 응답)
  * - Supabase는 영속 백업 (fire-and-forget)
  * - 비로그인 시 아무 동작 안 함
- * - visibilitychange 시 미전송 데이터 즉시 flush
+ * - visibilitychange 시 keepalive fetch로 즉시 flush
  */
 export function useLessonSync(
   lessonId: string,
@@ -39,7 +40,7 @@ export function useLessonSync(
     }
   }, [lessonId, progressType])
 
-  // 페이지 숨김 시 미전송 데이터 즉시 flush
+  // 페이지 숨김/닫기 시 keepalive fetch로 즉시 flush
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.hidden && pendingPayloadRef.current) {
@@ -47,12 +48,24 @@ export function useLessonSync(
           clearTimeout(debounceRef.current)
           debounceRef.current = null
         }
-        doSync(pendingPayloadRef.current)
+        flushToSupabase(
+          "lesson_progress",
+          pendingPayloadRef.current as Record<string, unknown>,
+          "user_id,lesson_id,variant,progress_type"
+        )
+        pendingPayloadRef.current = null
       }
     }
     document.addEventListener("visibilitychange", handleVisibilityChange)
     return () => document.removeEventListener("visibilitychange", handleVisibilityChange)
-  }, [doSync])
+  }, [])
+
+  // 컴포넌트 언마운트 시 타이머 정리
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current)
+    }
+  }, [])
 
   /**
    * 진행 상황을 Supabase에 upsert (debounced, fire-and-forget)
@@ -66,7 +79,7 @@ export function useLessonSync(
       const payload = {
         user_id: user.id,
         lesson_id: lessonId,
-        variant: variant || null,
+        variant: variant || "",
         progress_type: progressType,
         progress_data: progressData,
         updated_at: new Date().toISOString(),
@@ -97,7 +110,7 @@ export function useLessonSync(
         const payload = {
           user_id: user.id,
           lesson_id: lessonId,
-          variant: variant || null,
+          variant: variant || "",
           progress_type: progressType,
           progress_data: {},
           completed: true,
@@ -129,14 +142,24 @@ export function useLessonSync(
 
     try {
       const supabase = createClient()
-      const { data, error } = await supabase
+      // variant가 null/''인 경우: 기존 null 데이터와 새 '' 데이터 모두 매칭
+      let query = supabase
         .from("lesson_progress")
         .select("progress_data, completed, score")
         .eq("user_id", user.id)
         .eq("lesson_id", lessonId)
         .eq("progress_type", progressType)
-        .is("variant", variant || null)
-        .single()
+
+      if (variant) {
+        query = query.eq("variant", variant)
+      } else {
+        query = query.or("variant.is.null,variant.eq.")
+      }
+
+      const { data, error } = await query
+        .order("updated_at", { ascending: false })
+        .limit(1)
+        .maybeSingle()
 
       if (error || !data) return null
 

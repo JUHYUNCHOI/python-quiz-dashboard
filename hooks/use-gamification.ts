@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react"
 import { useAuth } from "@/contexts/auth-context"
 import { createClient } from "@/lib/supabase/client"
+import { flushToSupabase } from "@/lib/supabase/keepalive-flush"
 
 // -------- Types --------
 export interface GamificationState {
@@ -41,14 +42,17 @@ function calcComboBonus(maxCombo: number): number {
   return 0
 }
 
+/** 로컬 타임존 기준 YYYY-MM-DD (UTC 사용 시 한국 사용자 streak 깨짐 방지) */
 function todayStr(): string {
-  return new Date().toISOString().slice(0, 10)
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`
 }
 
 function isYesterday(dateStr: string): boolean {
   const yesterday = new Date()
   yesterday.setDate(yesterday.getDate() - 1)
-  return dateStr === yesterday.toISOString().slice(0, 10)
+  const ys = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, "0")}-${String(yesterday.getDate()).padStart(2, "0")}`
+  return dateStr === ys
 }
 
 function safeParseInt(value: string | null, fallback: number): number {
@@ -178,7 +182,7 @@ export function useGamification() {
     debounceRef.current = setTimeout(() => { doSync(payload) }, 1000)
   }, [user, doSync])
 
-  // 페이지 숨김 시 미전송 데이터 즉시 flush
+  // 페이지 숨김/닫기 시 keepalive fetch로 즉시 flush
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.hidden && pendingPayloadRef.current) {
@@ -186,12 +190,24 @@ export function useGamification() {
           clearTimeout(debounceRef.current)
           debounceRef.current = null
         }
-        doSync(pendingPayloadRef.current)
+        flushToSupabase(
+          "gamification_data",
+          pendingPayloadRef.current as Record<string, unknown>,
+          "user_id"
+        )
+        pendingPayloadRef.current = null
       }
     }
     document.addEventListener("visibilitychange", handleVisibilityChange)
     return () => document.removeEventListener("visibilitychange", handleVisibilityChange)
-  }, [doSync])
+  }, [])
+
+  // 컴포넌트 언마운트 시 타이머 정리
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current)
+    }
+  }, [])
 
   const calculateXpBreakdown = useCallback(
     (correctAnswers: number, totalQuestions: number, maxCombo: number): XpBreakdown => {

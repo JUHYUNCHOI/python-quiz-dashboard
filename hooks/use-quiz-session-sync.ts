@@ -41,9 +41,14 @@ export function useQuizSessionSync() {
         }
         const { error } = await supabase.from("quiz_sessions").insert(payload)
         if (error) {
-          console.error("[QuizSync] insert failed:", error.message, error.code)
-          const { error: retryError } = await supabase.from("quiz_sessions").insert(payload)
-          if (retryError) console.error("[QuizSync] retry failed:", retryError.message)
+          // 네트워크 에러(응답 없음)인 경우에만 재시도 — 서버 에러는 중복 방지 위해 재시도 안 함
+          if (error.code === "PGRST000" || error.message?.includes("network")) {
+            console.error("[QuizSync] insert failed (retrying):", error.message, error.code)
+            const { error: retryError } = await supabase.from("quiz_sessions").insert(payload)
+            if (retryError) console.error("[QuizSync] retry failed:", retryError.message)
+          } else {
+            console.error("[QuizSync] insert failed:", error.message, error.code)
+          }
         }
       } catch (e) {
         console.error("[QuizSync] network error:", e)

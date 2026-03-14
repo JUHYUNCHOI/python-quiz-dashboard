@@ -61,7 +61,7 @@ export function getTopicStats(): { topic: string; correct: number; total: number
   const map = new Map<string, { correct: number; total: number }>()
 
   for (const entry of entries) {
-    for (const tr of entry.topicResults) {
+    for (const tr of (entry.topicResults || [])) {
       const prev = map.get(tr.topic) || { correct: 0, total: 0 }
       map.set(tr.topic, {
         correct: prev.correct + tr.correct,

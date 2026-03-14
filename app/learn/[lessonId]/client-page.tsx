@@ -87,6 +87,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   
   const canGoNext = () => {
     if (!step) return false
+    if (isTeacher) return true // 선생님은 어디서든 자유롭게 이동
     if (isReviewMode) return false // 복습 모드에서는 "확인" 버튼으로만 이동
     if (step.type === "explain" || step.type === "interactive" || step.type === "tryit" || step.type === "animation" || step.type === "practice") return true
     return isCurrentStepCompleted
@@ -115,11 +116,32 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     if (saved) {
       try {
         const data = JSON.parse(saved)
-        setCurrentChapter(data.chapter || 0)
-        setCurrentStep(data.step || 0)
+        // 범위 체크: 레슨 구조가 변경되었을 때 out-of-bounds 방지
+        const maxCh = lesson ? lesson.chapters.length - 1 : 0
+        const ch = Math.min(Math.max(data.chapter || 0, 0), maxCh)
+        const maxSt = lesson?.chapters[ch]?.steps?.length ? lesson.chapters[ch].steps.length - 1 : 0
+        const st = Math.min(Math.max(data.step || 0, 0), maxSt)
+        setCurrentChapter(ch)
+        setCurrentStep(st)
         setScore(data.score || 0)
         setCompletedSteps(new Set(data.completed || []))
-      } catch {}
+        // wrongQueue 복원 (새로고침 시 복습 모드 유지)
+        if (data.wrongQueue?.length && lesson) {
+          const chapterData = lesson.chapters[ch]
+          if (chapterData) {
+            const restored = (data.wrongQueue as string[])
+              .map((id: string) => chapterData.steps.find((s: LessonStep) => s.id === id))
+              .filter((s: LessonStep | undefined): s is LessonStep => !!s)
+            if (restored.length > 0) {
+              setWrongQueue(restored)
+              setReviewIndex(Math.min(data.reviewIndex || 0, restored.length - 1))
+            }
+          }
+        }
+      } catch {
+        console.warn("[LessonPage] Failed to parse saved progress")
+      }
+      setProgressLoaded(true)
     } else {
       // localStorage 비어있으면 Supabase에서 복구 시도
       loadFromCloud().then(data => {
@@ -129,22 +151,25 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
           setScore((data.score as number) || 0)
           setCompletedSteps(new Set((data.completed as string[]) || []))
         }
+      }).finally(() => {
+        // 클라우드 로드 완료 후에만 저장 이펙트 활성화 (초기 state 덮어쓰기 방지)
+        setProgressLoaded(true)
       })
     }
-    // 로드 완료 후에만 저장 이펙트 활성화 (초기 state 덮어쓰기 방지)
-    setProgressLoaded(true)
   }, [progressKey, loadFromCloud])
 
   useEffect(() => {
     if (!lesson || !progressLoaded) return
     const progressData = {
       chapter: currentChapter, step: currentStep, score,
-      completed: Array.from(completedSteps)
+      completed: Array.from(completedSteps),
+      wrongQueue: wrongQueue.map(s => s.id),
+      reviewIndex,
     }
     localStorage.setItem(progressKey, JSON.stringify(progressData))
     // Supabase에도 동기화 (debounced, fire-and-forget)
     syncProgress(progressData)
-  }, [currentChapter, currentStep, score, completedSteps, progressKey, lesson, syncProgress, progressLoaded])
+  }, [currentChapter, currentStep, score, completedSteps, progressKey, lesson, syncProgress, progressLoaded, wrongQueue, reviewIndex])
 
   // 잠금 체크: 같은 트랙(Python/C++) 내에서 이전 수업 완료해야 접근 가능 (선생님은 전부 열림)
   const isLocked = (() => {
@@ -196,23 +221,14 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     )
   }
 
-  // variant 전환 시 진행상황 로드
+  // variant 전환 시 진행상황 로드 (load effect가 progressKey 변경 감지하여 처리)
   const handleVariantChange = (newVariant: LibraryVariant) => {
     setVariant(newVariant)
-    const saved = localStorage.getItem(`practice-v2-${lessonId}-${newVariant}`)
-    if (saved) {
-      try {
-        const data = JSON.parse(saved)
-        setCurrentChapter(data.chapter || 0)
-        setCurrentStep(data.step || 0)
-        setScore(data.score || 0)
-        setCompletedSteps(new Set(data.completed || []))
-      } catch {
-        setCurrentChapter(0); setCurrentStep(0); setScore(0); setCompletedSteps(new Set())
-      }
-    } else {
-      setCurrentChapter(0); setCurrentStep(0); setScore(0); setCompletedSteps(new Set())
-    }
+    setProgressLoaded(false) // 새 variant 데이터 로드 전까지 저장 차단
+    setCurrentChapter(0)
+    setCurrentStep(0)
+    setScore(0)
+    setCompletedSteps(new Set())
     setWrongQueue([])
     setReviewIndex(0)
     resetStepState()
@@ -238,6 +254,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     setShowChapterList(false)
     resetStepState()
     localStorage.removeItem(progressKey)
+    // Supabase에도 리셋 동기화
+    syncProgress({ chapter: 0, step: 0, score: 0, completed: [] })
   }
 
   const finishChapter = () => {
@@ -262,8 +280,9 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const goNext = () => {
     if (!canGoNext()) return
     if (currentStep < chapter.steps.length - 1) {
+      const nextStep = chapter.steps[currentStep + 1]
       setCurrentStep(currentStep + 1)
-      resetStepState()
+      restoreCompletedStepState(nextStep)
     } else if (wrongQueue.length > 0 && !isReviewMode) {
       // 일반 스텝 끝 + 틀린 문제 있음 → 복습 모드 진입
       setReviewIndex(0)
@@ -293,16 +312,35 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     setShowLessonComplete(false)
   }
 
+  // 이미 완료된 quiz/predict 스텝으로 돌아가면 정답을 자동으로 보여주기
+  // 선생님은 매번 학생과 함께 새로 풀어야 하므로 항상 리셋
+  const restoreCompletedStepState = useCallback((targetStep: LessonStep | undefined) => {
+    if (isTeacher || !targetStep || !completedSteps.has(targetStep.id)) {
+      resetStepState()
+      return
+    }
+    if ((targetStep.type === "quiz" || targetStep.type === "predict") && targetStep.answer !== undefined) {
+      setSelectedAnswer(targetStep.answer)
+      setShowExplanation(true)
+      setHintLevel(0)
+      setQuizAttempts(0)
+    } else {
+      resetStepState()
+    }
+  }, [completedSteps, isTeacher])
+
   const goPrev = () => {
     if (isReviewMode) return // 복습 모드에서는 뒤로 못감
     if (currentStep > 0) {
+      const prevStep = chapter.steps[currentStep - 1]
       setCurrentStep(currentStep - 1)
-      resetStepState()
+      restoreCompletedStepState(prevStep)
     } else if (currentChapter > 0) {
       const prevChapter = lesson.chapters[currentChapter - 1]
+      const prevStep = prevChapter.steps[prevChapter.steps.length - 1]
       setCurrentChapter(currentChapter - 1)
       setCurrentStep(prevChapter.steps.length - 1)
-      resetStepState()
+      restoreCompletedStepState(prevStep)
     }
   }
 
@@ -334,8 +372,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
         const newQueue = wrongQueue.filter((_, i) => i !== reviewIndex)
         setWrongQueue(newQueue)
         if (!completedSteps.has(step.id)) {
-          if (!isIGCSE) setScore(score + 10)
-          setCompletedSteps(new Set([...completedSteps, step.id]))
+          if (!isIGCSE) setScore(prev => prev + 10)
+          setCompletedSteps(prev => new Set([...prev, step.id]))
         }
         if (!isIGCSE) {
           setShowConfetti(true)
@@ -353,8 +391,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
         }, isIGCSE ? 600 : 1200)
       } else {
         if (!completedSteps.has(step.id)) {
-          if (!isIGCSE) setScore(score + 10)
-          setCompletedSteps(new Set([...completedSteps, step.id]))
+          if (!isIGCSE) setScore(prev => prev + 10)
+          setCompletedSteps(prev => new Set([...prev, step.id]))
           if (!isIGCSE) {
             setShowConfetti(true)
             setSuccessMessage(t("정답! 🎉", "Correct! 🎉"))
@@ -379,8 +417,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
         const newQueue = wrongQueue.filter((_, i) => i !== reviewIndex)
         setWrongQueue(newQueue)
         if (!completedSteps.has(step.id)) {
-          if (!isIGCSE) setScore(score + 10)
-          setCompletedSteps(new Set([...completedSteps, step.id]))
+          if (!isIGCSE) setScore(prev => prev + 10)
+          setCompletedSteps(prev => new Set([...prev, step.id]))
         }
         if (!isIGCSE) {
           setShowConfetti(true)
@@ -398,8 +436,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
         }, isIGCSE ? 600 : 1200)
       } else {
         if (!completedSteps.has(step.id)) {
-          if (!isIGCSE) setScore(score + 10)
-          setCompletedSteps(new Set([...completedSteps, step.id]))
+          if (!isIGCSE) setScore(prev => prev + 10)
+          setCompletedSteps(prev => new Set([...prev, step.id]))
           if (!isIGCSE) {
             setShowConfetti(true)
             setSuccessMessage(t("정답! 🎉", "Correct! 🎉"))
@@ -418,9 +456,10 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
 
   const handleStepAcknowledge = () => {
     if (!completedSteps.has(step.id)) {
-      setCompletedSteps(new Set([...completedSteps, step.id]))
+      setCompletedSteps(prev => new Set([...prev, step.id]))
     }
     if (isReviewMode) {
+      if (reviewIndex >= wrongQueue.length) { finishChapter(); return }
       const failedStep = wrongQueue[reviewIndex]
       const newQueue = wrongQueue.filter((_, i) => i !== reviewIndex)
       newQueue.push(failedStep)
@@ -442,11 +481,12 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const acknowledgeQuiz = () => {
     // 오답 확인 후 다음으로 이동
     if (!completedSteps.has(step.id)) {
-      setCompletedSteps(new Set([...completedSteps, step.id]))
+      setCompletedSteps(prev => new Set([...prev, step.id]))
     }
 
     if (isReviewMode) {
       // 복습 모드에서 또 틀림: 큐 끝으로 다시 추가
+      if (reviewIndex >= wrongQueue.length) { finishChapter(); return }
       const failedStep = wrongQueue[reviewIndex]
       const newQueue = wrongQueue.filter((_, i) => i !== reviewIndex)
       newQueue.push(failedStep)
@@ -583,7 +623,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                 <>
                   <div className="flex-1 h-2.5 md:h-3 bg-amber-100 rounded-full overflow-hidden">
                     <div className="h-full bg-gradient-to-r from-amber-400 to-orange-500 rounded-full transition-all duration-500"
-                      style={{ width: `${((reviewIndex + 1) / wrongQueue.length) * 100}%` }} />
+                      style={{ width: `${wrongQueue.length > 0 ? ((reviewIndex + 1) / wrongQueue.length) * 100 : 0}%` }} />
                   </div>
                   <span className="text-sm md:text-base font-bold text-amber-500 tabular-nums shrink-0 flex items-center gap-1">
                     <RotateCcw className="w-3.5 h-3.5" />
@@ -650,7 +690,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             <StepRenderer
               step={step}
               lang={lang}
-              isCompleted={isCurrentStepCompleted}
+              isCompleted={isTeacher ? false : isCurrentStepCompleted}
               hintLevel={hintLevel}
               onHintLevelChange={setHintLevel}
               onSuccess={handleSuccess}

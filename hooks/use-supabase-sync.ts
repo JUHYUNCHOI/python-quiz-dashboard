@@ -3,11 +3,12 @@
 import { useCallback, useRef, useEffect } from "react"
 import { useAuth } from "@/contexts/auth-context"
 import { createClient } from "@/lib/supabase/client"
+import { flushToSupabase } from "@/lib/supabase/keepalive-flush"
 
 /**
  * Supabase 동기화 훅
  * localStorage에 항상 즉시 쓰고, 로그인 상태면 Supabase에도 debounce 쓰기
- * visibilitychange 시 미전송 데이터 즉시 flush
+ * visibilitychange 시 미전송 데이터 즉시 flush (keepalive fetch)
  */
 export function useSupabaseSync() {
   const { user } = useAuth()
@@ -15,25 +16,7 @@ export function useSupabaseSync() {
   const debounceTimers = useRef<Map<string, NodeJS.Timeout>>(new Map())
   const pendingPayloads = useRef<Map<string, { table: string; data: Record<string, unknown>; onConflict: string }>>(new Map())
 
-  // 즉시 전송 헬퍼
-  const doFlush = useCallback(async (key: string) => {
-    const pending = pendingPayloads.current.get(key)
-    if (!pending) return
-
-    try {
-      const { error } = await supabase
-        .from(pending.table)
-        .upsert(pending.data, { onConflict: pending.onConflict })
-      if (error) {
-        console.error(`[SupabaseSync] ${pending.table} flush failed:`, error.message, error.code)
-      }
-      pendingPayloads.current.delete(key)
-    } catch (e) {
-      console.error(`[SupabaseSync] ${pending.table} flush network error:`, e)
-    }
-  }, [supabase])
-
-  // 페이지 숨김 시 모든 미전송 데이터 즉시 flush
+  // 페이지 숨김/닫기 시 모든 미전송 데이터 즉시 flush (keepalive fetch로 탭 닫기 시에도 전송)
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.hidden && pendingPayloads.current.size > 0) {
@@ -43,15 +26,25 @@ export function useSupabaseSync() {
         }
         debounceTimers.current.clear()
 
-        // 모든 pending 즉시 전송
-        for (const key of Array.from(pendingPayloads.current.keys())) {
-          doFlush(key)
+        // 모든 pending을 keepalive fetch로 즉시 전송
+        for (const pending of pendingPayloads.current.values()) {
+          flushToSupabase(pending.table, pending.data, pending.onConflict)
         }
+        pendingPayloads.current.clear()
       }
     }
     document.addEventListener("visibilitychange", handleVisibilityChange)
     return () => document.removeEventListener("visibilitychange", handleVisibilityChange)
-  }, [doFlush])
+  }, [])
+
+  // 컴포넌트 언마운트 시 타이머 정리
+  useEffect(() => {
+    return () => {
+      for (const timer of debounceTimers.current.values()) {
+        clearTimeout(timer)
+      }
+    }
+  }, [])
 
   /**
    * Supabase 테이블에서 데이터 로드

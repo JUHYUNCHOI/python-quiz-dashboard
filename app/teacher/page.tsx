@@ -13,7 +13,7 @@ import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 
 export default function TeacherDashboardPage() {
-  const { user, profile } = useAuth()
+  const { user, profile, isLoading: authLoading } = useAuth()
   const { t } = useLanguage()
   const [classes, setClasses] = useState<(Class & { memberCount: number })[]>([])
   const [isCreating, setIsCreating] = useState(false)
@@ -25,6 +25,33 @@ export default function TeacherDashboardPage() {
     if (!user) return
     loadClasses()
   }, [user])
+
+  // 인증 가드: 로그인 + teacher 역할 필요
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-orange-50 to-mint-50">
+        <Header />
+        <div className="flex items-center justify-center pt-20">
+          <div className="text-[60px] animate-bounce">🦒</div>
+        </div>
+        <BottomNav />
+      </div>
+    )
+  }
+  if (!user || profile?.role !== "teacher") {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-orange-50 to-mint-50">
+        <Header />
+        <main className="max-w-md mx-auto px-4 pt-10 text-center space-y-4">
+          <div className="text-6xl">🔒</div>
+          <h2 className="text-xl font-bold text-gray-800">{t("선생님 전용 페이지", "Teacher Only")}</h2>
+          <p className="text-gray-500">{t("선생님 계정으로 로그인이 필요합니다", "Teacher login required")}</p>
+          <Link href="/login" className="inline-block px-6 py-2 rounded-xl bg-orange-500 text-white font-bold">{t("로그인", "Login")}</Link>
+        </main>
+        <BottomNav />
+      </div>
+    )
+  }
 
   const loadClasses = async () => {
     const supabase = createClient()

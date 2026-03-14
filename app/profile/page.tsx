@@ -1,12 +1,11 @@
 "use client"
 
-import { useState } from "react"
 import { useAuth } from "@/contexts/auth-context"
 import { useGamification } from "@/hooks/use-gamification"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { Card } from "@/components/ui/card"
-import { LogOut, Trophy, Flame, Zap, ShieldCheck, Users, LogIn, Globe, ArrowLeftRight } from "lucide-react"
+import { LogOut, Trophy, Flame, Zap, ShieldCheck, Users, LogIn, Globe } from "lucide-react"
 import Link from "next/link"
 import { LanguageToggle } from "@/components/language-toggle"
 import { useLanguage } from "@/contexts/language-context"
@@ -16,23 +15,6 @@ export default function ProfilePage() {
   const { user, profile, isAuthenticated, isLoading, refreshProfile } = useAuth()
   const { level, totalXp, dailyStreak, xpInCurrentLevel } = useGamification()
   const { t } = useLanguage()
-  const [switching, setSwitching] = useState(false)
-
-  const toggleRole = async () => {
-    if (!user || switching) return
-    setSwitching(true)
-    try {
-      const supabase = createClient()
-      const newRole = profile?.role === "teacher" ? "student" : "teacher"
-      await supabase.from("profiles").update({ role: newRole }).eq("id", user.id)
-      await refreshProfile()
-    } catch {
-      // 실패 시 무시
-    } finally {
-      setSwitching(false)
-    }
-  }
-
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-orange-50 to-mint-50">
@@ -146,7 +128,7 @@ export default function ProfilePage() {
             <div className="text-center p-3 rounded-xl bg-purple-50">
               <Zap className="w-5 h-5 text-purple-500 mx-auto mb-1" />
               <p className="text-lg font-bold text-purple-600">{totalXp}</p>
-              <p className="text-xs text-gray-500">총 XP</p>
+              <p className="text-xs text-gray-500">{t("총 XP", "Total XP")}</p>
             </div>
             <div className="text-center p-3 rounded-xl bg-red-50">
               <Flame className="w-5 h-5 text-red-500 mx-auto mb-1" />
@@ -191,22 +173,6 @@ export default function ProfilePage() {
             </Link>
           )}
 
-          {/* 역할 전환 */}
-          <button onClick={toggleRole} disabled={switching} className="w-full">
-            <Card className="p-4 border border-gray-100 hover:border-blue-200 transition-all cursor-pointer">
-              <div className="flex items-center gap-3">
-                <ArrowLeftRight className={`w-5 h-5 text-blue-500 ${switching ? "animate-spin" : ""}`} />
-                <span className="font-medium text-gray-700">
-                  {switching
-                    ? t("전환 중...", "Switching...")
-                    : profile?.role === "teacher"
-                      ? t("학생으로 전환", "Switch to Student")
-                      : t("선생님으로 전환", "Switch to Teacher")
-                  }
-                </span>
-              </div>
-            </Card>
-          </button>
         </div>
 
         {/* 로그아웃 */}

@@ -101,12 +101,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (currentUser) {
           await fetchProfile(currentUser.id)
 
-          // 로그인 시 양방향 동기화
+          // 로그인 시 양방향 동기화 (순차 실행: 업로드 완료 후 복원)
           if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
-            // localStorage → Supabase (기존 로컬 데이터 업로드)
-            migrateLocalStorageToSupabase(currentUser.id).catch(() => {})
-            // Supabase → localStorage (클라우드 데이터 복원)
-            restoreFromCloud(currentUser.id).catch(() => {})
+            // 1. localStorage → Supabase (기존 로컬 데이터 업로드)
+            // 2. 업로드 완료 후 Supabase → localStorage (클라우드 데이터 복원)
+            migrateLocalStorageToSupabase(currentUser.id)
+              .catch(() => {})
+              .then(() => restoreFromCloud(currentUser.id))
+              .catch(() => {})
           }
         } else {
           setProfile(null)
@@ -121,6 +123,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       clearTimeout(timeout)
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // JWT 토큰 자동 갱신 (25분마다) — 긴 레슨 중 세션 만료로 인한 저장 실패 방지
+  useEffect(() => {
+    if (!user) return
+    const interval = setInterval(async () => {
+      try {
+        // getUser()는 네트워크 호출을 하면서 자동으로 토큰을 갱신함
+        await supabase.auth.getUser()
+      } catch {
+        // 네트워크 에러 시 무시 — 다음 인터벌에서 재시도
+      }
+    }, 25 * 60 * 1000) // 25분 (JWT 기본 만료 60분보다 충분히 앞서)
+    return () => clearInterval(interval)
+  }, [user, supabase])
 
   return (
     <AuthContext.Provider

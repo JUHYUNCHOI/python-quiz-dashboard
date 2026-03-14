@@ -26,6 +26,19 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
   const [wrongBlankIds, setWrongBlankIds] = useState<Set<number>>(new Set())
   const [showAckButton, setShowAckButton] = useState(false)
 
+  // 이미 완료된 스텝으로 돌아왔을 때 정답 자동 표시
+  useEffect(() => {
+    if (isCompleted && !isReview && !isSubmitted && Object.keys(filledValues).length === 0) {
+      const correctValues: Record<number, string> = {}
+      blanks.forEach(b => {
+        correctValues[b.id] = b.answer
+      })
+      setFilledValues(correctValues)
+      setIsSubmitted(true)
+      setIsCorrect(true)
+    }
+  }, [isCompleted, isReview]) // eslint-disable-line react-hooks/exhaustive-deps
+
   // 1.5초 후 확인 버튼 표시
   useEffect(() => {
     if (isSubmitted && !isCorrect) {

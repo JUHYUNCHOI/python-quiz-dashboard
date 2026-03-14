@@ -328,6 +328,9 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
   const [predictSelected, setPredictSelected] = useState<number | null>(null)
   const [predictAnswered, setPredictAnswered] = useState(false)
   
+  // progressLoaded: 진도 데이터 로드 완료 전 save 방지 (초기값 덮어쓰기 방지)
+  const [progressLoaded, setProgressLoaded] = useState(false)
+
   const inputRef = useRef<HTMLInputElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -354,6 +357,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
         } else if (savedStep >= lesson.steps.length) {
           localStorage.removeItem(`lesson-${lessonId}`)
         }
+        setProgressLoaded(true)
       } else {
         // localStorage 비어있으면 Supabase에서 복구 시도
         loadFromCloud().then(data => {
@@ -366,16 +370,19 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
               setStreak(typeof data.streak === 'number' ? data.streak as number : 0)
             }
           }
+        }).finally(() => {
+          setProgressLoaded(true)
         })
       }
     } catch (e) {
       console.error('Failed to load progress', e)
       try { localStorage.removeItem(`lesson-${lessonId}`) } catch {}
+      setProgressLoaded(true)
     }
   }, [lessonId, lesson, loadFromCloud])
 
   useEffect(() => {
-    if (!lesson) return
+    if (!lesson || !progressLoaded) return
     const progressData = { step, score, wrongAnswers, streak }
     try {
       localStorage.setItem(`lesson-${lessonId}`, JSON.stringify(progressData))
@@ -384,7 +391,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
     }
     // Supabase에도 동기화 (debounced, fire-and-forget)
     syncProgress(progressData)
-  }, [step, score, wrongAnswers, streak, lessonId, lesson, syncProgress])
+  }, [step, score, wrongAnswers, streak, lessonId, lesson, syncProgress, progressLoaded])
 
   // ============================================================
   // 입력 포커스

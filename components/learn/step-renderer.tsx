@@ -102,6 +102,17 @@ export function StepRenderer({
     case "practice":
       return <PracticeStep step={step} lang={lang} />
 
+    case "coding":
+      return (
+        <TryItStep
+          step={step}
+          isCompleted={isCompleted}
+          hintLevel={hintLevel}
+          onHintLevelChange={onHintLevelChange}
+          onSuccess={onSuccess}
+        />
+      )
+
     default:
       return <div className="text-gray-500">{t("알 수 없는 스텝 타입:", "Unknown step type:")} {step.type}</div>
   }
