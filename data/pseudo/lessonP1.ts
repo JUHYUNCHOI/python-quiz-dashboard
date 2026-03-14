@@ -211,6 +211,7 @@ OUTPUT x
           id: "ch2-q1",
           type: "quiz",
           title: "🐛 오류 1 찾기",
+          code: `01 DECLARE Count : STRING\n02 DECLARE Limit : INTEGER\n03 DECLARE Value : REAL\n04 DECLARE Total : REAL\n05 Total ← 0\n06 Limit ← ROUND(RANDOM() * 9, 0) + 1\n07 IF Count ← 1 TO Limit\n08     OUTPUT "Enter a number"\n09     INPUT Count\n10     Total ← Total * Value\n11 NEXT Count\n12 OUTPUT "Total is ", Total\n13 OUTPUT "Average is ", Total / Limit`,
           content: `01번 줄 \`DECLARE Count : STRING\`에서 오류는?`,
           options: [
             'Count는 반복문 카운터이므로 INTEGER여야 한다',
@@ -229,6 +230,7 @@ OUTPUT x
           id: "ch2-q2",
           type: "quiz",
           title: "🐛 오류 2 찾기",
+          code: `01 DECLARE Count : STRING\n02 DECLARE Limit : INTEGER\n03 DECLARE Value : REAL\n04 DECLARE Total : REAL\n05 Total ← 0\n06 Limit ← ROUND(RANDOM() * 9, 0) + 1\n07 IF Count ← 1 TO Limit\n08     OUTPUT "Enter a number"\n09     INPUT Count\n10     Total ← Total * Value\n11 NEXT Count\n12 OUTPUT "Total is ", Total\n13 OUTPUT "Average is ", Total / Limit`,
           content: `07번 줄 \`IF Count ← 1 TO Limit\`에서 오류는?`,
           options: [
             'IF 대신 FOR을 써야 한다',
@@ -247,6 +249,7 @@ IF는 조건문이지 반복문이 아니에요.
           id: "ch2-q3",
           type: "quiz",
           title: "🐛 오류 3 찾기",
+          code: `01 DECLARE Count : STRING\n02 DECLARE Limit : INTEGER\n03 DECLARE Value : REAL\n04 DECLARE Total : REAL\n05 Total ← 0\n06 Limit ← ROUND(RANDOM() * 9, 0) + 1\n07 IF Count ← 1 TO Limit\n08     OUTPUT "Enter a number"\n09     INPUT Count\n10     Total ← Total * Value\n11 NEXT Count\n12 OUTPUT "Total is ", Total\n13 OUTPUT "Average is ", Total / Limit`,
           content: `09번 줄 \`INPUT Count\`에서 오류는?`,
           options: [
             'Count 대신 Value를 입력받아야 한다',
@@ -265,6 +268,7 @@ Count에 입력을 받으면 반복문이 망가져요.
           id: "ch2-q4",
           type: "quiz",
           title: "🐛 오류 4 찾기",
+          code: `01 DECLARE Count : STRING\n02 DECLARE Limit : INTEGER\n03 DECLARE Value : REAL\n04 DECLARE Total : REAL\n05 Total ← 0\n06 Limit ← ROUND(RANDOM() * 9, 0) + 1\n07 IF Count ← 1 TO Limit\n08     OUTPUT "Enter a number"\n09     INPUT Count\n10     Total ← Total * Value\n11 NEXT Count\n12 OUTPUT "Total is ", Total\n13 OUTPUT "Average is ", Total / Limit`,
           content: `10번 줄 \`Total ← Total * Value\`에서 오류는?`,
           options: [
             '* 대신 + 를 써야 한다 (합계를 구하므로)',

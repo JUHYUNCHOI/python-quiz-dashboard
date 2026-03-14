@@ -2,8 +2,10 @@
 
 import { useEffect } from "react"
 import { Check } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 export function SuccessOverlay({ show, message, onClose }: { show: boolean, message: string, onClose: () => void }) {
+  const { t } = useLanguage()
   useEffect(() => {
     if (show) {
       const timer = setTimeout(onClose, 2000)
@@ -20,7 +22,7 @@ export function SuccessOverlay({ show, message, onClose }: { show: boolean, mess
           <Check className="w-10 h-10 text-white" />
         </div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">{message}</h2>
-        <p className="text-gray-500">+10 포인트!</p>
+        <p className="text-gray-500">{t("+10 포인트!", "+10 Points!")}</p>
       </div>
       <style jsx>{`
         @keyframes bounce-in {

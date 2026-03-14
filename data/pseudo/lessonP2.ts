@@ -350,6 +350,7 @@ OUTPUT LENGTH(Text)
           id: "ch3-q1",
           type: "quiz",
           title: "🐛 오류 1: 04번 줄",
+          code: `01 Exit ← 1\n02 WHILE Exit <> 0 DO\n03     INPUT Number\n04     IF Number < 0\n05         THEN\n06             Total ← Total + Number\n07         ELSE\n08             IF Number = 0\n09                 THEN\n10                     Exit ← 1\n11             ENDIF\n12     ENDIF\n13 ENDWHILE\n14 OUTPUT "The total of your numbers is ", Number`,
           content: `04번 줄 \`IF Number < 0\`에서 오류는?
 
 프로그램의 의도: **양수(positive)**를 입력하면 Total에 더해야 해요.`,
@@ -372,6 +373,7 @@ OUTPUT LENGTH(Text)
           id: "ch3-q2",
           type: "quiz",
           title: "🐛 오류 2: 10번 줄",
+          code: `01 Exit ← 1\n02 WHILE Exit <> 0 DO\n03     INPUT Number\n04     IF Number < 0\n05         THEN\n06             Total ← Total + Number\n07         ELSE\n08             IF Number = 0\n09                 THEN\n10                     Exit ← 1\n11             ENDIF\n12     ENDIF\n13 ENDWHILE\n14 OUTPUT "The total of your numbers is ", Number`,
           content: `10번 줄 \`Exit ← 1\`에서 오류는?
 
 프로그램의 의도: 0을 입력하면 **반복을 중단**해야 해요.
@@ -395,6 +397,7 @@ OUTPUT LENGTH(Text)
           id: "ch3-q3",
           type: "quiz",
           title: "🐛 오류 3: 14번 줄",
+          code: `01 Exit ← 1\n02 WHILE Exit <> 0 DO\n03     INPUT Number\n04     IF Number < 0\n05         THEN\n06             Total ← Total + Number\n07         ELSE\n08             IF Number = 0\n09                 THEN\n10                     Exit ← 1\n11             ENDIF\n12     ENDIF\n13 ENDWHILE\n14 OUTPUT "The total of your numbers is ", Number`,
           content: `14번 줄 \`OUTPUT "The total of your numbers is ", Number\`에서 오류는?
 
 프로그램의 의도: 마지막에 **합계**를 출력해야 해요.`,
@@ -418,6 +421,7 @@ Number는 마지막으로 입력받은 값(0)이고,
           id: "ch3-q4",
           type: "quiz",
           title: "🐛 오류 4: 빠진 코드",
+          code: `01 Exit ← 1\n02 WHILE Exit <> 0 DO\n03     INPUT Number\n04     IF Number < 0\n05         THEN\n06             Total ← Total + Number\n07         ELSE\n08             IF Number = 0\n09                 THEN\n10                     Exit ← 1\n11             ENDIF\n12     ENDIF\n13 ENDWHILE\n14 OUTPUT "The total of your numbers is ", Number`,
           content: `위 코드에서 **빠진 중요한 코드**가 있어요.
 
 Total을 사용하기 전에 해야 하는 것은?`,

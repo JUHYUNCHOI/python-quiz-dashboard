@@ -138,7 +138,8 @@ export function useQuizState(questions: QuizQuestion[]) {
     if (currentQuestion === Math.floor(quizSettings.questionCount / 2) && !midCheckInShown) {
       setMidCheckInShown(true)
       setShowMidCheckIn(true)
-      setTimeout(() => setShowMidCheckIn(false), 3000)
+      const timer = setTimeout(() => setShowMidCheckIn(false), 3000)
+      return () => clearTimeout(timer)
     }
   }, [currentQuestion, quizSettings.questionCount, midCheckInShown])
 
@@ -192,7 +193,7 @@ export function useQuizState(questions: QuizQuestion[]) {
   )
 
   const handleNext = useCallback(() => {
-    if (selectedAnswer === null || sessionOver) return
+    if (selectedAnswer === null || sessionOver || showResult) return
 
     const timeSpent = (Date.now() - questionStartTime) / 1000
     if (timeSpent < 3) {
@@ -281,6 +282,7 @@ export function useQuizState(questions: QuizQuestion[]) {
     combo,
     hearts,
     sessionOver,
+    showResult,
     score,
     saveSessionData,
   ])
@@ -316,13 +318,17 @@ export function useQuizState(questions: QuizQuestion[]) {
       return
     }
 
-    router.push("/")
-  }, [currentQuestion, quizSettings.questionCount, router])
+    // 80% 이상 진행했으면 결과 저장 후 결과 페이지로
+    saveSessionData("completed", score)
+    router.push("/quiz/session-complete")
+  }, [currentQuestion, quizSettings.questionCount, router, saveSessionData, score])
 
   const confirmExit = useCallback(() => {
     setShowExitConfirm(false)
-    router.push("/")
-  }, [router])
+    // 중간 종료해도 부분 결과 저장
+    saveSessionData("completed", score)
+    router.push("/quiz/session-complete")
+  }, [router, saveSessionData, score])
 
   const cancelExit = useCallback(() => {
     setShowExitConfirm(false)

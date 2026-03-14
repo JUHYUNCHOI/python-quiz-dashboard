@@ -9,8 +9,31 @@ import { GeneratedQuestionsReview } from "@/components/admin/generated-questions
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, Settings, Menu, X } from "lucide-react"
 import Link from "next/link"
+import { useAuth } from "@/contexts/auth-context"
 
 export default function AdminPage() {
+  const { isAuthenticated, profile, isLoading: authLoading } = useAuth()
+
+  // 인증 가드: 로그인 + teacher 역할 필요
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-[60px] animate-bounce">🦒</div>
+      </div>
+    )
+  }
+  if (!isAuthenticated || profile?.role !== "teacher") {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="text-6xl">🔒</div>
+          <h2 className="text-xl font-bold text-gray-800">관리자 전용 페이지</h2>
+          <p className="text-gray-500">선생님 계정으로 로그인이 필요합니다</p>
+          <Link href="/login" className="inline-block px-6 py-2 rounded-xl bg-orange-500 text-white font-bold">로그인</Link>
+        </div>
+      </div>
+    )
+  }
   const [uploadedFile, setUploadedFile] = useState<File | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisComplete, setAnalysisComplete] = useState(false)

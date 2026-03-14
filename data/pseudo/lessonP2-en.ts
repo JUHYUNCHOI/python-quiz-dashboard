@@ -350,6 +350,7 @@ Can you spot the errors? \u{1F914}`
           id: "ch3-q1",
           type: "quiz",
           title: "\u{1F41B} Error 1: Line 04",
+          code: `01 Exit \u2190 1\n02 WHILE Exit <> 0 DO\n03     INPUT Number\n04     IF Number < 0\n05         THEN\n06             Total \u2190 Total + Number\n07         ELSE\n08             IF Number = 0\n09                 THEN\n10                     Exit \u2190 1\n11             ENDIF\n12     ENDIF\n13 ENDWHILE\n14 OUTPUT "The total of your numbers is ", Number`,
           content: `What is the error on line 04: \`IF Number < 0\`?
 
 The intended behavior: If the number is **positive**, it should be added to Total.`,
@@ -372,6 +373,7 @@ Fix: \`IF Number > 0\`
           id: "ch3-q2",
           type: "quiz",
           title: "\u{1F41B} Error 2: Line 10",
+          code: `01 Exit \u2190 1\n02 WHILE Exit <> 0 DO\n03     INPUT Number\n04     IF Number < 0\n05         THEN\n06             Total \u2190 Total + Number\n07         ELSE\n08             IF Number = 0\n09                 THEN\n10                     Exit \u2190 1\n11             ENDIF\n12     ENDIF\n13 ENDWHILE\n14 OUTPUT "The total of your numbers is ", Number`,
           content: `What is the error on line 10: \`Exit \u2190 1\`?
 
 The intended behavior: When 0 is entered, the **loop should stop**.
@@ -395,6 +397,7 @@ Fix: \`Exit \u2190 0\`
           id: "ch3-q3",
           type: "quiz",
           title: "\u{1F41B} Error 3: Line 14",
+          code: `01 Exit \u2190 1\n02 WHILE Exit <> 0 DO\n03     INPUT Number\n04     IF Number < 0\n05         THEN\n06             Total \u2190 Total + Number\n07         ELSE\n08             IF Number = 0\n09                 THEN\n10                     Exit \u2190 1\n11             ENDIF\n12     ENDIF\n13 ENDWHILE\n14 OUTPUT "The total of your numbers is ", Number`,
           content: `What is the error on line 14: \`OUTPUT "The total of your numbers is ", Number\`?
 
 The intended behavior: Output the **total** at the end.`,
@@ -418,6 +421,7 @@ Fix: \`OUTPUT "The total of your numbers is ", Total\`
           id: "ch3-q4",
           type: "quiz",
           title: "\u{1F41B} Error 4: Missing Code",
+          code: `01 Exit \u2190 1\n02 WHILE Exit <> 0 DO\n03     INPUT Number\n04     IF Number < 0\n05         THEN\n06             Total \u2190 Total + Number\n07         ELSE\n08             IF Number = 0\n09                 THEN\n10                     Exit \u2190 1\n11             ENDIF\n12     ENDIF\n13 ENDWHILE\n14 OUTPUT "The total of your numbers is ", Number`,
           content: `The code above is **missing an important piece of code**.
 
 What needs to be done before using Total?`,

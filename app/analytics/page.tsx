@@ -1,6 +1,8 @@
 "use client"
 
 import { useState } from "react"
+import { useAuth } from "@/contexts/auth-context"
+import { useLanguage } from "@/contexts/language-context"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { OverviewCards } from "@/components/analytics/overview-cards"
@@ -15,6 +17,9 @@ import { Button } from "@/components/ui/button"
 
 export default function AnalyticsPage() {
   const [showSettings, setShowSettings] = useState(false)
+  const { profile } = useAuth()
+  const { t } = useLanguage()
+  const displayName = profile?.display_name || t("학습자", "Learner")
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
@@ -25,8 +30,8 @@ export default function AnalyticsPage() {
         {/* Page Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-slate-800">학습 분석 대시보드</h1>
-            <p className="mt-2 text-slate-600">지민님의 학습 패턴과 성장을 확인하세요</p>
+            <h1 className="text-3xl font-bold text-slate-800">{t("학습 분석 대시보드", "Learning Analytics")}</h1>
+            <p className="mt-2 text-slate-600">{t(`${displayName}님의 학습 패턴과 성장을 확인하세요`, `Check ${displayName}'s learning patterns and growth`)}</p>
           </div>
           <Button onClick={() => setShowSettings(!showSettings)} variant="outline" size="lg" className="gap-2">
             <Settings className="h-5 w-5" />

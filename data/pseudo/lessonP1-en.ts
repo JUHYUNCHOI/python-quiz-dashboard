@@ -211,6 +211,7 @@ Can you spot the errors? \u{1F914}`
           id: "ch2-q1",
           type: "quiz",
           title: "\u{1F41B} Find Error 1",
+          code: `01 DECLARE Count : STRING\n02 DECLARE Limit : INTEGER\n03 DECLARE Value : REAL\n04 DECLARE Total : REAL\n05 Total \u2190 0\n06 Limit \u2190 ROUND(RANDOM() * 9, 0) + 1\n07 IF Count \u2190 1 TO Limit\n08     OUTPUT "Enter a number"\n09     INPUT Count\n10     Total \u2190 Total * Value\n11 NEXT Count\n12 OUTPUT "Total is ", Total\n13 OUTPUT "Average is ", Total / Limit`,
           content: `What is wrong with line 01: \`DECLARE Count : STRING\`?`,
           options: [
             'Count is used as a loop counter, so it should be INTEGER',
@@ -229,6 +230,7 @@ Fix: \`DECLARE Count : INTEGER\``
           id: "ch2-q2",
           type: "quiz",
           title: "\u{1F41B} Find Error 2",
+          code: `01 DECLARE Count : STRING\n02 DECLARE Limit : INTEGER\n03 DECLARE Value : REAL\n04 DECLARE Total : REAL\n05 Total \u2190 0\n06 Limit \u2190 ROUND(RANDOM() * 9, 0) + 1\n07 IF Count \u2190 1 TO Limit\n08     OUTPUT "Enter a number"\n09     INPUT Count\n10     Total \u2190 Total * Value\n11 NEXT Count\n12 OUTPUT "Total is ", Total\n13 OUTPUT "Average is ", Total / Limit`,
           content: `What is wrong with line 07: \`IF Count \u2190 1 TO Limit\`?`,
           options: [
             'IF should be replaced with FOR',
@@ -247,6 +249,7 @@ Fix: \`FOR Count \u2190 1 TO Limit\``
           id: "ch2-q3",
           type: "quiz",
           title: "\u{1F41B} Find Error 3",
+          code: `01 DECLARE Count : STRING\n02 DECLARE Limit : INTEGER\n03 DECLARE Value : REAL\n04 DECLARE Total : REAL\n05 Total \u2190 0\n06 Limit \u2190 ROUND(RANDOM() * 9, 0) + 1\n07 IF Count \u2190 1 TO Limit\n08     OUTPUT "Enter a number"\n09     INPUT Count\n10     Total \u2190 Total * Value\n11 NEXT Count\n12 OUTPUT "Total is ", Total\n13 OUTPUT "Average is ", Total / Limit`,
           content: `What is wrong with line 09: \`INPUT Count\`?`,
           options: [
             'Count should be replaced with Value',
@@ -265,6 +268,7 @@ Fix: \`INPUT Value\``
           id: "ch2-q4",
           type: "quiz",
           title: "\u{1F41B} Find Error 4",
+          code: `01 DECLARE Count : STRING\n02 DECLARE Limit : INTEGER\n03 DECLARE Value : REAL\n04 DECLARE Total : REAL\n05 Total \u2190 0\n06 Limit \u2190 ROUND(RANDOM() * 9, 0) + 1\n07 IF Count \u2190 1 TO Limit\n08     OUTPUT "Enter a number"\n09     INPUT Count\n10     Total \u2190 Total * Value\n11 NEXT Count\n12 OUTPUT "Total is ", Total\n13 OUTPUT "Average is ", Total / Limit`,
           content: `What is wrong with line 10: \`Total \u2190 Total * Value\`?`,
           options: [
             '* should be replaced with + (since we are calculating a total)',

@@ -131,6 +131,8 @@ function SessionCompletePage() {
 
   // Session data from sessionStorage
   const [sessionData, setSessionData] = useState<SessionData | null>(null)
+  // useRef로 동기적 가드: React 배칭/StrictMode로 인한 이중 실행 방지
+  const xpCommittedRef = useRef(false)
   const [xpCommitted, setXpCommitted] = useState(false)
 
   // Animation phase (0–7)
@@ -161,14 +163,15 @@ function SessionCompletePage() {
 
   // Commit XP once + save quiz session to Supabase + save quiz history to localStorage
   useEffect(() => {
-    if (breakdown && !xpCommitted && sessionData) {
+    if (breakdown && !xpCommittedRef.current && sessionData) {
+      xpCommittedRef.current = true // 동기적 가드 — re-render 전에 즉시 차단
       setPrevLevel(gamification.level)
       gamification.commitSessionXp(breakdown)
       saveQuizSession(sessionData, breakdown.totalXp)
 
       // 퀴즈 이력 localStorage 저장
       const topicMap = new Map<string, { correct: number; total: number }>()
-      for (const qr of sessionData.questionDetails) {
+      for (const qr of (sessionData.questionDetails ?? [])) {
         const topics = qr.related_topics?.length ? qr.related_topics : ["일반"]
         for (const topic of topics) {
           const prev = topicMap.get(topic) || { correct: 0, total: 0 }
@@ -194,6 +197,9 @@ function SessionCompletePage() {
         topicResults,
       })
       logActivity("quiz")
+
+      // 커밋 완료 후 sessionStorage 클리어 — 브라우저 뒤로가기 시 이중 커밋 방지
+      try { sessionStorage.removeItem("quizSessionData") } catch {}
 
       setXpCommitted(true)
     }

@@ -212,7 +212,7 @@ export default function QuizSetupPage() {
             <div>
               <div className="text-3xl font-bold text-gray-800 mb-1">{t(`0/${questionCount} 완료`, `0/${questionCount} completed`)}</div>
               <p className="text-sm text-gray-600 mb-2">{t("오늘도 끝까지 해보자!", "Let's finish today!")}</p>
-              <p className="text-xs text-gray-500">{t("어제 15/20 완료 (75%)", "Yesterday 15/20 completed (75%)")}</p>
+              <p className="text-xs text-gray-500">{t(`연속 학습 ${gamification.dailyStreak}일째!`, `${gamification.dailyStreak}-day streak!`)}</p>
             </div>
             <div className="relative w-24 h-24">
               <svg className="transform -rotate-90 w-24 h-24">

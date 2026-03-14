@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useCallback } from "react"
+import { useEffect, useCallback, useMemo } from "react"
 import { X, Clock, ChevronLeft, ChevronRight, Check, AlertCircle, Coffee } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -9,7 +9,6 @@ import { CelebrationScreen } from "@/components/celebration-screen"
 import { ExplanationPanel } from "@/components/explanation-panel"
 import { cn } from "@/lib/utils"
 import { useQuizState, getComboTier } from "@/hooks/use-quiz-state"
-import type { QuizQuestion } from "@/hooks/use-quiz-state"
 import { useQuizTimer } from "@/hooks/use-quiz-timer"
 import { useFocusTracker } from "@/hooks/use-focus-tracker"
 import { useSwipe } from "@/hooks/use-swipe"
@@ -31,21 +30,20 @@ function shuffleArray<T>(arr: T[]): T[] {
   return a
 }
 
-function getQuestionsForCourse(): QuizQuestion[] {
-  try {
-    const raw = sessionStorage.getItem("quizSettings")
-    if (raw) {
-      const parsed = JSON.parse(raw)
-      if (parsed.course === "cpp") return shuffleArray(cppQuestions)
-    }
-  } catch {}
-  return shuffleArray(pythonQuestions)
-}
-
-// 세션마다 한 번만 셔플
-const shuffled = typeof window !== "undefined" ? getQuestionsForCourse() : pythonQuestions
-
 export default function QuizPage() {
+  // 코스에 맞는 문제 배열 — 컴포넌트 마운트 시 1회 셔플
+  const shuffled = useMemo(() => {
+    if (typeof window === "undefined") return pythonQuestions
+    try {
+      const raw = sessionStorage.getItem("quizSettings")
+      if (raw) {
+        const parsed = JSON.parse(raw)
+        if (parsed.course === "cpp") return shuffleArray(cppQuestions)
+      }
+    } catch {}
+    return shuffleArray(pythonQuestions)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
   const quiz = useQuizState(shuffled)
   const { play, isMuted, toggleMute } = useSoundEffect()
   const gamification = useGamification()
@@ -278,13 +276,19 @@ export default function QuizPage() {
           <Card className="bg-white p-8 max-w-md w-full text-center animate-bounce-in">
             <div className="text-7xl mb-4">💔</div>
             <h3 className="text-2xl font-bold text-gray-800 mb-2">{t("하트가 다 떨어졌어요!", "Out of hearts!")}</h3>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 mb-4">
               {t(
                 `${quiz.score}문제 맞혔어요. 다음엔 더 잘할 수 있을 거예요!`,
                 `You got ${quiz.score} right. You'll do better next time!`
               )}
             </p>
-            <div className="text-5xl mb-4">🦒💪</div>
+            <div className="text-5xl mb-6">🦒💪</div>
+            <button
+              onClick={quiz.confirmExit}
+              className="w-full py-3 rounded-xl bg-gradient-to-r from-orange-400 to-orange-500 text-white font-bold text-base shadow-lg hover:shadow-xl hover:scale-105 transition-all"
+            >
+              {t("결과 보기", "View Results")}
+            </button>
           </Card>
         </div>
       )}

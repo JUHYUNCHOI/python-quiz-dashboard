@@ -28,10 +28,11 @@ export default function AuthCallbackPage() {
         }
       }
 
-      // 로그인 전 페이지로 복귀
-      const returnTo = sessionStorage.getItem("loginReturnTo")
+      // 로그인 전 페이지로 복귀 (상대 경로만 허용 — open redirect 방지)
+      const raw = sessionStorage.getItem("loginReturnTo")
       sessionStorage.removeItem("loginReturnTo")
-      router.replace(returnTo || "/")
+      const returnTo = raw && raw.startsWith("/") && !raw.startsWith("//") ? raw : "/"
+      router.replace(returnTo)
     }
     handleCallback()
   }, [router])

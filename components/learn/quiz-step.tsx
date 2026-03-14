@@ -1,9 +1,10 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { HelpCircle, Check, X, Lightbulb, ArrowRight } from "lucide-react"
+import { HelpCircle, Check, X, Lightbulb, ArrowRight, ChevronDown, ChevronUp } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { LessonStep } from "./types"
+import { CodeBlock } from "@/components/ui/code-block"
 import { renderContent } from "./render-content"
 import { useLanguage } from "@/contexts/language-context"
 
@@ -22,6 +23,7 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
   const { t } = useLanguage()
   // 오답 시 "확인" 버튼을 1.5초 후에 보여줌 (설명을 읽게 유도)
   const [showAckButton, setShowAckButton] = useState(false)
+  const [showCode, setShowCode] = useState(false)
 
   useEffect(() => {
     if (showExplanation && selectedAnswer !== null && selectedAnswer !== step.answer) {
@@ -42,6 +44,22 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{step.title}</h1>
         {step.content && <div className="text-base md:text-lg text-gray-800">{renderContent(step.content)}</div>}
       </div>
+      {step.code && (
+        <div>
+          <button
+            onClick={() => setShowCode(!showCode)}
+            className="w-full py-2 px-3 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600"
+          >
+            {showCode ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            {showCode ? t("코드 숨기기", "Hide Code") : t("📋 코드 보기", "📋 View Code")}
+          </button>
+          {showCode && (
+            <div className="mt-2 rounded-2xl overflow-hidden border-2 border-gray-200">
+              <CodeBlock code={step.code} language="pseudo" />
+            </div>
+          )}
+        </div>
+      )}
       <div className="space-y-3">
         {step.options?.map((option, idx) => {
           const isSelected = selectedAnswer === idx
