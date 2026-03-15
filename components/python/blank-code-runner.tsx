@@ -244,7 +244,7 @@ export function BlankCodeRunner({
           const beforeText = line.slice(lastIndex, match.index)
           parts.push(
             <span key={`code-${lineIdx}-${lastIndex}`}>
-              {highlightPythonInline(beforeText)}
+              {highlightPythonInline(beforeText, true)}
             </span>
           )
         }
@@ -311,7 +311,7 @@ export function BlankCodeRunner({
         const afterText = line.slice(lastIndex)
         parts.push(
           <span key={`code-${lineIdx}-end`}>
-            {highlightPythonInline(afterText)}
+            {highlightPythonInline(afterText, true)}
           </span>
         )
       }
@@ -335,6 +335,14 @@ export function BlankCodeRunner({
       {task && (
         <div className="bg-indigo-50 rounded-lg md:rounded-xl p-2.5 md:p-3 border border-indigo-200">
           <p className="text-indigo-800 font-bold text-sm md:text-base">🎯 {task}</p>
+        </div>
+      )}
+
+      {/* 기대 출력 미리보기 — 빈칸에 뭘 넣어야 하는지 유추 가능 */}
+      {expectedOutput && (
+        <div className="bg-amber-50 rounded-lg md:rounded-xl p-2.5 md:p-3 border border-amber-200">
+          <p className="text-amber-700 font-bold text-xs md:text-sm mb-1">📋 이렇게 출력되도록 빈칸을 채우세요:</p>
+          <pre className="font-mono text-xs md:text-sm text-amber-900 whitespace-pre-wrap bg-amber-100/50 rounded-md p-2">{expectedOutput}</pre>
         </div>
       )}
 

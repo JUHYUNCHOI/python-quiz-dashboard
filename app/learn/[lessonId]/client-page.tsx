@@ -2,7 +2,7 @@
 
 import { useState, useEffect, use, useCallback } from "react"
 import { useRouter } from "next/navigation"
-import { ChevronRight, ChevronLeft, X, Lock, PartyPopper, RotateCcw } from "lucide-react"
+import { ChevronRight, ChevronLeft, X, Lock, PartyPopper, RotateCcw, LogIn } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
 import { LanguageToggle } from "@/components/language-toggle"
@@ -612,7 +612,18 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             {/* 0줄: 프로그래밍 언어 | UI 언어 */}
             <div className="flex items-center justify-between mb-1.5">
               <ProgrammingLanguageToggle current={currentProgrammingLang} />
-              <LanguageToggle />
+              <div className="flex items-center gap-2">
+                <LanguageToggle />
+                {!isAuthenticated && (
+                  <button
+                    onClick={() => router.push(`/login?returnTo=${encodeURIComponent(`/learn/${lessonId}`)}`)}
+                    className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 border border-orange-200 transition-colors"
+                  >
+                    <LogIn className="w-3 h-3" />
+                    {t("로그인", "Login")}
+                  </button>
+                )}
+              </div>
             </div>
             {/* 1줄: 나가기 | 프로그레스바 | 스텝 카운터 */}
             <div className="flex items-center gap-3 md:gap-4">
