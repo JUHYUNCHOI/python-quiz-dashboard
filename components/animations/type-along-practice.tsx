@@ -14,8 +14,8 @@ interface TypeAlongPracticeProps {
 
 // Python 문법 하이라이팅
 // Tailwind safelist (ensure these classes are not purged):
-// text-gray-500 text-gray-400 text-gray-600 text-amber-300 text-cyan-300
-// text-orange-300 text-pink-400 text-purple-300 text-green-300 font-semibold
+// text-gray-500 text-gray-400 text-gray-200 text-amber-300 text-cyan-300
+// text-orange-300 text-violet-400 text-purple-300 text-green-300 text-sky-300 text-gray-100 font-semibold
 function highlightPython(code: string): React.ReactNode[] {
   if (!code) return [<div key={0} className="text-gray-500">(코드 없음)</div>]
   const lines = code.split('\n')
@@ -41,9 +41,9 @@ function highlightPython(code: string): React.ReactNode[] {
         if (strMatch) {
           const full = strMatch[0]
           if (strMatch[1] === 'f') {
-            parts.push(<span key={key++} className="text-amber-300">{full}</span>)
+            parts.push(<span key={key++} className="text-green-300">{full}</span>)
           } else {
-            parts.push(<span key={key++} className="text-amber-300">{full}</span>)
+            parts.push(<span key={key++} className="text-green-300">{full}</span>)
           }
           remaining = remaining.slice(full.length)
           matched = true
@@ -62,7 +62,7 @@ function highlightPython(code: string): React.ReactNode[] {
           } else if (constants.includes(kw)) {
             parts.push(<span key={key++} className="text-orange-300">{kw}</span>)
           } else {
-            parts.push(<span key={key++} className="text-pink-400 font-semibold">{kw}</span>)
+            parts.push(<span key={key++} className="text-violet-400 font-semibold">{kw}</span>)
           }
           remaining = remaining.slice(kw.length)
           matched = true
@@ -83,7 +83,7 @@ function highlightPython(code: string): React.ReactNode[] {
       if (!matched) {
         const opMatch = remaining.match(/^([()\[\]{}:,=+\-*/<>!]+)/)
         if (opMatch) {
-          parts.push(<span key={key++} className="text-gray-400">{opMatch[1]}</span>)
+          parts.push(<span key={key++} className="text-sky-300">{opMatch[1]}</span>)
           remaining = remaining.slice(opMatch[1].length)
           matched = true
         }
@@ -91,14 +91,14 @@ function highlightPython(code: string): React.ReactNode[] {
 
       // 일반 텍스트 (한 글자씩)
       if (!matched) {
-        parts.push(<span key={key++} className="text-green-300">{remaining[0]}</span>)
+        parts.push(<span key={key++} className="text-gray-100">{remaining[0]}</span>)
         remaining = remaining.slice(1)
       }
     }
 
     return (
       <div key={lineIdx} className="leading-relaxed flex">
-        <span className="text-gray-600 select-none w-6 text-right mr-3 text-xs leading-relaxed flex-shrink-0">{lineIdx + 1}</span>
+        <span className="text-gray-500 select-none w-6 text-right mr-3 text-xs leading-relaxed flex-shrink-0">{lineIdx + 1}</span>
         <span>{parts.length > 0 ? parts : <span>&nbsp;</span>}</span>
       </div>
     )
