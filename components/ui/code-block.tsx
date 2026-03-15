@@ -8,7 +8,7 @@ interface CodeBlockProps {
   className?: string
 }
 
-// 토큰화 패턴
+// 토큰화 패턴 (밝은 배경용)
 const patterns: { regex: RegExp; className: string }[] = [
   { regex: /'[^']*'|"[^"]*"/g, className: 'text-emerald-700' },
   { regex: /\b\d+\.?\d*\b/g, className: 'text-orange-600' },
@@ -19,8 +19,20 @@ const patterns: { regex: RegExp; className: string }[] = [
   { regex: /[,:]/g, className: 'text-slate-500' },
 ]
 
+// 토큰화 패턴 (어두운 배경용 — BlankCodeRunner 등)
+const darkPatterns: { regex: RegExp; className: string }[] = [
+  { regex: /'[^']*'|"[^"]*"/g, className: 'text-emerald-300' },
+  { regex: /\b\d+\.?\d*\b/g, className: 'text-orange-300' },
+  { regex: /\b(print|type|if|else|elif|for|while|def|class|return|import|from|as|try|except|finally|with|True|False|None|and|or|not|in|is)\b/g, className: 'text-pink-400 font-semibold' },
+  { regex: /\b(len|range|str|int|float|bool|list|dict|set|tuple|input|open|abs|max|min|sum|round)\b/g, className: 'text-teal-300' },
+  { regex: /[+\-*/%=<>!&|^~]+/g, className: 'text-slate-400' },
+  { regex: /[()[\]{}]/g, className: 'text-slate-300' },
+  { regex: /[,:]/g, className: 'text-slate-400' },
+]
+
 // 한 줄을 토큰화 (div 없이 토큰 배열만 반환)
-function tokenizeLine(line: string, keyPrefix: string = ''): React.ReactNode[] {
+function tokenizeLine(line: string, keyPrefix: string = '', dark: boolean = false): React.ReactNode[] {
+  const activePatterns = dark ? darkPatterns : patterns
   const tokens: React.ReactNode[] = []
   let remaining = line
   let keyIndex = 0
@@ -51,7 +63,7 @@ function tokenizeLine(line: string, keyPrefix: string = ''): React.ReactNode[] {
     const inString = stringMatches.find(s => i >= s.start && i < s.end)
     if (inString) {
       tokens.push(
-        <span key={`${keyPrefix}${keyIndex++}`} className="text-emerald-700">
+        <span key={`${keyPrefix}${keyIndex++}`} className={activePatterns[0].className}>
           {inString.text}
         </span>
       )
@@ -60,7 +72,7 @@ function tokenizeLine(line: string, keyPrefix: string = ''): React.ReactNode[] {
     }
 
     let matched = false
-    for (const pattern of patterns.slice(1)) {
+    for (const pattern of activePatterns.slice(1)) {
       const testStr = remaining.slice(i)
       const keywordMatch = testStr.match(new RegExp(`^(?:${pattern.regex.source})`))
       if (keywordMatch) {
@@ -82,7 +94,7 @@ function tokenizeLine(line: string, keyPrefix: string = ''): React.ReactNode[] {
         if (inStr) break
 
         let shouldBreak = false
-        for (const pattern of patterns.slice(1)) {
+        for (const pattern of activePatterns.slice(1)) {
           const testStr = remaining.slice(i)
           if (testStr.match(new RegExp(`^(?:${pattern.regex.source})`))) {
             shouldBreak = true
@@ -96,7 +108,7 @@ function tokenizeLine(line: string, keyPrefix: string = ''): React.ReactNode[] {
       }
       if (text) {
         tokens.push(
-          <span key={`${keyPrefix}${keyIndex++}`} className="text-slate-800">
+          <span key={`${keyPrefix}${keyIndex++}`} className={dark ? "text-slate-200" : "text-slate-800"}>
             {text}
           </span>
         )
@@ -106,7 +118,7 @@ function tokenizeLine(line: string, keyPrefix: string = ''): React.ReactNode[] {
 
   if (comment) {
     tokens.push(
-      <span key={`${keyPrefix}${keyIndex++}`} className="text-green-600 italic">
+      <span key={`${keyPrefix}${keyIndex++}`} className={dark ? "text-green-400 italic" : "text-green-600 italic"}>
         {comment}
       </span>
     )
@@ -130,8 +142,8 @@ export function highlightPython(code: string): React.ReactNode[] {
 }
 
 // 인라인 하이라이팅 (div 없이 span만 — BlankCodeRunner용)
-export function highlightPythonInline(text: string): React.ReactNode[] {
-  return tokenizeLine(text)
+export function highlightPythonInline(text: string, dark: boolean = false): React.ReactNode[] {
+  return tokenizeLine(text, '', dark)
 }
 
 // ============================================
