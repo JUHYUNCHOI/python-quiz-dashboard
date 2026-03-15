@@ -614,7 +614,11 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
               <ProgrammingLanguageToggle current={currentProgrammingLang} />
               <div className="flex items-center gap-2">
                 <LanguageToggle />
-                {!isAuthenticated && (
+                {isAuthenticated ? (
+                  <span className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold text-green-700 bg-green-50 border border-green-200">
+                    ✅ {profile?.display_name || t("로그인됨", "Logged in")}
+                  </span>
+                ) : (
                   <button
                     onClick={() => router.push(`/login?returnTo=${encodeURIComponent(`/learn/${lessonId}`)}`)}
                     className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 border border-orange-200 transition-colors"
