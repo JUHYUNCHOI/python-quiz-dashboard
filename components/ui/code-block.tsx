@@ -19,15 +19,15 @@ const patterns: { regex: RegExp; className: string }[] = [
   { regex: /[,:]/g, className: 'text-slate-500' },
 ]
 
-// 토큰화 패턴 (어두운 배경용 — BlankCodeRunner 등)
+// 토큰화 패턴 (어두운 배경용 — VS Code 스타일 선명한 색상)
 const darkPatterns: { regex: RegExp; className: string }[] = [
-  { regex: /'[^']*'|"[^"]*"/g, className: 'text-emerald-300' },
-  { regex: /\b\d+\.?\d*\b/g, className: 'text-orange-300' },
-  { regex: /\b(print|type|if|else|elif|for|while|def|class|return|import|from|as|try|except|finally|with|True|False|None|and|or|not|in|is)\b/g, className: 'text-pink-400 font-semibold' },
-  { regex: /\b(len|range|str|int|float|bool|list|dict|set|tuple|input|open|abs|max|min|sum|round)\b/g, className: 'text-teal-300' },
-  { regex: /[+\-*/%=<>!&|^~]+/g, className: 'text-slate-400' },
-  { regex: /[()[\]{}]/g, className: 'text-slate-300' },
-  { regex: /[,:]/g, className: 'text-slate-400' },
+  { regex: /'[^']*'|"[^"]*"/g, className: 'text-green-300' },
+  { regex: /\b\d+\.?\d*\b/g, className: 'text-amber-300' },
+  { regex: /\b(print|type|if|else|elif|for|while|def|class|return|import|from|as|try|except|finally|with|True|False|None|and|or|not|in|is)\b/g, className: 'text-violet-400 font-semibold' },
+  { regex: /\b(len|range|str|int|float|bool|list|dict|set|tuple|input|open|abs|max|min|sum|round)\b/g, className: 'text-cyan-300' },
+  { regex: /[+\-*/%=<>!&|^~]+/g, className: 'text-sky-300' },
+  { regex: /[()[\]{}]/g, className: 'text-gray-200' },
+  { regex: /[,:]/g, className: 'text-gray-400' },
 ]
 
 // 한 줄을 토큰화 (div 없이 토큰 배열만 반환)
@@ -108,7 +108,7 @@ function tokenizeLine(line: string, keyPrefix: string = '', dark: boolean = fals
       }
       if (text) {
         tokens.push(
-          <span key={`${keyPrefix}${keyIndex++}`} className={dark ? "text-slate-200" : "text-slate-800"}>
+          <span key={`${keyPrefix}${keyIndex++}`} className={dark ? "text-gray-100" : "text-slate-800"}>
             {text}
           </span>
         )
@@ -128,11 +128,11 @@ function tokenizeLine(line: string, keyPrefix: string = '', dark: boolean = fals
 }
 
 // Python syntax highlighting (줄별 div 포함)
-export function highlightPython(code: string): React.ReactNode[] {
+export function highlightPython(code: string, dark: boolean = false): React.ReactNode[] {
   const lines = code.split('\n')
 
   return lines.map((line, lineIndex) => {
-    const tokens = tokenizeLine(line, `L${lineIndex}-`)
+    const tokens = tokenizeLine(line, `L${lineIndex}-`, dark)
     return (
       <div key={lineIndex} className="leading-relaxed">
         {tokens.length > 0 ? tokens : <span>&nbsp;</span>}

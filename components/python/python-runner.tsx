@@ -86,7 +86,7 @@ export function PythonRunner({
   const [hasEdited, setHasEdited] = useState(false)  // 유저가 수정했는지 추적
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const highlightRef = useRef<HTMLDivElement>(null)
-  const highlightedCode = useMemo(() => highlightPython(code), [code])
+  const highlightedCode = useMemo(() => highlightPython(code, true), [code])
 
   useEffect(() => {
     loadPyodideInstance()
