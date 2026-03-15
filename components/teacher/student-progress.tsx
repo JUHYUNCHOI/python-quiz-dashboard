@@ -2,7 +2,7 @@
 
 import { Check, Clock, Minus } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { pythonParts, cppParts, pseudoParts, type PartMeta } from "@/lib/curriculum-data"
+import { pythonParts, cppParts, pseudoParts, getLessonName, type PartMeta } from "@/lib/curriculum-data"
 
 interface LessonProgressRow {
   lesson_id: string
@@ -25,7 +25,7 @@ function getCompletedSet(progress: LessonProgressRow[]): Set<string> {
   return set
 }
 
-// 진행 중 (started but not completed) Set
+// 진행 중 Set
 function getInProgressSet(progress: LessonProgressRow[]): Set<string> {
   const completed = getCompletedSet(progress)
   const set = new Set<string>()
@@ -35,6 +35,33 @@ function getInProgressSet(progress: LessonProgressRow[]): Set<string> {
     }
   }
   return set
+}
+
+// 레슨별 최근 업데이트 날짜
+function getUpdatedMap(progress: LessonProgressRow[]): Map<string, string> {
+  const map = new Map<string, string>()
+  for (const lp of progress) {
+    const existing = map.get(lp.lesson_id)
+    if (!existing || lp.updated_at > existing) {
+      map.set(lp.lesson_id, lp.updated_at)
+    }
+  }
+  return map
+}
+
+function formatShortDate(dateStr: string): string {
+  if (!dateStr) return ""
+  try {
+    const d = new Date(dateStr)
+    const today = new Date()
+    if (d.toDateString() === today.toDateString()) return "오늘"
+    const yesterday = new Date(today)
+    yesterday.setDate(yesterday.getDate() - 1)
+    if (d.toDateString() === yesterday.toDateString()) return "어제"
+    return `${d.getMonth() + 1}/${d.getDate()}`
+  } catch {
+    return ""
+  }
 }
 
 function ProgressBar({ completed, total }: { completed: number; total: number }) {
@@ -55,33 +82,59 @@ function ProgressBar({ completed, total }: { completed: number; total: number })
   )
 }
 
-function LessonGrid({ part, completedSet, inProgressSet }: {
+function LessonList({ part, completedSet, inProgressSet, updatedMap }: {
   part: PartMeta
   completedSet: Set<string>
   inProgressSet: Set<string>
+  updatedMap: Map<string, string>
 }) {
   return (
-    <div className="flex flex-wrap gap-1">
+    <div className="space-y-0.5">
       {part.lessonIds.map(id => {
         const idStr = String(id)
         const done = completedSet.has(idStr)
         const inProgress = inProgressSet.has(idStr)
-        // Extract short label from lesson ID
-        const label = idStr.replace("cpp-", "C").replace("pseudo-", "P").replace("igcse-", "IG-")
+        const name = getLessonName(idStr)
+        const date = updatedMap.get(idStr)
+
         return (
           <div
             key={idStr}
-            title={`${idStr} ${done ? "완료" : inProgress ? "진행중" : "미시작"}`}
             className={cn(
-              "w-7 h-7 rounded text-[10px] font-bold flex items-center justify-center",
-              done ? "bg-green-500 text-white" :
-              inProgress ? "bg-amber-100 text-amber-700 border border-amber-300" :
-              "bg-gray-100 text-gray-400"
+              "flex items-center gap-2 px-2 py-1 rounded-lg text-xs",
+              done ? "bg-green-50" :
+              inProgress ? "bg-amber-50" :
+              "opacity-40"
             )}
           >
-            {done ? <Check className="w-3.5 h-3.5" /> :
-             inProgress ? <Clock className="w-3 h-3" /> :
-             <Minus className="w-3 h-3" />}
+            {/* 상태 아이콘 */}
+            <div className={cn(
+              "w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0",
+              done ? "bg-green-500 text-white" :
+              inProgress ? "bg-amber-400 text-white" :
+              "bg-gray-200 text-gray-400"
+            )}>
+              {done ? <Check className="w-3 h-3" /> :
+               inProgress ? <Clock className="w-3 h-3" /> :
+               <Minus className="w-2.5 h-2.5" />}
+            </div>
+
+            {/* 레슨 이름 */}
+            <span className={cn(
+              "flex-1 font-medium truncate",
+              done ? "text-green-700" :
+              inProgress ? "text-amber-700" :
+              "text-gray-400"
+            )}>
+              {name}
+            </span>
+
+            {/* 날짜 */}
+            {date && (
+              <span className="text-[10px] text-gray-400 flex-shrink-0">
+                {formatShortDate(date)}
+              </span>
+            )}
           </div>
         )
       })}
@@ -89,12 +142,13 @@ function LessonGrid({ part, completedSet, inProgressSet }: {
   )
 }
 
-function LanguageSection({ title, emoji, parts, completedSet, inProgressSet }: {
+function LanguageSection({ title, emoji, parts, completedSet, inProgressSet, updatedMap }: {
   title: string
   emoji: string
   parts: PartMeta[]
   completedSet: Set<string>
   inProgressSet: Set<string>
+  updatedMap: Map<string, string>
 }) {
   const totalLessons = parts.reduce((sum, p) => sum + p.lessonIds.length, 0)
   const completedLessons = parts.reduce((sum, p) =>
@@ -102,7 +156,7 @@ function LanguageSection({ title, emoji, parts, completedSet, inProgressSet }: {
   )
 
   if (completedLessons === 0 && !parts.some(p => p.lessonIds.some(id => inProgressSet.has(String(id))))) {
-    return null // 이 언어에 활동이 없으면 숨김
+    return null
   }
 
   return (
@@ -118,9 +172,9 @@ function LanguageSection({ title, emoji, parts, completedSet, inProgressSet }: {
         const partInProgress = part.lessonIds.some(id => inProgressSet.has(String(id)))
         if (partCompleted === 0 && !partInProgress) return null
         return (
-          <div key={part.id} className="ml-1 space-y-1">
+          <div key={part.id} className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-500">{part.title}</span>
+              <span className="text-xs font-bold text-gray-600">{part.title}</span>
               <span className={cn(
                 "text-[10px] font-bold px-1.5 py-0.5 rounded-full",
                 partCompleted === part.lessonIds.length
@@ -130,7 +184,12 @@ function LanguageSection({ title, emoji, parts, completedSet, inProgressSet }: {
                 {partCompleted}/{part.lessonIds.length}
               </span>
             </div>
-            <LessonGrid part={part} completedSet={completedSet} inProgressSet={inProgressSet} />
+            <LessonList
+              part={part}
+              completedSet={completedSet}
+              inProgressSet={inProgressSet}
+              updatedMap={updatedMap}
+            />
           </div>
         )
       })}
@@ -147,10 +206,15 @@ export function StudentProgress({ lessonProgress }: Props) {
 
   const completedSet = getCompletedSet(lessonProgress)
   const inProgressSet = getInProgressSet(lessonProgress)
+  const updatedMap = getUpdatedMap(lessonProgress)
 
-  // 전체 통계
   const totalCompleted = completedSet.size
   const totalInProgress = inProgressSet.size
+
+  // 가장 최근 활동 레슨
+  const sorted = [...lessonProgress].sort((a, b) => (b.updated_at || "").localeCompare(a.updated_at || ""))
+  const lastLesson = sorted[0]
+  const lastLessonName = lastLesson ? getLessonName(lastLesson.lesson_id) : null
 
   return (
     <div className="mt-3 space-y-4">
@@ -166,24 +230,38 @@ export function StudentProgress({ lessonProgress }: Props) {
         </div>
       </div>
 
+      {/* 최근 활동 레슨 */}
+      {lastLesson && lastLessonName && (
+        <div className="flex items-center gap-2 px-3 py-2 bg-indigo-50 rounded-lg border border-indigo-200">
+          <span className="text-xs">📖</span>
+          <span className="text-xs font-bold text-indigo-700">최근:</span>
+          <span className="text-xs text-indigo-600 truncate flex-1">{lastLessonName}</span>
+          <span className="text-[10px] text-indigo-400">{formatShortDate(lastLesson.updated_at)}</span>
+          {lastLesson.completed && <Check className="w-3 h-3 text-green-500" />}
+        </div>
+      )}
+
       {/* 언어별 섹션 */}
       <LanguageSection
         title="Python" emoji="🐍"
         parts={pythonParts}
         completedSet={completedSet}
         inProgressSet={inProgressSet}
+        updatedMap={updatedMap}
       />
       <LanguageSection
         title="C++" emoji="⚡"
         parts={cppParts}
         completedSet={completedSet}
         inProgressSet={inProgressSet}
+        updatedMap={updatedMap}
       />
       <LanguageSection
         title="Pseudocode" emoji="📋"
         parts={pseudoParts}
         completedSet={completedSet}
         inProgressSet={inProgressSet}
+        updatedMap={updatedMap}
       />
     </div>
   )

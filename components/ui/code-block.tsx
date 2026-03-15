@@ -270,7 +270,7 @@ export function CodeBlock({ code, language = 'python', className }: CodeBlockPro
       "bg-slate-50 border border-slate-200 rounded-xl p-4 md:p-5 overflow-x-auto",
       className
     )}>
-      <pre className="font-mono text-sm md:text-base" style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
+      <pre className="font-mono text-[13px] md:text-[15px] leading-[1.8]" style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
         {highlighted}
       </pre>
     </div>

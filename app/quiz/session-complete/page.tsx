@@ -10,6 +10,9 @@ import type { SessionData } from "@/hooks/use-quiz-state"
 import { useLanguage } from "@/contexts/language-context"
 import { addQuizHistoryEntry } from "@/lib/quiz-history"
 import { logActivity } from "@/lib/activity-log"
+import { analyzeQuizResult, analyzeStreak } from "@/lib/feedback-analyzer"
+import { QuizFeedbackCard } from "@/components/feedback/quiz-feedback-card"
+import { StreakWidget } from "@/components/feedback/streak-widget"
 
 // -------- CountUp animation --------
 function CountUp({ end, duration = 800, prefix = "", suffix = "", className = "" }: {
@@ -262,6 +265,16 @@ function SessionCompletePage() {
   const accuracy = Math.round((sessionData.correctAnswers / sessionData.totalQuestions) * 100)
   const isHeartsDepleted = endReason === "hearts"
 
+  // 맞춤 피드백 분석
+  const quizFeedback = analyzeQuizResult(
+    sessionData.correctAnswers,
+    sessionData.totalQuestions,
+    sessionData.maxCombo,
+    sessionData.questionDetails || [],
+    sessionData.difficulty,
+  )
+  const streakInfo = analyzeStreak(gamification.dailyStreak)
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 via-mint-50 to-lavender-50">
       <main className="container mx-auto px-4 py-8 max-w-lg">
@@ -370,6 +383,17 @@ function SessionCompletePage() {
           />
         </div>
 
+        {/* === Phase 7: Personalized Feedback === */}
+        {phase >= 7 && (
+          <div className="space-y-4 mb-6">
+            {/* 맞춤 피드백 카드 */}
+            <QuizFeedbackCard feedback={quizFeedback} t={t} visible={true} />
+
+            {/* 스트릭 위젯 */}
+            <StreakWidget streak={streakInfo} t={t} />
+          </div>
+        )}
+
         {/* === Phase 7: Action buttons === */}
         {phase >= 7 && (
           <div className="space-y-3 animate-fade-in-delay">
@@ -388,16 +412,6 @@ function SessionCompletePage() {
             >
               {t("그만하기", "Quit")}
             </button>
-
-            {/* Daily streak badge */}
-            {gamification.dailyStreak > 0 && (
-              <div className="flex items-center justify-center gap-2 pt-2">
-                <span className="text-2xl animate-flame">🔥</span>
-                <span className="text-sm font-bold text-orange-600">
-                  {t(`${gamification.dailyStreak}일 연속 학습 중!`, `${gamification.dailyStreak}-day streak!`)}
-                </span>
-              </div>
-            )}
           </div>
         )}
 

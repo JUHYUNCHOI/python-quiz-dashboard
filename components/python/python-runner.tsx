@@ -273,10 +273,10 @@ export function PythonRunner({
           <div
             ref={highlightRef}
             aria-hidden="true"
-            className="absolute inset-0 font-mono p-2 md:p-3 overflow-hidden pointer-events-none text-xs md:text-sm leading-relaxed whitespace-pre-wrap break-words"
+            className="absolute inset-0 font-mono p-3 md:p-4 overflow-hidden pointer-events-none text-[13px] md:text-[15px] leading-[1.8] whitespace-pre-wrap break-words"
             style={{ minHeight }}
           >
-            <pre className="font-mono text-xs md:text-sm leading-relaxed m-0 p-0 whitespace-pre-wrap break-words">
+            <pre className="font-mono text-[13px] md:text-[15px] leading-[1.8] m-0 p-0 whitespace-pre-wrap break-words">
               {highlightedCode}
             </pre>
           </div>
@@ -298,8 +298,8 @@ export function PythonRunner({
             disabled={readOnly || isLoading}
             placeholder="Python 코드 입력..."
             className={cn(
-              "w-full bg-transparent font-mono p-2 md:p-3 resize-none focus:outline-none placeholder:text-gray-600 relative z-10",
-              "text-xs md:text-sm leading-relaxed text-transparent caret-white selection:bg-blue-500/40"
+              "w-full bg-transparent font-mono p-3 md:p-4 resize-none focus:outline-none placeholder:text-gray-600 relative z-10",
+              "text-[13px] md:text-[15px] leading-[1.8] text-transparent caret-white selection:bg-blue-500/40"
             )}
             style={{ minHeight }}
             spellCheck={false}

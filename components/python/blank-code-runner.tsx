@@ -289,7 +289,7 @@ export function BlankCodeRunner({
             placeholder="___"
             className={cn(
               "inline-block font-mono text-center rounded-md border-2 mx-0.5 px-1 py-0 transition-all",
-              "text-xs md:text-sm leading-relaxed bg-gray-800 outline-none",
+              "text-[13px] md:text-[15px] leading-[1.8] bg-gray-800 outline-none",
               focusedBlank === currentBlankId
                 ? "border-amber-400 text-amber-300 ring-1 ring-amber-400/50"
                 : value
@@ -322,7 +322,7 @@ export function BlankCodeRunner({
       }
 
       return (
-        <div key={lineIdx} className="leading-relaxed whitespace-pre">
+        <div key={lineIdx} className="leading-[1.8] whitespace-pre">
           {parts}
         </div>
       )
@@ -364,7 +364,7 @@ export function BlankCodeRunner({
           </span>
         </div>
 
-        <div className="font-mono p-2 md:p-3 text-xs md:text-sm overflow-x-auto" style={{ minHeight }}>
+        <div className="font-mono p-3 md:p-4 text-[13px] md:text-[15px] overflow-x-auto" style={{ minHeight }}>
           {renderCodeWithBlanks()}
         </div>
       </div>
