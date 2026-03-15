@@ -97,8 +97,8 @@ function highlightPython(code: string): React.ReactNode[] {
     }
 
     return (
-      <div key={lineIdx} className="leading-relaxed flex">
-        <span className="text-gray-500 select-none w-6 text-right mr-3 text-xs leading-relaxed flex-shrink-0">{lineIdx + 1}</span>
+      <div key={lineIdx} className="leading-[1.8] flex">
+        <span className="text-gray-500 select-none w-6 text-right mr-3 text-xs leading-[1.8] flex-shrink-0">{lineIdx + 1}</span>
         <span>{parts.length > 0 ? parts : <span>&nbsp;</span>}</span>
       </div>
     )
@@ -275,7 +275,7 @@ export function TypeAlongPractice({
             "transition-all duration-300 overflow-hidden",
             showGuide ? "max-h-[300px] opacity-100 mt-3" : "max-h-0 opacity-0"
           )}>
-            <div className="bg-gray-800 rounded-xl p-3 font-mono text-xs md:text-sm">
+            <div className="bg-gray-800 rounded-xl p-3 font-mono text-[13px] md:text-[15px]">
               <div className="flex items-center gap-2 mb-2 text-gray-400 text-xs">
                 <span>📖 이렇게 써보세요</span>
               </div>
@@ -301,7 +301,7 @@ export function TypeAlongPractice({
               </button>
             </div>
             <div className={cn(
-              "bg-gray-800 rounded-xl p-4 font-mono text-sm transition-all",
+              "bg-gray-800 rounded-xl p-4 font-mono text-[13px] md:text-[15px] transition-all",
               showGuide ? "opacity-100" : "opacity-20 blur-sm"
             )}>
               <div className="whitespace-pre-wrap">{highlightPython(targetCode)}</div>
@@ -329,7 +329,7 @@ export function TypeAlongPractice({
                     : "border-gray-300 bg-gray-900"
             )}>
               {/* Ghost text: 남은 코드를 흐리게 표시 */}
-              <div className="absolute inset-0 p-4 font-mono text-sm pointer-events-none whitespace-pre-wrap" aria-hidden="true">
+              <div className="absolute inset-0 p-4 font-mono text-[14px] md:text-[15px] leading-[1.8] pointer-events-none whitespace-pre-wrap" aria-hidden="true">
                 <span className="invisible">{userCode}</span>
                 <span className="text-gray-600 opacity-40">{ghostText}</span>
               </div>
@@ -338,7 +338,7 @@ export function TypeAlongPractice({
                 value={userCode}
                 onChange={(e) => setUserCode(e.target.value)}
                 className={cn(
-                  "w-full p-4 font-mono text-base bg-transparent outline-none resize-none relative z-10",
+                  "w-full p-4 font-mono text-[14px] md:text-[15px] leading-[1.8] bg-transparent outline-none resize-none relative z-10",
                   isFullMatch ? "text-green-300" : "text-yellow-300"
                 )}
                 placeholder=""
@@ -373,7 +373,7 @@ export function TypeAlongPractice({
                   : "border-gray-300 bg-gray-900"
           )}>
             {/* Ghost text: 남은 코드를 흐리게 표시 */}
-            <div className="absolute inset-0 p-3 font-mono text-base pointer-events-none whitespace-pre-wrap" aria-hidden="true">
+            <div className="absolute inset-0 p-3 font-mono text-[14px] leading-[1.8] pointer-events-none whitespace-pre-wrap" aria-hidden="true">
               <span className="invisible">{userCode}</span>
               <span className="text-gray-600 opacity-40">{ghostText}</span>
             </div>
@@ -382,7 +382,7 @@ export function TypeAlongPractice({
               value={userCode}
               onChange={(e) => setUserCode(e.target.value)}
               className={cn(
-                "w-full p-3 font-mono text-base bg-transparent outline-none resize-none relative z-10",
+                "w-full p-3 font-mono text-[14px] leading-[1.8] bg-transparent outline-none resize-none relative z-10",
                 isFullMatch ? "text-green-300" : "text-yellow-300"
               )}
               placeholder=""

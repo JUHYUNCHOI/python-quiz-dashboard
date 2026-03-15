@@ -16,6 +16,9 @@ import { useGamification } from "@/hooks/use-gamification"
 import { logActivity } from "@/lib/activity-log"
 import { getCompletedLessons, pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
 import { useAuth } from "@/contexts/auth-context"
+import { analyzeLessonComplete, analyzeStreak } from "@/lib/feedback-analyzer"
+import { LessonFeedbackCard } from "@/components/feedback/lesson-feedback-card"
+import { StreakWidget } from "@/components/feedback/streak-widget"
 
 // 분리된 컴포넌트
 import { Confetti } from "@/components/learn/confetti"
@@ -517,6 +520,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   // 챕터 완료 화면
   if (showLessonComplete) {
     const totalPoints = score
+    const lessonFeedback = analyzeLessonComplete(lessonId)
+    const streakInfo = analyzeStreak(gamification.dailyStreak)
     return (
       <>
         {!isIGCSE && <Confetti show={showConfetti} />}
@@ -539,22 +544,33 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                 </div>
               </>
             )}
-            {!isAuthenticated && (
-              <div className="bg-green-50 border border-green-200 rounded-2xl p-4 mb-4 text-left">
-                <p className="text-sm font-bold text-green-800 mb-1">🦒 {t("로그인하면 진도가 안전하게 저장돼요!", "Login to safely save your progress!")}</p>
-                <p className="text-xs text-green-600 mb-3">{t("지금까지 푼 내용이 클라우드에 저장되고, 다른 기기에서도 이어할 수 있어요", "Your work will be saved to the cloud and synced across devices")}</p>
-                <button
-                  onClick={() => { router.push(`/login?returnTo=${encodeURIComponent(`/learn/${lessonId}`)}`) }}
-                  className="w-full py-2.5 bg-white border border-green-300 hover:bg-green-50 text-green-700 rounded-xl font-bold text-sm transition-colors flex items-center justify-center gap-2"
-                >
-                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M19.6 10.23c0-.68-.06-1.36-.17-2.02H10v3.83h5.38a4.6 4.6 0 0 1-2 3.02v2.5h3.24c1.89-1.74 2.98-4.3 2.98-7.33Z" fill="#4285F4"/><path d="M10 20c2.7 0 4.96-.9 6.62-2.44l-3.24-2.5c-.9.6-2.04.95-3.38.95-2.6 0-4.8-1.76-5.58-4.12H1.08v2.58A9.99 9.99 0 0 0 10 20Z" fill="#34A853"/><path d="M4.42 11.89A6.01 6.01 0 0 1 4.1 10c0-.66.11-1.3.32-1.89V5.53H1.08A9.99 9.99 0 0 0 0 10c0 1.61.39 3.14 1.08 4.47l3.34-2.58Z" fill="#FBBC05"/><path d="M10 3.96c1.47 0 2.78.5 3.82 1.5l2.86-2.86C14.96.99 12.7 0 10 0A9.99 9.99 0 0 0 1.08 5.53l3.34 2.58C5.2 5.72 7.4 3.96 10 3.96Z" fill="#EA4335"/></svg>
-                  {t("Google로 로그인", "Login with Google")}
-                </button>
-              </div>
-            )}
-            <button onClick={() => { localStorage.removeItem(progressKey); router.push(`/curriculum#lesson-${lessonId}`) }} className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-lg transition-colors">
-              {t("돌아가기", "Go Back")}
-            </button>
+
+            {/* 스트릭 위젯 */}
+            <div className="mb-4">
+              <StreakWidget streak={streakInfo} t={t} />
+            </div>
+
+            {/* 맞춤 피드백: 진도, 다음 레슨, 복습 추천 */}
+            <LessonFeedbackCard feedback={lessonFeedback} t={t} />
+
+            <div className="mt-4 space-y-3">
+              {!isAuthenticated && (
+                <div className="bg-green-50 border border-green-200 rounded-2xl p-4 text-left">
+                  <p className="text-sm font-bold text-green-800 mb-1">🦒 {t("로그인하면 진도가 안전하게 저장돼요!", "Login to safely save your progress!")}</p>
+                  <p className="text-xs text-green-600 mb-3">{t("지금까지 푼 내용이 클라우드에 저장되고, 다른 기기에서도 이어할 수 있어요", "Your work will be saved to the cloud and synced across devices")}</p>
+                  <button
+                    onClick={() => { router.push(`/login?returnTo=${encodeURIComponent(`/learn/${lessonId}`)}`) }}
+                    className="w-full py-2.5 bg-white border border-green-300 hover:bg-green-50 text-green-700 rounded-xl font-bold text-sm transition-colors flex items-center justify-center gap-2"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M19.6 10.23c0-.68-.06-1.36-.17-2.02H10v3.83h5.38a4.6 4.6 0 0 1-2 3.02v2.5h3.24c1.89-1.74 2.98-4.3 2.98-7.33Z" fill="#4285F4"/><path d="M10 20c2.7 0 4.96-.9 6.62-2.44l-3.24-2.5c-.9.6-2.04.95-3.38.95-2.6 0-4.8-1.76-5.58-4.12H1.08v2.58A9.99 9.99 0 0 0 10 20Z" fill="#34A853"/><path d="M4.42 11.89A6.01 6.01 0 0 1 4.1 10c0-.66.11-1.3.32-1.89V5.53H1.08A9.99 9.99 0 0 0 0 10c0 1.61.39 3.14 1.08 4.47l3.34-2.58Z" fill="#FBBC05"/><path d="M10 3.96c1.47 0 2.78.5 3.82 1.5l2.86-2.86C14.96.99 12.7 0 10 0A9.99 9.99 0 0 0 1.08 5.53l3.34 2.58C5.2 5.72 7.4 3.96 10 3.96Z" fill="#EA4335"/></svg>
+                    {t("Google로 로그인", "Login with Google")}
+                  </button>
+                </div>
+              )}
+              <button onClick={() => { localStorage.removeItem(progressKey); router.push(`/curriculum#lesson-${lessonId}`) }} className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-lg transition-colors">
+                {t("돌아가기", "Go Back")}
+              </button>
+            </div>
           </div>
         </div>
       </>
@@ -614,6 +630,9 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
               <ProgrammingLanguageToggle current={currentProgrammingLang} />
               <div className="flex items-center gap-2">
                 <LanguageToggle />
+                {gamification.dailyStreak > 0 && (
+                  <StreakWidget streak={analyzeStreak(gamification.dailyStreak)} t={t} compact />
+                )}
                 {isAuthenticated ? (
                   <span className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold text-green-700 bg-green-50 border border-green-200">
                     ✅ {profile?.display_name || t("로그인됨", "Logged in")}
@@ -721,40 +740,40 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
           </div>
         </div>
 
-        <div className="h-[70px] md:h-[90px] lg:h-[110px]" />
+        <div className="h-[60px] md:h-[70px] lg:h-[70px]" />
       </div>
 
       {/* 네비게이션 버튼 */}
       <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-lg z-20">
-        <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-2 md:py-3 lg:py-4">
-          <div className="flex gap-3 md:gap-4 lg:gap-6 justify-center">
+        <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-2 md:py-2.5">
+          <div className="flex gap-3 md:gap-4 justify-center">
             <button onClick={goPrev} disabled={currentStep === 0 && currentChapter === 0}
-              className={cn("flex flex-col items-center justify-center rounded-xl md:rounded-2xl font-bold transition-colors", "w-[60px] h-[50px] md:w-[80px] md:h-[70px] lg:w-[100px] lg:h-[80px]",
+              className={cn("flex items-center justify-center gap-1 rounded-xl font-bold transition-colors", "px-4 py-2.5 md:px-6 md:py-3",
                 isReviewMode ? "invisible" :
                 (currentStep > 0 || currentChapter > 0) ? "bg-gray-100 hover:bg-gray-200 text-gray-700" : "invisible")}>
-              <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" />
-              <span className="text-xs md:text-sm lg:text-base">{t("이전", "Prev")}</span>
+              <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
+              <span className="text-sm md:text-base">{t("이전", "Prev")}</span>
             </button>
             {(() => {
               const isLastStepOfLastChapter = currentChapter === lesson.chapters.length - 1 && currentStep === chapter.steps.length - 1 && !isReviewMode
               const isLastStepOfChapter = currentStep === chapter.steps.length - 1 && !isReviewMode
               return (
                 <button onClick={goNext} disabled={!canGoNext()}
-                  className={cn("flex flex-col items-center justify-center rounded-xl md:rounded-2xl font-bold transition-colors",
+                  className={cn("flex items-center justify-center gap-1 rounded-xl font-bold transition-colors",
                     isLastStepOfLastChapter && canGoNext()
-                      ? "w-[100px] h-[50px] md:w-[130px] md:h-[70px] lg:w-[160px] lg:h-[80px] bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white shadow-lg animate-pulse"
-                      : cn("w-[60px] h-[50px] md:w-[80px] md:h-[70px] lg:w-[100px] lg:h-[80px]",
+                      ? "px-6 py-2.5 md:px-8 md:py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white shadow-lg animate-pulse"
+                      : cn("px-4 py-2.5 md:px-6 md:py-3",
                           canGoNext() ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg" : "bg-gray-200 text-gray-400 cursor-not-allowed"))}>
                   {canGoNext() ? (
                     isLastStepOfLastChapter ? (
-                      <><span className="text-base md:text-lg lg:text-xl">🎉</span><span className="text-xs md:text-sm lg:text-base">{t("레슨 완료!", "Finish!")}</span></>
+                      <><span className="text-sm md:text-base">🎉</span><span className="text-sm md:text-base">{t("레슨 완료!", "Finish!")}</span></>
                     ) : isLastStepOfChapter ? (
-                      <><ChevronRight className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" /><span className="text-xs md:text-sm lg:text-base">{t("챕터 완료", "End Chapter")}</span></>
+                      <><ChevronRight className="w-4 h-4 md:w-5 md:h-5" /><span className="text-sm md:text-base">{t("챕터 완료", "End Chapter")}</span></>
                     ) : (
-                      <><ChevronRight className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" /><span className="text-xs md:text-sm lg:text-base">{t("다음", "Next")}</span></>
+                      <><ChevronRight className="w-4 h-4 md:w-5 md:h-5" /><span className="text-sm md:text-base">{t("다음", "Next")}</span></>
                     )
                   ) : (
-                    <><Lock className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" /><span className="text-[10px] md:text-xs lg:text-sm">{t("완료 필요", "Complete first")}</span></>
+                    <><Lock className="w-4 h-4 md:w-5 md:h-5" /><span className="text-xs md:text-sm">{t("완료 필요", "Complete first")}</span></>
                   )}
                 </button>
               )

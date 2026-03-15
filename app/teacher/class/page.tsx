@@ -7,14 +7,30 @@ import { createClient } from "@/lib/supabase/client"
 import type { Class, Profile, GamificationData } from "@/lib/supabase/types"
 import type { QuizSession } from "@/lib/supabase/types"
 import { Card } from "@/components/ui/card"
-import { ArrowLeft, Copy, Check, Users, Trophy, Flame, BookOpen, ChevronDown, ClipboardCheck } from "lucide-react"
+import { ArrowLeft, Copy, Check, Users, Trophy, Flame, BookOpen, ChevronDown, ClipboardCheck, ExternalLink } from "lucide-react"
 import Link from "next/link"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { StudentQuizReport } from "@/components/teacher/student-quiz-report"
 import { StudentConsistency } from "@/components/teacher/student-consistency"
 import { StudentProgress } from "@/components/teacher/student-progress"
+import { ClassOverview } from "@/components/teacher/class-overview"
+import { getLessonName } from "@/lib/curriculum-data"
 import { cn } from "@/lib/utils"
+
+/** 가장 최근에 활동한 레슨 찾기 */
+function getCurrentLesson(progress: LessonProgressRow[]): { name: string; completed: boolean; date: string } | null {
+  if (!progress || progress.length === 0) return null
+  const sorted = [...progress].sort((a, b) => (b.updated_at || "").localeCompare(a.updated_at || ""))
+  const recent = sorted[0]
+  if (!recent) return null
+  const emoji = recent.lesson_id.startsWith("cpp-") ? "⚡" : recent.lesson_id.startsWith("pseudo-") || recent.lesson_id.startsWith("igcse-") ? "📋" : "🐍"
+  return {
+    name: `${emoji} ${getLessonName(recent.lesson_id)}`,
+    completed: recent.completed,
+    date: recent.updated_at,
+  }
+}
 
 interface LessonProgressRow {
   lesson_id: string
@@ -59,6 +75,8 @@ export default function ClassDetailPage() {
   const [sortBy, setSortBy] = useState<"name" | "xp" | "lessons" | "streak">("name")
   const [expandedStudent, setExpandedStudent] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<"lessons" | "quizzes" | "consistency">("lessons")
+  const [parentLinkCopied, setParentLinkCopied] = useState<string | null>(null)
+  const [generatingLink, setGeneratingLink] = useState<string | null>(null)
 
   useEffect(() => {
     if (!user || !classId) return
@@ -202,6 +220,51 @@ export default function ClassDetailPage() {
     }
   }
 
+  const generateParentLink = async (student: StudentRow) => {
+    if (!user || !classId || generatingLink) return
+    setGeneratingLink(student.id)
+
+    try {
+      const supabase = createClient()
+      // 이미 존재하는 링크 확인
+      const { data: existing } = await supabase
+        .from("parent_report_links")
+        .select("token")
+        .eq("student_id", student.id)
+        .eq("class_id", classId)
+        .eq("is_active", true)
+        .single()
+
+      let linkToken: string
+
+      if (existing) {
+        linkToken = existing.token
+      } else {
+        // 새 토큰 생성
+        linkToken = Array.from(crypto.getRandomValues(new Uint8Array(16)))
+          .map(b => b.toString(36).padStart(2, "0"))
+          .join("")
+          .slice(0, 20)
+
+        await supabase.from("parent_report_links").insert({
+          token: linkToken,
+          student_id: student.id,
+          class_id: classId,
+          created_by: user.id,
+          student_name: student.displayName,
+        })
+      }
+
+      const url = `${window.location.origin}/parent?t=${linkToken}`
+      await navigator.clipboard.writeText(url)
+      setParentLinkCopied(student.id)
+      setTimeout(() => setParentLinkCopied(null), 3000)
+    } catch (e) {
+      console.error("Failed to generate parent link:", e)
+    }
+    setGeneratingLink(null)
+  }
+
   const displayName = teacherProfile?.display_name || "선생님"
 
   return (
@@ -240,6 +303,9 @@ export default function ClassDetailPage() {
                 </span>
               </div>
             </Card>
+
+            {/* 반 전체 요약 + 위험 알림 + 진도 비교 */}
+            <ClassOverview students={students} />
 
             {/* 정렬 버튼 */}
             <div className="flex gap-2 mb-4 flex-wrap">
@@ -291,7 +357,7 @@ export default function ClassDetailPage() {
                         )}
                       </div>
 
-                      {/* 이름 */}
+                      {/* 이름 + 현재 학습 중 */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-1.5">
                           <p className="font-bold text-gray-800 truncate">{student.displayName}</p>
@@ -299,7 +365,16 @@ export default function ClassDetailPage() {
                             <span className="text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full font-medium">오늘 활동</span>
                           )}
                         </div>
-                        <p className="text-xs text-gray-400">마지막 활동: {student.lastActive}</p>
+                        {(() => {
+                          const current = getCurrentLesson(student.lessonProgress)
+                          return current ? (
+                            <p className="text-xs text-indigo-500 font-medium truncate">
+                              📖 {current.name} {current.completed ? "✅" : "🔄"}
+                            </p>
+                          ) : (
+                            <p className="text-xs text-gray-400">아직 시작 전</p>
+                          )
+                        })()}
                       </div>
 
                       {/* 통계 */}
@@ -328,8 +403,8 @@ export default function ClassDetailPage() {
                     {/* 펼친 상세: 탭 UI */}
                     {expandedStudent === student.id && (
                       <div className="px-4 pb-4 border-t border-gray-100">
-                        {/* 탭 버튼 */}
-                        <div className="flex gap-1 mt-3 mb-1">
+                        {/* 탭 버튼 + 학부모 링크 */}
+                        <div className="flex gap-1 mt-3 mb-1 items-center">
                           {([
                             { key: "lessons" as const, label: "레슨 진도" },
                             { key: "quizzes" as const, label: "퀴즈 리포트" },
@@ -348,6 +423,26 @@ export default function ClassDetailPage() {
                               {label}
                             </button>
                           ))}
+
+                          {/* 학부모 링크 버튼 */}
+                          <button
+                            onClick={(e) => { e.stopPropagation(); generateParentLink(student) }}
+                            disabled={generatingLink === student.id}
+                            className={cn(
+                              "ml-auto px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1",
+                              parentLinkCopied === student.id
+                                ? "bg-green-100 text-green-700"
+                                : "bg-indigo-100 text-indigo-600 hover:bg-indigo-200"
+                            )}
+                          >
+                            {parentLinkCopied === student.id ? (
+                              <><Check className="w-3 h-3" /> 복사됨!</>
+                            ) : generatingLink === student.id ? (
+                              "생성 중..."
+                            ) : (
+                              <><ExternalLink className="w-3 h-3" /> 학부모 링크</>
+                            )}
+                          </button>
                         </div>
 
                         {/* 레슨 진도 탭 */}
