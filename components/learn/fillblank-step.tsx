@@ -253,7 +253,7 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
                 {isCorrect ? t("정답! 🎉", "Correct! 🎉") : t("틀렸어요!", "Wrong!")}
               </span>
             </div>
-            <p className={cn("text-sm", isCorrect ? "text-green-800" : "text-amber-800")}>
+            <p className={cn("text-sm whitespace-pre-line", isCorrect ? "text-green-800" : "text-amber-800")}>
               {step.explanation}
             </p>
 
