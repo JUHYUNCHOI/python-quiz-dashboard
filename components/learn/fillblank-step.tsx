@@ -282,9 +282,10 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
                       setIsCorrect(false)
                       setShowAckButton(false)
                     }}
-                    className="mt-2 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-400 hover:to-indigo-500 shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 animate-fade-in"
+                    className="mt-2 flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg transition-colors animate-fade-in"
                   >
-                    {t("다시 풀기", "Try Again")} <RotateCcw className="w-5 h-5" />
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    {t("다시 풀기", "Try Again")}
                   </button>
                 ) : (
                   <>

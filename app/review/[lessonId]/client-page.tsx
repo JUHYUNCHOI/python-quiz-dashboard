@@ -408,7 +408,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
       </div>
 
       {/* 메인 콘텐츠 */}
-      <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6 pb-24">
+      <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6 pb-40">
         <div className="bg-white rounded-2xl p-6 md:p-10 shadow-sm">
           {currentReview && (
             <StepRenderer
