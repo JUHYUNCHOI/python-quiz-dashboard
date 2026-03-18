@@ -30,11 +30,13 @@ function extractReviewSteps(lesson: LessonData): { step: LessonStep; chapterId: 
   return steps
 }
 
-// 해당 챕터의 explain 스텝들을 가져오기
-function getChapterExplains(lesson: LessonData, chapterId: string): LessonStep[] {
+// 해당 챕터에서 특정 스텝 직전에 나오는 explain 스텝들을 가져오기 (최대 2개)
+function getChapterExplains(lesson: LessonData, chapterId: string, stepId?: string): LessonStep[] {
   const chapter = lesson.chapters.find(ch => ch.id === chapterId)
   if (!chapter) return []
-  return chapter.steps.filter(s => s.type === "explain")
+  const stepIdx = stepId ? chapter.steps.findIndex(s => s.id === stepId) : -1
+  const stepsToScan = stepIdx >= 0 ? chapter.steps.slice(0, stepIdx) : chapter.steps
+  return stepsToScan.filter(s => s.type === "explain").slice(-2)
 }
 
 // ============================================================
@@ -427,7 +429,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                     : t("📖 잘 모르겠으면 수업 내용 보기", "📖 Hint: View lesson content")}
               </button>
               {showLesson && (() => {
-                const explains = getChapterExplains(lesson, currentReview.chapterId)
+                const explains = getChapterExplains(lesson, currentReview.chapterId, currentReview.step.id)
                 return (
                   <div className="mt-2 p-3 bg-amber-50 rounded-xl border border-amber-200 max-h-52 overflow-y-auto">
                     <p className="text-amber-700 font-bold text-xs mb-2">
