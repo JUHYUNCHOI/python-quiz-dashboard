@@ -17,7 +17,7 @@ export function CodeDisplay({
   code,
   language: languageProp,
   maxHeight = 500,
-  showLineNumbers = true,
+  showLineNumbers: showLineNumbersProp,
   className,
 }: CodeDisplayProps) {
   // 언어 자동 감지: #include, cout, cin → C++, def/print → Python
@@ -31,7 +31,9 @@ export function CodeDisplay({
 
   const [copied, setCopied] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
-  const [wrapLines, setWrapLines] = useState(typeof window !== 'undefined' && window.innerWidth < 640)
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640
+  const showLineNumbers = showLineNumbersProp ?? !isMobile
+  const [wrapLines, setWrapLines] = useState(isMobile)
   const [theme, setTheme] = useState<"dark" | "light">("dark")
   const [fontSize, setFontSize] = useState<"small" | "medium" | "large" | "xlarge">("medium")
   const [highContrast, setHighContrast] = useState(false)
