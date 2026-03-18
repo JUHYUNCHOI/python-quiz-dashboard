@@ -51,10 +51,10 @@ export default function DashboardPage() {
 
         {/* 빠른 액션 */}
         <div className="grid grid-cols-2 gap-3">
-          <Link href="/curriculum">
-            <Card className="p-4 border-2 border-green-200 hover:border-green-400 transition-all cursor-pointer hover:shadow-md group">
+          <Link href="/curriculum" className="block active:scale-[0.97] transition-transform">
+            <Card className="p-5 border-2 border-green-200 hover:border-green-400 active:border-green-500 active:bg-green-50 transition-all hover:shadow-md min-h-[120px]">
               <div className="flex flex-col items-center gap-2 text-center">
-                <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
                   <BookOpen className="w-6 h-6 text-green-600" />
                 </div>
                 <span className="font-bold text-sm text-gray-700">{t("수업하기", "Lessons")}</span>
@@ -62,10 +62,10 @@ export default function DashboardPage() {
               </div>
             </Card>
           </Link>
-          <Link href="/quiz/setup">
-            <Card className="p-4 border-2 border-purple-200 hover:border-purple-400 transition-all cursor-pointer hover:shadow-md group">
+          <Link href="/quiz/setup" className="block active:scale-[0.97] transition-transform">
+            <Card className="p-5 border-2 border-purple-200 hover:border-purple-400 active:border-purple-500 active:bg-purple-50 transition-all hover:shadow-md min-h-[120px]">
               <div className="flex flex-col items-center gap-2 text-center">
-                <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
                   <Brain className="w-6 h-6 text-purple-600" />
                 </div>
                 <span className="font-bold text-sm text-gray-700">{t("퀴즈 풀기", "Take Quiz")}</span>

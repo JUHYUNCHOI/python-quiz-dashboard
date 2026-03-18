@@ -8,6 +8,19 @@ input, textarea, select {
   font-size: 16px;
 }
 
+/* 모바일 터치 최적화 */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+a, button {
+  touch-action: manipulation;
+}
+
+/* iPhone 하단 안전 영역 */
+.safe-area-inset-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
 /* 코드 폰트에서 리가처 비활성화 (!=→≠, <=→≤, >=→≥ 방지) */
 code, pre, .font-mono, [class*="font-mono"] {
   font-variant-ligatures: none;
