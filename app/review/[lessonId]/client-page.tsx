@@ -247,17 +247,18 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
     return () => window.removeEventListener("keydown", handleKey)
   }, [router])
 
+  // 결과 화면 표시 시 완료 저장
+  useEffect(() => {
+    if (showResults) {
+      const pct = totalAttempted > 0 ? Math.round((correctCount / totalAttempted) * 100) : 0
+      if (pct >= 70) markQuizComplete(lessonId)
+    }
+  }, [showResults, totalAttempted, correctCount, lessonId])
+
   // 결과 화면
   if (showResults) {
     const percentage = totalAttempted > 0 ? Math.round((correctCount / totalAttempted) * 100) : 0
     const isPerfect = wrongSteps.length === 0
-
-    // 완료 시 저장
-    useEffect(() => {
-      if (percentage >= 70) {
-        markQuizComplete(lessonId)
-      }
-    }, [])
 
     return (
       <div className="min-h-screen bg-gray-50">
