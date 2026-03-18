@@ -347,7 +347,7 @@ export default function QuizPage() {
 
               {/* Code Block */}
               <div className="mb-6">
-                <CodeDisplay key={question.id} code={question.code} />
+                <CodeDisplay key={question.id} code={question.code} showLineNumbers={false} />
               </div>
 
               {/* Options */}

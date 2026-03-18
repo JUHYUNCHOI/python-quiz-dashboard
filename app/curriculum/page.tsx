@@ -704,7 +704,7 @@ export default function CurriculumPage() {
                                         </span>
                                         {lesson.hasQuiz && (
                                           <span className="px-1.5 py-0.5 bg-orange-100 text-orange-600 rounded text-xs font-bold">
-                                            {t("퀴즈", "Quiz")}
+                                            {t("복습", "Review")}
                                           </span>
                                         )}
                                         {lesson.isProject && (
@@ -744,7 +744,7 @@ export default function CurriculumPage() {
                                               : "border-black bg-orange-400 text-white hover:bg-orange-500 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                                           }`}
                                         >
-                                          {isQuizDone ? t("✅ 퀴즈완료", "✅ Quiz") : t("🎮 퀴즈", "🎮 Quiz")}
+                                          {isQuizDone ? t("✅ 복습완료", "✅ Review") : t("📝 복습", "📝 Review")}
                                         </Link>
                                       )}
                                     </>
