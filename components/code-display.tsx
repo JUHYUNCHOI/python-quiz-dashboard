@@ -15,14 +15,23 @@ interface CodeDisplayProps {
 
 export function CodeDisplay({
   code,
-  language = "Python",
+  language: languageProp,
   maxHeight = 500,
   showLineNumbers = true,
   className,
 }: CodeDisplayProps) {
+  // 언어 자동 감지: #include, cout, cin → C++, def/print → Python
+  const language = languageProp || (
+    code.includes('#include') || code.includes('cout') || code.includes('int main')
+      ? 'C++'
+      : code.includes('def ') || code.includes('print(')
+        ? 'Python'
+        : 'Code'
+  )
+
   const [copied, setCopied] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
-  const [wrapLines, setWrapLines] = useState(false)
+  const [wrapLines, setWrapLines] = useState(typeof window !== 'undefined' && window.innerWidth < 640)
   const [theme, setTheme] = useState<"dark" | "light">("dark")
   const [fontSize, setFontSize] = useState<"small" | "medium" | "large" | "xlarge">("medium")
   const [highContrast, setHighContrast] = useState(false)
@@ -56,8 +65,14 @@ export function CodeDisplay({
       number: isDark ? "text-[#748FFC]" : "text-[#0984E3]",
     }
 
-    const keywords = new Set(["def","class","if","elif","else","for","while","return","import","from","as","try","except","finally","with","lambda","yield","async","await","pass","break","continue","raise","assert","del","global","nonlocal","in","is","not","and","or","True","False","None"])
-    const builtins = new Set(["print","len","range","str","int","float","list","dict","set","tuple","type","isinstance","input","open","enumerate","zip","map","filter","sum","max","min","abs","round","sorted","reversed"])
+    const isCpp = language === 'C++'
+    const keywords = isCpp
+      ? new Set(["if","else","for","while","do","switch","case","break","continue","return","class","struct","public","private","protected","virtual","override","const","static","void","int","double","float","char","bool","long","short","unsigned","signed","auto","string","true","false","nullptr","new","delete","namespace","using","template","typename","typedef","enum","sizeof","this","throw","try","catch","include","iostream"])
+      : new Set(["def","class","if","elif","else","for","while","return","import","from","as","try","except","finally","with","lambda","yield","async","await","pass","break","continue","raise","assert","del","global","nonlocal","in","is","not","and","or","True","False","None"])
+    const builtins = isCpp
+      ? new Set(["cout","cin","endl","cerr","vector","map","set","pair","array","getline","push_back","size","begin","end","sort","find","swap","to_string","stoi","stod","printf","scanf","main","istringstream","ostringstream","stringstream"])
+      : new Set(["print","len","range","str","int","float","list","dict","set","tuple","type","isinstance","input","open","enumerate","zip","map","filter","sum","max","min","abs","round","sorted","reversed"])
+    const commentChar = isCpp ? '//' : '#'
 
     // Single-pass tokenizer to avoid regex cascade corruption
     const tokens: string[] = []
@@ -66,8 +81,13 @@ export function CodeDisplay({
 
     while (i < line.length) {
       // Comment
-      if (line[i] === "#") {
+      if ((isCpp && line[i] === '/' && line[i+1] === '/') || (!isCpp && line[i] === '#')) {
         tokens.push(`<span class="${colors.comment}">${esc(line.slice(i))}</span>`)
+        break
+      }
+      // C++ preprocessor
+      if (isCpp && line[i] === '#') {
+        tokens.push(`<span class="${colors.keyword}">${esc(line.slice(i))}</span>`)
         break
       }
       // String
