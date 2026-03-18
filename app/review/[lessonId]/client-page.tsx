@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/auth-context"
 import { useSoundEffect } from "@/hooks/use-sound-effect"
 import { markQuizComplete } from "@/lib/mark-lesson-complete"
 import { StepRenderer } from "@/components/learn/step-renderer"
+import { renderContent } from "@/components/learn/render-content"
 import { lessonsData, bilingualLessons } from "@/components/learn/lesson-registry"
 import type { LessonStep, LessonData } from "@/components/learn/types"
 
@@ -435,10 +436,8 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                     {explains.length > 0 ? (
                       <>
                         {explains.slice(0, 2).map((explain, i) => (
-                          <div key={i} className={cn("text-xs", i > 0 && "mt-2 pt-2 border-t border-amber-100")}>
-                            {explain.content && (
-                              <p className="text-gray-700 leading-relaxed">{explain.content.split('\n').slice(0, 6).join('\n')}</p>
-                            )}
+                          <div key={i} className={cn("text-xs [&_h1]:text-sm [&_h2]:text-xs [&_p]:text-xs [&_pre]:text-xs", i > 0 && "mt-2 pt-2 border-t border-amber-100")}>
+                            {explain.content && renderContent(explain.content)}
                             {explain.code && (
                               <pre className="mt-1.5 bg-gray-900 text-green-400 p-2 rounded text-xs overflow-x-auto font-mono">{explain.code}</pre>
                             )}
