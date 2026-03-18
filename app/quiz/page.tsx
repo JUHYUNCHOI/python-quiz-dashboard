@@ -112,9 +112,9 @@ export default function QuizPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-mint-50">
-      {/* Top Bar */}
-      <div className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-10">
-        <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-3 md:py-4">
+      {/* Top Bar — 수업 페이지와 동일한 스타일 */}
+      <div className="border-b border-orange-100 bg-white/95 backdrop-blur-lg sticky top-0 z-10 safe-area-inset-bottom">
+        <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 md:py-3">
           <div className="flex items-center justify-between gap-2 md:gap-4">
             {/* Left: Exit + Progress */}
             <div className="flex items-center gap-2 md:gap-3 flex-1">
@@ -132,13 +132,13 @@ export default function QuizPage() {
                   </span>
                   <span className="hidden sm:inline">{Math.round(quiz.progress)}% {t("완료", "Done")}</span>
                 </div>
-                <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
+                <div className="h-2.5 md:h-3 w-full overflow-hidden rounded-full bg-gray-200">
                   <div
                     className={cn(
                       "h-full transition-all duration-500 rounded-full",
                       quiz.combo >= 5
-                        ? "bg-gradient-to-r from-orange-400 via-red-500 to-orange-400 animate-pulse"
-                        : "bg-gradient-to-r from-orange-400 to-orange-500",
+                        ? "bg-gradient-to-r from-indigo-400 via-purple-500 to-indigo-400 animate-pulse"
+                        : "bg-indigo-500",
                     )}
                     style={{ width: `${quiz.progress}%` }}
                   />
@@ -302,22 +302,22 @@ export default function QuizPage() {
         </div>
       )}
 
-      {/* Main Content */}
+      {/* Main Content — 수업 페이지와 동일한 레이아웃 */}
       <main
-        className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8"
+        className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6"
         onTouchStart={swipeHandlers.onTouchStart}
         onTouchMove={swipeHandlers.onTouchMove}
         onTouchEnd={swipeHandlers.onTouchEnd}
       >
         <div className="max-w-4xl mx-auto">
-          <Card
+          <div
             className={cn(
-              "overflow-hidden border-2 transition-all duration-500",
-              quiz.showResult && !quiz.isCorrect && "animate-shake border-red-300",
+              "bg-white rounded-2xl p-6 md:p-10 shadow-sm transition-all duration-300",
+              quiz.showResult && !quiz.isCorrect && "animate-shake ring-2 ring-red-300",
               quiz.combo >= 5 && !quiz.showResult && comboTier.glowClass,
             )}
           >
-            <div className="p-4 md:p-6 lg:p-8">
+            <div>
               {/* Question Header */}
               <div className="mb-4 md:mb-6 flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -414,10 +414,10 @@ export default function QuizPage() {
                 })}
               </div>
             </div>
-          </Card>
+          </div>
 
-          {/* Bottom Actions */}
-          <div className="mt-6 flex items-center justify-between gap-4">
+          {/* Bottom Actions — 수업 하단 네비와 동일 스타일 */}
+          <div className="mt-4 flex items-center justify-between gap-4">
             <div className="flex items-center gap-2">
               {quiz.currentQuestion > 0 && (
                 <button
@@ -436,14 +436,19 @@ export default function QuizPage() {
               </button>
             </div>
 
-            <Button
+            <button
               onClick={quiz.handleNext}
               disabled={quiz.selectedAnswer === null}
-              className="min-w-[120px] md:min-w-32 rounded-full bg-gradient-to-r from-orange-400 to-orange-500 px-6 md:px-8 py-5 md:py-6 text-base md:text-lg font-semibold text-white shadow-lg transition-all hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:hover:scale-100 min-h-[44px]"
+              className={cn(
+                "flex items-center justify-center gap-1 rounded-xl font-bold min-h-[44px] px-5 py-3 md:px-6 md:py-3 transition-colors",
+                quiz.selectedAnswer !== null
+                  ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg"
+                  : "bg-gray-200 text-gray-400 cursor-not-allowed"
+              )}
             >
               {t("다음", "Next")}
-              <ChevronRight className="ml-1 h-4 w-4 md:h-5 md:w-5" />
-            </Button>
+              <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
+            </button>
           </div>
 
           <p className="mt-4 text-center text-xs text-gray-400 md:hidden">
