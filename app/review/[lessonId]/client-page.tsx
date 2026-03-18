@@ -55,21 +55,43 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   const lesson = isBilingual ? bilingualLessons[lessonId][lang] : lessonsData[lessonId]
   const reviewSteps = lesson ? extractReviewSteps(lesson) : []
 
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [score, setScore] = useState(0)
-  const [totalAttempted, setTotalAttempted] = useState(0)
-  const [correctCount, setCorrectCount] = useState(0)
-  const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set())
+  // localStorage에서 진도 복원
+  const storageKey = `review-progress-${lessonId}`
+  const loadSaved = () => {
+    try {
+      const saved = localStorage.getItem(storageKey)
+      if (saved) return JSON.parse(saved)
+    } catch {}
+    return null
+  }
+  const saved = loadSaved()
+
+  const [currentIndex, setCurrentIndex] = useState<number>(saved?.currentIndex ?? 0)
+  const [score, setScore] = useState<number>(saved?.score ?? 0)
+  const [totalAttempted, setTotalAttempted] = useState<number>(saved?.totalAttempted ?? 0)
+  const [correctCount, setCorrectCount] = useState<number>(saved?.correctCount ?? 0)
+  const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set(saved?.completedSteps ?? []))
   const [showResults, setShowResults] = useState(false)
-  const [wrongSteps, setWrongSteps] = useState<number[]>([])
+  const [wrongSteps, setWrongSteps] = useState<number[]>(saved?.wrongSteps ?? [])
 
   // StepRenderer 관련 상태
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
   const [showExplanation, setShowExplanation] = useState(false)
   const [quizAttempts, setQuizAttempts] = useState(0)
   const [hintLevel, setHintLevel] = useState(0)
-  const [isCurrentStepCompleted, setIsCurrentStepCompleted] = useState(false)
+  const [isCurrentStepCompleted, setIsCurrentStepCompleted] = useState(saved?.completedSteps?.includes(saved?.currentIndex ?? 0) ?? false)
   const [showLesson, setShowLesson] = useState(false)
+
+  // 진도 저장
+  useEffect(() => {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify({
+        currentIndex, score, totalAttempted, correctCount,
+        completedSteps: Array.from(completedSteps),
+        wrongSteps,
+      }))
+    } catch {}
+  }, [currentIndex, score, totalAttempted, correctCount, completedSteps, wrongSteps, storageKey])
 
   // 현재 스텝
   const currentReview = reviewSteps[currentIndex]
@@ -269,6 +291,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                   setCorrectCount(0)
                   setCompletedSteps(new Set())
                   setWrongSteps([])
+                  try { localStorage.removeItem(storageKey) } catch {}
                   goToStep(0)
                 }}
                 className="flex items-center justify-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold"
