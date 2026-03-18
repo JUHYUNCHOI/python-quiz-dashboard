@@ -410,6 +410,61 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
       {/* 메인 콘텐츠 */}
       <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6 pb-40">
         <div className="bg-white rounded-2xl p-6 md:p-10 shadow-sm">
+
+          {/* 수업 내용 보기 — 문제 위에 배치 */}
+          {(!isCurrentStepCompleted || wrongSteps.includes(currentIndex)) && currentReview && (
+            <div className="mb-5">
+              <button
+                onClick={() => setShowLesson(!showLesson)}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-50 hover:bg-orange-100 rounded-lg border border-orange-200 text-orange-600 font-bold text-xs transition-colors"
+              >
+                <BookOpen className="w-3.5 h-3.5" />
+                {showLesson
+                  ? t("수업 내용 닫기 ▲", "Hide lesson ▲")
+                  : isCurrentStepCompleted
+                    ? t("📖 틀린 부분 수업 내용 보기", "📖 View lesson content")
+                    : t("📖 잘 모르겠으면 수업 내용 보기", "📖 Hint: View lesson content")}
+              </button>
+              {showLesson && (() => {
+                const explains = getChapterExplains(lesson, currentReview.chapterId)
+                return (
+                  <div className="mt-2 p-3 bg-amber-50 rounded-xl border border-amber-200 max-h-52 overflow-y-auto">
+                    <p className="text-amber-700 font-bold text-xs mb-2">
+                      {currentReview.chapterEmoji} {currentReview.chapterTitle}
+                    </p>
+                    {explains.length > 0 ? (
+                      <>
+                        {explains.slice(0, 2).map((explain, i) => (
+                          <div key={i} className={cn("text-xs", i > 0 && "mt-2 pt-2 border-t border-amber-100")}>
+                            {explain.content && (
+                              <p className="text-gray-700 leading-relaxed">{explain.content.split('\n').slice(0, 6).join('\n')}</p>
+                            )}
+                            {explain.code && (
+                              <pre className="mt-1.5 bg-gray-900 text-green-400 p-2 rounded text-xs overflow-x-auto font-mono">{explain.code}</pre>
+                            )}
+                          </div>
+                        ))}
+                        <button
+                          onClick={() => router.push(`/learn/${lessonId}`)}
+                          className="mt-2 text-amber-600 font-bold text-xs hover:underline"
+                        >
+                          {t("전체 수업 보기 →", "View full lesson →")}
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        onClick={() => router.push(`/learn/${lessonId}`)}
+                        className="text-amber-600 font-bold text-xs hover:underline"
+                      >
+                        {t("수업 페이지에서 보기 →", "View in lesson →")}
+                      </button>
+                    )}
+                  </div>
+                )
+              })()}
+            </div>
+          )}
+
           {currentReview && (
             <StepRenderer
               key={`review-${currentIndex}-${resetCount}`}
@@ -449,19 +504,8 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                   setQuizAttempts(0)
                   setIsCurrentStepCompleted(false)
                   setResetCount(prev => prev + 1)
-                  // savedAnswers에서 제거
-                  setSavedAnswers(prev => {
-                    const next = { ...prev }
-                    delete next[currentIndex]
-                    return next
-                  })
-                  // completedSteps에서 제거
-                  setCompletedSteps(prev => {
-                    const next = new Set(prev)
-                    next.delete(currentIndex)
-                    return next
-                  })
-                  // wrongSteps에서 제거
+                  setSavedAnswers(prev => { const next = { ...prev }; delete next[currentIndex]; return next })
+                  setCompletedSteps(prev => { const next = new Set(prev); next.delete(currentIndex); return next })
                   setWrongSteps(prev => prev.filter(i => i !== currentIndex))
                 }}
                 className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
@@ -469,48 +513,6 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                 <RotateCcw className="w-3.5 h-3.5" />
                 {t("이 문제 다시 풀기", "Redo this question")}
               </button>
-            </div>
-          )}
-
-          {/* 풀기 전 또는 틀렸을 때 — 수업 내용 인라인 보기 */}
-          {(!isCurrentStepCompleted || wrongSteps.includes(currentIndex)) && (
-            <div className="mt-4">
-              <button
-                onClick={() => setShowLesson(!showLesson)}
-                className="flex items-center gap-2 px-4 py-3 bg-orange-50 hover:bg-orange-100 rounded-xl border border-orange-200 text-orange-700 font-bold text-sm w-full transition-colors"
-              >
-                <BookOpen className="w-4 h-4" />
-                {showLesson
-                  ? t("수업 내용 닫기 ▲", "Hide lesson ▲")
-                  : isCurrentStepCompleted
-                    ? t("📖 틀린 부분 수업 내용 보기 ▼", "📖 View lesson content ▼")
-                    : t("📖 잘 모르겠으면 수업 내용 보기 ▼", "📖 Hint: View lesson content ▼")}
-              </button>
-              {showLesson && currentReview && (
-                <div className="mt-3 space-y-3 p-4 bg-indigo-50 rounded-xl border border-indigo-200">
-                  <p className="text-indigo-700 font-bold text-sm">
-                    {currentReview.chapterEmoji} {currentReview.chapterTitle}
-                  </p>
-                  {getChapterExplains(lesson, currentReview.chapterId).map((explain, i) => (
-                    <div key={i} className="bg-white rounded-lg p-4 shadow-sm space-y-2">
-                      {explain.content && (
-                        <div className="text-gray-800 text-sm font-medium whitespace-pre-line">{explain.content}</div>
-                      )}
-                      {explain.code && (
-                        <pre className="bg-gray-900 text-green-400 p-3 rounded-lg text-xs overflow-x-auto font-mono">{explain.code}</pre>
-                      )}
-                    </div>
-                  ))}
-                  {getChapterExplains(lesson, currentReview.chapterId).length === 0 && (
-                    <button
-                      onClick={() => router.push(`/learn/${lessonId}`)}
-                      className="text-indigo-600 font-bold text-sm hover:underline"
-                    >
-                      {t("수업 페이지에서 보기 →", "View in lesson →")}
-                    </button>
-                  )}
-                </div>
-              )}
             </div>
           )}
         </div>
