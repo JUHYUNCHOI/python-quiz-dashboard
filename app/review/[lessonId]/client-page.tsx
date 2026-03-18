@@ -9,7 +9,7 @@ import { useAuth } from "@/contexts/auth-context"
 import { useSoundEffect } from "@/hooks/use-sound-effect"
 import { markQuizComplete } from "@/lib/mark-lesson-complete"
 import { StepRenderer } from "@/components/learn/step-renderer"
-import { lessonsData } from "@/components/learn/lesson-registry"
+import { lessonsData, bilingualLessons } from "@/components/learn/lesson-registry"
 import type { LessonStep, LessonData } from "@/components/learn/types"
 
 // ============================================================
@@ -50,7 +50,9 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   const effectiveTeacher = isTeacher && !teacherAsStudent
   const { play } = useSoundEffect()
 
-  const lesson = lessonsData[lessonId]
+  // 수업 페이지와 동일한 한/영 레슨 선택 로직
+  const isBilingual = lessonId in bilingualLessons
+  const lesson = isBilingual ? bilingualLessons[lessonId][lang] : lessonsData[lessonId]
   const reviewSteps = lesson ? extractReviewSteps(lesson) : []
 
   const [currentIndex, setCurrentIndex] = useState(0)
