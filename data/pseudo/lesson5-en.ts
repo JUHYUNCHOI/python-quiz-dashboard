@@ -143,6 +143,41 @@ The \`MOD\` operator gives the remainder of division.
 Notice: in CIE pseudocode, **=** is used for comparison (not ==)!`
         },
         {
+          id: "ch2-mod",
+          type: "explain",
+          title: "🔢 MOD and DIV — Two Results of Division",
+          content: `Before we use conditions with numbers, let's learn **two arithmetic operators** you'll need!
+
+**Division gives two results:**
+
+\`\`\`
+17 ÷ 5 = 3 ... remainder 2
+\`\`\`
+
+{!blue} **DIV** = the **quotient** (integer part only!)
+{!pink} **MOD** = the **remainder**
+
+| Operation | Meaning | Example | Result |
+|-----------|---------|---------|--------|
+| \`17 DIV 5\` | Quotient | Integer part of 17 ÷ 5 | **3** |
+| \`17 MOD 5\` | Remainder | Remainder of 17 ÷ 5 | **2** |
+| \`10 DIV 3\` | Quotient | Integer part of 10 ÷ 3 | **3** |
+| \`10 MOD 3\` | Remainder | Remainder of 10 ÷ 3 | **1** |
+
+### 💡 When to use MOD?
+
+{!green} **Even/odd check**: \`number MOD 2\` → 0 means even, 1 means odd!
+{!orange} **Multiple check**: \`number MOD 3 = 0\` means it's a multiple of 3!
+
+\`\`\`
+7 MOD 2 = 1   → odd!
+8 MOD 2 = 0   → even!
+15 MOD 5 = 0  → multiple of 5!
+\`\`\`
+
+@Key: **DIV = quotient, MOD = remainder**. These appear frequently in IGCSE exams!`
+        },
+        {
           id: "ch2-predict1",
           type: "predict",
           title: "🔮 Predict the Output!",

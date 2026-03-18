@@ -189,7 +189,7 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
       </div>
 
       {/* 코드 블록 */}
-      <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 md:p-5 font-mono text-sm md:text-base overflow-x-auto">
+      <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 md:p-5 font-mono text-sm md:text-base overflow-x-auto whitespace-pre">
         {renderCodeWithBlanks()}
       </div>
 

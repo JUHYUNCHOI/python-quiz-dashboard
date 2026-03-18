@@ -23,6 +23,7 @@ export const cppLesson3EnData: LessonData = {
           id: "ch1-intro",
           type: "explain",
           title: "📦 How is it different from Python?",
+          component: "cppVariableBuilder",
           content: `In Python, \`x = 10\` and you're done, right?
 C++ is different! **You have to specify the type when creating a variable.**
 
@@ -45,9 +46,28 @@ Why so strict? 🤔
 💡 A C++ variable = **a typed box**. Only integers can go in an integer box!`
         },
         {
+          id: "ch1-typefix",
+          type: "explain",
+          title: "Once you set a type, you can't change it!",
+          content: `In Python, you could do \`x = 10\` then \`x = "hello"\` — no problem. In C++, that's **impossible**!
+
+\`\`\`cpp
+int x = 10;
+x = "hello";   // ❌ Compile error!
+\`\`\`
+
+The type you choose at the start sticks forever. An integer box can only hold integers, a string box can only hold strings!
+
+**But why is C++ so strict?** 🤔
+When you create a variable, C++ **reserves memory space** right away. \`int\` takes 4 bytes, \`double\` takes 8 bytes — each type needs a different amount. If the type could change, the reserved space wouldn't match!
+
+💡 It seems annoying, but it catches mistakes **before your program even runs**! Up next, let's see how much memory each type actually uses →`
+        },
+        {
           id: "ch1-types",
           type: "explain",
           title: "📋 The 5 Main C++ Types",
+          component: "memoryTypeVisualizer",
           content: `Let's look at the most common types!
 
 | C++ Type | Meaning | Example |
@@ -59,6 +79,15 @@ Why so strict? 🤔
 | \`bool\` | True/False | \`bool pass = true;\` |
 
 The 3 most used are **int, double, string**!
+
+⚠️ **To use string**, you need \`#include <string>\` at the top!
+\`\`\`cpp
+#include <iostream>
+#include <string>    // ← Required for string type!
+\`\`\`
+int, double, char, bool are built-in, but **string comes from a library** — you must include it.
+
+Each type uses a **different amount of memory**. Check out the animation below to see how many bytes each type takes! 👇
 
 | Python 🐍 | C++ ⚡ |
 |---|---|
@@ -93,6 +122,7 @@ The 3 most used are **int, double, string**!
           id: "ch1-char",
           type: "explain",
           title: "🔤 char vs string — Different quotes!",
+          component: "cppCharBuilder",
           content: `\`\`\`cpp
 char grade = 'A';       // Single quotes → exactly 1 character
 string name = "Alice";  // Double quotes → text (string)
@@ -105,7 +135,9 @@ string name = "Alice";  // Double quotes → text (string)
 
 💭 What if you write \`char x = 'AB';\`? → **Error**! char holds exactly 1 character!
 
-In Python, \`' '\` and \`" "\` are the same, but in C++ they are **completely different types**!`
+In Python, \`' '\` and \`" "\` are the same, but in C++ they are **completely different types**!
+
+💡 Why does char exist separately? A single character takes only 1 byte of memory. When storing a million characters, it's much more efficient than string!`
         },
         {
           id: "ch1-practice",
@@ -178,7 +210,25 @@ const double PI = 3.14159;
 
 Python has no real constant syntax, but C++ uses const so the **compiler protects it**!
 
-💡 const = **a value that never changes**. Perfect for fixed values like π (pi)!`
+💡 const = **a value that never changes**. Perfect for fixed values like π (pi)!
+
+With const, the compiler catches you if you accidentally try to change the value! Protect fixed values like pi with const.
+
+For example, in a game you might set \`const double GRAVITY = 9.8;\`. If you accidentally write \`GRAVITY = 0;\`, the **compiler gives an error immediately**. Without const, the program would behave strangely and you'd have a very hard time finding the bug.`
+        },
+        {
+          id: "ch2-division-trap",
+          type: "explain",
+          title: "⚠️ Trap: Integer Division",
+          content: `When you divide int by int in C++, the decimal part gets **chopped off**!
+
+7 / 2 is NOT 3.5 — it becomes **3**.
+
+Why? Because the result of an int operation is also an int.
+
+Want the decimal result? Make at least one side a double:
+
+\`7.0 / 2\` → \`3.5\` ✅`
         },
         {
           id: "ch2-pred1",
@@ -193,6 +243,7 @@ Python has no real constant syntax, but C++ uses const so the **compiler protect
           id: "ch2-convert",
           type: "explain",
           title: "🔄 Type Conversion",
+          component: "cppTypeConvertBuilder",
           content: `**Automatic conversion** — small type → big type happens automatically!
 \`\`\`cpp
 int a = 10;
@@ -276,6 +327,34 @@ int main() {
           ],
           answer: 1,
           explanation: "C++ uses stoi (string to int) to convert strings to integers! It's like Python's int()."
+        },
+        {
+          id: "ch2-q2",
+          type: "quiz",
+          title: "Understanding const!",
+          content: `Which line causes an error?\n\n\`\`\`cpp\nconst double PI = 3.14;\ndouble r = 5.0;\nPI = 3.14159;\ncout << PI * r * r << endl;\n\`\`\``,
+          options: [
+            "Line 1 (const double PI = 3.14;)",
+            "Line 2 (double r = 5.0;)",
+            "Line 3 (PI = 3.14159;)",
+            "Line 4 (cout << PI * r * r;)"
+          ],
+          answer: 2,
+          explanation: "PI is declared with const, so its value can't be changed! Line 3 tries to assign a new value to PI, causing a compile error."
+        },
+        {
+          id: "ch2-q3",
+          type: "quiz",
+          title: "Integer division trap!",
+          content: `What does this code print?\n\n\`\`\`cpp\nint a = 5;\nint b = 2;\ncout << a / b << endl;\n\`\`\``,
+          options: [
+            "2.5",
+            "2",
+            "3",
+            "Error"
+          ],
+          answer: 1,
+          explanation: "When dividing int by int, the decimal part is dropped! 5 / 2 = 2, not 2.5. For 2.5, write 5.0 / 2!"
         }
       ]
     },

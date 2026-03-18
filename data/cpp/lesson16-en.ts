@@ -22,7 +22,9 @@ export const cppLesson16EnData: LessonData = {
           id: "ch1-intro",
           type: "explain",
           title: "📖 map — Store Key-Value Pairs!",
-          content: `You've used Python's \`dict\` before, right? In C++, \`map\` does the same job!
+          content: `Imagine you're building a school grade management system. You want to look up 'Alice's' score instantly. With a vector, you'd have to search one by one from the beginning. With 1000 students? Way too slow! You need a tool that lets you **look up by name directly**.
+
+You've used Python's \`dict\` before, right? In C++, \`map\` does the same job!
 
 \`\`\`cpp
 #include <map>
@@ -131,6 +133,10 @@ cout << scores.size() << endl;  // 1
 | \`del d["key"]\` | \`m.erase("key")\` |
 | \`len(d)\` | \`m.size()\` |
 
+Two ways to check if a key exists:
+• \`m.count(key)\` — returns 1 if found, 0 if not (for simple checks)
+• \`m.find(key)\` — returns an iterator if found, end() if not (when you also need the value)
+
 💡 \`count()\` returns 1 if the key exists, 0 if not! Great for quick existence checks.`
         },
         {
@@ -148,6 +154,8 @@ cout << scores.size() << endl;  // 1
           title: "📖 unordered_map — Faster Without Sorting!",
           content: `\`map\` sorts keys, so insert/search is **O(log n)**.
 Don't need sorting? Use \`unordered_map\` for **O(1) average** — much faster!
+
+O(1) means finding it **in one step** whether there are 1,000 or 1,000,000 students. O(log n) means about 20 comparisons for 1,000,000 students. Both are fast, but if you don't need sorting, unordered is faster!
 
 \`\`\`cpp
 #include <unordered_map>
@@ -171,6 +179,31 @@ Python's \`dict\` is actually more similar to C++'s \`unordered_map\`!
 | Python Equivalent | — | **dict** |
 
 💡 In most cases, \`unordered_map\` is faster! Only use \`map\` when you need sorted keys.`
+        },
+        {
+          id: "ch1-question",
+          type: "explain",
+          title: "🙋 Question: Can't I just use a vector of pairs?",
+          content: `**"Can't I just use a vector of pairs?"**
+
+It looks similar, but there's a big difference!
+
+With a vector, you have to search from beginning to end to find a key (slow). With a map, you find it instantly by key (fast)!
+
+\`\`\`cpp
+// vector<pair> — searching is slow O(n)
+vector<pair<string, int>> v = {{"Alice", 95}, {"Bob", 87}};
+// To find "Bob", you have to check one by one
+for (auto& p : v) {
+    if (p.first == "Bob") { /* found it! */ }
+}
+
+// map — searching is fast O(log n)
+map<string, int> m = {{"Alice", 95}, {"Bob", 87}};
+cout << m["Bob"];  // Direct access! 87
+\`\`\`
+
+💡 The more data you have, the bigger map's advantage! With 1 million entries, a vector needs up to 1 million comparisons, but a map only needs about 20.`
         },
         {
           id: "ch1-practice",
@@ -231,7 +264,9 @@ cherry: 1`
           id: "ch2-intro",
           type: "explain",
           title: "🎯 set — No Duplicates + Auto-Sorted!",
-          content: `You've used Python's \`set\` before, right? C++ has \`set\` too!
+          content: `You want to find only the unique scores from a list of exam results. With a vector? You'd have to manually check for duplicates. With set, just insert and it automatically removes duplicates + sorts!
+
+You've used Python's \`set\` before, right? C++ has \`set\` too!
 
 \`\`\`cpp
 #include <set>

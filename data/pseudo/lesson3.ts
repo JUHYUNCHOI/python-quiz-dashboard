@@ -157,6 +157,27 @@ OUTPUT "나는 " & food & "를 좋아해요!"
           explanation: '첫 번째 OUTPUT이 "좋아하는 음식: "을 출력하고, 사용자가 "피자"를 입력하면 `food`에 저장돼요. 두 번째 OUTPUT에서 **나는 피자를 좋아해요!**가 출력돼요. OUTPUT이 2개니까 출력도 2줄이에요!'
         },
         {
+          id: "ch2-predict2",
+          type: "predict",
+          title: "🔮 & 연산자!",
+          content: `사용자가 "Kim"을 입력했을 때, 출력 결과는?
+
+\`\`\`
+DECLARE name : STRING
+OUTPUT "이름을 입력하세요:"
+INPUT name
+OUTPUT "안녕, " & name & "님!"
+\`\`\``,
+          options: [
+            '안녕, Kim님!',
+            '안녕, name님!',
+            '안녕, "Kim"님!',
+            '에러'
+          ],
+          answer: 0,
+          explanation: '& 연산자가 문자열을 이어 붙여요! "안녕, " + "Kim" + "님!" = **안녕, Kim님!** name은 변수니까 따옴표 없이 값이 들어가요.'
+        },
+        {
           id: "ch2-fill2",
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",

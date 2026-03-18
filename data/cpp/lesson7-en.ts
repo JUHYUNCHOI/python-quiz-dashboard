@@ -19,6 +19,33 @@ export const cppLesson7EnData: LessonData = {
       emoji: "🔁",
       steps: [
         {
+          id: "ch1-increment",
+          type: "explain",
+          title: "🔢 What's i++? (Increment Operator)",
+          content: `Before learning for loops, you need to know C++'s **increment operators**!
+
+In Python you wrote \`i += 1\` to add 1. C++ has a **shorter way**:
+
+| Python 🐍 | C++ ⚡ | Meaning |
+|---|---|---|
+| \`i += 1\` | {pink:\`i++\`} | Increase i by 1 |
+| \`i -= 1\` | {blue:\`i--\`} | Decrease i by 1 |
+
+\`\`\`cpp
+int i = 0;
+i++;     // i is now 1  (same as i += 1)
+i++;     // i is now 2
+i--;     // i is now 1  (same as i -= 1)
+\`\`\`
+
+{!pink} \`i++\` = **"increase i by 1!"** (increment)
+{!blue} \`i--\` = **"decrease i by 1!"** (decrement)
+
+You'll use \`i++\` ALL THE TIME in C++ for loops!
+
+💡 Fun fact: C++ is named after this! It means "C incremented by 1 (++)" 😄`,
+        },
+        {
           id: "ch1-compare",
           type: "explain",
           title: "🔁 for: Python vs C++",
@@ -29,18 +56,27 @@ export const cppLesson7EnData: LessonData = {
 
 The C++ for loop has **3 parts** separated by semicolons (;):
 
+\`\`\`cpp
+for (int i = 0;  i < 5;    i++)
 \`\`\`
-for (init; condition; update)
-      ①       ②        ③
-\`\`\`
 
-① **Init:** \`int i = 0\` → starting value
-② **Condition:** \`i < 5\` → keep looping while true
-③ **Update:** \`i++\` → runs after each iteration
+{!pink} ① {pink:**Init**} — \`int i = 0\` → starting value (runs only once!)
+{!blue} ② {blue:**Condition**} — \`i < 5\` → keep looping while true
+{!green} ③ {green:**Update**} — \`i++\` → runs after each iteration
 
-It looks complex at first, but just **remember the 3 parts**!
+**Execution order:** {pink:① Init} → {blue:② Check} → body → {green:③ Update} → {blue:② Check} → body → {green:③ Update} → ... → {blue:② false → done!}
 
-💡 for loop = "start, condition, change" — just 3 things!`
+@Key: for loop = "{pink:start}, {blue:condition}, {green:change}" — just 3 things!`,
+          component: "cppForBuilder",
+        },
+        {
+          id: "ch1-sim",
+          type: "explain",
+          title: "🔍 Trace: How does C++ for(init; cond; inc) work?",
+          content: `See the exact order of initialization, condition check, and increment in a C++ for loop!
+
+Press **▶ Run** or **▷ Step** to trace the execution.`,
+          component: "codeTraceCppFor",
         },
         {
           id: "ch1-fb1",
@@ -143,6 +179,20 @@ int main() {
       emoji: "🔃",
       steps: [
         {
+          id: "ch2-why",
+          type: "explain",
+          title: "for vs while: When to use which?",
+          content: `The for loop is perfect for **fixed-count** repetition: 'repeat 10 times', 'go through the whole array'.
+
+But what about these situations?
+- Keep accepting input until the user types 'quit'
+- Ask for a password again until it's correct
+- Repeat game turns until the game ends
+
+When you **don't know the count, only the condition** → you need while!
+while literally means 'keep going while this is true'.`
+        },
+        {
           id: "ch2-while",
           type: "explain",
           title: "🔃 while — Almost the same as Python!",
@@ -170,7 +220,17 @@ Only 3 differences:
 2. **Curly braces {}** for the block
 3. count++ instead of count += 1 (optional)
 
-💡 Same rules as if statements! () + {} is all you need.`
+💡 Same rules as if statements! () + {} is all you need.`,
+          component: "cppWhileBuilder",
+        },
+        {
+          id: "ch2-sim",
+          type: "explain",
+          title: "🔍 Trace: C++ while loop factorial",
+          content: `Watch how a while loop calculates factorial (1×2×3×4) step by step!
+
+Press **▶ Run** or **▷ Step** to trace the execution.`,
+          component: "codeTraceCppWhile",
         },
         {
           id: "ch2-pred1",
@@ -185,28 +245,47 @@ Only 3 differences:
           id: "ch2-dowhile",
           type: "explain",
           title: "🆕 do-while (Not in Python!)",
+          component: "cppDoWhileBuilder",
           content: `C++ has a **do-while loop** that Python doesn't have!
 
 \`\`\`cpp
 do {
-    cout << "Hello!";
+    statement;
 } while (condition);   // ← semicolon at the end!
 \`\`\`
 
 | while | do-while |
 |-------|----------|
-| Check condition first → 0 times possible | **Execute first** → then check condition |
-| May run 0 times | **Always runs at least once!** |
+| {blue:Check condition first} → 0 times possible | {pink:**Execute first**} → then check |
+| May run 0 times | {pink:**Always runs at least once!**} |
+
+### 🤔 Why use it?
+
+It's perfect for **"must do at least once"** situations:
+
+{!pink} 🎮 **Menu selection** — you need to show the menu before the user can choose!
+{!blue} 🔐 **Password input** — you need to ask at least once to check if it's correct!
+{!green} 🎲 **Game rounds** — play at least one round before deciding to continue!
 
 \`\`\`cpp
-int x = 10;
+// Most common pattern: input validation
+int num;
 do {
-    cout << "Hello!";
-} while (x < 5);  // x=10 and 10 < 5 is false!
-// But "Hello!" still prints once! (executes first)
+    cout << "Enter 1-10: ";
+    cin >> num;
+} while (num < 1 || num > 10);
+// Keeps asking until valid!
 \`\`\`
 
-💡 do-while = "do it first, then check if we should continue!"`
+You could use while, but do-while makes your {pink:**intent clearer**}:
+
+| while version | do-while version |
+|-----------|-------------|
+| Need initial variable | Execute right away! |
+| \`while(true) { ... break; }\` | \`do { ... } while(cond);\` |
+| Intent unclear | **"do first"** is obvious in code |
+
+@Key: do-while = "do it first, then decide!" Perfect for input validation, menus, game loops!`
         },
         {
           id: "ch2-pred2",
@@ -216,6 +295,72 @@ do {
           options: ["Nothing", "Hello", "Hello 5 times", "Infinite loop"],
           answer: 1,
           explanation: "do-while runs at least once! x=10 and x < 5 is false, but do executes first → 'Hello' prints once."
+        },
+        {
+          id: "ch2-fb-dowhile",
+          type: "fillblank" as const,
+          title: "Convert to do-while",
+          content: `Rewrite this while loop as a do-while.
+
+\`\`\`cpp
+int n;
+while (true) {
+    cout << "Enter a positive number: ";
+    cin >> n;
+    if (n > 0) break;
+}
+\`\`\``,
+          code: "int n;\n___ {\n    cout << \"Enter a positive number: \";\n    cin >> n;\n} ___(n <= 0);",
+          fillBlanks: [
+            { id: 0, answer: "do", options: ["do", "while", "for", "repeat"] },
+            { id: 1, answer: "while", options: ["while", "until", "do", "if"] }
+          ],
+          explanation: "do-while runs at least once before checking the condition. It's a perfect pattern for input validation!"
+        },
+        {
+          id: "ch2-dowhile-practice",
+          type: "practice" as const,
+          title: "✋ Build a Menu with do-while!",
+          content: `Use do-while to create a simple menu system!
+
+Show the menu first, then repeat until the user picks 3 (exit).
+This is the **real use case** for do-while — "must do at least once"!`,
+          code: `#include <iostream>
+using namespace std;
+
+int main() {
+    int choice;
+
+    do {
+        cout << "=== Menu ===" << endl;
+        cout << "1. Say Hello" << endl;
+        cout << "2. Say Name" << endl;
+        cout << "3. Exit" << endl;
+        cout << "Choice: ";
+        cin >> choice;
+
+        if (choice == 1) {
+            cout << "Hello!" << endl;
+        } else if (choice == 2) {
+            cout << "I'm a C++ program!" << endl;
+        }
+    } while (choice != 3);
+
+    cout << "Goodbye!" << endl;
+    return 0;
+}`,
+          expectedOutput: `=== Menu ===
+1. Say Hello
+2. Say Name
+3. Exit
+Choice: 1
+Hello!
+=== Menu ===
+1. Say Hello
+2. Say Name
+3. Exit
+Choice: 3
+Goodbye!`
         },
         {
           id: "ch2-fb1",
@@ -265,6 +410,17 @@ int main() {
 Liftoff!`
         },
         {
+          id: "ch2-breakcon-why",
+          type: "explain",
+          title: "🤔 Want to stop or skip during a loop?",
+          content: `Running a loop to the end isn't always what you want!
+
+{!pink} 🔍 **Search**: Found what you're looking for → no need to keep searching!
+{!blue} 🚫 **Filter**: Skip even numbers and only process odd ones?
+
+That's when \`break\` and \`continue\` help. Good news — **they work exactly like Python!** 😎`
+        },
+        {
           id: "ch2-breakcon",
           type: "explain",
           title: "🛑 break & continue (Same as Python!)",
@@ -294,6 +450,17 @@ for (int i = 0; i < 5; i++) {
 | \`continue\` | Skip current iteration | Exactly the same! ✅ |
 
 💡 break and continue work **exactly like Python**! They work in both for and while loops.`
+        },
+        {
+          id: "ch2-fb-continue",
+          type: "fillblank" as const,
+          title: "Skip with continue",
+          content: "Print only the odd numbers from 1 to 10 by skipping the even ones.",
+          code: "for (int i = 1; i <= 10; i++) {\n    if (i % 2 == 0) ___;\n    cout << i << \" \";\n}",
+          fillBlanks: [
+            { id: 0, answer: "continue", options: ["continue", "break", "return", "skip"] }
+          ],
+          explanation: "continue skips the rest of the loop body and jumps to the next iteration. When i is even, continue prevents cout from running!"
         },
         {
           id: "ch2-q1",

@@ -16,21 +16,27 @@ export const cppLesson1EnData: LessonData = {
     // ============================================
     {
       id: "ch1",
-      title: "What is C++?",
-      emoji: "🌍",
+      title: "Say Hello in C++!",
+      emoji: "🎯",
       steps: [
         {
           id: "ch1-intro",
           type: "explain",
           title: "🎉 Meet C++!",
-          content: `C++ is just another programming language, like Python. The syntax is different, that's all!
+          content: `Have you ever played Minecraft? Minecraft was built with C++! So were League of Legends and Fortnite. Most of the programs you use every day are made with C++.
+
+C++ is just another programming language, like Python. The syntax is different, that's all!
+
+But **why learn C++?** 🤔
+
+The **games** we play every day (Unreal Engine, LOL, Minecraft), **operating systems** (Windows, macOS), **embedded systems** (robots, cars, IoT devices)... they're all made with C++!
+
+C++ is **fast and can directly control hardware**, so it's practically essential wherever performance matters. It's also the most popular language in competitive programming (USACO, IOI)! 🏆
 
 For those who learned Python, there are **two big differences**:
 
 **1. You need to compile** — We never did this in Python!
-**2. Syntax is stricter** — Semicolons, curly braces, and more
-
-Let's learn what compiling means first! 🚀`
+**2. Syntax is stricter** — Semicolons, curly braces, and more`
         },
         {
           id: "ch1-compile",
@@ -42,32 +48,29 @@ C++ is different! You need to **convert** your code into something the computer 
 
 It's a bit annoying, and sometimes takes time, but... since the computer runs code in its own language, it runs SO much **faster**! ⚡
 
-💡 Think about it — we read much faster in our own language than having someone translate every page as we go!
-
-Try it below! Compile some code and watch it turn into binary! 👇`
-        },
-        {
-          id: "ch1-compile-viz",
-          type: "interactive" as const,
-          title: "See code turn into binary!",
-          description: "When you compile code, it turns into 0s and 1s that computers understand. Try it!",
+💡 Think about it — we read much faster in our own language than having someone translate every page as we go!`,
           component: "compileVisualizer",
         },
-      ]
-    },
-    // ============================================
-    // Chapter 2: Your First C++ Program!
-    // ============================================
-    {
-      id: "ch2",
-      title: "Your First C++ Program!",
-      emoji: "📝",
-      steps: [
+        // ── Check compile understanding ──
         {
-          id: "ch2-file",
-          type: "explain",
-          title: "📁 Create a C++ file!",
-          content: `Now let's learn the syntax! But first, let's create a C++ file!
+          id: "ch1-quiz-compile",
+          type: "quiz",
+          title: "Check your understanding!",
+          content: `Python runs code immediately, but C++ needs one extra step before running.
+
+What is that step?`,
+          options: ["Compile", "Debug", "Format", "Upload"],
+          answer: 0,
+          explanation: "C++ needs to convert code into the computer's language (0s and 1s) first — that's compiling! Debugging is finding bugs, formatting is making code look pretty."
+        },
+        // ── Transition: Let's try it! ──
+        {
+          id: "ch1-file",
+          type: "practice" as const,
+          title: "📁 Create your own .cpp file!",
+          content: `Now that we know what compiling is, let's write some code!
+
+First, we need to create a C++ file.
 
 Python files end with \`.py\`, right?
 C++ files end with \`.cpp\`!
@@ -76,103 +79,147 @@ C++ files end with \`.cpp\`!
 |---|---|
 | main**.py** | main**.cpp** |
 
-Let's all create a **main.cpp** file!
+🎯 **Try it now!** Open your editor (VS Code, CLion, etc.) and create a new file called **main.cpp**!
 
-Ready? Then let's start writing a simple program! ✨`
+Don't worry about what to write inside yet — just make the empty file. We'll fill it in together next! ✨`,
+          code: `// Did you create main.cpp?\n// It's okay if it's empty!\n// We'll fill it in together 😊`,
+          expectedOutput: ``
         },
+        // ── cout intro ──
         {
-          id: "ch2-main",
+          id: "ch2-cout-intro",
           type: "explain",
-          title: "🏁 Start with int main()!",
-          content: `In C++, you can't just write code anywhere. You must start inside **int main()**!
+          title: "🖨️ Let's print something!",
+          content: `In Python, you did this:
 
-\`\`\`cpp
-int main() {
-
-}
+\`\`\`python
+print("Hello")
 \`\`\`
 
-Why? Because C++ programs look for the \`main\` function and start running from there.
-→ It's like saying "this is the starting line!"
+In C++, you write:
 
-Also! In Python, you used \`:\` and indentation for code blocks.
-In C++, you use **{ }** instead.
+\`\`\`cpp
+std::cout << "Hello" << std::endl;
+\`\`\`
 
-Everything from \`{\` to \`}\` is "my block of code to run." So watch your brackets!
+Looks like a lot, right? Let's break it down:
 
-💡 Don't worry about what \`int\` means yet! Just remember **"this is how we start."**`
+- \`std::cout\` → Print to screen! (Python's \`print\`)
+- \`<<\` → "Send this!" (look at the arrow direction — it pushes left!)
+- \`std::endl\` → Line break (Python does this automatically, C++ doesn't!)
+- \`;\` → End of statement! C++ needs a **semicolon after every command**
+
+(We'll explain std:: later! For now, just know it means **'using a standard tool'** 📌)`
         },
+        // ── Check cout immediately ──
         {
-          id: "ch2-fb1",
-          type: "fillblank" as const,
-          title: "Fill in the blanks",
-          content: "Build the skeleton of a C++ program!",
-          code: "#include <iostream>\n\n___ main() ___\n\n___",
-          fillBlanks: [
-            { id: 0, answer: "int", options: ["int", "def", "void", "func"] },
-            { id: 1, answer: "{", options: ["{", ":", "(", "["] },
-            { id: 2, answer: "}", options: ["}", ";", ")", "]"] }
+          id: "ch2-quiz-cout",
+          type: "quiz",
+          title: "Python → C++ translation!",
+          content: `In Python, \`print("Hello")\` prints Hello to the screen.
+
+How do you do the same thing in C++?`,
+          options: [
+            'std::cout << "Hello" << std::endl;',
+            'print("Hello");',
+            'echo "Hello";',
+            'System.out.println("Hello");'
           ],
-          explanation: "C++ programs start inside int main() { }! Curly braces define the code block."
+          answer: 0,
+          explanation: "Python's print() = C++'s std::cout << ! And don't forget the semicolon (;) at the end!"
         },
+        // ── #include ──
         {
           id: "ch2-include",
           type: "explain",
-          title: "📦 #include <iostream>",
-          content: `If you want to print something, you need this at the top:
+          title: "📦 Wait! You can't just use it",
+          content: `You can't just write cout and expect it to work!
 
+C++ doesn't have printing built in.
+→ You need to tell it **"bring me the output tools!"** first.
+
+That's this line:
 \`\`\`cpp
 #include <iostream>
 \`\`\`
 
-C++ doesn't have printing built in!
-→ You need to tell it **"bring me the output tools!"**
-
-In Python, you used \`import\`. Same idea, different syntax!
+It's the same concept as Python's \`import\`!
 
 | Python 🐍 | C++ ⚡ |
 |---|---|
 | \`import math\` | \`#include <cmath>\` |
 | *(print just works)* | \`#include <iostream>\` |
 
-⚠️ To print in C++, you MUST have **#include <iostream>**!`
+💡 Think of **#include as reaching into a toolbox**. Need output? Grab iostream. Need math? Grab cmath! 🧰
+
+⚠️ Leave it out? The compiler says **"what's cout?"** — error!`
         },
+        // ── Check include ──
         {
-          id: "ch2-q1",
+          id: "ch2-q1a",
           type: "quiz",
-          title: "include quiz!",
-          content: `What do you need at the top of your file to print in C++?`,
+          title: "What if you remove #include?",
+          content: `What happens if you leave out #include <iostream> and try to use cout?`,
           options: [
-            "import iostream",
-            "#include <iostream>",
-            "using iostream",
-            "require iostream"
+            "The program runs slower",
+            "You can't use cout (compile error)",
+            "The program runs but nothing is printed",
+            "Nothing goes wrong"
           ],
           answer: 1,
-          explanation: "#include <iostream> brings in the output tools! It's like Python's import."
+          explanation: "#include <iostream> is required to use cout and cin. Without it, the compiler won't know what cout is!"
         },
+        // ── int main() ──
         {
-          id: "ch2-cout",
+          id: "ch2-main",
           type: "explain",
-          title: "🖨️ First output! std::cout",
-          content: `Now that we have the output tools, let's print something!
+          title: "🏁 Where do we write code? int main()!",
+          content: `We got our tools and learned cout. But you can't just write code **anywhere**!
 
-Write this inside the \`int main()\` block:
+C++ programs start inside **int main()**:
 
 \`\`\`cpp
-std::cout << "Hello" << std::endl;
+int main() {
+    // write code here!
+}
 \`\`\`
 
-Looks like a lot, right? Let's break it down!
+Why? Because C++ looks for the \`main\` function and starts running from there.
+→ It's like saying "this is the starting line!"
 
-- \`std::cout\` → Print to screen! (Python's \`print\`)
-- \`<<\` → "Send this!"
-- \`std::endl\` → Line break (Python print does this automatically, C++ doesn't!)
+In Python, you used \`:\` and **indentation** for code blocks.
+In C++, you use **{ }** instead. Don't forget your brackets!
 
-⚠️ In C++, every statement MUST end with **;**!
-Forget it and the compiler will immediately throw an error! 😱
+💡 Don't worry about what \`int\` means yet! Just remember **"this is how we start."**`
+        },
+        // ── Check main ──
+        {
+          id: "ch2-fb-main",
+          type: "fillblank" as const,
+          title: "C++ program starting point!",
+          content: "Fill in the blanks to make a C++ program's starting point!",
+          code: "___ main() ___\n    // code goes here!\n___",
+          fillBlanks: [
+            { id: 0, answer: "int", options: ["int", "def", "void", "func"] },
+            { id: 1, answer: "{", options: ["{", ":", "(", "["] },
+            { id: 2, answer: "}", options: ["}", ";", ")", "]"] }
+          ],
+          explanation: "C++ starts inside int main() { }! Instead of Python's : we use { } for code blocks."
+        },
+        // ── Full assembly ──
+        {
+          id: "ch2-assemble",
+          type: "explain",
+          title: "🧩 Put it all together!",
+          component: "helloWorldBuilder",
+          content: `Let's combine everything we've learned!
 
-Here's the full program:
+**① Get tools** → \`#include <iostream>\`
+**② Starting point** → \`int main() { }\`
+**③ Print** → \`std::cout << "Hello" << std::endl;\`
+**④ Done signal** → \`return 0;\`
+
+Put it together:
 
 \`\`\`cpp
 #include <iostream>
@@ -183,16 +230,48 @@ int main() {
 }
 \`\`\`
 
-💡 \`return 0;\` means "program done! Everything went fine!"`
+\`return 0;\` means **"finished without problems!"** It's like raising your hand after a test and saying "I'm done!" ✋
+
+🎉 Congrats! This is your **first C++ program**!`
         },
+        // ── Predict ──
         {
           id: "ch2-pred1",
           type: "predict" as const,
-          title: "What will happen?",
+          title: "What does this output?",
           code: '#include <iostream>\n\nint main() {\n    std::cout << "Hi!" << std::endl;\n    return 0;\n}',
           options: ["Hi!", "Hi! endl", "std::cout Hi!", "Error"],
           answer: 0,
           explanation: "std::cout prints to screen, std::endl just adds a line break! Only Hi! appears on screen."
+        },
+        // ── Fill in complete program ──
+        {
+          id: "ch2-fb1",
+          type: "fillblank" as const,
+          title: "Complete the full program!",
+          content: "Combine everything you learned!",
+          code: "___ <iostream>\n\nint main() {\n    std::cout ___ \"Hello\" ___ std::endl;\n    return 0;\n}",
+          fillBlanks: [
+            { id: 0, answer: "#include", options: ["#include", "import", "using", "require"] },
+            { id: 1, answer: "<<", options: ["<<", ">>", "->", "=="] },
+            { id: 2, answer: "<<", options: ["<<", ">>", "+", "&&"] }
+          ],
+          explanation: "#include brings in tools, and << sends values to cout! << means 'send this!'"
+        },
+        // ── Quiz ──
+        {
+          id: "ch2-q1",
+          type: "quiz",
+          title: "#include quiz!",
+          content: `What do you need at the top of your file to print in C++?`,
+          options: [
+            "import iostream",
+            "#include <iostream>",
+            "using iostream",
+            "require iostream"
+          ],
+          answer: 1,
+          explanation: "#include <iostream> brings in the output tools! It's like Python's import."
         },
       ]
     },
@@ -228,13 +307,7 @@ After compiling, a file called **a.out** appears.
 
 You'll see **Hello** appear on screen! 🎉
 
-💡 Want a custom name? \`g++ -o hello main.cpp\` creates an executable called \`hello\`!`
-        },
-        {
-          id: "ch3-flow",
-          type: "interactive" as const,
-          title: "Let's review what we learned!",
-          description: "See the full journey of your program — from code to output! Click through each step!",
+💡 Want a custom name? \`g++ -o hello main.cpp\` creates an executable called \`hello\`!`,
           component: "buildRunFlow",
         },
         {

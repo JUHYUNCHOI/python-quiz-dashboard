@@ -265,6 +265,34 @@ CLOSEFILE "result.txt"
           explanation: '첫 번째 WRITE로 "Line A"가 쓰여요. 두 번째는 APPEND 모드이므로 기존의 "Line A"를 유지하고 "Line B", "Line C"를 **추가**해요!'
         },
         {
+          id: "ch2-quiz1",
+          type: "quiz",
+          title: "❓ 파일 모드!",
+          content: '기존 파일 내용을 **유지하면서** 새 데이터를 추가하려면?',
+          options: [
+            'OPENFILE ... FOR READ',
+            'OPENFILE ... FOR WRITE',
+            'OPENFILE ... FOR APPEND',
+            'OPENFILE ... FOR DELETE'
+          ],
+          answer: 2,
+          explanation: '**APPEND** 모드는 기존 내용 뒤에 추가해요! WRITE는 기존 내용을 지우고 새로 쓰고, READ는 읽기만 해요.'
+        },
+        {
+          id: "ch2-quiz2",
+          type: "quiz",
+          title: "❓ 파일 처리 순서!",
+          content: '파일 처리의 올바른 순서는?',
+          options: [
+            'WRITEFILE → OPENFILE → CLOSEFILE',
+            'OPENFILE → READFILE → CLOSEFILE',
+            'CLOSEFILE → OPENFILE → READFILE',
+            'READFILE → CLOSEFILE → OPENFILE'
+          ],
+          answer: 1,
+          explanation: '파일은 반드시 **열고(OPEN) → 사용(READ/WRITE) → 닫기(CLOSE)** 순서예요! 닫는 걸 잊으면 데이터가 손실될 수 있어요.'
+        },
+        {
           id: "ch2-fill1",
           type: "fillblank",
           title: "✏️ 빈칸을 채워봐요!",

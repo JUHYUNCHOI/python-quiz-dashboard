@@ -22,7 +22,8 @@ export const cppLesson10Data: LessonData = {
           id: "ch1-intro",
           type: "explain",
           title: "🔁 Range-based for 문",
-          content: `지난 시간에 for 루프로 배열/벡터를 순회했죠?
+          component: "cppRangeForBuilder",
+          content: `지난 시간에 \`for (int i = 0; i < size; i++)\` 이런 인덱스 루프를 배웠죠? 매번 이렇게 쓰면 실수하기 쉬워요. 더 간단한 방법이 있어요!
 
 \`\`\`cpp
 vector<int> nums = {10, 20, 30};
@@ -122,7 +123,11 @@ for (int& x : nums) {
 | 읽기만 할 때 | \`for (int x : v)\` |
 | 수정할 때 | \`for (int& x : v)\` |
 
-💡 &를 붙이면 "원본에 직접 접근"한다는 뜻이에요!`
+💡 &를 붙이면 "원본에 직접 접근"한다는 뜻이에요!
+
+& = '이 원본 자체'라는 뜻이에요. 복사본이 아니라 진짜! 친구에게 사진을 **복사**해서 주면 원본은 안 변하지만, **원본 파일 자체**를 공유하면 친구가 수정하면 내 것도 바뀌잖아요? &가 바로 원본 공유예요!
+
+여기서 & 기호가 나와요! &는 '원본을 직접 수정한다'는 뜻이에요. 자세한 건 레슨 12에서 배울 거예요. 지금은 '&가 있으면 원본 수정, 없으면 복사본'이라고만 기억하세요!`
         },
         {
           id: "ch1-pred1",
@@ -209,6 +214,8 @@ x = 3.14;       // ⚠️ 3만 저장됨! (int라서 소수점 잘림)
 x = "hello";    // ❌ 에러! int인데 string을 넣으려고!
 \`\`\`
 
+auto는 '처음에만 결정되는 확정 계약'이에요. \`auto x = 5;\`라고 쓰면 x는 int로 **영원히** 결정돼요. 파이썬처럼 나중에 문자열을 넣을 수 없어요!
+
 💡 auto는 "타입 안 쓰는 것"이 아니라 "컴파일러가 대신 써주는 것"이에요! 파이썬처럼 자유롭지는 않아요.`
         },
         {
@@ -227,6 +234,7 @@ x = "hello";    // ❌ 에러! int인데 string을 넣으려고!
           id: "ch2-combo",
           type: "explain",
           title: "🔥 auto + range-for 조합!",
+          component: "cppAutoBuilder",
           content: `auto와 range-for를 같이 쓰면 정말 편해요! 이게 **현대 C++의 대표 스타일**이에요.
 
 **타입을 직접 쓸 때:**
@@ -267,6 +275,11 @@ for (const auto& name : names) {
     cout << name << endl;
 }
 \`\`\`
+
+언제 뭘 써야 할까요?
+- \`auto x\` : 작은 값(int, double)을 읽기만 할 때
+- \`auto& x\` : 원소를 **수정**할 때
+- \`const auto& x\` : 큰 데이터(string)를 읽기만 할 때 (복사 방지)
 
 💡 \`for (const auto& x : v)\`는 C++ 고수들이 가장 많이 쓰는 패턴이에요!`
         },

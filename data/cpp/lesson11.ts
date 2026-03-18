@@ -22,7 +22,12 @@ export const cppLesson11Data: LessonData = {
           id: "ch1-intro",
           type: "explain",
           title: "📏 문자열 길이와 접근!",
-          content: `파이썬에서 문자열 길이를 구할 때 \`len()\`을 썼죠? C++에서는 **메서드**를 사용해요!
+          component: "cppStringBuilder",
+          content: `채팅 앱을 만든다고 생각해보세요. '@홍길동'을 찾아서 알림을 보내야 하고, 욕설을 '***'로 바꿔야 하고, 메시지 길이가 100자를 넘는지 확인해야 해요. 이 모든 게 **문자열 조작**이에요!
+
+파이썬에서 문자열은 간단했죠? \`.upper()\`, \`.split()\`, 슬라이싱... C++의 string은 비슷하지만 **주의할 점**이 더 많아요!
+
+파이썬에서 문자열 길이를 구할 때 \`len()\`을 썼죠? C++에서는 **메서드**를 사용해요!
 
 **파이썬 🐍:**
 \`\`\`python
@@ -104,6 +109,18 @@ if (pos == string::npos) {
 }
 \`\`\`
 파이썬은 \`-1\`을 리턴하지만, C++은 \`string::npos\`라는 특별한 값을 리턴해요!
+
+🔍 \`string::npos\`란? 'no position'의 약자예요. find()가 문자를 못 찾으면 이 특별한 값을 돌려줘요. 왜 -1이 아닐까? 문자열 위치는 음수가 될 수 없는 \`size_t\` 타입이라서예요!
+
+문자열에서 뭔가를 찾을 때는 항상 이 패턴을 써요:
+\`\`\`cpp
+size_t pos = str.find("abc");
+if (pos != string::npos) {
+    // 찾았을 때
+} else {
+    // 못 찾았을 때
+}
+\`\`\`
 
 💡 find와 substr을 조합하면 파이썬의 슬라이싱처럼 쓸 수 있어요!`
         },
@@ -267,15 +284,15 @@ cout << (char)toupper(c) << endl;  // 'A'
 cout << (char)tolower('Z') << endl; // 'z'
 \`\`\`
 
-⚠️ \`toupper()\`, \`tolower()\`는 **한 글자(char)**에만 동작해요! 파이썬의 \`.upper()\`처럼 문자열 전체를 한 번에 바꾸지는 못해요.
+⚠️ toupper()와 tolower()는 **한 글자(char)**에만 써요! 전체 문자열을 바꾸려면 range-for 루프를 돌려야 해요. 파이썬의 \`.upper()\`처럼 문자열 전체를 한 번에 바꾸지는 못해요.
 
-전체 문자열을 대문자로 바꾸려면 for 루프를 써야 해요:
+전체 문자열을 대문자로 바꾸려면? for 루프가 필요해요:
 \`\`\`cpp
 string s = "hello";
-for (auto& c : s) {
+for (char& c : s) {
     c = toupper(c);
 }
-// s는 이제 "HELLO"
+cout << s;  // HELLO
 \`\`\`
 
 💡 stoi = **s**tring **to** **i**nt, stod = **s**tring **to** **d**ouble로 기억하면 쉬워요!`

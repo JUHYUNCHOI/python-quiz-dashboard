@@ -196,6 +196,257 @@ const registry: Record<string, ComponentEntry> = {
     load: () => import("@/components/animations/file-io"),
     exportName: "ReadMethodDemo",
   },
+
+  // 문법 조립 애니메이션 (SyntaxBuilder)
+  cppIfBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppIfBuilder",
+  },
+  cppForBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppForBuilder",
+  },
+  cppWhileBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppWhileBuilder",
+  },
+  cppFunctionBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppFunctionBuilder",
+  },
+  pyIfBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "PyIfBuilder",
+  },
+  pyForBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "PyForBuilder",
+  },
+  pyFunctionBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "PyFunctionBuilder",
+  },
+  pyClassBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "PyClassBuilder",
+  },
+  cppSwitchBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppSwitchBuilder",
+  },
+  cppArrayBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppArrayBuilder",
+  },
+  cppPointerBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppPointerBuilder",
+  },
+  cppClassBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppClassBuilder",
+  },
+  pyWhileBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "PyWhileBuilder",
+  },
+  pyTryExceptBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "PyTryExceptBuilder",
+  },
+  pyListBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "PyListBuilder",
+  },
+  pyDictBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "PyDictBuilder",
+  },
+  cppTernaryBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppTernaryBuilder",
+  },
+  cppVariableBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppVariableBuilder",
+  },
+  cppCoutBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppCoutBuilder",
+  },
+  cppCinBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppCinBuilder",
+  },
+  cppStringBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppStringBuilder",
+  },
+  cppDoWhileBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppDoWhileBuilder",
+  },
+  pyVariableBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "PyVariableBuilder",
+  },
+  pyPrintBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "PyPrintBuilder",
+  },
+  pyInputBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "PyInputBuilder",
+  },
+  cppEscapeBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppEscapeBuilder",
+  },
+  cppCharBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppCharBuilder",
+  },
+  cppTypeConvertBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppTypeConvertBuilder",
+  },
+  cppIntDivisionBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppIntDivisionBuilder",
+  },
+  cppElseIfBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppElseIfBuilder",
+  },
+  cppVectorBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppVectorBuilder",
+  },
+  cppRangeForBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppRangeForBuilder",
+  },
+  cppAutoBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppAutoBuilder",
+  },
+  cppReferenceBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppReferenceBuilder",
+  },
+  cppCallByRefBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppCallByRefBuilder",
+  },
+  cppPublicPrivateBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppPublicPrivateBuilder",
+  },
+  cppBraceTrapBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppBraceTrapBuilder",
+  },
+
+  // C++ 레슨: 데이터 타입별 메모리 시각화
+  memoryTypeVisualizer: {
+    load: () => import("@/components/animations/memory-type-visualizer"),
+    exportName: "MemoryTypeVisualizer",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+
+  // C++ 레슨: cin 버퍼 시각화 (cin.ignore 설명용)
+  cinBufferVisualizer: {
+    load: () => import("@/components/animations/cin-buffer-visualizer"),
+    exportName: "CinBufferVisualizer",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+
+  // 코드 실행 추적 시뮬레이터 (조건문/반복문 단계별 실행)
+  codeTracePyIfElse: {
+    load: () => import("@/components/animations/code-trace/preset-components"),
+    exportName: "CodeTracePyIfElse",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+  codeTracePyNestedIf: {
+    load: () => import("@/components/animations/code-trace/preset-components"),
+    exportName: "CodeTracePyNestedIf",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+  codeTracePyForSum: {
+    load: () => import("@/components/animations/code-trace/preset-components"),
+    exportName: "CodeTracePyForSum",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+  codeTracePyWhile: {
+    load: () => import("@/components/animations/code-trace/preset-components"),
+    exportName: "CodeTracePyWhile",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+  codeTracePyForIf: {
+    load: () => import("@/components/animations/code-trace/preset-components"),
+    exportName: "CodeTracePyForIf",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+  codeTraceCppIfElse: {
+    load: () => import("@/components/animations/code-trace/preset-components"),
+    exportName: "CodeTraceCppIfElse",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+  codeTraceCppFor: {
+    load: () => import("@/components/animations/code-trace/preset-components"),
+    exportName: "CodeTraceCppFor",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+  codeTraceCppArrayLoop: {
+    load: () => import("@/components/animations/code-trace/preset-components"),
+    exportName: "CodeTraceCppArrayLoop",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+  codeTraceCppWhile: {
+    load: () => import("@/components/animations/code-trace/preset-components"),
+    exportName: "CodeTraceCppWhile",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+  codeTraceCppBraceTrapNo: {
+    load: () => import("@/components/animations/code-trace/preset-components"),
+    exportName: "CodeTraceCppBraceTrapNo",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+  codeTraceCppBraceTrapYes: {
+    load: () => import("@/components/animations/code-trace/preset-components"),
+    exportName: "CodeTraceCppBraceTrapYes",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+  codeTraceCppBraceTrapNoCombo: {
+    load: () => import("@/components/animations/code-trace/preset-components"),
+    exportName: "CodeTraceCppBraceTrapNoCombo",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+  codeTraceCppBraceTrapYesCombo: {
+    load: () => import("@/components/animations/code-trace/preset-components"),
+    exportName: "CodeTraceCppBraceTrapYesCombo",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+  codeTraceCppScoreGrade: {
+    load: () => import("@/components/animations/code-trace/preset-components"),
+    exportName: "CodeTraceCppScoreGrade",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+  codeTracePyIfElseLow: {
+    load: () => import("@/components/animations/code-trace/preset-components"),
+    exportName: "CodeTracePyIfElseLow",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+  codeTracePyNestedIfFalse: {
+    load: () => import("@/components/animations/code-trace/preset-components"),
+    exportName: "CodeTracePyNestedIfFalse",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+  codeTraceCppScoreGradeHigh: {
+    load: () => import("@/components/animations/code-trace/preset-components"),
+    exportName: "CodeTraceCppScoreGradeHigh",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
 }
 
 export default registry

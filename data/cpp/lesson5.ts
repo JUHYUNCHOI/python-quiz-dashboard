@@ -47,7 +47,13 @@ int c = 10 * 3;   // 30
           id: "ch1-division",
           type: "explain",
           title: "⚠️ 정수 나눗셈의 함정!",
-          content: `파이썬과 C++의 **가장 큰 차이점**이에요!
+          component: "cppIntDivisionBuilder",
+          content: `**왜 5 / 2 = 2가 될까요?** 🤔
+
+C++은 메모리를 아끼기 위해 \`int\`끼리 계산하면 결과도 \`int\`로 만들어요.
+소수점을 저장할 공간이 없으니 그냥 잘라버리는 거예요!
+
+파이썬과 C++의 **가장 큰 차이점**이에요!
 
 **파이썬 🐍:** \`5 / 2\` → \`2.5\` ✅
 **C++ ⚡:** \`5 / 2\` → \`2\` 😱 (소수점이 버려짐!)
@@ -92,6 +98,15 @@ cout << 15 % 4;  // 3 (15 = 4 × 3 + 3)
 → \`x % 2 == 0\` 이면 짝수, \`x % 2 == 1\` 이면 홀수!
 
 💡 나머지 연산은 파이썬이랑 똑같으니까 편하게 쓰세요! 😊`
+        },
+        {
+          id: "ch1-pred-modulo",
+          type: "predict" as const,
+          title: "나머지 연산 활용",
+          code: "#include <iostream>\nusing namespace std;\nint main() {\n    int n = 7;\n    if (n % 2 == 0) {\n        cout << \"짝수\";\n    } else {\n        cout << \"홀수\";\n    }\n    return 0;\n}",
+          options: ["짝수", "홀수", "1", "에러"],
+          answer: 1,
+          explanation: "7을 2로 나눈 나머지는 1이에요. 0이 아니니까 else 블록이 실행돼요! 이 패턴은 정말 자주 써요."
         },
         {
           id: "ch1-practice",
@@ -145,6 +160,17 @@ int main() {
       title: "비교와 논리 연산자",
       emoji: "⚖️",
       steps: [
+        {
+          id: "ch2-why",
+          type: "explain",
+          title: "왜 값을 비교해야 할까?",
+          content: `게임에서 점수가 100점 이상이면 보너스를 주고 싶어요.
+쇼핑몰에서 나이가 19세 이상이면 성인 인증을 해야 해요.
+로봇이 벽과의 거리가 10cm 이하면 멈춰야 해요.
+
+이런 **'조건 판단'**을 하려면 값을 비교할 수 있어야 해요!
+비교 연산자는 다음 시간에 배울 **if문의 핵심 재료**예요.`
+        },
         {
           id: "ch2-compare",
           type: "explain",
@@ -201,7 +227,8 @@ if (!finished) {
 }
 \`\`\`
 
-💡 \`and\` → \`&&\`, \`or\` → \`||\`, \`not\` → \`!\` 만 기억하면 돼요!`
+💡 \`and\` → \`&&\`, \`or\` → \`||\`, \`not\` → \`!\` 만 기억하면 돼요!`,
+          component: "cppIfBuilder",
         },
         {
           id: "ch2-fb1",
@@ -243,6 +270,64 @@ x--;    // x = x - 1 → 5
           explanation: "a = 3 → a++ → 4 → a++ → 5! 두 번 ++했으니까 3 + 2 = 5예요."
         },
         {
+          id: "ch2-prefix-postfix",
+          type: "explain",
+          title: "🔍 x++ vs ++x — 뭐가 다를까?",
+          content: `\`x++\`과 \`++x\`는 둘 다 x에 1을 더해요. 하지만 **다른 연산과 함께 쓸 때** 차이가 나요!
+
+\`\`\`cpp
+int x = 5;
+cout << x++ << endl;  // 5를 출력하고, 그 다음에 x가 6이 됨
+cout << x << endl;    // 6
+\`\`\`
+
+\`\`\`cpp
+int y = 5;
+cout << ++y << endl;  // y를 먼저 6으로 만들고, 6을 출력
+cout << y << endl;    // 6
+\`\`\`
+
+| 구분 | 동작 순서 | 기억법 |
+|---|---|---|
+| \`x++\` (후위) | **값을 먼저 사용** → 그 다음 +1 | ++가 뒤 → "나중에" 올라감 |
+| \`++x\` (전위) | **먼저 +1** → 그 다음 값을 사용 | ++가 앞 → "먼저" 올라감 |
+
+💡 단독으로 쓸 때는 \`x++;\`과 \`++x;\` 결과가 똑같아요! 차이는 **cout이나 대입과 함께 쓸 때**만 나타나요.`
+        },
+        {
+          id: "ch2-pred-prefix",
+          type: "predict" as const,
+          title: "x++ vs ++x 차이 맞추기!",
+          code: "#include <iostream>\nusing namespace std;\nint main() {\n    int a = 10;\n    cout << a++ << endl;\n    cout << a << endl;\n    return 0;\n}",
+          options: ["10\\n10", "10\\n11", "11\\n11", "11\\n12"],
+          answer: 1,
+          explanation: "a++는 **후위**: 먼저 현재 값 10을 출력하고, 그 다음에 a가 11이 돼요. 두 번째 줄에서 a는 이미 11!"
+        },
+        {
+          id: "ch2-pred-prefix2",
+          type: "predict" as const,
+          title: "이번엔 ++x!",
+          code: "#include <iostream>\nusing namespace std;\nint main() {\n    int b = 10;\n    cout << ++b << endl;\n    cout << b << endl;\n    return 0;\n}",
+          options: ["10\\n10", "10\\n11", "11\\n11", "11\\n12"],
+          answer: 2,
+          explanation: "++b는 **전위**: 먼저 b를 11로 만들고, 그 값 11을 출력해요. 두 번째 줄에서도 b는 11!"
+        },
+        {
+          id: "ch2-q-prefix",
+          type: "quiz",
+          title: "후위 vs 전위!",
+          content: `다음 코드의 출력은?
+
+\`\`\`cpp
+int x = 3;
+int y = x++;
+cout << x << " " << y;
+\`\`\``,
+          options: ["3 3", "4 3", "4 4", "3 4"],
+          answer: 1,
+          explanation: "x++는 후위: y에 현재 값 3을 먼저 대입하고, 그 다음 x가 4가 돼요. 결과: x=4, y=3!"
+        },
+        {
           id: "ch2-compound",
           type: "explain",
           title: "📝 복합 대입 연산자 (+=, -=, ...)",
@@ -266,6 +351,31 @@ score %= 3;    // score = score % 3 → 1
 | \`%=\` | 나머지 대입 | \`x %= 3\` → \`x = x % 3\` |
 
 💡 파이썬이랑 완전히 같아요! 다만 C++에는 \`x++\`, \`x--\`가 추가로 있는 거예요!`
+        },
+        {
+          id: "ch2-precedence",
+          type: "explain",
+          title: "⚠️ 연산 순서 주의!",
+          content: `연산자가 많아지면 **순서**가 중요해요!
+
+\`\`\`cpp
+cout << 5 + 3 * 2;   // 11 (16이 아니에요!)
+\`\`\`
+
+곱셈(\`*\`)이 덧셈(\`+\`)보다 먼저 계산돼요! 수학이랑 같죠?
+
+헷갈리면 **괄호**를 써요:
+\`\`\`cpp
+cout << (5 + 3) * 2;  // 16 (괄호 안이 먼저!)
+\`\`\`
+
+비교와 논리도 순서가 있어요: \`&&\`가 \`||\`보다 먼저 계산돼요!
+\`\`\`cpp
+// a || b && c 는 a || (b && c) 와 같아요!
+\`\`\`
+
+💡 기억법: **"괄호 > 산술 > 비교 > 논리"** 순서!
+→ 헷갈리면 그냥 괄호를 쓰세요. 코드도 더 읽기 쉬워져요! 😊`
         },
         {
           id: "ch2-pred2",
@@ -397,6 +507,92 @@ cout << result;
           explanation: "5.0은 실수(double)이므로, 5.0 / 2 = 2.5! 하나라도 실수면 결과도 실수가 돼요."
         },
         {
+          id: "ch3-q5",
+          type: "quiz",
+          title: "x++ vs ++x",
+          content: `다음 코드의 출력은?
+
+\`\`\`cpp
+int a = 5;
+int b = ++a;
+cout << a << " " << b;
+\`\`\``,
+          options: ["5 5", "5 6", "6 6", "6 5"],
+          answer: 2,
+          explanation: "++a는 전위: 먼저 a를 6으로 만들고, 그 값 6을 b에 대입해요. 결과: a=6, b=6!"
+        },
+        {
+          id: "ch3-q6",
+          type: "quiz",
+          title: "종합 추적!",
+          content: `다음 코드의 출력은?
+
+\`\`\`cpp
+int x = 8;
+x += 2;
+x--;
+x *= 3;
+cout << x;
+\`\`\``,
+          options: ["27", "30", "24", "21"],
+          answer: 0,
+          explanation: "x=8 → x+=2 → 10 → x-- → 9 → x*=3 → 27! 한 줄씩 따라가면 돼요."
+        },
+        {
+          id: "ch3-q7",
+          type: "quiz",
+          title: "논리 + 비교 종합",
+          content: `다음 코드의 출력은?
+
+\`\`\`cpp
+int a = 3, b = 7;
+cout << (a != b && b > 5);
+\`\`\``,
+          options: ["0", "1", "true", "에러"],
+          answer: 1,
+          explanation: "a != b → true (3≠7), b > 5 → true (7>5). true && true = true! C++에서 true는 1로 출력돼요."
+        },
+        {
+          id: "ch3-practice",
+          type: "practice" as const,
+          title: "✋ x++ vs ++x 직접 실험해보기!",
+          content: `후위(x++)와 전위(++x)의 차이를 직접 눈으로 확인해봐요!
+
+숫자를 바꿔가면서 결과를 예측해보세요.`,
+          code: `#include <iostream>
+using namespace std;
+
+int main() {
+    int x = 5;
+
+    // 후위 (postfix): 값을 먼저 쓰고, 나중에 +1
+    cout << "=== 후위 x++ ===" << endl;
+    cout << "x 시작: " << x << endl;
+    cout << "x++ = " << x++ << endl;  // 5 출력 후 +1
+    cout << "x 현재: " << x << endl;  // 6
+
+    cout << endl;
+    x = 5;  // 리셋
+
+    // 전위 (prefix): 먼저 +1하고, 값을 씀
+    cout << "=== 전위 ++x ===" << endl;
+    cout << "x 시작: " << x << endl;
+    cout << "++x = " << ++x << endl;  // +1 후 6 출력
+    cout << "x 현재: " << x << endl;  // 6
+
+    return 0;
+}`,
+          expectedOutput: `=== 후위 x++ ===
+x 시작: 5
+x++ = 5
+x 현재: 6
+
+=== 전위 ++x ===
+x 시작: 5
+++x = 6
+x 현재: 6`
+        },
+        {
           id: "ch3-summary",
           type: "explain",
           title: "🎯 오늘 배운 것!",
@@ -408,6 +604,7 @@ cout << result;
 - ✅ **비교 연산자** — ==, !=, <, > 동일, 출력은 1/0
 - ✅ **논리 연산자** — and → &&, or → ||, not → !
 - ✅ **증감 연산자** — x++, x-- (파이썬에 없는 것!)
+- ✅ **x++ vs ++x** — 후위는 "쓰고 올리고", 전위는 "올리고 쓰고"!
 
 🚀 **다음 시간: 조건문 (if/else)** — 중괄호 {}와 else if를 배워요!`
         }

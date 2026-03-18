@@ -22,7 +22,13 @@ export const cppLesson15EnData: LessonData = {
           id: "ch1-intro",
           type: "explain",
           title: "🔗 pair — Bundle Two Values Together!",
-          content: `Sometimes you need to keep **two values** together — like a name and score, or x and y coordinates.
+          content: `Imagine you're announcing test results. 'Alice 95, Bob 87, Carol 92...' You need to keep names and scores **together** at all times. If you use separate variables, the names and scores get mixed up when you sort!
+
+If you use separate variables? \`string name1; int score1; string name2; int score2;\` 😰 Too messy!
+
+**pair is a simple tool that bundles two values together.**
+
+When you have **two values** that always go together — like a name and score, or x and y coordinates:
 
 \`\`\`cpp
 #include <utility>  // Header that contains pair
@@ -183,7 +189,41 @@ v.sort()  # Python tuples also sort by first element!
 # [(1,'A'), (1,'D'), (2,'B'), (3,'C')]
 \`\`\`
 
+Why pair's auto-comparison is useful: when you sort a \`vector<pair<int,string>>\`, it automatically sorts by the first value (score)!
+
 💡 It works the same way as Python tuples! First value first, then second value as tiebreaker.`
+        },
+        {
+          id: "ch1-question",
+          type: "explain",
+          title: "🙋 Question: Can't I just use two vector<int>s?",
+          content: `**"Can't I just use two vector<int>s?"**
+
+You can! But problems arise when sorting: if you sort the scores, the names don't move along with them.
+
+\`\`\`cpp
+// What if you store them separately?
+vector<string> names = {"Kim", "Lee", "Park"};
+vector<int> scores = {78, 95, 88};
+
+sort(scores.begin(), scores.end());
+// scores = {78, 88, 95}
+// names stays as {"Kim", "Lee", "Park"} 😱
+// You can't tell whose score 78 belongs to!
+\`\`\`
+
+With pair, they always move together!
+
+\`\`\`cpp
+vector<pair<int, string>> students = {
+    {78, "Kim"}, {95, "Lee"}, {88, "Park"}
+};
+sort(students.begin(), students.end());
+// {78, "Kim"}, {88, "Park"}, {95, "Lee"} ✅
+// Scores and names always stay together!
+\`\`\`
+
+💡 Related data should be **bundled together** — it's safer and more convenient!`
         },
         {
           id: "ch1-practice",
@@ -242,7 +282,9 @@ Park: 92`
           id: "ch2-intro",
           type: "explain",
           title: "📊 sort() — The Basics of Sorting!",
-          content: `C++'s **sort()** function lets you sort data!
+          content: `Say you want to sort a list of students by score. If you make \`pair<score, name>\`, sorting happens automatically by score! That's the real power of pair.
+
+C++'s **sort()** function lets you sort data!
 
 \`\`\`cpp
 #include <algorithm>  // Header that contains sort()!
@@ -359,6 +401,9 @@ sort(v.begin(), v.end(), cmp);
 \`\`\`
 
 **Method 2: Lambda**
+
+Here's a new syntax! \`[](int a, int b) { return a > b; }\` — this is called a **lambda**, an 'anonymous function.' It starts with \`[]\` and is a disposable function you create right on the spot. No need to define a separate function above — super convenient!
+
 \`\`\`cpp
 sort(v.begin(), v.end(), [](int a, int b) {
     return a > b;  // Descending

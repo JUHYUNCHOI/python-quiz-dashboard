@@ -22,47 +22,50 @@ export const cppLesson10EnData: LessonData = {
           id: "ch1-intro",
           type: "explain",
           title: "🔁 Range-for: Python-style Loops in C++!",
-          content: `In Lesson 9, we looped through arrays with an index-based for:
+          component: "cppRangeForBuilder",
+          content: `Last time we learned index-based loops like \`for (int i = 0; i < size; i++)\`. Writing that every time is error-prone. There's a simpler way!
 
 \`\`\`cpp
-for (int i = 0; i < 5; i++) {
-    cout << arr[i] << " ";
+vector<int> nums = {10, 20, 30};
+for (int i = 0; i < nums.size(); i++) {
+    cout << nums[i] << " ";
 }
 \`\`\`
 
-Kind of annoying, right? In Python it's so simple:
+Wasn't the index variable \`i\` kind of annoying? We want to access values directly, like in Python!
 
+**Python 🐍:**
 \`\`\`python
-for x in scores:
+nums = [10, 20, 30]
+for x in nums:
     print(x)
 \`\`\`
 
-Good news — C++ has something similar! It's called **range-based for** (or "range-for"):
-
+**C++ ⚡ (range-based for):**
 \`\`\`cpp
-int scores[5] = {90, 85, 78, 92, 88};
-
-for (int x : scores) {
+vector<int> nums = {10, 20, 30};
+for (int x : nums) {
     cout << x << " ";
 }
-// Output: 90 85 78 92 88
 \`\`\`
+
+\`for (type variable : container)\` — almost the same as Python's \`for x in list:\`!
 
 | Python 🐍 | C++ ⚡ |
 |---|---|
-| \`for x in scores:\` | \`for (int x : scores) {\` |
-| Automatic | Automatic too! |
+| \`for x in nums:\` | \`for (int x : nums) {\` |
+| No type needed | Type required |
+| Colon : | Colon : (same!) |
 
-Works with **arrays AND vectors**!
-
+Works with both arrays and vectors:
 \`\`\`cpp
-vector<int> nums = {1, 2, 3};
-for (int n : nums) {
-    cout << n << " ";
+int arr[3] = {1, 2, 3};
+for (int x : arr) {     // Arrays work too!
+    cout << x << " ";
 }
 \`\`\`
 
-💡 Range-for is the closest thing to Python's \`for x in list\`! No more messing with indices.`
+💡 Range-based for is super convenient when you don't need the index!`
         },
         {
           id: "ch1-fb1",
@@ -111,7 +114,11 @@ Think of it like this:
 
 In Python, when you do \`for x in list\` and change \`x\`, it doesn't change the list either. But C++ gives you the **choice** with &!
 
-💡 Need to read? Use \`int x\`. Need to write? Use \`int& x\`!`
+💡 Adding & means "access the original directly"!
+
+& means "the original itself." Not a copy, but the real thing! If you **copy** a photo and give it to a friend, editing the copy doesn't affect the original. But if you **share the original file**, any changes your friend makes show up on yours too. That's exactly what & does — it's sharing the original!
+
+This is where the & symbol shows up! & means "modify the original directly." We'll learn more about it in Lesson 12. For now, just remember: **& = modify original, no & = copy only**!`
         },
         {
           id: "ch1-pred1",
@@ -208,7 +215,9 @@ x = 3.14;      // x is still int! 3.14 becomes 3
 // x = "hello"; // ❌ Error! Can't change type!
 \`\`\`
 
-💡 auto is like Python convenience with C++ safety. The type is decided at compile time, not runtime!`
+Think of auto as a "one-time binding contract." When you write \`auto x = 5;\`, x becomes int **forever**. You can't put a string in it later like you would in Python!
+
+💡 auto doesn't mean "no type" — it means "the compiler writes the type for you!" It's not as free as Python.`
         },
         {
           id: "ch2-fb1",
@@ -226,6 +235,7 @@ x = 3.14;      // x is still int! 3.14 becomes 3
           id: "ch2-combo",
           type: "explain",
           title: "🎯 auto + Range-for: The Modern C++ Style!",
+          component: "cppAutoBuilder",
           content: `Here's where auto really shines — combine it with range-for!
 
 **Without auto:**
@@ -255,15 +265,35 @@ for (string name : names) { ... }
 for (auto name : names) { ... }
 \`\`\`
 
-There are **3 common patterns**:
+Remember these three patterns:
 
 | Pattern | Meaning | When to use |
 |---|---|---|
-| \`for (auto x : vec)\` | Copy | Just reading, small types |
-| \`for (auto& x : vec)\` | Reference | Need to modify |
-| \`for (const auto& x : vec)\` | Const reference | Reading, avoid copying (large types) |
+| \`for (auto x : vec)\` | Copy (read-only) | Just reading, small types |
+| \`for (auto& x : vec)\` | Reference (modifiable) | Need to modify |
+| \`for (const auto& x : vec)\` | Const reference (read-only + efficient) | Reading large objects |
 
-💡 \`for (const auto& x : vec)\` is the **most recommended** for reading — it's fast and safe!`
+Here's an example with a string vector:
+\`\`\`cpp
+vector<string> names = {"Alice", "Bob", "Charlie"};
+
+// Explicit type: vector<string>, so... string? string&? Confusing!
+for (const string& name : names) {
+    cout << name << endl;
+}
+
+// auto: no need to think about it!
+for (const auto& name : names) {
+    cout << name << endl;
+}
+\`\`\`
+
+When should you use which?
+- \`auto x\` : Reading small values (int, double)
+- \`auto& x\` : When you need to **modify** elements
+- \`const auto& x\` : Reading large data (string) without copying
+
+💡 \`for (const auto& x : v)\` is the pattern C++ experts use the most!`
         },
         {
           id: "ch2-pred1",

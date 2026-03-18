@@ -1,10 +1,13 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { useRouter } from "next/navigation"
+import { recordAnswer, getGradeInfo } from "@/lib/spaced-repetition"
+import { scheduleRetry, getRetryQuestion } from "@/lib/quiz-question-selector"
 
 export interface QuizQuestion {
   id: number
+  lessonId: string | number
   difficulty: string
   question: string
   code: string
@@ -18,6 +21,7 @@ export interface QuizQuestion {
     correct: string
   }
   relatedTopics?: string[]
+  animationKey?: string
 }
 
 export interface QuizSettings {
@@ -46,6 +50,11 @@ export interface SessionData {
   questionDetails: QuestionResult[]
   startedAt: number
   difficulty: string
+  // 말해보카 스타일 통계
+  perfectCount: number
+  greatCount: number
+  goodCount: number
+  retryCorrectCount: number   // 재출제에서 맞힌 수
 }
 
 // -------- Combo Tier System --------
@@ -104,6 +113,14 @@ export function useQuizState(questions: QuizQuestion[]) {
   const [showCelebration, setShowCelebration] = useState(false)
   const [showExplanation, setShowExplanation] = useState(false)
 
+  // 말해보카 스타일: 오답 재출제 큐 + 등급
+  const retryQueueRef = useRef<Map<number, number>>(new Map())
+  const [currentGrade, setCurrentGrade] = useState<"perfect" | "great" | "good" | "fail" | null>(null)
+  const questionAttemptRef = useRef<Map<number, number>>(new Map())  // questionId → 시도 횟수
+  const [isRetryQuestion, setIsRetryQuestion] = useState(false)
+  const [retryInsertedQuestions, setRetryInsertedQuestions] = useState<QuizQuestion[]>([])
+  const [gradeStats, setGradeStats] = useState({ perfect: 0, great: 0, good: 0, retryCorrect: 0 })
+
   // Mid check-in
   const [showMidCheckIn, setShowMidCheckIn] = useState(false)
   const [midCheckInShown, setMidCheckInShown] = useState(false)
@@ -159,7 +176,12 @@ export function useQuizState(questions: QuizQuestion[]) {
     return () => window.removeEventListener("beforeunload", handler)
   }, [currentQuestion, showResult])
 
-  const question = questions[currentQuestion] ?? questions[0]
+  // 재출제 문제가 있으면 그것을 현재 문제로 사용
+  const retryCheck = getRetryQuestion(retryQueueRef.current, questions)
+  const activeRetryQuestion = retryCheck.question
+
+  // 현재 문제: 재출제 문제가 있으면 그것, 없으면 순서대로
+  const question = activeRetryQuestion || (questions[currentQuestion] ?? questions[0])
   const progress = ((currentQuestion + 1) / quizSettings.questionCount) * 100
   const estimatedRemainingTime = Math.ceil((quizSettings.questionCount - currentQuestion - 1) * 1)
 
@@ -177,6 +199,10 @@ export function useQuizState(questions: QuizQuestion[]) {
         questionDetails: questionResults,
         startedAt: quizSettings.startTime,
         difficulty: quizSettings.difficulty,
+        perfectCount: gradeStats.perfect,
+        greatCount: gradeStats.great,
+        goodCount: gradeStats.good,
+        retryCorrectCount: gradeStats.retryCorrect,
       }
       sessionStorage.setItem("quizSessionData", JSON.stringify(data))
     },
@@ -218,10 +244,33 @@ export function useQuizState(questions: QuizQuestion[]) {
       related_topics: question.relatedTopics,
     }])
 
+    // 시도 횟수 추적
+    const prevAttempts = questionAttemptRef.current.get(question.id) || 0
+    const attempts = prevAttempts + 1
+    questionAttemptRef.current.set(question.id, attempts)
+
+    // 간격 반복 기록
+    const mastery = recordAnswer(question.id, correct, attempts)
+    setCurrentGrade(mastery.lastGrade)
+
+    // 재출제 큐 업데이트 (카운트다운)
+    if (activeRetryQuestion) {
+      retryQueueRef.current = retryCheck.updatedQueue
+    }
+
     if (correct) {
       const newScore = score + 1
       setScore(newScore)
       setWrongAnswerStreak(0)
+
+      // 등급 통계 업데이트
+      setGradeStats(prev => ({
+        ...prev,
+        perfect: prev.perfect + (mastery.lastGrade === "perfect" ? 1 : 0),
+        great: prev.great + (mastery.lastGrade === "great" ? 1 : 0),
+        good: prev.good + (mastery.lastGrade === "good" ? 1 : 0),
+        retryCorrect: prev.retryCorrect + (isRetryQuestion ? 1 : 0),
+      }))
 
       // Combo logic
       const newCombo = combo + 1
@@ -231,6 +280,15 @@ export function useQuizState(questions: QuizQuestion[]) {
       setShowCelebration(true)
       setTimeout(() => {
         setShowCelebration(false)
+        setIsRetryQuestion(false)
+
+        // 재출제 문제를 풀었으면 currentQuestion은 안 올림
+        if (activeRetryQuestion) {
+          setSelectedAnswer(null)
+          setShowResult(false)
+          return
+        }
+
         if (currentQuestion < quizSettings.questionCount - 1) {
           setCurrentQuestion((q) => q + 1)
           setSelectedAnswer(null)
@@ -243,6 +301,9 @@ export function useQuizState(questions: QuizQuestion[]) {
     } else {
       // Reset combo on wrong
       setCombo(0)
+
+      // 오답 재출제 큐에 추가 (2-3문제 뒤에 다시 나옴)
+      retryQueueRef.current = scheduleRetry(retryQueueRef.current, question.id)
 
       // Hearts logic
       const newHearts = hearts - 1
@@ -357,6 +418,15 @@ export function useQuizState(questions: QuizQuestion[]) {
 
   const handleExplanationClose = useCallback(() => {
     setShowExplanation(false)
+    setIsRetryQuestion(false)
+
+    // 재출제 문제에서 설명 닫으면 currentQuestion 안 올림
+    if (activeRetryQuestion) {
+      setSelectedAnswer(null)
+      setShowResult(false)
+      return
+    }
+
     if (currentQuestion < quizSettings.questionCount - 1) {
       setCurrentQuestion((q) => q + 1)
       setSelectedAnswer(null)
@@ -365,7 +435,7 @@ export function useQuizState(questions: QuizQuestion[]) {
       saveSessionData("completed", score)
       router.push("/quiz/session-complete")
     }
-  }, [currentQuestion, quizSettings.questionCount, router, saveSessionData, score])
+  }, [currentQuestion, quizSettings.questionCount, router, saveSessionData, score, activeRetryQuestion])
 
   const handlePracticeSimilar = useCallback(() => {
     setShowExplanation(false)
@@ -401,6 +471,11 @@ export function useQuizState(questions: QuizQuestion[]) {
     showQuickAnswerWarning,
     showWrongToast,
     showExitConfirm,
+
+    // 말해보카 스타일
+    currentGrade,
+    isRetryQuestion,
+    gradeStats,
 
     // Actions
     handleAnswerSelect,

@@ -99,6 +99,24 @@ else:
           hint2: "if score >= 60:"
         },
         {
+          id: "nested-sim",
+          type: "explain",
+          title: "🔍 실행 추적: if 안에 if가 있다면? (True 경로)",
+          content: `if 안에 또 if가 있을 때, **둘 다 참**이면 어떻게 되는지 봐요!
+
+**▶ 실행하기** 또는 **▷ 한 단계** 버튼을 눌러보세요.`,
+          component: "codeTracePyNestedIf",
+        },
+        {
+          id: "nested-sim-false",
+          type: "explain",
+          title: "🔍 실행 추적: 안쪽 if가 거짓이면? (False 경로)",
+          content: `이번엔 has_id가 **False**! 바깥 if는 참이지만 안쪽 if가 거짓이면 어디로 갈까요?
+
+**▶ 실행하기** 또는 **▷ 한 단계** 버튼을 눌러보세요.`,
+          component: "codeTracePyNestedIfFalse",
+        },
+        {
           id: "quiz2",
           type: "quiz",
           title: "❓ 퀴즈!",
@@ -134,6 +152,24 @@ else:
 \`\`\`
 
 → 85점은 80 이상이니까 'B' 출력!`
+        },
+        {
+          id: "elif-sim",
+          type: "explain",
+          title: "🔍 실행 추적: score=85 → B학점 (elif 경로)",
+          content: `score=85일 때, if → elif → else 중 어디로 가는지 추적해 보세요!
+
+**▶ 실행하기** 또는 **▷ 한 단계** 버튼을 눌러보세요.`,
+          component: "codeTracePyIfElse",
+        },
+        {
+          id: "elif-sim-false",
+          type: "explain",
+          title: "🔍 실행 추적: score=65 → C학점 (else 경로)",
+          content: `이번엔 score=65! 모든 조건이 거짓이면 else로 가는 과정을 봐요!
+
+**▶ 실행하기** 또는 **▷ 한 단계** 버튼을 눌러보세요.`,
+          component: "codeTracePyIfElseLow",
         },
         {
           id: "try3",

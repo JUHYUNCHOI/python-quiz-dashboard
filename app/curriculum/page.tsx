@@ -343,6 +343,7 @@ export default function CurriculumPage() {
   const isTeacher = profile?.role === "teacher"
 
   const [completedLessons, setCompletedLessons] = useState<Set<number | string>>(new Set())
+  const [completedQuizzes, setCompletedQuizzes] = useState<Set<number | string>>(new Set())
   const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set(["part1", "part2", "part3", "part3-advanced", "part4", "part5", "part6", "part7", "part8", "part9", "cpp-part1", "cpp-part2", "cpp-part3", "pseudo-part1", "pseudo-part2", "pseudo-part3", "pseudo-part4", "pseudo-part5", "igcse-sql", "igcse-logic"]))
   const [selectedCourse, setSelectedCourse] = useState<CourseType>("python")
   const [loaded, setLoaded] = useState(false)
@@ -353,6 +354,17 @@ export default function CurriculumPage() {
     if (saved) {
       const arr: (string | number)[] = JSON.parse(saved)
       setCompletedLessons(new Set(arr.map(id => typeof id === "string" && /^\d+$/.test(id) ? Number(id) : id)))
+    }
+    const savedQuizzes = localStorage.getItem("completedQuizzes")
+    if (savedQuizzes) {
+      const arr: (string | number)[] = JSON.parse(savedQuizzes)
+      setCompletedQuizzes(new Set(arr.map(id => typeof id === "string" && /^\d+$/.test(id) ? Number(id) : id)))
+    } else if (saved) {
+      // 마이그레이션: completedQuizzes가 없으면 completedLessons를 복사
+      // (기존에 수업+퀴즈가 하나로 추적되었으므로)
+      localStorage.setItem("completedQuizzes", saved)
+      const arr: (string | number)[] = JSON.parse(saved)
+      setCompletedQuizzes(new Set(arr.map(id => typeof id === "string" && /^\d+$/.test(id) ? Number(id) : id)))
     }
     const savedCourse = localStorage.getItem("selectedCourse") as CourseType
     if (savedCourse === "python" || savedCourse === "cpp" || savedCourse === "pseudo") {
@@ -371,6 +383,11 @@ export default function CurriculumPage() {
       if (saved) {
         const arr: (string | number)[] = JSON.parse(saved)
         setCompletedLessons(new Set(arr.map(id => typeof id === "string" && /^\d+$/.test(id) ? Number(id) : id)))
+      }
+      const savedQ = localStorage.getItem("completedQuizzes")
+      if (savedQ) {
+        const arr: (string | number)[] = JSON.parse(savedQ)
+        setCompletedQuizzes(new Set(arr.map(id => typeof id === "string" && /^\d+$/.test(id) ? Number(id) : id)))
       }
     }
     window.addEventListener("cloud-data-restored", handler)
@@ -631,6 +648,7 @@ export default function CurriculumPage() {
                       <div className="space-y-2 sm:space-y-3">
                         {partLessons.map((lesson) => {
                           const isCompleted = completedLessons.has(lesson.id)
+                          const isQuizDone = completedQuizzes.has(lesson.id)
                           const isNextLesson = nextLessonInfo?.lesson.id === lesson.id
                           const isLocked = !unlockedLessons.has(lesson.id)
 
@@ -709,22 +727,24 @@ export default function CurriculumPage() {
                                     <>
                                       <Link
                                         href={`/learn/${lesson.id}`}
-                                        className={`px-3 sm:px-4 py-2 rounded-lg border-2 border-black font-bold text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-xs sm:text-sm ${
-                                          isPseudo ? "bg-green-500 hover:bg-green-600" : isCpp ? "bg-blue-500 hover:bg-blue-600" : "bg-green-500 hover:bg-green-600"
+                                        className={`min-w-[5.5rem] sm:min-w-[6.5rem] text-center px-3 sm:px-4 py-2 rounded-lg border-2 font-bold text-xs sm:text-sm ${
+                                          isCompleted
+                                            ? "border-green-600 bg-green-50 text-green-700 hover:bg-green-100"
+                                            : `border-black text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${isPseudo ? "bg-green-500 hover:bg-green-600" : isCpp ? "bg-blue-500 hover:bg-blue-600" : "bg-green-500 hover:bg-green-600"}`
                                         }`}
                                       >
-                                        {t("📺 수업", "📺 Lesson")}
+                                        {isCompleted ? t("✅ 수업완료", "✅ Done") : t("📺 수업", "📺 Lesson")}
                                       </Link>
                                       {!isPseudo && (!isCpp || cppReviewIds.has(String(lesson.id))) && (
                                         <Link
                                           href={getReviewPath(lesson.id)}
-                                          className={`px-3 sm:px-4 py-2 rounded-lg border-2 border-black font-bold text-xs sm:text-sm ${
-                                            isCompleted
-                                              ? "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                                              : "bg-orange-400 text-white hover:bg-orange-500 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                                          className={`min-w-[5.5rem] sm:min-w-[6.5rem] text-center px-3 sm:px-4 py-2 rounded-lg border-2 font-bold text-xs sm:text-sm ${
+                                            isQuizDone
+                                              ? "border-green-600 bg-green-50 text-green-700 hover:bg-green-100"
+                                              : "border-black bg-orange-400 text-white hover:bg-orange-500 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                                           }`}
                                         >
-                                          {t("🎮 퀴즈", "🎮 Quiz")}
+                                          {isQuizDone ? t("✅ 퀴즈완료", "✅ Quiz") : t("🎮 퀴즈", "🎮 Quiz")}
                                         </Link>
                                       )}
                                     </>

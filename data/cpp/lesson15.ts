@@ -22,7 +22,13 @@ export const cppLesson15Data: LessonData = {
           id: "ch1-intro",
           type: "explain",
           title: "🔗 pair — 두 값을 하나로 묶기!",
-          content: `이름과 점수, x좌표와 y좌표처럼 **두 개의 값**을 항상 같이 다뤄야 할 때가 있어요.
+          content: `시험 결과를 발표한다고 생각해보세요. '홍길동 95점, 김민수 87점, 이영희 92점...' 이름과 점수를 **항상 같이** 다뤄야 하잖아요? 변수를 따로 만들면 정렬할 때 이름과 점수가 따로 놀아요!
+
+변수를 2개 따로 만들면? \`string name1; int score1; string name2; int score2;\` 😰 너무 복잡하죠!
+
+**pair는 두 값을 하나로 묶는 간단한 도구**예요.
+
+이름과 점수, x좌표와 y좌표처럼 **두 개의 값**을 항상 같이 다뤄야 할 때가 있어요.
 
 \`\`\`cpp
 #include <utility>  // pair이 들어있는 헤더
@@ -183,7 +189,41 @@ v.sort()  # 파이썬 tuple도 첫 번째 요소 기준 정렬!
 # [(1,'A'), (1,'D'), (2,'B'), (3,'C')]
 \`\`\`
 
+pair의 자동 비교가 유용한 이유: \`vector<pair<int,string>>\`을 sort()하면 자동으로 첫 번째 값(점수) 기준으로 정렬돼요!
+
 💡 파이썬 tuple과 같은 방식으로 비교돼요! first 먼저, 그 다음 second 순서예요.`
+        },
+        {
+          id: "ch1-question",
+          type: "explain",
+          title: "🙋 질문: vector<int> 2개로 하면 안 돼?",
+          content: `**"vector<int> 2개로 하면 안 돼?"**
+
+돼요! 하지만 정렬할 때 문제가 생겨요: 점수를 정렬하면 이름은 따로 움직이지 않아요.
+
+\`\`\`cpp
+// 따로 저장하면?
+vector<string> names = {"Kim", "Lee", "Park"};
+vector<int> scores = {78, 95, 88};
+
+sort(scores.begin(), scores.end());
+// scores = {78, 88, 95}
+// names는 그대로 {"Kim", "Lee", "Park"} 😱
+// 78점이 Kim인지 알 수 없어요!
+\`\`\`
+
+pair로 묶으면 항상 같이 움직여요!
+
+\`\`\`cpp
+vector<pair<int, string>> students = {
+    {78, "Kim"}, {95, "Lee"}, {88, "Park"}
+};
+sort(students.begin(), students.end());
+// {78, "Kim"}, {88, "Park"}, {95, "Lee"} ✅
+// 점수와 이름이 항상 같이 움직여요!
+\`\`\`
+
+💡 관련된 데이터는 **묶어서 관리**하는 게 안전하고 편해요!`
         },
         {
           id: "ch1-practice",
@@ -242,7 +282,9 @@ Park: 92`
           id: "ch2-intro",
           type: "explain",
           title: "📊 sort() — 정렬의 기본!",
-          content: `C++의 **sort()** 함수로 데이터를 정렬할 수 있어요!
+          content: `학생 목록을 점수순으로 정렬하고 싶어요. \`pair<점수, 이름>\`으로 만들면 자동으로 점수 기준 정렬이 돼요! 이게 pair의 진짜 힘이에요.
+
+C++의 **sort()** 함수로 데이터를 정렬할 수 있어요!
 
 \`\`\`cpp
 #include <algorithm>  // sort()가 들어있는 헤더!
@@ -359,6 +401,9 @@ sort(v.begin(), v.end(), cmp);
 \`\`\`
 
 **방법 2: 람다 (lambda)**
+
+여기서 새로운 문법이 나와요! \`[](int a, int b) { return a > b; }\` — 이건 **람다(lambda)**라고 하는 '이름 없는 함수'예요. \`[]\`로 시작하고, 그 자리에서 바로 만들어 쓰는 일회용 함수예요. 별도로 위에 함수를 정의할 필요가 없어서 편해요!
+
 \`\`\`cpp
 sort(v.begin(), v.end(), [](int a, int b) {
     return a > b;  // 내림차순

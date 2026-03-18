@@ -23,8 +23,11 @@ export const cppLesson4EnData: LessonData = {
           id: "ch1-intro",
           type: "explain",
           title: "⌨️ Getting keyboard input!",
+          component: "cppCinBuilder",
           content: `In Python, \`input()\` does everything in one line, right?
 C++ needs 3 steps!
+
+Python's input() is just one line, but C++ needs 3 steps: (1) declare the variable (2) print a prompt message (3) read with cin. Why? Because C++ needs the variable type to be set in advance!
 
 \`\`\`cpp
 string name;                    // 1. Declare the variable first
@@ -107,7 +110,9 @@ cin >> score;     // double variable → automatically reads a decimal!
 
 C++ reads data matching the variable type **automatically** — no conversion needed!
 
-💡 This is the **advantage of specifying types upfront**. The computer already knows what to expect!`
+💡 This is the **advantage of specifying types upfront**. The computer already knows what to expect!
+
+What if you type 'hello' into an int variable? cin enters a **failure state**. The variable gets 0, and all subsequent cin calls stop working! The program looks like it froze 😱 (We'll learn about error handling later!)`
         },
         {
           id: "ch1-practice",
@@ -224,7 +229,9 @@ getline(cin, fullName);
 | \`cin >>\` | Stops at space ❌ | Single words, numbers |
 | \`getline(cin, var)\` | Includes spaces ✅ | Full lines of text |
 
-💡 For input that might contain spaces (like names), use getline()!`
+💡 For input that might contain spaces (like names), use getline()!
+
+cin >> is designed to quickly read one word at a time. But when you need a full name like 'John Smith'? You need getline()!`
         },
         {
           id: "ch2-fb1",
@@ -251,31 +258,28 @@ getline(cin, fullName);
           id: "ch2-ignore",
           type: "explain",
           title: "⚠️ Watch Out: cin >> Then getline!",
+          component: "cinBufferVisualizer",
           content: `Using cin >> and getline() **together** has a trap!
 
-\`\`\`cpp
-int age;
-string name;
-cin >> age;          // Type 14 + Enter → the Enter(\\n) stays!
-getline(cin, name);  // Reads the leftover \\n → empty string! 😱
-\`\`\`
+cin >> only reads the number and **leaves Enter(↵) in the buffer.**
+getline() **reads up to Enter**, so it grabs the leftover Enter and gets an empty string!
 
-**Solution: cin.ignore()**
-\`\`\`cpp
-int age;
-string name;
-cin >> age;
-cin.ignore();        // ← Discard the leftover Enter(\\n)!
-getline(cin, name);  // Now it reads properly! ✅
-\`\`\`
+**Solution:** Add \`cin.ignore();\` between them to clear the leftover Enter!
 
-| Situation | Need cin.ignore()? |
-|-----------|-------------------|
-| Only using cin >> | Not needed ✅ |
-| Only using getline() | Not needed ✅ |
-| cin >> **then** getline() | **cin.ignore() required!** ⚠️ |
+Watch the animation below to see exactly how the buffer works! 👇`
+        },
+        {
+          id: "ch2-decision",
+          type: "explain",
+          title: "cin >> vs getline() Selection Guide",
+          content: `| Situation | What to use |
+|---|---|
+| One number | \`cin >>\` |
+| One word | \`cin >>\` |
+| Sentence with spaces | \`getline()\` |
+| Number then sentence | \`cin >>\` → \`cin.ignore()\` → \`getline()\` |
 
-💡 cin >> leaves the Enter behind, getline() reads up to Enter. Use cin.ignore() to clear the leftover!`
+💡 Basic rule: if you need spaces, use getline(). Otherwise, cin >>!`
         },
         {
           id: "ch2-practice",

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef, useCallback } from "react"
 
 // ============================================
 // 컴파일 시뮬레이터
@@ -43,6 +43,7 @@ export function CompileVisualizer({ lang = "ko" }: CompileVisualizerProps) {
   const scrambleRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const revealRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const currentLineRef = useRef(0)
+  const bottomRef = useRef<HTMLDivElement>(null)
 
   const code = CODE_SAMPLES[selectedCode].code
   const codeLines = code.split("\n")
@@ -84,6 +85,11 @@ export function CompileVisualizer({ lang = "ko" }: CompileVisualizerProps) {
     setPhase("compiling")
     currentLineRef.current = 0
 
+    // 컴파일 시작 시 하단이 보이도록 스크롤
+    requestAnimationFrame(() => {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
+    })
+
     // 스크램블 효과
     scrambleRef.current = setInterval(() => {
       setScrambleText(targetLines.map(() => generateBinary(32)))
@@ -122,10 +128,10 @@ export function CompileVisualizer({ lang = "ko" }: CompileVisualizerProps) {
           <button
             key={i}
             onClick={() => handleCodeChange(i)}
-            className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
+            className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${
               selectedCode === i
                 ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/30"
-                : "bg-gray-700 text-gray-400 hover:bg-gray-600"
+                : "bg-gray-700 text-gray-300 hover:bg-gray-600"
             }`}
           >
             {sample.label[lang]}
@@ -145,9 +151,9 @@ export function CompileVisualizer({ lang = "ko" }: CompileVisualizerProps) {
                   <polyline points="8 6 2 12 8 18" />
                 </svg>
               </span>
-              <span className="text-emerald-400 text-sm font-bold">{t.ourCode}</span>
+              <span className="text-emerald-400 text-base font-extrabold">{t.ourCode}</span>
             </div>
-            <div className="font-mono text-sm space-y-1">
+            <div className="font-mono text-base space-y-1">
               {codeLines.map((line, i) => (
                 <div key={i} className={`transition-all duration-300 ${
                   phase === "compiling" && revealedLines <= i ? "text-amber-300" : "text-gray-200"
@@ -161,9 +167,9 @@ export function CompileVisualizer({ lang = "ko" }: CompileVisualizerProps) {
           {/* 화살표 */}
           <div className="flex md:flex-col items-center justify-center gap-1 py-2 md:py-0 md:px-2">
             <div className={`transition-all duration-500 ${
-              phase === "compiling" ? "text-emerald-400 scale-110" : "text-gray-500"
+              phase === "compiling" ? "text-emerald-400 scale-110" : "text-gray-300"
             }`}>
-              <svg className="hidden md:block w-16 h-6" viewBox="0 0 64 24">
+              <svg className="hidden md:block w-20 h-8" viewBox="0 0 64 24">
                 <line x1="0" y1="12" x2="50" y2="12" stroke="currentColor" strokeWidth="2.5"
                   strokeDasharray={phase === "compiling" ? "4 4" : "0"}>
                   {phase === "compiling" && <animate attributeName="stroke-dashoffset" values="8;0" dur="0.4s" repeatCount="indefinite" />}
@@ -178,8 +184,8 @@ export function CompileVisualizer({ lang = "ko" }: CompileVisualizerProps) {
                 <polygon points="6,30 12,40 18,30" fill="currentColor" />
               </svg>
             </div>
-            <span className={`text-[10px] font-black tracking-widest transition-colors ${
-              phase === "compiling" ? "text-emerald-400" : "text-gray-500"
+            <span className={`text-sm font-black tracking-widest transition-colors ${
+              phase === "compiling" ? "text-emerald-400" : "text-white"
             }`}>
               {t.compile}
             </span>
@@ -194,7 +200,7 @@ export function CompileVisualizer({ lang = "ko" }: CompileVisualizerProps) {
                 phase === "done" ? "bg-amber-500/20" : "bg-gray-700"
               }`}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                  stroke={phase === "done" ? "#f59e0b" : "#6b7280"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  stroke={phase === "done" ? "#f59e0b" : "#9ca3af"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="4" y="4" width="16" height="16" rx="2" />
                   <rect x="9" y="9" width="6" height="6" />
                   <line x1="9" y1="1" x2="9" y2="4" /><line x1="15" y1="1" x2="15" y2="4" />
@@ -203,15 +209,15 @@ export function CompileVisualizer({ lang = "ko" }: CompileVisualizerProps) {
                   <line x1="1" y1="9" x2="4" y2="9" /><line x1="1" y1="14" x2="4" y2="14" />
                 </svg>
               </span>
-              <span className={`text-sm font-bold transition-colors ${
-                phase === "done" ? "text-amber-400" : "text-gray-500"
+              <span className={`text-base font-extrabold transition-colors ${
+                phase === "done" ? "text-amber-400" : "text-white"
               }`}>
                 {t.machineCode}
               </span>
             </div>
-            <div className="font-mono text-sm min-h-[3rem]">
+            <div className="font-mono text-base min-h-[3rem]">
               {phase === "idle" && (
-                <p className="text-gray-600 text-xs italic">{t.placeholder}</p>
+                <p className="text-gray-300 text-sm italic">{t.placeholder}</p>
               )}
               {(phase === "compiling" || phase === "done") && (
                 <div className="space-y-1">
@@ -226,7 +232,7 @@ export function CompileVisualizer({ lang = "ko" }: CompileVisualizerProps) {
                     }
                     if (phase === "compiling") {
                       return (
-                        <div key={i} className="text-gray-600 animate-pulse">
+                        <div key={i} className="text-gray-400 animate-pulse">
                           {scrambleText[i] || generateBinary(32)}
                         </div>
                       )
@@ -273,9 +279,10 @@ export function CompileVisualizer({ lang = "ko" }: CompileVisualizerProps) {
         </div>
 
         {/* 하단 설명 */}
-        <p className="text-center text-gray-500 text-xs">
+        <p className="text-center text-gray-200 text-sm font-medium">
           {t.bottomText}
         </p>
+        <div ref={bottomRef} />
       </div>
     </div>
   )
@@ -295,7 +302,7 @@ function highlightCpp(line: string): React.ReactNode[] {
     if (match[1]) tokens.push(<span key={`k${match.index}`} className="text-orange-400 font-bold">{match[1]}</span>)
     else if (match[2]) tokens.push(<span key={`s${match.index}`} className="text-emerald-400">{match[2]}</span>)
     else if (match[3]) tokens.push(<span key={`n${match.index}`} className="text-amber-300">{match[3]}</span>)
-    else if (match[4]) tokens.push(<span key={`o${match.index}`} className="text-gray-400">{match[4]}</span>)
+    else if (match[4]) tokens.push(<span key={`o${match.index}`} className="text-gray-200">{match[4]}</span>)
     else if (match[5]) tokens.push(<span key={`w${match.index}`}>{match[5]}</span>)
     else if (match[6]) tokens.push(<span key={`i${match.index}`} className="text-gray-200">{match[6]}</span>)
     lastIndex = regex.lastIndex

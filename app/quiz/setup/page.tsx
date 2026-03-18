@@ -9,6 +9,7 @@ import { BottomNav } from "@/components/bottom-nav"
 import { cn } from "@/lib/utils"
 import { useGamification } from "@/hooks/use-gamification"
 import { useLanguage } from "@/contexts/language-context"
+import { getDueQuestions, getMasteryStats, getMasteryLabel } from "@/lib/spaced-repetition"
 
 export default function QuizSetupPage() {
   const router = useRouter()
@@ -28,6 +29,10 @@ export default function QuizSetupPage() {
   const [selectedCourse, setSelectedCourse] = useState("python")
   const [questionCount, setQuestionCount] = useState(20)
   const [selectedDifficulty, setSelectedDifficulty] = useState("mixed")
+
+  // 간격 반복 상태
+  const dueCount = typeof window !== "undefined" ? getDueQuestions().length : 0
+  const masteryStats = typeof window !== "undefined" ? getMasteryStats() : null
   const [showCustomInput, setShowCustomInput] = useState(false)
   const [customValue, setCustomValue] = useState("")
 
@@ -201,6 +206,54 @@ export default function QuizSetupPage() {
             <span className="text-lg font-semibold">{t(`약 ${estimatedTime}분 소요`, `About ${estimatedTime} min`)}</span>
           </div>
         </Card>
+
+        {/* 복습 알림 (간격 반복) */}
+        {dueCount > 0 && (
+          <Card className="p-4 mb-4 border-2 border-purple-200 bg-purple-50/50 shadow-md">
+            <div className="flex items-center gap-3">
+              <span className="text-3xl">🔄</span>
+              <div className="flex-1">
+                <p className="text-sm font-bold text-purple-700">
+                  {t(`복습할 문제 ${dueCount}개!`, `${dueCount} questions to review!`)}
+                </p>
+                <p className="text-xs text-purple-500">
+                  {t("잊어버리기 전에 복습하면 오래 기억해요", "Review before you forget for better retention")}
+                </p>
+              </div>
+              <span className="text-2xl animate-pulse">🧠</span>
+            </div>
+          </Card>
+        )}
+
+        {/* 숙련도 현황 */}
+        {masteryStats && (masteryStats.learningCount > 0 || masteryStats.reviewingCount > 0 || masteryStats.masteredCount > 0) && (
+          <Card className="p-4 mb-4 border-2 border-gray-200 shadow-md">
+            <h3 className="text-sm font-bold text-gray-700 mb-3">{t("나의 숙련도", "My Mastery")}</h3>
+            <div className="flex gap-2">
+              {masteryStats.learningCount > 0 && (
+                <div className="flex-1 text-center p-2 bg-red-50 rounded-lg">
+                  <div className="text-lg">🌱</div>
+                  <div className="text-lg font-black text-red-600">{masteryStats.learningCount}</div>
+                  <div className="text-[10px] text-red-500">{t("학습 중", "Learning")}</div>
+                </div>
+              )}
+              {masteryStats.reviewingCount > 0 && (
+                <div className="flex-1 text-center p-2 bg-orange-50 rounded-lg">
+                  <div className="text-lg">🌿</div>
+                  <div className="text-lg font-black text-orange-600">{masteryStats.reviewingCount}</div>
+                  <div className="text-[10px] text-orange-500">{t("복습 중", "Reviewing")}</div>
+                </div>
+              )}
+              {masteryStats.masteredCount > 0 && (
+                <div className="flex-1 text-center p-2 bg-green-50 rounded-lg">
+                  <div className="text-lg">⭐</div>
+                  <div className="text-lg font-black text-green-600">{masteryStats.masteredCount}</div>
+                  <div className="text-[10px] text-green-500">{t("숙달", "Mastered")}</div>
+                </div>
+              )}
+            </div>
+          </Card>
+        )}
 
         {/* Daily Goal Section */}
         <Card className="p-6 mb-6 border-2 border-mint-200 shadow-lg">

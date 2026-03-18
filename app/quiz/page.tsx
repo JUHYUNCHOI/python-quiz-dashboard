@@ -9,6 +9,8 @@ import { CelebrationScreen } from "@/components/celebration-screen"
 import { ExplanationPanel } from "@/components/explanation-panel"
 import { cn } from "@/lib/utils"
 import { useQuizState, getComboTier } from "@/hooks/use-quiz-state"
+import { getGradeInfo } from "@/lib/spaced-repetition"
+import { createSmartSession } from "@/lib/quiz-question-selector"
 import { useQuizTimer } from "@/hooks/use-quiz-timer"
 import { useFocusTracker } from "@/hooks/use-focus-tracker"
 import { useSwipe } from "@/hooks/use-swipe"
@@ -31,18 +33,25 @@ function shuffleArray<T>(arr: T[]): T[] {
 }
 
 export default function QuizPage() {
-  // 코스에 맞는 문제 배열 — 컴포넌트 마운트 시 1회 셔플
-  const shuffled = useMemo(() => {
-    if (typeof window === "undefined") return pythonQuestions
+  // 코스에 맞는 문제 배열 — 스마트 세션 (간격 반복 기반)
+  const smartSession = useMemo(() => {
+    if (typeof window === "undefined") return { questions: pythonQuestions, reviewCount: 0, newCount: 0 }
     try {
       const raw = sessionStorage.getItem("quizSettings")
       if (raw) {
         const parsed = JSON.parse(raw)
-        if (parsed.course === "cpp") return shuffleArray(cppQuestions)
+        const pool = parsed.course === "cpp" ? cppQuestions : pythonQuestions
+        const count = parsed.questionCount || 20
+        return createSmartSession(pool, count, {
+          difficulty: parsed.difficulty || "mixed",
+          filterByProgress: true,
+        })
       }
     } catch {}
-    return shuffleArray(pythonQuestions)
+    return createSmartSession(pythonQuestions, 20)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const shuffled = smartSession.questions
 
   const quiz = useQuizState(shuffled)
   const { play, isMuted, toggleMute } = useSoundEffect()
@@ -311,16 +320,23 @@ export default function QuizPage() {
             <div className="p-4 md:p-6 lg:p-8">
               {/* Question Header */}
               <div className="mb-4 md:mb-6 flex items-center justify-between">
-                <span
-                  className={cn(
-                    "rounded-full px-3 py-1 text-xs md:text-sm font-semibold",
-                    question.difficulty === "쉬움" && "bg-green-100 text-green-700",
-                    question.difficulty === "보통" && "bg-yellow-100 text-yellow-700",
-                    question.difficulty === "어려움" && "bg-red-100 text-red-700",
+                <div className="flex items-center gap-2">
+                  <span
+                    className={cn(
+                      "rounded-full px-3 py-1 text-xs md:text-sm font-semibold",
+                      question.difficulty === "쉬움" && "bg-green-100 text-green-700",
+                      question.difficulty === "보통" && "bg-yellow-100 text-yellow-700",
+                      question.difficulty === "어려움" && "bg-red-100 text-red-700",
+                    )}
+                  >
+                    {question.difficulty}
+                  </span>
+                  {quiz.isRetryQuestion && (
+                    <span className="rounded-full px-3 py-1 text-xs font-semibold bg-purple-100 text-purple-700 animate-pulse">
+                      🔄 다시 풀기
+                    </span>
                   )}
-                >
-                  {question.difficulty}
-                </span>
+                </div>
                 <span className="text-xs md:text-sm text-gray-500">{t("문제", "Q")} #{question.id}</span>
               </div>
 
@@ -442,6 +458,8 @@ export default function QuizPage() {
         streak={gamification.dailyStreak}
         comboTier={comboTier}
         combo={quiz.combo}
+        grade={quiz.currentGrade}
+        isRetry={quiz.isRetryQuestion}
       />
 
       <ExplanationPanel
@@ -453,6 +471,7 @@ export default function QuizPage() {
         keyConceptDescription={question.keyConceptDescription}
         codeComparison={question.codeComparison}
         relatedTopics={question.relatedTopics}
+        animationKey={question.animationKey}
         onClose={quiz.handleExplanationClose}
         onPracticeSimilar={quiz.handlePracticeSimilar}
         onNext={quiz.handleExplanationClose}

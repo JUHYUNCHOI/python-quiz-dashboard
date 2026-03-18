@@ -197,6 +197,37 @@ NEXT dan
           ]
         },
         {
+          id: "ch2-quiz1",
+          type: "quiz",
+          title: "❓ REPEAT vs WHILE!",
+          content: '`REPEAT...UNTIL`과 `WHILE`의 가장 큰 차이는?',
+          options: [
+            'REPEAT가 더 빠르다',
+            'REPEAT는 최소 1번은 실행된다',
+            'WHILE만 조건을 확인한다',
+            'REPEAT는 FOR문과 같다'
+          ],
+          answer: 1,
+          explanation: 'REPEAT는 **먼저 실행하고 나중에 조건 확인**! 그래서 조건이 처음부터 거짓이어도 최소 1번은 실행돼요.'
+        },
+        {
+          id: "ch2-quiz2",
+          type: "quiz",
+          title: "❓ 중첩 반복문!",
+          content: `다음 코드에서 OUTPUT은 총 몇 번 실행될까요?
+
+\`\`\`
+FOR i ← 1 TO 3
+    FOR j ← 1 TO 4
+        OUTPUT i * j
+    NEXT j
+NEXT i
+\`\`\``,
+          options: ['3번', '4번', '7번', '12번'],
+          answer: 3,
+          explanation: '바깥 FOR가 3번, 안쪽 FOR가 4번 → 3 × 4 = **12번** 실행돼요! 중첩 반복문은 곱셈!'
+        },
+        {
           id: "ch2-predict2",
           type: "predict",
           title: "🔮 최종 도전!",

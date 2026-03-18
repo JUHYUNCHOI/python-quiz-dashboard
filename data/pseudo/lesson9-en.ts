@@ -163,6 +163,22 @@ You can use CASE with integer values too, not just strings!
 Each number maps cleanly to an action.`
         },
         {
+          id: "ch2-div-reminder",
+          type: "explain",
+          title: "🔢 Quick Reminder: DIV",
+          content: `This example uses the **DIV** operator. Quick review!
+
+{!blue} **DIV** = the **quotient** of division (integer part only, discard remainder!)
+
+| Operation | Calculation | Result |
+|-----------|-----------|--------|
+| \`85 DIV 10\` | 85 ÷ 10 = 8.5 → integer only! | **8** |
+| \`73 DIV 10\` | 73 ÷ 10 = 7.3 → integer only! | **7** |
+| \`100 DIV 10\` | 100 ÷ 10 = 10 | **10** |
+
+💡 DIV by 10 gives you the **tens digit**! → Perfect for grade calculation with CASE!`
+        },
+        {
           id: "ch2-grade",
           type: "explain",
           title: "📊 Grade Calculation Program",

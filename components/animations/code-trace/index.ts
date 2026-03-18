@@ -1,0 +1,5 @@
+export { CodeTraceSimulator } from "./code-trace-simulator"
+export type { CodeTracePreset, TraceStep, TraceVariable, TraceCondition } from "./code-trace-simulator"
+export { CODE_TRACE_PRESETS } from "./presets"
+export type { CodeTracePresetKey } from "./presets"
+export * from "./presets"

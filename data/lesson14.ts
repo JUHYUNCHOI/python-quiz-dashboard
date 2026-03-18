@@ -47,6 +47,17 @@ while count < 5:
 4. count가 5가 되면 조건이 거짓 → 종료`
         },
         {
+          id: "while-sim",
+          type: "explain",
+          title: "🔍 실행 추적: while 카운트다운",
+          content: `while문이 조건을 확인하고, 변수를 바꾸고, 다시 확인하는 과정을 추적해요!
+
+count가 3에서 0까지 줄어드는 과정을 한 단계씩 봐요.
+
+**▶ 실행하기** 또는 **▷ 한 단계** 버튼을 눌러보세요.`,
+          component: "codeTracePyWhile",
+        },
+        {
           id: "try1",
           type: "tryit",
           title: "🖥️ 직접 해보기!",

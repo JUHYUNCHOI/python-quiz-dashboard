@@ -23,6 +23,7 @@ export const cppLesson3Data: LessonData = {
           id: "ch1-intro",
           type: "explain",
           title: "📦 파이썬과 뭐가 달라요?",
+          component: "cppVariableBuilder",
           content: `파이썬에서는 \`x = 10\` 하면 끝이었죠?
 C++은 달라요! **변수를 만들 때 타입을 직접 정해줘야** 해요.
 
@@ -40,14 +41,33 @@ x = 20;             // OK! 정수끼리는 가능
 \`\`\`
 
 왜 이렇게 엄격할까요? 🤔
-→ 실수를 **컴파일할 때** 바로 잡아줘서 좋아요! 파이썬은 실행해봐야 에러를 알 수 있잖아요.
+→ 컴파일할 때 타입을 확인하면 실수를 미리 잡을 수 있어요! 파이썬은 실행해봐야만 에러를 알 수 있지만, C++은 프로그램을 만들 때 바로 잡아줘요.
 
 💡 C++의 변수 = **타입이 정해진 상자**. 정수 상자에는 정수만 넣을 수 있어요!`
+        },
+        {
+          id: "ch1-typefix",
+          type: "explain",
+          title: "한번 정한 타입은 바꿀 수 없어요!",
+          content: `파이썬에서는 \`x = 10\` 다음에 \`x = "hello"\`가 됐죠? C++에서는 **불가능**해요!
+
+\`\`\`cpp
+int x = 10;
+x = "hello";   // ❌ 컴파일 에러!
+\`\`\`
+
+처음 정한 타입은 끝까지 유지돼요. 정수 상자에는 정수만, 문자열 상자에는 문자열만 넣을 수 있어요!
+
+**왜 이렇게 엄격할까요?** 🤔
+C++은 변수를 만들 때 **메모리 공간을 미리 확보**해요. \`int\`는 4바이트, \`double\`은 8바이트처럼, 타입마다 필요한 메모리 크기가 달라요. 만약 중간에 타입이 바뀌면 확보해둔 공간이 안 맞아서 문제가 생기겠죠?
+
+💡 불편해 보이지만, 덕분에 실수를 **실행하기 전에** 잡아줘요! 다음에서 각 타입이 메모리를 얼마나 쓰는지 눈으로 확인해봐요 →`
         },
         {
           id: "ch1-types",
           type: "explain",
           title: "📋 C++의 주요 타입 5가지",
+          component: "memoryTypeVisualizer",
           content: `자주 쓰는 타입을 정리해볼게요!
 
 | C++ 타입 | 의미 | 예시 |
@@ -59,6 +79,15 @@ x = 20;             // OK! 정수끼리는 가능
 | \`bool\` | 참/거짓 | \`bool pass = true;\` |
 
 가장 많이 쓰는 건 **int, double, string** 이 3개예요!
+
+⚠️ **string을 쓰려면** 맨 위에 \`#include <string>\`을 추가해야 해요!
+\`\`\`cpp
+#include <iostream>
+#include <string>    // ← string 타입을 쓰려면 필수!
+\`\`\`
+int, double, char, bool은 기본 내장이라 별도 include가 필요 없지만, **string은 라이브러리**에서 가져와야 해요.
+
+타입마다 **메모리를 차지하는 크기**가 달라요. 아래에서 각 타입이 몇 바이트를 쓰는지 눈으로 확인해보세요! 👇
 
 | 파이썬 🐍 | C++ ⚡ |
 |---|---|
@@ -93,6 +122,7 @@ x = 20;             // OK! 정수끼리는 가능
           id: "ch1-char",
           type: "explain",
           title: "🔤 char vs string — 따옴표가 달라요!",
+          component: "cppCharBuilder",
           content: `\`\`\`cpp
 char grade = 'A';       // 작은따옴표 → 글자 1개
 string name = "주현";   // 큰따옴표 → 문자열
@@ -105,7 +135,9 @@ string name = "주현";   // 큰따옴표 → 문자열
 
 💭 \`char x = 'AB';\` 라고 쓰면? → **에러**예요! char는 딱 1글자만!
 
-파이썬에서는 \`' '\`이랑 \`" "\`이 똑같지만, C++에서는 **완전히 다른 타입**이에요!`
+파이썬에서는 \`' '\`이랑 \`" "\`이 똑같지만, C++에서는 **완전히 다른 타입**이에요!
+
+💡 char는 왜 따로 있을까요? 글자 하나는 메모리 1바이트만 차지해요. 100만 개의 글자를 저장할 때 string보다 훨씬 효율적이에요!`
         },
         {
           id: "ch1-practice",
@@ -178,7 +210,25 @@ const double PI = 3.14159;
 
 파이썬은 상수 문법이 없지만, C++은 const로 **컴파일러가 지켜줘요**!
 
-💡 const = **절대 안 바뀌는 값**. 원주율(π)처럼 고정된 값에 쓰면 딱이에요!`
+💡 const = **절대 안 바뀌는 값**. 원주율(π)처럼 고정된 값에 쓰면 딱이에요!
+
+const로 선언하면 실수로 값을 바꾼 경우를 컴파일러가 잡아줘요! 원주율 같은 고정값은 const로 보호하세요.
+
+예를 들어 게임에서 중력값 \`const double GRAVITY = 9.8;\`로 정해두면, 실수로 \`GRAVITY = 0;\`을 쓰면 **컴파일러가 바로 에러**를 내요. const 없이는 프로그램이 이상하게 동작해도 원인을 찾기 어려워요.`
+        },
+        {
+          id: "ch2-division-trap",
+          type: "explain",
+          title: "⚠️ 함정: 정수 나눗셈",
+          content: `C++에서 int끼리 나누면 소수점이 **버려져요**!
+
+7 / 2 = 3.5가 아니라 **3**이 됩니다.
+
+왜? int끼리의 연산 결과도 int이기 때문이에요.
+
+소수점 결과를 원한다면? 하나라도 double로 만들어야 해요:
+
+\`7.0 / 2\` → \`3.5\` ✅`
         },
         {
           id: "ch2-pred1",
@@ -193,6 +243,7 @@ const double PI = 3.14159;
           id: "ch2-convert",
           type: "explain",
           title: "🔄 타입 변환",
+          component: "cppTypeConvertBuilder",
           content: `**자동 변환** — 작은 타입 → 큰 타입은 자동!
 \`\`\`cpp
 int a = 10;
@@ -276,6 +327,34 @@ int main() {
           ],
           answer: 1,
           explanation: "C++에서 문자열을 정수로 바꾸는 함수는 stoi(string to int)예요! 파이썬의 int()에 해당해요."
+        },
+        {
+          id: "ch2-q2",
+          type: "quiz",
+          title: "const 이해하기!",
+          content: `다음 코드에서 에러가 발생하는 줄은?\n\n\`\`\`cpp\nconst double PI = 3.14;\ndouble r = 5.0;\nPI = 3.14159;\ncout << PI * r * r << endl;\n\`\`\``,
+          options: [
+            "1번 줄 (const double PI = 3.14;)",
+            "2번 줄 (double r = 5.0;)",
+            "3번 줄 (PI = 3.14159;)",
+            "4번 줄 (cout << PI * r * r;)"
+          ],
+          answer: 2,
+          explanation: "const로 선언한 PI는 값을 바꿀 수 없어요! 3번 줄에서 PI에 새 값을 넣으려고 해서 컴파일 에러가 발생해요."
+        },
+        {
+          id: "ch2-q3",
+          type: "quiz",
+          title: "정수 나눗셈 함정!",
+          content: `다음 코드의 출력 결과는?\n\n\`\`\`cpp\nint a = 5;\nint b = 2;\ncout << a / b << endl;\n\`\`\``,
+          options: [
+            "2.5",
+            "2",
+            "3",
+            "에러"
+          ],
+          answer: 1,
+          explanation: "int끼리 나누면 소수점이 버려져요! 5 / 2 = 2.5가 아니라 2가 됩니다. 2.5를 원하면 5.0 / 2로 써야 해요!"
         }
       ]
     },

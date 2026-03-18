@@ -154,7 +154,11 @@ ENDWHILE
 5
 \`\`\`
 
-count가 6이 되면 \`6 <= 5\`가 거짓이라 멈춰요!`
+count가 6이 되면 \`6 <= 5\`가 거짓이라 멈춰요!
+
+{!red} ⚠️ **주의! 무한루프 위험!** — \`count ← count + 1\`을 빼먹으면 count가 영원히 1이라 조건이 항상 참 → **프로그램이 멈추지 않아요!**
+
+WHILE문에서는 반드시 **조건이 언젠가 거짓이 되도록** 값을 바꿔줘야 해요!`
         },
         {
           id: "ch2-predict1",
@@ -188,6 +192,37 @@ ENDWHILE
             { id: 1, answer: "WHILE", options: ["WHILE", "FOR", "IF", "REPEAT"] },
             { id: 2, answer: "ENDWHILE", options: ["ENDWHILE", "ENDIF", "END", "NEXT"] }
           ]
+        },
+        {
+          id: "ch2-quiz1",
+          type: "quiz",
+          title: "❓ FOR vs WHILE!",
+          content: '다음 중 **WHILE** 반복문을 쓰기에 적합한 상황은?',
+          options: [
+            '1부터 100까지 숫자 출력',
+            '배열의 모든 원소 출력',
+            '사용자가 "exit"을 입력할 때까지 반복',
+            '구구단 2단 출력'
+          ],
+          answer: 2,
+          explanation: '"exit" 입력 시까지 반복은 **횟수를 모르는** 반복이라 WHILE이 적합해요! 나머지는 횟수가 정해져 있어서 FOR이 더 좋아요.'
+        },
+        {
+          id: "ch2-quiz2",
+          type: "quiz",
+          title: "❓ WHILE문 동작!",
+          content: `다음 코드에서 OUTPUT은 몇 번 실행될까요?
+
+\`\`\`
+x ← 5
+WHILE x > 10
+    OUTPUT x
+    x ← x + 1
+ENDWHILE
+\`\`\``,
+          options: ['0번', '1번', '5번', '무한 반복'],
+          answer: 0,
+          explanation: 'x=5이고 조건 x > 10이 처음부터 **거짓**이에요! WHILE은 조건을 먼저 확인하니까 한 번도 실행 안 돼요. 0번!'
         },
         {
           id: "ch2-compare",
