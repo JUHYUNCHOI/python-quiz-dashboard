@@ -62,23 +62,27 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
       const saved = localStorage.getItem(storageKey)
       if (saved) return JSON.parse(saved)
     } catch {}
-    // 이미 완료한 학생: 모든 스텝을 정답으로 채움
+    // 이미 완료한 학생: quiz/predict/fillblank만 자동 완료 (tryit/practice/mission은 직접 해야 함)
     try {
       const completedLessons = JSON.parse(localStorage.getItem("completedLessons") || "[]").map(String)
       const completedQuizzes = JSON.parse(localStorage.getItem("completedQuizzes") || "[]").map(String)
       const wasCompleted = completedLessons.includes(String(lessonId)) || completedQuizzes.includes(String(lessonId))
       if (wasCompleted && reviewSteps.length > 0) {
-        const allCompleted = reviewSteps.map((_, i) => i)
+        const autoCompleteTypes = new Set(["quiz", "predict", "fillblank"])
+        const autoCompleted: number[] = []
         const allAnswers: Record<number, number> = {}
         reviewSteps.forEach((r, i) => {
-          if (r.step.answer !== undefined) allAnswers[i] = r.step.answer
+          if (autoCompleteTypes.has(r.step.type)) {
+            autoCompleted.push(i)
+            if (r.step.answer !== undefined) allAnswers[i] = r.step.answer
+          }
         })
         return {
           currentIndex: 0,
-          score: reviewSteps.length * 10,
-          totalAttempted: reviewSteps.length,
-          correctCount: reviewSteps.length,
-          completedSteps: allCompleted,
+          score: autoCompleted.length * 10,
+          totalAttempted: autoCompleted.length,
+          correctCount: autoCompleted.length,
+          completedSteps: autoCompleted,
           wrongSteps: [],
           savedAnswers: allAnswers,
         }
