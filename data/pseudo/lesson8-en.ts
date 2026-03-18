@@ -219,6 +219,37 @@ OUTPUT total
           answer: 1,
           explanation: 'The loop adds each element to `total`: 0 + 2 = 2, then 2 + 4 = 6, then 6 + 6 = 12, then 12 + 8 = **20**. This is a common pattern for calculating the **sum** of an array!'
         },
+        {
+          id: "ch2-quiz1",
+          type: "quiz",
+          title: "❓ Array index!",
+          content: 'In `DECLARE scores : ARRAY[1:5] OF INTEGER`, what is the valid index range?',
+          options: ['0 to 4', '1 to 5', '0 to 5', '1 to 4'],
+          answer: 1,
+          explanation: 'CIE pseudocode arrays **start from 1**! [1:5] means indices 1, 2, 3, 4, 5 are valid.'
+        },
+        {
+          id: "ch2-quiz2",
+          type: "quiz",
+          title: "❓ Array + loop!",
+          content: `What is the output?
+
+\`\`\`
+DECLARE nums : ARRAY[1:4] OF INTEGER
+nums[1] ← 10
+nums[2] ← 20
+nums[3] ← 30
+nums[4] ← 40
+total ← 0
+FOR i ← 1 TO 4
+    total ← total + nums[i]
+NEXT i
+OUTPUT total
+\`\`\``,
+          options: ['10', '40', '100', 'Error'],
+          answer: 2,
+          explanation: '10 + 20 + 30 + 40 = **100**! The FOR loop traverses all array elements and sums them.'
+        },
       ]
     },
   ]

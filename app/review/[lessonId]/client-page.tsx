@@ -34,7 +34,7 @@ import { runPythonCode } from "./utils/pythonRunner"
 
 // Supabase 진도 동기화
 import { useLessonSync } from "@/hooks/use-lesson-sync"
-import { markLessonComplete } from "@/lib/mark-lesson-complete"
+import { markLessonComplete, markQuizComplete } from "@/lib/mark-lesson-complete"
 
 // 다국어 지원
 import { useLanguage } from "@/contexts/language-context"
@@ -533,6 +533,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
       } else {
         syncCompletion(score)
         markLessonComplete(lessonId)
+        markQuizComplete(lessonId)
         try { localStorage.removeItem(`lesson-${lessonId}`) } catch {}
         router.push("/curriculum")
       }
@@ -2077,6 +2078,7 @@ export default function LearnPage({ params }: { params: Promise<{ lessonId: stri
               onClick={() => {
                 syncCompletion(score)
                 markLessonComplete(lessonId)
+                markQuizComplete(lessonId)
                 try { localStorage.removeItem(`lesson-${lessonId}`) } catch {}
                 router.push("/curriculum")
               }}

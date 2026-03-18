@@ -239,6 +239,37 @@ NEXT i
           answer: 0,
           explanation: 'When i=1, inner loop runs 1 time (one star). When i=2, inner loop runs 2 times (two stars). When i=3, inner loop runs 3 times (three stars). This creates a **triangle pattern**!'
         },
+        {
+          id: "ch2-quiz1",
+          type: "quiz",
+          title: "❓ REPEAT vs WHILE!",
+          content: 'What is the biggest difference between `REPEAT...UNTIL` and `WHILE`?',
+          options: [
+            'REPEAT is faster',
+            'REPEAT always runs at least once',
+            'Only WHILE checks conditions',
+            'REPEAT is the same as FOR'
+          ],
+          answer: 1,
+          explanation: 'REPEAT **executes first, then checks condition**! So even if the condition is false from the start, it runs at least once.'
+        },
+        {
+          id: "ch2-quiz2",
+          type: "quiz",
+          title: "❓ Nested loops!",
+          content: `How many times is OUTPUT executed?
+
+\`\`\`
+FOR i ← 1 TO 3
+    FOR j ← 1 TO 4
+        OUTPUT i * j
+    NEXT j
+NEXT i
+\`\`\``,
+          options: ['3 times', '4 times', '7 times', '12 times'],
+          answer: 3,
+          explanation: 'Outer FOR runs 3 times, inner FOR runs 4 times → 3 × 4 = **12 times**! Nested loops multiply!'
+        },
       ]
     }
   ]

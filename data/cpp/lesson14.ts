@@ -68,7 +68,8 @@ s.age = 15
 | \`__init__\`에서 초기화 | 선언 후 .\`으로 접근 |
 | 세미콜론 없음 | **닫는 중괄호 뒤 세미콜론!** |
 
-💡 struct 정의 끝에 **세미콜론(;)**을 꼭 붙여야 해요! 안 붙이면 에러가 나요.`
+💡 struct 정의 끝에 **세미콜론(;)**을 꼭 붙여야 해요! 안 붙이면 에러가 나요.`,
+          component: "cppClassBuilder",
         },
         {
           id: "ch1-fb1",
@@ -196,7 +197,13 @@ Score: 95.5`
           id: "ch2-intro",
           type: "explain",
           title: "🎓 class = struct + 접근 제어!",
+          component: "cppPublicPrivateBuilder",
           content: `**class**는 struct에 **접근 제어(public/private)**가 추가된 거예요!
+
+왜 class에서는 private이 기본일까요? 실수로 내부 데이터를 건드리는 걸 막으려고예요! 예: 사각형의 width = -10이 되면 안 되잖아요?
+
+• \`public:\` — 클래스 바깥에서도 접근 가능 (누구나 쓸 수 있어요)
+• \`private:\` — 클래스 안에서만 접근 가능 (외부에서 직접 건드릴 수 없어요)
 
 핵심 차이:
 - **struct**: 멤버가 기본적으로 **public** (누구나 접근 가능)
@@ -244,6 +251,8 @@ class Rectangle:
 | \`_변수\`는 관례적 private | \`private:\`로 진짜 차단! |
 | 모든 것 접근 가능 | private은 진짜 접근 불가 |
 | \`self\` 필요 | \`self\` 불필요 |
+
+캡슐화(encapsulation)는 **데이터를 숨겨서 실수를 방지**하는 거예요. 약 캡슐처럼 안의 내용물(데이터)을 보호하고, 정해진 방법(메서드)으로만 접근하게 해요.
 
 💡 private으로 데이터를 숨기고, public 함수로만 접근하게 하는 게 **캡슐화(encapsulation)**예요!`
         },
@@ -304,6 +313,8 @@ d = Dog("Buddy", 3)
 | self 필요 | self 불필요 |
 | \`Dog("Buddy", 3)\` | \`Dog d("Buddy", 3);\` |
 
+C++에서 생성자가 없으면? 멤버 변수들이 **쓰레기 값**으로 시작해요! width가 -8273561이 될 수 있어요. 그래서 생성자에서 초기값을 꼭 정해줘야 해요.
+
 💡 생성자 덕분에 객체를 만들 때 바로 값을 넣을 수 있어요! 파이썬의 \`__init__\`과 같은 역할이에요.`
         },
         {
@@ -356,6 +367,38 @@ int main() {
 }`,
           expectedOutput: `Area: 15
 Perimeter: 16`
+        },
+        {
+          id: "ch2-pred-private",
+          type: "predict" as const,
+          title: "private 접근 시도",
+          code: "class Rectangle {\nprivate:\n    int width;\npublic:\n    Rectangle(int w) : width(w) {}\n};\n\nint main() {\n    Rectangle r(5);\n    r.width = 10;  // ???\n}",
+          options: ["10", "5", "0", "컴파일 에러"],
+          answer: 3,
+          explanation: "컴파일 에러! width는 private이라 클래스 바깥에서 접근할 수 없어요. private 멤버는 클래스 내부에서만 접근 가능해요. 외부에서 수정하려면 public 메서드(setter)를 만들어야 해요. 이것이 캡슐화의 핵심이에요!"
+        },
+        {
+          id: "ch2-getter-setter",
+          type: "explain",
+          title: "💡 그러면 private 값은 어떻게 바꿔?",
+          content: `private 멤버를 안전하게 접근하는 방법: **getter(읽기)**와 **setter(쓰기)** 메서드!
+
+\`\`\`cpp
+class Rectangle {
+private:
+    int width;
+public:
+    Rectangle(int w) : width(w) {}
+    int getWidth() { return width; }     // getter
+    void setWidth(int w) {
+        if (w > 0) width = w;  // 검증 후 설정!
+    }
+};
+\`\`\`
+
+왜 이렇게 할까요? setWidth에서 \`w > 0\` 검증을 하잖아요! width = -10이 되는 걸 막아줘요. 직접 접근하면 이런 보호가 불가능해요.
+
+💡 getter는 값을 읽어오는 함수, setter는 값을 검증 후 설정하는 함수예요!`
         },
         {
           id: "ch2-q1",

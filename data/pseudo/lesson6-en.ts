@@ -174,7 +174,11 @@ Output:
 
 - **WHILE** checks the condition **before** each loop
 - If the condition is FALSE from the start, the loop **never runs**
-- Always close with **ENDWHILE**`
+- Always close with **ENDWHILE**
+
+{!red} ⚠️ **Warning! Infinite loop danger!** — If you forget \`count ← count + 1\`, count stays at 1 forever and the condition is always true → **the program never stops!**
+
+In WHILE loops, you MUST **update the value** so the condition eventually becomes false!`
         },
         {
           id: "ch2-example",
@@ -246,6 +250,37 @@ ENDWHILE
           ],
           answer: 0,
           explanation: 'x starts at 10 and decreases by 3 each time: 10, 7, 4, 1. When x becomes -2, the condition (x > 0) is FALSE, so the loop stops. Output: **10 7 4 1**.'
+        },
+        {
+          id: "ch2-quiz1",
+          type: "quiz",
+          title: "❓ FOR vs WHILE!",
+          content: 'Which situation is best suited for a **WHILE** loop?',
+          options: [
+            'Print numbers 1 to 100',
+            'Print all elements of an array',
+            'Repeat until user types "exit"',
+            'Print the 2 times table'
+          ],
+          answer: 2,
+          explanation: 'Repeating until "exit" means **unknown number of repetitions** → WHILE is perfect! The others have fixed counts → FOR is better.'
+        },
+        {
+          id: "ch2-quiz2",
+          type: "quiz",
+          title: "❓ WHILE behavior!",
+          content: `How many times is OUTPUT executed?
+
+\`\`\`
+x ← 5
+WHILE x > 10
+    OUTPUT x
+    x ← x + 1
+ENDWHILE
+\`\`\``,
+          options: ['0 times', '1 time', '5 times', 'Infinite loop'],
+          answer: 0,
+          explanation: 'x=5 and condition x > 10 is **false from the start**! WHILE checks condition first, so it never executes. 0 times!'
         },
       ]
     }

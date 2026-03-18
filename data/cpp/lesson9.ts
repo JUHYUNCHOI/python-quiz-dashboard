@@ -29,12 +29,18 @@ scores = [90, 85, 78, 92, 88]
 print(scores[0])  # 90
 \`\`\`
 
+왜 배열이 필요할까요? 학생 30명의 점수를 저장한다고 생각해보세요. 변수 30개를 만들 건가요? \`score1, score2, score3...\` 😱
+
+배열은 같은 종류의 데이터를 **한 줄에 보관하는 서랍장**이에요.
+
 C++에서는 **배열(array)**을 써요!
 
 \`\`\`cpp
 int scores[5] = {90, 85, 78, 92, 88};
 cout << scores[0];  // 90
 \`\`\`
+
+💡 배열은 **처음부터 크기를 정하는 좌석 예약**과 같아요. 좌석을 나중에 늘릴 수 없듯이, 배열도 크기를 나중에 바꿀 수 없어요.
 
 큰 차이점이 있어요:
 
@@ -45,7 +51,8 @@ cout << scores[0];  // 90
 | 타입 섞을 수 있음 | **같은 타입만!** |
 | \`scores.append(100)\` | ❌ 추가 불가! |
 
-💡 C++ 배열 = **크기가 정해진, 같은 타입의 상자들**이에요!`
+💡 C++ 배열 = **크기가 정해진, 같은 타입의 상자들**이에요!`,
+          component: "cppArrayBuilder",
         },
         {
           id: "ch1-fb1",
@@ -81,7 +88,9 @@ int arr[3] = {1, 2, 3};
 cout << arr[5];  // ❌ 에러가 아니라 쓰레기 값! (파이썬은 IndexError)
 \`\`\`
 
-파이썬은 범위를 벗어나면 에러를 줬지만, C++은 **조용히 이상한 값**을 줘요. 조심해야 해요!
+파이썬은 범위를 벗어나면 IndexError가 나지만, C++은 에러 없이 **쓰레기 값**을 읽어요. 매우 위험해요! arr[100]을 읽어도 프로그램이 그냥 돌아가요.
+
+예를 들어 \`int arr[3] = {10, 20, 30};\`에서 \`arr[100]\`을 읽으면? 에러 없이 \`-827361\` 같은 엉뚱한 숫자가 나와요! 이게 바로 **쓰레기 값(garbage value)**이에요.
 
 💡 C++ 배열은 범위 체크를 안 해요 → 직접 조심해야 해요!`
         },
@@ -127,6 +136,17 @@ for (int i = 0; i < size; i++) {
 💡 파이썬의 \`for s in scores\`보다 복잡하지만, 나중에 **range-based for**를 배우면 비슷해져요!`
         },
         {
+          id: "ch1-loop-sim",
+          type: "explain",
+          title: "🔍 실행 추적: 배열 순회가 어떻게 동작할까?",
+          content: `i가 0부터 2까지 변하며 arr[i]로 배열의 각 칸에 접근하는 과정을 추적합니다.
+
+**i가 바뀔 때마다** arr[i]가 가리키는 칸이 달라져요!
+
+**▶ 실행하기** 또는 **▷ 한 단계** 버튼을 눌러보세요.`,
+          component: "codeTraceCppArrayLoop",
+        },
+        {
           id: "ch1-pred2",
           type: "predict" as const,
           title: "배열 + 루프!",
@@ -162,6 +182,29 @@ int main() {
 평균: 86.6`
         },
         {
+          id: "ch1-practice2",
+          type: "practice" as const,
+          title: "✋ 배열에서 최댓값 찾기!",
+          content: `5개의 점수가 저장된 배열에서 최댓값을 찾아 출력하세요.`,
+          code: `#include <iostream>
+using namespace std;
+
+int main() {
+    int scores[5] = {85, 92, 78, 96, 88};
+    int maxScore = scores[0];
+
+    for (int i = 1; i < 5; i++) {
+        if (scores[i] > maxScore) {
+            maxScore = scores[i];
+        }
+    }
+
+    cout << "최고 점수: " << maxScore << endl;
+    return 0;
+}`,
+          expectedOutput: `최고 점수: 96`
+        },
+        {
           id: "ch1-q1",
           type: "quiz",
           title: "배열 기초!",
@@ -189,6 +232,7 @@ int main() {
           id: "ch2-intro",
           type: "explain",
           title: "📦 vector = 크기가 변하는 배열!",
+          component: "cppVectorBuilder",
           content: `배열은 크기가 고정이라 불편하죠? **vector**는 파이썬 list처럼 크기가 자유로워요!
 
 \`\`\`cpp
@@ -208,6 +252,8 @@ nums.push_back(4);  // [1, 2, 3, 4] — 끝에 추가!
 | \`nums[0]\` | \`nums[0]\` (같아요!) |
 
 ⚠️ \`#include <vector>\`을 꼭 추가해야 해요!
+
+헤더(header)는 C++의 추가 기능을 불러오는 거예요. vector를 쓰려면 <vector> 헤더가 필요해요.
 
 💡 vector는 **크기가 자동으로 늘어나는 배열**이에요. 실전에서는 배열보다 vector를 훨씬 많이 써요!`
         },
@@ -265,15 +311,16 @@ v.clear();           // 전부 삭제 → {}
           title: "📊 배열 vs vector 비교",
           content: `언제 뭘 써야 할까요?
 
-| | 배열 (array) | vector |
+| | 배열 (array) | 벡터 (vector) |
 |---|---|---|
-| 크기 | **고정** | **자유롭게 변경** |
-| 선언 | \`int arr[5]\` | \`vector<int> v\` |
-| 추가 | ❌ 불가 | \`push_back()\` |
-| 삭제 | ❌ 불가 | \`pop_back()\` |
+| 크기 | 처음에 고정 | 자유롭게 변경 |
+| 선언 | \`int arr[5];\` | \`vector<int> v;\` |
+| 추가 | 불가능 | \`v.push_back(x)\` |
+| 삭제 | 불가능 | \`v.pop_back()\` |
 | 크기 확인 | 직접 관리 | \`.size()\` |
-| 안전성 | 범위 체크 없음 | \`.at()\`으로 체크 |
+| 안전성 | 범위 체크 없음 | \`.at()\` 사용 가능 |
 | 헤더 | 없음 | \`#include <vector>\` |
+| 💡 추천 | 크기가 고정일 때 | 대부분의 경우! |
 
 **결론:**
 - 크기가 정해져 있으면 → **배열** (더 빠름)

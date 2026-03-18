@@ -22,7 +22,9 @@ export const cppLesson16Data: LessonData = {
           id: "ch1-intro",
           type: "explain",
           title: "📖 map — 키와 값을 짝지어 저장해요!",
-          content: `파이썬에서 \`dict\`를 써본 적 있죠? C++에서는 \`map\`이 같은 역할을 해요!
+          content: `학교 성적 관리 시스템을 만든다고 생각해보세요. '홍길동'의 점수를 바로 찾고 싶어요. 벡터로 하면 처음부터 끝까지 하나씩 찾아야 해요. 1000명이면? 너무 느려요! **이름으로 바로 찾을 수 있는** 도구가 필요해요.
+
+파이썬에서 \`dict\`를 써본 적 있죠? C++에서는 \`map\`이 같은 역할을 해요!
 
 \`\`\`cpp
 #include <map>
@@ -131,6 +133,10 @@ cout << scores.size() << endl;  // 1
 | \`del d["key"]\` | \`m.erase("key")\` |
 | \`len(d)\` | \`m.size()\` |
 
+키가 있는지 확인하는 방법 2가지:
+• \`m.count(key)\` — 있으면 1, 없으면 0 (간단 확인)
+• \`m.find(key)\` — 있으면 iterator, 없으면 end() (값도 같이 쓸 때)
+
 💡 \`count()\`는 키가 있으면 1, 없으면 0을 반환해요! 있는지 확인할 때 편해요.`
         },
         {
@@ -148,6 +154,8 @@ cout << scores.size() << endl;  // 1
           title: "📖 unordered_map — 정렬 없이 더 빠르게!",
           content: `\`map\`은 키를 정렬하기 때문에 삽입/검색이 **O(log n)**이에요.
 정렬이 필요 없다면? \`unordered_map\`을 쓰면 **O(1)**으로 훨씬 빨라요!
+
+O(1)은 학생이 1000명이든 100만 명이든 **한 번에** 찾는 거예요. O(log n)은 100만 명이면 약 20번 비교해서 찾아요. 둘 다 빠르지만, 정렬이 필요 없다면 unordered가 더 빨라요!
 
 \`\`\`cpp
 #include <unordered_map>
@@ -171,6 +179,31 @@ scores["Bob"] = 87;
 | 파이썬 유사 | 없음 | **dict** |
 
 💡 대부분의 경우 \`unordered_map\`이 더 빨라요! 키 정렬이 필요할 때만 \`map\`을 써요.`
+        },
+        {
+          id: "ch1-question",
+          type: "explain",
+          title: "🙋 질문: 벡터에 pair를 넣어도 비슷하잖아?",
+          content: `**"벡터에 pair를 넣어도 비슷하잖아?"**
+
+비슷해 보이지만 큰 차이가 있어요!
+
+벡터는 키로 검색하려면 처음부터 끝까지 찾아야 해요(느림). map은 키로 바로 찾아요(빠름)!
+
+\`\`\`cpp
+// vector<pair> — 검색이 느려요 O(n)
+vector<pair<string, int>> v = {{"Alice", 95}, {"Bob", 87}};
+// "Bob"을 찾으려면 하나씩 확인해야 해요
+for (auto& p : v) {
+    if (p.first == "Bob") { /* 찾았다! */ }
+}
+
+// map — 검색이 빨라요 O(log n)
+map<string, int> m = {{"Alice", 95}, {"Bob", 87}};
+cout << m["Bob"];  // 바로 접근! 87
+\`\`\`
+
+💡 데이터가 많을수록 map의 장점이 커져요! 100만 개의 데이터에서 벡터는 최대 100만 번, map은 약 20번만 비교하면 돼요.`
         },
         {
           id: "ch1-practice",
@@ -231,7 +264,9 @@ cherry: 1`
           id: "ch2-intro",
           type: "explain",
           title: "🎯 set — 중복 없이 정렬까지!",
-          content: `파이썬의 \`set\`을 써본 적 있죠? C++에도 \`set\`이 있어요!
+          content: `시험 점수 목록에서 중복 없이 고유한 점수만 알고 싶어요. 벡터로 하면? 일일이 중복 체크해야 해요. set은 넣기만 하면 자동으로 중복 제거 + 정렬!
+
+파이썬의 \`set\`을 써본 적 있죠? C++에도 \`set\`이 있어요!
 
 \`\`\`cpp
 #include <set>

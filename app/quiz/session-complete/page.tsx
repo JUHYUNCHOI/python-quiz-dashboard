@@ -371,6 +371,39 @@ function SessionCompletePage() {
           )}
         </div>
 
+        {/* === Phase 5.5: 등급 통계 (말해보카 스타일) === */}
+        {phase >= 5 && sessionData.perfectCount !== undefined && (
+          <div className="bg-white/40 backdrop-blur-md rounded-2xl border border-purple-200/50 p-5 mb-6 animate-fly-in-right">
+            <h2 className="text-lg font-bold text-gray-700 mb-3">{t("📋 등급 분석", "📋 Grade Analysis")}</h2>
+            <div className="grid grid-cols-3 gap-3">
+              {sessionData.perfectCount > 0 && (
+                <div className="text-center p-3 bg-yellow-50 rounded-xl border border-yellow-200">
+                  <div className="text-2xl mb-1">🌟</div>
+                  <div className="text-xl font-black text-yellow-600">{sessionData.perfectCount}</div>
+                  <div className="text-[10px] text-yellow-600 font-medium">Perfect</div>
+                </div>
+              )}
+              {sessionData.greatCount > 0 && (
+                <div className="text-center p-3 bg-blue-50 rounded-xl border border-blue-200">
+                  <div className="text-2xl mb-1">👏</div>
+                  <div className="text-xl font-black text-blue-600">{sessionData.greatCount}</div>
+                  <div className="text-[10px] text-blue-600 font-medium">Great</div>
+                </div>
+              )}
+              {sessionData.retryCorrectCount > 0 && (
+                <div className="text-center p-3 bg-purple-50 rounded-xl border border-purple-200">
+                  <div className="text-2xl mb-1">🔄</div>
+                  <div className="text-xl font-black text-purple-600">{sessionData.retryCorrectCount}</div>
+                  <div className="text-[10px] text-purple-600 font-medium">{t("다시 풀어 정답", "Retry correct")}</div>
+                </div>
+              )}
+            </div>
+            {sessionData.perfectCount > 0 && sessionData.perfectCount === sessionData.correctAnswers && (
+              <p className="text-center text-sm font-bold text-yellow-600 mt-3">🌟 모든 문제를 첫 시도에 맞혔어요!</p>
+            )}
+          </div>
+        )}
+
         {/* === Phase 6: Level progress === */}
         <div className="mb-8">
           <LevelBar

@@ -5,17 +5,67 @@ import { CodeBlock } from "@/components/ui/code-block"
 import { useLanguage } from "@/contexts/language-context"
 
 // ============================================
-// 인라인 마크다운 헬퍼: `code` + **bold** 처리
+// 인라인 컬러 태그 맵: {pink:텍스트} → 핑크색
+// ============================================
+const COLOR_MAP: Record<string, string> = {
+  pink: "text-pink-600",
+  red: "text-red-600",
+  blue: "text-blue-600",
+  sky: "text-sky-600",
+  green: "text-emerald-600",
+  teal: "text-teal-600",
+  purple: "text-violet-600",
+  orange: "text-orange-600",
+  amber: "text-amber-600",
+  indigo: "text-indigo-600",
+}
+const COLOR_BG_MAP: Record<string, string> = {
+  pink: "bg-pink-50 border-pink-200 text-pink-700",
+  red: "bg-red-50 border-red-200 text-red-700",
+  blue: "bg-blue-50 border-blue-200 text-blue-700",
+  sky: "bg-sky-50 border-sky-200 text-sky-700",
+  green: "bg-emerald-50 border-emerald-200 text-emerald-700",
+  teal: "bg-teal-50 border-teal-200 text-teal-700",
+  purple: "bg-violet-50 border-violet-200 text-violet-700",
+  orange: "bg-orange-50 border-orange-200 text-orange-700",
+  amber: "bg-amber-50 border-amber-200 text-amber-700",
+  indigo: "bg-indigo-50 border-indigo-200 text-indigo-700",
+}
+
+// ============================================
+// 인라인 마크다운 헬퍼: `code` + **bold** + {color:text} 처리
 // ============================================
 function renderInlineMarkdown(text: string, keyPrefix: string = ""): React.ReactNode[] {
+  // 1단계: {color:text} 컬러 태그 + `code` + **bold** 통합 분리
+  const colorTagPattern = /(\{(?:pink|red|blue|sky|green|teal|purple|orange|amber|indigo):[^}]+\})/g
+  const segments = text.split(colorTagPattern)
+
+  return segments.flatMap((segment, si): React.ReactNode[] => {
+    // {color:text} 컬러 태그 처리
+    const colorMatch = segment.match(/^\{(pink|red|blue|sky|green|teal|purple|orange|amber|indigo):([^}]+)\}$/)
+    if (colorMatch) {
+      const colorName = colorMatch[1]
+      const innerText = colorMatch[2]
+      const cls = COLOR_MAP[colorName] || "text-gray-700"
+      // 내부 **bold**와 `code` 처리
+      return [<span key={`${keyPrefix}c${si}`} className={`${cls} font-semibold`}>{renderBasicInline(innerText, `${keyPrefix}c${si}-`)}</span>]
+    }
+
+    // 일반 텍스트: `code` + **bold** 처리
+    return renderBasicInline(segment, `${keyPrefix}${si}-`)
+  })
+}
+
+// `code` + **bold** 처리 (컬러 태그 내부에서도 재사용)
+function renderBasicInline(text: string, keyPrefix: string = ""): React.ReactNode[] {
   const parts = text.split(/(`[^`]+`)/g)
-  return parts.map((part, j) => {
+  return parts.flatMap((part, j): React.ReactNode[] => {
     if (part.startsWith('`') && part.endsWith('`')) {
-      return (
+      return [
         <code key={`${keyPrefix}${j}`} className="bg-indigo-100 px-1.5 py-0.5 rounded-md font-mono text-indigo-700 text-sm font-semibold">
           {part.slice(1, -1)}
         </code>
-      )
+      ]
     }
     const boldParts = part.split(/(\*\*[^*]+\*\*)/g)
     return boldParts.map((bp, k) => {
@@ -29,21 +79,31 @@ function renderInlineMarkdown(text: string, keyPrefix: string = ""): React.React
 
 // chat bubble 전용 인라인 (배경색이 다름)
 function renderChatInline(text: string, keyPrefix: string = ""): React.ReactNode[] {
-  const parts = text.split(/(`[^`]+`)/g)
-  return parts.map((part, j) => {
-    if (part.startsWith('`') && part.endsWith('`')) {
-      return (
-        <code key={`${keyPrefix}${j}`} className="bg-white/30 px-1 py-0.5 rounded font-mono text-sm font-bold">
-          {part.slice(1, -1)}
-        </code>
-      )
+  const colorTagPattern = /(\{(?:pink|red|blue|sky|green|teal|purple|orange|amber|indigo):[^}]+\})/g
+  const segments = text.split(colorTagPattern)
+
+  return segments.flatMap((segment, si): React.ReactNode[] => {
+    const colorMatch = segment.match(/^\{(pink|red|blue|sky|green|teal|purple|orange|amber|indigo):([^}]+)\}$/)
+    if (colorMatch) {
+      const cls = COLOR_MAP[colorMatch[1]] || ""
+      return [<span key={`${keyPrefix}c${si}`} className={`${cls} font-semibold`}>{colorMatch[2]}</span>]
     }
-    const boldParts = part.split(/(\*\*[^*]+\*\*)/g)
-    return boldParts.map((bp, k) => {
-      if (bp.startsWith('**') && bp.endsWith('**')) {
-        return <strong key={`${keyPrefix}${j}-${k}`} className="font-bold">{bp.slice(2, -2)}</strong>
+    const parts = segment.split(/(`[^`]+`)/g)
+    return parts.flatMap((part, j): React.ReactNode[] => {
+      if (part.startsWith('`') && part.endsWith('`')) {
+        return [
+          <code key={`${keyPrefix}${si}-${j}`} className="bg-white/30 px-1 py-0.5 rounded font-mono text-sm font-bold">
+            {part.slice(1, -1)}
+          </code>
+        ]
       }
-      return bp
+      const boldParts = part.split(/(\*\*[^*]+\*\*)/g)
+      return boldParts.map((bp, k) => {
+        if (bp.startsWith('**') && bp.endsWith('**')) {
+          return <strong key={`${keyPrefix}${si}-${j}-${k}`} className="font-bold">{bp.slice(2, -2)}</strong>
+        }
+        return bp
+      })
     })
   })
 }
@@ -231,6 +291,23 @@ export function renderContent(content: string) {
         )
       }
 
+      i++
+      continue
+    }
+
+    // ── 컬러 블록 라인: {!color} 텍스트 ──
+    const colorBlockMatch = line.match(/^\{!(pink|red|blue|sky|green|teal|purple|orange|amber|indigo)\}\s*(.+)$/)
+    if (colorBlockMatch) {
+      const colorName = colorBlockMatch[1]
+      const blockText = colorBlockMatch[2]
+      const bgCls = COLOR_BG_MAP[colorName] || "bg-gray-50 border-gray-200 text-gray-700"
+      elements.push(
+        <div key={key++} className={`my-2 ${bgCls} border rounded-xl px-3 py-2 md:px-4 md:py-2.5`}>
+          <p className="text-sm md:text-base font-medium leading-relaxed">
+            {renderInlineMarkdown(blockText, `cb-${key}-`)}
+          </p>
+        </div>
+      )
       i++
       continue
     }

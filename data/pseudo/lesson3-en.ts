@@ -154,6 +154,27 @@ OUTPUT "Double is: " & num
           ]
         },
         {
+          id: "ch2-predict2",
+          type: "predict",
+          title: "🔮 & operator!",
+          content: `If the user inputs "Kim", what is the output?
+
+\`\`\`
+DECLARE name : STRING
+OUTPUT "Enter your name:"
+INPUT name
+OUTPUT "Hello, " & name & "!"
+\`\`\``,
+          options: [
+            'Hello, Kim!',
+            'Hello, name!',
+            'Hello, "Kim"!',
+            'Error'
+          ],
+          answer: 0,
+          explanation: 'The & operator joins strings! "Hello, " + "Kim" + "!" = **Hello, Kim!** name is a variable so its value is used without quotes.'
+        },
+        {
           id: "ch2-quiz2",
           type: "quiz",
           title: "🏆 Final Quiz!",

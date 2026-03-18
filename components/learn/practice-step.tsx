@@ -48,11 +48,11 @@ export function PracticeStep({ step, lang = "ko" }: PracticeStepProps) {
 
       {/* 예상 출력 (항상 보임 — 목표를 보여줌) */}
       {step.expectedOutput && (
-        <div className="bg-slate-800 rounded-xl p-4 font-mono text-sm border border-slate-300">
-          <div className="text-slate-400 text-xs mb-2">
+        <div className="bg-gray-900 rounded-xl p-4 font-mono text-sm border border-gray-700">
+          <div className="text-gray-300 text-xs font-bold mb-2">
             {isEn ? "Expected Output" : "예상 출력 (Expected Output)"}
           </div>
-          <div className="text-green-400 whitespace-pre-line">{step.expectedOutput}</div>
+          <div className="text-green-400 text-base whitespace-pre-line">{step.expectedOutput}</div>
         </div>
       )}
 

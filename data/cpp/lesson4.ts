@@ -23,8 +23,11 @@ export const cppLesson4Data: LessonData = {
           id: "ch1-intro",
           type: "explain",
           title: "⌨️ 키보드로 입력받기!",
+          component: "cppCinBuilder",
           content: `파이썬에서는 \`input()\` 하나로 끝이었죠?
 C++은 3단계가 필요해요!
+
+파이썬은 input() 한 줄이면 끝이지만, C++은 3단계가 필요해요: ① 변수 선언 ② 안내 메시지 출력 ③ cin으로 입력. 왜? C++은 변수 타입을 미리 정해야 하니까요!
 
 \`\`\`cpp
 string name;                    // 1. 변수 먼저 선언
@@ -107,7 +110,9 @@ cin >> score;     // double 변수니까 자동으로 실수 입력!
 
 C++은 변수 타입에 맞게 **알아서 읽어주니까** 형변환이 필요 없어요!
 
-💡 이게 바로 **타입을 미리 정하는 장점**이에요. 컴퓨터가 뭘 받아야 할지 이미 알고 있으니까요!`
+💡 이게 바로 **타입을 미리 정하는 장점**이에요. 컴퓨터가 뭘 받아야 할지 이미 알고 있으니까요!
+
+만약 int 변수에 '안녕'을 입력하면? cin이 **실패 상태**에 빠져요. 변수에는 0이 들어가고, 이후 모든 cin이 작동을 멈춰요! 프로그램이 멈춘 것처럼 보여요 😱 (에러 처리는 나중에 배워요!)`
         },
         {
           id: "ch1-practice",
@@ -224,7 +229,9 @@ getline(cin, fullName);
 | \`cin >>\` | 공백에서 멈춤 ❌ | 단어 하나, 숫자 |
 | \`getline(cin, 변수)\` | 공백 포함 ✅ | 한 줄 전체 |
 
-💡 이름처럼 공백이 있을 수 있는 입력은 getline()을 쓰세요!`
+💡 이름처럼 공백이 있을 수 있는 입력은 getline()을 쓰세요!
+
+cin >>는 빠르게 한 단어씩 읽도록 설계됐어요. 하지만 '홍 길동' 같은 전체 이름이 필요하면? getline()을 써야 해요!`
         },
         {
           id: "ch2-fb1",
@@ -251,31 +258,28 @@ getline(cin, fullName);
           id: "ch2-ignore",
           type: "explain",
           title: "⚠️ cin >> 다음에 getline 쓸 때 주의!",
+          component: "cinBufferVisualizer",
           content: `cin >>와 getline()을 **같이 쓰면** 함정이 있어요!
 
-\`\`\`cpp
-int age;
-string name;
-cin >> age;          // 14 입력 후 엔터 → 엔터(\\n)가 남아있음!
-getline(cin, name);  // 남은 \\n을 읽어서 빈 줄이 됨! 😱
-\`\`\`
+cin >>는 숫자만 읽고 **엔터(↵)를 버퍼에 남겨둬요.**
+getline()은 **엔터까지 읽는 함수**라서, 남은 엔터를 읽어버리면 빈 줄이 돼요!
 
-**해결 방법: cin.ignore()**
-\`\`\`cpp
-int age;
-string name;
-cin >> age;
-cin.ignore();        // ← 남은 엔터(\\n)를 버려요!
-getline(cin, name);  // 이제 정상적으로 입력받아요! ✅
-\`\`\`
+**해결:** \`cin.ignore();\` 를 사이에 넣으면 남은 엔터를 지워줘요!
 
-| 상황 | 필요한가? |
-|------|----------|
-| cin >> 만 쓸 때 | 필요 없음 ✅ |
-| getline()만 쓸 때 | 필요 없음 ✅ |
-| cin >> **다음에** getline() | **cin.ignore() 필수!** ⚠️ |
+아래 애니메이션에서 버퍼가 어떻게 동작하는지 직접 눈으로 확인해보세요! 👇`
+        },
+        {
+          id: "ch2-decision",
+          type: "explain",
+          title: "cin >> vs getline() 선택 가이드",
+          content: `| 상황 | 사용할 것 |
+|---|---|
+| 숫자 하나 | \`cin >>\` |
+| 단어 하나 | \`cin >>\` |
+| 공백 포함 문장 | \`getline()\` |
+| 숫자 → 문장 순서 | \`cin >>\` → \`cin.ignore()\` → \`getline()\` |
 
-💡 cin >>는 엔터를 남기고, getline()은 엔터까지 읽어요. cin.ignore()로 남은 엔터를 치워주세요!`
+💡 기본 규칙: 공백이 필요하면 getline(), 아니면 cin >>!`
         },
         {
           id: "ch2-practice",

@@ -9,6 +9,7 @@ export const ch2: Chapter = {
       id: "ch2-1",
       type: "explain",
       title: "💭 try-except는 어떤 구조일까?",
+      component: "pyTryExceptBuilder",
       content: `💭 에러를 잡으려면 코드를 **어떤 구조**로 감싸야 할까? "시도해보고, 에러나면 이거 해!"를 코드로 쓰면?
 
 \`\`\`python

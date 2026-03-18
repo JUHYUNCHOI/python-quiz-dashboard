@@ -22,7 +22,9 @@ export const cppLesson19EnData: LessonData = {
           id: "ch1-intro",
           type: "explain",
           title: "📄 ifstream & ofstream — Reading and Writing Files!",
-          content: `Sometimes your program needs to read from or write to files. In competitions like USACO, file I/O is essential!
+          content: `In USACO contests, you submit answers as **files**, not to the console! And if the test data has 100,000 lines, you can't type it in manually every time, right? You need to learn how to read from files and write to files.
+
+Sometimes your program needs to read from or write to files. In competitions like USACO, file I/O is essential!
 
 In C++, you use the \`<fstream>\` header:
 
@@ -181,6 +183,36 @@ Comparing with Python:
 💡 When using getline after cin >>, always add **cin.ignore()**! Forgetting it causes subtle bugs.`
         },
         {
+          id: "ch1-pred-ignore",
+          type: "predict" as const,
+          title: "The cin-then-getline trap",
+          content: "Predict the output of this code. (Input: first 3, then Hello World)",
+          code: "#include <iostream>\nusing namespace std;\nint main() {\n    int n;\n    string s;\n    cout << \"Number: \";\n    cin >> n;\n    cout << \"Sentence: \";\n    getline(cin, s);\n    cout << \"n=\" << n << \", s=\" << s << endl;\n}",
+          options: ["n=3, s=Hello World", "n=3, s=", "Error", "n=3, s= Hello World"],
+          answer: 1,
+          explanation: "After cin >> n, the leftover newline (\\n) in the buffer gets consumed by getline()! So s becomes an empty string. You need to add cin.ignore() after cin >> to fix this."
+        },
+        {
+          id: "ch1-practice-getline",
+          type: "practice" as const,
+          title: "✋ Read a Name and a Quote",
+          content: `Read a name (with spaces) and a quote, then print them.
+Use getline()!`,
+          code: `#include <iostream>
+using namespace std;
+
+int main() {
+    string name, quote;
+    cout << "Name: ";
+    getline(cin, name);
+    cout << "Quote: ";
+    getline(cin, quote);
+    cout << name << "'s quote: " << quote << endl;
+    return 0;
+}`,
+          expectedOutput: "Name: Hong Gildong\nQuote: Hello!\nHong Gildong's quote: Hello!"
+        },
+        {
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ Read Numbers from File and Print Sum!",
@@ -245,6 +277,13 @@ int main() {
           type: "explain",
           title: "⚡ Fast I/O — Speed Up cin/cout!",
           content: `C++'s cin/cout are **slow** by default! That's because they're **synchronized** with C's scanf/printf.
+
+**What does synchronization mean?**
+By default, C++'s cout/cin are **synchronized** with C's printf/scanf. Synchronization means that even if you mix both, the output order is guaranteed. But this synchronization **slows things down**!
+
+In contests we never use printf/scanf, so it's safe to turn off synchronization:
+- \`ios::sync_with_stdio(false);\` — turn off synchronization
+- \`cin.tie(nullptr);\` — untie cin from cout
 
 Turning off this synchronization makes them **2-5x faster**!
 

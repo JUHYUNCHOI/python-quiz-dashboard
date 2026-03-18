@@ -10,6 +10,8 @@ interface CelebrationScreenProps {
   streak?: number
   comboTier?: ComboTierInfo
   combo?: number
+  grade?: "perfect" | "great" | "good" | "fail" | null
+  isRetry?: boolean
 }
 
 const tierMessages: Record<string, string[]> = {
@@ -20,7 +22,7 @@ const tierMessages: Record<string, string[]> = {
   legend: ["전설이 탄생했다! 👑", "이 세상 사람 맞아?!", "무적 모드!"],
 }
 
-export function CelebrationScreen({ show, points = 10, streak = 0, comboTier, combo = 0 }: CelebrationScreenProps) {
+export function CelebrationScreen({ show, points = 10, streak = 0, comboTier, combo = 0, grade, isRetry }: CelebrationScreenProps) {
   const [message, setMessage] = useState("완벽해요!")
   const tier = comboTier?.tier || "base"
 
@@ -112,6 +114,27 @@ export function CelebrationScreen({ show, points = 10, streak = 0, comboTier, co
           </div>
           <div className="text-2xl md:text-4xl font-bold text-gray-800 animate-fade-in-delay">{message}</div>
         </div>
+
+        {/* 등급 뱃지 (말해보카 스타일) */}
+        {grade && grade !== "fail" && (
+          <div className={cn(
+            "px-6 py-2 rounded-full border-2 text-lg md:text-xl font-black animate-scale-in",
+            grade === "perfect" && "bg-yellow-50 border-yellow-400 text-yellow-600",
+            grade === "great" && "bg-blue-50 border-blue-400 text-blue-600",
+            grade === "good" && "bg-green-50 border-green-400 text-green-600",
+          )}>
+            {grade === "perfect" && "🌟 Perfect!"}
+            {grade === "great" && "👏 Great!"}
+            {grade === "good" && "👍 Good!"}
+          </div>
+        )}
+
+        {/* 재출제 정답 표시 */}
+        {isRetry && (
+          <div className="px-4 py-1.5 rounded-full bg-purple-50 border border-purple-300 text-purple-600 text-sm font-bold animate-fade-in-delay">
+            🔄 다시 풀어서 맞혔어요!
+          </div>
+        )}
 
         {/* Points animation */}
         <div className="text-3xl md:text-5xl font-bold text-orange-600 animate-fly-up">+{points} XP</div>

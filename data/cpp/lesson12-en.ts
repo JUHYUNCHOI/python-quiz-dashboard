@@ -22,7 +22,10 @@ export const cppLesson12EnData: LessonData = {
           id: "ch1-intro",
           type: "explain",
           title: "🏷️ What Is a Reference?",
-          content: `In C++, a **reference** is an **alias** (another name) for an existing variable!
+          component: "cppReferenceBuilder",
+          content: `In Python, when you pass a variable to a function, things just worked, right? C++ is different. You have to **choose whether to modify the original or use a copy**. If you don't understand this difference, functions won't behave the way you expect!
+
+In C++, a **reference** is an **alias** (another name) for an existing variable!
 
 \`\`\`cpp
 int x = 10;
@@ -55,7 +58,9 @@ In Python, integers are immutable, so \`ref = 20\` makes ref point to a new obje
 | \`ref = 20\` → x unchanged (int) | \`ref = 20;\` → x changes too! |
 | Implicit behavior | \`&\` makes it explicit |
 
-💡 \`&\` means "this variable is an alias for another variable!"`
+💡 \`&\` means "this variable is an alias for another variable!"
+
+💡 The & symbol has multiple meanings! Here it means **reference (alias)**. Later it's also used as the **address-of operator**, but you can tell them apart from context.`
         },
         {
           id: "ch1-pred1",
@@ -77,8 +82,10 @@ int x = 10;
 const int& ref = x;   // read-only reference!
 
 cout << ref;    // ✅ Reading is OK!
-// ref = 20;    // ❌ Error! Can't modify through const ref!
+// ref = 20;    // ❌ Error! const means no modification!
 \`\`\`
+
+When you pass large data (like a 1000-character string) to a function, copying it is slow. Using \`const string&\` lets you read the original directly while locking it from modification. Safe and fast!
 
 Why use const references? Two great reasons:
 
@@ -224,6 +231,7 @@ In Python, integers don't change either because they're immutable. But in C++, *
           id: "ch2-ref",
           type: "explain",
           title: "🔗 Call by Reference — Modify the Original!",
+          component: "cppCallByRefBuilder",
           content: `Want to actually change the original? Use a **reference (&)**!
 
 \`\`\`cpp
@@ -262,7 +270,9 @@ In Python, \`x, y = y, x\` does it in one line. In C++, you build a swap functio
 | Call by Value | \`void f(int x)\` | ❌ |
 | Call by Reference | \`void f(int& x)\` | ✅ |
 
-💡 Just one \`&\` completely changes how the function behaves!`
+💡 Just one \`&\` completely changes how the function behaves!
+
+References (&) and pointers (*) serve a similar purpose but are different tools. A reference is an 'alias,' while a pointer is 'a variable that stores an address.' We'll learn about pointers in the next lesson!`
         },
         {
           id: "ch2-fb1",
@@ -293,7 +303,9 @@ In Python, \`x, y = y, x\` does it in one line. In C++, you build a swap functio
 1. A swap function to exchange two values
 2. A function that doubles every element in a vector
 
-When a vector is passed by reference, the original vector gets modified!`,
+When a vector is passed by reference, the original vector gets modified!
+
+\`vector<int>&\` means 'a reference to an integer vector.' Because of the &, the function can directly modify the original vector!`,
           code: `#include <iostream>
 #include <vector>
 using namespace std;

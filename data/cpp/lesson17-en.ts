@@ -22,7 +22,15 @@ export const cppLesson17EnData: LessonData = {
           id: "ch1-intro",
           type: "explain",
           title: "🔍 STL Algorithms — C++'s Powerful Built-in Tools!",
-          content: `**STL** stands for **Standard Template Library**. It's a collection of powerful built-in functions that come with C++!
+          content: `Finding the minimum in a vector, searching for a specific value... Writing for loops every time is tedious and error-prone. C++ STL has functions that solve these tasks in **one line**! These are the tools professional developers use the most.
+
+**STL** stands for **Standard Template Library**. It's a collection of powerful built-in functions that come with C++!
+
+Think about these situations:
+- You want to find the maximum value in an array → \`max_element()\`
+- You want to count how many times a value appears → \`count()\`
+- You want to find a specific value → \`find()\`
+- You could write a for loop yourself, but STL algorithms do it in **one line**!
 
 Remember using \`sorted()\`, \`min()\`, \`max()\`, \`sum()\` in Python? C++ has similar functions!
 
@@ -128,6 +136,12 @@ if (it != v.end()) {         // check existence
 | \`30 in lst\` | \`find(...) != v.end()\` |
 | \`lst.index(30)\` | \`it - v.begin()\` |
 | Raises ValueError if missing | Returns \`v.end()\` if missing |
+
+⚠️ **What if find() can't find the value?** It returns end(). Always check:
+\`\`\`cpp
+auto it = find(v.begin(), v.end(), 42);
+if (it != v.end()) { /* found */ }
+\`\`\`
 
 💡 \`find()\` searches linearly from front to back. Time complexity is **O(n)**!`
         },
@@ -250,7 +264,14 @@ Found 9 at index 3`
           id: "ch2-intro",
           type: "explain",
           title: "🎯 binary_search() — Lightning-Fast Search!",
-          content: `\`find()\` checks elements one by one, making it **O(n)**. But if the data is **sorted**, we can search much faster!
+          content: `Imagine you need to search through 100,000 data items in a USACO contest. Using find() one by one means **time limit exceeded**! Binary search finds it in just 20 steps.
+
+\`find()\` checks elements one by one, making it **O(n)**. But if the data is **sorted**, we can search much faster!
+
+- find() checks one by one from start to end: O(n)
+- binary_search() cuts the range in half each time: O(log n)
+- Searching in **1 million** items: find() needs ~1 million checks, binary_search() needs ~20!
+- ⚠️ But you need to **sort first**. Since sorting has a cost, it only pays off when you search multiple times.
 
 **Binary search** finds elements in sorted data in **O(log n)** time!
 
@@ -363,6 +384,16 @@ int idx = lower_bound(v.begin(), v.end(), 5) - v.begin();
 💡 \`lower_bound()\` is used constantly in USACO Silver! It's essential for coordinate compression, range queries, and more!`
         },
         {
+          id: "ch2-practice-bounds",
+          type: "predict" as const,
+          title: "Count students scoring 70+",
+          content: "In a sorted array of scores, figure out how many students scored 70 or above.",
+          code: "#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    vector<int> scores = {45, 55, 67, 72, 78, 85, 91, 98};\n    auto it = lower_bound(scores.begin(), scores.end(), 70);\n    cout << scores.end() - it << \" students\";\n}",
+          options: ["3 students", "4 students", "5 students", "6 students"],
+          answer: 2,
+          explanation: "lower_bound finds the first position >= 70. That's 72! Counting from there to end(): 72, 78, 85, 91, 98 = 5 students."
+        },
+        {
           id: "ch2-pred1",
           type: "predict" as const,
           title: "Predict the lower_bound() result!",
@@ -375,7 +406,9 @@ int idx = lower_bound(v.begin(), v.end(), 5) - v.begin();
           id: "ch2-unique",
           type: "explain",
           title: "🎯 unique() & erase() — Remove Duplicates!",
-          content: `\`unique()\` removes **consecutive duplicates**. Pair it with \`erase()\` for complete deduplication!
+          content: `When you need to remove duplicates: say you read values from a data file and there are duplicates. You could use a set, but when you want to remove only the duplicates while keeping the original order, you need the erase-unique pattern!
+
+\`unique()\` removes **consecutive duplicates**. Pair it with \`erase()\` for complete deduplication!
 
 \`\`\`cpp
 vector<int> v = {3, 1, 4, 1, 5, 3, 3};

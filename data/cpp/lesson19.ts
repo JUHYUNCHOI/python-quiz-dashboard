@@ -22,7 +22,9 @@ export const cppLesson19Data: LessonData = {
           id: "ch1-intro",
           type: "explain",
           title: "📄 ifstream & ofstream — 파일 읽고 쓰기!",
-          content: `프로그램에서 파일을 읽거나 쓰고 싶을 때가 있어요. USACO 같은 대회에서는 파일 입출력이 필수예요!
+          content: `USACO 대회에서는 답을 콘솔이 아니라 **파일**로 제출해요! 그리고 테스트 데이터가 10만 줄이면 매번 직접 입력할 수 없잖아요? 파일에서 읽고 파일로 쓰는 법을 배워야 해요.
+
+프로그램에서 파일을 읽거나 쓰고 싶을 때가 있어요. USACO 같은 대회에서는 파일 입출력이 필수예요!
 
 C++에서는 \`<fstream>\` 헤더를 사용해요:
 
@@ -181,6 +183,36 @@ getline(fin, line);  // 파일에서 한 줄 읽기!
 💡 cin >> 다음에 getline을 쓸 때는 **cin.ignore()**를 꼭 넣어요! 이걸 빼먹으면 버그가 생겨요.`
         },
         {
+          id: "ch1-pred-ignore",
+          type: "predict" as const,
+          title: "cin 후 getline의 함정",
+          content: "이 코드의 출력을 예측해보세요. (입력: 먼저 3, 그 다음 Hello World)",
+          code: "#include <iostream>\nusing namespace std;\nint main() {\n    int n;\n    string s;\n    cout << \"숫자: \";\n    cin >> n;\n    cout << \"문장: \";\n    getline(cin, s);\n    cout << \"n=\" << n << \", s=\" << s << endl;\n}",
+          options: ["n=3, s=Hello World", "n=3, s=", "에러", "n=3, s= Hello World"],
+          answer: 1,
+          explanation: "cin >> n 이후 버퍼에 남은 엔터(\\n)를 getline()이 읽어버려요! s가 빈 문자열이 됩니다. cin.ignore()를 cin >> 다음에 넣어야 해요."
+        },
+        {
+          id: "ch1-practice-getline",
+          type: "practice" as const,
+          title: "✋ 이름과 한마디 입력받기",
+          content: `이름(공백 포함)과 한마디를 각각 입력받아 출력하세요.
+getline()을 사용하세요!`,
+          code: `#include <iostream>
+using namespace std;
+
+int main() {
+    string name, quote;
+    cout << "이름: ";
+    getline(cin, name);
+    cout << "한마디: ";
+    getline(cin, quote);
+    cout << name << "의 한마디: " << quote << endl;
+    return 0;
+}`,
+          expectedOutput: "이름: 홍 길동\n한마디: 안녕하세요!\n홍 길동의 한마디: 안녕하세요!"
+        },
+        {
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ 파일에서 숫자 읽고 합계 출력!",
@@ -245,6 +277,13 @@ int main() {
           type: "explain",
           title: "⚡ Fast I/O — cin/cout 속도 높이기!",
           content: `C++의 cin/cout은 기본적으로 **느려요**! 왜냐하면 C의 scanf/printf와 **동기화**되어 있거든요.
+
+**동기화가 뭔가요?**
+기본적으로 C++의 cout/cin은 C의 printf/scanf와 **동기화**되어 있어요. 동기화란? 둘 다 섞어 써도 출력 순서가 보장되는 거예요. 하지만 이 동기화가 **속도를 느리게** 해요!
+
+대회에서는 printf/scanf를 안 쓰니까, 동기화를 꺼도 돼요:
+- \`ios::sync_with_stdio(false);\` — 동기화 끄기
+- \`cin.tie(nullptr);\` — cin과 cout의 묶음 풀기
 
 이 동기화를 끄면 **2~5배** 빨라져요!
 

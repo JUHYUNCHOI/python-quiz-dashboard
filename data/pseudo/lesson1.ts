@@ -128,6 +128,54 @@ OUTPUT "10 + 5"
           ]
         },
         {
+          id: "ch2-fill2",
+          type: "fillblank",
+          title: "✏️ 숫자와 글자 구분!",
+          content: '100을 계산 결과로 출력하고, "100"을 글자로 출력하는 코드를 완성하세요.',
+          code: 'OUTPUT 50 + ___\nOUTPUT ___ 100 ___',
+          fillBlanks: [
+            { id: 0, answer: "50", options: ["50", "100", "\"50\"", "OUTPUT"] },
+            { id: 1, answer: '"', options: ['"', "'", "(", ""] },
+            { id: 2, answer: '"', options: ['"', "'", ")", ""] }
+          ],
+          explanation: '따옴표 없는 50 + 50은 계산되어 100이 나오고, "100"은 글자 그대로 100이 출력돼요!'
+        },
+        {
+          id: "ch2-predict2",
+          type: "predict",
+          title: "🔮 몇 줄이 출력될까?",
+          content: `다음 수도코드의 출력 결과는?
+
+\`\`\`
+OUTPUT "A"
+OUTPUT "B"
+OUTPUT "C"
+OUTPUT 1 + 2 + 3
+\`\`\``,
+          options: [
+            'A\nB\nC\n6',
+            'ABC\n6',
+            'A\nB\nC\n1 + 2 + 3',
+            'ABC123'
+          ],
+          answer: 0,
+          explanation: '각 OUTPUT은 새 줄에 출력돼요! A, B, C는 각각 한 줄, 마지막 1+2+3은 계산되어 6이 나와요.'
+        },
+        {
+          id: "ch2-quiz1",
+          type: "quiz",
+          title: "❓ OUTPUT 문법!",
+          content: '`OUTPUT "Hello"`에서 큰따옴표의 역할은?',
+          options: [
+            '없어도 되는 장식',
+            'Hello가 글자(문자열)라는 표시',
+            'Hello를 크게 출력하라는 뜻',
+            '줄바꿈을 하라는 뜻'
+          ],
+          answer: 1,
+          explanation: '큰따옴표 " "는 안의 내용이 **글자(문자열)**라는 뜻이에요. 따옴표 없으면 변수나 숫자 계산으로 처리돼요!'
+        },
+        {
           id: "ch2-quiz2",
           type: "quiz",
           title: "🏆 마무리 퀴즈!",

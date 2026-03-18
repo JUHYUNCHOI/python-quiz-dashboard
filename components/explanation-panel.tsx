@@ -1,12 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, type ComponentType } from "react"
 import { X, BookOpen, ChevronDown, ChevronUp, Bookmark } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import { CodeDisplay } from "./code-display"
 import { useLanguage } from "@/contexts/language-context"
+import registry from "./learn/component-registry"
 
 interface ExplanationPanelProps {
   show: boolean
@@ -20,6 +21,7 @@ interface ExplanationPanelProps {
     correct: string
   }
   relatedTopics?: string[]
+  animationKey?: string
   onClose: () => void
   onPracticeSimilar?: () => void
   onNext: () => void
@@ -34,12 +36,34 @@ export function ExplanationPanel({
   keyConceptDescription,
   codeComparison,
   relatedTopics = [],
+  animationKey,
   onClose,
   onNext,
 }: ExplanationPanelProps) {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const [isBookmarked, setIsBookmarked] = useState(false)
   const [showRelated, setShowRelated] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [AnimationComponent, setAnimationComponent] = useState<ComponentType<any> | null>(null)
+
+  // 애니메이션 컴포넌트 동적 로드
+  useEffect(() => {
+    if (!animationKey || !show) {
+      setAnimationComponent(null)
+      return
+    }
+    const entry = registry[animationKey]
+    if (!entry) return
+
+    let cancelled = false
+    entry.load().then((mod) => {
+      if (cancelled) return
+      const m = mod as Record<string, any>
+      const Comp = entry.exportName ? m[entry.exportName] : m.default
+      if (Comp) setAnimationComponent(() => Comp)
+    }).catch(() => {})
+    return () => { cancelled = true }
+  }, [animationKey, show])
 
   if (!show) return null
 
@@ -111,6 +135,19 @@ export function ExplanationPanel({
                 </div>
               </div>
             </div>
+          )}
+
+          {/* Interactive Animation */}
+          {AnimationComponent && (
+            <Card className="border-2 border-purple-200 bg-purple-50 p-4 md:p-5 overflow-hidden">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-2xl">🎬</span>
+                <h4 className="font-bold text-purple-900 text-base md:text-lg">{t("시각적으로 이해하기", "Visual Explanation")}</h4>
+              </div>
+              <div className="rounded-xl overflow-hidden bg-white p-3">
+                <AnimationComponent lang={lang} onSuccess={() => {}} />
+              </div>
+            </Card>
           )}
 
           <Card className="border-2 border-yellow-300 bg-yellow-50 p-4 md:p-5">

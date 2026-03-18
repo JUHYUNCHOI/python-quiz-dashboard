@@ -48,6 +48,15 @@ This code prints "Hello" **5 times**!
 - Indentation: the code to repeat`
         },
         {
+          id: "for-sim",
+          type: "explain",
+          title: "🔍 Trace: How does a for loop actually run?",
+          content: `Watch how variables change with each iteration as 1 + 2 + 3 gets calculated!
+
+Press **▶ Run** or **▷ Step** to trace the execution.`,
+          component: "codeTracePyForSum",
+        },
+        {
           id: "try1",
           type: "tryit",
           title: "🖥️ Try It Yourself!",
@@ -184,6 +193,15 @@ Or even shorter:
 \`\`\`python
 total = sum(numbers)  # 150
 \`\`\``
+        },
+        {
+          id: "forif-sim",
+          type: "explain",
+          title: "🔍 Trace: for + if even/odd filter",
+          content: `Trace how a loop checks conditions each iteration to filter even and odd numbers!
+
+Press **▶ Run** or **▷ Step** to trace the execution.`,
+          component: "codeTracePyForIf",
         },
         {
           id: "try5",

@@ -70,7 +70,16 @@ s[-1]           # top (마지막 원소 확인)
 | \`len(s)\` | \`s.size()\` |
 | \`len(s) == 0\` | \`s.empty()\` |
 
-💡 C++의 \`pop()\`은 값을 **리턴하지 않아요**! 값을 먼저 \`top()\`으로 확인한 후 \`pop()\`으로 제거해요.`
+💡 C++의 \`pop()\`은 값을 **리턴하지 않아요**! 값을 먼저 \`top()\`으로 확인한 후 \`pop()\`으로 제거해요.
+
+**왜 vector 대신 stack을 쓸까요?**
+vector로도 push_back/pop_back으로 stack처럼 쓸 수 있어요. 그런데 왜 stack을 따로 쓸까요? **의도를 명확하게** 보여주기 위해서예요! stack을 쓰면 '이 코드는 LIFO로만 사용합니다'라는 약속이에요. 실수로 중간 값을 접근하는 것도 방지해줘요.
+
+**스택은 어디에 쓸까요?**
+• **실행 취소(Undo):** 마지막 작업부터 취소하잖아요!
+• **괄호 검사:** 여는 괄호를 스택에 넣고, 닫는 괄호가 나오면 꺼내요
+• **웹 브라우저 뒤로가기:** 마지막 방문 페이지부터 돌아가죠
+• **DFS(깊이 우선 탐색):** 알고리즘 대회에서 자주 쓰여요`
         },
         {
           id: "ch1-fb1",
@@ -163,6 +172,15 @@ q[0]              # front
           options: ["10", "20", "30", "에러"],
           answer: 1,
           explanation: "push(10), push(20), push(30)으로 [10,20,30]이 돼요. pop()은 맨 앞의 10을 제거해요 → [20,30]. front()는 20이에요!"
+        },
+        {
+          id: "ch1-pred-parens",
+          type: "predict" as const,
+          title: "불균형 괄호 예측!",
+          code: "// 예시 1: \"(()\" → 스택에 남는 것?\n// 예시 2: \"())\" → 스택에 남는 것?\n\n#include <iostream>\n#include <stack>\n#include <string>\nusing namespace std;\n\nint main() {\n    string str = \"(()\";\n    stack<char> s;\n    bool valid = true;\n    for (char c : str) {\n        if (c == '(') s.push(c);\n        else if (c == ')') {\n            if (s.empty()) { valid = false; break; }\n            s.pop();\n        }\n    }\n    if (valid && s.empty()) cout << \"Valid\";\n    else cout << \"Invalid\";\n    return 0;\n}",
+          options: ["Valid", "Invalid", "에러", "아무것도 출력 안 됨"],
+          answer: 1,
+          explanation: "\"(()\" → 여는 괄호 2개를 push하고, 닫는 괄호 1개로 pop 1번 → 스택에 '('가 남아있어요! 불균형이라 Invalid예요.\n\n\"())\"의 경우 → '(' push, ')' pop → 스택 비어있음, 또 ')' 등장 → 스택이 비어있는데 pop하려 하니까 Invalid!\n\n• \"(()\" → 불균형! 여는 괄호가 남아요\n• \"())\" → 불균형! 닫는 괄호가 남아요"
         },
         {
           id: "ch1-practice",
@@ -303,7 +321,9 @@ dq[1]               # 인덱스 접근
           id: "ch2-pq",
           type: "explain",
           title: "⚡ priority_queue — 자동 정렬!",
-          content: `**priority_queue**는 넣으면 **자동으로 가장 큰 값이 맨 위**에 오는 자료구조예요! (최대 힙)
+          content: `병원 응급실을 생각해보세요. 먼저 온 환자가 아니라 **가장 위급한** 환자를 먼저 치료하잖아요? priority_queue가 바로 이거예요!
+
+**priority_queue**는 넣으면 **자동으로 가장 큰 값이 맨 위**에 오는 자료구조예요! (최대 힙)
 
 \`\`\`cpp
 #include <queue>  // queue와 같은 헤더!
@@ -348,6 +368,11 @@ minPQ.push(10);
 minPQ.push(50);
 cout << minPQ.top();  // 10 (가장 작은 값!)
 \`\`\`
+
+**왜 C++은 max-heap이 기본일까요?**
+C++의 priority_queue는 **가장 큰 값이 먼저** 나와요 (max-heap). 파이썬의 heapq는 가장 작은 값이 먼저 나오죠 (min-heap).
+
+왜 다를까? C++은 '우선순위가 높은 것 = 큰 숫자'라고 가정해요. 작은 값부터 꺼내고 싶으면? \`priority_queue<int, vector<int>, greater<int>>\`를 사용하세요!
 
 💡 C++은 기본이 **최대 힙**, 파이썬은 기본이 **최소 힙**이에요! 헷갈리지 않게 주의해요!`
         },

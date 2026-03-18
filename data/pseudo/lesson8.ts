@@ -233,6 +233,42 @@ OUTPUT total
           ],
           answer: 0,
           explanation: '반복문이 배열의 모든 값을 더해요: 5 + 10 + 15 + 20 = **50**. 이렇게 배열과 반복문을 함께 쓰면 합계를 쉽게 구할 수 있어요!'
+        },
+        {
+          id: "ch2-quiz1",
+          type: "quiz",
+          title: "❓ 배열 인덱스!",
+          content: '`DECLARE scores : ARRAY[1:5] OF INTEGER`에서 올바른 인덱스 범위는?',
+          options: [
+            '0부터 4',
+            '1부터 5',
+            '0부터 5',
+            '1부터 4'
+          ],
+          answer: 1,
+          explanation: 'CIE 수도코드 배열은 **1부터 시작**해요! [1:5]이면 인덱스 1, 2, 3, 4, 5를 사용할 수 있어요.'
+        },
+        {
+          id: "ch2-quiz2",
+          type: "quiz",
+          title: "❓ 배열 + 반복문!",
+          content: `다음 코드의 출력은?
+
+\`\`\`
+DECLARE nums : ARRAY[1:4] OF INTEGER
+nums[1] ← 10
+nums[2] ← 20
+nums[3] ← 30
+nums[4] ← 40
+total ← 0
+FOR i ← 1 TO 4
+    total ← total + nums[i]
+NEXT i
+OUTPUT total
+\`\`\``,
+          options: ['10', '40', '100', '에러'],
+          answer: 2,
+          explanation: '10 + 20 + 30 + 40 = **100**! FOR문으로 배열의 모든 원소를 순회하며 합계를 구했어요.'
         }
       ]
     }

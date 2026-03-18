@@ -35,6 +35,7 @@ export const ch1: Chapter = {
       id: "ch1-4",
       type: "explain",
       title: "💭 반복 코드를 상자에 담으면?",
+      component: "pyFunctionBuilder",
       content: `💭 반복되는 부분을 **상자에 넣고 이름**을 붙이면 어떨까? 달라지는 부분만 **구멍**을 뚫어서!
 
 \`\`\`python

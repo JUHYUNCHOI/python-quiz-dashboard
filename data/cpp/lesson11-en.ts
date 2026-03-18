@@ -22,7 +22,12 @@ export const cppLesson11EnData: LessonData = {
           id: "ch1-intro",
           type: "explain",
           title: "📏 String Length and Access!",
-          content: `In Python, you used \`len()\` to get a string's length. In C++, you use **methods** on the string object!
+          component: "cppStringBuilder",
+          content: `Imagine you're building a chat app. You need to find '@username' to send notifications, replace profanity with '***', and check if a message exceeds 100 characters. All of this is **string manipulation**!
+
+In Python, strings were easy, right? \`.upper()\`, \`.split()\`, slicing... C++ strings are similar but have **more things to watch out for**!
+
+In Python, you used \`len()\` to get a string's length. In C++, you use **methods** on the string object!
 
 **Python 🐍:**
 \`\`\`python
@@ -104,6 +109,18 @@ if (pos == string::npos) {
 }
 \`\`\`
 Python returns \`-1\`, but C++ returns \`string::npos\` — a special constant!
+
+🔍 What is \`string::npos\`? It stands for 'no position.' When find() can't locate the character, it returns this special value. Why not -1? Because string positions use the \`size_t\` type, which can't be negative!
+
+Here's the standard pattern for searching in strings:
+\`\`\`cpp
+size_t pos = str.find("abc");
+if (pos != string::npos) {
+    // found it
+} else {
+    // not found
+}
+\`\`\`
 
 💡 Combine find and substr to replicate Python's slicing!`
         },
@@ -267,15 +284,15 @@ cout << (char)toupper(c) << endl;  // 'A'
 cout << (char)tolower('Z') << endl; // 'z'
 \`\`\`
 
-⚠️ \`toupper()\` and \`tolower()\` work on **single characters (char)** only! Unlike Python's \`.upper()\`, they don't work on whole strings.
+⚠️ toupper() and tolower() only work on **single characters (char)**! You can't use them on entire strings like Python's \`.upper()\`.
 
-To uppercase an entire string, use a loop:
+To uppercase an entire string, you need a for loop:
 \`\`\`cpp
 string s = "hello";
-for (auto& c : s) {
+for (char& c : s) {
     c = toupper(c);
 }
-// s is now "HELLO"
+cout << s;  // HELLO
 \`\`\`
 
 💡 Memory trick: stoi = **s**tring **to** **i**nt, stod = **s**tring **to** **d**ouble!`

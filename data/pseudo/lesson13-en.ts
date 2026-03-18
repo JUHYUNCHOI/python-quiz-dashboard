@@ -184,6 +184,34 @@ CLOSEFILE "colors.txt"
           explanation: 'The first READFILE reads "Red" into color. The second READFILE reads the next line "Green" into color (overwriting "Red"). OUTPUT displays **Green**.'
         },
         {
+          id: "ch2-quiz1",
+          type: "quiz",
+          title: "❓ File modes!",
+          content: 'To add new data while **keeping** existing file content, which mode should you use?',
+          options: [
+            'OPENFILE ... FOR READ',
+            'OPENFILE ... FOR WRITE',
+            'OPENFILE ... FOR APPEND',
+            'OPENFILE ... FOR DELETE'
+          ],
+          answer: 2,
+          explanation: '**APPEND** mode adds data after existing content! WRITE erases everything first, READ is read-only.'
+        },
+        {
+          id: "ch2-quiz2",
+          type: "quiz",
+          title: "❓ File processing order!",
+          content: 'What is the correct order for file processing?',
+          options: [
+            'WRITEFILE → OPENFILE → CLOSEFILE',
+            'OPENFILE → READFILE → CLOSEFILE',
+            'CLOSEFILE → OPENFILE → READFILE',
+            'READFILE → CLOSEFILE → OPENFILE'
+          ],
+          answer: 1,
+          explanation: 'Files must be **opened → used (read/write) → closed** in order! Forgetting to close can cause data loss.'
+        },
+        {
           id: "ch2-fill2",
           type: "fillblank",
           title: "✏️ Fill in the blanks!",

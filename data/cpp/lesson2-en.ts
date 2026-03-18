@@ -23,8 +23,11 @@ export const cppLesson2EnData: LessonData = {
           id: "ch1-numbers",
           type: "explain",
           title: "🔢 You can print numbers too!",
-          content: `Last time we printed strings with \`std::cout << "Hello"\`.
-But cout can actually print **numbers** too!
+          content: `Last time we printed strings with \`std::cout << "Hello"\`, right?
+
+A program **has to show its results to be useful!** If it just calculates without displaying anything... nobody would know! 😅 That's why mastering cout is so important!
+
+Actually, cout can print not just strings but **numbers** too!
 
 \`\`\`cpp
 std::cout << 42 << std::endl;       // integer
@@ -80,6 +83,7 @@ Remember how Python did it?
           id: "ch1-escape",
           type: "explain",
           title: "✨ Special characters (escape sequences)",
+          component: "cppEscapeBuilder",
           content: `Inside strings, some characters have special meanings!
 Put a \`\\\` (backslash) before certain letters to create **special characters**.
 
@@ -105,7 +109,9 @@ Common escape sequences:
 | \`\\\\\` | Backslash (\\) itself | \`"C:\\\\Users"\` → C:\\Users |
 | \`\\"\` | Quote (") itself | \`"He said \\"Hi\\""\` → He said "Hi" |
 
-💡 \`\\n\` does the same thing as endl from Lesson 1! In competitive programming, \\n is used more often.`
+💡 \`\\n\` does the same thing as endl from Lesson 1! In competitive programming, \\n is used more often.
+
+🤔 **Why do we need escape sequences?** In Python, line breaks inside strings feel natural, but in C++ you need backslash (\\\\) to express special behavior within a single line of code. The backslash acts as a signal saying "the next character has a special meaning!"`
         },
         {
           id: "ch1-practice",
@@ -162,7 +168,9 @@ If there are two students named "Alex" in school, how do you tell them apart?
 C++ does the same thing!
 → "**std::**cout" = "cout from the **std group**"
 
-💡 The group name prevents name conflicts — that's why we write it!`
+💡 The group name prevents name conflicts — that's why we write it!
+
+C++ libraries are made up of code from many different people, so names can overlap. If there are 3 students named 'Alex' in school? You'd say 'Class 1 Alex', 'Class 2 Alex' to tell them apart. **namespace does exactly that!** So \`std::cout\` means "cout from the class called std."`
         },
         {
           id: "ch2-namespace",
@@ -341,7 +349,7 @@ Both produce **exactly the same result!** You just type less.
           options: [
             "\\s",
             "\\t",
-            "\\n",
+            "\\tab",
             "\\b"
           ],
           answer: 1,
@@ -360,6 +368,32 @@ Both produce **exactly the same result!** You just type less.
           ],
           answer: 1,
           explanation: 'To put quotes inside a string, use \\"! Plain " would end the string early.'
+        },
+        {
+          id: "ch4-practice",
+          type: "practice" as const,
+          title: "✋ Escape + namespace combined practice!",
+          content: `Let's combine the escape characters and \`using namespace std;\` we learned today!
+
+**Type the code below** in your editor, compile, and run it.
+Using \\n, \\t, \\", and thanks to using namespace std; we can write clean code without std::!`,
+          code: `#include <iostream>
+using namespace std;
+
+int main() {
+    cout << "=== Report Card ===" << endl;
+    cout << "Name\\tEnglish\\tMath" << endl;
+    cout << "Alice\\t95\\t100" << endl;
+    cout << "Bob\\t88\\t92" << endl;
+    cout << "\\nTeacher said \\"Great job!\\"" << endl;
+    return 0;
+}`,
+          expectedOutput: `=== Report Card ===
+Name\tEnglish\tMath
+Alice\t95\t100
+Bob\t88\t92
+
+Teacher said "Great job!"`
         },
         {
           id: "ch4-summary",

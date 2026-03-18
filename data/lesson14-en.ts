@@ -47,6 +47,17 @@ while count < 5:
 4. When count becomes 5, the condition is false → stop`
         },
         {
+          id: "while-sim",
+          type: "explain",
+          title: "🔍 Trace: while loop countdown",
+          content: `Watch how while checks the condition, changes the variable, and checks again!
+
+See count decrease from 3 to 0, step by step.
+
+Press **▶ Run** or **▷ Step** to trace the execution.`,
+          component: "codeTracePyWhile",
+        },
+        {
           id: "try1",
           type: "tryit",
           title: "🖥️ Try It Yourself!",

@@ -19,6 +19,33 @@ export const cppLesson7Data: LessonData = {
       emoji: "🔁",
       steps: [
         {
+          id: "ch1-increment",
+          type: "explain",
+          title: "🔢 i++가 뭐야? (증감 연산자)",
+          content: `for문을 배우기 전에, C++의 **증감 연산자**를 먼저 알아야 해요!
+
+파이썬에서는 \`i += 1\`로 1을 더했죠? C++에는 **더 짧은 방법**이 있어요:
+
+| 파이썬 🐍 | C++ ⚡ | 의미 |
+|---|---|---|
+| \`i += 1\` | {pink:\`i++\`} | i를 1 증가 |
+| \`i -= 1\` | {blue:\`i--\`} | i를 1 감소 |
+
+\`\`\`cpp
+int i = 0;
+i++;     // i는 이제 1  (i += 1과 같음)
+i++;     // i는 이제 2
+i--;     // i는 이제 1  (i -= 1과 같음)
+\`\`\`
+
+{!pink} \`i++\` = **"i를 1 증가시켜!"** (increment)
+{!blue} \`i--\` = **"i를 1 감소시켜!"** (decrement)
+
+C++ for문에서 \`i++\`를 매우 많이 쓰니까 꼭 기억하세요!
+
+💡 참고: C++이라는 이름 자체가 "C에서 1 증가(++)" 라는 뜻이에요! 😄`,
+        },
+        {
           id: "ch1-compare",
           type: "explain",
           title: "🔁 for문: 파이썬 vs C++",
@@ -29,18 +56,29 @@ export const cppLesson7Data: LessonData = {
 
 C++ for문은 세미콜론(;)으로 **3부분**을 나눠요:
 
+\`\`\`cpp
+for (int i = 0;  i < 5;    i++)
 \`\`\`
-for (초기식; 조건식; 증감식)
-     ①       ②       ③
-\`\`\`
 
-① **초기식:** \`int i = 0\` → 시작값
-② **조건식:** \`i < 5\` → 이 조건이 true인 동안 반복
-③ **증감식:** \`i++\` → 매 반복 후 실행
+{!pink} ① {pink:**초기식**} — \`int i = 0\` → 시작값 설정 (딱 한 번만!)
+{!blue} ② {blue:**조건식**} — \`i < 5\` → 이 조건이 true인 동안 반복
+{!green} ③ {green:**증감식**} — \`i++\` → 매 반복 끝에 실행
 
-처음엔 복잡해 보이지만, **3부분의 의미만 기억하면** 쉬워요!
+**실행 순서:** {pink:① 초기화} → {blue:② 조건 확인} → 본문 실행 → {green:③ 증감} → {blue:② 조건 확인} → 본문 실행 → {green:③ 증감} → ... → {blue:② 거짓이면 끝!}
 
-💡 for문 = "시작, 조건, 변화" 딱 3가지!`
+@핵심: for문 = "{pink:시작}, {blue:조건}, {green:변화}" 딱 3가지!`,
+          component: "cppForBuilder",
+        },
+        {
+          id: "ch1-sim",
+          type: "explain",
+          title: "🔍 실행 추적: C++ for문이 어떤 순서로 동작할까?",
+          content: `for(초기화; 조건; 증감)의 3부분이 어떤 순서로 실행되는지 한 단계씩 봐요!
+
+i가 1부터 3까지 변하며 sum에 더해지는 과정을 추적합니다.
+
+**▶ 실행하기** 또는 **▷ 한 단계** 버튼을 눌러보세요.`,
+          component: "codeTraceCppFor",
         },
         {
           id: "ch1-fb1",
@@ -143,6 +181,20 @@ int main() {
       emoji: "🔃",
       steps: [
         {
+          id: "ch2-why",
+          type: "explain",
+          title: "for vs while: 언제 어떤 걸 쓸까?",
+          content: `for 반복문은 **횟수가 정해진** 반복에 딱이에요: '10번 반복', '배열 끝까지'
+
+하지만 이런 상황은요?
+- 사용자가 'quit'을 입력할 때까지 계속 받기
+- 비밀번호가 맞을 때까지 다시 입력받기
+- 게임이 끝날 때까지 턴 반복하기
+
+**횟수를 모르고, 조건만 아는 경우** → while문이 필요해요!
+while은 '~하는 동안 반복'이라는 뜻 그대로예요.`
+        },
+        {
           id: "ch2-while",
           type: "explain",
           title: "🔃 while문 — 파이썬과 거의 같아요!",
@@ -166,11 +218,23 @@ while (count < 5) {
 \`\`\`
 
 차이점은 딱 3개:
-1. 조건에 **소괄호 ()**
-2. 블록에 **중괄호 {}**
-3. count += 1 대신 **count++** (선택)
+{!pink} 1. 조건에 {pink:**소괄호 ()**}
+{!blue} 2. 블록에 {blue:**중괄호 {}**}
+{!green} 3. count += 1 대신 {green:**count++**} (선택)
 
-💡 if문이랑 규칙이 똑같아요! () + {} 만 기억하세요.`
+💡 if문이랑 규칙이 똑같아요! () + {} 만 기억하세요.`,
+          component: "cppWhileBuilder",
+        },
+        {
+          id: "ch2-sim",
+          type: "explain",
+          title: "🔍 실행 추적: C++ while 팩토리얼 계산",
+          content: `while문으로 팩토리얼(1×2×3×4)을 구하는 과정을 추적해요!
+
+n이 1부터 4까지 올라가면서 result가 곱해지는 과정을 한 단계씩 봐요.
+
+**▶ 실행하기** 또는 **▷ 한 단계** 버튼을 눌러보세요.`,
+          component: "codeTraceCppWhile",
         },
         {
           id: "ch2-pred1",
@@ -185,28 +249,47 @@ while (count < 5) {
           id: "ch2-dowhile",
           type: "explain",
           title: "🆕 do-while문 (파이썬에 없음!)",
+          component: "cppDoWhileBuilder",
           content: `C++에는 **do-while문**이 있어요. 파이썬에는 없는 거예요!
 
 \`\`\`cpp
 do {
-    cout << "Hello!";
+    명령어;
 } while (조건);   // ← 끝에 세미콜론!
 \`\`\`
 
 | while | do-while |
 |-------|----------|
-| 조건 먼저 확인 → false면 0번 실행 | **먼저 실행** → 그다음 조건 확인 |
-| 0번 실행 가능 | **최소 1번은 실행!** |
+| {blue:조건 먼저 확인} → false면 0번 실행 | {pink:**먼저 실행**} → 그다음 조건 확인 |
+| 0번 실행 가능 | {pink:**최소 1번은 실행!**} |
+
+### 🤔 왜 쓰는 건데?
+
+**"일단 한 번은 해야 하는"** 상황에 딱이에요:
+
+{!pink} 🎮 **메뉴 선택** — 일단 메뉴를 보여줘야 선택할 수 있잖아!
+{!blue} 🔐 **비밀번호 입력** — 일단 한 번은 입력받아야 맞는지 확인하지!
+{!green} 🎲 **게임 라운드** — 일단 한 판은 해봐야 더 할지 결정하지!
 
 \`\`\`cpp
-int x = 10;
+// 가장 흔한 패턴: 입력 검증
+int num;
 do {
-    cout << "Hello!";
-} while (x < 5);  // x=10인데 10 < 5는 false!
-// 하지만 "Hello!"는 1번 출력됨! (먼저 실행하니까)
+    cout << "1~10 사이 숫자: ";
+    cin >> num;
+} while (num < 1 || num > 10);
+// 올바른 숫자 나올 때까지 반복!
 \`\`\`
 
-💡 do-while = "일단 한 번 실행하고, 그 다음에 조건을 봐!" 예요.`
+while로도 할 수 있지만, do-while이 {pink:**의도가 더 명확**}해요:
+
+| while 버전 | do-while 버전 |
+|-----------|-------------|
+| 변수 초기화 필요 | 바로 실행! |
+| \`while(true) { ... break; }\` | \`do { ... } while(조건);\` |
+| 의도가 불분명 | **"일단 실행"**이 코드에서 보임 |
+
+@핵심: do-while = "일단 한 번 하고, 더 할지 결정!" 입력 검증, 메뉴, 게임 루프에 딱!`
         },
         {
           id: "ch2-pred2",
@@ -216,6 +299,72 @@ do {
           options: ["아무것도 안 나옴", "Hello", "Hello 5번", "무한 반복"],
           answer: 1,
           explanation: "do-while은 최소 1번 실행! x=10이고 x < 5는 false지만, do가 먼저 실행되어 'Hello'가 1번 출력돼요."
+        },
+        {
+          id: "ch2-fb-dowhile",
+          type: "fillblank" as const,
+          title: "do-while로 바꿔보기",
+          content: `아래 while 루프를 do-while로 바꾸세요.
+
+\`\`\`cpp
+int n;
+while (true) {
+    cout << "양수를 입력: ";
+    cin >> n;
+    if (n > 0) break;
+}
+\`\`\``,
+          code: "int n;\n___ {\n    cout << \"양수를 입력: \";\n    cin >> n;\n} ___(n <= 0);",
+          fillBlanks: [
+            { id: 0, answer: "do", options: ["do", "while", "for", "repeat"] },
+            { id: 1, answer: "while", options: ["while", "until", "do", "if"] }
+          ],
+          explanation: "do-while은 최소 1번은 실행하고 조건을 검사해요. 입력 검증에 딱 맞는 패턴이에요!"
+        },
+        {
+          id: "ch2-dowhile-practice",
+          type: "practice" as const,
+          title: "✋ do-while로 메뉴 만들기!",
+          content: `do-while을 사용해서 간단한 메뉴 시스템을 만들어봐요!
+
+일단 메뉴를 보여주고, 3번(종료)을 누를 때까지 반복해요.
+이게 바로 **"일단 한 번은 해야 하는"** do-while의 진짜 사용법이에요!`,
+          code: `#include <iostream>
+using namespace std;
+
+int main() {
+    int choice;
+
+    do {
+        cout << "=== 메뉴 ===" << endl;
+        cout << "1. 인사하기" << endl;
+        cout << "2. 이름 말하기" << endl;
+        cout << "3. 종료" << endl;
+        cout << "선택: ";
+        cin >> choice;
+
+        if (choice == 1) {
+            cout << "안녕하세요!" << endl;
+        } else if (choice == 2) {
+            cout << "저는 C++ 프로그램이에요!" << endl;
+        }
+    } while (choice != 3);
+
+    cout << "프로그램을 종료합니다." << endl;
+    return 0;
+}`,
+          expectedOutput: `=== 메뉴 ===
+1. 인사하기
+2. 이름 말하기
+3. 종료
+선택: 1
+안녕하세요!
+=== 메뉴 ===
+1. 인사하기
+2. 이름 말하기
+3. 종료
+선택: 3
+프로그램을 종료합니다.`
         },
         {
           id: "ch2-fb1",
@@ -265,9 +414,20 @@ int main() {
 발사!`
         },
         {
+          id: "ch2-breakcon-why",
+          type: "explain",
+          title: "🤔 반복 중에 멈추거나 건너뛰고 싶으면?",
+          content: `반복문이 끝까지 도는 게 항상 좋은 건 아니에요!
+
+{!pink} 🔍 **검색**: 찾고 싶은 값을 발견하면 → 더 이상 찾을 필요 없잖아!
+{!blue} 🚫 **필터**: 짝수만 건너뛰고 홀수만 처리하고 싶으면?
+
+이럴 때 \`break\`와 \`continue\`가 필요해요. 다행히 **파이썬과 완전히 같아요!** 😎`
+        },
+        {
           id: "ch2-breakcon",
           type: "explain",
-          title: "🛑 break와 continue (파이썬과 같아요!)",
+          title: "🛑 break와 continue",
           content: `반복문 안에서 **흐름을 제어**하는 두 가지 키워드가 있어요!
 
 \`\`\`cpp
@@ -294,6 +454,17 @@ for (int i = 0; i < 5; i++) {
 | \`continue\` | 이번 회차 건너뛰기 | 똑같아요! ✅ |
 
 💡 break와 continue는 파이썬과 **완전히 같은 동작**이에요! while문에서도 for문에서도 쓸 수 있어요.`
+        },
+        {
+          id: "ch2-fb-continue",
+          type: "fillblank" as const,
+          title: "continue로 건너뛰기",
+          content: "1~10 중 짝수만 건너뛰고 홀수만 출력하는 코드를 완성하세요.",
+          code: "for (int i = 1; i <= 10; i++) {\n    if (i % 2 == 0) ___;\n    cout << i << \" \";\n}",
+          fillBlanks: [
+            { id: 0, answer: "continue", options: ["continue", "break", "return", "skip"] }
+          ],
+          explanation: "continue는 남은 코드를 건너뛰고 다음 반복으로 갑니다. 짝수일 때 continue하면 cout이 실행되지 않아요!"
         },
         {
           id: "ch2-q1",

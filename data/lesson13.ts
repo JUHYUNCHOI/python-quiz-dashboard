@@ -48,6 +48,17 @@ for i in range(5):
 - 들여쓰기: 반복할 코드`
         },
         {
+          id: "for-sim",
+          type: "explain",
+          title: "🔍 실행 추적: for 반복문이 실제로 어떻게 돌아갈까?",
+          content: `for문이 한 줄씩 실행되면서 변수가 어떻게 바뀌는지 봐요!
+
+total에 1, 2, 3이 차례로 더해지는 과정을 추적합니다.
+
+**▶ 실행하기** 또는 **▷ 한 단계** 버튼을 눌러보세요.`,
+          component: "codeTracePyForSum",
+        },
+        {
           id: "try1",
           type: "tryit",
           title: "🖥️ 직접 해보기!",
@@ -184,6 +195,17 @@ print(f"합계: {total}")  # 합계: 150
 \`\`\`python
 total = sum(numbers)  # 150
 \`\`\``
+        },
+        {
+          id: "forif-sim",
+          type: "explain",
+          title: "🔍 실행 추적: for + if 짝수/홀수 판별",
+          content: `반복문 안에서 if로 짝수/홀수를 구분하는 과정을 추적해 보세요!
+
+매 반복마다 조건이 참/거짓으로 바뀌는 걸 눈으로 확인할 수 있어요.
+
+**▶ 실행하기** 또는 **▷ 한 단계** 버튼을 눌러보세요.`,
+          component: "codeTracePyForIf",
         },
         {
           id: "try5",

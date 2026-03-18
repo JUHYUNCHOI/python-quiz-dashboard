@@ -163,14 +163,59 @@ export default function ProfilePage() {
           )}
 
           {profile?.role === "teacher" && (
-            <Link href="/teacher">
-              <Card className="p-4 border border-gray-100 hover:border-purple-200 transition-all cursor-pointer">
-                <div className="flex items-center gap-3">
+            <>
+              <Card className={`p-5 border-2 ${
+                typeof window !== "undefined" && localStorage.getItem("teacher-as-student") === "true"
+                  ? "border-blue-200 bg-blue-50/50"
+                  : "border-purple-200 bg-purple-50/50"
+              }`}>
+                <div className="flex items-center gap-3 mb-3">
                   <ShieldCheck className="w-5 h-5 text-purple-500" />
-                  <span className="font-medium text-gray-700">{t("선생님 대시보드", "Teacher Dashboard")}</span>
+                  <span className="font-bold text-gray-700">{t("수업 모드", "Lesson Mode")}</span>
+                </div>
+                <p className="text-sm text-gray-500 mb-3">
+                  {typeof window !== "undefined" && localStorage.getItem("teacher-as-student") === "true"
+                    ? t("현재 학생 모드: 진도가 저장되고, 퀴즈를 풀어야 넘어갈 수 있어요", "Student mode: progress saved, must solve quizzes")
+                    : t("현재 선생님 모드: 자유롭게 이동 가능, 진도 저장 안 됨", "Teacher mode: free navigation, progress not saved")}
+                </p>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => {
+                      localStorage.setItem("teacher-as-student", "false")
+                      window.location.reload()
+                    }}
+                    className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold text-sm transition-all ${
+                      typeof window !== "undefined" && localStorage.getItem("teacher-as-student") !== "true"
+                        ? "bg-purple-600 text-white shadow-md ring-2 ring-purple-300"
+                        : "bg-white text-purple-600 border-2 border-purple-200 hover:bg-purple-50"
+                    }`}
+                  >
+                    👨‍🏫 {t("선생님 모드", "Teacher")}
+                  </button>
+                  <button
+                    onClick={() => {
+                      localStorage.setItem("teacher-as-student", "true")
+                      window.location.reload()
+                    }}
+                    className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold text-sm transition-all ${
+                      typeof window !== "undefined" && localStorage.getItem("teacher-as-student") === "true"
+                        ? "bg-blue-600 text-white shadow-md ring-2 ring-blue-300"
+                        : "bg-white text-blue-600 border-2 border-blue-200 hover:bg-blue-50"
+                    }`}
+                  >
+                    👨‍🎓 {t("학생 모드", "Student")}
+                  </button>
                 </div>
               </Card>
-            </Link>
+              <Link href="/teacher">
+                <Card className="p-4 border border-gray-100 hover:border-purple-200 transition-all cursor-pointer">
+                  <div className="flex items-center gap-3">
+                    <ShieldCheck className="w-5 h-5 text-purple-500" />
+                    <span className="font-medium text-gray-700">{t("선생님 대시보드", "Teacher Dashboard")}</span>
+                  </div>
+                </Card>
+              </Link>
+            </>
           )}
 
         </div>

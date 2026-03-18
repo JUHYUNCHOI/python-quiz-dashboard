@@ -68,7 +68,8 @@ s.age = 15
 | Initialize in \`__init__\` | Access with \`.\` after declaration |
 | No semicolon | **Semicolon after closing brace!** |
 
-💡 You MUST put a **semicolon (;)** after the struct definition! Forgetting it causes an error.`
+💡 You MUST put a **semicolon (;)** after the struct definition! Forgetting it causes an error.`,
+          component: "cppClassBuilder",
         },
         {
           id: "ch1-fb1",
@@ -196,7 +197,13 @@ Score: 95.5`
           id: "ch2-intro",
           type: "explain",
           title: "🎓 class = struct + Access Control!",
+          component: "cppPublicPrivateBuilder",
           content: `A **class** is basically a struct with **access control (public/private)** added!
+
+Why is private the default in a class? To prevent accidentally messing with internal data! For example, a rectangle's width should never be -10, right?
+
+• \`public:\` — Accessible from outside the class (anyone can use it)
+• \`private:\` — Only accessible inside the class (the outside world can't touch it directly)
 
 Key difference:
 - **struct**: Members are **public** by default (anyone can access)
@@ -244,6 +251,8 @@ class Rectangle:
 | \`_var\` is convention-only private | \`private:\` truly blocks access! |
 | Everything is accessible | private is truly inaccessible |
 | \`self\` required | No \`self\` needed |
+
+Encapsulation means **hiding data to prevent mistakes**. Like a medicine capsule that protects its contents inside, you protect data and only allow access through designated methods.
 
 💡 Hiding data with private and exposing it through public functions is called **encapsulation**!`
         },
@@ -304,6 +313,8 @@ d = Dog("Buddy", 3)
 | self required | No self needed |
 | \`Dog("Buddy", 3)\` | \`Dog d("Buddy", 3);\` |
 
+What happens if there's no constructor in C++? Member variables start with **garbage values**! width could be -8273561. That's why you should always set initial values in the constructor.
+
 💡 Constructors let you set values right when you create an object! They serve the same role as Python's \`__init__\`.`
         },
         {
@@ -356,6 +367,38 @@ int main() {
 }`,
           expectedOutput: `Area: 15
 Perimeter: 16`
+        },
+        {
+          id: "ch2-pred-private",
+          type: "predict" as const,
+          title: "Accessing private members",
+          code: "class Rectangle {\nprivate:\n    int width;\npublic:\n    Rectangle(int w) : width(w) {}\n};\n\nint main() {\n    Rectangle r(5);\n    r.width = 10;  // ???\n}",
+          options: ["10", "5", "0", "Compile error"],
+          answer: 3,
+          explanation: "Compile error! width is private, so it can't be accessed from outside the class. Private members can only be accessed from inside the class. To modify it from outside, you'd need to create a public method (setter). This is the core of encapsulation!"
+        },
+        {
+          id: "ch2-getter-setter",
+          type: "explain",
+          title: "💡 So How Do You Change Private Values?",
+          content: `The safe way to access private members: **getter (read)** and **setter (write)** methods!
+
+\`\`\`cpp
+class Rectangle {
+private:
+    int width;
+public:
+    Rectangle(int w) : width(w) {}
+    int getWidth() { return width; }     // getter
+    void setWidth(int w) {
+        if (w > 0) width = w;  // validate before setting!
+    }
+};
+\`\`\`
+
+Why do it this way? Notice that setWidth checks \`w > 0\`! It prevents width from becoming -10. If you allowed direct access, this kind of protection would be impossible.
+
+💡 A getter is a function that reads a value, and a setter is a function that validates and sets a value!`
         },
         {
           id: "ch2-q1",

@@ -22,7 +22,15 @@ export const cppLesson17Data: LessonData = {
           id: "ch1-intro",
           type: "explain",
           title: "🔍 STL 알고리즘 — C++의 강력한 내장 도구!",
-          content: `**STL**은 **Standard Template Library**의 약자예요. C++에서 제공하는 강력한 내장 함수 모음이에요!
+          content: `벡터에서 최솟값 찾기, 특정 값 검색하기... 매번 for문을 직접 짜면 귀찮고 실수하기 쉬워요. C++ STL에는 이런 작업을 **한 줄**로 해결하는 함수들이 있어요! 프로 개발자들이 가장 많이 쓰는 도구예요.
+
+**STL**은 **Standard Template Library**의 약자예요. C++에서 제공하는 강력한 내장 함수 모음이에요!
+
+이런 상황을 생각해봐요:
+- 배열에서 최댓값을 찾고 싶어요 → \`max_element()\`
+- 특정 값이 몇 개인지 세고 싶어요 → \`count()\`
+- 특정 값을 찾고 싶어요 → \`find()\`
+- 직접 for문을 쓸 수도 있지만, STL 알고리즘은 **한 줄**이면 돼요!
 
 파이썬에서 \`sorted()\`, \`min()\`, \`max()\`, \`sum()\` 같은 내장 함수를 썼던 것 기억나요? C++에도 비슷한 함수들이 있어요!
 
@@ -128,6 +136,12 @@ if (it != v.end()) {         // 존재 확인
 | \`30 in lst\` | \`find(...) != v.end()\` |
 | \`lst.index(30)\` | \`it - v.begin()\` |
 | 없으면 ValueError | 없으면 \`v.end()\` 반환 |
+
+⚠️ **find()가 값을 못 찾으면?** end()를 반환해요. 항상 확인하세요:
+\`\`\`cpp
+auto it = find(v.begin(), v.end(), 42);
+if (it != v.end()) { /* 찾음 */ }
+\`\`\`
 
 💡 \`find()\`는 앞에서부터 순서대로 찾아요. 시간 복잡도는 **O(n)**이에요!`
         },
@@ -250,7 +264,14 @@ Found 9 at index 3`
           id: "ch2-intro",
           type: "explain",
           title: "🎯 binary_search() — 초고속 탐색!",
-          content: `\`find()\`는 처음부터 끝까지 하나씩 확인해서 **O(n)**이에요. 만약 데이터가 **정렬되어 있다면**, 훨씬 빠르게 찾을 수 있어요!
+          content: `USACO 대회에서 10만 개의 데이터를 검색해야 한다고 생각해보세요. find()로 하나씩 찾으면 **시간 초과**! binary_search는 20번만에 찾아요.
+
+\`find()\`는 처음부터 끝까지 하나씩 확인해서 **O(n)**이에요. 만약 데이터가 **정렬되어 있다면**, 훨씬 빠르게 찾을 수 있어요!
+
+- find()는 처음부터 끝까지 하나씩 봐요: O(n)
+- binary_search()는 반씩 줄여가요: O(log n)
+- **1백만 개**에서 찾을 때: find()는 ~100만 번, binary_search()는 ~20번!
+- ⚠️ 대신 **정렬이 먼저** 필요해요. 정렬 비용이 크니까, 여러 번 검색할 때만 이득이에요.
 
 **이진탐색(Binary Search)**은 정렬된 데이터에서 **O(log n)**에 탐색해요!
 
@@ -363,6 +384,16 @@ int idx = lower_bound(v.begin(), v.end(), 5) - v.begin();
 💡 USACO Silver에서 \`lower_bound()\`는 정말 자주 쓰여요! 좌표 압축, 범위 쿼리 등에 필수예요!`
         },
         {
+          id: "ch2-practice-bounds",
+          type: "predict" as const,
+          title: "70점 이상인 학생 수 구하기",
+          content: "정렬된 점수 배열에서 70점 이상인 학생이 몇 명인지 구해보세요.",
+          code: "#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    vector<int> scores = {45, 55, 67, 72, 78, 85, 91, 98};\n    auto it = lower_bound(scores.begin(), scores.end(), 70);\n    cout << scores.end() - it << \"명\";\n}",
+          options: ["3명", "4명", "5명", "6명"],
+          answer: 2,
+          explanation: "lower_bound는 70 '이상'인 첫 위치를 찾아요. 72가 첫 번째! 거기서 end()까지 세면 72, 78, 85, 91, 98 = 5명이에요."
+        },
+        {
           id: "ch2-pred1",
           type: "predict" as const,
           title: "lower_bound() 결과 예측!",
@@ -375,7 +406,9 @@ int idx = lower_bound(v.begin(), v.end(), 5) - v.begin();
           id: "ch2-unique",
           type: "explain",
           title: "🎯 unique() & erase() — 중복 제거!",
-          content: `\`unique()\`는 **연속된 중복**을 제거하는 함수예요. \`erase()\`와 함께 써서 완전히 중복을 제거해요!
+          content: `중복 제거가 필요한 상황: 데이터 파일에서 읽은 값에 중복이 있어요. set을 쓸 수도 있지만, 원래 순서를 유지하면서 중복만 제거하고 싶을 때 erase-unique 패턴이 필요해요!
+
+\`unique()\`는 **연속된 중복**을 제거하는 함수예요. \`erase()\`와 함께 써서 완전히 중복을 제거해요!
 
 \`\`\`cpp
 vector<int> v = {3, 1, 4, 1, 5, 3, 3};

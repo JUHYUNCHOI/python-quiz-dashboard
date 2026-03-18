@@ -99,6 +99,24 @@ else:
           hint2: "if score >= 60:"
         },
         {
+          id: "nested-sim",
+          type: "explain",
+          title: "🔍 Trace: Nested if (True path)",
+          content: `See how nested if statements execute when **both conditions are True**!
+
+Press **▶ Run** or **▷ Step** to trace the execution.`,
+          component: "codeTracePyNestedIf",
+        },
+        {
+          id: "nested-sim-false",
+          type: "explain",
+          title: "🔍 Trace: Nested if (False path)",
+          content: `Now has_id is **False**! The outer if is True but the inner if is False — where does it go?
+
+Press **▶ Run** or **▷ Step** to trace the execution.`,
+          component: "codeTracePyNestedIfFalse",
+        },
+        {
           id: "quiz2",
           type: "quiz",
           title: "❓ Quiz!",
@@ -134,6 +152,24 @@ else:
 \`\`\`
 
 → 85 is 80 or above, so 'B' is printed!`
+        },
+        {
+          id: "elif-sim",
+          type: "explain",
+          title: "🔍 Trace: score=85 → B (elif path)",
+          content: `Follow the code line by line to see which branch gets executed when score=85!
+
+Press **▶ Run** or **▷ Step** to trace the execution.`,
+          component: "codeTracePyIfElse",
+        },
+        {
+          id: "elif-sim-false",
+          type: "explain",
+          title: "🔍 Trace: score=65 → C (else path)",
+          content: `Now score=65! When ALL conditions are False, watch how the code falls through to else!
+
+Press **▶ Run** or **▷ Step** to trace the execution.`,
+          component: "codeTracePyIfElseLow",
         },
         {
           id: "try3",

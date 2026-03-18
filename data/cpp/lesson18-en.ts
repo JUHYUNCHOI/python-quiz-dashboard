@@ -70,7 +70,16 @@ s[-1]           # top (check last element)
 | \`len(s)\` | \`s.size()\` |
 | \`len(s) == 0\` | \`s.empty()\` |
 
-💡 C++'s \`pop()\` does **NOT return** a value! First check the value with \`top()\`, then remove it with \`pop()\`.`
+💡 C++'s \`pop()\` does **NOT return** a value! First check the value with \`top()\`, then remove it with \`pop()\`.
+
+**Why use stack instead of vector?**
+You can use vector with push_back/pop_back to mimic a stack. So why use stack separately? To **make your intent clear**! Using stack is a promise that says 'this code only uses LIFO operations.' It also prevents accidentally accessing middle elements.
+
+**Where are stacks used?**
+• **Undo operations:** You undo the most recent action first!
+• **Bracket matching:** Push opening brackets, pop when you see a closing one
+• **Browser back button:** You go back to the most recently visited page
+• **DFS (Depth-First Search):** Used frequently in competitive programming`
         },
         {
           id: "ch1-fb1",
@@ -163,6 +172,15 @@ q[0]              # front
           options: ["10", "20", "30", "Error"],
           answer: 1,
           explanation: "push(10), push(20), push(30) gives [10,20,30]. pop() removes the front element 10 → [20,30]. front() returns 20!"
+        },
+        {
+          id: "ch1-pred-parens",
+          type: "predict" as const,
+          title: "Unbalanced brackets prediction!",
+          code: "// Example 1: \"(()\" → what's left in the stack?\n// Example 2: \"())\" → what's left in the stack?\n\n#include <iostream>\n#include <stack>\n#include <string>\nusing namespace std;\n\nint main() {\n    string str = \"(()\";\n    stack<char> s;\n    bool valid = true;\n    for (char c : str) {\n        if (c == '(') s.push(c);\n        else if (c == ')') {\n            if (s.empty()) { valid = false; break; }\n            s.pop();\n        }\n    }\n    if (valid && s.empty()) cout << \"Valid\";\n    else cout << \"Invalid\";\n    return 0;\n}",
+          options: ["Valid", "Invalid", "Error", "Nothing is printed"],
+          answer: 1,
+          explanation: "\"(()\" → Push 2 opening brackets, pop once for 1 closing bracket → '(' remains in the stack! It's unbalanced, so Invalid.\n\nFor \"())\" → Push '(', pop for ')' → stack is empty, then another ')' appears → stack is empty but trying to pop, so Invalid!\n\n• \"(()\" → Unbalanced! An opening bracket is left over\n• \"())\" → Unbalanced! A closing bracket is left over"
         },
         {
           id: "ch1-practice",
@@ -303,7 +321,9 @@ dq[1]               # index access
           id: "ch2-pq",
           type: "explain",
           title: "⚡ priority_queue — Auto-Sorted!",
-          content: `A **priority_queue** automatically keeps the **largest value on top**! (max-heap)
+          content: `Think about a hospital emergency room. It's not the patient who arrived first who gets treated first — it's the **most critical** patient! That's exactly what a priority_queue does!
+
+A **priority_queue** automatically keeps the **largest value on top**! (max-heap)
 
 \`\`\`cpp
 #include <queue>  // same header as queue!
@@ -348,6 +368,11 @@ minPQ.push(10);
 minPQ.push(50);
 cout << minPQ.top();  // 10 (smallest value!)
 \`\`\`
+
+**Why is C++ a max-heap by default?**
+C++'s priority_queue has the **largest value come out first** (max-heap). Python's heapq has the smallest value come out first (min-heap).
+
+Why the difference? C++ assumes 'higher priority = bigger number'. Want smallest first? Use \`priority_queue<int, vector<int>, greater<int>>\`!
 
 💡 C++ defaults to **max-heap**, Python defaults to **min-heap**! Don't mix them up!`
         },

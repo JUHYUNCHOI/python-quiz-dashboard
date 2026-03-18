@@ -127,6 +127,54 @@ OUTPUT "10 + 5"
           ]
         },
         {
+          id: "ch2-fill2",
+          type: "fillblank",
+          title: "✏️ Numbers vs text!",
+          content: 'Complete the code to output 100 as a calculation result, then "100" as text.',
+          code: 'OUTPUT 50 + ___\nOUTPUT ___ 100 ___',
+          fillBlanks: [
+            { id: 0, answer: "50", options: ["50", "100", "\"50\"", "OUTPUT"] },
+            { id: 1, answer: '"', options: ['"', "'", "(", ""] },
+            { id: 2, answer: '"', options: ['"', "'", ")", ""] }
+          ],
+          explanation: 'Without quotes, 50 + 50 calculates to 100. With quotes, "100" outputs the text 100!'
+        },
+        {
+          id: "ch2-predict2",
+          type: "predict",
+          title: "🔮 How many lines?",
+          content: `What is the output?
+
+\`\`\`
+OUTPUT "A"
+OUTPUT "B"
+OUTPUT "C"
+OUTPUT 1 + 2 + 3
+\`\`\``,
+          options: [
+            'A\nB\nC\n6',
+            'ABC\n6',
+            'A\nB\nC\n1 + 2 + 3',
+            'ABC123'
+          ],
+          answer: 0,
+          explanation: 'Each OUTPUT goes on a new line! A, B, C each on one line, and 1+2+3 calculates to 6.'
+        },
+        {
+          id: "ch2-quiz1",
+          type: "quiz",
+          title: "❓ OUTPUT syntax!",
+          content: 'What is the purpose of double quotes in `OUTPUT "Hello"`?',
+          options: [
+            'Optional decoration',
+            'Indicates Hello is text (a string)',
+            'Makes Hello print larger',
+            'Adds a line break'
+          ],
+          answer: 1,
+          explanation: 'Double quotes " " mark the content as **text (string)**. Without quotes, it would be treated as a variable or calculation!'
+        },
+        {
           id: "ch2-quiz2",
           type: "quiz",
           title: "🏆 Final Quiz!",

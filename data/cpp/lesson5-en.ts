@@ -47,7 +47,13 @@ But... **division** has a big surprise! 😱`
           id: "ch1-division",
           type: "explain",
           title: "⚠️ The Integer Division Trap!",
-          content: `This is the **biggest difference** between Python and C++!
+          component: "cppIntDivisionBuilder",
+          content: `**Why does 5 / 2 = 2?** 🤔
+
+C++ saves memory by making \`int\` calculations produce \`int\` results.
+There's no room to store decimals, so it just chops them off!
+
+This is the **biggest difference** between Python and C++!
 
 **Python 🐍:** \`5 / 2\` → \`2.5\` ✅
 **C++ ⚡:** \`5 / 2\` → \`2\` 😱 (decimal part is dropped!)
@@ -92,6 +98,15 @@ cout << 15 % 4;  // 3 (15 = 4 × 3 + 3)
 → \`x % 2 == 0\` means even, \`x % 2 == 1\` means odd!
 
 💡 Modulo works the same as Python — feel right at home! 😊`
+        },
+        {
+          id: "ch1-pred-modulo",
+          type: "predict" as const,
+          title: "Modulo in action",
+          code: "#include <iostream>\nusing namespace std;\nint main() {\n    int n = 7;\n    if (n % 2 == 0) {\n        cout << \"even\";\n    } else {\n        cout << \"odd\";\n    }\n    return 0;\n}",
+          options: ["even", "odd", "1", "Error"],
+          answer: 1,
+          explanation: "7 divided by 2 has remainder 1. Since it's not 0, the else block runs! This pattern comes up all the time."
         },
         {
           id: "ch1-practice",
@@ -145,6 +160,17 @@ Second number: 3
       title: "Comparison & Logic",
       emoji: "⚖️",
       steps: [
+        {
+          id: "ch2-why",
+          type: "explain",
+          title: "Why do we need to compare values?",
+          content: `In a game, you want to give a bonus when the score is 100 or above.
+On a shopping site, users 18 or older need age verification.
+A robot must stop when the distance to a wall is 10 cm or less.
+
+To make these kinds of **decisions**, you need to compare values!
+Comparison operators are the **key ingredient** for the if statements we'll learn next time.`
+        },
         {
           id: "ch2-compare",
           type: "explain",
@@ -201,7 +227,8 @@ if (!finished) {
 }
 \`\`\`
 
-💡 Just remember: \`and\` → \`&&\`, \`or\` → \`||\`, \`not\` → \`!\``
+💡 Just remember: \`and\` → \`&&\`, \`or\` → \`||\`, \`not\` → \`!\``,
+          component: "cppIfBuilder",
         },
         {
           id: "ch2-fb1",
@@ -243,6 +270,64 @@ x--;    // x = x - 1 → 5
           explanation: "a = 3 → a++ → 4 → a++ → 5! Two increments: 3 + 2 = 5."
         },
         {
+          id: "ch2-prefix-postfix",
+          type: "explain",
+          title: "🔍 x++ vs ++x — What's the Difference?",
+          content: `Both \`x++\` and \`++x\` add 1 to x. But they behave differently **when used with other operations**!
+
+\`\`\`cpp
+int x = 5;
+cout << x++ << endl;  // Prints 5, THEN x becomes 6
+cout << x << endl;    // 6
+\`\`\`
+
+\`\`\`cpp
+int y = 5;
+cout << ++y << endl;  // y becomes 6 FIRST, then prints 6
+cout << y << endl;    // 6
+\`\`\`
+
+| Type | Order | Memory Trick |
+|---|---|---|
+| \`x++\` (postfix) | **Use value first** → then +1 | ++ is after → increments "after" |
+| \`++x\` (prefix) | **+1 first** → then use value | ++ is before → increments "before" |
+
+💡 When used alone, \`x++;\` and \`++x;\` give the same result! The difference only matters **with cout or assignment**.`
+        },
+        {
+          id: "ch2-pred-prefix",
+          type: "predict" as const,
+          title: "Guess x++ output!",
+          code: "#include <iostream>\nusing namespace std;\nint main() {\n    int a = 10;\n    cout << a++ << endl;\n    cout << a << endl;\n    return 0;\n}",
+          options: ["10\\n10", "10\\n11", "11\\n11", "11\\n12"],
+          answer: 1,
+          explanation: "a++ is postfix: first prints current value 10, THEN a becomes 11. Second line prints 11!"
+        },
+        {
+          id: "ch2-pred-prefix2",
+          type: "predict" as const,
+          title: "Now try ++x!",
+          code: "#include <iostream>\nusing namespace std;\nint main() {\n    int b = 10;\n    cout << ++b << endl;\n    cout << b << endl;\n    return 0;\n}",
+          options: ["10\\n10", "10\\n11", "11\\n11", "11\\n12"],
+          answer: 2,
+          explanation: "++b is prefix: first makes b = 11, THEN prints 11. Second line also prints 11!"
+        },
+        {
+          id: "ch2-q-prefix",
+          type: "quiz",
+          title: "Postfix vs Prefix!",
+          content: `What is the output?
+
+\`\`\`cpp
+int x = 3;
+int y = x++;
+cout << x << " " << y;
+\`\`\``,
+          options: ["3 3", "4 3", "4 4", "3 4"],
+          answer: 1,
+          explanation: "x++ is postfix: y gets the current value 3 first, THEN x becomes 4. Result: x=4, y=3!"
+        },
+        {
           id: "ch2-compound",
           type: "explain",
           title: "📝 Compound Assignment (+=, -=, ...)",
@@ -266,6 +351,31 @@ score %= 3;    // score = score % 3 → 1
 | \`%=\` | Modulo & assign | \`x %= 3\` → \`x = x % 3\` |
 
 💡 These are exactly the same as Python! C++ just adds \`x++\` and \`x--\` on top!`
+        },
+        {
+          id: "ch2-precedence",
+          type: "explain",
+          title: "⚠️ Watch the Order of Operations!",
+          content: `When there are many operators, **order matters**!
+
+\`\`\`cpp
+cout << 5 + 3 * 2;   // 11 (not 16!)
+\`\`\`
+
+Multiplication (\`*\`) happens before addition (\`+\`). Same as in math!
+
+When in doubt, use **parentheses**:
+\`\`\`cpp
+cout << (5 + 3) * 2;  // 16 (parentheses first!)
+\`\`\`
+
+Comparison and logic have an order too: \`&&\` is evaluated before \`||\`!
+\`\`\`cpp
+// a || b && c  is the same as  a || (b && c)!
+\`\`\`
+
+💡 Remember: **"parentheses > arithmetic > comparison > logic"**!
+→ When in doubt, just use parentheses. It makes code easier to read too! 😊`
         },
         {
           id: "ch2-pred2",
@@ -397,6 +507,92 @@ cout << result;
           explanation: "5.0 is a double, so 5.0 / 2 = 2.5! If at least one operand is a double, the result is double."
         },
         {
+          id: "ch3-q5",
+          type: "quiz",
+          title: "x++ vs ++x",
+          content: `What does this print?
+
+\`\`\`cpp
+int a = 5;
+int b = ++a;
+cout << a << " " << b;
+\`\`\``,
+          options: ["5 5", "5 6", "6 6", "6 5"],
+          answer: 2,
+          explanation: "++a is prefix: first makes a = 6, then assigns 6 to b. Result: a=6, b=6!"
+        },
+        {
+          id: "ch3-q6",
+          type: "quiz",
+          title: "Combined tracking!",
+          content: `What does this print?
+
+\`\`\`cpp
+int x = 8;
+x += 2;
+x--;
+x *= 3;
+cout << x;
+\`\`\``,
+          options: ["27", "30", "24", "21"],
+          answer: 0,
+          explanation: "x=8 → x+=2 → 10 → x-- → 9 → x*=3 → 27! Just trace it line by line."
+        },
+        {
+          id: "ch3-q7",
+          type: "quiz",
+          title: "Logic + comparison combo",
+          content: `What does this print?
+
+\`\`\`cpp
+int a = 3, b = 7;
+cout << (a != b && b > 5);
+\`\`\``,
+          options: ["0", "1", "true", "Error"],
+          answer: 1,
+          explanation: "a != b → true (3≠7), b > 5 → true (7>5). true && true = true! C++ prints true as 1."
+        },
+        {
+          id: "ch3-practice",
+          type: "practice" as const,
+          title: "✋ Experiment with x++ vs ++x!",
+          content: `See the difference between postfix (x++) and prefix (++x) with your own eyes!
+
+Try changing the numbers and predict the results.`,
+          code: `#include <iostream>
+using namespace std;
+
+int main() {
+    int x = 5;
+
+    // Postfix: use value first, then +1
+    cout << "=== Postfix x++ ===" << endl;
+    cout << "x start: " << x << endl;
+    cout << "x++ = " << x++ << endl;  // prints 5, then +1
+    cout << "x now: " << x << endl;   // 6
+
+    cout << endl;
+    x = 5;  // reset
+
+    // Prefix: +1 first, then use value
+    cout << "=== Prefix ++x ===" << endl;
+    cout << "x start: " << x << endl;
+    cout << "++x = " << ++x << endl;  // +1 first, prints 6
+    cout << "x now: " << x << endl;   // 6
+
+    return 0;
+}`,
+          expectedOutput: `=== Postfix x++ ===
+x start: 5
+x++ = 5
+x now: 6
+
+=== Prefix ++x ===
+x start: 5
+++x = 6
+x now: 6`
+        },
+        {
           id: "ch3-summary",
           type: "explain",
           title: "🎯 What you learned today!",
@@ -408,6 +604,7 @@ cout << result;
 - ✅ **Comparison** — ==, !=, <, > same, but output is 1/0
 - ✅ **Logic operators** — and → &&, or → ||, not → !
 - ✅ **Increment/Decrement** — x++, x-- (not in Python!)
+- ✅ **x++ vs ++x** — postfix = "use then increment", prefix = "increment then use"!
 
 🚀 **Next time: Conditionals (if/else)** — Curly braces {} and else if!`
         }

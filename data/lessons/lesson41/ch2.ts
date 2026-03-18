@@ -9,6 +9,7 @@ export const ch2: Chapter = {
       id: "ch2-0",
       type: "explain",
       title: "💭 클래스를 만드는 코드, 어떻게 생겼을까?",
+      component: "pyClassBuilder",
       content: `💭 붕어빵 틀을 코드로 만들려면? **class**라는 키워드를 써요!
 
 \`\`\`python

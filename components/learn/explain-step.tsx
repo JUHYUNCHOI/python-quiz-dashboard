@@ -1,19 +1,37 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, type ComponentType } from "react"
 import { BookOpen, ChevronDown, ChevronUp, Eye } from "lucide-react"
 import { LessonStep } from "./types"
 import { renderContent } from "./render-content"
 import { useLanguage } from "@/contexts/language-context"
 import { cn } from "@/lib/utils"
+import registry from "./component-registry"
 
 interface ExplainStepProps {
   step: LessonStep
 }
 
 export function ExplainStep({ step }: ExplainStepProps) {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const [showReveal, setShowReveal] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [AnimComp, setAnimComp] = useState<ComponentType<any> | null>(null)
+
+  // 설명 안에 포함된 애니메이션 컴포넌트 동적 로드
+  useEffect(() => {
+    if (!step.component) { setAnimComp(null); return }
+    const entry = registry[step.component]
+    if (!entry) return
+    let cancelled = false
+    entry.load().then((mod) => {
+      if (cancelled) return
+      const m = mod as Record<string, any>
+      const Comp = entry.exportName ? m[entry.exportName] : m.default
+      if (Comp) setAnimComp(() => Comp)
+    }).catch(() => {})
+    return () => { cancelled = true }
+  }, [step.component])
 
   return (
     <div className="space-y-6">
@@ -23,7 +41,19 @@ export function ExplainStep({ step }: ExplainStepProps) {
         </span>
       </div>
       <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{step.title}</h1>
+
+      {/* 본문 설명 먼저 → 이해한 뒤 애니메이션으로 확인 (자연스러운 이야기 흐름) */}
       {step.content && <div className="space-y-3">{renderContent(step.content)}</div>}
+
+      {AnimComp && (
+        <div className="rounded-xl overflow-hidden bg-gradient-to-b from-indigo-50 to-white border border-indigo-200 p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-lg">🎬</span>
+            <span className="text-sm font-bold text-indigo-700">{t("직접 확인해보기", "See it in action")}</span>
+          </div>
+          <AnimComp lang={lang} onSuccess={() => {}} />
+        </div>
+      )}
 
       {/* 답 보기 접이식 영역 */}
       {step.reveal && (

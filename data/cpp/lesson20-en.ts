@@ -22,7 +22,9 @@ export const cppLesson20EnData: LessonData = {
           id: "ch1-intro",
           type: "explain",
           title: "🛠️ bits/stdc++.h — All Headers in One Line!",
-          content: `Normally in C++, you include headers one by one:
+          content: `In a 3-hour contest, you don't have time to write \`#include <iostream>\`, \`#include <vector>\`, \`#include <algorithm>\`... 10 lines for every problem! One bits/stdc++.h solves everything!
+
+Normally in C++, you include headers one by one:
 
 \`\`\`cpp
 #include <iostream>
@@ -64,7 +66,14 @@ using namespace std;       // No need for std:: prefix!
 | Basic types just work | \`using namespace std;\` for convenience |
 | Import only what you need | Include all STL at once |
 
-⚠️ **Warning!** \`bits/stdc++.h\` is only for CP! In production code, you should include only the headers you need. It can slow down compilation.`
+⚠️ **Warning!** \`bits/stdc++.h\` is only for CP!
+
+**Downsides of bits/stdc++.h:**
+• Compilation time is **2-3x slower** (it includes every header)
+• **Never use it** in real projects (it's non-standard)
+• You stop learning **which header you actually need** (bad habit)
+
+Only use it for saving time in contests!`
         },
         {
           id: "ch1-fb1",
@@ -189,6 +198,15 @@ v.sort()            # Simple!
 | \`float('inf')\` | \`INF = 1e9\` |
 | \`for i in range(n)\` | \`rep(i, n)\` |
 
+⚠️ **Macro traps:**
+\`\`\`cpp
+#define square(x) x*x
+cout << square(3+1);  // Expected: 16, Actual: 7!
+// Why? It becomes 3+1*3+1 = 7 through text substitution!
+// Safe version: #define square(x) ((x)*(x))
+\`\`\`
+Macros are simple text replacement, so they have traps like this. Only use them for simple things!
+
 💡 Too many macros can make code hard to read. Only define the ones you use **frequently**!`
         },
         {
@@ -257,7 +275,17 @@ Size: 5`
           id: "ch2-intro",
           type: "explain",
           title: "💡 Bit Operations — Computing with 0s and 1s!",
-          content: `Computers process everything in **bits (0s and 1s)**. Bit operations let you manipulate these bits directly!
+          content: `The real power of bitmasks: you can represent **all subsets** of a set with 3 elements {A, B, C}!
+- 000 (binary) = {} empty set
+- 001 = {C}
+- 010 = {B}
+- 011 = {B,C}
+- ...
+- 111 = {A,B,C}
+
+8 subsets represented by numbers 0-7! This comes up constantly in USACO.
+
+Computers process everything in **bits (0s and 1s)**. Bit operations let you manipulate these bits directly!
 
 **Bit operators:**
 \`\`\`cpp
@@ -304,6 +332,11 @@ print(n & 1)   # odd/even check
 | Odd/even check | \`n % 2\` or \`n & 1\` | \`n & 1\` (faster!) |
 | Power of 2 | \`2 ** k\` or \`1 << k\` | \`1 << k\` |
 | Divide by 2 | \`n // 2\` | \`n >> 1\` |
+
+**When are bit operations useful?**
+• **Check if a number is a power of 2:** \`(n & (n-1)) == 0\` → true means it's a power of 2!
+• **Odd/even check:** \`(n & 1)\` → 1 means odd, 0 means even
+• **Bitmask:** Manage multiple states with a single number (essential in contests!)
 
 💡 Bit operators are the same in Python and C++! But in C++, they're often used when **performance** matters.`
         },
@@ -450,6 +483,12 @@ n = int(input())
 | Type shortcuts | Not needed | \`typedef ll, vi, pii\` |
 | Fast I/O | Automatic | \`sync_with_stdio + tie\` |
 | File I/O | \`sys.stdin = open()\` | \`freopen()\` |
+
+Applying this template to an actual USACO Bronze problem:
+1. freopen() for file I/O
+2. Fast I/O to save time
+3. bits/stdc++.h so you don't worry about headers
+→ You can focus entirely on solving the problem!
 
 💡 Memorize this template and you can start coding immediately in a contest! Saving time is key!`
         },

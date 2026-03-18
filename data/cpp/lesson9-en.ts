@@ -29,12 +29,18 @@ scores = [90, 85, 78, 92, 88]
 print(scores[0])  # 90
 \`\`\`
 
+Why do we need arrays? Imagine storing scores for 30 students. Would you create 30 separate variables? \`score1, score2, score3...\` 😱
+
+An array is like a **row of drawers** that holds the same kind of data **all in one place**.
+
 In C++, we use **arrays**!
 
 \`\`\`cpp
 int scores[5] = {90, 85, 78, 92, 88};
 cout << scores[0];  // 90
 \`\`\`
+
+💡 An array is like **reserving seats ahead of time**. Just like you can't add more seats later, you can't change an array's size once it's created.
 
 Big differences:
 
@@ -45,7 +51,8 @@ Big differences:
 | Can mix types | **Same type only!** |
 | \`scores.append(100)\` | ❌ Can't add! |
 
-💡 A C++ array = **fixed-size boxes of the same type**!`
+💡 A C++ array = **fixed-size boxes of the same type**!`,
+          component: "cppArrayBuilder",
         },
         {
           id: "ch1-fb1",
@@ -81,7 +88,9 @@ int arr[3] = {1, 2, 3};
 cout << arr[5];  // ❌ Not an error — garbage value! (Python gives IndexError)
 \`\`\`
 
-Python gives you an error when out of bounds, but C++ **silently returns garbage**. Be careful!
+Python gives you an IndexError when out of bounds, but C++ reads a **garbage value** without any error. This is very dangerous! Even \`arr[100]\` will run without crashing — it just reads random memory.
+
+For example, with \`int arr[3] = {10, 20, 30};\`, reading \`arr[100]\` gives you something like \`-827361\` — a completely random number! This is called a **garbage value**.
 
 💡 C++ arrays don't check bounds → you must be careful yourself!`
         },
@@ -127,6 +136,17 @@ for (int i = 0; i < size; i++) {
 💡 More verbose than Python's \`for s in scores\`, but later you'll learn **range-based for** which is similar!`
         },
         {
+          id: "ch1-loop-sim",
+          type: "explain",
+          title: "🔍 Trace: How does array traversal work?",
+          content: `Watch how i changes from 0 to 2, accessing each slot with arr[i]!
+
+**Each time i changes**, arr[i] points to a different slot!
+
+Press **▶ Run** or **▷ Step** to trace the execution.`,
+          component: "codeTraceCppArrayLoop",
+        },
+        {
           id: "ch1-pred2",
           type: "predict" as const,
           title: "Array + Loop!",
@@ -162,6 +182,29 @@ int main() {
 Average: 86.6`
         },
         {
+          id: "ch1-practice2",
+          type: "practice" as const,
+          title: "✋ Find the Maximum in an Array!",
+          content: `Find and print the maximum value in an array of 5 scores.`,
+          code: `#include <iostream>
+using namespace std;
+
+int main() {
+    int scores[5] = {85, 92, 78, 96, 88};
+    int maxScore = scores[0];
+
+    for (int i = 1; i < 5; i++) {
+        if (scores[i] > maxScore) {
+            maxScore = scores[i];
+        }
+    }
+
+    cout << "Highest score: " << maxScore << endl;
+    return 0;
+}`,
+          expectedOutput: `Highest score: 96`
+        },
+        {
           id: "ch1-q1",
           type: "quiz",
           title: "Array basics!",
@@ -189,6 +232,7 @@ Average: 86.6`
           id: "ch2-intro",
           type: "explain",
           title: "📦 vector = Resizable Array!",
+          component: "cppVectorBuilder",
           content: `Arrays have a fixed size which is inconvenient, right? **vector** is like Python lists — the size is flexible!
 
 \`\`\`cpp
@@ -207,7 +251,9 @@ Comparison with Python:
 | \`len(nums)\` | \`nums.size()\` |
 | \`nums[0]\` | \`nums[0]\` (same!) |
 
-⚠️ Don't forget \`#include <vector>\`!
+⚠️ You must add \`#include <vector>\`!
+
+A header is how you load extra features in C++. To use vector, you need the <vector> header.
 
 💡 A vector is an **automatically resizing array**. In practice, vectors are used much more than arrays!`
         },
@@ -274,6 +320,7 @@ v.clear();           // Remove all → {}
 | Get size | Track manually | \`.size()\` |
 | Safety | No bounds check | \`.at()\` checks |
 | Header | None | \`#include <vector>\` |
+| 💡 Recommended | When size is fixed | Most of the time! |
 
 **Bottom line:**
 - Fixed size → **array** (faster)
