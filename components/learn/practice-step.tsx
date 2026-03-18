@@ -11,9 +11,10 @@ import { motion, AnimatePresence } from "framer-motion"
 interface PracticeStepProps {
   step: LessonStep
   lang?: "ko" | "en"
+  isReview?: boolean
 }
 
-export function PracticeStep({ step, lang = "ko" }: PracticeStepProps) {
+export function PracticeStep({ step, lang = "ko", isReview = false }: PracticeStepProps) {
   const [done, setDone] = useState(false)
   const [copied, setCopied] = useState(false)
   const [showCode, setShowCode] = useState(false)
@@ -56,8 +57,8 @@ export function PracticeStep({ step, lang = "ko" }: PracticeStepProps) {
         </div>
       )}
 
-      {/* 힌트 메시지 — 코드 안 열었을 때만 */}
-      {step.code && !showCode && (
+      {/* 힌트 메시지 — 코드 안 열었을 때만, 리뷰 모드 제외 */}
+      {step.code && !showCode && !isReview && (
         <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-800">
           💡 {isEn
             ? "Try writing the code yourself first! If you get stuck, click below to see the solution."
@@ -65,8 +66,8 @@ export function PracticeStep({ step, lang = "ko" }: PracticeStepProps) {
         </div>
       )}
 
-      {/* 코드 토글 */}
-      {step.code && (
+      {/* 코드 토글 — 리뷰 모드에서는 숨김 */}
+      {step.code && !isReview && (
         <div>
           <button
             onClick={() => setShowCode(!showCode)}
