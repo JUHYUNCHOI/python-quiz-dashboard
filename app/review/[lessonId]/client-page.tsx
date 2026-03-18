@@ -166,17 +166,15 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
       }
     } else {
       play("wrong")
-      if (quizAttempts >= 1) {
-        setShowExplanation(true)
-        if (!completedSteps.has(currentIndex)) {
-          setTotalAttempted(prev => prev + 1)
-          setWrongSteps(prev => [...prev, currentIndex])
-          setCompletedSteps(prev => new Set([...prev, currentIndex]))
-          setIsCurrentStepCompleted(true)
-        }
+      setShowExplanation(true)
+      if (!completedSteps.has(currentIndex)) {
+        setTotalAttempted(prev => prev + 1)
+        setWrongSteps(prev => [...prev, currentIndex])
+        setCompletedSteps(prev => new Set([...prev, currentIndex]))
+        setIsCurrentStepCompleted(true)
       }
     }
-  }, [currentIndex, reviewSteps, completedSteps, quizAttempts, play])
+  }, [currentIndex, reviewSteps, completedSteps, play])
 
   // 퀴즈 설명 확인 후
   const acknowledgeQuiz = useCallback(() => {
@@ -474,8 +472,8 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
             </div>
           )}
 
-          {/* 틀렸을 때 — 수업 내용 인라인 보기 */}
-          {isCurrentStepCompleted && wrongSteps.includes(currentIndex) && (
+          {/* 풀기 전 또는 틀렸을 때 — 수업 내용 인라인 보기 */}
+          {(!isCurrentStepCompleted || wrongSteps.includes(currentIndex)) && (
             <div className="mt-4">
               <button
                 onClick={() => setShowLesson(!showLesson)}
@@ -484,7 +482,9 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                 <BookOpen className="w-4 h-4" />
                 {showLesson
                   ? t("수업 내용 닫기 ▲", "Hide lesson ▲")
-                  : t("📖 이 부분 수업 내용 보기 ▼", "📖 View lesson content ▼")}
+                  : isCurrentStepCompleted
+                    ? t("📖 틀린 부분 수업 내용 보기 ▼", "📖 View lesson content ▼")
+                    : t("📖 잘 모르겠으면 수업 내용 보기 ▼", "📖 Hint: View lesson content ▼")}
               </button>
               {showLesson && currentReview && (
                 <div className="mt-3 space-y-3 p-4 bg-indigo-50 rounded-xl border border-indigo-200">
