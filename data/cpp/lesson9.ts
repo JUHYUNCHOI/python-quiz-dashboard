@@ -60,6 +60,12 @@ cout << scores[0];  // 90
           title: "빈칸을 채워주세요",
           content: "정수 3개를 담는 배열을 선언해봐요!",
           code: "___ nums[___] = {10, 20, 30};",
+          reviewHint: `배열 선언 구조:
+
+**데이터타입** 변수명[**크기**] = {초기값, ...};
+
+- 데이터타입: 저장할 값의 종류 (정수 → \`int\`, 실수 → \`float\`)
+- 크기: 배열에 들어가는 원소 개수`,
           fillBlanks: [
             { id: 0, answer: "int", options: ["int", "list", "array", "var"] },
             { id: 1, answer: "3", options: ["3", "2", "4", "[]"] }
@@ -99,6 +105,13 @@ cout << arr[5];  // ❌ 에러가 아니라 쓰레기 값! (파이썬은 IndexEr
           type: "predict" as const,
           title: "배열 접근!",
           code: "#include <iostream>\nusing namespace std;\nint main() {\n    int arr[4] = {5, 10, 15, 20};\n    arr[2] = 100;\n    cout << arr[0] + arr[2];\n    return 0;\n}",
+          reviewHint: `배열 원소 접근: \`arr[인덱스]\` (인덱스는 **0부터** 시작)
+
+- \`arr[0]\` → 첫 번째 값
+- \`arr[2]\` → 세 번째 값
+- \`arr[2] = 100\` → 세 번째 값을 100으로 **변경**
+
+값을 바꾸면 그 이후부터 바뀐 값이 사용돼요.`,
           options: ["20", "105", "115", "에러"],
           answer: 1,
           explanation: "arr[2]를 100으로 바꿨어요! arr[0]=5, arr[2]=100 → 5 + 100 = 105!"
@@ -151,6 +164,11 @@ for (int i = 0; i < size; i++) {
           type: "predict" as const,
           title: "배열 + 루프!",
           code: "#include <iostream>\nusing namespace std;\nint main() {\n    int arr[5] = {2, 4, 6, 8, 10};\n    int sum = 0;\n    for (int i = 0; i < 5; i++) {\n        sum += arr[i];\n    }\n    cout << sum;\n    return 0;\n}",
+          reviewHint: `for 루프로 배열 순회: \`i\`가 0부터 (크기-1)까지 증가하며 \`arr[i]\`로 접근해요.
+
+\`sum += arr[i]\` → sum에 arr[i] 값을 계속 **누적**해요.
+
+배열의 각 값을 순서대로 더하면 총합이 나와요.`,
           options: ["20", "24", "30", "에러"],
           answer: 2,
           explanation: "2 + 4 + 6 + 8 + 10 = 30! for 루프로 배열의 모든 원소를 더했어요."
@@ -209,6 +227,12 @@ int main() {
           type: "quiz",
           title: "배열 기초!",
           content: "C++ 배열에 대해 **틀린** 설명은?",
+          reviewHint: `C++ 배열의 특징:
+- 선언할 때 **크기를 반드시 지정** (나중에 변경 불가)
+- 인덱스는 **0부터** 시작
+- **같은 타입**의 값만 저장 가능
+
+크기를 동적으로 바꾸려면 \`vector\`를 써야 해요.`,
           options: [
             "크기를 선언할 때 정해야 한다",
             "인덱스는 0부터 시작한다",
@@ -263,6 +287,13 @@ nums.push_back(4);  // [1, 2, 3, 4] — 끝에 추가!
           title: "빈칸을 채워주세요",
           content: "문자열 벡터를 선언해봐요!",
           code: "#include <___>\n\nvector<___> names = {\"Alice\", \"Bob\"};",
+          reviewHint: `vector를 사용하려면 헤더 파일이 필요해요:
+\`#include <헤더이름>\`
+
+- \`iostream\` → 입출력용
+- \`vector\` → vector 사용 시 필요
+
+C++에서 문자열 타입은 \`string\`이에요. (파이썬의 \`str\`)`,
           fillBlanks: [
             { id: 0, answer: "vector", options: ["vector", "array", "list", "iostream"] },
             { id: 1, answer: "string", options: ["string", "char", "text", "str"] }
@@ -301,6 +332,12 @@ v.clear();           // 전부 삭제 → {}
           type: "predict" as const,
           title: "vector 조작!",
           code: "#include <iostream>\n#include <vector>\nusing namespace std;\nint main() {\n    vector<int> v = {1, 2, 3};\n    v.push_back(4);\n    v.push_back(5);\n    v.pop_back();\n    cout << v.size();\n    return 0;\n}",
+          reviewHint: `vector 주요 메서드:
+- \`push_back(값)\` → 끝에 **추가** (크기 +1)
+- \`pop_back()\` → 마지막 원소 **제거** (크기 -1)
+- \`size()\` → 현재 원소 **개수** 반환
+
+코드를 순서대로 따라가며 크기가 어떻게 바뀌는지 추적해보세요.`,
           options: ["3", "4", "5", "에러"],
           answer: 1,
           explanation: "{1,2,3} → push_back(4) → {1,2,3,4} → push_back(5) → {1,2,3,4,5} → pop_back() → {1,2,3,4}. 크기는 4!"
@@ -335,6 +372,9 @@ v.clear();           // 전부 삭제 → {}
           title: "빈칸을 채워주세요",
           content: "벡터에 값을 추가하고 크기를 확인해봐요!",
           code: "vector<int> v = {5, 10};\nv.___(15);\ncout << v.___();",
+          reviewHint: `파이썬 → C++ vector 메서드 대응:
+- \`list.append(x)\` → \`v.push_back(x)\` (끝에 추가)
+- \`len(list)\` → \`v.size()\` (원소 개수)`,
           fillBlanks: [
             { id: 0, answer: "push_back", options: ["push_back", "append", "add", "insert"] },
             { id: 1, answer: "size", options: ["size", "length", "len", "count"] }
@@ -383,6 +423,9 @@ int main() {
           type: "quiz",
           title: "vector 메서드!",
           content: "파이썬의 `nums.append(10)`에 해당하는 C++ 코드는?",
+          reviewHint: `C++ vector에서 끝에 원소를 추가하는 메서드는 파이썬의 \`append\`와 이름이 달라요.
+
+"push" = 밀어 넣다, "back" = 뒤에 → 뒤에 밀어 넣는다!`,
           options: [
             "nums.add(10)",
             "nums.push_back(10)",
@@ -407,6 +450,12 @@ int main() {
           type: "quiz",
           title: "배열 선언!",
           content: "정수 5개를 저장하는 배열을 올바르게 선언한 것은?",
+          reviewHint: `C++ 배열 선언 구조:
+
+**타입** 배열명**[크기]**;
+
+- 타입이 앞에 오고, 크기는 변수명 **뒤** 대괄호 안에 들어가요.
+- Java의 \`int[] arr\`나 Python의 \`arr = []\`와 위치가 달라요!`,
           options: [
             "int arr = [5];",
             "int arr[5];",
@@ -421,6 +470,12 @@ int main() {
           type: "quiz",
           title: "vector vs 배열!",
           content: "배열 대신 vector를 써야 하는 상황은?",
+          reviewHint: `배열 vs vector 핵심 차이:
+
+| | 배열 | vector |
+|---|---|---|
+| 크기 | **고정** (변경 불가) | **유동** (추가/삭제 가능) |
+| 사용 | 크기가 정해진 경우 | 크기가 변하는 경우 |`,
           options: [
             "크기가 정확히 정해져 있을 때",
             "데이터를 계속 추가/삭제해야 할 때",
@@ -441,6 +496,9 @@ vector<int> v = {1, 2, 3};
 v.push_back(4);
 cout << v[2] << " " << v.size();
 \`\`\``,
+          reviewHint: `- \`v[2]\`: 인덱스는 **0부터** 시작 → v[0]=1, v[1]=2, v[2]=3
+- \`push_back(4)\` 후 vector에 원소가 하나 추가됨
+- \`size()\`: 현재 **원소 개수** 반환`,
           options: ["3 3", "3 4", "4 4", "2 4"],
           answer: 1,
           explanation: "push_back(4) 후 v = {1,2,3,4}. v[2]=3, size()=4 → \"3 4\"!"
@@ -450,6 +508,11 @@ cout << v[2] << " " << v.size();
           type: "quiz",
           title: "안전한 접근!",
           content: "배열이나 vector에서 범위를 벗어난 접근을 **안전하게 체크**하려면?",
+          reviewHint: `\`v[i]\` vs 안전한 접근 방법:
+- \`v[i]\`: 빠르지만 범위 초과 시 **쓰레기 값** (에러 없음)
+- 범위를 벗어나면 에러를 알려주는 메서드는?
+
+"at" = "~에서 가져오다" — 범위 체크 포함!`,
           options: [
             "arr[i]를 사용한다",
             "v.at(i)를 사용한다",

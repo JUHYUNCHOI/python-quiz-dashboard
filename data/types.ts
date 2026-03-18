@@ -19,6 +19,7 @@ export interface LessonStep {
   expectedOutput?: string
   hint?: string
   hint2?: string
+  reviewHint?: string
   task?: string
   options?: string[]
   answer?: number

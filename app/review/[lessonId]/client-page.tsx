@@ -39,6 +39,15 @@ function getChapterExplains(lesson: LessonData, chapterId: string, stepId?: stri
   return stepsToScan.filter(s => s.type === "explain").slice(-2)
 }
 
+// 복습 힌트용: 코드 블록 제거 후 텍스트(개념 설명)만 반환
+function extractProseHint(content: string): string {
+  return content
+    .replace(/```[\s\S]*?```/g, "")  // 코드 블록 제거
+    .replace(/\|.*\|.*\n?/g, "")     // 마크다운 테이블 제거
+    .replace(/\n{3,}/g, "\n\n")      // 연속 빈줄 정리
+    .trim()
+}
+
 // ============================================================
 // 메인 컴포넌트
 // ============================================================
@@ -429,22 +438,35 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                     : t("📖 잘 모르겠으면 수업 내용 보기", "📖 Hint: View lesson content")}
               </button>
               {showLesson && (() => {
+                const reviewHint = currentReview.step.reviewHint
                 const explains = getChapterExplains(lesson, currentReview.chapterId, currentReview.step.id)
                 return (
                   <div className="mt-2 p-3 bg-amber-50 rounded-xl border border-amber-200 max-h-52 overflow-y-auto">
                     <p className="text-amber-700 font-bold text-xs mb-2">
                       {currentReview.chapterEmoji} {currentReview.chapterTitle}
                     </p>
-                    {explains.length > 0 ? (
+                    {reviewHint ? (
                       <>
-                        {explains.slice(0, 2).map((explain, i) => (
-                          <div key={i} className={cn("text-xs [&_h1]:text-sm [&_h2]:text-xs [&_p]:text-xs [&_pre]:text-xs", i > 0 && "mt-2 pt-2 border-t border-amber-100")}>
-                            {explain.content && renderContent(explain.content)}
-                            {explain.code && (
-                              <pre className="mt-1.5 bg-gray-900 text-green-400 p-2 rounded text-xs overflow-x-auto font-mono">{explain.code}</pre>
-                            )}
-                          </div>
-                        ))}
+                        <div className="text-xs [&_h1]:text-sm [&_h2]:text-xs [&_p]:text-xs">
+                          {renderContent(reviewHint)}
+                        </div>
+                        <button
+                          onClick={() => router.push(`/learn/${lessonId}`)}
+                          className="mt-2 text-amber-600 font-bold text-xs hover:underline"
+                        >
+                          {t("전체 수업 보기 →", "View full lesson →")}
+                        </button>
+                      </>
+                    ) : explains.length > 0 ? (
+                      <>
+                        {explains.slice(0, 2).map((explain, i) => {
+                          const prose = explain.content ? extractProseHint(explain.content) : ""
+                          return (
+                            <div key={i} className={cn("text-xs [&_h1]:text-sm [&_h2]:text-xs [&_p]:text-xs", i > 0 && "mt-2 pt-2 border-t border-amber-100")}>
+                              {prose && renderContent(prose)}
+                            </div>
+                          )
+                        })}
                         <button
                           onClick={() => router.push(`/learn/${lessonId}`)}
                           className="mt-2 text-amber-600 font-bold text-xs hover:underline"
