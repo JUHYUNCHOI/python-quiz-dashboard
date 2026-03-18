@@ -364,20 +364,20 @@ export default function QuizPage() {
                       onClick={() => quiz.handleAnswerSelect(index)}
                       disabled={quiz.showResult}
                       className={cn(
-                        "group relative w-full rounded-xl border-2 p-4 md:p-5 text-left transition-all duration-300 min-h-[56px]",
-                        "hover:shadow-md hover:scale-[1.02] active:scale-[0.98]",
+                        "group relative w-full rounded-xl border-2 p-4 md:p-5 text-left transition-colors duration-200 min-h-[56px]",
+                        "active:scale-[0.98]",
                         !quiz.showResult &&
                           !isSelected &&
                           "border-gray-200 bg-white hover:border-orange-300 hover:bg-orange-50",
-                        !quiz.showResult && isSelected && "border-orange-400 bg-orange-50 shadow-lg scale-[1.02]",
+                        !quiz.showResult && isSelected && "border-orange-400 bg-orange-50 shadow-md",
                         showCorrect && "border-green-400 bg-green-50 shadow-lg",
                         showWrong && "border-red-400 bg-red-50",
                         quiz.showResult && "cursor-not-allowed",
                       )}
                     >
-                      <div className="absolute inset-0 overflow-hidden rounded-xl">
+                      <div className="absolute inset-0 overflow-hidden rounded-xl pointer-events-none">
                         {isSelected && !quiz.showResult && (
-                          <div className="absolute inset-0 bg-orange-400/20 animate-ripple rounded-xl" />
+                          <div className="absolute inset-0 bg-orange-400/10 rounded-xl" />
                         )}
                       </div>
 
@@ -400,7 +400,7 @@ export default function QuizPage() {
 
                         <span
                           className={cn(
-                            "flex-1 font-mono text-sm md:text-base lg:text-lg font-medium transition-colors",
+                            "flex-1 font-mono text-sm md:text-base lg:text-lg font-medium transition-colors whitespace-pre-line",
                             !quiz.showResult && "text-gray-700",
                             showCorrect && "text-green-700",
                             showWrong && "text-red-700",
