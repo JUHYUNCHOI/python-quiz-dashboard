@@ -171,22 +171,19 @@ export function PredictStep({ step, isCompleted, selectedAnswer, showExplanation
           {isReview && selectedAnswer !== step.answer && (
             <p className="text-sm text-amber-700 mt-1">{t("아래에서 수업 내용을 확인하고 다시 풀어보세요!", "Check the lesson content below and try again!")}</p>
           )}
-          {selectedAnswer !== step.answer && (
-            showAckButton ? (
-              isReview ? null : (
-                <>
-                  <p className="mt-2 text-xs text-amber-600 font-medium text-center">{t("🔄 이 문제는 나중에 다시 나와요!", "🔄 This question will come up again later!")}</p>
-                  <button
-                    onClick={onAcknowledge}
-                    className="mt-2 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 animate-fade-in"
-                  >
-                  {t("확인했어요", "Got it")} <ArrowRight className="w-5 h-5" />
-                </button>
-              </>
-              )
-            ) : (
-              <p className="mt-3 text-center text-xs text-amber-500 animate-pulse">{t("설명을 읽어보세요...", "Read the explanation...")}</p>
-            )
+          {selectedAnswer !== step.answer && !showAckButton && (
+            <p className="mt-3 text-center text-xs text-amber-500 animate-pulse">{t("설명을 읽어보세요...", "Read the explanation...")}</p>
+          )}
+          {selectedAnswer !== step.answer && showAckButton && !isReview && (
+            <>
+              <p className="mt-2 text-xs text-amber-600 font-medium text-center">{t("🔄 이 문제는 나중에 다시 나와요!", "🔄 This question will come up again later!")}</p>
+              <button
+                onClick={onAcknowledge}
+                className="mt-2 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 animate-fade-in"
+              >
+                {t("확인했어요", "Got it")} <ArrowRight className="w-5 h-5" />
+              </button>
+            </>
           )}
         </motion.div>
       )}
