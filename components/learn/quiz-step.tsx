@@ -65,16 +65,19 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
           const isSelected = selectedAnswer === idx
           const isCorrect = idx === step.answer
           const showResult = selectedAnswer !== null
+          // 복습 모드: 정답을 표시하지 않음 (틀린 것만 빨간색)
+          const hideCorrectInReview = isReview && !isSelected
           return (
             <button key={`${idx}-${selectedAnswer}`} onClick={() => onAnswer(idx)} disabled={selectedAnswer !== null}
               className={cn("w-full p-4 rounded-xl text-left font-medium text-sm md:text-base transition-all border-2 flex items-center min-h-[48px] active:scale-[0.98]",
                 !showResult && "bg-white hover:bg-indigo-50 active:bg-indigo-100 border-gray-200 hover:border-indigo-400",
-                showResult && isCorrect && "bg-green-100 border-green-500 text-green-800",
+                showResult && isCorrect && !hideCorrectInReview && "bg-green-100 border-green-500 text-green-800",
                 showResult && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800",
-                showResult && !isSelected && !isCorrect && "bg-gray-100 border-gray-200 text-gray-400"
+                showResult && !isSelected && !isCorrect && "bg-gray-100 border-gray-200 text-gray-400",
+                showResult && hideCorrectInReview && "bg-gray-100 border-gray-200 text-gray-400"
               )}>
               <span className="flex-1">{option.split(/\\n|\n/).map((line, i, arr) => (<span key={i}>{line}{i < arr.length - 1 && <br />}</span>))}</span>
-              {showResult && isCorrect && <Check className="w-5 h-5 shrink-0 ml-2 text-green-600" />}
+              {showResult && isCorrect && !hideCorrectInReview && <Check className="w-5 h-5 shrink-0 ml-2 text-green-600" />}
               {showResult && isSelected && !isCorrect && <X className="w-5 h-5 shrink-0 ml-2 text-red-600" />}
             </button>
           )
@@ -87,15 +90,23 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
                 {selectedAnswer === step.answer ? t("정답! 🎉", "Correct! 🎉") : t("틀렸어요!", "Wrong!")}
               </span>
             </div>
-            <p className={cn("text-sm whitespace-pre-line", selectedAnswer === step.answer ? "text-green-800" : "text-amber-800")}>{step.explanation}</p>
+            {/* 복습 모드에서 틀리면 설명(정답 힌트) 숨김 */}
+            {(selectedAnswer === step.answer || !isReview) && (
+              <p className={cn("text-sm whitespace-pre-line", selectedAnswer === step.answer ? "text-green-800" : "text-amber-800")}>{step.explanation}</p>
+            )}
+            {isReview && selectedAnswer !== step.answer && (
+              <p className="text-sm text-amber-700 mt-1">{t("아래에서 수업 내용을 확인하고 다시 풀어보세요!", "Check the lesson content below and try again!")}</p>
+            )}
             {selectedAnswer !== step.answer && (
               showAckButton ? (
-                <>
-                  {!isReview && <p className="mt-2 text-xs text-amber-600 font-medium text-center">{t("🔄 이 문제는 나중에 다시 나와요!", "🔄 This question will come up again later!")}</p>}
-                  <button onClick={onAcknowledge} className="mt-2 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 animate-fade-in">
-                    {t("확인했어요", "Got it")} <ArrowRight className="w-5 h-5" />
-                  </button>
-                </>
+                isReview ? null : (
+                  <>
+                    <p className="mt-2 text-xs text-amber-600 font-medium text-center">{t("🔄 이 문제는 나중에 다시 나와요!", "🔄 This question will come up again later!")}</p>
+                    <button onClick={onAcknowledge} className="mt-2 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 animate-fade-in">
+                      {t("확인했어요", "Got it")} <ArrowRight className="w-5 h-5" />
+                    </button>
+                  </>
+                )
               ) : (
                 <p className="mt-3 text-center text-xs text-amber-500 animate-pulse">{t("설명을 읽어보세요...", "Read the explanation...")}</p>
               )

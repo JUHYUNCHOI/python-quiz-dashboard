@@ -257,8 +257,8 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
               {step.explanation}
             </p>
 
-            {/* 오답 시 정답 표시 */}
-            {!isCorrect && (
+            {/* 오답 시 정답 표시 — 복습 모드에서는 숨김 */}
+            {!isCorrect && !isReview && (
               <div className="mt-2 p-2 bg-white/60 rounded-lg">
                 <p className="text-xs text-amber-700 font-medium mb-1">{t("정답:", "Answer:")}</p>
                 <div className="flex flex-wrap gap-1">
@@ -273,15 +273,30 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
 
             {!isCorrect && (
               showAckButton ? (
-                <>
-                  {!isReview && <p className="mt-2 text-xs text-amber-600 font-medium text-center">{t("🔄 이 문제는 나중에 다시 나와요!", "🔄 This question will come up again later!")}</p>}
+                isReview ? (
                   <button
-                    onClick={handleAcknowledge}
-                    className="mt-2 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 animate-fade-in"
+                    onClick={() => {
+                      setFilledValues({})
+                      setCurrentBlankIndex(0)
+                      setIsSubmitted(false)
+                      setIsCorrect(false)
+                      setShowAckButton(false)
+                    }}
+                    className="mt-2 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-400 hover:to-indigo-500 shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 animate-fade-in"
                   >
-                    {t("확인했어요", "Got it")} <ArrowRight className="w-5 h-5" />
+                    {t("다시 풀기", "Try Again")} <RotateCcw className="w-5 h-5" />
                   </button>
-                </>
+                ) : (
+                  <>
+                    <p className="mt-2 text-xs text-amber-600 font-medium text-center">{t("🔄 이 문제는 나중에 다시 나와요!", "🔄 This question will come up again later!")}</p>
+                    <button
+                      onClick={handleAcknowledge}
+                      className="mt-2 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 animate-fade-in"
+                    >
+                      {t("확인했어요", "Got it")} <ArrowRight className="w-5 h-5" />
+                    </button>
+                  </>
+                )
               ) : (
                 <p className="mt-3 text-center text-xs text-amber-500 animate-pulse">{t("설명을 읽어보세요...", "Read the explanation...")}</p>
               )
