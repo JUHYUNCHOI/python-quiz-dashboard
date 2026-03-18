@@ -703,9 +703,9 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
         <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-lg border-b border-gray-200 shadow-sm">
           <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 md:py-3">
             {/* 0줄: 프로그래밍 언어 | UI 언어 */}
-            <div className="flex items-center justify-between mb-1.5">
-              <ProgrammingLanguageToggle current={currentProgrammingLang} />
-              <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between gap-2 mb-1.5 overflow-x-auto">
+              <ProgrammingLanguageToggle current={currentProgrammingLang} className="shrink-0" />
+              <div className="flex items-center gap-1.5 shrink-0">
                 <LanguageToggle />
                 {gamification.dailyStreak > 0 && (
                   <StreakWidget streak={analyzeStreak(gamification.dailyStreak)} t={t} compact />
