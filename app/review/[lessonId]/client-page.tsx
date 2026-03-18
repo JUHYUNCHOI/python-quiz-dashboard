@@ -82,16 +82,21 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   const [isCurrentStepCompleted, setIsCurrentStepCompleted] = useState(saved?.completedSteps?.includes(saved?.currentIndex ?? 0) ?? false)
   const [showLesson, setShowLesson] = useState(false)
 
+  // 각 스텝별 선택한 답 저장 (quiz/predict용)
+  const [savedAnswers, setSavedAnswers] = useState<Record<number, number>>(saved?.savedAnswers ?? {})
+  // 리셋 카운터 (key 변경용)
+  const [resetCount, setResetCount] = useState(0)
+
   // 진도 저장
   useEffect(() => {
     try {
       localStorage.setItem(storageKey, JSON.stringify({
         currentIndex, score, totalAttempted, correctCount,
         completedSteps: Array.from(completedSteps),
-        wrongSteps,
+        wrongSteps, savedAnswers,
       }))
     } catch {}
-  }, [currentIndex, score, totalAttempted, correctCount, completedSteps, wrongSteps, storageKey])
+  }, [currentIndex, score, totalAttempted, correctCount, completedSteps, wrongSteps, savedAnswers, storageKey])
 
   // 현재 스텝
   const currentReview = reviewSteps[currentIndex]
@@ -117,6 +122,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   // 퀴즈 정답 처리
   const handleQuizAnswer = useCallback((idx: number) => {
     setSelectedAnswer(idx)
+    setSavedAnswers(prev => ({ ...prev, [currentIndex]: idx }))
     setQuizAttempts(prev => prev + 1)
     const step = reviewSteps[currentIndex]?.step
     if (!step) return
@@ -184,12 +190,20 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   // 스텝 이동
   const goToStep = (idx: number) => {
     setCurrentIndex(idx)
-    setSelectedAnswer(null)
-    setShowExplanation(false)
-    setQuizAttempts(0)
     setHintLevel(0)
-    setIsCurrentStepCompleted(completedSteps.has(idx))
     setShowLesson(false)
+    const wasCompleted = completedSteps.has(idx)
+    setIsCurrentStepCompleted(wasCompleted)
+    // 이미 풀었던 문제면 답 복원
+    if (wasCompleted && savedAnswers[idx] !== undefined) {
+      setSelectedAnswer(savedAnswers[idx])
+      setShowExplanation(true)
+      setQuizAttempts(2) // 이미 풀었으므로
+    } else {
+      setSelectedAnswer(null)
+      setShowExplanation(false)
+      setQuizAttempts(0)
+    }
   }
 
   // 이전/다음
@@ -373,7 +387,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
         <div className="bg-white rounded-2xl p-6 md:p-10 shadow-sm">
           {currentReview && (
             <StepRenderer
-              key={`review-${currentIndex}`}
+              key={`review-${currentIndex}-${resetCount}`}
               step={currentReview.step}
               lang={lang}
               isCompleted={effectiveTeacher ? false : isCurrentStepCompleted}
@@ -398,6 +412,39 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
               onStepAcknowledge={handleStepAcknowledge}
               isReview={true}
             />
+          )}
+
+          {/* 완료된 문제 — 다시 풀기 버튼 */}
+          {isCurrentStepCompleted && (
+            <div className="mt-3 flex justify-end">
+              <button
+                onClick={() => {
+                  setSelectedAnswer(null)
+                  setShowExplanation(false)
+                  setQuizAttempts(0)
+                  setIsCurrentStepCompleted(false)
+                  setResetCount(prev => prev + 1)
+                  // savedAnswers에서 제거
+                  setSavedAnswers(prev => {
+                    const next = { ...prev }
+                    delete next[currentIndex]
+                    return next
+                  })
+                  // completedSteps에서 제거
+                  setCompletedSteps(prev => {
+                    const next = new Set(prev)
+                    next.delete(currentIndex)
+                    return next
+                  })
+                  // wrongSteps에서 제거
+                  setWrongSteps(prev => prev.filter(i => i !== currentIndex))
+                }}
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                {t("이 문제 다시 풀기", "Redo this question")}
+              </button>
+            </div>
           )}
 
           {/* 틀렸을 때 — 수업 내용 인라인 보기 */}
