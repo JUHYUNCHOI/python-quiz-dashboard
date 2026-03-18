@@ -67,8 +67,8 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
           const showResult = selectedAnswer !== null
           return (
             <button key={`${idx}-${selectedAnswer}`} onClick={() => onAnswer(idx)} disabled={selectedAnswer !== null}
-              className={cn("w-full p-3 md:p-4 rounded-lg md:rounded-xl text-left font-medium text-sm md:text-base transition-all border-2 flex items-center",
-                !showResult && "bg-white hover:bg-indigo-50 border-gray-200 hover:border-indigo-400",
+              className={cn("w-full p-4 rounded-xl text-left font-medium text-sm md:text-base transition-all border-2 flex items-center min-h-[48px] active:scale-[0.98]",
+                !showResult && "bg-white hover:bg-indigo-50 active:bg-indigo-100 border-gray-200 hover:border-indigo-400",
                 showResult && isCorrect && "bg-green-100 border-green-500 text-green-800",
                 showResult && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800",
                 showResult && !isSelected && !isCorrect && "bg-gray-100 border-gray-200 text-gray-400"

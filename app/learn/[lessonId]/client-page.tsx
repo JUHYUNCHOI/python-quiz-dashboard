@@ -857,11 +857,11 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       </div>
 
       {/* 네비게이션 버튼 */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-lg z-20">
-        <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-2 md:py-2.5">
+      <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-lg z-20 safe-area-inset-bottom">
+        <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 md:py-3">
           <div className="flex gap-3 md:gap-4 justify-center">
             <button onClick={goPrev} disabled={currentStep === 0 && currentChapter === 0}
-              className={cn("flex items-center justify-center gap-1 rounded-xl font-bold transition-colors", "px-4 py-2.5 md:px-6 md:py-3",
+              className={cn("flex items-center justify-center gap-1 rounded-xl font-bold transition-colors min-h-[44px]", "px-5 py-3 md:px-6 md:py-3",
                 isReviewMode ? "invisible" :
                 (currentStep > 0 || currentChapter > 0) ? "bg-gray-100 hover:bg-gray-200 text-gray-700" : "invisible")}>
               <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
@@ -872,10 +872,10 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
               const isLastStepOfChapter = currentStep === chapter.steps.length - 1 && !isReviewMode
               return (
                 <button onClick={goNext} disabled={!canGoNext()}
-                  className={cn("flex items-center justify-center gap-1 rounded-xl font-bold transition-colors",
+                  className={cn("flex items-center justify-center gap-1 rounded-xl font-bold transition-colors min-h-[44px]",
                     isLastStepOfLastChapter && canGoNext()
-                      ? "px-6 py-2.5 md:px-8 md:py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white shadow-lg animate-pulse"
-                      : cn("px-4 py-2.5 md:px-6 md:py-3",
+                      ? "px-6 py-3 md:px-8 md:py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white shadow-lg animate-pulse"
+                      : cn("px-5 py-3 md:px-6 md:py-3",
                           canGoNext() ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg" : "bg-gray-200 text-gray-400 cursor-not-allowed"))}>
                   {canGoNext() ? (
                     isLastStepOfLastChapter ? (

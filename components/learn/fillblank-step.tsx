@@ -216,8 +216,8 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
                   onClick={() => handleOptionClick(option)}
                   disabled={isUsed}
                   className={cn(
-                    "px-4 py-2.5 rounded-xl font-mono text-sm md:text-base font-semibold transition-all border-2",
-                    !isUsed && "bg-white hover:bg-violet-50 border-gray-200 hover:border-violet-400 text-gray-800",
+                    "px-4 py-3 rounded-xl font-mono text-sm md:text-base font-semibold transition-all border-2 min-h-[44px]",
+                    !isUsed && "bg-white hover:bg-violet-50 active:bg-violet-100 border-gray-200 hover:border-violet-400 text-gray-800",
                     isUsed && "bg-gray-100 border-gray-200 text-gray-300 cursor-not-allowed"
                   )}
                 >

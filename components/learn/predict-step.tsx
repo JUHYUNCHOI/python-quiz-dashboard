@@ -124,8 +124,8 @@ export function PredictStep({ step, isCompleted, selectedAnswer, showExplanation
               onClick={() => onAnswer(idx)}
               disabled={selectedAnswer !== null}
               className={cn(
-                "w-full p-3 md:p-4 rounded-lg md:rounded-xl text-left font-mono text-sm md:text-base transition-all border-2 whitespace-pre-line flex items-center",
-                !showResult && "bg-white hover:bg-emerald-50 border-gray-200 hover:border-emerald-400",
+                "w-full p-4 rounded-xl text-left font-mono text-sm md:text-base transition-all border-2 whitespace-pre-line flex items-center min-h-[48px]",
+                !showResult && "bg-white hover:bg-emerald-50 active:bg-emerald-100 border-gray-200 hover:border-emerald-400",
                 showResult && isCorrect && "bg-green-100 border-green-500 text-green-800",
                 showResult && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800",
                 showResult && !isSelected && !isCorrect && "bg-gray-100 border-gray-200 text-gray-400"
