@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from "react"
 import { createPortal } from "react-dom"
-import { Keyboard, Copy, CheckCheck, Eye, Lightbulb, Terminal, X, ChevronRight } from "lucide-react"
+import { Keyboard, Copy, CheckCheck, Eye, Lightbulb, X, ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { LessonStep } from "./types"
 import { CodeBlock } from "@/components/ui/code-block"
 import { renderContent } from "./render-content"
 import { motion, AnimatePresence } from "framer-motion"
+import { CppRunner } from "@/components/cpp/cpp-runner"
 
 interface PracticeStepProps {
   step: LessonStep
@@ -16,7 +17,7 @@ interface PracticeStepProps {
 }
 
 function normalize(s: string) {
-  return s.trim().replace(/\r\n/g, "\n").replace(/[ \t]+/g, " ").toLowerCase()
+  return s.trim().replace(/\s+/g, " ").toLowerCase()
 }
 
 function extractSkeleton(code: string): string {
@@ -47,8 +48,6 @@ function extractSkeleton(code: string): string {
 
 export function PracticeStep({ step, lang = "ko", onSuccess }: PracticeStepProps) {
   const [done, setDone] = useState(false)
-  const [userOutput, setUserOutput] = useState("")
-  const [isCorrect, setIsCorrect] = useState<boolean | null>(null)
   const [failCount, setFailCount] = useState(0)
   const [copiedSkeleton, setCopiedSkeleton] = useState(false)
   const [copiedFull, setCopiedFull] = useState(false)
@@ -62,8 +61,6 @@ export function PracticeStep({ step, lang = "ko", onSuccess }: PracticeStepProps
   // step이 바뀌면 모든 상태 리셋
   useEffect(() => {
     setDone(false)
-    setUserOutput("")
-    setIsCorrect(null)
     setFailCount(0)
     setCopiedSkeleton(false)
     setCopiedFull(false)
@@ -91,20 +88,17 @@ export function PracticeStep({ step, lang = "ko", onSuccess }: PracticeStepProps
     setTimeout(() => setCopiedFull(false), 2000)
   }
 
-  const handleCheckOutput = () => {
-    if (!step.expectedOutput) return
-    const correct = normalize(userOutput) === normalize(step.expectedOutput)
-    setIsCorrect(correct)
-    if (correct) {
-      setDone(true)
-      onSuccess?.()
-    } else {
-      const next = failCount + 1
-      setFailCount(next)
-      setShowSkeleton(false)
-      setShowFullCode(false)
-      setHintOpen(true)   // 틀리면 힌트 시트 자동 오픈
-    }
+  const handleRunSuccess = () => {
+    setDone(true)
+    onSuccess?.()
+  }
+
+  const handleRunError = () => {
+    const next = failCount + 1
+    setFailCount(next)
+    setShowSkeleton(false)
+    setShowFullCode(false)
+    setHintOpen(true) // 틀리면 힌트 시트 자동 오픈
   }
 
   const handleCloseHint = () => {
@@ -148,74 +142,20 @@ export function PracticeStep({ step, lang = "ko", onSuccess }: PracticeStepProps
           <div className="space-y-2 md:space-y-3">{renderContent(step.content)}</div>
         )}
 
-        {/* 예상 출력 */}
-        {step.expectedOutput && (
-          <div className="bg-gray-900 rounded-xl p-3 md:p-4 font-mono text-sm border border-gray-700">
-            <div className="text-gray-300 text-xs font-bold mb-2">
-              🎯 {isEn ? "Expected Output" : "이렇게 출력되어야 해요"}
-            </div>
-            <div className="text-green-400 whitespace-pre overflow-x-auto">{step.expectedOutput}</div>
-          </div>
+        {/* C++ 코드 에디터 + 실행 (모바일/데스크톱 공통) */}
+        {!done && step.code && (
+          <CppRunner
+            key={step.id}
+            initialCode={skeleton || `#include <iostream>\nusing namespace std;\n\nint main() {\n    // 👉 여기에 코드를 작성하세요\n    return 0;\n}`}
+            expectedOutput={step.expectedOutput}
+            onSuccess={handleRunSuccess}
+            onError={handleRunError}
+            isEn={isEn}
+          />
         )}
 
-        {/* 모바일: 검증 없이 완료 */}
-        {!done && hasExpected && (
-          <div className="md:hidden space-y-3">
-            <div className="flex items-start gap-3 p-3 bg-blue-50 rounded-xl border border-blue-200">
-              <span className="text-xl mt-0.5">💻</span>
-              <p className="text-sm text-blue-800 leading-relaxed">
-                {isEn
-                  ? "This exercise requires a computer. Open VS Code, write the code, and mark it complete!"
-                  : "이 실습은 컴퓨터에서 진행해요. VS Code에서 코드를 작성하고 완료 표시하세요!"}
-              </p>
-            </div>
-            <button
-              onClick={() => { setDone(true); onSuccess?.() }}
-              className="w-full py-3 rounded-xl text-sm font-bold bg-teal-600 text-white hover:bg-teal-500 shadow-md"
-            >
-              {isEn ? "💻 I'll do it on my computer ✓" : "💻 컴퓨터에서 해볼게요 ✓"}
-            </button>
-          </div>
-        )}
-
-        {/* 데스크톱: 출력 붙여넣기 + 결과 확인 */}
-        {!done && hasExpected && (
-          <div className="hidden md:block space-y-2">
-            <div className="flex items-center gap-2 text-sm font-bold text-gray-700">
-              <Terminal className="w-4 h-4 text-teal-600" />
-              {isEn ? "Run your code and paste the output:" : "코드를 실행하고 결과를 붙여넣으세요:"}
-            </div>
-            <textarea
-              value={userOutput}
-              onChange={(e) => { setUserOutput(e.target.value); setIsCorrect(null) }}
-              onKeyDown={(e) => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) handleCheckOutput() }}
-              placeholder={isEn ? "Paste terminal output here..." : "터미널 출력 결과를 여기에 붙여넣으세요..."}
-              rows={3}
-              className={cn(
-                "w-full font-mono text-sm p-3 rounded-xl border-2 bg-gray-950 text-green-400 placeholder:text-gray-600 outline-none resize-none transition-all",
-                isCorrect === true ? "border-green-500" :
-                isCorrect === false ? "border-red-500" :
-                "border-gray-700 focus:border-teal-500"
-              )}
-              spellCheck={false}
-            />
-            <button
-              onClick={handleCheckOutput}
-              disabled={!userOutput.trim()}
-              className={cn(
-                "w-full py-3 rounded-xl text-sm font-bold transition-all",
-                userOutput.trim()
-                  ? "bg-teal-600 hover:bg-teal-500 text-white shadow-md"
-                  : "bg-gray-200 text-gray-400 cursor-not-allowed"
-              )}
-            >
-              {isEn ? "✅ Check Output" : "✅ 결과 확인하기"}
-            </button>
-          </div>
-        )}
-
-        {/* expectedOutput 없는 경우 — 자유 완료 */}
-        {!done && !hasExpected && (
+        {/* code도 expectedOutput도 없는 경우 — 자유 완료 */}
+        {!done && !step.code && !hasExpected && (
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={() => { setDone(true); onSuccess?.() }}
@@ -232,10 +172,9 @@ export function PracticeStep({ step, lang = "ko", onSuccess }: PracticeStepProps
             animate={{ opacity: 1, scale: 1 }}
             className="space-y-3"
           >
-            {/* 데스크톱 + 출력 검증 성공인 경우만 정답 패널 */}
-            {step.expectedOutput && isCorrect === true && (
-              <div className="hidden md:block bg-gray-900 rounded-xl p-4 font-mono text-sm border border-green-600">
-                <div className="text-green-400 text-xs font-bold mb-2">✅ {isEn ? "Correct!" : "정답!"}</div>
+            {step.expectedOutput && (
+              <div className="bg-gray-900 rounded-xl p-4 font-mono text-sm border border-green-600">
+                <div className="text-green-400 text-xs font-bold mb-2">✅ {isEn ? "Correct output!" : "정확한 출력!"}</div>
                 <div className="text-green-400 whitespace-pre-line">{step.expectedOutput}</div>
               </div>
             )}

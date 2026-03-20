@@ -66,6 +66,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const [currentStep, setCurrentStep] = useState(0)
   const [score, setScore] = useState(0)
   const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set())
+  const [isAlreadyDone, setIsAlreadyDone] = useState(false) // 이미 완료한 레슨: 자유 탐색 허용
   const [progressLoaded, setProgressLoaded] = useState(false)
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
   const [showExplanation, setShowExplanation] = useState(false)
@@ -97,6 +98,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const canGoNext = () => {
     if (!step) return false
     if (effectiveTeacher) return true // 선생님은 어디서든 자유롭게 이동
+    if (isAlreadyDone) return true // 이미 완료한 레슨: 자유 탐색 (복습용)
     if (isReviewMode) return false // 복습 모드에서는 "확인" 버튼으로만 이동
     if (step.type === "explain" || step.type === "interactive" || step.type === "animation") return true
     if (step.type === "tryit" || step.type === "mission" || step.type === "coding" || step.type === "practice") return isCurrentStepCompleted
@@ -143,10 +145,16 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
         // 저장된 completed + 현재 위치 이전의 읽기 스텝(explain 등)만 자동 완료
         // quiz/predict/fillblank는 실제로 풀어야만 completed에 들어감
         const savedCompleted = new Set<string>(data.completed || [])
+        if (isLessonAlreadyDone) setIsAlreadyDone(true)
         if (isLessonAlreadyDone && lesson) {
-          // 이미 완료한 레슨: 모든 스텝을 completed로
+          // 이미 완료한 레슨: 읽기/실습 스텝만 자동 완료
+          // quiz/predict/fillblank는 실제로 풀어야 progress bar에 초록색 표시
+          // (canGoNext는 isAlreadyDone으로 별도 허용)
+          const nonInteractiveTypes = ["explain", "interactive", "animation", "tryit", "practice", "coding", "mission"]
           for (const ch of lesson.chapters) {
-            for (const s of ch.steps) savedCompleted.add(s.id)
+            for (const s of ch.steps) {
+              if (nonInteractiveTypes.includes(s.type)) savedCompleted.add(s.id)
+            }
           }
         } else {
           const autoCompleteTypes = ["explain", "interactive", "practice", "animation", "tryit"]
@@ -182,13 +190,17 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     } else {
       // localStorage 비어있으면 Supabase에서 복구 시도
       loadFromCloud().then(data => {
-        // 클라우드 데이터 없지만 이미 완료한 레슨이면 모든 스텝 완료 처리
+        // 클라우드 데이터 없지만 이미 완료한 레슨이면 읽기 스텝만 완료 처리
+        if (isLessonAlreadyDone) setIsAlreadyDone(true)
         if (!data && isLessonAlreadyDone && lesson) {
-          const allCompleted = new Set<string>()
+          const nonInteractiveTypes = ["explain", "interactive", "animation", "tryit", "practice", "coding", "mission"]
+          const autoCompleted = new Set<string>()
           for (const ch of lesson.chapters) {
-            for (const s of ch.steps) allCompleted.add(s.id)
+            for (const s of ch.steps) {
+              if (nonInteractiveTypes.includes(s.type)) autoCompleted.add(s.id)
+            }
           }
-          setCompletedSteps(allCompleted)
+          setCompletedSteps(autoCompleted)
         }
         if (data) {
           const cloudCh = (data.chapter as number) || 0
@@ -198,8 +210,11 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
           setScore((data.score as number) || 0)
           const cloudCompleted = new Set<string>((data.completed as string[]) || [])
           if (isLessonAlreadyDone && lesson) {
+            const nonInteractiveTypes = ["explain", "interactive", "animation", "tryit", "practice", "coding", "mission"]
             for (const ch of lesson.chapters) {
-              for (const s of ch.steps) cloudCompleted.add(s.id)
+              for (const s of ch.steps) {
+                if (nonInteractiveTypes.includes(s.type)) cloudCompleted.add(s.id)
+              }
             }
           } else {
             const autoCompleteTypes = ["explain", "interactive", "practice", "animation", "tryit"]
