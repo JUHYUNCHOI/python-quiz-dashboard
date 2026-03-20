@@ -1,8 +1,15 @@
 "use client"
 
-import { useState, useCallback, useRef } from "react"
-import { Play, Loader2, RotateCcw, Check, X } from "lucide-react"
+import { useState, useCallback, useEffect } from "react"
+import dynamic from "next/dynamic"
+import { Play, Loader2, RotateCcw, Check, X, Eye } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { CodeBlock } from "@/components/ui/code-block"
+
+const CodeEditor = dynamic(
+  () => import("@uiw/react-textarea-code-editor").then(m => m.default),
+  { ssr: false }
+)
 
 interface CppRunnerProps {
   initialCode: string
@@ -29,7 +36,6 @@ function friendlyError(stderr: string): string {
     return m ? `❌ '${m[1]}'이 선언되지 않았어요. 오타나 #include를 확인해보세요.` : "❌ 선언되지 않은 변수/함수가 있어요."
   }
   if (stderr.includes("error:")) {
-    // Extract the first error line
     const firstError = stderr.split("\n").find(l => l.includes("error:"))
     return "❌ 컴파일 오류: " + (firstError?.split("error:")[1]?.trim() || stderr.split("\n")[0])
   }
@@ -42,7 +48,7 @@ export function CppRunner({
   task,
   onSuccess,
   onError,
-  minHeight = "180px",
+  minHeight,
   isEn = false
 }: CppRunnerProps) {
   const [code, setCode] = useState(initialCode)
@@ -50,7 +56,11 @@ export function CppRunner({
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null)
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const [failCount, setFailCount] = useState(0)
+  const [showAnswer, setShowAnswer] = useState(false)
+
+  const lineCount = initialCode.split("\n").length
+  const editorMinHeight = minHeight ?? `${Math.max(240, lineCount * 24 + 48)}px`
 
   const runCode = useCallback(async () => {
     if (!code.trim() || isLoading) return
@@ -79,17 +89,29 @@ export function CppRunner({
 
       if (compileStderr) {
         setError(friendlyError(compileStderr))
+        const next = failCount + 1
+        setFailCount(next)
+        if (next >= 3) setShowAnswer(true)
         onError?.()
       } else if (runStderr) {
         setError("❌ 런타임 오류: " + runStderr.split("\n")[0])
+        const next = failCount + 1
+        setFailCount(next)
+        if (next >= 3) setShowAnswer(true)
         onError?.()
       } else {
         setOutput(runStdout)
         if (expectedOutput) {
           const isMatch = normalize(runStdout) === normalize(expectedOutput)
           setIsCorrect(isMatch)
-          if (isMatch) onSuccess?.()
-          else onError?.()
+          if (isMatch) {
+            onSuccess?.()
+          } else {
+            const next = failCount + 1
+            setFailCount(next)
+            if (next >= 3) setShowAnswer(true)
+            onError?.()
+          }
         } else {
           setIsCorrect(true)
           onSuccess?.()
@@ -103,66 +125,71 @@ export function CppRunner({
     } finally {
       setIsLoading(false)
     }
-  }, [code, expectedOutput, onSuccess, onError, isLoading, isEn])
+  }, [code, expectedOutput, onSuccess, onError, isLoading, isEn, failCount])
 
   const reset = () => {
     setCode(initialCode)
     setOutput("")
     setError("")
     setIsCorrect(null)
-    textareaRef.current?.focus()
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
       e.preventDefault()
       runCode()
     }
-    if (e.key === "Tab") {
-      e.preventDefault()
-      const el = e.currentTarget
-      const start = el.selectionStart
-      const end = el.selectionEnd
-      const newCode = code.substring(0, start) + "    " + code.substring(end)
-      setCode(newCode)
-      setTimeout(() => { el.selectionStart = el.selectionEnd = start + 4 }, 0)
-    }
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3" onKeyDown={handleKeyDown}>
       {task && (
         <div className="bg-teal-50 rounded-lg p-2.5 border border-teal-200">
           <p className="text-teal-800 font-bold text-sm">🎯 {task}</p>
         </div>
       )}
 
-      {/* 코드 에디터 */}
+      {/* 예상 출력 표시 */}
+      {expectedOutput && (
+        <div className="bg-gray-900 rounded-xl p-3 border border-gray-700">
+          <p className="text-gray-400 text-xs font-bold mb-1.5">
+            {isEn ? "🎯 Target output:" : "🎯 이렇게 출력되어야 해요:"}
+          </p>
+          <pre className="font-mono text-sm text-emerald-400 whitespace-pre-wrap">{expectedOutput}</pre>
+        </div>
+      )}
+
+      {/* 코드 에디터 — syntax highlighted */}
       <div className={cn(
-        "bg-gray-900 rounded-xl overflow-hidden border-2 transition-all",
+        "rounded-xl overflow-hidden border-2 transition-all",
         isCorrect === true && "border-green-500",
         isCorrect === false && "border-red-500",
         isCorrect === null && "border-gray-700"
       )}>
-        <div className="flex items-center justify-between px-3 py-1.5 bg-gray-800">
+        <div className="flex items-center justify-between px-3 py-1.5 bg-[#1e1e2e]">
           <div className="flex items-center gap-1.5">
             <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
             <div className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
             <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
           </div>
-          <span className="text-gray-400 text-xs font-mono">C++ — Ctrl+Enter 실행</span>
+          <span className="text-gray-400 text-xs font-mono">C++ — Ctrl+Enter {isEn ? "to run" : "실행"}</span>
         </div>
-        <textarea
-          ref={textareaRef}
-          value={code}
-          onChange={(e) => { setCode(e.target.value); setIsCorrect(null); setOutput(""); setError("") }}
-          onKeyDown={handleKeyDown}
-          className="w-full bg-gray-900 text-gray-100 font-mono text-sm p-4 outline-none resize-none leading-relaxed"
-          style={{ minHeight }}
-          spellCheck={false}
-          autoCapitalize="none"
-          autoCorrect="off"
-        />
+        <div style={{ background: "#1e1e2e", minHeight: editorMinHeight }}>
+          <CodeEditor
+            value={code}
+            language="cpp"
+            onChange={e => { setCode(e.target.value); setIsCorrect(null); setOutput(""); setError("") }}
+            padding={16}
+            data-color-mode="dark"
+            style={{
+              fontFamily: '"Fira Code", "Fira Mono", "Courier New", monospace',
+              fontSize: 14,
+              lineHeight: 1.6,
+              minHeight: editorMinHeight,
+              background: "#1e1e2e",
+            }}
+          />
+        </div>
       </div>
 
       {/* 버튼 */}
@@ -212,6 +239,9 @@ export function CppRunner({
             )}>
               {error ? (isEn ? "Error!" : "오류!") : isCorrect === true ? (isEn ? "Correct! 🎉" : "정답! 🎉") : (isEn ? "Output:" : "결과:")}
             </span>
+            {failCount > 0 && !isCorrect && (
+              <span className="ml-auto text-xs text-gray-400">{isEn ? `${failCount} attempt(s)` : `${failCount}번 시도`}</span>
+            )}
           </div>
           <pre className={cn(
             "font-mono text-xs md:text-sm whitespace-pre-wrap break-all",
@@ -219,15 +249,19 @@ export function CppRunner({
           )}>
             {error || output}
           </pre>
-          {/* 틀린 경우: 기대 출력 힌트 */}
-          {!error && isCorrect === false && expectedOutput && (
-            <div className="mt-2 pt-2 border-t border-gray-200">
-              <p className="text-xs text-gray-500 mb-1">{isEn ? "Expected:" : "이렇게 나와야 해요:"}</p>
-              <pre className="font-mono text-xs text-amber-700 bg-amber-50 p-2 rounded">
-                {expectedOutput}
-              </pre>
-            </div>
-          )}
+        </div>
+      )}
+
+      {/* 3번 틀린 후 정답 코드 공개 */}
+      {showAnswer && initialCode && (
+        <div className="rounded-xl border-2 border-red-200 overflow-hidden">
+          <div className="flex items-center gap-2 px-4 py-3 bg-red-50 text-red-700 font-bold text-sm">
+            <Eye className="w-4 h-4" />
+            {isEn ? "Answer code (3 attempts used)" : "정답 코드 (3번 시도 후 공개)"}
+          </div>
+          <div className="relative">
+            <CodeBlock code={initialCode} language="cpp" />
+          </div>
         </div>
       )}
     </div>

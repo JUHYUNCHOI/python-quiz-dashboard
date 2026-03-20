@@ -770,9 +770,11 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                     {lesson.chapters.map((ch, chIdx) =>
                       ch.steps.map((st, stIdx) => {
                         const globalIdx = lesson.chapters.slice(0, chIdx).reduce((s, c) => s + c.steps.length, 0) + stIdx
+                        const currentGlobalIdx = lesson.chapters.slice(0, currentChapter).reduce((s, c) => s + c.steps.length, 0) + currentStep
                         const isCurrent = chIdx === currentChapter && stIdx === currentStep
                         const isCompleted = completedSteps.has(st.id)
-                        const isClickable = effectiveTeacher || isCompleted || isCurrent
+                        const isBeforeCurrent = globalIdx < currentGlobalIdx
+                        const isClickable = effectiveTeacher || isCompleted || isBeforeCurrent || isCurrent
                         const isChapterStart = stIdx === 0 && chIdx > 0
                         return (
                           <button
@@ -782,7 +784,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                               isChapterStart && "ml-1",
                               isCurrent
                                 ? "bg-indigo-500 scale-y-125"
-                                : (effectiveTeacher || isCompleted)
+                                : (effectiveTeacher || isCompleted || isBeforeCurrent || isAlreadyDone)
                                   ? "bg-emerald-400 hover:bg-emerald-300 cursor-pointer"
                                   : "bg-gray-200",
                               globalIdx === 0 && "rounded-l-full",
