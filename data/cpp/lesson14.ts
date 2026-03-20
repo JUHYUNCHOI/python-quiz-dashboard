@@ -68,7 +68,9 @@ s.age = 15
 | \`__init__\`에서 초기화 | 선언 후 .\`으로 접근 |
 | 세미콜론 없음 | **닫는 중괄호 뒤 세미콜론!** |
 
-💡 struct 정의 끝에 **세미콜론(;)**을 꼭 붙여야 해요! 안 붙이면 에러가 나요.`,
+💡 struct 정의 끝에 **세미콜론(;)**을 꼭 붙여야 해요! 안 붙이면 에러가 나요.
+
+> 💡 **미리 알아두세요:** 나중에 \`class\`도 배울 건데, struct와 class의 차이는 **딱 하나**밖에 없어요. 어떤 차이인지는 Ch2에서 바로 알아볼게요!`,
           component: "cppClassBuilder",
         },
         {
@@ -110,25 +112,9 @@ cout << s.age << endl;    // 15
 cout << s.gpa << endl;    // 3.8
 \`\`\`
 
-**struct에 함수도 넣을 수 있어요!**
-\`\`\`cpp
-struct Student {
-    string name;
-    int age;
-    double gpa;
+💡 중괄호 초기화는 간단할 때, 하나씩 대입은 명확하게 하고 싶을 때 써요!
 
-    void print() {
-        cout << name << " (" << age << ") GPA: " << gpa << endl;
-    }
-};
-
-Student s = {"Kim", 15, 3.8};
-s.print();  // Kim (15) GPA: 3.8
-\`\`\`
-
-파이썬의 메서드처럼, C++ struct 안에도 함수를 넣을 수 있어요! 대신 \`self\`는 필요 없어요.
-
-💡 중괄호 초기화는 간단할 때, 하나씩 대입은 명확하게 하고 싶을 때 써요!`
+> 📌 **참고:** struct 안에 함수도 넣을 수 있어요. 하지만 함수가 필요한 경우에는 보통 \`class\`를 써요. struct는 "데이터를 묶는 것"이 주 목적이에요!`
         },
         {
           id: "ch1-pred1",
@@ -198,16 +184,23 @@ Score: 95.5`
           type: "explain",
           title: "🎓 class = struct + 접근 제어!",
           component: "cppPublicPrivateBuilder",
-          content: `**class**는 struct에 **접근 제어(public/private)**가 추가된 거예요!
+          content: `## struct vs class — 차이는 딱 하나!
 
-왜 class에서는 private이 기본일까요? 실수로 내부 데이터를 건드리는 걸 막으려고예요! 예: 사각형의 width = -10이 되면 안 되잖아요?
+| | struct | class |
+|---|---|---|
+| **기본 접근 권한** | \`public\` (누구나 접근 가능) | \`private\` (외부 접근 불가) |
+| **언제 쓰나** | 데이터 묶음 (Point, Color, Student) | 내부 보호가 필요할 때 (BankAccount, Rectangle) |
+
+**그게 전부예요!** struct와 class는 이 차이 하나를 빼면 완전히 동일해요.
+
+---
+
+**class**는 기본적으로 모든 멤버가 \`private\`이에요. 왜 그럴까요?
+
+실수로 내부 데이터를 잘못 건드리는 걸 막으려고예요! 예: 사각형의 width = -10이 되면 안 되잖아요?
 
 • \`public:\` — 클래스 바깥에서도 접근 가능 (누구나 쓸 수 있어요)
 • \`private:\` — 클래스 안에서만 접근 가능 (외부에서 직접 건드릴 수 없어요)
-
-핵심 차이:
-- **struct**: 멤버가 기본적으로 **public** (누구나 접근 가능)
-- **class**: 멤버가 기본적으로 **private** (외부에서 접근 불가)
 
 \`\`\`cpp
 class Rectangle {
@@ -542,8 +535,8 @@ Part 2 (레슨 9~14)에서 배운 모든 것을 정리해봐요!
 ### 🔗 레슨 12: 참조와 함수
 - Call by Value vs Reference, \`&\`로 원본 수정
 
-### 🧩 레슨 13: 열거형 & 상수
-- \`enum\`, \`enum class\`, \`const\`로 코드의 의미를 명확하게
+### 📍 레슨 13: 포인터 기초
+- 메모리 주소, 포인터 선언, 역참조, nullptr 안전 처리
 
 ### 🏗️ 레슨 14: 구조체 & 클래스
 - \`struct\`로 데이터 묶기, \`class\`로 캡슐화, 생성자(constructor)
@@ -557,13 +550,22 @@ Part 2 (레슨 9~14)에서 배운 모든 것을 정리해봐요!
 | 배열/벡터 | \`int arr[]\`, \`vector<int>\` | 여러 값 저장 |
 | Range-for | \`for(auto x : v)\` | 편한 반복 |
 | 참조 | \`int& ref\` | 변수의 별명 |
-| struct | \`struct { };\` | 데이터 묶기 |
-| class | \`class { private/public };\` | 캡슐화 |
+| 포인터 | \`int* ptr = &x;\` | 메모리 주소 저장 (참고용) |
+| struct | \`struct { };\` | 데이터 묶음 (기본 public) |
+| class | \`class { private/public };\` | 캡슐화 (기본 private) |
 | 생성자 | \`ClassName(...)\` | 객체 초기화 |
+
+## 🤔 언제 struct, 언제 class?
+
+| 상황 | 선택 | 예시 |
+|---|---|---|
+| 데이터만 묶을 때 | **struct** | \`Point {x, y}\`, \`Color {r,g,b}\` |
+| 내부 데이터를 보호해야 할 때 | **class** | \`BankAccount {잔액}\`, \`Rectangle {검증}\` |
+| 확신이 없을 때 | **class** | 캡슐화는 나중에 추가하기 어려워요 |
 
 🎊 **축하해요!** Part 2를 모두 마쳤어요! C++의 중요한 개념들을 정복했어요!
 
-🚀 **다음은 Part 3!** 포인터, 동적 메모리, 그리고 더 깊은 OOP를 배워볼 거예요!`
+🚀 **다음은 Part 3!** 동적 메모리, 상속, 다형성으로 더 깊은 C++을 배워볼 거예요!`
         }
       ]
     }

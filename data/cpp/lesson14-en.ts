@@ -68,7 +68,9 @@ s.age = 15
 | Initialize in \`__init__\` | Access with \`.\` after declaration |
 | No semicolon | **Semicolon after closing brace!** |
 
-💡 You MUST put a **semicolon (;)** after the struct definition! Forgetting it causes an error.`,
+💡 You MUST put a **semicolon (;)** after the struct definition! Forgetting it causes an error.
+
+> 💡 **Heads up!** We'll also learn \`class\` soon. The difference between struct and class in C++ is **just one thing**. Find out what in Ch2!`,
           component: "cppClassBuilder",
         },
         {
@@ -110,25 +112,9 @@ cout << s.age << endl;    // 15
 cout << s.gpa << endl;    // 3.8
 \`\`\`
 
-**You can even put functions inside a struct!**
-\`\`\`cpp
-struct Student {
-    string name;
-    int age;
-    double gpa;
+💡 Curly brace initialization is great for simple cases, and member-by-member assignment is clearer when you need it!
 
-    void print() {
-        cout << name << " (" << age << ") GPA: " << gpa << endl;
-    }
-};
-
-Student s = {"Kim", 15, 3.8};
-s.print();  // Kim (15) GPA: 3.8
-\`\`\`
-
-Just like Python methods, you can add functions inside a C++ struct! But you don't need \`self\`.
-
-💡 Use brace initialization for simplicity, or assign one by one when you want clarity!`
+> 📌 **Note:** You can add functions to a struct, but when you need functions, \`class\` is usually the right choice. Structs are primarily for grouping data!`
         },
         {
           id: "ch1-pred1",
@@ -198,16 +184,23 @@ Score: 95.5`
           type: "explain",
           title: "🎓 class = struct + Access Control!",
           component: "cppPublicPrivateBuilder",
-          content: `A **class** is basically a struct with **access control (public/private)** added!
+          content: `## struct vs class — The Difference is Just ONE Thing!
 
-Why is private the default in a class? To prevent accidentally messing with internal data! For example, a rectangle's width should never be -10, right?
+| | struct | class |
+|---|---|---|
+| **Default access** | \`public\` (anyone can access) | \`private\` (outside access blocked) |
+| **When to use** | Data bundles (Point, Color, Student) | When internal data needs protection (BankAccount, Rectangle) |
 
-• \`public:\` — Accessible from outside the class (anyone can use it)
-• \`private:\` — Only accessible inside the class (the outside world can't touch it directly)
+**That's it!** struct and class are identical except for this one difference.
 
-Key difference:
-- **struct**: Members are **public** by default (anyone can access)
-- **class**: Members are **private** by default (no outside access)
+---
+
+**class** defaults all members to \`private\`. Why?
+
+To prevent accidentally modifying internal data! For example: a rectangle's width = -10 would be a problem!
+
+- \`public:\` — Accessible from outside the class (anyone can use it)
+- \`private:\` — Only accessible inside the class (can't be touched externally)
 
 \`\`\`cpp
 class Rectangle {
@@ -542,8 +535,8 @@ Let's review everything you learned in Part 2 (Lessons 9-14)!
 ### 🔗 Lesson 12: References & Functions
 - Call by Value vs Reference, modify originals with \`&\`
 
-### 🧩 Lesson 13: Enums & Constants
-- \`enum\`, \`enum class\`, \`const\` for clearer, safer code
+### 📍 Lesson 13: Pointer Basics
+- Memory addresses, pointer declaration, dereference, nullptr safety
 
 ### 🏗️ Lesson 14: Structs & Classes
 - Bundle data with \`struct\`, encapsulate with \`class\`, constructors
@@ -563,7 +556,15 @@ Let's review everything you learned in Part 2 (Lessons 9-14)!
 
 🎊 **Congratulations!** You've completed Part 2! You've mastered important C++ concepts!
 
-🚀 **Up next — Part 3!** Pointers, dynamic memory, and deeper OOP await!`
+## 🤔 When struct? When class?
+
+| Situation | Choice | Example |
+|---|---|---|
+| Just grouping data | **struct** | \`Point {x, y}\`, \`Color {r,g,b}\` |
+| Need to protect internal data | **class** | \`BankAccount {balance}\`, \`Rectangle {validation}\` |
+| Not sure | **class** | Encapsulation is hard to add later |
+
+🚀 **Up next: Part 3!** Dynamic memory, inheritance, and polymorphism for deeper C++!`
         }
       ]
     }
