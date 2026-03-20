@@ -187,7 +187,7 @@ export function CppRunner({
               lineHeight: 1.7,
               minHeight: editorMinHeight,
               background: "#282c34",
-              color: "#abb2bf",
+              color: "#e6edf3",
             }}
           />
         </div>

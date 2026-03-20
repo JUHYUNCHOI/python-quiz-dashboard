@@ -28,16 +28,24 @@ code, pre, .font-mono, [class*="font-mono"] {
 
 /* @uiw/react-textarea-code-editor 가시성 개선 */
 .w-tc-editor[data-color-mode="dark"] {
-  --color-prettylights-syntax-comment: #8b949e !important;
-  color: #abb2bf;
+  --color-prettylights-syntax-comment: #a8b1c2 !important;
+  --color-prettylights-syntax-constant: #79c0ff !important;
+  --color-prettylights-syntax-entity: #d2a8ff !important;
+  --color-prettylights-syntax-storage-modifier-import: #e6edf3 !important;
+  --color-prettylights-syntax-keyword: #ff7b72 !important;
+  --color-prettylights-syntax-string: #a5d6ff !important;
+  --color-prettylights-syntax-variable: #ffa657 !important;
+  --color-fg-default: #e6edf3 !important;
+  color: #e6edf3;
 }
 .w-tc-editor[data-color-mode="dark"] textarea {
   font-size: 15px !important;
-  caret-color: #abb2bf;
+  color: #e6edf3 !important;
+  caret-color: #e6edf3 !important;
 }
 .w-tc-editor[data-color-mode="dark"] .w-tc-editor-preview code,
 .w-tc-editor[data-color-mode="dark"] .w-tc-editor-preview pre {
-  color: #abb2bf !important;
+  color: #e6edf3 !important;
   font-size: 15px !important;
 }
 
