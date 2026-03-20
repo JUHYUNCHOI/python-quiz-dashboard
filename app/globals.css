@@ -26,6 +26,21 @@ code, pre, .font-mono, [class*="font-mono"] {
   font-variant-ligatures: none;
 }
 
+/* @uiw/react-textarea-code-editor 가시성 개선 */
+.w-tc-editor[data-color-mode="dark"] {
+  --color-prettylights-syntax-comment: #8b949e !important;
+  color: #abb2bf;
+}
+.w-tc-editor[data-color-mode="dark"] textarea {
+  font-size: 15px !important;
+  caret-color: #abb2bf;
+}
+.w-tc-editor[data-color-mode="dark"] .w-tc-editor-preview code,
+.w-tc-editor[data-color-mode="dark"] .w-tc-editor-preview pre {
+  color: #abb2bf !important;
+  font-size: 15px !important;
+}
+
 :root {
   --background: #fffbf5;
   --foreground: #1a1a1a;

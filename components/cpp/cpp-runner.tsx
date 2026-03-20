@@ -166,7 +166,7 @@ export function CppRunner({
         isCorrect === false && "border-red-500",
         isCorrect === null && "border-gray-700"
       )}>
-        <div className="flex items-center justify-between px-3 py-1.5 bg-[#1e1e2e]">
+        <div className="flex items-center justify-between px-3 py-1.5 bg-[#282c34]">
           <div className="flex items-center gap-1.5">
             <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
             <div className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
@@ -174,7 +174,7 @@ export function CppRunner({
           </div>
           <span className="text-gray-400 text-xs font-mono">C++ — Ctrl+Enter {isEn ? "to run" : "실행"}</span>
         </div>
-        <div style={{ background: "#1e1e2e", minHeight: editorMinHeight }}>
+        <div style={{ background: "#282c34", minHeight: editorMinHeight }}>
           <CodeEditor
             value={code}
             language="cpp"
@@ -183,10 +183,11 @@ export function CppRunner({
             data-color-mode="dark"
             style={{
               fontFamily: '"Fira Code", "Fira Mono", "Courier New", monospace',
-              fontSize: 14,
-              lineHeight: 1.6,
+              fontSize: 15,
+              lineHeight: 1.7,
               minHeight: editorMinHeight,
-              background: "#1e1e2e",
+              background: "#282c34",
+              color: "#abb2bf",
             }}
           />
         </div>
