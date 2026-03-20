@@ -48,6 +48,9 @@ code, pre, .font-mono, [class*="font-mono"] {
   color: #e6edf3 !important;
   font-size: 15px !important;
 }
+.w-tc-editor[data-color-mode="dark"] .token.punctuation {
+  color: #e6edf3 !important;
+}
 
 :root {
   --background: #fffbf5;
