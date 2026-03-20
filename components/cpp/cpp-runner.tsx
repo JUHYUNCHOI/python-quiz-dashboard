@@ -1,15 +1,9 @@
 "use client"
 
-import { useState, useCallback, useEffect } from "react"
-import dynamic from "next/dynamic"
+import { useState, useCallback, useRef, useMemo } from "react"
 import { Play, Loader2, RotateCcw, Check, X, Eye } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { CodeBlock } from "@/components/ui/code-block"
-
-const CodeEditor = dynamic(
-  () => import("@uiw/react-textarea-code-editor").then(m => m.default),
-  { ssr: false }
-)
+import { CodeBlock, highlightCpp } from "@/components/ui/code-block"
 
 interface CppRunnerProps {
   initialCode: string
@@ -59,8 +53,20 @@ export function CppRunner({
   const [failCount, setFailCount] = useState(0)
   const [showAnswer, setShowAnswer] = useState(false)
 
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const highlightRef = useRef<HTMLDivElement>(null)
+
   const lineCount = initialCode.split("\n").length
-  const editorMinHeight = minHeight ?? `${Math.max(240, lineCount * 24 + 48)}px`
+  const editorMinHeight = minHeight ?? `${Math.max(280, lineCount * 28 + 64)}px`
+
+  const highlightedCode = useMemo(() => highlightCpp(code), [code])
+
+  const handleScroll = () => {
+    if (textareaRef.current && highlightRef.current) {
+      highlightRef.current.scrollTop = textareaRef.current.scrollTop
+      highlightRef.current.scrollLeft = textareaRef.current.scrollLeft
+    }
+  }
 
   const runCode = useCallback(async () => {
     if (!code.trim() || isLoading) return
@@ -159,7 +165,7 @@ export function CppRunner({
         </div>
       )}
 
-      {/* 코드 에디터 — syntax highlighted */}
+      {/* 코드 에디터 — 투명 textarea + highlight 레이어 */}
       <div className={cn(
         "rounded-xl overflow-hidden border-2 transition-all",
         isCorrect === true && "border-green-500",
@@ -174,21 +180,45 @@ export function CppRunner({
           </div>
           <span className="text-gray-400 text-xs font-mono">C++ — Ctrl+Enter {isEn ? "to run" : "실행"}</span>
         </div>
-        <div style={{ background: "#282c34", minHeight: editorMinHeight }}>
-          <CodeEditor
+
+        <div className="relative bg-[#282c34]" style={{ minHeight: editorMinHeight }}>
+          {/* Syntax highlight 배경 레이어 */}
+          <div
+            ref={highlightRef}
+            aria-hidden="true"
+            className="absolute inset-0 font-mono p-4 overflow-hidden pointer-events-none text-[15px] leading-[1.7]"
+            style={{ minHeight: editorMinHeight }}
+          >
+            <pre className="font-mono text-[15px] leading-[1.7] m-0 p-0 whitespace-pre">
+              {highlightedCode}
+            </pre>
+          </div>
+
+          {/* 투명 textarea (입력용) */}
+          <textarea
+            ref={textareaRef}
             value={code}
-            language="cpp"
             onChange={e => { setCode(e.target.value); setIsCorrect(null); setOutput(""); setError("") }}
-            padding={16}
-            data-color-mode="dark"
-            style={{
-              fontFamily: '"Fira Code", "Fira Mono", "Courier New", monospace',
-              fontSize: 15,
-              lineHeight: 1.7,
-              minHeight: editorMinHeight,
-              background: "#282c34",
-              color: "#e6edf3",
+            onKeyDown={e => {
+              if (e.key === "Tab") {
+                e.preventDefault()
+                const start = e.currentTarget.selectionStart
+                const end = e.currentTarget.selectionEnd
+                const newCode = code.substring(0, start) + "    " + code.substring(end)
+                setCode(newCode)
+                setTimeout(() => {
+                  if (textareaRef.current) {
+                    textareaRef.current.selectionStart = textareaRef.current.selectionEnd = start + 4
+                  }
+                }, 0)
+              }
             }}
+            onScroll={handleScroll}
+            spellCheck={false}
+            autoCorrect="off"
+            autoCapitalize="off"
+            className="w-full bg-transparent font-mono p-4 resize-none focus:outline-none relative z-10 text-[15px] leading-[1.7] text-transparent caret-white selection:bg-blue-500/40 overflow-hidden"
+            style={{ minHeight: editorMinHeight }}
           />
         </div>
       </div>
