@@ -81,6 +81,9 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const [wrongQueue, setWrongQueue] = useState<LessonStep[]>([])
   const [reviewIndex, setReviewIndex] = useState(0)
   // 선생님이 학생 시점으로 전환 (프로필에서 설정, localStorage 저장)
+  // 복습 페이지에서 진입했는지 확인
+  const fromReview = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("from") === "review"
+
   const teacherAsStudent = typeof window !== "undefined" && localStorage.getItem("teacher-as-student") === "true"
   const effectiveTeacher = isTeacher && !teacherAsStudent
   const isReviewMode = wrongQueue.length > 0 && reviewIndex < wrongQueue.length
@@ -95,7 +98,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     if (!step) return false
     if (effectiveTeacher) return true // 선생님은 어디서든 자유롭게 이동
     if (isReviewMode) return false // 복습 모드에서는 "확인" 버튼으로만 이동
-    if (step.type === "explain" || step.type === "interactive" || step.type === "tryit" || step.type === "animation" || step.type === "practice") return true
+    if (step.type === "explain" || step.type === "interactive" || step.type === "animation") return true
+    if (step.type === "tryit" || step.type === "mission" || step.type === "coding" || step.type === "practice") return isCurrentStepCompleted
     return isCurrentStepCompleted
   }
 
@@ -255,6 +259,52 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     return false
   })()
 
+  // ── 훅은 반드시 early return 앞에 선언해야 함 (Rules of Hooks) ──
+  const resetStepState = () => {
+    setSelectedAnswer(null)
+    setShowExplanation(false)
+    setHintLevel(0)
+    setQuizAttempts(0)
+  }
+
+  const restoreCompletedStepState = useCallback((targetStep: LessonStep | undefined) => {
+    if (effectiveTeacher || !targetStep || !completedSteps.has(targetStep.id)) {
+      setSelectedAnswer(null)
+      setShowExplanation(false)
+      setHintLevel(0)
+      setQuizAttempts(0)
+      return
+    }
+    if ((targetStep.type === "quiz" || targetStep.type === "predict") && targetStep.answer !== undefined) {
+      setSelectedAnswer(targetStep.answer)
+      setShowExplanation(true)
+      setHintLevel(0)
+      setQuizAttempts(0)
+    } else {
+      setSelectedAnswer(null)
+      setShowExplanation(false)
+      setHintLevel(0)
+      setQuizAttempts(0)
+    }
+  }, [completedSteps, effectiveTeacher])
+
+  const handleSuccess = useCallback(() => {
+    if (!step?.id || completedSteps.has(step.id)) return
+    setCompletedSteps(prev => new Set([...prev, step.id]))
+    if (isIGCSE) {
+      play("codeSuccess")
+    } else {
+      if (!effectiveTeacher) setScore(prev => prev + 10)
+      setShowConfetti(true)
+      setSuccessMessage(t("잘했어요! 🎉", "Great job! 🎉"))
+      setShowSuccess(true)
+      play("codeSuccess")
+      setTimeout(() => setShowConfetti(false), 2000)
+    }
+  }, [completedSteps, step?.id, play, isIGCSE, effectiveTeacher, t])
+
+  const closeSuccessOverlay = useCallback(() => { setShowSuccess(false) }, [])
+
   if (isLocked) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white flex items-center justify-center">
@@ -294,13 +344,6 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     setWrongQueue([])
     setReviewIndex(0)
     resetStepState()
-  }
-
-  const resetStepState = () => {
-    setSelectedAnswer(null)
-    setShowExplanation(false)
-    setHintLevel(0)
-    setQuizAttempts(0)
   }
 
   // 레슨 처음부터 다시 시작
@@ -353,7 +396,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     // quiz/predict/fillblank는 실제로 풀어야 완료됨
     // 읽기 스텝은 넘어가면 자동 완료 (선생님 모드에서도 시각적 진행 표시, 저장은 useEffect에서 막음)
     if (step && !completedSteps.has(step.id) &&
-        (step.type === "explain" || step.type === "interactive" || step.type === "practice" || step.type === "animation" || step.type === "tryit")) {
+        (step.type === "explain" || step.type === "interactive" || step.type === "animation")) {
       setCompletedSteps(prev => new Set([...prev, step.id]))
     }
     if (currentStep < chapter.steps.length - 1) {
@@ -393,23 +436,6 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     setShowLessonComplete(false)
   }
 
-  // 이미 완료된 quiz/predict 스텝으로 돌아가면 정답을 자동으로 보여주기
-  // 선생님은 매번 학생과 함께 새로 풀어야 하므로 항상 리셋
-  const restoreCompletedStepState = useCallback((targetStep: LessonStep | undefined) => {
-    if (effectiveTeacher || !targetStep || !completedSteps.has(targetStep.id)) {
-      resetStepState()
-      return
-    }
-    if ((targetStep.type === "quiz" || targetStep.type === "predict") && targetStep.answer !== undefined) {
-      setSelectedAnswer(targetStep.answer)
-      setShowExplanation(true)
-      setHintLevel(0)
-      setQuizAttempts(0)
-    } else {
-      resetStepState()
-    }
-  }, [completedSteps, effectiveTeacher])
-
   const goPrev = () => {
     if (isReviewMode) return // 복습 모드에서는 뒤로 못감
     if (currentStep > 0) {
@@ -424,22 +450,6 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       restoreCompletedStepState(prevStep)
     }
   }
-
-  const handleSuccess = useCallback(() => {
-    if (!completedSteps.has(step.id)) {
-      setCompletedSteps(prev => new Set([...prev, step.id]))
-      if (isIGCSE) {
-        play("codeSuccess")
-      } else {
-        if (!effectiveTeacher) setScore(prev => prev + 10)
-        setShowConfetti(true)
-        setSuccessMessage(t("잘했어요! 🎉", "Great job! 🎉"))
-        setShowSuccess(true)
-        play("codeSuccess")
-        setTimeout(() => setShowConfetti(false), 2000)
-      }
-    }
-  }, [completedSteps, step?.id, play, isIGCSE, effectiveTeacher])
 
   const handleQuizAnswer = (idx: number) => {
     if (selectedAnswer !== null) return
@@ -589,8 +599,6 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     }
   }
 
-  const closeSuccessOverlay = useCallback(() => { setShowSuccess(false) }, [])
-
   const totalSteps = lesson.chapters.reduce((sum, ch) => sum + ch.steps.length, 0)
   const currentStepIndex = lesson.chapters.slice(0, currentChapter).reduce((sum, ch) => sum + ch.steps.length, 0) + currentStep + 1
 
@@ -702,8 +710,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
         {/* 상단 헤더 */}
         <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-lg border-b border-gray-200 shadow-sm">
           <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 md:py-3">
-            {/* 0줄: 프로그래밍 언어 | UI 언어 */}
-            <div className="flex items-center justify-between gap-2 mb-1.5 overflow-x-auto">
+            {/* 0줄: 프로그래밍 언어 | UI 언어 — 모바일에서는 숨김 (공간 부족) */}
+            <div className="hidden md:flex items-center justify-between gap-2 mb-1.5">
               <ProgrammingLanguageToggle current={currentProgrammingLang} className="shrink-0" />
               <div className="flex items-center gap-1.5 shrink-0">
                 <LanguageToggle />
@@ -859,6 +867,29 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       {/* 네비게이션 버튼 */}
       <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-lg z-20 safe-area-inset-bottom">
         <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 md:py-3">
+          {fromReview && (
+            <div className="flex justify-center mb-2">
+              <button
+                onClick={() => router.push(`/review/${lessonId}`)}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-300 transition-colors w-full max-w-sm justify-center"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                {t("이해했어요! 복습으로 돌아가기", "Got it! Back to Review")}
+              </button>
+            </div>
+          )}
+          {/* 완료 필요 안내 — 비활성화된 이유를 명확히 */}
+          {!canGoNext() && !isReviewMode && step && (
+            <p className="text-center text-xs text-gray-400 mb-2">
+              {step.type === "quiz" || step.type === "predict"
+                ? t("👆 위에서 정답을 선택해야 넘어갈 수 있어요", "👆 Select an answer above to continue")
+                : step.type === "fillblank"
+                ? t("👆 위에서 빈칸을 모두 채워야 넘어갈 수 있어요", "👆 Fill all the blanks above to continue")
+                : step.type === "practice"
+                ? t("👆 위에서 실습을 완료해야 넘어갈 수 있어요", "👆 Complete the exercise above to continue")
+                : t("👆 위 내용을 완료해야 넘어갈 수 있어요", "👆 Complete the step above to continue")}
+            </p>
+          )}
           <div className="flex gap-3 md:gap-4 justify-center">
             <button onClick={goPrev} disabled={currentStep === 0 && currentChapter === 0}
               className={cn("flex items-center justify-center gap-1 rounded-xl font-bold transition-colors min-h-[44px]", "px-5 py-3 md:px-6 md:py-3",

@@ -100,7 +100,7 @@ export function StepRenderer({
       return <AnimationStep step={step} />
 
     case "practice":
-      return <PracticeStep step={step} lang={lang} isReview={isReview} />
+      return <PracticeStep step={step} lang={lang} onSuccess={onSuccess} />
 
     case "coding":
       return (

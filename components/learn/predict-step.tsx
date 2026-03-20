@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Terminal, Lightbulb, ArrowRight, Check, X } from "lucide-react"
+import { Terminal, Lightbulb, ArrowRight, Check, X, RotateCcw } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { LessonStep } from "./types"
 import { CodeBlock } from "@/components/ui/code-block"
@@ -172,18 +172,37 @@ export function PredictStep({ step, isCompleted, selectedAnswer, showExplanation
             <p className="text-sm text-amber-700 mt-1">{t("아래에서 수업 내용을 확인하고 다시 풀어보세요!", "Check the lesson content below and try again!")}</p>
           )}
           {selectedAnswer !== step.answer && !showAckButton && (
-            <p className="mt-3 text-center text-xs text-amber-500 animate-pulse">{t("설명을 읽어보세요...", "Read the explanation...")}</p>
+            // 1.5초 대기 중: 진행 바로 시각적 피드백
+            <div className="mt-3 space-y-1.5">
+              <div className="h-1 bg-amber-100 rounded-full overflow-hidden">
+                <motion.div
+                  initial={{ width: "0%" }}
+                  animate={{ width: "100%" }}
+                  transition={{ duration: 1.4, ease: "linear" }}
+                  className="h-full bg-amber-400 rounded-full"
+                />
+              </div>
+              <p className="text-center text-xs text-amber-500">{t("설명을 읽어보세요...", "Read the explanation...")}</p>
+            </div>
           )}
-          {selectedAnswer !== step.answer && showAckButton && !isReview && (
-            <>
-              <p className="mt-2 text-xs text-amber-600 font-medium text-center">{t("🔄 이 문제는 나중에 다시 나와요!", "🔄 This question will come up again later!")}</p>
-              <button
-                onClick={onAcknowledge}
-                className="mt-2 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 animate-fade-in"
-              >
-                {t("확인했어요", "Got it")} <ArrowRight className="w-5 h-5" />
+          {selectedAnswer !== step.answer && showAckButton && (
+            isReview ? (
+              // 복습 모드 오답: 다시 풀 수 있도록 버튼 제공
+              <button onClick={onAcknowledge} className="mt-3 w-full py-3 rounded-xl text-sm font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 border-2 border-amber-200 flex items-center justify-center gap-2 animate-fade-in">
+                <RotateCcw className="w-4 h-4" />
+                {t("다음 문제로 (나중에 다시 풀게요)", "Next (I'll retry this later)")}
               </button>
-            </>
+            ) : (
+              <>
+                <p className="mt-2 text-xs text-amber-600 font-medium text-center">{t("🔄 이 문제는 나중에 다시 나와요!", "🔄 This question will come up again later!")}</p>
+                <button
+                  onClick={onAcknowledge}
+                  className="mt-2 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 animate-fade-in"
+                >
+                  {t("확인했어요", "Got it")} <ArrowRight className="w-5 h-5" />
+                </button>
+              </>
+            )
           )}
         </motion.div>
       )}

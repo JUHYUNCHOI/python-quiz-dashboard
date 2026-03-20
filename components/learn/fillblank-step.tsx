@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { PenLine, Lightbulb, ArrowRight, Check, X, RotateCcw } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { LessonStep } from "./types"
@@ -25,6 +25,8 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
   const [isCorrect, setIsCorrect] = useState(false)
   const [wrongBlankIds, setWrongBlankIds] = useState<Set<number>>(new Set())
   const [showAckButton, setShowAckButton] = useState(false)
+  const [lastFilledId, setLastFilledId] = useState<number | null>(null) // 방금 채운 빈칸 flash용
+  const optionsRef = useRef<HTMLDivElement>(null)
 
   // 이미 완료된 스텝으로 돌아왔을 때 정답 자동 표시
   useEffect(() => {
@@ -54,10 +56,18 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
     const newFilled = { ...filledValues, [blankId]: value }
     setFilledValues(newFilled)
 
+    // 방금 채운 빈칸 flash 애니메이션
+    setLastFilledId(blankId)
+    setTimeout(() => setLastFilledId(null), 500)
+
     // 다음 빈칸으로 자동 이동
     const nextEmpty = blanks.findIndex((b, i) => i > currentBlankIndex && !(b.id in newFilled))
     if (nextEmpty !== -1) {
       setCurrentBlankIndex(nextEmpty)
+      // 다음 빈칸이 화면 밖이면 옵션 영역으로 스크롤
+      setTimeout(() => {
+        optionsRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" })
+      }, 100)
     } else {
       // 모든 빈칸 채워짐 → 자동 채점
       const allFilled = blanks.every(b => b.id in newFilled)
@@ -126,10 +136,13 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
           const isWrong = isSubmitted && wrongBlankIds.has(blank.id)
           const isRight = isSubmitted && !wrongBlankIds.has(blank.id) && isFilled
 
+          const isJustFilled = lastFilledId === blank.id
           parts.push(
             <motion.span
               key={`blank-${blank.id}-${isSubmitted}`}
               layout
+              animate={isJustFilled ? { scale: [1, 1.2, 1], backgroundColor: ["#ede9fe", "#a78bfa", "#ede9fe"] } : {}}
+              transition={{ duration: 0.4 }}
               className={cn(
                 "inline-flex items-center min-w-[3.5rem] px-2 py-0.5 mx-0.5 rounded text-center font-mono text-sm transition-all",
                 !isFilled && !isSubmitted && "border-2 border-dashed border-slate-400 text-slate-400",
@@ -195,19 +208,27 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
 
       {/* 옵션 버튼 */}
       {!isSubmitted && currentBlank && (
-        <div className="space-y-3">
-          <p className="text-sm text-gray-500 font-medium">
-            {t(`빈칸 ${currentBlankIndex + 1}/${blanks.length} 선택:`, `Blank ${currentBlankIndex + 1}/${blanks.length}:`)}
-          </p>
+        <div className="space-y-3" ref={optionsRef}>
+          <div className="flex items-center gap-2">
+            <p className="text-sm text-gray-500 font-medium">
+              {t(`빈칸 ${currentBlankIndex + 1}/${blanks.length} 선택:`, `Blank ${currentBlankIndex + 1}/${blanks.length}:`)}
+            </p>
+            {/* 진행 도트 */}
+            <div className="flex gap-1">
+              {blanks.map((b, i) => (
+                <div key={b.id} className={cn(
+                  "w-2 h-2 rounded-full transition-all",
+                  b.id in filledValues ? "bg-violet-400" : i === currentBlankIndex ? "bg-amber-400 animate-pulse" : "bg-gray-200"
+                )} />
+              ))}
+            </div>
+          </div>
           <div className="flex flex-wrap gap-2">
             {currentBlank.options.map((option, idx) => {
-              // Count how many OTHER blanks already use this option
               const usedCount = Object.entries(filledValues).filter(
                 ([blankId, val]) => val === option && Number(blankId) !== currentBlank.id
               ).length
-              // Count how many blanks (including current) offer this option
               const availableCount = blanks.filter(b => b.options.includes(option)).length
-              // Only disable if all available slots for this option are taken by other blanks
               const isUsed = usedCount >= availableCount && filledValues[currentBlank.id] !== option
               return (
                 <motion.button
@@ -215,13 +236,15 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
                   whileTap={{ scale: 0.95 }}
                   onClick={() => handleOptionClick(option)}
                   disabled={isUsed}
+                  title={isUsed ? t("이미 다른 칸에서 사용했어요", "Already used in another blank") : undefined}
                   className={cn(
                     "px-4 py-3 rounded-xl font-mono text-sm md:text-base font-semibold transition-all border-2 min-h-[44px]",
                     !isUsed && "bg-white hover:bg-violet-50 active:bg-violet-100 border-gray-200 hover:border-violet-400 text-gray-800",
-                    isUsed && "bg-gray-100 border-gray-200 text-gray-300 cursor-not-allowed"
+                    isUsed && "bg-gray-100 border-gray-200 text-gray-300 cursor-not-allowed opacity-50"
                   )}
                 >
                   {option}
+                  {isUsed && <span className="ml-1 text-xs">✗</span>}
                 </motion.button>
               )
             })}

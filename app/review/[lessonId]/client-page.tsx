@@ -10,7 +10,7 @@ import { useSoundEffect } from "@/hooks/use-sound-effect"
 import { markQuizComplete } from "@/lib/mark-lesson-complete"
 import { StepRenderer } from "@/components/learn/step-renderer"
 import { renderContent } from "@/components/learn/render-content"
-import { lessonsData, bilingualLessons } from "@/components/learn/lesson-registry"
+import { lessonsData, bilingualLessons, lessonVariants } from "@/components/learn/lesson-registry"
 import type { LessonStep, LessonData } from "@/components/learn/types"
 
 // ============================================================
@@ -138,6 +138,22 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
 
   // 현재 스텝
   const currentReview = reviewSteps[currentIndex]
+
+  // 해당 챕터 위치로 learn 페이지 이동
+  const goToLesson = (chapterId: string) => {
+    const chIdx = lesson.chapters.findIndex(ch => ch.id === chapterId)
+    if (chIdx >= 0) {
+      const hasVariants = lessonId in lessonVariants
+      const variant = hasVariants
+        ? (localStorage.getItem(`library-variant-${lessonId}`) || "turtle")
+        : null
+      const progressKey = hasVariants ? `practice-v2-${lessonId}-${variant}` : `practice-v2-${lessonId}`
+      const saved = localStorage.getItem(progressKey)
+      const prev = saved ? JSON.parse(saved) : {}
+      localStorage.setItem(progressKey, JSON.stringify({ ...prev, chapter: chIdx, step: 0 }))
+    }
+    router.push(`/learn/${lessonId}?from=review`)
+  }
 
   // 레슨 없으면 에러
   if (!lesson || reviewSteps.length === 0) {
@@ -451,7 +467,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                           {renderContent(reviewHint)}
                         </div>
                         <button
-                          onClick={() => router.push(`/learn/${lessonId}`)}
+                          onClick={() => goToLesson(currentReview.chapterId)}
                           className="mt-2 text-amber-600 font-bold text-xs hover:underline"
                         >
                           {t("전체 수업 보기 →", "View full lesson →")}
@@ -468,7 +484,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                           )
                         })}
                         <button
-                          onClick={() => router.push(`/learn/${lessonId}`)}
+                          onClick={() => goToLesson(currentReview.chapterId)}
                           className="mt-2 text-amber-600 font-bold text-xs hover:underline"
                         >
                           {t("전체 수업 보기 →", "View full lesson →")}
@@ -476,7 +492,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                       </>
                     ) : (
                       <button
-                        onClick={() => router.push(`/learn/${lessonId}`)}
+                        onClick={() => goToLesson(currentReview.chapterId)}
                         className="text-amber-600 font-bold text-xs hover:underline"
                       >
                         {t("수업 페이지에서 보기 →", "View in lesson →")}
