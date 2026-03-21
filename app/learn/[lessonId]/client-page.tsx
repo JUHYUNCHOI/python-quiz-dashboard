@@ -430,6 +430,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       restoreCompletedStepState(prevStep)
     } else if (currentChapter > 0) {
       const prevChapter = lesson.chapters[currentChapter - 1]
+      if (!prevChapter || prevChapter.steps.length === 0) return
       const prevStep = prevChapter.steps[prevChapter.steps.length - 1]
       setCurrentChapter(currentChapter - 1)
       setCurrentStep(prevChapter.steps.length - 1)

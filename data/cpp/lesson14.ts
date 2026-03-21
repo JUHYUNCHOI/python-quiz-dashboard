@@ -11,6 +11,139 @@ export const cppLesson14Data: LessonData = {
   description: "class로 나만의 타입 만들기!",
   chapters: [
     // ============================================
+    // Chapter 1: 구조체 (struct)
+    // ============================================
+    {
+      id: "ch1",
+      title: "구조체 (struct)",
+      emoji: "📦",
+      steps: [
+        {
+          id: "ch1-intro",
+          type: "explain",
+          title: "📦 struct — 여러 데이터를 하나로 묶기!",
+          component: "cppStructBuilder",
+          content: `## struct — 관련 데이터를 하나의 묶음으로!
+
+게임 캐릭터를 생각해봐요. 캐릭터에는 이름, 체력, 공격력이 있어요. 이걸 따로따로 변수로 관리하면?
+
+\`\`\`cpp
+// 😰 따로따로 관리하면 복잡해요
+string name1 = "전사";
+int hp1 = 100;
+int atk1 = 30;
+
+string name2 = "마법사";
+int hp2 = 70;
+int atk2 = 50;
+\`\`\`
+
+캐릭터가 100명이면? 변수가 300개가 필요해요. 😱
+
+**struct**를 쓰면 관련 데이터를 하나로 묶을 수 있어요!
+
+\`\`\`cpp
+struct Character {
+    string name;
+    int hp;
+    int atk;
+};
+
+Character warrior = {"전사", 100, 30};
+Character mage    = {"마법사", 70, 50};
+
+cout << warrior.name << " HP: " << warrior.hp;  // 전사 HP: 100
+\`\`\`
+
+| 구분 | 파이썬 🐍 | C++ struct ⚡ |
+|------|-----------|--------------|
+| 묶음 정의 | \`class\` 또는 \`dataclass\` | \`struct\` |
+| 멤버 접근 | \`obj.field\` | \`obj.field\` |
+| 기본 접근권한 | 없음(관례) | **public** (class는 private) |
+
+> 💡 **struct vs class**: C++에서 struct는 기본이 \`public\`, class는 기본이 \`private\`이에요. 주로 데이터 묶음엔 struct, 기능(메서드) 위주엔 class를 씁니다.`,
+        },
+        {
+          id: "ch1-practice",
+          type: "explain",
+          title: "struct 선언과 사용",
+          content: `## struct 선언 방법
+
+\`\`\`cpp
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+    char grade;
+};
+
+int main() {
+    // 방법 1: 선언 후 대입
+    Student s1;
+    s1.name  = "김철수";
+    s1.score = 95;
+    s1.grade = 'A';
+
+    // 방법 2: 초기화 리스트 (순서 맞춰야 해요!)
+    Student s2 = {"이영희", 87, 'B'};
+
+    cout << s1.name << ": " << s1.score << "점 (" << s1.grade << ")" << endl;
+    cout << s2.name << ": " << s2.score << "점 (" << s2.grade << ")" << endl;
+    return 0;
+}
+\`\`\`
+
+출력:
+\`\`\`
+김철수: 95점 (A)
+이영희: 87점 (B)
+\`\`\`
+
+## struct 배열 (여러 학생 관리)
+
+\`\`\`cpp
+Student students[3] = {
+    {"김철수", 95, 'A'},
+    {"이영희", 87, 'B'},
+    {"박민준", 72, 'C'},
+};
+
+for (int i = 0; i < 3; i++) {
+    cout << students[i].name << ": " << students[i].score << endl;
+}
+\`\`\`
+
+## 함수에 struct 전달
+
+\`\`\`cpp
+// 값 전달 (복사본)
+void print(Student s) {
+    cout << s.name << " " << s.score << endl;
+}
+
+// 참조 전달 (원본 수정 가능, 빠름)
+void boost(Student& s) {
+    s.score += 10;
+}
+
+boost(s1);  // s1.score가 실제로 바뀜
+\`\`\``,
+        },
+        {
+          id: "ch1-quiz",
+          type: "quiz",
+          title: "struct 멤버 접근",
+          content: "struct Point { int x; int y; }; 에서 Point p = {3, 7}; p.x += 2; 를 실행하면 p.x의 값은?",
+          options: ["3", "5", "7", "9"],
+          answer: 1,
+          explanation: "p.x = 3이고 p.x += 2를 하면 p.x = 5가 됩니다.",
+        },
+      ],
+    },
+    // ============================================
     // Chapter 2: class 입문
     // ============================================
     {

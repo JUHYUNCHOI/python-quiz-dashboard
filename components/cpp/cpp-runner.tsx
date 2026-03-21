@@ -63,7 +63,7 @@ function highlightCppCode(code: string): string {
     }
     const colorMap: Record<string, string> = {
       keyword: "#ff7b72",
-      comment: "#8b949e",
+      comment: "#b0bec5",
       string: "#a5d6ff",
       preprocessor: "#ff7b72",
       number: "#ffa657",

@@ -17,7 +17,7 @@ export const cppQuestions: QuizQuestion[] = [
   },
   {
     id: 2,
-    lessonId: "cpp-1",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다익스트라 알고리즘에 대한 설명으로 올바른 것은?",
     code: `// 다익스트라 핵심 아이디어
@@ -129,7 +129,7 @@ int main() {
   },
   {
     id: 7,
-    lessonId: "cpp-2",
+    lessonId: "cpp-7",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -154,7 +154,7 @@ int main() {
   },
   {
     id: 8,
-    lessonId: "cpp-2",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 코드에서 try-catch의 출력은?",
     code: `#include <iostream>
@@ -910,7 +910,7 @@ int main() {
   },
   {
     id: 43,
-    lessonId: "cpp-6",
+    lessonId: "cpp-20",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -2514,7 +2514,7 @@ int main() {
   },
   {
     id: 109,
-    lessonId: "cpp-11",
+    lessonId: "cpp-4",
     difficulty: "보통",
     question: "다음 코드에서 getline과 cin >>의 차이는 무엇인가요?",
     code: `#include <iostream>
@@ -2565,7 +2565,7 @@ int main() {
   },
   {
     id: 111,
-    lessonId: "cpp-11",
+    lessonId: "cpp-20",
     difficulty: "보통",
     question: "다음 코드에서 c_str()의 역할은?",
     code: `#include <iostream>
@@ -3106,7 +3106,7 @@ int main() {
   },
   {
     id: 133,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "보통",
     question: "다음 코드의 버그는 무엇인가?",
     code: `#include <iostream>
@@ -3139,7 +3139,7 @@ int main() {
   },
   {
     id: 134,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3164,7 +3164,7 @@ int main() {
   },
   {
     id: 135,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3186,7 +3186,7 @@ int main() {
   },
   {
     id: 136,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3243,7 +3243,7 @@ int main() {
   },
   {
     id: 138,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3265,7 +3265,7 @@ int main() {
   },
   {
     id: 139,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3293,7 +3293,7 @@ p = 10;   // 오류! 주소에 정수를 넣으려 함`,
   },
   {
     id: 140,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3314,7 +3314,7 @@ int main() {
   },
   {
     id: 141,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3338,7 +3338,7 @@ int main() {
   },
   {
     id: 142,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드에서 현재 상태로 컴파일 오류가 발생하나요?",
     code: `#include <iostream>
@@ -3367,7 +3367,7 @@ p = &y;   // OK! 포인터 재할당 가능`,
   },
   {
     id: 143,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드에서 주석 C와 D를 해제하면 어떤 것이 오류인가요?",
     code: `#include <iostream>
@@ -3390,7 +3390,7 @@ int main() {
   },
   {
     id: 144,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3416,7 +3416,7 @@ int main() {
   },
   {
     id: 145,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3443,7 +3443,7 @@ int main() {
   },
   {
     id: 146,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 중 메모리 누수가 발생하는 코드는?",
     code: `// A:
@@ -3470,7 +3470,7 @@ unique_ptr<int> p = make_unique<int>(10);`,
   },
   {
     id: 147,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드에서 unique_ptr의 소유권 이전 후 출력 결과는?",
     code: `#include <iostream>
@@ -3498,7 +3498,7 @@ int main() {
   },
   {
     id: 148,
-    lessonId: "cpp-12",
+    lessonId: "cpp-6",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3532,7 +3532,7 @@ else  // if(x>20)의 else!`,
   },
   {
     id: 149,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3556,7 +3556,7 @@ int main() {
   },
   {
     id: 150,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드에서 메모리 누수가 발생하는 이유는?",
     code: `#include <iostream>
@@ -3584,7 +3584,7 @@ p = new int(100);`,
   },
   {
     id: 151,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3610,7 +3610,7 @@ int main() {
   },
   {
     id: 152,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3635,7 +3635,7 @@ int main() {
   },
   {
     id: 153,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드에서 shared_ptr의 참조 카운트는?",
     code: `#include <iostream>
@@ -3658,7 +3658,7 @@ int main() {
   },
   {
     id: 154,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3679,7 +3679,7 @@ int main() {
   },
   {
     id: 155,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드에서 발생하는 문제는?",
     code: `#include <iostream>
@@ -4391,7 +4391,7 @@ int main() {
   },
   {
     id: 179,
-    lessonId: "cpp-14",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -4433,7 +4433,7 @@ int main() {
   },
   {
     id: 180,
-    lessonId: "cpp-14",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 코드에서 컴파일 오류가 발생하는 이유는?",
     code: `#include <iostream>
@@ -4457,7 +4457,7 @@ int main() {
   },
   {
     id: 181,
-    lessonId: "cpp-14",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 다형성 코드에서 shapes[0]->area()의 결과는?",
     code: `#include <iostream>
@@ -4552,7 +4552,7 @@ int main() {
   },
   {
     id: 184,
-    lessonId: "cpp-14",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 코드에서 virtual 소멸자가 없으면 발생하는 문제는?",
     code: `#include <iostream>
@@ -4592,7 +4592,7 @@ public:
   },
   {
     id: 185,
-    lessonId: "cpp-14",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -4654,7 +4654,7 @@ int main() {
   },
   {
     id: 187,
-    lessonId: "cpp-14",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -4695,7 +4695,7 @@ p->show();  // Derived::show() 호출!`,
   },
   {
     id: 188,
-    lessonId: "cpp-14",
+    lessonId: "cpp-9",
     difficulty: "어려움",
     question: "다음 코드에서 emplace_back과 push_back의 차이는?",
     code: `#include <iostream>
@@ -4723,7 +4723,7 @@ int main() {
   },
   {
     id: 189,
-    lessonId: "cpp-14",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 코드에서 상속의 접근 지정자에 따른 차이는?",
     code: `class Base {
@@ -4751,7 +4751,7 @@ class Derived : public Base {
   },
   {
     id: 190,
-    lessonId: "cpp-14",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -4789,7 +4789,7 @@ int main() {
   },
   {
     id: 191,
-    lessonId: "cpp-14",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -4813,7 +4813,7 @@ int main() {
   },
   {
     id: 192,
-    lessonId: "cpp-14",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -4844,7 +4844,7 @@ int main() {
   },
   {
     id: 193,
-    lessonId: "cpp-14",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -4879,7 +4879,7 @@ int main() {
   },
   {
     id: 194,
-    lessonId: "cpp-14",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 코드에서 virtual 소멸자가 필요한 이유는?",
     code: `#include <iostream>
@@ -4919,7 +4919,7 @@ public:
   },
   {
     id: 195,
-    lessonId: "cpp-14",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 코드에서 컴파일 오류가 발생하는 줄은?",
     code: `#include <iostream>
@@ -5391,20 +5391,17 @@ int main() {
 using namespace std;
 
 int main() {
-    set<int> s;
-    s.insert(3);
-    s.insert(1);
-    s.insert(3);
-    s.insert(2);
-    cout << s.size();
+    set<int> s = {5, 3, 8, 1, 3, 5};
+    for (int x : s)
+        cout << x << " ";
     return 0;
 }`,
-    options: ["4", "3", "2", "컴파일 오류"],
+    options: ["5 3 8 1 3 5 ", "1 3 5 8 ", "1 3 3 5 5 8 ", "컴파일 오류"],
     correctAnswer: 1,
-    explanation: "set은 중복을 허용하지 않습니다. 3을 두 번 넣어도 하나만 저장됩니다. {1, 2, 3}으로 size()=3입니다.",
-    keyConceptTitle: "STL set",
-    keyConceptDescription: "set은 중복 없이 정렬된 상태로 요소를 저장합니다. 삽입, 삭제, 검색 모두 O(log N)입니다.",
-    relatedTopics: ["set", "중복 제거", "STL"],
+    explanation: "set은 중복을 제거하고 자동으로 오름차순 정렬합니다. {5,3,8,1,3,5} → {1,3,5,8}이 되어 '1 3 5 8 '이 출력됩니다.",
+    keyConceptTitle: "set의 자동 정렬과 중복 제거",
+    keyConceptDescription: "set을 순회하면 항상 오름차순으로 원소가 나옵니다. 중복 허용이 필요하면 multiset을 사용하세요.",
+    relatedTopics: ["set", "정렬", "중복 제거", "순회"],
   },
   {
     id: 212,
@@ -8286,5 +8283,130 @@ int ways(int n) {
     keyConceptTitle: "경우의 수 재귀 (카운팅 DP)",
     keyConceptDescription: "n을 만드는 경우의 수 = (n-1)을 만드는 수 + (n-2)를 만드는 수 + (n-3)을 만드는 수. 이런 패턴은 USACO에서 자주 나옵니다.",
     relatedTopics: ["카운팅 DP", "경우의 수", "재귀", "USACO"],
+  },
+  {
+    id: 324,
+    lessonId: "cpp-4",
+    difficulty: "보통",
+    question: "다음 코드에서 '김철수'를 입력했을 때 출력 결과는?",
+    code: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    string name;
+    cin >> name;
+    cout << "안녕, " << name << "!" << endl;
+    return 0;
+}`,
+    options: ["안녕, 김철수!", "안녕, 김!", "안녕, !", "런타임 오류"],
+    correctAnswer: 1,
+    explanation: "cin >>은 공백(띄어쓰기)을 기준으로 입력을 분리합니다. '김철수'에서 '김'까지만 읽힙니다. 띄어쓰기가 포함된 이름을 전부 읽으려면 getline()을 써야 합니다.",
+    keyConceptTitle: "cin >>의 공백 처리",
+    keyConceptDescription: "cin >>은 공백, 탭, 엔터를 구분자로 사용합니다. 공백이 포함된 문자열 전체를 읽으려면 getline(cin, 변수)을 사용해야 합니다.",
+    relatedTopics: ["cin", "공백", "문자열 입력"],
+  },
+  {
+    id: 325,
+    lessonId: "cpp-4",
+    difficulty: "보통",
+    question: "띄어쓰기가 포함된 한 줄 전체를 읽는 올바른 코드는?",
+    code: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    string line;
+    // 한 줄 전체 입력받기
+    _______________
+    cout << line << endl;
+    return 0;
+}`,
+    options: [
+      "cin >> line;",
+      "getline(cin, line);",
+      "cin.get(line);",
+      "read(cin, line);"
+    ],
+    correctAnswer: 1,
+    explanation: "getline(cin, line)은 엔터를 누를 때까지의 문자 전체(공백 포함)를 읽습니다. cin >>은 공백 전까지만 읽습니다.",
+    keyConceptTitle: "getline() 함수",
+    keyConceptDescription: "getline(cin, 변수)는 줄바꿈 전까지 모든 문자(공백 포함)를 읽어 string에 저장합니다. Python의 input()과 동작이 같습니다.",
+    relatedTopics: ["getline", "cin", "문자열", "공백 처리"],
+  },
+  {
+    id: 326,
+    lessonId: "cpp-4",
+    difficulty: "보통",
+    question: "다음 코드를 실행할 때, 나이에 20, 이름에 '홍길동'을 입력하면 어떤 문제가 생기나?",
+    code: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    int age;
+    string name;
+    cout << "나이: "; cin >> age;
+    cout << "이름: "; getline(cin, name);
+    cout << age << "살 " << name << endl;
+    return 0;
+}`,
+    options: [
+      "정상 출력: 20살 홍길동",
+      "name이 비어있어 '20살 '만 출력된다",
+      "age 입력이 안 된다",
+      "컴파일 오류"
+    ],
+    correctAnswer: 1,
+    explanation: "cin >> age 후 버퍼에 '\\n'(엔터)이 남아있어서, getline()이 그 엔터를 읽고 바로 종료됩니다. 그래서 name이 빈 문자열이 됩니다.",
+    keyConceptTitle: "cin >> 후 getline() 버퍼 문제",
+    keyConceptDescription: "cin >>은 입력을 읽고 엔터를 버퍼에 남깁니다. 이후 getline()을 쓰면 그 엔터를 읽어버립니다. cin.ignore()로 남은 엔터를 제거해야 합니다.",
+    relatedTopics: ["cin.ignore", "getline", "입력 버퍼", "버퍼 비우기"],
+  },
+  {
+    id: 327,
+    lessonId: "cpp-4",
+    difficulty: "보통",
+    question: "앞 문제의 버퍼 문제를 해결하는 올바른 코드는?",
+    code: `int main() {
+    int age;
+    string name;
+    cin >> age;
+    _____________  // 버퍼의 엔터 제거
+    getline(cin, name);
+    cout << age << "살 " << name << endl;
+}`,
+    options: [
+      "cin.clear();",
+      "cin.ignore();",
+      "cin.flush();",
+      "cin.reset();"
+    ],
+    correctAnswer: 1,
+    explanation: "cin.ignore()는 버퍼에 남은 문자 하나(엔터)를 버립니다. cin >> 후 getline()을 쓸 때는 반드시 cin.ignore()를 먼저 호출해야 합니다.",
+    keyConceptTitle: "cin.ignore()로 버퍼 비우기",
+    keyConceptDescription: "cin.ignore()는 입력 스트림에서 문자 1개를 버립니다. cin >> 후 남은 엔터를 제거할 때 사용합니다. cin.ignore(1000, '\\n')으로 특정 문자까지 버릴 수도 있습니다.",
+    relatedTopics: ["cin.ignore", "입력 버퍼", "getline", "cin"],
+  },
+  {
+    id: 328,
+    lessonId: "cpp-4",
+    difficulty: "쉬움",
+    question: "다음 코드에서 '10 20 30'을 입력했을 때 출력 결과는?",
+    code: `#include <iostream>
+using namespace std;
+
+int main() {
+    int a, b, c;
+    cin >> a >> b >> c;
+    cout << a + b + c << endl;
+    return 0;
+}`,
+    options: ["102030", "60", "10", "컴파일 오류"],
+    correctAnswer: 1,
+    explanation: "cin >> a >> b >> c 처럼 연속으로 연결하면 공백/엔터로 구분된 세 값을 차례로 읽습니다. 10+20+30=60.",
+    keyConceptTitle: "cin 연속 입력",
+    keyConceptDescription: "cin >> a >> b >> c처럼 >>를 연결하면 여러 값을 한 번에 입력받을 수 있습니다. Python의 a, b, c = map(int, input().split())과 같은 역할입니다.",
+    relatedTopics: ["cin", "연속 입력", "다중 변수"],
   },
 ];
