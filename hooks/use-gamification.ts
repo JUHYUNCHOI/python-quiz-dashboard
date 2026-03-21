@@ -13,6 +13,7 @@ export interface GamificationState {
   dailyStreak: number
   lastActiveDate: string
   sessionsToday: number
+  xpToday: number
 }
 
 export interface XpBreakdown {
@@ -29,9 +30,11 @@ const STORAGE_KEYS = {
   dailyStreak: "gamification-daily-streak",
   lastActiveDate: "gamification-last-active-date",
   sessionsToday: "gamification-sessions-today",
+  xpToday: "gamification-xp-today",
 } as const
 
 const XP_PER_LEVEL = 100
+export const DAILY_XP_GOAL = 50
 
 // -------- Helpers --------
 function calcComboBonus(maxCombo: number): number {
@@ -69,11 +72,18 @@ function loadState(): GamificationState {
     const level = Math.floor(totalXp / XP_PER_LEVEL) + 1
     const xpInCurrentLevel = totalXp % XP_PER_LEVEL
     const today = todayStr()
-    const actualSessionsToday = lastActiveDate === today ? sessionsToday : 0
+    const isToday = lastActiveDate === today
+    const actualSessionsToday = isToday ? sessionsToday : 0
+    const xpTodayRaw = safeParseInt(localStorage.getItem(STORAGE_KEYS.xpToday), 0)
+    // 마이그레이션: 오늘 세션을 했는데 xpToday가 0이면 (이전 버전 사용자)
+    // → 세션 1번 = 퀴즈 최소 100+ XP이므로 목표 달성으로 처리
+    const xpToday = isToday
+      ? (xpTodayRaw > 0 ? xpTodayRaw : actualSessionsToday > 0 ? DAILY_XP_GOAL : 0)
+      : 0
 
-    return { totalXp, level, xpInCurrentLevel, dailyStreak, lastActiveDate, sessionsToday: actualSessionsToday }
+    return { totalXp, level, xpInCurrentLevel, dailyStreak, lastActiveDate, sessionsToday: actualSessionsToday, xpToday }
   } catch {
-    return { totalXp: 0, level: 1, xpInCurrentLevel: 0, dailyStreak: 0, lastActiveDate: "", sessionsToday: 0 }
+    return { totalXp: 0, level: 1, xpInCurrentLevel: 0, dailyStreak: 0, lastActiveDate: "", sessionsToday: 0, xpToday: 0 }
   }
 }
 
@@ -83,6 +93,7 @@ function persistState(s: GamificationState): void {
     localStorage.setItem(STORAGE_KEYS.dailyStreak, String(s.dailyStreak))
     localStorage.setItem(STORAGE_KEYS.lastActiveDate, s.lastActiveDate)
     localStorage.setItem(STORAGE_KEYS.sessionsToday, String(s.sessionsToday))
+    localStorage.setItem(STORAGE_KEYS.xpToday, String(s.xpToday))
   } catch {}
 }
 
@@ -90,7 +101,7 @@ function persistState(s: GamificationState): void {
 export function useGamification() {
   const [state, setState] = useState<GamificationState>(() => {
     if (typeof window === "undefined") {
-      return { totalXp: 0, level: 1, xpInCurrentLevel: 0, dailyStreak: 0, lastActiveDate: "", sessionsToday: 0 }
+      return { totalXp: 0, level: 1, xpInCurrentLevel: 0, dailyStreak: 0, lastActiveDate: "", sessionsToday: 0, xpToday: 0 }
     }
     return loadState()
   })
@@ -104,11 +115,68 @@ export function useGamification() {
     setState(loadState())
   }, [])
 
-  // 로그인 시 Supabase에서 데이터 로드 (있으면 덮어쓰기)
+  // 로그인 시 Supabase에서 데이터 로드
+  // - 로컬 vs Supabase 중 항상 더 큰 값(최신) 선택 → sync 지연에도 XP/스트릭 손실 없음
+  // - 네트워크 오류 시 최대 2회 재시도, 실패해도 localStorage 유지 (화면 정상 표시)
   useEffect(() => {
     if (!user) return
 
-    const loadFromSupabase = async () => {
+    let cancelled = false
+
+    const applySupabaseData = (data: Record<string, unknown>) => {
+      if (cancelled) return
+
+      const supabaseTotalXp = safeParseInt(String(data.total_xp ?? 0), 0)
+      if (supabaseTotalXp <= 0) return // 신규 유저 or 빈 데이터 → localStorage 유지
+
+      const today = todayStr()
+
+      // 로컬 값 먼저 읽기 (Supabase sync 지연 시 로컬이 더 최신일 수 있음)
+      const localTotalXp      = safeParseInt(localStorage.getItem(STORAGE_KEYS.totalXp), 0)
+      const localLastActive   = localStorage.getItem(STORAGE_KEYS.lastActiveDate) || ""
+      const localSessions     = safeParseInt(localStorage.getItem(STORAGE_KEYS.sessionsToday), 0)
+      const localStreak       = safeParseInt(localStorage.getItem(STORAGE_KEYS.dailyStreak), 0)
+      const localXpToday      = safeParseInt(localStorage.getItem(STORAGE_KEYS.xpToday), 0)
+
+      const supabaseLastActive  = String(data.last_active_date ?? "")
+      const supabaseStreak      = safeParseInt(String(data.daily_streak ?? 0), 0)
+      const supabaseSessions    = safeParseInt(String(data.sessions_today ?? 0), 0)
+
+      // 항상 더 큰 값 선택: sync 지연/실패 시 데이터 손실 방지
+      // (YYYY-MM-DD 형식은 문자열 비교로 날짜 대소 판단 가능)
+      const totalXp        = Math.max(supabaseTotalXp, localTotalXp)
+      const lastActiveDate = localLastActive > supabaseLastActive ? localLastActive : supabaseLastActive
+      const dailyStreak    = Math.max(supabaseStreak, localStreak)
+
+      // sessionsToday: 더 최신 날짜 기준으로 선택
+      const sessionsToday = (() => {
+        if (localLastActive === today && supabaseLastActive === today)
+          return Math.max(localSessions, supabaseSessions)
+        if (localLastActive === today) return localSessions
+        if (supabaseLastActive === today) return supabaseSessions
+        return 0
+      })()
+
+      // xpToday: Supabase에 없음 → 항상 로컬 기준 + migration
+      const isLocalToday = localLastActive === today
+      const xpToday = isLocalToday
+        ? (localXpToday > 0 ? localXpToday : localSessions > 0 ? DAILY_XP_GOAL : 0)
+        : 0
+
+      const level          = Math.floor(totalXp / XP_PER_LEVEL) + 1
+      const xpInCurrentLevel = totalXp % XP_PER_LEVEL
+
+      const newState: GamificationState = {
+        totalXp, level, xpInCurrentLevel,
+        dailyStreak, lastActiveDate, sessionsToday, xpToday,
+      }
+      setState(newState)
+      persistState(newState)
+    }
+
+    const loadFromSupabase = async (attempt: number): Promise<void> => {
+      // 컴포넌트 언마운트 후엔 진입 자체를 막음
+      if (cancelled) return
       try {
         const supabase = createClient()
         const { data, error } = await supabase
@@ -117,34 +185,25 @@ export function useGamification() {
           .eq("user_id", user.id)
           .single()
 
-        if (error && error.code !== "PGRST116") {
-          console.error("[Gamification Load] read failed:", error.message, error.code)
+        if (error) {
+          // PGRST116 = row not found (신규 유저) → 재시도 불필요
+          if (error.code === "PGRST116") return
+          throw new Error(error.message)
         }
 
-        if (!error && data && data.total_xp > 0) {
-          const totalXp = data.total_xp
-          const level = Math.floor(totalXp / XP_PER_LEVEL) + 1
-          const xpInCurrentLevel = totalXp % XP_PER_LEVEL
-          const today = todayStr()
-          const sessionsToday = data.last_active_date === today ? data.sessions_today : 0
-
-          const newState: GamificationState = {
-            totalXp,
-            level,
-            xpInCurrentLevel,
-            dailyStreak: data.daily_streak,
-            lastActiveDate: data.last_active_date,
-            sessionsToday,
-          }
-          setState(newState)
-          persistState(newState) // localStorage도 업데이트
-        }
+        if (data) applySupabaseData(data as Record<string, unknown>)
       } catch {
-        // Supabase 로드 실패 시 localStorage 유지
+        if (cancelled) return
+        if (attempt < 2) {
+          // 1차 실패 → 1.5초 후 재시도, 2차 실패 → 3초 후 재시도
+          setTimeout(() => loadFromSupabase(attempt + 1), 1500 * (attempt + 1))
+        }
+        // 모든 재시도 실패 → localStorage 상태 유지, 화면은 정상 표시됨
       }
     }
 
-    loadFromSupabase()
+    loadFromSupabase(0)
+    return () => { cancelled = true }
   }, [user])
 
   // Supabase에 즉시 전송 (내부 헬퍼)
@@ -246,6 +305,7 @@ export function useGamification() {
       const newLevel = Math.floor(newTotalXp / XP_PER_LEVEL) + 1
       const xpInCurrentLevel = newTotalXp % XP_PER_LEVEL
       const newSessionsToday = isNewDay ? 1 : prev.sessionsToday + 1
+      const newXpToday = isNewDay ? amount : (prev.xpToday || 0) + amount
 
       const next: GamificationState = {
         totalXp: newTotalXp,
@@ -254,6 +314,7 @@ export function useGamification() {
         dailyStreak: newStreak,
         lastActiveDate: today,
         sessionsToday: newSessionsToday,
+        xpToday: newXpToday,
       }
 
       persistState(next)
@@ -282,6 +343,7 @@ export function useGamification() {
       const newLevel = Math.floor(newTotalXp / XP_PER_LEVEL) + 1
       const xpInCurrentLevel = newTotalXp % XP_PER_LEVEL
       const newSessionsToday = isNewDay ? 1 : prev.sessionsToday + 1
+      const newXpToday = isNewDay ? xpBreakdown.totalXp : (prev.xpToday || 0) + xpBreakdown.totalXp
 
       const next: GamificationState = {
         totalXp: newTotalXp,
@@ -290,6 +352,7 @@ export function useGamification() {
         dailyStreak: newStreak,
         lastActiveDate: today,
         sessionsToday: newSessionsToday,
+        xpToday: newXpToday,
       }
 
       persistState(next)

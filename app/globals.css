@@ -52,6 +52,23 @@ code, pre, .font-mono, [class*="font-mono"] {
   color: #e6edf3 !important;
 }
 
+/* react-simple-code-editor + prismjs C++ 다크 테마 */
+.cpp-editor-dark .token.keyword { color: #ff7b72 !important; }
+.cpp-editor-dark .token.builtin { color: #ff7b72 !important; }
+.cpp-editor-dark .token.operator { color: #ff7b72 !important; }
+.cpp-editor-dark .token.string { color: #a5d6ff !important; }
+.cpp-editor-dark .token.char { color: #a5d6ff !important; }
+.cpp-editor-dark .token.number { color: #ffa657 !important; }
+.cpp-editor-dark .token.comment { color: #8b949e !important; font-style: italic; }
+.cpp-editor-dark .token.function { color: #d2a8ff !important; }
+.cpp-editor-dark .token.class-name { color: #ffa657 !important; }
+.cpp-editor-dark .token.boolean { color: #79c0ff !important; }
+.cpp-editor-dark .token.punctuation { color: #e6edf3 !important; }
+.cpp-editor-dark .token.macro { color: #ff7b72 !important; }
+.cpp-editor-dark .token.directive { color: #ff7b72 !important; }
+.cpp-editor-dark .token.directive-hash { color: #ff7b72 !important; }
+.cpp-editor-dark .token.type { color: #79c0ff !important; }
+
 :root {
   --background: #fffbf5;
   --foreground: #1a1a1a;
