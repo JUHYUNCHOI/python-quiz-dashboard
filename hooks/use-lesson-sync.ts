@@ -163,8 +163,8 @@ export function useLessonSync(
 
       if (error || !data) return null
 
-      // 이미 완료된 레슨이면 null (다시 시작하도록)
-      if (data.completed) return null
+      // 완료된 레슨이면 완료 마커를 반환 (client-page에서 isAlreadyDone 처리)
+      if (data.completed) return { _cloudCompleted: true }
 
       return data.progress_data as Record<string, unknown>
     } catch {

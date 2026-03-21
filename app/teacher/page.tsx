@@ -112,6 +112,15 @@ export default function TeacherDashboardPage() {
           </button>
         </div>
 
+        {/* 숙제 검토 링크 */}
+        <Link href="/teacher/homework" className="flex items-center gap-3 p-4 rounded-xl border-2 border-indigo-100 bg-indigo-50 hover:bg-indigo-100 transition-colors mb-6">
+          <span className="text-2xl">📋</span>
+          <div>
+            <p className="font-bold text-indigo-800">{t("숙제 제출 현황 보기", "View Homework Submissions")}</p>
+            <p className="text-xs text-indigo-500">{t("학생들이 제출한 코드를 확인하세요", "Review code submitted by students")}</p>
+          </div>
+        </Link>
+
         {/* 새 반 만들기 폼 */}
         {isCreating && (
           <Card className="p-4 mb-4 border-2 border-orange-200">

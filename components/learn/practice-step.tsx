@@ -14,39 +14,18 @@ interface PracticeStepProps {
   step: LessonStep
   lang?: "ko" | "en"
   onSuccess?: () => void
+  lessonId?: string
 }
 
 function normalize(s: string) {
   return s.trim().replace(/\s+/g, " ").toLowerCase()
 }
 
-function extractSkeleton(code: string): string {
-  const lines = code.split("\n")
-  const skeleton: string[] = []
-  let inMain = false
-  let depth = 0
-  let skippedLogic = false
-  for (const line of lines) {
-    const trimmed = line.trim()
-    if (!inMain && (trimmed.startsWith("#") || trimmed.startsWith("using") || trimmed === "")) {
-      skeleton.push(line); continue
-    }
-    if (!inMain && trimmed.includes("main(")) {
-      inMain = true; skeleton.push(line); depth = 1; continue
-    }
-    if (inMain) {
-      depth += (line.match(/\{/g) || []).length
-      depth -= (line.match(/\}/g) || []).length
-      if (depth === 0 || trimmed === "return 0;" || trimmed === "}") {
-        if (!skippedLogic) { skeleton.push("    // 👉 여기에 코드를 작성하세요"); skippedLogic = true }
-        skeleton.push(line)
-      }
-    }
-  }
-  return skeleton.join("\n")
+function extractSkeleton(_code: string): string {
+  return "// 👉 여기에 코드를 직접 작성하거나 복사해서 붙여넣으세요!"
 }
 
-export function PracticeStep({ step, lang = "ko", onSuccess }: PracticeStepProps) {
+export function PracticeStep({ step, lang = "ko", onSuccess, lessonId }: PracticeStepProps) {
   const [done, setDone] = useState(false)
   const [failCount, setFailCount] = useState(0)
   const [copiedSkeleton, setCopiedSkeleton] = useState(false)
@@ -146,11 +125,15 @@ export function PracticeStep({ step, lang = "ko", onSuccess }: PracticeStepProps
         {!done && step.code && (
           <CppRunner
             key={step.id}
-            initialCode={skeleton || `#include <iostream>\nusing namespace std;\n\nint main() {\n    // 👉 여기에 코드를 작성하세요\n    return 0;\n}`}
+            initialCode={skeleton || `// 👉 여기에 코드를 직접 작성하거나 복사해서 붙여넣으세요!`}
             expectedOutput={step.expectedOutput}
             onSuccess={handleRunSuccess}
             onError={handleRunError}
             isEn={isEn}
+            submissionMode={true}
+            lessonId={lessonId}
+            stepId={step.id}
+            stepTitle={step.title}
           />
         )}
 

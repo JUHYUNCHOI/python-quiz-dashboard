@@ -462,6 +462,48 @@ const CPP_POINTER: SyntaxBuilderPreset = {
   ],
 }
 
+const CPP_STRUCT: SyntaxBuilderPreset = {
+  title: { ko: "C++ struct — 여러 변수를 하나로!", en: "C++ struct — grouping variables!" },
+  steps: [
+    {
+      code: "struct Student {",
+      highlight: { start: 0, end: 16 },
+      label: { ko: "struct = 여러 변수를 하나의 타입으로 묶는 설계도!", en: "struct = blueprint that groups multiple variables into one type!" },
+      icon: "📋",
+    },
+    {
+      code: "struct Student {\n    string name;",
+      highlight: { start: 16, end: 33 },
+      label: { ko: "멤버 변수 1: 학생 이름을 저장해요", en: "Member 1: stores the student's name" },
+      icon: "📝",
+    },
+    {
+      code: "struct Student {\n    string name;\n    int age;\n    double score;",
+      highlight: { start: 33, end: 64 },
+      label: { ko: "멤버 변수를 원하는 만큼 추가할 수 있어요!", en: "Add as many members as you need!" },
+      icon: "➕",
+    },
+    {
+      code: "struct Student {\n    string name;\n    int age;\n    double score;\n};",
+      highlight: { start: 64, end: 67 },
+      label: { ko: "닫는 중괄호 뒤에 세미콜론(;) 필수! 빠뜨리면 에러!", en: "Semicolon(;) after closing brace is required! Forget it → error!" },
+      icon: "⚠️",
+    },
+    {
+      code: "struct Student {\n    string name;\n    int age;\n    double score;\n};\n\nStudent s = {\"Kim\", 15, 95.5};",
+      highlight: { start: 67, end: 99 },
+      label: { ko: "중괄호 초기화로 한번에 값을 넣어요! 선언 순서대로 입력해요.", en: "Use brace initialization! Order matches the member declaration order." },
+      icon: "🎯",
+    },
+    {
+      code: "struct Student {\n    string name;\n    int age;\n    double score;\n};\n\nStudent s = {\"Kim\", 15, 95.5};\ncout << s.name;  // Kim\ncout << s.age;   // 15",
+      highlight: { start: 99, end: 146 },
+      label: { ko: "점(.) 연산자로 멤버에 접근! s.name, s.age, s.score", en: "Use dot(.) operator to access members! s.name, s.age, s.score" },
+      icon: "✨",
+    },
+  ],
+}
+
 const CPP_CLASS: SyntaxBuilderPreset = {
   title: { ko: "C++ 클래스 만들기", en: "Building a C++ class" },
   steps: [
@@ -1386,6 +1428,7 @@ const PRESETS: Record<string, SyntaxBuilderPreset> = {
   "cpp-switch": CPP_SWITCH,
   "cpp-array": CPP_ARRAY,
   "cpp-pointer": CPP_POINTER,
+  "cpp-struct": CPP_STRUCT,
   "cpp-class": CPP_CLASS,
   "cpp-variable": CPP_VARIABLE,
   "cpp-cout": CPP_COUT,
@@ -1619,6 +1662,9 @@ export function CppArrayBuilder(props: Omit<SyntaxBuilderProps, "preset">) {
 }
 export function CppPointerBuilder(props: Omit<SyntaxBuilderProps, "preset">) {
   return <SyntaxBuilder {...props} preset="cpp-pointer" />
+}
+export function CppStructBuilder(props: Omit<SyntaxBuilderProps, "preset">) {
+  return <SyntaxBuilder {...props} preset="cpp-struct" />
 }
 export function CppClassBuilder(props: Omit<SyntaxBuilderProps, "preset">) {
   return <SyntaxBuilder {...props} preset="cpp-class" />

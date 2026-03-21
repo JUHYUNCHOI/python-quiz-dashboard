@@ -78,20 +78,15 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const [hintLevel, setHintLevel] = useState(0)
   const [quizAttempts, setQuizAttempts] = useState(0)
   const [showChapterList, setShowChapterList] = useState(false)
-  // 복습 모드: 틀린 퀴즈를 챕터 끝에서 다시 출제
-  const [wrongQueue, setWrongQueue] = useState<LessonStep[]>([])
-  const [reviewIndex, setReviewIndex] = useState(0)
   // 선생님이 학생 시점으로 전환 (프로필에서 설정, localStorage 저장)
   // 복습 페이지에서 진입했는지 확인
   const fromReview = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("from") === "review"
 
   const teacherAsStudent = typeof window !== "undefined" && localStorage.getItem("teacher-as-student") === "true"
   const effectiveTeacher = isTeacher && !teacherAsStudent
-  const isReviewMode = wrongQueue.length > 0 && reviewIndex < wrongQueue.length
 
   const chapter = lesson?.chapters[currentChapter]
-  // 복습 모드면 wrongQueue에서 스텝을 꺼냄, 아니면 일반 진행
-  const step = isReviewMode ? wrongQueue[reviewIndex] : chapter?.steps[currentStep]
+  const step = chapter?.steps[currentStep]
 
   const isCurrentStepCompleted = step ? completedSteps.has(step.id) : false
   
@@ -99,7 +94,6 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     if (!step) return false
     if (effectiveTeacher) return true // 선생님은 어디서든 자유롭게 이동
     if (isAlreadyDone) return true // 이미 완료한 레슨: 자유 탐색 (복습용)
-    if (isReviewMode) return false // 복습 모드에서는 "확인" 버튼으로만 이동
     if (step.type === "explain" || step.type === "interactive" || step.type === "animation") return true
     if (step.type === "tryit" || step.type === "mission" || step.type === "coding" || step.type === "practice") return isCurrentStepCompleted
     return isCurrentStepCompleted
@@ -170,19 +164,6 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
           }
         }
         setCompletedSteps(savedCompleted)
-        // wrongQueue 복원 (새로고침 시 복습 모드 유지)
-        if (data.wrongQueue?.length && lesson) {
-          const chapterData = lesson.chapters[ch]
-          if (chapterData) {
-            const restored = (data.wrongQueue as string[])
-              .map((id: string) => chapterData.steps.find((s: LessonStep) => s.id === id))
-              .filter((s: LessonStep | undefined): s is LessonStep => !!s)
-            if (restored.length > 0) {
-              setWrongQueue(restored)
-              setReviewIndex(Math.min(data.reviewIndex || 0, restored.length - 1))
-            }
-          }
-        }
       } catch {
         console.warn("[LessonPage] Failed to parse saved progress")
       }
@@ -190,30 +171,36 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     } else {
       // localStorage 비어있으면 Supabase에서 복구 시도
       loadFromCloud().then(data => {
-        // 클라우드 데이터 없지만 이미 완료한 레슨이면 읽기 스텝만 완료 처리
-        if (isLessonAlreadyDone) setIsAlreadyDone(true)
-        if (!data && isLessonAlreadyDone && lesson) {
-          const nonInteractiveTypes = ["explain", "interactive", "animation", "tryit", "practice", "coding", "mission"]
-          const autoCompleted = new Set<string>()
-          for (const ch of lesson.chapters) {
-            for (const s of ch.steps) {
-              if (nonInteractiveTypes.includes(s.type)) autoCompleted.add(s.id)
+        // 클라우드 완료 마커(_cloudCompleted) 또는 localStorage 완료 기록 기준으로 판단
+        const cloudIsDone = data?._cloudCompleted === true
+        const isEffectivelyDone = isLessonAlreadyDone || cloudIsDone
+        if (isEffectivelyDone) setIsAlreadyDone(true)
+
+        if (!data || cloudIsDone) {
+          // 진행 데이터 없음: 완료 레슨이면 읽기 스텝만 자동 완료
+          if (isEffectivelyDone && lesson) {
+            const nonInteractiveTypes = ["explain", "interactive", "animation", "tryit", "practice", "coding", "mission"]
+            const autoCompleted = new Set<string>()
+            for (const ch of lesson.chapters) {
+              for (const s of ch.steps) {
+                if (nonInteractiveTypes.includes(s.type)) autoCompleted.add(s.id)
+              }
             }
+            setCompletedSteps(autoCompleted)
           }
-          setCompletedSteps(autoCompleted)
-        }
-        if (data) {
+        } else {
+          // 실제 진행 중인 클라우드 데이터 복구
           const cloudCh = (data.chapter as number) || 0
           const cloudSt = (data.step as number) || 0
           setCurrentChapter(cloudCh)
           setCurrentStep(cloudSt)
           setScore((data.score as number) || 0)
-          const cloudCompleted = new Set<string>((data.completed as string[]) || [])
-          if (isLessonAlreadyDone && lesson) {
+          const cloudCompletedSteps = new Set<string>((data.completed as string[]) || [])
+          if (isEffectivelyDone && lesson) {
             const nonInteractiveTypes = ["explain", "interactive", "animation", "tryit", "practice", "coding", "mission"]
             for (const ch of lesson.chapters) {
               for (const s of ch.steps) {
-                if (nonInteractiveTypes.includes(s.type)) cloudCompleted.add(s.id)
+                if (nonInteractiveTypes.includes(s.type)) cloudCompletedSteps.add(s.id)
               }
             }
           } else {
@@ -223,13 +210,13 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                 const steps = lesson.chapters[ci].steps
                 for (let si = 0; si < steps.length; si++) {
                   if ((ci < cloudCh || (ci === cloudCh && si < cloudSt)) && autoCompleteTypes.includes(steps[si].type)) {
-                    cloudCompleted.add(steps[si].id)
+                    cloudCompletedSteps.add(steps[si].id)
                   }
                 }
               }
             }
           }
-          setCompletedSteps(cloudCompleted)
+          setCompletedSteps(cloudCompletedSteps)
         }
       }).finally(() => {
         // 클라우드 로드 완료 후에만 저장 이펙트 활성화 (초기 state 덮어쓰기 방지)
@@ -244,13 +231,11 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     const progressData = {
       chapter: currentChapter, step: currentStep, score,
       completed: Array.from(completedSteps),
-      wrongQueue: wrongQueue.map(s => s.id),
-      reviewIndex,
     }
     localStorage.setItem(progressKey, JSON.stringify(progressData))
     // Supabase에도 동기화 (debounced, fire-and-forget)
     syncProgress(progressData)
-  }, [currentChapter, currentStep, score, completedSteps, progressKey, lesson, syncProgress, progressLoaded, wrongQueue, reviewIndex, effectiveTeacher])
+  }, [currentChapter, currentStep, score, completedSteps, progressKey, lesson, syncProgress, progressLoaded, effectiveTeacher])
 
   // 잠금 체크: 같은 트랙(Python/C++) 내에서 이전 수업 완료해야 접근 가능 (선생님은 전부 열림)
   const isLocked = (() => {
@@ -356,8 +341,6 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     setCurrentStep(0)
     setScore(0)
     setCompletedSteps(new Set())
-    setWrongQueue([])
-    setReviewIndex(0)
     resetStepState()
   }
 
@@ -367,8 +350,6 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     setCurrentStep(0)
     setScore(0)
     setCompletedSteps(new Set())
-    setWrongQueue([])
-    setReviewIndex(0)
     setShowChapterComplete(false)
     setShowLessonComplete(false)
     setShowChapterList(false)
@@ -419,11 +400,6 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       setCurrentStep(currentStep + 1)
       restoreCompletedStepState(nextStep)
       scrollToTop()
-    } else if (wrongQueue.length > 0 && !isReviewMode) {
-      // 일반 스텝 끝 + 틀린 문제 있음 → 복습 모드 진입
-      setReviewIndex(0)
-      resetStepState()
-      scrollToTop()
     } else {
       finishChapter()
     }
@@ -433,8 +409,6 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     setShowChapterComplete(false)
     setCurrentChapter(currentChapter + 1)
     setCurrentStep(0)
-    setWrongQueue([])
-    setReviewIndex(0)
     resetStepState()
     scrollToTop()
   }
@@ -443,8 +417,6 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     setCurrentChapter(chIdx)
     setCurrentStep(0)
     scrollToTop()
-    setWrongQueue([])
-    setReviewIndex(0)
     resetStepState()
     setShowChapterList(false)
     setShowChapterComplete(false)
@@ -452,7 +424,6 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   }
 
   const goPrev = () => {
-    if (isReviewMode) return // 복습 모드에서는 뒤로 못감
     if (currentStep > 0) {
       const prevStep = chapter.steps[currentStep - 1]
       setCurrentStep(currentStep - 1)
@@ -473,44 +444,18 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     setQuizAttempts(prev => prev + 1)
     if (idx === step.answer) {
       play("correct")
-      if (isReviewMode) {
-        const newQueue = wrongQueue.filter((_, i) => i !== reviewIndex)
-        if (!effectiveTeacher) setWrongQueue(newQueue)
-        if (!completedSteps.has(step.id)) {
-          if (!effectiveTeacher && !isIGCSE) setScore(prev => prev + 10)
-          setCompletedSteps(prev => new Set([...prev, step.id]))
-        }
+      if (!completedSteps.has(step.id)) {
+        if (!effectiveTeacher && !isIGCSE) setScore(prev => prev + 10)
+        setCompletedSteps(prev => new Set([...prev, step.id]))
         if (!isIGCSE) {
           setShowConfetti(true)
-          setSuccessMessage(t("이번엔 맞았어요! 🎉", "Got it this time! 🎉"))
+          setSuccessMessage(t("정답! 🎉", "Correct! 🎉"))
           setShowSuccess(true)
           setTimeout(() => setShowConfetti(false), 2000)
-        }
-        setTimeout(() => {
-          if (newQueue.length === 0) {
-            finishChapter()
-          } else {
-            setReviewIndex(prev => prev >= newQueue.length ? 0 : prev)
-            resetStepState()
-          }
-        }, isIGCSE ? 600 : 1200)
-      } else {
-        if (!completedSteps.has(step.id)) {
-          if (!effectiveTeacher && !isIGCSE) setScore(prev => prev + 10)
-          setCompletedSteps(prev => new Set([...prev, step.id]))
-          if (!isIGCSE) {
-            setShowConfetti(true)
-            setSuccessMessage(t("정답! 🎉", "Correct! 🎉"))
-            setShowSuccess(true)
-            setTimeout(() => setShowConfetti(false), 2000)
-          }
         }
       }
     } else {
       play("wrong")
-      if (!isReviewMode && !effectiveTeacher) {
-        setWrongQueue(prev => [...prev, step])
-      }
     }
   }
 
@@ -518,44 +463,18 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const handleStepComplete = (correct: boolean) => {
     if (correct) {
       play("correct")
-      if (isReviewMode) {
-        const newQueue = wrongQueue.filter((_, i) => i !== reviewIndex)
-        if (!effectiveTeacher) setWrongQueue(newQueue)
-        if (!completedSteps.has(step.id)) {
-          if (!effectiveTeacher && !isIGCSE) setScore(prev => prev + 10)
-          setCompletedSteps(prev => new Set([...prev, step.id]))
-        }
+      if (!completedSteps.has(step.id)) {
+        if (!effectiveTeacher && !isIGCSE) setScore(prev => prev + 10)
+        setCompletedSteps(prev => new Set([...prev, step.id]))
         if (!isIGCSE) {
           setShowConfetti(true)
-          setSuccessMessage(t("이번엔 맞았어요! 🎉", "Got it this time! 🎉"))
+          setSuccessMessage(t("정답! 🎉", "Correct! 🎉"))
           setShowSuccess(true)
           setTimeout(() => setShowConfetti(false), 2000)
-        }
-        setTimeout(() => {
-          if (newQueue.length === 0) {
-            finishChapter()
-          } else {
-            setReviewIndex(prev => prev >= newQueue.length ? 0 : prev)
-            resetStepState()
-          }
-        }, isIGCSE ? 600 : 1200)
-      } else {
-        if (!completedSteps.has(step.id)) {
-          if (!effectiveTeacher && !isIGCSE) setScore(prev => prev + 10)
-          setCompletedSteps(prev => new Set([...prev, step.id]))
-          if (!isIGCSE) {
-            setShowConfetti(true)
-            setSuccessMessage(t("정답! 🎉", "Correct! 🎉"))
-            setShowSuccess(true)
-            setTimeout(() => setShowConfetti(false), 2000)
-          }
         }
       }
     } else {
       play("wrong")
-      if (!isReviewMode && !effectiveTeacher) {
-        setWrongQueue(prev => [...prev, step])
-      }
     }
   }
 
@@ -563,20 +482,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     if (!completedSteps.has(step.id)) {
       setCompletedSteps(prev => new Set([...prev, step.id]))
     }
-    if (isReviewMode) {
-      if (reviewIndex >= wrongQueue.length) { finishChapter(); return }
-      const failedStep = wrongQueue[reviewIndex]
-      const newQueue = wrongQueue.filter((_, i) => i !== reviewIndex)
-      newQueue.push(failedStep)
-      setWrongQueue(newQueue)
-      resetStepState()
-      return
-    }
     if (currentStep < chapter.steps.length - 1) {
       setCurrentStep(currentStep + 1)
-      resetStepState()
-    } else if (wrongQueue.length > 0) {
-      setReviewIndex(0)
       resetStepState()
     } else {
       finishChapter()
@@ -584,30 +491,12 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   }
 
   const acknowledgeQuiz = () => {
-    // 오답 확인 후 다음으로 이동
+    // 오답 확인 후 다음 스텝으로
     if (!completedSteps.has(step.id)) {
       setCompletedSteps(prev => new Set([...prev, step.id]))
     }
-
-    if (isReviewMode) {
-      // 복습 모드에서 또 틀림: 큐 끝으로 다시 추가
-      if (reviewIndex >= wrongQueue.length) { finishChapter(); return }
-      const failedStep = wrongQueue[reviewIndex]
-      const newQueue = wrongQueue.filter((_, i) => i !== reviewIndex)
-      newQueue.push(failedStep)
-      setWrongQueue(newQueue)
-      // reviewIndex 그대로 (다음 문제가 앞으로 밀림)
-      resetStepState()
-      return
-    }
-
-    // 일반 모드: 다음 스텝으로
     if (currentStep < chapter.steps.length - 1) {
       setCurrentStep(currentStep + 1)
-      resetStepState()
-    } else if (wrongQueue.length > 0) {
-      // 일반 스텝 다 끝남 + 틀린 문제 있음 → 복습 모드 진입
-      setReviewIndex(0)
       resetStepState()
     } else {
       finishChapter()
@@ -616,6 +505,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
 
   const totalSteps = lesson.chapters.reduce((sum, ch) => sum + ch.steps.length, 0)
   const currentStepIndex = lesson.chapters.slice(0, currentChapter).reduce((sum, ch) => sum + ch.steps.length, 0) + currentStep + 1
+  // 진도가 있을 때만 현재 스텝 표시 (처음 입장 시 보라색 방지)
+  const hasProgress = currentChapter > 0 || currentStep > 0 || completedSteps.size > 0 || isAlreadyDone
 
   // 챕터 완료 화면
   if (showLessonComplete) {
@@ -753,20 +644,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
               <button onClick={() => router.push(`/curriculum#lesson-${lessonId}`)} className="text-gray-400 hover:text-gray-600 transition-colors" aria-label="나가기">
                 <X className="w-5 h-5 md:w-6 md:h-6" />
               </button>
-              {isReviewMode ? (
-                <>
-                  <div className="flex-1 h-2.5 md:h-3 bg-amber-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-amber-400 to-orange-500 rounded-full transition-all duration-500"
-                      style={{ width: `${wrongQueue.length > 0 ? ((reviewIndex + 1) / wrongQueue.length) * 100 : 0}%` }} />
-                  </div>
-                  <span className="text-sm md:text-base font-bold text-amber-500 tabular-nums shrink-0 flex items-center gap-1">
-                    <RotateCcw className="w-3.5 h-3.5" />
-                    {reviewIndex + 1}<span className="text-amber-300">/</span>{wrongQueue.length}
-                  </span>
-                </>
-              ) : (
-                <>
-                  <div className="flex-1 flex items-center gap-[2px] h-2.5 md:h-3">
+              <div className="flex-1 flex items-center gap-[2px] h-2.5 md:h-3">
                     {lesson.chapters.map((ch, chIdx) =>
                       ch.steps.map((st, stIdx) => {
                         const globalIdx = lesson.chapters.slice(0, chIdx).reduce((s, c) => s + c.steps.length, 0) + stIdx
@@ -774,7 +652,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                         const isCurrent = chIdx === currentChapter && stIdx === currentStep
                         const isCompleted = completedSteps.has(st.id)
                         const isBeforeCurrent = globalIdx < currentGlobalIdx
-                        const isClickable = effectiveTeacher || isCompleted || isBeforeCurrent || isCurrent
+                        const isClickable = effectiveTeacher || isCompleted || isBeforeCurrent || isCurrent || isAlreadyDone
                         const isChapterStart = stIdx === 0 && chIdx > 0
                         return (
                           <button
@@ -782,7 +660,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                             className={cn(
                               "h-full flex-1 transition-all duration-300 min-w-[3px]",
                               isChapterStart && "ml-1",
-                              isCurrent
+                              isCurrent && hasProgress
                                 ? "bg-indigo-500 scale-y-125"
                                 : (effectiveTeacher || isCompleted || isBeforeCurrent || isAlreadyDone)
                                   ? "bg-emerald-400 hover:bg-emerald-300 cursor-pointer"
@@ -795,8 +673,6 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                               if (!isClickable || isCurrent) return
                               setCurrentChapter(chIdx)
                               setCurrentStep(stIdx)
-                              setWrongQueue([])
-                              setReviewIndex(0)
                               restoreCompletedStepState(st)
                               setShowChapterComplete(false)
                               setShowLessonComplete(false)
@@ -808,11 +684,9 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                       })
                     )}
                   </div>
-                  <span className="text-sm md:text-base font-bold text-gray-500 tabular-nums shrink-0">
-                    {currentStepIndex}<span className="text-gray-300">/</span>{totalSteps}
-                  </span>
-                </>
-              )}
+              <span className="text-sm md:text-base font-bold text-gray-500 tabular-nums shrink-0">
+                {currentStepIndex}<span className="text-gray-300">/</span>{totalSteps}
+              </span>
             </div>
             {/* 2줄: 챕터 이름 + 토글들 */}
             <div className="flex items-center justify-between mt-1.5">
@@ -863,6 +737,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
               step={step}
               lang={lang}
               isCompleted={effectiveTeacher ? false : isCurrentStepCompleted}
+              lessonId={lessonId}
               hintLevel={hintLevel}
               onHintLevelChange={setHintLevel}
               onSuccess={handleSuccess}
@@ -873,7 +748,6 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
               onQuizAcknowledge={acknowledgeQuiz}
               onStepComplete={handleStepComplete}
               onStepAcknowledge={handleStepAcknowledge}
-              isReview={isReviewMode}
             />
           </div>
         </div>
@@ -896,7 +770,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             </div>
           )}
           {/* 완료 필요 안내 — 비활성화된 이유를 명확히 */}
-          {!canGoNext() && !isReviewMode && step && (
+          {!canGoNext() && step && (
             <p className="text-center text-xs text-gray-400 mb-2">
               {step.type === "quiz" || step.type === "predict"
                 ? t("👆 위에서 정답을 선택해야 넘어갈 수 있어요", "👆 Select an answer above to continue")
@@ -910,14 +784,13 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
           <div className="flex gap-3 md:gap-4 justify-center">
             <button onClick={goPrev} disabled={currentStep === 0 && currentChapter === 0}
               className={cn("flex items-center justify-center gap-1 rounded-xl font-bold transition-colors min-h-[44px]", "px-5 py-3 md:px-6 md:py-3",
-                isReviewMode ? "invisible" :
                 (currentStep > 0 || currentChapter > 0) ? "bg-gray-100 hover:bg-gray-200 text-gray-700" : "invisible")}>
               <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
               <span className="text-sm md:text-base">{t("이전", "Prev")}</span>
             </button>
             {(() => {
-              const isLastStepOfLastChapter = currentChapter === lesson.chapters.length - 1 && currentStep === chapter.steps.length - 1 && !isReviewMode
-              const isLastStepOfChapter = currentStep === chapter.steps.length - 1 && !isReviewMode
+              const isLastStepOfLastChapter = currentChapter === lesson.chapters.length - 1 && currentStep === chapter.steps.length - 1
+              const isLastStepOfChapter = currentStep === chapter.steps.length - 1
               return (
                 <button onClick={goNext} disabled={!canGoNext()}
                   className={cn("flex items-center justify-center gap-1 rounded-xl font-bold transition-colors min-h-[44px]",

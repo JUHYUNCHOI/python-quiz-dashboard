@@ -15,6 +15,7 @@ interface StepRendererProps {
   step: LessonStep
   lang: "ko" | "en"
   isCompleted: boolean
+  lessonId?: string
   // tryit/mission
   hintLevel: number
   onHintLevelChange: (level: number) => void
@@ -28,14 +29,13 @@ interface StepRendererProps {
   // fillblank
   onStepComplete?: (correct: boolean) => void
   onStepAcknowledge?: () => void
-  isReview?: boolean
 }
 
 export function StepRenderer({
-  step, lang, isCompleted,
+  step, lang, isCompleted, lessonId,
   hintLevel, onHintLevelChange, onSuccess,
   selectedAnswer, showExplanation, quizAttempts, onQuizAnswer, onQuizAcknowledge,
-  onStepComplete, onStepAcknowledge, isReview
+  onStepComplete, onStepAcknowledge
 }: StepRendererProps) {
   const { t } = useLanguage()
   switch (step.type) {
@@ -64,7 +64,6 @@ export function StepRenderer({
           quizAttempts={quizAttempts}
           onAnswer={onQuizAnswer}
           onAcknowledge={onQuizAcknowledge}
-          isReview={isReview}
         />
       )
 
@@ -78,7 +77,6 @@ export function StepRenderer({
           quizAttempts={quizAttempts}
           onAnswer={onQuizAnswer}
           onAcknowledge={onQuizAcknowledge}
-          isReview={isReview}
         />
       )
 
@@ -89,7 +87,6 @@ export function StepRenderer({
           isCompleted={isCompleted}
           onComplete={onStepComplete!}
           onAcknowledge={onStepAcknowledge!}
-          isReview={isReview}
         />
       )
 
@@ -100,7 +97,7 @@ export function StepRenderer({
       return <AnimationStep step={step} />
 
     case "practice":
-      return <PracticeStep step={step} lang={lang} onSuccess={onSuccess} />
+      return <PracticeStep step={step} lang={lang} onSuccess={onSuccess} lessonId={lessonId} />
 
     case "coding":
       return (

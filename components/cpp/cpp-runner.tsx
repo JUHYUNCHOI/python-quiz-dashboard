@@ -1,9 +1,83 @@
 "use client"
 
-import { useState, useCallback, useRef, useMemo } from "react"
+import { useState, useCallback } from "react"
+import dynamic from "next/dynamic"
 import { Play, Loader2, RotateCcw, Check, X, Eye } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { CodeBlock, highlightCpp } from "@/components/ui/code-block"
+import { CodeBlock } from "@/components/ui/code-block"
+import { createClient } from "@/lib/supabase/client"
+const SimpleEditor = dynamic(() => import("react-simple-code-editor"), { ssr: false })
+
+const CPP_KEYWORDS = /\b(alignas|alignof|and|and_eq|asm|auto|bitand|bitor|bool|break|case|catch|char|char8_t|char16_t|char32_t|class|compl|concept|const|consteval|constexpr|constinit|const_cast|continue|co_await|co_return|co_yield|decltype|default|delete|do|double|dynamic_cast|else|enum|explicit|export|extern|false|float|for|friend|goto|if|inline|int|long|mutable|namespace|new|noexcept|not|not_eq|nullptr|operator|or|or_eq|private|protected|public|register|reinterpret_cast|requires|return|short|signed|sizeof|static|static_assert|static_cast|struct|switch|template|this|thread_local|throw|true|try|typedef|typeid|typename|union|unsigned|using|virtual|void|volatile|wchar_t|while|xor|xor_eq|string|vector|map|set|pair|cout|cin|endl|std)\b/g
+const CPP_PREPROCESSOR = /^(#\s*(?:include|define|undef|if|ifdef|ifndef|elif|else|endif|error|pragma|line)\b.*)/gm
+const CPP_STRING = /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/g
+const CPP_COMMENT_LINE = /\/\/.*/g
+const CPP_COMMENT_BLOCK = /\/\*[\s\S]*?\*\//g
+const CPP_NUMBER = /\b\d+(?:\.\d+)?(?:[eE][+-]?\d+)?[uUlLfF]?\b/g
+
+function escapeHtml(s: string) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+}
+
+function highlightCppCode(code: string): string {
+  // We process the code with placeholders to avoid re-highlighting replaced regions
+  const segments: Array<{ text: string; cls?: string }> = []
+  let remaining = code
+
+  // Build a list of all matches with their ranges, then sort by position
+  type Match = { start: number; end: number; text: string; cls: string }
+  const matches: Match[] = []
+
+  const addMatches = (re: RegExp, cls: string) => {
+    re.lastIndex = 0
+    let m
+    while ((m = re.exec(remaining)) !== null) {
+      matches.push({ start: m.index, end: m.index + m[0].length, text: m[0], cls })
+    }
+  }
+
+  addMatches(new RegExp(CPP_COMMENT_BLOCK.source, "g"), "comment")
+  addMatches(new RegExp(CPP_COMMENT_LINE.source, "g"), "comment")
+  addMatches(new RegExp(CPP_STRING.source, "g"), "string")
+  addMatches(new RegExp(CPP_PREPROCESSOR.source, "gm"), "preprocessor")
+  addMatches(new RegExp(CPP_KEYWORDS.source, "g"), "keyword")
+  addMatches(new RegExp(CPP_NUMBER.source, "g"), "number")
+
+  // Sort by start, remove overlapping
+  matches.sort((a, b) => a.start - b.start)
+  const filtered: Match[] = []
+  let cursor = 0
+  for (const m of matches) {
+    if (m.start >= cursor) {
+      filtered.push(m)
+      cursor = m.end
+    }
+  }
+
+  // Build HTML
+  cursor = 0
+  let html = ""
+  for (const m of filtered) {
+    if (m.start > cursor) {
+      html += escapeHtml(remaining.slice(cursor, m.start))
+    }
+    const colorMap: Record<string, string> = {
+      keyword: "#ff7b72",
+      comment: "#8b949e",
+      string: "#a5d6ff",
+      preprocessor: "#ff7b72",
+      number: "#ffa657",
+    }
+    const color = colorMap[m.cls] || "#e6edf3"
+    const style = m.cls === "comment" ? `color:${color};font-style:italic` : `color:${color}`
+    html += `<span style="${style}">${escapeHtml(m.text)}</span>`
+    cursor = m.end
+  }
+  if (cursor < remaining.length) {
+    html += escapeHtml(remaining.slice(cursor))
+  }
+  return html
+}
 
 interface CppRunnerProps {
   initialCode: string
@@ -13,9 +87,14 @@ interface CppRunnerProps {
   onError?: () => void
   minHeight?: string
   isEn?: boolean
+  // 숙제 제출 모드
+  submissionMode?: boolean
+  lessonId?: string
+  stepId?: string
+  stepTitle?: string
 }
 
-const PISTON_API = "https://emkc.org/api/v2/piston/execute"
+const WANDBOX_API = "https://wandbox.org/api/compile.json"
 
 function normalize(s: string) {
   return s.trim().replace(/\s+/g, " ").toLowerCase()
@@ -43,7 +122,11 @@ export function CppRunner({
   onSuccess,
   onError,
   minHeight,
-  isEn = false
+  isEn = false,
+  submissionMode = false,
+  lessonId,
+  stepId,
+  stepTitle,
 }: CppRunnerProps) {
   const [code, setCode] = useState(initialCode)
   const [output, setOutput] = useState("")
@@ -52,19 +135,40 @@ export function CppRunner({
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null)
   const [failCount, setFailCount] = useState(0)
   const [showAnswer, setShowAnswer] = useState(false)
-
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
-  const highlightRef = useRef<HTMLDivElement>(null)
+  const [hasRun, setHasRun] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
 
   const lineCount = initialCode.split("\n").length
   const editorMinHeight = minHeight ?? `${Math.max(280, lineCount * 28 + 64)}px`
 
-  const highlightedCode = useMemo(() => highlightCpp(code, true), [code])
-
-  const handleScroll = () => {
-    if (textareaRef.current && highlightRef.current) {
-      highlightRef.current.scrollTop = textareaRef.current.scrollTop
-      highlightRef.current.scrollLeft = textareaRef.current.scrollLeft
+  const saveCodeSilently = async (currentCode: string) => {
+    if (isSubmitting || isSubmitted) return
+    setIsSubmitting(true)
+    try {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("display_name")
+        .eq("id", user.id)
+        .single()
+      await supabase
+        .from("homework_submissions")
+        .insert({
+          student_id: user.id,
+          student_name: profile?.display_name || user.email,
+          lesson_id: lessonId || "unknown",
+          step_id: stepId || "unknown",
+          step_title: stepTitle || "",
+          code: currentCode,
+        })
+      setIsSubmitted(true)
+    } catch {
+      // 백그라운드 저장 실패는 조용히 처리 (학생 방해 안 함)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -76,51 +180,62 @@ export function CppRunner({
     setIsCorrect(null)
 
     try {
-      const res = await fetch(PISTON_API, {
+      const res = await fetch(WANDBOX_API, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          language: "cpp",
-          version: "*",
-          files: [{ content: code }]
+          code,
+          compiler: "gcc-head",
+          "compiler-option-raw": "-std=c++17\n-O2",
         })
       })
 
       if (!res.ok) throw new Error("API error")
       const data = await res.json()
 
-      const compileStderr = data.compile?.stderr || ""
-      const runStdout = (data.run?.stdout || "").trimEnd()
-      const runStderr = data.run?.stderr || ""
+      const compileStderr = data.compiler_error || ""
+      const runStdout = (data.program_output || "").trimEnd()
+      const runStderr = data.program_error || ""
 
       if (compileStderr) {
         setError(friendlyError(compileStderr))
-        const next = failCount + 1
-        setFailCount(next)
-        if (next >= 3) setShowAnswer(true)
-        onError?.()
-      } else if (runStderr) {
+        if (!submissionMode) {
+          const next = failCount + 1
+          setFailCount(next)
+          if (next >= 3) setShowAnswer(true)
+          onError?.()
+        }
+      } else if (runStderr && data.status !== "0") {
         setError("❌ 런타임 오류: " + runStderr.split("\n")[0])
-        const next = failCount + 1
-        setFailCount(next)
-        if (next >= 3) setShowAnswer(true)
-        onError?.()
+        if (!submissionMode) {
+          const next = failCount + 1
+          setFailCount(next)
+          if (next >= 3) setShowAnswer(true)
+          onError?.()
+        }
       } else {
         setOutput(runStdout)
-        if (expectedOutput) {
-          const isMatch = normalize(runStdout) === normalize(expectedOutput)
-          setIsCorrect(isMatch)
-          if (isMatch) {
-            onSuccess?.()
-          } else {
-            const next = failCount + 1
-            setFailCount(next)
-            if (next >= 3) setShowAnswer(true)
-            onError?.()
-          }
-        } else {
-          setIsCorrect(true)
+        setHasRun(true)
+        if (submissionMode && !isSubmitted) {
+          // 자동 저장 (백그라운드) + 다음 버튼 활성화
+          saveCodeSilently(code)
           onSuccess?.()
+        } else if (!submissionMode) {
+          if (expectedOutput) {
+            const isMatch = normalize(runStdout) === normalize(expectedOutput)
+            setIsCorrect(isMatch)
+            if (isMatch) {
+              onSuccess?.()
+            } else {
+              const next = failCount + 1
+              setFailCount(next)
+              if (next >= 3) setShowAnswer(true)
+              onError?.()
+            }
+          } else {
+            setIsCorrect(true)
+            onSuccess?.()
+          }
         }
       }
     } catch {
@@ -131,31 +246,24 @@ export function CppRunner({
     } finally {
       setIsLoading(false)
     }
-  }, [code, expectedOutput, onSuccess, onError, isLoading, isEn, failCount])
+  }, [code, expectedOutput, onSuccess, onError, isLoading, isEn, failCount, submissionMode, isSubmitted, isSubmitting])
 
   const reset = () => {
     setCode(initialCode)
     setOutput("")
     setError("")
     setIsCorrect(null)
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
-      e.preventDefault()
-      runCode()
-    }
+    setHasRun(false)
   }
 
   return (
-    <div className="space-y-3" onKeyDown={handleKeyDown}>
+    <div className="space-y-3">
       {task && (
         <div className="bg-teal-50 rounded-lg p-2.5 border border-teal-200">
           <p className="text-teal-800 font-bold text-sm">🎯 {task}</p>
         </div>
       )}
 
-      {/* 예상 출력 표시 */}
       {expectedOutput && (
         <div className="bg-gray-900 rounded-xl p-3 border border-gray-700">
           <p className="text-gray-400 text-xs font-bold mb-1.5">
@@ -165,7 +273,7 @@ export function CppRunner({
         </div>
       )}
 
-      {/* 코드 에디터 — 투명 textarea + highlight 레이어 */}
+      {/* 코드 에디터 */}
       <div className={cn(
         "rounded-xl overflow-hidden border-2 transition-all",
         isCorrect === true && "border-green-500",
@@ -178,47 +286,30 @@ export function CppRunner({
             <div className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
             <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
           </div>
-          <span className="text-gray-400 text-xs font-mono">C++ — Ctrl+Enter {isEn ? "to run" : "실행"}</span>
+          <span className="text-gray-400 text-xs font-mono">C++ — Ctrl+Enter {isEn ? "to save" : "저장"}</span>
         </div>
 
-        <div className="relative bg-[#282c34]" style={{ minHeight: editorMinHeight }}>
-          {/* Syntax highlight 배경 레이어 */}
-          <div
-            ref={highlightRef}
-            aria-hidden="true"
-            className="absolute inset-0 font-mono p-4 overflow-hidden pointer-events-none text-[15px] leading-[1.7]"
-            style={{ minHeight: editorMinHeight }}
-          >
-            <pre className="font-mono text-[15px] leading-[1.7] m-0 p-0 whitespace-pre">
-              {highlightedCode}
-            </pre>
-          </div>
-
-          {/* 투명 textarea (입력용) */}
-          <textarea
-            ref={textareaRef}
+        <div className="cpp-editor-dark" onKeyDown={e => {
+          if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+            e.preventDefault()
+            runCode()
+          }
+        }}>
+          <SimpleEditor
             value={code}
-            onChange={e => { setCode(e.target.value); setIsCorrect(null); setOutput(""); setError("") }}
-            onKeyDown={e => {
-              if (e.key === "Tab") {
-                e.preventDefault()
-                const start = e.currentTarget.selectionStart
-                const end = e.currentTarget.selectionEnd
-                const newCode = code.substring(0, start) + "    " + code.substring(end)
-                setCode(newCode)
-                setTimeout(() => {
-                  if (textareaRef.current) {
-                    textareaRef.current.selectionStart = textareaRef.current.selectionEnd = start + 4
-                  }
-                }, 0)
-              }
+            onValueChange={newCode => { setCode(newCode); setIsCorrect(null); setOutput(""); setError("") }}
+            highlight={highlightCppCode}
+            padding={16}
+            tabSize={4}
+            insertSpaces={true}
+            style={{
+              fontFamily: '"Fira Code", "Fira Mono", "Courier New", monospace',
+              fontSize: 15,
+              lineHeight: 1.7,
+              minHeight: editorMinHeight,
+              background: "#282c34",
+              color: "#e6edf3",
             }}
-            onScroll={handleScroll}
-            spellCheck={false}
-            autoCorrect="off"
-            autoCapitalize="off"
-            className="w-full bg-transparent font-mono p-4 resize-none focus:outline-none relative z-10 text-[15px] leading-[1.7] text-transparent caret-white selection:bg-blue-500/40 overflow-hidden"
-            style={{ minHeight: editorMinHeight }}
           />
         </div>
       </div>
@@ -237,13 +328,13 @@ export function CppRunner({
         >
           {isLoading
             ? <><Loader2 className="w-4 h-4 animate-spin" />{isEn ? "Running..." : "컴파일 중..."}</>
-            : <><Play className="w-4 h-4" />{isEn ? "▶ Run" : "▶ 실행"}</>
+            : <><Play className="w-4 h-4" />{isEn ? "▶ Save" : "▶ 저장"}</>
           }
         </button>
         <button
           onClick={reset}
           title={isEn ? "Reset" : "초기화"}
-          className="px-4 py-2.5 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold transition-all"
+          className="px-4 py-2.5 rounded-xl font-bold transition-all bg-gray-200 hover:bg-gray-300 text-gray-700"
         >
           <RotateCcw className="w-4 h-4" />
         </button>
@@ -270,7 +361,7 @@ export function CppRunner({
             )}>
               {error ? (isEn ? "Error!" : "오류!") : isCorrect === true ? (isEn ? "Correct! 🎉" : "정답! 🎉") : (isEn ? "Output:" : "결과:")}
             </span>
-            {failCount > 0 && !isCorrect && (
+            {failCount > 0 && !isCorrect && !submissionMode && (
               <span className="ml-auto text-xs text-gray-400">{isEn ? `${failCount} attempt(s)` : `${failCount}번 시도`}</span>
             )}
           </div>
@@ -281,6 +372,20 @@ export function CppRunner({
             {error || output}
           </pre>
         </div>
+      )}
+
+      {/* 자동 저장 상태 표시 (submissionMode만) */}
+      {submissionMode && isSubmitting && (
+        <p className="text-center text-xs text-gray-400 flex items-center justify-center gap-1">
+          <Loader2 className="w-3 h-3 animate-spin" />
+          {isEn ? "Saving..." : "저장 중..."}
+        </p>
+      )}
+      {submissionMode && isSubmitted && (
+        <p className="text-center text-xs text-green-600 flex items-center justify-center gap-1">
+          <Check className="w-3 h-3" />
+          {isEn ? "Saved ✓" : "저장됨 ✓"}
+        </p>
       )}
 
       {/* 3번 틀린 후 정답 코드 공개 */}

@@ -376,6 +376,14 @@ export default function CurriculumPage() {
     setLoaded(true)
   }, [])
 
+  // 학생이 IGCSE 탭에 있으면 Python으로 리셋 (profile 로드 후 확인)
+  useEffect(() => {
+    if (profile !== undefined && !isTeacher && selectedCourse === "pseudo") {
+      setSelectedCourse("python")
+      localStorage.setItem("selectedCourse", "python")
+    }
+  }, [profile, isTeacher, selectedCourse])
+
   // 클라우드 복원 완료 시 진도 갱신
   useEffect(() => {
     const handler = () => {
@@ -517,16 +525,18 @@ export default function CurriculumPage() {
             >
               ⚡ C++
             </button>
-            <button
-              onClick={() => handleCourseChange("pseudo")}
-              className={`flex items-center gap-2 px-5 py-3 rounded-xl border-3 border-black font-bold text-base transition-all ${
-                selectedCourse === "pseudo"
-                  ? "bg-green-500 text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
-                  : "bg-white text-gray-600 hover:bg-green-50"
-              }`}
-            >
-              📄 IGCSE
-            </button>
+            {isTeacher && (
+              <button
+                onClick={() => handleCourseChange("pseudo")}
+                className={`flex items-center gap-2 px-5 py-3 rounded-xl border-3 border-black font-bold text-base transition-all ${
+                  selectedCourse === "pseudo"
+                    ? "bg-green-500 text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
+                    : "bg-white text-gray-600 hover:bg-green-50"
+                }`}
+              >
+                📄 IGCSE
+              </button>
+            )}
           </div>
         </div>
 

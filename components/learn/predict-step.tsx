@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Terminal, Lightbulb, ArrowRight, Check, X, RotateCcw } from "lucide-react"
+import { Terminal, Lightbulb, Check, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { LessonStep } from "./types"
 import { CodeBlock } from "@/components/ui/code-block"
@@ -17,7 +17,6 @@ interface PredictStepProps {
   quizAttempts: number
   onAnswer: (idx: number) => void
   onAcknowledge: () => void
-  isReview?: boolean
 }
 
 // 터미널 타자기 애니메이션
@@ -56,8 +55,9 @@ function TerminalOutput({ output, show }: { output: string; show: boolean }) {
   )
 }
 
-export function PredictStep({ step, isCompleted, selectedAnswer, showExplanation, quizAttempts, onAnswer, onAcknowledge, isReview }: PredictStepProps) {
+export function PredictStep({ step, isCompleted, selectedAnswer, showExplanation, quizAttempts, onAnswer, onAcknowledge }: PredictStepProps) {
   const [showAckButton, setShowAckButton] = useState(false)
+  const [showHint, setShowHint] = useState(false)
   const { t } = useLanguage()
 
   useEffect(() => {
@@ -68,7 +68,8 @@ export function PredictStep({ step, isCompleted, selectedAnswer, showExplanation
     }
   }, [showExplanation, selectedAnswer, step.answer])
 
-  // 정답 출력 텍스트 (predict의 정답 옵션)
+  useEffect(() => { setShowHint(false) }, [step.id])
+
   const correctOutput = step.options?.[step.answer ?? 0] ?? ""
 
   return (
@@ -79,19 +80,14 @@ export function PredictStep({ step, isCompleted, selectedAnswer, showExplanation
           <span className="px-3 py-1 rounded-full text-sm font-bold bg-emerald-100 text-emerald-700">
             <Terminal className="w-4 h-4 inline mr-1" />{t("출력 예측", "Predict Output")}
           </span>
-          {isReview && (
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-orange-100 text-orange-600 animate-pulse">
-              {t("🔄 아까 틀린 문제", "🔄 Review")}
-            </span>
-          )}
-          {isCompleted && !isReview && (
+          {isCompleted && (
             <span className="px-2 py-0.5 rounded text-xs bg-green-100 text-green-700 font-medium">{t("✅ 정답!", "✅ Correct!")}</span>
           )}
         </div>
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{step.title}</h1>
       </div>
 
-      {/* 큰 코드 블록 */}
+      {/* 코드 블록 */}
       {step.code && (
         <div className="rounded-2xl overflow-hidden border-2 border-gray-200">
           <CodeBlock code={step.code} language="cpp" />
@@ -111,13 +107,28 @@ export function PredictStep({ step, isCompleted, selectedAnswer, showExplanation
         </p>
       )}
 
+      {/* 힌트 버튼 — 아직 답 안 선택했을 때만 */}
+      {selectedAnswer === null && step.explanation && (
+        <button
+          onClick={() => setShowHint(!showHint)}
+          className="flex items-center gap-1.5 text-sm text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
+        >
+          <Lightbulb className="w-4 h-4" />
+          {showHint ? t("힌트 숨기기", "Hide hint") : t("💡 힌트 보기", "💡 Show hint")}
+        </button>
+      )}
+      {showHint && selectedAnswer === null && (
+        <div className="p-3 rounded-xl bg-indigo-50 border border-indigo-200 text-sm text-indigo-800">
+          {step.explanation}
+        </div>
+      )}
+
       {/* 선택지 */}
       <div className="space-y-3">
         {step.options?.map((option, idx) => {
           const isSelected = selectedAnswer === idx
           const isCorrect = idx === step.answer
           const showResult = selectedAnswer !== null
-          const hideCorrectInReview = isReview && !isSelected
           return (
             <motion.button
               key={`${idx}-${selectedAnswer}`}
@@ -127,23 +138,22 @@ export function PredictStep({ step, isCompleted, selectedAnswer, showExplanation
               className={cn(
                 "w-full p-4 rounded-xl text-left font-mono text-sm md:text-base transition-all border-2 whitespace-pre-line flex items-center min-h-[48px]",
                 !showResult && "bg-white hover:bg-emerald-50 active:bg-emerald-100 border-gray-200 hover:border-emerald-400",
-                showResult && isCorrect && !hideCorrectInReview && "bg-green-100 border-green-500 text-green-800",
+                showResult && isCorrect && "bg-green-100 border-green-500 text-green-800",
                 showResult && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800",
                 showResult && !isSelected && !isCorrect && "bg-gray-100 border-gray-200 text-gray-400",
-                showResult && hideCorrectInReview && "bg-gray-100 border-gray-200 text-gray-400"
               )}
             >
               <span className="flex-1">{option}</span>
-              {showResult && isCorrect && !hideCorrectInReview && <Check className="w-5 h-5 shrink-0 ml-2 text-green-600" />}
+              {showResult && isCorrect && <Check className="w-5 h-5 shrink-0 ml-2 text-green-600" />}
               {showResult && isSelected && !isCorrect && <X className="w-5 h-5 shrink-0 ml-2 text-red-600" />}
             </motion.button>
           )
         })}
       </div>
 
-      {/* 터미널 애니메이션 — 복습 모드에서 틀리면 정답 출력 숨김 */}
+      {/* 터미널 애니메이션 */}
       <AnimatePresence>
-        <TerminalOutput output={correctOutput} show={selectedAnswer !== null && (!isReview || selectedAnswer === step.answer)} />
+        <TerminalOutput output={correctOutput} show={selectedAnswer !== null} />
       </AnimatePresence>
 
       {/* 설명 */}
@@ -162,17 +172,10 @@ export function PredictStep({ step, isCompleted, selectedAnswer, showExplanation
               {selectedAnswer === step.answer ? t("정답! 🎉", "Correct! 🎉") : t("틀렸어요!", "Wrong!")}
             </span>
           </div>
-          {/* 복습 모드에서 틀리면 설명 숨김 */}
-          {(selectedAnswer === step.answer || !isReview) && (
-            <p className={cn("text-sm whitespace-pre-line", selectedAnswer === step.answer ? "text-green-800" : "text-amber-800")}>
-              {step.explanation}
-            </p>
-          )}
-          {isReview && selectedAnswer !== step.answer && (
-            <p className="text-sm text-amber-700 mt-1">{t("아래에서 수업 내용을 확인하고 다시 풀어보세요!", "Check the lesson content below and try again!")}</p>
-          )}
+          <p className={cn("text-sm whitespace-pre-line", selectedAnswer === step.answer ? "text-green-800" : "text-amber-800")}>
+            {step.explanation}
+          </p>
           {selectedAnswer !== step.answer && !showAckButton && (
-            // 1.5초 대기 중: 진행 바로 시각적 피드백
             <div className="mt-3 space-y-1.5">
               <div className="h-1 bg-amber-100 rounded-full overflow-hidden">
                 <motion.div
@@ -186,23 +189,12 @@ export function PredictStep({ step, isCompleted, selectedAnswer, showExplanation
             </div>
           )}
           {selectedAnswer !== step.answer && showAckButton && (
-            isReview ? (
-              // 복습 모드 오답: 다시 풀 수 있도록 버튼 제공
-              <button onClick={onAcknowledge} className="mt-3 w-full py-3 rounded-xl text-sm font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 border-2 border-amber-200 flex items-center justify-center gap-2 animate-fade-in">
-                <RotateCcw className="w-4 h-4" />
-                {t("다음 문제로 (나중에 다시 풀게요)", "Next (I'll retry this later)")}
-              </button>
-            ) : (
-              <>
-                <p className="mt-2 text-xs text-amber-600 font-medium text-center">{t("🔄 이 문제는 나중에 다시 나와요!", "🔄 This question will come up again later!")}</p>
-                <button
-                  onClick={onAcknowledge}
-                  className="mt-2 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 animate-fade-in"
-                >
-                  {t("확인했어요", "Got it")} <ArrowRight className="w-5 h-5" />
-                </button>
-              </>
-            )
+            <button
+              onClick={onAcknowledge}
+              className="mt-2 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md transition-all flex items-center justify-center gap-2 animate-fade-in"
+            >
+              {t("확인했어요 →", "Got it →")}
+            </button>
           )}
         </motion.div>
       )}

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { HelpCircle, Check, X, Lightbulb, ArrowRight, ChevronDown, ChevronUp, RotateCcw } from "lucide-react"
+import { HelpCircle, Check, X, Lightbulb, ChevronDown, ChevronUp } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { LessonStep } from "./types"
 import { CodeBlock } from "@/components/ui/code-block"
@@ -17,14 +17,13 @@ interface QuizStepProps {
   quizAttempts: number
   onAnswer: (idx: number) => void
   onAcknowledge: () => void
-  isReview?: boolean
 }
 
-export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, quizAttempts, onAnswer, onAcknowledge, isReview }: QuizStepProps) {
+export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, quizAttempts, onAnswer, onAcknowledge }: QuizStepProps) {
   const { t } = useLanguage()
-  // 오답 시 "확인" 버튼을 1.5초 후에 보여줌 (설명을 읽게 유도)
   const [showAckButton, setShowAckButton] = useState(false)
   const [showCode, setShowCode] = useState(false)
+  const [showHint, setShowHint] = useState(false)
 
   useEffect(() => {
     if (showExplanation && selectedAnswer !== null && selectedAnswer !== step.answer) {
@@ -34,13 +33,15 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
     }
   }, [showExplanation, selectedAnswer, step.answer])
 
+  // 스텝 바뀌면 힌트 닫기
+  useEffect(() => { setShowHint(false) }, [step.id])
+
   return (
     <div className="space-y-6">
       <div className="space-y-4">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="px-3 py-1 rounded-full text-sm font-bold bg-amber-100 text-amber-700"><HelpCircle className="w-4 h-4 inline mr-1" />{t("퀴즈", "Quiz")}</span>
-          {isReview && <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-orange-100 text-orange-600 animate-pulse">{t("🔄 아까 틀린 문제", "🔄 Review")}</span>}
-          {isCompleted && !isReview && <span className="px-2 py-0.5 rounded text-xs bg-green-100 text-green-700 font-medium">{t("✅ 정답!", "✅ Correct!")}</span>}
+          {isCompleted && <span className="px-2 py-0.5 rounded text-xs bg-green-100 text-green-700 font-medium">{t("✅ 정답!", "✅ Correct!")}</span>}
         </div>
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{step.title}</h1>
         {step.content && <div className="text-base md:text-lg text-gray-800">{renderContent(step.content)}</div>}
@@ -61,24 +62,38 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
           )}
         </div>
       )}
+
+      {/* 힌트 버튼 — 아직 답 안 선택했을 때만 */}
+      {selectedAnswer === null && step.explanation && (
+        <button
+          onClick={() => setShowHint(!showHint)}
+          className="flex items-center gap-1.5 text-sm text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
+        >
+          <Lightbulb className="w-4 h-4" />
+          {showHint ? t("힌트 숨기기", "Hide hint") : t("💡 힌트 보기", "💡 Show hint")}
+        </button>
+      )}
+      {showHint && selectedAnswer === null && (
+        <div className="p-3 rounded-xl bg-indigo-50 border border-indigo-200 text-sm text-indigo-800">
+          {step.explanation}
+        </div>
+      )}
+
       <div className="space-y-3">
         {step.options?.map((option, idx) => {
           const isSelected = selectedAnswer === idx
           const isCorrect = idx === step.answer
           const showResult = selectedAnswer !== null
-          // 복습 모드: 정답을 표시하지 않음 (틀린 것만 빨간색)
-          const hideCorrectInReview = isReview && !isSelected
           return (
             <button key={`${idx}-${selectedAnswer}`} onClick={() => onAnswer(idx)} disabled={selectedAnswer !== null}
               className={cn("w-full p-4 rounded-xl text-left font-medium text-sm md:text-base transition-all border-2 flex items-center min-h-[48px] active:scale-[0.98]",
                 !showResult && "bg-white hover:bg-indigo-50 active:bg-indigo-100 border-gray-200 hover:border-indigo-400",
-                showResult && isCorrect && !hideCorrectInReview && "bg-green-100 border-green-500 text-green-800",
+                showResult && isCorrect && "bg-green-100 border-green-500 text-green-800",
                 showResult && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800",
                 showResult && !isSelected && !isCorrect && "bg-gray-100 border-gray-200 text-gray-400",
-                showResult && hideCorrectInReview && "bg-gray-100 border-gray-200 text-gray-400"
               )}>
               <span className="flex-1">{option.split(/\\n|\n/).map((line, i, arr) => (<span key={i}>{line}{i < arr.length - 1 && <br />}</span>))}</span>
-              {showResult && isCorrect && !hideCorrectInReview && <Check className="w-5 h-5 shrink-0 ml-2 text-green-600" />}
+              {showResult && isCorrect && <Check className="w-5 h-5 shrink-0 ml-2 text-green-600" />}
               {showResult && isSelected && !isCorrect && <X className="w-5 h-5 shrink-0 ml-2 text-red-600" />}
             </button>
           )
@@ -91,31 +106,13 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
                 {selectedAnswer === step.answer ? t("정답! 🎉", "Correct! 🎉") : t("틀렸어요!", "Wrong!")}
               </span>
             </div>
-            {/* 복습 모드에서 틀리면 설명(정답 힌트) 숨김 */}
-            {(selectedAnswer === step.answer || !isReview) && (
-              <p className={cn("text-sm whitespace-pre-line", selectedAnswer === step.answer ? "text-green-800" : "text-amber-800")}>{step.explanation}</p>
-            )}
-            {isReview && selectedAnswer !== step.answer && (
-              <p className="text-sm text-amber-700 mt-1">{t("아래에서 수업 내용을 확인하고 다시 풀어보세요!", "Check the lesson content below and try again!")}</p>
-            )}
+            <p className={cn("text-sm whitespace-pre-line", selectedAnswer === step.answer ? "text-green-800" : "text-amber-800")}>{step.explanation}</p>
             {selectedAnswer !== step.answer && (
               showAckButton ? (
-                isReview ? (
-                  // 복습 모드 오답: 다시 풀 수 있도록 버튼 제공
-                  <button onClick={onAcknowledge} className="mt-3 w-full py-3 rounded-xl text-sm font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 border-2 border-amber-200 flex items-center justify-center gap-2 animate-fade-in">
-                    <RotateCcw className="w-4 h-4" />
-                    {t("다음 문제로 (나중에 다시 풀게요)", "Next (I'll retry this later)")}
-                  </button>
-                ) : (
-                  <>
-                    <p className="mt-2 text-xs text-amber-600 font-medium text-center">{t("🔄 이 문제는 나중에 다시 나와요!", "🔄 This question will come up again later!")}</p>
-                    <button onClick={onAcknowledge} className="mt-2 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 animate-fade-in">
-                      {t("확인했어요", "Got it")} <ArrowRight className="w-5 h-5" />
-                    </button>
-                  </>
-                )
+                <button onClick={onAcknowledge} className="mt-2 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md transition-all flex items-center justify-center gap-2 animate-fade-in">
+                  {t("확인했어요 →", "Got it →")}
+                </button>
               ) : (
-                // 1.5초 대기 중: 진행 바로 시각적 피드백
                 <div className="mt-3 space-y-1.5">
                   <div className="h-1 bg-amber-100 rounded-full overflow-hidden">
                     <motion.div
