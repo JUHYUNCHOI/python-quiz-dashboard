@@ -1,176 +1,15 @@
 // ============================================
-// C++ Lesson 14: Structs & Classes
+// C++ Lesson 14: Classes (class)
 // C++ for students who already know Python
 // ============================================
 import { LessonData } from '../types'
 
 export const cppLesson14EnData: LessonData = {
   id: "cpp-14",
-  title: "Structs & Classes",
+  title: "Classes (class)",
   emoji: "🏗️",
-  description: "Create your own types with struct and class!",
+  description: "Create your own types with class!",
   chapters: [
-    // ============================================
-    // Chapter 1: struct
-    // ============================================
-    {
-      id: "ch1",
-      title: "Structs",
-      emoji: "📋",
-      steps: [
-        {
-          id: "ch1-intro",
-          type: "explain",
-          title: "📋 struct — Group Variables Together!",
-          content: `What if you want to store a student's name, age, and grade? Making individual variables is messy:
-
-\`\`\`cpp
-string name1 = "Kim";
-int age1 = 15;
-double gpa1 = 3.8;
-// What if there are 100 students...? 😱
-\`\`\`
-
-With **struct**, you can bundle multiple variables into **one custom type**!
-
-\`\`\`cpp
-struct Student {
-    string name;
-    int age;
-    double gpa;
-};  // ← Don't forget the semicolon!
-
-Student s;
-s.name = "Kim";
-s.age = 15;
-s.gpa = 3.8;
-\`\`\`
-
-Let's compare with Python:
-
-**Python 🐍:**
-\`\`\`python
-class Student:
-    def __init__(self):
-        self.name = ""
-        self.age = 0
-        self.gpa = 0.0
-
-s = Student()
-s.name = "Kim"
-s.age = 15
-\`\`\`
-
-| Python 🐍 | C++ struct ⚡ |
-|---|---|
-| \`class Student:\` | \`struct Student { };\` |
-| \`self.name\` | \`s.name\` |
-| Initialize in \`__init__\` | Access with \`.\` after declaration |
-| No semicolon | **Semicolon after closing brace!** |
-
-💡 You MUST put a **semicolon (;)** after the struct definition! Forgetting it causes an error.
-
-> 💡 **Heads up!** We'll also learn \`class\` soon. The difference between struct and class in C++ is **just one thing**. Find out what in Ch2!`,
-          component: "cppClassBuilder",
-        },
-        {
-          id: "ch1-fb1",
-          type: "fillblank" as const,
-          title: "Fill in the blank",
-          content: "Define a Point with x and y!",
-          code: "___  Point {\n    double x;\n    double y;\n};",
-          fillBlanks: [
-            { id: 0, answer: "struct", options: ["struct", "class", "type", "object"] }
-          ],
-          explanation: "The struct keyword declares a struct! It follows the pattern struct Point { ... };"
-        },
-        {
-          id: "ch1-init",
-          type: "explain",
-          title: "📋 How to Initialize a struct!",
-          content: `There are several ways to initialize a struct!
-
-**Method 1: Assign one by one**
-\`\`\`cpp
-Student s;
-s.name = "Kim";
-s.age = 15;
-s.gpa = 3.8;
-\`\`\`
-
-**Method 2: Brace Initialization**
-\`\`\`cpp
-Student s = {"Kim", 15, 3.8};
-\`\`\`
-
-Order matters! Values must match the order they're declared in the struct.
-
-**Accessing members: the dot (.) operator**
-\`\`\`cpp
-cout << s.name << endl;   // Kim
-cout << s.age << endl;    // 15
-cout << s.gpa << endl;    // 3.8
-\`\`\`
-
-💡 Curly brace initialization is great for simple cases, and member-by-member assignment is clearer when you need it!
-
-> 📌 **Note:** You can add functions to a struct, but when you need functions, \`class\` is usually the right choice. Structs are primarily for grouping data!`
-        },
-        {
-          id: "ch1-pred1",
-          type: "predict" as const,
-          title: "Using a struct!",
-          code: "#include <iostream>\n#include <string>\nusing namespace std;\nstruct Point {\n    double x;\n    double y;\n};\nint main() {\n    Point p = {3.0, 4.0};\n    cout << p.x + p.y;\n    return 0;\n}",
-          options: ["3.0", "4.0", "7", "Error"],
-          answer: 2,
-          explanation: "p.x is 3.0 and p.y is 4.0. So 3.0 + 4.0 = 7 is printed! Use the dot (.) operator to access members."
-        },
-        {
-          id: "ch1-practice",
-          type: "practice" as const,
-          title: "✋ Create a Student struct!",
-          content: `Create a Student struct, store name/age/score, and print them out!
-
-Define the struct, initialize it with brace initialization, and access the members to print.`,
-          code: `#include <iostream>
-#include <string>
-using namespace std;
-
-struct Student {
-    string name;
-    int age;
-    double score;
-};
-
-int main() {
-    Student s = {"Kim", 15, 95.5};
-
-    cout << "Name: " << s.name << endl;
-    cout << "Age: " << s.age << endl;
-    cout << "Score: " << s.score << endl;
-
-    return 0;
-}`,
-          expectedOutput: `Name: Kim
-Age: 15
-Score: 95.5`
-        },
-        {
-          id: "ch1-q1",
-          type: "quiz",
-          title: "struct basics!",
-          content: "What's the most commonly forgotten part of a C++ struct definition that causes errors?",
-          options: [
-            "The struct keyword",
-            "The curly braces {}",
-            "The semicolon ; after the closing brace",
-            "The member variable names"
-          ],
-          answer: 2,
-          explanation: "You must put a semicolon (;) at the end of a struct definition! struct Student { ... }; Forgetting it causes a compile error."
-        }
-      ]
-    },
     // ============================================
     // Chapter 2: Intro to Classes
     // ============================================
@@ -182,18 +21,11 @@ Score: 95.5`
         {
           id: "ch2-intro",
           type: "explain",
-          title: "🎓 class = struct + Access Control!",
+          title: "🎓 class — Create Your Own Types!",
           component: "cppPublicPrivateBuilder",
-          content: `## struct vs class — The Difference is Just ONE Thing!
+          content: `## C++ class — Similar to Python's class, but More Powerful!
 
-| | struct | class |
-|---|---|---|
-| **Default access** | \`public\` (anyone can access) | \`private\` (outside access blocked) |
-| **When to use** | Data bundles (Point, Color, Student) | When internal data needs protection (BankAccount, Rectangle) |
-
-**That's it!** struct and class are identical except for this one difference.
-
----
+You've used class in Python before, right? C++'s class works similarly. The difference is that C++ can **truly enforce** access restrictions.
 
 **class** defaults all members to \`private\`. Why?
 
@@ -396,16 +228,16 @@ Why do it this way? Notice that setWidth checks \`w > 0\`! It prevents width fro
         {
           id: "ch2-q1",
           type: "quiz",
-          title: "struct vs class!",
-          content: "What is the **biggest difference** between `struct` and `class` in C++?",
+          title: "class default access!",
+          content: "In C++, what is the **default access** for members of a `class` when nothing is specified?",
           options: [
-            "struct can't have functions",
-            "class can't have variables",
-            "struct defaults to public, class defaults to private",
-            "struct is slower than class"
+            "public — anyone can access",
+            "protected — only child classes can access",
+            "private — only accessible inside the class",
+            "no access — causes an error"
           ],
           answer: 2,
-          explanation: "struct members are public by default, while class members are private by default! Other than that, they're almost identical. Both can have functions and variables."
+          explanation: "class members are private by default! That means outside code can't accidentally touch them. To allow outside access, you must explicitly write public:."
         }
       ]
     },
@@ -420,26 +252,28 @@ Why do it this way? Notice that setWidth checks \`w > 0\`! It prevents width fro
         {
           id: "ch3-q1",
           type: "quiz",
-          title: "struct syntax!",
+          title: "Reading class code!",
           content: `What's the output?
 
 \`\`\`cpp
-struct Vec2 {
-    int x, y;
+class Dog {
+public:
+    string name;
+    Dog(string n) { name = n; }
 };
 int main() {
-    Vec2 v = {10, 20};
-    cout << v.x + v.y;
+    Dog d("Buddy");
+    cout << d.name;
 }
 \`\`\``,
           options: [
-            "10",
-            "20",
-            "30",
-            "Error"
+            "Error",
+            "d",
+            "Buddy",
+            "name"
           ],
           answer: 2,
-          explanation: "Brace initialization sets v.x=10 and v.y=20. So v.x + v.y = 30 is printed!"
+          explanation: "Dog d(\"Buddy\") calls the constructor so name becomes \"Buddy\". Since name is public, d.name is accessible!"
         },
         {
           id: "ch3-q2",
@@ -535,11 +369,12 @@ Let's review everything you learned in Part 2 (Lessons 9-14)!
 ### 🔗 Lesson 12: References & Functions
 - Call by Value vs Reference, modify originals with \`&\`
 
-### 📍 Lesson 13: Pointer Basics
-- Memory addresses, pointer declaration, dereference, nullptr safety
+### 🔄 Lesson 13: Recursion
+- Functions calling themselves, base case required
+- Memoization to eliminate repeated work → foundation of Dynamic Programming (DP)
 
-### 🏗️ Lesson 14: Structs & Classes
-- Bundle data with \`struct\`, encapsulate with \`class\`, constructors
+### 🏗️ Lesson 14: Classes (class)
+- Encapsulate with \`class\`, private/public access control, constructors
 
 ---
 
@@ -550,21 +385,14 @@ Let's review everything you learned in Part 2 (Lessons 9-14)!
 | Arrays/Vectors | \`int arr[]\`, \`vector<int>\` | Store multiple values |
 | Range-for | \`for(auto x : v)\` | Easy iteration |
 | References | \`int& ref\` | Alias for a variable |
-| struct | \`struct { };\` | Bundle data together |
+| Recursion | \`func(n-1)\` | Base case + recursive call |
+| Memoization | \`memo[n]\` | Eliminate repeated work (DP) |
 | class | \`class { private/public };\` | Encapsulation |
 | Constructor | \`ClassName(...)\` | Initialize objects |
 
 🎊 **Congratulations!** You've completed Part 2! You've mastered important C++ concepts!
 
-## 🤔 When struct? When class?
-
-| Situation | Choice | Example |
-|---|---|---|
-| Just grouping data | **struct** | \`Point {x, y}\`, \`Color {r,g,b}\` |
-| Need to protect internal data | **class** | \`BankAccount {balance}\`, \`Rectangle {validation}\` |
-| Not sure | **class** | Encapsulation is hard to add later |
-
-🚀 **Up next: Part 3!** Dynamic memory, inheritance, and polymorphism for deeper C++!`
+🚀 **Up next: Part 3!** pairs & sorting, map & set, STL algorithms for even more powerful C++!`
         }
       ]
     }

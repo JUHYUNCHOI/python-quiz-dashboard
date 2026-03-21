@@ -2854,7 +2854,7 @@ int main() {
   },
   {
     id: 123,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "보통",
     question: "다음 코드에서 swap 함수 호출 후 a와 b의 값은?",
     code: `#include <iostream>
@@ -2886,7 +2886,7 @@ int main() {
   },
   {
     id: 124,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -2908,7 +2908,7 @@ int main() {
   },
   {
     id: 125,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -2936,7 +2936,7 @@ delete p;  // 반드시 해제`,
   },
   {
     id: 126,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -2963,7 +2963,7 @@ delete[] arr;  // 배열 해제`,
   },
   {
     id: 127,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -2992,7 +2992,7 @@ int main() {
   },
   {
     id: 128,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "보통",
     question: "다음 코드에서 sizeof를 이용한 배열 크기 계산 결과는?",
     code: `#include <iostream>
@@ -3013,7 +3013,7 @@ int main() {
   },
   {
     id: 129,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3039,7 +3039,7 @@ int main() {
   },
   {
     id: 130,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3060,7 +3060,7 @@ int main() {
   },
   {
     id: 131,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3082,7 +3082,7 @@ int main() {
   },
   {
     id: 132,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3106,7 +3106,7 @@ int main() {
   },
   {
     id: 133,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "보통",
     question: "다음 코드의 버그는 무엇인가?",
     code: `#include <iostream>
@@ -3139,7 +3139,7 @@ int main() {
   },
   {
     id: 134,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3164,7 +3164,7 @@ int main() {
   },
   {
     id: 135,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3186,7 +3186,7 @@ int main() {
   },
   {
     id: 136,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3212,7 +3212,7 @@ int main() {
   },
   {
     id: 137,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3243,7 +3243,7 @@ int main() {
   },
   {
     id: 138,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3265,7 +3265,7 @@ int main() {
   },
   {
     id: 139,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3293,7 +3293,7 @@ p = 10;   // 오류! 주소에 정수를 넣으려 함`,
   },
   {
     id: 140,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3314,7 +3314,7 @@ int main() {
   },
   {
     id: 141,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3338,7 +3338,7 @@ int main() {
   },
   {
     id: 142,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "어려움",
     question: "다음 코드에서 현재 상태로 컴파일 오류가 발생하나요?",
     code: `#include <iostream>
@@ -3367,7 +3367,7 @@ p = &y;   // OK! 포인터 재할당 가능`,
   },
   {
     id: 143,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "어려움",
     question: "다음 코드에서 주석 C와 D를 해제하면 어떤 것이 오류인가요?",
     code: `#include <iostream>
@@ -3390,7 +3390,7 @@ int main() {
   },
   {
     id: 144,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3416,7 +3416,7 @@ int main() {
   },
   {
     id: 145,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3443,7 +3443,7 @@ int main() {
   },
   {
     id: 146,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "어려움",
     question: "다음 중 메모리 누수가 발생하는 코드는?",
     code: `// A:
@@ -3470,7 +3470,7 @@ unique_ptr<int> p = make_unique<int>(10);`,
   },
   {
     id: 147,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "어려움",
     question: "다음 코드에서 unique_ptr의 소유권 이전 후 출력 결과는?",
     code: `#include <iostream>
@@ -3498,7 +3498,7 @@ int main() {
   },
   {
     id: 148,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3532,7 +3532,7 @@ else  // if(x>20)의 else!`,
   },
   {
     id: 149,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3556,7 +3556,7 @@ int main() {
   },
   {
     id: 150,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "어려움",
     question: "다음 코드에서 메모리 누수가 발생하는 이유는?",
     code: `#include <iostream>
@@ -3584,7 +3584,7 @@ p = new int(100);`,
   },
   {
     id: 151,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3610,7 +3610,7 @@ int main() {
   },
   {
     id: 152,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3635,7 +3635,7 @@ int main() {
   },
   {
     id: 153,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "어려움",
     question: "다음 코드에서 shared_ptr의 참조 카운트는?",
     code: `#include <iostream>
@@ -3658,7 +3658,7 @@ int main() {
   },
   {
     id: 154,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3679,7 +3679,7 @@ int main() {
   },
   {
     id: 155,
-    lessonId: "cpp-13",
+    lessonId: "cpp-12",
     difficulty: "어려움",
     question: "다음 코드에서 발생하는 문제는?",
     code: `#include <iostream>
@@ -3705,30 +3705,31 @@ int main() {
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
+#include <string>
 using namespace std;
 
-struct Student {
+class Student {
+public:
     string name;
     int age;
+    Student(string n, int a) : name(n), age(a) {}
 };
 
 int main() {
-    Student s;
-    s.name = "Kim";
-    s.age = 15;
+    Student s("Kim", 15);
     cout << s.name << " " << s.age;
     return 0;
 }`,
     options: ["Kim 15", "Kim15", "컴파일 오류", "0 0"],
     correctAnswer: 0,
-    explanation: "구조체 멤버에 .으로 접근하여 값을 설정하고 출력합니다. \"Kim 15\"가 출력됩니다.",
-    keyConceptTitle: "구조체 (struct)",
-    keyConceptDescription: "struct는 관련 데이터를 하나의 타입으로 묶습니다. 멤버에는 . 연산자로 접근합니다.",
-    relatedTopics: ["struct", "멤버 접근", "사용자 정의 타입"],
+    explanation: "생성자로 name과 age를 초기화합니다. s.name은 \"Kim\", s.age는 15이므로 \"Kim 15\"가 출력됩니다.",
+    keyConceptTitle: "클래스와 생성자",
+    keyConceptDescription: "class로 관련 데이터를 하나의 타입으로 묶고, 생성자로 초기값을 설정합니다. public 멤버는 .으로 접근합니다.",
+    relatedTopics: ["class", "생성자", "멤버 접근"],
   },
   {
     id: 157,
-    lessonId: "cpp-14",
+    lessonId: "cpp-12",
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3750,7 +3751,7 @@ int main() {
   },
   {
     id: 158,
-    lessonId: "cpp-14",
+    lessonId: "cpp-11",
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3772,7 +3773,7 @@ int main() {
   },
   {
     id: 159,
-    lessonId: "cpp-14",
+    lessonId: "cpp-12",
     difficulty: "보통",
     question: "다음 코드에서 함수 오버로딩이 올바르게 동작하는 이유는?",
     code: `#include <iostream>
@@ -4229,64 +4230,74 @@ int main() {
     id: 174,
     lessonId: "cpp-14",
     difficulty: "어려움",
-    question: "다음 구조체와 포인터 코드의 출력 결과는?",
+    question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
+#include <string>
 using namespace std;
 
-struct Point {
-    int x, y;
+class BankAccount {
+private:
+    int balance;
+public:
+    BankAccount(int b) : balance(b) {}
+    void deposit(int amount) {
+        if (amount > 0) balance += amount;
+    }
+    void withdraw(int amount) {
+        if (amount > 0 && amount <= balance) balance -= amount;
+    }
+    int getBalance() { return balance; }
 };
 
 int main() {
-    Point p = {3, 7};
-    Point* ptr = &p;
-    ptr->x = 10;
-    cout << p.x << " " << p.y;
+    BankAccount acc(1000);
+    acc.deposit(500);
+    acc.withdraw(200);
+    cout << acc.getBalance();
     return 0;
 }`,
-    options: ["3 7", "10 7", "10 10", "컴파일 오류"],
+    options: ["1000", "1300", "1500", "컴파일 오류"],
     correctAnswer: 1,
-    explanation: "ptr->x = 10은 포인터를 통해 구조체 멤버 x를 10으로 변경합니다. p.y는 변경되지 않아 7 그대로입니다.",
-    keyConceptTitle: "구조체 포인터와 -> 연산자",
-    keyConceptDescription: "구조체 포인터에서 멤버에 접근할 때는 -> 연산자를 사용합니다. ptr->x는 (*ptr).x와 같습니다.",
-    relatedTopics: ["구조체", "포인터", "-> 연산자"],
+    explanation: "1000 + 500 - 200 = 1300. setter처럼 deposit/withdraw에서 검증하고 balance를 변경합니다. private이라 직접 접근은 불가능해요.",
+    keyConceptTitle: "캡슐화 실전",
+    keyConceptDescription: "private 멤버는 외부에서 직접 수정 불가. public 메서드에서 검증 후 변경하는 것이 캡슐화의 핵심입니다.",
+    relatedTopics: ["캡슐화", "private", "getter/setter"],
   },
   {
     id: 175,
     lessonId: "cpp-14",
     difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
+    question: "다음 코드에서 컴파일 오류가 발생하는 줄은?",
     code: `#include <iostream>
+#include <string>
 using namespace std;
 
 class Dog {
+    string name;  // (A) — private 기본
 public:
-    string name;
-    void bark() { cout << name << ": 멍멍!"; }
-};
-
-struct Cat {
-    string name;
-    void meow() { cout << name << ": 야옹!"; }
+    Dog(string n) : name(n) {}
+    string getName() { return name; }
 };
 
 int main() {
-    Dog d; d.name = "바둑이"; d.bark();
+    Dog d("바둑이");
+    cout << d.getName();   // (B)
+    cout << d.name;        // (C)
     return 0;
 }`,
-    options: ["바둑이: 멍멍!", "컴파일 오류", ": 멍멍!", "바둑이: 야옹!"],
-    correctAnswer: 0,
-    explanation: "class와 struct 모두 멤버 변수와 함수를 가질 수 있습니다. d.name을 설정한 후 bark()를 호출합니다.",
-    keyConceptTitle: "class vs struct",
-    keyConceptDescription: "C++에서 class와 struct의 유일한 차이는 기본 접근 제어입니다. class는 기본 private, struct는 기본 public입니다.",
+    options: ["(A)줄", "(B)줄", "(C)줄", "오류 없음"],
+    correctAnswer: 2,
+    explanation: "class에서 접근 제어를 명시하지 않으면 기본이 private입니다. (C)의 d.name은 외부에서 private 멤버에 직접 접근하므로 컴파일 오류가 납니다. (B)의 getName()은 public이라 괜찮아요.",
+    keyConceptTitle: "class 기본 접근 권한",
+    keyConceptDescription: "class 멤버는 기본 private입니다. 외부에서 접근하려면 public:으로 명시해야 합니다.",
     codeComparison: {
       wrong: `class Dog {
-    string name;  // private! 외부 접근 불가`,
+    string name;  // 기본 private — 외부 접근 불가!`,
       correct: `class Dog {
 public:
-    string name;  // public으로 명시 필요`,
+    string name;  // public으로 명시해야 외부 접근 가능`,
     },
-    relatedTopics: ["class", "struct", "접근 제어"],
+    relatedTopics: ["class", "private", "접근 제어"],
   },
   {
     id: 176,
@@ -7720,5 +7731,560 @@ int main() {
     keyConceptTitle: "활동 선택 문제 (그리디)",
     keyConceptDescription: "끝나는 시간이 빠른 순으로 정렬한 뒤, 겹치지 않는 활동을 탐욕적으로 선택합니다. 최적해가 보장됩니다.",
     relatedTopics: ["그리디", "활동 선택", "정렬", "USACO"],
+  },
+  // ============================================
+  // 레슨 13: 재귀 (Recursion) — Q301~Q333
+  // ============================================
+  {
+    id: 301,
+    lessonId: "cpp-13",
+    difficulty: "쉬움",
+    question: "다음 재귀 함수의 출력 결과는?",
+    code: `#include <iostream>
+using namespace std;
+
+int factorial(int n) {
+    if (n <= 1) return 1;
+    return n * factorial(n - 1);
+}
+
+int main() {
+    cout << factorial(4);
+    return 0;
+}`,
+    options: ["10", "24", "12", "0"],
+    correctAnswer: 1,
+    explanation: "factorial(4) = 4 × factorial(3) = 4 × 3 × 2 × 1 = 24입니다. n<=1일 때 1을 반환하는 기저 조건으로 재귀가 멈춰요.",
+    keyConceptTitle: "재귀 함수 (Recursion)",
+    keyConceptDescription: "재귀 함수는 자기 자신을 호출하는 함수입니다. 반드시 기저 조건(Base Case)이 있어야 무한 호출을 방지합니다.",
+    codeComparison: {
+      wrong: `int factorial(int n) {
+    return n * factorial(n - 1);  // 기저 조건 없음 → 무한 재귀!`,
+      correct: `int factorial(int n) {
+    if (n <= 1) return 1;  // 기저 조건
+    return n * factorial(n - 1);`,
+    },
+    relatedTopics: ["재귀", "팩토리얼", "기저 조건"],
+  },
+  {
+    id: 302,
+    lessonId: "cpp-13",
+    difficulty: "쉬움",
+    question: "재귀 함수에서 **반드시** 필요한 것은?",
+    code: `// 올바른 재귀 구조:
+int func(int n) {
+    if (n == 0) return 0;   // ???
+    return func(n - 1) + 1;
+}`,
+    options: ["전역 변수", "기저 조건(Base Case)", "반복문(for/while)", "포인터"],
+    correctAnswer: 1,
+    explanation: "기저 조건이 없으면 함수가 영원히 자신을 호출하여 스택 오버플로우가 발생합니다. 위 코드에서 if (n == 0) return 0;이 기저 조건입니다.",
+    keyConceptTitle: "기저 조건 (Base Case)",
+    keyConceptDescription: "재귀 함수는 반드시 더 이상 재귀를 하지 않는 기저 조건(종료 조건)이 있어야 합니다. 없으면 무한 재귀로 스택 오버플로우가 발생합니다.",
+    relatedTopics: ["기저 조건", "무한 재귀", "스택 오버플로우"],
+  },
+  {
+    id: 303,
+    lessonId: "cpp-13",
+    difficulty: "쉬움",
+    question: "다음 재귀 함수의 출력은?",
+    code: `#include <iostream>
+using namespace std;
+
+void countdown(int n) {
+    if (n <= 0) {
+        cout << "발사!";
+        return;
+    }
+    cout << n << " ";
+    countdown(n - 1);
+}
+
+int main() {
+    countdown(3);
+    return 0;
+}`,
+    options: ["발사! 1 2 3 ", "3 2 1 발사!", "1 2 3 발사!", "3 2 1"],
+    correctAnswer: 1,
+    explanation: "countdown(3) → '3 ' 출력 → countdown(2) → '2 ' 출력 → countdown(1) → '1 ' 출력 → countdown(0) → '발사!' 출력. 결과: 3 2 1 발사!",
+    keyConceptTitle: "재귀 실행 순서",
+    keyConceptDescription: "재귀 호출 전에 출력하면 큰 수부터 출력됩니다. 재귀 호출 후에 출력하면 기저 조건부터 출력됩니다.",
+    relatedTopics: ["재귀 실행 순서", "출력 순서", "재귀 호출"],
+  },
+  {
+    id: 304,
+    lessonId: "cpp-13",
+    difficulty: "쉬움",
+    question: "다음 재귀 함수 sum(5)의 반환값은?",
+    code: `int sum(int n) {
+    if (n <= 0) return 0;
+    return n + sum(n - 1);
+}`,
+    options: ["10", "15", "20", "5"],
+    correctAnswer: 1,
+    explanation: "sum(5) = 5 + sum(4) = 5 + 4 + sum(3) = 5+4+3+2+1+0 = 15. 1부터 n까지의 합입니다.",
+    keyConceptTitle: "재귀로 합계 구하기",
+    keyConceptDescription: "sum(n) = n + sum(n-1)의 관계를 이용해 재귀로 합계를 구할 수 있습니다. 기저 조건은 n<=0일 때 0을 반환합니다.",
+    relatedTopics: ["재귀", "합계", "귀납적 정의"],
+  },
+  {
+    id: 305,
+    lessonId: "cpp-13",
+    difficulty: "쉬움",
+    question: "다음 재귀 함수의 결과는?",
+    code: `#include <iostream>
+using namespace std;
+
+int power(int base, int exp) {
+    if (exp == 0) return 1;
+    return base * power(base, exp - 1);
+}
+
+int main() {
+    cout << power(2, 5);
+    return 0;
+}`,
+    options: ["10", "16", "32", "64"],
+    correctAnswer: 2,
+    explanation: "power(2,5) = 2 × power(2,4) = 2×2×2×2×2×1 = 32. 2^5 = 32입니다. exp==0일 때 1을 반환하는 것이 기저 조건이에요.",
+    keyConceptTitle: "재귀로 거듭제곱 계산",
+    keyConceptDescription: "base^exp = base × base^(exp-1)의 재귀 관계를 이용합니다. 기저 조건은 exp==0일 때 1입니다.",
+    relatedTopics: ["재귀", "거듭제곱", "기저 조건"],
+  },
+  {
+    id: 306,
+    lessonId: "cpp-13",
+    difficulty: "보통",
+    question: "피보나치 수열에서 fib(7)의 값은?\n(fib(0)=0, fib(1)=1, fib(n)=fib(n-1)+fib(n-2))",
+    code: `int fib(int n) {
+    if (n <= 1) return n;
+    return fib(n-1) + fib(n-2);
+}`,
+    options: ["8", "13", "21", "5"],
+    correctAnswer: 1,
+    explanation: "fib: 0,1,1,2,3,5,8,13... fib(7)=13입니다. fib(0)=0, fib(1)=1, fib(2)=1, fib(3)=2, fib(4)=3, fib(5)=5, fib(6)=8, fib(7)=13",
+    keyConceptTitle: "피보나치 수열",
+    keyConceptDescription: "fib(n) = fib(n-1) + fib(n-2). 두 개의 기저 조건(n=0, n=1)을 가집니다. 단순 재귀는 중복 계산이 많아 느립니다.",
+    relatedTopics: ["피보나치", "재귀", "메모이제이션"],
+  },
+  {
+    id: 307,
+    lessonId: "cpp-13",
+    difficulty: "보통",
+    question: "다음 재귀 함수의 문제점은?",
+    code: `int badRecursion(int n) {
+    return n + badRecursion(n + 1);  // n이 증가!
+}`,
+    options: ["기저 조건이 없다", "반환 타입이 잘못됐다", "매개변수가 잘못됐다", "재귀 호출이 없다"],
+    correctAnswer: 0,
+    explanation: "기저 조건이 없고, 재귀 호출마다 n이 증가해서 절대 멈추지 않습니다. 스택 오버플로우가 발생해요.",
+    keyConceptTitle: "무한 재귀",
+    keyConceptDescription: "재귀가 멈추려면 매번 호출마다 문제가 '작아져야' 합니다. n이 증가하면 기저 조건에 도달할 수 없습니다.",
+    codeComparison: {
+      wrong: `return n + badRecursion(n + 1);  // n이 증가 → 무한!`,
+      correct: `if (n <= 0) return 0;
+return n + goodRecursion(n - 1);  // n이 감소 → 종료!`,
+    },
+    relatedTopics: ["무한 재귀", "기저 조건", "재귀 설계"],
+  },
+  {
+    id: 308,
+    lessonId: "cpp-13",
+    difficulty: "보통",
+    question: "메모이제이션을 적용한 피보나치에서 fib(5)를 처음 계산할 때 실제 함수 호출 횟수는?",
+    code: `int memo[100];
+
+int fib(int n) {
+    if (n <= 1) return n;
+    if (memo[n] != -1) return memo[n];
+    memo[n] = fib(n-1) + fib(n-2);
+    return memo[n];
+}`,
+    options: ["1번", "9번", "31번", "무한번"],
+    correctAnswer: 1,
+    explanation: "fib(5)를 처음 계산하면: fib(5)→fib(4)→fib(3)→fib(2)→fib(1)+fib(0)가 순서대로 계산됩니다. 총 9번의 호출이 발생합니다. (메모가 없으면 15번)",
+    keyConceptTitle: "메모이제이션 효과",
+    keyConceptDescription: "메모이제이션은 한 번 계산한 값을 저장합니다. 이미 계산된 값은 O(1)로 반환되어 전체 시간복잡도가 O(n)이 됩니다.",
+    relatedTopics: ["메모이제이션", "동적 프로그래밍", "시간복잡도"],
+  },
+  {
+    id: 309,
+    lessonId: "cpp-13",
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+using namespace std;
+
+int fib(int n) {
+    if (n <= 1) return n;
+    return fib(n-1) + fib(n-2);
+}
+
+int main() {
+    for (int i = 0; i <= 5; i++) {
+        cout << fib(i) << " ";
+    }
+    return 0;
+}`,
+    options: ["0 1 1 2 3 5 ", "1 1 2 3 5 8 ", "0 1 2 3 4 5 ", "1 2 3 5 8 13 "],
+    correctAnswer: 0,
+    explanation: "fib(0)=0, fib(1)=1, fib(2)=1, fib(3)=2, fib(4)=3, fib(5)=5. 피보나치 수열의 처음 6개 항이에요!",
+    keyConceptTitle: "피보나치 수열 출력",
+    keyConceptDescription: "피보나치는 0부터 시작하는 버전(0,1,1,2,3,5,8...)과 1부터 시작하는 버전(1,1,2,3,5,8...)이 있어요.",
+    relatedTopics: ["피보나치", "재귀", "수열"],
+  },
+  {
+    id: 310,
+    lessonId: "cpp-13",
+    difficulty: "보통",
+    question: "재귀와 반복문의 비교로 **틀린** 것은?",
+    code: `// 재귀 버전
+int sumRecursive(int n) {
+    if (n <= 0) return 0;
+    return n + sumRecursive(n-1);
+}
+
+// 반복 버전
+int sumLoop(int n) {
+    int total = 0;
+    for (int i = 1; i <= n; i++) total += i;
+    return total;
+}`,
+    options: ["재귀는 코드가 직관적이다", "반복문은 메모리 효율이 좋다", "재귀는 항상 반복문보다 빠르다", "둘 다 같은 결과를 낸다"],
+    correctAnswer: 2,
+    explanation: "재귀는 함수 호출 오버헤드와 스택 메모리 사용으로 인해 일반적으로 반복문보다 느립니다. 단순한 경우에는 반복문이 더 효율적이에요.",
+    keyConceptTitle: "재귀 vs 반복문",
+    keyConceptDescription: "재귀는 코드가 직관적이지만 함수 호출 비용과 스택 메모리가 필요합니다. 반복문은 더 빠르고 메모리 효율적입니다. 트리/그래프 같은 복잡한 구조에서는 재귀가 훨씬 편리합니다.",
+    relatedTopics: ["재귀", "반복문", "시간복잡도", "스택 메모리"],
+  },
+  {
+    id: 311,
+    lessonId: "cpp-13",
+    difficulty: "보통",
+    question: "메모이제이션에서 memo 배열을 초기화하는 올바른 방법은?",
+    code: `int memo[100];
+
+// 초기화 방법 A: fill(memo, memo + 100, -1);
+// 초기화 방법 B: memset(memo, -1, sizeof(memo));
+// 초기화 방법 C: 아무것도 안 함`,
+    options: ["A만 올바르다", "B만 올바르다", "A와 B 모두 올바르다", "C가 가장 좋다"],
+    correctAnswer: 2,
+    explanation: "fill과 memset 모두 배열을 -1로 초기화하는 올바른 방법입니다. 아무것도 안 하면 쓰레기 값이 들어있어 이미 계산했다고 잘못 판단할 수 있어요.",
+    keyConceptTitle: "메모이제이션 초기화",
+    keyConceptDescription: "메모이제이션 배열은 -1(미계산 상태)로 초기화해야 합니다. fill(arr, arr+N, -1) 또는 memset(arr, -1, sizeof(arr))를 사용합니다.",
+    codeComparison: {
+      wrong: `int memo[100];  // 초기화 안 함 → 쓰레기 값 → 버그!`,
+      correct: `int memo[100];
+fill(memo, memo + 100, -1);  // 반드시 초기화!`,
+    },
+    relatedTopics: ["메모이제이션", "배열 초기화", "fill", "memset"],
+  },
+  {
+    id: 312,
+    lessonId: "cpp-13",
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+using namespace std;
+
+void printReverse(int n) {
+    if (n <= 0) return;
+    printReverse(n - 1);  // 재귀 먼저
+    cout << n << " ";     // 그 다음 출력
+}
+
+int main() {
+    printReverse(4);
+    return 0;
+}`,
+    options: ["4 3 2 1 ", "1 2 3 4 ", "4 4 4 4 ", "1 1 1 1 "],
+    correctAnswer: 1,
+    explanation: "재귀 호출 후에 출력하므로, 가장 안쪽(n=1)부터 바깥쪽(n=4)으로 출력됩니다. 결과: 1 2 3 4",
+    keyConceptTitle: "재귀 후 실행",
+    keyConceptDescription: "재귀 호출 전에 코드가 있으면 호출 순서대로 실행되고, 재귀 호출 후에 코드가 있으면 반환 순서대로 실행됩니다. 이 차이가 중요해요!",
+    codeComparison: {
+      wrong: `cout << n;         // 출력 먼저
+recurse(n-1);      // 재귀: n, n-1, n-2...`,
+      correct: `recurse(n-1);      // 재귀 먼저
+cout << n;         // 출력: 1, 2, 3...n`,
+    },
+    relatedTopics: ["재귀 실행 순서", "후위 처리", "역순 출력"],
+  },
+  {
+    id: 313,
+    lessonId: "cpp-13",
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+using namespace std;
+
+int memo[20];
+
+int fib(int n) {
+    if (n <= 1) return n;
+    if (memo[n] != -1) return memo[n];
+    return memo[n] = fib(n-1) + fib(n-2);
+}
+
+int main() {
+    fill(memo, memo + 20, -1);
+    cout << fib(10);
+    return 0;
+}`,
+    options: ["34", "55", "89", "144"],
+    correctAnswer: 1,
+    explanation: "메모이제이션을 적용한 피보나치 fib(10)=55입니다. 피보나치: 0,1,1,2,3,5,8,13,21,34,55",
+    keyConceptTitle: "메모이제이션 피보나치",
+    keyConceptDescription: "memo[n] = fib(n-1) + fib(n-2)로 계산과 저장을 한 줄로 쓸 수 있습니다. 메모이제이션으로 O(2^n) → O(n)으로 개선됩니다.",
+    relatedTopics: ["메모이제이션", "피보나치", "동적 프로그래밍"],
+  },
+  {
+    id: 314,
+    lessonId: "cpp-13",
+    difficulty: "보통",
+    question: "일반 재귀와 메모이제이션 피보나치의 시간복잡도 비교로 **맞는** 것은?",
+    code: `// 일반 재귀
+int fib1(int n) {
+    if (n <= 1) return n;
+    return fib1(n-1) + fib1(n-2);
+}
+
+// 메모이제이션
+int fib2(int n) {
+    if (n <= 1) return n;
+    if (memo[n] != -1) return memo[n];
+    return memo[n] = fib2(n-1) + fib2(n-2);
+}`,
+    options: ["둘 다 O(n)", "둘 다 O(2^n)", "일반: O(2^n), 메모: O(n)", "일반: O(n), 메모: O(2^n)"],
+    correctAnswer: 2,
+    explanation: "일반 재귀는 중복 계산이 많아 O(2^n)입니다. 메모이제이션은 각 값을 한 번만 계산하므로 O(n)입니다. fib(40)에서 차이가 엄청나요!",
+    keyConceptTitle: "시간복잡도 비교",
+    keyConceptDescription: "O(2^n)은 n이 커질수록 기하급수적으로 증가합니다. fib(40)을 일반 재귀로 계산하면 약 10억 번, 메모이제이션은 79번만 계산합니다.",
+    relatedTopics: ["시간복잡도", "O(n)", "O(2^n)", "메모이제이션"],
+  },
+  {
+    id: 315,
+    lessonId: "cpp-13",
+    difficulty: "보통",
+    question: "다음 재귀 함수 gcd(48, 18)의 결과는?\n(최대공약수를 유클리드 알고리즘으로 구함)",
+    code: `int gcd(int a, int b) {
+    if (b == 0) return a;
+    return gcd(b, a % b);
+}`,
+    options: ["2", "3", "6", "9"],
+    correctAnswer: 2,
+    explanation: "gcd(48,18): 48%18=12 → gcd(18,12): 18%12=6 → gcd(12,6): 12%6=0 → gcd(6,0): return 6. 48과 18의 최대공약수는 6입니다.",
+    keyConceptTitle: "유클리드 알고리즘 (재귀)",
+    keyConceptDescription: "gcd(a,b) = gcd(b, a%b). b가 0이면 a가 최대공약수입니다. 이 알고리즘은 매우 효율적이며 알고리즘 대회에서 자주 사용됩니다.",
+    codeComparison: {
+      wrong: `// for 루프로 하나씩 찾기 - 느림!
+for (int i = min(a,b); i >= 1; i--)
+    if (a%i==0 && b%i==0) return i;`,
+      correct: `// 재귀 유클리드 - 훨씬 빠름!
+if (b == 0) return a;
+return gcd(b, a % b);`,
+    },
+    relatedTopics: ["유클리드 알고리즘", "최대공약수", "GCD", "재귀"],
+  },
+  {
+    id: 316,
+    lessonId: "cpp-13",
+    difficulty: "어려움",
+    question: "다음 재귀 함수의 출력 결과는?",
+    code: `#include <iostream>
+using namespace std;
+
+int f(int n) {
+    if (n == 0) return 1;
+    if (n % 2 == 0) return f(n/2);
+    return f(n-1) + f(n-1);
+}
+
+int main() {
+    cout << f(4);
+    return 0;
+}`,
+    options: ["1", "2", "4", "8"],
+    correctAnswer: 1,
+    explanation: "f(4): 4는 짝수 → f(4/2) = f(2). f(2): 2는 짝수 → f(2/2) = f(1). f(1): 1은 홀수 → f(0) + f(0) = 1 + 1 = 2. 따라서 f(4) = f(2) = f(1) = 2.",
+    keyConceptTitle: "복잡한 재귀 추적",
+    keyConceptDescription: "재귀 함수를 추적할 때는 각 호출마다 어떤 조건에 해당하는지 확인하며 하나씩 따라가야 합니다.",
+    relatedTopics: ["재귀 추적", "복잡한 재귀", "함수 호출"],
+  },
+  {
+    id: 317,
+    lessonId: "cpp-13",
+    difficulty: "어려움",
+    question: "다음 코드에서 hanoi(2, 'A', 'C', 'B')의 출력은?",
+    code: `#include <iostream>
+using namespace std;
+
+void hanoi(int n, char from, char to, char aux) {
+    if (n == 1) {
+        cout << from << "->" << to << endl;
+        return;
+    }
+    hanoi(n-1, from, aux, to);
+    cout << from << "->" << to << endl;
+    hanoi(n-1, aux, to, from);
+}`,
+    options: [
+      "A->C\nA->B\nC->B",
+      "A->B\nA->C\nB->C",
+      "A->C\nB->A\nB->C",
+      "A->B\nA->C\nA->B"
+    ],
+    correctAnswer: 1,
+    explanation: "하노이 탑 n=2: 1단계(n=1): A→B 이동, 2단계: A→C 이동, 3단계(n=1): B→C 이동. 출력: A->B, A->C, B->C",
+    keyConceptTitle: "하노이 탑 (Tower of Hanoi)",
+    keyConceptDescription: "하노이 탑은 재귀의 대표적인 예시입니다. n개의 원판을 이동하려면 2^n - 1번의 이동이 필요합니다.",
+    relatedTopics: ["하노이 탑", "재귀", "분할 정복"],
+  },
+  {
+    id: 318,
+    lessonId: "cpp-13",
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+using namespace std;
+
+int count_calls = 0;
+
+int fib_plain(int n) {
+    count_calls++;
+    if (n <= 1) return n;
+    return fib_plain(n-1) + fib_plain(n-2);
+}
+
+int main() {
+    fib_plain(6);
+    cout << count_calls;
+    return 0;
+}`,
+    options: ["7", "13", "25", "25"],
+    correctAnswer: 2,
+    explanation: "fib(6)을 일반 재귀로 계산하면 총 25번 호출됩니다. 각 노드가 트리에서 호출 횟수를 나타내며 fib(6)=25번, 메모이제이션 사용 시 11번으로 줄어듭니다.",
+    keyConceptTitle: "재귀 호출 횟수",
+    keyConceptDescription: "일반 피보나치 재귀의 호출 횟수는 fib(n)*2+1 정도입니다. 중복 호출이 많아 매우 비효율적입니다.",
+    relatedTopics: ["재귀 호출 횟수", "효율성", "메모이제이션 필요성"],
+  },
+  {
+    id: 319,
+    lessonId: "cpp-13",
+    difficulty: "어려움",
+    question: "다음 이진 탐색 재귀 함수에서 search(arr, 0, 7, 7)의 반환값은?",
+    code: `#include <iostream>
+using namespace std;
+
+int arr[] = {1, 3, 5, 7, 9, 11, 13, 15};
+
+int search(int arr[], int left, int right, int target) {
+    if (left > right) return -1;
+    int mid = (left + right) / 2;
+    if (arr[mid] == target) return mid;
+    if (arr[mid] < target) return search(arr, mid+1, right, target);
+    return search(arr, left, mid-1, target);
+}`,
+    options: ["2", "3", "4", "-1"],
+    correctAnswer: 1,
+    explanation: "search(0,7,7): mid=3, arr[3]=7==target → 3 반환! 배열의 인덱스 3에 7이 있습니다.",
+    keyConceptTitle: "이진 탐색 (재귀)",
+    keyConceptDescription: "이진 탐색을 재귀로 구현할 수 있습니다. 중간값과 비교하여 왼쪽 또는 오른쪽을 재귀적으로 탐색합니다. O(log n)의 시간복잡도를 가집니다.",
+    relatedTopics: ["이진 탐색", "재귀", "분할 정복", "O(log n)"],
+  },
+  {
+    id: 320,
+    lessonId: "cpp-13",
+    difficulty: "어려움",
+    question: "다음 메모이제이션 코드에서 `memo[n] != -1` 조건 대신 다른 값을 초기값으로 쓰면 안 되는 이유는?",
+    code: `int memo[100];
+// fill(memo, memo + 100, 0);  // 0으로 초기화하면?
+
+int fib(int n) {
+    if (n <= 1) return n;
+    if (memo[n] != 0) return memo[n];  // 저장된 값?
+    return memo[n] = fib(n-1) + fib(n-2);
+}`,
+    options: [
+      "0으로 초기화해도 완전히 동일하게 동작한다",
+      "fib(2)=1이지만 0으로 초기화하면 memo[2]=1을 저장 후 다음번엔 0!=1이라 재계산한다",
+      "fib(n)의 결과가 0일 수 있어서 '계산 안 됨'과 구분 불가능하다",
+      "fill 함수가 0과 호환되지 않는다"
+    ],
+    correctAnswer: 2,
+    explanation: "fib(0)=0입니다! memo를 0으로 초기화하면 fib(0)=0을 저장해도 '계산 안 됨(0)'과 구분이 안 됩니다. -1은 피보나치 수열에 절대 나오지 않는 값이라 안전합니다.",
+    keyConceptTitle: "초기값 선택의 중요성",
+    keyConceptDescription: "메모이제이션의 초기값은 실제 답으로 나올 수 없는 값이어야 합니다. 피보나치는 0이 유효한 답이므로 -1을 초기값으로 사용합니다.",
+    relatedTopics: ["메모이제이션", "초기값", "경계 조건", "피보나치"],
+  },
+  {
+    id: 321,
+    lessonId: "cpp-13",
+    difficulty: "어려움",
+    question: "다음 코드에서 재귀를 이용한 배열 합계 계산의 출력은?",
+    code: `#include <iostream>
+using namespace std;
+
+int arr[] = {1, 2, 3, 4, 5};
+
+int arraySum(int arr[], int n) {
+    if (n == 0) return 0;
+    return arr[n-1] + arraySum(arr, n-1);
+}
+
+int main() {
+    cout << arraySum(arr, 5);
+    return 0;
+}`,
+    options: ["10", "15", "20", "1"],
+    correctAnswer: 1,
+    explanation: "arraySum(arr,5) = arr[4] + arraySum(arr,4) = 5+4+3+2+1+0 = 15. 배열의 모든 원소 합입니다.",
+    keyConceptTitle: "배열의 재귀적 합계",
+    keyConceptDescription: "배열의 합을 재귀로 구할 때, 마지막 원소와 나머지 배열의 합으로 분할합니다. n=0일 때 0을 반환하는 것이 기저 조건입니다.",
+    relatedTopics: ["재귀", "배열", "합계 계산"],
+  },
+  {
+    id: 322,
+    lessonId: "cpp-13",
+    difficulty: "어려움",
+    question: "재귀 함수와 동적 프로그래밍(DP)의 관계로 **맞는** 것은?",
+    code: `// 탑다운 DP (메모이제이션 재귀)
+int dp[1001];
+int coin(int n) {
+    if (n == 0) return 0;
+    if (dp[n] != -1) return dp[n];
+    return dp[n] = min(coin(n-1), coin(n-5)) + 1;  // 단순화 예시
+}`,
+    options: [
+      "DP는 재귀와 완전히 다른 알고리즘이다",
+      "메모이제이션 재귀는 탑다운 DP의 한 형태이다",
+      "DP는 항상 반복문으로만 구현해야 한다",
+      "재귀가 DP보다 항상 빠르다"
+    ],
+    correctAnswer: 1,
+    explanation: "메모이제이션을 사용하는 재귀는 탑다운 DP(Top-Down DP)입니다. 반복문으로 구현하면 바텀업 DP(Bottom-Up DP)입니다. 둘 다 같은 시간복잡도를 가집니다.",
+    keyConceptTitle: "탑다운 DP (메모이제이션)",
+    keyConceptDescription: "동적 프로그래밍(DP)은 큰 문제를 작은 부분 문제로 나누고 결과를 재사용합니다. 재귀+메모이제이션 = 탑다운 DP, 반복문+테이블 = 바텀업 DP",
+    relatedTopics: ["동적 프로그래밍", "DP", "탑다운", "바텀업", "USACO"],
+  },
+  {
+    id: 323,
+    lessonId: "cpp-13",
+    difficulty: "어려움",
+    question: "다음 코드로 구현한 '숫자 n을 1, 2, 3의 합으로 나타내는 경우의 수'에서 ways(4)의 값은?",
+    code: `int memo[100];
+
+int ways(int n) {
+    if (n == 0) return 1;
+    if (n < 0) return 0;
+    if (memo[n] != -1) return memo[n];
+    return memo[n] = ways(n-1) + ways(n-2) + ways(n-3);
+}`,
+    options: ["4", "5", "7", "8"],
+    correctAnswer: 2,
+    explanation: "ways(4): ways(3)+ways(2)+ways(1)=4+2+1=7. 4를 1,2,3의 합으로 나타내는 방법: 1+1+1+1, 1+1+2, 1+2+1, 2+1+1, 2+2, 1+3, 3+1 → 7가지",
+    keyConceptTitle: "경우의 수 재귀 (카운팅 DP)",
+    keyConceptDescription: "n을 만드는 경우의 수 = (n-1)을 만드는 수 + (n-2)를 만드는 수 + (n-3)을 만드는 수. 이런 패턴은 USACO에서 자주 나옵니다.",
+    relatedTopics: ["카운팅 DP", "경우의 수", "재귀", "USACO"],
   },
 ];
