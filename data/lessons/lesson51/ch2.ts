@@ -43,36 +43,36 @@ loaded = json.loads(json_str)
       initialCode: `import json
 
 class Character:
-    def __init__(s, name, job):
-        s.name = name
-        s.job = job
-        s.level = 1
-        s.hp, s.max_hp = 100, 100
-        s.atk = 15
-        s.defense = 10
-        s.gold = 0
-        s.exp = 0
-        s.inventory = []
+    def __init__(self, name, job):
+        self.name = name
+        self.job = job
+        self.level = 1
+        self.hp, self.max_hp = 100, 100
+        self.atk = 15
+        self.defense = 10
+        self.gold = 0
+        self.exp = 0
+        self.inventory = []
 
-    def to_dict(s):
+    def to_dict(self):
         return {
-            'name': s.name,
-            'job': s.job,
-            'level': s.level,
-            'hp': s.hp,
-            'max_hp': s.max_hp,
-            'atk': s.atk,
-            'defense': s.defense,
-            'gold': s.gold,
-            'exp': s.exp,
-            'inventory': [item for item in s.inventory]
+            'name': self.name,
+            'job': self.job,
+            'level': self.level,
+            'hp': self.hp,
+            'max_hp': self.max_hp,
+            'atk': self.atk,
+            'defense': self.defense,
+            'gold': self.gold,
+            'exp': self.exp,
+            'inventory': [item for item in self.inventory]
         }
 
-    def status(s):
+    def status(self):
         jobs = {'warrior': '용사', 'mage': '마법사', 'archer': '궁수'}
-        print(f'[{jobs[s.job]}] {s.name} Lv.{s.level}')
-        print(f'  HP: {s.hp}/{s.max_hp} | ATK: {s.atk}')
-        print(f'  골드: {s.gold} | 인벤토리: {s.inventory}')
+        print(f'[{jobs[self.job]}] {self.name} Lv.{self.level}')
+        print(f'  HP: {self.hp}/{self.max_hp} | ATK: {self.atk}')
+        print(f'  골드: {self.gold} | 인벤토리: {self.inventory}')
 
 def from_dict(data):
     hero = Character(data['name'], data['job'])

@@ -35,29 +35,29 @@ def create_monster(name):
       title: "💻 Monster 클래스!",
       task: "Monster 클래스와 팩토리 함수를 실행해보세요!",
       initialCode: `class Monster:
-    def __init__(s, name, hp, atk, defense, exp, gold):
-        s.name = name
-        s.hp = hp
-        s.max_hp = hp
-        s.atk = atk
-        s.defense = defense
-        s.exp_reward = exp
-        s.gold_reward = gold
-        s.alive = True
+    def __init__(self, name, hp, atk, defense, exp, gold):
+        self.name = name
+        self.hp = hp
+        self.max_hp = hp
+        self.atk = atk
+        self.defense = defense
+        self.exp_reward = exp
+        self.gold_reward = gold
+        self.alive = True
 
-    def take_damage(s, damage):
-        actual = damage - s.defense
+    def take_damage(self, damage):
+        actual = damage - self.defense
         if actual < 1:
             actual = 1
-        s.hp -= actual
-        if s.hp <= 0:
-            s.hp = 0
-            s.alive = False
+        self.hp -= actual
+        if self.hp <= 0:
+            self.hp = 0
+            self.alive = False
         return actual
 
-    def show(s):
-        state = 'O' if s.alive else 'X'
-        print(f'[{state}] {s.name}: HP {s.hp}/{s.max_hp}')
+    def show(self):
+        state = 'O' if self.alive else 'X'
+        print(f'[{state}] {self.name}: HP {self.hp}/{self.max_hp}')
 
 def create_monster(name):
     data = {
@@ -113,63 +113,63 @@ if actual < 1:
       title: "💻 자동 전투!",
       task: "actions 리스트로 자동 전투를 실행하세요!",
       initialCode: `class Character:
-    def __init__(s, name, job):
-        s.name = name
-        s.job = job
-        s.alive = True
-        s.exp = 0
-        s.gold = 0
+    def __init__(self, name, job):
+        self.name = name
+        self.job = job
+        self.alive = True
+        self.exp = 0
+        self.gold = 0
         if job == 'warrior':
-            s.hp, s.max_hp = 120, 120
-            s.atk, s.defense = 15, 12
+            self.hp, self.max_hp = 120, 120
+            self.atk, self.defense = 15, 12
         elif job == 'mage':
-            s.hp, s.max_hp = 80, 80
-            s.atk, s.defense = 25, 5
+            self.hp, self.max_hp = 80, 80
+            self.atk, self.defense = 25, 5
         else:
-            s.hp, s.max_hp = 100, 100
-            s.atk, s.defense = 20, 8
+            self.hp, self.max_hp = 100, 100
+            self.atk, self.defense = 20, 8
 
-    def take_damage(s, damage):
-        actual = damage - s.defense
+    def take_damage(self, damage):
+        actual = damage - self.defense
         if actual < 1:
             actual = 1
-        s.hp -= actual
-        if s.hp <= 0:
-            s.hp = 0
-            s.alive = False
+        self.hp -= actual
+        if self.hp <= 0:
+            self.hp = 0
+            self.alive = False
         return actual
 
-    def attack_target(s, target):
-        actual = target.take_damage(s.atk)
-        print(f'  {s.name} -> {target.name} ({actual} 데미지)')
+    def attack_target(self, target):
+        actual = target.take_damage(self.atk)
+        print(f'  {self.name} -> {target.name} ({actual} 데미지)')
 
-    def heal_self(s, amount):
-        s.hp = min(s.hp + amount, s.max_hp)
-        print(f'  {s.name} 회복! HP: {s.hp}/{s.max_hp}')
+    def heal_self(self, amount):
+        self.hp = min(self.hp + amount, self.max_hp)
+        print(f'  {self.name} 회복! HP: {self.hp}/{self.max_hp}')
 
 class Monster:
-    def __init__(s, name, hp, atk, defense, exp, gold):
-        s.name = name
-        s.hp = hp
-        s.atk = atk
-        s.defense = defense
-        s.exp_reward = exp
-        s.gold_reward = gold
-        s.alive = True
+    def __init__(self, name, hp, atk, defense, exp, gold):
+        self.name = name
+        self.hp = hp
+        self.atk = atk
+        self.defense = defense
+        self.exp_reward = exp
+        self.gold_reward = gold
+        self.alive = True
 
-    def take_damage(s, damage):
-        actual = damage - s.defense
+    def take_damage(self, damage):
+        actual = damage - self.defense
         if actual < 1:
             actual = 1
-        s.hp -= actual
-        if s.hp <= 0:
-            s.hp = 0
-            s.alive = False
+        self.hp -= actual
+        if self.hp <= 0:
+            self.hp = 0
+            self.alive = False
         return actual
 
-    def attack_target(s, target):
-        actual = target.take_damage(s.atk)
-        print(f'  {s.name} -> {target.name} ({actual} 데미지)')
+    def attack_target(self, target):
+        actual = target.take_damage(self.atk)
+        print(f'  {self.name} -> {target.name} ({actual} 데미지)')
 
 # 전투!
 hero = Character('용사', 'warrior')
@@ -218,41 +218,41 @@ elif not hero.alive:
       title: "🎯 미션: 전투 함수!",
       task: "빈칸 3개를 채워서 전투 함수를 완성하세요!",
       initialCode: `class Character:
-    def __init__(s, name, hp, atk, defense):
-        s.name = name
-        s.hp = hp
-        s.atk = atk
-        s.defense = defense
-        s.alive = True
+    def __init__(self, name, hp, atk, defense):
+        self.name = name
+        self.hp = hp
+        self.atk = atk
+        self.defense = defense
+        self.alive = True
 
-    def take_damage(s, damage):
-        actual = damage - s.defense
+    def take_damage(self, damage):
+        actual = damage - self.defense
         if actual < 1:
             actual = 1
-        s.hp -= actual
-        if s.hp <= 0:
-            s.hp = 0
-            s.alive = False
+        self.hp -= actual
+        if self.hp <= 0:
+            self.hp = 0
+            self.alive = False
         return actual
 
 class Monster:
-    def __init__(s, name, hp, atk, defense, exp, gold):
-        s.name = name
-        s.hp = hp
-        s.atk = atk
-        s.defense = defense
-        s.exp_reward = exp
-        s.gold_reward = gold
-        s.alive = True
+    def __init__(self, name, hp, atk, defense, exp, gold):
+        self.name = name
+        self.hp = hp
+        self.atk = atk
+        self.defense = defense
+        self.exp_reward = exp
+        self.gold_reward = gold
+        self.alive = True
 
-    def take_damage(s, damage):
-        actual = damage - s.defense
+    def take_damage(self, damage):
+        actual = damage - self.defense
         if actual < 1:
             actual = 1
-        s.hp -= actual
-        if s.hp <= 0:
-            s.hp = 0
-            s.alive = False
+        self.hp -= actual
+        if self.hp <= 0:
+            self.hp = 0
+            self.alive = False
         return actual
 
 def battle(hero, monster, actions):

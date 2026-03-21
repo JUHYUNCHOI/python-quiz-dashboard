@@ -66,9 +66,9 @@ class Item:       # 아이템
 
 \`\`\`python
 class Character:
-    def __init__(s, name, job):
-        s.name = name   # 이름
-        s.job = job     # 직업
+    def __init__(self, name, job):
+        self.name = name   # 이름
+        self.job = job     # 직업
 \`\`\`
 
 @핵심: 클래스의 __init__에 **이름과 직업**을 먼저 넣어요! 가장 기본적인 정보부터!`
@@ -81,10 +81,10 @@ class Character:
 
 \`\`\`python
         # 스탯 (직업마다 다르게 설정 가능!)
-        s.hp = 100         # 현재 체력
-        s.max_hp = 100     # 최대 체력 (회복 한도!)
-        s.atk = 15         # 공격력
-        s.defense = 10     # 방어력
+        self.hp = 100         # 현재 체력
+        self.max_hp = 100     # 최대 체력 (회복 한도!)
+        self.atk = 15         # 공격력
+        self.defense = 10     # 방어력
 \`\`\`
 
 💡 **max_hp를 따로 저장하는 이유**: 체력이 줄었다 회복할 때, 최대치를 넘지 않게 제한해야 해요!
@@ -99,28 +99,28 @@ class Character:
 
 \`\`\`python
         # 성장
-        s.level = 1        # 레벨
-        s.exp = 0          # 경험치
-        s.gold = 0         # 골드
+        self.level = 1        # 레벨
+        self.exp = 0          # 경험치
+        self.gold = 0         # 골드
 
         # 장비
-        s.inventory = []   # 인벤토리 (리스트!)
+        self.inventory = []   # 인벤토리 (리스트!)
 \`\`\`
 
 **전체 합치면:**
 \`\`\`python
 class Character:
-    def __init__(s, name, job):
-        s.name = name      # 기본 정보
-        s.job = job
-        s.hp = 100         # 스탯
-        s.max_hp = 100
-        s.atk = 15
-        s.defense = 10
-        s.level = 1        # 성장
-        s.exp = 0
-        s.gold = 0
-        s.inventory = []   # 장비
+    def __init__(self, name, job):
+        self.name = name      # 기본 정보
+        self.job = job
+        self.hp = 100         # 스탯
+        self.max_hp = 100
+        self.atk = 15
+        self.defense = 10
+        self.level = 1        # 성장
+        self.exp = 0
+        self.gold = 0
+        self.inventory = []   # 장비
 \`\`\`
 
 @핵심: 기본정보 + 스탯 + 성장 + 장비 = **__init__ 완성!** 차근차근 쌓으면 복잡하지 않아요!`
@@ -131,25 +131,25 @@ class Character:
       title: "💻 Character 기본 만들기!",
       task: "Character 클래스를 만들고 캐릭터 정보를 출력해보세요!",
       initialCode: `class Character:
-    def __init__(s, name, job):
-        s.name = name
-        s.job = job
-        s.hp = 100
-        s.max_hp = 100
-        s.atk = 15
-        s.defense = 10
-        s.level = 1
-        s.exp = 0
-        s.gold = 0
-        s.inventory = []
+    def __init__(self, name, job):
+        self.name = name
+        self.job = job
+        self.hp = 100
+        self.max_hp = 100
+        self.atk = 15
+        self.defense = 10
+        self.level = 1
+        self.exp = 0
+        self.gold = 0
+        self.inventory = []
 
-    def status(s):
-        print(f'=== {s.name} ===')
-        print(f'직업: {s.job}')
-        print(f'HP: {s.hp}/{s.max_hp}')
-        print(f'ATK: {s.atk} | DEF: {s.defense}')
-        print(f'Lv.{s.level} | EXP: {s.exp}')
-        print(f'골드: {s.gold}')
+    def status(self):
+        print(f'=== {self.name} ===')
+        print(f'직업: {self.job}')
+        print(f'HP: {self.hp}/{self.max_hp}')
+        print(f'ATK: {self.atk} | DEF: {self.defense}')
+        print(f'Lv.{self.level} | EXP: {self.exp}')
+        print(f'골드: {self.gold}')
 
 # 캐릭터 만들기!
 hero = Character('철수', '용사')
@@ -166,13 +166,13 @@ hero.status()`,
 
 \`\`\`python
 class Monster:
-    def __init__(s, name, hp, atk, defense, exp, gold):
-        s.name = name
-        s.hp = hp
-        s.atk = atk
-        s.defense = defense
-        s.exp_reward = exp    # 처치 시 경험치
-        s.gold_reward = gold  # 처치 시 골드
+    def __init__(self, name, hp, atk, defense, exp, gold):
+        self.name = name
+        self.hp = hp
+        self.atk = atk
+        self.defense = defense
+        self.exp_reward = exp    # 처치 시 경험치
+        self.gold_reward = gold  # 처치 시 골드
 \`\`\`
 
 @핵심: 몬스터는 전투 스탯 + **처치 보상(exp, gold)**이 핵심!`
@@ -185,11 +185,11 @@ class Monster:
 
 \`\`\`python
 class Item:
-    def __init__(s, name, item_type, value, price):
-        s.name = name
-        s.item_type = item_type  # 'heal', 'atk', 'def'
-        s.value = value          # 효과 수치
-        s.price = price          # 가격
+    def __init__(self, name, item_type, value, price):
+        self.name = name
+        self.item_type = item_type  # 'heal', 'atk', 'def'
+        self.value = value          # 효과 수치
+        self.price = price          # 가격
 \`\`\`
 
 @핵심: Item은 **종류(item_type)**로 구분하고, **효과(value)**와 **가격(price)**을 저장!`
@@ -200,40 +200,40 @@ class Item:
       title: "💻 3개 클래스 모두 만들기!",
       task: "Character, Monster, Item 클래스를 모두 만들어보세요!",
       initialCode: `class Character:
-    def __init__(s, name, job):
-        s.name = name
-        s.job = job
-        s.hp = 100
-        s.max_hp = 100
-        s.atk = 15
-        s.defense = 10
-        s.level = 1
+    def __init__(self, name, job):
+        self.name = name
+        self.job = job
+        self.hp = 100
+        self.max_hp = 100
+        self.atk = 15
+        self.defense = 10
+        self.level = 1
 
-    def show(s):
-        print(f'[{s.job}] {s.name}: HP {s.hp}/{s.max_hp}, ATK {s.atk}, DEF {s.defense}')
+    def show(self):
+        print(f'[{self.job}] {self.name}: HP {self.hp}/{self.max_hp}, ATK {self.atk}, DEF {self.defense}')
 
 class Monster:
-    def __init__(s, name, hp, atk, defense, exp, gold):
-        s.name = name
-        s.hp = hp
-        s.atk = atk
-        s.defense = defense
-        s.exp_reward = exp
-        s.gold_reward = gold
+    def __init__(self, name, hp, atk, defense, exp, gold):
+        self.name = name
+        self.hp = hp
+        self.atk = atk
+        self.defense = defense
+        self.exp_reward = exp
+        self.gold_reward = gold
 
-    def show(s):
-        print(f'[몬스터] {s.name}: HP {s.hp}, ATK {s.atk}, DEF {s.defense}')
+    def show(self):
+        print(f'[몬스터] {self.name}: HP {self.hp}, ATK {self.atk}, DEF {self.defense}')
 
 class Item:
-    def __init__(s, name, item_type, value, price):
-        s.name = name
-        s.item_type = item_type
-        s.value = value
-        s.price = price
+    def __init__(self, name, item_type, value, price):
+        self.name = name
+        self.item_type = item_type
+        self.value = value
+        self.price = price
 
-    def show(s):
+    def show(self):
         types = {'heal': '회복', 'atk': '공격력', 'def': '방어력'}
-        print(f'[{types[s.item_type]}] {s.name}: +{s.value}, {s.price}골드')
+        print(f'[{types[self.item_type]}] {self.name}: +{self.value}, {self.price}골드')
 
 # 생성!
 hero = Character('영희', '마법사')
@@ -260,7 +260,7 @@ potion.show()`,
       id: "ch1-10",
       type: "quiz",
       title: "❓ 퀴즈!",
-      content: "`s.max_hp = hp`에서 max_hp를 따로 저장하는 이유는?",
+      content: "`self.max_hp = hp`에서 max_hp를 따로 저장하는 이유는?",
       options: [
         "메모리를 아끼려고",
         "회복할 때 최대치를 알기 위해",

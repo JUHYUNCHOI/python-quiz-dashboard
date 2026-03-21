@@ -115,33 +115,33 @@ while True:
       title: "💻 직업 선택 시스템!",
       task: "직업에 따라 다른 스탯을 가진 캐릭터를 만들어보세요!",
       initialCode: `class Character:
-    def __init__(s, name, job):
-        s.name = name
-        s.job = job
-        s.level = 1
-        s.exp = 0
-        s.gold = 0
-        s.inventory = []
+    def __init__(self, name, job):
+        self.name = name
+        self.job = job
+        self.level = 1
+        self.exp = 0
+        self.gold = 0
+        self.inventory = []
 
         # 직업별 스탯!
         if job == 'warrior':
-            s.hp, s.max_hp = 120, 120
-            s.atk = 15
-            s.defense = 12
+            self.hp, self.max_hp = 120, 120
+            self.atk = 15
+            self.defense = 12
         elif job == 'mage':
-            s.hp, s.max_hp = 80, 80
-            s.atk = 25
-            s.defense = 5
+            self.hp, self.max_hp = 80, 80
+            self.atk = 25
+            self.defense = 5
         elif job == 'archer':
-            s.hp, s.max_hp = 100, 100
-            s.atk = 20
-            s.defense = 8
+            self.hp, self.max_hp = 100, 100
+            self.atk = 20
+            self.defense = 8
 
-    def status(s):
+    def status(self):
         jobs = {'warrior': '용사', 'mage': '마법사', 'archer': '궁수'}
-        print(f'[{jobs[s.job]}] {s.name}')
-        print(f'  HP: {s.hp}/{s.max_hp}')
-        print(f'  ATK: {s.atk} | DEF: {s.defense}')
+        print(f'[{jobs[self.job]}] {self.name}')
+        print(f'  HP: {self.hp}/{self.max_hp}')
+        print(f'  ATK: {self.atk} | DEF: {self.defense}')
 
 # 직업 선택! (actions 패턴)
 job_choice = 'warrior'

@@ -19,11 +19,11 @@ export const ch1: Chapter = {
 
 \`\`\`python
 if job == 'warrior':
-    s.hp, s.atk, s.defense = 120, 15, 12
+    self.hp, self.atk, self.defense = 120, 15, 12
 elif job == 'mage':
-    s.hp, s.atk, s.defense = 80, 25, 5
+    self.hp, self.atk, self.defense = 80, 25, 5
 elif job == 'archer':
-    s.hp, s.atk, s.defense = 100, 20, 8
+    self.hp, self.atk, self.defense = 100, 20, 8
 \`\`\`
 
 @핵심: **if/elif**로 직업별 분기해서 서로 다른 스탯을 설정!`
@@ -34,53 +34,53 @@ elif job == 'archer':
       title: "💻 Character 클래스 전체!",
       task: "직업별 스탯 + 전투 메서드가 있는 Character 클래스를 실행하세요!",
       initialCode: `class Character:
-    def __init__(s, name, job):
-        s.name = name
-        s.job = job
-        s.level = 1
-        s.exp = 0
-        s.gold = 0
-        s.inventory = []
-        s.alive = True
+    def __init__(self, name, job):
+        self.name = name
+        self.job = job
+        self.level = 1
+        self.exp = 0
+        self.gold = 0
+        self.inventory = []
+        self.alive = True
 
         # 직업별 스탯!
         if job == 'warrior':
-            s.hp, s.max_hp = 120, 120
-            s.atk = 15
-            s.defense = 12
+            self.hp, self.max_hp = 120, 120
+            self.atk = 15
+            self.defense = 12
         elif job == 'mage':
-            s.hp, s.max_hp = 80, 80
-            s.atk = 25
-            s.defense = 5
+            self.hp, self.max_hp = 80, 80
+            self.atk = 25
+            self.defense = 5
         elif job == 'archer':
-            s.hp, s.max_hp = 100, 100
-            s.atk = 20
-            s.defense = 8
+            self.hp, self.max_hp = 100, 100
+            self.atk = 20
+            self.defense = 8
 
-    def take_damage(s, damage):
-        actual = damage - s.defense
+    def take_damage(self, damage):
+        actual = damage - self.defense
         if actual < 1:
             actual = 1
-        s.hp -= actual
-        if s.hp <= 0:
-            s.hp = 0
-            s.alive = False
+        self.hp -= actual
+        if self.hp <= 0:
+            self.hp = 0
+            self.alive = False
         return actual
 
-    def attack(s, target):
-        actual = target.take_damage(s.atk)
-        print(f'  {s.name} -> {target.name} ({actual} 데미지)')
+    def attack(self, target):
+        actual = target.take_damage(self.atk)
+        print(f'  {self.name} -> {target.name} ({actual} 데미지)')
         return actual
 
-    def heal(s, amount):
-        s.hp = min(s.hp + amount, s.max_hp)
-        print(f'  {s.name} 회복! HP: {s.hp}/{s.max_hp}')
+    def heal(self, amount):
+        self.hp = min(self.hp + amount, self.max_hp)
+        print(f'  {self.name} 회복! HP: {self.hp}/{self.max_hp}')
 
-    def status(s):
+    def status(self):
         jobs = {'warrior': '용사', 'mage': '마법사', 'archer': '궁수'}
-        print(f'[{jobs[s.job]}] {s.name} Lv.{s.level}')
-        print(f'  HP: {s.hp}/{s.max_hp} | ATK: {s.atk} | DEF: {s.defense}')
-        print(f'  EXP: {s.exp} | 골드: {s.gold}')
+        print(f'[{jobs[self.job]}] {self.name} Lv.{self.level}')
+        print(f'  HP: {self.hp}/{self.max_hp} | ATK: {self.atk} | DEF: {self.defense}')
+        print(f'  EXP: {self.exp} | 골드: {self.gold}')
 
 # 3직업 비교!
 print('=== 직업별 스탯 ===')
@@ -98,45 +98,45 @@ for job in ['warrior', 'mage', 'archer']:
       title: "💻 레벨업 시스템!",
       task: "경험치를 모아 레벨업하는 시스템을 실행하세요!",
       initialCode: `class Character:
-    def __init__(s, name, job):
-        s.name = name
-        s.job = job
-        s.level = 1
-        s.exp = 0
-        s.gold = 0
-        s.alive = True
+    def __init__(self, name, job):
+        self.name = name
+        self.job = job
+        self.level = 1
+        self.exp = 0
+        self.gold = 0
+        self.alive = True
 
         if job == 'warrior':
-            s.hp, s.max_hp = 120, 120
-            s.atk, s.defense = 15, 12
+            self.hp, self.max_hp = 120, 120
+            self.atk, self.defense = 15, 12
         elif job == 'mage':
-            s.hp, s.max_hp = 80, 80
-            s.atk, s.defense = 25, 5
+            self.hp, self.max_hp = 80, 80
+            self.atk, self.defense = 25, 5
         else:
-            s.hp, s.max_hp = 100, 100
-            s.atk, s.defense = 20, 8
+            self.hp, self.max_hp = 100, 100
+            self.atk, self.defense = 20, 8
 
-    def gain_exp(s, amount):
-        s.exp += amount
-        print(f'  +{amount} EXP (총 {s.exp})')
+    def gain_exp(self, amount):
+        self.exp += amount
+        print(f'  +{amount} EXP (총 {self.exp})')
         # 100 경험치마다 레벨업!
-        while s.exp >= 100:
-            s.exp -= 100
-            s.level_up()
+        while self.exp >= 100:
+            self.exp -= 100
+            self.level_up()
 
-    def level_up(s):
-        s.level += 1
+    def level_up(self):
+        self.level += 1
         # 레벨업 보너스!
-        s.max_hp += 10
-        s.hp = s.max_hp  # 풀회복!
-        s.atk += 3
-        s.defense += 2
-        print(f'  ★ 레벨 업! Lv.{s.level}!')
-        print(f'    HP: {s.max_hp} | ATK: {s.atk} | DEF: {s.defense}')
+        self.max_hp += 10
+        self.hp = self.max_hp  # 풀회복!
+        self.atk += 3
+        self.defense += 2
+        print(f'  ★ 레벨 업! Lv.{self.level}!')
+        print(f'    HP: {self.max_hp} | ATK: {self.atk} | DEF: {self.defense}')
 
-    def gain_gold(s, amount):
-        s.gold += amount
-        print(f'  +{amount} 골드 (총 {s.gold})')
+    def gain_gold(self, amount):
+        self.gold += amount
+        print(f'  +{amount} 골드 (총 {self.gold})')
 
 # 테스트!
 hero = Character('용사', 'warrior')
@@ -165,32 +165,32 @@ print(f'EXP: {hero.exp} | 골드: {hero.gold}')`,
       title: "🎯 미션: Character 완성!",
       task: "빈칸 3개를 채워서 Character 클래스를 완성하세요!",
       initialCode: `class Character:
-    def __init__(s, name, job):
-        s.name = name
-        s.job = job
-        s.level = 1
-        s.exp = 0
+    def __init__(self, name, job):
+        self.name = name
+        self.job = job
+        self.level = 1
+        self.exp = 0
 
         if job == 'warrior':
-            s.hp, s.max_hp = 120, 120
-            s.atk, s.defense = 15, 12
+            self.hp, self.max_hp = 120, 120
+            self.atk, self.defense = 15, 12
         elif job == 'mage':
-            s.hp, s.max_hp = 80, 80
-            s.atk, s.defense = 25, 5
+            self.hp, self.max_hp = 80, 80
+            self.atk, self.defense = 25, 5
 
-    def gain_exp(s, amount):
-        s.___ += amount
-        if s.exp >= 100:
-            s.exp -= 100
-            s.level_up()
+    def gain_exp(self, amount):
+        self.___ += amount
+        if self.exp >= 100:
+            self.exp -= 100
+            self.level_up()
 
-    def level_up(s):
-        s.___ += 1
-        s.max_hp += 10
-        s.hp = s.max_hp
-        s.atk += 3
-        print(f'레벨 업! Lv.{s.level}')
-        print(f'  HP: {s.max_hp}, ATK: {s.atk}')
+    def level_up(self):
+        self.___ += 1
+        self.max_hp += 10
+        self.hp = self.max_hp
+        self.atk += 3
+        print(f'레벨 업! Lv.{self.level}')
+        print(f'  HP: {self.max_hp}, ATK: {self.atk}')
 
 hero = Character('철수', 'warrior')
 print(f'Lv.{hero.level} | HP: {hero.hp} | ATK: {hero.atk}')
@@ -218,24 +218,24 @@ print(f'\\n마법사 HP: {hero2.hp}, ATK: {hero2.atk}')`,
       title: "💻 3직업 전투 비교!",
       task: "같은 몬스터와 싸울 때 직업별 차이를 확인하세요!",
       initialCode: `class Character:
-    def __init__(s, name, job):
-        s.name = name
-        s.job = job
+    def __init__(self, name, job):
+        self.name = name
+        self.job = job
         if job == 'warrior':
-            s.hp, s.max_hp = 120, 120
-            s.atk, s.defense = 15, 12
+            self.hp, self.max_hp = 120, 120
+            self.atk, self.defense = 15, 12
         elif job == 'mage':
-            s.hp, s.max_hp = 80, 80
-            s.atk, s.defense = 25, 5
+            self.hp, self.max_hp = 80, 80
+            self.atk, self.defense = 25, 5
         else:
-            s.hp, s.max_hp = 100, 100
-            s.atk, s.defense = 20, 8
+            self.hp, self.max_hp = 100, 100
+            self.atk, self.defense = 20, 8
 
-    def take_damage(s, damage):
-        actual = damage - s.defense
+    def take_damage(self, damage):
+        actual = damage - self.defense
         if actual < 1:
             actual = 1
-        s.hp -= actual
+        self.hp -= actual
         return actual
 
 # 몬스터 공격력 15로 테스트

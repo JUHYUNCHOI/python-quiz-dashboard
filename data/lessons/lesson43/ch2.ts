@@ -11,41 +11,41 @@ export const ch2: Chapter = {
       title: "👹 2단계: 몬스터 만들기!",
       task: "Character 클래스에 attack, take_damage, heal 메서드를 추가한 전투 시스템을 실행하세요!",
       initialCode: `class Character:
-    def __init__(s, name, hp, atk, defense):
-        s.name = name
-        s.hp = hp
-        s.max_hp = hp
-        s.atk = atk
-        s.defense = defense
-        s.alive = True
+    def __init__(self, name, hp, atk, defense):
+        self.name = name
+        self.hp = hp
+        self.max_hp = hp
+        self.atk = atk
+        self.defense = defense
+        self.alive = True
 
-    def take_damage(s, damage):
-        actual = damage - s.defense
+    def take_damage(self, damage):
+        actual = damage - self.defense
         if actual < 1:
             actual = 1
-        s.hp = s.hp - actual
-        if s.hp <= 0:
-            s.hp = 0
-            s.alive = False
+        self.hp = self.hp - actual
+        if self.hp <= 0:
+            self.hp = 0
+            self.alive = False
         return actual
 
-    def attack(s, target):
-        if not s.alive:
+    def attack(self, target):
+        if not self.alive:
             return
-        actual = target.take_damage(s.atk)
-        print(f'{s.name} -> {target.name} ({actual} 데미지)')
+        actual = target.take_damage(self.atk)
+        print(f'{self.name} -> {target.name} ({actual} 데미지)')
         if not target.alive:
             print(f'{target.name} 쓰러짐!')
 
-    def heal(s, amount):
-        if not s.alive:
+    def heal(self, amount):
+        if not self.alive:
             return
-        s.hp = min(s.hp + amount, s.max_hp)
-        print(f'{s.name} 회복! HP: {s.hp}/{s.max_hp}')
+        self.hp = min(self.hp + amount, self.max_hp)
+        print(f'{self.name} 회복! HP: {self.hp}/{self.max_hp}')
 
-    def status(s):
-        state = 'O' if s.alive else 'X'
-        print(f'[{state}] {s.name}: HP {s.hp}/{s.max_hp}')
+    def status(self):
+        state = 'O' if self.alive else 'X'
+        print(f'[{state}] {self.name}: HP {self.hp}/{self.max_hp}')
 
 # 캐릭터 생성
 hero = Character('용사', 100, 25, 8)
@@ -73,25 +73,25 @@ slime.status()`,
       title: "🎯 미션: 전투 메서드 완성!",
       task: "빈칸 3개를 채워서 전투 시스템을 완성하세요!",
       initialCode: `class Character:
-    def __init__(s, name, hp, atk, defense):
-        s.name = name
-        s.hp = hp
-        s.atk = atk
-        s.defense = defense
+    def __init__(self, name, hp, atk, defense):
+        self.name = name
+        self.hp = hp
+        self.atk = atk
+        self.defense = defense
 
-    def take_damage(s, damage):
-        actual = damage - s.___
+    def take_damage(self, damage):
+        actual = damage - self.___
         if actual < 1:
             actual = 1
-        s.hp = s.hp - actual
+        self.hp = self.hp - actual
         return actual
 
-    def attack(s, target):
-        actual = target.___(s.atk)
-        print(f'{s.name} -> {target.name} ({actual} 데미지)')
+    def attack(self, target):
+        actual = target.___(self.atk)
+        print(f'{self.name} -> {target.name} ({actual} 데미지)')
 
-    def status(s):
-        print(f'{s.name}: HP {s.hp}')
+    def status(self):
+        print(f'{self.name}: HP {self.hp}')
 
 hero = Character('용사', 100, 25, 8)
 slime = Character('슬라임', 30, 10, 2)
@@ -114,7 +114,7 @@ slime.status()`,
       id: "ch2-1",
       type: "quiz",
       title: "퀴즈!",
-      content: "방어력이 10이고 공격력 8인 공격을 받으면?\n\n```python\ndef take_damage(s, damage):\n    actual = damage - s.defense\n    if actual < 1:\n        actual = 1\n```",
+      content: "방어력이 10이고 공격력 8인 공격을 받으면?\n\n```python\ndef take_damage(self, damage):\n    actual = damage - self.defense\n    if actual < 1:\n        actual = 1\n```",
       options: [
         "0 데미지 (무시)",
         "1 데미지 (최소)",

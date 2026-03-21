@@ -11,9 +11,9 @@ export const ch2: Chapter = {
       title: "문제 9: Calculator 클래스",
       task: "빈칸을 채워서 Calculator 클래스를 완성하세요!",
       initialCode: `class Calculator:
-    def add(s, a, b):
+    def add(self, a, b):
         ___
-    def multiply(s, a, b):
+    def multiply(self, a, b):
         ___
 
 calc = Calculator()
@@ -29,12 +29,12 @@ print(calc.multiply(4, 6))`,
       title: "문제 10: 사각형 클래스",
       task: "빈칸을 채워서 Rectangle 클래스의 area와 perimeter를 완성하세요!",
       initialCode: `class Rectangle:
-    def __init__(s, width, height):
-        s.width = width
-        s.height = height
-    def area(s):
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+    def area(self):
         ___
-    def perimeter(s):
+    def perimeter(self):
         ___
 
 rect = Rectangle(5, 3)
@@ -42,13 +42,13 @@ print(f'넓이: {rect.area()}')
 print(f'둘레: {rect.perimeter()}')`,
       expectedOutput: "넓이: 15\n둘레: 16",
       hint: "넓이 = 가로 × 세로, 둘레 = (가로 + 세로) × 2",
-      hint2: "return s.width * s.height / return (s.width + s.height) * 2"
+      hint2: "return self.width * self.height / return (self.width + self.height) * 2"
     },
     {
       id: "ch2-2",
       type: "quiz",
       title: "문제 11",
-      content: "출력 결과는?\n\n```python\nclass Animal:\n    total = 0\n    def __init__(s, species):\n        s.species = species\n        Animal.total += 1\ncat = Animal('고양이')\ndog = Animal('강아지')\nprint(f'{cat.species}, {dog.species}')\nprint(f'총: {Animal.total}마리')\n```",
+      content: "출력 결과는?\n\n```python\nclass Animal:\n    total = 0\n    def __init__(self, species):\n        self.species = species\n        Animal.total += 1\ncat = Animal('고양이')\ndog = Animal('강아지')\nprint(f'{cat.species}, {dog.species}')\nprint(f'총: {Animal.total}마리')\n```",
       options: [
         "고양이, 강아지\\n총: 1마리",
         "고양이, 강아지\\n총: 2마리",
@@ -64,12 +64,12 @@ print(f'둘레: {rect.perimeter()}')`,
       title: "문제 12: 학생 성적 클래스",
       task: "빈칸을 채워서 Student 클래스의 add_score와 average를 완성하세요!",
       initialCode: `class Student:
-    def __init__(s, name):
-        s.name = name
-        s.scores = []
-    def add_score(s, score):
+    def __init__(self, name):
+        self.name = name
+        self.scores = []
+    def add_score(self, score):
         ___
-    def average(s):
+    def average(self):
         ___
 
 student = Student('민수')
@@ -79,13 +79,13 @@ student.add_score(78)
 print(f'{student.name}의 평균: {student.average():.1f}')`,
       expectedOutput: "민수의 평균: 85.0",
       hint: "append로 점수 추가, sum/len으로 평균 계산!",
-      hint2: "s.scores.append(score) / return sum(s.scores) / len(s.scores)"
+      hint2: "self.scores.append(score) / return sum(self.scores) / len(self.scores)"
     },
     {
       id: "ch2-4",
       type: "quiz",
       title: "문제 13",
-      content: "`hero.attack(monster)`에서 `s`에 들어가는 것은?\n\n```python\nclass Character:\n    def attack(s, target):\n        print(f'{s.name} → {target.name}')\n```",
+      content: "`hero.attack(monster)`에서 `s`에 들어가는 것은?\n\n```python\nclass Character:\n    def attack(self, target):\n        print(f'{self.name} → {target.name}')\n```",
       options: ["monster", "hero", "attack", "None"],
       answer: 1,
       explanation: "메서드를 호출한 객체(hero)가 s에 들어가요!"
@@ -96,18 +96,18 @@ print(f'{student.name}의 평균: {student.average():.1f}')`,
       title: "문제 14: 자판기 클래스",
       task: "VendingMachine 클래스를 실행하고 결과를 확인하세요!",
       initialCode: `class VendingMachine:
-    def __init__(s):
-        s.items = {'콜라': 1200, '사이다': 1000, '주스': 1500}
-    def show_menu(s):
-        for name, price in s.items.items():
+    def __init__(self):
+        self.items = {'콜라': 1200, '사이다': 1000, '주스': 1500}
+    def show_menu(self):
+        for name, price in self.items.items():
             print(f'{name}: {price}원')
-    def buy(s, item, money):
-        if item not in s.items:
+    def buy(self, item, money):
+        if item not in self.items:
             print('없는 상품!')
-        elif money < s.items[item]:
-            print(f'돈 부족! {s.items[item] - money}원 더 필요')
+        elif money < self.items[item]:
+            print(f'돈 부족! {self.items[item] - money}원 더 필요')
         else:
-            change = money - s.items[item]
+            change = money - self.items[item]
             print(f'{item} 구매! 거스름돈: {change}원')
 
 vm = VendingMachine()

@@ -38,41 +38,41 @@ for action in actions:
       title: "⚔️ 3단계: 턴제 전투!",
       task: "actions 리스트로 자동 전투하는 시스템을 실행해보세요!",
       initialCode: `class Character:
-    def __init__(s, name, hp, atk, defense):
-        s.name = name
-        s.hp = hp
-        s.max_hp = hp
-        s.atk = atk
-        s.defense = defense
-        s.alive = True
+    def __init__(self, name, hp, atk, defense):
+        self.name = name
+        self.hp = hp
+        self.max_hp = hp
+        self.atk = atk
+        self.defense = defense
+        self.alive = True
 
-    def take_damage(s, damage):
-        actual = damage - s.defense
+    def take_damage(self, damage):
+        actual = damage - self.defense
         if actual < 1:
             actual = 1
-        s.hp = s.hp - actual
-        if s.hp <= 0:
-            s.hp = 0
-            s.alive = False
+        self.hp = self.hp - actual
+        if self.hp <= 0:
+            self.hp = 0
+            self.alive = False
         return actual
 
-    def attack(s, target):
-        if not s.alive:
+    def attack(self, target):
+        if not self.alive:
             return
-        actual = target.take_damage(s.atk)
-        print(f'  {s.name} -> {target.name} ({actual} 데미지)')
+        actual = target.take_damage(self.atk)
+        print(f'  {self.name} -> {target.name} ({actual} 데미지)')
         if not target.alive:
             print(f'  {target.name} 쓰러짐!')
 
-    def heal(s, amount):
-        if not s.alive:
+    def heal(self, amount):
+        if not self.alive:
             return
-        s.hp = min(s.hp + amount, s.max_hp)
-        print(f'  {s.name} 회복! HP: {s.hp}/{s.max_hp}')
+        self.hp = min(self.hp + amount, self.max_hp)
+        print(f'  {self.name} 회복! HP: {self.hp}/{self.max_hp}')
 
-    def status(s):
-        state = 'O' if s.alive else 'X'
-        print(f'  [{state}] {s.name}: HP {s.hp}/{s.max_hp}')
+    def status(self):
+        state = 'O' if self.alive else 'X'
+        print(f'  [{state}] {self.name}: HP {self.hp}/{self.max_hp}')
 
 # 캐릭터 생성
 hero = Character('용사', 100, 25, 8)
@@ -119,43 +119,43 @@ else:
       title: "🎯 미션: 전투 행동 추가!",
       task: "빈칸 3개를 채워서 'defend' 행동을 추가하세요!",
       initialCode: `class Character:
-    def __init__(s, name, hp, atk, defense):
-        s.name = name
-        s.hp = hp
-        s.max_hp = hp
-        s.atk = atk
-        s.defense = defense
-        s.alive = True
-        s.defending = False
+    def __init__(self, name, hp, atk, defense):
+        self.name = name
+        self.hp = hp
+        self.max_hp = hp
+        self.atk = atk
+        self.defense = defense
+        self.alive = True
+        self.defending = False
 
-    def take_damage(s, damage):
-        actual = damage - s.defense
-        if s.defending:
+    def take_damage(self, damage):
+        actual = damage - self.defense
+        if self.defending:
             actual = actual // 2
-            s.defending = False
+            self.defending = False
         if actual < 1:
             actual = 1
-        s.hp = s.hp - actual
-        if s.hp <= 0:
-            s.hp = 0
-            s.alive = False
+        self.hp = self.hp - actual
+        if self.hp <= 0:
+            self.hp = 0
+            self.alive = False
         return actual
 
-    def attack(s, target):
-        actual = target.take_damage(s.atk)
-        print(f'  {s.name} -> {target.name} ({actual} 데미지)')
+    def attack(self, target):
+        actual = target.take_damage(self.atk)
+        print(f'  {self.name} -> {target.name} ({actual} 데미지)')
 
-    def defend(s):
-        s.___ = True
-        print(f'  {s.name} 방어 자세! (다음 데미지 절반)')
+    def defend(self):
+        self.___ = True
+        print(f'  {self.name} 방어 자세! (다음 데미지 절반)')
 
-    def heal(s, amount):
-        s.hp = min(s.hp + amount, s.max_hp)
-        print(f'  {s.name} 회복! HP: {s.hp}/{s.max_hp}')
+    def heal(self, amount):
+        self.hp = min(self.hp + amount, self.max_hp)
+        print(f'  {self.name} 회복! HP: {self.hp}/{self.max_hp}')
 
-    def status(s):
-        state = 'O' if s.alive else 'X'
-        print(f'  [{state}] {s.name}: HP {s.hp}/{s.max_hp}')
+    def status(self):
+        state = 'O' if self.alive else 'X'
+        print(f'  [{state}] {self.name}: HP {self.hp}/{self.max_hp}')
 
 hero = Character('용사', 80, 22, 5)
 orc = Character('오크', 50, 20, 3)
@@ -190,7 +190,7 @@ orc.status()`,
       id: "ch3-2",
       type: "quiz",
       title: "퀴즈: 턴제 전투!",
-      content: "defend() 후 데미지를 받으면 어떻게 되나요?\n\n```python\ndef take_damage(s, damage):\n    actual = damage - s.defense\n    if s.defending:\n        actual = actual // 2\n```",
+      content: "defend() 후 데미지를 받으면 어떻게 되나요?\n\n```python\ndef take_damage(self, damage):\n    actual = damage - self.defense\n    if self.defending:\n        actual = actual // 2\n```",
       options: [
         "데미지 0",
         "데미지 변화 없음",

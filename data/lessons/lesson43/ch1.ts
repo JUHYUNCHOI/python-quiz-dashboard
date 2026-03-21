@@ -32,19 +32,19 @@ battle(hero, monster)  # 자동 전투!
       title: "💻 1단계: 캐릭터 기본 클래스",
       task: "Character 클래스의 기본 구조를 실행해보세요!",
       initialCode: `class Character:
-    def __init__(s, name, hp, atk):
-        s.name = name
-        s.hp = hp
-        s.max_hp = hp
-        s.atk = atk
-        s.alive = True
+    def __init__(self, name, hp, atk):
+        self.name = name
+        self.hp = hp
+        self.max_hp = hp
+        self.atk = atk
+        self.alive = True
 
-    def status(s):
+    def status(self):
         bar_len = 10
-        filled = int(s.hp / s.max_hp * bar_len)
+        filled = int(self.hp / self.max_hp * bar_len)
         bar = '#' * filled + '-' * (bar_len - filled)
-        state = 'O' if s.alive else 'X'
-        print(f'[{state}] {s.name}: [{bar}] HP {s.hp}/{s.max_hp} ATK {s.atk}')
+        state = 'O' if self.alive else 'X'
+        print(f'[{state}] {self.name}: [{bar}] HP {self.hp}/{self.max_hp} ATK {self.atk}')
 
 hero = Character('용사', 100, 20)
 mage = Character('마법사', 80, 30)
@@ -52,7 +52,7 @@ hero.status()
 mage.status()`,
       expectedOutput: `[O] 용사: [##########] HP 100/100 ATK 20\n[O] 마법사: [##########] HP 80/80 ATK 30`,
       hint: "HP 바는 현재 체력 비율로 만들어요!",
-      hint2: "filled = int(s.hp / s.max_hp * bar_len)으로 비율 계산!"
+      hint2: "filled = int(self.hp / self.max_hp * bar_len)으로 비율 계산!"
     },
     {
       id: "ch1-2",
@@ -60,22 +60,22 @@ mage.status()`,
       title: "🎯 미션: 캐릭터에 방어력 추가!",
       task: "Character 클래스에 defense(방어력) 속성을 추가하세요! 빈칸 2개를 채우세요!",
       initialCode: `class Character:
-    def __init__(s, name, hp, atk, defense):
-        s.name = name
-        s.hp = hp
-        s.max_hp = hp
-        s.atk = atk
-        s.___ = defense
-        s.alive = True
+    def __init__(self, name, hp, atk, defense):
+        self.name = name
+        self.hp = hp
+        self.max_hp = hp
+        self.atk = atk
+        self.___ = defense
+        self.alive = True
 
-    def status(s):
-        state = 'O' if s.alive else 'X'
-        print(f'[{state}] {s.name}: HP {s.hp}/{s.max_hp} ATK {s.atk} DEF {s.___}')
+    def status(self):
+        state = 'O' if self.alive else 'X'
+        print(f'[{state}] {self.name}: HP {self.hp}/{self.max_hp} ATK {self.atk} DEF {self.___}')
 
 hero = Character('용사', 100, 20, 10)
 hero.status()`,
       expectedOutput: `[O] 용사: HP 100/100 ATK 20 DEF 10`,
-      hint: "방어력도 다른 속성처럼 s.xxx로 저장해요!",
+      hint: "방어력도 다른 속성처럼 self.xxx로 저장해요!",
       hint2: "defense / defense"
     }
   ]

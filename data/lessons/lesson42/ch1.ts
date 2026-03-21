@@ -29,17 +29,17 @@ hero = Character('용사', 100)
 
 \`\`\`python
 class Character:
-    def __init__(s, char_name, hp):
-        s.char_name = char_name
-        s.hp = hp
+    def __init__(self, char_name, hp):
+        self.char_name = char_name
+        self.hp = hp
 
-    def say_hello(s):  # 👈 메서드!
-        print(f'안녕! 나는 {s.char_name}이야!')
+    def say_hello(self):  # 👈 메서드!
+        print(f'안녕! 나는 {self.char_name}이야!')
 \`\`\`
 
 ⚠️ 메서드의 첫 번째 매개변수는 항상 **s(self)** = "나 자신"!
 
-@핵심: 클래스 안에 \`def 메서드이름(s):\`로 정의하고, \`객체.메서드()\`로 호출!`
+@핵심: 클래스 안에 \`def 메서드이름(self):\`로 정의하고, \`객체.메서드()\`로 호출!`
     },
     {
       id: "ch1-1",
@@ -47,15 +47,15 @@ class Character:
       title: "💻 인사 & 상태 메서드 만들기!",
       task: "say_hello와 show_status 메서드를 가진 Character 클래스를 실행해보세요!",
       initialCode: `class Character:
-    def __init__(s, char_name, hp):
-        s.char_name = char_name
-        s.hp = hp
+    def __init__(self, char_name, hp):
+        self.char_name = char_name
+        self.hp = hp
 
-    def say_hello(s):
-        print(f'안녕! 나는 {s.char_name}이야!')
+    def say_hello(self):
+        print(f'안녕! 나는 {self.char_name}이야!')
 
-    def show_status(s):
-        print(f'{s.char_name}: HP {s.hp}')
+    def show_status(self):
+        print(f'{self.char_name}: HP {self.hp}')
 
 hero = Character('용사', 100)
 hero.say_hello()
@@ -70,18 +70,18 @@ hero.show_status()`,
       title: "💻 메서드에 매개변수 추가!",
       task: "매개변수가 있는 메서드를 만들어 실행해보세요!",
       initialCode: `class Character:
-    def __init__(s, char_name, hp):
-        s.char_name = char_name
-        s.hp = hp
+    def __init__(self, char_name, hp):
+        self.char_name = char_name
+        self.hp = hp
 
-    def say_hello(s):
-        print(f'안녕! 나는 {s.char_name}이야!')
+    def say_hello(self):
+        print(f'안녕! 나는 {self.char_name}이야!')
 
-    def introduce(s, age, job):
-        print(f'이름: {s.char_name}')
+    def introduce(self, age, job):
+        print(f'이름: {self.char_name}')
         print(f'나이: {age}살')
         print(f'직업: {job}')
-        print(f'HP: {s.hp}')
+        print(f'HP: {self.hp}')
 
 hero = Character('용사', 100)
 hero.say_hello()
@@ -103,18 +103,18 @@ mage.introduce(20, '마법사')`,
       title: "🎯 미션: 메서드 만들기!",
       task: "빈칸 3개를 채워서 레벨업 메서드를 완성하세요!",
       initialCode: `class Character:
-    def __init__(s, char_name, hp):
-        s.char_name = char_name
-        s.hp = hp
-        s.level = 1
+    def __init__(self, char_name, hp):
+        self.char_name = char_name
+        self.hp = hp
+        self.level = 1
 
-    def show_status(s):
-        print(f'{s.char_name} Lv.{s.level} (HP:{s.hp})')
+    def show_status(self):
+        print(f'{self.char_name} Lv.{self.level} (HP:{self.hp})')
 
     def level_up(___):
-        s.level = s.level + 1
-        s.___ = s.hp + 20
-        print(f'{s.char_name} 레벨 업! Lv.{s.level} (HP:{s.hp})')
+        self.level = self.level + 1
+        self.___ = self.hp + 20
+        print(f'{self.char_name} 레벨 업! Lv.{self.level} (HP:{self.hp})')
 
 hero = Character('용사', 100)
 hero.show_status()

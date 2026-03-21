@@ -12,9 +12,9 @@ export const ch2: Chapter = {
       content: `💭 인사 메서드는 혼자 했는데... 공격은 **상대방**이 필요하잖아? 메서드에 상대를 어떻게 전달하지?
 
 \`\`\`python
-def attack(s, target):  # target = 공격 대상!
-    print(f'{s.char_name}이(가) {target.char_name}을(를) 공격!')
-    target.hp = target.hp - s.atk  # 상대 HP 감소!
+def attack(self, target):  # target = 공격 대상!
+    print(f'{self.char_name}이(가) {target.char_name}을(를) 공격!')
+    target.hp = target.hp - self.atk  # 상대 HP 감소!
 \`\`\`
 
 💡 **target**도 객체라서 \`target.char_name\`, \`target.hp\` 사용 가능!
@@ -27,15 +27,15 @@ def attack(s, target):  # target = 공격 대상!
       title: "💻 공격 시스템 실행!",
       task: "용사가 슬라임을 공격하는 코드를 실행해보세요!",
       initialCode: `class Character:
-    def __init__(s, char_name, hp, atk):
-        s.char_name = char_name
-        s.hp = hp
-        s.atk = atk
+    def __init__(self, char_name, hp, atk):
+        self.char_name = char_name
+        self.hp = hp
+        self.atk = atk
 
-    def attack(s, target):
-        print(f'{s.char_name}이(가) {target.char_name}을(를) 공격!')
-        print(f'{s.atk} 데미지!')
-        target.hp = target.hp - s.atk
+    def attack(self, target):
+        print(f'{self.char_name}이(가) {target.char_name}을(를) 공격!')
+        print(f'{self.atk} 데미지!')
+        target.hp = target.hp - self.atk
         print(f'{target.char_name}의 남은 HP: {target.hp}')
 
 hero = Character('용사', 100, 25)
@@ -51,20 +51,20 @@ hero.attack(slime)`,
       title: "💚 회복 시스템 만들기!",
       task: "heal 메서드로 HP를 회복하되, max_hp를 넘지 않게 하는 코드를 실행해보세요!",
       initialCode: `class Character:
-    def __init__(s, char_name, hp, atk):
-        s.char_name = char_name
-        s.hp = hp
-        s.max_hp = hp
-        s.atk = atk
+    def __init__(self, char_name, hp, atk):
+        self.char_name = char_name
+        self.hp = hp
+        self.max_hp = hp
+        self.atk = atk
 
-    def heal(s, amount):
-        s.hp = s.hp + amount
-        if s.hp > s.max_hp:
-            s.hp = s.max_hp
-        print(f'{s.char_name} 회복! (+{amount}) HP: {s.hp}/{s.max_hp}')
+    def heal(self, amount):
+        self.hp = self.hp + amount
+        if self.hp > self.max_hp:
+            self.hp = self.max_hp
+        print(f'{self.char_name} 회복! (+{amount}) HP: {self.hp}/{self.max_hp}')
 
-    def status(s):
-        print(f'{s.char_name}: HP {s.hp}/{s.max_hp}, ATK {s.atk}')
+    def status(self):
+        print(f'{self.char_name}: HP {self.hp}/{self.max_hp}, ATK {self.atk}')
 
 hero = Character('용사', 100, 25)
 hero.status()

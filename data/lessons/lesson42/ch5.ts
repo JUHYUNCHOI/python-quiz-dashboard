@@ -15,24 +15,24 @@ export const ch5: Chapter = {
 \`\`\`python
 # ❌ 이렇게 하면 같은 코드를 3번 반복...
 class Warrior:
-    def __init__(s, name, hp):
-        s.name = name
-        s.hp = hp
-    def attack(s): ...
+    def __init__(self, name, hp):
+        self.name = name
+        self.hp = hp
+    def attack(self): ...
 
 class Mage:
-    def __init__(s, name, hp):  # 또 같은 코드!
-        s.name = name
-        s.hp = hp
-    def attack(s): ...
+    def __init__(self, name, hp):  # 또 같은 코드!
+        self.name = name
+        self.hp = hp
+    def attack(self): ...
 \`\`\`
 
 \`\`\`python
 # ✅ 상속으로 해결!
 class Character:          # 부모 클래스
-    def __init__(s, name, hp):
-        s.name = name
-        s.hp = hp
+    def __init__(self, name, hp):
+        self.name = name
+        self.hp = hp
 
 class Warrior(Character):  # 자식: Character를 상속!
     pass                   # 부모의 __init__을 그대로 사용
@@ -53,7 +53,7 @@ class Mage(Character):     # 자식: Character를 상속!
       type: "predict",
       title: "이 코드의 출력은?",
       content: "자식이 부모의 메서드를 쓸 수 있을까요?",
-      code: "class Animal:\n    def __init__(s, name):\n        s.name = name\n    def speak(s):\n        print(f'{s.name}: ...')\n\nclass Dog(Animal):\n    pass\n\nd = Dog('멍멍이')\nd.speak()",
+      code: "class Animal:\n    def __init__(self, name):\n        self.name = name\n    def speak(self):\n        print(f'{self.name}: ...')\n\nclass Dog(Animal):\n    pass\n\nd = Dog('멍멍이')\nd.speak()",
       options: ["멍멍이: ...", "에러: Dog has no speak", "None", "Animal: ..."],
       answer: 0,
       explanation: "Dog는 Animal을 상속받아서 speak() 메서드를 그대로 쓸 수 있어요! 코드 한 줄도 안 썼는데!"
@@ -66,15 +66,15 @@ class Mage(Character):     # 자식: Character를 상속!
 
 \`\`\`python
 class Animal:
-    def speak(s):
+    def speak(self):
         print("...")
 
 class Dog(Animal):
-    def speak(s):        # 같은 이름으로 덮어쓰기!
+    def speak(self):        # 같은 이름으로 덮어쓰기!
         print("멍멍!")
 
 class Cat(Animal):
-    def speak(s):        # 고양이는 다르게!
+    def speak(self):        # 고양이는 다르게!
         print("야옹!")
 \`\`\`
 
@@ -94,7 +94,7 @@ for a in animals:
       type: "predict",
       title: "어떤 메서드가 호출될까?",
       content: "부모와 자식 둘 다 같은 메서드가 있으면?",
-      code: "class Parent:\n    def greet(s):\n        print('안녕 부모')\n\nclass Child(Parent):\n    def greet(s):\n        print('안녕 자식')\n\nc = Child()\nc.greet()",
+      code: "class Parent:\n    def greet(self):\n        print('안녕 부모')\n\nclass Child(Parent):\n    def greet(self):\n        print('안녕 자식')\n\nc = Child()\nc.greet()",
       options: ["안녕 자식", "안녕 부모", "안녕 부모\n안녕 자식", "에러"],
       answer: 0,
       explanation: "자식이 같은 이름의 메서드를 가지면 자식 것이 우선! 이걸 오버라이딩이라고 해요."
@@ -107,14 +107,14 @@ for a in animals:
 
 \`\`\`python
 class Character:
-    def __init__(s, name, hp):
-        s.name = name
-        s.hp = hp
+    def __init__(self, name, hp):
+        self.name = name
+        self.hp = hp
 
 class Warrior(Character):
-    def __init__(s, name, hp, weapon):
+    def __init__(self, name, hp, weapon):
         super().__init__(name, hp)  # 부모의 __init__ 호출!
-        s.weapon = weapon           # 전사만의 추가 속성
+        self.weapon = weapon           # 전사만의 추가 속성
 
 w = Warrior("용사", 100, "검")
 print(f"{w.name} HP:{w.hp} 무기:{w.weapon}")
@@ -130,13 +130,13 @@ print(f"{w.name} HP:{w.hp} 무기:{w.weapon}")
       type: "fillblank" as const,
       title: "빈칸을 채워주세요",
       content: "Mage 클래스가 Character를 상속받아 마법 속성을 추가해요!",
-      code: "class Character:\n    def __init__(s, name, hp):\n        s.name = name\n        s.hp = hp\n\nclass Mage(___):\n    def __init__(s, name, hp, magic):\n        ___.__init__(name, hp)\n        s.magic = ___",
+      code: "class Character:\n    def __init__(self, name, hp):\n        self.name = name\n        self.hp = hp\n\nclass Mage(___):\n    def __init__(self, name, hp, magic):\n        ___.__init__(name, hp)\n        self.magic = ___",
       fillBlanks: [
         { id: 0, answer: "Character", options: ["Character", "Object", "Base", "Parent"] },
         { id: 1, answer: "super()", options: ["super()", "self", "Character", "parent()"] },
         { id: 2, answer: "magic", options: ["magic", "mp", "spell", "power"] }
       ],
-      explanation: "class Mage(Character)로 상속! super().__init__()으로 부모 생성자 호출! s.magic = magic으로 추가 속성!"
+      explanation: "class Mage(Character)로 상속! super().__init__()으로 부모 생성자 호출! self.magic = magic으로 추가 속성!"
     },
     {
       id: "ch5-quiz1",
@@ -156,7 +156,7 @@ print(f"{w.name} HP:{w.hp} 무기:{w.weapon}")
       id: "ch5-quiz2",
       type: "quiz",
       title: "코드 예측!",
-      content: "다음 코드의 결과는?\n\n```python\nclass A:\n    def say(s):\n        print('A')\n\nclass B(A):\n    pass\n\nclass C(B):\n    def say(s):\n        print('C')\n\nC().say()\n```",
+      content: "다음 코드의 결과는?\n\n```python\nclass A:\n    def say(self):\n        print('A')\n\nclass B(A):\n    pass\n\nclass C(B):\n    def say(self):\n        print('C')\n\nC().say()\n```",
       options: [
         "C",
         "A",
