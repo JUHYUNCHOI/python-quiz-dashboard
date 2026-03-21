@@ -59,7 +59,7 @@ export function CppRunner({
   const lineCount = initialCode.split("\n").length
   const editorMinHeight = minHeight ?? `${Math.max(280, lineCount * 28 + 64)}px`
 
-  const highlightedCode = useMemo(() => highlightCpp(code), [code])
+  const highlightedCode = useMemo(() => highlightCpp(code, true), [code])
 
   const handleScroll = () => {
     if (textareaRef.current && highlightRef.current) {

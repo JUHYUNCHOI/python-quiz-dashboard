@@ -249,10 +249,10 @@ function tokenizeCppLine(line: string, keyPrefix: string = '', dark: boolean = f
   return tokens
 }
 
-export function highlightCpp(code: string): React.ReactNode[] {
+export function highlightCpp(code: string, dark: boolean = false): React.ReactNode[] {
   const lines = code.split('\n')
   return lines.map((line, lineIndex) => {
-    const tokens = tokenizeCppLine(line, `L${lineIndex}-`)
+    const tokens = tokenizeCppLine(line, `L${lineIndex}-`, dark)
     return (
       <div key={lineIndex} className="leading-relaxed">
         {tokens.length > 0 ? tokens : <span>&nbsp;</span>}
