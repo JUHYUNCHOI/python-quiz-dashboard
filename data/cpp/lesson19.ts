@@ -290,7 +290,7 @@ int main() {
 \`\`\`cpp
 int main() {
     ios_base::sync_with_stdio(false);  // C와의 동기화 끄기!
-    cin.tie(NULL);                      // cin과 cout의 묶임 풀기!
+    cin.tie(nullptr);                      // cin과 cout의 묶임 풀기!
 
     // 이제 cin/cout이 훨씬 빨라요!
     int n;
@@ -330,11 +330,11 @@ input = sys.stdin.readline  # 파이썬의 Fast I/O!
           type: "fillblank" as const,
           title: "빈칸을 채워주세요",
           content: "빠른 입출력을 설정해봐요!",
-          code: "int main() {\n    ios_base::sync_with_stdio(false);\n    cin.___  (NULL);\n    // Fast I/O 설정 완료!\n}",
+          code: "int main() {\n    ios_base::sync_with_stdio(false);\n    cin.___(nullptr);\n    // Fast I/O 설정 완료!\n}",
           fillBlanks: [
             { id: 0, answer: "tie", options: ["tie", "sync", "bind", "link"] }
           ],
-          explanation: "cin.tie(NULL)은 cin과 cout의 묶임을 풀어서 속도를 높여요! ios_base::sync_with_stdio(false)와 함께 사용해요."
+          explanation: "cin.tie(nullptr)은 cin과 cout의 묶임을 풀어서 속도를 높여요! ios_base::sync_with_stdio(false)와 함께 사용해요."
         },
         {
           id: "ch2-endl",
@@ -383,7 +383,7 @@ print(i)  # 자동 줄바꿈, 별도 설정 불필요
 using namespace std;
 int main() {
     ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+    cin.tie(nullptr);
     for (int i = 1; i <= 3; i++) {
         cout << i << '\\n';
     }
@@ -407,7 +407,7 @@ using namespace std;
 int main() {
     // Fast I/O
     ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+    cin.tie(nullptr);
 
     // 파일 I/O (USACO)
     freopen("problem.in", "r", stdin);
@@ -428,7 +428,7 @@ int main() {
 - 출력: \`문제이름.out\` (예: \`ride.out\`, \`gift1.out\`)
 
 **체크리스트:**
-1. \`ios_base::sync_with_stdio(false)\` + \`cin.tie(NULL)\`
+1. \`ios_base::sync_with_stdio(false)\` + \`cin.tie(nullptr)\`
 2. \`freopen("problem.in", "r", stdin)\`
 3. \`freopen("problem.out", "w", stdout)\`
 4. \`'\\n'\` 사용 (\`endl\` 대신!)
@@ -461,7 +461,7 @@ using namespace std;
 
 int main() {
     ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+    cin.tie(nullptr);
 
     freopen("solve.in", "r", stdin);
     freopen("solve.out", "w", stdout);
@@ -583,7 +583,7 @@ int main() {
 
 ### ⚡ Fast I/O
 - \`ios_base::sync_with_stdio(false)\` — C 동기화 끄기
-- \`cin.tie(NULL)\` — cin/cout 묶임 풀기
+- \`cin.tie(nullptr)\` — cin/cout 묶임 풀기
 - \`'\\n'\` 사용 — endl은 느려요!
 
 ### 🏆 USACO 템플릿
@@ -593,7 +593,7 @@ int main() {
 using namespace std;
 int main() {
     ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+    cin.tie(nullptr);
     freopen("problem.in", "r", stdin);
     freopen("problem.out", "w", stdout);
     // 풀이 코드...

@@ -8,7 +8,7 @@ export const cppLesson12Data: LessonData = {
   id: "cpp-12",
   title: "참조와 함수",
   emoji: "🔗",
-  description: "Call by value vs reference!",
+  description: "참조(reference)와 포인터(pointer)로 원본을 직접 다뤄요!",
   chapters: [
     // ============================================
     // Chapter 1: 참조 (Reference)
@@ -272,7 +272,7 @@ int main() {
 
 💡 \`&\` 하나의 차이로 함수의 동작이 완전히 달라져요!
 
-참조(&)와 포인터(*)는 비슷한 목적이지만 다른 도구예요. 참조는 '별명'이고, 포인터는 '주소를 저장하는 변수'예요. 포인터는 다음 레슨에서 배워요!`
+참조(&)와 포인터(*)는 비슷한 목적이지만 다른 도구예요. 참조는 '별명'이고, 포인터는 '주소를 저장하는 변수'예요. 바로 다음 챕터에서 포인터도 배워봐요!`
         },
         {
           id: "ch2-fb1",
@@ -359,13 +359,148 @@ double: 2 4 6 8 10 `
     // ============================================
     // Chapter 3: 정리 퀴즈
     // ============================================
+    // ============================================
+    // Chapter 3: 포인터 기초 (Pointer Basics)
+    // ============================================
     {
       id: "ch3",
+      title: "포인터 기초",
+      emoji: "🎯",
+      steps: [
+        {
+          id: "ch3-ptr-intro",
+          type: "explain",
+          title: "🎯 포인터(Pointer) — 주소를 저장하는 변수!",
+          content: `참조(&)는 변수의 '별명'이었죠? **포인터(*)는 변수의 주소(메모리 위치)를 저장하는 변수**예요!
+
+\`\`\`cpp
+int x = 42;
+
+// 참조: 별명
+int& ref = x;   // ref는 x의 다른 이름
+
+// 포인터: 주소 저장
+int* ptr = &x;  // ptr은 x의 주소를 저장
+\`\`\`
+
+**핵심 연산자 두 가지:**
+
+| 연산자 | 이름 | 하는 일 |
+|---|---|---|
+| \`&\` | 주소 연산자 | 변수의 주소를 가져와요 |
+| \`*\` | 역참조 연산자 | 주소에 저장된 값을 가져와요 |
+
+\`\`\`cpp
+int x = 42;
+int* ptr = &x;    // ptr = x의 주소 (예: 0x1234)
+
+cout << ptr;     // 주소 출력 (0x1234 같은 값)
+cout << *ptr;    // 역참조: 42 출력
+cout << &x;      // x의 주소 출력
+
+*ptr = 100;      // 역참조로 값 변경!
+cout << x;       // 100 (x가 바뀌었어요!)
+\`\`\`
+
+**nullptr — 아무것도 가리키지 않는 포인터 (C++11):**
+
+\`\`\`cpp
+int* p = nullptr;  // 빈 포인터 (C++11 이후)
+// int* p = NULL;   // 옛날 방식 (비권장)
+
+if (p != nullptr) {
+    cout << *p;    // nullptr이면 접근하면 안 돼요!
+}
+\`\`\`
+
+💡 포인터와 참조의 차이:
+- **참조**: 항상 유효한 변수를 가리킴, nullptr 불가, 재지정 불가
+- **포인터**: nullptr 가능, 다른 변수를 가리키도록 변경 가능`,
+        },
+        {
+          id: "ch3-ptr-pred1",
+          type: "predict" as const,
+          title: "포인터 역참조!",
+          code: `#include <iostream>
+using namespace std;
+int main() {
+    int x = 10;
+    int* p = &x;
+    *p = 99;
+    cout << x;
+    return 0;
+}`,
+          options: ["10", "99", "0", "에러"],
+          answer: 1,
+          explanation: "*p = 99는 p가 가리키는 변수(x)의 값을 99로 바꿔요! 포인터로 원본을 수정할 수 있어요.",
+        },
+        {
+          id: "ch3-ptr-q1",
+          type: "quiz",
+          title: "포인터 기본!",
+          content: "`int* ptr = &x;` 에서 `*ptr`이 반환하는 것은?",
+          options: [
+            "ptr 변수 자체의 주소",
+            "x의 주소",
+            "x의 값",
+            "포인터의 크기",
+          ],
+          answer: 2,
+          explanation: "*ptr은 역참조(dereference)입니다. 포인터가 가리키는 곳의 값, 즉 x의 값을 반환해요!",
+        },
+        {
+          id: "ch3-ptr-vs-ref",
+          type: "explain",
+          title: "🆚 참조 vs 포인터",
+          content: `경쟁 프로그래밍에서는 **참조**를 훨씬 많이 써요. 하지만 포인터를 이해해야 배열, 연결 리스트 등 고급 자료구조를 다룰 수 있어요!
+
+\`\`\`cpp
+// 참조로 전달 (권장 — 더 안전)
+void add10(int& n) { n += 10; }
+
+// 포인터로 전달 (저수준 제어 필요할 때)
+void add10(int* p) { *p += 10; }
+
+int main() {
+    int x = 5;
+    add10(x);     // 참조 호출: 그냥 x
+    add10(&x);    // 포인터 호출: x의 주소
+    cout << x;    // 25
+}
+\`\`\`
+
+| 기능 | 참조 | 포인터 |
+|---|---|---|
+| 초기화 | 필수 | 나중에 가능 |
+| nullptr | 불가 | 가능 |
+| 재지정 | 불가 | 가능 |
+| 경쟁 프로그래밍 | 자주 사용 ✅ | 가끔 사용 |
+
+💡 **권장:** C++11 이후에는 포인터 대신 참조나 **스마트 포인터**를 써요!`,
+        },
+        {
+          id: "ch3-ptr-q2",
+          type: "quiz",
+          title: "참조 vs 포인터!",
+          content: "참조(&)와 포인터(*)의 차이로 올바른 것은?",
+          options: [
+            "참조는 nullptr이 될 수 있지만, 포인터는 안 된다",
+            "포인터는 nullptr이 될 수 있지만, 참조는 항상 유효한 변수를 가리킨다",
+            "둘 다 같은 동작을 한다",
+            "포인터는 const로 선언할 수 없다",
+          ],
+          answer: 1,
+          explanation: "참조는 항상 유효한 변수를 가리켜야 하고 nullptr이 불가능해요. 포인터는 nullptr로 '아무것도 가리키지 않음'을 표현할 수 있어요!",
+        },
+      ]
+    },
+    {
+      id: "ch4",
       title: "정리 퀴즈",
       emoji: "🏆",
       steps: [
         {
-          id: "ch3-q1",
+          id: "ch4-q1",
           type: "quiz",
           title: "참조 선언!",
           content: "`int x = 5;` 뒤에 `x`의 참조를 만드는 올바른 코드는?",
@@ -379,7 +514,7 @@ double: 2 4 6 8 10 `
           explanation: "int& ref = x;로 참조를 선언해요! &를 타입 뒤에 붙이는 게 참조 문법이에요."
         },
         {
-          id: "ch3-q2",
+          id: "ch4-q2",
           type: "quiz",
           title: "함수 매개변수!",
           content: `이 코드의 출력은?
@@ -403,7 +538,7 @@ int main() {
           explanation: "참조(&)로 받으니 원본이 바뀌어요! 첫 번째 호출: 5→15, 두 번째 호출: 15→25. 최종 x는 25예요."
         },
         {
-          id: "ch3-q3",
+          id: "ch4-q3",
           type: "quiz",
           title: "const 참조!",
           content: "`const int& ref = x;`에서 할 수 **없는** 것은?",
@@ -417,7 +552,7 @@ int main() {
           explanation: "const 참조는 읽기 전용이에요! 값을 읽거나 비교는 되지만, ref = 100처럼 수정하면 컴파일 에러가 나요."
         },
         {
-          id: "ch3-q4",
+          id: "ch4-q4",
           type: "quiz",
           title: "벡터와 참조!",
           content: "큰 벡터를 함수에 넘길 때, `void f(vector<int> v)` 대신 `void f(const vector<int>& v)`를 쓰는 이유는?",
@@ -431,16 +566,16 @@ int main() {
           explanation: "const 참조(&)로 받으면 큰 벡터를 복사하지 않아서 빠르고, const라서 실수로 수정하는 것도 막아줘요! 일석이조예요."
         },
         {
-          id: "ch3-summary",
+          id: "ch4-summary",
           type: "explain",
           title: "🎯 오늘 배운 것!",
           content: `## ✅ 오늘의 정리!
 
-- ✅ **참조(Reference)** — \`int& ref = x;\`로 변수의 별명(alias)을 만들어요
+### 📌 참조 (Reference)
+- ✅ **참조** — \`int& ref = x;\`로 변수의 별명(alias)을 만들어요
 - ✅ **const 참조** — \`const int& ref = x;\`는 읽기만 가능, 복사 없이 빠르게!
 - ✅ **Call by Value** — \`void f(int x)\` 복사본이 넘어가서 원본 안 바뀜
 - ✅ **Call by Reference** — \`void f(int& x)\` 원본의 별명이 넘어가서 원본 바뀜
-- ✅ **swap 함수** — 참조 전달의 대표적인 활용 예시!
 
 | 매개변수 방식 | 문법 | 원본 수정? | 복사 비용? |
 |---|---|---|---|
@@ -448,9 +583,15 @@ int main() {
 | Call by Reference | \`void f(int& x)\` | ✅ | 없음 |
 | const Reference | \`void f(const int& x)\` | ❌ | 없음 |
 
-💡 **규칙:** 수정해야 하면 \`&\`, 읽기만 하면 \`const &\`, 작은 값은 그냥 복사!
+### 🎯 포인터 (Pointer)
+- ✅ **포인터 선언** — \`int* ptr = &x;\` (x의 주소를 저장)
+- ✅ **역참조** — \`*ptr\`로 포인터가 가리키는 값에 접근
+- ✅ **nullptr** — C++11+, 아무것도 가리키지 않는 안전한 null 포인터
+- ✅ **참조 vs 포인터** — 참조는 null 불가·재지정 불가, 포인터는 null 가능·재지정 가능
 
-🚀 **다음 시간 예고:** 더 다양한 C++ 기능들을 배워봐요!`
+💡 **규칙:** 수정해야 하면 \`&\`, 읽기만 하면 \`const &\`, 저수준 제어가 필요하면 포인터!
+
+🚀 **다음 레슨:** 재귀(Recursion) — 함수가 자기 자신을 호출하는 강력한 기법!`
         }
       ]
     }
