@@ -77,19 +77,30 @@ export function PythonRunner({
   storageKey
 }: PythonRunnerProps) {
   const lsKey = storageKey ? `python-runner-${storageKey}` : null
-  const [code, setCode] = useState(() => {
-    if (!lsKey) return initialCode
+
+  // localStorage에서 저장된 상태 복원 (code + correct)
+  const loadSaved = () => {
+    if (!lsKey) return { code: initialCode, correct: null as boolean | null }
     try {
-      return localStorage.getItem(lsKey) ?? initialCode
+      const raw = localStorage.getItem(lsKey)
+      if (!raw) return { code: initialCode, correct: null }
+      // 구 포맷(plain string) 호환
+      if (!raw.startsWith("{")) return { code: raw, correct: null }
+      const parsed = JSON.parse(raw)
+      return { code: parsed.code ?? initialCode, correct: parsed.correct ?? null }
     } catch {
-      return initialCode
+      return { code: initialCode, correct: null }
     }
-  })  // localStorage에서 복원, 없으면 initialCode
+  }
+
+  const { code: savedCode, correct: savedCorrect } = loadSaved()
+
+  const [code, setCode] = useState(savedCode)
   const [output, setOutput] = useState("")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [isPyodideReady, setIsPyodideReady] = useState(false)
-  const [isCorrect, setIsCorrect] = useState<boolean | null>(null)
+  const [isCorrect, setIsCorrect] = useState<boolean | null>(savedCorrect)
   const [showHint, setShowHint] = useState(false)
   const [attempts, setAttempts] = useState(0)
   const [isFocused, setIsFocused] = useState(false)
@@ -97,6 +108,7 @@ export function PythonRunner({
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const highlightRef = useRef<HTMLDivElement>(null)
   const highlightedCode = useMemo(() => highlightPython(code, true), [code])
+  const isInitialMount = useRef(true)
 
   useEffect(() => {
     loadPyodideInstance()
@@ -107,19 +119,24 @@ export function PythonRunner({
       })
   }, [])
 
+  // 코드 변경 시 결과 초기화 (첫 마운트 제외 — 저장된 isCorrect 유지)
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false
+      return
+    }
     setIsCorrect(null)
     setOutput("")
     setError("")
   }, [code])
 
-  // 코드 localStorage 저장 (페이지 이탈 후 복귀 시 복원)
+  // 코드 + 정답 여부 localStorage 저장 (페이지 이탈 후 복귀 시 복원)
   useEffect(() => {
-    if (!lsKey || code === initialCode) return
+    if (!lsKey) return
     try {
-      localStorage.setItem(lsKey, code)
+      localStorage.setItem(lsKey, JSON.stringify({ code, correct: isCorrect }))
     } catch { /* ignore */ }
-  }, [code, lsKey, initialCode])
+  }, [code, isCorrect, lsKey])
 
   // 스크롤 동기화
   const handleScroll = useCallback(() => {
