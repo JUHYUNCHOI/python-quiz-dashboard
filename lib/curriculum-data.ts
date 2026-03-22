@@ -39,7 +39,7 @@ export const pseudoParts: PartMeta[] = [
   { id: "igcse-logic", title: "기출: Logic Gates", titleEn: "Past Papers: Logic Gates", lessonIds: ["igcse-logic1"] },
 ]
 
-/** 레슨 ID → 짧은 이름 매핑 */
+/** 레슨 ID → 짧은 이름 매핑 (한국어) */
 export const lessonNames: Record<string, string> = {
   // Python Part 1
   "1": "print() 출력", "2": "데이터 타입", "3": "변수", "4": "연산자",
@@ -79,9 +79,51 @@ export const lessonNames: Record<string, string> = {
   "igcse-sql1": "SQL 기초", "igcse-sql2": "SQL 심화", "igcse-logic1": "Logic Gates",
 }
 
+/** 레슨 ID → 짧은 이름 매핑 (영어) */
+export const lessonNamesEn: Record<string, string> = {
+  // Python Part 1
+  "1": "print() Output", "2": "Data Types", "3": "Variables", "4": "Operators",
+  "5": "String Operations", "6": "String Methods", "7": "print() Options", "8": "f-string",
+  "9": "Type Conversion", "10": "input() Input", "p1": "🎮 Mini Calculator",
+  // Python Part 2
+  "11": "Conditionals (if)", "12": "Advanced Conditionals", "13": "Loops (for)", "14": "Loops (while)", "p2": "🎮 Number Guessing",
+  // Python Part 3
+  "15": "Data Structures Overview", "16": "Lists Basics", "17": "Lists & Loops", "18": "split/join",
+  "19": "Tuples", "20": "Dictionaries", "21": "Sets", "22": "Slicing", "p3": "🎮 Hangman",
+  // Python Part 3+
+  "23": "Stacks", "24": "Queues", "25": "2D Lists", "26": "Sorting",
+  // Python Part 4-9
+  "27": "Turtle Basics", "28": "Turtle Drawing", "29": "Turtle Game", "30": "Pygame Basics", "31": "Pygame Game",
+  "32": "Functions Basics", "33": "Parameters", "34": "Return Values", "35": "Scope", "36": "Recursion",
+  "37": "Error Handling", "38": "File Reading", "39": "File Writing", "40": "CSV",
+  "41": "Classes Basics", "42": "Methods", "43": "Inheritance", "44": "Polymorphism",
+  "45": "Creating Modules", "46": "Standard Library", "47": "pip", "48": "API",
+  "49": "Project 1", "50": "Project 2", "51": "Project 3", "52": "Project 4", "p4": "🎮 Final",
+  // C++
+  "cpp-1": "Python vs C++", "cpp-2": "cout & namespace", "cpp-3": "Variables & Types", "cpp-4": "cin Input",
+  "cpp-5": "Operators", "cpp-6": "Conditionals (if/else)", "cpp-7": "Loops (for/while)", "cpp-8": "Functions", "cpp-p1": "🎮 Number Guessing",
+  "cpp-9": "Arrays & Vectors", "cpp-10": "Range-for & auto", "cpp-11": "Advanced Strings", "cpp-12": "References & Functions",
+  "cpp-13": "Pointers Basics", "cpp-14": "Structs & Classes", "cpp-p2": "⚔️ RPG Character",
+  "cpp-15": "pair & Sorting", "cpp-16": "map & set", "cpp-17": "STL Algorithms", "cpp-18": "stack/queue/deque",
+  "cpp-19": "Files & Fast I/O", "cpp-20": "CP Tips", "cpp-p3": "🏆 USACO Mock",
+  // Pseudocode
+  "pseudo-1": "Basics", "pseudo-2": "Variables", "pseudo-3": "I/O", "pseudo-4": "Conditionals",
+  "pseudo-28": "Boolean", "pseudo-5": "Loops", "pseudo-6": "Arrays", "pseudo-7": "Functions",
+  "pseudo-8": "Strings", "pseudo-p1": "🎮 Project",
+  "pseudo-9": "2D Arrays", "pseudo-10": "Files", "pseudo-11": "Records",
+  "pseudo-12": "Searching", "pseudo-13": "Sorting", "pseudo-14": "Stack/Queue", "pseudo-p2": "🎮 Project",
+  "pseudo-15": "Recursion", "pseudo-16": "Linked Lists", "pseudo-17": "Trees",
+  "pseudo-18": "Graphs", "pseudo-19": "Hashing", "pseudo-20": "Complexity", "pseudo-p3": "🎮 Project",
+  "pseudo-21": "Past Paper 1", "pseudo-22": "Past Paper 2", "pseudo-23": "Past Paper 3",
+  "pseudo-24": "Number Systems", "pseudo-25": "Logic Gates", "pseudo-26": "Networks", "pseudo-27": "Security",
+  "igcse-sql1": "SQL Basics", "igcse-sql2": "Advanced SQL", "igcse-logic1": "Logic Gates",
+}
+
 /** 레슨 ID로 이름 가져오기 */
-export function getLessonName(lessonId: string | number): string {
-  return lessonNames[String(lessonId)] || String(lessonId)
+export function getLessonName(lessonId: string | number, lang: "ko" | "en" = "ko"): string {
+  const key = String(lessonId)
+  if (lang === "en") return lessonNamesEn[key] || lessonNames[key] || key
+  return lessonNames[key] || key
 }
 
 /** 완료된 레슨 Set을 localStorage에서 로드 */

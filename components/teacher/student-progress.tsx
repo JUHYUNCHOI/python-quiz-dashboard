@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils"
 import { pythonParts, cppParts, pseudoParts, getLessonName, type PartMeta } from "@/lib/curriculum-data"
+import { useLanguage } from "@/contexts/language-context"
 
 interface LessonProgressRow {
   lesson_id: string
@@ -140,7 +141,7 @@ function LessonRow({ summary, name }: { summary: LessonSummary | undefined; name
   )
 }
 
-function PartSection({ part, lessonMap }: { part: PartMeta; lessonMap: Map<string, LessonSummary> }) {
+function PartSection({ part, lessonMap, lang }: { part: PartMeta; lessonMap: Map<string, LessonSummary>; lang: "ko" | "en" }) {
   const ids = part.lessonIds.map(String)
   const learnDoneCount = ids.filter(id => lessonMap.get(id)?.learn?.completed).length
   const inProgressCount = ids.filter(id => {
@@ -189,7 +190,7 @@ function PartSection({ part, lessonMap }: { part: PartMeta; lessonMap: Map<strin
       {/* 레슨 목록 */}
       <div className="space-y-0.5">
         {ids.map(id => (
-          <LessonRow key={id} summary={lessonMap.get(id)} name={getLessonName(id)} />
+          <LessonRow key={id} summary={lessonMap.get(id)} name={getLessonName(id, lang)} />
         ))}
       </div>
 
@@ -211,11 +212,12 @@ function PartSection({ part, lessonMap }: { part: PartMeta; lessonMap: Map<strin
   )
 }
 
-function LanguageSection({ title, emoji, parts, lessonMap }: {
+function LanguageSection({ title, emoji, parts, lessonMap, lang }: {
   title: string
   emoji: string
   parts: PartMeta[]
   lessonMap: Map<string, LessonSummary>
+  lang: "ko" | "en"
 }) {
   const allIds = parts.flatMap(p => p.lessonIds.map(String))
   const learnDone = allIds.filter(id => lessonMap.get(id)?.learn?.completed).length
@@ -232,13 +234,15 @@ function LanguageSection({ title, emoji, parts, lessonMap }: {
         <span className="text-xs text-blue-400">{reviewDone}/{learnDone || 0} 복습</span>
       </div>
       {parts.map(part => (
-        <PartSection key={part.id} part={part} lessonMap={lessonMap} />
+        <PartSection key={part.id} part={part} lessonMap={lessonMap} lang={lang} />
       ))}
     </div>
   )
 }
 
 export function StudentProgress({ lessonProgress }: Props) {
+  const { lang } = useLanguage()
+
   if (lessonProgress.length === 0) {
     return (
       <p className="text-sm text-gray-400 py-3 text-center">아직 학습 기록이 없어요</p>
@@ -286,7 +290,7 @@ export function StudentProgress({ lessonProgress }: Props) {
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1">
               <span className="text-xs font-bold text-indigo-700">최근 활동:</span>
-              <span className="text-xs text-indigo-600 truncate">{getLessonName(lastRow.lesson_id)}</span>
+              <span className="text-xs text-indigo-600 truncate">{getLessonName(lastRow.lesson_id, lang)}</span>
             </div>
             <div className="text-[10px] text-indigo-400">
               {lastRow.progress_type === "learn" ? "학습" : "복습"} · {formatDate(lastRow.updated_at)}
@@ -297,9 +301,9 @@ export function StudentProgress({ lessonProgress }: Props) {
       )}
 
       {/* 언어별 섹션 */}
-      <LanguageSection title="Python" emoji="🐍" parts={pythonParts} lessonMap={lessonMap} />
-      <LanguageSection title="C++" emoji="⚡" parts={cppParts} lessonMap={lessonMap} />
-      <LanguageSection title="Pseudocode" emoji="📋" parts={pseudoParts} lessonMap={lessonMap} />
+      <LanguageSection title="Python" emoji="🐍" parts={pythonParts} lessonMap={lessonMap} lang={lang} />
+      <LanguageSection title="C++" emoji="⚡" parts={cppParts} lessonMap={lessonMap} lang={lang} />
+      <LanguageSection title="Pseudocode" emoji="📋" parts={pseudoParts} lessonMap={lessonMap} lang={lang} />
     </div>
   )
 }

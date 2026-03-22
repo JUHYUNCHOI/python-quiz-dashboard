@@ -512,7 +512,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   // 챕터 완료 화면
   if (showLessonComplete) {
     const totalPoints = score
-    const lessonFeedback = analyzeLessonComplete(lessonId)
+    const lessonFeedback = analyzeLessonComplete(lessonId, lang)
     const streakInfo = analyzeStreak(gamification.dailyStreak)
     return (
       <>

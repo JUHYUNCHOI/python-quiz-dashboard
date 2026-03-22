@@ -17,16 +17,17 @@ import { StudentProgress } from "@/components/teacher/student-progress"
 import { ClassOverview } from "@/components/teacher/class-overview"
 import { getLessonName } from "@/lib/curriculum-data"
 import { cn } from "@/lib/utils"
+import { useLanguage } from "@/contexts/language-context"
 
 /** 가장 최근에 활동한 레슨 찾기 */
-function getCurrentLesson(progress: LessonProgressRow[]): { name: string; completed: boolean; date: string } | null {
+function getCurrentLesson(progress: LessonProgressRow[], lang: "ko" | "en" = "ko"): { name: string; completed: boolean; date: string } | null {
   if (!progress || progress.length === 0) return null
   const sorted = [...progress].sort((a, b) => (b.updated_at || "").localeCompare(a.updated_at || ""))
   const recent = sorted[0]
   if (!recent) return null
   const emoji = recent.lesson_id.startsWith("cpp-") ? "⚡" : recent.lesson_id.startsWith("pseudo-") || recent.lesson_id.startsWith("igcse-") ? "📋" : "🐍"
   return {
-    name: `${emoji} ${getLessonName(recent.lesson_id)}`,
+    name: `${emoji} ${getLessonName(recent.lesson_id, lang)}`,
     completed: recent.completed,
     date: recent.updated_at,
   }
@@ -90,6 +91,7 @@ export default function ClassDetailPage() {
   const searchParams = useSearchParams()
   const classId = searchParams.get("id") || ""
   const { user, profile: teacherProfile } = useAuth()
+  const { lang } = useLanguage()
   const [classInfo, setClassInfo] = useState<Class | null>(null)
   const [students, setStudents] = useState<StudentRow[]>([])
   const [copiedCode, setCopiedCode] = useState(false)
@@ -409,7 +411,7 @@ export default function ClassDetailPage() {
                           )}
                         </div>
                         {(() => {
-                          const current = getCurrentLesson(student.lessonProgress)
+                          const current = getCurrentLesson(student.lessonProgress, lang)
                           return current ? (
                             <p className="text-xs text-indigo-500 font-medium truncate">
                               📖 {current.name} {current.completed ? "✅" : "🔄"}

@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
 import { getLessonName } from "@/lib/curriculum-data"
 import { cn } from "@/lib/utils"
+import { useLanguage } from "@/contexts/language-context"
 import { BookOpen, Trophy, Flame, Clock, TrendingUp, Check, Minus } from "lucide-react"
 
 interface ParentReportData {
@@ -77,6 +78,7 @@ export default function ParentReportPageWrapper() {
 function ParentReportPage() {
   const searchParams = useSearchParams()
   const token = searchParams.get("t") || ""
+  const { lang } = useLanguage()
   const [data, setData] = useState<ParentReportData | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
@@ -294,7 +296,7 @@ function ParentReportPage() {
                     {p.completed ? <Check className="w-3 h-3" /> : <Minus className="w-2.5 h-2.5" />}
                   </span>
                   <span className="flex-1 text-gray-700 font-medium truncate">
-                    {getLessonName(p.lesson_id)}
+                    {getLessonName(p.lesson_id, lang)}
                   </span>
                   <span className="text-xs text-gray-400 flex-shrink-0">
                     {formatShortDate(p.updated_at)}
@@ -362,7 +364,7 @@ function ParentReportPage() {
                     <Check className="w-3 h-3" />
                   </span>
                   <span className="flex-1 text-gray-700 font-medium truncate">
-                    {getLessonName(p.lesson_id)}
+                    {getLessonName(p.lesson_id, lang)}
                   </span>
                   <span className="text-xs text-gray-400 flex-shrink-0">
                     {formatShortDate(p.updated_at)}

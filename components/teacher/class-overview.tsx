@@ -3,6 +3,7 @@
 import { AlertTriangle, TrendingUp, Users, Flame, BookOpen, Trophy } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { getLessonName } from "@/lib/curriculum-data"
+import { useLanguage } from "@/contexts/language-context"
 
 interface LessonProgressRow {
   lesson_id: string
@@ -114,6 +115,7 @@ function analyzeRisks(students: StudentRow[]): RiskAlert[] {
 }
 
 export function ClassOverview({ students }: Props) {
+  const { lang } = useLanguage()
   if (students.length === 0) return null
 
   const totalStudents = students.length
@@ -177,7 +179,7 @@ export function ClassOverview({ students }: Props) {
           <span className="text-sm">📖</span>
           <span className="text-xs font-bold text-indigo-700">가장 많이 학습 중:</span>
           <span className="text-xs text-indigo-600 flex-1 truncate">
-            {getLessonName(topLesson[0])}
+            {getLessonName(topLesson[0], lang)}
           </span>
           <span className="text-[10px] text-indigo-400">{topLesson[1]}명</span>
         </div>
