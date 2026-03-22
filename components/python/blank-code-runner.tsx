@@ -96,21 +96,30 @@ export function BlankCodeRunner({
 
   const lsKey = storageKey ? `blank-runner-${storageKey}` : null
 
-  const [filledValues, setFilledValues] = useState<Record<number, string>>(() => {
-    if (!lsKey) return {}
+  // localStorage에서 저장된 상태 복원 (values + correct)
+  const loadSaved = () => {
+    if (!lsKey) return { values: {} as Record<number, string>, correct: null as boolean | null }
     try {
-      const saved = localStorage.getItem(lsKey)
-      return saved ? JSON.parse(saved) : {}
+      const raw = localStorage.getItem(lsKey)
+      if (!raw) return { values: {}, correct: null }
+      const parsed = JSON.parse(raw)
+      // 구 포맷(plain object) 호환
+      if (parsed.values !== undefined) return { values: parsed.values, correct: parsed.correct ?? null }
+      return { values: parsed, correct: null }
     } catch {
-      return {}
+      return { values: {}, correct: null }
     }
-  })
+  }
+
+  const { values: savedValues, correct: savedCorrect } = loadSaved()
+
+  const [filledValues, setFilledValues] = useState<Record<number, string>>(savedValues)
   const [focusedBlank, setFocusedBlank] = useState<number>(0)
   const [output, setOutput] = useState("")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [isPyodideReady, setIsPyodideReady] = useState(false)
-  const [isCorrect, setIsCorrect] = useState<boolean | null>(null)
+  const [isCorrect, setIsCorrect] = useState<boolean | null>(savedCorrect)
   const [showHint, setShowHint] = useState(false)
   const [attempts, setAttempts] = useState(0)
   const inputRefs = useRef<Record<number, HTMLInputElement | null>>({})
@@ -124,13 +133,13 @@ export function BlankCodeRunner({
       })
   }, [])
 
-  // 빈칸 값 localStorage 저장 (페이지 이탈 후 복귀 시 복원)
+  // 빈칸 값 + 정답 여부 localStorage 저장 (페이지 이탈 후 복귀 시 복원)
   useEffect(() => {
-    if (!lsKey || Object.keys(filledValues).length === 0) return
+    if (!lsKey) return
     try {
-      localStorage.setItem(lsKey, JSON.stringify(filledValues))
+      localStorage.setItem(lsKey, JSON.stringify({ values: filledValues, correct: isCorrect }))
     } catch { /* ignore */ }
-  }, [filledValues, lsKey])
+  }, [filledValues, isCorrect, lsKey])
 
   // 빈칸 값을 코드에 합성
   const buildCode = useCallback(() => {
