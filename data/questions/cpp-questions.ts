@@ -3106,7 +3106,7 @@ int main() {
   },
   {
     id: 133,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "보통",
     question: "다음 코드의 버그는 무엇인가?",
     code: `#include <iostream>
@@ -3139,7 +3139,7 @@ int main() {
   },
   {
     id: 134,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3164,7 +3164,7 @@ int main() {
   },
   {
     id: 135,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3186,7 +3186,7 @@ int main() {
   },
   {
     id: 136,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3212,7 +3212,7 @@ int main() {
   },
   {
     id: 137,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3243,7 +3243,7 @@ int main() {
   },
   {
     id: 138,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3265,7 +3265,7 @@ int main() {
   },
   {
     id: 139,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3293,7 +3293,7 @@ p = 10;   // 오류! 주소에 정수를 넣으려 함`,
   },
   {
     id: 140,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3314,7 +3314,7 @@ int main() {
   },
   {
     id: 141,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3338,7 +3338,7 @@ int main() {
   },
   {
     id: 142,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드에서 현재 상태로 컴파일 오류가 발생하나요?",
     code: `#include <iostream>
@@ -3367,7 +3367,7 @@ p = &y;   // OK! 포인터 재할당 가능`,
   },
   {
     id: 143,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드에서 주석 C와 D를 해제하면 어떤 것이 오류인가요?",
     code: `#include <iostream>
@@ -3390,7 +3390,7 @@ int main() {
   },
   {
     id: 144,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3416,7 +3416,7 @@ int main() {
   },
   {
     id: 145,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3443,7 +3443,7 @@ int main() {
   },
   {
     id: 146,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 중 메모리 누수가 발생하는 코드는?",
     code: `// A:
@@ -3470,7 +3470,7 @@ unique_ptr<int> p = make_unique<int>(10);`,
   },
   {
     id: 147,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드에서 unique_ptr의 소유권 이전 후 출력 결과는?",
     code: `#include <iostream>
@@ -3532,7 +3532,7 @@ else  // if(x>20)의 else!`,
   },
   {
     id: 149,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3556,7 +3556,7 @@ int main() {
   },
   {
     id: 150,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드에서 메모리 누수가 발생하는 이유는?",
     code: `#include <iostream>
@@ -3584,7 +3584,7 @@ p = new int(100);`,
   },
   {
     id: 151,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3610,7 +3610,7 @@ int main() {
   },
   {
     id: 152,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3635,7 +3635,7 @@ int main() {
   },
   {
     id: 153,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드에서 shared_ptr의 참조 카운트는?",
     code: `#include <iostream>
@@ -3658,7 +3658,7 @@ int main() {
   },
   {
     id: 154,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3679,7 +3679,7 @@ int main() {
   },
   {
     id: 155,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드에서 발생하는 문제는?",
     code: `#include <iostream>
