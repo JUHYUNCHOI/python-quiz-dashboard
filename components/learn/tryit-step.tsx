@@ -68,6 +68,7 @@ export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onS
             hint2={step.hint2}
             onSuccess={onSuccess}
             minHeight={step.type === "mission" ? "160px" : "140px"}
+            isStepDone={isCompleted}
           />
         ) : (
           <PythonRunner
@@ -81,6 +82,7 @@ export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onS
             showExpectedOutput={step.type === "mission"}
             minHeight={step.type === "mission" ? "160px" : "140px"}
             requireCodeChange={false}
+            isStepDone={isCompleted}
           />
         )}
       </div>
