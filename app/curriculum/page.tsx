@@ -761,7 +761,7 @@ export default function CurriculumPage() {
                                       >
                                         {isCompleted ? t("✅ 수업완료", "✅ Done") : t("📺 수업", "📺 Lesson")}
                                       </Link>
-                                      {!isPseudo && (!isCpp || cppReviewIds.has(String(lesson.id))) && (
+                                      {isCompleted && !isPseudo && (!isCpp || cppReviewIds.has(String(lesson.id))) && (
                                         <Link
                                           href={getReviewPath(lesson.id)}
                                           className={`min-w-[5.5rem] sm:min-w-[6.5rem] text-center px-3 sm:px-4 py-2 rounded-lg border-2 font-bold text-xs sm:text-sm ${

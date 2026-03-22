@@ -27,14 +27,21 @@ export function Header() {
         </Link>
 
         <div className="flex items-center gap-2 md:gap-4">
-          {/* 언어 선택 버튼 */}
-          <button
-            onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')}
-            className="flex items-center justify-center rounded-full bg-gray-100 px-2.5 py-2 min-h-[44px] hover:bg-gray-200 transition-colors text-sm font-medium"
-            title={lang === 'ko' ? 'Switch to English' : '한국어로 전환'}
-          >
-            {lang === 'ko' ? '🇺🇸 EN' : '🇰🇷 KO'}
-          </button>
+          {/* 언어 선택 탭 */}
+          <div className="flex items-center rounded-full bg-gray-100 p-0.5 text-xs font-bold">
+            <button
+              onClick={() => setLang('ko')}
+              className={`px-2.5 py-1.5 rounded-full transition-colors ${lang === 'ko' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+            >
+              🇰🇷 KO
+            </button>
+            <button
+              onClick={() => setLang('en')}
+              className={`px-2.5 py-1.5 rounded-full transition-colors ${lang === 'en' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+            >
+              🇺🇸 EN
+            </button>
+          </div>
 
           {!isLoading && !isAuthenticated ? (
             <Link

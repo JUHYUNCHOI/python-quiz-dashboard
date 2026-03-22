@@ -1,6 +1,7 @@
 "use client"
 
-import { useEffect, useCallback, useMemo, useState } from "react"
+import { useEffect, useCallback, useMemo, useState, useRef } from "react"
+import { useRouter } from "next/navigation"
 import { X, Clock, ChevronLeft, ChevronRight, Check, AlertCircle, Coffee, Flag } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -33,6 +34,19 @@ function shuffleArray<T>(arr: T[]): T[] {
 }
 
 export default function QuizPage() {
+  const router = useRouter()
+
+  // 설정 없이 직접 접근하면 setup으로 redirect
+  const hasSettings = useRef<boolean | null>(null)
+  if (typeof window !== "undefined" && hasSettings.current === null) {
+    hasSettings.current = !!sessionStorage.getItem("quizSettings")
+  }
+  useEffect(() => {
+    if (hasSettings.current === false) {
+      router.replace("/quiz/setup")
+    }
+  }, [router])
+
   // 코스에 맞는 문제 배열 — 스마트 세션 (간격 반복 기반)
   const smartSession = useMemo(() => {
     if (typeof window === "undefined") return { questions: pythonQuestions, reviewCount: 0, newCount: 0 }

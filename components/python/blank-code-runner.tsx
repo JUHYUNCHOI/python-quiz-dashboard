@@ -369,6 +369,13 @@ export function BlankCodeRunner({
         </div>
       </div>
 
+      {/* 빈칸 미완료 힌트 */}
+      {!allFilled && (
+        <p className="text-center text-xs text-amber-500 font-medium animate-pulse">
+          👆 위 빈칸을 채우면 실행 버튼이 활성화돼요!
+        </p>
+      )}
+
       {/* 버튼들 */}
       <div className="flex gap-2">
         <button
@@ -377,8 +384,8 @@ export function BlankCodeRunner({
           className={cn(
             "flex-1 flex items-center justify-center gap-1.5 md:gap-2 py-2 md:py-2.5 rounded-lg md:rounded-xl font-bold text-sm md:text-base transition-all",
             allFilled && isPyodideReady && !isLoading
-              ? "bg-green-600 hover:bg-green-500 text-white shadow-md"
-              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+              ? "bg-green-600 hover:bg-green-500 text-white shadow-md animate-pulse"
+              : "bg-gray-200 text-gray-400 cursor-not-allowed"
           )}
         >
           {isLoading ? (
@@ -386,7 +393,7 @@ export function BlankCodeRunner({
           ) : (
             <Play className="w-3.5 h-3.5 md:w-4 md:h-4" />
           )}
-          {isLoading ? "실행중..." : allFilled ? "▶ 실행" : "빈칸을 채우세요"}
+          {isLoading ? "실행중..." : allFilled ? "▶ 실행하기!" : "빈칸을 채워주세요"}
         </button>
 
         <button
