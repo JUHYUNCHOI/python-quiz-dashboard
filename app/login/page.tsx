@@ -25,6 +25,7 @@ function LoginContent() {
   const [emailMode, setEmailMode] = useState<"login" | "signup">("login")
   const [emailError, setEmailError] = useState("")
   const [emailSuccess, setEmailSuccess] = useState("")
+  const [oauthError, setOauthError] = useState("")
   const searchParams = useSearchParams()
   const error = searchParams.get("error")
   const returnTo = safeReturnTo(searchParams.get("returnTo"))
@@ -48,6 +49,7 @@ function LoginContent() {
 
     if (error) {
       console.error("Login error:", error)
+      setOauthError(t("로그인에 실패했어요. 잠시 후 다시 시도해주세요.", "Login failed. Please try again later."))
       setIsLoading(null)
     }
   }
@@ -108,10 +110,10 @@ function LoginContent() {
         </div>
 
         {/* 에러 메시지 */}
-        {error && (
+        {(error || oauthError) && (
           <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-center">
             <p className="text-sm text-red-600">
-              로그인에 실패했어요. 다시 시도해주세요.
+              {oauthError || t("로그인에 실패했어요. 다시 시도해주세요.", "Login failed. Please try again.")}
             </p>
           </div>
         )}
