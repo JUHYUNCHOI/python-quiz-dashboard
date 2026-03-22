@@ -10,6 +10,7 @@ import { useMasterySync } from "@/hooks/use-mastery-sync"
 import type { SessionData } from "@/hooks/use-quiz-state"
 import { useLanguage } from "@/contexts/language-context"
 import { addQuizHistoryEntry } from "@/lib/quiz-history"
+import { syncAchievements, getAchievementDef } from "@/lib/achievements"
 import { logActivity } from "@/lib/activity-log"
 import { analyzeQuizResult, analyzeStreak } from "@/lib/feedback-analyzer"
 import { QuizFeedbackCard } from "@/components/feedback/quiz-feedback-card"
@@ -142,6 +143,8 @@ function SessionCompletePage() {
 
   // Animation phase (0–7)
   const [phase, setPhase] = useState(-1)
+  // 새로 잠금 해제된 업적
+  const [newAchievements, setNewAchievements] = useState<string[]>([])
 
   // Load session data — 데이터 없으면 퀴즈 홈으로
   useEffect(() => {
@@ -206,6 +209,12 @@ function SessionCompletePage() {
         topicResults,
       })
       logActivity("quiz")
+
+      // 업적 체크 — quiz history 저장 직후 실행
+      try {
+        const { newlyUnlocked } = syncAchievements()
+        if (newlyUnlocked.length > 0) setNewAchievements(newlyUnlocked)
+      } catch {}
 
       // 커밋 완료 후 sessionStorage 클리어 — 브라우저 뒤로가기 시 이중 커밋 방지
       try { sessionStorage.removeItem("quizSessionData") } catch {}
@@ -421,6 +430,33 @@ function SessionCompletePage() {
             t={t}
           />
         </div>
+
+        {/* === Phase 6.5: New Achievements === */}
+        {phase >= 6 && newAchievements.length > 0 && (
+          <div className="mb-6 space-y-2 animate-scale-in">
+            {newAchievements.map((id) => {
+              const def = getAchievementDef(id)
+              if (!def) return null
+              return (
+                <div
+                  key={id}
+                  className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-yellow-50 to-amber-50 border-2 border-yellow-300 rounded-2xl shadow-md"
+                >
+                  <span className="text-2xl shrink-0">{def.emoji}</span>
+                  <div className="flex-1">
+                    <p className="text-xs font-bold text-yellow-600 uppercase tracking-wide">
+                      {t("업적 달성! 🏅", "Achievement Unlocked! 🏅")}
+                    </p>
+                    <p className="text-sm font-black text-gray-800">
+                      {t(def.title, def.titleEn)}
+                    </p>
+                    <p className="text-[10px] text-gray-500">{t(def.desc, def.descEn)}</p>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
 
         {/* === Phase 7: Personalized Feedback === */}
         {phase >= 7 && (

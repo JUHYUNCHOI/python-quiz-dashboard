@@ -10,6 +10,8 @@ import { useLanguage } from "@/contexts/language-context"
 import { useGamification, DAILY_XP_GOAL } from "@/hooks/use-gamification"
 import { useState, useEffect } from "react"
 import { OnboardingModal } from "@/components/onboarding-modal"
+import { DailyChallenges } from "@/components/daily-challenges"
+import { AchievementsShelf } from "@/components/achievements-shelf"
 
 // -------- 레슨 ID 순서 --------
 const PYTHON_LESSON_IDS: (number | string)[] = [
@@ -197,6 +199,9 @@ export default function DashboardPage() {
         {/* 기린 히어로 */}
         <GiraffeHero />
 
+        {/* 오늘의 도전 과제 */}
+        <DailyChallenges />
+
         {/* 오늘의 목표 */}
         <Card className="p-4 border-2 border-orange-200 bg-gradient-to-r from-orange-50 to-yellow-50">
           <div className="flex items-center justify-between mb-3">
@@ -318,6 +323,9 @@ export default function DashboardPage() {
             <p className="text-xs text-gray-400">{t("연속", "Streak")}</p>
           </div>
         </div>
+
+        {/* 업적 선반 */}
+        <AchievementsShelf />
 
         {/* 빠른 액션 */}
         <div className="grid grid-cols-2 gap-3">
