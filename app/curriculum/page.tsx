@@ -347,6 +347,8 @@ export default function CurriculumPage() {
   const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set(["part1", "cpp-part1", "pseudo-part1"]))
   const [selectedCourse, setSelectedCourse] = useState<CourseType>("python")
   const [loaded, setLoaded] = useState(false)
+  // P2 민준: 건너뛰기 확인 상태 (어떤 레슨 ID를 건너뛸지)
+  const [skipConfirmId, setSkipConfirmId] = useState<number | string | null>(null)
 
   // 초기 로드: localStorage에서 진도/코스 복원
   useEffect(() => {
@@ -488,6 +490,31 @@ export default function CurriculumPage() {
     localStorage.setItem("completedLessons", JSON.stringify([...newCompleted]))
   }
 
+  /** 해당 레슨까지(포함) 모든 이전 레슨을 완료 처리 (건너뛰기) */
+  const skipToLesson = (targetId: number | string) => {
+    const data = selectedCourse === "python" ? pythonCurriculumData : selectedCourse === "cpp" ? cppCurriculumData : pseudoCurriculumData
+    const allLessonIds = data.flatMap((p) => p.lessons.map((l) => l.id))
+    const newCompleted = new Set(completedLessons)
+    for (const id of allLessonIds) {
+      newCompleted.add(id)
+      if (id === targetId) break
+    }
+    setCompletedLessons(newCompleted)
+    localStorage.setItem("completedLessons", JSON.stringify([...newCompleted]))
+    setSkipConfirmId(null)
+    // 건너뛴 이후 파트 자동 열기
+    for (const part of data) {
+      const ids = part.lessons.map((l) => l.id)
+      if (ids.includes(targetId)) {
+        const nextPartIdx = data.indexOf(part) + 1
+        if (nextPartIdx < data.length) {
+          setExpandedParts((prev) => new Set([...prev, data[nextPartIdx].id]))
+        }
+        break
+      }
+    }
+  }
+
   const togglePart = (partId: string) => {
     const newExpanded = new Set(expandedParts)
     if (newExpanded.has(partId)) {
@@ -604,6 +631,29 @@ export default function CurriculumPage() {
             </div>
           </div>
         </div>
+
+        {/* P2 민준: 신규 학생 시작점 설정 배너 */}
+        {loaded && completedCount === 0 && !isTeacher && !isPseudo && (
+          <div className="max-w-[1600px] mx-auto mb-4">
+            <div className="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-2xl border-2 border-indigo-200 p-4 flex items-start gap-3">
+              <span className="text-2xl shrink-0">🎯</span>
+              <div className="flex-1">
+                <p className="font-bold text-gray-800 text-sm">
+                  {t(
+                    "이미 Python을 배운 적 있나요?",
+                    "Have you learned Python before?",
+                  )}
+                </p>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  {t(
+                    "처음부터 할 필요 없어요! 아는 레슨의 🔓 건너뛰기 버튼을 눌러 원하는 레슨부터 시작하세요.",
+                    "No need to start from scratch! Click 🔓 Skip on lessons you already know.",
+                  )}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* 커리큘럼 그리드 - 반응형 */}
         <div className="max-w-[1600px] mx-auto">
@@ -743,12 +793,45 @@ export default function CurriculumPage() {
                                   </div>
                                 </div>
 
-                                {/* 버튼들: 잠긴 수업은 비활성화 */}
+                                {/* 버튼들: 잠긴 수업은 건너뛰기 버튼 표시 (선생님 제외) */}
                                 <div className="flex gap-2 flex-shrink-0">
                                   {isLocked ? (
-                                    <span className="px-3 sm:px-4 py-2 rounded-lg border-2 border-gray-300 font-bold text-gray-400 text-xs sm:text-sm cursor-not-allowed">
-                                      🔒
-                                    </span>
+                                    !isTeacher && !isPseudo ? (
+                                      skipConfirmId === lesson.id ? (
+                                        // 확인 단계
+                                        <div className="flex flex-col items-end gap-1">
+                                          <p className="text-[10px] text-gray-500 text-right leading-tight">
+                                            {t("이전 레슨도 완료 처리돼요", "Previous lessons will be marked done")}
+                                          </p>
+                                          <div className="flex gap-1">
+                                            <button
+                                              onClick={() => setSkipConfirmId(null)}
+                                              className="px-2 py-1 rounded-lg border border-gray-300 text-gray-400 text-[10px] font-bold hover:bg-gray-50"
+                                            >
+                                              {t("취소", "Cancel")}
+                                            </button>
+                                            <button
+                                              onClick={() => skipToLesson(lesson.id)}
+                                              className="px-2 py-1 rounded-lg border border-orange-400 bg-orange-50 text-orange-600 text-[10px] font-bold hover:bg-orange-100"
+                                            >
+                                              {t("건너뛰기 ✓", "Skip ✓")}
+                                            </button>
+                                          </div>
+                                        </div>
+                                      ) : (
+                                        <button
+                                          onClick={() => setSkipConfirmId(lesson.id)}
+                                          className="px-2 sm:px-3 py-2 rounded-lg border-2 border-gray-300 text-gray-400 text-xs font-bold hover:border-orange-300 hover:text-orange-500 hover:bg-orange-50 transition-colors"
+                                          title={t("이미 아는 내용이라면 건너뛰기", "Skip if you already know this")}
+                                        >
+                                          🔓 {t("건너뛰기", "Skip")}
+                                        </button>
+                                      )
+                                    ) : (
+                                      <span className="px-3 sm:px-4 py-2 rounded-lg border-2 border-gray-300 font-bold text-gray-400 text-xs sm:text-sm cursor-not-allowed">
+                                        🔒
+                                      </span>
+                                    )
                                   ) : (
                                     <>
                                       <Link
