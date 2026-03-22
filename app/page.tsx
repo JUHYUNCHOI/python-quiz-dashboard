@@ -153,12 +153,27 @@ export default function DashboardPage() {
   const [lessonLoaded, setLessonLoaded] = useState(false)
   const [showOnboarding, setShowOnboarding] = useState(false)
   const [showCppBridge, setShowCppBridge] = useState(false)
+  // 퀴즈 이력/업적 존재 여부 (없으면 빈 카드 노출 안 함)
+  const [hasQuizHistory, setHasQuizHistory] = useState(false)
+  const [hasAchievements, setHasAchievements] = useState(false)
 
   useEffect(() => {
     const course = readSelectedCourse()
     setSelectedCourse(course)
     setNextLesson(readNextLesson(lang))
     setLessonLoaded(true)
+
+    // 퀴즈 이력 & 업적 존재 여부 확인
+    try {
+      const history = localStorage.getItem("quiz-history")
+      const parsed = history ? JSON.parse(history) : []
+      setHasQuizHistory(Array.isArray(parsed) && parsed.length > 0)
+    } catch {}
+    try {
+      const unlocked = localStorage.getItem("achievements-unlocked")
+      const parsed = unlocked ? JSON.parse(unlocked) : []
+      setHasAchievements(Array.isArray(parsed) && parsed.length > 0)
+    } catch {}
 
     // C++ 전환 가이드: cpp 선택 + 완료 레슨 < 5 + 세션에서 닫지 않은 경우
     try {
@@ -220,8 +235,8 @@ export default function DashboardPage() {
         {/* Python→C++ 전환 가이드 (C++ 시작 초반에만 표시) */}
         {showCppBridge && <PythonToCppBridge onDismiss={handleCppBridgeDismiss} />}
 
-        {/* 오늘의 도전 과제 */}
-        <DailyChallenges />
+        {/* 오늘의 도전 과제 — 퀴즈 이력이 있는 사용자만 표시 (신규 유저에게 빈 카드 방지) */}
+        {hasQuizHistory && <DailyChallenges />}
 
         {/* 오늘의 목표 */}
         <Card className="p-4 border-2 border-orange-200 bg-gradient-to-r from-orange-50 to-yellow-50">
@@ -345,8 +360,8 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* 업적 선반 */}
-        <AchievementsShelf />
+        {/* 업적 선반 — 하나라도 달성한 사용자만 표시 (14개 회색 배지 방지) */}
+        {hasAchievements && <AchievementsShelf />}
 
         {/* 빠른 액션 */}
         <div className="grid grid-cols-2 gap-3">

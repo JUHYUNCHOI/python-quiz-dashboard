@@ -56,6 +56,21 @@ export default function QuizPage() {
         const parsed = JSON.parse(raw)
         const pool = parsed.course === "cpp" ? cppQuestions : pythonQuestions
         const count = parsed.questionCount || 20
+
+        // 레슨 집중 퀴즈: lessonFilter가 있으면 해당 레슨 문제만 출제
+        if (parsed.lessonFilter !== undefined) {
+          const filtered = pool.filter(
+            (q) => String(q.lessonId) === String(parsed.lessonFilter)
+          )
+          // 해당 레슨 문제가 3개 이상 있으면 집중 퀴즈, 아니면 일반 세션
+          if (filtered.length >= 3) {
+            return createSmartSession(filtered, Math.min(count, filtered.length), {
+              difficulty: parsed.difficulty || "mixed",
+              filterByProgress: false, // 레슨 집중이므로 진도 필터 끔
+            })
+          }
+        }
+
         return createSmartSession(pool, count, {
           difficulty: parsed.difficulty || "mixed",
           filterByProgress: true,

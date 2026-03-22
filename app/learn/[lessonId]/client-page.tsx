@@ -547,6 +547,25 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             <LessonFeedbackCard feedback={lessonFeedback} t={t} />
 
             <div className="mt-4 space-y-3">
+              {/* 레슨 집중 퀴즈 CTA — IGCSE 제외, 레슨 ID가 숫자형(Python) 또는 cpp-N 형식일 때 */}
+              {!isIGCSE && (
+                <button
+                  onClick={() => {
+                    const course = currentProgrammingLang === "cpp" ? "cpp" : "python"
+                    sessionStorage.setItem("quizSettings", JSON.stringify({
+                      questionCount: 10,
+                      difficulty: "mixed",
+                      course,
+                      startTime: Date.now(),
+                      lessonFilter: isNaN(Number(lessonId)) ? lessonId : Number(lessonId),
+                    }))
+                    router.push("/quiz")
+                  }}
+                  className="w-full py-3 bg-orange-500 hover:bg-orange-600 active:scale-95 text-white rounded-xl font-bold text-base transition-all"
+                >
+                  {t("이 레슨 퀴즈 풀기 🧠", "Quiz on this lesson 🧠")}
+                </button>
+              )}
               {!isAuthenticated && (
                 <div className="bg-green-50 border border-green-200 rounded-2xl p-4 text-left">
                   <p className="text-sm font-bold text-green-800 mb-1">🦒 {t("로그인하면 진도가 안전하게 저장돼요!", "Login to safely save your progress!")}</p>
