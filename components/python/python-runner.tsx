@@ -32,6 +32,8 @@ interface PythonRunnerProps {
   minHeight?: string
   requireCodeChange?: boolean
   storageKey?: string
+  /** 이미 완료한 스텝 여부 — 저장된 코드 없어도 완료 상태 표시 */
+  isStepDone?: boolean
 }
 
 // Pyodide 싱글톤
@@ -75,23 +77,25 @@ export function PythonRunner({
   showExpectedOutput = false,
   minHeight = "100px",
   requireCodeChange = true,
-  storageKey
+  storageKey,
+  isStepDone = false
 }: PythonRunnerProps) {
   const lsKey = storageKey ? `python-runner-${storageKey}` : null
 
-  // localStorage에서 저장된 상태 복원 (code + correct)
+  // localStorage에서 저장된 상태 복원
+  // 없고 이미 완료한 스텝이면 완료 상태로 표시
   const loadSaved = () => {
-    if (!lsKey) return { code: initialCode, correct: null as boolean | null }
-    try {
-      const raw = localStorage.getItem(lsKey)
-      if (!raw) return { code: initialCode, correct: null }
-      // 구 포맷(plain string) 호환
-      if (!raw.startsWith("{")) return { code: raw, correct: null }
-      const parsed = JSON.parse(raw)
-      return { code: parsed.code ?? initialCode, correct: parsed.correct ?? null }
-    } catch {
-      return { code: initialCode, correct: null }
+    if (lsKey) {
+      try {
+        const raw = localStorage.getItem(lsKey)
+        if (raw) {
+          if (!raw.startsWith("{")) return { code: raw, correct: null as boolean | null }
+          const parsed = JSON.parse(raw)
+          return { code: parsed.code ?? initialCode, correct: parsed.correct ?? null }
+        }
+      } catch { /* ignore */ }
     }
+    return { code: initialCode, correct: isStepDone ? (true as boolean | null) : null }
   }
 
   const { code: savedCode, correct: savedCorrect } = loadSaved()

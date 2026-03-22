@@ -29,6 +29,8 @@ interface BlankCodeRunnerProps {
   onSuccess?: () => void
   minHeight?: string
   storageKey?: string
+  /** 이미 완료한 스텝 여부 — 저장된 코드 없으면 정답으로 자동 채움 */
+  isStepDone?: boolean
 }
 
 // Pyodide 싱글톤
@@ -112,26 +114,35 @@ export function BlankCodeRunner({
   hint2 = "",
   onSuccess,
   minHeight = "140px",
-  storageKey
+  storageKey,
+  isStepDone = false
 }: BlankCodeRunnerProps) {
   const blanks = parseBlanks(initialCode)
   const answers = hint2 ? parseAnswers(hint2) : []
 
   const lsKey = storageKey ? `blank-runner-${storageKey}` : null
 
-  // localStorage에서 저장된 상태 복원 (values + correct)
+  // localStorage에서 저장된 상태 복원
+  // 없고 이미 완료한 스텝이면 hint2 정답으로 채움
   const loadSaved = () => {
-    if (!lsKey) return { values: {} as Record<number, string>, correct: null as boolean | null }
-    try {
-      const raw = localStorage.getItem(lsKey)
-      if (!raw) return { values: {}, correct: null }
-      const parsed = JSON.parse(raw)
-      // 구 포맷(plain object) 호환
-      if (parsed.values !== undefined) return { values: parsed.values, correct: parsed.correct ?? null }
-      return { values: parsed, correct: null }
-    } catch {
-      return { values: {}, correct: null }
+    if (lsKey) {
+      try {
+        const raw = localStorage.getItem(lsKey)
+        if (raw) {
+          const parsed = JSON.parse(raw)
+          if (parsed.values !== undefined) return { values: parsed.values as Record<number, string>, correct: parsed.correct ?? null }
+          return { values: parsed as Record<number, string>, correct: null }
+        }
+      } catch { /* ignore */ }
     }
+    // 저장된 코드 없음 + 완료한 스텝 → 정답으로 채움
+    if (isStepDone && answers.length > 0) {
+      return {
+        values: Object.fromEntries(answers.map((ans, i) => [i, ans])) as Record<number, string>,
+        correct: true as boolean | null
+      }
+    }
+    return { values: {} as Record<number, string>, correct: null as boolean | null }
   }
 
   const { values: savedValues, correct: savedCorrect } = loadSaved()
