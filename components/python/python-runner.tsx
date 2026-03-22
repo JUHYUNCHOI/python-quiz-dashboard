@@ -30,6 +30,7 @@ interface PythonRunnerProps {
   showExpectedOutput?: boolean
   minHeight?: string
   requireCodeChange?: boolean
+  storageKey?: string
 }
 
 // Pyodide 싱글톤
@@ -72,9 +73,18 @@ export function PythonRunner({
   readOnly = false,
   showExpectedOutput = false,
   minHeight = "100px",
-  requireCodeChange = true
+  requireCodeChange = true,
+  storageKey
 }: PythonRunnerProps) {
-  const [code, setCode] = useState(initialCode)  // initialCode를 실제 초기값으로
+  const lsKey = storageKey ? `python-runner-${storageKey}` : null
+  const [code, setCode] = useState(() => {
+    if (!lsKey) return initialCode
+    try {
+      return localStorage.getItem(lsKey) ?? initialCode
+    } catch {
+      return initialCode
+    }
+  })  // localStorage에서 복원, 없으면 initialCode
   const [output, setOutput] = useState("")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -102,6 +112,14 @@ export function PythonRunner({
     setOutput("")
     setError("")
   }, [code])
+
+  // 코드 localStorage 저장 (페이지 이탈 후 복귀 시 복원)
+  useEffect(() => {
+    if (!lsKey || code === initialCode) return
+    try {
+      localStorage.setItem(lsKey, code)
+    } catch { /* ignore */ }
+  }, [code, lsKey, initialCode])
 
   // 스크롤 동기화
   const handleScroll = useCallback(() => {
