@@ -139,6 +139,22 @@ function QuizSetupPage() {
           </div>
         </div>
 
+        {/* 빠른 시작 (P6 캐주얼 유저용) */}
+        <div className="flex justify-center mb-6">
+          <button
+            onClick={() => {
+              sessionStorage.setItem("quizSettings", JSON.stringify({
+                questionCount: 5, difficulty: "mixed", course: selectedCourse, startTime: Date.now()
+              }))
+              router.push("/quiz")
+            }}
+            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white border-2 border-orange-200 text-orange-600 font-bold hover:border-orange-400 hover:bg-orange-50 transition-all hover:scale-105 active:scale-95 shadow-sm"
+          >
+            <span className="text-lg">⚡</span>
+            {t("지금 바로 5문제", "Quick 5 questions")}
+          </button>
+        </div>
+
         {/* Course Selector */}
         <div className="flex justify-center gap-3 mb-6">
           {courseOptions.map((course) => (
@@ -189,7 +205,7 @@ function QuizSetupPage() {
 
           {/* Quick Select Chips */}
           <div className="flex flex-wrap items-center justify-center gap-2 mb-4">
-            {[10, 20, 30, 50].map((count) => (
+            {[5, 10, 20, 30, 50].map((count) => (
               <button
                 key={count}
                 onClick={() => handleQuickSelect(count)}
@@ -200,7 +216,7 @@ function QuizSetupPage() {
                     : "bg-white text-gray-700 border-2 border-gray-200 hover:border-orange-300",
                 )}
               >
-                {t(`${count}개`, `${count} questions`)}
+                {count === 5 ? t("5개 ⚡", "5 ⚡") : t(`${count}개`, `${count} questions`)}
               </button>
             ))}
             <button

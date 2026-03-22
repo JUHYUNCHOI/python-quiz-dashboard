@@ -1,9 +1,9 @@
 "use client"
 
-import { AlertTriangle, TrendingUp, Users, Flame, BookOpen, Trophy } from "lucide-react"
+import { AlertTriangle, TrendingUp, Users, Flame, BookOpen, Target } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { getLessonName } from "@/lib/curriculum-data"
 import { useLanguage } from "@/contexts/language-context"
+import type { QuizSession } from "@/lib/supabase/types"
 
 interface LessonProgressRow {
   lesson_id: string
@@ -22,14 +22,7 @@ interface StudentRow {
   lastActive: string
   activeToday: boolean
   lessonProgress: LessonProgressRow[]
-}
-
-interface RiskAlert {
-  type: "inactive" | "stuck" | "low_quiz"
-  studentName: string
-  detail: string
-  severity: "warning" | "danger"
-  emoji: string
+  quizSessions: QuizSession[]
 }
 
 interface Props {
@@ -39,233 +32,257 @@ interface Props {
 function daysSince(dateStr: string): number {
   if (!dateStr || dateStr === "-") return 999
   try {
-    const d = new Date(dateStr)
-    const now = new Date()
-    return Math.floor((now.getTime() - d.getTime()) / (1000 * 60 * 60 * 24))
-  } catch {
-    return 999
-  }
+    return Math.floor((Date.now() - new Date(dateStr).getTime()) / (1000 * 60 * 60 * 24))
+  } catch { return 999 }
 }
 
-function analyzeRisks(students: StudentRow[]): RiskAlert[] {
+// 학생 패턴 분류 — 노력도 vs 이해도 매트릭스
+type StudentPattern = "star" | "hardworker" | "coaster" | "atrisk" | "new"
+
+function classifyPattern(s: StudentRow): StudentPattern {
+  if (s.completedLessons === 0 && s.lessonProgress.length === 0) return "new"
+
+  const recentQuizzes = s.quizSessions.slice(0, 10)
+  const avgAccuracy = recentQuizzes.length > 0
+    ? recentQuizzes.reduce((sum, q) => sum + (q.correct_answers / q.total_questions) * 100, 0) / recentQuizzes.length
+    : null
+
+  const lastActiveDays = daysSince(s.lastActive)
+  const isRegular = lastActiveDays <= 2 && (s.quizSessions.length >= 3 || s.completedLessons >= 3)
+  const highAccuracy = avgAccuracy !== null && avgAccuracy >= 72
+  const lowAccuracy  = avgAccuracy !== null && avgAccuracy < 55
+
+  if (isRegular && highAccuracy)  return "star"        // 잘 따라가는 학생
+  if (isRegular && lowAccuracy)   return "hardworker"  // 열심히 하는데 이해 부족
+  if (!isRegular && highAccuracy) return "coaster"     // 실력은 있는데 게으름
+  if (!isRegular && lowAccuracy)  return "atrisk"      // 개입 필요
+  return "star" // default: 데이터 부족 시 문제 없는 걸로 간주
+}
+
+const PATTERN_META: Record<StudentPattern, { emoji: string; label: string; color: string; bg: string; advice: string }> = {
+  star:       { emoji: "✅", label: "잘 따라가는 중",    color: "text-green-700",  bg: "bg-green-50",  advice: "이대로 유지하세요" },
+  hardworker: { emoji: "⚡", label: "개념 보충 필요",    color: "text-amber-700",  bg: "bg-amber-50",  advice: "1:1 설명이 도움될 수 있어요" },
+  coaster:    { emoji: "💤", label: "실력 있는데 빠짐",  color: "text-blue-700",   bg: "bg-blue-50",   advice: "동기부여가 필요해요" },
+  atrisk:     { emoji: "🚨", label: "개입 필요",         color: "text-red-700",    bg: "bg-red-50",    advice: "적극적인 관리가 필요해요" },
+  new:        { emoji: "🌱", label: "아직 시작 전",      color: "text-gray-500",   bg: "bg-gray-50",   advice: "시작을 독려해 주세요" },
+}
+
+// 위험 알림 생성
+interface RiskAlert {
+  studentName: string
+  detail: string
+  severity: "danger" | "warning"
+  emoji: string
+  action: string  // 선생님이 할 수 있는 것
+}
+
+function buildRiskAlerts(students: StudentRow[]): RiskAlert[] {
   const alerts: RiskAlert[] = []
+  const avgCompleted = students.length > 0
+    ? students.reduce((s, st) => s + st.completedLessons, 0) / students.length
+    : 0
 
   for (const s of students) {
     const days = daysSince(s.lastActive)
+    const recentQuizzes = s.quizSessions.slice(0, 5)
+    const avgAcc = recentQuizzes.length >= 2
+      ? recentQuizzes.reduce((sum, q) => sum + (q.correct_answers / q.total_questions) * 100, 0) / recentQuizzes.length
+      : null
 
-    // 7일 이상 미접속 → danger
+    // 장기 미접속
     if (days >= 7) {
-      alerts.push({
-        type: "inactive",
-        studentName: s.displayName,
-        detail: `${days}일째 미접속`,
-        severity: "danger",
-        emoji: "🚨",
-      })
-    }
-    // 3~6일 미접속 → warning
-    else if (days >= 3) {
-      alerts.push({
-        type: "inactive",
-        studentName: s.displayName,
-        detail: `${days}일째 미접속`,
-        severity: "warning",
-        emoji: "⚠️",
-      })
+      alerts.push({ studentName: s.displayName, detail: `${days}일째 접속 없음`, severity: "danger", emoji: "🚨", action: "연락 필요" })
+    } else if (days >= 3 && days < 7) {
+      alerts.push({ studentName: s.displayName, detail: `${days}일째 미접속`, severity: "warning", emoji: "⚠️", action: "확인 필요" })
     }
 
-    // 진도 정체: 레슨을 시작했지만 완료 수가 0
-    if (s.lessonProgress.length > 0 && s.completedLessons === 0) {
-      alerts.push({
-        type: "stuck",
-        studentName: s.displayName,
-        detail: "시작했지만 아직 완료 없음",
-        severity: "warning",
-        emoji: "🔄",
-      })
+    // 낮은 정답률 (5문제 이상 풀었는데 55% 미만)
+    if (avgAcc !== null && avgAcc < 55 && recentQuizzes.length >= 3 && days <= 3) {
+      alerts.push({ studentName: s.displayName, detail: `퀴즈 평균 ${Math.round(avgAcc)}% — 개념 이해 부족`, severity: "warning", emoji: "📉", action: "1:1 설명 권장" })
     }
 
-    // 완료 수 대비 너무 낮은 경우 (클래스 평균의 50% 미만)
-  }
-
-  // 진도 하위 학생 경고 (평균의 50% 미만인 학생)
-  if (students.length >= 3) {
-    const avgCompleted = students.reduce((s, st) => s + st.completedLessons, 0) / students.length
-    if (avgCompleted > 2) {
-      for (const s of students) {
-        if (s.completedLessons < avgCompleted * 0.5 && s.completedLessons > 0) {
-          // 이미 inactive로 잡힌 학생은 중복 방지
-          if (!alerts.some(a => a.studentName === s.displayName && a.type === "inactive")) {
-            alerts.push({
-              type: "stuck",
-              studentName: s.displayName,
-              detail: `완료 ${s.completedLessons}개 (평균 ${Math.round(avgCompleted)}개)`,
-              severity: "warning",
-              emoji: "📉",
-            })
-          }
-        }
+    // 진도 크게 뒤처짐
+    if (avgCompleted > 4 && s.completedLessons < avgCompleted * 0.4 && s.completedLessons >= 0) {
+      if (!alerts.some(a => a.studentName === s.displayName && a.emoji === "🚨")) {
+        alerts.push({ studentName: s.displayName, detail: `완료 ${s.completedLessons}개 (반 평균 ${Math.round(avgCompleted)}개)`, severity: "warning", emoji: "📊", action: "진도 확인" })
       }
     }
   }
 
-  // severity 순 정렬 (danger > warning)
-  alerts.sort((a, b) => (a.severity === "danger" ? 0 : 1) - (b.severity === "danger" ? 0 : 1))
-  return alerts
+  // danger 먼저, 중복 학생 제거 (같은 학생에 여러 알림이 있으면 severity 높은 거 우선)
+  const seen = new Map<string, RiskAlert>()
+  for (const a of alerts.sort((x, y) => (x.severity === "danger" ? 0 : 1) - (y.severity === "danger" ? 0 : 1))) {
+    if (!seen.has(a.studentName) || (seen.get(a.studentName)!.severity === "warning" && a.severity === "danger")) {
+      seen.set(a.studentName, a)
+    }
+  }
+  return [...seen.values()]
 }
 
 export function ClassOverview({ students }: Props) {
-  const { lang } = useLanguage()
+  const { lang: _lang } = useLanguage()
   if (students.length === 0) return null
 
-  const totalStudents = students.length
-  const activeToday = students.filter(s => s.activeToday).length
-  const avgLessons = Math.round(students.reduce((s, st) => s + st.completedLessons, 0) / totalStudents)
-  const avgXp = Math.round(students.reduce((s, st) => s + st.totalXp, 0) / totalStudents)
-  const avgStreak = (students.reduce((s, st) => s + st.dailyStreak, 0) / totalStudents).toFixed(1)
+  const total = students.length
+  const activeToday  = students.filter(s => s.activeToday).length
 
-  // 가장 많이 하고 있는 레슨 (최근 활동 기준)
-  const recentLessonCount = new Map<string, number>()
-  for (const s of students) {
-    if (s.lessonProgress.length > 0) {
-      const sorted = [...s.lessonProgress].sort((a, b) => (b.updated_at || "").localeCompare(a.updated_at || ""))
-      const recentId = sorted[0]?.lesson_id
-      if (recentId) {
-        recentLessonCount.set(recentId, (recentLessonCount.get(recentId) || 0) + 1)
-      }
-    }
-  }
-  const topLesson = [...recentLessonCount.entries()].sort((a, b) => b[1] - a[1])[0]
+  // 이번 주 활동 인원 (7일 이내 접속)
+  const activeThisWeek = students.filter(s => daysSince(s.lastActive) <= 7).length
 
-  // 위험 알림
-  const risks = analyzeRisks(students)
+  // 반 평균 퀴즈 정답률
+  const studentsWithQuiz = students.filter(s => s.quizSessions.length >= 2)
+  const classAvgAccuracy = studentsWithQuiz.length > 0
+    ? Math.round(
+        studentsWithQuiz.reduce((sum, s) => {
+          const recent = s.quizSessions.slice(0, 10)
+          const acc = recent.reduce((a, q) => a + (q.correct_answers / q.total_questions) * 100, 0) / recent.length
+          return sum + acc
+        }, 0) / studentsWithQuiz.length
+      )
+    : null
 
-  // 진도 분포 (간단한 막대 차트)
+  const avgLessons = Math.round(students.reduce((s, st) => s + st.completedLessons, 0) / total)
   const maxCompleted = Math.max(...students.map(s => s.completedLessons), 1)
+
+  // 패턴 분류
+  const patternCounts = students.reduce((acc, s) => {
+    const p = classifyPattern(s)
+    acc[p] = (acc[p] || 0) + 1
+    return acc
+  }, {} as Record<StudentPattern, number>)
+
+  const risks = buildRiskAlerts(students)
+  const dangerCount = risks.filter(r => r.severity === "danger").length
 
   return (
     <div className="space-y-4 mb-6">
-      {/* 반 전체 통계 */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-        <StatCard
-          icon={<Users className="w-4 h-4" />}
-          label="오늘 활동"
-          value={`${activeToday}/${totalStudents}`}
-          color={activeToday > totalStudents * 0.5 ? "green" : activeToday > 0 ? "amber" : "red"}
-        />
-        <StatCard
-          icon={<BookOpen className="w-4 h-4" />}
-          label="평균 완료"
-          value={`${avgLessons}개`}
-          color="purple"
-        />
-        <StatCard
-          icon={<Trophy className="w-4 h-4" />}
-          label="평균 XP"
-          value={String(avgXp)}
-          color="orange"
-        />
-        <StatCard
-          icon={<Flame className="w-4 h-4" />}
-          label="평균 연속일"
-          value={`${avgStreak}일`}
-          color="blue"
-        />
+
+      {/* ① 이번 주 반 요약 — 선생님이 매일 제일 먼저 보는 숫자 */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 space-y-3">
+        <h3 className="text-sm font-black text-gray-700">📊 이번 주 반 현황</h3>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <StatCard
+            icon={<Users className="w-4 h-4" />}
+            value={`${activeThisWeek}/${total}명`}
+            label="이번 주 활동"
+            sub={activeToday > 0 ? `오늘 ${activeToday}명` : "오늘 없음"}
+            color={activeThisWeek >= total * 0.7 ? "green" : activeThisWeek > 0 ? "amber" : "red"}
+          />
+          <StatCard
+            icon={<BookOpen className="w-4 h-4" />}
+            value={`${avgLessons}개`}
+            label="평균 완료 레슨"
+            sub="반 평균"
+            color="purple"
+          />
+          <StatCard
+            icon={<Target className="w-4 h-4" />}
+            value={classAvgAccuracy !== null ? `${classAvgAccuracy}%` : "—"}
+            label="평균 퀴즈 정답률"
+            sub={classAvgAccuracy !== null ? (classAvgAccuracy >= 75 ? "양호 👍" : classAvgAccuracy >= 55 ? "보통" : "복습 필요 ⚠️") : "데이터 부족"}
+            color={classAvgAccuracy === null ? "gray" : classAvgAccuracy >= 75 ? "green" : classAvgAccuracy >= 55 ? "amber" : "red"}
+          />
+          <StatCard
+            icon={<Flame className="w-4 h-4" />}
+            value={`${(students.reduce((s, st) => s + st.dailyStreak, 0) / total).toFixed(1)}일`}
+            label="평균 연속일"
+            sub="스트릭"
+            color="orange"
+          />
+        </div>
       </div>
 
-      {/* 현재 가장 많이 학습 중인 레슨 */}
-      {topLesson && (
-        <div className="flex items-center gap-2 px-4 py-2.5 bg-indigo-50 rounded-xl border border-indigo-200">
-          <span className="text-sm">📖</span>
-          <span className="text-xs font-bold text-indigo-700">가장 많이 학습 중:</span>
-          <span className="text-xs text-indigo-600 flex-1 truncate">
-            {getLessonName(topLesson[0], lang)}
-          </span>
-          <span className="text-[10px] text-indigo-400">{topLesson[1]}명</span>
+      {/* ② 지금 당장 신경써야 할 학생 */}
+      {risks.length > 0 && (
+        <div className={cn(
+          "rounded-2xl border p-4 space-y-3",
+          dangerCount > 0 ? "bg-red-50 border-red-200" : "bg-amber-50 border-amber-200"
+        )}>
+          <div className="flex items-center gap-2">
+            <AlertTriangle className={cn("w-4 h-4", dangerCount > 0 ? "text-red-500" : "text-amber-500")} />
+            <h3 className={cn("text-sm font-black", dangerCount > 0 ? "text-red-800" : "text-amber-800")}>
+              지금 신경써야 할 학생 {risks.length}명
+            </h3>
+          </div>
+          <div className="space-y-2">
+            {risks.slice(0, 5).map((risk, i) => (
+              <div key={i} className="flex items-center gap-3 bg-white rounded-xl px-3 py-2.5">
+                <span className="text-base">{risk.emoji}</span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-bold text-gray-800">{risk.studentName}</p>
+                  <p className="text-xs text-gray-500 truncate">{risk.detail}</p>
+                </div>
+                <span className={cn(
+                  "text-[10px] font-bold px-2 py-0.5 rounded-full flex-shrink-0",
+                  risk.severity === "danger" ? "bg-red-100 text-red-700" : "bg-amber-100 text-amber-700"
+                )}>
+                  {risk.action}
+                </span>
+              </div>
+            ))}
+            {risks.length > 5 && (
+              <p className="text-xs text-center text-gray-400">+{risks.length - 5}명 더 있어요 (아래 목록 확인)</p>
+            )}
+          </div>
         </div>
       )}
 
-      {/* 비활동 경고 카드 — Google Classroom 스타일 요약 */}
-      {(() => {
-        const dangerCount = risks.filter(r => r.severity === "danger" && r.type === "inactive").length
-        const warnCount = risks.filter(r => r.severity === "warning" && r.type === "inactive").length
-        const otherRisks = risks.filter(r => r.type !== "inactive")
-        if (risks.length === 0) return null
+      {risks.length === 0 && (
+        <div className="rounded-2xl border border-green-200 bg-green-50 px-4 py-3 flex items-center gap-2">
+          <span className="text-lg">🎉</span>
+          <p className="text-sm font-bold text-green-700">이번 주 모든 학생이 잘 따라가고 있어요!</p>
+        </div>
+      )}
 
-        return (
-          <div className="space-y-2">
-            {/* 요약 배너 */}
-            {(dangerCount > 0 || warnCount > 0) && (
-              <div className={cn(
-                "flex items-center gap-3 px-4 py-3 rounded-xl border font-medium text-sm",
-                dangerCount > 0
-                  ? "bg-red-50 border-red-200 text-red-700"
-                  : "bg-amber-50 border-amber-200 text-amber-700"
+      {/* ③ 학생 패턴 분포 — 수업 방향 결정에 도움 */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 space-y-3">
+        <h3 className="text-sm font-black text-gray-700">🗂️ 학생 유형 분포</h3>
+        <p className="text-xs text-gray-400">접속 빈도 × 퀴즈 정답률로 분류한 결과예요</p>
+        <div className="grid grid-cols-2 gap-2">
+          {(["star", "hardworker", "coaster", "atrisk"] as StudentPattern[]).map(pattern => {
+            const meta = PATTERN_META[pattern]
+            const count = patternCounts[pattern] || 0
+            if (count === 0) return null
+            return (
+              <div key={pattern} className={cn("rounded-xl p-3 border", meta.bg,
+                pattern === "star" ? "border-green-200" :
+                pattern === "hardworker" ? "border-amber-200" :
+                pattern === "coaster" ? "border-blue-200" : "border-red-200"
               )}>
-                <AlertTriangle className={cn("w-4 h-4 flex-shrink-0", dangerCount > 0 ? "text-red-500" : "text-amber-500")} />
-                <span className="flex-1">
-                  {dangerCount > 0 && <><strong>{dangerCount}명</strong>이 7일 이상 학습하지 않았어요</>}
-                  {dangerCount > 0 && warnCount > 0 && " · "}
-                  {warnCount > 0 && <><strong>{warnCount}명</strong>이 3~6일째 미접속</>}
-                </span>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-lg">{meta.emoji}</span>
+                  <span className={cn("text-xs font-black", meta.color)}>{count}명</span>
+                </div>
+                <p className={cn("text-xs font-bold", meta.color)}>{meta.label}</p>
+                <p className="text-[10px] text-gray-400 mt-0.5">{meta.advice}</p>
               </div>
-            )}
+            )
+          })}
+        </div>
+        {(patternCounts["new"] || 0) > 0 && (
+          <p className="text-xs text-gray-400 text-center">🌱 아직 시작 안 한 학생 {patternCounts["new"]}명</p>
+        )}
+      </div>
 
-            {/* 개별 목록 */}
-            <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
-              <div className="flex items-center gap-2 px-4 py-2 bg-gray-50 border-b border-gray-100">
-                <AlertTriangle className="w-3.5 h-3.5 text-gray-400" />
-                <span className="text-xs font-bold text-gray-600">주의 학생 ({risks.length}명)</span>
-              </div>
-              <div className="divide-y divide-gray-50">
-                {risks.slice(0, 6).map((risk, i) => (
-                  <div key={i} className="flex items-center gap-3 px-4 py-2.5">
-                    <span className="text-sm">{risk.emoji}</span>
-                    <span className="text-xs font-bold text-gray-700 w-20 truncate">{risk.studentName}</span>
-                    <span className={cn(
-                      "text-xs font-medium",
-                      risk.severity === "danger" ? "text-red-600" : "text-amber-600"
-                    )}>
-                      {risk.detail}
-                    </span>
-                    {risk.type === "inactive" && (
-                      <span className={cn(
-                        "ml-auto text-[10px] px-2 py-0.5 rounded-full font-bold",
-                        risk.severity === "danger"
-                          ? "bg-red-100 text-red-600"
-                          : "bg-amber-100 text-amber-600"
-                      )}>
-                        {risk.severity === "danger" ? "장기 미접속" : "주의"}
-                      </span>
-                    )}
-                  </div>
-                ))}
-                {risks.length > 6 && (
-                  <div className="px-4 py-2 text-xs text-gray-400 text-center">+{risks.length - 6}명 더</div>
-                )}
-              </div>
-            </div>
-          </div>
-        )
-      })()}
-
-      {/* 진도 비교 막대 차트 */}
-      <div className="rounded-xl border border-gray-200 bg-white p-4">
-        <div className="flex items-center gap-2 mb-3">
+      {/* ④ 학생별 진도 바 */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 space-y-3">
+        <div className="flex items-center gap-2">
           <TrendingUp className="w-4 h-4 text-gray-500" />
-          <span className="text-sm font-bold text-gray-700">학생별 진도 비교</span>
+          <h3 className="text-sm font-black text-gray-700">학생별 진도 비교</h3>
         </div>
         <div className="space-y-1.5">
           {[...students]
             .sort((a, b) => b.completedLessons - a.completedLessons)
             .map(s => {
-              const pct = maxCompleted > 0 ? (s.completedLessons / maxCompleted) * 100 : 0
+              const pct = (s.completedLessons / maxCompleted) * 100
+              const pattern = classifyPattern(s)
+              const meta = PATTERN_META[pattern]
               const days = daysSince(s.lastActive)
               return (
                 <div key={s.id} className="flex items-center gap-2">
-                  <span className={cn(
-                    "text-xs font-medium w-16 truncate text-right",
-                    days >= 3 ? "text-red-400" : "text-gray-600"
+                  <span className="text-xs w-4 text-center">{meta.emoji}</span>
+                  <span className={cn("text-xs font-medium w-16 truncate text-right",
+                    days >= 5 ? "text-red-400" : days >= 3 ? "text-amber-500" : "text-gray-600"
                   )}>
                     {s.displayName}
                   </span>
@@ -273,12 +290,12 @@ export function ClassOverview({ students }: Props) {
                     <div
                       className={cn(
                         "h-full rounded-full transition-all",
-                        days >= 7 ? "bg-red-300" :
-                        days >= 3 ? "bg-amber-400" :
-                        s.completedLessons >= avgLessons ? "bg-green-500" :
-                        "bg-blue-400"
+                        pattern === "star" ? "bg-green-500" :
+                        pattern === "hardworker" ? "bg-amber-400" :
+                        pattern === "coaster" ? "bg-blue-400" :
+                        pattern === "atrisk" ? "bg-red-400" : "bg-gray-300"
                       )}
-                      style={{ width: `${Math.max(pct, 2)}%` }}
+                      style={{ width: `${Math.max(pct, s.completedLessons > 0 ? 3 : 0)}%` }}
                     />
                   </div>
                   <span className="text-[10px] font-bold text-gray-400 w-8 text-right">
@@ -288,38 +305,36 @@ export function ClassOverview({ students }: Props) {
               )
             })}
         </div>
-        <div className="flex items-center gap-3 mt-2 text-[10px] text-gray-400 justify-end">
-          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-500" /> 평균 이상</span>
-          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-blue-400" /> 평균 미만</span>
-          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-400" /> 3일+ 미접속</span>
-          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-300" /> 7일+ 미접속</span>
+        <div className="flex items-center gap-3 mt-1 text-[10px] text-gray-400 flex-wrap">
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-500" />잘 따라가는 중</span>
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-400" />개념 보충 필요</span>
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-blue-400" />빠짐 주의</span>
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-400" />개입 필요</span>
         </div>
       </div>
     </div>
   )
 }
 
-function StatCard({ icon, label, value, color }: {
-  icon: React.ReactNode
-  label: string
-  value: string
-  color: "green" | "amber" | "red" | "purple" | "orange" | "blue"
+function StatCard({ icon, value, label, sub, color }: {
+  icon: React.ReactNode; value: string; label: string; sub: string
+  color: "green" | "amber" | "red" | "purple" | "orange" | "blue" | "gray"
 }) {
   const colors = {
-    green: "bg-green-50 text-green-600 border-green-200",
-    amber: "bg-amber-50 text-amber-600 border-amber-200",
-    red: "bg-red-50 text-red-600 border-red-200",
+    green:  "bg-green-50  text-green-600  border-green-200",
+    amber:  "bg-amber-50  text-amber-600  border-amber-200",
+    red:    "bg-red-50    text-red-600    border-red-200",
     purple: "bg-purple-50 text-purple-600 border-purple-200",
     orange: "bg-orange-50 text-orange-600 border-orange-200",
-    blue: "bg-blue-50 text-blue-600 border-blue-200",
+    blue:   "bg-blue-50   text-blue-600   border-blue-200",
+    gray:   "bg-gray-50   text-gray-500   border-gray-200",
   }
   return (
     <div className={cn("rounded-xl border p-3 text-center", colors[color])}>
-      <div className="flex items-center justify-center gap-1 mb-1">
-        {icon}
-      </div>
+      <div className="flex items-center justify-center mb-1">{icon}</div>
       <div className="text-lg font-black">{value}</div>
-      <div className="text-[10px] opacity-70">{label}</div>
+      <div className="text-[10px] opacity-75 font-medium">{label}</div>
+      <div className="text-[9px] opacity-60 mt-0.5">{sub}</div>
     </div>
   )
 }
