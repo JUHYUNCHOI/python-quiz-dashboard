@@ -156,6 +156,12 @@ export function BlankCodeRunner({
       })
   }, [])
 
+  // 최신 값을 ref로 동기 추적 (unmount cleanup에서 사용)
+  const latestFilledValues = useRef(filledValues)
+  const latestIsCorrect = useRef(isCorrect)
+  latestFilledValues.current = filledValues
+  latestIsCorrect.current = isCorrect
+
   // 빈칸 값 + 정답 여부 localStorage 저장 (페이지 이탈 후 복귀 시 복원)
   useEffect(() => {
     if (!lsKey) return
@@ -163,6 +169,19 @@ export function BlankCodeRunner({
       localStorage.setItem(lsKey, JSON.stringify({ values: filledValues, correct: isCorrect }))
     } catch { /* ignore */ }
   }, [filledValues, isCorrect, lsKey])
+
+  // React 배치로 인해 unmount 전 effect가 실행 안 될 수 있음 → cleanup에서 강제 저장
+  useEffect(() => {
+    return () => {
+      if (!lsKey) return
+      try {
+        localStorage.setItem(lsKey, JSON.stringify({
+          values: latestFilledValues.current,
+          correct: latestIsCorrect.current
+        }))
+      } catch { /* ignore */ }
+    }
+  }, [lsKey])
 
   // DB 연동: 로드 완료 후 복원 또는 lazy migration
   const { getSubmission, saveSubmission, loaded: dbLoaded } = useCodeSubmission()

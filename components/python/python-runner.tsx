@@ -131,6 +131,12 @@ export function PythonRunner({
     setError("")
   }, [code])
 
+  // 최신 값을 ref로 동기 추적 (unmount cleanup에서 사용)
+  const latestCode = useRef(code)
+  const latestIsCorrect = useRef(isCorrect)
+  latestCode.current = code
+  latestIsCorrect.current = isCorrect
+
   // 코드 + 정답 여부 localStorage 저장 (페이지 이탈 후 복귀 시 복원)
   useEffect(() => {
     if (!lsKey) return
@@ -138,6 +144,19 @@ export function PythonRunner({
       localStorage.setItem(lsKey, JSON.stringify({ code, correct: isCorrect }))
     } catch { /* ignore */ }
   }, [code, isCorrect, lsKey])
+
+  // React 배치로 인해 unmount 전 effect가 실행 안 될 수 있음 → cleanup에서 강제 저장
+  useEffect(() => {
+    return () => {
+      if (!lsKey) return
+      try {
+        localStorage.setItem(lsKey, JSON.stringify({
+          code: latestCode.current,
+          correct: latestIsCorrect.current
+        }))
+      } catch { /* ignore */ }
+    }
+  }, [lsKey])
 
   // DB 연동: 로드 완료 후 복원 또는 lazy migration
   const { getSubmission, saveSubmission, loaded: dbLoaded } = useCodeSubmission()
