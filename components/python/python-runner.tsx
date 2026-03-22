@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import { Play, Loader2, RotateCcw, Check, X, Lightbulb } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { highlightPython } from "@/components/ui/code-block"
+import { useCodeSubmission } from "@/contexts/code-submission-context"
 
 // Pyodide 타입 정의
 declare global {
@@ -138,6 +139,24 @@ export function PythonRunner({
     } catch { /* ignore */ }
   }, [code, isCorrect, lsKey])
 
+  // DB 연동: 로드 완료 후 복원 또는 lazy migration
+  const { getSubmission, saveSubmission, loaded: dbLoaded } = useCodeSubmission()
+  useEffect(() => {
+    if (!dbLoaded || !storageKey) return
+    const dbCode = getSubmission(storageKey)
+
+    if (savedCorrect === true) {
+      // localStorage에 이미 정답 있음 → DB에 lazy migration
+      saveSubmission(storageKey, savedCode)
+    } else if (dbCode && !isCorrect) {
+      // DB에 저장된 코드 있음 (다른 기기에서 풀었음) → 복원
+      setCode(dbCode)
+      setIsCorrect(true)
+      isInitialMount.current = true // 코드 변경 시 isCorrect 리셋 방지
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dbLoaded, storageKey])
+
   // 스크롤 동기화
   const handleScroll = useCallback(() => {
     if (textareaRef.current && highlightRef.current) {
@@ -191,6 +210,7 @@ export function PythonRunner({
 
         if (isMatch) {
           onSuccess?.()
+          if (storageKey) saveSubmission(storageKey, code)
         } else {
           onError?.()
           if (attempts >= 1 && hint) {
@@ -201,6 +221,7 @@ export function PythonRunner({
         // expectedOutput이 없으면 실행만 하면 성공 (run-only 모드)
         setIsCorrect(true)
         onSuccess?.()
+        if (storageKey) saveSubmission(storageKey, code)
       }
     } catch (err: any) {
       let errorMsg = err.message || "에러!"

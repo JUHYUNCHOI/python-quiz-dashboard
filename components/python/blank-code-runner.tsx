@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react"
 import { Play, Loader2, RotateCcw, Check, X, Lightbulb } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { highlightPythonInline } from "@/components/ui/code-block"
+import { useCodeSubmission } from "@/contexts/code-submission-context"
 
 // Pyodide 타입 정의
 declare global {
@@ -81,6 +82,28 @@ function parseAnswers(hint2: string): string[] {
   return hint2.split(' / ').map(s => s.trim())
 }
 
+// 빈칸 값을 코드에 합성 (컴포넌트 외부에서도 사용 가능)
+function buildAssembledCode(initialCode: string, filledValues: Record<number, string>): string {
+  const lines = initialCode.split('\n')
+  let blankIdx = 0
+  const result: string[] = []
+  for (const line of lines) {
+    const regex = /___/g
+    let newLine = ''
+    let lastIndex = 0
+    let match
+    while ((match = regex.exec(line)) !== null) {
+      newLine += line.slice(lastIndex, match.index)
+      newLine += filledValues[blankIdx] || '___'
+      blankIdx++
+      lastIndex = match.index + 3
+    }
+    newLine += line.slice(lastIndex)
+    result.push(newLine)
+  }
+  return result.join('\n')
+}
+
 export function BlankCodeRunner({
   initialCode,
   expectedOutput = "",
@@ -141,29 +164,32 @@ export function BlankCodeRunner({
     } catch { /* ignore */ }
   }, [filledValues, isCorrect, lsKey])
 
+  // DB 연동: 로드 완료 후 복원 또는 lazy migration
+  const { getSubmission, saveSubmission, loaded: dbLoaded } = useCodeSubmission()
+  useEffect(() => {
+    if (!dbLoaded || !storageKey) return
+    const dbData = getSubmission(storageKey)
+
+    if (savedCorrect === true) {
+      // localStorage에 이미 정답 있음 → DB에 lazy migration (다른 기기 대비)
+      const assembled = buildAssembledCode(initialCode, savedValues)
+      saveSubmission(storageKey, JSON.stringify({ values: savedValues, assembled }))
+    } else if (dbData) {
+      // DB에 저장된 데이터 있음 (다른 기기에서 풀었음) → 복원
+      try {
+        const parsed = JSON.parse(dbData)
+        if (parsed.values) {
+          setFilledValues(parsed.values)
+          setIsCorrect(true)
+        }
+      } catch { /* ignore */ }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dbLoaded, storageKey])
+
   // 빈칸 값을 코드에 합성
   const buildCode = useCallback(() => {
-    const lines = initialCode.split('\n')
-    let blankIdx = 0
-    const result: string[] = []
-
-    for (let i = 0; i < lines.length; i++) {
-      let line = lines[i]
-      const regex = /___/g
-      let newLine = ''
-      let lastIndex = 0
-      let match
-
-      while ((match = regex.exec(line)) !== null) {
-        newLine += line.slice(lastIndex, match.index)
-        newLine += filledValues[blankIdx] || '___'
-        blankIdx++
-        lastIndex = match.index + 3
-      }
-      newLine += line.slice(lastIndex)
-      result.push(newLine)
-    }
-    return result.join('\n')
+    return buildAssembledCode(initialCode, filledValues)
   }, [initialCode, filledValues])
 
   // 모든 빈칸이 채워졌는지
@@ -209,6 +235,7 @@ export function BlankCodeRunner({
 
         if (isMatch) {
           onSuccess?.()
+          if (storageKey) saveSubmission(storageKey, JSON.stringify({ values: filledValues, assembled: code }))
         } else {
           if (attempts >= 1 && hint) {
             setShowHint(true)
@@ -217,6 +244,7 @@ export function BlankCodeRunner({
       } else {
         setIsCorrect(true)
         onSuccess?.()
+        if (storageKey) saveSubmission(storageKey, JSON.stringify({ values: filledValues, assembled: code }))
       }
     } catch (err: any) {
       let errorMsg = err.message || "에러!"

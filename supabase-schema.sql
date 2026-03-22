@@ -381,3 +381,38 @@ begin
   return v_class_id;
 end;
 $$;
+
+
+
+-- ======== code_submissions: 학생 정답 코드 저장 ========
+-- 추가 마이그레이션 (기존 DB에 실행)
+
+create table if not exists public.code_submissions (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references public.profiles(id) on delete cascade not null,
+  lesson_id text not null,
+  step_id text not null,
+  code text not null,
+  submitted_at timestamptz not null default now(),
+  unique(user_id, lesson_id, step_id)
+);
+
+alter table public.code_submissions enable row level security;
+
+-- 학생: 자신의 제출 코드만 관리
+create policy "Students manage own code" on public.code_submissions
+  for all using (auth.uid() = user_id);
+
+-- 선생님: 자기 반 학생의 코드 조회 가능
+create policy "Teachers read class submissions" on public.code_submissions
+  for select using (
+    exists (
+      select 1 from public.class_members cm
+      join public.classes c on cm.class_id = c.id
+      where cm.student_id = code_submissions.user_id
+        and c.teacher_id = auth.uid()
+    )
+  );
+
+create index if not exists idx_code_submissions_user_lesson
+  on public.code_submissions(user_id, lesson_id);
