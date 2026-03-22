@@ -12,7 +12,7 @@ export async function restoreFromCloud(userId: string) {
 
   try {
     // 병렬로 모든 데이터 로드
-    const [quizResult, lessonResult, prefResult] = await Promise.allSettled([
+    const [quizResult, lessonResult, prefResult, masteryResult] = await Promise.allSettled([
       supabase
         .from("quiz_sessions")
         .select("*")
@@ -30,6 +30,10 @@ export async function restoreFromCloud(userId: string) {
         .select("*")
         .eq("user_id", userId)
         .single(),
+      supabase
+        .from("question_mastery")
+        .select("question_id,box,correct_streak,total_attempts,total_correct,last_review_date,next_review_date,last_grade")
+        .eq("user_id", userId),
     ])
 
     // 1. 퀴즈 이력 복원 (quiz_sessions → quiz-history localStorage)
@@ -52,6 +56,12 @@ export async function restoreFromCloud(userId: string) {
     if (prefResult.status === "fulfilled" && prefResult.value.data) {
       restorePreferences(prefResult.value.data)
     }
+
+    // 5. question-mastery 복원
+    if (masteryResult.status === "fulfilled" && masteryResult.value.data?.length) {
+      restoreQuestionMastery(masteryResult.value.data)
+    }
+
     // 복원 완료 알림 → 커리큘럼 등 UI 갱신 트리거
     if (typeof window !== "undefined") {
       window.dispatchEvent(new Event("cloud-data-restored"))
@@ -165,6 +175,37 @@ function restoreActivityLog(
 
   try {
     localStorage.setItem("activity-log", JSON.stringify(merged))
+  } catch {}
+}
+
+/** question_mastery rows → localStorage (클라우드 데이터 우선, 더 높은 totalAttempts 사용) */
+function restoreQuestionMastery(rows: Record<string, unknown>[]) {
+  const existingRaw = localStorage.getItem("question-mastery")
+  const existing: Record<number, unknown> = existingRaw ? JSON.parse(existingRaw) : {}
+
+  for (const row of rows) {
+    const qId = row.question_id as number
+    const local = existing[qId] as Record<string, unknown> | undefined
+
+    // 로컬에 더 많은 시도 기록이 있으면 로컬 우선 (더 최신)
+    const localAttempts = (local?.totalAttempts as number) || 0
+    const cloudAttempts = row.total_attempts as number
+    if (localAttempts >= cloudAttempts) continue
+
+    existing[qId] = {
+      questionId: qId,
+      box: row.box,
+      correctStreak: row.correct_streak,
+      totalAttempts: cloudAttempts,
+      totalCorrect: row.total_correct,
+      lastReviewDate: row.last_review_date,
+      nextReviewDate: row.next_review_date,
+      lastGrade: row.last_grade,
+    }
+  }
+
+  try {
+    localStorage.setItem("question-mastery", JSON.stringify(existing))
   } catch {}
 }
 

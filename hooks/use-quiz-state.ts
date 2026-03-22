@@ -102,6 +102,7 @@ export function useQuizState(questions: QuizQuestion[]) {
 
   // Hearts system
   const [hearts, setHearts] = useState(5)
+  const [maxHearts, setMaxHearts] = useState(5)
   const [sessionOver, setSessionOver] = useState(false)
   const [lastHeartLost, setLastHeartLost] = useState(false)
 
@@ -145,6 +146,16 @@ export function useQuizState(questions: QuizQuestion[]) {
       const parsed = JSON.parse(settings) as QuizSettings
       parsed.questionCount = Math.min(parsed.questionCount, questions.length)
       setQuizSettings(parsed)
+      // 난이도별 하트 수 설정: 쉬움 7, 보통 5, 어려움 3
+      const difficultyHearts: Record<string, number> = {
+        beginner: 7,
+        intermediate: 5,
+        advanced: 3,
+        mixed: 5,
+      }
+      const h = difficultyHearts[parsed.difficulty] ?? 5
+      setHearts(h)
+      setMaxHearts(h)
     } else {
       router.push("/quiz/setup")
     }
@@ -175,6 +186,33 @@ export function useQuizState(questions: QuizQuestion[]) {
     window.addEventListener("beforeunload", handler)
     return () => window.removeEventListener("beforeunload", handler)
   }, [currentQuestion, showResult])
+
+  // 30초마다 현재 세션 상태 sessionStorage에 자동 저장 (비정상 종료 복구용)
+  useEffect(() => {
+    if (sessionOver || currentQuestion === 0) return
+    const interval = setInterval(() => {
+      try {
+        const elapsed = Date.now() - quizSettings.startTime
+        const partial = {
+          totalQuestions: quizSettings.questionCount,
+          correctAnswers: score,
+          maxCombo,
+          heartsRemaining: hearts,
+          timeElapsedMs: elapsed,
+          endReason: "completed" as const,
+          questionDetails: questionResults,
+          startedAt: quizSettings.startTime,
+          difficulty: quizSettings.difficulty,
+          perfectCount: gradeStats.perfect,
+          greatCount: gradeStats.great,
+          goodCount: gradeStats.good,
+          retryCorrectCount: gradeStats.retryCorrect,
+        }
+        sessionStorage.setItem("quizSessionData", JSON.stringify(partial))
+      } catch {}
+    }, 30000)
+    return () => clearInterval(interval)
+  }, [sessionOver, currentQuestion, quizSettings, score, maxCombo, hearts, questionResults, gradeStats])
 
   // 재출제 문제가 있으면 그것을 현재 문제로 사용
   const retryCheck = getRetryQuestion(retryQueueRef.current, questions)
@@ -460,6 +498,7 @@ export function useQuizState(questions: QuizQuestion[]) {
     combo,
     maxCombo,
     hearts,
+    maxHearts,
     sessionOver,
     lastHeartLost,
 

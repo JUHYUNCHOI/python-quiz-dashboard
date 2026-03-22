@@ -1,7 +1,8 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { Card } from "@/components/ui/card"
-import { AlertCircle, PartyPopper } from "lucide-react"
+import { TrendingUp, PartyPopper, ChevronRight } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 import { useEffect, useState } from "react"
 import { getTopicStats } from "@/lib/quiz-history"
@@ -14,6 +15,7 @@ interface WeakTopic {
 
 export function WeakAreas() {
   const { t } = useLanguage()
+  const router = useRouter()
   const [weakTopics, setWeakTopics] = useState<WeakTopic[]>([])
   const [hasData, setHasData] = useState(false)
 
@@ -31,12 +33,12 @@ export function WeakAreas() {
     return (
       <Card className="border-0 bg-white p-6 shadow-lg">
         <div className="mb-4 flex items-center gap-2">
-          <AlertCircle className="h-6 w-6 text-orange-500" />
-          <h2 className="text-xl font-bold">{t("약점 분석", "Weak Areas")}</h2>
+          <TrendingUp className="h-6 w-6 text-orange-500" />
+          <h2 className="text-xl font-bold">{t("성장 포인트", "Growth Points")}</h2>
         </div>
         <div className="flex flex-col items-center justify-center py-8 text-gray-400">
           <span className="text-4xl mb-2">🎯</span>
-          <p className="text-sm">{t("퀴즈를 3문제 이상 풀면 약점을 분석해드려요!", "Take 3+ quiz questions to see weak area analysis!")}</p>
+          <p className="text-sm">{t("퀴즈를 3문제 이상 풀면 성장 포인트를 알려드려요!", "Take 3+ quiz questions to find your growth points!")}</p>
         </div>
       </Card>
     )
@@ -57,8 +59,8 @@ export function WeakAreas() {
   return (
     <Card className="border-0 bg-white p-6 shadow-lg">
       <div className="mb-6 flex items-center gap-2">
-        <AlertCircle className="h-6 w-6 text-orange-500" />
-        <h2 className="text-xl font-bold">{t("약점 보완하기", "Improve Weak Areas")}</h2>
+        <TrendingUp className="h-6 w-6 text-orange-500" />
+        <h2 className="text-xl font-bold">{t("성장 포인트", "Growth Points")}</h2>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -82,9 +84,17 @@ export function WeakAreas() {
               </div>
             </div>
 
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground mb-3">
               {t(`${topic.total}문제 중 ${Math.round(topic.total * topic.accuracy / 100)}개 정답`, `${Math.round(topic.total * topic.accuracy / 100)}/${topic.total} correct`)}
             </p>
+
+            <button
+              onClick={() => router.push("/quiz/setup")}
+              className="w-full flex items-center justify-center gap-1 py-2 rounded-lg bg-orange-500 text-white text-xs font-bold hover:bg-orange-600 transition-colors"
+            >
+              {t("이 주제 연습하기", "Practice this topic")}
+              <ChevronRight className="h-3 w-3" />
+            </button>
           </Card>
         ))}
       </div>

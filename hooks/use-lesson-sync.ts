@@ -117,6 +117,9 @@ export function useLessonSync(
           score,
           updated_at: new Date().toISOString(),
         }
+        // keepalive fetch로 먼저 전송 — 페이지 이동/닫기 시에도 취소되지 않음
+        flushToSupabase("lesson_progress", payload, "user_id,lesson_id,variant,progress_type")
+        // 일반 upsert도 병행 (에러 로깅용)
         const { error } = await supabase.from("lesson_progress").upsert(
           payload,
           { onConflict: "user_id,lesson_id,variant,progress_type" }

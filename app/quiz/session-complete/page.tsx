@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils"
 import { useGamification } from "@/hooks/use-gamification"
 import { useSoundEffect } from "@/hooks/use-sound-effect"
 import { useQuizSessionSync } from "@/hooks/use-quiz-session-sync"
+import { useMasterySync } from "@/hooks/use-mastery-sync"
 import type { SessionData } from "@/hooks/use-quiz-state"
 import { useLanguage } from "@/contexts/language-context"
 import { addQuizHistoryEntry } from "@/lib/quiz-history"
@@ -130,6 +131,7 @@ function SessionCompletePage() {
   const gamification = useGamification()
   const { play } = useSoundEffect()
   const { saveQuizSession } = useQuizSessionSync()
+  const { syncMastery } = useMasterySync()
   const { t } = useLanguage()
 
   // Session data from sessionStorage
@@ -172,6 +174,10 @@ function SessionCompletePage() {
       gamification.commitSessionXp(breakdown)
       saveQuizSession(sessionData, breakdown.totalXp)
 
+      // 이번 세션에서 답변한 문제들의 mastery Supabase 동기화
+      const answeredIds = (sessionData.questionDetails ?? []).map(qr => qr.question_id)
+      syncMastery(answeredIds)
+
       // 퀴즈 이력 localStorage 저장
       const topicMap = new Map<string, { correct: number; total: number }>()
       for (const qr of (sessionData.questionDetails ?? [])) {
@@ -206,7 +212,7 @@ function SessionCompletePage() {
 
       setXpCommitted(true)
     }
-  }, [breakdown, xpCommitted, gamification, sessionData, saveQuizSession])
+  }, [breakdown, xpCommitted, gamification, sessionData, saveQuizSession, syncMastery])
 
   // Staggered phase reveal
   useEffect(() => {
@@ -380,14 +386,14 @@ function SessionCompletePage() {
                 <div className="text-center p-3 bg-yellow-50 rounded-xl border border-yellow-200">
                   <div className="text-2xl mb-1">🌟</div>
                   <div className="text-xl font-black text-yellow-600">{sessionData.perfectCount}</div>
-                  <div className="text-[10px] text-yellow-600 font-medium">Perfect</div>
+                  <div className="text-[10px] text-yellow-600 font-medium">{t("퍼펙트", "Perfect")}</div>
                 </div>
               )}
               {sessionData.greatCount > 0 && (
                 <div className="text-center p-3 bg-blue-50 rounded-xl border border-blue-200">
                   <div className="text-2xl mb-1">👏</div>
                   <div className="text-xl font-black text-blue-600">{sessionData.greatCount}</div>
-                  <div className="text-[10px] text-blue-600 font-medium">Great</div>
+                  <div className="text-[10px] text-blue-600 font-medium">{t("잘했어요", "Great")}</div>
                 </div>
               )}
               {sessionData.retryCorrectCount > 0 && (
