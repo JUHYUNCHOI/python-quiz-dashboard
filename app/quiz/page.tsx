@@ -1,7 +1,7 @@
 "use client"
 
-import { useEffect, useCallback, useMemo } from "react"
-import { X, Clock, ChevronLeft, ChevronRight, Check, AlertCircle, Coffee } from "lucide-react"
+import { useEffect, useCallback, useMemo, useState } from "react"
+import { X, Clock, ChevronLeft, ChevronRight, Check, AlertCircle, Coffee, Flag } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { CodeDisplay } from "@/components/code-display"
@@ -59,6 +59,24 @@ export default function QuizPage() {
   const { t } = useLanguage()
   const { isFocused, justReturnedFocus } = useFocusTracker()
   const comboTier = getComboTier(quiz.combo)
+  const [reportedQuestions, setReportedQuestions] = useState<Set<number>>(new Set())
+  const [showReportToast, setShowReportToast] = useState(false)
+
+  const handleReport = useCallback((questionId: number) => {
+    if (reportedQuestions.has(questionId)) return
+    setReportedQuestions(prev => new Set(prev).add(questionId))
+    // localStorage에 신고 목록 저장
+    try {
+      const raw = localStorage.getItem("reported-questions") || "[]"
+      const list: number[] = JSON.parse(raw)
+      if (!list.includes(questionId)) {
+        list.push(questionId)
+        localStorage.setItem("reported-questions", JSON.stringify(list))
+      }
+    } catch {}
+    setShowReportToast(true)
+    setTimeout(() => setShowReportToast(false), 2000)
+  }, [reportedQuestions])
 
   const { formattedTime, isLowTime } = useQuizTimer({
     initialTime: 300,
@@ -148,7 +166,7 @@ export default function QuizPage() {
 
             {/* Center: Hearts */}
             <div className="flex items-center gap-0.5">
-              {Array.from({ length: 5 }).map((_, i) => (
+              {Array.from({ length: quiz.maxHearts }).map((_, i) => (
                 <span
                   key={i}
                   className={cn(
@@ -188,19 +206,35 @@ export default function QuizPage() {
 
               <div
                 className={cn(
-                  "flex items-center gap-1.5 rounded-full px-3 py-1.5",
+                  "flex flex-col items-center rounded-full px-3 py-1",
                   isLowTime ? "bg-red-100 animate-pulse" : "bg-orange-100",
                 )}
               >
-                <Clock className={cn("h-4 w-4", isLowTime ? "text-red-600" : "text-orange-600")} />
-                <span className={cn("font-mono text-sm font-semibold", isLowTime ? "text-red-600" : "text-orange-600")}>
-                  {formattedTime}
+                <span className={cn("text-[9px] font-medium leading-tight", isLowTime ? "text-red-500" : "text-orange-400")}>
+                  {t("학습 시간", "Time")}
                 </span>
+                <div className="flex items-center gap-1">
+                  <Clock className={cn("h-3.5 w-3.5", isLowTime ? "text-red-600" : "text-orange-600")} />
+                  <span className={cn("font-mono text-sm font-semibold", isLowTime ? "text-red-600" : "text-orange-600")}>
+                    {formattedTime}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {showReportToast && (
+        <div className="fixed top-20 right-4 z-50 animate-slide-in-right">
+          <Card className="bg-white shadow-xl border-2 border-red-200 p-3 max-w-xs">
+            <div className="flex items-center gap-2">
+              <Flag className="h-4 w-4 text-red-400 flex-shrink-0" />
+              <p className="text-sm font-semibold text-gray-700">{t("신고가 접수됐어요!", "Issue reported!")}</p>
+            </div>
+          </Card>
+        </div>
+      )}
 
       {quiz.showQuickAnswerWarning && (
         <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 animate-slide-in-down">
@@ -337,7 +371,21 @@ export default function QuizPage() {
                     </span>
                   )}
                 </div>
-                <span className="text-xs md:text-sm text-gray-500">{t("문제", "Q")} #{question.id}</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs md:text-sm text-gray-500">{t("문제", "Q")} #{question.id}</span>
+                  <button
+                    onClick={() => handleReport(question.id)}
+                    title={t("문제 오류 신고", "Report issue")}
+                    className={cn(
+                      "p-1 rounded transition-colors",
+                      reportedQuestions.has(question.id)
+                        ? "text-red-400 cursor-default"
+                        : "text-gray-300 hover:text-red-400"
+                    )}
+                  >
+                    <Flag className="h-3.5 w-3.5" />
+                  </button>
+                </div>
               </div>
 
               {/* Question Text */}

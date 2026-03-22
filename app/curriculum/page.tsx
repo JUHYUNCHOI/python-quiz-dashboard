@@ -224,8 +224,8 @@ export default function CurriculumPage() {
     },
     {
       id: "cpp-part3",
-      title: t("Part 3: USACO 준비", "Part 3: USACO Prep"),
-      description: t("대회 프로그래밍(CP)에 필요한 STL 컨테이너, 알고리즘, Fast I/O, 비트 연산을 마스터해요!", "Master STL containers, algorithms, Fast I/O, and bitwise operations for competitive programming!"),
+      title: t("Part 3: USACO 준비 🏆", "Part 3: USACO Prep 🏆"),
+      description: t("USACO는 미국 최고의 코딩 대회예요! 어렵지 않아요 — STL 도구들을 배우면 복잡한 문제도 쉽게 풀 수 있어요. C++의 강력한 무기들을 익혀봐요!", "USACO is a prestigious US coding olympiad! Don't worry — learning STL tools makes hard problems manageable. Master C++'s powerful weapons!"),
       lessons: [
         { id: "cpp-15", title: t("15. pair & 정렬", "15. pair & Sorting"), description: t("pair<int,int>, sort(), 커스텀 비교", "pair<int,int>, sort(), custom comparison"), duration: t("25분", "25 min"), hasQuiz: true },
         { id: "cpp-16", title: "16. map & set", description: "map, unordered_map, set", duration: t("25분", "25 min"), hasQuiz: true },
@@ -344,7 +344,7 @@ export default function CurriculumPage() {
 
   const [completedLessons, setCompletedLessons] = useState<Set<number | string>>(new Set())
   const [completedQuizzes, setCompletedQuizzes] = useState<Set<number | string>>(new Set())
-  const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set(["part1", "part2", "part3", "part3-advanced", "part4", "part5", "part6", "part7", "part8", "part9", "cpp-part1", "cpp-part2", "cpp-part3", "pseudo-part1", "pseudo-part2", "pseudo-part3", "pseudo-part4", "pseudo-part5", "igcse-sql", "igcse-logic"]))
+  const [expandedParts, setExpandedParts] = useState<Set<string>>(new Set(["part1", "cpp-part1", "pseudo-part1"]))
   const [selectedCourse, setSelectedCourse] = useState<CourseType>("python")
   const [loaded, setLoaded] = useState(false)
 
@@ -375,6 +375,22 @@ export default function CurriculumPage() {
     }
     setLoaded(true)
   }, [])
+
+  // 진도에 따라 현재 파트만 열기 (완료된 파트 + 첫 미완료 파트)
+  useEffect(() => {
+    if (!loaded) return
+    const allData = selectedCourse === "python" ? pythonCurriculumData : selectedCourse === "cpp" ? cppCurriculumData : pseudoCurriculumData
+    const active = new Set<string>()
+    for (const part of allData) {
+      const ids = part.lessons.map(l => l.id)
+      const hasAnyComplete = ids.some(id => completedLessons.has(id))
+      const hasIncomplete = ids.some(id => !completedLessons.has(id))
+      if (hasAnyComplete) active.add(part.id)
+      if (hasIncomplete) { active.add(part.id); break } // 첫 미완료 파트까지
+    }
+    if (active.size === 0 && allData.length > 0) active.add(allData[0].id)
+    setExpandedParts(active)
+  }, [loaded, selectedCourse]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // 학생이 IGCSE 탭에 있으면 Python으로 리셋 (profile 로드 후 확인)
   useEffect(() => {
@@ -750,11 +766,11 @@ export default function CurriculumPage() {
                                           href={getReviewPath(lesson.id)}
                                           className={`min-w-[5.5rem] sm:min-w-[6.5rem] text-center px-3 sm:px-4 py-2 rounded-lg border-2 font-bold text-xs sm:text-sm ${
                                             isQuizDone
-                                              ? "border-green-600 bg-green-50 text-green-700 hover:bg-green-100"
+                                              ? "border-blue-500 bg-blue-50 text-blue-700 hover:bg-blue-100"
                                               : "border-black bg-orange-400 text-white hover:bg-orange-500 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                                           }`}
                                         >
-                                          {isQuizDone ? t("✅ 복습완료", "✅ Review") : t("📝 복습", "📝 Review")}
+                                          {isQuizDone ? t("📘 복습완료", "📘 Reviewed") : t("📝 복습", "📝 Review")}
                                         </Link>
                                       )}
                                     </>

@@ -60,12 +60,12 @@ export const lessonNames: Record<string, string> = {
   "45": "모듈 만들기", "46": "표준 라이브러리", "47": "pip", "48": "API",
   "49": "프로젝트1", "50": "프로젝트2", "51": "프로젝트3", "52": "프로젝트4", "p4": "🎮 최종",
   // C++
-  "cpp-1": "Hello World", "cpp-2": "변수/타입", "cpp-3": "입출력", "cpp-4": "연산자",
-  "cpp-5": "조건문", "cpp-6": "반복문", "cpp-7": "배열", "cpp-8": "함수", "cpp-p1": "🎮 프로젝트",
-  "cpp-9": "문자열", "cpp-10": "포인터", "cpp-11": "구조체", "cpp-12": "벡터",
-  "cpp-13": "STL", "cpp-14": "파일", "cpp-p2": "🎮 프로젝트",
-  "cpp-15": "정렬", "cpp-16": "탐색", "cpp-17": "그래프", "cpp-18": "DP",
-  "cpp-19": "그리디", "cpp-20": "시뮬레이션", "cpp-p3": "🎮 프로젝트",
+  "cpp-1": "파이썬 vs C++", "cpp-2": "cout & namespace", "cpp-3": "변수와 타입", "cpp-4": "cin 입력",
+  "cpp-5": "연산자", "cpp-6": "조건문 (if/else)", "cpp-7": "반복문 (for/while)", "cpp-8": "함수", "cpp-p1": "🎮 숫자 맞추기",
+  "cpp-9": "배열 & 벡터", "cpp-10": "Range-for & auto", "cpp-11": "문자열 심화", "cpp-12": "참조와 함수",
+  "cpp-13": "포인터 기초", "cpp-14": "구조체 & 클래스", "cpp-p2": "⚔️ RPG 캐릭터",
+  "cpp-15": "pair & 정렬", "cpp-16": "map & set", "cpp-17": "STL 알고리즘", "cpp-18": "stack/queue/deque",
+  "cpp-19": "파일 & Fast I/O", "cpp-20": "CP 실전 팁", "cpp-p3": "🏆 USACO 모의전",
   // Pseudocode
   "pseudo-1": "기초", "pseudo-2": "변수", "pseudo-3": "입출력", "pseudo-4": "조건문",
   "pseudo-28": "Boolean", "pseudo-5": "반복문", "pseudo-6": "배열", "pseudo-7": "함수",

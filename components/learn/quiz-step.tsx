@@ -43,7 +43,9 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
           <span className="px-3 py-1 rounded-full text-sm font-bold bg-amber-100 text-amber-700"><HelpCircle className="w-4 h-4 inline mr-1" />{t("퀴즈", "Quiz")}</span>
           {isCompleted && <span className="px-2 py-0.5 rounded text-xs bg-green-100 text-green-700 font-medium">{t("✅ 정답!", "✅ Correct!")}</span>}
         </div>
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{step.title}</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+          {step.title === "정리 퀴즈" ? t("마무리 체크! 🎯", "Wrap-up Check! 🎯") : step.title}
+        </h1>
         {step.content && <div className="text-base md:text-lg text-gray-800">{renderContent(step.content)}</div>}
       </div>
       {step.code && (
@@ -99,14 +101,26 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
           )
         })}
         {showExplanation && step.explanation && (
-          <div className={cn("p-3 md:p-4 rounded-lg md:rounded-xl border-2 mt-2", selectedAnswer === step.answer ? "bg-green-50 border-green-300" : "bg-amber-50 border-amber-300")}>
+          <div className="mt-2 space-y-2">
+            {/* 오답일 때: 정답 강조 카드 */}
+            {selectedAnswer !== step.answer && step.options && (
+              <div className="p-3 bg-green-50 border-2 border-green-300 rounded-xl flex items-center gap-2">
+                <Check className="w-4 h-4 text-green-600 shrink-0" />
+                <div>
+                  <p className="text-[10px] text-green-600 font-bold">{t("정답", "Correct Answer")}</p>
+                  <p className="text-sm text-green-800 font-medium">{step.options[step.answer ?? 0]}</p>
+                </div>
+              </div>
+            )}
+            {/* 설명 박스 */}
+            <div className={cn("p-3 md:p-4 rounded-lg md:rounded-xl border-2", selectedAnswer === step.answer ? "bg-green-50 border-green-300" : "bg-amber-50 border-amber-300")}>
             <div className="flex items-center gap-2 mb-1">
               <Lightbulb className={cn("w-4 h-4", selectedAnswer === step.answer ? "text-green-600" : "text-amber-600")} />
               <span className={cn("font-bold text-sm", selectedAnswer === step.answer ? "text-green-700" : "text-amber-700")}>
-                {selectedAnswer === step.answer ? t("정답! 🎉", "Correct! 🎉") : t("틀렸어요!", "Wrong!")}
+                {selectedAnswer === step.answer ? t("정답! 🎉", "Correct! 🎉") : t("🤔 왜 틀렸을까요?", "Why was it wrong?")}
               </span>
             </div>
-            <p className={cn("text-sm whitespace-pre-line", selectedAnswer === step.answer ? "text-green-800" : "text-amber-800")}>{step.explanation}</p>
+            <p className={cn("text-sm whitespace-pre-line leading-relaxed", selectedAnswer === step.answer ? "text-green-800" : "text-amber-800")}>{step.explanation}</p>
             {selectedAnswer !== step.answer && (
               showAckButton ? (
                 <button onClick={onAcknowledge} className="mt-2 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md transition-all flex items-center justify-center gap-2 animate-fade-in">
@@ -126,6 +140,7 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
                 </div>
               )
             )}
+            </div>
           </div>
         )}
       </div>
