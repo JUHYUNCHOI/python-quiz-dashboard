@@ -11,12 +11,18 @@ interface CodeSubmissionContextValue {
   saveSubmission: (stepId: string, code: string) => void
   /** DB 로드 완료 여부 */
   loaded: boolean
+  /** 로그인 여부 (runners에서 로그인 유도 표시용) */
+  isAuthenticated: boolean
+  /** 현재 레슨 ID (localStorage 마이그레이션용) */
+  lessonId: string
 }
 
 const CodeSubmissionContext = createContext<CodeSubmissionContextValue>({
   getSubmission: () => null,
   saveSubmission: () => {},
   loaded: false,
+  isAuthenticated: false,
+  lessonId: "",
 })
 
 export function CodeSubmissionProvider({
@@ -55,7 +61,7 @@ export function CodeSubmissionProvider({
   }, [submissions])
 
   return (
-    <CodeSubmissionContext.Provider value={{ getSubmission, saveSubmission, loaded }}>
+    <CodeSubmissionContext.Provider value={{ getSubmission, saveSubmission, loaded, isAuthenticated, lessonId }}>
       {children}
     </CodeSubmissionContext.Provider>
   )

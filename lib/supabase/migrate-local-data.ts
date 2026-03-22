@@ -132,7 +132,68 @@ export async function migrateLocalStorageToSupabase(userId: string) {
       }
     }
 
-    // 5. 설정 (언어, 사운드)
+    // 5. question-mastery (간격 반복 데이터)
+    const masteryRaw = localStorage.getItem("question-mastery")
+    if (masteryRaw) {
+      const mastery: Record<string, {
+        questionId: number; box: number; correctStreak: number;
+        totalAttempts: number; totalCorrect: number;
+        lastReviewDate: string; nextReviewDate: string; lastGrade: string | null;
+      }> = JSON.parse(masteryRaw)
+      const masteryRows = Object.values(mastery).map(m => ({
+        user_id: userId,
+        question_id: m.questionId,
+        box: m.box,
+        correct_streak: m.correctStreak,
+        total_attempts: m.totalAttempts,
+        total_correct: m.totalCorrect,
+        last_review_date: m.lastReviewDate,
+        next_review_date: m.nextReviewDate,
+        last_grade: m.lastGrade,
+        updated_at: new Date().toISOString(),
+      }))
+      if (masteryRows.length > 0) {
+        // 100개씩 배치 처리
+        for (let i = 0; i < masteryRows.length; i += 100) {
+          const batch = masteryRows.slice(i, i + 100)
+          const { error: mError } = await supabase
+            .from("question_mastery")
+            .upsert(batch, { onConflict: "user_id,question_id" })
+          if (mError) console.error("[Migration] question_mastery upsert failed:", mError.message, mError.code)
+        }
+      }
+    }
+
+    // 6. 코드 제출 (blank-runner-* / python-runner-* + correct:true + lessonId 있는 것)
+    const codeRows: { user_id: string; lesson_id: string; step_id: string; code: string }[] = []
+    for (const key of keys) {
+      if (!key.startsWith("blank-runner-") && !key.startsWith("python-runner-")) continue
+      try {
+        const raw = localStorage.getItem(key)
+        if (!raw) continue
+        const parsed = JSON.parse(raw)
+        if (!parsed.correct || !parsed.lessonId) continue  // 정답 아니거나 lessonId 없으면 스킵
+
+        const stepId = key.startsWith("blank-runner-")
+          ? key.replace("blank-runner-", "")
+          : key.replace("python-runner-", "")
+
+        const code = key.startsWith("blank-runner-")
+          ? JSON.stringify({ values: parsed.values || {}, assembled: parsed.assembled || "" })
+          : (parsed.code || "")
+
+        if (!code) continue
+        codeRows.push({ user_id: userId, lesson_id: parsed.lessonId, step_id: stepId, code })
+      } catch { /* 개별 키 실패 시 건너뜀 */ }
+    }
+    if (codeRows.length > 0) {
+      const { error: cError } = await supabase
+        .from("code_submissions")
+        .upsert(codeRows, { onConflict: "user_id,lesson_id,step_id", ignoreDuplicates: true })
+      if (cError) console.error("[Migration] code_submissions upsert failed:", cError.message, cError.code)
+    }
+
+    // 7. 설정 (언어, 사운드)
     const language = localStorage.getItem("language") || "ko"
     const soundMuted = localStorage.getItem("sound-muted") === "true"
 

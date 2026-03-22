@@ -131,19 +131,22 @@ export function PythonRunner({
     setError("")
   }, [code])
 
+  // DB 연동 context (localStorage 저장에도 lessonId 필요하므로 먼저 선언)
+  const { getSubmission, saveSubmission, loaded: dbLoaded, isAuthenticated: dbAuth, lessonId: dbLessonId } = useCodeSubmission()
+
   // 최신 값을 ref로 동기 추적 (unmount cleanup에서 사용)
   const latestCode = useRef(code)
   const latestIsCorrect = useRef(isCorrect)
   latestCode.current = code
   latestIsCorrect.current = isCorrect
 
-  // 코드 + 정답 여부 localStorage 저장 (페이지 이탈 후 복귀 시 복원)
+  // 코드 + 정답 여부 localStorage 저장 (lessonId 포함 → 로그인 시 마이그레이션용)
   useEffect(() => {
     if (!lsKey) return
     try {
-      localStorage.setItem(lsKey, JSON.stringify({ code, correct: isCorrect }))
+      localStorage.setItem(lsKey, JSON.stringify({ code, correct: isCorrect, lessonId: dbLessonId || undefined }))
     } catch { /* ignore */ }
-  }, [code, isCorrect, lsKey])
+  }, [code, isCorrect, lsKey, dbLessonId])
 
   // React 배치로 인해 unmount 전 effect가 실행 안 될 수 있음 → cleanup에서 강제 저장
   useEffect(() => {
@@ -152,14 +155,12 @@ export function PythonRunner({
       try {
         localStorage.setItem(lsKey, JSON.stringify({
           code: latestCode.current,
-          correct: latestIsCorrect.current
+          correct: latestIsCorrect.current,
+          lessonId: dbLessonId || undefined
         }))
       } catch { /* ignore */ }
     }
-  }, [lsKey])
-
-  // DB 연동: 로드 완료 후 복원 또는 lazy migration
-  const { getSubmission, saveSubmission, loaded: dbLoaded } = useCodeSubmission()
+  }, [lsKey, dbLessonId])
   useEffect(() => {
     if (!dbLoaded || !storageKey) return
     const dbCode = getSubmission(storageKey)
@@ -442,6 +443,17 @@ export function PythonRunner({
             {error || output}
           </pre>
         </div>
+      )}
+
+      {/* 비로그인 학생 로그인 유도 (정답 맞췄을 때 한 번만 표시) */}
+      {isCorrect === true && !dbAuth && (
+        <p className="text-center text-xs text-gray-400">
+          💾 이 기기에만 저장돼요.{" "}
+          <a href="/login" className="text-indigo-500 hover:text-indigo-700 underline font-medium">
+            로그인
+          </a>
+          하면 어디서든 코드가 저장돼요!
+        </p>
       )}
 
       {/* 기대 출력 */}
