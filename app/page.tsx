@@ -12,6 +12,7 @@ import { useState, useEffect } from "react"
 import { OnboardingModal } from "@/components/onboarding-modal"
 import { DailyChallenges } from "@/components/daily-challenges"
 import { AchievementsShelf } from "@/components/achievements-shelf"
+import { PythonToCppBridge } from "@/components/python-to-cpp-bridge"
 
 // -------- 레슨 ID 순서 --------
 const PYTHON_LESSON_IDS: (number | string)[] = [
@@ -151,12 +152,24 @@ export default function DashboardPage() {
   // lessonLoaded: localStorage 읽기 전에 "모든 레슨 완료" 카드가 잠깐 뜨는 깜빡임 방지
   const [lessonLoaded, setLessonLoaded] = useState(false)
   const [showOnboarding, setShowOnboarding] = useState(false)
+  const [showCppBridge, setShowCppBridge] = useState(false)
 
   useEffect(() => {
     const course = readSelectedCourse()
     setSelectedCourse(course)
     setNextLesson(readNextLesson(lang))
     setLessonLoaded(true)
+
+    // C++ 전환 가이드: cpp 선택 + 완료 레슨 < 5 + 세션에서 닫지 않은 경우
+    try {
+      const cppBridgeDismissed = sessionStorage.getItem("cpp-bridge-dismissed")
+      if (!cppBridgeDismissed && course === "cpp") {
+        const completedRaw = localStorage.getItem("completedLessons")
+        const completed: string[] = completedRaw ? JSON.parse(completedRaw) : []
+        const cppDone = completed.filter((id) => id.startsWith("cpp-")).length
+        if (cppDone < 5) setShowCppBridge(true)
+      }
+    } catch {}
 
     // 온보딩: 첫 방문 여부 확인
     try {
@@ -174,6 +187,11 @@ export default function DashboardPage() {
     setSelectedCourse("cpp")
     // C++ 다음 레슨 다시 계산 (readNextLesson은 localStorage 읽으므로 바로 호출)
     setNextLesson(readNextLesson(lang))
+  }
+
+  const handleCppBridgeDismiss = () => {
+    try { sessionStorage.setItem("cpp-bridge-dismissed", "1") } catch {}
+    setShowCppBridge(false)
   }
 
   const handleOnboardingComplete = (course: "python" | "cpp") => {
@@ -198,6 +216,9 @@ export default function DashboardPage() {
 
         {/* 기린 히어로 */}
         <GiraffeHero />
+
+        {/* Python→C++ 전환 가이드 (C++ 시작 초반에만 표시) */}
+        {showCppBridge && <PythonToCppBridge onDismiss={handleCppBridgeDismiss} />}
 
         {/* 오늘의 도전 과제 */}
         <DailyChallenges />
