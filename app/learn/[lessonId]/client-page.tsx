@@ -19,6 +19,7 @@ import { useAuth } from "@/contexts/auth-context"
 import { analyzeLessonComplete, analyzeStreak } from "@/lib/feedback-analyzer"
 import { LessonFeedbackCard } from "@/components/feedback/lesson-feedback-card"
 import { StreakWidget } from "@/components/feedback/streak-widget"
+import { CodeSubmissionProvider } from "@/contexts/code-submission-context"
 
 // 분리된 컴포넌트
 import { Confetti } from "@/components/learn/confetti"
@@ -608,7 +609,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   }
 
   return (
-    <>
+    <CodeSubmissionProvider lessonId={lessonId}>
       <Confetti show={showConfetti} />
       <SuccessOverlay show={showSuccess} message={successMessage} onClose={closeSuccessOverlay} />
       
@@ -815,6 +816,6 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
           </div>
         </div>
       </div>
-    </>
+    </CodeSubmissionProvider>
   )
 }
