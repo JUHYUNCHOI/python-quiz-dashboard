@@ -8,7 +8,7 @@ export const cppLesson12Data: LessonData = {
   id: "cpp-12",
   title: "참조와 함수",
   emoji: "🔗",
-  description: "Call by value vs reference!",
+  description: "참조(reference)로 원본을 직접 다뤄요! Call by Reference 마스터!",
   chapters: [
     // ============================================
     // Chapter 1: 참조 (Reference)
@@ -272,7 +272,7 @@ int main() {
 
 💡 \`&\` 하나의 차이로 함수의 동작이 완전히 달라져요!
 
-참조(&)와 포인터(*)는 비슷한 목적이지만 다른 도구예요. 참조는 '별명'이고, 포인터는 '주소를 저장하는 변수'예요. 포인터는 다음 레슨에서 배워요!`
+💡 참조는 '별명'이에요. 포인터('주소를 저장하는 변수')는 다음 레슨에서 배워요!`
         },
         {
           id: "ch2-fb1",
@@ -436,11 +436,11 @@ int main() {
           title: "🎯 오늘 배운 것!",
           content: `## ✅ 오늘의 정리!
 
-- ✅ **참조(Reference)** — \`int& ref = x;\`로 변수의 별명(alias)을 만들어요
+### 📌 참조 (Reference)
+- ✅ **참조** — \`int& ref = x;\`로 변수의 별명(alias)을 만들어요
 - ✅ **const 참조** — \`const int& ref = x;\`는 읽기만 가능, 복사 없이 빠르게!
 - ✅ **Call by Value** — \`void f(int x)\` 복사본이 넘어가서 원본 안 바뀜
 - ✅ **Call by Reference** — \`void f(int& x)\` 원본의 별명이 넘어가서 원본 바뀜
-- ✅ **swap 함수** — 참조 전달의 대표적인 활용 예시!
 
 | 매개변수 방식 | 문법 | 원본 수정? | 복사 비용? |
 |---|---|---|---|
@@ -448,9 +448,9 @@ int main() {
 | Call by Reference | \`void f(int& x)\` | ✅ | 없음 |
 | const Reference | \`void f(const int& x)\` | ❌ | 없음 |
 
-💡 **규칙:** 수정해야 하면 \`&\`, 읽기만 하면 \`const &\`, 작은 값은 그냥 복사!
+💡 **규칙:** 수정해야 하면 \`&\`, 읽기만 하면 \`const &\`!
 
-🚀 **다음 시간 예고:** 더 다양한 C++ 기능들을 배워봐요!`
+🚀 **다음 레슨:** 포인터(Pointer) — 메모리 주소를 직접 다루는 강력한 도구!`
         }
       ]
     }

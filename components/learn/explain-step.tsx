@@ -47,9 +47,14 @@ export function ExplainStep({ step }: ExplainStepProps) {
 
       {AnimComp && (
         <div className="rounded-xl overflow-hidden bg-gradient-to-b from-indigo-50 to-white border border-indigo-200 p-4">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="text-lg">🎬</span>
-            <span className="text-sm font-bold text-indigo-700">{t("직접 확인해보기", "See it in action")}</span>
+          <div className="flex items-start justify-between mb-3">
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-lg">🎬</span>
+                <span className="text-sm font-bold text-indigo-700">{t("코드 살펴보기", "Watch the code")}</span>
+              </div>
+              <p className="text-xs text-indigo-400 mt-0.5 ml-7">{t("애니메이션을 보면서 코드의 동작을 확인해봐요!", "Watch how the code works step by step!")}</p>
+            </div>
           </div>
           <AnimComp lang={lang} onSuccess={() => {}} />
         </div>

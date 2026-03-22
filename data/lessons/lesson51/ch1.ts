@@ -32,22 +32,22 @@ shop_items = {
       title: "💻 상점 만들기!",
       task: "상점에서 아이템을 구매하는 시스템을 실행하세요!",
       initialCode: `class Item:
-    def __init__(s, name, item_type, value, price):
-        s.name = name
-        s.item_type = item_type
-        s.value = value
-        s.price = price
+    def __init__(self, name, item_type, value, price):
+        self.name = name
+        self.item_type = item_type
+        self.value = value
+        self.price = price
 
 class Character:
-    def __init__(s, name):
-        s.name = name
-        s.hp, s.max_hp = 100, 100
-        s.atk = 15
-        s.gold = 200
-        s.inventory = []
+    def __init__(self, name):
+        self.name = name
+        self.hp, self.max_hp = 100, 100
+        self.atk = 15
+        self.gold = 200
+        self.inventory = []
 
-    def add_item(s, item):
-        s.inventory.append(item)
+    def add_item(self, item):
+        self.inventory.append(item)
 
 # 상점!
 shop_items = {
@@ -103,9 +103,9 @@ for item in hero.inventory:
       title: "🎯 미션: 상점 완성!",
       task: "빈칸 3개를 채워서 상점 시스템을 완성하세요!",
       initialCode: `class Item:
-    def __init__(s, name, price):
-        s.name = name
-        s.price = price
+    def __init__(self, name, price):
+        self.name = name
+        self.price = price
 
 shop = {
     'sword': Item('검', 150),
@@ -138,42 +138,42 @@ print(f'남은 골드: {gold}')`,
       title: "💻 전투 → 보상 → 상점!",
       task: "전투 승리 후 골드를 얻고 상점에서 쇼핑하세요!",
       initialCode: `class Character:
-    def __init__(s, name, hp, atk, defense):
-        s.name = name
-        s.hp, s.max_hp = hp, hp
-        s.atk = atk
-        s.defense = defense
-        s.gold = 0
-        s.inventory = []
-        s.alive = True
+    def __init__(self, name, hp, atk, defense):
+        self.name = name
+        self.hp, self.max_hp = hp, hp
+        self.atk = atk
+        self.defense = defense
+        self.gold = 0
+        self.inventory = []
+        self.alive = True
 
-    def take_damage(s, damage):
-        actual = damage - s.defense
+    def take_damage(self, damage):
+        actual = damage - self.defense
         if actual < 1:
             actual = 1
-        s.hp -= actual
-        if s.hp <= 0:
-            s.hp = 0
-            s.alive = False
+        self.hp -= actual
+        if self.hp <= 0:
+            self.hp = 0
+            self.alive = False
         return actual
 
 class Monster:
-    def __init__(s, name, hp, atk, defense, gold):
-        s.name = name
-        s.hp = hp
-        s.atk = atk
-        s.defense = defense
-        s.gold_reward = gold
-        s.alive = True
+    def __init__(self, name, hp, atk, defense, gold):
+        self.name = name
+        self.hp = hp
+        self.atk = atk
+        self.defense = defense
+        self.gold_reward = gold
+        self.alive = True
 
-    def take_damage(s, damage):
-        actual = damage - s.defense
+    def take_damage(self, damage):
+        actual = damage - self.defense
         if actual < 1:
             actual = 1
-        s.hp -= actual
-        if s.hp <= 0:
-            s.hp = 0
-            s.alive = False
+        self.hp -= actual
+        if self.hp <= 0:
+            self.hp = 0
+            self.alive = False
         return actual
 
 # 간단한 전투!

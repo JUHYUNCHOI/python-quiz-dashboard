@@ -237,6 +237,43 @@ Sum: 30
 Found 9 at index 3`
         },
         {
+          id: "ch1-lambda",
+          type: "explain",
+          title: "🔍 find_if & count_if — 조건으로 검색!",
+          content: `\`find()\`는 정확한 값을 찾지만, 조건으로 검색하고 싶을 때는 **\`find_if()\`**와 **\`count_if()\`**를 사용해요!
+
+\`\`\`cpp
+#include <algorithm>
+#include <vector>
+using namespace std;
+
+vector<int> v = {3, 7, 1, 8, 4, 9, 2};
+
+// 조건: 5보다 큰 첫 번째 원소 찾기
+auto it = find_if(v.begin(), v.end(), [](int x) {
+    return x > 5;
+});
+if (it != v.end()) cout << *it;  // 7
+
+// 조건: 짝수 개수 세기
+int cnt = count_if(v.begin(), v.end(), [](int x) {
+    return x % 2 == 0;
+});
+cout << cnt;  // 3 (8, 4, 2)
+\`\`\`
+
+**람다 표현식 (Lambda Expression)** — C++11+
+
+\`[](매개변수) { return 조건식; }\` 형태의 **이름 없는 함수**예요!
+
+| 파이썬 🐍 | C++ ⚡ |
+|---|---|
+| \`filter(lambda x: x > 5, lst)\` | \`find_if(..., [](int x){ return x > 5; })\` |
+| \`len([x for x in lst if x % 2 == 0])\` | \`count_if(..., [](int x){ return x % 2 == 0; })\` |
+
+람다는 레슨 15의 \`sort()\`에서도 이미 사용했어요! STL 알고리즘 어디서든 조건 함수를 넘길 수 있어요.`,
+        },
+        {
           id: "ch1-q1",
           type: "quiz",
           title: "STL 기초!",

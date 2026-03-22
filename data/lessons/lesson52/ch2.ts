@@ -24,27 +24,27 @@ export const ch2: Chapter = {
       title: "💻 ④ 퀘스트 시스템!",
       task: "딕셔너리로 퀘스트를 관리하는 시스템을 실행해보세요!",
       initialCode: `class Quest:
-    def __init__(s, name, description, target, reward_gold, reward_exp):
-        s.name = name
-        s.description = description
-        s.target = target    # 달성 조건 수치
-        s.progress = 0       # 현재 진행도
-        s.completed = False
-        s.reward_gold = reward_gold
-        s.reward_exp = reward_exp
+    def __init__(self, name, description, target, reward_gold, reward_exp):
+        self.name = name
+        self.description = description
+        self.target = target    # 달성 조건 수치
+        self.progress = 0       # 현재 진행도
+        self.completed = False
+        self.reward_gold = reward_gold
+        self.reward_exp = reward_exp
 
-    def update(s, amount):
-        if s.completed:
+    def update(self, amount):
+        if self.completed:
             return
-        s.progress += amount
-        print(f'  [{s.name}] 진행: {s.progress}/{s.target}')
-        if s.progress >= s.target:
-            s.completed = True
-            print(f'  ★ 퀘스트 완료! 보상: {s.reward_gold}골드, {s.reward_exp}EXP')
+        self.progress += amount
+        print(f'  [{self.name}] 진행: {self.progress}/{self.target}')
+        if self.progress >= self.target:
+            self.completed = True
+            print(f'  ★ 퀘스트 완료! 보상: {self.reward_gold}골드, {self.reward_exp}EXP')
 
-    def show(s):
-        status = '완료' if s.completed else f'{s.progress}/{s.target}'
-        print(f'  [{status}] {s.name}: {s.description}')
+    def show(self):
+        status = '완료' if self.completed else f'{self.progress}/{self.target}'
+        print(f'  [{status}] {self.name}: {self.description}')
 
 # 퀘스트 목록!
 quests = {
@@ -81,19 +81,19 @@ for q in quests.values():
       title: "🎯 미션: 퀘스트 완성!",
       task: "빈칸 3개를 채워서 퀘스트를 완성하세요!",
       initialCode: `class Quest:
-    def __init__(s, name, target):
-        s.name = name
-        s.target = target
-        s.progress = 0
-        s.___ = False
+    def __init__(self, name, target):
+        self.name = name
+        self.target = target
+        self.progress = 0
+        self.___ = False
 
-    def update(s, amount):
-        s.progress += amount
-        if s.progress >= s.___:
-            s.completed = True
-            print(f'{s.name} 완료!')
+    def update(self, amount):
+        self.progress += amount
+        if self.progress >= self.___:
+            self.completed = True
+            print(f'{self.name} 완료!')
         else:
-            print(f'{s.name}: {s.progress}/{s.target}')
+            print(f'{self.name}: {self.progress}/{self.target}')
 
 q = Quest('몬스터 처치', 3)
 q.update(1)
@@ -109,66 +109,66 @@ q.update(1)`,
       title: "💻 ⑤ 스킬 시스템!",
       task: "직업별 특수 스킬을 사용해보세요!",
       initialCode: `class Character:
-    def __init__(s, name, job):
-        s.name = name
-        s.job = job
-        s.mp = 50
-        s.max_mp = 50
+    def __init__(self, name, job):
+        self.name = name
+        self.job = job
+        self.mp = 50
+        self.max_mp = 50
 
         if job == 'warrior':
-            s.hp, s.max_hp, s.atk, s.defense = 120, 120, 15, 12
-            s.skills = {
+            self.hp, self.max_hp, self.atk, self.defense = 120, 120, 15, 12
+            self.skills = {
                 'power_strike': {'name': '강타', 'mp': 15, 'multiplier': 2.0},
                 'war_cry': {'name': '함성', 'mp': 10, 'atk_buff': 5},
             }
         elif job == 'mage':
-            s.hp, s.max_hp, s.atk, s.defense = 80, 80, 25, 5
-            s.skills = {
+            self.hp, self.max_hp, self.atk, self.defense = 80, 80, 25, 5
+            self.skills = {
                 'fireball': {'name': '파이어볼', 'mp': 20, 'multiplier': 2.5},
                 'heal_spell': {'name': '힐', 'mp': 15, 'heal': 40},
             }
         else:
-            s.hp, s.max_hp, s.atk, s.defense = 100, 100, 20, 8
-            s.skills = {
+            self.hp, self.max_hp, self.atk, self.defense = 100, 100, 20, 8
+            self.skills = {
                 'rapid_shot': {'name': '속사', 'mp': 15, 'hits': 3},
                 'dodge': {'name': '회피', 'mp': 10, 'def_buff': 8},
             }
 
-    def use_skill(s, skill_key, target=None):
-        if skill_key not in s.skills:
+    def use_skill(self, skill_key, target=None):
+        if skill_key not in self.skills:
             print('  스킬 없음!')
             return
-        skill = s.skills[skill_key]
-        if s.mp < skill['mp']:
-            print(f'  MP 부족! ({s.mp}/{skill["mp"]})')
+        skill = self.skills[skill_key]
+        if self.mp < skill['mp']:
+            print(f'  MP 부족! ({self.mp}/{skill["mp"]})')
             return
 
-        s.mp -= skill['mp']
+        self.mp -= skill['mp']
         jobs = {'warrior': '용사', 'mage': '마법사', 'archer': '궁수'}
 
         if 'multiplier' in skill:
-            damage = int(s.atk * skill['multiplier'])
-            print(f'  ★ {skill["name"]}! {damage} 데미지! (MP: {s.mp})')
+            damage = int(self.atk * skill['multiplier'])
+            print(f'  ★ {skill["name"]}! {damage} 데미지! (MP: {self.mp})')
         elif 'heal' in skill:
-            s.hp = min(s.hp + skill['heal'], s.max_hp)
-            print(f'  ★ {skill["name"]}! HP {s.hp}/{s.max_hp} (MP: {s.mp})')
+            self.hp = min(self.hp + skill['heal'], self.max_hp)
+            print(f'  ★ {skill["name"]}! HP {self.hp}/{self.max_hp} (MP: {self.mp})')
         elif 'hits' in skill:
             total = 0
             for i in range(skill['hits']):
-                dmg = int(s.atk * 0.6)
+                dmg = int(self.atk * 0.6)
                 total += dmg
-            print(f'  ★ {skill["name"]}! {skill["hits"]}연타 = {total} 데미지! (MP: {s.mp})')
+            print(f'  ★ {skill["name"]}! {skill["hits"]}연타 = {total} 데미지! (MP: {self.mp})')
         elif 'atk_buff' in skill:
-            s.atk += skill['atk_buff']
-            print(f'  ★ {skill["name"]}! ATK +{skill["atk_buff"]} -> {s.atk} (MP: {s.mp})')
+            self.atk += skill['atk_buff']
+            print(f'  ★ {skill["name"]}! ATK +{skill["atk_buff"]} -> {self.atk} (MP: {self.mp})')
         elif 'def_buff' in skill:
-            s.defense += skill['def_buff']
-            print(f'  ★ {skill["name"]}! DEF +{skill["def_buff"]} -> {s.defense} (MP: {s.mp})')
+            self.defense += skill['def_buff']
+            print(f'  ★ {skill["name"]}! DEF +{skill["def_buff"]} -> {self.defense} (MP: {self.mp})')
 
-    def show_skills(s):
+    def show_skills(self):
         jobs = {'warrior': '용사', 'mage': '마법사', 'archer': '궁수'}
-        print(f'[{jobs[s.job]}] {s.name}의 스킬 (MP: {s.mp}/{s.max_mp})')
-        for key, skill in s.skills.items():
+        print(f'[{jobs[self.job]}] {self.name}의 스킬 (MP: {self.mp}/{self.max_mp})')
+        for key, skill in self.skills.items():
             print(f'  - {skill["name"]} (MP: {skill["mp"]})')
 
 # 테스트!
@@ -200,29 +200,29 @@ archer.use_skill('dodge')`,
       title: "🎯 미션: 스킬 추가!",
       task: "빈칸 3개를 채워서 스킬 시스템을 완성하세요!",
       initialCode: `class Mage:
-    def __init__(s, name):
-        s.name = name
-        s.hp, s.max_hp = 80, 80
-        s.atk = 25
-        s.mp = 50
+    def __init__(self, name):
+        self.name = name
+        self.hp, self.max_hp = 80, 80
+        self.atk = 25
+        self.mp = 50
 
-    def fireball(s):
+    def fireball(self):
         cost = 20
-        if s.___ < cost:
+        if self.___ < cost:
             print('MP 부족!')
             return
-        s.mp -= cost
-        damage = int(s.atk * ___)
-        print(f'파이어볼! {damage} 데미지 (MP: {s.mp})')
+        self.mp -= cost
+        damage = int(self.atk * ___)
+        print(f'파이어볼! {damage} 데미지 (MP: {self.mp})')
 
-    def heal(s):
+    def heal(self):
         cost = 15
-        if s.mp < cost:
+        if self.mp < cost:
             print('MP 부족!')
             return
-        s.mp -= cost
-        s.hp = min(s.hp + 40, s.___)
-        print(f'힐! HP: {s.hp}/{s.max_hp} (MP: {s.mp})')
+        self.mp -= cost
+        self.hp = min(self.hp + 40, self.___)
+        print(f'힐! HP: {self.hp}/{self.max_hp} (MP: {self.mp})')
 
 m = Mage('영희')
 m.hp = 50
@@ -236,7 +236,7 @@ m.heal()`,
       id: "ch2-5",
       type: "quiz",
       title: "❓ 퀴즈!",
-      content: "퀘스트 시스템에서 `s.progress >= s.target`을 체크하는 이유는?",
+      content: "퀘스트 시스템에서 `self.progress >= self.target`을 체크하는 이유는?",
       options: [
         "진행도가 정확히 목표와 같을 때만 완료",
         "진행도가 목표 이상이면 완료 처리하려고",

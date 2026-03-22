@@ -19,11 +19,11 @@ export const ch3: Chapter = {
 
 \`\`\`python
 class Item:
-    def __init__(s, name, item_type, value, price):
-        s.name = name        # 물약
-        s.item_type = item_type  # 'heal'
-        s.value = value      # 30
-        s.price = price      # 50
+    def __init__(self, name, item_type, value, price):
+        self.name = name        # 물약
+        self.item_type = item_type  # 'heal'
+        self.value = value      # 30
+        self.price = price      # 50
 \`\`\`
 
 @핵심: **item_type** 속성으로 'heal', 'atk', 'def'를 구분해서 효과를 다르게 적용!`
@@ -34,34 +34,34 @@ class Item:
       title: "💻 Item 클래스 + 사용!",
       task: "아이템을 만들고 캐릭터에게 사용해보세요!",
       initialCode: `class Item:
-    def __init__(s, name, item_type, value, price):
-        s.name = name
-        s.item_type = item_type
-        s.value = value
-        s.price = price
+    def __init__(self, name, item_type, value, price):
+        self.name = name
+        self.item_type = item_type
+        self.value = value
+        self.price = price
 
-    def show(s):
+    def show(self):
         types = {'heal': '회복', 'atk': '공격력', 'def': '방어력'}
-        print(f'  {s.name} [{types[s.item_type]} +{s.value}] ({s.price}골드)')
+        print(f'  {self.name} [{types[self.item_type]} +{self.value}] ({self.price}골드)')
 
 class Character:
-    def __init__(s, name):
-        s.name = name
-        s.hp, s.max_hp = 100, 100
-        s.atk = 15
-        s.defense = 10
-        s.inventory = []
+    def __init__(self, name):
+        self.name = name
+        self.hp, self.max_hp = 100, 100
+        self.atk = 15
+        self.defense = 10
+        self.inventory = []
 
-    def use_item(s, item):
+    def use_item(self, item):
         if item.item_type == 'heal':
-            s.hp = min(s.hp + item.value, s.max_hp)
-            print(f'{s.name}: {item.name} 사용! HP {s.hp}/{s.max_hp}')
+            self.hp = min(self.hp + item.value, self.max_hp)
+            print(f'{self.name}: {item.name} 사용! HP {self.hp}/{self.max_hp}')
         elif item.item_type == 'atk':
-            s.atk += item.value
-            print(f'{s.name}: {item.name} 사용! ATK {s.atk}')
+            self.atk += item.value
+            print(f'{self.name}: {item.name} 사용! ATK {self.atk}')
         elif item.item_type == 'def':
-            s.defense += item.value
-            print(f'{s.name}: {item.name} 사용! DEF {s.defense}')
+            self.defense += item.value
+            print(f'{self.name}: {item.name} 사용! DEF {self.defense}')
 
 # 아이템 생성
 potion = Item('물약', 'heal', 30, 50)
@@ -96,43 +96,43 @@ print(f'HP: {hero.hp}/{hero.max_hp} | ATK: {hero.atk} | DEF: {hero.defense}')`,
       title: "💻 인벤토리 관리!",
       task: "인벤토리에 아이템을 넣고, 사용하고, 확인해보세요!",
       initialCode: `class Item:
-    def __init__(s, name, item_type, value, price):
-        s.name = name
-        s.item_type = item_type
-        s.value = value
-        s.price = price
+    def __init__(self, name, item_type, value, price):
+        self.name = name
+        self.item_type = item_type
+        self.value = value
+        self.price = price
 
 class Character:
-    def __init__(s, name):
-        s.name = name
-        s.hp, s.max_hp = 100, 100
-        s.atk = 15
-        s.defense = 10
-        s.inventory = []
+    def __init__(self, name):
+        self.name = name
+        self.hp, self.max_hp = 100, 100
+        self.atk = 15
+        self.defense = 10
+        self.inventory = []
 
-    def add_item(s, item):
-        s.inventory.append(item)
+    def add_item(self, item):
+        self.inventory.append(item)
         print(f'  + {item.name} 획득!')
 
-    def show_inventory(s):
-        if len(s.inventory) == 0:
+    def show_inventory(self):
+        if len(self.inventory) == 0:
             print('  (비어있음)')
             return
-        for i, item in enumerate(s.inventory):
+        for i, item in enumerate(self.inventory):
             types = {'heal': '회복', 'atk': '공격', 'def': '방어'}
             print(f'  {i+1}. {item.name} [{types[item.item_type]} +{item.value}]')
 
-    def use_item(s, index):
-        if index < 0 or index >= len(s.inventory):
+    def use_item(self, index):
+        if index < 0 or index >= len(self.inventory):
             print('  잘못된 번호!')
             return
-        item = s.inventory.pop(index)  # 사용 후 제거!
+        item = self.inventory.pop(index)  # 사용 후 제거!
         if item.item_type == 'heal':
-            s.hp = min(s.hp + item.value, s.max_hp)
-            print(f'  {item.name} 사용! HP {s.hp}/{s.max_hp}')
+            self.hp = min(self.hp + item.value, self.max_hp)
+            print(f'  {item.name} 사용! HP {self.hp}/{self.max_hp}')
         elif item.item_type == 'atk':
-            s.atk += item.value
-            print(f'  {item.name} 사용! ATK {s.atk}')
+            self.atk += item.value
+            print(f'  {item.name} 사용! ATK {self.atk}')
 
 # 테스트!
 hero = Character('영희')
@@ -165,26 +165,26 @@ print(f'\\nHP: {hero.hp}/{hero.max_hp}')`,
       title: "🎯 미션: 인벤토리 완성!",
       task: "빈칸 3개를 채워서 인벤토리 시스템을 완성하세요!",
       initialCode: `class Item:
-    def __init__(s, name, item_type, value):
-        s.name = name
-        s.item_type = item_type
-        s.value = value
+    def __init__(self, name, item_type, value):
+        self.name = name
+        self.item_type = item_type
+        self.value = value
 
 class Character:
-    def __init__(s, name):
-        s.name = name
-        s.hp, s.max_hp = 80, 100
-        s.inventory = []
+    def __init__(self, name):
+        self.name = name
+        self.hp, self.max_hp = 80, 100
+        self.inventory = []
 
-    def add_item(s, item):
-        s.inventory.___(item)
+    def add_item(self, item):
+        self.inventory.___(item)
         print(f'+ {item.name}')
 
-    def use_item(s, index):
-        item = s.inventory.___(index)
+    def use_item(self, index):
+        item = self.inventory.___(index)
         if item.item_type == 'heal':
-            s.hp = ___(s.hp + item.value, s.max_hp)
-            print(f'{item.name} 사용! HP {s.hp}/{s.max_hp}')
+            self.hp = ___(self.hp + item.value, self.max_hp)
+            print(f'{item.name} 사용! HP {self.hp}/{self.max_hp}')
 
 hero = Character('철수')
 hero.add_item(Item('물약', 'heal', 30))

@@ -11,18 +11,18 @@ export const ch4: Chapter = {
       title: "⚔️ 미니 전투 시스템!",
       task: "alive 속성을 활용한 전투 시스템을 실행해보세요!",
       initialCode: `class Character:
-    def __init__(s, char_name, hp, atk):
-        s.char_name = char_name
-        s.hp = hp
-        s.atk = atk
-        s.alive = True
+    def __init__(self, char_name, hp, atk):
+        self.char_name = char_name
+        self.hp = hp
+        self.atk = atk
+        self.alive = True
 
-    def attack(s, target):
-        if not s.alive:
-            print(f'{s.char_name}은(는) 사망했습니다!')
+    def attack(self, target):
+        if not self.alive:
+            print(f'{self.char_name}은(는) 사망했습니다!')
             return
-        print(f'{s.char_name} -> {target.char_name} 공격! (-{s.atk})')
-        target.hp = target.hp - s.atk
+        print(f'{self.char_name} -> {target.char_name} 공격! (-{self.atk})')
+        target.hp = target.hp - self.atk
         if target.hp <= 0:
             target.hp = 0
             target.alive = False
@@ -30,9 +30,9 @@ export const ch4: Chapter = {
         else:
             print(f'{target.char_name} 남은 HP: {target.hp}')
 
-    def status(s):
-        state = 'O' if s.alive else 'X'
-        print(f'[{state}] {s.char_name}: HP {s.hp}')
+    def status(self):
+        state = 'O' if self.alive else 'X'
+        print(f'[{state}] {self.char_name}: HP {self.hp}')
 
 hero = Character('용사', 100, 25)
 slime = Character('슬라임', 40, 10)
@@ -60,23 +60,23 @@ slime.status()`,
       title: "🏦 미션: 은행 계좌 클래스!",
       task: "BankAccount 클래스의 빈칸(___) 3개를 채워서 입금, 출금, 잔액 조회 기능을 완성하세요!",
       initialCode: `class BankAccount:
-    def __init__(s, owner, balance):
-        s.owner = owner
-        s.balance = balance
+    def __init__(self, owner, balance):
+        self.owner = owner
+        self.balance = balance
 
-    def deposit(s, amount):
-        s.balance = s.balance ___ amount
-        print(f'{amount}원 입금! 잔액: {s.balance}원')
+    def deposit(self, amount):
+        self.balance = self.balance ___ amount
+        print(f'{amount}원 입금! 잔액: {self.balance}원')
 
-    def withdraw(s, amount):
-        if s.balance ___ amount:
-            s.balance = s.balance - amount
-            print(f'{amount}원 출금! 잔액: {s.balance}원')
+    def withdraw(self, amount):
+        if self.balance ___ amount:
+            self.balance = self.balance - amount
+            print(f'{amount}원 출금! 잔액: {self.balance}원')
         else:
-            print(f'잔액 부족! 현재: {s.balance}원')
+            print(f'잔액 부족! 현재: {self.balance}원')
 
-    def show_balance(s):
-        print(f'{s.owner}님 잔액: {s.___}원')
+    def show_balance(self):
+        print(f'{self.owner}님 잔액: {self.___}원')
 
 account = BankAccount('철수', 10000)
 account.show_balance()

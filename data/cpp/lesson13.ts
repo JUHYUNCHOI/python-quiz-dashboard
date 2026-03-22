@@ -1,267 +1,251 @@
 // ============================================
-// C++ Lesson 13: 재귀 (Recursion)
+// C++ Lesson 13: 포인터 기초 (Pointer Basics)
 // 파이썬을 아는 학생을 위한 C++ 강의
 // ============================================
 import { LessonData } from '../types'
 
 export const cppLesson13Data: LessonData = {
   id: "cpp-13",
-  title: "재귀 (Recursion)",
-  emoji: "🔄",
-  description: "함수가 자신을 호출하는 재귀와 메모이제이션!",
+  title: "포인터 기초",
+  emoji: "🎯",
+  description: "메모리 주소를 직접 다루는 포인터! int* ptr, &주소, *역참조, nullptr",
   chapters: [
     // ============================================
-    // Chapter 1: 재귀 기초
+    // Chapter 1: 포인터란?
     // ============================================
     {
       id: "ch1",
-      title: "재귀 기초",
-      emoji: "🌀",
+      title: "포인터란?",
+      emoji: "📍",
       steps: [
         {
           id: "ch1-intro",
           type: "explain",
-          title: "🌀 재귀 — 자기 자신을 호출하는 함수!",
-          content: `러시아 인형(마트료시카)을 열면 안에 똑같은 더 작은 인형이 있어요. 그 인형을 열면 또 더 작은 인형... **재귀**가 바로 이런 개념이에요!
-
-**재귀(Recursion)**는 함수가 **자기 자신을 호출**하는 기법이에요.
-
-재귀에는 반드시 두 가지가 필요해요:
-1. **기저 조건(Base Case)** — 더 이상 호출하지 않는 종료 조건
-2. **재귀 호출(Recursive Call)** — 자기 자신을 (더 작은 문제로) 호출
+          title: "📍 포인터(Pointer) — 주소를 저장하는 변수!",
+          content: `지난 레슨에서 참조(&)는 변수의 **별명**이라고 배웠죠? **포인터(*)는 변수의 주소(메모리 위치)를 저장하는 변수**예요!
 
 \`\`\`cpp
-// 5! = 5 × 4 × 3 × 2 × 1 = 120
-int factorial(int n) {
-    if (n <= 1) return 1;   // 기저 조건!
-    return n * factorial(n - 1);  // 재귀 호출!
-}
+int x = 42;
 
-cout << factorial(5);  // 120
+// 참조: 별명 (이전 레슨)
+int& ref = x;   // ref는 x의 다른 이름
+
+// 포인터: 주소 저장 (이번 레슨!)
+int* ptr = &x;  // ptr은 x의 주소를 저장
 \`\`\`
 
-호출 과정을 따라가봐요:
-\`\`\`
-factorial(5)
-  = 5 × factorial(4)
-        = 4 × factorial(3)
-              = 3 × factorial(2)
-                    = 2 × factorial(1)
-                          = 1  ← 기저 조건!
-                    = 2 × 1 = 2
-              = 3 × 2 = 6
-        = 4 × 6 = 24
-  = 5 × 24 = 120
-\`\`\`
+**핵심 연산자 두 가지:**
 
-파이썬과 비교해봐요:
+| 연산자 | 이름 | 하는 일 |
+|---|---|---|
+| \`&\` | 주소 연산자 | 변수의 주소를 가져와요 |
+| \`*\` | 역참조 연산자 | 주소에 저장된 값을 가져와요 |
 
-**파이썬 🐍:**
-\`\`\`python
-def factorial(n):
-    if n <= 1:
-        return 1
-    return n * factorial(n - 1)
+\`\`\`cpp
+int x = 42;
+int* ptr = &x;    // ptr = x의 주소 (예: 0x7fff1234)
+
+cout << ptr;      // 주소 출력 (16진수 값)
+cout << *ptr;     // 역참조: 42 출력
+cout << &x;       // x의 주소 출력
+
+*ptr = 100;       // 역참조로 값 변경!
+cout << x;        // 100 (x가 바뀌었어요!)
 \`\`\`
 
-거의 똑같죠! C++에서는 타입만 명시하면 돼요.
-
-| 파이썬 🐍 | C++ ⚡ |
-|---|---|
-| \`def factorial(n):\` | \`int factorial(int n) {\` |
-| 들여쓰기로 범위 | 중괄호로 범위 |
-| 반환 타입 없음 | \`int\` 반환 타입 명시 |
-| 재귀 방식은 완전히 동일! | 재귀 방식은 완전히 동일! |
-
-💡 기저 조건이 없으면 무한 재귀! **스택 오버플로우(Stack Overflow)** 오류가 발생해요. 항상 종료 조건을 먼저 써요!`
+💡 파이썬에는 포인터가 없어요. C++의 포인터는 메모리를 직접 제어할 수 있는 강력한 도구예요!`,
+        },
+        {
+          id: "ch1-pred1",
+          type: "predict" as const,
+          title: "포인터 역참조!",
+          code: `#include <iostream>
+using namespace std;
+int main() {
+    int x = 10;
+    int* p = &x;
+    *p = 99;
+    cout << x;
+    return 0;
+}`,
+          options: ["10", "99", "주소값", "에러"],
+          answer: 1,
+          explanation: "*p = 99는 p가 가리키는 변수(x)의 값을 99로 바꿔요! 포인터로 역참조하면 원본을 수정할 수 있어요.",
+        },
+        {
+          id: "ch1-q1",
+          type: "quiz",
+          title: "포인터 기본!",
+          content: "`int x = 5; int* ptr = &x;`에서 `*ptr`이 반환하는 것은?",
+          options: [
+            "ptr 변수 자체의 주소",
+            "x의 주소",
+            "x의 값 (5)",
+            "포인터의 크기",
+          ],
+          answer: 2,
+          explanation: "*ptr은 역참조(dereference)예요. 포인터가 가리키는 곳의 값, 즉 x의 값(5)을 반환해요!",
         },
         {
           id: "ch1-fb1",
           type: "fillblank" as const,
           title: "빈칸을 채워주세요",
-          content: "재귀 함수의 기저 조건을 완성해봐요!",
-          code: "int factorial(int n) {\n    if (n ___ 1) return 1;  // 기저 조건\n    return n * factorial(n - 1);\n}",
+          content: "포인터를 선언하고 역참조해봐요!",
+          code: "int x = 42;\nint___ ptr = &x;  // 포인터 선언\ncout << ___ptr;   // 역참조: 42 출력",
           fillBlanks: [
-            { id: 0, answer: "<=", options: ["<=", ">=", "==", ">"] }
+            { id: 0, answer: "*", options: ["*", "&", "**", " "] },
+            { id: 1, answer: "*", options: ["*", "&", "**", " "] },
           ],
-          explanation: "n <= 1이 기저 조건이에요! n이 0이나 1일 때 1을 반환하고 재귀를 멈춰요. n == 1만 쓰면 n=0일 때 처리가 안 될 수 있어요."
+          explanation: "int* ptr로 포인터를 선언하고, *ptr로 역참조해서 값을 가져와요!",
         },
-        {
-          id: "ch1-pred1",
-          type: "predict" as const,
-          title: "재귀 호출 추적!",
-          code: "#include <iostream>\nusing namespace std;\nvoid count(int n) {\n    if (n <= 0) return;\n    cout << n << \" \";\n    count(n - 1);\n}\nint main() {\n    count(4);\n    return 0;\n}",
-          options: ["1 2 3 4 ", "4 3 2 1 ", "4 4 4 4 ", "무한 반복"],
-          answer: 1,
-          explanation: "count(4) → 4 출력 → count(3) → 3 출력 → count(2) → 2 출력 → count(1) → 1 출력 → count(0) → return. 4 3 2 1 순서로 출력돼요!"
-        },
-        {
-          id: "ch1-practice",
-          type: "practice" as const,
-          title: "✋ 재귀로 합계 구하기!",
-          content: `1부터 n까지의 합을 재귀로 구해봐요!
-
-sum(n) = n + sum(n-1) 관계를 이용해요.
-기저 조건: sum(0) = 0`,
-          code: `#include <iostream>
-using namespace std;
-
-int sum(int n) {
-    if (n <= 0) return 0;  // 기저 조건
-    return n + sum(n - 1); // 재귀 호출
-}
-
-int main() {
-    cout << sum(5) << endl;   // 1+2+3+4+5
-    cout << sum(10) << endl;  // 1~10 합
-    return 0;
-}`,
-          expectedOutput: `15
-55`
-        },
-        {
-          id: "ch1-q1",
-          type: "quiz",
-          title: "재귀의 핵심!",
-          content: "재귀 함수에서 **반드시** 있어야 하는 것은?",
-          options: [
-            "반복문(for/while)",
-            "기저 조건(Base Case)",
-            "전역 변수",
-            "return 없는 void 타입"
-          ],
-          answer: 1,
-          explanation: "기저 조건이 없으면 함수가 무한히 자기 자신을 호출해서 스택 오버플로우가 발생해요! 재귀 함수에는 반드시 멈추는 조건(기저 조건)이 있어야 해요."
-        }
       ]
     },
     // ============================================
-    // Chapter 2: 피보나치와 메모이제이션
+    // Chapter 2: nullptr & 포인터 vs 참조
     // ============================================
     {
       id: "ch2",
-      title: "피보나치 & 메모이제이션",
-      emoji: "💾",
+      title: "nullptr & 포인터 활용",
+      emoji: "🔒",
       steps: [
         {
-          id: "ch2-fib",
+          id: "ch2-nullptr",
           type: "explain",
-          title: "💾 피보나치와 중복 계산 문제!",
-          content: `피보나치 수열: 0, 1, 1, 2, 3, 5, 8, 13, 21...
-각 수 = 앞의 두 수의 합! (fib(n) = fib(n-1) + fib(n-2))
+          title: "🔒 nullptr — 안전한 빈 포인터 (C++11)",
+          content: `포인터가 아무것도 가리키지 않을 때는 **nullptr**을 써요!
 
 \`\`\`cpp
-int fib(int n) {
-    if (n <= 1) return n;  // 기저 조건: fib(0)=0, fib(1)=1
-    return fib(n-1) + fib(n-2);
+int* p = nullptr;  // 빈 포인터 (C++11 이후 권장)
+// int* p = NULL;   // 옛날 방식 (비권장)
+
+if (p != nullptr) {
+    cout << *p;    // nullptr이면 절대 역참조하면 안 돼요!
 }
 \`\`\`
 
-그런데... fib(5)를 계산하면 이런 일이 생겨요:
-\`\`\`
-fib(5)
-├── fib(4)
-│   ├── fib(3) ← 이미 계산했어요!
-│   │   ├── fib(2)
-│   │   └── fib(1)
-│   └── fib(2)
-└── fib(3) ← 또 계산해요! (낭비!)
-    ├── fib(2)
-    └── fib(1)
-\`\`\`
-
-fib(40)을 계산하면 **수억 번**의 중복 계산이 발생해요! 🐢
-
-**해결책: 메모이제이션(Memoization)**
-한 번 계산한 값을 **저장**해두고 재사용해요!
+nullptr을 역참조하면 **프로그램이 충돌**(segfault)해요. 항상 확인하고 써야 해요!
 
 \`\`\`cpp
-int memo[100];  // -1로 초기화
+int* p = nullptr;
 
-int fib(int n) {
-    if (n <= 1) return n;
-    if (memo[n] != -1) return memo[n];  // 이미 계산했으면 바로 반환!
-    memo[n] = fib(n-1) + fib(n-2);     // 처음 계산할 때만 저장
-    return memo[n];
+// ❌ 위험! segfault!
+// cout << *p;
+
+// ✅ 안전하게 확인 후 사용
+if (p != nullptr) {
+    cout << *p;
+} else {
+    cout << "포인터가 비어있어요!";
 }
 \`\`\`
 
-fib(40)이 약 30억 번 → **79번**으로 줄어요! 🚀
-
-파이썬과 비교해봐요:
-
-**파이썬 🐍:**
-\`\`\`python
-from functools import lru_cache
-
-@lru_cache(maxsize=None)  # 파이썬은 데코레이터로 간단하게!
-def fib(n):
-    if n <= 1: return n
-    return fib(n-1) + fib(n-2)
-\`\`\`
-
-파이썬은 @lru_cache로 간단하게, C++은 배열로 직접 구현해요.
-
-| | 일반 재귀 | 메모이제이션 |
+| | nullptr (C++11) | NULL (구식) |
 |---|---|---|
-| 시간복잡도 | O(2^n) — 지수! | **O(n)** — 선형! |
-| fib(40) | 수억 번 호출 | 79번 호출 |
-| 구현 | 간단 | 배열 필요 |
-
-💡 메모이제이션은 **동적 프로그래밍(DP)**의 핵심 기법이에요! USACO에서 자주 쓰여요!`
+| 타입 | nullptr_t (타입 안전) | 정수 0 |
+| 권장 | ✅ C++11+ | ❌ 비권장 |`,
         },
         {
           id: "ch2-pred1",
           type: "predict" as const,
-          title: "피보나치 재귀 결과!",
-          code: "#include <iostream>\nusing namespace std;\nint fib(int n) {\n    if (n <= 1) return n;\n    return fib(n-1) + fib(n-2);\n}\nint main() {\n    cout << fib(7);\n    return 0;\n}",
-          options: ["11", "13", "21", "8"],
-          answer: 1,
-          explanation: "피보나치 수열: fib(0)=0, fib(1)=1, fib(2)=1, fib(3)=2, fib(4)=3, fib(5)=5, fib(6)=8, fib(7)=13이에요!"
+          title: "nullptr 체크!",
+          code: `#include <iostream>
+using namespace std;
+int main() {
+    int* p = nullptr;
+    if (p != nullptr) {
+        cout << "값: " << *p;
+    } else {
+        cout << "비어있음";
+    }
+    return 0;
+}`,
+          options: ["값: 0", "값: nullptr", "비어있음", "에러"],
+          answer: 2,
+          explanation: "p가 nullptr이므로 else 분기가 실행돼서 '비어있음'이 출력돼요. nullptr을 역참조하지 않아서 안전해요!",
+        },
+        {
+          id: "ch2-vs-ref",
+          type: "explain",
+          title: "🆚 참조 vs 포인터 — 언제 뭘 써요?",
+          content: `경쟁 프로그래밍에서는 **참조**를 훨씬 많이 써요. 하지만 포인터를 이해해야 배열, 연결 리스트 등 고급 자료구조를 다룰 수 있어요!
+
+\`\`\`cpp
+// 참조로 전달 (권장 — 더 안전, 더 간단)
+void add10(int& n) { n += 10; }
+
+// 포인터로 전달 (저수준 제어 필요할 때)
+void add10ptr(int* p) { *p += 10; }
+
+int main() {
+    int x = 5;
+    add10(x);       // 참조 호출: 그냥 x를 넘김
+    add10ptr(&x);   // 포인터 호출: x의 주소를 넘김
+    cout << x;      // 25
+}
+\`\`\`
+
+| 기능 | 참조 (&) | 포인터 (*) |
+|---|---|---|
+| 초기화 | 선언 시 필수 | 나중에 가능 |
+| nullptr | 불가 (항상 유효) | 가능 |
+| 재지정 | 불가 | 가능 |
+| 문법 | 더 간단 | 더 복잡 |
+| 경쟁 프로그래밍 | 자주 사용 ✅ | 가끔 사용 |
+
+💡 **실전 규칙:** 가능하면 참조(&)를 쓰고, 포인터는 nullptr이 필요하거나 재지정이 필요할 때만 써요!`,
         },
         {
           id: "ch2-practice",
           type: "practice" as const,
-          title: "✋ 메모이제이션으로 피보나치!",
-          content: `메모이제이션을 사용해서 피보나치 수열을 빠르게 계산해봐요!
+          title: "✋ 포인터로 swap 함수 만들기!",
+          content: `포인터를 이용해서 두 값을 교환하는 swap 함수를 만들어봐요!
 
-memo 배열을 -1로 초기화하고, 계산 결과를 저장해요.`,
+포인터 버전과 참조 버전을 비교해서 차이를 느껴봐요.`,
           code: `#include <iostream>
 using namespace std;
 
-int memo[50];
+// 포인터 버전
+void swapPtr(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
 
-int fib(int n) {
-    if (n <= 1) return n;
-    if (memo[n] != -1) return memo[n];
-    memo[n] = fib(n-1) + fib(n-2);
-    return memo[n];
+// 참조 버전 (더 간단!)
+void swapRef(int& a, int& b) {
+    int temp = a;
+    a = b;
+    b = temp;
 }
 
 int main() {
-    fill(memo, memo + 50, -1);
+    int x = 10, y = 20;
 
-    cout << fib(10) << endl;
-    cout << fib(20) << endl;
+    swapPtr(&x, &y);  // 주소를 넘겨야 함
+    cout << "포인터 swap: " << x << " " << y << endl;
+
+    swapRef(x, y);    // 그냥 변수를 넘김
+    cout << "참조 swap: " << x << " " << y << endl;
+
     return 0;
 }`,
-          expectedOutput: `55
-6765`
+          expectedOutput: `포인터 swap: 20 10
+참조 swap: 10 20`
         },
         {
           id: "ch2-q1",
           type: "quiz",
-          title: "메모이제이션 이해!",
-          content: "메모이제이션(Memoization)에 대한 설명으로 **맞는** 것은?",
+          title: "참조 vs 포인터!",
+          content: "참조(&)와 포인터(*)의 차이로 **올바른** 것은?",
           options: [
-            "항상 메모리를 덜 쓴다",
-            "한 번 계산한 결과를 저장해서 중복 계산을 방지한다",
-            "재귀 없이는 사용할 수 없다",
-            "코드는 복잡해지지만 속도는 같다"
+            "참조는 nullptr이 될 수 있지만, 포인터는 안 된다",
+            "포인터는 nullptr이 될 수 있지만, 참조는 항상 유효한 변수를 가리킨다",
+            "둘 다 완전히 같은 동작을 한다",
+            "포인터는 const로 선언할 수 없다",
           ],
           answer: 1,
-          explanation: "메모이제이션은 한 번 계산한 결과를 저장(메모)해두고, 같은 계산이 필요할 때 다시 계산하지 않고 저장된 값을 반환해요! fib(40)을 수억 번 계산에서 79번으로 줄일 수 있어요."
-        }
+          explanation: "참조는 항상 유효한 변수를 가리켜야 하고 nullptr이 불가능해요. 포인터는 nullptr로 '아무것도 가리키지 않음'을 표현할 수 있어요!",
+        },
       ]
     },
     // ============================================
@@ -275,113 +259,89 @@ int main() {
         {
           id: "ch3-q1",
           type: "quiz",
-          title: "재귀 코드 읽기!",
-          content: `이 함수의 출력은?
-
-\`\`\`cpp
-int mystery(int n) {
-    if (n == 0) return 0;
-    return 1 + mystery(n - 1);
-}
-cout << mystery(5);
-\`\`\``,
-          options: ["0", "1", "5", "무한 루프"],
+          title: "포인터 선언!",
+          content: "`int x = 5;` 뒤에 `x`를 가리키는 포인터를 올바르게 선언한 것은?",
+          options: [
+            "int ptr = x;",
+            "int& ptr = x;",
+            "int* ptr = &x;",
+            "int* ptr = x;"
+          ],
           answer: 2,
-          explanation: "mystery(5) = 1 + mystery(4) = 1 + 1 + mystery(3) = ... = 1+1+1+1+1+mystery(0) = 5+0 = 5예요! 이 함수는 사실 n을 그대로 반환해요."
+          explanation: "int* ptr = &x;로 포인터를 선언해요! *는 포인터 타입, &x는 x의 주소를 가져오는 주소 연산자예요."
         },
         {
           id: "ch3-q2",
           type: "quiz",
-          title: "스택 오버플로우!",
-          content: `다음 재귀 함수에서 **문제**가 있는 것은?
+          title: "역참조 결과!",
+          content: `이 코드의 출력은?
 
 \`\`\`cpp
-int bad(int n) {
-    return n + bad(n - 1);
-}
+int a = 7;
+int* p = &a;
+*p = *p + 3;
+cout << a;
 \`\`\``,
           options: [
-            "반환 타입이 잘못됐다",
-            "기저 조건(Base Case)이 없다",
-            "재귀 호출이 없다",
-            "매개변수 타입이 잘못됐다"
+            "7",
+            "10",
+            "3",
+            "에러"
           ],
           answer: 1,
-          explanation: "기저 조건이 없어요! 이 함수는 영원히 자기 자신을 호출해서 스택 오버플로우가 발생해요. if (n <= 0) return 0; 같은 기저 조건이 반드시 필요해요!"
+          explanation: "*p는 a의 값(7)이에요. *p + 3 = 10을 a에 저장하므로 a는 10이 돼요!"
         },
         {
           id: "ch3-q3",
           type: "quiz",
-          title: "메모이제이션 vs 일반 재귀!",
-          content: "피보나치를 일반 재귀로 계산할 때의 시간복잡도는?",
+          title: "nullptr 안전 체크!",
+          content: "포인터를 역참조하기 전에 해야 할 것은?",
           options: [
-            "O(n)",
-            "O(n log n)",
-            "O(n²)",
-            "O(2^n)"
+            "항상 바로 역참조한다",
+            "nullptr인지 확인한다",
+            "포인터를 정수로 변환한다",
+            "포인터를 삭제한다"
           ],
-          answer: 3,
-          explanation: "일반 재귀 피보나치는 O(2^n)으로 지수적으로 느려요! fib(40)은 약 2^40번의 연산이 필요해요. 메모이제이션을 쓰면 O(n)으로 줄어들어요!"
+          answer: 1,
+          explanation: "nullptr인 포인터를 역참조하면 프로그램이 충돌해요(segfault)! 항상 `if (p != nullptr)` 로 확인한 후 사용해야 해요."
         },
         {
           id: "ch3-q4",
           type: "quiz",
-          title: "재귀 실전!",
-          content: `이 코드의 출력은?
-
-\`\`\`cpp
-void printStars(int n) {
-    if (n == 0) return;
-    cout << "*";
-    printStars(n - 1);
-}
-printStars(3);
-\`\`\``,
-          options: ["***", "* * *", "3", "에러"],
-          answer: 0,
-          explanation: "printStars(3) → '*' 출력 → printStars(2) → '*' 출력 → printStars(1) → '*' 출력 → printStars(0) → return. 공백 없이 '***'가 출력돼요!"
+          title: "포인터로 함수 전달!",
+          content: "`void f(int* p) { *p = 99; }` 를 올바르게 호출하는 방법은?",
+          options: [
+            "f(x);",
+            "f(*x);",
+            "f(&x);",
+            "f(&&x);"
+          ],
+          answer: 2,
+          explanation: "포인터를 받는 함수에는 주소(&x)를 넘겨야 해요! f(&x)로 x의 주소를 전달하면 함수 안에서 *p로 x를 수정할 수 있어요."
         },
         {
           id: "ch3-summary",
           type: "explain",
-          title: "🎉 재귀 마스터!",
-          content: `## 🏆 레슨 13 완료!
+          title: "🎯 오늘 배운 것!",
+          content: `## ✅ 오늘의 정리!
 
-오늘 배운 핵심을 정리해봐요!
+### 🎯 포인터 (Pointer)
+- ✅ **포인터 선언** — \`int* ptr = &x;\` (x의 주소를 저장)
+- ✅ **주소 연산자** — \`&x\` (x의 메모리 주소)
+- ✅ **역참조 연산자** — \`*ptr\` (포인터가 가리키는 값)
+- ✅ **nullptr** — C++11+, 아무것도 가리키지 않는 안전한 빈 포인터
+- ✅ **참조 vs 포인터** — 참조는 null 불가·재지정 불가, 포인터는 null 가능·재지정 가능
 
-### 🌀 재귀(Recursion) 기본 구조
-\`\`\`cpp
-타입 함수(매개변수) {
-    if (기저_조건) return 값;  // ← 반드시!
-    return 더_작은_문제_재귀_호출;
-}
-\`\`\`
-
-### 재귀 vs 반복문
-- 재귀: 코드가 **직관적**, 트리/그래프 탐색에 강함
-- 반복문: **빠르고** 메모리 효율적
-
-### 💾 메모이제이션
-\`\`\`cpp
-int memo[N];  // -1로 초기화
-
-int func(int n) {
-    if (기저_조건) return ...;
-    if (memo[n] != -1) return memo[n];  // 저장된 값 재활용!
-    memo[n] = func(n-1) + ...;
-    return memo[n];
-}
-\`\`\`
-
-### 시간복잡도 비교
-| 방식 | fib(40) | 시간복잡도 |
+| 연산 | 문법 | 의미 |
 |---|---|---|
-| 일반 재귀 | ~10억 번 | O(2^n) |
-| 메모이제이션 | ~80번 | **O(n)** |
+| 포인터 선언 | \`int* ptr;\` | 정수 주소를 저장하는 변수 |
+| 주소 가져오기 | \`&x\` | x의 메모리 주소 |
+| 역참조 | \`*ptr\` | ptr이 가리키는 곳의 값 |
+| 빈 포인터 | \`nullptr\` | 아무것도 가리키지 않음 |
 
-💡 **재귀 + 메모이제이션 = 동적 프로그래밍(DP)**의 핵심이에요! USACO에서 정말 자주 나와요!
+💡 **실전 팁:** 경쟁 프로그래밍에서는 참조(&)를 더 많이 써요. 포인터는 자료구조(연결 리스트 등)에 중요해요!
 
-🚀 **다음 레슨:** 클래스(class) — 파이썬 class와 비슷하지만 더 강력한 C++ 클래스를 배워봐요!`
+🚀 **다음 레슨:** 구조체 & 클래스 — 데이터를 묶어서 나만의 타입을 만들어봐요!`
         }
       ]
     }

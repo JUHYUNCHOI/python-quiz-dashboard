@@ -181,9 +181,9 @@ const solutionScenario: ScenarioStep[] = [
     ],
     message: {
       ko: "사용자가 '주현'을 입력하면 버퍼에 들어가고...",
-      en: "User types 'Alex' and it goes into the buffer...",
+      en: "User types 'Juhyun' and it goes into the buffer...",
     },
-    userInput: { ko: "키보드: 주  현  Enter↵", en: "Keyboard: A  l  e  x  Enter↵" },
+    userInput: { ko: "키보드: 주  현  Enter↵", en: "Keyboard: J  u  h  y  u  n  Enter↵" },
   },
   {
     code: "getline(cin, name);",
@@ -195,7 +195,7 @@ const solutionScenario: ScenarioStep[] = [
     ],
     message: {
       ko: "getline()이 정상적으로 '주현'을 읽었어요! cin.ignore() 덕분!",
-      en: "getline() successfully reads 'Alex'! Thanks to cin.ignore()!",
+      en: "getline() successfully reads 'Juhyun'! Thanks to cin.ignore()!",
     },
   },
 ]

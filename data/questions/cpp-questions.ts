@@ -17,7 +17,7 @@ export const cppQuestions: QuizQuestion[] = [
   },
   {
     id: 2,
-    lessonId: "cpp-1",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다익스트라 알고리즘에 대한 설명으로 올바른 것은?",
     code: `// 다익스트라 핵심 아이디어
@@ -129,7 +129,7 @@ int main() {
   },
   {
     id: 7,
-    lessonId: "cpp-2",
+    lessonId: "cpp-7",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -154,7 +154,7 @@ int main() {
   },
   {
     id: 8,
-    lessonId: "cpp-2",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 코드에서 try-catch의 출력은?",
     code: `#include <iostream>
@@ -910,7 +910,7 @@ int main() {
   },
   {
     id: 43,
-    lessonId: "cpp-6",
+    lessonId: "cpp-20",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -2514,7 +2514,7 @@ int main() {
   },
   {
     id: 109,
-    lessonId: "cpp-11",
+    lessonId: "cpp-4",
     difficulty: "보통",
     question: "다음 코드에서 getline과 cin >>의 차이는 무엇인가요?",
     code: `#include <iostream>
@@ -2565,7 +2565,7 @@ int main() {
   },
   {
     id: 111,
-    lessonId: "cpp-11",
+    lessonId: "cpp-20",
     difficulty: "보통",
     question: "다음 코드에서 c_str()의 역할은?",
     code: `#include <iostream>
@@ -3106,7 +3106,7 @@ int main() {
   },
   {
     id: 133,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "보통",
     question: "다음 코드의 버그는 무엇인가?",
     code: `#include <iostream>
@@ -3139,7 +3139,7 @@ int main() {
   },
   {
     id: 134,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3164,7 +3164,7 @@ int main() {
   },
   {
     id: 135,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3186,7 +3186,7 @@ int main() {
   },
   {
     id: 136,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3212,7 +3212,7 @@ int main() {
   },
   {
     id: 137,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3243,7 +3243,7 @@ int main() {
   },
   {
     id: 138,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3265,7 +3265,7 @@ int main() {
   },
   {
     id: 139,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3293,7 +3293,7 @@ p = 10;   // 오류! 주소에 정수를 넣으려 함`,
   },
   {
     id: 140,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3314,7 +3314,7 @@ int main() {
   },
   {
     id: 141,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3338,7 +3338,7 @@ int main() {
   },
   {
     id: 142,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드에서 현재 상태로 컴파일 오류가 발생하나요?",
     code: `#include <iostream>
@@ -3367,7 +3367,7 @@ p = &y;   // OK! 포인터 재할당 가능`,
   },
   {
     id: 143,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드에서 주석 C와 D를 해제하면 어떤 것이 오류인가요?",
     code: `#include <iostream>
@@ -3390,7 +3390,7 @@ int main() {
   },
   {
     id: 144,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3416,7 +3416,7 @@ int main() {
   },
   {
     id: 145,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3443,7 +3443,7 @@ int main() {
   },
   {
     id: 146,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 중 메모리 누수가 발생하는 코드는?",
     code: `// A:
@@ -3470,7 +3470,7 @@ unique_ptr<int> p = make_unique<int>(10);`,
   },
   {
     id: 147,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드에서 unique_ptr의 소유권 이전 후 출력 결과는?",
     code: `#include <iostream>
@@ -3498,7 +3498,7 @@ int main() {
   },
   {
     id: 148,
-    lessonId: "cpp-12",
+    lessonId: "cpp-6",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3532,7 +3532,7 @@ else  // if(x>20)의 else!`,
   },
   {
     id: 149,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3556,7 +3556,7 @@ int main() {
   },
   {
     id: 150,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드에서 메모리 누수가 발생하는 이유는?",
     code: `#include <iostream>
@@ -3584,7 +3584,7 @@ p = new int(100);`,
   },
   {
     id: 151,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3610,7 +3610,7 @@ int main() {
   },
   {
     id: 152,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3635,7 +3635,7 @@ int main() {
   },
   {
     id: 153,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드에서 shared_ptr의 참조 카운트는?",
     code: `#include <iostream>
@@ -3658,7 +3658,7 @@ int main() {
   },
   {
     id: 154,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3679,7 +3679,7 @@ int main() {
   },
   {
     id: 155,
-    lessonId: "cpp-12",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드에서 발생하는 문제는?",
     code: `#include <iostream>
@@ -4391,7 +4391,7 @@ int main() {
   },
   {
     id: 179,
-    lessonId: "cpp-14",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -4433,7 +4433,7 @@ int main() {
   },
   {
     id: 180,
-    lessonId: "cpp-14",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 코드에서 컴파일 오류가 발생하는 이유는?",
     code: `#include <iostream>
@@ -4457,7 +4457,7 @@ int main() {
   },
   {
     id: 181,
-    lessonId: "cpp-14",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 다형성 코드에서 shapes[0]->area()의 결과는?",
     code: `#include <iostream>
@@ -4552,7 +4552,7 @@ int main() {
   },
   {
     id: 184,
-    lessonId: "cpp-14",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 코드에서 virtual 소멸자가 없으면 발생하는 문제는?",
     code: `#include <iostream>
@@ -4592,7 +4592,7 @@ public:
   },
   {
     id: 185,
-    lessonId: "cpp-14",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -4654,7 +4654,7 @@ int main() {
   },
   {
     id: 187,
-    lessonId: "cpp-14",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -4695,7 +4695,7 @@ p->show();  // Derived::show() 호출!`,
   },
   {
     id: 188,
-    lessonId: "cpp-14",
+    lessonId: "cpp-9",
     difficulty: "어려움",
     question: "다음 코드에서 emplace_back과 push_back의 차이는?",
     code: `#include <iostream>
@@ -4723,7 +4723,7 @@ int main() {
   },
   {
     id: 189,
-    lessonId: "cpp-14",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 코드에서 상속의 접근 지정자에 따른 차이는?",
     code: `class Base {
@@ -4751,7 +4751,7 @@ class Derived : public Base {
   },
   {
     id: 190,
-    lessonId: "cpp-14",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -4789,7 +4789,7 @@ int main() {
   },
   {
     id: 191,
-    lessonId: "cpp-14",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -4813,7 +4813,7 @@ int main() {
   },
   {
     id: 192,
-    lessonId: "cpp-14",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -4844,7 +4844,7 @@ int main() {
   },
   {
     id: 193,
-    lessonId: "cpp-14",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -4879,7 +4879,7 @@ int main() {
   },
   {
     id: 194,
-    lessonId: "cpp-14",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 코드에서 virtual 소멸자가 필요한 이유는?",
     code: `#include <iostream>
@@ -4919,7 +4919,7 @@ public:
   },
   {
     id: 195,
-    lessonId: "cpp-14",
+    lessonId: "cpp-20",
     difficulty: "어려움",
     question: "다음 코드에서 컴파일 오류가 발생하는 줄은?",
     code: `#include <iostream>
@@ -5391,20 +5391,17 @@ int main() {
 using namespace std;
 
 int main() {
-    set<int> s;
-    s.insert(3);
-    s.insert(1);
-    s.insert(3);
-    s.insert(2);
-    cout << s.size();
+    set<int> s = {5, 3, 8, 1, 3, 5};
+    for (int x : s)
+        cout << x << " ";
     return 0;
 }`,
-    options: ["4", "3", "2", "컴파일 오류"],
+    options: ["5 3 8 1 3 5 ", "1 3 5 8 ", "1 3 3 5 5 8 ", "컴파일 오류"],
     correctAnswer: 1,
-    explanation: "set은 중복을 허용하지 않습니다. 3을 두 번 넣어도 하나만 저장됩니다. {1, 2, 3}으로 size()=3입니다.",
-    keyConceptTitle: "STL set",
-    keyConceptDescription: "set은 중복 없이 정렬된 상태로 요소를 저장합니다. 삽입, 삭제, 검색 모두 O(log N)입니다.",
-    relatedTopics: ["set", "중복 제거", "STL"],
+    explanation: "set은 중복을 제거하고 자동으로 오름차순 정렬합니다. {5,3,8,1,3,5} → {1,3,5,8}이 되어 '1 3 5 8 '이 출력됩니다.",
+    keyConceptTitle: "set의 자동 정렬과 중복 제거",
+    keyConceptDescription: "set을 순회하면 항상 오름차순으로 원소가 나옵니다. 중복 허용이 필요하면 multiset을 사용하세요.",
+    relatedTopics: ["set", "정렬", "중복 제거", "순회"],
   },
   {
     id: 212,
@@ -6442,16 +6439,16 @@ int main() {
     question: "경쟁 프로그래밍에서 빠른 입출력을 위해 사용하는 코드로 올바른 것은?",
     code: `// 대회에서 시간 초과를 방지하기 위한
 // 빠른 입출력 설정은?`,
-    options: ["cin.fast(); cout.fast();", "ios::sync_with_stdio(false); cin.tie(NULL);", "scanf_fast(); printf_fast();", "#pragma fast_io"],
+    options: ["cin.fast(); cout.fast();", "ios::sync_with_stdio(false); cin.tie(nullptr);", "scanf_fast(); printf_fast();", "#pragma fast_io"],
     correctAnswer: 1,
-    explanation: "ios::sync_with_stdio(false)는 C/C++ 입출력 동기화를 끄고, cin.tie(NULL)은 cin/cout의 묶음을 풉니다.",
+    explanation: "ios::sync_with_stdio(false)는 C/C++ 입출력 동기화를 끄고, cin.tie(nullptr)은 cin/cout의 묶음을 풉니다.",
     keyConceptTitle: "빠른 입출력 (Fast I/O)",
-    keyConceptDescription: "경쟁 프로그래밍에서 cin/cout의 속도를 높이려면 sync_with_stdio(false)와 cin.tie(NULL)을 사용합니다.",
+    keyConceptDescription: "경쟁 프로그래밍에서 cin/cout의 속도를 높이려면 sync_with_stdio(false)와 cin.tie(nullptr)을 사용합니다.",
     codeComparison: {
       wrong: `// 느린 입출력 (동기화 켜짐)
 cin >> n;`,
       correct: `ios::sync_with_stdio(false);
-cin.tie(NULL);
+cin.tie(nullptr);
 cin >> n;  // 훨씬 빠름!`,
     },
     relatedTopics: ["빠른 I/O", "경쟁 프로그래밍", "sync_with_stdio"],
@@ -8286,5 +8283,568 @@ int ways(int n) {
     keyConceptTitle: "경우의 수 재귀 (카운팅 DP)",
     keyConceptDescription: "n을 만드는 경우의 수 = (n-1)을 만드는 수 + (n-2)를 만드는 수 + (n-3)을 만드는 수. 이런 패턴은 USACO에서 자주 나옵니다.",
     relatedTopics: ["카운팅 DP", "경우의 수", "재귀", "USACO"],
+  },
+  {
+    id: 324,
+    lessonId: "cpp-4",
+    difficulty: "보통",
+    question: "다음 코드에서 '김철수'를 입력했을 때 출력 결과는?",
+    code: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    string name;
+    cin >> name;
+    cout << "안녕, " << name << "!" << endl;
+    return 0;
+}`,
+    options: ["안녕, 김철수!", "안녕, 김!", "안녕, !", "런타임 오류"],
+    correctAnswer: 1,
+    explanation: "cin >>은 공백(띄어쓰기)을 기준으로 입력을 분리합니다. '김철수'에서 '김'까지만 읽힙니다. 띄어쓰기가 포함된 이름을 전부 읽으려면 getline()을 써야 합니다.",
+    keyConceptTitle: "cin >>의 공백 처리",
+    keyConceptDescription: "cin >>은 공백, 탭, 엔터를 구분자로 사용합니다. 공백이 포함된 문자열 전체를 읽으려면 getline(cin, 변수)을 사용해야 합니다.",
+    relatedTopics: ["cin", "공백", "문자열 입력"],
+  },
+  {
+    id: 325,
+    lessonId: "cpp-4",
+    difficulty: "보통",
+    question: "띄어쓰기가 포함된 한 줄 전체를 읽는 올바른 코드는?",
+    code: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    string line;
+    // 한 줄 전체 입력받기
+    _______________
+    cout << line << endl;
+    return 0;
+}`,
+    options: [
+      "cin >> line;",
+      "getline(cin, line);",
+      "cin.get(line);",
+      "read(cin, line);"
+    ],
+    correctAnswer: 1,
+    explanation: "getline(cin, line)은 엔터를 누를 때까지의 문자 전체(공백 포함)를 읽습니다. cin >>은 공백 전까지만 읽습니다.",
+    keyConceptTitle: "getline() 함수",
+    keyConceptDescription: "getline(cin, 변수)는 줄바꿈 전까지 모든 문자(공백 포함)를 읽어 string에 저장합니다. Python의 input()과 동작이 같습니다.",
+    relatedTopics: ["getline", "cin", "문자열", "공백 처리"],
+  },
+  {
+    id: 326,
+    lessonId: "cpp-4",
+    difficulty: "보통",
+    question: "다음 코드를 실행할 때, 나이에 20, 이름에 '홍길동'을 입력하면 어떤 문제가 생기나?",
+    code: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    int age;
+    string name;
+    cout << "나이: "; cin >> age;
+    cout << "이름: "; getline(cin, name);
+    cout << age << "살 " << name << endl;
+    return 0;
+}`,
+    options: [
+      "정상 출력: 20살 홍길동",
+      "name이 비어있어 '20살 '만 출력된다",
+      "age 입력이 안 된다",
+      "컴파일 오류"
+    ],
+    correctAnswer: 1,
+    explanation: "cin >> age 후 버퍼에 '\\n'(엔터)이 남아있어서, getline()이 그 엔터를 읽고 바로 종료됩니다. 그래서 name이 빈 문자열이 됩니다.",
+    keyConceptTitle: "cin >> 후 getline() 버퍼 문제",
+    keyConceptDescription: "cin >>은 입력을 읽고 엔터를 버퍼에 남깁니다. 이후 getline()을 쓰면 그 엔터를 읽어버립니다. cin.ignore()로 남은 엔터를 제거해야 합니다.",
+    relatedTopics: ["cin.ignore", "getline", "입력 버퍼", "버퍼 비우기"],
+  },
+  {
+    id: 327,
+    lessonId: "cpp-4",
+    difficulty: "보통",
+    question: "앞 문제의 버퍼 문제를 해결하는 올바른 코드는?",
+    code: `int main() {
+    int age;
+    string name;
+    cin >> age;
+    _____________  // 버퍼의 엔터 제거
+    getline(cin, name);
+    cout << age << "살 " << name << endl;
+}`,
+    options: [
+      "cin.clear();",
+      "cin.ignore();",
+      "cin.flush();",
+      "cin.reset();"
+    ],
+    correctAnswer: 1,
+    explanation: "cin.ignore()는 버퍼에 남은 문자 하나(엔터)를 버립니다. cin >> 후 getline()을 쓸 때는 반드시 cin.ignore()를 먼저 호출해야 합니다.",
+    keyConceptTitle: "cin.ignore()로 버퍼 비우기",
+    keyConceptDescription: "cin.ignore()는 입력 스트림에서 문자 1개를 버립니다. cin >> 후 남은 엔터를 제거할 때 사용합니다. cin.ignore(1000, '\\n')으로 특정 문자까지 버릴 수도 있습니다.",
+    relatedTopics: ["cin.ignore", "입력 버퍼", "getline", "cin"],
+  },
+  {
+    id: 328,
+    lessonId: "cpp-4",
+    difficulty: "쉬움",
+    question: "다음 코드에서 '10 20 30'을 입력했을 때 출력 결과는?",
+    code: `#include <iostream>
+using namespace std;
+
+int main() {
+    int a, b, c;
+    cin >> a >> b >> c;
+    cout << a + b + c << endl;
+    return 0;
+}`,
+    options: ["102030", "60", "10", "컴파일 오류"],
+    correctAnswer: 1,
+    explanation: "cin >> a >> b >> c 처럼 연속으로 연결하면 공백/엔터로 구분된 세 값을 차례로 읽습니다. 10+20+30=60.",
+    keyConceptTitle: "cin 연속 입력",
+    keyConceptDescription: "cin >> a >> b >> c처럼 >>를 연결하면 여러 값을 한 번에 입력받을 수 있습니다. Python의 a, b, c = map(int, input().split())과 같은 역할입니다.",
+    relatedTopics: ["cin", "연속 입력", "다중 변수"],
+  },
+  // ── cpp-1 보충 (파이썬 vs C++) ──
+  {
+    id: 329,
+    lessonId: "cpp-1",
+    difficulty: "쉬움",
+    question: "C++이 파이썬보다 빠른 핵심 이유는?",
+    code: `// 파이썬: 인터프리터 방식
+// 소스코드 → 한 줄씩 실행
+# python hello.py
+
+// C++: 컴파일 방식
+// 소스코드 → 기계어 → 실행
+// g++ hello.cpp -o hello
+// ./hello`,
+    options: [
+      "문법이 더 엄격해서",
+      "소스코드를 미리 기계어로 컴파일하기 때문에",
+      "변수 타입을 명시해서",
+      "세미콜론이 있어서",
+    ],
+    correctAnswer: 1,
+    explanation: "C++은 실행 전에 소스코드 전체를 기계어(0과 1)로 컴파일합니다. 파이썬은 한 줄씩 해석하며 실행하므로 더 느려요.",
+    keyConceptTitle: "컴파일 vs 인터프리터",
+    keyConceptDescription: "컴파일: 전체 코드를 기계어로 변환 후 실행 (빠름). 인터프리터: 코드를 한 줄씩 해석하며 실행 (느리지만 편리).",
+    relatedTopics: ["컴파일", "인터프리터", "기계어", "성능"],
+  },
+  {
+    id: 330,
+    lessonId: "cpp-1",
+    difficulty: "쉬움",
+    question: "C++에서 화면에 'Hello'를 출력하는 올바른 코드는?",
+    code: `#include <iostream>
+using namespace std;
+int main() {
+    ___
+    return 0;
+}`,
+    options: [
+      `print("Hello")`,
+      `cout << "Hello";`,
+      `System.out.println("Hello");`,
+      `echo "Hello";`,
+    ],
+    correctAnswer: 1,
+    explanation: `C++에서 출력은 cout을 사용합니다. cout << "Hello"; 형태로 씁니다. print()는 파이썬, System.out.println()은 Java, echo는 PHP/Shell입니다.`,
+    keyConceptTitle: "cout 출력",
+    keyConceptDescription: "cout은 C++의 표준 출력 스트림입니다. <<(삽입 연산자)로 출력할 값을 연결합니다. #include <iostream>이 필요합니다.",
+    relatedTopics: ["cout", "출력", "#include <iostream>"],
+  },
+  {
+    id: 331,
+    lessonId: "cpp-1",
+    difficulty: "쉬움",
+    question: "C++ 소스파일을 컴파일하는 명령어는? (g++ 컴파일러 사용)",
+    code: `// 파일: hello.cpp
+#include <iostream>
+using namespace std;
+int main() {
+    cout << "Hello";
+    return 0;
+}`,
+    options: ["python hello.cpp", "run hello.cpp", "g++ hello.cpp -o hello", "compile hello.cpp"],
+    correctAnswer: 2,
+    explanation: "g++ hello.cpp -o hello로 컴파일하면 hello라는 실행 파일이 생깁니다. -o는 output 파일명을 지정합니다. 이후 ./hello로 실행합니다.",
+    keyConceptTitle: "g++ 컴파일 명령",
+    keyConceptDescription: "g++ 소스파일.cpp -o 실행파일명 형식으로 컴파일합니다. 컴파일 오류가 있으면 실행 파일이 생성되지 않습니다.",
+    relatedTopics: ["g++", "컴파일", "실행 파일"],
+  },
+  {
+    id: 332,
+    lessonId: "cpp-1",
+    difficulty: "보통",
+    question: "다음 C++ 코드에서 `return 0;`의 역할은?",
+    code: `#include <iostream>
+using namespace std;
+int main() {
+    cout << "Hello, World!" << endl;
+    return 0;  // ?
+}`,
+    options: [
+      "프로그램을 처음부터 다시 실행한다",
+      "cout을 초기화한다",
+      "main 함수(프로그램)가 정상 종료됐음을 운영체제에 알린다",
+      "0을 출력한다",
+    ],
+    correctAnswer: 2,
+    explanation: "return 0은 main 함수가 0을 반환하며 종료한다는 의미입니다. 운영체제에 '프로그램이 오류 없이 정상 종료됐다'는 신호입니다. 오류 시 return 1(또는 다른 값)을 사용합니다.",
+    keyConceptTitle: "return 0의 의미",
+    keyConceptDescription: "C++ main 함수는 int를 반환합니다. 0은 성공, 0이 아닌 값은 오류를 나타냅니다. 운영체제나 쉘 스크립트에서 이 값을 확인할 수 있습니다.",
+    relatedTopics: ["return 0", "종료 코드", "main 함수"],
+  },
+  // ── cpp-2 보충 (cout 심화 & namespace) ──
+  {
+    id: 345,
+    lessonId: "cpp-2",
+    difficulty: "쉬움",
+    question: "`using namespace std;` 없이 cout을 사용하는 올바른 방법은?",
+    code: `#include <iostream>
+// using namespace std; 없음!
+
+int main() {
+    ___ << "Hello";
+    return 0;
+}`,
+    options: ["cout << \"Hello\";", "std::cout << \"Hello\";", "namespace::cout << \"Hello\";", "c::cout << \"Hello\";"],
+    correctAnswer: 1,
+    explanation: "using namespace std; 없이는 std:: 접두사를 붙여서 std::cout으로 사용해야 합니다. 대규모 프로젝트에서는 std::를 붙이는 것이 권장됩니다.",
+    keyConceptTitle: "std:: 네임스페이스",
+    keyConceptDescription: "using namespace std; 없이는 모든 표준 라이브러리 요소에 std:: 접두사가 필요합니다. std::cout, std::endl, std::string 등.",
+    relatedTopics: ["namespace", "std::", "using namespace std"],
+  },
+  {
+    id: 346,
+    lessonId: "cpp-2",
+    difficulty: "보통",
+    question: "소수점 2자리까지만 출력하려면?",
+    code: `#include <iostream>
+#include <iomanip>  // setprecision 헤더
+using namespace std;
+int main() {
+    double pi = 3.14159265;
+    cout << ___ << pi;  // 3.14 출력
+}`,
+    options: [
+      "round(pi, 2) <<",
+      "fixed << setprecision(2) <<",
+      "precision(2) <<",
+      "format(\"%.2f\") <<",
+    ],
+    correctAnswer: 1,
+    explanation: "fixed << setprecision(2)를 사용하면 소수점 이하 2자리로 고정됩니다. fixed 없이 setprecision(2)만 쓰면 전체 유효숫자 2자리가 됩니다.",
+    keyConceptTitle: "fixed & setprecision",
+    keyConceptDescription: "cout << fixed << setprecision(n): 소수점 n자리 고정. 파이썬의 f\"{x:.2f}\"와 같은 효과. #include <iomanip> 필요.",
+    relatedTopics: ["setprecision", "fixed", "iomanip", "소수점 출력"],
+  },
+  {
+    id: 347,
+    lessonId: "cpp-2",
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+using namespace std;
+int main() {
+    int a = 10, b = 3;
+    cout << a << "/" << b << "=" << a/b;
+    return 0;
+}`,
+    options: ["10/3=3.33", "10/3=3", "10/3=3.0", "에러"],
+    correctAnswer: 1,
+    explanation: "int / int = int (정수 나눗셈). 10/3 = 3 (나머지 버림). cout은 그냥 값을 순서대로 출력합니다. 소수점 결과를 원하면 (double)a/b로 형변환해야 합니다.",
+    keyConceptTitle: "정수 나눗셈과 cout",
+    keyConceptDescription: "int/int는 정수 나눗셈입니다. cout은 값을 그대로 출력합니다. 소수 출력: cout << (double)a/b 또는 cout << 1.0*a/b",
+    relatedTopics: ["정수 나눗셈", "cout", "형변환"],
+  },
+  // ── cpp-10 보충 (Range-for & auto) ──
+  {
+    id: 333,
+    lessonId: "cpp-10",
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+#include <vector>
+using namespace std;
+int main() {
+    vector<int> v = {10, 20, 30};
+    for (int x : v) {
+        cout << x << " ";
+    }
+    return 0;
+}`,
+    options: ["10 20 30", "30 20 10", "0 1 2", "에러"],
+    correctAnswer: 0,
+    explanation: "range-based for문 `for (int x : v)`는 v의 원소를 순서대로 x에 넣으며 반복합니다. 파이썬의 `for x in v:`와 동일합니다.",
+    keyConceptTitle: "Range-based for 문",
+    keyConceptDescription: "for (타입 변수 : 컨테이너) — 컨테이너의 원소를 순서대로 꺼내 반복합니다. 파이썬의 for x in list:와 같은 역할입니다.",
+    relatedTopics: ["range-based for", "벡터 순회", "C++11"],
+  },
+  {
+    id: 334,
+    lessonId: "cpp-10",
+    difficulty: "보통",
+    question: "벡터의 원소를 직접 수정하려면 어떻게 해야 하는가?",
+    code: `#include <iostream>
+#include <vector>
+using namespace std;
+int main() {
+    vector<int> v = {1, 2, 3, 4, 5};
+    for (___ x : v) {
+        x *= 2;  // 원소를 2배로 만들고 싶다
+    }
+    for (int x : v) cout << x << " ";
+}`,
+    options: [
+      "for (int x : v)",
+      "for (int& x : v)",
+      "for (auto x : v)",
+      "for (const int x : v)",
+    ],
+    correctAnswer: 1,
+    explanation: "int& x처럼 참조(&)로 받아야 원본 벡터가 수정됩니다. 참조 없이 `int x`로 받으면 복사본만 수정되고 원본 v는 그대로입니다.",
+    keyConceptTitle: "참조로 원소 수정",
+    keyConceptDescription: "for (int& x : v)로 참조를 받으면 원본 수정 가능. for (int x : v)는 복사본. for (const int& x : v)는 읽기 전용.",
+    relatedTopics: ["range-based for", "참조", "원소 수정"],
+  },
+  {
+    id: 335,
+    lessonId: "cpp-10",
+    difficulty: "보통",
+    question: "`auto`가 타입을 자동 추론하는 예시로 올바른 것은?",
+    code: `#include <vector>
+#include <string>
+using namespace std;
+int main() {
+    vector<string> words = {"apple", "banana", "cherry"};
+    for (auto word : words) {
+        // word의 타입은?
+    }
+}`,
+    options: ["word의 타입은 int", "word의 타입은 string (자동 추론)", "word의 타입은 vector<string>", "컴파일 오류"],
+    correctAnswer: 1,
+    explanation: "auto는 초기값으로부터 타입을 자동으로 추론합니다. words가 vector<string>이므로 auto word는 string 타입이 됩니다.",
+    keyConceptTitle: "auto 타입 추론",
+    keyConceptDescription: "auto는 컴파일러가 초기값을 보고 타입을 자동으로 결정합니다. 긴 타입명(vector<string>::iterator 등)을 간단하게 쓸 수 있습니다.",
+    relatedTopics: ["auto", "타입 추론", "C++11"],
+  },
+  // ── cpp-15 보충 (pair & 정렬) ──
+  {
+    id: 336,
+    lessonId: "cpp-15",
+    difficulty: "쉬움",
+    question: "`pair<string, int> p = {\"Kim\", 95};`에서 `p.first`와 `p.second`의 값은?",
+    code: `#include <iostream>
+#include <utility>
+using namespace std;
+int main() {
+    pair<string, int> p = {"Kim", 95};
+    cout << p.first << " " << p.second;
+}`,
+    options: [
+      "95 Kim",
+      "Kim 95",
+      "0 0",
+      "컴파일 오류",
+    ],
+    correctAnswer: 1,
+    explanation: "pair에서 첫 번째 값은 .first, 두 번째 값은 .second로 접근합니다. p.first = \"Kim\", p.second = 95입니다.",
+    keyConceptTitle: "pair.first / pair.second",
+    keyConceptDescription: "pair<T1, T2>: 두 값을 묶는 구조. .first로 첫 번째, .second로 두 번째 값에 접근합니다. 이름-점수, 좌표 등에 활용합니다.",
+    relatedTopics: ["pair", ".first", ".second", "<utility>"],
+  },
+  {
+    id: 337,
+    lessonId: "cpp-15",
+    difficulty: "보통",
+    question: "pair 벡터를 점수 내림차순으로 정렬하는 올바른 코드는?",
+    code: `#include <algorithm>
+#include <vector>
+using namespace std;
+int main() {
+    vector<pair<string, int>> students = {
+        {"Kim", 85}, {"Lee", 92}, {"Park", 78}
+    };
+    sort(students.begin(), students.end(), ___);
+}`,
+    options: [
+      "[](auto a, auto b) { return a.first < b.first; }",
+      "[](auto a, auto b) { return a.second > b.second; }",
+      "greater<pair<string,int>>()",
+      "[](auto a, auto b) { return a > b; }",
+    ],
+    correctAnswer: 1,
+    explanation: "람다에서 a.second > b.second는 '점수(second)가 더 큰 것이 앞에 온다'는 조건입니다. 결과: Lee(92), Kim(85), Park(78) 순서.",
+    keyConceptTitle: "pair 커스텀 정렬",
+    keyConceptDescription: "sort()의 세 번째 인자로 비교 함수(또는 람다)를 전달합니다. a.second > b.second는 second 기준 내림차순 정렬입니다.",
+    relatedTopics: ["sort", "pair 정렬", "람다", "커스텀 정렬"],
+  },
+  {
+    id: 338,
+    lessonId: "cpp-15",
+    difficulty: "보통",
+    question: "C++17 구조적 바인딩(structured bindings)으로 pair에 접근하는 방법은?",
+    code: `#include <iostream>
+using namespace std;
+int main() {
+    pair<string, int> p = {"Alice", 100};
+    auto ___ = p;
+    cout << name << " " << score;
+}`,
+    options: [
+      "auto (name, score)",
+      "auto [name, score]",
+      "auto {name, score}",
+      "auto name, score",
+    ],
+    correctAnswer: 1,
+    explanation: "C++17 구조적 바인딩: auto [name, score] = p; 로 pair의 .first를 name, .second를 score에 바로 풀어서 저장합니다.",
+    keyConceptTitle: "구조적 바인딩 (C++17)",
+    keyConceptDescription: "auto [a, b] = pair; 형태로 pair/tuple의 값을 한번에 여러 변수로 받습니다. map 순회에서 for (auto& [key, val] : map)으로 많이 씁니다.",
+    relatedTopics: ["structured bindings", "C++17", "pair 분해"],
+  },
+  // ── cpp-19 보충 (파일 I/O & Fast I/O) ──
+  {
+    id: 339,
+    lessonId: "cpp-19",
+    difficulty: "쉬움",
+    question: "USACO에서 파일에서 입력을 읽기 위해 사용하는 C++ 클래스는?",
+    code: `#include <fstream>
+using namespace std;
+int main() {
+    ___ fin("input.txt");
+    int x;
+    fin >> x;
+    fin.close();
+}`,
+    options: ["ofstream", "ifstream", "fstream", "iostream"],
+    correctAnswer: 1,
+    explanation: "ifstream은 input file stream의 약자입니다. 파일에서 읽기 위해 사용합니다. ofstream은 파일에 쓸 때, fstream은 읽기/쓰기 모두 가능합니다.",
+    keyConceptTitle: "ifstream — 파일 읽기",
+    keyConceptDescription: "ifstream fin(\"파일명\"); 으로 파일을 열고, fin >> 변수로 읽습니다. cin 대신 fin을 쓰면 됩니다. close()로 닫는 것을 잊지 마세요.",
+    relatedTopics: ["ifstream", "파일 입출력", "<fstream>", "USACO"],
+  },
+  {
+    id: 340,
+    lessonId: "cpp-19",
+    difficulty: "보통",
+    question: "Fast I/O 설정 후 절대 하면 안 되는 것은?",
+    code: `ios_base::sync_with_stdio(false);
+cin.tie(nullptr);
+// 이 이후로 ?`,
+    options: [
+      "cin >> n; 사용",
+      "cout << n; 사용",
+      "scanf(\"%d\", &n); 사용",
+      "getline(cin, s); 사용",
+    ],
+    correctAnswer: 2,
+    explanation: "sync_with_stdio(false)는 C++ 스트림(cin/cout)과 C 스트림(scanf/printf)의 동기화를 끊습니다. 이후 두 가지를 섞어 쓰면 입출력 순서가 꼬입니다.",
+    keyConceptTitle: "Fast I/O 주의사항",
+    keyConceptDescription: "sync_with_stdio(false) 후에는 cin/cout만 사용해야 합니다. scanf/printf를 섞으면 출력 순서가 비정상적이 됩니다.",
+    relatedTopics: ["sync_with_stdio", "Fast I/O", "scanf 금지"],
+  },
+  {
+    id: 341,
+    lessonId: "cpp-19",
+    difficulty: "보통",
+    question: "`endl`보다 `'\\n'`을 쓰는 것이 더 빠른 이유는?",
+    code: `// 느린 방식
+cout << result << endl;  // 출력 + 버퍼 flush!
+
+// 빠른 방식
+cout << result << "\\n"; // 출력만`,
+    options: [
+      "\\n은 두 글자라서",
+      "endl은 줄바꿈 + 버퍼를 강제로 비워서(flush) 느림",
+      "endl은 C++20에서 제거됨",
+      "\\n은 더 짧은 코드라서",
+    ],
+    correctAnswer: 1,
+    explanation: "endl은 '\\n' + flush(버퍼 강제 비우기)를 합니다. 대량 출력에서 flush 연산이 누적되면 매우 느려집니다. 경쟁 프로그래밍에서는 '\\n'을 사용합니다.",
+    keyConceptTitle: "endl vs \\n",
+    keyConceptDescription: "endl = '\\n' + 버퍼 flush. 버퍼 flush는 비용이 큰 작업입니다. 출력이 많은 경우 항상 '\\n'을 사용하세요.",
+    relatedTopics: ["endl", "\\n", "버퍼 flush", "성능"],
+  },
+  // ── cpp-p1 (숫자 맞추기 게임 프로젝트) ──
+  {
+    id: 342,
+    lessonId: "cpp-p1",
+    difficulty: "쉬움",
+    question: "숫자 맞추기 게임에서 1~100 사이의 난수를 생성하는 올바른 코드는?",
+    code: `#include <cstdlib>  // rand, srand
+#include <ctime>    // time
+
+srand(time(nullptr));  // 시드 설정
+int answer = ___;      // 1~100 사이`,
+    options: [
+      "rand() + 1",
+      "rand() % 100 + 1",
+      "random(1, 100)",
+      "rand(1, 100)",
+    ],
+    correctAnswer: 1,
+    explanation: "rand() % 100은 0~99를 반환합니다. +1을 하면 1~100이 됩니다. srand(time(nullptr))로 매번 다른 시드를 설정해야 진짜 랜덤이 됩니다.",
+    keyConceptTitle: "rand() % N + 1 패턴",
+    keyConceptDescription: "rand() % N: 0~(N-1). rand() % N + 1: 1~N. rand() % 100 + 1: 1~100. srand(time(nullptr))로 매번 다른 시드를 설정합니다.",
+    relatedTopics: ["rand()", "srand()", "난수 생성", "% 연산"],
+  },
+  {
+    id: 343,
+    lessonId: "cpp-p1",
+    difficulty: "보통",
+    question: "게임 루프에서 '정답을 맞출 때까지 반복'을 구현하는 올바른 패턴은?",
+    code: `int answer = rand() % 100 + 1;
+int guess = 0;
+
+___  // 정답 맞출 때까지 계속 반복
+{
+    cin >> guess;
+    if (guess < answer) cout << "⬆️ 더 큰 숫자\\n";
+    else if (guess > answer) cout << "⬇️ 더 작은 숫자\\n";
+}`,
+    options: [
+      "for (int i = 0; i < 100; i++)",
+      "while (guess != answer)",
+      "if (guess != answer)",
+      "do {} while (false)",
+    ],
+    correctAnswer: 1,
+    explanation: "while (guess != answer)은 guess가 answer와 같아질 때까지 반복합니다. 정답을 맞추면 루프가 종료됩니다.",
+    keyConceptTitle: "게임 루프 패턴",
+    keyConceptDescription: "조건이 참인 동안 반복 → while(조건). 정답 맞추기, 메뉴 선택, 게임 진행 등에 자주 사용하는 패턴입니다.",
+    relatedTopics: ["while", "게임 루프", "조건 반복"],
+  },
+  {
+    id: 344,
+    lessonId: "cpp-p1",
+    difficulty: "보통",
+    question: "시도 횟수를 세는 변수를 올바르게 사용한 코드는?",
+    code: `int answer = rand() % 100 + 1;
+int guess = 0;
+___ tries = 0;  // 시도 횟수
+
+while (guess != answer) {
+    cin >> guess;
+    ___  // 시도 횟수 증가
+}
+cout << tries << "번 만에 맞췄어요!";`,
+    options: [
+      "string tries; / tries++;",
+      "int tries; / tries++;",
+      "float tries; / tries += 1.0;",
+      "bool tries; / tries = true;",
+    ],
+    correctAnswer: 1,
+    explanation: "횟수 카운팅에는 int 타입을 사용합니다. tries++는 tries += 1과 동일합니다. 루프 안에서 매 반복마다 1씩 증가시킵니다.",
+    keyConceptTitle: "카운터 변수 패턴",
+    keyConceptDescription: "int count = 0; ... count++; 패턴은 반복 횟수, 시도 횟수, 조건 만족 횟수 등을 셀 때 가장 기본적인 패턴입니다.",
+    relatedTopics: ["카운터", "int", "++연산자"],
   },
 ];

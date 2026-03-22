@@ -64,13 +64,46 @@ const CPP_TITLES: Record<string, string> = {
   "cpp-p3":"🏆 USACO 준비",
 }
 
+const PYTHON_TITLES_EN: Record<string, string> = {
+  "1":"print() Output", "2":"Data Types", "3":"Variables", "4":"Operators",
+  "5":"String Operations", "6":"String Methods", "7":"print() Options", "8":"f-string",
+  "9":"Type Conversion", "10":"input() Input", "p1":"🎮 Mini Calculator",
+  "11":"Conditionals (if)", "12":"Advanced Conditionals", "13":"Loops (for)", "14":"Loops (while)",
+  "p2":"🎮 Number Guessing Game",
+  "15":"Data Structures Overview", "16":"List Basics", "17":"Lists & Loops",
+  "18":"split() and join()", "19":"Tuples", "20":"Dictionaries", "21":"Sets",
+  "22":"Slicing", "p3":"🎮 Hangman Game",
+  "23":"Stack", "24":"Queue", "25":"Deque", "26":"Data Structures Comparison",
+  "27":"Rock-Paper-Scissors Game", "28":"Lottery Number Generator", "29":"Vocabulary Program",
+  "30":"Grade Management System", "31":"Practice Problems",
+  "32":"Functions Basics", "33":"Parameters & Return Values", "34":"Using Functions",
+  "35":"Built-in Functions", "36":"Function Problems 30",
+  "37":"Error Handling", "38":"File Read/Write", "39":"Game Save", "40":"Part 6 Problems",
+  "41":"Classes Basics", "42":"Methods & Attributes", "43":"RPG Game", "44":"Part 7 Problems",
+  "45":"Modules Basics", "46":"Packages & pip", "47":"Weather App", "48":"Part 8 Problems",
+  "49":"Text RPG: Design", "50":"Text RPG: Core", "51":"Text RPG: Complete",
+  "52":"Text RPG: Upgrade", "p4":"🐍 Snake Game",
+}
+
+const CPP_TITLES_EN: Record<string, string> = {
+  "cpp-1":"Python vs C++", "cpp-2":"cout & namespace", "cpp-3":"Variables & Types",
+  "cpp-4":"cin Input", "cpp-5":"Operators", "cpp-6":"Conditionals (if/else)",
+  "cpp-7":"Loops (for/while)", "cpp-8":"Functions", "cpp-p1":"🎮 Number Guessing Game",
+  "cpp-9":"Arrays & Vectors", "cpp-10":"Range-for & auto", "cpp-11":"String Operations",
+  "cpp-12":"References & Functions", "cpp-13":"Recursion", "cpp-14":"Classes",
+  "cpp-p2":"🏆 Part 2 Review",
+  "cpp-15":"pair & Sorting", "cpp-16":"map & set", "cpp-17":"Stacks & Queues",
+  "cpp-18":"Priority Queue", "cpp-19":"Sorting Algorithms", "cpp-20":"CP Tips",
+  "cpp-p3":"🏆 USACO Prep",
+}
+
 interface NextLesson {
   id: number | string
   title: string
   course: "python" | "cpp"
 }
 
-function readNextLesson(): NextLesson | null {
+function readNextLesson(lang: "ko" | "en" = "ko"): NextLesson | null {
   try {
     const course = (localStorage.getItem("selectedCourse") || "python") as "python" | "cpp"
     const completedRaw = localStorage.getItem("completedLessons")
@@ -81,13 +114,15 @@ function readNextLesson(): NextLesson | null {
     if (course === "cpp") {
       for (const id of CPP_LESSON_IDS) {
         if (!completed.has(String(id))) {
-          return { id, title: CPP_TITLES[id] ?? `레슨 ${id}`, course }
+          const titles = lang === "en" ? CPP_TITLES_EN : CPP_TITLES
+          return { id, title: titles[id] ?? `Lesson ${id}`, course }
         }
       }
     } else {
       for (const id of PYTHON_LESSON_IDS) {
         if (!completed.has(String(id))) {
-          return { id, title: PYTHON_TITLES[String(id)] ?? `레슨 ${id}`, course }
+          const titles = lang === "en" ? PYTHON_TITLES_EN : PYTHON_TITLES
+          return { id, title: titles[String(id)] ?? `Lesson ${id}`, course }
         }
       }
     }
@@ -98,16 +133,16 @@ function readNextLesson(): NextLesson | null {
 }
 
 export default function DashboardPage() {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const { level, totalXp, dailyStreak, xpToday } = useGamification()
   const [nextLesson, setNextLesson] = useState<NextLesson | null>(null)
   // lessonLoaded: localStorage 읽기 전에 "모든 레슨 완료" 카드가 잠깐 뜨는 깜빡임 방지
   const [lessonLoaded, setLessonLoaded] = useState(false)
 
   useEffect(() => {
-    setNextLesson(readNextLesson())
+    setNextLesson(readNextLesson(lang))
     setLessonLoaded(true)
-  }, [])
+  }, [lang])
 
   const xpProgress = Math.min(xpToday, DAILY_XP_GOAL)
   const xpPercent = Math.round((xpProgress / DAILY_XP_GOAL) * 100)

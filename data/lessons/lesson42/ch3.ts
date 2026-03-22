@@ -11,7 +11,7 @@ export const ch3: Chapter = {
       title: "💭 게임 제목처럼 모두 같은 값은 어디에?",
       content: `💭 용사의 HP와 마법사의 HP는 각각 달라야 하는데... **게임 제목**은 모두 같잖아? 이건 어디에 저장하지?
 
-- \`s.hp\` → 각 캐릭터마다 **다른 값** (인스턴스 변수)
+- \`self.hp\` → 각 캐릭터마다 **다른 값** (인스턴스 변수)
 - 게임 제목 → 모두 **같은 값**이어야 해...?
 
 @핵심: 각자 다른 값 = **인스턴스 변수**, 모두 같은 값 = **???** (다음 스텝에서!)`
@@ -26,17 +26,17 @@ export const ch3: Chapter = {
 class Character:
     game_title = 'RPG 용사 게임'  # 클래스 변수 (공유!)
 
-    def __init__(s, char_name, hp):
-        s.char_name = char_name   # 인스턴스 변수 (각자!)
-        s.hp = hp                 # 인스턴스 변수 (각자!)
+    def __init__(self, char_name, hp):
+        self.char_name = char_name   # 인스턴스 변수 (각자!)
+        self.hp = hp                 # 인스턴스 변수 (각자!)
 \`\`\`
 
 | 종류 | 선언 위치 | 접근 방법 | 특징 |
 |------|-----------|-----------|------|
-| 인스턴스 변수 | __init__ 안 | s.xxx | 각자 다른 값 |
+| 인스턴스 변수 | __init__ 안 | self.xxx | 각자 다른 값 |
 | 클래스 변수 | 메서드 밖 | Character.xxx | 모두 공유 |
 
-@핵심: **인스턴스 변수(s.xxx)**는 각자, **클래스 변수(Character.xxx)**는 모두 공유!`
+@핵심: **인스턴스 변수(self.xxx)**는 각자, **클래스 변수(Character.xxx)**는 모두 공유!`
     },
     {
       id: "ch3-1",
@@ -47,9 +47,9 @@ class Character:
     game_title = 'RPG 용사 게임'
     total_count = 0
 
-    def __init__(s, char_name, hp):
-        s.char_name = char_name
-        s.hp = hp
+    def __init__(self, char_name, hp):
+        self.char_name = char_name
+        self.hp = hp
         Character.total_count = Character.total_count + 1
         print(f'{char_name} 생성! (현재 총 {Character.total_count}명)')
 
@@ -62,8 +62,8 @@ print(f'캐릭터 수: {Character.total_count}명')
 print(f'{hero.char_name}의 HP: {hero.hp}')
 print(f'{mage.char_name}의 HP: {mage.hp}')`,
       expectedOutput: `용사 생성! (현재 총 1명)\n마법사 생성! (현재 총 2명)\n궁수 생성! (현재 총 3명)\n\n게임 제목: RPG 용사 게임\n캐릭터 수: 3명\n용사의 HP: 100\n마법사의 HP: 80`,
-      hint: "Character.total_count는 모든 객체가 공유하지만, s.hp는 각자 달라요!",
-      hint2: "클래스 변수는 Character.변수명으로, 인스턴스 변수는 s.변수명으로 접근!"
+      hint: "Character.total_count는 모든 객체가 공유하지만, self.hp는 각자 달라요!",
+      hint2: "클래스 변수는 Character.변수명으로, 인스턴스 변수는 self.변수명으로 접근!"
     },
     {
       id: "ch3-1b",
@@ -74,13 +74,13 @@ print(f'{mage.char_name}의 HP: {mage.hp}')`,
     team_name = 'RPG 모험단'
     member_count = ___
 
-    def __init__(s, name, role):
-        s.name = name
-        s.role = role
+    def __init__(self, name, role):
+        self.name = name
+        self.role = role
         TeamMember.member_count = TeamMember.___ + 1
 
-    def introduce(s):
-        print(f'[{TeamMember.team_name}] {s.name} ({s.role})')
+    def introduce(self):
+        print(f'[{TeamMember.team_name}] {self.name} ({self.role})')
 
 m1 = TeamMember('용사', '전사')
 m2 = TeamMember('린', '궁수')
@@ -101,7 +101,7 @@ print(f'\\n팀원 수: {TeamMember.___}명')`,
       content: "다음 중 **클래스 변수**에 대한 설명으로 옳은 것은?",
       options: [
         "각 객체마다 다른 값을 가진다",
-        "s.xxx 형태로 선언한다",
+        "self.xxx 형태로 선언한다",
         "모든 객체가 같은 값을 공유한다",
         "__init__ 안에서만 만들 수 있다"
       ],
@@ -112,7 +112,7 @@ print(f'\\n팀원 수: {TeamMember.___}명')`,
       id: "ch3-3",
       type: "quiz",
       title: "퀴즈: 코드 예측!",
-      content: "다음 코드의 결과는?\n\n```python\nclass Pet:\n    count = 0\n    \n    def __init__(s, name):\n        s.name = name\n        Pet.count = Pet.count + 1\n\na = Pet('멍멍이')\nb = Pet('냥냥이')\nc = Pet('짹짹이')\nprint(Pet.count, a.name)\n```",
+      content: "다음 코드의 결과는?\n\n```python\nclass Pet:\n    count = 0\n    \n    def __init__(self, name):\n        self.name = name\n        Pet.count = Pet.count + 1\n\na = Pet('멍멍이')\nb = Pet('냥냥이')\nc = Pet('짹짹이')\nprint(Pet.count, a.name)\n```",
       options: [
         "1 멍멍이",
         "3 멍멍이",

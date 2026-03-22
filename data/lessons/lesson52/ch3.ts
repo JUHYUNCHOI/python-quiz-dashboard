@@ -24,19 +24,19 @@ export const ch3: Chapter = {
       title: "💻 ⑥ 업적 시스템!",
       task: "조건을 달성하면 업적이 해금되는 시스템을 실행해보세요!",
       initialCode: `class Achievement:
-    def __init__(s, name, description, condition_fn):
-        s.name = name
-        s.description = description
-        s.condition_fn = condition_fn  # 함수!
-        s.unlocked = False
+    def __init__(self, name, description, condition_fn):
+        self.name = name
+        self.description = description
+        self.condition_fn = condition_fn  # 함수!
+        self.unlocked = False
 
-    def check(s, player_data):
-        if s.unlocked:
+    def check(self, player_data):
+        if self.unlocked:
             return
-        if s.condition_fn(player_data):
-            s.unlocked = True
-            print(f'  ★ 업적 해금: {s.name}!')
-            print(f'    {s.description}')
+        if self.condition_fn(player_data):
+            self.unlocked = True
+            print(f'  ★ 업적 해금: {self.name}!')
+            print(f'    {self.description}')
 
 # 업적 목록!
 achievements = [
@@ -94,21 +94,21 @@ show_achievements()`,
 random.seed(42)
 
 class Item:
-    def __init__(s, name, item_type, value):
-        s.name = name
-        s.item_type = item_type
-        s.value = value
+    def __init__(self, name, item_type, value):
+        self.name = name
+        self.item_type = item_type
+        self.value = value
 
 class Monster:
-    def __init__(s, name, hp, drops):
-        s.name = name
-        s.hp = hp
+    def __init__(self, name, hp, drops):
+        self.name = name
+        self.hp = hp
         # drops = [(아이템, 확률), ...]
-        s.drops = drops
+        self.drops = drops
 
-    def get_drops(s):
+    def get_drops(self):
         result = []
-        for item, chance in s.drops:
+        for item, chance in self.drops:
             if random.random() < chance:
                 result.append(item)
         return result

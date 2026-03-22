@@ -53,7 +53,12 @@ export function ExplanationPanel({
       return
     }
     const entry = registry[animationKey]
-    if (!entry) return
+    if (!entry) {
+      if (process.env.NODE_ENV !== "production") {
+        console.warn(`[ExplanationPanel] animationKey "${animationKey}" not found in registry`)
+      }
+      return
+    }
 
     let cancelled = false
     entry.load().then((mod) => {

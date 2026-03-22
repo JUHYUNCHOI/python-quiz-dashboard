@@ -71,3 +71,41 @@ interface QuizQuestion {
 - Vercel (정적 빌드)
 - `npm run build` = `next build`
 - 동적 라우트 대신 query params 사용 (/parent?t=TOKEN)
+
+## ⚠️ 핵심 제약사항 — 기존 학생 데이터 보호
+
+**실제 학생들이 이미 학습 중인 프로덕션 서비스다. 모든 변경은 기존 진도 데이터에 영향을 주면 안 된다.**
+
+### 절대 하면 안 되는 것
+- `lesson_id` 값 변경 — Supabase `lesson_progress` 테이블에 저장된 키값이므로 바꾸면 기존 진도가 사라짐
+- `question.id` 변경 — `question-mastery` localStorage/DB에 저장된 키값
+- localStorage 키 이름 변경 (`completedLessons`, `completedQuizzes`, `question-mastery`, `quiz-history` 등)
+- Supabase 테이블 컬럼 삭제/이름 변경 (마이그레이션 없이)
+- 커리큘럼 레슨 순서 변경 — 잠금 해제 로직이 순서 기반이므로 기존 학생의 unlock 상태가 달라짐
+
+### 변경 시 반드시 확인할 것
+- 레슨 내용(텍스트/코드 예시) 수정 → OK, lesson_id만 유지하면 됨
+- 새 레슨 추가 → OK, 기존 ID와 겹치지 않게
+- UI/컴포넌트 변경 → OK, 데이터 구조에 영향 없으면
+- DB 스키마 변경 → 반드시 하위 호환 마이그레이션 작성 후 진행
+- variant=null 같은 레거시 데이터가 DB에 존재할 수 있음 — 쿼리 작성 시 null/'' 모두 고려
+
+### 🔒 보호된 lesson_id 목록 (절대 변경/삭제 금지)
+
+**Python** (숫자형 ID):
+`1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52`
+
+**C++** (문자열형 ID):
+`cpp-1 cpp-2 cpp-3 cpp-4 cpp-5 cpp-6 cpp-7 cpp-8 cpp-p1`
+`cpp-9 cpp-10 cpp-11 cpp-12 cpp-13 cpp-14 cpp-p2`
+`cpp-15 cpp-16 cpp-17 cpp-18 cpp-19 cpp-20 cpp-p3`
+
+**Pseudocode/IGCSE** (문자열형 ID):
+`pseudo-1 pseudo-2 pseudo-3 pseudo-4 pseudo-5 pseudo-6 pseudo-7 pseudo-8 pseudo-28 pseudo-p1`
+`pseudo-9 pseudo-10 pseudo-11 pseudo-12 pseudo-13 pseudo-14 pseudo-p2`
+`pseudo-15 pseudo-16 pseudo-17 pseudo-18 pseudo-19 pseudo-20 pseudo-p3`
+`pseudo-21 pseudo-22 pseudo-23`
+`pseudo-24 pseudo-25 pseudo-26 pseudo-27`
+`igcse-sql1 igcse-sql2 igcse-logic1`
+
+> 새 레슨 추가 시: Python은 53부터, C++은 cpp-21부터, Pseudocode는 pseudo-29부터 사용

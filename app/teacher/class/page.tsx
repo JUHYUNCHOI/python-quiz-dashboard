@@ -17,16 +17,17 @@ import { StudentProgress } from "@/components/teacher/student-progress"
 import { ClassOverview } from "@/components/teacher/class-overview"
 import { getLessonName } from "@/lib/curriculum-data"
 import { cn } from "@/lib/utils"
+import { useLanguage } from "@/contexts/language-context"
 
 /** 가장 최근에 활동한 레슨 찾기 */
-function getCurrentLesson(progress: LessonProgressRow[]): { name: string; completed: boolean; date: string } | null {
+function getCurrentLesson(progress: LessonProgressRow[], lang: "ko" | "en" = "ko"): { name: string; completed: boolean; date: string } | null {
   if (!progress || progress.length === 0) return null
   const sorted = [...progress].sort((a, b) => (b.updated_at || "").localeCompare(a.updated_at || ""))
   const recent = sorted[0]
   if (!recent) return null
   const emoji = recent.lesson_id.startsWith("cpp-") ? "⚡" : recent.lesson_id.startsWith("pseudo-") || recent.lesson_id.startsWith("igcse-") ? "📋" : "🐍"
   return {
-    name: `${emoji} ${getLessonName(recent.lesson_id)}`,
+    name: `${emoji} ${getLessonName(recent.lesson_id, lang)}`,
     completed: recent.completed,
     date: recent.updated_at,
   }
@@ -64,10 +65,33 @@ function formatDate(dateStr: string): string {
   }
 }
 
+function daysSince(dateStr: string): number {
+  if (!dateStr || dateStr === "-") return 999
+  try {
+    const d = new Date(dateStr)
+    const now = new Date()
+    return Math.floor((now.getTime() - d.getTime()) / (1000 * 60 * 60 * 24))
+  } catch {
+    return 999
+  }
+}
+
+function formatLastActive(dateStr: string): string {
+  if (!dateStr || dateStr === "-") return "기록 없음"
+  const days = daysSince(dateStr)
+  if (days === 0) return "오늘"
+  if (days === 1) return "어제"
+  if (days < 7) return `${days}일 전`
+  if (days < 14) return "1주 전"
+  if (days < 30) return `${Math.floor(days / 7)}주 전`
+  return "30일+"
+}
+
 export default function ClassDetailPage() {
   const searchParams = useSearchParams()
   const classId = searchParams.get("id") || ""
   const { user, profile: teacherProfile } = useAuth()
+  const { lang } = useLanguage()
   const [classInfo, setClassInfo] = useState<Class | null>(null)
   const [students, setStudents] = useState<StudentRow[]>([])
   const [copiedCode, setCopiedCode] = useState(false)
@@ -151,7 +175,8 @@ export default function ClassDetailPage() {
 
     // 유저별 진도 계산
     const progressMap = new Map<string, LessonProgressRow[]>()
-    const completedMap = new Map<string, number>()
+    // 완료된 레슨을 unique하게 카운트 (learn 완료만, lesson_id 기준 중복 제거)
+    const completedLessonsSet = new Map<string, Set<string>>()
     const todayStr = new Date().toISOString().slice(0, 10)
     const activeTodaySet = new Set<string>()
 
@@ -166,9 +191,10 @@ export default function ClassDetailPage() {
         updated_at: p.updated_at,
       })
 
-      // 완료 수
-      if (p.completed) {
-        completedMap.set(p.user_id, (completedMap.get(p.user_id) || 0) + 1)
+      // 완료 수: "learn" 타입 + completed=true인 lesson_id만 unique하게 카운트
+      if (p.completed && p.progress_type === "learn") {
+        if (!completedLessonsSet.has(p.user_id)) completedLessonsSet.set(p.user_id, new Set())
+        completedLessonsSet.get(p.user_id)!.add(p.lesson_id)
       }
 
       // 오늘 활동 여부
@@ -185,14 +211,22 @@ export default function ClassDetailPage() {
         return a.lesson_id.localeCompare(b.lesson_id)
       })
 
+      // lastActive: gamification + lesson_progress.updated_at 중 더 최근 것
+      const lessonLastActive = lessonProgress.reduce((max, p) => {
+        const d = p.updated_at?.slice(0, 10) || ""
+        return d > max ? d : max
+      }, "")
+      const gamLastActive = gam?.last_active_date || ""
+      const lastActive = lessonLastActive > gamLastActive ? lessonLastActive : (gamLastActive || "-")
+
       return {
         id: sid,
         displayName: prof?.display_name || "학생",
         avatarUrl: prof?.avatar_url || null,
-        completedLessons: completedMap.get(sid) || 0,
+        completedLessons: completedLessonsSet.get(sid)?.size || 0,
         totalXp: gam?.total_xp || 0,
         dailyStreak: gam?.daily_streak || 0,
-        lastActive: gam?.last_active_date || "-",
+        lastActive,
         activeToday: activeTodaySet.has(sid),
         lessonProgress,
         quizSessions: quizMap.get(sid) || [],
@@ -361,12 +395,23 @@ export default function ClassDetailPage() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-1.5">
                           <p className="font-bold text-gray-800 truncate">{student.displayName}</p>
-                          {student.activeToday && (
+                          {student.activeToday ? (
                             <span className="text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full font-medium">오늘 활동</span>
+                          ) : (
+                            <span className={cn(
+                              "text-[10px] px-1.5 py-0.5 rounded-full font-medium",
+                              daysSince(student.lastActive) >= 7
+                                ? "bg-red-100 text-red-600"
+                                : daysSince(student.lastActive) >= 3
+                                ? "bg-amber-100 text-amber-600"
+                                : "bg-gray-100 text-gray-400"
+                            )}>
+                              {formatLastActive(student.lastActive)}
+                            </span>
                           )}
                         </div>
                         {(() => {
-                          const current = getCurrentLesson(student.lessonProgress)
+                          const current = getCurrentLesson(student.lessonProgress, lang)
                           return current ? (
                             <p className="text-xs text-indigo-500 font-medium truncate">
                               📖 {current.name} {current.completed ? "✅" : "🔄"}

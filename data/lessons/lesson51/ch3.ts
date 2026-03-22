@@ -44,69 +44,69 @@ import random
 random.seed(42)
 
 class Character:
-    def __init__(s, name, job):
-        s.name = name
-        s.job = job
-        s.level = 1
-        s.exp = 0
-        s.gold = 0
-        s.inventory = []
-        s.alive = True
+    def __init__(self, name, job):
+        self.name = name
+        self.job = job
+        self.level = 1
+        self.exp = 0
+        self.gold = 0
+        self.inventory = []
+        self.alive = True
         if job == 'warrior':
-            s.hp, s.max_hp, s.atk, s.defense = 120, 120, 15, 12
+            self.hp, self.max_hp, self.atk, self.defense = 120, 120, 15, 12
         elif job == 'mage':
-            s.hp, s.max_hp, s.atk, s.defense = 80, 80, 25, 5
+            self.hp, self.max_hp, self.atk, self.defense = 80, 80, 25, 5
         else:
-            s.hp, s.max_hp, s.atk, s.defense = 100, 100, 20, 8
+            self.hp, self.max_hp, self.atk, self.defense = 100, 100, 20, 8
 
-    def take_damage(s, damage):
-        actual = damage - s.defense
+    def take_damage(self, damage):
+        actual = damage - self.defense
         if actual < 1: actual = 1
-        s.hp -= actual
-        if s.hp <= 0:
-            s.hp = 0
-            s.alive = False
+        self.hp -= actual
+        if self.hp <= 0:
+            self.hp = 0
+            self.alive = False
         return actual
 
-    def gain_exp(s, amount):
-        s.exp += amount
-        if s.exp >= 100:
-            s.exp -= 100
-            s.level += 1
-            s.max_hp += 10
-            s.hp = s.max_hp
-            s.atk += 3
-            s.defense += 2
-            print(f'  ★ 레벨 업! Lv.{s.level}!')
+    def gain_exp(self, amount):
+        self.exp += amount
+        if self.exp >= 100:
+            self.exp -= 100
+            self.level += 1
+            self.max_hp += 10
+            self.hp = self.max_hp
+            self.atk += 3
+            self.defense += 2
+            print(f'  ★ 레벨 업! Lv.{self.level}!')
 
-    def status(s):
+    def status(self):
         jobs = {'warrior': '용사', 'mage': '마법사', 'archer': '궁수'}
-        print(f'  [{jobs[s.job]}] {s.name} Lv.{s.level}')
-        print(f'  HP: {s.hp}/{s.max_hp} | ATK: {s.atk} | DEF: {s.defense}')
-        print(f'  EXP: {s.exp}/100 | 골드: {s.gold}')
+        print(f'  [{jobs[self.job]}] {self.name} Lv.{self.level}')
+        print(f'  HP: {self.hp}/{self.max_hp} | ATK: {self.atk} | DEF: {self.defense}')
+        print(f'  EXP: {self.exp}/100 | 골드: {self.gold}')
 
-    def to_dict(s):
-        return {'name': s.name, 'job': s.job, 'level': s.level,
-                'hp': s.hp, 'max_hp': s.max_hp, 'atk': s.atk,
-                'defense': s.defense, 'exp': s.exp, 'gold': s.gold}
+    def to_dict(self):
+        return {'name': self.name, 'job': self.job, 'level': self.level,
+                'hp': self.hp, 'max_hp': self.max_hp, 'atk': self.atk,
+                'defense': self.defense, 'exp': self.exp, 'gold': self.gold}
 
 class Monster:
-    def __init__(s, name, hp, atk, defense, exp, gold):
-        s.name = name
-        s.hp = hp
-        s.atk = atk
-        s.defense = defense
-        s.exp_reward = exp
-        s.gold_reward = gold
-        s.alive = True
+    def __init__(self, name, hp, atk, defense, exp, gold):
+        self.name = name
+        self.hp = hp
+        self.atk = atk
+        self.defense = defense
+        self.exp_reward = exp
+        self.gold_reward = gold
+        self.alive = True
 
-    def take_damage(s, damage):
-        actual = damage - s.defense
+    def take_damage(self, damage):
+        actual = damage - self.defense
         if actual < 1: actual = 1
-        s.hp -= actual
-        if s.hp <= 0:
-            s.hp = 0
-            s.alive = False
+        self.hp -= actual
+        if self.hp <= 0:
+            self.hp = 0
+            self.alive = False
         return actual
 
 def create_monster():
@@ -250,41 +250,41 @@ print(f'골드: {gold}, 저장: {saved}')`,
 random.seed(42)
 
 class Character:
-    def __init__(s, name, job):
-        s.name = name
-        s.job = job
-        s.alive = True
+    def __init__(self, name, job):
+        self.name = name
+        self.job = job
+        self.alive = True
         if job == 'warrior':
-            s.hp, s.max_hp, s.atk, s.defense = 120, 120, 15, 12
+            self.hp, self.max_hp, self.atk, self.defense = 120, 120, 15, 12
         elif job == 'mage':
-            s.hp, s.max_hp, s.atk, s.defense = 80, 80, 25, 5
+            self.hp, self.max_hp, self.atk, self.defense = 80, 80, 25, 5
         else:
-            s.hp, s.max_hp, s.atk, s.defense = 100, 100, 20, 8
+            self.hp, self.max_hp, self.atk, self.defense = 100, 100, 20, 8
 
-    def take_damage(s, damage):
-        actual = damage - s.defense
+    def take_damage(self, damage):
+        actual = damage - self.defense
         if actual < 1: actual = 1
-        s.hp -= actual
-        if s.hp <= 0:
-            s.hp = 0
-            s.alive = False
+        self.hp -= actual
+        if self.hp <= 0:
+            self.hp = 0
+            self.alive = False
         return actual
 
 class Monster:
-    def __init__(s, name, hp, atk, defense):
-        s.name = name
-        s.hp = hp
-        s.atk = atk
-        s.defense = defense
-        s.alive = True
+    def __init__(self, name, hp, atk, defense):
+        self.name = name
+        self.hp = hp
+        self.atk = atk
+        self.defense = defense
+        self.alive = True
 
-    def take_damage(s, damage):
-        actual = damage - s.defense
+    def take_damage(self, damage):
+        actual = damage - self.defense
         if actual < 1: actual = 1
-        s.hp -= actual
-        if s.hp <= 0:
-            s.hp = 0
-            s.alive = False
+        self.hp -= actual
+        if self.hp <= 0:
+            self.hp = 0
+            self.alive = False
         return actual
 
 # 같은 몬스터, 다른 직업!

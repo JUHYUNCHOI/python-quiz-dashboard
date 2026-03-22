@@ -13,10 +13,10 @@ export const ch3: Chapter = {
 
 \`\`\`python
 class Character:
-    def __init__(s, char_name, hp, atk):
-        s.char_name = char_name
-        s.hp = hp
-        s.atk = atk
+    def __init__(self, char_name, hp, atk):
+        self.char_name = char_name
+        self.hp = hp
+        self.atk = atk
 
 hero = Character('용사', 100, 20)
 mage = Character('마법사', 80, 35)
@@ -49,7 +49,7 @@ print(f'{mage.char_name}: HP {mage.hp}, ATK {mage.atk}')
       id: "ch3-1",
       type: "quiz",
       title: "예측해보세요!",
-      content: "다음 코드의 결과는?\n\n```python\nclass Pet:\n    def __init__(s, pet_name):\n        s.pet_name = pet_name\n\ndog = Pet('멍멍이')\ncat = Pet('냘냘이')\nprint(dog.pet_name, cat.pet_name)\n```",
+      content: "다음 코드의 결과는?\n\n```python\nclass Pet:\n    def __init__(self, pet_name):\n        self.pet_name = pet_name\n\ndog = Pet('멍멍이')\ncat = Pet('냘냘이')\nprint(dog.pet_name, cat.pet_name)\n```",
       options: ["멍멍이 멍멍이", "냘냘이 냘냘이", "멍멍이 냘냘이", "에러"],
       answer: 2,
       explanation: "dog과 cat은 서로 다른 객체! 각각 고유한 pet_name을 가져요!"
@@ -98,7 +98,7 @@ print(f'마법사 HP: {mage.hp}') # 80 (안 바뀜!)
       title: "빈칸 채우기: 여러 객체",
       description: "Item 클래스를 완성하고 아이템 2개를 만드세요!",
       component: "fillInBlank",
-      codeTemplate: "class Item:\n    def __init__(___1___, item_name, price):\n        s.item_name = ___2___\n        s.price = price\n\nsword = ___3___('검', 500)\nshield = Item('방패', 300)\nprint(f'{sword.item_name}: {sword.___4___}원')",
+      codeTemplate: "class Item:\n    def __init__(___1___, item_name, price):\n        self.item_name = ___2___\n        self.price = price\n\nsword = ___3___('검', 500)\nshield = Item('방패', 300)\nprint(f'{sword.item_name}: {sword.___4___}원')",
       blanks: [
         { id: "1", answer: "s, item_name, price", hint: "s + 매개변수 2개!" },
         { id: "2", answer: "item_name", hint: "받은 이름을 저장!" },

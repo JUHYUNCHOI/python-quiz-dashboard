@@ -3,6 +3,7 @@
 import { AlertTriangle, TrendingUp, Users, Flame, BookOpen, Trophy } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { getLessonName } from "@/lib/curriculum-data"
+import { useLanguage } from "@/contexts/language-context"
 
 interface LessonProgressRow {
   lesson_id: string
@@ -114,6 +115,7 @@ function analyzeRisks(students: StudentRow[]): RiskAlert[] {
 }
 
 export function ClassOverview({ students }: Props) {
+  const { lang } = useLanguage()
   if (students.length === 0) return null
 
   const totalStudents = students.length
@@ -177,40 +179,75 @@ export function ClassOverview({ students }: Props) {
           <span className="text-sm">📖</span>
           <span className="text-xs font-bold text-indigo-700">가장 많이 학습 중:</span>
           <span className="text-xs text-indigo-600 flex-1 truncate">
-            {getLessonName(topLesson[0])}
+            {getLessonName(topLesson[0], lang)}
           </span>
           <span className="text-[10px] text-indigo-400">{topLesson[1]}명</span>
         </div>
       )}
 
-      {/* 위험 알림 */}
-      {risks.length > 0 && (
-        <div className="rounded-xl border border-red-200 bg-red-50/50 overflow-hidden">
-          <div className="flex items-center gap-2 px-4 py-2.5 bg-red-100/50 border-b border-red-200">
-            <AlertTriangle className="w-4 h-4 text-red-500" />
-            <span className="text-sm font-bold text-red-700">주의 필요 ({risks.length})</span>
-          </div>
-          <div className="divide-y divide-red-100">
-            {risks.slice(0, 5).map((risk, i) => (
-              <div key={i} className="flex items-center gap-2 px-4 py-2">
-                <span className="text-sm">{risk.emoji}</span>
-                <span className="text-xs font-bold text-gray-700">{risk.studentName}</span>
-                <span className={cn(
-                  "text-xs",
-                  risk.severity === "danger" ? "text-red-600 font-bold" : "text-amber-600"
-                )}>
-                  {risk.detail}
+      {/* 비활동 경고 카드 — Google Classroom 스타일 요약 */}
+      {(() => {
+        const dangerCount = risks.filter(r => r.severity === "danger" && r.type === "inactive").length
+        const warnCount = risks.filter(r => r.severity === "warning" && r.type === "inactive").length
+        const otherRisks = risks.filter(r => r.type !== "inactive")
+        if (risks.length === 0) return null
+
+        return (
+          <div className="space-y-2">
+            {/* 요약 배너 */}
+            {(dangerCount > 0 || warnCount > 0) && (
+              <div className={cn(
+                "flex items-center gap-3 px-4 py-3 rounded-xl border font-medium text-sm",
+                dangerCount > 0
+                  ? "bg-red-50 border-red-200 text-red-700"
+                  : "bg-amber-50 border-amber-200 text-amber-700"
+              )}>
+                <AlertTriangle className={cn("w-4 h-4 flex-shrink-0", dangerCount > 0 ? "text-red-500" : "text-amber-500")} />
+                <span className="flex-1">
+                  {dangerCount > 0 && <><strong>{dangerCount}명</strong>이 7일 이상 학습하지 않았어요</>}
+                  {dangerCount > 0 && warnCount > 0 && " · "}
+                  {warnCount > 0 && <><strong>{warnCount}명</strong>이 3~6일째 미접속</>}
                 </span>
               </div>
-            ))}
-            {risks.length > 5 && (
-              <div className="px-4 py-2 text-xs text-gray-400 text-center">
-                +{risks.length - 5}개 더
-              </div>
             )}
+
+            {/* 개별 목록 */}
+            <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
+              <div className="flex items-center gap-2 px-4 py-2 bg-gray-50 border-b border-gray-100">
+                <AlertTriangle className="w-3.5 h-3.5 text-gray-400" />
+                <span className="text-xs font-bold text-gray-600">주의 학생 ({risks.length}명)</span>
+              </div>
+              <div className="divide-y divide-gray-50">
+                {risks.slice(0, 6).map((risk, i) => (
+                  <div key={i} className="flex items-center gap-3 px-4 py-2.5">
+                    <span className="text-sm">{risk.emoji}</span>
+                    <span className="text-xs font-bold text-gray-700 w-20 truncate">{risk.studentName}</span>
+                    <span className={cn(
+                      "text-xs font-medium",
+                      risk.severity === "danger" ? "text-red-600" : "text-amber-600"
+                    )}>
+                      {risk.detail}
+                    </span>
+                    {risk.type === "inactive" && (
+                      <span className={cn(
+                        "ml-auto text-[10px] px-2 py-0.5 rounded-full font-bold",
+                        risk.severity === "danger"
+                          ? "bg-red-100 text-red-600"
+                          : "bg-amber-100 text-amber-600"
+                      )}>
+                        {risk.severity === "danger" ? "장기 미접속" : "주의"}
+                      </span>
+                    )}
+                  </div>
+                ))}
+                {risks.length > 6 && (
+                  <div className="px-4 py-2 text-xs text-gray-400 text-center">+{risks.length - 6}명 더</div>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
-      )}
+        )
+      })()}
 
       {/* 진도 비교 막대 차트 */}
       <div className="rounded-xl border border-gray-200 bg-white p-4">

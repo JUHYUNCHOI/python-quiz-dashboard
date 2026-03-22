@@ -369,7 +369,7 @@ print(n & 1)   # 홀짝 체크
 **1. 빠른 입출력:**
 \`\`\`cpp
 ios_base::sync_with_stdio(false);
-cin.tie(NULL);
+cin.tie(nullptr);
 // 이 두 줄만으로 입출력이 훨씬 빨라져요!
 \`\`\`
 
@@ -443,7 +443,7 @@ const int MOD = 1e9 + 7;
 
 int main() {
     ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+    cin.tie(nullptr);
 
     // USACO 파일 입출력 (필요할 때)
     // freopen("problem.in", "r", stdin);
@@ -510,7 +510,7 @@ typedef vector<int> vi;
 
 int main() {
     ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+    cin.tie(nullptr);
 
     int n = 5;
     vi v = {42, 17, 93, 8, 56};
@@ -589,12 +589,12 @@ Diff: 85`
           content: "C++ CP에서 빠른 입출력을 위해 사용하는 코드는?",
           options: [
             "cin.speed(true);",
-            "ios_base::sync_with_stdio(false); cin.tie(NULL);",
+            "ios_base::sync_with_stdio(false); cin.tie(nullptr);",
             "fast_io::enable();",
             "#define FAST_IO"
           ],
           answer: 1,
-          explanation: "ios_base::sync_with_stdio(false)는 C와 C++ 입출력의 동기화를 끊고, cin.tie(NULL)은 cin과 cout의 연결을 끊어서 입출력 속도를 크게 높여줘요!"
+          explanation: "ios_base::sync_with_stdio(false)는 C와 C++ 입출력의 동기화를 끊고, cin.tie(nullptr)은 cin과 cout의 연결을 끊어서 입출력 속도를 크게 높여줘요!"
         },
         {
           id: "ch3-q4",

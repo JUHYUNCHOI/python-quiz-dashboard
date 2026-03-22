@@ -11,78 +11,78 @@ export const ch4: Chapter = {
       title: "🏆 4단계: 레벨업!",
       task: "경험치를 얻고 레벨업하는 시스템을 실행해보세요!",
       initialCode: `class Hero:
-    def __init__(s, name, hp, atk, defense):
-        s.name = name
-        s.hp = hp
-        s.max_hp = hp
-        s.atk = atk
-        s.defense = defense
-        s.level = 1
-        s.exp = 0
-        s.alive = True
+    def __init__(self, name, hp, atk, defense):
+        self.name = name
+        self.hp = hp
+        self.max_hp = hp
+        self.atk = atk
+        self.defense = defense
+        self.level = 1
+        self.exp = 0
+        self.alive = True
 
-    def take_damage(s, damage):
-        actual = damage - s.defense
+    def take_damage(self, damage):
+        actual = damage - self.defense
         if actual < 1:
             actual = 1
-        s.hp = s.hp - actual
-        if s.hp <= 0:
-            s.hp = 0
-            s.alive = False
+        self.hp = self.hp - actual
+        if self.hp <= 0:
+            self.hp = 0
+            self.alive = False
         return actual
 
-    def attack(s, target):
-        if not s.alive:
+    def attack(self, target):
+        if not self.alive:
             return
-        actual = target.take_damage(s.atk)
-        print(f'  {s.name} -> {target.name} ({actual} 데미지)')
+        actual = target.take_damage(self.atk)
+        print(f'  {self.name} -> {target.name} ({actual} 데미지)')
         if not target.alive:
             print(f'  {target.name} 쓰러짐!')
 
-    def gain_exp(s, amount):
-        s.exp = s.exp + amount
-        print(f'  +{amount} EXP (총 {s.exp})')
-        if s.exp >= 100:
-            s.level_up()
+    def gain_exp(self, amount):
+        self.exp = self.exp + amount
+        print(f'  +{amount} EXP (총 {self.exp})')
+        if self.exp >= 100:
+            self.level_up()
 
-    def level_up(s):
-        s.level = s.level + 1
-        s.exp = s.exp - 100
-        s.max_hp = s.max_hp + 20
-        s.hp = s.max_hp
-        s.atk = s.atk + 5
-        s.defense = s.defense + 2
-        print(f'  ★ LEVEL UP! Lv.{s.level}!')
-        print(f'  HP {s.max_hp} ATK {s.atk} DEF {s.defense}')
+    def level_up(self):
+        self.level = self.level + 1
+        self.exp = self.exp - 100
+        self.max_hp = self.max_hp + 20
+        self.hp = self.max_hp
+        self.atk = self.atk + 5
+        self.defense = self.defense + 2
+        print(f'  ★ LEVEL UP! Lv.{self.level}!')
+        print(f'  HP {self.max_hp} ATK {self.atk} DEF {self.defense}')
 
-    def status(s):
-        print(f'  Lv.{s.level} {s.name}: HP {s.hp}/{s.max_hp} ATK {s.atk} DEF {s.defense} EXP {s.exp}/100')
+    def status(self):
+        print(f'  Lv.{self.level} {self.name}: HP {self.hp}/{self.max_hp} ATK {self.atk} DEF {self.defense} EXP {self.exp}/100')
 
 class Monster:
-    def __init__(s, name, hp, atk, defense, exp_reward):
-        s.name = name
-        s.hp = hp
-        s.max_hp = hp
-        s.atk = atk
-        s.defense = defense
-        s.exp_reward = exp_reward
-        s.alive = True
+    def __init__(self, name, hp, atk, defense, exp_reward):
+        self.name = name
+        self.hp = hp
+        self.max_hp = hp
+        self.atk = atk
+        self.defense = defense
+        self.exp_reward = exp_reward
+        self.alive = True
 
-    def take_damage(s, damage):
-        actual = damage - s.defense
+    def take_damage(self, damage):
+        actual = damage - self.defense
         if actual < 1:
             actual = 1
-        s.hp = s.hp - actual
-        if s.hp <= 0:
-            s.hp = 0
-            s.alive = False
+        self.hp = self.hp - actual
+        if self.hp <= 0:
+            self.hp = 0
+            self.alive = False
         return actual
 
-    def attack(s, target):
-        if not s.alive:
+    def attack(self, target):
+        if not self.alive:
             return
-        actual = target.take_damage(s.atk)
-        print(f'  {s.name} -> {target.name} ({actual} 데미지)')
+        actual = target.take_damage(self.atk)
+        print(f'  {self.name} -> {target.name} ({actual} 데미지)')
 
 # 게임 시작!
 hero = Hero('용사', 100, 20, 5)
@@ -121,44 +121,44 @@ hero.status()`,
       title: "🎯 미션: 스킬 시스템 추가!",
       task: "Hero 클래스에 special_attack 메서드를 완성하세요! 빈칸 3개를 채우세요!",
       initialCode: `class Hero:
-    def __init__(s, name, hp, atk):
-        s.name = name
-        s.hp = hp
-        s.atk = atk
-        s.mp = 50
-        s.alive = True
+    def __init__(self, name, hp, atk):
+        self.name = name
+        self.hp = hp
+        self.atk = atk
+        self.mp = 50
+        self.alive = True
 
-    def take_damage(s, damage):
-        s.hp = s.hp - damage
-        if s.hp <= 0:
-            s.hp = 0
-            s.alive = False
+    def take_damage(self, damage):
+        self.hp = self.hp - damage
+        if self.hp <= 0:
+            self.hp = 0
+            self.alive = False
 
-    def attack(s, target):
-        target.take_damage(s.atk)
-        print(f'{s.name} 공격! (-{s.atk}) {target.name} HP: {target.hp}')
+    def attack(self, target):
+        target.take_damage(self.atk)
+        print(f'{self.name} 공격! (-{self.atk}) {target.name} HP: {target.hp}')
 
-    def special_attack(s, target, mp_cost):
-        if s.mp < ___:
+    def special_attack(self, target, mp_cost):
+        if self.mp < ___:
             print('MP 부족!')
             return
-        s.___ = s.mp - mp_cost
-        damage = s.atk * 2
+        self.___ = self.mp - mp_cost
+        damage = self.atk * 2
         target.take_damage(___)
-        print(f'{s.name} 필살기! (-{damage}) {target.name} HP: {target.hp}')
-        print(f'남은 MP: {s.mp}')
+        print(f'{self.name} 필살기! (-{damage}) {target.name} HP: {target.hp}')
+        print(f'남은 MP: {self.mp}')
 
 class Monster:
-    def __init__(s, name, hp):
-        s.name = name
-        s.hp = hp
-        s.alive = True
+    def __init__(self, name, hp):
+        self.name = name
+        self.hp = hp
+        self.alive = True
 
-    def take_damage(s, damage):
-        s.hp = s.hp - damage
-        if s.hp <= 0:
-            s.hp = 0
-            s.alive = False
+    def take_damage(self, damage):
+        self.hp = self.hp - damage
+        if self.hp <= 0:
+            self.hp = 0
+            self.alive = False
 
 hero = Hero('용사', 100, 20)
 boss = Monster('보스', 120)

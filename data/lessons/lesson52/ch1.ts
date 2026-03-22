@@ -25,24 +25,24 @@ export const ch1: Chapter = {
       title: "💻 ① 휴식 기능!",
       task: "전투 사이에 HP를 회복하는 휴식 기능을 실행해보세요!",
       initialCode: `class Character:
-    def __init__(s, name, hp, atk, defense):
-        s.name = name
-        s.hp = hp
-        s.max_hp = hp
-        s.atk = atk
-        s.defense = defense
+    def __init__(self, name, hp, atk, defense):
+        self.name = name
+        self.hp = hp
+        self.max_hp = hp
+        self.atk = atk
+        self.defense = defense
 
-    def rest(s):
+    def rest(self):
         # 최대 HP의 30% 회복!
-        heal_amount = int(s.max_hp * 0.3)
-        s.hp = min(s.hp + heal_amount, s.max_hp)
-        print(f'{s.name} 휴식! +{heal_amount} HP -> {s.hp}/{s.max_hp}')
+        heal_amount = int(self.max_hp * 0.3)
+        self.hp = min(self.hp + heal_amount, self.max_hp)
+        print(f'{self.name} 휴식! +{heal_amount} HP -> {self.hp}/{self.max_hp}')
 
-    def take_damage(s, damage):
-        actual = damage - s.defense
+    def take_damage(self, damage):
+        actual = damage - self.defense
         if actual < 1:
             actual = 1
-        s.hp -= actual
+        self.hp -= actual
         return actual
 
 # 테스트!
@@ -70,15 +70,15 @@ print(f'\\n최종: HP {hero.hp}/{hero.max_hp}')`,
       title: "🎯 미션: 휴식 추가!",
       task: "빈칸 3개를 채워서 휴식 기능을 완성하세요!",
       initialCode: `class Character:
-    def __init__(s, name, hp):
-        s.name = name
-        s.hp = hp
-        s.___ = hp
+    def __init__(self, name, hp):
+        self.name = name
+        self.hp = hp
+        self.___ = hp
 
-    def rest(s):
-        heal = int(s.max_hp * 0.3)
-        s.hp = ___(s.hp + heal, s.max_hp)
-        print(f'휴식! HP: {s.hp}/{s.max_hp}')
+    def rest(self):
+        heal = int(self.max_hp * 0.3)
+        self.hp = ___(self.hp + heal, self.max_hp)
+        print(f'휴식! HP: {self.hp}/{self.max_hp}')
 
 hero = Character('용사', 100)
 hero.hp = 50
@@ -98,21 +98,21 @@ print(f'회복 후: {hero.hp}')`,
 random.seed(42)
 
 class Character:
-    def __init__(s, name, hp, atk, defense):
-        s.name = name
-        s.hp = hp
-        s.atk = atk
-        s.defense = defense
-        s.crit_rate = 0.2   # 20% 확률
-        s.crit_damage = 1.5  # 1.5배
+    def __init__(self, name, hp, atk, defense):
+        self.name = name
+        self.hp = hp
+        self.atk = atk
+        self.defense = defense
+        self.crit_rate = 0.2   # 20% 확률
+        self.crit_damage = 1.5  # 1.5배
 
-    def attack_target(s, target):
-        damage = s.atk
+    def attack_target(self, target):
+        damage = self.atk
 
         # 치명타 판정!
-        is_crit = random.random() < s.crit_rate
+        is_crit = random.random() < self.crit_rate
         if is_crit:
-            damage = int(damage * s.crit_damage)
+            damage = int(damage * self.crit_damage)
 
         actual = damage - target.defense
         if actual < 1:
@@ -120,16 +120,16 @@ class Character:
         target.hp -= actual
 
         if is_crit:
-            print(f'  ★ 크리티컬! {s.name} -> {target.name} ({actual} 데미지!)')
+            print(f'  ★ 크리티컬! {self.name} -> {target.name} ({actual} 데미지!)')
         else:
-            print(f'  {s.name} -> {target.name} ({actual} 데미지)')
+            print(f'  {self.name} -> {target.name} ({actual} 데미지)')
 
 class Monster:
-    def __init__(s, name, hp, atk, defense):
-        s.name = name
-        s.hp = hp
-        s.atk = atk
-        s.defense = defense
+    def __init__(self, name, hp, atk, defense):
+        self.name = name
+        self.hp = hp
+        self.atk = atk
+        self.defense = defense
 
 # 테스트! (seed 고정으로 결과 동일)
 hero = Character('용사', 120, 20, 10)
@@ -152,19 +152,19 @@ for i in range(5):
 random.seed(10)
 
 class Fighter:
-    def __init__(s, name, atk):
-        s.name = name
-        s.atk = atk
-        s.crit_rate = 0.3  # 30%
+    def __init__(self, name, atk):
+        self.name = name
+        self.atk = atk
+        self.crit_rate = 0.3  # 30%
 
-    def attack(s):
-        damage = s.atk
-        is_crit = random.___() < s.crit_rate
+    def attack(self):
+        damage = self.atk
+        is_crit = random.___() < self.crit_rate
         if ___:
             damage = int(damage * 2)
-            print(f'★ 크리티컬! {s.name}: {damage} 데미지!')
+            print(f'★ 크리티컬! {self.name}: {damage} 데미지!')
         else:
-            print(f'{s.name}: {___} 데미지')
+            print(f'{self.name}: {___} 데미지')
 
 hero = Fighter('용사', 10)
 for i in range(4):
@@ -179,45 +179,45 @@ for i in range(4):
       title: "💻 ③ 장비 시스템!",
       task: "무기와 방어구를 장착하면 스탯이 변하는 시스템을 실행해보세요!",
       initialCode: `class Equipment:
-    def __init__(s, name, slot, atk_bonus, def_bonus):
-        s.name = name
-        s.slot = slot  # 'weapon' or 'armor'
-        s.atk_bonus = atk_bonus
-        s.def_bonus = def_bonus
+    def __init__(self, name, slot, atk_bonus, def_bonus):
+        self.name = name
+        self.slot = slot  # 'weapon' or 'armor'
+        self.atk_bonus = atk_bonus
+        self.def_bonus = def_bonus
 
 class Character:
-    def __init__(s, name, hp, atk, defense):
-        s.name = name
-        s.hp, s.max_hp = hp, hp
-        s.base_atk = atk
-        s.base_def = defense
-        s.weapon = None
-        s.armor = None
+    def __init__(self, name, hp, atk, defense):
+        self.name = name
+        self.hp, self.max_hp = hp, hp
+        self.base_atk = atk
+        self.base_def = defense
+        self.weapon = None
+        self.armor = None
 
-    def equip(s, equipment):
+    def equip(self, equipment):
         if equipment.slot == 'weapon':
-            if s.weapon:
-                print(f'  {s.weapon.name} 해제')
-            s.weapon = equipment
+            if self.weapon:
+                print(f'  {self.weapon.name} 해제')
+            self.weapon = equipment
             print(f'  {equipment.name} 장착!')
         elif equipment.slot == 'armor':
-            if s.armor:
-                print(f'  {s.armor.name} 해제')
-            s.armor = equipment
+            if self.armor:
+                print(f'  {self.armor.name} 해제')
+            self.armor = equipment
             print(f'  {equipment.name} 장착!')
 
-    def get_atk(s):
-        bonus = s.weapon.atk_bonus if s.weapon else 0
-        return s.base_atk + bonus
+    def get_atk(self):
+        bonus = self.weapon.atk_bonus if self.weapon else 0
+        return self.base_atk + bonus
 
-    def get_def(s):
-        bonus = s.armor.def_bonus if s.armor else 0
-        return s.base_def + bonus
+    def get_def(self):
+        bonus = self.armor.def_bonus if self.armor else 0
+        return self.base_def + bonus
 
-    def status(s):
-        w = s.weapon.name if s.weapon else '없음'
-        a = s.armor.name if s.armor else '없음'
-        print(f'{s.name}: ATK {s.get_atk()} (기본 {s.base_atk}), DEF {s.get_def()} (기본 {s.base_def})')
+    def status(self):
+        w = self.weapon.name if self.weapon else '없음'
+        a = self.armor.name if self.armor else '없음'
+        print(f'{self.name}: ATK {self.get_atk()} (기본 {self.base_atk}), DEF {self.get_def()} (기본 {self.base_def})')
         print(f'  무기: {w}, 방어구: {a}')
 
 # 장비!

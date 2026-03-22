@@ -122,7 +122,25 @@ if (pos != string::npos) {
 }
 \`\`\`
 
-💡 find와 substr을 조합하면 파이썬의 슬라이싱처럼 쓸 수 있어요!`
+💡 find와 substr을 조합하면 파이썬의 슬라이싱처럼 쓸 수 있어요!
+
+**C++20 팁: starts_with / ends_with**
+
+C++20부터 더 직관적인 메서드가 추가됐어요!
+
+\`\`\`cpp
+string s = "Hello World";
+
+// C++17 이하: find로 직접 구현
+bool starts = (s.find("Hello") == 0);           // 앞에서 시작?
+bool ends = (s.rfind("World") == s.size() - 5); // 뒤로 끝?
+
+// C++20 이상: 간단하게!
+bool starts20 = s.starts_with("Hello");  // true
+bool ends20   = s.ends_with("World");    // true
+\`\`\`
+
+USACO 대회 컴파일러가 C++17이라면 find를 쓰고, C++20이면 starts_with/ends_with를 쓸 수 있어요!`
         },
         {
           id: "ch1-fb1",

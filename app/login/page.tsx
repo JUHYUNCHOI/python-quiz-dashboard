@@ -9,6 +9,18 @@ import { Mail } from "lucide-react"
 import { LanguageToggle } from "@/components/language-toggle"
 import { useLanguage } from "@/contexts/language-context"
 
+// Capacitor는 네이티브 환경에서만 동적 import
+async function isNative(): Promise<boolean> {
+  try {
+    const { Capacitor } = await import("@capacitor/core")
+    return Capacitor.isNativePlatform()
+  } catch {
+    return false
+  }
+}
+
+const NATIVE_REDIRECT = "com.coderin.app://auth/callback"
+
 /** 상대 경로(/)로 시작하는 URL만 허용 — open redirect 방지 */
 function safeReturnTo(url: string | null): string {
   if (!url) return "/"
@@ -25,6 +37,7 @@ function LoginContent() {
   const [emailMode, setEmailMode] = useState<"login" | "signup">("login")
   const [emailError, setEmailError] = useState("")
   const [emailSuccess, setEmailSuccess] = useState("")
+  const [oauthError, setOauthError] = useState("")
   const searchParams = useSearchParams()
   const error = searchParams.get("error")
   const returnTo = safeReturnTo(searchParams.get("returnTo"))
@@ -32,23 +45,46 @@ function LoginContent() {
 
   const handleOAuthLogin = async (provider: "kakao" | "google") => {
     setIsLoading(provider)
+    setOauthError("")
     const supabase = createClient()
 
-    // OAuth는 외부 사이트를 거치므로 sessionStorage에 복귀 URL 저장
     if (returnTo) {
       sessionStorage.setItem("loginReturnTo", returnTo)
     }
 
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
-    })
+    const native = await isNative()
 
-    if (error) {
-      console.error("Login error:", error)
+    if (native) {
+      // 네이티브 앱: 시스템 브라우저(SFSafariViewController/Chrome Custom Tabs)로 열기
+      const { Browser } = await import("@capacitor/browser")
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: NATIVE_REDIRECT,
+          skipBrowserRedirect: true,
+        },
+      })
+      if (error || !data.url) {
+        console.error("Login error:", error)
+        setOauthError(t("로그인에 실패했어요. 잠시 후 다시 시도해주세요.", "Login failed. Please try again later."))
+        setIsLoading(null)
+        return
+      }
+      await Browser.open({ url: data.url })
       setIsLoading(null)
+    } else {
+      // 웹: 일반 OAuth 리디렉션
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      })
+      if (error) {
+        console.error("Login error:", error)
+        setOauthError(t("로그인에 실패했어요. 잠시 후 다시 시도해주세요.", "Login failed. Please try again later."))
+        setIsLoading(null)
+      }
     }
   }
 
@@ -108,10 +144,10 @@ function LoginContent() {
         </div>
 
         {/* 에러 메시지 */}
-        {error && (
+        {(error || oauthError) && (
           <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-center">
             <p className="text-sm text-red-600">
-              로그인에 실패했어요. 다시 시도해주세요.
+              {oauthError || t("로그인에 실패했어요. 다시 시도해주세요.", "Login failed. Please try again.")}
             </p>
           </div>
         )}

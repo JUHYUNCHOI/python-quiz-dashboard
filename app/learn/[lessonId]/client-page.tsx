@@ -431,6 +431,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       restoreCompletedStepState(prevStep)
     } else if (currentChapter > 0) {
       const prevChapter = lesson.chapters[currentChapter - 1]
+      if (!prevChapter || prevChapter.steps.length === 0) return
       const prevStep = prevChapter.steps[prevChapter.steps.length - 1]
       setCurrentChapter(currentChapter - 1)
       setCurrentStep(prevChapter.steps.length - 1)
@@ -512,7 +513,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   // 챕터 완료 화면
   if (showLessonComplete) {
     const totalPoints = score
-    const lessonFeedback = analyzeLessonComplete(lessonId)
+    const lessonFeedback = analyzeLessonComplete(lessonId, lang)
     const streakInfo = analyzeStreak(gamification.dailyStreak)
     return (
       <>

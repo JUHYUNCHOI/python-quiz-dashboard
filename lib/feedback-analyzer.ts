@@ -267,7 +267,7 @@ function recommendNextAction(
 
 // ──── Lesson Feedback ────
 
-export function analyzeLessonComplete(lessonId: string): LessonFeedback {
+export function analyzeLessonComplete(lessonId: string, lang: "ko" | "en" = "ko"): LessonFeedback {
   const completed = getCompletedLessons()
 
   // 전체 진도 계산
@@ -281,10 +281,10 @@ export function analyzeLessonComplete(lessonId: string): LessonFeedback {
   const { headline, emoji } = selectLessonCompleteMessage(completedCount, percentage)
 
   // 다음 레슨 추천
-  const nextLesson = findNextLesson(lessonId, allParts, completed)
+  const nextLesson = findNextLesson(lessonId, allParts, completed, lang)
 
   // 복습 추천 (이전에 완료한 레슨 중 오래된 것) — 나중에 lesson_progress 날짜 데이터로 개선 가능
-  const reviewSuggestions = getReviewSuggestions(lessonId, completed)
+  const reviewSuggestions = getReviewSuggestions(lessonId, completed, lang)
 
   return {
     headline,
@@ -332,7 +332,7 @@ function selectLessonCompleteMessage(completedCount: number, percentage: number)
   }
 }
 
-function findNextLesson(currentId: string, allParts: PartMeta[], completed: Set<number | string>): { lessonId: string; name: string } | null {
+function findNextLesson(currentId: string, allParts: PartMeta[], completed: Set<number | string>, lang: "ko" | "en" = "ko"): { lessonId: string; name: string } | null {
   // 현재 레슨이 속한 트랙 찾기
   const isCpp = currentId.startsWith("cpp-")
   const isPseudo = currentId.startsWith("pseudo-") || currentId.startsWith("igcse-")
@@ -344,12 +344,12 @@ function findNextLesson(currentId: string, allParts: PartMeta[], completed: Set<
 
   if (idx >= 0 && idx < trackIds.length - 1) {
     const nextId = trackIds[idx + 1]
-    return { lessonId: String(nextId), name: getLessonName(nextId) }
+    return { lessonId: String(nextId), name: getLessonName(nextId, lang) }
   }
   return null
 }
 
-function getReviewSuggestions(currentId: string, completed: Set<number | string>): { lessonId: string; name: string; daysSince: number }[] {
+function getReviewSuggestions(currentId: string, completed: Set<number | string>, lang: "ko" | "en" = "ko"): { lessonId: string; name: string; daysSince: number }[] {
   // 간단한 구현: 완료된 레슨 중 현재 레슨보다 10개 이상 이전의 것들을 복습 추천
   const isCpp = currentId.startsWith("cpp-")
   const isPseudo = currentId.startsWith("pseudo-") || currentId.startsWith("igcse-")
@@ -368,7 +368,7 @@ function getReviewSuggestions(currentId: string, completed: Set<number | string>
     if (completed.has(id)) {
       suggestions.push({
         lessonId: String(id),
-        name: getLessonName(id),
+        name: getLessonName(id, lang),
         daysSince: 7, // 정확한 날짜는 lesson_progress에서 가져와야 함 (향후 개선)
       })
     }
