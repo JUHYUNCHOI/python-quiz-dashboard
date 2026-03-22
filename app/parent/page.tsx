@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/client"
 import { getLessonName } from "@/lib/curriculum-data"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
-import { BookOpen, Trophy, Flame, Clock, TrendingUp, Check, Minus } from "lucide-react"
+import { BookOpen, Trophy, Flame, Clock, TrendingUp, Check, Minus, Share2, Copy } from "lucide-react"
 
 interface ParentReportData {
   student_name: string
@@ -82,6 +82,7 @@ function ParentReportPage() {
   const [data, setData] = useState<ParentReportData | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
+  const [copied, setCopied] = useState(false)
 
   useEffect(() => {
     if (!token) {
@@ -179,6 +180,21 @@ function ParentReportPage() {
   if (data.daily_streak === 0 && completedLessons.length > 0) improvementPoints.push("학습 연속 기록이 끊어졌어요. 매일 조금씩이라도 학습하면 좋아요")
   if (completedLessons.length === 0 && progress.length > 0) improvementPoints.push("아직 완료한 레슨이 없어요. 끝까지 마무리하는 습관이 중요해요")
 
+  // XP 레벨 계산 (100 XP = 1 레벨)
+  const xpLevel = Math.floor(data.total_xp / 100) + 1
+  const xpInLevel = data.total_xp % 100
+
+  const handleShare = async () => {
+    const url = window.location.href
+    if (navigator.share) {
+      try { await navigator.share({ title: `${data.student_name} 학습 리포트`, url }) } catch {}
+    } else {
+      navigator.clipboard.writeText(url)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-orange-50/30">
       {/* 헤더 */}
@@ -186,18 +202,37 @@ function ParentReportPage() {
         <div className="max-w-lg mx-auto">
           <div className="flex items-center gap-3 mb-2">
             <span className="text-4xl">🦒</span>
-            <div>
-              <p className="text-sm opacity-80">코드린 학습 리포트</p>
+            <div className="flex-1">
+              <p className="text-sm opacity-80 font-medium">코드린(Coderin) 학습 리포트</p>
               <h1 className="text-2xl font-black">{data.student_name}</h1>
+              <p className="text-xs opacity-60 mt-0.5">
+                Python · C++ 코딩 커리큘럼 학습 서비스
+              </p>
             </div>
+            <button
+              onClick={handleShare}
+              className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl bg-white/20 hover:bg-white/30 transition-colors"
+            >
+              {copied ? <Copy className="w-4 h-4" /> : <Share2 className="w-4 h-4" />}
+              <span className="text-[10px]">{copied ? "복사됨!" : "공유"}</span>
+            </button>
           </div>
-          <p className="text-sm opacity-70 mt-2">
+          <p className="text-sm opacity-60 mt-2">
             {formatDate(new Date().toISOString())} 기준
           </p>
         </div>
       </div>
 
       <main className="max-w-lg mx-auto px-4 py-6 space-y-6">
+
+        {/* 코드린 소개 (첫 방문 학부모용) */}
+        <div className="rounded-2xl border border-orange-200 bg-orange-50 p-4">
+          <p className="text-sm text-orange-700 font-medium leading-relaxed">
+            📌 <strong>코드린</strong>은 중학생·고등학생을 위한 코딩 학습 앱이에요.
+            Python과 C++을 단계별 레슨과 퀴즈로 배우고, XP·스트릭으로 학습 습관을 키워요.
+          </p>
+        </div>
+
         {/* 요약 통계 */}
         <div className="grid grid-cols-3 gap-3">
           <StatBox
@@ -206,18 +241,38 @@ function ParentReportPage() {
             label="완료 레슨"
             color="purple"
           />
-          <StatBox
-            icon={<Trophy className="w-5 h-5" />}
-            value={String(data.total_xp)}
-            label="총 XP"
-            color="orange"
-          />
-          <StatBox
-            icon={<Flame className="w-5 h-5" />}
-            value={`${data.daily_streak}일`}
-            label="연속 학습"
-            color={data.daily_streak >= 3 ? "green" : "gray"}
-          />
+          <div className="rounded-xl border border-orange-200 bg-orange-50 p-3 text-center">
+            <div className="flex items-center justify-center mb-1 text-orange-600">
+              <Trophy className="w-5 h-5" />
+            </div>
+            <div className="text-xl font-black text-orange-600">{data.total_xp}</div>
+            <div className="text-[10px] text-orange-500/80">XP · Lv.{xpLevel}</div>
+            <div className="mt-1 h-1.5 w-full bg-orange-200 rounded-full overflow-hidden">
+              <div className="h-full bg-orange-500 rounded-full" style={{ width: `${xpInLevel}%` }} />
+            </div>
+            <div className="text-[9px] text-orange-400 mt-0.5">{xpInLevel}/100 → Lv.{xpLevel + 1}</div>
+          </div>
+          <div className={cn(
+            "rounded-xl border p-3 text-center",
+            data.daily_streak >= 3 ? "bg-green-50 border-green-200" : "bg-gray-50 border-gray-200"
+          )}>
+            <div className={cn("flex items-center justify-center mb-1", data.daily_streak >= 3 ? "text-green-600" : "text-gray-400")}>
+              <Flame className="w-5 h-5" />
+            </div>
+            <div className={cn("text-xl font-black", data.daily_streak >= 3 ? "text-green-600" : "text-gray-500")}>
+              {data.daily_streak}일
+            </div>
+            <div className="text-[10px] text-gray-400">연속 학습</div>
+            <div className="text-[9px] text-gray-400 mt-0.5">
+              {data.daily_streak >= 7 ? "🔥 7일+" : data.daily_streak >= 3 ? "✨ 잘 하고 있어요!" : "매일 접속하면 스트릭이 쌓여요"}
+            </div>
+          </div>
+        </div>
+
+        {/* XP/스트릭 설명 */}
+        <div className="rounded-xl border border-gray-100 bg-gray-50 px-4 py-3 space-y-1.5 text-xs text-gray-500">
+          <p>📊 <strong>XP(경험치)</strong>: 퀴즈를 풀고 레슨을 완료하면 얻는 점수예요. 100 XP마다 레벨이 올라요.</p>
+          <p>🔥 <strong>스트릭</strong>: 매일 앱에 접속해 학습한 날 수예요. 꾸준함을 보여주는 지표예요.</p>
         </div>
 
         {/* 마지막 활동 */}
@@ -375,10 +430,25 @@ function ParentReportPage() {
           </div>
         )}
 
+        {/* 공유 버튼 (하단) */}
+        <div className="text-center">
+          <button
+            onClick={handleShare}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-orange-200 bg-orange-50 text-orange-600 text-sm font-semibold hover:bg-orange-100 transition-colors"
+          >
+            {copied ? <><Copy className="w-4 h-4" /> 링크 복사됨!</> : <><Share2 className="w-4 h-4" /> 이 리포트 공유하기</>}
+          </button>
+        </div>
+
         {/* 푸터 */}
-        <div className="text-center py-6">
-          <p className="text-xs text-gray-300">코드린 (Coderin) 학습 리포트</p>
-          <p className="text-xs text-gray-300 mt-1">이 페이지는 선생님이 공유한 링크입니다</p>
+        <div className="text-center py-6 space-y-1">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <span className="text-2xl">🦒</span>
+            <span className="font-black text-gray-400">Coderin</span>
+          </div>
+          <p className="text-xs text-gray-300">중학생·고등학생을 위한 코딩 학습 서비스</p>
+          <p className="text-xs text-gray-300">Python · C++ · Pseudocode 커리큘럼</p>
+          <p className="text-xs text-gray-300 mt-2">이 리포트는 선생님이 공유한 링크입니다</p>
         </div>
       </main>
     </div>

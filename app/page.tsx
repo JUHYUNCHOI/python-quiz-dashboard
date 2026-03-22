@@ -9,6 +9,7 @@ import Link from "next/link"
 import { useLanguage } from "@/contexts/language-context"
 import { useGamification, DAILY_XP_GOAL } from "@/hooks/use-gamification"
 import { useState, useEffect } from "react"
+import { OnboardingModal } from "@/components/onboarding-modal"
 
 // -------- 레슨 ID 순서 --------
 const PYTHON_LESSON_IDS: (number | string)[] = [
@@ -132,17 +133,52 @@ function readNextLesson(lang: "ko" | "en" = "ko"): NextLesson | null {
   }
 }
 
+function readSelectedCourse(): "python" | "cpp" {
+  try {
+    return (localStorage.getItem("selectedCourse") || "python") as "python" | "cpp"
+  } catch {
+    return "python"
+  }
+}
+
 export default function DashboardPage() {
   const { t, lang } = useLanguage()
   const { level, totalXp, dailyStreak, xpToday } = useGamification()
   const [nextLesson, setNextLesson] = useState<NextLesson | null>(null)
+  const [selectedCourse, setSelectedCourse] = useState<"python" | "cpp">("python")
   // lessonLoaded: localStorage 읽기 전에 "모든 레슨 완료" 카드가 잠깐 뜨는 깜빡임 방지
   const [lessonLoaded, setLessonLoaded] = useState(false)
+  const [showOnboarding, setShowOnboarding] = useState(false)
 
   useEffect(() => {
+    const course = readSelectedCourse()
+    setSelectedCourse(course)
     setNextLesson(readNextLesson(lang))
     setLessonLoaded(true)
+
+    // 온보딩: 첫 방문 여부 확인
+    try {
+      const done = localStorage.getItem("onboarding-done")
+      const hasLessons = !!localStorage.getItem("completedLessons")
+      const hasPractice = Object.keys(localStorage).some(k => k.startsWith("practice-v2-"))
+      if (!done && !hasLessons && !hasPractice) {
+        setShowOnboarding(true)
+      }
+    } catch {}
   }, [lang])
+
+  const switchToCpp = () => {
+    try { localStorage.setItem("selectedCourse", "cpp") } catch {}
+    setSelectedCourse("cpp")
+    // C++ 다음 레슨 다시 계산 (readNextLesson은 localStorage 읽으므로 바로 호출)
+    setNextLesson(readNextLesson(lang))
+  }
+
+  const handleOnboardingComplete = (course: "python" | "cpp") => {
+    setSelectedCourse(course)
+    setShowOnboarding(false)
+    setNextLesson(readNextLesson(lang))
+  }
 
   const xpProgress = Math.min(xpToday, DAILY_XP_GOAL)
   const xpPercent = Math.round((xpProgress / DAILY_XP_GOAL) * 100)
@@ -153,6 +189,7 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white">
+      {showOnboarding && <OnboardingModal onComplete={handleOnboardingComplete} />}
       <Header />
 
       <main className="w-full px-4 sm:px-6 pb-24 pt-4 max-w-2xl mx-auto space-y-4">
@@ -234,6 +271,25 @@ export default function DashboardPage() {
               </div>
             </Card>
           </Link>
+        ) : selectedCourse === "python" ? (
+          // Python 완료 → C++ 전환 CTA
+          <Card className="p-4 border-2 border-blue-300 bg-gradient-to-r from-blue-50 to-indigo-50">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-xl">🏆</div>
+              <div className="flex-1">
+                <p className="text-xs font-semibold text-blue-500 uppercase tracking-wide">{t("Python 완료!", "Python Complete!")}</p>
+                <p className="font-bold text-gray-800 text-sm mt-0.5">{t("C++에 도전해볼까요?", "Ready for C++?")}</p>
+                <p className="text-xs text-gray-500 mt-0.5">{t("Python 실력을 바탕으로 C++을 배워보세요!", "Build on your Python skills with C++!")}</p>
+              </div>
+              <button
+                onClick={switchToCpp}
+                className="flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-bold text-white bg-blue-500 hover:bg-blue-600 transition-colors shrink-0"
+              >
+                {t("시작", "Start")}
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </Card>
         ) : (
           <Card className="p-4 border-2 border-yellow-300 bg-yellow-50 text-center">
             <p className="text-2xl mb-1">🏆</p>

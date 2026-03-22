@@ -15,7 +15,22 @@ import { StudentQuizReport } from "@/components/teacher/student-quiz-report"
 import { StudentConsistency } from "@/components/teacher/student-consistency"
 import { StudentProgress } from "@/components/teacher/student-progress"
 import { ClassOverview } from "@/components/teacher/class-overview"
-import { getLessonName } from "@/lib/curriculum-data"
+import { getLessonName, pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
+
+// 커리큘럼 순서 인덱스 (한 번만 계산)
+const CURRICULUM_ORDER: Record<string, number> = {}
+;[...pythonParts, ...cppParts, ...pseudoParts].forEach(part => {
+  part.lessonIds.forEach((id, i) => {
+    // 파트 간격을 두어 파트 내 순서 유지
+    if (!(String(id) in CURRICULUM_ORDER)) {
+      CURRICULUM_ORDER[String(id)] = Object.keys(CURRICULUM_ORDER).length
+    }
+  })
+})
+
+function lessonSortIndex(lessonId: string): number {
+  return CURRICULUM_ORDER[lessonId] ?? 9999
+}
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
 
@@ -96,7 +111,7 @@ export default function ClassDetailPage() {
   const [students, setStudents] = useState<StudentRow[]>([])
   const [copiedCode, setCopiedCode] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-  const [sortBy, setSortBy] = useState<"name" | "xp" | "lessons" | "streak">("name")
+  const [sortBy, setSortBy] = useState<"name" | "xp" | "lessons" | "streak" | "lastActive">("lastActive")
   const [expandedStudent, setExpandedStudent] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<"lessons" | "quizzes" | "consistency">("lessons")
   const [parentLinkCopied, setParentLinkCopied] = useState<string | null>(null)
@@ -207,8 +222,8 @@ export default function ClassDetailPage() {
       const prof = profileMap.get(sid) as Profile | undefined
       const gam = gamMap.get(sid)
       const lessonProgress = (progressMap.get(sid) || []).sort((a, b) => {
-        // 레슨 ID 순서로 정렬
-        return a.lesson_id.localeCompare(b.lesson_id)
+        // 커리큘럼 순서로 정렬
+        return lessonSortIndex(a.lesson_id) - lessonSortIndex(b.lesson_id)
       })
 
       // lastActive: gamification + lesson_progress.updated_at 중 더 최근 것
@@ -242,6 +257,12 @@ export default function ClassDetailPage() {
       case "xp": return b.totalXp - a.totalXp
       case "lessons": return b.completedLessons - a.completedLessons
       case "streak": return b.dailyStreak - a.dailyStreak
+      case "lastActive": {
+        // 최근 활동 순 (내림차순): "-" 또는 없는 경우 맨 뒤로
+        const aDate = a.lastActive === "-" ? "0" : (a.lastActive || "0")
+        const bDate = b.lastActive === "-" ? "0" : (b.lastActive || "0")
+        return bDate.localeCompare(aDate)
+      }
       default: return a.displayName.localeCompare(b.displayName)
     }
   })
@@ -344,6 +365,7 @@ export default function ClassDetailPage() {
             {/* 정렬 버튼 */}
             <div className="flex gap-2 mb-4 flex-wrap">
               {[
+                { key: "lastActive" as const, label: "최근 활동순" },
                 { key: "name" as const, label: "이름순" },
                 { key: "xp" as const, label: "XP순" },
                 { key: "lessons" as const, label: "완료순" },

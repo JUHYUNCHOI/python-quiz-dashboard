@@ -101,7 +101,7 @@ export function MasteryStats() {
             ⏰ {t(`오늘 복습할 문제 ${stats.totalDue}개`, `${stats.totalDue} due for review today`)}
           </span>
           <a
-            href="/quiz?mode=review"
+            href="/quiz/setup?mode=review"
             className="text-xs font-bold text-orange-600 hover:text-orange-500"
           >
             {t("복습하기 →", "Review →")}

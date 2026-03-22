@@ -1,7 +1,8 @@
 "use client"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useEffect } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { Suspense } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Minus, Plus, Flame, Calendar, Clock, Sparkles } from "lucide-react"
@@ -11,8 +12,17 @@ import { useGamification } from "@/hooks/use-gamification"
 import { useLanguage } from "@/contexts/language-context"
 import { getDueQuestions, getMasteryStats, getMasteryLabel } from "@/lib/spaced-repetition"
 
-export default function QuizSetupPage() {
+export default function QuizSetupPageWrapper() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gradient-to-b from-orange-50 via-mint-50 to-lavender-50" />}>
+      <QuizSetupPage />
+    </Suspense>
+  )
+}
+
+function QuizSetupPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const gamification = useGamification()
   const { t, lang } = useLanguage()
 
@@ -35,6 +45,24 @@ export default function QuizSetupPage() {
   const masteryStats = typeof window !== "undefined" ? getMasteryStats() : null
   const [showCustomInput, setShowCustomInput] = useState(false)
   const [customValue, setCustomValue] = useState("")
+
+  // mode=review → 즉시 복습 세션 시작
+  useEffect(() => {
+    if (searchParams.get("mode") === "review" && dueCount > 0) {
+      const reviewCount = Math.min(Math.max(dueCount, 10), 30)
+      sessionStorage.setItem(
+        "quizSettings",
+        JSON.stringify({
+          questionCount: reviewCount,
+          difficulty: "mixed",
+          course: selectedCourse,
+          startTime: Date.now(),
+          reviewMode: true,
+        }),
+      )
+      router.replace("/quiz")
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const currentDate = new Date().toLocaleDateString(lang === "en" ? "en-US" : "ko-KR", {
     year: "numeric",

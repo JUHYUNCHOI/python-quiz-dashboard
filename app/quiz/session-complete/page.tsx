@@ -219,12 +219,12 @@ function SessionCompletePage() {
     if (!sessionData) return
     const timers: NodeJS.Timeout[] = []
     for (let i = 0; i <= 7; i++) {
-      timers.push(setTimeout(() => setPhase(i), 400 + i * 600))
+      timers.push(setTimeout(() => setPhase(i), 200 + i * 300))
     }
     // Play sound at the right time
-    timers.push(setTimeout(() => play("chapterComplete"), 500))
+    timers.push(setTimeout(() => play("chapterComplete"), 300))
     if (breakdown && breakdown.perfectBonus > 0) {
-      timers.push(setTimeout(() => play("combo10"), 400 + 4 * 600))
+      timers.push(setTimeout(() => play("combo10"), 200 + 4 * 300))
     }
     return () => timers.forEach(clearTimeout)
   }, [sessionData]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -233,7 +233,7 @@ function SessionCompletePage() {
   const isLevelUp = xpCommitted && gamification.level > prevLevel
   useEffect(() => {
     if (isLevelUp) {
-      const timer = setTimeout(() => play("levelup"), 400 + 6 * 600 + 300)
+      const timer = setTimeout(() => play("levelup"), 200 + 6 * 300 + 300)
       return () => clearTimeout(timer)
     }
   }, [isLevelUp]) // eslint-disable-line react-hooks/exhaustive-deps
