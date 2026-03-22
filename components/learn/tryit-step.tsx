@@ -60,6 +60,7 @@ export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onS
         {hasBlanks ? (
           <BlankCodeRunner
             key={step.id}
+            storageKey={step.id}
             initialCode={step.initialCode || ""}
             expectedOutput={step.expectedOutput}
             task={step.task}
@@ -71,6 +72,7 @@ export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onS
         ) : (
           <PythonRunner
             key={step.id}
+            storageKey={step.id}
             initialCode={step.initialCode || ""}
             expectedOutput={step.expectedOutput}
             task={step.task}

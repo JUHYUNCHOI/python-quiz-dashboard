@@ -27,6 +27,7 @@ interface BlankCodeRunnerProps {
   hint2?: string
   onSuccess?: () => void
   minHeight?: string
+  storageKey?: string
 }
 
 // Pyodide 싱글톤
@@ -87,12 +88,23 @@ export function BlankCodeRunner({
   hint = "",
   hint2 = "",
   onSuccess,
-  minHeight = "140px"
+  minHeight = "140px",
+  storageKey
 }: BlankCodeRunnerProps) {
   const blanks = parseBlanks(initialCode)
   const answers = hint2 ? parseAnswers(hint2) : []
 
-  const [filledValues, setFilledValues] = useState<Record<number, string>>({})
+  const lsKey = storageKey ? `blank-runner-${storageKey}` : null
+
+  const [filledValues, setFilledValues] = useState<Record<number, string>>(() => {
+    if (!lsKey) return {}
+    try {
+      const saved = localStorage.getItem(lsKey)
+      return saved ? JSON.parse(saved) : {}
+    } catch {
+      return {}
+    }
+  })
   const [focusedBlank, setFocusedBlank] = useState<number>(0)
   const [output, setOutput] = useState("")
   const [error, setError] = useState("")
@@ -111,6 +123,14 @@ export function BlankCodeRunner({
         setError("Python 환경을 불러오는 중...")
       })
   }, [])
+
+  // 빈칸 값 localStorage 저장 (페이지 이탈 후 복귀 시 복원)
+  useEffect(() => {
+    if (!lsKey || Object.keys(filledValues).length === 0) return
+    try {
+      localStorage.setItem(lsKey, JSON.stringify(filledValues))
+    } catch { /* ignore */ }
+  }, [filledValues, lsKey])
 
   // 빈칸 값을 코드에 합성
   const buildCode = useCallback(() => {
