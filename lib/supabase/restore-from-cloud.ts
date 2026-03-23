@@ -8,6 +8,7 @@ import type { QuizHistoryEntry } from "@/lib/quiz-history"
  * — auth-context.tsx에서 SIGNED_IN 이벤트 시 호출
  */
 export async function restoreFromCloud(userId: string) {
+  console.log("[RestoreFromCloud] called with userId:", userId)
   const supabase = createClient()
 
   try {
@@ -42,6 +43,7 @@ export async function restoreFromCloud(userId: string) {
     }
 
     // 2. 완료 수업 복원 (lesson_progress → completedLessons localStorage)
+    console.log("[RestoreFromCloud] lessonResult:", lessonResult.status, lessonResult.status === "fulfilled" ? lessonResult.value.data : lessonResult)
     if (lessonResult.status === "fulfilled" && lessonResult.value.data?.length) {
       restoreCompletedLessons(lessonResult.value.data)
     }

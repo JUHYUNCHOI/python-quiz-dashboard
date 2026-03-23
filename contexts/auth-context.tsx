@@ -103,12 +103,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
           // 로그인 시 양방향 동기화 (순차 실행: 업로드 완료 후 복원)
           if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
+            console.log("[AuthContext] sync triggered, event:", event, "userId:", currentUser.id)
             // 1. localStorage → Supabase (기존 로컬 데이터 업로드)
             // 2. 업로드 완료 후 Supabase → localStorage (클라우드 데이터 복원)
             migrateLocalStorageToSupabase(currentUser.id)
-              .catch(() => {})
+              .catch((e) => { console.error("[AuthContext] migrate failed:", e) })
               .then(() => restoreFromCloud(currentUser.id))
-              .catch(() => {})
+              .catch((e) => { console.error("[AuthContext] restore failed:", e) })
           }
         } else {
           setProfile(null)
