@@ -431,9 +431,11 @@ export default function QuizPage() {
               </h3>
 
               {/* Code Block */}
-              <div className="mb-6">
-                <CodeDisplay key={question.id} code={question.code} showLineNumbers={false} />
-              </div>
+              {question.code && question.code.trim() !== "" && (
+                <div className="mb-6">
+                  <CodeDisplay key={question.id} code={question.code} showLineNumbers={false} />
+                </div>
+              )}
 
               {/* Options */}
               <div className="space-y-3">

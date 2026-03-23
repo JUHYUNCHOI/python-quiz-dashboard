@@ -361,12 +361,6 @@ export default function CurriculumPage() {
     if (savedQuizzes) {
       const arr: (string | number)[] = JSON.parse(savedQuizzes)
       setCompletedQuizzes(new Set(arr.map(id => typeof id === "string" && /^\d+$/.test(id) ? Number(id) : id)))
-    } else if (saved) {
-      // 마이그레이션: completedQuizzes가 없으면 completedLessons를 복사
-      // (기존에 수업+퀴즈가 하나로 추적되었으므로)
-      localStorage.setItem("completedQuizzes", saved)
-      const arr: (string | number)[] = JSON.parse(saved)
-      setCompletedQuizzes(new Set(arr.map(id => typeof id === "string" && /^\d+$/.test(id) ? Number(id) : id)))
     }
     const savedCourse = localStorage.getItem("selectedCourse") as CourseType
     if (savedCourse === "python" || savedCourse === "cpp" || savedCourse === "pseudo") {

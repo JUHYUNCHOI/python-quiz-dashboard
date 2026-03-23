@@ -7,7 +7,12 @@ export const cppQuestions: QuizQuestion[] = [
     animationKey: "helloWorldBuilder",
     difficulty: "쉬움",
     question: "다음 중 C++ 프로그램의 시작점(entry point)이 되는 함수는?",
-    code: `// C++ 프로그램이 실행되면 가장 먼저 호출되는 함수는?`,
+    code: `#include <iostream>
+
+int main() {
+    std::cout << "Hello!" << std::endl;
+    return 0;
+}`,
     options: ["start()", "main()", "begin()", "run()"],
     correctAnswer: 1,
     explanation: "C++ 프로그램은 항상 main() 함수에서 시작됩니다. 이것은 C++ 표준에 의해 정해진 규칙입니다.",
@@ -8434,22 +8439,22 @@ int main() {
     difficulty: "쉬움",
     question: "C++에서 화면에 'Hello'를 출력하는 올바른 코드는?",
     code: `#include <iostream>
-using namespace std;
+
 int main() {
     ___
     return 0;
 }`,
     options: [
       `print("Hello")`,
-      `cout << "Hello";`,
+      `std::cout << "Hello" << std::endl;`,
       `System.out.println("Hello");`,
       `echo "Hello";`,
     ],
     correctAnswer: 1,
-    explanation: `C++에서 출력은 cout을 사용합니다. cout << "Hello"; 형태로 씁니다. print()는 파이썬, System.out.println()은 Java, echo는 PHP/Shell입니다.`,
-    keyConceptTitle: "cout 출력",
-    keyConceptDescription: "cout은 C++의 표준 출력 스트림입니다. <<(삽입 연산자)로 출력할 값을 연결합니다. #include <iostream>이 필요합니다.",
-    relatedTopics: ["cout", "출력", "#include <iostream>"],
+    explanation: `C++에서 출력은 std::cout을 사용합니다. std::cout << "Hello" << std::endl; 형태로 씁니다. print()는 파이썬, System.out.println()은 Java, echo는 PHP/Shell입니다.`,
+    keyConceptTitle: "std::cout 출력",
+    keyConceptDescription: "std::cout은 C++의 표준 출력 스트림입니다. <<(삽입 연산자)로 출력할 값을 연결하고, std::endl로 줄바꿈합니다.",
+    relatedTopics: ["std::cout", "출력", "#include <iostream>"],
   },
   {
     id: 331,
@@ -8458,9 +8463,9 @@ int main() {
     question: "C++ 소스파일을 컴파일하는 명령어는? (g++ 컴파일러 사용)",
     code: `// 파일: hello.cpp
 #include <iostream>
-using namespace std;
+
 int main() {
-    cout << "Hello";
+    std::cout << "Hello" << std::endl;
     return 0;
 }`,
     options: ["python hello.cpp", "run hello.cpp", "g++ hello.cpp -o hello", "compile hello.cpp"],
@@ -8492,6 +8497,484 @@ int main() {
     keyConceptTitle: "return 0의 위치",
     keyConceptDescription: "C++ 프로그램은 main() 함수 안에서 시작하고, return 0;으로 끝납니다. 모든 cout 출력 뒤에 위치합니다.",
     relatedTopics: ["return 0", "main 함수", "프로그램 구조"],
+  },
+  // ── cpp-1 보충 (Hello World 기초) ──
+  {
+    id: 348,
+    lessonId: "cpp-1",
+    difficulty: "쉬움",
+    question: "`#include <iostream>`을 쓰는 이유는?",
+    code: `#include <iostream>
+using namespace std;
+int main() {
+    cout << "Hello!";
+    return 0;
+}`,
+    options: [
+      "프로그램을 빠르게 실행하려고",
+      "cout, cin 같은 입출력 기능을 쓰려고",
+      "main 함수를 정의하려고",
+      "C++ 문법을 활성화하려고",
+    ],
+    correctAnswer: 1,
+    explanation: "#include <iostream>은 입출력(Input/Output) 기능을 가져옵니다. 이게 없으면 cout을 쓸 수 없어요!",
+    keyConceptTitle: "#include <iostream>",
+    keyConceptDescription: "#include는 헤더 파일을 불러오는 명령입니다. <iostream>은 화면 출력(cout)과 키보드 입력(cin)을 포함합니다.",
+    relatedTopics: ["#include", "헤더파일", "cout", "입출력"],
+  },
+  {
+    id: 349,
+    lessonId: "cpp-1",
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+
+int main() {
+    std::cout << "Hi!" << std::endl;
+    return 0;
+}`,
+    options: [
+      "Hi! endl",
+      "std::cout Hi!",
+      "Hi!",
+      "에러",
+    ],
+    correctAnswer: 2,
+    explanation: "std::cout은 화면에 내용을 출력하고, std::endl은 줄바꿈만 합니다. 화면에는 Hi!만 보입니다.",
+    keyConceptTitle: "std::cout 출력 결과",
+    keyConceptDescription: "std::cout << \"텍스트\" << std::endl;은 텍스트를 출력하고 줄을 바꿉니다. endl 자체는 화면에 출력되지 않습니다.",
+    relatedTopics: ["std::cout", "std::endl", "출력"],
+  },
+  {
+    id: 350,
+    lessonId: "cpp-1",
+    difficulty: "쉬움",
+    question: "다음 코드에서 `<<`의 역할은?",
+    code: `cout << "Hello, World!" << endl;`,
+    options: [
+      "두 수를 비교한다",
+      "cout에 출력할 내용을 전달(삽입)한다",
+      "변수에 값을 저장한다",
+      "줄바꿈을 한다",
+    ],
+    correctAnswer: 1,
+    explanation: "<<는 '삽입 연산자'입니다. cout << \"Hello\"는 'Hello를 cout(화면)에 넣어라'는 뜻이에요. 화살표가 오른쪽에서 왼쪽 방향으로 데이터를 흘려보낸다고 생각하면 됩니다.",
+    keyConceptTitle: "삽입 연산자 <<",
+    keyConceptDescription: "cout << 값: cout에 값을 삽입(출력)합니다. << 연산자를 여러 번 연결할 수 있습니다: cout << \"A\" << \"B\" << endl;",
+    relatedTopics: ["cout", "삽입 연산자", "출력"],
+  },
+  {
+    id: 351,
+    lessonId: "cpp-1",
+    difficulty: "쉬움",
+    question: "`endl`을 사용하면 어떻게 되나요?",
+    code: `cout << "1번 줄" << endl;
+cout << "2번 줄" << endl;`,
+    options: [
+      "프로그램을 종료한다",
+      "줄바꿈(Enter)을 한다",
+      "공백을 한 칸 넣는다",
+      "화면을 지운다",
+    ],
+    correctAnswer: 1,
+    explanation: "endl은 '줄 끝(end of line)'의 줄임말로, 출력 후 줄을 바꿉니다. 위 코드를 실행하면 '1번 줄'과 '2번 줄'이 각각 다른 줄에 출력됩니다.",
+    keyConceptTitle: "endl — 줄바꿈",
+    keyConceptDescription: "endl은 줄바꿈 문자(\\n)를 출력하고 출력 버퍼를 비웁니다. 화면에 Enter를 누른 것처럼 다음 줄로 넘어갑니다.",
+    relatedTopics: ["endl", "줄바꿈", "cout"],
+  },
+  {
+    id: 352,
+    lessonId: "cpp-1",
+    difficulty: "쉬움",
+    question: "C++ 소스 파일의 확장자는 무엇인가요?",
+    code: "",
+    options: [".py", ".java", ".cpp", ".txt"],
+    correctAnswer: 2,
+    explanation: "C++ 소스 파일은 .cpp 확장자를 사용합니다. 예: main.cpp, hello.cpp. .py는 파이썬, .java는 자바 파일입니다.",
+    keyConceptTitle: ".cpp 확장자",
+    keyConceptDescription: "C++ 소스 파일은 .cpp 또는 .cc 확장자를 사용합니다. 가장 흔한 건 .cpp (C Plus Plus의 약자)입니다.",
+    relatedTopics: [".cpp", "소스 파일", "확장자"],
+  },
+  {
+    id: 353,
+    lessonId: "cpp-1",
+    difficulty: "쉬움",
+    question: "다음 Hello World 코드의 올바른 구조 순서는?",
+    code: `// 줄 번호만 보고 순서 맞추기
+(A) int main() {
+(B) using namespace std;
+(C) #include <iostream>
+(D)     cout << "Hello, World!" << endl;
+(E)     return 0;
+(F) }`,
+    options: [
+      "C → B → A → D → E → F",
+      "A → C → B → D → E → F",
+      "D → A → C → B → E → F",
+      "C → A → B → D → E → F",
+    ],
+    correctAnswer: 0,
+    explanation: "#include가 맨 위, 그 다음 using namespace std, 그 다음 int main()과 중괄호 안에 실행 코드가 들어갑니다.",
+    keyConceptTitle: "C++ 코드 구조",
+    keyConceptDescription: "① #include (헤더) → ② using namespace std → ③ int main() { → ④ 실행 코드 → ⑤ return 0; → ⑥ }",
+    relatedTopics: ["코드 구조", "#include", "main 함수"],
+  },
+  {
+    id: 354,
+    lessonId: "cpp-1",
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+using namespace std;
+int main() {
+    cout << "Hello, World!" << endl;
+    return 0;
+}`,
+    options: [
+      `Hello, World!`,
+      `"Hello, World!"`,
+      `Hello World`,
+      `cout << Hello, World!`,
+    ],
+    correctAnswer: 0,
+    explanation: "cout은 큰따옴표 안의 내용만 출력합니다. 따옴표 자체는 출력되지 않아요. endl은 줄바꿈이므로 화면에는 Hello, World!만 보입니다.",
+    keyConceptTitle: "문자열 출력",
+    keyConceptDescription: "cout << \"텍스트\"는 따옴표 안의 내용을 그대로 출력합니다. 따옴표 기호는 출력되지 않습니다.",
+    relatedTopics: ["cout", "문자열", "출력"],
+  },
+  {
+    id: 355,
+    lessonId: "cpp-1",
+    difficulty: "쉬움",
+    question: "`#include <iostream>`을 빠뜨리면 어떻게 되나요?",
+    code: `// #include <iostream> 없음!
+using namespace std;
+int main() {
+    cout << "Hello!";
+    return 0;
+}`,
+    options: [
+      "정상적으로 실행된다",
+      "컴파일 오류가 발생한다",
+      "경고만 나오고 실행은 된다",
+      "빈 화면이 출력된다",
+    ],
+    correctAnswer: 1,
+    explanation: "#include <iostream>이 없으면 cout을 찾을 수 없어 컴파일 오류가 납니다. 컴파일러는 '이 cout이 뭔지 모르겠다'고 에러를 냅니다.",
+    keyConceptTitle: "컴파일 오류",
+    keyConceptDescription: "#include를 빼면 컴파일러가 cout을 인식하지 못해 오류가 발생합니다. 필요한 헤더 파일은 반드시 포함해야 합니다.",
+    relatedTopics: ["#include", "컴파일 오류", "헤더파일"],
+  },
+  {
+    id: 356,
+    lessonId: "cpp-1",
+    difficulty: "보통",
+    question: "다음 코드에서 틀린 부분은?",
+    code: `#include <iostream>
+using namespace std;
+int main() {
+    cout << "안녕하세요"
+    return 0;
+}`,
+    options: [
+      "#include가 잘못됐다",
+      "cout 줄 끝에 세미콜론(;)이 없다",
+      "return 0이 필요 없다",
+      "endl을 반드시 써야 한다",
+    ],
+    correctAnswer: 1,
+    explanation: "C++은 모든 문장(statement) 끝에 세미콜론(;)이 필요합니다. cout << \"안녕하세요\"; 로 고쳐야 합니다.",
+    keyConceptTitle: "세미콜론(;)",
+    keyConceptDescription: "C++에서 모든 문장은 세미콜론(;)으로 끝나야 합니다. 파이썬과 달리 줄바꿈만으로는 문장이 끝나지 않습니다.",
+    relatedTopics: ["세미콜론", "문법 오류", "컴파일 오류"],
+  },
+  {
+    id: 357,
+    lessonId: "cpp-1",
+    difficulty: "보통",
+    question: "C++ 프로그램과 Python 프로그램의 차이로 옳은 것은?",
+    code: "",
+    options: [
+      "C++은 코드를 한 줄씩 실행하고, Python은 먼저 전체를 컴파일한다",
+      "C++은 컴파일 후 실행 파일을 만들고, Python은 코드를 바로 해석하며 실행한다",
+      "C++과 Python 모두 인터프리터 방식이다",
+      "C++은 브라우저에서만 실행된다",
+    ],
+    correctAnswer: 1,
+    explanation: "C++은 컴파일 언어로, 소스 코드를 기계어로 번역한 실행 파일(.exe, a.out 등)을 만들고 실행합니다. Python은 인터프리터 언어로, 코드를 한 줄씩 해석하며 실행합니다.",
+    keyConceptTitle: "컴파일 vs 인터프리터",
+    keyConceptDescription: "컴파일 언어(C++): 전체 코드 → 기계어 변환 → 실행 파일 생성 → 실행 (빠름). 인터프리터 언어(Python): 코드를 한 줄씩 해석하며 실행 (유연함).",
+    relatedTopics: ["컴파일", "인터프리터", "실행 방식", "Python vs C++"],
+  },
+  {
+    id: 358,
+    lessonId: "cpp-1",
+    difficulty: "쉬움",
+    question: "컴파일 후 생긴 `a.out` 파일을 실행하는 명령어는?",
+    code: "",
+    options: ["run a.out", "execute a.out", "./a.out", "open a.out"],
+    correctAnswer: 2,
+    explanation: "./a.out으로 실행합니다. 앞의 ./는 '현재 폴더에 있는 파일'을 의미해요. 윈도우에서는 a.exe가 되기도 해요.",
+    keyConceptTitle: "실행 파일 실행 (./a.out)",
+    keyConceptDescription: "g++ main.cpp로 컴파일 → a.out 생성 → ./a.out으로 실행. ./는 현재 디렉토리를 의미합니다.",
+    relatedTopics: ["실행", "a.out", "터미널"],
+  },
+  {
+    id: 359,
+    lessonId: "cpp-1",
+    difficulty: "쉬움",
+    question: "컴파일 시 실행 파일 이름을 `hello`로 지정하는 명령어는?",
+    code: "",
+    options: [
+      "g++ main.cpp hello",
+      "g++ -o hello main.cpp",
+      "g++ main.cpp --name hello",
+      "g++ main.cpp > hello",
+    ],
+    correctAnswer: 1,
+    explanation: "-o 옵션 뒤에 원하는 실행 파일 이름을 씁니다. g++ -o hello main.cpp → ./hello로 실행!",
+    keyConceptTitle: "g++ -o 옵션",
+    keyConceptDescription: "g++ -o 파일명 소스파일.cpp: 원하는 이름으로 실행 파일 생성. -o는 output(출력)의 줄임말입니다.",
+    relatedTopics: ["g++", "-o 옵션", "컴파일", "실행 파일"],
+  },
+  {
+    id: 360,
+    lessonId: "cpp-1",
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+
+int main() {
+    std::cout << "A" << "B" << "C" << std::endl;
+    return 0;
+}`,
+    options: ["A B C", "ABC", "A, B, C", "에러"],
+    correctAnswer: 1,
+    explanation: "C++의 cout은 값을 자동으로 공백 없이 이어붙입니다. 공백이 필요하면 직접 \" \"를 넣어야 해요. 결과: ABC",
+    keyConceptTitle: "cout 연속 출력",
+    keyConceptDescription: "cout << \"A\" << \"B\" << \"C\"는 공백 없이 ABC를 출력합니다. 공백 원하면: cout << \"A\" << \" \" << \"B\"",
+    relatedTopics: ["cout", "<<", "연속 출력"],
+  },
+  {
+    id: 361,
+    lessonId: "cpp-1",
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+
+int main() {
+    std::cout << "Hello";
+    std::cout << "World";
+    return 0;
+}`,
+    options: [
+      "Hello\nWorld (두 줄)",
+      "HelloWorld (한 줄)",
+      "Hello World (공백 포함)",
+      "에러",
+    ],
+    correctAnswer: 1,
+    explanation: "endl이나 \\n 없이 cout을 여러 번 쓰면 줄바꿈 없이 이어서 출력됩니다. 결과: HelloWorld",
+    keyConceptTitle: "endl 없으면 줄바꿈 없음",
+    keyConceptDescription: "C++은 줄바꿈을 자동으로 안 해줍니다. endl이나 \\n을 명시적으로 써야 줄이 바뀝니다.",
+    relatedTopics: ["endl", "줄바꿈", "cout"],
+  },
+  {
+    id: 362,
+    lessonId: "cpp-1",
+    difficulty: "보통",
+    question: "다음 코드를 실행하면 몇 줄이 출력되나요?",
+    code: `#include <iostream>
+
+int main() {
+    std::cout << "사과" << std::endl;
+    std::cout << "바나나" << std::endl;
+    std::cout << "포도" << std::endl;
+    return 0;
+}`,
+    options: ["1줄 — 사과바나나포도", "3줄 — 각각 한 줄씩", "4줄 — return 0도 출력됨", "에러"],
+    correctAnswer: 1,
+    explanation: "std::endl이 있을 때마다 줄이 바뀝니다. 세 번의 cout + endl이 있으므로 3줄 출력됩니다. return 0;은 화면에 출력되지 않아요.",
+    keyConceptTitle: "endl로 줄 나누기",
+    keyConceptDescription: "std::endl이 있으면 그 자리에서 줄이 바뀝니다. endl이 3번이면 3줄로 출력됩니다.",
+    relatedTopics: ["endl", "줄바꿈", "cout"],
+  },
+  {
+    id: 363,
+    lessonId: "cpp-1",
+    difficulty: "보통",
+    question: "파이썬과 C++의 코드 블록 표시 방식 차이는?",
+    code: `# 파이썬
+def main():
+    print("Hello")
+
+// C++
+int main() {
+    std::cout << "Hello";
+}`,
+    options: [
+      "파이썬은 {}를 쓰고, C++은 :와 들여쓰기를 쓴다",
+      "파이썬은 :와 들여쓰기로 블록을 구분하고, C++은 {}를 쓴다",
+      "둘 다 {}를 쓴다",
+      "C++은 블록 구분이 없다",
+    ],
+    correctAnswer: 1,
+    explanation: "파이썬은 :(콜론)과 들여쓰기로 코드 블록을 만들지만, C++은 중괄호 { }로 블록을 표시합니다. C++에서 들여쓰기는 선택사항(가독성용)이에요.",
+    keyConceptTitle: "코드 블록: {} vs 들여쓰기",
+    keyConceptDescription: "Python: 콜론(:) + 들여쓰기. C++: 중괄호({ }). C++에서 들여쓰기는 문법상 의미 없고 가독성을 위한 것입니다.",
+    relatedTopics: ["중괄호", "코드 블록", "들여쓰기", "Python vs C++"],
+  },
+  {
+    id: 364,
+    lessonId: "cpp-1",
+    difficulty: "보통",
+    question: "다음 코드에서 `std::`는 무엇을 의미하나요?",
+    code: `#include <iostream>
+
+int main() {
+    std::cout << "Hello" << std::endl;
+    return 0;
+}`,
+    options: [
+      "파일을 불러오는 명령어다",
+      "'표준(standard) 도구를 쓴다'는 표시다",
+      "출력 속도를 빠르게 한다",
+      "컴파일러에게 C++ 모드를 알려준다",
+    ],
+    correctAnswer: 1,
+    explanation: "std::는 'standard(표준)'의 줄임말입니다. std::cout, std::endl처럼 C++ 표준 도구를 쓸 때 앞에 붙여요. 지금은 '표준 도구를 쓴다는 표시'로만 기억하세요!",
+    keyConceptTitle: "std:: 의미",
+    keyConceptDescription: "std::cout, std::endl — 앞의 std::는 C++ 표준 도구라는 표시입니다. 레슨 1에서는 항상 std::를 붙여서 씁니다.",
+    relatedTopics: ["std::", "std::cout", "std::endl"],
+  },
+  {
+    id: 365,
+    lessonId: "cpp-1",
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+
+int main() {
+    std::cout << "이름: " << "코드린" << std::endl;
+    std::cout << "언어: " << "C++" << std::endl;
+    return 0;
+}`,
+    options: [
+      "이름: 코드린 언어: C++ (한 줄)",
+      "이름: \\n코드린\\n언어: \\nC++",
+      "이름: 코드린\n언어: C++ (두 줄)",
+      "에러",
+    ],
+    correctAnswer: 2,
+    explanation: "첫 번째 cout은 '이름: 코드린'을 출력하고 endl로 줄바꿈, 두 번째 cout은 '언어: C++'을 출력하고 줄바꿈합니다. 총 두 줄이 출력됩니다.",
+    keyConceptTitle: "여러 줄 출력",
+    keyConceptDescription: "endl은 줄바꿈을 합니다. cout이 두 번 있고 각각 endl로 끝나면 두 줄이 출력됩니다.",
+    relatedTopics: ["cout", "endl", "여러 줄 출력"],
+  },
+  {
+    id: 366,
+    lessonId: "cpp-1",
+    difficulty: "쉬움",
+    question: "빈칸에 알맞은 헤더를 써서 Hello World 프로그램을 완성하세요.",
+    code: `___ <iostream>
+
+int main() {
+    std::cout << "Hello, World!" << std::endl;
+    return 0;
+}`,
+    options: ["#include", "import", "require", "using"],
+    correctAnswer: 0,
+    explanation: "#include <iostream>으로 출력 도구를 가져와야 cout을 쓸 수 있습니다.",
+    keyConceptTitle: "#include",
+    keyConceptDescription: "#include <헤더파일>: 필요한 기능을 불러옵니다. 파이썬의 import와 같은 역할이에요.",
+    relatedTopics: ["#include", "헤더파일", "iostream"],
+  },
+  {
+    id: 367,
+    lessonId: "cpp-1",
+    difficulty: "쉬움",
+    question: "빈칸을 채워 `int main()`의 코드 블록을 올바르게 완성하세요.",
+    code: `#include <iostream>
+
+int main() ___
+    std::cout << "Hello!" << std::endl;
+    return 0;
+___`,
+    options: ["{, }", "(, )", ":, end", "[, ]"],
+    correctAnswer: 0,
+    explanation: "C++에서 코드 블록은 { }(중괄호)로 감쌉니다. 파이썬의 콜론(:)+들여쓰기 대신 { }를 사용해요.",
+    keyConceptTitle: "중괄호 { }",
+    keyConceptDescription: "C++은 함수, 조건문, 반복문 등 모든 블록을 { }로 감쌉니다. 여는 {와 닫는 }가 항상 쌍을 이루어야 합니다.",
+    relatedTopics: ["중괄호", "코드 블록", "int main"],
+  },
+  {
+    id: 368,
+    lessonId: "cpp-1",
+    difficulty: "쉬움",
+    question: "빈칸을 채워 화면에 `Hello`를 출력하는 코드를 완성하세요.",
+    code: `#include <iostream>
+
+int main() {
+    std::___ << "Hello" << std::endl;
+    return 0;
+}`,
+    options: ["cout", "print", "output", "write"],
+    correctAnswer: 0,
+    explanation: "std::cout은 C++의 표준 출력 스트림입니다. 파이썬의 print()와 같은 역할이에요.",
+    keyConceptTitle: "std::cout",
+    keyConceptDescription: "std::cout: 화면에 출력하는 객체. << 연산자로 출력할 내용을 연결합니다.",
+    relatedTopics: ["cout", "std::", "출력"],
+  },
+  {
+    id: 369,
+    lessonId: "cpp-1",
+    difficulty: "쉬움",
+    question: "빈칸을 채워 줄바꿈이 있는 출력 코드를 완성하세요.",
+    code: `#include <iostream>
+
+int main() {
+    std::cout << "1번 줄" << std::___;
+    std::cout << "2번 줄" << std::endl;
+    return 0;
+}`,
+    options: ["endl", "newline", "enter", "break"],
+    correctAnswer: 0,
+    explanation: "std::endl은 줄바꿈을 합니다. 이걸 빠뜨리면 '1번 줄2번 줄'처럼 이어서 출력됩니다.",
+    keyConceptTitle: "std::endl",
+    keyConceptDescription: "std::endl: 줄바꿈 + 버퍼 비움. 출력 후 다음 줄로 넘어가고 싶을 때 사용합니다.",
+    relatedTopics: ["endl", "줄바꿈", "cout"],
+  },
+  {
+    id: 370,
+    lessonId: "cpp-1",
+    difficulty: "보통",
+    question: "빈칸을 채워 `main.cpp`를 컴파일하고 `hello`라는 실행 파일을 만드세요.",
+    code: `// 터미널에서 실행할 명령어:
+g++ ___ hello main.cpp`,
+    options: ["-o", "-out", "--output", "-name"],
+    correctAnswer: 0,
+    explanation: "g++ -o 실행파일명 소스파일.cpp 형식으로 씁니다. -o는 output(출력)의 줄임말이에요.",
+    keyConceptTitle: "g++ -o 옵션",
+    keyConceptDescription: "g++ -o 파일명 소스.cpp: 원하는 이름으로 실행 파일 생성. -o 없으면 자동으로 a.out이 생깁니다.",
+    relatedTopics: ["g++", "-o", "컴파일", "실행 파일"],
+  },
+  {
+    id: 371,
+    lessonId: "cpp-1",
+    difficulty: "보통",
+    question: "다음 코드에서 빈칸에 들어갈 말을 완성하세요. (문장 종료 기호)",
+    code: `#include <iostream>
+
+int main() {
+    std::cout << "C++은 재미있다" ___
+    return 0;
+}`,
+    options: [";  (세미콜론)", ". (마침표)", ", (쉼표)", "엔터만 치면 된다"],
+    correctAnswer: 0,
+    explanation: "C++에서 모든 문장은 세미콜론(;)으로 끝나야 합니다. 빼면 컴파일 오류가 납니다.",
+    keyConceptTitle: "세미콜론 ;",
+    keyConceptDescription: "C++의 모든 명령문은 ;으로 끝납니다. 파이썬과 달리 줄바꿈 자체는 문장의 끝을 의미하지 않습니다.",
+    relatedTopics: ["세미콜론", "문법", "컴파일 오류"],
   },
   // ── cpp-2 보충 (cout 심화 & namespace) ──
   {

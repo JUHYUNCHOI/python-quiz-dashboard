@@ -416,3 +416,34 @@ create policy "Teachers read class submissions" on public.code_submissions
 
 create index if not exists idx_code_submissions_user_lesson
   on public.code_submissions(user_id, lesson_id);
+
+-- ======== question_mastery (간격 반복 마스터리) ========
+-- Leitner 5-box 시스템: 문제별 학습 이력 저장
+create table if not exists public.question_mastery (
+  id               bigserial primary key,
+  user_id          uuid not null references auth.users(id) on delete cascade,
+  question_id      int  not null,
+  box              int  not null default 1,
+  correct_streak   int  not null default 0,
+  total_attempts   int  not null default 0,
+  total_correct    int  not null default 0,
+  last_review_date text,
+  next_review_date text,
+  last_grade       text,
+  updated_at       timestamptz not null default now(),
+  unique (user_id, question_id)
+);
+
+alter table public.question_mastery enable row level security;
+
+create policy "Users can manage own question mastery"
+  on public.question_mastery
+  for all
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
+
+create index if not exists idx_question_mastery_user
+  on public.question_mastery(user_id);
+
+create index if not exists idx_question_mastery_next_review
+  on public.question_mastery(user_id, next_review_date);
