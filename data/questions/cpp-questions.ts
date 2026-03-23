@@ -8600,24 +8600,23 @@ cout << "2번 줄" << endl;`,
     lessonId: "cpp-1",
     difficulty: "쉬움",
     question: "다음 Hello World 코드의 올바른 구조 순서는?",
-    code: `// 줄 번호만 보고 순서 맞추기
-(A) int main() {
-(B) using namespace std;
+    code: `// 순서가 뒤섞인 코드 — 올바른 순서는?
+(A)     std::cout << "Hello, World!" << std::endl;
+(B) }
 (C) #include <iostream>
-(D)     cout << "Hello, World!" << endl;
-(E)     return 0;
-(F) }`,
+(D)     return 0;
+(E) int main() {`,
     options: [
-      "C → B → A → D → E → F",
-      "A → C → B → D → E → F",
-      "D → A → C → B → E → F",
-      "C → A → B → D → E → F",
+      "C → E → A → D → B",
+      "E → C → A → D → B",
+      "C → A → E → D → B",
+      "A → C → E → D → B",
     ],
     correctAnswer: 0,
-    explanation: "#include가 맨 위, 그 다음 using namespace std, 그 다음 int main()과 중괄호 안에 실행 코드가 들어갑니다.",
+    explanation: "#include가 맨 위, 그 다음 int main() {, 중괄호 안에 cout과 return 0;, 마지막으로 닫는 }입니다.",
     keyConceptTitle: "C++ 코드 구조",
-    keyConceptDescription: "① #include (헤더) → ② using namespace std → ③ int main() { → ④ 실행 코드 → ⑤ return 0; → ⑥ }",
-    relatedTopics: ["코드 구조", "#include", "main 함수"],
+    keyConceptDescription: "① #include <iostream> → ② int main() { → ③ std::cout 출력 → ④ return 0; → ⑤ }",
+    relatedTopics: ["코드 구조", "#include", "main 함수", "return 0"],
   },
   {
     id: 354,
