@@ -539,26 +539,6 @@ int main() {
     relatedTopics: ["비교 연산자", "bool", "조건"],
   },
   {
-    id: 33,
-    lessonId: "cpp-5",
-    difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int main() {
-    int a = 5;
-    cout << a++ << " " << ++a;
-    return 0;
-}`,
-    options: ["5 7", "6 7", "5 6", "정의되지 않은 동작"],
-    correctAnswer: 3,
-    explanation: "같은 식에서 변수를 여러 번 수정하면 정의되지 않은 동작(undefined behavior)입니다.",
-    keyConceptTitle: "정의되지 않은 동작 (UB)",
-    keyConceptDescription: "하나의 표현식에서 같은 변수를 여러 번 변경하면 UB입니다. 컴파일러마다 결과가 다를 수 있습니다.",
-    relatedTopics: ["undefined behavior", "전위/후위 증감", "시퀀스 포인트"],
-  },
-  {
     id: 37,
     lessonId: "cpp-6",
     animationKey: "cppIfBuilder",
@@ -938,64 +918,6 @@ int main() {
     relatedTopics: ["break", "continue", "반복문"],
   },
   {
-    id: 53,
-    lessonId: "cpp-7",
-    difficulty: "쉬움",
-    question: "다음 switch 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int main() {
-    int x = 2;
-    switch (x) {
-        case 1: cout << "A"; break;
-        case 2: cout << "B"; break;
-        case 3: cout << "C"; break;
-        default: cout << "D";
-    }
-    return 0;
-}`,
-    options: ["A", "B", "C", "D"],
-    correctAnswer: 1,
-    explanation: "x=2이므로 case 2가 매칭되어 \"B\"가 출력됩니다. break가 있으므로 다음 case로 넘어가지 않습니다.",
-    keyConceptTitle: "switch-case 문",
-    keyConceptDescription: "switch는 변수의 값에 따라 여러 분기를 처리합니다. break를 빠뜨리면 fall-through가 발생합니다.",
-    relatedTopics: ["switch", "break", "fall-through"],
-    animationKey: "cppSwitchBuilder",
-  },
-  {
-    id: 54,
-    lessonId: "cpp-7",
-    difficulty: "쉬움",
-    question: "다음 switch 코드에서 break를 빠뜨리면 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int main() {
-    int x = 1;
-    switch (x) {
-        case 1: cout << "A";
-        case 2: cout << "B";
-        case 3: cout << "C";
-        default: cout << "D";
-    }
-    return 0;
-}`,
-    options: ["A", "AB", "ABCD", "AD"],
-    correctAnswer: 2,
-    explanation: "break가 없으면 fall-through가 발생하여 case 1 이후의 모든 코드가 실행됩니다. A, B, C, D 모두 출력됩니다.",
-    keyConceptTitle: "switch fall-through",
-    keyConceptDescription: "break가 없으면 매칭된 case 이후의 모든 case가 순서대로 실행됩니다. 의도적 fall-through가 아니면 반드시 break를 넣으세요.",
-    codeComparison: {
-      wrong: `case 1: cout << "A";  // break 없음!
-case 2: cout << "B";  // 여기도 실행됨`,
-      correct: `case 1: cout << "A"; break;
-case 2: cout << "B"; break;`,
-    },
-    relatedTopics: ["switch", "fall-through", "break"],
-    animationKey: "cppSwitchBuilder",
-  },
-  {
     id: 55,
     lessonId: "cpp-7",
     difficulty: "쉬움",
@@ -1025,63 +947,6 @@ do { cout << i; i++; } while (i < 5);
 // 최소 1번 실행: "5" 출력`,
     },
     relatedTopics: ["do-while", "while", "반복문"],
-  },
-  {
-    id: 56,
-    lessonId: "cpp-7",
-    difficulty: "쉬움",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int main() {
-    int x = 3;
-    switch(x) {
-        case 1: cout << "하나"; break;
-        case 2: cout << "둘"; break;
-        case 3: cout << "셋"; break;
-        default: cout << "기타";
-    }
-    return 0;
-}`,
-    options: ["하나", "둘", "셋", "기타"],
-    correctAnswer: 2,
-    explanation: "x=3이므로 case 3이 매칭되어 '셋'이 출력됩니다. break가 있으므로 다음 case로 넘어가지 않습니다.",
-    keyConceptTitle: "switch-case 매칭",
-    keyConceptDescription: "switch는 변수의 값에 따라 해당 case로 점프합니다. break가 없으면 fall-through가 발생합니다.",
-    relatedTopics: ["switch", "break", "fall-through"],
-    animationKey: "cppSwitchBuilder",
-  },
-  {
-    id: 57,
-    lessonId: "cpp-7",
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int main() {
-    int x = 2;
-    switch(x) {
-        case 1: cout << "A";
-        case 2: cout << "B";
-        case 3: cout << "C";
-        default: cout << "D";
-    }
-    return 0;
-}`,
-    options: ["B", "BCD", "BC", "ABCD"],
-    correctAnswer: 1,
-    explanation: "break가 없으므로 case 2부터 아래로 모두 실행됩니다(fall-through). B, C, D가 연속 출력됩니다.",
-    keyConceptTitle: "switch fall-through",
-    keyConceptDescription: "break가 없으면 매칭된 case 이후의 모든 case가 연속 실행됩니다. 이를 fall-through라 합니다.",
-    codeComparison: {
-      wrong: `case 2: cout << "B";
-case 3: cout << "C";  // break 없어서 fall-through`,
-      correct: `case 2: cout << "B"; break;
-case 3: cout << "C"; break;`,
-    },
-    relatedTopics: ["switch", "break", "fall-through"],
   },
   {
     id: 58,
@@ -1380,161 +1245,6 @@ int main() {
     relatedTopics: ["함수 오버로딩", "매개변수", "시그니처"],
   },
   {
-    id: 70,
-    lessonId: "cpp-8",
-    animationKey: "cppFunctionBuilder",
-    difficulty: "보통",
-    question: "다음 코드의 버그는 무엇인가?",
-    code: `#include <iostream>
-using namespace std;
-
-int main() {
-    int n = 5;
-    int factorial = 1;
-    for (int i = 0; i <= n; i++) {
-        factorial *= i;
-    }
-    cout << factorial;
-    return 0;
-}`,
-    options: ["n이 너무 크다", "i=0부터 시작하여 결과가 항상 0", "factorial 초기값이 잘못됨", "for문 조건이 잘못됨"],
-    correctAnswer: 1,
-    explanation: "i=0일 때 factorial *= 0이 되어 결과가 0이 됩니다. 팩토리얼은 i=1부터 시작해야 합니다.",
-    keyConceptTitle: "반복문 초기값 버그",
-    keyConceptDescription: "곱셈 누적에서 0을 곱하면 결과가 항상 0이 됩니다. 초기값과 시작 인덱스를 주의하세요.",
-    codeComparison: {
-      wrong: `for (int i = 0; i <= n; i++)
-    factorial *= i;  // 0을 곱하면 0!`,
-      correct: `for (int i = 1; i <= n; i++)
-    factorial *= i;  // 1부터 시작`,
-    },
-    relatedTopics: ["디버깅", "반복문 초기값", "팩토리얼"],
-  },
-  {
-    id: 71,
-    lessonId: "cpp-8",
-    difficulty: "쉬움",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int add(int a, int b) {
-    return a + b;
-}
-
-int main() {
-    cout << add(3, 4);
-    return 0;
-}`,
-    options: ["7", "34", "12", "컴파일 오류"],
-    correctAnswer: 0,
-    explanation: "add(3, 4)는 3 + 4 = 7을 반환합니다. return문으로 함수 결과를 돌려줍니다.",
-    keyConceptTitle: "함수의 반환값",
-    keyConceptDescription: "return문은 함수의 결과를 호출자에게 돌려줍니다. 반환 타입과 return 값의 타입이 일치해야 합니다.",
-    relatedTopics: ["함수 정의", "return", "매개변수"],
-  },
-  {
-    id: 72,
-    lessonId: "cpp-8",
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int mystery(int n) {
-    if (n == 0) return 0;
-    return n % 10 + mystery(n / 10);
-}
-
-int main() {
-    cout << mystery(1234);
-    return 0;
-}`,
-    options: ["1234", "10", "4", "7"],
-    correctAnswer: 1,
-    explanation: "각 자릿수의 합을 재귀로 구합니다. 1+2+3+4 = 10. n%10은 마지막 자리, n/10은 나머지 자릿수입니다.",
-    keyConceptTitle: "자릿수 합 재귀",
-    keyConceptDescription: "n%10으로 마지막 자릿수를, n/10으로 나머지 수를 분리하여 재귀적으로 자릿수 합을 구합니다.",
-    relatedTopics: ["재귀", "자릿수 분리", "% 연산"],
-  },
-  {
-    id: 73,
-    lessonId: "cpp-8",
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-void printRange(int start, int end) {
-    if (start > end) return;
-    cout << start << " ";
-    printRange(start + 1, end);
-}
-
-int main() {
-    printRange(3, 7);
-    return 0;
-}`,
-    options: ["3 4 5 6 7", "7 6 5 4 3", "3 4 5 6", "4 5 6 7"],
-    correctAnswer: 0,
-    explanation: "start부터 end까지 재귀로 출력합니다. 3→4→5→6→7 순서로 출력 후 8>7이므로 종료합니다.",
-    keyConceptTitle: "재귀로 범위 출력",
-    keyConceptDescription: "재귀 호출 전에 출력하면 순방향, 후에 출력하면 역방향이 됩니다.",
-    relatedTopics: ["재귀", "종료 조건", "순방향/역방향"],
-  },
-  {
-    id: 74,
-    lessonId: "cpp-8",
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int count = 0;
-
-void func() {
-    count++;
-}
-
-int main() {
-    func();
-    func();
-    func();
-    cout << count;
-    return 0;
-}`,
-    options: ["0", "1", "3", "컴파일 오류"],
-    correctAnswer: 2,
-    explanation: "count는 전역 변수이므로 func()를 3번 호출하면 count가 3이 됩니다.",
-    keyConceptTitle: "전역 변수",
-    keyConceptDescription: "전역 변수는 모든 함수에서 접근할 수 있으며, 프로그램 종료 시까지 유지됩니다.",
-    relatedTopics: ["전역 변수", "지역 변수", "스코프"],
-  },
-  {
-    id: 75,
-    lessonId: "cpp-8",
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int power(int base, int exp) {
-    if (exp == 0) return 1;
-    return base * power(base, exp - 1);
-}
-
-int main() {
-    cout << power(2, 10);
-    return 0;
-}`,
-    options: ["20", "100", "1024", "512"],
-    correctAnswer: 2,
-    explanation: "2^10 = 1024. 재귀로 base를 exp번 곱합니다. 2*2*2*...*2 (10번) = 1024.",
-    keyConceptTitle: "거듭제곱 재귀",
-    keyConceptDescription: "power(b, e) = b * power(b, e-1). base case는 exp==0일 때 1. O(n)이며 분할정복으로 O(log n) 가능.",
-    relatedTopics: ["거듭제곱", "재귀", "빠른 거듭제곱"],
-  },
-  {
     id: 76,
     lessonId: "cpp-8",
     difficulty: "보통",
@@ -1556,106 +1266,6 @@ int main() {
     keyConceptTitle: "기본 매개변수",
     keyConceptDescription: "함수 매개변수에 기본값을 지정하면 호출 시 생략할 수 있습니다. 기본값은 뒤쪽 매개변수부터 지정해야 합니다.",
     relatedTopics: ["기본 매개변수", "함수 호출", "인자 생략"],
-  },
-  {
-    id: 77,
-    lessonId: "cpp-8",
-    difficulty: "어려움",
-    question: "다음 코드에서 출력되는 값은?",
-    code: `#include <iostream>
-using namespace std;
-
-int factorial(int n) {
-    if (n <= 1) return 1;
-    return n * factorial(n - 1);
-}
-
-int main() {
-    cout << factorial(5);
-    return 0;
-}`,
-    options: ["15", "25", "120", "컴파일 오류"],
-    correctAnswer: 2,
-    explanation: "5! = 5 × 4 × 3 × 2 × 1 = 120. 재귀 함수가 n=1일 때 1을 반환하며 종료됩니다.",
-    keyConceptTitle: "재귀 함수 (Recursion)",
-    keyConceptDescription: "재귀 함수는 자기 자신을 호출합니다. 반드시 종료 조건(base case)이 필요합니다.",
-    relatedTopics: ["재귀", "base case", "스택 오버플로우"],
-  },
-  {
-    id: 78,
-    lessonId: "cpp-8",
-    difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-#include <functional>
-using namespace std;
-
-int main() {
-    auto adder = [](int x) {
-        return [x](int y) { return x + y; };
-    };
-    auto add5 = adder(5);
-    cout << add5(3) << " " << add5(10);
-    return 0;
-}`,
-    options: ["8 15", "5 5", "3 10", "컴파일 오류"],
-    correctAnswer: 0,
-    explanation: "adder(5)는 x=5를 캡처한 람다를 반환합니다. add5(3)=5+3=8, add5(10)=5+10=15.",
-    keyConceptTitle: "람다와 클로저",
-    keyConceptDescription: "람다가 외부 변수를 캡처하면 클로저가 됩니다. 함수를 반환하는 고차 함수 패턴입니다.",
-    relatedTopics: ["람다", "클로저", "캡처"],
-  },
-  {
-    id: 79,
-    lessonId: "cpp-8",
-    difficulty: "어려움",
-    question: "다음 코드에서 static 키워드의 역할은?",
-    code: `#include <iostream>
-using namespace std;
-
-void counter() {
-    static int count = 0;
-    count++;
-    cout << count << " ";
-}
-
-int main() {
-    counter();
-    counter();
-    counter();
-    return 0;
-}`,
-    options: ["1 1 1", "1 2 3", "0 1 2", "컴파일 오류"],
-    correctAnswer: 1,
-    explanation: "static 지역 변수는 함수가 끝나도 값이 유지됩니다. 최초 1번만 초기화되고 이후 호출에서 이전 값을 기억합니다.",
-    keyConceptTitle: "static 지역 변수",
-    keyConceptDescription: "static 지역 변수는 함수 호출 사이에 값이 유지됩니다. 프로그램 종료까지 메모리에 남아있습니다.",
-    relatedTopics: ["static", "지역 변수", "생명주기"],
-  },
-  {
-    id: 80,
-    lessonId: "cpp-8",
-    difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-void printReverse(int n) {
-    if (n == 0) return;
-    cout << n % 10;
-    printReverse(n / 10);
-}
-
-int main() {
-    printReverse(12345);
-    return 0;
-}`,
-    options: ["12345", "54321", "5", "1"],
-    correctAnswer: 1,
-    explanation: "n%10으로 마지막 자릿수를 먼저 출력하고 n/10으로 재귀합니다. 5→4→3→2→1 순서로 출력됩니다.",
-    keyConceptTitle: "재귀로 숫자 뒤집기",
-    keyConceptDescription: "n%10은 마지막 자릿수, n/10은 마지막 자리를 제거한 수입니다. 출력 순서에 따라 순/역방향이 결정됩니다.",
-    relatedTopics: ["재귀", "자릿수 분리", "숫자 뒤집기"],
   },
   {
     id: 81,
@@ -1881,29 +1491,6 @@ int main() {
     relatedTopics: ["2차원 배열", "이중 for문", "행렬"],
   },
   {
-    id: 91,
-    lessonId: "cpp-9",
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-#include <vector>
-using namespace std;
-
-int main() {
-    vector<int> v = {1, 2, 3, 4, 5};
-    v.erase(v.begin() + 1);
-    v.insert(v.begin(), 10);
-    for (int x : v) cout << x << " ";
-    return 0;
-}`,
-    options: ["10 1 3 4 5", "10 1 2 3 4 5", "1 10 3 4 5", "10 2 3 4 5"],
-    correctAnswer: 0,
-    explanation: "erase(begin+1)로 2가 제거되어 {1,3,4,5}. insert(begin, 10)으로 맨 앞에 10 추가하여 {10,1,3,4,5}.",
-    keyConceptTitle: "vector insert/erase",
-    keyConceptDescription: "erase(iterator)로 특정 위치 삭제, insert(iterator, value)로 특정 위치에 삽입합니다.",
-    relatedTopics: ["erase", "insert", "iterator"],
-  },
-  {
     id: 92,
     lessonId: "cpp-9",
     difficulty: "보통",
@@ -1953,30 +1540,6 @@ int main() {
     relatedTopics: ["배열 초기화", "값 초기화", "쓰레기 값"],
   },
   {
-    id: 94,
-    lessonId: "cpp-9",
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int main() {
-    int arr[] = {3, 1, 4, 1, 5, 9};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    int minVal = arr[0];
-    for (int i = 1; i < n; i++)
-        if (arr[i] < minVal) minVal = arr[i];
-    cout << minVal;
-    return 0;
-}`,
-    options: ["3", "1", "9", "0"],
-    correctAnswer: 1,
-    explanation: "배열에서 최솟값을 찾습니다. 1이 가장 작은 값입니다. sizeof(arr)/sizeof(arr[0])으로 배열 크기를 구합니다.",
-    keyConceptTitle: "배열 최솟값 찾기",
-    keyConceptDescription: "배열의 최솟값은 첫 원소를 기준으로 하나씩 비교하며 갱신합니다. sizeof 트릭으로 배열 크기를 구합니다.",
-    relatedTopics: ["최솟값", "sizeof", "배열 순회"],
-  },
-  {
     id: 95,
     lessonId: "cpp-9",
     difficulty: "쉬움",
@@ -1996,29 +1559,6 @@ int main() {
     keyConceptTitle: "#include 전처리 지시문",
     keyConceptDescription: "#include는 컴파일 전에 헤더 파일의 내용을 삽입합니다. <>는 시스템 헤더, \"\"는 사용자 헤더입니다.",
     relatedTopics: ["#include", "헤더 파일", "전처리기"],
-  },
-  {
-    id: 96,
-    lessonId: "cpp-9",
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-#include <vector>
-using namespace std;
-
-int main() {
-    vector<int> v = {10, 20, 30, 40, 50};
-    auto it = v.begin() + 2;
-    v.insert(it, 25);
-    cout << v.size() << " " << v[2] << " " << v[3];
-    return 0;
-}`,
-    options: ["5 25 30", "6 25 30", "5 30 25", "6 30 25"],
-    correctAnswer: 1,
-    explanation: "begin()+2 위치에 25를 삽입합니다. {10,20,25,30,40,50}. size=6, v[2]=25, v[3]=30.",
-    keyConceptTitle: "vector::insert",
-    keyConceptDescription: "insert(iterator, value)는 해당 위치 앞에 원소를 삽입합니다. 기존 원소들은 뒤로 밀립니다.",
-    relatedTopics: ["insert", "vector", "iterator"],
   },
   {
     id: 97,
@@ -2280,31 +1820,6 @@ int main() {
     relatedTopics: ["string", "replace", "문자열 조작"],
   },
   {
-    id: 108,
-    lessonId: "cpp-11",
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-#include <sstream>
-#include <string>
-using namespace std;
-
-int main() {
-    string s = "42 3.14 hello";
-    istringstream iss(s);
-    int n; double d; string word;
-    iss >> n >> d >> word;
-    cout << n << " " << word;
-    return 0;
-}`,
-    options: ["42 hello", "42 3.14", "3.14 hello", "컴파일 오류"],
-    correctAnswer: 0,
-    explanation: "istringstream은 문자열을 스트림처럼 읽습니다. >>로 공백 기준으로 분리하여 n=42, d=3.14, word=\"hello\"를 읽습니다.",
-    keyConceptTitle: "stringstream (문자열 스트림)",
-    keyConceptDescription: "istringstream은 문자열을 입력 스트림처럼 파싱합니다. 문자열에서 숫자를 추출하거나 공백으로 분리할 때 유용합니다.",
-    relatedTopics: ["stringstream", "istringstream", "파싱"],
-  },
-  {
     id: 109,
     lessonId: "cpp-4",
     difficulty: "보통",
@@ -2464,34 +1979,6 @@ int main() {
     keyConceptTitle: "string::find",
     keyConceptDescription: "find()는 부분 문자열의 시작 위치를 반환합니다. 찾지 못하면 string::npos를 반환합니다.",
     relatedTopics: ["find", "npos", "문자열 검색"],
-  },
-  {
-    id: 116,
-    lessonId: "cpp-11",
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-#include <string>
-#include <cctype>
-using namespace std;
-
-int main() {
-    string s = "Hello World 123";
-    int alpha = 0, digit = 0, space = 0;
-    for (char c : s) {
-        if (isalpha(c)) alpha++;
-        else if (isdigit(c)) digit++;
-        else if (isspace(c)) space++;
-    }
-    cout << alpha << " " << digit << " " << space;
-    return 0;
-}`,
-    options: ["10 3 2", "8 3 2", "10 3 3", "8 3 3"],
-    correctAnswer: 0,
-    explanation: "Hello(5) + World(5) = 10글자, 123 = 3숫자, 공백 2개. isalpha/isdigit/isspace로 분류합니다.",
-    keyConceptTitle: "문자 분류 함수",
-    keyConceptDescription: "cctype 헤더의 isalpha(), isdigit(), isspace() 등으로 문자 종류를 판별합니다.",
-    relatedTopics: ["isalpha", "isdigit", "cctype"],
   },
   {
     id: 117,
@@ -2677,180 +2164,6 @@ int main() {
     relatedTopics: ["값에 의한 전달", "포인터", "함수 매개변수"],
   },
   {
-    id: 124,
-    lessonId: "cpp-12",
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int main() {
-    int x = 10;
-    int* p = &x;
-    cout << *p + 5;
-    return 0;
-}`,
-    options: ["15", "메모리 주소 + 5", "컴파일 오류", "10"],
-    correctAnswer: 0,
-    explanation: "*p는 x의 값인 10입니다. 10 + 5 = 15가 출력됩니다.",
-    keyConceptTitle: "포인터 역참조와 연산",
-    keyConceptDescription: "*p로 포인터가 가리키는 값을 가져온 후 일반 연산을 수행할 수 있습니다.",
-    relatedTopics: ["포인터", "역참조", "연산자 우선순위"],
-    animationKey: "cppPointerBuilder",
-  },
-  {
-    id: 125,
-    lessonId: "cpp-12",
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int main() {
-    int* p = new int(42);
-    cout << *p << endl;
-    delete p;
-    return 0;
-}`,
-    options: ["0", "42", "메모리 주소", "컴파일 오류"],
-    correctAnswer: 1,
-    explanation: "new int(42)는 힙에 정수를 할당하고 42로 초기화합니다. *p로 역참조하면 42가 출력됩니다.",
-    keyConceptTitle: "new와 delete",
-    keyConceptDescription: "new는 힙에 메모리를 동적 할당하고, delete로 해제합니다. 해제하지 않으면 메모리 누수가 발생합니다.",
-    codeComparison: {
-      wrong: `int* p = new int(42);
-// delete 안 함 → 메모리 누수!`,
-      correct: `int* p = new int(42);
-delete p;  // 반드시 해제`,
-    },
-    relatedTopics: ["new", "delete", "힙 메모리"],
-    animationKey: "cppPointerBuilder",
-  },
-  {
-    id: 126,
-    lessonId: "cpp-12",
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int main() {
-    int* arr = new int[5]{10, 20, 30, 40, 50};
-    cout << arr[2] << endl;
-    delete[] arr;
-    return 0;
-}`,
-    options: ["10", "20", "30", "컴파일 오류"],
-    correctAnswer: 2,
-    explanation: "new int[5]로 동적 배열을 할당합니다. arr[2]는 세 번째 요소(30)입니다. 배열은 delete[]로 해제합니다.",
-    keyConceptTitle: "동적 배열 (new[]와 delete[])",
-    keyConceptDescription: "new 타입[크기]로 동적 배열을 할당합니다. 반드시 delete[]로 해제해야 합니다. delete만 쓰면 정의되지 않은 동작입니다.",
-    codeComparison: {
-      wrong: `int* arr = new int[5];
-delete arr;    // 오류! 배열은 delete[]로`,
-      correct: `int* arr = new int[5];
-delete[] arr;  // 배열 해제`,
-    },
-    relatedTopics: ["동적 배열", "new[]", "delete[]"],
-  },
-  {
-    id: 127,
-    lessonId: "cpp-12",
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int main() {
-    int* p = nullptr;
-    if (p == nullptr) {
-        cout << "null";
-    } else {
-        cout << *p;
-    }
-    return 0;
-}`,
-    options: ["0", "null", "컴파일 오류", "런타임 오류"],
-    correctAnswer: 1,
-    explanation: "nullptr은 아무것도 가리키지 않는 포인터입니다. p == nullptr이 참이므로 \"null\"이 출력됩니다.",
-    keyConceptTitle: "nullptr (널 포인터)",
-    keyConceptDescription: "nullptr은 C++11에서 도입된 널 포인터 상수입니다. 포인터를 사용하기 전에 nullptr 검사를 하는 것이 안전합니다.",
-    codeComparison: {
-      wrong: `int* p = NULL;  // C 스타일 (비권장)`,
-      correct: `int* p = nullptr;  // C++11 스타일 (권장)`,
-    },
-    relatedTopics: ["nullptr", "NULL", "포인터 안전성"],
-    animationKey: "cppPointerBuilder",
-  },
-  {
-    id: 128,
-    lessonId: "cpp-12",
-    difficulty: "보통",
-    question: "다음 코드에서 sizeof를 이용한 배열 크기 계산 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int main() {
-    int arr[] = {10, 20, 30, 40, 50};
-    int size = sizeof(arr) / sizeof(arr[0]);
-    cout << size;
-    return 0;
-}`,
-    options: ["5", "20", "4", "1"],
-    correctAnswer: 0,
-    explanation: "sizeof(arr)는 배열 전체 크기(20바이트), sizeof(arr[0])는 int 하나 크기(4바이트). 20/4 = 5(요소 개수)입니다.",
-    keyConceptTitle: "sizeof로 배열 크기 구하기",
-    keyConceptDescription: "sizeof(배열) / sizeof(배열[0])으로 배열의 요소 개수를 구할 수 있습니다. 단, 함수에 전달된 포인터에서는 동작하지 않습니다.",
-    relatedTopics: ["sizeof", "배열 크기", "포인터 감쇠"],
-  },
-  {
-    id: 129,
-    lessonId: "cpp-12",
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int main() {
-    int x = 10;
-    int& ref = x;
-    ref = 20;
-    cout << x << " " << ref;
-    return 0;
-}`,
-    options: ["10 20", "20 20", "10 10", "컴파일 오류"],
-    correctAnswer: 1,
-    explanation: "ref는 x의 참조(별명)입니다. ref를 변경하면 x도 함께 변경됩니다. 둘 다 같은 메모리를 가리킵니다.",
-    keyConceptTitle: "참조 변수 (Reference)",
-    keyConceptDescription: "int& ref = x는 x의 별명을 만듭니다. 참조는 선언 시 반드시 초기화해야 하며, 다른 변수를 참조하도록 변경할 수 없습니다.",
-    codeComparison: {
-      wrong: `int& ref;  // 오류! 참조는 반드시 초기화`,
-      correct: `int& ref = x;  // OK! x의 별명 생성`,
-    },
-    relatedTopics: ["참조", "포인터", "별명"],
-  },
-  {
-    id: 130,
-    lessonId: "cpp-12",
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int main() {
-    int arr[5] = {10, 20, 30, 40, 50};
-    int* p = arr;
-    cout << *(p + 3);
-    return 0;
-}`,
-    options: ["10", "30", "40", "50"],
-    correctAnswer: 2,
-    explanation: "p는 arr의 첫 원소를 가리킵니다. p+3은 4번째 원소(arr[3])를 가리키므로 *(p+3) = 40입니다.",
-    keyConceptTitle: "포인터 산술과 배열",
-    keyConceptDescription: "배열 이름은 첫 원소의 포인터입니다. p+n은 n번째 뒤의 원소를 가리키고, *(p+n) == arr[n]입니다.",
-    relatedTopics: ["포인터 산술", "배열과 포인터", "역참조"],
-  },
-  {
     id: 131,
     lessonId: "cpp-12",
     difficulty: "쉬움",
@@ -2871,30 +2184,6 @@ int main() {
     keyConceptTitle: "참조 변수",
     keyConceptDescription: "int& ref = a는 a의 별명을 만듭니다. ref와 a는 같은 메모리를 공유합니다.",
     relatedTopics: ["참조", "별명", "포인터와의 차이"],
-  },
-  {
-    id: 132,
-    lessonId: "cpp-12",
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int main() {
-    int arr[] = {10, 20, 30};
-    int* p = arr;
-    p++;
-    cout << *p << " ";
-    p++;
-    cout << *p;
-    return 0;
-}`,
-    options: ["10 20", "20 30", "10 30", "30 30"],
-    correctAnswer: 1,
-    explanation: "p는 arr[0]을 가리킵니다. p++하면 arr[1](20), 다시 p++하면 arr[2](30)을 가리킵니다.",
-    keyConceptTitle: "포인터 증감",
-    keyConceptDescription: "포인터에 ++를 하면 다음 원소로 이동합니다. int*이면 4바이트(int 크기)만큼 주소가 증가합니다.",
-    relatedTopics: ["포인터 산술", "배열 순회", "포인터 증감"],
   },
   {
     id: 133,
@@ -3289,40 +2578,6 @@ int main() {
     relatedTopics: ["unique_ptr", "move", "소유권", "RAII"],
   },
   {
-    id: 148,
-    lessonId: "cpp-6",
-    difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int main() {
-    int x = 10;
-    if (x > 5)
-        if (x > 20)
-            cout << "A";
-    else
-        cout << "B";
-    return 0;
-}`,
-    options: ["A", "B", "아무것도 출력 안 됨", "AB"],
-    correctAnswer: 1,
-    explanation: "else는 가장 가까운 if와 짝이 됩니다. 즉 if(x>20)의 else이므로, x>5이고 x<=20이면 'B'가 출력됩니다.",
-    keyConceptTitle: "dangling else 문제",
-    keyConceptDescription: "else는 항상 가장 가까운 if와 매칭됩니다. 중괄호를 사용하면 의도를 명확히 할 수 있습니다.",
-    codeComparison: {
-      wrong: `if (x > 5)
-    if (x > 20)
-        cout << "A";
-else  // if(x>20)의 else!`,
-      correct: `if (x > 5) {
-    if (x > 20)
-        cout << "A";
-} else  // if(x>5)의 else`,
-    },
-    relatedTopics: ["dangling else", "중괄호", "코드 가독성"],
-  },
-  {
     id: 149,
     lessonId: "cpp-13",
     difficulty: "어려움",
@@ -3562,28 +2817,6 @@ int main() {
     keyConceptTitle: "string 연결",
     keyConceptDescription: "+= 또는 + 연산자로 string을 이어붙일 수 있습니다. append() 메서드도 사용 가능합니다.",
     relatedTopics: ["string 연결", "append", "연산자 오버로딩"],
-  },
-  {
-    id: 159,
-    lessonId: "cpp-12",
-    difficulty: "보통",
-    question: "다음 코드에서 함수 오버로딩이 올바르게 동작하는 이유는?",
-    code: `#include <iostream>
-using namespace std;
-
-int square(int x) { return x * x; }
-double square(double x) { return x * x; }
-
-int main() {
-    cout << square(3) << " " << square(2.5);
-    return 0;
-}`,
-    options: ["매개변수 이름이 다르다", "반환 타입이 다르다", "매개변수 타입이 다르다", "함수 이름이 다르다"],
-    correctAnswer: 2,
-    explanation: "함수 오버로딩은 같은 이름이지만 매개변수의 타입이나 개수가 다를 때 가능합니다.",
-    keyConceptTitle: "함수 오버로딩",
-    keyConceptDescription: "같은 이름의 함수를 매개변수 타입/개수를 달리하여 여러 개 정의할 수 있습니다. 반환 타입만 다르면 불가능합니다.",
-    relatedTopics: ["오버로딩", "다형성", "매개변수"],
   },
   {
     id: 160,
@@ -4484,34 +3717,6 @@ Base* p = new Derived();
 p->show();  // Derived::show() 호출!`,
     },
     relatedTopics: ["virtual", "정적 바인딩", "동적 바인딩"],
-  },
-  {
-    id: 188,
-    lessonId: "cpp-9",
-    difficulty: "어려움",
-    question: "다음 코드에서 emplace_back과 push_back의 차이는?",
-    code: `#include <iostream>
-#include <vector>
-using namespace std;
-
-struct Point {
-    int x, y;
-    Point(int x, int y) : x(x), y(y) {}
-};
-
-int main() {
-    vector<Point> v;
-    v.push_back(Point(1, 2));   // 임시 객체 생성 후 복사/이동
-    v.emplace_back(3, 4);       // 직접 생성 (인자 전달)
-    cout << v[1].x << " " << v[1].y;
-    return 0;
-}`,
-    options: ["1 2", "3 4", "컴파일 오류", "0 0"],
-    correctAnswer: 1,
-    explanation: "emplace_back(3, 4)는 벡터 내부에서 직접 Point(3, 4)를 생성합니다. 불필요한 복사/이동을 피할 수 있습니다.",
-    keyConceptTitle: "emplace_back vs push_back",
-    keyConceptDescription: "emplace_back은 생성자 인자를 직접 받아 객체를 제자리에서 생성합니다. push_back보다 효율적일 수 있습니다.",
-    relatedTopics: ["emplace_back", "push_back", "vector", "이동 의미론"],
   },
   {
     id: 189,
@@ -9103,5 +8308,153 @@ cout << tries << "번 만에 맞췄어요!";`,
     keyConceptTitle: "카운터 변수 패턴",
     keyConceptDescription: "int count = 0; ... count++; 패턴은 반복 횟수, 시도 횟수, 조건 만족 횟수 등을 셀 때 가장 기본적인 패턴입니다.",
     relatedTopics: ["카운터", "int", "++연산자"],
+  },
+  {
+    id: 372,
+    lessonId: "cpp-3",
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+using namespace std;
+int main() {
+    int a = 7, b = 2;
+    cout << a / b << endl;
+    return 0;
+}`,
+    options: ["3", "3.5", "4", "컴파일 오류"],
+    correctAnswer: 0,
+    explanation: "int끼리 나누면 소수점이 버려져요. 7 ÷ 2 = 3.5지만 int/int = 3입니다. 결과를 3.5로 만들려면 (double)a / b 또는 7.0 / 2처럼 double로 변환해야 해요.",
+    keyConceptTitle: "정수 나눗셈 함정",
+    keyConceptDescription: "int / int는 항상 정수 결과를 반환합니다. 소수점 결과가 필요하면 피연산자 중 하나를 double로 변환하세요.",
+    relatedTopics: ["정수 나눗셈", "int", "double"],
+  },
+  {
+    id: 373,
+    lessonId: "cpp-3",
+    difficulty: "쉬움",
+    question: "문자열 \"42\"를 정수로 바꾸는 올바른 코드는?",
+    code: "",
+    options: [
+      "int n = int(\"42\");",
+      "int n = stoi(\"42\");",
+      "int n = to_int(\"42\");",
+      "int n = (\"42\");",
+    ],
+    correctAnswer: 1,
+    explanation: "문자열 → 정수 변환은 stoi(), 문자열 → 실수 변환은 stod()를 사용해요. to_int()는 C++에 없는 함수예요!",
+    keyConceptTitle: "타입 변환 함수",
+    keyConceptDescription: "stoi(문자열) → int, stod(문자열) → double, to_string(숫자) → string. 세 가지를 꼭 기억하세요!",
+    relatedTopics: ["stoi", "stod", "to_string", "타입 변환"],
+  },
+  {
+    id: 374,
+    lessonId: "cpp-3",
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+#include <string>
+using namespace std;
+int main() {
+    int score = 95;
+    string msg = "점수: " + to_string(score);
+    cout << msg << endl;
+    return 0;
+}`,
+    options: ["점수: 95", "점수: score", "컴파일 오류", "점수: 0"],
+    correctAnswer: 0,
+    explanation: "to_string(95)은 정수 95를 문자열 \"95\"로 변환해요. 그래서 \"점수: \" + \"95\" = \"점수: 95\"가 출력됩니다.",
+    keyConceptTitle: "to_string() 함수",
+    keyConceptDescription: "숫자를 문자열로 바꿀 때 to_string()을 사용해요. 문자열과 숫자를 +로 직접 합치면 컴파일 오류가 나므로 반드시 to_string()으로 변환 후 합쳐야 해요.",
+    relatedTopics: ["to_string", "타입 변환", "string"],
+  },
+  {
+    id: 375,
+    lessonId: "cpp-5",
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+using namespace std;
+int main() {
+    int a = 5;
+    cout << a++ << endl;
+    cout << ++a << endl;
+    return 0;
+}`,
+    options: ["5\n7", "6\n7", "5\n6", "6\n6"],
+    correctAnswer: 0,
+    explanation: "a++(후위): 현재 값(5)을 출력한 후 증가 → a=6. ++a(전위): 먼저 증가(a=7)한 후 출력 → 7. 결과: 5, 7",
+    keyConceptTitle: "전위 vs 후위 증감",
+    keyConceptDescription: "x++는 현재 값을 먼저 사용하고 나중에 증가, ++x는 먼저 증가하고 그 값을 사용합니다.",
+    relatedTopics: ["전위 증감", "후위 증감", "++", "--"],
+  },
+  {
+    id: 376,
+    lessonId: "cpp-5",
+    difficulty: "쉬움",
+    question: "다음 코드에서 b의 값은?",
+    code: `int a = 10;
+int b = ++a;`,
+    options: ["10", "11", "12", "컴파일 오류"],
+    correctAnswer: 1,
+    explanation: "++a(전위)는 먼저 a를 11로 증가시킨 후 b에 대입해요. b = 11입니다. a++였다면 b = 10, a = 11이 되었을 거예요.",
+    keyConceptTitle: "전위 증감 대입",
+    keyConceptDescription: "++x: 증가 먼저, 그 값 사용. x++: 현재 값 사용, 나중에 증가.",
+    relatedTopics: ["전위 증감", "++"],
+  },
+  {
+    id: 377,
+    lessonId: "cpp-8",
+    difficulty: "보통",
+    question: "다음 코드가 컴파일 오류 없이 동작하려면 빈칸에 무엇이 필요한가?",
+    code: `#include <iostream>
+using namespace std;
+
+// 빈칸
+
+int main() {
+    cout << add(3, 4) << endl;
+    return 0;
+}
+
+int add(int a, int b) {
+    return a + b;
+}`,
+    options: [
+      "int add(int a, int b);",
+      "int add();",
+      "add(int, int);",
+      "아무것도 필요없다",
+    ],
+    correctAnswer: 0,
+    explanation: "C++은 위에서 아래로 읽어요. main()에서 add()를 호출할 때 아직 add()가 정의되지 않았으므로 오류가 발생해요. 함수 프로토타입(원형 선언)을 위에 적어두면 해결됩니다.",
+    keyConceptTitle: "함수 프로토타입",
+    keyConceptDescription: "함수 정의가 호출보다 아래에 있으면 컴파일 오류가 발생해요. 함수 프로토타입(반환타입 함수명(매개변수타입);)을 상단에 선언하면 해결됩니다.",
+    relatedTopics: ["함수 프로토타입", "전방 선언", "컴파일"],
+  },
+  {
+    id: 378,
+    lessonId: "cpp-8",
+    difficulty: "쉬움",
+    question: "다음 중 올바른 설명은?",
+    code: `// 함수 A
+int getDouble(int x) {
+    return x * 2;
+}
+
+// 함수 B
+void printDouble(int x) {
+    cout << x * 2 << endl;
+}`,
+    options: [
+      "두 함수 모두 화면에 출력한다",
+      "getDouble은 값을 돌려주고, printDouble은 화면에 출력한다",
+      "return이 있어야 cout도 사용할 수 있다",
+      "void 함수는 아무것도 할 수 없다",
+    ],
+    correctAnswer: 1,
+    explanation: "return은 함수를 호출한 곳에 값을 '돌려줍니다'. cout은 화면에 '출력'합니다. getDouble(5)는 10을 돌려줘서 다른 계산에 쓸 수 있고, printDouble(5)는 10을 화면에 출력만 합니다.",
+    keyConceptTitle: "return vs cout",
+    keyConceptDescription: "return: 함수 호출자에게 값을 반환 (다른 계산에 활용 가능). cout: 화면에 출력 (값이 사라짐). 재사용 가능한 함수를 만들려면 return을 사용하세요.",
+    relatedTopics: ["return", "cout", "void", "함수"],
   },
 ];
