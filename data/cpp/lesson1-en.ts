@@ -290,12 +290,13 @@ Click **Next →** in the animation below to follow the flow 👇`,
         },
         {
           id: "ch3-practice",
-          type: "practice" as const,
+          type: "explain" as const,
           title: "✋ Compile and run it yourself!",
-          content: `Time to run your first C++ code!
+          content: `Let's run the code we've been learning about — for real this time!
 
-Type the code below into the editor and hit **Run** 👇
+**Step 1** — Open VS Code (or any editor) and create a file called \`main.cpp\`.
 
+**Step 2** — Type in this code:
 \`\`\`cpp
 #include <iostream>
 
@@ -303,14 +304,26 @@ int main() {
     std::cout << "Hello, World!" << std::endl;
     return 0;
 }
-\`\`\``,
-          code: `#include <iostream>
+\`\`\`
 
-int main() {
-    std::cout << "Hello, World!" << std::endl;
-    return 0;
-}`,
-          expectedOutput: `Hello, World!`
+**Step 3** — Open a terminal, navigate to the folder, and compile:
+\`\`\`
+g++ main.cpp
+\`\`\`
+
+**Step 4** — Check your folder — you'll see a new file called \`a.out\`. That's your executable!
+
+**Step 5** — Run it:
+\`\`\`
+./a.out
+\`\`\`
+
+**Step 6** — See \`Hello, World!\` in your terminal? You did it! 🎉
+
+---
+
+Every time you change your code, you'll need to compile and run again: \`g++\` → \`./a.out\`.
+Feels like extra steps — but remember what we learned? That's exactly why C++ runs **lightning fast** ⚡`,
         },
       ]
     },

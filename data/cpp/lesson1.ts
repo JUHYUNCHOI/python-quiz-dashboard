@@ -292,12 +292,13 @@ int main() {
         },
         {
           id: "ch3-practice",
-          type: "practice" as const,
+          type: "explain" as const,
           title: "✋ 직접 컴파일하고 실행해보세요!",
-          content: `이제 첫 번째 C++ 코드를 직접 실행해봐요!
+          content: `앞에서 배운 코드를 실제로 실행해봐요!
 
-아래 코드를 에디터에 그대로 입력하고 **실행** 버튼을 눌러보세요 👇
+**1단계** — VS Code(또는 원하는 에디터)를 열고 \`main.cpp\` 파일을 만드세요.
 
+**2단계** — 아래 코드를 그대로 입력하세요:
 \`\`\`cpp
 #include <iostream>
 
@@ -305,14 +306,26 @@ int main() {
     std::cout << "Hello, World!" << std::endl;
     return 0;
 }
-\`\`\``,
-          code: `#include <iostream>
+\`\`\`
 
-int main() {
-    std::cout << "Hello, World!" << std::endl;
-    return 0;
-}`,
-          expectedOutput: `Hello, World!`
+**3단계** — 터미널을 열고 파일이 있는 폴더로 이동한 뒤, 컴파일 명령어를 입력하세요:
+\`\`\`
+g++ main.cpp
+\`\`\`
+
+**4단계** — 폴더를 보면 \`a.out\` 파일이 생긴 걸 확인할 수 있어요. 이게 바로 실행 파일이에요!
+
+**5단계** — 이제 실행해보세요:
+\`\`\`
+./a.out
+\`\`\`
+
+**6단계** — 터미널에 \`Hello, World!\` 가 뜨면 성공! 🎉
+
+---
+
+잘 따라하셨나요? 앞으로 코드를 수정할 때마다 \`g++ 컴파일 → ./a.out 실행\` 두 단계를 반복해야 해요.
+조금 귀찮아 보이지만, 앞에서 배웠죠? 덕분에 코드가 **엄청 빠르게** 실행된답니다 ⚡`,
         },
       ]
     },
