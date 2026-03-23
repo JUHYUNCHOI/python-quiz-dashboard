@@ -28,6 +28,9 @@ export interface QuizSettings {
   questionCount: number
   difficulty: string
   startTime: number
+  course?: string
+  lessonFilter?: number | string
+  isReview?: boolean
 }
 
 export interface QuestionResult {
@@ -55,6 +58,9 @@ export interface SessionData {
   greatCount: number
   goodCount: number
   retryCorrectCount: number   // 재출제에서 맞힌 수
+  // 복습 세션 추적
+  isReview?: boolean
+  lessonFilter?: number | string
 }
 
 // -------- Combo Tier System --------
@@ -220,7 +226,7 @@ export function useQuizState(questions: QuizQuestion[]) {
 
   // 현재 문제: 재출제 문제가 있으면 그것, 없으면 순서대로
   const question = activeRetryQuestion || (questions[currentQuestion] ?? questions[0])
-  const progress = ((currentQuestion + 1) / quizSettings.questionCount) * 100
+  const progress = (currentQuestion / quizSettings.questionCount) * 100
   const estimatedRemainingTime = Math.ceil((quizSettings.questionCount - currentQuestion - 1) * 1)
 
   // Save session data to sessionStorage before navigation
@@ -241,6 +247,8 @@ export function useQuizState(questions: QuizQuestion[]) {
         greatCount: gradeStats.great,
         goodCount: gradeStats.good,
         retryCorrectCount: gradeStats.retryCorrect,
+        isReview: quizSettings.isReview,
+        lessonFilter: quizSettings.lessonFilter,
       }
       sessionStorage.setItem("quizSessionData", JSON.stringify(data))
     },

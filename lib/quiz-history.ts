@@ -16,6 +16,16 @@ export interface QuizHistoryEntry {
   endReason: "completed" | "hearts"
   xpEarned: number
   topicResults: { topic: string; correct: number; total: number }[]
+  // 복습 세션 추적 (선택적)
+  isReview?: boolean
+  lessonFilter?: number | string
+}
+
+/** 특정 레슨 복습을 완료한 적 있는지 확인 */
+export function hasReviewedLesson(lessonId: number | string): boolean {
+  return load().some(
+    e => e.isReview && String(e.lessonFilter) === String(lessonId) && e.endReason === "completed"
+  )
 }
 
 const STORAGE_KEY = "quiz-history"

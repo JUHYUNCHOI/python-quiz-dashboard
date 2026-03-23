@@ -209,7 +209,22 @@ function SessionCompletePage() {
         endReason: sessionData.endReason,
         xpEarned: breakdown.totalXp,
         topicResults,
+        isReview: sessionData.isReview,
+        lessonFilter: sessionData.lessonFilter,
       })
+
+      // 복습 세션이 완료된 경우 → completedQuizzes에 lessonId 추가 (커리큘럼 복습완료 표시)
+      if (sessionData.isReview && sessionData.lessonFilter != null && sessionData.endReason === "completed") {
+        try {
+          const saved = localStorage.getItem("completedQuizzes")
+          const arr: (string | number)[] = saved ? JSON.parse(saved) : []
+          const id = sessionData.lessonFilter
+          if (!arr.some(x => String(x) === String(id))) {
+            arr.push(id)
+            localStorage.setItem("completedQuizzes", JSON.stringify(arr))
+          }
+        } catch {}
+      }
       logActivity("quiz")
 
       // 업적 체크 — quiz history 저장 직후 실행

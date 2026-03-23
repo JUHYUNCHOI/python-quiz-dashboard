@@ -23,6 +23,7 @@ export default function ReviewRedirect({ params }: { params: Promise<{ lessonId:
         course,
         startTime: Date.now(),
         lessonFilter: id,
+        isReview: true,
       })
     )
     router.replace("/quiz")
