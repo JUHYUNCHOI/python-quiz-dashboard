@@ -177,23 +177,26 @@ export default function QuizPage() {
               >
                 <X className="h-5 w-5 md:h-6 md:w-6 text-gray-600" />
               </button>
-              <div className="flex-1 max-w-xs md:max-w-md">
-                <div className="mb-1 flex items-center justify-between text-xs md:text-sm text-gray-600">
-                  <span>
-                    {t("문제", "Q")} {quiz.currentQuestion + 1}/{quiz.quizSettings.questionCount}
-                  </span>
-                  <span className="hidden sm:inline text-indigo-600 font-medium">{Math.round(quiz.progress)}%</span>
+              <div className="flex-1">
+                <div className="mb-1 flex items-center justify-between text-xs text-gray-500">
+                  <span>{t("문제", "Q")} {quiz.currentQuestion + 1}/{quiz.quizSettings.questionCount}</span>
                 </div>
-                <div className="h-2.5 md:h-3 w-full overflow-hidden rounded-full bg-gray-200">
-                  <div
-                    className={cn(
-                      "h-full transition-all duration-500 rounded-full",
-                      quiz.combo >= 5
-                        ? "bg-gradient-to-r from-indigo-400 via-purple-500 to-indigo-400 animate-pulse"
-                        : "bg-indigo-500",
-                    )}
-                    style={{ width: `${quiz.progress}%` }}
-                  />
+                <div className="flex gap-1 w-full">
+                  {Array.from({ length: quiz.quizSettings.questionCount }).map((_, i) => (
+                    <div
+                      key={i}
+                      className={cn(
+                        "h-2.5 flex-1 rounded-sm transition-all duration-300",
+                        i < quiz.currentQuestion
+                          ? "bg-green-400"
+                          : i === quiz.currentQuestion
+                          ? quiz.combo >= 5
+                            ? "bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-400 animate-pulse"
+                            : "bg-indigo-500"
+                          : "bg-gray-200",
+                      )}
+                    />
+                  ))}
                 </div>
               </div>
             </div>
