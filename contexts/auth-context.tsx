@@ -17,6 +17,25 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
+/** 유저별 학습 데이터 localStorage 초기화 (계정 전환/로그아웃 시 호출) */
+function clearUserLocalStorage() {
+  const fixedKeys = [
+    "completedLessons", "completedQuizzes", "quiz-history",
+    "question-mastery", "activity-log",
+    "gamification-total-xp", "gamification-daily-streak",
+    "gamification-last-active-date", "gamification-sessions-today",
+    "language", "sound-muted",
+  ]
+  fixedKeys.forEach(k => localStorage.removeItem(k))
+  Object.keys(localStorage)
+    .filter(k =>
+      k.startsWith("practice-v2-") || k.startsWith("lesson-") ||
+      k.startsWith("blank-runner-") || k.startsWith("python-runner-") ||
+      k.startsWith("library-variant-")
+    )
+    .forEach(k => localStorage.removeItem(k))
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [profile, setProfile] = useState<Profile | null>(null)
@@ -108,18 +127,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
             if (isNewUser) {
               // 다른 계정 전환: 기존 로컬 데이터 초기화 후 클라우드에서 복원
-              const keysToRemove = [
-                "completedLessons", "completedQuizzes", "quiz-history",
-                "question-mastery", "activity-log", "gamification-total-xp",
-                "gamification-daily-streak", "gamification-last-active-date",
-                "gamification-sessions-today",
-              ]
-              keysToRemove.forEach(k => localStorage.removeItem(k))
-              // practice-v2-*, lesson-*, blank-runner-*, python-runner-* 도 제거
-              Object.keys(localStorage)
-                .filter(k => k.startsWith("practice-v2-") || k.startsWith("lesson-") || k.startsWith("blank-runner-") || k.startsWith("python-runner-"))
-                .forEach(k => localStorage.removeItem(k))
-
+              clearUserLocalStorage()
               restoreFromCloud(currentUser.id)
                 .catch((e) => { console.error("[AuthContext] restore failed:", e) })
             } else {
@@ -134,6 +142,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           }
         } else {
           setProfile(null)
+
+          // 로그아웃 시 학습 데이터 초기화 (다음 사용자 오염 방지)
+          if (event === "SIGNED_OUT") {
+            clearUserLocalStorage()
+          }
         }
 
         setIsLoading(false)
