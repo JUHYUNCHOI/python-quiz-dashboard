@@ -66,7 +66,7 @@ What is that step?`,
         // ── Transition: Let's try it! ──
         {
           id: "ch1-file",
-          type: "practice" as const,
+          type: "explain" as const,
           title: "📁 Create your own .cpp file!",
           content: `Now that we know what compiling is, let's write some code!
 
@@ -82,8 +82,6 @@ C++ files end with \`.cpp\`!
 🎯 **Try it now!** Open your editor (VS Code, CLion, etc.) and create a new file called **main.cpp**!
 
 Don't worry about what to write inside yet — just make the empty file. We'll fill it in together next! ✨`,
-          code: `// Did you create main.cpp?\n// It's okay if it's empty!\n// We'll fill it in together 😊`,
-          expectedOutput: ``
         },
         // ── cout intro ──
         {
