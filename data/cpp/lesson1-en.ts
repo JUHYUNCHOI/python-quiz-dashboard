@@ -68,9 +68,9 @@ What is that step?`,
           id: "ch1-file",
           type: "explain" as const,
           title: "📁 Create your own .cpp file!",
-          content: `Now that we know what compiling is, let's write some code!
+          content: `Now let's write some C++ code!
 
-First, we need to create a C++ file.
+First, let's learn about C++ file extensions.
 
 Python files end with \`.py\`, right?
 C++ files end with \`.cpp\`!
@@ -79,9 +79,7 @@ C++ files end with \`.cpp\`!
 |---|---|
 | main**.py** | main**.cpp** |
 
-🎯 **Try it now!** Open your editor (VS Code, CLion, etc.) and create a new file called **main.cpp**!
-
-Don't worry about what to write inside yet — just make the empty file. We'll fill it in together next! ✨`,
+In this lesson, you'll write C++ code right here in the browser. Later, you can create your own \`.cpp\` files in an editor like VS Code! 😊`,
         },
         // ── cout intro ──
         {
