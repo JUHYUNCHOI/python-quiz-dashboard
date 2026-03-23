@@ -753,7 +753,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
 
         {/* 메인 콘텐츠 */}
         <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6">
-          <div className="bg-white rounded-2xl p-6 md:p-10 shadow-sm">
+          <div className="bg-white rounded-2xl p-6 pb-28 md:p-10 md:pb-28 shadow-sm">
             <StepRenderer
               step={step}
               lang={lang}
@@ -773,7 +773,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
           </div>
         </div>
 
-        <div className="h-[50vh]" />
+        <div className="h-10" />
       </div>
 
       {/* 네비게이션 버튼 */}

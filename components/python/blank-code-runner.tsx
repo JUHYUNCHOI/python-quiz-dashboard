@@ -148,6 +148,30 @@ export function BlankCodeRunner({
   const { values: savedValues, correct: savedCorrect } = loadSaved()
 
   const [filledValues, setFilledValues] = useState<Record<number, string>>(savedValues)
+
+  // 저장된 값에서도 중복 함수 호출 초기 감지
+  const detectInitialWarnings = (values: Record<number, string>): Record<number, string> => {
+    const warnings: Record<number, string> = {}
+    const lines2 = initialCode.split('\n')
+    let bIdx = 0
+    for (const ln of lines2) {
+      const re2 = /___/g; let m2
+      while ((m2 = re2.exec(ln)) !== null) {
+        const val = values[bIdx]?.trim() || ""
+        const before = ln.slice(0, m2.index)
+        const funcMatch = before.match(/(\w+)\s*\($/)
+        if (funcMatch && val.startsWith(funcMatch[1] + "(")) {
+          warnings[bIdx] = `💡 "${funcMatch[1]}(" 는 이미 있어요! 괄호 안에 들어갈 값만 입력하세요.`
+        }
+        bIdx++
+      }
+    }
+    return warnings
+  }
+
+  const [nestedWarning, setNestedWarning] = useState<Record<number, string>>(
+    () => detectInitialWarnings(savedValues)
+  )
   const [focusedBlank, setFocusedBlank] = useState<number>(0)
   const [output, setOutput] = useState("")
   const [error, setError] = useState("")
@@ -349,10 +373,30 @@ export function BlankCodeRunner({
             type="text"
             value={value}
             onChange={(e) => {
-              setFilledValues(prev => ({ ...prev, [currentBlankId]: e.target.value }))
+              const newVal = e.target.value
+              setFilledValues(prev => ({ ...prev, [currentBlankId]: newVal }))
               setIsCorrect(null)
               setOutput("")
               setError("")
+              // 중복 함수 호출 감지: 템플릿에 이미 func( 가 있는데 input에도 func( 를 입력한 경우
+              // 예: print(___) → 학생이 print('Hello') 입력 → print(print('Hello')) 가 됨
+              const lines2 = initialCode.split('\n')
+              let bIdx = 0
+              let warning = ""
+              for (const ln of lines2) {
+                const re2 = /___/g; let m2
+                while ((m2 = re2.exec(ln)) !== null) {
+                  if (bIdx === currentBlankId) {
+                    const before = ln.slice(0, m2.index)
+                    const funcMatch = before.match(/(\w+)\s*\($/)
+                    if (funcMatch && newVal.trim().startsWith(funcMatch[1] + "(")) {
+                      warning = `💡 "${funcMatch[1]}(" 는 이미 있어요! 괄호 안에 들어갈 값만 입력하세요.`
+                    }
+                  }
+                  bIdx++
+                }
+              }
+              setNestedWarning(prev => ({ ...prev, [currentBlankId]: warning }))
             }}
             onFocus={() => setFocusedBlank(currentBlankId)}
             onKeyDown={(e) => {
@@ -456,6 +500,15 @@ export function BlankCodeRunner({
           {renderCodeWithBlanks()}
         </div>
       </div>
+
+      {/* 중복 함수 호출 경고 */}
+      {Object.values(nestedWarning).some(w => w) && (
+        <div className="bg-amber-50 border border-amber-300 rounded-lg px-3 py-2">
+          {Object.entries(nestedWarning).filter(([, w]) => w).map(([id, w]) => (
+            <p key={id} className="text-amber-800 text-xs font-medium">{w}</p>
+          ))}
+        </div>
+      )}
 
       {/* 빈칸 미완료 힌트 */}
       {!allFilled && (

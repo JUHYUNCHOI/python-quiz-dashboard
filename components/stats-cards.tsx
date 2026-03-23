@@ -49,7 +49,7 @@ export function StatsCards() {
     },
     {
       label: t("연속 학습", "Streak"),
-      value: dailyStreak > 0 ? `${dailyStreak}${t("일", "d")}` : "-",
+      value: `${dailyStreak}${t("일", "d")}`,
       sub: dailyStreak > 0 ? t("연속 학습 중!", "days in a row!") : t("오늘 시작해보세요", "Start today"),
       icon: Flame,
       gradient: "from-orange-500 to-orange-600",
