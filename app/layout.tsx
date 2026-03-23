@@ -16,8 +16,18 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: "코드린 - 재미있게 배우는 코딩",
-  description: "코드린과 함께 재미있게 배우는 코딩 학습 플랫폼",
-  generator: "v0.app",
+  description: "코드린과 함께 Python, C++ 코딩을 재미있게 배우세요. 중학생·고등학생을 위한 체계적인 코딩 학습 플랫폼.",
+  icons: {
+    icon: "/icon.svg",
+    apple: "/apple-icon.png",
+  },
+  openGraph: {
+    title: "코드린 - 재미있게 배우는 코딩",
+    description: "Python, C++ 코딩을 재미있게 배우는 학습 플랫폼. 레슨·퀴즈·진도 관리까지 한 곳에서.",
+    type: "website",
+    locale: "ko_KR",
+    siteName: "코드린",
+  },
 }
 
 export default function RootLayout({

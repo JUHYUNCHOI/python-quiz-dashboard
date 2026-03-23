@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# 관리자·선생님 전용 페이지는 인덱싱 제외
+Disallow: /admin
+Disallow: /teacher
+Disallow: /auth
+
+Sitemap: https://coderin.kr/sitemap.xml

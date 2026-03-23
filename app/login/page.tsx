@@ -256,6 +256,17 @@ function LoginContent() {
             <span key={i}>{line}{i === 0 && <br />}</span>
           ))}
         </p>
+
+        {/* 법적 링크 */}
+        <p className="text-xs text-center text-gray-300 pt-2">
+          <Link href="/terms" className="hover:text-gray-500 underline underline-offset-2">
+            {t("이용약관", "Terms")}
+          </Link>
+          <span className="mx-1.5">·</span>
+          <Link href="/privacy" className="hover:text-gray-500 underline underline-offset-2">
+            {t("개인정보처리방침", "Privacy")}
+          </Link>
+        </p>
       </div>
     </div>
   )
