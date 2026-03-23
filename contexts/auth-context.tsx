@@ -103,12 +103,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
           // 로그인 시 양방향 동기화 (순차 실행: 업로드 완료 후 복원)
           if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
-            // 1. localStorage → Supabase (기존 로컬 데이터 업로드)
-            // 2. 업로드 완료 후 Supabase → localStorage (클라우드 데이터 복원)
-            migrateLocalStorageToSupabase(currentUser.id)
-              .catch((e) => { console.error("[AuthContext] migrate failed:", e) })
-              .then(() => restoreFromCloud(currentUser.id))
-              .catch((e) => { console.error("[AuthContext] restore failed:", e) })
+            const lastUserId = localStorage.getItem("last-user-id")
+            const isNewUser = lastUserId && lastUserId !== currentUser.id
+
+            if (isNewUser) {
+              // 다른 계정 전환: 기존 로컬 데이터 초기화 후 클라우드에서 복원
+              const keysToRemove = [
+                "completedLessons", "completedQuizzes", "quiz-history",
+                "question-mastery", "activity-log", "gamification-total-xp",
+                "gamification-daily-streak", "gamification-last-active-date",
+                "gamification-sessions-today",
+              ]
+              keysToRemove.forEach(k => localStorage.removeItem(k))
+              // practice-v2-*, lesson-*, blank-runner-*, python-runner-* 도 제거
+              Object.keys(localStorage)
+                .filter(k => k.startsWith("practice-v2-") || k.startsWith("lesson-") || k.startsWith("blank-runner-") || k.startsWith("python-runner-"))
+                .forEach(k => localStorage.removeItem(k))
+
+              restoreFromCloud(currentUser.id)
+                .catch((e) => { console.error("[AuthContext] restore failed:", e) })
+            } else {
+              // 같은 계정: 로컬 데이터 업로드 후 클라우드 복원 (merge)
+              migrateLocalStorageToSupabase(currentUser.id)
+                .catch((e) => { console.error("[AuthContext] migrate failed:", e) })
+                .then(() => restoreFromCloud(currentUser.id))
+                .catch((e) => { console.error("[AuthContext] restore failed:", e) })
+            }
+
+            localStorage.setItem("last-user-id", currentUser.id)
           }
         } else {
           setProfile(null)
