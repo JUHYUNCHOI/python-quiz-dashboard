@@ -24,7 +24,7 @@ export async function restoreFromCloud(userId: string) {
         .select("lesson_id, completed, progress_type, updated_at")
         .eq("user_id", userId)
         .eq("completed", true)
-        .eq("progress_type", "learn"),
+        .or("progress_type.eq.learn,progress_type.is.null"),
       supabase
         .from("user_preferences")
         .select("*")
