@@ -8479,24 +8479,19 @@ int main() {
     id: 332,
     lessonId: "cpp-1",
     difficulty: "쉬움",
-    question: "C++ Hello World 코드에서 return 0;은 어디에 써야 하나요?",
-    code: `#include <iostream>
-using namespace std;
-int main() {
-    cout << "Hello, World!" << endl;
-    ___
-}`,
+    question: "다음 중 올바른 C++ Hello World 코드는?",
+    code: "",
     options: [
-      "return 0; — main() 안, cout 뒤에",
-      "return 0; — #include 앞에",
-      "return 0; — main() 바깥에",
-      "쓰지 않아도 된다",
+      `#include <iostream>\nint main() {\n    std::cout << "Hello" << std::endl;\n    return 0;\n}`,
+      `#include <iostream>\nreturn 0;\nint main() {\n    std::cout << "Hello" << std::endl;\n}`,
+      `#include <iostream>\nint main() {\n    return 0;\n    std::cout << "Hello" << std::endl;\n}`,
+      `int main() {\n    std::cout << "Hello" << std::endl;\n    return 0;\n}`,
     ],
     correctAnswer: 0,
-    explanation: "return 0;은 main() 함수 안, 코드가 다 끝난 뒤에 씁니다. '프로그램이 정상적으로 끝났어요!'라는 표시예요.",
+    explanation: "return 0;은 main() 안에서 모든 코드가 끝난 뒤 마지막에 씁니다. #include는 맨 위에, cout은 return 0; 앞에 와야 해요.",
     keyConceptTitle: "return 0의 위치",
-    keyConceptDescription: "C++ 프로그램은 main() 함수 안에서 시작하고, return 0;으로 끝납니다. 모든 cout 출력 뒤에 위치합니다.",
-    relatedTopics: ["return 0", "main 함수", "프로그램 구조"],
+    keyConceptDescription: "C++ 프로그램 구조: #include → int main() { → 실행 코드 → return 0; → }",
+    relatedTopics: ["return 0", "main 함수", "프로그램 구조", "#include"],
   },
   // ── cpp-1 보충 (Hello World 기초) ──
   {
@@ -8568,8 +8563,8 @@ int main() {
     lessonId: "cpp-1",
     difficulty: "쉬움",
     question: "endl을 사용하면 어떻게 되나요?",
-    code: `cout << "1번 줄" << endl;
-cout << "2번 줄" << endl;`,
+    code: `std::cout << "1번 줄" << std::endl;
+std::cout << "2번 줄" << std::endl;`,
     options: [
       "프로그램을 종료한다",
       "줄바꿈(Enter)을 한다",

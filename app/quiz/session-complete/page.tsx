@@ -264,10 +264,30 @@ function SessionCompletePage() {
     }
   }, [isLevelUp]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handlePlayAgain = useCallback(() => {
+  const handleRetryWrong = useCallback(() => {
+    if (!sessionData) return
+    const wrongIds = sessionData.questionDetails
+      .filter(qr => !qr.is_correct && qr.selected_answer !== -1) // 스킵 제외
+      .map(qr => qr.question_id)
+    const uniqueWrongIds = [...new Set(wrongIds)]
+    if (uniqueWrongIds.length === 0) return
+
+    // 이전 코스 설정 유지
+    const prevSettings = sessionStorage.getItem("quizSettings")
+    const prevCourse = prevSettings ? (JSON.parse(prevSettings).course ?? "python") : "python"
+    const prevDifficulty = prevSettings ? (JSON.parse(prevSettings).difficulty ?? "mixed") : "mixed"
+
     sessionStorage.removeItem("quizSessionData")
-    router.push("/quiz/setup")
-  }, [router])
+    sessionStorage.setItem("quizSettings", JSON.stringify({
+      questionCount: uniqueWrongIds.length,
+      difficulty: prevDifficulty,
+      course: prevCourse,
+      startTime: Date.now(),
+      retryQuestionIds: uniqueWrongIds,
+      isRetry: true,
+    }))
+    router.push("/quiz")
+  }, [router, sessionData])
 
   const handleGoHome = useCallback(() => {
     sessionStorage.removeItem("quizSessionData")
@@ -489,13 +509,15 @@ function SessionCompletePage() {
         {/* === Phase 7: Action buttons === */}
         {phase >= 7 && (
           <div className="space-y-3 animate-fade-in-delay">
-            {/* Play again - big CTA */}
-            <button
-              onClick={handlePlayAgain}
-              className="w-full py-4 rounded-2xl text-xl font-black text-white bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-95"
-            >
-              {t("한 판 더? 🔥", "One more? 🔥")}
-            </button>
+            {/* 틀린 문제 다시 풀기 - 틀린 게 있을 때만 표시 */}
+            {sessionData && sessionData.questionDetails.some(qr => !qr.is_correct && qr.selected_answer !== -1) ? (
+              <button
+                onClick={handleRetryWrong}
+                className="w-full py-4 rounded-2xl text-xl font-black text-white bg-gradient-to-r from-red-400 to-orange-400 hover:from-red-500 hover:to-orange-500 shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-95"
+              >
+                {t("틀린 문제 다시 풀기 🎯", "Retry wrong answers 🎯")}
+              </button>
+            ) : null}
 
             {/* Go home - subtle text */}
             <button

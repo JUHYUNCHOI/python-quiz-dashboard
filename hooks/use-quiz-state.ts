@@ -135,6 +135,12 @@ export function useQuizState(questions: QuizQuestion[]) {
   // Per-question result tracking
   const [questionResults, setQuestionResults] = useState<QuestionResult[]>([])
 
+  // 이전 문제로 돌아갈 때 상태 복원용 스냅샷
+  const questionSnapshots = useRef<Map<number, { selectedAnswer: number; isCorrect: boolean }>>(new Map())
+
+  // 스냅샷 복원 중 사운드 이펙트 억제 플래그 (뒤로가기/앞으로가기 시 틀린소리 방지)
+  const isSnapshotRestore = useRef(false)
+
   // Quick answer warning
   const [questionStartTime, setQuestionStartTime] = useState(Date.now())
   const [showQuickAnswerWarning, setShowQuickAnswerWarning] = useState(false)
@@ -265,6 +271,27 @@ export function useQuizState(questions: QuizQuestion[]) {
   )
 
   const handleNext = useCallback(() => {
+    // 이전 문제 복습 중(showResult=true이고 스냅샷 있는 문제) → 다음으로 건너뜀
+    if (showResult && questionSnapshots.current.has(currentQuestion)) {
+      const nextIdx = currentQuestion + 1
+      const snap = questionSnapshots.current.get(nextIdx)
+      if (snap) {
+        // 다음 문제도 이미 풀었으면 복원
+        isSnapshotRestore.current = true
+        setCurrentQuestion(nextIdx)
+        setSelectedAnswer(snap.selectedAnswer)
+        setIsCorrect(snap.isCorrect)
+        setShowResult(true)
+        return
+      } else {
+        // 다음 문제는 아직 안 풀었으면 새로 풀기
+        setCurrentQuestion(nextIdx)
+        setSelectedAnswer(null)
+        setShowResult(false)
+        return
+      }
+    }
+
     if (selectedAnswer === null || sessionOver || showResult) return
 
     const timeSpent = (Date.now() - questionStartTime) / 1000
@@ -277,6 +304,9 @@ export function useQuizState(questions: QuizQuestion[]) {
     const correct = selectedAnswer === question.correctAnswer
     setIsCorrect(correct)
     setShowResult(true)
+
+    // 이전 문제로 돌아올 때 복원용 스냅샷 저장
+    questionSnapshots.current.set(currentQuestion, { selectedAnswer, isCorrect: correct })
 
     // Record per-question result
     const timeTakenMs = Date.now() - questionStartTime
@@ -442,11 +472,26 @@ export function useQuizState(questions: QuizQuestion[]) {
   }, [])
 
   const handlePrevious = useCallback(() => {
-    if (currentQuestion > 0 && !showResult) {
-      setCurrentQuestion((q) => q - 1)
-      setSelectedAnswer(null)
+    if (currentQuestion > 0) {
+      const prevIdx = currentQuestion - 1
+      const snap = questionSnapshots.current.get(prevIdx)
+      setCurrentQuestion(prevIdx)
+      if (snap) {
+        // 이전에 풀었던 문제면 답변 상태 복원 (읽기 전용)
+        isSnapshotRestore.current = true
+        setSelectedAnswer(snap.selectedAnswer)
+        setIsCorrect(snap.isCorrect)
+        setShowResult(true)
+      } else {
+        setSelectedAnswer(null)
+        setShowResult(false)
+      }
     }
-  }, [currentQuestion, showResult])
+  }, [currentQuestion])
+
+  const dismissMidCheckIn = useCallback(() => {
+    setShowMidCheckIn(false)
+  }, [])
 
   const handleLowerDifficulty = useCallback(() => {
     setShowPauseScreen(false)
@@ -524,6 +569,9 @@ export function useQuizState(questions: QuizQuestion[]) {
     isRetryQuestion,
     gradeStats,
 
+    // Refs
+    isSnapshotRestore,
+
     // Actions
     handleAnswerSelect,
     handleNext,
@@ -532,6 +580,7 @@ export function useQuizState(questions: QuizQuestion[]) {
     confirmExit,
     cancelExit,
     handlePrevious,
+    dismissMidCheckIn,
     handleLowerDifficulty,
     handleTakeBreak,
     handleContinue,

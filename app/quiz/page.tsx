@@ -57,6 +57,16 @@ export default function QuizPage() {
         const pool = parsed.course === "cpp" ? cppQuestions : pythonQuestions
         const count = parsed.questionCount || 20
 
+        // 틀린 문제 다시 풀기: retryQuestionIds가 있으면 해당 문제들만 출제
+        if (parsed.retryQuestionIds && parsed.retryQuestionIds.length > 0) {
+          const retrySet = new Set<number>(parsed.retryQuestionIds)
+          const allQuestions = [...pythonQuestions, ...cppQuestions]
+          const retryPool = allQuestions.filter(q => retrySet.has(q.id))
+          if (retryPool.length > 0) {
+            return { questions: shuffleArray(retryPool), reviewCount: retryPool.length, newCount: 0 }
+          }
+        }
+
         // 레슨 집중 퀴즈: lessonFilter가 있으면 해당 레슨 문제만 출제
         if (parsed.lessonFilter !== undefined) {
           const filtered = pool.filter(
@@ -95,6 +105,17 @@ export default function QuizPage() {
   const comboTier = getComboTier(quiz.combo)
   const [reportedQuestions, setReportedQuestions] = useState<Set<number>>(new Set())
   const [showReportToast, setShowReportToast] = useState(false)
+
+  // 브라우저 뒤로가기 시 기존 나가기 확인 모달 재사용
+  useEffect(() => {
+    window.history.pushState(null, "", window.location.href)
+    const handlePopState = () => {
+      window.history.pushState(null, "", window.location.href)
+      quiz.handleExit() // 기존 X버튼과 동일한 확인 모달 표시
+    }
+    window.addEventListener("popstate", handlePopState)
+    return () => window.removeEventListener("popstate", handlePopState)
+  }, [quiz.handleExit])
 
   const handleReport = useCallback((questionId: number) => {
     if (reportedQuestions.has(questionId)) return
@@ -153,12 +174,16 @@ export default function QuizPage() {
     if (quiz.showCelebration) playCorrectSound(quiz.combo)
   }, [quiz.showCelebration, quiz.combo, playCorrectSound])
 
-  // 오답 사운드 + 하트 깨지는 사운드
+  // 오답 사운드 + 하트 깨지는 사운드 (스냅샷 복원 시에는 재생 안 함)
   useEffect(() => {
     if (quiz.showResult && !quiz.isCorrect) {
+      if (quiz.isSnapshotRestore.current) {
+        quiz.isSnapshotRestore.current = false
+        return
+      }
       play("heartbreak")
     }
-  }, [quiz.showResult, quiz.isCorrect, play])
+  }, [quiz.showResult, quiz.isCorrect, play, quiz.isSnapshotRestore])
 
   const question = quiz.question
 
@@ -302,8 +327,12 @@ export default function QuizPage() {
       )}
 
       {quiz.showMidCheckIn && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
-          <Card className="bg-white p-8 max-w-md mx-4 text-center animate-bounce-in">
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center cursor-pointer"
+          onClick={quiz.dismissMidCheckIn}
+          onTouchStart={quiz.dismissMidCheckIn}
+        >
+          <Card className="bg-white p-8 max-w-md mx-4 text-center animate-bounce-in pointer-events-none">
             <div className="text-6xl mb-4">🦒💪</div>
             <h3 className="text-2xl font-bold text-gray-800 mb-2">{t("절반 왔어요!", "Halfway there!")}</h3>
             <p className="text-lg text-gray-600 mb-2">{t("잘하고 있어요!", "You're doing great!")}</p>
@@ -313,6 +342,7 @@ export default function QuizPage() {
                 `${Math.round((quiz.score / (quiz.currentQuestion + 1)) * 100)}% accuracy so far!`
               )}
             </p>
+            <p className="text-xs text-gray-400 mt-4">{t("탭해서 계속하기", "Tap to continue")}</p>
           </Card>
         </div>
       )}

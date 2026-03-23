@@ -35,7 +35,9 @@ export function useMasterySync() {
       if (!user || questionIds.length === 0) return
 
       const allMastery = getAllMastery()
-      const rows = questionIds
+      // 중복 question_id 제거 (재출제 문제가 여러 번 답변될 수 있음)
+      const uniqueIds = [...new Set(questionIds)]
+      const rows = uniqueIds
         .filter(id => allMastery[id])
         .map((id) => {
           const m: QuestionMastery = allMastery[id]
