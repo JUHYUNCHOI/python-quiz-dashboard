@@ -122,7 +122,7 @@ How do you do the same thing in C++?`,
             'System.out.println("Hello");'
           ],
           answer: 0,
-          explanation: "Python's print() = C++'s std::cout << ! And don't forget the semicolon (;) at the end!"
+          explanation: "In C++, you write std::cout << \"Hello\" << std::endl; — use << to send content to the screen, and always end with a semicolon (;)!"
         },
         // ── #include ──
         {

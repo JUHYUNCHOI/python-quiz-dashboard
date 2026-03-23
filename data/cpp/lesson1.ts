@@ -124,7 +124,7 @@ C++에서 같은 일을 하려면 어떻게 써야 할까요?`,
             'System.out.println("Hello");'
           ],
           answer: 0,
-          explanation: "파이썬의 print() = C++의 std::cout << ! 그리고 끝에 세미콜론(;)을 붙여야 해요!"
+          explanation: "C++에서는 std::cout << \"Hello\" << std::endl; 처럼 써요. 파이썬의 print()와 달리 << 로 내용을 연결하고, 문장 끝에 ; 를 붙여야 해요!"
         },
         // ── Step 2: "근데 그냥 못 써요!" → #include 필요성 ──
         {
