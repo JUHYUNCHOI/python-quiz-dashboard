@@ -284,26 +284,8 @@ int main() {
           type: "explain",
           title: "⚡ How to compile and run!",
           content: `You wrote the code — now let's compile and run it!
-Open your terminal and follow along:
 
-**Step 1: Compile** 🔧
-\`\`\`
-g++ main.cpp
-\`\`\`
-\`g++\` is the C++ compile command!
-
-**Step 2: Check the output file** 💾
-After compiling, a file called **a.out** appears.
-→ Your code got converted into binary and created a.out!
-
-**Step 3: Run it** ▶️
-\`\`\`
-./a.out
-\`\`\`
-
-You'll see **Hello** appear on screen! 🎉
-
-💡 Want a custom name? \`g++ -o hello main.cpp\` creates an executable called \`hello\`!`,
+Click **Next →** in the animation below to follow the flow 👇`,
           component: "buildRunFlow",
         },
         {
