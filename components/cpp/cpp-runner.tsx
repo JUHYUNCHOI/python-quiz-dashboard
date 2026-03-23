@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
 import dynamic from "next/dynamic"
 import { Play, Loader2, RotateCcw, Check, X, Eye } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -128,7 +128,16 @@ export function CppRunner({
   stepId,
   stepTitle,
 }: CppRunnerProps) {
-  const [code, setCode] = useState(initialCode)
+  const storageKey = stepId ? `cpp-runner-${lessonId ?? "x"}-${stepId}` : null
+
+  const [code, setCode] = useState(() => {
+    if (!storageKey || typeof window === "undefined") return initialCode
+    try {
+      return localStorage.getItem(storageKey) ?? initialCode
+    } catch {
+      return initialCode
+    }
+  })
   const [output, setOutput] = useState("")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -138,6 +147,12 @@ export function CppRunner({
   const [hasRun, setHasRun] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+
+  // 코드 변경 시 localStorage 자동 저장
+  useEffect(() => {
+    if (!storageKey) return
+    try { localStorage.setItem(storageKey, code) } catch {}
+  }, [code, storageKey])
 
   const lineCount = initialCode.split("\n").length
   const editorMinHeight = minHeight ?? `${Math.max(280, lineCount * 28 + 64)}px`
@@ -250,6 +265,7 @@ export function CppRunner({
 
   const reset = () => {
     setCode(initialCode)
+    if (storageKey) { try { localStorage.removeItem(storageKey) } catch {} }
     setOutput("")
     setError("")
     setIsCorrect(null)
