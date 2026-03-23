@@ -8415,14 +8415,7 @@ int main() {
     lessonId: "cpp-1",
     difficulty: "쉬움",
     question: "C++이 파이썬보다 빠른 핵심 이유는?",
-    code: `// 파이썬: 인터프리터 방식
-// 소스코드 → 한 줄씩 실행
-# python hello.py
-
-// C++: 컴파일 방식
-// 소스코드 → 기계어 → 실행
-// g++ hello.cpp -o hello
-// ./hello`,
+    code: ``,
     options: [
       "문법이 더 엄격해서",
       "소스코드를 미리 기계어로 컴파일하기 때문에",
