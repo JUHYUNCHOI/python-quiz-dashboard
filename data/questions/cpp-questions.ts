@@ -8473,25 +8473,25 @@ int main() {
   {
     id: 332,
     lessonId: "cpp-1",
-    difficulty: "보통",
-    question: "다음 C++ 코드에서 `return 0;`의 역할은?",
+    difficulty: "쉬움",
+    question: "C++ Hello World 코드에서 `return 0;`은 어디에 써야 하나요?",
     code: `#include <iostream>
 using namespace std;
 int main() {
     cout << "Hello, World!" << endl;
-    return 0;  // ?
+    ___
 }`,
     options: [
-      "프로그램을 처음부터 다시 실행한다",
-      "cout을 초기화한다",
-      "main 함수(프로그램)가 정상 종료됐음을 운영체제에 알린다",
-      "0을 출력한다",
+      "return 0; — main() 안, cout 뒤에",
+      "return 0; — #include 앞에",
+      "return 0; — main() 바깥에",
+      "쓰지 않아도 된다",
     ],
-    correctAnswer: 2,
-    explanation: "return 0은 main 함수가 0을 반환하며 종료한다는 의미입니다. 운영체제에 '프로그램이 오류 없이 정상 종료됐다'는 신호입니다. 오류 시 return 1(또는 다른 값)을 사용합니다.",
-    keyConceptTitle: "return 0의 의미",
-    keyConceptDescription: "C++ main 함수는 int를 반환합니다. 0은 성공, 0이 아닌 값은 오류를 나타냅니다. 운영체제나 쉘 스크립트에서 이 값을 확인할 수 있습니다.",
-    relatedTopics: ["return 0", "종료 코드", "main 함수"],
+    correctAnswer: 0,
+    explanation: "return 0;은 main() 함수 안, 코드가 다 끝난 뒤에 씁니다. '프로그램이 정상적으로 끝났어요!'라는 표시예요.",
+    keyConceptTitle: "return 0의 위치",
+    keyConceptDescription: "C++ 프로그램은 main() 함수 안에서 시작하고, return 0;으로 끝납니다. 모든 cout 출력 뒤에 위치합니다.",
+    relatedTopics: ["return 0", "main 함수", "프로그램 구조"],
   },
   // ── cpp-2 보충 (cout 심화 & namespace) ──
   {
