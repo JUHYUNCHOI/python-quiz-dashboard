@@ -292,13 +292,18 @@ Click **Next →** in the animation below to follow the flow 👇`,
           id: "ch3-practice",
           type: "practice" as const,
           title: "✋ Compile and run it yourself!",
-          content: `Let's try what we just learned!
+          content: `Time to run your first C++ code!
 
-1. Type the code below in your editor
-2. Compile with \`g++ main.cpp\` in the terminal
-3. Run with \`./a.out\`
+Type the code below into the editor and hit **Run** 👇
 
-If it works, you'll see "Hello, World!" 🎉`,
+\`\`\`cpp
+#include <iostream>
+
+int main() {
+    std::cout << "Hello, World!" << std::endl;
+    return 0;
+}
+\`\`\``,
           code: `#include <iostream>
 
 int main() {

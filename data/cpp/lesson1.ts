@@ -294,13 +294,18 @@ int main() {
           id: "ch3-practice",
           type: "practice" as const,
           title: "✋ 직접 컴파일하고 실행해보세요!",
-          content: `지금 배운 걸 직접 해봐요!
+          content: `이제 첫 번째 C++ 코드를 직접 실행해봐요!
 
-1. 아래 코드를 에디터에 입력하세요
-2. 터미널에서 \`g++ main.cpp\` 으로 컴파일하세요
-3. \`./a.out\` 으로 실행하세요
+아래 코드를 에디터에 그대로 입력하고 **실행** 버튼을 눌러보세요 👇
 
-제대로 되면 "Hello, World!"가 보여요! 🎉`,
+\`\`\`cpp
+#include <iostream>
+
+int main() {
+    std::cout << "Hello, World!" << std::endl;
+    return 0;
+}
+\`\`\``,
           code: `#include <iostream>
 
 int main() {
