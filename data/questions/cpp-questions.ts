@@ -75,20 +75,24 @@ int main() {
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
-#include <iomanip>
 using namespace std;
 
 int main() {
-    double pi = 3.14159265;
-    cout << fixed << setprecision(2) << pi;
+    cout << "이름\\t나이" << endl;
+    cout << "민수\\t15" << endl;
     return 0;
 }`,
-    options: ["3.14159265", "3.14", "3.1", "3"],
+    options: [
+      "이름\\t나이\n민수\\t15",
+      "이름    나이\n민수    15",
+      "이름나이\n민수15",
+      "이름 나이\n민수 15",
+    ],
     correctAnswer: 1,
-    explanation: "fixed와 setprecision(2)를 사용하면 소수점 아래 2자리까지만 출력됩니다.",
-    keyConceptTitle: "출력 서식 지정",
-    keyConceptDescription: "fixed는 고정 소수점 표기, setprecision(n)은 소수점 이하 n자리까지 출력합니다. <iomanip> 헤더가 필요합니다.",
-    relatedTopics: ["fixed", "setprecision", "iomanip"],
+    explanation: "\\t는 탭(tab) 문자로, 일정 간격만큼 띄어줍니다. 코드에서 \\t로 쓰면 실제 출력에서 탭 간격이 됩니다.",
+    keyConceptTitle: "탭 이스케이프 문자 \\t",
+    keyConceptDescription: "\\t는 탭 키와 같은 효과로 열을 맞출 때 유용합니다. \\n은 줄바꿈, \\t는 탭입니다.",
+    relatedTopics: ["이스케이프 문자", "\\t", "cout"],
   },
   {
     id: 5,
@@ -96,21 +100,19 @@ int main() {
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
-#include <cmath>
-using namespace std;
 
 int main() {
-    cout << abs(-7) << " ";
-    cout << pow(2, 10) << " ";
-    cout << sqrt(144);
+    int score = 95;
+    std::cout << "점수: " << score << "점" << std::endl;
+    std::cout << "합격 여부: " << "합격" << std::endl;
     return 0;
 }`,
-    options: ["7 1024 12", "-7 1024 12", "7 10 144", "7 1024 144"],
+    options: ["점수: 95점\n합격 여부: 합격", "점수: score점\n합격 여부: 합격", "점수: 95 점\n합격 여부: 합격", "컴파일 에러"],
     correctAnswer: 0,
-    explanation: "abs(-7)=7, pow(2,10)=1024, sqrt(144)=12. cmath 헤더의 수학 함수들입니다.",
-    keyConceptTitle: "cmath 수학 함수",
-    keyConceptDescription: "abs(절대값), pow(거듭제곱), sqrt(제곱근) 등은 cmath 헤더에 있습니다.",
-    relatedTopics: ["cmath", "abs", "pow", "sqrt"],
+    explanation: "cout << 문자열 << 정수 << 문자열 처럼 << 연산자로 여러 타입을 이어서 출력할 수 있습니다. 변수 score는 값 95로 출력됩니다.",
+    keyConceptTitle: "문자열과 숫자 혼합 출력",
+    keyConceptDescription: "std::cout << \"텍스트\" << 변수 << \"텍스트\" 처럼 << 연산자를 연결하면 문자열과 숫자를 함께 출력할 수 있습니다.",
+    relatedTopics: ["cout", "<<연산자", "문자열+숫자 출력", "std::"],
   },
   {
     id: 6,
@@ -131,31 +133,6 @@ int main() {
     keyConceptTitle: "using namespace",
     keyConceptDescription: "std 네임스페이스의 모든 이름을 접두사 없이 사용할 수 있게 합니다. 대규모 프로젝트에서는 피하는 것이 좋습니다.",
     relatedTopics: ["namespace", "std", "이름 충돌"],
-  },
-  {
-    id: 7,
-    lessonId: "cpp-7",
-    difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int main() {
-    int n = 1234;
-    int reversed = 0;
-    while (n > 0) {
-        reversed = reversed * 10 + n % 10;
-        n /= 10;
-    }
-    cout << reversed;
-    return 0;
-}`,
-    options: ["1234", "4321", "1000", "4"],
-    correctAnswer: 1,
-    explanation: "매 반복마다 n의 마지막 자릿수를 reversed에 추가합니다. 1234 → 4 → 43 → 432 → 4321.",
-    keyConceptTitle: "숫자 뒤집기 알고리즘",
-    keyConceptDescription: "n%10으로 마지막 자릿수를 추출하고, reversed*10+자릿수로 숫자를 뒤집습니다.",
-    relatedTopics: ["자릿수 분리", "while 루프", "알고리즘"],
   },
   {
     id: 8,
@@ -292,31 +269,6 @@ MAX = 200;  // OK, const가 아니면 변경 가능`,
     relatedTopics: ["const", "상수", "매직 넘버"],
   },
   {
-    id: 14,
-    lessonId: "cpp-3",
-    difficulty: "쉬움",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int main() {
-    double d = 9.7;
-    int n = static_cast<int>(d);
-    cout << n << endl;
-    return 0;
-}`,
-    options: ["9.7", "10", "9", "컴파일 오류"],
-    correctAnswer: 2,
-    explanation: "static_cast<int>(9.7)은 소수점을 버리고 정수 9를 반환합니다. 반올림이 아니라 버림(truncation)입니다.",
-    keyConceptTitle: "static_cast 형변환",
-    keyConceptDescription: "static_cast<목표타입>(값)은 C++의 안전한 형변환 방법입니다. double→int 변환 시 소수점 이하가 버려집니다.",
-    codeComparison: {
-      wrong: `int n = (int)d;  // C 스타일 캐스팅 (비권장)`,
-      correct: `int n = static_cast<int>(d);  // C++ 스타일 (권장)`,
-    },
-    relatedTopics: ["static_cast", "형변환", "truncation"],
-  },
-  {
     id: 15,
     lessonId: "cpp-3",
     difficulty: "쉬움",
@@ -336,87 +288,6 @@ int main() {
     keyConceptTitle: "암시적 형변환 (Implicit Conversion)",
     keyConceptDescription: "서로 다른 타입끼리 연산 시 범위가 좁은 타입이 넓은 타입으로 자동 변환됩니다. int → double 변환이 대표적입니다.",
     relatedTopics: ["암시적 형변환", "타입 프로모션", "static_cast"],
-  },
-  {
-    id: 16,
-    lessonId: "cpp-3",
-    difficulty: "쉬움",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int main() {
-    char ch = '5';
-    int num = ch - '0';
-    cout << num + 10;
-    return 0;
-}`,
-    options: ["15", "63", "5", "컴파일 오류"],
-    correctAnswer: 0,
-    explanation: "'5'의 ASCII 값은 53, '0'은 48입니다. 53 - 48 = 5. 5 + 10 = 15가 출력됩니다.",
-    keyConceptTitle: "문자 → 숫자 변환 (ch - '0')",
-    keyConceptDescription: "문자 '0'~'9'에서 '0'을 빼면 해당 정수값(0~9)을 얻을 수 있습니다. ASCII 코드의 연속성을 이용한 기법입니다.",
-    relatedTopics: ["ASCII", "char", "형변환"],
-  },
-  {
-    id: 17,
-    lessonId: "cpp-3",
-    difficulty: "쉬움",
-    question: "다음 코드에서 sizeof(bool)의 일반적인 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int main() {
-    cout << sizeof(bool) << " " << sizeof(int);
-    return 0;
-}`,
-    options: ["0 4", "1 4", "1 2", "4 4"],
-    correctAnswer: 1,
-    explanation: "bool은 일반적으로 1바이트, int는 4바이트입니다. bool은 true/false만 저장하지만 최소 1바이트를 차지합니다.",
-    keyConceptTitle: "자료형 크기 (sizeof)",
-    keyConceptDescription: "일반적으로 bool: 1바이트, char: 1바이트, int: 4바이트, double: 8바이트. sizeof()로 확인할 수 있습니다.",
-    relatedTopics: ["sizeof", "자료형", "메모리"],
-  },
-  {
-    id: 18,
-    lessonId: "cpp-3",
-    difficulty: "쉬움",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int main() {
-    char ch = 'A';
-    cout << (int)ch;
-    return 0;
-}`,
-    options: ["A", "65", "97", "컴파일 오류"],
-    correctAnswer: 1,
-    explanation: "'A'의 ASCII 코드값은 65입니다. (int) 캐스팅으로 문자를 정수로 변환하면 ASCII 코드값이 출력됩니다.",
-    keyConceptTitle: "char와 ASCII 변환",
-    keyConceptDescription: "char는 내부적으로 정수(ASCII 코드)로 저장됩니다. (int)로 캐스팅하면 코드값을 볼 수 있습니다.",
-    relatedTopics: ["ASCII", "형변환", "char"],
-  },
-  {
-    id: 19,
-    lessonId: "cpp-3",
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int main() {
-    cout << sizeof(char) << " ";
-    cout << sizeof(int) << " ";
-    cout << sizeof(double);
-    return 0;
-}`,
-    options: ["1 2 4", "1 4 8", "2 4 8", "1 4 4"],
-    correctAnswer: 1,
-    explanation: "일반적인 시스템에서 char=1바이트, int=4바이트, double=8바이트입니다.",
-    keyConceptTitle: "sizeof 연산자",
-    keyConceptDescription: "sizeof는 자료형이나 변수의 메모리 크기를 바이트 단위로 반환합니다. 컴파일 시점에 결정됩니다.",
-    relatedTopics: ["메모리", "자료형 크기", "바이트"],
   },
   {
     id: 20,
@@ -583,28 +454,6 @@ int main() {
     relatedTopics: ["bool", "논리 연산자", "boolalpha"],
   },
   {
-    id: 28,
-    lessonId: "cpp-5",
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int main() {
-    int x = 0b1010;
-    int y = 012;
-    int z = 0xA;
-    cout << x << " " << y << " " << z;
-    return 0;
-}`,
-    options: ["1010 12 A", "10 10 10", "10 12 10", "1010 010 0xA"],
-    correctAnswer: 1,
-    explanation: "0b1010(2진수)=10, 012(8진수)=10, 0xA(16진수)=10. cout은 기본적으로 10진수로 출력합니다.",
-    keyConceptTitle: "진법 리터럴",
-    keyConceptDescription: "C++에서 0b는 2진수, 0은 8진수, 0x는 16진수 접두사입니다.",
-    relatedTopics: ["2진수", "8진수", "16진수"],
-  },
-  {
     id: 29,
     lessonId: "cpp-5",
     difficulty: "보통",
@@ -708,68 +557,6 @@ int main() {
     keyConceptTitle: "정의되지 않은 동작 (UB)",
     keyConceptDescription: "하나의 표현식에서 같은 변수를 여러 번 변경하면 UB입니다. 컴파일러마다 결과가 다를 수 있습니다.",
     relatedTopics: ["undefined behavior", "전위/후위 증감", "시퀀스 포인트"],
-  },
-  {
-    id: 34,
-    lessonId: "cpp-5",
-    difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int main() {
-    unsigned int x = -1;
-    cout << x;
-    return 0;
-}`,
-    options: ["-1", "0", "4294967295", "컴파일 오류"],
-    correctAnswer: 2,
-    explanation: "unsigned int에 -1을 넣으면 2의 보수로 모든 비트가 1이 되어 4294967295(2^32-1)가 됩니다.",
-    keyConceptTitle: "unsigned 오버플로우",
-    keyConceptDescription: "unsigned 타입은 음수를 저장할 수 없습니다. 음수를 넣으면 래핑되어 큰 양수가 됩니다.",
-    relatedTopics: ["unsigned", "오버플로우", "2의 보수"],
-  },
-  {
-    id: 35,
-    lessonId: "cpp-5",
-    difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-#include <limits>
-using namespace std;
-
-int main() {
-    int maxVal = numeric_limits<int>::max();
-    cout << maxVal + 1;
-    return 0;
-}`,
-    options: ["2147483648", "-2147483648", "0", "정의되지 않은 동작"],
-    correctAnswer: 3,
-    explanation: "signed int의 오버플로우는 C++ 표준에서 정의되지 않은 동작입니다. unsigned와 달리 래핑이 보장되지 않습니다.",
-    keyConceptTitle: "signed 정수 오버플로우",
-    keyConceptDescription: "signed 정수의 오버플로우는 UB입니다. unsigned만 모듈러 연산(래핑)이 보장됩니다.",
-    relatedTopics: ["오버플로우", "UB", "numeric_limits"],
-  },
-  {
-    id: 36,
-    lessonId: "cpp-5",
-    difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int main() {
-    int x = 5;
-    int y = (x > 3) + (x > 4) + (x > 5) + (x > 6);
-    cout << y;
-    return 0;
-}`,
-    options: ["0", "1", "2", "4"],
-    correctAnswer: 2,
-    explanation: "x=5: (5>3)=1, (5>4)=1, (5>5)=0, (5>6)=0. 합은 1+1+0+0=2입니다. bool은 1 또는 0으로 변환됩니다.",
-    keyConceptTitle: "bool의 정수 변환",
-    keyConceptDescription: "C++에서 true는 1, false는 0으로 정수 변환됩니다. 비교 결과를 산술에 활용할 수 있습니다.",
-    relatedTopics: ["bool to int", "비교 연산", "암시적 변환"],
   },
   {
     id: 37,
@@ -8994,25 +8781,25 @@ int main() {
     id: 346,
     lessonId: "cpp-2",
     difficulty: "보통",
-    question: "소수점 2자리까지만 출력하려면?",
+    question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
-#include <iomanip>  // setprecision 헤더
 using namespace std;
+
 int main() {
-    double pi = 3.14159265;
-    cout << ___ << pi;  // 3.14 출력
+    cout << "그는 \\"안녕\\"이라고 했다." << endl;
+    return 0;
 }`,
     options: [
-      "round(pi, 2) <<",
-      "fixed << setprecision(2) <<",
-      "precision(2) <<",
-      "format(\"%.2f\") <<",
+      '그는 \\"안녕\\"이라고 했다.',
+      '그는 "안녕"이라고 했다.',
+      "그는 안녕이라고 했다.",
+      "컴파일 에러",
     ],
     correctAnswer: 1,
-    explanation: "fixed << setprecision(2)를 사용하면 소수점 이하 2자리로 고정됩니다. fixed 없이 setprecision(2)만 쓰면 전체 유효숫자 2자리가 됩니다.",
-    keyConceptTitle: "fixed & setprecision",
-    keyConceptDescription: "cout << fixed << setprecision(n): 소수점 n자리 고정. 파이썬의 f\"{x:.2f}\"와 같은 효과. #include <iomanip> 필요.",
-    relatedTopics: ["setprecision", "fixed", "iomanip", "소수점 출력"],
+    explanation: '\\\\"는 문자열 안에서 큰따옴표를 출력하는 이스케이프 문자입니다. 실제 출력에는 \\\\ 없이 "만 나옵니다.',
+    keyConceptTitle: "이스케이프 문자 \\\"",
+    keyConceptDescription: '문자열 안에 큰따옴표를 넣으려면 \\\\"를 사용합니다. \\\\n(줄바꿈), \\\\t(탭)도 같은 방식입니다.',
+    relatedTopics: ["이스케이프 문자", "cout"],
   },
   {
     id: 347,
