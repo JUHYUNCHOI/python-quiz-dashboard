@@ -148,6 +148,8 @@ function SessionCompletePage() {
 
   // Load session data — 데이터 없으면 퀴즈 홈으로
   useEffect(() => {
+    // 퀴즈 완료 → 진행 중 플래그 제거
+    sessionStorage.removeItem("quiz-in-progress")
     try {
       const raw = sessionStorage.getItem("quizSessionData")
       if (raw) {

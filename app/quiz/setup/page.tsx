@@ -39,12 +39,38 @@ function QuizSetupPage() {
   const [selectedCourse, setSelectedCourse] = useState("python")
   const [questionCount, setQuestionCount] = useState(20)
   const [selectedDifficulty, setSelectedDifficulty] = useState("mixed")
+  const [quizInProgress, setQuizInProgress] = useState(false)
 
   // 간격 반복 상태
   const dueCount = typeof window !== "undefined" ? getDueQuestions().length : 0
   const masteryStats = typeof window !== "undefined" ? getMasteryStats() : null
   const [showCustomInput, setShowCustomInput] = useState(false)
   const [customValue, setCustomValue] = useState("")
+
+  // 저장된 설정 복원 + 진행 중 퀴즈 감지
+  useEffect(() => {
+    try {
+      const prefs = sessionStorage.getItem("quiz-setup-prefs")
+      if (prefs) {
+        const p = JSON.parse(prefs)
+        if (p.course) setSelectedCourse(p.course)
+        if (p.questionCount) setQuestionCount(p.questionCount)
+        if (p.difficulty) setSelectedDifficulty(p.difficulty)
+      }
+    } catch {}
+    const inProgress = sessionStorage.getItem("quiz-in-progress") === "1"
+    const hasSettings = !!sessionStorage.getItem("quizSettings")
+    setQuizInProgress(inProgress && hasSettings)
+  }, [])
+
+  // 설정 변경 시 sessionStorage에 저장 (이탈 후 복원용)
+  useEffect(() => {
+    try {
+      sessionStorage.setItem("quiz-setup-prefs", JSON.stringify({
+        course: selectedCourse, questionCount, difficulty: selectedDifficulty,
+      }))
+    } catch {}
+  }, [selectedCourse, questionCount, selectedDifficulty])
 
   // mode=review → 즉시 복습 세션 시작
   useEffect(() => {
@@ -104,7 +130,8 @@ function QuizSetupPage() {
   }
 
   const handleStart = () => {
-    // Store quiz settings in sessionStorage
+    sessionStorage.removeItem("quiz-in-progress") // 이전 플래그 초기화
+    setQuizInProgress(false)
     sessionStorage.setItem(
       "quizSettings",
       JSON.stringify({
@@ -138,6 +165,23 @@ function QuizSetupPage() {
             </div>
           </div>
         </div>
+
+        {/* 진행 중 퀴즈 이어서 풀기 배너 */}
+        {quizInProgress && (
+          <div className="mb-4 flex items-center gap-3 p-4 bg-amber-50 border-2 border-amber-300 rounded-2xl">
+            <span className="text-2xl">⚠️</span>
+            <div className="flex-1">
+              <p className="font-bold text-amber-800 text-sm">{t("진행 중인 퀴즈가 있어요", "Quiz in progress")}</p>
+              <p className="text-xs text-amber-600">{t("이어서 풀거나 새로 시작할 수 있어요", "Continue or start fresh")}</p>
+            </div>
+            <button
+              onClick={() => router.push("/quiz")}
+              className="shrink-0 px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-bold transition-colors"
+            >
+              {t("이어서 →", "Continue →")}
+            </button>
+          </div>
+        )}
 
         {/* 빠른 시작 (P6 캐주얼 유저용) */}
         <div className="flex justify-center mb-6">

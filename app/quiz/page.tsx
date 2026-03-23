@@ -82,6 +82,11 @@ export default function QuizPage() {
 
   const shuffled = smartSession.questions
 
+  // 퀴즈 진행 중 플래그 — setup 페이지 "이어서 풀기" 배너용
+  useEffect(() => {
+    sessionStorage.setItem("quiz-in-progress", "1")
+  }, [])
+
   const quiz = useQuizState(shuffled)
   const { play, isMuted, toggleMute } = useSoundEffect()
   const gamification = useGamification()
