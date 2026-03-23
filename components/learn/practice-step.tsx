@@ -21,8 +21,8 @@ function normalize(s: string) {
   return s.trim().replace(/\s+/g, " ").toLowerCase()
 }
 
-function extractSkeleton(_code: string): string {
-  return "// 👉 여기에 코드를 직접 작성하거나 복사해서 붙여넣으세요!"
+function extractSkeleton(code: string): string {
+  return code
 }
 
 export function PracticeStep({ step, lang = "ko", onSuccess, lessonId }: PracticeStepProps) {
