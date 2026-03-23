@@ -8198,7 +8198,7 @@ int search(int arr[], int left, int right, int target) {
     id: 320,
     lessonId: "cpp-13",
     difficulty: "어려움",
-    question: "다음 메모이제이션 코드에서 `memo[n] != -1` 조건 대신 다른 값을 초기값으로 쓰면 안 되는 이유는?",
+    question: "다음 메모이제이션 코드에서 memo[n] != -1 조건 대신 다른 값을 초기값으로 쓰면 안 되는 이유는?",
     code: `int memo[100];
 // fill(memo, memo + 100, 0);  // 0으로 초기화하면?
 
@@ -8479,7 +8479,7 @@ int main() {
     id: 332,
     lessonId: "cpp-1",
     difficulty: "쉬움",
-    question: "C++ Hello World 코드에서 `return 0;`은 어디에 써야 하나요?",
+    question: "C++ Hello World 코드에서 return 0;은 어디에 써야 하나요?",
     code: `#include <iostream>
 using namespace std;
 int main() {
@@ -8503,7 +8503,7 @@ int main() {
     id: 348,
     lessonId: "cpp-1",
     difficulty: "쉬움",
-    question: "`#include <iostream>`을 쓰는 이유는?",
+    question: "#include <iostream>을 쓰는 이유는?",
     code: `#include <iostream>
 using namespace std;
 int main() {
@@ -8549,7 +8549,7 @@ int main() {
     id: 350,
     lessonId: "cpp-1",
     difficulty: "쉬움",
-    question: "다음 코드에서 `<<`의 역할은?",
+    question: "다음 코드에서 <<의 역할은?",
     code: `cout << "Hello, World!" << endl;`,
     options: [
       "두 수를 비교한다",
@@ -8567,7 +8567,7 @@ int main() {
     id: 351,
     lessonId: "cpp-1",
     difficulty: "쉬움",
-    question: "`endl`을 사용하면 어떻게 되나요?",
+    question: "endl을 사용하면 어떻게 되나요?",
     code: `cout << "1번 줄" << endl;
 cout << "2번 줄" << endl;`,
     options: [
@@ -8646,7 +8646,7 @@ int main() {
     id: 355,
     lessonId: "cpp-1",
     difficulty: "쉬움",
-    question: "`#include <iostream>`을 빠뜨리면 어떻게 되나요?",
+    question: "#include <iostream>을 빠뜨리면 어떻게 되나요?",
     code: `// #include <iostream> 없음!
 using namespace std;
 int main() {
@@ -8710,7 +8710,7 @@ int main() {
     id: 358,
     lessonId: "cpp-1",
     difficulty: "쉬움",
-    question: "컴파일 후 생긴 `a.out` 파일을 실행하는 명령어는?",
+    question: "컴파일 후 생긴 a.out 파일을 실행하는 명령어는?",
     code: "",
     options: ["run a.out", "execute a.out", "./a.out", "open a.out"],
     correctAnswer: 2,
@@ -8723,7 +8723,7 @@ int main() {
     id: 359,
     lessonId: "cpp-1",
     difficulty: "쉬움",
-    question: "컴파일 시 실행 파일 이름을 `hello`로 지정하는 명령어는?",
+    question: "컴파일 시 실행 파일 이름을 hello로 지정하는 명령어는?",
     code: "",
     options: [
       "g++ main.cpp hello",
@@ -8828,7 +8828,7 @@ int main() {
     id: 364,
     lessonId: "cpp-1",
     difficulty: "보통",
-    question: "다음 코드에서 `std::`는 무엇을 의미하나요?",
+    question: "다음 코드에서 std::는 무엇을 의미하나요?",
     code: `#include <iostream>
 
 int main() {
@@ -8893,7 +8893,7 @@ int main() {
     id: 367,
     lessonId: "cpp-1",
     difficulty: "쉬움",
-    question: "빈칸을 채워 `int main()`의 코드 블록을 올바르게 완성하세요.",
+    question: "빈칸을 채워 int main()의 코드 블록을 올바르게 완성하세요.",
     code: `#include <iostream>
 
 int main() ___
@@ -8911,7 +8911,7 @@ ___`,
     id: 368,
     lessonId: "cpp-1",
     difficulty: "쉬움",
-    question: "빈칸을 채워 화면에 `Hello`를 출력하는 코드를 완성하세요.",
+    question: "빈칸을 채워 화면에 Hello를 출력하는 코드를 완성하세요.",
     code: `#include <iostream>
 
 int main() {
@@ -8948,7 +8948,7 @@ int main() {
     id: 370,
     lessonId: "cpp-1",
     difficulty: "보통",
-    question: "빈칸을 채워 `main.cpp`를 컴파일하고 `hello`라는 실행 파일을 만드세요.",
+    question: "빈칸을 채워 main.cpp를 컴파일하고 hello라는 실행 파일을 만드세요.",
     code: `// 터미널에서 실행할 명령어:
 g++ ___ hello main.cpp`,
     options: ["-o", "-out", "--output", "-name"],
@@ -8981,7 +8981,7 @@ int main() {
     id: 345,
     lessonId: "cpp-2",
     difficulty: "쉬움",
-    question: "`using namespace std;` 없이 cout을 사용하는 올바른 방법은?",
+    question: "using namespace std; 없이 cout을 사용하는 올바른 방법은?",
     code: `#include <iostream>
 // using namespace std; 없음!
 
@@ -9093,7 +9093,7 @@ int main() {
     id: 335,
     lessonId: "cpp-10",
     difficulty: "보통",
-    question: "`auto`가 타입을 자동 추론하는 예시로 올바른 것은?",
+    question: "auto가 타입을 자동 추론하는 예시로 올바른 것은?",
     code: `#include <vector>
 #include <string>
 using namespace std;
@@ -9115,7 +9115,7 @@ int main() {
     id: 336,
     lessonId: "cpp-15",
     difficulty: "쉬움",
-    question: "`pair<string, int> p = {\"Kim\", 95};`에서 `p.first`와 `p.second`의 값은?",
+    question: "pair<string, int> p = {\"Kim\", 95};`에서 `p.first`와 `p.second`의 값은?",
     code: `#include <iostream>
 #include <utility>
 using namespace std;
@@ -9230,7 +9230,7 @@ cin.tie(nullptr);
     id: 341,
     lessonId: "cpp-19",
     difficulty: "보통",
-    question: "`endl`보다 `'\\n'`을 쓰는 것이 더 빠른 이유는?",
+    question: "endl보다 '\\n'을 쓰는 것이 더 빠른 이유는?",
     code: `// 느린 방식
 cout << result << endl;  // 출력 + 버퍼 flush!
 
