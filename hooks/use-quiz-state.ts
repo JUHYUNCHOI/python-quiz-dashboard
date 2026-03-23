@@ -226,7 +226,7 @@ export function useQuizState(questions: QuizQuestion[]) {
 
   // 현재 문제: 재출제 문제가 있으면 그것, 없으면 순서대로
   const question = activeRetryQuestion || (questions[currentQuestion] ?? questions[0])
-  const progress = (currentQuestion / quizSettings.questionCount) * 100
+  const progress = ((currentQuestion + 1) / quizSettings.questionCount) * 100
   const estimatedRemainingTime = Math.ceil((quizSettings.questionCount - currentQuestion - 1) * 1)
 
   // Save session data to sessionStorage before navigation

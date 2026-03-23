@@ -182,7 +182,7 @@ export default function QuizPage() {
                   <span>
                     {t("문제", "Q")} {quiz.currentQuestion + 1}/{quiz.quizSettings.questionCount}
                   </span>
-                  <span className="hidden sm:inline">{Math.round(quiz.progress)}% {t("완료", "Done")}</span>
+                  <span className="hidden sm:inline text-indigo-600 font-medium">{Math.round(quiz.progress)}%</span>
                 </div>
                 <div className="h-2.5 md:h-3 w-full overflow-hidden rounded-full bg-gray-200">
                   <div

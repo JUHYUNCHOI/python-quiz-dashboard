@@ -20,14 +20,21 @@ export function CodeDisplay({
   showLineNumbers: showLineNumbersProp,
   className,
 }: CodeDisplayProps) {
-  // 언어 자동 감지: #include, cout, cin → C++, def/print → Python
-  const language = languageProp || (
-    code.includes('#include') || code.includes('cout') || code.includes('int main')
-      ? 'C++'
-      : code.includes('def ') || code.includes('print(')
-        ? 'Python'
-        : 'Code'
-  )
+  // 언어 자동 감지
+  const language = languageProp || (() => {
+    if (
+      code.includes('#include') || code.includes('cout') || code.includes('cin') ||
+      code.includes('int main') || code.includes('std::') || code.includes('endl') ||
+      code.includes('return 0') || /\bvoid\b/.test(code) ||
+      /\bint\b.*\(/.test(code) || code.includes('<<') || code.includes('>>')
+    ) return 'C++'
+    if (
+      code.includes('def ') || code.includes('print(') || code.includes('import ') ||
+      code.includes('elif ') || code.includes('True') || code.includes('False') ||
+      code.includes('None') || code.includes('self.')
+    ) return 'Python'
+    return 'Code'
+  })()
 
   const [copied, setCopied] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
