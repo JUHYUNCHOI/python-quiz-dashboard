@@ -224,20 +224,21 @@ x = 10;  // int에 int 대입 OK`,
     id: 12,
     lessonId: "cpp-3",
     difficulty: "쉬움",
-    question: "다음 코드의 출력 결과는?",
+    question: "두 cout의 출력 결과로 올바른 것은?",
     code: `#include <iostream>
 using namespace std;
 
 int main() {
     char c = 'A';
+    cout << c << endl;
     cout << (int)c << endl;
     return 0;
 }`,
-    options: ["A", "65", "97", "컴파일 오류"],
+    options: ["A 와 A", "A 와 숫자", "숫자 와 숫자", "컴파일 오류"],
     correctAnswer: 1,
-    explanation: "'A'의 ASCII 코드 값은 65입니다. (int)c로 형변환하면 문자 대신 ASCII 코드 정수가 출력됩니다.",
-    keyConceptTitle: "char 타입과 ASCII",
-    keyConceptDescription: "char 타입은 내부적으로 정수(ASCII 코드)로 저장됩니다. 'A'=65, 'a'=97, '0'=48입니다.",
+    explanation: "cout << c 는 문자 'A'를 그대로 출력하고, cout << (int)c 는 'A'를 int로 형변환해서 ASCII 코드인 65를 출력해요. 같은 변수라도 캐스팅하면 다르게 출력돼요!",
+    keyConceptTitle: "char 캐스팅 — 문자 vs 숫자",
+    keyConceptDescription: "char 변수를 그냥 출력하면 글자, (int)로 캐스팅하면 ASCII 숫자가 출력됩니다.",
     relatedTopics: ["char", "ASCII", "형변환"],
   },
   {
@@ -307,19 +308,19 @@ int main() {
     id: 21,
     lessonId: "cpp-3",
     difficulty: "쉬움",
-    question: "다음 코드에서 const의 역할은?",
+    question: "다음 코드를 컴파일하면 어떻게 되나요?",
     code: `#include <iostream>
 using namespace std;
 
 int main() {
     const int MAX = 100;
-    // MAX = 200;  // 이 줄의 결과는?
+    MAX = 200;
     cout << MAX;
     return 0;
 }`,
-    options: ["MAX가 200으로 변경됨", "컴파일 오류 (const 변수는 수정 불가)", "런타임 오류", "MAX가 100으로 유지됨"],
-    correctAnswer: 1,
-    explanation: "const로 선언된 변수는 값을 변경할 수 없습니다. MAX = 200은 컴파일 오류를 일으킵니다.",
+    options: ["200이 출력됨", "100이 출력됨", "컴파일 오류", "런타임 오류"],
+    correctAnswer: 2,
+    explanation: "const로 선언된 변수는 초기화 후 값을 변경할 수 없어요. MAX = 200처럼 const 변수에 대입하면 컴파일 오류가 발생합니다.",
     keyConceptTitle: "const 상수",
     keyConceptDescription: "const 변수는 초기화 후 값을 변경할 수 없습니다. 매직 넘버 대신 const를 사용하면 코드가 명확해집니다.",
     relatedTopics: ["const", "상수", "매직 넘버"],
