@@ -17,9 +17,27 @@ interface FillBlankStepProps {
   isReview?: boolean
 }
 
+// 배열을 Fisher-Yates 알고리즘으로 셔플 (step.id 기반 seed로 매번 같은 순서 유지)
+function seededShuffle<T>(arr: T[], seed: string): T[] {
+  const result = [...arr]
+  let h = 0
+  for (let i = 0; i < seed.length; i++) h = (Math.imul(31, h) + seed.charCodeAt(i)) | 0
+  for (let i = result.length - 1; i > 0; i--) {
+    h = (Math.imul(h, 1664525) + 1013904223) | 0
+    const j = Math.abs(h) % (i + 1);
+    [result[i], result[j]] = [result[j], result[i]]
+  }
+  return result
+}
+
 export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, isReview }: FillBlankStepProps) {
   const blanks: { id: number; answer: string; options: string[] }[] = step.fillBlanks || []
   const { t } = useLanguage()
+  // 보기 순서 shuffle (step.id + blank.id 기반으로 매번 동일하게 섞음)
+  const shuffledBlanks = blanks.map(b => ({
+    ...b,
+    options: seededShuffle(b.options, `${step.id}-${b.id}`)
+  }))
   const [filledValues, setFilledValues] = useState<Record<number, string>>({})
   const [currentBlankIndex, setCurrentBlankIndex] = useState(0)
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -187,7 +205,7 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
     })
   }
 
-  const currentBlank = blanks[currentBlankIndex]
+  const currentBlank = shuffledBlanks[currentBlankIndex]
 
   return (
     <div className="space-y-6">
@@ -239,7 +257,7 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
               const usedCount = Object.entries(filledValues).filter(
                 ([blankId, val]) => val === option && Number(blankId) !== currentBlank.id
               ).length
-              const availableCount = blanks.filter(b => b.options.includes(option)).length
+              const availableCount = shuffledBlanks.filter(b => b.options.includes(option)).length
               const isUsed = usedCount >= availableCount && filledValues[currentBlank.id] !== option
               return (
                 <motion.button
