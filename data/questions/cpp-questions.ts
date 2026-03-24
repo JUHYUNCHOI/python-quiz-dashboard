@@ -1824,23 +1824,11 @@ int main() {
     id: 109,
     lessonId: "cpp-4",
     difficulty: "보통",
-    question: "다음 코드에서 getline과 cin >>의 차이는 무엇인가요?",
-    code: `#include <iostream>
-#include <string>
-using namespace std;
-
-int main() {
-    string s1, s2;
-    // 입력: "Hello World"
-    // 방법 1:
-    cin >> s1;  // s1 = ?
-    // 방법 2:
-    getline(cin, s2);  // s2 = ?
-    return 0;
-}`,
-    options: ["둘 다 \"Hello World\" 전체를 읽는다", "cin >>는 \"Hello\"만, getline은 \"Hello World\" 전체를 읽는다", "cin >>는 \"Hello World\" 전체를, getline은 \"Hello\"만 읽는다", "둘 다 \"Hello\"만 읽는다"],
-    correctAnswer: 1,
-    explanation: "cin >>는 공백을 구분자로 사용하여 첫 단어만 읽습니다. getline은 줄 전체를 읽습니다.",
+    question: "입력이 \"Hello World\"일 때, cin >> s와 getline(cin, s)의 차이로 올바른 설명은?",
+    code: ``,
+    options: ["cin >>는 공백에서 멈춰 \"Hello\"만 읽고, getline은 줄 전체 \"Hello World\"를 읽는다", "cin >>는 \"Hello World\" 전체를, getline은 \"Hello\"만 읽는다", "둘 다 \"Hello World\" 전체를 읽는다", "둘 다 \"Hello\"만 읽는다"],
+    correctAnswer: 0,
+    explanation: "cin >>는 공백(스페이스, 탭, 엔터)을 만나면 멈춰요. 'Hello World' 입력 시 'Hello'만 읽어요. getline은 엔터 전까지 한 줄 전체를 읽으므로 'Hello World' 전체를 읽어요.",
     keyConceptTitle: "getline vs cin >>",
     keyConceptDescription: "cin >>는 공백/탭/줄바꿈에서 멈추고, getline(cin, s)은 줄 전체를 읽습니다. 공백 포함 입력이 필요하면 getline을 사용하세요.",
     codeComparison: {
