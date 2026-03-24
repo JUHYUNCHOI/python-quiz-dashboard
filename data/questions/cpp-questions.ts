@@ -295,7 +295,7 @@ int main() {
     animationKey: "syntaxSpotter",
     difficulty: "쉬움",
     question: "다음 중 C++ 문자열 리터럴의 올바른 표현은?",
-    code: `// 문자열을 올바르게 표현하는 것은?`,
+    code: ``,
     options: ["'Hello'", "\"Hello\"", "[Hello]", "{Hello}"],
     correctAnswer: 1,
     explanation: "C++에서 문자열 리터럴은 큰따옴표(\")로 감쌉니다. 작은따옴표(')는 단일 문자(char)용입니다.",
