@@ -7,6 +7,7 @@ import { LessonStep } from "./types"
 import { highlightCppInline } from "@/components/ui/code-block"
 import { motion, AnimatePresence } from "framer-motion"
 import { useLanguage } from "@/contexts/language-context"
+import { renderContent } from "./render-content"
 
 interface FillBlankStepProps {
   step: LessonStep
@@ -27,6 +28,16 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
   const [showAckButton, setShowAckButton] = useState(false)
   const [lastFilledId, setLastFilledId] = useState<number | null>(null) // 방금 채운 빈칸 flash용
   const optionsRef = useRef<HTMLDivElement>(null)
+
+  // step이 바뀌면 상태 초기화
+  useEffect(() => {
+    setFilledValues({})
+    setCurrentBlankIndex(0)
+    setIsSubmitted(false)
+    setIsCorrect(false)
+    setWrongBlankIds(new Set())
+    setShowAckButton(false)
+  }, [step.id]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // 이미 완료된 스텝으로 돌아왔을 때 정답 자동 표시
   useEffect(() => {
@@ -197,7 +208,7 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
         </div>
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{step.title}</h1>
         {step.content && (
-          <p className="text-base text-gray-600 leading-relaxed">{step.content}</p>
+          <div className="text-base text-gray-600 leading-relaxed space-y-2">{renderContent(step.content)}</div>
         )}
       </div>
 
