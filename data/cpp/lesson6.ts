@@ -257,9 +257,15 @@ if (score >= 90) {
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ 성적 등급 프로그램을 만들어보세요!",
-          content: `점수를 입력받아서 등급을 출력하는 프로그램을 만들어봐요!
+          content: `점수를 입력받아서 등급을 출력하는 프로그램을 완성해봐요!
 
-if, else if, else를 활용하는 연습이에요.`,
+**등급 기준:**
+- 90점 이상 → \`A등급! 🎉\`
+- 80점 이상 → \`B등급! 👍\`
+- 70점 이상 → \`C등급\`
+- 70점 미만 → \`더 열심히!\`
+
+if, else if, else를 순서대로 사용해보세요.`,
           code: `#include <iostream>
 using namespace std;
 
