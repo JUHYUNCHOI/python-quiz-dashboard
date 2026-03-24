@@ -7364,7 +7364,7 @@ int main() {
     id: 327,
     lessonId: "cpp-4",
     difficulty: "보통",
-    question: "앞 문제의 버퍼 문제를 해결하는 올바른 코드는?",
+    question: "cin >> 후 getline()을 쓸 때 버퍼에 남은 엔터를 제거하는 올바른 코드는?",
     code: `int main() {
     int age;
     string name;
