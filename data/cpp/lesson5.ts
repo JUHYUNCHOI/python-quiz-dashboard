@@ -235,7 +235,7 @@ if (!finished) {
           type: "fillblank" as const,
           title: "빈칸을 채워주세요",
           content: "90~100점이면 A등급! 조건을 완성해봐요!",
-          code: "if (score >= 90 ___ score <= 100) {\n    cout << \"A등급!\";\n}",
+          code: "if ((score >= 90) ___ (score <= 100)) {\n    cout << \"A등급!\";\n}",
           fillBlanks: [
             { id: 0, answer: "&&", options: ["&&", "||", "and", "&"] }
           ],
@@ -272,7 +272,7 @@ x--;    // x = x - 1 → 5
         {
           id: "ch2-prefix-postfix",
           type: "explain",
-          title: "🔍 x++ vs ++x — 뭐가 다를까?",
+          title: "🔍 후위 증감(x++) vs 전위 증감(++x) — 뭐가 다를까?",
           content: `\`x++\`과 \`++x\`는 둘 다 x에 1을 더해요. 하지만 **다른 연산과 함께 쓸 때** 차이가 나요!
 
 \`\`\`cpp
@@ -297,7 +297,7 @@ cout << y << endl;    // 6
         {
           id: "ch2-pred-prefix",
           type: "predict" as const,
-          title: "x++ vs ++x 차이 맞추기!",
+          title: "후위(x++) vs 전위(++x) 차이 맞추기!",
           code: "#include <iostream>\nusing namespace std;\nint main() {\n    int a = 10;\n    cout << a++ << endl;\n    cout << a << endl;\n    return 0;\n}",
           options: ["10\\n10", "10\\n11", "11\\n11", "11\\n12"],
           answer: 1,

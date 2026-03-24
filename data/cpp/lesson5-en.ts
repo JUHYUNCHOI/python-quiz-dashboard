@@ -235,7 +235,7 @@ if (!finished) {
           type: "fillblank" as const,
           title: "Fill in the blanks",
           content: "Connect two conditions together!",
-          code: "if (score >= 90 ___ score <= 100) {\n    cout << \"Grade A!\";\n}",
+          code: "if ((score >= 90) ___ (score <= 100)) {\n    cout << \"Grade A!\";\n}",
           fillBlanks: [
             { id: 0, answer: "&&", options: ["&&", "||", "and", "&"] }
           ],
@@ -272,7 +272,7 @@ x--;    // x = x - 1 → 5
         {
           id: "ch2-prefix-postfix",
           type: "explain",
-          title: "🔍 x++ vs ++x — What's the Difference?",
+          title: "🔍 Postfix (x++) vs Prefix (++x) — What's the Difference?",
           content: `Both \`x++\` and \`++x\` add 1 to x. But they behave differently **when used with other operations**!
 
 \`\`\`cpp

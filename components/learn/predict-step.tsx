@@ -143,7 +143,7 @@ export function PredictStep({ step, isCompleted, selectedAnswer, showExplanation
                 showResult && !isSelected && !isCorrect && "bg-gray-100 border-gray-200 text-gray-400",
               )}
             >
-              <span className="flex-1">{option}</span>
+              <span className="flex-1 font-mono text-sm whitespace-pre-line">{option.replace(/\\n/g, '\n')}</span>
               {showResult && isCorrect && <Check className="w-5 h-5 shrink-0 ml-2 text-green-600" />}
               {showResult && isSelected && !isCorrect && <X className="w-5 h-5 shrink-0 ml-2 text-red-600" />}
             </motion.button>
