@@ -4,7 +4,7 @@ import { GiraffeHero } from "@/components/giraffe-hero"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { Card } from "@/components/ui/card"
-import { BookOpen, Brain, Trophy, Flame, Zap, ChevronRight, Target } from "lucide-react"
+import { BookOpen, Brain, Trophy, Flame, Zap, ChevronRight, Target, CheckCircle2, BarChart3, Lock } from "lucide-react"
 import Link from "next/link"
 import { useLanguage } from "@/contexts/language-context"
 import { useGamification, DAILY_XP_GOAL } from "@/hooks/use-gamification"
@@ -13,6 +13,7 @@ import { OnboardingModal } from "@/components/onboarding-modal"
 import { DailyChallenges } from "@/components/daily-challenges"
 import { AchievementsShelf } from "@/components/achievements-shelf"
 import { PythonToCppBridge } from "@/components/python-to-cpp-bridge"
+import { useAuth } from "@/contexts/auth-context"
 
 // -------- 레슨 ID 순서 --------
 const PYTHON_LESSON_IDS: (number | string)[] = [
@@ -144,8 +145,245 @@ function readSelectedCourse(): "python" | "cpp" {
   }
 }
 
+// ============================================================
+// 랜딩 페이지 (비로그인 상태)
+// ============================================================
+
+const PREVIEW_PYTHON = [
+  { id: "1", title: "print() 출력" },
+  { id: "2", title: "데이터 타입" },
+  { id: "3", title: "변수" },
+  { id: "11", title: "조건문 (if)" },
+  { id: "13", title: "반복문 (for)" },
+  { id: "p1", title: "🎮 미니 계산기" },
+]
+
+const PREVIEW_CPP = [
+  { id: "cpp-1", title: "파이썬 vs C++" },
+  { id: "cpp-3", title: "변수와 타입" },
+  { id: "cpp-6", title: "조건문 (if/else)" },
+  { id: "cpp-9", title: "배열과 벡터" },
+  { id: "cpp-14", title: "클래스 (class)" },
+  { id: "cpp-p1", title: "🎮 숫자 맞추기" },
+]
+
+function LandingPage() {
+  const { t } = useLanguage()
+
+  const features = [
+    {
+      icon: <BookOpen className="w-6 h-6" />,
+      color: "bg-green-100 text-green-600",
+      title: t("체계적인 커리큘럼", "Structured Curriculum"),
+      desc: t("Python 52강 + C++ 20강으로 체계적으로 코딩을 배워요", "Learn coding step-by-step with 52 Python + 20 C++ lessons"),
+    },
+    {
+      icon: <Brain className="w-6 h-6" />,
+      color: "bg-purple-100 text-purple-600",
+      title: t("스마트 퀴즈", "Smart Quizzes"),
+      desc: t("간격 반복으로 내가 틀린 문제를 자동으로 복습해요", "Spaced repetition automatically reviews your weak points"),
+    },
+    {
+      icon: <Flame className="w-6 h-6" />,
+      color: "bg-orange-100 text-orange-600",
+      title: t("학습 스트릭", "Daily Streak"),
+      desc: t("매일 꾸준히 학습하고 연속 기록을 쌓아요", "Build a daily habit and track your streak"),
+    },
+    {
+      icon: <BarChart3 className="w-6 h-6" />,
+      color: "bg-blue-100 text-blue-600",
+      title: t("진도 관리", "Progress Tracking"),
+      desc: t("어느 레슨까지 완료했는지 한눈에 확인해요", "See exactly which lessons you've completed at a glance"),
+    },
+  ]
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-white">
+      {/* 상단 헤더 */}
+      <div className="flex items-center justify-between px-5 py-4 max-w-2xl mx-auto">
+        <div className="flex items-center gap-2">
+          <span className="text-2xl">🦒</span>
+          <span className="font-black text-xl text-gray-800">코드린</span>
+        </div>
+        <Link
+          href="/login"
+          className="px-4 py-2 rounded-full text-sm font-bold text-white bg-orange-500 hover:bg-orange-600 transition-colors"
+        >
+          {t("로그인", "Login")}
+        </Link>
+      </div>
+
+      <main className="max-w-2xl mx-auto px-5 pb-16 space-y-10">
+
+        {/* 히어로 섹션 */}
+        <div className="text-center pt-6 pb-2 space-y-4">
+          <div className="text-6xl">🦒</div>
+          <h1 className="text-3xl font-black text-gray-900 leading-tight">
+            {t("코딩, 재미있게\n배워보세요", "Learn Coding,\nStep by Step")}
+          </h1>
+          <p className="text-base text-gray-500 leading-relaxed max-w-sm mx-auto">
+            {t(
+              "중학생·고등학생을 위한 Python & C++ 학습 플랫폼.\n레슨부터 퀴즈까지 한 곳에서.",
+              "Python & C++ learning platform for students.\nLessons, quizzes, and progress — all in one place."
+            )}
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+            <Link
+              href="/login"
+              className="px-8 py-3.5 rounded-2xl text-base font-bold text-white bg-orange-500 hover:bg-orange-600 transition-colors shadow-md shadow-orange-200"
+            >
+              {t("무료로 시작하기", "Get Started Free")}
+            </Link>
+            <Link
+              href="/curriculum"
+              className="px-8 py-3.5 rounded-2xl text-base font-bold text-gray-700 bg-white border-2 border-gray-200 hover:border-gray-300 transition-colors"
+            >
+              {t("커리큘럼 보기", "Browse Curriculum")}
+            </Link>
+          </div>
+        </div>
+
+        {/* 기능 카드 */}
+        <div>
+          <h2 className="text-lg font-black text-gray-800 mb-3">
+            {t("이런 걸 배울 수 있어요", "What you'll get")}
+          </h2>
+          <div className="grid grid-cols-2 gap-3">
+            {features.map((f, i) => (
+              <div key={i} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm space-y-2">
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${f.color}`}>
+                  {f.icon}
+                </div>
+                <p className="font-bold text-sm text-gray-800">{f.title}</p>
+                <p className="text-xs text-gray-500 leading-relaxed">{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 커리큘럼 미리보기 */}
+        <div>
+          <h2 className="text-lg font-black text-gray-800 mb-3">
+            {t("커리큘럼 미리보기", "Curriculum Preview")}
+          </h2>
+          <div className="space-y-3">
+            {/* Python 트랙 */}
+            <div className="bg-green-50 rounded-2xl border border-green-100 p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-lg">🐍</span>
+                <span className="font-black text-gray-800">Python</span>
+                <span className="text-xs text-green-600 font-bold bg-green-100 px-2 py-0.5 rounded-full">
+                  {t("52강", "52 lessons")}
+                </span>
+              </div>
+              <div className="space-y-1.5">
+                {PREVIEW_PYTHON.map((lesson, i) => (
+                  <div key={lesson.id} className="flex items-center gap-2">
+                    {i < 2 ? (
+                      <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
+                    ) : (
+                      <div className="w-4 h-4 rounded-full border-2 border-gray-200 shrink-0" />
+                    )}
+                    <span className={`text-sm ${i < 2 ? "text-green-700 font-medium" : "text-gray-500"}`}>
+                      {lesson.title}
+                    </span>
+                    {i >= 2 && <Lock className="w-3 h-3 text-gray-300 ml-auto" />}
+                  </div>
+                ))}
+                <p className="text-xs text-green-600 font-medium pt-1">... {t("총 52강", "52 lessons total")}</p>
+              </div>
+            </div>
+
+            {/* C++ 트랙 */}
+            <div className="bg-blue-50 rounded-2xl border border-blue-100 p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-lg">⚡</span>
+                <span className="font-black text-gray-800">C++</span>
+                <span className="text-xs text-blue-600 font-bold bg-blue-100 px-2 py-0.5 rounded-full">
+                  {t("20강", "20 lessons")}
+                </span>
+              </div>
+              <div className="space-y-1.5">
+                {PREVIEW_CPP.map((lesson, i) => (
+                  <div key={lesson.id} className="flex items-center gap-2">
+                    <div className="w-4 h-4 rounded-full border-2 border-gray-200 shrink-0" />
+                    <span className="text-sm text-gray-500">{lesson.title}</span>
+                    <Lock className="w-3 h-3 text-gray-300 ml-auto" />
+                  </div>
+                ))}
+                <p className="text-xs text-blue-600 font-medium pt-1">... {t("총 20강", "20 lessons total")}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 학습 방법 */}
+        <div>
+          <h2 className="text-lg font-black text-gray-800 mb-3">
+            {t("어떻게 배우나요?", "How does it work?")}
+          </h2>
+          <div className="space-y-3">
+            {[
+              {
+                step: "1",
+                color: "bg-orange-500",
+                title: t("레슨 학습", "Study a Lesson"),
+                desc: t("설명 → 빈칸 채우기 → 예측 → 실전 문제 순서로 단계별 학습", "Learn through explanation → fill-in-the-blank → predict → practice"),
+              },
+              {
+                step: "2",
+                color: "bg-purple-500",
+                title: t("퀴즈로 복습", "Quiz & Review"),
+                desc: t("스마트 알고리즘이 내가 약한 부분을 자동으로 복습시켜줘요", "Smart algorithm automatically reviews your weak spots"),
+              },
+              {
+                step: "3",
+                color: "bg-green-500",
+                title: t("진도 확인", "Track Progress"),
+                desc: t("완료한 레슨, XP, 스트릭으로 학습 동기를 유지해요", "Stay motivated with completed lessons, XP, and streaks"),
+              },
+            ].map((item) => (
+              <div key={item.step} className="flex items-start gap-4 bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-black shrink-0 ${item.color}`}>
+                  {item.step}
+                </div>
+                <div>
+                  <p className="font-bold text-sm text-gray-800">{item.title}</p>
+                  <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 하단 CTA */}
+        <div className="bg-gradient-to-r from-orange-500 to-yellow-500 rounded-3xl p-6 text-center text-white space-y-3 shadow-lg shadow-orange-200">
+          <div className="text-3xl">🚀</div>
+          <p className="font-black text-xl">{t("지금 바로 시작해요!", "Start Learning Today!")}</p>
+          <p className="text-sm text-orange-100">
+            {t("구글 계정으로 1분 안에 시작할 수 있어요", "Start in under 1 minute with your Google account")}
+          </p>
+          <Link
+            href="/login"
+            className="inline-flex items-center gap-2 px-8 py-3 rounded-2xl text-base font-bold text-orange-600 bg-white hover:bg-orange-50 transition-colors"
+          >
+            {t("무료로 시작하기", "Get Started Free")}
+            <ChevronRight className="w-5 h-5" />
+          </Link>
+        </div>
+
+      </main>
+    </div>
+  )
+}
+
+// ============================================================
+// 대시보드 페이지 (로그인 상태)
+// ============================================================
+
 export default function DashboardPage() {
   const { t, lang } = useLanguage()
+  const { isAuthenticated, isLoading: authLoading } = useAuth()
   const { level, totalXp, dailyStreak, xpToday } = useGamification()
   const [nextLesson, setNextLesson] = useState<NextLesson | null>(null)
   const [selectedCourse, setSelectedCourse] = useState<"python" | "cpp">("python")
@@ -221,6 +459,23 @@ export default function DashboardPage() {
 
   const isCpp = nextLesson?.course === "cpp"
   const courseLabel = isCpp ? "C++" : "Python"
+
+  // 인증 로딩 중: 최소한의 스켈레톤
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white flex items-center justify-center">
+        <div className="text-center space-y-3">
+          <div className="text-4xl animate-bounce">🦒</div>
+          <div className="text-sm text-gray-400">{t("불러오는 중...", "Loading...")}</div>
+        </div>
+      </div>
+    )
+  }
+
+  // 비로그인: 랜딩 페이지
+  if (!isAuthenticated) {
+    return <LandingPage />
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white">
