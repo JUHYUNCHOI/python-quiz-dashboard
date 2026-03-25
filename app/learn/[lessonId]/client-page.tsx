@@ -55,7 +55,6 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     if (!authLoading && !user) router.replace("/login")
   }, [user, authLoading, router])
 
-  if (authLoading || !user) return null
 
   // Supabase 진도 동기화
   const { syncProgress, syncCompletion, loadFromCloud } = useLessonSync(
@@ -312,6 +311,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   }, [completedSteps, step?.id, play, isIGCSE, effectiveTeacher, t])
 
   const closeSuccessOverlay = useCallback(() => { setShowSuccess(false) }, [])
+
+  if (authLoading || !user) return null
 
   if (isLocked) {
     return (

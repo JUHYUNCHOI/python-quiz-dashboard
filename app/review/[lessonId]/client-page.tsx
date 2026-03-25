@@ -159,8 +159,6 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
     router.push(`/learn/${lessonId}?from=review`)
   }
 
-  if (authLoading || !user) return null
-
   // 레슨 없으면 에러
   if (!lesson || reviewSteps.length === 0) {
     return (
@@ -290,6 +288,8 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
       if (pct >= 70) markQuizComplete(lessonId)
     }
   }, [showResults, totalAttempted, correctCount, lessonId])
+
+  if (authLoading || !user) return null
 
   // 결과 화면
   if (showResults) {
