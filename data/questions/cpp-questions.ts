@@ -1443,7 +1443,7 @@ int main() {
   },
   {
     id: 89,
-    lessonId: "cpp-9",
+    lessonId: "cpp-11",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -1488,7 +1488,7 @@ int main() {
   },
   {
     id: 92,
-    lessonId: "cpp-9",
+    lessonId: "cpp-11",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
