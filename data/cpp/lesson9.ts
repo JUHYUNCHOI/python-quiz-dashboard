@@ -588,37 +588,111 @@ for (int x : v) {
 // 둘 다 출력: 10 20 30 40
 \`\`\`
 
-그런데 여기서 중요한 차이가 있어요.
+파이썬과 비교:
 
-## for (int x : v) — 복사
+\`\`\`python
+for x in v:       # 파이썬
+    print(x)
+\`\`\`
+\`\`\`cpp
+for (int x : v) { // C++
+    cout << x;
+}
+\`\`\`
+
+@핵심: \`for (타입 변수 : 컨테이너)\` 구조예요. 인덱스 없이 원소를 하나씩 꺼내서 써요!`,
+        },
+        {
+          id: "ch2-fb-range",
+          type: "fillblank" as const,
+          title: "빈칸을 채워주세요",
+          content: "vector의 모든 원소를 출력하는 range-based for를 완성해봐요!",
+          code: "vector<int> v = {1, 2, 3, 4, 5};\nfor (___ x : ___) {\n    cout << x << \" \";\n}",
+          reviewHint: `range-based for 구조:
+\`for (타입 변수명 : 컨테이너) { ... }\`
+
+- \`타입\`: 원소의 타입 (int, string 등)
+- \`변수명\`: 원소를 담을 변수
+- \`컨테이너\`: 순회할 배열/벡터 이름`,
+          fillBlanks: [
+            { id: 0, answer: "int", options: ["int", "auto", "for", "void"] },
+            { id: 1, answer: "v", options: ["v", "x", "nums", "i"] },
+          ],
+          explanation: "for (int x : v) — v의 원소를 int 타입 x에 하나씩 꺼내요!"
+        },
+        {
+          id: "ch2-pred-range",
+          type: "predict" as const,
+          title: "Range-based for 예측!",
+          code: `#include <iostream>
+#include <vector>
+using namespace std;
+int main() {
+    vector<int> v = {3, 6, 9, 12};
+    int sum = 0;
+    for (int x : v) {
+        sum += x;
+    }
+    cout << sum;
+    return 0;
+}`,
+          reviewHint: `range-based for는 v의 원소를 차례로 x에 담아요.
+- x = 3 → sum = 3
+- x = 6 → sum = 9
+- x = 9 → sum = 18
+- x = 12 → sum = 30`,
+          options: ["12", "24", "30", "에러"],
+          answer: 2,
+          explanation: "3+6+9+12 = 30! range-based for로 모든 원소를 순서대로 더했어요.",
+        },
+        {
+          id: "ch2-range-ref",
+          type: "explain",
+          title: "🔗 참조(&)로 더 빠르게, const로 더 안전하게",
+          content: `기본 \`for (int x : v)\`는 매번 값을 **복사**해요. 큰 데이터라면 느려질 수 있죠.
+
+**& 하나 추가하면** 복사 없이 원본을 직접 다뤄요!
+
+## for (int& x : v) — 참조 (빠름 + 수정 가능)
 
 \`\`\`cpp
-for (int x : v) { ... }
+vector<int> nums = {1, 2, 3};
+for (int& x : nums) {
+    x = x * 10;    // 원본이 바뀜!
+}
+// nums는 이제 {10, 20, 30} ✅
 \`\`\`
-매 반복마다 v의 값을 **복사**해서 x에 담아요. 원본을 바꿀 수 없고, 복사 비용이 생겨요.
-
-## for (int& x : v) — 참조 (빠름!)
-
-\`\`\`cpp
-for (int& x : v) { ... }
-\`\`\`
-x가 v의 원소를 **직접 가리켜요** (참조). 복사가 없으니 빠르고, 값을 수정할 수도 있어요.
 
 ## for (const int& x : v) — 권장!
 
 \`\`\`cpp
-for (const int& x : v) { ... }
+for (const int& x : nums) {
+    cout << x;     // 읽기만 OK
+    // x = 0;     // ❌ 컴파일 에러 (const라서 수정 불가)
+}
 \`\`\`
-참조라 빠르고, \`const\`라 실수로 값을 바꾸는 걸 막아줘요. **읽기만 할 때 최선의 선택!**
 
-@핵심: 값을 읽기만 한다면 **\`const int&\`**를 쓰는 게 정석이에요. 복사 없이 빠르고 안전해요!`,
+| 방식 | 복사 | 수정 | 속도 |
+|---|---|---|---|
+| \`int x\` | ✅ 복사 | ❌ 원본 불변 | 느림 |
+| \`int& x\` | ❌ 없음 | ✅ 가능 | 빠름 |
+| \`const int& x\` | ❌ 없음 | ❌ 불가 | 빠름 |
+
+@핵심: 값을 바꿀 필요 없으면 **\`const int&\`**, 값을 직접 수정할 때만 **\`int&\`**!`,
         },
         {
           id: "ch2-range-for-anim",
           type: "interactive",
-          title: "🎬 복사 vs 참조 — 직접 보기",
-          content: "실행 버튼을 눌러 복사와 참조의 차이를 눈으로 확인해보세요!",
+          title: "🎬 복사 vs 참조 — 개념으로 보기",
+          content: "실행 버튼을 눌러 복사와 참조의 차이를 확인해보세요!",
           component: "rangeForVisualizer",
+        },
+        {
+          id: "ch2-copy-ref-memory",
+          type: "interactive",
+          title: "🧠 메모리에서 실제로 무슨 일이?",
+          content: "복사와 참조가 RAM에서 어떻게 다른지 주소 단위로 확인해봐요!",
+          component: "copyRefMemory",
         },
         {
           id: "ch2-pred2",
