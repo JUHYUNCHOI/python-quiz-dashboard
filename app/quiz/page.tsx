@@ -58,13 +58,15 @@ export default function QuizPage() {
         const count = parsed.questionCount || 20
 
         // 틀린 문제 다시 풀기: retryQuestionIds가 있으면 해당 문제들만 출제
+        // pool (코스별)만 사용해야 함 — Python/C++ 문제 ID가 겹치므로 allQuestions 사용 시 다른 코스 문제가 섞임
         if (parsed.retryQuestionIds && parsed.retryQuestionIds.length > 0) {
           const retrySet = new Set<number>(parsed.retryQuestionIds)
-          const allQuestions = [...pythonQuestions, ...cppQuestions]
-          const retryPool = allQuestions.filter(q => retrySet.has(q.id))
+          const retryPool = pool.filter(q => retrySet.has(q.id))
           if (retryPool.length > 0) {
             return { questions: shuffleArray(retryPool), reviewCount: retryPool.length, newCount: 0 }
           }
+          // retryPool이 비어있으면 (삭제된 문제 ID) → 빈 배열 반환해서 리다이렉트 트리거
+          return { questions: [], reviewCount: 0, newCount: 0, retryQueue: new Map() }
         }
 
         // 레슨 집중 퀴즈: lessonFilter가 있으면 해당 레슨 문제만 출제
@@ -92,12 +94,21 @@ export default function QuizPage() {
 
   const shuffled = smartSession.questions
 
+  // 틀린 문제 retryPool이 비었으면 (삭제된 문제 ID) setup으로 리다이렉트
+  useEffect(() => {
+    if (shuffled.length === 0) {
+      sessionStorage.removeItem("quizSettings")
+      router.replace("/quiz/setup")
+    }
+  }, [shuffled.length, router])
+
   // 퀴즈 진행 중 플래그 — setup 페이지 "이어서 풀기" 배너용
   useEffect(() => {
     sessionStorage.setItem("quiz-in-progress", "1")
   }, [])
 
-  const quiz = useQuizState(shuffled)
+  // shuffled가 비어있으면 리다이렉트 중 — hooks 순서 유지 위해 fallback 사용
+  const quiz = useQuizState(shuffled.length > 0 ? shuffled : pythonQuestions.slice(0, 1))
   const { play, isMuted, toggleMute } = useSoundEffect()
   const gamification = useGamification()
   const { t } = useLanguage()
@@ -207,21 +218,38 @@ export default function QuizPage() {
                   <span>{t("문제", "Q")} {quiz.currentQuestion + 1}/{quiz.quizSettings.questionCount}</span>
                 </div>
                 <div className="flex gap-1 w-full">
-                  {Array.from({ length: quiz.quizSettings.questionCount }).map((_, i) => (
-                    <div
-                      key={i}
-                      className={cn(
-                        "h-2.5 flex-1 rounded-sm transition-all duration-300",
-                        i < quiz.currentQuestion
-                          ? "bg-green-400"
-                          : i === quiz.currentQuestion
-                          ? quiz.combo >= 5
-                            ? "bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-400 animate-pulse"
-                            : "bg-indigo-500"
-                          : "bg-gray-200",
-                      )}
-                    />
-                  ))}
+                  {Array.from({ length: quiz.quizSettings.questionCount }).map((_, i) => {
+                    const isAnswered = quiz.questionSnapshots.current.has(i)
+                    const isCurrent = i === quiz.currentQuestion
+                    const isJumpable = isAnswered || isCurrent
+                    return (
+                      <button
+                        key={i}
+                        onClick={() => {
+                          if (!isJumpable) return
+                          if (isCurrent) return
+                          const snap = quiz.questionSnapshots.current.get(i)
+                          if (snap) {
+                            quiz.isSnapshotRestore.current = true
+                            quiz.jumpToQuestion(i, snap)
+                          }
+                        }}
+                        className={cn(
+                          "h-2.5 flex-1 rounded-sm transition-all duration-300",
+                          isAnswered
+                            ? isCurrent
+                              ? "bg-green-500 ring-2 ring-indigo-400 ring-offset-1"
+                              : "bg-green-400 hover:bg-green-500 cursor-pointer"
+                            : isCurrent
+                            ? quiz.combo >= 5
+                              ? "bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-400 animate-pulse"
+                              : "bg-indigo-500"
+                            : "bg-gray-200 cursor-default",
+                        )}
+                        aria-label={`문제 ${i + 1}${isAnswered ? " (풀었음)" : ""}`}
+                      />
+                    )
+                  })}
                 </div>
               </div>
             </div>
@@ -517,13 +545,15 @@ export default function QuizPage() {
 
                         <span
                           className={cn(
-                            "flex-1 font-mono text-sm md:text-base lg:text-lg font-medium transition-colors whitespace-pre-line",
+                            "flex-1 font-mono text-sm md:text-base lg:text-lg font-medium transition-colors",
                             !quiz.showResult && "text-gray-700",
                             showCorrect && "text-green-700",
                             showWrong && "text-red-700",
                           )}
                         >
-                          {option}
+                          {option.split(/\\n|\n/).map((line, i, arr) => (
+                            <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+                          ))}
                         </span>
                       </div>
                     </button>

@@ -26,6 +26,7 @@ export interface LessonStep {
   explanation?: string
   // interactive 타입용
   component?: string
+  component2?: string
   componentProps?: Record<string, any>
   description?: string
   // typeAlong 컴포넌트용

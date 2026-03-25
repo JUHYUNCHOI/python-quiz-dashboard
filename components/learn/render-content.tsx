@@ -204,7 +204,7 @@ export function renderContent(content: string) {
                 {bodyRows.map((row, ri) => (
                   <tr key={ri} className={ri % 2 === 0 ? "bg-white" : "bg-indigo-50/30"}>
                     {row.map((cell, ci) => (
-                      <td key={ci} className="px-3 py-2 text-gray-700 border-t border-indigo-100">
+                      <td key={ci} className={`px-3 py-2 text-gray-700 border-t border-indigo-100${ci === 0 ? " whitespace-nowrap font-medium" : ""}`}>
                         {renderInlineMarkdown(cell, `td-${ri}-${ci}-`)}
                       </td>
                     ))}

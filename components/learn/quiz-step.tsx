@@ -17,14 +17,17 @@ interface QuizStepProps {
   quizAttempts: number
   onAnswer: (idx: number) => void
   onAcknowledge: () => void
+  showNextOnCorrect?: boolean  // 복습 페이지: 정답 후 설명 안에 "다음 문제 →" 버튼 표시
 }
 
-export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, quizAttempts, onAnswer, onAcknowledge }: QuizStepProps) {
+export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, quizAttempts, onAnswer, onAcknowledge, showNextOnCorrect }: QuizStepProps) {
   const { t } = useLanguage()
   const [showAckButton, setShowAckButton] = useState(false)
+  const [showCorrectNext, setShowCorrectNext] = useState(false)
   const [showCode, setShowCode] = useState(false)
   const [showHint, setShowHint] = useState(false)
 
+  // 오답: 1.5초 후 "확인했어요 →" 버튼
   useEffect(() => {
     if (showExplanation && selectedAnswer !== null && selectedAnswer !== step.answer) {
       setShowAckButton(false)
@@ -32,6 +35,15 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
       return () => clearTimeout(timer)
     }
   }, [showExplanation, selectedAnswer, step.answer])
+
+  // 정답 + showNextOnCorrect: 0.6초 후 "다음 문제 →" 버튼
+  useEffect(() => {
+    if (showNextOnCorrect && showExplanation && selectedAnswer !== null && selectedAnswer === step.answer) {
+      setShowCorrectNext(false)
+      const timer = setTimeout(() => setShowCorrectNext(true), 600)
+      return () => clearTimeout(timer)
+    }
+  }, [showNextOnCorrect, showExplanation, selectedAnswer, step.answer])
 
   // 스텝 바뀌면 힌트 닫기
   useEffect(() => { setShowHint(false) }, [step.id])
@@ -58,7 +70,7 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
             {showCode ? t("코드 숨기기", "Hide Code") : t("📋 코드 보기", "📋 View Code")}
           </button>
           {showCode && (
-            <div className="mt-2 rounded-2xl overflow-hidden border-2 border-gray-200">
+            <div className="mt-2 rounded-2xl overflow-x-auto border-2 border-gray-200">
               <CodeBlock code={step.code} language="pseudo" />
             </div>
           )}
@@ -121,6 +133,12 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
               </span>
             </div>
             <p className={cn("text-sm whitespace-pre-line leading-relaxed", selectedAnswer === step.answer ? "text-green-800" : "text-amber-800")}>{step.explanation}</p>
+            {/* 정답: showNextOnCorrect일 때 "다음 문제 →" 버튼 */}
+            {selectedAnswer === step.answer && showCorrectNext && (
+              <button onClick={onAcknowledge} className="mt-2 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-green-400 to-emerald-500 hover:from-green-500 hover:to-emerald-600 shadow-md transition-all flex items-center justify-center gap-2 animate-fade-in">
+                {t("다음 문제 →", "Next →")}
+              </button>
+            )}
             {selectedAnswer !== step.answer && (
               showAckButton ? (
                 <button onClick={onAcknowledge} className="mt-2 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md transition-all flex items-center justify-center gap-2 animate-fade-in">

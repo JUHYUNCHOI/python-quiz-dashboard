@@ -17,6 +17,7 @@ export interface LessonStep {
   answer?: number
   explanation?: string
   component?: string
+  component2?: string
   description?: string
   question?: string
   instruction?: string

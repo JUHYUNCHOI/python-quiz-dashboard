@@ -19,33 +19,6 @@ export const cppLesson7EnData: LessonData = {
       emoji: "🔁",
       steps: [
         {
-          id: "ch1-increment",
-          type: "explain",
-          title: "🔢 What's i++? (Increment Operator)",
-          content: `Before learning for loops, you need to know C++'s **increment operators**!
-
-In Python you wrote \`i += 1\` to add 1. C++ has a **shorter way**:
-
-| Python 🐍 | C++ ⚡ | Meaning |
-|---|---|---|
-| \`i += 1\` | {pink:\`i++\`} | Increase i by 1 |
-| \`i -= 1\` | {blue:\`i--\`} | Decrease i by 1 |
-
-\`\`\`cpp
-int i = 0;
-i++;     // i is now 1  (same as i += 1)
-i++;     // i is now 2
-i--;     // i is now 1  (same as i -= 1)
-\`\`\`
-
-{!pink} \`i++\` = **"increase i by 1!"** (increment)
-{!blue} \`i--\` = **"decrease i by 1!"** (decrement)
-
-You'll use \`i++\` ALL THE TIME in C++ for loops!
-
-💡 Fun fact: C++ is named after this! It means "C incremented by 1 (++)" 😄`,
-        },
-        {
           id: "ch1-compare",
           type: "explain",
           title: "🔁 for: Python vs C++",

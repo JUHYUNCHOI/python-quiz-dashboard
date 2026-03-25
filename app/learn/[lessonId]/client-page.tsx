@@ -558,6 +558,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                       course,
                       startTime: Date.now(),
                       lessonFilter: isNaN(Number(lessonId)) ? lessonId : Number(lessonId),
+                      isReview: true,
                     }))
                     router.push("/quiz")
                   }}

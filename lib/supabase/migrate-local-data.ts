@@ -72,7 +72,27 @@ export async function migrateLocalStorageToSupabase(userId: string) {
       }
     }
 
-    // 3. 학습 진도 (practice-v2-*)
+    // 3. 퀴즈 복습 완료 (completedQuizzes → lesson_progress quiz)
+    const completedQuizzesRaw = localStorage.getItem("completedQuizzes")
+    if (completedQuizzesRaw) {
+      const completedQuizzes: (string | number)[] = JSON.parse(completedQuizzesRaw)
+      const quizRows = completedQuizzes.map(lessonId => ({
+        user_id: userId,
+        lesson_id: String(lessonId),
+        variant: "",
+        progress_type: "quiz" as const,
+        progress_data: {},
+        completed: true,
+        score: 0,
+      }))
+      if (quizRows.length > 0) {
+        await supabase.from("lesson_progress").upsert(quizRows, {
+          onConflict: "user_id,lesson_id,variant,progress_type",
+        })
+      }
+    }
+
+    // 5. 학습 진도 (practice-v2-*)
     const keys = Object.keys(localStorage)
     const practiceKeys = keys.filter(k => k.startsWith("practice-v2-"))
 

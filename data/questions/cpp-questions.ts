@@ -753,25 +753,22 @@ int main() {
 using namespace std;
 
 int main() {
-    int x = 5;
-    if (x == 5) {
-        cout << "같다";
-    }
-    if (x = 3) {
-        cout << "참";
+    int score = 75;
+    if (score >= 90) {
+        cout << "A";
+    } else if (score >= 70) {
+        cout << "B";
+    } else {
+        cout << "C";
     }
     return 0;
 }`,
-    options: ["같다", "같다참", "참", "컴파일 오류"],
+    options: ["A", "B", "C", "AB"],
     correctAnswer: 1,
-    explanation: "첫 if: x==5는 true. 둘째 if: x=3은 대입이며, 3은 true(0이 아닌 값)이므로 둘 다 실행됩니다.",
-    keyConceptTitle: "== vs = 실수",
-    keyConceptDescription: "==는 비교, =는 대입입니다. if(x=3)은 x에 3을 대입한 후 3(true)으로 평가됩니다. 흔한 버그입니다.",
-    codeComparison: {
-      wrong: `if (x = 3)  // 대입! 항상 true (3 ≠ 0)`,
-      correct: `if (x == 3)  // 비교`,
-    },
-    relatedTopics: ["== vs =", "조건문 버그", "대입 연산"],
+    explanation: "score가 75이므로 첫 번째 조건 (75 >= 90)은 false, 두 번째 조건 (75 >= 70)은 true입니다. 'B'가 출력됩니다.",
+    keyConceptTitle: "else if로 여러 조건 처리",
+    keyConceptDescription: "if → else if → else 순서로 위에서 아래로 확인합니다. 처음 true인 조건의 블록만 실행되고 나머지는 건너뜁니다.",
+    relatedTopics: ["if-else", "조건문", "비교 연산자"],
   },
   {
     id: 47,
@@ -981,18 +978,18 @@ using namespace std;
 
 int main() {
     int sum = 0;
-    for (int i = 1; i <= 100; i++) {
+    for (int i = 1; i <= 5; i++) {
         sum += i;
     }
     cout << sum;
     return 0;
 }`,
-    options: ["100", "5050", "5000", "10000"],
+    options: ["10", "15", "20", "25"],
     correctAnswer: 1,
-    explanation: "1부터 100까지의 합은 n(n+1)/2 = 100×101/2 = 5050입니다.",
+    explanation: "i가 1,2,3,4,5 순서로 sum에 더해집니다. 1+2+3+4+5 = 15입니다.",
     keyConceptTitle: "누적 합 패턴",
-    keyConceptDescription: "반복문으로 1~N까지 합을 구하는 것은 가장 기본적인 누적 패턴입니다. 가우스 공식 n(n+1)/2로도 구할 수 있습니다.",
-    relatedTopics: ["누적 합", "가우스 공식", "반복문 패턴"],
+    keyConceptDescription: "sum += i는 반복할 때마다 i를 sum에 더해가는 누적 합 패턴입니다. 반복문의 가장 기본적인 활용법이에요.",
+    relatedTopics: ["누적 합", "반복문 패턴", "+="],
   },
   {
     id: 60,
@@ -1125,25 +1122,23 @@ int main() {
 using namespace std;
 
 int main() {
-    unsigned int i = 10;
-    while (i >= 0) {
+    int i = 0;
+    while (i < 10) {
         cout << i << " ";
-        i--;
+        // i++ 빠짐!
     }
     return 0;
 }`,
-    options: ["i가 음수가 될 수 없다", "while 조건이 잘못됨", "unsigned는 항상 >= 0이므로 조건이 항상 참", "i-- 대신 --i를 써야 한다"],
-    correctAnswer: 2,
-    explanation: "unsigned int는 항상 0 이상이므로 i >= 0 조건이 항상 참입니다. i가 0에서 --하면 4294967295로 래핑됩니다.",
-    keyConceptTitle: "unsigned 무한 루프",
-    keyConceptDescription: "unsigned 타입은 음수가 될 수 없으므로 >= 0 조건은 항상 참입니다. unsigned 사용 시 주의하세요.",
+    options: ["i++ 가 없어서 i가 계속 0이다", "while 조건이 항상 거짓이다", "cout이 루프를 멈춘다", "i의 초기값이 잘못됐다"],
+    correctAnswer: 0,
+    explanation: "i++가 없으면 i가 0에서 변하지 않아 while(i < 10)이 항상 true가 됩니다. 반복문에는 반드시 종료 조건을 바꾸는 코드가 필요해요.",
+    keyConceptTitle: "무한 루프 원인",
+    keyConceptDescription: "while 루프가 멈추려면 조건에 쓰인 변수가 반드시 바뀌어야 합니다. i++ 같은 업데이트 코드를 빠뜨리면 무한 루프가 됩니다.",
     codeComparison: {
-      wrong: `unsigned int i = 10;
-while (i >= 0)  // 항상 true!`,
-      correct: `int i = 10;
-while (i >= 0)  // i가 -1이 되면 종료`,
+      wrong: `while (i < 10) {\n    cout << i;  // i가 안 바뀜!`,
+      correct: `while (i < 10) {\n    cout << i;\n    i++;  // 종료 조건 갱신`,
     },
-    relatedTopics: ["unsigned", "무한 루프", "래핑"],
+    relatedTopics: ["무한 루프", "while", "업데이트 조건"],
   },
   {
     id: 66,

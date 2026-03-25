@@ -25,6 +25,7 @@ function clearUserLocalStorage() {
     "gamification-total-xp", "gamification-daily-streak",
     "gamification-last-active-date", "gamification-sessions-today",
     "language", "sound-muted",
+    "last-migrated-at",  // 마이그레이션 타임스탬프도 초기화 (계정 전환 시 다음 로그인에서 재업로드)
   ]
   fixedKeys.forEach(k => localStorage.removeItem(k))
   Object.keys(localStorage)
@@ -123,19 +124,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           // 로그인 시 양방향 동기화 (순차 실행: 업로드 완료 후 복원)
           if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
             const lastUserId = localStorage.getItem("last-user-id")
-            const isNewUser = lastUserId && lastUserId !== currentUser.id
+            // lastUserId가 null이거나 다른 계정이면 → 로컬 데이터 클리어 후 클라우드 복원
+            // lastUserId가 null인 경우도 "다른 사용자" 취급 (남의 로컬 데이터 업로드 방지)
+            const isSameUser = lastUserId === currentUser.id
 
-            if (isNewUser) {
-              // 다른 계정 전환: 기존 로컬 데이터 초기화 후 클라우드에서 복원
+            if (!isSameUser) {
+              // 다른 계정 전환 or 최초 로그인: 기존 로컬 데이터 초기화 후 클라우드에서 복원
               clearUserLocalStorage()
               restoreFromCloud(currentUser.id)
                 .catch((e) => { console.error("[AuthContext] restore failed:", e) })
             } else {
-              // 같은 계정: 로컬 데이터 업로드 후 클라우드 복원 (merge)
-              migrateLocalStorageToSupabase(currentUser.id)
-                .catch((e) => { console.error("[AuthContext] migrate failed:", e) })
-                .then(() => restoreFromCloud(currentUser.id))
-                .catch((e) => { console.error("[AuthContext] restore failed:", e) })
+              // 같은 계정: 24시간 내 마이그레이션 이미 했으면 업로드 생략, 복원만 실행
+              // (매 페이지 새로고침마다 Supabase 쓰기 방지)
+              const lastMigratedAt = localStorage.getItem("last-migrated-at")
+              const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000
+              const needsMigration = !lastMigratedAt ||
+                (Date.now() - parseInt(lastMigratedAt, 10)) > TWENTY_FOUR_HOURS
+
+              if (needsMigration) {
+                migrateLocalStorageToSupabase(currentUser.id)
+                  .then(() => {
+                    localStorage.setItem("last-migrated-at", Date.now().toString())
+                    return restoreFromCloud(currentUser.id)
+                  })
+                  .catch((e) => { console.error("[AuthContext] migrate/restore failed:", e) })
+              } else {
+                restoreFromCloud(currentUser.id)
+                  .catch((e) => { console.error("[AuthContext] restore failed:", e) })
+              }
             }
 
             localStorage.setItem("last-user-id", currentUser.id)

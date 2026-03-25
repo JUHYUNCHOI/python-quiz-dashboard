@@ -302,6 +302,27 @@ export function CodeTraceSimulator({
         </p>
       )}
 
+      {/* 모바일 전용 컨트롤 — 상단 배치 (스크롤 없이 바로 조작) */}
+      <div className="flex lg:hidden gap-2 mb-3">
+        <button
+          onClick={() => {
+            setIsPlaying(false)
+            if (currentStep >= totalSteps - 1) { reset(); setTimeout(() => goToStep(0), 100) }
+            else if (currentStep === -1) { goToStep(0) }
+            else { goToStep(currentStep + 1) }
+          }}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-sm bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg"
+        >
+          <Play className="w-4 h-4" />
+          {currentStep >= totalSteps - 1 ? t("처음부터", "Restart") : currentStep === -1 ? t("▶ 실행하기", "▶ Run") : t("▶ 한 단계", "▶ Next")}
+        </button>
+        {currentStep >= 0 && (
+          <button onClick={reset} className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm bg-slate-700 hover:bg-slate-600 text-slate-300">
+            <RotateCcw className="w-3.5 h-3.5" />{t("초기화", "Reset")}
+          </button>
+        )}
+      </div>
+
       {/* 메인 그리드: 코드 + 변수/조건 */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-3 mb-3">
         {/* 코드 영역 (3/5) */}
@@ -529,8 +550,8 @@ export function CodeTraceSimulator({
         </div>
       </div>
 
-      {/* 컨트롤 */}
-      <div className="flex flex-wrap gap-2">
+      {/* 컨트롤 — 데스크탑에서만 표시 (모바일은 상단 버튼 사용) */}
+      <div className="hidden lg:flex flex-wrap gap-2">
         {/* 메인 버튼: 다음 단계 (한 번 누르면 한 스텝) */}
         <button
           onClick={() => {

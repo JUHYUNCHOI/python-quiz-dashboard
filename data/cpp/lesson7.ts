@@ -19,33 +19,6 @@ export const cppLesson7Data: LessonData = {
       emoji: "🔁",
       steps: [
         {
-          id: "ch1-increment",
-          type: "explain",
-          title: "🔢 i++가 뭐야? (증감 연산자)",
-          content: `for문을 배우기 전에, C++의 **증감 연산자**를 먼저 알아야 해요!
-
-파이썬에서는 \`i += 1\`로 1을 더했죠? C++에는 **더 짧은 방법**이 있어요:
-
-| 파이썬 🐍 | C++ ⚡ | 의미 |
-|---|---|---|
-| \`i += 1\` | {pink:\`i++\`} | i를 1 증가 |
-| \`i -= 1\` | {blue:\`i--\`} | i를 1 감소 |
-
-\`\`\`cpp
-int i = 0;
-i++;     // i는 이제 1  (i += 1과 같음)
-i++;     // i는 이제 2
-i--;     // i는 이제 1  (i -= 1과 같음)
-\`\`\`
-
-{!pink} \`i++\` = **"i를 1 증가시켜!"** (increment)
-{!blue} \`i--\` = **"i를 1 감소시켜!"** (decrement)
-
-C++ for문에서 \`i++\`를 매우 많이 쓰니까 꼭 기억하세요!
-
-💡 참고: C++이라는 이름 자체가 "C에서 1 증가(++)" 라는 뜻이에요! 😄`,
-        },
-        {
           id: "ch1-compare",
           type: "explain",
           title: "🔁 for문: 파이썬 vs C++",
@@ -68,17 +41,7 @@ for (int i = 0;  i < 5;    i++)
 
 @핵심: for문 = "{pink:시작}, {blue:조건}, {green:변화}" 딱 3가지!`,
           component: "cppForBuilder",
-        },
-        {
-          id: "ch1-sim",
-          type: "explain",
-          title: "🔍 실행 추적: C++ for문이 어떤 순서로 동작할까?",
-          content: `for(초기화; 조건; 증감)의 3부분이 어떤 순서로 실행되는지 한 단계씩 봐요!
-
-i가 1부터 3까지 변하며 sum에 더해지는 과정을 추적합니다.
-
-**▶ 실행하기** 또는 **▷ 한 단계** 버튼을 눌러보세요.`,
-          component: "codeTraceCppFor",
+          component2: "codeTraceCppFor",
         },
         {
           id: "ch1-fb1",
@@ -224,17 +187,7 @@ while (count < 5) {
 
 💡 if문이랑 규칙이 똑같아요! () + {} 만 기억하세요.`,
           component: "cppWhileBuilder",
-        },
-        {
-          id: "ch2-sim",
-          type: "explain",
-          title: "🔍 실행 추적: C++ while 팩토리얼 계산",
-          content: `while문으로 팩토리얼(1×2×3×4)을 구하는 과정을 추적해요!
-
-n이 1부터 4까지 올라가면서 result가 곱해지는 과정을 한 단계씩 봐요.
-
-**▶ 실행하기** 또는 **▷ 한 단계** 버튼을 눌러보세요.`,
-          component: "codeTraceCppWhile",
+          component2: "codeTraceCppWhile",
         },
         {
           id: "ch2-pred1",

@@ -53,6 +53,7 @@ export interface SessionData {
   questionDetails: QuestionResult[]
   startedAt: number
   difficulty: string
+  course?: string              // 코스 (python | cpp) — retry 시 올바른 문제 풀이용
   // 말해보카 스타일 통계
   perfectCount: number
   greatCount: number
@@ -215,6 +216,9 @@ export function useQuizState(questions: QuizQuestion[]) {
           questionDetails: questionResults,
           startedAt: quizSettings.startTime,
           difficulty: quizSettings.difficulty,
+          course: quizSettings.course,
+          isReview: quizSettings.isReview,
+          lessonFilter: quizSettings.lessonFilter,
           perfectCount: gradeStats.perfect,
           greatCount: gradeStats.great,
           goodCount: gradeStats.good,
@@ -249,6 +253,7 @@ export function useQuizState(questions: QuizQuestion[]) {
         questionDetails: questionResults,
         startedAt: quizSettings.startTime,
         difficulty: quizSettings.difficulty,
+        course: quizSettings.course,
         perfectCount: gradeStats.perfect,
         greatCount: gradeStats.great,
         goodCount: gradeStats.good,
@@ -258,7 +263,7 @@ export function useQuizState(questions: QuizQuestion[]) {
       }
       sessionStorage.setItem("quizSessionData", JSON.stringify(data))
     },
-    [quizSettings, currentQuestion, maxCombo, hearts, questionResults],
+    [quizSettings, currentQuestion, maxCombo, hearts, questionResults, gradeStats],
   )
 
   const handleAnswerSelect = useCallback(
@@ -489,6 +494,16 @@ export function useQuizState(questions: QuizQuestion[]) {
     }
   }, [currentQuestion])
 
+  const jumpToQuestion = useCallback(
+    (idx: number, snap: { selectedAnswer: number; isCorrect: boolean }) => {
+      setCurrentQuestion(idx)
+      setSelectedAnswer(snap.selectedAnswer)
+      setIsCorrect(snap.isCorrect)
+      setShowResult(true)
+    },
+    [],
+  )
+
   const dismissMidCheckIn = useCallback(() => {
     setShowMidCheckIn(false)
   }, [])
@@ -571,6 +586,7 @@ export function useQuizState(questions: QuizQuestion[]) {
 
     // Refs
     isSnapshotRestore,
+    questionSnapshots,
 
     // Actions
     handleAnswerSelect,
@@ -580,6 +596,7 @@ export function useQuizState(questions: QuizQuestion[]) {
     confirmExit,
     cancelExit,
     handlePrevious,
+    jumpToQuestion,
     dismissMidCheckIn,
     handleLowerDifficulty,
     handleTakeBreak,

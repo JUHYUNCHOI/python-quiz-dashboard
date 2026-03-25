@@ -7,6 +7,8 @@ import { useGamification } from "@/hooks/use-gamification"
 import { useSoundEffect } from "@/hooks/use-sound-effect"
 import { useQuizSessionSync } from "@/hooks/use-quiz-session-sync"
 import { useMasterySync } from "@/hooks/use-mastery-sync"
+import { useAuth } from "@/contexts/auth-context"
+import { createClient } from "@/lib/supabase/client"
 import type { SessionData } from "@/hooks/use-quiz-state"
 import { useLanguage } from "@/contexts/language-context"
 import { addQuizHistoryEntry } from "@/lib/quiz-history"
@@ -132,6 +134,7 @@ function SessionCompletePage() {
   const gamification = useGamification()
   const { play } = useSoundEffect()
   const { saveQuizSession } = useQuizSessionSync()
+  const { user } = useAuth()
   const { syncMastery } = useMasterySync()
   const { t } = useLanguage()
 
@@ -148,18 +151,19 @@ function SessionCompletePage() {
 
   // Load session data — 데이터 없으면 퀴즈 홈으로
   useEffect(() => {
-    // 퀴즈 완료 → 진행 중 플래그 제거
+    // 퀴즈 완료 → 진행 중 플래그 + 세팅 제거 (이후 이어가기 버튼 방지)
     sessionStorage.removeItem("quiz-in-progress")
+    sessionStorage.removeItem("quizSettings")
     try {
       const raw = sessionStorage.getItem("quizSessionData")
       if (raw) {
         setSessionData(JSON.parse(raw))
       } else {
         // 세션 데이터 없음 → 리다이렉트
-        router.replace("/quiz")
+        router.replace("/quiz/setup")
       }
     } catch {
-      router.replace("/quiz")
+      router.replace("/quiz/setup")
     }
   }, [router])
 
@@ -213,17 +217,30 @@ function SessionCompletePage() {
         lessonFilter: sessionData.lessonFilter,
       })
 
-      // 복습 세션이 완료된 경우 → completedQuizzes에 lessonId 추가 (커리큘럼 복습완료 표시)
+      // 복습 세션이 완료된 경우 → completedQuizzes localStorage + Supabase 동시 저장
       if (sessionData.isReview && sessionData.lessonFilter != null && sessionData.endReason === "completed") {
+        const id = sessionData.lessonFilter
         try {
           const saved = localStorage.getItem("completedQuizzes")
           const arr: (string | number)[] = saved ? JSON.parse(saved) : []
-          const id = sessionData.lessonFilter
           if (!arr.some(x => String(x) === String(id))) {
             arr.push(id)
             localStorage.setItem("completedQuizzes", JSON.stringify(arr))
           }
         } catch {}
+        // Supabase에도 즉시 저장 (로그인된 경우)
+        if (user?.id) {
+          const supabase = createClient()
+          void supabase.from("lesson_progress").upsert({
+            user_id: user.id,
+            lesson_id: String(id),
+            variant: "",
+            progress_type: "quiz",
+            progress_data: {},
+            completed: true,
+            score: 0,
+          }, { onConflict: "user_id,lesson_id,variant,progress_type" })
+        }
       }
       logActivity("quiz")
 
@@ -272,10 +289,9 @@ function SessionCompletePage() {
     const uniqueWrongIds = [...new Set(wrongIds)]
     if (uniqueWrongIds.length === 0) return
 
-    // 이전 코스 설정 유지
-    const prevSettings = sessionStorage.getItem("quizSettings")
-    const prevCourse = prevSettings ? (JSON.parse(prevSettings).course ?? "python") : "python"
-    const prevDifficulty = prevSettings ? (JSON.parse(prevSettings).difficulty ?? "mixed") : "mixed"
+    // 이전 코스/난이도 설정 유지 — sessionData에서 읽음 (quizSettings는 로드 시 이미 삭제됨)
+    const prevCourse = sessionData?.course ?? "python"
+    const prevDifficulty = sessionData?.difficulty ?? "mixed"
 
     sessionStorage.removeItem("quizSessionData")
     sessionStorage.setItem("quizSettings", JSON.stringify({
@@ -291,8 +307,13 @@ function SessionCompletePage() {
 
   const handleGoHome = useCallback(() => {
     sessionStorage.removeItem("quizSessionData")
-    router.push("/")
-  }, [router])
+    // 레슨에서 시작한 퀴즈면 해당 레슨으로 돌아가기, 아니면 홈으로
+    if (sessionData?.lessonFilter != null) {
+      router.push(`/learn/${sessionData.lessonFilter}`)
+    } else {
+      router.push("/")
+    }
+  }, [router, sessionData])
 
   // Format time
   const formatTime = (ms: number) => {
@@ -519,12 +540,14 @@ function SessionCompletePage() {
               </button>
             ) : null}
 
-            {/* Go home - subtle text */}
+            {/* Go back - subtle text */}
             <button
               onClick={handleGoHome}
               className="w-full py-3 text-base font-medium text-gray-400 hover:text-gray-600 transition-colors"
             >
-              {t("그만하기", "Quit")}
+              {sessionData?.lessonFilter != null
+                ? t("← 레슨으로 돌아가기", "← Back to lesson")
+                : t("홈으로", "Home")}
             </button>
           </div>
         )}

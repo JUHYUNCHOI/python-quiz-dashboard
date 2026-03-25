@@ -529,6 +529,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
               onQuizAcknowledge={acknowledgeQuiz}
               onStepComplete={handleStepComplete}
               onStepAcknowledge={handleStepAcknowledge}
+              showNextOnCorrect={true}
             />
           )}
 

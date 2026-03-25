@@ -24,7 +24,7 @@ export async function restoreFromCloud(userId: string) {
         .select("lesson_id, completed, progress_type, updated_at")
         .eq("user_id", userId)
         .eq("completed", true)
-        .or("progress_type.eq.learn,progress_type.is.null"),
+        .or("progress_type.eq.learn,progress_type.eq.quiz,progress_type.is.null"),
       supabase
         .from("user_preferences")
         .select("*")
@@ -41,9 +41,13 @@ export async function restoreFromCloud(userId: string) {
       restoreQuizHistory(quizResult.value.data)
     }
 
-    // 2. 완료 수업 복원 (lesson_progress → completedLessons localStorage)
+    // 2. 완료 수업 + 퀴즈 복습 복원
     if (lessonResult.status === "fulfilled" && lessonResult.value.data?.length) {
-      restoreCompletedLessons(lessonResult.value.data)
+      const allLessons = lessonResult.value.data
+      const learnLessons = allLessons.filter(l => l.progress_type === "learn" || !l.progress_type)
+      const quizLessons = allLessons.filter(l => l.progress_type === "quiz")
+      if (learnLessons.length) restoreCompletedLessons(learnLessons)
+      if (quizLessons.length) restoreCompletedQuizzes(quizLessons)
     }
 
     // 3. 활동 로그 복원 (quiz + lesson 날짜 → activity-log localStorage)
@@ -132,7 +136,7 @@ function restoreQuizHistory(sessions: Record<string, unknown>[]) {
   } catch {}
 }
 
-/** lesson_progress (completed) → completedLessons localStorage */
+/** lesson_progress (completed, learn) → completedLessons localStorage */
 function restoreCompletedLessons(lessons: Record<string, unknown>[]) {
   const existingRaw = localStorage.getItem("completedLessons")
   const existing: string[] = existingRaw ? JSON.parse(existingRaw) : []
@@ -142,6 +146,19 @@ function restoreCompletedLessons(lessons: Record<string, unknown>[]) {
 
   try {
     localStorage.setItem("completedLessons", JSON.stringify(merged))
+  } catch {}
+}
+
+/** lesson_progress (completed, quiz) → completedQuizzes localStorage */
+function restoreCompletedQuizzes(lessons: Record<string, unknown>[]) {
+  const existingRaw = localStorage.getItem("completedQuizzes")
+  const existing: string[] = existingRaw ? JSON.parse(existingRaw) : []
+
+  const cloudIds = lessons.map(l => l.lesson_id as string)
+  const merged = Array.from(new Set([...existing, ...cloudIds]))
+
+  try {
+    localStorage.setItem("completedQuizzes", JSON.stringify(merged))
   } catch {}
 }
 
