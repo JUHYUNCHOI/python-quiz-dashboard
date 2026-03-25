@@ -129,18 +129,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             const isSameUser = lastUserId === currentUser.id
             const isFirstLogin = lastUserId === null  // 이 기기에서 처음 로그인 (로그인 전 공부한 데이터 있을 수 있음)
 
-            if (!isSameUser && !isFirstLogin) {
-              // 다른 계정 전환: 이전 유저 데이터 초기화 후 클라우드에서 복원
+            if (isFirstLogin || (!isSameUser && !isFirstLogin)) {
+              // 처음 로그인이거나 다른 계정 전환:
+              // localStorage 업로드 없이 클라우드에서 복원만 (남의 데이터 오염 방지)
               clearUserLocalStorage()
               restoreFromCloud(currentUser.id)
+                .then(() => {
+                  localStorage.setItem("last-migrated-at", Date.now().toString())
+                })
                 .catch((e) => { console.error("[AuthContext] restore failed:", e) })
             } else {
-              // 같은 계정 재로그인 OR 최초 로그인(비로그인 상태로 공부한 데이터 보존):
-              // 항상: completedLessons + completedQuizzes를 Supabase에 즉시 동기화 (쿨다운 없음)
+              // 같은 계정 재로그인:
+              // 항상: completedLessons + completedQuizzes를 Supabase에 즉시 동기화
               // 24시간마다: 전체 마이그레이션 (question_mastery 등 무거운 데이터)
               const lastMigratedAt = localStorage.getItem("last-migrated-at")
               const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000
-              const needsMigration = isFirstLogin || !lastMigratedAt ||
+              const needsMigration = !lastMigratedAt ||
                 (Date.now() - parseInt(lastMigratedAt, 10)) > TWENTY_FOUR_HOURS
 
               if (needsMigration) {
@@ -151,7 +155,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                   })
                   .catch((e) => { console.error("[AuthContext] migrate/restore failed:", e) })
               } else {
-                // 쿨다운 중이어도 completedLessons/completedQuizzes는 항상 동기화
                 syncCompletionsToSupabase(currentUser.id)
                   .catch((e) => { console.error("[AuthContext] syncCompletions failed:", e) })
                 restoreFromCloud(currentUser.id)

@@ -2,6 +2,7 @@
 
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
+import { RequireAuth } from "@/components/require-auth"
 import { useState, useEffect } from "react"
 import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
@@ -533,6 +534,7 @@ export default function CurriculumPage() {
   const nextLessonInfo = getNextLesson()
 
   return (
+    <RequireAuth>
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-mint-50">
       <Header />
 
@@ -869,5 +871,6 @@ export default function CurriculumPage() {
 
       <BottomNav />
     </div>
+    </RequireAuth>
   )
 }

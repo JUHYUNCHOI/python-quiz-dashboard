@@ -2,6 +2,7 @@
 
 import { useEffect, useCallback, useMemo, useState, useRef } from "react"
 import { useRouter } from "next/navigation"
+import { RequireAuth } from "@/components/require-auth"
 import { X, Clock, ChevronLeft, ChevronRight, Check, AlertCircle, Coffee, Flag } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -199,6 +200,7 @@ export default function QuizPage() {
   const question = quiz.question
 
   return (
+    <RequireAuth>
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-mint-50">
       {/* Top Bar — 수업 페이지와 동일한 스타일 */}
       <div className="border-b border-orange-100 bg-white/95 backdrop-blur-lg sticky top-0 z-10 safe-area-inset-bottom">
@@ -663,5 +665,6 @@ export default function QuizPage() {
         </div>
       )}
     </div>
+    </RequireAuth>
   )
 }

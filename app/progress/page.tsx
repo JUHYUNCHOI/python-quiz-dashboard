@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
+import { RequireAuth } from "@/components/require-auth"
 import { StatsCards } from "@/components/stats-cards"
 import { ProgressTracker } from "@/components/progress-tracker"
 import { PerformanceCharts } from "@/components/performance-charts"
@@ -55,6 +56,7 @@ export default function ProgressPage() {
   }
 
   return (
+    <RequireAuth>
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-mint-50 to-lavender-50">
       <Header />
 
@@ -106,5 +108,6 @@ export default function ProgressPage() {
 
       <BottomNav />
     </div>
+    </RequireAuth>
   )
 }

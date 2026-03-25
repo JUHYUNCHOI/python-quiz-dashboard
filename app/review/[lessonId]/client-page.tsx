@@ -56,8 +56,12 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   const lessonId = resolvedParams.lessonId
   const router = useRouter()
   const { t, lang } = useLanguage()
-  const { profile } = useAuth()
+  const { user, profile, isLoading: authLoading } = useAuth()
   const isTeacher = profile?.role === "teacher"
+
+  useEffect(() => {
+    if (!authLoading && !user) router.replace("/login")
+  }, [user, authLoading, router])
   const teacherAsStudent = typeof window !== "undefined" && localStorage.getItem("teacher-as-student") === "true"
   const effectiveTeacher = isTeacher && !teacherAsStudent
   const { play } = useSoundEffect()
@@ -154,6 +158,8 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
     }
     router.push(`/learn/${lessonId}?from=review`)
   }
+
+  if (authLoading || !user) return null
 
   // 레슨 없으면 에러
   if (!lesson || reviewSteps.length === 0) {

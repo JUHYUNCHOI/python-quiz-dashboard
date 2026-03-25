@@ -2,6 +2,7 @@
 
 import { useState, useEffect, use, useCallback } from "react"
 import { useRouter } from "next/navigation"
+import { RequireAuth } from "@/components/require-auth"
 import { ChevronRight, ChevronLeft, X, Lock, PartyPopper, RotateCcw, LogIn } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
@@ -47,8 +48,14 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
 
   // 게이미피케이션
   const gamification = useGamification()
-  const { profile, isAuthenticated } = useAuth()
+  const { user, profile, isAuthenticated, isLoading: authLoading } = useAuth()
   const isTeacher = profile?.role === "teacher"
+
+  useEffect(() => {
+    if (!authLoading && !user) router.replace("/login")
+  }, [user, authLoading, router])
+
+  if (authLoading || !user) return null
 
   // Supabase 진도 동기화
   const { syncProgress, syncCompletion, loadFromCloud } = useLessonSync(
