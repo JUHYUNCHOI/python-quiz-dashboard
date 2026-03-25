@@ -51,33 +51,7 @@ cout << scores[0];  // 90
 | 타입 섞을 수 있음 | **같은 타입만!** |
 | \`scores.append(100)\` | ❌ 추가 불가! |
 
-💡 C++ 배열 = **크기가 정해진, 같은 타입의 상자들**이에요!
-
-**모던 C++11 팁: \`std::array<T, N>\`**
-
-C++11부터는 C-style 배열 대신 \`std::array\`를 쓸 수 있어요. 더 안전하고 STL 함수들과 잘 호환돼요!
-
-\`\`\`cpp
-#include <array>
-
-// C-style 배열 (전통적)
-int old[5] = {1, 2, 3, 4, 5};
-
-// std::array (C++11, 모던 스타일)
-array<int, 5> modern = {1, 2, 3, 4, 5};
-
-cout << modern.size();   // 5 (C-style 배열은 .size() 없음!)
-cout << modern.at(2);    // 3 (범위 체크 포함!)
-\`\`\`
-
-| | C-style 배열 | \`std::array\` |
-|---|---|---|
-| 크기 알기 | 직접 계산 | \`.size()\` |
-| 범위 체크 | ❌ | \`.at(i)\` 사용 시 ✅ |
-| STL 알고리즘 | 가능 | ✅ 바로 사용 |
-| 경쟁 프로그래밍 | 자주 사용 | 때때로 사용 |
-
-💡 대회 코드에서는 속도 때문에 C-style 배열을 자주 써요. 하지만 일반 코드에서는 \`std::array\`가 더 안전해요!`,
+💡 C++ 배열 = **크기가 정해진, 같은 타입의 상자들**이에요!`,
           component: "cppArrayBuilder",
         },
         {
@@ -124,7 +98,15 @@ cout << arr[5];  // ❌ 에러가 아니라 쓰레기 값! (파이썬은 IndexEr
 
 예를 들어 \`int arr[3] = {10, 20, 30};\`에서 \`arr[100]\`을 읽으면? 에러 없이 \`-827361\` 같은 엉뚱한 숫자가 나와요! 이게 바로 **쓰레기 값(garbage value)**이에요.
 
-💡 C++ 배열은 범위 체크를 안 해요 → 직접 조심해야 해요!`
+💡 C++ 배열은 범위 체크를 안 해요 → 직접 조심해야 해요!
+
+⚠️ **초기화하지 않은 배열도 위험해요:**
+\`\`\`cpp
+int arr[5];                   // ❌ 초기화 안 함 → 쓰레기값!
+int arr[5] = {};              // ✅ 전부 0으로 초기화
+int arr[5] = {10, 20, 30};   // ✅ 나머지(4,5번째)는 자동으로 0
+\`\`\`
+파이썬은 자동으로 0/None으로 초기화되지만, C++은 직접 초기화해야 해요!`
         },
         {
           id: "ch1-pred1",
@@ -506,6 +488,61 @@ v.clear();
           options: ["3", "4", "5", "에러"],
           answer: 1,
           explanation: "{1,2,3} → push_back(4) → {1,2,3,4} → push_back(5) → {1,2,3,4,5} → pop_back() → {1,2,3,4}. 크기는 4!"
+        },
+        {
+          id: "ch2-loop",
+          type: "explain",
+          title: "🔁 vector 순회하기",
+          content: `vector도 배열처럼 **for 루프로 순회**할 수 있어요!
+
+\`\`\`cpp
+vector<int> v = {10, 20, 30, 40};
+
+for (int i = 0; i < v.size(); i++) {
+    cout << v[i] << " ";
+}
+// 출력: 10 20 30 40
+\`\`\`
+
+배열 순회와 **거의 똑같아요!** 다른 점은:
+- 배열: \`i < 크기\` (숫자 직접 입력)
+- vector: \`i < v.size()\` (.size()로 자동 계산)
+
+\`\`\`cpp
+// 합계 구하기
+int sum = 0;
+for (int i = 0; i < v.size(); i++) {
+    sum += v[i];
+}
+cout << sum;  // 100
+\`\`\`
+
+@핵심: 배열 순회와 구조가 같아요. v.size()가 배열의 고정 크기 대신 들어가는 것만 달라요!`
+        },
+        {
+          id: "ch2-pred2",
+          type: "predict" as const,
+          title: "vector 순회!",
+          code: "#include <iostream>\n#include <vector>\nusing namespace std;\nint main() {\n    vector<int> v = {3, 1, 4, 1, 5};\n    v.push_back(9);\n    int sum = 0;\n    for (int i = 0; i < v.size(); i++) {\n        sum += v[i];\n    }\n    cout << sum;\n    return 0;\n}",
+          reviewHint: `vector 순회: \`for (int i = 0; i < v.size(); i++)\`로 각 원소에 접근해요.
+
+push_back 후 vector의 원소들을 순서대로 더해보세요.`,
+          options: ["14", "23", "24", "에러"],
+          answer: 1,
+          explanation: "push_back(9) 후 v = {3,1,4,1,5,9}. 합계: 3+1+4+1+5+9 = 23!"
+        },
+        {
+          id: "ch2-pred3",
+          type: "predict" as const,
+          title: "front / back / empty!",
+          code: "#include <iostream>\n#include <vector>\nusing namespace std;\nint main() {\n    vector<int> v = {10, 20, 30};\n    cout << v.front() << \" \" << v.back() << endl;\n    v.clear();\n    cout << v.empty();\n    return 0;\n}",
+          reviewHint: `- \`front()\` → 첫 번째 원소
+- \`back()\` → 마지막 원소
+- \`clear()\` → 전부 삭제
+- \`empty()\` → 비어있으면 1(true), 아니면 0(false)`,
+          options: ["10 30\n0", "10 30\n1", "20 30\n1", "에러"],
+          answer: 1,
+          explanation: "front()=10, back()=30 출력 후, clear()로 비워지면 empty()=1(true)!"
         },
         {
           id: "ch2-compare",
