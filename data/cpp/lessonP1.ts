@@ -173,8 +173,7 @@ int main() {
     int answer = rand() % 100 + 1;
     cout << "정답: " << answer << endl;  // 테스트용
     return 0;
-}`,
-          expectedOutput: `정답: 42`
+}`
         },
         {
           id: "ch2-exp2",

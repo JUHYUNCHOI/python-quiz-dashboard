@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { HelpCircle, Check, X, Lightbulb, ChevronDown, ChevronUp } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { LessonStep } from "./types"
@@ -26,6 +26,7 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
   const [showCorrectNext, setShowCorrectNext] = useState(false)
   const [showCode, setShowCode] = useState(false)
   const [showHint, setShowHint] = useState(false)
+  const ackButtonRef = useRef<HTMLButtonElement>(null)
 
   // 오답: 1.5초 후 "확인했어요 →" 버튼
   useEffect(() => {
@@ -47,6 +48,13 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
 
   // 스텝 바뀌면 힌트 닫기
   useEffect(() => { setShowHint(false) }, [step.id])
+
+  // 버튼 나타나면 자동 스크롤
+  useEffect(() => {
+    if (showAckButton || showCorrectNext) {
+      setTimeout(() => ackButtonRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }), 100)
+    }
+  }, [showAckButton, showCorrectNext])
 
   return (
     <div className="space-y-6">
@@ -135,13 +143,13 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
             <p className={cn("text-sm whitespace-pre-line leading-relaxed", selectedAnswer === step.answer ? "text-green-800" : "text-amber-800")}>{step.explanation}</p>
             {/* 정답: showNextOnCorrect일 때 "다음 문제 →" 버튼 */}
             {selectedAnswer === step.answer && showCorrectNext && (
-              <button onClick={onAcknowledge} className="mt-2 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-green-400 to-emerald-500 hover:from-green-500 hover:to-emerald-600 shadow-md transition-all flex items-center justify-center gap-2 animate-fade-in">
+              <button ref={ackButtonRef} onClick={onAcknowledge} className="mt-2 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-green-400 to-emerald-500 hover:from-green-500 hover:to-emerald-600 shadow-md transition-all flex items-center justify-center gap-2 animate-fade-in">
                 {t("다음 문제 →", "Next →")}
               </button>
             )}
             {selectedAnswer !== step.answer && (
               showAckButton ? (
-                <button onClick={onAcknowledge} className="mt-2 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md transition-all flex items-center justify-center gap-2 animate-fade-in">
+                <button ref={ackButtonRef} onClick={onAcknowledge} className="mt-2 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md transition-all flex items-center justify-center gap-2 animate-fade-in">
                   {t("확인했어요 →", "Got it →")}
                 </button>
               ) : (
