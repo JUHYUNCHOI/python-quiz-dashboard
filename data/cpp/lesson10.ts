@@ -100,8 +100,8 @@ x = 9 → sum = 18`,
         {
           id: "ch1-ref",
           type: "explain",
-          title: "🔗 복사 vs 참조(&) — 왜 &가 중요한가?",
-          content: `기본 \`for (int x : v)\`는 원소를 **복사**해서 x에 담아요. x를 수정해도 원본이 안 바뀌어요.
+          title: "🔗 x를 바꿔도 원본이 그대로? — 복사의 비밀",
+          content: `방금 배운 \`for (int x : v)\`에는 숨겨진 비밀이 있어요. x를 아무리 수정해도 **원본이 안 바뀌어요.**
 
 \`\`\`cpp
 vector<int> nums = {1, 2, 3};
@@ -128,8 +128,8 @@ for (int& x : nums) {   // & 추가!
         {
           id: "ch1-ref-anim",
           type: "interactive",
-          title: "🎬 복사 vs 참조 — 개념 보기",
-          content: "실행 버튼을 눌러 차이를 확인해보세요!",
+          title: "🎬 복사 vs 참조(&) — 차이 직접 확인!",
+          content: "실행 버튼을 눌러 & 유무에 따라 결과가 어떻게 다른지 확인해보세요!",
           component: "rangeForVisualizer",
         },
         {
