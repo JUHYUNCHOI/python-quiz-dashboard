@@ -421,45 +421,54 @@ C++에서 문자열 타입은 \`string\`이에요. (파이썬의 \`str\`)`,
         {
           id: "ch2-methods",
           type: "explain",
-          title: "🛠️ vector 주요 기능 5가지",
-          content: `vector에서 꼭 알아야 할 5가지 기능이에요!
+          title: "🛠️ vector 5가지 핵심 기능",
+          content: `\`vector<int> v = {10, 20, 30};\` 기준으로 하나씩 살펴봐요!
 
-{!teal} 🟢 **push_back(값)** — 끝에 추가 {green:(파이썬: append)}
+## ① push_back(값) — 끝에 추가
+
+{!teal} 파이썬 **list.append(x)** → C++ **v.push_back(x)**
 
 \`\`\`cpp
-vector<int> v = {10, 20, 30};
 v.push_back(40);
-// v = {10, 20, 30, 40}
+// v = {10, 20, 30, 40}  ← 40이 뒤에 붙었어요!
 \`\`\`
 
-{!blue} 🔵 **pop_back()** — 마지막 원소 제거 {blue:(파이썬: pop())}
+## ② pop_back() — 마지막 제거
+
+{!blue} 파이썬 **list.pop()** → C++ **v.pop_back()**
 
 \`\`\`cpp
 v.pop_back();
-// v = {10, 20, 30}
+// v = {10, 20, 30}  ← 마지막 원소가 사라졌어요!
 \`\`\`
 
-{!purple} 🟣 **size()** — 원소 개수 반환 {purple:(파이썬: len())}
+## ③ size() — 원소 개수
+
+{!purple} 파이썬 **len(v)** → C++ **v.size()**
 
 \`\`\`cpp
 cout << v.size();   // 3
 \`\`\`
 
-{!orange} 🟠 **v[i]** vs **v.at(i)** — 원소 접근
+## ④ v[i] — 원소 접근
+
+{!orange} 파이썬 **v[i]** → C++ **v[i]** (같아요!)
 
 \`\`\`cpp
-cout << v[0];      // 10 — 빠르지만 범위 체크 없음
-cout << v.at(1);   // 20 — 범위 벗어나면 에러 알려줌 ✅
+cout << v[0];   // 10
+cout << v[2];   // 30
 \`\`\`
 
-{!pink} 🔴 **clear()** — 전부 삭제
+## ⑤ clear() — 전부 삭제
+
+{!pink} 파이썬 **v.clear()** → C++ **v.clear()**
 
 \`\`\`cpp
 v.clear();
-// v = {}  (빈 vector)
+// v = {}  (텅 빈 vector)
 \`\`\`
 
-@핵심: v.at(i)는 범위를 벗어나면 에러를 알려줘요! v[i]보다 안전해요.`
+@핵심: push_back / pop_back / size / v[i] / clear — 이 5개가 vector의 전부예요!`
         },
         {
           id: "ch2-pred1",

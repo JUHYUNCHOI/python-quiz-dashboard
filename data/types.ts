@@ -17,6 +17,7 @@ export interface LessonStep {
   code?: string
   initialCode?: string
   expectedOutput?: string
+  stdin?: string
   hint?: string
   hint2?: string
   reviewHint?: string
