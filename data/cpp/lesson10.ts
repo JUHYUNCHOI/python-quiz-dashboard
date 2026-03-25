@@ -18,21 +18,13 @@ export const cppLesson10Data: LessonData = {
       title: "Range-based for",
       emoji: "🔁",
       steps: [
+        // ── 1단계: 기본 설명 ──────────────────────
         {
           id: "ch1-intro",
           type: "explain",
           title: "🔁 Range-based for 문",
           component: "cppRangeForBuilder",
-          content: `지난 시간에 \`for (int i = 0; i < size; i++)\` 이런 인덱스 루프를 배웠죠? 매번 이렇게 쓰면 실수하기 쉬워요. 더 간단한 방법이 있어요!
-
-\`\`\`cpp
-vector<int> nums = {10, 20, 30};
-for (int i = 0; i < nums.size(); i++) {
-    cout << nums[i] << " ";
-}
-\`\`\`
-
-인덱스 변수 \`i\`를 쓰는 게 좀 귀찮지 않았나요? 파이썬처럼 바로 값에 접근하고 싶어요!
+          content: `지난 시간에 \`for (int i = 0; i < size; i++)\` 이런 인덱스 루프를 배웠죠? 더 간단한 방법이 있어요!
 
 **파이썬 🐍:**
 \`\`\`python
@@ -47,6 +39,7 @@ vector<int> nums = {10, 20, 30};
 for (int x : nums) {
     cout << x << " ";
 }
+// 출력: 10 20 30
 \`\`\`
 
 \`for (타입 변수 : 컨테이너)\` — 파이썬의 \`for x in list:\`와 거의 같아요!
@@ -54,97 +47,181 @@ for (int x : nums) {
 | 파이썬 🐍 | C++ ⚡ |
 |---|---|
 | \`for x in nums:\` | \`for (int x : nums) {\` |
-| 타입 안 씀 | 타입 써야 함 |
-| 콜론 : | 콜론 : (같아요!) |
+| \`in\` 키워드 | \`:\` 콜론 |
 
-배열에도 벡터에도 다 쓸 수 있어요:
+배열에도 벡터에도 다 써요:
 \`\`\`cpp
 int arr[3] = {1, 2, 3};
-for (int x : arr) {     // 배열도 OK!
-    cout << x << " ";
-}
-\`\`\`
-
-💡 range-based for는 인덱스가 필요 없을 때 아주 편해요!`
+for (int x : arr) { cout << x << " "; }  // 배열도 OK!
+\`\`\``,
         },
+        // ── 2단계: 기본 연습 ──────────────────────
         {
           id: "ch1-fb1",
           type: "fillblank" as const,
           title: "빈칸을 채워주세요",
           content: "range-for문으로 벡터를 순회해봐요!",
           code: "vector<int> v = {5, 10, 15};\nfor (___ x ___ v) {\n    cout << x << \" \";\n}",
+          reviewHint: `range-based for 구조:
+\`for (타입 변수명 : 컨테이너) { ... }\`
+- 타입: 원소 타입 (int, string 등)
+- 콜론(:) — 파이썬의 in 대신`,
           fillBlanks: [
             { id: 0, answer: "int", options: ["int", "var", "auto", "for"] },
             { id: 1, answer: ":", options: [":", "in", "of", "->"] }
           ],
-          explanation: "for (int x : v)로 벡터의 모든 원소를 순회해요! 파이썬의 'for x in v'와 비교하면 'in' 대신 ':'을 쓰는 거예요."
-        },
-        {
-          id: "ch1-ref",
-          type: "explain",
-          title: "🔗 참조(&)로 원소 수정하기",
-          content: `range-based for에서 그냥 \`int x\`를 쓰면, 값의 **복사본**이에요. 원본은 안 바뀌어요!
-
-\`\`\`cpp
-vector<int> nums = {1, 2, 3};
-for (int x : nums) {
-    x = x * 10;  // 복사본만 바뀜!
-}
-// nums는 여전히 {1, 2, 3} 😱
-\`\`\`
-
-원본을 바꾸려면 **참조(&)**를 써야 해요:
-\`\`\`cpp
-vector<int> nums = {1, 2, 3};
-for (int& x : nums) {   // & 추가!
-    x = x * 10;  // 원본이 바뀜!
-}
-// nums는 이제 {10, 20, 30} ✅
-\`\`\`
-
-파이썬과 비교하면:
-
-**파이썬 🐍 (리스트 원소 변경):**
-\`\`\`python
-nums = [1, 2, 3]
-for i in range(len(nums)):
-    nums[i] = nums[i] * 10  # 인덱스로 직접 접근
-\`\`\`
-
-**C++ ⚡ (참조로 변경):**
-\`\`\`cpp
-for (int& x : nums) {
-    x = x * 10;  // 참조라서 바로 변경!
-}
-\`\`\`
-
-| 목적 | 문법 |
-|---|---|
-| 읽기만 할 때 | \`for (int x : v)\` |
-| 수정할 때 | \`for (int& x : v)\` |
-
-💡 &를 붙이면 "원본에 직접 접근"한다는 뜻이에요!
-
-& = '이 원본 자체'라는 뜻이에요. 복사본이 아니라 진짜! 친구에게 사진을 **복사**해서 주면 원본은 안 변하지만, **원본 파일 자체**를 공유하면 친구가 수정하면 내 것도 바뀌잖아요? &가 바로 원본 공유예요!
-
-여기서 & 기호가 나와요! &는 '원본을 직접 수정한다'는 뜻이에요. 자세한 건 레슨 12에서 배울 거예요. 지금은 '&가 있으면 원본 수정, 없으면 복사본'이라고만 기억하세요!`
+          explanation: "for (int x : v) — v의 원소를 int x에 하나씩 꺼내요! 파이썬 'in' 대신 ':'을 써요."
         },
         {
           id: "ch1-pred1",
           type: "predict" as const,
-          title: "Range-for 출력!",
-          code: "#include <iostream>\n#include <vector>\nusing namespace std;\nint main() {\n    vector<int> v = {3, 6, 9};\n    for (int x : v) {\n        cout << x * 2 << \" \";\n    }\n    return 0;\n}",
-          options: ["3 6 9 ", "6 12 18 ", "2 4 6 ", "에러"],
+          title: "Range-for 출력 예측!",
+          code: `#include <iostream>
+#include <vector>
+using namespace std;
+int main() {
+    vector<int> v = {3, 6, 9};
+    int sum = 0;
+    for (int x : v) {
+        sum += x;
+    }
+    cout << sum;
+    return 0;
+}`,
+          reviewHint: `range-based for는 v의 원소를 차례로 x에 담아요.
+x = 3 → sum = 3
+x = 6 → sum = 9
+x = 9 → sum = 18`,
+          options: ["9", "18", "27", "에러"],
           answer: 1,
-          explanation: "v의 각 원소(3, 6, 9)에 2를 곱해서 출력해요! 3*2=6, 6*2=12, 9*2=18 → \"6 12 18 \""
+          explanation: "3+6+9 = 18! range-based for로 모든 원소를 순서대로 더했어요.",
         },
+        // ── 3단계: 참조 설명 ──────────────────────
+        {
+          id: "ch1-ref",
+          type: "explain",
+          title: "🔗 복사 vs 참조(&) — 왜 &가 중요한가?",
+          content: `기본 \`for (int x : v)\`는 원소를 **복사**해서 x에 담아요. x를 수정해도 원본이 안 바뀌어요.
+
+\`\`\`cpp
+vector<int> nums = {1, 2, 3};
+for (int x : nums) {
+    x = x * 10;   // x(복사본)만 바뀜
+}
+// nums는 여전히 {1, 2, 3} 😱
+\`\`\`
+
+**& 하나 붙이면** x가 원본을 직접 가리켜요:
+
+\`\`\`cpp
+for (int& x : nums) {   // & 추가!
+    x = x * 10;   // 원본이 바뀜!
+}
+// nums는 이제 {10, 20, 30} ✅
+\`\`\`
+
+& = "복사본이 아니라 원본 자체"예요. 사진을 복사해서 주면 원본은 안 변하지만, **원본 파일을 공유**하면 상대가 수정할 수 있잖아요? &가 바로 그거예요!
+
+그리고 &는 복사를 안 하기 때문에 **속도도 빠릅니다.** 특히 데이터가 크면 차이가 커요.`,
+        },
+        // ── 4단계: 복사/참조 애니메이션 ──────────────────────
+        {
+          id: "ch1-ref-anim",
+          type: "interactive",
+          title: "🎬 복사 vs 참조 — 개념 보기",
+          content: "실행 버튼을 눌러 차이를 확인해보세요!",
+          component: "rangeForVisualizer",
+        },
+        {
+          id: "ch1-ref-memory",
+          type: "interactive",
+          title: "🧠 RAM에서 실제로 무슨 일이?",
+          content: "메모리 주소 단위로 복사 vs 참조가 어떻게 다른지 보여줘요!",
+          component: "copyRefMemory",
+        },
+        // ── 5단계: 참조 연습 ──────────────────────
+        {
+          id: "ch1-ref-fb",
+          type: "fillblank" as const,
+          title: "참조로 원소 수정!",
+          content: "벡터의 모든 원소에 1을 더하는 코드를 완성해봐요!",
+          code: "vector<int> v = {1, 2, 3};\nfor (int___ x : v) {\n    x += 1;\n}\n// v는 이제 {2, 3, 4}",
+          reviewHint: `원본 원소를 수정하려면 참조(&)가 필요해요:
+- \`int x\` → 복사본, 원본 불변
+- \`int& x\` → 원본 직접 수정`,
+          fillBlanks: [
+            { id: 0, answer: "&", options: ["&", "*", "%", ""] }
+          ],
+          explanation: "int& x로 참조를 받아야 원본을 수정할 수 있어요! & 없이는 복사본만 바뀌어요."
+        },
+        {
+          id: "ch1-ref-pred",
+          type: "predict" as const,
+          title: "참조로 수정 후 출력!",
+          code: `#include <iostream>
+#include <vector>
+using namespace std;
+int main() {
+    vector<int> v = {10, 20, 30};
+    for (int& x : v) {
+        x = x / 10;
+    }
+    for (int x : v) {
+        cout << x << " ";
+    }
+    return 0;
+}`,
+          reviewHint: `첫 번째 for: int& x → 원본 수정 (x = x / 10)
+두 번째 for: int x → 수정된 원본 값 출력`,
+          options: ["10 20 30 ", "1 2 3 ", "0 2 3 ", "에러"],
+          answer: 1,
+          explanation: "int& x로 원본을 나누니 {1, 2, 3}이 돼요. 두 번째 for로 출력!"
+        },
+        // ── 6단계: const int& 결론 ──────────────────────
+        {
+          id: "ch1-const-ref",
+          type: "explain",
+          title: "🏆 결론: const int&를 써야 하는 이유",
+          content: `지금까지 배운 세 가지를 정리해봐요.
+
+\`\`\`cpp
+// ① 복사 (기본)
+for (int x : v) { ... }
+
+// ② 참조 (수정 가능, 빠름)
+for (int& x : v) { ... }
+
+// ③ const 참조 (읽기전용, 빠름) ← 권장!
+for (const int& x : v) { ... }
+\`\`\`
+
+| 방식 | 복사 발생? | 수정 가능? | 속도 |
+|---|---|---|---|
+| \`int x\` | ✅ 매번 복사 | ❌ | 느림 |
+| \`int& x\` | ❌ 없음 | ✅ 가능 | 빠름 |
+| \`const int& x\` | ❌ 없음 | ❌ 불가 | 빠름 |
+
+**왜 const int&가 권장인가요?**
+- 복사가 없어서 **빠르고**
+- const라서 실수로 원본을 수정하는 것을 **컴파일러가 막아줘요**
+
+\`\`\`cpp
+for (const int& x : v) {
+    cout << x;  // ✅ 읽기 OK
+    x = 0;      // ❌ 컴파일 에러! 실수 방지
+}
+\`\`\`
+
+@핵심: 값을 **읽기만** 할 때 → \`const int&\`, 값을 **수정**해야 할 때 → \`int&\`!`,
+        },
+        // ── 7단계: 최종 연습 ──────────────────────
         {
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ Range-for로 합 구하기!",
           content: `vector의 모든 원소의 합을 range-based for로 구해보세요!
 
-힌트: 인덱스 없이, \`for (int x : nums)\`로 각 원소에 바로 접근하면 돼요!`,
+읽기만 하니까 \`const int&\`를 써봐요!`,
           code: `#include <iostream>
 #include <vector>
 using namespace std;
@@ -153,7 +230,7 @@ int main() {
     vector<int> nums = {4, 8, 15, 16, 23, 42};
     int sum = 0;
 
-    for (int x : nums) {
+    for (const int& x : nums) {
         sum += x;
     }
 
@@ -166,16 +243,16 @@ int main() {
         {
           id: "ch1-q1",
           type: "quiz",
-          title: "Range-for 기초!",
-          content: "range-based for 문에서 벡터의 원소를 **수정**하고 싶을 때 올바른 문법은?",
+          title: "Range-for 핵심!",
+          content: "큰 데이터를 **읽기만** 할 때 가장 좋은 range-for 패턴은?",
           options: [
             "for (int x : v)",
             "for (int& x : v)",
-            "for (int* x : v)",
-            "for (int x in v)"
+            "for (const int& x : v)",
+            "for (int* x : v)"
           ],
-          answer: 1,
-          explanation: "& (참조)를 써야 원본 원소를 수정할 수 있어요! &가 없으면 복사본만 바뀌어요."
+          answer: 2,
+          explanation: "const int& — 복사 없이(참조) 빠르고, const로 실수 수정도 막아요. 읽기 전용엔 최선!"
         }
       ]
     },

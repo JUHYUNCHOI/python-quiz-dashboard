@@ -9733,4 +9733,67 @@ void printDouble(int x) {
     keyConceptDescription: "const int INF = 1e9; — 최솟값 탐색 초기화에 사용. INT_MAX 대신 오버플로우 방지.",
     relatedTopics: ["INF", "상수", "최솟값 초기화", "CP"],
   },
+
+  // ── cpp-10 추가: const int& 패턴 ──
+  {
+    id: 464,
+    lessonId: "cpp-10",
+    difficulty: "보통",
+    question: "읽기 전용으로 벡터를 순회할 때 가장 권장되는 패턴은?",
+    code: `vector<int> v = {1, 2, 3, 4, 5};
+// 빈칸에 들어갈 올바른 패턴은?
+for (___________ x : v) {
+    cout << x << " ";
+}`,
+    options: [
+      "for (int x : v)",
+      "for (int& x : v)",
+      "for (const int& x : v)",
+      "for (int* x : v)",
+    ],
+    correctAnswer: 2,
+    explanation: "const int& — 참조(&)라서 복사 없이 빠르고, const라서 실수로 원본을 수정하는 걸 컴파일러가 막아줘요. 읽기 전용 순회의 정석이에요!",
+    keyConceptTitle: "const 참조로 range-for",
+    keyConceptDescription: "const int&는 복사 없이(빠름) + 읽기 전용(안전). 큰 데이터를 읽기만 할 때 항상 이 패턴을 쓰세요.",
+    relatedTopics: ["const", "참조", "range-for", "최적화"],
+  },
+  {
+    id: 465,
+    lessonId: "cpp-10",
+    difficulty: "보통",
+    question: "다음 코드 실행 후 v의 값은?",
+    code: `vector<int> v = {1, 2, 3};
+for (const int& x : v) {
+    // x = x * 2;  ← 이 줄의 주석을 제거하면?
+}`,
+    options: [
+      "{2, 4, 6} — 정상 실행",
+      "컴파일 에러 — const라서 수정 불가",
+      "{1, 2, 3} — 복사본이라서 원본 불변",
+      "런타임 에러",
+    ],
+    correctAnswer: 1,
+    explanation: "const int& x는 읽기 전용 참조예요. x = 값 으로 수정하려 하면 컴파일 에러가 발생해요. 이게 const의 역할 — 실수 방지!",
+    keyConceptTitle: "const 참조의 보호",
+    keyConceptDescription: "const int&는 원본을 직접 가리키지만(참조), const라서 값 수정이 불가능해요. 컴파일러가 실수를 잡아줘요.",
+    relatedTopics: ["const", "참조", "컴파일 에러", "읽기전용"],
+  },
+  {
+    id: 466,
+    lessonId: "cpp-10",
+    difficulty: "쉬움",
+    question: "for (int x : v) vs for (int& x : v)의 차이로 올바른 것은?",
+    code: `vector<int> v = {10, 20, 30};`,
+    options: [
+      "int x는 빠르고, int& x는 느리다",
+      "int x는 복사본, int& x는 원본 직접 접근",
+      "int x로도 원본 수정이 가능하다",
+      "둘의 차이가 없다",
+    ],
+    correctAnswer: 1,
+    explanation: "int x는 매 반복마다 값을 복사 → 원본 수정 불가, 복사 비용 발생. int& x는 원본을 직접 가리킴 → 수정 가능, 빠름!",
+    keyConceptTitle: "복사 vs 참조",
+    keyConceptDescription: "& 없이는 복사본, &를 붙이면 원본에 직접 접근. 수정이 필요하면 &, 읽기만 하면 const &.",
+    relatedTopics: ["참조", "복사", "range-for", "&"],
+  },
 ];
