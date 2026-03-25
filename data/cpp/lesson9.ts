@@ -261,7 +261,9 @@ for i in range(5):
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ 배열로 평균 구하기!",
-          content: `5개의 점수를 배열에 저장하고, for 루프로 합계와 평균을 구해보세요!
+          content: `아래 점수 5개를 배열에 **직접 넣어서** 합계와 평균을 구해보세요!
+
+{!teal} 사용할 점수: **90, 85, 78, 92, 88**
 
 힌트: 평균은 \`합계 / 개수\`예요. 소수점을 보려면 \`(double)sum / 5\`로 캐스팅하세요!`,
           code: `#include <iostream>
