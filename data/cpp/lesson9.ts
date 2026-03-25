@@ -423,54 +423,64 @@ C++에서 문자열 타입은 \`string\`이에요. (파이썬의 \`str\`)`,
         {
           id: "ch2-methods",
           type: "explain",
-          title: "🛠️ vector 5가지 핵심 기능",
+          title: "🛠️ vector 주요 기능 모음",
           content: `\`vector<int> v = {10, 20, 30};\` 기준으로 하나씩 살펴봐요!
 
 ## ① push_back(값) — 끝에 추가
 
-{!teal} 파이썬 **list.append(x)** → C++ **v.push_back(x)**
-
 \`\`\`cpp
 v.push_back(40);
-// v = {10, 20, 30, 40}  ← 40이 뒤에 붙었어요!
+// 파이썬: v.append(40)
+// v = {10, 20, 30, 40}
 \`\`\`
 
 ## ② pop_back() — 마지막 제거
 
-{!blue} 파이썬 **list.pop()** → C++ **v.pop_back()**
-
 \`\`\`cpp
 v.pop_back();
-// v = {10, 20, 30}  ← 마지막 원소가 사라졌어요!
+// 파이썬: v.pop()
+// v = {10, 20, 30}
 \`\`\`
 
 ## ③ size() — 원소 개수
 
-{!purple} 파이썬 **len(v)** → C++ **v.size()**
-
 \`\`\`cpp
 cout << v.size();   // 3
+// 파이썬: len(v)
 \`\`\`
 
 ## ④ v[i] — 원소 접근
 
-{!orange} 파이썬 **v[i]** → C++ **v[i]** (같아요!)
-
 \`\`\`cpp
 cout << v[0];   // 10
 cout << v[2];   // 30
+// 파이썬: v[i]  ← 동일!
 \`\`\`
 
-## ⑤ clear() — 전부 삭제
+## ⑤ front() / back() — 처음 / 마지막 원소
 
-{!pink} 파이썬 **v.clear()** → C++ **v.clear()**
+\`\`\`cpp
+cout << v.front();  // 10  (첫 번째)
+cout << v.back();   // 30  (마지막)
+// 파이썬: v[0] / v[-1]
+\`\`\`
+
+## ⑥ empty() — 비어있는지 확인
+
+\`\`\`cpp
+if (v.empty()) cout << "비어있어요!";
+// 파이썬: if not v:
+\`\`\`
+
+## ⑦ clear() — 전부 삭제
 
 \`\`\`cpp
 v.clear();
 // v = {}  (텅 빈 vector)
+// 파이썬: v.clear()  ← 동일!
 \`\`\`
 
-@핵심: push_back / pop_back / size / v[i] / clear — 이 5개가 vector의 전부예요!`
+💡 **find, sort** 같은 검색/정렬 기능은 \`#include <algorithm>\` 헤더에서 제공해요. 나중에 배울게요!`
         },
         {
           id: "ch2-pred1",
@@ -584,9 +594,11 @@ cin으로 받은 값을 바로 push_back으로 넣으면 돼요!`,
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ vector로 숫자 관리하기!",
-          content: `사용자에게 숫자를 입력받아 vector에 저장하고, 전체를 출력해보세요!
+          content: `cin으로 숫자를 입력받아 vector에 저장하고, 전체를 출력해보세요!
 
-0을 입력하면 입력을 멈추고 결과를 출력해요.`,
+{!teal} 입력 방법: 숫자를 하나씩 입력하고, **0을 입력하면 종료**돼요.
+
+{!blue} 테스트 입력값: **5 3 8 2 0** (0 입력 시 종료)`,
           code: `#include <iostream>
 #include <vector>
 using namespace std;
@@ -612,8 +624,12 @@ int main() {
 
     return 0;
 }`,
+          stdin: `5
+3
+8
+2
+0`,
           expectedOutput: `숫자를 입력하세요 (0이면 종료):
-5 3 8 2 0
 입력한 숫자: 5 3 8 2
 총 4개`
         },
