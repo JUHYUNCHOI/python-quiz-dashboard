@@ -21,8 +21,8 @@ function normalize(s: string) {
   return s.trim().replace(/\s+/g, " ").toLowerCase()
 }
 
-function extractSkeleton(code: string): string {
-  return code
+function extractSkeleton(_code: string): string {
+  return ""
 }
 
 export function PracticeStep({ step, lang = "ko", onSuccess, lessonId }: PracticeStepProps) {
