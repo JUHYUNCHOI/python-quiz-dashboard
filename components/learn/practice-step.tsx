@@ -22,7 +22,13 @@ function normalize(s: string) {
 }
 
 function extractSkeleton(_code: string): string {
-  return ""
+  return `#include <iostream>
+using namespace std;
+
+int main() {
+
+    return 0;
+}`
 }
 
 export function PracticeStep({ step, lang = "ko", onSuccess, lessonId }: PracticeStepProps) {
