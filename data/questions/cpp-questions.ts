@@ -1602,6 +1602,116 @@ int main() {
     relatedTopics: ["vector", "insert", "iterator"],
   },
   {
+    id: 459,
+    lessonId: "cpp-9",
+    difficulty: "쉬움",
+    question: "배열에 cin으로 값을 입력받는 올바른 코드는?",
+    code: `int arr[3];
+for (int i = 0; i < 3; i++) {
+    _____ >> arr[i];
+}`,
+    options: ["cout", "cin", "input", "scanf"],
+    correctAnswer: 1,
+    explanation: "cin >> arr[i]로 배열의 각 칸에 차례로 값을 입력받아요. cout은 출력, cin은 입력!",
+    keyConceptTitle: "배열에 cin 입력",
+    keyConceptDescription: "for 루프 + cin >> arr[i] 패턴으로 배열을 채울 수 있습니다. 배열 크기만큼 반복합니다.",
+    relatedTopics: ["cin", "배열", "for 루프"],
+  },
+  {
+    id: 460,
+    lessonId: "cpp-9",
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    vector<int> v = {10, 20, 30};
+    v.push_back(40);
+    cout << v.front() << " " << v.back();
+    return 0;
+}`,
+    options: ["10 30", "10 40", "20 40", "에러"],
+    correctAnswer: 1,
+    explanation: "push_back(40) 후 v = {10,20,30,40}. front()=10(첫 번째), back()=40(마지막)!",
+    keyConceptTitle: "vector front() / back()",
+    keyConceptDescription: "front()는 첫 번째 원소, back()은 마지막 원소를 반환합니다. 파이썬의 v[0] / v[-1]에 해당해요.",
+    relatedTopics: ["front", "back", "vector"],
+  },
+  {
+    id: 461,
+    lessonId: "cpp-9",
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    vector<int> v = {1, 2, 3};
+    v.clear();
+    cout << v.empty();
+    return 0;
+}`,
+    options: ["1", "0", "에러", "3"],
+    correctAnswer: 0,
+    explanation: "clear()로 모든 원소를 삭제하면 vector가 비어요. empty()는 비어있으면 1(true), 아니면 0(false).",
+    keyConceptTitle: "vector empty() / clear()",
+    keyConceptDescription: "clear()는 모든 원소 삭제, empty()는 비어있는지 확인. 파이썬의 v.clear() / not v에 대응.",
+    relatedTopics: ["empty", "clear", "vector"],
+  },
+  {
+    id: 462,
+    lessonId: "cpp-9",
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    vector<int> v = {5, 10, 15, 20};
+    int sum = 0;
+    for (int i = 0; i < v.size(); i++) {
+        sum += v[i];
+    }
+    cout << sum;
+    return 0;
+}`,
+    options: ["15", "40", "50", "에러"],
+    correctAnswer: 2,
+    explanation: "v.size()=4이므로 i는 0~3. 5+10+15+20 = 50!",
+    keyConceptTitle: "vector for 루프 순회",
+    keyConceptDescription: "for (int i = 0; i < v.size(); i++) 패턴으로 vector를 순회합니다. 배열 순회와 동일하고, v.size()가 크기 역할을 합니다.",
+    relatedTopics: ["for 루프", "vector", "순회"],
+  },
+  {
+    id: 463,
+    lessonId: "cpp-9",
+    difficulty: "보통",
+    question: "v[i]와 v.at(i)의 차이점으로 올바른 것은?",
+    code: `vector<int> v = {1, 2, 3};
+
+v[10];      // ← A
+v.at(10);   // ← B`,
+    options: [
+      "A와 B 모두 에러를 발생시킨다",
+      "A는 쓰레기값, B는 범위 초과 에러",
+      "A는 에러, B는 쓰레기값",
+      "A와 B 모두 쓰레기값",
+    ],
+    correctAnswer: 1,
+    explanation: "v[i]는 범위를 벗어나도 에러 없이 쓰레기값! v.at(i)는 범위를 벗어나면 out_of_range 에러를 발생시켜요.",
+    keyConceptTitle: "v[i] vs v.at(i)",
+    keyConceptDescription: "v[i]는 빠르지만 범위 체크 없음. v.at(i)는 느리지만 범위를 벗어나면 예외를 던집니다. 파이썬의 IndexError처럼요.",
+    codeComparison: {
+      wrong: `v[100];  // ❌ 에러 없이 쓰레기값`,
+      correct: `v.at(100);  // ✅ out_of_range 에러 발생`,
+    },
+    relatedTopics: ["at", "범위 체크", "안전한 접근"],
+  },
+  {
     id: 99,
     lessonId: "cpp-10",
     difficulty: "보통",
