@@ -1334,7 +1334,7 @@ int main() {
   },
   {
     id: 84,
-    lessonId: "cpp-9",
+    lessonId: "cpp-11",
     difficulty: "보통",
     question: "다음 코드에서 2차원 배열의 출력 결과는?",
     code: `#include <iostream>
@@ -1374,7 +1374,7 @@ int main() {
   },
   {
     id: 86,
-    lessonId: "cpp-9",
+    lessonId: "cpp-11",
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -1394,7 +1394,7 @@ int main() {
   },
   {
     id: 87,
-    lessonId: "cpp-9",
+    lessonId: "cpp-11",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -1416,7 +1416,7 @@ int main() {
   },
   {
     id: 88,
-    lessonId: "cpp-9",
+    lessonId: "cpp-11",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -1464,7 +1464,7 @@ int main() {
   },
   {
     id: 90,
-    lessonId: "cpp-9",
+    lessonId: "cpp-11",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -1580,7 +1580,7 @@ int main() {
   },
   {
     id: 98,
-    lessonId: "cpp-9",
+    lessonId: "cpp-11",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
