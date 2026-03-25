@@ -49,7 +49,8 @@ export function PracticeStep({ step, lang = "ko", onSuccess, lessonId }: Practic
   }, [step.id])
 
   const isEn = lang === "en"
-  const skeleton = step.code ? extractSkeleton(step.code) : ""
+  // starterCode가 있으면 그걸 초기 코드로, 없으면 code에서 skeleton 추출
+  const skeleton = step.starterCode ?? (step.code ? extractSkeleton(step.code) : "")
   const hasExpected = !!step.expectedOutput
 
   // 현재 힌트 레벨 (failCount 기준, 최대 3)
@@ -122,7 +123,7 @@ export function PracticeStep({ step, lang = "ko", onSuccess, lessonId }: Practic
         )}
 
         {/* C++ 코드 에디터 + 실행 (모바일/데스크톱 공통) */}
-        {!done && step.code && (
+        {!done && (step.code || step.starterCode) && (
           <CppRunner
             key={step.id}
             initialCode={skeleton || `// 👉 여기에 코드를 직접 작성하거나 복사해서 붙여넣으세요!`}

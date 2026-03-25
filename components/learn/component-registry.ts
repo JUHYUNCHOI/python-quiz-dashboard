@@ -155,6 +155,12 @@ const registry: Record<string, ComponentEntry> = {
     }),
   },
 
+  // C++ 레슨: 헤더 파일 연결 애니메이션
+  headerFiles: {
+    load: () => import("@/components/animations/header-files"),
+    exportName: "HeaderFilesAnimation",
+  },
+
   // C++ 레슨: 함수 순서 오류 애니메이션
   functionOrder: {
     load: () => import("@/components/animations/function-order"),

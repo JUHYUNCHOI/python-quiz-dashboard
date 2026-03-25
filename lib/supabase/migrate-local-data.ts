@@ -1,6 +1,60 @@
 import { createClient } from "./client"
 
 /**
+ * 매 로그인마다 completedLessons + completedQuizzes를 Supabase에 동기화
+ * 24시간 쿨다운 없이 항상 실행 — 데이터가 작아서 비용 적음
+ */
+export async function syncCompletionsToSupabase(userId: string) {
+  const supabase = createClient()
+
+  try {
+    // completedLessons
+    const completedLessonsRaw = localStorage.getItem("completedLessons")
+    if (completedLessonsRaw) {
+      const completedLessons: (string | number)[] = JSON.parse(completedLessonsRaw)
+      const progressRows = completedLessons.map(lessonId => ({
+        user_id: userId,
+        lesson_id: String(lessonId),
+        variant: "",
+        progress_type: "learn" as const,
+        progress_data: {},
+        completed: true,
+        score: 0,
+      }))
+      if (progressRows.length > 0) {
+        const { error } = await supabase.from("lesson_progress").upsert(progressRows, {
+          onConflict: "user_id,lesson_id,variant,progress_type",
+        })
+        if (error) console.error("[syncCompletions] lesson_progress upsert failed:", error.message)
+      }
+    }
+
+    // completedQuizzes
+    const completedQuizzesRaw = localStorage.getItem("completedQuizzes")
+    if (completedQuizzesRaw) {
+      const completedQuizzes: (string | number)[] = JSON.parse(completedQuizzesRaw)
+      const quizRows = completedQuizzes.map(lessonId => ({
+        user_id: userId,
+        lesson_id: String(lessonId),
+        variant: "",
+        progress_type: "quiz" as const,
+        progress_data: {},
+        completed: true,
+        score: 0,
+      }))
+      if (quizRows.length > 0) {
+        const { error } = await supabase.from("lesson_progress").upsert(quizRows, {
+          onConflict: "user_id,lesson_id,variant,progress_type",
+        })
+        if (error) console.error("[syncCompletions] completedQuizzes upsert failed:", error.message)
+      }
+    }
+  } catch (e) {
+    console.error("[syncCompletions] failed:", e)
+  }
+}
+
+/**
  * 첫 로그인 시 localStorage 데이터를 Supabase로 마이그레이션
  * auth-context.tsx에서 SIGNED_IN 이벤트 시 1회 호출
  */

@@ -451,19 +451,12 @@ main() 위에 50개 함수를 전부 쓰면... main()이 어디 있는지도 못
           ],
           explanation: "프로토타입 = 반환 타입 + 함수 이름 + (매개변수) + 세미콜론(;)! 본체 { } 없이 선언만 해요."
         },
-        // ===== 헤더 파일: .h → .cpp → main → #ifndef =====
+        // ===== 헤더 파일: .h → .cpp → main → 시뮬 → 인사이트 → #ifndef =====
         {
           id: "ch2-header-intro",
           type: "explain",
-          title: "📄 헤더 파일(.h)에는 뭐가 들어가나?",
-          content: `프로토타입이 많아지면 파일로 분리하는 게 좋아요. C++에서는 이렇게 나눠요:
-
-\`\`\`
-📂 프로젝트/
-├── math.h      ← 프로토타입 모음 (선언)
-├── math.cpp    ← 함수 본체 (정의)
-└── main.cpp    ← main 함수
-\`\`\`
+          title: "📄 헤더 파일 만들어볼게요 — 여기엔 뭐가 들어가요?",
+          content: `프로토타입이 많아지면 파일로 분리하는 게 좋아요. 먼저 **헤더 파일**부터 만들어볼게요.
 
 **.h 파일에는 프로토타입(선언)만 넣어요:**
 
@@ -473,19 +466,19 @@ int add(int a, int b);
 int multiply(int a, int b);
 \`\`\`
 
-선언만! 본체 \`{ }\`는 없어요. 파이썬의 \`import\`처럼, 다른 파일에서 이 함수들을 쓸 수 있게 미리 알려주는 거예요.`
+본체 \`{ }\` 없이 선언만! "이런 함수가 있을 거예요" 라고 미리 알려주는 목차 같은 거예요.`
         },
         {
           id: "ch2-header-cpp",
           type: "explain",
-          title: "📄 .cpp 파일에는 함수 본체가 들어가요",
-          content: `함수의 실제 내용(본체)은 **.cpp 파일**에 써요.
+          title: "📄 그럼 함수 본체는? — .cpp 파일에 써요",
+          content: `함수의 실제 내용(본체)은 **.cpp 파일**에 작성해요. 관례상 헤더 파일과 같은 이름을 써요 (\`math.h\` ↔ \`math.cpp\`).
 
-그리고 이 .cpp 파일도 **자신의 .h 파일을 include**해야 해요 — 프로토타입을 참고해서 실수 없이 본체를 작성하기 위해서예요:
+그리고 **이 .cpp 파일도 자신의 .h 파일을 include**해야 해요 — 컴파일러가 "선언대로 본체가 맞게 작성됐나?" 확인하기 위해서예요:
 
 \`\`\`cpp
 // math.cpp
-#include "math.h"        // ← 우리가 만든 헤더 include!
+#include "math.h"        // ← 내 헤더를 include!
 
 int add(int a, int b) {
     return a + b;
@@ -496,19 +489,19 @@ int multiply(int a, int b) {
 }
 \`\`\`
 
-💡 \`#include <iostream>\` 처럼 꺾쇠(\`<>\`)는 C++ 기본 헤더,
-\`#include "math.h"\` 처럼 따옴표(\`""\`)는 우리가 만든 헤더예요!`
+💡 \`<iostream>\` 처럼 꺾쇠(\`<>\`)는 C++ 기본 라이브러리,
+\`"math.h"\` 처럼 따옴표(\`""\`)는 우리가 만든 파일이에요.`
         },
         {
           id: "ch2-header-main",
           type: "explain",
-          title: "📄 main.cpp에서 include하고 사용하기",
-          content: `main.cpp에서도 **헤더 파일을 include**하면 함수를 바로 쓸 수 있어요:
+          title: "📄 갖다 쓰는 쪽 — main.cpp에서도 include",
+          content: `main.cpp에서도 **헤더 파일을 include**하면 함수를 쓸 수 있어요. 본체가 어떻게 생겼는지 몰라도 돼요 — 헤더만 보면 돼요!
 
 \`\`\`cpp
 // main.cpp
 #include <iostream>
-#include "math.h"     // ← add, multiply를 알게 됨!
+#include "math.h"     // ← 이것만 있으면 add, multiply 사용 가능!
 using namespace std;
 
 int main() {
@@ -518,39 +511,42 @@ int main() {
 }
 \`\`\`
 
-**3개 파일의 역할 정리:**
+이제 3개 파일이 있어요. 이게 어떻게 연결되는지 다음 화면에서 확인해봐요!`
+        },
+        {
+          id: "ch2-header-anim",
+          type: "animation",
+          component: "headerFiles",
+          title: "🔗 세 파일이 연결되는 방식",
+          content: `💡 **핵심 인사이트:**
+본체(\`math.cpp\`)가 어떻게 작성됐는지 몰라도,
+**헤더 파일(\`math.h\`)만 보면** 어떤 함수가 있고 어떻게 쓰는지 알 수 있어요!
 
-| 파일 | 내용 |
-|---|---|
-| \`math.h\` | 선언 (프로토타입) |
-| \`math.cpp\` | 정의 (함수 본체) |
-| \`main.cpp\` | main + include "math.h" |`
+C++ 표준 라이브러리(\`<iostream>\`, \`<string>\` 등)도 같은 방식이에요 — 우리는 헤더만 include하고, 본체는 어딘가에 이미 컴파일돼 있어요.`
         },
         {
           id: "ch2-header-guard",
           type: "explain",
-          title: "🛡️ 마지막으로: #ifndef 헤더 가드",
-          content: `헤더 파일이 잘 작동해요! 그런데 프로젝트가 커지면 이런 일이 생겨요:
+          title: "⚠️ 아주 작은 문제 하나 — 중복 include",
+          content: `헤더 파일이 잘 작동해요! 근데 프로젝트가 커지면 이런 일이 생겨요:
 
 \`\`\`cpp
 // main.cpp
-#include "math.h"   // ← add, multiply 선언됨
-#include "utils.h"  // ← utils.h 안에도 #include "math.h"가 있으면?
-// → add, multiply가 두 번 선언됨 ❌ 에러!
+#include "math.h"   // ← add, multiply 선언됨 ✅
+#include "utils.h"  // ← utils.h 내부에도 #include "math.h" 있으면?
+//   └→ add, multiply 또 선언됨 ❌ 중복 에러!
 \`\`\`
 
-같은 헤더가 두 번 include되면 **중복 선언 에러**가 나요.
+같은 헤더가 두 번 include되면 **같은 프로토타입이 두 번 선언**돼서 에러나요.
 
 ---
 
-🏫 **비유:** 출석부에 같은 이름이 두 번 불리면 에러인 것처럼요.
-
-해결책 — 헤더 파일 맨 위아래에 **헤더 가드** 추가:
+해결책 — 헤더 파일에 **헤더 가드** 추가:
 
 \`\`\`cpp
 // math.h
 #ifndef MATH_H       // "MATH_H 아직 정의 안 됐지?"
-#define MATH_H       // "그러면 지금 정의할게!"
+#define MATH_H       // "없으면 지금 정의할게!"
 
 int add(int a, int b);
 int multiply(int a, int b);
@@ -558,9 +554,9 @@ int multiply(int a, int b);
 #endif               // "끝!"
 \`\`\`
 
-두 번째 include → \`#ifndef\`에서 "이미 정의됨" → **전부 건너뜀!**
+두 번째 include → \`#ifndef\` "이미 정의됨!" → **통째로 건너뜀** ✅
 
-💡 **규칙:** 파일명을 대문자 + 점(.) → 언더스코어(_)
+💡 **관례(convention):** 식별자는 아무 이름이나 써도 되지만, 다른 파일과 겹치지 않도록 파일명을 대문자로 바꿔서 쓰는 게 일반적이에요.
 - \`math.h\` → \`MATH_H\`
 - \`player_utils.h\` → \`PLAYER_UTILS_H\``
         },
@@ -741,9 +737,9 @@ int add(int x, int y) { return x + y; }  // ❌ 에러! 타입이 같잖아
           type: "predict" as const,
           title: "어떤 함수가 호출될까?",
           code: "#include <iostream>\nusing namespace std;\nint add(int a, int b) { return a + b; }\ndouble add(double a, double b) { return a + b; }\nint main() {\n    cout << add(1.5, 2.5);\n    return 0;\n}",
-          options: ["3", "4.0", "4", "에러"],
+          options: ["3", "에러", "4", "int 버전 add가 호출돼서 3"],
           answer: 2,
-          explanation: "1.5와 2.5는 double이니까 double 버전의 add가 호출돼요! 1.5 + 2.5 = 4. cout은 소수점 뒤가 0이면 생략해서 4가 출력돼요."
+          explanation: "1.5와 2.5는 double이니까 double 버전의 add가 호출돼요! 1.5 + 2.5 = 4. int 버전이 호출됐다면 소수점이 잘려서 add(1, 2) = 3이 됐겠지만, C++이 타입을 보고 딱 맞는 double 버전을 골라줘요!"
         },
         {
           id: "ch2-overload-q",
@@ -766,15 +762,40 @@ int add(int x, int y) { return x + y; }  // ❌ 에러! 타입이 같잖아
           content: `기본값 매개변수와 함수 오버로딩을 모두 써보는 프로그램이에요!
 
 void 함수와 반환값 있는 함수의 차이도 직접 느껴보세요.`,
+          starterCode: `#include <iostream>
+using namespace std;
+
+// 기본값 매개변수: greet(이름, 메시지="안녕하세요")
+void greet(string name, string msg = "안녕하세요") {
+    // 힌트: cout << msg << ", " << name << "!" << endl;
+}
+
+// 함수 오버로딩: 정수용 add
+int add(int a, int b) {
+    // 힌트: return a + b;
+}
+
+// 함수 오버로딩: 실수용 add
+double add(double a, double b) {
+    // 힌트: return a + b;
+}
+
+int main() {
+    greet("주현");
+    greet("민지", "반가워요");
+
+    cout << "정수: " << add(3, 5) << endl;
+    cout << "실수: " << add(1.5, 2.7) << endl;
+
+    return 0;
+}`,
           code: `#include <iostream>
 using namespace std;
 
-// 기본값 매개변수
 void greet(string name, string msg = "안녕하세요") {
     cout << msg << ", " << name << "!" << endl;
 }
 
-// 함수 오버로딩
 int add(int a, int b) {
     return a + b;
 }
