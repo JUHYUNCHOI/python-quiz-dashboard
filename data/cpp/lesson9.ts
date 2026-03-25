@@ -106,7 +106,16 @@ int arr[5];                   // ❌ 초기화 안 함 → 쓰레기값!
 int arr[5] = {};              // ✅ 전부 0으로 초기화
 int arr[5] = {10, 20, 30};   // ✅ 나머지(4,5번째)는 자동으로 0
 \`\`\`
-파이썬은 자동으로 0/None으로 초기화되지만, C++은 직접 초기화해야 해요!`
+파이썬은 자동으로 0/None으로 초기화되지만, C++은 직접 초기화해야 해요!
+
+@핵심: \`int arr[5] = {};\` — 중괄호를 비워두면 **전부 0으로 초기화**돼요. 나중에 "배열을 전부 0으로 만들고 싶을 때" 바로 쓸 수 있어요!`
+        },
+        {
+          id: "ch1-default-values",
+          type: "interactive",
+          title: "🎨 타입별 배열 기본값 확인하기",
+          content: "부분 초기화할 때 빈 칸에는 무엇이 들어갈까요? 타입마다 달라요!",
+          component: "arrayInitVisualizer",
         },
         {
           id: "ch1-pred1",
@@ -403,6 +412,45 @@ C++에서 문자열 타입은 \`string\`이에요. (파이썬의 \`str\`)`,
           explanation: "vector를 쓰려면 #include <vector>이 필요하고, 문자열 벡터는 vector<string>이에요!"
         },
         {
+          id: "ch2-init",
+          type: "explain",
+          title: "🔧 크기와 초기값으로 vector 만들기",
+          content: `이미 봤던 방식 외에, **크기와 초기값을 지정해서** vector를 만들 수 있어요.
+
+\`\`\`cpp
+vector<int> v(5, 0);    // 0이 5개: {0, 0, 0, 0, 0}
+vector<int> v(3, 10);   // 10이 3개: {10, 10, 10}
+\`\`\`
+
+파이썬에서 이렇게 하던 거랑 같아요:
+
+\`\`\`python
+v = [0] * 5   # 파이썬
+\`\`\`
+\`\`\`cpp
+vector<int> v(5, 0);  // C++, 같은 의미!
+\`\`\`
+
+@핵심: 나중에 알고리즘 문제에서 "n개짜리 배열을 전부 0으로 초기화"할 때 바로 쓸 수 있어요!`,
+        },
+        {
+          id: "ch2-fb-init",
+          type: "fillblank" as const,
+          title: "빈칸을 채워주세요",
+          content: "정수 4개를 전부 -1로 초기화한 vector를 만들어봐요!",
+          code: "vector<int> v(___, ___);",
+          reviewHint: `\`vector<타입> 변수명(크기, 초기값);\`
+
+예시:
+- \`vector<int> v(3, 0)\` → {0, 0, 0}
+- \`vector<int> v(5, 1)\` → {1, 1, 1, 1, 1}`,
+          fillBlanks: [
+            { id: 0, answer: "4", options: ["4", "3", "5", "-1"] },
+            { id: 1, answer: "-1", options: ["-1", "0", "1", "4"] }
+          ],
+          explanation: "vector<int> v(4, -1)은 -1이 4개 들어있는 벡터를 만들어요! v = {-1, -1, -1, -1}"
+        },
+        {
           id: "ch2-methods",
           type: "explain",
           title: "🛠️ vector 주요 기능 모음",
@@ -518,6 +566,59 @@ cout << sum;  // 100
 \`\`\`
 
 @핵심: 배열 순회와 구조가 같아요. v.size()가 배열의 고정 크기 대신 들어가는 것만 달라요!`
+        },
+        {
+          id: "ch2-range-for",
+          type: "explain",
+          title: "⚡ Range-based for — 파이썬처럼 순회하기",
+          content: `인덱스 없이 **값을 직접** 꺼내는 방법이 있어요. 파이썬의 \`for x in list\`랑 똑같아요!
+
+\`\`\`cpp
+vector<int> v = {10, 20, 30, 40};
+
+// 기존 방식
+for (int i = 0; i < v.size(); i++) {
+    cout << v[i] << " ";
+}
+
+// Range-based for (더 간결!)
+for (int x : v) {
+    cout << x << " ";
+}
+// 둘 다 출력: 10 20 30 40
+\`\`\`
+
+그런데 여기서 중요한 차이가 있어요.
+
+## for (int x : v) — 복사
+
+\`\`\`cpp
+for (int x : v) { ... }
+\`\`\`
+매 반복마다 v의 값을 **복사**해서 x에 담아요. 원본을 바꿀 수 없고, 복사 비용이 생겨요.
+
+## for (int& x : v) — 참조 (빠름!)
+
+\`\`\`cpp
+for (int& x : v) { ... }
+\`\`\`
+x가 v의 원소를 **직접 가리켜요** (참조). 복사가 없으니 빠르고, 값을 수정할 수도 있어요.
+
+## for (const int& x : v) — 권장!
+
+\`\`\`cpp
+for (const int& x : v) { ... }
+\`\`\`
+참조라 빠르고, \`const\`라 실수로 값을 바꾸는 걸 막아줘요. **읽기만 할 때 최선의 선택!**
+
+@핵심: 값을 읽기만 한다면 **\`const int&\`**를 쓰는 게 정석이에요. 복사 없이 빠르고 안전해요!`,
+        },
+        {
+          id: "ch2-range-for-anim",
+          type: "interactive",
+          title: "🎬 복사 vs 참조 — 직접 보기",
+          content: "실행 버튼을 눌러 복사와 참조의 차이를 눈으로 확인해보세요!",
+          component: "rangeForVisualizer",
         },
         {
           id: "ch2-pred2",

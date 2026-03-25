@@ -1443,7 +1443,7 @@ int main() {
   },
   {
     id: 89,
-    lessonId: "cpp-11",
+    lessonId: "cpp-9",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -1537,7 +1537,7 @@ int main() {
   },
   {
     id: 95,
-    lessonId: "cpp-9",
+    lessonId: "cpp-8",
     difficulty: "쉬움",
     question: "다음 코드에서 #include의 역할은?",
     code: `#include <iostream>
@@ -1605,13 +1605,13 @@ int main() {
     id: 459,
     lessonId: "cpp-9",
     difficulty: "쉬움",
-    question: "배열에 cin으로 값을 입력받는 올바른 코드는?",
+    question: "정수 배열 arr[3]에 사용자로부터 값 3개를 입력받으려 한다. 빈칸에 들어갈 올바른 코드는?",
     code: `int arr[3];
 for (int i = 0; i < 3; i++) {
-    _____ >> arr[i];
+    ______________;
 }`,
-    options: ["cout", "cin", "input", "scanf"],
-    correctAnswer: 1,
+    options: ["cin >> arr[i]", "cout << arr[i]", "arr[i] = input()", "scanf(arr[i])"],
+    correctAnswer: 0,
     explanation: "cin >> arr[i]로 배열의 각 칸에 차례로 값을 입력받아요. cout은 출력, cin은 입력!",
     keyConceptTitle: "배열에 cin 입력",
     keyConceptDescription: "for 루프 + cin >> arr[i] 패턴으로 배열을 채울 수 있습니다. 배열 크기만큼 반복합니다.",

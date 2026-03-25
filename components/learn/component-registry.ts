@@ -363,6 +363,20 @@ const registry: Record<string, ComponentEntry> = {
     exportName: "CppBraceTrapBuilder",
   },
 
+  // C++ 레슨: range-based for 루프 복사 vs 참조 시각화
+  rangeForVisualizer: {
+    load: () => import("@/components/animations/range-for-visualizer"),
+    exportName: "RangeForVisualizer",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+
+  // C++ 레슨: 배열 부분 초기화 기본값 시각화
+  arrayInitVisualizer: {
+    load: () => import("@/components/animations/array-init-visualizer"),
+    exportName: "ArrayInitVisualizer",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+
   // C++ 레슨: 데이터 타입별 메모리 시각화
   memoryTypeVisualizer: {
     load: () => import("@/components/animations/memory-type-visualizer"),
