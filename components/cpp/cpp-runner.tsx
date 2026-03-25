@@ -82,6 +82,7 @@ function highlightCppCode(code: string): string {
 interface CppRunnerProps {
   initialCode: string
   expectedOutput?: string
+  stdin?: string
   task?: string
   onSuccess?: () => void
   onError?: () => void
@@ -118,6 +119,7 @@ function friendlyError(stderr: string): string {
 export function CppRunner({
   initialCode,
   expectedOutput,
+  stdin,
   task,
   onSuccess,
   onError,
@@ -133,7 +135,10 @@ export function CppRunner({
   const [code, setCode] = useState(() => {
     if (!storageKey || typeof window === "undefined") return initialCode
     try {
-      return localStorage.getItem(storageKey) ?? initialCode
+      const saved = localStorage.getItem(storageKey)
+      // placeholder 코멘트나 빈 값이면 initialCode 사용 (이전 버전 마이그레이션)
+      if (!saved || saved.trim().startsWith("// 👉")) return initialCode
+      return saved
     } catch {
       return initialCode
     }
@@ -202,6 +207,7 @@ export function CppRunner({
           code,
           compiler: "gcc-head",
           "compiler-option-raw": "-std=c++17\n-O2",
+          ...(stdin ? { stdin } : {}),
         })
       })
 
@@ -277,6 +283,15 @@ export function CppRunner({
       {task && (
         <div className="bg-teal-50 rounded-lg p-2.5 border border-teal-200">
           <p className="text-teal-800 font-bold text-sm">🎯 {task}</p>
+        </div>
+      )}
+
+      {stdin && (
+        <div className="bg-gray-900 rounded-xl p-3 border border-gray-700">
+          <p className="text-gray-400 text-xs font-bold mb-1.5">
+            {isEn ? "⌨️ Input (stdin):" : "⌨️ 입력 데이터 (테스트용):"}
+          </p>
+          <pre className="font-mono text-sm text-sky-300 whitespace-pre-wrap">{stdin}</pre>
         </div>
       )}
 

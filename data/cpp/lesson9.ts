@@ -200,6 +200,64 @@ for (int i = 0; i < size; i++) {
           explanation: "2 + 4 + 6 + 8 + 10 = 30! for 루프로 배열의 모든 원소를 더했어요."
         },
         {
+          id: "ch1-cin",
+          type: "explain",
+          title: "⌨️ 배열에 cin으로 값 입력받기",
+          content: `배열에 값을 직접 쓰는 대신, 사용자가 **키보드로 입력**하게 할 수도 있어요!
+
+**for 루프 + cin 조합:**
+
+\`\`\`cpp
+#include <iostream>
+using namespace std;
+
+int main() {
+    int scores[5];
+
+    cout << "점수 5개를 입력하세요:" << endl;
+    for (int i = 0; i < 5; i++) {
+        cin >> scores[i];  // 각 칸에 차례로 입력받기
+    }
+
+    cout << "첫 번째 점수: " << scores[0] << endl;
+    return 0;
+}
+\`\`\`
+
+파이썬과 비교:
+
+\`\`\`python
+scores = []
+for i in range(5):
+    scores.append(int(input()))
+\`\`\`
+
+| 파이썬 🐍 | C++ ⚡ |
+|---|---|
+| \`int(input())\` | \`cin >> scores[i]\` |
+| 리스트에 append | 배열 칸에 직접 저장 |
+| 크기 자동 증가 | 배열 크기 미리 선언 필요 |
+
+@핵심: C++ 배열은 크기를 먼저 선언하고, for 루프 + cin으로 각 칸을 채워요!`
+        },
+        {
+          id: "ch1-fb-cin",
+          type: "fillblank" as const,
+          title: "빈칸을 채워주세요",
+          content: "3개의 값을 배열에 cin으로 입력받아요!",
+          code: "int arr[3];\nfor (int i = 0; i < ___; i++) {\n    ___ >> arr[i];\n}",
+          reviewHint: `for 루프로 배열에 cin 입력받기:
+
+- 반복 횟수 = 배열 크기 (3개 배열이면 3번 반복)
+- \`cin >> 변수\` 형태로 값을 입력받아요
+- \`arr[i]\`는 i번째 칸에 저장하는 것`,
+          fillBlanks: [
+            { id: 0, answer: "3", options: ["3", "5", "i", "0"] },
+            { id: 1, answer: "cin", options: ["cin", "cout", "input", "scanf"] }
+          ],
+          explanation: "배열 크기(3)만큼 반복하고, cin으로 각 칸에 값을 입력받아요!"
+        },
+        {
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ 배열로 평균 구하기!",
@@ -229,14 +287,21 @@ int main() {
           id: "ch1-practice2",
           type: "practice" as const,
           title: "✋ 배열에서 최댓값 찾기!",
-          content: `5개의 점수가 저장된 배열에서 최댓값을 찾아 출력하세요.`,
+          content: `cin으로 점수 5개를 입력받아, 배열에 저장하고 최댓값을 출력하세요.
+
+힌트: 먼저 배열을 선언하고, for 루프 + cin으로 채운 다음, 다시 for 루프로 최댓값을 찾아요!`,
           code: `#include <iostream>
 using namespace std;
 
 int main() {
-    int scores[5] = {85, 92, 78, 96, 88};
-    int maxScore = scores[0];
+    int scores[5];
 
+    cout << "점수 5개를 입력하세요:" << endl;
+    for (int i = 0; i < 5; i++) {
+        cin >> scores[i];
+    }
+
+    int maxScore = scores[0];
     for (int i = 1; i < 5; i++) {
         if (scores[i] > maxScore) {
             maxScore = scores[i];
@@ -246,7 +311,13 @@ int main() {
     cout << "최고 점수: " << maxScore << endl;
     return 0;
 }`,
-          expectedOutput: `최고 점수: 96`
+          stdin: `85
+92
+78
+96
+88`,
+          expectedOutput: `점수 5개를 입력하세요:
+최고 점수: 96`
         },
         {
           id: "ch1-q1",
@@ -267,6 +338,27 @@ int main() {
           ],
           answer: 2,
           explanation: "C-style 배열은 크기가 고정이에요! 크기를 늘리려면 vector를 써야 해요."
+        },
+        {
+          id: "ch1-q2",
+          type: "quiz",
+          title: "배열에 cin 입력받기!",
+          content: `3개짜리 배열에 cin으로 값을 받으려면 빈칸에 뭐가 들어가야 할까요?
+
+\`\`\`cpp
+int arr[3];
+for (int i = 0; i < 3; i++) {
+    _____ >> arr[i];
+}
+\`\`\``,
+          reviewHint: `키보드 입력을 받는 C++ 문법:
+- **출력**: \`cout << 값\`
+- **입력**: \`cin >> 변수\`
+
+"cin" = "character input"의 줄임말이에요.`,
+          options: ["cout", "cin", "input", "scanf"],
+          answer: 1,
+          explanation: "cin으로 값을 입력받아 arr[i]에 저장해요! cout은 출력, cin은 입력이에요."
         }
       ]
     },
@@ -329,29 +421,45 @@ C++에서 문자열 타입은 \`string\`이에요. (파이썬의 \`str\`)`,
         {
           id: "ch2-methods",
           type: "explain",
-          title: "🛠️ vector 주요 기능",
-          content: `vector에서 자주 쓰는 기능들이에요!
+          title: "🛠️ vector 주요 기능 5가지",
+          content: `vector에서 꼭 알아야 할 5가지 기능이에요!
+
+{!teal} 🟢 **push_back(값)** — 끝에 추가 {green:(파이썬: append)}
 
 \`\`\`cpp
 vector<int> v = {10, 20, 30};
-
-v.push_back(40);     // 끝에 추가 → {10, 20, 30, 40}
-v.pop_back();        // 마지막 제거 → {10, 20, 30}
-cout << v.size();    // 크기: 3
-cout << v[0];        // 첫 번째: 10
-cout << v.at(1);     // 두 번째: 20 (범위 체크!)
-v.clear();           // 전부 삭제 → {}
+v.push_back(40);
+// v = {10, 20, 30, 40}
 \`\`\`
 
-| 파이썬 🐍 | C++ vector ⚡ |
-|---|---|
-| \`v.append(x)\` | \`v.push_back(x)\` |
-| \`v.pop()\` | \`v.pop_back()\` |
-| \`len(v)\` | \`v.size()\` |
-| \`v[i]\` | \`v[i]\` 또는 \`v.at(i)\` |
-| \`v.clear()\` | \`v.clear()\` |
+{!blue} 🔵 **pop_back()** — 마지막 원소 제거 {blue:(파이썬: pop())}
 
-💡 \`v.at(i)\`는 \`v[i]\`와 같지만, 범위를 벗어나면 에러를 알려줘요! 더 안전해요.`
+\`\`\`cpp
+v.pop_back();
+// v = {10, 20, 30}
+\`\`\`
+
+{!purple} 🟣 **size()** — 원소 개수 반환 {purple:(파이썬: len())}
+
+\`\`\`cpp
+cout << v.size();   // 3
+\`\`\`
+
+{!orange} 🟠 **v[i]** vs **v.at(i)** — 원소 접근
+
+\`\`\`cpp
+cout << v[0];      // 10 — 빠르지만 범위 체크 없음
+cout << v.at(1);   // 20 — 범위 벗어나면 에러 알려줌 ✅
+\`\`\`
+
+{!pink} 🔴 **clear()** — 전부 삭제
+
+\`\`\`cpp
+v.clear();
+// v = {}  (빈 vector)
+\`\`\`
+
+@핵심: v.at(i)는 범위를 벗어나면 에러를 알려줘요! v[i]보다 안전해요.`
         },
         {
           id: "ch2-pred1",
@@ -408,6 +516,60 @@ v.clear();           // 전부 삭제 → {}
           explanation: "push_back()으로 추가하고, size()로 크기를 확인해요! 파이썬의 append()와 len()에 해당해요."
         },
         {
+          id: "ch2-cin",
+          type: "explain",
+          title: "⌨️ vector에 cin으로 값 입력받기",
+          content: `vector는 크기를 미리 정하지 않아도 되어서, 입력받으면서 **push_back으로 추가**하면 돼요!
+
+**방법 1: 개수를 먼저 입력받기**
+
+\`\`\`cpp
+int n;
+cin >> n;  // 몇 개 받을지 먼저 입력
+
+vector<int> nums;
+for (int i = 0; i < n; i++) {
+    int x;
+    cin >> x;
+    nums.push_back(x);
+}
+\`\`\`
+
+**방법 2: 특정 값(예: 0)이 나올 때까지 입력**
+
+\`\`\`cpp
+vector<int> nums;
+int x;
+while (cin >> x && x != 0) {
+    nums.push_back(x);
+}
+// 0 입력 시 종료
+\`\`\`
+
+| | 배열 (array) | vector |
+|---|---|---|
+| 입력 방식 | \`cin >> arr[i]\` | \`cin >> x; v.push_back(x)\` |
+| 크기 사전 선언 | **필요** | 불필요 |
+| 유연성 | 낮음 | 높음 |
+
+@핵심: vector는 크기를 몰라도 push_back으로 계속 추가할 수 있어서 cin과 더 자연스럽게 쓰여요!`
+        },
+        {
+          id: "ch2-fb-cin",
+          type: "fillblank" as const,
+          title: "빈칸을 채워주세요",
+          content: "cin으로 입력받아 vector에 추가하는 코드예요!",
+          code: "vector<int> v;\nint x;\ncin >> x;\nv.___(x);",
+          reviewHint: `vector에 원소를 끝에 추가하는 메서드:
+- \`v.push_back(값)\` → 뒤에 밀어 넣기
+
+cin으로 받은 값을 바로 push_back으로 넣으면 돼요!`,
+          fillBlanks: [
+            { id: 0, answer: "push_back", options: ["push_back", "append", "add", "insert"] }
+          ],
+          explanation: "cin으로 받은 값을 push_back으로 vector에 추가해요!"
+        },
+        {
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ vector로 숫자 관리하기!",
@@ -460,6 +622,26 @@ int main() {
           ],
           answer: 1,
           explanation: "C++ vector에서 끝에 추가하는 메서드는 push_back()이에요!"
+        },
+        {
+          id: "ch2-q2",
+          type: "quiz",
+          title: "vector + cin!",
+          content: `cin으로 입력받아 vector에 저장하는 올바른 코드는?`,
+          reviewHint: `vector에 cin 입력값을 추가하는 방법:
+
+1. cin으로 변수에 입력받기
+2. push_back으로 vector에 추가
+
+배열과 달리 vector는 크기를 먼저 정하지 않아도 돼요!`,
+          options: [
+            "vector<int> v;\ncin >> v;",
+            "vector<int> v;\nint x;\ncin >> x;\nv.push_back(x);",
+            "vector<int> v[5];\ncin >> v[0];",
+            "vector<int> v;\nv.cin(x);"
+          ],
+          answer: 1,
+          explanation: "cin으로 변수에 받고, push_back으로 vector에 추가하는 게 맞아요!"
         }
       ]
     },

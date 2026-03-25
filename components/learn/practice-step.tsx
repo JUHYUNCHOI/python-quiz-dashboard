@@ -134,6 +134,7 @@ export function PracticeStep({ step, lang = "ko", onSuccess, lessonId }: Practic
             key={step.id}
             initialCode={skeleton || `// 👉 여기에 코드를 직접 작성하거나 복사해서 붙여넣으세요!`}
             expectedOutput={step.expectedOutput}
+            stdin={step.stdin}
             onSuccess={handleRunSuccess}
             onError={handleRunError}
             isEn={isEn}
