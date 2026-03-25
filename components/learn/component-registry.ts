@@ -155,6 +155,12 @@ const registry: Record<string, ComponentEntry> = {
     }),
   },
 
+  // C++ 레슨: 함수 순서 오류 애니메이션
+  functionOrder: {
+    load: () => import("@/components/animations/function-order"),
+    exportName: "FunctionOrderAnimation",
+  },
+
   // C++ 레슨: 문법 차이 찾기 게임
   syntaxSpotter: {
     load: () => import("@/components/animations/syntax-spotter"),

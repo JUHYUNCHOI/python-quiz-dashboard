@@ -11,7 +11,7 @@ export interface TestCase {
 
 export interface LessonStep {
   id: string
-  type: "explain" | "tryit" | "mission" | "quiz" | "interactive" | "coding" | "fillblank" | "predict" | "practice"
+  type: "explain" | "tryit" | "mission" | "quiz" | "interactive" | "animation" | "coding" | "fillblank" | "predict" | "practice"
   title: string
   content?: string
   code?: string

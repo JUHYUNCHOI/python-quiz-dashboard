@@ -332,14 +332,14 @@ void func(int a = 10, int b) { }
           id: "ch2-proto-why",
           type: "explain",
           title: "😱 왜 에러가 나지? (순서 문제)",
-          content: `이 코드는 에러가 나요. 왜일까요?
+          content: `이 코드는 에러가 나요. 왜일까요? 🤔
 
 \`\`\`cpp
 #include <iostream>
 using namespace std;
 
 int main() {
-    cout << add(3, 5);  // ❌ 에러! add가 뭔지 모름!
+    cout << add(3, 5);
     return 0;
 }
 
@@ -348,11 +348,14 @@ int add(int a, int b) {
 }
 \`\`\`
 
-C++은 코드를 **위에서 아래로** 읽어요. main()에서 \`add()\`를 호출하는데, 그 시점에 컴파일러는 아직 add가 뭔지 몰라요!
-
-🐍 파이썬은 이런 문제가 없어요 — 실행할 때 함수를 찾으니까. 하지만 C++은 **컴파일 시점**에 모든 걸 알아야 해요.
-
-💡 해결 방법이 2가지 있어요! 다음 단계에서 알아볼게요.`
+다음을 눌러서 컴파일러가 어떻게 읽는지 직접 확인해봐요!`
+        },
+        {
+          id: "ch2-proto-why-anim",
+          type: "animation",
+          component: "functionOrder",
+          title: "🎬 컴파일러가 코드를 읽는 순서",
+          content: `💡 해결 방법이 2가지 있어요! 다음 단계에서 알아볼게요.`
         },
         {
           id: "ch2-proto-fix",
@@ -423,10 +426,6 @@ main() 위에 50개 함수를 전부 쓰면... main()이 어디 있는지도 못
 
 프로토타입을 쓰면 **main()을 파일 맨 위에** 두고, 함수 본체는 아래에 정리할 수 있어요.
 
-**문제 3: 팀 프로젝트**
-
-여러 사람이 다른 파일에서 함수를 만들면, 프로토타입을 .h 파일에 모아야 다른 파일에서 쓸 수 있어요!
-
 💡 정리: 프로토타입은 **큰 프로그램을 깔끔하게 정리**하기 위한 도구예요!`
         },
         {
@@ -452,130 +451,118 @@ main() 위에 50개 함수를 전부 쓰면... main()이 어디 있는지도 못
           ],
           explanation: "프로토타입 = 반환 타입 + 함수 이름 + (매개변수) + 세미콜론(;)! 본체 { } 없이 선언만 해요."
         },
-        // ===== 헤더 파일: 왜? → #ifndef 설명 → 구조 → 연습 =====
+        // ===== 헤더 파일: .h → .cpp → main → #ifndef =====
         {
-          id: "ch2-header-why",
+          id: "ch2-header-intro",
           type: "explain",
-          title: "📁 함수가 100개면? → 헤더 파일!",
-          content: `프로토타입이 하나둘이면 괜찮지만... 함수가 많아지면?
-
-\`\`\`cpp
-// 프로토타입이 10개... 20개... 너무 많아!
-int add(int a, int b);
-int subtract(int a, int b);
-int multiply(int a, int b);
-double divide(double a, double b);
-int max(int a, int b);
-// ... 계속 늘어남 😱
-\`\`\`
-
-해결: 프로토타입을 **별도 파일(.h)**에 모아놓기!
+          title: "📄 헤더 파일(.h)에는 뭐가 들어가나?",
+          content: `프로토타입이 많아지면 파일로 분리하는 게 좋아요. C++에서는 이렇게 나눠요:
 
 \`\`\`
 📂 프로젝트/
-├── math_utils.h    ← 프로토타입 모음 (선언)
-├── math_utils.cpp  ← 함수 본체 모음 (정의)
-└── main.cpp        ← main 함수
+├── math.h      ← 프로토타입 모음 (선언)
+├── math.cpp    ← 함수 본체 (정의)
+└── main.cpp    ← main 함수
 \`\`\`
 
-| 파이썬 🐍 | C++ ⚡ |
-|---|---|
-| \`import math_utils\` | \`#include "math_utils.h"\` |
-| 하나의 파일 | .h (선언) + .cpp (정의) 분리 |
+**.h 파일에는 프로토타입(선언)만 넣어요:**
 
-💡 \`#include <iostream>\` = C++ 기본 헤더, \`#include "파일.h"\` = 우리가 만든 헤더!`
+\`\`\`cpp
+// math.h
+int add(int a, int b);
+int multiply(int a, int b);
+\`\`\`
+
+선언만! 본체 \`{ }\`는 없어요. 파이썬의 \`import\`처럼, 다른 파일에서 이 함수들을 쓸 수 있게 미리 알려주는 거예요.`
         },
         {
-          id: "ch2-header-guard",
+          id: "ch2-header-cpp",
           type: "explain",
-          title: "🛡️ 잠깐, 이 이상한 코드는 뭐야?",
-          content: `헤더 파일을 보면 이런 코드가 있어요:
+          title: "📄 .cpp 파일에는 함수 본체가 들어가요",
+          content: `함수의 실제 내용(본체)은 **.cpp 파일**에 써요.
+
+그리고 이 .cpp 파일도 **자신의 .h 파일을 include**해야 해요 — 프로토타입을 참고해서 실수 없이 본체를 작성하기 위해서예요:
 
 \`\`\`cpp
-#ifndef MATH_UTILS_H
-#define MATH_UTILS_H
-// ... 프로토타입들 ...
-#endif
-\`\`\`
-
-이게 뭔지 **교실 비유**로 설명할게요!
-
----
-
-🏫 **상황:** 선생님이 출석부에 이름을 부르는데...
-
-**헤더 가드 없이:**
-> "김철수!" → 출석부에 적음 ✅
-> "김철수!" → 또 적음? → **"이미 있잖아!" ❌ 에러!**
-
-같은 헤더 파일을 두 번 include하면, 같은 프로토타입이 두 번 등록되면서 **"이거 이미 선언했잖아!"** 에러가 나요.
-
-**헤더 가드 있으면:**
-> \`#ifndef\` = "출석부에 이 이름 **아직 없지?**"
-> \`#define\` = "없으면 **이름 적고**, 아래 코드 실행!"
-> \`#endif\` = "끝!"
->
-> 두 번째로 부르면? → "이미 출석부에 있네? → **건너뛰기!**"
-
-\`\`\`cpp
-#ifndef MATH_UTILS_H     // "출석부에 이 이름 없지?"
-#define MATH_UTILS_H     // "없으니까 적어둘게!"
-
-int add(int a, int b);   // 이 코드가 실행됨!
-
-#endif                   // "끝!"
-
-// 두 번째로 include되면?
-// → "이미 출석부에 있네!" → 전부 건너뜀!
-\`\`\`
-
-💡 그냥 **"같은 파일이 두 번 읽히는 걸 막는 안전장치"**라고 생각하면 돼요!
-
-⚠️ 직접 헤더 파일을 만들 때 꼭 넣어줘야 해요. 안 넣으면 나중에 중복 에러가 날 수 있어요!`
-        },
-        {
-          id: "ch2-header-full",
-          type: "explain",
-          title: "📋 전체 구조 한눈에 보기",
-          content: `3개 파일이 어떻게 연결되는지 봐요:
-
-**① math_utils.h** — 프로토타입 (선언만!)
-\`\`\`cpp
-#ifndef MATH_UTILS_H
-#define MATH_UTILS_H
-
-int add(int a, int b);       // 선언만!
-int multiply(int a, int b);  // 선언만!
-
-#endif
-\`\`\`
-
-**② math_utils.cpp** — 함수 본체 (실제 코드!)
-\`\`\`cpp
-#include "math_utils.h"
+// math.cpp
+#include "math.h"        // ← 우리가 만든 헤더 include!
 
 int add(int a, int b) {
     return a + b;
 }
+
 int multiply(int a, int b) {
     return a * b;
 }
 \`\`\`
 
-**③ main.cpp** — 사용하는 쪽!
+💡 \`#include <iostream>\` 처럼 꺾쇠(\`<>\`)는 C++ 기본 헤더,
+\`#include "math.h"\` 처럼 따옴표(\`""\`)는 우리가 만든 헤더예요!`
+        },
+        {
+          id: "ch2-header-main",
+          type: "explain",
+          title: "📄 main.cpp에서 include하고 사용하기",
+          content: `main.cpp에서도 **헤더 파일을 include**하면 함수를 바로 쓸 수 있어요:
+
 \`\`\`cpp
+// main.cpp
 #include <iostream>
-#include "math_utils.h"  // 우리 헤더!
+#include "math.h"     // ← add, multiply를 알게 됨!
 using namespace std;
 
 int main() {
-    cout << add(3, 5) << endl;
-    cout << multiply(4, 6) << endl;
+    cout << add(3, 5) << endl;      // ✅ 8
+    cout << multiply(4, 6) << endl; // ✅ 24
     return 0;
 }
 \`\`\`
 
-💡 CP(경시대회)에서는 파일 하나에 다 쓰지만, 팀 프로젝트에서는 꼭 나눠요!`
+**3개 파일의 역할 정리:**
+
+| 파일 | 내용 |
+|---|---|
+| \`math.h\` | 선언 (프로토타입) |
+| \`math.cpp\` | 정의 (함수 본체) |
+| \`main.cpp\` | main + include "math.h" |`
+        },
+        {
+          id: "ch2-header-guard",
+          type: "explain",
+          title: "🛡️ 마지막으로: #ifndef 헤더 가드",
+          content: `헤더 파일이 잘 작동해요! 그런데 프로젝트가 커지면 이런 일이 생겨요:
+
+\`\`\`cpp
+// main.cpp
+#include "math.h"   // ← add, multiply 선언됨
+#include "utils.h"  // ← utils.h 안에도 #include "math.h"가 있으면?
+// → add, multiply가 두 번 선언됨 ❌ 에러!
+\`\`\`
+
+같은 헤더가 두 번 include되면 **중복 선언 에러**가 나요.
+
+---
+
+🏫 **비유:** 출석부에 같은 이름이 두 번 불리면 에러인 것처럼요.
+
+해결책 — 헤더 파일 맨 위아래에 **헤더 가드** 추가:
+
+\`\`\`cpp
+// math.h
+#ifndef MATH_H       // "MATH_H 아직 정의 안 됐지?"
+#define MATH_H       // "그러면 지금 정의할게!"
+
+int add(int a, int b);
+int multiply(int a, int b);
+
+#endif               // "끝!"
+\`\`\`
+
+두 번째 include → \`#ifndef\`에서 "이미 정의됨" → **전부 건너뜀!**
+
+💡 **규칙:** 파일명을 대문자 + 점(.) → 언더스코어(_)
+- \`math.h\` → \`MATH_H\`
+- \`player_utils.h\` → \`PLAYER_UTILS_H\``
         },
         {
           id: "ch2-header-q",
