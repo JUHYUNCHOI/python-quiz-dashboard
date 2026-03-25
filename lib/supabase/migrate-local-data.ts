@@ -8,6 +8,27 @@ export async function syncCompletionsToSupabase(userId: string) {
   const supabase = createClient()
 
   try {
+    // completed=true 행이 있는데 같은 lesson_id에 completed=false 행이 남아있으면 삭제
+    const { data: completedRows } = await supabase
+      .from("lesson_progress")
+      .select("lesson_id, progress_type")
+      .eq("user_id", userId)
+      .eq("completed", true)
+    if (completedRows && completedRows.length > 0) {
+      for (const row of completedRows) {
+        await supabase.from("lesson_progress")
+          .delete()
+          .eq("user_id", userId)
+          .eq("lesson_id", row.lesson_id)
+          .eq("progress_type", row.progress_type)
+          .eq("completed", false)
+      }
+    }
+  } catch (e) {
+    console.error("[syncCompletions] cleanup failed:", e)
+  }
+
+  try {
     // completedLessons
     const completedLessonsRaw = localStorage.getItem("completedLessons")
     if (completedLessonsRaw) {
