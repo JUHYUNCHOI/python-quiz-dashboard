@@ -204,58 +204,54 @@ int main() {
         },
         {
           id: "ch2-loop-patterns",
-          type: "explain",
-          title: "for문으로 할 수 있는 것들",
-          content: `struct 배열 + for문 조합으로 할 수 있는 세 가지 핵심 패턴이에요. USACO에서 정말 자주 나와요!
-
-\`\`\`cpp
-Student students[3] = {
+          type: "fillblank" as const,
+          title: "패턴 1: 합계 구하기",
+          content: `struct 배열의 모든 점수를 더하는 패턴이에요. \`total\`에 각 학생의 점수를 누적해요.`,
+          code: `Student students[3] = {
     {"김철수", 95},
     {"이영희", 87},
     {"박민준", 72},
 };
-\`\`\`
-
-**패턴 1: 합계 구하기**
-\`\`\`cpp
 int total = 0;
 for (int i = 0; i < 3; i++) {
-    total += students[i].score;
+    total ___ students[i].score;
 }
-cout << "합계: " << total;  // 합계: 254
-\`\`\`
-
-**패턴 2: 최솟값 찾기**
-\`\`\`cpp
-int minScore = students[0].score;  // 첫 번째 값으로 시작
+cout << "합계: " << total;  // 합계: 254`,
+          fillBlanks: [
+            { id: 0, answer: "+=", options: ["+=", "=", "-=", "=="] }
+          ],
+          explanation: "`total += students[i].score`로 i가 0, 1, 2일 때 95, 87, 72를 순서대로 더해요. 95+87+72=254!"
+        },
+        {
+          id: "ch2-loop-patterns2",
+          type: "fillblank" as const,
+          title: "패턴 2: 최솟값 찾기",
+          content: `최솟값을 찾을 때는 **첫 번째 값으로 초기화**하는 게 포인트예요. 0으로 시작하면 안 돼요!`,
+          code: `int minScore = students[___].score;  // 첫 번째 값으로 시작!
 for (int i = 1; i < 3; i++) {
     if (students[i].score < minScore)
         minScore = students[i].score;
 }
-cout << "최저: " << minScore;  // 최저: 72
-\`\`\`
-
-**패턴 3: 조건 만족 개수 세기**
-\`\`\`cpp
-int count = 0;
+cout << "최저: " << minScore;  // 최저: 72`,
+          fillBlanks: [
+            { id: 0, answer: "0", options: ["0", "1", "2", "-1"] }
+          ],
+          explanation: "초기값을 `students[0].score`(첫 번째 원소)로 설정해야 해요. 0으로 하면 모든 점수가 0보다 크니까 최솟값을 못 찾아요!"
+        },
+        {
+          id: "ch2-loop-patterns3",
+          type: "fillblank" as const,
+          title: "패턴 3: 조건 만족 개수 세기",
+          content: `조건에 맞는 학생 수를 셀 때는 \`count++\`를 써요. 90점 이상인 학생이 몇 명인지 세어봐요.`,
+          code: `int count = 0;
 for (int i = 0; i < 3; i++) {
-    if (students[i].score >= 90) count++;
+    if (students[i].score ___ 90) count++;
 }
-cout << count << "명";  // 1명
-\`\`\`
-
-파이썬과 비교해봐요:
-
-**파이썬 🐍:**
-\`\`\`python
-students = [{"name": "김철수", "score": 95}, ...]
-
-total = sum(s["score"] for s in students)
-min_score = min(s["score"] for s in students)
-count = sum(1 for s in students if s["score"] >= 90)
-\`\`\`
-
-> 💡 파이썬은 \`sum()\`, \`min()\`이 있지만 C++에서는 직접 for문으로 구현해야 해요. 하지만 구조는 똑같아요!`,
+cout << count << "명";  // 1명`,
+          fillBlanks: [
+            { id: 0, answer: ">=", options: [">=", ">", "==", "<="] }
+          ],
+          explanation: "`>= 90`이면 90점 이상인 학생을 세요. 김철수(95)만 해당되니까 1명이에요. `> 90`이면 91점 초과라 0명이 돼요!"
         },
         {
           id: "ch2-loop-pred1",

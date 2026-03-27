@@ -191,47 +191,54 @@ int main() {
         },
         {
           id: "ch2-loop-patterns",
-          type: "explain",
-          title: "Common For Loop Patterns with Struct Arrays",
-          content: `Three essential patterns for struct array + for loop. You'll see these constantly in USACO!
-
-\`\`\`cpp
-Student students[3] = {
+          type: "fillblank" as const,
+          title: "Pattern 1: Sum",
+          content: `Accumulate all scores in the struct array. Add each student's score to \`total\` one by one.`,
+          code: `Student students[3] = {
     {"Alice", 95},
     {"Bob",   87},
     {"Carol", 72},
 };
-\`\`\`
-
-**Pattern 1: Sum**
-\`\`\`cpp
 int total = 0;
 for (int i = 0; i < 3; i++) {
-    total += students[i].score;
+    total ___ students[i].score;
 }
-cout << "Total: " << total;  // Total: 254
-\`\`\`
-
-**Pattern 2: Find minimum**
-\`\`\`cpp
-int minScore = students[0].score;  // start with first value
+cout << "Total: " << total;  // Total: 254`,
+          fillBlanks: [
+            { id: 0, answer: "+=", options: ["+=", "=", "-=", "=="] }
+          ],
+          explanation: "`total += students[i].score` adds 95, 87, 72 as i goes 0, 1, 2. 95+87+72=254!"
+        },
+        {
+          id: "ch2-loop-patterns2",
+          type: "fillblank" as const,
+          title: "Pattern 2: Find minimum",
+          content: `The key to finding a minimum: **initialize with the first element**, not 0!`,
+          code: `int minScore = students[___].score;  // start with first value!
 for (int i = 1; i < 3; i++) {
     if (students[i].score < minScore)
         minScore = students[i].score;
 }
-cout << "Min: " << minScore;  // Min: 72
-\`\`\`
-
-**Pattern 3: Count matching condition**
-\`\`\`cpp
-int count = 0;
+cout << "Min: " << minScore;  // Min: 72`,
+          fillBlanks: [
+            { id: 0, answer: "0", options: ["0", "1", "2", "-1"] }
+          ],
+          explanation: "Start with `students[0].score` (first element). Starting with 0 would fail since all scores are greater than 0!"
+        },
+        {
+          id: "ch2-loop-patterns3",
+          type: "fillblank" as const,
+          title: "Pattern 3: Count matching condition",
+          content: `Count how many students scored 90 or above using \`count++\`.`,
+          code: `int count = 0;
 for (int i = 0; i < 3; i++) {
-    if (students[i].score >= 90) count++;
+    if (students[i].score ___ 90) count++;
 }
-cout << count << " students";  // 1 students
-\`\`\`
-
-> 💡 These three patterns appear in ~60% of USACO problems. They're worth memorizing!`,
+cout << count << " students";  // 1 students`,
+          fillBlanks: [
+            { id: 0, answer: ">=", options: [">=", ">", "==", "<="] }
+          ],
+          explanation: "`>= 90` counts scores of 90 and above — only Alice (95) qualifies, so the answer is 1. Using `> 90` would mean strictly above 90, giving 0!"
         },
         {
           id: "ch2-loop-pred1",
