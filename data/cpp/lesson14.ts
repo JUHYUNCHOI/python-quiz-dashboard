@@ -353,8 +353,15 @@ int main() {
           content: `\`students[1].score\`가 출력하는 값은?
 
 \`\`\`cpp
-struct Student { string name; int score; };
-Student students[3] = {{"A", 90}, {"B", 80}, {"C", 70}};
+struct Student {
+    string name;
+    int score;
+};
+Student students[3] = {
+    {"A", 90},
+    {"B", 80},
+    {"C", 70},
+};
 \`\`\``,
           options: ["90", "80", "70", "에러"],
           answer: 1,
