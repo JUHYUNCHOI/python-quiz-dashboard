@@ -393,16 +393,16 @@ Alice is 15 years old`
         {
           id: "ch3-q3",
           type: "quiz",
-          title: "String concatenation!",
-          content: "Which of these C++ string operations is **NOT valid**?",
+          title: "Checking find() result!",
+          content: "Which code correctly handles the case where `s.find(\"apple\")` fails?",
           options: [
-            "string s = \"Hi\" + \" there\";",
-            "string s = \"Hi\"; s += \" there\";",
-            "string a = \"Hi\"; string b = a + \" there\";",
-            "string s = \"Hi\"; s = s + \" there\";"
+            "if (s.find(\"apple\") != string::npos)",
+            "if (s.find(\"apple\") != -1)",
+            "if (s.find(\"apple\") == false)",
+            "if (s.find(\"apple\") == 0)"
           ],
           answer: 0,
-          explanation: "\"Hi\" + \" there\" fails because both are C-style strings (const char*), not std::string. At least one operand must be a std::string!"
+          explanation: "When find() fails, it returns string::npos — not -1 like Python! So you check success with `!= string::npos`."
         },
         {
           id: "ch3-q4",

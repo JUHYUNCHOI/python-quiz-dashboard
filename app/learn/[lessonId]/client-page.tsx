@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, use, useCallback } from "react"
+import { useState, useEffect, use, useCallback, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { RequireAuth } from "@/components/require-auth"
 import { ChevronRight, ChevronLeft, X, Lock, PartyPopper, RotateCcw, LogIn } from "lucide-react"
@@ -48,6 +48,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
 
   // 게이미피케이션
   const gamification = useGamification()
+  const xpAwardedRef = useRef(false) // 레슨 완료 XP 중복 지급 방지
   const { user, profile, isAuthenticated, isLoading: authLoading } = useAuth()
   const isTeacher = profile?.role === "teacher"
 
@@ -379,7 +380,10 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       markLessonComplete(lessonId)
       if (!effectiveTeacher) {
         syncCompletion(score)
-        if (!isIGCSE) gamification.addDirectXp(30)
+        if (!isIGCSE && !xpAwardedRef.current) {
+          xpAwardedRef.current = true
+          gamification.addDirectXp(30)
+        }
         logActivity("lesson")
       }
       if (!isIGCSE) setShowConfetti(true)

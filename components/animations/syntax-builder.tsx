@@ -478,10 +478,16 @@ const CPP_STRUCT: SyntaxBuilderPreset = {
       icon: "📝",
     },
     {
+      code: "struct Student {\n    string name;\n    int age;",
+      highlight: { start: 33, end: 46 },
+      label: { ko: "멤버 변수 2: 나이(정수)를 저장해요", en: "Member 2: stores the student's age (integer)" },
+      icon: "📝",
+    },
+    {
       code: "struct Student {\n    string name;\n    int age;\n    double score;",
-      highlight: { start: 33, end: 64 },
-      label: { ko: "멤버 변수를 원하는 만큼 추가할 수 있어요!", en: "Add as many members as you need!" },
-      icon: "➕",
+      highlight: { start: 46, end: 64 },
+      label: { ko: "멤버 변수 3: 점수(소수)를 저장해요. 멤버는 원하는 만큼!", en: "Member 3: stores the score (decimal). Add as many as you need!" },
+      icon: "📝",
     },
     {
       code: "struct Student {\n    string name;\n    int age;\n    double score;\n};",
@@ -1240,16 +1246,10 @@ const CPP_RANGE_FOR: SyntaxBuilderPreset = {
       icon: "✨",
     },
     {
-      code: "for (auto x : v)\n    cout << x;",
+      code: "for (int x : v)\n    cout << x;",
       highlight: { start: 5, end: 9 },
-      label: { ko: "auto = 타입 자동 추론! int 안 써도 돼요", en: "auto = automatic type! No need to write int" },
-      icon: "🤖",
-    },
-    {
-      code: "for (auto& x : v)\n    x = x * 2;  // 원본이 바뀜!",
-      highlight: { start: 5, end: 11 },
-      label: { ko: "& = 원본 참조! 값을 직접 바꿀 수 있어요", en: "& = reference! Can modify the original values" },
-      icon: "🔗",
+      label: { ko: "타입을 직접 써줘요. v의 원소 타입이 int니까 int x!",  en: "Write the type directly. Elements are int, so int x!" },
+      icon: "📦",
     },
   ],
 }
@@ -1278,9 +1278,9 @@ const CPP_AUTO: SyntaxBuilderPreset = {
       icon: "📝",
     },
     {
-      code: "auto it = v.begin();\n// auto → vector<int>::iterator\n// 직접 쓰면 너무 길어요!",
-      highlight: { start: 0, end: 69 },
-      label: { ko: "iterator 같은 긴 타입도 auto 한 단어로! 타이핑 절약!", en: "Even long types like iterator become just auto! Saves typing!" },
+      code: "vector<int> nums = {1, 2, 3};\nfor (auto x : nums)\n    cout << x;  // auto → int",
+      highlight: { start: 0, end: 67 },
+      label: { ko: "range-for에서도 auto! nums가 vector<int>니까 x는 int로 추론돼요", en: "auto in range-for! nums is vector<int> so x becomes int" },
       icon: "🎯",
     },
   ],

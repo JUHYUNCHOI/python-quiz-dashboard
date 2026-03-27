@@ -25,7 +25,7 @@ export const pythonParts: PartMeta[] = [
 
 export const cppParts: PartMeta[] = [
   { id: "cpp-part1", title: "Part 1: C++ 기초", titleEn: "Part 1: C++ Basics", lessonIds: ["cpp-1", "cpp-2", "cpp-3", "cpp-4", "cpp-5", "cpp-6", "cpp-7", "cpp-8", "cpp-p1"] },
-  { id: "cpp-part2", title: "Part 2: 더 깊은 C++", titleEn: "Part 2: Deeper C++", lessonIds: ["cpp-9", "cpp-10", "cpp-11", "cpp-12", "cpp-13", "cpp-14", "cpp-p2"] },
+  { id: "cpp-part2", title: "Part 2: 더 깊은 C++", titleEn: "Part 2: Deeper C++", lessonIds: ["cpp-9", "cpp-21", "cpp-10", "cpp-11", "cpp-12", "cpp-13", "cpp-14", "cpp-22", "cpp-p2"] },
   { id: "cpp-part3", title: "Part 3: USACO 준비", titleEn: "Part 3: USACO Prep", lessonIds: ["cpp-15", "cpp-16", "cpp-17", "cpp-18", "cpp-19", "cpp-20", "cpp-p3"] },
 ]
 
@@ -63,7 +63,8 @@ export const lessonNames: Record<string, string> = {
   "cpp-1": "파이썬 vs C++", "cpp-2": "cout & namespace", "cpp-3": "변수와 타입", "cpp-4": "cin 입력",
   "cpp-5": "연산자", "cpp-6": "조건문 (if/else)", "cpp-7": "반복문 (for/while)", "cpp-8": "함수", "cpp-p1": "🎮 숫자 맞추기",
   "cpp-9": "배열 & 벡터", "cpp-10": "Range-for & auto", "cpp-11": "문자열 심화", "cpp-12": "참조와 함수",
-  "cpp-13": "포인터 기초", "cpp-14": "구조체 & 클래스", "cpp-p2": "⚔️ RPG 캐릭터",
+  "cpp-13": "포인터 기초", "cpp-14": "구조체 (struct)", "cpp-22": "클래스 (class)", "cpp-p2": "⚔️ RPG 캐릭터",
+  "cpp-21": "2차원 배열 & 2D vector",
   "cpp-15": "pair & 정렬", "cpp-16": "map & set", "cpp-17": "STL 알고리즘", "cpp-18": "stack/queue/deque",
   "cpp-19": "파일 & Fast I/O", "cpp-20": "CP 실전 팁", "cpp-p3": "🏆 USACO 모의전",
   // Pseudocode
@@ -103,7 +104,8 @@ export const lessonNamesEn: Record<string, string> = {
   "cpp-1": "Python vs C++", "cpp-2": "cout & namespace", "cpp-3": "Variables & Types", "cpp-4": "cin Input",
   "cpp-5": "Operators", "cpp-6": "Conditionals (if/else)", "cpp-7": "Loops (for/while)", "cpp-8": "Functions", "cpp-p1": "🎮 Number Guessing",
   "cpp-9": "Arrays & Vectors", "cpp-10": "Range-for & auto", "cpp-11": "Advanced Strings", "cpp-12": "References & Functions",
-  "cpp-13": "Pointers Basics", "cpp-14": "Structs & Classes", "cpp-p2": "⚔️ RPG Character",
+  "cpp-13": "Pointers Basics", "cpp-14": "Structs", "cpp-22": "Classes", "cpp-p2": "⚔️ RPG Character",
+  "cpp-21": "2D Arrays & 2D Vectors",
   "cpp-15": "pair & Sorting", "cpp-16": "map & set", "cpp-17": "STL Algorithms", "cpp-18": "stack/queue/deque",
   "cpp-19": "Files & Fast I/O", "cpp-20": "CP Tips", "cpp-p3": "🏆 USACO Mock",
   // Pseudocode

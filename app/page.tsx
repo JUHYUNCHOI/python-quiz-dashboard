@@ -4,10 +4,10 @@ import { GiraffeHero } from "@/components/giraffe-hero"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { Card } from "@/components/ui/card"
-import { BookOpen, Brain, Trophy, Flame, Zap, ChevronRight, Target, CheckCircle2, BarChart3, Lock } from "lucide-react"
+import { BookOpen, Brain, Trophy, Flame, Zap, ChevronRight, Target, CheckCircle2, BarChart3, Lock, Shield } from "lucide-react"
 import Link from "next/link"
 import { useLanguage } from "@/contexts/language-context"
-import { useGamification, DAILY_XP_GOAL } from "@/hooks/use-gamification"
+import { useGamification, DAILY_XP_GOAL, getLevelTitle, STREAK_SHIELD_COST } from "@/hooks/use-gamification"
 import { useState, useEffect } from "react"
 import { OnboardingModal } from "@/components/onboarding-modal"
 import { DailyChallenges } from "@/components/daily-challenges"
@@ -32,7 +32,7 @@ const PYTHON_LESSON_IDS: (number | string)[] = [
 const CPP_LESSON_IDS: string[] = [
   "cpp-1","cpp-2","cpp-3","cpp-4","cpp-5","cpp-6","cpp-7","cpp-8","cpp-p1",
   "cpp-9","cpp-10","cpp-11","cpp-12","cpp-13","cpp-14","cpp-p2",
-  "cpp-15","cpp-16","cpp-17","cpp-18","cpp-19","cpp-20","cpp-p3",
+  "cpp-21","cpp-15","cpp-16","cpp-17","cpp-18","cpp-19","cpp-20","cpp-p3",
 ]
 
 // -------- 레슨 제목 매핑 --------
@@ -64,6 +64,7 @@ const CPP_TITLES: Record<string, string> = {
   "cpp-9":"배열과 벡터", "cpp-10":"범위 for & auto", "cpp-11":"문자열 연산",
   "cpp-12":"참조와 함수", "cpp-13":"재귀 (Recursion)", "cpp-14":"클래스 (class)",
   "cpp-p2":"🏆 Part 2 복습",
+  "cpp-21":"2차원 배열 & 2D vector",
   "cpp-15":"pair와 정렬", "cpp-16":"map과 set", "cpp-17":"스택과 큐",
   "cpp-18":"우선순위 큐", "cpp-19":"정렬 알고리즘", "cpp-20":"CP 실전 팁",
   "cpp-p3":"🏆 USACO 준비",
@@ -97,6 +98,7 @@ const CPP_TITLES_EN: Record<string, string> = {
   "cpp-9":"Arrays & Vectors", "cpp-10":"Range-for & auto", "cpp-11":"String Operations",
   "cpp-12":"References & Functions", "cpp-13":"Recursion", "cpp-14":"Classes",
   "cpp-p2":"🏆 Part 2 Review",
+  "cpp-21":"2D Arrays & 2D Vectors",
   "cpp-15":"pair & Sorting", "cpp-16":"map & set", "cpp-17":"Stacks & Queues",
   "cpp-18":"Priority Queue", "cpp-19":"Sorting Algorithms", "cpp-20":"CP Tips",
   "cpp-p3":"🏆 USACO Prep",
@@ -384,7 +386,9 @@ function LandingPage() {
 export default function DashboardPage() {
   const { t, lang } = useLanguage()
   const { isAuthenticated, isLoading: authLoading } = useAuth()
-  const { level, totalXp, dailyStreak, xpToday } = useGamification()
+  const { level, totalXp, xpInCurrentLevel, dailyStreak, xpToday, isStreakAtRisk, useStreakShield } = useGamification()
+  const [shieldUsed, setShieldUsed] = useState(false)
+  const levelInfo = getLevelTitle(level)
   const [nextLesson, setNextLesson] = useState<NextLesson | null>(null)
   const [selectedCourse, setSelectedCourse] = useState<"python" | "cpp">("python")
   // lessonLoaded: localStorage 읽기 전에 "모든 레슨 완료" 카드가 잠깐 뜨는 깜빡임 방지
@@ -594,17 +598,56 @@ export default function DashboardPage() {
           </Card>
         )}
 
+        {/* 🛡️ 스트릭 보호권 배너 (스트릭이 끊겼을 때만 표시) */}
+        {isStreakAtRisk && !shieldUsed && dailyStreak > 0 && (
+          <div className="rounded-xl border-2 border-yellow-300 bg-yellow-50 p-3 flex items-center gap-3">
+            <div className="text-2xl">🔥</div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-bold text-yellow-800">
+                {t(`${dailyStreak}일 스트릭이 위험해요!`, `Your ${dailyStreak}-day streak is at risk!`)}
+              </p>
+              <p className="text-xs text-yellow-700">
+                {t(`XP ${STREAK_SHIELD_COST}개로 지킬 수 있어요`, `Spend ${STREAK_SHIELD_COST} XP to protect it`)}
+              </p>
+            </div>
+            {totalXp >= STREAK_SHIELD_COST ? (
+              <button
+                onClick={() => {
+                  useStreakShield()
+                  setShieldUsed(true)
+                }}
+                className="flex items-center gap-1 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-bold text-xs px-3 py-2 rounded-lg border-2 border-yellow-500 shrink-0"
+              >
+                <Shield className="w-3 h-3" />
+                {t("지키기", "Shield")}
+              </button>
+            ) : (
+              <span className="text-xs text-yellow-600 shrink-0">{t("XP 부족", "Not enough XP")}</span>
+            )}
+          </div>
+        )}
+
         {/* 통계 미니 바 */}
         <div className="grid grid-cols-3 gap-2">
-          <div className="text-center p-3 rounded-xl bg-orange-50 border border-orange-100">
-            <Trophy className="w-4 h-4 text-orange-500 mx-auto mb-1" />
-            <p className="text-base font-bold text-orange-600">Lv.{level}</p>
-            <p className="text-xs text-gray-400">{t("레벨", "Level")}</p>
-          </div>
-          <div className="text-center p-3 rounded-xl bg-purple-50 border border-purple-100">
-            <Zap className="w-4 h-4 text-purple-500 mx-auto mb-1" />
-            <p className="text-base font-bold text-purple-600">{totalXp}</p>
-            <p className="text-xs text-gray-400">{t("총 XP", "Total XP")}</p>
+          {/* 레벨 + 진행 바 */}
+          <div className="col-span-2 p-3 rounded-xl bg-orange-50 border border-orange-100">
+            <div className="flex items-center justify-between mb-1.5">
+              <div className="flex items-center gap-1.5">
+                <span className="text-base">{levelInfo.emoji}</span>
+                <span className="text-sm font-bold text-orange-700">{levelInfo.title}</span>
+              </div>
+              <span className="text-xs font-bold text-orange-600">Lv.{level}</span>
+            </div>
+            {/* XP 진행 바 */}
+            <div className="w-full bg-orange-100 rounded-full h-2">
+              <div
+                className="bg-orange-400 h-2 rounded-full transition-all duration-500"
+                style={{ width: `${(xpInCurrentLevel / 100) * 100}%` }}
+              />
+            </div>
+            <p className="text-[10px] text-orange-400 mt-1">
+              {xpInCurrentLevel} / 100 XP {t("(다음 레벨)", "(next level)")}
+            </p>
           </div>
           <div className="text-center p-3 rounded-xl bg-red-50 border border-red-100">
             <Flame className="w-4 h-4 text-red-500 mx-auto mb-1" />

@@ -4926,6 +4926,551 @@ export const pythonQuestions: QuizQuestion[] = [
     keyConceptDescription: "islower()로 소문자 확인, upper()/lower()로 변환. 대소문자를 반전시킬 때 사용합니다.",
     relatedTopics: ["islower()", "upper()", "lower()", "문자열 순회"],
   },
+  // ── Notion 퀴즈 추가 (Lesson 1, 3, 4, 5, 7, 8, 9, 10, 11, 12, 14, 18) ──
+
+  // ── Lesson 1: print() ──
+  {
+    id: 360,
+    lessonId: 1,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `print('안녕' + '하세요')`,
+    options: ["안녕 하세요", "안녕하세요", "오류", "'안녕하세요'"],
+    correctAnswer: 1,
+    explanation: "문자열끼리 +로 연결하면 붙여쓰기가 돼요. '안녕' + '하세요' = '안녕하세요'",
+    keyConceptTitle: "문자열 연결 (+)",
+    keyConceptDescription: "print() 안에서 +로 문자열을 이어붙일 수 있어요. 공백을 넣으려면 직접 추가해야 해요.",
+    relatedTopics: ["문자열 연결", "print()"],
+  },
+  {
+    id: 361,
+    lessonId: 1,
+    difficulty: "쉬움",
+    question: "다음 중 오류(에러)가 나는 코드는?",
+    code: `a. print('Hello')
+b. print(Hello)
+c. print("Hello")`,
+    options: ["a", "b", "c", "a와 c"],
+    correctAnswer: 1,
+    explanation: "b는 따옴표 없이 Hello를 썼어요. 파이썬은 이걸 변수로 인식하는데, Hello라는 변수가 없으니 NameError가 나요.",
+    keyConceptTitle: "문자열에는 따옴표 필수!",
+    keyConceptDescription: "글자를 출력할 때는 반드시 따옴표(' ' 또는 \" \")로 감싸야 해요. 따옴표가 없으면 변수로 인식해요.",
+    relatedTopics: ["print()", "문자열", "NameError"],
+  },
+  {
+    id: 362,
+    lessonId: 1,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `print('치킨', 19000, '원')`,
+    options: ["치킨19000원", "치킨 19000 원", "오류", "'치킨' 19000 '원'"],
+    correctAnswer: 1,
+    explanation: "print()에서 쉼표(,)로 여러 값을 나열하면 자동으로 공백이 들어가요.",
+    keyConceptTitle: "print() 쉼표 구분",
+    keyConceptDescription: "print(a, b, c)처럼 쉼표로 구분하면 각 값 사이에 공백 1칸이 자동으로 들어가요.",
+    relatedTopics: ["print()", "쉼표", "sep"],
+  },
+  {
+    id: 363,
+    lessonId: 1,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `print(19000 + 2000)`,
+    options: ["190002000", "21000", "오류", "19000 + 2000"],
+    correctAnswer: 1,
+    explanation: "print() 안에서 숫자 계산이 먼저 실행돼요. 19000 + 2000 = 21000이 출력돼요.",
+    keyConceptTitle: "print() 안에서 계산",
+    keyConceptDescription: "print(10 + 20)처럼 괄호 안에 계산식을 넣으면 계산 결과가 출력돼요.",
+    relatedTopics: ["print()", "산술 연산자"],
+  },
+
+  // ── Lesson 3: 변수 (초급 버전) ──
+  {
+    id: 364,
+    lessonId: 3,
+    difficulty: "쉬움",
+    question: "다음 코드 실행 후 chicken의 값은?",
+    code: `chicken = 19000
+chicken = 20000
+print(chicken)`,
+    options: ["19000", "20000", "39000", "오류"],
+    correctAnswer: 1,
+    explanation: "같은 변수에 새 값을 대입하면 덮어써져요. 마지막에 대입된 20000이 chicken의 값이에요.",
+    keyConceptTitle: "변수 덮어쓰기",
+    keyConceptDescription: "변수에 새 값을 대입하면 이전 값은 사라지고 새 값으로 바뀌어요.",
+    relatedTopics: ["변수 대입", "="],
+  },
+  {
+    id: 365,
+    lessonId: 3,
+    difficulty: "쉬움",
+    question: "다음 코드 실행 후 money의 값은?",
+    code: `money = 50000
+money = money - 19000
+print(money)`,
+    options: ["50000", "19000", "31000", "오류"],
+    correctAnswer: 2,
+    explanation: "money = money - 19000은 현재 money(50000)에서 19000을 빼서 다시 money에 저장해요. 50000 - 19000 = 31000",
+    keyConceptTitle: "변수 업데이트",
+    keyConceptDescription: "변수 = 변수 - 값 패턴으로 변수를 업데이트할 수 있어요. money -= 19000과 같은 의미예요.",
+    relatedTopics: ["변수 업데이트", "-=", "대입 연산자"],
+  },
+
+  // ── Lesson 4: 연산자 (and/or, 우선순위) ──
+  {
+    id: 366,
+    lessonId: 4,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `print(10 >= 10)`,
+    options: ["True", "False", "10", "오류"],
+    correctAnswer: 0,
+    explanation: ">= 는 '크거나 같다'를 의미해요. 10은 10 이상이니까 True예요.",
+    keyConceptTitle: "비교 연산자 >=",
+    keyConceptDescription: ">= 는 '크거나 같다'를 확인하는 비교 연산자예요. 결과는 True 또는 False로 나와요.",
+    relatedTopics: ["비교 연산자", ">=", "bool"],
+  },
+  {
+    id: 367,
+    lessonId: 4,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `print(2 + 3 * 4)`,
+    options: ["20", "14", "24", "오류"],
+    correctAnswer: 1,
+    explanation: "수학처럼 곱하기(*)가 더하기(+)보다 먼저 계산돼요. 3*4=12 먼저, 그 다음 2+12=14예요.",
+    keyConceptTitle: "연산자 우선순위",
+    keyConceptDescription: "곱하기(*)와 나누기(/)가 더하기(+)와 빼기(-)보다 먼저 계산돼요. 수학 연산 순서와 같아요.",
+    relatedTopics: ["연산자 우선순위", "괄호"],
+  },
+  {
+    id: 368,
+    lessonId: 4,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `level = 10
+gold = 500
+print(level >= 10 and gold >= 1000)`,
+    options: ["True", "False", "오류", "level >= 10"],
+    correctAnswer: 1,
+    explanation: "level >= 10은 True, gold >= 1000은 False예요. and는 둘 다 True여야 True인데, 하나가 False라 결과는 False예요.",
+    keyConceptTitle: "and 연산자",
+    keyConceptDescription: "and는 두 조건이 모두 True일 때만 True를 반환해요. 하나라도 False면 False예요.",
+    relatedTopics: ["and", "논리 연산자", "bool"],
+  },
+  {
+    id: 369,
+    lessonId: 4,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `is_member = True
+has_coupon = False
+print(is_member or has_coupon)`,
+    options: ["True", "False", "오류", "True False"],
+    correctAnswer: 0,
+    explanation: "or는 둘 중 하나라도 True면 True예요. is_member가 True라서 결과는 True예요.",
+    keyConceptTitle: "or 연산자",
+    keyConceptDescription: "or는 두 조건 중 하나라도 True면 True를 반환해요. 둘 다 False여야만 False예요.",
+    relatedTopics: ["or", "논리 연산자", "bool"],
+  },
+
+  // ── Lesson 5: 문자열 연산 ──
+  {
+    id: 370,
+    lessonId: 5,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `a = '파이'
+b = '썬'
+print(a + b + ' 최고!')`,
+    options: ["파이 썬 최고!", "파이썬 최고!", "오류", "a + b + ' 최고!'"],
+    correctAnswer: 1,
+    explanation: "'파이' + '썬' + ' 최고!'를 차례로 이어붙이면 '파이썬 최고!'가 돼요.",
+    keyConceptTitle: "문자열 연결 (+)",
+    keyConceptDescription: "변수에 저장된 문자열도 +로 이어붙일 수 있어요.",
+    relatedTopics: ["문자열 연결", "+", "변수"],
+  },
+  {
+    id: 371,
+    lessonId: 5,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `print('#' * 10)`,
+    options: ["10", "##########", "# * 10", "오류"],
+    correctAnswer: 1,
+    explanation: "문자열 * 숫자는 문자열을 그 횟수만큼 반복해요. '#' * 10 = '##########'",
+    keyConceptTitle: "문자열 반복 (*)",
+    keyConceptDescription: "문자열 * 숫자로 문자열을 반복할 수 있어요. 구분선이나 테두리 만들 때 유용해요.",
+    relatedTopics: ["문자열 반복", "*"],
+  },
+  {
+    id: 372,
+    lessonId: 5,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `print('나이: ' + 15)`,
+    options: ["나이: 15", "나이:15", "오류", "나이:  15"],
+    correctAnswer: 2,
+    explanation: "문자열과 숫자는 + 로 바로 연결할 수 없어요. str(15)로 변환하거나 f-string을 쓰면 돼요.",
+    keyConceptTitle: "문자열 + 숫자는 오류!",
+    keyConceptDescription: "str + int는 TypeError가 나요. str(숫자) 또는 f'나이: {15}'처럼 변환이 필요해요.",
+    codeComparison: {
+      wrong: `print('나이: ' + 15)     # TypeError!`,
+      correct: `print('나이: ' + str(15))  # OK!`,
+    },
+    relatedTopics: ["TypeError", "str()", "f-string"],
+  },
+
+  // ── Lesson 11: 조건문 (if) ──
+  {
+    id: 373,
+    lessonId: 11,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `hp = 0
+if hp > 0:
+    print('살아있음!')
+    print('전투 계속!')
+print('게임 진행 중...')`,
+    options: [
+      "살아있음!\n전투 계속!\n게임 진행 중...",
+      "게임 진행 중...",
+      "살아있음!\n게임 진행 중...",
+      "아무것도 출력 안 됨",
+    ],
+    correctAnswer: 1,
+    explanation: "hp가 0이라 hp > 0은 False예요. if 안의 두 줄은 건너뛰고, 들여쓰기 없는 마지막 줄만 실행돼요.",
+    keyConceptTitle: "if 들여쓰기",
+    keyConceptDescription: "들여쓰기된 코드는 if 조건이 True일 때만 실행돼요. 들여쓰기 없는 코드는 조건과 상관없이 항상 실행돼요.",
+    relatedTopics: ["if", "들여쓰기", "조건문"],
+  },
+  {
+    id: 374,
+    lessonId: 11,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `followers = 1500
+if followers >= 10000:
+    print('인플루언서 🌟')
+elif followers >= 1000:
+    print('인싸 😎')
+elif followers >= 100:
+    print('일반인 🙂')
+else:
+    print('시작 단계 🌱')`,
+    options: ["인플루언서 🌟", "인싸 😎", "일반인 🙂", "시작 단계 🌱"],
+    correctAnswer: 1,
+    explanation: "1500 >= 10000은 False(다음으로), 1500 >= 1000은 True! 여기서 멈추고 '인싸 😎'를 출력해요.",
+    keyConceptTitle: "elif - 첫 번째 True에서 멈춤",
+    keyConceptDescription: "elif는 위에서 순서대로 확인해서 처음으로 True인 조건만 실행해요. 나머지는 확인하지 않아요.",
+    relatedTopics: ["elif", "if-elif-else", "조건문"],
+  },
+
+  // ── Lesson 12: 조건문 심화 (and/or/not) ──
+  {
+    id: 375,
+    lessonId: 12,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `level = 15
+gold = 500
+if level >= 10 and gold >= 1000:
+    print('상점 입장!')
+else:
+    print('조건 부족!')`,
+    options: ["상점 입장!", "조건 부족!", "오류", "아무것도 출력 안 됨"],
+    correctAnswer: 1,
+    explanation: "level >= 10은 True지만 gold >= 1000은 False예요. and는 둘 다 True여야 해서 결과는 False → else 실행!",
+    keyConceptTitle: "and는 둘 다 True여야",
+    keyConceptDescription: "and 조건은 양쪽이 모두 True여야 실행돼요. 하나라도 False면 else로 가요.",
+    relatedTopics: ["and", "논리 연산자", "if-else"],
+  },
+  {
+    id: 376,
+    lessonId: 12,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `age = 70
+if age <= 12 or age >= 65:
+    print('50% 할인! 🎉')
+else:
+    print('정상 가격')`,
+    options: ["50% 할인! 🎉", "정상 가격", "오류", "True"],
+    correctAnswer: 0,
+    explanation: "age <= 12는 False지만, age >= 65는 True예요. or는 하나만 True여도 True라서 할인!",
+    keyConceptTitle: "or는 하나만 True여도",
+    keyConceptDescription: "or 조건은 두 조건 중 하나만 True여도 실행돼요. 둘 다 False여야만 else로 가요.",
+    relatedTopics: ["or", "논리 연산자", "if-else"],
+  },
+  {
+    id: 377,
+    lessonId: 12,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `is_raining = False
+if not is_raining:
+    print('산책 가자! ☀️')
+else:
+    print('집에 있자 🏠')`,
+    options: ["산책 가자! ☀️", "집에 있자 🏠", "False", "오류"],
+    correctAnswer: 0,
+    explanation: "is_raining이 False라서 not is_raining은 True예요. if가 실행돼서 '산책 가자! ☀️'가 출력돼요.",
+    keyConceptTitle: "not - 조건 반전",
+    keyConceptDescription: "not은 True를 False로, False를 True로 뒤집어요. 'not 조건'은 조건이 거짓일 때 실행하고 싶을 때 써요.",
+    relatedTopics: ["not", "논리 연산자", "bool"],
+  },
+
+  // ── Lesson 14: 반복문 (while, break, continue) ──
+  {
+    id: 378,
+    lessonId: 14,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `for i in range(10):
+    if i == 3:
+        break
+    print(i)`,
+    options: ["0 1 2 3", "0\n1\n2\n3", "0\n1\n2", "1\n2\n3"],
+    correctAnswer: 2,
+    explanation: "i가 3일 때 break를 만나서 즉시 반복문을 탈출해요. 3은 출력 안 되고 0, 1, 2만 출력돼요.",
+    keyConceptTitle: "break - 반복문 탈출",
+    keyConceptDescription: "break는 반복문을 즉시 종료해요. break가 실행되는 순간 for/while을 완전히 빠져나가요.",
+    relatedTopics: ["break", "for", "반복문 제어"],
+  },
+  {
+    id: 379,
+    lessonId: 14,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `for i in range(1, 6):
+    if i % 2 == 0:
+        continue
+    print(i)`,
+    options: ["1\n2\n3\n4\n5", "2\n4", "1\n3\n5", "오류"],
+    correctAnswer: 2,
+    explanation: "i % 2 == 0은 짝수일 때 True예요. 짝수면 continue로 건너뛰어서 홀수(1, 3, 5)만 출력돼요.",
+    keyConceptTitle: "continue - 이번만 건너뛰기",
+    keyConceptDescription: "continue는 그 회차의 나머지 코드를 건너뛰고 다음 반복으로 넘어가요. 반복문 자체는 계속 실행돼요.",
+    relatedTopics: ["continue", "for", "나머지 연산자 %"],
+  },
+
+  // ── Lesson 7: print() 옵션 (end=) ──
+  {
+    id: 380,
+    lessonId: 7,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `print('로딩', end='...')
+print('완료!')`,
+    options: ["로딩\n완료!", "로딩...완료!", "로딩... 완료!", "오류"],
+    correctAnswer: 1,
+    explanation: "end='...'로 줄바꿈 대신 '...'이 붙어요. 다음 print()가 바로 이어서 출력되어 '로딩...완료!'가 돼요.",
+    keyConceptTitle: "end 옵션 — 줄바꿈 대신 다른 문자",
+    keyConceptDescription: "print()는 기본으로 끝에 줄바꿈(\\n)을 넣어요. end='...'처럼 바꾸면 줄바꿈 없이 원하는 문자가 붙어요.",
+    relatedTopics: ["end", "print() 옵션", "줄바꿈"],
+  },
+  {
+    id: 381,
+    lessonId: 7,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `print(2024, 12, 25, sep='/')`,
+    options: ["2024 12 25", "2024/12/25", "2024-12-25", "오류"],
+    correctAnswer: 1,
+    explanation: "sep='/'는 각 값 사이에 '/'를 넣어요. 기본값은 공백(' ')인데 바꿀 수 있어요.",
+    keyConceptTitle: "sep 옵션 — 값 사이 구분자 변경",
+    keyConceptDescription: "print(a, b, c, sep='-')처럼 sep으로 값들 사이 구분자를 지정해요. 날짜, 경로 출력에 유용해요.",
+    relatedTopics: ["sep", "print() 옵션"],
+  },
+
+  // ── Lesson 8: f-string 기초 ──
+  {
+    id: 382,
+    lessonId: 8,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `food = '치킨'
+price = 19000
+print(f'{food}: {price}원')`,
+    options: ["food: price원", "치킨: 19000원", "오류", "{food}: {price}원"],
+    correctAnswer: 1,
+    explanation: "f-string의 {} 안에 변수를 넣으면 변수 값으로 바뀌어요. food='치킨', price=19000이니 '치킨: 19000원'이 출력돼요.",
+    keyConceptTitle: "f-string 기본 — 변수 넣기",
+    keyConceptDescription: "f'텍스트 {변수} 텍스트' 형태로 쓰면 {}안의 변수가 실제 값으로 바뀌어요. f를 앞에 붙이는 것을 잊지 마세요!",
+    relatedTopics: ["f-string", "문자열 포매팅"],
+  },
+  {
+    id: 383,
+    lessonId: 8,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `chicken = 19000
+count = 3
+print(f'치킨 {count}마리: {chicken * count}원')`,
+    options: ["치킨 count마리: chicken * count원", "치킨 3마리: 57000원", "오류", "치킨 3마리: chicken * count원"],
+    correctAnswer: 1,
+    explanation: "f-string의 {} 안에서 계산도 돼요. {count}는 3, {chicken * count}는 19000*3=57000이에요.",
+    keyConceptTitle: "f-string — {} 안에서 계산",
+    keyConceptDescription: "f-string의 {} 안에 변수뿐 아니라 계산식도 넣을 수 있어요. {price * count}처럼 쓰면 자동으로 계산돼요.",
+    relatedTopics: ["f-string", "문자열 포매팅", "계산식"],
+  },
+  {
+    id: 384,
+    lessonId: 8,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `name = '홍길동'
+print('안녕, {name}!')`,
+    options: ["안녕, 홍길동!", "안녕, {name}!", "오류", "안녕, name!"],
+    correctAnswer: 1,
+    explanation: "f를 붙이지 않은 일반 문자열이에요. {}가 변수로 해석되지 않고 그대로 '{name}'이 출력돼요.",
+    keyConceptTitle: "f 빠뜨리면 {} 그대로 출력",
+    keyConceptDescription: "f-string은 앞에 반드시 f를 붙여야 해요. 없으면 {}가 변수가 아닌 일반 텍스트로 출력돼요.",
+    codeComparison: {
+      wrong: `print('안녕, {name}!')    # f 없음 → {name} 그대로`,
+      correct: `print(f'안녕, {name}!')   # f 있음 → 홍길동`,
+    },
+    relatedTopics: ["f-string", "자주 하는 실수"],
+  },
+
+  // ── Lesson 9: 타입 변환 ──
+  {
+    id: 385,
+    lessonId: 9,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `a = '25'
+b = '10'
+print(int(a) + int(b))`,
+    options: ["2510", "35", "오류", "'35'"],
+    correctAnswer: 1,
+    explanation: "int('25')는 25, int('10')는 10으로 바꿔요. 25 + 10 = 35 (숫자 더하기)예요.",
+    keyConceptTitle: "int() — 문자열을 정수로",
+    keyConceptDescription: "int('숫자 문자열')로 문자를 정수로 바꿔요. 바꾸지 않으면 '25' + '10' = '2510' (이어붙이기)이 돼요.",
+    relatedTopics: ["int()", "타입 변환", "str vs int"],
+  },
+  {
+    id: 386,
+    lessonId: 9,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `num = 42
+print('정답은 ' + str(num) + '번!')`,
+    options: ["정답은 42번!", "오류", "정답은 num번!", "'정답은 ' + 42 + '번!'"],
+    correctAnswer: 0,
+    explanation: "str(42)은 '42'(문자열)로 바꿔요. 이제 '정답은 ' + '42' + '번!'처럼 문자열끼리 연결돼요.",
+    keyConceptTitle: "str() — 숫자를 문자열로",
+    keyConceptDescription: "str(숫자)로 숫자를 문자열로 바꿔요. 문자열과 숫자를 + 로 연결할 때 꼭 필요해요.",
+    relatedTopics: ["str()", "타입 변환", "문자열 연결"],
+  },
+  {
+    id: 387,
+    lessonId: 9,
+    difficulty: "쉬움",
+    question: "다음 중 오류가 나는 코드는?",
+    code: `a. int('10')
+b. int('3.14')
+c. float('3.14')`,
+    options: ["a", "b", "c", "a와 c"],
+    correctAnswer: 1,
+    explanation: "int()는 소수점 문자열을 바로 변환할 수 없어요. '3.14' → float 먼저 → int 순으로 해야 해요.",
+    keyConceptTitle: "int()는 소수점 문자열 불가",
+    keyConceptDescription: "int('3.14')는 ValueError가 나요. 소수점 문자열은 float()로 바꾸거나, int(float('3.14'))처럼 두 단계로 해야 해요.",
+    codeComparison: {
+      wrong: `int('3.14')          # ValueError!`,
+      correct: `float('3.14')        # 3.14\nint(float('3.14'))   # 3`,
+    },
+    relatedTopics: ["int()", "float()", "ValueError"],
+  },
+
+  // ── Lesson 10: input() 입력 ──
+  {
+    id: 388,
+    lessonId: 10,
+    difficulty: "쉬움",
+    question: "다음 코드에서 사용자가 '15'를 입력하면 출력 결과는?",
+    code: `age = input('나이: ')
+print(type(age))`,
+    options: ["<class 'int'>", "<class 'str'>", "<class 'float'>", "15"],
+    correctAnswer: 1,
+    explanation: "input()은 항상 문자열(str)을 반환해요. 숫자 '15'를 입력해도 str 타입으로 저장돼요.",
+    keyConceptTitle: "input()은 항상 str 반환",
+    keyConceptDescription: "input()은 숫자를 입력해도 항상 문자열로 반환해요. 계산에 쓰려면 int(input())처럼 변환이 필요해요.",
+    relatedTopics: ["input()", "str", "타입 변환"],
+  },
+  {
+    id: 389,
+    lessonId: 10,
+    difficulty: "쉬움",
+    question: "다음 코드에서 사용자가 '5'를 입력하면 출력 결과는?",
+    code: `num = int(input('숫자: '))
+print(num + 10)`,
+    options: ["510", "15", "오류", "'5' + 10"],
+    correctAnswer: 1,
+    explanation: "int(input())으로 입력받은 문자열 '5'를 정수 5로 바꿔요. 5 + 10 = 15가 출력돼요.",
+    keyConceptTitle: "int(input()) — 숫자 입력 패턴",
+    keyConceptDescription: "숫자를 입력받아 계산할 때는 int(input('메시지'))처럼 감싸면 바로 정수로 저장돼요.",
+    relatedTopics: ["input()", "int()", "숫자 입력"],
+  },
+
+  // ── Lesson 18: split() / join() 기초 ──
+  {
+    id: 390,
+    lessonId: 18,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `fruits = '사과 바나나 포도'.split()
+print(fruits)`,
+    options: ["사과 바나나 포도", "['사과 바나나 포도']", "['사과', '바나나', '포도']", "오류"],
+    correctAnswer: 2,
+    explanation: "split()은 공백을 기준으로 나눠서 리스트를 만들어요. '사과 바나나 포도' → ['사과', '바나나', '포도']",
+    keyConceptTitle: "split() — 공백으로 나눠 리스트로",
+    keyConceptDescription: "문자열.split()은 공백을 기준으로 나눠서 리스트로 만들어요. 여러 값을 한 줄에 입력받을 때 유용해요.",
+    relatedTopics: ["split()", "리스트", "문자열"],
+  },
+  {
+    id: 391,
+    lessonId: 18,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `fruits = ['사과', '바나나', '포도']
+print(', '.join(fruits))`,
+    options: ["['사과', '바나나', '포도']", "사과 바나나 포도", "사과, 바나나, 포도", "오류"],
+    correctAnswer: 2,
+    explanation: "', '.join(리스트)는 리스트 항목들 사이에 ', '를 넣어서 하나의 문자열로 합쳐요.",
+    keyConceptTitle: "join() — 리스트를 문자열로",
+    keyConceptDescription: "'구분자'.join(리스트)로 리스트를 하나의 문자열로 합쳐요. split()의 반대 동작이에요.",
+    relatedTopics: ["join()", "리스트", "문자열"],
+  },
+  {
+    id: 392,
+    lessonId: 18,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `날짜 = '2024-12-25'.split('-')
+print(날짜[1])`,
+    options: ["2024", "12", "25", "['2024', '12', '25']"],
+    correctAnswer: 1,
+    explanation: "split('-')은 '-'를 기준으로 나눠요. ['2024', '12', '25']가 되고, [1]은 두 번째 항목 '12'예요.",
+    keyConceptTitle: "split(구분자) — 특정 문자로 나누기",
+    keyConceptDescription: "split() 안에 구분자를 넣으면 그 문자를 기준으로 나눠요. split('-'), split(',') 등으로 다양하게 사용해요.",
+    relatedTopics: ["split()", "구분자", "인덱스"],
+  },
+  {
+    id: 393,
+    lessonId: 18,
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `numbers = list(map(int, '10 20 30'.split()))
+print(numbers[0] + numbers[1])`,
+    options: ["1020", "30", "['10', '20', '30']", "오류"],
+    correctAnswer: 1,
+    explanation: "split()으로 ['10','20','30'] (문자열)이 되고, map(int,...)으로 [10, 20, 30] (정수)가 돼요. 10 + 20 = 30.",
+    keyConceptTitle: "map(int, split()) — 숫자 여러 개 입력",
+    keyConceptDescription: "list(map(int, input().split()))는 공백으로 구분된 숫자들을 한 번에 정수 리스트로 받는 표준 패턴이에요.",
+    relatedTopics: ["map()", "int()", "split()", "리스트"],
+  },
+
   // ── 추가 2D 리스트 (Lesson 25) ──
   {
     id: 300,

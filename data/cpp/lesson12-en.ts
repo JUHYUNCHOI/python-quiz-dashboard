@@ -29,7 +29,7 @@ In C++, a **reference** is an **alias** (another name) for an existing variable!
 
 \`\`\`cpp
 int x = 10;
-int& ref = x;   // ref is an alias for x!
+int& ref = x;   // ref is a reference to x
 \`\`\`
 
 \`ref\` and \`x\` point to the exact same memory. Change \`ref\`, and \`x\` changes too!
@@ -41,26 +41,9 @@ ref = 20;        // change ref...
 cout << x;       // x is also 20! They share the same memory
 \`\`\`
 
-Let's compare with Python:
+💡 \`&\` declares a reference — ref and x point to the same memory location!
 
-**Python 🐍:**
-\`\`\`python
-x = 10
-ref = x       # same object? new object?
-ref = 20      # only ref changes, x is still 10!
-\`\`\`
-
-In Python, integers are immutable, so \`ref = 20\` makes ref point to a new object. But a C++ reference is **permanently linked** to the original!
-
-| Python 🐍 | C++ Reference ⚡ |
-|---|---|
-| \`ref = x\` (copy or shared object) | \`int& ref = x;\` (alias of original) |
-| \`ref = 20\` → x unchanged (int) | \`ref = 20;\` → x changes too! |
-| Implicit behavior | \`&\` makes it explicit |
-
-💡 \`&\` means "this variable is an alias for another variable!"
-
-💡 The & symbol has multiple meanings! Here it means **reference (alias)**. Later it's also used as the **address-of operator**, but you can tell them apart from context.`
+💡 The & symbol has multiple meanings! Here it means **reference declaration**. Later it's also used as the **address-of operator**, but you can tell them apart from context.`
         },
         {
           id: "ch1-pred1",

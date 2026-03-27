@@ -363,6 +363,13 @@ const registry: Record<string, ComponentEntry> = {
     exportName: "CppBraceTrapBuilder",
   },
 
+  // C++ 레슨 14: struct 배열 + for 루프 시각화
+  cppStructArrayLoop: {
+    load: () => import("@/components/animations/struct-array-loop"),
+    exportName: "StructArrayLoop",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+
   // C++ 레슨: auto 타입 추론 시각화
   autoTypeVisualizer: {
     load: () => import("@/components/animations/auto-type-visualizer"),
@@ -377,11 +384,28 @@ const registry: Record<string, ComponentEntry> = {
     props: (_step: any, lang: string) => ({ lang }),
   },
 
+  // C++ 레슨: 복사/참조/Java 주소복사 상자 비교 (cpp-12)
+  referenceBoxVisualizer: {
+    load: () => import("@/components/animations/reference-box-visualizer"),
+    exportName: "ReferenceBoxVisualizer",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+
   // C++ 레슨: range-based for 루프 복사 vs 참조 시각화
   rangeForVisualizer: {
     load: () => import("@/components/animations/range-for-visualizer"),
     exportName: "RangeForVisualizer",
     props: (_step: any, lang: string) => ({ lang }),
+  },
+
+  // C++ 레슨 11: string 메서드 인터랙티브 체험 (substr / find / replace)
+  stringMethodVisualizer: {
+    load: () => import("@/components/animations/string-method-visualizer"),
+  },
+
+  // C++ 레슨 13: 참조 vs 포인터 비교 시뮬
+  pointerRefVisualizer: {
+    load: () => import("@/components/animations/pointer-ref-visualizer"),
   },
 
   // C++ 레슨: 배열 부분 초기화 기본값 시각화

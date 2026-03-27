@@ -73,94 +73,45 @@ string s = "Hi";
           id: "ch1-methods",
           type: "explain",
           title: "🔍 substr, find, replace!",
-          content: `파이썬의 슬라이싱, find, replace에 대응하는 C++ 메서드들이에요!
+          component: "stringMethodVisualizer",
+          content: `파이썬의 슬라이싱·find·replace에 대응하는 C++ 메서드 3가지예요. 직접 조작해보세요!
 
-**파이썬 🐍:**
-\`\`\`python
-s = "Hello World"
-print(s[0:5])         # "Hello" (슬라이싱)
-print(s.find("World")) # 6
-print(s.replace("World", "C++"))  # "Hello C++"
-\`\`\`
-
-**C++ ⚡:**
-\`\`\`cpp
-string s = "Hello World";
-cout << s.substr(0, 5) << endl;    // "Hello"
-cout << s.find("World") << endl;   // 6
-s.replace(6, 5, "C++");            // s가 "Hello C++"로 변경!
-cout << s << endl;                  // "Hello C++"
-\`\`\`
-
-| 파이썬 🐍 | C++ ⚡ | 설명 |
-|---|---|---|
-| \`s[a:b]\` | \`s.substr(pos, len)\` | 부분 문자열 (위치, **길이**!) |
-| \`s.find("x")\` | \`s.find("x")\` | 찾기 (같아요!) |
-| \`s.replace("a","b")\` | \`s.replace(pos, len, "b")\` | 교체 (위치 기반!) |
-
-⚠️ 중요한 차이: C++의 \`substr\`과 \`replace\`는 **위치와 길이**를 사용해요! 파이썬처럼 문자열로 검색하는 게 아니에요.
-
-만약 \`find()\`로 못 찾으면?
-\`\`\`cpp
-string s = "Hello";
-size_t pos = s.find("xyz");
-if (pos == string::npos) {
-    cout << "못 찾았어요!" << endl;
-}
-\`\`\`
-파이썬은 \`-1\`을 리턴하지만, C++은 \`string::npos\`라는 특별한 값을 리턴해요!
-
-🔍 \`string::npos\`란? 'no position'의 약자예요. find()가 문자를 못 찾으면 이 특별한 값을 돌려줘요. 왜 -1이 아닐까? 문자열 위치는 음수가 될 수 없는 \`size_t\` 타입이라서예요!
-
-문자열에서 뭔가를 찾을 때는 항상 이 패턴을 써요:
-\`\`\`cpp
-size_t pos = str.find("abc");
-if (pos != string::npos) {
-    // 찾았을 때
-} else {
-    // 못 찾았을 때
-}
-\`\`\`
-
-💡 find와 substr을 조합하면 파이썬의 슬라이싱처럼 쓸 수 있어요!
-
-**C++20 팁: starts_with / ends_with**
-
-C++20부터 더 직관적인 메서드가 추가됐어요!
-
-\`\`\`cpp
-string s = "Hello World";
-
-// C++17 이하: find로 직접 구현
-bool starts = (s.find("Hello") == 0);           // 앞에서 시작?
-bool ends = (s.rfind("World") == s.size() - 5); // 뒤로 끝?
-
-// C++20 이상: 간단하게!
-bool starts20 = s.starts_with("Hello");  // true
-bool ends20   = s.ends_with("World");    // true
-\`\`\`
-
-USACO 대회 컴파일러가 C++17이라면 find를 쓰고, C++20이면 starts_with/ends_with를 쓸 수 있어요!`
+**탭별 핵심 포인트:**
+- **substr(pos, len)** — 시작 위치 + **길이** (파이썬 s[a:b]의 끝 인덱스가 아니에요!)
+- **find("x")** — 위치 반환. 못 찾으면 \`string::npos\` (파이썬의 -1 대신!)
+- **replace(pos, len, "new")** — 위치 기반 교체 (파이썬처럼 문자열로 검색하지 않아요)`
         },
         {
           id: "ch1-fb1",
           type: "fillblank" as const,
           title: "빈칸을 채워주세요",
-          content: "문자열의 길이와 부분을 구해봐요!",
+          content: `\`"Programming"\`의 **글자 수**와 **앞 7글자**를 출력하는 코드예요.
+
+빈칸을 채우면 이렇게 출력돼요:
+\`\`\`
+11
+Program
+\`\`\``,
           code: "string s = \"Programming\";\ncout << s.___() << endl;\ncout << s.___(0, 7) << endl;",
           fillBlanks: [
             { id: 0, answer: "length", options: ["length", "len", "count", "sizeof"] },
             { id: 1, answer: "substr", options: ["substr", "slice", "sub", "cut"] }
           ],
-          explanation: "s.length()로 길이를 구하고, s.substr(0, 7)로 0번째부터 7글자를 잘라내요! \"Program\"이 출력돼요."
+          explanation: "s.length()는 문자열 길이 → 11 출력. s.substr(0, 7)은 0번 위치부터 7글자 → \"Program\" 출력!"
         },
         {
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ 단어 위치 찾기 프로그램!",
-          content: `문자열에서 특정 단어의 위치를 찾아보세요!
+          content: `아래 두 문자열이 주어져 있어요:
+\`\`\`cpp
+string sentence = "I love C++ programming";
+string word = "C++";
+\`\`\`
 
-find()로 위치를 구한 뒤, substr()로 그 위치부터 잘라내는 프로그램이에요.`,
+**할 일:**
+1. \`sentence.find(word)\`로 \`word\`의 위치를 구해요
+2. 찾았다면 (\`pos != string::npos\`) 위치를 출력하고, \`sentence.substr(pos)\`로 그 위치부터 끝까지 잘라내 출력해요`,
           code: `#include <iostream>
 #include <string>
 using namespace std;
@@ -411,16 +362,16 @@ Alice is 15 years old`
         {
           id: "ch3-q3",
           type: "quiz",
-          title: "문자열 합치기!",
-          content: "다음 중 C++ string 연산으로 **올바르지 않은** 것은?",
+          title: "find 결과 확인하기!",
+          content: "`s.find(\"apple\")`로 찾기에 실패했을 때를 올바르게 처리하는 코드는?",
           options: [
-            "string s = \"Hi\" + \" there\";",
-            "string s = \"Hi\"; s += \" there\";",
-            "string a = \"Hi\"; string b = a + \" there\";",
-            "string s = \"Hi\"; s = s + \" there\";"
+            "if (s.find(\"apple\") != string::npos)",
+            "if (s.find(\"apple\") != -1)",
+            "if (s.find(\"apple\") == false)",
+            "if (s.find(\"apple\") == 0)"
           ],
           answer: 0,
-          explanation: "\"Hi\" + \" there\"는 둘 다 C 문자열(const char*)이라 직접 + 연산이 안 돼요! 최소 하나가 string 타입이어야 해요."
+          explanation: "find()가 실패하면 string::npos를 반환해요. 파이썬은 -1을 반환하지만 C++는 string::npos예요. 그래서 `!= string::npos`로 성공 여부를 확인해야 해요!"
         },
         {
           id: "ch3-q4",

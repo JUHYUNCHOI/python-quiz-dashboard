@@ -1334,7 +1334,7 @@ int main() {
   },
   {
     id: 84,
-    lessonId: "cpp-11",
+    lessonId: "cpp-21",
     difficulty: "보통",
     question: "다음 코드에서 2차원 배열의 출력 결과는?",
     code: `#include <iostream>
@@ -1374,7 +1374,7 @@ int main() {
   },
   {
     id: 86,
-    lessonId: "cpp-11",
+    lessonId: "cpp-21",
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -1394,7 +1394,7 @@ int main() {
   },
   {
     id: 87,
-    lessonId: "cpp-11",
+    lessonId: "cpp-21",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -1416,7 +1416,7 @@ int main() {
   },
   {
     id: 88,
-    lessonId: "cpp-11",
+    lessonId: "cpp-21",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -1464,7 +1464,7 @@ int main() {
   },
   {
     id: 90,
-    lessonId: "cpp-11",
+    lessonId: "cpp-21",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -1488,7 +1488,7 @@ int main() {
   },
   {
     id: 92,
-    lessonId: "cpp-11",
+    lessonId: "cpp-9",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -1580,7 +1580,7 @@ int main() {
   },
   {
     id: 98,
-    lessonId: "cpp-11",
+    lessonId: "cpp-9",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -1745,24 +1745,17 @@ int main() {
   {
     id: 100,
     lessonId: "cpp-10",
-    difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
-    code: `#include <iostream>
-using namespace std;
-
-int main() {
-    auto x = 3.14;
-    auto y = 3;
-    auto z = 3.14f;
-    cout << sizeof(x) << " " << sizeof(y) << " " << sizeof(z);
-    return 0;
-}`,
-    options: ["8 4 4", "4 4 4", "8 4 8", "4 4 8"],
+    difficulty: "보통",
+    question: "다음 코드 실행 후 v[0]의 값은?",
+    code: `vector<int> v = {10, 20, 30};
+for (int x : v) x = x * 2;
+cout << v[0];`,
+    options: ["10", "20", "30", "에러"],
     correctAnswer: 0,
-    explanation: "3.14는 double(8바이트), 3은 int(4바이트), 3.14f는 float(4바이트)로 추론됩니다.",
-    keyConceptTitle: "auto 타입 추론",
-    keyConceptDescription: "auto는 초기값으로부터 타입을 추론합니다. 소수점 리터럴은 기본 double, f 접미사를 붙이면 float입니다.",
-    relatedTopics: ["auto", "타입 추론", "float vs double"],
+    explanation: "int x는 복사본이에요. x를 바꿔도 원본 v는 그대로 10! 원본을 바꾸려면 int& x 를 써야 해요.",
+    keyConceptTitle: "range-for 복사 vs 참조",
+    keyConceptDescription: "for (int x : v)는 복사본 — 원본 변경 없음. for (int& x : v)는 참조 — 원본 직접 수정.",
+    relatedTopics: ["range-for", "참조", "int&"],
   },
   {
     id: 101,
@@ -1892,16 +1885,15 @@ using namespace std;
 
 int main() {
     string s = "Hello World";
-    s.erase(5, 6);
-    cout << s;
+    cout << s.substr(6, 5);
     return 0;
 }`,
-    options: ["Hello", "World", "Hello World", "HelloWorld"],
-    correctAnswer: 0,
-    explanation: "erase(5, 6)은 인덱스 5부터 6글자를 삭제합니다. \" World\"(공백 포함 6글자)가 삭제되어 \"Hello\"만 남습니다.",
-    keyConceptTitle: "string::erase()",
-    keyConceptDescription: "erase(시작위치, 길이)로 문자열의 일부를 삭제합니다. 길이를 생략하면 시작 위치부터 끝까지 삭제됩니다.",
-    relatedTopics: ["string", "erase", "문자열 조작"],
+    options: ["Hello", "World", "Hello World", " World"],
+    correctAnswer: 1,
+    explanation: "substr(6, 5)은 인덱스 6부터 5글자를 반환합니다. 'W'(6), 'o'(7), 'r'(8), 'l'(9), 'd'(10) → \"World\"",
+    keyConceptTitle: "substr(pos, len)",
+    keyConceptDescription: "substr(pos, len)은 pos 위치부터 len글자를 잘라서 반환합니다. 파이썬의 s[pos:pos+len]과 같아요.",
+    relatedTopics: ["string", "substr", "문자열"],
   },
   {
     id: 107,
@@ -2281,7 +2273,7 @@ int main() {
   },
   {
     id: 133,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "보통",
     question: "다음 코드의 버그는 무엇인가?",
     code: `#include <iostream>
@@ -2314,7 +2306,7 @@ int main() {
   },
   {
     id: 134,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -2339,7 +2331,7 @@ int main() {
   },
   {
     id: 135,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -2361,7 +2353,7 @@ int main() {
   },
   {
     id: 136,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -2387,7 +2379,7 @@ int main() {
   },
   {
     id: 137,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -2418,7 +2410,7 @@ int main() {
   },
   {
     id: 138,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -2440,7 +2432,7 @@ int main() {
   },
   {
     id: 139,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -2468,7 +2460,7 @@ p = 10;   // 오류! 주소에 정수를 넣으려 함`,
   },
   {
     id: 140,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -2489,7 +2481,7 @@ int main() {
   },
   {
     id: 141,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -2513,7 +2505,7 @@ int main() {
   },
   {
     id: 142,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "어려움",
     question: "다음 코드에서 현재 상태로 컴파일 오류가 발생하나요?",
     code: `#include <iostream>
@@ -2542,7 +2534,7 @@ p = &y;   // OK! 포인터 재할당 가능`,
   },
   {
     id: 143,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "어려움",
     question: "다음 코드에서 주석 C와 D를 해제하면 어떤 것이 오류인가요?",
     code: `#include <iostream>
@@ -2565,7 +2557,7 @@ int main() {
   },
   {
     id: 144,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -2591,7 +2583,7 @@ int main() {
   },
   {
     id: 145,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -2618,7 +2610,7 @@ int main() {
   },
   {
     id: 146,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "어려움",
     question: "다음 중 메모리 누수가 발생하는 코드는?",
     code: `// A:
@@ -2645,7 +2637,7 @@ unique_ptr<int> p = make_unique<int>(10);`,
   },
   {
     id: 147,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "어려움",
     question: "다음 코드에서 unique_ptr의 소유권 이전 후 출력 결과는?",
     code: `#include <iostream>
@@ -2673,7 +2665,7 @@ int main() {
   },
   {
     id: 149,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -2697,7 +2689,7 @@ int main() {
   },
   {
     id: 150,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "어려움",
     question: "다음 코드에서 메모리 누수가 발생하는 이유는?",
     code: `#include <iostream>
@@ -2725,7 +2717,7 @@ p = new int(100);`,
   },
   {
     id: 151,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -2751,7 +2743,7 @@ int main() {
   },
   {
     id: 152,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -2776,7 +2768,7 @@ int main() {
   },
   {
     id: 153,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "어려움",
     question: "다음 코드에서 shared_ptr의 참조 카운트는?",
     code: `#include <iostream>
@@ -2799,7 +2791,7 @@ int main() {
   },
   {
     id: 154,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -2820,7 +2812,7 @@ int main() {
   },
   {
     id: 155,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "어려움",
     question: "다음 코드에서 발생하는 문제는?",
     code: `#include <iostream>
@@ -6824,7 +6816,7 @@ int main() {
   // ============================================
   {
     id: 301,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "쉬움",
     question: "다음 재귀 함수의 출력 결과는?",
     code: `#include <iostream>
@@ -6855,7 +6847,7 @@ int main() {
   },
   {
     id: 302,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "쉬움",
     question: "재귀 함수에서 **반드시** 필요한 것은?",
     code: `// 올바른 재귀 구조:
@@ -6872,7 +6864,7 @@ int func(int n) {
   },
   {
     id: 303,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "쉬움",
     question: "다음 재귀 함수의 출력은?",
     code: `#include <iostream>
@@ -6900,7 +6892,7 @@ int main() {
   },
   {
     id: 304,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "쉬움",
     question: "다음 재귀 함수 sum(5)의 반환값은?",
     code: `int sum(int n) {
@@ -6916,7 +6908,7 @@ int main() {
   },
   {
     id: 305,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "쉬움",
     question: "다음 재귀 함수의 결과는?",
     code: `#include <iostream>
@@ -6940,7 +6932,7 @@ int main() {
   },
   {
     id: 306,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "보통",
     question: "피보나치 수열에서 fib(7)의 값은?\n(fib(0)=0, fib(1)=1, fib(n)=fib(n-1)+fib(n-2))",
     code: `int fib(int n) {
@@ -6956,7 +6948,7 @@ int main() {
   },
   {
     id: 307,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "보통",
     question: "다음 재귀 함수의 문제점은?",
     code: `int badRecursion(int n) {
@@ -6976,7 +6968,7 @@ return n + goodRecursion(n - 1);  // n이 감소 → 종료!`,
   },
   {
     id: 308,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "보통",
     question: "메모이제이션을 적용한 피보나치에서 fib(5)를 처음 계산할 때 실제 함수 호출 횟수는?",
     code: `int memo[100];
@@ -6996,7 +6988,7 @@ int fib(int n) {
   },
   {
     id: 309,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -7022,7 +7014,7 @@ int main() {
   },
   {
     id: 310,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "보통",
     question: "재귀와 반복문의 비교로 **틀린** 것은?",
     code: `// 재귀 버전
@@ -7046,7 +7038,7 @@ int sumLoop(int n) {
   },
   {
     id: 311,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "보통",
     question: "메모이제이션에서 memo 배열을 초기화하는 올바른 방법은?",
     code: `int memo[100];
@@ -7068,7 +7060,7 @@ fill(memo, memo + 100, -1);  // 반드시 초기화!`,
   },
   {
     id: 312,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -7099,7 +7091,7 @@ cout << n;         // 출력: 1, 2, 3...n`,
   },
   {
     id: 313,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -7127,7 +7119,7 @@ int main() {
   },
   {
     id: 314,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "보통",
     question: "일반 재귀와 메모이제이션 피보나치의 시간복잡도 비교로 **맞는** 것은?",
     code: `// 일반 재귀
@@ -7151,7 +7143,7 @@ int fib2(int n) {
   },
   {
     id: 315,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "보통",
     question: "다음 재귀 함수 gcd(48, 18)의 결과는?\n(최대공약수를 유클리드 알고리즘으로 구함)",
     code: `int gcd(int a, int b) {
@@ -7175,7 +7167,7 @@ return gcd(b, a % b);`,
   },
   {
     id: 316,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "어려움",
     question: "다음 재귀 함수의 출력 결과는?",
     code: `#include <iostream>
@@ -7200,7 +7192,7 @@ int main() {
   },
   {
     id: 317,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "어려움",
     question: "다음 코드에서 hanoi(2, 'A', 'C', 'B')의 출력은?",
     code: `#include <iostream>
@@ -7229,7 +7221,7 @@ void hanoi(int n, char from, char to, char aux) {
   },
   {
     id: 318,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -7257,7 +7249,7 @@ int main() {
   },
   {
     id: 319,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "어려움",
     question: "다음 이진 탐색 재귀 함수에서 search(arr, 0, 7, 7)의 반환값은?",
     code: `#include <iostream>
@@ -7281,7 +7273,7 @@ int search(int arr[], int left, int right, int target) {
   },
   {
     id: 320,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "어려움",
     question: "다음 메모이제이션 코드에서 memo[n] != -1 조건 대신 다른 값을 초기값으로 쓰면 안 되는 이유는?",
     code: `int memo[100];
@@ -7306,7 +7298,7 @@ int fib(int n) {
   },
   {
     id: 321,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "어려움",
     question: "다음 코드에서 재귀를 이용한 배열 합계 계산의 출력은?",
     code: `#include <iostream>
@@ -7332,7 +7324,7 @@ int main() {
   },
   {
     id: 322,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "어려움",
     question: "재귀 함수와 동적 프로그래밍(DP)의 관계로 **맞는** 것은?",
     code: `// 탑다운 DP (메모이제이션 재귀)
@@ -7356,7 +7348,7 @@ int coin(int n) {
   },
   {
     id: 323,
-    lessonId: "cpp-13",
+    lessonId: "cpp-removed",
     difficulty: "어려움",
     question: "다음 코드로 구현한 '숫자 n을 1, 2, 3의 합으로 나타내는 경우의 수'에서 ways(4)의 값은?",
     code: `int memo[100];
@@ -9739,23 +9731,23 @@ void printDouble(int x) {
     id: 464,
     lessonId: "cpp-10",
     difficulty: "보통",
-    question: "읽기 전용으로 벡터를 순회할 때 가장 권장되는 패턴은?",
-    code: `vector<int> v = {1, 2, 3, 4, 5};
-// 빈칸에 들어갈 올바른 패턴은?
-for (___________ x : v) {
-    cout << x << " ";
+    question: "이름 목록을 출력만 할 때 가장 적절한 패턴은?",
+    code: `vector<string> names = {"Alice", "Bob", "Charlie"};
+// 출력만 하고 수정은 하지 않을 때
+for (___________ name : names) {
+    cout << name << "\\n";
 }`,
     options: [
-      "for (int x : v)",
-      "for (int& x : v)",
-      "for (const int& x : v)",
-      "for (int* x : v)",
+      "for (string name : names)",
+      "for (string& name : names)",
+      "for (const string& name : names)",
+      "for (string* name : names)",
     ],
     correctAnswer: 2,
-    explanation: "const int& — 참조(&)라서 복사 없이 빠르고, const라서 실수로 원본을 수정하는 걸 컴파일러가 막아줘요. 읽기 전용 순회의 정석이에요!",
+    explanation: "string은 글자가 많을수록 복사 비용이 커요. const string&는 복사 없이 원본을 바로 읽고, const라서 실수로 수정하는 것도 막아줘요. string& 는 수정 가능해서 읽기 전용엔 부적절해요.",
     keyConceptTitle: "const 참조로 range-for",
-    keyConceptDescription: "const int&는 복사 없이(빠름) + 읽기 전용(안전). 큰 데이터를 읽기만 할 때 항상 이 패턴을 쓰세요.",
-    relatedTopics: ["const", "참조", "range-for", "최적화"],
+    keyConceptDescription: "string처럼 크기가 큰 타입은 복사보다 const 참조가 훨씬 효율적이에요. 읽기만 할 때 → const T&",
+    relatedTopics: ["const", "참조", "range-for", "string"],
   },
   {
     id: 465,
@@ -9795,5 +9787,158 @@ for (const int& x : v) {
     keyConceptTitle: "복사 vs 참조",
     keyConceptDescription: "& 없이는 복사본, &를 붙이면 원본에 직접 접근. 수정이 필요하면 &, 읽기만 하면 const &.",
     relatedTopics: ["참조", "복사", "range-for", "&"],
+  },
+  // ============================================
+  // cpp-13: 포인터 기초 (새 문제)
+  // ============================================
+  {
+    id: 467,
+    lessonId: "cpp-13",
+    difficulty: "쉬움",
+    question: "포인터 선언 `int* ptr`에서 별표의 의미는?",
+    code: "",
+    options: [
+      "역참조 연산자 — 값을 가져온다",
+      "포인터 타입 선언 — 주소를 저장하는 변수",
+      "곱셈 연산자",
+      "주소를 가져오는 연산자",
+    ],
+    correctAnswer: 1,
+    explanation: "선언에서 int* ptr의 *는 타입의 일부예요. 'ptr은 int를 가리키는 포인터'라는 뜻이에요! 사용할 때 *ptr은 역참조 연산자로, 의미가 달라져요.",
+    keyConceptTitle: "포인터 선언",
+    keyConceptDescription: "선언의 *는 타입의 일부, 사용의 *는 역참조 연산자예요.",
+  },
+  {
+    id: 468,
+    lessonId: "cpp-removed",
+    difficulty: "쉬움",
+    question: "`int x = 5; int* ptr = &x;`에서 `ptr`에 저장되는 것은?",
+    code: "",
+    options: [
+      "5 (x의 값)",
+      "x라는 이름",
+      "x의 메모리 주소",
+      "포인터 자체의 크기",
+    ],
+    correctAnswer: 2,
+    explanation: "&x는 x의 메모리 주소를 가져오는 주소 연산자예요. ptr에는 x의 값이 아니라 x가 저장된 메모리 주소가 저장돼요!",
+    keyConceptTitle: "주소 연산자 &",
+    keyConceptDescription: "&x는 x의 메모리 주소를 반환해요.",
+  },
+  {
+    id: 469,
+    lessonId: "cpp-13",
+    difficulty: "쉬움",
+    question: "nullptr을 역참조하면 어떻게 되나요?",
+    code: `int* p = nullptr;\ncout << *p;  // ??`,
+    options: [
+      "0 출력",
+      "nullptr 출력",
+      "프로그램 충돌 (segfault)",
+      "아무것도 출력 안 함",
+    ],
+    correctAnswer: 2,
+    explanation: "nullptr인 포인터를 역참조하면 segfault가 발생해 프로그램이 충돌해요! 항상 if (p != nullptr)로 확인한 후 역참조해야 해요.",
+    keyConceptTitle: "nullptr 안전 체크",
+    keyConceptDescription: "역참조 전에 반드시 nullptr 체크를 해야 해요.",
+  },
+  {
+    id: 470,
+    lessonId: "cpp-removed",
+    difficulty: "쉬움",
+    question: "`cout << ptr`과 `cout << *ptr`의 출력 차이는?",
+    code: `int x = 42;\nint* ptr = &x;`,
+    options: [
+      "둘 다 42를 출력",
+      "ptr은 메모리 주소 출력, *ptr은 42 출력",
+      "ptr은 42 출력, *ptr은 메모리 주소 출력",
+      "둘 다 메모리 주소 출력",
+    ],
+    correctAnswer: 1,
+    explanation: "ptr 자체는 저장된 주소값(0x...)을 출력하고, *ptr은 역참조해서 그 주소에 있는 실제 값(42)을 출력해요!",
+    keyConceptTitle: "주소 vs 값",
+    keyConceptDescription: "ptr은 주소, *ptr은 그 주소에 있는 값이에요.",
+  },
+  {
+    id: 471,
+    lessonId: "cpp-13",
+    difficulty: "보통",
+    question: "다음 코드의 출력은?",
+    code: `int x = 10;\nint* ptr = &x;\n*ptr = *ptr * 2;\ncout << x;`,
+    options: ["10", "20", "0", "에러"],
+    correctAnswer: 1,
+    explanation: "*ptr은 x의 값(10)이에요. *ptr * 2 = 20을 *ptr에 저장하면 x가 20이 돼요. 역참조로 원본 변수를 직접 수정한 거예요!",
+    keyConceptTitle: "역참조로 값 수정",
+    keyConceptDescription: "*ptr = 값 으로 포인터가 가리키는 변수를 수정할 수 있어요.",
+  },
+  {
+    id: 472,
+    lessonId: "cpp-13",
+    difficulty: "보통",
+    question: "포인터를 받는 함수를 올바르게 호출하는 것은?",
+    code: `void double_it(int* p) { *p *= 2; }\nint x = 5;`,
+    options: ["double_it(x);", "double_it(*x);", "double_it(&x);", "double_it(&&x);"],
+    correctAnswer: 2,
+    explanation: "포인터 매개변수(int* p)를 받는 함수에는 &x처럼 주소를 넘겨야 해요. 함수 안에서 *p로 x를 수정할 수 있어요!",
+    keyConceptTitle: "포인터로 함수 전달",
+    keyConceptDescription: "포인터 매개변수 함수는 &x (주소)를 인수로 받아요.",
+  },
+  {
+    id: 473,
+    lessonId: "cpp-removed",
+    difficulty: "보통",
+    question: "참조(int& ref)와 포인터(int* ptr)의 차이로 **맞는** 것은?",
+    code: "",
+    options: [
+      "참조는 nullptr이 가능하고, 포인터는 불가능하다",
+      "포인터는 nullptr이 가능하고, 참조는 항상 유효한 변수를 가리킨다",
+      "참조는 가리키는 대상을 바꿀 수 있다",
+      "포인터는 선언과 동시에 초기화해야 한다",
+    ],
+    correctAnswer: 1,
+    explanation: "참조는 항상 유효한 변수를 가리켜야 하고 nullptr이 불가능해요. 포인터는 nullptr로 '아무것도 가리키지 않음'을 표현할 수 있어요!",
+    keyConceptTitle: "참조 vs 포인터",
+    keyConceptDescription: "포인터는 nullptr 가능·재지정 가능, 참조는 항상 유효·재지정 불가.",
+  },
+  {
+    id: 474,
+    lessonId: "cpp-removed",
+    difficulty: "보통",
+    question: "다음 코드의 출력은?",
+    code: `int x = 5;\nint* p = nullptr;\nif (p != nullptr) {\n    cout << *p;\n} else {\n    cout << "empty";\n}`,
+    options: ["5", "0", "empty", "에러"],
+    correctAnswer: 2,
+    explanation: "p가 nullptr이므로 else 분기가 실행되어 'empty'가 출력돼요. nullptr 체크 덕분에 안전하게 처리됐어요!",
+    keyConceptTitle: "nullptr 체크",
+    keyConceptDescription: "if (p != nullptr) 로 안전하게 역참조 여부를 결정해요.",
+  },
+  {
+    id: 475,
+    lessonId: "cpp-13",
+    difficulty: "어려움",
+    question: "다음 코드의 출력은?",
+    code: `int a = 1, b = 2;\nint* p = &a;\np = &b;\n*p = 9;\ncout << a << " " << b;`,
+    options: ["9 2", "1 9", "9 9", "에러"],
+    correctAnswer: 1,
+    explanation: "p가 처음엔 a를 가리키다가, p = &b로 b를 가리키게 됩니다. *p = 9는 b를 9로 바꿔요. 참조와 달리 포인터는 가리키는 대상을 바꿀 수 있어요!",
+    keyConceptTitle: "포인터 재지정",
+    keyConceptDescription: "포인터는 p = &b처럼 다른 변수를 가리키도록 재지정할 수 있어요.",
+  },
+  {
+    id: 476,
+    lessonId: "cpp-13",
+    difficulty: "어려움",
+    question: "다음 두 함수 중 x의 원본을 수정하는 것은?",
+    code: `void f1(int  n) { n  = 99; }\nvoid f2(int* p) { *p = 99; }\n\nint x = 1;\nf1(x);\nf2(&x);`,
+    options: [
+      "f1만 수정한다",
+      "f2만 수정한다",
+      "둘 다 수정한다",
+      "둘 다 수정 안 한다",
+    ],
+    correctAnswer: 1,
+    explanation: "f1은 복사본 n을 수정하므로 x에 영향 없어요. f2는 포인터로 &x를 받아 *p = 99로 x를 직접 수정해요!",
+    keyConceptTitle: "값 전달 vs 포인터 전달",
+    keyConceptDescription: "포인터로 전달할 때만 원본 변수를 함수 안에서 수정할 수 있어요.",
   },
 ];

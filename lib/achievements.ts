@@ -25,26 +25,18 @@ const STORAGE_KEY = "achievements-unlocked"
 export const ACHIEVEMENT_DEFS: AchievementDef[] = [
   // 퀴즈 관련
   {
-    id: "first_quiz",
-    emoji: "🎯",
-    title: "퀴즈 시작",
-    titleEn: "Quiz Starter",
-    desc: "첫 번째 퀴즈 완료",
-    descEn: "Complete your first quiz",
-  },
-  {
-    id: "quiz_50",
+    id: "quiz_100",
     emoji: "⚡",
-    title: "퀴즈 마스터",
-    titleEn: "Quiz Master",
-    desc: "총 50문제 풀기",
-    descEn: "Answer 50 questions total",
+    title: "100문제 돌파",
+    titleEn: "100 Questions",
+    desc: "총 100문제 풀기",
+    descEn: "Answer 100 questions total",
   },
   {
     id: "quiz_200",
     emoji: "🧠",
-    title: "퀴즈 고수",
-    titleEn: "Quiz Expert",
+    title: "200문제 돌파",
+    titleEn: "200 Questions",
     desc: "총 200문제 풀기",
     descEn: "Answer 200 questions total",
   },
@@ -63,30 +55,14 @@ export const ACHIEVEMENT_DEFS: AchievementDef[] = [
     emoji: "💯",
     title: "만점왕",
     titleEn: "Perfect Score",
-    desc: "한 세션 100% 정답 (5문제+)",
-    descEn: "100% accuracy in a session (5+ questions)",
-  },
-  {
-    id: "accuracy_80",
-    emoji: "🎖️",
-    title: "정확도 마스터",
-    titleEn: "Accuracy Master",
-    desc: "총 정답률 80% 이상 (50문제+)",
-    descEn: "80%+ accuracy over 50+ questions",
+    desc: "한 세션 10문제 이상, 100% 정답",
+    descEn: "100% accuracy in a session (10+ questions)",
   },
   // 연속 관련
   {
-    id: "streak_3",
-    emoji: "🔥",
-    title: "3일 연속",
-    titleEn: "3-Day Streak",
-    desc: "3일 연속 공부하기",
-    descEn: "Study 3 days in a row",
-  },
-  {
     id: "streak_7",
-    emoji: "🔥🔥",
-    title: "7일 연속",
+    emoji: "🔥",
+    title: "7일 연속 학습",
     titleEn: "7-Day Streak",
     desc: "7일 연속 공부하기",
     descEn: "Study 7 days in a row",
@@ -94,7 +70,7 @@ export const ACHIEVEMENT_DEFS: AchievementDef[] = [
   {
     id: "streak_30",
     emoji: "🌟",
-    title: "30일 연속",
+    title: "한 달 개근",
     titleEn: "30-Day Streak",
     desc: "30일 연속 공부하기",
     descEn: "Study 30 days in a row",
@@ -102,18 +78,10 @@ export const ACHIEVEMENT_DEFS: AchievementDef[] = [
   },
   // 레슨 관련
   {
-    id: "lesson_1",
-    emoji: "📚",
-    title: "첫 레슨",
-    titleEn: "First Lesson",
-    desc: "첫 번째 레슨 완료",
-    descEn: "Complete your first lesson",
-  },
-  {
     id: "lesson_10",
     emoji: "📖",
-    title: "레슨 10개",
-    titleEn: "10 Lessons",
+    title: "레슨 10개 완료",
+    titleEn: "10 Lessons Done",
     desc: "레슨 10개 완료",
     descEn: "Complete 10 lessons",
   },
@@ -128,29 +96,12 @@ export const ACHIEVEMENT_DEFS: AchievementDef[] = [
   },
   // 레벨 관련
   {
-    id: "level_5",
-    emoji: "🚀",
-    title: "레벨 5",
-    titleEn: "Level 5",
-    desc: "레벨 5 달성",
-    descEn: "Reach Level 5",
-  },
-  {
     id: "level_10",
     emoji: "🏆",
-    title: "레벨 10",
+    title: "레벨 10 달성",
     titleEn: "Level 10",
     desc: "레벨 10 달성",
     descEn: "Reach Level 10",
-  },
-  // 일일 챌린지
-  {
-    id: "daily_3",
-    emoji: "✅",
-    title: "챌린지 3회",
-    titleEn: "Challenge x3",
-    desc: "일일 챌린지 3개 모두 완료",
-    descEn: "Complete all 3 daily challenges",
   },
 ]
 
@@ -185,24 +136,14 @@ function computeEarned(): Set<string> {
     }> = raw ? JSON.parse(raw) : []
 
     const totalAnswered = history.reduce((s, e) => s + (e.totalQuestions || 0), 0)
-    const totalCorrect = history.reduce((s, e) => s + (e.correctAnswers || 0), 0)
     const hasPerfect = history.some(
-      (e) => (e.accuracy || 0) >= 100 && (e.totalQuestions || 0) >= 5,
+      (e) => (e.accuracy || 0) >= 100 && (e.totalQuestions || 0) >= 10,
     )
-    const overallAccuracy = totalAnswered > 0 ? totalCorrect / totalAnswered : 0
 
-    if (history.length >= 1) earned.add("first_quiz")
-    if (totalAnswered >= 50) earned.add("quiz_50")
+    if (totalAnswered >= 100) earned.add("quiz_100")
     if (totalAnswered >= 200) earned.add("quiz_200")
     if (totalAnswered >= 500) earned.add("quiz_500")
     if (hasPerfect) earned.add("perfect")
-    if (totalAnswered >= 50 && overallAccuracy >= 0.8) earned.add("accuracy_80")
-
-    // 일일 챌린지 3개 완료 (동적 import 피해 여기선 quiz-history로 근사)
-    // quiz-history가 오늘 3개 이상이고 세션당 정답률/문제수 충족 여부는
-    // daily-challenges에서 체크하므로, 여기선 DailyChallenges 완료 카운트를 저장된 값으로 판단
-    const dailyAllDone = localStorage.getItem("daily-challenges-all-done")
-    if (dailyAllDone === "1") earned.add("daily_3")
   } catch {}
 
   try {
@@ -210,7 +151,6 @@ function computeEarned(): Set<string> {
       localStorage.getItem("gamification-daily-streak") || "0",
       10,
     )
-    if (streak >= 3) earned.add("streak_3")
     if (streak >= 7) earned.add("streak_7")
     if (streak >= 30) earned.add("streak_30")
   } catch {}
@@ -218,7 +158,6 @@ function computeEarned(): Set<string> {
   try {
     const completedRaw = localStorage.getItem("completedLessons")
     const completed: string[] = completedRaw ? JSON.parse(completedRaw) : []
-    if (completed.length >= 1) earned.add("lesson_1")
     if (completed.length >= 10) earned.add("lesson_10")
     if (completed.length >= 30) earned.add("lesson_30")
   } catch {}
@@ -229,7 +168,6 @@ function computeEarned(): Set<string> {
       10,
     )
     const level = Math.floor(totalXp / 100) + 1
-    if (level >= 5) earned.add("level_5")
     if (level >= 10) earned.add("level_10")
   } catch {}
 

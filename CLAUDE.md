@@ -108,4 +108,5 @@ interface QuizQuestion {
 `pseudo-24 pseudo-25 pseudo-26 pseudo-27`
 `igcse-sql1 igcse-sql2 igcse-logic1`
 
-> 새 레슨 추가 시: Python은 53부터, C++은 cpp-21부터, Pseudocode는 pseudo-29부터 사용
+> 새 레슨 추가 시: Python은 53부터, C++은 cpp-23부터, Pseudocode는 pseudo-29부터 사용
+> (cpp-21 = 2차원 배열, cpp-22 = 클래스 — 이미 사용 중. 커리큘럼 순서는 ID 순서와 다를 수 있음: cpp-9 → cpp-21 → cpp-10 순으로 표시)

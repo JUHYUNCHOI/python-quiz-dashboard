@@ -132,13 +132,6 @@ for (int& x : nums) {   // & 추가!
           content: "실행 버튼을 눌러 & 유무에 따라 결과가 어떻게 다른지 확인해보세요!",
           component: "rangeForVisualizer",
         },
-        {
-          id: "ch1-ref-memory",
-          type: "interactive",
-          title: "🧠 RAM에서 실제로 무슨 일이?",
-          content: "메모리 주소 단위로 복사 vs 참조가 어떻게 다른지 보여줘요!",
-          component: "copyRefMemory",
-        },
         // ── 5단계: 참조 연습 ──────────────────────
         {
           id: "ch1-ref-fb",
@@ -177,49 +170,51 @@ int main() {
           answer: 1,
           explanation: "int& x로 원본을 나누니 {1, 2, 3}이 돼요. 두 번째 for로 출력!"
         },
-        // ── 6단계: const int& 결론 ──────────────────────
+        // ── 6단계: const int& 소개 ──────────────────────
         {
           id: "ch1-const-ref",
           type: "explain",
-          title: "🏆 결론: const int&를 써야 하는 이유",
-          content: `지금까지 배운 세 가지를 정리해봐요.
+          title: "🔒 & 에 자물쇠 달기 — const int&",
+          content: `&를 쓰면 빠르지만, 실수로 원본을 바꿀 수도 있어요. **읽기만 할 건데 수정을 막고 싶다면** \`const\`를 앞에 붙여요.
+
+레슨 3에서 배운 const 기억나요? PI처럼 절대 안 바뀌어야 하는 값에 붙이던 그거예요:
 
 \`\`\`cpp
-// ① 복사 (기본)
-for (int x : v) { ... }
-
-// ② 참조 (수정 가능, 빠름)
-for (int& x : v) { ... }
-
-// ③ const 참조 (읽기전용, 빠름) ← 권장!
-for (const int& x : v) { ... }
+const double PI = 3.14159;
+PI = 0;  // ❌ 에러! 바꿀 수 없어요
 \`\`\`
 
-| 방식 | 복사 발생? | 수정 가능? | 속도 |
-|---|---|---|---|
-| \`int x\` | ✅ 매번 복사 | ❌ | 느림 |
-| \`int& x\` | ❌ 없음 | ✅ 가능 | 빠름 |
-| \`const int& x\` | ❌ 없음 | ❌ 불가 | 빠름 |
-
-**왜 const int&가 권장인가요?**
-- 복사가 없어서 **빠르고**
-- const라서 실수로 원본을 수정하는 것을 **컴파일러가 막아줘요**
+이 \`const\`를 range-for에도 그대로 쓸 수 있어요:
 
 \`\`\`cpp
 for (const int& x : v) {
-    cout << x;  // ✅ 읽기 OK
+    cout << x;  // ✅ 읽기는 OK
     x = 0;      // ❌ 컴파일 에러! 실수 방지
 }
 \`\`\`
 
-@핵심: 값을 **읽기만** 할 때 → \`const int&\`, 값을 **수정**해야 할 때 → \`int&\`!`,
+**& = 빠름 (복사 없음)** + **const = 수정 방지** — 두 장점을 합쳤어요.
+
+그래서 실제 C++ 코드는 이렇게 써요:
+
+| 패턴 | 언제 쓰나요? |
+|---|---|
+| \`for (int& x : v)\` | 원소를 **수정**해야 할 때 |
+| \`for (const int& x : v)\` | **읽기만** 할 때 👈 가장 많이 씀! |
+| \`for (int x : v)\` | 거의 안 씀 |
+
+💡 **결론: 실제 C++ 개발자들은 거의 항상 &를 써요!**
+- 수정해야 하면 → \`int& x\`
+- 읽기만 하면 → \`const int& x\`
+
+\`int\` 같은 작은 타입은 복사해도 사실 별 차이 없어요. 하지만 \`string\`이나 큰 구조체라면 복사 비용이 커지거든요. 처음부터 \`const int&\` 습관을 들여두면, 나중에 어떤 타입이든 자연스럽게 쓸 수 있어요.`,
         },
         // ── 7단계: 최종 연습 ──────────────────────
         {
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ Range-for로 합 구하기!",
-          content: `vector의 모든 원소의 합을 range-based for로 구해보세요!
+          content: `개수를 입력받고, 숫자들을 입력받아 합을 구해보세요!
 
 읽기만 하니까 \`const int&\`를 써봐요!`,
           code: `#include <iostream>
@@ -227,9 +222,17 @@ for (const int& x : v) {
 using namespace std;
 
 int main() {
-    vector<int> nums = {4, 8, 15, 16, 23, 42};
-    int sum = 0;
+    int n;
+    cout << "숫자 개수를 입력하세요: ";
+    cin >> n;
 
+    vector<int> nums(n);
+    cout << "숫자 " << n << "개를 입력하세요: ";
+    for (int i = 0; i < n; i++) {
+        cin >> nums[i];
+    }
+
+    int sum = 0;
     for (const int& x : nums) {
         sum += x;
     }
@@ -238,21 +241,22 @@ int main() {
 
     return 0;
 }`,
-          expectedOutput: `합계: 108`
+          stdin: `6\n4 8 15 16 23 42`,
+          expectedOutput: `숫자 개수를 입력하세요: 숫자 6개를 입력하세요: 합계: 108`
         },
         {
           id: "ch1-q1",
           type: "quiz",
           title: "Range-for 핵심!",
-          content: "큰 데이터를 **읽기만** 할 때 가장 좋은 range-for 패턴은?",
+          content: "range-for에서 원본 벡터의 값을 **직접 수정**하려면?",
           options: [
             "for (int x : v)",
             "for (int& x : v)",
-            "for (const int& x : v)",
-            "for (int* x : v)"
+            "for (int x* : v)",
+            "for (int : x : v)"
           ],
-          answer: 2,
-          explanation: "const int& — 복사 없이(참조) 빠르고, const로 실수 수정도 막아요. 읽기 전용엔 최선!"
+          answer: 1,
+          explanation: "int& x — & 하나로 복사본이 아닌 원본을 직접 받아요. x를 바꾸면 v도 바뀌어요!"
         }
       ]
     },
@@ -360,12 +364,51 @@ for (const auto& name : names) {
 }
 \`\`\`
 
-언제 뭘 써야 할까요?
-- \`auto x\` : 작은 값(int, double)을 읽기만 할 때
-- \`auto& x\` : 원소를 **수정**할 때
-- \`const auto& x\` : 큰 데이터(string)를 읽기만 할 때 (복사 방지)
+세 패턴 중 뭘 쓸지는 다음 페이지에서 정리할게요!`
+        },
+        {
+          id: "ch2-auto-tradeoff",
+          type: "explain",
+          title: "⚖️ auto — 편하지만 조심할 것도 있어요",
+          content: `방금 세 가지 패턴을 봤죠? 그럼 세 중에 뭘 쓰면 좋을까요?
 
-💡 \`for (const auto& x : v)\`는 C++ 고수들이 가장 많이 쓰는 패턴이에요!`
+| 패턴 | 용도 |
+|---|---|
+| \`for (auto x : v)\` | 읽기 전용, 작은 값 (int 등) |
+| \`for (auto& x : v)\` | 원소를 **수정**할 때 |
+| \`for (const auto& x : v)\` | 읽기 전용 + 큰 데이터 (string 등) |
+
+💡 C++ 개발자들은 대부분 \`const auto&\`를 기본으로 써요. 실수할 일도 없고 복사도 안 해서 효율적이거든요.
+
+---
+
+그런데 auto를 **무조건** 쓰는 게 좋을까요? 꼭 그렇진 않아요!
+
+### 😓 auto를 쓸 때 주의할 점
+
+**타입이 눈에 안 보여요**
+\`\`\`cpp
+auto result = calculate();  // result가 int? double? string? 모름!
+int result = calculate();   // 한눈에 int라는 걸 알 수 있음
+\`\`\`
+코드를 처음 보는 사람(혹은 미래의 나)이 타입을 바로 알기 어려워요.
+
+**의도치 않은 타입이 될 수 있어요**
+\`\`\`cpp
+auto x = 5 / 2;   // 2.5가 아니라 2! (int / int = int)
+\`\`\`
+
+---
+
+### 📏 정리
+
+| 상황 | 추천 |
+|---|---|
+| 간단한 변수 (\`int\`, \`double\`) | 직접 타입 쓰기 (가독성 좋음) |
+| range-for 읽기 | **auto** 또는 직접 타입, 둘 다 OK |
+| range-for 수정 | **auto&** |
+
+처음 배울 때는 **타입을 직접 쓰는 연습**을 먼저 하고, 익숙해지면 auto를 자연스럽게 써가는 게 좋아요!`,
         },
         {
           id: "ch2-pred1",
@@ -380,15 +423,28 @@ for (const auto& name : names) {
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ auto + range-for로 벡터 처리!",
-          content: `숫자 벡터의 모든 원소를 2배로 만들고 출력해보세요!
+          content: `개수와 숫자들을 입력받아, 모든 원소를 **2배**로 바꾼 뒤 출력해보세요.
 
-auto&를 사용해서 원소를 직접 수정한 뒤, auto로 출력해봐요.`,
+**두 단계로 나눠서 작성해요:**
+
+**1단계 — 원소 수정:** \`for (auto& x : nums)\` 로 각 원소를 직접 2배로 변경
+**2단계 — 출력:** \`for (auto x : nums)\` 로 바뀐 값들을 출력
+
+> 💡 \`auto&\`는 원본을 수정할 때, \`auto\`는 읽기만 할 때 써요!`,
           code: `#include <iostream>
 #include <vector>
 using namespace std;
 
 int main() {
-    vector<int> nums = {3, 7, 2, 9, 5};
+    int n;
+    cout << "숫자 개수를 입력하세요: ";
+    cin >> n;
+
+    vector<int> nums(n);
+    cout << "숫자 " << n << "개를 입력하세요: ";
+    for (int i = 0; i < n; i++) {
+        cin >> nums[i];
+    }
 
     // 모든 원소를 2배로!
     for (auto& x : nums) {
@@ -396,6 +452,7 @@ int main() {
     }
 
     // 결과 출력
+    cout << "2배 결과: ";
     for (auto x : nums) {
         cout << x << " ";
     }
@@ -403,7 +460,8 @@ int main() {
 
     return 0;
 }`,
-          expectedOutput: `6 14 4 18 10 `
+          stdin: `5\n3 7 2 9 5`,
+          expectedOutput: `숫자 개수를 입력하세요: 숫자 5개를 입력하세요: 2배 결과: 6 14 4 18 10 `
         },
         {
           id: "ch2-q1",

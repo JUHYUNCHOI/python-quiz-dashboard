@@ -307,9 +307,12 @@ function SessionCompletePage() {
 
   const handleGoHome = useCallback(() => {
     sessionStorage.removeItem("quizSessionData")
-    // 레슨에서 시작한 퀴즈면 해당 레슨으로 돌아가기, 아니면 홈으로
+    // 레슨에서 시작한 퀴즈면 커리큘럼 목록으로, 아니면 홈으로
     if (sessionData?.lessonFilter != null) {
-      router.push(`/learn/${sessionData.lessonFilter}`)
+      if (sessionData.course) {
+        localStorage.setItem("selectedCourse", sessionData.course)
+      }
+      router.push("/curriculum")
     } else {
       router.push("/")
     }
@@ -546,7 +549,7 @@ function SessionCompletePage() {
               className="w-full py-3 text-base font-medium text-gray-400 hover:text-gray-600 transition-colors"
             >
               {sessionData?.lessonFilter != null
-                ? t("← 레슨으로 돌아가기", "← Back to lesson")
+                ? t("← 수업 목록으로", "← Back to curriculum")
                 : t("홈으로", "Home")}
             </button>
           </div>

@@ -438,6 +438,91 @@ v.sort(key=abs)
 💡 파이썬은 "이 값을 기준으로 정렬해" (key), C++는 "이 둘 중 누가 앞이야?" (비교 함수)라는 차이가 있어요!`
         },
         {
+          id: "ch2-struct-sort",
+          type: "explain",
+          title: "📦 struct 배열도 sort로 정렬!",
+          content: `람다를 배웠으니 이제 struct 배열도 정렬할 수 있어요! 람다에서 **멤버 필드**를 비교하면 돼요.
+
+\`\`\`cpp
+#include <algorithm>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+Student students[3] = {
+    {"김철수", 95},
+    {"이영희", 87},
+    {"박민준", 72},
+};
+
+// 점수 오름차순 정렬
+sort(students, students + 3, [](Student a, Student b) {
+    return a.score < b.score;
+});
+// 결과: 박민준(72) → 이영희(87) → 김철수(95)
+\`\`\`
+
+**내림차순은 > 로 바꾸면 끝!**
+\`\`\`cpp
+sort(students, students + 3, [](Student a, Student b) {
+    return a.score > b.score;  // > 로 바꾸기만 하면 돼요
+});
+// 결과: 김철수(95) → 이영희(87) → 박민준(72)
+\`\`\`
+
+**vector<Student>도 똑같아요:**
+\`\`\`cpp
+vector<Student> v = { {"김철수", 95}, {"이영희", 87} };
+sort(v.begin(), v.end(), [](Student a, Student b) {
+    return a.score < b.score;
+});
+\`\`\`
+
+**pair vs struct 어떨 때 뭘 써요?**
+
+| | pair | struct |
+|---|---|---|
+| 자동 정렬 | ✅ 람다 없이 됨 | ❌ 람다 필요 |
+| 멤버 이름 | \`.first\`, \`.second\` (의미 불명확) | \`.score\`, \`.name\` (명확!) |
+| 필드 개수 | 딱 2개 | 몇 개든 가능 |
+| USACO 사용 | 빠르게 묶을 때 | 데이터가 복잡할 때 |
+
+💡 \`pair<int,string>\`에서 \`.first\`가 뭔지 한눈에 안 보이죠? struct는 \`.score\`, \`.name\`처럼 **이름이 있어서** 코드가 읽기 훨씬 쉬워요!`,
+        },
+        {
+          id: "ch2-struct-pred",
+          type: "predict" as const,
+          title: "struct 정렬 결과!",
+          code: `#include <iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+int main() {
+    Student s[3] = {
+        {"Kim", 85},
+        {"Lee", 92},
+        {"Park", 78},
+    };
+    sort(s, s + 3, [](Student a, Student b) {
+        return a.score > b.score;
+    });
+    cout << s[0].name << " " << s[2].name;
+    return 0;
+}`,
+          options: ["Lee Park", "Kim Park", "Park Lee", "Kim Lee"],
+          answer: 0,
+          explanation: "점수 내림차순으로 정렬하면 Lee(92) → Kim(85) → Park(78) 순이에요. s[0].name은 Lee, s[2].name은 Park이에요."
+        },
+        {
           id: "ch2-pred2",
           type: "predict" as const,
           title: "커스텀 정렬 결과!",

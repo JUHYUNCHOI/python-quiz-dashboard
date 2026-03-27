@@ -3,7 +3,7 @@
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { RequireAuth } from "@/components/require-auth"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
 import Link from "next/link"
@@ -34,6 +34,7 @@ const lessonsInReview = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 
 const cppReviewIds = new Set([
   "cpp-1", "cpp-2", "cpp-3", "cpp-4", "cpp-5", "cpp-6", "cpp-7", "cpp-8",
   "cpp-9", "cpp-10", "cpp-11", "cpp-12", "cpp-13", "cpp-14",
+  "cpp-21",
   "cpp-15", "cpp-16", "cpp-17", "cpp-18", "cpp-19", "cpp-20",
   "cpp-p1", "cpp-p2", "cpp-p3"
 ])
@@ -215,11 +216,13 @@ export default function CurriculumPage() {
       description: t("배열, 벡터, 참조, 포인터, 클래스까지! C++만의 강력한 기능을 배워요.", "Arrays, vectors, references, pointers, and classes! Learn C++'s powerful features."),
       lessons: [
         { id: "cpp-9", title: t("9. 배열 & 벡터", "9. Arrays & Vectors"), description: "int arr[5], vector<int>, push_back", duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "cpp-10", title: "10. Range-for & auto", description: t("for(auto x : vec), 타입 추론", "for(auto x : vec), type inference"), duration: t("20분", "20 min"), hasQuiz: true },
-        { id: "cpp-11", title: t("11. 문자열 심화", "11. Advanced Strings"), description: t("substr, find, replace, 비교", "substr, find, replace, comparison"), duration: t("20분", "20 min"), hasQuiz: true },
-        { id: "cpp-12", title: t("12. 참조와 함수", "12. References & Functions"), description: "int& ref, call by reference", duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "cpp-13", title: t("13. 포인터 기초", "13. Pointer Basics"), description: "int* ptr, &, *, nullptr", duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "cpp-14", title: t("14. 구조체 & 클래스", "14. Structs & Classes"), description: t("struct, class, 생성자", "struct, class, constructors"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-21", title: t("10. 2차원 배열 & 2D vector", "10. 2D Arrays & 2D Vectors"), description: t("grid[행][열], vector<vector<int>>, 이중 for문", "grid[row][col], vector<vector<int>>, nested loops"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-10", title: t("11. Range-for & auto", "11. Range-for & auto"), description: t("for(auto x : vec), 타입 추론", "for(auto x : vec), type inference"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "cpp-11", title: t("12. 문자열 심화", "12. Advanced Strings"), description: t("substr, find, replace, 비교", "substr, find, replace, comparison"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "cpp-12", title: t("13. 참조와 함수", "13. References & Functions"), description: "int& ref, call by reference", duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-13", title: t("14. 포인터 기초", "14. Pointer Basics"), description: "int* ptr, &, *, nullptr", duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-14", title: t("15. 구조체 (struct)", "15. Structs"), description: t("struct, 멤버 변수, 점(.) 연산자", "struct, member variables, dot operator"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-22", title: t("16. 클래스 (class)", "16. Classes"), description: t("class, public/private, 생성자", "class, public/private, constructors"), duration: t("25분", "25 min"), hasQuiz: true },
         { id: "cpp-p2", title: t("⚔️ RPG 캐릭터 관리", "⚔️ RPG Character Manager"), description: t("Part 2 복습 프로젝트", "Part 2 Review Project"), duration: t("30분", "30 min"), isProject: true },
       ],
     },
@@ -397,23 +400,32 @@ export default function CurriculumPage() {
     }
   }, [profile, isTeacher, selectedCourse])
 
+  // 진도 갱신 헬퍼 (클라우드 복원 + visibility 복귀 시 공유)
+  const refreshProgress = useCallback(() => {
+    const saved = localStorage.getItem("completedLessons")
+    if (saved) {
+      const arr: (string | number)[] = JSON.parse(saved)
+      setCompletedLessons(new Set(arr.map(id => typeof id === "string" && /^\d+$/.test(id) ? Number(id) : id)))
+    }
+    const savedQ = localStorage.getItem("completedQuizzes")
+    if (savedQ) {
+      const arr: (string | number)[] = JSON.parse(savedQ)
+      setCompletedQuizzes(new Set(arr.map(id => typeof id === "string" && /^\d+$/.test(id) ? Number(id) : id)))
+    }
+  }, [])
+
   // 클라우드 복원 완료 시 진도 갱신
   useEffect(() => {
-    const handler = () => {
-      const saved = localStorage.getItem("completedLessons")
-      if (saved) {
-        const arr: (string | number)[] = JSON.parse(saved)
-        setCompletedLessons(new Set(arr.map(id => typeof id === "string" && /^\d+$/.test(id) ? Number(id) : id)))
-      }
-      const savedQ = localStorage.getItem("completedQuizzes")
-      if (savedQ) {
-        const arr: (string | number)[] = JSON.parse(savedQ)
-        setCompletedQuizzes(new Set(arr.map(id => typeof id === "string" && /^\d+$/.test(id) ? Number(id) : id)))
-      }
-    }
-    window.addEventListener("cloud-data-restored", handler)
-    return () => window.removeEventListener("cloud-data-restored", handler)
-  }, [])
+    window.addEventListener("cloud-data-restored", refreshProgress)
+    return () => window.removeEventListener("cloud-data-restored", refreshProgress)
+  }, [refreshProgress])
+
+  // 퀴즈/레슨에서 돌아올 때 진도 갱신 (stale state 방지)
+  useEffect(() => {
+    const handleVisibility = () => { if (!document.hidden) refreshProgress() }
+    document.addEventListener("visibilitychange", handleVisibility)
+    return () => document.removeEventListener("visibilitychange", handleVisibility)
+  }, [refreshProgress])
 
   // 로드 완료 후 다음 수업으로 자동 스크롤
   useEffect(() => {

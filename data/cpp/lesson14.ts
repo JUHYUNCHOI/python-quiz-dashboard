@@ -1,21 +1,21 @@
 // ============================================
-// C++ Lesson 14: 클래스 (class)
+// C++ Lesson 14: 구조체 (struct)
 // 파이썬을 아는 학생을 위한 C++ 강의
 // ============================================
 import { LessonData } from '../types'
 
 export const cppLesson14Data: LessonData = {
   id: "cpp-14",
-  title: "클래스 (class)",
-  emoji: "🏗️",
-  description: "class로 나만의 타입 만들기!",
+  title: "구조체 (struct)",
+  emoji: "📦",
+  description: "관련 데이터를 하나로 묶는 나만의 타입!",
   chapters: [
     // ============================================
     // Chapter 1: 구조체 (struct)
     // ============================================
     {
       id: "ch1",
-      title: "구조체 (struct)",
+      title: "struct 기초",
       emoji: "📦",
       steps: [
         {
@@ -23,92 +23,128 @@ export const cppLesson14Data: LessonData = {
           type: "explain",
           title: "📦 struct — 여러 데이터를 하나로 묶기!",
           component: "cppStructBuilder",
-          content: `## struct — 관련 데이터를 하나의 묶음으로!
-
-게임 캐릭터를 생각해봐요. 캐릭터에는 이름, 체력, 공격력이 있어요. 이걸 따로따로 변수로 관리하면?
+          content: `학생 4명의 이름, 나이, 점수를 저장하려면:
 
 \`\`\`cpp
-// 😰 따로따로 관리하면 복잡해요
-string name1 = "전사";
-int hp1 = 100;
-int atk1 = 30;
-
-string name2 = "마법사";
-int hp2 = 70;
-int atk2 = 50;
+string name1 = "김철수";  int age1 = 17;  double score1 = 95.5;
+string name2 = "이영희";  int age2 = 16;  double score2 = 87.0;
+string name3 = "박민준";  int age3 = 17;  double score3 = 72.3;
+string name4 = "최수아";  int age4 = 16;  double score4 = 91.8;
+// 학생이 100명이면? 변수가 300개... 😱
 \`\`\`
 
-캐릭터가 100명이면? 변수가 300개가 필요해요. 😱
-
-**struct**를 쓰면 관련 데이터를 하나로 묶을 수 있어요!
-
-\`\`\`cpp
-struct Character {
-    string name;
-    int hp;
-    int atk;
-};
-
-Character warrior = {"전사", 100, 30};
-Character mage    = {"마법사", 70, 50};
-
-cout << warrior.name << " HP: " << warrior.hp;  // 전사 HP: 100
-\`\`\`
-
-| 구분 | 파이썬 🐍 | C++ struct ⚡ |
-|------|-----------|--------------|
-| 묶음 정의 | \`class\` 또는 \`dataclass\` | \`struct\` |
-| 멤버 접근 | \`obj.field\` | \`obj.field\` |
-| 기본 접근권한 | 없음(관례) | **public** (class는 private) |
-
-> 💡 **struct vs class**: C++에서 struct는 기본이 \`public\`, class는 기본이 \`private\`이에요. 주로 데이터 묶음엔 struct, 기능(메서드) 위주엔 class를 씁니다.`,
+**struct**를 쓰면 이름 하나로 묶어서, 학생 100명도 변수 100개면 돼요 👇`,
         },
         {
-          id: "ch1-practice",
+          id: "ch1-syntax",
           type: "explain",
-          title: "struct 선언과 사용",
-          content: `## struct 선언 방법
+          title: "struct 문법 정리",
+          content: `**1단계: struct 정의**
+
+\`struct\` 키워드 → 이름 → \`{\`안에 변수들\`};\`
 
 \`\`\`cpp
-#include <iostream>
+struct Student {
+    string name;
+    int age;
+    double score;
+};  // ← 세미콜론 필수!
+\`\`\`
+
+> ⚠️ 왜 \`};\` 뒤에 세미콜론? struct 정의는 **선언문**이기 때문이에요. \`int x;\`처럼 선언이 끝나면 \`;\`으로 마쳐요.
+
+---
+
+**2단계: 변수 만들기**
+
+struct를 정의할 때 쓴 순서대로 값을 채워요:
+
+\`\`\`cpp
+//               name      age   score
+//                ↓         ↓      ↓
+Student s1 = {"김철수",    17,   95.5};
+Student s2 = {"이영희",    16,   87.0};
+\`\`\`
+
+---
+
+**3단계: 멤버 접근 — 점(.) 연산자**
+
+struct 안의 변수들을 **멤버(member)**라고 해요. 멤버에 접근할 때는 점(\`.\`)을 써요:
+
+\`\`\`cpp
+cout << s1.name;   // 김철수
+cout << s1.age;    // 17
+s1.score = 100.0;  // 수정도 가능!
+\`\`\``,
+        },
+        {
+          id: "ch1-pred1",
+          type: "predict" as const,
+          title: "점(.) 연산자로 멤버 수정!",
+          code: `#include <iostream>
 #include <string>
 using namespace std;
 
 struct Student {
     string name;
-    int score;
-    char grade;
+    int age;
+    double score;
 };
 
 int main() {
-    // 방법 1: 선언 후 대입
     Student s1;
-    s1.name  = "김철수";
-    s1.score = 95;
-    s1.grade = 'A';
-
-    // 방법 2: 초기화 리스트 (순서 맞춰야 해요!)
-    Student s2 = {"이영희", 87, 'B'};
-
-    cout << s1.name << ": " << s1.score << "점 (" << s1.grade << ")" << endl;
-    cout << s2.name << ": " << s2.score << "점 (" << s2.grade << ")" << endl;
+    s1.name = "김철수";
+    s1.age = 17;
+    s1.age = 20;
+    cout << s1.name << " " << s1.age;
     return 0;
-}
-\`\`\`
-
-출력:
-\`\`\`
-김철수: 95점 (A)
-이영희: 87점 (B)
-\`\`\`
-
-## struct 배열 (여러 학생 관리)
+}`,
+          options: ["김철수 17", "김철수 20", "에러", "김철수 0"],
+          answer: 1,
+          explanation: "s1.age를 17로 설정한 뒤 20으로 덮어썼어요. 마지막으로 대입한 값이 남으니까 '김철수 20'이 출력돼요."
+        },
+        {
+          id: "ch1-q1",
+          type: "quiz",
+          title: "점(.) 연산자!",
+          content: "`Student s1;` 이후 `s1`의 나이(age)에 접근하는 올바른 코드는?",
+          options: [
+            "s1→age",
+            "s1[age]",
+            "s1.age",
+            "age.s1"
+          ],
+          answer: 2,
+          explanation: "struct 멤버에 접근할 때는 점(.) 연산자를 써요! s1.age처럼 변수이름.멤버이름 순서로 쓰면 돼요."
+        },
+      ],
+    },
+    // ============================================
+    // Chapter 2: struct 활용
+    // ============================================
+    {
+      id: "ch2",
+      title: "struct 활용",
+      emoji: "🔧",
+      steps: [
+        {
+          id: "ch2-array",
+          type: "explain",
+          title: "struct 배열로 여러 데이터 관리",
+          component: "cppStructArrayLoop",
+          content: `struct의 진짜 힘은 **배열과 함께** 쓸 때예요!
 
 \`\`\`cpp
+struct Student {
+    string name;
+    int score;
+};
+
 Student students[3] = {
-    {"김철수", 95, 'A'},
-    {"이영희", 87, 'B'},
-    {"박민준", 72, 'C'},
+    {"김철수", 95},
+    {"이영희", 87},
+    {"박민준", 72},
 };
 
 for (int i = 0; i < 3; i++) {
@@ -116,433 +152,239 @@ for (int i = 0; i < 3; i++) {
 }
 \`\`\`
 
-## 함수에 struct 전달
+출력:
+\`\`\`
+김철수: 95
+이영희: 87
+박민준: 72
+\`\`\`
 
-\`\`\`cpp
-// 값 전달 (복사본)
-void print(Student s) {
-    cout << s.name << " " << s.score << endl;
-}
-
-// 참조 전달 (원본 수정 가능, 빠름)
-void boost(Student& s) {
-    s.score += 10;
-}
-
-boost(s1);  // s1.score가 실제로 바뀜
-\`\`\``,
+USACO에서 좌표, 간선 정보 등을 struct 배열로 많이 관리해요!`,
         },
         {
-          id: "ch1-quiz",
-          type: "quiz",
-          title: "struct 멤버 접근",
-          content: "struct Point { int x; int y; }; 에서 Point p = {3, 7}; p.x += 2; 를 실행하면 p.x의 값은?",
-          options: ["3", "5", "7", "9"],
-          answer: 1,
-          explanation: "p.x = 3이고 p.x += 2를 하면 p.x = 5가 됩니다.",
+          id: "ch2-pred1",
+          type: "predict" as const,
+          title: "struct 배열 + for문 출력!",
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+int main() {
+    Student students[3] = {
+        {"김철수", 95},
+        {"이영희", 87},
+        {"박민준", 72},
+    };
+    for (int i = 0; i < 3; i++) {
+        cout << students[i].name << endl;
+    }
+    return 0;
+}`,
+          options: ["김철수\n이영희\n박민준", "95\n87\n72", "김철수 95\n이영희 87\n박민준 72", "에러"],
+          answer: 0,
+          explanation: "students[i].name으로 각 학생의 이름 멤버에 접근해요. i가 0→1→2 순으로 증가하면서 김철수, 이영희, 박민준이 차례로 출력돼요."
         },
-      ],
-    },
-    // ============================================
-    // Chapter 2: class 입문
-    // ============================================
-    {
-      id: "ch2",
-      title: "class 입문",
-      emoji: "🎓",
-      steps: [
         {
-          id: "ch2-intro",
+          id: "ch2-fb1",
+          type: "fillblank" as const,
+          title: "for문으로 점수 출력!",
+          content: "모든 학생의 점수를 for문으로 출력해봐요.",
+          code: `for (int i = 0; i < 3; i++) {
+    cout << students[___].score << endl;
+}`,
+          fillBlanks: [
+            { id: 0, answer: "i", options: ["i", "0", "name", "score"] }
+          ],
+          explanation: "students[i].score — 배열 인덱스 i로 각 학생에 접근하고, 점(.)으로 score 멤버를 가져와요. i가 0, 1, 2로 바뀌면서 세 학생의 점수가 순서대로 출력돼요."
+        },
+        {
+          id: "ch2-loop-patterns",
           type: "explain",
-          title: "🎓 class — 나만의 타입 만들기!",
-          component: "cppPublicPrivateBuilder",
-          content: `## C++ class — 파이썬 class와 비슷하지만 더 강력해요!
-
-파이썬에서 class를 써봤죠? C++의 class도 비슷해요. 다른 점은 **접근 권한을 진짜로 막을 수 있다**는 거예요.
-
-**class**는 기본적으로 모든 멤버가 \`private\`이에요. 왜 그럴까요?
-
-실수로 내부 데이터를 잘못 건드리는 걸 막으려고예요! 예: 사각형의 width = -10이 되면 안 되잖아요?
-
-• \`public:\` — 클래스 바깥에서도 접근 가능 (누구나 쓸 수 있어요)
-• \`private:\` — 클래스 안에서만 접근 가능 (외부에서 직접 건드릴 수 없어요)
+          title: "for문으로 할 수 있는 것들",
+          content: `struct 배열 + for문 조합으로 할 수 있는 세 가지 핵심 패턴이에요. USACO에서 정말 자주 나와요!
 
 \`\`\`cpp
-class Rectangle {
-private:          // 외부에서 직접 접근 불가!
-    double width, height;
-
-public:           // 외부에서 접근 가능!
-    void setSize(double w, double h) {
-        width = w;
-        height = h;
-    }
-    double area() {
-        return width * height;
-    }
+Student students[3] = {
+    {"김철수", 95},
+    {"이영희", 87},
+    {"박민준", 72},
 };
 \`\`\`
 
+**패턴 1: 합계 구하기**
 \`\`\`cpp
-Rectangle r;
-// r.width = 5;      // ❌ 에러! private이라 접근 불가
-r.setSize(5, 3);     // ✅ public 함수로 접근!
-cout << r.area();     // ✅ 15
+int total = 0;
+for (int i = 0; i < 3; i++) {
+    total += students[i].score;
+}
+cout << "합계: " << total;  // 합계: 254
+\`\`\`
+
+**패턴 2: 최솟값 찾기**
+\`\`\`cpp
+int minScore = students[0].score;  // 첫 번째 값으로 시작
+for (int i = 1; i < 3; i++) {
+    if (students[i].score < minScore)
+        minScore = students[i].score;
+}
+cout << "최저: " << minScore;  // 최저: 72
+\`\`\`
+
+**패턴 3: 조건 만족 개수 세기**
+\`\`\`cpp
+int count = 0;
+for (int i = 0; i < 3; i++) {
+    if (students[i].score >= 90) count++;
+}
+cout << count << "명";  // 1명
 \`\`\`
 
 파이썬과 비교해봐요:
 
 **파이썬 🐍:**
 \`\`\`python
-class Rectangle:
-    def __init__(self):
-        self._width = 0   # _는 관례일 뿐, 강제 아님
-        self._height = 0
+students = [{"name": "김철수", "score": 95}, ...]
 
-    def set_size(self, w, h):
-        self._width = w
-        self._height = h
+total = sum(s["score"] for s in students)
+min_score = min(s["score"] for s in students)
+count = sum(1 for s in students if s["score"] >= 90)
 \`\`\`
 
-| 파이썬 🐍 | C++ class ⚡ |
-|---|---|
-| \`_변수\`는 관례적 private | \`private:\`로 진짜 차단! |
-| 모든 것 접근 가능 | private은 진짜 접근 불가 |
-| \`self\` 필요 | \`self\` 불필요 |
-
-캡슐화(encapsulation)는 **데이터를 숨겨서 실수를 방지**하는 거예요. 약 캡슐처럼 안의 내용물(데이터)을 보호하고, 정해진 방법(메서드)으로만 접근하게 해요.
-
-💡 private으로 데이터를 숨기고, public 함수로만 접근하게 하는 게 **캡슐화(encapsulation)**예요!`
+> 💡 파이썬은 \`sum()\`, \`min()\`이 있지만 C++에서는 직접 for문으로 구현해야 해요. 하지만 구조는 똑같아요!`,
         },
         {
-          id: "ch2-fb1",
-          type: "fillblank" as const,
-          title: "빈칸을 채워주세요",
-          content: "클래스의 접근 제어를 설정해봐요!",
-          code: "class Circle {\n___:\n    double radius;\npublic:\n    double area() {\n        return 3.14 * radius * radius;\n    }\n};",
-          fillBlanks: [
-            { id: 0, answer: "private", options: ["private", "public", "protected", "static"] }
-          ],
-          explanation: "private으로 선언하면 외부에서 radius에 직접 접근할 수 없어요! public 함수를 통해서만 접근하게 하는 게 캡슐화예요."
-        },
-        {
-          id: "ch2-constructor",
-          type: "explain",
-          title: "🎓 생성자 (Constructor)!",
-          content: `**생성자(constructor)**는 객체가 만들어질 때 **자동으로 호출**되는 특별한 함수예요!
+          id: "ch2-loop-pred1",
+          type: "predict" as const,
+          title: "합계 구하기!",
+          code: `#include <iostream>
+#include <string>
+using namespace std;
 
-규칙:
-- 클래스 이름과 **같은 이름**
-- **리턴 타입이 없음** (void도 아님!)
-- 객체 생성 시 자동 호출
-
-\`\`\`cpp
-class Dog {
-public:
+struct Student {
     string name;
-    int age;
-
-    Dog(string n, int a) {  // 생성자!
-        name = n;
-        age = a;
-    }
+    int score;
 };
 
-Dog d("Buddy", 3);  // 생성자가 자동으로 호출!
-cout << d.name;      // Buddy
-cout << d.age;       // 3
-\`\`\`
-
-파이썬의 \`__init__\`과 비교해봐요:
-
-**파이썬 🐍:**
-\`\`\`python
-class Dog:
-    def __init__(self, name, age):
-        self.name = name
-        self.age = age
-
-d = Dog("Buddy", 3)
-\`\`\`
-
-| 파이썬 🐍 | C++ ⚡ |
-|---|---|
-| \`__init__(self, ...)\` | \`클래스이름(...)\` |
-| self 필요 | self 불필요 |
-| \`Dog("Buddy", 3)\` | \`Dog d("Buddy", 3);\` |
-
-C++에서 생성자가 없으면? 멤버 변수들이 **쓰레기 값**으로 시작해요! width가 -8273561이 될 수 있어요. 그래서 생성자에서 초기값을 꼭 정해줘야 해요.
-
-**모던 C++11 팁: 멤버 초기화 리스트 (Initializer List)**
-
-더 효율적인 초기화 방법이 있어요!
-
-\`\`\`cpp
-// 방법 1: 생성자 바디에서 대입 (전통적)
-Dog(string n, int a) {
-    name = n;
-    age = a;
-}
-
-// 방법 2: 멤버 초기화 리스트 (C++11, 권장)
-Dog(string n, int a) : name(n), age(a) {}
-\`\`\`
-
-\`: name(n), age(a)\` 부분이 멤버 초기화 리스트예요. 대입이 아니라 **처음부터 올바른 값으로 초기화**하므로 더 효율적이에요! const 멤버 변수는 반드시 이 방법을 써야 해요.
-
-💡 생성자 덕분에 객체를 만들 때 바로 값을 넣을 수 있어요! 파이썬의 \`__init__\`과 같은 역할이에요.`
+int main() {
+    Student students[3] = {
+        {"김철수", 95},
+        {"이영희", 87},
+        {"박민준", 72},
+    };
+    int total = 0;
+    for (int i = 0; i < 3; i++) {
+        total += students[i].score;
+    }
+    cout << total;
+    return 0;
+}`,
+          options: ["254", "95", "87", "에러"],
+          answer: 0,
+          explanation: "95 + 87 + 72 = 254예요. total += students[i].score로 i가 0, 1, 2일 때 각 점수를 더해줘요."
         },
         {
-          id: "ch2-pred1",
-          type: "predict" as const,
-          title: "생성자 실행!",
-          code: "#include <iostream>\n#include <string>\nusing namespace std;\nclass Cat {\npublic:\n    string name;\n    int lives;\n    Cat(string n, int l) {\n        name = n;\n        lives = l;\n    }\n};\nint main() {\n    Cat c(\"Nabi\", 9);\n    cout << c.name << \" \" << c.lives;\n    return 0;\n}",
-          options: ["에러", "Nabi 9", "Nabi 0", " 9"],
-          answer: 1,
-          explanation: "Cat c(\"Nabi\", 9)에서 생성자가 호출돼요! name은 \"Nabi\", lives는 9로 초기화돼요. 그래서 Nabi 9가 출력돼요."
+          id: "ch2-ref",
+          type: "explain",
+          title: "함수에 struct 넘기기",
+          content: `함수에 struct를 넘길 때는 **참조(&)**를 쓰면 효율적이에요!
+
+\`\`\`cpp
+// 값 전달 — 복사본, 원본 변경 불가
+void print(Student s) {
+    cout << s.name << " " << s.score << endl;
+}
+
+// 참조 전달 — 원본에 직접 접근, 수정 가능
+void boost(Student& s) {
+    s.score += 10;
+}
+
+Student s = {"김철수", 85};
+boost(s);
+cout << s.score;  // 95 (원본이 바뀜!)
+\`\`\`
+
+큰 struct를 함수에 넘길 때 값 전달은 복사 비용이 커요. 참조 전달이 빠르고 메모리도 아껴요.`,
         },
         {
           id: "ch2-practice",
           type: "practice" as const,
-          title: "✋ Rectangle class 만들기!",
-          content: `Rectangle 클래스를 만들어봐요!
+          title: "✋ 학생 성적 관리!",
+          content: `3명의 학생 중 가장 높은 점수를 출력하는 프로그램을 완성해봐요.
 
-- 생성자로 가로(width), 세로(height)를 받아요
-- area() 메서드로 넓이를, perimeter() 메서드로 둘레를 계산해요
-
-class의 생성자와 메서드를 활용해봐요!`,
+주어진 코드를 실행하면 아래 출력이 나와야 해요.`,
           code: `#include <iostream>
+#include <string>
 using namespace std;
 
-class Rectangle {
-private:
-    double width, height;
-
-public:
-    Rectangle(double w, double h) {
-        width = w;
-        height = h;
-    }
-
-    double area() {
-        return width * height;
-    }
-
-    double perimeter() {
-        return 2 * (width + height);
-    }
+struct Student {
+    string name;
+    int score;
 };
 
 int main() {
-    Rectangle r(5.0, 3.0);
-    cout << "Area: " << r.area() << endl;
-    cout << "Perimeter: " << r.perimeter() << endl;
+    Student students[3] = {
+        {"김철수", 95},
+        {"이영희", 87},
+        {"박민준", 72},
+    };
 
+    int maxScore = 0;
+    for (int i = 0; i < 3; i++) {
+        if (students[i].score > maxScore) {
+            maxScore = students[i].score;
+        }
+    }
+
+    cout << "최고 점수: " << maxScore << endl;
     return 0;
 }`,
-          expectedOutput: `Area: 15
-Perimeter: 16`
-        },
-        {
-          id: "ch2-pred-private",
-          type: "predict" as const,
-          title: "private 접근 시도",
-          code: "class Rectangle {\nprivate:\n    int width;\npublic:\n    Rectangle(int w) : width(w) {}\n};\n\nint main() {\n    Rectangle r(5);\n    r.width = 10;  // ???\n}",
-          options: ["10", "5", "0", "컴파일 에러"],
-          answer: 3,
-          explanation: "컴파일 에러! width는 private이라 클래스 바깥에서 접근할 수 없어요. private 멤버는 클래스 내부에서만 접근 가능해요. 외부에서 수정하려면 public 메서드(setter)를 만들어야 해요. 이것이 캡슐화의 핵심이에요!"
-        },
-        {
-          id: "ch2-getter-setter",
-          type: "explain",
-          title: "💡 그러면 private 값은 어떻게 바꿔?",
-          content: `private 멤버를 안전하게 접근하는 방법: **getter(읽기)**와 **setter(쓰기)** 메서드!
-
-\`\`\`cpp
-class Rectangle {
-private:
-    int width;
-public:
-    Rectangle(int w) : width(w) {}
-    int getWidth() { return width; }     // getter
-    void setWidth(int w) {
-        if (w > 0) width = w;  // 검증 후 설정!
-    }
-};
-\`\`\`
-
-왜 이렇게 할까요? setWidth에서 \`w > 0\` 검증을 하잖아요! width = -10이 되는 걸 막아줘요. 직접 접근하면 이런 보호가 불가능해요.
-
-💡 getter는 값을 읽어오는 함수, setter는 값을 검증 후 설정하는 함수예요!`
+          expectedOutput: `최고 점수: 95`
         },
         {
           id: "ch2-q1",
           type: "quiz",
-          title: "class의 기본 접근 권한!",
-          content: "C++ `class`에서 아무것도 지정하지 않으면 멤버의 기본 접근 권한은?",
-          options: [
-            "public — 누구나 접근 가능",
-            "protected — 자식 클래스만 접근 가능",
-            "private — 클래스 내부에서만 접근 가능",
-            "접근 권한이 없어 에러가 난다"
-          ],
-          answer: 2,
-          explanation: "class의 멤버는 기본적으로 private이에요! 그래서 외부에서 실수로 건드리지 못해요. 외부에서 접근하려면 public:으로 명시해야 해요."
-        }
-      ]
-    },
-    // ============================================
-    // Chapter 3: 정리 퀴즈
-    // ============================================
-    {
-      id: "ch3",
-      title: "정리 퀴즈",
-      emoji: "🏆",
-      steps: [
-        {
-          id: "ch3-q1",
-          type: "quiz",
-          title: "class 코드 읽기!",
-          content: `이 코드의 출력은?
+          title: "struct 배열 접근!",
+          content: `\`students[1].score\`가 출력하는 값은?
 
 \`\`\`cpp
-class Dog {
-public:
-    string name;
-    Dog(string n) { name = n; }
-};
-int main() {
-    Dog d("Buddy");
-    cout << d.name;
-}
+struct Student { string name; int score; };
+Student students[3] = {{"A", 90}, {"B", 80}, {"C", 70}};
 \`\`\``,
-          options: [
-            "에러",
-            "d",
-            "Buddy",
-            "name"
-          ],
-          answer: 2,
-          explanation: "Dog d(\"Buddy\")로 생성자가 호출돼 name = \"Buddy\"가 돼요. name은 public이라 d.name으로 접근할 수 있어요!"
-        },
-        {
-          id: "ch3-q2",
-          type: "quiz",
-          title: "private 접근!",
-          content: `이 코드에서 에러가 나는 줄은?
-
-\`\`\`cpp
-class Box {
-private:
-    int size;
-public:
-    void setSize(int s) { size = s; }
-};
-int main() {
-    Box b;
-    b.size = 10;       // 줄 A
-    b.setSize(10);     // 줄 B
-}
-\`\`\``,
-          options: [
-            "줄 A",
-            "줄 B",
-            "둘 다 에러",
-            "에러 없음"
-          ],
-          answer: 0,
-          explanation: "size는 private이라 외부에서 직접 접근하면 에러가 나요! b.size = 10은 불가하고, b.setSize(10)은 public 함수라 괜찮아요."
-        },
-        {
-          id: "ch3-q3",
-          type: "quiz",
-          title: "생성자!",
-          content: "C++ 생성자에 대한 설명으로 **틀린** 것은?",
-          options: [
-            "클래스 이름과 같은 이름을 가진다",
-            "리턴 타입이 void이다",
-            "객체 생성 시 자동으로 호출된다",
-            "매개변수를 받을 수 있다"
-          ],
+          options: ["90", "80", "70", "에러"],
           answer: 1,
-          explanation: "생성자는 리턴 타입이 아예 없어요! void도 아니에요. 클래스 이름과 같은 이름이고, 객체 생성 시 자동 호출되고, 매개변수를 받을 수 있어요."
+          explanation: "students[1]은 두 번째 원소 {\"B\", 80}이에요. students[1].score는 80이에요!"
         },
         {
-          id: "ch3-q4",
-          type: "quiz",
-          title: "종합 문제!",
-          content: `이 코드의 출력은?
+          id: "ch2-summary",
+          type: "explain",
+          title: "🎯 오늘 배운 것!",
+          content: `## ✅ struct 정리!
 
 \`\`\`cpp
-class Counter {
-private:
-    int count;
-public:
-    Counter(int c) { count = c; }
-    void add() { count++; }
-    int get() { return count; }
-};
-int main() {
-    Counter c(10);
-    c.add();
-    c.add();
-    c.add();
-    cout << c.get();
-}
-\`\`\``,
-          options: [
-            "10",
-            "11",
-            "13",
-            "에러"
-          ],
-          answer: 2,
-          explanation: "Counter c(10)으로 count=10이 돼요. add()를 3번 호출하면 10→11→12→13이 돼요. get()은 13을 리턴해요!"
-        },
-        {
-          id: "ch3-summary",
-          type: "explain",
-          title: "🎉 Part 2 완료!",
-          content: `## 🏆 Part 2 완료! 정말 대단해요!
+struct 이름 {
+    타입 멤버1;
+    타입 멤버2;
+};  // 세미콜론 필수!
 
-Part 2 (레슨 9~14)에서 배운 모든 것을 정리해봐요!
+이름 변수 = {값1, 값2};  // 초기화
+변수.멤버                 // 접근
+\`\`\`
 
-### 📚 레슨 9: 배열 & 벡터
-- C-style 배열과 \`vector\`로 여러 데이터를 저장하는 법
+| 개념 | 내용 |
+|---|---|
+| 정의 | \`struct 이름 { 멤버들 };\` |
+| 생성 | \`Student s = {"김철수", 95};\` |
+| 접근 | \`s.name\`, \`s.score\` |
+| 배열 | \`Student arr[3] = {...};\` |
+| 함수 전달 | 참조(\`Student& s\`)로 넘기면 효율적 |
 
-### 🔄 레슨 10: Range-for & auto
-- \`for(auto x : vec)\`로 편하게 반복, \`auto\`로 타입 자동 추론
-
-### 🔤 레슨 11: 문자열 심화
-- \`string\`의 다양한 메서드와 활용법
-
-### 🔗 레슨 12: 참조와 함수
-- Call by Value vs Reference, \`&\`로 원본 수정
-
-### 🔄 레슨 13: 재귀 (Recursion)
-- 함수가 자신을 호출하는 재귀, 기저 조건(Base Case)
-- 메모이제이션으로 중복 계산 제거 → 동적 프로그래밍(DP) 기초
-
-### 🏗️ 레슨 14: 클래스 (class)
-- \`class\`로 캡슐화, private/public 접근 제어, 생성자(constructor)
-
----
-
-## ✅ Part 2 핵심 요약!
-
-| 개념 | 키워드 | 핵심 |
-|---|---|---|
-| 배열/벡터 | \`int arr[]\`, \`vector<int>\` | 여러 값 저장 |
-| Range-for | \`for(auto x : v)\` | 편한 반복 |
-| 참조 | \`int& ref\` | 변수의 별명 |
-| 재귀 | \`func(n-1)\` | 기저 조건 + 재귀 호출 |
-| 메모이제이션 | \`memo[n]\` | 중복 계산 제거 (DP 기초) |
-| class | \`class { private/public };\` | 캡슐화 (기본 private) |
-| 생성자 | \`ClassName(...)\` | 객체 초기화 |
-
-🎊 **축하해요!** Part 2를 모두 마쳤어요! C++의 중요한 개념들을 정복했어요!
-
-🚀 **다음은 Part 3!** pair & 정렬, map & set, STL 알고리즘으로 더 강력한 C++을 배워볼 거예요!`
+🚀 **다음 레슨:** class — struct에 접근 제어와 생성자를 추가해요!`
         }
       ]
     }
