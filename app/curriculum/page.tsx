@@ -381,12 +381,19 @@ export default function CurriculumPage() {
     if (!loaded) return
     const allData = selectedCourse === "python" ? pythonCurriculumData : selectedCourse === "cpp" ? cppCurriculumData : pseudoCurriculumData
     const active = new Set<string>()
+    let passedIncomplete = false
     for (const part of allData) {
       const ids = part.lessons.map(l => l.id)
       const hasAnyComplete = ids.some(id => completedLessons.has(id))
       const hasIncomplete = ids.some(id => !completedLessons.has(id))
-      if (hasAnyComplete) active.add(part.id)
-      if (hasIncomplete) { active.add(part.id); break } // 첫 미완료 파트까지
+      if (hasAnyComplete) {
+        active.add(part.id)
+        if (hasIncomplete) passedIncomplete = true
+      } else {
+        // 완료 레슨 없는 파트 — 아직 미완료 파트 못 만났으면 다음 파트로 표시
+        if (!passedIncomplete) active.add(part.id)
+        break
+      }
     }
     if (active.size === 0 && allData.length > 0) active.add(allData[0].id)
     setExpandedParts(active)
