@@ -190,6 +190,19 @@ int main() {
           explanation: "`students[i].name` accesses the name member of each student. As i goes 0→1→2, Alice, Bob, Carol are printed in order."
         },
         {
+          id: "ch2-fb1",
+          type: "fillblank" as const,
+          title: "Print scores with a for loop!",
+          content: "Print every student's score with a for loop.",
+          code: `for (int i = 0; i < 3; i++) {
+    cout << students[___].score << endl;
+}`,
+          fillBlanks: [
+            { id: 0, answer: "i", options: ["i", "0", "name", "score"] }
+          ],
+          explanation: "`students[i].score` — use index i to access each student, then dot notation for the score field. As i goes 0, 1, 2, each student's score prints in order."
+        },
+        {
           id: "ch2-loop-patterns",
           type: "fillblank" as const,
           title: "Pattern 1: Sum",
@@ -269,19 +282,6 @@ int main() {
           options: ["254", "95", "87", "Error"],
           answer: 0,
           explanation: "95 + 87 + 72 = 254. The loop adds each student's score as i goes 0, 1, 2."
-        },
-        {
-          id: "ch2-fb1",
-          type: "fillblank" as const,
-          title: "Print scores with a for loop!",
-          content: "Print every student's score with a for loop.",
-          code: `for (int i = 0; i < 3; i++) {
-    cout << students[___].score << endl;
-}`,
-          fillBlanks: [
-            { id: 0, answer: "i", options: ["i", "0", "name", "score"] }
-          ],
-          explanation: "`students[i].score` — use index i to access each student, then dot notation for the score field. As i goes 0, 1, 2, each student's score prints in order."
         },
         {
           id: "ch2-ref",
