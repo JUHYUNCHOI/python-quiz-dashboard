@@ -106,13 +106,9 @@ int main() {
     cout << grid[1][2];
     return 0;
 }`,
-          reviewHint: `2D 배열 접근: \`grid[행][열]\` (모두 **0부터** 시작)
-
-- \`grid[0]\` → 첫 번째 행 {1, 2, 3}
-- \`grid[1]\` → 두 번째 행 {4, 5, 6}
-- \`grid[1][2]\` → 두 번째 행, 세 번째 열`,
-          expectedOutput: "6",
-          explanation: "grid[1][2]는 1번 행(두 번째 줄)의 2번 열(세 번째 값) → 6이에요."
+          options: ["6", "5", "3", "에러"],
+          answer: 0,
+          explanation: "grid[1][2]는 1번 행(두 번째 줄)의 2번 열(세 번째 값) → 6이에요. 행과 열 인덱스 모두 0부터 시작하는 것 잊지 마세요!"
         },
         {
           id: "ch1-fb1",
@@ -154,6 +150,17 @@ int main() {
       title: "이중 for문 순회",
       emoji: "🔁",
       steps: [
+        {
+          id: "ch2-visual",
+          type: "explain",
+          title: "👀 i, j가 어떻게 움직이는지 직접 보기",
+          component: "gridLoopVisualizer",
+          content: `이중 for문에서 i와 j가 어떤 순서로 바뀌는지 한 단계씩 확인해봐요.
+
+- **바깥 루프 \`i\`** → 행이 바뀔 때 (위→아래)
+- **안쪽 루프 \`j\`** → 같은 행에서 열이 바뀔 때 (왼→오른)
+- i가 0인 동안 j가 0→1→2 끝까지 가고, 그 다음 i가 1로 넘어가요`,
+        },
         {
           id: "ch2-intro",
           type: "explain",
@@ -213,11 +220,9 @@ int main() {
     cout << sum;
     return 0;
 }`,
-          reviewHint: `이중 for문으로 2D 배열의 모든 원소를 더해요:
-- i=0: grid[0][0]=1, grid[0][1]=2, grid[0][2]=3
-- i=1: grid[1][0]=4, grid[1][1]=5, grid[1][2]=6`,
-          expectedOutput: "21",
-          explanation: "1+2+3+4+5+6 = 21이에요. 이중 for문으로 모든 원소를 순서대로 더했어요."
+          options: ["21", "15", "6", "12"],
+          answer: 0,
+          explanation: "이중 for문으로 모든 원소를 더해요: 1+2+3+4+5+6 = 21이에요."
         },
         {
           id: "ch2-practice",
@@ -343,12 +348,49 @@ int main() {
     cout << grid.size() << " " << grid[0].size() << " " << grid[1][2];
     return 0;
 }`,
-          reviewHint: `- \`grid(3, vector<int>(4, 0))\` → 3행 4열, 전부 0
-- \`grid[1][2] = 5\` → 1행 2열을 5로 변경
-- \`grid.size()\` → 행 수
-- \`grid[0].size()\` → 열 수`,
-          expectedOutput: "3 4 5",
-          explanation: "행이 3개, 열이 4개, grid[1][2]=5이에요."
+          options: ["3 4 5", "3 4 0", "4 3 5", "3 3 5"],
+          answer: 0,
+          explanation: "grid(3, vector<int>(4, 0))으로 3행 4열 생성. grid.size()=3(행), grid[0].size()=4(열), grid[1][2]=5이에요."
+        },
+        {
+          id: "ch3-cin",
+          type: "explain",
+          title: "⌨️ 2D 배열을 cin으로 입력받기",
+          content: `지금까지 배열에 값을 직접 넣었는데, 실제 USACO 문제는 **입력으로** 값이 들어와요.
+
+이중 for문 + cin으로 격자를 입력받는 패턴이에요:
+
+\`\`\`cpp
+int rows = 2, cols = 3;
+vector<vector<int>> grid(rows, vector<int>(cols, 0));
+
+for (int i = 0; i < rows; i++) {
+    for (int j = 0; j < cols; j++) {
+        cin >> grid[i][j];  // 한 칸씩 입력
+    }
+}
+\`\`\`
+
+**입력이 이렇게 들어오면:**
+\`\`\`
+1 2 3
+4 5 6
+\`\`\`
+
+cin은 공백/줄바꿈을 자동으로 건너뛰어서 순서대로 \`grid[0][0]=1, grid[0][1]=2, ..., grid[1][2]=6\`이 채워져요.
+
+**출력도 같은 구조:**
+\`\`\`cpp
+for (int i = 0; i < rows; i++) {
+    for (int j = 0; j < cols; j++) {
+        cout << grid[i][j];
+        if (j < cols - 1) cout << " ";  // 마지막 열 제외 공백
+    }
+    cout << "\\n";  // 행 끝마다 줄바꿈
+}
+\`\`\`
+
+> 💡 USACO 문제의 70% 이상이 첫 줄에 N, M (행, 열 크기)을 주고 다음 줄부터 격자를 입력해요. 이 패턴을 외워두면 문제 절반은 시작부터 우위예요!`,
         },
         {
           id: "ch3-practice",

@@ -315,9 +315,11 @@ cout << s.score;  // 95 (원본이 바뀜!)
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ 학생 성적 관리!",
-          content: `3명의 학생 중 가장 높은 점수를 출력하는 프로그램을 완성해봐요.
+          content: `Student struct를 사용해서 3명의 학생 중 가장 높은 점수를 출력하는 프로그램을 완성해봐요.
 
-주어진 코드를 실행하면 아래 출력이 나와야 해요.`,
+- Student struct: name(string), score(int)
+- 학생 데이터: 김철수(95), 이영희(87), 박민준(72)
+- for문으로 배열을 순회하며 가장 높은 점수를 찾아 출력하세요`,
           code: `#include <iostream>
 #include <string>
 using namespace std;

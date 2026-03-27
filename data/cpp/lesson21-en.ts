@@ -101,13 +101,9 @@ int main() {
     cout << grid[1][2];
     return 0;
 }`,
-          reviewHint: `2D array access: \`grid[row][col]\` (both start at **0**)
-
-- \`grid[0]\` → first row {1, 2, 3}
-- \`grid[1]\` → second row {4, 5, 6}
-- \`grid[1][2]\` → second row, third column`,
-          expectedOutput: "6",
-          explanation: "grid[1][2] is row 1 (second row), column 2 (third value) → 6."
+          options: ["6", "5", "3", "Error"],
+          answer: 0,
+          explanation: "grid[1][2] is row 1 (second row), column 2 (third value) → 6. Remember: both row and column indices start at 0!"
         },
         {
           id: "ch1-fb1",
@@ -129,15 +125,15 @@ int main() {
           id: "ch1-q1",
           type: "quiz",
           title: "2D Array Index!",
-          content: "For `int arr[3][4]`, what is the last accessible element?",
+          content: "For `int arr[3][4]`, which of the following causes an **out-of-bounds** error?",
           options: [
-            "arr[3][4]",
             "arr[2][3]",
-            "arr[3][3]",
-            "arr[2][4]"
+            "arr[0][0]",
+            "arr[3][0]",
+            "arr[1][3]"
           ],
-          answer: 1,
-          explanation: "Array indices start at 0! For 3 rows and 4 columns, rows go 0–2 and cols go 0–3. The last element is arr[2][3]."
+          answer: 2,
+          explanation: "`int arr[3][4]` has rows 0–2 and columns 0–3. `arr[3][0]` uses row index 3, which doesn't exist — that's out of bounds! The valid row range is 0 to 2 (3 rows total)."
         },
       ]
     },
@@ -201,11 +197,9 @@ int main() {
     cout << sum;
     return 0;
 }`,
-          reviewHint: `Nested for loop adds every element:
-- i=0: grid[0][0]=1, grid[0][1]=2, grid[0][2]=3
-- i=1: grid[1][0]=4, grid[1][1]=5, grid[1][2]=6`,
-          expectedOutput: "21",
-          explanation: "1+2+3+4+5+6 = 21. The nested for loop visits every element in order."
+          options: ["21", "15", "6", "12"],
+          answer: 0,
+          explanation: "The nested loop visits every element: 1+2+3+4+5+6 = 21."
         },
         {
           id: "ch2-practice",
@@ -328,12 +322,9 @@ int main() {
     cout << grid.size() << " " << grid[0].size() << " " << grid[1][2];
     return 0;
 }`,
-          reviewHint: `- \`grid(3, vector<int>(4, 0))\` → 3 rows, 4 cols, all 0
-- \`grid[1][2] = 5\` → set row 1, col 2 to 5
-- \`grid.size()\` → row count
-- \`grid[0].size()\` → col count`,
-          expectedOutput: "3 4 5",
-          explanation: "3 rows, 4 cols, and grid[1][2] = 5."
+          options: ["3 4 5", "3 4 0", "4 3 5", "3 3 5"],
+          answer: 0,
+          explanation: "`grid(3, vector<int>(4, 0))` creates 3 rows and 4 cols filled with 0. `grid[1][2] = 5` sets one cell. `grid.size()` = 3 (rows), `grid[0].size()` = 4 (cols), `grid[1][2]` = 5."
         },
         {
           id: "ch3-practice",

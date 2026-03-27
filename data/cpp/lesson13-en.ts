@@ -1,267 +1,265 @@
 // ============================================
-// C++ Lesson 13: Recursion
+// C++ Lesson 13: Pointer Basics
 // C++ for students who already know Python
 // ============================================
 import { LessonData } from '../types'
 
 export const cppLesson13EnData: LessonData = {
   id: "cpp-13",
-  title: "Recursion",
-  emoji: "🔄",
-  description: "Functions that call themselves — recursion and memoization!",
+  title: "Pointer Basics",
+  emoji: "🎯",
+  description: "Directly handle memory addresses — int* ptr, & address, * dereference, nullptr",
   chapters: [
     // ============================================
-    // Chapter 1: Recursion Basics
+    // Chapter 1: What is a Pointer?
     // ============================================
     {
       id: "ch1",
-      title: "Recursion Basics",
-      emoji: "🌀",
+      title: "What is a Pointer?",
+      emoji: "📍",
       steps: [
         {
           id: "ch1-intro",
           type: "explain",
-          title: "🌀 Recursion — A Function That Calls Itself!",
-          content: `Imagine a Russian nesting doll — open it, and there's a smaller identical doll inside. Open that one, and there's an even smaller one... **Recursion** is exactly this idea!
-
-**Recursion** is when a function **calls itself**.
-
-Every recursive function needs two things:
-1. **Base Case** — the stopping condition (no more calls)
-2. **Recursive Call** — calling itself with a smaller problem
-
+          title: "📍 Pointer — A Variable That Stores an Address!",
+          component: "cppPointerBuilder",
+          content: `You learned about references in the previous lesson:
 \`\`\`cpp
-// 5! = 5 × 4 × 3 × 2 × 1 = 120
-int factorial(int n) {
-    if (n <= 1) return 1;        // Base case!
-    return n * factorial(n - 1); // Recursive call!
-}
-
-cout << factorial(5);  // 120
+int x = 42;
+int& ref = x;   // ref directly refers to x
 \`\`\`
 
-Let's trace through the calls:
-\`\`\`
-factorial(5)
-  = 5 × factorial(4)
-        = 4 × factorial(3)
-              = 3 × factorial(2)
-                    = 2 × factorial(1)
-                          = 1  ← Base case!
-                    = 2 × 1 = 2
-              = 3 × 2 = 6
-        = 4 × 6 = 24
-  = 5 × 24 = 120
+This lesson: **pointers** — a variable that stores the **address** of x!
+\`\`\`cpp
+int x = 42;
+int* ptr = &x;  // ptr stores the address of x
 \`\`\`
 
-Compare with Python:
+\`&\` and \`*\` mean different things in **declaration** vs **use**:
 
-**Python 🐍:**
-\`\`\`python
-def factorial(n):
-    if n <= 1:
-        return 1
-    return n * factorial(n - 1)
-\`\`\`
+| | In declaration (part of type) | As operator |
+|---|---|---|
+| \`&\` | \`int& ref\` → reference variable | \`&x\` → get the address of x |
+| \`*\` | \`int* ptr\` → pointer variable | \`*ptr\` → get the value at the address |
 
-Almost identical! C++ just requires explicit type annotations.
+In practice:
+\`\`\`cpp
+int x = 42;
+int* ptr = &x;    // store x's address in ptr
 
-| Python 🐍 | C++ ⚡ |
-|---|---|
-| \`def factorial(n):\` | \`int factorial(int n) {\` |
-| Indent for scope | Curly braces for scope |
-| No return type | Explicit \`int\` return type |
-| Recursion logic is identical! | Recursion logic is identical! |
+cout << ptr;      // → 0x7fff1234  (memory address)
+cout << *ptr;     // → 42          (value at the address)
+cout << &x;       // → 0x7fff1234  (same as ptr!)
 
-💡 Without a base case, you'll get infinite recursion — a **Stack Overflow** error! Always write the stopping condition first!`
+*ptr = 100;       // change the value at ptr's address to 100
+cout << x;        // → 100         (x changed!)
+\`\`\``,
+        },
+        {
+          id: "ch1-pred1",
+          type: "predict" as const,
+          title: "Pointer dereference!",
+          code: `#include <iostream>
+using namespace std;
+int main() {
+    int x = 10;
+    int* p = &x;
+    *p = 99;
+    cout << x;
+    return 0;
+}`,
+          options: ["10", "99", "address value", "Error"],
+          answer: 1,
+          explanation: "`*p = 99` changes the value of the variable p points to (x) to 99! Dereferencing a pointer lets you modify the original variable.",
+        },
+        {
+          id: "ch1-q1",
+          type: "quiz",
+          title: "Pointer basics!",
+          content: "For `int x = 5; int* ptr = &x;`, what does `*ptr` return?",
+          options: [
+            "The address of ptr itself",
+            "The address of x",
+            "The value of x (5)",
+            "The size of the pointer",
+          ],
+          answer: 2,
+          explanation: "`*ptr` is dereferencing — it returns the value at the address ptr holds, which is x's value (5)!",
         },
         {
           id: "ch1-fb1",
           type: "fillblank" as const,
           title: "Fill in the blank",
-          content: "Complete the base case for this recursive function!",
-          code: "int factorial(int n) {\n    if (n ___ 1) return 1;  // base case\n    return n * factorial(n - 1);\n}",
+          content: "Declare a pointer and dereference it!",
+          code: "int x = 42;\nint___ ptr = &x;  // declare pointer\ncout << ___ptr;   // dereference: prints 42",
           fillBlanks: [
-            { id: 0, answer: "<=", options: ["<=", ">=", "==", ">"] }
+            { id: 0, answer: "*", options: ["*", "&", "**", " "] },
+            { id: 1, answer: "*", options: ["*", "&", "**", " "] },
           ],
-          explanation: "n <= 1 is the base case! When n is 0 or 1, return 1 and stop recursing. Using n == 1 alone would fail to handle n=0 correctly."
+          explanation: "Declare a pointer with `int* ptr`, then dereference with `*ptr` to get the value!",
         },
-        {
-          id: "ch1-pred1",
-          type: "predict" as const,
-          title: "Trace the recursive calls!",
-          code: "#include <iostream>\nusing namespace std;\nvoid count(int n) {\n    if (n <= 0) return;\n    cout << n << \" \";\n    count(n - 1);\n}\nint main() {\n    count(4);\n    return 0;\n}",
-          options: ["1 2 3 4 ", "4 3 2 1 ", "4 4 4 4 ", "infinite loop"],
-          answer: 1,
-          explanation: "count(4) → prints 4 → count(3) → prints 3 → count(2) → prints 2 → count(1) → prints 1 → count(0) → return. Output is 4 3 2 1!"
-        },
-        {
-          id: "ch1-practice",
-          type: "practice" as const,
-          title: "✋ Sum 1 to N with recursion!",
-          content: `Use recursion to find the sum from 1 to n!
-
-Use the relationship: sum(n) = n + sum(n-1)
-Base case: sum(0) = 0`,
-          code: `#include <iostream>
-using namespace std;
-
-int sum(int n) {
-    if (n <= 0) return 0;  // base case
-    return n + sum(n - 1); // recursive call
-}
-
-int main() {
-    cout << sum(5) << endl;   // 1+2+3+4+5
-    cout << sum(10) << endl;  // sum 1 to 10
-    return 0;
-}`,
-          expectedOutput: `15
-55`
-        },
-        {
-          id: "ch1-q1",
-          type: "quiz",
-          title: "The key to recursion!",
-          content: "What is **required** in every recursive function?",
-          options: [
-            "A loop (for/while)",
-            "A base case",
-            "A global variable",
-            "A void return type"
-          ],
-          answer: 1,
-          explanation: "Without a base case, the function calls itself forever and causes a stack overflow! Every recursive function must have a stopping condition (base case)."
-        }
       ]
     },
     // ============================================
-    // Chapter 2: Fibonacci & Memoization
+    // Chapter 2: nullptr & Pointer vs Reference
     // ============================================
     {
       id: "ch2",
-      title: "Fibonacci & Memoization",
-      emoji: "💾",
+      title: "nullptr & Pointer Usage",
+      emoji: "🔒",
       steps: [
         {
-          id: "ch2-fib",
+          id: "ch2-nullptr",
           type: "explain",
-          title: "💾 Fibonacci and the Repeated Work Problem!",
-          content: `Fibonacci sequence: 0, 1, 1, 2, 3, 5, 8, 13, 21...
-Each number = sum of the previous two! (fib(n) = fib(n-1) + fib(n-2))
+          title: "🔒 nullptr — Safe Empty Pointer (C++11)",
+          content: `When a pointer isn't pointing at anything, use **nullptr**!
 
 \`\`\`cpp
-int fib(int n) {
-    if (n <= 1) return n;  // base case: fib(0)=0, fib(1)=1
-    return fib(n-1) + fib(n-2);
+int* p = nullptr;  // empty pointer (recommended since C++11)
+// int* p = NULL;   // old style (not recommended)
+
+if (p != nullptr) {
+    cout << *p;    // never dereference nullptr!
 }
 \`\`\`
 
-But... computing fib(5) looks like this:
-\`\`\`
-fib(5)
-├── fib(4)
-│   ├── fib(3) ← already computed this!
-│   │   ├── fib(2)
-│   │   └── fib(1)
-│   └── fib(2)
-└── fib(3) ← computing again! (wasted!)
-    ├── fib(2)
-    └── fib(1)
-\`\`\`
-
-Computing fib(40) requires **billions** of repeated calculations! 🐢
-
-**The fix: Memoization**
-Store results once computed, and reuse them!
+Dereferencing nullptr **crashes your program** (segfault). Always check before using!
 
 \`\`\`cpp
-int memo[100];  // initialized to -1
+int* p = nullptr;
 
-int fib(int n) {
-    if (n <= 1) return n;
-    if (memo[n] != -1) return memo[n];  // already computed, return immediately!
-    memo[n] = fib(n-1) + fib(n-2);     // compute and store
-    return memo[n];
+// ❌ Dangerous! segfault!
+// cout << *p;
+
+// ✅ Safe: check first
+if (p != nullptr) {
+    cout << *p;
+} else {
+    cout << "Pointer is empty!";
 }
 \`\`\`
 
-fib(40) goes from ~1 billion calls → **79 calls**! 🚀
-
-Compare with Python:
-
-**Python 🐍:**
-\`\`\`python
-from functools import lru_cache
-
-@lru_cache(maxsize=None)  # Python handles it with a decorator!
-def fib(n):
-    if n <= 1: return n
-    return fib(n-1) + fib(n-2)
-\`\`\`
-
-Python uses @lru_cache; C++ uses an explicit array.
-
-| | Plain Recursion | Memoization |
+| | nullptr (C++11) | NULL (old) |
 |---|---|---|
-| Time complexity | O(2^n) — exponential! | **O(n)** — linear! |
-| fib(40) | ~1 billion calls | 79 calls |
-| Implementation | Simple | Needs an array |
-
-💡 Memoization is the core technique of **Dynamic Programming (DP)**! It comes up constantly in USACO problems!`
+| Type | nullptr_t (type-safe) | integer 0 |
+| Recommended | ✅ C++11+ | ❌ not recommended |`,
         },
         {
           id: "ch2-pred1",
           type: "predict" as const,
-          title: "Fibonacci result!",
-          code: "#include <iostream>\nusing namespace std;\nint fib(int n) {\n    if (n <= 1) return n;\n    return fib(n-1) + fib(n-2);\n}\nint main() {\n    cout << fib(7);\n    return 0;\n}",
-          options: ["11", "13", "21", "8"],
-          answer: 1,
-          explanation: "Fibonacci: fib(0)=0, fib(1)=1, fib(2)=1, fib(3)=2, fib(4)=3, fib(5)=5, fib(6)=8, fib(7)=13!"
+          title: "nullptr check!",
+          code: `#include <iostream>
+using namespace std;
+int main() {
+    int* p = nullptr;
+    if (p != nullptr) {
+        cout << "value: " << *p;
+    } else {
+        cout << "empty";
+    }
+    return 0;
+}`,
+          options: ["value: 0", "value: nullptr", "empty", "Error"],
+          answer: 2,
+          explanation: "p is nullptr so the else branch runs — prints 'empty'. We never dereference nullptr, so it's safe!",
+        },
+        {
+          id: "ch2-vs-ref",
+          type: "explain",
+          title: "🆚 Reference vs Pointer — When to Use Which?",
+          content: `In competitive programming, **references** are used far more. But understanding pointers is essential for arrays, linked lists, and advanced data structures!
+
+Reference (recommended):
+\`\`\`cpp
+void add10(int& n) { n += 10; }
+
+int main() {
+    int x = 5;
+    add10(x);       // pass x directly
+    cout << x;      // → 15
+}
+\`\`\`
+
+Pointer:
+\`\`\`cpp
+void add10ptr(int* p) { *p += 10; }
+
+int main() {
+    int x = 5;
+    add10ptr(&x);   // pass address of x
+    cout << x;      // → 15
+}
+\`\`\`
+
+| Feature | Reference (&) | Pointer (*) |
+|---|---|---|
+| Initialization | Required at declaration | Can be done later |
+| nullptr | Not possible (always valid) | Possible |
+| Reassignment | Not possible | Possible |
+| Syntax | Simpler | More complex |
+| In competitive programming | Used often ✅ | Occasionally |
+
+💡 **Practical rule:** Use references (&) when passing variables to functions. Pointers matter for data structures like linked lists.`,
+        },
+        {
+          id: "ch2-vs-visual",
+          type: "interactive",
+          title: "🔬 Reference vs Pointer — How Do They Differ in Memory?",
+          content: "Click the tabs to see how references and pointers differ in memory!",
+          component: "pointerRefVisualizer",
         },
         {
           id: "ch2-practice",
           type: "practice" as const,
-          title: "✋ Fibonacci with memoization!",
-          content: `Use memoization to compute Fibonacci numbers efficiently!
+          title: "✋ Build a swap function with pointers!",
+          content: `Use pointers to write a swap function that exchanges two values!
 
-Initialize the memo array to -1, then store computed results.`,
+Compare the pointer and reference versions to feel the difference.`,
           code: `#include <iostream>
 using namespace std;
 
-int memo[50];
+// Pointer version
+void swapPtr(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
 
-int fib(int n) {
-    if (n <= 1) return n;
-    if (memo[n] != -1) return memo[n];
-    memo[n] = fib(n-1) + fib(n-2);
-    return memo[n];
+// Reference version (simpler!)
+void swapRef(int& a, int& b) {
+    int temp = a;
+    a = b;
+    b = temp;
 }
 
 int main() {
-    fill(memo, memo + 50, -1);
+    int x = 10, y = 20;
 
-    cout << fib(10) << endl;
-    cout << fib(20) << endl;
+    swapPtr(&x, &y);
+    cout << "Pointer swap: " << x << " " << y << endl;
+
+    swapRef(x, y);
+    cout << "Reference swap: " << x << " " << y << endl;
+
     return 0;
 }`,
-          expectedOutput: `55
-6765`
+          expectedOutput: `Pointer swap: 20 10
+Reference swap: 10 20`
         },
         {
           id: "ch2-q1",
           type: "quiz",
-          title: "Understanding memoization!",
-          content: "Which statement about memoization is **correct**?",
+          title: "Reference vs Pointer!",
+          content: "Which statement about references (&) vs pointers (*) is **correct**?",
           options: [
-            "It always uses less memory",
-            "It stores computed results to avoid redundant calculations",
-            "It can only be used without recursion",
-            "Code becomes complex but speed stays the same"
+            "References can be nullptr, but pointers cannot",
+            "Pointers can be nullptr, but references always point to a valid variable",
+            "They behave exactly the same",
+            "Pointers cannot be declared as const",
           ],
           answer: 1,
-          explanation: "Memoization stores (memos) computed results so that when the same calculation is needed again, it returns the stored value instead of recomputing! fib(40) shrinks from billions of calls to just 79."
-        }
+          explanation: "References must always point to a valid variable and cannot be nullptr. Pointers can be nullptr to represent 'pointing to nothing'!",
+        },
       ]
     },
     // ============================================
@@ -275,113 +273,84 @@ int main() {
         {
           id: "ch3-q1",
           type: "quiz",
-          title: "Read the recursive code!",
-          content: `What does this function output?
-
-\`\`\`cpp
-int mystery(int n) {
-    if (n == 0) return 0;
-    return 1 + mystery(n - 1);
-}
-cout << mystery(5);
-\`\`\``,
-          options: ["0", "1", "5", "infinite loop"],
+          title: "Declaring a pointer!",
+          content: "After `int x = 5;`, which correctly declares a pointer to x?",
+          options: [
+            "int ptr = x;",
+            "int& ptr = x;",
+            "int* ptr = &x;",
+            "int* ptr = x;"
+          ],
           answer: 2,
-          explanation: "mystery(5) = 1 + mystery(4) = 1 + 1 + mystery(3) = ... = 1+1+1+1+1+mystery(0) = 5+0 = 5! This function essentially just returns n."
+          explanation: "`int* ptr = &x;` — * makes it a pointer type, &x gets the address of x."
         },
         {
           id: "ch3-q2",
           type: "quiz",
-          title: "Stack overflow!",
-          content: `What's **wrong** with this recursive function?
+          title: "Dereference result!",
+          content: `What is the output?
 
 \`\`\`cpp
-int bad(int n) {
-    return n + bad(n - 1);
-}
+int a = 7;
+int* p = &a;
+*p = *p + 3;
+cout << a;
 \`\`\``,
-          options: [
-            "The return type is wrong",
-            "There's no base case",
-            "There's no recursive call",
-            "The parameter type is wrong"
-          ],
+          options: ["7", "10", "3", "Error"],
           answer: 1,
-          explanation: "There's no base case! This function calls itself forever until a stack overflow occurs. It needs something like: if (n <= 0) return 0;"
+          explanation: "`*p` is the value of a (7). `*p + 3 = 10` is written back to a, so a becomes 10!"
         },
         {
           id: "ch3-q3",
           type: "quiz",
-          title: "Memoization vs plain recursion!",
-          content: "What is the time complexity of plain recursive Fibonacci?",
+          title: "Safe nullptr check!",
+          content: "What should you do before dereferencing a pointer?",
           options: [
-            "O(n)",
-            "O(n log n)",
-            "O(n²)",
-            "O(2^n)"
+            "Always dereference immediately",
+            "Check if it's nullptr",
+            "Convert the pointer to an integer",
+            "Delete the pointer"
           ],
-          answer: 3,
-          explanation: "Plain recursive Fibonacci is O(2^n) — exponential! fib(40) requires ~2^40 operations. With memoization it drops to O(n)!"
+          answer: 1,
+          explanation: "Dereferencing a nullptr crashes your program (segfault)! Always check `if (p != nullptr)` before using it."
         },
         {
           id: "ch3-q4",
           type: "quiz",
-          title: "Recursion in action!",
-          content: `What does this code output?
-
-\`\`\`cpp
-void printStars(int n) {
-    if (n == 0) return;
-    cout << "*";
-    printStars(n - 1);
-}
-printStars(3);
-\`\`\``,
-          options: ["***", "* * *", "3", "Error"],
-          answer: 0,
-          explanation: "printStars(3) → print '*' → printStars(2) → print '*' → printStars(1) → print '*' → printStars(0) → return. No spaces, so output is '***'!"
+          title: "Passing a pointer to a function!",
+          content: "How do you correctly call `void f(int* p) { *p = 99; }`?",
+          options: [
+            "f(x);",
+            "f(*x);",
+            "f(&x);",
+            "f(&&x);"
+          ],
+          answer: 2,
+          explanation: "A function that takes a pointer needs an address — pass `f(&x)` to give it the address of x. Inside, `*p` can modify x."
         },
         {
           id: "ch3-summary",
           type: "explain",
-          title: "🎉 Recursion complete!",
-          content: `## 🏆 Lesson 13 Done!
+          title: "🎯 What You Learned Today!",
+          content: `## ✅ Summary!
 
-Let's review what you learned today!
+### 🎯 Pointers
+- ✅ **Declare a pointer** — \`int* ptr = &x;\` (stores x's address)
+- ✅ **Address operator** — \`&x\` (memory address of x)
+- ✅ **Dereference operator** — \`*ptr\` (value at the address)
+- ✅ **nullptr** — C++11+, safe empty pointer
+- ✅ **Reference vs Pointer** — reference: can't be null, can't reassign; pointer: can be null, can reassign
 
-### 🌀 Basic Recursion Structure
-\`\`\`cpp
-type function(params) {
-    if (base_condition) return value;  // ← required!
-    return recursive_call_with_smaller_problem;
-}
-\`\`\`
-
-### Recursion vs Loops
-- Recursion: **Intuitive** code, great for trees/graphs
-- Loops: **Faster**, more memory-efficient
-
-### 💾 Memoization
-\`\`\`cpp
-int memo[N];  // initialized to -1
-
-int func(int n) {
-    if (base_condition) return ...;
-    if (memo[n] != -1) return memo[n];  // reuse stored result!
-    memo[n] = func(n-1) + ...;
-    return memo[n];
-}
-\`\`\`
-
-### Time Complexity Comparison
-| Approach | fib(40) | Time Complexity |
+| Operation | Syntax | Meaning |
 |---|---|---|
-| Plain recursion | ~1 billion calls | O(2^n) |
-| Memoization | ~80 calls | **O(n)** |
+| Declare pointer | \`int* ptr;\` | variable storing an int address |
+| Get address | \`&x\` | memory address of x |
+| Dereference | \`*ptr\` | value at the address ptr holds |
+| Empty pointer | \`nullptr\` | points to nothing |
 
-💡 **Recursion + Memoization = the core of Dynamic Programming (DP)**! This pattern appears constantly in USACO problems!
+💡 **Practical tip:** In competitive programming, references (&) are used more often. Pointers are essential for data structures like linked lists!
 
-🚀 **Next lesson:** Classes — Python's class concept taken to the next level with C++'s powerful access control!`
+🚀 **Next lesson:** Structs — bundle related data into your own custom type!`
         }
       ]
     }

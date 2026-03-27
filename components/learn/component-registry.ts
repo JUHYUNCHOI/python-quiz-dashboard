@@ -363,6 +363,13 @@ const registry: Record<string, ComponentEntry> = {
     exportName: "CppBraceTrapBuilder",
   },
 
+  // C++ 레슨 21: 2D 배열 이중 for문 시각화
+  gridLoopVisualizer: {
+    load: () => import("@/components/animations/grid-loop-visualizer"),
+    exportName: "GridLoopVisualizer",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+
   // C++ 레슨 14: struct 배열 + for 루프 시각화
   cppStructArrayLoop: {
     load: () => import("@/components/animations/struct-array-loop"),
