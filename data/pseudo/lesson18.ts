@@ -39,6 +39,42 @@ export const pseudoLesson18Data: LessonData = {
 **정렬 완료!**`
         },
         {
+          id: "ch1-algo",
+          type: "explain",
+          title: "📋 삽입 정렬 알고리즘",
+          content: `삽입 정렬의 전체 수도코드를 봐요:
+
+\`\`\`
+PROCEDURE InsertionSort(items : ARRAY, size : INTEGER)
+    DECLARE key : INTEGER
+    DECLARE j : INTEGER
+
+    FOR i ← 2 TO size
+        key ← items[i]
+        j ← i - 1
+
+        WHILE j >= 1 AND items[j] > key
+            items[j + 1] ← items[j]
+            j ← j - 1
+        ENDWHILE
+
+        items[j + 1] ← key
+    NEXT i
+ENDPROCEDURE
+\`\`\`
+
+동작 방식:
+1. **2번째 원소**부터 시작 (1번째는 이미 "정렬됨")
+2. 현재 원소를 **key**에 저장
+3. **WHILE 루프**로 더 큰 원소들을 **한 칸씩 오른쪽으로** 이동
+4. 빈자리에 **key** 삽입
+5. 나머지 원소들에 대해 반복
+
+WHILE 루프가 멈추는 조건:
+- 배열의 처음까지 도달 (j < 1), 또는
+- key보다 **크지 않은** 원소를 만남`
+        },
+        {
           id: "ch1-how",
           type: "explain",
           title: "📋 삽입 정렬의 원리",
@@ -95,6 +131,42 @@ export const pseudoLesson18Data: LessonData = {
 \`\`\`
 
 **정렬 완료!** [1, 2, 4, 7]`
+        },
+        {
+          id: "ch1-fill1",
+          type: "fillblank",
+          title: "✏️ 빈칸을 채워봐요!",
+          content: '삽입 정렬 알고리즘을 완성하세요.',
+          code: 'FOR i ← 2 TO size\n    key ← items[i]\n    j ← i - 1\n\n    ___ j >= 1 AND items[j] > key\n        items[j + 1] ← items[___]\n        j ← j - 1\n    ENDWHILE\n\n    items[___] ← key\nNEXT i',
+          fillBlanks: [
+            { id: 1, answer: "WHILE", options: ["WHILE", "FOR", "IF", "REPEAT"] },
+            { id: 2, answer: "j", options: ["j", "j + 1", "i", "key"] },
+            { id: 3, answer: "j + 1", options: ["j + 1", "j", "i", "j - 1"] }
+          ]
+        },
+        {
+          id: "ch1-predict1",
+          type: "predict",
+          title: "🔮 결과를 예측해봐요!",
+          content: `삽입 정렬에서 index 3의 원소를 처리한 후 배열은?
+
+시작 배열: **[7, 2, 4, 1]**
+
+\`\`\`
+// i=2 이후: key=2, 7을 오른쪽으로 이동, 2를 삽입
+//   → [2, 7, 4, 1]
+// i=3 이후: key=4, ...
+\`\`\`
+
+i=3이 완료된 후 배열은?`,
+          options: [
+            '[2, 4, 7, 1]',
+            '[2, 7, 4, 1]',
+            '[1, 2, 4, 7]',
+            '[4, 2, 7, 1]'
+          ],
+          answer: 0,
+          explanation: 'i=3일 때 key=4예요. items[2]=7, 7 > 4이므로 7을 오른쪽으로 이동 → [2, _, 7, 1]. j=1이 되면 items[1]=2, 2 > 4? 아니요! 멈추고 j+1 = 2 위치에 key 삽입: **[2, 4, 7, 1]**. 앞 세 원소가 정렬됐어요!'
         },
       ]
     },
@@ -259,6 +331,82 @@ ENDPROCEDURE
           ],
           answer: 0,
           explanation: 'WHILE 조건은 **j >= 1 AND arr[j] > key**예요. 즉, j가 0이 되거나(배열의 처음을 지남), arr[j]가 key 이하인 값을 만나면 멈춰요. 이때 j + 1 위치가 key가 들어갈 자리예요!'
+        }
+      ]
+    },
+    {
+      id: "ch3",
+      title: "정렬 알고리즘 비교",
+      emoji: "⚡",
+      steps: [
+        {
+          id: "ch3-compare",
+          type: "explain",
+          title: "⚡ 버블 정렬 vs 삽입 정렬",
+          content: `두 정렬 알고리즘을 비교해봐요:
+
+| 특징 | 버블 정렬 | 삽입 정렬 |
+|---|---|---|
+| **동작 방식** | 인접 원소 교환 | 올바른 위치에 삽입 |
+| **외부 루프** | n-1번 패스 | n-1번 삽입 |
+| **내부 동작** | 이웃끼리 비교 및 교환 | 원소를 오른쪽으로 이동 |
+| **최선의 경우** | O(n) (최적화 시) | O(n) (정렬된 데이터) |
+| **최악의 경우** | O(n^2) | O(n^2) |
+| **적합한 경우** | 이해하기 쉬움 | 거의 정렬된 데이터 |
+
+두 정렬 모두 **최악의 경우** 성능은 같지만, 삽입 정렬이 보통 **더 빠른** 이유:
+- 평균적으로 **교환 횟수가 적어요**
+- **거의 정렬된 데이터**에서 매우 효율적이에요 (이동이 거의 없어요)
+- 버블 정렬은 순서가 맞아도 이웃끼리 계속 비교해요
+
+IGCSE 시험에서는 **두 알고리즘** 모두 알고 단계별로 **추적**할 수 있어야 해요!`
+        },
+        {
+          id: "ch3-quiz1",
+          type: "quiz",
+          title: "🧠 퀴즈!",
+          content: '**거의 정렬된** 데이터에서 일반적으로 더 빠른 정렬 알고리즘은?',
+          options: [
+            '버블 정렬 — 비교 횟수가 적어서',
+            '삽입 정렬 — 이동이 거의 필요 없어서',
+            '두 알고리즘의 속도가 정확히 같다',
+            '둘 다 아님 — 이진 탐색을 써야 한다'
+          ],
+          answer: 1,
+          explanation: '거의 정렬된 데이터에서는 삽입 정렬이 탁월해요! 대부분의 원소가 이미 올바른 위치에 가까우면 WHILE 루프가 빠르게 종료돼 이동 횟수가 매우 적어져요. 최선의 경우 거의 O(n)에 가까워요.'
+        },
+        {
+          id: "ch3-predict1",
+          type: "predict",
+          title: "🔮 결과를 예측해봐요!",
+          content: `삽입 정렬을 **2번 완전히** 수행한 후 배열은?
+
+\`\`\`
+시작: [6, 3, 8, 1, 5]
+
+// 1번째 (i=2): key=3
+// 2번째 (i=3): key=8
+\`\`\``,
+          options: [
+            '[3, 6, 8, 1, 5]',
+            '[1, 3, 6, 8, 5]',
+            '[3, 8, 6, 1, 5]',
+            '[1, 3, 5, 6, 8]'
+          ],
+          answer: 0,
+          explanation: '1번째 (i=2): key=3, 6>3이므로 6을 오른쪽으로 이동, 3 삽입 → [3, 6, 8, 1, 5]. 2번째 (i=3): key=8, 6>8? 아니요! 8은 제자리 → [3, 6, 8, 1, 5]. 앞 3개 원소가 정렬됐지만 1과 5는 아직 처리되지 않았어요.'
+        },
+        {
+          id: "ch3-fill1",
+          type: "fillblank",
+          title: "✏️ 빈칸을 채워봐요!",
+          content: '각 정렬에 맞는 설명을 연결하세요.',
+          code: '// ___ 정렬: 인접한 원소를 비교, 잘못된 순서면 교환\n// ___ 정렬: 각 원소를 올바른 위치에 삽입\n// 둘 다 최악의 경우: O(___)',
+          fillBlanks: [
+            { id: 1, answer: "버블", options: ["버블", "삽입", "이진", "선형"] },
+            { id: 2, answer: "삽입", options: ["삽입", "버블", "선택", "병합"] },
+            { id: 3, answer: "n^2", options: ["n^2", "n", "log n", "n log n"] }
+          ]
         }
       ]
     }

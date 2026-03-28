@@ -300,6 +300,26 @@ B등급! 👍`
       emoji: "⚡",
       steps: [
         {
+          id: "ch3-why",
+          type: "explain",
+          title: "삼항 연산자가 왜 필요할까?",
+          content: `if-else가 있는데 왜 또 다른 방법이 필요할까요?
+
+이런 상황을 봐요:
+\`\`\`cpp
+string status;
+if (score >= 60) {
+    status = "합격";
+} else {
+    status = "불합격";
+}
+\`\`\`
+**6줄**이나 되는데, 사실 하는 일은 딱 하나: status에 값 하나 대입!
+
+**조건에 따라 하나의 값을 고를 때**는 삼항 연산자가 딱 맞아요.
+⚠️ 복잡한 로직은 if-else가 더 읽기 쉬워요!`
+        },
+        {
           id: "ch3-intro",
           type: "explain",
           title: "⚡ 삼항 연산자란?",

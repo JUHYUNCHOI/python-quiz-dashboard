@@ -52,13 +52,13 @@ You have to **actually buy it or pick it up** for it to appear in your inventory
 | The item you actually **own** | Sword in your inventory | **object** |
 
 **Writing a class** = writing the item description
-**Creating an object** = actually getting the item in your hands
-
----
-
-## Every class has exactly two things
-
-When designing a class, think about:
+**Creating an object** = actually getting the item in your hands`,
+        },
+        {
+          id: "ch1-build",
+          type: "explain",
+          title: "🚗 Let's Build a Car Class",
+          content: `Every class has exactly two things:
 
 | | What it is | C++ |
 |---|---|---|
@@ -66,11 +66,7 @@ When designing a class, think about:
 | **Things to do** | go forward, go back, etc. | Member functions |
 
 > 💡 A friend was asked "What do you need to make sushi?" They listed rice, cucumber, salmon, avocado… but forgot the **seaweed**.
-> When designing a class, you need to think carefully so **nothing important is left out**.
-
----
-
-## Let's Build a Car Class
+> When designing a class, think carefully so **nothing important is left out**.
 
 \`\`\`cpp
 class Car {
@@ -106,8 +102,6 @@ Car car2;  car2.color = "blue";   // object 2  ← same class, different object!
 \`\`\`
 
 This approach — **designing classes and creating objects from them** — is called **Object-Oriented Programming (OOP)**.
-
----
 
 **Compared to Python:**
 

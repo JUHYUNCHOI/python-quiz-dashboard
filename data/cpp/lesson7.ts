@@ -41,7 +41,15 @@ for (int i = 0;  i < 5;    i++)
 
 @핵심: for문 = "{pink:시작}, {blue:조건}, {green:변화}" 딱 3가지!`,
           component: "cppForBuilder",
-          component2: "codeTraceCppFor",
+        },
+        {
+          id: "ch1-sim",
+          type: "explain",
+          title: "🔍 추적: C++ for(init; cond; inc)의 실행 순서",
+          content: `초기화 → 조건 확인 → 증감의 정확한 순서를 눈으로 확인해봐요!
+
+**▶ 실행** 또는 **▷ 단계** 버튼을 눌러 추적하세요.`,
+          component: "codeTraceCppFor",
         },
         {
           id: "ch1-fb1",
@@ -187,7 +195,15 @@ while (count < 5) {
 
 💡 if문이랑 규칙이 똑같아요! () + {} 만 기억하세요.`,
           component: "cppWhileBuilder",
-          component2: "codeTraceCppWhile",
+        },
+        {
+          id: "ch2-sim",
+          type: "explain",
+          title: "🔍 추적: C++ while문으로 팩토리얼 계산",
+          content: `while문이 팩토리얼(1×2×3×4)을 어떻게 계산하는지 단계별로 확인해봐요!
+
+**▶ 실행** 또는 **▷ 단계** 버튼을 눌러 추적하세요.`,
+          component: "codeTraceCppWhile",
         },
         {
           id: "ch2-pred1",

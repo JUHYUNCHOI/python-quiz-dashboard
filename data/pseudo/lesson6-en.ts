@@ -108,6 +108,42 @@ NEXT i
 Output: 5, 4, 3, 2, 1 -- a countdown!`
         },
         {
+          id: "ch1-syntax",
+          type: "explain",
+          title: "📝 FOR...TO...NEXT Syntax",
+          content: `Let's look at the structure of a FOR loop:
+
+\`\`\`
+FOR variable ← start TO end
+    code to repeat
+NEXT variable
+\`\`\`
+
+- **variable**: a counter that tracks how many times we've looped (usually i)
+- **start**: the starting value of the counter
+- **end**: the final value (inclusive!)
+- **NEXT variable**: increments the counter by 1 and loops again
+
+Example:
+
+\`\`\`
+FOR i ← 1 TO 5
+    OUTPUT i
+NEXT i
+\`\`\`
+
+Result:
+\`\`\`
+1
+2
+3
+4
+5
+\`\`\`
+
+i increases from 1 to 5 one step at a time!`
+        },
+        {
           id: "ch1-predict1",
           type: "predict",
           title: "🔮 Predict the Output!",
@@ -202,34 +238,6 @@ This keeps asking until the user enters a positive number!
 If \`num\` is already positive, the loop is skipped entirely.`
         },
         {
-          id: "ch2-compare",
-          type: "explain",
-          title: "⚖️ FOR vs WHILE",
-          content: `When should you use each?
-
-**FOR loop** -- when you know the exact number of repeats:
-\`\`\`
-FOR i ← 1 TO 100
-    OUTPUT "Line ", i
-NEXT i
-\`\`\`
-Use when: printing 100 lines, processing 50 items, etc.
-
-**WHILE loop** -- when the number of repeats is unknown:
-\`\`\`
-WHILE answer <> "quit"
-    INPUT answer
-ENDWHILE
-\`\`\`
-Use when: waiting for user input, searching for something, etc.
-
-| | FOR | WHILE |
-|---|---|---|
-| Repeats known? | Yes | No |
-| Counter built-in? | Yes | No (manual) |
-| Condition check | N/A | Before each loop |`
-        },
-        {
           id: "ch2-predict1",
           type: "predict",
           title: "🔮 Predict the Output!",
@@ -250,6 +258,17 @@ ENDWHILE
           ],
           answer: 0,
           explanation: 'x starts at 10 and decreases by 3 each time: 10, 7, 4, 1. When x becomes -2, the condition (x > 0) is FALSE, so the loop stops. Output: **10 7 4 1**.'
+        },
+        {
+          id: "ch2-fill1",
+          type: "fillblank",
+          title: "✏️ Fill in the Blanks!",
+          content: 'Complete the code that repeats while count is less than 10.',
+          code: 'count ← 0\n___ count < 10\n    OUTPUT count\n    count ← count + 1\n___',
+          fillBlanks: [
+            { id: 1, answer: "WHILE", options: ["WHILE", "FOR", "IF", "REPEAT"] },
+            { id: 2, answer: "ENDWHILE", options: ["ENDWHILE", "ENDIF", "END", "NEXT"] }
+          ]
         },
         {
           id: "ch2-quiz1",
@@ -281,6 +300,34 @@ ENDWHILE
           options: ['0 times', '1 time', '5 times', 'Infinite loop'],
           answer: 0,
           explanation: 'x=5 and condition x > 10 is **false from the start**! WHILE checks condition first, so it never executes. 0 times!'
+        },
+        {
+          id: "ch2-compare",
+          type: "explain",
+          title: "⚖️ FOR vs WHILE",
+          content: `When should you use each?
+
+**FOR loop** -- when you know the exact number of repeats:
+\`\`\`
+FOR i ← 1 TO 100
+    OUTPUT "Line ", i
+NEXT i
+\`\`\`
+Use when: printing 100 lines, processing 50 items, etc.
+
+**WHILE loop** -- when the number of repeats is unknown:
+\`\`\`
+WHILE answer <> "quit"
+    INPUT answer
+ENDWHILE
+\`\`\`
+Use when: waiting for user input, searching for something, etc.
+
+| | FOR | WHILE |
+|---|---|---|
+| Repeats known? | Yes | No |
+| Counter built-in? | Yes | No (manual) |
+| Condition check | N/A | Before each loop |`
         },
       ]
     }
