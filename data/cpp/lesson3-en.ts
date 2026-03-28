@@ -74,7 +74,7 @@ When you create a variable, C++ **reserves memory space** right away. \`int\` ta
 |----------|---------|---------|
 | \`int\` | Integer | \`int age = 14;\` |
 | \`double\` | Decimal (float) | \`double pi = 3.14;\` |
-| \`string\` | Text | \`string name = "Alice";\` |
+| \`string\` | Text | \`string name = "Emma";\` |
 | \`char\` | Single character | \`char grade = 'A';\` |
 | \`bool\` | True/False | \`bool pass = true;\` |
 
@@ -110,7 +110,7 @@ Each type uses a **different amount of memory**. Check out the animation below t
           type: "fillblank" as const,
           title: "Fill in the blanks",
           content: "Pick the right type for each variable!",
-          code: "___ age = 14;\n___ pi = 3.14;\n___ name = \"Alice\";",
+          code: "___ age = 14;\n___ pi = 3.14;\n___ name = \"Emma\";",
           fillBlanks: [
             { id: 0, answer: "int", options: ["int", "double", "string", "char"] },
             { id: 1, answer: "double", options: ["int", "double", "string", "char"] },
@@ -125,7 +125,7 @@ Each type uses a **different amount of memory**. Check out the animation below t
           component: "cppCharBuilder",
           content: `\`\`\`cpp
 char grade = 'A';       // Single quotes → exactly 1 character
-string name = "Alice";  // Double quotes → text (string)
+string name = "Emma";  // Double quotes → text (string)
 \`\`\`
 
 | Quotes | Type | Examples |
@@ -151,7 +151,7 @@ In Python, \`' '\` and \`" "\` are the same, but in C++ they are **completely di
 using namespace std;
 
 int main() {
-    string name = "Alice";
+    string name = "Emma";
     int age = 14;
     double height = 165.5;
 
@@ -161,7 +161,7 @@ int main() {
 
     return 0;
 }`,
-          expectedOutput: `Name: Alice
+          expectedOutput: `Name: Emma
 Age: 14 years old
 Height: 165.5cm`
         },
@@ -370,12 +370,12 @@ int main() {
           id: "ch3-q1",
           type: "quiz",
           title: "Python → C++",
-          content: `How do you convert Python's \`name = "Alice"\` to C++?`,
+          content: `How do you convert Python's \`name = "Emma"\` to C++?`,
           options: [
-            `char name = "Alice";`,
-            `string name = "Alice";`,
-            `str name = "Alice";`,
-            `text name = "Alice";`
+            `char name = "Emma";`,
+            `string name = "Emma";`,
+            `str name = "Emma";`,
+            `text name = "Emma";`
           ],
           answer: 1,
           explanation: "C++ uses string for text! char holds only 1 character, and str/text don't exist in C++."

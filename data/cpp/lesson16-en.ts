@@ -22,7 +22,7 @@ export const cppLesson16EnData: LessonData = {
           id: "ch1-intro",
           type: "explain",
           title: "📖 map — Store Key-Value Pairs!",
-          content: `Imagine you're building a school grade management system. You want to look up 'Alice's' score instantly. With a vector, you'd have to search one by one from the beginning. With 1000 students? Way too slow! You need a tool that lets you **look up by name directly**.
+          content: `Imagine you're building a school grade management system. You want to look up 'Emma's' score instantly. With a vector, you'd have to search one by one from the beginning. With 1000 students? Way too slow! You need a tool that lets you **look up by name directly**.
 
 You've used Python's \`dict\` before, right? In C++, \`map\` does the same job!
 
@@ -32,8 +32,8 @@ You've used Python's \`dict\` before, right? In C++, \`map\` does the same job!
 using namespace std;
 
 map<string, int> scores;
-scores["Alice"] = 95;
-scores["Bob"] = 87;
+scores["Emma"] = 95;
+scores["Jake"] = 87;
 scores["Charlie"] = 92;
 \`\`\`
 
@@ -42,8 +42,8 @@ Let's compare with Python:
 **Python 🐍:**
 \`\`\`python
 scores = {}
-scores["Alice"] = 95
-scores["Bob"] = 87
+scores["Emma"] = 95
+scores["Jake"] = 87
 scores["Charlie"] = 92
 \`\`\`
 
@@ -61,9 +61,9 @@ Almost identical, right? But there's an important difference!
 \`\`\`cpp
 map<string, int> scores;
 scores["Charlie"] = 92;
-scores["Alice"] = 95;
-scores["Bob"] = 87;
-// Stored order: Alice → Bob → Charlie (alphabetical!)
+scores["Emma"] = 95;
+scores["Jake"] = 87;
+// Stored order: Emma → Jake → Charlie (alphabetical!)
 \`\`\``
         },
         {
@@ -86,14 +86,14 @@ scores["Bob"] = 87;
 **Iterating — using range-for**
 \`\`\`cpp
 map<string, int> scores = {
-    {"Alice", 95}, {"Bob", 87}
+    {"Emma", 95}, {"Jake", 87}
 };
 
 for (auto& [key, val] : scores) {
     cout << key << ": " << val << endl;
 }
-// Alice: 95
-// Bob: 87  (sorted by key!)
+// Emma: 95
+// Jake: 87  (sorted by key!)
 \`\`\`
 
 Compare with Python:
@@ -109,18 +109,18 @@ C++'s \`auto& [key, val]\` works just like Python's \`key, val\`!
 **Search Methods**
 \`\`\`cpp
 // Check if a key exists
-if (scores.count("Alice") > 0) {
-    cout << "Alice exists!" << endl;
+if (scores.count("Emma") > 0) {
+    cout << "Emma exists!" << endl;
 }
 
 // Search with find (returns end() if not found)
-auto it = scores.find("Bob");
+auto it = scores.find("Jake");
 if (it != scores.end()) {
     cout << it->second << endl;  // 87
 }
 
 // Delete a key-value pair
-scores.erase("Bob");
+scores.erase("Jake");
 
 // Check the size
 cout << scores.size() << endl;  // 1
@@ -162,8 +162,8 @@ O(1) means finding it **in one step** whether there are 1,000 or 1,000,000 stude
 using namespace std;
 
 unordered_map<string, int> scores;
-scores["Alice"] = 95;
-scores["Bob"] = 87;
+scores["Emma"] = 95;
+scores["Jake"] = 87;
 // Not sorted! But search is very fast
 \`\`\`
 
@@ -192,15 +192,15 @@ With a vector, you have to search from beginning to end to find a key (slow). Wi
 
 \`\`\`cpp
 // vector<pair> — searching is slow O(n)
-vector<pair<string, int>> v = {{"Alice", 95}, {"Bob", 87}};
-// To find "Bob", you have to check one by one
+vector<pair<string, int>> v = {{"Emma", 95}, {"Jake", 87}};
+// To find "Jake", you have to check one by one
 for (auto& p : v) {
-    if (p.first == "Bob") { /* found it! */ }
+    if (p.first == "Jake") { /* found it! */ }
 }
 
 // map — searching is fast O(log n)
-map<string, int> m = {{"Alice", 95}, {"Bob", 87}};
-cout << m["Bob"];  // Direct access! 87
+map<string, int> m = {{"Emma", 95}, {"Jake", 87}};
+cout << m["Jake"];  // Direct access! 87
 \`\`\`
 
 💡 The more data you have, the bigger map's advantage! With 1 million entries, a vector needs up to 1 million comparisons, but a map only needs about 20.`

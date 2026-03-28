@@ -224,8 +224,8 @@ int main() {
           id: "ch1-void-pred",
           type: "predict" as const,
           title: "Calling a void function?",
-          code: "#include <iostream>\nusing namespace std;\nvoid greet(string name) {\n    cout << \"Hi, \" << name << \"!\";\n}\nint main() {\n    greet(\"Alice\");\n    return 0;\n}",
-          options: ["Hi, Alice!", "Alice", "Error", "Nothing prints"],
+          code: "#include <iostream>\nusing namespace std;\nvoid greet(string name) {\n    cout << \"Hi, \" << name << \"!\";\n}\nint main() {\n    greet(\"Emma\");\n    return 0;\n}",
+          options: ["Hi, Emma!", "Emma", "Error", "Nothing prints"],
           answer: 0,
           explanation: "void functions work fine! They just don't return a value. cout still prints output!"
         },
@@ -297,8 +297,8 @@ void greet(string name, string msg = "Hello") {
     cout << msg << ", " << name << "!" << endl;
 }
 
-greet("Alice");           // Hello, Alice!
-greet("Alice", "Hey");    // Hey, Alice!
+greet("Emma");           // Hello, Emma!
+greet("Emma", "Hey");    // Hey, Emma!
 \`\`\`
 
 Same as Python!
@@ -796,16 +796,16 @@ double add(double a, double b) {
 }
 
 int main() {
-    greet("Alice");
-    greet("Bob", "Hey");
+    greet("Emma");
+    greet("Jake", "Hey");
 
     cout << "Integers: " << add(3, 5) << endl;
     cout << "Doubles: " << add(1.5, 2.7) << endl;
 
     return 0;
 }`,
-          expectedOutput: `Hello, Alice!
-Hey, Bob!
+          expectedOutput: `Hello, Emma!
+Hey, Jake!
 Integers: 8
 Doubles: 4.2`
         }

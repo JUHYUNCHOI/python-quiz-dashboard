@@ -256,7 +256,7 @@ for (auto x : nums) {
 
 Why is this awesome? Look at longer types:
 \`\`\`cpp
-vector<string> names = {"Alice", "Bob", "Charlie"};
+vector<string> names = {"Emma", "Jake", "Charlie"};
 
 // Without auto — so much typing!
 for (string name : names) { ... }
@@ -275,7 +275,7 @@ Remember these three patterns:
 
 Here's an example with a string vector:
 \`\`\`cpp
-vector<string> names = {"Alice", "Bob", "Charlie"};
+vector<string> names = {"Emma", "Jake", "Charlie"};
 
 // Explicit type: vector<string>, so... string? string&? Confusing!
 for (const string& name : names) {

@@ -26,9 +26,9 @@ export const cppLesson14EnData: LessonData = {
           content: `To store 4 students' names, ages, and scores:
 
 \`\`\`cpp
-string name1 = "Alice";  int age1 = 17;  double score1 = 95.5;
-string name2 = "Bob";    int age2 = 16;  double score2 = 87.0;
-string name3 = "Carol";  int age3 = 17;  double score3 = 72.3;
+string name1 = "Emma";  int age1 = 17;  double score1 = 95.5;
+string name2 = "Jake";    int age2 = 16;  double score2 = 87.0;
+string name3 = "Mia";  int age3 = 17;  double score3 = 72.3;
 string name4 = "Dave";   int age4 = 16;  double score4 = 91.8;
 // 100 students = 300 variables... 😱
 \`\`\`
@@ -62,8 +62,8 @@ Fill values in the order the fields were declared:
 \`\`\`cpp
 //               name     age   score
 //                ↓         ↓      ↓
-Student s1 = {"Alice",    17,   95.5};
-Student s2 = {"Bob",      16,   87.0};
+Student s1 = {"Emma",    17,   95.5};
+Student s2 = {"Jake",      16,   87.0};
 \`\`\`
 
 ---
@@ -73,7 +73,7 @@ Student s2 = {"Bob",      16,   87.0};
 Fields inside a struct are called **members**. Use dot notation to access them:
 
 \`\`\`cpp
-cout << s1.name;   // Alice
+cout << s1.name;   // Emma
 cout << s1.age;    // 17
 s1.score = 100.0;  // you can also modify!
 \`\`\``,
@@ -94,15 +94,15 @@ struct Student {
 
 int main() {
     Student s1;
-    s1.name = "Alice";
+    s1.name = "Emma";
     s1.age = 17;
     s1.age = 20;
     cout << s1.name << " " << s1.age;
     return 0;
 }`,
-          options: ["Alice 17", "Alice 20", "Error", "Alice 0"],
+          options: ["Emma 17", "Emma 20", "Error", "Emma 0"],
           answer: 1,
-          explanation: "s1.age was set to 17 then overwritten with 20. The last assigned value wins — output is 'Alice 20'."
+          explanation: "s1.age was set to 17 then overwritten with 20. The last assigned value wins — output is 'Emma 20'."
         },
         {
           id: "ch1-q1",
@@ -142,9 +142,9 @@ struct Student {
 };
 
 Student students[3] = {
-    {"Alice", 95},
-    {"Bob",   87},
-    {"Carol", 72},
+    {"Emma", 95},
+    {"Jake",   87},
+    {"Mia", 72},
 };
 
 for (int i = 0; i < 3; i++) {
@@ -154,9 +154,9 @@ for (int i = 0; i < 3; i++) {
 
 Output:
 \`\`\`
-Alice: 95
-Bob: 87
-Carol: 72
+Emma: 95
+Jake: 87
+Mia: 72
 \`\`\`
 
 In USACO, coordinate pairs, edge data, and more are commonly managed as struct arrays!`,
@@ -176,18 +176,18 @@ struct Student {
 
 int main() {
     Student students[3] = {
-        {"Alice", 95},
-        {"Bob",   87},
-        {"Carol", 72},
+        {"Emma", 95},
+        {"Jake",   87},
+        {"Mia", 72},
     };
     for (int i = 0; i < 3; i++) {
         cout << students[i].name << endl;
     }
     return 0;
 }`,
-          options: ["Alice\nBob\nCarol", "95\n87\n72", "Alice 95\nBob 87\nCarol 72", "Error"],
+          options: ["Emma\nJake\nMia", "95\n87\n72", "Emma 95\nJake 87\nMia 72", "Error"],
           answer: 0,
-          explanation: "`students[i].name` accesses the name member of each student. As i goes 0→1→2, Alice, Bob, Carol are printed in order."
+          explanation: "`students[i].name` accesses the name member of each student. As i goes 0→1→2, Emma, Jake, Mia are printed in order."
         },
         {
           id: "ch2-fb1",
@@ -208,9 +208,9 @@ int main() {
           title: "Pattern 1: Sum",
           content: `Accumulate all scores in the struct array. Add each student's score to \`total\` one by one.`,
           code: `Student students[3] = {
-    {"Alice", 95},
-    {"Bob",   87},
-    {"Carol", 72},
+    {"Emma", 95},
+    {"Jake",   87},
+    {"Mia", 72},
 };
 int total = 0;
 for (int i = 0; i < 3; i++) {
@@ -226,7 +226,7 @@ cout << "Total: " << total;  // Total: 254`,
           id: "ch2-mini-practice1",
           type: "practice" as const,
           title: "✋ Write the sum loop yourself!",
-          content: `Use the Student struct array to calculate the total score of Alice(95), Bob(87), Carol(72) with a for loop and print it.`,
+          content: `Use the Student struct array to calculate the total score of Emma(95), Jake(87), Mia(72) with a for loop and print it.`,
           code: `#include <iostream>
 #include <string>
 using namespace std;
@@ -238,9 +238,9 @@ struct Student {
 
 int main() {
     Student students[3] = {
-        {"Alice", 95},
-        {"Bob",   87},
-        {"Carol", 72},
+        {"Emma", 95},
+        {"Jake",   87},
+        {"Mia", 72},
     };
 
     // Write your code to find and print the total score here
@@ -275,7 +275,7 @@ cout << "Min: " << minScore;  // Min: 72`,
           id: "ch2-mini-practice2",
           type: "practice" as const,
           title: "✋ Write the maximum finder yourself!",
-          content: `Use the Student struct array to find the highest score among Alice(95), Bob(87), Carol(72) and print it. The initialization trick is the same as finding the minimum!`,
+          content: `Use the Student struct array to find the highest score among Emma(95), Jake(87), Mia(72) and print it. The initialization trick is the same as finding the minimum!`,
           code: `#include <iostream>
 #include <string>
 using namespace std;
@@ -287,9 +287,9 @@ struct Student {
 
 int main() {
     Student students[3] = {
-        {"Alice", 95},
-        {"Bob",   87},
-        {"Carol", 72},
+        {"Emma", 95},
+        {"Jake",   87},
+        {"Mia", 72},
     };
 
     // Write your code to find and print the highest score here
@@ -318,7 +318,7 @@ cout << count << " students";  // 1 students`,
           id: "ch2-mini-practice3",
           type: "practice" as const,
           title: "✋ Write the counter yourself!",
-          content: `Use the Student struct array to count how many of Alice(95), Bob(87), Carol(72) scored 80 or above and print the result.`,
+          content: `Use the Student struct array to count how many of Emma(95), Jake(87), Mia(72) scored 80 or above and print the result.`,
           code: `#include <iostream>
 #include <string>
 using namespace std;
@@ -330,9 +330,9 @@ struct Student {
 
 int main() {
     Student students[3] = {
-        {"Alice", 95},
-        {"Bob",   87},
-        {"Carol", 72},
+        {"Emma", 95},
+        {"Jake",   87},
+        {"Mia", 72},
     };
 
     // Write your code to count and print students with score >= 80 here
@@ -363,16 +363,16 @@ struct Student {
 
 int main() {
     Student students[3] = {
-        {"Alice", 95},
-        {"Bob",   87},
-        {"Carol", 72},
+        {"Emma", 95},
+        {"Jake",   87},
+        {"Mia", 72},
     };
 
     // Write your code to find and print the top student's name and score here
 
     return 0;
 }`,
-          expectedOutput: `#1: Alice (95)`
+          expectedOutput: `#1: Emma (95)`
         },
         {
           id: "ch2-ref",
@@ -391,7 +391,7 @@ void boost(Student& s) {
     s.score += 10;
 }
 
-Student s = {"Alice", 85};
+Student s = {"Emma", 85};
 boost(s);
 cout << s.score;  // 95 (original changed!)
 \`\`\`
@@ -438,7 +438,7 @@ var.member                 // access
 | Concept | Example |
 |---|---|
 | Define | \`struct Student { string name; int score; };\` |
-| Create | \`Student s = {"Alice", 95};\` |
+| Create | \`Student s = {"Emma", 95};\` |
 | Access | \`s.name\`, \`s.score\` |
 | Array | \`Student arr[3] = {...};\` |
 | Function | Pass by reference \`Student& s\` for efficiency |

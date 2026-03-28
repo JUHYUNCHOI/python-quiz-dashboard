@@ -321,7 +321,7 @@ This combines string methods with type conversion.`,
 using namespace std;
 
 int main() {
-    string name = "Alice";
+    string name = "Emma";
     int age = 15;
 
     cout << "Name: " << name << endl;
@@ -333,10 +333,10 @@ int main() {
 
     return 0;
 }`,
-          expectedOutput: `Name: Alice
+          expectedOutput: `Name: Emma
 Length: 5
 First letter: A
-Alice is 15 years old`
+Emma is 15 years old`
         },
         {
           id: "ch2-q1",
