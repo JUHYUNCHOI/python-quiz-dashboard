@@ -509,53 +509,6 @@ public:
       emoji: "💡",
       steps: [
         {
-          id: "ch4-getter-setter",
-          type: "explain",
-          title: "💡 private 값 읽고 쓰기 — getter & setter",
-          content: `private 멤버는 외부에서 직접 접근 불가! 그럼 어떻게 값을 읽고 바꿀까요?
-
-- **getter** — 값을 읽어주는 함수 (조회만)
-- **setter / 동작 함수** — 검증 후 값을 바꾸는 함수
-
-\`\`\`cpp
-class BankAccount {
-private:
-    string owner;
-    double balance;
-
-public:
-    BankAccount(string name, double initial) {
-        owner   = name;
-        balance = initial;
-    }
-
-    // getter: 잔액 조회
-    double getBalance() { return balance; }
-    string getOwner()   { return owner; }
-
-    // 입금: 0보다 클 때만
-    void deposit(double amount) {
-        if (amount > 0)
-            balance += amount;
-    }
-
-    // 출금: 잔액 이하일 때만
-    void withdraw(double amount) {
-        if (amount > 0 && amount <= balance)
-            balance -= amount;
-    }
-};
-
-BankAccount acc("김철수", 1000);
-acc.deposit(500);
-cout << acc.getBalance();  // 1500
-acc.withdraw(2000);        // 잔액 부족 → 무시됨
-cout << acc.getBalance();  // 1500
-\`\`\`
-
-이렇게 하면 balance가 절대 음수가 될 수 없어요!`,
-        },
-        {
           id: "ch4-fb1",
           type: "fillblank" as const,
           title: "getter 완성하기!",

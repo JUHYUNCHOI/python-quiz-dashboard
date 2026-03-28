@@ -510,53 +510,6 @@ public:
       emoji: "💡",
       steps: [
         {
-          id: "ch4-getter-setter",
-          type: "explain",
-          title: "💡 Reading and writing private values — getter & setter",
-          content: `Private members can't be accessed directly from outside! So how do we read and change them?
-
-- **getter** — a function that reads a value (read-only)
-- **setter / action function** — validates and changes a value
-
-\`\`\`cpp
-class BankAccount {
-private:
-    string owner;
-    double balance;
-
-public:
-    BankAccount(string name, double initial) {
-        owner   = name;
-        balance = initial;
-    }
-
-    // getters: read only
-    double getBalance() { return balance; }
-    string getOwner()   { return owner; }
-
-    // deposit: only when amount > 0
-    void deposit(double amount) {
-        if (amount > 0)
-            balance += amount;
-    }
-
-    // withdraw: only when amount <= balance
-    void withdraw(double amount) {
-        if (amount > 0 && amount <= balance)
-            balance -= amount;
-    }
-};
-
-BankAccount acc("Emma", 1000);
-acc.deposit(500);
-cout << acc.getBalance();  // 1500
-acc.withdraw(2000);        // Not enough balance — ignored
-cout << acc.getBalance();  // 1500
-\`\`\`
-
-This way, balance can never go negative!`,
-        },
-        {
           id: "ch4-fb1",
           type: "fillblank" as const,
           title: "Complete the getter!",
