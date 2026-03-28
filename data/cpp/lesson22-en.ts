@@ -121,22 +121,26 @@ Think of an RPG game — seeing the "Flame Sword" description in a shop doesn't 
 | Item **description** | Flame Sword info | **class** |
 | The item you actually **own** | Sword in your inventory | **object** |
 
-What you create from a class is called an **object**. You'll also hear the word **instance** — they mean the same thing.
+What you create from a class is called an **object** or **instance**.
 
 \`\`\`cpp
-Car myCar;            // ← an actual car (object) is created here!
-myCar.color = "red";
-myCar.speed = 0;
-myCar.forward();
-myCar.forward();
-myCar.info();         // red car, speed: 20
+int main() {
+    Car myCar;            // ← an actual car (object) is created here!
+    myCar.color = "red";
+    myCar.speed = 0;
+    myCar.forward();
+    myCar.forward();
+    myCar.info();         // red car, speed: 20
+}
 \`\`\`
 
 One blueprint, multiple cars:
 
 \`\`\`cpp
-Car car1;  car1.color = "red";    // object 1
-Car car2;  car2.color = "blue";   // object 2
+int main() {
+    Car car1;  car1.color = "red";    // object 1
+    Car car2;  car2.color = "blue";   // object 2
+}
 \`\`\`
 
 > 🍪 **Cookie cutter = class, cookie = object**
