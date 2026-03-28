@@ -444,13 +444,13 @@ int main() {
 
 ### C-style 2D Array
 \`\`\`cpp
-int grid[rows][cols] = {};   // all zeros
+int grid[rows][cols] = {};   // ← = {} to zero-initialize! Always do this
 grid[i][j]                   // access
 \`\`\`
 
-### 2D Vector
+### 2D Vector (when size depends on input)
 \`\`\`cpp
-vector<vector<int>> v(rows, vector<int>(cols, init));
+vector<vector<int>> v(rows, vector<int>(cols, 0));
 v[i][j]          // access
 v.size()         // row count
 v[0].size()      // col count
@@ -462,15 +462,40 @@ for (int i = 0; i < rows; i++) {
     for (int j = 0; j < cols; j++) {
         // process grid[i][j]
     }
+    cout << "\\n";  // newline after each row
 }
+\`\`\`
+
+### USACO Input Pattern (comes up constantly!)
+\`\`\`cpp
+int n, m;
+cin >> n >> m;
+vector<vector<int>> grid(n, vector<int>(m, 0));
+for (int i = 0; i < n; i++)
+    for (int j = 0; j < m; j++)
+        cin >> grid[i][j];
+\`\`\`
+
+### Key Loop Patterns
+\`\`\`cpp
+// Sum of all elements
+int sum = 0;
+for (int i = 0; i < n; i++)
+    for (int j = 0; j < m; j++)
+        sum += grid[i][j];
+
+// Main diagonal (row index == col index)
+for (int i = 0; i < n; i++)
+    cout << grid[i][i];   // grid[i][i] = diagonal!
 \`\`\`
 
 | | Python 🐍 | C++ ⚡ |
 |---|---|---|
 | 2D declaration | \`grid = [[0]*4 for _ in range(3)]\` | \`int grid[3][4] = {};\` |
+| Dynamic declaration | \`grid = [[0]*m for _ in range(n)]\` | \`vector<vector<int>> v(n, vector<int>(m, 0));\` |
 | Access | \`grid[i][j]\` | \`grid[i][j]\` |
-| Row count | \`len(grid)\` | \`grid.size()\` (vector) |
-| Col count | \`len(grid[0])\` | \`grid[0].size()\` (vector) |
+| Row count | \`len(grid)\` | \`v.size()\` |
+| Col count | \`len(grid[0])\` | \`v[0].size()\` |
 
 🚀 **Next:** pair & Sorting for USACO!`
         }

@@ -673,10 +673,16 @@ int main() {
           title: "🎉 Part 2 완료!",
           content: `## 🏆 Part 2 완료! 정말 대단해요!
 
-Part 2 (레슨 9~14, 22)에서 배운 모든 것을 정리해봐요!
+Part 2 (레슨 9, 21, 10~14, 22)에서 배운 모든 것을 정리해봐요!
 
 ### 📚 레슨 9: 배열 & 벡터
 - C-style 배열과 \`vector\`로 여러 데이터를 저장하는 법
+
+### 🗺️ 레슨 21: 2차원 배열 & 2D vector
+- \`int grid[행][열] = {};\` — 전부 0으로 초기화
+- \`vector<vector<int>> v(n, vector<int>(m, 0));\` — 크기가 동적일 때
+- 이중 for문으로 순회, cin으로 격자 입력받기 (USACO 핵심 패턴)
+- 주 대각선: \`grid[i][i]\`, 전체 합: 이중 for + 누적
 
 ### 🔄 레슨 10: Range-for & auto
 - \`for(auto x : vec)\`로 편하게 반복, \`auto\`로 타입 자동 추론
@@ -691,10 +697,17 @@ Part 2 (레슨 9~14, 22)에서 배운 모든 것을 정리해봐요!
 - 포인터 선언 \`int* ptr\`, 역참조 \`*ptr\`, nullptr
 
 ### 📦 레슨 14: 구조체 (struct)
-- 관련 데이터를 하나로 묶는 사용자 정의 타입
+- 관련 데이터를 하나로 묶는 사용자 정의 타입 (\`struct Student { string name; int score; };\`)
+- 점(\`.\`) 연산자로 멤버 접근, struct 배열로 여러 데이터 한 번에 관리
+- for문 패턴: **합계 / 최솟값·최댓값 / 조건 카운트**
+- 함수에 넘길 땐 참조(\`Student&\`)로 효율적으로
 
 ### 🎓 레슨 22: 클래스 (class)
-- \`private\`/\`public\` 접근 제어, 생성자, 캡슐화
+- 멤버변수 + 멤버함수를 묶어 **나만의 타입** (class = 설계도, object = 실체)
+- \`private\` / \`public\` — 멤버변수는 숨기고, 멤버함수는 공개
+- **getter** / **setter** — private 멤버를 읽고 쓰는 공개 창구 + 유효성 검사
+- **생성자** — 객체 생성 시 자동 호출, 클래스 이름과 동일, 리턴 타입 없음
+- **캡슐화(encapsulation)** — private으로 막고 공개 함수로만 접근하는 OOP 원칙
 
 ---
 
@@ -703,16 +716,18 @@ Part 2 (레슨 9~14, 22)에서 배운 모든 것을 정리해봐요!
 | 개념 | 키워드 | 핵심 |
 |---|---|---|
 | 배열/벡터 | \`int arr[]\`, \`vector<int>\` | 여러 값 저장 |
+| 2D 배열 | \`int grid[N][N] = {};\` | 격자/행렬, 이중 for 순회 |
 | Range-for | \`for(auto x : v)\` | 편한 반복 |
 | 참조 | \`int& ref\` | 원본에 직접 접근 |
 | 포인터 | \`int* ptr\` | 주소를 저장하는 변수 |
-| struct | \`struct Name { };\` | 데이터 묶음 |
-| class | \`class { private/public };\` | 캡슐화 (기본 private) |
-| 생성자 | \`ClassName(...)\` | 객체 초기화 |
+| struct | \`struct Name { };\` | 데이터 묶음, 배열+패턴 활용 |
+| class | \`class { private/public };\` | 설계도 → 객체 (OOP) |
+| getter/setter | \`getX()\` / \`setX(v)\` | private 멤버 접근 창구 |
+| 생성자 | \`ClassName(...)\` | 객체 생성 시 자동 초기화 |
 
 🎊 **축하해요!** Part 2를 모두 마쳤어요!
 
-🚀 **다음은 Part 3!** 2차원 배열, pair & 정렬, map & set, STL 알고리즘!`
+🚀 **다음은 Part 3!** pair & 정렬, map & set, STL 알고리즘!`
         }
       ]
     }

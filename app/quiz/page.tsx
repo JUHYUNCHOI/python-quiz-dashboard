@@ -257,7 +257,7 @@ export default function QuizPage() {
             </div>
 
             {/* Center: Hearts */}
-            <div className="flex items-center gap-0.5">
+            <div className="relative flex items-center gap-0.5">
               {Array.from({ length: quiz.maxHearts }).map((_, i) => (
                 <span
                   key={i}
@@ -274,6 +274,15 @@ export default function QuizPage() {
                   {i < quiz.hearts ? "❤️" : "🖤"}
                 </span>
               ))}
+              {/* Floating -1 indicator */}
+              {quiz.lastHeartLost && (
+                <span
+                  key={quiz.hearts}
+                  className="animate-float-heart-up pointer-events-none absolute -top-1 left-1/2 -translate-x-1/2 text-sm font-bold text-red-500 whitespace-nowrap"
+                >
+                  -1 ❤️
+                </span>
+              )}
             </div>
 
             {/* Right: Combo + Sound + Timer */}
@@ -408,6 +417,23 @@ export default function QuizPage() {
             </div>
           </Card>
         </div>
+      )}
+
+      {/* Danger vignette — hearts <= 2 (비복습 모드만) */}
+      {quiz.hearts <= 2 && !quiz.sessionOver && !quiz.quizSettings.isReview && (
+        <div
+          className="animate-danger-vignette pointer-events-none fixed inset-0 z-30"
+          style={{ background: "radial-gradient(ellipse at center, transparent 40%, rgba(220,38,38,0.55) 100%)" }}
+        />
+      )}
+
+      {/* Screen flash on heart lost */}
+      {quiz.lastHeartLost && (
+        <div
+          key={quiz.hearts}
+          className="animate-screen-flash pointer-events-none fixed inset-0 z-40"
+          style={{ background: "radial-gradient(ellipse at center, transparent 35%, rgba(239,68,68,0.45) 100%)" }}
+        />
       )}
 
       {/* Hearts depleted overlay */}

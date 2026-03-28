@@ -34,7 +34,7 @@ const lessonsInReview = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 
 const cppReviewIds = new Set([
   "cpp-1", "cpp-2", "cpp-3", "cpp-4", "cpp-5", "cpp-6", "cpp-7", "cpp-8",
   "cpp-9", "cpp-10", "cpp-11", "cpp-12", "cpp-13", "cpp-14",
-  "cpp-21",
+  "cpp-21", "cpp-22",
   "cpp-15", "cpp-16", "cpp-17", "cpp-18", "cpp-19", "cpp-20",
   "cpp-p1", "cpp-p2", "cpp-p3"
 ])

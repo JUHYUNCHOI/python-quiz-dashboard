@@ -386,18 +386,20 @@ export function useQuizState(questions: QuizQuestion[]) {
       // 오답 재출제 큐에 추가 (2-3문제 뒤에 다시 나옴)
       retryQueueRef.current = scheduleRetry(retryQueueRef.current, question.id)
 
-      // Hearts logic
-      const newHearts = hearts - 1
-      setHearts(newHearts)
-      setLastHeartLost(true)
+      // Hearts logic (복습 모드는 하트 차감 없음)
+      if (!quizSettings.isReview) {
+        const newHearts = hearts - 1
+        setHearts(newHearts)
+        setLastHeartLost(true)
 
-      if (newHearts <= 0) {
-        setSessionOver(true)
-        saveSessionData("hearts", score)
-        setTimeout(() => {
-          router.push("/quiz/session-complete?reason=hearts")
-        }, 1500)
-        return
+        if (newHearts <= 0) {
+          setSessionOver(true)
+          saveSessionData("hearts", score)
+          setTimeout(() => {
+            router.push("/quiz/session-complete?reason=hearts")
+          }, 1500)
+          return
+        }
       }
 
       const newStreak = wrongAnswerStreak + 1

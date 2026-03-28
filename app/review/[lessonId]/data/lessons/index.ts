@@ -119,6 +119,8 @@ export const lessonsData: Record<string, LessonData> = {
   // Part 7: 클래스
   "41": lesson41,
   // C++ 레슨
+  "cpp-21": createDummyLesson("cpp-21", "2차원 배열 & 2D vector"),
+  "cpp-22": createDummyLesson("cpp-22", "클래스 (class)"),
   "cpp-1": lessonCpp1,
   "cpp-2": lessonCpp2,
   "cpp-3": lessonCpp3,

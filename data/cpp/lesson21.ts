@@ -459,16 +459,16 @@ int main() {
 
 ### C-style 2D 배열
 \`\`\`cpp
-int grid[행][열] = {};        // 전부 0으로 초기화
+int grid[행][열] = {};        // ← = {} 로 전부 0 초기화! 꼭 쓰세요
 grid[i][j]                   // 접근
 \`\`\`
 
-### 2D vector
+### 2D vector (크기가 입력에 따라 달라질 때)
 \`\`\`cpp
-vector<vector<int>> v(행, vector<int>(열, 초기값));
-v[i][j]                      // 접근
-v.size()                     // 행 수
-v[0].size()                  // 열 수
+vector<vector<int>> v(행, vector<int>(열, 0));
+v[i][j]          // 접근
+v.size()         // 행 수
+v[0].size()      // 열 수
 \`\`\`
 
 ### 이중 for문 순회
@@ -477,15 +477,40 @@ for (int i = 0; i < rows; i++) {
     for (int j = 0; j < cols; j++) {
         // grid[i][j] 처리
     }
+    cout << "\\n";  // 행 끝 줄바꿈
 }
+\`\`\`
+
+### USACO 입력 패턴 (자주 나와요!)
+\`\`\`cpp
+int n, m;
+cin >> n >> m;
+vector<vector<int>> grid(n, vector<int>(m, 0));
+for (int i = 0; i < n; i++)
+    for (int j = 0; j < m; j++)
+        cin >> grid[i][j];
+\`\`\`
+
+### 주요 루프 패턴
+\`\`\`cpp
+// 전체 합계
+int sum = 0;
+for (int i = 0; i < n; i++)
+    for (int j = 0; j < m; j++)
+        sum += grid[i][j];
+
+// 주 대각선 (행 번호 = 열 번호)
+for (int i = 0; i < n; i++)
+    cout << grid[i][i];   // arr[i][i] = 대각선!
 \`\`\`
 
 | | 파이썬 🐍 | C++ ⚡ |
 |---|---|---|
 | 2D 선언 | \`grid = [[0]*4 for _ in range(3)]\` | \`int grid[3][4] = {};\` |
+| 동적 선언 | \`grid = [[0]*m for _ in range(n)]\` | \`vector<vector<int>> v(n, vector<int>(m, 0));\` |
 | 접근 | \`grid[i][j]\` | \`grid[i][j]\` |
-| 행 수 | \`len(grid)\` | \`grid.size()\` (vector) |
-| 열 수 | \`len(grid[0])\` | \`grid[0].size()\` (vector) |
+| 행 수 | \`len(grid)\` | \`v.size()\` |
+| 열 수 | \`len(grid[0])\` | \`v[0].size()\` |
 
 🚀 **다음 시간:** USACO를 위한 pair & 정렬!`
         }

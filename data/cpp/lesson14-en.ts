@@ -470,7 +470,7 @@ var.member                 // access
 | Array | \`Student arr[3] = {...};\` |
 | Function | Pass by reference \`Student& s\` for efficiency |
 
-🚀 **Next lesson:** class — add access control and constructors to struct!`
+🚀 **Next lesson:** class — member variables & functions, private/public access, constructors, encapsulation (OOP)!`
         }
       ]
     }

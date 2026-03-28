@@ -9941,4 +9941,1255 @@ for (const int& x : v) {
     keyConceptTitle: "값 전달 vs 포인터 전달",
     keyConceptDescription: "포인터로 전달할 때만 원본 변수를 함수 안에서 수정할 수 있어요.",
   },
+
+  // ============================================================
+  // cpp-21 추가 문제
+  // ============================================================
+  {
+    id: 492,
+    lessonId: "cpp-21",
+    difficulty: "쉬움",
+    question: "`int grid[3][3];` 와 `int grid[3][3] = {};` 의 차이는?",
+    code: `int a[3][3];        // 선언만
+int b[3][3] = {};   // 초기화까지`,
+    options: [
+      "차이 없다 — 둘 다 0으로 초기화된다",
+      "a는 쓰레기 값, b는 전부 0으로 초기화된다",
+      "a는 0, b는 쓰레기 값이다",
+      "컴파일 에러가 발생한다",
+    ],
+    correctAnswer: 1,
+    explanation: "선언만 하면(a) 메모리에 쓰레기 값이 남아요. `= {}`를 붙이면(b) 모든 원소가 0으로 초기화돼요. 2D 배열 사용 전에 `= {}`로 초기화하는 습관이 중요해요!",
+    keyConceptTitle: "2D 배열 제로 초기화",
+    keyConceptDescription: "`int arr[N][M] = {};` — 이 한 줄로 모든 원소를 0으로 초기화해요. 초기화 없이 사용하면 쓰레기 값으로 인한 버그가 생겨요.",
+    relatedTopics: ["2차원 배열", "초기화", "= {}", "쓰레기 값"],
+  },
+  {
+    id: 493,
+    lessonId: "cpp-21",
+    difficulty: "쉬움",
+    question: "5행 3열의 2D 배열을 0으로 초기화하는 올바른 선언은?",
+    code: `// 행(row) = 가로줄 수
+// 열(col) = 세로줄 수`,
+    options: [
+      "int grid[3][5] = {};",
+      "int grid[5][3] = {};",
+      "int grid[5, 3] = {};",
+      "int grid[5][3];",
+    ],
+    correctAnswer: 1,
+    explanation: "선언 형식은 `타입 이름[행][열]`이에요. 5행 3열이면 `int grid[5][3] = {};`. `[3][5]`는 3행 5열이라 반대예요!",
+    keyConceptTitle: "2D 배열 선언: [행][열] 순서",
+    keyConceptDescription: "`int arr[행수][열수]` — 행이 먼저, 열이 나중이에요. 헷갈리면 '행은 가로(줄 수), 열은 세로(칸 수)'로 기억하세요.",
+    relatedTopics: ["2차원 배열", "행", "열", "선언"],
+  },
+  {
+    id: 494,
+    lessonId: "cpp-21",
+    difficulty: "쉬움",
+    question: "다음 이중 for문의 출력 결과는?",
+    code: `#include <iostream>
+using namespace std;
+
+int main() {
+    int grid[2][3] = {{1, 2, 3}, {4, 5, 6}};
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 3; j++) {
+            cout << grid[i][j] << " ";
+        }
+        cout << "\\n";
+    }
+    return 0;
+}`,
+    options: [
+      "1 2 3 \\n4 5 6",
+      "1 2 3 4 5 6",
+      "4 5 6 \\n1 2 3",
+      "1 4 \\n2 5 \\n3 6",
+    ],
+    correctAnswer: 0,
+    explanation: "바깥 루프 i가 행(0→1), 안쪽 루프 j가 열(0→2)을 순회해요. 행이 끝날 때마다 `\\n`으로 줄바꿈하므로 1 2 3 이 출력되고 줄바꿈 후 4 5 6이 나와요.",
+    keyConceptTitle: "이중 for문 순회",
+    keyConceptDescription: "바깥 루프 i = 행, 안쪽 루프 j = 열. `grid[i][j]`로 모든 원소를 순서대로 방문해요. 행 끝에 `cout << \"\\n\"`으로 줄바꿈해요.",
+    relatedTopics: ["이중 for문", "2차원 배열", "순회"],
+  },
+  {
+    id: 495,
+    lessonId: "cpp-21",
+    difficulty: "보통",
+    question: "3행 4열 배열을 이중 for문으로 전체 순회할 때, 안쪽 `cout << grid[i][j];`가 실행되는 총 횟수는?",
+    code: `for (int i = 0; i < 3; i++)
+    for (int j = 0; j < 4; j++)
+        cout << grid[i][j];`,
+    options: ["7번", "12번", "9번", "16번"],
+    correctAnswer: 1,
+    explanation: "바깥 루프 3번 × 안쪽 루프 4번 = 12번이에요. 이중 for문의 실행 횟수는 행 수 × 열 수예요.",
+    keyConceptTitle: "이중 for문 실행 횟수",
+    keyConceptDescription: "이중 for문에서 안쪽 코드의 실행 횟수 = 바깥 루프 반복 수 × 안쪽 루프 반복 수. 3×4 배열이면 12번.",
+    relatedTopics: ["이중 for문", "실행 횟수", "행 × 열"],
+  },
+  {
+    id: 496,
+    lessonId: "cpp-21",
+    difficulty: "보통",
+    question: "`vector<vector<int>> v(5, vector<int>(3, 0));` 에서 행의 수와 열의 수는?",
+    code: `vector<vector<int>> v(5, vector<int>(3, 0));
+cout << v.size();      // ?
+cout << v[0].size();   // ?`,
+    options: [
+      "행 3, 열 5",
+      "행 5, 열 3",
+      "행 5, 열 5",
+      "행 3, 열 3",
+    ],
+    correctAnswer: 1,
+    explanation: "`v(5, vector<int>(3, 0))`에서 바깥 숫자 5가 행 수, 안쪽 숫자 3이 열 수예요. `v.size()` = 5(행), `v[0].size()` = 3(열).",
+    keyConceptTitle: "2D vector의 행/열 수",
+    keyConceptDescription: "`v.size()` = 행 수, `v[0].size()` = 열 수. 선언 시 `(행, vector<int>(열, 초기값))` 순서예요.",
+    relatedTopics: ["2D vector", "size()", "행", "열"],
+  },
+  {
+    id: 497,
+    lessonId: "cpp-21",
+    difficulty: "보통",
+    question: "다음 중 2행 3열 격자를 cin으로 입력받는 올바른 코드는?",
+    code: `// 입력:
+// 1 2 3
+// 4 5 6`,
+    options: [
+      `for (int i = 0; i < 2; i++) {\n    cin >> grid[i];\n}`,
+      `for (int i = 0; i < 2; i++) {\n    for (int j = 0; j < 3; j++) {\n        cin >> grid[i][j];\n    }\n}`,
+      `cin >> grid[0][0] >> grid[1][1];`,
+      `for (int j = 0; j < 3; j++) {\n    cin >> grid[j];\n}`,
+    ],
+    correctAnswer: 1,
+    explanation: "2D 배열 입력은 이중 for문으로 `cin >> grid[i][j]`를 써요. cin은 공백/줄바꿈을 자동으로 건너뛰어서 순서대로 grid[0][0]=1, ..., grid[1][2]=6이 채워져요.",
+    keyConceptTitle: "2D 배열 cin 입력",
+    keyConceptDescription: "이중 for문 + `cin >> grid[i][j]` — USACO 문제에서 격자 입력받을 때 핵심 패턴이에요. cin은 공백/줄바꿈 자동 처리해요.",
+    relatedTopics: ["cin", "2차원 배열", "입력", "USACO 패턴"],
+  },
+  {
+    id: 498,
+    lessonId: "cpp-21",
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    int n = 3, m = 3;
+    vector<vector<int>> grid(n, vector<int>(m, 0));
+
+    // 주 대각선에 1 저장
+    for (int i = 0; i < n; i++)
+        grid[i][i] = 1;
+
+    int sum = 0;
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < m; j++)
+            sum += grid[i][j];
+
+    cout << sum;
+    return 0;
+}`,
+    options: ["0", "3", "9", "1"],
+    correctAnswer: 1,
+    explanation: "grid를 전부 0으로 초기화 후, 대각선(grid[0][0], grid[1][1], grid[2][2])만 1로 설정해요. 전체 합 = 1+1+1 = 3이에요.",
+    keyConceptTitle: "2D vector + 대각선 + 전체 합",
+    keyConceptDescription: "`grid[i][i] = 1`로 대각선 설정, 이중 for로 전체 합 계산 — USACO에서 자주 나오는 조합이에요.",
+    relatedTopics: ["2D vector", "대각선", "전체 합", "USACO 패턴"],
+  },
+  {
+    id: 499,
+    lessonId: "cpp-21",
+    difficulty: "어려움",
+    question: "다음 USACO 스타일 코드에서 입력이 `3 3` 이후 `1 2 3 / 4 5 6 / 7 8 9` 일 때 출력은?",
+    code: `#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    vector<vector<int>> grid(n, vector<int>(m, 0));
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < m; j++)
+            cin >> grid[i][j];
+
+    int total = 0;
+    for (int i = 0; i < n; i++)
+        total += grid[i][i];   // 대각선만 합산
+    cout << total;
+    return 0;
+}`,
+    options: ["45", "15", "12", "컴파일 에러"],
+    correctAnswer: 1,
+    explanation: "3×3 격자에서 대각선 원소는 grid[0][0]=1, grid[1][1]=5, grid[2][2]=9. 합계 = 1+5+9 = 15.",
+    keyConceptTitle: "USACO 입력 + 대각선 합 패턴",
+    keyConceptDescription: "N, M 입력 → 2D vector 생성 → 이중 for cin 입력 → 처리. 이 전체 흐름이 USACO 격자 문제의 기본 템플릿이에요.",
+    relatedTopics: ["USACO 패턴", "cin 입력", "대각선 합", "2D vector"],
+  },
+
+  // ============================================================
+  // cpp-22: 클래스 (class)
+  // ============================================================
+  {
+    id: 477,
+    lessonId: "cpp-22",
+    difficulty: "쉬움",
+    question: "class에 대한 설명으로 올바른 것은?",
+    code: `class Car {
+    double speed;
+    string color;
+
+    void forward() { speed += 10; }
+    void info() {
+        cout << color << " " << speed;
+    }
+};`,
+    options: [
+      "class는 변수(데이터)만 가질 수 있다",
+      "class는 함수만 가질 수 있다",
+      "class는 데이터(멤버변수)와 함수(멤버함수)를 함께 묶는다",
+      "class로 만든 객체는 점(.)으로 멤버에 접근할 수 없다",
+    ],
+    correctAnswer: 2,
+    explanation: "class는 멤버변수(데이터)와 멤버함수를 함께 묶어 나만의 타입을 정의해요. 객체는 Car myCar; 처럼 만들고, myCar.forward(); 처럼 점(.)으로 접근해요.",
+    keyConceptTitle: "class 기본 구조",
+    keyConceptDescription: "class는 멤버변수(기억해야 할 것)와 멤버함수(해야 할 것)를 묶어 사용자 정의 타입을 만들어요.",
+    relatedTopics: ["class", "멤버변수", "멤버함수", "OOP"],
+  },
+  {
+    id: 478,
+    lessonId: "cpp-22",
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+#include <string>
+using namespace std;
+
+class Car {
+    string color;
+    double speed;
+    void forward() { speed += 10; }
+    void info() {
+        cout << color << " " << speed;
+    }
+};
+
+int main() {
+    Car c;
+    c.color = "파란색";
+    c.speed = 0;
+    c.forward();
+    c.forward();
+    c.info();
+    return 0;
+}`,
+    options: ["파란색 20", "파란색 0", "파란색 10", "컴파일 에러"],
+    correctAnswer: 3,
+    explanation: "color, speed, forward(), info() 모두 접근 제어 키워드가 없으면 기본적으로 private이에요. 외부에서 c.color = \"파란색\"으로 접근하면 컴파일 에러!",
+    keyConceptTitle: "class의 기본 접근 제어",
+    keyConceptDescription: "class에서 접근 제어 키워드를 쓰지 않으면 기본값은 private이에요. struct는 기본값이 public이에요.",
+    relatedTopics: ["private", "class", "접근 제어"],
+  },
+  {
+    id: 479,
+    lessonId: "cpp-22",
+    difficulty: "쉬움",
+    question: "C++ 멤버함수 안에서 같은 클래스의 멤버변수에 접근하는 올바른 방법은?",
+    code: `class Car {
+private:
+    double speed;
+public:
+    void forward() {
+        // speed를 10 올리려면?
+    }
+};`,
+    options: [
+      "self.speed += 10;",
+      "Car.speed += 10;",
+      "speed += 10;",
+      "this->speed() += 10;",
+    ],
+    correctAnswer: 2,
+    explanation: "C++에서는 멤버함수 안에서 멤버변수에 `speed`처럼 바로 접근해요. Python처럼 `self.speed`가 필요 없어요! C++은 같은 클래스 안이라면 자동으로 멤버변수를 찾아줘요.",
+    keyConceptTitle: "멤버함수 안에서 멤버변수 접근",
+    keyConceptDescription: "Python에서는 self.speed처럼 self가 필요하지만, C++에서는 그냥 speed만 써요. 멤버함수 안에서는 같은 클래스의 멤버에 바로 접근할 수 있어요.",
+    relatedTopics: ["멤버함수", "멤버변수", "self vs C++", "접근"],
+  },
+  {
+    id: 480,
+    lessonId: "cpp-22",
+    difficulty: "쉬움",
+    question: "class에서 `private:` 아래에 선언된 멤버변수에 대한 설명으로 옳은 것은?",
+    code: `class BankAccount {
+private:
+    double balance;
+public:
+    void deposit(double a) { balance += a; }
+};`,
+    options: [
+      "어디서나 접근할 수 있다",
+      "클래스 내부 함수에서만 접근할 수 있다",
+      "상속받은 클래스에서만 접근할 수 있다",
+      "main() 함수에서만 접근할 수 있다",
+    ],
+    correctAnswer: 1,
+    explanation: "private 멤버는 클래스 내부 함수(deposit 등)에서만 접근할 수 있어요. 외부에서 acc.balance = 1000; 처럼 직접 접근하면 컴파일 에러!",
+    keyConceptTitle: "private 접근 제한",
+    keyConceptDescription: "private: 아래 멤버는 클래스 내부에서만 접근 가능해요. 외부 코드로부터 데이터를 보호할 수 있어요.",
+    relatedTopics: ["private", "접근 제어", "캡슐화"],
+  },
+  {
+    id: 481,
+    lessonId: "cpp-22",
+    difficulty: "보통",
+    question: "다음 코드에서 컴파일 에러가 발생하는 줄은?",
+    code: `class Box {
+private:
+    int size;
+public:
+    void setSize(int s) { size = s; }
+    int getSize() { return size; }
+};
+
+int main() {
+    Box b;
+    b.size = 10;       // 줄 A
+    b.setSize(10);     // 줄 B
+    cout << b.getSize(); // 줄 C
+    return 0;
+}`,
+    options: ["줄 A", "줄 B", "줄 C", "에러 없음"],
+    correctAnswer: 0,
+    explanation: "size는 private이라 외부에서 b.size = 10으로 직접 접근하면 컴파일 에러! setSize()와 getSize()는 public 함수라 줄 B, C는 괜찮아요.",
+    keyConceptTitle: "private 직접 접근 불가",
+    keyConceptDescription: "private 멤버는 클래스 외부에서 직접 접근할 수 없어요. public 멤버함수를 통해서만 접근해야 해요.",
+    relatedTopics: ["private", "컴파일 에러", "getter", "setter"],
+  },
+  {
+    id: 482,
+    lessonId: "cpp-22",
+    difficulty: "보통",
+    question: "다음 중 `Timer` 클래스의 생성자를 **올바르게** 작성한 것은?",
+    code: `class Timer {
+private:
+    int seconds;
+public:
+    // 생성자: seconds를 s로 초기화
+    ???
+};`,
+    options: [
+      "void Timer(int s) { seconds = s; }",
+      "int Timer(int s) { seconds = s; }",
+      "Timer(int s) { seconds = s; }",
+      "timer(int s) { seconds = s; }",
+    ],
+    correctAnswer: 2,
+    explanation: "생성자는 ① 클래스 이름과 동일(Timer) ② 리턴 타입 없음(void도 안 됨!) ③ 매개변수 가능. `void Timer`는 리턴 타입이 있어서 틀리고, `timer`는 소문자라 클래스 이름과 달라서 틀려요.",
+    keyConceptTitle: "생성자 작성 규칙",
+    keyConceptDescription: "생성자 = 클래스 이름 + 괄호 + 본문. 리턴 타입을 쓰지 않아요. void도 안 돼요! 대소문자도 클래스 이름과 정확히 일치해야 해요.",
+    relatedTopics: ["생성자", "리턴 타입 없음", "클래스 이름 일치"],
+  },
+  {
+    id: 483,
+    lessonId: "cpp-22",
+    difficulty: "보통",
+    question: "getter와 setter에 대한 설명으로 옳지 않은 것은?",
+    code: `class Car {
+private:
+    double speed;
+public:
+    double getSpeed() { return speed; }
+    void setSpeed(double s) {
+        if (s >= 0) speed = s;
+    }
+};`,
+    options: [
+      "getter는 private 멤버의 값을 읽어서 반환하는 함수다",
+      "setter는 값을 설정할 때 유효성 검사를 할 수 있다",
+      "setter를 통하면 어떤 값이든 무조건 저장된다",
+      "getter/setter는 private 멤버에 접근하는 공개 창구 역할을 한다",
+    ],
+    correctAnswer: 2,
+    explanation: "setter는 유효성 검사를 포함할 수 있어요. 위 코드에서 setSpeed()는 s >= 0 일 때만 저장해요. 음수 속도를 거부할 수 있는 게 setter의 장점이에요!",
+    keyConceptTitle: "getter / setter",
+    keyConceptDescription: "getter는 값을 읽고, setter는 값을 설정해요. setter에서 잘못된 값을 거부하는 유효성 검사를 넣을 수 있어요.",
+    relatedTopics: ["getter", "setter", "캡슐화", "유효성 검사"],
+  },
+  {
+    id: 484,
+    lessonId: "cpp-22",
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+using namespace std;
+
+class Car {
+private:
+    double speed;
+public:
+    Car() { speed = 0; }
+    double getSpeed() { return speed; }
+    void setSpeed(double s) {
+        if (s >= 0) speed = s;
+    }
+};
+
+int main() {
+    Car myCar;
+    myCar.setSpeed(-999);
+    cout << myCar.getSpeed();
+    return 0;
+}`,
+    options: ["-999", "0", "999", "컴파일 에러"],
+    correctAnswer: 1,
+    explanation: "setSpeed(-999)에서 -999는 0보다 작으므로 조건 s >= 0을 통과 못해요. speed는 생성자에서 초기화한 0 그대로예요. getSpeed()는 0을 반환해요!",
+    keyConceptTitle: "setter 유효성 검사",
+    keyConceptDescription: "setter에서 잘못된 값(음수 속도 등)을 거부하면 멤버변수가 항상 올바른 상태를 유지해요.",
+    relatedTopics: ["setter", "유효성 검사", "생성자", "private"],
+  },
+  {
+    id: 485,
+    lessonId: "cpp-22",
+    difficulty: "쉬움",
+    question: "class와 객체(object)의 관계를 가장 잘 설명한 것은?",
+    code: `class Car {
+private:
+    string color;
+    double speed;
+public:
+    Car() { speed = 0; }
+    void setColor(string c) { color = c; }
+};
+
+int main() {
+    Car car1;
+    Car car2;
+    car1.setColor("빨간색");
+    car2.setColor("파란색");
+}`,
+    options: [
+      "class와 객체는 같은 것이다",
+      "class는 설계도이고, 객체는 그 설계도로 만들어진 실체이다",
+      "하나의 class로는 객체를 하나만 만들 수 있다",
+      "객체를 먼저 만들고 나서 class를 정의해야 한다",
+    ],
+    correctAnswer: 1,
+    explanation: "class는 붕어빵 틀(설계도)이고, 객체는 그 틀로 찍어낸 붕어빵(실체)이에요. car1과 car2는 모두 같은 Car class로 만들었지만 서로 독립적인 객체예요. 하나의 class로 여러 객체를 만들 수 있어요!",
+    keyConceptTitle: "class(설계도) vs 객체(실체)",
+    keyConceptDescription: "class는 '어떤 멤버를 가질지' 정의한 설계도예요. 객체는 그 설계도를 바탕으로 실제로 만들어진 실체예요. 붕어빵틀(class) → 붕어빵(object)!",
+    relatedTopics: ["class", "객체", "설계도", "인스턴스", "OOP"],
+  },
+  {
+    id: 486,
+    lessonId: "cpp-22",
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+#include <string>
+using namespace std;
+
+class BankAccount {
+private:
+    string owner;
+    double balance;
+public:
+    BankAccount(string name, double initial) {
+        owner = name;
+        balance = initial;
+    }
+    void info() {
+        cout << owner << ": " << balance << "원";
+    }
+};
+
+int main() {
+    BankAccount acc("김철수", 5000);
+    acc.info();
+    return 0;
+}`,
+    options: ["김철수: 5000원", "컴파일 에러", "0원", "김철수"],
+    correctAnswer: 0,
+    explanation: "BankAccount acc(\"김철수\", 5000)에서 생성자가 자동 호출돼요. owner = \"김철수\", balance = 5000으로 초기화되고, info()가 \"김철수: 5000원\"을 출력해요.",
+    keyConceptTitle: "생성자로 객체 초기화",
+    keyConceptDescription: "생성자에 인자를 넘기면 객체가 생성되는 순간 자동으로 초기화돼요. 따로 setter를 호출할 필요가 없어요.",
+    relatedTopics: ["생성자", "객체 초기화", "멤버함수"],
+  },
+  {
+    id: 487,
+    lessonId: "cpp-22",
+    difficulty: "보통",
+    question: "다음 클래스에서 객체를 **올바르게** 생성하는 코드는?",
+    code: `class BankAccount {
+private:
+    string owner;
+    double balance;
+public:
+    BankAccount(string name, double initial) {
+        owner = name;
+        balance = initial;
+    }
+};`,
+    options: [
+      "BankAccount acc;",
+      "BankAccount acc(\"김철수\", 1000);",
+      "BankAccount acc = new BankAccount(\"김철수\", 1000);",
+      "BankAccount(\"김철수\", 1000) acc;",
+    ],
+    correctAnswer: 1,
+    explanation: "매개변수가 있는 생성자는 `클래스명 변수명(인자1, 인자2);` 형식으로 호출해요. `acc;`만 쓰면 매개변수 없는 기본 생성자가 없어서 에러! `new`는 포인터용이라 틀려요.",
+    keyConceptTitle: "생성자로 객체 생성하는 문법",
+    keyConceptDescription: "매개변수 있는 생성자: `ClassName 변수명(값1, 값2);`. 괄호 안에 생성자 인자를 넘겨요. Java/Python의 `new`나 `ClassName()`과 형식이 달라요.",
+    relatedTopics: ["생성자", "객체 생성 문법", "매개변수"],
+  },
+  {
+    id: 488,
+    lessonId: "cpp-22",
+    difficulty: "어려움",
+    question: "캡슐화(encapsulation)에 대한 설명으로 가장 적절한 것은?",
+    code: `class BankAccount {
+private:
+    double balance;   // 외부에서 직접 접근 불가
+public:
+    void deposit(double a) {
+        if (a > 0) balance += a;  // 양수만 입금
+    }
+    double getBalance() { return balance; }
+};`,
+    options: [
+      "모든 멤버를 public으로 공개하는 설계 방식",
+      "멤버변수를 private으로 숨기고 public 함수로만 접근하게 하는 원칙",
+      "클래스를 다른 파일에 분리해서 관리하는 방식",
+      "여러 클래스를 하나로 합치는 기법",
+    ],
+    correctAnswer: 1,
+    explanation: "캡슐화는 데이터(멤버변수)를 private으로 숨기고, public 멤버함수만 외부에 공개하는 OOP 원칙이에요. 잘못된 값 입력을 막고, 내부 구현을 자유롭게 바꿀 수 있어요.",
+    keyConceptTitle: "캡슐화 (Encapsulation)",
+    keyConceptDescription: "private으로 데이터를 보호하고 public 함수로만 접근 — 이게 캡슐화예요. 객체지향의 핵심 원칙 중 하나예요.",
+    relatedTopics: ["캡슐화", "OOP", "private", "public", "getter", "setter"],
+  },
+  {
+    id: 489,
+    lessonId: "cpp-22",
+    difficulty: "어려움",
+    question: "class(클래스)와 struct(구조체)의 차이로 올바른 것은?",
+    code: `struct Point {
+    int x;   // 기본: public
+    int y;
+};
+
+class Circle {
+    double radius;  // 기본: private
+public:
+    void setR(double r) { radius = r; }
+};`,
+    options: [
+      "class는 멤버함수를 가질 수 없고, struct는 가질 수 있다",
+      "struct의 기본 접근 제어는 private이고, class는 public이다",
+      "struct의 기본 접근 제어는 public이고, class는 private이다",
+      "class와 struct는 완전히 동일하다",
+    ],
+    correctAnswer: 2,
+    explanation: "struct는 접근 제어 키워드가 없으면 기본이 public이고, class는 기본이 private이에요. 이것이 가장 핵심적인 차이예요!",
+    keyConceptTitle: "class vs struct 기본 접근 제어",
+    keyConceptDescription: "struct: 기본 public / class: 기본 private. 실무에서는 순수 데이터 묶음은 struct, 캡슐화가 필요하면 class를 주로 써요.",
+    relatedTopics: ["class", "struct", "private", "public", "기본 접근 제어"],
+  },
+  {
+    id: 490,
+    lessonId: "cpp-22",
+    difficulty: "어려움",
+    question: "다음 코드에서 잘못된 부분은?",
+    code: `class Player {
+private:
+    int hp;
+    int attack;
+public:
+    void Player(int h, int a) {   // 생성자??
+        hp = h;
+        attack = a;
+    }
+    int getHp() { return hp; }
+};
+
+int main() {
+    Player p(100, 30);
+    cout << p.getHp();
+}`,
+    options: [
+      "멤버변수를 private으로 선언한 것",
+      "getHp()의 반환 타입이 int인 것",
+      "생성자에 void 리턴 타입을 붙인 것",
+      "매개변수 이름이 h, a인 것",
+    ],
+    correctAnswer: 2,
+    explanation: "생성자는 리턴 타입이 없어야 해요. void를 붙이면 생성자가 아닌 일반 함수로 인식돼요! Player(int h, int a)처럼 void 없이 써야 해요.",
+    keyConceptTitle: "생성자에 void 금지",
+    keyConceptDescription: "생성자는 리턴 타입을 쓰지 않아요. void를 쓰면 컴파일러가 생성자가 아닌 일반 멤버함수로 처리해서 객체 초기화가 안 돼요.",
+    relatedTopics: ["생성자", "리턴 타입 없음", "void 금지"],
+  },
+  {
+    id: 491,
+    lessonId: "cpp-22",
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+using namespace std;
+
+class BankAccount {
+private:
+    double balance;
+public:
+    BankAccount(double initial) {
+        if (initial >= 0) balance = initial;
+        else              balance = 0;
+    }
+    void deposit(double a) {
+        if (a > 0) balance += a;
+    }
+    void withdraw(double a) {
+        if (a > 0 && balance >= a) balance -= a;
+    }
+    double getBalance() { return balance; }
+};
+
+int main() {
+    BankAccount acc(-500);
+    acc.deposit(1000);
+    acc.withdraw(300);
+    acc.withdraw(9999);
+    cout << acc.getBalance();
+    return 0;
+}`,
+    options: ["700", "200", "-500", "9199"],
+    correctAnswer: 0,
+    explanation: "BankAccount acc(-500): 초기값이 음수라 balance = 0. deposit(1000): 0+1000=1000. withdraw(300): 1000-300=700. withdraw(9999): 잔액(700) < 9999라 거부. 결과: 700.",
+    keyConceptTitle: "생성자 + getter/setter 종합",
+    keyConceptDescription: "생성자에서 잘못된 초기값을 막고, deposit/withdraw에서도 유효성 검사를 하면 항상 올바른 상태를 유지할 수 있어요.",
+    relatedTopics: ["생성자", "유효성 검사", "캡슐화", "getter", "setter"],
+  },
+
+  // ============================================================
+  // cpp-p1: 숫자 맞추기 게임 (추가 문제)
+  // ============================================================
+  {
+    id: 500,
+    lessonId: "cpp-p1",
+    difficulty: "쉬움",
+    question: "`srand(time(0))`을 호출하지 않으면 어떤 일이 생길까요?",
+    code: `// A: srand 없이
+int a = rand() % 100 + 1;
+
+// B: srand 있음
+srand(time(0));
+int b = rand() % 100 + 1;`,
+    options: [
+      "A와 B 모두 매번 다른 숫자가 나온다",
+      "A는 프로그램을 실행할 때마다 같은 숫자가 나온다",
+      "A는 컴파일 에러가 난다",
+      "B는 느리지만 A보다 더 랜덤하다",
+    ],
+    correctAnswer: 1,
+    explanation: "srand가 없으면 시드(seed)가 고정되어 매번 실행해도 rand()가 동일한 순서를 생성해요. srand(time(0))은 현재 시각을 시드로 설정해서 매번 다른 결과를 만들어요.",
+    keyConceptTitle: "srand(time(0)) — 랜덤 시드",
+    keyConceptDescription: "rand()는 시드 기반 의사난수예요. srand로 시드를 바꾸지 않으면 매번 같은 순서가 나와요. time(0)으로 현재 시각을 시드로 쓰면 매번 달라져요.",
+    relatedTopics: ["rand()", "srand()", "time(0)", "난수 시드"],
+  },
+  {
+    id: 501,
+    lessonId: "cpp-p1",
+    difficulty: "쉬움",
+    question: "다음 함수의 역할은?",
+    code: `int getRandomNumber() {
+    return rand() % 100 + 1;
+}`,
+    options: [
+      "0~100 사이의 실수를 반환한다",
+      "1~100 사이의 정수를 반환한다",
+      "0~99 사이의 정수를 반환한다",
+      "항상 50을 반환한다",
+    ],
+    correctAnswer: 1,
+    explanation: "rand() % 100은 0~99, 여기에 +1을 더하면 1~100이에요. 게임에서 정답을 1~100 범위로 만드는 함수예요.",
+    keyConceptTitle: "rand() % N + 1 패턴",
+    keyConceptDescription: "rand() % N → 0~(N-1). rand() % N + 1 → 1~N. 1부터 시작하는 범위를 만들 때 쓰는 기본 패턴이에요.",
+    relatedTopics: ["rand()", "범위 계산", "% 연산"],
+  },
+  {
+    id: 502,
+    lessonId: "cpp-p1",
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는? (answer = 42, 입력 순서: 70 → 20 → 42)",
+    code: `int answer = 42, guess = 0, tries = 0;
+while (guess != answer) {
+    cin >> guess;
+    tries++;
+    if (guess > answer)      cout << "더 작게!\\n";
+    else if (guess < answer) cout << "더 크게!\\n";
+}
+cout << tries << "번 만에 성공!";`,
+    options: [
+      "더 작게!\\n더 크게!\\n2번 만에 성공!",
+      "더 작게!\\n더 크게!\\n3번 만에 성공!",
+      "더 크게!\\n더 작게!\\n3번 만에 성공!",
+      "더 작게!\\n더 크게!\\n성공!",
+    ],
+    correctAnswer: 1,
+    explanation: "70 입력 → 70 > 42 → '더 작게!', tries=1. 20 입력 → 20 < 42 → '더 크게!', tries=2. 42 입력 → 42 == 42 → 루프 종료, tries=3. 출력: '3번 만에 성공!'",
+    keyConceptTitle: "게임 루프 흐름 추적",
+    keyConceptDescription: "while (guess != answer) 루프에서 매 반복마다 tries++, 힌트 출력. 정답이 입력되면 루프 탈출 후 시도 횟수 출력.",
+    relatedTopics: ["while 루프", "게임 루프", "카운터", "조건 분기"],
+  },
+  {
+    id: 503,
+    lessonId: "cpp-p1",
+    difficulty: "보통",
+    question: "'한 번 더 할래요?' 기능을 구현하는 올바른 do-while 패턴은?",
+    code: `char again;
+___ {
+    playGame();
+    cout << "한 번 더? (y/n): ";
+    cin >> again;
+} ___ (again == 'y');`,
+    options: [
+      "while / while",
+      "do / while",
+      "for / while",
+      "repeat / until",
+    ],
+    correctAnswer: 1,
+    explanation: "do-while은 본문을 먼저 한 번 실행한 뒤 조건을 검사해요. '게임을 먼저 하고, 이후 계속할지 확인'하는 구조에 딱 맞아요. while은 조건을 먼저 검사해서 게임이 한 번도 안 실행될 수 있어요.",
+    keyConceptTitle: "do-while — 최소 1회 실행 보장",
+    keyConceptDescription: "do { } while(조건); — 본문을 반드시 한 번 실행 후 조건 체크. '한 번 더?' 패턴의 정석이에요.",
+    relatedTopics: ["do-while", "게임 재시작", "반복문"],
+  },
+  {
+    id: 504,
+    lessonId: "cpp-p1",
+    difficulty: "보통",
+    question: "게임을 함수로 분리했을 때의 장점으로 옳지 않은 것은?",
+    code: `// 함수로 분리
+int getRandomNumber() { return rand() % 100 + 1; }
+void playGame() {
+    int answer = getRandomNumber();
+    // ... 게임 로직
+}
+
+int main() {
+    srand(time(0));
+    char again;
+    do { playGame(); cin >> again; } while (again == 'y');
+}`,
+    options: [
+      "main()이 짧아지고 읽기 쉬워진다",
+      "playGame()만 따로 테스트할 수 있다",
+      "함수로 나누면 실행 속도가 빨라진다",
+      "같은 코드를 여러 번 쓰지 않아도 된다",
+    ],
+    correctAnswer: 2,
+    explanation: "함수로 분리해도 실행 속도는 거의 동일해요(오히려 함수 호출 오버헤드가 생길 수 있어요). 분리의 진짜 장점은 가독성, 재사용성, 독립 테스트 가능성이에요.",
+    keyConceptTitle: "함수 분리의 장점",
+    keyConceptDescription: "함수 분리 = 가독성 ↑ + 재사용 ↑ + 유지보수 ↑. 실행 속도를 높이는 게 목적은 아니에요.",
+    relatedTopics: ["함수", "코드 구조화", "재사용성"],
+  },
+  {
+    id: 505,
+    lessonId: "cpp-p1",
+    difficulty: "어려움",
+    question: "숫자 맞추기에서 가장 적은 시도로 1~100을 맞추는 최적 전략은?",
+    code: `// 1~100 중 정답 맞추기
+// 전략 A: 1부터 순서대로 (1, 2, 3, ...)
+// 전략 B: 항상 남은 범위의 중간값 (50 → 25 or 75 → ...)`,
+    options: [
+      "전략 A — 최악 100번, 전략 B — 최악 7번",
+      "전략 A — 최악 50번, 전략 B — 최악 10번",
+      "두 전략의 최악 시도 횟수는 동일하다",
+      "전략 B — 최악 100번, 전략 A — 최악 50번",
+    ],
+    correctAnswer: 0,
+    explanation: "전략 A(순차)는 최악 100번. 전략 B(이진 탐색)는 범위를 매번 절반으로 줄여요. log₂(100) ≈ 7이라 최악 7번이면 충분해요. 이진 탐색이 훨씬 효율적이에요!",
+    keyConceptTitle: "이진 탐색 전략",
+    keyConceptDescription: "중간값부터 시작 → 힌트에 따라 위/아래 절반으로 좁혀가기 = 이진 탐색. 최악 log₂(N)번 안에 반드시 찾아요.",
+    relatedTopics: ["이진 탐색", "알고리즘", "탐색 전략"],
+  },
+  {
+    id: 506,
+    lessonId: "cpp-p1",
+    difficulty: "어려움",
+    question: "다음 코드에서 버그가 있는 부분은?",
+    code: `#include <iostream>
+#include <cstdlib>
+using namespace std;
+
+int getRandomNumber() {
+    srand(time(0));           // 줄 A
+    return rand() % 100 + 1;
+}
+
+int main() {
+    int answer = getRandomNumber();
+    int guess = 0, tries = 0;
+    while (guess != answer) {
+        cin >> guess;
+        tries++;
+    }
+    cout << tries << "번 만에 성공!";
+}`,
+    options: [
+      "rand() % 100 + 1이 1~101 범위를 생성한다",
+      "srand(time(0))이 getRandomNumber() 안에 있어서 호출할 때마다 시드가 재설정된다",
+      "while 루프가 guess == answer일 때 종료되지 않는다",
+      "tries가 int라서 오버플로우가 난다",
+    ],
+    correctAnswer: 1,
+    explanation: "srand는 main()에서 딱 한 번만 호출해야 해요. getRandomNumber() 안에 두면 함수를 호출할 때마다 시드가 재설정돼요. 같은 초 안에 여러 번 호출하면 time(0) 값이 같아서 같은 숫자가 반복될 수 있어요.",
+    keyConceptTitle: "srand는 main()에서 한 번만",
+    keyConceptDescription: "srand(time(0))은 프로그램 시작 시 main()에서 딱 한 번 호출하는 게 원칙이에요. 함수 안에 넣으면 매번 시드가 재설정돼요.",
+    relatedTopics: ["srand", "rand", "시드 초기화", "버그"],
+  },
+
+  // ============================================================
+  // cpp-p2: RPG 캐릭터 관리
+  // ============================================================
+  {
+    id: 507,
+    lessonId: "cpp-p2",
+    difficulty: "쉬움",
+    question: "RPG 캐릭터 class에서 멤버변수와 생성자가 올바르게 작성된 것은?",
+    code: `class Character {
+private:
+    string name;
+    int hp;
+    int attack;
+public:
+    // 생성자
+    ???
+};`,
+    options: [
+      "void Character(string n, int h, int a) { name=n; hp=h; attack=a; }",
+      "Character(string n, int h, int a) { name=n; hp=h; attack=a; }",
+      "Character() = { name, hp, attack }",
+      "Character(string n, int h, int a) : void { name=n; }",
+    ],
+    correctAnswer: 1,
+    explanation: "생성자는 클래스 이름과 동일하고 리턴 타입이 없어요. void를 쓰면 생성자가 아닌 일반 함수로 처리돼요. Character(string n, int h, int a) { ... } 형태가 올바른 생성자예요.",
+    keyConceptTitle: "RPG 캐릭터 class 생성자",
+    keyConceptDescription: "프로젝트에서 class를 쓸 때도 같은 규칙: 생성자 = 클래스 이름, 리턴 타입 없음. 멤버변수는 private, 생성자는 public에 선언.",
+    relatedTopics: ["class", "생성자", "private", "RPG 프로젝트"],
+  },
+  {
+    id: 508,
+    lessonId: "cpp-p2",
+    difficulty: "쉬움",
+    question: "파티원 목록을 저장하는 올바른 선언은?",
+    code: `// Character class가 정의되어 있을 때
+// 여러 캐릭터를 동적으로 추가/관리하려면?`,
+    options: [
+      "Character party[100];",
+      "vector<Character> party;",
+      "list<Character> party[10];",
+      "Character* party;",
+    ],
+    correctAnswer: 1,
+    explanation: "vector<Character>는 크기를 미리 정하지 않아도 되고 push_back()으로 동적 추가할 수 있어요. 배열은 크기를 미리 정해야 하고, Character*는 동적 메모리 관리가 복잡해요.",
+    keyConceptTitle: "vector<ClassName> — 객체 컬렉션",
+    keyConceptDescription: "여러 객체를 관리할 때는 vector<ClassName>이 가장 편해요. push_back()으로 추가, for(auto& c : party)로 순회해요.",
+    relatedTopics: ["vector", "class", "객체 컬렉션", "RPG 프로젝트"],
+  },
+  {
+    id: 509,
+    lessonId: "cpp-p2",
+    difficulty: "쉬움",
+    question: "파티원 정보를 출력하는 함수에서 `const Character&`를 쓰는 이유는?",
+    code: `void printCharacter(const Character& c) {
+    cout << c.getName() << " HP:" << c.getHp();
+}`,
+    options: [
+      "Character 객체를 복사해서 안전하게 수정하기 위해",
+      "객체를 복사하지 않고(참조) 내부를 변경도 못 하게(const) 하기 위해",
+      "const가 없으면 컴파일이 안 돼서",
+      "참조(&)가 없으면 함수가 호출이 안 돼서",
+    ],
+    correctAnswer: 1,
+    explanation: "참조(&)는 복사 비용을 없애고, const는 함수 안에서 실수로 c를 수정하는 걸 막아줘요. 출력 함수처럼 읽기만 할 때 const 참조가 가장 올바른 패턴이에요.",
+    keyConceptTitle: "const 참조 매개변수",
+    keyConceptDescription: "const ClassName& = 복사 없이 전달 + 수정 불가 보장. 읽기 전용으로 객체를 받을 때 표준 패턴이에요.",
+    relatedTopics: ["const 참조", "매개변수", "복사 방지", "RPG 프로젝트"],
+  },
+  {
+    id: 510,
+    lessonId: "cpp-p2",
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+class Character {
+private:
+    string name;
+    int hp;
+public:
+    Character(string n, int h) { name = n; hp = h; }
+    string getName() const { return name; }
+    int getHp() const { return hp; }
+};
+
+int main() {
+    vector<Character> party;
+    party.push_back(Character("전사", 100));
+    party.push_back(Character("마법사", 60));
+
+    for (const auto& c : party) {
+        cout << c.getName() << ": " << c.getHp() << "\\n";
+    }
+}`,
+    options: [
+      "전사: 100\\n마법사: 60",
+      "마법사: 60\\n전사: 100",
+      "전사: 60\\n마법사: 100",
+      "컴파일 에러",
+    ],
+    correctAnswer: 0,
+    explanation: "push_back 순서대로 vector에 저장돼요. range-for는 앞에서부터 순서대로 순회해요. '전사: 100'이 먼저, '마법사: 60'이 다음으로 출력돼요.",
+    keyConceptTitle: "vector + class + range-for",
+    keyConceptDescription: "vector에 push_back한 순서대로 저장되고, range-for로 순서대로 꺼내요. class 객체도 vector에 담아서 같은 방식으로 사용해요.",
+    relatedTopics: ["vector", "class", "range-for", "push_back"],
+  },
+  {
+    id: 511,
+    lessonId: "cpp-p2",
+    difficulty: "보통",
+    question: "캐릭터 HP를 감소시키는 함수를 올바르게 작성한 것은?",
+    code: `class Character {
+private:
+    int hp;
+public:
+    Character(int h) { hp = h; }
+    int getHp() { return hp; }
+    // takeDamage: hp를 damage만큼 줄임 (0 이하로는 안 됨)
+    ???
+};`,
+    options: [
+      "void takeDamage(int damage) { hp = damage; }",
+      "void takeDamage(int damage) { hp -= damage; if (hp < 0) hp = 0; }",
+      "int takeDamage(int damage) { return hp - damage; }",
+      "void takeDamage(int damage) const { hp -= damage; }",
+    ],
+    correctAnswer: 1,
+    explanation: "hp -= damage로 깎고, hp < 0이면 0으로 맞춰줘요. 'return hp - damage'는 실제로 멤버변수를 바꾸지 않아요. const 함수 안에서는 멤버변수를 수정할 수 없어요.",
+    keyConceptTitle: "HP 감소 함수 패턴",
+    keyConceptDescription: "hp -= damage 후 if (hp < 0) hp = 0; — 게임에서 HP를 줄일 때 0 미만으로 내려가지 않도록 처리하는 기본 패턴이에요.",
+    relatedTopics: ["멤버함수", "유효성 검사", "HP 관리", "RPG 프로젝트"],
+  },
+  {
+    id: 512,
+    lessonId: "cpp-p2",
+    difficulty: "보통",
+    question: "파티 전체를 보여주는 함수가 올바르게 구현된 것은?",
+    code: `void showParty(const vector<Character>& party) {
+    if (party.empty()) {
+        cout << "파티가 비어있어요!\\n";
+        return;
+    }
+    for (const auto& c : party) {
+        printCharacter(c);
+    }
+}`,
+    options: [
+      "party가 비어있으면 무한 루프가 된다",
+      "party.empty() 검사로 빈 경우를 먼저 처리하고, 아니면 순회 출력하는 올바른 구현이다",
+      "const vector<Character>&는 원소를 추가할 수 없어서 에러가 난다",
+      "range-for에서 const auto&를 쓰면 getName() 호출이 안 된다",
+    ],
+    correctAnswer: 1,
+    explanation: "empty() 검사 후 early return하고, 아니면 const auto&로 순회해요. const vector& 매개변수는 읽기 전용이라 push_back은 못 하지만 원소를 읽는 건 됩니다. const auto& c는 const Character&와 같아요.",
+    keyConceptTitle: "빈 컨테이너 검사 + 순회",
+    keyConceptDescription: "함수 시작에 empty() 체크 후 early return → 빈 경우 처리. 이후 range-for 순회 — 방어적 코드 작성의 기본 패턴이에요.",
+    relatedTopics: ["vector", "empty()", "range-for", "early return"],
+  },
+  {
+    id: 513,
+    lessonId: "cpp-p2",
+    difficulty: "어려움",
+    question: "다음 battle() 함수의 출력 결과는? (hero hp=100, attack=30 / monster hp=50)",
+    code: `#include <iostream>
+using namespace std;
+
+class Character {
+private:
+    string name; int hp; int attack;
+public:
+    Character(string n, int h, int a) { name=n; hp=h; attack=a; }
+    string getName() { return name; }
+    int getHp() { return hp; }
+    void takeDamage(int d) {
+        hp -= d;
+        if (hp < 0) hp = 0;
+    }
+    int getAttack() { return attack; }
+    bool isAlive() { return hp > 0; }
+};
+
+void battle(Character& hero, Character& monster) {
+    while (hero.isAlive() && monster.isAlive()) {
+        monster.takeDamage(hero.getAttack());
+        if (!monster.isAlive()) break;
+        hero.takeDamage(monster.getAttack());
+    }
+    cout << (hero.isAlive() ? "승리!" : "패배!");
+}
+
+int main() {
+    Character hero("전사", 100, 30);
+    Character monster("슬라임", 50, 999);
+    battle(hero, monster);
+}`,
+    options: ["패배!", "승리!", "무승부!", "컴파일 에러"],
+    correctAnswer: 0,
+    explanation: "1턴: 슬라임 hp 50-30=20 (살아있음) → 전사 hp 100-999 = 0으로 clamp. 2턴 시작: while 조건 hero.isAlive() = (0 > 0) = false → 루프 탈출. hero.isAlive() = false → '패배!' 출력. 슬라임 attack이 999라 영웅이 먼저 쓰러져요.",
+    keyConceptTitle: "전투 루프 흐름 추적",
+    keyConceptDescription: "while (둘 다 살아있는 동안) → 몬스터 먼저 피해 → 몬스터 사망 시 break → 영웅 먼저 공격하므로 영웅이 유리해요.",
+    relatedTopics: ["battle 함수", "while 루프", "isAlive", "break", "RPG 프로젝트"],
+  },
+  {
+    id: 514,
+    lessonId: "cpp-p2",
+    difficulty: "어려움",
+    question: "다음 코드에서 levelUp() 호출 후 출력 결과는?",
+    code: `#include <iostream>
+#include <string>
+using namespace std;
+
+class Character {
+private:
+    string name;
+    int attack;
+public:
+    Character(string n, int a) { name = n; attack = a; }
+    int getAttack() const { return attack; }
+    void setAttack(int a) { attack = a; }
+};
+
+void levelUp(Character c) {   // 값 전달 (복사본)
+    c.setAttack(c.getAttack() + 10);
+}
+
+int main() {
+    Character hero("전사", 30);
+    levelUp(hero);
+    cout << hero.getAttack();
+}`,
+    options: [
+      "30",
+      "40",
+      "컴파일 에러",
+      "0",
+    ],
+    correctAnswer: 0,
+    explanation: "levelUp(Character c)은 값 전달이라 hero의 복사본이 만들어져요. 복사본의 attack을 40으로 올려도 원본 hero는 그대로 30이에요. 원본을 바꾸려면 Character& c (참조 전달)로 바꿔야 해요.",
+    keyConceptTitle: "값 전달은 복사본만 수정",
+    keyConceptDescription: "함수가 객체를 값으로 받으면(Character c) 복사본을 수정하는 것이라 원본이 바뀌지 않아요. 원본을 수정하려면 참조(Character& c)로 전달해야 해요.",
+    relatedTopics: ["참조 전달", "값 전달", "복사본", "RPG 프로젝트"],
+  },
+
+  // ============================================================
+  // cpp-p3: USACO 모의전
+  // ============================================================
+  {
+    id: 515,
+    lessonId: "cpp-p3",
+    difficulty: "쉬움",
+    question: "`#include <bits/stdc++.h>`를 쓰는 이유는?",
+    code: `// 경쟁 프로그래밍 템플릿
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    vector<int> v = {3, 1, 4};
+    sort(v.begin(), v.end());
+    // vector, sort 모두 따로 include 안 해도 됨
+}`,
+    options: [
+      "코드 실행 속도를 빠르게 해주는 헤더다",
+      "vector, algorithm, string 등 표준 라이브러리를 한 번에 다 포함한다",
+      "USACO 채점 서버에서만 작동하는 특수 헤더다",
+      "using namespace std; 없이도 std:: 없이 쓸 수 있게 해준다",
+    ],
+    correctAnswer: 1,
+    explanation: "<bits/stdc++.h>는 거의 모든 C++ 표준 헤더를 한 번에 포함해요. 경쟁 프로그래밍에서 시간을 아끼기 위해 사용해요. 프로덕션 코드에서는 필요한 헤더만 명시적으로 포함하는 게 좋아요.",
+    keyConceptTitle: "#include <bits/stdc++.h>",
+    keyConceptDescription: "경쟁 프로그래밍 전용 단축키 헤더. 모든 표준 라이브러리를 한 번에 포함해요. 실제 프로젝트보다 대회에서 코딩 속도를 높일 때 사용해요.",
+    relatedTopics: ["bits/stdc++.h", "헤더", "경쟁 프로그래밍", "USACO"],
+  },
+  {
+    id: 516,
+    lessonId: "cpp-p3",
+    difficulty: "쉬움",
+    question: "`pair<int, string>`의 원소에 접근하는 올바른 방법은?",
+    code: `pair<int, string> cow = {500, "Bessie"};
+// 우유 생산량과 이름을 출력하려면?`,
+    options: [
+      "cow[0]과 cow[1]",
+      "cow.first와 cow.second",
+      "cow.get<0>()과 cow.get<1>()",
+      "cow.key와 cow.value",
+    ],
+    correctAnswer: 1,
+    explanation: "pair의 첫 번째 원소는 .first, 두 번째는 .second로 접근해요. cow.first = 500 (우유량), cow.second = \"Bessie\" (이름)이에요.",
+    keyConceptTitle: "pair.first / pair.second",
+    keyConceptDescription: "pair<T1, T2>의 접근: .first (첫 번째), .second (두 번째). USACO에서 두 값을 묶어 정렬할 때 자주 써요.",
+    relatedTopics: ["pair", "first", "second", "USACO"],
+  },
+  {
+    id: 517,
+    lessonId: "cpp-p3",
+    difficulty: "보통",
+    question: "소 정렬에서 '우유량 내림차순, 같으면 이름 오름차순'을 구현하는 lambda는?",
+    code: `vector<pair<int, string>> cows = {
+    {300, "Bessie"}, {500, "Elsie"}, {500, "Daisy"}
+};
+sort(cows.begin(), cows.end(), [](auto& a, auto& b) {
+    ???
+});`,
+    options: [
+      "return a < b;",
+      "return a.first > b.first || (a.first == b.first && a.second < b.second);",
+      "return a.first < b.first;",
+      "return a.second < b.second;",
+    ],
+    correctAnswer: 1,
+    explanation: "우유량(first) 내림차순: a.first > b.first. 우유량이 같으면 이름(second) 오름차순: a.second < b.second. 두 조건을 ||로 연결할 때 같은 경우를 &&로 처리해요.",
+    keyConceptTitle: "다중 조건 정렬 lambda",
+    keyConceptDescription: "sort + lambda로 복합 정렬: 주 조건 비교 || (같을 때 보조 조건). 이 패턴이 USACO 정렬 문제의 핵심이에요.",
+    relatedTopics: ["sort", "lambda", "pair", "다중 조건 정렬", "USACO"],
+  },
+  {
+    id: 518,
+    lessonId: "cpp-p3",
+    difficulty: "보통",
+    question: "`map<int, int>`로 숫자 빈도를 세는 코드의 출력 결과는?",
+    code: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    vector<int> nums = {3, 1, 3, 2, 3, 1};
+    map<int, int> freq;
+    for (int n : nums) freq[n]++;
+    cout << freq[3] << " " << freq[1] << " " << freq[2];
+}`,
+    options: [
+      "3 2 1", "1 2 3", "2 3 1", "3 1 2"],
+    correctAnswer: 0,
+    explanation: "3은 3번, 1은 2번, 2는 1번 등장해요. freq[3]=3, freq[1]=2, freq[2]=1. map은 키 기준 자동 오름차순 정렬이지만, cout에서 직접 키로 접근했으므로 3 2 1이 출력돼요.",
+    keyConceptTitle: "map으로 빈도 카운팅",
+    keyConceptDescription: "map<int,int> freq; for (int n : v) freq[n]++; — 처음 나온 키는 자동으로 0으로 초기화돼요. 빈도 카운팅의 기본 패턴이에요.",
+    relatedTopics: ["map", "빈도 카운팅", "freq[n]++", "USACO"],
+  },
+  {
+    id: 519,
+    lessonId: "cpp-p3",
+    difficulty: "보통",
+    question: "괄호 매칭에서 stack을 쓰는 이유로 가장 적절한 것은?",
+    code: `// 입력: "((()))"
+// 올바른 괄호인지 확인
+stack<char> st;
+for (char c : s) {
+    if (c == '(') st.push(c);
+    else {
+        if (st.empty()) { valid = false; break; }
+        st.pop();
+    }
+}
+valid = valid && st.empty();`,
+    options: [
+      "괄호의 총 개수를 빠르게 세기 위해",
+      "가장 최근에 열린 괄호를 먼저 닫아야 하는 구조(LIFO)이기 때문에",
+      "stack이 queue보다 메모리를 적게 써서",
+      "sort 없이 자동 정렬이 되기 때문에",
+    ],
+    correctAnswer: 1,
+    explanation: "괄호는 '가장 최근에 열린 것이 먼저 닫혀야' 해요. 이게 LIFO(Last In First Out) 구조인 stack이랑 딱 맞아요. queue나 vector로 하면 '가장 최근' 것을 꺼내기 복잡해져요.",
+    keyConceptTitle: "stack의 LIFO — 괄호 매칭",
+    keyConceptDescription: "괄호 매칭 = stack의 교과서 사례. '(' → push, ')' → top 확인 후 pop. 마지막에 stack이 비어있으면 올바른 괄호예요.",
+    relatedTopics: ["stack", "LIFO", "괄호 매칭", "USACO"],
+  },
+  {
+    id: 520,
+    lessonId: "cpp-p3",
+    difficulty: "어려움",
+    question: "다음 코드에서 서로 다른 숫자의 개수는?",
+    code: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    vector<int> v = {5, 3, 5, 2, 3, 3, 1};
+    map<int, int> freq;
+    for (int n : v) freq[n]++;
+    cout << freq.size();
+}`,
+    options: ["7", "4", "3", "5"],
+    correctAnswer: 1,
+    explanation: "v에서 서로 다른 값은 1, 2, 3, 5로 4개예요. freq 맵에는 키가 4개(1, 2, 3, 5) 들어가고, freq.size()는 4를 반환해요.",
+    keyConceptTitle: "map.size() = 서로 다른 키 수",
+    keyConceptDescription: "map에서 각 키는 한 번만 존재해요. 원소를 map에 담으면 중복이 자동 제거되고, .size()로 서로 다른 값의 수를 알 수 있어요.",
+    relatedTopics: ["map", "size()", "중복 제거", "서로 다른 원소 수"],
+  },
+  {
+    id: 521,
+    lessonId: "cpp-p3",
+    difficulty: "어려움",
+    question: "다음 괄호 검사 코드에서 입력 `\"(()\"` 의 결과는?",
+    code: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    string s = "(()";
+    stack<char> st;
+    bool valid = true;
+    for (char c : s) {
+        if (c == '(') st.push(c);
+        else {
+            if (st.empty()) { valid = false; break; }
+            st.pop();
+        }
+    }
+    if (!st.empty()) valid = false;
+    cout << (valid ? "올바름" : "잘못됨");
+}`,
+    options: ["올바름", "잘못됨", "컴파일 에러", "런타임 에러"],
+    correctAnswer: 1,
+    explanation: "'(' → push. '(' → push. ')' → pop. 루프 종료 후 stack에 '('가 1개 남아 있어요. !st.empty()이므로 valid = false → '잘못됨' 출력.",
+    keyConceptTitle: "미닫힌 괄호 감지",
+    keyConceptDescription: "루프 후 stack이 비어있어야 올바른 괄호. 남은 게 있으면 닫히지 않은 '('가 있다는 뜻이에요.",
+    relatedTopics: ["stack", "괄호 매칭", "USACO", "유효성 검사"],
+  },
+  {
+    id: 522,
+    lessonId: "cpp-p3",
+    difficulty: "어려움",
+    question: "USACO 파일 입출력을 위한 `freopen` 설정이 올바른 것은?",
+    code: `int main() {
+    // input.txt에서 읽고 output.txt에 쓰려면?
+    ???
+    int n; cin >> n;
+    cout << n * 2;
+}`,
+    options: [
+      "freopen(\"input.txt\", \"w\", stdin); freopen(\"output.txt\", \"r\", stdout);",
+      "freopen(\"input.txt\", \"r\", stdin); freopen(\"output.txt\", \"w\", stdout);",
+      "open(\"input.txt\"); close(\"output.txt\");",
+      "cin.open(\"input.txt\"); cout.open(\"output.txt\");",
+    ],
+    correctAnswer: 1,
+    explanation: "freopen(파일명, 모드, 스트림). 입력 파일은 \"r\"(read) + stdin, 출력 파일은 \"w\"(write) + stdout. 이렇게 하면 cin/cout이 자동으로 파일로 연결돼요.",
+    keyConceptTitle: "freopen — 파일 입출력 리다이렉션",
+    keyConceptDescription: "freopen(\"in.txt\", \"r\", stdin) + freopen(\"out.txt\", \"w\", stdout) → cin/cout이 파일과 연결. USACO 로컬 테스트의 기본 설정이에요.",
+    relatedTopics: ["freopen", "파일 입출력", "stdin", "stdout", "USACO"],
+  },
 ];
+

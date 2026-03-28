@@ -674,10 +674,16 @@ int main() {
           title: "🎉 Part 2 Complete!",
           content: `## 🏆 Part 2 Complete! Amazing work!
 
-Let's review everything from Part 2 (Lessons 9–14, 22)!
+Let's review everything from Part 2 (Lessons 9, 21, 10–14, 22)!
 
 ### 📚 Lesson 9: Arrays & Vectors
 - Storing multiple values with C-style arrays and \`vector\`
+
+### 🗺️ Lesson 21: 2D Arrays & 2D Vectors
+- \`int grid[rows][cols] = {};\` — zero-initialize always
+- \`vector<vector<int>> v(n, vector<int>(m, 0));\` — when size is dynamic
+- Nested loop traversal, reading grids from \`cin\` (core USACO pattern)
+- Main diagonal: \`grid[i][i]\`, total sum: nested for + accumulate
 
 ### 🔄 Lesson 10: Range-for & auto
 - Easy iteration with \`for(auto x : vec)\`, type inference with \`auto\`
@@ -692,10 +698,17 @@ Let's review everything from Part 2 (Lessons 9–14, 22)!
 - Pointer syntax \`int* ptr\`, dereference \`*ptr\`, nullptr
 
 ### 📦 Lesson 14: Struct
-- User-defined types that bundle related data
+- User-defined types that bundle related data (\`struct Student { string name; int score; };\`)
+- Access members with \`.\` operator, manage multiple records with struct arrays
+- Loop patterns: **sum / min & max / count with condition**
+- Pass by reference (\`Student&\`) for efficiency in functions
 
 ### 🎓 Lesson 22: Class
-- \`private\`/\`public\` access control, constructors, encapsulation
+- Bundle member variables + member functions into **your own type** (class = blueprint, object = instance)
+- \`private\` / \`public\` — hide data members, expose member functions
+- **getter** / **setter** — public interface to read/write private members with validation
+- **Constructor** — called automatically on object creation, same name as class, no return type
+- **Encapsulation** — keep data private, access only through public functions (OOP principle)
 
 ---
 
@@ -704,16 +717,18 @@ Let's review everything from Part 2 (Lessons 9–14, 22)!
 | Concept | Keyword | Core idea |
 |---|---|---|
 | Array/Vector | \`int arr[]\`, \`vector<int>\` | Store multiple values |
+| 2D Array | \`int grid[N][N] = {};\` | Grid/matrix, nested loop traversal |
 | Range-for | \`for(auto x : v)\` | Easy iteration |
 | Reference | \`int& ref\` | Direct access to original |
 | Pointer | \`int* ptr\` | Variable that stores an address |
-| struct | \`struct Name { };\` | Data bundle |
-| class | \`class { private/public };\` | Encapsulation (default private) |
-| Constructor | \`ClassName(...)\` | Object initialization |
+| struct | \`struct Name { };\` | Data bundle, array + pattern use |
+| class | \`class { private/public };\` | Blueprint → object (OOP) |
+| getter/setter | \`getX()\` / \`setX(v)\` | Public interface to private members |
+| Constructor | \`ClassName(...)\` | Auto-called at object creation |
 
 🎊 **Congratulations!** You've completed Part 2!
 
-🚀 **Next: Part 3!** 2D arrays, pair & sorting, map & set, STL algorithms!`
+🚀 **Next: Part 3!** pair & sorting, map & set, STL algorithms!`
         }
       ]
     }
