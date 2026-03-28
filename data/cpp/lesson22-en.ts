@@ -22,53 +22,38 @@ export const cppLesson22EnData: LessonData = {
           id: "ch1-intro",
           type: "explain",
           title: "🚗 What is a class?",
-          content: `In the computer world, cars don't exist. **You have to build them yourself.**
+          content: `\`int\` for integers, \`string\` for text.
+But a **car**? C++ has no car type — **you have to build it yourself!**
 
-\`int\` for integers, \`string\` for text.
-But a **car**? → You define it with a **class**!
+That's what a **class** is for.
 
 ---
 
-## 🎮 Think of it Like a Game Item
+## Two questions to ask when designing any class
 
-In an RPG game, have you ever looked at an item in the shop?
+Let's think about a car:
 
-You see something like:
+**🧠 What does it need to remember?**
+→ Color, current speed... this is **data**
+→ In C++: **member variables**
 
-> **Flame Sword**
-> - Attack: 150
-> - Durability: 80
-> - Attack(), Upgrade()
+**⚙️ What should it be able to do?**
+→ Go forward, go backward, show info...
+→ In C++: **member functions**
 
-Just **reading the description doesn't give you the sword.** You don't own it yet just because you saw it in the shop.
-
-You have to **actually buy it or pick it up** for it to appear in your inventory!
-
-→ That's exactly how **class and object** work.
-
-| | Game | Programming |
+| | Question | C++ |
 |---|---|---|
-| Item **description** | Flame Sword info | **class** |
-| The item you actually **own** | Sword in your inventory | **object** |
+| **Remember** | Color? Speed? | Member variables |
+| **Do** | Go forward? Brake? | Member functions |
 
-**Writing a class** = writing the item description
-**Creating an object** = actually getting the item in your hands`,
+> 💡 A friend was asked "What do you need to make sushi?" They listed rice, cucumber, salmon, avocado… but forgot the **seaweed**.
+> When designing a class, think carefully so **nothing important is left out**.`,
         },
         {
           id: "ch1-build",
           type: "explain",
-          title: "🚗 Let's Build a Car Class",
-          content: `Every class has exactly two things:
-
-| | What it is | C++ |
-|---|---|---|
-| **Things to remember** | color, speed, etc. | Member variables |
-| **Things to do** | go forward, go back, etc. | Member functions |
-
-> 💡 A friend was asked "What do you need to make sushi?" They listed rice, cucumber, salmon, avocado… but forgot the **seaweed**.
-> When designing a class, think carefully so **nothing important is left out**.
-
-\`\`\`cpp
+          title: "🚗 Build the Car Class + Create Objects",
+          content: `\`\`\`cpp
 class Car {
 public:
     string color;   // things to remember (member variables)
@@ -82,7 +67,27 @@ public:
 };
 \`\`\`
 
-This is just the **description** so far. To create an actual car:
+This is just the **blueprint** so far.
+
+---
+
+## 🎮 Think of it Like a Game Item
+
+Seeing the "Flame Sword" in the RPG shop **doesn't mean you own it.** Just reading the description doesn't put it in your inventory.
+
+You have to **actually buy it or pick it up** for it to exist in your hands!
+
+Classes work the same way — the blueprint alone creates nothing.
+**You have to create an object** for something to actually exist.
+
+| | Game | Programming |
+|---|---|---|
+| Item **description** | Flame Sword info | **class** |
+| The item you actually **own** | Sword in inventory | **object** |
+
+---
+
+To create an actual car from the blueprint:
 
 \`\`\`cpp
 Car myCar;           // ← This is where the actual object is created!
