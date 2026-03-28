@@ -25,24 +25,17 @@ export const cppLesson22EnData: LessonData = {
           content: `\`int\` for integers, \`string\` for text.
 But a **car**? C++ has no car type. **You have to build it yourself.**
 
-What would you need to think about to build a car?
+When building something from scratch, there are just two things to think about:
 
 **🧠 What does it need to remember?**
-→ Color, current speed...
 → In C++: **member variables**
 
 **⚙️ What should it be able to do?**
-→ Go forward, go backward, show info...
 → In C++: **member functions**
 
-| | Question | C++ |
-|---|---|---|
-| **Remember** | Color? Speed? | Member variables |
-| **Do** | Go forward? Brake? | Member functions |
+Bundling these two together into a definition — that's exactly what a **class** is.
 
-Like a friend who listed rice, cucumber, salmon, and avocado for a sushi roll but forgot the **seaweed** — when you try to think of everything at once, you miss what matters most. **Start with what's essential.**
-
-Bundling together "things to remember" and "things to do" — that's exactly what a **class** is.`,
+Like a friend who listed rice, cucumber, salmon, and avocado for a sushi roll but forgot the **seaweed** — when you try to think of everything at once, you miss what matters most. **Start with what's essential.**`,
         },
         {
           id: "ch1-build",
