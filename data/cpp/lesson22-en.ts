@@ -416,13 +416,20 @@ BankAccount acc;
 // acc.balance might be -398475.23 or some random value! 😱
 \`\`\`
 
-There are just three rules for writing a constructor:
+Let's break a constructor apart:
 
-{!blue} 📛 **Name** — must be exactly the same as the class name (case-sensitive!)
-{!orange} 🚫 **Return type** — none at all. Writing void is actually an error!
-{!green} ⚡ **Called** — automatically, once, the moment an object is created
+\`\`\`cpp
+// ↓ No return type! (no void, no int, nothing)
+BankAccount(string name, double initial) {
+// ↑ Class name!     ↑ initial values you want → receive as parameters
+    owner   = name;    // parameter → stored into member variable
+    balance = initial;
+}
+// If you don't need initial values, just leave the parentheses empty:
+// BankAccount() { owner = ""; balance = 0; }
+\`\`\`
 
-Applying these rules to BankAccount:
+Putting it inside the actual class:
 
 \`\`\`cpp {6-11,14}
 class BankAccount {

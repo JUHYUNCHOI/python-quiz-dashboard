@@ -415,13 +415,20 @@ BankAccount acc;
 // acc.balance가 -398475.23 같은 이상한 값일 수 있어요! 😱
 \`\`\`
 
-생성자는 딱 세 가지 규칙이 있어요:
+생성자를 뜯어보면:
 
-{!blue} 📛 **이름** — 클래스 이름과 완전히 동일해야 해요 (대소문자도!)
-{!orange} 🚫 **리턴 타입** — 아예 없어요. void라고 써도 에러예요!
-{!green} ⚡ **호출** — 객체를 만드는 순간 자동으로 딱 한 번
+\`\`\`cpp
+// ↓ 리턴 타입 없음! (void도 int도 아무것도 안 써요)
+BankAccount(string name, double initial) {
+// ↑ 클래스 이름!    ↑ 받고 싶은 초기값을 파라미터로
+    owner   = name;    // 파라미터 → 멤버변수에 저장
+    balance = initial;
+}
+// 초기값이 필요 없으면 괄호를 비우면 돼요:
+// BankAccount() { owner = ""; balance = 0; }
+\`\`\`
 
-이 규칙대로 BankAccount에 생성자를 만들면:
+실제 클래스에 넣으면:
 
 \`\`\`cpp {6-11,14}
 class BankAccount {
