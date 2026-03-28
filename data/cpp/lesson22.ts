@@ -384,7 +384,9 @@ int main() {
 }
 \`\`\`
 
-@핵심: private으로 막고, getter/setter로 통제된 창구를 만드는 것 — 이게 **캡슐화(encapsulation)**예요.`,
+@핵심: private으로 막고, getter/setter로 통제된 창구를 만드는 것 — 이게 **캡슐화(encapsulation)**예요.
+
+그런데 한 가지 남은 문제가 있어요. 객체를 만들자마자 매번 setter로 초기값을 설정해줘야 할까요? 더 좋은 방법이 없을까요?`,
         },
       ]
     },
@@ -400,7 +402,9 @@ int main() {
           id: "ch3-constructor",
           type: "explain",
           title: "🔧 생성자 — 객체가 태어날 때 자동 호출!",
-          content: `생성자가 없으면 멤버 변수들이 **쓰레기 값**으로 시작해요:
+          content: `있어요. **생성자(constructor)**예요.
+
+생성자는 객체가 만들어지는 순간 자동으로 호출되는 함수예요. 생성자가 없으면 멤버 변수들이 **쓰레기 값**으로 시작해요:
 
 \`\`\`cpp
 BankAccount acc;

@@ -385,7 +385,9 @@ int main() {
 }
 \`\`\`
 
-@Key: Block with private, then create a controlled gateway with getters/setters — that's **encapsulation**.`,
+@Key: Block with private, then create a controlled gateway with getters/setters — that's **encapsulation**.
+
+But there's still one question. Do we have to call a setter to set initial values every time we create an object? Is there a better way?`,
         },
       ]
     },
@@ -401,7 +403,9 @@ int main() {
           id: "ch3-constructor",
           type: "explain",
           title: "🔧 Constructor — Called automatically when an object is created!",
-          content: `Without a constructor, member variables start with **garbage values**:
+          content: `There is. It's called a **constructor**.
+
+A constructor is a function that runs automatically the moment an object is created. Without one, member variables start with **garbage values**:
 
 \`\`\`cpp
 BankAccount acc;
