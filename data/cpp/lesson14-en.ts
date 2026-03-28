@@ -256,14 +256,16 @@ int main() {
           content: `The key to finding a minimum: **initialize with the first element**, not 0!`,
           code: `int minScore = students[___].score;  // start with first value!
 for (int i = 1; i < 3; i++) {
-    if (students[i].score < minScore)
-        minScore = students[i].score;
+    if (students[i].score ___ minScore)
+        minScore = students[___].score;
 }
 cout << "Min: " << minScore;  // Min: 72`,
           fillBlanks: [
-            { id: 0, answer: "0", options: ["0", "1", "2", "-1"] }
+            { id: 0, answer: "0", options: ["0", "1", "2", "-1"] },
+            { id: 1, answer: "<", options: ["<", ">", "<=", ">="] },
+            { id: 2, answer: "i", options: ["i", "0", "1", "minScore"] }
           ],
-          explanation: "Start with `students[0].score` (first element). Starting with 0 would fail since all scores are greater than 0!"
+          explanation: "① Initialize with `students[0].score` — using 0 would fail since all scores are positive! ② Use `<` to check for smaller value ③ Update with `students[i].score` — the current element!"
         },
         {
           id: "ch2-mini-practice2",
@@ -335,60 +337,6 @@ int main() {
           expectedOutput: `80+: 2 students`
         },
         {
-          id: "ch2-loop-pred1",
-          type: "predict" as const,
-          title: "Finding the total!",
-          code: `#include <iostream>
-#include <string>
-using namespace std;
-
-struct Student {
-    string name;
-    int score;
-};
-
-int main() {
-    Student students[3] = {
-        {"Alice", 95},
-        {"Bob",   87},
-        {"Carol", 72},
-    };
-    int total = 0;
-    for (int i = 0; i < 3; i++) {
-        total += students[i].score;
-    }
-    cout << total;
-    return 0;
-}`,
-          options: ["254", "95", "87", "Error"],
-          answer: 0,
-          explanation: "95 + 87 + 72 = 254. The loop adds each student's score as i goes 0, 1, 2."
-        },
-        {
-          id: "ch2-ref",
-          type: "explain",
-          title: "Passing a struct to a function",
-          content: `Passing a struct to a function with a **reference (&)** is more efficient!
-
-\`\`\`cpp
-// Pass by value — copy, can't change original
-void print(Student s) {
-    cout << s.name << " " << s.score << endl;
-}
-
-// Pass by reference — direct access, can modify
-void boost(Student& s) {
-    s.score += 10;
-}
-
-Student s = {"Alice", 85};
-boost(s);
-cout << s.score;  // 95 (original changed!)
-\`\`\`
-
-Passing a large struct by value copies all its data — expensive. Pass by reference for speed and memory efficiency.`,
-        },
-        {
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ Find the #1 student!",
@@ -420,6 +368,30 @@ int main() {
     return 0;
 }`,
           expectedOutput: `#1: Alice (95)`
+        },
+        {
+          id: "ch2-ref",
+          type: "explain",
+          title: "Passing a struct to a function",
+          content: `Passing a struct to a function with a **reference (&)** is more efficient!
+
+\`\`\`cpp
+// Pass by value — copy, can't change original
+void print(Student s) {
+    cout << s.name << " " << s.score << endl;
+}
+
+// Pass by reference — direct access, can modify
+void boost(Student& s) {
+    s.score += 10;
+}
+
+Student s = {"Alice", 85};
+boost(s);
+cout << s.score;  // 95 (original changed!)
+\`\`\`
+
+Passing a large struct by value copies all its data — expensive. Pass by reference for speed and memory efficiency.`,
         },
         {
           id: "ch2-q1",

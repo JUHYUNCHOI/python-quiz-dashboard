@@ -256,14 +256,16 @@ int main() {
           content: `최솟값을 찾을 때는 **첫 번째 값으로 초기화**하는 게 포인트예요. 0으로 시작하면 안 돼요!`,
           code: `int minScore = students[___].score;  // 첫 번째 값으로 시작!
 for (int i = 1; i < 3; i++) {
-    if (students[i].score < minScore)
-        minScore = students[i].score;
+    if (students[i].score ___ minScore)
+        minScore = students[___].score;
 }
 cout << "최저: " << minScore;  // 최저: 72`,
           fillBlanks: [
-            { id: 0, answer: "0", options: ["0", "1", "2", "-1"] }
+            { id: 0, answer: "0", options: ["0", "1", "2", "-1"] },
+            { id: 1, answer: "<", options: ["<", ">", "<=", ">="] },
+            { id: 2, answer: "i", options: ["i", "0", "1", "minScore"] }
           ],
-          explanation: "초기값을 `students[0].score`(첫 번째 원소)로 설정해야 해요. 0으로 하면 모든 점수가 0보다 크니까 최솟값을 못 찾아요!"
+          explanation: "① 초기값은 `students[0].score` — 0으로 하면 모든 점수가 크니까 최솟값을 못 찾아요! ② `<`로 비교 — 더 작으면 갱신 ③ `students[i].score`로 현재 값으로 업데이트!"
         },
         {
           id: "ch2-mini-practice2",
@@ -335,60 +337,6 @@ int main() {
           expectedOutput: `80점 이상: 2명`
         },
         {
-          id: "ch2-loop-pred1",
-          type: "predict" as const,
-          title: "합계 구하기!",
-          code: `#include <iostream>
-#include <string>
-using namespace std;
-
-struct Student {
-    string name;
-    int score;
-};
-
-int main() {
-    Student students[3] = {
-        {"김철수", 95},
-        {"이영희", 87},
-        {"박민준", 72},
-    };
-    int total = 0;
-    for (int i = 0; i < 3; i++) {
-        total += students[i].score;
-    }
-    cout << total;
-    return 0;
-}`,
-          options: ["254", "95", "87", "에러"],
-          answer: 0,
-          explanation: "95 + 87 + 72 = 254예요. total += students[i].score로 i가 0, 1, 2일 때 각 점수를 더해줘요."
-        },
-        {
-          id: "ch2-ref",
-          type: "explain",
-          title: "함수에 struct 넘기기",
-          content: `함수에 struct를 넘길 때는 **참조(&)**를 쓰면 효율적이에요!
-
-\`\`\`cpp
-// 값 전달 — 복사본, 원본 변경 불가
-void print(Student s) {
-    cout << s.name << " " << s.score << endl;
-}
-
-// 참조 전달 — 원본에 직접 접근, 수정 가능
-void boost(Student& s) {
-    s.score += 10;
-}
-
-Student s = {"김철수", 85};
-boost(s);
-cout << s.score;  // 95 (원본이 바뀜!)
-\`\`\`
-
-큰 struct를 함수에 넘길 때 값 전달은 복사 비용이 커요. 참조 전달이 빠르고 메모리도 아껴요.`,
-        },
-        {
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ 1등 학생 이름 찾기!",
@@ -420,6 +368,30 @@ int main() {
     return 0;
 }`,
           expectedOutput: `1등: 김철수 (95점)`
+        },
+        {
+          id: "ch2-ref",
+          type: "explain",
+          title: "함수에 struct 넘기기",
+          content: `함수에 struct를 넘길 때는 **참조(&)**를 쓰면 효율적이에요!
+
+\`\`\`cpp
+// 값 전달 — 복사본, 원본 변경 불가
+void print(Student s) {
+    cout << s.name << " " << s.score << endl;
+}
+
+// 참조 전달 — 원본에 직접 접근, 수정 가능
+void boost(Student& s) {
+    s.score += 10;
+}
+
+Student s = {"김철수", 85};
+boost(s);
+cout << s.score;  // 95 (원본이 바뀜!)
+\`\`\`
+
+큰 struct를 함수에 넘길 때 값 전달은 복사 비용이 커요. 참조 전달이 빠르고 메모리도 아껴요.`,
         },
         {
           id: "ch2-q1",
