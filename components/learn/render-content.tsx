@@ -109,6 +109,32 @@ function renderChatInline(text: string, keyPrefix: string = ""): React.ReactNode
 }
 
 // ============================================
+// 접을 수 있는 코드블록 컴포넌트
+// ============================================
+function CollapsibleCode({ label, code, language }: { label: string; code: string; language: string }) {
+  const [open, setOpen] = React.useState(false)
+  return (
+    <div className="my-3">
+      <button
+        onClick={() => setOpen(v => !v)}
+        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-700 text-sm font-medium hover:bg-indigo-100 transition-colors"
+      >
+        <svg className={`w-3.5 h-3.5 transition-transform ${open ? "rotate-90" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+        {label}
+      </button>
+      {open && (
+        <div className="mt-2 relative group">
+          <CodeBlock code={code} language={language} />
+          <CopyButton code={code} />
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ============================================
 // 코드 복사 버튼 컴포넌트
 // ============================================
 function CopyButton({ code }: { code: string }) {
@@ -139,6 +165,26 @@ export function renderContent(content: string) {
 
   while (i < lines.length) {
     const line = lines[i]
+
+    // ── 접기 코드블록: {collapse:버튼텍스트} 다음 줄에 ```코드 ──
+    const collapseMatch = line.match(/^\{collapse:(.+)\}$/)
+    if (collapseMatch) {
+      const label = collapseMatch[1]
+      i++
+      if (i < lines.length && lines[i].startsWith('```')) {
+        const lang = lines[i].slice(3).trim() || 'python'
+        i++
+        const codeLines: string[] = []
+        while (i < lines.length && !lines[i].startsWith('```')) {
+          codeLines.push(lines[i])
+          i++
+        }
+        i++
+        const codeText = codeLines.join('\n')
+        elements.push(<CollapsibleCode key={key++} label={label} code={codeText} language={lang} />)
+      }
+      continue
+    }
 
     // ── 코드블록 ──
     if (line.startsWith('```')) {

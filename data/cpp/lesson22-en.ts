@@ -89,10 +89,7 @@ Then below, the **member functions** — things to do:
 
 > 🐍 **Coming from Python?** In Python you'd write \`self.speed\`, but in C++ you just write \`speed\` directly.
 
----
-
-**Full code:**
-
+{collapse:View full code}
 \`\`\`cpp
 class Car {
     double speed;
