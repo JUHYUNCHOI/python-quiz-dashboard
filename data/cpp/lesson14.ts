@@ -394,8 +394,11 @@ cout << s.score;  // 95 (원본이 바뀜!)
           title: "✋ 1등 학생 이름 찾기!",
           content: `이제 점수만이 아니라 **누가** 1등인지도 알아봐요!
 
-- for문으로 배열을 순회하며 가장 높은 점수를 가진 학생의 **이름과 점수**를 출력하세요
-- 힌트: \`maxIdx\` 변수로 인덱스를 추적하면 이름도 같이 찾을 수 있어요`,
+**순서:**
+1. \`maxIdx = 0\` 으로 초기화 (첫 번째 학생부터 시작)
+2. for문으로 배열 순회 (i = 1부터)
+3. \`students[i].score > students[maxIdx].score\` 이면 \`maxIdx = i\`
+4. \`students[maxIdx].name\` 과 \`students[maxIdx].score\` 출력`,
           code: `#include <iostream>
 #include <string>
 using namespace std;

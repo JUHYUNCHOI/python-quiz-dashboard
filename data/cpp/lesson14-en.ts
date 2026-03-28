@@ -394,9 +394,11 @@ Passing a large struct by value copies all its data — expensive. Pass by refer
           title: "✋ Find the #1 student!",
           content: `Now find not just the score, but **who** is #1!
 
-- Use a for loop to find the student with the highest score
-- Print both the **name** and **score** of the top student
-- Hint: track \`maxIdx\` (index) to find the name too`,
+**Steps:**
+1. Initialize \`maxIdx = 0\` (start with the first student)
+2. Loop through the array with for (i = 1 to 2)
+3. If \`students[i].score > students[maxIdx].score\`, update \`maxIdx = i\`
+4. Print \`students[maxIdx].name\` and \`students[maxIdx].score\``,
           code: `#include <iostream>
 #include <string>
 using namespace std;

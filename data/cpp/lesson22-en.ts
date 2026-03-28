@@ -155,43 +155,35 @@ What happens if there's no constructor in C++? Member variables start with **gar
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ Build a Rectangle class!",
-          content: `Build a Rectangle class!
+          content: `Complete the Rectangle class yourself!
 
-- The constructor takes width and height
-- area() returns the area, perimeter() returns the perimeter
-
-Practice using constructors and methods in a class!`,
+**Steps:**
+1. Declare \`width\` and \`height\` (double) in \`private\`
+2. Write the constructor — \`Rectangle(double w, double h)\` stores both values
+3. Write \`area()\` method — returns \`width * height\`
+4. Write \`perimeter()\` method — returns \`2 * (width + height)\``,
           code: `#include <iostream>
 using namespace std;
 
 class Rectangle {
 private:
-    double width, height;
+    // 1. Declare width, height (double)
 
 public:
-    Rectangle(double w, double h) {
-        width = w;
-        height = h;
-    }
+    // 2. Constructor: Rectangle(double w, double h)
 
-    double area() {
-        return width * height;
-    }
+    // 3. area() method
 
-    double perimeter() {
-        return 2 * (width + height);
-    }
+    // 4. perimeter() method
 };
 
 int main() {
     Rectangle r(5.0, 3.0);
     cout << "Area: " << r.area() << endl;
     cout << "Perimeter: " << r.perimeter() << endl;
-
     return 0;
 }`,
-          expectedOutput: `Area: 15
-Perimeter: 16`
+          expectedOutput: `Area: 15\nPerimeter: 16`
         },
         {
           id: "ch2-pred-private",
