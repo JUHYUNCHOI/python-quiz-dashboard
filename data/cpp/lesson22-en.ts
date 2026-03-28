@@ -121,7 +121,7 @@ Think of an RPG game — seeing the "Flame Sword" description in a shop doesn't 
 | Item **description** | Flame Sword info | **class** |
 | The item you actually **own** | Sword in your inventory | **object** |
 
-What you create from a class is called an **object** (or **instance**).
+What you create from a class is called an **object**. You'll also hear the word **instance** — they mean the same thing.
 
 \`\`\`cpp
 Car myCar;            // ← an actual car (object) is created here!
