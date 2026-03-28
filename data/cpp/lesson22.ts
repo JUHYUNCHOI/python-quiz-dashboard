@@ -40,7 +40,7 @@ export const cppLesson22Data: LessonData = {
         {
           id: "ch1-build",
           type: "explain",
-          title: "🚗 자동차로 설계해볼까요?",
+          title: "🚗 자동차 class를 만들어볼까요?",
           content: `자동차에서 **기억해야 할 것**부터 생각해봐요.
 
 달리려면 **속도**가 있어야겠죠? → \`speed\`

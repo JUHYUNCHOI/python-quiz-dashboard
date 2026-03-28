@@ -40,7 +40,7 @@ Like a friend who listed rice, cucumber, salmon, and avocado for a sushi roll bu
         {
           id: "ch1-build",
           type: "explain",
-          title: "🚗 Let's design it together",
+          title: "🚗 Let's build a Car class",
           content: `Let's think through what a car needs to **remember**.
 
 To move, it needs a **speed** → \`speed\`
