@@ -141,9 +141,9 @@ export function highlightPython(code: string, dark: boolean = false, highlightLi
     const tokens = tokenizeLine(line, `L${lineIndex}-`, dark)
     const marginClass = hasHighlights ? '-mx-4 px-4 md:-mx-5 md:px-5' : ''
     const accentClass = isHighlighted
-      ? 'bg-amber-100 border-l-[3px] border-amber-400 pl-[13px] md:pl-[17px]'
+      ? 'bg-white border-l-[3px] border-indigo-400 pl-[13px] md:pl-[17px]'
       : isDimmed
-        ? 'opacity-40'
+        ? 'opacity-30'
         : ''
     return (
       <div key={lineIndex} className={`leading-relaxed ${marginClass} ${accentClass}`}>
@@ -273,9 +273,9 @@ export function highlightCpp(code: string, dark: boolean = false, highlightLines
     const tokens = tokenizeCppLine(line, `L${lineIndex}-`, dark)
     const marginClass = hasHighlights ? '-mx-4 px-4 md:-mx-5 md:px-5' : ''
     const accentClass = isHighlighted
-      ? 'bg-amber-100 border-l-[3px] border-amber-400 pl-[13px] md:pl-[17px]'
+      ? 'bg-white border-l-[3px] border-indigo-400 pl-[13px] md:pl-[17px]'
       : isDimmed
-        ? 'opacity-40'
+        ? 'opacity-30'
         : ''
     return (
       <div key={lineIndex} className={`leading-relaxed ${marginClass} ${accentClass}`}>
