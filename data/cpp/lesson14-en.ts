@@ -399,6 +399,33 @@ cout << s.score;  // 95 (original changed!)
 Passing a large struct by value copies all its data — expensive. Pass by reference for speed and memory efficiency.`,
         },
         {
+          id: "ch2-ref-pred1",
+          type: "predict" as const,
+          title: "Pass by value — does the original change?",
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+void add10(Student s) {
+    s.score += 10;
+}
+
+int main() {
+    Student s = {"Emma", 85};
+    add10(s);
+    cout << s.score;
+    return 0;
+}`,
+          options: ["85", "95", "Error", "0"],
+          answer: 0,
+          explanation: "Pass by value sends a **copy** — changes inside the function don't affect the original. Output is 85. To modify the original, use `Student& s` (pass by reference)!"
+        },
+        {
           id: "ch2-q1",
           type: "quiz",
           title: "Struct array access!",

@@ -399,6 +399,33 @@ cout << s.score;  // 95 (원본이 바뀜!)
 큰 struct를 함수에 넘길 때 값 전달은 복사 비용이 커요. 참조 전달이 빠르고 메모리도 아껴요.`,
         },
         {
+          id: "ch2-ref-pred1",
+          type: "predict" as const,
+          title: "값 전달 — 원본이 바뀔까요?",
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+void add10(Student s) {
+    s.score += 10;
+}
+
+int main() {
+    Student s = {"김철수", 85};
+    add10(s);
+    cout << s.score;
+    return 0;
+}`,
+          options: ["85", "95", "에러", "0"],
+          answer: 0,
+          explanation: "값 전달은 **복사본**을 넘기기 때문에 함수 안에서 바꿔도 원본은 그대로예요. 85가 출력돼요. 원본을 바꾸려면 `Student& s`로 참조 전달해야 해요!"
+        },
+        {
           id: "ch2-q1",
           type: "quiz",
           title: "struct 배열 접근!",
