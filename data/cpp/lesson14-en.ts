@@ -223,6 +223,33 @@ cout << "Total: " << total;  // Total: 254`,
           explanation: "`total += students[i].score` adds 95, 87, 72 as i goes 0, 1, 2. 95+87+72=254!"
         },
         {
+          id: "ch2-mini-practice1",
+          type: "practice" as const,
+          title: "✋ Write the sum loop yourself!",
+          content: `The struct array is ready. Write a for loop to calculate the total score of all 3 students and print it.`,
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+int main() {
+    Student students[3] = {
+        {"Alice", 95},
+        {"Bob",   87},
+        {"Carol", 72},
+    };
+
+    // Write your code to find and print the total score here
+
+    return 0;
+}`,
+          expectedOutput: `Total: 254`
+        },
+        {
           id: "ch2-loop-patterns2",
           type: "fillblank" as const,
           title: "Pattern 2: Find minimum",
@@ -239,6 +266,33 @@ cout << "Min: " << minScore;  // Min: 72`,
           explanation: "Start with `students[0].score` (first element). Starting with 0 would fail since all scores are greater than 0!"
         },
         {
+          id: "ch2-mini-practice2",
+          type: "practice" as const,
+          title: "✋ Write the maximum finder yourself!",
+          content: `This time find the **maximum** score (not minimum). The initialization trick is the same!`,
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+int main() {
+    Student students[3] = {
+        {"Alice", 95},
+        {"Bob",   87},
+        {"Carol", 72},
+    };
+
+    // Write your code to find and print the highest score here
+
+    return 0;
+}`,
+          expectedOutput: `Top: 95`
+        },
+        {
           id: "ch2-loop-patterns3",
           type: "fillblank" as const,
           title: "Pattern 3: Count matching condition",
@@ -252,6 +306,33 @@ cout << count << " students";  // 1 students`,
             { id: 0, answer: ">=", options: [">=", ">", "==", "<="] }
           ],
           explanation: "`>= 90` counts scores of 90 and above — only Alice (95) qualifies, so the answer is 1. Using `> 90` would mean strictly above 90, giving 0!"
+        },
+        {
+          id: "ch2-mini-practice3",
+          type: "practice" as const,
+          title: "✋ Write the counter yourself!",
+          content: `Count how many students scored 80 or above and print the result.`,
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+int main() {
+    Student students[3] = {
+        {"Alice", 95},
+        {"Bob",   87},
+        {"Carol", 72},
+    };
+
+    // Write your code to count and print students with score >= 80 here
+
+    return 0;
+}`,
+          expectedOutput: `80+: 2 students`
         },
         {
           id: "ch2-loop-pred1",
@@ -310,12 +391,12 @@ Passing a large struct by value copies all its data — expensive. Pass by refer
         {
           id: "ch2-practice",
           type: "practice" as const,
-          title: "✋ Find the top score!",
-          content: `Using a Student struct, complete a program that prints the highest score among 3 students.
+          title: "✋ Find the #1 student!",
+          content: `Now find not just the score, but **who** is #1!
 
-- Student struct: name(string), score(int)
-- Students: Alice(95), Bob(87), Carol(72)
-- Use a for loop to find the highest score and print it`,
+- Use a for loop to find the student with the highest score
+- Print both the **name** and **score** of the top student
+- Hint: track \`maxIdx\` (index) to find the name too`,
           code: `#include <iostream>
 #include <string>
 using namespace std;
@@ -332,17 +413,11 @@ int main() {
         {"Carol", 72},
     };
 
-    int maxScore = 0;
-    for (int i = 0; i < 3; i++) {
-        if (students[i].score > maxScore) {
-            maxScore = students[i].score;
-        }
-    }
+    // Write your code to find and print the top student's name and score here
 
-    cout << "Top score: " << maxScore << endl;
     return 0;
 }`,
-          expectedOutput: `Top score: 95`
+          expectedOutput: `#1: Alice (95)`
         },
         {
           id: "ch2-q1",

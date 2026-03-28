@@ -223,6 +223,33 @@ cout << "합계: " << total;  // 합계: 254`,
           explanation: "`total += students[i].score`로 i가 0, 1, 2일 때 95, 87, 72를 순서대로 더해요. 95+87+72=254!"
         },
         {
+          id: "ch2-mini-practice1",
+          type: "practice" as const,
+          title: "✋ 합계 직접 써보기",
+          content: `struct 배열이 주어져 있어요. for문으로 3명의 점수 합계를 구해서 출력해봐요.`,
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+int main() {
+    Student students[3] = {
+        {"김철수", 95},
+        {"이영희", 87},
+        {"박민준", 72},
+    };
+
+    // 여기에 합계를 구하는 코드를 써보세요
+
+    return 0;
+}`,
+          expectedOutput: `합계: 254`
+        },
+        {
           id: "ch2-loop-patterns2",
           type: "fillblank" as const,
           title: "패턴 2: 최솟값 찾기",
@@ -239,6 +266,33 @@ cout << "최저: " << minScore;  // 최저: 72`,
           explanation: "초기값을 `students[0].score`(첫 번째 원소)로 설정해야 해요. 0으로 하면 모든 점수가 0보다 크니까 최솟값을 못 찾아요!"
         },
         {
+          id: "ch2-mini-practice2",
+          type: "practice" as const,
+          title: "✋ 최댓값 직접 써보기",
+          content: `이번엔 최솟값이 아니라 **최댓값**을 찾아봐요. 초기값 설정 방법은 같아요!`,
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+int main() {
+    Student students[3] = {
+        {"김철수", 95},
+        {"이영희", 87},
+        {"박민준", 72},
+    };
+
+    // 여기에 최댓값을 구하는 코드를 써보세요
+
+    return 0;
+}`,
+          expectedOutput: `최고: 95`
+        },
+        {
           id: "ch2-loop-patterns3",
           type: "fillblank" as const,
           title: "패턴 3: 조건 만족 개수 세기",
@@ -252,6 +306,33 @@ cout << count << "명";  // 1명`,
             { id: 0, answer: ">=", options: [">=", ">", "==", "<="] }
           ],
           explanation: "`>= 90`이면 90점 이상인 학생을 세요. 김철수(95)만 해당되니까 1명이에요. `> 90`이면 91점 초과라 0명이 돼요!"
+        },
+        {
+          id: "ch2-mini-practice3",
+          type: "practice" as const,
+          title: "✋ 조건 카운트 직접 써보기",
+          content: `80점 이상인 학생이 몇 명인지 직접 세어봐요.`,
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+int main() {
+    Student students[3] = {
+        {"김철수", 95},
+        {"이영희", 87},
+        {"박민준", 72},
+    };
+
+    // 여기에 80점 이상인 학생 수를 세는 코드를 써보세요
+
+    return 0;
+}`,
+          expectedOutput: `80점 이상: 2명`
         },
         {
           id: "ch2-loop-pred1",
@@ -310,12 +391,11 @@ cout << s.score;  // 95 (원본이 바뀜!)
         {
           id: "ch2-practice",
           type: "practice" as const,
-          title: "✋ 학생 성적 관리!",
-          content: `Student struct를 사용해서 3명의 학생 중 가장 높은 점수를 출력하는 프로그램을 완성해봐요.
+          title: "✋ 1등 학생 이름 찾기!",
+          content: `이제 점수만이 아니라 **누가** 1등인지도 알아봐요!
 
-- Student struct: name(string), score(int)
-- 학생 데이터: 김철수(95), 이영희(87), 박민준(72)
-- for문으로 배열을 순회하며 가장 높은 점수를 찾아 출력하세요`,
+- for문으로 배열을 순회하며 가장 높은 점수를 가진 학생의 **이름과 점수**를 출력하세요
+- 힌트: \`maxIdx\` 변수로 인덱스를 추적하면 이름도 같이 찾을 수 있어요`,
           code: `#include <iostream>
 #include <string>
 using namespace std;
@@ -332,17 +412,11 @@ int main() {
         {"박민준", 72},
     };
 
-    int maxScore = 0;
-    for (int i = 0; i < 3; i++) {
-        if (students[i].score > maxScore) {
-            maxScore = students[i].score;
-        }
-    }
+    // 여기에 1등 학생 이름과 점수를 출력하는 코드를 써보세요
 
-    cout << "최고 점수: " << maxScore << endl;
     return 0;
 }`,
-          expectedOutput: `최고 점수: 95`
+          expectedOutput: `1등: 김철수 (95점)`
         },
         {
           id: "ch2-q1",
