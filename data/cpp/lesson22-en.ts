@@ -41,7 +41,7 @@ What would you need to think about to build a car?
 | **Do** | Go forward? Brake? | Member functions |
 
 > 💡 A friend was asked "What do you need to make sushi?" They listed rice, cucumber, salmon, avocado… but forgot the **seaweed**.
-> Thinking carefully about what's needed — that's what class design is.
+> It's important to get into the habit of thinking through everything carefully so nothing gets left out.
 
 **Bundling together "things to remember" and "things to do" — that's exactly what a class is.**`,
         },
