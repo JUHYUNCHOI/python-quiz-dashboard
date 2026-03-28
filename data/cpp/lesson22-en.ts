@@ -22,43 +22,63 @@ export const cppLesson22EnData: LessonData = {
           id: "ch1-intro",
           type: "explain",
           title: "🚗 What is a class?",
-          content: `In the computer world, cars and audio systems don't exist. **You have to build everything.**
+          content: `In the computer world, cars don't exist. **You have to build them yourself.**
 
 \`int\` for integers, \`string\` for text.
-But a **car**? → You build it with a **class**!
+But a **car**? → You define it with a **class**!
 
 ---
 
-Before writing a class, you need to **think about what your program actually needs.**
+## 🎮 Think of it Like a Game Item
 
-What comes to mind when you think of a car? Wheels, engine, color, speed, fuel, doors...
+In an RPG game, have you ever looked at an item in the shop?
 
-The key question is: **"What does the car need to DO in MY program?"**
+You see something like:
 
-Building a racing game? → color, speed, go forward / go backward
-Building a parking system? → license plate, size, entry time
+> **Flame Sword**
+> - Attack: 150
+> - Durability: 80
+> - Attack(), Upgrade()
 
-**Choosing the right things for your purpose** — that's step one of class design!
+Just **reading the description doesn't give you the sword.** You don't own it yet just because you saw it in the shop.
 
-> 💡 A friend was asked "What do you need to make sushi?" They listed rice, cucumber, salmon, avocado… but forgot the **seaweed**.
-> Thinking carefully so nothing important gets left out — that's the skill that makes great class design.
+You have to **actually buy it or pick it up** for it to appear in your inventory!
 
-Every class has exactly two things:
+→ That's exactly how **class and object** work.
+
+| | Game | Programming |
+|---|---|---|
+| Item **description** | Flame Sword info | **class** |
+| The item you actually **own** | Sword in your inventory | **object** |
+
+**Writing a class** = writing the item description
+**Creating an object** = actually getting the item in your hands
+
+---
+
+## Every class has exactly two things
+
+When designing a class, think about:
 
 | | What it is | C++ |
 |---|---|---|
 | **Things to remember** | color, speed, etc. | Member variables |
 | **Things to do** | go forward, go back, etc. | Member functions |
 
-Let's build a simple car:
+> 💡 A friend was asked "What do you need to make sushi?" They listed rice, cucumber, salmon, avocado… but forgot the **seaweed**.
+> When designing a class, you need to think carefully so **nothing important is left out**.
+
+---
+
+## Let's Build a Car Class
 
 \`\`\`cpp
 class Car {
 public:
-    string color;   // things to remember
+    string color;   // things to remember (member variables)
     double speed;
 
-    void forward()  { speed += 10; }  // things to do
+    void forward()  { speed += 10; }  // things to do (member functions)
     void backward() { speed -= 10; }
     void info() {
         cout << color << " car, speed: " << speed << endl;
@@ -66,19 +86,28 @@ public:
 };
 \`\`\`
 
-Once you have the blueprint (class), you can create as many objects as you want:
+This is just the **description** so far. To create an actual car:
 
 \`\`\`cpp
-Car myCar;
+Car myCar;           // ← This is where the actual object is created!
 myCar.color = "red";
 myCar.speed = 0;
 myCar.forward();
 myCar.forward();
-myCar.info();      // red car, speed: 20
+myCar.info();        // red car, speed: 20
 \`\`\`
 
 > 🍪 **Cookie cutter = class, cookie = object**
-> One cutter, many cookies — one class, many objects.
+> One cutter makes many cookies — one class creates many objects.
+
+\`\`\`cpp
+Car car1;  car1.color = "red";    // object 1
+Car car2;  car2.color = "blue";   // object 2  ← same class, different object!
+\`\`\`
+
+This approach — **designing classes and creating objects from them** — is called **Object-Oriented Programming (OOP)**.
+
+---
 
 **Compared to Python:**
 
