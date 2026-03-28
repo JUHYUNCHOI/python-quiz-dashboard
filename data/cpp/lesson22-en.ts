@@ -416,23 +416,13 @@ BankAccount acc;
 // acc.balance might be -398475.23 or some random value! 😱
 \`\`\`
 
-**Here's how to write a constructor:**
+There are just three rules for writing a constructor:
 
-\`\`\`
-class ClassName {
-public:
-    ClassName(parameters) {   // name = class name exactly!
-        // initialize here      // no return type at all!
-    }
-};
-\`\`\`
+{!blue} 📛 **Name** — must be exactly the same as the class name (case-sensitive!)
+{!orange} 🚫 **Return type** — none at all. Writing void is actually an error!
+{!green} ⚡ **Called** — automatically, once, the moment an object is created
 
-Just three things to remember:
-- **Name**: must be exactly the same as the class name (case-sensitive!)
-- **Return type**: none at all — writing void is an error!
-- **Called**: automatically, once, the moment an object is created
-
-Applying this to BankAccount:
+Applying these rules to BankAccount:
 
 \`\`\`cpp {6-11,14}
 class BankAccount {
