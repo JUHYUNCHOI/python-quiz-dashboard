@@ -348,9 +348,7 @@ int main() {
           id: "ch2-getter-setter",
           type: "explain",
           title: "So how do we get or change values inside the class?",
-          content: `Direct access is blocked — but what if we need to read or update a value?
-
-We do it through public functions. These are called **getters** and **setters**.
+          content: `Through **public functions**. These are called **getters** and **setters**.
 
 - **getter** — a function that **reads** a value
 - **setter** — a function that **sets** a value (and can reject bad inputs!)

@@ -347,12 +347,10 @@ int main() {
           id: "ch2-getter-setter",
           type: "explain",
           title: "그럼 class 안의 값들은 어떻게 가져오고 바꿀까요?",
-          content: `직접 접근은 막혔는데, 값을 읽거나 바꾸고 싶으면 어떻게 할까요?
+          content: `**public 함수**를 통해서 해요. 이런 함수들을 **getter**와 **setter**라고 해요.
 
-public 함수를 통해서 해요. 이 함수들을 **getter**와 **setter**라고 불러요.
-
-- **getter** — 값을 **가져오는** 함수
-- **setter** — 값을 **설정하는** 함수 (잘못된 값은 여기서 막을 수 있어요!)
+- **getter** — 값을 **읽어오는** 함수
+- **setter** — 값을 **설정하는** 함수 (잘못된 값은 여기서 거부할 수 있어요!)
 
 \`\`\`cpp
 class Car {
