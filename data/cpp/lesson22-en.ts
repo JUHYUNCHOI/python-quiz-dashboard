@@ -56,13 +56,13 @@ Start with the \`class\` keyword, write the name, then wrap everything in curly 
 
 ---
 
-Now let's think about a car:
+Now let's think about a car.
 
-**Things to remember:**
-To move, it needs a **speed**. And to tell cars apart, a **color**.
+For **things to remember** — to move it needs a **speed**, and let's add a **color** so we can tell cars apart.
 
-**Things to do:**
-It should be able to go forward, and show its current state.
+For **things to do** — a function to go forward, and one to check the current state sounds like a good start.
+
+This is just one way to think about it. As you build, you might find you need more — or that some things aren't necessary after all.
 
 ---
 
