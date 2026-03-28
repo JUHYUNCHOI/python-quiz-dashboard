@@ -252,51 +252,19 @@ int main() {
 
 외부에서 아무 값이나 마음대로 넣을 수 있어요. 막을 방법이 없어요.
 
-통장 잔액을 생각해봐요. 만약 잔액을 아무나 직접 바꿀 수 있다면?
+근데 이게 통장 계좌 class라고 생각해보세요. 아무나 내 계좌의 돈을 바꿀 수 있다? 너무 위험하겠죠?
 
-\`\`\`cpp
-// ❌ 모든 게 public이라면...
-class BankAccount {
-public:
-    double balance;
-};
+그래서 class에는 접근을 제한하는 키워드가 있어요:
 
-BankAccount acc;
-acc.balance = 1000000;  // 아무나 잔액을 바꿀 수 있어요! 😱
-acc.balance = -500;     // 음수 잔액도 가능?!
-\`\`\`
+| 키워드 | 접근 가능한 곳 |
+|---|---|
+| **public** | 어디서나 접근 가능 — 지금까지 우리가 쓴 방식 |
+| **protected** | 클래스 내부 + 상속받은 클래스 |
+| **private** | 클래스 내부에서만 |
 
-이런 상황을 막으려면 **직접 접근을 차단**하고, **정해진 방법으로만** 바꿀 수 있게 해야 해요.
+보통 **멤버변수는 외부에서 직접 못 바꾸도록 private**으로 두고, **멤버함수는 public**으로 공개해요.
 
-그게 바로 **private**이에요:
-
-\`\`\`cpp
-// ✅ private으로 보호!
-class BankAccount {
-private:
-    double balance;          // 외부에서 직접 접근 불가!
-
-public:
-    void deposit(double amount) {   // 이 함수로만 잔액 변경 가능
-        if (amount > 0)
-            balance += amount;      // 클래스 내부에서는 OK
-    }
-    double getBalance() {
-        return balance;
-    }
-};
-
-BankAccount acc;
-// acc.balance = 1000000;   // ❌ 컴파일 에러!
-acc.deposit(500);            // ✅ 정해진 방법으로만 변경
-\`\`\`
-
-| | private | public |
-|---|---|---|
-| 접근 가능한 곳 | 클래스 **내부만** | **어디서나** |
-| 주로 쓰는 것 | 데이터 (변수) | 기능 (함수) |
-
-💡 데이터는 숨기고, 기능은 공개하는 것 → **캡슐화(encapsulation)**`,
+어떻게 쓰는지 바로 봐봐요.`,
         },
         {
           id: "ch2-fb1",

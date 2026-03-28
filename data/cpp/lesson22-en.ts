@@ -253,51 +253,19 @@ int main() {
 
 Anyone can set any value from outside. There's nothing stopping them.
 
-Think about a bank account balance. What if anyone could change it directly?
+Now imagine this is a bank account class. Anyone can change your balance? That's way too dangerous.
 
-\`\`\`cpp
-// ❌ If everything is public...
-class BankAccount {
-public:
-    double balance;
-};
+So classes have keywords that control access:
 
-BankAccount acc;
-acc.balance = 1000000;  // Anyone can change the balance! 😱
-acc.balance = -500;     // Negative balance is possible?!
-\`\`\`
+| Keyword | Who can access |
+|---|---|
+| **public** | Anyone — this is what we've been using so far |
+| **protected** | Inside the class + classes that inherit from it |
+| **private** | Inside the class only |
 
-To prevent this, we need to **block direct access** and only allow changes through **specific methods**.
+Typically, **member variables are kept private** so nothing can change them directly from outside, and **member functions are public** so they can be called.
 
-That's exactly what **private** does:
-
-\`\`\`cpp
-// ✅ Protected with private!
-class BankAccount {
-private:
-    double balance;          // No direct access from outside!
-
-public:
-    void deposit(double amount) {   // Only this function can change balance
-        if (amount > 0)
-            balance += amount;      // OK from inside the class
-    }
-    double getBalance() {
-        return balance;
-    }
-};
-
-BankAccount acc;
-// acc.balance = 1000000;   // ❌ Compile error!
-acc.deposit(500);            // ✅ Only through the approved method
-\`\`\`
-
-| | private | public |
-|---|---|---|
-| Accessible from | **Inside class only** | **Anywhere** |
-| Typically used for | Data (variables) | Functionality (functions) |
-
-💡 Hiding data and exposing only functions → **Encapsulation**`,
+Let's see how it works.`,
         },
         {
           id: "ch2-fb1",
