@@ -41,39 +41,50 @@ Like a friend who listed rice, cucumber, salmon, and avocado for a sushi roll bu
           id: "ch1-build",
           type: "explain",
           title: "🚗 Let's build a Car class",
-          content: `Let's think through what a car needs to **remember**.
+          content: `A class looks like this:
 
-To move, it needs a **speed** → \`speed\`
-To tell cars apart, it needs a **color** → \`color\`
+\`\`\`
+class Name {
+    things to remember...
 
-Now what should it be able to **do**?
+    things to do...
+};
+\`\`\`
 
-It should be able to move forward → \`forward()\`
-And show its current state → \`info()\`
+Start with the \`class\` keyword, write the name, then wrap everything in curly braces.
+**Things to remember** go at the top, **things to do** go below.
+We call these **member variables** and **member functions**.
 
 ---
 
-In C++, that looks like this:
+Now let's think about a car:
+
+**Things to remember:**
+To move, it needs a **speed**. And to tell cars apart, a **color**.
+
+**Things to do:**
+It should be able to go forward, and show its current state.
+
+---
 
 \`\`\`cpp
 class Car {
 public:               // ← just write this for now, we'll learn it later
-    double speed;     // remember: speed
-    string color;     // remember: color
+    double speed;     // member variable: speed
+    string color;     // member variable: color
 
-    void forward() {
-        speed += 10;  // access speed directly — no self
+    void forward() {          // member function: move forward
+        speed += 10;
     }
-    void info() {
+    void info() {             // member function: show state
         cout << color << " car, speed: " << speed << endl;
     }
-};  // ← semicolon required!
+};
 \`\`\`
 
-- Everything goes inside \`{ };\`
-- Inside member functions, access member variables directly — no \`self\`
+Inside member functions, you access member variables directly — no \`self\`.
 
-That's it for now. No car exists yet.`,
+No car exists yet.`,
         },
         {
           id: "ch1-object",
