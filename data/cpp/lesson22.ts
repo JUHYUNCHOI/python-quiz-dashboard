@@ -65,17 +65,23 @@ class 이름 {
 
 물론 이건 제가 생각한 것 중 하나예요. 만들다 보면 더 필요한 게 생길 수도 있고, 필요 없는 게 빠질 수도 있어요.
 
-코드로 써볼게요:
+코드로 써볼게요.
+
+먼저 **멤버변수** — 기억해야 할 것들이에요:
 
 \`\`\`cpp
 class Car {
-    double speed;     // 멤버변수: 속도
-    string color;     // 멤버변수: 색깔
+    double speed;   // 속도 → 소수점도 가능하게 double로
+    string color;   // 색깔 → 텍스트니까 string으로
+\`\`\`
 
-    void forward() {          // 멤버함수: 앞으로
-        speed += 10;
+그 아래에 **멤버함수** — 해야 할 것들이에요:
+
+\`\`\`cpp
+    void forward() {
+        speed += 10;   // 앞으로 가면 속도가 커지겠죠?
     }
-    void info() {             // 멤버함수: 현재 상태
+    void info() {      // 저는 임의로 정보를 출력하게 만들게요
         cout << color << " 자동차, 속도: " << speed << endl;
     }
 };

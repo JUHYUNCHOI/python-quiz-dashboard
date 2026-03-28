@@ -65,17 +65,23 @@ For **things to do** — a function to go forward, and one to check the current 
 
 This is just one way to think about it. As you build, you might find you need more — or that some things aren't necessary after all.
 
-Let's write it out:
+Let's write it out.
+
+First, the **member variables** — things to remember:
 
 \`\`\`cpp
 class Car {
-    double speed;     // member variable: speed
-    string color;     // member variable: color
+    double speed;   // speed → double so decimals work too
+    string color;   // color → string for text
+\`\`\`
 
-    void forward() {          // member function: move forward
-        speed += 10;
+Then below, the **member functions** — things to do:
+
+\`\`\`cpp
+    void forward() {
+        speed += 10;   // going forward means speed increases, right?
     }
-    void info() {             // member function: show state
+    void info() {      // I'll set this up to print the car's info
         cout << color << " car, speed: " << speed << endl;
     }
 };
