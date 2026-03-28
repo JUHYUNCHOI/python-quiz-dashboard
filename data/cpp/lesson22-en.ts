@@ -271,17 +271,18 @@ Let's see how it works.`,
           id: "ch2-how",
           type: "explain",
           title: "🔒 Using private / public",
-          content: `Inside a class, it looks like this:
+          content: `Anything under \`private:\` **cannot be accessed from outside the class.**
+Anything under \`public:\` **can be called from anywhere.**
 
 \`\`\`cpp
 class Car {
-private:
-    double speed;   // can't be changed directly from outside
+private:              // ← nothing below here is accessible from outside
+    double speed;
     string color;
 
-public:
-    void forward() {        // can be called from outside
-        speed += 10;        // accessing private variables from inside is fine
+public:               // ← everything below here can be called from outside
+    void forward() {
+        speed += 10;  // inside the class, private variables are fine to use
     }
     void info() {
         cout << color << " car, speed: " << speed << endl;
@@ -289,17 +290,15 @@ public:
 };
 \`\`\`
 
-Now if you try to access \`speed\` from outside:
+@Key: Private variables can only be touched by functions inside the class. Direct access from outside causes a compile error!
 
 \`\`\`cpp
 int main() {
     Car myCar;
-    myCar.speed = -999;   // ❌ Compile error! speed is private
-    myCar.forward();      // ✅ public function — no problem
+    myCar.speed = -999;   // ❌ Compile error
+    myCar.forward();      // ✅ public — no problem
 }
-\`\`\`
-
-Member variables under \`private:\`, member functions under \`public:\` — that's the standard pattern.`,
+\`\`\``,
         },
         {
           id: "ch2-fb1",

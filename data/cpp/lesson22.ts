@@ -270,17 +270,18 @@ int main() {
           id: "ch2-how",
           type: "explain",
           title: "🔒 private / public 사용법",
-          content: `class 안에서 이렇게 써요:
+          content: `\`private:\` 아래에 있는 것들은 **클래스 외부에서 접근할 수 없어요.**
+\`public:\` 아래에 있는 것들은 **어디서나 호출할 수 있어요.**
 
 \`\`\`cpp
 class Car {
-private:
-    double speed;   // 외부에서 직접 못 바꿔요
+private:              // ← 이 아래는 외부에서 접근 불가
+    double speed;
     string color;
 
-public:
-    void forward() {        // 외부에서 호출할 수 있어요
-        speed += 10;        // 내부에서는 private 변수에 접근 OK
+public:               // ← 이 아래는 외부에서 호출 가능
+    void forward() {
+        speed += 10;  // 클래스 내부에서는 private 변수 접근 OK
     }
     void info() {
         cout << color << " 자동차, 속도: " << speed << endl;
@@ -288,17 +289,15 @@ public:
 };
 \`\`\`
 
-이제 외부에서 \`speed\`에 직접 접근하면:
+@핵심: private 변수는 클래스 내부 함수만 건드릴 수 있어요. 외부에서 직접 접근하면 컴파일 에러!
 
 \`\`\`cpp
 int main() {
     Car myCar;
-    myCar.speed = -999;   // ❌ 컴파일 에러! private이라 접근 불가
-    myCar.forward();      // ✅ public 함수는 호출 가능
+    myCar.speed = -999;   // ❌ 컴파일 에러
+    myCar.forward();      // ✅ public이라 OK
 }
-\`\`\`
-
-멤버변수는 \`private:\` 아래, 멤버함수는 \`public:\` 아래에 두는 게 기본 패턴이에요.`,
+\`\`\``,
         },
         {
           id: "ch2-fb1",
