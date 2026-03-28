@@ -226,7 +226,7 @@ cout << "합계: " << total;  // 합계: 254`,
           id: "ch2-mini-practice1",
           type: "practice" as const,
           title: "✋ 합계 직접 써보기",
-          content: `김철수(95), 이영희(87), 박민준(72) — for문으로 3명의 점수 합계를 구해서 출력해봐요.`,
+          content: `Student struct 배열을 for문으로 순회해서 김철수(95), 이영희(87), 박민준(72) 3명의 점수 합계를 구해서 출력해봐요.`,
           code: `#include <iostream>
 #include <string>
 using namespace std;
@@ -269,7 +269,7 @@ cout << "최저: " << minScore;  // 최저: 72`,
           id: "ch2-mini-practice2",
           type: "practice" as const,
           title: "✋ 최댓값 직접 써보기",
-          content: `김철수(95), 이영희(87), 박민준(72) — 이번엔 최솟값이 아니라 **최댓값**을 찾아봐요. 초기값 설정 방법은 같아요!`,
+          content: `Student struct 배열에서 김철수(95), 이영희(87), 박민준(72) 중 가장 높은 점수를 찾아 출력해봐요. 초기값 설정 방법은 최솟값과 같아요!`,
           code: `#include <iostream>
 #include <string>
 using namespace std;
@@ -311,7 +311,7 @@ cout << count << "명";  // 1명`,
           id: "ch2-mini-practice3",
           type: "practice" as const,
           title: "✋ 조건 카운트 직접 써보기",
-          content: `김철수(95), 이영희(87), 박민준(72) — 80점 이상인 학생이 몇 명인지 직접 세어봐요.`,
+          content: `Student struct 배열에서 김철수(95), 이영희(87), 박민준(72) 중 80점 이상인 학생이 몇 명인지 세어서 출력해봐요.`,
           code: `#include <iostream>
 #include <string>
 using namespace std;

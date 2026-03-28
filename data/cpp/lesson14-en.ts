@@ -226,7 +226,7 @@ cout << "Total: " << total;  // Total: 254`,
           id: "ch2-mini-practice1",
           type: "practice" as const,
           title: "✋ Write the sum loop yourself!",
-          content: `Alice(95), Bob(87), Carol(72) — Write a for loop to calculate the total score of all 3 students and print it.`,
+          content: `Use the Student struct array to calculate the total score of Alice(95), Bob(87), Carol(72) with a for loop and print it.`,
           code: `#include <iostream>
 #include <string>
 using namespace std;
@@ -269,7 +269,7 @@ cout << "Min: " << minScore;  // Min: 72`,
           id: "ch2-mini-practice2",
           type: "practice" as const,
           title: "✋ Write the maximum finder yourself!",
-          content: `Alice(95), Bob(87), Carol(72) — This time find the **maximum** score (not minimum). The initialization trick is the same!`,
+          content: `Use the Student struct array to find the highest score among Alice(95), Bob(87), Carol(72) and print it. The initialization trick is the same as finding the minimum!`,
           code: `#include <iostream>
 #include <string>
 using namespace std;
@@ -311,7 +311,7 @@ cout << count << " students";  // 1 students`,
           id: "ch2-mini-practice3",
           type: "practice" as const,
           title: "✋ Write the counter yourself!",
-          content: `Alice(95), Bob(87), Carol(72) — Count how many students scored 80 or above and print the result.`,
+          content: `Use the Student struct array to count how many of Alice(95), Bob(87), Carol(72) scored 80 or above and print the result.`,
           code: `#include <iostream>
 #include <string>
 using namespace std;
