@@ -346,7 +346,7 @@ int main() {
         {
           id: "ch2-getter-setter",
           type: "explain",
-          title: "그럼 private 변수는 어떻게 읽고 바꾸죠?",
+          title: "그럼 class 안의 값들은 어떻게 가져오고 바꿀까요?",
           content: `직접 접근은 막혔는데, 값을 읽거나 바꾸고 싶으면 어떻게 할까요?
 
 public 함수를 통해서 해요. 이 함수들을 **getter**와 **setter**라고 불러요.
