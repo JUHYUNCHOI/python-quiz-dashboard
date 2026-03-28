@@ -89,6 +89,24 @@ class Car {
 
 > 🐍 **Python에서 오셨나요?** Python에서는 \`self.speed\`처럼 \`self\`가 필요했는데, C++에서는 그냥 \`speed\`로 바로 써요.
 
+---
+
+**전체 코드:**
+
+\`\`\`cpp
+class Car {
+    double speed;
+    string color;
+
+    void forward() {
+        speed += 10;
+    }
+    void info() {
+        cout << color << " 자동차, 속도: " << speed << endl;
+    }
+};
+\`\`\`
+
 아직 자동차가 생긴 건 아니에요.`,
         },
         {

@@ -89,6 +89,24 @@ Then below, the **member functions** — things to do:
 
 > 🐍 **Coming from Python?** In Python you'd write \`self.speed\`, but in C++ you just write \`speed\` directly.
 
+---
+
+**Full code:**
+
+\`\`\`cpp
+class Car {
+    double speed;
+    string color;
+
+    void forward() {
+        speed += 10;
+    }
+    void info() {
+        cout << color << " car, speed: " << speed << endl;
+    }
+};
+\`\`\`
+
 No car exists yet.`,
         },
         {
