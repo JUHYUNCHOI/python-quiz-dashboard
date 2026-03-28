@@ -25,7 +25,10 @@ export const cppLesson22EnData: LessonData = {
           content: `\`int\` for integers, \`string\` for text.
 But a **car**? C++ has no car type. **You have to build it yourself.**
 
-When building something from scratch, there are just two things to think about:
+But think about what goes into a car — tires, engine, fuel, color, speed, doors... it never ends.
+Like a friend asked to list sushi roll ingredients who named rice, cucumber, salmon, avocado — but forgot the **seaweed**. When you try to think of everything, you miss what matters most.
+
+So just ask two things:
 
 **🧠 What does it need to remember?**
 → In C++: **member variables**
@@ -33,9 +36,7 @@ When building something from scratch, there are just two things to think about:
 **⚙️ What should it be able to do?**
 → In C++: **member functions**
 
-Bundling these two together into a definition — that's exactly what a **class** is.
-
-Like a friend who listed rice, cucumber, salmon, and avocado for a sushi roll but forgot the **seaweed** — when you try to think of everything at once, you miss what matters most. **Start with what's essential.**`,
+Bundling these two together into a definition — that's exactly what a **class** is.`,
         },
         {
           id: "ch1-build",
@@ -64,11 +65,10 @@ For **things to do** — a function to go forward, and one to check the current 
 
 This is just one way to think about it. As you build, you might find you need more — or that some things aren't necessary after all.
 
----
+Let's write it out:
 
 \`\`\`cpp
 class Car {
-public:               // ← just write this for now, we'll learn it later
     double speed;     // member variable: speed
     string color;     // member variable: color
 
@@ -92,9 +92,15 @@ No car exists yet.`,
           content: `In an RPG game, seeing the "Flame Sword" description in the shop **doesn't mean you own it.**
 You have to actually buy it or pick it up for it to appear in your inventory.
 
-Classes work the same way.
-The Car we just wrote is a **blueprint**. No car exists yet.
-**You have to create one** for it to actually exist.
+The Car class we just wrote is the same — it's a **blueprint**.
+One more step is needed to actually create a car.
+
+| | Game | Programming |
+|---|---|---|
+| Item **description** | Flame Sword info | **class** |
+| The item you actually **own** | Sword in your inventory | **object** |
+
+What you create from a class is called an **object** (or **instance**).
 
 \`\`\`cpp
 Car myCar;            // ← an actual car (object) is created here!
@@ -104,15 +110,6 @@ myCar.forward();
 myCar.forward();
 myCar.info();         // red car, speed: 20
 \`\`\`
-
-What you create from a class is called an **object** (or **instance**).
-
-| | Game | Programming |
-|---|---|---|
-| Item **description** | Flame Sword info | **class** |
-| The item you actually **own** | Sword in your inventory | **object** |
-
----
 
 One blueprint, multiple cars:
 
