@@ -40,8 +40,8 @@ What would you need to think about to build a car?
 | **Remember** | Color? Speed? | Member variables |
 | **Do** | Go forward? Brake? | Member functions |
 
-> 💡 A friend was asked "What do you need to make sushi?" They listed rice, cucumber, salmon, avocado… but forgot the **seaweed**.
-> It's important to get into the habit of thinking through everything carefully so nothing gets left out.
+> 💡 A friend was asked "What do you need to make a sushi roll?" They listed rice, cucumber, salmon, avocado… but forgot the **seaweed**.
+> When you try to think of everything at once, you end up missing what matters most. When designing a class — **start with what's essential**.
 
 **Bundling together "things to remember" and "things to do" — that's exactly what a class is.**`,
         },
