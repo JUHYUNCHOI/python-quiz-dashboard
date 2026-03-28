@@ -253,7 +253,11 @@ int main() {
           id: "ch2-loop-patterns2",
           type: "fillblank" as const,
           title: "패턴 2: 최솟값 찾기",
-          content: `최솟값을 찾을 때는 **첫 번째 값으로 초기화**하는 게 포인트예요. 0으로 시작하면 안 돼요!`,
+          content: `최솟값 찾기는 세 가지를 결정해야 해요 (빈칸 3개!):
+
+① **초기값**을 뭘로 시작할지 — 0이면 안 되는 이유가 있어요
+② **비교 방향**을 어떻게 할지 — \`<\` 인지 \`>\` 인지
+③ **갱신**할 때 무슨 값으로 바꿀지`,
           code: `int minScore = students[___].score;  // 첫 번째 값으로 시작!
 for (int i = 1; i < 3; i++) {
     if (students[i].score ___ minScore)

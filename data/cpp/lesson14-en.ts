@@ -253,7 +253,11 @@ int main() {
           id: "ch2-loop-patterns2",
           type: "fillblank" as const,
           title: "Pattern 2: Find minimum",
-          content: `The key to finding a minimum: **initialize with the first element**, not 0!`,
+          content: `Finding a minimum requires 3 decisions (3 blanks!):
+
+① **Initial value** — why can't we start with 0?
+② **Comparison direction** — \`<\` or \`>\`?
+③ **Update value** — what do we replace minScore with?`,
           code: `int minScore = students[___].score;  // start with first value!
 for (int i = 1; i < 3; i++) {
     if (students[i].score ___ minScore)
