@@ -268,6 +268,40 @@ Typically, **member variables are kept private** so nothing can change them dire
 Let's see how it works.`,
         },
         {
+          id: "ch2-how",
+          type: "explain",
+          title: "🔒 Using private / public",
+          content: `Inside a class, it looks like this:
+
+\`\`\`cpp
+class Car {
+private:
+    double speed;   // can't be changed directly from outside
+    string color;
+
+public:
+    void forward() {        // can be called from outside
+        speed += 10;        // accessing private variables from inside is fine
+    }
+    void info() {
+        cout << color << " car, speed: " << speed << endl;
+    }
+};
+\`\`\`
+
+Now if you try to access \`speed\` from outside:
+
+\`\`\`cpp
+int main() {
+    Car myCar;
+    myCar.speed = -999;   // ❌ Compile error! speed is private
+    myCar.forward();      // ✅ public function — no problem
+}
+\`\`\`
+
+Member variables under \`private:\`, member functions under \`public:\` — that's the standard pattern.`,
+        },
+        {
           id: "ch2-fb1",
           type: "fillblank" as const,
           title: "Separate private from public!",
