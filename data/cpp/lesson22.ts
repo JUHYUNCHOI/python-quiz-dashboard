@@ -21,89 +21,114 @@ export const cppLesson22Data: LessonData = {
         {
           id: "ch1-intro",
           type: "explain",
-          title: "🐕 class — 나만의 타입 만들기!",
-          content: `**class**는 데이터와 함수를 하나로 묶어서 **나만의 타입**을 만드는 방법이에요.
+          title: "🚗 class — 컴퓨터 세상에 자동차 만들기!",
+          content: `컴퓨터 세상에는 자동차, 오디오 같은 것들이 없어요. **다 만들어야 해요.**
 
-예를 들어 개(Dog) 타입을 만들어 볼게요:
+정수는 \`int\`, 문자는 \`string\`으로 만들 수 있어요.
+그럼 **자동차**는? → 바로 **class**로 만들어요!
+
+---
+
+class를 만들 때는 **단순화**가 중요해요.
+
+> 💡 김밥을 만들려면 뭐가 필요할까요? 밥, 단무지, 소고기, 계란… 막상 **김**을 빼는 경우가 있어요. 자동차도 마찬가지예요 — 핵심만 추려야 해요.
+
+class 안에는 두 가지가 들어가요:
+
+| | 설명 | C++ |
+|---|---|---|
+| **기억해야 할 것** | 색깔, 속도 등 데이터 | 멤버변수 |
+| **해야 할 것** | 앞으로 가기, 뒤로 가기 등 동작 | 멤버함수 |
 
 \`\`\`cpp
-class Dog {
+class Car {
 public:
-    string name;   // 데이터
-    int age;
+    // 기억해야 할 것 (멤버변수)
+    string color;
+    double speed;
 
-    void bark() {  // 함수 (메서드)
-        cout << name << ": 멍멍!" << endl;
+    // 해야 할 것 (멤버함수)
+    void forward()  { speed += 10; }
+    void backward() { speed -= 10; }
+    void info() {
+        cout << color << " 자동차, 속도: " << speed << endl;
     }
 };
 \`\`\`
 
-이렇게 정의하면 Dog 타입의 변수를 만들 수 있어요:
+이렇게 정의하면 Car 타입의 변수를 만들 수 있어요:
 
 \`\`\`cpp
-Dog d;
-d.name = "바둑이";
-d.age = 3;
-d.bark();  // 바둑이: 멍멍!
+Car myCar;
+myCar.color = "빨간색";
+myCar.speed = 0;
+myCar.forward();   // speed: 10
+myCar.forward();   // speed: 20
+myCar.info();      // 빨간색 자동차, 속도: 20
 \`\`\`
+
+> 🍩 **붕어빵틀 = class, 붕어빵 = 객체!**
+> 틀(class)을 한 번 만들면 붕어빵(Car myCar, Car yourCar...)을 여러 개 찍어낼 수 있어요.
 
 **Python과 비교:**
 
 | | Python 🐍 | C++ ⚡ |
 |---|---|---|
-| 메서드 선언 | \`def bark(self):\` | \`void bark() {}\` |
-| 멤버 접근 | \`self.name\` | \`name\` (self 없음!) |
+| 메서드 선언 | \`def forward(self):\` | \`void forward() {}\` |
+| 멤버 접근 | \`self.speed\` | \`speed\` (self 없음!) |
 | 클래스 끝 | 들여쓰기로 구분 | \`};\` 세미콜론 필수! |
 
 💡 **지금 기억할 것:**
 - 메서드 안에서는 \`self\` 없이 멤버에 바로 접근해요
-- 클래스 정의 끝에 \`};\` 세미콜론 필수!
 - \`public:\` 의 의미는 다음 챕터에서 배울 거예요`,
         },
         {
           id: "ch1-pred1",
           type: "predict" as const,
-          title: "class 코드 읽기!",
+          title: "Car class 읽기!",
           code: `#include <iostream>
 #include <string>
 using namespace std;
 
-class Dog {
+class Car {
 public:
-    string name;
-    int age;
+    string color;
+    double speed;
+    void forward() { speed += 10; }
     void info() {
-        cout << name << " " << age << "살";
+        cout << color << " " << speed;
     }
 };
 
 int main() {
-    Dog d;
-    d.name = "바둑이";
-    d.age = 3;
-    d.info();
+    Car c;
+    c.color = "파란색";
+    c.speed = 0;
+    c.forward();
+    c.forward();
+    c.info();
     return 0;
 }`,
-          options: ["바둑이 3살", "바둑이", "3살", "에러"],
+          options: ["파란색 20", "파란색 0", "파란색 10", "에러"],
           answer: 0,
-          explanation: "d.name = \"바둑이\", d.age = 3으로 설정 후 info()를 호출해요. 메서드 안에서 name, age에 self 없이 바로 접근해요!"
+          explanation: "forward()를 두 번 호출해서 speed가 0→10→20이 돼요. info()는 color와 speed를 출력해요. 메서드 안에서 color, speed에 self 없이 바로 접근해요!"
         },
         {
           id: "ch1-fb1",
           type: "fillblank" as const,
-          title: "메서드에서 멤버 접근!",
-          content: "메서드 안에서 멤버 변수에 접근할 때는 `self` 없이 바로 써요!",
-          code: `class Dog {
+          title: "멤버함수 완성하기!",
+          content: "메서드 안에서는 `self` 없이 멤버변수에 바로 접근해요.",
+          code: `class Car {
 public:
-    string name;
-    void bark() {
-        cout << ___ << ": 멍멍!";
+    double speed;
+    void forward() {
+        ___ += 10;   // 속도를 10 올려요
     }
 };`,
           fillBlanks: [
-            { id: 0, answer: "name", options: ["name", "self.name", "Dog.name", "this.name"] }
+            { id: 0, answer: "speed", options: ["speed", "self.speed", "Car.speed", "this.speed"] }
           ],
-          explanation: "C++에서는 Python의 self.name과 달리 name만 써요! 메서드 안에서는 같은 클래스의 멤버에 바로 접근할 수 있어요."
+          explanation: "C++에서는 Python의 self.speed와 달리 speed만 써요! 메서드 안에서는 같은 클래스의 멤버변수에 바로 접근할 수 있어요."
         },
         {
           id: "ch1-q1",

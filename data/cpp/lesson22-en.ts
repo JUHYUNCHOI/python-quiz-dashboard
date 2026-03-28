@@ -21,89 +21,114 @@ export const cppLesson22EnData: LessonData = {
         {
           id: "ch1-intro",
           type: "explain",
-          title: "🐕 class — Create your own type!",
-          content: `**class** is a way to bundle data and functions together to create **your own custom type**.
+          title: "🚗 class — Building a car in the computer world!",
+          content: `In the computer world, things like cars and audio systems don't exist. **You have to build them.**
 
-Let's create a Dog type:
+Integers use \`int\`, text uses \`string\`.
+But a **car**? → You build it with a **class**!
+
+---
+
+When creating a class, **simplification** is key.
+
+> 💡 Think of a recipe for pancakes. You might list flour, eggs, milk… and forget the butter. Same with a class — focus on the essentials.
+
+Every class has two things inside:
+
+| | What it is | C++ |
+|---|---|---|
+| **Things to remember** | color, speed, etc. | Member variables |
+| **Things to do** | go forward, go back, etc. | Member functions |
 
 \`\`\`cpp
-class Dog {
+class Car {
 public:
-    string name;   // data
-    int age;
+    // Things to remember (member variables)
+    string color;
+    double speed;
 
-    void bark() {  // function (method)
-        cout << name << ": Woof!" << endl;
+    // Things to do (member functions)
+    void forward()  { speed += 10; }
+    void backward() { speed -= 10; }
+    void info() {
+        cout << color << " car, speed: " << speed << endl;
     }
 };
 \`\`\`
 
-Once defined, you can create Dog variables:
+Once defined, you can create Car objects:
 
 \`\`\`cpp
-Dog d;
-d.name = "Buddy";
-d.age = 3;
-d.bark();  // Buddy: Woof!
+Car myCar;
+myCar.color = "red";
+myCar.speed = 0;
+myCar.forward();   // speed: 10
+myCar.forward();   // speed: 20
+myCar.info();      // red car, speed: 20
 \`\`\`
+
+> 🍪 **Cookie cutter = class, cookie = object!**
+> Make the cutter (class) once, then stamp out as many cookies (Car myCar, Car yourCar...) as you want.
 
 **Compared to Python:**
 
 | | Python 🐍 | C++ ⚡ |
 |---|---|---|
-| Method | \`def bark(self):\` | \`void bark() {}\` |
-| Member access | \`self.name\` | \`name\` (no self!) |
+| Method | \`def forward(self):\` | \`void forward() {}\` |
+| Member access | \`self.speed\` | \`speed\` (no self!) |
 | Class end | indentation | \`};\` semicolon required! |
 
 💡 **Remember for now:**
 - Inside a method, access members directly — no \`self\` needed
-- \`};\` semicolon required at the end of the class!
 - We'll learn what \`public:\` means in the next chapter`,
         },
         {
           id: "ch1-pred1",
           type: "predict" as const,
-          title: "Read a class!",
+          title: "Read the Car class!",
           code: `#include <iostream>
 #include <string>
 using namespace std;
 
-class Dog {
+class Car {
 public:
-    string name;
-    int age;
+    string color;
+    double speed;
+    void forward() { speed += 10; }
     void info() {
-        cout << name << " " << age << " years old";
+        cout << color << " " << speed;
     }
 };
 
 int main() {
-    Dog d;
-    d.name = "Buddy";
-    d.age = 3;
-    d.info();
+    Car c;
+    c.color = "blue";
+    c.speed = 0;
+    c.forward();
+    c.forward();
+    c.info();
     return 0;
 }`,
-          options: ["Buddy 3 years old", "Buddy", "3 years old", "Error"],
+          options: ["blue 20", "blue 0", "blue 10", "Error"],
           answer: 0,
-          explanation: "After setting d.name = \"Buddy\" and d.age = 3, info() is called. Inside the method, name and age are accessed directly — no self needed!"
+          explanation: "forward() is called twice, so speed goes 0→10→20. info() prints color and speed. Inside the method, color and speed are accessed directly — no self needed!"
         },
         {
           id: "ch1-fb1",
           type: "fillblank" as const,
-          title: "Accessing members inside a method!",
+          title: "Complete the member function!",
           content: "Inside a method, access member variables directly — no `self`!",
-          code: `class Dog {
+          code: `class Car {
 public:
-    string name;
-    void bark() {
-        cout << ___ << ": Woof!";
+    double speed;
+    void forward() {
+        ___ += 10;   // increase speed by 10
     }
 };`,
           fillBlanks: [
-            { id: 0, answer: "name", options: ["name", "self.name", "Dog.name", "this.name"] }
+            { id: 0, answer: "speed", options: ["speed", "self.speed", "Car.speed", "this.speed"] }
           ],
-          explanation: "In C++, unlike Python's self.name, you just write name! Inside a method, you can directly access the class's own members."
+          explanation: "In C++, unlike Python's self.speed, you just write speed! Inside a method, you can directly access the class's own member variables."
         },
         {
           id: "ch1-q1",
