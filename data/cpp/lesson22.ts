@@ -400,6 +400,7 @@ setter에서는 잘못된 값을 거부할 수 있다는 게 포인트예요.
           id: "ch3-constructor",
           type: "explain",
           title: "🔧 생성자 — 객체가 태어날 때 자동 호출!",
+          component: "cppConstructorBuilder",
           content: `지금까지 잘 따라왔죠? 근데 이상한 점이 있지 않나요?
 
 우리가 Car 객체를 만들 때, 처음에는 speed도 없고 color도 없는 상태예요. 그 다음에 setter로 하나씩 넣어줘야 해요.
@@ -415,22 +416,13 @@ BankAccount acc;
 // acc.balance가 -398475.23 같은 이상한 값일 수 있어요! 😱
 \`\`\`
 
-생성자를 뜯어보면:
-
-\`\`\`cpp
-// ↓ 리턴 타입 없음! (void도 int도 아무것도 안 써요)
-BankAccount(string name, double initial) {
-// ↑ 클래스 이름!    ↑ 받고 싶은 초기값을 파라미터로
-    owner   = name;    // 파라미터 → 멤버변수에 저장
-    balance = initial;
-}
-// 초기값이 필요 없으면 괄호를 비우면 돼요:
-// BankAccount() { owner = ""; balance = 0; }
-\`\`\`
-
-실제 클래스에 넣으면:
-
-\`\`\`cpp {6-11,14}
+생성자를 하나씩 조립해봐요:`,
+        },
+        {
+          id: "ch3-constructor-usage",
+          type: "explain",
+          title: "생성자가 있는 클래스 전체 보기",
+          content: `\`\`\`cpp {6-11,14}
 class BankAccount {
 private:
     string owner;

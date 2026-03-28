@@ -401,6 +401,7 @@ But there's still one question — do we have to call a setter every single time
           id: "ch3-constructor",
           type: "explain",
           title: "🔧 Constructor — Called automatically when an object is created!",
+          component: "cppConstructorBuilder",
           content: `You've followed along great so far — but wait, something's a bit off, right?
 
 When we create a Car object, there's no speed and no color at first. We have to call setters one by one to fill them in.
@@ -416,22 +417,13 @@ BankAccount acc;
 // acc.balance might be -398475.23 or some random value! 😱
 \`\`\`
 
-Let's break a constructor apart:
-
-\`\`\`cpp
-// ↓ No return type! (no void, no int, nothing)
-BankAccount(string name, double initial) {
-// ↑ Class name!     ↑ initial values you want → receive as parameters
-    owner   = name;    // parameter → stored into member variable
-    balance = initial;
-}
-// If you don't need initial values, just leave the parentheses empty:
-// BankAccount() { owner = ""; balance = 0; }
-\`\`\`
-
-Putting it inside the actual class:
-
-\`\`\`cpp {6-11,14}
+Let's build a constructor step by step:`,
+        },
+        {
+          id: "ch3-constructor-usage",
+          type: "explain",
+          title: "The full class with a constructor",
+          content: `\`\`\`cpp {6-11,14}
 class BankAccount {
 private:
     string owner;

@@ -362,6 +362,10 @@ const registry: Record<string, ComponentEntry> = {
     load: () => import("@/components/animations/syntax-builder"),
     exportName: "CppBraceTrapBuilder",
   },
+  cppConstructorBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppConstructorBuilder",
+  },
 
   // C++ 레슨 21: 2D 배열 이중 for문 시각화
   gridLoopVisualizer: {

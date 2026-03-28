@@ -1418,6 +1418,42 @@ const CPP_BRACE_TRAP: SyntaxBuilderPreset = {
   ],
 }
 
+const CPP_CONSTRUCTOR: SyntaxBuilderPreset = {
+  title: { ko: "C++ 생성자 만들기", en: "Building a C++ Constructor" },
+  steps: [
+    {
+      code: "BankAccount",
+      highlight: { start: 0, end: 11 },
+      label: { ko: "이름은 클래스 이름 그대로! void나 int 같은 리턴 타입이 없어요", en: "Name = class name exactly! No return type like void or int!" },
+      icon: "🏷️",
+    },
+    {
+      code: "BankAccount()",
+      highlight: { start: 11, end: 13 },
+      label: { ko: "괄호 안에 받을 초기값을 쓸 거예요. 없으면 그냥 빈 괄호 ( )도 돼요!", en: "Initial values go inside. If you don't need any, just leave it empty ( )!" },
+      icon: "🫧",
+    },
+    {
+      code: "BankAccount(string name, double initial)",
+      highlight: { start: 12, end: 39 },
+      label: { ko: "초기값을 파라미터로 받아요! 객체 만들 때 이 값들이 전달돼요", en: "Receive initial values as parameters! These get passed when creating an object" },
+      icon: "📥",
+    },
+    {
+      code: "BankAccount(string name, double initial) {\n    owner = name;\n    balance = initial;\n}",
+      highlight: { start: 40, end: 85 },
+      label: { ko: "받은 값을 멤버변수에 저장! 객체가 태어나는 순간 초기화 완료!", en: "Store received values into member variables! Initialized the moment the object is created!" },
+      icon: "📦",
+    },
+    {
+      code: "BankAccount(string name, double initial) {\n    owner = name;\n    balance = initial;\n}\n\nBankAccount acc(\"김철수\", 1000);",
+      highlight: { start: 87, end: 116 },
+      label: { ko: "BankAccount acc(\"김철수\", 1000) → 생성자 자동 호출! 초기값이 바로 세팅돼요", en: "BankAccount acc(\"Alice\", 1000) → constructor called automatically! Values set instantly" },
+      icon: "✨",
+    },
+  ],
+}
+
 // 프리셋 매핑
 const PRESETS: Record<string, SyntaxBuilderPreset> = {
   "cpp-if": CPP_IF,
@@ -1447,6 +1483,7 @@ const PRESETS: Record<string, SyntaxBuilderPreset> = {
   "cpp-call-by-ref": CPP_CALL_BY_REF,
   "cpp-public-private": CPP_PUBLIC_PRIVATE,
   "cpp-brace-trap": CPP_BRACE_TRAP,
+  "cpp-constructor": CPP_CONSTRUCTOR,
   "py-if": PY_IF,
   "py-for": PY_FOR,
   "py-while": PY_WHILE,
@@ -1743,4 +1780,7 @@ export function CppPublicPrivateBuilder(props: Omit<SyntaxBuilderProps, "preset"
 }
 export function CppBraceTrapBuilder(props: Omit<SyntaxBuilderProps, "preset">) {
   return <SyntaxBuilder {...props} preset="cpp-brace-trap" />
+}
+export function CppConstructorBuilder(props: Omit<SyntaxBuilderProps, "preset">) {
+  return <SyntaxBuilder {...props} preset="cpp-constructor" />
 }
