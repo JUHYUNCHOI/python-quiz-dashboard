@@ -241,7 +241,19 @@ int main() {
           id: "ch2-why",
           type: "explain",
           title: "🔒 Why do we need to hide data?",
-          content: `Think about a bank account balance. What if anyone could change it directly?
+          content: `Our Car class actually has a problem.
+
+\`\`\`cpp
+int main() {
+    Car myCar;
+    myCar.speed = -999;   // negative speed?
+    myCar.color = "";     // empty color?
+}
+\`\`\`
+
+Anyone can set any value from outside. There's nothing stopping them.
+
+Think about a bank account balance. What if anyone could change it directly?
 
 \`\`\`cpp
 // ❌ If everything is public...

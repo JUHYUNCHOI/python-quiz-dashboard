@@ -240,7 +240,19 @@ int main() {
           id: "ch2-why",
           type: "explain",
           title: "🔒 왜 데이터를 숨겨야 할까?",
-          content: `통장 잔액을 생각해봐요. 만약 잔액을 아무나 직접 바꿀 수 있다면?
+          content: `우리가 만든 Car class, 사실 문제가 있어요.
+
+\`\`\`cpp
+int main() {
+    Car myCar;
+    myCar.speed = -999;   // 음수 속도?
+    myCar.color = "";     // 빈 색깔?
+}
+\`\`\`
+
+외부에서 아무 값이나 마음대로 넣을 수 있어요. 막을 방법이 없어요.
+
+통장 잔액을 생각해봐요. 만약 잔액을 아무나 직접 바꿀 수 있다면?
 
 \`\`\`cpp
 // ❌ 모든 게 public이라면...
