@@ -350,7 +350,7 @@ int main() {
           title: "So how do we get or change values inside the class?",
           content: `We said member variables should be private — but what if we need to read or change \`speed\`?
 
-We do it by creating **public functions**. These are called **getters** and **setters**.
+You access them **through public member functions**. Functions that read and change values like this are called **getters** and **setters**.
 
 - **getter** — a function that **reads** a value
 - **setter** — a function that **sets** a value (and can reject bad inputs!)
