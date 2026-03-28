@@ -146,7 +146,26 @@ int main() {
 > 🍪 **Cookie cutter = class, cookie = object**
 > One cutter makes many cookies — one class creates many objects.
 
-**Designing classes and creating objects from them** — this way of programming is called **Object-Oriented Programming (OOP)**.`,
+**Designing classes and creating objects from them** — this way of programming is called **Object-Oriented Programming (OOP)**.
+
+{collapse:📦 Bonus — what if there were no classes?}
+\`\`\`cpp
+// Without a class, two cars would look like this...
+int main() {
+    double car1Speed = 0;
+    string car1Color = "red";
+    double car2Speed = 0;
+    string car2Color = "blue";
+
+    // To move each car forward, you'd write it separately
+    car1Speed += 10;
+    car2Speed += 10;
+
+    cout << car1Color << " car, speed: " << car1Speed << endl;
+    cout << car2Color << " car, speed: " << car2Speed << endl;
+}
+// With 10 cars? That's 20 variables... and 10 separate operations...
+\`\`\``,
         },
         {
           id: "ch1-pred1",

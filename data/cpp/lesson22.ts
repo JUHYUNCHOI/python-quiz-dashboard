@@ -145,7 +145,26 @@ int main() {
 
 > 🍩 붕어빵틀 하나로 붕어빵을 여러 개 찍듯, class 하나로 객체를 여러 개 만들 수 있어요.
 
-이렇게 **class를 설계하고 객체를 만들어 쓰는 방식** — 이걸 **객체지향 프로그래밍(OOP)** 이라고 해요.`,
+이렇게 **class를 설계하고 객체를 만들어 쓰는 방식** — 이걸 **객체지향 프로그래밍(OOP)** 이라고 해요.
+
+{collapse:📦 번외 — class가 없었다면?}
+\`\`\`cpp
+// class 없이 자동차 2대를 표현하려면...
+int main() {
+    double car1Speed = 0;
+    string car1Color = "빨간색";
+    double car2Speed = 0;
+    string car2Color = "파란색";
+
+    // 앞으로 가게 하려면 각각 따로 써야 해요
+    car1Speed += 10;
+    car2Speed += 10;
+
+    cout << car1Color << " 자동차, 속도: " << car1Speed << endl;
+    cout << car2Color << " 자동차, 속도: " << car2Speed << endl;
+}
+// 자동차가 10대면? 변수가 20개... 함수도 10번...
+\`\`\``,
         },
         {
           id: "ch1-pred1",
