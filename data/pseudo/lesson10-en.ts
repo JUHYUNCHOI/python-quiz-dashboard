@@ -96,18 +96,6 @@ Output: **10**`
           }
         },
         {
-          id: "ch1-fill1",
-          type: "fillblank",
-          title: "✏️ Fill in the blanks!",
-          content: 'Complete the procedure definition and its call.',
-          code: '___ PrintMessage(msg : STRING)\n    OUTPUT msg\n___\n\n___ PrintMessage("Welcome!")',
-          fillBlanks: [
-            { id: 1, answer: "PROCEDURE", options: ["PROCEDURE", "FUNCTION", "DEF", "SUB"] },
-            { id: 2, answer: "ENDPROCEDURE", options: ["ENDPROCEDURE", "ENDFUNCTION", "END", "RETURN"] },
-            { id: 3, answer: "CALL", options: ["CALL", "RUN", "EXEC", "DO"] }
-          ]
-        },
-        {
           id: "ch1-predict1",
           type: "predict",
           title: "🔮 Predict the output!",
@@ -134,6 +122,18 @@ CALL Stars(5)
           ],
           answer: 0,
           explanation: 'The first call `Stars(3)` outputs "***" (3 stars). The second call `Stars(5)` outputs "*****" (5 stars). Each call runs the procedure with a different value of `n`.'
+        },
+        {
+          id: "ch1-fill1",
+          type: "fillblank",
+          title: "✏️ Fill in the blanks!",
+          content: 'Complete the procedure definition and its call.',
+          code: '___ PrintMessage(msg : STRING)\n    OUTPUT msg\n___\n\n___ PrintMessage("Welcome!")',
+          fillBlanks: [
+            { id: 1, answer: "PROCEDURE", options: ["PROCEDURE", "FUNCTION", "DEF", "SUB"] },
+            { id: 2, answer: "ENDPROCEDURE", options: ["ENDPROCEDURE", "ENDFUNCTION", "END", "RETURN"] },
+            { id: 3, answer: "CALL", options: ["CALL", "RUN", "EXEC", "DO"] }
+          ]
         }
       ]
     },
@@ -230,18 +230,6 @@ Functions can return any type: INTEGER, REAL, STRING, BOOLEAN, etc.`
           }
         },
         {
-          id: "ch2-fill2",
-          type: "fillblank",
-          title: "✏️ Fill in the blanks!",
-          content: 'Complete the function that calculates the square of a number.',
-          code: '___ Square(n : INTEGER) ___ INTEGER\n    ___ n * n\nENDFUNCTION',
-          fillBlanks: [
-            { id: 1, answer: "FUNCTION", options: ["FUNCTION", "PROCEDURE", "DEF", "SUB"] },
-            { id: 2, answer: "RETURNS", options: ["RETURNS", "RETURN", "GIVES", "OUTPUT"] },
-            { id: 3, answer: "RETURN", options: ["RETURN", "RETURNS", "OUTPUT", "GIVE"] }
-          ]
-        },
-        {
           id: "ch2-predict2",
           type: "predict",
           title: "🔮 Predict the output!",
@@ -270,6 +258,18 @@ OUTPUT y
           ],
           answer: 0,
           explanation: 'First, `Add(3, 4)` returns 7, so x = 7. Then `Multiply(7, 2)` returns 14, so y = 14. The output is **14**.'
+        },
+        {
+          id: "ch2-fill2",
+          type: "fillblank",
+          title: "✏️ Fill in the blanks!",
+          content: 'Complete the function that calculates the square of a number.',
+          code: '___ Square(n : INTEGER) ___ INTEGER\n    ___ n * n\nENDFUNCTION',
+          fillBlanks: [
+            { id: 1, answer: "FUNCTION", options: ["FUNCTION", "PROCEDURE", "DEF", "SUB"] },
+            { id: 2, answer: "RETURNS", options: ["RETURNS", "RETURN", "GIVES", "OUTPUT"] },
+            { id: 3, answer: "RETURN", options: ["RETURN", "RETURNS", "OUTPUT", "GIVE"] }
+          ]
         }
       ]
     },

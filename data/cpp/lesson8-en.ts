@@ -355,6 +355,13 @@ C++ reads code **top to bottom**. When main() calls \`add()\`, the compiler hasn
 💡 There are 2 ways to fix this! Let's see them next.`
         },
         {
+          id: "ch2-proto-why-anim",
+          type: "animation",
+          component: "functionOrder",
+          title: "🎬 How the Compiler Reads Code",
+          content: `💡 There are 2 ways to fix this! Let's see them next.`
+        },
+        {
           id: "ch2-proto-fix",
           type: "explain",
           title: "✅ Two Ways to Fix It",
@@ -576,6 +583,15 @@ int main() {
 \`\`\`
 
 💡 In competitive programming, everything goes in one file. But real team projects always split files!`
+        },
+        {
+          id: "ch2-header-anim",
+          type: "animation",
+          component: "headerFiles",
+          title: "🔗 How the Three Files Connect",
+          content: `💡 **Key insight:** Even without knowing how the function body (\`math.cpp\`) is written, just by reading the **header file (\`math.h\`)** you can know what functions exist and how to use them!
+
+The C++ standard library (\`<iostream>\`, \`<string>\`, etc.) works the same way — we just include the header, and the body is already compiled somewhere.`
         },
         {
           id: "ch2-header-q",
