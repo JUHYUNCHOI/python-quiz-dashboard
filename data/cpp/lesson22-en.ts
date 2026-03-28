@@ -81,7 +81,7 @@ class Car {
 };
 \`\`\`
 
-Inside member functions, you access member variables directly — no \`self\`.
+> 🐍 **Coming from Python?** In Python you'd write `self.speed`, but in C++ you just write `speed` directly.
 
 No car exists yet.`,
         },
