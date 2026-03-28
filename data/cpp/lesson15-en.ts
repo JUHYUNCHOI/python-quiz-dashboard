@@ -438,6 +438,91 @@ v.sort(key=abs)
 💡 Python says "sort by this value" (key), while C++ says "which of these two comes first?" (comparator) — that's the key difference!`
         },
         {
+          id: "ch2-struct-sort",
+          type: "explain",
+          title: "📦 Sorting a struct Array!",
+          content: `Now that you know lambdas, you can sort struct arrays too! Just compare **member fields** in the lambda.
+
+\`\`\`cpp
+#include <algorithm>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+Student students[3] = {
+    {"Kim", 95},
+    {"Lee", 87},
+    {"Park", 72},
+};
+
+// Sort by score ascending
+sort(students, students + 3, [](Student a, Student b) {
+    return a.score < b.score;
+});
+// Result: Park(72) → Lee(87) → Kim(95)
+\`\`\`
+
+**For descending, just flip the operator to >:**
+\`\`\`cpp
+sort(students, students + 3, [](Student a, Student b) {
+    return a.score > b.score;
+});
+// Result: Kim(95) → Lee(87) → Park(72)
+\`\`\`
+
+**Works the same with vector<Student>:**
+\`\`\`cpp
+vector<Student> v = { {"Kim", 95}, {"Lee", 87} };
+sort(v.begin(), v.end(), [](Student a, Student b) {
+    return a.score < b.score;
+});
+\`\`\`
+
+**pair vs struct — when to use which?**
+
+| | pair | struct |
+|---|---|---|
+| Auto sort | ✅ No lambda needed | ❌ Lambda required |
+| Member names | \`.first\`, \`.second\` (unclear) | \`.score\`, \`.name\` (clear!) |
+| Field count | Exactly 2 | As many as you need |
+| USACO use | Quick bundling | Complex data |
+
+💡 \`pair<int,string>\`'s \`.first\` tells you nothing. But struct's \`.score\` and \`.name\` make code **much easier to read**!`,
+        },
+        {
+          id: "ch2-struct-pred",
+          type: "predict" as const,
+          title: "struct sort result!",
+          code: `#include <iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+int main() {
+    Student s[3] = {
+        {"Kim", 85},
+        {"Lee", 92},
+        {"Park", 78},
+    };
+    sort(s, s + 3, [](Student a, Student b) {
+        return a.score > b.score;
+    });
+    cout << s[0].name << " " << s[2].name;
+    return 0;
+}`,
+          options: ["Lee Park", "Kim Park", "Park Lee", "Kim Lee"],
+          answer: 0,
+          explanation: "Sorting by score descending: Lee(92) → Kim(85) → Park(78). s[0].name is Lee, s[2].name is Park."
+        },
+        {
           id: "ch2-pred2",
           type: "predict" as const,
           title: "Custom sort result!",

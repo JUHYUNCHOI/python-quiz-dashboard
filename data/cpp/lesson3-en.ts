@@ -140,6 +140,29 @@ In Python, \`' '\` and \`" "\` are the same, but in C++ they are **completely di
 💡 Why does char exist separately? A single character takes only 1 byte of memory. When storing a million characters, it's much more efficient than string!`
         },
         {
+          id: "ch1-ascii",
+          type: "explain",
+          title: "🔢 char's Secret — It's Actually a Number!",
+          content: `char values are stored internally as **integers**. Each character has a unique number called its **ASCII code**.
+
+\`\`\`cpp
+char c = 'A';
+cout << c << endl;        // A
+cout << (int)c << endl;   // 65 ← ASCII code of 'A'
+\`\`\`
+
+Common ASCII codes:
+| Character | ASCII |
+|-----------|-------|
+| \`'A'\` | 65 |
+| \`'Z'\` | 90 |
+| \`'a'\` | 97 |
+| \`'z'\` | 122 |
+| \`'0'\` | 48 |
+
+💡 Writing \`(int)c\` converts a char to its numeric value — this is called **type casting**!`,
+        },
+        {
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ Create Your Own Variables!",
@@ -229,6 +252,59 @@ Why? Because the result of an int operation is also an int.
 Want the decimal result? Make at least one side a double:
 
 \`7.0 / 2\` → \`3.5\` ✅`
+        },
+        {
+          id: "ch2-casting",
+          type: "explain",
+          title: "🔧 Type Casting",
+          content: `**Type casting** means explicitly converting a value to a different type.
+
+The syntax is simple:
+\`\`\`cpp
+(target_type) value
+\`\`\`
+
+**① int ↔ double casting**
+\`\`\`cpp
+int a = 7, b = 2;
+double result = (double)a / b;  // 3.5 ✅
+// (double)a converts to 7.0 first → 7.0 / 2 = 3.5
+\`\`\`
+
+Watch out! Parentheses placement matters:
+\`\`\`cpp
+(double)(a / b)  // ❌ 3.0  → division happens first!
+(double)a / b    // ✅ 3.5  → a is cast first, then divided
+\`\`\`
+
+**② char ↔ int casting**
+\`\`\`cpp
+char c = 'A';
+cout << (int)c << endl;   // 65  (char → int: prints ASCII code)
+
+int n = 66;
+cout << (char)n << endl;  // B   (int → char: ASCII code → character)
+\`\`\`
+
+💡 Same as Python's \`ord('A')\` = 65 and \`chr(66)\` = 'B'!`,
+        },
+        {
+          id: "ch2-casting-q1",
+          type: "quiz",
+          title: "Casting quiz!",
+          content: `What does this code print?\n\n\`\`\`cpp\nint a = 5, b = 2;\ncout << (double)a / b << endl;\n\`\`\``,
+          options: ["2", "2.5", "2.0", "Error"],
+          answer: 1,
+          explanation: "(double)a converts a to 5.0 first, then divides by b (=2). 5.0 / 2 = 2.5! If it were (double)(a/b), you'd get 2.0."
+        },
+        {
+          id: "ch2-casting-q2",
+          type: "quiz",
+          title: "char casting!",
+          content: `What does this code print?\n\n\`\`\`cpp\nint n = 66;\ncout << (char)n << endl;\n\`\`\``,
+          options: ["66", "B", "A", "Error"],
+          answer: 1,
+          explanation: "(char)66 prints the character with ASCII code 66, which is 'B'. 'A'=65, 'B'=66, 'C'=67."
         },
         {
           id: "ch2-pred1",

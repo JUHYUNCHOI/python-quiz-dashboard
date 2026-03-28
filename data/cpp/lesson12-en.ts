@@ -46,6 +46,13 @@ cout << x;       // x is also 20! They share the same memory
 💡 The & symbol has multiple meanings! Here it means **reference declaration**. Later it's also used as the **address-of operator**, but you can tell them apart from context.`
         },
         {
+          id: "ch1-visual",
+          type: "interactive",
+          title: "📦 Copy vs Reference — Visualized with Boxes",
+          content: "Click through all three options to see the difference!",
+          component: "referenceBoxVisualizer",
+        },
+        {
           id: "ch1-pred1",
           type: "predict" as const,
           title: "Modifying a reference!",
@@ -276,6 +283,32 @@ References (&) and pointers (*) serve a similar purpose but are different tools.
           options: ["3 7", "7 3", "7 7", "Error"],
           answer: 1,
           explanation: "References (&) mean the originals are modified! temp=3, a=7, b=3 — so x becomes 7 and y becomes 3."
+        },
+        {
+          id: "ch2-vector-ref",
+          type: "explain",
+          title: "📦 Vectors Can Be Passed by Reference Too!",
+          content: `So far we've used \`int&\` to pass integers by reference. **Vectors work the same way — just add \`&\`!**
+
+\`\`\`cpp
+// No & → copy → original unchanged
+void addTen(vector<int> v) {
+    for (int& x : v) x += 10;  // only the copy changes
+}
+
+// With & → reference → original changes
+void addTen(vector<int>& v) {
+    for (int& x : v) x += 10;  // the original changes!
+}
+\`\`\`
+
+\`vector<int>&\` means "a reference to a vector of ints." Just like \`int&\`, you just add \`&\` after the type.
+
+⚠️ **Remember:** Inside the range-for, you also need \`int&\` to modify elements!
+\`\`\`cpp
+for (int x : v)   // x is a copy → v unchanged
+for (int& x : v)  // x is a reference → v changes!
+\`\`\``,
         },
         {
           id: "ch2-practice",

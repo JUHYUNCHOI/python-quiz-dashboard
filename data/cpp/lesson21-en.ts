@@ -143,6 +143,17 @@ int main() {
       emoji: "🔁",
       steps: [
         {
+          id: "ch2-visual",
+          type: "explain",
+          title: "👀 See How i and j Move",
+          component: "gridLoopVisualizer",
+          content: `Watch how i and j move step by step in a nested for loop.
+
+- **Outer loop \`i\`** → row changes (top to bottom)
+- **Inner loop \`j\`** → column changes within the same row (left to right)
+- While i is 0, j goes 0→1→2 all the way, then i moves to 1`,
+        },
+        {
           id: "ch2-intro",
           type: "explain",
           title: "🔁 How to Traverse a 2D Array",
@@ -325,6 +336,46 @@ int main() {
           options: ["3 4 5", "3 4 0", "4 3 5", "3 3 5"],
           answer: 0,
           explanation: "`grid(3, vector<int>(4, 0))` creates 3 rows and 4 cols filled with 0. `grid[1][2] = 5` sets one cell. `grid.size()` = 3 (rows), `grid[0].size()` = 4 (cols), `grid[1][2]` = 5."
+        },
+        {
+          id: "ch3-cin",
+          type: "explain",
+          title: "⌨️ Reading a 2D Array with cin",
+          content: `So far we've hardcoded values into arrays. In real USACO problems, **values come from input**.
+
+Here's the pattern for reading a grid with nested loops + cin:
+
+\`\`\`cpp
+int rows = 2, cols = 3;
+vector<vector<int>> grid(rows, vector<int>(cols, 0));
+
+for (int i = 0; i < rows; i++) {
+    for (int j = 0; j < cols; j++) {
+        cin >> grid[i][j];  // fill one cell at a time
+    }
+}
+\`\`\`
+
+**If the input looks like this:**
+\`\`\`
+1 2 3
+4 5 6
+\`\`\`
+
+cin automatically skips spaces and newlines, filling slots in order: \`grid[0][0]=1, grid[0][1]=2, ..., grid[1][2]=6\`.
+
+**Printing follows the same structure:**
+\`\`\`cpp
+for (int i = 0; i < rows; i++) {
+    for (int j = 0; j < cols; j++) {
+        cout << grid[i][j];
+        if (j < cols - 1) cout << " ";  // no space after last column
+    }
+    cout << "\\n";  // newline after each row
+}
+\`\`\`
+
+> 💡 Over 70% of USACO problems give N, M (rows, cols) on the first line, then the grid. Memorize this pattern and you're already ahead!`,
         },
         {
           id: "ch3-practice",

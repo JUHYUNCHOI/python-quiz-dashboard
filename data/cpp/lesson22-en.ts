@@ -21,34 +21,44 @@ export const cppLesson22EnData: LessonData = {
         {
           id: "ch1-intro",
           type: "explain",
-          title: "🚗 class — Building a car in the computer world!",
-          content: `In the computer world, things like cars and audio systems don't exist. **You have to build them.**
+          title: "🚗 What is a class?",
+          content: `In the computer world, cars and audio systems don't exist. **You have to build everything.**
 
-Integers use \`int\`, text uses \`string\`.
+\`int\` for integers, \`string\` for text.
 But a **car**? → You build it with a **class**!
 
 ---
 
-When creating a class, **simplification** is key.
+Before writing a class, you need to **think about what your program actually needs.**
 
-> 💡 Think of a recipe for pancakes. You might list flour, eggs, milk… and forget the butter. Same with a class — focus on the essentials.
+What comes to mind when you think of a car? Wheels, engine, color, speed, fuel, doors...
 
-Every class has two things inside:
+The key question is: **"What does the car need to DO in MY program?"**
+
+Building a racing game? → color, speed, go forward / go backward
+Building a parking system? → license plate, size, entry time
+
+**Choosing the right things for your purpose** — that's step one of class design!
+
+> 💡 A friend was asked "What do you need to make sushi?" They listed rice, cucumber, salmon, avocado… but forgot the **seaweed**.
+> Thinking carefully so nothing important gets left out — that's the skill that makes great class design.
+
+Every class has exactly two things:
 
 | | What it is | C++ |
 |---|---|---|
 | **Things to remember** | color, speed, etc. | Member variables |
 | **Things to do** | go forward, go back, etc. | Member functions |
 
+Let's build a simple car:
+
 \`\`\`cpp
 class Car {
 public:
-    // Things to remember (member variables)
-    string color;
+    string color;   // things to remember
     double speed;
 
-    // Things to do (member functions)
-    void forward()  { speed += 10; }
+    void forward()  { speed += 10; }  // things to do
     void backward() { speed -= 10; }
     void info() {
         cout << color << " car, speed: " << speed << endl;
@@ -56,19 +66,19 @@ public:
 };
 \`\`\`
 
-Once defined, you can create Car objects:
+Once you have the blueprint (class), you can create as many objects as you want:
 
 \`\`\`cpp
 Car myCar;
 myCar.color = "red";
 myCar.speed = 0;
-myCar.forward();   // speed: 10
-myCar.forward();   // speed: 20
+myCar.forward();
+myCar.forward();
 myCar.info();      // red car, speed: 20
 \`\`\`
 
-> 🍪 **Cookie cutter = class, cookie = object!**
-> Make the cutter (class) once, then stamp out as many cookies (Car myCar, Car yourCar...) as you want.
+> 🍪 **Cookie cutter = class, cookie = object**
+> One cutter, many cookies — one class, many objects.
 
 **Compared to Python:**
 

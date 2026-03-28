@@ -95,6 +95,13 @@ For example, with \`int arr[3] = {10, 20, 30};\`, reading \`arr[100]\` gives you
 💡 C++ arrays don't check bounds → you must be careful yourself!`
         },
         {
+          id: "ch1-default-values",
+          type: "interactive",
+          title: "🎨 Check Default Values by Type",
+          content: "When you partially initialize an array, what fills the remaining slots? It depends on the type!",
+          component: "arrayInitVisualizer",
+        },
+        {
           id: "ch1-pred1",
           type: "predict" as const,
           title: "Array access!",
@@ -154,6 +161,59 @@ Press **▶ Run** or **▷ Step** to trace the execution.`,
           options: ["20", "24", "30", "Error"],
           answer: 2,
           explanation: "2 + 4 + 6 + 8 + 10 = 30! The for loop adds all array elements."
+        },
+        {
+          id: "ch1-cin",
+          type: "explain",
+          title: "⌨️ Reading Input into an Array with cin",
+          content: `Instead of hardcoding values, you can let the user **type them in**!
+
+**for loop + cin:**
+
+\`\`\`cpp
+#include <iostream>
+using namespace std;
+
+int main() {
+    int scores[5];
+
+    cout << "Enter 5 scores:" << endl;
+    for (int i = 0; i < 5; i++) {
+        cin >> scores[i];  // Fill each slot one by one
+    }
+
+    cout << "First score: " << scores[0] << endl;
+    return 0;
+}
+\`\`\`
+
+Compared to Python:
+
+\`\`\`python
+scores = []
+for i in range(5):
+    scores.append(int(input()))
+\`\`\`
+
+| Python 🐍 | C++ ⚡ |
+|---|---|
+| \`int(input())\` | \`cin >> scores[i]\` |
+| Append to list | Store directly in slot |
+| Size grows automatically | Array size pre-declared |
+
+💡 In C++, declare the array size first, then fill each slot with for + cin!`,
+        },
+        {
+          id: "ch1-fb-cin",
+          type: "fillblank" as const,
+          title: "Fill in the blanks",
+          content: "Read 3 values into an array using cin!",
+          code: "int arr[3];\nfor (int i = 0; i < ___; i++) {\n    ___ >> arr[i];\n}",
+          fillBlanks: [
+            { id: 0, answer: "3", options: ["3", "5", "i", "0"] },
+            { id: 1, answer: "cin", options: ["cin", "cout", "input", "scanf"] }
+          ],
+          explanation: "Loop 3 times (the array size), and use cin to put a value into each slot!"
         },
         {
           id: "ch1-practice",
@@ -217,6 +277,22 @@ int main() {
           ],
           answer: 2,
           explanation: "C-style arrays have a fixed size! To resize, you need to use vector."
+        },
+        {
+          id: "ch1-q2",
+          type: "quiz",
+          title: "Reading into an array with cin!",
+          content: `What goes in the blank to fill an array using cin?
+
+\`\`\`cpp
+int arr[3];
+for (int i = 0; i < 3; i++) {
+    _____ >> arr[i];
+}
+\`\`\``,
+          options: ["cout", "cin", "input", "scanf"],
+          answer: 1,
+          explanation: "cin reads user input into arr[i]! cout is for output, cin is for input."
         }
       ]
     },
@@ -270,6 +346,40 @@ A header is how you load extra features in C++. To use vector, you need the <vec
           explanation: "You need #include <vector> to use vectors, and a string vector is vector<string>!"
         },
         {
+          id: "ch2-init",
+          type: "explain",
+          title: "🔧 Creating a vector with a fixed size and default value",
+          content: `Beyond declaring with values, you can create a vector with a **fixed size and starting value**:
+
+\`\`\`cpp
+vector<int> v(5, 0);    // 5 zeros: {0, 0, 0, 0, 0}
+vector<int> v(3, 10);   // 3 tens: {10, 10, 10}
+\`\`\`
+
+Same idea as Python:
+
+\`\`\`python
+v = [0] * 5   # Python
+\`\`\`
+\`\`\`cpp
+vector<int> v(5, 0);  // C++, same idea!
+\`\`\`
+
+💡 When algorithm problems say "initialize n elements to 0," this is the go-to pattern!`,
+        },
+        {
+          id: "ch2-fb-init",
+          type: "fillblank" as const,
+          title: "Fill in the blanks",
+          content: "Create a vector of 4 integers all initialized to -1!",
+          code: "vector<int> v(___, ___);",
+          fillBlanks: [
+            { id: 0, answer: "4", options: ["4", "3", "5", "-1"] },
+            { id: 1, answer: "-1", options: ["-1", "0", "1", "4"] }
+          ],
+          explanation: "vector<int> v(4, -1) creates a vector with 4 elements all set to -1! v = {-1, -1, -1, -1}"
+        },
+        {
           id: "ch2-methods",
           type: "explain",
           title: "🛠️ Key vector Methods",
@@ -306,6 +416,54 @@ v.clear();           // Remove all → {}
           explanation: "{1,2,3} → push_back(4) → {1,2,3,4} → push_back(5) → {1,2,3,4,5} → pop_back() → {1,2,3,4}. Size is 4!"
         },
         {
+          id: "ch2-loop",
+          type: "explain",
+          title: "🔁 Looping Through a vector",
+          content: `You can loop through a vector with a **for loop**, just like an array!
+
+\`\`\`cpp
+vector<int> v = {10, 20, 30, 40};
+
+for (int i = 0; i < v.size(); i++) {
+    cout << v[i] << " ";
+}
+// Output: 10 20 30 40
+\`\`\`
+
+The structure is nearly **identical to array traversal**! The only difference:
+- Array: \`i < size\` (hardcode the number)
+- vector: \`i < v.size()\` (automatically calculated)
+
+\`\`\`cpp
+// Calculate sum
+int sum = 0;
+for (int i = 0; i < v.size(); i++) {
+    sum += v[i];
+}
+cout << sum;  // 100
+\`\`\`
+
+💡 A cleaner way to loop — **range-based for** — is coming in the next lesson (cpp-10)!`,
+        },
+        {
+          id: "ch2-pred2",
+          type: "predict" as const,
+          title: "vector loop!",
+          code: "#include <iostream>\n#include <vector>\nusing namespace std;\nint main() {\n    vector<int> v = {3, 1, 4, 1, 5};\n    v.push_back(9);\n    int sum = 0;\n    for (int i = 0; i < v.size(); i++) {\n        sum += v[i];\n    }\n    cout << sum;\n    return 0;\n}",
+          options: ["14", "23", "24", "Error"],
+          answer: 1,
+          explanation: "After push_back(9), v = {3,1,4,1,5,9}. Sum: 3+1+4+1+5+9 = 23!"
+        },
+        {
+          id: "ch2-pred3",
+          type: "predict" as const,
+          title: "front / back / empty!",
+          code: "#include <iostream>\n#include <vector>\nusing namespace std;\nint main() {\n    vector<int> v = {10, 20, 30};\n    cout << v.front() << \" \" << v.back() << endl;\n    v.clear();\n    cout << v.empty();\n    return 0;\n}",
+          options: ["10 30\n0", "10 30\n1", "20 30\n1", "Error"],
+          answer: 1,
+          explanation: "front()=10, back()=30 is printed, then after clear(), empty()=1 (true)!"
+        },
+        {
           id: "ch2-compare",
           type: "explain",
           title: "📊 Array vs Vector Comparison",
@@ -340,6 +498,56 @@ v.clear();           // Remove all → {}
             { id: 1, answer: "size", options: ["size", "length", "len", "count"] }
           ],
           explanation: "push_back() adds to the end and size() returns the count! Like Python's append() and len()."
+        },
+        {
+          id: "ch2-cin",
+          type: "explain",
+          title: "⌨️ Reading Input into a vector with cin",
+          content: `With vector, you don't need to pre-declare the size — just **push_back as you receive input**!
+
+**Method 1: Read the count first**
+
+\`\`\`cpp
+int n;
+cin >> n;
+
+vector<int> nums;
+for (int i = 0; i < n; i++) {
+    int x;
+    cin >> x;
+    nums.push_back(x);
+}
+\`\`\`
+
+**Method 2: Stop when a specific value (e.g., 0) is entered**
+
+\`\`\`cpp
+vector<int> nums;
+int x;
+while (cin >> x && x != 0) {
+    nums.push_back(x);
+}
+// Stops when 0 is entered
+\`\`\`
+
+| | Array | vector |
+|---|---|---|
+| Input method | \`cin >> arr[i]\` | \`cin >> x; v.push_back(x)\` |
+| Pre-declare size | **Required** | Not needed |
+| Flexibility | Low | High |
+
+💡 Vectors don't need a pre-declared size — just push_back as you go!`,
+        },
+        {
+          id: "ch2-fb-cin",
+          type: "fillblank" as const,
+          title: "Fill in the blanks",
+          content: "Read a value with cin and add it to a vector!",
+          code: "vector<int> v;\nint x;\ncin >> x;\nv.___(x);",
+          fillBlanks: [
+            { id: 0, answer: "push_back", options: ["push_back", "append", "add", "insert"] }
+          ],
+          explanation: "Read with cin, then push_back to add to the vector!"
         },
         {
           id: "ch2-practice",
@@ -391,6 +599,20 @@ Total: 4 numbers`
           ],
           answer: 1,
           explanation: "In C++ vectors, the method to add to the end is push_back()!"
+        },
+        {
+          id: "ch2-q2",
+          type: "quiz",
+          title: "vector + cin!",
+          content: `What's the correct way to read input into a vector with cin?`,
+          options: [
+            "vector<int> v;\ncin >> v;",
+            "vector<int> v;\nint x;\ncin >> x;\nv.push_back(x);",
+            "vector<int> v[5];\ncin >> v[0];",
+            "vector<int> v;\nv.cin(x);"
+          ],
+          answer: 1,
+          explanation: "Read into a variable with cin, then add it to the vector with push_back!"
         }
       ]
     },

@@ -201,6 +201,39 @@ Let's compare with Python:
 💡 The third argument (initial value): use \`0\` for integer sum, \`0.0\` for floating-point sum!`
         },
         {
+          id: "ch1-lambda",
+          type: "explain",
+          title: "🔍 find_if & count_if — Search by Condition!",
+          content: `\`find()\` searches for an exact value, but what if you want to search by a **condition**? That's where **\`find_if()\`** and **\`count_if()\`** come in!
+
+\`\`\`cpp
+#include <algorithm>
+#include <vector>
+using namespace std;
+
+vector<int> v = {3, 7, 1, 8, 4, 9, 2};
+
+// Condition: find first element greater than 5
+auto it = find_if(v.begin(), v.end(), [](int x) {
+    return x > 5;
+});
+if (it != v.end()) cout << *it;  // 7
+
+// Condition: count even numbers
+int cnt = count_if(v.begin(), v.end(), [](int x) {
+    return x % 2 == 0;
+});
+cout << cnt;  // 3 (8, 4, 2)
+\`\`\`
+
+**Lambda expressions** — \`[](parameter) { return condition; }\` — are **unnamed functions** you write right on the spot. You already used them in Lesson 15 for \`sort()\`! They work anywhere an STL algorithm needs a condition function.
+
+| Python 🐍 | C++ ⚡ |
+|---|---|
+| \`filter(lambda x: x > 5, lst)\` | \`find_if(..., [](int x){ return x > 5; })\` |
+| \`len([x for x in lst if x % 2 == 0])\` | \`count_if(..., [](int x){ return x % 2 == 0; })\` |`,
+        },
+        {
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ Complete Vector Analysis!",
