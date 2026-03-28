@@ -6,6 +6,7 @@ interface CodeBlockProps {
   code: string
   language?: string
   className?: string
+  highlightLines?: Set<number>
 }
 
 // 토큰화 패턴 (밝은 배경용)
@@ -128,13 +129,24 @@ function tokenizeLine(line: string, keyPrefix: string = '', dark: boolean = fals
 }
 
 // Python syntax highlighting (줄별 div 포함)
-export function highlightPython(code: string, dark: boolean = false): React.ReactNode[] {
+export function highlightPython(code: string, dark: boolean = false, highlightLines?: Set<number>): React.ReactNode[] {
   const lines = code.split('\n')
+  const hasHighlights = highlightLines && highlightLines.size > 0
 
   return lines.map((line, lineIndex) => {
+    const lineNum = lineIndex + 1
+    const isHighlighted = hasHighlights && highlightLines!.has(lineNum)
+    const isDimmed = hasHighlights && !isHighlighted
+
     const tokens = tokenizeLine(line, `L${lineIndex}-`, dark)
+    const marginClass = hasHighlights ? '-mx-4 px-4 md:-mx-5 md:px-5' : ''
+    const accentClass = isHighlighted
+      ? 'bg-amber-100 border-l-[3px] border-amber-400 pl-[13px] md:pl-[17px]'
+      : isDimmed
+        ? 'opacity-40'
+        : ''
     return (
-      <div key={lineIndex} className="leading-relaxed">
+      <div key={lineIndex} className={`leading-relaxed ${marginClass} ${accentClass}`}>
         {tokens.length > 0 ? tokens : <span>&nbsp;</span>}
       </div>
     )
@@ -249,12 +261,24 @@ function tokenizeCppLine(line: string, keyPrefix: string = '', dark: boolean = f
   return tokens
 }
 
-export function highlightCpp(code: string, dark: boolean = false): React.ReactNode[] {
+export function highlightCpp(code: string, dark: boolean = false, highlightLines?: Set<number>): React.ReactNode[] {
   const lines = code.split('\n')
+  const hasHighlights = highlightLines && highlightLines.size > 0
+
   return lines.map((line, lineIndex) => {
+    const lineNum = lineIndex + 1
+    const isHighlighted = hasHighlights && highlightLines!.has(lineNum)
+    const isDimmed = hasHighlights && !isHighlighted
+
     const tokens = tokenizeCppLine(line, `L${lineIndex}-`, dark)
+    const marginClass = hasHighlights ? '-mx-4 px-4 md:-mx-5 md:px-5' : ''
+    const accentClass = isHighlighted
+      ? 'bg-amber-100 border-l-[3px] border-amber-400 pl-[13px] md:pl-[17px]'
+      : isDimmed
+        ? 'opacity-40'
+        : ''
     return (
-      <div key={lineIndex} className="leading-relaxed">
+      <div key={lineIndex} className={`leading-relaxed ${marginClass} ${accentClass}`}>
         {tokens.length > 0 ? tokens : <span>&nbsp;</span>}
       </div>
     )
@@ -359,11 +383,11 @@ function highlightSimple(code: string): React.ReactNode {
   return <span className="text-slate-800">{code}</span>
 }
 
-export function CodeBlock({ code, language = 'python', className }: CodeBlockProps) {
+export function CodeBlock({ code, language = 'python', className, highlightLines }: CodeBlockProps) {
   const highlighted = language === 'python'
-    ? highlightPython(code)
+    ? highlightPython(code, false, highlightLines)
     : (language === 'cpp' || language === 'c++' || language === 'c')
-      ? highlightCpp(code)
+      ? highlightCpp(code, false, highlightLines)
       : highlightSimple(code)
 
   return (

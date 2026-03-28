@@ -349,23 +349,18 @@ int main() {
           title: "그럼 class 안의 값들은 어떻게 가져오고 바꿀까요?",
           content: `멤버변수는 private으로 해야 한다고 했는데, 그럼 \`speed\`를 알고 싶거나 바꾸고 싶을 때는 어떻게 할까요?
 
-**public 멤버함수를 통해** 접근해요. 이렇게 값을 읽고 바꾸는 함수들을 **getter**와 **setter**라고 해요.
+멤버변수에 접근할 수 있는 함수를 **public에 넣어두면** 돼요.
 
-- **getter** — 값을 **읽어오는** 함수
-- **setter** — 값을 **설정하는** 함수 (잘못된 값은 여기서 거부할 수 있어요!)
-
-\`\`\`cpp
+\`\`\`cpp {6-8,10-15}
 class Car {
 private:
     double speed;
     string color;
 
 public:
-    // getter
-    double getSpeed() { return speed; }
-    string getColor() { return color; }
+    double getSpeed() { return speed; }   // speed 읽기
+    string getColor() { return color; }   // color 읽기
 
-    // setter — 여기서 유효성 검사 가능!
     void setSpeed(double s) {
         if (s >= 0) speed = s;   // 음수 속도는 거부
     }
@@ -379,10 +374,13 @@ public:
 int main() {
     Car myCar;
     myCar.setColor("빨간색");
-    myCar.setSpeed(-999);    // 조건 불충족 → 무시돼요
+    myCar.setSpeed(-999);     // 음수라서 무시돼요
     cout << myCar.getSpeed(); // 0 (바뀌지 않음)
 }
 \`\`\`
+
+값을 **읽는** 함수를 **getter**, 값을 **설정하는** 함수를 **setter**라고 해요.
+setter에서는 잘못된 값을 거부할 수 있다는 게 포인트예요.
 
 @핵심: private으로 막고, getter/setter로 통제된 창구를 만드는 것 — 이게 **캡슐화(encapsulation)**예요.
 
@@ -402,9 +400,15 @@ int main() {
           id: "ch3-constructor",
           type: "explain",
           title: "🔧 생성자 — 객체가 태어날 때 자동 호출!",
-          content: `있어요. **생성자(constructor)**예요.
+          content: `지금까지 잘 따라왔죠? 근데 이상한 점이 있지 않나요?
 
-생성자는 객체가 만들어지는 순간 자동으로 호출되는 함수예요. 생성자가 없으면 멤버 변수들이 **쓰레기 값**으로 시작해요:
+우리가 Car 객체를 만들 때, 처음에는 speed도 없고 color도 없는 상태예요. 그 다음에 setter로 하나씩 넣어줘야 해요.
+
+사람도 태어나는 순간 이름이 있고 성별이 있잖아요. 객체도 생기는 순간 처음부터 세팅이 되어 있어야 자연스럽지 않을까요?
+
+그래서 있어요. **객체가 만들어지는 순간 자동으로 호출되는 함수** — 이걸 **생성자(constructor)**라고 해요.
+
+생성자가 없으면 멤버 변수들이 **쓰레기 값**으로 시작해요:
 
 \`\`\`cpp
 BankAccount acc;

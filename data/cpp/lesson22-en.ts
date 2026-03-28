@@ -350,23 +350,18 @@ int main() {
           title: "So how do we get or change values inside the class?",
           content: `We said member variables should be private — but what if we need to read or change \`speed\`?
 
-You access them **through public member functions**. Functions that read and change values like this are called **getters** and **setters**.
+You access them **through a public member function**.
 
-- **getter** — a function that **reads** a value
-- **setter** — a function that **sets** a value (and can reject bad inputs!)
-
-\`\`\`cpp
+\`\`\`cpp {6-8,10-15}
 class Car {
 private:
     double speed;
     string color;
 
 public:
-    // getters
-    double getSpeed() { return speed; }
-    string getColor() { return color; }
+    double getSpeed() { return speed; }   // read speed
+    string getColor() { return color; }   // read color
 
-    // setters — validation happens here!
     void setSpeed(double s) {
         if (s >= 0) speed = s;   // reject negative speed
     }
@@ -380,14 +375,17 @@ public:
 int main() {
     Car myCar;
     myCar.setColor("red");
-    myCar.setSpeed(-999);    // condition fails → ignored
+    myCar.setSpeed(-999);    // negative → ignored
     cout << myCar.getSpeed(); // 0 (unchanged)
 }
 \`\`\`
 
+Functions that **read** a value are called **getters**, and functions that **set** a value are called **setters**.
+The key point: a setter can **reject invalid values**.
+
 @Key: Block with private, then create a controlled gateway with getters/setters — that's **encapsulation**.
 
-But there's still one question. Do we have to call a setter to set initial values every time we create an object? Is there a better way?`,
+But there's still one question — do we have to call a setter every single time we create an object just to set initial values? Is there a better way?`,
         },
       ]
     },
@@ -403,9 +401,15 @@ But there's still one question. Do we have to call a setter to set initial value
           id: "ch3-constructor",
           type: "explain",
           title: "🔧 Constructor — Called automatically when an object is created!",
-          content: `There is. It's called a **constructor**.
+          content: `You've followed along great so far — but wait, something's a bit off, right?
 
-A constructor is a function that runs automatically the moment an object is created. Without one, member variables start with **garbage values**:
+When we create a Car object, there's no speed and no color at first. We have to call setters one by one to fill them in.
+
+Think about it — when a person is born, they already have a name and a gender. Shouldn't an object also be set up from the very moment it comes into existence?
+
+And there is a way. A function that's **called automatically the moment an object is created** — that's called a **constructor**.
+
+Without a constructor, member variables start with **garbage values**:
 
 \`\`\`cpp
 BankAccount acc;

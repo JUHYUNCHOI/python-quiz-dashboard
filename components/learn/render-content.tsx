@@ -155,6 +155,28 @@ function CopyButton({ code }: { code: string }) {
 }
 
 // ============================================
+// 코드펜스 언어 + 하이라이트 라인 파싱
+// ============================================
+function parseLangAndHighlights(langStr: string): { lang: string; highlightLines: Set<number> } {
+  const match = langStr.match(/^(\w+)\s*\{([^}]+)\}$/)
+  if (!match) return { lang: langStr, highlightLines: new Set() }
+
+  const lang = match[1]
+  const spec = match[2]
+  const lines = new Set<number>()
+  spec.split(',').forEach(part => {
+    const range = part.trim().match(/^(\d+)-(\d+)$/)
+    if (range) {
+      for (let n = parseInt(range[1]); n <= parseInt(range[2]); n++) lines.add(n)
+    } else {
+      const n = parseInt(part.trim())
+      if (!isNaN(n)) lines.add(n)
+    }
+  })
+  return { lang, highlightLines: lines }
+}
+
+// ============================================
 // 메인 렌더 함수
 // ============================================
 export function renderContent(content: string) {
@@ -189,7 +211,7 @@ export function renderContent(content: string) {
     // ── 코드블록 ──
     if (line.startsWith('```')) {
       const codeLines: string[] = []
-      const lang = line.slice(3).trim() || 'python'
+      const { lang, highlightLines } = parseLangAndHighlights(line.slice(3).trim() || 'python')
       i++
 
       while (i < lines.length && !lines[i].startsWith('```')) {
@@ -202,7 +224,7 @@ export function renderContent(content: string) {
         const codeText = codeLines.join('\n')
         elements.push(
           <div key={key++} className="my-4 relative group">
-            <CodeBlock code={codeText} language={lang} />
+            <CodeBlock code={codeText} language={lang} highlightLines={highlightLines.size > 0 ? highlightLines : undefined} />
             <CopyButton code={codeText} />
           </div>
         )
