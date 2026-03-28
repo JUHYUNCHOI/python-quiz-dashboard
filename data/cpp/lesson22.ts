@@ -49,33 +49,53 @@ export const cppLesson22Data: LessonData = {
           id: "ch1-build",
           type: "explain",
           title: "🚗 그럼 어떻게 만들까요?",
-          content: `\`\`\`cpp
-class Car {
-public:
-    string color;   // 기억할 것 (멤버변수)
-    double speed;
+          content: `이렇게 써요:
 
-    void forward()  { speed += 10; }  // 할 수 있는 것 (멤버함수)
-    void backward() { speed -= 10; }
+\`\`\`cpp
+class Car {
+public:               // ← 지금은 그냥 쓰는 거예요, 나중에 배워요
+    string color;     // 기억할 것: 색깔
+    double speed;     // 기억할 것: 속도
+
+    void forward() {
+        speed += 10;  // 멤버변수에 self 없이 바로 접근해요
+    }
+    void backward() {
+        speed -= 10;
+    }
     void info() {
         cout << color << " 자동차, 속도: " << speed << endl;
     }
-};
+};  // ← 세미콜론 필수!
 \`\`\`
 
-이건 아직 **설계도(설명서)**예요.
+- **class 이름** 뒤에 \`{ };\` — 파이썬의 \`:\` + 들여쓰기 대신, 중괄호로 묶고 마지막에 세미콜론
+- **멤버변수**: 그냥 변수처럼 선언
+- **멤버함수**: 함수처럼 선언, 안에서 멤버변수를 \`self\` 없이 바로 써요
 
----
+그런데 이게 다예요. 아직 자동차가 생긴 건 아니에요.`,
+        },
+        {
+          id: "ch1-object",
+          type: "explain",
+          title: "🎮 그럼 실제 자동차는 어떻게 만들어요?",
+          content: `RPG 게임에서 상점에 "불꽃 검" 설명을 봤다고 해서 **내 것이 아니잖아요.**
+실제로 구매하거나 획득해야 인벤토리에 생겨요.
 
-## 🎮 게임 아이템으로 이해하기
-
-RPG 게임에서 상점에 "불꽃 검" 설명을 봤다고 해서 **내 것이 아니잖아요?**
-**실제로 구매하거나 획득해야** 내 인벤토리에 생겨요.
-
-class도 똑같아요 — 설계도만 있으면 아무것도 없어요.
+class도 똑같아요.
+방금 만든 Car는 **설계도**예요. 아직 자동차가 없어요.
 **실제로 만들어야** 비로소 존재해요.
 
-이렇게 class로 만든 실제 존재를 **객체(object)** 라고 해요.
+\`\`\`cpp
+Car myCar;            // ← 실제 자동차(객체)가 생겨요!
+myCar.color = "빨간색";
+myCar.speed = 0;
+myCar.forward();
+myCar.forward();
+myCar.info();         // 빨간색 자동차, 속도: 20
+\`\`\`
+
+이렇게 class로 만든 실체를 **객체(object)** 또는 **인스턴스(instance)** 라고 해요.
 
 | | 게임 | 프로그래밍 |
 |---|---|---|
@@ -84,38 +104,17 @@ class도 똑같아요 — 설계도만 있으면 아무것도 없어요.
 
 ---
 
-실제로 객체를 만들려면:
-
-\`\`\`cpp
-Car myCar;           // ← 여기서 실제 객체(object)가 생겨요!
-myCar.color = "빨간색";
-myCar.speed = 0;
-myCar.forward();
-myCar.forward();
-myCar.info();        // 빨간색 자동차, 속도: 20
-\`\`\`
-
-> 🍩 **붕어빵틀 = class, 붕어빵 = 객체(object)**
-> 틀 하나로 붕어빵 여러 개 → class 하나로 객체 여러 개!
+설계도 하나로 자동차를 여러 대 만들 수 있어요:
 
 \`\`\`cpp
 Car car1;  car1.color = "빨간색";   // 객체 1
-Car car2;  car2.color = "파란색";   // 객체 2  ← 같은 class, 다른 객체!
+Car car2;  car2.color = "파란색";   // 객체 2
 \`\`\`
 
-이렇게 **class를 설계하고 객체를 만들어 사용하는 방식**을 **객체지향 프로그래밍 (OOP)** 이라고 해요.
+> 🍩 **붕어빵틀 = class, 붕어빵 = 객체**
+> 틀 하나로 붕어빵 여러 개 찍듯, class 하나로 객체를 여러 개 만들 수 있어요.
 
-**Python과 비교:**
-
-| | Python 🐍 | C++ ⚡ |
-|---|---|---|
-| 메서드 선언 | \`def forward(self):\` | \`void forward() {}\` |
-| 멤버 접근 | \`self.speed\` | \`speed\` (self 없음!) |
-| 클래스 끝 | 들여쓰기로 구분 | \`};\` 세미콜론 필수! |
-
-💡 **지금 기억할 것:**
-- 메서드 안에서는 \`self\` 없이 멤버에 바로 접근해요
-- \`public:\` 의 의미는 다음 챕터에서 배워요`,
+이렇게 **class를 설계하고 객체를 만들어 쓰는 방식** — 이걸 **객체지향 프로그래밍(OOP)** 이라고 해요.`,
         },
         {
           id: "ch1-pred1",

@@ -49,72 +49,72 @@ What would you need to think about to build a car?
           id: "ch1-build",
           type: "explain",
           title: "🚗 So how do we actually build one?",
-          content: `\`\`\`cpp
-class Car {
-public:
-    string color;   // things to remember (member variables)
-    double speed;
+          content: `Here's how:
 
-    void forward()  { speed += 10; }  // things to do (member functions)
-    void backward() { speed -= 10; }
+\`\`\`cpp
+class Car {
+public:               // ← just write this for now, we'll learn it later
+    string color;     // remember: color
+    double speed;     // remember: speed
+
+    void forward() {
+        speed += 10;  // access member variables directly — no self
+    }
+    void backward() {
+        speed -= 10;
+    }
     void info() {
         cout << color << " car, speed: " << speed << endl;
     }
-};
+};  // ← semicolon required!
 \`\`\`
 
-This is just the **blueprint** so far.
+- **class name** followed by \`{ };\` — instead of Python's \`:\` + indentation, use curly braces with a semicolon at the end
+- **Member variables**: declared like regular variables
+- **Member functions**: declared like functions, and inside them you use member variables directly — no \`self\`
 
----
+But this is it for now. No car exists yet.`,
+        },
+        {
+          id: "ch1-object",
+          type: "explain",
+          title: "🎮 So how do you actually create a car?",
+          content: `In an RPG game, seeing the "Flame Sword" description in the shop **doesn't mean you own it.**
+You have to actually buy it or pick it up for it to appear in your inventory.
 
-## 🎮 Think of it Like a Game Item
-
-Seeing the "Flame Sword" in the RPG shop **doesn't mean you own it.** Just reading the description doesn't put it in your inventory.
-
-You have to **actually buy it or pick it up** for it to exist in your hands!
-
-Classes work the same way — the blueprint alone creates nothing.
-**You have to create an object** for something to actually exist.
-
-| | Game | Programming |
-|---|---|---|
-| Item **description** | Flame Sword info | **class** |
-| The item you actually **own** | Sword in inventory | **object** |
-
----
-
-To create an actual car from the blueprint:
+Classes work the same way.
+The Car we just wrote is a **blueprint**. No car exists yet.
+**You have to create one** for it to actually exist.
 
 \`\`\`cpp
-Car myCar;           // ← This is where the actual object is created!
+Car myCar;            // ← an actual car (object) is created here!
 myCar.color = "red";
 myCar.speed = 0;
 myCar.forward();
 myCar.forward();
-myCar.info();        // red car, speed: 20
+myCar.info();         // red car, speed: 20
+\`\`\`
+
+What you create from a class is called an **object** (or **instance**).
+
+| | Game | Programming |
+|---|---|---|
+| Item **description** | Flame Sword info | **class** |
+| The item you actually **own** | Sword in your inventory | **object** |
+
+---
+
+One blueprint, multiple cars:
+
+\`\`\`cpp
+Car car1;  car1.color = "red";    // object 1
+Car car2;  car2.color = "blue";   // object 2
 \`\`\`
 
 > 🍪 **Cookie cutter = class, cookie = object**
 > One cutter makes many cookies — one class creates many objects.
 
-\`\`\`cpp
-Car car1;  car1.color = "red";    // object 1
-Car car2;  car2.color = "blue";   // object 2  ← same class, different object!
-\`\`\`
-
-This approach — **designing classes and creating objects from them** — is called **Object-Oriented Programming (OOP)**.
-
-**Compared to Python:**
-
-| | Python 🐍 | C++ ⚡ |
-|---|---|---|
-| Method | \`def forward(self):\` | \`void forward() {}\` |
-| Member access | \`self.speed\` | \`speed\` (no self!) |
-| Class end | indentation | \`};\` semicolon required! |
-
-💡 **Remember for now:**
-- Inside a method, access members directly — no \`self\` needed
-- We'll learn what \`public:\` means in the next chapter`,
+**Designing classes and creating objects from them** — this way of programming is called **Object-Oriented Programming (OOP)**.`,
         },
         {
           id: "ch1-pred1",
