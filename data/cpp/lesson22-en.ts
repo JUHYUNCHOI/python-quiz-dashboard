@@ -176,7 +176,6 @@ int main() {
 using namespace std;
 
 class Car {
-public:
     string color;
     double speed;
     void forward() { speed += 10; }
@@ -204,7 +203,6 @@ int main() {
           title: "Complete the member function!",
           content: "Inside a method, access member variables directly — no `self`!",
           code: `class Car {
-public:
     double speed;
     void forward() {
         ___ += 10;   // increase speed by 10

@@ -175,7 +175,6 @@ int main() {
 using namespace std;
 
 class Car {
-public:
     string color;
     double speed;
     void forward() { speed += 10; }
@@ -203,7 +202,6 @@ int main() {
           title: "멤버함수 완성하기!",
           content: "메서드 안에서는 `self` 없이 멤버변수에 바로 접근해요.",
           code: `class Car {
-public:
     double speed;
     void forward() {
         ___ += 10;   // 속도를 10 올려요
