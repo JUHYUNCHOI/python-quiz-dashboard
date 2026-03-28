@@ -47,20 +47,29 @@ Bundling together "things to remember" and "things to do" — that's exactly wha
         {
           id: "ch1-build",
           type: "explain",
-          title: "🚗 So how do we actually build one?",
-          content: `Here's how:
+          title: "🚗 Let's design it together",
+          content: `Let's think through what a car needs to **remember**.
+
+To move, it needs a **speed** → \`speed\`
+To tell cars apart, it needs a **color** → \`color\`
+
+Now what should it be able to **do**?
+
+It should be able to move forward → \`forward()\`
+And show its current state → \`info()\`
+
+---
+
+In C++, that looks like this:
 
 \`\`\`cpp
 class Car {
 public:               // ← just write this for now, we'll learn it later
-    string color;     // remember: color
     double speed;     // remember: speed
+    string color;     // remember: color
 
     void forward() {
-        speed += 10;  // access member variables directly — no self
-    }
-    void backward() {
-        speed -= 10;
+        speed += 10;  // access speed directly — no self
     }
     void info() {
         cout << color << " car, speed: " << speed << endl;
@@ -68,11 +77,10 @@ public:               // ← just write this for now, we'll learn it later
 };  // ← semicolon required!
 \`\`\`
 
-- **class name** followed by \`{ };\` — instead of Python's \`:\` + indentation, use curly braces with a semicolon at the end
-- **Member variables**: declared like regular variables
-- **Member functions**: declared like functions, and inside them you use member variables directly — no \`self\`
+- Everything goes inside \`{ };\`
+- Inside member functions, access member variables directly — no \`self\`
 
-But this is it for now. No car exists yet.`,
+That's it for now. No car exists yet.`,
         },
         {
           id: "ch1-object",
