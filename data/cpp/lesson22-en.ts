@@ -45,15 +45,14 @@ Like a friend who listed rice, cucumber, salmon, and avocado for a sushi roll bu
 
 \`\`\`
 class Name {
-    things to remember...
+    things to remember...  // member variables
 
-    things to do...
+    things to do...        // member functions
 };
 \`\`\`
 
 Start with the \`class\` keyword, write the name, then wrap everything in curly braces.
-**Things to remember** go at the top, **things to do** go below.
-We call these **member variables** and **member functions**.
+**Member variables** go at the top, **member functions** go below.
 
 ---
 
