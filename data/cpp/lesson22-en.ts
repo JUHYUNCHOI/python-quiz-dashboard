@@ -23,18 +23,12 @@ export const cppLesson22EnData: LessonData = {
           type: "explain",
           title: "🚗 What is a class?",
           content: `\`int\` for integers, \`string\` for text.
-But a **car**? C++ has no car type — **you have to build it yourself!**
+But a **car**? C++ has no car type. **You have to build it yourself.**
 
-That's what a **class** is for.
-
----
-
-## Two questions to ask when designing any class
-
-Let's think about a car:
+What would you need to think about to build a car?
 
 **🧠 What does it need to remember?**
-→ Color, current speed... this is **data**
+→ Color, current speed...
 → In C++: **member variables**
 
 **⚙️ What should it be able to do?**
@@ -47,12 +41,14 @@ Let's think about a car:
 | **Do** | Go forward? Brake? | Member functions |
 
 > 💡 A friend was asked "What do you need to make sushi?" They listed rice, cucumber, salmon, avocado… but forgot the **seaweed**.
-> When designing a class, think carefully so **nothing important is left out**.`,
+> Thinking carefully about what's needed — that's what class design is.
+
+**Bundling together "things to remember" and "things to do" — that's exactly what a class is.**`,
         },
         {
           id: "ch1-build",
           type: "explain",
-          title: "🚗 Build the Car Class + Create Objects",
+          title: "🚗 So how do we actually build one?",
           content: `\`\`\`cpp
 class Car {
 public:
