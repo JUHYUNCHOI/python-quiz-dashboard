@@ -416,9 +416,25 @@ BankAccount acc;
 // acc.balance might be -398475.23 or some random value! 😱
 \`\`\`
 
-A **constructor** safely sets initial values the moment an object is created:
+**Here's how to write a constructor:**
 
-\`\`\`cpp
+\`\`\`
+class ClassName {
+public:
+    ClassName(parameters) {   // name = class name exactly!
+        // initialize here      // no return type at all!
+    }
+};
+\`\`\`
+
+Just three things to remember:
+- **Name**: must be exactly the same as the class name (case-sensitive!)
+- **Return type**: none at all — writing void is an error!
+- **Called**: automatically, once, the moment an object is created
+
+Applying this to BankAccount:
+
+\`\`\`cpp {6-11,14}
 class BankAccount {
 private:
     string owner;
@@ -441,12 +457,7 @@ BankAccount acc("Emma", 1000);  // Constructor called automatically!
 |---|---|---|
 | Constructor name | \`__init__\` | **Same as class name** |
 | First parameter | \`self\` required | None |
-| Return type | None | **None (not even void!)** |
-
-💡 **Remember:**
-- Constructor name = class name (exact match including case!)
-- No return type — writing void is actually an error!
-- Called automatically once when the object is created`,
+| Return type | None | **None (not even void!)** |`,
         },
         {
           id: "ch3-pred1",
