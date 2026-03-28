@@ -21,27 +21,26 @@ export const cppLesson22EnData: LessonData = {
         {
           id: "ch1-intro",
           type: "explain",
-          title: "🐕 class — What if we add functions to a struct?",
-          content: `**struct** only bundles data. **class** bundles data + functions (methods) together!
+          title: "🐕 class — Create your own type!",
+          content: `**class** is a way to bundle data and functions together to create **your own custom type**.
+
+Let's create a Dog type:
 
 \`\`\`cpp
-// struct: data only
-struct Dog {
-    string name;
-    int age;
-};
-
-// class: data + functions!
 class Dog {
 public:
-    string name;
+    string name;   // data
     int age;
 
-    void bark() {
+    void bark() {  // function (method)
         cout << name << ": Woof!" << endl;
     }
 };
+\`\`\`
 
+Once defined, you can create Dog variables:
+
+\`\`\`cpp
 Dog d;
 d.name = "Buddy";
 d.age = 3;
@@ -56,10 +55,10 @@ d.bark();  // Buddy: Woof!
 | Member access | \`self.name\` | \`name\` (no self!) |
 | Class end | indentation | \`};\` semicolon required! |
 
-💡 **Remember:**
+💡 **Remember for now:**
 - Inside a method, access members directly — no \`self\` needed
 - \`};\` semicolon required at the end of the class!
-- \`public:\` is needed so that outside code can access members`,
+- We'll learn what \`public:\` means in the next chapter`,
         },
         {
           id: "ch1-pred1",
@@ -109,16 +108,16 @@ public:
         {
           id: "ch1-q1",
           type: "quiz",
-          title: "class vs struct!",
-          content: "What is the most important practical difference between class and struct in C++?",
+          title: "What is a class?",
+          content: "Which statement about class is **correct**?",
           options: [
-            "class cannot have variables",
-            "class defaults to private access, struct defaults to public access",
-            "struct cannot have functions",
-            "There is no difference"
+            "A class can only hold variables (data), not functions",
+            "Methods inside a class cannot access the class's own members",
+            "A class bundles data and functions together to create a custom type",
+            "Variables created from a class cannot use dot (.) notation"
           ],
-          answer: 1,
-          explanation: "class defaults to private (no outside access), struct defaults to public (anyone can access)! That's why we use class when we need to protect data."
+          answer: 2,
+          explanation: "A class bundles data (variables) and functions (methods) to create your own type! You access them with dot notation like Dog d; d.bark();"
         },
       ]
     },

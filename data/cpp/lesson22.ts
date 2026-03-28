@@ -21,27 +21,26 @@ export const cppLesson22Data: LessonData = {
         {
           id: "ch1-intro",
           type: "explain",
-          title: "🐕 class — struct에 함수를 추가하면?",
-          content: `**struct**는 데이터만 묶었어요. **class**는 데이터 + 함수(메서드)를 함께 묶어요!
+          title: "🐕 class — 나만의 타입 만들기!",
+          content: `**class**는 데이터와 함수를 하나로 묶어서 **나만의 타입**을 만드는 방법이에요.
+
+예를 들어 개(Dog) 타입을 만들어 볼게요:
 
 \`\`\`cpp
-// struct: 데이터만
-struct Dog {
-    string name;
-    int age;
-};
-
-// class: 데이터 + 함수!
 class Dog {
 public:
-    string name;
+    string name;   // 데이터
     int age;
 
-    void bark() {
+    void bark() {  // 함수 (메서드)
         cout << name << ": 멍멍!" << endl;
     }
 };
+\`\`\`
 
+이렇게 정의하면 Dog 타입의 변수를 만들 수 있어요:
+
+\`\`\`cpp
 Dog d;
 d.name = "바둑이";
 d.age = 3;
@@ -52,14 +51,14 @@ d.bark();  // 바둑이: 멍멍!
 
 | | Python 🐍 | C++ ⚡ |
 |---|---|---|
-| 메서드 | \`def bark(self):\` | \`void bark() {}\` |
+| 메서드 선언 | \`def bark(self):\` | \`void bark() {}\` |
 | 멤버 접근 | \`self.name\` | \`name\` (self 없음!) |
 | 클래스 끝 | 들여쓰기로 구분 | \`};\` 세미콜론 필수! |
 
-💡 **기억할 것:**
-- 메서드 안에서는 같은 클래스의 멤버에 \`self\` 없이 바로 접근해요
+💡 **지금 기억할 것:**
+- 메서드 안에서는 \`self\` 없이 멤버에 바로 접근해요
 - 클래스 정의 끝에 \`};\` 세미콜론 필수!
-- \`public:\` 이 있어야 외부에서 접근 가능해요 (자세한 건 다음 챕터에서)`,
+- \`public:\` 의 의미는 다음 챕터에서 배울 거예요`,
         },
         {
           id: "ch1-pred1",
@@ -109,16 +108,16 @@ public:
         {
           id: "ch1-q1",
           type: "quiz",
-          title: "class와 struct 차이!",
-          content: "C++에서 class와 struct의 가장 큰 **실용적** 차이는?",
+          title: "class 기본 개념!",
+          content: "class에 대한 설명으로 **맞는** 것은?",
           options: [
-            "class는 변수를 가질 수 없다",
-            "class는 기본 접근이 private, struct는 기본 접근이 public이다",
-            "struct는 함수를 가질 수 없다",
-            "차이가 없다"
+            "class는 변수(데이터)만 가질 수 있다",
+            "class 안의 함수는 같은 class의 멤버에 접근할 수 없다",
+            "class는 데이터와 함수를 함께 묶어 나만의 타입을 만든다",
+            "class로 만든 변수는 점(.)으로 접근할 수 없다"
           ],
-          answer: 1,
-          explanation: "class는 기본이 private (외부 접근 불가), struct는 기본이 public (누구나 접근 가능)이에요! 그래서 데이터 보호가 필요할 때 class를 써요."
+          answer: 2,
+          explanation: "class는 데이터(변수)와 함수(메서드)를 함께 묶어 나만의 타입을 만드는 것이에요! Dog d; d.bark(); 처럼 점(.)으로 접근해요."
         },
       ]
     },
