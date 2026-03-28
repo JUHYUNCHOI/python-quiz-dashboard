@@ -344,6 +344,49 @@ int main() {
           answer: 2,
           explanation: "balance is private, so accessing acc.balance directly from outside the class causes a compile error! Only methods inside the class (like deposit) can access it."
         },
+        {
+          id: "ch2-getter-setter",
+          type: "explain",
+          title: "So how do we read or change private variables?",
+          content: `Direct access is blocked — but what if we need to read or update a value?
+
+We do it through public functions. These are called **getters** and **setters**.
+
+- **getter** — a function that **reads** a value
+- **setter** — a function that **sets** a value (and can reject bad inputs!)
+
+\`\`\`cpp
+class Car {
+private:
+    double speed;
+    string color;
+
+public:
+    // getters
+    double getSpeed() { return speed; }
+    string getColor() { return color; }
+
+    // setters — validation happens here!
+    void setSpeed(double s) {
+        if (s >= 0) speed = s;   // reject negative speed
+    }
+    void setColor(string c) {
+        if (c != "") color = c;  // reject empty color
+    }
+};
+\`\`\`
+
+\`\`\`cpp
+int main() {
+    Car myCar;
+    myCar.setColor("red");
+    myCar.setSpeed(-999);    // condition fails → ignored
+    cout << myCar.getSpeed(); // 0 (unchanged)
+}
+\`\`\`
+
+@Key: Block with private, then create a controlled gateway with getters/setters — that's **encapsulation**.`,
+        },
       ]
     },
     // ============================================

@@ -343,6 +343,49 @@ int main() {
           answer: 2,
           explanation: "balance는 private이라 클래스 외부에서 acc.balance로 직접 접근하면 컴파일 에러! 오직 클래스 안의 함수(deposit 등)에서만 접근할 수 있어요."
         },
+        {
+          id: "ch2-getter-setter",
+          type: "explain",
+          title: "그럼 private 변수는 어떻게 읽고 바꾸죠?",
+          content: `직접 접근은 막혔는데, 값을 읽거나 바꾸고 싶으면 어떻게 할까요?
+
+public 함수를 통해서 해요. 이 함수들을 **getter**와 **setter**라고 불러요.
+
+- **getter** — 값을 **가져오는** 함수
+- **setter** — 값을 **설정하는** 함수 (잘못된 값은 여기서 막을 수 있어요!)
+
+\`\`\`cpp
+class Car {
+private:
+    double speed;
+    string color;
+
+public:
+    // getter
+    double getSpeed() { return speed; }
+    string getColor() { return color; }
+
+    // setter — 여기서 유효성 검사 가능!
+    void setSpeed(double s) {
+        if (s >= 0) speed = s;   // 음수 속도는 거부
+    }
+    void setColor(string c) {
+        if (c != "") color = c;  // 빈 색깔은 거부
+    }
+};
+\`\`\`
+
+\`\`\`cpp
+int main() {
+    Car myCar;
+    myCar.setColor("빨간색");
+    myCar.setSpeed(-999);    // 조건 불충족 → 무시돼요
+    cout << myCar.getSpeed(); // 0 (바뀌지 않음)
+}
+\`\`\`
+
+@핵심: private으로 막고, getter/setter로 통제된 창구를 만드는 것 — 이게 **캡슐화(encapsulation)**예요.`,
+        },
       ]
     },
     // ============================================
