@@ -157,14 +157,14 @@ int main() {
     double car2Speed = 0;
     string car2Color = "blue";
 
-    // To move each car forward, you'd write it separately
     car1Speed += 10;
     car2Speed += 10;
 
+    // As code grows... wait, which car was car2Color for again?
     cout << car1Color << " car, speed: " << car1Speed << endl;
     cout << car2Color << " car, speed: " << car2Speed << endl;
 }
-// With 10 cars? That's 20 variables... and 10 separate operations...
+// With 10 cars? 20 variables — and you'd lose track of which belongs to which
 \`\`\``,
         },
         {

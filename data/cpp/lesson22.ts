@@ -156,14 +156,14 @@ int main() {
     double car2Speed = 0;
     string car2Color = "파란색";
 
-    // 앞으로 가게 하려면 각각 따로 써야 해요
     car1Speed += 10;
     car2Speed += 10;
 
+    // 코드가 길어지면... car2Color가 뭐였더라? 두 번째 자동차 색깔이었나?
     cout << car1Color << " 자동차, 속도: " << car1Speed << endl;
     cout << car2Color << " 자동차, 속도: " << car2Speed << endl;
 }
-// 자동차가 10대면? 변수가 20개... 함수도 10번...
+// 자동차가 10대면? 변수 20개에, 어떤 변수가 어떤 차의 것인지도 헷갈려요
 \`\`\``,
         },
         {
