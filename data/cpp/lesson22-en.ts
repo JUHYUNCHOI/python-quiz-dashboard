@@ -110,11 +110,11 @@ No car exists yet.`,
           id: "ch1-object",
           type: "explain",
           title: "🎮 So how do you actually create a car?",
-          content: `In an RPG game, seeing the "Flame Sword" description in the shop **doesn't mean you own it.**
-You have to actually buy it or pick it up for it to appear in your inventory.
+          content: `We just wrote a Car class — so does a car exist now?
 
-The Car class we just wrote is the same — it's a **blueprint**.
-One more step is needed to actually create a car.
+No. A class is a **blueprint**. One more step is needed to actually create a car.
+
+Think of an RPG game — seeing the "Flame Sword" description in a shop doesn't make it yours. You have to **actually buy it or pick it up** for it to appear in your inventory.
 
 | | Game | Programming |
 |---|---|---|
