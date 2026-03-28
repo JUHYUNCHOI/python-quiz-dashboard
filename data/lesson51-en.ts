@@ -1,7 +1,7 @@
 import { LessonData } from './types'
 
 export const lesson51EnData: LessonData = {
-  id: "51en",
+  id: "51",
   title: "Text RPG: Completing the Game",
   emoji: "🎮",
   description: "Complete the game with a shop, save system, and game loop!",

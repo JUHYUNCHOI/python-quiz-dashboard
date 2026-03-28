@@ -6,7 +6,7 @@
 import { LessonData } from './types'
 
 export const lesson35EnData: LessonData = {
-  id: "35en",
+  id: "35",
   title: "Built-in Functions",
   emoji: "📚",
   description: "Master the essential Python built-in functions!",

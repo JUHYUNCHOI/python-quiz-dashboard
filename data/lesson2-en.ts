@@ -4,7 +4,7 @@
 import { LessonData } from './types'
 
 export const lesson2EnData: LessonData = {
-  id: "2en",
+  id: "2",
   title: "Data Types",
   emoji: "📊",
   description: "Learn the differences between numbers, strings, and booleans!",

@@ -1,7 +1,7 @@
 import { LessonData } from './types'
 
 export const lesson44EnData: LessonData = {
-  id: "44en",
+  id: "44",
   title: "Part 7 Practice Problems 20",
   emoji: "📝",
   description: "20 practice problems on classes and methods!",

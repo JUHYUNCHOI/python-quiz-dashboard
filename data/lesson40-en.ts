@@ -1,7 +1,7 @@
 import { LessonData } from './types'
 
 export const lesson40EnData: LessonData = {
-  id: "40en",
+  id: "40",
   title: "Part 6 Problem Set 20",
   emoji: "\uD83D\uDCDD",
   description: "Error handling and file I/O comprehensive review problems!",
