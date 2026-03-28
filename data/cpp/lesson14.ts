@@ -301,13 +301,14 @@ int main() {
           content: `조건에 맞는 학생 수를 셀 때는 \`count++\`를 써요. 90점 이상인 학생이 몇 명인지 세어봐요.`,
           code: `int count = 0;
 for (int i = 0; i < 3; i++) {
-    if (students[i].score ___ 90) count++;
+    if (students[i].score ___ 90) count___;
 }
 cout << count << "명";  // 1명`,
           fillBlanks: [
-            { id: 0, answer: ">=", options: [">=", ">", "==", "<="] }
+            { id: 0, answer: ">=", options: [">=", ">", "==", "<="] },
+            { id: 1, answer: "++", options: ["++", "--", "+=1", "= 1"] }
           ],
-          explanation: "`>= 90`이면 90점 이상인 학생을 세요. 김철수(95)만 해당되니까 1명이에요. `> 90`이면 91점 초과라 0명이 돼요!"
+          explanation: "① `>= 90`으로 90점 이상인 학생만 걸러요 — `> 90`이면 91점 초과라 0명! ② `count++`로 1씩 증가 — `count--`는 빼는 거라 틀려요!"
         },
         {
           id: "ch2-mini-practice3",

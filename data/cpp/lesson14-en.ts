@@ -301,13 +301,14 @@ int main() {
           content: `Count how many students scored 90 or above using \`count++\`.`,
           code: `int count = 0;
 for (int i = 0; i < 3; i++) {
-    if (students[i].score ___ 90) count++;
+    if (students[i].score ___ 90) count___;
 }
 cout << count << " students";  // 1 students`,
           fillBlanks: [
-            { id: 0, answer: ">=", options: [">=", ">", "==", "<="] }
+            { id: 0, answer: ">=", options: [">=", ">", "==", "<="] },
+            { id: 1, answer: "++", options: ["++", "--", "+=1", "= 1"] }
           ],
-          explanation: "`>= 90` counts scores of 90 and above — only Alice (95) qualifies, so the answer is 1. Using `> 90` would mean strictly above 90, giving 0!"
+          explanation: "① `>= 90` means 90 and above — using `> 90` would mean strictly above 90, giving 0! ② `count++` increments by 1 — `count--` would subtract, which is wrong!"
         },
         {
           id: "ch2-mini-practice3",
