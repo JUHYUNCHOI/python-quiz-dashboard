@@ -1,251 +1,469 @@
 // ============================================
-// C++ Lesson 22: Classes (class)
-// C++ for students who already know Python
+// C++ Lesson 22: Class
+// C++ for students who know Python
 // ============================================
 import { LessonData } from '../types'
 
 export const cppLesson22EnData: LessonData = {
   id: "cpp-22",
-  title: "Classes (class)",
-  emoji: "🏗️",
-  description: "Create your own types with class!",
+  title: "Class",
+  emoji: "🎓",
+  description: "Data + functions together! Create your own types",
   chapters: [
     // ============================================
-    // Chapter 2: Intro to Classes
+    // Chapter 1: Class basics — struct + functions
     // ============================================
     {
-      id: "ch2",
-      title: "Intro to Classes",
-      emoji: "🎓",
+      id: "ch1",
+      title: "Class Basics",
+      emoji: "🐕",
       steps: [
         {
-          id: "ch2-intro",
+          id: "ch1-intro",
           type: "explain",
-          title: "🎓 class — Create Your Own Types!",
-          component: "cppPublicPrivateBuilder",
-          content: `## C++ class — Similar to Python's class, but More Powerful!
-
-You've used class in Python before, right? C++'s class works similarly. The difference is that C++ can **truly enforce** access restrictions.
-
-**class** defaults all members to \`private\`. Why?
-
-To prevent accidentally modifying internal data! For example: a rectangle's width = -10 would be a problem!
-
-- \`public:\` — Accessible from outside the class (anyone can use it)
-- \`private:\` — Only accessible inside the class (can't be touched externally)
+          title: "🐕 class — What if we add functions to a struct?",
+          content: `**struct** only bundles data. **class** bundles data + functions (methods) together!
 
 \`\`\`cpp
-class Rectangle {
-private:          // Cannot access from outside!
-    double width, height;
-
-public:           // Can access from outside!
-    void setSize(double w, double h) {
-        width = w;
-        height = h;
-    }
-    double area() {
-        return width * height;
-    }
+// struct: data only
+struct Dog {
+    string name;
+    int age;
 };
-\`\`\`
 
-\`\`\`cpp
-Rectangle r;
-// r.width = 5;      // ❌ Error! private — can't access
-r.setSize(5, 3);     // ✅ public function — OK!
-cout << r.area();     // ✅ 15
-\`\`\`
-
-Let's compare with Python:
-
-**Python 🐍:**
-\`\`\`python
-class Rectangle:
-    def __init__(self):
-        self._width = 0   # _ is just a convention, not enforced
-        self._height = 0
-
-    def set_size(self, w, h):
-        self._width = w
-        self._height = h
-\`\`\`
-
-| Python 🐍 | C++ class ⚡ |
-|---|---|
-| \`_var\` is convention-only private | \`private:\` truly blocks access! |
-| Everything is accessible | private is truly inaccessible |
-| \`self\` required | No \`self\` needed |
-
-Encapsulation means **hiding data to prevent mistakes**. Like a medicine capsule that protects its contents inside, you protect data and only allow access through designated methods.
-
-💡 Hiding data with private and exposing it through public functions is called **encapsulation**!`
-        },
-        {
-          id: "ch2-fb1",
-          type: "fillblank" as const,
-          title: "Fill in the blank",
-          content: "Hide the radius inside the class!",
-          code: "class Circle {\n___:\n    double radius;\npublic:\n    double area() {\n        return 3.14 * radius * radius;\n    }\n};",
-          fillBlanks: [
-            { id: 0, answer: "private", options: ["private", "public", "protected", "static"] }
-          ],
-          explanation: "Declaring radius as private means it can't be accessed directly from outside! Only public functions can interact with it — that's encapsulation."
-        },
-        {
-          id: "ch2-constructor",
-          type: "explain",
-          title: "🎓 Constructors!",
-          content: `A **constructor** is a special function that's **automatically called** when an object is created!
-
-Rules:
-- Has the **same name** as the class
-- Has **no return type** (not even void!)
-- Called automatically when an object is created
-
-\`\`\`cpp
+// class: data + functions!
 class Dog {
 public:
     string name;
     int age;
 
-    Dog(string n, int a) {  // Constructor!
-        name = n;
-        age = a;
+    void bark() {
+        cout << name << ": Woof!" << endl;
     }
 };
 
-Dog d("Buddy", 3);  // Constructor called automatically!
-cout << d.name;      // Buddy
-cout << d.age;       // 3
+Dog d;
+d.name = "Buddy";
+d.age = 3;
+d.bark();  // Buddy: Woof!
 \`\`\`
 
-Compare with Python's \`__init__\`:
+**Compared to Python:**
 
-**Python 🐍:**
-\`\`\`python
-class Dog:
-    def __init__(self, name, age):
-        self.name = name
-        self.age = age
+| | Python 🐍 | C++ ⚡ |
+|---|---|---|
+| Method | \`def bark(self):\` | \`void bark() {}\` |
+| Member access | \`self.name\` | \`name\` (no self!) |
+| Class end | indentation | \`};\` semicolon required! |
 
-d = Dog("Buddy", 3)
+💡 **Remember:**
+- Inside a method, access members directly — no \`self\` needed
+- \`};\` semicolon required at the end of the class!
+- \`public:\` is needed so that outside code can access members`,
+        },
+        {
+          id: "ch1-pred1",
+          type: "predict" as const,
+          title: "Read a class!",
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+class Dog {
+public:
+    string name;
+    int age;
+    void info() {
+        cout << name << " " << age << " years old";
+    }
+};
+
+int main() {
+    Dog d;
+    d.name = "Buddy";
+    d.age = 3;
+    d.info();
+    return 0;
+}`,
+          options: ["Buddy 3 years old", "Buddy", "3 years old", "Error"],
+          answer: 0,
+          explanation: "After setting d.name = \"Buddy\" and d.age = 3, info() is called. Inside the method, name and age are accessed directly — no self needed!"
+        },
+        {
+          id: "ch1-fb1",
+          type: "fillblank" as const,
+          title: "Accessing members inside a method!",
+          content: "Inside a method, access member variables directly — no `self`!",
+          code: `class Dog {
+public:
+    string name;
+    void bark() {
+        cout << ___ << ": Woof!";
+    }
+};`,
+          fillBlanks: [
+            { id: 0, answer: "name", options: ["name", "self.name", "Dog.name", "this.name"] }
+          ],
+          explanation: "In C++, unlike Python's self.name, you just write name! Inside a method, you can directly access the class's own members."
+        },
+        {
+          id: "ch1-q1",
+          type: "quiz",
+          title: "class vs struct!",
+          content: "What is the most important practical difference between class and struct in C++?",
+          options: [
+            "class cannot have variables",
+            "class defaults to private access, struct defaults to public access",
+            "struct cannot have functions",
+            "There is no difference"
+          ],
+          answer: 1,
+          explanation: "class defaults to private (no outside access), struct defaults to public (anyone can access)! That's why we use class when we need to protect data."
+        },
+      ]
+    },
+    // ============================================
+    // Chapter 2: private — Why hide data?
+    // ============================================
+    {
+      id: "ch2",
+      title: "private — Protecting Data",
+      emoji: "🔒",
+      steps: [
+        {
+          id: "ch2-why",
+          type: "explain",
+          title: "🔒 Why do we need to hide data?",
+          content: `Think about a bank account balance. What if anyone could change it directly?
+
+\`\`\`cpp
+// ❌ If everything is public...
+class BankAccount {
+public:
+    double balance;
+};
+
+BankAccount acc;
+acc.balance = 1000000;  // Anyone can change the balance! 😱
+acc.balance = -500;     // Negative balance is possible?!
 \`\`\`
 
-| Python 🐍 | C++ ⚡ |
-|---|---|
-| \`__init__(self, ...)\` | \`ClassName(...)\` |
-| self required | No self needed |
-| \`Dog("Buddy", 3)\` | \`Dog d("Buddy", 3);\` |
+To prevent this, we need to **block direct access** and only allow changes through **specific methods**.
 
-What happens if there's no constructor in C++? Member variables start with **garbage values**! width could be -8273561. That's why you should always set initial values in the constructor.
+That's exactly what **private** does:
 
-💡 Constructors let you set values right when you create an object! They serve the same role as Python's \`__init__\`.`
+\`\`\`cpp
+// ✅ Protected with private!
+class BankAccount {
+private:
+    double balance;          // No direct access from outside!
+
+public:
+    void deposit(double amount) {   // Only this function can change balance
+        if (amount > 0)
+            balance += amount;      // OK from inside the class
+    }
+    double getBalance() {
+        return balance;
+    }
+};
+
+BankAccount acc;
+// acc.balance = 1000000;   // ❌ Compile error!
+acc.deposit(500);            // ✅ Only through the approved method
+\`\`\`
+
+| | private | public |
+|---|---|---|
+| Accessible from | **Inside class only** | **Anywhere** |
+| Typically used for | Data (variables) | Functionality (functions) |
+
+💡 Hiding data and exposing only functions → **Encapsulation**`,
+        },
+        {
+          id: "ch2-fb1",
+          type: "fillblank" as const,
+          title: "Separate private from public!",
+          content: "The password should be hidden, but the check function should be public.",
+          code: `class Account {
+___:
+    string password;    // password must be hidden!
+
+___:
+    bool check(string input) {   // check function needs to be accessible!
+        return password == input;
+    }
+};`,
+          fillBlanks: [
+            { id: 0, answer: "private", options: ["private", "public", "protected", "hidden"] },
+            { id: 1, answer: "public", options: ["public", "private", "open", "extern"] }
+          ],
+          explanation: "password is private (hidden), check() is public (accessible). Hiding data and exposing only functions is the core of encapsulation!"
         },
         {
           id: "ch2-pred1",
           type: "predict" as const,
-          title: "Constructor in action!",
-          code: "#include <iostream>\n#include <string>\nusing namespace std;\nclass Cat {\npublic:\n    string name;\n    int lives;\n    Cat(string n, int l) {\n        name = n;\n        lives = l;\n    }\n};\nint main() {\n    Cat c(\"Nabi\", 9);\n    cout << c.name << \" \" << c.lives;\n    return 0;\n}",
-          options: ["Error", "Nabi 9", "Nabi 0", " 9"],
-          answer: 1,
-          explanation: "The constructor is called with Cat c(\"Nabi\", 9). name becomes \"Nabi\" and lives becomes 9. So the output is Nabi 9."
-        },
-        {
-          id: "ch2-practice",
-          type: "practice" as const,
-          title: "✋ Build a Rectangle class!",
-          content: `Complete the Rectangle class yourself!
-
-**Steps:**
-1. Declare \`width\` and \`height\` (double) in \`private\`
-2. Write the constructor — \`Rectangle(double w, double h)\` stores both values
-3. Write \`area()\` method — returns \`width * height\`
-4. Write \`perimeter()\` method — returns \`2 * (width + height)\``,
+          title: "What happens when you access private directly?",
           code: `#include <iostream>
 using namespace std;
 
-class Rectangle {
+class BankAccount {
 private:
-    // 1. Declare width, height (double)
-
+    double balance;
 public:
-    // 2. Constructor: Rectangle(double w, double h)
-
-    // 3. area() method
-
-    // 4. perimeter() method
+    void deposit(double a) { balance += a; }
 };
 
 int main() {
-    Rectangle r(5.0, 3.0);
-    cout << "Area: " << r.area() << endl;
-    cout << "Perimeter: " << r.perimeter() << endl;
+    BankAccount acc;
+    acc.balance = 1000;
+    cout << acc.balance;
     return 0;
 }`,
-          expectedOutput: `Area: 15\nPerimeter: 16`
-        },
-        {
-          id: "ch2-pred-private",
-          type: "predict" as const,
-          title: "Accessing private members",
-          code: "class Rectangle {\nprivate:\n    int width;\npublic:\n    Rectangle(int w) : width(w) {}\n};\n\nint main() {\n    Rectangle r(5);\n    r.width = 10;  // ???\n}",
-          options: ["10", "5", "0", "Compile error"],
-          answer: 3,
-          explanation: "Compile error! width is private, so it can't be accessed from outside the class. Private members can only be accessed from inside the class. To modify it from outside, you'd need to create a public method (setter). This is the core of encapsulation!"
-        },
-        {
-          id: "ch2-getter-setter",
-          type: "explain",
-          title: "💡 So How Do You Change Private Values?",
-          content: `The safe way to access private members: **getter (read)** and **setter (write)** methods!
-
-\`\`\`cpp
-class Rectangle {
-private:
-    int width;
-public:
-    Rectangle(int w) : width(w) {}
-    int getWidth() { return width; }     // getter
-    void setWidth(int w) {
-        if (w > 0) width = w;  // validate before setting!
-    }
-};
-\`\`\`
-
-Why do it this way? Notice that setWidth checks \`w > 0\`! It prevents width from becoming -10. If you allowed direct access, this kind of protection would be impossible.
-
-💡 A getter is a function that reads a value, and a setter is a function that validates and sets a value!`
-        },
-        {
-          id: "ch2-q1",
-          type: "quiz",
-          title: "class default access!",
-          content: "In C++, what is the **default access** for members of a `class` when nothing is specified?",
-          options: [
-            "public — anyone can access",
-            "protected — only child classes can access",
-            "private — only accessible inside the class",
-            "no access — causes an error"
-          ],
+          options: ["1000", "0", "Compile error", "Garbage value"],
           answer: 2,
-          explanation: "class members are private by default! That means outside code can't accidentally touch them. To allow outside access, you must explicitly write public:."
-        }
+          explanation: "balance is private, so accessing acc.balance directly from outside the class causes a compile error! Only methods inside the class (like deposit) can access it."
+        },
       ]
     },
     // ============================================
-    // Chapter 3: Review Quiz
+    // Chapter 3: Constructor
     // ============================================
     {
       id: "ch3",
+      title: "Constructor",
+      emoji: "🔧",
+      steps: [
+        {
+          id: "ch3-constructor",
+          type: "explain",
+          title: "🔧 Constructor — Called automatically when an object is created!",
+          content: `Without a constructor, member variables start with **garbage values**:
+
+\`\`\`cpp
+BankAccount acc;
+// acc.balance might be -398475.23 or some random value! 😱
+\`\`\`
+
+A **constructor** safely sets initial values the moment an object is created:
+
+\`\`\`cpp
+class BankAccount {
+private:
+    string owner;
+    double balance;
+
+public:
+    BankAccount(string name, double initial) {  // Constructor!
+        owner = name;
+        if (initial >= 0) balance = initial;
+        else              balance = 0;   // Block negative deposits
+    }
+};
+
+BankAccount acc("Emma", 1000);  // Constructor called automatically!
+\`\`\`
+
+**Compared to Python:**
+
+| | Python 🐍 | C++ ⚡ |
+|---|---|---|
+| Constructor name | \`__init__\` | **Same as class name** |
+| First parameter | \`self\` required | None |
+| Return type | None | **None (not even void!)** |
+
+💡 **Remember:**
+- Constructor name = class name (exact match including case!)
+- No return type — writing void is actually an error!
+- Called automatically once when the object is created`,
+        },
+        {
+          id: "ch3-pred1",
+          type: "predict" as const,
+          title: "Constructor in action!",
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+class BankAccount {
+private:
+    string owner;
+    double balance;
+public:
+    BankAccount(string name, double initial) {
+        owner = name;
+        balance = initial;
+    }
+    void info() {
+        cout << owner << ": $" << balance;
+    }
+};
+
+int main() {
+    BankAccount acc("Emma", 5000);
+    acc.info();
+    return 0;
+}`,
+          options: ["Emma: $5000", "Error", "$0", "Emma"],
+          answer: 0,
+          explanation: "BankAccount acc(\"Emma\", 5000) automatically calls the constructor! owner = \"Emma\", balance = 5000 are initialized, and info() prints them."
+        },
+        {
+          id: "ch3-fb1",
+          type: "fillblank" as const,
+          title: "Complete the constructor!",
+          content: "Inside the constructor, store the parameter value (right) into the member variable (left).",
+          code: `class Timer {
+private:
+    int seconds;
+public:
+    Timer(int s) {
+        ___ = ___;
+    }
+    int get() { return seconds; }
+};`,
+          fillBlanks: [
+            { id: 0, answer: "seconds", options: ["seconds", "s", "Timer", "int"] },
+            { id: 1, answer: "s", options: ["s", "seconds", "0", "get()"] }
+          ],
+          explanation: "`seconds = s` — left side is the member variable (seconds), right side is the parameter (s). Think of it as 'store the received value into the member'!"
+        },
+      ]
+    },
+    // ============================================
+    // Chapter 4: getter/setter + Practice
+    // ============================================
+    {
+      id: "ch4",
+      title: "getter/setter + Practice",
+      emoji: "💡",
+      steps: [
+        {
+          id: "ch4-getter-setter",
+          type: "explain",
+          title: "💡 Reading and writing private values — getter & setter",
+          content: `Private members can't be accessed directly from outside! So how do we read and change them?
+
+- **getter** — a function that reads a value (read-only)
+- **setter / action function** — validates and changes a value
+
+\`\`\`cpp
+class BankAccount {
+private:
+    string owner;
+    double balance;
+
+public:
+    BankAccount(string name, double initial) {
+        owner   = name;
+        balance = initial;
+    }
+
+    // getters: read only
+    double getBalance() { return balance; }
+    string getOwner()   { return owner; }
+
+    // deposit: only when amount > 0
+    void deposit(double amount) {
+        if (amount > 0)
+            balance += amount;
+    }
+
+    // withdraw: only when amount <= balance
+    void withdraw(double amount) {
+        if (amount > 0 && amount <= balance)
+            balance -= amount;
+    }
+};
+
+BankAccount acc("Emma", 1000);
+acc.deposit(500);
+cout << acc.getBalance();  // 1500
+acc.withdraw(2000);        // Not enough balance — ignored
+cout << acc.getBalance();  // 1500
+\`\`\`
+
+This way, balance can never go negative!`,
+        },
+        {
+          id: "ch4-fb1",
+          type: "fillblank" as const,
+          title: "Complete the getter!",
+          content: "A getter reads a private member and **returns** it.",
+          code: `class Player {
+private:
+    int hp;
+public:
+    Player(int h) { hp = h; }
+
+    int getHp() { return ___; }   // return hp
+
+    void takeDamage(int dmg) {
+        if (hp - dmg ___ 0)       // don't go below 0
+            hp -= dmg;
+    }
+};`,
+          fillBlanks: [
+            { id: 0, answer: "hp", options: ["hp", "dmg", "0", "getHp"] },
+            { id: 1, answer: ">=", options: [">=", ">", "<=", "=="] }
+          ],
+          explanation: "① `return hp` — the getter simply returns the member variable ② `hp - dmg >= 0` — only apply damage when hp won't go below 0!"
+        },
+        {
+          id: "ch4-practice",
+          type: "practice" as const,
+          title: "✋ Build a BankAccount class!",
+          content: `Complete the bank account class yourself!
+
+**Steps:**
+1. Declare \`owner\`(string) and \`balance\`(double) in \`private\`
+2. Constructor: \`BankAccount(string name, double initial)\` — initialize
+3. \`getBalance()\` — return balance
+4. \`deposit(double amount)\` — add to balance only when amount > 0
+5. \`withdraw(double amount)\` — subtract only when amount > 0 and <= balance`,
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+class BankAccount {
+private:
+    // 1. Declare owner(string), balance(double)
+
+public:
+    // 2. Constructor: BankAccount(string name, double initial)
+
+    // 3. getBalance()
+
+    // 4. deposit(double amount)
+
+    // 5. withdraw(double amount)
+};
+
+int main() {
+    BankAccount acc("Emma", 1000);
+    acc.deposit(500);
+    acc.withdraw(200);
+    acc.withdraw(9999);  // Not enough — ignored
+    cout << acc.getBalance();
+    return 0;
+}`,
+          expectedOutput: `1300`
+        },
+      ]
+    },
+    // ============================================
+    // Chapter 5: Review Quiz
+    // ============================================
+    {
+      id: "ch5",
       title: "Review Quiz",
       emoji: "🏆",
       steps: [
         {
-          id: "ch3-q1",
+          id: "ch5-q1",
           type: "quiz",
-          title: "Reading class code!",
-          content: `What's the output?
+          title: "Read the class!",
+          content: `What is the output?
 
 \`\`\`cpp
 class Dog {
@@ -258,17 +476,12 @@ int main() {
     cout << d.name;
 }
 \`\`\``,
-          options: [
-            "Error",
-            "d",
-            "Buddy",
-            "name"
-          ],
+          options: ["Error", "d", "Buddy", "name"],
           answer: 2,
-          explanation: "Dog d(\"Buddy\") calls the constructor so name becomes \"Buddy\". Since name is public, d.name is accessible!"
+          explanation: "Dog d(\"Buddy\") calls the constructor, setting name = \"Buddy\". Since name is public, d.name is accessible!"
         },
         {
-          id: "ch3-q2",
+          id: "ch5-q2",
           type: "quiz",
           title: "private access!",
           content: `Which line causes an error?
@@ -286,34 +499,29 @@ int main() {
     b.setSize(10);     // Line B
 }
 \`\`\``,
-          options: [
-            "Line A",
-            "Line B",
-            "Both lines",
-            "No error"
-          ],
+          options: ["Line A", "Line B", "Both lines", "No error"],
           answer: 0,
-          explanation: "size is private, so accessing it directly from outside causes an error! b.size = 10 is not allowed, but b.setSize(10) works because it's a public function."
+          explanation: "size is private, so b.size = 10 directly from outside the class is a compile error! setSize() is a public function, so Line B is fine."
         },
         {
-          id: "ch3-q3",
+          id: "ch5-q3",
           type: "quiz",
-          title: "Constructors!",
-          content: "Which statement about C++ constructors is **incorrect**?",
+          title: "Constructor!",
+          content: "Which statement about C++ constructors is **wrong**?",
           options: [
             "It has the same name as the class",
             "Its return type is void",
-            "It's called automatically when an object is created",
+            "It is called automatically when an object is created",
             "It can take parameters"
           ],
           answer: 1,
-          explanation: "Constructors have NO return type at all — not even void! They share the class name, are called automatically on object creation, and can accept parameters."
+          explanation: "Constructors have NO return type at all — not even void! They share the class name, are called automatically on object creation, and can take parameters."
         },
         {
-          id: "ch3-q4",
+          id: "ch5-q4",
           type: "quiz",
-          title: "Comprehensive challenge!",
-          content: `What's the output?
+          title: "Comprehensive question!",
+          content: `What is the output?
 
 \`\`\`cpp
 class Counter {
@@ -332,47 +540,56 @@ int main() {
     cout << c.get();
 }
 \`\`\``,
-          options: [
-            "10",
-            "11",
-            "13",
-            "Error"
-          ],
+          options: ["10", "11", "13", "Error"],
           answer: 2,
-          explanation: "Counter c(10) sets count to 10. Calling add() three times: 10 -> 11 -> 12 -> 13. get() returns 13!"
+          explanation: "Counter c(10) sets count = 10. Calling add() three times: 10→11→12→13. get() returns 13!"
         },
         {
-          id: "ch3-summary",
+          id: "ch5-summary",
           type: "explain",
-          title: "🎉 Lesson 22 Complete!",
-          content: `## 🏆 Lesson 22 Complete! Amazing work!
+          title: "🎉 Part 2 Complete!",
+          content: `## 🏆 Part 2 Complete! Amazing work!
 
-You've now learned the essentials of C++ classes!
+Let's review everything from Part 2 (Lessons 9–14, 22)!
 
-### 🔑 Lesson 13: Pointers
-- Direct memory access with \`*\` and \`&\`, pointer arithmetic
+### 📚 Lesson 9: Arrays & Vectors
+- Storing multiple values with C-style arrays and \`vector\`
 
-### 🏛️ Lesson 14: Structs
-- Group related data with \`struct\`, public members by default
+### 🔄 Lesson 10: Range-for & auto
+- Easy iteration with \`for(auto x : vec)\`, type inference with \`auto\`
 
-### 🏗️ Lesson 22: Classes (class)
-- Encapsulate with \`class\`, private/public access control, constructors
+### 🔤 Lesson 11: Strings
+- String methods and usage patterns
+
+### 🔗 Lesson 12: References & Functions
+- Call by Value vs Reference, modifying originals with \`int& ref\`
+
+### 🎯 Lesson 13: Pointers
+- Pointer syntax \`int* ptr\`, dereference \`*ptr\`, nullptr
+
+### 📦 Lesson 14: Struct
+- User-defined types that bundle related data
+
+### 🎓 Lesson 22: Class
+- \`private\`/\`public\` access control, constructors, encapsulation
 
 ---
 
-## ✅ Lesson 22 Key Summary!
+## ✅ Part 2 Key Summary!
 
-| Concept | Keywords | Core Idea |
+| Concept | Keyword | Core idea |
 |---|---|---|
-| class | \`class { private/public };\` | Encapsulation |
-| private | \`private:\` | Block external access |
-| public | \`public:\` | Allow external access |
-| Constructor | \`ClassName(...)\` | Initialize objects |
-| Getter/Setter | \`getX()\` / \`setX()\` | Safe access to private data |
+| Array/Vector | \`int arr[]\`, \`vector<int>\` | Store multiple values |
+| Range-for | \`for(auto x : v)\` | Easy iteration |
+| Reference | \`int& ref\` | Direct access to original |
+| Pointer | \`int* ptr\` | Variable that stores an address |
+| struct | \`struct Name { };\` | Data bundle |
+| class | \`class { private/public };\` | Encapsulation (default private) |
+| Constructor | \`ClassName(...)\` | Object initialization |
 
-🎊 **Congratulations!** You've mastered C++ classes — the foundation of Object-Oriented Programming!
+🎊 **Congratulations!** You've completed Part 2!
 
-🚀 **Keep going!** Apply these OOP concepts to build more powerful and maintainable C++ programs!`
+🚀 **Next: Part 3!** 2D arrays, pair & sorting, map & set, STL algorithms!`
         }
       ]
     }

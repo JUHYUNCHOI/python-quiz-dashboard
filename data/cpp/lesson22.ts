@@ -8,230 +8,459 @@ export const cppLesson22Data: LessonData = {
   id: "cpp-22",
   title: "클래스 (class)",
   emoji: "🎓",
-  description: "나만의 타입 만들기! public/private, 생성자, 캡슐화",
+  description: "데이터 + 함수를 하나로! 나만의 타입 만들기",
   chapters: [
     // ============================================
-    // Chapter 1: class 기초
+    // Chapter 1: class 기초 — struct에 함수를 추가하면?
     // ============================================
     {
       id: "ch1",
       title: "class 기초",
-      emoji: "🎓",
+      emoji: "🐕",
       steps: [
         {
           id: "ch1-intro",
           type: "explain",
-          title: "🎓 class — struct보다 강력한 타입!",
-          component: "cppPublicPrivateBuilder",
-          content: `앞에서 배운 **struct**는 데이터를 묶는 간단한 방법이었어요.
-
-**class**는 거기서 한 발 더 나아가요 — 데이터를 **숨길 수 있어요**.
-
-왜 숨길까요? 예를 들어 사각형의 가로 길이가 음수가 되면 안 되잖아요. 직접 접근을 막고, 정해진 방법으로만 바꾸게 하면 실수를 막을 수 있어요.
+          title: "🐕 class — struct에 함수를 추가하면?",
+          content: `**struct**는 데이터만 묶었어요. **class**는 데이터 + 함수(메서드)를 함께 묶어요!
 
 \`\`\`cpp
-class Rectangle {
-private:          // 외부에서 직접 접근 불가!
-    double width, height;
-
-public:           // 외부에서 접근 가능!
-    void setSize(double w, double h) {
-        if (w > 0 && h > 0) {  // 검증 후 설정
-            width = w;
-            height = h;
-        }
-    }
-    double area() {
-        return width * height;
-    }
+// struct: 데이터만
+struct Dog {
+    string name;
+    int age;
 };
-\`\`\`
 
-\`\`\`cpp
-Rectangle r;
-// r.width = -5;    // ❌ 컴파일 에러! private이라 접근 불가
-r.setSize(5, 3);    // ✅ public 함수로만 접근
-cout << r.area();   // 15
-\`\`\`
-
-| | struct | class |
-|---|---|---|
-| 기본 접근 | **public** (누구나) | **private** (내부만) |
-| 주로 쓰는 곳 | 데이터 묶음 | 데이터 + 기능 |
-
-💡 **private**으로 데이터를 숨기고, **public** 함수로만 접근하게 하는 것 → **캡슐화(encapsulation)**`,
-        },
-        {
-          id: "ch1-fb1",
-          type: "fillblank" as const,
-          title: "빈칸을 채워주세요",
-          content: "클래스의 접근 제어를 설정해봐요!",
-          code: "class Circle {\n___:\n    double radius;\npublic:\n    double area() {\n        return 3.14 * radius * radius;\n    }\n};",
-          fillBlanks: [
-            { id: 0, answer: "private", options: ["private", "public", "protected", "static"] }
-          ],
-          explanation: "private으로 선언하면 외부에서 radius에 직접 접근할 수 없어요! public 함수를 통해서만 접근하게 하는 게 캡슐화예요."
-        },
-        {
-          id: "ch1-pred1",
-          type: "predict" as const,
-          title: "private 접근 시도",
-          code: "class Rectangle {\nprivate:\n    int width;\npublic:\n    Rectangle(int w) : width(w) {}\n};\n\nint main() {\n    Rectangle r(5);\n    r.width = 10;  // ???\n}",
-          options: ["10", "5", "0", "컴파일 에러"],
-          answer: 3,
-          explanation: "컴파일 에러! width는 private이라 클래스 바깥에서 접근할 수 없어요. 외부에서 수정하려면 public setter 메서드를 만들어야 해요."
-        },
-        {
-          id: "ch1-q1",
-          type: "quiz",
-          title: "class 기본 접근 권한!",
-          content: "C++ `class`에서 아무것도 지정하지 않으면 멤버의 기본 접근 권한은?",
-          options: [
-            "public — 누구나 접근 가능",
-            "protected — 자식 클래스만 접근 가능",
-            "private — 클래스 내부에서만 접근 가능",
-            "접근 권한이 없어 에러가 난다"
-          ],
-          answer: 2,
-          explanation: "class의 멤버는 기본적으로 private이에요! 외부에서 접근하려면 public:으로 명시해야 해요. struct는 반대로 기본이 public이에요."
-        },
-      ]
-    },
-    // ============================================
-    // Chapter 2: 생성자 (Constructor)
-    // ============================================
-    {
-      id: "ch2",
-      title: "생성자 (Constructor)",
-      emoji: "🔧",
-      steps: [
-        {
-          id: "ch2-constructor",
-          type: "explain",
-          title: "🔧 생성자 — 객체가 태어날 때 자동 호출!",
-          content: `**생성자(constructor)**는 객체가 만들어질 때 **자동으로 호출**되는 특별한 함수예요.
-
-규칙:
-- 클래스 이름과 **같은 이름**
-- **리턴 타입 없음** (void도 아님!)
-- 객체 생성 시 자동 호출
-
-\`\`\`cpp
+// class: 데이터 + 함수!
 class Dog {
 public:
     string name;
     int age;
 
-    Dog(string n, int a) {  // 생성자!
-        name = n;
-        age  = a;
+    void bark() {
+        cout << name << ": 멍멍!" << endl;
     }
 };
 
-Dog d("Buddy", 3);   // 생성자 자동 호출
-cout << d.name;      // Buddy
-cout << d.age;       // 3
+Dog d;
+d.name = "바둑이";
+d.age = 3;
+d.bark();  // 바둑이: 멍멍!
 \`\`\`
 
-생성자가 없으면 멤버 변수들이 **쓰레기 값**으로 시작해요! 항상 생성자에서 초기값을 정해줘야 해요.
+**Python과 비교:**
 
-**더 깔끔한 방법 — 멤버 초기화 리스트:**
+| | Python 🐍 | C++ ⚡ |
+|---|---|---|
+| 메서드 | \`def bark(self):\` | \`void bark() {}\` |
+| 멤버 접근 | \`self.name\` | \`name\` (self 없음!) |
+| 클래스 끝 | 들여쓰기로 구분 | \`};\` 세미콜론 필수! |
 
-\`\`\`cpp
-// 일반 방법
-Dog(string n, int a) {
-    name = n;
-    age = a;
-}
-
-// 초기화 리스트 (권장)
-Dog(string n, int a) : name(n), age(a) {}
-\`\`\`
-
-\`: name(n), age(a)\` — 대입이 아니라 **처음부터 올바른 값으로 초기화**해요.`,
+💡 **기억할 것:**
+- 메서드 안에서는 같은 클래스의 멤버에 \`self\` 없이 바로 접근해요
+- 클래스 정의 끝에 \`};\` 세미콜론 필수!
+- \`public:\` 이 있어야 외부에서 접근 가능해요 (자세한 건 다음 챕터에서)`,
         },
         {
-          id: "ch2-pred1",
+          id: "ch1-pred1",
           type: "predict" as const,
-          title: "생성자 실행!",
-          code: "#include <iostream>\n#include <string>\nusing namespace std;\nclass Cat {\npublic:\n    string name;\n    int lives;\n    Cat(string n, int l) {\n        name = n;\n        lives = l;\n    }\n};\nint main() {\n    Cat c(\"Nabi\", 9);\n    cout << c.name << \" \" << c.lives;\n    return 0;\n}",
-          options: ["에러", "Nabi 9", "Nabi 0", " 9"],
-          answer: 1,
-          explanation: "Cat c(\"Nabi\", 9)에서 생성자가 호출돼요! name은 \"Nabi\", lives는 9로 초기화돼요."
-        },
-        {
-          id: "ch2-getter-setter",
-          type: "explain",
-          title: "💡 private 값은 어떻게 읽고 바꿔?",
-          content: `private 멤버를 안전하게 접근하는 방법: **getter(읽기)**와 **setter(쓰기)** 메서드!
-
-\`\`\`cpp
-class Rectangle {
-private:
-    int width;
-public:
-    Rectangle(int w) : width(w) {}
-
-    int getWidth() { return width; }      // getter: 읽기만
-    void setWidth(int w) {
-        if (w > 0) width = w;            // setter: 검증 후 쓰기
-    }
-};
-
-Rectangle r(5);
-cout << r.getWidth();  // 5
-r.setWidth(10);        // OK
-r.setWidth(-3);        // 무시됨 (검증 실패)
-\`\`\`
-
-setter에서 \`w > 0\` 검증을 하기 때문에 width = -10이 되는 걸 막아줘요. 직접 접근했다면 이런 보호가 불가능해요.`,
-        },
-        {
-          id: "ch2-practice",
-          type: "practice" as const,
-          title: "✋ Rectangle class 만들기!",
-          content: `Rectangle 클래스를 직접 완성해봐요!
-
-**순서:**
-1. \`private\`에 \`width\`, \`height\` (double) 선언
-2. \`public\`에 생성자 작성 — \`Rectangle(double w, double h)\`로 두 값 받아서 저장
-3. \`area()\` 메서드 작성 — \`width * height\` 반환
-4. \`perimeter()\` 메서드 작성 — \`2 * (width + height)\` 반환`,
+          title: "class 코드 읽기!",
           code: `#include <iostream>
+#include <string>
 using namespace std;
 
-class Rectangle {
-private:
-    // 1. width, height 선언 (double)
-
+class Dog {
 public:
-    // 2. 생성자: Rectangle(double w, double h)
-
-    // 3. area() 메서드
-
-    // 4. perimeter() 메서드
+    string name;
+    int age;
+    void info() {
+        cout << name << " " << age << "살";
+    }
 };
 
 int main() {
-    Rectangle r(5.0, 3.0);
-    cout << "넓이: " << r.area() << endl;
-    cout << "둘레: " << r.perimeter() << endl;
+    Dog d;
+    d.name = "바둑이";
+    d.age = 3;
+    d.info();
     return 0;
 }`,
-          expectedOutput: `넓이: 15\n둘레: 16`
+          options: ["바둑이 3살", "바둑이", "3살", "에러"],
+          answer: 0,
+          explanation: "d.name = \"바둑이\", d.age = 3으로 설정 후 info()를 호출해요. 메서드 안에서 name, age에 self 없이 바로 접근해요!"
+        },
+        {
+          id: "ch1-fb1",
+          type: "fillblank" as const,
+          title: "메서드에서 멤버 접근!",
+          content: "메서드 안에서 멤버 변수에 접근할 때는 `self` 없이 바로 써요!",
+          code: `class Dog {
+public:
+    string name;
+    void bark() {
+        cout << ___ << ": 멍멍!";
+    }
+};`,
+          fillBlanks: [
+            { id: 0, answer: "name", options: ["name", "self.name", "Dog.name", "this.name"] }
+          ],
+          explanation: "C++에서는 Python의 self.name과 달리 name만 써요! 메서드 안에서는 같은 클래스의 멤버에 바로 접근할 수 있어요."
+        },
+        {
+          id: "ch1-q1",
+          type: "quiz",
+          title: "class와 struct 차이!",
+          content: "C++에서 class와 struct의 가장 큰 **실용적** 차이는?",
+          options: [
+            "class는 변수를 가질 수 없다",
+            "class는 기본 접근이 private, struct는 기본 접근이 public이다",
+            "struct는 함수를 가질 수 없다",
+            "차이가 없다"
+          ],
+          answer: 1,
+          explanation: "class는 기본이 private (외부 접근 불가), struct는 기본이 public (누구나 접근 가능)이에요! 그래서 데이터 보호가 필요할 때 class를 써요."
         },
       ]
     },
     // ============================================
-    // Chapter 3: 정리 퀴즈
+    // Chapter 2: private — 왜 데이터를 숨길까?
+    // ============================================
+    {
+      id: "ch2",
+      title: "private — 데이터 보호",
+      emoji: "🔒",
+      steps: [
+        {
+          id: "ch2-why",
+          type: "explain",
+          title: "🔒 왜 데이터를 숨겨야 할까?",
+          content: `통장 잔액을 생각해봐요. 만약 잔액을 아무나 직접 바꿀 수 있다면?
+
+\`\`\`cpp
+// ❌ 모든 게 public이라면...
+class BankAccount {
+public:
+    double balance;
+};
+
+BankAccount acc;
+acc.balance = 1000000;  // 아무나 잔액을 바꿀 수 있어요! 😱
+acc.balance = -500;     // 음수 잔액도 가능?!
+\`\`\`
+
+이런 상황을 막으려면 **직접 접근을 차단**하고, **정해진 방법으로만** 바꿀 수 있게 해야 해요.
+
+그게 바로 **private**이에요:
+
+\`\`\`cpp
+// ✅ private으로 보호!
+class BankAccount {
+private:
+    double balance;          // 외부에서 직접 접근 불가!
+
+public:
+    void deposit(double amount) {   // 이 함수로만 잔액 변경 가능
+        if (amount > 0)
+            balance += amount;      // 클래스 내부에서는 OK
+    }
+    double getBalance() {
+        return balance;
+    }
+};
+
+BankAccount acc;
+// acc.balance = 1000000;   // ❌ 컴파일 에러!
+acc.deposit(500);            // ✅ 정해진 방법으로만 변경
+\`\`\`
+
+| | private | public |
+|---|---|---|
+| 접근 가능한 곳 | 클래스 **내부만** | **어디서나** |
+| 주로 쓰는 것 | 데이터 (변수) | 기능 (함수) |
+
+💡 데이터는 숨기고, 기능은 공개하는 것 → **캡슐화(encapsulation)**`,
+        },
+        {
+          id: "ch2-fb1",
+          type: "fillblank" as const,
+          title: "private/public 구분하기!",
+          content: "비밀번호는 숨기고, 비밀번호 확인 함수는 공개해요.",
+          code: `class Account {
+___:
+    string password;    // 비밀번호는 숨겨야 해요!
+
+___:
+    bool check(string input) {   // 확인 함수는 외부에서 써야 해요!
+        return password == input;
+    }
+};`,
+          fillBlanks: [
+            { id: 0, answer: "private", options: ["private", "public", "protected", "hidden"] },
+            { id: 1, answer: "public", options: ["public", "private", "open", "extern"] }
+          ],
+          explanation: "비밀번호(password)는 private으로 숨기고, 확인 함수(check)는 public으로 공개해요. 데이터는 숨기고 기능은 공개하는 게 캡슐화의 핵심이에요!"
+        },
+        {
+          id: "ch2-pred1",
+          type: "predict" as const,
+          title: "private에 직접 접근하면?",
+          code: `#include <iostream>
+using namespace std;
+
+class BankAccount {
+private:
+    double balance;
+public:
+    void deposit(double a) { balance += a; }
+};
+
+int main() {
+    BankAccount acc;
+    acc.balance = 1000;
+    cout << acc.balance;
+    return 0;
+}`,
+          options: ["1000", "0", "컴파일 에러", "쓰레기값"],
+          answer: 2,
+          explanation: "balance는 private이라 클래스 외부에서 acc.balance로 직접 접근하면 컴파일 에러! 오직 클래스 안의 함수(deposit 등)에서만 접근할 수 있어요."
+        },
+      ]
+    },
+    // ============================================
+    // Chapter 3: 생성자 (Constructor)
     // ============================================
     {
       id: "ch3",
+      title: "생성자 (Constructor)",
+      emoji: "🔧",
+      steps: [
+        {
+          id: "ch3-constructor",
+          type: "explain",
+          title: "🔧 생성자 — 객체가 태어날 때 자동 호출!",
+          content: `생성자가 없으면 멤버 변수들이 **쓰레기 값**으로 시작해요:
+
+\`\`\`cpp
+BankAccount acc;
+// acc.balance가 -398475.23 같은 이상한 값일 수 있어요! 😱
+\`\`\`
+
+**생성자**를 만들면 객체가 생성되는 순간 초기값을 안전하게 설정해요:
+
+\`\`\`cpp
+class BankAccount {
+private:
+    string owner;
+    double balance;
+
+public:
+    BankAccount(string name, double initial) {  // 생성자!
+        owner = name;
+        if (initial >= 0) balance = initial;
+        else              balance = 0;   // 음수 입금 차단
+    }
+};
+
+BankAccount acc("김철수", 1000);  // 생성자 자동 호출!
+\`\`\`
+
+**Python과 비교:**
+
+| | Python 🐍 | C++ ⚡ |
+|---|---|---|
+| 생성자 이름 | \`__init__\` | **클래스 이름과 동일** |
+| 첫 번째 매개변수 | \`self\` 필수 | 없음 |
+| 리턴 타입 | 없음 | **없음 (void도 아님!)** |
+
+💡 **기억할 것:**
+- 생성자 이름 = 클래스 이름 (대소문자까지 동일!)
+- 리턴 타입 없음 — void도 쓰면 에러가 나요!
+- 객체를 만들 때 딱 한 번 자동으로 호출됨`,
+        },
+        {
+          id: "ch3-pred1",
+          type: "predict" as const,
+          title: "생성자 실행!",
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+class BankAccount {
+private:
+    string owner;
+    double balance;
+public:
+    BankAccount(string name, double initial) {
+        owner = name;
+        balance = initial;
+    }
+    void info() {
+        cout << owner << ": " << balance << "원";
+    }
+};
+
+int main() {
+    BankAccount acc("김철수", 5000);
+    acc.info();
+    return 0;
+}`,
+          options: ["김철수: 5000원", "에러", "0원", "김철수"],
+          answer: 0,
+          explanation: "BankAccount acc(\"김철수\", 5000)에서 생성자가 자동 호출돼요! owner = \"김철수\", balance = 5000으로 초기화되고 info()가 출력해요."
+        },
+        {
+          id: "ch3-fb1",
+          type: "fillblank" as const,
+          title: "생성자 완성하기!",
+          content: "생성자 안에서 멤버 변수(왼쪽)에 매개변수(오른쪽) 값을 저장해요.",
+          code: `class Timer {
+private:
+    int seconds;
+public:
+    Timer(int s) {
+        ___ = ___;
+    }
+    int get() { return seconds; }
+};`,
+          fillBlanks: [
+            { id: 0, answer: "seconds", options: ["seconds", "s", "Timer", "int"] },
+            { id: 1, answer: "s", options: ["s", "seconds", "0", "get()"] }
+          ],
+          explanation: "`seconds = s` — 왼쪽은 멤버 변수(seconds), 오른쪽은 매개변수(s)예요. '멤버에 전달받은 값을 저장한다'고 기억하면 돼요!"
+        },
+      ]
+    },
+    // ============================================
+    // Chapter 4: getter/setter + 종합 실습
+    // ============================================
+    {
+      id: "ch4",
+      title: "getter/setter + 실습",
+      emoji: "💡",
+      steps: [
+        {
+          id: "ch4-getter-setter",
+          type: "explain",
+          title: "💡 private 값 읽고 쓰기 — getter & setter",
+          content: `private 멤버는 외부에서 직접 접근 불가! 그럼 어떻게 값을 읽고 바꿀까요?
+
+- **getter** — 값을 읽어주는 함수 (조회만)
+- **setter / 동작 함수** — 검증 후 값을 바꾸는 함수
+
+\`\`\`cpp
+class BankAccount {
+private:
+    string owner;
+    double balance;
+
+public:
+    BankAccount(string name, double initial) {
+        owner   = name;
+        balance = initial;
+    }
+
+    // getter: 잔액 조회
+    double getBalance() { return balance; }
+    string getOwner()   { return owner; }
+
+    // 입금: 0보다 클 때만
+    void deposit(double amount) {
+        if (amount > 0)
+            balance += amount;
+    }
+
+    // 출금: 잔액 이하일 때만
+    void withdraw(double amount) {
+        if (amount > 0 && amount <= balance)
+            balance -= amount;
+    }
+};
+
+BankAccount acc("김철수", 1000);
+acc.deposit(500);
+cout << acc.getBalance();  // 1500
+acc.withdraw(2000);        // 잔액 부족 → 무시됨
+cout << acc.getBalance();  // 1500
+\`\`\`
+
+이렇게 하면 balance가 절대 음수가 될 수 없어요!`,
+        },
+        {
+          id: "ch4-fb1",
+          type: "fillblank" as const,
+          title: "getter 완성하기!",
+          content: "getter는 private 멤버를 **읽어서 반환**하는 함수예요.",
+          code: `class Player {
+private:
+    int hp;
+public:
+    Player(int h) { hp = h; }
+
+    int getHp() { return ___; }   // hp 반환
+
+    void takeDamage(int dmg) {
+        if (hp - dmg ___ 0)       // hp가 0 이하로 내려가지 않도록
+            hp -= dmg;
+    }
+};`,
+          fillBlanks: [
+            { id: 0, answer: "hp", options: ["hp", "dmg", "0", "getHp"] },
+            { id: 1, answer: ">=", options: [">=", ">", "<=", "=="] }
+          ],
+          explanation: "① `return hp` — getter는 멤버 변수를 그대로 반환해요 ② `hp - dmg >= 0` — 체력이 0 이하로 내려가지 않을 때만 데미지를 적용해요!"
+        },
+        {
+          id: "ch4-practice",
+          type: "practice" as const,
+          title: "✋ BankAccount class 만들기!",
+          content: `통장 클래스를 직접 완성해봐요!
+
+**순서:**
+1. \`private\`에 \`owner\`(string), \`balance\`(double) 선언
+2. 생성자: \`BankAccount(string name, double initial)\` 로 초기화
+3. \`getBalance()\` — balance 반환
+4. \`deposit(double amount)\` — 0보다 클 때만 balance에 추가
+5. \`withdraw(double amount)\` — 0보다 크고 balance 이하일 때만 차감`,
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+class BankAccount {
+private:
+    // 1. owner(string), balance(double) 선언
+
+public:
+    // 2. 생성자: BankAccount(string name, double initial)
+
+    // 3. getBalance()
+
+    // 4. deposit(double amount)
+
+    // 5. withdraw(double amount)
+};
+
+int main() {
+    BankAccount acc("김철수", 1000);
+    acc.deposit(500);
+    acc.withdraw(200);
+    acc.withdraw(9999);  // 잔액 부족 — 무시됨
+    cout << acc.getBalance() << "원";
+    return 0;
+}`,
+          expectedOutput: `1300원`
+        },
+      ]
+    },
+    // ============================================
+    // Chapter 5: 정리 퀴즈
+    // ============================================
+    {
+      id: "ch5",
       title: "정리 퀴즈",
       emoji: "🏆",
       steps: [
         {
-          id: "ch3-q1",
+          id: "ch5-q1",
           type: "quiz",
           title: "class 코드 읽기!",
           content: `이 코드의 출력은?
@@ -252,7 +481,7 @@ int main() {
           explanation: "Dog d(\"Buddy\")로 생성자가 호출돼 name = \"Buddy\"가 돼요. name은 public이라 d.name으로 접근 가능해요!"
         },
         {
-          id: "ch3-q2",
+          id: "ch5-q2",
           type: "quiz",
           title: "private 접근!",
           content: `이 코드에서 에러가 나는 줄은?
@@ -275,7 +504,7 @@ int main() {
           explanation: "size는 private이라 외부에서 직접 b.size = 10은 에러! setSize()는 public 함수라 괜찮아요."
         },
         {
-          id: "ch3-q3",
+          id: "ch5-q3",
           type: "quiz",
           title: "생성자!",
           content: "C++ 생성자에 대한 설명으로 **틀린** 것은?",
@@ -289,7 +518,7 @@ int main() {
           explanation: "생성자는 리턴 타입이 아예 없어요! void도 아니에요. 클래스 이름과 같은 이름이고, 객체 생성 시 자동 호출되고, 매개변수를 받을 수 있어요."
         },
         {
-          id: "ch3-q4",
+          id: "ch5-q4",
           type: "quiz",
           title: "종합 문제!",
           content: `이 코드의 출력은?
@@ -316,7 +545,7 @@ int main() {
           explanation: "Counter c(10)으로 count=10이 돼요. add()를 3번 호출하면 10→11→12→13이 돼요. get()은 13을 리턴해요!"
         },
         {
-          id: "ch3-summary",
+          id: "ch5-summary",
           type: "explain",
           title: "🎉 Part 2 완료!",
           content: `## 🏆 Part 2 완료! 정말 대단해요!
