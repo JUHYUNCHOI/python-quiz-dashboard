@@ -81,7 +81,7 @@ class Car {
 };
 \`\`\`
 
-> 🐍 **Python에서 오셨나요?** Python에서는 `self.speed`처럼 `self`가 필요했는데, C++에서는 그냥 `speed`로 바로 써요.
+> 🐍 **Python에서 오셨나요?** Python에서는 \`self.speed\`처럼 \`self\`가 필요했는데, C++에서는 그냥 \`speed\`로 바로 써요.
 
 아직 자동차가 생긴 건 아니에요.`,
         },
