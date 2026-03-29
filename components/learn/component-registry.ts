@@ -250,6 +250,16 @@ const registry: Record<string, ComponentEntry> = {
     load: () => import("@/components/animations/syntax-builder"),
     exportName: "CppArrayBuilder",
   },
+  // pair vs 두 vector 비교 시각화 (cpp-15 lesson)
+  pairVsTwoVectors: {
+    load: () => import("@/components/animations/pair-vs-vectors"),
+    exportName: "PairVsTwoVectorsAnimation",
+  },
+  // pair 비교 & 정렬 인터랙티브 애니메이션 (cpp-15 lesson)
+  pairCompare: {
+    load: () => import("@/components/animations/pair-compare"),
+    exportName: "PairCompareAnimation",
+  },
   cppPointerBuilder: {
     load: () => import("@/components/animations/syntax-builder"),
     exportName: "CppPointerBuilder",

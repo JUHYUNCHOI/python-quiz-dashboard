@@ -48,7 +48,7 @@ import {
   cppLesson13Data, cppLesson14Data,
   // C++ Korean lessons 15-22
   cppLesson15Data, cppLesson16Data, cppLesson17Data, cppLesson18Data,
-  cppLesson19Data, cppLesson20Data, cppLesson21Data, cppLesson22Data,
+  cppLesson19Data, cppLesson20Data, cppLesson21Data, cppLesson22Data, cppLesson23Data,
   // C++ lesson 22 (Korean only, no English version yet)
   // C++ project lessons
   cppLessonP1Data, cppLessonP2Data, cppLessonP3Data,
@@ -112,7 +112,8 @@ export const lessonsData: Record<string, LessonData> = {
   "cpp-13": cppLesson13Data, "cpp-14": cppLesson14Data,
   "cpp-21": cppLesson21Data, "cpp-22": cppLesson22Data,
   // C++ Part 3
-  "cpp-15": cppLesson15Data, "cpp-16": cppLesson16Data, "cpp-17": cppLesson17Data, "cpp-18": cppLesson18Data,
+  "cpp-15": cppLesson15Data, "cpp-23": cppLesson23Data,
+  "cpp-16": cppLesson16Data, "cpp-17": cppLesson17Data, "cpp-18": cppLesson18Data,
   "cpp-19": cppLesson19Data, "cpp-20": cppLesson20Data,
   // C++ projects
   "cpp-p1": cppLessonP1Data, "cpp-p2": cppLessonP2Data, "cpp-p3": cppLessonP3Data,

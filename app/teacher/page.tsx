@@ -21,10 +21,34 @@ export default function TeacherDashboardPage() {
   const [copiedCode, setCopiedCode] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
+  const loadClasses = async () => {
+    const supabase = createClient()
+    const { data: classData } = await supabase
+      .from("classes")
+      .select("*")
+      .eq("teacher_id", user!.id)
+      .order("created_at", { ascending: false })
+
+    if (classData) {
+      // 각 반의 학생 수 조회
+      const classesWithCount = await Promise.all(
+        classData.map(async (cls) => {
+          const { count } = await supabase
+            .from("class_members")
+            .select("*", { count: "exact", head: true })
+            .eq("class_id", cls.id)
+          return { ...cls, memberCount: count ?? 0 }
+        })
+      )
+      setClasses(classesWithCount)
+    }
+    setIsLoading(false)
+  }
+
   useEffect(() => {
     if (!user) return
     loadClasses()
-  }, [user])
+  }, [user]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // 인증 가드: 로그인 + teacher 역할 필요
   if (authLoading) {
@@ -51,30 +75,6 @@ export default function TeacherDashboardPage() {
         <BottomNav />
       </div>
     )
-  }
-
-  const loadClasses = async () => {
-    const supabase = createClient()
-    const { data: classData } = await supabase
-      .from("classes")
-      .select("*")
-      .eq("teacher_id", user!.id)
-      .order("created_at", { ascending: false })
-
-    if (classData) {
-      // 각 반의 학생 수 조회
-      const classesWithCount = await Promise.all(
-        classData.map(async (cls) => {
-          const { count } = await supabase
-            .from("class_members")
-            .select("*", { count: "exact", head: true })
-            .eq("class_id", cls.id)
-          return { ...cls, memberCount: count ?? 0 }
-        })
-      )
-      setClasses(classesWithCount)
-    }
-    setIsLoading(false)
   }
 
   const handleCreateClass = async (e: React.FormEvent) => {

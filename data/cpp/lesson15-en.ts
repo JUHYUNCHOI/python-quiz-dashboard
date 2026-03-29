@@ -1,14 +1,14 @@
 // ============================================
-// C++ Lesson 15: pair & Sorting
+// C++ Lesson 15: pair & tuple
 // C++ for students who already know Python
 // ============================================
 import { LessonData } from '../types'
 
 export const cppLesson15EnData: LessonData = {
   id: "cpp-15",
-  title: "pair & Sorting",
+  title: "pair & tuple",
   emoji: "🔗",
-  description: "pair, tuple, and mastering sort!",
+  description: "Bundle two values together! Learn pair and tuple.",
   chapters: [
     // ============================================
     // Chapter 1: pair & tuple
@@ -74,7 +74,7 @@ print(p[1])          # 95
 | No types needed | Types required (or use auto) |
 | Any number of items | **Exactly 2 only!** |
 
-💡 A pair can hold exactly **2 values**! For 3 or more, you need a tuple.`
+💡 A pair can hold exactly **2 values**! For 3 or more, you could use tuple — but **in practice, struct is used far more often.** tuple's syntax is tricky. pair shines when you need to bundle two values together for sorting!`
         },
         {
           id: "ch1-fb1",
@@ -195,35 +195,31 @@ Why pair's auto-comparison is useful: when you sort a \`vector<pair<int,string>>
         },
         {
           id: "ch1-question",
-          type: "explain",
-          title: "🙋 Question: Can't I just use two vector<int>s?",
-          content: `**"Can't I just use two vector<int>s?"**
-
-You can! But problems arise when sorting: if you sort the scores, the names don't move along with them.
-
-\`\`\`cpp
-// What if you store them separately?
-vector<string> names = {"Kim", "Lee", "Park"};
-vector<int> scores = {78, 95, 88};
-
-sort(scores.begin(), scores.end());
-// scores = {78, 88, 95}
-// names stays as {"Kim", "Lee", "Park"} 😱
-// You can't tell whose score 78 belongs to!
-\`\`\`
-
-With pair, they always move together!
-
-\`\`\`cpp
-vector<pair<int, string>> students = {
-    {78, "Kim"}, {95, "Lee"}, {88, "Park"}
-};
-sort(students.begin(), students.end());
-// {78, "Kim"}, {88, "Park"}, {95, "Lee"} ✅
-// Scores and names always stay together!
-\`\`\`
-
-💡 Related data should be **bundled together** — it's safer and more convenient!`
+          type: "animation" as const,
+          title: "🙋 Question: Can't I just use two vectors?",
+          component: "pairVsTwoVectors",
+          content: "Press the sort button to see the difference between the two approaches!",
+        },
+        {
+          id: "ch1-fb2",
+          type: "fillblank" as const,
+          title: "Access pair members!",
+          content: "Use .first and .second to get values from a pair!",
+          code: "pair<string, int> p = {\"Kim\", 95};\ncout << p.___ << \": \" << p.___ << endl;\n// Output: Kim: 95",
+          fillBlanks: [
+            { id: 0, answer: "first", options: ["first", "second", "name", "0"] },
+            { id: 1, answer: "second", options: ["first", "second", "score", "1"] }
+          ],
+          explanation: "The first value of a pair is accessed with .first, and the second with .second! Using p[0] or p[1] would be an error — pairs use .first/.second, not indexes."
+        },
+        {
+          id: "ch1-pred2",
+          type: "predict" as const,
+          title: "Predict the push_back output!",
+          code: "#include <iostream>\n#include <string>\n#include <vector>\nusing namespace std;\nint main() {\n    vector<pair<string, int>> v;\n    v.push_back({\"Kim\", 95});\n    v.push_back(make_pair(\"Lee\", 88));\n    cout << v[0].first << \" \" << v[1].second;\n}",
+          options: ["Kim 88", "Kim 95", "Lee 88", "95 88"],
+          answer: 0,
+          explanation: "v[0].first is the first value of the first pair → \"Kim\". v[1].second is the second value of the second pair → 88. Output: Kim 88"
         },
         {
           id: "ch1-practice",
@@ -271,326 +267,16 @@ Park: 92`
       ]
     },
     // ============================================
-    // Chapter 2: Mastering sort
+    // Chapter 2: Review Quiz
+    // (sort is covered in cpp-23!)
     // ============================================
     {
       id: "ch2",
-      title: "Mastering sort",
-      emoji: "📊",
-      steps: [
-        {
-          id: "ch2-intro",
-          type: "explain",
-          title: "📊 sort() — The Basics of Sorting!",
-          content: `Say you want to sort a list of students by score. If you make \`pair<score, name>\`, sorting happens automatically by score! That's the real power of pair.
-
-C++'s **sort()** function lets you sort data!
-
-\`\`\`cpp
-#include <algorithm>  // Header that contains sort()!
-#include <vector>
-
-vector<int> v = {5, 2, 8, 1, 9};
-sort(v.begin(), v.end());
-// v = {1, 2, 5, 8, 9}  (ascending order)
-\`\`\`
-
-**You can sort arrays too:**
-\`\`\`cpp
-int arr[] = {5, 2, 8, 1, 9};
-sort(arr, arr + 5);  // Sort arr[0] through arr[4]
-// arr = {1, 2, 5, 8, 9}
-\`\`\`
-
-Let's compare with Python:
-
-**Python 🐍:**
-\`\`\`python
-v = [5, 2, 8, 1, 9]
-v.sort()             # Modifies in-place (like C++ sort!)
-# or
-v2 = sorted(v)       # Returns a new list
-
-arr = [5, 2, 8, 1, 9]
-arr.sort()           # List method
-\`\`\`
-
-| Python 🐍 | C++ sort ⚡ |
-|---|---|
-| \`v.sort()\` | \`sort(v.begin(), v.end())\` |
-| \`sorted(v)\` — returns new list | No equivalent in C++ (always in-place) |
-| \`arr.sort()\` | \`sort(arr, arr+n)\` |
-| Automatically sorts everything | Must **specify the range** yourself |
-
-💡 sort() requires \`#include <algorithm>\`! And you must specify the range with **begin() and end()**.`
-        },
-        {
-          id: "ch2-fb1",
-          type: "fillblank" as const,
-          title: "Fill in the blanks",
-          content: "Sort the vector in order!",
-          code: "vector<int> v = {3, 1, 4, 1, 5};\nsort(v.___, v.___);",
-          fillBlanks: [
-            { id: 0, answer: "begin()", options: ["begin()", "front()", "start()", "first()"] },
-            { id: 1, answer: "end()", options: ["end()", "back()", "stop()", "last()"] }
-          ],
-          explanation: "sort() takes a start and end position! For vectors, use v.begin() and v.end()."
-        },
-        {
-          id: "ch2-reverse",
-          type: "explain",
-          title: "📊 Reverse Sorting — Descending Order!",
-          content: `The default sort() is ascending. To sort in **descending order (largest first)**:
-
-**Method 1: Use greater<>**
-\`\`\`cpp
-vector<int> v = {5, 2, 8, 1, 9};
-sort(v.begin(), v.end(), greater<int>());
-// v = {9, 8, 5, 2, 1}  (descending!)
-\`\`\`
-
-**Method 2: Use rbegin(), rend() (reverse iterators)**
-\`\`\`cpp
-sort(v.rbegin(), v.rend());
-// Sorting with reverse iterators gives descending order!
-\`\`\`
-
-Let's compare with Python:
-
-**Python 🐍:**
-\`\`\`python
-v = [5, 2, 8, 1, 9]
-v.sort(reverse=True)  # Simply pass reverse=True!
-# v = [9, 8, 5, 2, 1]
-\`\`\`
-
-| Python 🐍 | C++ ⚡ |
-|---|---|
-| \`sort(reverse=True)\` | \`sort(v.begin(), v.end(), greater<int>())\` |
-| Just one parameter! | Pass a comparator as the third argument |
-
-💡 Don't forget both sets of **parentheses ()** in \`greater<int>()\`! \`greater<int>\` is the type, and the trailing \`()\` creates an object from it.`
-        },
-        {
-          id: "ch2-pred1",
-          type: "predict" as const,
-          title: "Output after sort!",
-          code: "#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;\nint main() {\n    vector<int> v = {4, 2, 7, 1, 5};\n    sort(v.begin(), v.end());\n    cout << v[0] << \" \" << v[4];\n    return 0;\n}",
-          options: ["4 5", "1 7", "7 1", "1 5"],
-          answer: 1,
-          explanation: "After sort(), v = {1, 2, 4, 5, 7}. v[0] is the smallest: 1, v[4] is the largest: 7. So the output is 1 7!"
-        },
-        {
-          id: "ch2-custom",
-          type: "explain",
-          title: "📊 Custom Comparators — Sort Your Way!",
-          content: `You can pass **your own comparison function** as the third argument to sort()!
-
-**Comparator rules:**
-- Takes two arguments
-- Returns **true** if the first argument should come **before** the second
-- Returns **false** otherwise
-
-**Method 1: Regular function**
-\`\`\`cpp
-bool cmp(int a, int b) {
-    return a > b;  // If a > b, put a first → descending!
-}
-
-sort(v.begin(), v.end(), cmp);
-\`\`\`
-
-**Method 2: Lambda**
-
-Here's a new syntax! \`[](int a, int b) { return a > b; }\` — this is called a **lambda**, an 'anonymous function.' It starts with \`[]\` and is a disposable function you create right on the spot. No need to define a separate function above — super convenient!
-
-\`\`\`cpp
-sort(v.begin(), v.end(), [](int a, int b) {
-    return a > b;  // Descending
-});
-\`\`\`
-
-**Real example: Sort by absolute value**
-\`\`\`cpp
-vector<int> v = {-5, 3, -1, 4, -2};
-sort(v.begin(), v.end(), [](int a, int b) {
-    return abs(a) < abs(b);  // Smallest absolute value first!
-});
-// v = {-1, -2, 3, 4, -5}
-\`\`\`
-
-Let's compare with Python:
-
-**Python 🐍:**
-\`\`\`python
-v = [-5, 3, -1, 4, -2]
-v.sort(key=lambda x: abs(x))  # Specify criterion with key
-# or
-v.sort(key=abs)
-\`\`\`
-
-| Python 🐍 | C++ ⚡ |
-|---|---|
-| \`key=func\` — transform value then compare | Comparator **directly compares two values** |
-| \`lambda x: abs(x)\` | \`[](int a, int b){ return abs(a)<abs(b); }\` |
-| 1 argument (transform function) | 2 arguments (comparison function) |
-
-💡 Python says "sort by this value" (key), while C++ says "which of these two comes first?" (comparator) — that's the key difference!`
-        },
-        {
-          id: "ch2-struct-sort",
-          type: "explain",
-          title: "📦 Sorting a struct Array!",
-          content: `Now that you know lambdas, you can sort struct arrays too! Just compare **member fields** in the lambda.
-
-\`\`\`cpp
-#include <algorithm>
-using namespace std;
-
-struct Student {
-    string name;
-    int score;
-};
-
-Student students[3] = {
-    {"Kim", 95},
-    {"Lee", 87},
-    {"Park", 72},
-};
-
-// Sort by score ascending
-sort(students, students + 3, [](Student a, Student b) {
-    return a.score < b.score;
-});
-// Result: Park(72) → Lee(87) → Kim(95)
-\`\`\`
-
-**For descending, just flip the operator to >:**
-\`\`\`cpp
-sort(students, students + 3, [](Student a, Student b) {
-    return a.score > b.score;
-});
-// Result: Kim(95) → Lee(87) → Park(72)
-\`\`\`
-
-**Works the same with vector<Student>:**
-\`\`\`cpp
-vector<Student> v = { {"Kim", 95}, {"Lee", 87} };
-sort(v.begin(), v.end(), [](Student a, Student b) {
-    return a.score < b.score;
-});
-\`\`\`
-
-**pair vs struct — when to use which?**
-
-| | pair | struct |
-|---|---|---|
-| Auto sort | ✅ No lambda needed | ❌ Lambda required |
-| Member names | \`.first\`, \`.second\` (unclear) | \`.score\`, \`.name\` (clear!) |
-| Field count | Exactly 2 | As many as you need |
-| USACO use | Quick bundling | Complex data |
-
-💡 \`pair<int,string>\`'s \`.first\` tells you nothing. But struct's \`.score\` and \`.name\` make code **much easier to read**!`,
-        },
-        {
-          id: "ch2-struct-pred",
-          type: "predict" as const,
-          title: "struct sort result!",
-          code: `#include <iostream>
-#include <string>
-#include <algorithm>
-using namespace std;
-
-struct Student {
-    string name;
-    int score;
-};
-
-int main() {
-    Student s[3] = {
-        {"Kim", 85},
-        {"Lee", 92},
-        {"Park", 78},
-    };
-    sort(s, s + 3, [](Student a, Student b) {
-        return a.score > b.score;
-    });
-    cout << s[0].name << " " << s[2].name;
-    return 0;
-}`,
-          options: ["Lee Park", "Kim Park", "Park Lee", "Kim Lee"],
-          answer: 0,
-          explanation: "Sorting by score descending: Lee(92) → Kim(85) → Park(78). s[0].name is Lee, s[2].name is Park."
-        },
-        {
-          id: "ch2-pred2",
-          type: "predict" as const,
-          title: "Custom sort result!",
-          code: "#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;\nbool cmp(int a, int b) {\n    return a % 10 < b % 10;\n}\nint main() {\n    vector<int> v = {23, 11, 45, 32};\n    sort(v.begin(), v.end(), cmp);\n    cout << v[0] << \" \" << v[3];\n    return 0;\n}",
-          options: ["11 45", "23 32", "11 23", "32 23"],
-          answer: 0,
-          explanation: "cmp compares by the ones digit (% 10)! 23->3, 11->1, 45->5, 32->2. Sorted by ones digit: 11(1), 32(2), 23(3), 45(5). So v[0]=11, v[3]=45. Output is 11 45!"
-        },
-        {
-          id: "ch2-practice",
-          type: "practice" as const,
-          title: "✋ Sort Scores in Descending Order!",
-          content: `Store scores and names in a vector<pair<int,string>>, then sort by score in descending order!
-
-If you put the score in pair's first, it automatically sorts by score. Use greater<> to make it descending!`,
-          code: `#include <iostream>
-#include <vector>
-#include <string>
-#include <algorithm>
-using namespace std;
-
-int main() {
-    vector<pair<int, string>> scores = {
-        {85, "Kim"},
-        {92, "Lee"},
-        {78, "Park"},
-        {95, "Choi"}
-    };
-
-    sort(scores.begin(), scores.end(), greater<pair<int,string>>());
-
-    for (auto& s : scores) {
-        cout << s.second << ": " << s.first << endl;
-    }
-
-    return 0;
-}`,
-          expectedOutput: `Choi: 95
-Lee: 92
-Kim: 85
-Park: 78`
-        },
-        {
-          id: "ch2-q1",
-          type: "quiz",
-          title: "sort basics!",
-          content: "Which header must you include to use sort()?",
-          options: [
-            "#include <sort>",
-            "#include <algorithm>",
-            "#include <vector>",
-            "#include <utility>"
-          ],
-          answer: 1,
-          explanation: "sort() is in the <algorithm> header! <vector> is for vector, and <utility> is for pair."
-        }
-      ]
-    },
-    // ============================================
-    // Chapter 3: Review Quiz
-    // ============================================
-    {
-      id: "ch3",
       title: "Review Quiz",
       emoji: "🏆",
       steps: [
         {
-          id: "ch3-q1",
+          id: "ch2-q1",
           type: "quiz",
           title: "pair declaration!",
           content: `Which of the following is a valid pair declaration?`,
@@ -604,41 +290,7 @@ Park: 78`
           explanation: "The syntax is pair<Type1, Type2> varName = {val1, val2}; — using angle brackets < >!"
         },
         {
-          id: "ch3-q2",
-          type: "quiz",
-          title: "sort basics!",
-          content: `What's the output?
-
-\`\`\`cpp
-vector<int> v = {3, 1, 4};
-sort(v.begin(), v.end());
-cout << v[0] << v[1] << v[2];
-\`\`\``,
-          options: [
-            "314",
-            "134",
-            "431",
-            "143"
-          ],
-          answer: 1,
-          explanation: "After sort(), v is sorted in ascending order: {1, 3, 4}. v[0]=1, v[1]=3, v[2]=4, so the output is 134!"
-        },
-        {
-          id: "ch3-q3",
-          type: "quiz",
-          title: "Custom sorting!",
-          content: `Which statement about sort's comparator function is correct?`,
-          options: [
-            "Returning true puts the second argument first",
-            "Returning true puts the first argument first",
-            "It must always return an int",
-            "It takes only 1 argument"
-          ],
-          answer: 1,
-          explanation: "When the comparator returns true, the first argument goes before the second! In bool cmp(a, b), returning true means a comes before b."
-        },
-        {
-          id: "ch3-q4",
+          id: "ch2-q2",
           type: "quiz",
           title: "pair comparison!",
           content: `What's the output?
@@ -659,22 +311,22 @@ else cout << "B";
           explanation: "pair comparison checks first values first. Both have first = 1, so it compares second values. 10 > 5, so a > b is true! A is printed."
         },
         {
-          id: "ch3-summary",
+          id: "ch2-summary",
           type: "explain",
           title: "🎉 Lesson Summary!",
           content: `## 🏆 Lesson 15 Complete! Great work!
 
-### 🔗 pair & tuple
+### 🔗 pair
 - **pair<T1, T2>**: Bundle two values together
+- \`pair<string,int> p = {"Kim", 95};\` — declare and initialize
 - Access with \`.first\` and \`.second\`
-- **tuple**: Bundle 3 or more values, access with \`get<N>(t)\`
-- pair supports **automatic comparison**! (first first, then second)
+- Supports **automatic comparison**! (first → second)
+- **Sorting a vector<pair> automatically sorts by first value!**
 
-### 📊 Mastering sort
-- \`sort(v.begin(), v.end())\` — ascending order
-- \`sort(v.begin(), v.end(), greater<int>())\` — descending
-- Custom comparator functions or **lambdas** for any sorting criteria
-- Sorting vector<pair> automatically sorts by first!
+### 🔗 tuple
+- **tuple<T1, T2, T3>**: Bundle 3 or more values
+- \`get<N>(t)\` to access the Nth value
+- \`tie(a, b, c) = t;\` to unpack all at once
 
 ### 🐍 Key Differences from Python!
 
@@ -682,11 +334,9 @@ else cout << "B";
 |---|---|---|
 | Bundle 2 values | \`(a, b)\` tuple | \`pair<T1,T2>{a,b}\` |
 | Access | \`t[0]\`, \`t[1]\` | \`.first\`, \`.second\` |
-| Sort | \`list.sort()\` | \`sort(begin, end)\` |
-| Descending | \`reverse=True\` | \`greater<T>()\` |
-| Custom sort | \`key=func\` | Comparator (2 args) |
+| Bundle 3+ values | tuple (any size) | \`tuple<T1,T2,T3>\` |
 
-🚀 **Next lesson** covers **map & set** — key-value stores and duplicate-free collections! Exciting stuff ahead!`
+🚀 **Next lesson (cpp-23)** covers **sort mastery** — custom sorting, lambdas, lower_bound, and more!`
         }
       ]
     }

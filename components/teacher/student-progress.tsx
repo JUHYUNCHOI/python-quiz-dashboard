@@ -1,8 +1,11 @@
 "use client"
 
+import { useState } from "react"
 import { cn } from "@/lib/utils"
 import { pythonParts, cppParts, pseudoParts, getLessonName, type PartMeta } from "@/lib/curriculum-data"
 import { useLanguage } from "@/contexts/language-context"
+import { LessonStepAnswersView } from "./lesson-step-answers-view"
+import { ChevronDown, ChevronUp } from "lucide-react"
 
 interface LessonProgressRow {
   lesson_id: string
@@ -14,6 +17,7 @@ interface LessonProgressRow {
 
 interface Props {
   lessonProgress: LessonProgressRow[]
+  studentId?: string
 }
 
 function formatDate(dateStr: string): string {
@@ -28,6 +32,18 @@ function formatDate(dateStr: string): string {
     return `${d.getMonth() + 1}/${d.getDate()}`
   } catch {
     return ""
+  }
+}
+
+// 학습 완료 후 며칠 지났는지 (복습 긴급도 판단용)
+function daysSince(dateStr: string): number {
+  if (!dateStr) return 0
+  try {
+    const d = new Date(dateStr)
+    const now = new Date()
+    return Math.floor((now.getTime() - d.getTime()) / (1000 * 60 * 60 * 24))
+  } catch {
+    return 0
   }
 }
 
@@ -65,19 +81,34 @@ function buildLessonMap(progress: LessonProgressRow[]): Map<string, LessonSummar
   return map
 }
 
-function LessonRow({ summary, name }: { summary: LessonSummary | undefined; name: string }) {
+function LessonRow({ summary, name, lessonId, studentId }: {
+  summary: LessonSummary | undefined
+  name: string
+  lessonId: string
+  studentId?: string
+}) {
+  const [showAnswers, setShowAnswers] = useState<"learn" | "review" | null>(null)
   const learn = summary?.learn ?? null
   const review = summary?.review ?? null
 
   const learnDone = learn?.completed ?? false
   const inProgress = !learnDone && learn !== null
-  const notStarted = !learnDone && learn === null
+
+  // 학습 완료 후 경과 일수 (복습 긴급도)
+  const learnDays = learnDone && learn?.updated_at ? daysSince(learn.updated_at) : 0
+  // D+3 이상이면 권장, D+7 이상이면 지연
+  const reviewUrgency = !review?.completed && learnDone
+    ? learnDays >= 7 ? "overdue"
+    : learnDays >= 3 ? "recommended"
+    : "soon"
+    : "none"
 
   return (
     <div className={cn(
-      "grid grid-cols-[1fr_auto_auto] gap-x-2 items-center px-2 py-1.5 rounded-lg",
+      "rounded-lg",
       learnDone ? "bg-green-50" : inProgress ? "bg-amber-50" : "opacity-35"
     )}>
+    <div className="grid grid-cols-[1fr_auto_auto] gap-x-2 items-center px-2 py-1.5">
       {/* 레슨 이름 + 상태 */}
       <div className="flex items-center gap-1.5 min-w-0">
         <span className={cn(
@@ -125,7 +156,17 @@ function LessonRow({ summary, name }: { summary: LessonSummary | undefined; name
           <span className="text-[10px] text-gray-300">—</span>
         ) : review?.completed ? (
           <>
-            <span className="text-[10px] font-bold text-blue-600">복습 ✓</span>
+            {review.score > 0 ? (
+              <span className={cn(
+                "text-[10px] font-black px-1.5 py-0.5 rounded",
+                review.score >= 80 ? "bg-blue-100 text-blue-700" :
+                review.score >= 60 ? "bg-amber-100 text-amber-700" : "bg-red-100 text-red-600"
+              )}>
+                {review.score}%
+              </span>
+            ) : (
+              <span className="text-[10px] font-bold text-blue-600">복습 ✓</span>
+            )}
             <span className="text-[9px] text-gray-400">{formatDate(review.updated_at)}</span>
           </>
         ) : review ? (
@@ -133,15 +174,71 @@ function LessonRow({ summary, name }: { summary: LessonSummary | undefined; name
             <span className="text-[10px] text-amber-500 font-medium">복습 중</span>
             <span className="text-[9px] text-gray-400">{formatDate(review.updated_at)}</span>
           </>
+        ) : reviewUrgency === "overdue" ? (
+          <>
+            <span className="text-[10px] font-black text-red-500 bg-red-50 px-1.5 py-0.5 rounded">D+{learnDays}일</span>
+            <span className="text-[9px] text-red-400">복습 필요</span>
+          </>
+        ) : reviewUrgency === "recommended" ? (
+          <>
+            <span className="text-[10px] font-bold text-amber-500">D+{learnDays}일</span>
+            <span className="text-[9px] text-amber-400">복습 권장</span>
+          </>
         ) : (
           <span className="text-[10px] text-gray-400">복습 전</span>
         )}
       </div>
     </div>
+
+    {/* 선생님용: 학습/복습 답 보기 버튼 */}
+    {studentId && (learnDone || review?.completed) && (
+      <div className="flex gap-1 px-2 pb-1.5">
+        {learnDone && (
+          <button
+            onClick={() => setShowAnswers(showAnswers === "learn" ? null : "learn")}
+            className={cn(
+              "flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full border transition-all",
+              showAnswers === "learn"
+                ? "bg-indigo-100 border-indigo-300 text-indigo-700 font-bold"
+                : "bg-white border-gray-200 text-gray-500 hover:border-indigo-300 hover:text-indigo-600"
+            )}
+          >
+            {showAnswers === "learn" ? <ChevronUp className="w-2.5 h-2.5" /> : <ChevronDown className="w-2.5 h-2.5" />}
+            학습 답 보기
+          </button>
+        )}
+        {review?.completed && (
+          <button
+            onClick={() => setShowAnswers(showAnswers === "review" ? null : "review")}
+            className={cn(
+              "flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full border transition-all",
+              showAnswers === "review"
+                ? "bg-blue-100 border-blue-300 text-blue-700 font-bold"
+                : "bg-white border-gray-200 text-gray-500 hover:border-blue-300 hover:text-blue-600"
+            )}
+          >
+            {showAnswers === "review" ? <ChevronUp className="w-2.5 h-2.5" /> : <ChevronDown className="w-2.5 h-2.5" />}
+            복습 답 보기
+          </button>
+        )}
+      </div>
+    )}
+
+    {/* 인라인 답변 뷰 */}
+    {studentId && showAnswers && (
+      <div className="px-2 pb-2">
+        <LessonStepAnswersView
+          studentId={studentId}
+          lessonId={lessonId}
+          progressType={showAnswers}
+        />
+      </div>
+    )}
+  </div>
   )
 }
 
-function PartSection({ part, lessonMap, lang }: { part: PartMeta; lessonMap: Map<string, LessonSummary>; lang: "ko" | "en" }) {
+function PartSection({ part, lessonMap, lang, studentId }: { part: PartMeta; lessonMap: Map<string, LessonSummary>; lang: "ko" | "en"; studentId?: string }) {
   const ids = part.lessonIds.map(String)
   const learnDoneCount = ids.filter(id => lessonMap.get(id)?.learn?.completed).length
   const inProgressCount = ids.filter(id => {
@@ -190,7 +287,7 @@ function PartSection({ part, lessonMap, lang }: { part: PartMeta; lessonMap: Map
       {/* 레슨 목록 */}
       <div className="space-y-0.5">
         {ids.map(id => (
-          <LessonRow key={id} summary={lessonMap.get(id)} name={getLessonName(id, lang)} />
+          <LessonRow key={id} lessonId={id} studentId={studentId} summary={lessonMap.get(id)} name={getLessonName(id, lang)} />
         ))}
       </div>
 
@@ -212,12 +309,13 @@ function PartSection({ part, lessonMap, lang }: { part: PartMeta; lessonMap: Map
   )
 }
 
-function LanguageSection({ title, emoji, parts, lessonMap, lang }: {
+function LanguageSection({ title, emoji, parts, lessonMap, lang, studentId }: {
   title: string
   emoji: string
   parts: PartMeta[]
   lessonMap: Map<string, LessonSummary>
   lang: "ko" | "en"
+  studentId?: string
 }) {
   const allIds = parts.flatMap(p => p.lessonIds.map(String))
   const learnDone = allIds.filter(id => lessonMap.get(id)?.learn?.completed).length
@@ -234,13 +332,13 @@ function LanguageSection({ title, emoji, parts, lessonMap, lang }: {
         <span className="text-xs text-blue-400">{reviewDone}/{learnDone || 0} 복습</span>
       </div>
       {parts.map(part => (
-        <PartSection key={part.id} part={part} lessonMap={lessonMap} lang={lang} />
+        <PartSection key={part.id} part={part} lessonMap={lessonMap} lang={lang} studentId={studentId} />
       ))}
     </div>
   )
 }
 
-export function StudentProgress({ lessonProgress }: Props) {
+export function StudentProgress({ lessonProgress, studentId }: Props) {
   const { lang } = useLanguage()
 
   if (lessonProgress.length === 0) {
@@ -301,9 +399,9 @@ export function StudentProgress({ lessonProgress }: Props) {
       )}
 
       {/* 언어별 섹션 */}
-      <LanguageSection title="Python" emoji="🐍" parts={pythonParts} lessonMap={lessonMap} lang={lang} />
-      <LanguageSection title="C++" emoji="⚡" parts={cppParts} lessonMap={lessonMap} lang={lang} />
-      <LanguageSection title="Pseudocode" emoji="📋" parts={pseudoParts} lessonMap={lessonMap} lang={lang} />
+      <LanguageSection title="Python" emoji="🐍" parts={pythonParts} lessonMap={lessonMap} lang={lang} studentId={studentId} />
+      <LanguageSection title="C++" emoji="⚡" parts={cppParts} lessonMap={lessonMap} lang={lang} studentId={studentId} />
+      <LanguageSection title="Pseudocode" emoji="📋" parts={pseudoParts} lessonMap={lessonMap} lang={lang} studentId={studentId} />
     </div>
   )
 }

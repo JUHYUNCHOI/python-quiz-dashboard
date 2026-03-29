@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/client"
 import type { Class, Profile, GamificationData } from "@/lib/supabase/types"
 import type { QuizSession } from "@/lib/supabase/types"
 import { Card } from "@/components/ui/card"
-import { ArrowLeft, Copy, Check, Users, Trophy, Flame, BookOpen, ChevronDown, ClipboardCheck, ExternalLink } from "lucide-react"
+import { ArrowLeft, Copy, Check, Users, Trophy, Flame, BookOpen, ChevronDown, ClipboardCheck, ExternalLink, AlertTriangle, Clock } from "lucide-react"
 import Link from "next/link"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
@@ -16,6 +16,8 @@ import { StudentConsistency } from "@/components/teacher/student-consistency"
 import { StudentProgress } from "@/components/teacher/student-progress"
 import { ClassOverview } from "@/components/teacher/class-overview"
 import { getLessonName, pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
+
+const STUDENTS_PER_PAGE = 10
 
 // 커리큘럼 순서 인덱스 (한 번만 계산)
 const CURRICULUM_ORDER: Record<string, number> = {}
@@ -102,6 +104,160 @@ function formatLastActive(dateStr: string): string {
   return "30일+"
 }
 
+// ─────────────────────────────────────────────────────────
+// 학생 자동 분석 카드
+// ─────────────────────────────────────────────────────────
+function StudentInsights({ lessonProgress, quizSessions, lang }: {
+  lessonProgress: LessonProgressRow[]
+  quizSessions: QuizSession[]
+  lang: "ko" | "en"
+}) {
+  // lesson_id 별로 learn/review 최신 행 수집
+  const learnMap = new Map<string, { updated_at: string }>()
+  const reviewMap = new Map<string, { score: number; updated_at: string }>()
+  for (const row of lessonProgress) {
+    if (row.progress_type === "learn" && row.completed) {
+      const ex = learnMap.get(row.lesson_id)
+      if (!ex || row.updated_at > ex.updated_at) learnMap.set(row.lesson_id, { updated_at: row.updated_at })
+    }
+    if (row.progress_type === "review" && row.completed) {
+      const ex = reviewMap.get(row.lesson_id)
+      if (!ex || row.updated_at > ex.updated_at) reviewMap.set(row.lesson_id, { score: row.score, updated_at: row.updated_at })
+    }
+  }
+
+  // 0. 자주 틀리는 문제 (퀴즈 세션 집계)
+  const conceptMap = new Map<number, { text: string; total: number; wrong: number }>()
+  for (const session of quizSessions) {
+    for (const q of (session.question_details ?? [])) {
+      const entry = conceptMap.get(q.question_id) ?? { text: q.question_text, total: 0, wrong: 0 }
+      entry.total++
+      if (!q.is_correct) entry.wrong++
+      conceptMap.set(q.question_id, entry)
+    }
+  }
+  const weakQuestions = [...conceptMap.entries()]
+    .map(([id, v]) => ({ id, text: v.text, total: v.total, wrong: v.wrong, pct: Math.round((v.wrong / v.total) * 100) }))
+    .filter(w => w.total >= 2 && w.wrong >= 2)   // 2번 이상 틀린 문제
+    .sort((a, b) => b.wrong - a.wrong || b.pct - a.pct)
+    .slice(0, 4)
+
+  // 1. 낮은 복습 점수 수업 (복습 완료했지만 점수 < 70%)
+  const lowScores = [...reviewMap.entries()]
+    .map(([lessonId, { score, updated_at }]) => ({ lessonId, score, updated_at }))
+    .filter(r => r.score > 0 && r.score < 70)
+    .sort((a, b) => a.score - b.score)
+    .slice(0, 3)
+
+  // 2. 복습이 밀린 수업 (학습 완료 후 D+3 이상 미복습)
+  const overdueReviews = [...learnMap.entries()]
+    .filter(([lessonId]) => !reviewMap.has(lessonId))
+    .map(([lessonId, { updated_at }]) => ({ lessonId, days: daysSince(updated_at) }))
+    .filter(r => r.days >= 3)
+    .sort((a, b) => b.days - a.days)
+    .slice(0, 3)
+
+  if (weakQuestions.length === 0 && lowScores.length === 0 && overdueReviews.length === 0) return null
+
+  return (
+    <div className="mt-3 mb-1 rounded-xl border border-orange-200 bg-orange-50 p-3 space-y-3">
+      <div className="flex items-center gap-1.5">
+        <AlertTriangle className="w-3.5 h-3.5 text-orange-500" />
+        <span className="text-xs font-black text-orange-700">학습 분석</span>
+        <span className="text-[10px] text-orange-400 ml-auto">자동 감지</span>
+      </div>
+
+      {/* 자주 틀리는 문제 */}
+      {weakQuestions.length > 0 && (
+        <div className="space-y-1.5">
+          <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">🔁 반복해서 틀린 문제</p>
+          {weakQuestions.map(w => (
+            <div key={w.id} className="flex items-start gap-2 py-1 border-b border-orange-100 last:border-0">
+              <div className="flex-1 min-w-0">
+                <p className="text-[11px] text-gray-700 line-clamp-2 leading-snug">{w.text}</p>
+              </div>
+              <div className="flex-shrink-0 flex flex-col items-end gap-0.5">
+                <span className={cn(
+                  "text-[10px] font-black px-1.5 py-0.5 rounded",
+                  w.pct >= 80 ? "bg-red-100 text-red-600" : w.pct >= 60 ? "bg-orange-100 text-orange-600" : "bg-amber-100 text-amber-600"
+                )}>{w.wrong}번 틀림</span>
+                <span className="text-[9px] text-gray-400">{w.total}번 중 {w.pct}% 오답</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 낮은 복습 점수 */}
+      {lowScores.length > 0 && (
+        <div className="space-y-1.5">
+          <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">📉 낮은 복습 점수 — 재복습 권장</p>
+          {lowScores.map(r => (
+            <div key={r.lessonId} className="flex items-center gap-2">
+              <div className="flex-1 min-w-0">
+                <span className="text-[11px] text-gray-700 truncate block font-medium">{getLessonName(r.lessonId, lang)}</span>
+                <div className="flex items-center gap-1 mt-0.5">
+                  <div className="w-20 h-1 bg-red-100 rounded-full overflow-hidden">
+                    <div
+                      className={cn("h-full rounded-full", r.score < 40 ? "bg-red-500" : r.score < 60 ? "bg-orange-400" : "bg-amber-400")}
+                      style={{ width: `${r.score}%` }}
+                    />
+                  </div>
+                  <span className={cn(
+                    "text-[10px] font-black",
+                    r.score < 40 ? "text-red-600" : r.score < 60 ? "text-orange-600" : "text-amber-600"
+                  )}>{r.score}%</span>
+                </div>
+              </div>
+              <Link
+                href={`/review/${r.lessonId}`}
+                target="_blank"
+                className="flex-shrink-0 text-[10px] font-bold px-2 py-1 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition-colors flex items-center gap-0.5"
+              >
+                복습하기 →
+              </Link>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 복습이 밀린 수업 */}
+      {overdueReviews.length > 0 && (
+        <div className="space-y-1.5">
+          <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">⏰ 복습이 밀린 수업</p>
+          {overdueReviews.map(r => (
+            <div key={r.lessonId} className="flex items-center gap-2">
+              <div className="flex-1 min-w-0">
+                <span className="text-[11px] text-gray-700 truncate block font-medium">{getLessonName(r.lessonId, lang)}</span>
+                <span className={cn(
+                  "text-[10px] font-bold",
+                  r.days >= 14 ? "text-red-500" : r.days >= 7 ? "text-amber-500" : "text-yellow-600"
+                )}>학습 후 {r.days}일째 복습 없음</span>
+              </div>
+              <Link
+                href={`/review/${r.lessonId}`}
+                target="_blank"
+                className={cn(
+                  "flex-shrink-0 text-[10px] font-bold px-2 py-1 rounded-lg transition-colors flex items-center gap-0.5",
+                  r.days >= 14 ? "bg-red-100 text-red-600 hover:bg-red-200" :
+                  r.days >= 7  ? "bg-amber-100 text-amber-600 hover:bg-amber-200" :
+                                 "bg-yellow-100 text-yellow-600 hover:bg-yellow-200"
+                )}
+              >
+                복습하기 →
+              </Link>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <p className="text-[9px] text-orange-300 border-t border-orange-200 pt-2">
+        복습하기 링크를 학생에게 직접 공유하거나, 학생이 스스로 복습하도록 안내하세요.
+      </p>
+    </div>
+  )
+}
+
 export default function ClassDetailPage() {
   const searchParams = useSearchParams()
   const classId = searchParams.get("id") || ""
@@ -116,6 +272,7 @@ export default function ClassDetailPage() {
   const [activeTab, setActiveTab] = useState<"lessons" | "quizzes" | "consistency">("lessons")
   const [parentLinkCopied, setParentLinkCopied] = useState<string | null>(null)
   const [generatingLink, setGeneratingLink] = useState<string | null>(null)
+  const [studentPage, setStudentPage] = useState(0)
 
   useEffect(() => {
     if (!user || !classId) return
@@ -360,7 +517,20 @@ export default function ClassDetailPage() {
             </Card>
 
             {/* 반 전체 요약 + 위험 알림 + 진도 비교 */}
-            <ClassOverview students={students} />
+            <ClassOverview
+              students={students}
+              onStudentClick={(studentId) => {
+                setExpandedStudent(studentId)
+                setActiveTab("lessons")
+                // 정렬된 목록에서 해당 학생의 페이지로 이동
+                const idx = sortedStudents.findIndex(s => s.id === studentId)
+                if (idx >= 0) setStudentPage(Math.floor(idx / STUDENTS_PER_PAGE))
+                // 잠시 후 해당 학생 카드로 스크롤
+                setTimeout(() => {
+                  document.getElementById(`student-${studentId}`)?.scrollIntoView({ behavior: "smooth", block: "center" })
+                }, 100)
+              }}
+            />
 
             {/* 정렬 버튼 */}
             <div className="flex gap-2 mb-4 flex-wrap">
@@ -373,7 +543,7 @@ export default function ClassDetailPage() {
               ].map(({ key, label }) => (
                 <button
                   key={key}
-                  onClick={() => setSortBy(key)}
+                  onClick={() => { setSortBy(key); setStudentPage(0) }}
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
                     sortBy === key
                       ? "bg-orange-500 text-white"
@@ -398,8 +568,12 @@ export default function ClassDetailPage() {
               </Card>
             ) : (
               <div className="space-y-2">
-                {sortedStudents.map((student, idx) => (
-                  <Card key={student.id} className="border border-gray-100 overflow-hidden">
+                {(() => {
+                  const pagedStudents = sortedStudents.slice(studentPage * STUDENTS_PER_PAGE, (studentPage + 1) * STUDENTS_PER_PAGE)
+                  const totalPages = Math.ceil(sortedStudents.length / STUDENTS_PER_PAGE)
+                  return (<>
+                {pagedStudents.map((student, idx) => (
+                  <Card key={student.id} id={`student-${student.id}`} className="border border-gray-100 overflow-hidden">
                     {/* 학생 요약 행 */}
                     <button
                       onClick={() => setExpandedStudent(expandedStudent === student.id ? null : student.id)}
@@ -470,6 +644,13 @@ export default function ClassDetailPage() {
                     {/* 펼친 상세: 탭 UI */}
                     {expandedStudent === student.id && (
                       <div className="px-4 pb-4 border-t border-gray-100">
+                        {/* 자동 분석 카드 */}
+                        <StudentInsights
+                          lessonProgress={student.lessonProgress}
+                          quizSessions={student.quizSessions}
+                          lang={lang}
+                        />
+
                         {/* 탭 버튼 + 학부모 링크 */}
                         <div className="flex gap-1 mt-3 mb-1 items-center">
                           {([
@@ -514,7 +695,7 @@ export default function ClassDetailPage() {
 
                         {/* 레슨 진도 탭 */}
                         {activeTab === "lessons" && (
-                          <StudentProgress lessonProgress={student.lessonProgress} />
+                          <StudentProgress lessonProgress={student.lessonProgress} studentId={student.id} />
                         )}
 
                         {/* 퀴즈 리포트 탭 */}
@@ -530,6 +711,29 @@ export default function ClassDetailPage() {
                     )}
                   </Card>
                 ))}
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-center gap-2 mt-2 pt-2 border-t border-gray-100">
+                    <button
+                      onClick={() => setStudentPage(p => Math.max(0, p - 1))}
+                      disabled={studentPage === 0}
+                      className="px-3 py-1 text-xs font-bold rounded-lg border border-gray-200 disabled:opacity-30 hover:bg-gray-50"
+                    >
+                      ← 이전
+                    </button>
+                    <span className="text-xs text-gray-500 font-medium">
+                      {studentPage + 1} / {totalPages}
+                    </span>
+                    <button
+                      onClick={() => setStudentPage(p => Math.min(totalPages - 1, p + 1))}
+                      disabled={studentPage === totalPages - 1}
+                      className="px-3 py-1 text-xs font-bold rounded-lg border border-gray-200 disabled:opacity-30 hover:bg-gray-50"
+                    >
+                      다음 →
+                    </button>
+                  </div>
+                )}
+                  </>)
+                })()}
               </div>
             )}
           </>

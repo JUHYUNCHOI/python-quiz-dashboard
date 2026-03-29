@@ -12,7 +12,7 @@ import { renderContent } from "./render-content"
 interface FillBlankStepProps {
   step: LessonStep
   isCompleted: boolean
-  onComplete: (correct: boolean) => void
+  onComplete: (correct: boolean, filledValues?: Record<number, string>) => void
   onAcknowledge: () => void
   isReview?: boolean
 }
@@ -116,10 +116,10 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
 
     if (wrong.size === 0) {
       setIsCorrect(true)
-      onComplete(true)
+      onComplete(true, values)
     } else {
       setIsCorrect(false)
-      onComplete(false)
+      onComplete(false, values)
     }
   }
 

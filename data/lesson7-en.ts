@@ -115,11 +115,11 @@ print("World")
           id: "try4",
           type: "tryit",
           title: "🖥️ Connect with Arrows!",
-          task: "Print in the format A → B → C!",
+          task: "Print in the format A -> B -> C!",
           initialCode: "print(\"A\", end=___)\nprint(\"B\", end=___)\nprint(\"C\")",
-          expectedOutput: "A → B → C",
-          hint: "Set end=\" → \"!",
-          hint2: "print(\"A\", end=\" → \")"
+          expectedOutput: "A -> B -> C",
+          hint: "Set end=\" -> \"!",
+          hint2: "print(\"A\", end=\" -> \")"
         },
         {
           id: "quiz2",

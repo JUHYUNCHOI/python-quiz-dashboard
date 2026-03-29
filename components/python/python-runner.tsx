@@ -481,6 +481,16 @@ export function PythonRunner({
         </div>
       )}
 
+      {/* 건너뛰기 버튼 (3회 이상 실패 시) */}
+      {attempts >= 3 && isCorrect !== true && (
+        <button
+          onClick={() => { onSuccess?.() }}
+          className="w-full py-2.5 rounded-xl text-sm font-medium text-gray-500 bg-gray-100 hover:bg-gray-200 border border-gray-200 transition-all"
+        >
+          → 다음으로 넘어갈게요
+        </button>
+      )}
+
       <style jsx>{`
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(4px); }

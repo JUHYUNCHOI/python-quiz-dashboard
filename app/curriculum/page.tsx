@@ -2,7 +2,7 @@
 
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
-import { RequireAuth } from "@/components/require-auth"
+
 import { useState, useEffect, useCallback } from "react"
 import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
@@ -35,7 +35,7 @@ const cppReviewIds = new Set([
   "cpp-1", "cpp-2", "cpp-3", "cpp-4", "cpp-5", "cpp-6", "cpp-7", "cpp-8",
   "cpp-9", "cpp-10", "cpp-11", "cpp-12", "cpp-13", "cpp-14",
   "cpp-21", "cpp-22",
-  "cpp-15", "cpp-16", "cpp-17", "cpp-18", "cpp-19", "cpp-20",
+  "cpp-15", "cpp-23", "cpp-16", "cpp-17", "cpp-18", "cpp-19", "cpp-20",
   "cpp-p1", "cpp-p2", "cpp-p3"
 ])
 
@@ -231,12 +231,13 @@ export default function CurriculumPage() {
       title: t("Part 3: USACO 준비 🏆", "Part 3: USACO Prep 🏆"),
       description: t("USACO는 미국 최고의 코딩 대회예요! 어렵지 않아요 — STL 도구들을 배우면 복잡한 문제도 쉽게 풀 수 있어요. C++의 강력한 무기들을 익혀봐요!", "USACO is a prestigious US coding olympiad! Don't worry — learning STL tools makes hard problems manageable. Master C++'s powerful weapons!"),
       lessons: [
-        { id: "cpp-15", title: t("15. pair & 정렬", "15. pair & Sorting"), description: t("pair<int,int>, sort(), 커스텀 비교", "pair<int,int>, sort(), custom comparison"), duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "cpp-16", title: "16. map & set", description: "map, unordered_map, set", duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "cpp-17", title: t("17. STL 알고리즘", "17. STL Algorithms"), description: "sort, find, lower_bound, accumulate", duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "cpp-18", title: "18. stack, queue & deque", description: t("STL 컨테이너, priority_queue", "STL containers, priority_queue"), duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "cpp-19", title: t("19. 파일 I/O & Fast I/O", "19. File I/O & Fast I/O"), description: "freopen, ifstream, sync_with_stdio", duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "cpp-20", title: t("20. CP 실전 팁", "20. CP Practical Tips"), description: t("bits/stdc++.h, typedef, 비트 연산", "bits/stdc++.h, typedef, bitwise operations"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-15", title: t("15. pair & tuple", "15. pair & tuple"), description: t("pair<T,T>, .first/.second, 자동 비교", "pair<T,T>, .first/.second, auto comparison"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "cpp-23", title: t("16. sort 마스터", "16. sort Master"), description: t("sort(), 람다, lower_bound, stable_sort", "sort(), lambda, lower_bound, stable_sort"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-16", title: "17. map & set", description: "map, unordered_map, set", duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-17", title: t("18. STL 알고리즘", "18. STL Algorithms"), description: "find, count_if, accumulate, binary_search", duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-18", title: "19. stack, queue & deque", description: t("STL 컨테이너, priority_queue", "STL containers, priority_queue"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-19", title: t("20. 파일 I/O & Fast I/O", "20. File I/O & Fast I/O"), description: "freopen, ifstream, sync_with_stdio", duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-20", title: t("21. CP 실전 팁", "21. CP Practical Tips"), description: t("bits/stdc++.h, typedef, 비트 연산", "bits/stdc++.h, typedef, bitwise operations"), duration: t("25분", "25 min"), hasQuiz: true },
         { id: "cpp-p3", title: t("🏆 USACO 모의전", "🏆 USACO Mock Contest"), description: t("Part 3 복습 프로젝트", "Part 3 Review Project"), duration: t("30분", "30 min"), isProject: true },
       ],
     },
@@ -399,6 +400,25 @@ export default function CurriculumPage() {
     setExpandedParts(active)
   }, [loaded, selectedCourse]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // 파트 마지막 레슨 완료 시 다음 파트 자동 펼치기
+  useEffect(() => {
+    if (!loaded) return
+    const data = selectedCourse === "python" ? pythonCurriculumData : selectedCourse === "cpp" ? cppCurriculumData : pseudoCurriculumData
+    for (let i = 0; i < data.length - 1; i++) {
+      const part = data[i]
+      const lastId = part.lessons[part.lessons.length - 1]?.id
+      if (lastId && completedLessons.has(lastId)) {
+        const nextPart = data[i + 1]
+        setExpandedParts(prev => {
+          if (prev.has(nextPart.id)) return prev
+          const next = new Set(prev)
+          next.add(nextPart.id)
+          return next
+        })
+      }
+    }
+  }, [loaded, completedLessons]) // eslint-disable-line react-hooks/exhaustive-deps
+
   // 학생이 IGCSE 탭에 있으면 Python으로 리셋 (profile 로드 후 확인)
   useEffect(() => {
     if (profile !== undefined && !isTeacher && selectedCourse === "pseudo") {
@@ -553,7 +573,6 @@ export default function CurriculumPage() {
   const nextLessonInfo = getNextLesson()
 
   return (
-    <RequireAuth>
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-mint-50">
       <Header />
 
@@ -561,38 +580,46 @@ export default function CurriculumPage() {
       <main className="w-full px-4 sm:px-6 lg:px-12 xl:px-20 pb-24">
         
         {/* 코스 선택 탭 */}
-        <div className="max-w-[1600px] mx-auto mb-4">
-          <div className="flex gap-2">
+        <div className="max-w-[1600px] mx-auto mb-5 pt-3">
+          <div className="flex flex-wrap gap-2">
+            {/* Python 탭 */}
             <button
               onClick={() => handleCourseChange("python")}
-              className={`flex items-center gap-2 px-5 py-3 rounded-xl border-3 border-black font-bold text-base transition-all ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-black text-sm font-bold transition-all ${
                 selectedCourse === "python"
-                  ? "bg-orange-400 text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
-                  : "bg-white text-gray-600 hover:bg-orange-50"
+                  ? "bg-orange-500 text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
+                  : "bg-white text-gray-700 hover:bg-orange-50"
               }`}
             >
               🐍 Python
+              <span className={`text-[10px] font-normal ${selectedCourse === "python" ? "text-white/70" : "text-gray-400"}`}>52강</span>
             </button>
+
+            {/* C++ 탭 */}
             <button
               onClick={() => handleCourseChange("cpp")}
-              className={`flex items-center gap-2 px-5 py-3 rounded-xl border-3 border-black font-bold text-base transition-all ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-black text-sm font-bold transition-all ${
                 selectedCourse === "cpp"
-                  ? "bg-blue-500 text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
-                  : "bg-white text-gray-600 hover:bg-blue-50"
+                  ? "bg-blue-600 text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
+                  : "bg-white text-gray-700 hover:bg-blue-50"
               }`}
             >
               ⚡ C++
+              <span className={`text-[10px] font-normal ${selectedCourse === "cpp" ? "text-white/70" : "text-gray-400"}`}>20강</span>
             </button>
+
+            {/* IGCSE — 선생님 전용 */}
             {isTeacher && (
               <button
                 onClick={() => handleCourseChange("pseudo")}
-                className={`flex items-center gap-2 px-5 py-3 rounded-xl border-3 border-black font-bold text-base transition-all ${
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-black text-sm font-bold transition-all ${
                   selectedCourse === "pseudo"
                     ? "bg-green-500 text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
-                    : "bg-white text-gray-600 hover:bg-green-50"
+                    : "bg-white text-green-700 hover:bg-green-50"
                 }`}
               >
                 📄 IGCSE
+                <span className={`text-[10px] font-normal ${selectedCourse === "pseudo" ? "text-white/70" : "text-gray-400"}`}>선생님 전용</span>
               </button>
             )}
           </div>
@@ -859,7 +886,7 @@ export default function CurriculumPage() {
                                       >
                                         {isCompleted ? t("✅ 수업완료", "✅ Done") : t("📺 수업", "📺 Lesson")}
                                       </Link>
-                                      {isCompleted && !isPseudo && (!isCpp || cppReviewIds.has(String(lesson.id))) && (
+                                      {(isCompleted || isTeacher) && !isPseudo && (!isCpp || cppReviewIds.has(String(lesson.id))) && (
                                         <Link
                                           href={getReviewPath(lesson.id)}
                                           className={`min-w-[5.5rem] sm:min-w-[6.5rem] text-center px-3 sm:px-4 py-2 rounded-lg border-2 font-bold text-xs sm:text-sm ${
@@ -890,6 +917,5 @@ export default function CurriculumPage() {
 
       <BottomNav />
     </div>
-    </RequireAuth>
   )
 }

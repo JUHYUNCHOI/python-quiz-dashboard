@@ -13,6 +13,7 @@ import { SoundToggle } from "@/components/sound-toggle"
 import { useSoundEffect } from "@/hooks/use-sound-effect"
 import { useLessonSync } from "@/hooks/use-lesson-sync"
 import { markLessonComplete } from "@/lib/mark-lesson-complete"
+import { saveStepAnswer } from "@/lib/save-step-answer"
 import { useGamification } from "@/hooks/use-gamification"
 import { logActivity } from "@/lib/activity-log"
 import { getCompletedLessons, pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
@@ -456,7 +457,20 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     setSelectedAnswer(idx)
     setShowExplanation(true)
     setQuizAttempts(prev => prev + 1)
-    if (idx === step.answer) {
+    const isCorrect = idx === step.answer
+    // 스텝 답변 저장 (선생님이 학생 답 확인용)
+    if (!effectiveTeacher) {
+      saveStepAnswer({
+        lessonId,
+        progressType: "learn",
+        stepId: step.id,
+        stepType: step.type,
+        isCorrect,
+        userAnswer: { selectedIdx: idx, option: step.options?.[idx] ?? "" },
+        correctAnswer: { selectedIdx: step.answer ?? 0, option: step.options?.[step.answer ?? 0] ?? "" },
+      })
+    }
+    if (isCorrect) {
       play("correct")
       if (!completedSteps.has(step.id)) {
         if (!effectiveTeacher && !isIGCSE) setScore(prev => prev + 10)
@@ -474,7 +488,20 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   }
 
   // fillblank 등 새 인터랙티브 스텝용 핸들러
-  const handleStepComplete = (correct: boolean) => {
+  const handleStepComplete = (correct: boolean, filledValues?: Record<number, string>) => {
+    // fillblank 스텝 답변 저장
+    if (!effectiveTeacher && step && step.type === "fillblank" && filledValues) {
+      const blanks: { id: number; answer: string }[] = step.fillBlanks ?? []
+      saveStepAnswer({
+        lessonId,
+        progressType: "learn",
+        stepId: step.id,
+        stepType: step.type,
+        isCorrect: correct,
+        userAnswer: filledValues as Record<string, unknown>,
+        correctAnswer: Object.fromEntries(blanks.map(b => [b.id, b.answer])),
+      })
+    }
     if (correct) {
       play("correct")
       if (!completedSteps.has(step.id)) {

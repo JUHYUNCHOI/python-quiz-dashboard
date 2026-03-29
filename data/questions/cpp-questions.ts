@@ -8208,7 +8208,7 @@ int main() {
   },
   {
     id: 337,
-    lessonId: "cpp-15",
+    lessonId: "cpp-23",
     difficulty: "보통",
     question: "pair 벡터를 점수 내림차순으로 정렬하는 올바른 코드는?",
     code: `#include <algorithm>
@@ -8231,30 +8231,6 @@ int main() {
     keyConceptTitle: "pair 커스텀 정렬",
     keyConceptDescription: "sort()의 세 번째 인자로 비교 함수(또는 람다)를 전달합니다. a.second > b.second는 second 기준 내림차순 정렬입니다.",
     relatedTopics: ["sort", "pair 정렬", "람다", "커스텀 정렬"],
-  },
-  {
-    id: 338,
-    lessonId: "cpp-15",
-    difficulty: "보통",
-    question: "C++17 구조적 바인딩(structured bindings)으로 pair에 접근하는 방법은?",
-    code: `#include <iostream>
-using namespace std;
-int main() {
-    pair<string, int> p = {"Alice", 100};
-    auto ___ = p;
-    cout << name << " " << score;
-}`,
-    options: [
-      "auto (name, score)",
-      "auto [name, score]",
-      "auto {name, score}",
-      "auto name, score",
-    ],
-    correctAnswer: 1,
-    explanation: "C++17 구조적 바인딩: auto [name, score] = p; 로 pair의 .first를 name, .second를 score에 바로 풀어서 저장합니다.",
-    keyConceptTitle: "구조적 바인딩 (C++17)",
-    keyConceptDescription: "auto [a, b] = pair; 형태로 pair/tuple의 값을 한번에 여러 변수로 받습니다. map 순회에서 for (auto& [key, val] : map)으로 많이 씁니다.",
-    relatedTopics: ["structured bindings", "C++17", "pair 분해"],
   },
   // ── cpp-19 보충 (파일 I/O & Fast I/O) ──
   {
@@ -8558,7 +8534,7 @@ void printDouble(int x) {
   },
   {
     id: 380,
-    lessonId: "cpp-15",
+    lessonId: "cpp-23",
     difficulty: "쉬움",
     question: "vector를 오름차순 정렬하는 올바른 코드는?",
     code: "",
@@ -8571,7 +8547,7 @@ void printDouble(int x) {
   },
   {
     id: 381,
-    lessonId: "cpp-15",
+    lessonId: "cpp-23",
     difficulty: "쉬움",
     question: "vector를 내림차순으로 정렬하는 올바른 코드는?",
     code: "",
@@ -8589,7 +8565,7 @@ void printDouble(int x) {
   },
   {
     id: 382,
-    lessonId: "cpp-15",
+    lessonId: "cpp-23",
     difficulty: "쉬움",
     question: "다음 코드 실행 후 v[0]의 값은?",
     code: `#include <algorithm>\n#include <vector>\nusing namespace std;\nint main() {\n    vector<int> v = {5, 2, 8, 1, 9};\n    sort(v.begin(), v.end());\n    return 0;\n}`,
@@ -8602,7 +8578,7 @@ void printDouble(int x) {
   },
   {
     id: 383,
-    lessonId: "cpp-15",
+    lessonId: "cpp-23",
     difficulty: "보통",
     question: "vector<pair<int,int>>를 sort하면 어떤 기준으로 정렬되나요?",
     code: "",
@@ -8638,7 +8614,7 @@ void printDouble(int x) {
   },
   {
     id: 385,
-    lessonId: "cpp-15",
+    lessonId: "cpp-23",
     difficulty: "보통",
     question: "벡터를 절댓값 기준 오름차순으로 정렬하는 코드는?",
     code: "",
@@ -8669,7 +8645,7 @@ void printDouble(int x) {
   },
   {
     id: 387,
-    lessonId: "cpp-15",
+    lessonId: "cpp-23",
     difficulty: "쉬움",
     question: "C-style 배열을 sort할 때 올바른 코드는? (int arr[5])",
     code: "",
@@ -8687,7 +8663,7 @@ void printDouble(int x) {
   },
   {
     id: 388,
-    lessonId: "cpp-15",
+    lessonId: "cpp-23",
     difficulty: "보통",
     question: "다음 코드 실행 후 출력 결과는?",
     code: `#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;\nint main() {\n    vector<pair<int,int>> v = {{2,5},{1,3},{2,1}};\n    sort(v.begin(), v.end());\n    cout << v[0].first << " " << v[0].second << endl;\n    return 0;\n}`,
@@ -10758,34 +10734,26 @@ int main() {
     id: 507,
     lessonId: "cpp-p2",
     difficulty: "쉬움",
-    question: "RPG 캐릭터 class에서 멤버변수와 생성자가 올바르게 작성된 것은?",
-    code: `class Character {
-private:
-    string name;
-    int hp;
-    int attack;
-public:
-    // 생성자
-    ???
-};`,
+    question: "다음 중 Character 구조체가 올바르게 선언된 것은?",
+    code: `// RPG 캐릭터의 name, hp, atk, level을 담는 구조체를 만들려면?`,
     options: [
-      "void Character(string n, int h, int a) { name=n; hp=h; attack=a; }",
-      "Character(string n, int h, int a) { name=n; hp=h; attack=a; }",
-      "Character() = { name, hp, attack }",
-      "Character(string n, int h, int a) : void { name=n; }",
+      "class Character { string name; int hp; int atk; int level; };",
+      "struct Character { string name; int hp; int atk; int level; };",
+      "struct { Character string name; int hp; };",
+      "Character struct { string name; int hp; int atk; };",
     ],
     correctAnswer: 1,
-    explanation: "생성자는 클래스 이름과 동일하고 리턴 타입이 없어요. void를 쓰면 생성자가 아닌 일반 함수로 처리돼요. Character(string n, int h, int a) { ... } 형태가 올바른 생성자예요.",
-    keyConceptTitle: "RPG 캐릭터 class 생성자",
-    keyConceptDescription: "프로젝트에서 class를 쓸 때도 같은 규칙: 생성자 = 클래스 이름, 리턴 타입 없음. 멤버변수는 private, 생성자는 public에 선언.",
-    relatedTopics: ["class", "생성자", "private", "RPG 프로젝트"],
+    explanation: "struct 키워드 + 이름 + { 멤버변수들; }; 형태예요. 마지막 }; 세미콜론을 꼭 붙여야 해요!",
+    keyConceptTitle: "struct 선언 형태",
+    keyConceptDescription: "struct 이름 { 멤버변수들; }; — struct는 여러 변수를 하나로 묶는 커스텀 타입이에요. 멤버 선언 순서대로 초기화 리스트 { }로 값을 넣을 수 있어요.",
+    relatedTopics: ["struct", "멤버변수", "RPG 프로젝트"],
   },
   {
     id: 508,
     lessonId: "cpp-p2",
     difficulty: "쉬움",
     question: "파티원 목록을 저장하는 올바른 선언은?",
-    code: `// Character class가 정의되어 있을 때
+    code: `// Character struct가 정의되어 있을 때
 // 여러 캐릭터를 동적으로 추가/관리하려면?`,
     options: [
       "Character party[100];",
@@ -10795,29 +10763,37 @@ public:
     ],
     correctAnswer: 1,
     explanation: "vector<Character>는 크기를 미리 정하지 않아도 되고 push_back()으로 동적 추가할 수 있어요. 배열은 크기를 미리 정해야 하고, Character*는 동적 메모리 관리가 복잡해요.",
-    keyConceptTitle: "vector<ClassName> — 객체 컬렉션",
-    keyConceptDescription: "여러 객체를 관리할 때는 vector<ClassName>이 가장 편해요. push_back()으로 추가, for(auto& c : party)로 순회해요.",
-    relatedTopics: ["vector", "class", "객체 컬렉션", "RPG 프로젝트"],
+    keyConceptTitle: "vector<struct타입> — 구조체 컬렉션",
+    keyConceptDescription: "여러 구조체를 관리할 때는 vector<타입>이 가장 편해요. push_back()으로 추가, for(auto& c : party)로 순회해요.",
+    relatedTopics: ["vector", "struct", "구조체 컬렉션", "RPG 프로젝트"],
   },
   {
     id: 509,
     lessonId: "cpp-p2",
     difficulty: "쉬움",
-    question: "파티원 정보를 출력하는 함수에서 `const Character&`를 쓰는 이유는?",
-    code: `void printCharacter(const Character& c) {
-    cout << c.getName() << " HP:" << c.getHp();
+    question: "다음 코드의 출력 결과는?",
+    code: `struct Character {
+    string name;
+    int hp;
+};
+
+int main() {
+    Character hero;
+    hero.name = "전사";
+    hero.hp = 100;
+    cout << hero.name << " HP: " << hero.hp << "\\n";
 }`,
     options: [
-      "Character 객체를 복사해서 안전하게 수정하기 위해",
-      "객체를 복사하지 않고(참조) 내부를 변경도 못 하게(const) 하기 위해",
-      "const가 없으면 컴파일이 안 돼서",
-      "참조(&)가 없으면 함수가 호출이 안 돼서",
+      "전사 100",
+      "전사 HP: 100",
+      "hero HP: 100",
+      "컴파일 에러",
     ],
     correctAnswer: 1,
-    explanation: "참조(&)는 복사 비용을 없애고, const는 함수 안에서 실수로 c를 수정하는 걸 막아줘요. 출력 함수처럼 읽기만 할 때 const 참조가 가장 올바른 패턴이에요.",
-    keyConceptTitle: "const 참조 매개변수",
-    keyConceptDescription: "const ClassName& = 복사 없이 전달 + 수정 불가 보장. 읽기 전용으로 객체를 받을 때 표준 패턴이에요.",
-    relatedTopics: ["const 참조", "매개변수", "복사 방지", "RPG 프로젝트"],
+    explanation: "hero.name은 \"전사\", hero.hp는 100이에요. . (점) 연산자로 멤버에 접근해서 출력하면 \"전사 HP: 100\"이 나와요.",
+    keyConceptTitle: "점(.) 연산자로 멤버 접근",
+    keyConceptDescription: "구조체변수.멤버이름 형태로 멤버에 접근해요. hero.name, hero.hp처럼 사용해요. 점 연산자는 struct와 class 모두에서 쓰여요.",
+    relatedTopics: ["struct", "멤버 접근", ". 연산자", "RPG 프로젝트"],
   },
   {
     id: 510,
@@ -10825,176 +10801,162 @@ public:
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
-#include <vector>
 #include <string>
+#include <vector>
 using namespace std;
 
-class Character {
-private:
+struct Character {
     string name;
     int hp;
-public:
-    Character(string n, int h) { name = n; hp = h; }
-    string getName() const { return name; }
-    int getHp() const { return hp; }
+    int atk;
+    int level;
 };
 
 int main() {
+    Character warrior = {"전사", 100, 25, 1};
+    Character mage = {"마법사", 60, 40, 1};
     vector<Character> party;
-    party.push_back(Character("전사", 100));
-    party.push_back(Character("마법사", 60));
-
-    for (const auto& c : party) {
-        cout << c.getName() << ": " << c.getHp() << "\\n";
-    }
+    party.push_back(warrior);
+    party.push_back(mage);
+    cout << "파티원 수: " << party.size() << "\\n";
+    cout << party[0].name << " HP: " << party[0].hp << "\\n";
 }`,
     options: [
-      "전사: 100\\n마법사: 60",
-      "마법사: 60\\n전사: 100",
-      "전사: 60\\n마법사: 100",
+      "파티원 수: 2\\n전사 HP: 100",
+      "파티원 수: 1\\n전사 HP: 100",
+      "파티원 수: 2\\n마법사 HP: 60",
       "컴파일 에러",
     ],
     correctAnswer: 0,
-    explanation: "push_back 순서대로 vector에 저장돼요. range-for는 앞에서부터 순서대로 순회해요. '전사: 100'이 먼저, '마법사: 60'이 다음으로 출력돼요.",
-    keyConceptTitle: "vector + class + range-for",
-    keyConceptDescription: "vector에 push_back한 순서대로 저장되고, range-for로 순서대로 꺼내요. class 객체도 vector에 담아서 같은 방식으로 사용해요.",
-    relatedTopics: ["vector", "class", "range-for", "push_back"],
+    explanation: "push_back으로 warrior, mage 순서로 2명을 추가했어요. party.size()=2, party[0]은 첫 번째 warrior이므로 name=\"전사\", hp=100이에요.",
+    keyConceptTitle: "struct 초기화 리스트 + vector",
+    keyConceptDescription: "struct 변수 = {값1, 값2, ...}; 형태로 초기화할 때 멤버 선언 순서대로 값을 넣어요. push_back으로 vector에 struct를 담고, [i].멤버로 접근해요.",
+    relatedTopics: ["struct 초기화", "vector", "push_back", "RPG 프로젝트"],
   },
   {
     id: 511,
     lessonId: "cpp-p2",
     difficulty: "보통",
-    question: "캐릭터 HP를 감소시키는 함수를 올바르게 작성한 것은?",
-    code: `class Character {
-private:
-    int hp;
-public:
-    Character(int h) { hp = h; }
-    int getHp() { return hp; }
-    // takeDamage: hp를 damage만큼 줄임 (0 이하로는 안 됨)
-    ???
-};`,
+    question: "다음 showCharacter 함수에서 c.hp를 바꾸면 원본 캐릭터 hp는 어떻게 될까요?",
+    code: `void showCharacter(Character c) {
+    cout << "=== " << c.name << " ===" << "\\n";
+    cout << "HP: " << c.hp << "\\n";
+    cout << "ATK: " << c.atk << "\\n";
+}`,
     options: [
-      "void takeDamage(int damage) { hp = damage; }",
-      "void takeDamage(int damage) { hp -= damage; if (hp < 0) hp = 0; }",
-      "int takeDamage(int damage) { return hp - damage; }",
-      "void takeDamage(int damage) const { hp -= damage; }",
+      "함수 안에서 c.hp를 수정하면 원본 캐릭터 hp도 바뀐다",
+      "c는 원본의 복사본이라, c를 수정해도 원본은 바뀌지 않는다",
+      "struct는 값 전달이 불가능해서 항상 &를 붙여야 한다",
+      "값 전달은 참조 전달보다 항상 빠르다",
     ],
     correctAnswer: 1,
-    explanation: "hp -= damage로 깎고, hp < 0이면 0으로 맞춰줘요. 'return hp - damage'는 실제로 멤버변수를 바꾸지 않아요. const 함수 안에서는 멤버변수를 수정할 수 없어요.",
-    keyConceptTitle: "HP 감소 함수 패턴",
-    keyConceptDescription: "hp -= damage 후 if (hp < 0) hp = 0; — 게임에서 HP를 줄일 때 0 미만으로 내려가지 않도록 처리하는 기본 패턴이에요.",
-    relatedTopics: ["멤버함수", "유효성 검사", "HP 관리", "RPG 프로젝트"],
+    explanation: "Character c처럼 & 없이 값으로 전달하면 원본의 복사본이 만들어져요. 출력처럼 읽기만 할 때는 값 전달로 충분해요. 원본을 수정해야 할 때는 Character&를 써요.",
+    keyConceptTitle: "struct 값 전달 = 복사본",
+    keyConceptDescription: "void showCharacter(Character c) — c는 원본의 복사본이에요. 읽기만 할 때는 OK. 원본 HP를 깎는 attack 같은 함수는 Character&(참조)로 받아야 해요.",
+    relatedTopics: ["값 전달", "복사본", "struct", "RPG 프로젝트"],
   },
   {
     id: 512,
     lessonId: "cpp-p2",
     difficulty: "보통",
-    question: "파티 전체를 보여주는 함수가 올바르게 구현된 것은?",
-    code: `void showParty(const vector<Character>& party) {
-    if (party.empty()) {
-        cout << "파티가 비어있어요!\\n";
-        return;
-    }
-    for (const auto& c : party) {
-        printCharacter(c);
+    question: "다음 attack 함수에서 & 기호를 붙이는 이유는?",
+    code: `void attack(Character& attacker, Character& target) {
+    target.hp -= attacker.atk;
+    cout << attacker.name << "이(가) " << target.name
+         << "을 공격! (-" << attacker.atk << "HP)" << "\\n";
+    if (target.hp <= 0) {
+        cout << target.name << " 쓰러졌다!" << "\\n";
     }
 }`,
     options: [
-      "party가 비어있으면 무한 루프가 된다",
-      "party.empty() 검사로 빈 경우를 먼저 처리하고, 아니면 순회 출력하는 올바른 구현이다",
-      "const vector<Character>&는 원소를 추가할 수 없어서 에러가 난다",
-      "range-for에서 const auto&를 쓰면 getName() 호출이 안 된다",
+      "& 없으면 struct를 함수에 넣을 수 없어서",
+      "원본 hp를 직접 깎아야 하므로",
+      "참조를 쓰면 코드가 더 짧아지므로",
+      "& 없이는 . 연산자를 쓸 수 없어서",
     ],
     correctAnswer: 1,
-    explanation: "empty() 검사 후 early return하고, 아니면 const auto&로 순회해요. const vector& 매개변수는 읽기 전용이라 push_back은 못 하지만 원소를 읽는 건 됩니다. const auto& c는 const Character&와 같아요.",
-    keyConceptTitle: "빈 컨테이너 검사 + 순회",
-    keyConceptDescription: "함수 시작에 empty() 체크 후 early return → 빈 경우 처리. 이후 range-for 순회 — 방어적 코드 작성의 기본 패턴이에요.",
-    relatedTopics: ["vector", "empty()", "range-for", "early return"],
+    explanation: "& (참조)를 쓰면 복사본이 아닌 원본을 직접 수정해요. target.hp -= attacker.atk 가 실제 캐릭터의 hp를 깎아요. & 없으면 복사본만 바뀌고 원본 hp는 그대로예요.",
+    keyConceptTitle: "참조 전달 = 원본 수정",
+    keyConceptDescription: "void attack(Character& a, Character& t) — &를 붙이면 원본을 직접 수정해요. HP처럼 게임 상태를 바꿔야 할 때 반드시 참조 전달을 써요.",
+    relatedTopics: ["참조 전달", "&", "struct", "원본 수정", "RPG 프로젝트"],
   },
   {
     id: 513,
     lessonId: "cpp-p2",
     difficulty: "어려움",
-    question: "다음 battle() 함수의 출력 결과는? (hero hp=100, attack=30 / monster hp=50)",
+    question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
+#include <string>
 using namespace std;
 
-class Character {
-private:
-    string name; int hp; int attack;
-public:
-    Character(string n, int h, int a) { name=n; hp=h; attack=a; }
-    string getName() { return name; }
-    int getHp() { return hp; }
-    void takeDamage(int d) {
-        hp -= d;
-        if (hp < 0) hp = 0;
-    }
-    int getAttack() { return attack; }
-    bool isAlive() { return hp > 0; }
+struct Character {
+    string name;
+    int hp;
+    int atk;
 };
 
-void battle(Character& hero, Character& monster) {
-    while (hero.isAlive() && monster.isAlive()) {
-        monster.takeDamage(hero.getAttack());
-        if (!monster.isAlive()) break;
-        hero.takeDamage(monster.getAttack());
+void attack(Character& attacker, Character& target) {
+    target.hp -= attacker.atk;
+    if (target.hp <= 0) {
+        cout << target.name << " 쓰러졌다!\\n";
     }
-    cout << (hero.isAlive() ? "승리!" : "패배!");
 }
 
 int main() {
-    Character hero("전사", 100, 30);
-    Character monster("슬라임", 50, 999);
-    battle(hero, monster);
+    Character hero = {"전사", 100, 30};
+    Character slime = {"슬라임", 25, 10};
+    attack(hero, slime);
+    attack(slime, hero);
+    cout << "전사 HP: " << hero.hp << "\\n";
 }`,
-    options: ["패배!", "승리!", "무승부!", "컴파일 에러"],
+    options: [
+      "슬라임 쓰러졌다!\\n전사 HP: 90",
+      "슬라임 쓰러졌다!\\n전사 HP: 100",
+      "전사 HP: 90",
+      "컴파일 에러",
+    ],
     correctAnswer: 0,
-    explanation: "1턴: 슬라임 hp 50-30=20 (살아있음) → 전사 hp 100-999 = 0으로 clamp. 2턴 시작: while 조건 hero.isAlive() = (0 > 0) = false → 루프 탈출. hero.isAlive() = false → '패배!' 출력. 슬라임 attack이 999라 영웅이 먼저 쓰러져요.",
-    keyConceptTitle: "전투 루프 흐름 추적",
-    keyConceptDescription: "while (둘 다 살아있는 동안) → 몬스터 먼저 피해 → 몬스터 사망 시 break → 영웅 먼저 공격하므로 영웅이 유리해요.",
-    relatedTopics: ["battle 함수", "while 루프", "isAlive", "break", "RPG 프로젝트"],
+    explanation: "attack(hero, slime): slime.hp = 25-30 = -5 → -5<=0이므로 \"슬라임 쓰러졌다!\" 출력. attack(slime, hero): hero.hp = 100-10 = 90 → 90>0이므로 출력 없음. 마지막으로 \"전사 HP: 90\" 출력. 참조(&) 덕분에 원본 hp가 실제로 바뀌었어요.",
+    keyConceptTitle: "참조 전달로 hp 수정 추적",
+    keyConceptDescription: "& 참조로 받은 target.hp -= attacker.atk 는 원본을 직접 수정해요. 호출 순서대로 차례로 추적하면 최종 hp와 출력을 알 수 있어요.",
+    relatedTopics: ["참조 전달", "attack 함수", "추적", "RPG 프로젝트"],
   },
   {
     id: 514,
     lessonId: "cpp-p2",
     difficulty: "어려움",
-    question: "다음 코드에서 levelUp() 호출 후 출력 결과는?",
+    question: "다음 코드에서 attack() 호출 후 slime.hp 출력 결과는?",
     code: `#include <iostream>
 #include <string>
 using namespace std;
 
-class Character {
-private:
+struct Character {
     string name;
-    int attack;
-public:
-    Character(string n, int a) { name = n; attack = a; }
-    int getAttack() const { return attack; }
-    void setAttack(int a) { attack = a; }
+    int hp;
+    int atk;
 };
 
-void levelUp(Character c) {   // 값 전달 (복사본)
-    c.setAttack(c.getAttack() + 10);
+void attack(Character attacker, Character target) {  // & 없음!
+    target.hp -= attacker.atk;
 }
 
 int main() {
-    Character hero("전사", 30);
-    levelUp(hero);
-    cout << hero.getAttack();
+    Character hero = {"전사", 100, 30};
+    Character slime = {"슬라임", 50, 10};
+    attack(hero, slime);
+    cout << slime.hp;
 }`,
     options: [
-      "30",
-      "40",
-      "컴파일 에러",
+      "50",
+      "20",
       "0",
+      "컴파일 에러",
     ],
     correctAnswer: 0,
-    explanation: "levelUp(Character c)은 값 전달이라 hero의 복사본이 만들어져요. 복사본의 attack을 40으로 올려도 원본 hero는 그대로 30이에요. 원본을 바꾸려면 Character& c (참조 전달)로 바꿔야 해요.",
-    keyConceptTitle: "값 전달은 복사본만 수정",
-    keyConceptDescription: "함수가 객체를 값으로 받으면(Character c) 복사본을 수정하는 것이라 원본이 바뀌지 않아요. 원본을 수정하려면 참조(Character& c)로 전달해야 해요.",
-    relatedTopics: ["참조 전달", "값 전달", "복사본", "RPG 프로젝트"],
+    explanation: "attack(Character target) — & 없이 값 전달이에요. target은 slime의 복사본이라, target.hp = 50-30 = 20으로 바뀌지만 원본 slime.hp는 여전히 50이에요. 원본을 수정하려면 Character& target이 필요해요.",
+    keyConceptTitle: "& 없으면 원본이 안 바뀐다",
+    keyConceptDescription: "void attack(Character target) — &가 없으면 값 전달이라 복사본만 수정돼요. slime.hp = 50 그대로! attack 함수에서 원본 hp를 깎으려면 반드시 Character& target으로 써야 해요.",
+    relatedTopics: ["값 전달", "참조 전달", "& 차이", "RPG 프로젝트"],
   },
 
   // ============================================================
@@ -11030,43 +10992,47 @@ int main() {
     id: 516,
     lessonId: "cpp-p3",
     difficulty: "쉬움",
-    question: "`pair<int, string>`의 원소에 접근하는 올바른 방법은?",
-    code: `pair<int, string> cow = {500, "Bessie"};
-// 우유 생산량과 이름을 출력하려면?`,
+    question: "벡터를 내림차순으로 정렬하는 올바른 코드는?",
+    code: `vector<int> v = {5, 2, 8, 1, 9};
+// 내림차순 정렬하려면?`,
     options: [
-      "cow[0]과 cow[1]",
-      "cow.first와 cow.second",
-      "cow.get<0>()과 cow.get<1>()",
-      "cow.key와 cow.value",
+      "sort(v.begin(), v.end());",
+      "sort(v.begin(), v.end(), greater<int>());",
+      "sort(v.end(), v.begin());",
+      "sort_desc(v.begin(), v.end());",
     ],
     correctAnswer: 1,
-    explanation: "pair의 첫 번째 원소는 .first, 두 번째는 .second로 접근해요. cow.first = 500 (우유량), cow.second = \"Bessie\" (이름)이에요.",
-    keyConceptTitle: "pair.first / pair.second",
-    keyConceptDescription: "pair<T1, T2>의 접근: .first (첫 번째), .second (두 번째). USACO에서 두 값을 묶어 정렬할 때 자주 써요.",
-    relatedTopics: ["pair", "first", "second", "USACO"],
+    explanation: "sort 세 번째 인자로 greater<int>()를 넣으면 내림차순 정렬이에요. sort(v.begin(), v.end())만 쓰면 기본 오름차순이에요.",
+    keyConceptTitle: "내림차순 정렬 — greater<int>()",
+    keyConceptDescription: "sort(v.begin(), v.end(), greater<int>()) — 큰 수부터 정렬. sort(v.begin(), v.end()) — 작은 수부터 정렬(오름차순). USACO에서 상위 K개를 구할 때 자주 써요.",
+    relatedTopics: ["sort", "greater", "내림차순", "USACO"],
   },
   {
     id: 517,
     lessonId: "cpp-p3",
     difficulty: "보통",
-    question: "소 정렬에서 '우유량 내림차순, 같으면 이름 오름차순'을 구현하는 lambda는?",
-    code: `vector<pair<int, string>> cows = {
-    {300, "Bessie"}, {500, "Elsie"}, {500, "Daisy"}
-};
-sort(cows.begin(), cows.end(), [](auto& a, auto& b) {
-    ???
-});`,
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    vector<int> v = {3, 1, 4, 1, 5};
+    sort(v.begin(), v.end(), greater<int>());
+    for (int i = 0; i < 3; i++) {
+        cout << v[i] << " ";
+    }
+}`,
     options: [
-      "return a < b;",
-      "return a.first > b.first || (a.first == b.first && a.second < b.second);",
-      "return a.first < b.first;",
-      "return a.second < b.second;",
+      "5 4 3",
+      "1 1 3",
+      "3 1 4",
+      "5 4 1",
     ],
-    correctAnswer: 1,
-    explanation: "우유량(first) 내림차순: a.first > b.first. 우유량이 같으면 이름(second) 오름차순: a.second < b.second. 두 조건을 ||로 연결할 때 같은 경우를 &&로 처리해요.",
-    keyConceptTitle: "다중 조건 정렬 lambda",
-    keyConceptDescription: "sort + lambda로 복합 정렬: 주 조건 비교 || (같을 때 보조 조건). 이 패턴이 USACO 정렬 문제의 핵심이에요.",
-    relatedTopics: ["sort", "lambda", "pair", "다중 조건 정렬", "USACO"],
+    correctAnswer: 0,
+    explanation: "greater<int>()로 내림차순 정렬하면 v = {5, 4, 3, 1, 1}이에요. 인덱스 0, 1, 2를 출력하면 \"5 4 3\"이에요.",
+    keyConceptTitle: "내림차순 정렬 후 상위 K개 출력",
+    keyConceptDescription: "sort + greater<int>()로 내림차순 정렬 후, 앞에서 K개(v[0]~v[K-1])를 출력하면 상위 K개를 뽑을 수 있어요. USACO Bronze에서 자주 나오는 패턴이에요.",
+    relatedTopics: ["sort", "greater", "상위 K개", "USACO"],
   },
   {
     id: 518,

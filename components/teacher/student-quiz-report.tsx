@@ -2,11 +2,82 @@
 
 import { useState } from "react"
 import type { QuizSession } from "@/lib/supabase/types"
-import { ChevronDown, AlertTriangle, Clock, Zap } from "lucide-react"
+import { ChevronDown, AlertTriangle, Clock, Zap, TrendingDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface Props {
   quizSessions: QuizSession[]
+}
+
+// ── 약점 요약 계산 ──────────────────────────────────────────
+interface WeakPoint {
+  question_id: number
+  question_text: string
+  total: number
+  correct: number
+  avgTimeMs: number
+}
+
+function buildWeakPoints(sessions: QuizSession[]): WeakPoint[] {
+  const map = new Map<number, { text: string; total: number; correct: number; totalTimeMs: number }>()
+  for (const session of sessions) {
+    for (const q of (session.question_details ?? [])) {
+      const entry = map.get(q.question_id) ?? { text: q.question_text, total: 0, correct: 0, totalTimeMs: 0 }
+      entry.total++
+      if (q.is_correct) entry.correct++
+      entry.totalTimeMs += q.time_taken_ms ?? 0
+      map.set(q.question_id, entry)
+    }
+  }
+  return [...map.entries()]
+    .map(([id, v]) => ({
+      question_id: id,
+      question_text: v.text,
+      total: v.total,
+      correct: v.correct,
+      avgTimeMs: Math.round(v.totalTimeMs / v.total),
+    }))
+    .filter(w => w.total >= 2)
+    .sort((a, b) => (a.correct / a.total) - (b.correct / b.total))
+    .slice(0, 5)
+}
+
+function WeaknessSummary({ sessions }: { sessions: QuizSession[] }) {
+  const weakPoints = buildWeakPoints(sessions)
+  if (weakPoints.length === 0) return null
+  return (
+    <div className="rounded-xl border border-red-100 bg-red-50 p-3 space-y-2 mb-3">
+      <div className="flex items-center gap-1.5">
+        <TrendingDown className="w-3.5 h-3.5 text-red-500" />
+        <span className="text-xs font-black text-red-700">자주 틀리는 개념</span>
+        <span className="text-[10px] text-red-400 ml-auto">최근 퀴즈 기준</span>
+      </div>
+      <div className="space-y-1.5">
+        {weakPoints.map(w => {
+          const pct = Math.round((w.correct / w.total) * 100)
+          const isSlow = w.avgTimeMs > 60000
+          return (
+            <div key={w.question_id} className="space-y-0.5">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] text-gray-600 flex-1 truncate">{w.question_text}</span>
+                <span className={cn(
+                  "text-[10px] font-bold flex-shrink-0 w-10 text-right",
+                  pct === 0 ? "text-red-600" : pct < 50 ? "text-orange-600" : "text-amber-600"
+                )}>{w.correct}/{w.total} {pct}%</span>
+                {isSlow && <span className="text-[9px] bg-amber-100 text-amber-600 px-1 rounded flex-shrink-0">느림</span>}
+              </div>
+              <div className="h-1 bg-red-100 rounded-full overflow-hidden">
+                <div
+                  className={cn("h-full rounded-full", pct === 0 ? "bg-red-500" : pct < 50 ? "bg-orange-400" : "bg-amber-400")}
+                  style={{ width: `${Math.max(pct, 3)}%` }}
+                />
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
 }
 
 function formatDate(dateStr: string): string {
@@ -33,6 +104,7 @@ function getTimeColor(ms: number): string {
 
 export function StudentQuizReport({ quizSessions }: Props) {
   const [expandedSession, setExpandedSession] = useState<string | null>(null)
+  const [showAllSessions, setShowAllSessions] = useState(false)
 
   if (quizSessions.length === 0) {
     return (
@@ -40,9 +112,16 @@ export function StudentQuizReport({ quizSessions }: Props) {
     )
   }
 
+  const visibleSessions = showAllSessions ? quizSessions : quizSessions.slice(0, 10)
+
   return (
-    <div className="mt-3 space-y-2">
-      {quizSessions.map((session) => {
+    <div className="mt-3">
+      {/* 약점 요약 카드 — 항상 최상단 */}
+      <WeaknessSummary sessions={quizSessions} />
+
+      {/* 세션 목록 */}
+      <div className="space-y-2">
+      {visibleSessions.map((session) => {
         const accuracy = Math.round((session.correct_answers / session.total_questions) * 100)
         const isExpanded = expandedSession === session.id
 
@@ -144,6 +223,19 @@ export function StudentQuizReport({ quizSessions }: Props) {
           </div>
         )
       })}
+      </div>
+
+      {/* 더 보기 버튼 */}
+      {quizSessions.length > 10 && (
+        <button
+          onClick={() => setShowAllSessions(v => !v)}
+          className="w-full mt-2 py-1.5 text-[11px] text-gray-400 hover:text-gray-600 font-medium text-center border border-dashed border-gray-200 rounded-lg hover:border-gray-300 transition-colors"
+        >
+          {showAllSessions
+            ? "▲ 접기"
+            : `▼ 이전 기록 더 보기 (+${quizSessions.length - 10}회)`}
+        </button>
+      )}
     </div>
   )
 }

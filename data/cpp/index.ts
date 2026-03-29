@@ -25,6 +25,7 @@ export { cppLesson19Data } from './lesson19'
 export { cppLesson20Data } from './lesson20'
 export { cppLesson21Data } from './lesson21'
 export { cppLesson22Data } from './lesson22'
+export { cppLesson23Data } from './lesson23'
 
 // Korean projects
 export { cppLessonP1Data } from './lessonP1'

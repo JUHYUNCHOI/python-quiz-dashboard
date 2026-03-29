@@ -27,7 +27,7 @@ interface StepRendererProps {
   onQuizAnswer: (idx: number) => void
   onQuizAcknowledge: () => void
   // fillblank
-  onStepComplete?: (correct: boolean) => void
+  onStepComplete?: (correct: boolean, filledValues?: Record<number, string>) => void
   onStepAcknowledge?: () => void
   showNextOnCorrect?: boolean  // 복습: 정답 후 설명 안에 "다음 문제 →" 버튼
 }

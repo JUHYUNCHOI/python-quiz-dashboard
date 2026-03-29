@@ -336,6 +336,10 @@ const registry: Record<string, LessonEntry> = {
     load: () => import('./cpp/lesson15'), exportName: 'cppLesson15Data',
     enLoad: () => import('./cpp/lesson15-en'), enExportName: 'cppLesson15EnData',
   },
+  "cpp-23": {
+    load: () => import('./cpp/lesson23'), exportName: 'cppLesson23Data',
+    enLoad: () => import('./cpp/lesson23'), enExportName: 'cppLesson23Data',
+  },
   "cpp-16": {
     load: () => import('./cpp/lesson16'), exportName: 'cppLesson16Data',
     enLoad: () => import('./cpp/lesson16-en'), enExportName: 'cppLesson16EnData',
@@ -693,6 +697,7 @@ export { cppLesson14Data } from './cpp/lesson14'
 export { cppLesson22Data } from './cpp/lesson22'
 export { cppLesson21Data } from './cpp/lesson21'
 export { cppLesson15Data } from './cpp/lesson15'
+export { cppLesson23Data } from './cpp/lesson23'
 export { cppLesson16Data } from './cpp/lesson16'
 export { cppLesson17Data } from './cpp/lesson17'
 export { cppLesson18Data } from './cpp/lesson18'
