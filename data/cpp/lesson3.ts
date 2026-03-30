@@ -167,8 +167,8 @@ cout << (int)c << endl;   // 65 ← 'A'의 ASCII 코드
         {
           id: "ch1-practice",
           type: "practice" as const,
-          title: "✋ 변수를 직접 만들어보세요!",
-          content: `지금까지 배운 int, double, string을 사용해서 자기소개를 출력하는 프로그램을 만들어봐요!
+          title: "✋ RPG 캐릭터 정보를 출력해보세요!",
+          content: `지금까지 배운 int, double, string을 사용해서 RPG 캐릭터 정보를 출력하는 프로그램을 만들어봐요!
 
 `,
           code: `#include <iostream>
@@ -176,19 +176,22 @@ cout << (int)c << endl;   // 65 ← 'A'의 ASCII 코드
 using namespace std;
 
 int main() {
-    string name = "주현";
-    int age = 14;
-    double height = 165.5;
+    string name = "슬라임";
+    int hp = 100;
+    int attack = 25;
+    int level = 3;
 
     cout << "이름: " << name << endl;
-    cout << "나이: " << age << "살" << endl;
-    cout << "키: " << height << "cm" << endl;
+    cout << "HP: " << hp << endl;
+    cout << "공격력: " << attack << endl;
+    cout << "레벨: " << level << endl;
 
     return 0;
 }`,
-          expectedOutput: `이름: 주현
-나이: 14살
-키: 165.5cm`
+          expectedOutput: `이름: 슬라임
+HP: 100
+공격력: 25
+레벨: 3`
         },
         {
           id: "ch1-q1",
@@ -368,38 +371,44 @@ string s = to_string(456);   // int → string "456"
         {
           id: "ch2-practice",
           type: "practice" as const,
-          title: "✋ 성적 처리 프로그램!",
-          content: `학교 성적 관리 시스템에서 성적 데이터를 처리해요.
+          title: "✋ 데미지 계산기!",
+          content: `아래 두 변수가 이미 선언되어 있어요:
 
-아래 상황을 해결하는 코드를 직접 실행해봐요:
-- 입력 데이터가 문자열 형태로 들어와서, 계산을 위해 숫자로 바꿔야 해요
-- 처리한 결과를 문자열로 이어붙여서 출력해야 해요`,
-          code: `#include <iostream>
+\`\`\`cpp
+string rawDamage = "25";      // 문자열로 된 기본 데미지
+string rawMultiplier = "1.5"; // 문자열로 된 배율
+\`\`\`
+
+1. \`rawDamage\`를 정수로 변환해서 2배한 값을 출력하세요 (25 × 2 = 50)
+2. \`rawMultiplier\`를 실수로 변환해서 2배한 값을 출력하세요 (1.5 × 2 = 3)
+3. 계산한 데미지(50)를 \`to_string()\`으로 문자열로 변환하고, **문자열 연결(+)** 로 \`"의 데미지!"\`을 붙여서 출력하세요
+
+💡 **문자열 연결 (+)** — 두 문자열을 이어붙이는 것을 **문자열 연결**이라고 해요.
+\`\`\`cpp
+string a = "드래곤";
+string b = " 등장!";
+cout << a + b << endl;    // 드래곤 등장!
+\`\`\`
+숫자를 문자열에 붙이려면 먼저 \`to_string()\`으로 변환해야 해요:
+\`\`\`cpp
+int dmg = 50;
+cout << to_string(dmg) + "의 데미지!" << endl;   // 50의 데미지!
+\`\`\``,
+          starterCode: `#include <iostream>
 #include <string>
 using namespace std;
 
 int main() {
-    // 시스템에서 받아온 데이터 (문자열 형태)
-    string rawScore = "85";
-    string rawBonus = "1.5";
+    string rawDamage = "25";
+    string rawMultiplier = "1.5";
 
-    // 정수로 변환해서 2배 계산
-    int score = stoi(rawScore) * 2;
-    cout << score << endl;        // 출력: 170
-
-    // 실수로 변환해서 적용
-    double bonus = stod(rawBonus) * 2;
-    cout << bonus << endl;        // 출력: 3
-
-    // 점수를 문자열로 변환해서 메시지 만들기
-    string msg = to_string(score) + "점 획득!";
-    cout << msg << endl;          // 출력: 170점 획득!
+    // 여기에 코드를 작성하세요
 
     return 0;
 }`,
-          expectedOutput: `170
+          expectedOutput: `50
 3
-170점 획득!`
+50의 데미지!`
         },
         {
           id: "ch2-q1",

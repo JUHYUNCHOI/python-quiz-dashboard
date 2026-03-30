@@ -221,11 +221,9 @@ using namespace std;
 
 int main() {
     int n;
-    cout << "숫자 개수를 입력하세요: ";
     cin >> n;
 
     vector<int> nums(n);
-    cout << "숫자 " << n << "개를 입력하세요: ";
     for (int i = 0; i < n; i++) {
         cin >> nums[i];
     }
@@ -240,7 +238,7 @@ int main() {
     return 0;
 }`,
           stdin: `6\n4 8 15 16 23 42`,
-          expectedOutput: `숫자 개수를 입력하세요: 숫자 6개를 입력하세요: 합계: 108`
+          expectedOutput: `합계: 108`
         },
         {
           id: "ch1-q1",
@@ -428,11 +426,9 @@ using namespace std;
 
 int main() {
     int n;
-    cout << "숫자 개수를 입력하세요: ";
     cin >> n;
 
     vector<int> nums(n);
-    cout << "숫자 " << n << "개를 입력하세요: ";
     for (int i = 0; i < n; i++) {
         cin >> nums[i];
     }
@@ -452,7 +448,7 @@ int main() {
     return 0;
 }`,
           stdin: `5\n3 7 2 9 5`,
-          expectedOutput: `숫자 개수를 입력하세요: 숫자 5개를 입력하세요: 2배 결과: 6 14 4 18 10 `
+          expectedOutput: `2배 결과: 6 14 4 18 10 `
         },
         {
           id: "ch2-q1",

@@ -173,10 +173,12 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
           }
         }
         setCompletedSteps(savedCompleted)
+        setProgressLoaded(true)
       } catch {
-        console.warn("[LessonPage] Failed to parse saved progress")
+        console.warn("[LessonPage] Failed to parse saved progress — clearing corrupted data")
+        localStorage.removeItem(progressKey)
+        setProgressLoaded(true) // 파싱 실패 시 처음부터 시작
       }
-      setProgressLoaded(true)
     } else {
       // localStorage 비어있으면 Supabase에서 복구 시도
       loadFromCloud().then(data => {
@@ -705,7 +707,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
               <button onClick={() => router.push(`/curriculum#lesson-${lessonId}`)} className="text-gray-400 hover:text-gray-600 transition-colors" aria-label="나가기">
                 <X className="w-5 h-5 md:w-6 md:h-6" />
               </button>
-              <div className="flex-1 flex items-center gap-[2px] h-2.5 md:h-3">
+              <div className="flex-1 flex items-center gap-[2px] h-2.5 md:h-3 overflow-visible">
                     {lesson.chapters.map((ch, chIdx) =>
                       ch.steps.map((st, stIdx) => {
                         const globalIdx = lesson.chapters.slice(0, chIdx).reduce((s, c) => s + c.steps.length, 0) + stIdx
@@ -716,31 +718,40 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                         const isClickable = effectiveTeacher || isCompleted || isBeforeCurrent || isCurrent || isAlreadyDone
                         const isChapterStart = stIdx === 0 && chIdx > 0
                         return (
-                          <button
+                          <div
                             key={`${chIdx}-${stIdx}`}
-                            className={cn(
-                              "h-full flex-1 transition-all duration-300 min-w-[3px]",
-                              isChapterStart && "ml-1",
-                              isCurrent && hasProgress
-                                ? "bg-indigo-500 scale-y-125"
-                                : (effectiveTeacher || isCompleted || isBeforeCurrent || isAlreadyDone)
-                                  ? "bg-emerald-400 hover:bg-emerald-300 cursor-pointer"
-                                  : "bg-gray-200",
-                              globalIdx === 0 && "rounded-l-full",
-                              globalIdx === totalSteps - 1 && "rounded-r-full",
-                            )}
-                            disabled={!isClickable}
-                            onClick={() => {
-                              if (!isClickable || isCurrent) return
-                              setCurrentChapter(chIdx)
-                              setCurrentStep(stIdx)
-                              restoreCompletedStepState(st)
-                              setShowChapterComplete(false)
-                              setShowLessonComplete(false)
-                              scrollToTop()
-                            }}
-                            title={`${ch.emoji} ${ch.title} — ${t("단계", "Step")} ${stIdx + 1}`}
-                          />
+                            className={cn("relative group h-full flex-1 min-w-[3px]", isChapterStart && "ml-1")}
+                          >
+                            {/* Hover tooltip */}
+                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:flex flex-col items-center pointer-events-none z-50">
+                              <div className="bg-indigo-500/90 text-white text-[10px] font-bold rounded px-1.5 py-0.5 whitespace-nowrap shadow leading-tight">
+                                {globalIdx + 1}
+                              </div>
+                              <div className="w-1.5 h-1.5 bg-indigo-500/90 rotate-45 -mt-[3px]" />
+                            </div>
+                            <button
+                              className={cn(
+                                "h-full w-full transition-all duration-150 origin-center group-hover:scale-y-[2.5] group-hover:rounded-sm",
+                                isCurrent && hasProgress
+                                  ? "bg-indigo-500 scale-y-125"
+                                  : (effectiveTeacher || isCompleted || isBeforeCurrent || isAlreadyDone)
+                                    ? "bg-emerald-400 hover:bg-emerald-300 cursor-pointer"
+                                    : "bg-gray-200",
+                                globalIdx === 0 && "rounded-l-full",
+                                globalIdx === totalSteps - 1 && "rounded-r-full",
+                              )}
+                              disabled={!isClickable}
+                              onClick={() => {
+                                if (!isClickable || isCurrent) return
+                                setCurrentChapter(chIdx)
+                                setCurrentStep(stIdx)
+                                restoreCompletedStepState(st)
+                                setShowChapterComplete(false)
+                                setShowLessonComplete(false)
+                                scrollToTop()
+                              }}
+                            />
+                          </div>
                         )
                       })
                     )}

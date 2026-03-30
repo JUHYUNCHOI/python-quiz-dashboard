@@ -545,7 +545,7 @@ public:
 3. \`getBalance()\` — return balance
 4. \`deposit(double amount)\` — add to balance only when amount > 0
 5. \`withdraw(double amount)\` — subtract only when amount > 0 and <= balance`,
-          code: `#include <iostream>
+          starterCode: `#include <iostream>
 #include <string>
 using namespace std;
 
@@ -558,9 +558,45 @@ public:
 
     // 3. getBalance()
 
-    // 4. deposit(double amount)
+    // 4. deposit(double amount) — only when amount > 0
 
-    // 5. withdraw(double amount)
+    // 5. withdraw(double amount) — only when amount > 0 and <= balance
+};
+
+int main() {
+    BankAccount acc("Emma", 1000);
+    acc.deposit(500);
+    acc.withdraw(200);
+    acc.withdraw(9999);  // Not enough — ignored
+    cout << acc.getBalance();
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+class BankAccount {
+private:
+    string owner;
+    double balance;
+
+public:
+    BankAccount(string name, double initial) {
+        owner = name;
+        balance = initial;
+    }
+
+    double getBalance() {
+        return balance;
+    }
+
+    void deposit(double amount) {
+        if (amount > 0) balance += amount;
+    }
+
+    void withdraw(double amount) {
+        if (amount > 0 && amount <= balance) balance -= amount;
+    }
 };
 
 int main() {

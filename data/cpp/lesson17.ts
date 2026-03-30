@@ -269,7 +269,7 @@ cout << cnt;  // 3 (8, 4, 2)
 | \`filter(lambda x: x > 5, lst)\` | \`find_if(..., [](int x){ return x > 5; })\` |
 | \`len([x for x in lst if x % 2 == 0])\` | \`count_if(..., [](int x){ return x % 2 == 0; })\` |
 
-람다는 레슨 15의 \`sort()\`에서도 이미 사용했어요! STL 알고리즘 어디서든 조건 함수를 넘길 수 있어요.`,
+람다는 \`sort()\`를 비롯한 STL 알고리즘 어디서든 조건 함수를 넘길 수 있어요.`,
         },
         {
           id: "ch1-q1",
@@ -523,7 +523,7 @@ int main() {
 
     return 0;
 }`,
-          expectedOutput: `Sorted: 10 20 30 40 50
+          expectedOutput: `Sorted: 10 20 30 40 50 
 30 found at index 2`
         },
         {

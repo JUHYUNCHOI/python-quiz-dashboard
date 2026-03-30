@@ -702,8 +702,6 @@ int main() {
     vector<int> nums;
     int input;
 
-    cout << "숫자를 입력하세요 (0이면 종료): " << endl;
-
     while (true) {
         cin >> input;
         if (input == 0) break;
@@ -724,8 +722,7 @@ int main() {
 8
 2
 0`,
-          expectedOutput: `숫자를 입력하세요 (0이면 종료):
-입력한 숫자: 5 3 8 2
+          expectedOutput: `입력한 숫자: 5 3 8 2
 총 4개`
         },
         {

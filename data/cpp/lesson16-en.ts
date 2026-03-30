@@ -149,6 +149,74 @@ Two ways to check if a key exists:
           explanation: "map automatically sorts by key! In alphabetical order: apple → banana → cherry. The insertion order doesn't matter!"
         },
         {
+          id: "ch1-missing-key",
+          type: "explain",
+          title: "⚠️ What happens when you access a missing key with []?",
+          content: `C++ map behaves very differently from Python when you access a **missing key with \`[]\`**!
+
+**Python 🐍:**
+\`\`\`python
+d = {}
+print(d["missing"])  # ❌ KeyError!
+\`\`\`
+
+**C++ map ⚡:**
+\`\`\`cpp
+map<string, int> m;
+cout << m["missing"];  // Prints 0 — and the key is auto-created! 😱
+cout << m.size();      // 1 (a new key was added)
+\`\`\`
+
+The moment you use \`[]\` on a missing key, it gets **created with a default value of 0**. No error, which makes this a sneaky bug!
+
+---
+
+**Always check first:**
+
+\`\`\`cpp
+map<string, int> scores;
+scores["Alice"] = 95;
+
+// ❌ Wrong — if "Bob" doesn't exist, it gets added as 0!
+cout << scores["Bob"];  // Prints 0, adds "Bob":0 to map
+
+// ✅ Correct — check with count first
+if (scores.count("Bob") > 0) {
+    cout << scores["Bob"];
+}
+
+// ✅ Correct — use find
+auto it = scores.find("Bob");
+if (it != scores.end()) {
+    cout << it->second;
+}
+\`\`\`
+
+💡 **But this behavior is actually useful for frequency counting!**
+\`\`\`cpp
+freq[word]++;  // If missing → created as 0, then incremented to 1 ✅
+\`\`\``
+        },
+        {
+          id: "ch1-pred-missing",
+          type: "predict" as const,
+          title: "Accessing a missing key?",
+          code: `#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+int main() {
+    map<string, int> m;
+    m["a"] = 1;
+    cout << m["b"] << endl;
+    cout << m.size() << endl;
+    return 0;
+}`,
+          options: ["Error", "0\n1", "0\n2", "1\n1"],
+          answer: 2,
+          explanation: "m[\"b\"] doesn't exist, so it prints 0 and simultaneously adds \"b\":0 to the map! That's why size() is 2. This is one of C++ map's most common traps."
+        },
+        {
           id: "ch1-unordered",
           type: "explain",
           title: "📖 unordered_map — Faster Without Sorting!",

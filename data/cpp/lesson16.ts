@@ -149,6 +149,74 @@ cout << scores.size() << endl;  // 1
           explanation: "map은 키를 자동으로 정렬해요! 알파벳 순서로 apple → banana → cherry가 출력돼요. 삽입 순서와 상관없어요!"
         },
         {
+          id: "ch1-missing-key",
+          type: "explain",
+          title: "⚠️ 없는 키를 [] 로 접근하면?",
+          content: `C++ map에서 **없는 키를 \`[]\`로 접근하면** 파이썬과 다르게 동작해요!
+
+**파이썬 🐍:**
+\`\`\`python
+d = {}
+print(d["없는키"])  # ❌ KeyError 발생!
+\`\`\`
+
+**C++ map ⚡:**
+\`\`\`cpp
+map<string, int> m;
+cout << m["없는키"];  // 0 출력 — 그리고 키가 자동 생성됨! 😱
+cout << m.size();    // 1 (키가 하나 생겼어요)
+\`\`\`
+
+\`[]\`로 접근하는 순간 **기본값(0)으로 자동 생성**돼요. 에러가 안 나서 버그를 찾기 어려워요!
+
+---
+
+**그래서 있는지 먼저 확인해야 해요:**
+
+\`\`\`cpp
+map<string, int> scores;
+scores["Alice"] = 95;
+
+// ❌ 잘못된 방법 — 없는 키면 0이 생겨버림
+cout << scores["Bob"];  // 0 출력 + "Bob": 0 자동 추가!
+
+// ✅ 올바른 방법 1 — count로 먼저 확인
+if (scores.count("Bob") > 0) {
+    cout << scores["Bob"];
+}
+
+// ✅ 올바른 방법 2 — find 사용
+auto it = scores.find("Bob");
+if (it != scores.end()) {
+    cout << it->second;
+}
+\`\`\`
+
+💡 **단, 빈도수 세기에서는 이 특성이 오히려 유용해요!**
+\`\`\`cpp
+freq[word]++;  // 없으면 0으로 생성 후 1 증가 → 완벽!
+\`\`\``
+        },
+        {
+          id: "ch1-pred-missing",
+          type: "predict" as const,
+          title: "없는 키 접근하면?",
+          code: `#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+int main() {
+    map<string, int> m;
+    m["a"] = 1;
+    cout << m["b"] << endl;
+    cout << m.size() << endl;
+    return 0;
+}`,
+          options: ["에러", "0\n1", "0\n2", "1\n1"],
+          answer: 2,
+          explanation: "m[\"b\"]는 없는 키라서 기본값 0이 출력되고, 동시에 \"b\":0 이 map에 추가돼요! 그래서 size()가 2가 됩니다. C++ map의 대표적인 함정이에요."
+        },
+        {
           id: "ch1-unordered",
           type: "explain",
           title: "📖 unordered_map — 정렬 없이 더 빠르게!",

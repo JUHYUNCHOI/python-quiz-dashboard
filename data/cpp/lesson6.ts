@@ -256,39 +256,39 @@ if (score >= 90) {
         {
           id: "ch2-practice",
           type: "practice" as const,
-          title: "✋ 성적 등급 프로그램을 만들어보세요!",
-          content: `점수를 입력받아서 등급을 출력하는 프로그램을 완성해봐요!
+          title: "✋ HP 상태 판별 프로그램을 만들어보세요!",
+          content: `HP를 입력받아서 상태를 출력하는 프로그램을 완성해봐요!
 
-**등급 기준:**
-- 90점 이상 → \`A등급! 🎉\`
-- 80점 이상 → \`B등급! 👍\`
-- 70점 이상 → \`C등급\`
-- 70점 미만 → \`더 열심히!\`
+**상태 기준:**
+- 80 이상 → \`안전!\`
+- 50 이상 → \`주의!\`
+- 20 이상 → \`위험!\`
+- 20 미만 → \`쓰러지기 직전!\`
 
 if, else if, else를 순서대로 사용해보세요.`,
           code: `#include <iostream>
 using namespace std;
 
 int main() {
-    int score;
-    cout << "점수를 입력하세요: ";
-    cin >> score;
+    int hp;
+    cout << "HP를 입력하세요: ";
+    cin >> hp;
 
-    if (score >= 90) {
-        cout << "A등급! 🎉" << endl;
-    } else if (score >= 80) {
-        cout << "B등급! 👍" << endl;
-    } else if (score >= 70) {
-        cout << "C등급" << endl;
+    if (hp >= 80) {
+        cout << "안전!" << endl;
+    } else if (hp >= 50) {
+        cout << "주의!" << endl;
+    } else if (hp >= 20) {
+        cout << "위험!" << endl;
     } else {
-        cout << "더 열심히!" << endl;
+        cout << "쓰러지기 직전!" << endl;
     }
 
     return 0;
 }`,
-          stdin: `85`,
-          expectedOutput: `점수를 입력하세요: 85
-B등급! 👍`
+          stdin: `35`,
+          expectedOutput: `HP를 입력하세요: 35
+위험!`
         }
       ]
     },
@@ -440,17 +440,17 @@ if (age <= 12) {
         {
           id: "ch3-practice",
           type: "practice" as const,
-          title: "삼항 연산자로 성인/미성년 판별",
-          content: `나이를 입력받아 18세 이상이면 "성인", 미만이면 "미성년"을 출력하세요.
+          title: "삼항 연산자로 생존/사망 판별",
+          content: `HP를 입력받아 1 이상이면 "생존!", 0 이하면 "사망..."을 출력하세요.
 삼항 연산자를 사용하세요!`,
-          code: `#include <iostream>
+          starterCode: `#include <iostream>
 #include <string>
 using namespace std;
 
 int main() {
-    int age;
-    cout << "나이: ";
-    cin >> age;
+    int hp;
+    cout << "HP: ";
+    cin >> hp;
 
     // 삼항 연산자로 한 줄에 작성하세요
     string result = ___;
@@ -458,9 +458,23 @@ int main() {
     cout << result << endl;
     return 0;
 }`,
-          stdin: `20`,
-          expectedOutput: `나이: 20
-성인`
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    int hp;
+    cout << "HP: ";
+    cin >> hp;
+
+    string result = (hp >= 1) ? "생존!" : "사망...";
+
+    cout << result << endl;
+    return 0;
+}`,
+          stdin: `50`,
+          expectedOutput: `HP: 50
+생존!`
         },
         {
           id: "ch3-pred1",
@@ -773,29 +787,33 @@ case 1~5는 break 없이 쭉 떨어져서 **"평일"**을 출력해요. 이게 *
         {
           id: "ch4-practice1",
           type: "practice" as const,
-          title: "✍️ 직접 switch문 만들어보기!",
-          content: `요일 번호에 따라 요일 이름을 출력하는 switch문을 만들어봐요!
+          title: "✍️ 무기 선택 switch문 만들어보기!",
+          content: `무기 번호에 따라 무기 이름을 출력하는 switch문을 만들어봐요!
 
-- day = 1이면 "월요일"
-- day = 2이면 "화요일"
-- 그 외에는 "기타"`,
+- weapon = 1이면 "검"
+- weapon = 2이면 "활"
+- weapon = 3이면 "마법"
+- 그 외에는 "맨손"`,
           code: `#include <iostream>
 using namespace std;
 int main() {
-    int day = 1;
-    switch (day) {
+    int weapon = 1;
+    switch (weapon) {
         case 1:
-            cout << "월요일";
+            cout << "검";
             break;
         case 2:
-            cout << "화요일";
+            cout << "활";
+            break;
+        case 3:
+            cout << "마법";
             break;
         default:
-            cout << "기타";
+            cout << "맨손";
     }
     return 0;
 }`,
-          expectedOutput: "월요일"
+          expectedOutput: "검"
         },
       ]
     },
@@ -838,17 +856,21 @@ int main() {
         {
           id: "ch5-q3",
           type: "quiz",
-          title: "삼항 연산자!",
+          title: "switch fall-through!",
           content: `결과는?
 
 \`\`\`cpp
-int n = 4;
-string result = (n % 2 == 0) ? "짝수" : "홀수";
-cout << result;
+int x = 2;
+switch (x) {
+    case 1: cout << "one"; break;
+    case 2: cout << "two";
+    case 3: cout << "three"; break;
+    default: cout << "other";
+}
 \`\`\``,
-          options: ["짝수", "홀수", "에러", "4"],
-          answer: 0,
-          explanation: "4 % 2 == 0은 true! 삼항 연산자에서 true면 ? 바로 뒤의 '짝수'가 선택돼요."
+          options: ["two", "twothree", "two three", "에러"],
+          answer: 1,
+          explanation: "case 2에 break가 없어서 case 3으로 fall-through! 'two'와 'three'가 붙어서 출력돼요. 의도하지 않은 fall-through는 흔한 버그예요 — break를 꼭 확인하세요."
         },
         {
           id: "ch5-summary",

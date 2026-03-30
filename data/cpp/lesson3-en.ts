@@ -165,8 +165,8 @@ Common ASCII codes:
         {
           id: "ch1-practice",
           type: "practice" as const,
-          title: "✋ Create Your Own Variables!",
-          content: `Let's use int, double, and string to make a self-introduction program!
+          title: "✋ Create Your RPG Character!",
+          content: `Let's use int and string to display RPG character stats!
 
 **Type the code below** in your editor, compile it, and run it.`,
           code: `#include <iostream>
@@ -174,19 +174,22 @@ Common ASCII codes:
 using namespace std;
 
 int main() {
-    string name = "Emma";
-    int age = 14;
-    double height = 165.5;
+    string name = "Slime";
+    int hp = 100;
+    int attack = 25;
+    int level = 3;
 
     cout << "Name: " << name << endl;
-    cout << "Age: " << age << " years old" << endl;
-    cout << "Height: " << height << "cm" << endl;
+    cout << "HP: " << hp << endl;
+    cout << "Attack: " << attack << endl;
+    cout << "Level: " << level << endl;
 
     return 0;
 }`,
-          expectedOutput: `Name: Emma
-Age: 14 years old
-Height: 165.5cm`
+          expectedOutput: `Name: Slime
+HP: 100
+Attack: 25
+Level: 3`
         },
         {
           id: "ch1-q1",
@@ -365,30 +368,38 @@ string s = to_string(456);   // int → string "456"
         {
           id: "ch2-practice",
           type: "practice" as const,
-          title: "✋ Try Type Conversion Yourself!",
-          content: `Let's use stoi, stod, and to_string to convert between strings and numbers!
+          title: "✋ Damage Calculator!",
+          content: `Two variables are already declared below:
 
-Run it and try changing the values to see what happens!`,
-          code: `#include <iostream>
+\`\`\`cpp
+string rawDamage = "25";      // damage as a string
+string rawMultiplier = "1.5"; // multiplier as a string
+\`\`\`
+
+1. Convert \`rawDamage\` to an integer and print it doubled (25 × 2 = 50)
+2. Convert \`rawMultiplier\` to a double and print it doubled (1.5 × 2 = 3)
+3. Convert the damage (50) to a string using \`to_string()\` and **concatenate** \`" damage!"\` to print it
+
+💡 **String concatenation (+)** — joining two strings together.
+\`\`\`cpp
+int dmg = 50;
+cout << to_string(dmg) + " damage!" << endl;   // 50 damage!
+\`\`\``,
+          starterCode: `#include <iostream>
 #include <string>
 using namespace std;
 
 int main() {
-    string numStr = "42";
-    int num = stoi(numStr);
-    cout << num + 8 << endl;
+    string rawDamage = "25";
+    string rawMultiplier = "1.5";
 
-    double pi = stod("3.14");
-    cout << pi * 2 << endl;
-
-    string result = to_string(100) + " points";
-    cout << result << endl;
+    // Write your code here
 
     return 0;
 }`,
           expectedOutput: `50
-6.28
-100 points`
+3
+50 damage!`
         },
         {
           id: "ch2-q1",

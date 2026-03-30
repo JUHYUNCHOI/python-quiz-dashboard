@@ -226,7 +226,7 @@ int cnt = count_if(v.begin(), v.end(), [](int x) {
 cout << cnt;  // 3 (8, 4, 2)
 \`\`\`
 
-**Lambda expressions** — \`[](parameter) { return condition; }\` — are **unnamed functions** you write right on the spot. You already used them in Lesson 15 for \`sort()\`! They work anywhere an STL algorithm needs a condition function.
+**Lambda expressions** — \`[](parameter) { return condition; }\` — are **unnamed functions** you write right on the spot. They work anywhere an STL algorithm needs a condition function, including \`sort()\`!
 
 | Python 🐍 | C++ ⚡ |
 |---|---|

@@ -203,14 +203,14 @@ using namespace std;
 
 int main() {
     string name, quote;
-    cout << "이름: ";
     getline(cin, name);
-    cout << "한마디: ";
     getline(cin, quote);
     cout << name << "의 한마디: " << quote << endl;
     return 0;
 }`,
-          expectedOutput: "이름: 홍 길동\n한마디: 안녕하세요!\n홍 길동의 한마디: 안녕하세요!"
+          stdin: `홍 길동
+안녕하세요!`,
+          expectedOutput: `홍 길동의 한마디: 안녕하세요!`
         },
         {
           id: "ch1-practice",
@@ -557,7 +557,7 @@ int main() {
             "cout << i << \"\\n\" << flush;"
           ],
           answer: 1,
-          explanation: "'\\n'은 줄바꿈만 해서 가장 빨라요! endl과 flush는 버퍼를 플러시해서 느리고, sync_with_stdio(false) 상태에서 printf를 쓰면 문제가 생길 수 있어요."
+          explanation: "'\\n'은 줄바꿈만 해서 가장 빨라요! endl과 flush는 버퍼를 플러시해서 느리고, sync_with_stdio(false) 상태에서 cin/cout과 printf를 섞어 쓰면 출력 순서가 꼬일 수 있어요. 한 가지만 쓰는 게 안전해요."
         },
         {
           id: "ch3-summary",

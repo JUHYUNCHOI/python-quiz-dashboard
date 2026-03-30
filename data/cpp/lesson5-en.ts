@@ -111,35 +111,34 @@ cout << 15 % 4;  // 3 (15 = 4 × 3 + 3)
         {
           id: "ch1-practice",
           type: "practice" as const,
-          title: "✋ Build a Calculator!",
-          content: `Let's make a calculator that takes two numbers and shows all arithmetic results!
+          title: "✋ Battle Damage Calculator!",
+          content: `Let's make a calculator that takes attack and defense values and shows battle results!
 
-Pay attention to the integer division result — you'll see the decimal part disappear!`,
+Pay attention to the integer division result — you'll see the decimal part disappear when halving damage!`,
           code: `#include <iostream>
 using namespace std;
 
 int main() {
-    int a, b;
-    cout << "First number: ";
-    cin >> a;
-    cout << "Second number: ";
-    cin >> b;
+    int attack, defense;
+    cout << "Attack: ";
+    cin >> attack;
+    cout << "Defense: ";
+    cin >> defense;
 
-    cout << a << " + " << b << " = " << a + b << endl;
-    cout << a << " - " << b << " = " << a - b << endl;
-    cout << a << " * " << b << " = " << a * b << endl;
-    cout << a << " / " << b << " = " << a / b << endl;
-    cout << a << " % " << b << " = " << a % b << endl;
+    cout << "Damage: " << attack - defense << endl;
+    cout << "Double attack: " << attack * 2 << endl;
+    cout << "Half damage: " << attack / 2 << endl;
+    cout << "Remainder: " << attack % defense << endl;
 
     return 0;
 }`,
-          expectedOutput: `First number: 10
-Second number: 3
-10 + 3 = 13
-10 - 3 = 7
-10 * 3 = 30
-10 / 3 = 3
-10 % 3 = 1`
+          stdin: `25\n10`,
+          expectedOutput: `Attack: 25
+Defense: 10
+Damage: 15
+Double attack: 50
+Half damage: 12
+Remainder: 5`
         },
         {
           id: "ch1-q1",
@@ -389,45 +388,47 @@ Comparison and logic have an order too: \`&&\` is evaluated before \`||\`!
         {
           id: "ch2-practice",
           type: "practice" as const,
-          title: "✋ Try All the Operators!",
-          content: `This program uses comparison, logic, increment, and compound assignment operators!
+          title: "✋ Battle Turn Simulator!",
+          content: `This program checks HP conditions using comparison, logic, increment, and compound assignment operators!
 
-Run it and try changing x to see how the results change!`,
+Try different HP values to see how the results change!`,
           code: `#include <iostream>
 using namespace std;
 
 int main() {
-    int x = 7;
+    int hp;
+    cin >> hp;
 
     // Comparison operators
-    cout << "x > 5: " << (x > 5) << endl;
-    cout << "x == 7: " << (x == 7) << endl;
+    cout << "hp > 50: " << (hp > 50) << endl;
+    cout << "hp == 100: " << (hp == 100) << endl;
 
     // Logic operators
-    cout << "x > 0 && x < 10: " << (x > 0 && x < 10) << endl;
-    cout << "x < 0 || x > 5: " << (x < 0 || x > 5) << endl;
+    cout << "hp > 0 && hp <= 100: " << (hp > 0 && hp <= 100) << endl;
+    cout << "hp <= 0 || hp >= 100: " << (hp <= 0 || hp >= 100) << endl;
 
     // Increment/decrement
-    cout << "x = " << x << endl;
-    x++;
-    cout << "After x++: " << x << endl;
-    x--;
-    cout << "After x--: " << x << endl;
+    cout << "hp = " << hp << endl;
+    hp++;
+    cout << "After hp++: " << hp << endl;
+    hp--;
+    cout << "After hp--: " << hp << endl;
 
-    // Compound assignment
-    x += 10;
-    cout << "After x += 10: " << x << endl;
+    // Compound assignment (take damage)
+    hp -= 10;
+    cout << "After hp -= 10: " << hp << endl;
 
     return 0;
 }`,
-          expectedOutput: `x > 5: 1
-x == 7: 1
-x > 0 && x < 10: 1
-x < 0 || x > 5: 1
-x = 7
-After x++: 8
-After x--: 7
-After x += 10: 17`
+          stdin: `75`,
+          expectedOutput: `hp > 50: 1
+hp == 100: 0
+hp > 0 && hp <= 100: 1
+hp <= 0 || hp >= 100: 0
+hp = 75
+After hp++: 76
+After hp--: 75
+After hp -= 10: 65`
         },
         {
           id: "ch2-q1",
@@ -556,10 +557,10 @@ cout << (a != b && b > 5);
           id: "ch3-practice",
           type: "practice" as const,
           title: "✋ Experiment with x++ vs ++x!",
-          content: `See the difference between postfix (x++) and prefix (++x) with your own eyes!
+          content: `Start with **x = 5** and complete the code to match the expected output below.
 
-Try changing the numbers and predict the results.`,
-          code: `#include <iostream>
+See for yourself why postfix (x++) and prefix (++x) print different numbers!`,
+          starterCode: `#include <iostream>
 using namespace std;
 
 int main() {
@@ -567,18 +568,14 @@ int main() {
 
     // Postfix: use value first, then +1
     cout << "=== Postfix x++ ===" << endl;
-    cout << "x start: " << x << endl;
-    cout << "x++ = " << x++ << endl;  // prints 5, then +1
-    cout << "x now: " << x << endl;   // 6
+    // Write your code here
 
     cout << endl;
     x = 5;  // reset
 
     // Prefix: +1 first, then use value
     cout << "=== Prefix ++x ===" << endl;
-    cout << "x start: " << x << endl;
-    cout << "++x = " << ++x << endl;  // +1 first, prints 6
-    cout << "x now: " << x << endl;   // 6
+    // Write your code here
 
     return 0;
 }`,

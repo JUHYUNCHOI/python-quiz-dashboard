@@ -293,48 +293,54 @@ while (true) {
         {
           id: "ch2-dowhile-practice",
           type: "practice" as const,
-          title: "✋ do-while로 메뉴 만들기!",
-          content: `do-while을 사용해서 간단한 메뉴 시스템을 만들어봐요!
+          title: "✋ do-while로 전투 메뉴 만들기!",
+          content: `RPG 게임처럼 전투 메뉴가 계속 반복되도록 만들어봐요!
 
-일단 메뉴를 보여주고, 3번(종료)을 누를 때까지 반복해요.
-이게 바로 **"일단 한 번은 해야 하는"** do-while의 진짜 사용법이에요!`,
-          code: `#include <iostream>
+**3번(도망)을 누를 때까지 메뉴가 계속 나와요.**
+
+각 선택 시 출력:
+- **1번** → \`25 데미지를 입혔다!\`
+- **2번** → \`현재 HP: 100\`
+- **3번** → 반복 종료 후 \`도망쳤다...\`
+
+do-while 골격은 이미 있어요 — if/else 부분을 채워보세요!`,
+          starterCode: `#include <iostream>
 using namespace std;
 
 int main() {
     int choice;
 
     do {
-        cout << "=== 메뉴 ===" << endl;
-        cout << "1. 인사하기" << endl;
-        cout << "2. 이름 말하기" << endl;
-        cout << "3. 종료" << endl;
+        cout << "=== 전투 메뉴 ===" << endl;
+        cout << "1. 공격" << endl;
+        cout << "2. 체력 확인" << endl;
+        cout << "3. 도망" << endl;
         cout << "선택: ";
         cin >> choice;
 
         if (choice == 1) {
-            cout << "안녕하세요!" << endl;
+            // 여기에 코드를 작성하세요
         } else if (choice == 2) {
-            cout << "저는 C++ 프로그램이에요!" << endl;
+            // 여기에 코드를 작성하세요
         }
     } while (choice != 3);
 
-    cout << "프로그램을 종료합니다." << endl;
+    cout << "도망쳤다..." << endl;
     return 0;
 }`,
           stdin: `1\n3`,
-          expectedOutput: `=== 메뉴 ===
-1. 인사하기
-2. 이름 말하기
-3. 종료
+          expectedOutput: `=== 전투 메뉴 ===
+1. 공격
+2. 체력 확인
+3. 도망
 선택: 1
-안녕하세요!
-=== 메뉴 ===
-1. 인사하기
-2. 이름 말하기
-3. 종료
+25 데미지를 입혔다!
+=== 전투 메뉴 ===
+1. 공격
+2. 체력 확인
+3. 도망
 선택: 3
-프로그램을 종료합니다.`
+도망쳤다...`
         },
         {
           id: "ch2-fb1",

@@ -462,7 +462,7 @@ main() 위에 50개 함수를 전부 쓰면... main()이 어디 있는지도 못
 **.h 파일에는 프로토타입(선언)만 넣어요:**
 
 \`\`\`cpp
-// math.h
+// mymath.h
 int add(int a, int b);
 int multiply(int a, int b);
 \`\`\`
@@ -473,13 +473,13 @@ int multiply(int a, int b);
           id: "ch2-header-cpp",
           type: "explain",
           title: "📄 그럼 함수 본체는? — .cpp 파일에 써요",
-          content: `함수의 실제 내용(본체)은 **.cpp 파일**에 작성해요. 관례상 헤더 파일과 같은 이름을 써요 (\`math.h\` ↔ \`math.cpp\`).
+          content: `함수의 실제 내용(본체)은 **.cpp 파일**에 작성해요. 관례상 헤더 파일과 같은 이름을 써요 (\`mymath.h\` ↔ \`mymath.cpp\`).
 
 그리고 **이 .cpp 파일도 자신의 .h 파일을 include**해야 해요 — 컴파일러가 "선언대로 본체가 맞게 작성됐나?" 확인하기 위해서예요:
 
 \`\`\`cpp
-// math.cpp
-#include "math.h"        // ← 내 헤더를 include!
+// mymath.cpp
+#include "mymath.h"      // ← 내 헤더를 include!
 
 int add(int a, int b) {
     return a + b;
@@ -491,7 +491,7 @@ int multiply(int a, int b) {
 \`\`\`
 
 💡 \`<iostream>\` 처럼 꺾쇠(\`<>\`)는 C++ 기본 라이브러리,
-\`"math.h"\` 처럼 따옴표(\`""\`)는 우리가 만든 파일이에요.`
+\`"mymath.h"\` 처럼 따옴표(\`""\`)는 우리가 만든 파일이에요.`
         },
         {
           id: "ch2-header-main",
@@ -502,7 +502,7 @@ int multiply(int a, int b) {
 \`\`\`cpp
 // main.cpp
 #include <iostream>
-#include "math.h"     // ← 이것만 있으면 add, multiply 사용 가능!
+#include "mymath.h"   // ← 이것만 있으면 add, multiply 사용 가능!
 using namespace std;
 
 int main() {
@@ -520,8 +520,8 @@ int main() {
           component: "headerFiles",
           title: "🔗 세 파일이 연결되는 방식",
           content: `💡 **핵심 인사이트:**
-본체(\`math.cpp\`)가 어떻게 작성됐는지 몰라도,
-**헤더 파일(\`math.h\`)만 보면** 어떤 함수가 있고 어떻게 쓰는지 알 수 있어요!
+본체(\`mymath.cpp\`)가 어떻게 작성됐는지 몰라도,
+**헤더 파일(\`mymath.h\`)만 보면** 어떤 함수가 있고 어떻게 쓰는지 알 수 있어요!
 
 C++ 표준 라이브러리(\`<iostream>\`, \`<string>\` 등)도 같은 방식이에요 — 우리는 헤더만 include하고, 본체는 어딘가에 이미 컴파일돼 있어요.`
         },
@@ -533,8 +533,8 @@ C++ 표준 라이브러리(\`<iostream>\`, \`<string>\` 등)도 같은 방식이
 
 \`\`\`cpp
 // main.cpp
-#include "math.h"   // ← add, multiply 선언됨 ✅
-#include "utils.h"  // ← utils.h 내부에도 #include "math.h" 있으면?
+#include "mymath.h"  // ← add, multiply 선언됨 ✅
+#include "utils.h"   // ← utils.h 내부에도 #include "mymath.h" 있으면?
 //   └→ add, multiply 또 선언됨 ❌ 중복 에러!
 \`\`\`
 
@@ -545,9 +545,9 @@ C++ 표준 라이브러리(\`<iostream>\`, \`<string>\` 등)도 같은 방식이
 해결책 — 헤더 파일에 **헤더 가드** 추가:
 
 \`\`\`cpp
-// math.h
-#ifndef MATH_H       // "MATH_H 아직 정의 안 됐지?"
-#define MATH_H       // "없으면 지금 정의할게!"
+// mymath.h
+#ifndef MYMATH_H     // "MYMATH_H 아직 정의 안 됐지?"
+#define MYMATH_H     // "없으면 지금 정의할게!"
 
 int add(int a, int b);
 int multiply(int a, int b);
@@ -558,7 +558,7 @@ int multiply(int a, int b);
 두 번째 include → \`#ifndef\` "이미 정의됨!" → **통째로 건너뜀** ✅
 
 💡 **관례(convention):** 식별자는 아무 이름이나 써도 되지만, 다른 파일과 겹치지 않도록 파일명을 대문자로 바꿔서 쓰는 게 일반적이에요.
-- \`math.h\` → \`MATH_H\`
+- \`mymath.h\` → \`MYMATH_H\`
 - \`player_utils.h\` → \`PLAYER_UTILS_H\``
         },
         {
@@ -730,8 +730,8 @@ int add(int x, int y) { return x + y; }  // ❌ 에러! 타입이 같잖아
           content: `int 버전과 double 버전이 있을 때, 하나는 int이고 하나는 double인 인자를 넘기면?`,
           code: "#include <iostream>\nusing namespace std;\n\nint add(int a, int b) { return a + b; }\ndouble add(double a, double b) { return a + b; }\n\nint main() {\n    cout << add(1, 2.5);  // int + double ??\n    return 0;\n}",
           options: ["3", "3.5", "컴파일 에러 (모호함)", "런타임 에러"],
-          answer: 1,
-          explanation: "C++은 int 1을 double 1.0으로 자동 변환해서 double 버전을 호출해요. 결과는 3.5! 하지만 이런 자동 변환은 예상 못한 결과를 낳을 수 있으니, 매개변수 타입을 맞춰주는 게 좋아요."
+          answer: 2,
+          explanation: "이건 실제로 컴파일 에러예요! add(int,int)를 쓰려면 2.5→int 변환이 필요하고, add(double,double)을 쓰려면 1→double 변환이 필요해요. 둘 다 변환 1번씩 필요하니 컴파일러가 어떤 걸 써야 할지 판단 못 해서 '모호함(ambiguous)' 에러를 냅니다. 호출할 때 타입을 맞춰서 add(1.0, 2.5) 또는 add(1, 2)처럼 쓰세요!"
         },
         {
           id: "ch2-pred-overload",
@@ -909,6 +909,7 @@ def square(x):
 - ✅ **void** — 반환값 없는 함수
 - ✅ **기본값** — 파이썬과 같은 방식! (뒤쪽 매개변수에)
 - ✅ **프로토타입** — 함수를 사용 전에 선언!
+- ✅ **함수 오버로딩** — 이름 같고 매개변수 타입/개수 다르면 별개의 함수! (단, 인자가 모호하면 컴파일 에러)
 
 🎉 **C++ 기초 Part 1 완료!** 여기까지 배운 것만으로도 간단한 C++ 프로그램을 만들 수 있어요! 🚀`
         }

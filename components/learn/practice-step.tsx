@@ -15,6 +15,7 @@ interface PracticeStepProps {
   lang?: "ko" | "en"
   onSuccess?: () => void
   lessonId?: string
+  isCompleted?: boolean
 }
 
 function normalize(s: string) {
@@ -31,7 +32,7 @@ int main() {
 }`
 }
 
-export function PracticeStep({ step, lang = "ko", onSuccess, lessonId }: PracticeStepProps) {
+export function PracticeStep({ step, lang = "ko", onSuccess, lessonId, isCompleted = false }: PracticeStepProps) {
   const [done, setDone] = useState(false)
   const [failCount, setFailCount] = useState(0)
   const [copiedSkeleton, setCopiedSkeleton] = useState(false)
@@ -53,6 +54,11 @@ export function PracticeStep({ step, lang = "ko", onSuccess, lessonId }: Practic
     setShowSkeleton(false)
     setShowFullCode(false)
   }, [step.id])
+
+  // isCompleted가 true가 되면 done도 true로 동기화 (새로고침 후 완료 상태 복원)
+  useEffect(() => {
+    if (isCompleted) setDone(true)
+  }, [isCompleted, step.id])
 
   const isEn = lang === "en"
   // starterCode가 있으면 그걸 초기 코드로, 없으면 code에서 skeleton 추출

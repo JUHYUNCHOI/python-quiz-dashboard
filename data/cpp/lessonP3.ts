@@ -148,8 +148,9 @@ pair의 first에 우유생산량, second에 이름을 넣는 것에 주목하세
 using namespace std;
 
 int main() {
-    freopen("sort.in", "r", stdin);
-    freopen("sort.out", "w", stdout);
+    // 실제 USACO 제출 시: 아래 두 줄 주석 해제!
+    // freopen("sort.in", "r", stdin);
+    // freopen("sort.out", "w", stdout);
 
     int n, k;
     cin >> n >> k;
@@ -301,8 +302,9 @@ for (int i = 0; i < n; i++) {
 using namespace std;
 
 int main() {
-    freopen("distinct.in", "r", stdin);
-    freopen("distinct.out", "w", stdout);
+    // 실제 USACO 제출 시: 아래 두 줄 주석 해제!
+    // freopen("distinct.in", "r", stdin);
+    // freopen("distinct.out", "w", stdout);
 
     int n;
     cin >> n;
@@ -451,8 +453,9 @@ YES
 using namespace std;
 
 int main() {
-    freopen("bracket.in", "r", stdin);
-    freopen("bracket.out", "w", stdout);
+    // 실제 USACO 제출 시: 아래 두 줄 주석 해제!
+    // freopen("bracket.in", "r", stdin);
+    // freopen("bracket.out", "w", stdout);
 
     string s;
     cin >> s;

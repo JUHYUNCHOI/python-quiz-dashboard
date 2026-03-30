@@ -589,7 +589,7 @@ int main() {
           type: "animation",
           component: "headerFiles",
           title: "🔗 How the Three Files Connect",
-          content: `💡 **Key insight:** Even without knowing how the function body (\`math.cpp\`) is written, just by reading the **header file (\`math.h\`)** you can know what functions exist and how to use them!
+          content: `💡 **Key insight:** Even without knowing how the function body (\`math_utils.cpp\`) is written, just by reading the **header file (\`math_utils.h\`)** you can know what functions exist and how to use them!
 
 The C++ standard library (\`<iostream>\`, \`<string>\`, etc.) works the same way — we just include the header, and the body is already compiled somewhere.`
         },
@@ -761,8 +761,8 @@ int add(int x, int y) { return x + y; }  // ❌ Error! Same types
           content: `When there's an int version and a double version, what if one argument is int and the other is double?`,
           code: "#include <iostream>\nusing namespace std;\n\nint add(int a, int b) { return a + b; }\ndouble add(double a, double b) { return a + b; }\n\nint main() {\n    cout << add(1, 2.5);  // int + double ??\n    return 0;\n}",
           options: ["3", "3.5", "Compile error (ambiguous)", "Runtime error"],
-          answer: 1,
-          explanation: "C++ automatically converts int 1 to double 1.0 and calls the double version. Result is 3.5! But these implicit conversions can cause unexpected results, so it's best to match parameter types explicitly."
+          answer: 2,
+          explanation: "This is actually a compile error! To call add(int,int), 2.5 needs to convert to int. To call add(double,double), 1 needs to convert to double. Both overloads require exactly one conversion, so the compiler can't decide which to use — it reports an 'ambiguous call' error. Fix it by matching types: add(1.0, 2.5) or add(1, 2)."
         },
         {
           id: "ch2-pred-overload",
@@ -915,6 +915,7 @@ def square(x):
 - ✅ **void** — for functions that return nothing
 - ✅ **Default values** — same as Python! (right-side parameters)
 - ✅ **Prototypes** — declare functions before use!
+- ✅ **Function overloading** — same name, different parameter types/count = separate functions! (ambiguous calls = compile error)
 
 🎉 **C++ Basics Part 1 Complete!** With everything you've learned, you can now write basic C++ programs! 🚀`
         }

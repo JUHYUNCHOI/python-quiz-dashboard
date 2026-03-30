@@ -541,7 +541,7 @@ public:
 \`main()\`에서 이미 사용하는 코드를 보고, 클래스를 완성하세요.
 - 입금은 금액이 0보다 클 때만 처리
 - 출금은 금액이 0보다 크고 잔액 이하일 때만 처리`,
-          code: `#include <iostream>
+          starterCode: `#include <iostream>
 #include <string>
 using namespace std;
 
@@ -554,9 +554,45 @@ public:
 
     // 3. getBalance()
 
-    // 4. deposit(double amount)
+    // 4. deposit(double amount) — 0보다 클 때만 처리
 
-    // 5. withdraw(double amount)
+    // 5. withdraw(double amount) — 0보다 크고 잔액 이하일 때만 처리
+};
+
+int main() {
+    BankAccount acc("김철수", 1000);
+    acc.deposit(500);
+    acc.withdraw(200);
+    acc.withdraw(9999);  // 잔액 부족 — 무시됨
+    cout << acc.getBalance() << "원";
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+class BankAccount {
+private:
+    string owner;
+    double balance;
+
+public:
+    BankAccount(string name, double initial) {
+        owner = name;
+        balance = initial;
+    }
+
+    double getBalance() {
+        return balance;
+    }
+
+    void deposit(double amount) {
+        if (amount > 0) balance += amount;
+    }
+
+    void withdraw(double amount) {
+        if (amount > 0 && amount <= balance) balance -= amount;
+    }
 };
 
 int main() {
