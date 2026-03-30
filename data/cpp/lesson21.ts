@@ -228,10 +228,7 @@ int main() {
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ 대각선 합 구하기!",
-          content: `**목표:** 3×3 배열의 **주 대각선** 원소들의 합을 출력하세요.
-
-주 대각선이란 **행 번호 = 열 번호**인 원소들이에요.
-- (0,0), (1,1), (2,2)
+          content: `3×3 배열에서 왼쪽 위에서 오른쪽 아래로 이어지는 **주 대각선** 원소들의 합을 구하세요.
 
 **주어진 배열:**
 \`\`\`
@@ -240,12 +237,7 @@ int arr[3][3] = {
     {4, 5, 6},
     {7, 8, 9}
 };
-\`\`\`
-
-**단계별 힌트:**
-1. i를 0~2까지 반복하는 for문을 써요
-2. \`arr[i][i]\` 가 대각선 원소예요
-3. 합계를 더하고 출력해요`,
+\`\`\``,
           code: `#include <iostream>
 using namespace std;
 int main() {
@@ -396,9 +388,9 @@ for (int i = 0; i < rows; i++) {
           id: "ch3-practice",
           type: "practice" as const,
           title: "✋ 격자 입력받기!",
-          content: `**목표:** 2×3 격자를 입력받아 그대로 출력하세요.
+          content: `2×3 격자를 입력받아 그대로 출력하세요.
 
-**입력 형식 (예시):**
+**입력:**
 \`\`\`
 1 2 3
 4 5 6
@@ -408,12 +400,7 @@ for (int i = 0; i < rows; i++) {
 \`\`\`
 1 2 3
 4 5 6
-\`\`\`
-
-**단계별:**
-1. \`vector<vector<int>> grid(2, vector<int>(3, 0));\` 로 선언
-2. 이중 for문으로 \`cin >> grid[i][j]\` 입력받기
-3. 이중 for문으로 출력 (행 끝마다 \`cout << "\\n"\`)`,
+\`\`\``,
           code: `#include <iostream>
 #include <vector>
 using namespace std;

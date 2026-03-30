@@ -96,9 +96,7 @@ auto p3 = make_pair("Park", 77);
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ 이름+점수 pair 벡터 만들기!",
-          content: `이름과 점수를 pair로 묶어서 vector에 저장하고 출력해봐요!
-
-make_pair()나 중괄호 초기화를 사용해서 pair를 만들고, .first와 .second로 접근해봐요.`,
+          content: `학생 이름과 점수를 pair로 묶어서 vector에 저장하고, 각 학생의 정보를 출력해봐요!`,
           code: `#include <iostream>
 #include <string>
 #include <vector>

@@ -133,6 +133,7 @@ int main() {
 
     return 0;
 }`,
+          stdin: `10\n3`,
           expectedOutput: `첫 번째 숫자: 10
 두 번째 숫자: 3
 10 + 3 = 13
@@ -392,12 +393,13 @@ cout << (5 + 3) * 2;  // 16 (괄호 안이 먼저!)
           title: "✋ 연산자들을 직접 써보세요!",
           content: `비교, 논리, 증감, 복합 대입 연산자를 모두 사용해보는 프로그램이에요!
 
-실행해보고, x의 값을 바꿔가면서 결과가 어떻게 달라지는지 확인해봐요!`,
+숫자를 입력하면 각 연산자 결과를 출력해요. 다른 숫자를 입력해서 결과가 어떻게 달라지는지 확인해봐요!`,
           code: `#include <iostream>
 using namespace std;
 
 int main() {
-    int x = 7;
+    int x;
+    cin >> x;
 
     // 비교 연산자
     cout << "x > 5: " << (x > 5) << endl;
@@ -420,6 +422,7 @@ int main() {
 
     return 0;
 }`,
+          stdin: `7`,
           expectedOutput: `x > 5: 1
 x == 7: 1
 x > 0 && x < 10: 1

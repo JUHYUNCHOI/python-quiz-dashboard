@@ -96,9 +96,9 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
         })
         return {
           currentIndex: 0,
-          score: autoCompleted.length * 10,
-          totalAttempted: autoCompleted.length,
-          correctCount: autoCompleted.length,
+          score: 0,
+          totalAttempted: 0,
+          correctCount: 0,
           completedSteps: autoCompleted,
           wrongSteps: [],
           savedAnswers: allAnswers,

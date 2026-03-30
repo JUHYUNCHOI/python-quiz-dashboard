@@ -128,25 +128,23 @@ export function PracticeStep({ step, lang = "ko", onSuccess, lessonId }: Practic
           <div className="space-y-2 md:space-y-3">{renderContent(step.content)}</div>
         )}
 
-        {/* C++ 코드 에디터 + 실행 (모바일/데스크톱 공통) */}
-        {!done && (step.code || step.starterCode) && (
-          <CppRunner
-            key={step.id}
-            initialCode={skeleton || `// 👉 여기에 코드를 직접 작성하거나 복사해서 붙여넣으세요!`}
-            expectedOutput={step.expectedOutput}
-            stdin={step.stdin}
-            onSuccess={handleRunSuccess}
-            onError={handleRunError}
-            isEn={isEn}
-            submissionMode={true}
-            lessonId={lessonId}
-            stepId={step.id}
-            stepTitle={step.title}
-          />
-        )}
+        {/* C++ 코드 에디터 + 실행 (완료 후에도 항상 표시) */}
+        <CppRunner
+          key={step.id}
+          initialCode={skeleton || `#include <iostream>\nusing namespace std;\n\nint main() {\n    \n    return 0;\n}`}
+          expectedOutput={step.expectedOutput}
+          stdin={step.stdin}
+          onSuccess={handleRunSuccess}
+          onError={handleRunError}
+          isEn={isEn}
+          submissionMode={!!step.expectedOutput}
+          lessonId={lessonId}
+          stepId={step.id}
+          stepTitle={step.title}
+        />
 
-        {/* code도 expectedOutput도 없는 경우 — 자유 완료 */}
-        {!done && !step.code && !hasExpected && (
+        {/* expectedOutput 없는 경우 — 실행 후 자유 완료 */}
+        {!done && !hasExpected && (
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={() => { setDone(true); onSuccess?.() }}
@@ -163,12 +161,6 @@ export function PracticeStep({ step, lang = "ko", onSuccess, lessonId }: Practic
             animate={{ opacity: 1, scale: 1 }}
             className="space-y-3"
           >
-            {step.expectedOutput && (
-              <div className="bg-gray-900 rounded-xl p-4 font-mono text-sm border border-green-600">
-                <div className="text-green-400 text-xs font-bold mb-2">✅ {isEn ? "Correct output!" : "정확한 출력!"}</div>
-                <div className="text-green-400 whitespace-pre-line">{step.expectedOutput}</div>
-              </div>
-            )}
             <div className="w-full py-4 rounded-xl text-base font-bold text-center text-teal-700 bg-teal-50 border-2 border-teal-200">
               {isEn ? "✅ Great job! Move on →" : "✅ 잘했어요! 다음으로 넘어가세요 →"}
             </div>

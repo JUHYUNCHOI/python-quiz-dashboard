@@ -209,10 +209,7 @@ cout << m["Bob"];  // 바로 접근! 87
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ 단어 빈도수 세기!",
-          content: `주어진 단어 배열에서 각 단어가 몇 번 나오는지 세봐요!
-
-map을 사용해서 단어별 개수를 세고, 순회하면서 출력해봐요.
-map은 자동 정렬되니까 알파벳 순서로 출력될 거예요!`,
+          content: `주어진 단어 배열에서 각 단어가 몇 번 나오는지 세고, 알파벳 순서로 출력하는 코드를 실행해봐요!`,
           code: `#include <iostream>
 #include <map>
 #include <string>
@@ -400,9 +397,7 @@ s.insert(4);
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ 중복 제거 후 정렬 출력!",
-          content: `주어진 숫자 배열에서 중복을 제거하고 정렬된 순서로 출력해봐요!
-
-set을 사용하면 중복 제거와 정렬을 한 번에 할 수 있어요!`,
+          content: `주어진 숫자 배열에서 중복을 제거하고 정렬된 순서로 출력하는 코드를 실행해봐요!`,
           code: `#include <iostream>
 #include <set>
 using namespace std;
@@ -424,7 +419,7 @@ int main() {
     return 0;
 }`,
           expectedOutput: `Count: 6
-1 2 3 4 7 9`
+1 2 3 4 7 9 `
         },
         {
           id: "ch2-q1",

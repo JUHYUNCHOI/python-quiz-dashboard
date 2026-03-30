@@ -263,6 +263,7 @@ int main() {
 
     return 0;
 }`,
+          stdin: `7\n3`,
           expectedOutput: `첫 번째 숫자: 7
 두 번째 숫자: 3
 7 + 3 = 10`
@@ -767,17 +768,17 @@ using namespace std;
 
 // 기본값 매개변수: greet(이름, 메시지="안녕하세요")
 void greet(string name, string msg = "안녕하세요") {
-    // 힌트: cout << msg << ", " << name << "!" << endl;
+
 }
 
 // 함수 오버로딩: 정수용 add
 int add(int a, int b) {
-    // 힌트: return a + b;
+
 }
 
 // 함수 오버로딩: 실수용 add
 double add(double a, double b) {
-    // 힌트: return a + b;
+
 }
 
 int main() {

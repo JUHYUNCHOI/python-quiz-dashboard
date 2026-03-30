@@ -286,6 +286,7 @@ int main() {
 
     return 0;
 }`,
+          stdin: `85`,
           expectedOutput: `점수를 입력하세요: 85
 B등급! 👍`
         }
@@ -443,6 +444,7 @@ if (age <= 12) {
           content: `나이를 입력받아 18세 이상이면 "성인", 미만이면 "미성년"을 출력하세요.
 삼항 연산자를 사용하세요!`,
           code: `#include <iostream>
+#include <string>
 using namespace std;
 
 int main() {
@@ -456,6 +458,7 @@ int main() {
     cout << result << endl;
     return 0;
 }`,
+          stdin: `20`,
           expectedOutput: `나이: 20
 성인`
         },
@@ -775,9 +778,7 @@ case 1~5는 break 없이 쭉 떨어져서 **"평일"**을 출력해요. 이게 *
 
 - day = 1이면 "월요일"
 - day = 2이면 "화요일"
-- 그 외에는 "기타"
-
-💡 힌트: case마다 break를 꼭 써주세요! default도 잊지 마세요!`,
+- 그 외에는 "기타"`,
           code: `#include <iostream>
 using namespace std;
 int main() {

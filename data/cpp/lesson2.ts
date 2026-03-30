@@ -119,7 +119,6 @@ std::cout << "주현\\t14" << std::endl;
           title: "✋ 이스케이프 문자를 직접 써보세요!",
           content: `\\n, \\t, \\"를 활용해서 표 형태로 출력하는 프로그램을 만들어봐요!
 
-에디터에서 아래 코드를 **직접 입력**하고, 컴파일해서 실행해보세요.
 탭(\\t)으로 깔끔하게 정렬되는 걸 확인해봐요!`,
           code: `#include <iostream>
 
@@ -369,7 +368,6 @@ int main() {
           title: "✋ 이스케이프 + namespace 종합 연습!",
           content: `오늘 배운 이스케이프 문자와 \`using namespace std;\`를 합쳐서 연습해봐요!
 
-아래 코드를 **직접 입력**하고 컴파일해서 실행해보세요.
 \\n, \\t, \\"를 활용하고, using namespace std; 덕분에 std:: 없이 깔끔하게 쓸 수 있어요!`,
           code: `#include <iostream>
 using namespace std;

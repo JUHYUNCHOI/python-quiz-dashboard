@@ -204,9 +204,7 @@ swap(a, b);
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ 벡터 종합 분석!",
-          content: `벡터에서 최대값, 최소값, 합계를 구하고, 특정 값이 있는지 찾아봐요!
-
-min_element, max_element, accumulate, find를 모두 활용해봐요.`,
+          content: `벡터에서 최대값, 최소값, 합계를 구하고, 특정 값이 있는지 찾아보는 코드를 실행해봐요!`,
           code: `#include <iostream>
 #include <vector>
 #include <algorithm>
@@ -499,9 +497,7 @@ coords.erase(unique(coords.begin(), coords.end()), coords.end());
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ 정렬 + lower_bound로 값 찾기!",
-          content: `정렬되지 않은 벡터를 정렬하고, lower_bound로 특정 값의 위치를 찾아봐요!
-
-sort()로 정렬한 뒤, lower_bound()로 값을 찾아서 인덱스를 출력해봐요.`,
+          content: `정렬되지 않은 벡터를 정렬하고, 특정 값의 위치를 찾는 코드를 실행해봐요!`,
           code: `#include <iostream>
 #include <vector>
 #include <algorithm>

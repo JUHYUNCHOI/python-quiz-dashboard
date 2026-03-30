@@ -186,9 +186,7 @@ q[0]              # front
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ stack으로 괄호 매칭 체크!",
-          content: `문자열 "(())"의 괄호가 올바른지 stack으로 확인해봐요!
-
-'('를 만나면 push, ')'를 만나면 pop. 끝났을 때 stack이 비어있으면 올바른 괄호예요!`,
+          content: `문자열 "(())"의 괄호가 올바르게 짝지어졌는지 stack을 활용해서 확인하는 코드를 실행해봐요!`,
           code: `#include <iostream>
 #include <stack>
 #include <string>
@@ -418,9 +416,7 @@ deque:          [1, 2, 3] → 앞/뒤 모두 가능!
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ priority_queue로 가장 큰 3개 값 출력!",
-          content: `5개의 숫자를 priority_queue에 넣고, 가장 큰 3개를 순서대로 출력해봐요!
-
-priority_queue는 자동으로 큰 값이 위에 오니까, top()과 pop()을 반복하면 돼요.`,
+          content: `5개의 숫자를 priority_queue에 넣고, 가장 큰 3개를 순서대로 출력하는 코드를 실행해봐요!`,
           code: `#include <iostream>
 #include <queue>
 using namespace std;

@@ -118,10 +118,7 @@ C++은 변수 타입에 맞게 **알아서 읽어주니까** 형변환이 필요
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ 입력받아서 출력해보세요!",
-          content: `이름과 나이를 입력받아서 인사하는 프로그램을 만들어봐요!
-
-에디터에서 아래 코드를 **직접 입력**하고, 컴파일해서 실행해보세요.
-실행하면 이름과 나이를 입력할 수 있어요!`,
+          content: `이름과 나이를 입력받아서 인사하는 프로그램을 만들어봐요!`,
           code: `#include <iostream>
 #include <string>
 using namespace std;
@@ -141,6 +138,7 @@ int main() {
 
     return 0;
 }`,
+          stdin: `주현\n14`,
           expectedOutput: `이름을 입력하세요: 주현
 나이를 입력하세요: 14
 안녕하세요, 주현! 14살이군요!`
@@ -299,8 +297,9 @@ getline(cin, name); // 이제 정상 동작 ✅
           title: "✋ getline과 cin.ignore를 직접 써보세요!",
           content: `나이(숫자)와 좋아하는 음식(공백 포함)을 입력받는 프로그램이에요!
 
-**먼저 cin.ignore()를 지우고** 실행해보세요. 음식 입력이 건너뛰어지는 걸 직접 볼 수 있어요!
-그다음 cin.ignore()를 다시 넣고 실행하면 정상 작동해요.`,
+\`cin >> age\`로 숫자를 읽고 나면 입력 버퍼에 엔터(\\n)가 남아있어요.
+\`cin.ignore()\`는 그 남은 엔터를 버려서, 뒤의 \`getline()\`이 정상적으로 한 줄을 읽을 수 있게 해줘요.
+코드를 실행해서 결과를 확인해보세요!`,
           code: `#include <iostream>
 #include <string>
 using namespace std;
@@ -312,7 +311,7 @@ int main() {
     cout << "나이: ";
     cin >> age;
 
-    cin.ignore();  // ← 이걸 지우고 실행해보세요!
+    cin.ignore();  // ← 남은 엔터를 버려서 getline이 정상 동작!
 
     cout << "좋아하는 음식: ";
     getline(cin, food);
@@ -321,6 +320,7 @@ int main() {
 
     return 0;
 }`,
+          stdin: `14\n치킨 버거`,
           expectedOutput: `나이: 14
 좋아하는 음식: 치킨 버거
 14살, 좋아하는 음식: 치킨 버거`

@@ -322,6 +322,7 @@ int main() {
     cout << "프로그램을 종료합니다." << endl;
     return 0;
 }`,
+          stdin: `1\n3`,
           expectedOutput: `=== 메뉴 ===
 1. 인사하기
 2. 이름 말하기

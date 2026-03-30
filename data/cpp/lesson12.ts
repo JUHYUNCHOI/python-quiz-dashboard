@@ -300,12 +300,10 @@ for (int& x : v)  // x는 원본의 참조(reference) → v가 바뀜!
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ swap 함수 + 벡터 2배 함수!",
-          content: `참조를 활용하는 두 가지 함수를 완성해봐요!
+          content: `참조를 활용하는 두 가지 함수가 어떻게 동작하는지 실행해봐요!
 
-1. \`mySwap\` — 두 정수를 서로 교환
-2. \`doubleAll\` — 벡터의 모든 원소를 2배로 만들기
-
-힌트: \`doubleAll\`은 \`vector<int>&\`로 받아야 원본이 바뀌어요!`,
+- 두 정수를 서로 교환하는 함수
+- 벡터의 모든 원소를 2배로 만드는 함수`,
           code: `#include <iostream>
 #include <vector>
 using namespace std;

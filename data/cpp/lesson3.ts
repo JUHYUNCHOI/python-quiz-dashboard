@@ -170,7 +170,7 @@ cout << (int)c << endl;   // 65 ← 'A'의 ASCII 코드
           title: "✋ 변수를 직접 만들어보세요!",
           content: `지금까지 배운 int, double, string을 사용해서 자기소개를 출력하는 프로그램을 만들어봐요!
 
-에디터에서 아래 코드를 **직접 입력**하고 컴파일해서 실행해보세요.`,
+`,
           code: `#include <iostream>
 #include <string>
 using namespace std;
@@ -368,32 +368,38 @@ string s = to_string(456);   // int → string "456"
         {
           id: "ch2-practice",
           type: "practice" as const,
-          title: "✋ 빈칸에 변환 함수를 채워보세요!",
-          content: `___ 부분에 알맞은 함수 이름을 채워서 실행해보세요.
+          title: "✋ 성적 처리 프로그램!",
+          content: `학교 성적 관리 시스템에서 성적 데이터를 처리해요.
 
-사용할 함수: **stoi** (문자열→정수), **stod** (문자열→실수), **to_string** (숫자→문자열)`,
+아래 상황을 해결하는 코드를 직접 실행해봐요:
+- 입력 데이터가 문자열 형태로 들어와서, 계산을 위해 숫자로 바꿔야 해요
+- 처리한 결과를 문자열로 이어붙여서 출력해야 해요`,
           code: `#include <iostream>
 #include <string>
 using namespace std;
 
 int main() {
-    // 1. "25"를 정수로 변환해서 2배 출력
-    int n = ___("25") * 2;
-    cout << n << endl;        // 출력: 50
+    // 시스템에서 받아온 데이터 (문자열 형태)
+    string rawScore = "85";
+    string rawBonus = "1.5";
 
-    // 2. "3.14"를 실수로 변환해서 2배 출력
-    double pi = ___("3.14") * 2;
-    cout << pi << endl;       // 출력: 6.28
+    // 정수로 변환해서 2배 계산
+    int score = stoi(rawScore) * 2;
+    cout << score << endl;        // 출력: 170
 
-    // 3. 100을 문자열로 변환하고 "점" 붙이기
-    string result = ___(100) + "점";
-    cout << result << endl;   // 출력: 100점
+    // 실수로 변환해서 적용
+    double bonus = stod(rawBonus) * 2;
+    cout << bonus << endl;        // 출력: 3
+
+    // 점수를 문자열로 변환해서 메시지 만들기
+    string msg = to_string(score) + "점 획득!";
+    cout << msg << endl;          // 출력: 170점 획득!
 
     return 0;
 }`,
-          expectedOutput: `50
-6.28
-100점`
+          expectedOutput: `170
+3
+170점 획득!`
         },
         {
           id: "ch2-q1",

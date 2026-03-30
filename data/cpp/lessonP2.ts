@@ -186,9 +186,9 @@ void printCharacter(const Character& c) {
           id: "ch2-prac1",
           type: "practice" as const,
           title: "✋ Step 1 — class + 출력 함수!",
-          content: `Character class를 정의하고, printCharacter()로 출력해보세요!
+          content: `Character class를 정의하고, 출력 함수를 만들어서 각 캐릭터 정보를 출력해봐요!
 
-\`const Character&\`로 참조 전달하는 것에 주목하세요!`,
+참조 전달을 사용하는 방법에 주목하세요.`,
           code: `#include <iostream>
 #include <string>
 using namespace std;
@@ -280,9 +280,7 @@ void addCharacter(vector<Character>& party) {
           id: "ch2-prac2",
           type: "practice" as const,
           title: "✋ Step 2 — 파티 관리 코드!",
-          content: `vector<Character>로 파티를 관리하고, showParty / addCharacter 함수를 만들어보세요!
-
-range-for 문 \`for (const auto& c : party)\`가 핵심이에요!`,
+          content: `vector로 파티를 관리하고, 파티를 표시하는 코드를 만들어봐요!`,
           code: `#include <iostream>
 #include <vector>
 #include <string>
@@ -571,7 +569,9 @@ int main() {
     }
     return 0;
 }`,
-          expectedOutput: `=== RPG 파티 관리 ===
+          stdin: `2\n4`,
+          expectedOutput: `
+=== RPG 파티 관리 ===
 1. 캐릭터 추가
 2. 파티 보기
 3. 전투!
@@ -580,7 +580,16 @@ int main() {
 
 === 파티 목록 (2명) ===
   용사 [HP:100 ATK:15 DEF:10 LV:1]
-  마법사 [HP:80 ATK:20 DEF:5 LV:1]`
+  마법사 [HP:80 ATK:20 DEF:5 LV:1]
+
+=== RPG 파티 관리 ===
+1. 캐릭터 추가
+2. 파티 보기
+3. 전투!
+4. 종료
+선택: 4
+
+모험을 종료합니다. 안녕!`
         }
       ]
     },

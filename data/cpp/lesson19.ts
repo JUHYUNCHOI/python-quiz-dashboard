@@ -215,22 +215,17 @@ int main() {
         {
           id: "ch1-practice",
           type: "practice" as const,
-          title: "✋ 파일에서 숫자 읽고 합계 출력!",
+          title: "✋ 숫자 N개 합계 구하기 (cin 버전)",
           content: `숫자 N개를 입력받아 합계를 출력하는 프로그램이에요.
 
-freopen을 사용해서 파일 입출력을 하고, 숫자들의 합을 구해봐요!
-
-입력 예시 (input.txt):
-3
-10 20 30
-
-출력: 60`,
+실제 대회에서는 이 코드에 \`freopen("input.txt", "r", stdin);\` 을 추가해서 파일에서 읽어요.
+지금은 그냥 cin으로 입력받아 동작을 확인해봐요!`,
           code: `#include <iostream>
 using namespace std;
 
 int main() {
-    freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
+    // 실제 USACO: freopen("input.txt", "r", stdin); 추가
+    // freopen("output.txt", "w", stdout); 추가
 
     int n;
     cin >> n;
@@ -246,6 +241,8 @@ int main() {
 
     return 0;
 }`,
+          stdin: `3
+10 20 30`,
           expectedOutput: "60"
         },
         {
@@ -440,22 +437,15 @@ int main() {
         {
           id: "ch2-practice",
           type: "practice" as const,
-          title: "✋ USACO 스타일 문제!",
-          content: `USACO 스타일로 문제를 풀어봐요!
+          title: "✋ Fast I/O + 2배 출력 문제!",
+          content: `N개의 숫자를 입력받아 각 숫자를 2배로 출력해요.
 
-파일에서 N개의 숫자를 읽고, 각 숫자를 2배로 만들어서 출력해요.
+Fast I/O를 적용해서 실행해봐요!
 
-입력 (solve.in):
-4
-3 7 1 5
-
-출력 (solve.out):
-6
-14
-2
-10
-
-Fast I/O + freopen을 모두 사용해봐요!`,
+실제 USACO 제출 시에는 코드 앞에:
+- \`freopen("solve.in", "r", stdin);\`
+- \`freopen("solve.out", "w", stdout);\`
+를 추가해요.`,
           code: `#include <iostream>
 using namespace std;
 
@@ -463,8 +453,8 @@ int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    freopen("solve.in", "r", stdin);
-    freopen("solve.out", "w", stdout);
+    // 실제 USACO: freopen("solve.in", "r", stdin);
+    // 실제 USACO: freopen("solve.out", "w", stdout);
 
     int n;
     cin >> n;
@@ -477,6 +467,8 @@ int main() {
 
     return 0;
 }`,
+          stdin: `4
+3 7 1 5`,
           expectedOutput: `6
 14
 2

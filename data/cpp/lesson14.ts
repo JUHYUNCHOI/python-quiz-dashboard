@@ -347,11 +347,7 @@ int main() {
           title: "✋ 1등 학생 이름 찾기!",
           content: `이제 점수만이 아니라 **누가** 1등인지도 알아봐요!
 
-**순서:**
-1. \`maxIdx = 0\` 으로 초기화 (첫 번째 학생부터 시작)
-2. for문으로 배열 순회 (i = 1부터)
-3. \`students[i].score > students[maxIdx].score\` 이면 \`maxIdx = i\`
-4. \`students[maxIdx].name\` 과 \`students[maxIdx].score\` 출력`,
+3명의 학생 중 가장 높은 점수를 받은 학생의 이름과 점수를 출력하는 코드를 작성해봐요.`,
           code: `#include <iostream>
 #include <string>
 using namespace std;

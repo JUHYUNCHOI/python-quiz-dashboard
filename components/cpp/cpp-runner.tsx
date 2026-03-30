@@ -254,8 +254,8 @@ export function CppRunner({
               onError?.()
             }
           } else {
-            setIsCorrect(true)
-            onSuccess?.()
+            // expectedOutput 없으면 출력만 보여주고 사용자가 직접 완료
+            setIsCorrect(null)
           }
         }
       }
@@ -317,15 +317,10 @@ export function CppRunner({
             <div className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
             <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
           </div>
-          <span className="text-gray-400 text-xs font-mono">C++ — Ctrl+Enter {isEn ? "to save" : "저장"}</span>
+          <span className="text-gray-400 text-xs font-mono">C++ — Ctrl+Enter {isEn ? "to run" : "실행"}</span>
         </div>
 
-        <div className="cpp-editor-dark" onKeyDown={e => {
-          if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
-            e.preventDefault()
-            runCode()
-          }
-        }}>
+        <div className="cpp-editor-dark">
           <SimpleEditor
             value={code}
             onValueChange={newCode => { setCode(newCode); setIsCorrect(null); setOutput(""); setError("") }}
@@ -333,6 +328,30 @@ export function CppRunner({
             padding={16}
             tabSize={4}
             insertSpaces={true}
+            onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement & HTMLDivElement>) => {
+              if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault()
+                runCode()
+                return
+              }
+              if (e.key === "Enter") {
+                e.preventDefault()
+                const textarea = e.currentTarget
+                const start = textarea.selectionStart
+                const val = textarea.value
+                const lineStart = val.lastIndexOf("\n", start - 1) + 1
+                const currentLine = val.slice(lineStart, start)
+                const indent = currentLine.match(/^(\s*)/)?.[1] ?? ""
+                const extraIndent = currentLine.trimEnd().endsWith("{") ? "    " : ""
+                const newVal = val.slice(0, start) + "\n" + indent + extraIndent + val.slice(start)
+                const newCursor = start + 1 + indent.length + extraIndent.length
+                setCode(newVal)
+                requestAnimationFrame(() => {
+                  textarea.selectionStart = newCursor
+                  textarea.selectionEnd = newCursor
+                })
+              }
+            }}
             style={{
               fontFamily: '"Fira Code", "Fira Mono", "Courier New", monospace',
               fontSize: 15,
@@ -359,7 +378,7 @@ export function CppRunner({
         >
           {isLoading
             ? <><Loader2 className="w-4 h-4 animate-spin" />{isEn ? "Running..." : "컴파일 중..."}</>
-            : <><Play className="w-4 h-4" />{isEn ? "▶ Save" : "▶ 저장"}</>
+            : <><Play className="w-4 h-4" />{isEn ? "▶ Run & Save" : "▶ 실행 및 저장"}</>
           }
         </button>
         <button

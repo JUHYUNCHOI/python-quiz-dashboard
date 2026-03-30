@@ -260,6 +260,16 @@ const registry: Record<string, ComponentEntry> = {
     load: () => import("@/components/animations/pair-compare"),
     exportName: "PairCompareAnimation",
   },
+  // 선형 탐색 시뮬레이션 (탐색 알고리즘 도입)
+  linearSearch: {
+    load: () => import("@/components/animations/linear-search"),
+    exportName: "LinearSearchAnimation",
+  },
+  // 이진 탐색 시뮬레이션 (lower_bound 이해)
+  binarySearch: {
+    load: () => import("@/components/animations/binary-search"),
+    exportName: "BinarySearchAnimation",
+  },
   cppPointerBuilder: {
     load: () => import("@/components/animations/syntax-builder"),
     exportName: "CppPointerBuilder",

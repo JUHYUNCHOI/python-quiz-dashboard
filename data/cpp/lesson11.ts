@@ -102,37 +102,44 @@ Program
         {
           id: "ch1-practice",
           type: "practice" as const,
-          title: "✋ 단어 위치 찾기 프로그램!",
-          content: `아래 두 문자열이 주어져 있어요:
-\`\`\`cpp
-string sentence = "I love C++ programming";
-string word = "C++";
-\`\`\`
+          title: "✋ 서버 로그 분석기",
+          content: `서버가 기록한 로그를 분석하는 프로그램을 만들어요.
 
-**할 일:**
-1. \`sentence.find(word)\`로 \`word\`의 위치를 구해요
-2. 찾았다면 (\`pos != string::npos\`) 위치를 출력하고, \`sentence.substr(pos)\`로 그 위치부터 끝까지 잘라내 출력해요`,
+아래 로그가 저장되어 있어요:
+\`string log = "2024-01-15 ERROR server connection failed";\`
+
+1. "ERROR"가 있으면 몇 번째 위치인지, 그리고 ERROR 이후 메시지를 출력해요
+2. "CRITICAL"이 있는지 확인하고, 없으면 "CRITICAL 없음: 정상 범위"를 출력해요
+3. 날짜(앞 10글자)를 출력해요`,
           code: `#include <iostream>
 #include <string>
 using namespace std;
 
 int main() {
-    string sentence = "I love C++ programming";
-    string word = "C++";
+    string log = "2024-01-15 ERROR server connection failed";
 
-    size_t pos = sentence.find(word);
-
+    // "ERROR" 검색
+    size_t pos = log.find("ERROR");
     if (pos != string::npos) {
-        cout << "\"" << word << "\" found at position " << pos << endl;
-        cout << "From there: " << sentence.substr(pos) << endl;
-    } else {
-        cout << "Not found!" << endl;
+        cout << "오류 발견! 위치: " << pos << endl;
+        cout << "오류 메시지: " << log.substr(pos + 6) << endl;
     }
+
+    // "CRITICAL" 검색
+    size_t pos2 = log.find("CRITICAL");
+    if (pos2 == string::npos) {
+        cout << "CRITICAL 없음: 정상 범위" << endl;
+    }
+
+    // 날짜 추출
+    cout << "날짜: " << log.substr(0, 10) << endl;
 
     return 0;
 }`,
-          expectedOutput: `"C++" found at position 7
-From there: C++ programming`
+          expectedOutput: `오류 발견! 위치: 11
+오류 메시지: server connection failed
+CRITICAL 없음: 정상 범위
+날짜: 2024-01-15`
         },
         {
           id: "ch1-q1",
@@ -282,9 +289,13 @@ cout << s;  // HELLO
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ 이름 분석 프로그램!",
-          content: `이름을 정의하고, 길이와 첫 글자를 출력한 뒤, 나이를 문자열로 변환해서 메시지를 만들어보세요!
+          content: `학생 정보 시스템에서 이름 데이터를 분석해야 해요.
+\`string name = "Alice"\`, \`int age = 15\`가 주어졌을 때, 아래 정보를 출력하는 코드를 완성해봐요:
 
-to_string()과 문자열 연결(+)을 활용해요.`,
+- 이름 전체: \`Name: Alice\`
+- 이름의 글자 수: \`Length: 5\`
+- 이름의 첫 글자: \`First letter: A\`
+- 이름과 나이를 합친 소개 문장: \`Alice is 15 years old\``,
           code: `#include <iostream>
 #include <string>
 using namespace std;

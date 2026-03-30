@@ -5,6 +5,7 @@ import { TryExceptFlow, ErrorTypesCards } from "@/components/animations"
 import { LessonStep } from "./types"
 import { useLanguage } from "@/contexts/language-context"
 import registry from "./component-registry"
+import { renderContent } from "./render-content"
 
 interface AnimationStepProps {
   step: LessonStep
@@ -42,6 +43,7 @@ export function AnimationStep({ step }: AnimationStepProps) {
       <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{step.question || step.title}</h1>
       {step.instruction && <p className="text-gray-600 text-lg">{step.instruction}</p>}
       {step.description && <p className="text-gray-600 text-lg">{step.description}</p>}
+      {step.content && <div className="space-y-3">{renderContent(step.content)}</div>}
 
       {/* 레지스트리 기반 컴포넌트 */}
       {DynamicComponent && (

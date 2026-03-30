@@ -252,11 +252,11 @@ for i in range(5):
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ 배열로 평균 구하기!",
-          content: `아래 점수 5개를 배열에 **직접 넣어서** 합계와 평균을 구해보세요!
+          content: `시험 점수 5개를 배열에 저장하고 합계와 평균을 계산해봐요!
 
 {!teal} 사용할 점수: **90, 85, 78, 92, 88**
 
-힌트: 평균은 \`합계 / 개수\`예요. 소수점을 보려면 \`(double)sum / 5\`로 캐스팅하세요!`,
+평균은 소수점까지 정확하게 출력해야 해요.`,
           code: `#include <iostream>
 using namespace std;
 
@@ -280,9 +280,7 @@ int main() {
           id: "ch1-practice2",
           type: "practice" as const,
           title: "✋ 배열에서 최댓값 찾기!",
-          content: `cin으로 점수 5개를 입력받아, 배열에 저장하고 최댓값을 출력하세요.
-
-힌트: 먼저 배열을 선언하고, for 루프 + cin으로 채운 다음, 다시 for 루프로 최댓값을 찾아요!`,
+          content: `점수 5개를 입력받아 그 중 가장 높은 점수를 출력하세요.`,
           code: `#include <iostream>
 using namespace std;
 

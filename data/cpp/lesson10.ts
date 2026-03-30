@@ -214,9 +214,7 @@ for (const int& x : v) {
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ Range-for로 합 구하기!",
-          content: `개수를 입력받고, 숫자들을 입력받아 합을 구해보세요!
-
-읽기만 하니까 \`const int&\`를 써봐요!`,
+          content: `숫자 개수를 입력받고, 그 숫자들을 입력받아 합계를 구해보세요!`,
           code: `#include <iostream>
 #include <vector>
 using namespace std;
@@ -423,14 +421,7 @@ auto x = 5 / 2;   // 2.5가 아니라 2! (int / int = int)
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ auto + range-for로 벡터 처리!",
-          content: `개수와 숫자들을 입력받아, 모든 원소를 **2배**로 바꾼 뒤 출력해보세요.
-
-**두 단계로 나눠서 작성해요:**
-
-**1단계 — 원소 수정:** \`for (auto& x : nums)\` 로 각 원소를 직접 2배로 변경
-**2단계 — 출력:** \`for (auto x : nums)\` 로 바뀐 값들을 출력
-
-> 💡 \`auto&\`는 원본을 수정할 때, \`auto\`는 읽기만 할 때 써요!`,
+          content: `숫자 개수와 숫자들을 입력받아, 모든 원소를 2배로 바꾼 뒤 출력해보세요.`,
           code: `#include <iostream>
 #include <vector>
 using namespace std;
