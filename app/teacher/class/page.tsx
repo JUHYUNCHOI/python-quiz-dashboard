@@ -36,6 +36,105 @@ function lessonSortIndex(lessonId: string): number {
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
 
+// ─── 학생 상태 그리드 ────────────────────────────────────────
+function studentStatus(s: { lastActive: string; quizSessions: { correct_answers: number; total_questions: number }[] }): "danger" | "warn" | "ok" | "new" {
+  const days = Math.floor((Date.now() - new Date(s.lastActive === "-" ? 0 : s.lastActive).getTime()) / 86400000)
+  const recent = s.quizSessions.slice(0, 5)
+  const avgAcc = recent.length >= 2
+    ? recent.reduce((sum, q) => sum + (q.correct_answers / q.total_questions) * 100, 0) / recent.length
+    : null
+  if (s.lastActive === "-" && recent.length === 0) return "new"
+  if (days >= 7) return "danger"
+  if (days >= 4 || (avgAcc !== null && avgAcc < 55 && days <= 3)) return "warn"
+  return "ok"
+}
+
+const STATUS_DOT: Record<string, string> = {
+  danger: "bg-red-500",
+  warn:   "bg-amber-400",
+  ok:     "bg-green-500",
+  new:    "bg-gray-300",
+}
+const STATUS_ORDER = { danger: 0, warn: 1, ok: 2, new: 3 }
+
+function StudentStatusGrid({ students, onStudentClick, lang, hwStudentIds, hwPendingIds }: {
+  students: StudentRow[]
+  onStudentClick: (id: string) => void
+  lang: "ko" | "en"
+  hwStudentIds?: Set<string>
+  hwPendingIds?: Set<string>
+}) {
+  const sorted = [...students].sort((a, b) =>
+    STATUS_ORDER[studentStatus(a)] - STATUS_ORDER[studentStatus(b)]
+  )
+
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-4">
+      <div className="px-4 py-3 border-b border-gray-50 flex items-center justify-between">
+        <div>
+          <h3 className="text-sm font-black text-gray-700">👥 전체 학생 현황</h3>
+          <p className="text-[11px] text-gray-400 mt-0.5">문제 있는 학생 먼저 · 클릭하면 상세 확인</p>
+        </div>
+        <div className="flex items-center gap-3 text-[10px] text-gray-400">
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-500" />위험</span>
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-400" />주의</span>
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-500" />양호</span>
+        </div>
+      </div>
+      <div className="divide-y divide-gray-50">
+        {sorted.map(s => {
+          const status = studentStatus(s)
+          const days = Math.floor((Date.now() - new Date(s.lastActive === "-" ? 0 : s.lastActive).getTime()) / 86400000)
+          const recent = s.quizSessions.slice(0, 5)
+          const avgAcc = recent.length >= 2
+            ? Math.round(recent.reduce((sum, q) => sum + (q.correct_answers / q.total_questions) * 100, 0) / recent.length)
+            : null
+          const lastLesson = s.lessonProgress
+            .filter(r => r.progress_type === "learn" && r.completed)
+            .sort((a, b) => b.updated_at.localeCompare(a.updated_at))[0]
+
+          return (
+            <button
+              key={s.id}
+              onClick={() => onStudentClick(s.id)}
+              className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors text-left group"
+            >
+              <span className={cn("w-2 h-2 rounded-full flex-shrink-0 mt-0.5", STATUS_DOT[status])} />
+              <span className="text-sm font-semibold text-gray-800 w-20 truncate group-hover:text-orange-600 transition-colors">
+                {s.displayName}
+              </span>
+              <span className={cn(
+                "text-xs w-14 flex-shrink-0 font-medium",
+                days === 0 ? "text-green-600" : days <= 2 ? "text-gray-500" : days <= 5 ? "text-amber-500 font-bold" : "text-red-500 font-bold"
+              )}>
+                {s.lastActive === "-" ? "기록없음" : days === 0 ? "오늘" : days === 1 ? "어제" : `${days}일 전`}
+              </span>
+              <span className="text-xs text-gray-400 flex-1 truncate">
+                {lastLesson ? getLessonName(lastLesson.lesson_id, lang) : "—"}
+              </span>
+              <span className={cn(
+                "text-xs font-black w-10 text-right flex-shrink-0",
+                avgAcc === null ? "text-gray-300" : avgAcc >= 70 ? "text-green-600" : avgAcc >= 55 ? "text-amber-500" : "text-red-500"
+              )}>
+                {avgAcc !== null ? `${avgAcc}%` : "—"}
+              </span>
+              {hwStudentIds && (
+                <span className="w-12 flex-shrink-0 text-right text-[10px] font-bold">
+                  {hwPendingIds?.has(s.id)
+                    ? <span className="text-amber-600">확인필요</span>
+                    : hwStudentIds.has(s.id)
+                    ? <span className="text-green-600">채점완료</span>
+                    : ""}
+                </span>
+              )}
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 /** 가장 최근에 활동한 레슨 찾기 */
 function getCurrentLesson(progress: LessonProgressRow[], lang: "ko" | "en" = "ko"): { name: string; completed: boolean; date: string } | null {
   if (!progress || progress.length === 0) return null
@@ -261,6 +360,7 @@ function StudentInsights({ lessonProgress, quizSessions, lang }: {
 export default function ClassDetailPage() {
   const searchParams = useSearchParams()
   const classId = searchParams.get("id") || ""
+  const focusStudentId = searchParams.get("student") || null
   const { user, profile: teacherProfile } = useAuth()
   const { lang } = useLanguage()
   const [classInfo, setClassInfo] = useState<Class | null>(null)
@@ -273,11 +373,48 @@ export default function ClassDetailPage() {
   const [parentLinkCopied, setParentLinkCopied] = useState<string | null>(null)
   const [generatingLink, setGeneratingLink] = useState<string | null>(null)
   const [studentPage, setStudentPage] = useState(0)
+  const [hwStudentIds, setHwStudentIds] = useState<Set<string>>(new Set())
+  const [hwPendingIds, setHwPendingIds] = useState<Set<string>>(new Set())
+  // 학생 카드 펼칠 때만 question_details 포함한 상세 세션 로드
+  const [detailedSessions, setDetailedSessions] = useState<Record<string, QuizSession[]>>({})
 
   useEffect(() => {
     if (!user || !classId) return
     loadClassData()
   }, [user, classId])
+
+  // 학생 카드 펼칠 때 question_details 포함 상세 세션 로드 (lazy)
+  useEffect(() => {
+    if (!expandedStudent || detailedSessions[expandedStudent]) return
+    const fetchDetail = async () => {
+      const supabase = createClient()
+      const { data } = await supabase
+        .from("quiz_sessions")
+        .select("*")
+        .eq("user_id", expandedStudent)
+        .order("completed_at", { ascending: false })
+        .limit(30)
+      if (data) setDetailedSessions(prev => ({ ...prev, [expandedStudent]: data as QuizSession[] }))
+    }
+    fetchDetail()
+  }, [expandedStudent]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // URL에 student 파라미터 있으면 자동으로 해당 학생 펼치고 스크롤
+  useEffect(() => {
+    if (!focusStudentId || students.length === 0) return
+    setExpandedStudent(focusStudentId)
+    setActiveTab("lessons")
+    const sorted = [...students].sort((a, b) => {
+      const da = Math.floor((Date.now() - new Date(a.lastActive).getTime()) / 86400000)
+      const db = Math.floor((Date.now() - new Date(b.lastActive).getTime()) / 86400000)
+      return da - db
+    })
+    const idx = sorted.findIndex(s => s.id === focusStudentId)
+    if (idx >= 0) setStudentPage(Math.floor(idx / STUDENTS_PER_PAGE))
+    setTimeout(() => {
+      document.getElementById(`student-${focusStudentId}`)?.scrollIntoView({ behavior: "smooth", block: "center" })
+    }, 400)
+  }, [focusStudentId, students]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadClassData = async () => {
     const supabase = createClient()
@@ -309,34 +446,36 @@ export default function ClassDetailPage() {
 
     const studentIds = members.map(m => m.student_id)
 
-    // 프로필
+    // 프로필 (필요한 컬럼만)
     const { data: profiles } = await supabase
       .from("profiles")
-      .select("*")
+      .select("id, display_name, avatar_url")
       .in("id", studentIds)
 
-    // 게이미피케이션
+    // 게이미피케이션 (필요한 컬럼만)
     const { data: gamification } = await supabase
       .from("gamification_data")
-      .select("*")
+      .select("user_id, total_xp, daily_streak, last_active_date")
       .in("user_id", studentIds)
 
-    // 전체 레슨 진도 (완료/미완료 모두)
+    // 전체 레슨 진도 (학생 1명당 최대 ~120행 = 52레슨×2타입+버퍼)
     const { data: progress } = await supabase
       .from("lesson_progress")
       .select("user_id, lesson_id, progress_type, completed, score, updated_at")
       .in("user_id", studentIds)
+      .limit(studentIds.length * 130)
 
-    // 퀴즈 세션
+    // 퀴즈 세션 — question_details 제외, 학생당 최대 25개 (개요 통계용)
     const { data: quizSessions } = await supabase
       .from("quiz_sessions")
-      .select("*")
+      .select("id, user_id, difficulty, total_questions, correct_answers, max_combo, hearts_remaining, time_elapsed_ms, end_reason, xp_earned, quick_answer_count, slow_answer_count, started_at, completed_at")
       .in("user_id", studentIds)
       .order("completed_at", { ascending: false })
+      .limit(studentIds.length * 25)
 
     // 조합
     const profileMap = new Map((profiles || []).map(p => [p.id, p]))
-    const gamMap = new Map((gamification || []).map((g: GamificationData) => [g.user_id, g]))
+    const gamMap = new Map((gamification || []).map((g: { user_id: string; total_xp: number; daily_streak: number; last_active_date: string }) => [g.user_id, g]))
 
     // 유저별 퀴즈 세션
     const quizMap = new Map<string, QuizSession[]>()
@@ -406,6 +545,15 @@ export default function ClassDetailPage() {
     })
 
     setStudents(rows)
+
+    // 숙제 제출한 학생 ID 목록 + 확인 필요 학생
+    const { data: hwData } = await supabase
+      .from("homework_submissions")
+      .select("student_id, teacher_grade")
+      .in("student_id", studentIds)
+    setHwStudentIds(new Set((hwData || []).map(h => h.student_id)))
+    setHwPendingIds(new Set((hwData || []).filter(h => !h.teacher_grade || h.teacher_grade === "fail").map(h => h.student_id)))
+
     setIsLoading(false)
   }
 
@@ -516,16 +664,33 @@ export default function ClassDetailPage() {
               </div>
             </Card>
 
-            {/* 반 전체 요약 + 위험 알림 + 진도 비교 */}
+            {/* 학생 상태 그리드 — 가장 먼저 */}
+            {students.length > 0 && (
+              <StudentStatusGrid
+                students={students}
+                lang={lang}
+                hwStudentIds={hwStudentIds}
+                hwPendingIds={hwPendingIds}
+                onStudentClick={(studentId) => {
+                  setExpandedStudent(studentId)
+                  setActiveTab("lessons")
+                  const idx = sortedStudents.findIndex(s => s.id === studentId)
+                  if (idx >= 0) setStudentPage(Math.floor(idx / STUDENTS_PER_PAGE))
+                  setTimeout(() => {
+                    document.getElementById(`student-${studentId}`)?.scrollIntoView({ behavior: "smooth", block: "center" })
+                  }, 150)
+                }}
+              />
+            )}
+
+            {/* 반 전체 요약 + 위험 알림 + 약점 레슨 */}
             <ClassOverview
               students={students}
               onStudentClick={(studentId) => {
                 setExpandedStudent(studentId)
                 setActiveTab("lessons")
-                // 정렬된 목록에서 해당 학생의 페이지로 이동
                 const idx = sortedStudents.findIndex(s => s.id === studentId)
                 if (idx >= 0) setStudentPage(Math.floor(idx / STUDENTS_PER_PAGE))
-                // 잠시 후 해당 학생 카드로 스크롤
                 setTimeout(() => {
                   document.getElementById(`student-${studentId}`)?.scrollIntoView({ behavior: "smooth", block: "center" })
                 }, 100)
@@ -647,7 +812,7 @@ export default function ClassDetailPage() {
                         {/* 자동 분석 카드 */}
                         <StudentInsights
                           lessonProgress={student.lessonProgress}
-                          quizSessions={student.quizSessions}
+                          quizSessions={detailedSessions[student.id] || student.quizSessions}
                           lang={lang}
                         />
 
@@ -700,7 +865,7 @@ export default function ClassDetailPage() {
 
                         {/* 퀴즈 리포트 탭 */}
                         {activeTab === "quizzes" && (
-                          <StudentQuizReport quizSessions={student.quizSessions} />
+                          <StudentQuizReport quizSessions={detailedSessions[student.id] || student.quizSessions} />
                         )}
 
                         {/* 꾸준함 탭 */}

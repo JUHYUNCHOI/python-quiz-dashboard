@@ -409,7 +409,7 @@ Teacher said "Great job!"`
 - ✅ **namespace** — A "folder" to prevent name conflicts
 - ✅ **using namespace std;** — Skip writing std::!
 
-🚀 **Next time: cin Input** — Get keyboard input with cin >>!`
+🚀 **Next time: Variables & Types** — Store data with int, double, and string!`
         }
       ]
     }

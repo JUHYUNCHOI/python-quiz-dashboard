@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { AlertTriangle, TrendingUp, Users, Flame, BookOpen, Target, ChevronDown } from "lucide-react"
+import { AlertTriangle, Users, Flame, BookOpen, Target, ChevronDown, ChevronUp } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
 import { getLessonName } from "@/lib/curriculum-data"
@@ -79,6 +79,7 @@ interface RiskAlert {
   emoji: string
   action: string  // 선생님이 할 수 있는 것
   focusLesson?: string // 구체적으로 문제가 되는 레슨/영역
+  weakTopics?: string[] // 약한 레슨/개념 목록 (최대 3개)
 }
 
 function buildRiskAlerts(students: StudentRow[]): RiskAlert[] {
@@ -109,14 +110,24 @@ function buildRiskAlerts(students: StudentRow[]): RiskAlert[] {
 
     // 낮은 정답률 (5문제 이상 풀었는데 55% 미만)
     if (avgAcc !== null && avgAcc < 55 && recentQuizzes.length >= 3 && days <= 3) {
+      // 복습 점수 기준 하위 3개 레슨
+      const bottomLessons = [...reviewRows].sort((a, b) => a.score - b.score).slice(0, 3)
+      const weakTopics: string[] = bottomLessons.map(r => `${getLessonName(r.lesson_id, "ko")} ${r.score}%`)
+
+      // 핵심 메시지: "어디서 막히는지"가 바로 보이도록
+      const topTwo = weakTopics.slice(0, 2).join("  ·  ")
+      const detail = topTwo
+        ? `${topTwo}  (퀴즈 ${Math.round(avgAcc)}%)`
+        : `퀴즈 평균 ${Math.round(avgAcc)}% — 개념 이해 부족`
+
       alerts.push({
         studentId: s.id,
         studentName: s.displayName,
-        detail: `퀴즈 평균 ${Math.round(avgAcc)}% — 개념 이해 부족`,
+        detail,
         severity: "warning",
         emoji: "📉",
         action: "1:1 설명 권장",
-        focusLesson: worstReview ? `복습 최저: 레슨 ${worstReview.lesson_id} (${worstReview.score}%)` : undefined,
+        weakTopics: weakTopics.length > 2 ? weakTopics.slice(2) : undefined,
       })
     }
 
@@ -141,6 +152,7 @@ function buildRiskAlerts(students: StudentRow[]): RiskAlert[] {
 export function ClassOverview({ students, onStudentClick }: Props) {
   const { lang: _lang } = useLanguage()
   const [expandedPattern, setExpandedPattern] = useState<StudentPattern | null>(null)
+  const [showPatternDist, setShowPatternDist] = useState(false)
   if (students.length === 0) return null
 
   const total = students.length
@@ -205,6 +217,27 @@ export function ClassOverview({ students, onStudentClick }: Props) {
 
   const risks = buildRiskAlerts(students)
   const dangerCount = risks.filter(r => r.severity === "danger").length
+
+  // 반 전체 레슨별 약점 집계 (복습 완료 기준)
+  const lessonScoreMap = new Map<string, number[]>()
+  for (const s of students) {
+    for (const row of s.lessonProgress) {
+      if (row.progress_type === "review" && row.completed && row.score > 0) {
+        if (!lessonScoreMap.has(row.lesson_id)) lessonScoreMap.set(row.lesson_id, [])
+        lessonScoreMap.get(row.lesson_id)!.push(row.score)
+      }
+    }
+  }
+  const classWeakLessons = [...lessonScoreMap.entries()]
+    .map(([lessonId, scores]) => ({
+      lessonId,
+      avgScore: Math.round(scores.reduce((a, b) => a + b, 0) / scores.length),
+      total: scores.length,
+      struggling: scores.filter(s => s < 65).length,
+    }))
+    .filter(r => r.total >= 2)            // 2명 이상 복습한 레슨만
+    .sort((a, b) => a.avgScore - b.avgScore)
+    .slice(0, 5)
 
   return (
     <div className="space-y-4 mb-6">
@@ -273,6 +306,13 @@ export function ClassOverview({ students, onStudentClick }: Props) {
                   {risk.focusLesson && (
                     <p className="text-[10px] text-orange-500 font-bold mt-0.5">📌 {risk.focusLesson}</p>
                   )}
+                  {risk.weakTopics && risk.weakTopics.length > 0 && (
+                    <div className="mt-1 space-y-0.5">
+                      {risk.weakTopics.map((topic, ti) => (
+                        <p key={ti} className="text-[10px] text-red-500 font-semibold truncate">📉 {topic}</p>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 <span className={cn(
                   "text-[10px] font-bold px-2 py-0.5 rounded-full flex-shrink-0 mt-0.5",
@@ -296,10 +336,64 @@ export function ClassOverview({ students, onStudentClick }: Props) {
         </div>
       )}
 
-      {/* ③ 학생 패턴 분포 — 수업 방향 결정에 도움 */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 space-y-3">
-        <h3 className="text-sm font-black text-gray-700">🗂️ 학생 유형 분포</h3>
-        <p className="text-xs text-gray-400">접속 빈도 × 퀴즈 정답률 기준 · 카드를 눌러서 학생 확인</p>
+      {/* ③ 반 전체 약점 레슨 — 다음 수업에 뭘 다시 짚을지 */}
+      {classWeakLessons.length > 0 && (
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 space-y-3">
+          <div>
+            <h3 className="text-sm font-black text-gray-700">📚 다음 수업에 다시 짚어야 할 레슨</h3>
+            <p className="text-[11px] text-gray-400 mt-0.5">복습 점수 기준 · 2명 이상 완료한 레슨만 표시</p>
+          </div>
+          <div className="space-y-2.5">
+            {classWeakLessons.map(({ lessonId, avgScore, total, struggling }) => {
+              const name = getLessonName(lessonId, "ko")
+              const barColor = avgScore < 50 ? "bg-red-400" : avgScore < 65 ? "bg-amber-400" : "bg-green-400"
+              const textColor = avgScore < 50 ? "text-red-600" : avgScore < 65 ? "text-amber-600" : "text-green-600"
+              const urgency = struggling >= total * 0.6
+                ? { label: "재수업 권장", bg: "bg-red-100 text-red-700" }
+                : struggling > 0
+                ? { label: "복습 권장", bg: "bg-amber-100 text-amber-700" }
+                : { label: "양호", bg: "bg-green-100 text-green-700" }
+              return (
+                <div key={lessonId}>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs font-bold text-gray-700 truncate flex-1 mr-2">{name}</span>
+                    <div className="flex items-center gap-1.5 flex-shrink-0">
+                      <span className="text-[10px] text-gray-400">{struggling}/{total}명 어려움</span>
+                      <span className={cn("text-[10px] font-bold px-1.5 py-0.5 rounded-full", urgency.bg)}>{urgency.label}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                      <div
+                        className={cn("h-full rounded-full transition-all", barColor)}
+                        style={{ width: `${avgScore}%` }}
+                      />
+                    </div>
+                    <span className={cn("text-xs font-black w-8 text-right", textColor)}>{avgScore}%</span>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* ④ 학생 패턴 분포 — 기본 접힘 */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <button
+          onClick={() => setShowPatternDist(v => !v)}
+          className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors"
+        >
+          <div>
+            <p className="text-sm font-black text-gray-700 text-left">🗂️ 학생 유형 분포</p>
+            <p className="text-xs text-gray-400 text-left">접속 빈도 × 퀴즈 정답률 기준</p>
+          </div>
+          {showPatternDist
+            ? <ChevronUp className="w-4 h-4 text-gray-400 flex-shrink-0" />
+            : <ChevronDown className="w-4 h-4 text-gray-400 flex-shrink-0" />
+          }
+        </button>
+        {showPatternDist && <div className="px-4 pb-4 pt-1 space-y-3">
         <div className="grid grid-cols-2 gap-2">
           {(["star", "hardworker", "coaster", "atrisk"] as StudentPattern[]).map(pattern => {
             const meta = PATTERN_META[pattern]
@@ -393,55 +487,7 @@ export function ClassOverview({ students, onStudentClick }: Props) {
         {(patternCounts["new"] || 0) > 0 && (
           <p className="text-xs text-gray-400 text-center">🌱 아직 시작 안 한 학생 {patternCounts["new"] || 0}명</p>
         )}
-      </div>
-
-      {/* ④ 학생별 진도 바 */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 space-y-3">
-        <div className="flex items-center gap-2">
-          <TrendingUp className="w-4 h-4 text-gray-500" />
-          <h3 className="text-sm font-black text-gray-700">학생별 진도 비교</h3>
-        </div>
-        <div className="space-y-1.5 max-h-[240px] overflow-y-auto pr-1">
-          {[...students]
-            .sort((a, b) => b.completedLessons - a.completedLessons)
-            .map(s => {
-              const pct = (s.completedLessons / maxCompleted) * 100
-              const pattern = classifyPattern(s)
-              const meta = PATTERN_META[pattern]
-              const days = daysSince(s.lastActive)
-              return (
-                <div key={s.id} className="flex items-center gap-2">
-                  <span className="text-xs w-4 text-center">{meta.emoji}</span>
-                  <span className={cn("text-xs font-medium w-16 truncate text-right",
-                    days >= 5 ? "text-red-400" : days >= 3 ? "text-amber-500" : "text-gray-600"
-                  )}>
-                    {s.displayName}
-                  </span>
-                  <div className="flex-1 h-4 bg-gray-100 rounded-full overflow-hidden">
-                    <div
-                      className={cn(
-                        "h-full rounded-full transition-all",
-                        pattern === "star" ? "bg-green-500" :
-                        pattern === "hardworker" ? "bg-amber-400" :
-                        pattern === "coaster" ? "bg-blue-400" :
-                        pattern === "atrisk" ? "bg-red-400" : "bg-gray-300"
-                      )}
-                      style={{ width: `${Math.max(pct, s.completedLessons > 0 ? 3 : 0)}%` }}
-                    />
-                  </div>
-                  <span className="text-[10px] font-bold text-gray-400 w-8 text-right">
-                    {s.completedLessons}
-                  </span>
-                </div>
-              )
-            })}
-        </div>
-        <div className="flex items-center gap-3 mt-1 text-[10px] text-gray-400 flex-wrap">
-          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-500" />잘 따라가는 중</span>
-          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-400" />개념 보충 필요</span>
-          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-blue-400" />빠짐 주의</span>
-          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-400" />개입 필요</span>
-        </div>
+        </div>}
       </div>
     </div>
   )

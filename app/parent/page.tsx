@@ -3,7 +3,7 @@
 import { useEffect, useState, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
-import { pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
+import { pythonParts, cppParts, pseudoParts, getLessonName } from "@/lib/curriculum-data"
 import { cn } from "@/lib/utils"
 import { Share2, Copy } from "lucide-react"
 
@@ -31,13 +31,96 @@ interface ParentReportData {
   }[]
 }
 
-// ─── 커리큘럼 능력 서술 ────────────────────────────────────────────────
+// ─── 커리큘럼 ID 목록 ────────────────────────────────────────────────
 const PYTHON_PART_IDS = pythonParts.flatMap(p => p.lessonIds.map(String))
-const CPP_PART_IDS   = cppParts.flatMap(p => p.lessonIds.map(String))
+const CPP_PART_IDS    = cppParts.flatMap(p => p.lessonIds.map(String))
+const PSEUDO_PART_IDS = pseudoParts.flatMap(p => p.lessonIds.map(String))
+
+// ─── Algorithm 플랫폼 토픽 ID (algo-*) ──────────────────────────────
+const ALGO_TOPIC_IDS = [
+  "algo-array","algo-backtracking","algo-binarysearch","algo-bitmanipulation",
+  "algo-divideconquer","algo-dp","algo-graph","algo-greedy","algo-hashtable",
+  "algo-linkedlist","algo-prefixsum","algo-priorityqueue","algo-recursion",
+  "algo-shortestpath","algo-sorting","algo-stackqueue","algo-string",
+  "algo-topologicalsort","algo-tree","algo-trie","algo-unionfind",
+]
+
+// ─── 로드맵 단계 ID 그룹 ─────────────────────────────────────────────
+const PY_INTRO_IDS   = [1,2,3,4,5,6,7,8,9,10,"p1",11,12,13,14,"p2"].map(String)
+const PY_MID_IDS     = [15,16,17,18,19,20,21,22,"p3",23,24,25,26,27,28,29,30,31].map(String)
+const PY_ADV_IDS     = [32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,"p4"].map(String)
+const CPP_BASE_IDS   = ["cpp-1","cpp-2","cpp-3","cpp-4","cpp-5","cpp-6","cpp-7","cpp-8","cpp-p1",
+                        "cpp-9","cpp-21","cpp-10","cpp-11","cpp-12","cpp-13","cpp-14","cpp-22","cpp-p2"]
+const CPP_ALGO_IDS   = ["cpp-15","cpp-23","cpp-16","cpp-17","cpp-18","cpp-19","cpp-20","cpp-p3"]
+const PS_INTRO_IDS   = ["pseudo-1","pseudo-2","pseudo-3","pseudo-4","pseudo-28","pseudo-5","pseudo-6","pseudo-7","pseudo-8","pseudo-p1"]
+const PS_MID_IDS     = ["pseudo-9","pseudo-10","pseudo-11","pseudo-12","pseudo-13","pseudo-14","pseudo-p2"]
+const PS_ALGO_IDS    = ["pseudo-15","pseudo-16","pseudo-17","pseudo-18","pseudo-19","pseudo-20","pseudo-p3","pseudo-21","pseudo-22","pseudo-23"]
+const PS_ADV_IDS     = ["pseudo-24","pseudo-25","pseudo-26","pseudo-27","igcse-sql1","igcse-sql2","igcse-logic1"]
+
+type RoadmapStage = { id: string; emoji: string; label: string; desc: string; lessonIds: string[]; external: boolean }
+
+// Python 트랙 로드맵 (Python → Algorithm → 대회)
+const PYTHON_ROADMAP: RoadmapStage[] = [
+  { id: "py-intro",  emoji: "🐍", label: "Python 입문",        desc: "변수, 조건문, 반복문 — 코딩의 기본기",          lessonIds: PY_INTRO_IDS,  external: false },
+  { id: "py-mid",    emoji: "🐍", label: "Python 심화",        desc: "자료구조, 함수 — 실용적인 프로그램 작성",        lessonIds: PY_MID_IDS,    external: false },
+  { id: "py-adv",    emoji: "🐍", label: "Python 완성",        desc: "클래스, 모듈, 종합 프로젝트",                   lessonIds: PY_ADV_IDS,    external: false },
+  { id: "algo-py",   emoji: "📊", label: "알고리즘 (Python)",   desc: "정렬, 탐색, DP — Algorithm 플랫폼에서 학습",     lessonIds: ALGO_TOPIC_IDS, external: false },
+  { id: "contest",   emoji: "🏆", label: "USACO / MCC 도전",   desc: "알고리즘 대회 — CodeQuest에서 실전 훈련",        lessonIds: [],            external: true  },
+]
+
+// C++ 트랙 로드맵 (Python → C++ → Algorithm → 대회)
+const CPP_ROADMAP: RoadmapStage[] = [
+  { id: "py-intro",  emoji: "🐍", label: "Python 입문",        desc: "변수, 조건문, 반복문 — 코딩의 기본기",          lessonIds: PY_INTRO_IDS,  external: false },
+  { id: "py-mid",    emoji: "🐍", label: "Python 심화",        desc: "자료구조, 함수 — 실용적인 프로그램 작성",        lessonIds: PY_MID_IDS,    external: false },
+  { id: "py-adv",    emoji: "🐍", label: "Python 완성",        desc: "클래스, 모듈, 종합 프로젝트",                   lessonIds: PY_ADV_IDS,    external: false },
+  { id: "cpp-base",  emoji: "⚡", label: "C++ 기초·중급",      desc: "C++ 문법, 포인터, 자료구조",                    lessonIds: CPP_BASE_IDS,  external: false },
+  { id: "algo-cpp",  emoji: "📊", label: "알고리즘 (C++)",     desc: "정렬, 탐색, 그리디, DP — C++로 문제 해결",      lessonIds: CPP_ALGO_IDS,  external: false },
+  { id: "contest",   emoji: "🏆", label: "USACO / MCC 도전",   desc: "알고리즘 대회 — CodeQuest에서 실전 훈련",        lessonIds: [],            external: true  },
+]
+
+// IGCSE 트랙 로드맵
+const IGCSE_ROADMAP: RoadmapStage[] = [
+  { id: "ps-intro",  emoji: "📋", label: "수도코드 기초",       desc: "변수, 반복문, 배열 — IGCSE 시험의 기본기",      lessonIds: PS_INTRO_IDS,  external: false },
+  { id: "ps-mid",    emoji: "📋", label: "수도코드 중급",       desc: "절차, 함수, 파일 처리",                         lessonIds: PS_MID_IDS,    external: false },
+  { id: "ps-algo",   emoji: "📋", label: "알고리즘·시험 대비",  desc: "정렬, 탐색, 스택·큐 + 기출 형식",               lessonIds: PS_ALGO_IDS,   external: false },
+  { id: "ps-adv",    emoji: "📋", label: "CS 이론·SQL·논리 회로",desc: "IGCSE Computer Science 심화",                  lessonIds: PS_ADV_IDS,    external: false },
+  { id: "mcc",       emoji: "🏆", label: "MCC 도전",            desc: "말레이시아 컴퓨팅 챌린지 — 코드린 수료 후",      lessonIds: [],            external: true  },
+]
+
+// 트랙 감지
+function getTrack(completedIds: Set<string>, inProgressIds: Set<string>): "python" | "cpp" | "igcse" {
+  const allActive = new Set([...completedIds, ...inProgressIds])
+  const hasIgcse = [...allActive].some(id => id.startsWith("pseudo-") || id.startsWith("igcse-"))
+  const hasCpp   = [...allActive].some(id => id.startsWith("cpp-"))
+  if (hasIgcse) return "igcse"
+  if (hasCpp)   return "cpp"
+  return "python"
+}
 
 function getCapabilityStatement(completedIds: Set<string>): { title: string; bullets: string[] } | null {
-  const pyDone  = PYTHON_PART_IDS.filter(id => completedIds.has(id)).length
-  const cppDone = CPP_PART_IDS.filter(id => completedIds.has(id)).length
+  const pyDone     = PYTHON_PART_IDS.filter(id => completedIds.has(id)).length
+  const cppDone    = CPP_PART_IDS.filter(id => completedIds.has(id)).length
+  const pseudoDone = PSEUDO_PART_IDS.filter(id => completedIds.has(id)).length
+
+  // IGCSE 트랙
+  if (pseudoDone >= 3 && pyDone < 5) {
+    if (pseudoDone >= 24) return {
+      title: "IGCSE CS 심화 수준",
+      bullets: ["SQL, 논리 회로, CS 이론까지 IGCSE 전 범위를 다룰 수 있어요", "MCC 등 컴퓨팅 대회에 도전할 수 있는 수준이에요"],
+    }
+    if (pseudoDone >= 15) return {
+      title: "IGCSE 알고리즘 학습 중",
+      bullets: ["정렬·탐색·스택·큐 알고리즘을 수도코드로 작성할 수 있어요", "IGCSE 시험 형식에 익숙해지고 있어요"],
+    }
+    if (pseudoDone >= 8) return {
+      title: "수도코드 중급 수준",
+      bullets: ["함수, 파일 처리 등 중급 개념을 수도코드로 표현할 수 있어요", "IGCSE Computer Science 시험을 준비하고 있어요"],
+    }
+    return {
+      title: "수도코드 기초 학습 중",
+      bullets: ["IGCSE에서 요구하는 수도코드 기본 문법을 배우고 있어요", "변수, 조건문, 반복문을 수도코드로 작성할 수 있어요"],
+    }
+  }
 
   // C++ 수준 먼저 (더 높은 수준이면 우선)
   if (cppDone >= 20) return {
@@ -236,11 +319,17 @@ function ParentReportPage() {
   const currentPart   = getCurrentPart(completedIds, inProgressIds)
   const capability    = getCapabilityStatement(completedIds)
   const understanding = getUnderstandingInfo(avgAccuracy)
+  const track         = getTrack(completedIds, inProgressIds)
+  const roadmap       = track === "igcse" ? IGCSE_ROADMAP : track === "cpp" ? CPP_ROADMAP : PYTHON_ROADMAP
+  const trackLabel    = track === "igcse" ? "IGCSE" : track === "cpp" ? "C++ 트랙" : "Python 트랙"
 
-  // 최근 막힌 레슨 (진행 중 & 미완료)
+  // CodeQuest(cq-*) 완료 문제 수
+  const cqCompleted   = [...completedIds].filter(id => id.startsWith("cq-")).length
+
+  // 약점 레슨 (복습 완료했는데 점수 낮은 것 = 실제 이해 부족)
   const stuckLessons = progress
-    .filter(p => !p.completed && p.score > 0)
-    .sort((a, b) => (b.updated_at || "").localeCompare(a.updated_at || ""))
+    .filter(p => p.progress_type === "review" && p.completed && p.score < 70)
+    .sort((a, b) => a.score - b.score)
     .slice(0, 3)
 
   // 한 줄 요약 생성
@@ -277,106 +366,145 @@ function ParentReportPage() {
 
       <main className="max-w-lg mx-auto px-4 py-5 space-y-4">
 
-        {/* ① 한 줄 요약 (가장 중요) */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-          <p className="text-base font-bold text-gray-800 leading-relaxed">{getSummary()}</p>
+        {/* ① 핵심 3가지 한눈에 */}
+        <div className="grid grid-cols-3 gap-2">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-3 text-center">
+            <p className="text-2xl font-black text-gray-800">
+              {lastActiveDays === 0 ? "오늘" : lastActiveDays === 1 ? "어제" : lastActiveDays < 999 ? `${lastActiveDays}일 전` : "—"}
+            </p>
+            <p className="text-[11px] text-gray-400 mt-0.5">마지막 접속</p>
+          </div>
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-3 text-center">
+            <p className="text-2xl font-black text-orange-500">{weeklyDays}일</p>
+            <p className="text-[11px] text-gray-400 mt-0.5">이번 주 공부</p>
+          </div>
+          <div className={cn("rounded-2xl border shadow-sm p-3 text-center", understanding.bgColor, understanding.borderColor)}>
+            <p className={cn("text-2xl font-black", understanding.color)}>
+              {avgAccuracy !== null ? `${avgAccuracy}%` : "—"}
+            </p>
+            <p className="text-[11px] text-gray-400 mt-0.5">문제 정확도</p>
+          </div>
         </div>
 
-        {/* ② 지금 어디까지 왔나요? */}
-        {currentPart ? (
-          <Section title="📍 지금 어디까지 왔나요?">
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <span className={cn(
-                  "text-xs font-bold px-2.5 py-1 rounded-full",
-                  currentPart.courseName === "Python" ? "bg-green-100 text-green-700" : "bg-blue-100 text-blue-700"
-                )}>
-                  {currentPart.courseName}
-                </span>
-                <span className="text-sm font-bold text-gray-700">{currentPart.partTitle}</span>
-              </div>
-
-              {/* 파트 내 진행도 */}
-              <div>
-                <div className="flex items-center justify-between text-xs text-gray-500 mb-1.5">
-                  <span>이 단원에서 완료한 레슨</span>
-                  <span className="font-bold">{currentPart.doneInPart} / {currentPart.totalInPart}개</span>
-                </div>
-                <div className="h-3 w-full bg-gray-100 rounded-full overflow-hidden">
-                  <div
-                    className={cn("h-full rounded-full transition-all", currentPart.courseName === "Python" ? "bg-green-500" : "bg-blue-500")}
-                    style={{ width: `${(currentPart.doneInPart / currentPart.totalInPart) * 100}%` }}
-                  />
-                </div>
-              </div>
-
-              {/* 전체 진행도 */}
-              <div className="text-sm text-gray-500">
-                전체 완료: <strong className="text-gray-700">{completedIds.size}개</strong> 레슨
-                {inProgressIds.size > 0 && <span className="ml-2 text-amber-600">({inProgressIds.size}개 진행 중)</span>}
-              </div>
+        {/* ② 지금 이 수준이면 뭘 할 수 있어요? — 가장 중요 */}
+        {capability ? (
+          <div className="bg-white rounded-2xl border-2 border-orange-200 shadow-sm p-4 space-y-3">
+            <h2 className="text-sm font-black text-gray-700">💡 지금 {data.student_name} 학생은 뭘 할 수 있나요?</h2>
+            <div className="bg-orange-50 rounded-xl px-3 py-2">
+              <p className="text-sm font-black text-orange-700">{capability.title}</p>
             </div>
-          </Section>
-        ) : completedIds.size > 0 ? (
-          <Section title="📍 학습 현황">
-            <p className="text-sm text-gray-600">총 <strong>{completedIds.size}개</strong> 레슨을 완료했어요. 모든 과정을 마쳤거나 새 단원을 시작하기 전이에요.</p>
-          </Section>
-        ) : null}
-
-        {/* ③ 이 수준이면 뭘 할 수 있나요? */}
-        {capability && (
-          <Section title="💡 지금 이 수준이면 뭘 할 수 있나요?">
-            <div>
-              <p className="text-sm font-bold text-gray-800 mb-2">{capability.title}</p>
-              <ul className="space-y-1.5">
-                {capability.bullets.map((b, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
-                    <span className="text-green-500 mt-0.5 flex-shrink-0">✓</span>
-                    {b}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Section>
+            <ul className="space-y-2">
+              {capability.bullets.map((b, i) => (
+                <li key={i} className="flex items-start gap-2 text-sm text-gray-700 leading-relaxed">
+                  <span className="text-green-500 mt-0.5 flex-shrink-0 font-bold">✓</span>
+                  {b}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+            <p className="text-sm text-gray-500">아직 학습을 시작하지 않았어요. 첫 레슨을 시작하면 여기에 능력 설명이 나타나요.</p>
+          </div>
         )}
 
-        {/* ④ 이해도: 쉽게 풀었나요 어렵게 풀었나요? */}
-        <div className={cn("rounded-2xl border p-4 space-y-2", understanding.bgColor, understanding.borderColor)}>
-          <h2 className="text-sm font-black text-gray-700">🧠 문제를 얼마나 잘 풀고 있나요?</h2>
-          <p className={cn("text-base font-bold", understanding.color)}>{understanding.label}</p>
-          <p className="text-sm text-gray-600 leading-relaxed">{understanding.description}</p>
-          {quizzes.length > 0 && (
-            <div className="flex gap-1 mt-2 flex-wrap">
-              {quizzes.slice(0, 7).map((q, i) => {
-                const acc = Math.round((q.correct_answers / q.total_questions) * 100)
+        {/* ③ 학습 여정 로드맵 */}
+        <Section title={`🗺️ ${trackLabel} 학습 여정`}>
+          <p className="text-xs text-gray-400 -mt-1 mb-3">
+            {track === "igcse"
+              ? "코드린은 수도코드 기초부터 IGCSE CS 심화까지 이어지는 전 과정을 다뤄요"
+              : track === "cpp"
+              ? "코드린은 Python 입문부터 C++ 알고리즘 대회(USACO/MCC)까지 이어지는 전 과정을 다뤄요"
+              : "코드린은 Python 입문부터 알고리즘 대회(USACO/MCC)까지 이어지는 전 과정을 다뤄요"}
+          </p>
+          <div className="space-y-2">
+            {roadmap.map((stage, idx) => {
+              if (stage.external) {
+                // 외부 플랫폼 목표 — 별도 스타일
+                const prevStage = roadmap[idx - 1]
+                const prevDone = prevStage?.lessonIds.filter(id => completedIds.has(id)).length ?? 0
+                const prevTotal = prevStage?.lessonIds.length ?? 1
+                const prevComplete = prevDone === prevTotal
                 return (
-                  <div key={i} className="flex flex-col items-center gap-0.5">
-                    <div className="w-7 h-16 bg-gray-100 rounded-lg overflow-hidden flex flex-col justify-end">
-                      <div
-                        className={cn("rounded-lg", acc >= 80 ? "bg-green-500" : acc >= 60 ? "bg-blue-400" : acc >= 45 ? "bg-amber-400" : "bg-red-400")}
-                        style={{ height: `${acc}%` }}
-                      />
+                  <div key={stage.id} className={cn(
+                    "rounded-xl p-3 border-2 border-dashed",
+                    prevComplete ? "border-yellow-300 bg-yellow-50" : "border-gray-200 bg-gray-50 opacity-50"
+                  )}>
+                    <div className="flex items-center gap-3">
+                      <span className="text-xl">{stage.emoji}</span>
+                      <div>
+                        <p className={cn("text-sm font-bold", prevComplete ? "text-yellow-700" : "text-gray-400")}>
+                          {stage.label}
+                        </p>
+                        <p className="text-[11px] text-gray-400">{stage.desc}</p>
+                        {cqCompleted > 0 && (
+                          <p className="text-[11px] text-blue-600 font-semibold mt-0.5">🏆 CodeQuest {cqCompleted}문제 완료</p>
+                        )}
+                        {prevComplete && (
+                          <p className="text-[11px] text-yellow-600 font-bold mt-0.5">🎉 코드린 수료! 이제 다음 단계에 도전해보세요</p>
+                        )}
+                      </div>
                     </div>
-                    <span className="text-[9px] text-gray-400">{acc}%</span>
                   </div>
                 )
-              })}
-              <div className="flex items-end pb-4 ml-1">
-                <span className="text-[10px] text-gray-400">← 최근 퀴즈</span>
-              </div>
-            </div>
-          )}
-        </div>
+              }
 
-        {/* ⑤ 이번 주 얼마나 했나요? */}
-        <Section title="📅 이번 주 얼마나 공부했나요?">
+              const done = stage.lessonIds.filter(id => completedIds.has(id)).length
+              const total = stage.lessonIds.length
+              const pct = Math.round((done / total) * 100)
+              const isComplete = done === total
+              const isActive = done > 0 && !isComplete
+              const isLocked = done === 0 && idx > 0 && (() => {
+                const prev = roadmap[idx - 1]
+                return !prev.external && prev.lessonIds.filter(id => completedIds.has(id)).length === 0
+              })()
+              return (
+                <div key={stage.id} className={cn(
+                  "rounded-xl p-3 border transition-all",
+                  isComplete ? "bg-green-50 border-green-200" :
+                  isActive ? "bg-white border-orange-200 shadow-sm" :
+                  isLocked ? "bg-gray-50 border-gray-100 opacity-40" :
+                  "bg-white border-gray-100"
+                )}>
+                  <div className="flex items-center gap-3">
+                    <span className="text-xl flex-shrink-0">{isComplete ? "✅" : isLocked ? "🔒" : stage.emoji}</span>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-2">
+                        <p className={cn("text-sm font-bold",
+                          isComplete ? "text-green-700" : isLocked ? "text-gray-400" : "text-gray-800"
+                        )}>{stage.label}</p>
+                        <span className={cn("text-xs font-bold flex-shrink-0",
+                          isComplete ? "text-green-600" : isActive ? "text-orange-600" : "text-gray-400"
+                        )}>
+                          {isLocked ? "잠김" : `${done}/${total}`}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-gray-400 mt-0.5">{stage.desc}</p>
+                      {!isLocked && (
+                        <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden mt-1.5">
+                          <div
+                            className={cn("h-full rounded-full transition-all",
+                              isComplete ? "bg-green-500" : "bg-orange-400"
+                            )}
+                            style={{ width: `${pct}%` }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </Section>
+
+        {/* ④ 이번 주 얼마나 했나요? */}
+        <Section title="📅 이번 주 공부 습관">
           <div className="flex items-center gap-4">
-            {/* 요일 칸 */}
             <div className="flex gap-1.5">
               {["월","화","수","목","금","토","일"].map((day, i) => {
-                // 이번 주 각 요일에 활동했는지 확인
                 const targetDate = new Date()
-                const dayOfWeek = targetDate.getDay() // 0=일
+                const dayOfWeek = targetDate.getDay()
                 const mondayOffset = (dayOfWeek === 0 ? -6 : 1 - dayOfWeek)
                 const monday = new Date(targetDate)
                 monday.setDate(targetDate.getDate() + mondayOffset)
@@ -395,7 +523,7 @@ function ParentReportPage() {
                       isActive ? "bg-orange-400 text-white shadow-sm" :
                       "bg-gray-100 text-gray-300"
                     )}>
-                      {isActive ? "✓" : isFuture ? "" : ""}
+                      {isActive ? "✓" : ""}
                     </div>
                     <span className={cn("text-[10px]", isToday ? "text-orange-500 font-bold" : "text-gray-400")}>{day}</span>
                   </div>
@@ -418,18 +546,18 @@ function ParentReportPage() {
           </p>
         </Section>
 
-        {/* ⑥ 어디서 막혀 있나요? (있을 경우만) */}
+        {/* ⑤ 약점 레슨 */}
         {stuckLessons.length > 0 && (
           <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 space-y-3">
-            <h2 className="text-sm font-black text-amber-800">⚡ 지금 이 부분이 어려운 것 같아요</h2>
-            <p className="text-xs text-amber-600">시작했지만 아직 완료하지 못한 레슨이에요. 막히는 부분이 있으면 선생님께 질문하도록 격려해 주세요.</p>
+            <h2 className="text-sm font-black text-amber-800">⚡ 이 부분을 좀 더 연습하면 좋아요</h2>
+            <p className="text-xs text-amber-600">배웠지만 복습 점수가 낮은 단원이에요. 선생님께 질문하거나 다시 풀어보면 도움이 돼요.</p>
             <div className="space-y-2">
               {stuckLessons.map((p, i) => (
                 <div key={i} className="flex items-center gap-2 bg-white rounded-xl px-3 py-2">
                   <span className="text-amber-400">⚡</span>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-gray-700 truncate">{getLessonDisplayName(p.lesson_id)}</p>
-                    <p className="text-xs text-gray-400">{p.score > 0 ? `${p.score}% 진행 중` : "시작함"}</p>
+                    <p className="text-sm font-semibold text-gray-700 truncate">{getLessonName(p.lesson_id, "ko")}</p>
+                    <p className="text-xs text-gray-400">복습 점수 {p.score}%</p>
                   </div>
                 </div>
               ))}
@@ -437,7 +565,7 @@ function ParentReportPage() {
           </div>
         )}
 
-        {/* ⑦ 부모가 할 수 있는 것 */}
+        {/* ⑥ 부모가 할 수 있는 것 */}
         <Section title="🤝 부모님이 도와주실 수 있어요">
           <ul className="space-y-2 text-sm text-gray-600">
             {lastActiveDays >= 3 && <li className="flex gap-2"><span className="text-orange-500 flex-shrink-0">•</span>"{data.student_name}아, 오늘 코드린 한 번 켜볼까?"라고 가볍게 말해주세요</li>}
@@ -465,17 +593,6 @@ function ParentReportPage() {
   )
 }
 
-// 레슨 ID → 사람이 읽기 쉬운 이름
-function getLessonDisplayName(lessonId: string): string {
-  const allParts = [...pythonParts, ...cppParts, ...pseudoParts]
-  for (const part of allParts) {
-    if (part.lessonIds.map(String).includes(lessonId)) {
-      const idx = part.lessonIds.map(String).indexOf(lessonId)
-      return `${part.title} — ${idx + 1}번째 레슨`
-    }
-  }
-  return lessonId
-}
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (

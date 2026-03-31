@@ -346,6 +346,15 @@ export default function CurriculumPage() {
 
   const { profile } = useAuth()
   const isTeacher = profile?.role === "teacher"
+  // IGCSE 트랙 학생 감지 (pseudo-* or igcse-* 레슨을 가진 경우)
+  const isIgcseStudent = !isTeacher && (() => {
+    try {
+      const saved = localStorage.getItem("completedLessons")
+      if (!saved) return false
+      const arr: (string | number)[] = JSON.parse(saved)
+      return arr.some(id => String(id).startsWith("pseudo-") || String(id).startsWith("igcse-"))
+    } catch { return false }
+  })()
 
   const [completedLessons, setCompletedLessons] = useState<Set<number | string>>(new Set())
   const [completedQuizzes, setCompletedQuizzes] = useState<Set<number | string>>(new Set())
@@ -419,13 +428,13 @@ export default function CurriculumPage() {
     }
   }, [loaded, completedLessons]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // 학생이 IGCSE 탭에 있으면 Python으로 리셋 (profile 로드 후 확인)
+  // 학생이 IGCSE 탭에 있으면 Python으로 리셋 (IGCSE 트랙 학생 제외)
   useEffect(() => {
-    if (profile !== undefined && !isTeacher && selectedCourse === "pseudo") {
+    if (profile !== undefined && !isTeacher && !isIgcseStudent && selectedCourse === "pseudo") {
       setSelectedCourse("python")
       localStorage.setItem("selectedCourse", "python")
     }
-  }, [profile, isTeacher, selectedCourse])
+  }, [profile, isTeacher, isIgcseStudent, selectedCourse])
 
   // 진도 갱신 헬퍼 (클라우드 복원 + visibility 복귀 시 공유)
   const refreshProgress = useCallback(() => {
@@ -608,8 +617,8 @@ export default function CurriculumPage() {
               <span className={`text-[10px] font-normal ${selectedCourse === "cpp" ? "text-white/70" : "text-gray-400"}`}>20강</span>
             </button>
 
-            {/* IGCSE — 선생님 전용 */}
-            {isTeacher && (
+            {/* IGCSE — 선생님 또는 IGCSE 트랙 학생 */}
+            {(isTeacher || isIgcseStudent) && (
               <button
                 onClick={() => handleCourseChange("pseudo")}
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-black text-sm font-bold transition-all ${
@@ -619,7 +628,7 @@ export default function CurriculumPage() {
                 }`}
               >
                 📄 IGCSE
-                <span className={`text-[10px] font-normal ${selectedCourse === "pseudo" ? "text-white/70" : "text-gray-400"}`}>선생님 전용</span>
+                <span className={`text-[10px] font-normal ${selectedCourse === "pseudo" ? "text-white/70" : "text-gray-400"}`}>37강</span>
               </button>
             )}
           </div>
@@ -643,17 +652,29 @@ export default function CurriculumPage() {
                 </div>
               </div>
               
-              {/* 다음 수업 버튼 */}
-              {nextLessonInfo && (
-                <Link
-                  href={`/learn/${nextLessonInfo.lesson.id}`}
-                  className="bg-green-500 text-white px-6 py-3 rounded-xl border-2 border-black font-bold hover:bg-green-600 transition-colors flex items-center justify-center gap-2 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
-                >
-                  <Sparkles className="h-5 w-5" />
-                  <span className="hidden sm:inline">{t("다음:", "Next:")}</span> {nextLessonInfo.lesson.title}
-                  <Play className="h-5 w-5" />
-                </Link>
-              )}
+              {/* 버튼 그룹 */}
+              <div className="flex flex-col sm:flex-row gap-2">
+                {/* 다음 수업 버튼 */}
+                {nextLessonInfo && (
+                  <Link
+                    href={`/learn/${nextLessonInfo.lesson.id}`}
+                    className="bg-green-500 text-white px-6 py-3 rounded-xl border-2 border-black font-bold hover:bg-green-600 transition-colors flex items-center justify-center gap-2 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
+                  >
+                    <Sparkles className="h-5 w-5" />
+                    <span className="hidden sm:inline">{t("다음:", "Next:")}</span> {nextLessonInfo.lesson.title}
+                    <Play className="h-5 w-5" />
+                  </Link>
+                )}
+                {/* 연습 퀴즈 버튼 */}
+                {completedCount > 0 && (
+                  <Link
+                    href="/algorithm"
+                    className="bg-purple-500 text-white px-5 py-3 rounded-xl border-2 border-black font-bold hover:bg-purple-600 transition-colors flex items-center justify-center gap-2 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
+                  >
+                    🧠 {t("연습하기", "Practice")}
+                  </Link>
+                )}
+              </div>
             </div>
             
             {/* 진도 바 */}

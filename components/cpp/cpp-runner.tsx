@@ -152,6 +152,32 @@ export function CppRunner({
   const [hasRun, setHasRun] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [teacherGrade, setTeacherGrade] = useState<"pass" | "fail" | "auto" | null | undefined>(undefined) // undefined = 아직 로딩
+
+  // 마운트 시 이전 제출 결과 확인 (submissionMode만)
+  useEffect(() => {
+    if (!submissionMode || !stepId) return
+    const fetchPrevGrade = async () => {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+      const { data } = await supabase
+        .from("homework_submissions")
+        .select("teacher_grade")
+        .eq("student_id", user.id)
+        .eq("step_id", stepId)
+        .order("submitted_at", { ascending: false })
+        .limit(1)
+        .single()
+      if (data) {
+        setIsSubmitted(true)
+        setTeacherGrade((data.teacher_grade as "pass" | "fail" | "auto" | null) ?? null)
+      } else {
+        setTeacherGrade(null)
+      }
+    }
+    fetchPrevGrade()
+  }, [submissionMode, stepId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // 코드 변경 시 localStorage 자동 저장
   useEffect(() => {
@@ -162,8 +188,9 @@ export function CppRunner({
   const lineCount = initialCode.split("\n").length
   const editorMinHeight = minHeight ?? `${Math.max(280, lineCount * 28 + 64)}px`
 
-  const saveCodeSilently = async (currentCode: string) => {
-    if (isSubmitting || isSubmitted) return
+  // teacher_grade: 'auto' = expectedOutput 일치, null = 자유 구현(선생님 확인 필요)
+  const saveCodeSilently = async (currentCode: string, autoGrade: "auto" | null = null) => {
+    if (isSubmitting || (isSubmitted && teacherGrade !== "fail")) return
     setIsSubmitting(true)
     try {
       const supabase = createClient()
@@ -183,8 +210,12 @@ export function CppRunner({
           step_id: stepId || "unknown",
           step_title: stepTitle || "",
           code: currentCode,
+          teacher_grade: autoGrade,
+          expected_output: expectedOutput || null,
+          problem_description: task || null,
         })
       setIsSubmitted(true)
+      setTeacherGrade(autoGrade ?? null) // 제출 직후엔 자동채점 결과 or null
     } catch {
       // 백그라운드 저장 실패는 조용히 처리 (학생 방해 안 함)
     } finally {
@@ -237,9 +268,12 @@ export function CppRunner({
       } else {
         setOutput(runStdout)
         setHasRun(true)
-        if (submissionMode && !isSubmitted) {
-          // 자동 저장 (백그라운드) + 다음 버튼 활성화
-          saveCodeSilently(code)
+        if (submissionMode && (!isSubmitted || teacherGrade === "fail")) {
+          // expectedOutput 있으면 자동 채점, 없으면 null(선생님 확인)
+          const autoGrade = expectedOutput && normalize(runStdout) === normalize(expectedOutput)
+            ? "auto" as const
+            : null
+          saveCodeSilently(code, autoGrade)
           onSuccess?.()
         } else if (!submissionMode) {
           if (expectedOutput) {
@@ -424,18 +458,27 @@ export function CppRunner({
         </div>
       )}
 
-      {/* 자동 저장 상태 표시 (submissionMode만) */}
+      {/* 제출 상태 / 선생님 채점 결과 (submissionMode만) */}
       {submissionMode && isSubmitting && (
         <p className="text-center text-xs text-gray-400 flex items-center justify-center gap-1">
           <Loader2 className="w-3 h-3 animate-spin" />
           {isEn ? "Saving..." : "저장 중..."}
         </p>
       )}
-      {submissionMode && isSubmitted && (
-        <p className="text-center text-xs text-green-600 flex items-center justify-center gap-1">
-          <Check className="w-3 h-3" />
-          {isEn ? "Saved ✓" : "저장됨 ✓"}
-        </p>
+      {submissionMode && isSubmitted && !isSubmitting && (
+        <div className={cn(
+          "rounded-xl px-4 py-3 text-sm font-bold text-center",
+          teacherGrade === "pass" || teacherGrade === "auto"
+            ? "bg-green-50 text-green-700 border border-green-200"
+            : teacherGrade === "fail"
+            ? "bg-red-50 text-red-700 border border-red-200"
+            : "bg-gray-50 text-gray-500 border border-gray-200"
+        )}>
+          {teacherGrade === "pass" && (isEn ? "✅ Teacher approved!" : "✅ 선생님이 정답 확인했어요!")}
+          {teacherGrade === "auto" && (isEn ? "✅ Correct! (auto-graded)" : "✅ 정답이에요! (자동 채점)")}
+          {teacherGrade === "fail" && (isEn ? "❌ Try again! Teacher left feedback." : "❌ 다시 도전해보세요! 선생님이 확인했어요.")}
+          {(teacherGrade === null || teacherGrade === undefined) && (isEn ? "📬 Submitted — waiting for teacher review" : "📬 제출됨 — 선생님 확인 대기 중")}
+        </div>
       )}
 
       {/* 3번 틀린 후 정답 코드 공개 */}
