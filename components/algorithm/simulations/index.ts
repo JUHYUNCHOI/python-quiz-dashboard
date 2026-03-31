@@ -53,6 +53,24 @@ import {
   inorderSim,
 } from './sims/graph'
 
+// String / Basics (new)
+import {
+  alphabetSearchSim,
+  charFreqSim,
+  palindromeSim,
+  anagramSim,
+  palindromeMakeSim,
+  factorialSim,
+} from './sims/string'
+
+import {
+  minMaxSim,
+  twoSumSim,
+  stockSim,
+  sumCountSim,
+  coordCompressSim,
+} from './sims/basics'
+
 const ALL_SIMS: SimDefinition[] = [
   // sorting
   cutlineSim,
@@ -89,6 +107,19 @@ const ALL_SIMS: SimDefinition[] = [
   bfsSim,
   shortestPathBFSSim,
   inorderSim,
+  // string
+  alphabetSearchSim,
+  charFreqSim,
+  palindromeSim,
+  anagramSim,
+  palindromeMakeSim,
+  factorialSim,
+  // basics
+  minMaxSim,
+  twoSumSim,
+  stockSim,
+  sumCountSim,
+  coordCompressSim,
 ]
 
 const SIM_REGISTRY: Record<string, SimDefinition> = {}
@@ -101,7 +132,7 @@ const ALIASES: Record<string, SimDefinition> = {
   // sorting
   cutline:        cutlineSim,
   selection:      selectionSortSim,
-  coordSort:      selectionSortSim,
+  coordSort:      coordCompressSim,
   stableSort:     insertionSortSim,
   mergeIntervals: mergeSortSim,
 
@@ -110,6 +141,8 @@ const ALIASES: Record<string, SimDefinition> = {
   window:         slidingWindowSim,
   charSum:        prefixSumSim,
   '2DSum':        prefixSumSim,
+  chess:          prefixSumSim,
+  modSum:         prefixSumSim,
 
   // stack / queue / hash
   stackImpl:      stackSim,
@@ -131,12 +164,13 @@ const ALIASES: Record<string, SimDefinition> = {
   treeCut:        binarySearchSim,
   router:         binarySearchSim,
   kth:            binarySearchSim,
-  'lIS':          lisSim,
+  lIS:            lisSim,
 
   // recursion / greedy
   coin:           greedyCoinSim,
   aTM:            greedyCoinSim,
   meeting:        greedyMeetingSim,
+  gas:            greedyMeetingSim,
 
   // DP
   fib1:           fibDPSim,
@@ -145,6 +179,11 @@ const ALIASES: Record<string, SimDefinition> = {
   tile:           stairsSim,
   stair:          stairsSim,
   easyStair:      stairsSim,
+  wine:           stairsSim,
+  rGB:            stairsSim,
+  triangle:       stairsSim,
+  wire:           stairsSim,
+  maxSub:         lisSim,
   knapsack:       knapsackSim,
   lCS:            lisSim,
   bitonic:        lisSim,
@@ -155,11 +194,21 @@ const ALIASES: Record<string, SimDefinition> = {
   dFS2:           dfsSim,
   dFSBFS:         dfsSim,
   cabbage:        dfsSim,
+  complex:        dfsSim,
+  bipartite:      dfsSim,
+  wall:           dfsSim,
   bFS1:           bfsSim,
   bFS2:           bfsSim,
+  tomato:         bfsSim,
+  tomato3:        bfsSim,
+  knight:         bfsSim,
+  snake:          bfsSim,
+  hide:           bfsSim,
   maze:           shortestPathBFSSim,
   treeTraversal:  inorderSim,
   levelOrder:     inorderSim,
+  maxDepth:       inorderSim,
+  invert:         inorderSim,
 }
 
 for (const [alias, sim] of Object.entries(ALIASES)) {

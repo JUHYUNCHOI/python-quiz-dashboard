@@ -57,6 +57,7 @@ export const stringTopic: AlgoTopic = {
             difficulty: 'bronze',
             link: 'https://www.acmicpc.net/problem/10809',
             simIntro: '문자열을 한 글자씩 순회하면서 각 알파벳의 첫 등장 위치를 기록하는 과정을 확인해보세요!',
+            sim: { type: 'alphabet-search', defaultInput: 'baekjoon' },
             descriptionHTML: `
                 <h3>문제</h3>
                 <p>알파벳 소문자로만 이루어진 단어 S가 주어진다. 각각의 알파벳에 대해서, 단어에 포함되어 있는 경우에는 <strong>처음 등장하는 위치</strong>를, 포함되어 있지 않은 경우에는 <strong>-1</strong>을 출력하는 프로그램을 작성하시오.</p>
@@ -294,6 +295,7 @@ npos면 -1로 변환하여 출력합니다.`,
             difficulty: 'silver',
             link: 'https://www.acmicpc.net/problem/1157',
             simIntro: '딕셔너리로 글자 빈도를 세는 과정을 확인해보세요! (코드 탭에서는 배열 방식도 볼 수 있어요)',
+            sim: { type: 'char-freq', defaultInput: 'Mississipi' },
             descriptionHTML: `
                 <h3>문제</h3>
                 <p>알파벳 대소문자로 이루어진 단어가 주어집니다.
@@ -730,6 +732,7 @@ int main() {
             difficulty: 'easy',
             link: 'https://leetcode.com/problems/valid-palindrome/',
             simIntro: '힌트 3에서 배운 투 포인터가 양쪽 끝에서 어떻게 좁혀가는지 직접 확인해보세요!',
+            sim: { type: 'palindrome', defaultInput: 'racecar' },
             descriptionHTML: `
                 <h3>문제</h3>
                 <p>문자열 <code>s</code>가 주어집니다.
@@ -1082,6 +1085,7 @@ tolower()로 대소문자 무시.`,
             difficulty: 'medium',
             link: 'https://leetcode.com/problems/group-anagrams/',
             simIntro: '정렬 키로 애너그램이 어떻게 같은 그룹으로 묶이는지 확인해보세요!',
+            sim: { type: 'anagram', defaultInput: 'eat tea tan ate nat bat' },
             descriptionHTML: `
                 <h3>문제</h3>
                 <p>문자열 배열 <code>strs</code>가 주어집니다.
@@ -1341,6 +1345,7 @@ mp[key]에 자동으로 push_back됩니다.`,
             difficulty: 'silver',
             link: 'https://www.acmicpc.net/problem/1213',
             simIntro: '딕셔너리로 빈도를 세고, 절반씩 배치하는 과정을 확인해보세요! (코드 탭에서는 배열 방식도 볼 수 있어요)',
+            sim: { type: 'palindrome-make', defaultInput: 'aabbccd' },
             descriptionHTML: `
                 <h3>문제</h3>
                 <p>영어 대문자로만 이루어진 이름이 주어집니다.

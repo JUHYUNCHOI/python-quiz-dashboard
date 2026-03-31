@@ -45,6 +45,7 @@ export const recursionTopic: AlgoTopic = {
             difficulty: 'bronze',
             link: 'https://www.acmicpc.net/problem/27433',
             simIntro: 'factorial(5)의 콜 스택이 어떻게 쌓이고 풀리는지 확인해보세요!',
+            sim: { type: 'factorial', defaultInput: '5' },
             inputLabel: '입력값 (N)',
             descriptionHTML: `
                 <h3>문제</h3>
@@ -200,6 +201,7 @@ long long factorial(int n) {
             difficulty: 'bronze',
             link: 'https://www.acmicpc.net/problem/10870',
             simIntro: 'fib(5)의 재귀 호출 트리가 어떻게 펼쳐지는지 확인해보세요!',
+            sim: { type: 'recursion', defaultInput: '5' },
             inputLabel: '입력값 (n)',
             descriptionHTML: `
                 <h3>문제</h3>

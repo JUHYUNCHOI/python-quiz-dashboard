@@ -43,6 +43,7 @@ export const arrayTopic: AlgoTopic = {
             difficulty: 'bronze',
             link: 'https://www.acmicpc.net/problem/10818',
             simIntro: '배열을 처음부터 끝까지 순회하면서 최솟값과 최댓값을 추적하는 과정을 단계별로 확인해보세요!',
+            sim: { type: 'minmax', defaultInput: '20 10 35 30 7' },
             descriptionHTML: `
                 <h3>문제</h3>
                 <p>N개의 정수가 주어진다. 이때, 최솟값과 최댓값을 구하는 프로그램을 작성하시오.</p>
@@ -339,6 +340,8 @@ int main() {
             title: 'LeetCode 1 - Two Sum',
             difficulty: 'easy',
             link: 'https://leetcode.com/problems/two-sum/',
+            simIntro: '해시 테이블로 O(n)에 Two Sum을 푸는 과정을 확인해보세요!',
+            sim: { type: 'two-sum', defaultInput: '2 7 11 15' },
             descriptionHTML: `
                 <h3>문제</h3>
                 <p>정수 배열 <code>nums</code>와 정수 <code>target</code>이 주어집니다.
@@ -601,6 +604,7 @@ seen에 짝꿍이 있으면 정답 반환 (O(1) 조회).`,
             difficulty: 'easy',
             link: 'https://leetcode.com/problems/best-time-to-buy-and-sell-stock/',
             simIntro: '최솟값을 추적하면서 이익을 계산하는 과정을 단계별로 확인해보세요!',
+            sim: { type: 'stock', defaultInput: '7 1 5 3 6 4' },
             descriptionHTML: `
                 <h3>문제</h3>
                 <p>주식 가격 배열 <code>prices</code>가 주어집니다.
@@ -862,7 +866,8 @@ O(n) 한 번 순회로 최적 해를 구합니다.`,
             title: 'BOJ 2003 - 수들의 합 2',
             difficulty: 'silver',
             link: 'https://www.acmicpc.net/problem/2003',
-            simIntro: '슬라이딩 윈도우가 합을 유지하며 이동하는 과정을 확인해보세요!',
+            simIntro: '투 포인터가 합을 유지하며 이동하는 과정을 확인해보세요!',
+            sim: { type: 'sum-count', defaultInput: '1 2 3 2 5' },
             descriptionHTML: `
                 <h3>문제</h3>
                 <p>N개의 수로 이루어진 수열에서,
