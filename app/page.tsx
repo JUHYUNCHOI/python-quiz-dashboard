@@ -154,39 +154,12 @@ function readSelectedCourse(): "python" | "cpp" {
 
 
 function LandingPage() {
-  const { t, lang } = useLanguage()
-
-  const features = [
-    {
-      icon: <BookOpen className="w-6 h-6" />,
-      color: "bg-green-100 text-green-600",
-      title: t("체계적인 커리큘럼", "Structured Curriculum"),
-      desc: t("Python 52강 + C++ 20강으로 체계적으로 코딩을 배워요", "Learn coding step-by-step with 52 Python + 20 C++ lessons"),
-    },
-    {
-      icon: <Brain className="w-6 h-6" />,
-      color: "bg-purple-100 text-purple-600",
-      title: t("스마트 퀴즈", "Smart Quizzes"),
-      desc: t("간격 반복으로 내가 틀린 문제를 자동으로 복습해요", "Spaced repetition automatically reviews your weak points"),
-    },
-    {
-      icon: <Flame className="w-6 h-6" />,
-      color: "bg-orange-100 text-orange-600",
-      title: t("학습 스트릭", "Daily Streak"),
-      desc: t("매일 꾸준히 학습하고 연속 기록을 쌓아요", "Build a daily habit and track your streak"),
-    },
-    {
-      icon: <BarChart3 className="w-6 h-6" />,
-      color: "bg-blue-100 text-blue-600",
-      title: t("진도 관리", "Progress Tracking"),
-      desc: t("어느 레슨까지 완료했는지 한눈에 확인해요", "See exactly which lessons you've completed at a glance"),
-    },
-  ]
+  const { t } = useLanguage()
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-white">
       {/* 상단 헤더 */}
-      <div className="flex items-center justify-between px-5 py-4 max-w-2xl mx-auto">
+      <div className="flex items-center justify-between px-5 py-4 max-w-lg mx-auto">
         <div className="flex items-center gap-2">
           <span className="text-2xl">🦒</span>
           <span className="font-black text-xl text-gray-800">코드린</span>
@@ -199,170 +172,178 @@ function LandingPage() {
         </Link>
       </div>
 
-      <main className="max-w-2xl mx-auto px-5 pb-16 space-y-10">
+      <main className="max-w-lg mx-auto px-5 pb-16 space-y-10">
 
-        {/* 히어로 섹션 */}
-        <div className="text-center pt-6 pb-2 space-y-4">
-          <div className="text-6xl">🦒</div>
-          <h1 className="text-3xl font-black text-gray-900 leading-tight">
-            {t("코딩, 재미있게\n배워보세요", "Learn Coding,\nStep by Step")}
+        {/* ── 히어로 ── */}
+        <div className="text-center pt-4 pb-2 space-y-3">
+          <div className="text-5xl">🦒</div>
+          <h1 className="text-2xl font-black text-gray-900 leading-tight">
+            {t("코딩 시작부터\nUSACO·MCC 대회까지", "From First Code\nto USACO & MCC")}
           </h1>
-          <p className="text-base text-gray-500 leading-relaxed max-w-sm mx-auto">
+          <p className="text-sm text-gray-500 leading-relaxed">
             {t(
-              "중학생·고등학생을 위한 코딩 학습 플랫폼.\n입문부터 대회까지 한 곳에서.",
-              "Coding platform for middle & high school students.\nFrom first lesson to competitions, all in one place."
+              "중학생·고등학생을 위한 단계별 코딩 로드맵.\n선생님과 함께, 내 속도로.",
+              "A step-by-step coding roadmap for middle & high schoolers.\nAt your own pace, with your teacher."
             )}
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
-            <Link
-              href="/login"
-              className="px-8 py-3.5 rounded-2xl text-base font-bold text-white bg-orange-500 hover:bg-orange-600 transition-colors shadow-md shadow-orange-200"
-            >
-              {t("무료로 시작하기", "Get Started Free")}
-            </Link>
-            <Link
-              href="/curriculum"
-              className="px-8 py-3.5 rounded-2xl text-base font-bold text-gray-700 bg-white border-2 border-gray-200 hover:border-gray-300 transition-colors"
-            >
-              {t("커리큘럼 보기", "Browse Curriculum")}
-            </Link>
-          </div>
+          <Link
+            href="/login"
+            className="inline-block mt-1 px-8 py-3 rounded-2xl bg-orange-500 text-white font-black text-base border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
+          >
+            {t("무료로 시작하기 →", "Get Started Free →")}
+          </Link>
         </div>
 
-        {/* 기능 카드 */}
-        <div>
-          <h2 className="text-lg font-black text-gray-800 mb-3">
-            {t("이런 걸 배울 수 있어요", "What you'll get")}
+        {/* ── 학습 경로 (핵심) ── */}
+        <div className="space-y-1">
+          <h2 className="text-base font-black text-gray-800 mb-3">
+            {t("내가 가는 경로", "Your Learning Path")}
           </h2>
-          <div className="grid grid-cols-2 gap-3">
-            {features.map((f, i) => (
-              <div key={i} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm space-y-2">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${f.color}`}>
-                  {f.icon}
+
+          {/* STEP 1 */}
+          <div className="flex gap-3 items-stretch">
+            <div className="flex flex-col items-center">
+              <div className="w-8 h-8 rounded-full bg-orange-500 border-2 border-black flex items-center justify-center text-white font-black text-xs flex-shrink-0">1</div>
+              <div className="w-0.5 bg-orange-200 flex-1 mt-1" />
+            </div>
+            <div className="flex-1 pb-4">
+              <div className="rounded-2xl border-2 border-orange-300 bg-orange-50 p-4 space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">🐍</span>
+                  <div>
+                    <p className="font-black text-gray-900 text-sm">Python 기초 <span className="text-[11px] font-normal text-gray-400">52강</span></p>
+                    <p className="text-[11px] text-gray-500">{t("코딩 경험 없어도 시작 가능", "No prior coding experience needed")}</p>
+                  </div>
                 </div>
-                <p className="font-bold text-sm text-gray-800">{f.title}</p>
-                <p className="text-xs text-gray-500 leading-relaxed">{f.desc}</p>
+                <div className="bg-white rounded-xl border border-orange-100 p-2.5 space-y-1">
+                  <p className="text-[10px] font-black text-orange-500 uppercase tracking-wider">{t("이걸 만들 수 있어요", "You'll be able to build")}</p>
+                  {([
+                    ['🎮', t('숫자 맞추기 게임, Hangman', 'Number guessing game, Hangman')],
+                    ['🧮', t('성적 계산기, 환율 변환기', 'GPA calculator, currency converter')],
+                    ['📊', t('데이터 정렬·검색 프로그램', 'Data sorting & search programs')],
+                  ] as [string, string][]).map(([icon, text]) => (
+                    <div key={text} className="flex items-center gap-1.5 text-xs text-gray-700">
+                      <span>{icon}</span><span>{text}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            ))}
+            </div>
+          </div>
+
+          {/* STEP 2 — 갈림길 */}
+          <div className="flex gap-3 items-stretch">
+            <div className="flex flex-col items-center">
+              <div className="w-8 h-8 rounded-full bg-blue-500 border-2 border-black flex items-center justify-center text-white font-black text-xs flex-shrink-0">2</div>
+              <div className="w-0.5 bg-gray-200 flex-1 mt-1" />
+            </div>
+            <div className="flex-1 pb-4">
+              <p className="text-[10px] font-black text-gray-400 mb-2 uppercase tracking-wider">{t("목표에 따라 선택", "Choose your path")}</p>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="rounded-2xl border-2 border-blue-300 bg-blue-50 p-3 space-y-2">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-base">⚡</span>
+                    <p className="font-black text-gray-900 text-sm">C++ 전환</p>
+                  </div>
+                  <p className="text-[11px] text-gray-500">{t("20강", "20 lessons")}</p>
+                  <div className="bg-white rounded-lg border border-blue-100 p-2 space-y-1">
+                    <p className="text-[10px] font-black text-blue-500 uppercase">{t("얻는 것", "You gain")}</p>
+                    {[
+                      t('실행속도 10~100배', '10~100× faster code'),
+                      t('USACO 대회 도전', 'USACO competition ready'),
+                      t('포인터·메모리 이해', 'Pointers & memory mastery'),
+                    ].map(s => <p key={s} className="text-[11px] text-gray-700">✓ {s}</p>)}
+                  </div>
+                </div>
+                <div className="rounded-2xl border-2 border-orange-200 bg-orange-50/60 p-3 space-y-2">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-base">🐍</span>
+                    <p className="font-black text-gray-900 text-sm">Python 유지</p>
+                  </div>
+                  <p className="text-[11px] text-gray-500">{t("바로 알고리즘으로", "Jump to algorithms")}</p>
+                  <div className="bg-white rounded-lg border border-orange-100 p-2 space-y-1">
+                    <p className="text-[10px] font-black text-orange-500 uppercase">{t("얻는 것", "You gain")}</p>
+                    {[
+                      t('더 빠른 대회 입문', 'Faster path to contests'),
+                      t('MCC 출전 가능', 'MCC competition ready'),
+                      t('논리력 집중 훈련', 'Focus on problem solving'),
+                    ].map(s => <p key={s} className="text-[11px] text-gray-700">✓ {s}</p>)}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* STEP 3 — 알고리즘 */}
+          <div className="flex gap-3 items-stretch">
+            <div className="flex flex-col items-center">
+              <div className="w-8 h-8 rounded-full bg-purple-500 border-2 border-black flex items-center justify-center text-white font-black text-xs flex-shrink-0">3</div>
+              <div className="w-0.5 bg-purple-200 flex-1 mt-1" />
+            </div>
+            <div className="flex-1 pb-4">
+              <div className="rounded-2xl border-2 border-purple-300 bg-purple-50 p-4 space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">🧠</span>
+                  <div>
+                    <p className="font-black text-gray-900 text-sm">{t("알고리즘 훈련", "Algorithm Training")}</p>
+                    <p className="text-[11px] text-gray-500">Bronze → Silver → Gold</p>
+                  </div>
+                </div>
+                <div className="bg-white rounded-xl border border-purple-100 p-2.5 space-y-1">
+                  <p className="text-[10px] font-black text-purple-500 uppercase tracking-wider">{t("풀 수 있게 되는 문제", "Problems you'll solve")}</p>
+                  {[
+                    ['🥉', t('BOJ 실버 · USACO Bronze', 'BOJ Silver · USACO Bronze')],
+                    ['🥈', t('BOJ 골드 · USACO Silver', 'BOJ Gold · USACO Silver')],
+                    ['🥇', t('BOJ 플래티넘 · USACO Gold 도전', 'BOJ Platinum · USACO Gold')],
+                  ].map(([icon, text]) => (
+                    <div key={String(text)} className="flex items-center gap-1.5 text-xs text-gray-700">
+                      <span>{icon}</span><span>{text}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* STEP 4 — 대회 */}
+          <div className="flex gap-3">
+            <div className="w-8 h-8 rounded-full bg-yellow-400 border-2 border-black flex items-center justify-center text-lg flex-shrink-0">🏆</div>
+            <div className="flex-1">
+              <div className="rounded-2xl border-2 border-yellow-300 bg-yellow-50 p-4 space-y-2">
+                <p className="font-black text-gray-900 text-sm">{t("대회 출전", "Competition")}</p>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="bg-white rounded-xl border border-yellow-200 p-2.5 space-y-0.5">
+                    <p className="font-black text-sm text-gray-900">USACO 🇺🇸</p>
+                    <p className="text-[11px] text-gray-500">{t("미국 정보올림피아드", "USA Computing Olympiad")}</p>
+                    <p className="text-[11px] text-gray-400">{t("대학 입시 스펙", "College app credential")}</p>
+                    <span className="inline-block text-[10px] bg-blue-100 text-blue-700 rounded px-1.5 py-0.5 font-bold">C++ {t("권장", "recommended")}</span>
+                  </div>
+                  <div className="bg-white rounded-xl border border-yellow-200 p-2.5 space-y-0.5">
+                    <p className="font-black text-sm text-gray-900">MCC 🇨🇦</p>
+                    <p className="text-[11px] text-gray-500">{t("캐나다 정보올림피아드", "Canadian Computing Contest")}</p>
+                    <p className="text-[11px] text-gray-400">{t("학교 대표 출전", "School representative")}</p>
+                    <span className="inline-block text-[10px] bg-orange-100 text-orange-700 rounded px-1.5 py-0.5 font-bold">Python {t("가능", "supported")}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* 🗺️ 3단계 여정 */}
+        {/* ── 학습 방법 ── */}
         <div>
-          <div className="text-center mb-4">
-            <h2 className="text-lg font-black text-gray-800">{t("코딩, 이렇게 나아가요", "Your Coding Journey")}</h2>
-            <p className="text-xs text-gray-400 mt-1">
-              {t("배우고 → 풀고 → 겨루는 3단계", "Learn → Solve → Compete")}
-            </p>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 items-stretch">
-
-            {/* 1단계: 배우기 */}
-            <div className="flex-1 rounded-2xl border-2 border-black bg-gradient-to-br from-orange-400 to-amber-500 p-4 text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-[10px] font-black bg-white/25 px-2 py-0.5 rounded-full">{t("1단계", "STEP 1")}</span>
-                <span className="text-2xl leading-none">📚</span>
-              </div>
-              <p className="font-black text-xl mb-1">{t("배우기", "Learn")}</p>
-              <p className="text-[11px] text-white/70 mb-3">{t("Python & C++ 수업", "Python & C++ lessons")}</p>
-              <div className="space-y-1">
-                {(lang === "ko"
-                  ? ["🐍 Python 입문 — 변수·조건문·반복문", "⚡ C++ — 배열·STL·알고리즘", "🎮 미니 프로젝트로 실전 적용", "📊 52개 Python + 20개 C++ 레슨"]
-                  : ["🐍 Python — Variables, Loops, Functions", "⚡ C++ — Arrays, STL, Algorithms", "🎮 Mini projects for hands-on practice", "📊 52 Python + 20 C++ lessons"]
-                ).map((item) => (
-                  <p key={item} className="text-[11px] text-white/85">{item}</p>
-                ))}
-              </div>
-              <div className="mt-3 pt-2.5 border-t border-white/20 text-[10px] text-white/60 font-bold">
-                📖 72 {t("레슨", "lessons")} · ⏱ {t("약 23시간", "~23 hours")}
-              </div>
-            </div>
-
-            <div className="flex sm:flex-col items-center justify-center text-gray-300 font-bold text-xl shrink-0">
-              <span className="hidden sm:block">↓</span>
-              <span className="sm:hidden">→</span>
-            </div>
-
-            {/* 2단계: 풀기 */}
-            <div className="flex-1 rounded-2xl border-2 border-black bg-gradient-to-br from-blue-500 to-indigo-600 p-4 text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-[10px] font-black bg-white/25 px-2 py-0.5 rounded-full">{t("2단계", "STEP 2")}</span>
-                <span className="text-2xl leading-none">🧩</span>
-              </div>
-              <p className="font-black text-xl mb-1">{t("풀기", "Solve")}</p>
-              <p className="text-[11px] text-white/70 mb-3">{t("코딩 문제로 실력 키우기", "Build skills with coding problems")}</p>
-              <div className="space-y-1">
-                {(lang === "ko"
-                  ? ["📊 정렬 · 탐색 · 그래프 · DP", "🐍 Python & C++ 모두 지원", "💡 힌트 · 시뮬레이션 · 풀이 제공", "🔢 150개+ 코딩 문제"]
-                  : ["📊 Sorting, Search, Graph, DP", "🐍 Python & C++ supported", "💡 Hints, simulation, and solutions", "🔢 150+ coding problems"]
-                ).map((item) => (
-                  <p key={item} className="text-[11px] text-white/85">{item}</p>
-                ))}
-              </div>
-              <div className="mt-3 pt-2.5 border-t border-white/20 text-[10px] text-white/60 font-bold">
-                🧩 150+ {t("문제", "problems")} · {t("배우기 이후 권장", "After Learn stage")}
-              </div>
-            </div>
-
-            <div className="flex sm:flex-col items-center justify-center text-gray-300 font-bold text-xl shrink-0">
-              <span className="hidden sm:block">↓</span>
-              <span className="sm:hidden">→</span>
-            </div>
-
-            {/* 3단계: 겨루기 */}
-            <div className="flex-1 rounded-2xl border-2 border-dashed border-amber-300 bg-gradient-to-br from-amber-50 to-yellow-50 p-4">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-[10px] font-black bg-amber-100 text-amber-600 px-2 py-0.5 rounded-full">🎯 {t("3단계", "STEP 3")}</span>
-                <span className="text-2xl leading-none">🏆</span>
-              </div>
-              <p className="font-black text-xl text-gray-800 mb-1">{t("겨루기", "Compete")}</p>
-              <p className="text-[11px] text-gray-400 mb-3">{t("실전 대회 도전!", "Enter real competitions!")}</p>
-              <div className="space-y-1">
-                {(lang === "ko"
-                  ? ["🥉 USACO Bronze — 완전탐색 · 그리디", "🥈 USACO Silver — BFS/DFS · DP", "🇲🇾 MCC — 말레이시아 컴퓨팅 챌린지", "🌐 160개+ 대회 문제 해설"]
-                  : ["🥉 USACO Bronze — Search & Greedy", "🥈 USACO Silver — BFS/DFS & DP", "🇲🇾 MCC — Malaysia Computing Challenge", "🌐 160+ competition problem guides"]
-                ).map((item) => (
-                  <p key={item} className="text-[11px] text-gray-500">{item}</p>
-                ))}
-              </div>
-              <div className="mt-3 pt-2.5 border-t border-amber-200 text-[10px] text-amber-400 font-bold">
-                🚧 {t("풀기 단계 이후 도전하세요!", "Unlock after Solve stage!")}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* 학습 방법 */}
-        <div>
-          <h2 className="text-lg font-black text-gray-800 mb-3">
+          <h2 className="text-base font-black text-gray-800 mb-3">
             {t("어떻게 배우나요?", "How does it work?")}
           </h2>
-          <div className="space-y-3">
+          <div className="space-y-2">
             {[
-              {
-                step: "1",
-                color: "bg-orange-500",
-                title: t("레슨 학습", "Study a Lesson"),
-                desc: t("설명 → 빈칸 채우기 → 예측 → 실전 문제 순서로 단계별 학습", "Learn through explanation → fill-in-the-blank → predict → practice"),
-              },
-              {
-                step: "2",
-                color: "bg-purple-500",
-                title: t("퀴즈로 복습", "Quiz & Review"),
-                desc: t("스마트 알고리즘이 내가 약한 부분을 자동으로 복습시켜줘요", "Smart algorithm automatically reviews your weak spots"),
-              },
-              {
-                step: "3",
-                color: "bg-green-500",
-                title: t("진도 확인", "Track Progress"),
-                desc: t("완료한 레슨, XP, 스트릭으로 학습 동기를 유지해요", "Stay motivated with completed lessons, XP, and streaks"),
-              },
-            ].map((item) => (
-              <div key={item.step} className="flex items-start gap-4 bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-black shrink-0 ${item.color}`}>
-                  {item.step}
-                </div>
+              { icon: '📖', color: 'bg-orange-100 text-orange-600', title: t('수업 듣기', 'Study a Lesson'), desc: t('설명 → 빈칸 채우기 → 코드 예측 → 직접 실행. 브라우저에서 바로.', 'Explanation → fill-in → predict → run code. All in your browser.') },
+              { icon: '🧩', color: 'bg-purple-100 text-purple-600', title: t('퀴즈로 굳히기', 'Reinforce with Quizzes'), desc: t('틀린 문제를 자동으로 다시 출제. 개념이 머릿속에 남아요.', 'Missed concepts come back automatically until they stick.') },
+              { icon: '🧠', color: 'bg-blue-100 text-blue-600', title: t('알고리즘 문제 풀기', 'Solve Algorithm Problems'), desc: t('시뮬레이션으로 흐름을 보고, 힌트로 막힌 곳을 뚫어요.', 'Visualize the flow, use hints when stuck, submit your solution.') },
+              { icon: '📊', color: 'bg-green-100 text-green-600', title: t('선생님 피드백', 'Teacher Feedback'), desc: t('직접해보기 과제를 선생님이 채점하고 코멘트를 달아줘요.', 'Your teacher grades your hands-on assignments and leaves comments.') },
+            ].map(item => (
+              <div key={item.title} className="flex items-start gap-3 bg-white rounded-2xl border border-gray-100 p-3.5 shadow-sm">
+                <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-base flex-shrink-0 ${item.color}`}>{item.icon}</div>
                 <div>
                   <p className="font-bold text-sm text-gray-800">{item.title}</p>
                   <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">{item.desc}</p>
@@ -372,20 +353,15 @@ function LandingPage() {
           </div>
         </div>
 
-        {/* 하단 CTA */}
-        <div className="bg-gradient-to-r from-orange-500 to-yellow-500 rounded-3xl p-6 text-center text-white space-y-3 shadow-lg shadow-orange-200">
-          <div className="text-3xl">🚀</div>
-          <p className="font-black text-xl">{t("지금 바로 시작해요!", "Start Learning Today!")}</p>
-          <p className="text-sm text-orange-100">
-            {t("구글 계정으로 1분 안에 시작할 수 있어요", "Start in under 1 minute with your Google account")}
-          </p>
+        {/* ── 하단 CTA ── */}
+        <div className="text-center space-y-2 pt-2">
           <Link
             href="/login"
-            className="inline-flex items-center gap-2 px-8 py-3 rounded-2xl text-base font-bold text-orange-600 bg-white hover:bg-orange-50 transition-colors"
+            className="inline-block px-8 py-3 rounded-2xl bg-orange-500 text-white font-black text-base border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
           >
-            {t("무료로 시작하기", "Get Started Free")}
-            <ChevronRight className="w-5 h-5" />
+            {t("지금 시작하기 →", "Get Started →")}
           </Link>
+          <p className="text-[11px] text-gray-400">{t("선생님과 함께 나에게 맞는 경로를 찾아요", "Find the right path with your teacher")}</p>
         </div>
 
       </main>

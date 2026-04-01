@@ -581,92 +581,34 @@ export default function CurriculumPage() {
 
   const nextLessonInfo = getNextLesson()
 
-  // 비로그인 → 로드맵 뷰
+  // 비로그인 → 커리큘럼 잠금 안내
   if (!authLoading && !isAuthenticated) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white">
         <Header />
-        <main className="max-w-3xl mx-auto px-4 pt-8 pb-28 space-y-8">
+        <main className="max-w-lg mx-auto px-4 pt-12 pb-28 flex flex-col items-center text-center space-y-6">
 
-          {/* 히어로 */}
-          <div className="text-center space-y-3">
-            <div className="text-5xl">📚</div>
-            <h1 className="text-3xl font-black text-gray-900">코드린 커리큘럼</h1>
-            <p className="text-gray-500 text-sm">단계별 로드맵으로 프로그래밍을 배워보세요</p>
-            <Link
-              href="/login"
-              className="inline-block mt-2 px-8 py-3 rounded-2xl bg-orange-500 text-white font-black text-base border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
-            >
-              로그인하고 시작하기 →
-            </Link>
+          {/* 잠금 아이콘 */}
+          <div className="w-20 h-20 rounded-full bg-orange-100 border-2 border-orange-200 flex items-center justify-center text-4xl">
+            🔒
           </div>
 
-          {/* 트랙 카드 3개 */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {[
-              {
-                emoji: '🐍', title: 'Python', subtitle: '기초 마스터', color: 'border-orange-300 bg-orange-50',
-                badge: '52강', desc: '처음 코딩을 시작하는 학생을 위한 파이썬 입문 과정',
-                parts: ['변수·타입·연산자', '조건문·반복문', '함수·리스트·딕셔너리', '클래스·파일·예외처리', '알고리즘 입문'],
-              },
-              {
-                emoji: '⚡', title: 'C++', subtitle: 'Python → C++', color: 'border-blue-300 bg-blue-50',
-                badge: '20강', desc: '파이썬을 배운 학생을 위한 C++ 전환 과정',
-                parts: ['입출력·변수·타입', '조건문·반복문', '배열·함수·포인터', '클래스·STL', '알고리즘 실습'],
-              },
-              {
-                emoji: '📄', title: 'IGCSE', subtitle: '0478 Computer Science', color: 'border-green-300 bg-green-50',
-                badge: '37강', desc: 'Cambridge IGCSE CS 시험을 위한 수도코드·SQL·Logic',
-                parts: ['수도코드 기초', '배열·함수·파일', '정렬·탐색 알고리즘', 'SQL 데이터베이스', 'Logic Gates 기출'],
-              },
-            ].map(track => (
-              <div key={track.title} className={`rounded-2xl border-2 ${track.color} p-4 space-y-3`}>
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">{track.emoji}</span>
-                  <div>
-                    <p className="font-black text-gray-900">{track.title}</p>
-                    <p className="text-[11px] text-gray-500">{track.subtitle}</p>
-                  </div>
-                  <span className="ml-auto text-[11px] font-bold text-gray-400 bg-white rounded-full px-2 py-0.5 border">{track.badge}</span>
-                </div>
-                <p className="text-xs text-gray-600">{track.desc}</p>
-                <ul className="space-y-1">
-                  {track.parts.map((p, i) => (
-                    <li key={i} className="flex items-center gap-2 text-xs text-gray-700">
-                      <span className="w-4 h-4 rounded-full bg-white border-2 border-gray-200 text-[9px] font-bold text-gray-400 flex items-center justify-center flex-shrink-0">{i+1}</span>
-                      {p}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+          <div className="space-y-2">
+            <h1 className="text-xl font-black text-gray-900">로그인하면 커리큘럼을 볼 수 있어요</h1>
+            <p className="text-sm text-gray-500">Python 52강 · C++ 20강 · 알고리즘 훈련</p>
           </div>
 
-          {/* 특징 */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {[
-              { emoji: '▶️', title: '브라우저에서 실행', desc: '설치 없이 바로' },
-              { emoji: '🎯', title: '단계별 잠금해제', desc: '순서대로 배우기' },
-              { emoji: '🧩', title: '퀴즈 & 시뮬레이션', desc: '개념 완벽 이해' },
-              { emoji: '📊', title: '선생님 피드백', desc: '직접해보기 채점' },
-            ].map(f => (
-              <div key={f.title} className="bg-white rounded-xl border border-gray-100 p-3 text-center space-y-1">
-                <div className="text-xl">{f.emoji}</div>
-                <p className="text-xs font-bold text-gray-800">{f.title}</p>
-                <p className="text-[10px] text-gray-400">{f.desc}</p>
-              </div>
-            ))}
-          </div>
+          <Link
+            href="/login"
+            className="inline-block px-8 py-3 rounded-2xl bg-orange-500 text-white font-black text-base border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
+          >
+            로그인하고 시작하기 →
+          </Link>
 
-          {/* 하단 CTA */}
-          <div className="text-center">
-            <Link
-              href="/login"
-              className="inline-block px-8 py-3 rounded-2xl bg-orange-500 text-white font-black text-base border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
-            >
-              지금 시작하기 →
-            </Link>
-          </div>
+          <Link href="/" className="text-xs text-gray-400 underline underline-offset-2">
+            코드린이 처음이라면? 소개 보기
+          </Link>
+
         </main>
         <BottomNav />
       </div>
