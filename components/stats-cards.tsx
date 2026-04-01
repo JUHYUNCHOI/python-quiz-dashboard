@@ -21,7 +21,7 @@ export function StatsCards() {
 
     const history = getQuizHistory()
     if (history.length > 0) {
-      const recent = history.slice(0, 10)
+      const recent = history.slice(0, 20)
       const totalCorrect = recent.reduce((s, e) => s + e.correctAnswers, 0)
       const totalQ = recent.reduce((s, e) => s + e.totalQuestions, 0)
       setRecentAccuracy(totalQ > 0 ? Math.round((totalCorrect / totalQ) * 100) : null)
@@ -32,7 +32,7 @@ export function StatsCards() {
     {
       label: t("레벨", "Level"),
       value: `Lv.${level}`,
-      sub: `${xpInCurrentLevel}/100 XP`,
+      sub: t(`다음 레벨까지 ${100 - xpInCurrentLevel} XP`, `${100 - xpInCurrentLevel} XP to next level`),
       icon: Star,
       gradient: "from-lavender-400 to-lavender-500",
       iconBg: "bg-lavender-100",
@@ -59,7 +59,7 @@ export function StatsCards() {
     {
       label: t("완료한 수업", "Lessons Done"),
       value: `${completedCount}`,
-      sub: recentAccuracy !== null ? t(`최근 정답률 ${recentAccuracy}%`, `Recent accuracy ${recentAccuracy}%`) : t("퀴즈를 풀어보세요", "Try a quiz"),
+      sub: recentAccuracy !== null ? t(`최근 20회 정답률 ${recentAccuracy}%`, `Last 20 quizzes: ${recentAccuracy}%`) : t("퀴즈를 풀어보세요", "Try a quiz"),
       icon: BookOpen,
       gradient: "from-mint-400 to-mint-500",
       iconBg: "bg-mint-100",

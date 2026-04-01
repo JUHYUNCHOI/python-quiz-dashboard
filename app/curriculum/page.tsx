@@ -4,9 +4,11 @@ import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 
 import { useState, useEffect, useCallback } from "react"
+import { useSearchParams } from "next/navigation"
 import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
 import Link from "next/link"
+import { cn } from "@/lib/utils"
 import {
   CheckCircle2,
   Circle,
@@ -345,9 +347,11 @@ export default function CurriculumPage() {
   ]
 
   const { profile, isAuthenticated, isLoading: authLoading } = useAuth()
+  const searchParams = useSearchParams()
   const isTeacher = profile?.role === "teacher"
-  // IGCSE 트랙 학생 감지 (pseudo-* or igcse-* 레슨을 가진 경우)
+  // IGCSE 트랙 학생 감지: pseudo-*/igcse-* 레슨 완료 OR ?track=igcse URL 파라미터
   const isIgcseStudent = !isTeacher && (() => {
+    if (searchParams.get("track") === "igcse") return true
     try {
       const saved = localStorage.getItem("completedLessons")
       if (!saved) return false
@@ -363,6 +367,8 @@ export default function CurriculumPage() {
   const [loaded, setLoaded] = useState(false)
   // P2 민준: 건너뛰기 확인 상태 (어떤 레슨 ID를 건너뛸지)
   const [skipConfirmId, setSkipConfirmId] = useState<number | string | null>(null)
+  const [cppNudge, setCppNudge] = useState(false)
+  const [showCppModal, setShowCppModal] = useState(false)
 
   // 초기 로드: localStorage에서 진도/코스 복원
   useEffect(() => {
@@ -386,22 +392,16 @@ export default function CurriculumPage() {
     setLoaded(true)
   }, [])
 
-  // 진도에 따라 현재 파트만 열기 (완료된 파트 + 첫 미완료 파트)
+  // 진도에 따라 현재 파트만 열기 (완료 레슨이 있는 첫 미완료 파트만)
   useEffect(() => {
     if (!loaded) return
     const allData = selectedCourse === "python" ? pythonCurriculumData : selectedCourse === "cpp" ? cppCurriculumData : pseudoCurriculumData
     const active = new Set<string>()
-    let passedIncomplete = false
     for (const part of allData) {
       const ids = part.lessons.map(l => l.id)
-      const hasAnyComplete = ids.some(id => completedLessons.has(id))
       const hasIncomplete = ids.some(id => !completedLessons.has(id))
-      if (hasAnyComplete) {
+      if (hasIncomplete) {
         active.add(part.id)
-        if (hasIncomplete) passedIncomplete = true
-      } else {
-        // 완료 레슨 없는 파트 — 아직 미완료 파트 못 만났으면 다음 파트로 표시
-        if (!passedIncomplete) active.add(part.id)
         break
       }
     }
@@ -496,14 +496,28 @@ export default function CurriculumPage() {
     }
   }, [loaded]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  const curriculumData = selectedCourse === "python" ? pythonCurriculumData : selectedCourse === "cpp" ? cppCurriculumData : pseudoCurriculumData
+  const isCpp = selectedCourse === "cpp"
+  const isPseudo = selectedCourse === "pseudo"
+
+  // Python 진도가 없으면 C++ 탭에 힌트 표시 (차단은 아님)
+  const pythonLessonIds = pythonCurriculumData.flatMap(p => p.lessons.map(l => String(l.id)))
+  const hasPythonProgress = pythonLessonIds.some(id => completedLessons.has(id) || completedLessons.has(Number(id)))
+
   const handleCourseChange = (course: CourseType) => {
+    if (course === "cpp" && !hasPythonProgress) {
+      setShowCppModal(true)
+      return
+    }
     setSelectedCourse(course)
     localStorage.setItem("selectedCourse", course)
   }
 
-  const curriculumData = selectedCourse === "python" ? pythonCurriculumData : selectedCourse === "cpp" ? cppCurriculumData : pseudoCurriculumData
-  const isCpp = selectedCourse === "cpp"
-  const isPseudo = selectedCourse === "pseudo"
+  const confirmCppSwitch = () => {
+    setShowCppModal(false)
+    setSelectedCourse("cpp")
+    localStorage.setItem("selectedCourse", "cpp")
+  }
 
   const allLessons = curriculumData.flatMap((part) => part.lessons)
   const totalCount = allLessons.length
@@ -583,33 +597,65 @@ export default function CurriculumPage() {
 
   // 비로그인 → 커리큘럼 잠금 안내
   if (!authLoading && !isAuthenticated) {
+    const previewLessons = [
+      { title: t("1. print() 출력", "1. print() Output"), duration: t("15분", "15 min") },
+      { title: t("2. 데이터 타입", "2. Data Types"), duration: t("15분", "15 min") },
+      { title: t("3. 변수", "3. Variables"), duration: t("20분", "20 min") },
+      { title: t("4. 연산자", "4. Operators"), duration: t("20분", "20 min") },
+      { title: t("5. 문자열 연산", "5. String Operations"), duration: t("15분", "15 min") },
+      { title: t("6. 문자열 메서드", "6. String Methods"), duration: t("20분", "20 min") },
+    ]
     return (
       <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white">
         <Header />
-        <main className="max-w-lg mx-auto px-4 pt-12 pb-28 flex flex-col items-center text-center space-y-6">
-
-          {/* 잠금 아이콘 */}
-          <div className="w-20 h-20 rounded-full bg-orange-100 border-2 border-orange-200 flex items-center justify-center text-4xl">
-            🔒
+        <main className="max-w-lg mx-auto px-4 pt-5 pb-44">
+          {/* 코스 탭 미리보기 */}
+          <div className="flex gap-2 mb-5 pointer-events-none opacity-60">
+            <div className="px-4 py-2.5 rounded-xl border-2 border-black bg-orange-500 text-white text-sm font-bold">🐍 Python</div>
+            <div className="px-4 py-2.5 rounded-xl border-2 border-black bg-white text-gray-700 text-sm font-bold">⚡ C++</div>
+            <div className="px-4 py-2.5 rounded-xl border-2 border-black bg-white text-gray-700 text-sm font-bold">📄 Pseudocode</div>
           </div>
 
-          <div className="space-y-2">
-            <h1 className="text-xl font-black text-gray-900">로그인하면 커리큘럼을 볼 수 있어요</h1>
-            <p className="text-sm text-gray-500">Python 52강 · C++ 20강 · 알고리즘 훈련</p>
+          {/* Part 1 미리보기 */}
+          <div className="mb-3">
+            <h2 className="font-black text-gray-800 text-base">{t("Part 1: 기초", "Part 1: Basics")}</h2>
+            <p className="text-xs text-gray-500 mt-0.5">{t("파이썬 설치부터 기본적인 입출력까지!", "From installing Python to basic I/O!")}</p>
           </div>
 
-          <Link
-            href="/login"
-            className="inline-block px-8 py-3 rounded-2xl bg-orange-500 text-white font-black text-base border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
-          >
-            로그인하고 시작하기 →
-          </Link>
-
-          <Link href="/" className="text-xs text-gray-400 underline underline-offset-2">
-            코드린이 처음이라면? 소개 보기
-          </Link>
-
+          <div className="relative space-y-2">
+            {previewLessons.map((lesson, i) => (
+              <div
+                key={i}
+                className={cn(
+                  "flex items-center gap-3 p-3.5 rounded-xl border border-gray-200 bg-white",
+                  i >= 3 && "opacity-40"
+                )}
+              >
+                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
+                  <Lock className="w-3.5 h-3.5 text-gray-400" />
+                </div>
+                <p className="flex-1 text-sm font-medium text-gray-700">{lesson.title}</p>
+                <span className="text-xs text-gray-400">{lesson.duration}</span>
+              </div>
+            ))}
+            {/* 하단 그라디언트 페이드 */}
+            <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent pointer-events-none" />
+          </div>
         </main>
+
+        {/* 고정 하단 CTA */}
+        <div className="fixed bottom-16 left-0 right-0 z-10 bg-white/95 backdrop-blur-sm border-t border-orange-100 px-4 py-3">
+          <div className="max-w-lg mx-auto space-y-2">
+            <p className="text-center text-xs text-gray-500">{t("Python 52강 · C++ 20강 · 알고리즘 훈련", "Python 52 · C++ 20 · Algorithm Training")}</p>
+            <Link
+              href="/login"
+              className="block w-full text-center px-8 py-3 rounded-2xl bg-orange-500 text-white font-black text-base border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
+            >
+              {t("무료로 시작하기 →", "Get Started Free →")}
+            </Link>
+          </div>
+        </div>
+
         <BottomNav />
       </div>
     )
@@ -641,11 +687,7 @@ export default function CurriculumPage() {
             {/* C++ 탭 */}
             <button
               onClick={() => handleCourseChange("cpp")}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-black text-sm font-bold transition-all ${
-                selectedCourse === "cpp"
-                  ? "bg-blue-600 text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
-                  : "bg-white text-gray-700 hover:bg-blue-50"
-              }`}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-black text-sm font-bold transition-all ${selectedCourse === "cpp" ? "bg-blue-600 text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]" : hasPythonProgress ? "bg-white text-gray-700 hover:bg-blue-50" : "bg-white text-gray-400 border-gray-300 hover:bg-blue-50"}`}
             >
               ⚡ C++
               <span className={`text-[10px] font-normal ${selectedCourse === "cpp" ? "text-white/70" : "text-gray-400"}`}>20강</span>
@@ -666,6 +708,36 @@ export default function CurriculumPage() {
               </button>
             )}
           </div>
+
+          {/* C++ 선택 모달 */}
+          {showCppModal && (
+            <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+              <div className="bg-white rounded-2xl shadow-xl border-2 border-black p-6 max-w-sm w-full space-y-4">
+                <div className="text-center">
+                  <div className="text-4xl mb-2">⚡</div>
+                  <h3 className="text-base font-black text-gray-800">C++로 바로 시작할까요?</h3>
+                  <p className="text-sm text-gray-500 mt-2 leading-relaxed">
+                    이 코스는 <span className="font-bold text-blue-600">파이썬을 아는 학생</span>을 위해 만들어졌어요.<br />
+                    Python을 먼저 배우면 C++가 훨씬 쉬워요!
+                  </p>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <button
+                    onClick={() => setShowCppModal(false)}
+                    className="w-full py-3 rounded-xl font-bold text-white bg-orange-500 hover:bg-orange-600 transition-all"
+                  >
+                    🐍 Python 먼저 할게요
+                  </button>
+                  <button
+                    onClick={confirmCppSwitch}
+                    className="w-full py-2.5 rounded-xl font-bold text-blue-600 border-2 border-blue-200 hover:bg-blue-50 transition-all text-sm"
+                  >
+                    그래도 C++ 시작할게요
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* 상단 진도 바 */}
@@ -728,6 +800,33 @@ export default function CurriculumPage() {
             </div>
           </div>
         </div>
+
+        {/* 커리큘럼 완료 → 알고리즘 진입 배너 */}
+        {loaded && progress === 100 && !isPseudo && (
+          <div className="max-w-[1600px] mx-auto mb-6">
+            <div className="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-2xl border-4 border-black p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-white">
+              <div className="flex flex-col sm:flex-row items-center gap-4">
+                <div className="text-5xl shrink-0">🎓</div>
+                <div className="flex-1 text-center sm:text-left">
+                  <p className="font-black text-xl mb-1">
+                    {isCpp
+                      ? t("C++ 완주! 이제 알고리즘이에요 🚀", "C++ complete! Time for algorithms 🚀")
+                      : t("Python 완주! 이제 알고리즘이에요 🚀", "Python complete! Time for algorithms 🚀")}
+                  </p>
+                  <p className="text-white/80 text-sm">
+                    {t("배운 문법으로 실전 문제를 풀어봐요. 정렬, 그래프, DP가 기다려요!", "Apply what you learned to real problems — sorting, graphs, DP await!")}
+                  </p>
+                </div>
+                <Link
+                  href="/algorithm"
+                  className="shrink-0 bg-white text-purple-700 font-black px-6 py-3 rounded-xl border-2 border-black hover:bg-purple-50 transition-colors shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] whitespace-nowrap"
+                >
+                  🧠 {t("알고리즘 시작하기", "Start Algorithms")}
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* P2 민준: 신규 학생 시작점 설정 배너 */}
         {loaded && completedCount === 0 && !isTeacher && !isPseudo && (
@@ -897,9 +996,26 @@ export default function CurriculumPage() {
                                       skipConfirmId === lesson.id ? (
                                         // 확인 단계
                                         <div className="flex flex-col items-end gap-1">
-                                          <p className="text-[10px] text-gray-500 text-right leading-tight">
-                                            {t("이전 레슨도 완료 처리돼요", "Previous lessons will be marked done")}
-                                          </p>
+                                          {(() => {
+                                            const data = selectedCourse === "python" ? pythonCurriculumData : selectedCourse === "cpp" ? cppCurriculumData : pseudoCurriculumData
+                                            const allIds = data.flatMap(p => p.lessons.map(l => l.id))
+                                            const targetIdx = allIds.findIndex(id => String(id) === String(lesson.id))
+                                            const skippedIds = allIds.slice(0, targetIdx + 1).filter(id => !completedLessons.has(String(id)))
+                                            const skippedNames = skippedIds.slice(0, 3).map(id => {
+                                              const found = data.flatMap(p => p.lessons).find(l => String(l.id) === String(id))
+                                              return found?.title ?? String(id)
+                                            })
+                                            return (
+                                              <div className="text-right space-y-0.5">
+                                                <p className="text-[10px] text-amber-600 font-bold leading-tight">
+                                                  ⚠️ {t(`미학습 ${skippedIds.length}개 레슨이 완료 처리됩니다`, `${skippedIds.length} lessons will be marked done`)}
+                                                </p>
+                                                <p className="text-[9px] text-amber-500 leading-tight">
+                                                  {skippedNames.join(", ")}{skippedIds.length > 3 ? ` 외 ${skippedIds.length - 3}개` : ""}
+                                                </p>
+                                              </div>
+                                            )
+                                          })()}
                                           <div className="flex gap-1">
                                             <button
                                               onClick={() => setSkipConfirmId(null)}
