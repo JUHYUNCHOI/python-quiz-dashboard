@@ -605,7 +605,7 @@ export default function ClassDetailPage() {
         .eq("student_id", student.id)
         .eq("class_id", classId)
         .eq("is_active", true)
-        .single()
+        .maybeSingle()
 
       let linkToken: string
 
