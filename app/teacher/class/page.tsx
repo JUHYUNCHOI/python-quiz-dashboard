@@ -371,15 +371,21 @@ export default function ClassDetailPage() {
   const [expandedStudent, setExpandedStudent] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<"lessons" | "quizzes" | "consistency">("lessons")
   const [parentLinkCopied, setParentLinkCopied] = useState<string | null>(null)
+  const [parentLinkError, setParentLinkError] = useState<string | null>(null)
   const [generatingLink, setGeneratingLink] = useState<string | null>(null)
   const [studentPage, setStudentPage] = useState(0)
   const [hwStudentIds, setHwStudentIds] = useState<Set<string>>(new Set())
   const [hwPendingIds, setHwPendingIds] = useState<Set<string>>(new Set())
+  const [hwLessonsByStudent, setHwLessonsByStudent] = useState<Map<string, Set<string>>>(new Map())
   // 학생 카드 펼칠 때만 question_details 포함한 상세 세션 로드
   const [detailedSessions, setDetailedSessions] = useState<Record<string, QuizSession[]>>({})
 
   useEffect(() => {
-    if (!user || !classId) return
+    if (!user) return
+    if (!classId) {
+      setIsLoading(false)
+      return
+    }
     loadClassData()
   }, [user, classId])
 
@@ -546,13 +552,19 @@ export default function ClassDetailPage() {
 
     setStudents(rows)
 
-    // 숙제 제출한 학생 ID 목록 + 확인 필요 학생
+    // 숙제 제출한 학생 ID 목록 + 확인 필요 학생 + 과제 레슨 맵
     const { data: hwData } = await supabase
       .from("homework_submissions")
-      .select("student_id, teacher_grade")
+      .select("student_id, lesson_id, teacher_grade")
       .in("student_id", studentIds)
     setHwStudentIds(new Set((hwData || []).map(h => h.student_id)))
     setHwPendingIds(new Set((hwData || []).filter(h => !h.teacher_grade || h.teacher_grade === "fail").map(h => h.student_id)))
+    const lessonMap = new Map<string, Set<string>>()
+    for (const h of (hwData || [])) {
+      if (!lessonMap.has(h.student_id)) lessonMap.set(h.student_id, new Set())
+      lessonMap.get(h.student_id)!.add(h.lesson_id)
+    }
+    setHwLessonsByStudent(lessonMap)
 
     setIsLoading(false)
   }
@@ -606,21 +618,37 @@ export default function ClassDetailPage() {
           .join("")
           .slice(0, 20)
 
-        await supabase.from("parent_report_links").insert({
+        const { error: insertError } = await supabase.from("parent_report_links").insert({
           token: linkToken,
           student_id: student.id,
           class_id: classId,
           created_by: user.id,
           student_name: student.displayName,
         })
+        if (insertError) throw insertError
       }
 
       const url = `${window.location.origin}/parent?t=${linkToken}`
-      await navigator.clipboard.writeText(url)
+
+      // Web Share API 지원 기기 (모바일)면 공유 시트 열기
+      if (navigator.share) {
+        await navigator.share({
+          title: `${student.displayName} 학습 리포트`,
+          text: `코드린에서 ${student.displayName}의 학습 현황을 확인하세요.`,
+          url,
+        }).catch(() => {
+          // 공유 취소 시 클립보드로 폴백
+          navigator.clipboard.writeText(url)
+        })
+      } else {
+        await navigator.clipboard.writeText(url)
+      }
       setParentLinkCopied(student.id)
       setTimeout(() => setParentLinkCopied(null), 3000)
     } catch (e) {
       console.error("Failed to generate parent link:", e)
+      setParentLinkError("링크 생성에 실패했습니다. 다시 시도해주세요.")
+      setTimeout(() => setParentLinkError(null), 4000)
     }
     setGeneratingLink(null)
   }
@@ -631,12 +659,29 @@ export default function ClassDetailPage() {
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-mint-50">
       <Header />
 
+      {parentLinkError && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-xl shadow-lg animate-in fade-in slide-in-from-top-2">
+          {parentLinkError}
+        </div>
+      )}
+
       <main className="w-full px-4 sm:px-6 pb-24 pt-6 max-w-2xl mx-auto">
         <Link href="/teacher" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-4">
           <ArrowLeft className="w-4 h-4" /> 반 목록으로
         </Link>
 
-        {classInfo && (
+        {!classId && !isLoading && (
+          <div className="flex flex-col items-center justify-center py-20 text-center">
+            <div className="text-6xl mb-4">🏫</div>
+            <h2 className="text-xl font-bold text-gray-700 mb-2">반을 선택해주세요</h2>
+            <p className="text-gray-400 text-sm mb-6">대시보드에서 관리할 반을 선택하세요.</p>
+            <Link href="/teacher" className="px-6 py-3 bg-orange-500 text-white font-bold rounded-xl hover:bg-orange-600 transition-colors">
+              대시보드로 이동
+            </Link>
+          </div>
+        )}
+
+        {classId && classInfo && (
           <>
             {/* 반 정보 카드 */}
             <Card className="p-5 mb-6 border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-yellow-50">
@@ -740,9 +785,12 @@ export default function ClassDetailPage() {
                 {pagedStudents.map((student, idx) => (
                   <Card key={student.id} id={`student-${student.id}`} className="border border-gray-100 overflow-hidden">
                     {/* 학생 요약 행 */}
-                    <button
+                    <div
+                      role="button"
+                      tabIndex={0}
                       onClick={() => setExpandedStudent(expandedStudent === student.id ? null : student.id)}
-                      className="w-full p-4 flex items-center gap-3 hover:bg-gray-50/50 transition-colors text-left"
+                      onKeyDown={(e) => e.key === "Enter" && setExpandedStudent(expandedStudent === student.id ? null : student.id)}
+                      className="w-full p-4 flex items-center gap-3 hover:bg-gray-50/50 transition-colors text-left cursor-pointer"
                     >
                       {/* 순위 + 오늘 활동 표시 */}
                       <div className="relative w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-sm font-bold text-orange-600 flex-shrink-0">
@@ -799,12 +847,31 @@ export default function ClassDetailPage() {
                         </span>
                       </div>
 
+                      {/* 학부모 링크 */}
+                      <button
+                        onClick={(e) => { e.stopPropagation(); generateParentLink(student) }}
+                        disabled={generatingLink === student.id}
+                        className={cn(
+                          "px-2 py-1 rounded-lg text-[10px] font-medium transition-all flex items-center gap-1 flex-shrink-0",
+                          parentLinkCopied === student.id
+                            ? "bg-green-100 text-green-700"
+                            : "bg-indigo-100 text-indigo-600 hover:bg-indigo-200"
+                        )}
+                        title="학부모 리포트 링크 복사"
+                      >
+                        {parentLinkCopied === student.id ? (
+                          <><Check className="w-3 h-3" /> 복사됨</>
+                        ) : (
+                          <><ExternalLink className="w-3 h-3" /> 학부모</>
+                        )}
+                      </button>
+
                       {/* 펼치기 화살표 */}
                       <ChevronDown className={cn(
                         "w-4 h-4 text-gray-400 transition-transform flex-shrink-0",
                         expandedStudent === student.id && "rotate-180"
                       )} />
-                    </button>
+                    </div>
 
                     {/* 펼친 상세: 탭 UI */}
                     {expandedStudent === student.id && (
@@ -860,7 +927,7 @@ export default function ClassDetailPage() {
 
                         {/* 레슨 진도 탭 */}
                         {activeTab === "lessons" && (
-                          <StudentProgress lessonProgress={student.lessonProgress} studentId={student.id} />
+                          <StudentProgress lessonProgress={student.lessonProgress} studentId={student.id} homeworkLessonIds={hwLessonsByStudent.get(student.id)} />
                         )}
 
                         {/* 퀴즈 리포트 탭 */}

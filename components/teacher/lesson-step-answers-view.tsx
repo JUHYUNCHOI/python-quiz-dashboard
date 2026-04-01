@@ -101,9 +101,11 @@ export function LessonStepAnswersView({ studentId, lessonId, progressType, lang 
 
   if (answers.length === 0) {
     return (
-      <div className="py-5 text-center space-y-1">
-        <p className="text-xs text-gray-400">아직 저장된 답변이 없어요.</p>
-        <p className="text-[10px] text-gray-300">이 기능 추가 이후 푼 스텝만 표시됩니다.</p>
+      <div className="py-4 px-3 text-center space-y-1.5 bg-gray-50 rounded-lg">
+        <p className="text-xs font-medium text-gray-500">저장된 답변이 없어요</p>
+        <p className="text-[11px] text-gray-400 leading-snug">
+          이 레슨은 답변 저장 기능 추가 전에<br/>완료되어 기록이 없습니다
+        </p>
       </div>
     )
   }

@@ -18,6 +18,7 @@ interface LessonProgressRow {
 interface Props {
   lessonProgress: LessonProgressRow[]
   studentId?: string
+  homeworkLessonIds?: Set<string>
 }
 
 function formatDate(dateStr: string): string {
@@ -81,11 +82,12 @@ function buildLessonMap(progress: LessonProgressRow[]): Map<string, LessonSummar
   return map
 }
 
-function LessonRow({ summary, name, lessonId, studentId }: {
+function LessonRow({ summary, name, lessonId, studentId, isHomework }: {
   summary: LessonSummary | undefined
   name: string
   lessonId: string
   studentId?: string
+  isHomework?: boolean
 }) {
   const [showAnswers, setShowAnswers] = useState<"learn" | "review" | null>(null)
   const learn = summary?.learn ?? null
@@ -121,6 +123,7 @@ function LessonRow({ summary, name, lessonId, studentId }: {
         )}>
           {name}
         </span>
+        {isHomework && <span className="text-[9px] flex-shrink-0" title="선생님 지정 과제">📋</span>}
       </div>
 
       {/* 학습 칸 */}
@@ -162,7 +165,7 @@ function LessonRow({ summary, name, lessonId, studentId }: {
                 review.score >= 80 ? "bg-blue-100 text-blue-700" :
                 review.score >= 60 ? "bg-amber-100 text-amber-700" : "bg-red-100 text-red-600"
               )}>
-                {review.score}%
+                {Math.min(review.score, 100)}%
               </span>
             ) : (
               <span className="text-[10px] font-bold text-blue-600">복습 ✓</span>
@@ -238,7 +241,7 @@ function LessonRow({ summary, name, lessonId, studentId }: {
   )
 }
 
-function PartSection({ part, lessonMap, lang, studentId }: { part: PartMeta; lessonMap: Map<string, LessonSummary>; lang: "ko" | "en"; studentId?: string }) {
+function PartSection({ part, lessonMap, lang, studentId, homeworkLessonIds }: { part: PartMeta; lessonMap: Map<string, LessonSummary>; lang: "ko" | "en"; studentId?: string; homeworkLessonIds?: Set<string> }) {
   const ids = part.lessonIds.map(String)
   const learnDoneCount = ids.filter(id => lessonMap.get(id)?.learn?.completed).length
   const inProgressCount = ids.filter(id => {
@@ -287,7 +290,7 @@ function PartSection({ part, lessonMap, lang, studentId }: { part: PartMeta; les
       {/* 레슨 목록 */}
       <div className="space-y-0.5">
         {ids.map(id => (
-          <LessonRow key={id} lessonId={id} studentId={studentId} summary={lessonMap.get(id)} name={getLessonName(id, lang)} />
+          <LessonRow key={id} lessonId={id} studentId={studentId} summary={lessonMap.get(id)} name={getLessonName(id, lang)} isHomework={homeworkLessonIds?.has(id)} />
         ))}
       </div>
 
@@ -309,13 +312,14 @@ function PartSection({ part, lessonMap, lang, studentId }: { part: PartMeta; les
   )
 }
 
-function LanguageSection({ title, emoji, parts, lessonMap, lang, studentId }: {
+function LanguageSection({ title, emoji, parts, lessonMap, lang, studentId, homeworkLessonIds }: {
   title: string
   emoji: string
   parts: PartMeta[]
   lessonMap: Map<string, LessonSummary>
   lang: "ko" | "en"
   studentId?: string
+  homeworkLessonIds?: Set<string>
 }) {
   const allIds = parts.flatMap(p => p.lessonIds.map(String))
   const learnDone = allIds.filter(id => lessonMap.get(id)?.learn?.completed).length
@@ -332,13 +336,13 @@ function LanguageSection({ title, emoji, parts, lessonMap, lang, studentId }: {
         <span className="text-xs text-blue-400">{reviewDone}/{learnDone || 0} 복습</span>
       </div>
       {parts.map(part => (
-        <PartSection key={part.id} part={part} lessonMap={lessonMap} lang={lang} studentId={studentId} />
+        <PartSection key={part.id} part={part} lessonMap={lessonMap} lang={lang} studentId={studentId} homeworkLessonIds={homeworkLessonIds} />
       ))}
     </div>
   )
 }
 
-export function StudentProgress({ lessonProgress, studentId }: Props) {
+export function StudentProgress({ lessonProgress, studentId, homeworkLessonIds }: Props) {
   const { lang } = useLanguage()
 
   if (lessonProgress.length === 0) {
@@ -359,6 +363,15 @@ export function StudentProgress({ lessonProgress, studentId }: Props) {
   const totalReviewDone = allIds.filter(id => lessonMap.get(id)?.review?.completed).length
   const totalInProgress = [...lessonMap.values()].filter(s => s.learn && !s.learn.completed).length
 
+  // 복습 완료 레슨 중 점수 있는 것들의 평균 (100% 초과 캡 적용)
+  const scoredReviewIds = allIds.filter(id => {
+    const s = lessonMap.get(id)
+    return s?.review?.completed && (s.review.score || 0) > 0
+  })
+  const avgReviewScore = scoredReviewIds.length > 0
+    ? Math.round(scoredReviewIds.reduce((sum, id) => sum + Math.min(lessonMap.get(id)!.review!.score, 100), 0) / scoredReviewIds.length)
+    : null
+
   // 가장 최근 활동
   const sorted = [...lessonProgress].sort((a, b) => (b.updated_at || "").localeCompare(a.updated_at || ""))
   const lastRow = sorted[0]
@@ -378,13 +391,21 @@ export function StudentProgress({ lessonProgress, studentId }: Props) {
         <div className="text-center py-2 px-1 bg-blue-50 rounded-lg">
           <div className="text-lg font-black text-blue-500">{totalReviewDone}</div>
           <div className="text-[10px] text-gray-500">복습 완료</div>
+          {avgReviewScore !== null && (
+            <div className={cn(
+              "text-[9px] font-bold mt-0.5",
+              avgReviewScore >= 80 ? "text-blue-600" : avgReviewScore >= 60 ? "text-amber-500" : "text-red-500"
+            )}>
+              평균 {avgReviewScore}%
+            </div>
+          )}
         </div>
       </div>
 
       {/* 최근 활동 */}
       {lastRow && (
         <div className="flex items-center gap-2 px-3 py-2 bg-indigo-50 rounded-lg border border-indigo-200">
-          <span className="text-xs">📖</span>
+          <span className="text-xs">{lastRow.progress_type === "review" ? "🔄" : "📖"}</span>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1">
               <span className="text-xs font-bold text-indigo-700">최근 활동:</span>
@@ -399,9 +420,9 @@ export function StudentProgress({ lessonProgress, studentId }: Props) {
       )}
 
       {/* 언어별 섹션 */}
-      <LanguageSection title="Python" emoji="🐍" parts={pythonParts} lessonMap={lessonMap} lang={lang} studentId={studentId} />
-      <LanguageSection title="C++" emoji="⚡" parts={cppParts} lessonMap={lessonMap} lang={lang} studentId={studentId} />
-      <LanguageSection title="Pseudocode" emoji="📋" parts={pseudoParts} lessonMap={lessonMap} lang={lang} studentId={studentId} />
+      <LanguageSection title="Python" emoji="🐍" parts={pythonParts} lessonMap={lessonMap} lang={lang} studentId={studentId} homeworkLessonIds={homeworkLessonIds} />
+      <LanguageSection title="C++" emoji="⚡" parts={cppParts} lessonMap={lessonMap} lang={lang} studentId={studentId} homeworkLessonIds={homeworkLessonIds} />
+      <LanguageSection title="Pseudocode" emoji="📋" parts={pseudoParts} lessonMap={lessonMap} lang={lang} studentId={studentId} homeworkLessonIds={homeworkLessonIds} />
     </div>
   )
 }
