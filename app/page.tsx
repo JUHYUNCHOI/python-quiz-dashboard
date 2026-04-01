@@ -337,10 +337,26 @@ function LandingPage() {
           </h2>
           <div className="space-y-2">
             {[
-              { icon: '📖', color: 'bg-orange-100 text-orange-600', title: t('수업 듣기', 'Study a Lesson'), desc: t('설명 → 빈칸 채우기 → 코드 예측 → 직접 실행. 브라우저에서 바로.', 'Explanation → fill-in → predict → run code. All in your browser.') },
-              { icon: '🧩', color: 'bg-purple-100 text-purple-600', title: t('퀴즈로 굳히기', 'Reinforce with Quizzes'), desc: t('틀린 문제를 자동으로 다시 출제. 개념이 머릿속에 남아요.', 'Missed concepts come back automatically until they stick.') },
-              { icon: '🧠', color: 'bg-blue-100 text-blue-600', title: t('알고리즘 문제 풀기', 'Solve Algorithm Problems'), desc: t('시뮬레이션으로 흐름을 보고, 힌트로 막힌 곳을 뚫어요.', 'Visualize the flow, use hints when stuck, submit your solution.') },
-              { icon: '📊', color: 'bg-green-100 text-green-600', title: t('선생님 피드백', 'Teacher Feedback'), desc: t('직접해보기 과제를 선생님이 채점하고 코멘트를 달아줘요.', 'Your teacher grades your hands-on assignments and leaves comments.') },
+              {
+                icon: '📖', color: 'bg-orange-100 text-orange-600',
+                title: t('수업 듣기', 'Study a Lesson'),
+                desc: t('설명 → 빈칸 채우기 → 코드 예측 → 직접 실행. 브라우저에서 바로.', 'Explanation → fill-in → predict → run code. All in your browser.'),
+              },
+              {
+                icon: '🔁', color: 'bg-purple-100 text-purple-600',
+                title: t('퀴즈로 굳히기 — 듀오링고처럼', 'Quiz to Lock It In — Like Duolingo'),
+                desc: t('틀린 문제는 2~3문제 후 자동으로 다시 나와요. 개념이 완전히 내 것이 될 때까지.', 'Wrong answers come back 2–3 questions later, automatically, until they truly stick.'),
+              },
+              {
+                icon: '🧠', color: 'bg-blue-100 text-blue-600',
+                title: t('알고리즘 시뮬레이션', 'Algorithm Simulations'),
+                desc: t('정렬·그래프·DP가 눈앞에서 움직여요. 보고 나면 코드가 이해돼요.', 'Watch sorting, graphs, and DP animate step-by-step. See it, then write it.'),
+              },
+              {
+                icon: '📝', color: 'bg-green-100 text-green-600',
+                title: t('직접 코딩 + 선생님 채점', 'Code It + Teacher Review'),
+                desc: t('과제를 직접 짜서 제출하면 선생님이 채점하고 코멘트를 달아줘요.', 'Submit your own code; your teacher grades it and leaves comments.'),
+              },
             ].map(item => (
               <div key={item.title} className="flex items-start gap-3 bg-white rounded-2xl border border-gray-100 p-3.5 shadow-sm">
                 <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-base flex-shrink-0 ${item.color}`}>{item.icon}</div>
@@ -348,6 +364,34 @@ function LandingPage() {
                   <p className="font-bold text-sm text-gray-800">{item.title}</p>
                   <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">{item.desc}</p>
                 </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── 부모님도 함께 ── */}
+        <div className="rounded-2xl border-2 border-gray-100 bg-gray-50 p-5 space-y-3">
+          <div className="flex items-center gap-2">
+            <span className="text-xl">👨‍👩‍👧</span>
+            <h2 className="text-base font-black text-gray-800">
+              {t("부모님도 함께 확인해요", "Parents Stay in the Loop")}
+            </h2>
+          </div>
+          <p className="text-xs text-gray-500 leading-relaxed">
+            {t(
+              "자녀가 어디까지 배웠는지, 어떤 과제를 완료했는지 부모님 전용 뷰에서 확인할 수 있어요. 선생님 피드백도 함께 볼 수 있습니다.",
+              "Parents have their own view to track which lessons their child has completed, which assignments were submitted, and what feedback the teacher left."
+            )}
+          </p>
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              { icon: '📈', label: t('레슨 진도', 'Lesson Progress') },
+              { icon: '✅', label: t('과제 완료', 'Assignment Status') },
+              { icon: '💬', label: t('선생님 피드백', 'Teacher Comments') },
+            ].map(item => (
+              <div key={item.label} className="bg-white rounded-xl border border-gray-100 p-2.5 text-center space-y-1">
+                <div className="text-lg">{item.icon}</div>
+                <p className="text-[11px] font-bold text-gray-700">{item.label}</p>
               </div>
             ))}
           </div>
