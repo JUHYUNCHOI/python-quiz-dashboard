@@ -731,6 +731,7 @@ export default function ClassDetailPage() {
             {/* 반 전체 요약 + 위험 알림 + 약점 레슨 */}
             <ClassOverview
               students={students}
+              joinCode={classInfo?.join_code}
               onStudentClick={(studentId) => {
                 setExpandedStudent(studentId)
                 setActiveTab("lessons")

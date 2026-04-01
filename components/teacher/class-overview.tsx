@@ -30,6 +30,7 @@ interface StudentRow {
 interface Props {
   students: StudentRow[]
   onStudentClick?: (studentId: string) => void
+  joinCode?: string
 }
 
 function daysSince(dateStr: string): number {
@@ -59,7 +60,7 @@ function classifyPattern(s: StudentRow): StudentPattern {
   if (isRegular && lowAccuracy)   return "hardworker"  // 열심히 하는데 이해 부족
   if (!isRegular && highAccuracy) return "coaster"     // 실력은 있는데 게으름
   if (!isRegular && lowAccuracy)  return "atrisk"      // 개입 필요
-  return "star" // default: 데이터 부족 시 문제 없는 걸로 간주
+  return "new" // default: 데이터 부족 시 아직 시작 전으로 간주
 }
 
 const PATTERN_META: Record<StudentPattern, { emoji: string; label: string; color: string; bg: string; advice: string }> = {
@@ -100,6 +101,23 @@ function buildRiskAlerts(students: StudentRow[]): RiskAlert[] {
     const worstReview = reviewRows.length > 0
       ? reviewRows.reduce((min, r) => r.score < min.score ? r : min)
       : null
+
+    // D+7 이상 복습 안 한 레슨 (학습 완료 후 7일+ 경과, 복습 미시작)
+    const reviewedIds = new Set(s.lessonProgress.filter(r => r.progress_type === "review").map(r => r.lesson_id))
+    const overdueUnreviewed = s.lessonProgress.filter(r =>
+      r.progress_type === "learn" && r.completed && !reviewedIds.has(r.lesson_id) && daysSince(r.updated_at) >= 7
+    )
+    if (overdueUnreviewed.length >= 2 && days <= 7) {
+      const lessonNames = overdueUnreviewed.slice(0, 2).map(r => getLessonName(r.lesson_id, "ko")).join(" · ")
+      alerts.push({
+        studentId: s.id,
+        studentName: s.displayName,
+        detail: `복습 미시작 ${overdueUnreviewed.length}개 — ${lessonNames}`,
+        severity: "warning",
+        emoji: "🔄",
+        action: "복습 독려",
+      })
+    }
 
     // 장기 미접속
     if (days >= 7) {
@@ -149,11 +167,24 @@ function buildRiskAlerts(students: StudentRow[]): RiskAlert[] {
   return [...seen.values()]
 }
 
-export function ClassOverview({ students, onStudentClick }: Props) {
+export function ClassOverview({ students, onStudentClick, joinCode }: Props) {
   const { lang: _lang } = useLanguage()
   const [expandedPattern, setExpandedPattern] = useState<StudentPattern | null>(null)
   const [showPatternDist, setShowPatternDist] = useState(false)
-  if (students.length === 0) return null
+
+  if (students.length === 0) return (
+    <div className="bg-white rounded-2xl border border-dashed border-gray-200 p-8 text-center mb-6">
+      <div className="text-4xl mb-3">👥</div>
+      <p className="text-sm font-bold text-gray-600 mb-1">아직 참가한 학생이 없어요</p>
+      {joinCode ? (
+        <p className="text-sm text-gray-400">
+          참가 코드 <span className="font-mono font-black text-orange-500 bg-orange-50 px-2 py-0.5 rounded">{joinCode}</span>를 학생들에게 공유해보세요
+        </p>
+      ) : (
+        <p className="text-sm text-gray-400">반 참가 코드를 학생들에게 공유해보세요</p>
+      )}
+    </div>
+  )
 
   const total = students.length
   const activeToday  = students.filter(s => s.activeToday).length
@@ -161,8 +192,9 @@ export function ClassOverview({ students, onStudentClick }: Props) {
   // 이번 주 활동 인원 (7일 이내 접속)
   const activeThisWeek = students.filter(s => daysSince(s.lastActive) <= 7).length
 
-  // 반 평균 퀴즈 정답률
-  const studentsWithQuiz = students.filter(s => s.quizSessions.length >= 2)
+  // 반 평균 퀴즈 정답률 (퀴즈 1회 이상 학생 기준, 전체 참여율 함께 표시)
+  const studentsWithQuiz = students.filter(s => s.quizSessions.length >= 1)
+  const quizParticipationRate = Math.round((studentsWithQuiz.length / total) * 100)
   const classAvgAccuracy = studentsWithQuiz.length > 0
     ? Math.round(
         studentsWithQuiz.reduce((sum, s) => {
@@ -264,7 +296,7 @@ export function ClassOverview({ students, onStudentClick }: Props) {
             icon={<Target className="w-4 h-4" />}
             value={classAvgAccuracy !== null ? `${classAvgAccuracy}%` : "—"}
             label="평균 퀴즈 정답률"
-            sub={classAvgAccuracy !== null ? (classAvgAccuracy >= 75 ? "양호 👍" : classAvgAccuracy >= 55 ? "보통" : "복습 필요 ⚠️") : "데이터 부족"}
+            sub={classAvgAccuracy !== null ? `참여 ${studentsWithQuiz.length}/${total}명 (${quizParticipationRate}%)` : "퀴즈 기록 없음"}
             color={classAvgAccuracy === null ? "gray" : classAvgAccuracy >= 75 ? "green" : classAvgAccuracy >= 55 ? "amber" : "red"}
           />
           <StatCard

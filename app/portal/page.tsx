@@ -6,6 +6,8 @@ import { createClient } from "@/lib/supabase/client"
 import { cn } from "@/lib/utils"
 import { RequireAuth } from "@/components/require-auth"
 import { Header } from "@/components/header"
+import { BottomNav } from "@/components/bottom-nav"
+import { pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
 
 // ─── 플랫폼 URL 설정 ─────────────────────────────────────────────────
 const ALGORITHM_URL = process.env.NEXT_PUBLIC_ALGORITHM_URL || "http://localhost:8080"
@@ -87,6 +89,96 @@ export default function PortalPage() {
   )
 }
 
+function RoleOnboardingModal({ onSelect }: { onSelect: (role: "student" | "teacher", joinCode?: string) => void }) {
+  const [step, setStep] = useState<"role" | "joincode">("role")
+  const [joinCode, setJoinCode] = useState("")
+
+  return (
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-3xl p-6 w-full max-w-sm shadow-xl">
+        {step === "role" ? (
+          <>
+            <div className="text-center mb-6">
+              <div className="text-4xl mb-2">🦒</div>
+              <h2 className="text-xl font-black text-gray-900">코드린에 오신 걸 환영해요!</h2>
+              <p className="text-sm text-gray-500 mt-1">어떻게 사용할 예정인가요?</p>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                onClick={() => setStep("joincode")}
+                className="flex flex-col items-center gap-2 p-4 rounded-2xl border-2 border-gray-200 hover:border-orange-400 hover:bg-orange-50 transition-all"
+              >
+                <span className="text-3xl">🎒</span>
+                <span className="font-black text-gray-800">학생</span>
+                <span className="text-[11px] text-gray-400 text-center leading-tight">코딩 배우기</span>
+              </button>
+              <button
+                onClick={() => onSelect("teacher")}
+                className="flex flex-col items-center gap-2 p-4 rounded-2xl border-2 border-gray-200 hover:border-indigo-400 hover:bg-indigo-50 transition-all"
+              >
+                <span className="text-3xl">📋</span>
+                <span className="font-black text-gray-800">선생님</span>
+                <span className="text-[11px] text-gray-400 text-center leading-tight">학생 반 관리</span>
+              </button>
+            </div>
+            <p className="text-[11px] text-center text-gray-400 mt-3">
+              혼자 공부하거나 학부모라면 학생으로 시작하세요
+            </p>
+          </>
+        ) : (
+          <>
+            <div className="text-center mb-5">
+              <div className="text-4xl mb-2">🎒</div>
+              <h2 className="text-lg font-black text-gray-900">선생님께 반 코드를 받으셨나요?</h2>
+              <p className="text-sm text-gray-500 mt-1">있으면 입력하고, 없으면 그냥 시작해도 돼요</p>
+            </div>
+            <input
+              type="text"
+              value={joinCode}
+              onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
+              placeholder="반 코드 입력 (선택)"
+              className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-orange-400 outline-none text-center text-lg font-mono font-bold tracking-widest mb-3"
+              maxLength={8}
+            />
+            <button
+              onClick={() => onSelect("student", joinCode.trim() || undefined)}
+              className="w-full py-3 rounded-2xl bg-orange-500 text-white font-black text-base mb-2 hover:bg-orange-600 transition-all"
+            >
+              {joinCode.trim() ? "반 참가하고 시작하기" : "혼자 시작하기"}
+            </button>
+            <button
+              onClick={() => setStep("role")}
+              className="w-full text-sm text-gray-400 hover:text-gray-600"
+            >
+              ← 뒤로
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  )
+}
+
+interface HomeworkItem {
+  id: string
+  lesson_id: string
+  step_title: string | null
+  submitted_at: string
+  teacher_grade: string | null
+  teacher_comment: string | null
+}
+
+function hwTimeAgo(iso: string) {
+  const diff = Date.now() - new Date(iso).getTime()
+  const d = Math.floor(diff / 86400000)
+  const h = Math.floor(diff / 3600000)
+  if (h < 1) return "방금"
+  if (d < 1) return `${h}시간 전`
+  if (d < 7) return `${d}일 전`
+  const dt = new Date(iso)
+  return `${dt.getMonth()+1}/${dt.getDate()}`
+}
+
 function PortalContent() {
   const router = useRouter()
   const [name, setName] = useState("")
@@ -95,6 +187,28 @@ function PortalContent() {
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set())
   const [cqCount, setCqCount] = useState(0)
   const [loading, setLoading] = useState(true)
+  const [showRoleModal, setShowRoleModal] = useState(false)
+  const [homeworks, setHomeworks] = useState<HomeworkItem[]>([])
+  const [parentLinkCopied, setParentLinkCopied] = useState(false)
+  const [parentLinkLoading, setParentLinkLoading] = useState(false)
+
+  const handleRoleSelect = async (role: "student" | "teacher", joinCode?: string) => {
+    setShowRoleModal(false)
+    const supabase = createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return
+    await supabase.from("profiles").update({ role }).eq("id", user.id)
+    if (role === "teacher") {
+      router.replace("/teacher")
+    } else {
+      // 반 코드가 있으면 자동 참가 시도
+      if (joinCode) {
+        const { joinClassByCode } = await import("@/app/teacher/actions")
+        await joinClassByCode(joinCode)
+      }
+      router.replace("/curriculum")
+    }
+  }
 
   useEffect(() => {
     async function load() {
@@ -102,14 +216,23 @@ function PortalContent() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
 
+      // 역할 체크: null이면 온보딩 모달, teacher면 대시보드로
+      const { data: profileData } = await supabase
+        .from("profiles").select("role").eq("id", user.id).maybeSingle()
+      if (profileData?.role === "teacher") {
+        router.replace("/teacher")
+        return
+      }
+      if (!profileData?.role) setShowRoleModal(true)
+
       // 이름
       const { data: profile } = await supabase
-        .from("users").select("name").eq("id", user.id).maybeSingle()
-      if (profile?.name) setName(profile.name)
+        .from("profiles").select("display_name").eq("id", user.id).maybeSingle()
+      if (profile?.display_name) setName(profile.display_name)
 
       // XP / 스트릭
       const { data: gami } = await supabase
-        .from("gamification").select("total_xp,daily_streak").eq("user_id", user.id).maybeSingle()
+        .from("gamification_data").select("total_xp,daily_streak").eq("user_id", user.id).maybeSingle()
       if (gami) { setXp(gami.total_xp ?? 0); setStreak(gami.daily_streak ?? 0) }
 
       // 진도
@@ -122,15 +245,39 @@ function PortalContent() {
         setCqCount([...ids].filter(id => id.startsWith("cq-")).length)
       }
 
+      // 최근 숙제 제출 (최신 5개)
+      const { data: hw } = await supabase
+        .from("homework_submissions")
+        .select("id,lesson_id,step_title,submitted_at,teacher_grade,teacher_comment")
+        .eq("student_id", user.id)
+        .order("submitted_at", { ascending: false })
+        .limit(5)
+      if (hw) setHomeworks(hw)
+
       setLoading(false)
     }
     load()
   }, [])
 
+  // 다음 미완료 레슨 ID 찾기
+  function getNextLessonId(): string | null {
+    const allParts = [...pythonParts, ...cppParts, ...pseudoParts]
+    for (const part of allParts) {
+      for (const id of part.lessonIds) {
+        const sid = String(id)
+        if (!completedIds.has(sid) && !completedIds.has(id as string)) {
+          return sid
+        }
+      }
+    }
+    return null
+  }
+
   // 플랫폼으로 이동
   async function navigateTo(platform: "coderin" | "algorithm" | "codequest", stageId: string) {
     if (platform === "coderin") {
-      router.push("/curriculum")
+      const nextId = getNextLessonId()
+      router.push(nextId ? `/learn/${nextId}` : "/curriculum")
       return
     }
     if (platform === "algorithm") {
@@ -148,6 +295,42 @@ function PortalContent() {
     } else {
       window.open(`${CODEQUEST_URL}?track=${track}`, "_blank")
     }
+  }
+
+  const handleShareParentReport = async () => {
+    setParentLinkLoading(true)
+    try {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+
+      // 기존 토큰 확인
+      let token: string | null = null
+      const { data: existing } = await supabase
+        .from("parent_report_links")
+        .select("token")
+        .eq("student_id", user.id)
+        .maybeSingle()
+      if (existing?.token) {
+        token = existing.token
+      } else {
+        // 새 토큰 생성
+        token = Array.from({ length: 20 }, () =>
+          "ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789"[Math.floor(Math.random() * 56)]
+        ).join("")
+        await supabase.from("parent_report_links").insert({ token, student_id: user.id })
+      }
+
+      const url = `${window.location.origin}/parent?t=${token}`
+      if (navigator.share) {
+        await navigator.share({ title: "코드린 학습 리포트", url })
+      } else {
+        await navigator.clipboard.writeText(url)
+        setParentLinkCopied(true)
+        setTimeout(() => setParentLinkCopied(false), 2500)
+      }
+    } catch {}
+    setParentLinkLoading(false)
   }
 
   const track = getTrack(completedIds)
@@ -172,7 +355,8 @@ function PortalContent() {
     if (idx === 0) return "active"
     const prev = stages[idx - 1]
     const prevDone = prev.lessonIds.filter(id => completedIds.has(id)).length
-    return prevDone > 0 ? "active" : "locked"
+    const threshold = Math.ceil(prev.lessonIds.length * 0.7)
+    return prevDone >= threshold ? "active" : "locked"
   }
 
   if (loading) return (
@@ -188,6 +372,7 @@ function PortalContent() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {showRoleModal && <RoleOnboardingModal onSelect={handleRoleSelect} />}
       <Header />
 
       <main className="max-w-lg mx-auto px-4 py-6 space-y-5">
@@ -218,6 +403,12 @@ function PortalContent() {
               </div>
             )}
           </div>
+          <button
+            onClick={() => router.push("/analytics")}
+            className="mt-3 text-[11px] font-semibold text-white/70 hover:text-white transition-colors underline underline-offset-2"
+          >
+            📊 학습 분석 자세히 보기 →
+          </button>
         </div>
 
         {/* 학습 여정 */}
@@ -337,6 +528,61 @@ function PortalContent() {
           </div>
         </div>
 
+        {/* 숙제 섹션 — 제출 내역 있을 때만 표시 */}
+        {homeworks.length > 0 && (
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 space-y-3">
+            <h2 className="text-sm font-black text-gray-700">📝 내 숙제</h2>
+            <div className="space-y-2">
+              {homeworks.map(hw => {
+                const isGraded = hw.teacher_grade !== null
+                const isPassed = hw.teacher_grade === "pass"
+                const isFailed = hw.teacher_grade === "fail"
+                return (
+                  <div
+                    key={hw.id}
+                    className={cn(
+                      "rounded-xl border p-3 cursor-pointer transition-all",
+                      isGraded
+                        ? isPassed
+                          ? "bg-green-50 border-green-200"
+                          : "bg-red-50 border-red-200"
+                        : "bg-amber-50 border-amber-200"
+                    )}
+                    onClick={() => {
+                      if (!hw.lesson_id) return
+                      router.push(`/learn/${hw.lesson_id}`)
+                    }}
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-bold text-gray-800 truncate">
+                          {hw.step_title || "과제"}
+                        </p>
+                        <p className="text-[11px] text-gray-400 mt-0.5">{hwTimeAgo(hw.submitted_at)}</p>
+                      </div>
+                      <span className={cn(
+                        "flex-shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full",
+                        isGraded
+                          ? isPassed
+                            ? "bg-green-100 text-green-700"
+                            : "bg-red-100 text-red-700"
+                          : "bg-amber-100 text-amber-700"
+                      )}>
+                        {isGraded ? (isPassed ? "✅ 통과" : "❌ 재도전") : "⏳ 채점 대기"}
+                      </span>
+                    </div>
+                    {hw.teacher_comment && (
+                      <p className="mt-2 text-[11px] text-gray-600 bg-white/70 rounded-lg px-2.5 py-1.5 border border-gray-100">
+                        💬 {hw.teacher_comment}
+                      </p>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
         {/* 빠른 이동 */}
         <div className="grid grid-cols-3 gap-2">
           {([
@@ -361,12 +607,26 @@ function PortalContent() {
           })}
         </div>
 
+        {/* 부모님 리포트 공유 */}
+        <button
+          onClick={handleShareParentReport}
+          disabled={parentLinkLoading}
+          className="w-full py-2.5 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-600 hover:border-orange-300 hover:text-orange-600 transition-all disabled:opacity-50"
+        >
+          {parentLinkLoading
+            ? "⏳ 링크 생성 중..."
+            : parentLinkCopied
+              ? "✅ 링크가 복사됐어요!"
+              : "👨‍👩‍👧 부모님께 학습 리포트 공유하기"}
+        </button>
+
         {/* 하단 안내 */}
         <p className="text-[11px] text-center text-gray-400 pb-4">
           🔑 로그인은 한 번만 — 풀기·겨루기에서도 자동으로 연결돼요
         </p>
 
       </main>
+      <BottomNav />
     </div>
   )
 }
