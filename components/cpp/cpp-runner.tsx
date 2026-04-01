@@ -190,7 +190,9 @@ export function CppRunner({
 
   // teacher_grade: 'auto' = expectedOutput 일치, null = 자유 구현(선생님 확인 필요)
   const saveCodeSilently = async (currentCode: string, autoGrade: "auto" | null = null) => {
-    if (isSubmitting || (isSubmitted && teacherGrade !== "fail")) return
+    // 이미 정답 처리됐으면 스킵. null(미채점) 상태에서 정답이 나오면 재제출 허용
+    if (isSubmitting) return
+    if (isSubmitted && teacherGrade !== "fail" && !(autoGrade === "auto" && teacherGrade === null)) return
     setIsSubmitting(true)
     try {
       const supabase = createClient()
@@ -201,7 +203,7 @@ export function CppRunner({
         .select("display_name")
         .eq("id", user.id)
         .single()
-      await supabase
+      const { error } = await supabase
         .from("homework_submissions")
         .insert({
           student_id: user.id,
@@ -214,8 +216,10 @@ export function CppRunner({
           expected_output: expectedOutput || null,
           problem_description: task || null,
         })
-      setIsSubmitted(true)
-      setTeacherGrade(autoGrade ?? null) // 제출 직후엔 자동채점 결과 or null
+      if (!error) {
+        setIsSubmitted(true)
+        setTeacherGrade(autoGrade ?? null)
+      }
     } catch {
       // 백그라운드 저장 실패는 조용히 처리 (학생 방해 안 함)
     } finally {

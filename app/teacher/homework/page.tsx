@@ -172,9 +172,13 @@ export default function HomeworkPage() {
   const setGrade = async (grp: SubmissionGroup, grade: Grade) => {
     setSaving(grp.key)
     const supabase = createClient()
-    await supabase.from("homework_submissions").update({ teacher_grade: grade }).in("id", grp.allIds)
-    setGrades(prev => ({ ...prev, [grp.key]: grade }))
-    setGroups(prev => prev.map(g => g.key === grp.key ? { ...g, teacher_grade: grade } : g))
+    const { error } = await supabase.from("homework_submissions").update({ teacher_grade: grade }).in("id", grp.allIds)
+    if (error) {
+      setError("채점 저장 실패: " + error.message)
+    } else {
+      setGrades(prev => ({ ...prev, [grp.key]: grade }))
+      setGroups(prev => prev.map(g => g.key === grp.key ? { ...g, teacher_grade: grade } : g))
+    }
     setSaving(null)
   }
 
