@@ -13,10 +13,10 @@ export function BottomNav() {
   const { t } = useLanguage()
 
   const studentNav = [
-    { icon: Map,     label: t("여정", "Journey"),  href: "/portal"     },
-    { icon: BookOpen,label: t("수업", "Lessons"),  href: "/curriculum" },
-    { icon: Puzzle,  label: t("풀기", "Practice"), href: "/algorithm"  },
-    { icon: User,    label: t("내정보", "Profile"), href: "/profile"    },
+    { icon: Map,     label: t("여정", "Journey"),    href: "/portal"     },
+    { icon: BookOpen,label: t("수업", "Lessons"),    href: "/curriculum" },
+    { icon: Puzzle,  label: t("알고리즘", "Algo"),   href: "/algorithm"  },
+    { icon: User,    label: t("내정보", "Profile"),  href: "/profile"    },
   ]
 
   const teacherNav = [
@@ -29,7 +29,7 @@ export function BottomNav() {
   const guestNav = [
     { icon: Home,     label: t("홈", "Home"),      href: "/"           },
     { icon: BookOpen, label: t("수업", "Lessons"),  href: "/curriculum" },
-    { icon: Puzzle,   label: t("풀기", "Practice"), href: "/algorithm"  },
+    { icon: Puzzle,   label: t("알고리즘", "Algo"),  href: "/algorithm"  },
     { icon: User,     label: t("내정보", "Profile"), href: "/profile"    },
   ]
 

@@ -29,6 +29,20 @@ import { SuccessOverlay } from "@/components/learn/success-overlay"
 import { StepRenderer } from "@/components/learn/step-renderer"
 import { lessonsData, bilingualLessons, lessonVariants } from "@/components/learn/lesson-registry"
 import type { LessonStep } from "@/components/learn/types"
+
+// ── 다음 레슨 ID 계산 ──────────────────────────────────────────────────
+function getNextLessonId(currentId: string): string | null {
+  const allParts = [
+    ...pythonParts,
+    ...cppParts,
+    ...pseudoParts,
+  ]
+  const allIds = allParts.flatMap(p => p.lessonIds.map(String))
+  const idx = allIds.indexOf(String(currentId))
+  if (idx === -1 || idx >= allIds.length - 1) return null
+  return allIds[idx + 1]
+}
+
 export default function PracticePage({ params }: { params: Promise<{ lessonId: string }> }) {
   const resolvedParams = use(params)
   const lessonId = resolvedParams.lessonId
@@ -588,7 +602,56 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             <LessonFeedbackCard feedback={lessonFeedback} t={t} />
 
             <div className="mt-4 space-y-3">
-              {/* 레슨 집중 퀴즈 CTA — IGCSE 제외, 레슨 ID가 숫자형(Python) 또는 cpp-N 형식일 때 */}
+              {/* 다음 레슨 바로 가기 / 트랙 완주 안내 */}
+              {(() => {
+                const nextId = getNextLessonId(lessonId)
+                // 다음 레슨 있으면 바로 이동 버튼
+                if (nextId) {
+                  return (
+                    <button
+                      onClick={() => { localStorage.removeItem(progressKey); router.push(`/learn/${nextId}`) }}
+                      className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white rounded-xl font-bold text-base transition-all"
+                    >
+                      {t("다음 레슨으로 →", "Next Lesson →")}
+                    </button>
+                  )
+                }
+                // Python 마지막 레슨(p4) 완료 → C++ 전환 유도
+                if (currentProgrammingLang === "python") {
+                  return (
+                    <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl p-4 text-left space-y-2">
+                      <p className="text-base font-black text-blue-800">🎉 {t("Python 커리큘럼 완주!", "Python Curriculum Complete!")}</p>
+                      <p className="text-sm text-blue-700">{t("다음 단계는 C++ 전환이에요. 속도가 10~100배 빨라지고 USACO 대회에 도전할 수 있어요.", "Next up: switch to C++. Code runs 10–100× faster and you can compete in USACO.")}</p>
+                      <button
+                        onClick={() => {
+                          try { localStorage.setItem("selectedCourse", "cpp") } catch {}
+                          router.push("/curriculum")
+                        }}
+                        className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold text-sm transition-all"
+                      >
+                        ⚡ {t("C++ 커리큘럼 시작하기 →", "Start C++ Curriculum →")}
+                      </button>
+                    </div>
+                  )
+                }
+                // C++ 마지막 레슨 완료 → 알고리즘 유도
+                if (currentProgrammingLang === "cpp") {
+                  return (
+                    <div className="bg-purple-50 border-2 border-purple-200 rounded-2xl p-4 text-left space-y-2">
+                      <p className="text-base font-black text-purple-800">🏆 {t("C++ 커리큘럼 완주!", "C++ Curriculum Complete!")}</p>
+                      <p className="text-sm text-purple-700">{t("이제 알고리즘 훈련으로! 정렬·탐색·DP로 USACO Bronze를 목표로 해봐요.", "Time for algorithm training! Aim for USACO Bronze with sorting, search & DP.")}</p>
+                      <button
+                        onClick={() => router.push("/algorithm")}
+                        className="w-full py-2.5 bg-purple-600 hover:bg-purple-500 text-white rounded-xl font-bold text-sm transition-all"
+                      >
+                        🧠 {t("알고리즘 훈련 시작하기 →", "Start Algorithm Training →")}
+                      </button>
+                    </div>
+                  )
+                }
+                return null
+              })()}
+              {/* 레슨 집중 퀴즈 CTA — IGCSE 제외 */}
               {!isIGCSE && (
                 <button
                   onClick={() => {

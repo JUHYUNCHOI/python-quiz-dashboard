@@ -306,11 +306,50 @@ export default function TeacherDashboardPage() {
         {isLoading ? (
           <div className="text-center py-12 text-gray-400">{t("불러오는 중...", "Loading...")}</div>
         ) : classes.length === 0 ? (
-          <Card className="p-8 text-center border-2 border-dashed border-gray-200">
-            <Users className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500 mb-1">{t("아직 만든 반이 없어요", "No classes created yet")}</p>
-            <p className="text-sm text-gray-400">{t("\"새 반 만들기\"를 눌러 시작하세요", "Press \"Create New Class\" to start")}</p>
-          </Card>
+          <div className="space-y-4">
+            {/* 온보딩 안내 */}
+            <div className="rounded-2xl border-2 border-orange-200 bg-orange-50 p-5 space-y-4">
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">👋</span>
+                <div>
+                  <p className="font-black text-gray-900">{t("코드린 선생님, 환영합니다!", "Welcome to Coderin, Teacher!")}</p>
+                  <p className="text-xs text-gray-500">{t("아래 3단계로 수업을 시작해보세요", "Follow these 3 steps to get started")}</p>
+                </div>
+              </div>
+              <div className="space-y-3">
+                {[
+                  {
+                    step: "1",
+                    color: "bg-orange-500",
+                    title: t("반 만들기", "Create a Class"),
+                    desc: t("위의 '새 반 만들기' 버튼을 눌러 반을 생성하면 참여 코드가 생성돼요.", "Tap '+ New Class' above to create a class and get a join code."),
+                  },
+                  {
+                    step: "2",
+                    color: "bg-blue-500",
+                    title: t("학생 초대", "Invite Students"),
+                    desc: t("참여 코드를 학생에게 알려주세요. 학생이 코드린에 로그인 후 코드를 입력하면 반에 합류해요.", "Share the join code with students. They enter it after logging in to join your class."),
+                  },
+                  {
+                    step: "3",
+                    color: "bg-green-500",
+                    title: t("진도 & 과제 확인", "Track Progress & Homework"),
+                    desc: t("반 관리 페이지에서 학생별 레슨 진도, 과제 제출 현황, 학부모 리포트 링크를 확인할 수 있어요.", "In the class page, view each student's lesson progress, homework submissions, and generate parent report links."),
+                  },
+                ].map(item => (
+                  <div key={item.step} className="flex items-start gap-3 bg-white rounded-xl p-3">
+                    <div className={`w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-black flex-shrink-0 ${item.color}`}>
+                      {item.step}
+                    </div>
+                    <div>
+                      <p className="font-bold text-sm text-gray-800">{item.title}</p>
+                      <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         ) : (
           <div className="space-y-3">
             {classes.map((cls) => {

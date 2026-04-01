@@ -58,6 +58,7 @@ begin
 
   return json_build_object(
     'student_name', coalesce(v_link.student_name, v_profile.display_name),
+    'student_id', v_link.student_id,
     'total_xp', coalesce(v_gam.total_xp, 0),
     'daily_streak', coalesce(v_gam.daily_streak, 0),
     'last_active_date', coalesce(v_gam.last_active_date, ''),
