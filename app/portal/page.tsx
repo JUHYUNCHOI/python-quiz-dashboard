@@ -318,7 +318,14 @@ function PortalContent() {
         token = Array.from({ length: 20 }, () =>
           "ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789"[Math.floor(Math.random() * 56)]
         ).join("")
-        await supabase.from("parent_report_links").insert({ token, student_id: user.id })
+        // class_id는 선생님이 생성 시에만 필요 — 학생 직접 생성은 null (DB nullable)
+        const { error: insertError } = await supabase.from("parent_report_links").insert({
+          token,
+          student_id: user.id,
+          created_by: user.id,
+          student_name: name || user.email || "",
+        })
+        if (insertError) throw insertError
       }
 
       const url = `${window.location.origin}/parent?t=${token}`
