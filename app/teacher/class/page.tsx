@@ -646,7 +646,7 @@ export default function ClassDetailPage() {
       setParentLinkCopied(student.id)
       setTimeout(() => setParentLinkCopied(null), 3000)
     } catch (e) {
-      console.error("Failed to generate parent link:", e)
+      console.error("Failed to generate parent link:", (e as any)?.message ?? (e as any)?.code ?? JSON.stringify(e))
       setParentLinkError("링크 생성에 실패했습니다. 다시 시도해주세요.")
       setTimeout(() => setParentLinkError(null), 4000)
     }

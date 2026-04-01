@@ -382,7 +382,11 @@ function PortalContent() {
       {showRoleModal && <RoleOnboardingModal onSelect={handleRoleSelect} />}
       <Header />
 
-      <main className="max-w-lg mx-auto px-4 py-6 space-y-5">
+      <main className="max-w-[1200px] mx-auto px-4 py-6">
+        <div className="lg:flex lg:gap-8 lg:items-start">
+
+        {/* ── 왼쪽: 인사 + 빠른이동 ── */}
+        <div className="lg:w-[380px] lg:flex-shrink-0 space-y-5">
 
         {/* 인사 + 스탯 */}
         <div className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl p-5 text-white">
@@ -417,6 +421,11 @@ function PortalContent() {
             📊 학습 분석 자세히 보기 →
           </button>
         </div>
+
+        </div>
+
+        {/* ── 오른쪽: 학습 여정 + 숙제 ── */}
+        <div className="lg:flex-1 space-y-5 mt-5 lg:mt-0">
 
         {/* 학습 여정 */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 space-y-3">
@@ -590,8 +599,11 @@ function PortalContent() {
           </div>
         )}
 
+        </div>
+        </div>
+
         {/* 빠른 이동 */}
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 sm:grid-cols-3 gap-2 mt-5">
           {([
             { platform: "coderin",   emoji: "📚", label: "배우기"  },
             { platform: "algorithm", emoji: "🧩", label: "풀기"    },

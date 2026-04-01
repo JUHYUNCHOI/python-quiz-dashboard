@@ -204,13 +204,40 @@ export default function TeacherDashboardPage() {
     setTimeout(() => setCopiedCode(null), 2000)
   }
 
+  const regenerateCode = async (cls: (typeof classes)[number], e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (!window.confirm(t(
+      `'${cls.name}' 반의 참가 코드를 재발급할까요?\n기존에 가입한 학생들은 영향 없어요.`,
+      `Regenerate join code for '${cls.name}'?\nStudents already in the class won't be affected.`
+    ))) return
+    const supabase = createClient()
+    const newCode = Math.random().toString(36).slice(2, 8).toUpperCase()
+    const { error } = await supabase.from("classes").update({ join_code: newCode }).eq("id", cls.id)
+    if (!error) loadClasses()
+  }
+
+  const shareCode = async (cls: (typeof classes)[number]) => {
+    const message = t(
+      `[코드린] ${cls.name} 반에 초대합니다!\n참여 코드: ${cls.join_code}\n\ncoderin.app에서 로그인 후 '반 참가' 메뉴에 코드를 입력하세요.`,
+      `[Coderin] You're invited to ${cls.name}!\nJoin code: ${cls.join_code}\n\nLogin at coderin.app and enter the code to join.`
+    )
+    if (navigator.share) {
+      try { await navigator.share({ title: t("코드린 반 참여", "Join Coderin Class"), text: message }) } catch {}
+    } else {
+      navigator.clipboard.writeText(message)
+      setCopiedCode(cls.join_code + "-share")
+      setTimeout(() => setCopiedCode(null), 2000)
+    }
+  }
+
   const displayName = profile?.display_name || t("선생님", "Teacher")
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-mint-50">
       <Header />
 
-      <main className="w-full px-4 sm:px-6 pb-24 pt-6 max-w-2xl mx-auto">
+      <main className="w-full px-4 sm:px-6 pb-24 pt-6 max-w-[1200px] mx-auto">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-xl font-bold text-gray-800">{t("내 반 관리", "Manage My Classes")}</h1>
           <button
@@ -351,7 +378,7 @@ export default function TeacherDashboardPage() {
             </div>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {classes.map((cls) => {
               const dangerCount = risks.filter(r => r.classId === cls.id && r.severity === "danger").length
               const warnCount = risks.filter(r => r.classId === cls.id && r.severity === "warning").length
@@ -387,8 +414,29 @@ export default function TeacherDashboardPage() {
                           {copiedCode === cls.join_code ? (
                             <><Check className="w-3.5 h-3.5 text-green-500" /> {t("복사됨", "Copied")}</>
                           ) : (
-                            <><Copy className="w-3.5 h-3.5" /> {t("코드", "Code")}: {cls.join_code}</>
+                            <><Copy className="w-3.5 h-3.5" /> {cls.join_code}</>
                           )}
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                            shareCode(cls)
+                          }}
+                          className="flex items-center gap-1 text-indigo-500 hover:text-indigo-700 transition-colors font-semibold"
+                        >
+                          {copiedCode === cls.join_code + "-share" ? (
+                            <><Check className="w-3.5 h-3.5 text-green-500" /> {t("복사됨", "Copied")}</>
+                          ) : (
+                            t("공유 →", "Share →")
+                          )}
+                        </button>
+                        <button
+                          onClick={(e) => regenerateCode(cls, e)}
+                          className="flex items-center gap-1 text-gray-300 hover:text-gray-500 transition-colors text-xs"
+                          title={t("코드 재발급", "Regenerate code")}
+                        >
+                          🔄
                         </button>
                       </div>
                     </div>

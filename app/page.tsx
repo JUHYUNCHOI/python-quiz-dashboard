@@ -159,7 +159,7 @@ function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-white">
       {/* 상단 헤더 */}
-      <div className="flex items-center justify-between px-5 py-4 max-w-lg mx-auto">
+      <div className="flex items-center justify-between px-5 py-4 max-w-[1200px] mx-auto">
         <div className="flex items-center gap-2">
           <span className="text-2xl">🦒</span>
           <span className="font-black text-xl text-gray-800">코드린</span>
@@ -172,10 +172,10 @@ function LandingPage() {
         </Link>
       </div>
 
-      <main className="max-w-lg mx-auto px-5 pb-16 space-y-10">
+      <main className="max-w-[1200px] mx-auto px-5 pb-16">
 
-        {/* ── 히어로 ── */}
-        <div className="text-center pt-4 pb-2 space-y-3">
+        {/* ── 히어로 (공통 상단) ── */}
+        <div className="text-center pt-4 pb-6 space-y-3 max-w-xl mx-auto">
           <div className="text-5xl">🦒</div>
           <h1 className="text-2xl font-black text-gray-900 leading-tight">
             {t("코딩 시작부터\nUSACO·MCC 대회까지", "From First Code\nto USACO & MCC")}
@@ -194,8 +194,8 @@ function LandingPage() {
           </Link>
         </div>
 
-        {/* ── 학습 경로 (핵심) ── */}
-        <div className="space-y-1">
+        {/* ── 학습 경로 ── */}
+        <div className="lg:max-w-2xl lg:mx-auto space-y-1 mb-10">
           <h2 className="text-base font-black text-gray-800 mb-3">
             {t("내가 가는 경로", "Your Learning Path")}
           </h2>
@@ -335,7 +335,7 @@ function LandingPage() {
           <h2 className="text-base font-black text-gray-800 mb-3">
             {t("어떻게 배우나요?", "How does it work?")}
           </h2>
-          <div className="space-y-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {[
               {
                 icon: '📖', color: 'bg-orange-100 text-orange-600',
@@ -398,7 +398,7 @@ function LandingPage() {
         </div>
 
         {/* ── 하단 CTA ── */}
-        <div className="text-center space-y-2 pt-2">
+        <div className="text-center space-y-2 pt-8">
           <Link
             href="/login"
             className="inline-block px-8 py-3 rounded-2xl bg-orange-500 text-white font-black text-base border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
