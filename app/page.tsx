@@ -4,11 +4,11 @@ import { GiraffeHero } from "@/components/giraffe-hero"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { Card } from "@/components/ui/card"
-import { BookOpen, Brain, Trophy, Flame, Zap, ChevronRight, Target, CheckCircle2, BarChart3, Shield } from "lucide-react"
+import { BookOpen, Brain, Trophy, Flame, Zap, ChevronRight, Target, CheckCircle2, BarChart3 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useLanguage } from "@/contexts/language-context"
-import { useGamification, DAILY_XP_GOAL, getLevelTitle, STREAK_SHIELD_COST } from "@/hooks/use-gamification"
+import { useGamification, DAILY_XP_GOAL, getLevelTitle } from "@/hooks/use-gamification"
 import { useState, useEffect } from "react"
 import { OnboardingModal } from "@/components/onboarding-modal"
 import { DailyChallenges } from "@/components/daily-challenges"
@@ -421,8 +421,7 @@ export default function DashboardPage() {
   const { t, lang } = useLanguage()
   const { isAuthenticated, isLoading: authLoading, profile } = useAuth()
   const router = useRouter()
-  const { level, totalXp, xpInCurrentLevel, dailyStreak, xpToday, isStreakAtRisk, useStreakShield } = useGamification()
-  const [shieldUsed, setShieldUsed] = useState(false)
+  const { level, totalXp, xpInCurrentLevel, dailyStreak, xpToday } = useGamification()
   const levelInfo = getLevelTitle(level)
   const [nextLesson, setNextLesson] = useState<NextLesson | null>(null)
   const [selectedCourse, setSelectedCourse] = useState<"python" | "cpp">("python")
@@ -439,7 +438,7 @@ export default function DashboardPage() {
     if (!isAuthenticated || !profile) return
     if (profile.role === "teacher") router.replace("/teacher")
     else if (profile.role === "parent") router.replace("/parent")
-    else router.replace("/curriculum")
+    else router.replace("/portal")
   }, [isAuthenticated, profile, router])
 
   useEffect(() => {

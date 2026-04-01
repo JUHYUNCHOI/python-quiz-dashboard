@@ -298,7 +298,11 @@ function ParentReportPage() {
       try {
         const supabase = createClient()
         const { data: result, error: rpcError } = await supabase.rpc("get_parent_report", { p_token: token })
-        if (rpcError || result?.error === "invalid_token") {
+        if (rpcError) {
+          console.error("get_parent_report error:", rpcError)
+          setError(`오류: ${rpcError.message}`); setLoading(false); return
+        }
+        if (result?.error === "invalid_token") {
           setError("유효하지 않은 링크입니다"); setLoading(false); return
         }
         setData(result as ParentReportData)
@@ -340,11 +344,20 @@ function ParentReportPage() {
   )
 
   if (error || !data) return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white flex items-center justify-center">
-      <div className="text-center space-y-3">
+    <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white flex items-center justify-center p-6">
+      <div className="text-center space-y-4 max-w-sm">
         <div className="text-5xl">🔒</div>
-        <p className="text-gray-600 font-bold">{error || "리포트를 찾을 수 없습니다"}</p>
-        <p className="text-sm text-gray-400">선생님에게 새 링크를 요청해주세요</p>
+        <div>
+          <p className="text-gray-700 font-bold text-lg">링크를 사용할 수 없어요</p>
+          <p className="text-gray-500 text-sm mt-1">링크가 만료되었거나 유효하지 않습니다</p>
+        </div>
+        <div className="bg-orange-50 border border-orange-100 rounded-xl p-4 text-left space-y-2">
+          <p className="text-xs font-semibold text-orange-700">이렇게 해보세요</p>
+          <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
+            <li>학생에게 새 링크 생성을 요청해주세요</li>
+            <li>코드린 앱 → 프로필 → 부모님 리포트 공유</li>
+          </ul>
+        </div>
       </div>
     </div>
   )

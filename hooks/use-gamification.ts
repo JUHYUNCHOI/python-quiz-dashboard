@@ -34,7 +34,7 @@ const STORAGE_KEYS = {
 } as const
 
 const XP_PER_LEVEL = 100
-export const DAILY_XP_GOAL = 50
+export const DAILY_XP_GOAL = 100
 export const STREAK_SHIELD_COST = 50
 
 // -------- Level Titles --------
@@ -159,9 +159,10 @@ export function useGamification() {
       const supabaseStreak      = safeParseInt(String(data.daily_streak ?? 0), 0)
       const supabaseSessions    = safeParseInt(String(data.sessions_today ?? 0), 0)
 
-      // 항상 더 큰 값 선택: sync 지연/실패 시 데이터 손실 방지
+      // 서버 값 우선: supabase에 데이터가 있으면 신뢰 (로컬 조작 방지)
+      // 서버 값이 0인 경우만 로컬 폴백 (신규 유저 또는 sync 이전 데이터)
       // (YYYY-MM-DD 형식은 문자열 비교로 날짜 대소 판단 가능)
-      const totalXp        = Math.max(supabaseTotalXp, localTotalXp)
+      const totalXp        = supabaseTotalXp > 0 ? supabaseTotalXp : localTotalXp
       const lastActiveDate = localLastActive > supabaseLastActive ? localLastActive : supabaseLastActive
       const dailyStreak    = Math.max(supabaseStreak, localStreak)
 
