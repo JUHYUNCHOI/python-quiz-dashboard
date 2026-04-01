@@ -9,6 +9,7 @@ import { Share2, Copy } from "lucide-react"
 
 interface ParentReportData {
   student_name: string
+  student_id?: string
   total_xp: number
   daily_streak: number
   last_active_date: string
@@ -29,6 +30,14 @@ interface ParentReportData {
     xp_earned: number
     completed_at: string
   }[]
+}
+
+interface HomeworkItem {
+  lesson_id: string
+  submitted_at: string
+  teacher_grade: string | null  // "pass" | "fail" | "auto" | null(미채점)
+  teacher_comment: string | null
+  student_code: string
 }
 
 // ─── 커리큘럼 ID 목록 ────────────────────────────────────────────────
@@ -249,10 +258,36 @@ export default function ParentReportPageWrapper() {
   )
 }
 
+// ─── 최근 완료 레슨 추출 ─────────────────────────────────────────────
+function getRecentCompletions(progress: ParentReportData["lesson_progress"], limit = 5) {
+  return progress
+    .filter(p => p.completed && p.progress_type === "lesson")
+    .sort((a, b) => b.updated_at.localeCompare(a.updated_at))
+    .slice(0, limit)
+}
+
+// ─── 다음 레슨 찾기 ───────────────────────────────────────────────────
+function getNextLesson(completedIds: Set<string>): { id: string; name: string; course: string } | null {
+  const allParts = [
+    ...pythonParts.map(p => ({ ...p, course: "Python" })),
+    ...cppParts.map(p => ({ ...p, course: "C++" })),
+    ...pseudoParts.map(p => ({ ...p, course: "Pseudocode" })),
+  ]
+  for (const part of allParts) {
+    for (const id of part.lessonIds.map(String)) {
+      if (!completedIds.has(id)) {
+        return { id, name: getLessonName(id, "ko"), course: part.course }
+      }
+    }
+  }
+  return null
+}
+
 function ParentReportPage() {
   const searchParams = useSearchParams()
   const token = searchParams.get("t") || ""
   const [data, setData] = useState<ParentReportData | null>(null)
+  const [homework, setHomework] = useState<HomeworkItem[]>([])
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [copied, setCopied] = useState(false)
@@ -267,6 +302,17 @@ function ParentReportPage() {
           setError("유효하지 않은 링크입니다"); setLoading(false); return
         }
         setData(result as ParentReportData)
+
+        // 과제 제출 내역 조회 (token으로 student_id 매핑)
+        if (result?.student_id) {
+          const { data: hw } = await supabase
+            .from("homework_submissions")
+            .select("lesson_id, submitted_at, teacher_grade, teacher_comment, student_code")
+            .eq("student_id", result.student_id)
+            .order("submitted_at", { ascending: false })
+            .limit(10)
+          if (hw) setHomework(hw as HomeworkItem[])
+        }
       } catch { setError("오류가 발생했습니다") }
       setLoading(false)
     }
@@ -326,11 +372,22 @@ function ParentReportPage() {
   // CodeQuest(cq-*) 완료 문제 수
   const cqCompleted   = [...completedIds].filter(id => id.startsWith("cq-")).length
 
+  // 최근 완료 레슨 (날짜 역순)
+  const recentLessons = getRecentCompletions(progress, 5)
+
+  // 다음 레슨
+  const nextLesson = getNextLesson(completedIds)
+
   // 약점 레슨 (복습 완료했는데 점수 낮은 것 = 실제 이해 부족)
   const stuckLessons = progress
     .filter(p => p.progress_type === "review" && p.completed && p.score < 70)
     .sort((a, b) => a.score - b.score)
     .slice(0, 3)
+
+  // 과제 — 채점 완료 / 미채점 분류
+  const gradedHw   = homework.filter(h => h.teacher_grade === "pass" || h.teacher_grade === "auto")
+  const failedHw   = homework.filter(h => h.teacher_grade === "fail")
+  const pendingHw  = homework.filter(h => h.teacher_grade === null)
 
   // 한 줄 요약 생성
   function getSummary(): string {
@@ -408,7 +465,98 @@ function ParentReportPage() {
           </div>
         )}
 
-        {/* ③ 학습 여정 로드맵 */}
+        {/* ③ 최근 완료한 레슨 + 다음 레슨 */}
+        {(recentLessons.length > 0 || nextLesson) && (
+          <Section title="📖 최근 학습 내역">
+            {recentLessons.length > 0 && (
+              <div className="space-y-1.5">
+                <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">최근 완료</p>
+                {recentLessons.map((p, i) => {
+                  const daysAgo = daysSince(p.updated_at)
+                  const dateLabel = daysAgo === 0 ? "오늘" : daysAgo === 1 ? "어제" : `${daysAgo}일 전`
+                  return (
+                    <div key={i} className="flex items-center gap-3 bg-green-50 rounded-xl px-3 py-2">
+                      <span className="text-green-500 flex-shrink-0">✓</span>
+                      <span className="flex-1 text-sm text-gray-700 truncate">{getLessonName(p.lesson_id, "ko")}</span>
+                      <span className="text-[11px] text-gray-400 flex-shrink-0">{dateLabel}</span>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+            {nextLesson && (
+              <div className="mt-2 space-y-1.5">
+                <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">다음에 배울 내용</p>
+                <div className="flex items-center gap-3 bg-orange-50 rounded-xl px-3 py-2 border border-orange-100">
+                  <span className="text-orange-400 flex-shrink-0">▶</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm text-gray-700 font-semibold truncate">{nextLesson.name}</p>
+                    <p className="text-[11px] text-gray-400">{nextLesson.course} 커리큘럼</p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </Section>
+        )}
+
+        {/* ③-b 직접해보기 과제 피드백 */}
+        <Section title="📝 직접해보기 과제">
+          {homework.length === 0 ? (
+            <p className="text-sm text-gray-400">아직 제출한 과제가 없어요.</p>
+          ) : (
+            <div className="space-y-3">
+              {/* 요약 뱃지 */}
+              <div className="flex gap-2 flex-wrap">
+                {gradedHw.length > 0 && (
+                  <span className="text-[11px] font-bold bg-green-100 text-green-700 px-2.5 py-1 rounded-full">
+                    ✓ 통과 {gradedHw.length}개
+                  </span>
+                )}
+                {failedHw.length > 0 && (
+                  <span className="text-[11px] font-bold bg-red-100 text-red-700 px-2.5 py-1 rounded-full">
+                    재도전 {failedHw.length}개
+                  </span>
+                )}
+                {pendingHw.length > 0 && (
+                  <span className="text-[11px] font-bold bg-gray-100 text-gray-500 px-2.5 py-1 rounded-full">
+                    채점 대기 {pendingHw.length}개
+                  </span>
+                )}
+              </div>
+              {/* 최근 3개 과제 상세 */}
+              <div className="space-y-2">
+                {homework.slice(0, 3).map((h, i) => {
+                  const gradeInfo =
+                    h.teacher_grade === "pass" || h.teacher_grade === "auto"
+                      ? { label: "통과", color: "text-green-600 bg-green-50 border-green-100" }
+                      : h.teacher_grade === "fail"
+                      ? { label: "재도전", color: "text-red-600 bg-red-50 border-red-100" }
+                      : { label: "채점 대기", color: "text-gray-500 bg-gray-50 border-gray-100" }
+                  return (
+                    <div key={i} className={`rounded-xl border px-3 py-2.5 space-y-1 ${gradeInfo.color}`}>
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="text-sm font-semibold text-gray-700 truncate flex-1">
+                          {getLessonName(h.lesson_id, "ko")}
+                        </p>
+                        <span className="text-[11px] font-bold flex-shrink-0">{gradeInfo.label}</span>
+                      </div>
+                      {h.teacher_comment && (
+                        <p className="text-xs text-gray-600 leading-relaxed">
+                          💬 {h.teacher_comment}
+                        </p>
+                      )}
+                      <p className="text-[10px] text-gray-400">
+                        {new Date(h.submitted_at).toLocaleDateString("ko-KR", { month: "long", day: "numeric" })} 제출
+                      </p>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+        </Section>
+
+        {/* ③-c 이번 주 얼마나 했나요? (기존 ④, 앞으로 이동) */}
         <Section title={`🗺️ ${trackLabel} 학습 여정`}>
           <p className="text-xs text-gray-400 -mt-1 mb-3">
             {track === "igcse"
@@ -498,7 +646,7 @@ function ParentReportPage() {
           </div>
         </Section>
 
-        {/* ④ 이번 주 얼마나 했나요? */}
+        {/* ④ 이번 주 공부 습관 */}
         <Section title="📅 이번 주 공부 습관">
           <div className="flex items-center gap-4">
             <div className="flex gap-1.5">
