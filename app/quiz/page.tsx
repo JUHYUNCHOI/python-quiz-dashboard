@@ -145,8 +145,9 @@ export default function QuizPage() {
     setTimeout(() => setShowReportToast(false), 2000)
   }, [reportedQuestions])
 
+  const isBeginnerMode = quiz.quizSettings.difficulty === "beginner"
   const { formattedTime, isLowTime } = useQuizTimer({
-    initialTime: 300,
+    initialTime: isBeginnerMode ? 9999 : 300,
     isPaused: quiz.showResult || !isFocused,
   })
 
@@ -211,7 +212,7 @@ export default function QuizPage() {
               <button
                 onClick={quiz.handleExit}
                 className="rounded-full p-2 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors hover:bg-gray-100"
-                aria-label="나가기"
+                aria-label={t("나가기", "Exit")}
               >
                 <X className="h-5 w-5 md:h-6 md:w-6 text-gray-600" />
               </button>
@@ -248,7 +249,7 @@ export default function QuizPage() {
                               : "bg-indigo-500"
                             : "bg-gray-200 cursor-default",
                         )}
-                        aria-label={`문제 ${i + 1}${isAnswered ? " (풀었음)" : ""}`}
+                        aria-label={`${t("문제", "Q")} ${i + 1}${isAnswered ? t(" (풀었음)", " (answered)") : ""}`}
                       />
                     )
                   })}
@@ -305,6 +306,7 @@ export default function QuizPage() {
 
               <SoundToggle isMuted={isMuted} onToggle={toggleMute} />
 
+              {!isBeginnerMode && (
               <div
                 className={cn(
                   "flex flex-col items-center rounded-full px-3 py-1",
@@ -321,6 +323,7 @@ export default function QuizPage() {
                   </span>
                 </div>
               </div>
+              )}
             </div>
           </div>
         </div>
@@ -365,26 +368,52 @@ export default function QuizPage() {
         </div>
       )}
 
-      {quiz.showMidCheckIn && (
-        <div
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center cursor-pointer"
-          onClick={quiz.dismissMidCheckIn}
-          onTouchStart={quiz.dismissMidCheckIn}
-        >
-          <Card className="bg-white p-8 max-w-md mx-4 text-center animate-bounce-in pointer-events-none">
-            <div className="text-6xl mb-4">🦒💪</div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-2">{t("절반 왔어요!", "Halfway there!")}</h3>
-            <p className="text-lg text-gray-600 mb-2">{t("잘하고 있어요!", "You're doing great!")}</p>
-            <p className="text-sm text-gray-500">
-              {t(
-                `지금까지 ${Math.round((quiz.score / (quiz.currentQuestion + 1)) * 100)}% 정답률!`,
-                `${Math.round((quiz.score / (quiz.currentQuestion + 1)) * 100)}% accuracy so far!`
+      {quiz.showMidCheckIn && (() => {
+        const midAcc = Math.round((quiz.score / (quiz.currentQuestion + 1)) * 100)
+        const isStruggling = midAcc < 50
+        const isExcelling = midAcc >= 80
+        return (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <Card className="bg-white p-8 max-w-md w-full text-center animate-bounce-in">
+              <div className="text-6xl mb-4">{isStruggling ? "🦒💭" : isExcelling ? "🦒👑" : "🦒💪"}</div>
+              <h3 className="text-2xl font-bold text-gray-800 mb-2">{t("절반 왔어요!", "Halfway there!")}</h3>
+              <p className={`text-lg font-semibold mb-2 ${isStruggling ? "text-amber-600" : isExcelling ? "text-green-600" : "text-gray-600"}`}>
+                {isStruggling
+                  ? t("조금 어렵죠? 괜찮아요!", "Feeling tough? That's okay!")
+                  : isExcelling
+                  ? t("훌륭해요! 이 기세 유지해요!", "Excellent! Keep it up!")
+                  : t("잘하고 있어요!", "You're doing great!")}
+              </p>
+              <p className="text-sm text-gray-500 mb-6">
+                {t(`지금까지 ${midAcc}% 정답률!`, `${midAcc}% accuracy so far!`)}
+              </p>
+              {isStruggling ? (
+                <div className="space-y-2">
+                  <button
+                    onClick={() => { quiz.dismissMidCheckIn(); router.push("/curriculum") }}
+                    className="w-full py-3 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold transition-colors"
+                  >
+                    {t("📚 관련 레슨 복습하기", "📚 Review related lessons")}
+                  </button>
+                  <button
+                    onClick={quiz.dismissMidCheckIn}
+                    className="w-full py-3 rounded-xl border border-gray-200 text-gray-500 font-medium hover:bg-gray-50 transition-colors"
+                  >
+                    {t("계속 도전하기", "Keep going anyway")}
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={quiz.dismissMidCheckIn}
+                  className="w-full py-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold transition-colors"
+                >
+                  {t("계속하기 →", "Continue →")}
+                </button>
               )}
-            </p>
-            <p className="text-xs text-gray-400 mt-4">{t("탭해서 계속하기", "Tap to continue")}</p>
-          </Card>
-        </div>
-      )}
+            </Card>
+          </div>
+        )
+      })()}
 
       {quiz.showPauseScreen && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -486,11 +515,11 @@ export default function QuizPage() {
                       question.difficulty === "어려움" && "bg-red-100 text-red-700",
                     )}
                   >
-                    {question.difficulty}
+                    {question.difficulty === "쉬움" ? t("쉬움", "Easy") : question.difficulty === "보통" ? t("보통", "Medium") : t("어려움", "Hard")}
                   </span>
                   {quiz.isRetryQuestion && (
                     <span className="rounded-full px-3 py-1 text-xs font-semibold bg-purple-100 text-purple-700 animate-pulse">
-                      🔄 다시 풀기
+                      🔄 {t("다시 풀기", "Retry")}
                     </span>
                   )}
                 </div>

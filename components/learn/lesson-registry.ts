@@ -59,7 +59,7 @@ import {
   cppLesson13EnData, cppLesson14EnData,
   // C++ English lessons 15-22
   cppLesson15EnData, cppLesson16EnData, cppLesson17EnData, cppLesson18EnData,
-  cppLesson19EnData, cppLesson20EnData, cppLesson21EnData,
+  cppLesson19EnData, cppLesson20EnData, cppLesson21EnData, cppLesson22EnData,
   // C++ English project lessons
   cppLessonP1EnData, cppLessonP2EnData, cppLessonP3EnData,
   // Pseudocode Korean lessons
@@ -231,6 +231,7 @@ export const bilingualLessons: Record<string, { ko: LessonData, en: LessonData }
   "cpp-13": { ko: cppLesson13Data, en: cppLesson13EnData },
   "cpp-14": { ko: cppLesson14Data, en: cppLesson14EnData },
   "cpp-21": { ko: cppLesson21Data, en: cppLesson21EnData },
+  "cpp-22": { ko: cppLesson22Data, en: cppLesson22EnData },
   // C++ Part 3
   "cpp-15": { ko: cppLesson15Data, en: cppLesson15EnData },
   "cpp-16": { ko: cppLesson16Data, en: cppLesson16EnData },

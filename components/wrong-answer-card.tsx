@@ -2,6 +2,7 @@
 
 import { ChevronDown, ChevronUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useLanguage } from "@/contexts/language-context"
 
 interface WrongAnswer {
   id: number
@@ -19,6 +20,7 @@ interface WrongAnswerCardProps {
 }
 
 export function WrongAnswerCard({ answer, isExpanded, onToggle }: WrongAnswerCardProps) {
+  const { t } = useLanguage()
   return (
     <div className="overflow-hidden rounded-2xl bg-white shadow-md transition-all hover:shadow-lg">
       {/* Header */}
@@ -45,25 +47,25 @@ export function WrongAnswerCard({ answer, isExpanded, onToggle }: WrongAnswerCar
           <div className="space-y-4">
             {/* Your answer */}
             <div className="rounded-xl bg-red-50 p-4">
-              <p className="mb-1 text-sm font-semibold text-red-600">내 답변</p>
+              <p className="mb-1 text-sm font-semibold text-red-600">{t("내 답변", "Your Answer")}</p>
               <code className="font-mono text-red-700">{answer.yourAnswer}</code>
             </div>
 
             {/* Correct answer */}
             <div className="rounded-xl bg-green-50 p-4">
-              <p className="mb-1 text-sm font-semibold text-green-600">정답</p>
+              <p className="mb-1 text-sm font-semibold text-green-600">{t("정답", "Correct Answer")}</p>
               <code className="font-mono text-green-700">{answer.correctAnswer}</code>
             </div>
 
             {/* Explanation */}
             <div className="rounded-xl bg-blue-50 p-4">
-              <p className="mb-1 text-sm font-semibold text-blue-600">설명</p>
+              <p className="mb-1 text-sm font-semibold text-blue-600">{t("설명", "Explanation")}</p>
               <p className="text-sm text-gray-700">{answer.explanation}</p>
             </div>
 
             {/* Action button */}
             <Button className="w-full rounded-full bg-gradient-to-r from-orange-400 to-orange-500 py-3 font-semibold text-white transition-all hover:shadow-lg">
-              유사 문제 풀기
+              {t("유사 문제 풀기", "Practice Similar")}
             </Button>
           </div>
         </div>

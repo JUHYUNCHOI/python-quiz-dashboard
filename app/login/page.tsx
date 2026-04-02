@@ -24,7 +24,6 @@ const NATIVE_REDIRECT = "com.coderin.app://auth/callback"
 /** 상대 경로(/)로 시작하는 URL만 허용 — open redirect 방지 */
 function safeReturnTo(url: string | null): string {
   if (!url) return "/"
-  // 상대 경로만 허용 (프로토콜, //, 외부 도메인 차단)
   if (url.startsWith("/") && !url.startsWith("//")) return url
   return "/"
 }
@@ -34,7 +33,7 @@ function LoginContent() {
   const [showEmailForm, setShowEmailForm] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [emailMode, setEmailMode] = useState<"login" | "signup">("login")
+  const [emailMode, setEmailMode] = useState<"login" | "signup" | "reset">("login")
   const [emailError, setEmailError] = useState("")
   const [emailSuccess, setEmailSuccess] = useState("")
   const [oauthError, setOauthError] = useState("")
@@ -49,13 +48,12 @@ function LoginContent() {
     const supabase = createClient()
 
     if (returnTo) {
-      sessionStorage.setItem("loginReturnTo", returnTo)
+      localStorage.setItem("loginReturnTo", returnTo)
     }
 
     const native = await isNative()
 
     if (native) {
-      // 네이티브 앱: 시스템 브라우저(SFSafariViewController/Chrome Custom Tabs)로 열기
       const { Browser } = await import("@capacitor/browser")
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider,
@@ -73,7 +71,6 @@ function LoginContent() {
       await Browser.open({ url: data.url })
       setIsLoading(null)
     } else {
-      // 웹: 일반 OAuth 리디렉션
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
@@ -96,7 +93,16 @@ function LoginContent() {
 
     const supabase = createClient()
 
-    if (emailMode === "signup") {
+    if (emailMode === "reset") {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      })
+      if (error) {
+        setEmailError(error.message)
+      } else {
+        setEmailSuccess(t("비밀번호 재설정 링크를 이메일로 보냈어요. 메일함을 확인해주세요!", "Password reset link sent! Check your email."))
+      }
+    } else if (emailMode === "signup") {
       const { error } = await supabase.auth.signUp({
         email,
         password,
@@ -107,7 +113,7 @@ function LoginContent() {
       if (error) {
         setEmailError(error.message)
       } else {
-        setEmailSuccess("확인 이메일을 보냈어요. 메일함을 확인해주세요!")
+        setEmailSuccess(t("확인 이메일을 보냈어요. 메일함을 확인해주세요!", "Verification email sent! Check your inbox."))
       }
     } else {
       const { error } = await supabase.auth.signInWithPassword({
@@ -117,7 +123,7 @@ function LoginContent() {
       if (error) {
         setEmailError(
           error.message === "Invalid login credentials"
-            ? "이메일 또는 비밀번호가 틀렸어요"
+            ? t("이메일 또는 비밀번호가 틀렸어요", "Invalid email or password")
             : error.message
         )
       } else {
@@ -130,7 +136,7 @@ function LoginContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-yellow-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-sm space-y-8">
+      <div className="w-full max-w-sm space-y-6">
         {/* 언어 선택 */}
         <div className="flex justify-center">
           <LanguageToggle />
@@ -182,7 +188,7 @@ function LoginContent() {
             <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
               <div className="flex gap-2 mb-1">
                 <button
-                  onClick={() => { setEmailMode("login"); setEmailError("") }}
+                  onClick={() => { setEmailMode("login"); setEmailError(""); setEmailSuccess("") }}
                   className={`flex-1 py-1.5 rounded-lg text-sm font-medium transition-all ${
                     emailMode === "login" ? "bg-orange-500 text-white" : "bg-gray-100 text-gray-500"
                   }`}
@@ -190,7 +196,7 @@ function LoginContent() {
                   {t("로그인", "Login")}
                 </button>
                 <button
-                  onClick={() => { setEmailMode("signup"); setEmailError("") }}
+                  onClick={() => { setEmailMode("signup"); setEmailError(""); setEmailSuccess("") }}
                   className={`flex-1 py-1.5 rounded-lg text-sm font-medium transition-all ${
                     emailMode === "signup" ? "bg-orange-500 text-white" : "bg-gray-100 text-gray-500"
                   }`}
@@ -208,15 +214,32 @@ function LoginContent() {
                   className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-orange-400 focus:ring-2 focus:ring-orange-100 outline-none text-sm"
                   required
                 />
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder={t("비밀번호 (6자 이상)", "Password (min 6 chars)")}
-                  minLength={6}
-                  className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-orange-400 focus:ring-2 focus:ring-orange-100 outline-none text-sm"
-                  required
-                />
+                {emailMode !== "reset" && (
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder={t("비밀번호 (6자 이상)", "Password (min 6 chars)")}
+                    minLength={6}
+                    className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-orange-400 focus:ring-2 focus:ring-orange-100 outline-none text-sm"
+                    required
+                  />
+                )}
+
+                {emailMode === "login" && (
+                  <button
+                    type="button"
+                    onClick={() => { setEmailMode("reset"); setEmailError(""); setEmailSuccess("") }}
+                    className="text-xs text-gray-400 hover:text-orange-500 transition-colors"
+                  >
+                    {t("비밀번호를 잊으셨나요?", "Forgot your password?")}
+                  </button>
+                )}
+                {emailMode === "reset" && (
+                  <p className="text-xs text-gray-500">
+                    {t("이메일을 입력하면 비밀번호 재설정 링크를 보내드려요.", "Enter your email to receive a password reset link.")}
+                  </p>
+                )}
 
                 {emailError && (
                   <p className="text-xs text-red-500">{emailError}</p>
@@ -232,9 +255,23 @@ function LoginContent() {
                 >
                   {isLoading === "email"
                     ? t("처리 중...", "Processing...")
-                    : emailMode === "login" ? t("로그인", "Login") : t("회원가입", "Sign up")
+                    : emailMode === "login"
+                      ? t("로그인", "Login")
+                      : emailMode === "signup"
+                        ? t("회원가입", "Sign up")
+                        : t("재설정 링크 보내기", "Send reset link")
                   }
                 </button>
+
+                {emailMode === "reset" && (
+                  <button
+                    type="button"
+                    onClick={() => { setEmailMode("login"); setEmailError(""); setEmailSuccess("") }}
+                    className="w-full text-xs text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    {t("← 로그인으로 돌아가기", "← Back to login")}
+                  </button>
+                )}
               </form>
             </div>
           )}

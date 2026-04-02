@@ -4,10 +4,12 @@ import { use, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { cppQuestions } from "@/data/questions/cpp-questions"
 import { pythonQuestions } from "@/data/questions/python-questions"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function ReviewRedirect({ params }: { params: Promise<{ lessonId: string }> }) {
   const { lessonId } = use(params)
   const router = useRouter()
+  const { t } = useLanguage()
 
   useEffect(() => {
     const id = isNaN(Number(lessonId)) ? lessonId : Number(lessonId)
@@ -37,7 +39,7 @@ export default function ReviewRedirect({ params }: { params: Promise<{ lessonId:
 
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <p className="text-gray-400 animate-pulse">복습 퀴즈를 준비하고 있어요...</p>
+      <p className="text-gray-400 animate-pulse">{t("복습 퀴즈를 준비하고 있어요...", "Preparing review quiz...")}</p>
     </div>
   )
 }

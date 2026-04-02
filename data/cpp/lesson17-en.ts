@@ -72,7 +72,9 @@ Let's compare with Python:
 | \`max(lst)\` | \`*max_element(v.begin(), v.end())\` |
 | \`lst.count(3)\` | \`count(v.begin(), v.end(), 3)\` |
 
-💡 Most C++ STL algorithms take a **range** in the form \`(begin, end)\`. You always pass \`v.begin()\` and \`v.end()\`!`
+💡 Most C++ STL algorithms take a **range** in the form \`(begin, end)\`. You always pass \`v.begin()\` and \`v.end()\`!
+
+👇 The syntax and examples for each function above are explained step by step below!`
         },
         {
           id: "ch1-fb1",

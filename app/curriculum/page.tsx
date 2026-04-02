@@ -715,10 +715,10 @@ export default function CurriculumPage() {
               <div className="bg-white rounded-2xl shadow-xl border-2 border-black p-6 max-w-sm w-full space-y-4">
                 <div className="text-center">
                   <div className="text-4xl mb-2">⚡</div>
-                  <h3 className="text-base font-black text-gray-800">C++로 바로 시작할까요?</h3>
+                  <h3 className="text-base font-black text-gray-800">{t("C++로 바로 시작할까요?", "Jump straight into C++?")}</h3>
                   <p className="text-sm text-gray-500 mt-2 leading-relaxed">
-                    이 코스는 <span className="font-bold text-blue-600">파이썬을 아는 학생</span>을 위해 만들어졌어요.<br />
-                    Python을 먼저 배우면 C++가 훨씬 쉬워요!
+                    {t("이 코스는 ", "This course is designed for ")}<span className="font-bold text-blue-600">{t("파이썬을 아는 학생", "students who know Python")}</span>{t("을 위해 만들어졌어요.", ".")}<br />
+                    {t("Python을 먼저 배우면 C++가 훨씬 쉬워요!", "Learning Python first makes C++ much easier!")}
                   </p>
                 </div>
                 <div className="flex flex-col gap-2">
@@ -726,13 +726,13 @@ export default function CurriculumPage() {
                     onClick={() => setShowCppModal(false)}
                     className="w-full py-3 rounded-xl font-bold text-white bg-orange-500 hover:bg-orange-600 transition-all"
                   >
-                    🐍 Python 먼저 할게요
+                    {t("🐍 Python 먼저 할게요", "🐍 Let me learn Python first")}
                   </button>
                   <button
                     onClick={confirmCppSwitch}
                     className="w-full py-2.5 rounded-xl font-bold text-blue-600 border-2 border-blue-200 hover:bg-blue-50 transition-all text-sm"
                   >
-                    그래도 C++ 시작할게요
+                    {t("그래도 C++ 시작할게요", "Start C++ anyway")}
                   </button>
                 </div>
               </div>

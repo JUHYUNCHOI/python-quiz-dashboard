@@ -16,6 +16,7 @@ export const pythonQuestions: QuizQuestion[] = [
     relatedTopics: ["코드 가독성", "문서화", "docstring"],
   },
   // ── Lesson 2: 데이터 타입 ──
+  // NOTE: id:1 (comment syntax) moved to lessonId:3 below
   {
     id: 2,
     lessonId: 2,
@@ -32,7 +33,7 @@ export const pythonQuestions: QuizQuestion[] = [
   {
     id: 3,
     lessonId: 2,
-    difficulty: "쉬움",
+    difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `x = None\nprint(x is None)`,
     options: ["True", "False", "None", "오류"],
@@ -73,19 +74,6 @@ export const pythonQuestions: QuizQuestion[] = [
     relatedTopics: ["타입 변환", "int", "float"],
   },
   {
-    id: 6,
-    lessonId: 2,
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `print(type(3.14).__name__)`,
-    options: ["float", "double", "decimal", "number"],
-    correctAnswer: 0,
-    explanation: "Python에서 소수점이 있는 숫자는 float 타입입니다. __name__ 속성은 타입의 이름을 문자열로 반환합니다.",
-    keyConceptTitle: "type()과 __name__",
-    keyConceptDescription: "type(obj)은 객체의 타입을 반환하고, __name__은 그 타입의 이름 문자열을 반환합니다.",
-    relatedTopics: ["자료형", "내장 함수", "매직 속성"],
-  },
-  {
     id: 7,
     lessonId: 2,
     difficulty: "보통",
@@ -112,19 +100,6 @@ export const pythonQuestions: QuizQuestion[] = [
     relatedTopics: ["float", "IEEE 754", "math.isclose()"],
   },
   {
-    id: 9,
-    lessonId: 2,
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `print(type(1+2j))`,
-    options: ["<class 'int'>", "<class 'float'>", "<class 'complex'>", "오류"],
-    correctAnswer: 2,
-    explanation: "1+2j는 Python의 복소수(complex) 리터럴입니다. j는 허수 단위를 나타냅니다.",
-    keyConceptTitle: "복소수 타입",
-    keyConceptDescription: "Python은 복소수를 기본 자료형으로 지원합니다. a+bj 형태로 표현하며, .real과 .imag로 실수부와 허수부에 접근합니다.",
-    relatedTopics: ["자료형", "complex", "수학 연산"],
-  },
-  {
     id: 10,
     lessonId: 2,
     difficulty: "보통",
@@ -141,32 +116,6 @@ export const pythonQuestions: QuizQuestion[] = [
     keyConceptTitle: "Truthy와 Falsy 값",
     keyConceptDescription: "Python에서 빈 문자열, 0, None, 빈 컬렉션은 False로 평가됩니다. 문자열 '0'은 비어있지 않으므로 True입니다.",
     relatedTopics: ["bool()", "truthy", "falsy", "조건 평가"],
-  },
-  {
-    id: 11,
-    lessonId: 2,
-    difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
-    code: `print(0.1 + 0.2 == 0.3)`,
-    options: ["True", "False", "0.3", "오류"],
-    correctAnswer: 1,
-    explanation: "부동소수점 연산의 정밀도 문제로 0.1 + 0.2는 정확히 0.3이 아닙니다. 0.30000000000000004와 같은 값이 됩니다.",
-    keyConceptTitle: "부동소수점 정밀도",
-    keyConceptDescription: "컴퓨터는 소수를 이진법으로 저장하므로 미세한 오차가 발생합니다. math.isclose()를 사용하면 안전하게 비교할 수 있습니다.",
-    relatedTopics: ["float", "math.isclose()", "decimal 모듈"],
-  },
-  {
-    id: 12,
-    lessonId: 2,
-    difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
-    code: `a = 256\nb = 256\nprint(a is b)\n\nc = 257\nd = 257\nprint(c is d)`,
-    options: ["True True", "True False", "False False", "False True"],
-    correctAnswer: 1,
-    explanation: "Python은 -5부터 256까지의 정수를 캐싱(interning)합니다. 256은 캐싱 범위 안이므로 같은 객체를 참조하지만, 257은 범위 밖이므로 별도의 객체가 생성됩니다.",
-    keyConceptTitle: "정수 캐싱 (Integer Interning)",
-    keyConceptDescription: "CPython은 자주 사용되는 -5~256 범위의 정수를 미리 생성하여 캐싱합니다. is 연산자는 값이 아니라 객체 동일성을 비교합니다.",
-    relatedTopics: ["is vs ==", "객체 동일성", "CPython 구현"],
   },
   // ── Lesson 3: 변수 ──
   {
@@ -475,19 +424,6 @@ export const pythonQuestions: QuizQuestion[] = [
     relatedTopics: ["startswith()", "문자열 검사", "파일 확장자 검사"],
   },
   {
-    id: 35,
-    lessonId: 6,
-    difficulty: "쉬움",
-    question: "다음 코드의 출력 결과는?",
-    code: `text = "Hello, World!"\nprint(text.count("l"))`,
-    options: ["2", "3", "1", "오류"],
-    correctAnswer: 1,
-    explanation: "'Hello, World!'에서 소문자 'l'은 인덱스 2, 3, 10에 총 3번 등장합니다.",
-    keyConceptTitle: "문자열 count() 메서드",
-    keyConceptDescription: "count()는 문자열에서 특정 부분 문자열이 겹치지 않게 등장하는 횟수를 반환합니다.",
-    relatedTopics: ["문자열 메서드", "find()", "index()"],
-  },
-  {
     id: 36,
     lessonId: 6,
     difficulty: "쉬움",
@@ -574,22 +510,6 @@ export const pythonQuestions: QuizQuestion[] = [
     keyConceptDescription: "sep은 값 사이 구분자(기본: 공백), end는 출력 끝 문자(기본: 줄바꿈)를 설정합니다.",
     relatedTopics: ["print 옵션", "문자열 출력", "end 매개변수"],
   },
-  {
-    id: 42,
-    lessonId: 7,
-    difficulty: "쉬움",
-    question: "다음 중 출력 결과가 다른 하나는?",
-    code: `# A: print("Hello" + " " + "World")
-# B: print("Hello", "World")
-# C: print(f"Hello World")
-# D: print("Hello World")`,
-    options: ["A", "B", "C", "D"],
-    correctAnswer: 0,
-    explanation: "B, C, D 모두 'Hello World'를 출력합니다. A도 'Hello World'를 출력하므로 사실 모두 같지만, B는 print()가 자동으로 공백을 넣는 것이고 A는 명시적 연결입니다. 실제로 모두 동일한 출력이지만, 출제 의도는 print()의 sep 매개변수 이해입니다.",
-    keyConceptTitle: "print()의 sep 매개변수",
-    keyConceptDescription: "print()는 여러 인자를 받을 때 기본적으로 공백(sep=' ')으로 구분합니다. sep 매개변수를 변경하면 구분자를 바꿀 수 있습니다.",
-    relatedTopics: ["print()", "sep", "end", "문자열 연결"],
-  },
   // ── Lesson 8: f-string ──
   {
     id: 43,
@@ -607,7 +527,7 @@ export const pythonQuestions: QuizQuestion[] = [
   {
     id: 44,
     lessonId: 8,
-    difficulty: "쉬움",
+    difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `price = 1234.5\nprint(f"{price:,.1f}원")`,
     options: ["1234.5원", "1,234.5원", "1234.50원", "오류"],
@@ -620,7 +540,7 @@ export const pythonQuestions: QuizQuestion[] = [
   {
     id: 45,
     lessonId: 8,
-    difficulty: "쉬움",
+    difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `print(f"{42:05d}")`,
     options: ["42", "00042", "42.00", "오류"],
@@ -633,7 +553,7 @@ export const pythonQuestions: QuizQuestion[] = [
   {
     id: 46,
     lessonId: 8,
-    difficulty: "쉬움",
+    difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `print(f"{'Python':>10}")`,
     options: ["    Python", "Python    ", "  Python  ", "오류"],
@@ -801,19 +721,6 @@ export const pythonQuestions: QuizQuestion[] = [
     keyConceptDescription: "조건부 표현식을 연결하여 if-elif-else와 같은 효과를 낼 수 있습니다.",
     relatedTopics: ["조건문", "삼항 연산자", "코드 가독성"],
   },
-  {
-    id: 57,
-    lessonId: 11,
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `x = 5\nresult = "양수" if x > 0 else "음수" if x < 0 else "영"\nprint(result)`,
-    options: ["양수", "음수", "영", "오류"],
-    correctAnswer: 0,
-    explanation: "삼항 연산자가 중첩되어 있습니다. x=5 > 0이 True이므로 '양수'가 선택됩니다. 나머지는 평가되지 않습니다.",
-    keyConceptTitle: "중첩 삼항 연산자",
-    keyConceptDescription: "a if 조건1 else b if 조건2 else c 형태로 중첩할 수 있습니다. 첫 번째 True인 조건의 값이 반환됩니다.",
-    relatedTopics: ["삼항 연산자", "조건식", "if-else"],
-  },
   // ── Lesson 12: and/or/not ──
   {
     id: 58,
@@ -873,20 +780,6 @@ export const pythonQuestions: QuizQuestion[] = [
     relatedTopics: ["break", "반복문 제어", "for 루프"],
   },
   {
-    id: 62,
-    lessonId: 13,
-    animationKey: "pyForBuilder",
-    difficulty: "쉬움",
-    question: "다음 코드의 출력 결과는?",
-    code: `for i in range(5):\n    if i == 3:\n        break\n    print(i, end=' ')`,
-    options: ["0 1 2", "0 1 2 3", "0 1 2 3 4", "3"],
-    correctAnswer: 0,
-    explanation: "i가 3이 되면 break로 반복문을 즉시 종료합니다. 따라서 0, 1, 2만 출력됩니다.",
-    keyConceptTitle: "break 문",
-    keyConceptDescription: "break는 가장 가까운 반복문을 즉시 종료합니다.",
-    relatedTopics: ["continue", "for 문", "while 문"],
-  },
-  {
     id: 63,
     lessonId: 13,
     difficulty: "쉬움",
@@ -902,7 +795,7 @@ export const pythonQuestions: QuizQuestion[] = [
   {
     id: 64,
     lessonId: 13,
-    difficulty: "쉬움",
+    difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `for i in range(1, 4):\n    for j in range(1, 4):\n        if i * j > 4:\n            break\n    else:\n        print(i, end=" ")`,
     options: ["1 2", "1 2 3", "1", "3"],
@@ -915,7 +808,7 @@ export const pythonQuestions: QuizQuestion[] = [
   {
     id: 65,
     lessonId: 13,
-    difficulty: "보통",
+    difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
     code: `for i in range(3):\n    print(i, end=" ")`,
     options: ["1 2 3", "0 1 2", "0 1 2 3", "1 2"],
@@ -1078,7 +971,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 77,
-    lessonId: 13,
+    lessonId: 17,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `result = [x**2 for x in range(5) if x % 2 != 0]\nprint(result)`,
@@ -1351,23 +1244,6 @@ export const pythonQuestions: QuizQuestion[] = [
     relatedTopics: ["얕은 복사", "깊은 복사", "id()"],
   },
   {
-    id: 96,
-    lessonId: 16,
-    difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
-    code: `a = [1, 2, 3]\nb = a\nb.append(4)\nprint(a)`,
-    options: ["[1, 2, 3]", "[1, 2, 3, 4]", "[4]", "오류"],
-    correctAnswer: 1,
-    explanation: "b = a는 리스트를 복사하는 것이 아니라 같은 객체를 참조합니다. b를 변경하면 a도 바뀝니다.",
-    keyConceptTitle: "참조와 복사",
-    keyConceptDescription: "리스트 같은 가변 객체는 = 로 할당하면 같은 객체를 참조합니다. 독립 복사는 a.copy()나 a[:]를 사용하세요.",
-    codeComparison: {
-      wrong: `b = a        # 같은 객체 참조\nb.append(4)  # a도 변경됨`,
-      correct: `b = a.copy()  # 독립 복사\nb.append(4)   # a는 변경 안 됨`,
-    },
-    relatedTopics: ["얕은 복사", "깊은 복사", "가변 객체"],
-  },
-  {
     id: 97,
     lessonId: 16,
     difficulty: "어려움",
@@ -1504,7 +1380,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 107,
-    lessonId: 17,
+    lessonId: 34,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `nums = [1, 2, 3]\nsquared = list(map(lambda x: x**2, nums))\nprint(squared)`,
@@ -1875,7 +1751,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 134,
-    lessonId: 20,
+    lessonId: 34,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `d = {"b": 2, "a": 1, "c": 3}\nsorted_d = dict(sorted(d.items(), key=lambda x: x[1]))\nprint(list(sorted_d.keys()))`,
@@ -1901,7 +1777,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 136,
-    lessonId: 20,
+    lessonId: 45,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `from collections import defaultdict\nd = defaultdict(list)\nfor item in [(1,"a"), (1,"b"), (2,"c")]:\n    d[item[0]].append(item[1])\nprint(dict(d))`,
@@ -2223,7 +2099,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 160,
-    lessonId: 24,
+    lessonId: 25,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `from collections import deque\nd = deque([1, 2, 3])\nd.rotate(1)\nprint(list(d))`,
@@ -2237,7 +2113,7 @@ export const pythonQuestions: QuizQuestion[] = [
   // ── Lesson 25: 2D 리스트 ──
   {
     id: 161,
-    lessonId: 25,
+    lessonId: 17,
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
     code: `matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\nprint(matrix[1][2])`,
@@ -2250,7 +2126,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 162,
-    lessonId: 25,
+    lessonId: 17,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `matrix = [[1, 2], [3, 4], [5, 6]]\ncol = [row[0] for row in matrix]\nprint(col)`,
@@ -2263,7 +2139,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 163,
-    lessonId: 25,
+    lessonId: 17,
     difficulty: "어려움",
     question: "다음 코드의 문제점은?",
     code: `# 3x3 영행렬을 만들려고 함\nmatrix = [[0] * 3] * 3\nmatrix[0][0] = 1\nprint(matrix)`,
@@ -2280,7 +2156,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 164,
-    lessonId: 25,
+    lessonId: 17,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `matrix = [[1,2,3],[4,5,6],[7,8,9]]\ntransposed = list(zip(*matrix))\nprint(transposed[0])`,
@@ -2320,7 +2196,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 167,
-    lessonId: 26,
+    lessonId: 34,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `students = [("Alice", 85), ("Bob", 92), ("Charlie", 85)]\nresult = sorted(students, key=lambda x: (-x[1], x[0]))\nprint(result[0][0])`,
@@ -2333,7 +2209,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 168,
-    lessonId: 26,
+    lessonId: 45,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `from functools import cmp_to_key\ndef compare(a, b):\n    return len(a) - len(b)\nwords = ["hi", "hello", "hey"]\nresult = sorted(words, key=cmp_to_key(compare))\nprint(result)`,
@@ -2421,7 +2297,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 174,
-    lessonId: 32,
+    lessonId: 34,
     animationKey: "pyFunctionBuilder",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
@@ -2524,7 +2400,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 181,
-    lessonId: 33,
+    lessonId: 34,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `def outer(x):\n    def inner(y):\n        return x + y\n    return inner\n\nadd5 = outer(5)\nprint(add5(3), add5(10))`,
@@ -2602,62 +2478,6 @@ export const pythonQuestions: QuizQuestion[] = [
     keyConceptTitle: "lambda와 클로저",
     keyConceptDescription: "함수가 lambda를 반환하면 외부 변수(n)를 기억하는 클로저가 생성됩니다.",
     relatedTopics: ["클로저", "lambda", "함수 팩토리"],
-  },
-  {
-    id: 187,
-    lessonId: 34,
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `def decorator(func):\n    def wrapper(*args):\n        print("Before")\n        result = func(*args)\n        print("After")\n        return result\n    return wrapper\n\n@decorator\ndef say(name):\n    print(f"Hello, {name}")\n\nsay("Alice")`,
-    options: ["Before\\nHello, Alice\\nAfter", "Hello, Alice", "Before\\nAfter", "오류"],
-    correctAnswer: 0,
-    explanation: "@decorator는 say = decorator(say)와 동일합니다. wrapper가 Before, 원래 함수, After 순서로 실행합니다.",
-    keyConceptTitle: "데코레이터",
-    keyConceptDescription: "@데코레이터는 함수를 감싸서 전후에 추가 동작을 넣는 패턴입니다. 로깅, 인증 등에 자주 사용됩니다.",
-    relatedTopics: ["데코레이터", "래퍼 함수", "@구문"],
-  },
-  {
-    id: 188,
-    lessonId: 34,
-    difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
-    code: `funcs = [lambda x, i=i: x + i for i in range(3)]\nprint([f(10) for f in funcs])`,
-    options: ["[10, 11, 12]", "[12, 12, 12]", "[10, 10, 10]", "오류"],
-    correctAnswer: 0,
-    explanation: "i=i로 기본값을 지정하면 각 lambda가 생성 시점의 i 값을 캡처합니다. 기본값 없이 i만 쓰면 모두 마지막 값(2)을 참조합니다.",
-    keyConceptTitle: "lambda 루프 캡처 문제",
-    keyConceptDescription: "루프 안에서 lambda를 만들 때 변수를 기본값으로 캡처하지 않으면 모든 lambda가 같은 변수를 공유합니다.",
-    codeComparison: {
-      wrong: `[lambda x: x + i for i in range(3)]  # 모두 i=2`,
-      correct: `[lambda x, i=i: x + i for i in range(3)]  # 각 i 캡처`,
-    },
-    relatedTopics: ["클로저", "캡처", "기본값 트릭"],
-  },
-  {
-    id: 189,
-    lessonId: 34,
-    difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
-    code: `def repeat(n):\n    def decorator(func):\n        def wrapper(*args):\n            for _ in range(n):\n                func(*args)\n        return wrapper\n    return decorator\n\n@repeat(3)\ndef say(msg):\n    print(msg)\n\nsay("hi")`,
-    options: ["hi\\nhi\\nhi", "hi", "오류", "hi hi hi"],
-    correctAnswer: 0,
-    explanation: "@repeat(3)은 먼저 repeat(3)을 호출해 decorator를 얻고, @decorator를 say에 적용합니다. 함수가 3번 반복됩니다.",
-    keyConceptTitle: "매개변수화된 데코레이터",
-    keyConceptDescription: "데코레이터에 인자를 전달하려면 3중 중첩 함수가 필요합니다: 외부(인자) → 데코레이터(함수) → 래퍼(실행).",
-    relatedTopics: ["데코레이터", "중첩 함수", "팩토리 패턴"],
-  },
-  {
-    id: 190,
-    lessonId: 34,
-    difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
-    code: `import time\ndef timer(func):\n    def wrapper(*args):\n        start = time.time()\n        result = func(*args)\n        return result\n    return wrapper\n\n@timer\ndef add(a, b):\n    return a + b\n\nprint(add.__name__)`,
-    options: ["wrapper", "add", "timer", "오류"],
-    correctAnswer: 0,
-    explanation: "데코레이터가 wrapper를 반환하므로 __name__이 'wrapper'가 됩니다. functools.wraps를 사용하면 원래 이름을 유지합니다.",
-    keyConceptTitle: "functools.wraps",
-    keyConceptDescription: "데코레이터의 wrapper에 @functools.wraps(func)를 붙이면 원래 함수의 메타데이터(이름, docstring 등)가 보존됩니다.",
-    relatedTopics: ["functools.wraps", "__name__", "메타데이터"],
   },
   // ── Lesson 35: 스코프 / 내장 함수 ──
   {
@@ -2805,19 +2625,6 @@ export const pythonQuestions: QuizQuestion[] = [
     keyConceptDescription: "중첩 깊이를 알 수 없는 리스트를 펼칠 때 재귀가 유용합니다. isinstance()로 리스트인지 확인합니다.",
     relatedTopics: ["재귀", "flatten", "isinstance"],
   },
-  {
-    id: 202,
-    lessonId: 36,
-    difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
-    code: `from functools import lru_cache\n\n@lru_cache(maxsize=None)\ndef fib(n):\n    if n <= 1:\n        return n\n    return fib(n-1) + fib(n-2)\n\nprint(fib(50))`,
-    options: ["12586269025", "오류 (재귀 깊이 초과)", "None", "0"],
-    correctAnswer: 0,
-    explanation: "lru_cache로 이미 계산한 결과를 캐싱하므로 fib(50)도 빠르게 계산됩니다. 캐시 없으면 사실상 계산 불가능합니다.",
-    keyConceptTitle: "lru_cache (메모이제이션)",
-    keyConceptDescription: "@lru_cache는 함수의 반환값을 자동으로 캐싱합니다. 재귀의 중복 계산을 제거하여 성능을 극적으로 향상시킵니다.",
-    relatedTopics: ["lru_cache", "메모이제이션", "동적 프로그래밍"],
-  },
   // ── Lesson 37: 에러 처리 (try-except) ──
   {
     id: 203,
@@ -2918,20 +2725,6 @@ export const pythonQuestions: QuizQuestion[] = [
     relatedTopics: ["raise", "커스텀 에러", "입력 검증"],
   },
   {
-    id: 210,
-    lessonId: 37,
-    animationKey: "errorTypesCards",
-    difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
-    code: `class NegativeError(ValueError):\n    pass\n\ntry:\n    raise NegativeError("음수!")\nexcept ValueError:\n    print("ValueError 잡힘")`,
-    options: ["ValueError 잡힘", "오류 (NegativeError)", "NegativeError", "None"],
-    correctAnswer: 0,
-    explanation: "NegativeError는 ValueError의 하위 클래스이므로 except ValueError에서 잡힙니다.",
-    keyConceptTitle: "커스텀 예외와 상속",
-    keyConceptDescription: "사용자 정의 예외는 기본 예외 클래스를 상속합니다. 상위 클래스의 except가 하위 예외도 잡습니다.",
-    relatedTopics: ["커스텀 예외", "상속", "예외 계층"],
-  },
-  {
     id: 211,
     lessonId: 37,
     animationKey: "tryExceptFlow",
@@ -2944,19 +2737,6 @@ export const pythonQuestions: QuizQuestion[] = [
     keyConceptTitle: "finally에서의 return (주의)",
     keyConceptDescription: "finally에서 return을 사용하면 try/except의 return을 덮어씁니다. 이는 혼란을 초래하므로 피해야 합니다.",
     relatedTopics: ["finally", "return 덮어쓰기", "안티패턴"],
-  },
-  {
-    id: 212,
-    lessonId: 37,
-    difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
-    code: `import contextlib\n\n@contextlib.contextmanager\ndef managed():\n    print("enter")\n    yield\n    print("exit")\n\nwith managed():\n    print("body")`,
-    options: ["enter\\nbody\\nexit", "body\\nenter\\nexit", "enter\\nexit\\nbody", "오류"],
-    correctAnswer: 0,
-    explanation: "contextmanager는 yield 전이 __enter__, yield 후가 __exit__입니다. enter → body → exit 순서입니다.",
-    keyConceptTitle: "컨텍스트 매니저",
-    keyConceptDescription: "with 문은 리소스의 획득과 해제를 자동으로 관리합니다. contextmanager 데코레이터로 간편하게 만들 수 있습니다.",
-    relatedTopics: ["with문", "contextmanager", "리소스 관리"],
   },
   {
     id: 213,
@@ -3174,19 +2954,6 @@ export const pythonQuestions: QuizQuestion[] = [
     keyConceptDescription: "__add__, __sub__, __eq__ 등 매직 메서드를 정의하면 연산자를 커스텀 클래스에서 사용할 수 있습니다.",
     relatedTopics: ["연산자 오버로딩", "__add__", "매직 메서드"],
   },
-  {
-    id: 228,
-    lessonId: 41,
-    difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
-    code: `class Singleton:\n    _instance = None\n    def __new__(cls):\n        if cls._instance is None:\n            cls._instance = super().__new__(cls)\n        return cls._instance\n\na = Singleton()\nb = Singleton()\nprint(a is b)`,
-    options: ["True", "False", "None", "오류"],
-    correctAnswer: 0,
-    explanation: "__new__에서 이미 인스턴스가 있으면 같은 것을 반환하므로, a와 b는 동일한 객체입니다.",
-    keyConceptTitle: "싱글톤 패턴 (__new__)",
-    keyConceptDescription: "__new__는 __init__ 전에 호출되어 실제 인스턴스를 생성합니다. 싱글톤 패턴으로 인스턴스를 하나만 만들 수 있습니다.",
-    relatedTopics: ["__new__", "싱글톤", "디자인 패턴"],
-  },
   // ── Lesson 42: 메서드 ──
   {
     id: 229,
@@ -3213,45 +2980,6 @@ export const pythonQuestions: QuizQuestion[] = [
     keyConceptTitle: "캡슐화 기초",
     keyConceptDescription: "객체의 데이터(속성)와 그를 조작하는 메서드를 하나의 클래스에 묶는 것을 캡슐화라 합니다.",
     relatedTopics: ["캡슐화", "getter", "상태 관리"],
-  },
-  {
-    id: 231,
-    lessonId: 42,
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `class MyClass:\n    @staticmethod\n    def greet():\n        return "Hello"\n\nprint(MyClass.greet())`,
-    options: ["Hello", "오류 (self 없음)", "None", "MyClass"],
-    correctAnswer: 0,
-    explanation: "@staticmethod는 self가 필요 없는 메서드입니다. 인스턴스 없이 클래스에서 직접 호출할 수 있습니다.",
-    keyConceptTitle: "정적 메서드 (@staticmethod)",
-    keyConceptDescription: "정적 메서드는 인스턴스나 클래스 상태에 접근하지 않는 유틸리티 함수입니다. self나 cls 매개변수가 없습니다.",
-    relatedTopics: ["staticmethod", "유틸리티 함수", "클래스 설계"],
-  },
-  {
-    id: 232,
-    lessonId: 42,
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `class MyClass:\n    count = 0\n    def __init__(self):\n        MyClass.count += 1\n    @classmethod\n    def get_count(cls):\n        return cls.count\n\na = MyClass()\nb = MyClass()\nprint(MyClass.get_count())`,
-    options: ["2", "0", "1", "오류"],
-    correctAnswer: 0,
-    explanation: "@classmethod는 cls를 통해 클래스 변수에 접근합니다. 인스턴스 2개를 생성했으므로 count는 2입니다.",
-    keyConceptTitle: "클래스 메서드 (@classmethod)",
-    keyConceptDescription: "클래스 메서드는 첫 인자로 cls(클래스)를 받습니다. 클래스 변수에 접근하거나 대안 생성자를 만들 때 사용합니다.",
-    relatedTopics: ["classmethod", "cls", "팩토리 메서드"],
-  },
-  {
-    id: 233,
-    lessonId: 42,
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `class Temperature:\n    def __init__(self, celsius):\n        self._celsius = celsius\n    @property\n    def fahrenheit(self):\n        return self._celsius * 9/5 + 32\n\nt = Temperature(100)\nprint(t.fahrenheit)`,
-    options: ["212.0", "100", "오류", "fahrenheit"],
-    correctAnswer: 0,
-    explanation: "@property로 메서드를 속성처럼 접근할 수 있습니다. 100°C = 212°F입니다.",
-    keyConceptTitle: "@property 데코레이터",
-    keyConceptDescription: "@property는 메서드를 속성처럼 사용할 수 있게 합니다. 괄호 없이 t.fahrenheit로 접근합니다.",
-    relatedTopics: ["property", "getter", "캡슐화"],
   },
   {
     id: 234,
@@ -3282,7 +3010,7 @@ export const pythonQuestions: QuizQuestion[] = [
   // ── Lesson 43: 상속 ──
   {
     id: 236,
-    lessonId: 43,
+    lessonId: 44,
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
     code: `class Animal:\n    def speak(self):\n        return "..."\n\nclass Dog(Animal):\n    def speak(self):\n        return "멍멍!"\n\nd = Dog()\nprint(d.speak())`,
@@ -3295,7 +3023,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 237,
-    lessonId: 43,
+    lessonId: 44,
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
     code: `class Shape:\n    def __init__(self, color):\n        self.color = color\n\nclass Circle(Shape):\n    def __init__(self, color, radius):\n        super().__init__(color)\n        self.radius = radius\n\nc = Circle("red", 5)\nprint(c.color, c.radius)`,
@@ -3308,7 +3036,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 238,
-    lessonId: 43,
+    lessonId: 44,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `class A:\n    def greet(self):\n        return "A"\n\nclass B(A):\n    pass\n\nclass C(B):\n    pass\n\nc = C()\nprint(c.greet())`,
@@ -3321,7 +3049,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 239,
-    lessonId: 43,
+    lessonId: 44,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `class Animal:\n    def __init__(self, name):\n        self.name = name\n    def info(self):\n        return f"{self.name}"\n\nclass Dog(Animal):\n    def info(self):\n        return f"{super().info()} (개)"\n\nd = Dog("Buddy")\nprint(d.info())`,
@@ -3334,7 +3062,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 240,
-    lessonId: 43,
+    lessonId: 44,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `class A:\n    pass\nclass B(A):\n    pass\n\nb = B()\nprint(isinstance(b, A))\nprint(issubclass(B, A))`,
@@ -3347,7 +3075,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 241,
-    lessonId: 43,
+    lessonId: 44,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `class A:\n    def method(self):\n        return "A"\n\nclass B(A):\n    def method(self):\n        return "B"\n\nclass C(A):\n    def method(self):\n        return "C"\n\nclass D(B, C):\n    pass\n\nd = D()\nprint(d.method())`,
@@ -3357,19 +3085,6 @@ export const pythonQuestions: QuizQuestion[] = [
     keyConceptTitle: "다중 상속과 MRO",
     keyConceptDescription: "Python은 C3 선형화 알고리즘으로 MRO를 결정합니다. class D(B, C)에서 B가 C보다 먼저 검색됩니다.",
     relatedTopics: ["다중 상속", "MRO", "다이아몬드 문제"],
-  },
-  {
-    id: 242,
-    lessonId: 43,
-    difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
-    code: `from abc import ABC, abstractmethod\n\nclass Shape(ABC):\n    @abstractmethod\n    def area(self):\n        pass\n\nclass Circle(Shape):\n    def __init__(self, r):\n        self.r = r\n    def area(self):\n        return 3.14 * self.r ** 2\n\ntry:\n    s = Shape()\nexcept TypeError:\n    print("추상 클래스 인스턴스화 불가")\n\nc = Circle(5)\nprint(c.area())`,
-    options: ["추상 클래스 인스턴스화 불가\\n78.5", "78.5", "오류", "추상 클래스 인스턴스화 불가"],
-    correctAnswer: 0,
-    explanation: "ABC를 상속한 Shape는 직접 인스턴스화할 수 없습니다. Circle은 area()를 구현했으므로 사용 가능합니다.",
-    keyConceptTitle: "추상 클래스 (ABC)",
-    keyConceptDescription: "ABC와 @abstractmethod로 추상 클래스를 만들면 하위 클래스가 반드시 해당 메서드를 구현하도록 강제합니다.",
-    relatedTopics: ["ABC", "추상 메서드", "인터페이스"],
   },
   // ── Lesson 44: 다형성 ──
   {
@@ -3436,19 +3151,6 @@ export const pythonQuestions: QuizQuestion[] = [
     keyConceptTitle: "이터레이터 프로토콜",
     keyConceptDescription: "__iter__와 __next__를 구현하면 for 루프에서 사용 가능합니다. StopIteration으로 종료를 알립니다.",
     relatedTopics: ["이터레이터", "__iter__", "__next__"],
-  },
-  {
-    id: 248,
-    lessonId: 44,
-    difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
-    code: `class Meta(type):\n    def __new__(mcs, name, bases, namespace):\n        namespace["created_by"] = "Meta"\n        return super().__new__(mcs, name, bases, namespace)\n\nclass MyClass(metaclass=Meta):\n    pass\n\nprint(MyClass.created_by)`,
-    options: ["Meta", "오류", "MyClass", "None"],
-    correctAnswer: 0,
-    explanation: "메타클래스의 __new__에서 클래스 네임스페이스에 속성을 추가합니다. 클래스 생성 시 자동으로 적용됩니다.",
-    keyConceptTitle: "메타클래스",
-    keyConceptDescription: "메타클래스는 '클래스의 클래스'입니다. 클래스 생성 과정을 커스텀할 수 있는 고급 기능입니다.",
-    relatedTopics: ["메타클래스", "type", "클래스 생성"],
   },
   // ── Lesson 45: 모듈 만들기 ──
   {
@@ -3727,19 +3429,6 @@ export const pythonQuestions: QuizQuestion[] = [
     keyConceptDescription: "__repr__은 개발자용(정확한) 표현, __str__은 사용자용(읽기 좋은) 표현입니다. __str__이 없으면 __repr__이 대신 사용됩니다.",
     relatedTopics: ["__repr__", "__str__", "객체 표현"],
   },
-  {
-    id: 270,
-    lessonId: 42,
-    difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
-    code: `class CachedProperty:\n    def __init__(self, func):\n        self.func = func\n        self.name = func.__name__\n    def __get__(self, obj, objtype=None):\n        if obj is None:\n            return self\n        value = self.func(obj)\n        setattr(obj, self.name, value)\n        return value\n\nclass MyClass:\n    @CachedProperty\n    def data(self):\n        print("computing")\n        return 42\n\nobj = MyClass()\nprint(obj.data)\nprint(obj.data)`,
-    options: ["computing\\n42\\n42", "computing\\n42\\ncomputing\\n42", "42\\n42", "오류"],
-    correctAnswer: 0,
-    explanation: "첫 접근 시 __get__이 호출되어 computing을 출력하고 값을 인스턴스에 캐시합니다. 두 번째 접근은 캐시된 값을 사용합니다.",
-    keyConceptTitle: "디스크립터 프로토콜",
-    keyConceptDescription: "__get__, __set__, __delete__을 구현하면 속성 접근을 커스텀할 수 있습니다. property의 기반 기술입니다.",
-    relatedTopics: ["디스크립터", "__get__", "캐싱"],
-  },
   // ── 추가 에러 처리 문제 (Lesson 37) ──
   {
     id: 271,
@@ -3825,20 +3514,6 @@ export const pythonQuestions: QuizQuestion[] = [
     keyConceptDescription: "reversed()는 원본을 유지하고 새 이터레이터를 반환합니다. list.reverse()는 원본을 직접 수정합니다.",
     relatedTopics: ["reversed", "reverse", "원본 보존"],
   },
-  // ── 추가 문자열 심화 (Lesson 6) ──
-  {
-    id: 277,
-    lessonId: 42,
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `class Config:\n    _instance = None\n    _data = {}\n\n    @classmethod\n    def get(cls, key, default=None):\n        return cls._data.get(key, default)\n\n    @classmethod\n    def set(cls, key, value):\n        cls._data[key] = value\n\nConfig.set("debug", True)\nprint(Config.get("debug"))\nprint(Config.get("missing", "N/A"))`,
-    options: ["True\\nN/A", "True\\nNone", "오류", "debug\\nmissing"],
-    correctAnswer: 0,
-    explanation: "클래스 메서드로 공유 설정을 관리합니다. 존재하지 않는 키는 기본값 'N/A'를 반환합니다.",
-    keyConceptTitle: "클래스 메서드로 상태 관리",
-    keyConceptDescription: "클래스 변수와 클래스 메서드를 조합하면 인스턴스 없이 전역 상태를 관리할 수 있습니다.",
-    relatedTopics: ["클래스 메서드", "상태 관리", "설정 패턴"],
-  },
   // ── 추가 반복문 심화 (Lesson 13) ──
   {
     id: 278,
@@ -3852,35 +3527,6 @@ export const pythonQuestions: QuizQuestion[] = [
     keyConceptTitle: "파이프라인 패턴",
     keyConceptDescription: "데이터를 여러 변환 단계를 거치게 하는 파이프라인 패턴은 메서드 체이닝으로 깔끔하게 구현할 수 있습니다.",
     relatedTopics: ["파이프라인", "메서드 체이닝", "함수형 프로그래밍"],
-  },
-  // ── 추가 에러 심화 (Lesson 37) ──
-  {
-    id: 279,
-    lessonId: 37,
-    animationKey: "errorTypesCards",
-    difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
-    code: `class ValidationError(Exception):\n    def __init__(self, field, message):\n        self.field = field\n        self.message = message\n        super().__init__(f"{field}: {message}")\n\ntry:\n    raise ValidationError("email", "유효하지 않은 이메일")\nexcept ValidationError as e:\n    print(e.field)\n    print(e)`,
-    options: ["email\\nemail: 유효하지 않은 이메일", "오류", "email\\n유효하지 않은 이메일", "ValidationError"],
-    correctAnswer: 0,
-    explanation: "커스텀 예외에 추가 속성을 정의할 수 있습니다. super().__init__()에 전달한 메시지가 str(e)로 출력됩니다.",
-    keyConceptTitle: "커스텀 예외 클래스",
-    keyConceptDescription: "Exception을 상속하여 도메인 특화 예외를 만들 수 있습니다. 추가 속성으로 에러 정보를 풍부하게 전달합니다.",
-    relatedTopics: ["커스텀 예외", "상속", "에러 정보"],
-  },
-  // ── 추가 함수 심화 (Lesson 34) ──
-  {
-    id: 280,
-    lessonId: 34,
-    difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
-    code: `def memoize(func):\n    cache = {}\n    def wrapper(*args):\n        if args not in cache:\n            cache[args] = func(*args)\n        return cache[args]\n    return wrapper\n\n@memoize\ndef add(a, b):\n    print("computing")\n    return a + b\n\nprint(add(1, 2))\nprint(add(1, 2))\nprint(add(3, 4))`,
-    options: ["computing\\n3\\n3\\ncomputing\\n7", "computing\\n3\\ncomputing\\n3\\ncomputing\\n7", "3\\n3\\n7", "오류"],
-    correctAnswer: 0,
-    explanation: "첫 add(1,2) 호출 시 computing 출력 후 캐시. 두 번째는 캐시에서 반환. add(3,4)는 새 인자이므로 다시 computing.",
-    keyConceptTitle: "메모이제이션 데코레이터",
-    keyConceptDescription: "함수의 결과를 캐시에 저장하는 데코레이터입니다. 같은 인자로 재호출 시 계산 없이 캐시값을 반환합니다.",
-    relatedTopics: ["메모이제이션", "캐싱", "데코레이터"],
   },
   // ── 추가 리스트/반복 (Lesson 17) ──
   {
@@ -3909,20 +3555,6 @@ export const pythonQuestions: QuizQuestion[] = [
     keyConceptTitle: "다중 상속 활용",
     keyConceptDescription: "독립적인 기능을 가진 클래스들을 다중 상속하면 조합(composition)처럼 사용할 수 있습니다.",
     relatedTopics: ["다중 상속", "믹스인", "__dict__"],
-  },
-  // ── 추가 모듈 (Lesson 46) ──
-  {
-    id: 283,
-    lessonId: 46,
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `from dataclasses import dataclass\n\n@dataclass\nclass Point:\n    x: float\n    y: float\n\np1 = Point(1.0, 2.0)\np2 = Point(1.0, 2.0)\nprint(p1 == p2)\nprint(p1)`,
-    options: ["True\\nPoint(x=1.0, y=2.0)", "False\\nPoint(x=1.0, y=2.0)", "True\\n<Point object>", "오류"],
-    correctAnswer: 0,
-    explanation: "@dataclass는 __init__, __repr__, __eq__ 등을 자동 생성합니다. 같은 값이면 ==가 True입니다.",
-    keyConceptTitle: "dataclasses",
-    keyConceptDescription: "@dataclass 데코레이터는 데이터 저장용 클래스의 보일러플레이트 코드를 자동 생성합니다.",
-    relatedTopics: ["dataclass", "보일러플레이트", "데이터 클래스"],
   },
   // ── 추가 파일/모듈 (Lesson 38) ──
   {
@@ -3996,20 +3628,6 @@ export const pythonQuestions: QuizQuestion[] = [
     keyConceptDescription: "삼항 연산자(값 if 조건 else 값)를 중첩하면 여러 조건을 한 줄에 처리할 수 있지만, 가독성이 떨어질 수 있습니다.",
     relatedTopics: ["삼항 연산자", "fizzbuzz", "조건 표현식"],
   },
-  // ── 추가 for문 (Lesson 13) ──
-  {
-    id: 289,
-    lessonId: 13,
-    difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
-    code: `gen = (x**2 for x in range(5))\nprint(sum(gen))\nprint(sum(gen))`,
-    options: ["30\\n0", "30\\n30", "0\\n30", "오류"],
-    correctAnswer: 0,
-    explanation: "제너레이터는 한 번만 순회 가능합니다. 첫 sum()에서 모두 소비되어 두 번째 sum()은 0입니다.",
-    keyConceptTitle: "제너레이터 표현식의 일회성",
-    keyConceptDescription: "제너레이터는 이터레이터이므로 한 번 소비하면 재사용할 수 없습니다. 재사용이 필요하면 리스트로 변환하세요.",
-    relatedTopics: ["제너레이터", "일회성 이터레이터", "메모리 효율"],
-  },
   // ── 추가 while문 (Lesson 14) ──
   {
     id: 290,
@@ -4080,34 +3698,6 @@ export const pythonQuestions: QuizQuestion[] = [
     keyConceptTitle: "여러 숫자 입력 받기",
     keyConceptDescription: "input().split()으로 공백 구분 입력을 받고, map(int, ...)으로 정수 리스트를 만드는 것은 표준 입력 패턴입니다.",
     relatedTopics: ["input()", "split()", "map()"],
-  },
-  // ── 추가 print 옵션 (Lesson 7) ──
-  {
-    id: 295,
-    lessonId: 7,
-    difficulty: "보통",
-    question: "다음 코드의 출력 결과는?",
-    code: `import sys\nprint("error!", file=sys.stderr)`,
-    options: ["error! (표준 에러로 출력)", "error! (표준 출력으로 출력)", "오류", "None"],
-    correctAnswer: 0,
-    explanation: "file=sys.stderr로 표준 에러 스트림에 출력합니다. 로그와 일반 출력을 분리할 때 사용합니다.",
-    keyConceptTitle: "print()의 file 매개변수",
-    keyConceptDescription: "print(값, file=파일객체)로 출력 대상을 변경할 수 있습니다. sys.stderr, 파일 객체 등을 지정합니다.",
-    relatedTopics: ["print()", "stderr", "출력 리다이렉션"],
-  },
-  // ── 추가 데이터타입 (Lesson 2) ──
-  {
-    id: 296,
-    lessonId: 2,
-    difficulty: "어려움",
-    question: "다음 코드의 출력 결과는?",
-    code: `a = 256\nb = 256\nc = 257\nd = 257\nprint(a is b)\nprint(c is d)`,
-    options: ["True\\nFalse", "True\\nTrue", "False\\nFalse", "False\\nTrue"],
-    correctAnswer: 0,
-    explanation: "Python은 -5~256 범위의 정수를 캐싱합니다. 256은 캐시 내이므로 같은 객체, 257은 범위 밖이므로 별도 객체입니다.",
-    keyConceptTitle: "정수 캐싱 (Integer Interning)",
-    keyConceptDescription: "Python은 자주 사용되는 작은 정수(-5~256)를 미리 생성하여 재사용합니다. is로 비교하면 이 캐싱의 영향을 받습니다.",
-    relatedTopics: ["정수 캐싱", "is vs ==", "CPython 구현"],
   },
   // ── 추가 변수 (Lesson 3) ──
   {
@@ -4549,7 +4139,7 @@ export const pythonQuestions: QuizQuestion[] = [
     lessonId: 52,
     difficulty: "보통",
     question: "치명타(50% 확률로 2배 데미지) 구현에서 올바른 코드는?",
-    code: `import random\n\ndef attack_with_crit(self, target):\n    damage = self.atk\n    if random.___(0, 1) < 0.5:  # 50% 확률\n        damage *= 2\n        print('  ★ 치명타!')\n    target.take_damage(damage)`,
+    code: `import random\n\ndef attack_with_crit(self, target):\n    damage = self.atk\n    if random.___(0, 1) < 0.5:  # 50% 확률\n        damage *= 2\n        print('  * 치명타!')\n    target.take_damage(damage)`,
     options: ["randint()", "random()", "choice()", "sample()"],
     correctAnswer: 1,
     explanation: "random.random()은 0.0 이상 1.0 미만의 실수를 반환합니다. < 0.5이면 50% 확률이 됩니다.",
@@ -5031,21 +4621,8 @@ print(money)`,
     relatedTopics: ["비교 연산자", ">=", "bool"],
   },
   {
-    id: 367,
-    lessonId: 4,
-    difficulty: "쉬움",
-    question: "다음 코드의 출력 결과는?",
-    code: `print(2 + 3 * 4)`,
-    options: ["20", "14", "24", "오류"],
-    correctAnswer: 1,
-    explanation: "수학처럼 곱하기(*)가 더하기(+)보다 먼저 계산돼요. 3*4=12 먼저, 그 다음 2+12=14예요.",
-    keyConceptTitle: "연산자 우선순위",
-    keyConceptDescription: "곱하기(*)와 나누기(/)가 더하기(+)와 빼기(-)보다 먼저 계산돼요. 수학 연산 순서와 같아요.",
-    relatedTopics: ["연산자 우선순위", "괄호"],
-  },
-  {
     id: 368,
-    lessonId: 4,
+    lessonId: 12,
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
     code: `level = 10
@@ -5060,7 +4637,7 @@ print(level >= 10 and gold >= 1000)`,
   },
   {
     id: 369,
-    lessonId: 4,
+    lessonId: 12,
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
     code: `is_member = True
@@ -5151,16 +4728,16 @@ print('게임 진행 중...')`,
     question: "다음 코드의 출력 결과는?",
     code: `followers = 1500
 if followers >= 10000:
-    print('인플루언서 🌟')
+    print('인플루언서')
 elif followers >= 1000:
-    print('인싸 😎')
+    print('인싸')
 elif followers >= 100:
-    print('일반인 🙂')
+    print('일반인')
 else:
-    print('시작 단계 🌱')`,
-    options: ["인플루언서 🌟", "인싸 😎", "일반인 🙂", "시작 단계 🌱"],
+    print('시작 단계')`,
+    options: ["인플루언서", "인싸", "일반인", "시작 단계"],
     correctAnswer: 1,
-    explanation: "1500 >= 10000은 False(다음으로), 1500 >= 1000은 True! 여기서 멈추고 '인싸 😎'를 출력해요.",
+    explanation: "1500 >= 10000은 False(다음으로), 1500 >= 1000은 True! 여기서 멈추고 '인싸'를 출력해요.",
     keyConceptTitle: "elif - 첫 번째 True에서 멈춤",
     keyConceptDescription: "elif는 위에서 순서대로 확인해서 처음으로 True인 조건만 실행해요. 나머지는 확인하지 않아요.",
     relatedTopics: ["elif", "if-elif-else", "조건문"],
@@ -5192,10 +4769,10 @@ else:
     question: "다음 코드의 출력 결과는?",
     code: `age = 70
 if age <= 12 or age >= 65:
-    print('50% 할인! 🎉')
+    print('50% 할인!')
 else:
     print('정상 가격')`,
-    options: ["50% 할인! 🎉", "정상 가격", "오류", "True"],
+    options: ["50% 할인!", "정상 가격", "오류", "True"],
     correctAnswer: 0,
     explanation: "age <= 12는 False지만, age >= 65는 True예요. or는 하나만 True여도 True라서 할인!",
     keyConceptTitle: "or는 하나만 True여도",
@@ -5209,12 +4786,12 @@ else:
     question: "다음 코드의 출력 결과는?",
     code: `is_raining = False
 if not is_raining:
-    print('산책 가자! ☀️')
+    print('산책 가자!')
 else:
-    print('집에 있자 🏠')`,
-    options: ["산책 가자! ☀️", "집에 있자 🏠", "False", "오류"],
+    print('집에 있자')`,
+    options: ["산책 가자!", "집에 있자", "False", "오류"],
     correctAnswer: 0,
-    explanation: "is_raining이 False라서 not is_raining은 True예요. if가 실행돼서 '산책 가자! ☀️'가 출력돼요.",
+    explanation: "is_raining이 False라서 not is_raining은 True예요. if가 실행돼서 '산책 가자!'가 출력돼요.",
     keyConceptTitle: "not - 조건 반전",
     keyConceptDescription: "not은 True를 False로, False를 True로 뒤집어요. 'not 조건'은 조건이 거짓일 때 실행하고 싶을 때 써요.",
     relatedTopics: ["not", "논리 연산자", "bool"],
@@ -5223,7 +4800,7 @@ else:
   // ── Lesson 14: 반복문 (while, break, continue) ──
   {
     id: 378,
-    lessonId: 14,
+    lessonId: 13,
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
     code: `for i in range(10):
@@ -5239,7 +4816,7 @@ else:
   },
   {
     id: 379,
-    lessonId: 14,
+    lessonId: 13,
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
     code: `for i in range(1, 6):
@@ -5474,7 +5051,7 @@ print(numbers[0] + numbers[1])`,
   // ── 추가 2D 리스트 (Lesson 25) ──
   {
     id: 300,
-    lessonId: 25,
+    lessonId: 17,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `matrix = [[1,2,3],[4,5,6],[7,8,9]]\ndiag = [matrix[i][i] for i in range(len(matrix))]\nanti = [matrix[i][len(matrix)-1-i] for i in range(len(matrix))]\nprint(diag, anti)`,
@@ -5484,5 +5061,747 @@ print(numbers[0] + numbers[1])`,
     keyConceptTitle: "행렬 대각선 추출",
     keyConceptDescription: "주대각선은 matrix[i][i], 반대각선은 matrix[i][n-1-i]로 추출합니다.",
     relatedTopics: ["2D 리스트", "대각선", "행렬 연산"],
+  },
+
+  // ── Lesson 7: print() 옵션 추가 ──
+  {
+    id: 394,
+    lessonId: 7,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `print('철수', '영희', '민수', sep=', ')`,
+    options: ["철수 영희 민수", "철수, 영희, 민수", "철수,영희,민수", "오류"],
+    correctAnswer: 1,
+    explanation: "sep=', '는 각 값 사이에 ', '(쉼표+공백)을 넣어요. '철수, 영희, 민수'가 출력돼요.",
+    keyConceptTitle: "sep 옵션 — 쉼표 구분자",
+    keyConceptDescription: "print(a, b, c, sep=', ')처럼 sep을 지정하면 값들 사이에 원하는 구분자를 넣을 수 있어요. 기본값은 공백(' ')이에요.",
+    relatedTopics: ["sep", "print() 옵션", "구분자"],
+  },
+  {
+    id: 395,
+    lessonId: 7,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `print('A', 'B', 'C', sep='')`,
+    options: ["A B C", "A-B-C", "ABC", "오류"],
+    correctAnswer: 2,
+    explanation: "sep=''(빈 문자열)은 구분자가 없다는 뜻이에요. 값들이 붙어서 'ABC'가 출력돼요.",
+    keyConceptTitle: "sep='' — 구분자 없이 이어붙이기",
+    keyConceptDescription: "sep=''로 설정하면 값들 사이에 아무것도 없이 바로 이어 붙여요. print('A','B','C', sep='')는 'ABC'를 출력해요.",
+    relatedTopics: ["sep", "print() 옵션", "이어붙이기"],
+  },
+  {
+    id: 396,
+    lessonId: 7,
+    difficulty: "쉬움",
+    question: "다음 코드를 실행하면 출력은 몇 줄인가?",
+    code: `print('1', end=' ')
+print('2', end=' ')
+print('3')`,
+    options: ["3줄", "1줄", "2줄", "오류"],
+    correctAnswer: 1,
+    explanation: "end=' '는 줄바꿈 대신 공백을 붙여요. 첫 두 print가 줄바꿈 없이 이어지고, 마지막 print만 줄바꿈이 돼서 전체 1줄로 출력돼요.",
+    keyConceptTitle: "end 옵션 — 줄바꿈 방지",
+    keyConceptDescription: "print()는 기본으로 끝에 줄바꿈(\\n)을 붙여요. end=' '처럼 바꾸면 줄바꿈 없이 지정한 문자가 붙어서 다음 print가 이어져요.",
+    relatedTopics: ["end", "print() 옵션", "줄바꿈"],
+  },
+  {
+    id: 397,
+    lessonId: 7,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `nums = [1, 2, 3, 4, 5]
+print(*nums)`,
+    options: ["[1, 2, 3, 4, 5]", "1 2 3 4 5", "12345", "오류"],
+    correctAnswer: 1,
+    explanation: "print(*리스트)는 리스트를 풀어서 각 요소를 개별 인자로 전달해요. 기본 sep이 공백이므로 '1 2 3 4 5'가 출력돼요.",
+    keyConceptTitle: "print(*리스트) — 리스트 언패킹 출력",
+    keyConceptDescription: "* 연산자로 리스트를 풀어서 print에 전달하면 각 요소가 공백으로 구분되어 출력돼요. for 문 없이 한 줄로 출력할 때 편리해요.",
+    relatedTopics: ["언패킹", "print() 옵션", "리스트"],
+  },
+  {
+    id: 398,
+    lessonId: 7,
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `nums = [10, 20, 30]
+print(*nums, sep='-')`,
+    options: ["[10, 20, 30]", "10 20 30", "10-20-30", "오류"],
+    correctAnswer: 2,
+    explanation: "*nums로 리스트를 풀면 print(10, 20, 30, sep='-')와 같아져요. sep='-'로 구분해서 '10-20-30'이 출력돼요.",
+    keyConceptTitle: "print(*리스트, sep=...)  — 조합",
+    keyConceptDescription: "print(*리스트, sep=구분자)를 쓰면 리스트 요소들을 원하는 구분자로 한 줄에 출력할 수 있어요.",
+    relatedTopics: ["언패킹", "sep", "print() 옵션"],
+  },
+  {
+    id: 399,
+    lessonId: 7,
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `print('A', 'B', sep='*', end='!\n')
+print('끝')`,
+    options: ["A*B!\n끝", "A B!\n끝", "A*B\n끝", "A*B!끝"],
+    correctAnswer: 0,
+    explanation: "sep='*'으로 'A*B'가 되고, end='!\\n'으로 '!'와 줄바꿈이 붙어요. 다음 줄에 '끝'이 출력돼요.",
+    keyConceptTitle: "sep과 end 동시 사용",
+    keyConceptDescription: "sep과 end를 함께 쓸 수 있어요. sep은 값 사이, end는 출력 끝에 각각 적용돼요. 순서는 바뀌어도 결과는 같아요.",
+    relatedTopics: ["sep", "end", "print() 옵션"],
+  },
+
+  // ── Lesson 10: input() 입력 추가 ──
+  {
+    id: 400,
+    lessonId: 10,
+    difficulty: "쉬움",
+    question: "다음 코드에서 사용자가 '홍길동'을 입력했을 때 출력 결과는?",
+    code: `name = input('이름: ')
+print('안녕,', name + '!')`,
+    options: ["안녕, 홍길동!", "안녕, name!", "안녕,홍길동!", "오류"],
+    correctAnswer: 0,
+    explanation: "input()으로 '홍길동'을 받아 name에 저장해요. print('안녕,', '홍길동!')은 '안녕, 홍길동!'을 출력해요.",
+    keyConceptTitle: "input('메시지') — 안내 문구와 함께 입력받기",
+    keyConceptDescription: "input('메시지')처럼 괄호 안에 문자열을 넣으면 입력받기 전에 안내 문구를 보여줘요. 입력값은 항상 str로 반환돼요.",
+    relatedTopics: ["input()", "str", "출력"],
+  },
+  {
+    id: 401,
+    lessonId: 10,
+    difficulty: "쉬움",
+    question: "다음 코드에서 사용자가 '3.14'를 입력했을 때 출력 결과는?",
+    code: `pi = float(input('파이 값: '))
+print(pi * 2)`,
+    options: ["6.28", "3.143.14", "오류", "3.14"],
+    correctAnswer: 0,
+    explanation: "float(input())으로 '3.14'를 실수 3.14로 바꿔요. 3.14 * 2 = 6.28이 출력돼요.",
+    keyConceptTitle: "float(input()) — 실수 입력 패턴",
+    keyConceptDescription: "소수점이 있는 숫자를 입력받으려면 float(input('메시지'))를 써요. int()는 소수점 문자열을 변환할 수 없어서 오류가 나요.",
+    relatedTopics: ["float()", "input()", "타입 변환"],
+  },
+  {
+    id: 402,
+    lessonId: 10,
+    difficulty: "쉬움",
+    question: "다음 코드에서 사용자가 '10'을 입력하면 어떤 오류가 발생하는가?",
+    code: `num = input('숫자: ')
+print(num + 5)`,
+    options: ["SyntaxError", "TypeError", "ValueError", "오류 없음, 15 출력"],
+    correctAnswer: 1,
+    explanation: "input()은 '10' (문자열)을 반환해요. 문자열 + 정수는 TypeError(타입 오류)가 발생해요.",
+    keyConceptTitle: "input() 후 형변환 필수",
+    keyConceptDescription: "input()의 결과는 str이므로 숫자 연산 전에 반드시 int() 또는 float()로 변환해야 해요. 그렇지 않으면 TypeError가 발생해요.",
+    codeComparison: {
+      wrong: `num = input('숫자: ')  # str\nprint(num + 5)         # TypeError!`,
+      correct: `num = int(input('숫자: '))  # int\nprint(num + 5)              # 정상!`,
+    },
+    relatedTopics: ["input()", "TypeError", "타입 변환"],
+  },
+  {
+    id: 403,
+    lessonId: 10,
+    difficulty: "쉬움",
+    question: "사용자가 '3 7'을 입력했을 때 다음 코드의 출력 결과는?",
+    code: `a, b = input('두 숫자: ').split()
+print(a, b)`,
+    options: ["3 7", "['3', '7']", "37", "오류"],
+    correctAnswer: 0,
+    explanation: "'3 7'.split()은 ['3', '7']이 되고, a, b로 각각 언패킹돼요. print(a, b)는 '3 7'을 출력해요.",
+    keyConceptTitle: "input().split() — 여러 값 한 줄 입력",
+    keyConceptDescription: "input().split()은 한 줄에 공백으로 구분된 여러 값을 받아 리스트로 만들어요. a, b = input().split()처럼 언패킹해서 각 변수에 저장할 수 있어요.",
+    relatedTopics: ["split()", "input()", "언패킹"],
+  },
+  {
+    id: 404,
+    lessonId: 10,
+    difficulty: "보통",
+    question: "사용자가 '10 20'을 입력했을 때 다음 코드의 출력 결과는?",
+    code: `a, b = map(int, input('두 수: ').split())
+print(a + b)`,
+    options: ["1020", "30", "['10', '20']", "오류"],
+    correctAnswer: 1,
+    explanation: "split()으로 ['10', '20']이 되고, map(int, ...)으로 각각 정수 10, 20으로 변환돼요. a=10, b=20이므로 a+b=30이에요.",
+    keyConceptTitle: "map(int, input().split()) — 정수 여러 개 입력",
+    keyConceptDescription: "a, b = map(int, input().split())은 공백으로 구분된 정수 여러 개를 한 번에 받는 표준 패턴이에요. 코딩 테스트에서 자주 써요.",
+    relatedTopics: ["map()", "split()", "input()", "언패킹"],
+  },
+  {
+    id: 405,
+    lessonId: 10,
+    difficulty: "보통",
+    question: "사용자가 '5'를 입력했을 때 다음 코드의 출력 결과는?",
+    code: `n = int(input('반지름: '))
+area = 3.14 * n * n
+print(f'넓이: {area}')`,
+    options: ["넓이: 78.5", "넓이: 5", "오류", "넓이: 3.14 * 5 * 5"],
+    correctAnswer: 0,
+    explanation: "int(input())으로 5를 받아요. 3.14 * 5 * 5 = 78.5. f-string으로 '넓이: 78.5'가 출력돼요.",
+    keyConceptTitle: "입력값으로 계산하기",
+    keyConceptDescription: "int(input())으로 숫자를 받아 계산식에 바로 사용할 수 있어요. 면적, 거리, 점수 등 다양한 계산에 활용해요.",
+    relatedTopics: ["int(input())", "계산", "f-string"],
+  },
+
+  // ── Lesson 15: 자료구조 개요 추가 ──
+  {
+    id: 406,
+    lessonId: 15,
+    difficulty: "쉬움",
+    question: "파이썬에서 수정이 불가능한(불변) 자료구조는?",
+    code: `a = [1, 2, 3]   # ?
+b = (1, 2, 3)   # ?`,
+    options: ["리스트 (list)", "튜플 (tuple)", "딕셔너리 (dict)", "집합 (set)"],
+    correctAnswer: 1,
+    explanation: "튜플은 한 번 만들면 요소를 변경할 수 없어요. 리스트, 딕셔너리, 집합은 모두 수정 가능(가변)이에요.",
+    keyConceptTitle: "튜플 — 불변(immutable) 자료구조",
+    keyConceptDescription: "튜플은 ()로 만들고 수정이 불가능해요. 좌표, RGB 색상처럼 변경하면 안 되는 값을 저장할 때 사용해요.",
+    relatedTopics: ["튜플", "불변", "가변 vs 불변"],
+  },
+  {
+    id: 407,
+    lessonId: 15,
+    difficulty: "쉬움",
+    question: "중복된 값을 자동으로 제거해주는 자료구조는?",
+    code: `data = [1, 2, 2, 3, 3, 3]
+unique = set(data)
+print(unique)`,
+    options: ["리스트 (list)", "튜플 (tuple)", "딕셔너리 (dict)", "집합 (set)"],
+    correctAnswer: 3,
+    explanation: "집합(set)은 중복을 허용하지 않아요. [1, 2, 2, 3, 3, 3]을 set으로 변환하면 {1, 2, 3}이 돼요.",
+    keyConceptTitle: "집합 (set) — 중복 자동 제거",
+    keyConceptDescription: "집합은 {}로 만들고 중복을 허용하지 않아요. 출석부, 방문자 목록처럼 중복 없이 고유한 값만 관리할 때 사용해요.",
+    relatedTopics: ["집합", "중복 제거", "set()"],
+  },
+  {
+    id: 408,
+    lessonId: 15,
+    difficulty: "쉬움",
+    question: "다음 중 리스트의 특징으로 올바른 것은?",
+    code: `fruits = ['사과', '바나나', '포도']
+fruits.append('망고')
+print(fruits[0])`,
+    options: [
+      "순서가 없고 수정 불가능하다",
+      "순서가 있고 수정 가능하다",
+      "키-값 쌍으로 저장한다",
+      "중복을 허용하지 않는다",
+    ],
+    correctAnswer: 1,
+    explanation: "리스트는 순서가 있고(인덱스로 접근 가능), 수정도 가능해요(append, remove 등). 중복도 허용해요.",
+    keyConceptTitle: "리스트 — 순서 있고 수정 가능",
+    keyConceptDescription: "리스트는 []로 만들고 순서가 있어요. 인덱스(0, 1, 2...)로 접근하고 append(), pop() 등으로 수정할 수 있어요.",
+    relatedTopics: ["리스트", "순서", "가변"],
+  },
+  {
+    id: 409,
+    lessonId: 15,
+    difficulty: "보통",
+    question: "다음 상황에서 가장 적합한 자료구조는? '반 학생 30명의 이름과 각자의 점수를 저장하고, 이름으로 빠르게 점수를 찾고 싶다'",
+    code: `# 어떤 자료구조가 가장 좋을까?
+# (1) scores = [85, 92, 78, ...]
+# (2) scores = {'철수': 85, '영희': 92, ...}
+# (3) scores = (85, 92, 78, ...)`,
+    options: ["리스트 (1번)", "딕셔너리 (2번)", "튜플 (3번)", "집합"],
+    correctAnswer: 1,
+    explanation: "이름(키)으로 점수(값)를 빠르게 찾으려면 딕셔너리가 가장 적합해요. scores['철수']처럼 O(1)로 바로 접근할 수 있어요.",
+    keyConceptTitle: "딕셔너리 — 이름으로 빠르게 찾기",
+    keyConceptDescription: "딕셔너리는 키를 이용해 값을 O(1)로 빠르게 검색해요. '이름으로 찾기', '단어장', '학생 정보' 등 연관 데이터를 저장할 때 최적이에요.",
+    relatedTopics: ["딕셔너리", "자료구조 선택", "키-값"],
+  },
+  {
+    id: 410,
+    lessonId: 15,
+    difficulty: "보통",
+    question: "다음 코드에서 집합의 출력 결과로 올바른 것은?",
+    code: `attendance = {'철수', '영희', '철수', '민수', '영희'}
+print(len(attendance))`,
+    options: ["5", "3", "2", "오류"],
+    correctAnswer: 1,
+    explanation: "집합은 중복을 제거해요. '철수'와 '영희'가 각각 2번 나오지만 1번씩만 저장돼요. 결과는 {'철수', '영희', '민수'}로 3개예요.",
+    keyConceptTitle: "집합의 중복 제거 특성",
+    keyConceptDescription: "집합에 같은 값을 여러 번 넣어도 하나만 유지돼요. len(집합)으로 고유한 항목 수를 알 수 있어요.",
+    relatedTopics: ["집합", "중복 제거", "len()"],
+  },
+  {
+    id: 411,
+    lessonId: 15,
+    difficulty: "보통",
+    question: "리스트와 튜플의 차이를 묻는 질문에 올바른 답변은?",
+    code: `my_list = [1, 2, 3]
+my_tuple = (1, 2, 3)
+
+my_list[0] = 99   # 가능?
+my_tuple[0] = 99  # 가능?`,
+    options: [
+      "둘 다 수정 가능하다",
+      "리스트는 수정 가능, 튜플은 수정 불가능",
+      "리스트는 수정 불가능, 튜플은 수정 가능",
+      "둘 다 수정 불가능하다",
+    ],
+    correctAnswer: 1,
+    explanation: "리스트는 my_list[0] = 99처럼 수정 가능(가변)해요. 튜플은 TypeError가 발생해서 수정 불가능(불변)이에요.",
+    keyConceptTitle: "리스트(가변) vs 튜플(불변)",
+    keyConceptDescription: "리스트: 수정 가능(mutable). 튜플: 수정 불가능(immutable). 변경이 필요하면 리스트, 고정값이면 튜플을 써요.",
+    codeComparison: {
+      wrong: `my_tuple = (1, 2, 3)\nmy_tuple[0] = 99  # TypeError!`,
+      correct: `my_list = [1, 2, 3]\nmy_list[0] = 99   # OK: [99, 2, 3]`,
+    },
+    relatedTopics: ["리스트", "튜플", "가변 vs 불변"],
+  },
+
+  // ── Lesson 24: 큐 추가 ──
+  {
+    id: 412,
+    lessonId: 24,
+    difficulty: "쉬움",
+    question: "큐(Queue)에 A, B, C 순서로 넣고 하나씩 꺼낼 때 꺼내지는 순서는?",
+    code: `from collections import deque
+q = deque()
+q.append('A')
+q.append('B')
+q.append('C')
+# 꺼내는 순서는?`,
+    options: ["C, B, A", "A, B, C", "B, A, C", "랜덤"],
+    correctAnswer: 1,
+    explanation: "큐는 FIFO(First In, First Out)예요. 먼저 넣은 A가 먼저 나오고, 그 다음 B, C 순서예요.",
+    keyConceptTitle: "큐의 FIFO 순서",
+    keyConceptDescription: "큐는 줄 서기와 같아요. 먼저 온(넣은) 것이 먼저 처리(나옴)돼요. append()로 뒤에 추가하고, popleft()로 앞에서 꺼내요.",
+    relatedTopics: ["FIFO", "큐", "deque"],
+  },
+  {
+    id: 413,
+    lessonId: 24,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `from collections import deque
+q = deque(['가', '나', '다'])
+q.append('라')
+print(q.popleft())
+print(len(q))`,
+    options: ["가\n3", "라\n3", "가\n4", "오류"],
+    correctAnswer: 0,
+    explanation: "append('라')로 ['가','나','다','라']가 돼요. popleft()는 맨 앞 '가'를 꺼내요. 남은 건 ['나','다','라']로 len=3이에요.",
+    keyConceptTitle: "deque enqueue/dequeue",
+    keyConceptDescription: "deque에서 큐로 사용할 때: append()로 뒤에 추가(enqueue), popleft()로 앞에서 제거(dequeue)해요.",
+    relatedTopics: ["deque", "append()", "popleft()"],
+  },
+  {
+    id: 414,
+    lessonId: 24,
+    difficulty: "쉬움",
+    question: "큐와 스택의 차이에 대한 설명으로 올바른 것은?",
+    code: `# 스택: LIFO (Last In, First Out)
+# 큐: FIFO (First In, First Out)`,
+    options: [
+      "스택과 큐 모두 FIFO 방식이다",
+      "스택은 LIFO, 큐는 FIFO 방식이다",
+      "스택은 FIFO, 큐는 LIFO 방식이다",
+      "둘 다 랜덤으로 꺼낸다",
+    ],
+    correctAnswer: 1,
+    explanation: "스택은 나중에 넣은 것이 먼저 나오는 LIFO(프링글스 통), 큐는 먼저 넣은 것이 먼저 나오는 FIFO(줄 서기)예요.",
+    keyConceptTitle: "스택(LIFO) vs 큐(FIFO)",
+    keyConceptDescription: "스택: 위에서만 넣고 빼는 LIFO. 큐: 뒤에 넣고 앞에서 빼는 FIFO. 상황에 따라 적합한 자료구조를 선택해요.",
+    relatedTopics: ["스택", "큐", "LIFO", "FIFO"],
+  },
+  {
+    id: 415,
+    lessonId: 24,
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `from collections import deque
+
+q = deque()
+for i in [1, 2, 3, 4, 5]:
+    q.append(i)
+
+result = []
+while q:
+    result.append(q.popleft())
+print(result)`,
+    options: ["[5, 4, 3, 2, 1]", "[1, 2, 3, 4, 5]", "[3, 2, 1, 4, 5]", "오류"],
+    correctAnswer: 1,
+    explanation: "1~5를 순서대로 append()로 넣고, popleft()로 앞에서 꺼내요. FIFO라 넣은 순서대로 [1, 2, 3, 4, 5]가 나와요.",
+    keyConceptTitle: "큐로 순서 유지하기",
+    keyConceptDescription: "큐(deque)에 append()로 순서대로 넣고 popleft()로 꺼내면 넣은 순서가 그대로 유지돼요. 순서대로 처리해야 할 때 유용해요.",
+    relatedTopics: ["deque", "FIFO", "큐 순회"],
+  },
+  {
+    id: 416,
+    lessonId: 24,
+    difficulty: "보통",
+    question: "프린터 대기열을 시뮬레이션하는 코드에서 빈칸에 알맞은 것은?",
+    code: `from collections import deque
+
+printer = deque()
+printer.append('문서A')
+printer.append('문서B')
+printer.append('문서C')
+
+# 첫 번째 문서 처리
+doc = printer.___()
+print(f'{doc} 인쇄 완료')`,
+    options: ["pop()", "popleft()", "append()", "appendleft()"],
+    correctAnswer: 1,
+    explanation: "프린터 대기열은 큐로 먼저 들어온 문서를 먼저 처리해요. 앞에서 꺼내는 popleft()를 사용해야 '문서A 인쇄 완료'가 출력돼요.",
+    keyConceptTitle: "큐 활용: 대기열 처리",
+    keyConceptDescription: "프린터, 콜센터, 은행 줄처럼 먼저 온 것을 먼저 처리하는 상황에 큐를 써요. popleft()로 앞에서 꺼내야 FIFO 순서가 유지돼요.",
+    relatedTopics: ["popleft()", "큐 활용", "대기열"],
+  },
+  {
+    id: 417,
+    lessonId: 24,
+    difficulty: "보통",
+    question: "다음 코드에서 is_empty()가 True를 반환하는 조건은?",
+    code: `from collections import deque
+
+class Queue:
+    def __init__(self):
+        self.items = deque()
+
+    def enqueue(self, item):
+        self.items.append(item)
+
+    def dequeue(self):
+        return self.items.popleft() if self.items else None
+
+    def is_empty(self):
+        return len(self.items) == 0`,
+    options: [
+      "items에 요소가 1개 이상일 때",
+      "items가 비어있을 때 (길이가 0)",
+      "items에 요소가 정확히 1개일 때",
+      "항상 True",
+    ],
+    correctAnswer: 1,
+    explanation: "len(self.items) == 0은 deque가 비어있을 때 True가 돼요. 요소가 하나라도 있으면 len >= 1이므로 False예요.",
+    keyConceptTitle: "큐의 isEmpty 확인",
+    keyConceptDescription: "큐가 비었는지 확인할 때 len(deque) == 0 또는 not deque를 써요. dequeue 전에 isEmpty() 확인이 중요해요.",
+    relatedTopics: ["is_empty()", "len()", "큐 클래스"],
+  },
+  {
+    id: 418,
+    lessonId: 24,
+    difficulty: "어려움",
+    question: "다음 큐 시뮬레이션 코드의 최종 출력 결과는?",
+    code: `from collections import deque
+
+q = deque([1, 2, 3])
+q.append(q.popleft())
+q.append(q.popleft())
+print(list(q))`,
+    options: ["[3, 1, 2]", "[1, 2, 3]", "[2, 3, 1]", "[3, 2, 1]"],
+    correctAnswer: 0,
+    explanation: "시작: [1,2,3]. 1번: popleft()→1, append(1)→[2,3,1]. 2번: popleft()→2, append(2)→[3,1,2]. 결과: [3,1,2].",
+    keyConceptTitle: "앞에서 빼서 뒤로 보내기",
+    keyConceptDescription: "큐에서 앞 요소를 popleft()로 빼서 다시 append()로 뒤에 붙이면 원형 큐처럼 회전시킬 수 있어요. 요세푸스 문제 등에 활용돼요.",
+    relatedTopics: ["popleft()", "append()", "원형 큐"],
+  },
+
+  // ── Lesson 25: 덱 추가 ──
+  {
+    id: 419,
+    lessonId: 25,
+    difficulty: "쉬움",
+    question: "덱(Deque)에 대한 설명으로 올바른 것은?",
+    code: `from collections import deque
+d = deque([1, 2, 3])
+# 덱은 어떤 자료구조인가?`,
+    options: [
+      "뒤에서만 추가/삭제 가능하다",
+      "앞에서만 추가/삭제 가능하다",
+      "앞과 뒤 양쪽에서 추가/삭제 가능하다",
+      "중간에서만 추가/삭제 가능하다",
+    ],
+    correctAnswer: 2,
+    explanation: "덱(Deque)은 Double-Ended Queue의 약자로 양쪽 끝에서 O(1)로 추가/삭제할 수 있어요.",
+    keyConceptTitle: "덱 — 양쪽에서 추가/삭제",
+    keyConceptDescription: "덱은 앞(appendleft/popleft)과 뒤(append/pop) 양쪽에서 O(1)로 조작할 수 있어요. 스택과 큐 기능을 모두 포함해요.",
+    relatedTopics: ["deque", "Double-Ended Queue", "양방향"],
+  },
+  {
+    id: 420,
+    lessonId: 25,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `from collections import deque
+d = deque([2, 3, 4])
+d.appendleft(1)
+print(list(d))`,
+    options: ["[2, 3, 4, 1]", "[1, 2, 3, 4]", "[2, 1, 3, 4]", "오류"],
+    correctAnswer: 1,
+    explanation: "appendleft(1)은 덱의 왼쪽(앞)에 1을 추가해요. [2,3,4]의 앞에 1이 붙어 [1,2,3,4]가 돼요.",
+    keyConceptTitle: "appendleft() — 앞에 추가",
+    keyConceptDescription: "appendleft(x)는 덱의 왼쪽(앞)에 x를 추가해요. 리스트의 insert(0, x)와 같은 결과지만 O(1)로 훨씬 빠르게 동작해요.",
+    relatedTopics: ["appendleft()", "deque", "앞 추가"],
+  },
+  {
+    id: 421,
+    lessonId: 25,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `from collections import deque
+d = deque([1, 2, 3, 4])
+d.pop()
+d.popleft()
+print(list(d))`,
+    options: ["[2, 3]", "[1, 4]", "[1, 2, 3]", "오류"],
+    correctAnswer: 0,
+    explanation: "pop()은 뒤에서 4를 제거해 [1,2,3], popleft()는 앞에서 1을 제거해 [2,3]이 돼요.",
+    keyConceptTitle: "pop()과 popleft() 차이",
+    keyConceptDescription: "pop()은 덱의 뒤(오른쪽)에서 제거하고, popleft()는 앞(왼쪽)에서 제거해요. 둘 다 O(1)이에요.",
+    relatedTopics: ["pop()", "popleft()", "deque"],
+  },
+  {
+    id: 422,
+    lessonId: 25,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `from collections import deque
+recent = deque(maxlen=3)
+recent.append(1)
+recent.append(2)
+recent.append(3)
+recent.append(4)
+print(list(recent))`,
+    options: ["[1, 2, 3, 4]", "[2, 3, 4]", "[1, 2, 3]", "오류"],
+    correctAnswer: 1,
+    explanation: "maxlen=3으로 최대 3개만 유지해요. 4번째 값 4가 들어오면 가장 오래된 1이 자동 제거돼 [2,3,4]가 돼요.",
+    keyConceptTitle: "maxlen — 최대 길이 제한",
+    keyConceptDescription: "deque(maxlen=n)으로 최대 크기를 제한할 수 있어요. 새 요소가 추가될 때 가장 오래된 요소가 자동으로 제거돼요. 최근 N개 유지에 유용해요.",
+    relatedTopics: ["maxlen", "deque", "최근 N개"],
+  },
+  {
+    id: 423,
+    lessonId: 25,
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `from collections import deque
+d = deque([1, 2, 3, 4, 5])
+d.rotate(-1)
+print(list(d))`,
+    options: ["[5, 1, 2, 3, 4]", "[2, 3, 4, 5, 1]", "[1, 2, 3, 4, 5]", "오류"],
+    correctAnswer: 1,
+    explanation: "rotate(-1)은 왼쪽으로 1칸 회전이에요. 맨 앞 1이 맨 뒤로 이동해 [2,3,4,5,1]이 돼요.",
+    keyConceptTitle: "rotate(음수) — 왼쪽 회전",
+    keyConceptDescription: "rotate(n)은 양수면 오른쪽, 음수면 왼쪽으로 회전해요. rotate(-1)은 맨 앞 요소를 맨 뒤로 보내요.",
+    relatedTopics: ["rotate()", "deque", "회전"],
+  },
+  {
+    id: 424,
+    lessonId: 25,
+    difficulty: "보통",
+    question: "리스트 대신 덱(deque)을 사용하는 이유로 가장 적절한 것은?",
+    code: `# 리스트
+my_list = [1, 2, 3]
+my_list.insert(0, 0)  # O(n) - 느림!
+
+# 덱
+from collections import deque
+d = deque([1, 2, 3])
+d.appendleft(0)  # O(1) - 빠름!`,
+    options: [
+      "덱은 더 많은 메모리를 사용하기 때문",
+      "앞에서의 추가/삭제가 O(1)로 리스트보다 빠르기 때문",
+      "덱은 중간 삽입이 빠르기 때문",
+      "덱은 인덱스 접근이 빠르기 때문",
+    ],
+    correctAnswer: 1,
+    explanation: "리스트의 앞 삽입(insert(0, x))은 모든 요소를 한 칸씩 밀어야 해서 O(n)이에요. 덱의 appendleft()는 O(1)이라 훨씬 빠르게 동작해요.",
+    keyConceptTitle: "덱 vs 리스트 성능 차이",
+    keyConceptDescription: "리스트: 앞 추가/삭제 O(n). 덱: 앞 추가/삭제 O(1). 앞뒤 조작이 많으면 덱을 사용해야 해요.",
+    codeComparison: {
+      wrong: `my_list.insert(0, x)   # O(n) — 전체 이동`,
+      correct: `my_deque.appendleft(x) # O(1) — 바로 추가`,
+    },
+    relatedTopics: ["성능 비교", "O(1) vs O(n)", "deque"],
+  },
+  {
+    id: 425,
+    lessonId: 25,
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `from collections import deque
+d = deque([1, 2, 3])
+d.append(4)
+d.appendleft(0)
+print(d[0], d[-1])`,
+    options: ["1 3", "0 4", "0 3", "1 4"],
+    correctAnswer: 1,
+    explanation: "append(4)로 [1,2,3,4], appendleft(0)으로 [0,1,2,3,4]가 돼요. d[0]=0, d[-1]=4예요.",
+    keyConceptTitle: "덱의 인덱스 접근",
+    keyConceptDescription: "덱은 리스트처럼 d[0], d[-1]으로 앞뒤 요소에 접근할 수 있어요. 단, 중간 인덱스 접근은 O(n)으로 리스트보다 느려요.",
+    relatedTopics: ["deque", "인덱스 접근", "append/appendleft"],
+  },
+  {
+    id: 426,
+    lessonId: 25,
+    difficulty: "어려움",
+    question: "다음 코드에서 maxlen=3인 덱에 요소를 추가할 때 출력 결과는?",
+    code: `from collections import deque
+d = deque([10, 20, 30], maxlen=3)
+d.appendleft(5)
+print(list(d))`,
+    options: ["[5, 10, 20, 30]", "[5, 10, 20]", "[10, 20, 30]", "오류"],
+    correctAnswer: 1,
+    explanation: "maxlen=3이고 현재 [10,20,30]인데 appendleft(5)로 앞에 5를 추가하면 가장 오른쪽(오래된 방향) 30이 제거돼 [5,10,20]이 돼요.",
+    keyConceptTitle: "appendleft()와 maxlen의 상호작용",
+    keyConceptDescription: "maxlen이 설정된 덱에서 appendleft()로 앞에 추가하면 반대쪽(오른쪽) 요소가 밀려 제거돼요. append()로 뒤에 추가하면 왼쪽 요소가 제거돼요.",
+    relatedTopics: ["maxlen", "appendleft()", "덱 크기 제한"],
+  },
+  {
+    id: 427,
+    lessonId: 25,
+    difficulty: "어려움",
+    question: "덱으로 회문(팰린드롬)을 검사하는 코드에서 빈칸에 알맞은 코드는?",
+    code: `from collections import deque
+
+def is_palindrome(s):
+    d = deque(s)
+    while len(d) > 1:
+        if ___ != ___:
+            return False
+    return True
+
+print(is_palindrome('level'))   # True
+print(is_palindrome('hello'))   # False`,
+    options: [
+      "d.pop() != d.pop()",
+      "d.popleft() != d.pop()",
+      "d.appendleft() != d.append()",
+      "d[0] != d[-1]",
+    ],
+    correctAnswer: 1,
+    explanation: "회문 검사는 앞(popleft)과 뒤(pop)에서 하나씩 꺼내 비교해요. 덱을 이용해 양쪽에서 동시에 꺼낼 수 있어요.",
+    keyConceptTitle: "덱으로 회문 검사",
+    keyConceptDescription: "덱의 양쪽 끝을 동시에 접근하는 특성을 활용해 앞뒤 문자를 비교하면 회문인지 확인할 수 있어요. popleft()와 pop()을 함께 써요.",
+    relatedTopics: ["popleft()", "pop()", "회문", "덱 활용"],
+  },
+
+  // ── Lesson 26: 자료구조 비교와 선택 추가 ──
+  {
+    id: 428,
+    lessonId: 26,
+    difficulty: "쉬움",
+    question: "다음 중 앞에서 꺼내기(dequeue) 성능이 O(1)인 자료구조는?",
+    code: `# 어떤 것이 앞에서 꺼낼 때 O(1)인가?
+# A. list.pop(0)
+# B. deque.popleft()`,
+    options: ["리스트 (list.pop(0))", "덱 (deque.popleft())", "둘 다 O(1)", "둘 다 O(n)"],
+    correctAnswer: 1,
+    explanation: "list.pop(0)은 뒤의 모든 요소를 한 칸씩 당겨야 해서 O(n)이에요. deque.popleft()는 O(1)이에요.",
+    keyConceptTitle: "앞 삭제 성능: 리스트 O(n) vs 덱 O(1)",
+    keyConceptDescription: "리스트는 앞 삽입/삭제가 O(n)이고, 덱은 O(1)이에요. 큐나 앞뒤 조작이 많은 경우엔 deque를 사용해야 해요.",
+    relatedTopics: ["시간 복잡도", "O(1)", "deque vs list"],
+  },
+  {
+    id: 429,
+    lessonId: 26,
+    difficulty: "쉬움",
+    question: "10만 개 데이터에서 특정 값이 있는지 검색할 때 가장 빠른 자료구조는?",
+    code: `data_list = [i for i in range(100000)]
+data_set = set(range(100000))
+data_dict = {i: True for i in range(100000)}
+
+# 어느 것이 가장 빠를까?
+# 99999 in data_list  →  O(?)
+# 99999 in data_set   →  O(?)`,
+    options: ["리스트", "집합(set) 또는 딕셔너리", "튜플", "모두 같다"],
+    correctAnswer: 1,
+    explanation: "리스트의 'in' 검색은 O(n)으로 최대 10만 번 비교해요. 집합과 딕셔너리는 해시를 사용해서 O(1)이에요.",
+    keyConceptTitle: "검색 성능: 집합/딕셔너리 O(1) vs 리스트 O(n)",
+    keyConceptDescription: "리스트는 처음부터 끝까지 하나씩 확인하므로 O(n)이에요. 집합과 딕셔너리는 해시 구조 덕분에 O(1)로 바로 찾아요.",
+    relatedTopics: ["시간 복잡도", "O(1)", "집합", "딕셔너리"],
+  },
+  {
+    id: 430,
+    lessonId: 26,
+    difficulty: "보통",
+    question: "다음 상황에서 각 자료구조 선택으로 가장 적합한 조합은?",
+    code: `# 상황 A: 브라우저 뒤로가기 (방문 페이지 저장)
+# 상황 B: 프린터 대기열 처리
+# 상황 C: 최근 검색어 5개 유지`,
+    options: [
+      "A: 큐, B: 스택, C: 리스트",
+      "A: 스택, B: 큐, C: 덱(maxlen=5)",
+      "A: 리스트, B: 집합, C: 딕셔너리",
+      "A: 덱, B: 덱, C: 덱",
+    ],
+    correctAnswer: 1,
+    explanation: "뒤로가기 = LIFO(스택). 프린터 대기열 = FIFO(큐, deque). 최근 N개 유지 = deque(maxlen=5).",
+    keyConceptTitle: "상황별 자료구조 선택",
+    keyConceptDescription: "LIFO(마지막 것 먼저) → 스택. FIFO(처음 것 먼저) → 큐. 양쪽 조작/최근 N개 → 덱. 상황에 맞는 자료구조 선택이 핵심이에요.",
+    relatedTopics: ["자료구조 선택", "스택", "큐", "덱"],
+  },
+  {
+    id: 431,
+    lessonId: 26,
+    difficulty: "보통",
+    question: "다음 코드에서 set을 사용하는 이유로 가장 적절한 것은?",
+    code: `visited = set()
+
+def visit(url):
+    if url not in visited:
+        visited.add(url)
+        print(f'방문: {url}')
+    else:
+        print(f'이미 방문한 곳: {url}')
+
+visit('naver.com')
+visit('google.com')
+visit('naver.com')`,
+    options: [
+      "순서를 유지하기 위해",
+      "중복 없이 O(1) 검색을 위해",
+      "키-값 쌍을 저장하기 위해",
+      "최대 크기를 제한하기 위해",
+    ],
+    correctAnswer: 1,
+    explanation: "방문 여부 확인은 'in' 연산이 자주 발생해요. 집합은 O(1)로 빠르게 검색하고 자동 중복 제거도 돼서 방문 기록 저장에 적합해요.",
+    keyConceptTitle: "집합(set) 활용: 방문 여부 확인",
+    keyConceptDescription: "중복 없이 포함 여부를 O(1)로 확인해야 할 때 집합(set)이 최적이에요. 리스트는 O(n)이라 데이터가 많을수록 느려요.",
+    relatedTopics: ["집합", "O(1) 검색", "중복 제거"],
+  },
+  {
+    id: 432,
+    lessonId: 26,
+    difficulty: "보통",
+    question: "다음 중 시간 복잡도 표에서 올바른 것은?",
+    code: `# 각 자료구조의 맨 앞 삽입 시간 복잡도
+# A. 리스트: O(n)
+# B. 덱: O(1)
+# C. 집합: O(1)  (순서 없음, 앞/뒤 구분 없음)`,
+    options: [
+      "리스트 앞 삽입: O(1), 덱 앞 삽입: O(n)",
+      "리스트 앞 삽입: O(n), 덱 앞 삽입: O(1)",
+      "둘 다 O(1)",
+      "둘 다 O(n)",
+    ],
+    correctAnswer: 1,
+    explanation: "리스트는 앞에 삽입하면 기존 모든 요소를 한 칸씩 이동해야 해서 O(n)이에요. 덱(deque)은 appendleft()가 O(1)이에요.",
+    keyConceptTitle: "리스트 vs 덱 시간 복잡도",
+    keyConceptDescription: "리스트: 뒤 추가/삭제 O(1), 앞 추가/삭제 O(n). 덱: 앞뒤 추가/삭제 모두 O(1). 앞쪽 조작이 많으면 무조건 덱을 써야 해요.",
+    relatedTopics: ["시간 복잡도", "deque", "리스트 vs 덱"],
+  },
+  {
+    id: 433,
+    lessonId: 26,
+    difficulty: "어려움",
+    question: "다음 코드에서 리스트 대신 집합을 사용했을 때 성능 개선 효과가 가장 큰 연산은?",
+    code: `# 리스트 버전
+my_list = list(range(1000000))
+result1 = 999999 in my_list   # O(n)
+
+# 집합 버전
+my_set = set(range(1000000))
+result2 = 999999 in my_set    # O(1)`,
+    options: [
+      "append() — 뒤에 추가",
+      "in 연산 — 포함 여부 검색",
+      "len() — 길이 확인",
+      "순회 — for 루프",
+    ],
+    correctAnswer: 1,
+    explanation: "리스트의 'in' 검색은 O(n), 집합의 'in' 검색은 O(1)이에요. 100만 개 데이터에서 검색 횟수가 많을수록 집합이 압도적으로 빨라요.",
+    keyConceptTitle: "집합 검색 O(1) vs 리스트 O(n)",
+    keyConceptDescription: "in 연산의 시간 복잡도: 리스트 O(n), 집합/딕셔너리 O(1). 검색이 빈번하면 리스트 대신 집합을 쓰는 것이 성능 핵심이에요.",
+    relatedTopics: ["O(1) vs O(n)", "집합", "성능 최적화"],
   },
 ]

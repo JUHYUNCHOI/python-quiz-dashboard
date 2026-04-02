@@ -324,7 +324,7 @@ const registry: Record<string, LessonEntry> = {
   },
   "cpp-22": {
     load: () => import('./cpp/lesson22'), exportName: 'cppLesson22Data',
-    enLoad: () => import('./cpp/lesson22'), enExportName: 'cppLesson22Data',
+    enLoad: () => import('./cpp/lesson22-en'), enExportName: 'cppLesson22EnData',
   },
 
   // C++ Part 3: USACO 준비 (cpp-21, cpp-15 ~ cpp-20)
@@ -695,6 +695,7 @@ export { cppLesson12Data } from './cpp/lesson12'
 export { cppLesson13Data } from './cpp/lesson13'
 export { cppLesson14Data } from './cpp/lesson14'
 export { cppLesson22Data } from './cpp/lesson22'
+export { cppLesson22EnData } from './cpp/lesson22-en'
 export { cppLesson21Data } from './cpp/lesson21'
 export { cppLesson15Data } from './cpp/lesson15'
 export { cppLesson23Data } from './cpp/lesson23'

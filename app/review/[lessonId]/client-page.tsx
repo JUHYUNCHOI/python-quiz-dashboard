@@ -113,6 +113,8 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   const [score, setScore] = useState<number>(saved?.score ?? 0)
   const [totalAttempted, setTotalAttempted] = useState<number>(saved?.totalAttempted ?? 0)
   const [correctCount, setCorrectCount] = useState<number>(saved?.correctCount ?? 0)
+  // 현재 세션에서 실제로 답한 문제 수 (이전 저장 데이터 제외)
+  const [sessionAttempts, setSessionAttempts] = useState(0)
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set(saved?.completedSteps ?? []))
   const [showResults, setShowResults] = useState(false)
   const [wrongSteps, setWrongSteps] = useState<number[]>(saved?.wrongSteps ?? [])
@@ -205,6 +207,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
       if (!completedSteps.has(currentIndex)) {
         setCorrectCount(prev => prev + 1)
         setTotalAttempted(prev => prev + 1)
+        setSessionAttempts(prev => prev + 1)
         setScore(prev => prev + 10)
         setCompletedSteps(prev => new Set([...prev, currentIndex]))
         setIsCurrentStepCompleted(true)
@@ -214,6 +217,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
       setShowExplanation(true)
       if (!completedSteps.has(currentIndex)) {
         setTotalAttempted(prev => prev + 1)
+        setSessionAttempts(prev => prev + 1)
         setWrongSteps(prev => [...prev, currentIndex])
         setCompletedSteps(prev => new Set([...prev, currentIndex]))
         setIsCurrentStepCompleted(true)
@@ -249,6 +253,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
         })
       }
       setTotalAttempted(prev => prev + 1)
+      setSessionAttempts(prev => prev + 1)
       if (correct) {
         setCorrectCount(prev => prev + 1)
         setScore(prev => prev + 10)
@@ -308,13 +313,13 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
     return () => window.removeEventListener("keydown", handleKey)
   }, [router])
 
-  // 결과 화면 표시 시 완료 저장
+  // 결과 화면 표시 시 완료 저장 — 현재 세션에서 실제 답변한 경우에만
   useEffect(() => {
-    if (showResults) {
+    if (showResults && sessionAttempts > 0) {
       const pct = totalAttempted > 0 ? Math.round((correctCount / totalAttempted) * 100) : 0
       if (pct >= 70) markQuizComplete(lessonId)
     }
-  }, [showResults, totalAttempted, correctCount, lessonId])
+  }, [showResults, totalAttempted, correctCount, lessonId, sessionAttempts])
 
   if (authLoading || !user) return null
 
@@ -549,6 +554,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                 if (!completedSteps.has(currentIndex)) {
                   setCorrectCount(prev => prev + 1)
                   setTotalAttempted(prev => prev + 1)
+                  setSessionAttempts(prev => prev + 1)
                   setScore(prev => prev + 10)
                   setCompletedSteps(prev => new Set([...prev, currentIndex]))
                   setIsCurrentStepCompleted(true)

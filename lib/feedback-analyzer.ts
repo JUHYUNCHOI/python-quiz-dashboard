@@ -349,8 +349,117 @@ function findNextLesson(currentId: string, allParts: PartMeta[], completed: Set<
   return null
 }
 
+// ──── localStorage helpers (safe for SSR/SSG) ────
+
+function safeLocalStorageGet(key: string): string | null {
+  try {
+    if (typeof window === "undefined") return null
+    return localStorage.getItem(key)
+  } catch {
+    return null
+  }
+}
+
+interface RawMastery {
+  questionId: number
+  box: number
+  lastReviewDate?: string
+}
+
+/** question-mastery localStorage → lessonId별 box 1/2 문제 수 집계
+ *
+ * question-mastery에는 lessonId가 없으므로, 레슨 범위를 직접 저장된 question_id 기반으로
+ * 추론하는 대신 quiz-history의 lessonFilter 기반 데이터를 우선 사용하고,
+ * 이 함수는 전체 "저숙련 문제 비율"을 레슨별로 추정하는 보조 역할을 한다.
+ * 실제 lessonId 매핑은 quiz-history에서 가져온 questionDetails를 사용하면 더 정확하나,
+ * quiz-history 에는 questionId→lessonId 매핑이 직접 없으므로 여기서는
+ * question-mastery 전체의 저숙련 문제 비율로 복습 필요 여부를 보조 판단한다.
+ */
+function getLowMasteryCount(): { lowMasteryCount: number; totalSeen: number } {
+  const raw = safeLocalStorageGet("question-mastery")
+  if (!raw) return { lowMasteryCount: 0, totalSeen: 0 }
+  try {
+    const data: Record<string, RawMastery> = JSON.parse(raw)
+    const entries = Object.values(data)
+    const lowMasteryCount = entries.filter(e => e.box === 1 || e.box === 2).length
+    return { lowMasteryCount, totalSeen: entries.length }
+  } catch {
+    return { lowMasteryCount: 0, totalSeen: 0 }
+  }
+}
+
+interface LessonAccuracyEntry {
+  lessonId: string
+  correct: number
+  total: number
+  lastDate: string
+}
+
+/** quiz-history에서 lessonFilter가 있는 세션들의 레슨별 정답률 집계 */
+function getLessonAccuracyFromHistory(
+  trackIds: (number | string)[],
+  completed: Set<number | string>,
+): Map<string, LessonAccuracyEntry> {
+  const raw = safeLocalStorageGet("quiz-history")
+  if (!raw) return new Map()
+
+  try {
+    const history: Array<{
+      date?: string
+      accuracy?: number
+      correctAnswers?: number
+      totalQuestions?: number
+      isReview?: boolean
+      lessonFilter?: number | string
+    }> = JSON.parse(raw)
+    if (!Array.isArray(history)) return new Map()
+
+    const map = new Map<string, LessonAccuracyEntry>()
+
+    for (const entry of history) {
+      // lessonFilter가 있는 세션 (레슨별 복습 또는 레슨 집중 퀴즈)만 사용
+      if (entry.lessonFilter == null) continue
+
+      const lessonKey = String(entry.lessonFilter)
+      const normId: number | string = /^\d+$/.test(lessonKey) ? Number(lessonKey) : lessonKey
+
+      // 현재 트랙의 레슨이고 완료된 것만
+      if (!trackIds.includes(normId) || !completed.has(normId)) continue
+
+      const correct = entry.correctAnswers ?? 0
+      const total = entry.totalQuestions ?? 0
+      if (total === 0) continue
+
+      const prev = map.get(lessonKey) ?? { lessonId: lessonKey, correct: 0, total: 0, lastDate: "" }
+      const entryDate = entry.date ?? ""
+      map.set(lessonKey, {
+        lessonId: lessonKey,
+        correct: prev.correct + correct,
+        total: prev.total + total,
+        lastDate: entryDate > prev.lastDate ? entryDate : prev.lastDate,
+      })
+    }
+
+    return map
+  } catch {
+    return new Map()
+  }
+}
+
+/** 마지막 복습일로부터 경과 일수 계산 */
+function daysSinceDate(dateStr: string): number {
+  if (!dateStr) return 7
+  try {
+    const then = new Date(dateStr)
+    const now = new Date()
+    const diff = Math.floor((now.getTime() - then.getTime()) / (1000 * 60 * 60 * 24))
+    return Math.max(0, diff)
+  } catch {
+    return 7
+  }
+}
+
 function getReviewSuggestions(currentId: string, completed: Set<number | string>, lang: "ko" | "en" = "ko"): { lessonId: string; name: string; daysSince: number }[] {
-  // 간단한 구현: 완료된 레슨 중 현재 레슨보다 10개 이상 이전의 것들을 복습 추천
   const isCpp = currentId.startsWith("cpp-")
   const isPseudo = currentId.startsWith("pseudo-") || currentId.startsWith("igcse-")
   const trackParts = isCpp ? cppParts : isPseudo ? pseudoParts : pythonParts
@@ -359,21 +468,98 @@ function getReviewSuggestions(currentId: string, completed: Set<number | string>
   const currentNorm = /^\d+$/.test(currentId) ? Number(currentId) : currentId
   const currentIdx = trackIds.indexOf(currentNorm)
 
-  if (currentIdx < 10) return []
+  // 완료된 레슨 중 현재 레슨 이전 것들만 후보로
+  const candidateIds = currentIdx > 0
+    ? trackIds.slice(0, currentIdx).filter(id => completed.has(id))
+    : []
 
-  const suggestions: { lessonId: string; name: string; daysSince: number }[] = []
-  // 현재 위치에서 8~12개 전 레슨 중 완료된 것들
-  for (let i = Math.max(0, currentIdx - 12); i <= currentIdx - 8 && i >= 0; i++) {
-    const id = trackIds[i]
-    if (completed.has(id)) {
-      suggestions.push({
-        lessonId: String(id),
-        name: getLessonName(id, lang),
-        daysSince: 7, // 정확한 날짜는 lesson_progress에서 가져와야 함 (향후 개선)
+  if (candidateIds.length === 0) return []
+
+  // ── Step 1: quiz-history에서 레슨별 정답률 집계 ──
+  const lessonAccuracy = getLessonAccuracyFromHistory(trackIds, completed)
+
+  // 낮은 정답률(< 70%) 레슨 우선순위 목록
+  const weakByHistory: { lessonId: string; accuracy: number; daysSince: number }[] = []
+  for (const [lessonKey, data] of lessonAccuracy.entries()) {
+    const normId: number | string = /^\d+$/.test(lessonKey) ? Number(lessonKey) : lessonKey
+    if (!candidateIds.includes(normId)) continue
+    const accuracy = data.total > 0 ? Math.round((data.correct / data.total) * 100) : 100
+    if (accuracy < 70) {
+      weakByHistory.push({
+        lessonId: lessonKey,
+        accuracy,
+        daysSince: daysSinceDate(data.lastDate),
       })
     }
   }
-  return suggestions.slice(0, 2)
+  // 정답률 낮은 순으로 정렬
+  weakByHistory.sort((a, b) => a.accuracy - b.accuracy)
+
+  // ── Step 2: question-mastery에서 전체 저숙련 비율 확인 (보조 신호) ──
+  const { lowMasteryCount, totalSeen } = getLowMasteryCount()
+  const hasSignificantLowMastery = totalSeen > 10 && lowMasteryCount / totalSeen > 0.3
+
+  // ── Step 3: 결과 조합 ──
+  const suggestions: { lessonId: string; name: string; daysSince: number }[] = []
+
+  // quiz-history 기반 약한 레슨 먼저 추가
+  for (const item of weakByHistory) {
+    if (suggestions.length >= 3) break
+    const normId: number | string = /^\d+$/.test(item.lessonId) ? Number(item.lessonId) : item.lessonId
+    suggestions.push({
+      lessonId: item.lessonId,
+      name: getLessonName(normId, lang),
+      daysSince: item.daysSince,
+    })
+  }
+
+  // ── Step 4: 아직 2개 미만이면 위치 기반 fallback으로 보충 ──
+  if (suggestions.length < 2 && currentIdx >= 8) {
+    // 저숙련 비율이 높으면 좀 더 최근 레슨(4~8개 전)도 후보로
+    const lookbackFar = hasSignificantLowMastery ? currentIdx - 4 : currentIdx - 8
+    const lookbackNear = hasSignificantLowMastery ? currentIdx - 1 : currentIdx - 4
+
+    const alreadySuggested = new Set(suggestions.map(s => s.lessonId))
+
+    for (let i = Math.max(0, lookbackFar); i < lookbackNear && i >= 0; i++) {
+      if (suggestions.length >= 2) break
+      const id = trackIds[i]
+      const idStr = String(id)
+      if (completed.has(id) && !alreadySuggested.has(idStr)) {
+        // 이미 history에서 높은 정확도(≥70%)로 확인된 레슨은 건너뜀
+        const histEntry = lessonAccuracy.get(idStr)
+        if (histEntry) {
+          const acc = histEntry.total > 0 ? Math.round((histEntry.correct / histEntry.total) * 100) : 100
+          if (acc >= 70) continue
+        }
+        suggestions.push({
+          lessonId: idStr,
+          name: getLessonName(id, lang),
+          daysSince: histEntry ? daysSinceDate(histEntry.lastDate) : 7,
+        })
+      }
+    }
+
+    // 그래도 부족하면 8~12개 전 위치 기반 원래 로직으로 채움
+    if (suggestions.length < 2) {
+      const alreadySuggested2 = new Set(suggestions.map(s => s.lessonId))
+      for (let i = Math.max(0, currentIdx - 12); i <= currentIdx - 8 && i >= 0; i++) {
+        if (suggestions.length >= 2) break
+        const id = trackIds[i]
+        const idStr = String(id)
+        if (completed.has(id) && !alreadySuggested2.has(idStr)) {
+          const histEntry = lessonAccuracy.get(idStr)
+          suggestions.push({
+            lessonId: idStr,
+            name: getLessonName(id, lang),
+            daysSince: histEntry ? daysSinceDate(histEntry.lastDate) : 7,
+          })
+        }
+      }
+    }
+  }
+
+  return suggestions.slice(0, 3)
 }
 
 // ──── Streak Analysis ────

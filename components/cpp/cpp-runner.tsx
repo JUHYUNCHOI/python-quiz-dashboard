@@ -171,7 +171,12 @@ export function CppRunner({
         .single()
       if (data) {
         setIsSubmitted(true)
-        setTeacherGrade((data.teacher_grade as "pass" | "fail" | "auto" | null) ?? null)
+        const grade = (data.teacher_grade as "pass" | "fail" | "auto" | null) ?? null
+        setTeacherGrade(grade)
+        // 선생님이 이미 확인했거나 자동 채점 완료된 경우 레슨 진도 동기화
+        if (grade === "pass" || grade === "auto") {
+          onSuccess?.()
+        }
       } else {
         setTeacherGrade(null)
       }
@@ -278,7 +283,10 @@ export function CppRunner({
             ? "auto" as const
             : null
           saveCodeSilently(code, autoGrade)
-          onSuccess?.()
+          // 자동 채점 통과하거나 expectedOutput이 없는 경우에만 완료 처리
+          if (autoGrade === "auto" || !expectedOutput) {
+            onSuccess?.()
+          }
         } else if (!submissionMode) {
           if (expectedOutput) {
             const isMatch = normalize(runStdout) === normalize(expectedOutput)

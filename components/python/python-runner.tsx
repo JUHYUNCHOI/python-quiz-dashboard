@@ -5,6 +5,7 @@ import { Play, Loader2, RotateCcw, Check, X, Lightbulb } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { highlightPython } from "@/components/ui/code-block"
 import { useCodeSubmission } from "@/contexts/code-submission-context"
+import { useLanguage } from "@/contexts/language-context"
 
 // Pyodide 타입 정의
 declare global {
@@ -80,6 +81,7 @@ export function PythonRunner({
   storageKey,
   isStepDone = false
 }: PythonRunnerProps) {
+  const { t } = useLanguage()
   const lsKey = storageKey ? `python-runner-${storageKey}` : null
 
   // localStorage에서 저장된 상태 복원
@@ -344,7 +346,7 @@ export function PythonRunner({
           {initialCode && !hasEdited && code === initialCode && (
             <div className="absolute top-0 right-0 z-20 m-2">
               <span className="text-[10px] md:text-xs bg-amber-400 text-amber-900 px-2 py-0.5 rounded-full font-bold animate-pulse">
-                ← 코드를 수정해보세요!
+                {t("← 코드를 수정해보세요!", "← Edit the code!")}
               </span>
             </div>
           )}
@@ -376,7 +378,7 @@ export function PythonRunner({
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             disabled={readOnly || isLoading}
-            placeholder="Python 코드 입력..."
+            placeholder={t("Python 코드 입력...", "Enter Python code...")}
             className={cn(
               "w-full bg-transparent font-mono p-3 md:p-4 resize-none focus:outline-none placeholder:text-gray-600 relative z-10",
               "text-[13px] md:text-[15px] leading-[1.8] text-transparent caret-white selection:bg-blue-500/40"
@@ -404,13 +406,13 @@ export function PythonRunner({
           ) : (
             <Play className="w-3.5 h-3.5 md:w-4 md:h-4" />
           )}
-          {isLoading ? "실행중..." : "▶ 실행"}
+          {isLoading ? t("실행중...", "Running...") : t("▶ 실행", "▶ Run")}
         </button>
         
         <button
           onClick={reset}
           className="px-3 md:px-4 py-2 md:py-2.5 rounded-lg md:rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold transition-all"
-          title="초기화"
+          title={t("초기화", "Reset")}
         >
           <RotateCcw className="w-3.5 h-3.5 md:w-4 md:h-4" />
         </button>
@@ -436,7 +438,7 @@ export function PythonRunner({
               "font-bold text-xs md:text-sm",
               error ? "text-red-600" : isCorrect ? "text-green-600" : "text-gray-700"
             )}>
-              {error ? "에러!" : isCorrect ? "정답! 🎉" : "결과:"}
+              {error ? t("에러!", "Error!") : isCorrect ? t("정답! 🎉", "Correct! 🎉") : t("결과:", "Output:")}
             </span>
           </div>
           
@@ -452,18 +454,18 @@ export function PythonRunner({
       {/* 비로그인 학생 로그인 유도 (정답 맞췄을 때 한 번만 표시) */}
       {isCorrect === true && !dbAuth && (
         <p className="text-center text-xs text-gray-400">
-          💾 이 기기에만 저장돼요.{" "}
+          {t("💾 이 기기에만 저장돼요.", "💾 Saved on this device only.")}{" "}
           <a href="/login" className="text-indigo-500 hover:text-indigo-700 underline font-medium">
-            로그인
+            {t("로그인", "Login")}
           </a>
-          하면 어디서든 코드가 저장돼요!
+          {t("하면 어디서든 코드가 저장돼요!", " to sync your code across devices!")}
         </p>
       )}
 
       {/* 기대 출력 */}
       {showExpectedOutput && expectedOutput && isCorrect === false && (
         <div className="bg-amber-50 rounded-lg md:rounded-xl p-2.5 md:p-3 border border-amber-300">
-          <p className="text-amber-800 font-bold mb-1 text-xs md:text-sm">🎯 이렇게 나와야 해요:</p>
+          <p className="text-amber-800 font-bold mb-1 text-xs md:text-sm">🎯 {t("이렇게 나와야 해요:", "Expected output:")}</p>
           <pre className="font-mono text-amber-900 bg-amber-100 p-1.5 md:p-2 rounded text-xs md:text-sm">
             {expectedOutput}
           </pre>
@@ -475,7 +477,7 @@ export function PythonRunner({
         <div className="bg-purple-50 rounded-lg md:rounded-xl p-2.5 md:p-3 border border-purple-300 animate-fadeIn">
           <div className="flex items-center gap-1.5 md:gap-2 mb-1">
             <Lightbulb className="w-3.5 h-3.5 md:w-4 md:h-4 text-purple-600" />
-            <span className="font-bold text-purple-700 text-xs md:text-sm">💡 힌트!</span>
+            <span className="font-bold text-purple-700 text-xs md:text-sm">💡 {t("힌트!", "Hint!")}</span>
           </div>
           <p className="text-purple-800 font-mono text-xs md:text-sm">{hint}</p>
         </div>
@@ -487,7 +489,7 @@ export function PythonRunner({
           onClick={() => { onSuccess?.() }}
           className="w-full py-2.5 rounded-xl text-sm font-medium text-gray-500 bg-gray-100 hover:bg-gray-200 border border-gray-200 transition-all"
         >
-          → 다음으로 넘어갈게요
+          {t("→ 다음으로 넘어갈게요", "→ Move on")}
         </button>
       )}
 

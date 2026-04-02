@@ -2,42 +2,50 @@
 
 import { Card } from "@/components/ui/card"
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
+import { useLanguage } from "@/contexts/language-context"
 
 export function WeeklySummary() {
+  const { t } = useLanguage()
+
+  const dayLabels = [
+    t("월", "Mon"), t("화", "Tue"), t("수", "Wed"), t("목", "Thu"),
+    t("금", "Fri"), t("토", "Sat"), t("일", "Sun"),
+  ]
+
   const weeklyData = [
-    { day: "월", questions: 15, accuracy: 73 },
-    { day: "화", questions: 20, accuracy: 90 },
-    { day: "수", questions: 20, accuracy: 78 },
-    { day: "목", questions: 20, accuracy: 85 },
-    { day: "금", questions: 20, accuracy: 88 },
-    { day: "토", questions: 25, accuracy: 92 },
-    { day: "일", questions: 20, accuracy: 87 },
+    { day: dayLabels[0], questions: 15, accuracy: 73 },
+    { day: dayLabels[1], questions: 20, accuracy: 90 },
+    { day: dayLabels[2], questions: 20, accuracy: 78 },
+    { day: dayLabels[3], questions: 20, accuracy: 85 },
+    { day: dayLabels[4], questions: 20, accuracy: 88 },
+    { day: dayLabels[5], questions: 25, accuracy: 92 },
+    { day: dayLabels[6], questions: 20, accuracy: 87 },
   ]
 
   const engagementHeatmap = [
-    { day: "월", focus: 70, time: 65, completion: 75 },
-    { day: "화", focus: 95, time: 90, completion: 100 },
-    { day: "수", focus: 65, time: 70, completion: 100 },
-    { day: "목", focus: 92, time: 88, completion: 100 },
-    { day: "금", focus: 88, time: 85, completion: 100 },
-    { day: "토", focus: 95, time: 92, completion: 100 },
-    { day: "일", focus: 87, time: 85, completion: 100 },
+    { day: dayLabels[0], focus: 70, time: 65, completion: 75 },
+    { day: dayLabels[1], focus: 95, time: 90, completion: 100 },
+    { day: dayLabels[2], focus: 65, time: 70, completion: 100 },
+    { day: dayLabels[3], focus: 92, time: 88, completion: 100 },
+    { day: dayLabels[4], focus: 88, time: 85, completion: 100 },
+    { day: dayLabels[5], focus: 95, time: 92, completion: 100 },
+    { day: dayLabels[6], focus: 87, time: 85, completion: 100 },
   ]
 
   return (
     <Card className="p-6 bg-white shadow-lg">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-bold text-slate-800">주간 요약</h2>
+        <h2 className="text-xl font-bold text-slate-800">{t("주간 요약", "Weekly Summary")}</h2>
         <div className="text-right">
-          <p className="text-sm text-slate-600">이번 주 목표</p>
-          <p className="text-2xl font-bold text-green-600">140/140 완료 ✓</p>
+          <p className="text-sm text-slate-600">{t("이번 주 목표", "Weekly goal")}</p>
+          <p className="text-2xl font-bold text-green-600">140/140 {t("완료 ✓", "done ✓")}</p>
         </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Questions per Day */}
         <div>
-          <h3 className="text-sm font-semibold text-slate-700 mb-4">일일 문제 수</h3>
+          <h3 className="text-sm font-semibold text-slate-700 mb-4">{t("일일 문제 수", "Daily Questions")}</h3>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={weeklyData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
@@ -57,7 +65,7 @@ export function WeeklySummary() {
 
         {/* Accuracy Trend */}
         <div>
-          <h3 className="text-sm font-semibold text-slate-700 mb-4">정답률 추이</h3>
+          <h3 className="text-sm font-semibold text-slate-700 mb-4">{t("정답률 추이", "Accuracy Trend")}</h3>
           <ResponsiveContainer width="100%" height={200}>
             <LineChart data={weeklyData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
@@ -84,12 +92,12 @@ export function WeeklySummary() {
 
       {/* Engagement Quality Heatmap */}
       <div className="mt-6">
-        <h3 className="text-sm font-semibold text-slate-700 mb-4">참여도 히트맵</h3>
+        <h3 className="text-sm font-semibold text-slate-700 mb-4">{t("참여도 히트맵", "Engagement Heatmap")}</h3>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-slate-200">
-                <th className="text-left py-2 px-3 font-medium text-slate-600">지표</th>
+                <th className="text-left py-2 px-3 font-medium text-slate-600">{t("지표", "Metric")}</th>
                 {engagementHeatmap.map((day) => (
                   <th key={day.day} className="text-center py-2 px-3 font-medium text-slate-600">
                     {day.day}
@@ -99,7 +107,7 @@ export function WeeklySummary() {
             </thead>
             <tbody>
               <tr className="border-b border-slate-100">
-                <td className="py-3 px-3 font-medium text-slate-700">집중도</td>
+                <td className="py-3 px-3 font-medium text-slate-700">{t("집중도", "Focus")}</td>
                 {engagementHeatmap.map((day, i) => (
                   <td key={i} className="text-center py-3 px-3">
                     <div
@@ -118,7 +126,7 @@ export function WeeklySummary() {
                 ))}
               </tr>
               <tr className="border-b border-slate-100">
-                <td className="py-3 px-3 font-medium text-slate-700">시간 품질</td>
+                <td className="py-3 px-3 font-medium text-slate-700">{t("시간 품질", "Time Quality")}</td>
                 {engagementHeatmap.map((day, i) => (
                   <td key={i} className="text-center py-3 px-3">
                     <div
@@ -137,7 +145,7 @@ export function WeeklySummary() {
                 ))}
               </tr>
               <tr>
-                <td className="py-3 px-3 font-medium text-slate-700">완료율</td>
+                <td className="py-3 px-3 font-medium text-slate-700">{t("완료율", "Completion")}</td>
                 {engagementHeatmap.map((day, i) => (
                   <td key={i} className="text-center py-3 px-3">
                     <div

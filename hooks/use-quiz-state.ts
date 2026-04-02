@@ -41,6 +41,7 @@ export interface QuestionResult {
   correct_answer: number
   is_correct: boolean
   related_topics?: string[]
+  lesson_id?: string | number
 }
 
 export interface SessionData {
@@ -323,6 +324,7 @@ export function useQuizState(questions: QuizQuestion[]) {
       correct_answer: question.correctAnswer,
       is_correct: correct,
       related_topics: question.relatedTopics,
+      lesson_id: question.lessonId,
     }])
 
     // 시도 횟수 추적
@@ -441,6 +443,7 @@ export function useQuizState(questions: QuizQuestion[]) {
       correct_answer: question.correctAnswer,
       is_correct: false,
       related_topics: question.relatedTopics,
+      lesson_id: question.lessonId,
     }])
 
     if (currentQuestion < quizSettings.questionCount - 1) {

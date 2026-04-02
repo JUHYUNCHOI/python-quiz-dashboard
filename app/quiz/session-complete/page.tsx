@@ -17,6 +17,9 @@ import { logActivity } from "@/lib/activity-log"
 import { analyzeQuizResult, analyzeStreak } from "@/lib/feedback-analyzer"
 import { QuizFeedbackCard } from "@/components/feedback/quiz-feedback-card"
 import { StreakWidget } from "@/components/feedback/streak-widget"
+import { BottomNav } from "@/components/bottom-nav"
+import { getLessonName } from "@/lib/curriculum-data"
+import Link from "next/link"
 
 // -------- CountUp animation --------
 function CountUp({ end, duration = 800, prefix = "", suffix = "", className = "" }: {
@@ -136,7 +139,7 @@ function SessionCompletePage() {
   const { saveQuizSession } = useQuizSessionSync()
   const { user } = useAuth()
   const { syncMastery } = useMasterySync()
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
 
   // Session data from sessionStorage
   const [sessionData, setSessionData] = useState<SessionData | null>(null)
@@ -353,7 +356,7 @@ function SessionCompletePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 via-mint-50 to-lavender-50">
-      <main className="container mx-auto px-4 py-8 max-w-lg">
+      <main className="container mx-auto px-4 py-8 pb-24 max-w-lg">
 
         {/* === Phase 0: Header with giraffe + score === */}
         {phase >= 0 && (
@@ -475,7 +478,7 @@ function SessionCompletePage() {
               )}
             </div>
             {sessionData.perfectCount > 0 && sessionData.perfectCount === sessionData.correctAnswers && (
-              <p className="text-center text-sm font-bold text-yellow-600 mt-3">🌟 모든 문제를 첫 시도에 맞혔어요!</p>
+              <p className="text-center text-sm font-bold text-yellow-600 mt-3">{t("🌟 모든 문제를 첫 시도에 맞혔어요!", "🌟 You got every question right on the first try!")}</p>
             )}
           </div>
         )}
@@ -523,35 +526,75 @@ function SessionCompletePage() {
         {phase >= 7 && (
           <div className="space-y-4 mb-6">
             {/* 맞춤 피드백 카드 */}
-            <QuizFeedbackCard feedback={quizFeedback} t={t} visible={true} />
+            <QuizFeedbackCard
+              feedback={quizFeedback}
+              t={t}
+              visible={true}
+              nextActionHref={
+                quizFeedback.nextAction.type === "advance" ? "/curriculum" :
+                quizFeedback.nextAction.type === "review" ? "/quiz/setup?mode=review" :
+                "/quiz/setup"
+              }
+            />
 
             {/* 스트릭 위젯 */}
             <StreakWidget streak={streakInfo} t={t} />
           </div>
         )}
 
+        {/* === Phase 7: 복습 추천 레슨 === */}
+        {phase >= 7 && (() => {
+          const wrongLessonIds = [...new Set(
+            sessionData.questionDetails
+              .filter(qr => !qr.is_correct && qr.selected_answer !== -1 && qr.lesson_id != null)
+              .map(qr => qr.lesson_id!)
+          )].slice(0, 3)
+          if (wrongLessonIds.length === 0) return null
+          return (
+            <div className="mb-4 animate-fade-in-delay">
+              <p className="text-xs font-bold text-gray-500 mb-2 text-center">
+                {t("📚 이 레슨을 복습해보세요", "📚 Review these lessons")}
+              </p>
+              <div className="space-y-2">
+                {wrongLessonIds.map(id => {
+                  const href = `/learn/${String(id)}`
+                  return (
+                    <Link key={String(id)} href={href}
+                      className="flex items-center justify-between px-4 py-2.5 bg-white/60 backdrop-blur-sm border border-orange-200 rounded-xl hover:bg-orange-50 hover:border-orange-300 transition-all group">
+                      <span className="text-sm font-medium text-gray-700 group-hover:text-orange-700">
+                        {getLessonName(id, lang)}
+                      </span>
+                      <span className="text-xs text-orange-400 font-bold">{t("복습 →", "Review →")}</span>
+                    </Link>
+                  )
+                })}
+              </div>
+            </div>
+          )
+        })()}
+
         {/* === Phase 7: Action buttons === */}
         {phase >= 7 && (
           <div className="space-y-3 animate-fade-in-delay">
-            {/* 틀린 문제 다시 풀기 - 틀린 게 있을 때만 표시 */}
+            {/* 홈/수업목록 - primary */}
+            <button
+              onClick={handleGoHome}
+              className="w-full py-4 rounded-2xl text-xl font-black text-white bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-95"
+            >
+              {sessionData?.lessonFilter != null
+                ? t("← 수업 목록으로", "← Back to curriculum")
+                : t("홈으로 🏠", "Home 🏠")}
+            </button>
+
+            {/* 틀린 문제 다시 풀기 - secondary, 틀린 게 있을 때만 표시 */}
             {sessionData && sessionData.questionDetails.some(qr => !qr.is_correct && qr.selected_answer !== -1) ? (
               <button
                 onClick={handleRetryWrong}
-                className="w-full py-4 rounded-2xl text-xl font-black text-white bg-gradient-to-r from-red-400 to-orange-400 hover:from-red-500 hover:to-orange-500 shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-95"
+                className="w-full py-3 rounded-2xl text-base font-bold text-orange-600 bg-orange-50 border-2 border-orange-200 hover:bg-orange-100 transition-all"
               >
                 {t("틀린 문제 다시 풀기 🎯", "Retry wrong answers 🎯")}
               </button>
             ) : null}
-
-            {/* Go back - subtle text */}
-            <button
-              onClick={handleGoHome}
-              className="w-full py-3 text-base font-medium text-gray-400 hover:text-gray-600 transition-colors"
-            >
-              {sessionData?.lessonFilter != null
-                ? t("← 수업 목록으로", "← Back to curriculum")
-                : t("홈으로", "Home")}
-            </button>
           </div>
         )}
 
@@ -582,6 +625,7 @@ function SessionCompletePage() {
           </div>
         )}
       </main>
+      <BottomNav />
     </div>
   )
 }

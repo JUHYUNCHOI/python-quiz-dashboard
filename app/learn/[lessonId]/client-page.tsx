@@ -164,10 +164,10 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
         const savedCompleted = new Set<string>(data.completed || [])
         if (isLessonAlreadyDone) setIsAlreadyDone(true)
         if (isLessonAlreadyDone && lesson) {
-          // 이미 완료한 레슨: 읽기/실습 스텝만 자동 완료
-          // quiz/predict/fillblank는 실제로 풀어야 progress bar에 초록색 표시
+          // 이미 완료한 레슨: 읽기 스텝만 자동 완료
+          // tryit/practice/coding/mission은 실제 코드 실행해야 "Great job!" 표시
           // (canGoNext는 isAlreadyDone으로 별도 허용)
-          const nonInteractiveTypes = ["explain", "interactive", "animation", "tryit", "practice", "coding", "mission"]
+          const nonInteractiveTypes = ["explain", "interactive", "animation"]
           for (const ch of lesson.chapters) {
             for (const s of ch.steps) {
               if (nonInteractiveTypes.includes(s.type)) savedCompleted.add(s.id)
@@ -204,7 +204,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
         if (!data || cloudIsDone) {
           // 진행 데이터 없음: 완료 레슨이면 읽기 스텝만 자동 완료
           if (isEffectivelyDone && lesson) {
-            const nonInteractiveTypes = ["explain", "interactive", "animation", "tryit", "practice", "coding", "mission"]
+            const nonInteractiveTypes = ["explain", "interactive", "animation"]
             const autoCompleted = new Set<string>()
             for (const ch of lesson.chapters) {
               for (const s of ch.steps) {
@@ -222,7 +222,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
           setScore((data.score as number) || 0)
           const cloudCompletedSteps = new Set<string>((data.completed as string[]) || [])
           if (isEffectivelyDone && lesson) {
-            const nonInteractiveTypes = ["explain", "interactive", "animation", "tryit", "practice", "coding", "mission"]
+            const nonInteractiveTypes = ["explain", "interactive", "animation"]
             for (const ch of lesson.chapters) {
               for (const s of ch.steps) {
                 if (nonInteractiveTypes.includes(s.type)) cloudCompletedSteps.add(s.id)

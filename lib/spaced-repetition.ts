@@ -142,8 +142,9 @@ export function getDueQuestions(): number[] {
 }
 
 /** 숙련도별 문제 분류 */
-export function getMasteryStats(): {
-  newCount: number
+export function getMasteryStats(totalQuestions = 0): {
+  newCount: number    // 한 번도 풀지 않은 문제 수 (totalQuestions 전달 시 계산)
+  seenCount: number   // 지금까지 한 번이라도 풀어본 문제 수
   learningCount: number
   reviewingCount: number
   masteredCount: number
@@ -157,9 +158,11 @@ export function getMasteryStats(): {
   const box1 = allValues.filter(m => m.box === 1).length
   const box23 = allValues.filter(m => m.box === 2 || m.box === 3).length
   const box45 = allValues.filter(m => m.box >= 4).length
+  const seenCount = allValues.length
 
   return {
-    newCount: 0, // 계산 시 전체 문제에서 기록된 것을 빼야 함
+    newCount: totalQuestions > 0 ? Math.max(0, totalQuestions - seenCount) : 0,
+    seenCount,
     learningCount: box1,
     reviewingCount: box23,
     masteredCount: box45,

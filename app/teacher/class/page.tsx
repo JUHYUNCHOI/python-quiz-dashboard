@@ -72,13 +72,13 @@ function StudentStatusGrid({ students, onStudentClick, lang, hwStudentIds, hwPen
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-4">
       <div className="px-4 py-3 border-b border-gray-50 flex items-center justify-between">
         <div>
-          <h3 className="text-sm font-black text-gray-700">👥 전체 학생 현황</h3>
-          <p className="text-[11px] text-gray-400 mt-0.5">문제 있는 학생 먼저 · 클릭하면 상세 확인</p>
+          <h3 className="text-sm font-black text-gray-700">👥 {lang === "en" ? "All Students" : "전체 학생 현황"}</h3>
+          <p className="text-[11px] text-gray-400 mt-0.5">{lang === "en" ? "At-risk students first · Click to expand" : "문제 있는 학생 먼저 · 클릭하면 상세 확인"}</p>
         </div>
         <div className="flex items-center gap-3 text-[10px] text-gray-400">
-          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-500" />위험</span>
-          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-400" />주의</span>
-          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-500" />양호</span>
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-500" />{lang === "en" ? "At risk" : "위험"}</span>
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-400" />{lang === "en" ? "Watch" : "주의"}</span>
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-500" />{lang === "en" ? "Good" : "양호"}</span>
         </div>
       </div>
       <div className="divide-y divide-gray-50">
@@ -107,7 +107,7 @@ function StudentStatusGrid({ students, onStudentClick, lang, hwStudentIds, hwPen
                 "text-xs w-14 flex-shrink-0 font-medium",
                 days === 0 ? "text-green-600" : days <= 2 ? "text-gray-500" : days <= 5 ? "text-amber-500 font-bold" : "text-red-500 font-bold"
               )}>
-                {s.lastActive === "-" ? "기록없음" : days === 0 ? "오늘" : days === 1 ? "어제" : `${days}일 전`}
+                {s.lastActive === "-" ? (lang === "en" ? "No record" : "기록없음") : days === 0 ? (lang === "en" ? "Today" : "오늘") : days === 1 ? (lang === "en" ? "Yesterday" : "어제") : (lang === "en" ? `${days}d ago` : `${days}일 전`)}
               </span>
               <span className="text-xs text-gray-400 flex-1 truncate">
                 {lastLesson ? getLessonName(lastLesson.lesson_id, lang) : "—"}
@@ -121,9 +121,9 @@ function StudentStatusGrid({ students, onStudentClick, lang, hwStudentIds, hwPen
               {hwStudentIds && (
                 <span className="w-12 flex-shrink-0 text-right text-[10px] font-bold">
                   {hwPendingIds?.has(s.id)
-                    ? <span className="text-amber-600">확인필요</span>
+                    ? <span className="text-amber-600">{lang === "en" ? "Needs review" : "확인필요"}</span>
                     : hwStudentIds.has(s.id)
-                    ? <span className="text-green-600">채점완료</span>
+                    ? <span className="text-green-600">{lang === "en" ? "Graded" : "채점완료"}</span>
                     : ""}
                 </span>
               )}
@@ -192,15 +192,15 @@ function daysSince(dateStr: string): number {
   }
 }
 
-function formatLastActive(dateStr: string): string {
-  if (!dateStr || dateStr === "-") return "기록 없음"
+function formatLastActive(dateStr: string, lang: "ko" | "en" = "ko"): string {
+  if (!dateStr || dateStr === "-") return lang === "en" ? "No record" : "기록 없음"
   const days = daysSince(dateStr)
-  if (days === 0) return "오늘"
-  if (days === 1) return "어제"
-  if (days < 7) return `${days}일 전`
-  if (days < 14) return "1주 전"
-  if (days < 30) return `${Math.floor(days / 7)}주 전`
-  return "30일+"
+  if (days === 0) return lang === "en" ? "Today" : "오늘"
+  if (days === 1) return lang === "en" ? "Yesterday" : "어제"
+  if (days < 7) return lang === "en" ? `${days}d ago` : `${days}일 전`
+  if (days < 14) return lang === "en" ? "1w ago" : "1주 전"
+  if (days < 30) return lang === "en" ? `${Math.floor(days / 7)}w ago` : `${Math.floor(days / 7)}주 전`
+  return lang === "en" ? "30d+" : "30일+"
 }
 
 // ─────────────────────────────────────────────────────────
@@ -262,14 +262,14 @@ function StudentInsights({ lessonProgress, quizSessions, lang }: {
     <div className="mt-3 mb-1 rounded-xl border border-orange-200 bg-orange-50 p-3 space-y-3">
       <div className="flex items-center gap-1.5">
         <AlertTriangle className="w-3.5 h-3.5 text-orange-500" />
-        <span className="text-xs font-black text-orange-700">학습 분석</span>
-        <span className="text-[10px] text-orange-400 ml-auto">자동 감지</span>
+        <span className="text-xs font-black text-orange-700">{lang === "en" ? "Learning Analysis" : "학습 분석"}</span>
+        <span className="text-[10px] text-orange-400 ml-auto">{lang === "en" ? "Auto-detected" : "자동 감지"}</span>
       </div>
 
       {/* 자주 틀리는 문제 */}
       {weakQuestions.length > 0 && (
         <div className="space-y-1.5">
-          <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">🔁 반복해서 틀린 문제</p>
+          <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">🔁 {lang === "en" ? "Repeatedly wrong" : "반복해서 틀린 문제"}</p>
           {weakQuestions.map(w => (
             <div key={w.id} className="flex items-start gap-2 py-1 border-b border-orange-100 last:border-0">
               <div className="flex-1 min-w-0">
@@ -279,8 +279,8 @@ function StudentInsights({ lessonProgress, quizSessions, lang }: {
                 <span className={cn(
                   "text-[10px] font-black px-1.5 py-0.5 rounded",
                   w.pct >= 80 ? "bg-red-100 text-red-600" : w.pct >= 60 ? "bg-orange-100 text-orange-600" : "bg-amber-100 text-amber-600"
-                )}>{w.wrong}번 틀림</span>
-                <span className="text-[9px] text-gray-400">{w.total}번 중 {w.pct}% 오답</span>
+                )}>{lang === "en" ? `Wrong ${w.wrong}×` : `${w.wrong}번 틀림`}</span>
+                <span className="text-[9px] text-gray-400">{lang === "en" ? `${w.pct}% wrong of ${w.total}` : `${w.total}번 중 ${w.pct}% 오답`}</span>
               </div>
             </div>
           ))}
@@ -290,7 +290,7 @@ function StudentInsights({ lessonProgress, quizSessions, lang }: {
       {/* 낮은 복습 점수 */}
       {lowScores.length > 0 && (
         <div className="space-y-1.5">
-          <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">📉 낮은 복습 점수 — 재복습 권장</p>
+          <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">📉 {lang === "en" ? "Low review scores — re-review recommended" : "낮은 복습 점수 — 재복습 권장"}</p>
           {lowScores.map(r => (
             <div key={r.lessonId} className="flex items-center gap-2">
               <div className="flex-1 min-w-0">
@@ -313,7 +313,7 @@ function StudentInsights({ lessonProgress, quizSessions, lang }: {
                 target="_blank"
                 className="flex-shrink-0 text-[10px] font-bold px-2 py-1 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition-colors flex items-center gap-0.5"
               >
-                복습하기 →
+                {lang === "en" ? "Review →" : "복습하기 →"}
               </Link>
             </div>
           ))}
@@ -323,7 +323,7 @@ function StudentInsights({ lessonProgress, quizSessions, lang }: {
       {/* 복습이 밀린 수업 */}
       {overdueReviews.length > 0 && (
         <div className="space-y-1.5">
-          <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">⏰ 복습이 밀린 수업</p>
+          <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">⏰ {lang === "en" ? "Overdue reviews" : "복습이 밀린 수업"}</p>
           {overdueReviews.map(r => (
             <div key={r.lessonId} className="flex items-center gap-2">
               <div className="flex-1 min-w-0">
@@ -331,7 +331,7 @@ function StudentInsights({ lessonProgress, quizSessions, lang }: {
                 <span className={cn(
                   "text-[10px] font-bold",
                   r.days >= 14 ? "text-red-500" : r.days >= 7 ? "text-amber-500" : "text-yellow-600"
-                )}>학습 후 {r.days}일째 복습 없음</span>
+                )}>{lang === "en" ? `No review for ${r.days}d` : `학습 후 ${r.days}일째 복습 없음`}</span>
               </div>
               <Link
                 href={`/review/${r.lessonId}`}
@@ -343,7 +343,7 @@ function StudentInsights({ lessonProgress, quizSessions, lang }: {
                                  "bg-yellow-100 text-yellow-600 hover:bg-yellow-200"
                 )}
               >
-                복습하기 →
+                {lang === "en" ? "Review →" : "복습하기 →"}
               </Link>
             </div>
           ))}
@@ -351,7 +351,7 @@ function StudentInsights({ lessonProgress, quizSessions, lang }: {
       )}
 
       <p className="text-[9px] text-orange-300 border-t border-orange-200 pt-2">
-        복습하기 링크를 학생에게 직접 공유하거나, 학생이 스스로 복습하도록 안내하세요.
+        {lang === "en" ? "Share the review link directly with the student, or guide them to review on their own." : "복습하기 링크를 학생에게 직접 공유하거나, 학생이 스스로 복습하도록 안내하세요."}
       </p>
     </div>
   )
@@ -538,7 +538,7 @@ export default function ClassDetailPage() {
 
       return {
         id: sid,
-        displayName: prof?.display_name || "학생",
+        displayName: prof?.display_name || (lang === "en" ? "Student" : "학생"),
         avatarUrl: prof?.avatar_url || null,
         completedLessons: completedLessonsSet.get(sid)?.size || 0,
         totalXp: gam?.total_xp || 0,
@@ -647,13 +647,13 @@ export default function ClassDetailPage() {
       setTimeout(() => setParentLinkCopied(null), 3000)
     } catch (e) {
       console.error("Failed to generate parent link:", (e as any)?.message ?? (e as any)?.code ?? JSON.stringify(e))
-      setParentLinkError("링크 생성에 실패했습니다. 다시 시도해주세요.")
+      setParentLinkError(lang === "en" ? "Failed to generate link. Please try again." : "링크 생성에 실패했습니다. 다시 시도해주세요.")
       setTimeout(() => setParentLinkError(null), 4000)
     }
     setGeneratingLink(null)
   }
 
-  const displayName = teacherProfile?.display_name || "선생님"
+  const displayName = teacherProfile?.display_name || (lang === "en" ? "Teacher" : "선생님")
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-mint-50">
@@ -667,16 +667,16 @@ export default function ClassDetailPage() {
 
       <main className="w-full px-4 sm:px-6 pb-24 pt-6 max-w-2xl mx-auto">
         <Link href="/teacher" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-4">
-          <ArrowLeft className="w-4 h-4" /> 반 목록으로
+          <ArrowLeft className="w-4 h-4" /> {lang === "en" ? "Class list" : "반 목록으로"}
         </Link>
 
         {!classId && !isLoading && (
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <div className="text-6xl mb-4">🏫</div>
-            <h2 className="text-xl font-bold text-gray-700 mb-2">반을 선택해주세요</h2>
-            <p className="text-gray-400 text-sm mb-6">대시보드에서 관리할 반을 선택하세요.</p>
+            <h2 className="text-xl font-bold text-gray-700 mb-2">{lang === "en" ? "Select a class" : "반을 선택해주세요"}</h2>
+            <p className="text-gray-400 text-sm mb-6">{lang === "en" ? "Select a class to manage from the dashboard." : "대시보드에서 관리할 반을 선택하세요."}</p>
             <Link href="/teacher" className="px-6 py-3 bg-orange-500 text-white font-bold rounded-xl hover:bg-orange-600 transition-colors">
-              대시보드로 이동
+              {lang === "en" ? "Go to Dashboard" : "대시보드로 이동"}
             </Link>
           </div>
         )}
@@ -688,7 +688,7 @@ export default function ClassDetailPage() {
               <h1 className="text-xl font-bold text-gray-800 mb-3">{classInfo.name}</h1>
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-orange-200">
-                  <span className="text-sm text-gray-500">참가 코드</span>
+                  <span className="text-sm text-gray-500">{lang === "en" ? "Join code" : "참가 코드"}</span>
                   <span className="font-mono font-bold text-lg text-orange-600 tracking-widest">
                     {classInfo.join_code}
                   </span>
@@ -704,7 +704,7 @@ export default function ClassDetailPage() {
                   </button>
                 </div>
                 <span className="flex items-center gap-1 text-sm text-gray-500">
-                  <Users className="w-4 h-4" /> {students.length}명
+                  <Users className="w-4 h-4" /> {students.length}{lang === "en" ? " students" : "명"}
                 </span>
               </div>
             </Card>
@@ -746,11 +746,11 @@ export default function ClassDetailPage() {
             {/* 정렬 버튼 */}
             <div className="flex gap-2 mb-4 flex-wrap">
               {[
-                { key: "lastActive" as const, label: "최근 활동순" },
-                { key: "name" as const, label: "이름순" },
-                { key: "xp" as const, label: "XP순" },
-                { key: "lessons" as const, label: "완료순" },
-                { key: "streak" as const, label: "연속일순" },
+                { key: "lastActive" as const, label: lang === "en" ? "Recent activity" : "최근 활동순" },
+                { key: "name" as const, label: lang === "en" ? "Name" : "이름순" },
+                { key: "xp" as const, label: lang === "en" ? "XP" : "XP순" },
+                { key: "lessons" as const, label: lang === "en" ? "Lessons done" : "완료순" },
+                { key: "streak" as const, label: lang === "en" ? "Streak" : "연속일순" },
               ].map(({ key, label }) => (
                 <button
                   key={key}
@@ -768,13 +768,13 @@ export default function ClassDetailPage() {
 
             {/* 학생 테이블 */}
             {isLoading ? (
-              <div className="text-center py-12 text-gray-400">불러오는 중...</div>
+              <div className="text-center py-12 text-gray-400">{lang === "en" ? "Loading..." : "불러오는 중..."}</div>
             ) : students.length === 0 ? (
               <Card className="p-8 text-center border-2 border-dashed border-gray-200">
                 <Users className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                <p className="text-gray-500 mb-1">아직 참가한 학생이 없어요</p>
+                <p className="text-gray-500 mb-1">{lang === "en" ? "No students yet" : "아직 참가한 학생이 없어요"}</p>
                 <p className="text-sm text-gray-400">
-                  참가 코드 <strong className="text-orange-600">{classInfo.join_code}</strong>를 학생들에게 공유하세요
+                  {lang === "en" ? "Share the join code " : "참가 코드 "}<strong className="text-orange-600">{classInfo.join_code}</strong>{lang === "en" ? " with students" : "를 학생들에게 공유하세요"}
                 </p>
               </Card>
             ) : (
@@ -806,7 +806,7 @@ export default function ClassDetailPage() {
                         <div className="flex items-center gap-1.5">
                           <p className="font-bold text-gray-800 truncate">{student.displayName}</p>
                           {student.activeToday ? (
-                            <span className="text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full font-medium">오늘 활동</span>
+                            <span className="text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full font-medium">{lang === "en" ? "Active today" : "오늘 활동"}</span>
                           ) : (
                             <span className={cn(
                               "text-[10px] px-1.5 py-0.5 rounded-full font-medium",
@@ -816,7 +816,7 @@ export default function ClassDetailPage() {
                                 ? "bg-amber-100 text-amber-600"
                                 : "bg-gray-100 text-gray-400"
                             )}>
-                              {formatLastActive(student.lastActive)}
+                              {formatLastActive(student.lastActive, lang)}
                             </span>
                           )}
                         </div>
@@ -827,7 +827,7 @@ export default function ClassDetailPage() {
                               📖 {current.name} {current.completed ? "✅" : "🔄"}
                             </p>
                           ) : (
-                            <p className="text-xs text-gray-400">아직 시작 전</p>
+                            <p className="text-xs text-gray-400">{lang === "en" ? "Not started yet" : "아직 시작 전"}</p>
                           )
                         })()}
                       </div>
@@ -861,9 +861,9 @@ export default function ClassDetailPage() {
                         title="학부모 리포트 링크 복사"
                       >
                         {parentLinkCopied === student.id ? (
-                          <><Check className="w-3 h-3" /> 복사됨</>
+                          <><Check className="w-3 h-3" /> {lang === "en" ? "Copied" : "복사됨"}</>
                         ) : (
-                          <><ExternalLink className="w-3 h-3" /> 학부모</>
+                          <><ExternalLink className="w-3 h-3" /> {lang === "en" ? "Parent" : "학부모"}</>
                         )}
                       </button>
 
@@ -887,9 +887,9 @@ export default function ClassDetailPage() {
                         {/* 탭 버튼 + 학부모 링크 */}
                         <div className="flex gap-1 mt-3 mb-1 items-center">
                           {([
-                            { key: "lessons" as const, label: "레슨 진도" },
-                            { key: "quizzes" as const, label: "퀴즈 리포트" },
-                            { key: "consistency" as const, label: "꾸준함" },
+                            { key: "lessons" as const, label: lang === "en" ? "Lesson Progress" : "레슨 진도" },
+                            { key: "quizzes" as const, label: lang === "en" ? "Quiz Report" : "퀴즈 리포트" },
+                            { key: "consistency" as const, label: lang === "en" ? "Consistency" : "꾸준함" },
                           ]).map(({ key, label }) => (
                             <button
                               key={key}
@@ -917,11 +917,11 @@ export default function ClassDetailPage() {
                             )}
                           >
                             {parentLinkCopied === student.id ? (
-                              <><Check className="w-3 h-3" /> 복사됨!</>
+                              <><Check className="w-3 h-3" /> {lang === "en" ? "Copied!" : "복사됨!"}</>
                             ) : generatingLink === student.id ? (
-                              "생성 중..."
+                              lang === "en" ? "Generating..." : "생성 중..."
                             ) : (
-                              <><ExternalLink className="w-3 h-3" /> 학부모 링크</>
+                              <><ExternalLink className="w-3 h-3" /> {lang === "en" ? "Parent link" : "학부모 링크"}</>
                             )}
                           </button>
                         </div>
@@ -951,7 +951,7 @@ export default function ClassDetailPage() {
                       disabled={studentPage === 0}
                       className="px-3 py-1 text-xs font-bold rounded-lg border border-gray-200 disabled:opacity-30 hover:bg-gray-50"
                     >
-                      ← 이전
+                      {lang === "en" ? "← Prev" : "← 이전"}
                     </button>
                     <span className="text-xs text-gray-500 font-medium">
                       {studentPage + 1} / {totalPages}
@@ -961,7 +961,7 @@ export default function ClassDetailPage() {
                       disabled={studentPage === totalPages - 1}
                       className="px-3 py-1 text-xs font-bold rounded-lg border border-gray-200 disabled:opacity-30 hover:bg-gray-50"
                     >
-                      다음 →
+                      {lang === "en" ? "Next →" : "다음 →"}
                     </button>
                   </div>
                 )}

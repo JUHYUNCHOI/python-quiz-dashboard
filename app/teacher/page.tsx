@@ -7,7 +7,8 @@ import { createClient } from "@/lib/supabase/client"
 import { createClass } from "./actions"
 import type { Class } from "@/lib/supabase/types"
 import { Card } from "@/components/ui/card"
-import { Plus, Users, Copy, Check, ChevronRight, AlertTriangle } from "lucide-react"
+import { Plus, Users, Copy, Check, ChevronRight, AlertTriangle, Flag } from "lucide-react"
+import { FlaggedQuestions } from "@/components/teacher/flagged-questions"
 import Link from "next/link"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
@@ -41,6 +42,7 @@ export default function TeacherDashboardPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [risks, setRisks] = useState<StudentRisk[]>([])
   const [hwCount, setHwCount] = useState<number | null>(null)
+  const [flagCount, setFlagCount] = useState<number | null>(null)
 
   const loadClasses = async () => {
     const supabase = createClient()
@@ -66,11 +68,19 @@ export default function TeacherDashboardPage() {
       await loadRisks(supabase, classesWithCount)
     }
     // 숙제 확인 필요 건수 (미채점 or 오답만)
-    const { count } = await supabase
+    const { count: hwc } = await supabase
       .from("homework_submissions")
       .select("*", { count: "exact", head: true })
       .or("teacher_grade.is.null,teacher_grade.eq.fail")
-    setHwCount(count ?? 0)
+    setHwCount(hwc ?? 0)
+
+    // 미검토 신고 문제 건수
+    const { count: fc } = await supabase
+      .from("flagged_questions")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "pending")
+    setFlagCount(fc ?? 0)
+
     setIsLoading(false)
   }
 
@@ -249,7 +259,7 @@ export default function TeacherDashboardPage() {
         </div>
 
         {/* 숙제 검토 링크 */}
-        <Link href="/teacher/homework" className="flex items-center gap-3 p-4 rounded-xl border-2 border-indigo-100 bg-indigo-50 hover:bg-indigo-100 transition-colors mb-4">
+        <Link href="/teacher/homework" className="flex items-center gap-3 p-4 rounded-xl border-2 border-indigo-100 bg-indigo-50 hover:bg-indigo-100 transition-colors mb-2">
           <span className="text-2xl">📋</span>
           <div className="flex-1">
             <p className="font-bold text-indigo-800">{t("숙제 제출 현황 보기", "View Homework Submissions")}</p>
@@ -261,6 +271,20 @@ export default function TeacherDashboardPage() {
             </span>
           )}
         </Link>
+
+        {/* 신고된 문제 링크 */}
+        <div className="flex items-center gap-3 p-4 rounded-xl border-2 border-orange-100 bg-orange-50 mb-4">
+          <Flag className="w-5 h-5 text-orange-500 flex-shrink-0" />
+          <div className="flex-1">
+            <p className="font-bold text-orange-800">{t("신고된 문제 검토", "Review Flagged Questions")}</p>
+            <p className="text-xs text-orange-500">{t("학생이 신고한 부적합 문제를 확인하세요", "Check questions flagged by students")}</p>
+          </div>
+          {flagCount !== null && flagCount > 0 && (
+            <span className="bg-red-500 text-white text-xs font-bold px-2.5 py-1 rounded-full flex-shrink-0">
+              {flagCount}{t("건", "")}
+            </span>
+          )}
+        </div>
 
         {/* 전체 반 신경써야 할 학생 */}
         {risks.length > 0 && (
@@ -448,6 +472,10 @@ export default function TeacherDashboardPage() {
             })}
           </div>
         )}
+        {/* 신고된 문제 목록 */}
+        <div className="mt-6 border-t pt-6">
+          <FlaggedQuestions />
+        </div>
       </main>
 
       <BottomNav />

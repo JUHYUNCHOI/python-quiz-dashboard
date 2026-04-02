@@ -348,7 +348,14 @@ int main() {
           id: "ch2-getter-setter",
           type: "explain",
           title: "So how do we get or change values inside the class?",
-          content: `We said member variables should be private — but what if we need to read or change \`speed\`?
+          content: `We just blocked the bank balance with \`private\`. But that doesn't mean nobody can ever see it — you use a **teller window**.
+
+Here's another way to think about it. Imagine your stuff is in your room. You don't want people just walking in and grabbing things, right? So you **lock the door** (\`private\`).
+
+But if a friend needs something? They **knock and ask** — you hand it to them → that's a **getter**.
+Want to put something in? They **ask you** — you check if it's okay, then let it in → that's a **setter**.
+
+A class works the same way. We said member variables should be private — but what if we need to read or change \`speed\`?
 
 You access them **through a public member function**.
 

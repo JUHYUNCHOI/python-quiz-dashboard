@@ -63,9 +63,102 @@ interface QuizQuestion {
 
 ### 커리큘럼 구조 (app/curriculum/page.tsx)
 - Python: 52 레슨 (Part 1-9)
-- C++: 20 레슨 (Part 1-3, USACO 준비)
+- C++: 23 레슨 + 프로젝트 3개 (Part 1-3)
 - Pseudocode/IGCSE: 별도 트랙
 - 순차 잠금 해제 (완료한 레슨 + 다음 1개)
+
+### ⚠️ C++ lessonId ↔ 커리큘럼 매핑 (ID 번호 ≠ 커리큘럼 순서)
+
+> **퀴즈 문제 작업 시 반드시 이 표를 참고할 것. ID 번호만 보고 순서를 추측하면 안 됨.**
+
+**Part 1** (cpp-p1로 마무리):
+| lessonId | 커리큘럼 순서 | 내용 |
+|---|---|---|
+| cpp-1 | 1 | 파이썬 vs C++ — main(), #include, 기본 구조 |
+| cpp-2 | 2 | cout 심화 & namespace — endl, \n, \t, using namespace std |
+| cpp-3 | 3 | 변수와 타입 — int/double/string/bool/char, const, auto, 타입변환 |
+| cpp-4 | 4 | cin 입력 — cin >>, getline |
+| cpp-5 | 5 | 연산자 — +,-,*,/,%, ++, +=, ==, !=, &&, \|\|, !, 삼항 |
+| cpp-6 | 6 | 조건문 — if/else, else if, switch/case |
+| cpp-7 | 7 | 반복문 — for, while, do-while, break, continue, 중첩 루프 |
+| cpp-8 | 8 | 함수 — 선언/정의, 매개변수, return, void, 오버로딩 |
+| cpp-p1 | - | 프로젝트: 숫자 맞추기 게임 |
+
+**Part 2** (cpp-p2로 마무리):
+| lessonId | 커리큘럼 순서 | 내용 |
+|---|---|---|
+| cpp-9 | 9 | 배열 & 벡터 — int arr[5], vector<T>, push_back, pop_back, size |
+| cpp-21 | 10 | 2차원 배열 & 2D vector — grid[행][열], vector<vector<int>> ← ID가 21이지만 파트2 2번째! |
+| cpp-10 | 11 | Range-for & auto — for(auto x : vec), 타입 추론 |
+| cpp-11 | 12 | 문자열 심화 — substr, find, replace, length, compare |
+| cpp-12 | 13 | 참조와 함수 — int& ref, pass by reference, swap |
+| cpp-13 | 14 | 포인터 기초 — int* ptr, &, *, nullptr, 포인터 산술 |
+| cpp-14 | 15 | 구조체 (struct) — struct 선언, . 멤버 접근, struct 배열 |
+| cpp-22 | 16 | 클래스 (class) — class, public/private, getter/setter, 생성자, OOP ← ID가 22이지만 파트2 마지막! |
+| cpp-p2 | - | 프로젝트: RPG 캐릭터 관리 |
+
+**Part 3** (cpp-p3로 마무리):
+| lessonId | 커리큘럼 순서 | 내용 |
+|---|---|---|
+| cpp-15 | 17 | pair & tuple — std::pair, .first/.second, std::tuple, get<> |
+| cpp-23 | 18 | sort 마스터 — sort(), 커스텀 comparator, lambda 정렬, 정렬 알고리즘 이론 ← ID가 23이지만 파트3 2번째! |
+| cpp-16 | 19 | map & set — std::map, std::set, std::unordered_map |
+| cpp-17 | 20 | STL 탐색 함수 — find, count_if, accumulate, 반복자 |
+| cpp-18 | 21 | stack & queue — std::stack, std::queue, std::deque, std::priority_queue |
+| cpp-19 | 22 | 파일 I/O & Fast I/O — ifstream, ofstream, ios::sync_with_stdio |
+| cpp-20 | 23 | CP 실전 팁 — 다익스트라, bits/stdc++.h, 비트연산, typedef |
+| cpp-p3 | - | 프로젝트: USACO 모의전 |
+
+**퀴즈 문제 작성/배정 시 체크리스트:**
+- cpp-21 문제는 cpp-9(배열/벡터), cpp-7(반복문)만 전제해야 함 — 문자열/레퍼런스/포인터 개념 사용 금지
+- cpp-22 문제는 cpp-14(struct)까지 배운 상태 기준 — STL(cpp-15~) 개념 사용 금지
+- cpp-23 문제는 cpp-15(pair/tuple) 이후 — sort 심화 및 정렬 이론 담당
+- 상속/다형성/virtual 개념 → cpp-22(class) 레슨에 포함
+- 수동 구현 정렬(버블/선택/삽입) 이론 → cpp-23
+
+## 플랫폼 통합 로드맵
+
+코드린은 3개의 독립 프로젝트를 하나의 제품으로 통합하는 방향으로 개발 중이다.
+
+### 3개 플랫폼 현황
+
+| 플랫폼 | 경로 | 스택 | 배포 | lesson_id 접두사 |
+|---|---|---|---|---|
+| **Coderin** | `~/Coding/python-quiz-dashboard` | Next.js 16, TS, Tailwind | Vercel | `cpp-*`, `python-*`, `pseudo-*` |
+| **Algorithm Lab** | `~/Coding/Algorithm` | Vanilla JS SPA | Cloudflare Workers | `algo-*` |
+| **CodeQuest** | `~/Coding/codequest` | React 18 + Vite | Vercel (예정) | `cq-*` |
+
+**세 플랫폼 모두 같은 Supabase 인스턴스(`kehxcwquevocshrytgyo`)를 사용하고 `lesson_progress` 테이블을 공유한다.**
+Algorithm Lab과 CodeQuest 모두 Coderin SSO 연동이 이미 구현되어 있다.
+
+### 통합 순서
+
+**1단계: Algorithm Lab → Coderin 흡수 (최우선)**
+- Algorithm Lab의 22개 알고리즘 토픽 + 시각화를 Coderin 레슨 형식으로 이전
+- Vanilla JS → React/Next.js 컴포넌트 변환
+- 기존 `algo-*` lesson_id는 그대로 유지 (기존 진도 데이터 보호)
+- Algorithm Lab의 시각화 패턴: `_renderViz*` 메서드들 → React 컴포넌트로 변환
+
+**2단계: CodeQuest → Coderin 흡수**
+- USACO/MCC 161개 문제 튜토리얼을 `/quest/[problemId]` 라우트로 통합
+- React 컴포넌트들이 Next.js 친화적이라 이전 비용 상대적으로 낮음
+- `shared.jsx`의 Quiz, CodeBlock 등은 Coderin 레슨 컴포넌트와 호환 가능
+- 기존 `cq-*` lesson_id 유지
+
+### 학습 흐름 (통합 후)
+```
+Coderin 문법 레슨 (Python/C++) → Algorithm Lab 알고리즘 이론 → CodeQuest 실전 문제 (USACO/MCC)
+```
+
+### Algorithm Lab 콘텐츠 구조 (참고)
+- 22개 토픽: array, backtracking, binarysearch, bitmanipulation, dp, graph, greedy, hashtable, linkedlist, prefixsum, priorityqueue, recursion, shortestpath, sorting, stackqueue, string, topologicalsort, tree, trie, unionfind 등
+- 각 토픽: 개념 설명 + 문제별 4탭(Problem/Think/Sim/Code)
+- 시각화: DOM 조작 기반 step-by-step 애니메이션 (closure 패턴)
+
+### CodeQuest 콘텐츠 구조 (참고)
+- 161개 USACO Bronze/MCC 문제 튜토리얼
+- 각 문제: 3챕터(문제이해/풀이전략/코드빌드), 26+ 스텝
+- 공유 컴포넌트: `Narration`, `Quiz`, `NumInput`, `CodeBlock`, `CodeReveal`
 
 ## 배포
 - Vercel (정적 빌드)
