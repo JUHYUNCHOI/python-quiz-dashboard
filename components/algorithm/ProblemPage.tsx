@@ -1,13 +1,23 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
 import type { AlgoTopic, AlgoProblem } from "@/data/algorithm/types"
 import { CodeStepper } from "./CodeStepper"
 import { HintSystem } from "./HintSystem"
-import { SimPlayer } from "./simulations/SimPlayer"
-import { getSim } from "./simulations"
+import { AlgoTopicViz } from "./AlgoTopicViz"
 import { useAlgoProgress } from "@/hooks/use-algo-progress"
+
+function injectAlgoStyle() {
+  if (typeof document === 'undefined') return
+  const id = 'algo-style-link'
+  if (document.getElementById(id)) return
+  const link = document.createElement('link')
+  link.id = id
+  link.rel = 'stylesheet'
+  link.href = '/algo-style.css'
+  document.head.appendChild(link)
+}
 
 type Tab = 'problem' | 'sim' | 'think' | 'code'
 
@@ -22,12 +32,14 @@ export function ProblemPage({ topic, problem, onBack }: Props) {
   const [lang, setLang] = useState<'python' | 'cpp'>('python')
   const { isComplete, markComplete } = useAlgoProgress()
 
-  const sim = problem.sim ? getSim(problem.sim.type) : undefined
+  useEffect(() => { injectAlgoStyle() }, [])
+
+  const hasSim = !!problem.sim
   const done = isComplete(problem.id)
 
   const tabs: { id: Tab; label: string; emoji: string; hidden?: boolean }[] = [
     { id: 'problem', label: '문제',   emoji: '📋' },
-    { id: 'sim',     label: '시뮬',   emoji: '▶️', hidden: !sim },
+    { id: 'sim',     label: '시뮬',   emoji: '▶️', hidden: !hasSim },
     { id: 'think',   label: '힌트',   emoji: '💡' },
     { id: 'code',    label: '코드',   emoji: '💻' },
   ]
@@ -95,7 +107,7 @@ export function ProblemPage({ topic, problem, onBack }: Props) {
             {problem.simIntro && (
               <div className="bg-orange-50 border border-orange-100 rounded-xl p-3 mb-4 text-sm text-orange-700">
                 💡 {problem.simIntro}
-                {sim && (
+                {hasSim && (
                   <button
                     onClick={() => setTab('sim')}
                     className="ml-2 underline font-medium hover:text-orange-900"
@@ -106,17 +118,14 @@ export function ProblemPage({ topic, problem, onBack }: Props) {
               </div>
             )}
             <div
-              className="prose prose-sm max-w-none"
+              className="algo-scope"
               dangerouslySetInnerHTML={{ __html: problem.descriptionHTML }}
             />
           </div>
         )}
 
-        {tab === 'sim' && sim && (
-          <div className="bg-white rounded-2xl border border-gray-100 p-5">
-            <h2 className="text-base font-bold text-gray-800 mb-3">{sim.title}</h2>
-            <SimPlayer sim={sim} />
-          </div>
+        {tab === 'sim' && hasSim && (
+          <AlgoTopicViz topicId={topic.id} problemId={problem.id} />
         )}
 
         {tab === 'think' && (
