@@ -289,7 +289,7 @@ cout << (char)n << endl;  // B   (int → char: ASCII 코드 → 글자)
           id: "ch2-casting-q2",
           type: "quiz",
           title: "char 캐스팅!",
-          content: `다음 코드의 출력 결과는?\n\n\`\`\`cpp\nint n = 66;\ncout << (char)n << endl;\n\`\`\``,
+          content: `다음 코드의 출력 결과는?\n\n\`\`\`cpp\n// 참고: 'A' = 65\nint n = 66;\ncout << (char)n << endl;\n\`\`\``,
           options: ["66", "B", "A", "에러"],
           answer: 1,
           explanation: "(char)66은 ASCII 코드 66에 해당하는 글자 'B'를 출력해요. 'A'=65, 'B'=66, 'C'=67 순서예요."
