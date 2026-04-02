@@ -304,7 +304,7 @@ cout << (char)n << endl;  // B   (int → char: ASCII code → character)
           id: "ch2-casting-q2",
           type: "quiz",
           title: "char casting!",
-          content: `What does this code print?\n\n\`\`\`cpp\nint n = 66;\ncout << (char)n << endl;\n\`\`\``,
+          content: `What does this code print?\n\n\`\`\`cpp\n// Note: 'A' = 65\nint n = 66;\ncout << (char)n << endl;\n\`\`\``,
           options: ["66", "B", "A", "Error"],
           answer: 1,
           explanation: "(char)66 prints the character with ASCII code 66, which is 'B'. 'A'=65, 'B'=66, 'C'=67."
@@ -380,10 +380,14 @@ string rawMultiplier = "1.5"; // multiplier as a string
 2. Convert \`rawMultiplier\` to a double and print it doubled (1.5 × 2 = 3)
 3. Convert the damage (50) to a string using \`to_string()\` and **concatenate** \`" damage!"\` to print it
 
-💡 **String concatenation (+)** — joining two strings together.
+💡 **Hint** — pass the variable directly into the function:
 \`\`\`cpp
-int dmg = 50;
-cout << to_string(dmg) + " damage!" << endl;   // 50 damage!
+int dmg = stoi(rawDamage);         // rawDamage string → int
+double mult = stod(rawMultiplier); // rawMultiplier string → double
+\`\`\`
+String concatenation: convert a number to string first with \`to_string()\`:
+\`\`\`cpp
+cout << to_string(dmg * 2) + " damage!" << endl;
 \`\`\``,
           starterCode: `#include <iostream>
 #include <string>

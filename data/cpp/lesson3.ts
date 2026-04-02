@@ -365,16 +365,14 @@ string rawMultiplier = "1.5"; // 문자열로 된 배율
 2. \`rawMultiplier\`를 실수로 변환해서 2배한 값을 출력하세요 (1.5 × 2 = 3)
 3. 계산한 데미지(50)를 \`to_string()\`으로 문자열로 변환하고, **문자열 연결(+)** 로 \`"의 데미지!"\`을 붙여서 출력하세요
 
-💡 **문자열 연결 (+)** — 두 문자열을 이어붙이는 것을 **문자열 연결**이라고 해요.
+💡 **힌트** — 변수를 그대로 함수에 넣으면 돼요:
 \`\`\`cpp
-string a = "드래곤";
-string b = " 등장!";
-cout << a + b << endl;    // 드래곤 등장!
+int dmg = stoi(rawDamage);        // rawDamage 문자열 → 정수
+double mult = stod(rawMultiplier); // rawMultiplier 문자열 → 실수
 \`\`\`
-숫자를 문자열에 붙이려면 먼저 \`to_string()\`으로 변환해야 해요:
+문자열 연결: 숫자를 문자열에 붙이려면 먼저 \`to_string()\`으로 변환하세요:
 \`\`\`cpp
-int dmg = 50;
-cout << to_string(dmg) + "의 데미지!" << endl;   // 50의 데미지!
+cout << to_string(dmg * 2) + "의 데미지!" << endl;
 \`\`\``,
           starterCode: `#include <iostream>
 #include <string>
