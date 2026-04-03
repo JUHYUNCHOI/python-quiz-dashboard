@@ -176,7 +176,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 17,
-    lessonId: 3,
+    lessonId: 9,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `x = 10\ny = x\nx += 5\nprint("x=" + str(x) + ", y=" + str(y))`,
@@ -189,7 +189,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 18,
-    lessonId: 16,
+    lessonId: 33,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `a, *b, c = [1, 2, 3, 4, 5]\nprint(b)`,
@@ -799,8 +799,8 @@ export const pythonQuestions: QuizQuestion[] = [
     question: "다음 코드의 출력 결과는?",
     code: `for i in range(1, 4):\n    for j in range(1, 4):\n        if i * j > 4:\n            break\n    else:\n        print(i, end=" ")`,
     options: ["1 2", "1 2 3", "1", "3"],
-    correctAnswer: 0,
-    explanation: "for-else에서 else는 break 없이 내부 루프가 끝났을 때 실행됩니다. i=1,2일 때 i*j가 4를 넘지 않아 else 실행. i=3일 때 j=2에서 break.",
+    correctAnswer: 2,
+    explanation: "for-else에서 else는 break 없이 내부 루프가 끝났을 때 실행됩니다. i=1일 때 모든 i*j가 최대 1×3=3≤4라서 break 없이 완료 → else 실행. i=2일 때 j=3에서 2×3=6>4로 break 발생 → else 미실행. i=3일 때 j=2에서 3×2=6>4로 break 발생 → else 미실행. 따라서 '1'만 출력됩니다.",
     keyConceptTitle: "for-else와 break의 관계",
     keyConceptDescription: "for-else에서 else는 '루프가 break 없이 끝났을 때' 실행됩니다. break가 발생하면 else를 건너뜁니다.",
     relatedTopics: ["for-else", "break", "중첩 반복문"],
@@ -889,7 +889,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 71,
-    lessonId: 14,
+    lessonId: 13,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `for i in range(1, 6):\n    if i % 2 == 0:\n        continue\n    print(i, end=" ")`,
@@ -1144,9 +1144,9 @@ export const pythonQuestions: QuizQuestion[] = [
     keyConceptDescription: "sort()는 리스트를 직접 변경하고, sorted()는 새 리스트를 반환합니다. reverse=True를 넣으면 내림차순입니다.",
     codeComparison: {
       wrong: `nums.sort()     # 원본 변경, None 반환\nx = nums.sort() # x는 None!`,
-      correct: `nums.sort()       # 원본 직접 정렬\nx = sorted(nums)  # 새 리스트 반환`,
+      correct: `nums.sort()       # 원본 직접 정렬\nprint(nums)       # 정렬된 결과 출력`,
     },
-    relatedTopics: ["sorted()", "reverse", "key 매개변수"],
+    relatedTopics: ["sort()", "reverse", "key 매개변수"],
   },
   {
     id: 89,
@@ -2106,7 +2106,7 @@ export const pythonQuestions: QuizQuestion[] = [
     keyConceptDescription: "rotate(n)은 양수면 오른쪽, 음수면 왼쪽으로 n칸 회전합니다.",
     relatedTopics: ["deque", "rotate", "순환 버퍼"],
   },
-  // ── Lesson 25: 2D 리스트 ──
+  // ── Lesson 17: 2D 리스트 ──
   {
     id: 161,
     lessonId: 17,
@@ -2350,7 +2350,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 178,
-    lessonId: 33,
+    lessonId: 34,
     animationKey: "keywordArgVisualizer",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
@@ -2409,7 +2409,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 182,
-    lessonId: 33,
+    lessonId: 34,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `def apply(func, *args, **kwargs):\n    return func(*args, **kwargs)\n\ndef add(a, b, c=0):\n    return a + b + c\n\nprint(apply(add, 1, 2, c=10))`,
@@ -2610,7 +2610,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 201,
-    lessonId: 36,
+    lessonId: 41,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `def flatten(lst):\n    result = []\n    for item in lst:\n        if isinstance(item, list):\n            result.extend(flatten(item))\n        else:\n            result.append(item)\n    return result\n\nprint(flatten([1, [2, [3, 4]], 5]))`,
@@ -2924,7 +2924,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 226,
-    lessonId: 41,
+    lessonId: 42,
     animationKey: "pyClassBuilder",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
@@ -2938,7 +2938,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 227,
-    lessonId: 41,
+    lessonId: 42,
     animationKey: "pyClassBuilder",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
@@ -3471,7 +3471,7 @@ export const pythonQuestions: QuizQuestion[] = [
   // ── 추가 딕셔너리 심화 (Lesson 20) ──
   {
     id: 274,
-    lessonId: 20,
+    lessonId: 34,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `d = {"a": 1, "b": 2}\nnew = {**d, "c": 3, "a": 10}\nprint(new)`,
@@ -5044,7 +5044,7 @@ print(numbers[0] + numbers[1])`,
     relatedTopics: ["map()", "int()", "split()", "리스트"],
   },
 
-  // ── 추가 2D 리스트 (Lesson 25) ──
+  // ── 추가 2D 리스트 (Lesson 17) ──
   {
     id: 300,
     lessonId: 17,
@@ -5103,7 +5103,7 @@ print('3')`,
   },
   {
     id: 397,
-    lessonId: 16,
+    lessonId: 35,
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
     code: `nums = [1, 2, 3, 4, 5]
@@ -5117,7 +5117,7 @@ print(*nums)`,
   },
   {
     id: 398,
-    lessonId: 16,
+    lessonId: 35,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `nums = [10, 20, 30]
@@ -5443,7 +5443,7 @@ print(f'{doc} 인쇄 완료')`,
   },
   {
     id: 417,
-    lessonId: 32,
+    lessonId: 41,
     difficulty: "보통",
     question: "다음 코드에서 is_empty()가 True를 반환하는 조건은?",
     code: `from collections import deque
