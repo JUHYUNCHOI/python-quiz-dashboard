@@ -508,7 +508,6 @@ int main() {
   {
     id: 38,
     lessonId: "cpp-5",
-    animationKey: "cppIfBuilder",
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3306,7 +3305,7 @@ int main() {
   },
   {
     id: 232,
-    lessonId: "cpp-23",
+    lessonId: "cpp-17",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -5035,7 +5034,7 @@ int main() {
     id: 324,
     lessonId: "cpp-4",
     difficulty: "보통",
-    question: "다음 코드에서 '김철수'를 입력했을 때 출력 결과는?",
+    question: "다음 코드에서 '김 철수'를 입력했을 때 출력 결과는?",
     code: `#include <iostream>
 #include <string>
 using namespace std;
@@ -5046,9 +5045,9 @@ int main() {
     cout << "안녕, " << name << "!" << endl;
     return 0;
 }`,
-    options: ["안녕, 김철수!", "안녕, 김!", "안녕, !", "런타임 오류"],
+    options: ["안녕, 김 철수!", "안녕, 김!", "안녕, !", "런타임 오류"],
     correctAnswer: 1,
-    explanation: "cin >>은 공백(띄어쓰기)을 기준으로 입력을 분리합니다. '김철수'에서 '김'까지만 읽힙니다. 띄어쓰기가 포함된 이름을 전부 읽으려면 getline()을 써야 합니다.",
+    explanation: "cin >>은 공백(띄어쓰기)을 기준으로 입력을 분리합니다. '김 철수'에서 공백 전의 '김'까지만 읽힙니다. 띄어쓰기가 포함된 이름을 전부 읽으려면 getline()을 써야 합니다.",
     keyConceptTitle: "cin >>의 공백 처리",
     keyConceptDescription: "cin >>은 공백, 탭, 엔터를 구분자로 사용합니다. 공백이 포함된 문자열 전체를 읽으려면 getline(cin, 변수)을 사용해야 합니다.",
     relatedTopics: ["cin", "공백", "문자열 입력"],
@@ -5969,8 +5968,8 @@ cout << result << "\\n"; // 출력만`,
     code: `#include <cstdlib>  // rand, srand
 #include <ctime>    // time
 
-srand(time(nullptr));  // 시드 설정
-int answer = ___;      // 1~100 사이`,
+srand(time(0));    // 시드 설정
+int answer = ___;  // 1~100 사이`,
     options: [
       "rand() + 1",
       "rand() % 100 + 1",
@@ -5978,9 +5977,9 @@ int answer = ___;      // 1~100 사이`,
       "rand(1, 100)",
     ],
     correctAnswer: 1,
-    explanation: "rand() % 100은 0~99를 반환합니다. +1을 하면 1~100이 됩니다. srand(time(nullptr))로 매번 다른 시드를 설정해야 진짜 랜덤이 됩니다.",
+    explanation: "rand() % 100은 0~99를 반환합니다. +1을 하면 1~100이 됩니다. srand(time(0))으로 매번 다른 시드를 설정해야 진짜 랜덤이 됩니다.",
     keyConceptTitle: "rand() % N + 1 패턴",
-    keyConceptDescription: "rand() % N: 0~(N-1). rand() % N + 1: 1~N. rand() % 100 + 1: 1~100. srand(time(nullptr))로 매번 다른 시드를 설정합니다.",
+    keyConceptDescription: "rand() % N: 0~(N-1). rand() % N + 1: 1~N. rand() % 100 + 1: 1~100. srand(time(0))으로 매번 다른 시드를 설정합니다.",
     relatedTopics: ["rand()", "srand()", "난수 생성", "% 연산"],
   },
   {
@@ -8749,7 +8748,7 @@ int main() {
   },
   {
     id: 532,
-    lessonId: "cpp-9",
+    lessonId: "cpp-13",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -11999,7 +11998,7 @@ cout << count;`,
   },
   {
     id: 658,
-    lessonId: "cpp-7",
+    lessonId: "cpp-21",
     difficulty: "어려움",
     question: "N×M 격자 각 행의 합을 출력하는 코드에서 빈칸에 들어갈 알맞은 코드는?",
     code: `int grid[3][3] = {{1,2,3},{4,5,6},{7,8,9}};
@@ -12025,13 +12024,12 @@ for (int i = 0; i < N; i++) {
     id: 659,
     lessonId: "cpp-7",
     difficulty: "어려움",
-    question: "중첩 루프에서 바깥 루프도 탈출하려 할 때 올바른 패턴은?",
-    code: `// 격자에서 첫 번째 음수를 찾으면 두 루프 모두 종료
-int grid[3][3] = {{1,2,3},{4,-1,6},{7,8,9}};
+    question: "중첩 루프에서 바깥 루프도 탈출하려 할 때 올바른 패턴은? (i*j > 10인 첫 번째 쌍을 출력하고 종료)",
+    code: `// i*j 값이 10을 넘는 첫 번째 (i,j)를 찾으면 두 루프 종료
 bool found = false;
-for (int i = 0; i < 3 && !found; i++) {
-    for (int j = 0; j < 3; j++) {
-        if (grid[i][j] < 0) {
+for (int i = 1; i <= 5 && !found; i++) {
+    for (int j = 1; j <= 5; j++) {
+        if (i * j > 10) {
             cout << i << " " << j;
             /* 빈칸 */
         }
@@ -12488,15 +12486,15 @@ if (x > 0)
 else
     cout << "negative";`,
     options: ["big", "negative", "아무것도 출력 안 됨", "컴파일 오류"],
-    correctAnswer: 2,
-    explanation: "들여쓰기가 오해를 일으킵니다. C++에서 else는 가장 가까운 if와 짝을 이룹니다(dangling else). 따라서 else는 'if(x > 10)'과 짝입니다. x=5이면 outer if(x>0) 진입, inner if(x>10) 거짓 → inner else인 'negative' 실행? 아닙니다 — else가 inner if와 짝이므로 x=5일 때 inner if 거짓 → inner else 실행 → 'negative' 출력됩니다.",
+    correctAnswer: 1,
+    explanation: "C++에서 else는 항상 가장 가까운 if와 짝을 이룹니다. 들여쓰기와 달리, 이 코드에서 else는 'if(x > 10)'과 짝입니다. x=5이면: outer if(x>0) → 참 → 진입, inner if(x>10) → 거짓 → else 실행 → 'negative' 출력됩니다.",
     keyConceptTitle: "dangling else",
     keyConceptDescription: "else는 항상 코드상 가장 가까운(짝이 없는) if와 연결됩니다. 들여쓰기에 속지 마세요. 명확하게 하려면 중괄호 {}를 사용하세요.",
     relatedTopics: ["dangling else", "중괄호", "if-else 규칙"],
   },
   {
     id: 641,
-    lessonId: "cpp-6",
+    lessonId: "cpp-13",
     difficulty: "보통",
     question: "다음 코드가 런타임 오류(null 포인터) 없이 안전하게 동작하는 이유는?",
     code: `int* ptr = nullptr;
