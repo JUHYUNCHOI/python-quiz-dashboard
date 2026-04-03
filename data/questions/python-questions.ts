@@ -3590,7 +3590,7 @@ export const pythonQuestions: QuizQuestion[] = [
     code: `s = "Hello, World!"\nprint(s[::2])`,
     options: ["Hlo ol!", "Hello", "el,Wrd", "오류"],
     correctAnswer: 0,
-    explanation: "[::2]는 인덱스 0, 2, 4, 6, 8, 10, 12의 문자를 선택합니다: H, l, o, (, )W, r, d, !",
+    explanation: "[::2]는 인덱스 0, 2, 4, 6, 8, 10, 12의 문자를 선택합니다: H, l, o, ' '(공백), o, l, !",
     keyConceptTitle: "문자열 스텝 슬라이싱",
     keyConceptDescription: "문자열에도 [::스텝]을 적용할 수 있습니다. 매 n번째 문자를 추출하거나 역순으로 만들 때 유용합니다.",
     relatedTopics: ["스텝 슬라이싱", "문자열", "패턴 추출"],
