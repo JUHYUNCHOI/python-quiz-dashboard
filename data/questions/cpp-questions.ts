@@ -96,7 +96,7 @@ int main() {
   },
   {
     id: 5,
-    lessonId: "cpp-1",
+    lessonId: "cpp-3",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -528,7 +528,7 @@ int main() {
   },
   {
     id: 39,
-    lessonId: "cpp-5",
+    lessonId: "cpp-6",
     animationKey: "cppIfBuilder",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
@@ -1606,10 +1606,10 @@ for (int x : v) x = x * 2;
 cout << v[0];`,
     options: ["10", "20", "30", "에러"],
     correctAnswer: 0,
-    explanation: "int x는 복사본이에요. x를 바꿔도 원본 v는 그대로 10! 원본을 바꾸려면 int& x 를 써야 해요.",
-    keyConceptTitle: "range-for 복사 vs 참조",
-    keyConceptDescription: "for (int x : v)는 복사본 — 원본 변경 없음. for (int& x : v)는 참조 — 원본 직접 수정.",
-    relatedTopics: ["range-for", "참조", "int&"],
+    explanation: "for (int x : v)에서 x는 복사본입니다. x = x * 2로 복사본을 바꿔도 원본 v[0]은 그대로 10입니다.",
+    keyConceptTitle: "range-for 복사본",
+    keyConceptDescription: "for (int x : v)는 각 원소의 복사본을 x에 담습니다. x를 아무리 수정해도 원본 벡터는 변경되지 않습니다.",
+    relatedTopics: ["range-for", "auto", "복사본"],
   },
   {
     id: 101,
@@ -1880,7 +1880,7 @@ int main() {
   },
   {
     id: 121,
-    lessonId: "cpp-11",
+    lessonId: "cpp-12",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -2018,7 +2018,7 @@ int main() {
   },
   {
     id: 157,
-    lessonId: "cpp-4",
+    lessonId: "cpp-8",
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -2317,24 +2317,22 @@ int main() {
     code: `#include <iostream>
 using namespace std;
 
-enum Color { RED, GREEN, BLUE };
-
 int main() {
-    Color c = GREEN;
-    switch (c) {
-        case RED: cout << "빨강"; break;
-        case GREEN: cout << "초록"; break;
-        case BLUE: cout << "파랑"; break;
+    int grade = 2;
+    switch (grade) {
+        case 1: cout << "A"; break;
+        case 2: cout << "B"; break;
+        case 3: cout << "C"; break;
+        default: cout << "F";
     }
-    cout << " (" << c << ")";
     return 0;
 }`,
-    options: ["초록 (GREEN)", "초록 (1)", "초록 (0)", "빨강 (0)"],
+    options: ["A", "B", "C", "F"],
     correctAnswer: 1,
-    explanation: "enum에서 GREEN=1 (RED=0부터 시작). cout << c는 정수값 1을 출력합니다.",
-    keyConceptTitle: "enum 열거형",
-    keyConceptDescription: "enum은 기본적으로 0부터 시작하는 정수입니다. cout으로 출력하면 정수값이 나옵니다.",
-    relatedTopics: ["enum", "열거형", "switch"],
+    explanation: "grade = 2이므로 case 2:에 해당하는 'B'가 출력됩니다. break가 있으므로 다음 case로 넘어가지 않습니다.",
+    keyConceptTitle: "switch/case — 정수 분기",
+    keyConceptDescription: "switch문은 정수 값에 따라 다른 case를 실행합니다. break가 없으면 다음 case로 흘러내립니다(fall-through).",
+    relatedTopics: ["switch", "case", "break", "default"],
   },
   {
     id: 172,
@@ -2782,25 +2780,25 @@ int main() {
     id: 208,
     lessonId: "cpp-16",
     difficulty: "보통",
-    question: "다음 코드에서 auto와 structured binding의 출력 결과는?",
+    question: "다음 코드에서 auto&를 사용한 map 순회의 출력 결과는?",
     code: `#include <iostream>
 #include <map>
 using namespace std;
 
 int main() {
     map<string, int> m = {{"a", 1}, {"b", 2}, {"c", 3}};
-    for (auto& [key, val] : m) {
-        val *= 10;
+    for (auto& p : m) {
+        p.second *= 10;
     }
     cout << m["b"];
     return 0;
 }`,
     options: ["2", "20", "10", "컴파일 오류"],
     correctAnswer: 1,
-    explanation: "auto& [key, val]은 C++17 structured binding으로 pair의 first/second를 직접 바인딩합니다. val *= 10으로 원본이 수정됩니다.",
-    keyConceptTitle: "Structured Binding (C++17)",
-    keyConceptDescription: "auto [key, val] = pair 또는 tuple의 요소를 개별 변수에 바인딩합니다. &를 쓰면 참조로 원본 수정 가능.",
-    relatedTopics: ["structured binding", "auto", "C++17"],
+    explanation: "auto& p로 map의 각 pair를 참조로 받으면 p.second를 수정할 때 원본 map이 변경됩니다. m[\"b\"]의 원래 값 2가 10배인 20이 됩니다.",
+    keyConceptTitle: "auto&로 map 값 수정",
+    keyConceptDescription: "map을 range-for로 순회할 때 auto& p를 쓰면 p.first(키), p.second(값)에 접근해 원본을 수정할 수 있습니다.",
+    relatedTopics: ["map", "auto", "range-for", "참조"],
   },
   {
     id: 209,
@@ -2935,7 +2933,7 @@ int main() {
   },
   {
     id: 214,
-    lessonId: "cpp-17",
+    lessonId: "cpp-23",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -2958,7 +2956,7 @@ int main() {
   },
   {
     id: 215,
-    lessonId: "cpp-20",
+    lessonId: "cpp-17",
     difficulty: "보통",
     question: "다음 중 벡터에서 특정 위치에 요소를 삽입하는 올바른 방법은?",
     code: `vector<int> v = {1, 2, 3};
@@ -2976,7 +2974,7 @@ int main() {
   },
   {
     id: 216,
-    lessonId: "cpp-20",
+    lessonId: "cpp-17",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -2999,7 +2997,7 @@ int main() {
   },
   {
     id: 217,
-    lessonId: "cpp-20",
+    lessonId: "cpp-17",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3096,7 +3094,7 @@ int main() {
   },
   {
     id: 222,
-    lessonId: "cpp-20",
+    lessonId: "cpp-17",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3210,7 +3208,7 @@ int main() {
   },
   {
     id: 227,
-    lessonId: "cpp-17",
+    lessonId: "cpp-23",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3308,7 +3306,7 @@ int main() {
   },
   {
     id: 232,
-    lessonId: "cpp-17",
+    lessonId: "cpp-23",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3333,7 +3331,7 @@ int main() {
   },
   {
     id: 234,
-    lessonId: "cpp-17",
+    lessonId: "cpp-23",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3422,7 +3420,7 @@ sort(v.begin(), v.end(), cmp);  // 별도 함수`,
   },
   {
     id: 237,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 이진 탐색 코드에서 정렬된 배열 {1,3,5,7,9}에서 target=6일 때 반환값은?",
     code: `int binarySearch(vector<int>& v, int target) {
@@ -3491,7 +3489,7 @@ int main() {
   },
   {
     id: 240,
-    lessonId: "cpp-20",
+    lessonId: "cpp-17",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3520,7 +3518,7 @@ lower_bound(v.begin(), v.end(), 4);  // 정렬 후 사용`,
   },
   {
     id: 241,
-    lessonId: "cpp-17",
+    lessonId: "cpp-23",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3544,7 +3542,7 @@ int main() {
   },
   {
     id: 242,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -3867,7 +3865,7 @@ int main() {
   },
   {
     id: 258,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "이진 탐색(Binary Search)의 시간 복잡도는?",
     code: `// 정렬된 배열에서 값을 찾는 이진 탐색
@@ -3911,7 +3909,7 @@ for (int i = 0; i < n-1; i++) {
   },
   {
     id: 260,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 BFS 코드에서 빈칸에 들어갈 자료구조는?",
     code: `#include <iostream>
@@ -3949,7 +3947,7 @@ void bfs(vector<vector<int>>& graph, int start) {
   },
   {
     id: 261,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 DFS 코드의 방문 순서로 올바른 것은? (인접 리스트가 오름차순 정렬된 경우)",
     code: `#include <iostream>
@@ -3982,7 +3980,7 @@ int main() { dfs(0); }`,
   },
   {
     id: 262,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 DP(동적 프로그래밍) 코드는 무엇을 계산하나요?",
     code: `#include <iostream>
@@ -4007,7 +4005,7 @@ int main() {
   },
   {
     id: 263,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "배낭 문제(Knapsack Problem)에서 DP 테이블 dp[i][w]의 의미는?",
     code: `// 0-1 Knapsack DP
@@ -4030,7 +4028,7 @@ for (int i = 1; i <= n; i++) {
   },
   {
     id: 264,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 그리디 알고리즘은 어떤 문제를 풀고 있나요?",
     code: `#include <iostream>
@@ -4144,7 +4142,7 @@ void mergeSort(int arr[], int l, int r) {
   },
   {
     id: 269,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 투 포인터 코드는 무엇을 수행하나요?",
     code: `#include <iostream>
@@ -4174,7 +4172,7 @@ int main() {
   },
   {
     id: 270,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 슬라이딩 윈도우 코드에서 크기 3인 윈도우의 최대 합은?",
     code: `#include <iostream>
@@ -4204,7 +4202,7 @@ int main() {
   },
   {
     id: 271,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 백트래킹 코드는 N=3일 때 무엇을 출력하나요?",
     code: `#include <iostream>
@@ -4243,7 +4241,7 @@ int main() {
   },
   {
     id: 272,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "N개에서 R개를 고르는 조합의 재귀식으로 올바른 것은?",
     code: `int C(int n, int r) {
@@ -4260,7 +4258,7 @@ int main() {
   },
   {
     id: 273,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "그래프를 인접 행렬과 인접 리스트로 표현할 때의 차이로 올바른 것은?",
     code: `// 인접 행렬
@@ -4277,7 +4275,7 @@ vector<vector<int>> adj(N);  // adj[i] = i에서 갈 수 있는 노드들`,
   },
   {
     id: 274,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 유니온 파인드 코드에서 find 함수의 역할은?",
     code: `int parent[1001];
@@ -4301,7 +4299,7 @@ void unite(int a, int b) {
   },
   {
     id: 275,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 prefix sum (누적 합) 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -4333,7 +4331,7 @@ int sum = prefix[r+1] - prefix[l];`,
   },
   {
     id: 276,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 코드는 어떤 알고리즘 기법을 사용하나요?",
     code: `#include <iostream>
@@ -4364,7 +4362,7 @@ int main() {
   },
   {
     id: 277,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 재귀 함수는 무엇을 계산하나요?",
     code: `#include <iostream>
@@ -4388,7 +4386,7 @@ int main() {
   },
   {
     id: 278,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 코드에서 N=4일 때 재귀 호출 횟수(fib 함수 호출 총 횟수)는?",
     code: `#include <iostream>
@@ -4426,7 +4424,7 @@ int fib(int n) {
   },
   {
     id: 279,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 코드에서 N=5일 때 배열에 1~5의 합을 저장하는 prefix sum의 결과는?",
     code: `#include <iostream>
@@ -4450,7 +4448,7 @@ int main() {
   },
   {
     id: 280,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 코드에서 그래프의 간선 수(E)를 구하면?",
     code: `#include <iostream>
@@ -4483,7 +4481,7 @@ int main() {
   },
   {
     id: 281,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 코드에서 N=4일 때 이진수 조합(부분집합)의 개수는?",
     code: `#include <iostream>
@@ -4507,7 +4505,7 @@ int main() {
   },
   {
     id: 282,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 코드의 시간 복잡도는?",
     code: `#include <iostream>
@@ -4540,7 +4538,7 @@ int main() {
   },
   {
     id: 283,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -4570,7 +4568,7 @@ int main() {
   },
   {
     id: 284,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -4594,7 +4592,7 @@ int main() {
   },
   {
     id: 285,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -4668,7 +4666,7 @@ int main() {
   },
   {
     id: 288,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 재귀 코드의 시간 복잡도는?",
     code: `int fib(int n) {
@@ -4685,7 +4683,7 @@ int main() {
   },
   {
     id: 289,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -4719,7 +4717,7 @@ int main() {
   },
   {
     id: 290,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -4768,7 +4766,7 @@ int main() {
   },
   {
     id: 292,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -4797,7 +4795,7 @@ int main() {
   },
   {
     id: 293,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -4829,7 +4827,7 @@ int main() {
   },
   {
     id: 294,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 코드의 시간 복잡도는?",
     code: `int power(int base, int exp) {
@@ -4879,7 +4877,7 @@ int main() {
   },
   {
     id: 296,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는? (그래프 BFS)",
     code: `#include <iostream>
@@ -4914,7 +4912,7 @@ int main() {
   },
   {
     id: 297,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는? (DFS)",
     code: `#include <iostream>
@@ -4946,7 +4944,7 @@ int main() {
   },
   {
     id: 298,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는? (DP: 최장 증가 부분 수열 길이)",
     code: `#include <iostream>
@@ -4974,7 +4972,7 @@ int main() {
   },
   {
     id: 299,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -5000,7 +4998,7 @@ int main() {
   },
   {
     id: 300,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 USACO 스타일 코드에서 그리디 알고리즘의 결과는?\n\n활동 선택 문제: N개의 활동이 (시작, 끝) 시간으로 주어질 때 겹치지 않게 최대 몇 개를 선택할 수 있는가?",
     code: `#include <iostream>
@@ -5760,7 +5758,7 @@ int main() {
   },
   {
     id: 347,
-    lessonId: "cpp-1",
+    lessonId: "cpp-5",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -5802,7 +5800,7 @@ int main() {
   },
   {
     id: 334,
-    lessonId: "cpp-10",
+    lessonId: "cpp-12",
     difficulty: "보통",
     question: "벡터의 원소를 직접 수정하려면 어떻게 해야 하는가?",
     code: `#include <iostream>
@@ -6201,7 +6199,7 @@ void printDouble(int x) {
   },
   {
     id: 380,
-    lessonId: "cpp-17",
+    lessonId: "cpp-23",
     difficulty: "쉬움",
     question: "vector를 오름차순 정렬하는 올바른 코드는?",
     code: "",
@@ -6214,7 +6212,7 @@ void printDouble(int x) {
   },
   {
     id: 381,
-    lessonId: "cpp-17",
+    lessonId: "cpp-23",
     difficulty: "쉬움",
     question: "vector를 내림차순으로 정렬하는 올바른 코드는?",
     code: "",
@@ -6232,7 +6230,7 @@ void printDouble(int x) {
   },
   {
     id: 382,
-    lessonId: "cpp-17",
+    lessonId: "cpp-23",
     difficulty: "쉬움",
     question: "다음 코드 실행 후 v[0]의 값은?",
     code: `#include <algorithm>\n#include <vector>\nusing namespace std;\nint main() {\n    vector<int> v = {5, 2, 8, 1, 9};\n    sort(v.begin(), v.end());\n    return 0;\n}`,
@@ -6312,7 +6310,7 @@ void printDouble(int x) {
   },
   {
     id: 387,
-    lessonId: "cpp-17",
+    lessonId: "cpp-23",
     difficulty: "쉬움",
     question: "C-style 배열을 sort할 때 올바른 코드는? (int arr[5])",
     code: "",
@@ -6787,7 +6785,7 @@ void printDouble(int x) {
   },
   {
     id: 418,
-    lessonId: "cpp-10",
+    lessonId: "cpp-12",
     difficulty: "보통",
     question: "벡터의 모든 원소를 2배로 만들려면?",
     code: `vector<int> v = {1, 2, 3};`,
@@ -7113,7 +7111,7 @@ void printDouble(int x) {
   },
   {
     id: 440,
-    lessonId: "cpp-11",
+    lessonId: "cpp-12",
     difficulty: "보통",
     question: "문자열 전체를 대문자로 바꾸는 올바른 코드는?",
     code: 'string s = "hello";',
@@ -7320,7 +7318,7 @@ void printDouble(int x) {
   // ── cpp-10 추가: const int& 패턴 ──
   {
     id: 464,
-    lessonId: "cpp-10",
+    lessonId: "cpp-12",
     difficulty: "보통",
     question: "이름 목록을 출력만 할 때 가장 적절한 패턴은?",
     code: `vector<string> names = {"Alice", "Bob", "Charlie"};
@@ -7342,7 +7340,7 @@ for (___________ name : names) {
   },
   {
     id: 465,
-    lessonId: "cpp-10",
+    lessonId: "cpp-12",
     difficulty: "보통",
     question: "다음 코드 실행 후 v의 값은?",
     code: `vector<int> v = {1, 2, 3};
@@ -7363,7 +7361,7 @@ for (const int& x : v) {
   },
   {
     id: 466,
-    lessonId: "cpp-10",
+    lessonId: "cpp-12",
     difficulty: "쉬움",
     question: "for (int x : v) vs for (int& x : v)의 차이로 올바른 것은?",
     code: `vector<int> v = {10, 20, 30};`,
@@ -9374,7 +9372,7 @@ int main() {
   // ── cpp-14 (탐색 알고리즘) ──────────────────────────────────────────────
   {
     id: 556,
-    lessonId: "cpp-20",
+    lessonId: "cpp-17",
     difficulty: "쉬움",
     question: "선형 탐색(linear search)의 설명으로 올바른 것은?",
     code: `// 선형 탐색 예시
@@ -9397,7 +9395,7 @@ int linearSearch(int arr[], int n, int target) {
   },
   {
     id: 557,
-    lessonId: "cpp-20",
+    lessonId: "cpp-17",
     difficulty: "쉬움",
     question: "선형 탐색에서 원소를 찾지 못했을 때 반환하는 관례적인 값은?",
     code: `int linearSearch(int arr[], int n, int target) {
@@ -9414,7 +9412,7 @@ int linearSearch(int arr[], int n, int target) {
   },
   {
     id: 558,
-    lessonId: "cpp-20",
+    lessonId: "cpp-17",
     difficulty: "보통",
     question: "다음 선형 탐색 코드에서 배열 {4, 2, 7, 1, 9}에서 target=7을 찾을 때 반환값은?",
     code: `int linearSearch(int arr[], int n, int target) {
@@ -9432,7 +9430,7 @@ int linearSearch(int arr[], int n, int target) {
   },
   {
     id: 559,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "보통",
     question: "이진 탐색(binary search)의 전제 조건은?",
     code: `// 이진 탐색 사용 조건
@@ -9451,7 +9449,7 @@ int arr2[] = {5, 1, 9, 3, 7};   // 가능?`,
   },
   {
     id: 560,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "보통",
     question: "다음 이진 탐색 코드에서 {1,3,5,7,9}에서 target=5를 탐색할 때 mid값의 변화 순서는?",
     code: `int binarySearch(int arr[], int n, int target) {
@@ -9478,7 +9476,7 @@ int arr2[] = {5, 1, 9, 3, 7};   // 가능?`,
   },
   {
     id: 561,
-    lessonId: "cpp-20",
+    lessonId: "cpp-17",
     difficulty: "보통",
     question: "선형 탐색의 시간 복잡도는?",
     code: `// N개의 원소가 있는 배열에서 선형 탐색
@@ -9493,7 +9491,7 @@ for (int i = 0; i < N; i++) {
   },
   {
     id: 562,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 이진 탐색에서 {2,4,6,8,10,12,14}에서 target=10 탐색 시 총 비교 횟수는?",
     code: `int binarySearch(int arr[], int n, int target) {
@@ -9515,7 +9513,7 @@ for (int i = 0; i < N; i++) {
   },
   {
     id: 563,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 코드에서 정렬되지 않은 배열에 이진 탐색을 적용했을 때 문제점은?",
     code: `int arr[] = {5, 2, 8, 1, 9, 3};  // 정렬 안 됨
@@ -9541,7 +9539,7 @@ int mid = (0 + 5) / 2;  // mid = 2
   },
   {
     id: 564,
-    lessonId: "cpp-20",
+    lessonId: "algo-preview",
     difficulty: "어려움",
     question: "다음 코드에서 이진 탐색의 오버플로우를 방지하는 mid 계산법은?",
     code: `// 두 가지 mid 계산 방법
@@ -11286,7 +11284,7 @@ int main() {
   },
   {
     id: 628,
-    lessonId: "cpp-15",
+    lessonId: "cpp-23",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `#include <iostream>
@@ -11353,7 +11351,7 @@ int main() {
   },
   {
     id: 631,
-    lessonId: "cpp-15",
+    lessonId: "cpp-23",
     difficulty: "어려움",
     question: "다음 코드에서 pair<int,int> 비교를 통한 정렬 결과로 v[1]은?",
     code: `#include <iostream>
@@ -11874,10 +11872,10 @@ cout << sum;`,
     id: 651,
     lessonId: "cpp-7",
     difficulty: "쉬움",
-    question: "벡터에서 값 7을 발견하면 즉시 중단하고 인덱스를 출력하는 코드에서 빈칸은?",
-    code: `vector<int> v = {3, 1, 7, 4, 9};
-for (int i = 0; i < v.size(); i++) {
-    if (v[i] == 7) {
+    question: "배열에서 값 7을 발견하면 즉시 중단하고 인덱스를 출력하는 코드에서 빈칸은?",
+    code: `int arr[] = {3, 1, 7, 4, 9};
+for (int i = 0; i < 5; i++) {
+    if (arr[i] == 7) {
         cout << i;
         /* 빈칸 */;
     }
@@ -12625,5 +12623,533 @@ bool inBounds(int r, int c) {
     keyConceptDescription: "격자 경계 검사 패턴: r >= 0 && r < N && c >= 0 && c < M. 네 조건 모두 &&로 연결. 이 패턴은 BFS/DFS/시뮬레이션 문제에서 반복적으로 등장합니다.",
     relatedTopics: ["격자", "경계 검사", "&&", "USACO", "배열 인덱스"],
   },
-];
+  // ── cpp-5/8/11/18 어려움 보강 (IDs 695–710) ──────────────────────────────
+  {
+    id: 695,
+    lessonId: "cpp-5",
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+using namespace std;
 
+int main() {
+    int a = 2, b = 3;
+    int result = a + b * 2 - 1 % b;
+    cout << result;
+    return 0;
+}`,
+    options: ["8", "9", "7", "10"],
+    correctAnswer: 2,
+    explanation: "연산자 우선순위: *(곱셈)과 %(나머지)가 +,-보다 먼저 계산됩니다. b*2 = 3*2 = 6, 1%b = 1%3 = 1. 이후 왼쪽에서 오른쪽으로: a + 6 - 1 = 2 + 6 - 1 = 7.",
+    keyConceptTitle: "연산자 우선순위",
+    keyConceptDescription: "*, /, %는 +, -보다 우선순위가 높아 먼저 계산됩니다. 같은 우선순위면 왼쪽에서 오른쪽으로 계산합니다.",
+  },
+  {
+    id: 696,
+    lessonId: "cpp-5",
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+using namespace std;
+
+int main() {
+    int a = 5;
+    int x = ++a;
+    int y = a++;
+    cout << x << " " << y << " " << a;
+    return 0;
+}`,
+    options: ["6 6 7", "5 5 7", "6 5 7", "5 6 7"],
+    correctAnswer: 0,
+    explanation: "++a(전위): a를 먼저 6으로 증가시킨 후 x에 6을 대입. x=6, a=6. a++(후위): 현재 a값 6을 y에 대입한 후 a를 7로 증가. y=6, a=7. 출력: 6 6 7.",
+    keyConceptTitle: "전위 vs 후위 증가 연산자",
+    keyConceptDescription: "++a(전위): 증가 후 대입, 증가된 값 반환. a++(후위): 대입 후 증가, 원래 값 반환. 분리된 문장으로 사용해야 동작이 명확합니다.",
+  },
+  {
+    id: 697,
+    lessonId: "cpp-5",
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+using namespace std;
+
+int x = 0;
+
+bool check() {
+    x++;
+    return true;
+}
+
+int main() {
+    bool result = false && check();
+    cout << x;
+    return 0;
+}`,
+    options: ["0", "1", "2", "컴파일 오류"],
+    correctAnswer: 0,
+    explanation: "&&(논리 AND)의 단락 평가(short-circuit): 왼쪽 피연산자가 false이면 오른쪽은 절대 평가되지 않습니다. false && check()에서 false이므로 check()는 호출되지 않고 x는 0 그대로입니다.",
+    keyConceptTitle: "단락 평가(Short-Circuit Evaluation)",
+    keyConceptDescription: "&&에서 왼쪽이 false면 오른쪽 미평가. ||에서 왼쪽이 true면 오른쪽 미평가. 부수 효과(side effect)가 있는 함수 호출 시 주의해야 합니다.",
+  },
+  {
+    id: 698,
+    lessonId: "cpp-5",
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+using namespace std;
+
+int main() {
+    int a = 10;
+    a += 3;
+    a *= 2;
+    a -= a / 3;
+    cout << a;
+    return 0;
+}`,
+    options: ["18", "20", "16", "22"],
+    correctAnswer: 0,
+    explanation: "단계별로: a=10 → a+=3: a=13 → a*=2: a=26 → a-=a/3: a/3 = 26/3 = 8(정수 나눗셈), a=26-8=18. 출력: 18.",
+    keyConceptTitle: "복합 대입 연산자와 정수 나눗셈",
+    keyConceptDescription: "복합 대입 연산자(+=, *=, -=, /=)는 순서대로 실행됩니다. 정수형끼리의 /는 소수점 버림 정수 나눗셈입니다.",
+  },
+  {
+    id: 699,
+    lessonId: "cpp-8",
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+using namespace std;
+
+void print(int a) {
+    cout << "int: " << a << endl;
+}
+
+void print(double a) {
+    cout << "double: " << a << endl;
+}
+
+int main() {
+    print(3.0f);
+    return 0;
+}`,
+    options: ["int: 3", "double: 3", "컴파일 오류: 모호한 호출", "int: 0"],
+    correctAnswer: 1,
+    explanation: "3.0f는 float 리터럴입니다. float에서 double로의 변환은 정밀도 손실 없는 승격(promotion)이고, float에서 int로의 변환은 축소 변환입니다. 승격이 우선하므로 double 버전이 호출됩니다. cout << 3.0f는 소수점 없이 '3'으로 출력됩니다.",
+    keyConceptTitle: "함수 오버로딩 해석과 타입 승격",
+    keyConceptDescription: "오버로딩 해석 시 float는 double로 승격됩니다. int로의 암시적 축소 변환보다 double로의 승격이 우선합니다.",
+  },
+  {
+    id: 700,
+    lessonId: "cpp-8",
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+using namespace std;
+
+void swap(int a, int b) {
+    int tmp = a;
+    a = b;
+    b = tmp;
+}
+
+int main() {
+    int x = 1, y = 2;
+    swap(x, y);
+    cout << x << " " << y;
+    return 0;
+}`,
+    options: ["2 1", "1 2", "0 0", "컴파일 오류"],
+    correctAnswer: 1,
+    explanation: "이 swap 함수는 값에 의한 전달(pass by value)입니다. a와 b는 x와 y의 복사본이므로 함수 내에서 값이 바뀌어도 원본 x, y에는 영향이 없습니다. x=1, y=2 그대로 출력됩니다.",
+    keyConceptTitle: "값에 의한 전달 (Pass by Value)",
+    keyConceptDescription: "함수 매개변수는 기본적으로 복사본입니다. 원본을 수정하려면 참조(int& a) 또는 포인터를 사용해야 합니다.",
+  },
+  {
+    id: 701,
+    lessonId: "cpp-8",
+    difficulty: "어려움",
+    question: "다음 재귀 함수의 출력 결과는?",
+    code: `#include <iostream>
+using namespace std;
+
+int f(int n) {
+    if (n <= 1) return n;
+    return f(n - 1) + f(n - 2);
+}
+
+int main() {
+    cout << f(6);
+    return 0;
+}`,
+    options: ["8", "13", "5", "21"],
+    correctAnswer: 0,
+    explanation: "이 함수는 피보나치 수열입니다. f(0)=0, f(1)=1, f(2)=1, f(3)=2, f(4)=3, f(5)=5, f(6) = f(5)+f(4) = 5+3 = 8.",
+    keyConceptTitle: "피보나치 재귀 트레이싱",
+    keyConceptDescription: "재귀 함수는 호출 트리를 그려 추적합니다. f(n) = f(n-1) + f(n-2)는 피보나치 수열: 0,1,1,2,3,5,8,13,...",
+  },
+  {
+    id: 702,
+    lessonId: "cpp-8",
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+using namespace std;
+
+int add(int a, int b = 10) {
+    return a + b;
+}
+
+int add(int a) {
+    return a + 100;
+}
+
+int main() {
+    cout << add(5);
+    return 0;
+}`,
+    options: ["15", "105", "컴파일 오류: 모호한 호출", "110"],
+    correctAnswer: 2,
+    explanation: "add(5)를 호출할 때 두 함수가 모두 매칭됩니다: add(int) 버전과 add(int, int=10)의 기본값 버전 모두 add(5)로 호출 가능합니다. 컴파일러는 어느 쪽을 선택해야 할지 알 수 없어 '모호한 호출' 오류가 발생합니다.",
+    keyConceptTitle: "기본 매개변수와 오버로딩 충돌",
+    keyConceptDescription: "기본 매개변수(default parameter)를 가진 함수와 다른 오버로딩 버전이 공존하면 호출이 모호해질 수 있습니다. 컴파일 오류로 이어집니다.",
+  },
+  {
+    id: 703,
+    lessonId: "cpp-11",
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    string s = "hello world";
+    size_t pos = s.find("xyz");
+    if (pos == string::npos) {
+        cout << "not found";
+    } else {
+        cout << pos;
+    }
+    return 0;
+}`,
+    options: ["not found", "0", "-1", "컴파일 오류"],
+    correctAnswer: 0,
+    explanation: "find()가 찾는 문자열이 없으면 string::npos를 반환합니다. npos는 size_t 타입의 최대값(-1을 unsigned로 해석)입니다. pos == string::npos 비교가 참이므로 'not found'가 출력됩니다.",
+    keyConceptTitle: "find()와 string::npos",
+    keyConceptDescription: "find()가 문자열을 찾지 못하면 string::npos를 반환합니다. 반드시 == string::npos로 비교하고, -1과 직접 비교하면 안 됩니다(size_t는 unsigned).",
+  },
+  {
+    id: 704,
+    lessonId: "cpp-11",
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    string s = "abcdefgh";
+    string part = s.substr(s.find("cde"), 3);
+    cout << part;
+    return 0;
+}`,
+    options: ["cde", "cd", "cdef", "컴파일 오류"],
+    correctAnswer: 0,
+    explanation: "s.find(\"cde\")는 인덱스 2를 반환합니다. s.substr(2, 3)은 인덱스 2부터 3글자를 추출합니다: 'c','d','e' → \"cde\".",
+    keyConceptTitle: "find()와 substr() 연쇄 사용",
+    keyConceptDescription: "substr(pos, len)은 pos 위치부터 len개의 문자를 추출합니다. find()의 반환값을 substr의 시작 위치로 바로 사용할 수 있습니다.",
+  },
+  {
+    id: 705,
+    lessonId: "cpp-11",
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    string s = "aabbcc";
+    s.replace(2, 2, "XYZ");
+    cout << s;
+    return 0;
+}`,
+    options: ["aaXYZcc", "aaXYZbcc", "aaXYZ", "aabbXYZ"],
+    correctAnswer: 0,
+    explanation: "replace(pos, len, new_str)는 pos 위치에서 len개의 문자를 new_str로 교체합니다. replace(2, 2, \"XYZ\")는 인덱스 2부터 2글자('b','b')를 \"XYZ\"(3글자)로 교체합니다. 결과: \"aa\" + \"XYZ\" + \"cc\" = \"aaXYZcc\".",
+    keyConceptTitle: "replace()로 인한 인덱스 변화",
+    keyConceptDescription: "replace(pos, len, str)은 len글자를 str로 교체합니다. 교체 전후 문자열 길이가 달라질 수 있으므로 이후 인덱스 연산 시 주의해야 합니다.",
+  },
+  {
+    id: 706,
+    lessonId: "cpp-11",
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    string a = "apple";
+    string b = "banana";
+    int result = a.compare(b);
+    if (result < 0) cout << "a < b";
+    else if (result > 0) cout << "a > b";
+    else cout << "a == b";
+    return 0;
+}`,
+    options: ["a < b", "a > b", "a == b", "컴파일 오류"],
+    correctAnswer: 0,
+    explanation: "compare()는 사전 순으로 비교합니다. 'a'(97)는 'b'(98)보다 작으므로 \"apple\"이 \"banana\"보다 사전 순으로 앞에 옵니다. result < 0이 참이므로 'a < b'가 출력됩니다.",
+    keyConceptTitle: "compare() 반환값 해석",
+    keyConceptDescription: "a.compare(b): 반환값이 0이면 같음, 음수이면 a가 사전 순으로 앞, 양수이면 a가 사전 순으로 뒤에 위치합니다.",
+  },
+  {
+    id: 707,
+    lessonId: "cpp-18",
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+#include <queue>
+using namespace std;
+
+int main() {
+    priority_queue<int> pq;
+    pq.push(3);
+    pq.push(1);
+    pq.push(4);
+    pq.push(1);
+    pq.push(5);
+    while (!pq.empty()) {
+        cout << pq.top() << " ";
+        pq.pop();
+    }
+    return 0;
+}`,
+    options: ["5 4 3 1 1", "1 1 3 4 5", "3 1 4 1 5", "5 3 4 1 1"],
+    correctAnswer: 0,
+    explanation: "priority_queue<int>는 기본적으로 최대 힙(max-heap)입니다. 가장 큰 값이 top()에 위치합니다. 5 → 4 → 3 → 1 → 1 순서로 pop되어 출력됩니다.",
+    keyConceptTitle: "priority_queue 기본: 최대 힙",
+    keyConceptDescription: "priority_queue<int>는 max-heap이므로 가장 큰 값이 먼저 나옵니다. min-heap을 원하면 priority_queue<int, vector<int>, greater<int>>를 사용합니다.",
+  },
+  {
+    id: 708,
+    lessonId: "cpp-18",
+    difficulty: "어려움",
+    question: "다음 코드는 괄호 문자열이 올바른지 검사합니다. 입력이 \"(()\" 일 때 출력 결과는?",
+    code: `#include <iostream>
+#include <stack>
+#include <string>
+using namespace std;
+
+int main() {
+    string s = "(()";
+    stack<char> st;
+    bool valid = true;
+    for (char c : s) {
+        if (c == '(') st.push(c);
+        else if (c == ')') {
+            if (st.empty()) { valid = false; break; }
+            st.pop();
+        }
+    }
+    if (!st.empty()) valid = false;
+    cout << (valid ? "YES" : "NO");
+    return 0;
+}`,
+    options: ["YES", "NO", "컴파일 오류", "런타임 오류"],
+    correctAnswer: 1,
+    explanation: "\"(()\"를 처리합니다: '(' → push, '(' → push, ')' → pop. 루프 종료 후 스택에 '('가 1개 남아있습니다. !st.empty()가 참이므로 valid=false. 출력: 'NO'.",
+    keyConceptTitle: "스택으로 괄호 유효성 검사",
+    keyConceptDescription: "올바른 괄호 검사: '(' → push, ')' → 스택이 비면 invalid, 아니면 pop. 루프 후 스택이 비어있어야 valid. 짝이 안 맞으면 NO.",
+  },
+  {
+    id: 709,
+    lessonId: "cpp-18",
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+#include <stack>
+#include <queue>
+using namespace std;
+
+int main() {
+    stack<int> st;
+    queue<int> q;
+    for (int i = 1; i <= 3; i++) {
+        st.push(i);
+        q.push(i);
+    }
+    cout << st.top() << " " << q.front();
+    st.pop(); q.pop();
+    cout << " " << st.top() << " " << q.front();
+    return 0;
+}`,
+    options: ["3 1 2 2", "1 1 2 2", "3 3 2 2", "1 3 2 2"],
+    correctAnswer: 0,
+    explanation: "1,2,3을 push합니다. stack은 LIFO: top()=3. queue는 FIFO: front()=1. 각각 pop 후: stack top()=2, queue front()=2. 출력: '3 1 2 2'.",
+    keyConceptTitle: "스택(LIFO) vs 큐(FIFO) 비교",
+    keyConceptDescription: "스택: top()은 마지막에 넣은 값(LIFO). 큐: front()는 처음 넣은 값(FIFO). pop() 후 다음 원소가 각 구조에 따라 다릅니다.",
+  },
+  {
+    id: 710,
+    lessonId: "cpp-18",
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+#include <deque>
+using namespace std;
+
+int main() {
+    deque<int> dq;
+    dq.push_back(1);
+    dq.push_front(2);
+    dq.push_back(3);
+    dq.push_front(4);
+    cout << dq.front() << " " << dq.back();
+    dq.pop_front();
+    dq.pop_back();
+    cout << " " << dq.front() << " " << dq.back();
+    return 0;
+}`,
+    options: ["4 3 2 1", "1 4 2 3", "4 3 1 3", "2 3 2 1"],
+    correctAnswer: 0,
+    explanation: "push_back(1): [1]. push_front(2): [2,1]. push_back(3): [2,1,3]. push_front(4): [4,2,1,3]. front()=4, back()=3. pop_front() → [2,1,3]. pop_back() → [2,1]. front()=2, back()=1. 출력: '4 3 2 1'.",
+    keyConceptTitle: "deque 앞/뒤 삽입 및 삭제",
+    keyConceptDescription: "deque는 양쪽 끝에서 O(1) 삽입/삭제가 가능합니다. push_front/pop_front는 앞쪽, push_back/pop_back은 뒤쪽을 조작합니다.",
+  },
+  // ── cpp-4 어려움 보강 ──────────────────────────────────
+  {
+    id: 711,
+    lessonId: "cpp-4",
+    difficulty: "어려움",
+    question: `다음 코드에서 cin.ignore()를 제거했을 때 name에 저장되는 값은?`,
+    code: `#include <iostream>
+#include <string>
+using namespace std;
+int main() {
+    int age;
+    string name;
+    cin >> age;
+    // cin.ignore(); // 제거됨
+    getline(cin, name);
+    cout << "[" << name << "]";
+    return 0;
+}`,
+    options: ["입력 값(25 Alice)에서 [Alice]", "[]", "[25]", "런타임 오류"],
+    correctAnswer: 1,
+    explanation: "cin >> age 후 개행(\\n)이 버퍼에 남습니다. cin.ignore()가 없으면 getline이 즉시 이 개행을 읽어 name은 빈 문자열이 됩니다.",
+    keyConceptTitle: "cin과 getline 혼용 — 버퍼 개행 문제",
+    keyConceptDescription: "cin >> 다음 getline을 사용하려면 cin.ignore()로 버퍼의 개행을 먼저 제거해야 합니다.",
+  },
+  {
+    id: 712,
+    lessonId: "cpp-4",
+    difficulty: "어려움",
+    question: `다음 코드에서 입력이 "3.14abc" 한 줄일 때 출력 결과는?`,
+    code: `#include <iostream>
+#include <string>
+using namespace std;
+int main() {
+    double d;
+    string s;
+    cin >> d >> s;
+    cout << d << " " << s;
+    return 0;
+}`,
+    options: ["3.14 abc", "3.14 (공백 후 끝)", "0 3.14abc", "런타임 오류"],
+    correctAnswer: 0,
+    explanation: "cin >> d는 숫자 부분 3.14만 읽고 알파벳에서 멈춥니다. 버퍼에 abc가 남고 cin >> s가 이를 읽어 s = \"abc\"가 됩니다.",
+    keyConceptTitle: "cin의 타입별 파싱",
+    keyConceptDescription: "cin >>는 해당 타입으로 해석 가능한 부분까지만 읽습니다. 나머지는 버퍼에 남아 다음 cin >>가 읽습니다.",
+  },
+  {
+    id: 713,
+    lessonId: "cpp-9",
+    difficulty: "어려움",
+    question: `다음 코드에서 n=2이고 입력이 각각 "hello world", "foo bar"일 때 출력은?`,
+    code: `#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+int main() {
+    int n; cin >> n; cin.ignore();
+    vector<string> lines(n);
+    for (int i = 0; i < n; i++)
+        getline(cin, lines[i]);
+    cout << lines[0] << "|" << lines[1];
+    return 0;
+}`,
+    options: ["hello world|foo bar", "hello|foo", "world|bar", "hello world| (두 번째 줄 없음)"],
+    correctAnswer: 0,
+    explanation: "cin >> n 후 cin.ignore()로 개행을 제거했으므로 getline이 각 줄을 공백 포함 완전히 읽습니다. lines[0]=\"hello world\", lines[1]=\"foo bar\".",
+    keyConceptTitle: "getline으로 공백 포함 여러 줄 입력",
+    keyConceptDescription: "getline은 개행 전의 모든 문자(공백 포함)를 읽습니다. cin >>와 함께 쓸 때는 cin.ignore()가 필수입니다.",
+  },
+  // ── cpp-10 어려움 보강 ──────────────────────────────────
+  {
+    id: 714,
+    lessonId: "cpp-12",
+    difficulty: "어려움",
+    question: `다음 코드의 출력 결과는?`,
+    code: `#include <iostream>
+#include <vector>
+using namespace std;
+int main() {
+    vector<int> v = {1, 2, 3, 4, 5};
+    for (auto& x : v) x *= 2;
+    for (auto x : v) cout << x << " ";
+    return 0;
+}`,
+    options: ["1 2 3 4 5 ", "2 4 6 8 10 ", "2 4 6 8 10 (첫 루프만 복사본 수정)", "컴파일 오류"],
+    correctAnswer: 1,
+    explanation: "auto& x : v는 참조로 받아 원본을 수정합니다. 첫 루프에서 모든 요소가 2배가 되고 두 번째 루프에서 2 4 6 8 10이 출력됩니다.",
+    keyConceptTitle: "auto vs auto& in range-for",
+    keyConceptDescription: "auto x는 복사본(원본 불변), auto& x는 참조(원본 수정 가능). 원소 수정이 목적이면 반드시 & 를 붙이세요.",
+  },
+  {
+    id: 715,
+    lessonId: "cpp-12",
+    difficulty: "어려움",
+    question: `다음 코드의 출력 결과는?`,
+    code: `#include <iostream>
+#include <vector>
+using namespace std;
+int main() {
+    vector<vector<int>> mat = {{1,2,3},{4,5,6},{7,8,9}};
+    int sum = 0;
+    for (const auto& row : mat)
+        for (auto val : row)
+            sum += val;
+    cout << sum;
+    return 0;
+}`,
+    options: ["45", "15", "0", "컴파일 오류"],
+    correctAnswer: 0,
+    explanation: "const auto& row로 각 행을 참조, auto val로 각 열 값을 복사합니다. 1+2+3+4+5+6+7+8+9 = 45.",
+    keyConceptTitle: "중첩 컨테이너 range-for 순회",
+    keyConceptDescription: "외부 루프는 const auto&로 복사 비용 절감, 내부 루프는 auto로 값 접근하는 패턴이 일반적입니다.",
+  },
+  {
+    id: 716,
+    lessonId: "cpp-17",
+    difficulty: "어려움",
+    question: `다음 코드에서 auto 추론 타입에 대한 설명 중 잘못된 것은?`,
+    code: `vector<int> v = {1, 2, 3};
+auto a = v[0];        // (A)
+auto& b = v[0];       // (B)
+const auto c = v[0];  // (C)
+auto it = v.begin();  // (D)`,
+    options: [
+      "(A): int — v[0]의 복사",
+      "(B): int& — 참조, b 수정 시 v[0]도 변경됨",
+      "(C): const int — 수정 불가",
+      "(D): int — begin()이 int를 반환하므로",
+    ],
+    correctAnswer: 3,
+    explanation: "v.begin()은 vector<int>::iterator 타입을 반환합니다. auto it의 추론 타입은 int가 아니라 iterator입니다.",
+    keyConceptTitle: "auto 타입 추론 — iterator",
+    keyConceptDescription: "begin()처럼 복잡한 반환 타입을 가진 함수에 auto를 쓰면 실제 타입이 정확히 추론됩니다. int가 아닌 iterator입니다.",
+  },
+];
