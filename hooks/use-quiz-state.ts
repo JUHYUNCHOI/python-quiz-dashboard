@@ -126,7 +126,6 @@ export function useQuizState(questions: QuizQuestion[]) {
   const retryQueueRef = useRef<Map<number, number>>(new Map())
   const [currentGrade, setCurrentGrade] = useState<"perfect" | "great" | "good" | "fail" | null>(null)
   const questionAttemptRef = useRef<Map<number, number>>(new Map())  // questionId → 시도 횟수
-  const [isRetryQuestion, setIsRetryQuestion] = useState(false)
   const [retryInsertedQuestions, setRetryInsertedQuestions] = useState<QuizQuestion[]>([])
   const [gradeStats, setGradeStats] = useState({ perfect: 0, great: 0, good: 0, retryCorrect: 0 })
 
@@ -235,6 +234,9 @@ export function useQuizState(questions: QuizQuestion[]) {
   const retryCheck = getRetryQuestion(retryQueueRef.current, questions)
   const activeRetryQuestion = retryCheck.question
 
+  // 재출제 문제 여부 파생값 (state 대신 derive) — activeRetryQuestion 기반
+  const isRetryQuestion = !!activeRetryQuestion
+
   // 현재 문제: 재출제 문제가 있으면 그것, 없으면 순서대로
   const question = activeRetryQuestion || (questions[currentQuestion] ?? questions[0])
   const progress = ((currentQuestion + 1) / quizSettings.questionCount) * 100
@@ -336,10 +338,9 @@ export function useQuizState(questions: QuizQuestion[]) {
     const mastery = recordAnswer(question.id, correct, attempts)
     setCurrentGrade(mastery.lastGrade)
 
-    // 재출제 큐 업데이트 (카운트다운)
-    if (activeRetryQuestion) {
-      retryQueueRef.current = retryCheck.updatedQueue
-    }
+    // 재출제 큐 업데이트 (카운트다운) — 매 답변마다 항상 업데이트
+    // ❌ 이전: if (activeRetryQuestion) 조건 때문에 countdown이 영원히 감소 안 했음
+    retryQueueRef.current = retryCheck.updatedQueue
 
     if (correct) {
       const newScore = score + 1
@@ -363,7 +364,6 @@ export function useQuizState(questions: QuizQuestion[]) {
       setShowCelebration(true)
       setTimeout(() => {
         setShowCelebration(false)
-        setIsRetryQuestion(false)
 
         // 재출제 문제를 풀었으면 currentQuestion은 안 올림
         if (activeRetryQuestion) {
@@ -529,7 +529,6 @@ export function useQuizState(questions: QuizQuestion[]) {
 
   const handleExplanationClose = useCallback(() => {
     setShowExplanation(false)
-    setIsRetryQuestion(false)
 
     // 재출제 문제에서 설명 닫으면 currentQuestion 안 올림
     if (activeRetryQuestion) {
