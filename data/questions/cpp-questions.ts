@@ -13150,4 +13150,185 @@ auto it = v.begin();  // (D)`,
     keyConceptTitle: "auto 타입 추론 — iterator",
     keyConceptDescription: "begin()처럼 복잡한 반환 타입을 가진 함수에 auto를 쓰면 실제 타입이 정확히 추론됩니다. int가 아닌 iterator입니다.",
   },
+  // ===== lessonId "cpp-10": Range-for & auto =====
+  {
+    id: 717,
+    lessonId: "cpp-10",
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    vector<int> v = {10, 20, 30};
+    for (auto x : v) {
+        cout << x << " ";
+    }
+    return 0;
+}`,
+    options: ["10 20 30 ", "30 20 10 ", "10\n20\n30\n", "오류"],
+    correctAnswer: 0,
+    explanation: "for(auto x : v)는 벡터의 각 요소를 순서대로 x에 복사합니다. 10, 20, 30이 공백으로 구분되어 출력됩니다.",
+    keyConceptTitle: "range-for 기본 순회",
+    keyConceptDescription: "for(auto x : container)는 컨테이너의 모든 요소를 처음부터 끝까지 순서대로 순회합니다. x는 각 요소의 복사본입니다.",
+    relatedTopics: ["range-for", "auto", "vector 순회"],
+  },
+  {
+    id: 718,
+    lessonId: "cpp-10",
+    difficulty: "쉬움",
+    question: "다음 코드에서 auto로 추론된 변수 타입으로 올바른 것은?",
+    code: `#include <iostream>
+using namespace std;
+
+int main() {
+    auto a = 42;
+    auto b = 3.14;
+    auto c = true;
+    auto d = 'Z';
+    return 0;
+}`,
+    options: [
+      "a=int, b=double, c=bool, d=char",
+      "a=int, b=float, c=int, d=string",
+      "모두 int로 추론됨",
+      "오류 — auto는 기본 타입에 사용할 수 없음",
+    ],
+    correctAnswer: 0,
+    explanation: "auto는 우변의 리터럴 타입을 자동 추론합니다. 42→int, 3.14→double, true→bool, 'Z'→char로 추론됩니다.",
+    keyConceptTitle: "auto 타입 추론",
+    keyConceptDescription: "auto 키워드는 변수 초기화 시 우변의 타입을 자동으로 추론합니다. 정수 리터럴은 int, 소수점은 double, 불리언은 bool, 문자는 char로 추론됩니다.",
+    relatedTopics: ["auto", "타입 추론", "변수 선언"],
+  },
+  {
+    id: 719,
+    lessonId: "cpp-10",
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    vector<int> nums = {1, 2, 3, 4, 5};
+    int sum = 0;
+    for (auto x : nums) {
+        sum += x;
+    }
+    cout << sum << endl;
+    return 0;
+}`,
+    options: ["15", "5", "1", "오류"],
+    correctAnswer: 0,
+    explanation: "range-for로 1+2+3+4+5 = 15를 누적합니다.",
+    keyConceptTitle: "range-for로 합산",
+    keyConceptDescription: "range-for와 누적 변수를 함께 사용하면 컨테이너 전체 합산을 간결하게 표현할 수 있습니다.",
+    relatedTopics: ["range-for", "누적 합", "auto"],
+  },
+  {
+    id: 720,
+    lessonId: "cpp-10",
+    difficulty: "보통",
+    question: "다음 두 코드 A와 B의 동작 차이로 올바른 것은?",
+    code: `// 코드 A — range-for
+vector<int> v = {10, 20, 30};
+for (auto x : v) {
+    cout << x << " ";
+}
+
+// 코드 B — 인덱스 for
+for (int i = 0; i < v.size(); i++) {
+    cout << v[i] << " ";
+}`,
+    options: [
+      "A와 B 모두 10 20 30 을 출력한다",
+      "A는 역순으로 출력하고 B는 정순으로 출력한다",
+      "A는 컴파일 오류이다",
+      "B만 인덱스 접근이 가능하므로 B의 결과가 더 빠르다",
+    ],
+    correctAnswer: 0,
+    explanation: "두 코드 모두 벡터를 처음부터 끝까지 순서대로 순회하며 '10 20 30 '을 출력합니다. range-for는 더 간결한 문법으로 같은 결과를 냅니다.",
+    keyConceptTitle: "range-for vs 인덱스 for 비교",
+    keyConceptDescription: "range-for는 인덱스 for와 동일하게 정순으로 순회합니다. range-for는 인덱스가 불필요할 때 더 간결합니다. 인덱스가 필요하면 전통적인 for를 사용합니다.",
+    relatedTopics: ["range-for", "인덱스 for", "vector 순회"],
+  },
+  {
+    id: 721,
+    lessonId: "cpp-10",
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    string word = "hello";
+    int count = 0;
+    for (auto ch : word) {
+        if (ch == 'l') count++;
+    }
+    cout << count << endl;
+    return 0;
+}`,
+    options: ["2", "1", "3", "오류"],
+    correctAnswer: 0,
+    explanation: "string에도 range-for를 사용할 수 있습니다. 'h', 'e', 'l', 'l', 'o' 중 'l'은 2개이므로 count=2가 출력됩니다.",
+    keyConceptTitle: "string에 range-for 적용",
+    keyConceptDescription: "range-for는 string에도 사용 가능합니다. 각 문자를 순서대로 순회하며 개별 char에 접근할 수 있습니다.",
+    relatedTopics: ["range-for", "string 순회", "char"],
+  },
+  {
+    id: 722,
+    lessonId: "cpp-10",
+    difficulty: "어려움",
+    question: "다음 코드 실행 후 벡터 v의 내용은?",
+    code: `#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    vector<int> v = {1, 2, 3, 4, 5};
+    for (auto x : v) {
+        x = x * 2;  // 원본을 수정하려 했음
+    }
+    for (auto x : v) {
+        cout << x << " ";
+    }
+    return 0;
+}`,
+    options: ["2 4 6 8 10 ", "1 2 3 4 5 ", "0 0 0 0 0 ", "오류"],
+    correctAnswer: 1,
+    explanation: "`auto x`는 각 요소의 복사본입니다. x를 수정해도 원본 벡터에 전혀 영향을 주지 않으므로 v는 그대로 {1, 2, 3, 4, 5}입니다.",
+    keyConceptTitle: "range-for 값 복사 함정",
+    keyConceptDescription: "`for(auto x : v)`에서 x는 원본의 복사본입니다. 루프 안에서 x를 바꿔도 원본 벡터는 변하지 않습니다. 원본 수정이 필요하다면 나중에 배울 '참조' 문법을 사용해야 합니다.",
+    relatedTopics: ["range-for", "값 복사", "auto"],
+  },
+  {
+    id: 723,
+    lessonId: "cpp-10",
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<string> words = {"hi", "hello", "hey"};
+    for (auto word : words) {
+        for (auto ch : word) {
+            if (ch == 'h') cout << ch;
+        }
+    }
+    cout << endl;
+    return 0;
+}`,
+    options: ["hhh", "heh", "h h h ", "오류"],
+    correctAnswer: 0,
+    explanation: "바깥 range-for는 words의 각 string을 순회합니다. 안쪽 range-for는 각 string의 char를 순회하며 'h'만 출력합니다. 'hi'→h, 'hello'→h, 'hey'→h → 'hhh'가 출력됩니다.",
+    keyConceptTitle: "중첩 range-for — vector<string> 순회",
+    keyConceptDescription: "range-for를 중첩하면 컬렉션 안의 컬렉션을 순회할 수 있습니다. vector<string>에서 바깥 루프는 string을, 안쪽 루프는 char를 순회합니다.",
+    relatedTopics: ["중첩 range-for", "vector<string>", "string 순회"],
+  },
 ];

@@ -6537,4 +6537,1116 @@ print(p.hp)`,
     keyConceptTitle: "@property와 setter",
     keyConceptDescription: "@property로 메서드를 속성처럼 접근할 수 있습니다. setter를 정의하면 p.hp = 값 시 자동으로 검증 로직이 실행되어 캡슐화를 강화합니다.",
   },
+  // ===== lessonId 11: 조건문 (if/elif/else) =====
+  {
+    id: 464,
+    lessonId: 11,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `score = 75
+if score >= 90:
+    print("A")
+elif score >= 80:
+    print("B")
+elif score >= 70:
+    print("C")
+else:
+    print("D")`,
+    options: ["A", "B", "C", "D"],
+    correctAnswer: 2,
+    explanation: "score가 75이므로 score >= 90(False), score >= 80(False), score >= 70(True)이 되어 'C'가 출력됩니다.",
+    keyConceptTitle: "elif 체인",
+    keyConceptDescription: "elif 조건은 위에서 아래로 순서대로 평가되며, 처음으로 True가 되는 블록 하나만 실행됩니다.",
+    relatedTopics: ["조건문", "elif"],
+  },
+  {
+    id: 465,
+    lessonId: 11,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `x = 10
+if x > 5:
+    print("크다")
+else:
+    print("작거나 같다")`,
+    options: ["크다", "작거나 같다", "오류", "아무것도 출력되지 않음"],
+    correctAnswer: 0,
+    explanation: "x가 10이고 10 > 5는 True이므로 if 블록이 실행되어 '크다'가 출력됩니다.",
+    keyConceptTitle: "if/else 기본 분기",
+    keyConceptDescription: "if 조건이 True이면 if 블록을, False이면 else 블록을 실행합니다.",
+    relatedTopics: ["조건문", "if/else"],
+  },
+  {
+    id: 466,
+    lessonId: 12,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `a = 5
+b = 3
+if a > b and a != 10:
+    print("참")
+else:
+    print("거짓")`,
+    options: ["참", "거짓", "오류", "None"],
+    correctAnswer: 0,
+    explanation: "a > b는 5 > 3 = True, a != 10은 True입니다. True and True = True이므로 '참'이 출력됩니다.",
+    keyConceptTitle: "비교 연산자 조합",
+    keyConceptDescription: "and 연산자는 양쪽 조건이 모두 True일 때만 True를 반환합니다.",
+    relatedTopics: ["비교 연산자", "논리 연산자"],
+  },
+  {
+    id: 467,
+    lessonId: 11,
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `x = 7
+if x > 5:
+    if x > 10:
+        print("A")
+    else:
+        print("B")
+else:
+    print("C")`,
+    options: ["A", "B", "C", "오류"],
+    correctAnswer: 1,
+    explanation: "x=7은 x > 5가 True이므로 안쪽 if로 진입합니다. x > 10은 7 > 10 = False이므로 else 블록의 'B'가 출력됩니다.",
+    keyConceptTitle: "중첩 if",
+    keyConceptDescription: "if 블록 안에 또 다른 if를 쓸 수 있습니다. 바깥 조건이 True일 때만 안쪽 조건이 평가됩니다.",
+    relatedTopics: ["중첩 if", "조건문"],
+  },
+  {
+    id: 468,
+    lessonId: 12,
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `age = 20
+has_id = False
+if age >= 18 and has_id:
+    print("입장 가능")
+elif age >= 18 or has_id:
+    print("확인 필요")
+else:
+    print("입장 불가")`,
+    options: ["입장 가능", "확인 필요", "입장 불가", "오류"],
+    correctAnswer: 1,
+    explanation: "age >= 18은 True, has_id는 False이므로 and 조건(True and False)은 False입니다. or 조건(True or False)은 True이므로 '확인 필요'가 출력됩니다.",
+    keyConceptTitle: "and/or 복합 조건",
+    keyConceptDescription: "and는 모두 True일 때, or는 하나라도 True일 때 True입니다. and가 or보다 먼저 평가됩니다.",
+    relatedTopics: ["논리 연산자", "and", "or"],
+  },
+  {
+    id: 469,
+    lessonId: 12,
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `x = 8
+result = "짝수" if x % 2 == 0 else "홀수"
+print(result)`,
+    options: ["짝수", "홀수", "오류", "0"],
+    correctAnswer: 0,
+    explanation: "x % 2 == 0은 8 % 2 == 0 → 0 == 0 = True이므로 삼항 연산자는 '짝수'를 반환합니다.",
+    keyConceptTitle: "삼항 연산자(조건 표현식)",
+    keyConceptDescription: "`값1 if 조건 else 값2` 형태로 한 줄에 조건 분기를 표현합니다. 조건이 True이면 값1, False이면 값2가 됩니다.",
+    relatedTopics: ["삼항 연산자", "조건 표현식"],
+  },
+  {
+    id: 470,
+    lessonId: 11,
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `n = 100
+if n > 50:
+    print("50 초과")
+elif n > 80:
+    print("80 초과")
+elif n == 100:
+    print("정확히 100")
+else:
+    print("50 이하")`,
+    options: ["50 초과", "80 초과", "정확히 100", "50 이하"],
+    correctAnswer: 0,
+    explanation: "n=100에서 n > 50이 True이므로 첫 번째 블록 '50 초과'가 실행됩니다. elif는 앞 조건이 이미 True이면 평가되지 않습니다.",
+    keyConceptTitle: "elif 순서 함정",
+    keyConceptDescription: "elif 체인은 순서대로 평가하고 처음 True인 블록만 실행합니다. 더 구체적인 조건을 앞에 두어야 원하는 결과를 얻을 수 있습니다.",
+    relatedTopics: ["elif", "조건문 순서"],
+  },
+  {
+    id: 471,
+    lessonId: 12,
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `x = True
+y = False
+if not x or not y:
+    print("A")
+else:
+    print("B")`,
+    options: ["A", "B", "오류", "None"],
+    correctAnswer: 0,
+    explanation: "not x = not True = False, not y = not False = True입니다. False or True = True이므로 'A'가 출력됩니다.",
+    keyConceptTitle: "not 연산자와 드 모르간 법칙",
+    keyConceptDescription: "`not (A and B)`는 `not A or not B`와 동일합니다(드 모르간 법칙). not은 True/False를 반전시킵니다.",
+    relatedTopics: ["not 연산자", "드 모르간 법칙", "논리 연산자"],
+  },
+  {
+    id: 472,
+    lessonId: 12,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `a = 5
+b = 10
+c = 3
+if a < b and not (c > a or b == 10):
+    print("X")
+elif a < b:
+    print("Y")
+else:
+    print("Z")`,
+    options: ["X", "Y", "Z", "오류"],
+    correctAnswer: 1,
+    explanation: "a < b는 True입니다. 괄호 안: c > a는 3 > 5 = False, b == 10은 True이므로 False or True = True. not True = False. True and False = False이므로 첫 조건은 False입니다. elif의 a < b는 True이므로 'Y'가 출력됩니다.",
+    keyConceptTitle: "중첩 논리 연산자 복합",
+    keyConceptDescription: "복합 조건에서는 괄호 안을 먼저 계산하고, not → and → or 순으로 평가합니다.",
+    relatedTopics: ["논리 연산자", "중첩 조건", "연산자 우선순위"],
+  },
+  {
+    id: 473,
+    lessonId: 12,
+    difficulty: "어려움",
+    question: "1 이상 10 이하의 수를 '범위 내'로 판정하려 합니다. 다음 중 버그가 있는 코드는?",
+    code: `n = 10
+# (A)
+if 1 <= n <= 10:
+    print("범위 내")
+# (B)
+if n >= 1 and n <= 10:
+    print("범위 내")
+# (C)
+if n > 1 and n < 10:
+    print("범위 내")
+# (D)
+if not (n < 1 or n > 10):
+    print("범위 내")`,
+    options: ["(A)", "(B)", "(C)", "(D)"],
+    correctAnswer: 2,
+    explanation: "(C)는 `n > 1 and n < 10`으로 경계값 1과 10을 포함하지 않습니다. n=10일 때 10 < 10은 False이므로 '범위 내'가 출력되지 않습니다. n >= 1, n <= 10이어야 올바릅니다.",
+    keyConceptTitle: "경계값 조건 오류",
+    keyConceptDescription: "경계값(boundary value) 처리 시 >와 >=, <와 <=를 혼동하지 않아야 합니다. 포함 여부를 정확히 확인하세요.",
+    relatedTopics: ["경계값", "비교 연산자", "논리 연산자"],
+  },
+  {
+    id: 474,
+    lessonId: 11,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `x = 5
+y = 5
+if x > 3:
+    if y > 4:
+        print("A")
+    elif y == 5:
+        print("B")
+    else:
+        print("C")
+elif x == 5:
+    print("D")
+else:
+    print("E")`,
+    options: ["A", "B", "C", "D"],
+    correctAnswer: 0,
+    explanation: "x > 3(True)으로 안쪽 if로 진입합니다. y > 4는 5 > 4 = True이므로 'A'가 출력됩니다. y == 5 조건은 평가되지 않습니다.",
+    keyConceptTitle: "조건 흐름 추적",
+    keyConceptDescription: "중첩된 if/elif/else에서는 바깥 조건 → 안쪽 조건 순서로 흐름을 추적해야 합니다. 먼저 True가 된 블록만 실행됩니다.",
+    relatedTopics: ["중첩 if", "조건 흐름", "elif"],
+  },
+  // ===== lessonId 14: while 반복문 =====
+  {
+    id: 475,
+    lessonId: 14,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `i = 1
+while i <= 4:
+    print(i)
+    i += 1`,
+    options: ["1\n2\n3\n4", "1\n2\n3\n4\n5", "0\n1\n2\n3", "1\n2\n3"],
+    correctAnswer: 0,
+    explanation: "i가 1부터 시작해서 1씩 증가하며 i <= 4인 동안 출력됩니다. i=1,2,3,4 순서로 출력 후 i=5가 되면 조건이 False가 되어 종료됩니다.",
+    keyConceptTitle: "while 카운터",
+    keyConceptDescription: "while 루프는 조건이 True인 동안 반복합니다. 카운터 변수를 매 반복마다 갱신하여 무한루프를 방지합니다.",
+    relatedTopics: ["while", "카운터"],
+  },
+  {
+    id: 476,
+    lessonId: 14,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `i = 0
+while True:
+    if i == 3:
+        break
+    print(i)
+    i += 1`,
+    options: ["0\n1\n2", "0\n1\n2\n3", "1\n2\n3", "무한 출력"],
+    correctAnswer: 0,
+    explanation: "i=0,1,2를 출력하고 i=3이 되면 break로 루프를 탈출합니다. i=3일 때 break가 먼저 실행되어 print(3)는 실행되지 않습니다.",
+    keyConceptTitle: "while + break",
+    keyConceptDescription: "break는 루프를 즉시 종료합니다. while True와 함께 사용하면 특정 조건에서만 종료하는 루프를 만들 수 있습니다.",
+    relatedTopics: ["while", "break"],
+  },
+  {
+    id: 477,
+    lessonId: 14,
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `i = 0
+while i < 5:
+    i += 1
+    if i % 2 == 0:
+        continue
+    print(i)`,
+    options: ["1\n3\n5", "2\n4", "1\n2\n3\n4\n5", "0\n2\n4"],
+    correctAnswer: 0,
+    explanation: "i를 먼저 증가시킨 후 짝수이면 continue로 print를 건너뜁니다. i=1(홀수→출력), i=2(짝수→skip), i=3(홀수→출력), i=4(짝수→skip), i=5(홀수→출력).",
+    keyConceptTitle: "while + continue",
+    keyConceptDescription: "continue는 현재 반복의 나머지 코드를 건너뛰고 다음 반복으로 넘어갑니다. break와 달리 루프는 계속됩니다.",
+    relatedTopics: ["while", "continue"],
+  },
+  {
+    id: 478,
+    lessonId: 14,
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `i = 1
+while i <= 5:
+    if i == 3:
+        break
+    i += 1
+else:
+    print("완료")
+print(f"i = {i}")`,
+    options: ["완료\ni = 6", "i = 3", "완료\ni = 3", "오류"],
+    correctAnswer: 1,
+    explanation: "while-else에서 else는 break 없이 루프가 정상 종료될 때만 실행됩니다. i=3에서 break로 종료되므로 else는 실행되지 않고 print(f'i = {i}')만 실행됩니다. i는 3입니다.",
+    keyConceptTitle: "while-else 패턴",
+    keyConceptDescription: "while 루프의 else 블록은 break 없이 조건이 False가 되어 정상 종료될 때만 실행됩니다. break로 종료되면 else는 건너뜁니다.",
+    relatedTopics: ["while-else", "break"],
+  },
+  {
+    id: 479,
+    lessonId: 14,
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `total = 0
+n = 1
+while n <= 5:
+    total += n
+    n += 1
+print(total)`,
+    options: ["10", "15", "25", "5"],
+    correctAnswer: 1,
+    explanation: "1+2+3+4+5 = 15입니다. n이 1에서 5까지 증가하며 total에 누적됩니다.",
+    keyConceptTitle: "while 누적 합",
+    keyConceptDescription: "누적 변수(total=0)를 선언하고 while 루프에서 매번 더해가는 패턴입니다.",
+    relatedTopics: ["while", "누적 합", "카운터"],
+  },
+  {
+    id: 480,
+    lessonId: 14,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `i = 0
+while i < 3:
+    j = 0
+    while j < 3:
+        if j == 1:
+            break
+        print(f"{i},{j}")
+        j += 1
+    i += 1`,
+    options: ["0,0\n1,0\n2,0", "0,0\n0,1\n1,0\n1,1\n2,0\n2,1", "0,0\n0,1\n0,2", "오류"],
+    correctAnswer: 0,
+    explanation: "안쪽 while에서 j=0을 출력 후 j=1이 되면 break로 안쪽 루프만 탈출합니다. 바깥 루프는 계속되어 i=0,1,2 각각 (i,0)만 출력됩니다. 결과: 0,0 / 1,0 / 2,0.",
+    keyConceptTitle: "중첩 while + break 탈출",
+    keyConceptDescription: "break는 자신이 속한 가장 가까운 루프만 탈출합니다. 중첩 루프에서 안쪽 break는 바깥 루프에 영향을 주지 않습니다.",
+    relatedTopics: ["중첩 while", "break"],
+  },
+  {
+    id: 481,
+    lessonId: 14,
+    difficulty: "어려움",
+    question: "다음 코드는 1부터 5까지 출력하려 했지만 무한루프에 빠집니다. 원인은?",
+    code: `i = 1
+while i <= 5:
+    print(i)
+i += 1`,
+    options: [
+      "i += 1이 while 블록 밖에 있어서 루프 안에서 i가 증가하지 않는다",
+      "while 조건이 잘못되어 항상 True이다",
+      "print(i)가 i를 변경한다",
+      "i = 1 초기화가 잘못되었다",
+    ],
+    correctAnswer: 0,
+    explanation: "i += 1의 들여쓰기가 while 블록 밖에 있어 루프 안에서 실행되지 않습니다. i는 항상 1로 유지되어 조건 i <= 5가 영원히 True입니다. i += 1을 while 블록 안으로 들여써야 합니다.",
+    keyConceptTitle: "while 무한루프 — 들여쓰기 오류",
+    keyConceptDescription: "Python에서 들여쓰기는 코드 블록을 결정합니다. 카운터 증가 코드가 while 블록 밖에 있으면 반복되지 않아 무한루프가 됩니다.",
+    relatedTopics: ["while", "무한루프", "들여쓰기"],
+  },
+  // ===== lessonId 23: 스택 (Stack) =====
+  {
+    id: 482,
+    lessonId: 23,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `stack = []
+stack.append(1)
+stack.append(2)
+stack.append(3)
+print(stack.pop())
+print(stack.pop())`,
+    options: ["1\n2", "3\n2", "1\n3", "2\n3"],
+    correctAnswer: 1,
+    explanation: "스택에 1, 2, 3 순서로 push한 후 pop을 두 번 하면 LIFO 원칙에 따라 마지막에 들어간 3이 먼저, 그다음 2가 출력됩니다.",
+    keyConceptTitle: "스택 push/pop — LIFO",
+    keyConceptDescription: "리스트의 append()는 스택의 push, pop()은 스택의 pop 역할을 합니다. 마지막에 들어간 데이터가 먼저 나오는 LIFO 구조입니다.",
+    relatedTopics: ["스택", "LIFO", "append", "pop"],
+  },
+  {
+    id: 483,
+    lessonId: 23,
+    difficulty: "쉬움",
+    question: "스택에 'A', 'B', 'C'를 순서대로 push한 후 pop을 3번 하면 출력 순서는?",
+    code: `stack = []
+for ch in ['A', 'B', 'C']:
+    stack.append(ch)
+while stack:
+    print(stack.pop())`,
+    options: ["A\nB\nC", "C\nB\nA", "B\nA\nC", "C\nA\nB"],
+    correctAnswer: 1,
+    explanation: "스택은 LIFO입니다. A→B→C 순으로 push했으므로 pop은 C→B→A 순서로 나옵니다.",
+    keyConceptTitle: "스택 LIFO 순서",
+    keyConceptDescription: "스택은 Last In, First Out입니다. push 순서의 역순으로 pop됩니다.",
+    relatedTopics: ["스택", "LIFO", "pop 순서"],
+  },
+  {
+    id: 484,
+    lessonId: 23,
+    difficulty: "쉬움",
+    question: "스택이 비어 있는지 확인하는 올바른 Python 코드는?",
+    code: `stack = []
+stack.append(10)
+stack.pop()
+# 스택이 비어있는지 확인`,
+    options: [
+      "if stack == None:",
+      "if len(stack) == 0:",
+      "if stack.empty():",
+      "if stack.size() == 0:",
+    ],
+    correctAnswer: 1,
+    explanation: "Python 리스트로 구현한 스택은 len(stack) == 0 또는 not stack으로 빈 상태를 확인합니다. stack.empty()나 stack.size()는 Python 리스트에 없는 메서드입니다.",
+    keyConceptTitle: "스택 is_empty 조건",
+    keyConceptDescription: "Python 리스트 기반 스택에서 빈 상태 확인은 `len(stack) == 0` 또는 `not stack`을 사용합니다.",
+    relatedTopics: ["스택", "is_empty", "len"],
+  },
+  {
+    id: 485,
+    lessonId: 23,
+    difficulty: "쉬움",
+    question: "스택의 맨 위 값을 제거 없이 확인(peek)하는 올바른 코드는?",
+    code: `stack = [1, 2, 3, 4, 5]
+# 맨 위(top) 값을 확인만 하고 제거하지 않는다`,
+    options: [
+      "stack.pop()",
+      "stack[-1]",
+      "stack[0]",
+      "stack.peek()",
+    ],
+    correctAnswer: 1,
+    explanation: "stack[-1]은 리스트의 마지막 요소(스택의 top)를 제거 없이 반환합니다. pop()은 제거까지 합니다. stack.peek()는 Python에 없는 메서드입니다.",
+    keyConceptTitle: "스택 peek 연산",
+    keyConceptDescription: "peek은 스택의 top 값을 보기만 하는 연산입니다. Python 리스트에서는 `stack[-1]`로 구현합니다.",
+    relatedTopics: ["스택", "peek", "인덱싱"],
+  },
+  {
+    id: 486,
+    lessonId: 23,
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `word = "hello"
+stack = []
+for ch in word:
+    stack.append(ch)
+result = ""
+while stack:
+    result += stack.pop()
+print(result)`,
+    options: ["hello", "olleh", "oelhl", "오류"],
+    correctAnswer: 1,
+    explanation: "h, e, l, l, o 순서로 스택에 push한 후 pop하면 역순인 o, l, l, e, h로 꺼내집니다. result는 'olleh'가 됩니다.",
+    keyConceptTitle: "스택으로 문자열 역순",
+    keyConceptDescription: "스택의 LIFO 특성을 이용하면 문자열을 역순으로 만들 수 있습니다. 각 문자를 push한 뒤 모두 pop하면 역순 문자열이 됩니다.",
+    relatedTopics: ["스택", "문자열 역순", "LIFO 활용"],
+  },
+  {
+    id: 487,
+    lessonId: 23,
+    difficulty: "보통",
+    question: "괄호 문자열 '(()' 를 스택으로 검사할 때 다음 코드의 출력 결과는?",
+    code: `s = "(()"
+stack = []
+for ch in s:
+    if ch == '(':
+        stack.append(ch)
+    elif ch == ')':
+        if stack:
+            stack.pop()
+print(len(stack), "개 미매칭")`,
+    options: ["0 개 미매칭", "1 개 미매칭", "2 개 미매칭", "오류"],
+    correctAnswer: 1,
+    explanation: "'(' push → '(' push → ')' pop. 처리 후 스택에 '('가 1개 남아 '1 개 미매칭'이 출력됩니다.",
+    keyConceptTitle: "괄호 검사 스택",
+    keyConceptDescription: "여는 괄호를 push하고 닫는 괄호를 만나면 pop합니다. 처리 후 스택이 비어 있으면 올바른 괄호 쌍입니다.",
+    relatedTopics: ["스택", "괄호 검사", "LIFO 활용"],
+  },
+  {
+    id: 488,
+    lessonId: 23,
+    difficulty: "보통",
+    question: "빈 스택에서 pop을 시도할 때 발생하는 오류를 방지하는 올바른 코드는?",
+    code: `stack = [1, 2]
+stack.pop()
+stack.pop()
+# 스택이 비었는데 또 pop 시도
+# 아래 중 안전한 코드는?`,
+    options: [
+      "stack.pop()",
+      "if stack: stack.pop()",
+      "stack.pop(default=None)",
+      "stack.safe_pop()",
+    ],
+    correctAnswer: 1,
+    explanation: "빈 리스트에서 pop()을 호출하면 IndexError가 발생합니다. `if stack:` 조건으로 비어있지 않을 때만 pop합니다. pop(default=None)이나 safe_pop()은 Python 리스트에 없습니다.",
+    keyConceptTitle: "스택 언더플로 방지",
+    keyConceptDescription: "스택이 비어 있는데 pop을 시도하면 IndexError(스택 언더플로)가 발생합니다. pop 전에 항상 스택이 비어 있지 않은지 확인하세요.",
+    relatedTopics: ["스택", "언더플로", "IndexError"],
+  },
+  {
+    id: 489,
+    lessonId: 23,
+    difficulty: "어려움",
+    question: "다음 코드 실행 후 stack1과 stack2의 상태는?",
+    code: `stack1 = [1, 2, 3, 4]
+stack2 = []
+while stack1:
+    stack2.append(stack1.pop())
+stack2.pop()
+stack1.append(stack2.pop())
+print(stack1)
+print(stack2)`,
+    options: [
+      "[3]\n[4, 3, 2]",
+      "[3]\n[4, 3]",
+      "[2]\n[4, 3]",
+      "[2]\n[4, 3, 2]",
+    ],
+    correctAnswer: 2,
+    explanation: "stack1=[1,2,3,4]를 모두 pop해 stack2에 push하면 stack2=[4,3,2,1]. stack2.pop()으로 1 제거 → stack2=[4,3,2]. stack1.append(stack2.pop())은 stack2에서 2를 꺼내 stack1에 추가 → stack1=[2], stack2=[4,3].",
+    keyConceptTitle: "두 스택 연산 추적",
+    keyConceptDescription: "스택 연산을 단계별로 추적하는 것이 중요합니다. 각 push/pop 이후 스택 상태를 직접 그려가며 확인하세요.",
+    relatedTopics: ["스택", "연산 추적", "두 스택"],
+  },
+  // ===== lessonId 26: 자료구조 비교와 선택 =====
+  {
+    id: 490,
+    lessonId: 26,
+    difficulty: "쉬움",
+    question: "데이터에서 중복을 제거하고 고유한 값만 유지하려 할 때 가장 적합한 자료구조는?",
+    code: `data = [3, 1, 4, 1, 5, 9, 2, 6, 5, 3]
+# 중복 없이 고유한 값만 유지`,
+    options: ["리스트(list)", "튜플(tuple)", "집합(set)", "딕셔너리(dict)"],
+    correctAnswer: 2,
+    explanation: "집합(set)은 중복을 자동으로 제거하고 고유한 값만 저장합니다. set(data)를 사용하면 간단히 중복을 제거할 수 있습니다.",
+    keyConceptTitle: "중복 제거 — set",
+    keyConceptDescription: "집합(set)은 중복 값을 허용하지 않습니다. 중복 제거가 필요할 때 set()을 사용하는 것이 가장 효율적입니다.",
+    relatedTopics: ["set", "중복 제거", "자료구조 선택"],
+  },
+  {
+    id: 491,
+    lessonId: 26,
+    difficulty: "쉬움",
+    question: "데이터를 순서대로 저장하고 나중에 수정도 해야 합니다. 가장 적합한 자료구조는?",
+    code: `# 조건:
+# 1. 삽입 순서 보장
+# 2. 나중에 특정 값 수정 가능
+# 3. 인덱스로 접근 가능`,
+    options: ["집합(set)", "튜플(tuple)", "리스트(list)", "딕셔너리(dict)"],
+    correctAnswer: 2,
+    explanation: "리스트는 삽입 순서를 보장하고 인덱스로 접근하며 수정(mutable)이 가능합니다. 튜플은 불변(immutable), 집합은 순서 없음, 딕셔너리는 키-값 쌍입니다.",
+    keyConceptTitle: "순서 보장 + 수정 가능 — list",
+    keyConceptDescription: "리스트는 순서가 있고 수정 가능한(mutable) 자료구조입니다. 튜플은 순서가 있지만 불변입니다.",
+    relatedTopics: ["list", "tuple", "자료구조 선택", "mutable"],
+  },
+  {
+    id: 492,
+    lessonId: 26,
+    difficulty: "보통",
+    question: "학생 이름으로 점수를 빠르게 조회해야 합니다. 가장 적합한 자료구조와 이유는?",
+    code: `# 요구사항: "홍길동" → 95점 같은 키-값 조회
+# O(1) 평균 시간복잡도로 조회해야 함`,
+    options: [
+      "리스트 — 인덱스 조회가 O(1)이므로",
+      "딕셔너리 — 키 기반 해시 조회가 평균 O(1)이므로",
+      "집합 — 존재 여부 확인이 O(1)이므로",
+      "튜플 — 불변이라 빠르게 읽을 수 있으므로",
+    ],
+    correctAnswer: 1,
+    explanation: "딕셔너리는 해시 테이블 기반으로 키-값 조회가 평균 O(1)입니다. 이름(키)으로 점수(값)를 O(1)에 찾을 수 있는 최적의 자료구조입니다.",
+    keyConceptTitle: "키-값 조회 — dict",
+    keyConceptDescription: "딕셔너리는 해시 테이블로 구현되어 키 조회가 평균 O(1)입니다. 이름→점수, ID→정보처럼 키로 값을 빠르게 찾을 때 사용합니다.",
+    relatedTopics: ["dict", "O(1) 조회", "해시 테이블", "자료구조 선택"],
+  },
+  {
+    id: 493,
+    lessonId: 26,
+    difficulty: "보통",
+    question: "은행 창구 대기열 시스템을 구현하려 합니다. 번호표 순서대로 처리해야 할 때 가장 적합한 자료구조는?",
+    code: `# 조건:
+# - 먼저 온 고객이 먼저 처리됨 (FIFO)
+# - 앞에서 꺼내고 뒤에서 추가하는 작업이 빈번함`,
+    options: [
+      "리스트(list) — append/pop(0) 활용",
+      "스택(list 기반) — append/pop 활용",
+      "deque — append/popleft 활용",
+      "집합(set) — 순서 없는 처리",
+    ],
+    correctAnswer: 2,
+    explanation: "FIFO(선입선출) 구조엔 큐가 적합합니다. deque는 양끝 삽입/삭제가 O(1)이라 큐 구현에 최적입니다. list의 pop(0)는 O(n)이라 비효율적입니다.",
+    keyConceptTitle: "FIFO — deque(큐)",
+    keyConceptDescription: "큐(Queue)는 FIFO 구조입니다. Python에서 collections.deque로 구현하면 양끝 삽입/삭제가 O(1)이어서 list 기반 큐보다 효율적입니다.",
+    relatedTopics: ["deque", "큐", "FIFO", "자료구조 선택"],
+  },
+  {
+    id: 494,
+    lessonId: 26,
+    difficulty: "어려움",
+    question: "다음 두 코드 A, B의 시간복잡도 차이로 옳은 것은?",
+    code: `# 코드 A: 리스트에서 특정 값 존재 여부 확인
+data_list = list(range(10000))
+result = 9999 in data_list  # O(?)
+
+# 코드 B: 집합에서 특정 값 존재 여부 확인
+data_set = set(range(10000))
+result = 9999 in data_set   # O(?)`,
+    options: [
+      "A: O(1), B: O(1) — 둘 다 같음",
+      "A: O(n), B: O(1) — set이 훨씬 빠름",
+      "A: O(n), B: O(n) — 둘 다 순회 필요",
+      "A: O(log n), B: O(1) — list는 이진탐색 사용",
+    ],
+    correctAnswer: 1,
+    explanation: "리스트의 `in` 연산은 처음부터 순차 탐색하는 O(n)입니다. 집합의 `in` 연산은 해시 기반으로 평균 O(1)입니다. 대용량 데이터에서 존재 여부를 자주 확인한다면 set이 훨씬 효율적입니다.",
+    keyConceptTitle: "리스트 O(n) vs 집합 O(1) 검색",
+    keyConceptDescription: "리스트의 `in` 연산은 O(n), 집합의 `in` 연산은 평균 O(1)입니다. 빈번한 존재 여부 확인에는 set이 효율적입니다.",
+    relatedTopics: ["시간복잡도", "set", "list", "O(n) vs O(1)"],
+  },
+  // ===== lessonId 33: 매개변수와 반환값 =====
+  {
+    id: 495,
+    lessonId: 33,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `def greet(name, greeting="안녕하세요"):
+    print(f"{greeting}, {name}!")
+
+greet("철수")
+greet("영희", "반가워요")`,
+    options: [
+      "안녕하세요, 철수!\n반가워요, 영희!",
+      "철수, 안녕하세요!\n영희, 반가워요!",
+      "오류",
+      "안녕하세요, 철수!\n안녕하세요, 영희!",
+    ],
+    correctAnswer: 0,
+    explanation: "첫 번째 호출은 greeting 기본값 '안녕하세요'를 사용합니다. 두 번째 호출은 '반가워요'를 명시적으로 전달합니다.",
+    keyConceptTitle: "기본값 매개변수",
+    keyConceptDescription: "기본값 매개변수는 인자를 전달하지 않으면 지정된 기본값을 사용합니다. 기본값이 있는 매개변수는 없는 것 뒤에 위치해야 합니다.",
+    relatedTopics: ["기본값 매개변수", "함수"],
+  },
+  {
+    id: 496,
+    lessonId: 33,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `def introduce(name, age, city):
+    print(f"이름: {name}, 나이: {age}, 도시: {city}")
+
+introduce(age=25, city="서울", name="민준")`,
+    options: [
+      "이름: 민준, 나이: 25, 도시: 서울",
+      "이름: age, 나이: name, 도시: city",
+      "오류 — 키워드 인자 순서가 잘못됨",
+      "이름: 25, 나이: 서울, 도시: 민준",
+    ],
+    correctAnswer: 0,
+    explanation: "키워드 인자는 순서와 상관없이 매개변수 이름으로 값이 전달됩니다. name='민준', age=25, city='서울'로 올바르게 매핑됩니다.",
+    keyConceptTitle: "키워드 인자",
+    keyConceptDescription: "키워드 인자는 `매개변수명=값` 형태로 전달하며, 순서와 무관하게 올바른 매개변수에 값이 배정됩니다.",
+    relatedTopics: ["키워드 인자", "함수 호출"],
+  },
+  {
+    id: 497,
+    lessonId: 33,
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `def total(*args):
+    result = 0
+    for n in args:
+        result += n
+    return result
+
+print(total(1, 2, 3))
+print(total(10, 20))`,
+    options: ["6\n30", "1\n10", "[1, 2, 3]\n[10, 20]", "오류"],
+    correctAnswer: 0,
+    explanation: "*args는 가변 개수의 위치 인자를 튜플로 받습니다. total(1,2,3)은 1+2+3=6, total(10,20)은 10+20=30을 반환합니다.",
+    keyConceptTitle: "*args 가변 인자",
+    keyConceptDescription: "*args는 임의 개수의 위치 인자를 튜플로 묶어 받습니다. for 루프로 각 값을 처리할 수 있습니다.",
+    relatedTopics: ["*args", "가변 인자", "함수"],
+  },
+  {
+    id: 498,
+    lessonId: 33,
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `def min_max(numbers):
+    return min(numbers), max(numbers)
+
+result = min_max([3, 1, 4, 1, 5, 9])
+lo, hi = result
+print(lo, hi)`,
+    options: ["1 9", "(1, 9)", "1\n9", "오류"],
+    correctAnswer: 0,
+    explanation: "함수가 min, max 두 값을 반환하면 튜플 (1, 9)가 됩니다. `lo, hi = result`로 언패킹하면 lo=1, hi=9입니다. print(lo, hi)는 '1 9'를 출력합니다.",
+    keyConceptTitle: "다중 반환값 — 튜플 언패킹",
+    keyConceptDescription: "Python 함수는 `return a, b`로 여러 값을 튜플로 반환합니다. 호출 측에서 `x, y = func()`로 언패킹할 수 있습니다.",
+    relatedTopics: ["다중 반환값", "튜플 언패킹", "함수"],
+  },
+  {
+    id: 499,
+    lessonId: 33,
+    difficulty: "어려움",
+    question: "다음 코드에서 오류가 발생하는 이유는?",
+    code: `def func(a, b=10, c):
+    return a + b + c
+
+print(func(1, 2, 3))`,
+    options: [
+      "기본값 매개변수(b=10) 뒤에 기본값 없는 매개변수(c)가 올 수 없다",
+      "return에서 세 값을 더할 수 없다",
+      "func를 호출할 때 인자 수가 부족하다",
+      "b와 c의 이름이 충돌한다",
+    ],
+    correctAnswer: 0,
+    explanation: "Python에서 기본값이 있는 매개변수(b=10) 뒤에 기본값이 없는 매개변수(c)를 놓으면 SyntaxError가 발생합니다. 기본값이 없는 매개변수는 항상 기본값이 있는 것보다 앞에 와야 합니다.",
+    keyConceptTitle: "매개변수 순서 오류",
+    keyConceptDescription: "기본값이 있는 매개변수는 기본값이 없는 매개변수 뒤에 위치해야 합니다. 순서: 일반 매개변수 → 기본값 매개변수 → *args",
+    relatedTopics: ["기본값 매개변수", "매개변수 순서", "SyntaxError"],
+  },
+  // ===== lessonId 41: 클래스 기초 =====
+  {
+    id: 500,
+    lessonId: 41,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `class Dog:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+d = Dog("바둑이", 3)
+print(d.name)
+print(d.age)`,
+    options: ["바둑이\n3", "name\nage", "오류", "Dog\n3"],
+    correctAnswer: 0,
+    explanation: "__init__에서 self.name과 self.age 속성이 초기화됩니다. d.name은 '바둑이', d.age는 3을 반환합니다.",
+    keyConceptTitle: "__init__과 self",
+    keyConceptDescription: "__init__은 인스턴스 생성 시 자동으로 호출되는 초기화 메서드입니다. self는 인스턴스 자신을 가리키며, self.속성명으로 인스턴스 속성을 정의합니다.",
+    relatedTopics: ["__init__", "self", "인스턴스 속성"],
+  },
+  {
+    id: 501,
+    lessonId: 41,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+p1 = Point(1, 2)
+p2 = Point(3, 4)
+print(p1.x, p2.y)`,
+    options: ["1 4", "1 2", "3 4", "오류"],
+    correctAnswer: 0,
+    explanation: "p1과 p2는 독립적인 인스턴스입니다. p1.x는 1, p2.y는 4입니다. 각 인스턴스는 자신만의 속성 값을 가집니다.",
+    keyConceptTitle: "여러 인스턴스 생성",
+    keyConceptDescription: "같은 클래스로 여러 인스턴스를 만들 수 있으며, 각 인스턴스는 독립적인 속성 값을 가집니다.",
+    relatedTopics: ["인스턴스", "클래스", "독립 속성"],
+  },
+  {
+    id: 502,
+    lessonId: 41,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `class Circle:
+    def __init__(self, radius):
+        self.radius = radius
+
+    def area(self):
+        return 3.14 * self.radius * self.radius
+
+c = Circle(5)
+print(c.area())`,
+    options: ["78.5", "15.7", "25", "오류"],
+    correctAnswer: 0,
+    explanation: "area() 메서드는 3.14 * 5 * 5 = 78.5를 반환합니다.",
+    keyConceptTitle: "인스턴스 메서드 호출",
+    keyConceptDescription: "인스턴스 메서드는 `인스턴스.메서드명()`으로 호출합니다. self 매개변수는 자동으로 인스턴스가 전달되어 self.속성으로 인스턴스 데이터에 접근합니다.",
+    relatedTopics: ["인스턴스 메서드", "self", "클래스"],
+  },
+  {
+    id: 503,
+    lessonId: 41,
+    difficulty: "보통",
+    question: "다음 코드에서 오류가 발생하는 이유는?",
+    code: `class Counter:
+    def __init__(self):
+        self.count = 0
+
+    def increment():
+        self.count += 1
+
+c = Counter()
+c.increment()`,
+    options: [
+      "increment() 메서드에 self 매개변수가 없어서",
+      "count 속성을 0으로 초기화하면 안 돼서",
+      "Counter 클래스에 __init__이 있으면 안 돼서",
+      "c.increment()에 인자를 전달하지 않아서",
+    ],
+    correctAnswer: 0,
+    explanation: "인스턴스 메서드는 첫 번째 매개변수로 self를 반드시 선언해야 합니다. `def increment(self):`처럼 써야 하는데 self가 없어 TypeError가 발생합니다.",
+    keyConceptTitle: "self 없는 메서드 오류",
+    keyConceptDescription: "인스턴스 메서드는 반드시 첫 번째 매개변수로 self를 선언해야 합니다. self가 없으면 인스턴스 속성에 접근할 수 없고 TypeError가 발생합니다.",
+    relatedTopics: ["self", "인스턴스 메서드", "TypeError"],
+  },
+  {
+    id: 504,
+    lessonId: 41,
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `class MyClass:
+    class_var = 0  # 클래스 변수
+
+    def __init__(self, value):
+        self.instance_var = value  # 인스턴스 변수
+        MyClass.class_var += 1
+
+a = MyClass(10)
+b = MyClass(20)
+print(a.class_var, b.class_var)
+print(a.instance_var, b.instance_var)`,
+    options: [
+      "2 2\n10 20",
+      "1 1\n10 20",
+      "2 2\n20 20",
+      "오류",
+    ],
+    correctAnswer: 0,
+    explanation: "class_var는 모든 인스턴스가 공유합니다. 인스턴스 생성마다 1씩 증가해 2가 됩니다. instance_var는 각 인스턴스에 독립적으로 10, 20입니다.",
+    keyConceptTitle: "클래스 변수 vs 인스턴스 변수",
+    keyConceptDescription: "클래스 변수는 모든 인스턴스가 공유합니다. 인스턴스 변수는 self.변수명으로 정의하며 인스턴스마다 독립적입니다.",
+    relatedTopics: ["클래스 변수", "인스턴스 변수", "공유 상태"],
+  },
+  {
+    id: 505,
+    lessonId: 41,
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `class Robot:
+    def __init__(self, name):
+        self.name = name
+        self.power_on()
+
+    def power_on(self):
+        print(f"{self.name} 전원 ON")
+
+r = Robot("R2D2")`,
+    options: ["R2D2 전원 ON", "오류", "아무것도 출력 안 됨", "전원 ON"],
+    correctAnswer: 0,
+    explanation: "__init__ 안에서 self.power_on()을 호출합니다. 인스턴스 생성 시 __init__이 실행되고, 그 안에서 power_on()이 호출되어 'R2D2 전원 ON'이 출력됩니다.",
+    keyConceptTitle: "__init__에서 메서드 호출",
+    keyConceptDescription: "__init__ 안에서 self.메서드()로 다른 인스턴스 메서드를 호출할 수 있습니다. 초기화 시 특정 동작이 필요할 때 사용합니다.",
+    relatedTopics: ["__init__", "self", "메서드 호출"],
+  },
+  {
+    id: 506,
+    lessonId: 41,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `class Bank:
+    def __init__(self, balance):
+        self.balance = balance
+
+    def deposit(self, amount):
+        self.balance += amount
+        return self
+
+    def withdraw(self, amount):
+        self.balance -= amount
+        return self
+
+b = Bank(1000)
+b.deposit(500).withdraw(200).deposit(100)
+print(b.balance)`,
+    options: ["1400", "1500", "1100", "오류"],
+    correctAnswer: 0,
+    explanation: "1000 + 500 = 1500, 1500 - 200 = 1300, 1300 + 100 = 1400. 각 메서드가 self를 반환하므로 메서드 체이닝이 가능합니다.",
+    keyConceptTitle: "메서드 체이닝",
+    keyConceptDescription: "메서드가 `return self`를 반환하면 `객체.메서드1().메서드2()`처럼 연속 호출(메서드 체이닝)이 가능합니다.",
+    relatedTopics: ["메서드 체이닝", "return self", "클래스"],
+  },
+  // ===== lessonId 47: Part 8 프로젝트 — 모듈 활용 =====
+  {
+    id: 507,
+    lessonId: 47,
+    difficulty: "쉬움",
+    question: "`if __name__ == '__main__':` 구문의 목적으로 가장 올바른 것은?",
+    code: `# utils.py
+def add(a, b):
+    return a + b
+
+if __name__ == "__main__":
+    print(add(3, 5))`,
+    options: [
+      "파일을 직접 실행할 때만 코드를 실행하고, import 시에는 실행하지 않으려고",
+      "함수 add가 정의되었는지 확인하려고",
+      "모듈 이름을 'main'으로 설정하려고",
+      "클래스 이름을 확인하려고",
+    ],
+    correctAnswer: 0,
+    explanation: "파일을 직접 실행하면 __name__이 '__main__'이 됩니다. 다른 파일에서 import하면 __name__은 모듈 이름('utils')이 됩니다. 이 조건으로 직접 실행 시에만 특정 코드를 실행할 수 있습니다.",
+    keyConceptTitle: "__name__ == '__main__'",
+    keyConceptDescription: "파일을 직접 실행하면 __name__은 '__main__', import하면 모듈 파일명입니다. 이를 이용해 직접 실행 시에만 테스트 코드를 실행하게 할 수 있습니다.",
+    relatedTopics: ["__name__", "모듈", "import"],
+  },
+  {
+    id: 508,
+    lessonId: 47,
+    difficulty: "쉬움",
+    question: "math 모듈에서 sqrt 함수만 가져오는 올바른 코드는?",
+    code: `# math 모듈의 sqrt 함수만 import해서
+# math.sqrt(16) 대신 sqrt(16)으로 바로 쓰고 싶다`,
+    options: [
+      "import math.sqrt",
+      "from math import sqrt",
+      "import sqrt from math",
+      "include math.sqrt",
+    ],
+    correctAnswer: 1,
+    explanation: "`from 모듈 import 함수명`으로 특정 함수만 가져올 수 있습니다. 이후 `sqrt(16)`처럼 모듈명 없이 직접 사용 가능합니다.",
+    keyConceptTitle: "from ... import ...",
+    keyConceptDescription: "`from 모듈 import 이름`으로 모듈에서 특정 항목만 가져옵니다. 전체 모듈을 import할 때보다 이름 앞에 모듈명을 붙이지 않아도 됩니다.",
+    relatedTopics: ["import", "from import", "모듈"],
+  },
+  {
+    id: 509,
+    lessonId: 47,
+    difficulty: "보통",
+    question: "main.py에서 helper.py를 import할 때, helper.py 내부의 `print(__name__)`은 무엇을 출력하나요?",
+    code: `# 파일 구조:
+# main.py  (python main.py 로 직접 실행)
+# helper.py (main.py 에서 import helper)
+
+# helper.py 내용:
+# print(__name__)`,
+    options: [
+      "__main__",
+      "helper",
+      "main",
+      "None",
+    ],
+    correctAnswer: 1,
+    explanation: "main.py에서 import helper하면 helper.py가 로드되며 __name__은 'helper'(파일명 확장자 제외)가 됩니다. helper.py를 직접 실행할 때만 '__main__'이 됩니다.",
+    keyConceptTitle: "__name__ 값 변화",
+    keyConceptDescription: "파일을 직접 실행하면 __name__ = '__main__'. 다른 파일에서 import되면 __name__ = '모듈명'(파일명 확장자 제외).",
+    relatedTopics: ["__name__", "import", "모듈"],
+  },
+  {
+    id: 510,
+    lessonId: 47,
+    difficulty: "보통",
+    question: "프로젝트를 모듈로 분리할 때의 올바른 설계 원칙은?",
+    code: `# 게임 프로젝트 구조 예시
+# player.py  — 플레이어 관련 클래스/함수
+# enemy.py   — 적 관련 클래스/함수
+# utils.py   — 공통 유틸리티 함수
+# main.py    — 게임 루프, 각 모듈 import`,
+    options: [
+      "모든 코드를 main.py 한 파일에 넣는 것이 관리하기 쉽다",
+      "각 모듈은 관련된 기능끼리 묶어 단일 책임 원칙을 지킨다",
+      "모듈이 많을수록 항상 성능이 향상된다",
+      "utils.py에는 클래스를 정의하면 안 된다",
+    ],
+    correctAnswer: 1,
+    explanation: "모듈 분리의 핵심 원칙은 관련된 기능끼리 묶는 것(응집도)입니다. 각 모듈이 하나의 책임을 가지면 코드 유지보수와 재사용이 쉬워집니다.",
+    keyConceptTitle: "모듈 분리 설계 원칙",
+    keyConceptDescription: "모듈은 관련된 기능을 하나의 파일로 묶어 관리합니다. 단일 책임 원칙: 각 모듈은 하나의 역할을 담당해야 합니다.",
+    relatedTopics: ["모듈", "설계 원칙", "단일 책임"],
+  },
+  {
+    id: 511,
+    lessonId: 47,
+    difficulty: "어려움",
+    question: "다음 파일 구조에서 발생하는 문제는?",
+    code: `# a.py
+from b import func_b
+
+def func_a():
+    return "a"
+
+# b.py
+from a import func_a
+
+def func_b():
+    return "b"`,
+    options: [
+      "함수 이름이 너무 짧아서 충돌이 발생한다",
+      "a.py와 b.py가 서로를 import하는 순환 참조(circular import)로 ImportError가 발생한다",
+      "from 대신 import를 써야 한다",
+      "함수 반환값이 문자열이면 import 오류가 발생한다",
+    ],
+    correctAnswer: 1,
+    explanation: "a.py가 b.py를 import하고, b.py도 a.py를 import하면 순환 참조(circular import)가 발생합니다. Python이 a.py를 로드하는 도중 b.py를 로드하려 하지만 a.py가 아직 완성되지 않아 ImportError 또는 NameError가 발생합니다.",
+    keyConceptTitle: "순환 import(circular import) 오류",
+    keyConceptDescription: "두 모듈이 서로를 import하면 순환 참조가 발생합니다. 해결책: 공통 의존성을 별도 모듈로 분리하거나, 함수 내부에서 import하는 지연 import를 사용합니다.",
+    relatedTopics: ["circular import", "모듈", "ImportError"],
+  },
+  // ===== lessonId 50: Part 9 텍스트 RPG =====
+  {
+    id: 512,
+    lessonId: 50,
+    difficulty: "쉬움",
+    question: "텍스트 RPG 게임 루프의 기본 구조로 가장 올바른 것은?",
+    code: `# 게임 루프 기본 구조
+while game_running:
+    # 1. 상태 표시
+    # 2. 입력 받기
+    # 3. 입력 처리
+    # 4. 게임 상태 업데이트`,
+    options: [
+      "게임이 시작되면 종료 조건 없이 무한히 실행되어야 한다",
+      "game_running 변수가 True인 동안 반복하며, 특정 조건에서 False로 설정해 종료한다",
+      "for 루프를 쓰는 것이 while 루프보다 항상 더 적합하다",
+      "게임 루프는 반드시 재귀 함수로 구현해야 한다",
+    ],
+    correctAnswer: 1,
+    explanation: "게임 루프는 `while game_running:` 구조가 일반적입니다. 플레이어가 '종료' 선택 등 특정 조건에서 game_running을 False로 설정하면 루프가 종료됩니다.",
+    keyConceptTitle: "게임 루프 구조",
+    keyConceptDescription: "게임 루프는 상태 표시 → 입력 → 처리 → 업데이트를 반복합니다. while 루프로 구현하며 종료 조건이 되면 루프를 탈출합니다.",
+    relatedTopics: ["게임 루프", "while", "상태 관리"],
+  },
+  {
+    id: 513,
+    lessonId: 50,
+    difficulty: "보통",
+    question: "다음 RPG 캐릭터 클래스에서 연속으로 take_damage()를 호출한 후 hp는?",
+    code: `class Character:
+    def __init__(self, name, hp, attack):
+        self.name = name
+        self.hp = hp
+        self.attack = attack
+
+    def take_damage(self, damage):
+        self.hp = max(0, self.hp - damage)
+
+hero = Character("영웅", 100, 15)
+hero.take_damage(30)
+hero.take_damage(80)
+print(hero.hp)`,
+    options: ["0", "-10", "10", "오류"],
+    correctAnswer: 0,
+    explanation: "첫 번째 take_damage(30): hp = max(0, 100-30) = 70. 두 번째 take_damage(80): hp = max(0, 70-80) = max(0, -10) = 0.",
+    keyConceptTitle: "max()로 HP 하한 제한",
+    keyConceptDescription: "RPG에서 HP가 음수가 되지 않도록 `max(0, hp - damage)`를 사용합니다. max()는 두 값 중 큰 값을 반환합니다.",
+    relatedTopics: ["클래스", "max()", "게임 로직"],
+  },
+  {
+    id: 514,
+    lessonId: 50,
+    difficulty: "보통",
+    question: "게임 세이브 데이터를 파일로 저장/로드하는 코드의 출력 결과는?",
+    code: `import json
+
+save_data = {"name": "영웅", "hp": 80, "level": 5}
+with open("save.json", "w") as f:
+    json.dump(save_data, f)
+
+with open("save.json", "r") as f:
+    loaded = json.load(f)
+print(loaded["name"])`,
+    options: [
+      "오류 — json.dump는 딕셔너리를 저장할 수 없다",
+      "영웅",
+      "오류 — with open은 json 파일에 사용할 수 없다",
+      "{'name': '영웅', 'hp': 80, 'level': 5}",
+    ],
+    correctAnswer: 1,
+    explanation: "json.dump()로 딕셔너리를 JSON 파일로 저장하고, json.load()로 다시 딕셔너리로 불러옵니다. loaded['name']은 '영웅'을 반환합니다.",
+    keyConceptTitle: "JSON으로 게임 세이브/로드",
+    keyConceptDescription: "json 모듈의 dump()로 파이썬 딕셔너리를 JSON 파일로 저장하고, load()로 불러옵니다. 게임 세이브 파일 구현에 자주 사용됩니다.",
+    relatedTopics: ["json", "파일 I/O", "세이브 시스템"],
+  },
+  {
+    id: 515,
+    lessonId: 50,
+    difficulty: "어려움",
+    question: "다음 RPG 전투 시스템에서 전투 종료 후 player.hp는?",
+    code: `class Fighter:
+    def __init__(self, name, hp, atk):
+        self.name = name
+        self.hp = hp
+        self.atk = atk
+
+    def attack(self, target):
+        target.hp -= self.atk
+
+    def is_alive(self):
+        return self.hp > 0
+
+player = Fighter("플레이어", 50, 20)
+enemy = Fighter("고블린", 40, 15)
+
+while player.is_alive() and enemy.is_alive():
+    player.attack(enemy)
+    if enemy.is_alive():
+        enemy.attack(player)
+
+if player.is_alive():
+    print(f"{player.name} 승리! 남은 HP: {player.hp}")
+else:
+    print(f"{enemy.name} 승리!")`,
+    options: [
+      "플레이어 승리! 남은 HP: 35",
+      "플레이어 승리! 남은 HP: 20",
+      "고블린 승리!",
+      "플레이어 승리! 남은 HP: 50",
+    ],
+    correctAnswer: 0,
+    explanation: "라운드1: 플레이어 공격 → 고블린 hp=40-20=20(생존), 고블린 공격 → 플레이어 hp=50-15=35. 라운드2: 플레이어 공격 → 고블린 hp=20-20=0(사망), 루프 종료. 플레이어 hp=35이므로 '플레이어 승리! 남은 HP: 35' 출력.",
+    keyConceptTitle: "전투 루프 — 클래스와 while 결합",
+    keyConceptDescription: "RPG 전투는 두 객체가 번갈아 공격하는 while 루프로 구현합니다. 매 라운드 후 생존 여부를 확인해 루프 종료 조건을 설정합니다.",
+    relatedTopics: ["클래스", "전투 시스템", "while 루프", "게임 로직"],
+  },
 ]
