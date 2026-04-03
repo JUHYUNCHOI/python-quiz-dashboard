@@ -448,19 +448,110 @@ function checkPython(): Issue[] {
 }
 
 // ─────────────────────────────────────────────
+// 구조 검증 (중복 ID, correctAnswer 범위, 필수 필드)
+// ─────────────────────────────────────────────
+function checkStructure(): Issue[] {
+  const issues: Issue[] = []
+
+  const groups: Array<{ label: string; questions: typeof pythonQuestions }> = [
+    { label: "Python", questions: pythonQuestions },
+    { label: "C++",    questions: cppQuestions as typeof pythonQuestions },
+  ]
+
+  for (const { label, questions } of groups) {
+    // 파일 내 중복 ID 검사
+    const idCount = new Map<number, number>()
+    for (const q of questions) {
+      idCount.set(q.id, (idCount.get(q.id) ?? 0) + 1)
+    }
+    for (const [id, count] of idCount.entries()) {
+      if (count > 1) {
+        issues.push({
+          id,
+          lessonId: "중복",
+          rule: `[${label}] 파일 내 중복 question.id`,
+          detail: `id ${id}가 ${count}번 사용됨 — mastery 데이터 충돌 위험`,
+        })
+      }
+    }
+
+    // 각 문제 필드 검사
+    for (const q of questions) {
+      const prefix = `[${label}] Q${q.id}`
+
+      if (!q.options || q.options.length < 2) {
+        issues.push({
+          id: q.id,
+          lessonId: q.lessonId,
+          rule: "options 부족",
+          detail: `${prefix}: options가 ${q.options?.length ?? 0}개 (최소 2개 필요)`,
+        })
+      }
+
+      if (q.options && q.options.length >= 2) {
+        if (
+          q.correctAnswer === undefined ||
+          q.correctAnswer === null ||
+          q.correctAnswer < 0 ||
+          q.correctAnswer >= q.options.length
+        ) {
+          issues.push({
+            id: q.id,
+            lessonId: q.lessonId,
+            rule: "correctAnswer 범위 초과",
+            detail: `${prefix}: correctAnswer=${q.correctAnswer}, options.length=${q.options.length}`,
+          })
+        }
+      }
+
+      if (!q.question || q.question.trim() === "") {
+        issues.push({
+          id: q.id,
+          lessonId: q.lessonId,
+          rule: "question 필드 누락",
+          detail: `${prefix}: question이 비어있습니다`,
+        })
+      }
+      if (!q.explanation || q.explanation.trim() === "") {
+        issues.push({
+          id: q.id,
+          lessonId: q.lessonId,
+          rule: "explanation 필드 누락",
+          detail: `${prefix}: explanation이 비어있습니다`,
+        })
+      }
+    }
+  }
+
+  return issues
+}
+
+// ─────────────────────────────────────────────
 // 메인
 // ─────────────────────────────────────────────
 function main() {
-  console.log("\n🔍 퀴즈 문제 선수학습 검증 시작...\n")
+  console.log("\n🔍 퀴즈 문제 검증 시작...\n")
 
+  const structIssues = checkStructure()
   const cppIssues = checkCpp()
   const pyIssues = checkPython()
-  const total = cppIssues.length + pyIssues.length
+  const total = structIssues.length + cppIssues.length + pyIssues.length
+
+  if (structIssues.length === 0) {
+    console.log("✅ 구조 검증 (중복 ID / correctAnswer / 필수 필드): 이상 없음")
+  } else {
+    console.log(`❌ 구조 오류: ${structIssues.length}건 발견\n`)
+    for (const issue of structIssues) {
+      console.log(`  Q${issue.id} [${issue.lessonId}]`)
+      console.log(`    규칙: ${issue.rule}`)
+      console.log(`    상세: ${issue.detail}\n`)
+    }
+  }
 
   if (cppIssues.length === 0) {
-    console.log("✅ C++ 문제: 이상 없음")
+    console.log("✅ C++ 선수학습: 이상 없음")
   } else {
-    console.log(`❌ C++ 문제: ${cppIssues.length}건 발견\n`)
+    console.log(`❌ C++ 선수학습: ${cppIssues.length}건 발견\n`)
     for (const issue of cppIssues) {
       console.log(`  Q${issue.id} [${issue.lessonId}]`)
       console.log(`    규칙: ${issue.rule}`)
@@ -469,9 +560,9 @@ function main() {
   }
 
   if (pyIssues.length === 0) {
-    console.log("✅ Python 문제: 이상 없음")
+    console.log("✅ Python 선수학습: 이상 없음")
   } else {
-    console.log(`\n❌ Python 문제: ${pyIssues.length}건 발견\n`)
+    console.log(`\n❌ Python 선수학습: ${pyIssues.length}건 발견\n`)
     for (const issue of pyIssues) {
       console.log(`  Q${issue.id} [레슨 ${issue.lessonId}]`)
       console.log(`    규칙: ${issue.rule}`)
@@ -481,10 +572,12 @@ function main() {
 
   console.log("─".repeat(50))
   if (total === 0) {
-    console.log("\n✅ 모든 퀴즈 문제가 선수학습 규칙을 준수합니다.\n")
+    console.log("\n✅ 모든 퀴즈 문제가 검증을 통과했습니다.\n")
     process.exit(0)
   } else {
-    console.log(`\n❌ 총 ${total}건의 위반이 발견되었습니다. (C++ ${cppIssues.length}건 / Python ${pyIssues.length}건)\n`)
+    console.log(
+      `\n❌ 총 ${total}건의 오류 (구조 ${structIssues.length}건 / C++ 선수학습 ${cppIssues.length}건 / Python 선수학습 ${pyIssues.length}건)\n`
+    )
     process.exit(1)
   }
 }
