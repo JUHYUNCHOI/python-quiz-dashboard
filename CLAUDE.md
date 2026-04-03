@@ -67,6 +67,61 @@ interface QuizQuestion {
 - Pseudocode/IGCSE: 별도 트랙
 - 순차 잠금 해제 (완료한 레슨 + 다음 1개)
 
+### ⚠️ Python 레슨 번호 매핑 (퀴즈 문제 작업 시 반드시 확인)
+
+> `python-questions.ts` 파일 내 섹션 주석과 실제 커리큘럼 ID가 다를 수 있음. **항상 `app/curriculum/page.tsx`의 `pythonCurriculumData`를 정답으로 사용할 것.**
+
+| lessonId | 레슨 제목 | 비고 |
+|---|---|---|
+| 1 | print() 출력 | |
+| 2 | 데이터 타입 | int, float, bool, str — 리스트/딕셔너리 없음 |
+| 3 | 변수 | |
+| 4 | 연산자 | |
+| 5 | 문자열 연산 | |
+| 6 | 문자열 메서드 | |
+| 7 | print() 옵션 (sep/end) | |
+| 8 | f-string | f-string 첫 등장 |
+| 9 | 타입 변환 | |
+| 10 | input() | |
+| 11 | 조건문 (if/elif/else) | def 없음, 리스트 없음 |
+| 12 | 조건문 심화 (and/or/not) | |
+| 13 | 반복문 (for) | range() 사용. 리스트 리터럴 `[]` 없음 |
+| 14 | 반복문 (while) | |
+| 15 | 자료구조 개요 | 4가지 자료구조 소개 |
+| 16 | 리스트 기초 | 리스트 첫 등장. `[]`, append, pop 등 |
+| 17 | 리스트와 반복문 | for문으로 리스트 순회. 2D 리스트도 여기 포함 |
+| 18 | split()과 join() | |
+| 19 | 튜플 | |
+| 20 | 딕셔너리 | |
+| 21 | 집합 (set) | |
+| 22 | 슬라이싱 | |
+| 23 | 스택 (Stack) | LIFO |
+| 24 | 큐 (Queue) | FIFO. deque를 큐로 사용하는 것 포함 |
+| **25** | **덱 (Deque)** | **양쪽 삽입/삭제. deque 고유 연산 (rotate 등)** |
+| **26** | **자료구조 비교와 선택** | **상황에 맞는 자료구조 고르기. 성능 비교** |
+| 27-31 | Part 4 프로젝트/문제 | 가위바위보, 로또, 단어장, 성적관리, 종합 |
+| 32 | 함수 기초 (def/return) | **def 첫 등장** |
+| 33 | 매개변수와 반환값 | |
+| 34 | 함수 활용 (lambda/스코프) | **lambda 첫 등장** |
+| 35 | 내장함수 총정리 | len, sum, max, min, sorted, map |
+| 36 | 함수 문제 30 | |
+| 37 | 에러 처리 (try-except) | |
+| 38 | 파일 읽고 쓰기 | |
+| 39-40 | Part 6 프로젝트/문제 | |
+| 41 | 클래스 기초 | |
+| 42 | 메서드와 속성 | |
+| 43-44 | Part 7 프로젝트/문제 | |
+| 45 | 모듈 기초 | |
+| 46 | 패키지와 pip | |
+| 47-48 | Part 8 프로젝트/문제 | |
+| 49-52 | Part 9 텍스트 RPG | |
+
+**⚠️ 자주 혼동되는 것:**
+- lesson 25 = **덱(Deque)** (NOT 2D 리스트)
+- lesson 26 = **자료구조 비교** (NOT 정렬)
+- 2D 리스트 전용 레슨은 없음 → `lessonId: 17` (리스트와 반복문)에 배정
+- def/함수는 lesson 32부터, lambda는 lesson 34부터
+
 ### ⚠️ C++ lessonId ↔ 커리큘럼 매핑 (ID 번호 ≠ 커리큘럼 순서)
 
 > **퀴즈 문제 작업 시 반드시 이 표를 참고할 것. ID 번호만 보고 순서를 추측하면 안 됨.**
@@ -116,9 +171,7 @@ interface QuizQuestion {
 - 상속/다형성/virtual 개념 → cpp-22(class) 레슨에 포함
 - 수동 구현 정렬(버블/선택/삽입) 이론 → cpp-23
 
-## 플랫폼 통합 로드맵
-
-코드린은 3개의 독립 프로젝트를 하나의 제품으로 통합하는 방향으로 개발 중이다.
+## 제품 로드맵
 
 ### 3개 플랫폼 현황
 
@@ -128,35 +181,170 @@ interface QuizQuestion {
 | **Algorithm Lab** | `~/Coding/Algorithm` | Vanilla JS SPA | Cloudflare Workers | `algo-*` |
 | **CodeQuest** | `~/Coding/codequest` | React 18 + Vite | Vercel (예정) | `cq-*` |
 
-**세 플랫폼 모두 같은 Supabase 인스턴스(`kehxcwquevocshrytgyo`)를 사용하고 `lesson_progress` 테이블을 공유한다.**
-Algorithm Lab과 CodeQuest 모두 Coderin SSO 연동이 이미 구현되어 있다.
+세 플랫폼 모두 **같은 Supabase 인스턴스**(`kehxcwquevocshrytgyo`)와 `lesson_progress` 테이블을 공유한다.
+Algorithm Lab, CodeQuest 모두 Coderin SSO 연동이 이미 구현되어 있다.
 
-### 통합 순서
+### 전체 학습 여정 (제품 비전)
 
-**1단계: Algorithm Lab → Coderin 흡수 (최우선)**
-- Algorithm Lab의 22개 알고리즘 토픽 + 시각화를 Coderin 레슨 형식으로 이전
-- Vanilla JS → React/Next.js 컴포넌트 변환
-- 기존 `algo-*` lesson_id는 그대로 유지 (기존 진도 데이터 보호)
-- Algorithm Lab의 시각화 패턴: `_renderViz*` 메서드들 → React 컴포넌트로 변환
-
-**2단계: CodeQuest → Coderin 흡수**
-- USACO/MCC 161개 문제 튜토리얼을 `/quest/[problemId]` 라우트로 통합
-- React 컴포넌트들이 Next.js 친화적이라 이전 비용 상대적으로 낮음
-- `shared.jsx`의 Quiz, CodeBlock 등은 Coderin 레슨 컴포넌트와 호환 가능
-- 기존 `cq-*` lesson_id 유지
-
-### 학습 흐름 (통합 후)
 ```
-Coderin 문법 레슨 (Python/C++) → Algorithm Lab 알고리즘 이론 → CodeQuest 실전 문제 (USACO/MCC)
+[문법]          [연습]            [알고리즘]         [실전]
+C++ 23레슨  →  코딩 연습       →  Algorithm Lab  →  CodeQuest
+Python 52레슨   132문제 (9클러스터) 22토픽            161문제 (USACO/MCC)
 ```
+
+커리큘럼 페이지를 전체 여정 맵으로 개편. 학생이 처음부터 목적지를 볼 수 있어야 함.
+
+### 잠금 해제 기준
+
+| 섹션 | 잠금 해제 조건 |
+|---|---|
+| 연습 문제 | C++ 8레슨 이상 완료 |
+| 알고리즘 (Algorithm Lab) | 연습 클러스터 5개 이상 완료 |
+| 실전 (CodeQuest) | 알고리즘 토픽 8개 이상 완료 |
+
+---
+
+## Phase 1: MCQ 퀴즈 재배분 (현재 진행)
+
+USACO Bronze 분석 결과 — 모든 문제에 등장: 반복문, 배열, 조건문, 정렬.
+현재 cpp-22(클래스 79개), cpp-20(CP팁 62개)에 과도하게 편중되어 있음.
+기존 question.id 삭제 불가 (학생 mastery 데이터 보호). **추가만** 한다.
+
+### ⚠️ algo-preview lessonId — 알고리즘 Lab용 임시 보관소
+
+cpp-20 문제 중 BFS/DFS/DP/그리디/백트래킹/유니온파인드/누적합/투포인터/슬라이딩윈도우 등
+**C++ 커리큘럼에서 가르치지 않는 알고리즘 이론** 문제들은 `lessonId: "algo-preview"`로 설정한다.
+
+**이유:**
+- cpp-20 레슨("CP 실전 팁")은 비트연산/typedef/다익스트라만 가르침
+- 위 알고리즘 주제들은 Phase 4(Algorithm Lab 흡수) 이후 `algo-*` lessonId로 재배정 예정
+- `algo-preview`는 존재하지 않는 lessonId → 학생 복습 큐에 절대 등장 안 함
+- question.id는 그대로 → 기존 mastery 데이터 무손실
+
+**algo-preview로 이동된 question IDs (cpp-questions.ts):**
+`242, 260, 261, 262, 263, 264, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 288, 289, 290, 292, 293, 294, 296, 297, 298, 299, 300`
+
+Phase 4 완료 시: 각 알고리즘 토픽에 맞는 `algo-*` ID로 재배정할 것.
+
+| 레슨 | 현재 | 목표 | 추가 | 이유 |
+|---|---|---|---|---|
+| cpp-6 조건문 | 7 | 22 | +15 | Bronze 100% 등장, 어려움 0개 |
+| cpp-7 반복문 | 12 | 25 | +13 | Bronze 100% 등장 |
+| cpp-23 커스텀 정렬 | 11 | 25 | +14 | Bronze 60%+ 등장, 쉬움 0개 |
+| cpp-12 레퍼런스 | 7 | 18 | +11 | 핵심 개념 대비 부족 |
+| cpp-3 타입시스템 | 8 | 18 | +10 | Python→C++ 전환 최대 난관 |
+
+**총 +63개 MCQ 문제 작성**
+
+---
+
+## Phase 2: 코딩 연습 문제 시스템 + 콘텐츠
+
+### 설계 원칙
+- 기존 레슨 스텝에 **삽입하지 않는다** — 별도 `/practice` 시스템으로 분리
+- 기존 학생 진도에 영향 없음 (lesson_id 체계가 완전히 독립적)
+- CppRunner 기반 자동 채점 (Wandbox API 기존 사용)
+- lesson_id 접두사: `practice-*`
+
+### PracticeProblem 인터페이스
+
+```typescript
+interface PracticeProblem {
+  id: string                              // "loop-001"
+  cluster: string                         // "반복문 패턴"
+  unlockAfter: string                     // "cpp-7"
+  difficulty: "쉬움" | "보통" | "어려움"
+  title: string
+  description: string
+  constraints: string                     // "1 ≤ N ≤ 1000"
+  initialCode: string                     // 시작 템플릿
+  testCases: { stdin: string; expectedOutput: string }[]
+  hints: string[]                         // 단계별 공개
+  solutionCode: string
+  solutionExplanation: string
+}
+```
+
+### 연습 문제 클러스터 (USACO Bronze 분석 기반)
+
+| 클러스터 | 잠금 해제 | 문제 수 | 핵심 패턴 |
+|---|---|---|---|
+| 입출력 기초 | cpp-4 | 8 | cin 다중 입력, 포맷 출력 |
+| 조건/논리 | cpp-6 | 15 | 중첩 if, 경계값, 논리 오류 |
+| **반복문 패턴** | cpp-7 | 20 | 중첩 루프, 누적, 패턴 (핵심) |
+| **배열/벡터** | cpp-9 | 20 | 순회, 최대/최소, 두 배열 (핵심) |
+| 문자열 | cpp-11 | 12 | 파싱, 문자 비교, 변환 |
+| map/set 활용 | cpp-16 | 12 | 빈도수, 중복 제거, 존재 확인 |
+| **정렬 마스터** | cpp-23 | 15 | 커스텀 정렬, 정렬 후 처리 (핵심) |
+| 2D 그리드 | cpp-21 | 15 | 격자 탐색, 행/열 처리 |
+| **시뮬레이션** | cpp-9+7+6 | 15 | Bronze 핵심 — 직접 시뮬 (핵심) |
+
+**총 132문제**
+
+---
+
+## Phase 3: 커리큘럼 페이지 개편
+
+```
+┌─────────────────────────────────────────────────┐
+│  🗺️ 나의 학습 여정                                │
+├──────────┬──────────┬────────────┬──────────────┤
+│ 1. 문법  │ 2. 연습  │ 3. 알고리즘 │  4. 실전     │
+│ C++ 23레슨│ 9클러스터 │  22토픽    │  161문제     │
+└──────────┴──────────┴────────────┴──────────────┘
+```
+
+---
+
+## Phase 4: Algorithm Lab → Coderin 흡수
+
+### 기술 방식
+Vanilla JS 시각화를 처음부터 재작성하지 않는다.
+`useRef + useEffect` 래퍼 패턴으로 기존 JS 초기화 함수를 React 컴포넌트 안에서 호출.
+
+```tsx
+useEffect(() => {
+  if (vizRef.current) {
+    AlgoTopics[topicId].renderConcept(vizRef.current)
+  }
+  return () => { /* cleanup */ }
+}, [topicId])
+```
+
+### 통합 우선순위 (USACO Bronze → Silver 순)
+
+**Wave 1 — Bronze 직결 (먼저):**
+sorting → array → prefixsum → stackqueue → hashtable
+
+**Wave 2 — Silver 필수:**
+graph(BFS/DFS) → recursion → binarysearch → greedy → dp
+
+**Wave 3 — Gold+:**
+backtracking, tree, trie, unionfind, shortestpath, bitmanipulation 등
+
+### 설계 원칙
+- 알고리즘 이론은 언어 무관 단일 콘텐츠
+- 코드 예시만 Python ↔ C++ 토글 (기본값: 학생이 더 배운 언어)
+- 기존 `algo-*` lesson_id 유지 (기존 진도 보호)
+- Algorithm Lab CLAUDE.md의 시각화 품질 기준 그대로 적용
 
 ### Algorithm Lab 콘텐츠 구조 (참고)
-- 22개 토픽: array, backtracking, binarysearch, bitmanipulation, dp, graph, greedy, hashtable, linkedlist, prefixsum, priorityqueue, recursion, shortestpath, sorting, stackqueue, string, topologicalsort, tree, trie, unionfind 등
-- 각 토픽: 개념 설명 + 문제별 4탭(Problem/Think/Sim/Code)
-- 시각화: DOM 조작 기반 step-by-step 애니메이션 (closure 패턴)
+- 22개 토픽 파일: `~/Coding/Algorithm/topics/*.js`
+- 각 토픽: `renderConcept()` + `_renderViz*()` + `_initStepController()`
+- 시각화: FLIP 애니메이션 패턴 (closure 기반 step controller)
+- 4탭 구조: Problem / Think(힌트) / Sim(시뮬레이션) / Code
+
+---
+
+## Phase 5: CodeQuest → Coderin 흡수
+
+- `/quest/[problemId]` 라우트로 통합
+- 기존 React 컴포넌트 Next.js로 이전 (스택 친화적)
+- `shared.jsx`의 Quiz, CodeBlock 등 Coderin 컴포넌트와 호환
+- 기존 `cq-*` lesson_id 유지
 
 ### CodeQuest 콘텐츠 구조 (참고)
-- 161개 USACO Bronze/MCC 문제 튜토리얼
+- 161개 USACO Bronze/MCC 문제 튜토리얼 (`~/Coding/codequest/src/problems/`)
 - 각 문제: 3챕터(문제이해/풀이전략/코드빌드), 26+ 스텝
 - 공유 컴포넌트: `Narration`, `Quiz`, `NumInput`, `CodeBlock`, `CodeReveal`
 

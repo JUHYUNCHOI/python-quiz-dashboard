@@ -49,7 +49,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 4,
-    lessonId: 2,
+    lessonId: 16,
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
     code: `x = bool(0)\ny = bool("")\nz = bool([])\nprint(x, y, z)`,
@@ -101,7 +101,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 10,
-    lessonId: 2,
+    lessonId: 9,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `print(bool(""), bool(" "), bool("0"), bool(0))`,
@@ -179,7 +179,7 @@ export const pythonQuestions: QuizQuestion[] = [
     lessonId: 3,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
-    code: `x = 10\ny = x\nx += 5\nprint(f"x={x}, y={y}")`,
+    code: `x = 10\ny = x\nx += 5\nprint("x=" + str(x) + ", y=" + str(y))`,
     options: ["x=15, y=10", "x=15, y=15", "x=10, y=10", "오류"],
     correctAnswer: 0,
     explanation: "정수는 불변(immutable) 타입이므로 y = x는 값을 복사합니다. x를 변경해도 y에 영향이 없습니다.",
@@ -189,7 +189,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 18,
-    lessonId: 3,
+    lessonId: 16,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `a, *b, c = [1, 2, 3, 4, 5]\nprint(b)`,
@@ -665,7 +665,7 @@ export const pythonQuestions: QuizQuestion[] = [
     animationKey: "pyIfBuilder",
     difficulty: "쉬움",
     question: "다음 코드에서 버그를 찾으세요.",
-    code: `def is_even(n):\n    if n % 2 = 0:\n        return True\n    return False`,
+    code: `n = 4\nif n % 2 = 0:\n    print("짝수")`,
     options: [
       "비교 연산자가 잘못됨 (= 대신 == 사용해야 함)",
       "return 위치가 잘못됨",
@@ -680,7 +680,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 54,
-    lessonId: 11,
+    lessonId: 12,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `x = 7\nresult = "짝수" if x % 2 == 0 else "홀수"\nprint(result)`,
@@ -697,7 +697,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 55,
-    lessonId: 11,
+    lessonId: 12,
     difficulty: "보통",
     question: "빈칸에 들어갈 코드로 올바른 것은?",
     code: `score = 85\ngrade = "A" if score >= 90 ____ "B" if score >= 80 ____ "C"\nprint(grade)  # B`,
@@ -710,7 +710,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 56,
-    lessonId: 11,
+    lessonId: 12,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `x = 10\nresult = '양수' if x > 0 else '음수' if x < 0 else '영'\nprint(result)`,
@@ -837,7 +837,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 67,
-    lessonId: 13,
+    lessonId: 17,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `for i, v in enumerate(["a", "b", "c"]):\n    print(f"{i}:{v}", end=" ")`,
@@ -850,7 +850,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 68,
-    lessonId: 13,
+    lessonId: 35,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `names = ["철수", "영희"]\nscores = [90, 85]\nfor name, score in zip(names, scores):\n    print(f"{name}:{score}", end=" ")`,
@@ -889,7 +889,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 71,
-    lessonId: 13,
+    lessonId: 14,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `for i in range(1, 6):\n    if i % 2 == 0:\n        continue\n    print(i, end=" ")`,
@@ -919,7 +919,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 73,
-    lessonId: 13,
+    lessonId: 19,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `result = []\nfor i in range(3):\n    for j in range(3):\n        if i != j:\n            result.append((i, j))\nprint(len(result))`,
@@ -984,7 +984,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 78,
-    lessonId: 13,
+    lessonId: 17,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `nums = [1, 2, 3, 4, 5]\nfor i, v in enumerate(nums, start=1):\n    if i == 3:\n        print(v)\n        break`,
@@ -997,7 +997,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 79,
-    lessonId: 13,
+    lessonId: 19,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `result = []\nfor i in range(3):\n    for j in range(3):\n        if i == j:\n            break\n        result.append((i, j))\nprint(result)`,
@@ -1150,7 +1150,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 89,
-    lessonId: 16,
+    lessonId: 17,
     difficulty: "보통",
     question: "다음 2D 리스트에서 값 6에 접근하는 방법은?",
     code: `matrix = [\n    [1, 2, 3],\n    [4, 5, 6],\n    [7, 8, 9]\n]`,
@@ -1222,7 +1222,7 @@ export const pythonQuestions: QuizQuestion[] = [
     lessonId: 16,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
-    code: `a = [1, 2, 3]\nb = a[:]\nb.append(4)\nprint(a, b)`,
+    code: `a = [1, 2, 3]\nb = a.copy()\nb.append(4)\nprint(a, b)`,
     options: ["[1, 2, 3] [1, 2, 3, 4]", "[1, 2, 3, 4] [1, 2, 3, 4]", "[1, 2, 3, 4] [1, 2, 3]", "오류"],
     correctAnswer: 0,
     explanation: "a[:]는 리스트의 얕은 복사를 만듭니다. b는 a와 독립적인 새 리스트이므로 b에 추가해도 a에 영향이 없습니다.",
@@ -1254,11 +1254,7 @@ export const pythonQuestions: QuizQuestion[] = [
     explanation: "copy()는 얕은 복사이므로 내부 리스트 [2,3]은 a와 b가 공유합니다. b[1]을 수정하면 a[1]도 변경됩니다.",
     keyConceptTitle: "얕은 복사 vs 깊은 복사",
     keyConceptDescription: "얕은 복사는 외부 리스트만 복사하고, 내부 객체는 참조를 공유합니다. 완전한 독립 복사가 필요하면 copy.deepcopy()를 사용하세요.",
-    codeComparison: {
-      wrong: `import copy\nb = a.copy()  # 얕은 복사 - 내부 리스트 공유`,
-      correct: `import copy\nb = copy.deepcopy(a)  # 깊은 복사 - 완전 독립`,
-    },
-    relatedTopics: ["얕은 복사", "깊은 복사", "copy 모듈"],
+    relatedTopics: ["얕은 복사", "깊은 복사", "중첩 리스트"],
   },
   {
     id: 98,
@@ -1288,7 +1284,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 100,
-    lessonId: 16,
+    lessonId: 22,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `a = [1, 2, 3]\na[1:2] = [10, 20, 30]\nprint(a)`,
@@ -1380,7 +1376,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 107,
-    lessonId: 34,
+    lessonId: 35,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `nums = [1, 2, 3]\nsquared = list(map(lambda x: x**2, nums))\nprint(squared)`,
@@ -1393,7 +1389,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 108,
-    lessonId: 17,
+    lessonId: 35,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `nums = [1, 2, 3, 4, 5]\nnums_iter = iter(nums)\nfor _ in range(2):\n    next(nums_iter)\nprint(list(nums_iter))`,
@@ -1406,7 +1402,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 109,
-    lessonId: 17,
+    lessonId: 19,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `nums = [1, 2, 3]\nresult = []\nfor i in range(len(nums)):\n    for j in range(i+1, len(nums)):\n        result.append((nums[i], nums[j]))\nprint(result)`,
@@ -1419,7 +1415,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 110,
-    lessonId: 17,
+    lessonId: 22,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `nums = [1, 2, 3, 4]\nresult = nums[:]\nfor i in range(len(result)//2):\n    result[i], result[-(i+1)] = result[-(i+1)], result[i]\nprint(result)`,
@@ -1489,7 +1485,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 115,
-    lessonId: 18,
+    lessonId: 35,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `csv = "name,age,city"\nheader = csv.split(",")\nrow = "Alice,30,Seoul"\ndata = dict(zip(header, row.split(",")))\nprint(data["age"])`,
@@ -1502,7 +1498,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 116,
-    lessonId: 18,
+    lessonId: 22,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `text = "hello world"\nresult = "-".join(text.split()[::-1])\nprint(result)`,
@@ -1544,7 +1540,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 119,
-    lessonId: 19,
+    lessonId: 33,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `a, b, *c = (1, 2, 3, 4, 5)\nprint(c)`,
@@ -1587,7 +1583,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 122,
-    lessonId: 19,
+    lessonId: 46,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `from collections import namedtuple\nPoint = namedtuple("Point", ["x", "y"])\np = Point(3, 4)\nprint(p.x, p[0])`,
@@ -1751,7 +1747,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 134,
-    lessonId: 34,
+    lessonId: 35,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `d = {"b": 2, "a": 1, "c": 3}\nsorted_d = dict(sorted(d.items(), key=lambda x: x[1]))\nprint(list(sorted_d.keys()))`,
@@ -2036,7 +2032,7 @@ export const pythonQuestions: QuizQuestion[] = [
     lessonId: 23,
     difficulty: "어려움",
     question: "다음 괄호 검증 코드에서 빈칸에 들어갈 것은?",
-    code: `def is_valid(s):\n    stack = []\n    pairs = {")":"(", "]":"[", "}":"{"}\n    for c in s:\n        if c in "([{":\n            stack.append(c)\n        elif c in ")]}":\n            if not stack or stack[-1] != ___:\n                return False\n            stack.pop()\n    return len(stack) == 0`,
+    code: `stack = []\npairs = {")":"(", "]":"[", "}":"{"}\ns = "([{}])"\nfor c in s:\n    if c in "([{":\n        stack.append(c)\n    elif c in ")]}":\n        if not stack or stack[-1] != ___:\n            print("유효하지 않음")\n            break\n        stack.pop()`,
     options: ["pairs[c]", "pairs[stack[-1]]", "c", "stack[0]"],
     correctAnswer: 0,
     explanation: "닫는 괄호 c에 대응하는 여는 괄호는 pairs[c]입니다. 스택 최상단과 비교해야 합니다.",
@@ -2049,7 +2045,7 @@ export const pythonQuestions: QuizQuestion[] = [
     lessonId: 23,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
-    code: `def reverse_string(s):\n    stack = list(s)\n    result = ""\n    while stack:\n        result += stack.pop()\n    return result\n\nprint(reverse_string("hello"))`,
+    code: `s = "hello"\nstack = list(s)\nresult = ""\nwhile stack:\n    result += stack.pop()\nprint(result)`,
     options: ["olleh", "hello", "h", "오류"],
     correctAnswer: 0,
     explanation: "스택에서 pop()하면 마지막 문자부터 꺼내지므로 문자열이 뒤집어집니다.",
@@ -2156,7 +2152,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 164,
-    lessonId: 17,
+    lessonId: 35,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `matrix = [[1,2,3],[4,5,6],[7,8,9]]\ntransposed = list(zip(*matrix))\nprint(transposed[0])`,
@@ -2170,7 +2166,7 @@ export const pythonQuestions: QuizQuestion[] = [
   // ── Lesson 26: 정렬 ──
   {
     id: 165,
-    lessonId: 26,
+    lessonId: 35,
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
     code: `nums = [3, 1, 4, 1, 5]\nprint(sorted(nums))`,
@@ -2183,7 +2179,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 166,
-    lessonId: 26,
+    lessonId: 35,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `words = ["banana", "apple", "cherry"]\nresult = sorted(words, key=len)\nprint(result)`,
@@ -2196,7 +2192,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 167,
-    lessonId: 34,
+    lessonId: 35,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `students = [("Alice", 85), ("Bob", 92), ("Charlie", 85)]\nresult = sorted(students, key=lambda x: (-x[1], x[0]))\nprint(result[0][0])`,
@@ -2440,7 +2436,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 184,
-    lessonId: 34,
+    lessonId: 35,
     animationKey: "mapFactory",
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
@@ -2454,7 +2450,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 185,
-    lessonId: 34,
+    lessonId: 46,
     animationKey: "mapFactory",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
@@ -3010,7 +3006,7 @@ export const pythonQuestions: QuizQuestion[] = [
   // ── Lesson 43: 상속 ──
   {
     id: 236,
-    lessonId: 44,
+    lessonId: 42,
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
     code: `class Animal:\n    def speak(self):\n        return "..."\n\nclass Dog(Animal):\n    def speak(self):\n        return "멍멍!"\n\nd = Dog()\nprint(d.speak())`,
@@ -3023,7 +3019,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 237,
-    lessonId: 44,
+    lessonId: 42,
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
     code: `class Shape:\n    def __init__(self, color):\n        self.color = color\n\nclass Circle(Shape):\n    def __init__(self, color, radius):\n        super().__init__(color)\n        self.radius = radius\n\nc = Circle("red", 5)\nprint(c.color, c.radius)`,
@@ -3036,7 +3032,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 238,
-    lessonId: 44,
+    lessonId: 42,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `class A:\n    def greet(self):\n        return "A"\n\nclass B(A):\n    pass\n\nclass C(B):\n    pass\n\nc = C()\nprint(c.greet())`,
@@ -3049,7 +3045,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 239,
-    lessonId: 44,
+    lessonId: 42,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `class Animal:\n    def __init__(self, name):\n        self.name = name\n    def info(self):\n        return f"{self.name}"\n\nclass Dog(Animal):\n    def info(self):\n        return f"{super().info()} (개)"\n\nd = Dog("Buddy")\nprint(d.info())`,
@@ -3062,7 +3058,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 240,
-    lessonId: 44,
+    lessonId: 42,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `class A:\n    pass\nclass B(A):\n    pass\n\nb = B()\nprint(isinstance(b, A))\nprint(issubclass(B, A))`,
@@ -3075,7 +3071,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 241,
-    lessonId: 44,
+    lessonId: 42,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `class A:\n    def method(self):\n        return "A"\n\nclass B(A):\n    def method(self):\n        return "B"\n\nclass C(A):\n    def method(self):\n        return "C"\n\nclass D(B, C):\n    pass\n\nd = D()\nprint(d.method())`,
@@ -3336,10 +3332,10 @@ export const pythonQuestions: QuizQuestion[] = [
     keyConceptDescription: "heapq는 최소 힙(우선순위 큐)을 제공합니다. heappush()로 추가, heappop()으로 최솟값을 O(log n)에 추출합니다.",
     relatedTopics: ["heapq", "우선순위 큐", "최소 힙"],
   },
-  // ── Lesson 47: pip ──
+  // ── Lesson 46: 패키지와 pip ──
   {
     id: 263,
-    lessonId: 47,
+    lessonId: 46,
     difficulty: "쉬움",
     question: "pip으로 패키지를 설치하는 올바른 명령어는?",
     code: `# requests 패키지 설치`,
@@ -3352,7 +3348,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 264,
-    lessonId: 47,
+    lessonId: 46,
     difficulty: "쉬움",
     question: "requirements.txt 파일의 용도는?",
     code: `# requirements.txt\nrequests==2.31.0\nnumpy>=1.24.0`,
@@ -3365,7 +3361,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 265,
-    lessonId: 47,
+    lessonId: 46,
     difficulty: "보통",
     question: "가상환경(venv)의 주요 목적은?",
     code: `# python -m venv myenv`,
@@ -3378,7 +3374,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 266,
-    lessonId: 47,
+    lessonId: 46,
     difficulty: "보통",
     question: "pip install requests==2.28.0 에서 ==의 의미는?",
     code: `pip install requests==2.28.0`,
@@ -3391,7 +3387,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 267,
-    lessonId: 47,
+    lessonId: 46,
     difficulty: "어려움",
     question: "다음 중 setup.py나 pyproject.toml의 역할은?",
     code: `# pyproject.toml or setup.py`,
@@ -3404,7 +3400,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 268,
-    lessonId: 47,
+    lessonId: 46,
     difficulty: "어려움",
     question: "pip install -e . 명령의 의미는?",
     code: `# 프로젝트 루트에서 실행\npip install -e .`,
@@ -3461,7 +3457,7 @@ export const pythonQuestions: QuizQuestion[] = [
   // ── 추가 클래스 문제 (Lesson 43) ──
   {
     id: 273,
-    lessonId: 43,
+    lessonId: 42,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `class Mixin:\n    def hello(self):\n        return "Mixin"\n\nclass Base:\n    def hello(self):\n        return "Base"\n\nclass Child(Mixin, Base):\n    pass\n\nprint(Child().hello())`,
@@ -3531,7 +3527,7 @@ export const pythonQuestions: QuizQuestion[] = [
   // ── 추가 리스트/반복 (Lesson 17) ──
   {
     id: 281,
-    lessonId: 17,
+    lessonId: 32,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `def chunk(lst, size):\n    return [lst[i:i+size] for i in range(0, len(lst), size)]\n\nprint(chunk([1,2,3,4,5,6,7], 3))`,
@@ -3545,7 +3541,7 @@ export const pythonQuestions: QuizQuestion[] = [
   // ── 추가 상속 (Lesson 43) ──
   {
     id: 282,
-    lessonId: 43,
+    lessonId: 42,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `class Loggable:\n    def log(self, msg):\n        print(f"[{self.__class__.__name__}] {msg}")\n\nclass Serializable:\n    def to_dict(self):\n        return self.__dict__\n\nclass User(Loggable, Serializable):\n    def __init__(self, name):\n        self.name = name\n\nu = User("Alice")\nu.log("created")\nprint(u.to_dict())`,
@@ -3574,7 +3570,7 @@ export const pythonQuestions: QuizQuestion[] = [
   // ── 추가 집합 (Lesson 21) ──
   {
     id: 285,
-    lessonId: 21,
+    lessonId: 35,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `list1 = [1, 2, 3, 4, 5]\nlist2 = [4, 5, 6, 7, 8]\ncommon = set(list1) & set(list2)\nonly1 = set(list1) - set(list2)\nprint(sorted(common))\nprint(sorted(only1))`,
@@ -3617,7 +3613,7 @@ export const pythonQuestions: QuizQuestion[] = [
   // ── 추가 조건문 (Lesson 11) ──
   {
     id: 288,
-    lessonId: 11,
+    lessonId: 12,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `x = 15\nresult = "fizzbuzz" if x % 15 == 0 else "fizz" if x % 3 == 0 else "buzz" if x % 5 == 0 else str(x)\nprint(result)`,
@@ -3631,7 +3627,7 @@ export const pythonQuestions: QuizQuestion[] = [
   // ── 추가 while문 (Lesson 14) ──
   {
     id: 290,
-    lessonId: 14,
+    lessonId: 32,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `def collatz(n):\n    steps = 0\n    while n != 1:\n        if n % 2 == 0:\n            n = n // 2\n        else:\n            n = 3 * n + 1\n        steps += 1\n    return steps\n\nprint(collatz(6))`,
@@ -3645,7 +3641,7 @@ export const pythonQuestions: QuizQuestion[] = [
   // ── 추가 연산자 (Lesson 4) ──
   {
     id: 291,
-    lessonId: 4,
+    lessonId: 16,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `a = [1, 2, 3]\nb = [1, 2, 3]\nc = a\nprint(a == b)\nprint(a is b)\nprint(a is c)`,
@@ -3687,7 +3683,7 @@ export const pythonQuestions: QuizQuestion[] = [
   // ── 추가 input (Lesson 10) ──
   {
     id: 294,
-    lessonId: 10,
+    lessonId: 35,
     animationKey: "mapFactory",
     difficulty: "보통",
     question: "다음 코드에서 사용자가 '3 5 7'을 입력하면 출력은?",
@@ -4176,7 +4172,7 @@ export const pythonQuestions: QuizQuestion[] = [
   // ── 추가 조건 심화 (Lesson 12) ──
   {
     id: 299,
-    lessonId: 12,
+    lessonId: 16,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `x = 0\ny = ""\nz = []\nprint(not x and not y and not z)\nprint(bool(x or y or z or "hello"))`,
@@ -5035,7 +5031,7 @@ print(날짜[1])`,
   },
   {
     id: 393,
-    lessonId: 18,
+    lessonId: 35,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `numbers = list(map(int, '10 20 30'.split()))
@@ -5107,7 +5103,7 @@ print('3')`,
   },
   {
     id: 397,
-    lessonId: 7,
+    lessonId: 16,
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
     code: `nums = [1, 2, 3, 4, 5]
@@ -5121,7 +5117,7 @@ print(*nums)`,
   },
   {
     id: 398,
-    lessonId: 7,
+    lessonId: 16,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `nums = [10, 20, 30]
@@ -5211,7 +5207,7 @@ print(a, b)`,
   },
   {
     id: 404,
-    lessonId: 10,
+    lessonId: 35,
     difficulty: "보통",
     question: "사용자가 '10 20'을 입력했을 때 다음 코드의 출력 결과는?",
     code: `a, b = map(int, input('두 수: ').split())
@@ -5256,7 +5252,7 @@ b = (1, 2, 3)   # ?`,
   },
   {
     id: 407,
-    lessonId: 15,
+    lessonId: 21,
     difficulty: "쉬움",
     question: "중복된 값을 자동으로 제거해주는 자료구조는?",
     code: `data = [1, 2, 2, 3, 3, 3]
@@ -5307,7 +5303,7 @@ print(fruits[0])`,
   },
   {
     id: 410,
-    lessonId: 15,
+    lessonId: 21,
     difficulty: "보통",
     question: "다음 코드에서 집합의 출력 결과로 올바른 것은?",
     code: `attendance = {'철수', '영희', '철수', '민수', '영희'}
@@ -5447,7 +5443,7 @@ print(f'{doc} 인쇄 완료')`,
   },
   {
     id: 417,
-    lessonId: 24,
+    lessonId: 32,
     difficulty: "보통",
     question: "다음 코드에서 is_empty()가 True를 반환하는 조건은?",
     code: `from collections import deque
@@ -5648,7 +5644,7 @@ print(list(d))`,
   },
   {
     id: 427,
-    lessonId: 25,
+    lessonId: 32,
     difficulty: "어려움",
     question: "덱으로 회문(팰린드롬)을 검사하는 코드에서 빈칸에 알맞은 코드는?",
     code: `from collections import deque
@@ -5732,7 +5728,7 @@ data_dict = {i: True for i in range(100000)}
   },
   {
     id: 431,
-    lessonId: 26,
+    lessonId: 32,
     difficulty: "보통",
     question: "다음 코드에서 set을 사용하는 이유로 가장 적절한 것은?",
     code: `visited = set()
@@ -5803,5 +5799,742 @@ result2 = 999999 in my_set    # O(1)`,
     keyConceptTitle: "집합 검색 O(1) vs 리스트 O(n)",
     keyConceptDescription: "in 연산의 시간 복잡도: 리스트 O(n), 집합/딕셔너리 O(1). 검색이 빈번하면 리스트 대신 집합을 쓰는 것이 성능 핵심이에요.",
     relatedTopics: ["O(1) vs O(n)", "집합", "성능 최적화"],
+  },
+
+  // ── Lesson 36: 함수 30 문제 (Function Problems) ──
+  {
+    id: 434,
+    lessonId: 36,
+    difficulty: "쉬움",
+    question: "다음 함수의 반환값은?",
+    code: `def greet(name):
+    return "Hello, " + name
+
+result = greet("Alice")
+print(result)`,
+    options: ["Hello, Alice", "Hello, name", "greet(Alice)", "오류"],
+    correctAnswer: 0,
+    explanation: "greet('Alice')는 'Hello, ' + 'Alice'를 반환합니다. return문이 있으므로 호출한 쪽에서 값을 받을 수 있습니다.",
+    keyConceptTitle: "함수 반환값",
+    keyConceptDescription: "return문은 함수의 결과를 호출한 곳으로 돌려줍니다. 반환된 값은 변수에 저장하거나 바로 사용할 수 있습니다.",
+  },
+  {
+    id: 435,
+    lessonId: 36,
+    difficulty: "쉬움",
+    question: "다음 코드에서 함수를 호출했을 때 출력 결과는?",
+    code: `def add(a, b):
+    return a + b
+
+print(add(3, 5))
+print(add(10, 20))`,
+    options: ["8\n30", "3 5\n10 20", "add(3, 5)\nadd(10, 20)", "오류"],
+    correctAnswer: 0,
+    explanation: "add(3, 5)는 3+5=8, add(10, 20)은 10+20=30을 반환합니다. print()로 각각 출력하면 8과 30이 나옵니다.",
+    keyConceptTitle: "함수 호출과 인자",
+    keyConceptDescription: "함수를 정의할 때의 a, b는 매개변수(parameter), 호출할 때의 3, 5는 인수(argument)입니다.",
+  },
+  {
+    id: 436,
+    lessonId: 36,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `def say_hello():
+    print("Hello!")
+
+result = say_hello()
+print(result)`,
+    options: ["Hello!\nNone", "Hello!", "None", "오류"],
+    correctAnswer: 0,
+    explanation: "say_hello()는 return이 없으므로 None을 반환합니다. 함수 내부에서 print()로 'Hello!'를 출력하고, 반환값 None이 result에 저장되어 다시 출력됩니다.",
+    keyConceptTitle: "return이 없는 함수",
+    keyConceptDescription: "return문이 없는 함수는 자동으로 None을 반환합니다. None은 '값이 없음'을 나타내는 특별한 타입입니다.",
+  },
+  {
+    id: 437,
+    lessonId: 36,
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `x = 10
+
+def change():
+    x = 20
+    print(x)
+
+change()
+print(x)`,
+    options: ["20\n10", "20\n20", "10\n10", "오류"],
+    correctAnswer: 0,
+    explanation: "함수 내부의 x = 20은 새로운 지역 변수를 만듭니다. 전역 변수 x는 변경되지 않아 함수 바깥에서는 여전히 10입니다.",
+    keyConceptTitle: "변수 스코프 (scope)",
+    keyConceptDescription: "함수 내부에서 변수를 새로 대입하면 지역 변수가 됩니다. 지역 변수는 함수 밖의 동일한 이름 변수와 별개입니다.",
+  },
+  {
+    id: 438,
+    lessonId: 36,
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `def power(base, exp=2):
+    return base ** exp
+
+print(power(3))
+print(power(2, 3))`,
+    options: ["9\n8", "3\n2", "6\n6", "오류"],
+    correctAnswer: 0,
+    explanation: "exp=2는 기본값(default parameter)입니다. power(3)은 exp=2를 사용해 3²=9, power(2, 3)은 2³=8을 반환합니다.",
+    keyConceptTitle: "기본값 매개변수 (default parameter)",
+    keyConceptDescription: "매개변수에 기본값을 설정하면 해당 인수를 생략하고 호출할 수 있습니다. 기본값이 있는 매개변수는 뒤쪽에 위치해야 합니다.",
+  },
+  {
+    id: 439,
+    lessonId: 36,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `def make_adder(n):
+    def adder(x):
+        return x + n
+    return adder
+
+add5 = make_adder(5)
+add10 = make_adder(10)
+print(add5(3))
+print(add10(3))`,
+    options: ["8\n13", "5\n10", "3\n3", "오류"],
+    correctAnswer: 0,
+    explanation: "make_adder(5)는 n=5를 기억하는 adder 함수를 반환합니다(클로저). add5(3)은 3+5=8, add10(3)은 3+10=13입니다.",
+    keyConceptTitle: "클로저 (Closure)",
+    keyConceptDescription: "내부 함수가 외부 함수의 변수를 기억하는 패턴입니다. make_adder로 n이 다른 함수를 여러 개 만들 수 있습니다.",
+  },
+
+  // ── Lesson 43: RPG 게임 (OOP) ──
+  {
+    id: 440,
+    lessonId: 43,
+    difficulty: "쉬움",
+    question: "다음 클래스에서 인스턴스를 생성하는 올바른 방법은?",
+    code: `class Hero:
+    def __init__(self, name, hp):
+        self.name = name
+        self.hp = hp`,
+    options: [
+      'hero = Hero("Alice", 100)',
+      'hero = Hero.new("Alice", 100)',
+      'hero = new Hero("Alice", 100)',
+      'hero = Hero.__init__("Alice", 100)',
+    ],
+    correctAnswer: 0,
+    explanation: "Python에서 인스턴스는 클래스이름(인수)으로 생성합니다. __init__은 자동으로 호출되므로 직접 호출하지 않습니다.",
+    keyConceptTitle: "클래스 인스턴스 생성",
+    keyConceptDescription: "Hero('Alice', 100)처럼 클래스를 함수처럼 호출하면 새 인스턴스가 만들어지고 __init__이 자동으로 실행됩니다.",
+  },
+  {
+    id: 441,
+    lessonId: 43,
+    difficulty: "쉬움",
+    question: "다음 코드의 출력 결과는?",
+    code: `class Character:
+    def __init__(self, name, hp):
+        self.name = name
+        self.hp = hp
+
+    def status(self):
+        print(f'{self.name}: {self.hp}HP')
+
+hero = Character("철수", 100)
+hero.status()`,
+    options: ["철수: 100HP", "name: hp HP", "Character: 100", "오류"],
+    correctAnswer: 0,
+    explanation: "hero.status()는 self가 hero 인스턴스를 가리키므로 self.name='철수', self.hp=100이 됩니다.",
+    keyConceptTitle: "self와 인스턴스 메서드",
+    keyConceptDescription: "메서드의 첫 번째 매개변수 self는 인스턴스 자신을 가리킵니다. 메서드를 호출할 때 self는 자동으로 전달됩니다.",
+  },
+  {
+    id: 442,
+    lessonId: 43,
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `class Monster:
+    count = 0
+
+    def __init__(self, name):
+        self.name = name
+        Monster.count += 1
+
+m1 = Monster("슬라임")
+m2 = Monster("고블린")
+m3 = Monster("오크")
+print(Monster.count)`,
+    options: ["3", "1", "0", "오류"],
+    correctAnswer: 0,
+    explanation: "count는 클래스 변수로 모든 인스턴스가 공유합니다. Monster()를 3번 호출할 때마다 Monster.count가 1씩 증가하여 최종값은 3입니다.",
+    keyConceptTitle: "클래스 변수 vs 인스턴스 변수",
+    keyConceptDescription: "클래스 변수(class variable)는 모든 인스턴스가 공유하며 클래스이름.변수로 접근합니다. self.변수는 각 인스턴스만의 인스턴스 변수입니다.",
+  },
+  {
+    id: 443,
+    lessonId: 43,
+    difficulty: "보통",
+    question: "다음 코드에서 hero.attack(monster) 호출 후 monster.hp 값은?",
+    code: `class Hero:
+    def __init__(self, atk):
+        self.atk = atk
+
+    def attack(self, enemy):
+        enemy.hp -= self.atk
+
+class Monster:
+    def __init__(self, hp):
+        self.hp = hp
+
+hero = Hero(25)
+monster = Monster(100)
+hero.attack(monster)
+hero.attack(monster)`,
+    options: ["50", "75", "100", "25"],
+    correctAnswer: 0,
+    explanation: "hero.atk=25이고 attack을 2번 호출하므로 monster.hp = 100 - 25 - 25 = 50이 됩니다.",
+    keyConceptTitle: "메서드를 통한 객체 상호작용",
+    keyConceptDescription: "메서드의 매개변수로 다른 객체를 받아 그 객체의 속성을 수정할 수 있습니다. 이것이 객체들이 상호작용하는 방식입니다.",
+  },
+  {
+    id: 444,
+    lessonId: 43,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `class Animal:
+    def speak(self):
+        return "..."
+
+class Dog(Animal):
+    def speak(self):
+        return "멍멍"
+
+class Cat(Animal):
+    def speak(self):
+        return "야옹"
+
+animals = [Dog(), Cat(), Animal()]
+for a in animals:
+    print(a.speak())`,
+    options: ["멍멍\n야옹\n...", "...\n...\n...", "멍멍\n멍멍\n멍멍", "오류"],
+    correctAnswer: 0,
+    explanation: "각 객체의 실제 타입에 따라 speak()가 호출됩니다. Dog는 '멍멍', Cat은 '야옹', Animal은 '...'을 반환합니다. 이것이 다형성(polymorphism)입니다.",
+    keyConceptTitle: "다형성 (Polymorphism)",
+    keyConceptDescription: "같은 메서드 이름으로 각 클래스가 다른 동작을 수행할 수 있습니다. 부모 클래스 타입의 변수로 자식 객체를 다룰 수 있습니다.",
+  },
+  {
+    id: 445,
+    lessonId: 43,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `class Character:
+    def __init__(self, name, hp):
+        self.name = name
+        self._hp = hp  # 캡슐화
+
+    def get_hp(self):
+        return self._hp
+
+    def take_damage(self, amount):
+        self._hp = max(0, self._hp - amount)
+
+c = Character("영웅", 50)
+c.take_damage(30)
+c.take_damage(30)
+print(c.get_hp())`,
+    options: ["0", "20", "-10", "50"],
+    correctAnswer: 0,
+    explanation: "첫 공격 후 hp = max(0, 50-30) = 20, 두 번째 공격 후 hp = max(0, 20-30) = max(0, -10) = 0. max(0, ...)로 음수 방지.",
+    keyConceptTitle: "캡슐화와 max() 활용",
+    keyConceptDescription: "_hp처럼 밑줄로 시작하는 변수는 외부에서 직접 접근하지 않는 관례입니다. max(0, 값)으로 음수가 되는 것을 방지합니다.",
+  },
+
+  // ── Lesson 49: 텍스트 RPG 게임 설계 ──
+  {
+    id: 446,
+    lessonId: 49,
+    difficulty: "쉬움",
+    question: "텍스트 RPG의 게임 루프에서 '계속 반복하다가 특정 조건에서 종료'를 구현하기에 가장 적합한 구조는?",
+    code: `# 게임 루프 예시
+while True:
+    command = input("명령 입력: ")
+    if command == "quit":
+        break
+    # 명령 처리...`,
+    options: [
+      "while True + break",
+      "for i in range(100):",
+      "if/elif 체인",
+      "try/except 블록",
+    ],
+    correctAnswer: 0,
+    explanation: "게임 루프는 종료 조건을 알 수 없으므로 while True로 무한 반복하다가 종료 명령 시 break로 빠져나오는 패턴이 일반적입니다.",
+    keyConceptTitle: "게임 루프 패턴",
+    keyConceptDescription: "while True + break 패턴은 종료 시점을 루프 내부에서 결정할 때 사용합니다. 게임 루프, 메뉴 시스템 등에 널리 쓰입니다.",
+  },
+  {
+    id: 447,
+    lessonId: 49,
+    difficulty: "쉬움",
+    question: "다음 중 게임의 여러 방(room)을 딕셔너리로 표현하는 적절한 구조는?",
+    code: `# 방 데이터 구조
+rooms = {
+    "시작점": {"설명": "어두운 방", "출구": ["북쪽", "동쪽"]},
+    "북쪽 방": {"설명": "밝은 방", "출구": ["남쪽"]},
+}`,
+    options: [
+      "딕셔너리 안에 딕셔너리 (중첩 딕셔너리)",
+      "리스트 안에 리스트 (2D 배열)",
+      "튜플 목록",
+      "단순 문자열 변수",
+    ],
+    correctAnswer: 0,
+    explanation: "방 이름을 키로, 설명/출구 등 속성을 값으로 하는 중첩 딕셔너리가 방 데이터를 표현하기에 적합합니다. 이름으로 O(1) 접근이 가능합니다.",
+    keyConceptTitle: "중첩 딕셔너리 데이터 설계",
+    keyConceptDescription: "게임 맵, 캐릭터 속성 등 복잡한 데이터는 딕셔너리 안에 딕셔너리를 중첩하여 표현합니다. rooms['시작점']['설명']으로 접근합니다.",
+  },
+  {
+    id: 448,
+    lessonId: 49,
+    difficulty: "보통",
+    question: "다음 코드에서 게임 상태를 클래스로 관리할 때의 장점은?",
+    code: `class GameState:
+    def __init__(self):
+        self.player_hp = 100
+        self.inventory = []
+        self.current_room = "시작점"
+        self.score = 0
+
+    def save(self):
+        return {
+            'hp': self.player_hp,
+            'room': self.current_room,
+            'score': self.score,
+        }`,
+    options: [
+      "관련 데이터를 하나의 객체로 묶어 관리가 쉬워진다",
+      "전역 변수를 사용하는 것보다 느리다",
+      "메모리를 더 많이 사용한다",
+      "단순한 게임에는 클래스가 필요없다",
+    ],
+    correctAnswer: 0,
+    explanation: "클래스로 게임 상태를 묶으면 관련 데이터를 한 곳에서 관리하고, save() 같은 메서드로 일관된 방식으로 다룰 수 있습니다.",
+    keyConceptTitle: "클래스로 상태 관리",
+    keyConceptDescription: "게임 상태처럼 여러 변수가 연관된 경우 클래스로 묶으면 코드 구조가 명확해지고 저장/불러오기 등의 기능을 메서드로 캡슐화할 수 있습니다.",
+  },
+  {
+    id: 449,
+    lessonId: 49,
+    difficulty: "보통",
+    question: "텍스트 RPG에서 플레이어 명령어를 처리할 때 가장 확장하기 쉬운 구조는?",
+    code: `# 방법 A: if/elif 체인
+if cmd == "go":
+    ...
+elif cmd == "attack":
+    ...
+
+# 방법 B: 딕셔너리 디스패치
+commands = {
+    "go": handle_go,
+    "attack": handle_attack,
+}
+if cmd in commands:
+    commands[cmd]()`,
+    options: [
+      "방법 B: 딕셔너리 디스패치 — 새 명령어를 dict에 추가하면 된다",
+      "방법 A: if/elif — 읽기 쉽고 빠르다",
+      "둘 다 동일하다",
+      "switch/case를 사용해야 한다",
+    ],
+    correctAnswer: 0,
+    explanation: "딕셔너리 디스패치는 명령어를 추가할 때 dict에 항목만 추가하면 됩니다. if/elif 체인은 명령어가 늘어날수록 길어지고 수정이 어려워집니다.",
+    keyConceptTitle: "딕셔너리 디스패치 패턴",
+    keyConceptDescription: "명령어-함수를 딕셔너리로 매핑하면 Open/Closed 원칙을 지킬 수 있습니다. 기존 코드를 수정하지 않고 새 명령어를 추가할 수 있습니다.",
+  },
+  {
+    id: 450,
+    lessonId: 49,
+    difficulty: "어려움",
+    question: "다음 코드에서 Player와 Room 클래스의 관계는?",
+    code: `class Room:
+    def __init__(self, name, description):
+        self.name = name
+        self.description = description
+        self.enemies = []
+
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.hp = 100
+        self.current_room = None  # Room 인스턴스를 참조
+
+    def enter_room(self, room):
+        self.current_room = room
+        print(f'{room.description}')`,
+    options: [
+      "컴포지션(Composition) — Player가 Room을 참조",
+      "상속(Inheritance) — Player가 Room을 상속",
+      "Player와 Room은 독립적으로 관련 없음",
+      "Room이 Player를 상속",
+    ],
+    correctAnswer: 0,
+    explanation: "Player가 Room 인스턴스를 속성으로 참조하는 관계는 컴포지션(Has-A 관계)입니다. 'Player는 Room을 가진다'는 의미입니다.",
+    keyConceptTitle: "컴포지션 (Composition)",
+    keyConceptDescription: "컴포지션은 클래스가 다른 클래스의 인스턴스를 속성으로 포함하는 설계 패턴입니다. 상속(Is-A)과 대비되는 Has-A 관계입니다.",
+  },
+  {
+    id: 451,
+    lessonId: 49,
+    difficulty: "어려움",
+    question: "게임의 적(Enemy)을 여러 종류로 확장할 때 올바른 상속 구조는?",
+    code: `class Enemy:
+    def __init__(self, name, hp, atk):
+        self.name = name
+        self.hp = hp
+        self.atk = atk
+
+    def attack(self, player):
+        player.hp -= self.atk
+
+class Boss(Enemy):
+    def __init__(self, name, hp, atk, special):
+        super().__init__(name, hp, atk)
+        self.special = special`,
+    options: [
+      "super().__init__()으로 부모 초기화 후 자식 속성 추가",
+      "Boss에서 __init__을 완전히 새로 작성",
+      "Enemy의 코드를 Boss에 복사",
+      "Boss(Enemy)가 아닌 Boss(object)로 선언",
+    ],
+    correctAnswer: 0,
+    explanation: "super().__init__()으로 부모 클래스의 초기화를 재사용하고, 추가 속성만 자식에서 정의합니다. 코드 중복을 방지합니다.",
+    keyConceptTitle: "super()와 상속 초기화",
+    keyConceptDescription: "super().__init__()은 부모 클래스의 __init__을 호출합니다. 자식 클래스에서 부모 기능을 재사용하면서 추가 기능을 덧붙일 수 있습니다.",
+  },
+
+  // ── Lesson 51: 텍스트 RPG 완성 (저장/불러오기) ──
+  {
+    id: 452,
+    lessonId: 51,
+    difficulty: "쉬움",
+    question: "Python에서 게임 데이터를 JSON 파일로 저장하는 올바른 코드는?",
+    code: `import json
+
+data = {"name": "영웅", "hp": 80, "level": 3}`,
+    options: [
+      `with open('save.json', 'w') as f:\n    json.dump(data, f)`,
+      `json.save('save.json', data)`,
+      `open('save.json').write(data)`,
+      `json.write(data, 'save.json')`,
+    ],
+    correctAnswer: 0,
+    explanation: "json.dump(data, file)로 딕셔너리를 JSON 파일에 씁니다. with open()을 사용하면 파일이 자동으로 닫힙니다.",
+    keyConceptTitle: "json.dump() — JSON 파일 저장",
+    keyConceptDescription: "json.dump(객체, 파일)은 Python 객체를 JSON 형식으로 파일에 저장합니다. 반대로 json.load(파일)로 불러옵니다.",
+  },
+  {
+    id: 453,
+    lessonId: 51,
+    difficulty: "쉬움",
+    question: "저장된 JSON 파일을 불러오는 올바른 코드는?",
+    code: `import json
+# save.json 파일에 게임 데이터가 저장되어 있습니다`,
+    options: [
+      `with open('save.json', 'r') as f:\n    data = json.load(f)`,
+      `data = json.read('save.json')`,
+      `data = open('save.json').json()`,
+      `data = json.loads('save.json')`,
+    ],
+    correctAnswer: 0,
+    explanation: "json.load(file)로 JSON 파일을 Python 딕셔너리로 읽어옵니다. json.loads()는 파일이 아닌 문자열을 파싱할 때 사용합니다.",
+    keyConceptTitle: "json.load() — JSON 파일 불러오기",
+    keyConceptDescription: "json.load(파일)은 파일에서 JSON을 읽어 Python 객체로 변환합니다. dump/load 쌍을 기억하세요.",
+  },
+  {
+    id: 454,
+    lessonId: 51,
+    difficulty: "보통",
+    question: "다음 코드에서 게임 저장/불러오기를 구현할 때 try/except가 필요한 이유는?",
+    code: `import json, os
+
+def load_game():
+    try:
+        with open('save.json', 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {"name": "신규", "hp": 100, "level": 1}`,
+    options: [
+      "세이브 파일이 없을 때 오류 없이 기본값을 반환하기 위해",
+      "JSON 형식이 잘못됐을 때 파일을 삭제하기 위해",
+      "파일 저장 속도를 높이기 위해",
+      "try/except는 필수가 아니라 스타일의 문제이다",
+    ],
+    correctAnswer: 0,
+    explanation: "처음 플레이하는 경우 save.json이 없으면 FileNotFoundError가 발생합니다. try/except로 이를 처리하고 기본 캐릭터 데이터를 반환합니다.",
+    keyConceptTitle: "FileNotFoundError 처리",
+    keyConceptDescription: "파일 읽기 전에 존재 여부를 확인하거나 try/except FileNotFoundError를 사용해야 합니다. 신규 유저를 위한 기본값 반환 패턴에 자주 쓰입니다.",
+  },
+  {
+    id: 455,
+    lessonId: 51,
+    difficulty: "보통",
+    question: "다음 중 게임 상태를 저장 가능한 형태로 직렬화(serialize)할 때 주의할 점은?",
+    code: `class Player:
+    def __init__(self, name, hp):
+        self.name = name
+        self.hp = hp
+
+player = Player("영웅", 80)
+# 아래 코드는 TypeError를 발생시킵니다
+# json.dumps(player)  # 오류!
+
+# 올바른 방법:
+data = {"name": player.name, "hp": player.hp}
+import json
+print(json.dumps(data))`,
+    options: [
+      "클래스 인스턴스는 직접 JSON으로 변환할 수 없어 딕셔너리로 변환해야 한다",
+      "json.dumps()는 정수를 처리하지 못한다",
+      "클래스 인스턴스도 json.dumps()로 바로 저장할 수 있다",
+      "JSON은 게임 저장에 적합하지 않다",
+    ],
+    correctAnswer: 0,
+    explanation: "json.dumps()는 dict, list, str, int, float, bool, None만 처리합니다. 클래스 인스턴스는 {'name': ..., 'hp': ...}처럼 딕셔너리로 변환 후 저장해야 합니다.",
+    keyConceptTitle: "JSON 직렬화 가능 타입",
+    keyConceptDescription: "JSON으로 저장할 수 있는 타입: dict, list, str, int, float, bool, None. 클래스 인스턴스를 저장하려면 to_dict() 메서드를 구현하는 것이 일반적입니다.",
+  },
+  {
+    id: 456,
+    lessonId: 51,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `import json
+
+original = {"name": "영웅", "items": ["검", "방패"], "level": 5}
+json_str = json.dumps(original, ensure_ascii=False)
+loaded = json.loads(json_str)
+
+loaded["items"].append("갑옷")
+print(len(original["items"]))
+print(len(loaded["items"]))`,
+    options: ["2\n3", "3\n3", "2\n2", "오류"],
+    correctAnswer: 0,
+    explanation: "json.dumps → json.loads 과정에서 깊은 복사(deep copy)가 이루어집니다. loaded는 original과 독립적이므로 loaded['items']에 추가해도 original에 영향이 없습니다.",
+    keyConceptTitle: "JSON 직렬화로 깊은 복사",
+    keyConceptDescription: "json.dumps → json.loads는 객체를 깊은 복사하는 효과가 있습니다. 독립적인 복사본이 필요할 때 copy.deepcopy() 또는 이 패턴을 사용합니다.",
+  },
+  {
+    id: 457,
+    lessonId: 51,
+    difficulty: "어려움",
+    question: "다음 코드에서 게임을 자동 저장(autosave)하는 올바른 구조는?",
+    code: `class Game:
+    def __init__(self):
+        self.player = {"name": "영웅", "hp": 100}
+        self.turn = 0
+
+    def play_turn(self, action):
+        self.turn += 1
+        # 액션 처리...
+        if self.turn % 5 == 0:
+            self.save()
+
+    def save(self):
+        import json
+        with open('autosave.json', 'w', encoding='utf-8') as f:
+            json.dump({"player": self.player, "turn": self.turn}, f)`,
+    options: [
+      "5턴마다 자동으로 save() 호출 — 데이터 유실 최소화",
+      "이 코드는 잘못됐다 — save()를 플레이어가 직접 호출해야 한다",
+      "json.dump은 한글을 저장할 수 없다",
+      "turn % 5 == 0은 항상 False이다",
+    ],
+    correctAnswer: 0,
+    explanation: "turn % 5 == 0은 5, 10, 15... 턴마다 True가 됩니다. encoding='utf-8'로 한글 저장이 가능하며, 자동 저장으로 데이터 유실을 최소화합니다.",
+    keyConceptTitle: "자동 저장 (Autosave) 패턴",
+    keyConceptDescription: "% 연산으로 N턴마다 자동 저장을 구현합니다. encoding='utf-8'을 지정해야 한글 등 비ASCII 문자를 올바르게 저장합니다.",
+  },
+
+  // ── Lesson 52: 텍스트 RPG 업그레이드 ──
+  {
+    id: 458,
+    lessonId: 52,
+    difficulty: "쉬움",
+    question: "기존 Character 클래스에 새 기능을 추가할 때 상속을 사용하는 이유는?",
+    code: `class Character:
+    def __init__(self, name, hp):
+        self.name = name
+        self.hp = hp
+
+# 마법사 추가: Character를 수정하지 않고 확장
+class Mage(Character):
+    def __init__(self, name, hp, mp):
+        super().__init__(name, hp)
+        self.mp = mp
+
+    def cast_spell(self):
+        self.mp -= 10
+        return 50`,
+    options: [
+      "기존 Character 코드를 수정하지 않고 새 기능을 추가할 수 있다",
+      "Mage가 더 빠르게 실행된다",
+      "Character를 삭제할 수 있다",
+      "mp 변수를 글로벌로 사용하기 위해",
+    ],
+    correctAnswer: 0,
+    explanation: "상속으로 기존 Character 코드는 그대로 두고 Mage에만 mp와 cast_spell을 추가합니다. 기존 코드를 수정하지 않아 버그 위험이 줄어듭니다.",
+    keyConceptTitle: "상속으로 기능 확장",
+    keyConceptDescription: "기존 클래스를 변경하지 않고 상속으로 확장하는 것이 OOP의 핵심 원칙입니다(Open/Closed Principle). 기존 코드는 보존하면서 새 기능을 추가합니다.",
+  },
+  {
+    id: 459,
+    lessonId: 52,
+    difficulty: "쉬움",
+    question: "다음 코드에서 Warrior가 Character의 메서드를 재사용하는 방법은?",
+    code: `class Character:
+    def get_info(self):
+        return f'이름: {self.name}, HP: {self.hp}'
+
+class Warrior(Character):
+    def __init__(self, name, hp, strength):
+        super().__init__(name, hp) if hasattr(super(), '__init__') else None
+        self.name = name
+        self.hp = hp
+        self.strength = strength
+
+    def get_info(self):
+        base = super().get_info()
+        return f'{base}, 힘: {self.strength}'
+
+w = Warrior("전사", 150, 80)
+print(w.get_info())`,
+    options: [
+      "이름: 전사, HP: 150, 힘: 80",
+      "힘: 80",
+      "이름: 전사, HP: 150",
+      "오류",
+    ],
+    correctAnswer: 0,
+    explanation: "super().get_info()로 부모의 메서드를 호출해 기본 정보를 가져오고, 거기에 ', 힘: 80'을 붙입니다. 메서드 오버라이드 + super() 패턴입니다.",
+    keyConceptTitle: "super()로 부모 메서드 호출",
+    keyConceptDescription: "자식 클래스에서 super().메서드()로 부모의 메서드를 호출할 수 있습니다. 부모 기능을 확장하거나 결과에 추가 정보를 덧붙일 때 유용합니다.",
+  },
+  {
+    id: 460,
+    lessonId: 52,
+    difficulty: "보통",
+    question: "다음 코드의 출력 결과는?",
+    code: `class Item:
+    def __init__(self, name, power):
+        self.name = name
+        self.power = power
+
+    def __repr__(self):
+        return f'Item({self.name}, {self.power})'
+
+class Inventory:
+    def __init__(self):
+        self.items = []
+
+    def add(self, item):
+        self.items.append(item)
+
+    def total_power(self):
+        return sum(item.power for item in self.items)
+
+inv = Inventory()
+inv.add(Item("검", 30))
+inv.add(Item("갑옷", 20))
+print(inv.total_power())`,
+    options: ["50", "30", "20", "오류"],
+    correctAnswer: 0,
+    explanation: "아이템 두 개의 power 합: 30 + 20 = 50. sum(item.power for item in self.items)는 제너레이터 표현식으로 각 아이템의 power를 합산합니다.",
+    keyConceptTitle: "컴포지션과 제너레이터 표현식",
+    keyConceptDescription: "Inventory가 Item 리스트를 포함하는 컴포지션 구조입니다. sum(속성 for 객체 in 리스트)로 리스트 내 객체의 속성 합계를 쉽게 계산합니다.",
+  },
+  {
+    id: 461,
+    lessonId: 52,
+    difficulty: "보통",
+    question: "게임에 새로운 직업(Archer)을 추가할 때 기존 코드 변경 없이 확장하는 올바른 방법은?",
+    code: `class Character:
+    def __init__(self, name, hp):
+        self.name = name
+        self.hp = hp
+
+    def special_skill(self):
+        return "기본 공격"
+
+class Warrior(Character):
+    def special_skill(self):
+        return "방패 강타"
+
+# Archer 추가 방법?`,
+    options: [
+      "class Archer(Character)를 새로 정의하고 special_skill()을 오버라이드",
+      "Character에 archer_skill() 메서드를 추가",
+      "Warrior를 수정해 궁수 기능 추가",
+      "global 변수로 직업을 관리",
+    ],
+    correctAnswer: 0,
+    explanation: "기존 Character, Warrior를 수정하지 않고 새 클래스 Archer(Character)를 정의합니다. 이것이 개방-폐쇄 원칙(Open/Closed Principle)입니다.",
+    keyConceptTitle: "개방-폐쇄 원칙 (Open/Closed)",
+    keyConceptDescription: "클래스는 확장에는 열려있고 수정에는 닫혀있어야 합니다. 상속으로 기존 코드 수정 없이 새 기능을 추가하는 것이 올바른 OOP 설계입니다.",
+  },
+  {
+    id: 462,
+    lessonId: 52,
+    difficulty: "어려움",
+    question: "다음 코드에서 __iter__와 __next__를 구현한 클래스의 출력은?",
+    code: `class CountDown:
+    def __init__(self, start):
+        self.current = start
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.current <= 0:
+            raise StopIteration
+        self.current -= 1
+        return self.current + 1
+
+for n in CountDown(3):
+    print(n)`,
+    options: ["3\n2\n1", "1\n2\n3", "0\n1\n2", "오류"],
+    correctAnswer: 0,
+    explanation: "CountDown(3)에서 current=3 → __next__: return 3, current=2 → return 2, current=1 → return 1, current=0 → StopIteration으로 루프 종료.",
+    keyConceptTitle: "이터레이터 프로토콜",
+    keyConceptDescription: "__iter__와 __next__를 구현하면 for 루프에서 사용할 수 있는 이터레이터가 됩니다. StopIteration 예외로 반복 종료를 알립니다.",
+  },
+  {
+    id: 463,
+    lessonId: 52,
+    difficulty: "어려움",
+    question: "다음 코드에서 @property 데코레이터의 역할은?",
+    code: `class Player:
+    def __init__(self, name, hp, max_hp):
+        self.name = name
+        self._hp = hp
+        self.max_hp = max_hp
+
+    @property
+    def hp(self):
+        return self._hp
+
+    @hp.setter
+    def hp(self, value):
+        self._hp = max(0, min(value, self.max_hp))
+
+p = Player("영웅", 100, 100)
+p.hp = 150  # max_hp로 제한됨
+print(p.hp)
+p.hp = -10  # 0으로 제한됨
+print(p.hp)`,
+    options: ["100\n0", "150\n-10", "100\n100", "오류"],
+    correctAnswer: 0,
+    explanation: "setter에서 min(value, max_hp)로 최대값을, max(0, ...)로 최솟값을 제한합니다. 150 → min(150, 100)=100, -10 → max(0, -10)=0.",
+    keyConceptTitle: "@property와 setter",
+    keyConceptDescription: "@property로 메서드를 속성처럼 접근할 수 있습니다. setter를 정의하면 p.hp = 값 시 자동으로 검증 로직이 실행되어 캡슐화를 강화합니다.",
   },
 ]
