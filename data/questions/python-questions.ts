@@ -298,12 +298,8 @@ export const pythonQuestions: QuizQuestion[] = [
     correctAnswer: 1,
     explanation: "문자열끼리 + 연산을 하면 연결(concatenation)이 됩니다. '3'과 '5'는 문자열이므로 '35'가 됩니다.",
     keyConceptTitle: "문자열 연결",
-    keyConceptDescription: "문자열에 + 를 사용하면 두 문자열이 연결됩니다. 숫자와 문자열을 더하려면 타입 변환이 필요합니다.",
-    codeComparison: {
-      wrong: `"3" + "5"  # "35" (문자열 연결)`,
-      correct: `int("3") + int("5")  # 8 (숫자 덧셈)`,
-    },
-    relatedTopics: ["타입 변환", "int()", "str()"],
+    keyConceptDescription: "문자열에 + 를 사용하면 두 문자열이 연결됩니다. 숫자 계산을 원한다면 숫자형 변수를 사용해야 합니다.",
+    relatedTopics: ["문자열 연결", "문자열 연산"],
   },
   {
     id: 26,
@@ -4678,7 +4674,7 @@ print(a + b + ' 최고!')`,
   },
   {
     id: 372,
-    lessonId: 5,
+    lessonId: 9,
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
     code: `print('나이: ' + 15)`,

@@ -1,10 +1,10 @@
 /**
- * 퀴즈 문제 선수학습·lessonId 검증 스크립트
+ * 퀴즈 문제 선수학습·lessonId 검증 스크립트 (강화판)
  * 실행: npm run validate-questions
  *
  * 검사 항목:
- *  1. Python — 코드에 사용된 개념이 해당 lessonId보다 늦게 도입되는지
- *  2. C++   — 코드에 사용된 문법이 해당 lessonId 커리큘럼 순서보다 앞서는지
+ *  1. Python — code + codeComparison 필드의 선수학습 위반
+ *  2. C++   — code + codeComparison 필드의 선수학습 위반
  */
 
 import { pythonQuestions } from "../data/questions/python-questions"
@@ -22,7 +22,6 @@ interface Issue {
 
 // ─────────────────────────────────────────────
 // C++ 커리큘럼 순서 (lessonId → 순서 번호)
-// ID 번호 ≠ 커리큘럼 순서이므로 반드시 이 표를 사용
 // ─────────────────────────────────────────────
 const CPP_ORDER: Record<string, number> = {
   "cpp-1":  1,
@@ -51,7 +50,6 @@ const CPP_ORDER: Record<string, number> = {
   "cpp-19": 22,
   "cpp-20": 23,
   "cpp-p3": 23.5,
-  // 의도적 보관소 — 검사 제외
   "algo-preview": 999,
   "retired":      999,
   "deprecated":   999,
@@ -59,19 +57,47 @@ const CPP_ORDER: Record<string, number> = {
 
 // ─────────────────────────────────────────────
 // C++ 선수학습 규칙
-// [패턴, 최소 커리큘럼 순서, 규칙 설명]
 // ─────────────────────────────────────────────
 type CppRule = [RegExp, number, string]
 
 const CPP_RULES: CppRule[] = [
+  // 2D 배열 선언/접근 — cpp-21 (순서 10)
+  [/\w+\s*\[\s*\w+\s*\]\s*\[\s*\w+\s*\]/, 10,
+    "2D 배열 → cpp-21 이후에만 사용 가능"],
+
+  // Range-for (for auto) — cpp-10 (순서 11)
+  [/for\s*\(\s*auto\b/, 11,
+    "for(auto) range-for → cpp-10 이후에만 사용 가능"],
+
+  // 문자열 심화 메서드 — cpp-11 (순서 12)
+  [/\.substr\s*\(|\.find\s*\(|\.replace\s*\(|string::npos/, 12,
+    "substr/find/replace → cpp-11 이후에만 사용 가능"],
+
   // 참조(&) — cpp-12 (순서 13)
   [/\bint\s*&|\bdouble\s*&|\bstring\s*&|\bchar\s*&|\bauto\s*&|\bconst\s+\w+\s*&/, 13,
     "참조(&) 문법 → cpp-12 이후에만 사용 가능"],
 
-  // 이터레이터 .begin() / .end()
-  // cpp-23(sort 레슨, 순서 18)에서 sort(v.begin(), v.end()) 형태로 먼저 도입됨
-  // cpp-17(STL 탐색, 순서 20)에서 반복자 개념을 본격적으로 다룸
-  // → 최소 기준: cpp-23 순서(18)
+  // 포인터 — cpp-13 (순서 14)
+  [/\bint\s*\*|\bdouble\s*\*|\bchar\s*\*|\bvoid\s*\*|\bnullptr\b|\s->\s|\*\w+\s*=/, 14,
+    "포인터(*/->/nullptr) → cpp-13 이후에만 사용 가능"],
+
+  // struct — cpp-14 (순서 15)
+  [/\bstruct\s+\w+|\bstruct\s*\{/, 15,
+    "struct → cpp-14 이후에만 사용 가능"],
+
+  // class — cpp-22 (순서 16)
+  [/\bclass\s+\w+/, 16,
+    "class → cpp-22 이후에만 사용 가능"],
+
+  // vector<> — cpp-9 (순서 9)
+  [/\bvector\s*</, 9,
+    "vector<> → cpp-9 이후에만 사용 가능"],
+
+  // pair<> / tuple<> / .first / .second — cpp-15 (순서 17)
+  [/\bpair\s*<|\btuple\s*<|\bget\s*<|\.first\b|\.second\b/, 17,
+    "pair/tuple/.first/.second → cpp-15 이후에만 사용 가능"],
+
+  // .begin() / .end() — cpp-23 (순서 18)
   [/\.begin\(\)|\.end\(\)|\.rbegin\(\)|\.rend\(\)/, 18,
     ".begin()/.end() → cpp-23(sort) 이후에만 사용 가능"],
 
@@ -83,47 +109,155 @@ const CPP_RULES: CppRule[] = [
   [/\[\s*\]\s*\(|\[&\]\s*\(|\[=\]\s*\(/, 18,
     "lambda([]{}) → cpp-23 이후에만 사용 가능"],
 
-  // vector<> — cpp-9 (순서 9)
-  [/\bvector\s*</, 9,
-    "vector<> → cpp-9 이후에만 사용 가능"],
-
-  // pair<> / .first / .second — cpp-15 (순서 17)
-  [/\bpair\s*<|\.first\b|\.second\b/, 17,
-    "pair<>/.first/.second → cpp-15 이후에만 사용 가능"],
+  // greater<> / less<> — cpp-23 (순서 18)
+  [/\bgreater\s*<|\bless\s*</, 18,
+    "greater<>/less<> 비교 함수 → cpp-23 이후에만 사용 가능"],
 
   // map<> / set<> / unordered_map — cpp-16 (순서 19)
   [/\bmap\s*<|\bset\s*<|\bunordered_map\s*<|\bunordered_set\s*</, 19,
     "map/set/unordered_map → cpp-16 이후에만 사용 가능"],
 
+  // STL 알고리즘 함수 — cpp-17 (순서 20)
+  [/\bcount_if\s*\(|\bfind_if\s*\(|\baccumulate\s*\(|\btransform\s*\(|\bfor_each\s*\(/, 20,
+    "count_if/find_if/accumulate → cpp-17 이후에만 사용 가능"],
+
   // stack<> / queue<> / deque<> / priority_queue<> — cpp-18 (순서 21)
   [/\bstack\s*<|\bqueue\s*<|\bdeque\s*<|\bpriority_queue\s*</, 21,
     "stack/queue/deque/priority_queue → cpp-18 이후에만 사용 가능"],
 
-  // greater<> / less<> (비교 함수 객체) — cpp-23 (순서 18)
-  [/\bgreater\s*<|\bless\s*</, 18,
-    "greater<>/less<> 비교 함수 → cpp-23 이후에만 사용 가능"],
+  // 파일 I/O — cpp-19 (순서 22)
+  [/\bifstream\b|\bofstream\b|\bfstream\b/, 22,
+    "ifstream/ofstream → cpp-19 이후에만 사용 가능"],
 ]
 
 // ─────────────────────────────────────────────
 // Python 선수학습 규칙
-// [패턴, 최소 lessonId 번호, 규칙 설명, 예외 조건(optional)]
 // ─────────────────────────────────────────────
 type PyRule = {
   pattern: RegExp
   minLesson: number
   description: string
-  // 이 패턴이 코드에 있어도 위반으로 보지 않는 예외 패턴
   exception?: RegExp
-  // 이 lessonId들은 규칙 적용을 건너뜀 (개요·프로젝트 레슨 예외)
   exceptionLessons?: number[]
 }
 
 const PYTHON_RULES: PyRule[] = [
+  // bool() / int() / float() / str() 변환 함수 — lesson 9
+  {
+    pattern: /\bbool\s*\(|\bint\s*\(|\bfloat\s*\(|\bstr\s*\(/,
+    minLesson: 9,
+    description: "타입변환 함수 bool()/int()/float()/str() → 레슨 9 이후에만 사용 가능",
+  },
+
+  // input() — lesson 10
+  {
+    pattern: /\binput\s*\(/,
+    minLesson: 10,
+    description: "input() → 레슨 10 이후에만 사용 가능",
+  },
+
+  // and / or / not 논리 연산자 — lesson 12
+  {
+    pattern: /\band\b|\bor\b|\bnot\b/,
+    minLesson: 12,
+    description: "and/or/not → 레슨 12 이후에만 사용 가능",
+  },
+
+  // for 루프 — lesson 13
+  {
+    pattern: /\bfor\s+\w+\s+in\b/,
+    minLesson: 13,
+    description: "for 루프 → 레슨 13 이후에만 사용 가능",
+  },
+
+  // while — lesson 14
+  {
+    pattern: /\bwhile\b/,
+    minLesson: 14,
+    description: "while → 레슨 14 이후에만 사용 가능",
+  },
+
+  // 리스트 리터럴/메서드 — lesson 16
+  {
+    pattern: /=\s*\[|\.append\(|\.pop\(|\.insert\(|\.remove\(|\blist\s*\(|\.extend\(/,
+    minLesson: 16,
+    description: "리스트 리터럴/메서드 → 레슨 16 이후에만 사용 가능",
+    exceptionLessons: [15],
+  },
+
+  // 리스트 컴프리헨션 — lesson 17
+  {
+    pattern: /\[\s*\S[^\]]*\bfor\b[^\]]*\bin\b/,
+    minLesson: 17,
+    description: "리스트 컴프리헨션 → 레슨 17 이후에만 사용 가능",
+    exceptionLessons: [15],
+  },
+
+  // enumerate() — lesson 17
+  {
+    pattern: /\benumerate\s*\(/,
+    minLesson: 17,
+    description: "enumerate() → 레슨 17 이후에만 사용 가능",
+  },
+
+  // 튜플 대입 — lesson 19
+  {
+    pattern: /=\s*\(\s*\w+\s*,\s*\w+\s*\)|\.append\s*\(\s*\(\s*\w+\s*,/,
+    minLesson: 19,
+    description: "튜플 대입/append((a,b)) → 레슨 19 이후에만 사용 가능",
+    exceptionLessons: [15],
+  },
+
+  // 딕셔너리 리터럴/메서드 — lesson 20
+  {
+    pattern: /=\s*\{[^}]*:[^}]*\}|\.keys\(\)|\.values\(\)|\.items\(\)/,
+    minLesson: 20,
+    description: "딕셔너리 리터럴/메서드 → 레슨 20 이후에만 사용 가능",
+    exceptionLessons: [15],
+  },
+
+  // set() — lesson 21
+  {
+    pattern: /\bset\s*\(/,
+    minLesson: 21,
+    description: "set() → 레슨 21 이후에만 사용 가능",
+    exceptionLessons: [15, 20],
+  },
+
+  // 스텝 슬라이싱 — lesson 22
+  {
+    pattern: /\[.*:.*:.*\]/,
+    minLesson: 22,
+    description: "스텝 슬라이싱 [::n] → 레슨 22 이후에만 사용 가능",
+  },
+
+  // deque / popleft — lesson 24
+  {
+    pattern: /\bdeque\s*\(|\.popleft\s*\(|\.appendleft\s*\(|\.rotate\s*\(/,
+    minLesson: 24,
+    description: "deque/popleft → 레슨 24 이후에만 사용 가능",
+    exception: /from\s+collections\s+import\s+deque/,
+  },
+
   // def 키워드 — lesson 32
   {
     pattern: /\bdef\s+\w+\s*\(/,
     minLesson: 32,
     description: "def 키워드 → 레슨 32 이후에만 사용 가능",
+  },
+
+  // *args in def — lesson 33
+  {
+    pattern: /\bdef\s+\w+\s*\([^)]*\*\w/,
+    minLesson: 33,
+    description: "*args → 레슨 33 이후에만 사용 가능",
+  },
+
+  // print(*var) / func(*var) 언패킹 호출 — lesson 33
+  {
+    pattern: /\bprint\s*\(\s*\*\w|\bfunc\s*\(\s*\*\w|\(\s*\*\w+\s*[,)]/,
+    minLesson: 33,
+    description: "함수 호출 시 *언패킹 → 레슨 33 이후에만 사용 가능",
   },
 
   // lambda — lesson 34
@@ -133,62 +267,49 @@ const PYTHON_RULES: PyRule[] = [
     description: "lambda → 레슨 34 이후에만 사용 가능",
   },
 
-  // f-string — lesson 8
+  // **kwargs in def — lesson 34
   {
-    pattern: /f["']/,
-    minLesson: 8,
-    description: "f-string → 레슨 8 이후에만 사용 가능",
+    pattern: /\bdef\s+\w+\s*\([^)]*\*\*\w/,
+    minLesson: 34,
+    description: "**kwargs → 레슨 34 이후에만 사용 가능",
   },
 
-  // 리스트 리터럴 [] 또는 list() — lesson 16
-  // 단, 빈 슬라이스/인덱싱 [0], [i] 등은 제외하기 어려우므로 `= [` 패턴만 체크
-  // 예외: lesson 15 (자료구조 개요) — 4가지 자료구조를 소개하는 레슨이므로
-  //         리스트 리터럴 표시 자체는 필요함
+  // **dict 스프레드 — lesson 34
   {
-    pattern: /=\s*\[|\.append\(|\.pop\(|\.insert\(|\.remove\(|\blist\s*\(/,
-    minLesson: 16,
-    description: "리스트 리터럴/메서드 → 레슨 16 이후에만 사용 가능",
-    exceptionLessons: [15],
+    pattern: /\{\s*\*\*\w|\*\*\w+\s*[,}]/,
+    minLesson: 34,
+    description: "**dict 스프레드 → 레슨 34 이후에만 사용 가능",
   },
 
-  // 딕셔너리 리터럴 또는 메서드 — lesson 20
-  // 예외: lesson 15 (자료구조 개요) — 딕셔너리가 어떻게 생겼는지 보여주는 맥락
+  // global / nonlocal — lesson 34
   {
-    pattern: /=\s*\{[^}]*:[^}]*\}|\.keys\(\)|\.values\(\)|\.items\(\)/,
-    minLesson: 20,
-    description: "딕셔너리 리터럴/메서드 → 레슨 20 이후에만 사용 가능",
-    exceptionLessons: [15],
+    pattern: /\bglobal\s+\w+|\bnonlocal\s+\w+/,
+    minLesson: 34,
+    description: "global/nonlocal → 레슨 34 이후에만 사용 가능",
   },
 
-  // set() 생성자 — lesson 21
-  // 집합 리터럴 {a, b}는 딕셔너리와 구별이 어려우므로 생성자 호출만 검사
-  // 예외: lesson 15 (자료구조 개요), lesson 20 (딕셔너리 — keys를 set으로 비교하는 맥락 허용)
+  // sorted() / map() / zip() / filter() — lesson 35
   {
-    pattern: /\bset\s*\(/,
-    minLesson: 21,
-    description: "set() → 레슨 21 이후에만 사용 가능",
-    exceptionLessons: [15, 20],
-  },
-
-  // map() / zip() / filter() — lesson 35
-  {
-    pattern: /\bmap\s*\(|\bzip\s*\(|\bfilter\s*\(/,
+    pattern: /\bsorted\s*\(|\bmap\s*\(|\bzip\s*\(|\bfilter\s*\(/,
     minLesson: 35,
-    description: "map()/zip()/filter() → 레슨 35 이후에만 사용 가능",
+    description: "sorted()/map()/zip()/filter() → 레슨 35 이후에만 사용 가능",
   },
 
-  // sorted() — lesson 35
+  // try / except / raise — lesson 37
   {
-    pattern: /\bsorted\s*\(/,
-    minLesson: 35,
-    description: "sorted() → 레슨 35 이후에만 사용 가능",
+    pattern: /\btry\s*:|\bexcept\b|\braise\b/,
+    minLesson: 37,
+    description: "try/except/raise → 레슨 37 이후에만 사용 가능",
+  },
+
+  // open() / with open() — lesson 38
+  {
+    pattern: /\bopen\s*\(/,
+    minLesson: 38,
+    description: "open() → 레슨 38 이후에만 사용 가능",
   },
 
   // import 문 — lesson 45
-  // 예외:
-  //   - from collections import deque     → lesson 24 (큐 레슨에서 먼저 도입)
-  //   - import json / csv / os / pathlib  → lesson 38 (파일 I/O 레슨에서 함께 가르침)
-  //   - import random / math / datetime   → 프로젝트 레슨(27-31, 39-40, 43-44, 47-52)에서 실용적으로 사용
   {
     pattern: /^\s*(import\s+\w+|from\s+\w+\s+import)/m,
     minLesson: 45,
@@ -196,22 +317,53 @@ const PYTHON_RULES: PyRule[] = [
     exception: /from\s+collections\s+import\s+deque|import\s+(json|csv|os|pathlib|random|math|datetime|re)/,
   },
 
-  // 슬라이싱 스텝 [::-1] / [::2] — lesson 22
+  // class 키워드 — lesson 41
   {
-    pattern: /\[.*:.*:.*\]/,
-    minLesson: 22,
-    description: "스텝 슬라이싱 [::n] → 레슨 22 이후에만 사용 가능",
+    pattern: /\bclass\s+\w+/,
+    minLesson: 41,
+    description: "class → 레슨 41 이후에만 사용 가능",
   },
 
-  // 튜플을 변수에 대입하거나 append로 삽입하는 패턴 — lesson 19
-  // 주의: print(a, b) 같은 일반 함수 호출은 제외해야 하므로
-  //   '= (x, y)' 또는 '.append((x, y))' 형태만 검사
-  // 예외: lesson 15 (자료구조 개요) — 튜플이 어떻게 생겼는지 보여주는 맥락
+  // __init__ / self. — lesson 41
   {
-    pattern: /=\s*\(\s*\w+\s*,\s*\w+\s*\)|\.append\s*\(\s*\(\s*\w+\s*,/,
-    minLesson: 19,
-    description: "튜플 대입/append((a,b)) → 레슨 19 이후에만 사용 가능",
-    exceptionLessons: [15],
+    pattern: /\bself\s*\.|\b__init__\b/,
+    minLesson: 41,
+    description: "__init__/self → 레슨 41 이후에만 사용 가능",
+  },
+
+  // isinstance() — lesson 41
+  {
+    pattern: /\bisinstance\s*\(/,
+    minLesson: 41,
+    description: "isinstance() → 레슨 41 이후에만 사용 가능",
+  },
+
+  // dunder 메서드 (__str__, __repr__, __add__ 등 __init__ 제외) — lesson 42
+  {
+    pattern: /\bdef\s+__(str|repr|add|sub|mul|truediv|floordiv|mod|pow|eq|ne|lt|le|gt|ge|len|iter|next|getitem|setitem|delitem|contains|hash|call|enter|exit|iadd|isub|imul|neg|pos|abs)__\s*\(/,
+    minLesson: 42,
+    description: "dunder 메서드(__str__/__repr__ 등) → 레슨 42 이후에만 사용 가능",
+  },
+
+  // super() — lesson 42
+  {
+    pattern: /\bsuper\s*\(\s*\)/,
+    minLesson: 42,
+    description: "super() → 레슨 42 이후에만 사용 가능",
+  },
+
+  // @staticmethod / @classmethod / @property — lesson 42
+  {
+    pattern: /@staticmethod|@classmethod|@property/,
+    minLesson: 42,
+    description: "@staticmethod/@classmethod/@property → 레슨 42 이후에만 사용 가능",
+  },
+
+  // f-string — lesson 8
+  {
+    pattern: /f["']/,
+    minLesson: 8,
+    description: "f-string → 레슨 8 이후에만 사용 가능",
   },
 ]
 
@@ -225,7 +377,6 @@ function checkCpp(): Issue[] {
     const lessonId = String(q.lessonId)
     const order = CPP_ORDER[lessonId]
 
-    // 알 수 없는 lessonId 경고
     if (order === undefined) {
       issues.push({
         id: q.id,
@@ -236,14 +387,18 @@ function checkCpp(): Issue[] {
       continue
     }
 
-    // 의도적 보관소는 검사 건너뜀
     if (order === 999) continue
 
-    const code = q.code ?? ""
+    // code + codeComparison 모두 검사
+    const codeComparison = (q as any).codeComparison
+    const allCode = [
+      q.code ?? "",
+      codeComparison?.wrong ?? "",
+      codeComparison?.correct ?? "",
+    ].join("\n")
 
     for (const [pattern, minOrder, description] of CPP_RULES) {
-      if (pattern.test(code) && order < minOrder) {
-        // sort() 예외: cpp-23 본인은 허용
+      if (pattern.test(allCode) && order < minOrder) {
         issues.push({
           id: q.id,
           lessonId,
@@ -263,19 +418,20 @@ function checkPython(): Issue[] {
   for (const q of pythonQuestions) {
     const lessonId = q.lessonId as number
 
-    // 특수 lessonId는 건너뜀
     if (typeof lessonId !== "number") continue
 
-    const code = q.code ?? ""
+    // code + codeComparison 모두 검사
+    const codeComparison = (q as any).codeComparison
+    const allCode = [
+      q.code ?? "",
+      codeComparison?.wrong ?? "",
+      codeComparison?.correct ?? "",
+    ].join("\n")
 
     for (const rule of PYTHON_RULES) {
-      if (!rule.pattern.test(code)) continue
-
-      // 예외 레슨 확인
+      if (!rule.pattern.test(allCode)) continue
       if (rule.exceptionLessons && rule.exceptionLessons.includes(lessonId)) continue
-
-      // 예외 패턴 확인
-      if (rule.exception && rule.exception.test(code)) continue
+      if (rule.exception && rule.exception.test(allCode)) continue
 
       if (lessonId < rule.minLesson) {
         issues.push({
@@ -301,7 +457,6 @@ function main() {
   const pyIssues = checkPython()
   const total = cppIssues.length + pyIssues.length
 
-  // ── C++ 결과 출력 ──
   if (cppIssues.length === 0) {
     console.log("✅ C++ 문제: 이상 없음")
   } else {
@@ -313,7 +468,6 @@ function main() {
     }
   }
 
-  // ── Python 결과 출력 ──
   if (pyIssues.length === 0) {
     console.log("✅ Python 문제: 이상 없음")
   } else {
@@ -325,7 +479,6 @@ function main() {
     }
   }
 
-  // ── 최종 결과 ──
   console.log("─".repeat(50))
   if (total === 0) {
     console.log("\n✅ 모든 퀴즈 문제가 선수학습 규칙을 준수합니다.\n")
