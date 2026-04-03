@@ -1225,7 +1225,7 @@ export const pythonQuestions: QuizQuestion[] = [
     code: `a = [1, 2, 3]\nb = a.copy()\nb.append(4)\nprint(a, b)`,
     options: ["[1, 2, 3] [1, 2, 3, 4]", "[1, 2, 3, 4] [1, 2, 3, 4]", "[1, 2, 3, 4] [1, 2, 3]", "오류"],
     correctAnswer: 0,
-    explanation: "a[:]는 리스트의 얕은 복사를 만듭니다. b는 a와 독립적인 새 리스트이므로 b에 추가해도 a에 영향이 없습니다.",
+    explanation: "a.copy()는 리스트의 얕은 복사를 만듭니다. b는 a와 독립적인 새 리스트이므로 b에 추가해도 a에 영향이 없습니다.",
     keyConceptTitle: "리스트 얕은 복사",
     keyConceptDescription: "a[:]나 a.copy()로 리스트를 복사하면 원본과 독립적인 새 리스트가 생깁니다. 단, 내부 객체는 공유됩니다(얕은 복사).",
     relatedTopics: ["깊은 복사", "copy()", "리스트 슬라이싱"],
