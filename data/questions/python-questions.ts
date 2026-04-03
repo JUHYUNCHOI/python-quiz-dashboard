@@ -7219,15 +7219,15 @@ print(total(10, 20))`,
     lessonId: 33,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
-    code: `def min_max(numbers):
-    return min(numbers), max(numbers)
+    code: `def calc(a, b):
+    return a + b, a * b
 
-result = min_max([3, 1, 4, 1, 5, 9])
-lo, hi = result
-print(lo, hi)`,
-    options: ["1 9", "(1, 9)", "1\n9", "오류"],
+result = calc(3, 4)
+add, mul = result
+print(add, mul)`,
+    options: ["7 12", "(7, 12)", "7\n12", "오류"],
     correctAnswer: 0,
-    explanation: "함수가 min, max 두 값을 반환하면 튜플 (1, 9)가 됩니다. `lo, hi = result`로 언패킹하면 lo=1, hi=9입니다. print(lo, hi)는 '1 9'를 출력합니다.",
+    explanation: "함수가 a+b=7, a*b=12 두 값을 반환하면 튜플 (7, 12)가 됩니다. `add, mul = result`로 언패킹하면 add=7, mul=12입니다. print(add, mul)은 '7 12'를 출력합니다.",
     keyConceptTitle: "다중 반환값 — 튜플 언패킹",
     keyConceptDescription: "Python 함수는 `return a, b`로 여러 값을 튜플로 반환합니다. 호출 측에서 `x, y = func()`로 언패킹할 수 있습니다.",
     relatedTopics: ["다중 반환값", "튜플 언패킹", "함수"],
