@@ -224,8 +224,8 @@ int main() {
           id: "ch1-void-pred",
           type: "predict" as const,
           title: "Calling a void function?",
-          code: "#include <iostream>\nusing namespace std;\nvoid greet(string name) {\n    cout << \"Hi, \" << name << \"!\";\n}\nint main() {\n    greet(\"Alice\");\n    return 0;\n}",
-          options: ["Hi, Alice!", "Alice", "Error", "Nothing prints"],
+          code: "#include <iostream>\nusing namespace std;\nvoid greet(string name) {\n    cout << \"Hi, \" << name << \"!\";\n}\nint main() {\n    greet(\"Emma\");\n    return 0;\n}",
+          options: ["Hi, Emma!", "Emma", "Error", "Nothing prints"],
           answer: 0,
           explanation: "void functions work fine! They just don't return a value. cout still prints output!"
         },
@@ -263,9 +263,8 @@ int main() {
 
     return 0;
 }`,
-          expectedOutput: `First number: 7
-Second number: 3
-7 + 3 = 10`
+          stdin: `7\n3`,
+          expectedOutput: `First number: Second number: 7 + 3 = 10`
         },
         {
           id: "ch1-q1",
@@ -297,8 +296,8 @@ void greet(string name, string msg = "Hello") {
     cout << msg << ", " << name << "!" << endl;
 }
 
-greet("Alice");           // Hello, Alice!
-greet("Alice", "Hey");    // Hey, Alice!
+greet("Emma");           // Hello, Emma!
+greet("Emma", "Hey");    // Hey, Emma!
 \`\`\`
 
 Same as Python!
@@ -353,6 +352,13 @@ C++ reads code **top to bottom**. When main() calls \`add()\`, the compiler hasn
 🐍 Python doesn't have this problem — it looks up functions at runtime. But C++ needs to know everything at **compile time**.
 
 💡 There are 2 ways to fix this! Let's see them next.`
+        },
+        {
+          id: "ch2-proto-why-anim",
+          type: "animation",
+          component: "functionOrder",
+          title: "🎬 How the Compiler Reads Code",
+          content: `💡 There are 2 ways to fix this! Let's see them next.`
         },
         {
           id: "ch2-proto-fix",
@@ -486,6 +492,67 @@ Solution: Put prototypes in a **separate file (.h)**!
 💡 \`#include <iostream>\` = built-in C++ header. \`#include "file.h"\` = our custom header!`
         },
         {
+          id: "ch2-header-intro",
+          type: "explain",
+          title: "📄 The Header File — What Goes Inside?",
+          content: `When prototypes pile up, it's time to split files. Start with the **header file**!
+
+**.h file = prototypes (declarations) only:**
+
+\`\`\`cpp
+// mymath.h
+int add(int a, int b);
+int multiply(int a, int b);
+\`\`\`
+
+No \`{ }\` body — just declarations! It's like a table of contents saying "these functions exist somewhere."`,
+        },
+        {
+          id: "ch2-header-cpp",
+          type: "explain",
+          title: "📄 The Function Bodies → Go in the .cpp File",
+          content: `The actual function code goes in a **.cpp file**. By convention, use the same name as the header (\`mymath.h\` ↔ \`mymath.cpp\`).
+
+The .cpp file also **includes its own .h file** — so the compiler can check that the definitions match the declarations:
+
+\`\`\`cpp
+// mymath.cpp
+#include "mymath.h"      // ← include my own header!
+
+int add(int a, int b) {
+    return a + b;
+}
+
+int multiply(int a, int b) {
+    return a * b;
+}
+\`\`\`
+
+💡 \`<iostream>\` with angle brackets = C++ built-in library,
+\`"mymath.h"\` with quotes = our own file!`,
+        },
+        {
+          id: "ch2-header-main",
+          type: "explain",
+          title: "📄 Using It — Include the Header in main.cpp",
+          content: `In main.cpp, just **include the header** and you can use the functions — no need to know how they're implemented!
+
+\`\`\`cpp
+// main.cpp
+#include <iostream>
+#include "mymath.h"   // ← just this! add and multiply are ready to use!
+using namespace std;
+
+int main() {
+    cout << add(3, 5) << endl;      // ✅ 8
+    cout << multiply(4, 6) << endl; // ✅ 24
+    return 0;
+}
+\`\`\`
+
+Now we have 3 files. Next, see the full picture of how they connect!`,
+        },
+        {
           id: "ch2-header-guard",
           type: "explain",
           title: "🛡️ Wait, what's this weird code?",
@@ -576,6 +643,15 @@ int main() {
 \`\`\`
 
 💡 In competitive programming, everything goes in one file. But real team projects always split files!`
+        },
+        {
+          id: "ch2-header-anim",
+          type: "animation",
+          component: "headerFiles",
+          title: "🔗 How the Three Files Connect",
+          content: `💡 **Key insight:** Even without knowing how the function body (\`math_utils.cpp\`) is written, just by reading the **header file (\`math_utils.h\`)** you can know what functions exist and how to use them!
+
+The C++ standard library (\`<iostream>\`, \`<string>\`, etc.) works the same way — we just include the header, and the body is already compiled somewhere.`
         },
         {
           id: "ch2-header-q",
@@ -745,8 +821,8 @@ int add(int x, int y) { return x + y; }  // ❌ Error! Same types
           content: `When there's an int version and a double version, what if one argument is int and the other is double?`,
           code: "#include <iostream>\nusing namespace std;\n\nint add(int a, int b) { return a + b; }\ndouble add(double a, double b) { return a + b; }\n\nint main() {\n    cout << add(1, 2.5);  // int + double ??\n    return 0;\n}",
           options: ["3", "3.5", "Compile error (ambiguous)", "Runtime error"],
-          answer: 1,
-          explanation: "C++ automatically converts int 1 to double 1.0 and calls the double version. Result is 3.5! But these implicit conversions can cause unexpected results, so it's best to match parameter types explicitly."
+          answer: 2,
+          explanation: "This is actually a compile error! To call add(int,int), 2.5 needs to convert to int. To call add(double,double), 1 needs to convert to double. Both overloads require exactly one conversion, so the compiler can't decide which to use — it reports an 'ambiguous call' error. Fix it by matching types: add(1.0, 2.5) or add(1, 2)."
         },
         {
           id: "ch2-pred-overload",
@@ -796,16 +872,16 @@ double add(double a, double b) {
 }
 
 int main() {
-    greet("Alice");
-    greet("Bob", "Hey");
+    greet("Emma");
+    greet("Jake", "Hey");
 
     cout << "Integers: " << add(3, 5) << endl;
     cout << "Doubles: " << add(1.5, 2.7) << endl;
 
     return 0;
 }`,
-          expectedOutput: `Hello, Alice!
-Hey, Bob!
+          expectedOutput: `Hello, Emma!
+Hey, Jake!
 Integers: 8
 Doubles: 4.2`
         }
@@ -899,6 +975,7 @@ def square(x):
 - ✅ **void** — for functions that return nothing
 - ✅ **Default values** — same as Python! (right-side parameters)
 - ✅ **Prototypes** — declare functions before use!
+- ✅ **Function overloading** — same name, different parameter types/count = separate functions! (ambiguous calls = compile error)
 
 🎉 **C++ Basics Part 1 Complete!** With everything you've learned, you can now write basic C++ programs! 🚀`
         }

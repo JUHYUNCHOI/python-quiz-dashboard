@@ -83,6 +83,7 @@ export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onS
             minHeight={step.type === "mission" ? "160px" : "140px"}
             requireCodeChange={false}
             isStepDone={isCompleted}
+            requireCorrect={step.type === "mission"}
           />
         )}
       </div>

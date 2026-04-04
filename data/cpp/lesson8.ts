@@ -263,9 +263,8 @@ int main() {
 
     return 0;
 }`,
-          expectedOutput: `첫 번째 숫자: 7
-두 번째 숫자: 3
-7 + 3 = 10`
+          stdin: `7\n3`,
+          expectedOutput: `첫 번째 숫자: 두 번째 숫자: 7 + 3 = 10`
         },
         {
           id: "ch1-q1",
@@ -332,14 +331,14 @@ void func(int a = 10, int b) { }
           id: "ch2-proto-why",
           type: "explain",
           title: "😱 왜 에러가 나지? (순서 문제)",
-          content: `이 코드는 에러가 나요. 왜일까요?
+          content: `이 코드는 에러가 나요. 왜일까요? 🤔
 
 \`\`\`cpp
 #include <iostream>
 using namespace std;
 
 int main() {
-    cout << add(3, 5);  // ❌ 에러! add가 뭔지 모름!
+    cout << add(3, 5);
     return 0;
 }
 
@@ -348,11 +347,14 @@ int add(int a, int b) {
 }
 \`\`\`
 
-C++은 코드를 **위에서 아래로** 읽어요. main()에서 \`add()\`를 호출하는데, 그 시점에 컴파일러는 아직 add가 뭔지 몰라요!
-
-🐍 파이썬은 이런 문제가 없어요 — 실행할 때 함수를 찾으니까. 하지만 C++은 **컴파일 시점**에 모든 걸 알아야 해요.
-
-💡 해결 방법이 2가지 있어요! 다음 단계에서 알아볼게요.`
+다음을 눌러서 컴파일러가 어떻게 읽는지 직접 확인해봐요!`
+        },
+        {
+          id: "ch2-proto-why-anim",
+          type: "animation",
+          component: "functionOrder",
+          title: "🎬 컴파일러가 코드를 읽는 순서",
+          content: `💡 해결 방법이 2가지 있어요! 다음 단계에서 알아볼게요.`
         },
         {
           id: "ch2-proto-fix",
@@ -423,10 +425,6 @@ main() 위에 50개 함수를 전부 쓰면... main()이 어디 있는지도 못
 
 프로토타입을 쓰면 **main()을 파일 맨 위에** 두고, 함수 본체는 아래에 정리할 수 있어요.
 
-**문제 3: 팀 프로젝트**
-
-여러 사람이 다른 파일에서 함수를 만들면, 프로토타입을 .h 파일에 모아야 다른 파일에서 쓸 수 있어요!
-
 💡 정리: 프로토타입은 **큰 프로그램을 깔끔하게 정리**하기 위한 도구예요!`
         },
         {
@@ -452,15 +450,15 @@ main() 위에 50개 함수를 전부 쓰면... main()이 어디 있는지도 못
           ],
           explanation: "프로토타입 = 반환 타입 + 함수 이름 + (매개변수) + 세미콜론(;)! 본체 { } 없이 선언만 해요."
         },
-        // ===== 헤더 파일: 왜? → #ifndef 설명 → 구조 → 연습 =====
+        // ===== 헤더 파일: .h → .cpp → main → 시뮬 → 인사이트 → #ifndef =====
         {
           id: "ch2-header-why",
           type: "explain",
-          title: "📁 함수가 100개면? → 헤더 파일!",
-          content: `프로토타입이 하나둘이면 괜찮지만... 함수가 많아지면?
+          title: "📁 함수가 100개? → 헤더 파일로 분리!",
+          content: `프로토타입이 1~2개면 괜찮지만... 엄청 많아지면 어떻게 될까요?
 
 \`\`\`cpp
-// 프로토타입이 10개... 20개... 너무 많아!
+// 10개... 20개... 너무 많아!
 int add(int a, int b);
 int subtract(int a, int b);
 int multiply(int a, int b);
@@ -469,75 +467,88 @@ int max(int a, int b);
 // ... 계속 늘어남 😱
 \`\`\`
 
-해결: 프로토타입을 **별도 파일(.h)**에 모아놓기!
+해결책: 프로토타입을 **별도 파일(.h)**에 넣으면 돼요!
 
 \`\`\`
-📂 프로젝트/
-├── math_utils.h    ← 프로토타입 모음 (선언)
-├── math_utils.cpp  ← 함수 본체 모음 (정의)
+📂 project/
+├── math_utils.h    ← 프로토타입 (선언)
+├── math_utils.cpp  ← 함수 본체 (정의)
 └── main.cpp        ← main 함수
 \`\`\`
 
 | 파이썬 🐍 | C++ ⚡ |
 |---|---|
 | \`import math_utils\` | \`#include "math_utils.h"\` |
-| 하나의 파일 | .h (선언) + .cpp (정의) 분리 |
+| 파일 하나 | .h (선언) + .cpp (정의) |
 
-💡 \`#include <iostream>\` = C++ 기본 헤더, \`#include "파일.h"\` = 우리가 만든 헤더!`
+💡 \`#include <iostream>\` = C++ 내장 헤더, \`#include "파일.h"\` = 우리가 만든 헤더!`
         },
         {
-          id: "ch2-header-guard",
+          id: "ch2-header-intro",
           type: "explain",
-          title: "🛡️ 잠깐, 이 이상한 코드는 뭐야?",
-          content: `헤더 파일을 보면 이런 코드가 있어요:
+          title: "📄 헤더 파일 만들어볼게요 — 여기엔 뭐가 들어가요?",
+          content: `프로토타입이 많아지면 파일로 분리하는 게 좋아요. 먼저 **헤더 파일**부터 만들어볼게요.
+
+**.h 파일에는 프로토타입(선언)만 넣어요:**
 
 \`\`\`cpp
-#ifndef MATH_UTILS_H
-#define MATH_UTILS_H
-// ... 프로토타입들 ...
-#endif
+// mymath.h
+int add(int a, int b);
+int multiply(int a, int b);
 \`\`\`
 
-이게 뭔지 **교실 비유**로 설명할게요!
+본체 \`{ }\` 없이 선언만! "이런 함수가 있을 거예요" 라고 미리 알려주는 목차 같은 거예요.`
+        },
+        {
+          id: "ch2-header-cpp",
+          type: "explain",
+          title: "📄 그럼 함수 본체는? — .cpp 파일에 써요",
+          content: `함수의 실제 내용(본체)은 **.cpp 파일**에 작성해요. 관례상 헤더 파일과 같은 이름을 써요 (\`mymath.h\` ↔ \`mymath.cpp\`).
 
----
-
-🏫 **상황:** 선생님이 출석부에 이름을 부르는데...
-
-**헤더 가드 없이:**
-> "김철수!" → 출석부에 적음 ✅
-> "김철수!" → 또 적음? → **"이미 있잖아!" ❌ 에러!**
-
-같은 헤더 파일을 두 번 include하면, 같은 프로토타입이 두 번 등록되면서 **"이거 이미 선언했잖아!"** 에러가 나요.
-
-**헤더 가드 있으면:**
-> \`#ifndef\` = "출석부에 이 이름 **아직 없지?**"
-> \`#define\` = "없으면 **이름 적고**, 아래 코드 실행!"
-> \`#endif\` = "끝!"
->
-> 두 번째로 부르면? → "이미 출석부에 있네? → **건너뛰기!**"
+그리고 **이 .cpp 파일도 자신의 .h 파일을 include**해야 해요 — 컴파일러가 "선언대로 본체가 맞게 작성됐나?" 확인하기 위해서예요:
 
 \`\`\`cpp
-#ifndef MATH_UTILS_H     // "출석부에 이 이름 없지?"
-#define MATH_UTILS_H     // "없으니까 적어둘게!"
+// mymath.cpp
+#include "mymath.h"      // ← 내 헤더를 include!
 
-int add(int a, int b);   // 이 코드가 실행됨!
+int add(int a, int b) {
+    return a + b;
+}
 
-#endif                   // "끝!"
-
-// 두 번째로 include되면?
-// → "이미 출석부에 있네!" → 전부 건너뜀!
+int multiply(int a, int b) {
+    return a * b;
+}
 \`\`\`
 
-💡 그냥 **"같은 파일이 두 번 읽히는 걸 막는 안전장치"**라고 생각하면 돼요!
+💡 \`<iostream>\` 처럼 꺾쇠(\`<>\`)는 C++ 기본 라이브러리,
+\`"mymath.h"\` 처럼 따옴표(\`""\`)는 우리가 만든 파일이에요.`
+        },
+        {
+          id: "ch2-header-main",
+          type: "explain",
+          title: "📄 갖다 쓰는 쪽 — main.cpp에서도 include",
+          content: `main.cpp에서도 **헤더 파일을 include**하면 함수를 쓸 수 있어요. 본체가 어떻게 생겼는지 몰라도 돼요 — 헤더만 보면 돼요!
 
-⚠️ 직접 헤더 파일을 만들 때 꼭 넣어줘야 해요. 안 넣으면 나중에 중복 에러가 날 수 있어요!`
+\`\`\`cpp
+// main.cpp
+#include <iostream>
+#include "mymath.h"   // ← 이것만 있으면 add, multiply 사용 가능!
+using namespace std;
+
+int main() {
+    cout << add(3, 5) << endl;      // ✅ 8
+    cout << multiply(4, 6) << endl; // ✅ 24
+    return 0;
+}
+\`\`\`
+
+이제 3개 파일이 있어요. 이게 어떻게 연결되는지 다음 화면에서 확인해봐요!`
         },
         {
           id: "ch2-header-full",
           type: "explain",
           title: "📋 전체 구조 한눈에 보기",
-          content: `3개 파일이 어떻게 연결되는지 봐요:
+          content: `3개 파일이 어떻게 연결되는지 보세요:
 
 **① math_utils.h** — 프로토타입 (선언만!)
 \`\`\`cpp
@@ -562,7 +573,7 @@ int multiply(int a, int b) {
 }
 \`\`\`
 
-**③ main.cpp** — 사용하는 쪽!
+**③ main.cpp** — 사용하는 파일!
 \`\`\`cpp
 #include <iostream>
 #include "math_utils.h"  // 우리 헤더!
@@ -575,7 +586,54 @@ int main() {
 }
 \`\`\`
 
-💡 CP(경시대회)에서는 파일 하나에 다 쓰지만, 팀 프로젝트에서는 꼭 나눠요!`
+💡 대회용 코드는 파일 하나에 다 넣지만, 실제 팀 프로젝트는 항상 파일을 분리해요!`
+        },
+        {
+          id: "ch2-header-anim",
+          type: "animation",
+          component: "headerFiles",
+          title: "🔗 세 파일이 연결되는 방식",
+          content: `💡 **핵심 인사이트:**
+본체(\`mymath.cpp\`)가 어떻게 작성됐는지 몰라도,
+**헤더 파일(\`mymath.h\`)만 보면** 어떤 함수가 있고 어떻게 쓰는지 알 수 있어요!
+
+C++ 표준 라이브러리(\`<iostream>\`, \`<string>\` 등)도 같은 방식이에요 — 우리는 헤더만 include하고, 본체는 어딘가에 이미 컴파일돼 있어요.`
+        },
+        {
+          id: "ch2-header-guard",
+          type: "explain",
+          title: "⚠️ 아주 작은 문제 하나 — 중복 include",
+          content: `헤더 파일이 잘 작동해요! 근데 프로젝트가 커지면 이런 일이 생겨요:
+
+\`\`\`cpp
+// main.cpp
+#include "mymath.h"  // ← add, multiply 선언됨 ✅
+#include "utils.h"   // ← utils.h 내부에도 #include "mymath.h" 있으면?
+//   └→ add, multiply 또 선언됨 ❌ 중복 에러!
+\`\`\`
+
+같은 헤더가 두 번 include되면 **같은 프로토타입이 두 번 선언**돼서 에러나요.
+
+---
+
+해결책 — 헤더 파일에 **헤더 가드** 추가:
+
+\`\`\`cpp
+// mymath.h
+#ifndef MYMATH_H     // "MYMATH_H 아직 정의 안 됐지?"
+#define MYMATH_H     // "없으면 지금 정의할게!"
+
+int add(int a, int b);
+int multiply(int a, int b);
+
+#endif               // "끝!"
+\`\`\`
+
+두 번째 include → \`#ifndef\` "이미 정의됨!" → **통째로 건너뜀** ✅
+
+💡 **관례(convention):** 식별자는 아무 이름이나 써도 되지만, 다른 파일과 겹치지 않도록 파일명을 대문자로 바꿔서 쓰는 게 일반적이에요.
+- \`mymath.h\` → \`MYMATH_H\`
+- \`player_utils.h\` → \`PLAYER_UTILS_H\``
         },
         {
           id: "ch2-header-q",
@@ -746,17 +804,17 @@ int add(int x, int y) { return x + y; }  // ❌ 에러! 타입이 같잖아
           content: `int 버전과 double 버전이 있을 때, 하나는 int이고 하나는 double인 인자를 넘기면?`,
           code: "#include <iostream>\nusing namespace std;\n\nint add(int a, int b) { return a + b; }\ndouble add(double a, double b) { return a + b; }\n\nint main() {\n    cout << add(1, 2.5);  // int + double ??\n    return 0;\n}",
           options: ["3", "3.5", "컴파일 에러 (모호함)", "런타임 에러"],
-          answer: 1,
-          explanation: "C++은 int 1을 double 1.0으로 자동 변환해서 double 버전을 호출해요. 결과는 3.5! 하지만 이런 자동 변환은 예상 못한 결과를 낳을 수 있으니, 매개변수 타입을 맞춰주는 게 좋아요."
+          answer: 2,
+          explanation: "이건 실제로 컴파일 에러예요! add(int,int)를 쓰려면 2.5→int 변환이 필요하고, add(double,double)을 쓰려면 1→double 변환이 필요해요. 둘 다 변환 1번씩 필요하니 컴파일러가 어떤 걸 써야 할지 판단 못 해서 '모호함(ambiguous)' 에러를 냅니다. 호출할 때 타입을 맞춰서 add(1.0, 2.5) 또는 add(1, 2)처럼 쓰세요!"
         },
         {
           id: "ch2-pred-overload",
           type: "predict" as const,
           title: "어떤 함수가 호출될까?",
           code: "#include <iostream>\nusing namespace std;\nint add(int a, int b) { return a + b; }\ndouble add(double a, double b) { return a + b; }\nint main() {\n    cout << add(1.5, 2.5);\n    return 0;\n}",
-          options: ["3", "4.0", "4", "에러"],
+          options: ["3", "에러", "4", "int 버전 add가 호출돼서 3"],
           answer: 2,
-          explanation: "1.5와 2.5는 double이니까 double 버전의 add가 호출돼요! 1.5 + 2.5 = 4. cout은 소수점 뒤가 0이면 생략해서 4가 출력돼요."
+          explanation: "1.5와 2.5는 double이니까 double 버전의 add가 호출돼요! 1.5 + 2.5 = 4. int 버전이 호출됐다면 소수점이 잘려서 add(1, 2) = 3이 됐겠지만, C++이 타입을 보고 딱 맞는 double 버전을 골라줘요!"
         },
         {
           id: "ch2-overload-q",
@@ -779,15 +837,40 @@ int add(int x, int y) { return x + y; }  // ❌ 에러! 타입이 같잖아
           content: `기본값 매개변수와 함수 오버로딩을 모두 써보는 프로그램이에요!
 
 void 함수와 반환값 있는 함수의 차이도 직접 느껴보세요.`,
+          starterCode: `#include <iostream>
+using namespace std;
+
+// 기본값 매개변수: greet(이름, 메시지="안녕하세요")
+void greet(string name, string msg = "안녕하세요") {
+
+}
+
+// 함수 오버로딩: 정수용 add
+int add(int a, int b) {
+
+}
+
+// 함수 오버로딩: 실수용 add
+double add(double a, double b) {
+
+}
+
+int main() {
+    greet("주현");
+    greet("민지", "반가워요");
+
+    cout << "정수: " << add(3, 5) << endl;
+    cout << "실수: " << add(1.5, 2.7) << endl;
+
+    return 0;
+}`,
           code: `#include <iostream>
 using namespace std;
 
-// 기본값 매개변수
 void greet(string name, string msg = "안녕하세요") {
     cout << msg << ", " << name << "!" << endl;
 }
 
-// 함수 오버로딩
 int add(int a, int b) {
     return a + b;
 }
@@ -900,6 +983,7 @@ def square(x):
 - ✅ **void** — 반환값 없는 함수
 - ✅ **기본값** — 파이썬과 같은 방식! (뒤쪽 매개변수에)
 - ✅ **프로토타입** — 함수를 사용 전에 선언!
+- ✅ **함수 오버로딩** — 이름 같고 매개변수 타입/개수 다르면 별개의 함수! (단, 인자가 모호하면 컴파일 에러)
 
 🎉 **C++ 기초 Part 1 완료!** 여기까지 배운 것만으로도 간단한 C++ 프로그램을 만들 수 있어요! 🚀`
         }

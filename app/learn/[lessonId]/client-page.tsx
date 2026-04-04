@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useEffect, use, useCallback } from "react"
+import { useState, useEffect, use, useCallback, useRef } from "react"
 import { useRouter } from "next/navigation"
+import { RequireAuth } from "@/components/require-auth"
 import { ChevronRight, ChevronLeft, X, Lock, PartyPopper, RotateCcw, LogIn } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
@@ -12,8 +13,10 @@ import { SoundToggle } from "@/components/sound-toggle"
 import { useSoundEffect } from "@/hooks/use-sound-effect"
 import { useLessonSync } from "@/hooks/use-lesson-sync"
 import { markLessonComplete } from "@/lib/mark-lesson-complete"
+import { saveStepAnswer } from "@/lib/save-step-answer"
 import { useGamification } from "@/hooks/use-gamification"
 import { logActivity } from "@/lib/activity-log"
+import { trackStepVisit } from "@/lib/track-step-visit"
 import { getCompletedLessons, pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
 import { useAuth } from "@/contexts/auth-context"
 import { analyzeLessonComplete, analyzeStreak } from "@/lib/feedback-analyzer"
@@ -27,6 +30,20 @@ import { SuccessOverlay } from "@/components/learn/success-overlay"
 import { StepRenderer } from "@/components/learn/step-renderer"
 import { lessonsData, bilingualLessons, lessonVariants } from "@/components/learn/lesson-registry"
 import type { LessonStep } from "@/components/learn/types"
+
+// ── 다음 레슨 ID 계산 ──────────────────────────────────────────────────
+function getNextLessonId(currentId: string): string | null {
+  const allParts = [
+    ...pythonParts,
+    ...cppParts,
+    ...pseudoParts,
+  ]
+  const allIds = allParts.flatMap(p => p.lessonIds.map(String))
+  const idx = allIds.indexOf(String(currentId))
+  if (idx === -1 || idx >= allIds.length - 1) return null
+  return allIds[idx + 1]
+}
+
 export default function PracticePage({ params }: { params: Promise<{ lessonId: string }> }) {
   const resolvedParams = use(params)
   const lessonId = resolvedParams.lessonId
@@ -47,8 +64,14 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
 
   // 게이미피케이션
   const gamification = useGamification()
-  const { profile, isAuthenticated } = useAuth()
+  const xpAwardedRef = useRef(false) // 레슨 완료 XP 중복 지급 방지
+  const { user, profile, isAuthenticated, isLoading: authLoading } = useAuth()
   const isTeacher = profile?.role === "teacher"
+
+  useEffect(() => {
+    if (!authLoading && !user) router.replace("/login")
+  }, [user, authLoading, router])
+
 
   // Supabase 진도 동기화
   const { syncProgress, syncCompletion, loadFromCloud } = useLessonSync(
@@ -142,17 +165,17 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
         const savedCompleted = new Set<string>(data.completed || [])
         if (isLessonAlreadyDone) setIsAlreadyDone(true)
         if (isLessonAlreadyDone && lesson) {
-          // 이미 완료한 레슨: 읽기/실습 스텝만 자동 완료
-          // quiz/predict/fillblank는 실제로 풀어야 progress bar에 초록색 표시
+          // 이미 완료한 레슨: 읽기 스텝만 자동 완료
+          // tryit/practice/coding/mission은 실제 코드 실행해야 "Great job!" 표시
           // (canGoNext는 isAlreadyDone으로 별도 허용)
-          const nonInteractiveTypes = ["explain", "interactive", "animation", "tryit", "practice", "coding", "mission"]
+          const nonInteractiveTypes = ["explain", "interactive", "animation"]
           for (const ch of lesson.chapters) {
             for (const s of ch.steps) {
               if (nonInteractiveTypes.includes(s.type)) savedCompleted.add(s.id)
             }
           }
         } else {
-          const autoCompleteTypes = ["explain", "interactive", "practice", "animation", "tryit"]
+          const autoCompleteTypes = ["explain", "interactive", "animation", "tryit"]
           if (lesson) {
             for (let ci = 0; ci < lesson.chapters.length; ci++) {
               const steps = lesson.chapters[ci].steps
@@ -165,10 +188,12 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
           }
         }
         setCompletedSteps(savedCompleted)
+        setProgressLoaded(true)
       } catch {
-        console.warn("[LessonPage] Failed to parse saved progress")
+        console.warn("[LessonPage] Failed to parse saved progress — clearing corrupted data")
+        localStorage.removeItem(progressKey)
+        setProgressLoaded(true) // 파싱 실패 시 처음부터 시작
       }
-      setProgressLoaded(true)
     } else {
       // localStorage 비어있으면 Supabase에서 복구 시도
       loadFromCloud().then(data => {
@@ -180,7 +205,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
         if (!data || cloudIsDone) {
           // 진행 데이터 없음: 완료 레슨이면 읽기 스텝만 자동 완료
           if (isEffectivelyDone && lesson) {
-            const nonInteractiveTypes = ["explain", "interactive", "animation", "tryit", "practice", "coding", "mission"]
+            const nonInteractiveTypes = ["explain", "interactive", "animation"]
             const autoCompleted = new Set<string>()
             for (const ch of lesson.chapters) {
               for (const s of ch.steps) {
@@ -198,14 +223,14 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
           setScore((data.score as number) || 0)
           const cloudCompletedSteps = new Set<string>((data.completed as string[]) || [])
           if (isEffectivelyDone && lesson) {
-            const nonInteractiveTypes = ["explain", "interactive", "animation", "tryit", "practice", "coding", "mission"]
+            const nonInteractiveTypes = ["explain", "interactive", "animation"]
             for (const ch of lesson.chapters) {
               for (const s of ch.steps) {
                 if (nonInteractiveTypes.includes(s.type)) cloudCompletedSteps.add(s.id)
               }
             }
           } else {
-            const autoCompleteTypes = ["explain", "interactive", "practice", "animation", "tryit"]
+            const autoCompleteTypes = ["explain", "interactive", "animation", "tryit"]
             if (lesson) {
               for (let ci = 0; ci < lesson.chapters.length; ci++) {
                 const steps = lesson.chapters[ci].steps
@@ -229,14 +254,37 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   useEffect(() => {
     if (!lesson || !progressLoaded) return
     if (effectiveTeacher) return // 선생님 모드에서는 진도 저장 안함
+    const totalSteps = lesson.chapters.reduce((sum, ch) => sum + ch.steps.length, 0)
     const progressData = {
       chapter: currentChapter, step: currentStep, score,
       completed: Array.from(completedSteps),
+      totalSteps,
     }
     localStorage.setItem(progressKey, JSON.stringify(progressData))
     // Supabase에도 동기화 (debounced, fire-and-forget)
     syncProgress(progressData)
   }, [currentChapter, currentStep, score, completedSteps, progressKey, lesson, syncProgress, progressLoaded, effectiveTeacher])
+
+  // ── 스텝 방문 로그 (선생님 제외, 진도 로드 후에만) ─────────────────────────
+  useEffect(() => {
+    if (!user || isTeacher || !step || !lesson || !progressLoaded) return
+    const totalSteps = lesson.chapters.reduce((sum, ch) => sum + ch.steps.length, 0)
+    let stepIndex = 0
+    for (let ci = 0; ci < currentChapter; ci++) {
+      stepIndex += lesson.chapters[ci].steps.length
+    }
+    stepIndex += currentStep
+    trackStepVisit({
+      userId: user.id,
+      lessonId,
+      stepId: step.id,
+      stepType: step.type,
+      stepIndex,
+      totalSteps,
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentChapter, currentStep, progressLoaded])
+  // ──────────────────────────────────────────────────────────────────────────
 
   // 잠금 체크: 같은 트랙(Python/C++) 내에서 이전 수업 완료해야 접근 가능 (선생님은 전부 열림)
   const isLocked = (() => {
@@ -306,6 +354,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
 
   const closeSuccessOverlay = useCallback(() => { setShowSuccess(false) }, [])
 
+  if (authLoading || !user) return null
+
   if (isLocked) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white flex items-center justify-center">
@@ -371,7 +421,10 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       markLessonComplete(lessonId)
       if (!effectiveTeacher) {
         syncCompletion(score)
-        if (!isIGCSE) gamification.addDirectXp(30)
+        if (!isIGCSE && !xpAwardedRef.current) {
+          xpAwardedRef.current = true
+          gamification.addDirectXp(30)
+        }
         logActivity("lesson")
       }
       if (!isIGCSE) setShowConfetti(true)
@@ -444,7 +497,20 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     setSelectedAnswer(idx)
     setShowExplanation(true)
     setQuizAttempts(prev => prev + 1)
-    if (idx === step.answer) {
+    const isCorrect = idx === step.answer
+    // 스텝 답변 저장 (선생님이 학생 답 확인용)
+    if (!effectiveTeacher) {
+      saveStepAnswer({
+        lessonId,
+        progressType: "learn",
+        stepId: step.id,
+        stepType: step.type,
+        isCorrect,
+        userAnswer: { selectedIdx: idx, option: step.options?.[idx] ?? "" },
+        correctAnswer: { selectedIdx: step.answer ?? 0, option: step.options?.[step.answer ?? 0] ?? "" },
+      })
+    }
+    if (isCorrect) {
       play("correct")
       if (!completedSteps.has(step.id)) {
         if (!effectiveTeacher && !isIGCSE) setScore(prev => prev + 10)
@@ -462,7 +528,20 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   }
 
   // fillblank 등 새 인터랙티브 스텝용 핸들러
-  const handleStepComplete = (correct: boolean) => {
+  const handleStepComplete = (correct: boolean, filledValues?: Record<number, string>) => {
+    // fillblank 스텝 답변 저장
+    if (!effectiveTeacher && step && step.type === "fillblank" && filledValues) {
+      const blanks: { id: number; answer: string }[] = step.fillBlanks ?? []
+      saveStepAnswer({
+        lessonId,
+        progressType: "learn",
+        stepId: step.id,
+        stepType: step.type,
+        isCorrect: correct,
+        userAnswer: filledValues as Record<string, unknown>,
+        correctAnswer: Object.fromEntries(blanks.map(b => [b.id, b.answer])),
+      })
+    }
     if (correct) {
       play("correct")
       if (!completedSteps.has(step.id)) {
@@ -547,7 +626,56 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             <LessonFeedbackCard feedback={lessonFeedback} t={t} />
 
             <div className="mt-4 space-y-3">
-              {/* 레슨 집중 퀴즈 CTA — IGCSE 제외, 레슨 ID가 숫자형(Python) 또는 cpp-N 형식일 때 */}
+              {/* 다음 레슨 바로 가기 / 트랙 완주 안내 */}
+              {(() => {
+                const nextId = getNextLessonId(lessonId)
+                // 다음 레슨 있으면 바로 이동 버튼
+                if (nextId) {
+                  return (
+                    <button
+                      onClick={() => { localStorage.removeItem(progressKey); router.push(`/learn/${nextId}`) }}
+                      className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white rounded-xl font-bold text-base transition-all"
+                    >
+                      {t("다음 레슨으로 →", "Next Lesson →")}
+                    </button>
+                  )
+                }
+                // Python 마지막 레슨(p4) 완료 → C++ 전환 유도
+                if (currentProgrammingLang === "python") {
+                  return (
+                    <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl p-4 text-left space-y-2">
+                      <p className="text-base font-black text-blue-800">🎉 {t("Python 커리큘럼 완주!", "Python Curriculum Complete!")}</p>
+                      <p className="text-sm text-blue-700">{t("다음 단계는 C++ 전환이에요. 속도가 10~100배 빨라지고 USACO 대회에 도전할 수 있어요.", "Next up: switch to C++. Code runs 10–100× faster and you can compete in USACO.")}</p>
+                      <button
+                        onClick={() => {
+                          try { localStorage.setItem("selectedCourse", "cpp") } catch {}
+                          router.push("/curriculum")
+                        }}
+                        className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold text-sm transition-all"
+                      >
+                        ⚡ {t("C++ 커리큘럼 시작하기 →", "Start C++ Curriculum →")}
+                      </button>
+                    </div>
+                  )
+                }
+                // C++ 마지막 레슨 완료 → 알고리즘 유도
+                if (currentProgrammingLang === "cpp") {
+                  return (
+                    <div className="bg-purple-50 border-2 border-purple-200 rounded-2xl p-4 text-left space-y-2">
+                      <p className="text-base font-black text-purple-800">🏆 {t("C++ 커리큘럼 완주!", "C++ Curriculum Complete!")}</p>
+                      <p className="text-sm text-purple-700">{t("이제 알고리즘 훈련으로! 정렬·탐색·DP로 USACO Bronze를 목표로 해봐요.", "Time for algorithm training! Aim for USACO Bronze with sorting, search & DP.")}</p>
+                      <button
+                        onClick={() => router.push("/algorithm")}
+                        className="w-full py-2.5 bg-purple-600 hover:bg-purple-500 text-white rounded-xl font-bold text-sm transition-all"
+                      >
+                        🧠 {t("알고리즘 훈련 시작하기 →", "Start Algorithm Training →")}
+                      </button>
+                    </div>
+                  )
+                }
+                return null
+              })()}
+              {/* 레슨 집중 퀴즈 CTA — IGCSE 제외 */}
               {!isIGCSE && (
                 <button
                   onClick={() => {
@@ -558,6 +686,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                       course,
                       startTime: Date.now(),
                       lessonFilter: isNaN(Number(lessonId)) ? lessonId : Number(lessonId),
+                      isReview: true,
                     }))
                     router.push("/quiz")
                   }}
@@ -665,7 +794,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
               <button onClick={() => router.push(`/curriculum#lesson-${lessonId}`)} className="text-gray-400 hover:text-gray-600 transition-colors" aria-label="나가기">
                 <X className="w-5 h-5 md:w-6 md:h-6" />
               </button>
-              <div className="flex-1 flex items-center gap-[2px] h-2.5 md:h-3">
+              <div className="flex-1 flex items-center gap-[2px] h-2.5 md:h-3 overflow-visible">
                     {lesson.chapters.map((ch, chIdx) =>
                       ch.steps.map((st, stIdx) => {
                         const globalIdx = lesson.chapters.slice(0, chIdx).reduce((s, c) => s + c.steps.length, 0) + stIdx
@@ -676,31 +805,40 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                         const isClickable = effectiveTeacher || isCompleted || isBeforeCurrent || isCurrent || isAlreadyDone
                         const isChapterStart = stIdx === 0 && chIdx > 0
                         return (
-                          <button
+                          <div
                             key={`${chIdx}-${stIdx}`}
-                            className={cn(
-                              "h-full flex-1 transition-all duration-300 min-w-[3px]",
-                              isChapterStart && "ml-1",
-                              isCurrent && hasProgress
-                                ? "bg-indigo-500 scale-y-125"
-                                : (effectiveTeacher || isCompleted || isBeforeCurrent || isAlreadyDone)
-                                  ? "bg-emerald-400 hover:bg-emerald-300 cursor-pointer"
-                                  : "bg-gray-200",
-                              globalIdx === 0 && "rounded-l-full",
-                              globalIdx === totalSteps - 1 && "rounded-r-full",
-                            )}
-                            disabled={!isClickable}
-                            onClick={() => {
-                              if (!isClickable || isCurrent) return
-                              setCurrentChapter(chIdx)
-                              setCurrentStep(stIdx)
-                              restoreCompletedStepState(st)
-                              setShowChapterComplete(false)
-                              setShowLessonComplete(false)
-                              scrollToTop()
-                            }}
-                            title={`${ch.emoji} ${ch.title} — ${t("단계", "Step")} ${stIdx + 1}`}
-                          />
+                            className={cn("relative group h-full flex-1 min-w-[3px]", isChapterStart && "ml-1")}
+                          >
+                            {/* Hover tooltip */}
+                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:flex flex-col items-center pointer-events-none z-50">
+                              <div className="bg-indigo-500/90 text-white text-[10px] font-bold rounded px-1.5 py-0.5 whitespace-nowrap shadow leading-tight">
+                                {globalIdx + 1}
+                              </div>
+                              <div className="w-1.5 h-1.5 bg-indigo-500/90 rotate-45 -mt-[3px]" />
+                            </div>
+                            <button
+                              className={cn(
+                                "h-full w-full transition-all duration-150 origin-center group-hover:scale-y-[2.5] group-hover:rounded-sm",
+                                isCurrent && hasProgress
+                                  ? "bg-indigo-500 scale-y-125"
+                                  : (effectiveTeacher || isCompleted || isBeforeCurrent || isAlreadyDone)
+                                    ? "bg-emerald-400 hover:bg-emerald-300 cursor-pointer"
+                                    : "bg-gray-200",
+                                globalIdx === 0 && "rounded-l-full",
+                                globalIdx === totalSteps - 1 && "rounded-r-full",
+                              )}
+                              disabled={!isClickable}
+                              onClick={() => {
+                                if (!isClickable || isCurrent) return
+                                setCurrentChapter(chIdx)
+                                setCurrentStep(stIdx)
+                                restoreCompletedStepState(st)
+                                setShowChapterComplete(false)
+                                setShowLessonComplete(false)
+                                scrollToTop()
+                              }}
+                            />
+                          </div>
                         )
                       })
                     )}
