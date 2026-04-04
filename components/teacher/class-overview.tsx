@@ -126,17 +126,17 @@ function buildRiskAlerts(students: StudentRow[]): RiskAlert[] {
       alerts.push({ studentId: s.id, studentName: s.displayName, detail: `${days}일째 미접속`, severity: "warning", emoji: "⚠️", action: "확인 필요" })
     }
 
-    // 낮은 정답률 (5문제 이상 풀었는데 55% 미만)
+    // 낮은 정답률 (최근 3세션 이상, 55% 미만, 3일 이내 접속)
     if (avgAcc !== null && avgAcc < 55 && recentQuizzes.length >= 3 && days <= 3) {
-      // 복습 점수 기준 하위 3개 레슨
+      // 복습 점수 기준 하위 레슨
       const bottomLessons = [...reviewRows].sort((a, b) => a.score - b.score).slice(0, 3)
       const weakTopics: string[] = bottomLessons.map(r => `${getLessonName(r.lesson_id, "ko")} ${r.score}%`)
 
-      // 핵심 메시지: "어디서 막히는지"가 바로 보이도록
       const topTwo = weakTopics.slice(0, 2).join("  ·  ")
+      const sessionCount = recentQuizzes.length
       const detail = topTwo
-        ? `${topTwo}  (퀴즈 ${Math.round(avgAcc)}%)`
-        : `퀴즈 평균 ${Math.round(avgAcc)}% — 개념 이해 부족`
+        ? `최근 ${sessionCount}회 퀴즈 평균 ${Math.round(avgAcc)}%  ·  ${topTwo}`
+        : `최근 ${sessionCount}회 퀴즈 평균 ${Math.round(avgAcc)}%`
 
       alerts.push({
         studentId: s.id,
@@ -144,7 +144,7 @@ function buildRiskAlerts(students: StudentRow[]): RiskAlert[] {
         detail,
         severity: "warning",
         emoji: "📉",
-        action: "1:1 설명 권장",
+        action: "퀴즈 확인",
         weakTopics: weakTopics.length > 2 ? weakTopics.slice(2) : undefined,
       })
     }
@@ -330,11 +330,10 @@ export function ClassOverview({ students, onStudentClick, joinCode }: Props) {
               >
                 <span className="text-base mt-0.5 flex-shrink-0">{risk.emoji}</span>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-bold text-gray-800 group-hover:text-orange-600 transition-colors flex items-center gap-1">
+                  <p className="text-sm font-bold text-gray-800 group-hover:text-orange-600 transition-colors">
                     {risk.studentName}
-                    <span className="text-[10px] text-gray-300 font-normal">→ 클릭해서 확인</span>
                   </p>
-                  <p className="text-xs text-gray-500 truncate">{risk.detail}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{risk.detail}</p>
                   {risk.focusLesson && (
                     <p className="text-[10px] text-orange-500 font-bold mt-0.5">📌 {risk.focusLesson}</p>
                   )}
@@ -346,12 +345,7 @@ export function ClassOverview({ students, onStudentClick, joinCode }: Props) {
                     </div>
                   )}
                 </div>
-                <span className={cn(
-                  "text-[10px] font-bold px-2 py-0.5 rounded-full flex-shrink-0 mt-0.5",
-                  risk.severity === "danger" ? "bg-red-100 text-red-700" : "bg-amber-100 text-amber-700"
-                )}>
-                  {risk.action}
-                </span>
+                <span className="text-[10px] text-gray-300 font-normal flex-shrink-0 mt-0.5">→ 상세보기</span>
               </button>
             ))}
             {risks.length > 5 && (
