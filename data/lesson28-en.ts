@@ -4,7 +4,7 @@
 import { LessonData } from './types'
 
 export const lesson28EnData: LessonData = {
-  id: "28en",
+  id: "28",
   title: "Lotto Number Generator",
   emoji: "🎱",
   description: "Use random, duplicate checking, and loops to generate lotto numbers!",

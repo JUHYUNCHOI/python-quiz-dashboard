@@ -2,15 +2,8 @@
 
 import { createClient } from "@/lib/supabase/client"
 
-// 선생님 등록 (비밀 코드 확인)
-// NOTE: 정적 빌드에서는 서버 환경변수 접근 불가
-// TEACHER_SECRET_CODE 검증을 Supabase Edge Function으로 이동하는 것을 권장
-export async function registerAsTeacher(secretCode: string) {
-  const expectedCode = process.env.NEXT_PUBLIC_TEACHER_SECRET_CODE
-  if (!expectedCode || secretCode !== expectedCode) {
-    return { error: "잘못된 등록 코드입니다" }
-  }
-
+// 선생님으로 전환 (누구나 가능)
+export async function registerAsTeacher() {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: "로그인이 필요합니다" }

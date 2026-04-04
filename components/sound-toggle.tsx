@@ -2,6 +2,7 @@
 
 import { Volume2, VolumeX } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useLanguage } from "@/contexts/language-context"
 
 interface SoundToggleProps {
   isMuted: boolean
@@ -10,6 +11,7 @@ interface SoundToggleProps {
 }
 
 export function SoundToggle({ isMuted, onToggle, className }: SoundToggleProps) {
+  const { t } = useLanguage()
   return (
     <button
       onClick={onToggle}
@@ -20,8 +22,8 @@ export function SoundToggle({ isMuted, onToggle, className }: SoundToggleProps) 
           : "text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50",
         className
       )}
-      aria-label={isMuted ? "소리 켜기" : "소리 끄기"}
-      title={isMuted ? "🔇 소리 켜기" : "🔊 소리 끄기"}
+      aria-label={isMuted ? t("소리 켜기", "Unmute") : t("소리 끄기", "Mute")}
+      title={isMuted ? t("🔇 소리 켜기", "🔇 Unmute") : t("🔊 소리 끄기", "🔊 Mute")}
     >
       {isMuted ? (
         <VolumeX className="w-4 h-4 md:w-5 md:h-5" />

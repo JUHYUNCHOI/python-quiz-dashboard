@@ -6,7 +6,7 @@
 import { LessonData } from './types'
 
 export const lesson27EnData: LessonData = {
-  id: "27en",
+  id: "27",
   title: "Rock Paper Scissors Game",
   emoji: "✊",
   description: "Build Rock Paper Scissors with lists, conditionals, and loops!",

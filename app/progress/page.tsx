@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
+import { RequireAuth } from "@/components/require-auth"
 import { StatsCards } from "@/components/stats-cards"
 import { ProgressTracker } from "@/components/progress-tracker"
 import { PerformanceCharts } from "@/components/performance-charts"
@@ -46,15 +47,11 @@ export default function ProgressPage() {
       return
     }
     const id = nextLesson.id
-    const isCpp = String(id).startsWith("cpp-")
-    if (isCpp) {
-      router.push(`/learn/cpp/${String(id).replace("cpp-", "")}`)
-    } else {
-      router.push(`/learn/${id}`)
-    }
+    router.push(`/learn/${String(id)}`)
   }
 
   return (
+    <RequireAuth>
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-mint-50 to-lavender-50">
       <Header />
 
@@ -66,6 +63,12 @@ export default function ProgressPage() {
         <StatsCards />
 
         {/* 계속 학습 CTA — research #1 priority */}
+        {nextLesson === null && (
+          <div className="mt-4 w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-2xl px-5 py-4 shadow-lg text-center">
+            <p className="text-lg font-black mb-0.5">🎉 {t("모든 레슨 완료!", "All lessons complete!")}</p>
+            <p className="text-sm text-green-100">{t("이제 알고리즘 도전에 나서볼까요?", "Ready to tackle algorithms?")}</p>
+          </div>
+        )}
         <button
           onClick={handleContinue}
           className="mt-4 w-full flex items-center justify-between bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-2xl px-5 py-4 shadow-lg hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] transition-all"
@@ -106,5 +109,6 @@ export default function ProgressPage() {
 
       <BottomNav />
     </div>
+    </RequireAuth>
   )
 }

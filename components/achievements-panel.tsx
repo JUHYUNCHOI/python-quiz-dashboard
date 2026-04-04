@@ -3,6 +3,7 @@
 import { Card } from "@/components/ui/card"
 import { Trophy, Target } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useLanguage } from "@/contexts/language-context"
 
 const achievements = [
   { name: "첫 걸음", description: "첫 퀴즈 완료", unlocked: true, icon: "🎯" },
@@ -21,13 +22,14 @@ const nextMilestone = {
 }
 
 export function AchievementsPanel() {
+  const { t } = useLanguage()
   return (
     <div className="grid gap-6 lg:grid-cols-2">
       {/* Achievements */}
       <Card className="border-0 bg-white p-6 shadow-lg">
         <div className="mb-6 flex items-center gap-2">
           <Trophy className="h-6 w-6 text-yellow-500" />
-          <h2 className="text-xl font-bold">업적</h2>
+          <h2 className="text-xl font-bold">{t("업적", "Achievements")}</h2>
         </div>
 
         <div className="grid grid-cols-3 gap-3">
@@ -60,7 +62,7 @@ export function AchievementsPanel() {
       <Card className="border-0 bg-gradient-to-br from-lavender-50 to-mint-50 p-6 shadow-lg">
         <div className="mb-6 flex items-center gap-2">
           <Target className="h-6 w-6 text-lavender-500" />
-          <h2 className="text-xl font-bold">다음 목표</h2>
+          <h2 className="text-xl font-bold">{t("다음 목표", "Next Goal")}</h2>
         </div>
 
         <div className="flex flex-col items-center gap-4">
@@ -70,7 +72,7 @@ export function AchievementsPanel() {
 
           <div className="w-full">
             <div className="mb-2 flex items-center justify-between text-sm">
-              <span className="font-semibold">진행률</span>
+              <span className="font-semibold">{t("진행률", "Progress")}</span>
               <span className="font-bold text-lavender-600">
                 {nextMilestone.current} / {nextMilestone.target}
               </span>
@@ -84,7 +86,7 @@ export function AchievementsPanel() {
           </div>
 
           <p className="text-center text-sm font-semibold text-lavender-600">
-            {nextMilestone.target - nextMilestone.current}문제 남았어요!
+            {t(`${nextMilestone.target - nextMilestone.current}문제 남았어요!`, `${nextMilestone.target - nextMilestone.current} questions to go!`)}
           </p>
         </div>
       </Card>

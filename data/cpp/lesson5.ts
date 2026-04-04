@@ -111,19 +111,16 @@ cout << 15 % 4;  // 3 (15 = 4 × 3 + 3)
         {
           id: "ch1-practice",
           type: "practice" as const,
-          title: "✋ 계산기를 만들어보세요!",
-          content: `두 숫자를 입력받아서 사칙연산 결과를 출력하는 계산기를 만들어봐요!
+          title: "✋ 사칙연산 계산기!",
+          content: `두 정수를 입력받아 5가지 연산 결과를 출력하세요!
 
-정수 나눗셈의 결과도 확인해보세요 — 소수점이 사라지는 걸 직접 볼 수 있어요!`,
+정수 나눗셈 결과도 확인해보세요 — 소수점이 사라지는 걸 직접 볼 수 있어요!`,
           code: `#include <iostream>
 using namespace std;
 
 int main() {
     int a, b;
-    cout << "첫 번째 숫자: ";
-    cin >> a;
-    cout << "두 번째 숫자: ";
-    cin >> b;
+    cin >> a >> b;
 
     cout << a << " + " << b << " = " << a + b << endl;
     cout << a << " - " << b << " = " << a - b << endl;
@@ -133,13 +130,12 @@ int main() {
 
     return 0;
 }`,
-          expectedOutput: `첫 번째 숫자: 10
-두 번째 숫자: 3
-10 + 3 = 13
-10 - 3 = 7
-10 * 3 = 30
-10 / 3 = 3
-10 % 3 = 1`
+          stdin: `25\n10`,
+          expectedOutput: `25 + 10 = 35
+25 - 10 = 15
+25 * 10 = 250
+25 / 10 = 2
+25 % 10 = 5`
         },
         {
           id: "ch1-q1",
@@ -235,7 +231,7 @@ if (!finished) {
           type: "fillblank" as const,
           title: "빈칸을 채워주세요",
           content: "90~100점이면 A등급! 조건을 완성해봐요!",
-          code: "if (score >= 90 ___ score <= 100) {\n    cout << \"A등급!\";\n}",
+          code: "if ((score >= 90) ___ (score <= 100)) {\n    cout << \"A등급!\";\n}",
           fillBlanks: [
             { id: 0, answer: "&&", options: ["&&", "||", "and", "&"] }
           ],
@@ -272,7 +268,7 @@ x--;    // x = x - 1 → 5
         {
           id: "ch2-prefix-postfix",
           type: "explain",
-          title: "🔍 x++ vs ++x — 뭐가 다를까?",
+          title: "🔍 후위 증감(x++) vs 전위 증감(++x) — 뭐가 다를까?",
           content: `\`x++\`과 \`++x\`는 둘 다 x에 1을 더해요. 하지만 **다른 연산과 함께 쓸 때** 차이가 나요!
 
 \`\`\`cpp
@@ -297,7 +293,7 @@ cout << y << endl;    // 6
         {
           id: "ch2-pred-prefix",
           type: "predict" as const,
-          title: "x++ vs ++x 차이 맞추기!",
+          title: "후위(x++) vs 전위(++x) 차이 맞추기!",
           code: "#include <iostream>\nusing namespace std;\nint main() {\n    int a = 10;\n    cout << a++ << endl;\n    cout << a << endl;\n    return 0;\n}",
           options: ["10\\n10", "10\\n11", "11\\n11", "11\\n12"],
           answer: 1,
@@ -389,45 +385,47 @@ cout << (5 + 3) * 2;  // 16 (괄호 안이 먼저!)
         {
           id: "ch2-practice",
           type: "practice" as const,
-          title: "✋ 연산자들을 직접 써보세요!",
-          content: `비교, 논리, 증감, 복합 대입 연산자를 모두 사용해보는 프로그램이에요!
+          title: "✋ 전투 턴 시뮬레이터!",
+          content: `HP를 입력받아서 전투 상황을 판단하는 프로그램이에요!
 
-실행해보고, x의 값을 바꿔가면서 결과가 어떻게 달라지는지 확인해봐요!`,
+다양한 HP 값으로 결과가 어떻게 달라지는지 확인해봐요!`,
           code: `#include <iostream>
 using namespace std;
 
 int main() {
-    int x = 7;
+    int hp;
+    cin >> hp;
 
     // 비교 연산자
-    cout << "x > 5: " << (x > 5) << endl;
-    cout << "x == 7: " << (x == 7) << endl;
+    cout << "hp > 50: " << (hp > 50) << endl;
+    cout << "hp == 100: " << (hp == 100) << endl;
 
     // 논리 연산자
-    cout << "x > 0 && x < 10: " << (x > 0 && x < 10) << endl;
-    cout << "x < 0 || x > 5: " << (x < 0 || x > 5) << endl;
+    cout << "hp > 0 && hp <= 100: " << (hp > 0 && hp <= 100) << endl;
+    cout << "hp <= 0 || hp >= 100: " << (hp <= 0 || hp >= 100) << endl;
 
     // 증감 연산자
-    cout << "x = " << x << endl;
-    x++;
-    cout << "x++ 후: " << x << endl;
-    x--;
-    cout << "x-- 후: " << x << endl;
+    cout << "hp = " << hp << endl;
+    hp++;
+    cout << "hp++ 후: " << hp << endl;
+    hp--;
+    cout << "hp-- 후: " << hp << endl;
 
-    // 복합 대입
-    x += 10;
-    cout << "x += 10 후: " << x << endl;
+    // 복합 대입 (데미지 받기)
+    hp -= 10;
+    cout << "hp -= 10 후: " << hp << endl;
 
     return 0;
 }`,
-          expectedOutput: `x > 5: 1
-x == 7: 1
-x > 0 && x < 10: 1
-x < 0 || x > 5: 1
-x = 7
-x++ 후: 8
-x-- 후: 7
-x += 10 후: 17`
+          stdin: `75`,
+          expectedOutput: `hp > 50: 1
+hp == 100: 0
+hp > 0 && hp <= 100: 1
+hp <= 0 || hp >= 100: 0
+hp = 75
+hp++ 후: 76
+hp-- 후: 75
+hp -= 10 후: 65`
         },
         {
           id: "ch2-q1",
@@ -556,10 +554,10 @@ cout << (a != b && b > 5);
           id: "ch3-practice",
           type: "practice" as const,
           title: "✋ x++ vs ++x 직접 실험해보기!",
-          content: `후위(x++)와 전위(++x)의 차이를 직접 눈으로 확인해봐요!
+          content: `**x = 5** 로 시작해서 아래 기대 출력이 나오도록 코드를 완성해보세요.
 
-숫자를 바꿔가면서 결과를 예측해보세요.`,
-          code: `#include <iostream>
+후위(x++)와 전위(++x)에서 출력되는 숫자가 왜 다른지 직접 확인해봐요!`,
+          starterCode: `#include <iostream>
 using namespace std;
 
 int main() {
@@ -567,18 +565,14 @@ int main() {
 
     // 후위 (postfix): 값을 먼저 쓰고, 나중에 +1
     cout << "=== 후위 x++ ===" << endl;
-    cout << "x 시작: " << x << endl;
-    cout << "x++ = " << x++ << endl;  // 5 출력 후 +1
-    cout << "x 현재: " << x << endl;  // 6
+    // 여기에 코드를 작성하세요
 
     cout << endl;
     x = 5;  // 리셋
 
     // 전위 (prefix): 먼저 +1하고, 값을 씀
     cout << "=== 전위 ++x ===" << endl;
-    cout << "x 시작: " << x << endl;
-    cout << "++x = " << ++x << endl;  // +1 후 6 출력
-    cout << "x 현재: " << x << endl;  // 6
+    // 여기에 코드를 작성하세요
 
     return 0;
 }`,

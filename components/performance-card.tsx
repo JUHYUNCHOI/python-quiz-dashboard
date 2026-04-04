@@ -2,6 +2,7 @@
 
 import type { LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useLanguage } from "@/contexts/language-context"
 
 interface PerformanceCardProps {
   category: string
@@ -12,6 +13,7 @@ interface PerformanceCardProps {
 }
 
 export function PerformanceCard({ category, icon: Icon, correct, total, color }: PerformanceCardProps) {
+  const { t } = useLanguage()
   const percentage = (correct / total) * 100
 
   const colorClasses = {
@@ -59,7 +61,7 @@ export function PerformanceCard({ category, icon: Icon, correct, total, color }:
         />
       </div>
 
-      <p className="mt-2 text-sm text-gray-600">{Math.round(percentage)}% 정답률</p>
+      <p className="mt-2 text-sm text-gray-600">{Math.round(percentage)}% {t("정답률", "accuracy")}</p>
     </div>
   )
 }

@@ -79,7 +79,7 @@ export function BuildRunFlow({ lang = "ko" }: BuildRunFlowProps) {
 
   const nodes: FlowNode[] = isNaming ? [
     { icon: "📝", label: "main.cpp",              desc: ko ? "우리가 쓴 코드" : "Our code",              active: phase >= PHASES.NAMING_INTRO,   color: "emerald" },
-    { icon: "🔧", label: "g++ -o myprogram",       desc: ko ? "이름 지정 컴파일" : "Named compile",       active: phase >= PHASES.NAMING_COMPILE, color: "blue",   terminal: true },
+    { icon: "🔧", label: "g++ -o myprogram main.cpp", desc: ko ? "이름 지정 컴파일" : "Named compile",       active: phase >= PHASES.NAMING_COMPILE, color: "blue",   terminal: true },
     { icon: "💾", label: "myprogram",              desc: ko ? "내가 정한 이름" : "My named file",          active: phase >= PHASES.NAMING_COMPILE, color: "amber" },
     { icon: "▶️", label: "./myprogram",            desc: ko ? "실행!" : "Run!",                           active: phase >= PHASES.NAMING_RUN,     color: "purple", terminal: true },
     { icon: "✨", label: "Hello",                  desc: ko ? "똑같이 출력! 🎉" : "Same output! 🎉",      active: phase >= PHASES.NAMING_RUN,     color: "rose" },
@@ -135,6 +135,7 @@ export function BuildRunFlow({ lang = "ko" }: BuildRunFlowProps) {
             </p>
             <p className="text-gray-400 text-xs text-center mt-1 font-mono">
               g++ <span className="text-amber-400 font-bold">-o myprogram</span> main.cpp
+
             </p>
           </div>
         )}

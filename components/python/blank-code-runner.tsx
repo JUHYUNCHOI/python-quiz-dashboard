@@ -601,6 +601,16 @@ export function BlankCodeRunner({
         </div>
       )}
 
+      {/* 건너뛰기 버튼 (3회 이상 실패 시) */}
+      {attempts >= 3 && !isCorrect && (
+        <button
+          onClick={() => { onSuccess?.() }}
+          className="w-full py-2.5 rounded-xl text-sm font-medium text-gray-500 bg-gray-100 hover:bg-gray-200 border border-gray-200 transition-all"
+        >
+          → 정답 확인했어요, 다음으로 넘어갈게요
+        </button>
+      )}
+
       {/* 비로그인 학생 로그인 유도 (정답 맞췄을 때 한 번만 표시) */}
       {isCorrect === true && !dbAuth && (
         <p className="text-center text-xs text-gray-400">

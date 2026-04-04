@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 360" font-family="-apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <defs>
+    <filter id="s" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="#0000001a"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="680" height="360" fill="#F1F2FB" rx="24"/>
+
+  <!-- ===== LEFT: Python ===== -->
+  <rect x="24" y="24" width="292" height="312" rx="18" fill="white" filter="url(#s)"/>
+
+  <!-- Header -->
+  <rect x="24" y="24" width="292" height="58" rx="18" fill="#EDEEFF"/>
+  <rect x="24" y="62" width="292" height="20" fill="#EDEEFF"/>
+  <text x="170" y="56" text-anchor="middle" fill="#4F46E5" font-size="19" font-weight="800">🐍 파이썬</text>
+
+  <!-- x = 10 -->
+  <rect x="48" y="106" width="244" height="52" rx="14" fill="#F8F8FF"/>
+  <rect x="62" y="118" width="38" height="28" rx="9" fill="#6366F1"/>
+  <text x="81" y="136" text-anchor="middle" fill="white" font-size="15" font-weight="700">x</text>
+  <text x="114" y="137" text-anchor="middle" fill="#A5B4FC" font-size="20">→</text>
+  <rect x="130" y="114" width="148" height="36" rx="10" fill="#EEF2FF" stroke="#C7D2FE" stroke-width="1.5"/>
+  <text x="204" y="128" text-anchor="middle" fill="#818CF8" font-size="11">정수</text>
+  <text x="204" y="144" text-anchor="middle" fill="#4338CA" font-size="15" font-weight="700">10</text>
+
+  <!-- x = "안녕" -->
+  <rect x="48" y="172" width="244" height="52" rx="14" fill="#F8FFF9"/>
+  <rect x="62" y="184" width="38" height="28" rx="9" fill="#6366F1"/>
+  <text x="81" y="202" text-anchor="middle" fill="white" font-size="15" font-weight="700">x</text>
+  <text x="114" y="203" text-anchor="middle" fill="#A5B4FC" font-size="20">→</text>
+  <rect x="130" y="180" width="148" height="36" rx="10" fill="#F0FDF4" stroke="#BBF7D0" stroke-width="1.5"/>
+  <text x="204" y="194" text-anchor="middle" fill="#22C55E" font-size="11">문자열</text>
+  <text x="204" y="210" text-anchor="middle" fill="#15803D" font-size="15" font-weight="700">"안녕"</text>
+
+  <!-- OK badge -->
+  <rect x="48" y="240" width="244" height="38" rx="12" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.5"/>
+  <text x="170" y="263" text-anchor="middle" fill="#16A34A" font-size="13" font-weight="600">✅ 타입 바꿔도 OK!</text>
+
+  <!-- note -->
+  <text x="170" y="306" text-anchor="middle" fill="#9CA3AF" font-size="11">메모리는 파이썬이 자동으로 관리해줘요</text>
+
+  <!-- VS -->
+  <text x="340" y="188" text-anchor="middle" fill="#C7D2FE" font-size="13" font-weight="700">VS</text>
+  <line x1="336" y1="40" x2="336" y2="320" stroke="#E0E4F5" stroke-width="1.5"/>
+
+  <!-- ===== RIGHT: C++ ===== -->
+  <rect x="364" y="24" width="292" height="312" rx="18" fill="white" filter="url(#s)"/>
+
+  <!-- Header -->
+  <rect x="364" y="24" width="292" height="58" rx="18" fill="#FFF4E6"/>
+  <rect x="364" y="62" width="292" height="20" fill="#FFF4E6"/>
+  <text x="510" y="56" text-anchor="middle" fill="#EA580C" font-size="19" font-weight="800">⚡ C++</text>
+
+  <!-- int row -->
+  <rect x="380" y="96" width="260" height="72" rx="14" fill="#FFF8F8"/>
+  <text x="396" y="116" fill="#64748B" font-size="12" font-weight="600" font-family="'Courier New', monospace">int a = 10;</text>
+  <!-- 4 boxes, each 44px wide, gap 8px → total 44*4+8*3=176+24=200px, centered in 260 → start at 30 -->
+  <rect x="410" y="122" width="44" height="34" rx="9" fill="#FEE2E2" stroke="#FCA5A5" stroke-width="1.5"/>
+  <rect x="462" y="122" width="44" height="34" rx="9" fill="#FEE2E2" stroke="#FCA5A5" stroke-width="1.5"/>
+  <rect x="514" y="122" width="44" height="34" rx="9" fill="#FEE2E2" stroke="#FCA5A5" stroke-width="1.5"/>
+  <rect x="566" y="122" width="44" height="34" rx="9" fill="#FECACA" stroke="#F87171" stroke-width="2"/>
+  <text x="432" y="143" text-anchor="middle" fill="#FCA5A5" font-size="18">·</text>
+  <text x="484" y="143" text-anchor="middle" fill="#FCA5A5" font-size="18">·</text>
+  <text x="536" y="143" text-anchor="middle" fill="#FCA5A5" font-size="18">·</text>
+  <text x="588" y="143" text-anchor="middle" fill="#DC2626" font-size="13" font-weight="700">10</text>
+  <text x="510" y="164" text-anchor="middle" fill="#EF4444" font-size="11" font-weight="600">4 bytes 고정</text>
+
+  <!-- double row -->
+  <rect x="380" y="180" width="260" height="72" rx="14" fill="#FFFDF5"/>
+  <text x="396" y="200" fill="#64748B" font-size="12" font-weight="600" font-family="'Courier New', monospace">double pi = 3.14;</text>
+  <!-- 8 boxes, each 25px, gap 5px → total 25*8+5*7=200+35=235px, start at 398 -->
+  <rect x="398" y="206" width="25" height="28" rx="6" fill="#FEF3C7" stroke="#FCD34D" stroke-width="1.5"/>
+  <rect x="428" y="206" width="25" height="28" rx="6" fill="#FEF3C7" stroke="#FCD34D" stroke-width="1.5"/>
+  <rect x="458" y="206" width="25" height="28" rx="6" fill="#FEF3C7" stroke="#FCD34D" stroke-width="1.5"/>
+  <rect x="488" y="206" width="25" height="28" rx="6" fill="#FEF3C7" stroke="#FCD34D" stroke-width="1.5"/>
+  <rect x="518" y="206" width="25" height="28" rx="6" fill="#FEF3C7" stroke="#FCD34D" stroke-width="1.5"/>
+  <rect x="548" y="206" width="25" height="28" rx="6" fill="#FEF3C7" stroke="#FCD34D" stroke-width="1.5"/>
+  <rect x="578" y="206" width="25" height="28" rx="6" fill="#FDE68A" stroke="#F59E0B" stroke-width="2"/>
+  <rect x="608" y="206" width="25" height="28" rx="6" fill="#FDE68A" stroke="#F59E0B" stroke-width="2"/>
+  <text x="510" y="248" text-anchor="middle" fill="#D97706" font-size="11" font-weight="600">8 bytes 고정</text>
+
+  <!-- char row -->
+  <rect x="380" y="264" width="260" height="60" rx="14" fill="#F9F6FF"/>
+  <text x="396" y="284" fill="#64748B" font-size="12" font-weight="600" font-family="'Courier New', monospace">char c = 'A';</text>
+  <rect x="398" y="290" width="44" height="28" rx="9" fill="#EDE9FE" stroke="#C4B5FD" stroke-width="2"/>
+  <text x="420" y="309" text-anchor="middle" fill="#7C3AED" font-size="13" font-weight="700">'A'</text>
+  <text x="452" y="308" fill="#8B5CF6" font-size="11" font-weight="600">← 1 byte 고정</text>
+</svg>

@@ -22,7 +22,7 @@ export function Header() {
           <div className="text-2xl md:text-3xl">🦒</div>
           <div>
             <h1 className="text-base md:text-lg font-bold text-gray-800">{t("코드린", "Coderin")}</h1>
-            <p className="text-xs md:text-sm text-gray-600">{displayName}{t("님", "")}</p>
+            {isAuthenticated && <p className="text-xs md:text-sm text-gray-600">{displayName}{t("님", "")}</p>}
           </div>
         </Link>
 

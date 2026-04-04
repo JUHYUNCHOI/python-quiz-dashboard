@@ -1,10 +1,13 @@
 "use client"
 
+import { useLanguage } from "@/contexts/language-context"
+
 interface CircularProgressProps {
   score: number
 }
 
 export function CircularProgress({ score }: CircularProgressProps) {
+  const { t } = useLanguage()
   const radius = 70
   const circumference = 2 * Math.PI * radius
   const offset = circumference - (score / 100) * circumference
@@ -41,7 +44,7 @@ export function CircularProgress({ score }: CircularProgressProps) {
         <span className="text-5xl font-bold" style={{ color: getColor() }}>
           {score}
         </span>
-        <span className="text-lg text-gray-500">점</span>
+        <span className="text-lg text-gray-500">{t("점", "pts")}</span>
       </div>
     </div>
   )

@@ -378,7 +378,7 @@ export function CodeDisplay({
   return (
     <>
       <div className={cn("overflow-hidden rounded-xl border shadow-lg", borderColor, className)}>
-        <CodeContent />
+        {CodeContent()}
       </div>
 
       {/* Fullscreen Modal */}

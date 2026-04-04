@@ -15,6 +15,7 @@ interface PracticeStepProps {
   lang?: "ko" | "en"
   onSuccess?: () => void
   lessonId?: string
+  isCompleted?: boolean
 }
 
 function normalize(s: string) {
@@ -22,10 +23,16 @@ function normalize(s: string) {
 }
 
 function extractSkeleton(_code: string): string {
-  return "// 👉 여기에 코드를 직접 작성하거나 복사해서 붙여넣으세요!"
+  return `#include <iostream>
+using namespace std;
+
+int main() {
+
+    return 0;
+}`
 }
 
-export function PracticeStep({ step, lang = "ko", onSuccess, lessonId }: PracticeStepProps) {
+export function PracticeStep({ step, lang = "ko", onSuccess, lessonId, isCompleted = false }: PracticeStepProps) {
   const [done, setDone] = useState(false)
   const [failCount, setFailCount] = useState(0)
   const [copiedSkeleton, setCopiedSkeleton] = useState(false)
@@ -48,8 +55,14 @@ export function PracticeStep({ step, lang = "ko", onSuccess, lessonId }: Practic
     setShowFullCode(false)
   }, [step.id])
 
+  // isCompleted가 true가 되면 done도 true로 동기화 (새로고침 후 완료 상태 복원)
+  useEffect(() => {
+    if (isCompleted) setDone(true)
+  }, [isCompleted, step.id])
+
   const isEn = lang === "en"
-  const skeleton = step.code ? extractSkeleton(step.code) : ""
+  // starterCode가 있으면 그걸 초기 코드로, 없으면 code에서 skeleton 추출
+  const skeleton = step.starterCode ?? (step.code ? extractSkeleton(step.code) : "")
   const hasExpected = !!step.expectedOutput
 
   // 현재 힌트 레벨 (failCount 기준, 최대 3)
@@ -121,24 +134,23 @@ export function PracticeStep({ step, lang = "ko", onSuccess, lessonId }: Practic
           <div className="space-y-2 md:space-y-3">{renderContent(step.content)}</div>
         )}
 
-        {/* C++ 코드 에디터 + 실행 (모바일/데스크톱 공통) */}
-        {!done && step.code && (
-          <CppRunner
-            key={step.id}
-            initialCode={skeleton || `// 👉 여기에 코드를 직접 작성하거나 복사해서 붙여넣으세요!`}
-            expectedOutput={step.expectedOutput}
-            onSuccess={handleRunSuccess}
-            onError={handleRunError}
-            isEn={isEn}
-            submissionMode={true}
-            lessonId={lessonId}
-            stepId={step.id}
-            stepTitle={step.title}
-          />
-        )}
+        {/* C++ 코드 에디터 + 실행 (완료 후에도 항상 표시) */}
+        <CppRunner
+          key={step.id}
+          initialCode={skeleton || `#include <iostream>\nusing namespace std;\n\nint main() {\n    \n    return 0;\n}`}
+          expectedOutput={step.expectedOutput}
+          stdin={step.stdin}
+          onSuccess={handleRunSuccess}
+          onError={handleRunError}
+          isEn={isEn}
+          submissionMode={!!step.expectedOutput}
+          lessonId={lessonId}
+          stepId={step.id}
+          stepTitle={step.title}
+        />
 
-        {/* code도 expectedOutput도 없는 경우 — 자유 완료 */}
-        {!done && !step.code && !hasExpected && (
+        {/* expectedOutput 없는 경우 — 실행 후 자유 완료 */}
+        {!done && !hasExpected && (
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={() => { setDone(true); onSuccess?.() }}
@@ -155,12 +167,6 @@ export function PracticeStep({ step, lang = "ko", onSuccess, lessonId }: Practic
             animate={{ opacity: 1, scale: 1 }}
             className="space-y-3"
           >
-            {step.expectedOutput && (
-              <div className="bg-gray-900 rounded-xl p-4 font-mono text-sm border border-green-600">
-                <div className="text-green-400 text-xs font-bold mb-2">✅ {isEn ? "Correct output!" : "정확한 출력!"}</div>
-                <div className="text-green-400 whitespace-pre-line">{step.expectedOutput}</div>
-              </div>
-            )}
             <div className="w-full py-4 rounded-xl text-base font-bold text-center text-teal-700 bg-teal-50 border-2 border-teal-200">
               {isEn ? "✅ Great job! Move on →" : "✅ 잘했어요! 다음으로 넘어가세요 →"}
             </div>

@@ -10,18 +10,26 @@ import { ShieldCheck, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 
 export default function TeacherRegisterPage() {
-  const [code, setCode] = useState("")
-  const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const { isAuthenticated, profile, refreshProfile } = useAuth()
+  const [error, setError] = useState("")
+  const [showConfirm, setShowConfirm] = useState(false)
+  const { isAuthenticated, isLoading: authLoading, profile, refreshProfile } = useAuth()
   const { t } = useLanguage()
   const router = useRouter()
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-orange-50 to-yellow-50 flex items-center justify-center">
+        <div className="text-5xl animate-bounce">🦒</div>
+      </div>
+    )
+  }
 
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-orange-50 to-yellow-50 flex items-center justify-center p-4">
         <Card className="p-6 max-w-sm w-full text-center">
-          <p className="text-gray-600 mb-4">{t("선생님 등록을 위해 먼저 로그인해주세요.", "Please login first to register as a teacher.")}</p>
+          <p className="text-gray-600 mb-4">{t("선생님 전환을 위해 먼저 로그인해주세요.", "Please login first.")}</p>
           <Link href="/login" className="text-orange-600 font-bold hover:underline">
             {t("로그인하기", "Login")}
           </Link>
@@ -35,7 +43,7 @@ export default function TeacherRegisterPage() {
       <div className="min-h-screen bg-gradient-to-b from-orange-50 to-yellow-50 flex items-center justify-center p-4">
         <Card className="p-6 max-w-sm w-full text-center">
           <ShieldCheck className="w-12 h-12 text-green-500 mx-auto mb-3" />
-          <h2 className="text-lg font-bold mb-2">{t("이미 선생님으로 등록되어 있어요!", "You're already registered as a teacher!")}</h2>
+          <h2 className="text-lg font-bold mb-2">{t("이미 선생님으로 등록되어 있어요!", "You're already a teacher!")}</h2>
           <Link href="/teacher" className="text-orange-600 font-bold hover:underline">
             {t("대시보드로 가기", "Go to Dashboard")}
           </Link>
@@ -44,13 +52,10 @@ export default function TeacherRegisterPage() {
     )
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleRegister = async () => {
     setError("")
     setIsLoading(true)
-
-    const result = await registerAsTeacher(code)
-
+    const result = await registerAsTeacher()
     if (result.error) {
       setError(result.error)
       setIsLoading(false)
@@ -68,33 +73,73 @@ export default function TeacherRegisterPage() {
         </Link>
 
         <div className="text-center mb-6">
-          <ShieldCheck className="w-12 h-12 text-orange-500 mx-auto mb-3" />
-          <h1 className="text-xl font-bold text-gray-800">{t("선생님 등록", "Teacher Registration")}</h1>
-          <p className="text-sm text-gray-500 mt-1">{t("등록 코드를 입력해주세요", "Enter the registration code")}</p>
+          <div className="text-5xl mb-3">📋</div>
+          <h1 className="text-xl font-bold text-gray-800">{t("선생님으로 전환", "Switch to Teacher")}</h1>
+          <p className="text-sm text-gray-500 mt-2">
+            {t(
+              "선생님 계정으로 전환하면 반을 만들고\n학생 진도와 과제를 관리할 수 있어요.",
+              "As a teacher, you can create classes\nand manage student progress."
+            )}
+          </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            placeholder={t("등록 코드 입력", "Enter registration code")}
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-orange-400 focus:ring-2 focus:ring-orange-100 outline-none text-center text-lg tracking-widest"
-            required
-          />
+        <div className="bg-orange-50 rounded-xl p-4 mb-4 space-y-2 text-sm text-gray-600">
+          <div className="flex items-start gap-2">
+            <span>✅</span>
+            <span>{t("반 만들기 & 학생 초대", "Create classes & invite students")}</span>
+          </div>
+          <div className="flex items-start gap-2">
+            <span>✅</span>
+            <span>{t("레슨 진도 & 과제 현황 확인", "Track lesson progress & homework")}</span>
+          </div>
+          <div className="flex items-start gap-2">
+            <span>✅</span>
+            <span>{t("학부모 리포트 링크 생성", "Generate parent report links")}</span>
+          </div>
+        </div>
 
-          {error && (
-            <p className="text-sm text-red-500 text-center">{error}</p>
-          )}
+        {error && (
+          <p className="text-sm text-red-500 text-center mb-3">{error}</p>
+        )}
 
-          <button
-            type="submit"
-            disabled={isLoading || !code}
-            className="w-full py-3 rounded-xl font-bold text-white bg-orange-500 hover:bg-orange-600 disabled:opacity-50 transition-all"
-          >
-            {isLoading ? t("확인 중...", "Checking...") : t("등록하기", "Register")}
-          </button>
-        </form>
+        <button
+          onClick={() => setShowConfirm(true)}
+          disabled={isLoading}
+          className="w-full py-3 rounded-xl font-bold text-white bg-orange-500 hover:bg-orange-600 disabled:opacity-50 transition-all"
+        >
+          {t("선생님으로 전환하기", "Switch to Teacher")}
+        </button>
+
+        {/* 확인 모달 */}
+        {showConfirm && (
+          <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+            <Card className="p-6 max-w-sm w-full space-y-4">
+              <div className="text-center">
+                <div className="text-4xl mb-2">⚠️</div>
+                <h3 className="text-base font-black text-gray-800">{t("선생님으로 전환할까요?", "Switch to Teacher?")}</h3>
+                <p className="text-sm text-gray-500 mt-2">
+                  {t("이후 설정에서 되돌리기 어렵습니다. 정말 전환하시겠어요?", "This is hard to undo later. Are you sure?")}
+                </p>
+              </div>
+              {error && <p className="text-sm text-red-500 text-center">{error}</p>}
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setShowConfirm(false)}
+                  className="flex-1 py-2.5 rounded-xl border-2 border-gray-200 font-bold text-gray-600 hover:bg-gray-50"
+                >
+                  {t("취소", "Cancel")}
+                </button>
+                <button
+                  onClick={handleRegister}
+                  disabled={isLoading}
+                  className="flex-1 py-2.5 rounded-xl font-bold text-white bg-orange-500 hover:bg-orange-600 disabled:opacity-50"
+                >
+                  {isLoading ? t("처리 중...", "Processing...") : t("전환하기", "Switch")}
+                </button>
+              </div>
+            </Card>
+          </div>
+        )}
       </Card>
     </div>
   )

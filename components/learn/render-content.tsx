@@ -109,6 +109,32 @@ function renderChatInline(text: string, keyPrefix: string = ""): React.ReactNode
 }
 
 // ============================================
+// 접을 수 있는 코드블록 컴포넌트
+// ============================================
+function CollapsibleCode({ label, code, language }: { label: string; code: string; language: string }) {
+  const [open, setOpen] = React.useState(false)
+  return (
+    <div className="my-3">
+      <button
+        onClick={() => setOpen(v => !v)}
+        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-700 text-sm font-medium hover:bg-indigo-100 transition-colors"
+      >
+        <svg className={`w-3.5 h-3.5 transition-transform ${open ? "rotate-90" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+        {label}
+      </button>
+      {open && (
+        <div className="mt-2 relative group">
+          <CodeBlock code={code} language={language} />
+          <CopyButton code={code} />
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ============================================
 // 코드 복사 버튼 컴포넌트
 // ============================================
 function CopyButton({ code }: { code: string }) {
@@ -129,6 +155,28 @@ function CopyButton({ code }: { code: string }) {
 }
 
 // ============================================
+// 코드펜스 언어 + 하이라이트 라인 파싱
+// ============================================
+function parseLangAndHighlights(langStr: string): { lang: string; highlightLines: Set<number> } {
+  const match = langStr.match(/^(\w+)\s*\{([^}]+)\}$/)
+  if (!match) return { lang: langStr, highlightLines: new Set() }
+
+  const lang = match[1]
+  const spec = match[2]
+  const lines = new Set<number>()
+  spec.split(',').forEach(part => {
+    const range = part.trim().match(/^(\d+)-(\d+)$/)
+    if (range) {
+      for (let n = parseInt(range[1]); n <= parseInt(range[2]); n++) lines.add(n)
+    } else {
+      const n = parseInt(part.trim())
+      if (!isNaN(n)) lines.add(n)
+    }
+  })
+  return { lang, highlightLines: lines }
+}
+
+// ============================================
 // 메인 렌더 함수
 // ============================================
 export function renderContent(content: string) {
@@ -140,10 +188,30 @@ export function renderContent(content: string) {
   while (i < lines.length) {
     const line = lines[i]
 
+    // ── 접기 코드블록: {collapse:버튼텍스트} 다음 줄에 ```코드 ──
+    const collapseMatch = line.match(/^\{collapse:(.+)\}$/)
+    if (collapseMatch) {
+      const label = collapseMatch[1]
+      i++
+      if (i < lines.length && lines[i].startsWith('```')) {
+        const lang = lines[i].slice(3).trim() || 'python'
+        i++
+        const codeLines: string[] = []
+        while (i < lines.length && !lines[i].startsWith('```')) {
+          codeLines.push(lines[i])
+          i++
+        }
+        i++
+        const codeText = codeLines.join('\n')
+        elements.push(<CollapsibleCode key={key++} label={label} code={codeText} language={lang} />)
+      }
+      continue
+    }
+
     // ── 코드블록 ──
     if (line.startsWith('```')) {
       const codeLines: string[] = []
-      const lang = line.slice(3).trim() || 'python'
+      const { lang, highlightLines } = parseLangAndHighlights(line.slice(3).trim() || 'python')
       i++
 
       while (i < lines.length && !lines[i].startsWith('```')) {
@@ -156,7 +224,7 @@ export function renderContent(content: string) {
         const codeText = codeLines.join('\n')
         elements.push(
           <div key={key++} className="my-4 relative group">
-            <CodeBlock code={codeText} language={lang} />
+            <CodeBlock code={codeText} language={lang} highlightLines={highlightLines.size > 0 ? highlightLines : undefined} />
             <CopyButton code={codeText} />
           </div>
         )
@@ -174,8 +242,10 @@ export function renderContent(content: string) {
       }
 
       if (tableLines.length >= 2) {
-        const parseRow = (row: string) =>
-          row.slice(1, -1).split('|').map(cell => cell.trim())
+        const parseRow = (row: string) => {
+          const inner = row.slice(1, -1).replace(/\\\|/g, '\x00')
+          return inner.split('|').map(cell => cell.trim().replace(/\x00/g, '|'))
+        }
 
         const isSeparator = (row: string) =>
           parseRow(row).every(cell => /^[-:\s]+$/.test(cell))
@@ -204,7 +274,7 @@ export function renderContent(content: string) {
                 {bodyRows.map((row, ri) => (
                   <tr key={ri} className={ri % 2 === 0 ? "bg-white" : "bg-indigo-50/30"}>
                     {row.map((cell, ci) => (
-                      <td key={ci} className="px-3 py-2 text-gray-700 border-t border-indigo-100">
+                      <td key={ci} className={`px-3 py-2 text-gray-700 border-t border-indigo-100${ci === 0 ? " whitespace-nowrap font-medium" : ""}`}>
                         {renderInlineMarkdown(cell, `td-${ri}-${ci}-`)}
                       </td>
                     ))}
@@ -282,7 +352,7 @@ export function renderContent(content: string) {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z" />
                 </svg>
               </span>
-              <span className="font-bold text-indigo-700 text-sm">따라해보세요!</span>
+              <span className="font-bold text-indigo-700 text-sm">{role === 'TryIt' ? "Try It!" : "따라해보세요!"}</span>
             </div>
             <p className="text-sm md:text-base text-indigo-800 leading-relaxed pl-9">
               {renderInlineMarkdown(text)}

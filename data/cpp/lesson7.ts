@@ -19,33 +19,6 @@ export const cppLesson7Data: LessonData = {
       emoji: "🔁",
       steps: [
         {
-          id: "ch1-increment",
-          type: "explain",
-          title: "🔢 i++가 뭐야? (증감 연산자)",
-          content: `for문을 배우기 전에, C++의 **증감 연산자**를 먼저 알아야 해요!
-
-파이썬에서는 \`i += 1\`로 1을 더했죠? C++에는 **더 짧은 방법**이 있어요:
-
-| 파이썬 🐍 | C++ ⚡ | 의미 |
-|---|---|---|
-| \`i += 1\` | {pink:\`i++\`} | i를 1 증가 |
-| \`i -= 1\` | {blue:\`i--\`} | i를 1 감소 |
-
-\`\`\`cpp
-int i = 0;
-i++;     // i는 이제 1  (i += 1과 같음)
-i++;     // i는 이제 2
-i--;     // i는 이제 1  (i -= 1과 같음)
-\`\`\`
-
-{!pink} \`i++\` = **"i를 1 증가시켜!"** (increment)
-{!blue} \`i--\` = **"i를 1 감소시켜!"** (decrement)
-
-C++ for문에서 \`i++\`를 매우 많이 쓰니까 꼭 기억하세요!
-
-💡 참고: C++이라는 이름 자체가 "C에서 1 증가(++)" 라는 뜻이에요! 😄`,
-        },
-        {
           id: "ch1-compare",
           type: "explain",
           title: "🔁 for문: 파이썬 vs C++",
@@ -72,12 +45,10 @@ for (int i = 0;  i < 5;    i++)
         {
           id: "ch1-sim",
           type: "explain",
-          title: "🔍 실행 추적: C++ for문이 어떤 순서로 동작할까?",
-          content: `for(초기화; 조건; 증감)의 3부분이 어떤 순서로 실행되는지 한 단계씩 봐요!
+          title: "🔍 추적: C++ for(init; cond; inc)의 실행 순서",
+          content: `초기화 → 조건 확인 → 증감의 정확한 순서를 눈으로 확인해봐요!
 
-i가 1부터 3까지 변하며 sum에 더해지는 과정을 추적합니다.
-
-**▶ 실행하기** 또는 **▷ 한 단계** 버튼을 눌러보세요.`,
+**▶ 실행** 또는 **▷ 단계** 버튼을 눌러 추적하세요.`,
           component: "codeTraceCppFor",
         },
         {
@@ -219,7 +190,7 @@ while (count < 5) {
 
 차이점은 딱 3개:
 {!pink} 1. 조건에 {pink:**소괄호 ()**}
-{!blue} 2. 블록에 {blue:**중괄호 {}**}
+{!blue} 2. 블록에 {blue:**중괄호**} { }
 {!green} 3. count += 1 대신 {green:**count++**} (선택)
 
 💡 if문이랑 규칙이 똑같아요! () + {} 만 기억하세요.`,
@@ -228,12 +199,10 @@ while (count < 5) {
         {
           id: "ch2-sim",
           type: "explain",
-          title: "🔍 실행 추적: C++ while 팩토리얼 계산",
-          content: `while문으로 팩토리얼(1×2×3×4)을 구하는 과정을 추적해요!
+          title: "🔍 추적: C++ while문으로 팩토리얼 계산",
+          content: `while문이 팩토리얼(1×2×3×4)을 어떻게 계산하는지 단계별로 확인해봐요!
 
-n이 1부터 4까지 올라가면서 result가 곱해지는 과정을 한 단계씩 봐요.
-
-**▶ 실행하기** 또는 **▷ 한 단계** 버튼을 눌러보세요.`,
+**▶ 실행** 또는 **▷ 단계** 버튼을 눌러 추적하세요.`,
           component: "codeTraceCppWhile",
         },
         {
@@ -324,47 +293,54 @@ while (true) {
         {
           id: "ch2-dowhile-practice",
           type: "practice" as const,
-          title: "✋ do-while로 메뉴 만들기!",
-          content: `do-while을 사용해서 간단한 메뉴 시스템을 만들어봐요!
+          title: "✋ do-while로 전투 메뉴 만들기!",
+          content: `RPG 게임처럼 전투 메뉴가 계속 반복되도록 만들어봐요!
 
-일단 메뉴를 보여주고, 3번(종료)을 누를 때까지 반복해요.
-이게 바로 **"일단 한 번은 해야 하는"** do-while의 진짜 사용법이에요!`,
-          code: `#include <iostream>
+**3번(도망)을 누를 때까지 메뉴가 계속 나와요.**
+
+각 선택 시 출력:
+- **1번** → \`25 데미지를 입혔다!\`
+- **2번** → \`현재 HP: 100\`
+- **3번** → 반복 종료 후 \`도망쳤다...\`
+
+do-while 골격은 이미 있어요 — if/else 부분을 채워보세요!`,
+          starterCode: `#include <iostream>
 using namespace std;
 
 int main() {
     int choice;
 
     do {
-        cout << "=== 메뉴 ===" << endl;
-        cout << "1. 인사하기" << endl;
-        cout << "2. 이름 말하기" << endl;
-        cout << "3. 종료" << endl;
+        cout << "=== 전투 메뉴 ===" << endl;
+        cout << "1. 공격" << endl;
+        cout << "2. 체력 확인" << endl;
+        cout << "3. 도망" << endl;
         cout << "선택: ";
         cin >> choice;
 
         if (choice == 1) {
-            cout << "안녕하세요!" << endl;
+            // 여기에 코드를 작성하세요
         } else if (choice == 2) {
-            cout << "저는 C++ 프로그램이에요!" << endl;
+            // 여기에 코드를 작성하세요
         }
     } while (choice != 3);
 
-    cout << "프로그램을 종료합니다." << endl;
+    cout << "도망쳤다..." << endl;
     return 0;
 }`,
-          expectedOutput: `=== 메뉴 ===
-1. 인사하기
-2. 이름 말하기
-3. 종료
+          stdin: `1\n3`,
+          expectedOutput: `=== 전투 메뉴 ===
+1. 공격
+2. 체력 확인
+3. 도망
 선택: 1
-안녕하세요!
-=== 메뉴 ===
-1. 인사하기
-2. 이름 말하기
-3. 종료
+25 데미지를 입혔다!
+=== 전투 메뉴 ===
+1. 공격
+2. 체력 확인
+3. 도망
 선택: 3
-프로그램을 종료합니다.`
+도망쳤다...`
         },
         {
           id: "ch2-fb1",

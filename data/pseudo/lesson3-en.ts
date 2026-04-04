@@ -143,17 +143,6 @@ OUTPUT "Double is: " & num
           explanation: "First OUTPUT shows **Enter a number:**. The user inputs **7**, so `num` is 7. Then `num ← num * 2` makes `num` equal to **14**. The second OUTPUT shows **Double is: 14**. Two OUTPUTs = two lines!"
         },
         {
-          id: "ch2-fill2",
-          type: "fillblank",
-          title: "✏️ Fill in the blanks!",
-          content: "Complete the code to ask for a city name and display a greeting.",
-          code: "DECLARE city : STRING\n___ \"Where do you live?\"\nINPUT city\nOUTPUT \"Welcome to \" ___ city",
-          fillBlanks: [
-            { id: 1, answer: "OUTPUT", options: ["OUTPUT", "INPUT", "DECLARE", "PRINT"] },
-            { id: 2, answer: "&", options: ["&", "+", ",", "."] }
-          ]
-        },
-        {
           id: "ch2-predict2",
           type: "predict",
           title: "🔮 & operator!",
@@ -173,6 +162,17 @@ OUTPUT "Hello, " & name & "!"
           ],
           answer: 0,
           explanation: 'The & operator joins strings! "Hello, " + "Kim" + "!" = **Hello, Kim!** name is a variable so its value is used without quotes.'
+        },
+        {
+          id: "ch2-fill2",
+          type: "fillblank",
+          title: "✏️ Fill in the blanks!",
+          content: "Complete the code to ask for a city name and display a greeting.",
+          code: "DECLARE city : STRING\n___ \"Where do you live?\"\nINPUT city\nOUTPUT \"Welcome to \" ___ city",
+          fillBlanks: [
+            { id: 1, answer: "OUTPUT", options: ["OUTPUT", "INPUT", "DECLARE", "PRINT"] },
+            { id: 2, answer: "&", options: ["&", "+", ",", "."] }
+          ]
         },
         {
           id: "ch2-quiz2",

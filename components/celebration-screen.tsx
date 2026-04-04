@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { cn } from "@/lib/utils"
 import type { ComboTierInfo } from "@/hooks/use-quiz-state"
+import { useLanguage } from "@/contexts/language-context"
 
 interface CelebrationScreenProps {
   show: boolean
@@ -14,24 +15,32 @@ interface CelebrationScreenProps {
   isRetry?: boolean
 }
 
-const tierMessages: Record<string, string[]> = {
+const tierMessagesKo: Record<string, string[]> = {
   base: ["완벽해요!", "똑똑해요!", "최고예요!", "천재인가요?", "멋져요!"],
   good: ["3연속! 대단해요!", "연속 정답! 굿!", "잘하고 있어요!"],
   fire: ["불타오르고 있어! 🔥", "멈출 수가 없다!", "화끈하다!"],
   insane: ["미쳤다! 천재야!", "이건 레전드급!", "역대급 실력!"],
   legend: ["전설이 탄생했다! 👑", "이 세상 사람 맞아?!", "무적 모드!"],
 }
+const tierMessagesEn: Record<string, string[]> = {
+  base: ["Perfect!", "Well done!", "Amazing!", "Genius?", "Awesome!"],
+  good: ["3 in a row!", "Streak going!", "Keep it up!"],
+  fire: ["On fire! 🔥", "Unstoppable!", "Blazing!"],
+  insane: ["Incredible!", "Legendary!", "Unreal!"],
+  legend: ["A legend is born! 👑", "Are you even human?!", "Invincible mode!"],
+}
 
 export function CelebrationScreen({ show, points = 10, streak = 0, comboTier, combo = 0, grade, isRetry }: CelebrationScreenProps) {
+  const { t, lang } = useLanguage()
   const [message, setMessage] = useState("완벽해요!")
   const tier = comboTier?.tier || "base"
 
   useEffect(() => {
     if (show) {
-      const msgs = tierMessages[tier] || tierMessages.base
+      const msgs = (lang === "ko" ? tierMessagesKo : tierMessagesEn)[tier] || (lang === "ko" ? tierMessagesKo : tierMessagesEn).base
       setMessage(msgs[Math.floor(Math.random() * msgs.length)])
     }
-  }, [show, tier])
+  }, [show, tier, lang])
 
   if (!show) return null
 
@@ -110,7 +119,7 @@ export function CelebrationScreen({ show, points = 10, streak = 0, comboTier, co
         {/* Success message */}
         <div className="text-center space-y-2 md:space-y-3">
           <div className="text-5xl md:text-7xl lg:text-8xl font-black text-orange-500 animate-scale-in drop-shadow-lg">
-            정답!
+            {t("정답!", "Correct!")}
           </div>
           <div className="text-2xl md:text-4xl font-bold text-gray-800 animate-fade-in-delay">{message}</div>
         </div>
@@ -132,7 +141,7 @@ export function CelebrationScreen({ show, points = 10, streak = 0, comboTier, co
         {/* 재출제 정답 표시 */}
         {isRetry && (
           <div className="px-4 py-1.5 rounded-full bg-purple-50 border border-purple-300 text-purple-600 text-sm font-bold animate-fade-in-delay">
-            🔄 다시 풀어서 맞혔어요!
+            {t("🔄 다시 풀어서 맞혔어요!", "🔄 Got it right on retry!")}
           </div>
         )}
 
@@ -151,7 +160,7 @@ export function CelebrationScreen({ show, points = 10, streak = 0, comboTier, co
             )}
           >
             <span className="text-2xl">{comboTier.emoji}</span>
-            <span className="text-lg font-black">{combo}연속!</span>
+            <span className="text-lg font-black">{combo}{t("연속!", " combo!")}</span>
           </div>
         )}
 
@@ -159,7 +168,7 @@ export function CelebrationScreen({ show, points = 10, streak = 0, comboTier, co
         {streak > 0 && (
           <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-full px-4 md:px-6 py-2 md:py-3 shadow-lg animate-fade-in-delay-2">
             <span className="text-2xl md:text-3xl animate-flame">🔥</span>
-            <span className="text-lg md:text-xl font-bold text-orange-600">{streak}일 연속!</span>
+            <span className="text-lg md:text-xl font-bold text-orange-600">{streak}{t("일 연속!", " day streak!")}</span>
           </div>
         )}
 

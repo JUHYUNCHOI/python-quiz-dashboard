@@ -72,7 +72,9 @@ Let's compare with Python:
 | \`max(lst)\` | \`*max_element(v.begin(), v.end())\` |
 | \`lst.count(3)\` | \`count(v.begin(), v.end(), 3)\` |
 
-💡 Most C++ STL algorithms take a **range** in the form \`(begin, end)\`. You always pass \`v.begin()\` and \`v.end()\`!`
+💡 Most C++ STL algorithms take a **range** in the form \`(begin, end)\`. You always pass \`v.begin()\` and \`v.end()\`!
+
+👇 The syntax and examples for each function above are explained step by step below!`
         },
         {
           id: "ch1-fb1",
@@ -199,6 +201,39 @@ Let's compare with Python:
 | \`a, b = b, a\` | \`swap(a, b)\` |
 
 💡 The third argument (initial value): use \`0\` for integer sum, \`0.0\` for floating-point sum!`
+        },
+        {
+          id: "ch1-lambda",
+          type: "explain",
+          title: "🔍 find_if & count_if — Search by Condition!",
+          content: `\`find()\` searches for an exact value, but what if you want to search by a **condition**? That's where **\`find_if()\`** and **\`count_if()\`** come in!
+
+\`\`\`cpp
+#include <algorithm>
+#include <vector>
+using namespace std;
+
+vector<int> v = {3, 7, 1, 8, 4, 9, 2};
+
+// Condition: find first element greater than 5
+auto it = find_if(v.begin(), v.end(), [](int x) {
+    return x > 5;
+});
+if (it != v.end()) cout << *it;  // 7
+
+// Condition: count even numbers
+int cnt = count_if(v.begin(), v.end(), [](int x) {
+    return x % 2 == 0;
+});
+cout << cnt;  // 3 (8, 4, 2)
+\`\`\`
+
+**Lambda expressions** — \`[](parameter) { return condition; }\` — are **unnamed functions** you write right on the spot. They work anywhere an STL algorithm needs a condition function, including \`sort()\`!
+
+| Python 🐍 | C++ ⚡ |
+|---|---|
+| \`filter(lambda x: x > 5, lst)\` | \`find_if(..., [](int x){ return x > 5; })\` |
+| \`len([x for x in lst if x % 2 == 0])\` | \`count_if(..., [](int x){ return x % 2 == 0; })\` |`,
         },
         {
           id: "ch1-practice",

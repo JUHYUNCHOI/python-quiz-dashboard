@@ -141,9 +141,7 @@ int main() {
 
     return 0;
 }`,
-          expectedOutput: `Enter your name: Alice
-Enter your age: 14
-Hello, Alice! You are 14 years old!`
+          stdin: `Emma\n14`
         },
         {
           id: "ch1-q1",
@@ -179,10 +177,10 @@ Hello, Alice! You are 14 years old!`
 string name;
 int age;
 cin >> name >> age;
-// Input: Alice 14 (separated by space!)
+// Input: Emma 14 (separated by space!)
 \`\`\`
 
-Separate values with spaces or enter — "Alice" goes into name, 14 goes into age!
+Separate values with spaces or enter — "Emma" goes into name, 14 goes into age!
 
 | Python 🐍 | C++ ⚡ |
 |---|---|
@@ -249,10 +247,10 @@ cin >> is designed to quickly read one word at a time. But when you need a full 
           id: "ch2-pred2",
           type: "predict" as const,
           title: "What will this print?",
-          code: "#include <iostream>\nusing namespace std;\n\nint main() {\n    string name;\n    int age;\n    cin >> name >> age;\n    cout << name << \" is \" << age << \" years old\" << endl;\n    return 0;\n}\n// Input: Alice 14",
-          options: ["Error", "Alice 14 is 0 years old", "Alice is 14 years old", "Alice  is 14 years old"],
+          code: "#include <iostream>\nusing namespace std;\n\nint main() {\n    string name;\n    int age;\n    cin >> name >> age;\n    cout << name << \" is \" << age << \" years old\" << endl;\n    return 0;\n}\n// Input: Emma 14",
+          options: ["Error", "Emma 14 is 0 years old", "Emma is 14 years old", "Emma  is 14 years old"],
           answer: 2,
-          explanation: "Space separates 'Alice' into name and '14' into age. Result: 'Alice is 14 years old'"
+          explanation: "Space separates 'Emma' into name and '14' into age. Result: 'Emma is 14 years old'"
         },
         {
           id: "ch2-ignore",
@@ -309,9 +307,7 @@ int main() {
 
     return 0;
 }`,
-          expectedOutput: `Age: 14
-Favorite food: chicken burger
-14 years old, favorite food: chicken burger`
+          stdin: `14\nchicken burger`
         },
         {
           id: "ch2-q1",

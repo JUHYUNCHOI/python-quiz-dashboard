@@ -19,33 +19,6 @@ export const cppLesson7EnData: LessonData = {
       emoji: "🔁",
       steps: [
         {
-          id: "ch1-increment",
-          type: "explain",
-          title: "🔢 What's i++? (Increment Operator)",
-          content: `Before learning for loops, you need to know C++'s **increment operators**!
-
-In Python you wrote \`i += 1\` to add 1. C++ has a **shorter way**:
-
-| Python 🐍 | C++ ⚡ | Meaning |
-|---|---|---|
-| \`i += 1\` | {pink:\`i++\`} | Increase i by 1 |
-| \`i -= 1\` | {blue:\`i--\`} | Decrease i by 1 |
-
-\`\`\`cpp
-int i = 0;
-i++;     // i is now 1  (same as i += 1)
-i++;     // i is now 2
-i--;     // i is now 1  (same as i -= 1)
-\`\`\`
-
-{!pink} \`i++\` = **"increase i by 1!"** (increment)
-{!blue} \`i--\` = **"decrease i by 1!"** (decrement)
-
-You'll use \`i++\` ALL THE TIME in C++ for loops!
-
-💡 Fun fact: C++ is named after this! It means "C incremented by 1 (++)" 😄`,
-        },
-        {
           id: "ch1-compare",
           type: "explain",
           title: "🔁 for: Python vs C++",
@@ -320,47 +293,53 @@ while (true) {
         {
           id: "ch2-dowhile-practice",
           type: "practice" as const,
-          title: "✋ Build a Menu with do-while!",
-          content: `Use do-while to create a simple menu system!
+          title: "✋ Build a Battle Menu with do-while!",
+          content: `Make an RPG-style battle menu that keeps repeating — just like a real game!
 
-Show the menu first, then repeat until the user picks 3 (exit).
-This is the **real use case** for do-while — "must do at least once"!`,
-          code: `#include <iostream>
+**The menu loops until you pick 3 (run away).**
+
+What each option should print:
+- **1** → \`Dealt 25 damage!\`
+- **2** → \`Current HP: 100\`
+- **3** → exits the loop, then prints \`You ran away...\`
+
+The do-while skeleton is ready — just fill in the if/else body!`,
+          starterCode: `#include <iostream>
 using namespace std;
 
 int main() {
     int choice;
 
     do {
-        cout << "=== Menu ===" << endl;
-        cout << "1. Say Hello" << endl;
-        cout << "2. Say Name" << endl;
-        cout << "3. Exit" << endl;
+        cout << "=== Battle Menu ===" << endl;
+        cout << "1. Attack" << endl;
+        cout << "2. Check HP" << endl;
+        cout << "3. Run Away" << endl;
         cout << "Choice: ";
         cin >> choice;
 
         if (choice == 1) {
-            cout << "Hello!" << endl;
+            // Write your code here
         } else if (choice == 2) {
-            cout << "I'm a C++ program!" << endl;
+            // Write your code here
         }
     } while (choice != 3);
 
-    cout << "Goodbye!" << endl;
+    cout << "You ran away..." << endl;
     return 0;
 }`,
-          expectedOutput: `=== Menu ===
-1. Say Hello
-2. Say Name
-3. Exit
+          expectedOutput: `=== Battle Menu ===
+1. Attack
+2. Check HP
+3. Run Away
 Choice: 1
-Hello!
-=== Menu ===
-1. Say Hello
-2. Say Name
-3. Exit
+Dealt 25 damage!
+=== Battle Menu ===
+1. Attack
+2. Check HP
+3. Run Away
 Choice: 3
-Goodbye!`
+You ran away...`
         },
         {
           id: "ch2-fb1",

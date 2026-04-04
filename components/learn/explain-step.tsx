@@ -17,8 +17,10 @@ export function ExplainStep({ step }: ExplainStepProps) {
   const [showReveal, setShowReveal] = useState(false)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [AnimComp, setAnimComp] = useState<ComponentType<any> | null>(null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [AnimComp2, setAnimComp2] = useState<ComponentType<any> | null>(null)
 
-  // 설명 안에 포함된 애니메이션 컴포넌트 동적 로드
+  // 첫 번째 컴포넌트 동적 로드
   useEffect(() => {
     if (!step.component) { setAnimComp(null); return }
     const entry = registry[step.component]
@@ -33,6 +35,21 @@ export function ExplainStep({ step }: ExplainStepProps) {
     return () => { cancelled = true }
   }, [step.component])
 
+  // 두 번째 컴포넌트 동적 로드 (선택적)
+  useEffect(() => {
+    if (!step.component2) { setAnimComp2(null); return }
+    const entry = registry[step.component2]
+    if (!entry) return
+    let cancelled = false
+    entry.load().then((mod) => {
+      if (cancelled) return
+      const m = mod as Record<string, any>
+      const Comp = entry.exportName ? m[entry.exportName] : m.default
+      if (Comp) setAnimComp2(() => Comp)
+    }).catch(() => {})
+    return () => { cancelled = true }
+  }, [step.component2])
+
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2">
@@ -46,17 +63,14 @@ export function ExplainStep({ step }: ExplainStepProps) {
       {step.content && <div className="space-y-3">{renderContent(step.content)}</div>}
 
       {AnimComp && (
-        <div className="rounded-xl overflow-hidden bg-gradient-to-b from-indigo-50 to-white border border-indigo-200 p-4">
-          <div className="flex items-start justify-between mb-3">
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-lg">🎬</span>
-                <span className="text-sm font-bold text-indigo-700">{t("코드 살펴보기", "Watch the code")}</span>
-              </div>
-              <p className="text-xs text-indigo-400 mt-0.5 ml-7">{t("애니메이션을 보면서 코드의 동작을 확인해봐요!", "Watch how the code works step by step!")}</p>
-            </div>
-          </div>
+        <div className="rounded-xl overflow-hidden">
           <AnimComp lang={lang} onSuccess={() => {}} />
+        </div>
+      )}
+
+      {AnimComp2 && (
+        <div className="rounded-xl overflow-hidden">
+          <AnimComp2 lang={lang} onSuccess={() => {}} />
         </div>
       )}
 

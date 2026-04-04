@@ -71,8 +71,8 @@ export function createSmartSession(
       const lid = String(q.lessonId)
       return completedLessons.has(lid)
     })
-    // 완료한 레슨이 있지만 문제가 너무 적으면 전체 풀 사용
-    if (pool.length < totalCount) {
+    // 문제가 아예 없을 때만 전체 풀 fallback (미학습 토픽 출제 방지)
+    if (pool.length === 0) {
       pool = allQuestions
     }
   }
@@ -83,6 +83,11 @@ export function createSmartSession(
 
   // 필터 후 문제가 부족하면 전체 풀 사용
   const effectivePool = filteredPool.length >= totalCount ? filteredPool : pool
+
+  // 문제 풀이 완전히 비어있으면 빈 세션 반환
+  if (effectivePool.length === 0) {
+    return { questions: [], reviewCount: 0, newCount: 0, retryQueue: new Map() }
+  }
 
   // 복습 문제 (오늘 복습 해야 하는 것)
   const reviewQuestions: QuizQuestion[] = []
@@ -205,6 +210,9 @@ export function getRetryQuestion(
 /**
  * 적응형 난이도 계산
  * 최근 N문제의 정답률로 난이도 추천
+ *
+ * @todo 현재 UI에서 호출하지 않음. 향후 퀴즈 설정 화면에서 추천 배지로 연결 예정.
+ *       연결 전까지 export만 유지.
  */
 export function calculateAdaptiveDifficulty(
   recentResults: boolean[],  // 최근 정답/오답 기록 (true=정답)

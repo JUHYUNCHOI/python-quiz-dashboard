@@ -74,7 +74,7 @@ When you create a variable, C++ **reserves memory space** right away. \`int\` ta
 |----------|---------|---------|
 | \`int\` | Integer | \`int age = 14;\` |
 | \`double\` | Decimal (float) | \`double pi = 3.14;\` |
-| \`string\` | Text | \`string name = "Alice";\` |
+| \`string\` | Text | \`string name = "Emma";\` |
 | \`char\` | Single character | \`char grade = 'A';\` |
 | \`bool\` | True/False | \`bool pass = true;\` |
 
@@ -110,7 +110,7 @@ Each type uses a **different amount of memory**. Check out the animation below t
           type: "fillblank" as const,
           title: "Fill in the blanks",
           content: "Pick the right type for each variable!",
-          code: "___ age = 14;\n___ pi = 3.14;\n___ name = \"Alice\";",
+          code: "___ age = 14;\n___ pi = 3.14;\n___ name = \"Emma\";",
           fillBlanks: [
             { id: 0, answer: "int", options: ["int", "double", "string", "char"] },
             { id: 1, answer: "double", options: ["int", "double", "string", "char"] },
@@ -125,7 +125,7 @@ Each type uses a **different amount of memory**. Check out the animation below t
           component: "cppCharBuilder",
           content: `\`\`\`cpp
 char grade = 'A';       // Single quotes → exactly 1 character
-string name = "Alice";  // Double quotes → text (string)
+string name = "Emma";  // Double quotes → text (string)
 \`\`\`
 
 | Quotes | Type | Examples |
@@ -140,10 +140,33 @@ In Python, \`' '\` and \`" "\` are the same, but in C++ they are **completely di
 💡 Why does char exist separately? A single character takes only 1 byte of memory. When storing a million characters, it's much more efficient than string!`
         },
         {
+          id: "ch1-ascii",
+          type: "explain",
+          title: "🔢 char's Secret — It's Actually a Number!",
+          content: `char values are stored internally as **integers**. Each character has a unique number called its **ASCII code**.
+
+\`\`\`cpp
+char c = 'A';
+cout << c << endl;        // A
+cout << (int)c << endl;   // 65 ← ASCII code of 'A'
+\`\`\`
+
+Common ASCII codes:
+| Character | ASCII |
+|-----------|-------|
+| \`'A'\` | 65 |
+| \`'Z'\` | 90 |
+| \`'a'\` | 97 |
+| \`'z'\` | 122 |
+| \`'0'\` | 48 |
+
+💡 Writing \`(int)c\` converts a char to its numeric value — this is called **type casting**!`,
+        },
+        {
           id: "ch1-practice",
           type: "practice" as const,
-          title: "✋ Create Your Own Variables!",
-          content: `Let's use int, double, and string to make a self-introduction program!
+          title: "✋ Create Your RPG Character!",
+          content: `Let's use int and string to display RPG character stats!
 
 **Type the code below** in your editor, compile it, and run it.`,
           code: `#include <iostream>
@@ -151,19 +174,22 @@ In Python, \`' '\` and \`" "\` are the same, but in C++ they are **completely di
 using namespace std;
 
 int main() {
-    string name = "Alice";
-    int age = 14;
-    double height = 165.5;
+    string name = "Slime";
+    int hp = 100;
+    int attack = 25;
+    int level = 3;
 
     cout << "Name: " << name << endl;
-    cout << "Age: " << age << " years old" << endl;
-    cout << "Height: " << height << "cm" << endl;
+    cout << "HP: " << hp << endl;
+    cout << "Attack: " << attack << endl;
+    cout << "Level: " << level << endl;
 
     return 0;
 }`,
-          expectedOutput: `Name: Alice
-Age: 14 years old
-Height: 165.5cm`
+          expectedOutput: `Name: Slime
+HP: 100
+Attack: 25
+Level: 3`
         },
         {
           id: "ch1-q1",
@@ -231,6 +257,59 @@ Want the decimal result? Make at least one side a double:
 \`7.0 / 2\` → \`3.5\` ✅`
         },
         {
+          id: "ch2-casting",
+          type: "explain",
+          title: "🔧 Type Casting",
+          content: `**Type casting** means explicitly converting a value to a different type.
+
+The syntax is simple:
+\`\`\`cpp
+(target_type) value
+\`\`\`
+
+**① int ↔ double casting**
+\`\`\`cpp
+int a = 7, b = 2;
+double result = (double)a / b;  // 3.5 ✅
+// (double)a converts to 7.0 first → 7.0 / 2 = 3.5
+\`\`\`
+
+Watch out! Parentheses placement matters:
+\`\`\`cpp
+(double)(a / b)  // ❌ 3.0  → division happens first!
+(double)a / b    // ✅ 3.5  → a is cast first, then divided
+\`\`\`
+
+**② char ↔ int casting**
+\`\`\`cpp
+char c = 'A';
+cout << (int)c << endl;   // 65  (char → int: prints ASCII code)
+
+int n = 66;
+cout << (char)n << endl;  // B   (int → char: ASCII code → character)
+\`\`\`
+
+💡 Same as Python's \`ord('A')\` = 65 and \`chr(66)\` = 'B'!`,
+        },
+        {
+          id: "ch2-casting-q1",
+          type: "quiz",
+          title: "Casting quiz!",
+          content: `What does this code print?\n\n\`\`\`cpp\nint a = 5, b = 2;\ncout << (double)a / b << endl;\n\`\`\``,
+          options: ["2", "2.5", "2.0", "Error"],
+          answer: 1,
+          explanation: "(double)a converts a to 5.0 first, then divides by b (=2). 5.0 / 2 = 2.5! If it were (double)(a/b), you'd get 2.0."
+        },
+        {
+          id: "ch2-casting-q2",
+          type: "quiz",
+          title: "char casting!",
+          content: `What does this code print?\n\n\`\`\`cpp\n// Note: 'A' = 65\nint n = 66;\ncout << (char)n << endl;\n\`\`\``,
+          options: ["66", "B", "A", "Error"],
+          answer: 1,
+          explanation: "(char)66 prints the character with ASCII code 66, which is 'B'. 'A'=65, 'B'=66, 'C'=67."
+        },
+        {
           id: "ch2-pred1",
           type: "predict" as const,
           title: "Watch out for this trap! 🕳️",
@@ -289,30 +368,42 @@ string s = to_string(456);   // int → string "456"
         {
           id: "ch2-practice",
           type: "practice" as const,
-          title: "✋ Try Type Conversion Yourself!",
-          content: `Let's use stoi, stod, and to_string to convert between strings and numbers!
+          title: "✋ Damage Calculator!",
+          content: `Two variables are already declared below:
 
-Run it and try changing the values to see what happens!`,
-          code: `#include <iostream>
+\`\`\`cpp
+string rawDamage = "25";      // damage as a string
+string rawMultiplier = "1.5"; // multiplier as a string
+\`\`\`
+
+1. Convert \`rawDamage\` to an integer and print it doubled (25 × 2 = 50)
+2. Convert \`rawMultiplier\` to a double and print it doubled (1.5 × 2 = 3)
+3. Convert the damage (50) to a string using \`to_string()\` and **concatenate** \`" damage!"\` to print it
+
+💡 **Hint** — pass the variable directly into the function:
+\`\`\`cpp
+int dmg = stoi(rawDamage);         // rawDamage string → int
+double mult = stod(rawMultiplier); // rawMultiplier string → double
+\`\`\`
+String concatenation: convert a number to string first with \`to_string()\`:
+\`\`\`cpp
+cout << to_string(dmg * 2) + " damage!" << endl;
+\`\`\``,
+          starterCode: `#include <iostream>
 #include <string>
 using namespace std;
 
 int main() {
-    string numStr = "42";
-    int num = stoi(numStr);
-    cout << num + 8 << endl;
+    string rawDamage = "25";
+    string rawMultiplier = "1.5";
 
-    double pi = stod("3.14");
-    cout << pi * 2 << endl;
-
-    string result = to_string(100) + " points";
-    cout << result << endl;
+    // Write your code here
 
     return 0;
 }`,
           expectedOutput: `50
-6.28
-100 points`
+3
+50 damage!`
         },
         {
           id: "ch2-q1",
@@ -370,12 +461,12 @@ int main() {
           id: "ch3-q1",
           type: "quiz",
           title: "Python → C++",
-          content: `How do you convert Python's \`name = "Alice"\` to C++?`,
+          content: `How do you convert Python's \`name = "Emma"\` to C++?`,
           options: [
-            `char name = "Alice";`,
-            `string name = "Alice";`,
-            `str name = "Alice";`,
-            `text name = "Alice";`
+            `char name = "Emma";`,
+            `string name = "Emma";`,
+            `str name = "Emma";`,
+            `text name = "Emma";`
           ],
           answer: 1,
           explanation: "C++ uses string for text! char holds only 1 character, and str/text don't exist in C++."

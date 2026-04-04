@@ -2,8 +2,8 @@ import { LessonData } from '../types';
 
 export const lessonCpp15: LessonData = {
     id: "cpp-15",
-    title: "pair & 정렬",
-    description: "pair와 sort 복습!",
+    title: "pair & tuple",
+    description: "pair와 tuple 복습!",
     language: "cpp",
     steps: [
       // ==================== CHAPTER 1: pair ====================
@@ -30,20 +30,18 @@ export const lessonCpp15: LessonData = {
         }
       },
 
-      // make_pair 설명
       {
         type: "explain",
         content: {
           lines: [
             "make_pair()로 더 간편하게 pair를 만들 수 있어요! ⚡",
-            "타입을 자동으로 추론해줘요."
+            "중괄호 초기화도 OK!"
           ],
-          code: 'pair<string, int> p1("영희", 88);    // 직접 생성\nauto p2 = make_pair("민수", 92);     // make_pair 사용',
+          code: 'pair<string, int> p1 = {"영희", 88};     // 중괄호 초기화\nauto p2 = make_pair("민수", 92);          // make_pair 사용',
           note: "make_pair는 타입을 안 써도 알아서 추론!"
         }
       },
 
-      // 예측 퀴즈
       {
         type: "explain",
         content: {
@@ -60,7 +58,6 @@ export const lessonCpp15: LessonData = {
         }
       },
 
-      // Lv.1: pair 타입 빈칸
       {
         type: "practice",
         content: {
@@ -74,7 +71,6 @@ export const lessonCpp15: LessonData = {
         }
       },
 
-      // Lv.1: first/second 빈칸
       {
         type: "practice",
         content: {
@@ -87,7 +83,6 @@ export const lessonCpp15: LessonData = {
         }
       },
 
-      // 퀴즈
       {
         type: "quiz",
         content: {
@@ -98,7 +93,6 @@ export const lessonCpp15: LessonData = {
         }
       },
 
-      // 에러 퀴즈
       {
         type: "errorQuiz",
         content: {
@@ -114,7 +108,6 @@ export const lessonCpp15: LessonData = {
         }
       },
 
-      // Lv.2: make_pair 빈칸
       {
         type: "practice",
         content: {
@@ -127,7 +120,6 @@ export const lessonCpp15: LessonData = {
         }
       },
 
-      // 보상
       {
         type: "reward",
         content: {
@@ -136,7 +128,6 @@ export const lessonCpp15: LessonData = {
         }
       },
 
-      // 챕터 1 요약
       {
         type: "summary",
         content: {
@@ -145,7 +136,7 @@ export const lessonCpp15: LessonData = {
           learned: [
             "pair<타입1, 타입2> — 두 값을 하나로 묶기",
             ".first — 첫 번째 값, .second — 두 번째 값",
-            "make_pair()로 간편하게 생성",
+            "make_pair() 또는 {값1, 값2}로 생성",
             "파이썬 tuple(a, b)와 비슷!"
           ],
           canDo: "pair로 두 값을 묶고, first/second로 접근할 수 있어요!",
@@ -153,17 +144,16 @@ export const lessonCpp15: LessonData = {
         }
       },
 
-      // ==================== CHAPTER 2: sort 정렬 ====================
+      // ==================== CHAPTER 2: pair 비교 & 벡터 ====================
       {
         type: "chapter",
         content: {
           num: 2,
-          title: "sort 정렬",
-          desc: "sort()와 커스텀 정렬을 복습해요!"
+          title: "pair 비교 & vector<pair>",
+          desc: "pair끼리 비교하고, 벡터에 저장해봐요!"
         }
       },
 
-      // 인터리빙: 챕터1 복습
       {
         type: "interleaving",
         content: {
@@ -179,224 +169,78 @@ export const lessonCpp15: LessonData = {
         type: "explain",
         content: {
           lines: [
-            "sort()는 벡터나 배열을 정렬해요! 📊",
-            "기본은 오름차순(작은 → 큰 순서)!",
-            "파이썬의 .sort()와 비슷하지만, begin/end를 넘겨줘요."
+            "pair끼리 <, > 로 비교할 수 있어요! 🔍",
+            "먼저 first를 비교하고, 같으면 second를 비교해요.",
+            "그래서 vector<pair>를 sort()하면 first 기준으로 자동 정렬!"
           ],
-          code: '#include <algorithm>\n#include <vector>\nusing namespace std;\n\nvector<int> v = {5, 2, 8, 1, 9};\nsort(v.begin(), v.end());\n// v = {1, 2, 5, 8, 9}',
-          result: "1 2 5 8 9",
-          note: "sort(시작, 끝) — <algorithm> 헤더 필요!"
+          code: 'vector<pair<int,string>> v = {\n    {3, "C"}, {1, "A"}, {2, "B"}, {1, "D"}\n};\nsort(v.begin(), v.end());\n// 결과: {1,"A"}, {1,"D"}, {2,"B"}, {3,"C"}',
+          note: "first가 같으면 second 기준으로 정렬!"
         }
       },
 
-      // 예측 퀴즈
       {
         type: "explain",
         content: {
           lines: [
-            "내림차순 정렬은 greater<int>()를 세 번째 인자로!",
-            "또는 rbegin/rend를 쓸 수도 있어요."
+            "pair 비교 연산자를 직접 확인해봐요!"
           ],
-          code: 'vector<int> v = {5, 2, 8, 1, 9};\nsort(v.begin(), v.end(), greater<int>());\ncout << v[0] << " " << v[4] << endl;',
+          code: 'pair<int,int> a = {1, 10};\npair<int,int> b = {1, 5};\nif (a > b) cout << "A";\nelse cout << "B";',
           predict: {
             question: "출력 결과는?",
-            options: ["1 9", "9 1", "5 2"],
-            answer: 1,
-            feedback: "greater<int>()는 내림차순! 가장 큰 9가 앞, 가장 작은 1이 뒤!"
+            options: ["A", "B", "에러"],
+            answer: 0,
+            feedback: "first는 둘 다 1로 같아요. second를 비교하면 10 > 5이므로 a > b → A!"
           }
         }
       },
 
-      // Lv.1: sort 빈칸
-      {
-        type: "practice",
-        content: {
-          level: 1,
-          task: "벡터를 오름차순으로 정렬해요!",
-          guide: "sort(시작, 끝) 형태!",
-          template: "sort(v.___(), v.___());",
-          answer: "begin",
-          blanksAnswer: ["begin", "end"],
-          expect: "sort(v.begin(), v.end());"
-        }
-      },
-
-      // 퀴즈
-      {
-        type: "quiz",
-        content: {
-          question: "sort()를 쓰려면 어떤 헤더가 필요할까요?",
-          options: ["<iostream>", "<vector>", "<algorithm>", "<sort>"],
-          answer: 2,
-          explanation: "sort()는 <algorithm> 헤더에 들어있어요!"
-        }
-      },
-
-      // 람다 정렬 설명
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "람다(lambda)로 정렬 기준을 직접 만들 수 있어요! 🎯",
-            "파이썬의 key=lambda와 비슷해요!",
-            "[](매개변수) { return 비교조건; }"
-          ],
-          code: 'vector<string> names = {"banana", "apple", "cherry"};\nsort(names.begin(), names.end(), [](string a, string b) {\n    return a.size() < b.size();  // 짧은 것부터\n});\n// names = {"apple", "banana", "cherry"}',
-          result: "apple banana cherry",
-          note: "람다 = 이름 없는 함수! []가 캡처, ()가 매개변수!"
-        }
-      },
-
-      // Lv.2: 내림차순 정렬 빈칸
       {
         type: "practice",
         content: {
           level: 2,
-          task: "벡터를 내림차순으로 정렬해요!",
-          guide: "세 번째 인자로 greater를 써요!",
-          template: "sort(v.begin(), v.end(), ___<int>());",
-          answer: "greater",
-          expect: "sort(v.begin(), v.end(), greater<int>());"
+          task: "vector<pair<string, int>>에 학생 2명을 추가해봐요!",
+          guide: "push_back({이름, 점수}) 형태!",
+          template: 'vector<pair<string, int>> v;\nv.___({\"Kim\", 95});\nv.___({\"Lee\", 88});',
+          answer: "push_back",
+          blanksAnswer: ["push_back", "push_back"],
+          expect: 'vector<pair<string, int>> v;\nv.push_back({"Kim", 95});\nv.push_back({"Lee", 88});'
         }
       },
 
-      // 에러 퀴즈
       {
-        type: "errorQuiz",
+        type: "quiz",
         content: {
-          question: "이 코드는 왜 에러일까요?",
-          code: '#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> v = {3, 1, 2};\n    sort(v.begin(), v.end());\n    return 0;\n}',
-          options: [
-            "#include <algorithm>이 빠져서",
-            "vector가 빈칸이라서",
-            "sort()의 인자가 틀려서"
-          ],
-          answer: 0,
-          explanation: "sort()는 <algorithm> 헤더에 있어요! #include <algorithm>을 추가해야 해요."
+          question: "pair<int,int> a={2,5}; pair<int,int> b={2,3}; 일 때 a < b 는?",
+          options: ["true (2<2 이니까)", "false (5>3 이니까)", "에러"],
+          answer: 1,
+          explanation: "first가 같으면(2==2) second를 비교해요. 5 > 3이므로 a > b → a < b는 false!"
         }
       },
 
-      // 보상
       {
         type: "reward",
         content: {
-          message: "sort 정렬 완벽!",
-          emoji: "📊"
+          message: "pair 비교 완벽!",
+          emoji: "🔍"
         }
       },
 
-      // 챕터 2 요약
       {
         type: "summary",
         content: {
           num: 2,
-          title: "sort 정렬",
+          title: "pair 비교 & vector<pair>",
           learned: [
-            "sort(begin, end) — 오름차순 정렬",
-            "sort(begin, end, greater<타입>()) — 내림차순",
-            "람다로 커스텀 정렬 기준 만들기",
-            "<algorithm> 헤더 필요!"
+            "pair는 < > == 비교 연산자 자동 지원",
+            "비교 순서: first 먼저, 같으면 second",
+            "vector<pair>를 sort()하면 first 기준 자동 정렬",
+            "점수+이름 묶어서 정렬할 때 아주 유용!"
           ],
-          canDo: "sort()로 벡터를 오름차순/내림차순/커스텀 정렬할 수 있어요!",
-          emoji: "📊"
+          canDo: "pair끼리 비교하고 vector<pair>를 정렬할 수 있어요!",
+          emoji: "🔍"
         }
       },
 
-      // ==================== CHAPTER 3: 종합 프로젝트 ====================
-      {
-        type: "chapter",
-        content: {
-          num: 3,
-          title: "프로젝트: 학생 점수 정렬",
-          desc: "pair 벡터로 학생 점수를 정렬해요!"
-        }
-      },
-
-      // 인터리빙: 챕터2 복습
-      {
-        type: "interleaving",
-        content: {
-          message: "잠깐! sort 사용법 기억나요?",
-          task: "벡터 v를 오름차순 정렬하는 코드를 써봐요!",
-          template: null,
-          answer: "sort(v.begin(), v.end());",
-          alternateAnswers: [
-            "sort(v.begin(), v.end())"
-          ],
-          expect: "sort(v.begin(), v.end());"
-        }
-      },
-
-      // 종합 예측
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "pair<string, int> 벡터를 점수 기준으로 정렬해봐요!",
-            "람다에서 .second를 비교하면 점수 기준 정렬!"
-          ],
-          code: 'vector<pair<string, int>> students = {\n    {"철수", 85}, {"영희", 92}, {"민수", 78}\n};\nsort(students.begin(), students.end(),\n    [](auto a, auto b) { return a.second > b.second; });\ncout << students[0].first << ": " << students[0].second << endl;',
-          predict: {
-            question: "출력 결과는?",
-            options: ["철수: 85", "영희: 92", "민수: 78"],
-            answer: 1,
-            feedback: "내림차순(>)이니까 가장 높은 점수 92점인 영희가 맨 앞!"
-          }
-        }
-      },
-
-      // 프로젝트 Step 1
-      {
-        type: "project",
-        content: {
-          step: 1,
-          total: 3,
-          task: "헤더와 using namespace std를 써봐요!",
-          target: "#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;",
-          hint: "iostream, vector, algorithm 세 개!",
-          done: [],
-          answer: "#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;"
-        }
-      },
-
-      // 프로젝트 Step 2
-      {
-        type: "project",
-        content: {
-          step: 2,
-          total: 3,
-          task: "pair 벡터에 학생 3명을 넣어요!",
-          target: 'vector<pair<string, int>> students = {\n    {"철수", 85}, {"영희", 92}, {"민수", 78}\n};',
-          hint: 'vector<pair<string, int>> students = { {"이름", 점수}, ... };',
-          done: ["#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint main() {"],
-          answer: 'vector<pair<string, int>> students = {\n    {"철수", 85}, {"영희", 92}, {"민수", 78}\n};'
-        }
-      },
-
-      // 프로젝트 Step 3
-      {
-        type: "project",
-        content: {
-          step: 3,
-          total: 3,
-          task: "점수 내림차순으로 정렬하는 sort를 써봐요!",
-          target: "sort(students.begin(), students.end(),\n    [](auto a, auto b) { return a.second > b.second; });",
-          hint: "람다에서 a.second > b.second 로 내림차순!",
-          done: ["#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint main() {", 'vector<pair<string, int>> students = {\n    {"철수", 85}, {"영희", 92}, {"민수", 78}\n};'],
-          answer: "sort(students.begin(), students.end(),\n    [](auto a, auto b) { return a.second > b.second; });"
-        }
-      },
-
-      // 보상
-      {
-        type: "reward",
-        content: {
-          message: "학생 점수 정렬 프로젝트 완성!",
-          emoji: "🏆"
-        }
-      },
-
-      // done
       {
         type: "done",
         content: {}

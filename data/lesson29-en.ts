@@ -4,7 +4,7 @@
 import { LessonData } from './types'
 
 export const lesson29EnData: LessonData = {
-  id: "29en",
+  id: "29",
   title: "Vocabulary Book Program",
   emoji: "📖",
   description: "Build a vocabulary book with dictionaries! Add, search, and delete words!",

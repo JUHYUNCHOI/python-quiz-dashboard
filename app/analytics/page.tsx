@@ -17,9 +17,32 @@ import { Button } from "@/components/ui/button"
 
 export default function AnalyticsPage() {
   const [showSettings, setShowSettings] = useState(false)
-  const { profile } = useAuth()
+  const { profile, isAuthenticated, isLoading } = useAuth()
   const { t } = useLanguage()
   const displayName = profile?.display_name || t("학습자", "Learner")
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center">
+        <div className="text-5xl animate-bounce">🦒</div>
+      </div>
+    )
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center p-4">
+        <div className="text-center max-w-sm">
+          <div className="text-6xl mb-4">📊</div>
+          <h2 className="text-xl font-bold text-slate-800 mb-2">{t("로그인이 필요해요", "Login Required")}</h2>
+          <p className="text-slate-500 mb-6">{t("학습 분석을 보려면 먼저 로그인해주세요.", "Please login to view your learning analytics.")}</p>
+          <a href="/login" className="inline-block px-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors">
+            {t("로그인하기", "Login")}
+          </a>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
@@ -31,11 +54,11 @@ export default function AnalyticsPage() {
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-slate-800">{t("학습 분석 대시보드", "Learning Analytics")}</h1>
-            <p className="mt-2 text-slate-600">{t(`${displayName}님의 학습 패턴과 성장을 확인하세요`, `Check ${displayName}'s learning patterns and growth`)}</p>
+            <p className="mt-2 text-slate-600">{t(`${displayName}님의 학습 패턴과 성장을 확인하세요`, `${displayName}'s learning patterns and progress`)}</p>
           </div>
           <Button onClick={() => setShowSettings(!showSettings)} variant="outline" size="lg" className="gap-2">
             <Settings className="h-5 w-5" />
-            설정
+            {t("설정", "Settings")}
           </Button>
         </div>
 

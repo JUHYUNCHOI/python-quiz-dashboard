@@ -72,6 +72,22 @@ s[-1]           # top (check last element)
 
 💡 C++'s \`pop()\` does **NOT return** a value! First check the value with \`top()\`, then remove it with \`pop()\`.
 
+**Stack function reference**
+
+| Function | Syntax | Description |
+|---|---|---|
+| push | \`s.push(x)\` | Add to top |
+| pop | \`s.pop()\` | Remove from top (no return value!) |
+| top | \`s.top()\` | Check top value (doesn't remove) |
+| size | \`s.size()\` | Number of elements |
+| empty | \`s.empty()\` | Returns true if empty |
+
+⚠️ \`pop()\` does not return the value! To use the value, check it with \`top()\` first, then call \`pop()\`:
+\`\`\`cpp
+int val = s.top();  // read the value
+s.pop();            // then remove it
+\`\`\`
+
 **Why use stack instead of vector?**
 You can use vector with push_back/pop_back to mimic a stack. So why use stack separately? To **make your intent clear**! Using stack is a promise that says 'this code only uses LIFO operations.' It also prevents accidentally accessing middle elements.
 
@@ -150,6 +166,17 @@ q[0]              # front
 | \`q.popleft()\` → returns value | \`q.pop()\` → no return value! |
 | \`q[0]\` | \`q.front()\` |
 | \`q[-1]\` | \`q.back()\` |
+
+**Queue function reference**
+
+| Function | Syntax | Description |
+|---|---|---|
+| push | \`q.push(x)\` | Add to back |
+| pop | \`q.pop()\` | Remove from front (no return value!) |
+| front | \`q.front()\` | Check front value |
+| back | \`q.back()\` | Check back value |
+| size | \`q.size()\` | Number of elements |
+| empty | \`q.empty()\` | Returns true if empty |
 
 💡 Queue is **essential for BFS (Breadth-First Search)**! You'll always need it for graph traversal.`
         },
@@ -555,32 +582,96 @@ cout << pq.top();
           explanation: "priority_queue is a max-heap by default! Among 3,1,4,1,5 the largest value 5 goes to top()."
         },
         {
+          id: "ch3-simulation",
+          type: "explain",
+          title: "🎮 LIFO vs FIFO — See the Difference!",
+          content: `Let's push the same data into both a stack and a queue, then see how differently they come out!
+
+**Push data in order: 1 → 2 → 3**
+
+\`\`\`cpp
+// push into stack
+stack<int> s;
+s.push(1); s.push(2); s.push(3);
+
+// push into queue
+queue<int> q;
+q.push(1); q.push(2); q.push(3);
+\`\`\`
+
+**Stack internal state** (top is at the right):
+\`\`\`
+push 1 → [1]           top = 1
+push 2 → [1, 2]        top = 2
+push 3 → [1, 2, 3]     top = 3
+\`\`\`
+
+**Queue internal state** (flows left → right):
+\`\`\`
+push 1 → front [1] back
+push 2 → front [1, 2] back
+push 3 → front [1, 2, 3] back
+\`\`\`
+
+---
+
+**Now pop everything out — what order do they come out in?**
+
+\`\`\`cpp
+// pop from stack
+while (!s.empty()) {
+    cout << s.top() << " ";
+    s.pop();
+}
+// Output: 3 2 1  ← reversed! (LIFO)
+
+// pop from queue
+while (!q.empty()) {
+    cout << q.front() << " ";
+    q.pop();
+}
+// Output: 1 2 3  ← same order as inserted! (FIFO)
+\`\`\`
+
+**stack**: 3 → 2 → 1 (last in comes out first)
+**queue**: 1 → 2 → 3 (first in comes out first)
+
+---
+
+**Real-world analogies**
+
+| Data structure | Principle | Real-world example |
+|---|---|---|
+| stack (LIFO) | Last in → first out | Stacking plates, browser back button, undo |
+| queue (FIFO) | First in → first out | Waiting in line, printer queue, message processing |
+| deque | Insert/remove from both ends | Two-way line, card deck |
+| priority_queue | Highest priority first | ER triage order, task scheduling |
+
+💡 How these data structures are used in actual algorithms (graph traversal, shortest path, etc.) is covered in the **Algorithm Lab**!`
+        },
+        {
           id: "ch3-summary",
           type: "explain",
           title: "🎉 Lesson 18 Complete!",
           content: `## 🏆 What we learned today!
 
-### 📦 stack (LIFO)
+### 📦 stack (LIFO — last in, first out)
 - \`#include <stack>\`
-- \`push()\`, \`pop()\`, \`top()\`, \`empty()\`, \`size()\`
-- Use cases: bracket matching, undo, DFS
+- \`push(x)\` add, \`top()\` peek, \`pop()\` remove, \`empty()\`, \`size()\`
 
-### 📦 queue (FIFO)
+### 📦 queue (FIFO — first in, first out)
 - \`#include <queue>\`
-- \`push()\`, \`pop()\`, \`front()\`, \`back()\`
-- Use cases: BFS, waiting lines
+- \`push(x)\` add, \`front()\` peek front, \`back()\` peek back, \`pop()\` remove
 
 ### ⚡ deque (Double-Ended Queue)
 - \`#include <deque>\`
 - \`push_front()\`, \`push_back()\`, \`pop_front()\`, \`pop_back()\`
 - Index access works! \`dq[i]\`
-- Use cases: sliding window, when you need both ends
 
 ### ⚡ priority_queue (Heap)
 - \`#include <queue>\`
 - Default: **max-heap** (largest at top)
 - Min-heap: \`priority_queue<int, vector<int>, greater<int>>\`
-- Use cases: quick max/min lookup, Dijkstra
 
 | Data Structure | Access Function | Pop Location |
 |---|---|---|

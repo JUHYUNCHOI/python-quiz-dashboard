@@ -2,8 +2,11 @@
 
 import { Card } from "@/components/ui/card"
 import { CheckCircle2, Clock, Target, Zap } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 export function DailyActivityTimeline() {
+  const { t } = useLanguage()
+
   const dailyActivities = [
     {
       date: "10월 24일 (목)",
@@ -12,7 +15,10 @@ export function DailyActivityTimeline() {
       timeSpent: 25,
       accuracy: 85,
       focus: 92,
-      indicators: ["⚡ 집중도 높음", "🎯 세심하게 풀었어요"],
+      indicators: [
+        t("⚡ 집중도 높음", "⚡ High focus"),
+        t("🎯 세심하게 풀었어요", "🎯 Thorough solving"),
+      ],
       status: "excellent",
     },
     {
@@ -22,7 +28,10 @@ export function DailyActivityTimeline() {
       timeSpent: 18,
       accuracy: 78,
       focus: 65,
-      indicators: ["💭 약간 산만했어요", "⏱️ 빠르게 풀었어요"],
+      indicators: [
+        t("💭 약간 산만했어요", "💭 Slightly distracted"),
+        t("⏱️ 빠르게 풀었어요", "⏱️ Solved quickly"),
+      ],
       status: "good",
     },
     {
@@ -32,7 +41,10 @@ export function DailyActivityTimeline() {
       timeSpent: 32,
       accuracy: 90,
       focus: 95,
-      indicators: ["⚡ 집중도 높음", "🎯 세심하게 풀었어요"],
+      indicators: [
+        t("⚡ 집중도 높음", "⚡ High focus"),
+        t("🎯 세심하게 풀었어요", "🎯 Thorough solving"),
+      ],
       status: "excellent",
     },
     {
@@ -42,14 +54,14 @@ export function DailyActivityTimeline() {
       timeSpent: 22,
       accuracy: 73,
       focus: 70,
-      indicators: ["💭 약간 산만했어요"],
+      indicators: [t("💭 약간 산만했어요", "💭 Slightly distracted")],
       status: "warning",
     },
   ]
 
   return (
     <Card className="p-6 bg-white shadow-lg">
-      <h2 className="text-xl font-bold text-slate-800 mb-6">일일 활동 타임라인</h2>
+      <h2 className="text-xl font-bold text-slate-800 mb-6">{t("일일 활동 타임라인", "Daily Activity Timeline")}</h2>
 
       <div className="space-y-4">
         {dailyActivities.map((activity, index) => (
@@ -70,7 +82,7 @@ export function DailyActivityTimeline() {
                 <div className="mt-2 flex items-center gap-2">
                   <CheckCircle2 className="h-5 w-5 text-green-600" />
                   <span className="font-semibold text-slate-700">
-                    {activity.completed}/{activity.total} 완료
+                    {activity.completed}/{activity.total} {t("완료", "done")}
                   </span>
                 </div>
               </div>
@@ -79,15 +91,15 @@ export function DailyActivityTimeline() {
               <div className="flex flex-wrap gap-4 text-sm">
                 <div className="flex items-center gap-2">
                   <Clock className="h-4 w-4 text-slate-600" />
-                  <span className="text-slate-700">{activity.timeSpent}분</span>
+                  <span className="text-slate-700">{activity.timeSpent}{t("분", " min")}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Target className="h-4 w-4 text-slate-600" />
-                  <span className="text-slate-700">{activity.accuracy}% 정답</span>
+                  <span className="text-slate-700">{activity.accuracy}% {t("정답", "correct")}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Zap className="h-4 w-4 text-slate-600" />
-                  <span className="text-slate-700">집중도 {activity.focus}%</span>
+                  <span className="text-slate-700">{t("집중도", "Focus")} {activity.focus}%</span>
                 </div>
               </div>
 

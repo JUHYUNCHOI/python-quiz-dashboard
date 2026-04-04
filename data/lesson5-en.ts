@@ -4,7 +4,7 @@
 import { LessonData } from './types'
 
 export const lesson5EnData: LessonData = {
-  id: "5en",
+  id: "5",
   title: "String Operations",
   emoji: "🔗",
   description: "Let's add and multiply strings!",

@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { cn } from "@/lib/utils"
 import type { QuizFeedback } from "@/lib/feedback-analyzer"
 
@@ -7,9 +8,10 @@ interface Props {
   feedback: QuizFeedback
   t: (ko: string, en: string) => string
   visible: boolean
+  nextActionHref?: string
 }
 
-export function QuizFeedbackCard({ feedback, t, visible }: Props) {
+export function QuizFeedbackCard({ feedback, t, visible, nextActionHref }: Props) {
   if (!visible) return null
 
   const toneColors = {
@@ -84,15 +86,30 @@ export function QuizFeedbackCard({ feedback, t, visible }: Props) {
       )}
 
       {/* 다음 행동 추천 */}
-      <div className={cn(
-        "flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-bold",
-        feedback.nextAction.type === "advance" ? "bg-indigo-100 text-indigo-700" :
-        feedback.nextAction.type === "review" ? "bg-amber-100 text-amber-700" :
-        "bg-blue-100 text-blue-700"
-      )}>
-        <span>{feedback.nextAction.type === "advance" ? "🚀" : feedback.nextAction.type === "review" ? "📖" : "🔄"}</span>
-        <span>{t(feedback.nextAction.ko, feedback.nextAction.en)}</span>
-      </div>
+      {nextActionHref ? (
+        <Link href={nextActionHref} className={cn(
+          "flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl text-sm font-bold transition-opacity hover:opacity-80",
+          feedback.nextAction.type === "advance" ? "bg-indigo-100 text-indigo-700" :
+          feedback.nextAction.type === "review" ? "bg-amber-100 text-amber-700" :
+          "bg-blue-100 text-blue-700"
+        )}>
+          <div className="flex items-center gap-2">
+            <span>{feedback.nextAction.type === "advance" ? "🚀" : feedback.nextAction.type === "review" ? "📖" : "🔄"}</span>
+            <span>{t(feedback.nextAction.ko, feedback.nextAction.en)}</span>
+          </div>
+          <span className="text-xs opacity-60">→</span>
+        </Link>
+      ) : (
+        <div className={cn(
+          "flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-bold",
+          feedback.nextAction.type === "advance" ? "bg-indigo-100 text-indigo-700" :
+          feedback.nextAction.type === "review" ? "bg-amber-100 text-amber-700" :
+          "bg-blue-100 text-blue-700"
+        )}>
+          <span>{feedback.nextAction.type === "advance" ? "🚀" : feedback.nextAction.type === "review" ? "📖" : "🔄"}</span>
+          <span>{t(feedback.nextAction.ko, feedback.nextAction.en)}</span>
+        </div>
+      )}
     </div>
   )
 }

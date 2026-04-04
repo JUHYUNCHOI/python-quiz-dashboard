@@ -45,6 +45,70 @@ NEXT i
 이 코드 3줄이 위의 5줄과 같은 일을 해요!`
         },
         {
+          id: "ch1-detail",
+          type: "explain",
+          title: "📋 FOR 반복문의 동작 방식",
+          content: `단계별로 살펴봐요:
+
+\`\`\`
+FOR counter ← 1 TO 3
+    OUTPUT "안녕!"
+NEXT counter
+\`\`\`
+
+| 단계 | counter | 동작 |
+|---|---|---|
+| 1번째 | 1 | OUTPUT "안녕!" |
+| 2번째 | 2 | OUTPUT "안녕!" |
+| 3번째 | 3 | OUTPUT "안녕!" |
+
+결과:
+\`\`\`
+안녕!
+안녕!
+안녕!
+\`\`\`
+
+핵심 규칙:
+- counter는 첫 번째 숫자(1)에서 **시작**해요
+- 매번 **1씩 증가**해요
+- 마지막 숫자(3)에 도달하면 **멈춰요**
+- 항상 **NEXT 변수이름**으로 닫아야 해요!`
+        },
+        {
+          id: "ch1-step",
+          type: "explain",
+          title: "⏩ STEP 사용하기",
+          content: `**STEP**을 사용하면 counter가 증가하는 양을 바꿀 수 있어요:
+
+\`\`\`
+FOR i ← 0 TO 10 STEP 2
+    OUTPUT i
+NEXT i
+\`\`\`
+
+결과:
+\`\`\`
+0
+2
+4
+6
+8
+10
+\`\`\`
+
+매번 2씩 증가해요!
+
+역방향 카운트도 가능해요:
+\`\`\`
+FOR i ← 5 TO 1 STEP -1
+    OUTPUT i
+NEXT i
+\`\`\`
+
+결과: 5, 4, 3, 2, 1 — 카운트다운!`
+        },
+        {
           id: "ch1-syntax",
           type: "explain",
           title: "📝 FOR...TO...NEXT 문법",
@@ -159,6 +223,27 @@ count가 6이 되면 \`6 <= 5\`가 거짓이라 멈춰요!
 {!red} ⚠️ **주의! 무한루프 위험!** — \`count ← count + 1\`을 빼먹으면 count가 영원히 1이라 조건이 항상 참 → **프로그램이 멈추지 않아요!**
 
 WHILE문에서는 반드시 **조건이 언젠가 거짓이 되도록** 값을 바꿔줘야 해요!`
+        },
+        {
+          id: "ch2-example",
+          type: "explain",
+          title: "📋 실용적인 WHILE 반복문",
+          content: `WHILE 반복문은 사용자 입력 검증에 유용해요:
+
+\`\`\`
+OUTPUT "양수를 입력하세요:"
+INPUT num
+WHILE num <= 0
+    OUTPUT "잘못된 값! 다시 입력하세요:"
+    INPUT num
+ENDWHILE
+OUTPUT "입력한 값: ", num
+\`\`\`
+
+사용자가 양수를 입력할 때까지 계속 물어봐요!
+
+**중요:** 조건은 반복문 본문이 실행되기 **전에** 확인해요.
+\`num\`이 처음부터 양수라면 반복문은 아예 실행되지 않아요.`
         },
         {
           id: "ch2-predict1",

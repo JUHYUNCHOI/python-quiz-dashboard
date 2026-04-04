@@ -139,31 +139,44 @@ if (pos != string::npos) {
         {
           id: "ch1-practice",
           type: "practice" as const,
-          title: "✋ Word Finder Program!",
-          content: `Find where a word appears in a sentence!
+          title: "✋ Server Log Analyzer",
+          content: `You're building a program to analyze server logs.
 
-Use find() to get the position, then substr() to extract from that position.`,
+Start with:
+\`string log = "2024-01-15 ERROR server connection failed";\`
+
+1. Check if "ERROR" exists — print its position and the message after it
+2. Check if "CRITICAL" exists — it's not there, so print "CRITICAL not found: within normal range"
+3. Extract and print the date (first 10 characters)`,
           code: `#include <iostream>
 #include <string>
 using namespace std;
 
 int main() {
-    string sentence = "I love C++ programming";
-    string word = "C++";
+    string log = "2024-01-15 ERROR server connection failed";
 
-    size_t pos = sentence.find(word);
-
+    // Search for "ERROR"
+    size_t pos = log.find("ERROR");
     if (pos != string::npos) {
-        cout << "\"" << word << "\" found at position " << pos << endl;
-        cout << "From there: " << sentence.substr(pos) << endl;
-    } else {
-        cout << "Not found!" << endl;
+        cout << "Error found! Position: " << pos << endl;
+        cout << "Error message: " << log.substr(pos + 6) << endl;
     }
+
+    // Search for "CRITICAL"
+    size_t pos2 = log.find("CRITICAL");
+    if (pos2 == string::npos) {
+        cout << "CRITICAL not found: within normal range" << endl;
+    }
+
+    // Extract date
+    cout << "Date: " << log.substr(0, 10) << endl;
 
     return 0;
 }`,
-          expectedOutput: `"C++" found at position 7
-From there: C++ programming`
+          expectedOutput: `Error found! Position: 11
+Error message: server connection failed
+CRITICAL not found: within normal range
+Date: 2024-01-15`
         },
         {
           id: "ch1-q1",
@@ -313,9 +326,12 @@ cout << s;  // HELLO
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ Name Analysis Program!",
-          content: `Define a name, print its length and first letter, then use to_string() and concatenation to build a message!
+          content: `Declare \`string name = "Alice"\` and \`int age = 15\`, then print the following in order:
 
-This combines string methods with type conversion.`,
+1. Print \`name\` → \`Name: Alice\`
+2. Use \`name.length()\` to print the length → \`Length: 5\`
+3. Use \`name[0]\` to print the first letter → \`First letter: A\`
+4. Use \`to_string(age)\` and concatenation (+) to build a sentence → \`Alice is 15 years old\``,
           code: `#include <iostream>
 #include <string>
 using namespace std;
@@ -393,16 +409,16 @@ Alice is 15 years old`
         {
           id: "ch3-q3",
           type: "quiz",
-          title: "String concatenation!",
-          content: "Which of these C++ string operations is **NOT valid**?",
+          title: "Checking find() result!",
+          content: "Which code correctly handles the case where `s.find(\"apple\")` fails?",
           options: [
-            "string s = \"Hi\" + \" there\";",
-            "string s = \"Hi\"; s += \" there\";",
-            "string a = \"Hi\"; string b = a + \" there\";",
-            "string s = \"Hi\"; s = s + \" there\";"
+            "if (s.find(\"apple\") != string::npos)",
+            "if (s.find(\"apple\") != -1)",
+            "if (s.find(\"apple\") == false)",
+            "if (s.find(\"apple\") == 0)"
           ],
           answer: 0,
-          explanation: "\"Hi\" + \" there\" fails because both are C-style strings (const char*), not std::string. At least one operand must be a std::string!"
+          explanation: "When find() fails, it returns string::npos — not -1 like Python! So you check success with `!= string::npos`."
         },
         {
           id: "ch3-q4",

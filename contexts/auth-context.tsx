@@ -4,7 +4,7 @@ import { createContext, useContext, useState, useEffect, useCallback, ReactNode 
 import { createClient } from "@/lib/supabase/client"
 import type { User } from "@supabase/supabase-js"
 import type { Profile } from "@/lib/supabase/types"
-import { migrateLocalStorageToSupabase } from "@/lib/supabase/migrate-local-data"
+import { migrateLocalStorageToSupabase, syncCompletionsToSupabase } from "@/lib/supabase/migrate-local-data"
 import { restoreFromCloud } from "@/lib/supabase/restore-from-cloud"
 
 interface AuthContextType {
@@ -16,6 +16,26 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
+
+/** 유저별 학습 데이터 localStorage 초기화 (계정 전환/로그아웃 시 호출) */
+function clearUserLocalStorage() {
+  const fixedKeys = [
+    "completedLessons", "completedQuizzes", "quiz-history",
+    "question-mastery", "activity-log",
+    "gamification-total-xp", "gamification-daily-streak",
+    "gamification-last-active-date", "gamification-sessions-today",
+    "language", "sound-muted",
+    "last-migrated-at",  // 마이그레이션 타임스탬프도 초기화 (계정 전환 시 다음 로그인에서 재업로드)
+  ]
+  fixedKeys.forEach(k => localStorage.removeItem(k))
+  Object.keys(localStorage)
+    .filter(k =>
+      k.startsWith("practice-v2-") || k.startsWith("lesson-") ||
+      k.startsWith("blank-runner-") || k.startsWith("python-runner-") ||
+      k.startsWith("library-variant-")
+    )
+    .forEach(k => localStorage.removeItem(k))
+}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
@@ -103,15 +123,56 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
           // 로그인 시 양방향 동기화 (순차 실행: 업로드 완료 후 복원)
           if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
-            // 1. localStorage → Supabase (기존 로컬 데이터 업로드)
-            // 2. 업로드 완료 후 Supabase → localStorage (클라우드 데이터 복원)
-            migrateLocalStorageToSupabase(currentUser.id)
-              .catch(() => {})
-              .then(() => restoreFromCloud(currentUser.id))
-              .catch(() => {})
+            const lastUserId = localStorage.getItem("last-user-id")
+            // lastUserId가 null이거나 다른 계정이면 → 로컬 데이터 클리어 후 클라우드 복원
+            // lastUserId가 null인 경우도 "다른 사용자" 취급 (남의 로컬 데이터 업로드 방지)
+            const isSameUser = lastUserId === currentUser.id
+            const isFirstLogin = lastUserId === null  // 이 기기에서 처음 로그인 (로그인 전 공부한 데이터 있을 수 있음)
+
+            if (isFirstLogin || (!isSameUser && !isFirstLogin)) {
+              // 처음 로그인이거나 다른 계정 전환:
+              // localStorage 업로드 없이 클라우드에서 복원만 (남의 데이터 오염 방지)
+              clearUserLocalStorage()
+              restoreFromCloud(currentUser.id)
+                .then(() => {
+                  localStorage.setItem("last-migrated-at", Date.now().toString())
+                })
+                .catch((e) => { console.error("[AuthContext] restore failed:", e) })
+            } else {
+              // 같은 계정 재로그인:
+              // 항상: completedLessons + completedQuizzes를 Supabase에 즉시 동기화
+              // 24시간마다: 전체 마이그레이션 (question_mastery 등 무거운 데이터)
+              const lastMigratedAt = localStorage.getItem("last-migrated-at")
+              const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000
+              const needsMigration = !lastMigratedAt ||
+                (Date.now() - parseInt(lastMigratedAt, 10)) > TWENTY_FOUR_HOURS
+
+              if (needsMigration) {
+                migrateLocalStorageToSupabase(currentUser.id)
+                  .then(() => {
+                    localStorage.setItem("last-migrated-at", Date.now().toString())
+                    return restoreFromCloud(currentUser.id)
+                  })
+                  .catch((e) => { console.error("[AuthContext] migrate/restore failed:", e) })
+              } else {
+                syncCompletionsToSupabase(currentUser.id)
+                  .catch((e) => { console.error("[AuthContext] syncCompletions failed:", e) })
+                restoreFromCloud(currentUser.id)
+                  .catch((e) => { console.error("[AuthContext] restore failed:", e) })
+              }
+            }
+
+            localStorage.setItem("last-user-id", currentUser.id)
           }
         } else {
           setProfile(null)
+
+          // 로그아웃 시: 학습 데이터는 유지 (재로그인 시 마이그레이션에서 업로드됨)
+          // 단, 마이그레이션 쿨다운만 초기화해서 재로그인 시 반드시 업로드 실행
+          // (다른 사용자가 로그인하면 isSameUser=false 분기에서 clearUserLocalStorage 호출됨)
+          if (event === "SIGNED_OUT") {
+            localStorage.removeItem("last-migrated-at")
+          }
         }
 
         setIsLoading(false)

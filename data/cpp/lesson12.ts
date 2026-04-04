@@ -25,11 +25,11 @@ export const cppLesson12Data: LessonData = {
           component: "cppReferenceBuilder",
           content: `파이썬에서는 함수에 변수를 넘기면 알아서 잘 됐죠? C++은 달라요. **원본을 수정할지, 복사본을 쓸지** 직접 선택해야 해요. 이 차이를 모르면 함수가 생각대로 동작하지 않아요!
 
-C++에서 **참조(reference)**는 변수의 **별명(alias)**이에요!
+C++에서 **참조(reference)**는 다른 변수를 가리키는 **또 다른 이름**이에요!
 
 \`\`\`cpp
 int x = 10;
-int& ref = x;   // ref는 x의 별명!
+int& ref = x;   // ref는 x의 참조(reference)
 \`\`\`
 
 \`ref\`와 \`x\`는 완전히 같은 메모리를 가리켜요. \`ref\`를 바꾸면 \`x\`도 바뀌어요!
@@ -41,26 +41,17 @@ ref = 20;        // ref를 바꾸면...
 cout << x;       // x도 20! 같은 곳을 가리키니까요
 \`\`\`
 
-파이썬과 비교하면:
+💡 \`&\`는 참조(reference) 선언이에요! ref와 x는 같은 메모리를 가리켜요.
 
-**파이썬 🐍:**
-\`\`\`python
-x = 10
-ref = x       # 새로운 객체? 같은 객체?
-ref = 20      # ref만 바뀌고, x는 여전히 10!
-\`\`\`
-
-파이썬에서 정수(int)는 immutable이라 \`ref = 20\`은 ref가 새 객체를 가리키는 거예요. 하지만 C++ 참조는 **항상 원본에 연결**돼 있어요!
-
-| 파이썬 🐍 | C++ 참조 ⚡ |
-|---|---|
-| \`ref = x\` (값 복사 또는 객체 공유) | \`int& ref = x;\` (원본의 별명) |
-| \`ref = 20\` → x 안 변함 (int) | \`ref = 20;\` → x도 변함! |
-| 명시적이지 않음 | \`&\`로 참조임을 명시 |
-
-💡 \`&\`는 "이 변수는 다른 변수의 별명이에요!"라는 뜻이에요!
-
-💡 &는 여러 의미가 있어요! 여기서는 **참조(별명)**라는 뜻이에요. 나중에 **주소 연산자**로도 쓰이지만, 문맥에서 구분할 수 있어요.`
+💡 &는 여러 의미가 있어요! 여기서는 **참조(reference)** 선언이에요. 나중에 **주소 연산자**로도 쓰이지만, 문맥에서 구분할 수 있어요.`
+        },
+        // ── 시각화: 세 가지 방식 비교 ──────────────────────
+        {
+          id: "ch1-visual",
+          type: "interactive",
+          title: "📦 상자로 이해하는 복사 vs 참조",
+          content: "세 가지를 직접 눌러보면서 차이를 확인해보세요!",
+          component: "referenceBoxVisualizer",
         },
         {
           id: "ch1-pred1",
@@ -69,7 +60,7 @@ ref = 20      # ref만 바뀌고, x는 여전히 10!
           code: "#include <iostream>\nusing namespace std;\nint main() {\n    int x = 10;\n    int& ref = x;\n    ref = 20;\n    cout << x;\n    return 0;\n}",
           options: ["10", "20", "0", "에러"],
           answer: 1,
-          explanation: "ref는 x의 별명(참조)이에요! ref = 20은 곧 x = 20과 같아요. 그래서 x를 출력하면 20이 나와요."
+          explanation: "ref는 x의 참조(reference)예요! ref = 20은 곧 x = 20과 같아요. 그래서 x를 출력하면 20이 나와요."
         },
         {
           id: "ch1-const",
@@ -114,12 +105,12 @@ const string& ref = longText;
           id: "ch1-fb1",
           type: "fillblank" as const,
           title: "빈칸을 채워주세요",
-          content: "변수의 별명(참조)을 만들어봐요!",
+          content: "변수의 참조(reference)를 만들어봐요!",
           code: "int a = 42;\nint___ ref = a;\ncout << ref;",
           fillBlanks: [
             { id: 0, answer: "&", options: ["&", "*", "=", "@"] }
           ],
-          explanation: "int& ref = a; 로 참조를 선언해요! &를 붙이면 ref는 a의 별명이 돼요."
+          explanation: "int& ref = a; 로 참조를 선언해요! &를 붙이면 ref는 a의 참조(reference)가 돼요."
         },
         {
           id: "ch1-practice",
@@ -159,12 +150,12 @@ ref = 500`
           content: "`int x = 5; int& ref = x;`에서 `ref`에 대한 설명으로 **맞는** 것은?",
           options: [
             "ref는 x의 복사본이다",
-            "ref는 x의 별명(alias)이다",
+            "ref는 x를 가리키는 참조(reference)다",
             "ref는 x의 주소를 저장한다",
             "ref는 새로운 변수를 만든다"
           ],
           answer: 1,
-          explanation: "참조(reference)는 원래 변수의 별명이에요! ref와 x는 같은 메모리를 공유해서, 하나를 바꾸면 다른 하나도 바뀌어요."
+          explanation: "참조(reference)는 같은 메모리를 가리키는 또 다른 이름이에요! ref와 x는 같은 메모리를 공유해서, 하나를 바꾸면 다른 하나도 바뀌어요."
         }
       ]
     },
@@ -196,27 +187,19 @@ int main() {
 
 \`tryChange\`에 \`num\`을 넘기면, \`num\`의 **복사본**이 만들어져요. 함수 안에서 \`x\`를 바꿔도 원본 \`num\`은 그대로예요!
 
-파이썬과 비교하면:
+📦 함수를 호출할 때마다 **독립된 복사본**이 생긴다고 생각하면 돼요:
 
-**파이썬 🐍:**
-\`\`\`python
-def try_change(x):
-    x = 99      # 정수는 immutable!
+\`\`\`
+  [호출 전]   num = 10
+                  │
+                  │  복사
+                  ▼
+  [함수 안]   x = 10  →  x = 99  (변경됨)
 
-num = 10
-try_change(num)
-print(num)      # 10 — 파이썬도 안 바뀜!
+  [호출 후]   num = 10  ✅ 원본은 그대로!
 \`\`\`
 
-파이썬에서도 정수(int)를 함수에 넘기면 원본이 안 바뀌어요. 정수가 immutable이라서요. 하지만 C++에서는 **모든 타입**이 기본적으로 복사돼요!
-
-| 상황 | C++ (기본) | 파이썬 |
-|---|---|---|
-| int 넘기기 | 복사됨 (안 바뀜) | immutable (안 바뀜) |
-| string 넘기기 | 복사됨 (안 바뀜) | 객체 참조 전달 |
-| list/vector 넘기기 | 복사됨! (안 바뀜) | 객체 참조 전달 (바뀜!) |
-
-💡 C++은 기본이 "복사"예요! 파이썬과 큰 차이가 나는 부분이에요.`
+C++에서는 **int, double, string, 구조체** 등 모든 타입이 기본적으로 복사돼요. 함수에 큰 데이터를 넘길 때 매번 복사가 일어나면 느려질 수 있어요 → 그래서 다음에 배울 **참조(&)**가 필요해요!`
         },
         {
           id: "ch2-pred1",
@@ -231,7 +214,6 @@ print(num)      # 10 — 파이썬도 안 바뀜!
           id: "ch2-ref",
           type: "explain",
           title: "🔗 참조 전달 (Call by Reference)",
-          component: "cppCallByRefBuilder",
           content: `원본을 바꾸고 싶다면? **참조(&)**를 쓰면 돼요!
 
 \`\`\`cpp
@@ -246,7 +228,7 @@ int main() {
 }
 \`\`\`
 
-\`int& x\`로 받으면, \`x\`는 원본 \`num\`의 **별명**이 돼요. \`x\`를 바꾸면 \`num\`도 바뀌죠!
+\`int& x\`로 받으면, \`x\`는 원본 \`num\`의 **참조(reference)**가 돼요. \`x\`를 바꾸면 \`num\`도 바뀌죠!
 
 이걸 활용한 대표적인 예: **swap 함수!**
 \`\`\`cpp
@@ -263,8 +245,6 @@ int main() {
 }
 \`\`\`
 
-파이썬에서는 \`x, y = y, x\` 한 줄이면 되지만, C++에서는 참조를 써서 swap 함수를 만들어야 해요.
-
 | 방식 | 문법 | 원본 바뀜? |
 |---|---|---|
 | Call by Value | \`void f(int x)\` | ❌ |
@@ -272,7 +252,7 @@ int main() {
 
 💡 \`&\` 하나의 차이로 함수의 동작이 완전히 달라져요!
 
-💡 참조는 '별명'이에요. 포인터('주소를 저장하는 변수')는 다음 레슨에서 배워요!`
+💡 포인터('주소를 저장하는 변수')는 다음 레슨에서 배워요!`
         },
         {
           id: "ch2-fb1",
@@ -295,17 +275,39 @@ int main() {
           explanation: "참조(&)로 받았으니 원본이 바뀌어요! temp=3, a=7, b=3 → x는 7, y는 3이 돼요."
         },
         {
+          id: "ch2-vector-ref",
+          type: "explain",
+          title: "📦 vector도 참조로 받을 수 있어요",
+          content: `지금까지 \`int&\`로 정수의 참조를 받았어요. **vector도 똑같이 \`&\`를 붙여서 참조로 받을 수 있어요!**
+
+\`\`\`cpp
+// & 없음 → 복사본 → 원본 안 바뀜
+void addTen(vector<int> v) {
+    for (int& x : v) x += 10;  // 복사본만 바뀜
+}
+
+// & 있음 → 원본 → 원본이 바뀜
+void addTen(vector<int>& v) {
+    for (int& x : v) x += 10;  // 원본이 바뀜!
+}
+\`\`\`
+
+\`vector<int>&\`는 "정수 벡터의 참조"예요. int를 참조로 받을 때 \`int&\`라고 쓰는 것처럼, vector도 타입 뒤에 \`&\`만 붙이면 돼요.
+
+⚠️ **주의:** range-for 안에서도 원본을 바꾸려면 \`int&\`로 받아야 해요!
+\`\`\`cpp
+for (int x : v)   // x는 복사본 → v 안 바뀜
+for (int& x : v)  // x는 원본의 참조(reference) → v가 바뀜!
+\`\`\``,
+        },
+        {
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ swap 함수 + 벡터 2배 함수!",
-          content: `참조를 활용하는 두 가지 함수를 연습해봐요!
+          content: `참조를 활용하는 두 가지 함수가 어떻게 동작하는지 실행해봐요!
 
-1. swap 함수로 두 값을 교환하기
-2. 벡터의 모든 원소를 2배로 만드는 함수 만들기
-
-벡터를 참조로 받으면 원본 벡터가 수정돼요!
-
-\`vector<int>&\`는 '정수 벡터의 참조'라는 뜻이에요. &가 있으니까 함수 안에서 원본 벡터를 직접 수정할 수 있어요!`,
+- 두 정수를 서로 교환하는 함수
+- 벡터의 모든 원소를 2배로 만드는 함수`,
           code: `#include <iostream>
 #include <vector>
 using namespace std;
@@ -347,12 +349,12 @@ double: 2 4 6 8 10 `
           content: "`void f(int x)` 와 `void f(int& x)`의 차이는?",
           options: [
             "차이 없다",
-            "int x는 복사본, int& x는 원본의 별명",
+            "int x는 복사본, int& x는 원본의 참조(reference)",
             "int x는 느리고, int& x는 빠르다",
             "int& x는 에러가 난다"
           ],
           answer: 1,
-          explanation: "int x는 값의 복사본을 받고(Call by Value), int& x는 원본의 별명을 받아요(Call by Reference). &가 있으면 원본을 수정할 수 있어요!"
+          explanation: "int x는 값의 복사본을 받고(Call by Value), int& x는 원본의 참조를 받아요(Call by Reference). &가 있으면 원본을 수정할 수 있어요!"
         }
       ]
     },
@@ -437,10 +439,10 @@ int main() {
           content: `## ✅ 오늘의 정리!
 
 ### 📌 참조 (Reference)
-- ✅ **참조** — \`int& ref = x;\`로 변수의 별명(alias)을 만들어요
+- ✅ **참조(reference)** — \`int& ref = x;\`로 같은 메모리를 가리키는 또 다른 이름을 만들어요
 - ✅ **const 참조** — \`const int& ref = x;\`는 읽기만 가능, 복사 없이 빠르게!
 - ✅ **Call by Value** — \`void f(int x)\` 복사본이 넘어가서 원본 안 바뀜
-- ✅ **Call by Reference** — \`void f(int& x)\` 원본의 별명이 넘어가서 원본 바뀜
+- ✅ **Call by Reference** — \`void f(int& x)\` 원본의 참조(reference)가 넘어가서 원본 바뀜
 
 | 매개변수 방식 | 문법 | 원본 수정? | 복사 비용? |
 |---|---|---|---|

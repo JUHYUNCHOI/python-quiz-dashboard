@@ -27,15 +27,16 @@ interface StepRendererProps {
   onQuizAnswer: (idx: number) => void
   onQuizAcknowledge: () => void
   // fillblank
-  onStepComplete?: (correct: boolean) => void
+  onStepComplete?: (correct: boolean, filledValues?: Record<number, string>) => void
   onStepAcknowledge?: () => void
+  showNextOnCorrect?: boolean  // 복습: 정답 후 설명 안에 "다음 문제 →" 버튼
 }
 
 export function StepRenderer({
   step, lang, isCompleted, lessonId,
   hintLevel, onHintLevelChange, onSuccess,
   selectedAnswer, showExplanation, quizAttempts, onQuizAnswer, onQuizAcknowledge,
-  onStepComplete, onStepAcknowledge
+  onStepComplete, onStepAcknowledge, showNextOnCorrect
 }: StepRendererProps) {
   const { t } = useLanguage()
   switch (step.type) {
@@ -64,6 +65,7 @@ export function StepRenderer({
           quizAttempts={quizAttempts}
           onAnswer={onQuizAnswer}
           onAcknowledge={onQuizAcknowledge}
+          showNextOnCorrect={showNextOnCorrect}
         />
       )
 
@@ -97,7 +99,7 @@ export function StepRenderer({
       return <AnimationStep step={step} />
 
     case "practice":
-      return <PracticeStep step={step} lang={lang} onSuccess={onSuccess} lessonId={lessonId} />
+      return <PracticeStep step={step} lang={lang} onSuccess={onSuccess} lessonId={lessonId} isCompleted={isCompleted} />
 
     case "coding":
       return (

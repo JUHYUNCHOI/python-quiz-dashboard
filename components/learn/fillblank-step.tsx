@@ -7,18 +7,37 @@ import { LessonStep } from "./types"
 import { highlightCppInline } from "@/components/ui/code-block"
 import { motion, AnimatePresence } from "framer-motion"
 import { useLanguage } from "@/contexts/language-context"
+import { renderContent } from "./render-content"
 
 interface FillBlankStepProps {
   step: LessonStep
   isCompleted: boolean
-  onComplete: (correct: boolean) => void
+  onComplete: (correct: boolean, filledValues?: Record<number, string>) => void
   onAcknowledge: () => void
   isReview?: boolean
+}
+
+// 배열을 Fisher-Yates 알고리즘으로 셔플 (step.id 기반 seed로 매번 같은 순서 유지)
+function seededShuffle<T>(arr: T[], seed: string): T[] {
+  const result = [...arr]
+  let h = 0
+  for (let i = 0; i < seed.length; i++) h = (Math.imul(31, h) + seed.charCodeAt(i)) | 0
+  for (let i = result.length - 1; i > 0; i--) {
+    h = (Math.imul(h, 1664525) + 1013904223) | 0
+    const j = Math.abs(h) % (i + 1);
+    [result[i], result[j]] = [result[j], result[i]]
+  }
+  return result
 }
 
 export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, isReview }: FillBlankStepProps) {
   const blanks: { id: number; answer: string; options: string[] }[] = step.fillBlanks || []
   const { t } = useLanguage()
+  // 보기 순서 shuffle (step.id + blank.id 기반으로 매번 동일하게 섞음)
+  const shuffledBlanks = blanks.map(b => ({
+    ...b,
+    options: seededShuffle(b.options, `${step.id}-${b.id}`)
+  }))
   const [filledValues, setFilledValues] = useState<Record<number, string>>({})
   const [currentBlankIndex, setCurrentBlankIndex] = useState(0)
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -27,6 +46,16 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
   const [showAckButton, setShowAckButton] = useState(false)
   const [lastFilledId, setLastFilledId] = useState<number | null>(null) // 방금 채운 빈칸 flash용
   const optionsRef = useRef<HTMLDivElement>(null)
+
+  // step이 바뀌면 상태 초기화
+  useEffect(() => {
+    setFilledValues({})
+    setCurrentBlankIndex(0)
+    setIsSubmitted(false)
+    setIsCorrect(false)
+    setWrongBlankIds(new Set())
+    setShowAckButton(false)
+  }, [step.id]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // 이미 완료된 스텝으로 돌아왔을 때 정답 자동 표시
   useEffect(() => {
@@ -87,10 +116,10 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
 
     if (wrong.size === 0) {
       setIsCorrect(true)
-      onComplete(true)
+      onComplete(true, values)
     } else {
       setIsCorrect(false)
-      onComplete(false)
+      onComplete(false, values)
     }
   }
 
@@ -176,7 +205,7 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
     })
   }
 
-  const currentBlank = blanks[currentBlankIndex]
+  const currentBlank = shuffledBlanks[currentBlankIndex]
 
   return (
     <div className="space-y-6">
@@ -197,7 +226,7 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
         </div>
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{step.title}</h1>
         {step.content && (
-          <p className="text-base text-gray-600 leading-relaxed">{step.content}</p>
+          <div className="text-base text-gray-600 leading-relaxed space-y-2">{renderContent(step.content)}</div>
         )}
       </div>
 
@@ -228,7 +257,7 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
               const usedCount = Object.entries(filledValues).filter(
                 ([blankId, val]) => val === option && Number(blankId) !== currentBlank.id
               ).length
-              const availableCount = blanks.filter(b => b.options.includes(option)).length
+              const availableCount = shuffledBlanks.filter(b => b.options.includes(option)).length
               const isUsed = usedCount >= availableCount && filledValues[currentBlank.id] !== option
               return (
                 <motion.button

@@ -3,6 +3,8 @@
 import { Card } from "@/components/ui/card"
 import { Check, X } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useLanguage } from "@/contexts/language-context"
+import { FlagButton } from "@/components/flag-question-button"
 
 interface Question {
   id: number
@@ -11,6 +13,7 @@ interface Question {
   code: string
   options: string[]
   correctAnswer: number
+  lessonId?: string | number
 }
 
 interface QuestionCardProps {
@@ -19,19 +22,28 @@ interface QuestionCardProps {
   showResult: boolean
   isCorrect: boolean
   onAnswerSelect: (index: number) => void
+  lessonId?: string | number
 }
 
-export function QuestionCard({ question, selectedAnswer, showResult, isCorrect, onAnswerSelect }: QuestionCardProps) {
+export function QuestionCard({ question, selectedAnswer, showResult, isCorrect, onAnswerSelect, lessonId }: QuestionCardProps) {
+  const { t, lang } = useLanguage()
+
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case "쉬움":
-        return "bg-green-100 text-green-700"
-      case "보통":
-        return "bg-yellow-100 text-yellow-700"
-      case "어려움":
-        return "bg-red-100 text-red-700"
-      default:
-        return "bg-gray-100 text-gray-700"
+      case "쉬움": return "bg-green-100 text-green-700"
+      case "보통": return "bg-yellow-100 text-yellow-700"
+      case "어려움": return "bg-red-100 text-red-700"
+      default: return "bg-gray-100 text-gray-700"
+    }
+  }
+
+  const getDifficultyLabel = (difficulty: string) => {
+    if (lang === "ko") return difficulty
+    switch (difficulty) {
+      case "쉬움": return "Easy"
+      case "보통": return "Medium"
+      case "어려움": return "Hard"
+      default: return difficulty
     }
   }
 
@@ -51,9 +63,15 @@ export function QuestionCard({ question, selectedAnswer, showResult, isCorrect, 
               getDifficultyColor(question.difficulty),
             )}
           >
-            {question.difficulty}
+            {getDifficultyLabel(question.difficulty)}
           </span>
-          <span className="text-xs md:text-sm text-gray-500">문제 #{question.id}</span>
+          <div className="flex items-center gap-2">
+            <span className="text-xs md:text-sm text-gray-500">{t("문제", "Q")} #{question.id}</span>
+            <FlagButton
+              questionId={question.id}
+              lessonId={lessonId ?? question.lessonId ?? "unknown"}
+            />
+          </div>
         </div>
 
         {/* Question Text */}
@@ -151,7 +169,9 @@ export function QuestionCard({ question, selectedAnswer, showResult, isCorrect, 
               isCorrect ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700",
             )}
           >
-            {isCorrect ? "정답입니다! 🎉" : `아쉬워요! 정답은 "${question.options[question.correctAnswer]}" 입니다.`}
+            {isCorrect
+              ? t("정답입니다! 🎉", "Correct! 🎉")
+              : t(`아쉬워요! 정답은 "${question.options[question.correctAnswer]}" 입니다.`, `Incorrect! The answer is "${question.options[question.correctAnswer]}".`)}
           </div>
         )}
       </div>

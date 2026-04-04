@@ -34,7 +34,18 @@ const STORAGE_KEYS = {
 } as const
 
 const XP_PER_LEVEL = 100
-export const DAILY_XP_GOAL = 50
+export const DAILY_XP_GOAL = 100
+export const STREAK_SHIELD_COST = 50
+
+// -------- Level Titles --------
+export function getLevelTitle(level: number): { title: string; emoji: string } {
+  if (level >= 50) return { title: "전설", emoji: "👑" }
+  if (level >= 30) return { title: "마스터", emoji: "💎" }
+  if (level >= 20) return { title: "고수", emoji: "🔥" }
+  if (level >= 10) return { title: "코딩러", emoji: "⚡" }
+  if (level >= 5)  return { title: "초보 코더", emoji: "📗" }
+  return { title: "입문자", emoji: "🐣" }
+}
 
 // -------- Helpers --------
 function calcComboBonus(maxCombo: number): number {
@@ -56,6 +67,12 @@ function isYesterday(dateStr: string): boolean {
   yesterday.setDate(yesterday.getDate() - 1)
   const ys = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, "0")}-${String(yesterday.getDate()).padStart(2, "0")}`
   return dateStr === ys
+}
+
+function yesterdayStr(): string {
+  const d = new Date()
+  d.setDate(d.getDate() - 1)
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`
 }
 
 function safeParseInt(value: string | null, fallback: number): number {
@@ -142,9 +159,10 @@ export function useGamification() {
       const supabaseStreak      = safeParseInt(String(data.daily_streak ?? 0), 0)
       const supabaseSessions    = safeParseInt(String(data.sessions_today ?? 0), 0)
 
-      // 항상 더 큰 값 선택: sync 지연/실패 시 데이터 손실 방지
+      // 서버 값 우선: supabase에 데이터가 있으면 신뢰 (로컬 조작 방지)
+      // 서버 값이 0인 경우만 로컬 폴백 (신규 유저 또는 sync 이전 데이터)
       // (YYYY-MM-DD 형식은 문자열 비교로 날짜 대소 판단 가능)
-      const totalXp        = Math.max(supabaseTotalXp, localTotalXp)
+      const totalXp        = supabaseTotalXp > 0 ? supabaseTotalXp : localTotalXp
       const lastActiveDate = localLastActive > supabaseLastActive ? localLastActive : supabaseLastActive
       const dailyStreak    = Math.max(supabaseStreak, localStreak)
 
@@ -361,10 +379,38 @@ export function useGamification() {
     })
   }, [syncToSupabase])
 
+  // 스트릭 위험 감지: 마지막 활동이 그저께 이상 → 스트릭이 끊김
+  const isStreakAtRisk = state.dailyStreak > 0
+    && state.lastActiveDate !== todayStr()
+    && !isYesterday(state.lastActiveDate)
+    && state.lastActiveDate !== ""
+
+  // 스트릭 보호권: XP 50 소모 → 어제 활동한 것처럼 lastActiveDate 복원
+  const useStreakShield = useCallback(() => {
+    if (state.totalXp < STREAK_SHIELD_COST) return false
+    const ys = yesterdayStr()
+    setState((prev) => {
+      const newTotalXp = prev.totalXp - STREAK_SHIELD_COST
+      const next: GamificationState = {
+        ...prev,
+        totalXp: newTotalXp,
+        level: Math.floor(newTotalXp / XP_PER_LEVEL) + 1,
+        xpInCurrentLevel: newTotalXp % XP_PER_LEVEL,
+        lastActiveDate: ys,
+      }
+      persistState(next)
+      syncToSupabase(next)
+      return next
+    })
+    return true
+  }, [state.totalXp, syncToSupabase])
+
   return {
     ...state,
     calculateXpBreakdown,
     commitSessionXp,
     addDirectXp,
+    isStreakAtRisk,
+    useStreakShield,
   }
 }

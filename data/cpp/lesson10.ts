@@ -18,21 +18,13 @@ export const cppLesson10Data: LessonData = {
       title: "Range-based for",
       emoji: "🔁",
       steps: [
+        // ── 1단계: 기본 설명 ──────────────────────
         {
           id: "ch1-intro",
           type: "explain",
           title: "🔁 Range-based for 문",
           component: "cppRangeForBuilder",
-          content: `지난 시간에 \`for (int i = 0; i < size; i++)\` 이런 인덱스 루프를 배웠죠? 매번 이렇게 쓰면 실수하기 쉬워요. 더 간단한 방법이 있어요!
-
-\`\`\`cpp
-vector<int> nums = {10, 20, 30};
-for (int i = 0; i < nums.size(); i++) {
-    cout << nums[i] << " ";
-}
-\`\`\`
-
-인덱스 변수 \`i\`를 쓰는 게 좀 귀찮지 않았나요? 파이썬처럼 바로 값에 접근하고 싶어요!
+          content: `지난 시간에 \`for (int i = 0; i < size; i++)\` 이런 인덱스 루프를 배웠죠? 더 간단한 방법이 있어요!
 
 **파이썬 🐍:**
 \`\`\`python
@@ -47,6 +39,7 @@ vector<int> nums = {10, 20, 30};
 for (int x : nums) {
     cout << x << " ";
 }
+// 출력: 10 20 30
 \`\`\`
 
 \`for (타입 변수 : 컨테이너)\` — 파이썬의 \`for x in list:\`와 거의 같아요!
@@ -54,106 +47,189 @@ for (int x : nums) {
 | 파이썬 🐍 | C++ ⚡ |
 |---|---|
 | \`for x in nums:\` | \`for (int x : nums) {\` |
-| 타입 안 씀 | 타입 써야 함 |
-| 콜론 : | 콜론 : (같아요!) |
+| \`in\` 키워드 | \`:\` 콜론 |
 
-배열에도 벡터에도 다 쓸 수 있어요:
+배열에도 벡터에도 다 써요:
 \`\`\`cpp
 int arr[3] = {1, 2, 3};
-for (int x : arr) {     // 배열도 OK!
-    cout << x << " ";
-}
-\`\`\`
-
-💡 range-based for는 인덱스가 필요 없을 때 아주 편해요!`
+for (int x : arr) { cout << x << " "; }  // 배열도 OK!
+\`\`\``,
         },
+        // ── 2단계: 기본 연습 ──────────────────────
         {
           id: "ch1-fb1",
           type: "fillblank" as const,
           title: "빈칸을 채워주세요",
           content: "range-for문으로 벡터를 순회해봐요!",
           code: "vector<int> v = {5, 10, 15};\nfor (___ x ___ v) {\n    cout << x << \" \";\n}",
+          reviewHint: `range-based for 구조:
+\`for (타입 변수명 : 컨테이너) { ... }\`
+- 타입: 원소 타입 (int, string 등)
+- 콜론(:) — 파이썬의 in 대신`,
           fillBlanks: [
             { id: 0, answer: "int", options: ["int", "var", "auto", "for"] },
             { id: 1, answer: ":", options: [":", "in", "of", "->"] }
           ],
-          explanation: "for (int x : v)로 벡터의 모든 원소를 순회해요! 파이썬의 'for x in v'와 비교하면 'in' 대신 ':'을 쓰는 거예요."
-        },
-        {
-          id: "ch1-ref",
-          type: "explain",
-          title: "🔗 참조(&)로 원소 수정하기",
-          content: `range-based for에서 그냥 \`int x\`를 쓰면, 값의 **복사본**이에요. 원본은 안 바뀌어요!
-
-\`\`\`cpp
-vector<int> nums = {1, 2, 3};
-for (int x : nums) {
-    x = x * 10;  // 복사본만 바뀜!
-}
-// nums는 여전히 {1, 2, 3} 😱
-\`\`\`
-
-원본을 바꾸려면 **참조(&)**를 써야 해요:
-\`\`\`cpp
-vector<int> nums = {1, 2, 3};
-for (int& x : nums) {   // & 추가!
-    x = x * 10;  // 원본이 바뀜!
-}
-// nums는 이제 {10, 20, 30} ✅
-\`\`\`
-
-파이썬과 비교하면:
-
-**파이썬 🐍 (리스트 원소 변경):**
-\`\`\`python
-nums = [1, 2, 3]
-for i in range(len(nums)):
-    nums[i] = nums[i] * 10  # 인덱스로 직접 접근
-\`\`\`
-
-**C++ ⚡ (참조로 변경):**
-\`\`\`cpp
-for (int& x : nums) {
-    x = x * 10;  // 참조라서 바로 변경!
-}
-\`\`\`
-
-| 목적 | 문법 |
-|---|---|
-| 읽기만 할 때 | \`for (int x : v)\` |
-| 수정할 때 | \`for (int& x : v)\` |
-
-💡 &를 붙이면 "원본에 직접 접근"한다는 뜻이에요!
-
-& = '이 원본 자체'라는 뜻이에요. 복사본이 아니라 진짜! 친구에게 사진을 **복사**해서 주면 원본은 안 변하지만, **원본 파일 자체**를 공유하면 친구가 수정하면 내 것도 바뀌잖아요? &가 바로 원본 공유예요!
-
-여기서 & 기호가 나와요! &는 '원본을 직접 수정한다'는 뜻이에요. 자세한 건 레슨 12에서 배울 거예요. 지금은 '&가 있으면 원본 수정, 없으면 복사본'이라고만 기억하세요!`
+          explanation: "for (int x : v) — v의 원소를 int x에 하나씩 꺼내요! 파이썬 'in' 대신 ':'을 써요."
         },
         {
           id: "ch1-pred1",
           type: "predict" as const,
-          title: "Range-for 출력!",
-          code: "#include <iostream>\n#include <vector>\nusing namespace std;\nint main() {\n    vector<int> v = {3, 6, 9};\n    for (int x : v) {\n        cout << x * 2 << \" \";\n    }\n    return 0;\n}",
-          options: ["3 6 9 ", "6 12 18 ", "2 4 6 ", "에러"],
+          title: "Range-for 출력 예측!",
+          code: `#include <iostream>
+#include <vector>
+using namespace std;
+int main() {
+    vector<int> v = {3, 6, 9};
+    int sum = 0;
+    for (int x : v) {
+        sum += x;
+    }
+    cout << sum;
+    return 0;
+}`,
+          reviewHint: `range-based for는 v의 원소를 차례로 x에 담아요.
+x = 3 → sum = 3
+x = 6 → sum = 9
+x = 9 → sum = 18`,
+          options: ["9", "18", "27", "에러"],
           answer: 1,
-          explanation: "v의 각 원소(3, 6, 9)에 2를 곱해서 출력해요! 3*2=6, 6*2=12, 9*2=18 → \"6 12 18 \""
+          explanation: "3+6+9 = 18! range-based for로 모든 원소를 순서대로 더했어요.",
         },
+        // ── 3단계: 참조 설명 ──────────────────────
+        {
+          id: "ch1-ref",
+          type: "explain",
+          title: "🔗 x를 바꿔도 원본이 그대로? — 복사의 비밀",
+          content: `방금 배운 \`for (int x : v)\`에는 숨겨진 비밀이 있어요. x를 아무리 수정해도 **원본이 안 바뀌어요.**
+
+\`\`\`cpp
+vector<int> nums = {1, 2, 3};
+for (int x : nums) {
+    x = x * 10;   // x(복사본)만 바뀜
+}
+// nums는 여전히 {1, 2, 3} 😱
+\`\`\`
+
+**& 하나 붙이면** x가 원본을 직접 가리켜요:
+
+\`\`\`cpp
+for (int& x : nums) {   // & 추가!
+    x = x * 10;   // 원본이 바뀜!
+}
+// nums는 이제 {10, 20, 30} ✅
+\`\`\`
+
+& = "복사본이 아니라 원본 자체"예요. 사진을 복사해서 주면 원본은 안 변하지만, **원본 파일을 공유**하면 상대가 수정할 수 있잖아요? &가 바로 그거예요!
+
+그리고 &는 복사를 안 하기 때문에 **속도도 빠릅니다.** 특히 데이터가 크면 차이가 커요.`,
+        },
+        // ── 4단계: 복사/참조 애니메이션 ──────────────────────
+        {
+          id: "ch1-ref-anim",
+          type: "interactive",
+          title: "🎬 복사 vs 참조(&) — 차이 직접 확인!",
+          content: "실행 버튼을 눌러 & 유무에 따라 결과가 어떻게 다른지 확인해보세요!",
+          component: "rangeForVisualizer",
+        },
+        // ── 5단계: 참조 연습 ──────────────────────
+        {
+          id: "ch1-ref-fb",
+          type: "fillblank" as const,
+          title: "참조로 원소 수정!",
+          content: "벡터의 모든 원소에 1을 더하는 코드를 완성해봐요!",
+          code: "vector<int> v = {1, 2, 3};\nfor (int___ x : v) {\n    x += 1;\n}\n// v는 이제 {2, 3, 4}",
+          reviewHint: `원본 원소를 수정하려면 참조(&)가 필요해요:
+- \`int x\` → 복사본, 원본 불변
+- \`int& x\` → 원본 직접 수정`,
+          fillBlanks: [
+            { id: 0, answer: "&", options: ["&", "*", "%", ""] }
+          ],
+          explanation: "int& x로 참조를 받아야 원본을 수정할 수 있어요! & 없이는 복사본만 바뀌어요."
+        },
+        {
+          id: "ch1-ref-pred",
+          type: "predict" as const,
+          title: "참조로 수정 후 출력!",
+          code: `#include <iostream>
+#include <vector>
+using namespace std;
+int main() {
+    vector<int> v = {10, 20, 30};
+    for (int& x : v) {
+        x = x / 10;
+    }
+    for (int x : v) {
+        cout << x << " ";
+    }
+    return 0;
+}`,
+          reviewHint: `첫 번째 for: int& x → 원본 수정 (x = x / 10)
+두 번째 for: int x → 수정된 원본 값 출력`,
+          options: ["10 20 30 ", "1 2 3 ", "0 2 3 ", "에러"],
+          answer: 1,
+          explanation: "int& x로 원본을 나누니 {1, 2, 3}이 돼요. 두 번째 for로 출력!"
+        },
+        // ── 6단계: const int& 소개 ──────────────────────
+        {
+          id: "ch1-const-ref",
+          type: "explain",
+          title: "🔒 & 에 자물쇠 달기 — const int&",
+          content: `&를 쓰면 빠르지만, 실수로 원본을 바꿀 수도 있어요. **읽기만 할 건데 수정을 막고 싶다면** \`const\`를 앞에 붙여요.
+
+레슨 3에서 배운 const 기억나요? PI처럼 절대 안 바뀌어야 하는 값에 붙이던 그거예요:
+
+\`\`\`cpp
+const double PI = 3.14159;
+PI = 0;  // ❌ 에러! 바꿀 수 없어요
+\`\`\`
+
+이 \`const\`를 range-for에도 그대로 쓸 수 있어요:
+
+\`\`\`cpp
+for (const int& x : v) {
+    cout << x;  // ✅ 읽기는 OK
+    x = 0;      // ❌ 컴파일 에러! 실수 방지
+}
+\`\`\`
+
+**& = 빠름 (복사 없음)** + **const = 수정 방지** — 두 장점을 합쳤어요.
+
+그래서 실제 C++ 코드는 이렇게 써요:
+
+| 패턴 | 언제 쓰나요? |
+|---|---|
+| \`for (int& x : v)\` | 원소를 **수정**해야 할 때 |
+| \`for (const int& x : v)\` | **읽기만** 할 때 👈 가장 많이 씀! |
+| \`for (int x : v)\` | 거의 안 씀 |
+
+💡 **결론: 실제 C++ 개발자들은 거의 항상 &를 써요!**
+- 수정해야 하면 → \`int& x\`
+- 읽기만 하면 → \`const int& x\`
+
+\`int\` 같은 작은 타입은 복사해도 사실 별 차이 없어요. 하지만 \`string\`이나 큰 구조체라면 복사 비용이 커지거든요. 처음부터 \`const int&\` 습관을 들여두면, 나중에 어떤 타입이든 자연스럽게 쓸 수 있어요.`,
+        },
+        // ── 7단계: 최종 연습 ──────────────────────
         {
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ Range-for로 합 구하기!",
-          content: `vector의 모든 원소의 합을 range-based for로 구해보세요!
-
-힌트: 인덱스 없이, \`for (int x : nums)\`로 각 원소에 바로 접근하면 돼요!`,
+          content: `숫자 개수를 입력받고, 그 숫자들을 입력받아 합계를 구해보세요!`,
           code: `#include <iostream>
 #include <vector>
 using namespace std;
 
 int main() {
-    vector<int> nums = {4, 8, 15, 16, 23, 42};
-    int sum = 0;
+    int n;
+    cin >> n;
 
-    for (int x : nums) {
+    vector<int> nums(n);
+    for (int i = 0; i < n; i++) {
+        cin >> nums[i];
+    }
+
+    int sum = 0;
+    for (const int& x : nums) {
         sum += x;
     }
 
@@ -161,21 +237,22 @@ int main() {
 
     return 0;
 }`,
+          stdin: `6\n4 8 15 16 23 42`,
           expectedOutput: `합계: 108`
         },
         {
           id: "ch1-q1",
           type: "quiz",
-          title: "Range-for 기초!",
-          content: "range-based for 문에서 벡터의 원소를 **수정**하고 싶을 때 올바른 문법은?",
+          title: "Range-for 핵심!",
+          content: "range-for에서 원본 벡터의 값을 **직접 수정**하려면?",
           options: [
             "for (int x : v)",
             "for (int& x : v)",
-            "for (int* x : v)",
-            "for (int x in v)"
+            "for (int x* : v)",
+            "for (int : x : v)"
           ],
           answer: 1,
-          explanation: "& (참조)를 써야 원본 원소를 수정할 수 있어요! &가 없으면 복사본만 바뀌어요."
+          explanation: "int& x — & 하나로 복사본이 아닌 원본을 직접 받아요. x를 바꾸면 v도 바뀌어요!"
         }
       ]
     },
@@ -217,6 +294,13 @@ x = "hello";    // ❌ 에러! int인데 string을 넣으려고!
 auto는 '처음에만 결정되는 확정 계약'이에요. \`auto x = 5;\`라고 쓰면 x는 int로 **영원히** 결정돼요. 파이썬처럼 나중에 문자열을 넣을 수 없어요!
 
 💡 auto는 "타입 안 쓰는 것"이 아니라 "컴파일러가 대신 써주는 것"이에요! 파이썬처럼 자유롭지는 않아요.`
+        },
+        {
+          id: "ch2-auto-anim",
+          type: "interactive",
+          title: "🤖 auto가 타입을 추론하는 과정",
+          content: "▶ 버튼을 눌러 컴파일러가 어떤 타입을 선택하는지 직접 확인해보세요!",
+          component: "autoTypeVisualizer",
         },
         {
           id: "ch2-fb1",
@@ -276,12 +360,51 @@ for (const auto& name : names) {
 }
 \`\`\`
 
-언제 뭘 써야 할까요?
-- \`auto x\` : 작은 값(int, double)을 읽기만 할 때
-- \`auto& x\` : 원소를 **수정**할 때
-- \`const auto& x\` : 큰 데이터(string)를 읽기만 할 때 (복사 방지)
+세 패턴 중 뭘 쓸지는 다음 페이지에서 정리할게요!`
+        },
+        {
+          id: "ch2-auto-tradeoff",
+          type: "explain",
+          title: "⚖️ auto — 편하지만 조심할 것도 있어요",
+          content: `방금 세 가지 패턴을 봤죠? 그럼 세 중에 뭘 쓰면 좋을까요?
 
-💡 \`for (const auto& x : v)\`는 C++ 고수들이 가장 많이 쓰는 패턴이에요!`
+| 패턴 | 용도 |
+|---|---|
+| \`for (auto x : v)\` | 읽기 전용, 작은 값 (int 등) |
+| \`for (auto& x : v)\` | 원소를 **수정**할 때 |
+| \`for (const auto& x : v)\` | 읽기 전용 + 큰 데이터 (string 등) |
+
+💡 C++ 개발자들은 대부분 \`const auto&\`를 기본으로 써요. 실수할 일도 없고 복사도 안 해서 효율적이거든요.
+
+---
+
+그런데 auto를 **무조건** 쓰는 게 좋을까요? 꼭 그렇진 않아요!
+
+### 😓 auto를 쓸 때 주의할 점
+
+**타입이 눈에 안 보여요**
+\`\`\`cpp
+auto result = calculate();  // result가 int? double? string? 모름!
+int result = calculate();   // 한눈에 int라는 걸 알 수 있음
+\`\`\`
+코드를 처음 보는 사람(혹은 미래의 나)이 타입을 바로 알기 어려워요.
+
+**의도치 않은 타입이 될 수 있어요**
+\`\`\`cpp
+auto x = 5 / 2;   // 2.5가 아니라 2! (int / int = int)
+\`\`\`
+
+---
+
+### 📏 정리
+
+| 상황 | 추천 |
+|---|---|
+| 간단한 변수 (\`int\`, \`double\`) | 직접 타입 쓰기 (가독성 좋음) |
+| range-for 읽기 | **auto** 또는 직접 타입, 둘 다 OK |
+| range-for 수정 | **auto&** |
+
+처음 배울 때는 **타입을 직접 쓰는 연습**을 먼저 하고, 익숙해지면 auto를 자연스럽게 써가는 게 좋아요!`,
         },
         {
           id: "ch2-pred1",
@@ -296,15 +419,19 @@ for (const auto& name : names) {
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ auto + range-for로 벡터 처리!",
-          content: `숫자 벡터의 모든 원소를 2배로 만들고 출력해보세요!
-
-auto&를 사용해서 원소를 직접 수정한 뒤, auto로 출력해봐요.`,
+          content: `숫자 개수와 숫자들을 입력받아, 모든 원소를 2배로 바꾼 뒤 출력해보세요.`,
           code: `#include <iostream>
 #include <vector>
 using namespace std;
 
 int main() {
-    vector<int> nums = {3, 7, 2, 9, 5};
+    int n;
+    cin >> n;
+
+    vector<int> nums(n);
+    for (int i = 0; i < n; i++) {
+        cin >> nums[i];
+    }
 
     // 모든 원소를 2배로!
     for (auto& x : nums) {
@@ -312,6 +439,7 @@ int main() {
     }
 
     // 결과 출력
+    cout << "2배 결과: ";
     for (auto x : nums) {
         cout << x << " ";
     }
@@ -319,7 +447,8 @@ int main() {
 
     return 0;
 }`,
-          expectedOutput: `6 14 4 18 10 `
+          stdin: `5\n3 7 2 9 5`,
+          expectedOutput: `2배 결과: 6 14 4 18 10 `
         },
         {
           id: "ch2-q1",

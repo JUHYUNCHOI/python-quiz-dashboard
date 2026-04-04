@@ -7,6 +7,8 @@ import { useGamification } from "@/hooks/use-gamification"
 import { useSoundEffect } from "@/hooks/use-sound-effect"
 import { useQuizSessionSync } from "@/hooks/use-quiz-session-sync"
 import { useMasterySync } from "@/hooks/use-mastery-sync"
+import { useAuth } from "@/contexts/auth-context"
+import { createClient } from "@/lib/supabase/client"
 import type { SessionData } from "@/hooks/use-quiz-state"
 import { useLanguage } from "@/contexts/language-context"
 import { addQuizHistoryEntry } from "@/lib/quiz-history"
@@ -15,6 +17,9 @@ import { logActivity } from "@/lib/activity-log"
 import { analyzeQuizResult, analyzeStreak } from "@/lib/feedback-analyzer"
 import { QuizFeedbackCard } from "@/components/feedback/quiz-feedback-card"
 import { StreakWidget } from "@/components/feedback/streak-widget"
+import { BottomNav } from "@/components/bottom-nav"
+import { getLessonName } from "@/lib/curriculum-data"
+import Link from "next/link"
 
 // -------- CountUp animation --------
 function CountUp({ end, duration = 800, prefix = "", suffix = "", className = "" }: {
@@ -132,8 +137,9 @@ function SessionCompletePage() {
   const gamification = useGamification()
   const { play } = useSoundEffect()
   const { saveQuizSession } = useQuizSessionSync()
+  const { user } = useAuth()
   const { syncMastery } = useMasterySync()
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
 
   // Session data from sessionStorage
   const [sessionData, setSessionData] = useState<SessionData | null>(null)
@@ -148,18 +154,19 @@ function SessionCompletePage() {
 
   // Load session data — 데이터 없으면 퀴즈 홈으로
   useEffect(() => {
-    // 퀴즈 완료 → 진행 중 플래그 제거
+    // 퀴즈 완료 → 진행 중 플래그 + 세팅 제거 (이후 이어가기 버튼 방지)
     sessionStorage.removeItem("quiz-in-progress")
+    sessionStorage.removeItem("quizSettings")
     try {
       const raw = sessionStorage.getItem("quizSessionData")
       if (raw) {
         setSessionData(JSON.parse(raw))
       } else {
         // 세션 데이터 없음 → 리다이렉트
-        router.replace("/quiz")
+        router.replace("/quiz/setup")
       }
     } catch {
-      router.replace("/quiz")
+      router.replace("/quiz/setup")
     }
   }, [router])
 
@@ -213,17 +220,30 @@ function SessionCompletePage() {
         lessonFilter: sessionData.lessonFilter,
       })
 
-      // 복습 세션이 완료된 경우 → completedQuizzes에 lessonId 추가 (커리큘럼 복습완료 표시)
+      // 복습 세션이 완료된 경우 → completedQuizzes localStorage + Supabase 동시 저장
       if (sessionData.isReview && sessionData.lessonFilter != null && sessionData.endReason === "completed") {
+        const id = sessionData.lessonFilter
         try {
           const saved = localStorage.getItem("completedQuizzes")
           const arr: (string | number)[] = saved ? JSON.parse(saved) : []
-          const id = sessionData.lessonFilter
           if (!arr.some(x => String(x) === String(id))) {
             arr.push(id)
             localStorage.setItem("completedQuizzes", JSON.stringify(arr))
           }
         } catch {}
+        // Supabase에도 즉시 저장 (로그인된 경우)
+        if (user?.id) {
+          const supabase = createClient()
+          void supabase.from("lesson_progress").upsert({
+            user_id: user.id,
+            lesson_id: String(id),
+            variant: "",
+            progress_type: "quiz",
+            progress_data: {},
+            completed: true,
+            score: 0,
+          }, { onConflict: "user_id,lesson_id,variant,progress_type" })
+        }
       }
       logActivity("quiz")
 
@@ -264,15 +284,42 @@ function SessionCompletePage() {
     }
   }, [isLevelUp]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handlePlayAgain = useCallback(() => {
+  const handleRetryWrong = useCallback(() => {
+    if (!sessionData) return
+    const wrongIds = sessionData.questionDetails
+      .filter(qr => !qr.is_correct && qr.selected_answer !== -1) // 스킵 제외
+      .map(qr => qr.question_id)
+    const uniqueWrongIds = [...new Set(wrongIds)]
+    if (uniqueWrongIds.length === 0) return
+
+    // 이전 코스/난이도 설정 유지 — sessionData에서 읽음 (quizSettings는 로드 시 이미 삭제됨)
+    const prevCourse = sessionData?.course ?? "python"
+    const prevDifficulty = sessionData?.difficulty ?? "mixed"
+
     sessionStorage.removeItem("quizSessionData")
-    router.push("/quiz/setup")
-  }, [router])
+    sessionStorage.setItem("quizSettings", JSON.stringify({
+      questionCount: uniqueWrongIds.length,
+      difficulty: prevDifficulty,
+      course: prevCourse,
+      startTime: Date.now(),
+      retryQuestionIds: uniqueWrongIds,
+      isRetry: true,
+    }))
+    router.push("/quiz")
+  }, [router, sessionData])
 
   const handleGoHome = useCallback(() => {
     sessionStorage.removeItem("quizSessionData")
-    router.push("/")
-  }, [router])
+    // 레슨에서 시작한 퀴즈면 커리큘럼 목록으로, 아니면 홈으로
+    if (sessionData?.lessonFilter != null) {
+      if (sessionData.course) {
+        localStorage.setItem("selectedCourse", sessionData.course)
+      }
+      router.push("/curriculum")
+    } else {
+      router.push("/")
+    }
+  }, [router, sessionData])
 
   // Format time
   const formatTime = (ms: number) => {
@@ -309,7 +356,7 @@ function SessionCompletePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 via-mint-50 to-lavender-50">
-      <main className="container mx-auto px-4 py-8 max-w-lg">
+      <main className="container mx-auto px-4 py-8 pb-24 max-w-lg">
 
         {/* === Phase 0: Header with giraffe + score === */}
         {phase >= 0 && (
@@ -431,7 +478,7 @@ function SessionCompletePage() {
               )}
             </div>
             {sessionData.perfectCount > 0 && sessionData.perfectCount === sessionData.correctAnswers && (
-              <p className="text-center text-sm font-bold text-yellow-600 mt-3">🌟 모든 문제를 첫 시도에 맞혔어요!</p>
+              <p className="text-center text-sm font-bold text-yellow-600 mt-3">{t("🌟 모든 문제를 첫 시도에 맞혔어요!", "🌟 You got every question right on the first try!")}</p>
             )}
           </div>
         )}
@@ -479,31 +526,75 @@ function SessionCompletePage() {
         {phase >= 7 && (
           <div className="space-y-4 mb-6">
             {/* 맞춤 피드백 카드 */}
-            <QuizFeedbackCard feedback={quizFeedback} t={t} visible={true} />
+            <QuizFeedbackCard
+              feedback={quizFeedback}
+              t={t}
+              visible={true}
+              nextActionHref={
+                quizFeedback.nextAction.type === "advance" ? "/curriculum" :
+                quizFeedback.nextAction.type === "review" ? "/quiz/setup?mode=review" :
+                "/quiz/setup"
+              }
+            />
 
             {/* 스트릭 위젯 */}
             <StreakWidget streak={streakInfo} t={t} />
           </div>
         )}
 
+        {/* === Phase 7: 복습 추천 레슨 === */}
+        {phase >= 7 && (() => {
+          const wrongLessonIds = [...new Set(
+            sessionData.questionDetails
+              .filter(qr => !qr.is_correct && qr.selected_answer !== -1 && qr.lesson_id != null)
+              .map(qr => qr.lesson_id!)
+          )].slice(0, 3)
+          if (wrongLessonIds.length === 0) return null
+          return (
+            <div className="mb-4 animate-fade-in-delay">
+              <p className="text-xs font-bold text-gray-500 mb-2 text-center">
+                {t("📚 이 레슨을 복습해보세요", "📚 Review these lessons")}
+              </p>
+              <div className="space-y-2">
+                {wrongLessonIds.map(id => {
+                  const href = `/learn/${String(id)}`
+                  return (
+                    <Link key={String(id)} href={href}
+                      className="flex items-center justify-between px-4 py-2.5 bg-white/60 backdrop-blur-sm border border-orange-200 rounded-xl hover:bg-orange-50 hover:border-orange-300 transition-all group">
+                      <span className="text-sm font-medium text-gray-700 group-hover:text-orange-700">
+                        {getLessonName(id, lang)}
+                      </span>
+                      <span className="text-xs text-orange-400 font-bold">{t("복습 →", "Review →")}</span>
+                    </Link>
+                  )
+                })}
+              </div>
+            </div>
+          )
+        })()}
+
         {/* === Phase 7: Action buttons === */}
         {phase >= 7 && (
           <div className="space-y-3 animate-fade-in-delay">
-            {/* Play again - big CTA */}
-            <button
-              onClick={handlePlayAgain}
-              className="w-full py-4 rounded-2xl text-xl font-black text-white bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-95"
-            >
-              {t("한 판 더? 🔥", "One more? 🔥")}
-            </button>
-
-            {/* Go home - subtle text */}
+            {/* 홈/수업목록 - primary */}
             <button
               onClick={handleGoHome}
-              className="w-full py-3 text-base font-medium text-gray-400 hover:text-gray-600 transition-colors"
+              className="w-full py-4 rounded-2xl text-xl font-black text-white bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-95"
             >
-              {t("그만하기", "Quit")}
+              {sessionData?.lessonFilter != null
+                ? t("← 수업 목록으로", "← Back to curriculum")
+                : t("홈으로 🏠", "Home 🏠")}
             </button>
+
+            {/* 틀린 문제 다시 풀기 - secondary, 틀린 게 있을 때만 표시 */}
+            {sessionData && sessionData.questionDetails.some(qr => !qr.is_correct && qr.selected_answer !== -1) ? (
+              <button
+                onClick={handleRetryWrong}
+                className="w-full py-3 rounded-2xl text-base font-bold text-orange-600 bg-orange-50 border-2 border-orange-200 hover:bg-orange-100 transition-all"
+              >
+                {t("틀린 문제 다시 풀기 🎯", "Retry wrong answers 🎯")}
+              </button>
+            ) : null}
           </div>
         )}
 
@@ -534,6 +625,7 @@ function SessionCompletePage() {
           </div>
         )}
       </main>
+      <BottomNav />
     </div>
   )
 }

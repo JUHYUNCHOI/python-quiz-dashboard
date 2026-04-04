@@ -80,47 +80,6 @@ for (int x : arr) {     // Arrays work too!
           explanation: "Range-for syntax: for (type variable : container). The colon (:) is like Python's 'in'!"
         },
         {
-          id: "ch1-ref",
-          type: "explain",
-          title: "✏️ Modifying Elements: Use a Reference!",
-          content: `By default, range-for gives you a **copy** of each element:
-
-\`\`\`cpp
-vector<int> nums = {1, 2, 3};
-
-for (int x : nums) {
-    x = x * 10;  // Only changes the copy!
-}
-// nums is still {1, 2, 3} — unchanged!
-\`\`\`
-
-To actually **modify** the original elements, add **&** (reference):
-
-\`\`\`cpp
-vector<int> nums = {1, 2, 3};
-
-for (int& x : nums) {  // ← & means reference!
-    x = x * 10;  // Now changes the actual element!
-}
-// nums is now {10, 20, 30} — changed!
-\`\`\`
-
-Think of it like this:
-
-| Syntax | Meaning | Modifies original? |
-|---|---|---|
-| \`for (int x : nums)\` | Copy | ❌ No |
-| \`for (int& x : nums)\` | Reference | ✅ Yes |
-
-In Python, when you do \`for x in list\` and change \`x\`, it doesn't change the list either. But C++ gives you the **choice** with &!
-
-💡 Adding & means "access the original directly"!
-
-& means "the original itself." Not a copy, but the real thing! If you **copy** a photo and give it to a friend, editing the copy doesn't affect the original. But if you **share the original file**, any changes your friend makes show up on yours too. That's exactly what & does — it's sharing the original!
-
-This is where the & symbol shows up! & means "modify the original directly." We'll learn more about it in Lesson 12. For now, just remember: **& = modify original, no & = copy only**!`
-        },
-        {
           id: "ch1-pred1",
           type: "predict" as const,
           title: "Range-for output!",
@@ -128,6 +87,108 @@ This is where the & symbol shows up! & means "modify the original directly." We'
           options: ["10", "15", "12", "Error"],
           answer: 1,
           explanation: "1 + 2 + 3 + 4 + 5 = 15! Range-for visits every element, just like Python's for-in."
+        },
+        {
+          id: "ch1-ref",
+          type: "explain",
+          title: "🔗 Modifying Elements — The Secret of Copies",
+          content: `There's a hidden secret in \`for (int x : v)\` — no matter how much you modify x, **the original doesn't change**.
+
+\`\`\`cpp
+vector<int> nums = {1, 2, 3};
+for (int x : nums) {
+    x = x * 10;   // only the copy changes
+}
+// nums is still {1, 2, 3} 😱
+\`\`\`
+
+**Add & (one character)** and x directly references the original:
+
+\`\`\`cpp
+for (int& x : nums) {   // add &!
+    x = x * 10;   // original changes!
+}
+// nums is now {10, 20, 30} ✅
+\`\`\`
+
+& = "not a copy, but the original itself." If you copy a photo and give it away, edits to the copy don't affect your original. But if you **share the original file**, changes show up on both sides. That's exactly what & does!
+
+And since & skips copying, it's also **faster**. The bigger the data, the bigger the difference.`,
+        },
+        {
+          id: "ch1-ref-anim",
+          type: "interactive",
+          title: "🎬 Copy vs Reference (&) — See the Difference!",
+          content: "Press the run button to see how the result differs with and without &!",
+          component: "rangeForVisualizer",
+        },
+        {
+          id: "ch1-ref-fb",
+          type: "fillblank" as const,
+          title: "Modify elements with a reference!",
+          content: "Complete the code to add 1 to every element in the vector!",
+          code: "vector<int> v = {1, 2, 3};\nfor (int___ x : v) {\n    x += 1;\n}\n// v is now {2, 3, 4}",
+          fillBlanks: [
+            { id: 0, answer: "&", options: ["&", "*", "%", ""] }
+          ],
+          explanation: "You need int& x (reference) to modify the original elements! Without &, only the copy changes."
+        },
+        {
+          id: "ch1-ref-pred",
+          type: "predict" as const,
+          title: "Modify with reference, then print!",
+          code: `#include <iostream>
+#include <vector>
+using namespace std;
+int main() {
+    vector<int> v = {10, 20, 30};
+    for (int& x : v) {
+        x = x / 10;
+    }
+    for (int x : v) {
+        cout << x << " ";
+    }
+    return 0;
+}`,
+          options: ["10 20 30 ", "1 2 3 ", "0 2 3 ", "Error"],
+          answer: 1,
+          explanation: "int& x modifies the originals: {1, 2, 3}. Second loop prints them!"
+        },
+        {
+          id: "ch1-const-ref",
+          type: "explain",
+          title: "🔒 Lock the Reference — const int&",
+          content: `& is fast, but you might accidentally modify the original. If you only want to **read** without risk of changing it, add \`const\`.
+
+Remember const from Lesson 3? It was for values like PI that must never change:
+
+\`\`\`cpp
+const double PI = 3.14159;
+PI = 0;  // ❌ Error! Can't change it
+\`\`\`
+
+You can use the same \`const\` in range-for:
+
+\`\`\`cpp
+for (const int& x : v) {
+    cout << x;  // ✅ Reading is fine
+    x = 0;      // ❌ Compile error! Accidental edits prevented
+}
+\`\`\`
+
+**& = fast (no copy)** + **const = no modification** — both benefits combined.
+
+That's why real C++ code uses these patterns:
+
+| Pattern | When to use |
+|---|---|
+| \`for (int& x : v)\` | When you need to **modify** |
+| \`for (const int& x : v)\` | **Read-only** 👈 used most! |
+| \`for (int x : v)\` | Rarely used |
+
+💡 **Bottom line: Real C++ developers almost always use &!**
+- Need to modify → \`int& x\`
+- Read only → \`const int& x\``,
         },
         {
           id: "ch1-practice",
@@ -220,6 +281,13 @@ Think of auto as a "one-time binding contract." When you write \`auto x = 5;\`, 
 💡 auto doesn't mean "no type" — it means "the compiler writes the type for you!" It's not as free as Python.`
         },
         {
+          id: "ch2-auto-anim",
+          type: "interactive",
+          title: "🤖 Watching auto Infer Types",
+          content: "Press ▶ to see which type the compiler picks for each value!",
+          component: "autoTypeVisualizer",
+        },
+        {
           id: "ch2-fb1",
           type: "fillblank" as const,
           title: "Fill in the blanks",
@@ -256,7 +324,7 @@ for (auto x : nums) {
 
 Why is this awesome? Look at longer types:
 \`\`\`cpp
-vector<string> names = {"Alice", "Bob", "Charlie"};
+vector<string> names = {"Emma", "Jake", "Charlie"};
 
 // Without auto — so much typing!
 for (string name : names) { ... }
@@ -275,7 +343,7 @@ Remember these three patterns:
 
 Here's an example with a string vector:
 \`\`\`cpp
-vector<string> names = {"Alice", "Bob", "Charlie"};
+vector<string> names = {"Emma", "Jake", "Charlie"};
 
 // Explicit type: vector<string>, so... string? string&? Confusing!
 for (const string& name : names) {
@@ -294,6 +362,50 @@ When should you use which?
 - \`const auto& x\` : Reading large data (string) without copying
 
 💡 \`for (const auto& x : v)\` is the pattern C++ experts use the most!`
+        },
+        {
+          id: "ch2-auto-tradeoff",
+          type: "explain",
+          title: "⚖️ auto — Convenient, but Watch Out",
+          content: `You saw three patterns just now. Which should you use?
+
+| Pattern | When to use |
+|---|---|
+| \`for (auto x : v)\` | Read-only, small values (int etc.) |
+| \`for (auto& x : v)\` | When **modifying** elements |
+| \`for (const auto& x : v)\` | Read-only + large data (string etc.) |
+
+💡 Most C++ developers default to \`const auto&\` — no accidents, no copying, efficient.
+
+---
+
+But should you **always** use auto? Not necessarily!
+
+### 😓 Caution with auto
+
+**Type is hidden from view**
+\`\`\`cpp
+auto result = calculate();  // Is result int? double? string? Unknown!
+int result = calculate();   // Clearly int at a glance
+\`\`\`
+Someone reading your code (or future you) may not immediately know the type.
+
+**Unintended type can happen**
+\`\`\`cpp
+auto x = 5 / 2;   // Not 2.5 — it's 2! (int / int = int)
+\`\`\`
+
+---
+
+### 📏 Summary
+
+| Situation | Recommendation |
+|---|---|
+| Simple variables (\`int\`, \`double\`) | Write the type explicitly (more readable) |
+| range-for reading | **auto** or explicit type, either is fine |
+| range-for modifying | **auto&** |
+
+Start by **practicing with explicit types**, then let auto come naturally as you get comfortable!`,
         },
         {
           id: "ch2-pred1",

@@ -11,12 +11,13 @@ export interface TestCase {
 
 export interface LessonStep {
   id: string
-  type: "explain" | "tryit" | "mission" | "quiz" | "interactive" | "coding" | "fillblank" | "predict" | "practice"
+  type: "explain" | "tryit" | "mission" | "quiz" | "interactive" | "animation" | "coding" | "fillblank" | "predict" | "practice"
   title: string
   content?: string
   code?: string
   initialCode?: string
   expectedOutput?: string
+  stdin?: string
   hint?: string
   hint2?: string
   reviewHint?: string
@@ -26,6 +27,7 @@ export interface LessonStep {
   explanation?: string
   // interactive 타입용
   component?: string
+  component2?: string
   componentProps?: Record<string, any>
   description?: string
   // typeAlong 컴포넌트용

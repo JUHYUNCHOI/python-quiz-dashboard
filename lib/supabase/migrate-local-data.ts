@@ -1,6 +1,81 @@
 import { createClient } from "./client"
 
 /**
+ * 매 로그인마다 completedLessons + completedQuizzes를 Supabase에 동기화
+ * 24시간 쿨다운 없이 항상 실행 — 데이터가 작아서 비용 적음
+ */
+export async function syncCompletionsToSupabase(userId: string) {
+  const supabase = createClient()
+
+  try {
+    // completed=true 행이 있는데 같은 lesson_id에 completed=false 행이 남아있으면 삭제
+    const { data: completedRows } = await supabase
+      .from("lesson_progress")
+      .select("lesson_id, progress_type")
+      .eq("user_id", userId)
+      .eq("completed", true)
+    if (completedRows && completedRows.length > 0) {
+      for (const row of completedRows) {
+        await supabase.from("lesson_progress")
+          .delete()
+          .eq("user_id", userId)
+          .eq("lesson_id", row.lesson_id)
+          .eq("progress_type", row.progress_type)
+          .eq("completed", false)
+      }
+    }
+  } catch (e) {
+    console.error("[syncCompletions] cleanup failed:", e)
+  }
+
+  try {
+    // completedLessons
+    const completedLessonsRaw = localStorage.getItem("completedLessons")
+    if (completedLessonsRaw) {
+      const completedLessons: (string | number)[] = JSON.parse(completedLessonsRaw)
+      const progressRows = completedLessons.map(lessonId => ({
+        user_id: userId,
+        lesson_id: String(lessonId),
+        variant: "",
+        progress_type: "learn" as const,
+        progress_data: {},
+        completed: true,
+        score: 0,
+      }))
+      if (progressRows.length > 0) {
+        const { error } = await supabase.from("lesson_progress").upsert(progressRows, {
+          onConflict: "user_id,lesson_id,variant,progress_type",
+        })
+        if (error) console.error("[syncCompletions] lesson_progress upsert failed:", error.message)
+      }
+    }
+
+    // completedQuizzes
+    const completedQuizzesRaw = localStorage.getItem("completedQuizzes")
+    if (completedQuizzesRaw) {
+      const completedQuizzes: (string | number)[] = JSON.parse(completedQuizzesRaw)
+      const quizRows = completedQuizzes.map(lessonId => ({
+        user_id: userId,
+        lesson_id: String(lessonId),
+        variant: "",
+        progress_type: "quiz" as const,
+        progress_data: {},
+        completed: true,
+        score: 0,
+      }))
+      if (quizRows.length > 0) {
+        const { error } = await supabase.from("lesson_progress").upsert(quizRows, {
+          onConflict: "user_id,lesson_id,variant,progress_type",
+        })
+        if (error) console.error("[syncCompletions] completedQuizzes upsert failed:", error.message)
+      }
+    }
+  } catch (e) {
+    console.error("[syncCompletions] failed:", e)
+  }
+}
+
+/**
  * 첫 로그인 시 localStorage 데이터를 Supabase로 마이그레이션
  * auth-context.tsx에서 SIGNED_IN 이벤트 시 1회 호출
  */
@@ -72,7 +147,27 @@ export async function migrateLocalStorageToSupabase(userId: string) {
       }
     }
 
-    // 3. 학습 진도 (practice-v2-*)
+    // 3. 퀴즈 복습 완료 (completedQuizzes → lesson_progress quiz)
+    const completedQuizzesRaw = localStorage.getItem("completedQuizzes")
+    if (completedQuizzesRaw) {
+      const completedQuizzes: (string | number)[] = JSON.parse(completedQuizzesRaw)
+      const quizRows = completedQuizzes.map(lessonId => ({
+        user_id: userId,
+        lesson_id: String(lessonId),
+        variant: "",
+        progress_type: "quiz" as const,
+        progress_data: {},
+        completed: true,
+        score: 0,
+      }))
+      if (quizRows.length > 0) {
+        await supabase.from("lesson_progress").upsert(quizRows, {
+          onConflict: "user_id,lesson_id,variant,progress_type",
+        })
+      }
+    }
+
+    // 5. 학습 진도 (practice-v2-*)
     const keys = Object.keys(localStorage)
     const practiceKeys = keys.filter(k => k.startsWith("practice-v2-"))
 

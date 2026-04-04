@@ -415,7 +415,7 @@ std::cout << "두 번째 줄\\n";
         {
           id: "ch5-q2",
           type: "quiz",
-          title: "세미콜론!",
+          title: "뭐가 빠졌을까?",
           content: `C++에서 이 코드가 에러나는 이유는?
 \`\`\`cpp
 std::cout << "Hi" << std::endl

@@ -1,6 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
+import { useLanguage } from "@/contexts/language-context"
 
 interface GiraffeMascotProps {
   showResult: boolean
@@ -8,14 +9,15 @@ interface GiraffeMascotProps {
 }
 
 export function GiraffeMascot({ showResult, isCorrect }: GiraffeMascotProps) {
+  const { t } = useLanguage()
   const getExpression = () => {
     if (!showResult) return "🦒"
     return isCorrect ? "🦒✨" : "🦒💭"
   }
 
   const getMessage = () => {
-    if (!showResult) return "화이팅!"
-    return isCorrect ? "잘했어요!" : "괜찮아요!"
+    if (!showResult) return t("화이팅!", "You got this!")
+    return isCorrect ? t("잘했어요!", "Great job!") : t("괜찮아요!", "That's okay!")
   }
 
   return (

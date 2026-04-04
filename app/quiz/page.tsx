@@ -2,6 +2,7 @@
 
 import { useEffect, useCallback, useMemo, useState, useRef } from "react"
 import { useRouter } from "next/navigation"
+import { RequireAuth } from "@/components/require-auth"
 import { X, Clock, ChevronLeft, ChevronRight, Check, AlertCircle, Coffee, Flag } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -57,6 +58,18 @@ export default function QuizPage() {
         const pool = parsed.course === "cpp" ? cppQuestions : pythonQuestions
         const count = parsed.questionCount || 20
 
+        // 틀린 문제 다시 풀기: retryQuestionIds가 있으면 해당 문제들만 출제
+        // pool (코스별)만 사용해야 함 — Python/C++ 문제 ID가 겹치므로 allQuestions 사용 시 다른 코스 문제가 섞임
+        if (parsed.retryQuestionIds && parsed.retryQuestionIds.length > 0) {
+          const retrySet = new Set<number>(parsed.retryQuestionIds)
+          const retryPool = pool.filter(q => retrySet.has(q.id))
+          if (retryPool.length > 0) {
+            return { questions: shuffleArray(retryPool), reviewCount: retryPool.length, newCount: 0 }
+          }
+          // retryPool이 비어있으면 (삭제된 문제 ID) → 빈 배열 반환해서 리다이렉트 트리거
+          return { questions: [], reviewCount: 0, newCount: 0, retryQueue: new Map() }
+        }
+
         // 레슨 집중 퀴즈: lessonFilter가 있으면 해당 레슨 문제만 출제
         if (parsed.lessonFilter !== undefined) {
           const filtered = pool.filter(
@@ -82,12 +95,21 @@ export default function QuizPage() {
 
   const shuffled = smartSession.questions
 
+  // 틀린 문제 retryPool이 비었으면 (삭제된 문제 ID) setup으로 리다이렉트
+  useEffect(() => {
+    if (shuffled.length === 0) {
+      sessionStorage.removeItem("quizSettings")
+      router.replace("/quiz/setup")
+    }
+  }, [shuffled.length, router])
+
   // 퀴즈 진행 중 플래그 — setup 페이지 "이어서 풀기" 배너용
   useEffect(() => {
     sessionStorage.setItem("quiz-in-progress", "1")
   }, [])
 
-  const quiz = useQuizState(shuffled)
+  // shuffled가 비어있으면 리다이렉트 중 — hooks 순서 유지 위해 fallback 사용
+  const quiz = useQuizState(shuffled.length > 0 ? shuffled : pythonQuestions.slice(0, 1))
   const { play, isMuted, toggleMute } = useSoundEffect()
   const gamification = useGamification()
   const { t } = useLanguage()
@@ -95,6 +117,17 @@ export default function QuizPage() {
   const comboTier = getComboTier(quiz.combo)
   const [reportedQuestions, setReportedQuestions] = useState<Set<number>>(new Set())
   const [showReportToast, setShowReportToast] = useState(false)
+
+  // 브라우저 뒤로가기 시 기존 나가기 확인 모달 재사용
+  useEffect(() => {
+    window.history.pushState(null, "", window.location.href)
+    const handlePopState = () => {
+      window.history.pushState(null, "", window.location.href)
+      quiz.handleExit() // 기존 X버튼과 동일한 확인 모달 표시
+    }
+    window.addEventListener("popstate", handlePopState)
+    return () => window.removeEventListener("popstate", handlePopState)
+  }, [quiz.handleExit])
 
   const handleReport = useCallback((questionId: number) => {
     if (reportedQuestions.has(questionId)) return
@@ -112,8 +145,9 @@ export default function QuizPage() {
     setTimeout(() => setShowReportToast(false), 2000)
   }, [reportedQuestions])
 
+  const isBeginnerMode = quiz.quizSettings.difficulty === "beginner"
   const { formattedTime, isLowTime } = useQuizTimer({
-    initialTime: 300,
+    initialTime: isBeginnerMode ? 9999 : 300,
     isPaused: quiz.showResult || !isFocused,
   })
 
@@ -153,16 +187,21 @@ export default function QuizPage() {
     if (quiz.showCelebration) playCorrectSound(quiz.combo)
   }, [quiz.showCelebration, quiz.combo, playCorrectSound])
 
-  // 오답 사운드 + 하트 깨지는 사운드
+  // 오답 사운드 + 하트 깨지는 사운드 (스냅샷 복원 시에는 재생 안 함)
   useEffect(() => {
     if (quiz.showResult && !quiz.isCorrect) {
+      if (quiz.isSnapshotRestore.current) {
+        quiz.isSnapshotRestore.current = false
+        return
+      }
       play("heartbreak")
     }
-  }, [quiz.showResult, quiz.isCorrect, play])
+  }, [quiz.showResult, quiz.isCorrect, play, quiz.isSnapshotRestore])
 
   const question = quiz.question
 
   return (
+    <RequireAuth>
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-mint-50">
       {/* Top Bar — 수업 페이지와 동일한 스타일 */}
       <div className="border-b border-orange-100 bg-white/95 backdrop-blur-lg sticky top-0 z-10 safe-area-inset-bottom">
@@ -173,7 +212,7 @@ export default function QuizPage() {
               <button
                 onClick={quiz.handleExit}
                 className="rounded-full p-2 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors hover:bg-gray-100"
-                aria-label="나가기"
+                aria-label={t("나가기", "Exit")}
               >
                 <X className="h-5 w-5 md:h-6 md:w-6 text-gray-600" />
               </button>
@@ -182,27 +221,44 @@ export default function QuizPage() {
                   <span>{t("문제", "Q")} {quiz.currentQuestion + 1}/{quiz.quizSettings.questionCount}</span>
                 </div>
                 <div className="flex gap-1 w-full">
-                  {Array.from({ length: quiz.quizSettings.questionCount }).map((_, i) => (
-                    <div
-                      key={i}
-                      className={cn(
-                        "h-2.5 flex-1 rounded-sm transition-all duration-300",
-                        i < quiz.currentQuestion
-                          ? "bg-green-400"
-                          : i === quiz.currentQuestion
-                          ? quiz.combo >= 5
-                            ? "bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-400 animate-pulse"
-                            : "bg-indigo-500"
-                          : "bg-gray-200",
-                      )}
-                    />
-                  ))}
+                  {Array.from({ length: quiz.quizSettings.questionCount }).map((_, i) => {
+                    const isAnswered = quiz.questionSnapshots.current.has(i)
+                    const isCurrent = i === quiz.currentQuestion
+                    const isJumpable = isAnswered || isCurrent
+                    return (
+                      <button
+                        key={i}
+                        onClick={() => {
+                          if (!isJumpable) return
+                          if (isCurrent) return
+                          const snap = quiz.questionSnapshots.current.get(i)
+                          if (snap) {
+                            quiz.isSnapshotRestore.current = true
+                            quiz.jumpToQuestion(i, snap)
+                          }
+                        }}
+                        className={cn(
+                          "h-2.5 flex-1 rounded-sm transition-all duration-300",
+                          isAnswered
+                            ? isCurrent
+                              ? "bg-green-500 ring-2 ring-indigo-400 ring-offset-1"
+                              : "bg-green-400 hover:bg-green-500 cursor-pointer"
+                            : isCurrent
+                            ? quiz.combo >= 5
+                              ? "bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-400 animate-pulse"
+                              : "bg-indigo-500"
+                            : "bg-gray-200 cursor-default",
+                        )}
+                        aria-label={`${t("문제", "Q")} ${i + 1}${isAnswered ? t(" (풀었음)", " (answered)") : ""}`}
+                      />
+                    )
+                  })}
                 </div>
               </div>
             </div>
 
             {/* Center: Hearts */}
-            <div className="flex items-center gap-0.5">
+            <div className="relative flex items-center gap-0.5">
               {Array.from({ length: quiz.maxHearts }).map((_, i) => (
                 <span
                   key={i}
@@ -219,6 +275,15 @@ export default function QuizPage() {
                   {i < quiz.hearts ? "❤️" : "🖤"}
                 </span>
               ))}
+              {/* Floating -1 indicator */}
+              {quiz.lastHeartLost && (
+                <span
+                  key={quiz.hearts}
+                  className="animate-float-heart-up pointer-events-none absolute -top-1 left-1/2 -translate-x-1/2 text-sm font-bold text-red-500 whitespace-nowrap"
+                >
+                  -1 ❤️
+                </span>
+              )}
             </div>
 
             {/* Right: Combo + Sound + Timer */}
@@ -241,6 +306,7 @@ export default function QuizPage() {
 
               <SoundToggle isMuted={isMuted} onToggle={toggleMute} />
 
+              {!isBeginnerMode && (
               <div
                 className={cn(
                   "flex flex-col items-center rounded-full px-3 py-1",
@@ -257,6 +323,7 @@ export default function QuizPage() {
                   </span>
                 </div>
               </div>
+              )}
             </div>
           </div>
         </div>
@@ -301,21 +368,52 @@ export default function QuizPage() {
         </div>
       )}
 
-      {quiz.showMidCheckIn && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
-          <Card className="bg-white p-8 max-w-md mx-4 text-center animate-bounce-in">
-            <div className="text-6xl mb-4">🦒💪</div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-2">{t("절반 왔어요!", "Halfway there!")}</h3>
-            <p className="text-lg text-gray-600 mb-2">{t("잘하고 있어요!", "You're doing great!")}</p>
-            <p className="text-sm text-gray-500">
-              {t(
-                `지금까지 ${Math.round((quiz.score / (quiz.currentQuestion + 1)) * 100)}% 정답률!`,
-                `${Math.round((quiz.score / (quiz.currentQuestion + 1)) * 100)}% accuracy so far!`
+      {quiz.showMidCheckIn && (() => {
+        const midAcc = Math.round((quiz.score / (quiz.currentQuestion + 1)) * 100)
+        const isStruggling = midAcc < 50
+        const isExcelling = midAcc >= 80
+        return (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <Card className="bg-white p-8 max-w-md w-full text-center animate-bounce-in">
+              <div className="text-6xl mb-4">{isStruggling ? "🦒💭" : isExcelling ? "🦒👑" : "🦒💪"}</div>
+              <h3 className="text-2xl font-bold text-gray-800 mb-2">{t("절반 왔어요!", "Halfway there!")}</h3>
+              <p className={`text-lg font-semibold mb-2 ${isStruggling ? "text-amber-600" : isExcelling ? "text-green-600" : "text-gray-600"}`}>
+                {isStruggling
+                  ? t("조금 어렵죠? 괜찮아요!", "Feeling tough? That's okay!")
+                  : isExcelling
+                  ? t("훌륭해요! 이 기세 유지해요!", "Excellent! Keep it up!")
+                  : t("잘하고 있어요!", "You're doing great!")}
+              </p>
+              <p className="text-sm text-gray-500 mb-6">
+                {t(`지금까지 ${midAcc}% 정답률!`, `${midAcc}% accuracy so far!`)}
+              </p>
+              {isStruggling ? (
+                <div className="space-y-2">
+                  <button
+                    onClick={() => { quiz.dismissMidCheckIn(); router.push("/curriculum") }}
+                    className="w-full py-3 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold transition-colors"
+                  >
+                    {t("📚 관련 레슨 복습하기", "📚 Review related lessons")}
+                  </button>
+                  <button
+                    onClick={quiz.dismissMidCheckIn}
+                    className="w-full py-3 rounded-xl border border-gray-200 text-gray-500 font-medium hover:bg-gray-50 transition-colors"
+                  >
+                    {t("계속 도전하기", "Keep going anyway")}
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={quiz.dismissMidCheckIn}
+                  className="w-full py-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold transition-colors"
+                >
+                  {t("계속하기 →", "Continue →")}
+                </button>
               )}
-            </p>
-          </Card>
-        </div>
-      )}
+            </Card>
+          </div>
+        )
+      })()}
 
       {quiz.showPauseScreen && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -348,6 +446,23 @@ export default function QuizPage() {
             </div>
           </Card>
         </div>
+      )}
+
+      {/* Danger vignette — hearts <= 2 (비복습 모드만) */}
+      {quiz.hearts <= 2 && !quiz.sessionOver && !quiz.quizSettings.isReview && (
+        <div
+          className="animate-danger-vignette pointer-events-none fixed inset-0 z-30"
+          style={{ background: "radial-gradient(ellipse at center, transparent 40%, rgba(220,38,38,0.55) 100%)" }}
+        />
+      )}
+
+      {/* Screen flash on heart lost */}
+      {quiz.lastHeartLost && (
+        <div
+          key={quiz.hearts}
+          className="animate-screen-flash pointer-events-none fixed inset-0 z-40"
+          style={{ background: "radial-gradient(ellipse at center, transparent 35%, rgba(239,68,68,0.45) 100%)" }}
+        />
       )}
 
       {/* Hearts depleted overlay */}
@@ -400,11 +515,11 @@ export default function QuizPage() {
                       question.difficulty === "어려움" && "bg-red-100 text-red-700",
                     )}
                   >
-                    {question.difficulty}
+                    {question.difficulty === "쉬움" ? t("쉬움", "Easy") : question.difficulty === "보통" ? t("보통", "Medium") : t("어려움", "Hard")}
                   </span>
                   {quiz.isRetryQuestion && (
                     <span className="rounded-full px-3 py-1 text-xs font-semibold bg-purple-100 text-purple-700 animate-pulse">
-                      🔄 다시 풀기
+                      🔄 {t("다시 풀기", "Retry")}
                     </span>
                   )}
                 </div>
@@ -487,13 +602,15 @@ export default function QuizPage() {
 
                         <span
                           className={cn(
-                            "flex-1 font-mono text-sm md:text-base lg:text-lg font-medium transition-colors whitespace-pre-line",
+                            "flex-1 font-mono text-sm md:text-base lg:text-lg font-medium transition-colors",
                             !quiz.showResult && "text-gray-700",
                             showCorrect && "text-green-700",
                             showWrong && "text-red-700",
                           )}
                         >
-                          {option}
+                          {option.split(/\\n|\n/).map((line, i, arr) => (
+                            <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+                          ))}
                         </span>
                       </div>
                     </button>
@@ -603,5 +720,6 @@ export default function QuizPage() {
         </div>
       )}
     </div>
+    </RequireAuth>
   )
 }

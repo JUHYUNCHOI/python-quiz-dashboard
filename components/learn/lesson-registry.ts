@@ -46,9 +46,10 @@ import {
   cppLesson5Data, cppLesson6Data, cppLesson7Data, cppLesson8Data,
   cppLesson9Data, cppLesson10Data, cppLesson11Data, cppLesson12Data,
   cppLesson13Data, cppLesson14Data,
-  // C++ Korean lessons 15-20
+  // C++ Korean lessons 15-22
   cppLesson15Data, cppLesson16Data, cppLesson17Data, cppLesson18Data,
-  cppLesson19Data, cppLesson20Data,
+  cppLesson19Data, cppLesson20Data, cppLesson21Data, cppLesson22Data, cppLesson23Data,
+  // C++ lesson 22 (Korean only, no English version yet)
   // C++ project lessons
   cppLessonP1Data, cppLessonP2Data, cppLessonP3Data,
   // C++ English lessons
@@ -56,9 +57,9 @@ import {
   cppLesson5EnData, cppLesson6EnData, cppLesson7EnData, cppLesson8EnData,
   cppLesson9EnData, cppLesson10EnData, cppLesson11EnData, cppLesson12EnData,
   cppLesson13EnData, cppLesson14EnData,
-  // C++ English lessons 15-20
+  // C++ English lessons 15-22
   cppLesson15EnData, cppLesson16EnData, cppLesson17EnData, cppLesson18EnData,
-  cppLesson19EnData, cppLesson20EnData,
+  cppLesson19EnData, cppLesson20EnData, cppLesson21EnData, cppLesson22EnData,
   // C++ English project lessons
   cppLessonP1EnData, cppLessonP2EnData, cppLessonP3EnData,
   // Pseudocode Korean lessons
@@ -109,8 +110,10 @@ export const lessonsData: Record<string, LessonData> = {
   // C++ Part 2
   "cpp-9": cppLesson9Data, "cpp-10": cppLesson10Data, "cpp-11": cppLesson11Data, "cpp-12": cppLesson12Data,
   "cpp-13": cppLesson13Data, "cpp-14": cppLesson14Data,
+  "cpp-21": cppLesson21Data, "cpp-22": cppLesson22Data,
   // C++ Part 3
-  "cpp-15": cppLesson15Data, "cpp-16": cppLesson16Data, "cpp-17": cppLesson17Data, "cpp-18": cppLesson18Data,
+  "cpp-15": cppLesson15Data, "cpp-23": cppLesson23Data,
+  "cpp-16": cppLesson16Data, "cpp-17": cppLesson17Data, "cpp-18": cppLesson18Data,
   "cpp-19": cppLesson19Data, "cpp-20": cppLesson20Data,
   // C++ projects
   "cpp-p1": cppLessonP1Data, "cpp-p2": cppLessonP2Data, "cpp-p3": cppLessonP3Data,
@@ -227,6 +230,8 @@ export const bilingualLessons: Record<string, { ko: LessonData, en: LessonData }
   "cpp-12": { ko: cppLesson12Data, en: cppLesson12EnData },
   "cpp-13": { ko: cppLesson13Data, en: cppLesson13EnData },
   "cpp-14": { ko: cppLesson14Data, en: cppLesson14EnData },
+  "cpp-21": { ko: cppLesson21Data, en: cppLesson21EnData },
+  "cpp-22": { ko: cppLesson22Data, en: cppLesson22EnData },
   // C++ Part 3
   "cpp-15": { ko: cppLesson15Data, en: cppLesson15EnData },
   "cpp-16": { ko: cppLesson16Data, en: cppLesson16EnData },

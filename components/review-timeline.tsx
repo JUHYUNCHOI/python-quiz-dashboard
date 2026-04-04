@@ -1,6 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
+import { useLanguage } from "@/contexts/language-context"
 
 interface ReviewScheduleItem {
   time: string
@@ -14,6 +15,7 @@ interface ReviewTimelineProps {
 }
 
 export function ReviewTimeline({ schedule }: ReviewTimelineProps) {
+  const { t } = useLanguage()
   const colorClasses = {
     orange: "bg-orange-400 text-white",
     yellow: "bg-yellow-400 text-gray-800",
@@ -36,11 +38,11 @@ export function ReviewTimeline({ schedule }: ReviewTimelineProps) {
             <div className="flex flex-1 items-center justify-between rounded-2xl bg-gray-50 p-4 transition-all hover:bg-gray-100">
               <div>
                 <h4 className="font-semibold text-gray-800">{item.time}</h4>
-                <p className="text-sm text-gray-600">{item.count}개 문제</p>
+                <p className="text-sm text-gray-600">{t(`${item.count}개 문제`, `${item.count} questions`)}</p>
               </div>
 
               <div className={cn("rounded-full px-4 py-1 text-sm font-semibold", colorClasses[item.color])}>
-                {item.days === 0 ? "지금" : `D+${item.days}`}
+                {item.days === 0 ? t("지금", "Now") : `D+${item.days}`}
               </div>
             </div>
           </div>

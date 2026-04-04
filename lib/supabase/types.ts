@@ -2,7 +2,7 @@
 
 export interface Profile {
   id: string
-  role: "student" | "teacher"
+  role: "student" | "teacher" | "parent"
   display_name: string
   avatar_url: string | null
   created_at: string

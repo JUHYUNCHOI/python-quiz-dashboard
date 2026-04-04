@@ -67,8 +67,8 @@ std::cout << "Score: " << 100 << std::endl;
 
 Chaining multiple values works too:
 \`\`\`cpp
-std::cout << "Age: " << 14 << " Name: " << "Alice" << std::endl;
-// Output: Age: 14 Name: Alice
+std::cout << "Age: " << 14 << " Name: " << "Emma" << std::endl;
+// Output: Age: 14 Name: Emma
 \`\`\`
 
 Remember how Python did it?
@@ -94,10 +94,10 @@ std::cout << "Line 1\\nLine 2" << std::endl;
 // Line 2
 
 std::cout << "Name\\tAge" << std::endl;
-std::cout << "Alice\\t14" << std::endl;
+std::cout << "Emma\\t14" << std::endl;
 // Output:
 // Name    Age
-// Alice   14
+// Emma   14
 \`\`\`
 
 Common escape sequences:
@@ -125,14 +125,14 @@ See how tabs (\\t) neatly align everything!`,
 
 int main() {
     std::cout << "Name\\tAge\\tScore" << std::endl;
-    std::cout << "Alice\\t14\\t100" << std::endl;
-    std::cout << "Bob\\t15\\t95" << std::endl;
+    std::cout << "Emma\\t14\\t100" << std::endl;
+    std::cout << "Jake\\t15\\t95" << std::endl;
     std::cout << "\\nGot an \\"A+\\" in math!" << std::endl;
     return 0;
 }`,
           expectedOutput: `Name\tAge\tScore
-Alice\t14\t100
-Bob\t15\t95
+Emma\t14\t100
+Jake\t15\t95
 
 Got an "A+" in math!`
         },
@@ -383,15 +383,15 @@ using namespace std;
 int main() {
     cout << "=== Report Card ===" << endl;
     cout << "Name\\tEnglish\\tMath" << endl;
-    cout << "Alice\\t95\\t100" << endl;
-    cout << "Bob\\t88\\t92" << endl;
+    cout << "Emma\\t95\\t100" << endl;
+    cout << "Jake\\t88\\t92" << endl;
     cout << "\\nTeacher said \\"Great job!\\"" << endl;
     return 0;
 }`,
           expectedOutput: `=== Report Card ===
 Name\tEnglish\tMath
-Alice\t95\t100
-Bob\t88\t92
+Emma\t95\t100
+Jake\t88\t92
 
 Teacher said "Great job!"`
         },
@@ -409,7 +409,7 @@ Teacher said "Great job!"`
 - ✅ **namespace** — A "folder" to prevent name conflicts
 - ✅ **using namespace std;** — Skip writing std::!
 
-🚀 **Next time: cin Input** — Get keyboard input with cin >>!`
+🚀 **Next time: Variables & Types** — Store data with int, double, and string!`
         }
       ]
     }

@@ -74,6 +74,64 @@ The WHILE loop shifts elements right to make room for the key. It stops when:
 - We find an element that is **not greater** than the key`
         },
         {
+          id: "ch1-how",
+          type: "explain",
+          title: "📋 How Insertion Sort Works",
+          content: `Let's break down the core idea:
+
+**1) Think of the array as two parts:**
+- Left side: already **sorted**
+- Right side: not yet **sorted**
+
+**2) Take one element from the unsorted part**
+- We call this value the **key**
+
+**3) Insert the key into the correct position in the sorted part**
+- Shift all elements larger than key one step to the right
+- Place key in the empty spot
+
+Repeat this process from the 2nd element to the last, and the array will be fully sorted!`
+        },
+        {
+          id: "ch1-example",
+          type: "explain",
+          title: "🔍 Step-by-step: [7, 2, 4, 1]",
+          content: `Let's sort [7, 2, 4, 1] using insertion sort!
+
+**Initial state:**
+\`\`\`
+[7, 2, 4, 1]
+ ^sorted
+\`\`\`
+
+**i = 2: key = 2**
+\`\`\`
+2 < 7, so shift 7 right
+[_, 7, 4, 1] → [2, 7, 4, 1]
+ ^^^^^sorted
+\`\`\`
+
+**i = 3: key = 4**
+\`\`\`
+4 < 7, so shift 7 right
+4 > 2, so insert here!
+[2, _, 7, 1] → [2, 4, 7, 1]
+ ^^^^^^^^sorted
+\`\`\`
+
+**i = 4: key = 1**
+\`\`\`
+1 < 7 → shift 7
+1 < 4 → shift 4
+1 < 2 → shift 2
+Insert at the front!
+[_, 2, 4, 7] → [1, 2, 4, 7]
+ ^^^^^^^^^^^sorted
+\`\`\`
+
+**Sorted!** [1, 2, 4, 7]`
+        },
+        {
           id: "ch1-fill1",
           type: "fillblank",
           title: "✏️ Fill in the blanks!",
@@ -116,6 +174,35 @@ What is the array after i=3 completes?`,
       title: "Tracing Insertion Sort",
       emoji: "📊",
       steps: [
+        {
+          id: "ch2-code",
+          type: "explain",
+          title: "💻 Insertion Sort in CIE Pseudocode",
+          content: `Here is the CIE pseudocode for insertion sort:
+
+\`\`\`
+PROCEDURE InsertionSort(BYREF arr : ARRAY)
+    FOR i ← 2 TO LENGTH(arr)
+        key ← arr[i]
+        j ← i - 1
+        WHILE j >= 1 AND arr[j] > key
+            arr[j + 1] ← arr[j]
+            j ← j - 1
+        ENDWHILE
+        arr[j + 1] ← key
+    NEXT i
+ENDPROCEDURE
+\`\`\`
+
+Let's break it down line by line:
+
+1. **BYREF**: modifies the original array directly
+2. **FOR i ← 2**: start from the 2nd element (the 1st is already "sorted")
+3. **key ← arr[i]**: save the value to insert
+4. **j ← i - 1**: start comparing from the last position of the sorted part
+5. **WHILE j >= 1 AND arr[j] > key**: shift elements larger than key to the right
+6. **arr[j + 1] ← key**: insert key into the empty spot`
+        },
         {
           id: "ch2-trace",
           type: "explain",
@@ -175,18 +262,32 @@ How many shifts happen?`,
           explanation: 'When i=2, key=5 and j=1. We check: arr[1]=3, is 3 > 5? **No!** The WHILE condition is false, so the loop does not execute at all. 5 stays in place because it is already larger than everything in the sorted section [3]. Result: [3, 5, 1, 4]. **0 shifts** needed!'
         },
         {
-          id: "ch2-quiz1",
-          type: "quiz",
-          title: "🧠 Quiz!",
-          content: 'What is the **worst case** for insertion sort?',
+          id: "ch2-predict2",
+          type: "predict",
+          title: "🔮 Predict the final result!",
+          content: `Apply insertion sort completely to [5, 3, 8, 1]. What is the final result?
+
+\`\`\`
+PROCEDURE InsertionSort(BYREF arr : ARRAY)
+    FOR i ← 2 TO LENGTH(arr)
+        key ← arr[i]
+        j ← i - 1
+        WHILE j >= 1 AND arr[j] > key
+            arr[j + 1] ← arr[j]
+            j ← j - 1
+        ENDWHILE
+        arr[j + 1] ← key
+    NEXT i
+ENDPROCEDURE
+\`\`\``,
           options: [
-            'An already sorted array [1, 2, 3, 4, 5]',
-            'An array with all equal values [3, 3, 3, 3]',
-            'A reverse-sorted array [5, 4, 3, 2, 1]',
-            'A randomly ordered array'
+            '[1, 3, 5, 8]',
+            '[8, 5, 3, 1]',
+            '[1, 5, 3, 8]',
+            '[3, 5, 8, 1]'
           ],
-          answer: 2,
-          explanation: 'A **reverse-sorted** array is the worst case! Every element must be shifted all the way to the beginning. For [5, 4, 3, 2, 1]: inserting 4 needs 1 shift, inserting 3 needs 2 shifts, inserting 2 needs 3 shifts, inserting 1 needs 4 shifts. Maximum work!'
+          answer: 0,
+          explanation: 'Step by step: [5,3,8,1] → i=2: [3,5,8,1] → i=3: [3,5,8,1] (8 is already in place) → i=4: [1,3,5,8]. Sorted in ascending order!'
         },
         {
           id: "ch2-fill1",
@@ -199,6 +300,30 @@ How many shifts happen?`,
             { id: 2, answer: "1", options: ["1", "2", "0", "3"] },
             { id: 3, answer: "1", options: ["1", "3", "5", "0"] }
           ]
+        },
+        {
+          id: "ch2-fill2",
+          type: "fillblank",
+          title: "✏️ Fill in the blanks!",
+          content: 'After the WHILE loop ends, complete the code that inserts the key into the correct position.',
+          code: 'WHILE j >= 1 AND arr[j] > key\n    arr[j + 1] ← arr[j]\n    j ← j - 1\nENDWHILE\narr[___] ← key',
+          fillBlanks: [
+            { id: 1, answer: "j + 1", options: ["j + 1", "j", "j - 1", "i"] }
+          ]
+        },
+        {
+          id: "ch2-quiz1",
+          type: "quiz",
+          title: "🧠 Quiz!",
+          content: 'What is the **worst case** for insertion sort?',
+          options: [
+            'An already sorted array [1, 2, 3, 4, 5]',
+            'An array with all equal values [3, 3, 3, 3]',
+            'A reverse-sorted array [5, 4, 3, 2, 1]',
+            'A randomly ordered array'
+          ],
+          answer: 2,
+          explanation: 'A **reverse-sorted** array is the worst case! Every element must be shifted all the way to the beginning. For [5, 4, 3, 2, 1]: inserting 4 needs 1 shift, inserting 3 needs 2 shifts, inserting 2 needs 3 shifts, inserting 1 needs 4 shifts. Maximum work!'
         },
       ]
     },

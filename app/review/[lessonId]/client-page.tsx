@@ -8,6 +8,7 @@ import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
 import { useSoundEffect } from "@/hooks/use-sound-effect"
 import { markQuizComplete } from "@/lib/mark-lesson-complete"
+import { saveStepAnswer } from "@/lib/save-step-answer"
 import { StepRenderer } from "@/components/learn/step-renderer"
 import { renderContent } from "@/components/learn/render-content"
 import { lessonsData, bilingualLessons, lessonVariants } from "@/components/learn/lesson-registry"
@@ -56,8 +57,12 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   const lessonId = resolvedParams.lessonId
   const router = useRouter()
   const { t, lang } = useLanguage()
-  const { profile } = useAuth()
+  const { user, profile, isLoading: authLoading } = useAuth()
   const isTeacher = profile?.role === "teacher"
+
+  useEffect(() => {
+    if (!authLoading && !user) router.replace("/login")
+  }, [user, authLoading, router])
   const teacherAsStudent = typeof window !== "undefined" && localStorage.getItem("teacher-as-student") === "true"
   const effectiveTeacher = isTeacher && !teacherAsStudent
   const { play } = useSoundEffect()
@@ -91,9 +96,9 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
         })
         return {
           currentIndex: 0,
-          score: autoCompleted.length * 10,
-          totalAttempted: autoCompleted.length,
-          correctCount: autoCompleted.length,
+          score: 0,
+          totalAttempted: 0,
+          correctCount: 0,
           completedSteps: autoCompleted,
           wrongSteps: [],
           savedAnswers: allAnswers,
@@ -108,6 +113,8 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   const [score, setScore] = useState<number>(saved?.score ?? 0)
   const [totalAttempted, setTotalAttempted] = useState<number>(saved?.totalAttempted ?? 0)
   const [correctCount, setCorrectCount] = useState<number>(saved?.correctCount ?? 0)
+  // 현재 세션에서 실제로 답한 문제 수 (이전 저장 데이터 제외)
+  const [sessionAttempts, setSessionAttempts] = useState(0)
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set(saved?.completedSteps ?? []))
   const [showResults, setShowResults] = useState(false)
   const [wrongSteps, setWrongSteps] = useState<number[]>(saved?.wrongSteps ?? [])
@@ -182,12 +189,25 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
     if (!step) return
 
     const isCorrect = idx === step.answer
+    // 스텝 답변 저장 (선생님이 학생 답 확인용)
+    if (!effectiveTeacher) {
+      saveStepAnswer({
+        lessonId,
+        progressType: "review",
+        stepId: step.id,
+        stepType: step.type,
+        isCorrect,
+        userAnswer: { selectedIdx: idx, option: step.options?.[idx] ?? "" },
+        correctAnswer: { selectedIdx: step.answer ?? 0, option: step.options?.[step.answer ?? 0] ?? "" },
+      })
+    }
     if (isCorrect) {
       play("correct")
       setShowExplanation(true)
       if (!completedSteps.has(currentIndex)) {
         setCorrectCount(prev => prev + 1)
         setTotalAttempted(prev => prev + 1)
+        setSessionAttempts(prev => prev + 1)
         setScore(prev => prev + 10)
         setCompletedSteps(prev => new Set([...prev, currentIndex]))
         setIsCurrentStepCompleted(true)
@@ -197,6 +217,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
       setShowExplanation(true)
       if (!completedSteps.has(currentIndex)) {
         setTotalAttempted(prev => prev + 1)
+        setSessionAttempts(prev => prev + 1)
         setWrongSteps(prev => [...prev, currentIndex])
         setCompletedSteps(prev => new Set([...prev, currentIndex]))
         setIsCurrentStepCompleted(true)
@@ -215,9 +236,24 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   }, [currentIndex, reviewSteps.length])
 
   // fillblank 완료 처리
-  const handleStepComplete = useCallback((correct: boolean) => {
+  const handleStepComplete = useCallback((correct: boolean, filledValues?: Record<number, string>) => {
     if (!completedSteps.has(currentIndex)) {
+      const step = reviewSteps[currentIndex]?.step
+      // fillblank 스텝 답변 저장
+      if (!effectiveTeacher && step && step.type === "fillblank" && filledValues) {
+        const blanks: { id: number; answer: string }[] = step.fillBlanks ?? []
+        saveStepAnswer({
+          lessonId,
+          progressType: "review",
+          stepId: step.id,
+          stepType: step.type,
+          isCorrect: correct,
+          userAnswer: filledValues as Record<string, unknown>,
+          correctAnswer: Object.fromEntries(blanks.map(b => [b.id, b.answer])),
+        })
+      }
       setTotalAttempted(prev => prev + 1)
+      setSessionAttempts(prev => prev + 1)
       if (correct) {
         setCorrectCount(prev => prev + 1)
         setScore(prev => prev + 10)
@@ -229,7 +265,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
       setCompletedSteps(prev => new Set([...prev, currentIndex]))
       setIsCurrentStepCompleted(true)
     }
-  }, [currentIndex, completedSteps, play])
+  }, [currentIndex, completedSteps, play, effectiveTeacher, reviewSteps, lessonId])
 
   const handleStepAcknowledge = useCallback(() => {
     if (currentIndex < reviewSteps.length - 1) {
@@ -277,13 +313,15 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
     return () => window.removeEventListener("keydown", handleKey)
   }, [router])
 
-  // 결과 화면 표시 시 완료 저장
+  // 결과 화면 표시 시 완료 저장 — 현재 세션에서 실제 답변한 경우에만
   useEffect(() => {
-    if (showResults) {
+    if (showResults && sessionAttempts > 0) {
       const pct = totalAttempted > 0 ? Math.round((correctCount / totalAttempted) * 100) : 0
       if (pct >= 70) markQuizComplete(lessonId)
     }
-  }, [showResults, totalAttempted, correctCount, lessonId])
+  }, [showResults, totalAttempted, correctCount, lessonId, sessionAttempts])
+
+  if (authLoading || !user) return null
 
   // 결과 화면
   if (showResults) {
@@ -516,6 +554,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                 if (!completedSteps.has(currentIndex)) {
                   setCorrectCount(prev => prev + 1)
                   setTotalAttempted(prev => prev + 1)
+                  setSessionAttempts(prev => prev + 1)
                   setScore(prev => prev + 10)
                   setCompletedSteps(prev => new Set([...prev, currentIndex]))
                   setIsCurrentStepCompleted(true)
@@ -529,6 +568,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
               onQuizAcknowledge={acknowledgeQuiz}
               onStepComplete={handleStepComplete}
               onStepAcknowledge={handleStepAcknowledge}
+              showNextOnCorrect={true}
             />
           )}
 

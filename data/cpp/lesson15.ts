@@ -1,14 +1,14 @@
 // ============================================
-// C++ Lesson 15: pair & 정렬
+// C++ Lesson 15: pair & tuple
 // 파이썬을 아는 학생을 위한 C++ 강의
 // ============================================
 import { LessonData } from '../types'
 
 export const cppLesson15Data: LessonData = {
   id: "cpp-15",
-  title: "pair & 정렬",
+  title: "pair & tuple",
   emoji: "🔗",
-  description: "pair, tuple, 그리고 sort의 모든 것!",
+  description: "두 값을 하나로! pair와 tuple로 데이터를 묶어봐요.",
   chapters: [
     // ============================================
     // Chapter 1: pair & tuple
@@ -27,8 +27,6 @@ export const cppLesson15Data: LessonData = {
 변수를 2개 따로 만들면? \`string name1; int score1; string name2; int score2;\` 😰 너무 복잡하죠!
 
 **pair는 두 값을 하나로 묶는 간단한 도구**예요.
-
-이름과 점수, x좌표와 y좌표처럼 **두 개의 값**을 항상 같이 다뤄야 할 때가 있어요.
 
 \`\`\`cpp
 #include <utility>  // pair이 들어있는 헤더
@@ -74,7 +72,7 @@ print(p[1])          # 95
 | 타입 안 써도 됨 | 타입 명시 (또는 auto) |
 | 몇 개든 OK | **딱 2개만!** |
 
-💡 pair는 딱 **2개의 값**만 묶을 수 있어요! 3개 이상은 tuple을 써야 해요.`
+💡 pair는 딱 **2개의 값**만 묶을 수 있어요! 3개 이상은 tuple을 쓸 수 있지만, 실전에서는 struct를 더 많이 써요.`
         },
         {
           id: "ch1-fb1",
@@ -191,39 +189,73 @@ v.sort()  # 파이썬 tuple도 첫 번째 요소 기준 정렬!
 
 pair의 자동 비교가 유용한 이유: \`vector<pair<int,string>>\`을 sort()하면 자동으로 첫 번째 값(점수) 기준으로 정렬돼요!
 
-💡 파이썬 tuple과 같은 방식으로 비교돼요! first 먼저, 그 다음 second 순서예요.`
+💡 파이썬 tuple과 같은 방식이에요! first 먼저, 그 다음 second 순서로 비교해요.`
         },
         {
           id: "ch1-question",
-          type: "explain",
+          type: "animation" as const,
           title: "🙋 질문: vector<int> 2개로 하면 안 돼?",
-          content: `**"vector<int> 2개로 하면 안 돼?"**
-
-돼요! 하지만 정렬할 때 문제가 생겨요: 점수를 정렬하면 이름은 따로 움직이지 않아요.
+          component: "pairVsTwoVectors",
+          content: "정렬 버튼을 눌러서 두 방식의 차이를 확인해봐요!",
+        },
+        {
+          id: "ch1-fb2",
+          type: "fillblank" as const,
+          title: "pair 멤버에 접근해봐요!",
+          content: "p.first와 p.second로 pair의 값을 꺼내봐요!",
+          code: "pair<string, int> p = {\"Kim\", 95};\ncout << p.___ << \": \" << p.___ << endl;\n// 출력: Kim: 95",
+          fillBlanks: [
+            { id: 0, answer: "first", options: ["first", "second", "name", "0"] },
+            { id: 1, answer: "second", options: ["first", "second", "score", "1"] }
+          ],
+          explanation: "pair의 첫 번째 값은 .first, 두 번째 값은 .second로 접근해요! p[0]이나 p[1]은 에러예요."
+        },
+        {
+          id: "ch1-pred2",
+          type: "predict" as const,
+          title: "출력 결과 맞추기!",
+          code: "#include <iostream>\n#include <string>\n#include <vector>\nusing namespace std;\nint main() {\n    vector<pair<string, int>> v;\n    v.push_back({\"Kim\", 95});\n    v.push_back(make_pair(\"Lee\", 88));\n    cout << v[0].first << \" \" << v[1].second;\n}",
+          options: ["Kim 88", "Kim 95", "Lee 88", "95 88"],
+          answer: 0,
+          explanation: "v[0].first는 첫 번째 pair의 첫 번째 값 → \"Kim\". v[1].second는 두 번째 pair의 두 번째 값 → 88. 출력: Kim 88"
+        },
+        {
+          id: "ch1-vec-iter",
+          type: "explain",
+          title: "🔄 vector<pair>를 반복문으로 순회하기",
+          content: `pair를 여러 개 다룰 때는 **vector<pair>**에 넣어서 관리해요.
 
 \`\`\`cpp
-// 따로 저장하면?
-vector<string> names = {"Kim", "Lee", "Park"};
-vector<int> scores = {78, 95, 88};
-
-sort(scores.begin(), scores.end());
-// scores = {78, 88, 95}
-// names는 그대로 {"Kim", "Lee", "Park"} 😱
-// 78점이 Kim인지 알 수 없어요!
+vector<pair<string, int>> students;
+students.push_back({"Kim", 95});
+students.push_back({"Lee", 88});
+students.push_back({"Park", 92});
 \`\`\`
 
-pair로 묶으면 항상 같이 움직여요!
+range-for로 순회할 때는 \`auto&\`를 쓰면 타입을 직접 안 써도 돼요:
 
 \`\`\`cpp
-vector<pair<int, string>> students = {
-    {78, "Kim"}, {95, "Lee"}, {88, "Park"}
-};
-sort(students.begin(), students.end());
-// {78, "Kim"}, {88, "Park"}, {95, "Lee"} ✅
-// 점수와 이름이 항상 같이 움직여요!
+for (auto& s : students) {
+    cout << s.first << ": " << s.second << endl;
+}
+// Kim: 95
+// Lee: 88
+// Park: 92
 \`\`\`
 
-💡 관련된 데이터는 **묶어서 관리**하는 게 안전하고 편해요!`
+\`auto&\`에서 \`s\`의 실제 타입은 \`pair<string, int>\`예요. 그래서:
+- \`s.first\` → string (이름)
+- \`s.second\` → int (점수)
+
+타입을 직접 쓰면 이렇게 돼요 (auto 없이):
+
+\`\`\`cpp
+for (pair<string, int>& s : students) {  // auto& 대신 직접 타입 명시
+    cout << s.first << ": " << s.second << endl;
+}
+\`\`\`
+
+💡 \`auto&\`가 훨씬 편하죠? 타입이 길어질수록 auto의 가치가 커져요!`
         },
         {
           id: "ch1-practice",
@@ -271,241 +303,15 @@ Park: 92`
       ]
     },
     // ============================================
-    // Chapter 2: sort 마스터
+    // Chapter 2: 정리 퀴즈
     // ============================================
     {
       id: "ch2",
-      title: "sort 마스터",
-      emoji: "📊",
-      steps: [
-        {
-          id: "ch2-intro",
-          type: "explain",
-          title: "📊 sort() — 정렬의 기본!",
-          content: `학생 목록을 점수순으로 정렬하고 싶어요. \`pair<점수, 이름>\`으로 만들면 자동으로 점수 기준 정렬이 돼요! 이게 pair의 진짜 힘이에요.
-
-C++의 **sort()** 함수로 데이터를 정렬할 수 있어요!
-
-\`\`\`cpp
-#include <algorithm>  // sort()가 들어있는 헤더!
-#include <vector>
-
-vector<int> v = {5, 2, 8, 1, 9};
-sort(v.begin(), v.end());
-// v = {1, 2, 5, 8, 9}  (오름차순)
-\`\`\`
-
-**배열도 정렬할 수 있어요:**
-\`\`\`cpp
-int arr[] = {5, 2, 8, 1, 9};
-sort(arr, arr + 5);  // arr[0]~arr[4] 정렬
-// arr = {1, 2, 5, 8, 9}
-\`\`\`
-
-파이썬과 비교해봐요:
-
-**파이썬 🐍:**
-\`\`\`python
-v = [5, 2, 8, 1, 9]
-v.sort()             # 원본 수정 (C++ sort처럼!)
-# 또는
-v2 = sorted(v)       # 새 리스트 반환
-
-arr = [5, 2, 8, 1, 9]
-arr.sort()           # 리스트의 메서드
-\`\`\`
-
-| 파이썬 🐍 | C++ sort ⚡ |
-|---|---|
-| \`v.sort()\` | \`sort(v.begin(), v.end())\` |
-| \`sorted(v)\` — 새 리스트 반환 | C++에는 이런 함수 없음 (항상 원본 수정) |
-| \`arr.sort()\` | \`sort(arr, arr+n)\` |
-| 자동으로 전체 정렬 | 범위를 **직접 지정**해야 함 |
-
-💡 sort()는 \`#include <algorithm>\`이 필요해요! 그리고 **begin()과 end()**로 범위를 지정해야 해요.`
-        },
-        {
-          id: "ch2-fb1",
-          type: "fillblank" as const,
-          title: "빈칸을 채워주세요",
-          content: "벡터를 정렬하는 코드를 완성해요!",
-          code: "vector<int> v = {3, 1, 4, 1, 5};\nsort(v.___, v.___);",
-          fillBlanks: [
-            { id: 0, answer: "begin()", options: ["begin()", "front()", "start()", "first()"] },
-            { id: 1, answer: "end()", options: ["end()", "back()", "stop()", "last()"] }
-          ],
-          explanation: "sort()에는 시작 위치와 끝 위치를 넣어요! vector는 v.begin()과 v.end()를 사용해요."
-        },
-        {
-          id: "ch2-reverse",
-          type: "explain",
-          title: "📊 역순 정렬 — 내림차순!",
-          content: `기본 sort()는 오름차순이에요. **내림차순(큰 수부터)**으로 하려면?
-
-**방법 1: greater<> 사용**
-\`\`\`cpp
-vector<int> v = {5, 2, 8, 1, 9};
-sort(v.begin(), v.end(), greater<int>());
-// v = {9, 8, 5, 2, 1}  (내림차순!)
-\`\`\`
-
-**방법 2: rbegin(), rend() 사용 (역순 반복자)**
-\`\`\`cpp
-sort(v.rbegin(), v.rend());
-// 역순 반복자로 정렬하면 내림차순!
-\`\`\`
-
-파이썬과 비교해봐요:
-
-**파이썬 🐍:**
-\`\`\`python
-v = [5, 2, 8, 1, 9]
-v.sort(reverse=True)  # 간단하게 reverse=True!
-# v = [9, 8, 5, 2, 1]
-\`\`\`
-
-| 파이썬 🐍 | C++ ⚡ |
-|---|---|
-| \`sort(reverse=True)\` | \`sort(v.begin(), v.end(), greater<int>())\` |
-| 매개변수 하나로 끝! | 세 번째 인자에 비교 함수 전달 |
-
-💡 \`greater<int>()\`에서 **괄호 ()** 두 쌍을 잊지 마세요! \`greater<int>\`는 타입이고, 뒤의 \`()\`로 객체를 만드는 거예요.`
-        },
-        {
-          id: "ch2-pred1",
-          type: "predict" as const,
-          title: "sort 후 출력!",
-          code: "#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;\nint main() {\n    vector<int> v = {4, 2, 7, 1, 5};\n    sort(v.begin(), v.end());\n    cout << v[0] << \" \" << v[4];\n    return 0;\n}",
-          options: ["4 5", "1 7", "7 1", "1 5"],
-          answer: 1,
-          explanation: "sort() 후 v = {1, 2, 4, 5, 7}이에요. v[0]은 가장 작은 1, v[4]는 가장 큰 7이에요. 그래서 1 7이 출력돼요!"
-        },
-        {
-          id: "ch2-custom",
-          type: "explain",
-          title: "📊 커스텀 비교 함수 — 내 맘대로 정렬!",
-          content: `sort()의 세 번째 인자로 **나만의 비교 함수**를 전달할 수 있어요!
-
-**비교 함수 규칙:**
-- 두 개의 인자를 받아요
-- **true**를 리턴하면 첫 번째 인자가 **앞에** 와요
-- **false**를 리턴하면 두 번째 인자가 앞에 와요
-
-**방법 1: 일반 함수**
-\`\`\`cpp
-bool cmp(int a, int b) {
-    return a > b;  // a가 b보다 크면 a를 앞에 → 내림차순!
-}
-
-sort(v.begin(), v.end(), cmp);
-\`\`\`
-
-**방법 2: 람다 (lambda)**
-
-여기서 새로운 문법이 나와요! \`[](int a, int b) { return a > b; }\` — 이건 **람다(lambda)**라고 하는 '이름 없는 함수'예요. \`[]\`로 시작하고, 그 자리에서 바로 만들어 쓰는 일회용 함수예요. 별도로 위에 함수를 정의할 필요가 없어서 편해요!
-
-\`\`\`cpp
-sort(v.begin(), v.end(), [](int a, int b) {
-    return a > b;  // 내림차순
-});
-\`\`\`
-
-**실전 예시: 절댓값 기준 정렬**
-\`\`\`cpp
-vector<int> v = {-5, 3, -1, 4, -2};
-sort(v.begin(), v.end(), [](int a, int b) {
-    return abs(a) < abs(b);  // 절댓값이 작은 것부터!
-});
-// v = {-1, -2, 3, 4, -5}
-\`\`\`
-
-파이썬과 비교해봐요:
-
-**파이썬 🐍:**
-\`\`\`python
-v = [-5, 3, -1, 4, -2]
-v.sort(key=lambda x: abs(x))  # key로 기준 지정
-# 또는
-v.sort(key=abs)
-\`\`\`
-
-| 파이썬 🐍 | C++ ⚡ |
-|---|---|
-| \`key=함수\` — 값을 변환해서 비교 | 비교 함수로 **두 값을 직접 비교** |
-| \`lambda x: abs(x)\` | \`[](int a, int b){ return abs(a)<abs(b); }\` |
-| 인자 1개 (변환 함수) | 인자 2개 (비교 함수) |
-
-💡 파이썬은 "이 값을 기준으로 정렬해" (key), C++는 "이 둘 중 누가 앞이야?" (비교 함수)라는 차이가 있어요!`
-        },
-        {
-          id: "ch2-pred2",
-          type: "predict" as const,
-          title: "커스텀 정렬 결과!",
-          code: "#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;\nbool cmp(int a, int b) {\n    return a % 10 < b % 10;\n}\nint main() {\n    vector<int> v = {23, 11, 45, 32};\n    sort(v.begin(), v.end(), cmp);\n    cout << v[0] << \" \" << v[3];\n    return 0;\n}",
-          options: ["11 45", "23 32", "11 23", "32 23"],
-          answer: 0,
-          explanation: "cmp는 일의 자리(% 10)로 비교해요! 23→3, 11→1, 45→5, 32→2. 일의 자리로 정렬하면: 11(1), 32(2), 23(3), 45(5). 그래서 v[0]=11, v[3]=45. 출력은 11 45!"
-        },
-        {
-          id: "ch2-practice",
-          type: "practice" as const,
-          title: "✋ 점수 내림차순 정렬!",
-          content: `vector<pair<int,string>>에 점수와 이름을 저장하고, 점수 내림차순으로 정렬해봐요!
-
-pair의 first에 점수를 넣으면 자동으로 점수 기준으로 정렬할 수 있어요. greater<>를 사용해서 내림차순으로 만들어봐요!`,
-          code: `#include <iostream>
-#include <vector>
-#include <string>
-#include <algorithm>
-using namespace std;
-
-int main() {
-    vector<pair<int, string>> scores = {
-        {85, "Kim"},
-        {92, "Lee"},
-        {78, "Park"},
-        {95, "Choi"}
-    };
-
-    sort(scores.begin(), scores.end(), greater<pair<int,string>>());
-
-    for (auto& s : scores) {
-        cout << s.second << ": " << s.first << endl;
-    }
-
-    return 0;
-}`,
-          expectedOutput: `Choi: 95
-Lee: 92
-Kim: 85
-Park: 78`
-        },
-        {
-          id: "ch2-q1",
-          type: "quiz",
-          title: "sort 관련!",
-          content: "sort()를 사용하려면 어떤 헤더를 include해야 하나요?",
-          options: [
-            "#include <sort>",
-            "#include <algorithm>",
-            "#include <vector>",
-            "#include <utility>"
-          ],
-          answer: 1,
-          explanation: "sort()는 <algorithm> 헤더에 들어있어요! <vector>는 vector용, <utility>는 pair용이에요."
-        }
-      ]
-    },
-    // ============================================
-    // Chapter 3: 정리 퀴즈
-    // ============================================
-    {
-      id: "ch3",
       title: "정리 퀴즈",
       emoji: "🏆",
       steps: [
         {
-          id: "ch3-q1",
+          id: "ch2-q1",
           type: "quiz",
           title: "pair 선언!",
           content: `다음 중 올바른 pair 선언은?`,
@@ -519,41 +325,7 @@ Park: 78`
           explanation: "pair<타입1, 타입2> 변수명 = {값1, 값2}; 형태로 선언해요! 꺾쇠 괄호 < >를 사용해요."
         },
         {
-          id: "ch3-q2",
-          type: "quiz",
-          title: "sort 기본!",
-          content: `이 코드의 출력은?
-
-\`\`\`cpp
-vector<int> v = {3, 1, 4};
-sort(v.begin(), v.end());
-cout << v[0] << v[1] << v[2];
-\`\`\``,
-          options: [
-            "314",
-            "134",
-            "431",
-            "143"
-          ],
-          answer: 1,
-          explanation: "sort() 후 오름차순 정렬되어 v = {1, 3, 4}가 돼요. v[0]=1, v[1]=3, v[2]=4이므로 134가 출력돼요!"
-        },
-        {
-          id: "ch3-q3",
-          type: "quiz",
-          title: "커스텀 정렬!",
-          content: `sort의 세 번째 인자로 전달하는 비교 함수의 규칙으로 올바른 것은?`,
-          options: [
-            "true를 리턴하면 두 번째 인자가 앞에 온다",
-            "true를 리턴하면 첫 번째 인자가 앞에 온다",
-            "항상 int를 리턴해야 한다",
-            "인자를 1개만 받아야 한다"
-          ],
-          answer: 1,
-          explanation: "비교 함수가 true를 리턴하면 첫 번째 인자가 앞에 와요! bool cmp(a, b)에서 true면 a가 b 앞에 오는 거예요."
-        },
-        {
-          id: "ch3-q4",
+          id: "ch2-q2",
           type: "quiz",
           title: "pair 비교!",
           content: `이 코드의 출력은?
@@ -574,34 +346,34 @@ else cout << "B";
           explanation: "pair 비교는 first를 먼저 비교해요. 둘 다 first가 1로 같으니 second를 비교해요. 10 > 5이므로 a > b는 true! A가 출력돼요."
         },
         {
-          id: "ch3-summary",
+          id: "ch2-summary",
           type: "explain",
           title: "🎉 오늘 배운 것 정리!",
           content: `## 🏆 레슨 15 완료! 잘했어요!
 
-### 🔗 pair & tuple
+### 🔗 pair
 - **pair<T1, T2>**: 두 값을 하나로 묶기
-- \`.first\`, \`.second\`로 접근
-- **tuple**: 3개 이상 묶기, \`get<N>(t)\`로 접근
-- pair는 **자동 비교** 가능! (first 먼저, 그 다음 second)
+- \`pair<string,int> p = {"Kim", 95};\` — 선언과 초기화
+- \`p.first\` — 첫 번째 값, \`p.second\` — 두 번째 값
+- \`make_pair(a, b)\` 또는 \`{a, b}\` 로 만들기
+- **자동 비교 지원!** (first 먼저, 같으면 second 순서)
+- **vector<pair> sort 시 자동으로 first 기준 정렬!**
 
-### 📊 sort 마스터
-- \`sort(v.begin(), v.end())\` — 오름차순 정렬
-- \`sort(v.begin(), v.end(), greater<int>())\` — 내림차순
-- 커스텀 비교 함수 또는 **람다**로 원하는 기준 정렬
-- vector<pair>을 sort하면 first 기준으로 자동 정렬!
+### 📦 tuple — 참고만!
+- **tuple<T1, T2, T3>**: 3개 이상 묶기
+- \`get<N>(t)\` 로 N번째 값 접근
+- \`tie(a, b, c) = t;\` 로 한 번에 꺼내기
+- 실전에서는 struct 선호!
 
 ### 🐍 파이썬과의 핵심 차이!
 
 | 개념 | 파이썬 🐍 | C++ ⚡ |
 |---|---|---|
-| 두 값 묶기 | \`(a, b)\` tuple | \`pair<T1,T2>{a,b}\` |
+| 두 값 묶기 | \`(a, b)\` | \`pair<T1,T2>{a, b}\` |
 | 접근 | \`t[0]\`, \`t[1]\` | \`.first\`, \`.second\` |
-| 정렬 | \`list.sort()\` | \`sort(begin, end)\` |
-| 내림차순 | \`reverse=True\` | \`greater<T>()\` |
-| 커스텀 정렬 | \`key=함수\` | 비교 함수 (인자 2개) |
+| 3개 이상 묶기 | tuple (개수 자유) | \`tuple<T1,T2,T3>\` |
 
-🚀 **다음 레슨**에서는 **map & set**을 배울 거예요! 키-값 저장소와 중복 없는 집합, 기대되죠?`
+🚀 **다음 레슨(cpp-23)**에서는 **sort 마스터**를 배울 거예요! 커스텀 정렬, 람다, 구조체 정렬까지!`
         }
       ]
     }

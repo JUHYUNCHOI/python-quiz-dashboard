@@ -23,6 +23,10 @@ export { cppLesson17Data } from './lesson17'
 export { cppLesson18Data } from './lesson18'
 export { cppLesson19Data } from './lesson19'
 export { cppLesson20Data } from './lesson20'
+export { cppLesson21Data } from './lesson21'
+export { cppLesson22Data } from './lesson22'
+export { cppLesson23Data } from './lesson23'
+export { cppLesson23EnData } from './lesson23-en'
 
 // Korean projects
 export { cppLessonP1Data } from './lessonP1'
@@ -50,6 +54,8 @@ export { cppLesson17EnData } from './lesson17-en'
 export { cppLesson18EnData } from './lesson18-en'
 export { cppLesson19EnData } from './lesson19-en'
 export { cppLesson20EnData } from './lesson20-en'
+export { cppLesson21EnData } from './lesson21-en'
+export { cppLesson22EnData } from './lesson22-en'
 
 // English projects
 export { cppLessonP1EnData } from './lessonP1-en'

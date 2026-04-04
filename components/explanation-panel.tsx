@@ -210,7 +210,7 @@ export function ExplanationPanel({
                 "p-5 md:p-6 rounded-xl transition-colors min-h-[56px] min-w-[56px] flex items-center justify-center",
                 isBookmarked && "bg-orange-100 border-orange-300",
               )}
-              title="복습 목록에 추가"
+              title={t("복습 목록에 추가", "Add to review list")}
             >
               <Bookmark className={cn("h-5 w-5", isBookmarked && "fill-orange-500 text-orange-500")} />
             </Button>

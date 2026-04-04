@@ -1,398 +1,476 @@
 // ============================================
-// C++ Lesson 14: Classes (class)
+// C++ Lesson 14: Structs (struct)
 // C++ for students who already know Python
 // ============================================
 import { LessonData } from '../types'
 
 export const cppLesson14EnData: LessonData = {
   id: "cpp-14",
-  title: "Classes (class)",
-  emoji: "🏗️",
-  description: "Create your own types with class!",
+  title: "Structs (struct)",
+  emoji: "📦",
+  description: "Bundle related data into your own custom type!",
   chapters: [
     // ============================================
-    // Chapter 2: Intro to Classes
+    // Chapter 1: Struct Basics
+    // ============================================
+    {
+      id: "ch1",
+      title: "Struct Basics",
+      emoji: "📦",
+      steps: [
+        {
+          id: "ch1-intro",
+          type: "explain",
+          title: "📦 struct — Bundle Multiple Fields Into One!",
+          component: "cppStructBuilder",
+          content: `To store 4 students' names, ages, and scores:
+
+\`\`\`cpp
+string name1 = "Emma";  int age1 = 17;  double score1 = 95.5;
+string name2 = "Jake";    int age2 = 16;  double score2 = 87.0;
+string name3 = "Mia";  int age3 = 17;  double score3 = 72.3;
+string name4 = "Dave";   int age4 = 16;  double score4 = 91.8;
+// 100 students = 300 variables... 😱
+\`\`\`
+
+With **struct**, you bundle everything under one name — 100 students = 100 variables 👇`,
+        },
+        {
+          id: "ch1-syntax",
+          type: "explain",
+          title: "struct Syntax",
+          content: `**Step 1: Define the struct**
+
+\`struct\` keyword → name → \`{\` fields \`};\`
+
+\`\`\`cpp
+struct Student {
+    string name;
+    int age;
+    double score;
+};  // ← semicolon required!
+\`\`\`
+
+> ⚠️ Why the semicolon after \`}\`? A struct definition is a **declaration statement**, just like \`int x;\` ends with \`;\`.
+
+---
+
+**Step 2: Create a variable**
+
+Fill values in the order the fields were declared:
+
+\`\`\`cpp
+//               name     age   score
+//                ↓         ↓      ↓
+Student s1 = {"Emma",    17,   95.5};
+Student s2 = {"Jake",      16,   87.0};
+\`\`\`
+
+---
+
+**Step 3: Access members — dot (.) operator**
+
+Fields inside a struct are called **members**. Use dot notation to access them:
+
+\`\`\`cpp
+cout << s1.name;   // Emma
+cout << s1.age;    // 17
+s1.score = 100.0;  // you can also modify!
+\`\`\``,
+        },
+        {
+          id: "ch1-pred1",
+          type: "predict" as const,
+          title: "Modifying a member with dot operator!",
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+    string name;
+    int age;
+    double score;
+};
+
+int main() {
+    Student s1;
+    s1.name = "Emma";
+    s1.age = 17;
+    s1.age = 20;
+    cout << s1.name << " " << s1.age;
+    return 0;
+}`,
+          options: ["Emma 17", "Emma 20", "Error", "Emma 0"],
+          answer: 1,
+          explanation: "s1.age was set to 17 then overwritten with 20. The last assigned value wins — output is 'Emma 20'."
+        },
+        {
+          id: "ch1-q1",
+          type: "quiz",
+          title: "Dot operator!",
+          content: "After `Student s1;`, how do you access the age field of `s1`?",
+          options: [
+            "s1→age",
+            "s1[age]",
+            "s1.age",
+            "age.s1"
+          ],
+          answer: 2,
+          explanation: "Use the dot operator to access struct members! `s1.age` — variable name first, then member name."
+        },
+      ],
+    },
+    // ============================================
+    // Chapter 2: Struct in Practice
     // ============================================
     {
       id: "ch2",
-      title: "Intro to Classes",
-      emoji: "🎓",
+      title: "Struct in Practice",
+      emoji: "🔧",
       steps: [
         {
-          id: "ch2-intro",
+          id: "ch2-array",
           type: "explain",
-          title: "🎓 class — Create Your Own Types!",
-          component: "cppPublicPrivateBuilder",
-          content: `## C++ class — Similar to Python's class, but More Powerful!
-
-You've used class in Python before, right? C++'s class works similarly. The difference is that C++ can **truly enforce** access restrictions.
-
-**class** defaults all members to \`private\`. Why?
-
-To prevent accidentally modifying internal data! For example: a rectangle's width = -10 would be a problem!
-
-- \`public:\` — Accessible from outside the class (anyone can use it)
-- \`private:\` — Only accessible inside the class (can't be touched externally)
+          title: "Struct Arrays for Managing Multiple Records",
+          component: "cppStructArrayLoop",
+          content: `The real power of struct shows with **arrays**!
 
 \`\`\`cpp
-class Rectangle {
-private:          // Cannot access from outside!
-    double width, height;
-
-public:           // Can access from outside!
-    void setSize(double w, double h) {
-        width = w;
-        height = h;
-    }
-    double area() {
-        return width * height;
-    }
-};
-\`\`\`
-
-\`\`\`cpp
-Rectangle r;
-// r.width = 5;      // ❌ Error! private — can't access
-r.setSize(5, 3);     // ✅ public function — OK!
-cout << r.area();     // ✅ 15
-\`\`\`
-
-Let's compare with Python:
-
-**Python 🐍:**
-\`\`\`python
-class Rectangle:
-    def __init__(self):
-        self._width = 0   # _ is just a convention, not enforced
-        self._height = 0
-
-    def set_size(self, w, h):
-        self._width = w
-        self._height = h
-\`\`\`
-
-| Python 🐍 | C++ class ⚡ |
-|---|---|
-| \`_var\` is convention-only private | \`private:\` truly blocks access! |
-| Everything is accessible | private is truly inaccessible |
-| \`self\` required | No \`self\` needed |
-
-Encapsulation means **hiding data to prevent mistakes**. Like a medicine capsule that protects its contents inside, you protect data and only allow access through designated methods.
-
-💡 Hiding data with private and exposing it through public functions is called **encapsulation**!`
-        },
-        {
-          id: "ch2-fb1",
-          type: "fillblank" as const,
-          title: "Fill in the blank",
-          content: "Hide the radius inside the class!",
-          code: "class Circle {\n___:\n    double radius;\npublic:\n    double area() {\n        return 3.14 * radius * radius;\n    }\n};",
-          fillBlanks: [
-            { id: 0, answer: "private", options: ["private", "public", "protected", "static"] }
-          ],
-          explanation: "Declaring radius as private means it can't be accessed directly from outside! Only public functions can interact with it — that's encapsulation."
-        },
-        {
-          id: "ch2-constructor",
-          type: "explain",
-          title: "🎓 Constructors!",
-          content: `A **constructor** is a special function that's **automatically called** when an object is created!
-
-Rules:
-- Has the **same name** as the class
-- Has **no return type** (not even void!)
-- Called automatically when an object is created
-
-\`\`\`cpp
-class Dog {
-public:
+struct Student {
     string name;
-    int age;
-
-    Dog(string n, int a) {  // Constructor!
-        name = n;
-        age = a;
-    }
+    int score;
 };
 
-Dog d("Buddy", 3);  // Constructor called automatically!
-cout << d.name;      // Buddy
-cout << d.age;       // 3
+Student students[3] = {
+    {"Emma", 95},
+    {"Jake",   87},
+    {"Mia", 72},
+};
+
+for (int i = 0; i < 3; i++) {
+    cout << students[i].name << ": " << students[i].score << endl;
+}
 \`\`\`
 
-Compare with Python's \`__init__\`:
-
-**Python 🐍:**
-\`\`\`python
-class Dog:
-    def __init__(self, name, age):
-        self.name = name
-        self.age = age
-
-d = Dog("Buddy", 3)
+Output:
+\`\`\`
+Emma: 95
+Jake: 87
+Mia: 72
 \`\`\`
 
-| Python 🐍 | C++ ⚡ |
-|---|---|
-| \`__init__(self, ...)\` | \`ClassName(...)\` |
-| self required | No self needed |
-| \`Dog("Buddy", 3)\` | \`Dog d("Buddy", 3);\` |
-
-What happens if there's no constructor in C++? Member variables start with **garbage values**! width could be -8273561. That's why you should always set initial values in the constructor.
-
-💡 Constructors let you set values right when you create an object! They serve the same role as Python's \`__init__\`.`
+In USACO, coordinate pairs, edge data, and more are commonly managed as struct arrays!`,
         },
         {
           id: "ch2-pred1",
           type: "predict" as const,
-          title: "Constructor in action!",
-          code: "#include <iostream>\n#include <string>\nusing namespace std;\nclass Cat {\npublic:\n    string name;\n    int lives;\n    Cat(string n, int l) {\n        name = n;\n        lives = l;\n    }\n};\nint main() {\n    Cat c(\"Nabi\", 9);\n    cout << c.name << \" \" << c.lives;\n    return 0;\n}",
-          options: ["Error", "Nabi 9", "Nabi 0", " 9"],
-          answer: 1,
-          explanation: "The constructor is called with Cat c(\"Nabi\", 9). name becomes \"Nabi\" and lives becomes 9. So the output is Nabi 9."
+          title: "Struct array + for loop output!",
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+int main() {
+    Student students[3] = {
+        {"Emma", 95},
+        {"Jake",   87},
+        {"Mia", 72},
+    };
+    for (int i = 0; i < 3; i++) {
+        cout << students[i].name << endl;
+    }
+    return 0;
+}`,
+          options: ["Emma\nJake\nMia", "95\n87\n72", "Emma 95\nJake 87\nMia 72", "Error"],
+          answer: 0,
+          explanation: "`students[i].name` accesses the name member of each student. As i goes 0→1→2, Emma, Jake, Mia are printed in order."
+        },
+        {
+          id: "ch2-fb1",
+          type: "fillblank" as const,
+          title: "Print scores with a for loop!",
+          content: "Print every student's score with a for loop.",
+          code: `for (int i = 0; i < 3; i++) {
+    cout << students[___].score << endl;
+}`,
+          fillBlanks: [
+            { id: 0, answer: "i", options: ["i", "0", "name", "score"] }
+          ],
+          explanation: "`students[i].score` — use index i to access each student, then dot notation for the score field. As i goes 0, 1, 2, each student's score prints in order."
+        },
+        {
+          id: "ch2-loop-patterns",
+          type: "fillblank" as const,
+          title: "Pattern 1: Sum",
+          content: `Accumulate all scores in the struct array. Add each student's score to \`total\` one by one.`,
+          code: `Student students[3] = {
+    {"Emma", 95},
+    {"Jake",   87},
+    {"Mia", 72},
+};
+int total = 0;
+for (int i = 0; i < 3; i++) {
+    total ___ students[i].score;
+}
+cout << "Total: " << total;  // Total: 254`,
+          fillBlanks: [
+            { id: 0, answer: "+=", options: ["+=", "=", "-=", "=="] }
+          ],
+          explanation: "`total += students[i].score` adds 95, 87, 72 as i goes 0, 1, 2. 95+87+72=254!"
+        },
+        {
+          id: "ch2-mini-practice1",
+          type: "practice" as const,
+          title: "✋ Write the sum loop yourself!",
+          content: `Use the Student struct array to calculate the total score of Emma(95), Jake(87), Mia(72) with a for loop and print it.`,
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+int main() {
+    Student students[3] = {
+        {"Emma", 95},
+        {"Jake",   87},
+        {"Mia", 72},
+    };
+
+    // Write your code to find and print the total score here
+
+    return 0;
+}`,
+          expectedOutput: `Total: 254`
+        },
+        {
+          id: "ch2-loop-patterns2",
+          type: "fillblank" as const,
+          title: "Pattern 2: Find minimum",
+          content: `Finding a minimum requires 3 decisions (3 blanks!):
+
+① **Initial value** — why can't we start with 0?
+② **Comparison direction** — \`<\` or \`>\`?
+③ **Update value** — what do we replace minScore with?`,
+          code: `int minScore = students[___].score;  // start with first value!
+for (int i = 1; i < 3; i++) {
+    if (students[i].score ___ minScore)
+        minScore = students[___].score;
+}
+cout << "Min: " << minScore;  // Min: 72`,
+          fillBlanks: [
+            { id: 0, answer: "0", options: ["0", "1", "2", "-1"] },
+            { id: 1, answer: "<", options: ["<", ">", "<=", ">="] },
+            { id: 2, answer: "i", options: ["i", "0", "1", "minScore"] }
+          ],
+          explanation: "① Initialize with `students[0].score` — using 0 would fail since all scores are positive! ② Use `<` to check for smaller value ③ Update with `students[i].score` — the current element!"
+        },
+        {
+          id: "ch2-mini-practice2",
+          type: "practice" as const,
+          title: "✋ Write the maximum finder yourself!",
+          content: `Use the Student struct array to find the highest score among Emma(95), Jake(87), Mia(72) and print it. The initialization trick is the same as finding the minimum!`,
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+int main() {
+    Student students[3] = {
+        {"Emma", 95},
+        {"Jake",   87},
+        {"Mia", 72},
+    };
+
+    // Write your code to find and print the highest score here
+
+    return 0;
+}`,
+          expectedOutput: `Top: 95`
+        },
+        {
+          id: "ch2-loop-patterns3",
+          type: "fillblank" as const,
+          title: "Pattern 3: Count matching condition",
+          content: `Count how many students scored 90 or above using \`count++\`.`,
+          code: `int count = 0;
+for (int i = 0; i < 3; i++) {
+    if (students[i].score ___ 90) count___;
+}
+cout << count << " students";  // 1 students`,
+          fillBlanks: [
+            { id: 0, answer: ">=", options: [">=", ">", "==", "<="] },
+            { id: 1, answer: "++", options: ["++", "--", "+=1", "= 1"] }
+          ],
+          explanation: "① `>= 90` means 90 and above — using `> 90` would mean strictly above 90, giving 0! ② `count++` increments by 1 — `count--` would subtract, which is wrong!"
+        },
+        {
+          id: "ch2-mini-practice3",
+          type: "practice" as const,
+          title: "✋ Write the counter yourself!",
+          content: `Use the Student struct array to count how many of Emma(95), Jake(87), Mia(72) scored 80 or above and print the result.`,
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+int main() {
+    Student students[3] = {
+        {"Emma", 95},
+        {"Jake",   87},
+        {"Mia", 72},
+    };
+
+    // Write your code to count and print students with score >= 80 here
+
+    return 0;
+}`,
+          expectedOutput: `80+: 2 students`
         },
         {
           id: "ch2-practice",
           type: "practice" as const,
-          title: "✋ Build a Rectangle class!",
-          content: `Build a Rectangle class!
+          title: "✋ Find the #1 student!",
+          content: `Now find not just the score, but **who** is #1!
 
-- The constructor takes width and height
-- area() returns the area, perimeter() returns the perimeter
-
-Practice using constructors and methods in a class!`,
+**Steps:**
+1. Initialize \`maxIdx = 0\` (start with the first student)
+2. Loop through the array with for (i = 1 to 2)
+3. If \`students[i].score > students[maxIdx].score\`, update \`maxIdx = i\`
+4. Print \`students[maxIdx].name\` and \`students[maxIdx].score\``,
           code: `#include <iostream>
+#include <string>
 using namespace std;
 
-class Rectangle {
-private:
-    double width, height;
-
-public:
-    Rectangle(double w, double h) {
-        width = w;
-        height = h;
-    }
-
-    double area() {
-        return width * height;
-    }
-
-    double perimeter() {
-        return 2 * (width + height);
-    }
+struct Student {
+    string name;
+    int score;
 };
 
 int main() {
-    Rectangle r(5.0, 3.0);
-    cout << "Area: " << r.area() << endl;
-    cout << "Perimeter: " << r.perimeter() << endl;
+    Student students[3] = {
+        {"Emma", 95},
+        {"Jake",   87},
+        {"Mia", 72},
+    };
+
+    // Write your code to find and print the top student's name and score here
 
     return 0;
 }`,
-          expectedOutput: `Area: 15
-Perimeter: 16`
+          expectedOutput: `#1: Emma (95)`
         },
         {
-          id: "ch2-pred-private",
-          type: "predict" as const,
-          title: "Accessing private members",
-          code: "class Rectangle {\nprivate:\n    int width;\npublic:\n    Rectangle(int w) : width(w) {}\n};\n\nint main() {\n    Rectangle r(5);\n    r.width = 10;  // ???\n}",
-          options: ["10", "5", "0", "Compile error"],
-          answer: 3,
-          explanation: "Compile error! width is private, so it can't be accessed from outside the class. Private members can only be accessed from inside the class. To modify it from outside, you'd need to create a public method (setter). This is the core of encapsulation!"
-        },
-        {
-          id: "ch2-getter-setter",
+          id: "ch2-ref",
           type: "explain",
-          title: "💡 So How Do You Change Private Values?",
-          content: `The safe way to access private members: **getter (read)** and **setter (write)** methods!
+          title: "Passing a struct to a function",
+          content: `Passing a struct to a function with a **reference (&)** is more efficient!
 
 \`\`\`cpp
-class Rectangle {
-private:
-    int width;
-public:
-    Rectangle(int w) : width(w) {}
-    int getWidth() { return width; }     // getter
-    void setWidth(int w) {
-        if (w > 0) width = w;  // validate before setting!
-    }
-};
+// Pass by value — copy, can't change original
+void print(Student s) {
+    cout << s.name << " " << s.score << endl;
+}
+
+// Pass by reference — direct access, can modify
+void boost(Student& s) {
+    s.score += 10;
+}
+
+Student s = {"Emma", 85};
+boost(s);
+cout << s.score;  // 95 (original changed!)
 \`\`\`
 
-Why do it this way? Notice that setWidth checks \`w > 0\`! It prevents width from becoming -10. If you allowed direct access, this kind of protection would be impossible.
+Passing a large struct by value copies all its data — expensive. Pass by reference for speed and memory efficiency.`,
+        },
+        {
+          id: "ch2-ref-pred1",
+          type: "predict" as const,
+          title: "Pass by value — does the original change?",
+          code: `#include <iostream>
+#include <string>
+using namespace std;
 
-💡 A getter is a function that reads a value, and a setter is a function that validates and sets a value!`
+struct Student {
+    string name;
+    int score;
+};
+
+void add10(Student s) {
+    s.score += 10;
+}
+
+int main() {
+    Student s = {"Emma", 85};
+    add10(s);
+    cout << s.score;
+    return 0;
+}`,
+          options: ["85", "95", "Error", "0"],
+          answer: 0,
+          explanation: "Pass by value sends a **copy** — changes inside the function don't affect the original. Output is 85. To modify the original, use `Student& s` (pass by reference)!"
         },
         {
           id: "ch2-q1",
           type: "quiz",
-          title: "class default access!",
-          content: "In C++, what is the **default access** for members of a `class` when nothing is specified?",
-          options: [
-            "public — anyone can access",
-            "protected — only child classes can access",
-            "private — only accessible inside the class",
-            "no access — causes an error"
-          ],
-          answer: 2,
-          explanation: "class members are private by default! That means outside code can't accidentally touch them. To allow outside access, you must explicitly write public:."
-        }
-      ]
-    },
-    // ============================================
-    // Chapter 3: Review Quiz
-    // ============================================
-    {
-      id: "ch3",
-      title: "Review Quiz",
-      emoji: "🏆",
-      steps: [
-        {
-          id: "ch3-q1",
-          type: "quiz",
-          title: "Reading class code!",
-          content: `What's the output?
+          title: "Struct array access!",
+          content: `What does \`students[1].score\` print?
 
 \`\`\`cpp
-class Dog {
-public:
+struct Student {
     string name;
-    Dog(string n) { name = n; }
+    int score;
 };
-int main() {
-    Dog d("Buddy");
-    cout << d.name;
-}
-\`\`\``,
-          options: [
-            "Error",
-            "d",
-            "Buddy",
-            "name"
-          ],
-          answer: 2,
-          explanation: "Dog d(\"Buddy\") calls the constructor so name becomes \"Buddy\". Since name is public, d.name is accessible!"
-        },
-        {
-          id: "ch3-q2",
-          type: "quiz",
-          title: "private access!",
-          content: `Which line causes an error?
-
-\`\`\`cpp
-class Box {
-private:
-    int size;
-public:
-    void setSize(int s) { size = s; }
+Student students[3] = {
+    {"A", 90},
+    {"B", 80},
+    {"C", 70},
 };
-int main() {
-    Box b;
-    b.size = 10;       // Line A
-    b.setSize(10);     // Line B
-}
 \`\`\``,
-          options: [
-            "Line A",
-            "Line B",
-            "Both lines",
-            "No error"
-          ],
-          answer: 0,
-          explanation: "size is private, so accessing it directly from outside causes an error! b.size = 10 is not allowed, but b.setSize(10) works because it's a public function."
-        },
-        {
-          id: "ch3-q3",
-          type: "quiz",
-          title: "Constructors!",
-          content: "Which statement about C++ constructors is **incorrect**?",
-          options: [
-            "It has the same name as the class",
-            "Its return type is void",
-            "It's called automatically when an object is created",
-            "It can take parameters"
-          ],
+          options: ["90", "80", "70", "Error"],
           answer: 1,
-          explanation: "Constructors have NO return type at all — not even void! They share the class name, are called automatically on object creation, and can accept parameters."
+          explanation: "`students[1]` is the second element `{\"B\", 80}`. `students[1].score` is 80!"
         },
         {
-          id: "ch3-q4",
-          type: "quiz",
-          title: "Comprehensive challenge!",
-          content: `What's the output?
+          id: "ch2-summary",
+          type: "explain",
+          title: "🎯 What You Learned Today!",
+          content: `## ✅ Struct Summary!
 
 \`\`\`cpp
-class Counter {
-private:
-    int count;
-public:
-    Counter(int c) { count = c; }
-    void add() { count++; }
-    int get() { return count; }
-};
-int main() {
-    Counter c(10);
-    c.add();
-    c.add();
-    c.add();
-    cout << c.get();
-}
-\`\`\``,
-          options: [
-            "10",
-            "11",
-            "13",
-            "Error"
-          ],
-          answer: 2,
-          explanation: "Counter c(10) sets count to 10. Calling add() three times: 10 -> 11 -> 12 -> 13. get() returns 13!"
-        },
-        {
-          id: "ch3-summary",
-          type: "explain",
-          title: "🎉 Part 2 Complete!",
-          content: `## 🏆 Part 2 Complete! Amazing work!
+struct Name {
+    type member1;
+    type member2;
+};  // semicolon required!
 
-Let's review everything you learned in Part 2 (Lessons 9-14)!
+Name var = {val1, val2};  // initialize
+var.member                 // access
+\`\`\`
 
-### 📚 Lesson 9: Arrays & Vectors
-- Store multiple values with C-style arrays and \`vector\`
+| Concept | Example |
+|---|---|
+| Define | \`struct Student { string name; int score; };\` |
+| Create | \`Student s = {"Emma", 95};\` |
+| Access | \`s.name\`, \`s.score\` |
+| Array | \`Student arr[3] = {...};\` |
+| Function | Pass by reference \`Student& s\` for efficiency |
 
-### 🔄 Lesson 10: Range-for & auto
-- Loop easily with \`for(auto x : vec)\`, auto type deduction
-
-### 🔤 Lesson 11: String Operations
-- Various \`string\` methods and techniques
-
-### 🔗 Lesson 12: References & Functions
-- Call by Value vs Reference, modify originals with \`&\`
-
-### 🔄 Lesson 13: Recursion
-- Functions calling themselves, base case required
-- Memoization to eliminate repeated work → foundation of Dynamic Programming (DP)
-
-### 🏗️ Lesson 14: Classes (class)
-- Encapsulate with \`class\`, private/public access control, constructors
-
----
-
-## ✅ Part 2 Key Summary!
-
-| Concept | Keywords | Core Idea |
-|---|---|---|
-| Arrays/Vectors | \`int arr[]\`, \`vector<int>\` | Store multiple values |
-| Range-for | \`for(auto x : v)\` | Easy iteration |
-| References | \`int& ref\` | Alias for a variable |
-| Recursion | \`func(n-1)\` | Base case + recursive call |
-| Memoization | \`memo[n]\` | Eliminate repeated work (DP) |
-| class | \`class { private/public };\` | Encapsulation |
-| Constructor | \`ClassName(...)\` | Initialize objects |
-
-🎊 **Congratulations!** You've completed Part 2! You've mastered important C++ concepts!
-
-🚀 **Up next: Part 3!** pairs & sorting, map & set, STL algorithms for even more powerful C++!`
+🚀 **Next lesson:** class — member variables & functions, private/public access, constructors, encapsulation (OOP)!`
         }
       ]
     }

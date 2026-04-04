@@ -248,32 +248,38 @@ Press **▶ Run** to trace step by step.`,
         {
           id: "ch2-practice",
           type: "practice" as const,
-          title: "✋ Build a Grade Checker!",
-          content: `Let's make a program that takes a score and outputs the grade!
+          title: "✋ Build an HP Status Checker!",
+          content: `Let's make a program that reads HP and outputs a status message!
 
-This is great practice for if, else if, and else.`,
+**Status levels:**
+- 80 or above → \`Safe!\`
+- 50 or above → \`Caution!\`
+- 20 or above → \`Danger!\`
+- Below 20 → \`On the brink!\`
+
+Practice using if, else if, and else in order.`,
           code: `#include <iostream>
 using namespace std;
 
 int main() {
-    int score;
-    cout << "Enter your score: ";
-    cin >> score;
+    int hp;
+    cout << "Enter HP: ";
+    cin >> hp;
 
-    if (score >= 90) {
-        cout << "Grade A! 🎉" << endl;
-    } else if (score >= 80) {
-        cout << "Grade B! 👍" << endl;
-    } else if (score >= 70) {
-        cout << "Grade C" << endl;
+    if (hp >= 80) {
+        cout << "Safe!" << endl;
+    } else if (hp >= 50) {
+        cout << "Caution!" << endl;
+    } else if (hp >= 20) {
+        cout << "Danger!" << endl;
     } else {
-        cout << "Try harder!" << endl;
+        cout << "On the brink!" << endl;
     }
 
     return 0;
 }`,
-          expectedOutput: `Enter your score: 85
-Grade B! 👍`
+          stdin: `35`,
+          expectedOutput: `Enter HP: Danger!`
         }
       ]
     },
@@ -423,16 +429,16 @@ if (age <= 12) {
         {
           id: "ch3-practice",
           type: "practice" as const,
-          title: "Ternary: adult or minor?",
-          content: `Take an age as input and print "adult" if 18 or older, "minor" if younger.
+          title: "Ternary: alive or defeated?",
+          content: `Take an HP as input and print "Alive!" if 1 or above, "Defeated..." if 0 or below.
 Use the ternary operator!`,
-          code: `#include <iostream>
+          starterCode: `#include <iostream>
 using namespace std;
 
 int main() {
-    int age;
-    cout << "Age: ";
-    cin >> age;
+    int hp;
+    cout << "HP: ";
+    cin >> hp;
 
     // Write it in one line using the ternary operator
     string result = ___;
@@ -440,8 +446,21 @@ int main() {
     cout << result << endl;
     return 0;
 }`,
-          expectedOutput: `Age: 20
-adult`
+          code: `#include <iostream>
+using namespace std;
+
+int main() {
+    int hp;
+    cout << "HP: ";
+    cin >> hp;
+
+    string result = (hp >= 1) ? "Alive!" : "Defeated...";
+
+    cout << result << endl;
+    return 0;
+}`,
+          stdin: `50`,
+          expectedOutput: `HP: Alive!`
         },
         {
           id: "ch3-pred1",
@@ -744,31 +763,35 @@ Cases 1-5 fall through to the same code — all print **"Weekday"**. This is **i
         {
           id: "ch4-practice1",
           type: "practice" as const,
-          title: "✍️ Write a switch statement!",
-          content: `Write a switch that prints the day name based on a number!
+          title: "✍️ Write a weapon selection switch!",
+          content: `Write a switch that prints the weapon name based on a number!
 
-- day = 1 → "Monday"
-- day = 2 → "Tuesday"
-- anything else → "Other"
+- weapon = 1 → "Sword"
+- weapon = 2 → "Bow"
+- weapon = 3 → "Magic"
+- anything else → "Bare hands"
 
 💡 Hint: Don't forget break after each case! And add a default too!`,
           code: `#include <iostream>
 using namespace std;
 int main() {
-    int day = 1;
-    switch (day) {
+    int weapon = 1;
+    switch (weapon) {
         case 1:
-            cout << "Monday";
+            cout << "Sword";
             break;
         case 2:
-            cout << "Tuesday";
+            cout << "Bow";
+            break;
+        case 3:
+            cout << "Magic";
             break;
         default:
-            cout << "Other";
+            cout << "Bare hands";
     }
     return 0;
 }`,
-          expectedOutput: "Monday"
+          expectedOutput: "Sword"
         },
       ]
     },
@@ -811,17 +834,21 @@ int main() {
         {
           id: "ch5-q3",
           type: "quiz",
-          title: "Ternary result!",
+          title: "switch fall-through!",
           content: `What's the output?
 
 \`\`\`cpp
-int n = 4;
-string result = (n % 2 == 0) ? "even" : "odd";
-cout << result;
+int x = 2;
+switch (x) {
+    case 1: cout << "one"; break;
+    case 2: cout << "two";
+    case 3: cout << "three"; break;
+    default: cout << "other";
+}
 \`\`\``,
-          options: ["even", "odd", "Error", "4"],
-          answer: 0,
-          explanation: "4 % 2 == 0 is true! The ternary picks the value after ? which is 'even'."
+          options: ["two", "twothree", "two three", "Error"],
+          answer: 1,
+          explanation: "case 2 has no break, so it falls through to case 3! 'two' and 'three' print back-to-back. Unintentional fall-through is a common bug — always double-check your breaks."
         },
         {
           id: "ch5-summary",

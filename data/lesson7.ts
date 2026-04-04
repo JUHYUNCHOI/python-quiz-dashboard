@@ -115,11 +115,11 @@ print("하세요")
           id: "try4",
           type: "tryit",
           title: "🖥️ 화살표로 연결!",
-          task: "A → B → C 형태로 출력하세요!",
+          task: "A -> B -> C 형태로 출력하세요!",
           initialCode: "print(\"A\", end=___)\nprint(\"B\", end=___)\nprint(\"C\")",
-          expectedOutput: "A → B → C",
-          hint: "end=\" → \"로 설정!",
-          hint2: "print(\"A\", end=\" → \")"
+          expectedOutput: "A -> B -> C",
+          hint: "end=\" -> \"로 설정!",
+          hint2: "print(\"A\", end=\" -> \")"
         },
         {
           id: "quiz2",

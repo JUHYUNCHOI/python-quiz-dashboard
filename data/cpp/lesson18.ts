@@ -72,6 +72,22 @@ s[-1]           # top (마지막 원소 확인)
 
 💡 C++의 \`pop()\`은 값을 **리턴하지 않아요**! 값을 먼저 \`top()\`으로 확인한 후 \`pop()\`으로 제거해요.
 
+**stack 함수 정리**
+
+| 함수 | 문법 | 설명 |
+|---|---|---|
+| push | \`s.push(x)\` | 맨 위에 추가 |
+| pop | \`s.pop()\` | 맨 위 제거 (리턴값 없음!) |
+| top | \`s.top()\` | 맨 위 값 확인 (제거 안 함) |
+| size | \`s.size()\` | 원소 개수 |
+| empty | \`s.empty()\` | 비어있으면 true |
+
+⚠️ \`pop()\`은 값을 반환하지 않아요! 값을 쓰려면 \`top()\`으로 먼저 확인 후 \`pop()\`해야 해요:
+\`\`\`cpp
+int val = s.top();  // 값 읽기
+s.pop();            // 그 다음 제거
+\`\`\`
+
 **왜 vector 대신 stack을 쓸까요?**
 vector로도 push_back/pop_back으로 stack처럼 쓸 수 있어요. 그런데 왜 stack을 따로 쓸까요? **의도를 명확하게** 보여주기 위해서예요! stack을 쓰면 '이 코드는 LIFO로만 사용합니다'라는 약속이에요. 실수로 중간 값을 접근하는 것도 방지해줘요.
 
@@ -151,6 +167,17 @@ q[0]              # front
 | \`q[0]\` | \`q.front()\` |
 | \`q[-1]\` | \`q.back()\` |
 
+**queue 함수 정리**
+
+| 함수 | 문법 | 설명 |
+|---|---|---|
+| push | \`q.push(x)\` | 뒤에 추가 |
+| pop | \`q.pop()\` | 앞에서 제거 (리턴값 없음!) |
+| front | \`q.front()\` | 맨 앞 값 확인 |
+| back | \`q.back()\` | 맨 뒤 값 확인 |
+| size | \`q.size()\` | 원소 개수 |
+| empty | \`q.empty()\` | 비어있으면 true |
+
 💡 queue는 **BFS(너비 우선 탐색)**에 필수적인 자료구조예요! 그래프 탐색할 때 꼭 쓰여요.`
         },
         {
@@ -186,9 +213,7 @@ q[0]              # front
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ stack으로 괄호 매칭 체크!",
-          content: `문자열 "(())"의 괄호가 올바른지 stack으로 확인해봐요!
-
-'('를 만나면 push, ')'를 만나면 pop. 끝났을 때 stack이 비어있으면 올바른 괄호예요!`,
+          content: `문자열 "(())"의 괄호가 올바르게 짝지어졌는지 stack을 활용해서 확인하는 코드를 실행해봐요!`,
           code: `#include <iostream>
 #include <stack>
 #include <string>
@@ -418,9 +443,7 @@ deque:          [1, 2, 3] → 앞/뒤 모두 가능!
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ priority_queue로 가장 큰 3개 값 출력!",
-          content: `5개의 숫자를 priority_queue에 넣고, 가장 큰 3개를 순서대로 출력해봐요!
-
-priority_queue는 자동으로 큰 값이 위에 오니까, top()과 pop()을 반복하면 돼요.`,
+          content: `5개의 숫자를 priority_queue에 넣고, 가장 큰 3개를 순서대로 출력하는 코드를 실행해봐요!`,
           code: `#include <iostream>
 #include <queue>
 using namespace std;
@@ -555,32 +578,96 @@ cout << pq.top();
           explanation: "priority_queue는 기본이 최대 힙이에요! 3,1,4,1,5 중 가장 큰 값인 5가 top()에 와요."
         },
         {
+          id: "ch3-simulation",
+          type: "explain",
+          title: "🎮 LIFO vs FIFO — 눈으로 비교!",
+          content: `stack과 queue에 같은 데이터를 순서대로 넣고 빼면 어떻게 다른지 직접 비교해봐요!
+
+**같은 데이터를 push: 1 → 2 → 3 순서로 넣기**
+
+\`\`\`cpp
+// stack에 push
+stack<int> s;
+s.push(1); s.push(2); s.push(3);
+
+// queue에 push
+queue<int> q;
+q.push(1); q.push(2); q.push(3);
+\`\`\`
+
+**stack의 내부 상태** (위가 top):
+\`\`\`
+push 1 → [1]           top = 1
+push 2 → [1, 2]        top = 2
+push 3 → [1, 2, 3]     top = 3
+\`\`\`
+
+**queue의 내부 상태** (→ 방향으로 이동):
+\`\`\`
+push 1 → front [1] back
+push 2 → front [1, 2] back
+push 3 → front [1, 2, 3] back
+\`\`\`
+
+---
+
+**이제 꺼내면 (pop)?**
+
+\`\`\`cpp
+// stack에서 꺼내기
+while (!s.empty()) {
+    cout << s.top() << " ";
+    s.pop();
+}
+// 출력: 3 2 1  ← 역순! (LIFO)
+
+// queue에서 꺼내기
+while (!q.empty()) {
+    cout << q.front() << " ";
+    q.pop();
+}
+// 출력: 1 2 3  ← 넣은 순서대로! (FIFO)
+\`\`\`
+
+**stack**: 3 → 2 → 1 (마지막에 넣은 것이 먼저 나와요)
+**queue**: 1 → 2 → 3 (처음에 넣은 것이 먼저 나와요)
+
+---
+
+**실생활 비유**
+
+| 자료구조 | 원리 | 실생활 예시 |
+|---|---|---|
+| stack (LIFO) | 마지막 입력 → 먼저 출력 | 접시 쌓기, 뒤로가기 버튼, 실행 취소(undo) |
+| queue (FIFO) | 첫 입력 → 먼저 출력 | 줄서기, 프린터 대기열, 메시지 처리 |
+| deque | 앞뒤 모두 삽입/삭제 | 양방향 줄서기, 덱 카드 |
+| priority_queue | 우선순위 높은 것이 먼저 | 응급실 진료 순서, 작업 스케줄링 |
+
+💡 이 자료구조들이 실제 알고리즘(그래프 탐색, 최단 경로 등)에서 어떻게 쓰이는지는 **알고리즘 랩**에서 다뤄요!`
+        },
+        {
           id: "ch3-summary",
           type: "explain",
           title: "🎉 레슨 18 완료!",
           content: `## 🏆 오늘 배운 것 정리!
 
-### 📦 stack (LIFO)
+### 📦 stack (LIFO — 마지막 입력이 먼저 나와요)
 - \`#include <stack>\`
-- \`push()\`, \`pop()\`, \`top()\`, \`empty()\`, \`size()\`
-- 용도: 괄호 매칭, undo, DFS
+- \`push(x)\` 추가, \`top()\` 확인, \`pop()\` 제거, \`empty()\`, \`size()\`
 
-### 📦 queue (FIFO)
+### 📦 queue (FIFO — 처음 입력이 먼저 나와요)
 - \`#include <queue>\`
-- \`push()\`, \`pop()\`, \`front()\`, \`back()\`
-- 용도: BFS, 대기열
+- \`push(x)\` 추가, \`front()\` 앞 확인, \`back()\` 뒤 확인, \`pop()\` 제거
 
 ### ⚡ deque (양쪽 큐)
 - \`#include <deque>\`
 - \`push_front()\`, \`push_back()\`, \`pop_front()\`, \`pop_back()\`
 - 인덱스 접근 가능! \`dq[i]\`
-- 용도: 슬라이딩 윈도우, 앞뒤 모두 필요할 때
 
 ### ⚡ priority_queue (힙)
 - \`#include <queue>\`
 - 기본: **최대 힙** (큰 값이 top)
 - 최소 힙: \`priority_queue<int, vector<int>, greater<int>>\`
-- 용도: 최대/최소 빠르게 찾기, 다익스트라
 
 | 자료구조 | 접근 함수 | pop 위치 |
 |---|---|---|

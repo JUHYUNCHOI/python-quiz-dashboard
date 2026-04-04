@@ -413,7 +413,7 @@ std::cout << "Second line\\n";
         {
           id: "ch5-q2",
           type: "quiz",
-          title: "Semicolons!",
+          title: "What's Missing?",
           content: `Why does this code cause an error?
 \`\`\`cpp
 std::cout << "Hi" << std::endl

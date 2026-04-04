@@ -1,7 +1,7 @@
 import { LessonData } from './types'
 
 export const lesson37EnData: LessonData = {
-  id: "37en",
+  id: "37",
   title: "Error Handling",
   emoji: "🛡️",
   description: "Make your games crash-proof, even when bugs happen!",

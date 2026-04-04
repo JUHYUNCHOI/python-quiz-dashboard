@@ -72,7 +72,9 @@ int cnt = count(v.begin(), v.end(), 3);  // 3이 몇 개? → 1
 | \`max(lst)\` | \`*max_element(v.begin(), v.end())\` |
 | \`lst.count(3)\` | \`count(v.begin(), v.end(), 3)\` |
 
-💡 C++의 STL 알고리즘은 대부분 \`(시작, 끝)\` 형태의 **범위(range)**를 인자로 받아요! \`v.begin()\`과 \`v.end()\`를 항상 넘겨줘야 해요.`
+💡 C++의 STL 알고리즘은 대부분 \`(시작, 끝)\` 형태의 **범위(range)**를 인자로 받아요! \`v.begin()\`과 \`v.end()\`를 항상 넘겨줘야 해요.
+
+👇 위 함수들의 자세한 문법과 예제는 바로 아래 단계에서 하나씩 설명해요!`
         },
         {
           id: "ch1-fb1",
@@ -204,9 +206,7 @@ swap(a, b);
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ 벡터 종합 분석!",
-          content: `벡터에서 최대값, 최소값, 합계를 구하고, 특정 값이 있는지 찾아봐요!
-
-min_element, max_element, accumulate, find를 모두 활용해봐요.`,
+          content: `벡터에서 최대값, 최소값, 합계를 구하고, 특정 값이 있는지 찾아보는 코드를 실행해봐요!`,
           code: `#include <iostream>
 #include <vector>
 #include <algorithm>
@@ -271,7 +271,7 @@ cout << cnt;  // 3 (8, 4, 2)
 | \`filter(lambda x: x > 5, lst)\` | \`find_if(..., [](int x){ return x > 5; })\` |
 | \`len([x for x in lst if x % 2 == 0])\` | \`count_if(..., [](int x){ return x % 2 == 0; })\` |
 
-람다는 레슨 15의 \`sort()\`에서도 이미 사용했어요! STL 알고리즘 어디서든 조건 함수를 넘길 수 있어요.`,
+람다는 \`sort()\`를 비롯한 STL 알고리즘 어디서든 조건 함수를 넘길 수 있어요.`,
         },
         {
           id: "ch1-q1",
@@ -499,9 +499,7 @@ coords.erase(unique(coords.begin(), coords.end()), coords.end());
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ 정렬 + lower_bound로 값 찾기!",
-          content: `정렬되지 않은 벡터를 정렬하고, lower_bound로 특정 값의 위치를 찾아봐요!
-
-sort()로 정렬한 뒤, lower_bound()로 값을 찾아서 인덱스를 출력해봐요.`,
+          content: `정렬되지 않은 벡터를 정렬하고, 특정 값의 위치를 찾는 코드를 실행해봐요!`,
           code: `#include <iostream>
 #include <vector>
 #include <algorithm>
@@ -527,7 +525,7 @@ int main() {
 
     return 0;
 }`,
-          expectedOutput: `Sorted: 10 20 30 40 50
+          expectedOutput: `Sorted: 10 20 30 40 50 
 30 found at index 2`
         },
         {

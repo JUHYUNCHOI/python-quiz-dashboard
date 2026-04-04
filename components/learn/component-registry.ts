@@ -155,6 +155,18 @@ const registry: Record<string, ComponentEntry> = {
     }),
   },
 
+  // C++ 레슨: 헤더 파일 연결 애니메이션
+  headerFiles: {
+    load: () => import("@/components/animations/header-files"),
+    exportName: "HeaderFilesAnimation",
+  },
+
+  // C++ 레슨: 함수 순서 오류 애니메이션
+  functionOrder: {
+    load: () => import("@/components/animations/function-order"),
+    exportName: "FunctionOrderAnimation",
+  },
+
   // C++ 레슨: 문법 차이 찾기 게임
   syntaxSpotter: {
     load: () => import("@/components/animations/syntax-spotter"),
@@ -237,6 +249,26 @@ const registry: Record<string, ComponentEntry> = {
   cppArrayBuilder: {
     load: () => import("@/components/animations/syntax-builder"),
     exportName: "CppArrayBuilder",
+  },
+  // pair vs 두 vector 비교 시각화 (cpp-15 lesson)
+  pairVsTwoVectors: {
+    load: () => import("@/components/animations/pair-vs-vectors"),
+    exportName: "PairVsTwoVectorsAnimation",
+  },
+  // pair 비교 & 정렬 인터랙티브 애니메이션 (cpp-15 lesson)
+  pairCompare: {
+    load: () => import("@/components/animations/pair-compare"),
+    exportName: "PairCompareAnimation",
+  },
+  // 선형 탐색 시뮬레이션 (탐색 알고리즘 도입)
+  linearSearch: {
+    load: () => import("@/components/animations/linear-search"),
+    exportName: "LinearSearchAnimation",
+  },
+  // 이진 탐색 시뮬레이션 (lower_bound 이해)
+  binarySearch: {
+    load: () => import("@/components/animations/binary-search"),
+    exportName: "BinarySearchAnimation",
   },
   cppPointerBuilder: {
     load: () => import("@/components/animations/syntax-builder"),
@@ -349,6 +381,69 @@ const registry: Record<string, ComponentEntry> = {
   cppBraceTrapBuilder: {
     load: () => import("@/components/animations/syntax-builder"),
     exportName: "CppBraceTrapBuilder",
+  },
+  cppConstructorBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppConstructorBuilder",
+  },
+
+  // C++ 레슨 21: 2D 배열 이중 for문 시각화
+  gridLoopVisualizer: {
+    load: () => import("@/components/animations/grid-loop-visualizer"),
+    exportName: "GridLoopVisualizer",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+
+  // C++ 레슨 14: struct 배열 + for 루프 시각화
+  cppStructArrayLoop: {
+    load: () => import("@/components/animations/struct-array-loop"),
+    exportName: "StructArrayLoop",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+
+  // C++ 레슨: auto 타입 추론 시각화
+  autoTypeVisualizer: {
+    load: () => import("@/components/animations/auto-type-visualizer"),
+    exportName: "AutoTypeVisualizer",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+
+  // C++ 레슨: 복사 vs 참조 메모리 주소 시뮬레이션
+  copyRefMemory: {
+    load: () => import("@/components/animations/copy-ref-memory"),
+    exportName: "CopyRefMemory",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+
+  // C++ 레슨: 복사/참조/Java 주소복사 상자 비교 (cpp-12)
+  referenceBoxVisualizer: {
+    load: () => import("@/components/animations/reference-box-visualizer"),
+    exportName: "ReferenceBoxVisualizer",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+
+  // C++ 레슨: range-based for 루프 복사 vs 참조 시각화
+  rangeForVisualizer: {
+    load: () => import("@/components/animations/range-for-visualizer"),
+    exportName: "RangeForVisualizer",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+
+  // C++ 레슨 11: string 메서드 인터랙티브 체험 (substr / find / replace)
+  stringMethodVisualizer: {
+    load: () => import("@/components/animations/string-method-visualizer"),
+  },
+
+  // C++ 레슨 13: 참조 vs 포인터 비교 시뮬
+  pointerRefVisualizer: {
+    load: () => import("@/components/animations/pointer-ref-visualizer"),
+  },
+
+  // C++ 레슨: 배열 부분 초기화 기본값 시각화
+  arrayInitVisualizer: {
+    load: () => import("@/components/animations/array-init-visualizer"),
+    exportName: "ArrayInitVisualizer",
+    props: (_step: any, lang: string) => ({ lang }),
   },
 
   // C++ 레슨: 데이터 타입별 메모리 시각화

@@ -4,7 +4,7 @@
 import { LessonData } from './types'
 
 export const lesson8EnData: LessonData = {
-  id: "8en",
+  id: "8",
   title: "f-string",
   emoji: "✨",
   description: "The easiest way to format strings!",

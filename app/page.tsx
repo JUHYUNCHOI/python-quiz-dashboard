@@ -4,15 +4,17 @@ import { GiraffeHero } from "@/components/giraffe-hero"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { Card } from "@/components/ui/card"
-import { BookOpen, Brain, Trophy, Flame, Zap, ChevronRight, Target } from "lucide-react"
+import { BookOpen, Brain, Trophy, Flame, Zap, ChevronRight, Target, CheckCircle2, BarChart3 } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useLanguage } from "@/contexts/language-context"
-import { useGamification, DAILY_XP_GOAL } from "@/hooks/use-gamification"
+import { useGamification, DAILY_XP_GOAL, getLevelTitle } from "@/hooks/use-gamification"
 import { useState, useEffect } from "react"
 import { OnboardingModal } from "@/components/onboarding-modal"
 import { DailyChallenges } from "@/components/daily-challenges"
 import { AchievementsShelf } from "@/components/achievements-shelf"
 import { PythonToCppBridge } from "@/components/python-to-cpp-bridge"
+import { useAuth } from "@/contexts/auth-context"
 
 // -------- 레슨 ID 순서 --------
 const PYTHON_LESSON_IDS: (number | string)[] = [
@@ -31,7 +33,7 @@ const PYTHON_LESSON_IDS: (number | string)[] = [
 const CPP_LESSON_IDS: string[] = [
   "cpp-1","cpp-2","cpp-3","cpp-4","cpp-5","cpp-6","cpp-7","cpp-8","cpp-p1",
   "cpp-9","cpp-10","cpp-11","cpp-12","cpp-13","cpp-14","cpp-p2",
-  "cpp-15","cpp-16","cpp-17","cpp-18","cpp-19","cpp-20","cpp-p3",
+  "cpp-21","cpp-15","cpp-23","cpp-16","cpp-17","cpp-18","cpp-19","cpp-20","cpp-p3",
 ]
 
 // -------- 레슨 제목 매핑 --------
@@ -63,6 +65,7 @@ const CPP_TITLES: Record<string, string> = {
   "cpp-9":"배열과 벡터", "cpp-10":"범위 for & auto", "cpp-11":"문자열 연산",
   "cpp-12":"참조와 함수", "cpp-13":"재귀 (Recursion)", "cpp-14":"클래스 (class)",
   "cpp-p2":"🏆 Part 2 복습",
+  "cpp-21":"2차원 배열 & 2D vector",
   "cpp-15":"pair와 정렬", "cpp-16":"map과 set", "cpp-17":"스택과 큐",
   "cpp-18":"우선순위 큐", "cpp-19":"정렬 알고리즘", "cpp-20":"CP 실전 팁",
   "cpp-p3":"🏆 USACO 준비",
@@ -96,6 +99,7 @@ const CPP_TITLES_EN: Record<string, string> = {
   "cpp-9":"Arrays & Vectors", "cpp-10":"Range-for & auto", "cpp-11":"String Operations",
   "cpp-12":"References & Functions", "cpp-13":"Recursion", "cpp-14":"Classes",
   "cpp-p2":"🏆 Part 2 Review",
+  "cpp-21":"2D Arrays & 2D Vectors",
   "cpp-15":"pair & Sorting", "cpp-16":"map & set", "cpp-17":"Stacks & Queues",
   "cpp-18":"Priority Queue", "cpp-19":"Sorting Algorithms", "cpp-20":"CP Tips",
   "cpp-p3":"🏆 USACO Prep",
@@ -144,9 +148,281 @@ function readSelectedCourse(): "python" | "cpp" {
   }
 }
 
+// ============================================================
+// 랜딩 페이지 (비로그인 상태)
+// ============================================================
+
+
+function LandingPage() {
+  const { t } = useLanguage()
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-white">
+      {/* 상단 헤더 */}
+      <div className="flex items-center justify-between px-5 py-4 max-w-[1200px] mx-auto">
+        <div className="flex items-center gap-2">
+          <span className="text-2xl">🦒</span>
+          <span className="font-black text-xl text-gray-800">코드린</span>
+        </div>
+        <Link
+          href="/login"
+          className="px-4 py-2 rounded-full text-sm font-bold text-white bg-orange-500 hover:bg-orange-600 transition-colors"
+        >
+          {t("로그인", "Login")}
+        </Link>
+      </div>
+
+      <main className="max-w-[1200px] mx-auto px-5 pb-16">
+
+        {/* ── 히어로 (공통 상단) ── */}
+        <div className="text-center pt-4 pb-6 space-y-3 max-w-xl mx-auto">
+          <div className="text-5xl">🦒</div>
+          <h1 className="text-2xl font-black text-gray-900 leading-tight">
+            {t("코딩 시작부터\nUSACO·MCC 대회까지", "From First Code\nto USACO & MCC")}
+          </h1>
+          <p className="text-sm text-gray-500 leading-relaxed">
+            {t(
+              "중학생·고등학생을 위한 단계별 코딩 로드맵.\n선생님과 함께, 내 속도로.",
+              "A step-by-step coding roadmap for middle & high schoolers.\nAt your own pace, with your teacher."
+            )}
+          </p>
+          <Link
+            href="/login"
+            className="inline-block mt-1 px-8 py-3 rounded-2xl bg-orange-500 text-white font-black text-base border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
+          >
+            {t("무료로 시작하기 →", "Get Started Free →")}
+          </Link>
+        </div>
+
+        {/* ── 학습 경로 ── */}
+        <div className="lg:max-w-2xl lg:mx-auto space-y-1 mb-10">
+          <h2 className="text-base font-black text-gray-800 mb-3">
+            {t("내가 가는 경로", "Your Learning Path")}
+          </h2>
+
+          {/* STEP 1 */}
+          <div className="flex gap-3 items-stretch">
+            <div className="flex flex-col items-center">
+              <div className="w-8 h-8 rounded-full bg-orange-500 border-2 border-black flex items-center justify-center text-white font-black text-xs flex-shrink-0">1</div>
+              <div className="w-0.5 bg-orange-200 flex-1 mt-1" />
+            </div>
+            <div className="flex-1 pb-4">
+              <div className="rounded-2xl border-2 border-orange-300 bg-orange-50 p-4 space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">🐍</span>
+                  <div>
+                    <p className="font-black text-gray-900 text-sm">Python 기초 <span className="text-[11px] font-normal text-gray-400">52강</span></p>
+                    <p className="text-[11px] text-gray-500">{t("코딩 경험 없어도 시작 가능", "No prior coding experience needed")}</p>
+                  </div>
+                </div>
+                <div className="bg-white rounded-xl border border-orange-100 p-2.5 space-y-1">
+                  <p className="text-[10px] font-black text-orange-500 uppercase tracking-wider">{t("이걸 만들 수 있어요", "You'll be able to build")}</p>
+                  {([
+                    ['🎮', t('숫자 맞추기 게임, Hangman', 'Number guessing game, Hangman')],
+                    ['🧮', t('성적 계산기, 환율 변환기', 'GPA calculator, currency converter')],
+                    ['📊', t('데이터 정렬·검색 프로그램', 'Data sorting & search programs')],
+                  ] as [string, string][]).map(([icon, text]) => (
+                    <div key={text} className="flex items-center gap-1.5 text-xs text-gray-700">
+                      <span>{icon}</span><span>{text}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* STEP 2 — 갈림길 */}
+          <div className="flex gap-3 items-stretch">
+            <div className="flex flex-col items-center">
+              <div className="w-8 h-8 rounded-full bg-blue-500 border-2 border-black flex items-center justify-center text-white font-black text-xs flex-shrink-0">2</div>
+              <div className="w-0.5 bg-gray-200 flex-1 mt-1" />
+            </div>
+            <div className="flex-1 pb-4">
+              <p className="text-[10px] font-black text-gray-400 mb-2 uppercase tracking-wider">{t("목표에 따라 선택", "Choose your path")}</p>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="rounded-2xl border-2 border-blue-300 bg-blue-50 p-3 space-y-2">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-base">⚡</span>
+                    <p className="font-black text-gray-900 text-sm">C++ 전환</p>
+                  </div>
+                  <p className="text-[11px] text-gray-500">{t("20강", "20 lessons")}</p>
+                  <div className="bg-white rounded-lg border border-blue-100 p-2 space-y-1">
+                    <p className="text-[10px] font-black text-blue-500 uppercase">{t("얻는 것", "You gain")}</p>
+                    {[
+                      t('실행속도 10~100배', '10~100× faster code'),
+                      t('USACO 대회 도전', 'USACO competition ready'),
+                      t('포인터·메모리 이해', 'Pointers & memory mastery'),
+                    ].map(s => <p key={s} className="text-[11px] text-gray-700">✓ {s}</p>)}
+                  </div>
+                </div>
+                <div className="rounded-2xl border-2 border-orange-200 bg-orange-50/60 p-3 space-y-2">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-base">🐍</span>
+                    <p className="font-black text-gray-900 text-sm">Python 유지</p>
+                  </div>
+                  <p className="text-[11px] text-gray-500">{t("바로 알고리즘으로", "Jump to algorithms")}</p>
+                  <div className="bg-white rounded-lg border border-orange-100 p-2 space-y-1">
+                    <p className="text-[10px] font-black text-orange-500 uppercase">{t("얻는 것", "You gain")}</p>
+                    {[
+                      t('더 빠른 대회 입문', 'Faster path to contests'),
+                      t('MCC 출전 가능', 'MCC competition ready'),
+                      t('논리력 집중 훈련', 'Focus on problem solving'),
+                    ].map(s => <p key={s} className="text-[11px] text-gray-700">✓ {s}</p>)}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* STEP 3 — 알고리즘 */}
+          <div className="flex gap-3 items-stretch">
+            <div className="flex flex-col items-center">
+              <div className="w-8 h-8 rounded-full bg-purple-500 border-2 border-black flex items-center justify-center text-white font-black text-xs flex-shrink-0">3</div>
+              <div className="w-0.5 bg-purple-200 flex-1 mt-1" />
+            </div>
+            <div className="flex-1 pb-4">
+              <div className="rounded-2xl border-2 border-purple-300 bg-purple-50 p-4 space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">🧠</span>
+                  <div>
+                    <p className="font-black text-gray-900 text-sm">{t("알고리즘 훈련", "Algorithm Training")}</p>
+                    <p className="text-[11px] text-gray-500">Bronze → Silver → Gold</p>
+                  </div>
+                </div>
+                <div className="bg-white rounded-xl border border-purple-100 p-2.5 space-y-1">
+                  <p className="text-[10px] font-black text-purple-500 uppercase tracking-wider">{t("풀 수 있게 되는 문제", "Problems you'll solve")}</p>
+                  {[
+                    ['🥉', t('BOJ 실버 · USACO Bronze', 'BOJ Silver · USACO Bronze')],
+                    ['🥈', t('BOJ 골드 · USACO Silver', 'BOJ Gold · USACO Silver')],
+                    ['🥇', t('BOJ 플래티넘 · USACO Gold 도전', 'BOJ Platinum · USACO Gold')],
+                  ].map(([icon, text]) => (
+                    <div key={String(text)} className="flex items-center gap-1.5 text-xs text-gray-700">
+                      <span>{icon}</span><span>{text}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* STEP 4 — 대회 */}
+          <div className="flex gap-3">
+            <div className="w-8 h-8 rounded-full bg-yellow-400 border-2 border-black flex items-center justify-center text-lg flex-shrink-0">🏆</div>
+            <div className="flex-1">
+              <div className="rounded-2xl border-2 border-yellow-300 bg-yellow-50 p-4 space-y-2">
+                <p className="font-black text-gray-900 text-sm">{t("대회 출전", "Competition")}</p>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="bg-white rounded-xl border border-yellow-200 p-2.5 space-y-0.5">
+                    <p className="font-black text-sm text-gray-900">USACO 🇺🇸</p>
+                    <p className="text-[11px] text-gray-500">{t("미국 정보올림피아드", "USA Computing Olympiad")}</p>
+                    <p className="text-[11px] text-gray-400">{t("대학 입시 스펙", "College app credential")}</p>
+                    <span className="inline-block text-[10px] bg-blue-100 text-blue-700 rounded px-1.5 py-0.5 font-bold">C++ {t("권장", "recommended")}</span>
+                  </div>
+                  <div className="bg-white rounded-xl border border-yellow-200 p-2.5 space-y-0.5">
+                    <p className="font-black text-sm text-gray-900">MCC 🇨🇦</p>
+                    <p className="text-[11px] text-gray-500">{t("캐나다 정보올림피아드", "Canadian Computing Contest")}</p>
+                    <p className="text-[11px] text-gray-400">{t("학교 대표 출전", "School representative")}</p>
+                    <span className="inline-block text-[10px] bg-orange-100 text-orange-700 rounded px-1.5 py-0.5 font-bold">Python {t("가능", "supported")}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── 학습 방법 ── */}
+        <div>
+          <h2 className="text-base font-black text-gray-800 mb-3">
+            {t("어떻게 배우나요?", "How does it work?")}
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {[
+              {
+                icon: '📖', color: 'bg-orange-100 text-orange-600',
+                title: t('수업 듣기', 'Study a Lesson'),
+                desc: t('설명 → 빈칸 채우기 → 코드 예측 → 직접 실행. 브라우저에서 바로.', 'Explanation → fill-in → predict → run code. All in your browser.'),
+              },
+              {
+                icon: '🔁', color: 'bg-purple-100 text-purple-600',
+                title: t('퀴즈로 굳히기 — 듀오링고처럼', 'Quiz to Lock It In — Like Duolingo'),
+                desc: t('틀린 문제는 2~3문제 후 자동으로 다시 나와요. 개념이 완전히 내 것이 될 때까지.', 'Wrong answers come back 2–3 questions later, automatically, until they truly stick.'),
+              },
+              {
+                icon: '🧠', color: 'bg-blue-100 text-blue-600',
+                title: t('알고리즘 시뮬레이션', 'Algorithm Simulations'),
+                desc: t('정렬·그래프·DP가 눈앞에서 움직여요. 보고 나면 코드가 이해돼요.', 'Watch sorting, graphs, and DP animate step-by-step. See it, then write it.'),
+              },
+              {
+                icon: '📝', color: 'bg-green-100 text-green-600',
+                title: t('직접 코딩 + 선생님 채점', 'Code It + Teacher Review'),
+                desc: t('과제를 직접 짜서 제출하면 선생님이 채점하고 코멘트를 달아줘요.', 'Submit your own code; your teacher grades it and leaves comments.'),
+              },
+            ].map(item => (
+              <div key={item.title} className="flex items-start gap-3 bg-white rounded-2xl border border-gray-100 p-3.5 shadow-sm">
+                <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-base flex-shrink-0 ${item.color}`}>{item.icon}</div>
+                <div>
+                  <p className="font-bold text-sm text-gray-800">{item.title}</p>
+                  <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── 부모님도 함께 ── */}
+        <div className="rounded-2xl border-2 border-gray-100 bg-gray-50 p-5 space-y-3">
+          <div className="flex items-center gap-2">
+            <span className="text-xl">👨‍👩‍👧</span>
+            <h2 className="text-base font-black text-gray-800">
+              {t("부모님도 함께 확인해요", "Parents Stay in the Loop")}
+            </h2>
+          </div>
+          <p className="text-xs text-gray-500 leading-relaxed">
+            {t(
+              "자녀가 어디까지 배웠는지, 어떤 과제를 완료했는지 부모님 전용 뷰에서 확인할 수 있어요. 선생님 피드백도 함께 볼 수 있습니다.",
+              "Parents have their own view to track which lessons their child has completed, which assignments were submitted, and what feedback the teacher left."
+            )}
+          </p>
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              { icon: '📈', label: t('레슨 진도', 'Lesson Progress') },
+              { icon: '✅', label: t('과제 완료', 'Assignment Status') },
+              { icon: '💬', label: t('선생님 피드백', 'Teacher Comments') },
+            ].map(item => (
+              <div key={item.label} className="bg-white rounded-xl border border-gray-100 p-2.5 text-center space-y-1">
+                <div className="text-lg">{item.icon}</div>
+                <p className="text-[11px] font-bold text-gray-700">{item.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── 하단 CTA ── */}
+        <div className="text-center space-y-2 pt-8">
+          <Link
+            href="/login"
+            className="inline-block px-8 py-3 rounded-2xl bg-orange-500 text-white font-black text-base border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
+          >
+            {t("지금 시작하기 →", "Get Started →")}
+          </Link>
+          <p className="text-[11px] text-gray-400">{t("선생님과 함께 나에게 맞는 경로를 찾아요", "Find the right path with your teacher")}</p>
+        </div>
+
+      </main>
+    </div>
+  )
+}
+
+// ============================================================
+// 대시보드 페이지 (로그인 상태)
+// ============================================================
+
 export default function DashboardPage() {
   const { t, lang } = useLanguage()
-  const { level, totalXp, dailyStreak, xpToday } = useGamification()
+  const { isAuthenticated, isLoading: authLoading, profile } = useAuth()
+  const router = useRouter()
+  const { level, totalXp, xpInCurrentLevel, dailyStreak, xpToday } = useGamification()
+  const levelInfo = getLevelTitle(level)
   const [nextLesson, setNextLesson] = useState<NextLesson | null>(null)
   const [selectedCourse, setSelectedCourse] = useState<"python" | "cpp">("python")
   // lessonLoaded: localStorage 읽기 전에 "모든 레슨 완료" 카드가 잠깐 뜨는 깜빡임 방지
@@ -156,6 +432,14 @@ export default function DashboardPage() {
   // 퀴즈 이력/업적 존재 여부 (없으면 빈 카드 노출 안 함)
   const [hasQuizHistory, setHasQuizHistory] = useState(false)
   const [hasAchievements, setHasAchievements] = useState(false)
+
+  // 로그인 상태면 역할별 페이지로 리디렉트
+  useEffect(() => {
+    if (!isAuthenticated || !profile) return
+    if (profile.role === "teacher") router.replace("/teacher")
+    else if (profile.role === "parent") router.replace("/parent")
+    else router.replace("/portal")
+  }, [isAuthenticated, profile, router])
 
   useEffect(() => {
     const course = readSelectedCourse()
@@ -222,176 +506,32 @@ export default function DashboardPage() {
   const isCpp = nextLesson?.course === "cpp"
   const courseLabel = isCpp ? "C++" : "Python"
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white">
-      {showOnboarding && <OnboardingModal onComplete={handleOnboardingComplete} />}
-      <Header />
-
-      <main className="w-full px-4 sm:px-6 pb-24 pt-4 max-w-2xl mx-auto space-y-4">
-
-        {/* 기린 히어로 */}
-        <GiraffeHero />
-
-        {/* Python→C++ 전환 가이드 (C++ 시작 초반에만 표시) */}
-        {showCppBridge && <PythonToCppBridge onDismiss={handleCppBridgeDismiss} />}
-
-        {/* 오늘의 도전 과제 — 퀴즈 이력이 있는 사용자만 표시 (신규 유저에게 빈 카드 방지) */}
-        {hasQuizHistory && <DailyChallenges />}
-
-        {/* 오늘의 목표 */}
-        <Card className="p-4 border-2 border-orange-200 bg-gradient-to-r from-orange-50 to-yellow-50">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <Target className="w-5 h-5 text-orange-500" />
-              <span className="font-bold text-gray-800 text-sm">
-                {t("오늘의 목표", "Daily Goal")}
-              </span>
-            </div>
-            <span className="text-sm font-bold text-orange-600">
-              {xpProgress} / {DAILY_XP_GOAL} XP
-            </span>
-          </div>
-
-          {/* 프로그레스 바 */}
-          <div className="w-full bg-orange-100 rounded-full h-4 overflow-hidden">
-            <div
-              className="h-4 rounded-full transition-all duration-700 ease-out"
-              style={{
-                width: `${xpPercent}%`,
-                background: goalDone
-                  ? "linear-gradient(90deg, #22c55e, #16a34a)"
-                  : "linear-gradient(90deg, #fb923c, #f97316)",
-              }}
-            />
-          </div>
-
-          <p className="text-xs text-gray-500 mt-2">
-            {goalDone
-              ? t("🎉 오늘 목표 달성! 스트릭 유지 중 🔥", "🎉 Goal reached! Streak is safe 🔥")
-              : t(
-                  `${DAILY_XP_GOAL - xpProgress} XP 더 모으면 목표 달성! 퀴즈 한 판이면 충분해요 💪`,
-                  `${DAILY_XP_GOAL - xpProgress} XP to go — one quiz session is enough! 💪`
-                )}
-          </p>
-        </Card>
-
-        {/* 다음 레슨 */}
-        {!lessonLoaded ? (
-          // localStorage 읽기 전: 스켈레톤으로 깜빡임 방지
-          <Card className="p-4 border-2 border-gray-100 animate-pulse">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gray-100" />
-              <div className="flex-1 space-y-2">
-                <div className="h-3 bg-gray-100 rounded w-1/3" />
-                <div className="h-4 bg-gray-100 rounded w-2/3" />
-              </div>
-              <div className="w-16 h-8 bg-gray-100 rounded-full" />
-            </div>
-          </Card>
-        ) : nextLesson ? (
-          <Link href={`/learn/${nextLesson.id}`} className="block active:scale-[0.98] transition-transform">
-            <Card className={`p-4 border-2 ${isCpp ? "border-blue-300 bg-gradient-to-r from-blue-50 to-indigo-50" : "border-green-300 bg-gradient-to-r from-green-50 to-emerald-50"} hover:shadow-md transition-shadow`}>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl ${isCpp ? "bg-blue-100" : "bg-green-100"}`}>
-                    {nextLesson.title.startsWith("🎮") || nextLesson.title.startsWith("🏆") || nextLesson.title.startsWith("🐍")
-                      ? nextLesson.title.slice(0, 2)
-                      : isCpp ? "⚡" : "🐍"}
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                      {t(`${courseLabel} 다음 레슨`, `Next ${courseLabel} Lesson`)}
-                    </p>
-                    <p className="font-bold text-gray-800 text-sm mt-0.5">{nextLesson.title}</p>
-                  </div>
-                </div>
-                <div className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-bold text-white ${isCpp ? "bg-blue-500" : "bg-green-500"}`}>
-                  {t("시작", "Go")}
-                  <ChevronRight className="w-4 h-4" />
-                </div>
-              </div>
-            </Card>
-          </Link>
-        ) : selectedCourse === "python" ? (
-          // Python 완료 → C++ 전환 CTA
-          <Card className="p-4 border-2 border-blue-300 bg-gradient-to-r from-blue-50 to-indigo-50">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-xl">🏆</div>
-              <div className="flex-1">
-                <p className="text-xs font-semibold text-blue-500 uppercase tracking-wide">{t("Python 완료!", "Python Complete!")}</p>
-                <p className="font-bold text-gray-800 text-sm mt-0.5">{t("C++에 도전해볼까요?", "Ready for C++?")}</p>
-                <p className="text-xs text-gray-500 mt-0.5">{t("Python 실력을 바탕으로 C++을 배워보세요!", "Build on your Python skills with C++!")}</p>
-              </div>
-              <button
-                onClick={switchToCpp}
-                className="flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-bold text-white bg-blue-500 hover:bg-blue-600 transition-colors shrink-0"
-              >
-                {t("시작", "Start")}
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-          </Card>
-        ) : (
-          <Card className="p-4 border-2 border-yellow-300 bg-yellow-50 text-center">
-            <p className="text-2xl mb-1">🏆</p>
-            <p className="font-bold text-gray-800 text-sm">{t("모든 레슨 완료!", "All lessons complete!")}</p>
-            <p className="text-xs text-gray-500 mt-1">{t("퀴즈로 실력을 다져봐요!", "Keep sharpening your skills with quizzes!")}</p>
-          </Card>
-        )}
-
-        {/* 통계 미니 바 */}
-        <div className="grid grid-cols-3 gap-2">
-          <div className="text-center p-3 rounded-xl bg-orange-50 border border-orange-100">
-            <Trophy className="w-4 h-4 text-orange-500 mx-auto mb-1" />
-            <p className="text-base font-bold text-orange-600">Lv.{level}</p>
-            <p className="text-xs text-gray-400">{t("레벨", "Level")}</p>
-          </div>
-          <div className="text-center p-3 rounded-xl bg-purple-50 border border-purple-100">
-            <Zap className="w-4 h-4 text-purple-500 mx-auto mb-1" />
-            <p className="text-base font-bold text-purple-600">{totalXp}</p>
-            <p className="text-xs text-gray-400">{t("총 XP", "Total XP")}</p>
-          </div>
-          <div className="text-center p-3 rounded-xl bg-red-50 border border-red-100">
-            <Flame className="w-4 h-4 text-red-500 mx-auto mb-1" />
-            <p className="text-base font-bold text-red-600">
-              {t(`${dailyStreak}일`, `${dailyStreak}d`)}
-            </p>
-            <p className="text-xs text-gray-400">{t("연속", "Streak")}</p>
-          </div>
+  // 인증 로딩 중: 최소한의 스켈레톤
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white flex items-center justify-center">
+        <div className="text-center space-y-3">
+          <div className="text-4xl animate-bounce">🦒</div>
+          <div className="text-sm text-gray-400">{t("불러오는 중...", "Loading...")}</div>
         </div>
+      </div>
+    )
+  }
 
-        {/* 업적 선반 — 하나라도 달성한 사용자만 표시 (14개 회색 배지 방지) */}
-        {hasAchievements && <AchievementsShelf />}
+  // 비로그인: 랜딩 페이지
+  if (!isAuthenticated) {
+    return <LandingPage />
+  }
 
-        {/* 빠른 액션 */}
-        <div className="grid grid-cols-2 gap-3">
-          <Link href="/curriculum" className="block active:scale-[0.97] transition-transform">
-            <Card className="p-4 border-2 border-green-200 hover:border-green-400 transition-all hover:shadow-md">
-              <div className="flex flex-col items-center gap-2 text-center">
-                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                  <BookOpen className="w-5 h-5 text-green-600" />
-                </div>
-                <span className="font-bold text-sm text-gray-700">{t("전체 커리큘럼", "Curriculum")}</span>
-                <span className="text-xs text-gray-400">{t("모든 레슨 보기", "Browse all lessons")}</span>
-              </div>
-            </Card>
-          </Link>
-          <Link href="/quiz/setup" className="block active:scale-[0.97] transition-transform">
-            <Card className="p-4 border-2 border-purple-200 hover:border-purple-400 transition-all hover:shadow-md">
-              <div className="flex flex-col items-center gap-2 text-center">
-                <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
-                  <Brain className="w-5 h-5 text-purple-600" />
-                </div>
-                <span className="font-bold text-sm text-gray-700">{t("퀴즈 풀기", "Take Quiz")}</span>
-                <span className="text-xs text-gray-400">{t("실력 테스트", "Test your skills")}</span>
-              </div>
-            </Card>
-          </Link>
-        </div>
-
-      </main>
-
-      <BottomNav />
+  // 로그인 상태: 포털로 리디렉트 (useEffect에서 처리)
+  if (isAuthenticated) return (
+    <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white flex items-center justify-center">
+      <div className="text-center space-y-3">
+        <div className="text-4xl animate-bounce">🦒</div>
+        <div className="text-sm text-gray-400">{t("이동 중...", "Redirecting...")}</div>
+      </div>
     </div>
   )
 }
+
+// 아래는 사용되지 않는 대시보드 코드 — 포털로 대체됨

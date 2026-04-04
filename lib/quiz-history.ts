@@ -30,6 +30,19 @@ export function hasReviewedLesson(lessonId: number | string): boolean {
 
 const STORAGE_KEY = "quiz-history"
 const MAX_ENTRIES = 100
+// 100건 한도로 오래된 기록이 삭제돼도 정확한 총 문제 수를 보존하는 별도 카운터
+const TOTAL_QUESTIONS_KEY = "quiz-questions-total"
+
+function loadTotalQuestions(): number {
+  try {
+    const raw = localStorage.getItem(TOTAL_QUESTIONS_KEY)
+    return raw ? (parseInt(raw, 10) || 0) : 0
+  } catch { return 0 }
+}
+
+function saveTotalQuestions(count: number): void {
+  try { localStorage.setItem(TOTAL_QUESTIONS_KEY, String(count)) } catch {}
+}
 
 function load(): QuizHistoryEntry[] {
   try {
@@ -65,6 +78,8 @@ export function addQuizHistoryEntry(entry: Omit<QuizHistoryEntry, "id">): void {
     entries.length = MAX_ENTRIES
   }
   save(entries)
+  // 별도 누적 카운터 — 기록 삭제 후에도 정확한 총 문제 수 보존
+  saveTotalQuestions(loadTotalQuestions() + entry.totalQuestions)
 }
 
 /** 토픽별 통계 집계 (정답률 + 총 문제 수) */
@@ -126,7 +141,10 @@ export function getTotalQuizCount(): number {
   return load().length
 }
 
-/** 총 풀은 문제 수 */
+/** 총 풀은 문제 수 (별도 카운터 우선 — 기록 삭제 후에도 정확) */
 export function getTotalQuestionsAnswered(): number {
+  const stored = loadTotalQuestions()
+  // 누적 카운터가 있으면 사용, 없으면 히스토리에서 계산 (기존 사용자 마이그레이션)
+  if (stored > 0) return stored
   return load().reduce((sum, e) => sum + e.totalQuestions, 0)
 }

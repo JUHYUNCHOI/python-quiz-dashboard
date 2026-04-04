@@ -6,7 +6,7 @@
 import { LessonData } from './types'
 
 export const lesson31EnData: LessonData = {
-  id: "31en",
+  id: "31",
   title: "Comprehensive Quiz Collection",
   emoji: "🏆",
   description: "A comprehensive challenge from basics to data structures!",

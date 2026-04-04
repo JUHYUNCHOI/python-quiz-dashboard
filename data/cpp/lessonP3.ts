@@ -148,8 +148,9 @@ pair의 first에 우유생산량, second에 이름을 넣는 것에 주목하세
 using namespace std;
 
 int main() {
-    freopen("sort.in", "r", stdin);
-    freopen("sort.out", "w", stdout);
+    // 실제 USACO 제출 시: 아래 두 줄 주석 해제!
+    // freopen("sort.in", "r", stdin);
+    // freopen("sort.out", "w", stdout);
 
     int n, k;
     cin >> n >> k;
@@ -169,6 +170,7 @@ int main() {
     }
     return 0;
 }`,
+          stdin: `5 3\nBessie 12\nElsie 20\nDaisy 15\nGertie 20\nButtercup 8`,
           expectedOutput: `Elsie
 Gertie
 Daisy`
@@ -300,8 +302,9 @@ for (int i = 0; i < n; i++) {
 using namespace std;
 
 int main() {
-    freopen("distinct.in", "r", stdin);
-    freopen("distinct.out", "w", stdout);
+    // 실제 USACO 제출 시: 아래 두 줄 주석 해제!
+    // freopen("distinct.in", "r", stdin);
+    // freopen("distinct.out", "w", stdout);
 
     int n;
     cin >> n;
@@ -319,6 +322,7 @@ int main() {
     }
     return 0;
 }`,
+          stdin: `8\n3 1 4 1 5 9 2 6`,
           expectedOutput: `7
 1 2
 2 1
@@ -449,8 +453,9 @@ YES
 using namespace std;
 
 int main() {
-    freopen("bracket.in", "r", stdin);
-    freopen("bracket.out", "w", stdout);
+    // 실제 USACO 제출 시: 아래 두 줄 주석 해제!
+    // freopen("bracket.in", "r", stdin);
+    // freopen("bracket.out", "w", stdout);
 
     string s;
     cin >> s;
@@ -479,6 +484,7 @@ int main() {
     }
     return 0;
 }`,
+          stdin: `((())`,
           expectedOutput: `NO
 1`
         },
