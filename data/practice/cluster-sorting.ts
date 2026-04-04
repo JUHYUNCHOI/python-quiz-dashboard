@@ -1,0 +1,810 @@
+import type { PracticeCluster } from "./types"
+
+export const sortingCluster: PracticeCluster = {
+  id: "sorting",
+  title: "정렬 마스터",
+  emoji: "📊",
+  description: "sort(), 커스텀 comparator, lambda 정렬, 정렬 후 처리",
+  unlockAfter: "cpp-23",
+  problems: [
+    {
+      id: "sort-001",
+      cluster: "sorting",
+      unlockAfter: "cpp-23",
+      difficulty: "쉬움",
+      title: "오름차순 정렬",
+      description: `N개의 정수가 주어질 때, 오름차순으로 정렬하여 출력하세요.`,
+      constraints: "1 ≤ N ≤ 1000, -10000 ≤ 각 정수 ≤ 10000",
+      initialCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+      testCases: [
+        { stdin: "5\n5 3 1 4 2", expectedOutput: "1 2 3 4 5", label: "기본" },
+        { stdin: "1\n42", expectedOutput: "42", label: "원소 1개" },
+        { stdin: "4\n-3 1 -1 0", expectedOutput: "-3 -1 0 1", label: "음수 포함" },
+      ],
+      hints: [
+        "sort(v.begin(), v.end())는 기본적으로 오름차순 정렬합니다.",
+        "정렬 후 공백으로 구분하여 출력하세요.",
+      ],
+      solutionCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    sort(v.begin(), v.end());
+    for (int i = 0; i < n; i++) {
+        if (i > 0) cout << ' ';
+        cout << v[i];
+    }
+    cout << "\n";
+    return 0;
+}`,
+      solutionExplanation: "sort(v.begin(), v.end())는 O(N log N)으로 오름차순 정렬합니다. 비교 함수를 생략하면 기본값(less<int>)이 사용됩니다.",
+    },
+    {
+      id: "sort-002",
+      cluster: "sorting",
+      unlockAfter: "cpp-23",
+      difficulty: "쉬움",
+      title: "내림차순 정렬",
+      description: `N개의 정수가 주어질 때, 내림차순으로 정렬하여 출력하세요.`,
+      constraints: "1 ≤ N ≤ 1000, -10000 ≤ 각 정수 ≤ 10000",
+      initialCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+      testCases: [
+        { stdin: "5\n5 3 1 4 2", expectedOutput: "5 4 3 2 1", label: "기본" },
+        { stdin: "3\n-1 -5 -3", expectedOutput: "-1 -3 -5", label: "음수" },
+        { stdin: "4\n10 10 5 5", expectedOutput: "10 10 5 5", label: "중복 포함" },
+      ],
+      hints: [
+        "sort의 세 번째 인수로 greater<int>()를 전달하면 내림차순 정렬입니다.",
+        "또는 정렬 후 reverse()를 호출하는 방법도 있습니다.",
+      ],
+      solutionCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    sort(v.begin(), v.end(), greater<int>());
+    for (int i = 0; i < n; i++) {
+        if (i > 0) cout << ' ';
+        cout << v[i];
+    }
+    cout << "\n";
+    return 0;
+}`,
+      solutionExplanation: "greater<int>()는 a > b가 true일 때 a를 앞에 놓으므로 내림차순이 됩니다. 람다로 작성하면 [](int a, int b){ return a > b; }와 동일합니다.",
+    },
+    {
+      id: "sort-003",
+      cluster: "sorting",
+      unlockAfter: "cpp-23",
+      difficulty: "쉬움",
+      title: "절댓값 기준 정렬",
+      description: `N개의 정수가 주어질 때, 절댓값 기준 오름차순으로 정렬하여 출력하세요.
+절댓값이 같으면 음수를 먼저 출력하세요.`,
+      constraints: "1 ≤ N ≤ 1000, -10000 ≤ 각 정수 ≤ 10000",
+      initialCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+      testCases: [
+        { stdin: "5\n-3 1 -1 5 -5", expectedOutput: "-1 1 -3 -5 5", label: "기본" },
+        { stdin: "3\n3 -3 0", expectedOutput: "0 -3 3", label: "0 포함" },
+        { stdin: "4\n10 -10 2 -2", expectedOutput: "-2 2 -10 10", label: "모두 절댓값 쌍" },
+      ],
+      hints: [
+        "람다 comparator에서 abs(a) != abs(b)이면 abs로 비교, 같으면 a < b로 비교하세요.",
+        "[](int a, int b){ return abs(a) != abs(b) ? abs(a) < abs(b) : a < b; }",
+      ],
+      solutionCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    sort(v.begin(), v.end(), [](int a, int b) {
+        if (abs(a) != abs(b)) return abs(a) < abs(b);
+        return a < b;
+    });
+    for (int i = 0; i < n; i++) {
+        if (i > 0) cout << ' ';
+        cout << v[i];
+    }
+    cout << "\n";
+    return 0;
+}`,
+      solutionExplanation: "람다의 반환값은 'a가 b보다 앞에 와야 하면 true'입니다. 절댓값이 다르면 절댓값으로 비교하고, 같으면 원래 값으로 비교해 음수를 앞에 놓습니다.",
+    },
+    {
+      id: "sort-004",
+      cluster: "sorting",
+      unlockAfter: "cpp-23",
+      difficulty: "보통",
+      title: "문자열 길이 기준 정렬",
+      description: `N개의 문자열이 주어질 때, 길이 기준 오름차순으로 정렬하여 출력하세요.
+길이가 같으면 사전순으로 정렬하세요.`,
+      constraints: "1 ≤ N ≤ 1000, 각 문자열은 영문 소문자, 길이 1 이상 50 이하",
+      initialCode: `#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<string> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+      testCases: [
+        { stdin: "4\nbanana apple fig cherry", expectedOutput: "fig apple banana cherry", label: "기본" },
+        { stdin: "3\ncat bat ant", expectedOutput: "ant bat cat", label: "길이 같음 — 사전순" },
+        { stdin: "2\nz ab", expectedOutput: "z ab", label: "짧은 것 우선" },
+      ],
+      hints: [
+        "람다에서 길이가 같으면 사전순(a < b)으로 비교하세요.",
+        "[](const string& a, const string& b){ return a.size() != b.size() ? a.size() < b.size() : a < b; }",
+      ],
+      solutionCode: `#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<string> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    sort(v.begin(), v.end(), [](const string& a, const string& b) {
+        if (a.size() != b.size()) return a.size() < b.size();
+        return a < b;
+    });
+    for (int i = 0; i < n; i++) {
+        if (i > 0) cout << ' ';
+        cout << v[i];
+    }
+    cout << "\n";
+    return 0;
+}`,
+      solutionExplanation: "다중 조건 정렬은 첫 번째 조건이 다를 때와 같을 때를 분기합니다. string의 < 연산자는 사전순 비교를 수행합니다.",
+    },
+    {
+      id: "sort-005",
+      cluster: "sorting",
+      unlockAfter: "cpp-23",
+      difficulty: "보통",
+      title: "pair 정렬 — 두 번째 기준 우선",
+      description: `N개의 (이름, 점수) 쌍이 주어질 때, 점수 내림차순으로 정렬하여 출력하세요.
+점수가 같으면 이름 알파벳 순으로 정렬하세요.`,
+      constraints: "1 ≤ N ≤ 1000, 이름은 영문 소문자, 0 ≤ 점수 ≤ 100",
+      initialCode: `#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<string, int>> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+      testCases: [
+        { stdin: "4\nalice 90\nbob 85\ncharlie 90\ndave 70", expectedOutput: "alice 90\ncharlie 90\nbob 85\ndave 70", label: "기본" },
+        { stdin: "2\nzoe 100\nadam 100", expectedOutput: "adam 100\nzoe 100", label: "점수 같음" },
+        { stdin: "3\na 50\nb 50\nc 50", expectedOutput: "a 50\nb 50\nc 50", label: "모두 같은 점수" },
+      ],
+      hints: [
+        "점수를 내림차순, 이름을 오름차순으로 정렬하는 comparator를 작성하세요.",
+        "b.second != a.second이면 점수 비교(b.second < a.second), 같으면 이름 비교",
+      ],
+      solutionCode: `#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<string, int>> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
+    sort(v.begin(), v.end(), [](const pair<string,int>& a, const pair<string,int>& b) {
+        if (a.second != b.second) return a.second > b.second;
+        return a.first < b.first;
+    });
+    for (auto& [name, score] : v)
+        cout << name << " " << score << "\n";
+    return 0;
+}`,
+      solutionExplanation: "a.second > b.second는 점수가 높은 것을 앞에 놓습니다. 점수가 같으면 이름 알파벳 순(a.first < b.first)으로 결정합니다.",
+    },
+    {
+      id: "sort-006",
+      cluster: "sorting",
+      unlockAfter: "cpp-23",
+      difficulty: "보통",
+      title: "정렬 후 K번째 수",
+      description: `N개의 정수가 주어질 때, 정렬했을 때 K번째로 작은 수를 출력하세요. (1-based)`,
+      constraints: "1 ≤ K ≤ N ≤ 1000, -10000 ≤ 각 정수 ≤ 10000",
+      initialCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n, k;
+    cin >> n >> k;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+      testCases: [
+        { stdin: "5 3\n5 3 1 4 2", expectedOutput: "3", label: "기본" },
+        { stdin: "5 1\n5 3 1 4 2", expectedOutput: "1", label: "최솟값" },
+        { stdin: "5 5\n5 3 1 4 2", expectedOutput: "5", label: "최댓값" },
+        { stdin: "3 2\n7 7 7", expectedOutput: "7", label: "중복" },
+      ],
+      hints: [
+        "오름차순 정렬 후 인덱스 K-1의 원소를 출력하세요.",
+        "K는 1-based이므로, 0-based 인덱스로 변환하면 v[K-1]입니다.",
+      ],
+      solutionCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n, k;
+    cin >> n >> k;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    sort(v.begin(), v.end());
+    cout << v[k - 1] << "\n";
+    return 0;
+}`,
+      solutionExplanation: "정렬 후 v[K-1]이 K번째로 작은 수입니다. nth_element()로 O(N) 시간에 구할 수도 있지만, sort + 인덱스가 더 직관적입니다.",
+    },
+    {
+      id: "sort-007",
+      cluster: "sorting",
+      unlockAfter: "cpp-23",
+      difficulty: "보통",
+      title: "중복 제거 후 정렬 (벡터)",
+      description: `N개의 정수가 주어질 때, 중복을 제거하고 오름차순으로 정렬한 뒤, 서로 다른 수의 개수와 그 수들을 출력하세요.
+
+- 첫 번째 줄: 서로 다른 수의 개수
+- 두 번째 줄: 수들 (공백 구분)`,
+      constraints: "1 ≤ N ≤ 10000, -10000 ≤ 각 정수 ≤ 10000",
+      initialCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+      testCases: [
+        { stdin: "6\n3 1 4 1 5 3", expectedOutput: "4\n1 3 4 5", label: "기본" },
+        { stdin: "4\n2 2 2 2", expectedOutput: "1\n2", label: "전부 같음" },
+        { stdin: "3\n3 2 1", expectedOutput: "3\n1 2 3", label: "중복 없음" },
+      ],
+      hints: [
+        "sort 후 unique()를 사용하면 중복을 제거할 수 있습니다.",
+        "unique()는 중복 원소를 뒤로 옮기고 '새 끝' 반복자를 반환합니다. erase()로 뒷부분을 삭제하세요.",
+      ],
+      solutionCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    sort(v.begin(), v.end());
+    v.erase(unique(v.begin(), v.end()), v.end());
+    cout << v.size() << "\n";
+    for (int i = 0; i < (int)v.size(); i++) {
+        if (i > 0) cout << ' ';
+        cout << v[i];
+    }
+    cout << "\n";
+    return 0;
+}`,
+      solutionExplanation: "sort → unique → erase 패턴은 벡터에서 중복을 제거하는 관용적 방법입니다. unique()는 정렬된 상태에서만 정확히 동작합니다.",
+    },
+    {
+      id: "sort-008",
+      cluster: "sorting",
+      unlockAfter: "cpp-23",
+      difficulty: "보통",
+      title: "나이 순 명단 정렬",
+      description: `N명의 (이름, 나이) 정보가 주어질 때, 나이 오름차순으로 정렬하여 출력하세요.
+나이가 같으면 입력 순서를 유지하세요. (stable sort)`,
+      constraints: "1 ≤ N ≤ 1000, 1 ≤ 나이 ≤ 100, 이름은 영문 최대 20자",
+      initialCode: `#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<string, int>> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+      testCases: [
+        { stdin: "4\nalice 30\nbob 20\ncharlie 20\ndave 25", expectedOutput: "bob 20\ncharlie 20\ndave 25\nalice 30", label: "나이 같을 때 순서 유지" },
+        { stdin: "3\na 3\nb 1\nc 2", expectedOutput: "b 1\nc 2\na 3", label: "역순 입력" },
+        { stdin: "2\nalpha 1\nbeta 1", expectedOutput: "alpha 1\nbeta 1", label: "전부 같은 나이" },
+      ],
+      hints: [
+        "stable_sort()는 같은 키 값을 가진 원소의 상대적 순서를 유지합니다.",
+        "일반 sort()는 같은 키에서 순서를 보장하지 않으므로, 이 문제에서는 stable_sort가 필요합니다.",
+      ],
+      solutionCode: `#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<string, int>> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
+    stable_sort(v.begin(), v.end(), [](const pair<string,int>& a, const pair<string,int>& b) {
+        return a.second < b.second;
+    });
+    for (auto& [name, age] : v)
+        cout << name << " " << age << "\n";
+    return 0;
+}`,
+      solutionExplanation: "stable_sort()는 sort()와 동일하지만, 비교값이 같은 원소들의 원래 순서를 보장합니다. O(N log² N) 또는 O(N log N)으로 동작합니다.",
+    },
+    {
+      id: "sort-009",
+      cluster: "sorting",
+      unlockAfter: "cpp-23",
+      difficulty: "어려움",
+      title: "구간 병합",
+      description: `N개의 구간 [l, r]이 주어질 때, 겹치거나 인접한 구간을 병합하여 출력하세요.
+병합된 구간의 수와 각 구간을 왼쪽 끝점 기준 오름차순으로 출력하세요.`,
+      constraints: "1 ≤ N ≤ 1000, 0 ≤ l ≤ r ≤ 10000",
+      initialCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<int,int>> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+      testCases: [
+        { stdin: "4\n1 3\n2 6\n8 10\n15 18", expectedOutput: "3\n1 6\n8 10\n15 18", label: "기본" },
+        { stdin: "3\n1 4\n4 5\n6 10", expectedOutput: "2\n1 5\n6 10", label: "인접 구간 병합" },
+        { stdin: "2\n1 10\n2 6", expectedOutput: "1\n1 10", label: "포함 관계" },
+      ],
+      hints: [
+        "먼저 l 기준으로 정렬하세요.",
+        "현재 구간의 l이 이전 병합 구간의 r 이하이면 r을 max(r, 현재 r)로 확장합니다.",
+      ],
+      solutionCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<int,int>> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
+    sort(v.begin(), v.end());
+    vector<pair<int,int>> merged;
+    for (auto [l, r] : v) {
+        if (!merged.empty() && l <= merged.back().second)
+            merged.back().second = max(merged.back().second, r);
+        else
+            merged.push_back({l, r});
+    }
+    cout << merged.size() << "\n";
+    for (auto [l, r] : merged)
+        cout << l << " " << r << "\n";
+    return 0;
+}`,
+      solutionExplanation: "l 기준 정렬 후 선형 순회합니다. 현재 구간의 시작이 마지막 병합 구간 끝 이하면 겹치므로 끝을 확장합니다. 그렇지 않으면 새 구간으로 추가합니다.",
+    },
+    {
+      id: "sort-010",
+      cluster: "sorting",
+      unlockAfter: "cpp-23",
+      difficulty: "어려움",
+      title: "다중 기준 정렬",
+      description: `N명의 학생 (이름, 점수)이 주어질 때, 점수 내림차순으로 정렬하되 점수가 같으면 이름 오름차순으로 정렬하여 출력하세요.`,
+      constraints: "1 ≤ N ≤ 1000, 0 ≤ 점수 ≤ 100, 이름은 영문 소문자 최대 20자",
+      initialCode: `#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<string, int>> students(n);
+    for (int i = 0; i < n; i++) cin >> students[i].first >> students[i].second;
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+      testCases: [
+        { stdin: "4\nalice 90\nbob 85\ncarol 90\ndave 75", expectedOutput: "alice 90\ncarol 90\nbob 85\ndave 75", label: "기본" },
+        { stdin: "3\nzara 100\nalex 100\nmike 99", expectedOutput: "alex 100\nzara 100\nmike 99", label: "동점 처리" },
+        { stdin: "1\nsolo 50", expectedOutput: "solo 50", label: "1명" },
+      ],
+      hints: [
+        "sort의 세 번째 인자로 람다를 사용하세요: sort(v.begin(), v.end(), [](...){})",
+        "점수가 다르면 점수 내림차순(b.second > a.second), 같으면 이름 오름차순(a.first < b.first).",
+      ],
+      solutionCode: `#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<string, int>> students(n);
+    for (int i = 0; i < n; i++) cin >> students[i].first >> students[i].second;
+    sort(students.begin(), students.end(), [](const pair<string,int>& a, const pair<string,int>& b) {
+        if (a.second != b.second) return a.second > b.second;
+        return a.first < b.first;
+    });
+    for (auto& [name, score] : students)
+        cout << name << " " << score << "\\n";
+    return 0;
+}`,
+      solutionExplanation: "커스텀 comparator: 점수가 다르면 점수 기준(내림차순), 같으면 이름 기준(오름차순)으로 비교합니다. USACO Bronze 정렬 문제의 전형적인 패턴입니다.",
+    },
+    {
+      id: "sort-011",
+      cluster: "sorting",
+      unlockAfter: "cpp-23",
+      difficulty: "어려움",
+      title: "정렬 후 중앙값",
+      description: `N개의 정수가 주어질 때, 정렬 후 중앙값을 출력하세요.
+N이 홀수이면 가운데 값, 짝수이면 가운데 두 값 중 작은 값을 출력합니다.`,
+      constraints: "1 ≤ N ≤ 100, -10000 ≤ 각 정수 ≤ 10000",
+      initialCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+      testCases: [
+        { stdin: "5\n3 1 4 1 5", expectedOutput: "3", label: "홀수 개" },
+        { stdin: "4\n3 1 4 2", expectedOutput: "2", label: "짝수 개 — 가운데 작은 값" },
+        { stdin: "1\n7", expectedOutput: "7", label: "원소 1개" },
+        { stdin: "6\n10 3 7 1 9 5", expectedOutput: "5", label: "짝수 6개" },
+      ],
+      hints: [
+        "sort() 후 인덱스 (n-1)/2를 출력하면 됩니다.",
+        "n=5: (5-1)/2=2 → 인덱스 2 (가운데). n=4: (4-1)/2=1 → 인덱스 1 (가운데 두 값 중 작은 쪽).",
+      ],
+      solutionCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    sort(v.begin(), v.end());
+    cout << v[(n - 1) / 2] << "\n";
+    return 0;
+}`,
+      solutionExplanation: "sort() 후 인덱스 (n-1)/2가 중앙값입니다. 홀수면 정확히 중간, 짝수면 가운데 두 값 중 작은 쪽이 선택됩니다. 정렬 후 인덱싱은 USACO Bronze 단골 패턴입니다.",
+    },
+    {
+      id: "sort-012",
+      cluster: "sorting",
+      unlockAfter: "cpp-23",
+      difficulty: "어려움",
+      title: "원래 인덱스 유지하며 정렬",
+      description: `N개의 정수가 주어질 때, 오름차순 정렬했을 때 각 원소가 원래 몇 번째(1-based) 위치에 있었는지 출력하세요.
+(값이 같은 원소가 있으면 원래 인덱스가 작은 것이 먼저 오도록 정렬)`,
+      constraints: "1 ≤ N ≤ 100, -10000 ≤ 각 정수 ≤ 10000",
+      initialCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+      testCases: [
+        { stdin: "5\n5 3 1 4 2", expectedOutput: "3 5 2 4 1", label: "기본" },
+        { stdin: "4\n1 2 3 4", expectedOutput: "1 2 3 4", label: "이미 정렬됨" },
+        { stdin: "4\n4 3 2 1", expectedOutput: "4 3 2 1", label: "역순" },
+        { stdin: "4\n3 1 3 2", expectedOutput: "2 4 1 3", label: "중복 포함" },
+      ],
+      hints: [
+        "pair<int,int>에 {값, 원래인덱스}를 저장하고 정렬하세요.",
+        "sort 후 pair의 second(원래인덱스)를 순서대로 출력합니다.",
+      ],
+      solutionCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<int,int>> v(n);
+    for (int i = 0; i < n; i++) {
+        cin >> v[i].first;
+        v[i].second = i + 1;  // 1-based 원래 인덱스
+    }
+    sort(v.begin(), v.end());  // 값 오름차순, 같으면 인덱스 오름차순 (pair 기본 비교)
+    for (int i = 0; i < n; i++) {
+        if (i > 0) cout << ' ';
+        cout << v[i].second;
+    }
+    cout << "\n";
+    return 0;
+}`,
+      solutionExplanation: "pair<값, 원래인덱스>로 묶어서 정렬합니다. pair의 기본 비교는 first 우선, 같으면 second 비교이므로 값이 같을 때 원래 인덱스가 작은 것이 앞에 옵니다. USACO에서 정렬 후 원래 위치를 추적할 때 쓰는 핵심 패턴입니다.",
+    },
+    {
+      id: "sort-013",
+      cluster: "sorting",
+      unlockAfter: "cpp-23",
+      difficulty: "어려움",
+      title: "회의실 배정",
+      description: `N개의 회의 (시작 시간, 끝 시간)가 주어질 때, 최대한 많은 회의를 배정할 수 있는 수를 출력하세요.
+한 회의가 끝나는 동시에 다음 회의를 시작할 수 있습니다.`,
+      constraints: "1 ≤ N ≤ 1000, 0 ≤ 시작 시간 < 끝 시간 ≤ 100000",
+      initialCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<int,int>> meetings(n);
+    for (int i = 0; i < n; i++) cin >> meetings[i].first >> meetings[i].second;
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+      testCases: [
+        { stdin: "6\n1 4\n3 5\n0 6\n5 7\n3 8\n5 9", expectedOutput: "3", label: "기본" },
+        { stdin: "3\n1 2\n2 3\n3 4", expectedOutput: "3", label: "연속 회의" },
+        { stdin: "2\n1 10\n2 5", expectedOutput: "1", label: "포함 관계" },
+      ],
+      hints: [
+        "끝 시간 기준으로 정렬하는 것이 핵심입니다 (그리디 알고리즘).",
+        "현재 회의의 시작 시간 >= 이전 선택 회의의 끝 시간이면 선택합니다.",
+      ],
+      solutionCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<int,int>> meetings(n);
+    for (int i = 0; i < n; i++) cin >> meetings[i].first >> meetings[i].second;
+    sort(meetings.begin(), meetings.end(), [](const pair<int,int>& a, const pair<int,int>& b) {
+        if (a.second != b.second) return a.second < b.second;
+        return a.first < b.first;
+    });
+    int count = 0, end = 0;
+    for (auto [s, e] : meetings) {
+        if (s >= end) {
+            count++;
+            end = e;
+        }
+    }
+    cout << count << "\n";
+    return 0;
+}`,
+      solutionExplanation: "활동 선택 문제의 그리디 해법: 끝 시간이 빠른 회의를 먼저 선택하면 최대 회의 수가 보장됩니다. 끝 시간이 같으면 시작 시간이 빠른 것을 우선합니다.",
+    },
+    {
+      id: "sort-014",
+      cluster: "sorting",
+      unlockAfter: "cpp-23",
+      difficulty: "어려움",
+      title: "정렬 후 연속 구간 최대 길이",
+      description: `N개의 정수가 주어질 때, 정렬 후 중복을 제거하면 연속된 정수로 이루어진 가장 긴 구간의 길이를 출력하세요.
+예: [4, 2, 2, 3, 5] → 정렬+중복제거 → [2, 3, 4, 5] → 연속 4개`,
+      constraints: "1 ≤ N ≤ 1000, -10000 ≤ 각 정수 ≤ 10000",
+      initialCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+      testCases: [
+        { stdin: "5\n4 2 2 3 5", expectedOutput: "4", label: "기본" },
+        { stdin: "4\n1 9 3 10", expectedOutput: "1", label: "연속 없음" },
+        { stdin: "6\n1 2 3 10 11 12", expectedOutput: "3", label: "두 구간" },
+        { stdin: "5\n5 5 5 5 5", expectedOutput: "1", label: "전부 같음" },
+        { stdin: "1\n7", expectedOutput: "1", label: "원소 1개" },
+      ],
+      hints: [
+        "sort 후 unique로 중복을 제거하세요.",
+        "인접한 두 원소가 차이가 1이면 연속입니다. 현재 구간 길이와 최대 구간 길이를 추적하세요.",
+      ],
+      solutionCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    sort(v.begin(), v.end());
+    v.erase(unique(v.begin(), v.end()), v.end());
+    int maxLen = 1, cur = 1;
+    for (int i = 1; i < (int)v.size(); i++) {
+        if (v[i] == v[i-1] + 1) cur++;
+        else cur = 1;
+        maxLen = max(maxLen, cur);
+    }
+    cout << maxLen << "\\n";
+    return 0;
+}`,
+      solutionExplanation: "정렬 + unique로 고유값만 남긴 후, 인접 원소가 1 차이면 같은 구간으로 봅니다. 선형 순회로 최대 연속 구간 길이를 추적합니다.",
+    },
+    {
+      id: "sort-015",
+      cluster: "sorting",
+      unlockAfter: "cpp-23",
+      difficulty: "어려움",
+      title: "가장 큰 수 만들기",
+      description: `N개의 비음수 정수가 주어질 때, 이 수들을 이어 붙여 만들 수 있는 가장 큰 수를 출력하세요.`,
+      constraints: "1 ≤ N ≤ 100, 0 ≤ 각 정수 ≤ 1000",
+      initialCode: `#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+      testCases: [
+        { stdin: "4\n3 30 34 5", expectedOutput: "5343330", label: "기본" },
+        { stdin: "2\n10 2", expectedOutput: "210", label: "두 수" },
+        { stdin: "3\n0 0 0", expectedOutput: "0", label: "전부 0" },
+        { stdin: "3\n1 2 3", expectedOutput: "321", label: "단순" },
+      ],
+      hints: [
+        "두 수 a, b를 비교할 때 to_string(a)+to_string(b) vs to_string(b)+to_string(a)를 문자열로 비교하세요.",
+        "전부 0일 때 '000...' 대신 '0'을 출력해야 하는 예외 처리를 잊지 마세요.",
+      ],
+      solutionCode: `#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<string> v(n);
+    for (int i = 0; i < n; i++) {
+        int x; cin >> x;
+        v[i] = to_string(x);
+    }
+    sort(v.begin(), v.end(), [](const string& a, const string& b) {
+        return a + b > b + a;
+    });
+    string result;
+    for (auto& s : v) result += s;
+    // 앞의 0 제거 (전부 0인 경우 "0" 출력)
+    size_t start = result.find_first_not_of('0');
+    cout << (start == string::npos ? "0" : result.substr(start)) << "\n";
+    return 0;
+}`,
+      solutionExplanation: "comparator a+b > b+a는 이어 붙였을 때 더 큰 문자열을 만드는 순서를 정합니다. 예: '3'+'30'='330' vs '30'+'3'='303', 330>303이므로 '3'이 앞에 옵니다.",
+    },
+  ],
+}

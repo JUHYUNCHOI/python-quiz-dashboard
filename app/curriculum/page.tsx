@@ -9,6 +9,8 @@ import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
+import { ALL_CLUSTERS } from "@/data/practice"
+import { ALL_TOPICS } from "@/data/algorithm/topics"
 import {
   CheckCircle2,
   Circle,
@@ -20,6 +22,7 @@ import {
   Play,
   Sparkles,
   Lock,
+  ArrowRight,
 } from "lucide-react"
 
 // ============================================================
@@ -233,13 +236,13 @@ export default function CurriculumPage() {
       title: t("Part 3: STL 도구 🛠️", "Part 3: STL Tools 🛠️"),
       description: t("C++의 강력한 무기들을 장착해요! pair, sort, map, stack — 이 도구들을 익히면 알고리즘 공부가 훨씬 쉬워져요.", "Equip yourself with C++'s powerful weapons! Master pair, sort, map, stack — these tools make algorithm study much easier."),
       lessons: [
-        { id: "cpp-15", title: t("15. pair & tuple", "15. pair & tuple"), description: t("두 값을 묶는 상자 — .first/.second 접근", "Bundle two values — .first/.second access"), duration: t("20분", "20 min"), hasQuiz: true },
-        { id: "cpp-23", title: t("16. sort 마스터", "16. sort Master"), description: t("sort(), 람다로 커스텀 정렬, stable_sort", "sort(), custom sorting with lambda, stable_sort"), duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "cpp-16", title: "17. map & set", description: t("key-value 저장, 자동 정렬 컨테이너", "Key-value storage, auto-sorted containers"), duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "cpp-17", title: t("18. STL 탐색 함수", "18. STL Search Functions"), description: t("find, count_if, accumulate — 반복자 활용", "find, count_if, accumulate — using iterators"), duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "cpp-18", title: t("19. stack & queue", "19. stack & queue"), description: t("LIFO/FIFO 자료구조, deque", "LIFO/FIFO data structures, deque"), duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "cpp-19", title: t("20. 파일 I/O & Fast I/O", "20. File I/O & Fast I/O"), description: t("대회 필수 셋업 — freopen, sync_with_stdio", "Contest essentials — freopen, sync_with_stdio"), duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "cpp-20", title: t("21. CP 실전 팁", "21. CP Practical Tips"), description: t("bits/stdc++.h, typedef — 대회 코드 짧게 쓰기", "bits/stdc++.h, typedef — writing contest code faster"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-15", title: t("17. pair & tuple", "17. pair & tuple"), description: t("두 값을 묶는 상자 — .first/.second 접근", "Bundle two values — .first/.second access"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "cpp-23", title: t("18. sort 마스터", "18. sort Master"), description: t("sort(), 람다로 커스텀 정렬, stable_sort", "sort(), custom sorting with lambda, stable_sort"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-16", title: "19. map & set", description: t("key-value 저장, 자동 정렬 컨테이너", "Key-value storage, auto-sorted containers"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-17", title: t("20. STL 탐색 함수", "20. STL Search Functions"), description: t("find, count_if, accumulate — 반복자 활용", "find, count_if, accumulate — using iterators"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-18", title: t("21. stack & queue", "21. stack & queue"), description: t("LIFO/FIFO 자료구조, deque", "LIFO/FIFO data structures, deque"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-19", title: t("22. 파일 I/O & Fast I/O", "22. File I/O & Fast I/O"), description: t("대회 필수 셋업 — freopen, sync_with_stdio", "Contest essentials — freopen, sync_with_stdio"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-20", title: t("23. CP 실전 팁", "23. CP Practical Tips"), description: t("bits/stdc++.h, typedef — 대회 코드 짧게 쓰기", "bits/stdc++.h, typedef — writing contest code faster"), duration: t("25분", "25 min"), hasQuiz: true },
         { id: "cpp-p3", title: t("🚀 다음 단계: 알고리즘", "🚀 Next Step: Algorithms"), description: t("C++ 도구 완료! 이제 알고리즘으로 넘어가요 →", "C++ tools complete! Time to move on to algorithms →"), duration: t("30분", "30 min"), isProject: true },
       ],
     },
@@ -369,6 +372,11 @@ export default function CurriculumPage() {
   const [skipConfirmId, setSkipConfirmId] = useState<number | string | null>(null)
   const [cppNudge, setCppNudge] = useState(false)
   const [showCppModal, setShowCppModal] = useState(false)
+  const [practiceClustersDone, setPracticeClustersDone] = useState(0)
+  const [practiceProblemsTotal, setPracticeProblemsTotal] = useState(0)
+  const [practiceProblemsDone, setPracticeProblemsDone] = useState(0)
+  const [algoTopicsDone, setAlgoTopicsDone] = useState(0)
+  const [algoTopicsTotal] = useState(ALL_TOPICS.length)
 
   // 초기 로드: localStorage에서 진도/코스 복원
   useEffect(() => {
@@ -389,6 +397,28 @@ export default function CurriculumPage() {
       setSelectedCourse("pseudo")
       localStorage.setItem("selectedCourse", "pseudo")
     }
+    // 연습 문제 진도 계산
+    try {
+      const solved = JSON.parse(localStorage.getItem("practice-solved") || "[]") as string[]
+      const solvedSet = new Set(solved)
+      const cppClusters = ALL_CLUSTERS.filter(c => !c.id.startsWith("py-"))
+      const total = ALL_CLUSTERS.reduce((acc, c) => acc + c.problems.length, 0)
+      const done = solved.length
+      // C++ 클러스터만 기준으로 완료 카운트 (Python 클러스터는 별도)
+      const clustersDone = cppClusters.filter(c => c.problems.every(p => solvedSet.has(p.id))).length
+      setPracticeProblemsTotal(total)
+      setPracticeProblemsDone(done)
+      setPracticeClustersDone(clustersDone)
+    } catch { /* ignore */ }
+    // 알고리즘 토픽 진도
+    try {
+      const algoCompleted = JSON.parse(localStorage.getItem("algo-completed") || "[]") as string[]
+      const algoCompletedSet = new Set(algoCompleted)
+      const topicsDone = ALL_TOPICS.filter(topic =>
+        topic.problems.some(p => algoCompletedSet.has(p.id))
+      ).length
+      setAlgoTopicsDone(topicsDone)
+    } catch { /* ignore */ }
     setLoaded(true)
   }, [])
 
@@ -499,6 +529,15 @@ export default function CurriculumPage() {
   const curriculumData = selectedCourse === "python" ? pythonCurriculumData : selectedCourse === "cpp" ? cppCurriculumData : pseudoCurriculumData
   const isCpp = selectedCourse === "cpp"
   const isPseudo = selectedCourse === "pseudo"
+
+  // 여정 맵 진도 계산
+  const cppLessonIds = ["cpp-1","cpp-2","cpp-3","cpp-4","cpp-5","cpp-6","cpp-7","cpp-8",
+    "cpp-9","cpp-21","cpp-10","cpp-11","cpp-12","cpp-13","cpp-14","cpp-22",
+    "cpp-15","cpp-23","cpp-16","cpp-17","cpp-18","cpp-19","cpp-20"]
+  const cppLessonsDone = cppLessonIds.filter(id => completedLessons.has(id)).length
+  const practiceUnlocked = cppLessonsDone >= 8
+  const algoUnlocked = practiceClustersDone >= 5
+  const questUnlocked = algoTopicsDone >= 8
 
   // Python 진도가 없으면 C++ 탭에 힌트 표시 (차단은 아님)
   const pythonLessonIds = pythonCurriculumData.flatMap(p => p.lessons.map(l => String(l.id)))
@@ -801,6 +840,137 @@ export default function CurriculumPage() {
           </div>
         </div>
 
+        {/* 🗺️ 학습 여정 맵 — C++ 전용 */}
+        {isCpp && loaded && (
+          <div className="max-w-[1600px] mx-auto mb-6">
+            <div className="bg-white rounded-2xl border-4 border-black p-5 sm:p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+              <div className="flex items-center justify-between mb-5">
+                <p className="font-black text-gray-800 text-base sm:text-lg">🗺️ {t("나의 학습 여정", "My Learning Journey")}</p>
+                <span className="text-xs text-gray-400">{t("C++ → 연습 → 알고리즘 → 실전", "C++ → Practice → Algorithm → Contest")}</span>
+              </div>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+
+                {/* Stage 1: 문법 */}
+                {(() => {
+                  const pct = Math.round((cppLessonsDone / 23) * 100)
+                  const isActive = cppLessonsDone < 23
+                  return (
+                    <Link href="/curriculum" className={cn(
+                      "rounded-2xl border-2 p-4 transition-all hover:scale-[1.02] active:scale-[0.98]",
+                      isActive ? "border-blue-400 bg-blue-50 shadow-[2px_2px_0px_0px_rgba(59,130,246,0.4)]" : "border-blue-300 bg-blue-50/50"
+                    )}>
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="text-2xl">⚡</div>
+                        {isActive && <span className="text-[10px] font-bold text-blue-600 bg-blue-100 px-2 py-0.5 rounded-full">{t("진행중", "In Progress")}</span>}
+                        {!isActive && <CheckCircle2 className="w-5 h-5 text-blue-500" />}
+                      </div>
+                      <p className="font-black text-blue-700 text-sm">{t("1. 문법", "1. Syntax")}</p>
+                      <p className="text-xs text-blue-500 mt-0.5 mb-3">{t("C++ 23레슨", "C++ 23 lessons")}</p>
+                      <div className="h-2 bg-blue-200 rounded-full overflow-hidden">
+                        <div className="h-full bg-blue-500 rounded-full transition-all duration-500" style={{ width: `${pct}%` }} />
+                      </div>
+                      <p className="text-[11px] text-blue-500 mt-1.5 font-medium">{cppLessonsDone}/23 {t("완료", "done")} · {pct}%</p>
+                    </Link>
+                  )
+                })()}
+
+                {/* Stage 2: 연습 */}
+                {practiceUnlocked ? (
+                  <Link href="/practice" className={cn(
+                    "rounded-2xl border-2 p-4 transition-all hover:scale-[1.02] active:scale-[0.98]",
+                    practiceClustersDone < 12 ? "border-green-400 bg-green-50 shadow-[2px_2px_0px_0px_rgba(34,197,94,0.4)]" : "border-green-300 bg-green-50/50"
+                  )}>
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="text-2xl">💪</div>
+                      {practiceClustersDone < 12 && cppLessonsDone >= 23 && <span className="text-[10px] font-bold text-green-600 bg-green-100 px-2 py-0.5 rounded-full">{t("진행중", "In Progress")}</span>}
+                      {practiceClustersDone >= 12 && <CheckCircle2 className="w-5 h-5 text-green-500" />}
+                    </div>
+                    <p className="font-black text-green-700 text-sm">{t("2. 연습", "2. Practice")}</p>
+                    <p className="text-xs text-green-500 mt-0.5 mb-3">{t("12 클러스터 · C++", "12 clusters · C++")}</p>
+                    <div className="h-2 bg-green-200 rounded-full overflow-hidden">
+                      <div className="h-full bg-green-500 rounded-full transition-all duration-500" style={{ width: `${Math.round((practiceClustersDone / 12) * 100)}%` }} />
+                    </div>
+                    <p className="text-[11px] text-green-500 mt-1.5 font-medium">{practiceClustersDone}/12 {t("클러스터 완료", "clusters done")}</p>
+                  </Link>
+                ) : (
+                  <div className="rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50 p-4">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="text-2xl opacity-30">💪</div>
+                      <Lock className="w-4 h-4 text-gray-300 mt-0.5" />
+                    </div>
+                    <p className="font-black text-gray-400 text-sm">{t("2. 연습", "2. Practice")}</p>
+                    <p className="text-xs text-gray-400 mt-0.5 mb-3">{t("9 클러스터 · 132문제", "9 clusters · 132 problems")}</p>
+                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="h-full bg-gray-300 rounded-full" style={{ width: `${Math.round((cppLessonsDone / 8) * 100)}%` }} />
+                    </div>
+                    <p className="text-[11px] text-gray-400 mt-1.5">{t(`C++ ${Math.max(0, 8 - cppLessonsDone)}레슨 더 필요`, `${Math.max(0, 8 - cppLessonsDone)} more C++ lessons`)}</p>
+                  </div>
+                )}
+
+                {/* Stage 3: 알고리즘 */}
+                {algoUnlocked ? (
+                  <Link href="/algorithm" className={cn(
+                    "rounded-2xl border-2 p-4 transition-all hover:scale-[1.02] active:scale-[0.98]",
+                    algoTopicsDone < algoTopicsTotal ? "border-purple-400 bg-purple-50 shadow-[2px_2px_0px_0px_rgba(168,85,247,0.4)]" : "border-purple-300 bg-purple-50/50"
+                  )}>
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="text-2xl">🧠</div>
+                      {algoTopicsDone < algoTopicsTotal && practiceClustersDone >= 5 && <span className="text-[10px] font-bold text-purple-600 bg-purple-100 px-2 py-0.5 rounded-full">{t("진행중", "In Progress")}</span>}
+                      {algoTopicsDone >= algoTopicsTotal && <CheckCircle2 className="w-5 h-5 text-purple-500" />}
+                    </div>
+                    <p className="font-black text-purple-700 text-sm">{t("3. 알고리즘", "3. Algorithm")}</p>
+                    <p className="text-xs text-purple-500 mt-0.5 mb-3">{t(`${algoTopicsTotal}개 토픽`, `${algoTopicsTotal} topics`)}</p>
+                    <div className="h-2 bg-purple-200 rounded-full overflow-hidden">
+                      <div className="h-full bg-purple-500 rounded-full transition-all duration-500" style={{ width: algoTopicsTotal > 0 ? `${Math.round((algoTopicsDone / algoTopicsTotal) * 100)}%` : "0%" }} />
+                    </div>
+                    <p className="text-[11px] text-purple-500 mt-1.5 font-medium">{algoTopicsDone}/{algoTopicsTotal} {t("토픽 시작", "topics started")}</p>
+                  </Link>
+                ) : (
+                  <div className="rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50 p-4">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="text-2xl opacity-30">🧠</div>
+                      <Lock className="w-4 h-4 text-gray-300 mt-0.5" />
+                    </div>
+                    <p className="font-black text-gray-400 text-sm">{t("3. 알고리즘", "3. Algorithm")}</p>
+                    <p className="text-xs text-gray-400 mt-0.5 mb-3">{t(`${algoTopicsTotal}개 토픽`, `${algoTopicsTotal} topics`)}</p>
+                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="h-full bg-gray-300 rounded-full" style={{ width: `${Math.min(100, Math.round((practiceClustersDone / 5) * 100))}%` }} />
+                    </div>
+                    <p className="text-[11px] text-gray-400 mt-1.5">{t(`연습 ${Math.max(0, 5 - practiceClustersDone)}클러스터 더 필요 (5개 기준)`, `${Math.max(0, 5 - practiceClustersDone)} more clusters (need 5)`)}</p>
+                  </div>
+                )}
+
+                {/* Stage 4: 실전 */}
+                {questUnlocked ? (
+                  <Link href="/quest" className="rounded-2xl border-2 border-orange-400 bg-orange-50 p-4 transition-all hover:scale-[1.02] active:scale-[0.98] shadow-[2px_2px_0px_0px_rgba(251,146,60,0.4)]">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="text-2xl">🏆</div>
+                      <span className="text-[10px] font-bold text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">{t("해금!", "Unlocked!")}</span>
+                    </div>
+                    <p className="font-black text-orange-700 text-sm">{t("4. 실전", "4. Contest")}</p>
+                    <p className="text-xs text-orange-500 mt-0.5 mb-3">USACO Bronze/Silver</p>
+                    <p className="text-[11px] text-orange-400 font-medium">161 {t("문제", "problems")}</p>
+                  </Link>
+                ) : (
+                  <div className="rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50 p-4">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="text-2xl opacity-30">🏆</div>
+                      <Lock className="w-4 h-4 text-gray-300 mt-0.5" />
+                    </div>
+                    <p className="font-black text-gray-400 text-sm">{t("4. 실전", "4. Contest")}</p>
+                    <p className="text-xs text-gray-400 mt-0.5 mb-3">USACO Bronze/Silver</p>
+                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="h-full bg-gray-300 rounded-full" style={{ width: `${Math.round((algoTopicsDone / 8) * 100)}%` }} />
+                    </div>
+                    <p className="text-[11px] text-gray-400 mt-1.5">{t(`알고리즘 토픽 ${Math.max(0, 8 - algoTopicsDone)}개 더`, `${Math.max(0, 8 - algoTopicsDone)} more algo topics`)}</p>
+                  </div>
+                )}
+
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* 커리큘럼 완료 → 알고리즘 진입 배너 */}
         {loaded && progress === 100 && !isPseudo && (
           <div className="max-w-[1600px] mx-auto mb-6">
@@ -936,26 +1106,26 @@ export default function CurriculumPage() {
                                     : 'bg-white border-black hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]'
                               }`}
                             >
-                              <div className="flex items-center gap-3">
+                              <div className="flex items-start gap-2 sm:gap-3">
                                 {/* 체크박스 또는 잠금 아이콘 */}
                                 {isLocked ? (
-                                  <Lock className="h-6 w-6 sm:h-7 sm:w-7 text-gray-400 flex-shrink-0" />
+                                  <Lock className="h-5 w-5 sm:h-6 sm:w-6 text-gray-400 flex-shrink-0 mt-0.5" />
                                 ) : (
                                   <button
                                     onClick={() => toggleCompletion(lesson.id)}
-                                    className="flex-shrink-0"
+                                    className="flex-shrink-0 mt-0.5"
                                   >
                                     {isCompleted ? (
-                                      <CheckCircle2 className="h-6 w-6 sm:h-7 sm:w-7 text-green-500" />
+                                      <CheckCircle2 className="h-5 w-5 sm:h-6 sm:w-6 text-green-500" />
                                     ) : (
-                                      <Circle className="h-6 w-6 sm:h-7 sm:w-7 text-gray-300 hover:text-gray-400" />
+                                      <Circle className="h-5 w-5 sm:h-6 sm:w-6 text-gray-300 hover:text-gray-400" />
                                     )}
                                   </button>
                                 )}
 
-                                {/* 레슨 정보 */}
+                                {/* 레슨 정보 + 버튼을 세로로 묶기 */}
                                 <div className="flex-1 min-w-0">
-                                  <h3 className={`font-bold text-sm sm:text-base ${isLocked ? "text-gray-400" : isCompleted ? "line-through text-gray-400" : "text-gray-900"}`}>
+                                  <h3 className={`font-bold text-sm sm:text-base break-keep ${isLocked ? "text-gray-400" : isCompleted ? "line-through text-gray-400" : "text-gray-900"}`}>
                                     {lesson.title}
                                   </h3>
                                   <div className="flex items-center gap-2 mt-1 flex-wrap">
@@ -987,90 +1157,89 @@ export default function CurriculumPage() {
                                       </>
                                     )}
                                   </div>
-                                </div>
 
-                                {/* 버튼들: 잠긴 수업은 건너뛰기 버튼 표시 (선생님 제외) */}
-                                <div className="flex gap-2 flex-shrink-0">
-                                  {isLocked ? (
-                                    !isTeacher && !isPseudo ? (
-                                      skipConfirmId === lesson.id ? (
-                                        // 확인 단계
-                                        <div className="flex flex-col items-end gap-1">
-                                          {(() => {
-                                            const data = selectedCourse === "python" ? pythonCurriculumData : selectedCourse === "cpp" ? cppCurriculumData : pseudoCurriculumData
-                                            const allIds = data.flatMap(p => p.lessons.map(l => l.id))
-                                            const targetIdx = allIds.findIndex(id => String(id) === String(lesson.id))
-                                            const skippedIds = allIds.slice(0, targetIdx + 1).filter(id => !completedLessons.has(String(id)))
-                                            const skippedNames = skippedIds.slice(0, 3).map(id => {
-                                              const found = data.flatMap(p => p.lessons).find(l => String(l.id) === String(id))
-                                              return found?.title ?? String(id)
-                                            })
-                                            return (
-                                              <div className="text-right space-y-0.5">
-                                                <p className="text-[10px] text-amber-600 font-bold leading-tight">
-                                                  ⚠️ {t(`미학습 ${skippedIds.length}개 레슨이 완료 처리됩니다`, `${skippedIds.length} lessons will be marked done`)}
-                                                </p>
-                                                <p className="text-[9px] text-amber-500 leading-tight">
-                                                  {skippedNames.join(", ")}{skippedIds.length > 3 ? ` 외 ${skippedIds.length - 3}개` : ""}
-                                                </p>
-                                              </div>
-                                            )
-                                          })()}
-                                          <div className="flex gap-1">
-                                            <button
-                                              onClick={() => setSkipConfirmId(null)}
-                                              className="px-2 py-1 rounded-lg border border-gray-300 text-gray-400 text-[10px] font-bold hover:bg-gray-50"
-                                            >
-                                              {t("취소", "Cancel")}
-                                            </button>
-                                            <button
-                                              onClick={() => skipToLesson(lesson.id)}
-                                              className="px-2 py-1 rounded-lg border border-orange-400 bg-orange-50 text-orange-600 text-[10px] font-bold hover:bg-orange-100"
-                                            >
-                                              {t("건너뛰기 ✓", "Skip ✓")}
-                                            </button>
+                                  {/* 버튼들: 타이틀 아래 배치로 텍스트 영역 확보 */}
+                                  <div className="flex flex-wrap gap-1.5 mt-2">
+                                    {isLocked ? (
+                                      !isTeacher && !isPseudo ? (
+                                        skipConfirmId === lesson.id ? (
+                                          <div className="flex flex-col gap-1">
+                                            {(() => {
+                                              const data = selectedCourse === "python" ? pythonCurriculumData : selectedCourse === "cpp" ? cppCurriculumData : pseudoCurriculumData
+                                              const allIds = data.flatMap(p => p.lessons.map(l => l.id))
+                                              const targetIdx = allIds.findIndex(id => String(id) === String(lesson.id))
+                                              const skippedIds = allIds.slice(0, targetIdx + 1).filter(id => !completedLessons.has(String(id)))
+                                              const skippedNames = skippedIds.slice(0, 3).map(id => {
+                                                const found = data.flatMap(p => p.lessons).find(l => String(l.id) === String(id))
+                                                return found?.title ?? String(id)
+                                              })
+                                              return (
+                                                <div className="space-y-0.5">
+                                                  <p className="text-[10px] text-amber-600 font-bold leading-tight">
+                                                    ⚠️ {t(`미학습 ${skippedIds.length}개 레슨이 완료 처리됩니다`, `${skippedIds.length} lessons will be marked done`)}
+                                                  </p>
+                                                  <p className="text-[9px] text-amber-500 leading-tight">
+                                                    {skippedNames.join(", ")}{skippedIds.length > 3 ? ` 외 ${skippedIds.length - 3}개` : ""}
+                                                  </p>
+                                                </div>
+                                              )
+                                            })()}
+                                            <div className="flex gap-1">
+                                              <button
+                                                onClick={() => setSkipConfirmId(null)}
+                                                className="px-2 py-1 rounded-lg border border-gray-300 text-gray-400 text-[10px] font-bold hover:bg-gray-50"
+                                              >
+                                                {t("취소", "Cancel")}
+                                              </button>
+                                              <button
+                                                onClick={() => skipToLesson(lesson.id)}
+                                                className="px-2 py-1 rounded-lg border border-orange-400 bg-orange-50 text-orange-600 text-[10px] font-bold hover:bg-orange-100"
+                                              >
+                                                {t("건너뛰기 ✓", "Skip ✓")}
+                                              </button>
+                                            </div>
                                           </div>
-                                        </div>
+                                        ) : (
+                                          <button
+                                            onClick={() => setSkipConfirmId(lesson.id)}
+                                            className="px-2 py-1.5 rounded-lg border-2 border-gray-300 text-gray-400 text-xs font-bold hover:border-orange-300 hover:text-orange-500 hover:bg-orange-50 transition-colors"
+                                            title={t("이미 아는 내용이라면 건너뛰기", "Skip if you already know this")}
+                                          >
+                                            🔓 {t("건너뛰기", "Skip")}
+                                          </button>
+                                        )
                                       ) : (
-                                        <button
-                                          onClick={() => setSkipConfirmId(lesson.id)}
-                                          className="px-2 sm:px-3 py-2 rounded-lg border-2 border-gray-300 text-gray-400 text-xs font-bold hover:border-orange-300 hover:text-orange-500 hover:bg-orange-50 transition-colors"
-                                          title={t("이미 아는 내용이라면 건너뛰기", "Skip if you already know this")}
-                                        >
-                                          🔓 {t("건너뛰기", "Skip")}
-                                        </button>
+                                        <span className="px-2 py-1.5 rounded-lg border-2 border-gray-300 font-bold text-gray-400 text-xs cursor-not-allowed">
+                                          🔒
+                                        </span>
                                       )
                                     ) : (
-                                      <span className="px-3 sm:px-4 py-2 rounded-lg border-2 border-gray-300 font-bold text-gray-400 text-xs sm:text-sm cursor-not-allowed">
-                                        🔒
-                                      </span>
-                                    )
-                                  ) : (
-                                    <>
-                                      <Link
-                                        href={`/learn/${lesson.id}`}
-                                        className={`min-w-[5.5rem] sm:min-w-[6.5rem] text-center px-3 sm:px-4 py-2 rounded-lg border-2 font-bold text-xs sm:text-sm ${
-                                          isCompleted
-                                            ? "border-green-600 bg-green-50 text-green-700 hover:bg-green-100"
-                                            : `border-black text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${isPseudo ? "bg-green-500 hover:bg-green-600" : isCpp ? "bg-blue-500 hover:bg-blue-600" : "bg-green-500 hover:bg-green-600"}`
-                                        }`}
-                                      >
-                                        {isCompleted ? t("✅ 수업완료", "✅ Done") : t("📺 수업", "📺 Lesson")}
-                                      </Link>
-                                      {(isCompleted || isTeacher) && !isPseudo && (!isCpp || cppReviewIds.has(String(lesson.id))) && (
+                                      <>
                                         <Link
-                                          href={getReviewPath(lesson.id)}
-                                          className={`min-w-[5.5rem] sm:min-w-[6.5rem] text-center px-3 sm:px-4 py-2 rounded-lg border-2 font-bold text-xs sm:text-sm ${
-                                            isQuizDone
-                                              ? "border-blue-500 bg-blue-50 text-blue-700 hover:bg-blue-100"
-                                              : "border-black bg-orange-400 text-white hover:bg-orange-500 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                                          href={`/learn/${lesson.id}`}
+                                          className={`px-3 py-1.5 rounded-lg border-2 font-bold text-xs ${
+                                            isCompleted
+                                              ? "border-green-600 bg-green-50 text-green-700 hover:bg-green-100"
+                                              : `border-black text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${isPseudo ? "bg-green-500 hover:bg-green-600" : isCpp ? "bg-blue-500 hover:bg-blue-600" : "bg-green-500 hover:bg-green-600"}`
                                           }`}
                                         >
-                                          {isQuizDone ? t("📘 복습완료", "📘 Reviewed") : t("📝 복습", "📝 Review")}
+                                          {isCompleted ? t("✅ 수업완료", "✅ Done") : t("📺 수업", "📺 Lesson")}
                                         </Link>
-                                      )}
-                                    </>
-                                  )}
+                                        {(isCompleted || isTeacher) && !isPseudo && (!isCpp || cppReviewIds.has(String(lesson.id))) && (
+                                          <Link
+                                            href={getReviewPath(lesson.id)}
+                                            className={`px-3 py-1.5 rounded-lg border-2 font-bold text-xs ${
+                                              isQuizDone
+                                                ? "border-blue-500 bg-blue-50 text-blue-700 hover:bg-blue-100"
+                                                : "border-black bg-orange-400 text-white hover:bg-orange-500 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                                            }`}
+                                          >
+                                            {isQuizDone ? t("📘 복습완료", "📘 Reviewed") : t("📝 복습", "📝 Review")}
+                                          </Link>
+                                        )}
+                                      </>
+                                    )}
+                                  </div>
                                 </div>
                               </div>
                             </div>

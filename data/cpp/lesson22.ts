@@ -167,6 +167,43 @@ int main() {
 \`\`\``,
         },
         {
+          id: "ch1-dict",
+          type: "explain",
+          title: "🆚 파이썬 dict와 비교해볼까요?",
+          content: `파이썬에서 데이터를 묶을 때 dict를 쓰곤 했죠:
+
+\`\`\`python
+car = {"color": "빨간색", "speed": 0}
+car["color"] = "파란색"  # OK
+\`\`\`
+
+C++ class로 바꾸면:
+
+\`\`\`cpp
+Car myCar;
+myCar.color = "파란색";  // OK
+\`\`\`
+
+비슷해 보이지만 **결정적인 차이**가 있어요.
+
+오타를 쳤을 때 어떻게 되는지 봐요:
+
+\`\`\`python
+car["colur"] = "파란색"  # 에러 없이 실행됨... 나중에 버그 😱
+\`\`\`
+
+\`\`\`cpp
+myCar.colur = "파란색";  // 컴파일 에러! 오타를 바로 잡아줘요 ✅
+\`\`\`
+
+파이썬 dict는 오타가 있어도 새 키를 추가한 것처럼 조용히 실행돼요.
+C++ class는 없는 멤버에 접근하면 **컴파일 자체가 안 돼요**.
+
+이걸 **타입 안전성(type safety)** 이라고 해요. 버그가 실행 중에 발견되는 게 아니라, 코드를 빌드할 때 바로 발견돼요.
+
+💡 프로그램이 커질수록 타입 안전성의 가치가 커져요!`
+        },
+        {
           id: "ch1-pred1",
           type: "predict" as const,
           title: "Car class 읽기!",
@@ -453,6 +490,52 @@ BankAccount acc("김철수", 1000);  // 생성자 자동 호출!
 | 생성자 이름 | \`__init__\` | **클래스 이름과 동일** |
 | 첫 번째 매개변수 | \`self\` 필수 | 없음 |
 | 리턴 타입 | 없음 | **없음 (void도 아님!)** |`,
+        },
+        {
+          id: "ch3-initlist",
+          type: "explain",
+          title: "💡 이니셜라이저 리스트 — C++이 권장하는 방식",
+          content: `생성자를 작성하는 방법이 두 가지 있어요.
+
+**방법 1: 바디에서 대입 (지금까지 한 방식)**
+\`\`\`cpp
+BankAccount(string name, double initial) {
+    owner = name;     // 멤버변수에 값을 "대입"
+    balance = initial;
+}
+\`\`\`
+
+**방법 2: 이니셜라이저 리스트 (C++ 권장 방식)**
+\`\`\`cpp
+BankAccount(string name, double initial)
+    : owner(name), balance(initial) {}
+\`\`\`
+
+콜론(:) 뒤에 \`멤버변수(값)\` 형태로 쓰고, 중괄호는 빈 채로 둬요.
+
+---
+
+**왜 권장하냐고요?** 실제로는 큰 차이가 없지만 \`const\` 멤버, \`reference\` 멤버는 이니셜라이저 리스트로만 초기화할 수 있어요:
+
+\`\`\`cpp
+class Foo {
+    const int id;       // const는 대입이 불가능 → 리스트 필수
+    int& ref;           // reference도 리스트 필수
+public:
+    Foo(int i, int& r) : id(i), ref(r) {}   // ✅
+};
+\`\`\`
+
+---
+
+현실적으로 두 방식 모두 쓰여요. **이 레슨에서는 읽기 쉽도록 대입 방식**을 기본으로 쓰고, 실제 C++ 코드에서는 이니셜라이저 리스트를 더 많이 만나게 돼요.
+
+\`\`\`cpp
+// 이렇게 생긴 코드를 봐도 당황하지 마세요 — 생성자예요!
+Player(string n, int hp) : name(n), health(hp) {}
+\`\`\`
+
+💡 **요약**: 대입 방식 = 쉽게 읽힘, 이니셜라이저 리스트 = C++ 권장 / const·reference 필수`
         },
         {
           id: "ch3-pred1",

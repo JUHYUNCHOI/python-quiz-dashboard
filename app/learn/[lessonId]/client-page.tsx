@@ -174,7 +174,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             }
           }
         } else {
-          const autoCompleteTypes = ["explain", "interactive", "practice", "animation", "tryit"]
+          const autoCompleteTypes = ["explain", "interactive", "animation", "tryit"]
           if (lesson) {
             for (let ci = 0; ci < lesson.chapters.length; ci++) {
               const steps = lesson.chapters[ci].steps
@@ -229,7 +229,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
               }
             }
           } else {
-            const autoCompleteTypes = ["explain", "interactive", "practice", "animation", "tryit"]
+            const autoCompleteTypes = ["explain", "interactive", "animation", "tryit"]
             if (lesson) {
               for (let ci = 0; ci < lesson.chapters.length; ci++) {
                 const steps = lesson.chapters[ci].steps

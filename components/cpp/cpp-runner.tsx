@@ -277,15 +277,19 @@ export function CppRunner({
       } else {
         setOutput(runStdout)
         setHasRun(true)
-        if (submissionMode && (!isSubmitted || teacherGrade === "fail")) {
-          // expectedOutput 있으면 자동 채점, 없으면 null(선생님 확인)
-          const autoGrade = expectedOutput && normalize(runStdout) === normalize(expectedOutput)
-            ? "auto" as const
-            : null
-          saveCodeSilently(code, autoGrade)
-          // 자동 채점 통과하거나 expectedOutput이 없는 경우에만 완료 처리
-          if (autoGrade === "auto" || !expectedOutput) {
+        if (submissionMode) {
+          const outputMatches = !expectedOutput || normalize(runStdout) === normalize(expectedOutput)
+          // 아직 제출 안 됐거나 fail 상태면 새로 저장
+          if (!isSubmitted || teacherGrade === "fail") {
+            const autoGrade = outputMatches ? "auto" as const : null
+            saveCodeSilently(code, autoGrade)
+          }
+          // 출력이 맞으면 항상 onSuccess 호출 (handleSuccess 내부에서 중복 방지)
+          if (outputMatches) {
+            setIsCorrect(true)
             onSuccess?.()
+          } else if (expectedOutput) {
+            setIsCorrect(false)
           }
         } else if (!submissionMode) {
           if (expectedOutput) {

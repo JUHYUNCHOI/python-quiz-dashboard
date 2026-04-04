@@ -222,6 +222,44 @@ Why pair's auto-comparison is useful: when you sort a \`vector<pair<int,string>>
           explanation: "v[0].first is the first value of the first pair → \"Kim\". v[1].second is the second value of the second pair → 88. Output: Kim 88"
         },
         {
+          id: "ch1-vec-iter",
+          type: "explain",
+          title: "🔄 Iterating over vector<pair>",
+          content: `When you have multiple pairs, store them in a **vector<pair>**:
+
+\`\`\`cpp
+vector<pair<string, int>> students;
+students.push_back({"Kim", 95});
+students.push_back({"Lee", 88});
+students.push_back({"Park", 92});
+\`\`\`
+
+Use range-for with \`auto&\` to loop through them — no need to write out the full type:
+
+\`\`\`cpp
+for (auto& s : students) {
+    cout << s.first << ": " << s.second << endl;
+}
+// Kim: 95
+// Lee: 88
+// Park: 92
+\`\`\`
+
+The actual type of \`s\` is \`pair<string, int>\`, so:
+- \`s.first\` → string (name)
+- \`s.second\` → int (score)
+
+Without \`auto\`, you'd have to write the full type:
+
+\`\`\`cpp
+for (pair<string, int>& s : students) {  // verbose!
+    cout << s.first << ": " << s.second << endl;
+}
+\`\`\`
+
+💡 \`auto&\` is much more convenient! The longer the type, the more valuable auto becomes.`
+        },
+        {
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ Build a Name+Score pair Vector!",

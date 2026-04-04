@@ -1268,6 +1268,7 @@ e가 끝이면 종료.
             difficulty: 'medium',
             link: 'https://leetcode.com/problems/3sum/',
             simIntro: '정렬 후 하나를 고정하고 투 포인터로 좁혀가는 과정을 확인해보세요!',
+            sim: { type: '3sum', defaultInput: '-4 -1 -1 0 1 2' },
             descriptionHTML: `
                 <h3>문제</h3>
                 <p>정수 배열 <code>nums</code>에서 합이 <code>0</code>이 되는

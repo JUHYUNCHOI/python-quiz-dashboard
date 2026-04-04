@@ -263,9 +263,8 @@ int main() {
 
     return 0;
 }`,
-          expectedOutput: `First number: 7
-Second number: 3
-7 + 3 = 10`
+          stdin: `7\n3`,
+          expectedOutput: `First number: Second number: 7 + 3 = 10`
         },
         {
           id: "ch1-q1",

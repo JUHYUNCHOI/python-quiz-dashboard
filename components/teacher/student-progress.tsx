@@ -266,6 +266,12 @@ function PartSection({ part, lessonMap, lang, studentId, homeworkLessonIds }: { 
         )}>
           {learnDoneCount}/{ids.length}
         </span>
+        <span className={cn(
+          "text-[9px] font-black",
+          pct === 100 ? "text-green-600" : "text-blue-500"
+        )}>
+          {pct}%
+        </span>
         {inProgressCount > 0 && (
           <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-600 font-bold">
             진행 중 {inProgressCount}
@@ -300,6 +306,12 @@ function PartSection({ part, lessonMap, lang, studentId, homeworkLessonIds }: { 
           <span className="text-[9px] text-gray-400">
             복습 완료 {reviewDoneCount}/{learnDoneCount}
           </span>
+          <span className={cn(
+            "text-[9px] font-black",
+            reviewDoneCount === learnDoneCount ? "text-blue-600" : "text-gray-400"
+          )}>
+            {learnDoneCount > 0 ? Math.round((reviewDoneCount / learnDoneCount) * 100) : 0}%
+          </span>
           <div className="flex-1 h-0.5 bg-gray-100 rounded-full overflow-hidden">
             <div
               className="h-full bg-blue-300 rounded-full"
@@ -333,7 +345,18 @@ function LanguageSection({ title, emoji, parts, lessonMap, lang, studentId, home
         <span className="text-sm">{emoji}</span>
         <span className="font-bold text-sm text-gray-700">{title}</span>
         <span className="text-xs text-gray-400">{learnDone}/{allIds.length} 학습</span>
-        <span className="text-xs text-blue-400">{reviewDone}/{learnDone || 0} 복습</span>
+        <span className={cn("text-xs font-bold", learnDone === allIds.length ? "text-green-600" : "text-blue-500")}>
+          {Math.round((learnDone / allIds.length) * 100)}%
+        </span>
+        {learnDone > 0 && (
+          <>
+            <span className="text-xs text-gray-300">·</span>
+            <span className="text-xs text-blue-400">복습 {reviewDone}/{learnDone}</span>
+            <span className="text-xs text-blue-500 font-bold">
+              {Math.round((reviewDone / learnDone) * 100)}%
+            </span>
+          </>
+        )}
       </div>
       {parts.map(part => (
         <PartSection key={part.id} part={part} lessonMap={lessonMap} lang={lang} studentId={studentId} homeworkLessonIds={homeworkLessonIds} />

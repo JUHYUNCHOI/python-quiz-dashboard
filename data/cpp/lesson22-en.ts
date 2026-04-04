@@ -168,6 +168,43 @@ int main() {
 \`\`\``,
         },
         {
+          id: "ch1-dict",
+          type: "explain",
+          title: "🆚 How does class compare to Python dict?",
+          content: `In Python, you might bundle data with a dict:
+
+\`\`\`python
+car = {"color": "red", "speed": 0}
+car["color"] = "blue"  # OK
+\`\`\`
+
+In C++ with a class:
+
+\`\`\`cpp
+Car myCar;
+myCar.color = "blue";  // OK
+\`\`\`
+
+They look similar — but there's a **critical difference**.
+
+What happens when you make a typo?
+
+\`\`\`python
+car["colur"] = "blue"  # No error... silently creates a new key 😱
+\`\`\`
+
+\`\`\`cpp
+myCar.colur = "blue";  // Compile error! Caught immediately ✅
+\`\`\`
+
+Python dict silently adds a new key if you mistype — the bug hides until runtime.
+C++ class **won't even compile** if you access a member that doesn't exist.
+
+This is called **type safety**. Bugs are caught at build time, not while the program is running.
+
+💡 The bigger your program gets, the more valuable type safety becomes!`
+        },
+        {
           id: "ch1-pred1",
           type: "predict" as const,
           title: "Read the Car class!",
@@ -454,6 +491,52 @@ BankAccount acc("Emma", 1000);  // Constructor called automatically!
 | Constructor name | \`__init__\` | **Same as class name** |
 | First parameter | \`self\` required | None |
 | Return type | None | **None (not even void!)** |`,
+        },
+        {
+          id: "ch3-initlist",
+          type: "explain",
+          title: "💡 Initializer List — The C++ Recommended Way",
+          content: `There are two ways to write a constructor.
+
+**Method 1: Assignment in the body (what we've been doing)**
+\`\`\`cpp
+BankAccount(string name, double initial) {
+    owner = name;      // "assigning" to member variables
+    balance = initial;
+}
+\`\`\`
+
+**Method 2: Initializer list (C++ recommended)**
+\`\`\`cpp
+BankAccount(string name, double initial)
+    : owner(name), balance(initial) {}
+\`\`\`
+
+After the colon (:), write \`member(value)\` pairs, then leave the braces empty.
+
+---
+
+**Why is it recommended?** In practice, the difference is minor — but \`const\` and \`reference\` members can *only* be initialized with an initializer list:
+
+\`\`\`cpp
+class Foo {
+    const int id;    // const can't be assigned → list required
+    int& ref;        // reference also requires list
+public:
+    Foo(int i, int& r) : id(i), ref(r) {}   // ✅
+};
+\`\`\`
+
+---
+
+Both styles appear in real code. **In this lesson we use assignment** for readability, but you'll see the initializer list more often in real-world C++ code.
+
+\`\`\`cpp
+// Don't be surprised when you see this — it's just a constructor!
+Player(string n, int hp) : name(n), health(hp) {}
+\`\`\`
+
+💡 **Summary**: Assignment = easier to read, initializer list = C++ preferred / required for const & references`
         },
         {
           id: "ch3-pred1",

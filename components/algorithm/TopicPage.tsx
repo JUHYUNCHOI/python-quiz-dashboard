@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils"
 import type { AlgoTopic } from "@/data/algorithm/types"
 import { useAlgoProgress } from "@/hooks/use-algo-progress"
+import { AlgoConceptViz } from "./AlgoConceptViz"
 
 interface Props {
   topic: AlgoTopic
@@ -50,13 +51,8 @@ export function TopicPage({ topic, onSelectProblem }: Props) {
         <p className="text-gray-600 text-sm">{topic.description}</p>
       </div>
 
-      {/* 개념 설명 */}
-      {topic.conceptHTML && (
-        <div
-          className="prose prose-sm max-w-none bg-white rounded-2xl border border-gray-100 p-5"
-          dangerouslySetInnerHTML={{ __html: topic.conceptHTML }}
-        />
-      )}
+      {/* 개념 시각화 (Algorithm Lab JS 래퍼) */}
+      <AlgoConceptViz topicId={topic.id} />
 
       {/* 학습 로드맵 */}
       <div>

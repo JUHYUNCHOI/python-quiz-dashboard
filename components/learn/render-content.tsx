@@ -242,8 +242,10 @@ export function renderContent(content: string) {
       }
 
       if (tableLines.length >= 2) {
-        const parseRow = (row: string) =>
-          row.slice(1, -1).split('|').map(cell => cell.trim())
+        const parseRow = (row: string) => {
+          const inner = row.slice(1, -1).replace(/\\\|/g, '\x00')
+          return inner.split('|').map(cell => cell.trim().replace(/\x00/g, '|'))
+        }
 
         const isSeparator = (row: string) =>
           parseRow(row).every(cell => /^[-:\s]+$/.test(cell))

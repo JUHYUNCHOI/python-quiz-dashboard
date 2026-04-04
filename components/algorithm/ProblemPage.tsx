@@ -118,7 +118,7 @@ export function ProblemPage({ topic, problem, onBack }: Props) {
               </div>
             )}
             <div
-              className="algo-scope"
+              className="algo-scope algo-prose"
               dangerouslySetInnerHTML={{ __html: problem.descriptionHTML }}
             />
           </div>

@@ -8345,3 +8345,88 @@ mark.code-line-new {
 .demo-uf-edge.uf-added { border-color: var(--green); background: var(--green)15; color: var(--green); }
 .demo-uf-edge.uf-cycle-edge { border-color: var(--red); background: var(--red)15; color: var(--red); }
 .demo-uf-edge.uf-pending { opacity: 0.5; cursor: default; }
+
+/* ===== Prose styles for problem descriptions (Coderin) ===== */
+.algo-prose {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--text-body);
+}
+
+.algo-prose h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-top: 1.5rem;
+    margin-bottom: 0.6rem;
+}
+
+.algo-prose h3:first-child {
+    margin-top: 0;
+}
+
+.algo-prose h4 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-top: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.algo-prose p {
+    margin-bottom: 0.85rem;
+    color: var(--text-body);
+}
+
+.algo-prose p:last-child {
+    margin-bottom: 0;
+}
+
+.algo-prose strong {
+    font-weight: 700;
+    color: var(--text);
+}
+
+.algo-prose ul,
+.algo-prose ol {
+    margin-left: 1.5rem;
+    margin-bottom: 0.85rem;
+}
+
+.algo-prose ul { list-style: disc; }
+.algo-prose ol { list-style: decimal; }
+
+.algo-prose li {
+    margin-bottom: 0.3rem;
+    color: var(--text-body);
+    line-height: 1.7;
+}
+
+.algo-prose code {
+    font-family: var(--font-mono);
+    background: rgba(0, 0, 0, 0.06);
+    color: #d63384;
+    padding: 2px 7px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.algo-prose pre {
+    background: #2d3436;
+    color: #dfe6e9;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    margin: 0.75rem 0;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    line-height: 1.6;
+}
+
+.algo-prose pre code {
+    background: none;
+    color: inherit;
+    padding: 0;
+    font-size: inherit;
+}

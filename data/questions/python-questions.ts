@@ -7644,4 +7644,692 @@ else:
     keyConceptDescription: "RPG 전투는 두 객체가 번갈아 공격하는 while 루프로 구현합니다. 매 라운드 후 생존 여부를 확인해 루프 종료 조건을 설정합니다.",
     relatedTopics: ["클래스", "전투 시스템", "while 루프", "게임 로직"],
   },
+  // ── Lesson 1: print() 출력 ──
+  {
+    id: 516,
+    lessonId: 1,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `x = print("Hello")
+print(x)`,
+    options: ["Hello\\nNone", "Hello\\nFalse", "오류 — print()는 값을 반환하지 않는다", "None\\nHello"],
+    correctAnswer: 0,
+    explanation: "print()는 화면에 출력 후 None을 반환합니다. 따라서 x에는 None이 저장되고, print(x)는 None을 출력합니다.",
+    keyConceptTitle: "print()의 반환값",
+    keyConceptDescription: "print() 함수는 출력 작업을 수행하지만 반환값은 None입니다. 변수에 print()의 결과를 담으면 None이 저장됩니다.",
+    relatedTopics: ["print", "반환값", "None"],
+  },
+  {
+    id: 517,
+    lessonId: 1,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `print("3" + "5")
+print(3 + 5)`,
+    options: ["35\\n8", "8\\n8", "35\\n35", "오류"],
+    correctAnswer: 0,
+    explanation: "문자열 \"3\" + \"5\"는 문자열 연결로 \"35\"가 됩니다. 정수 3 + 5는 덧셈으로 8이 됩니다.",
+    keyConceptTitle: "문자열 vs 정수 덧셈",
+    keyConceptDescription: "같은 + 연산자라도 피연산자의 타입에 따라 동작이 달라집니다. 문자열 + 문자열은 연결, 정수 + 정수는 덧셈입니다.",
+    relatedTopics: ["print", "문자열 연결", "타입"],
+  },
+  // ── Lesson 2: 데이터 타입 ──
+  {
+    id: 518,
+    lessonId: 2,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `print(True + True + False)
+print(True * 5)`,
+    options: ["2\\n5", "오류", "True\\nTrue", "1\\n1"],
+    correctAnswer: 0,
+    explanation: "Python에서 bool은 int의 서브클래스입니다. True는 1, False는 0으로 처리됩니다. 따라서 True + True + False = 1 + 1 + 0 = 2, True * 5 = 1 * 5 = 5입니다.",
+    keyConceptTitle: "bool과 int의 관계",
+    keyConceptDescription: "Python의 bool 타입은 int의 서브클래스입니다. True는 1, False는 0으로 연산에 사용될 수 있습니다.",
+    relatedTopics: ["bool", "int", "타입 변환"],
+  },
+  {
+    id: 519,
+    lessonId: 2,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `print(type(1) == type(True))
+print(isinstance(True, int))`,
+    options: ["False\\nTrue", "True\\nTrue", "False\\nFalse", "오류"],
+    correctAnswer: 0,
+    explanation: "type(1)은 <class 'int'>, type(True)는 <class 'bool'>로 서로 다릅니다. 하지만 bool은 int의 서브클래스이므로 isinstance(True, int)는 True를 반환합니다.",
+    keyConceptTitle: "type() vs isinstance()",
+    keyConceptDescription: "type()은 정확한 타입을 비교합니다. isinstance()는 상속 관계도 고려하여 True/False를 반환합니다. bool은 int의 서브클래스이므로 isinstance(True, int)는 True입니다.",
+    relatedTopics: ["type", "isinstance", "bool", "상속"],
+  },
+  // ── Lesson 3: 변수 ──
+  {
+    id: 520,
+    lessonId: 3,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `x = 5
+x += 3
+x *= 2
+print(x)`,
+    options: ["16", "13", "10", "26"],
+    correctAnswer: 0,
+    explanation: "x = 5, x += 3 → x = 8, x *= 2 → x = 16. 복합 대입 연산자는 순서대로 적용됩니다.",
+    keyConceptTitle: "복합 대입 연산자",
+    keyConceptDescription: "+=, *=, -= 등의 복합 대입 연산자는 기존 값에 연산을 적용하고 결과를 변수에 저장합니다. 순서에 주의해야 합니다.",
+    relatedTopics: ["변수", "복합 대입", "연산자"],
+  },
+  {
+    id: 521,
+    lessonId: 3,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `a, b = 3, 7
+a, b = b, a + b
+print(a, b)`,
+    options: ["7 10", "10 7", "7 7", "오류"],
+    correctAnswer: 0,
+    explanation: "우변은 이전 값을 기준으로 한꺼번에 평가됩니다. b의 이전 값 7이 a에 할당되고, 이전 a(3) + 이전 b(7) = 10이 b에 할당됩니다.",
+    keyConceptTitle: "다중 할당과 평가 순서",
+    keyConceptDescription: "Python의 다중 할당에서 우변은 모두 이전 값을 기준으로 먼저 평가된 후 좌변에 할당됩니다. a, b = b, a+b에서 a+b는 이전 a와 b를 사용합니다.",
+    relatedTopics: ["다중 할당", "변수", "평가 순서"],
+  },
+  // ── Lesson 4: 연산자 ──
+  {
+    id: 522,
+    lessonId: 4,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `print(3 + 2 * 4 ** 2)`,
+    options: ["35", "100", "40", "37"],
+    correctAnswer: 0,
+    explanation: "연산자 우선순위: ** > * > +. 4**2 = 16, 2*16 = 32, 3+32 = 35.",
+    keyConceptTitle: "연산자 우선순위",
+    keyConceptDescription: "Python 연산자 우선순위: 거듭제곱(**)이 가장 높고, 그 다음 곱셈/나눗셈(*,/,//,%), 마지막으로 덧셈/뺄셈(+,-)입니다.",
+    relatedTopics: ["연산자 우선순위", "거듭제곱", "산술 연산"],
+  },
+  {
+    id: 523,
+    lessonId: 4,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `print(-7 // 2)
+print(7 // -2)`,
+    options: ["-4\\n-4", "-3\\n-3", "-4\\n-3", "-3\\n-4"],
+    correctAnswer: 0,
+    explanation: "// 연산자는 음의 무한대 방향으로 내림(floor division)합니다. -7/2 = -3.5 → -4, 7/-2 = -3.5 → -4.",
+    keyConceptTitle: "정수 나눗셈(floor division)",
+    keyConceptDescription: "// 연산자는 결과를 음의 무한대 방향으로 내림합니다. 결과가 음수일 때 -3.5는 -4가 됩니다(0이 아닌 -4쪽으로 내림).",
+    relatedTopics: ["정수 나눗셈", "//", "음수 연산"],
+  },
+  // ── Lesson 5: 문자열 연산 ──
+  {
+    id: 524,
+    lessonId: 5,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `a = "abc"
+b = "def"
+print(a + b == b + a)
+print(a * 2 == a + a)`,
+    options: ["False\\nTrue", "True\\nTrue", "False\\nFalse", "오류"],
+    correctAnswer: 0,
+    explanation: "a + b = \"abcdef\", b + a = \"defabc\"로 서로 달라 False. a * 2 = \"abcabc\", a + a = \"abcabc\"로 같아 True.",
+    keyConceptTitle: "문자열 연산의 특성",
+    keyConceptDescription: "문자열 + 연산은 교환법칙이 성립하지 않습니다(a+b ≠ b+a). 반면 a * 2는 a + a와 같습니다.",
+    relatedTopics: ["문자열 연결", "문자열 반복", "비교 연산"],
+  },
+  {
+    id: 525,
+    lessonId: 5,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `print("Z" < "a")
+print("apple" < "banana")`,
+    options: ["True\\nTrue", "False\\nTrue", "True\\nFalse", "False\\nFalse"],
+    correctAnswer: 0,
+    explanation: "Python은 문자열을 유니코드 값으로 비교합니다. 'Z'의 유니코드는 90, 'a'는 97이므로 'Z' < 'a'는 True. 'apple'과 'banana'는 첫 글자 'a'(97) < 'b'(98)이므로 True.",
+    keyConceptTitle: "문자열 비교와 유니코드",
+    keyConceptDescription: "Python 문자열 비교는 유니코드 값을 기준으로 합니다. 대문자(A-Z: 65-90)는 소문자(a-z: 97-122)보다 유니코드 값이 작으므로 대문자 < 소문자입니다.",
+    relatedTopics: ["문자열 비교", "유니코드", "비교 연산"],
+  },
+  // ── Lesson 6: 문자열 메서드 ──
+  {
+    id: 526,
+    lessonId: 6,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `s = "  Hello World  "
+print(s.strip().lower().replace("o", "0"))`,
+    options: ["hell0 w0rld", "Hell0 W0rld", "  hell0 w0rld  ", "오류"],
+    correctAnswer: 0,
+    explanation: "메서드 체이닝: strip()으로 양쪽 공백 제거 → \"Hello World\", lower()로 소문자 변환 → \"hello world\", replace(\"o\", \"0\")으로 o를 0으로 교체 → \"hell0 w0rld\".",
+    keyConceptTitle: "메서드 체이닝",
+    keyConceptDescription: "문자열 메서드는 새 문자열을 반환하므로 연속으로 호출할 수 있습니다. 왼쪽에서 오른쪽 순서로 순차 적용됩니다.",
+    relatedTopics: ["strip", "lower", "replace", "메서드 체이닝"],
+  },
+  {
+    id: 527,
+    lessonId: 6,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `s = "Python"
+print(s.find("x"))
+print(s.find("P"))`,
+    options: ["-1\\n0", "오류\\n0", "0\\n-1", "False\\n0"],
+    correctAnswer: 0,
+    explanation: "find()는 찾는 문자가 없으면 -1을 반환하고, 있으면 첫 번째 인덱스를 반환합니다. 'x'는 없으므로 -1, 'P'는 인덱스 0에 있으므로 0.",
+    keyConceptTitle: "find() 메서드",
+    keyConceptDescription: "find()는 문자열에서 특정 문자/문자열의 첫 번째 위치를 반환합니다. 찾지 못하면 -1을 반환합니다(오류가 발생하지 않음).",
+    relatedTopics: ["find", "문자열 검색", "인덱스"],
+  },
+  {
+    id: 528,
+    lessonId: 6,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `s = "banana"
+print(s.count("a"))
+print(s.count("an"))`,
+    options: ["3\\n2", "3\\n1", "2\\n2", "4\\n2"],
+    correctAnswer: 0,
+    explanation: "\"banana\"에서 'a'는 위치 1, 3, 5에 총 3번 등장합니다. 'an'은 위치 1('an'), 3('an')에 총 2번 등장합니다.",
+    keyConceptTitle: "count() 메서드",
+    keyConceptDescription: "count()는 문자열 내에서 특정 문자 또는 부분 문자열이 몇 번 등장하는지 센 결과를 반환합니다.",
+    relatedTopics: ["count", "문자열 메서드", "부분 문자열"],
+  },
+  // ── Lesson 7: print() 옵션 ──
+  {
+    id: 529,
+    lessonId: 7,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `print(1, 2, 3, sep="-")
+print("A", "B", sep="->", end="!\\n")
+print("C")`,
+    options: ["1-2-3\\nA->B!\\nC", "1 2 3\\nA B!\\nC", "1-2-3\\nA->B\\nC", "오류"],
+    correctAnswer: 0,
+    explanation: "첫 줄: sep=\"-\"로 1-2-3 출력 후 기본 줄바꿈. 둘째 줄: sep=\"->\"로 A->B 출력, end=\"!\\n\"으로 !와 줄바꿈. 셋째 줄: C 출력.",
+    keyConceptTitle: "sep와 end 조합",
+    keyConceptDescription: "sep는 여러 인자 사이의 구분자, end는 출력 마지막에 추가할 문자를 지정합니다. 두 매개변수를 함께 사용할 수 있습니다.",
+    relatedTopics: ["sep", "end", "print 옵션"],
+  },
+  {
+    id: 530,
+    lessonId: 7,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `print("line1")
+print()
+print("line3")`,
+    options: ["line1\\n\\nline3", "line1\\nline3", "오류 — print()에 인자가 없으면 오류", "line1 line3"],
+    correctAnswer: 0,
+    explanation: "print()에 인자 없이 호출하면 빈 줄(줄바꿈만)을 출력합니다. 따라서 line1, 빈 줄, line3 순서로 세 줄이 출력됩니다.",
+    keyConceptTitle: "print()의 빈 줄 출력",
+    keyConceptDescription: "print()를 인자 없이 호출하면 줄바꿈 문자만 출력하여 빈 줄을 만듭니다. 오류가 발생하지 않습니다.",
+    relatedTopics: ["print", "빈 줄", "줄바꿈"],
+  },
+  // ── Lesson 8: f-string ──
+  {
+    id: 542,
+    lessonId: 8,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `x = 5
+print(f"{x ** 2 + 1}")
+print(f"{'Hi' * 3}")`,
+    options: ["26\\nHiHiHi", "25\\nHi", "오류", "x ** 2 + 1\\nHi * 3"],
+    correctAnswer: 0,
+    explanation: "f-string의 {} 안에는 임의의 표현식을 넣을 수 있습니다. x**2+1 = 25+1 = 26, 'Hi' * 3 = 'HiHiHi'.",
+    keyConceptTitle: "f-string 내 표현식",
+    keyConceptDescription: "f-string의 중괄호 {} 안에는 변수뿐만 아니라 연산식, 메서드 호출 등 Python 표현식을 자유롭게 쓸 수 있습니다.",
+    relatedTopics: ["f-string", "표현식", "문자열 포맷"],
+  },
+  {
+    id: 543,
+    lessonId: 8,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `pi = 3.14159
+print(f"{pi:.2f}")
+print(f"{100:05d}")`,
+    options: ["3.14\\n00100", "3.14159\\n100", "오류", "3.14\\n100"],
+    correctAnswer: 0,
+    explanation: ":.2f는 소수점 둘째 자리까지 표시하므로 3.14. :05d는 5자리 정수로 빈 자리를 0으로 채우므로 00100.",
+    keyConceptTitle: "f-string 포맷 지정자",
+    keyConceptDescription: "f-string에서 콜론(:) 이후에 포맷을 지정할 수 있습니다. .2f는 소수점 2자리, 05d는 5자리 정수에 앞을 0으로 채우는 포맷입니다.",
+    relatedTopics: ["f-string", "포맷 지정자", "소수점", "정렬"],
+  },
+  // ── Lesson 9: 타입 변환 ──
+  {
+    id: 531,
+    lessonId: 9,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `print(bool(0))
+print(bool(""))
+print(bool("0"))`,
+    options: ["False\\nFalse\\nTrue", "False\\nFalse\\nFalse", "False\\nTrue\\nTrue", "True\\nTrue\\nFalse"],
+    correctAnswer: 0,
+    explanation: "0과 빈 문자열 \"\"은 falsy 값으로 bool() 변환 시 False입니다. 반면 \"0\"은 비어있지 않은 문자열이므로 truthy → True.",
+    keyConceptTitle: "falsy vs truthy 값",
+    keyConceptDescription: "Python에서 0, 0.0, \"\", None, [], {}, () 등은 falsy입니다. 비어있지 않은 문자열 \"0\"은 내용이 있으므로 truthy(True)로 변환됩니다.",
+    relatedTopics: ["bool 변환", "falsy", "truthy", "타입 변환"],
+  },
+  {
+    id: 532,
+    lessonId: 9,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `print(int(3.9))
+print(int(-3.9))`,
+    options: ["3\\n-3", "4\\n-4", "3\\n-4", "오류"],
+    correctAnswer: 0,
+    explanation: "int()는 0 방향으로 버림(truncation)합니다. 3.9 → 3, -3.9 → -3. floor() 함수와 달리 음의 무한대가 아닌 0 방향으로 버립니다.",
+    keyConceptTitle: "int() 변환 — 버림(truncation)",
+    keyConceptDescription: "int()는 소수 부분을 0 방향으로 버립니다. 양수는 내림, 음수는 올림과 같은 효과입니다. math.floor()와는 음수에서 차이가 납니다(-3.9: int→-3, floor→-4).",
+    relatedTopics: ["int 변환", "버림", "truncation", "타입 변환"],
+  },
+  // ── Lesson 10: input() ──
+  {
+    id: 533,
+    lessonId: 10,
+    difficulty: "어려움",
+    question: "사용자가 숫자 3을 입력했을 때, 다음 코드에서 result의 값과 타입은?",
+    code: `result = input("숫자: ")`,
+    options: ["문자열 '3'", "정수 3", "실수 3.0", "입력한 값에 따라 자동으로 타입이 결정된다"],
+    correctAnswer: 0,
+    explanation: "input()은 사용자 입력을 항상 문자열(str)로 반환합니다. 숫자처럼 보여도 '3'이라는 문자열입니다. 정수로 사용하려면 int(input())을 써야 합니다.",
+    keyConceptTitle: "input()의 반환 타입",
+    keyConceptDescription: "input()은 사용자가 무엇을 입력하든 항상 str(문자열)을 반환합니다. 숫자 계산에 사용하려면 int()나 float()로 변환해야 합니다.",
+    relatedTopics: ["input", "str", "타입 변환"],
+  },
+  {
+    id: 534,
+    lessonId: 10,
+    difficulty: "어려움",
+    question: "사용자가 5를 입력했을 때 다음 코드의 결과는?",
+    code: `x = input()
+print(x + 3)`,
+    options: ["8", "53", "오류 — 문자열과 정수는 + 연산을 할 수 없다", "5"],
+    correctAnswer: 2,
+    explanation: "input()은 항상 문자열을 반환합니다. x는 '5'(문자열)이므로 '5' + 3은 TypeError: can only concatenate str (not \"int\") to str가 발생합니다.",
+    keyConceptTitle: "문자열과 정수의 + 연산 오류",
+    keyConceptDescription: "문자열과 정수는 + 연산을 직접 할 수 없습니다. input() 결과를 정수와 더하려면 반드시 int(input())으로 변환해야 합니다.",
+    relatedTopics: ["input", "TypeError", "타입 변환", "문자열+정수"],
+  },
+  // ── Lesson 11: 조건문 ──
+  {
+    id: 544,
+    lessonId: 11,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `x = 15
+if x > 20:
+    print("A")
+elif x > 10:
+    print("B")
+elif x > 5:
+    print("C")
+else:
+    print("D")`,
+    options: ["B", "C", "A", "BC"],
+    correctAnswer: 0,
+    explanation: "x=15는 x>20은 거짓, x>10은 참이므로 'B'를 출력하고 나머지 elif/else는 실행되지 않습니다.",
+    keyConceptTitle: "elif 체인 — 첫 참 조건만 실행",
+    keyConceptDescription: "if-elif-else에서는 조건을 위에서 아래로 확인하다가 처음으로 참인 조건의 블록만 실행합니다. x=15는 x>10을 만족하므로 B만 출력됩니다.",
+    relatedTopics: ["elif", "조건문", "제어 흐름"],
+  },
+  {
+    id: 545,
+    lessonId: 11,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `a, b = 3, 5
+if a > 0:
+    if b > a:
+        print("both positive, b > a")
+    else:
+        print("both positive, b <= a")
+elif a < 0:
+    print("a is negative")`,
+    options: ["both positive, b > a", "both positive, b <= a", "a is negative", "아무것도 출력되지 않는다"],
+    correctAnswer: 0,
+    explanation: "a=3 > 0이므로 if a > 0 블록에 진입. b=5 > a=3이므로 내부 if b > a가 참 → 'both positive, b > a' 출력.",
+    keyConceptTitle: "중첩 조건문",
+    keyConceptDescription: "if 블록 안에 또 다른 if 문을 중첩할 수 있습니다. 바깥 조건이 참일 때만 안쪽 조건을 평가합니다.",
+    relatedTopics: ["중첩 if", "조건문", "제어 흐름"],
+  },
+  // ── Lesson 12: 조건문 심화 ──
+  {
+    id: 546,
+    lessonId: 12,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `x = 0
+y = 10
+print(x == 0 and y > 5)
+print(x != 0 or y > 5)
+print(not (x > 0 or y < 5))`,
+    options: ["True\\nTrue\\nTrue", "True\\nFalse\\nTrue", "False\\nTrue\\nFalse", "True\\nTrue\\nFalse"],
+    correctAnswer: 0,
+    explanation: "1: x==0(True) and y>5(True) → True. 2: x!=0(False) or y>5(True) → True. 3: not (x>0(False) or y<5(False)) = not False = True.",
+    keyConceptTitle: "and/or/not 조합",
+    keyConceptDescription: "논리 연산자 우선순위: not > and > or. 괄호를 사용해 우선순위를 명시하면 코드를 읽기 쉽습니다.",
+    relatedTopics: ["and", "or", "not", "논리 연산"],
+  },
+  // ── Lesson 13: for 반복문 ──
+  {
+    id: 535,
+    lessonId: 13,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `for i in range(10, 0, -3):
+    print(i, end=" ")`,
+    options: ["10 7 4 1 ", "10 7 4 ", "9 6 3 0 ", "오류"],
+    correctAnswer: 0,
+    explanation: "range(10, 0, -3): 10부터 1 이상인 동안 3씩 감소. 10, 7, 4, 1 순서로 출력됩니다. 0은 범위에 포함되지 않습니다.",
+    keyConceptTitle: "역방향 range",
+    keyConceptDescription: "range(start, stop, step)에서 step이 음수이면 start에서 stop보다 큰 수까지 감소합니다. range(10, 0, -3)은 10, 7, 4, 1을 생성합니다.",
+    relatedTopics: ["range", "역방향 반복", "for 반복문"],
+  },
+  {
+    id: 536,
+    lessonId: 13,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `total = 0
+for i in range(1, 10, 2):
+    total += i
+print(total)`,
+    options: ["25", "20", "30", "45"],
+    correctAnswer: 0,
+    explanation: "range(1, 10, 2)는 1, 3, 5, 7, 9를 생성합니다. 합계: 1+3+5+7+9 = 25.",
+    keyConceptTitle: "range 스텝과 누적 합",
+    keyConceptDescription: "range(1, 10, 2)는 1부터 9까지 홀수를 생성합니다. 누적 합을 구할 때는 total = 0으로 초기화 후 += 연산을 반복합니다.",
+    relatedTopics: ["range", "누적 합", "for 반복문"],
+  },
+  {
+    id: 537,
+    lessonId: 13,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `count = 0
+for i in range(3):
+    for j in range(i + 1):
+        count += 1
+print(count)`,
+    options: ["6", "9", "3", "5"],
+    correctAnswer: 0,
+    explanation: "i=0: j는 range(1) → j=0, 1번 반복. i=1: j는 range(2) → j=0,1, 2번 반복. i=2: j는 range(3) → j=0,1,2, 3번 반복. 합계: 1+2+3 = 6.",
+    keyConceptTitle: "중첩 for 반복문 횟수 계산",
+    keyConceptDescription: "중첩 루프의 총 실행 횟수는 각 반복 횟수의 합입니다. 내부 range가 i+1이면 i=0일 때 1번, i=1일 때 2번, ... 순으로 삼각수를 만듭니다.",
+    relatedTopics: ["중첩 for", "range", "반복 횟수"],
+  },
+  // ── Lesson 14: while 반복문 ──
+  {
+    id: 547,
+    lessonId: 14,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `i = 0
+while True:
+    i += 1
+    if i == 5:
+        break
+print(i)`,
+    options: ["5", "4", "6", "무한 루프"],
+    correctAnswer: 0,
+    explanation: "while True는 무한 루프이지만 i가 5가 되면 break로 탈출합니다. 루프 종료 후 i는 5입니다.",
+    keyConceptTitle: "while True와 break",
+    keyConceptDescription: "while True로 무한 루프를 만들고 조건이 충족되면 break로 탈출하는 패턴은 반복 횟수를 미리 알 수 없을 때 유용합니다.",
+    relatedTopics: ["while True", "break", "무한 루프"],
+  },
+  {
+    id: 548,
+    lessonId: 14,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `i = 0
+result = 0
+while i < 5:
+    i += 1
+    if i % 2 == 0:
+        continue
+    result += i
+print(result)`,
+    options: ["9", "15", "6", "3"],
+    correctAnswer: 0,
+    explanation: "i=1(홀수, result+=1=1), i=2(짝수, continue), i=3(홀수, result+=3=4), i=4(짝수, continue), i=5(홀수, result+=5=9). 합계: 1+3+5 = 9.",
+    keyConceptTitle: "continue로 짝수 건너뛰기",
+    keyConceptDescription: "continue는 현재 반복의 나머지를 건너뛰고 다음 반복으로 이동합니다. i%2==0이면 continue로 짝수를 건너뛰어 홀수만 result에 더합니다.",
+    relatedTopics: ["while", "continue", "홀수 합"],
+  },
+  // ── Lesson 15: 자료구조 개요 ──
+  {
+    id: 538,
+    lessonId: 15,
+    difficulty: "어려움",
+    question: "다음 조건을 모두 만족하는 자료구조는? ① 순서가 있다 ② 값을 변경할 수 있다(mutable) ③ 중복값을 허용한다",
+    code: `# 자료구조 특성 비교\n# 리스트:    순서 O, 수정 O, 중복 O\n# 튜플:      순서 O, 수정 X, 중복 O\n# 딕셔너리:  순서 O, 수정 O, 키중복 X\n# 집합:      순서 X, 수정 O, 중복 X`,
+    options: ["리스트(list)", "튜플(tuple)", "딕셔너리(dict)", "집합(set)"],
+    correctAnswer: 0,
+    explanation: "리스트는 ① 순서 있음 ② 수정 가능(mutable) ③ 중복 허용 — 세 조건 모두 만족. 튜플은 변경 불가(immutable). 집합은 순서 없고 중복 불가. 딕셔너리는 순서 있지만 키 중복 불가.",
+    keyConceptTitle: "자료구조 특성 비교",
+    keyConceptDescription: "리스트: 순서 있음, 변경 가능, 중복 허용. 튜플: 순서 있음, 변경 불가, 중복 허용. 집합: 순서 없음, 변경 가능, 중복 불가. 딕셔너리: 순서 있음(3.7+), 변경 가능, 키 중복 불가.",
+    relatedTopics: ["자료구조", "list", "tuple", "set", "dict"],
+  },
+  {
+    id: 539,
+    lessonId: 15,
+    difficulty: "어려움",
+    question: "학생 100명의 이름과 점수를 저장하고 이름으로 빠르게 점수를 조회해야 한다. 가장 적합한 자료구조는?",
+    code: `# 이름으로 점수를 빠르게 조회하려면?\n# 리스트:     O(n) — 이름을 하나씩 비교\n# 딕셔너리:   O(1) — 이름(키)으로 즉시 조회\n# 집합:       값만 저장, 점수 저장 불가\n# 튜플:       수정 불가, 조회도 O(n)`,
+    options: ["리스트", "딕셔너리", "집합", "튜플"],
+    correctAnswer: 1,
+    explanation: "딕셔너리는 키(이름)로 값(점수)을 O(1) 평균 시간에 조회할 수 있습니다. 리스트는 이름을 검색하려면 O(n) 순차 탐색이 필요합니다.",
+    keyConceptTitle: "딕셔너리 — 키-값 빠른 조회",
+    keyConceptDescription: "딕셔너리는 해시 테이블 기반으로 키로 값을 O(1)에 조회할 수 있습니다. 이름→점수처럼 고유 키로 매핑된 데이터를 저장하고 검색할 때 최적입니다.",
+    relatedTopics: ["딕셔너리", "자료구조 선택", "O(1) 조회"],
+  },
+  // ── Lesson 17: 리스트와 반복문 ──
+  {
+    id: 549,
+    lessonId: 17,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+total = 0
+for row in matrix:
+    total += row[1]
+print(total)`,
+    options: ["15", "12", "9", "45"],
+    correctAnswer: 0,
+    explanation: "각 행의 인덱스 1(두 번째) 요소: 2, 5, 8. 합계: 2+5+8 = 15.",
+    keyConceptTitle: "2D 리스트 열 접근",
+    keyConceptDescription: "2D 리스트에서 각 행의 특정 열을 순회하려면 for row in matrix: total += row[열인덱스] 패턴을 사용합니다.",
+    relatedTopics: ["2D 리스트", "for 반복문", "인덱싱"],
+  },
+  {
+    id: 550,
+    lessonId: 17,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `nums = [1, 2, 3, 4, 5]
+evens = []
+for n in nums:
+    if n % 2 == 0:
+        evens.append(n)
+print(evens)
+print(sum(evens))`,
+    options: ["[2, 4]\\n6", "[1, 3, 5]\\n9", "[2, 4]\\n4", "오류"],
+    correctAnswer: 0,
+    explanation: "nums에서 짝수(2, 4)만 evens에 append합니다. evens = [2, 4], sum([2, 4]) = 6.",
+    keyConceptTitle: "리스트 필터링 패턴",
+    keyConceptDescription: "빈 리스트를 초기화하고 조건을 만족하는 원소만 append하는 패턴은 리스트 필터링의 기본입니다.",
+    relatedTopics: ["append", "for 반복문", "필터링", "sum"],
+  },
+  // ── Lesson 18: split과 join ──
+  {
+    id: 540,
+    lessonId: 18,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `s = "a  b   c"
+parts = s.split()
+print(len(parts))
+print(parts[1])`,
+    options: ["3\\nb", "3\\n ", "5\\nb", "오류"],
+    correctAnswer: 0,
+    explanation: "split() 인자 없이 호출하면 공백(스페이스, 탭 등)을 기준으로 분리하고 빈 문자열은 무시합니다. \"a  b   c\"는 ['a', 'b', 'c']로 3개 원소가 됩니다. parts[1] = 'b'.",
+    keyConceptTitle: "split() 인자 없이 호출",
+    keyConceptDescription: "split()에 인자를 주지 않으면 연속된 공백 전체를 하나의 구분자로 처리하고 결과에서 빈 문자열을 제거합니다. split(' ')와 다릅니다.",
+    relatedTopics: ["split", "공백 처리", "문자열 분리"],
+  },
+  {
+    id: 541,
+    lessonId: 18,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `words = ["Hello", "World", "Python"]
+print("-".join(words))
+print("".join(words))`,
+    options: ["Hello-World-Python\\nHelloWorldPython", "Hello World Python\\nHelloWorldPython", "오류", "Hello-World-Python\\nHello World Python"],
+    correctAnswer: 0,
+    explanation: "\"-\".join(words)는 원소 사이에 '-'를 삽입하여 \"Hello-World-Python\". \"\".join(words)는 빈 문자열로 연결하여 \"HelloWorldPython\".",
+    keyConceptTitle: "join() — 구분자로 결합",
+    keyConceptDescription: "join()은 리스트의 문자열 원소를 지정한 구분자로 연결합니다. \"\".join()은 구분자 없이 모두 붙여 연결합니다.",
+    relatedTopics: ["join", "리스트 결합", "문자열 처리"],
+  },
+  // ── Lesson 36: 함수 문제 ──
+  {
+    id: 551,
+    lessonId: 36,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `def greet(name, greeting="Hello"):
+    return f"{greeting}, {name}!"
+
+print(greet("Alice"))
+print(greet("Bob", "Hi"))`,
+    options: ["Hello, Alice!\\nHi, Bob!", "Hello, Alice!\\nHello, Bob!", "오류", "Alice, Hello!\\nBob, Hi!"],
+    correctAnswer: 0,
+    explanation: "greet(\"Alice\")는 greeting 기본값 \"Hello\" 사용 → \"Hello, Alice!\". greet(\"Bob\", \"Hi\")는 greeting에 \"Hi\" 전달 → \"Hi, Bob!\".",
+    keyConceptTitle: "기본 매개변수(default parameter)",
+    keyConceptDescription: "기본값이 있는 매개변수는 인자를 생략하면 기본값을 사용하고, 인자를 전달하면 전달된 값을 사용합니다.",
+    relatedTopics: ["기본 매개변수", "함수", "f-string"],
+  },
+  {
+    id: 552,
+    lessonId: 36,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `def add(a, b):
+    return a + b
+
+def multiply(a, b):
+    return a * b
+
+print(add(multiply(2, 3), multiply(4, 5)))`,
+    options: ["26", "46", "120", "오류"],
+    correctAnswer: 0,
+    explanation: "multiply(2, 3) = 6, multiply(4, 5) = 20. add(6, 20) = 26.",
+    keyConceptTitle: "함수 중첩 호출",
+    keyConceptDescription: "함수의 반환값을 다른 함수의 인자로 바로 사용할 수 있습니다. 안쪽 함수부터 평가되어 결과가 바깥 함수에 전달됩니다.",
+    relatedTopics: ["함수 중첩 호출", "return", "함수 합성"],
+  },
+  // ── Lesson 41: 클래스 기초 ──
+  {
+    id: 553,
+    lessonId: 41,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `class Counter:
+    count = 0
+
+    def __init__(self):
+        Counter.count += 1
+
+c1 = Counter()
+c2 = Counter()
+c3 = Counter()
+print(Counter.count)`,
+    options: ["3", "0", "1", "오류"],
+    correctAnswer: 0,
+    explanation: "count는 클래스 변수로 모든 인스턴스가 공유합니다. 인스턴스를 3번 생성할 때마다 __init__에서 Counter.count가 1씩 증가하므로 최종값은 3.",
+    keyConceptTitle: "클래스 변수 vs 인스턴스 변수",
+    keyConceptDescription: "클래스 변수(Counter.count)는 모든 인스턴스가 공유합니다. 인스턴스 생성 시마다 __init__이 호출되어 클래스 변수를 누적 증가시킬 수 있습니다.",
+    relatedTopics: ["클래스 변수", "__init__", "인스턴스"],
+  },
+  {
+    id: 554,
+    lessonId: 41,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `class Point:
+    def __init__(self, x=0, y=0):
+        self.x = x
+        self.y = y
+
+    def distance(self):
+        return (self.x ** 2 + self.y ** 2) ** 0.5
+
+p = Point(3, 4)
+print(p.distance())`,
+    options: ["5.0", "5", "7.0", "오류"],
+    correctAnswer: 0,
+    explanation: "피타고라스 정리: (3² + 4²)^0.5 = (9 + 16)^0.5 = 25^0.5 = 5.0. **0.5는 제곱근이므로 float를 반환합니다.",
+    keyConceptTitle: "인스턴스 메서드와 self",
+    keyConceptDescription: "인스턴스 메서드는 self를 통해 인스턴스 속성에 접근합니다. distance()는 self.x와 self.y를 사용해 원점까지의 거리를 계산합니다.",
+    relatedTopics: ["인스턴스 메서드", "self", "클래스", "피타고라스"],
+  },
+  // ── Lesson 48: Part 8 문제 ──
+  {
+    id: 555,
+    lessonId: 48,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `import math
+print(math.floor(3.7))
+print(math.ceil(3.2))
+print(math.sqrt(16))`,
+    options: ["3\\n4\\n4.0", "4\\n4\\n4", "3\\n3\\n4.0", "오류"],
+    correctAnswer: 0,
+    explanation: "math.floor(3.7)은 내림으로 3, math.ceil(3.2)은 올림으로 4, math.sqrt(16)은 제곱근으로 4.0(float)을 반환합니다.",
+    keyConceptTitle: "math 모듈 주요 함수",
+    keyConceptDescription: "math.floor()는 내림(≤), math.ceil()은 올림(≥), math.sqrt()는 제곱근을 계산합니다. sqrt()는 항상 float를 반환합니다.",
+    relatedTopics: ["math 모듈", "floor", "ceil", "sqrt"],
+  },
+  {
+    id: 556,
+    lessonId: 9,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `print(int(True))
+print(float(False))
+print(str(None))`,
+    options: ["1\\n0.0\\nNone", "True\\nFalse\\nNone", "1\\n0\\nNone", "오류"],
+    correctAnswer: 0,
+    explanation: "int(True)=1 (bool은 int의 서브클래스). float(False)=0.0. str(None)은 문자열 'None'을 반환합니다. None은 오류 없이 변환됩니다.",
+    keyConceptTitle: "bool과 None의 타입 변환",
+    keyConceptDescription: "bool을 int/float으로 변환하면 True→1/1.0, False→0/0.0. str(None)은 'None' 문자열이 됩니다. None 자체는 오류가 아닙니다.",
+    relatedTopics: ["타입 변환", "bool", "None"],
+  },
+  {
+    id: 557,
+    lessonId: 13,
+    difficulty: "어려움",
+    question: "다음 코드의 출력 결과는?",
+    code: `total = 0
+for i in range(5, 0, -1):
+    if i % 2 != 0:
+        total += i
+print(total)`,
+    options: ["9", "15", "6", "5"],
+    correctAnswer: 0,
+    explanation: "range(5, 0, -1)은 5, 4, 3, 2, 1을 생성합니다. 홀수만 더하면: 5+3+1=9.",
+    keyConceptTitle: "역방향 range와 조건부 누적",
+    keyConceptDescription: "range(start, stop, -1)은 start에서 stop+1까지 감소합니다. 조건과 결합하면 특정 조건의 값만 선택적으로 처리할 수 있습니다.",
+    relatedTopics: ["range", "역방향 반복", "홀수/짝수"],
+  },
 ]

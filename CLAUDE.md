@@ -9,6 +9,23 @@
 - Supabase (인증, DB)
 - `output: export` (정적 빌드) — 동적 라우트 불가, query params 사용
 
+## ⚠️ 레슨 파일 수정 규칙 — 반드시 준수
+
+**레슨 콘텐츠 파일은 선생님이 직접 작성/디버깅한 내용이 들어있다. Write(전체 덮어쓰기)를 사용하면 해당 내용이 영구 손실된다.**
+
+### 절대 규칙
+- `data/cpp/lesson*.ts`, `data/cpp/lessonP*.ts` — **Edit만 사용, Write 금지**
+- `data/lesson*.ts`, `data/lesson*-en.ts` — **Edit만 사용, Write 금지**
+- `data/cpp/lesson*-en.ts` — **Edit만 사용, Write 금지**
+- 예외: 새 파일 생성(기존 파일 없음)은 Write 가능
+
+### 왜 중요한가
+- 과거에 lesson15.ts에서 sort 챕터를 lesson23으로 이동할 때 Write로 통째로 덮어써서 pair 비교/애니메이션 스텝 등 선생님이 작성한 콘텐츠가 손실됨
+- 선생님이 A 작업을 요청했는데 Claude가 "관련된 B 파일도 정리하자"고 판단해서 Write를 쓰면 B에서 손실 발생
+- **요청하지 않은 파일은 건드리지 않는다**
+
+---
+
 ## 퀴즈 시스템 아키텍처
 
 ### 문제 파일

@@ -264,9 +264,7 @@ int main() {
     return 0;
 }`,
           stdin: `7\n3`,
-          expectedOutput: `첫 번째 숫자: 7
-두 번째 숫자: 3
-7 + 3 = 10`
+          expectedOutput: `첫 번째 숫자: 두 번째 숫자: 7 + 3 = 10`
         },
         {
           id: "ch1-q1",

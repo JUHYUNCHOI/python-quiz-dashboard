@@ -287,8 +287,7 @@ int main() {
     return 0;
 }`,
           stdin: `35`,
-          expectedOutput: `HP를 입력하세요: 35
-위험!`
+          expectedOutput: `HP를 입력하세요: 위험!`
         }
       ]
     },
@@ -473,8 +472,7 @@ int main() {
     return 0;
 }`,
           stdin: `50`,
-          expectedOutput: `HP: 50
-생존!`
+          expectedOutput: `HP: 생존!`
         },
         {
           id: "ch3-pred1",

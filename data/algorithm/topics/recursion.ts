@@ -356,6 +356,7 @@ int fib(int n) {
             difficulty: 'bronze',
             link: 'https://www.acmicpc.net/problem/25501',
             simIntro: '회문 검사 재귀가 양쪽 끝에서 어떻게 좁혀가는지 확인해보세요!',
+            sim: { type: 'palindrome-recursion', defaultInput: 'racecar' },
             inputLabel: '입력값 (n)',
             descriptionHTML: `
                 <h3>문제</h3>
@@ -575,6 +576,7 @@ int recursion(string& s, int l, int r) {
             difficulty: 'silver',
             link: 'https://www.acmicpc.net/problem/24060',
             simIntro: '병합 정렬의 분할과 병합 과정에서 값이 저장되는 순서를 확인해보세요!',
+            sim: { type: 'merge-sort-trace', defaultInput: '5\n3 1 4 5 2' },
             inputLabel: '입력값 (N)',
             descriptionHTML: `
                 <h3>문제</h3>
@@ -855,6 +857,7 @@ void merge(int p, int q, int r) {
             difficulty: 'silver',
             link: 'https://www.acmicpc.net/problem/4779',
             simIntro: '칸토어 집합에서 가운데 1/3이 어떻게 재귀적으로 빠지는지 확인해보세요!',
+            sim: { type: 'cantor', defaultInput: '3' },
             inputLabel: '입력값 (N)',
             descriptionHTML: `
                 <h3>문제</h3>
@@ -1072,6 +1075,7 @@ memset으로 대시 초기화 후 cantor 호출.`,
             difficulty: 'silver',
             link: 'https://www.acmicpc.net/problem/2447',
             simIntro: '9x9 별 패턴에서 가운데 블록이 재귀적으로 비워지는 과정을 확인해보세요!',
+            sim: { type: 'star-fractal', defaultInput: '9' },
             inputLabel: '입력값 (N)',
             descriptionHTML: `
                 <h3>문제</h3>
@@ -1271,6 +1275,7 @@ void star(int r, int c, int size) {
             difficulty: 'silver',
             link: 'https://www.acmicpc.net/problem/11729',
             simIntro: '3개 원판의 하노이 탑이 7번의 이동으로 어떻게 옮겨지는지 확인해보세요!',
+            sim: { type: 'hanoi', defaultInput: '3' },
             inputLabel: '입력값 (N)',
             descriptionHTML: `
                 <h3>문제</h3>
