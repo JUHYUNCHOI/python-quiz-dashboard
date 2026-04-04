@@ -202,10 +202,10 @@ Commas automatically add a **space** between values!`
           type: "mission",
           title: "🏆 Final Mission!",
           task: "Complete the game character info!",
-          initialCode: "print(f'=== 🎮 캐릭터 정보 ===')\n\nname = '용사'\nlevel = 5\nhp = ___\nattack = ___\n\nprint(f'이름: {name}')\nprint(f'레벨: {level}')\nprint(f'체력: {hp}')\nprint(f'공격력: {attack}')\nprint(f'=== 모험을 시작하자! ===')",
-          expectedOutput: "=== 🎮 캐릭터 정보 ===\n이름: 용사\n레벨: 5\n체력: 100\n공격력: 25\n=== 모험을 시작하자! ===",
-          hint: "Set hp to 100 and attack to 25!",
-          hint2: "hp = 100\nattack = 25"
+          initialCode: "print('=== 🎮 Character Info ===')\nprint('Name: Hero')\nprint('Level: 5')\nprint('HP: ___')\nprint('Attack: ___')\nprint('=== Let the adventure begin! ===')",
+          expectedOutput: "=== 🎮 Character Info ===\nName: Hero\nLevel: 5\nHP: 100\nAttack: 25\n=== Let the adventure begin! ===",
+          hint: "Fill in the numbers inside print()!",
+          hint2: "print('HP: 100')\nprint('Attack: 25')"
         },
         {
           id: "complete",

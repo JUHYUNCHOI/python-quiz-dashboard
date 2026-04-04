@@ -202,10 +202,10 @@ print('나이:', 15, '살')
           type: "mission",
           title: "🏆 최종 미션!",
           task: "게임 캐릭터 정보를 완성하세요!",
-          initialCode: "print(f'=== 🎮 캐릭터 정보 ===')\n\nname = '용사'\nlevel = 5\nhp = ___\nattack = ___\n\nprint(f'이름: {name}')\nprint(f'레벨: {level}')\nprint(f'체력: {hp}')\nprint(f'공격력: {attack}')\nprint(f'=== 모험을 시작하자! ===')",
+          initialCode: "print('=== 🎮 캐릭터 정보 ===')\nprint('이름: 용사')\nprint('레벨: 5')\nprint('체력: ___')\nprint('공격력: ___')\nprint('=== 모험을 시작하자! ===')",
           expectedOutput: "=== 🎮 캐릭터 정보 ===\n이름: 용사\n레벨: 5\n체력: 100\n공격력: 25\n=== 모험을 시작하자! ===",
-          hint: "hp에 100, attack에 25를 저장하세요!",
-          hint2: "hp = 100\nattack = 25"
+          hint: "print() 안에 숫자를 채워보세요!",
+          hint2: "print('체력: 100')\nprint('공격력: 25')"
         },
         {
           id: "complete",
