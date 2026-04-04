@@ -92,7 +92,7 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
           className="flex items-center gap-1.5 text-sm text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
         >
           <Lightbulb className="w-4 h-4" />
-          {showHint ? t("힌트 숨기기", "Hide hint") : t("💡 힌트 보기", "💡 Show hint")}
+          {showHint ? t("힌트 숨기기", "Hide hint") : t("힌트 보기", "Show hint")}
         </button>
       )}
       {showHint && selectedAnswer === null && (

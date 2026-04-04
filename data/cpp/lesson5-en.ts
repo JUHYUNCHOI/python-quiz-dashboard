@@ -111,34 +111,31 @@ cout << 15 % 4;  // 3 (15 = 4 × 3 + 3)
         {
           id: "ch1-practice",
           type: "practice" as const,
-          title: "✋ Battle Damage Calculator!",
-          content: `Let's make a calculator that takes attack and defense values and shows battle results!
+          title: "✋ Arithmetic Calculator!",
+          content: `Take two integers as input and output all 5 arithmetic results!
 
-Pay attention to the integer division result — you'll see the decimal part disappear when halving damage!`,
+Check the integer division result — you'll see the decimal part disappear!`,
           code: `#include <iostream>
 using namespace std;
 
 int main() {
-    int attack, defense;
-    cout << "Attack: ";
-    cin >> attack;
-    cout << "Defense: ";
-    cin >> defense;
+    int a, b;
+    cin >> a >> b;
 
-    cout << "Damage: " << attack - defense << endl;
-    cout << "Double attack: " << attack * 2 << endl;
-    cout << "Half damage: " << attack / 2 << endl;
-    cout << "Remainder: " << attack % defense << endl;
+    cout << a << " + " << b << " = " << a + b << endl;
+    cout << a << " - " << b << " = " << a - b << endl;
+    cout << a << " * " << b << " = " << a * b << endl;
+    cout << a << " / " << b << " = " << a / b << endl;
+    cout << a << " % " << b << " = " << a % b << endl;
 
     return 0;
 }`,
           stdin: `25\n10`,
-          expectedOutput: `Attack: 25
-Defense: 10
-Damage: 15
-Double attack: 50
-Half damage: 12
-Remainder: 5`
+          expectedOutput: `25 + 10 = 35
+25 - 10 = 15
+25 * 10 = 250
+25 / 10 = 2
+25 % 10 = 5`
         },
         {
           id: "ch1-q1",

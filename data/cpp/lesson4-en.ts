@@ -141,9 +141,7 @@ int main() {
 
     return 0;
 }`,
-          expectedOutput: `Enter your name: Emma
-Enter your age: 14
-Hello, Emma! You are 14 years old!`
+          stdin: `Emma\n14`
         },
         {
           id: "ch1-q1",
@@ -309,9 +307,7 @@ int main() {
 
     return 0;
 }`,
-          expectedOutput: `Age: 14
-Favorite food: chicken burger
-14 years old, favorite food: chicken burger`
+          stdin: `14\nchicken burger`
         },
         {
           id: "ch2-q1",

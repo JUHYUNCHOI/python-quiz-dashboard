@@ -111,34 +111,31 @@ cout << 15 % 4;  // 3 (15 = 4 × 3 + 3)
         {
           id: "ch1-practice",
           type: "practice" as const,
-          title: "✋ 전투 데미지 계산기!",
-          content: `공격력과 방어력을 입력받아서 전투 계산 결과를 출력해봐요!
+          title: "✋ 사칙연산 계산기!",
+          content: `두 정수를 입력받아 5가지 연산 결과를 출력하세요!
 
-정수 나눗셈으로 데미지를 반으로 줄이는 것도 확인해보세요 — 소수점이 사라지는 걸 직접 볼 수 있어요!`,
+정수 나눗셈 결과도 확인해보세요 — 소수점이 사라지는 걸 직접 볼 수 있어요!`,
           code: `#include <iostream>
 using namespace std;
 
 int main() {
-    int attack, defense;
-    cout << "공격력: ";
-    cin >> attack;
-    cout << "방어력: ";
-    cin >> defense;
+    int a, b;
+    cin >> a >> b;
 
-    cout << "데미지: " << attack - defense << endl;
-    cout << "2배 공격: " << attack * 2 << endl;
-    cout << "절반 데미지: " << attack / 2 << endl;
-    cout << "나머지: " << attack % defense << endl;
+    cout << a << " + " << b << " = " << a + b << endl;
+    cout << a << " - " << b << " = " << a - b << endl;
+    cout << a << " * " << b << " = " << a * b << endl;
+    cout << a << " / " << b << " = " << a / b << endl;
+    cout << a << " % " << b << " = " << a % b << endl;
 
     return 0;
 }`,
           stdin: `25\n10`,
-          expectedOutput: `공격력: 25
-방어력: 10
-데미지: 15
-2배 공격: 50
-절반 데미지: 12
-나머지: 5`
+          expectedOutput: `25 + 10 = 35
+25 - 10 = 15
+25 * 10 = 250
+25 / 10 = 2
+25 % 10 = 5`
         },
         {
           id: "ch1-q1",

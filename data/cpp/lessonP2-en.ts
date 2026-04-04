@@ -1,6 +1,6 @@
 // ============================================
 // C++ Project 2: RPG Character Manager
-// Part 2 Review Project (struct, vector, range-for, reference)
+// Part 2 Review Project (struct, class, vector, range-for, reference, string)
 // ============================================
 import { LessonData } from '../types'
 
@@ -8,133 +8,160 @@ export const cppLessonP2EnData: LessonData = {
   id: "cpp-p2",
   title: "RPG Character Manager",
   emoji: "⚔️",
-  description: "Part 2 Review Project! Manage an RPG party with struct and vector.",
+  description: "Part 2 Review Project! Build an RPG party manager using only what you've learned.",
   chapters: [
     // ============================================
-    // Chapter 1: Character Design
+    // Chapter 1: Character & Item Design
     // ============================================
     {
       id: "ch1",
-      title: "Character Design",
+      title: "Character & Item Design",
       emoji: "📋",
       steps: [
         {
           id: "ch1-exp1",
           type: "explain",
-          title: "⚔️ Project Intro — RPG Character Manager!",
-          content: `In this project, we'll use everything from Part 2 — **struct, vector, range-for, reference** — to build an RPG party manager!
+          title: "⚔️ Project Intro",
+          content: `In this project, we'll use **only** concepts from Part 2 to build an RPG party manager.
 
-When finished, it will show this menu:
+**Concepts used in this project:**
+
+| Lesson | Concept | Where it's used |
+|---|---|---|
+| Lesson 9 | vector, push_back | Party & inventory |
+| Lesson 11 | range-for, auto | Printing party/inventory |
+| Lesson 12 | string operations | Level text, item search |
+| Lesson 13 | reference (&) | Level up & equip functions |
+| Lesson 15 | struct | Item type |
+| Lesson 16 | class, constructor | Character type |
+
+No new syntax — just combining what you've learned!
+
+When finished, the program looks like this:
 
 \`\`\`
-=== RPG Party Manager ===
-1. Add Character
-2. View Party
-3. Battle!
-4. Quit
-Choice: _
-\`\`\`
+=== Party Status (2 members) ===
+Warrior [HP:100 ATK:20 DEF:10 LV1]
+Mage    [HP:80  ATK:20 DEF:5  LV1]
 
-In Python, you'd use a **class** for this, right?
-
-\`\`\`python
-class Character:
-    def __init__(self, name, hp, attack, defense):
-        self.name = name
-        self.hp = hp
-        self.attack = attack
-        self.defense = defense
-        self.level = 1
-\`\`\`
-
-In C++, we use **struct**! When you just need to bundle data, struct is perfect.
-
-| Python 🐍 | C++ ⚡ |
-|---|---|
-| \`class Character:\` | \`struct Character { };\` |
-| \`self.name\` | \`c.name\` |
-| \`characters = []\` | \`vector<Character> party;\` |
-| \`characters.append(c)\` | \`party.push_back(c);\` |
-| \`for c in characters:\` | \`for (const auto& c : party)\` |
-
-💡 This project puts ALL of Part 2's core concepts to work!`
+Warrior equipped Iron Sword!
+Warrior vs Slime!
+Warrior attacks! 17 damage
+Slime defeated!
+Warrior leveled up! LV2
+\`\`\``
         },
         {
           id: "ch1-exp2",
           type: "explain",
-          title: "📋 Designing the Character Struct",
-          content: `What info does an RPG character need?
-
-- **name** — Warrior, Mage, Archer...
-- **hp** — Goes down when hit by monsters
-- **attack** — Damage dealt to monsters
-- **defense** — Reduces incoming damage
-- **level** — Goes up when you win battles!
-
-As a C++ struct:
+          title: "📋 Designing the Character Class",
+          content: `Let's define what an RPG character needs using **class**. (Lesson 16)
 
 \`\`\`cpp
-struct Character {
+class Character {
+public:
     string name;
     int hp;
     int attack;
     int defense;
     int level;
+
+    Character(string n, int h, int a, int d) {
+        name = n;
+        hp = h;
+        attack = a;
+        defense = d;
+        level = 1;  // always starts at 1
+    }
 };
 \`\`\`
 
-The Python dict equivalent would be:
-
-\`\`\`python
-hero = {
-    "name": "Warrior",
-    "hp": 100,
-    "attack": 15,
-    "defense": 10,
-    "level": 1
-}
-\`\`\`
-
-But struct is **safer** than a dict! Typos cause compile errors:
+The constructor lets us create characters like this:
 
 \`\`\`cpp
-Character hero;
-hero.name = "Warrior";     // OK
-hero.nmae = "Warrior";     // Compile error! Catches your typo
+Character hero("Warrior", 100, 15, 10);
+cout << hero.name;   // Warrior
+cout << hero.hp;     // 100
+cout << hero.level;  // 1
 \`\`\`
 
-\`\`\`python
-hero["nmae"] = "Warrior"   # No error... bug waiting to happen 😱
-\`\`\`
-
-💡 Structs provide **type safety** — bugs get caught before the program even runs!`
+💡 As you learned in Lesson 16 — class is safer than a dict. Typos become compile errors instead of hidden bugs!`
         },
         {
           id: "ch1-fb1",
           type: "fillblank" as const,
-          title: "Fill in the blanks",
-          content: "Build the Character struct!",
-          code: "___ Character {\n    string name;\n    int hp;\n    int attack;\n    int defense;\n    int ___;\n}___",
+          title: "Complete the Character class",
+          content: "Fill in the blanks to finish the Character class.",
+          code: "___ Character {\n___:\n    string name;\n    int hp;\n    int attack;\n    int defense;\n    int level;\n    Character(string n, int h, int a, int d) {\n        name = n; hp = h; attack = a; defense = d; level = 1;\n    }\n};",
           fillBlanks: [
-            { id: 0, answer: "struct", options: ["struct", "class", "type", "object"] },
-            { id: 1, answer: "level", options: ["level", "lv", "exp", "rank"] },
-            { id: 2, answer: ";", options: [";", "", ":", ")"] }
+            { id: 0, answer: "class", options: ["class", "struct", "type", "object"] },
+            { id: 1, answer: "public", options: ["public", "private", "protected", "open"] }
           ],
-          explanation: "Use the struct keyword to declare, and don't forget the semicolon (;) after the closing brace! The level member is an int type."
+          explanation: "Declare with class, and use public: so members can be accessed from outside!"
+        },
+        {
+          id: "ch1-exp3",
+          type: "explain",
+          title: "🗡️ Designing struct Item + string operations",
+          content: `Characters can hold items! Use **struct** for the Item type. (Lesson 15)
+
+\`\`\`cpp
+struct Item {
+    string name;    // item name
+    int atkBonus;   // attack bonus
+    int hpBonus;    // HP bonus
+};
+\`\`\`
+
+struct is simpler than class — use it when you just need to bundle data:
+
+\`\`\`cpp
+Item sword = {"Iron Sword", 5, 0};
+Item potion = {"Health Potion", 0, 30};
+
+cout << sword.name;      // Iron Sword
+cout << sword.atkBonus;  // 5
+\`\`\`
+
+---
+
+**String operations** (Lesson 12) fit naturally here:
+
+\`\`\`cpp
+// to_string(): number → string
+string info = sword.name + " (ATK+" + to_string(sword.atkBonus) + ")";
+cout << info;   // Iron Sword (ATK+5)
+
+// find(): check if name contains "Sword"
+if (sword.name.find("Sword") != string::npos) {
+    cout << "This is a weapon!";
+}
+
+// length(): name length
+cout << sword.name.length();  // 10
+\`\`\`
+
+💡 \`string::npos\` means "not found". If \`find()\` returns this value, the substring isn't there.`
         },
         {
           id: "ch1-quiz1",
           type: "quiz",
-          title: "struct vs class!",
-          content: "What is the **biggest difference** between struct and class in C++?",
-          options: [
-            "struct cannot have functions",
-            "struct members are public by default",
-            "struct cannot use inheritance",
-            "struct cannot have a constructor"
-          ],
+          title: "Constructor check!",
+          content: `What is the value of \`hero.level\` after \`Character hero("Warrior", 100, 15, 10)\`?
+
+\`\`\`cpp
+class Character {
+public:
+    string name;
+    int hp, attack, defense, level;
+    Character(string n, int h, int a, int d) {
+        name = n; hp = h; attack = a; defense = d; level = 1;
+    }
+};
+\`\`\``,
+          options: ["0", "1", "10", "Compile error"],
           answer: 1,
-          explanation: "struct members are public by default, while class members are private by default. Other than that, they're almost identical! struct is convenient when you just need to bundle data."
+          explanation: "The constructor sets level = 1 automatically! Even though we didn't pass a level argument, it's always initialized to 1."
         }
       ]
     },
@@ -149,199 +176,162 @@ hero["nmae"] = "Warrior"   # No error... bug waiting to happen 😱
         {
           id: "ch2-exp1",
           type: "explain",
-          title: "🔨 Step 1 — Struct Definition + Character Creation",
-          content: `First, let's define the Character struct and write a function to create characters!
+          title: "🔨 Step 1 — Print function",
+          content: `Write a function to print character info. (Lesson 13 — references)
 
-**createCharacter function:**
-\`\`\`cpp
-Character createCharacter(string name, int hp, int atk, int def) {
-    return {name, hp, atk, def, 1};  // level starts at 1
-}
-\`\`\`
-
-Brace initialization \`{name, hp, atk, def, 1}\` makes creating structs super easy!
-
-**printCharacter function:**
 \`\`\`cpp
 void printCharacter(const Character& c) {
-    cout << "=== " << c.name << " ===" << endl;
-    cout << "HP: " << c.hp << endl;
+    string lvInfo = "LV" + to_string(c.level);  // Lesson 12
+    cout << c.name << " [HP:" << c.hp
+         << " ATK:" << c.attack
+         << " DEF:" << c.defense
+         << " " << lvInfo << "]" << endl;
 }
 \`\`\`
 
-\`const Character& c\` is important here!
-- \`const\` → promises we **won't modify** the character inside the function
-- \`&\` → passes by **reference** instead of copying (efficient!)
+In \`const Character& c\`:
+- \`&\` → passes by **reference**, no copying (Lesson 13)
+- \`const\` → we **won't modify** the character inside the function
 
-In Python, you never had to worry about this! In C++, **you manage performance directly**.
-
-💡 Read-only functions → use \`const Type&\` parameters. It's a great habit!`
+💡 Read-only functions → \`const Type&\`, modifying functions → \`Type&\``
         },
         {
           id: "ch2-prac1",
           type: "practice" as const,
-          title: "✋ Step 1 — Struct + Creation Function!",
-          content: `Define the Character struct, create characters with createCharacter(), and print them with printCharacter()!
-
-Notice how we use \`const Character&\` for pass-by-reference!`,
+          title: "✋ Step 1 — Create and print characters!",
+          content: `Define the Character class, create two characters, and print them.`,
           code: `#include <iostream>
-#include <vector>
 #include <string>
 using namespace std;
 
-struct Character {
+class Character {
+public:
     string name;
     int hp;
     int attack;
     int defense;
     int level;
+
+    Character(string n, int h, int a, int d) {
+        name = n;
+        hp = h;
+        attack = a;
+        defense = d;
+        level = 1;
+    }
 };
 
-Character createCharacter(string name, int hp, int atk, int def) {
-    return {name, hp, atk, def, 1};
-}
-
 void printCharacter(const Character& c) {
-    cout << "=== " << c.name << " ===" << endl;
-    cout << "  HP: " << c.hp << endl;
-    cout << "  ATK: " << c.attack << endl;
-    cout << "  DEF: " << c.defense << endl;
-    cout << "  LV: " << c.level << endl;
+    string lvInfo = "LV" + to_string(c.level);
+    cout << c.name << " [HP:" << c.hp
+         << " ATK:" << c.attack
+         << " DEF:" << c.defense
+         << " " << lvInfo << "]" << endl;
 }
 
 int main() {
-    Character hero = createCharacter("Warrior", 100, 15, 10);
-    printCharacter(hero);
+    Character hero("Warrior", 100, 15, 10);
+    Character mage("Mage", 80, 20, 5);
 
-    Character mage = createCharacter("Mage", 80, 20, 5);
+    printCharacter(hero);
     printCharacter(mage);
 
     return 0;
 }`,
-          expectedOutput: `=== Warrior ===
-  HP: 100
-  ATK: 15
-  DEF: 10
-  LV: 1
-=== Mage ===
-  HP: 80
-  ATK: 20
-  DEF: 5
-  LV: 1`
+          expectedOutput: `Warrior [HP:100 ATK:15 DEF:10 LV1]
+Mage [HP:80 ATK:20 DEF:5 LV1]`
         },
         {
           id: "ch2-exp2",
           type: "explain",
-          title: "🔨 Step 2 — Managing a Party with vector!",
-          content: `Now let's manage multiple characters with a **vector**!
+          title: "🔨 Step 2 — Manage party with vector",
+          content: `Manage multiple characters with a **vector**. (Lesson 9)
 
 \`\`\`cpp
 vector<Character> party;
+
+// push_back with constructor call
+party.push_back(Character("Warrior", 100, 15, 10));
+party.push_back(Character("Mage", 80, 20, 5));
 \`\`\`
 
-In Python, that would be:
-\`\`\`python
-party = []  # lists can hold any type, but...
-\`\`\`
+Print the full party with **range-for**! (Lesson 11)
 
-C++ uses \`vector<Character>\` to **explicitly specify** what type is stored!
-
-**Showing the party — range-for + auto:**
 \`\`\`cpp
 void showParty(const vector<Character>& party) {
-    for (const auto& c : party) {
-        cout << c.name << " [HP:" << c.hp << "]" << endl;
+    cout << "=== Party (" << party.size() << " members) ===" << endl;
+    for (const auto& c : party) {   // Lesson 11 range-for
+        printCharacter(c);
     }
 }
 \`\`\`
 
-Why \`const vector<Character>&\`?
-- No **copying** the entire vector (reference!)
-- No **modifying** it inside the function (const!)
-
-**Adding characters — reference for modification:**
-\`\`\`cpp
-void addCharacter(vector<Character>& party) {
-    // Need to modify party directly, so just & without const!
-    party.push_back({name, hp, atk, def, 1});
-}
-\`\`\`
-
-- Read-only: \`const vector<Character>&\` (showParty)
-- Modifiable: \`vector<Character>&\` (addCharacter)
-
-💡 The presence or absence of const with & tells you "read-only vs. modifiable"!`
+\`const vector<Character>&\`:
+- \`&\` → no copying the whole vector (Lesson 13)
+- \`const\` → we won't modify it`
         },
         {
           id: "ch2-prac2",
           type: "practice" as const,
-          title: "✋ Step 2 — Party Management Code!",
-          content: `Manage a party with vector<Character>, and build showParty / addCharacter functions!
-
-The key pattern is the range-for: \`for (const auto& c : party)\`!`,
+          title: "✋ Step 2 — Party list!",
+          content: `Create a party vector, add characters, and print the list.`,
           code: `#include <iostream>
 #include <vector>
 #include <string>
 using namespace std;
 
-struct Character {
+class Character {
+public:
     string name;
     int hp;
     int attack;
     int defense;
     int level;
+
+    Character(string n, int h, int a, int d) {
+        name = n;
+        hp = h;
+        attack = a;
+        defense = d;
+        level = 1;
+    }
 };
 
-void showParty(const vector<Character>& party) {
-    if (party.empty()) {
-        cout << "Party is empty!" << endl;
-        return;
-    }
-    cout << endl;
-    cout << "=== Party List (" << party.size() << " members) ===" << endl;
-    for (const auto& c : party) {
-        cout << "  " << c.name
-             << " [HP:" << c.hp
-             << " ATK:" << c.attack
-             << " DEF:" << c.defense
-             << " LV:" << c.level << "]" << endl;
-    }
+void printCharacter(const Character& c) {
+    cout << c.name << " [HP:" << c.hp
+         << " ATK:" << c.attack
+         << " DEF:" << c.defense
+         << " LV:" << c.level << "]" << endl;
 }
 
-void addCharacter(vector<Character>& party) {
-    string name;
-    int hp, atk, def;
-    cout << "Name: "; cin >> name;
-    cout << "HP: "; cin >> hp;
-    cout << "Attack: "; cin >> atk;
-    cout << "Defense: "; cin >> def;
-    party.push_back({name, hp, atk, def, 1});
-    cout << name << " has joined the party!" << endl;
+void showParty(const vector<Character>& party) {
+    cout << "=== Party (" << party.size() << " members) ===" << endl;
+    for (const auto& c : party) {
+        printCharacter(c);
+    }
 }
 
 int main() {
     vector<Character> party;
-    party.push_back({"Warrior", 100, 15, 10, 1});
-    party.push_back({"Mage", 80, 20, 5, 1});
+    party.push_back(Character("Warrior", 100, 15, 10));
+    party.push_back(Character("Mage", 80, 20, 5));
 
     showParty(party);
-    addCharacter(party);
+
+    party.push_back(Character("Archer", 90, 18, 8));
+    cout << "Archer joined the party!" << endl;
+
     showParty(party);
     return 0;
 }`,
-          expectedOutput: `=== Party List (2 members) ===
-  Warrior [HP:100 ATK:15 DEF:10 LV:1]
-  Mage [HP:80 ATK:20 DEF:5 LV:1]
-Name: Archer
-HP: 90
-Attack: 18
-Defense: 8
-Archer has joined the party!
-
-=== Party List (3 members) ===
-  Warrior [HP:100 ATK:15 DEF:10 LV:1]
-  Mage [HP:80 ATK:20 DEF:5 LV:1]
-  Archer [HP:90 ATK:18 DEF:8 LV:1]`
+          expectedOutput: `=== Party (2 members) ===
+Warrior [HP:100 ATK:15 DEF:10 LV:1]
+Mage [HP:80 ATK:20 DEF:5 LV:1]
+Archer joined the party!
+=== Party (3 members) ===
+Warrior [HP:100 ATK:15 DEF:10 LV:1]
+Mage [HP:80 ATK:20 DEF:5 LV:1]
+Archer [HP:90 ATK:18 DEF:8 LV:1]`
         },
         {
           id: "ch2-pred1",
@@ -349,120 +339,276 @@ Archer has joined the party!
           title: "Predict the party size!",
           code: `#include <iostream>
 #include <vector>
+#include <string>
 using namespace std;
 
-struct Character {
+class Character {
+public:
     string name;
     int hp, attack, defense, level;
+    Character(string n, int h, int a, int d) {
+        name = n; hp = h; attack = a; defense = d; level = 1;
+    }
 };
 
 int main() {
     vector<Character> party;
-    party.push_back({"Warrior", 100, 15, 10, 1});
-    party.push_back({"Mage", 80, 20, 5, 1});
-    party.push_back({"Archer", 90, 18, 8, 1});
+    party.push_back(Character("Warrior", 100, 15, 10));
+    party.push_back(Character("Mage", 80, 20, 5));
+    party.push_back(Character("Archer", 90, 18, 8));
     party.pop_back();
-    party.push_back({"Healer", 70, 8, 12, 1});
-    party.push_back({"Rogue", 85, 22, 6, 1});
+    party.push_back(Character("Healer", 70, 8, 12));
+    party.push_back(Character("Rogue", 85, 22, 6));
     cout << party.size();
     return 0;
 }`,
           options: ["3", "4", "5", "Error"],
           answer: 1,
-          explanation: "Start with 3 → pop_back() removes Archer → 2 → add Healer → 3 → add Rogue → 4! party.size() is 4."
+          explanation: "Add 3 → pop_back() removes Archer → 2 → add Healer → 3 → add Rogue → 4! party.size() is 4."
         },
         {
-          id: "ch2-exp3",
+          id: "ch2-exp-item",
           type: "explain",
-          title: "🔨 Step 3 — Battle System!",
-          content: `Now the most fun part — the **battle system**!
+          title: "🗡️ Step 3 — Item equip system",
+          content: `Add an **inventory** to the Character class. (Lesson 9 vector + Lesson 15 struct)
 
-**Random monster generation:**
 \`\`\`cpp
-#include <cstdlib>  // rand(), srand()
-#include <ctime>    // time()
+class Character {
+public:
+    string name;
+    int hp, attack, defense, level;
+    vector<Item> inventory;   // vector of structs! (Lesson 9)
 
-// Call once in main()
-srand(time(0));
-
-// Random monster
-int monsterHp = 30 + rand() % 71;      // 30~100
-int monsterAtk = 5 + rand() % 16;      // 5~20
+    Character(string n, int h, int a, int d) {
+        name = n; hp = h; attack = a; defense = d; level = 1;
+    }
+};
 \`\`\`
 
-Similar to Python's \`random.randint(30, 100)\`!
+The equip function uses **reference (&)** to modify the character directly: (Lesson 13)
 
-**Damage calculation:**
 \`\`\`cpp
-int damage = attacker.attack - target_defense;
-if (damage < 1) damage = 1;  // minimum 1 damage
-\`\`\`
-
-**Leveling up:**
-\`\`\`cpp
-void levelUp(Character& c) {  // & to modify directly!
-    c.level++;
-    c.hp += 10;
-    c.attack += 3;
-    c.defense += 2;
-    cout << c.name << " leveled up! LV " << c.level << "!" << endl;
+void equip(Character& c, Item item) {
+    c.attack += item.atkBonus;
+    c.hp += item.hpBonus;
+    c.inventory.push_back(item);
+    cout << c.name << " equipped " << item.name << "!" << endl;
 }
 \`\`\`
 
-\`Character& c\` is needed to modify the **original character**! Without \`&\`, only a copy gets changed and the original stays the same.
+Show inventory with range-for: (Lesson 11)
 
-💡 To modify a struct inside a function, you MUST use a **reference (&)**!`
+\`\`\`cpp
+void showInventory(const Character& c) {
+    cout << c.name << "'s inventory:" << endl;
+    for (const auto& item : c.inventory) {
+        string info = item.name + " (ATK+" + to_string(item.atkBonus)
+                    + " HP+" + to_string(item.hpBonus) + ")";
+        cout << "  " << info << endl;
+    }
+}
+\`\`\``
         },
         {
-          id: "ch2-prac3",
+          id: "ch2-prac-item",
           type: "practice" as const,
-          title: "✋ Step 3 — Complete RPG Program!",
-          content: `The full program is here! It uses struct, vector, range-for, references, and functions all together.
-
-Choose 1-4 from the menu to add characters, view party, battle, or quit!`,
+          title: "✋ Step 3 — Create items and equip!",
+          content: `Create struct Items and equip them to a character. Check that stats increase!`,
           code: `#include <iostream>
 #include <vector>
 #include <string>
-#include <cstdlib>
-#include <ctime>
 using namespace std;
 
-struct Character {
+struct Item {
+    string name;
+    int atkBonus;
+    int hpBonus;
+};
+
+class Character {
+public:
     string name;
     int hp;
     int attack;
     int defense;
     int level;
+    vector<Item> inventory;
+
+    Character(string n, int h, int a, int d) {
+        name = n; hp = h; attack = a; defense = d; level = 1;
+    }
 };
 
+void equip(Character& c, Item item) {
+    c.attack += item.atkBonus;
+    c.hp += item.hpBonus;
+    c.inventory.push_back(item);
+    cout << c.name << " equipped " << item.name << "!" << endl;
+}
+
+void showInventory(const Character& c) {
+    cout << c.name << "'s inventory (" << c.inventory.size() << "):" << endl;
+    for (const auto& item : c.inventory) {
+        string info = item.name + " (ATK+" + to_string(item.atkBonus)
+                    + " HP+" + to_string(item.hpBonus) + ")";
+        cout << "  " << info << endl;
+    }
+    cout << "Current stats — ATK:" << c.attack << " HP:" << c.hp << endl;
+}
+
+int main() {
+    Character hero("Warrior", 100, 15, 10);
+
+    Item sword = {"Iron Sword", 5, 0};
+    Item armor = {"Leather Armor", 0, 20};
+
+    equip(hero, sword);
+    equip(hero, armor);
+    showInventory(hero);
+
+    return 0;
+}`,
+          expectedOutput: `Warrior equipped Iron Sword!
+Warrior equipped Leather Armor!
+Warrior's inventory (2):
+  Iron Sword (ATK+5 HP+0)
+  Leather Armor (ATK+0 HP+20)
+Current stats — ATK:20 HP:120`
+        },
+        {
+          id: "ch2-exp3",
+          type: "explain",
+          title: "🔨 Step 4 — Level up (modify with reference)",
+          content: `When a character wins a battle, they get stronger. Use **reference (&)** to modify the original. (Lesson 13)
+
+\`\`\`cpp
+void levelUp(Character& c) {   // & → modifies original!
+    c.level++;
+    c.hp += 10;
+    c.attack += 3;
+    c.defense += 2;
+    cout << c.name << " leveled up! LV" << c.level << endl;
+}
+\`\`\`
+
+Without \`&\`, only a **copy** gets changed — the original party member stays the same:
+
+\`\`\`cpp
+void levelUp(Character c) {    // no & → modifies copy only!
+    c.level++;  // won't affect the actual party!
+}
+\`\`\`
+
+💡 To modify a class object inside a function, you MUST use \`&\`!`
+        },
+        {
+          id: "ch2-exp4",
+          type: "explain",
+          title: "🔨 Step 5 — Battle system",
+          content: `Simple battle system — just damage calculation, no randomness!
+
+\`\`\`cpp
+void battle(Character& hero) {
+    // Fixed monster stats
+    string monsterName = "Slime";
+    int monsterHp = 50;
+    int monsterAtk = 8;
+    int monsterDef = 3;
+
+    cout << hero.name << " vs " << monsterName << "!" << endl;
+
+    // Damage = attack - defense (minimum 1)
+    int heroDmg = hero.attack - monsterDef;
+    if (heroDmg < 1) heroDmg = 1;
+
+    int monsterDmg = monsterAtk - hero.defense;
+    if (monsterDmg < 1) monsterDmg = 1;
+
+    monsterHp -= heroDmg;
+    cout << hero.name << " attacks! " << heroDmg << " damage" << endl;
+
+    if (monsterHp <= 0) {
+        cout << monsterName << " defeated!" << endl;
+        levelUp(hero);   // level up! (passed by reference)
+    } else {
+        hero.hp -= monsterDmg;
+        cout << monsterName << " counterattacks! " << monsterDmg << " damage" << endl;
+        cout << hero.name << " HP: " << hero.hp << endl;
+    }
+}
+\`\`\`
+
+\`Character& hero\` means level up results are immediately reflected in the party.`
+        },
+        {
+          id: "ch2-prac3",
+          type: "practice" as const,
+          title: "✋ Complete — Full RPG Program!",
+          content: `struct, class, vector, range-for, references, and string operations all in one program.
+
+Choose 1–5 from the menu!`,
+          code: `#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+// ── struct: Lesson 15 ─────────────────────────
+struct Item {
+    string name;
+    int atkBonus;
+    int hpBonus;
+};
+
+// ── class: Lesson 16 ─────────────────────────
+class Character {
+public:
+    string name;
+    int hp;
+    int attack;
+    int defense;
+    int level;
+    vector<Item> inventory;   // vector of struct: Lesson 9
+
+    Character(string n, int h, int a, int d) {
+        name = n; hp = h; attack = a; defense = d; level = 1;
+    }
+};
+
+// ── const reference for reading: Lesson 13 ───
 void printCharacter(const Character& c) {
-    cout << "  " << c.name
-         << " [HP:" << c.hp
+    string lvInfo = "LV" + to_string(c.level);  // Lesson 12
+    cout << c.name << " [HP:" << c.hp
          << " ATK:" << c.attack
          << " DEF:" << c.defense
-         << " LV:" << c.level << "]" << endl;
+         << " " << lvInfo << "]" << endl;
 }
 
 void showParty(const vector<Character>& party) {
-    if (party.empty()) {
-        cout << "Party is empty!" << endl;
-        return;
-    }
-    cout << "=== Party List (" << party.size() << " members) ===" << endl;
-    for (const auto& c : party) {
+    cout << "=== Party (" << party.size() << " members) ===" << endl;
+    for (const auto& c : party) {   // range-for: Lesson 11
         printCharacter(c);
     }
 }
 
-void addCharacter(vector<Character>& party) {
-    string name;
-    int hp, atk, def;
-    cout << "Name: "; cin >> name;
-    cout << "HP: "; cin >> hp;
-    cout << "Attack: "; cin >> atk;
-    cout << "Defense: "; cin >> def;
-    party.push_back({name, hp, atk, def, 1});
-    cout << name << " has joined the party!" << endl;
+// ── reference for modification: Lesson 13 ────
+void equip(Character& c, Item item) {
+    c.attack += item.atkBonus;
+    c.hp += item.hpBonus;
+    c.inventory.push_back(item);
+    cout << c.name << " equipped " << item.name << "!" << endl;
+}
+
+void showInventory(const Character& c) {
+    if (c.inventory.empty()) {
+        cout << c.name << "'s inventory is empty." << endl;
+        return;
+    }
+    cout << c.name << "'s inventory:" << endl;
+    for (const auto& item : c.inventory) {
+        cout << "  " << item.name
+             << " (ATK+" << item.atkBonus
+             << " HP+" << item.hpBonus << ")" << endl;
+    }
 }
 
 void levelUp(Character& c) {
@@ -470,119 +616,128 @@ void levelUp(Character& c) {
     c.hp += 10;
     c.attack += 3;
     c.defense += 2;
-    cout << c.name << " leveled up! LV " << c.level << "!" << endl;
+    cout << c.name << " leveled up! LV" << c.level << endl;
 }
 
-void battle(vector<Character>& party) {
-    if (party.empty()) {
-        cout << "No characters in the party!" << endl;
-        return;
+void battle(Character& hero) {
+    string monsterName = "Slime";
+    int monsterHp = 50;
+    int monsterAtk = 8;
+    int monsterDef = 3;
+
+    cout << hero.name << " vs " << monsterName << "!" << endl;
+
+    int heroDmg = hero.attack - monsterDef;
+    if (heroDmg < 1) heroDmg = 1;
+
+    int monsterDmg = monsterAtk - hero.defense;
+    if (monsterDmg < 1) monsterDmg = 1;
+
+    monsterHp -= heroDmg;
+    cout << hero.name << " attacks! " << heroDmg << " damage" << endl;
+
+    if (monsterHp <= 0) {
+        cout << monsterName << " defeated!" << endl;
+        levelUp(hero);
+    } else {
+        hero.hp -= monsterDmg;
+        cout << monsterName << " counterattacks! " << monsterDmg << " damage" << endl;
+        cout << hero.name << " HP: " << hero.hp << endl;
     }
-
-    // Random monster generation
-    string monsters[] = {"Slime", "Goblin", "Orc", "Dragon", "Skeleton"};
-    string monsterName = monsters[rand() % 5];
-    int monsterHp = 30 + rand() % 71;
-    int monsterAtk = 5 + rand() % 16;
-    int monsterDef = 3 + rand() % 10;
-
-    cout << endl;
-    cout << "=== A Monster Appeared! ===" << endl;
-    cout << monsterName << " [HP:" << monsterHp
-         << " ATK:" << monsterAtk
-         << " DEF:" << monsterDef << "]" << endl;
-
-    // Choose a party member
-    cout << "Who will you send?" << endl;
-    for (int i = 0; i < (int)party.size(); i++) {
-        cout << i + 1 << ". " << party[i].name << endl;
-    }
-    int choice;
-    cin >> choice;
-    choice--;
-
-    if (choice < 0 || choice >= (int)party.size()) {
-        cout << "Invalid choice!" << endl;
-        return;
-    }
-
-    Character& hero = party[choice];
-    cout << endl;
-    cout << hero.name << " vs " << monsterName << " — Fight!" << endl;
-
-    int heroHp = hero.hp;
-
-    // Battle loop
-    while (heroHp > 0 && monsterHp > 0) {
-        // Hero attacks
-        int dmg = hero.attack - monsterDef + (rand() % 5);
-        if (dmg < 1) dmg = 1;
-        monsterHp -= dmg;
-        cout << hero.name << " attacks! " << dmg << " damage!" << endl;
-
-        if (monsterHp <= 0) {
-            cout << "Defeated " << monsterName << "!" << endl;
-            levelUp(hero);
-            return;
-        }
-
-        // Monster attacks
-        dmg = monsterAtk - hero.defense + (rand() % 5);
-        if (dmg < 1) dmg = 1;
-        heroHp -= dmg;
-        cout << monsterName << " attacks! " << dmg << " damage!" << endl;
-        cout << hero.name << " remaining HP: " << heroHp << endl;
-    }
-
-    cout << hero.name << " has fallen..." << endl;
-    hero.hp = hero.hp / 2;
-    cout << hero.name << "'s HP reduced to " << hero.hp << "." << endl;
 }
 
 int main() {
-    srand(time(0));
-
     vector<Character> party;
-    party.push_back({"Warrior", 100, 15, 10, 1});
-    party.push_back({"Mage", 80, 20, 5, 1});
+    party.push_back(Character("Warrior", 100, 15, 10));
+    party.push_back(Character("Mage", 80, 20, 5));
+
+    Item sword = {"Iron Sword", 5, 0};
+    equip(party[0], sword);
 
     int choice;
     while (true) {
         cout << endl;
         cout << "=== RPG Party Manager ===" << endl;
-        cout << "1. Add Character" << endl;
-        cout << "2. View Party" << endl;
-        cout << "3. Battle!" << endl;
-        cout << "4. Quit" << endl;
+        cout << "1. View Party" << endl;
+        cout << "2. Warrior Battle" << endl;
+        cout << "3. Mage Battle" << endl;
+        cout << "4. Warrior Inventory" << endl;
+        cout << "5. Quit" << endl;
         cout << "Choice: ";
         cin >> choice;
-        cout << endl;
 
         if (choice == 1) {
-            addCharacter(party);
-        } else if (choice == 2) {
             showParty(party);
+        } else if (choice == 2) {
+            battle(party[0]);
         } else if (choice == 3) {
-            battle(party);
+            battle(party[1]);
         } else if (choice == 4) {
-            cout << "Ending your adventure. Goodbye!" << endl;
+            showInventory(party[0]);
+        } else if (choice == 5) {
+            cout << "Ending your adventure!" << endl;
             break;
         } else {
-            cout << "Please pick 1-4!" << endl;
+            cout << "Please pick 1-5!" << endl;
         }
     }
     return 0;
 }`,
-          expectedOutput: `=== RPG Party Manager ===
-1. Add Character
-2. View Party
-3. Battle!
-4. Quit
-Choice: 2
+          stdin: `1\n4\n2\n1\n5`,
+          expectedOutput: `Warrior equipped Iron Sword!
 
-=== Party List (2 members) ===
-  Warrior [HP:100 ATK:15 DEF:10 LV:1]
-  Mage [HP:80 ATK:20 DEF:5 LV:1]`
+=== RPG Party Manager ===
+1. View Party
+2. Warrior Battle
+3. Mage Battle
+4. Warrior Inventory
+5. Quit
+Choice: 1
+=== Party (2 members) ===
+Warrior [HP:100 ATK:20 DEF:10 LV1]
+Mage [HP:80 ATK:20 DEF:5 LV1]
+
+=== RPG Party Manager ===
+1. View Party
+2. Warrior Battle
+3. Mage Battle
+4. Warrior Inventory
+5. Quit
+Choice: 4
+Warrior's inventory:
+  Iron Sword (ATK+5 HP+0)
+
+=== RPG Party Manager ===
+1. View Party
+2. Warrior Battle
+3. Mage Battle
+4. Warrior Inventory
+5. Quit
+Choice: 2
+Warrior vs Slime!
+Warrior attacks! 17 damage
+Slime defeated!
+Warrior leveled up! LV2
+
+=== RPG Party Manager ===
+1. View Party
+2. Warrior Battle
+3. Mage Battle
+4. Warrior Inventory
+5. Quit
+Choice: 1
+=== Party (2 members) ===
+Warrior [HP:110 ATK:23 DEF:12 LV2]
+Mage [HP:80 ATK:20 DEF:5 LV1]
+
+=== RPG Party Manager ===
+1. View Party
+2. Warrior Battle
+3. Mage Battle
+4. Warrior Inventory
+5. Quit
+Choice: 5
+Ending your adventure!`
         }
       ]
     },
@@ -597,18 +752,17 @@ Choice: 2
         {
           id: "ch3-exp1",
           type: "explain",
-          title: "🐍 Python vs C++ Comparison!",
-          content: `What would the same program look like in Python?
+          title: "🐍 Python vs C++ Comparison",
+          content: `Same program in Python:
 
-**Python version — key code:**
 \`\`\`python
 class Character:
-    def __init__(self, name, hp, atk, defense, level=1):
+    def __init__(self, name, hp, attack, defense):
         self.name = name
         self.hp = hp
-        self.attack = atk
+        self.attack = attack
         self.defense = defense
-        self.level = level
+        self.level = 1
 
 party = []
 party.append(Character("Warrior", 100, 15, 10))
@@ -621,23 +775,20 @@ for c in party:
 
 | Concept | Python 🐍 | C++ ⚡ |
 |---|---|---|
-| Bundling data | \`class Character:\` | \`struct Character { };\` |
-| Creating | \`Character("Warrior", 100, ...)\` | \`{"Warrior", 100, ...}\` or function |
-| Collection | \`party = []\` | \`vector<Character> party;\` |
-| Adding | \`party.append(c)\` | \`party.push_back(c);\` |
-| Iterating | \`for c in party:\` | \`for (const auto& c : party)\` |
-| Passing to modify | Automatic (reference) | \`Character&\` required |
-| Passing to read | Automatic | \`const Character&\` |
-| Type safety | Runtime error | **Compile error (safer!)** |
+| Bundle data | \`class Character:\` | \`class Character { };\` |
+| Create | \`Character("Warrior", ...)\` | \`Character("Warrior", ...)\` |
+| List | \`party = []\` | \`vector<Character> party;\` |
+| Add | \`party.append(c)\` | \`party.push_back(c);\` |
+| Iterate | \`for c in party:\` | \`for (const auto& c : party)\` |
+| Pass to modify | Automatic | \`Character&\` required |
+| Pass to read | Automatic | \`const Character&\` |
 
-C++ requires more typing, but you get **more safety and better performance** in return!
-
-💡 Things that Python handles automatically, C++ lets you manage directly. The tradeoff is performance and safety!`
+Writing \`&\` explicitly feels like extra work — but it tells you exactly **when a copy happens** just by reading the code!`
         },
         {
           id: "ch3-quiz1",
           type: "quiz",
-          title: "Understanding const references!",
+          title: "Understanding const reference!",
           content: `Which statement about \`const vector<Character>&\` in showParty is **FALSE**?
 
 \`\`\`cpp
@@ -652,84 +803,70 @@ void showParty(const vector<Character>& party) {
             "Passing large data by reference is a good practice"
           ],
           answer: 2,
-          explanation: "Removing const won't cause a compile error! But keeping const prevents accidental modifications, which is a great habit to have."
+          explanation: "Removing const won't cause a compile error! But keeping const prevents accidental modifications — it's a great habit."
         },
         {
           id: "ch3-exp2",
           type: "explain",
-          title: "🚀 Challenge Tasks!",
-          content: `Level up your RPG manager even further!
+          title: "🚀 Challenge Tasks",
+          content: `Level up your RPG! Everything below uses only concepts you've learned.
 
-**Challenge 1: Item System**
+**Challenge 1: Add a character**
 \`\`\`cpp
-struct Item {
-    string name;
-    int hpBoost;
-    int atkBoost;
-};
-
-struct Character {
-    string name;
-    int hp, attack, defense, level;
-    vector<Item> inventory;  // vector inside a struct!
-};
+string name;
+int hp, atk, def;
+cout << "Name: "; cin >> name;
+cout << "HP: "; cin >> hp;
+// ...
+party.push_back(Character(name, hp, atk, def));
 \`\`\`
 
-**Challenge 2: Save/Load to File**
+**Challenge 2: Level up the whole party — range-for (Lesson 11)**
 \`\`\`cpp
-#include <fstream>
+for (auto& c : party) {   // no const — we're modifying!
+    levelUp(c);
+}
+\`\`\`
 
-void saveParty(const vector<Character>& party) {
-    ofstream file("save.txt");
-    for (const auto& c : party) {
-        file << c.name << " " << c.hp << " "
-             << c.attack << " " << c.defense
-             << " " << c.level << endl;
+**Challenge 3: Find the strongest character**
+\`\`\`cpp
+Character best = party[0];
+for (const auto& c : party) {
+    if (c.attack > best.attack) {
+        best = c;
+    }
+}
+cout << "Strongest: " << best.name << endl;
+\`\`\`
+
+**Challenge 4: Search inventory for weapons — string find() (Lesson 12)**
+\`\`\`cpp
+for (const auto& item : hero.inventory) {
+    if (item.name.find("Sword") != string::npos) {
+        cout << "Weapon found: " << item.name << endl;
     }
 }
 \`\`\`
 
-**Challenge 3: Multi-Character Battles**
-- Entire party fights in turns
-- Boss monsters (HP 300+!)
-- Healer character that restores party HP
-
-**Challenge 4: Refactor to class**
-\`\`\`cpp
-class Character {
-private:
-    string name;
-    int hp, attack, defense, level;
-public:
-    Character(string n, int h, int a, int d)
-        : name(n), hp(h), attack(a), defense(d), level(1) {}
-    void takeDamage(int dmg);
-    void levelUp();
-    string getName() const { return name; }
-};
-\`\`\`
-
-💡 These challenges connect to what you'll learn in Part 3!`
+💡 In Challenge 2, notice \`auto&\` (no const) vs \`const auto&\`!`
         },
         {
           id: "ch3-exp3",
           type: "explain",
           title: "🎉 Part 2 Project Complete!",
-          content: `## ✅ What You Used in This Project!
+          content: `## ✅ What you reviewed in this project
 
-- ✅ **struct** — Bundled character data into a single type
-- ✅ **vector** — Party management (push_back, size, empty)
-- ✅ **range-for + auto** — \`for (const auto& c : party)\`
-- ✅ **const reference** — Read-only passing \`const Character&\`
-- ✅ **reference** — Modification passing \`Character&\`, \`vector<Character>&\`
-- ✅ **Function separation** — showParty, addCharacter, battle, levelUp
-- ✅ **string** — Character names, monster names
+- ✅ **struct** (Lesson 15) — Item type definition
+- ✅ **class** (Lesson 16) — Character data + constructor
+- ✅ **vector** (Lesson 9) — Party & inventory, push_back, size, empty
+- ✅ **range-for + auto** (Lesson 11) — \`for (const auto& c : party)\`
+- ✅ **string operations** (Lesson 12) — \`to_string()\`, \`find()\`
+- ✅ **const reference** (Lesson 13) — read-only passing \`const Character&\`
+- ✅ **reference** (Lesson 13) — modification passing \`Character&\`
 
-You completed a project using ALL of Part 2's core concepts!
+The pattern of bundling data with class, managing collections with vector, and organizing logic into functions is used **all the time** in C++ programming. Remember this pattern!
 
-The pattern of bundling data with struct, managing collections with vector, and organizing logic into functions is used **all the time** in C++ programming. Remember this pattern!
-
-🎮 Keep evolving your RPG into something even more awesome!`
+🎮 Keep building your RPG into something even more awesome!`
         }
       ]
     }

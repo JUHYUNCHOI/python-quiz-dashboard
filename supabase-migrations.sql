@@ -108,3 +108,42 @@ create policy "Teachers can update flagged questions"
       where id = auth.uid() and role = 'teacher'
     )
   );
+
+-- ── lesson_step_visits: 학생 스텝 방문 로그 ──────────────────────────────
+-- 학생이 수업을 완료하지 않아도 어떤 스텝까지 봤는지 추적
+-- 선생님이 "숙제 완료 버튼 안 눌렀지만 실제로 수업 봤는지" 확인 용도
+
+create table if not exists public.lesson_step_visits (
+  user_id        uuid        not null references auth.users(id) on delete cascade,
+  lesson_id      text        not null,
+  step_id        text        not null,
+  step_type      text,
+  step_index     integer     not null default 0,
+  total_steps    integer     not null default 0,
+  first_visited_at timestamptz not null default now(),
+  last_visited_at  timestamptz not null default now(),
+  primary key (user_id, lesson_id, step_id)
+);
+
+create index if not exists idx_step_visits_lesson
+  on public.lesson_step_visits (lesson_id, user_id);
+
+alter table public.lesson_step_visits enable row level security;
+
+drop policy if exists "Students can manage own step visits" on public.lesson_step_visits;
+create policy "Students can manage own step visits"
+  on public.lesson_step_visits for all
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
+
+drop policy if exists "Teachers can read student step visits" on public.lesson_step_visits;
+create policy "Teachers can read student step visits"
+  on public.lesson_step_visits for select
+  using (
+    exists (
+      select 1 from public.class_members cm
+      join public.classes c on c.id = cm.class_id
+      where cm.student_id = lesson_step_visits.user_id
+        and c.teacher_id = auth.uid()
+    )
+  );

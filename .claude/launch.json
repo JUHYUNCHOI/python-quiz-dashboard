@@ -4,7 +4,7 @@
     {
       "name": "dev",
       "runtimeExecutable": "/Users/juhyunchoi/.nvm/versions/node/v20.10.0/bin/node",
-      "runtimeArgs": ["./node_modules/.bin/next", "dev"],
+      "runtimeArgs": ["./node_modules/.bin/next", "dev", "--webpack"],
       "port": 3000,
       "autoPort": true
     }

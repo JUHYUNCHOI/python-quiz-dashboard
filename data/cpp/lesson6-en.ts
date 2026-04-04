@@ -279,8 +279,7 @@ int main() {
     return 0;
 }`,
           stdin: `35`,
-          expectedOutput: `Enter HP: 35
-Danger!`
+          expectedOutput: `Enter HP: Danger!`
         }
       ]
     },
@@ -461,8 +460,7 @@ int main() {
     return 0;
 }`,
           stdin: `50`,
-          expectedOutput: `HP: 50
-Alive!`
+          expectedOutput: `HP: Alive!`
         },
         {
           id: "ch3-pred1",

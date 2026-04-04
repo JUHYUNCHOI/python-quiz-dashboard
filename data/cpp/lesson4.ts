@@ -138,10 +138,7 @@ int main() {
 
     return 0;
 }`,
-          stdin: `주현\n14`,
-          expectedOutput: `이름을 입력하세요: 주현
-나이를 입력하세요: 14
-안녕하세요, 주현! 14살이군요!`
+          stdin: `주현\n14`
         },
         {
           id: "ch1-q1",
@@ -320,10 +317,7 @@ int main() {
 
     return 0;
 }`,
-          stdin: `14\n치킨 버거`,
-          expectedOutput: `나이: 14
-좋아하는 음식: 치킨 버거
-14살, 좋아하는 음식: 치킨 버거`
+          stdin: `14\n치킨 버거`
         },
         {
           id: "ch2-q1",
