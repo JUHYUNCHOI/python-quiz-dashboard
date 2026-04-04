@@ -202,10 +202,10 @@ Commas automatically add a **space** between values!`
           type: "mission",
           title: "🏆 Final Mission!",
           task: "Complete the game character info!",
-          initialCode: "print('=== 🎮 Character Info ===')\nprint('Name: Hero')\nprint('Level: 5')\nprint('HP: ___')\nprint('Attack: ___')\nprint('=== Let the adventure begin! ===')",
+          initialCode: "print('=== 🎮 Character Info ===')\nprint('Name: ___')\nprint('Level: ___')\nprint('HP: ___')\nprint('Attack: 25')\nprint('=== Let the adventure begin! ===')",
           expectedOutput: "=== 🎮 Character Info ===\nName: Hero\nLevel: 5\nHP: 100\nAttack: 25\n=== Let the adventure begin! ===",
-          hint: "Fill in the numbers inside print()!",
-          hint2: "print('HP: 100')\nprint('Attack: 25')"
+          hint: "Fill in the name, level, and HP inside print()!",
+          hint2: "print('Name: Hero')\nprint('Level: 5')\nprint('HP: 100')"
         },
         {
           id: "complete",
