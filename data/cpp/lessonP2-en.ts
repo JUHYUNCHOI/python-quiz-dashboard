@@ -28,12 +28,12 @@ export const cppLessonP2EnData: LessonData = {
 
 | Lesson | Concept | Where it's used |
 |---|---|---|
-| Lesson 14 | struct | Item type |
-| Lesson 22 | class, constructor | Character type |
 | Lesson 9 | vector, push_back | Party & inventory |
-| Lesson 10 | range-for, auto | Printing party/inventory |
-| Lesson 11 | string operations | Level text, item search |
-| Lesson 12 | reference (&) | Level up & equip functions |
+| Lesson 11 | range-for, auto | Printing party/inventory |
+| Lesson 12 | string operations | Level text, item search |
+| Lesson 13 | reference (&) | Level up & equip functions |
+| Lesson 15 | struct | Item type |
+| Lesson 16 | class, constructor | Character type |
 
 No new syntax — just combining what you've learned!
 
@@ -55,7 +55,7 @@ Warrior leveled up! LV2
           id: "ch1-exp2",
           type: "explain",
           title: "📋 Designing the Character Class",
-          content: `Let's define what an RPG character needs using **class**. (Lesson 22)
+          content: `Let's define what an RPG character needs using **class**. (Lesson 16)
 
 \`\`\`cpp
 class Character {
@@ -85,7 +85,7 @@ cout << hero.hp;     // 100
 cout << hero.level;  // 1
 \`\`\`
 
-💡 As you learned in Lesson 22 — class is safer than a dict. Typos become compile errors instead of hidden bugs!`
+💡 As you learned in Lesson 16 — class is safer than a dict. Typos become compile errors instead of hidden bugs!`
         },
         {
           id: "ch1-fb1",
@@ -103,7 +103,7 @@ cout << hero.level;  // 1
           id: "ch1-exp3",
           type: "explain",
           title: "🗡️ Designing struct Item + string operations",
-          content: `Characters can hold items! Use **struct** for the Item type. (Lesson 14)
+          content: `Characters can hold items! Use **struct** for the Item type. (Lesson 15)
 
 \`\`\`cpp
 struct Item {
@@ -125,7 +125,7 @@ cout << sword.atkBonus;  // 5
 
 ---
 
-**String operations** (Lesson 11) fit naturally here:
+**String operations** (Lesson 12) fit naturally here:
 
 \`\`\`cpp
 // to_string(): number → string
@@ -177,11 +177,11 @@ public:
           id: "ch2-exp1",
           type: "explain",
           title: "🔨 Step 1 — Print function",
-          content: `Write a function to print character info. (Lesson 12 — references)
+          content: `Write a function to print character info. (Lesson 13 — references)
 
 \`\`\`cpp
 void printCharacter(const Character& c) {
-    string lvInfo = "LV" + to_string(c.level);  // Lesson 11
+    string lvInfo = "LV" + to_string(c.level);  // Lesson 12
     cout << c.name << " [HP:" << c.hp
          << " ATK:" << c.attack
          << " DEF:" << c.defense
@@ -190,7 +190,7 @@ void printCharacter(const Character& c) {
 \`\`\`
 
 In \`const Character& c\`:
-- \`&\` → passes by **reference**, no copying (Lesson 12)
+- \`&\` → passes by **reference**, no copying (Lesson 13)
 - \`const\` → we **won't modify** the character inside the function
 
 💡 Read-only functions → \`const Type&\`, modifying functions → \`Type&\``
@@ -255,19 +255,19 @@ party.push_back(Character("Warrior", 100, 15, 10));
 party.push_back(Character("Mage", 80, 20, 5));
 \`\`\`
 
-Print the full party with **range-for**! (Lesson 10)
+Print the full party with **range-for**! (Lesson 11)
 
 \`\`\`cpp
 void showParty(const vector<Character>& party) {
     cout << "=== Party (" << party.size() << " members) ===" << endl;
-    for (const auto& c : party) {   // Lesson 10 range-for
+    for (const auto& c : party) {   // Lesson 11 range-for
         printCharacter(c);
     }
 }
 \`\`\`
 
 \`const vector<Character>&\`:
-- \`&\` → no copying the whole vector (Lesson 12)
+- \`&\` → no copying the whole vector (Lesson 13)
 - \`const\` → we won't modify it`
         },
         {
@@ -370,7 +370,7 @@ int main() {
           id: "ch2-exp-item",
           type: "explain",
           title: "🗡️ Step 3 — Item equip system",
-          content: `Add an **inventory** to the Character class. (Lesson 9 vector + Lesson 14 struct)
+          content: `Add an **inventory** to the Character class. (Lesson 9 vector + Lesson 15 struct)
 
 \`\`\`cpp
 class Character {
@@ -385,7 +385,7 @@ public:
 };
 \`\`\`
 
-The equip function uses **reference (&)** to modify the character directly: (Lesson 12)
+The equip function uses **reference (&)** to modify the character directly: (Lesson 13)
 
 \`\`\`cpp
 void equip(Character& c, Item item) {
@@ -396,7 +396,7 @@ void equip(Character& c, Item item) {
 }
 \`\`\`
 
-Show inventory with range-for: (Lesson 10)
+Show inventory with range-for: (Lesson 11)
 
 \`\`\`cpp
 void showInventory(const Character& c) {
@@ -479,7 +479,7 @@ Current stats — ATK:20 HP:120`
           id: "ch2-exp3",
           type: "explain",
           title: "🔨 Step 4 — Level up (modify with reference)",
-          content: `When a character wins a battle, they get stronger. Use **reference (&)** to modify the original. (Lesson 12)
+          content: `When a character wins a battle, they get stronger. Use **reference (&)** to modify the original. (Lesson 13)
 
 \`\`\`cpp
 void levelUp(Character& c) {   // & → modifies original!
@@ -552,14 +552,14 @@ Choose 1–5 from the menu!`,
 #include <string>
 using namespace std;
 
-// ── struct: Lesson 14 ─────────────────────────
+// ── struct: Lesson 15 ─────────────────────────
 struct Item {
     string name;
     int atkBonus;
     int hpBonus;
 };
 
-// ── class: Lesson 22 ─────────────────────────
+// ── class: Lesson 16 ─────────────────────────
 class Character {
 public:
     string name;
@@ -574,9 +574,9 @@ public:
     }
 };
 
-// ── const reference for reading: Lesson 12 ───
+// ── const reference for reading: Lesson 13 ───
 void printCharacter(const Character& c) {
-    string lvInfo = "LV" + to_string(c.level);  // Lesson 11
+    string lvInfo = "LV" + to_string(c.level);  // Lesson 12
     cout << c.name << " [HP:" << c.hp
          << " ATK:" << c.attack
          << " DEF:" << c.defense
@@ -585,12 +585,12 @@ void printCharacter(const Character& c) {
 
 void showParty(const vector<Character>& party) {
     cout << "=== Party (" << party.size() << " members) ===" << endl;
-    for (const auto& c : party) {   // range-for: Lesson 10
+    for (const auto& c : party) {   // range-for: Lesson 11
         printCharacter(c);
     }
 }
 
-// ── reference for modification: Lesson 12 ────
+// ── reference for modification: Lesson 13 ────
 void equip(Character& c, Item item) {
     c.attack += item.atkBonus;
     c.hp += item.hpBonus;
@@ -821,7 +821,7 @@ cout << "HP: "; cin >> hp;
 party.push_back(Character(name, hp, atk, def));
 \`\`\`
 
-**Challenge 2: Level up the whole party — range-for (Lesson 10)**
+**Challenge 2: Level up the whole party — range-for (Lesson 11)**
 \`\`\`cpp
 for (auto& c : party) {   // no const — we're modifying!
     levelUp(c);
@@ -839,7 +839,7 @@ for (const auto& c : party) {
 cout << "Strongest: " << best.name << endl;
 \`\`\`
 
-**Challenge 4: Search inventory for weapons — string find() (Lesson 11)**
+**Challenge 4: Search inventory for weapons — string find() (Lesson 12)**
 \`\`\`cpp
 for (const auto& item : hero.inventory) {
     if (item.name.find("Sword") != string::npos) {
@@ -856,13 +856,13 @@ for (const auto& item : hero.inventory) {
           title: "🎉 Part 2 Project Complete!",
           content: `## ✅ What you reviewed in this project
 
-- ✅ **struct** (Lesson 14) — Item type definition
-- ✅ **class** (Lesson 22) — Character data + constructor
+- ✅ **struct** (Lesson 15) — Item type definition
+- ✅ **class** (Lesson 16) — Character data + constructor
 - ✅ **vector** (Lesson 9) — Party & inventory, push_back, size, empty
-- ✅ **range-for + auto** (Lesson 10) — \`for (const auto& c : party)\`
-- ✅ **string operations** (Lesson 11) — \`to_string()\`, \`find()\`
-- ✅ **const reference** (Lesson 12) — read-only passing \`const Character&\`
-- ✅ **reference** (Lesson 12) — modification passing \`Character&\`
+- ✅ **range-for + auto** (Lesson 11) — \`for (const auto& c : party)\`
+- ✅ **string operations** (Lesson 12) — \`to_string()\`, \`find()\`
+- ✅ **const reference** (Lesson 13) — read-only passing \`const Character&\`
+- ✅ **reference** (Lesson 13) — modification passing \`Character&\`
 
 The pattern of bundling data with class, managing collections with vector, and organizing logic into functions is used **all the time** in C++ programming. Remember this pattern!
 

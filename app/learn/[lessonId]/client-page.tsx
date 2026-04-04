@@ -16,6 +16,7 @@ import { markLessonComplete } from "@/lib/mark-lesson-complete"
 import { saveStepAnswer } from "@/lib/save-step-answer"
 import { useGamification } from "@/hooks/use-gamification"
 import { logActivity } from "@/lib/activity-log"
+import { trackStepVisit } from "@/lib/track-step-visit"
 import { getCompletedLessons, pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
 import { useAuth } from "@/contexts/auth-context"
 import { analyzeLessonComplete, analyzeStreak } from "@/lib/feedback-analyzer"
@@ -261,6 +262,27 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     // Supabase에도 동기화 (debounced, fire-and-forget)
     syncProgress(progressData)
   }, [currentChapter, currentStep, score, completedSteps, progressKey, lesson, syncProgress, progressLoaded, effectiveTeacher])
+
+  // ── 스텝 방문 로그 (선생님 제외, 진도 로드 후에만) ─────────────────────────
+  useEffect(() => {
+    if (!user || isTeacher || !step || !lesson || !progressLoaded) return
+    const totalSteps = lesson.chapters.reduce((sum, ch) => sum + ch.steps.length, 0)
+    let stepIndex = 0
+    for (let ci = 0; ci < currentChapter; ci++) {
+      stepIndex += lesson.chapters[ci].steps.length
+    }
+    stepIndex += currentStep
+    trackStepVisit({
+      userId: user.id,
+      lessonId,
+      stepId: step.id,
+      stepType: step.type,
+      stepIndex,
+      totalSteps,
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentChapter, currentStep, progressLoaded])
+  // ──────────────────────────────────────────────────────────────────────────
 
   // 잠금 체크: 같은 트랙(Python/C++) 내에서 이전 수업 완료해야 접근 가능 (선생님은 전부 열림)
   const isLocked = (() => {

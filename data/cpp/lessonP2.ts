@@ -28,12 +28,12 @@ export const cppLessonP2Data: LessonData = {
 
 | 레슨 | 개념 | 어디서 쓰나요? |
 |---|---|---|
-| 레슨 14 | struct | Item(아이템) 타입 만들기 |
-| 레슨 22 | class, 생성자 | Character 타입 만들기 |
 | 레슨 9 | vector, push_back | 파티 & 인벤토리 관리 |
-| 레슨 10 | range-for, auto | 파티/인벤토리 출력 |
-| 레슨 11 | string 심화 | 레벨 텍스트, 아이템 검색 |
-| 레슨 12 | 참조(&) | 캐릭터 레벨업·장착 함수 |
+| 레슨 11 | range-for, auto | 파티/인벤토리 출력 |
+| 레슨 12 | string 심화 | 레벨 텍스트, 아이템 검색 |
+| 레슨 13 | 참조(&) | 캐릭터 레벨업·장착 함수 |
+| 레슨 15 | struct | Item(아이템) 타입 만들기 |
+| 레슨 16 | class, 생성자 | Character 타입 만들기 |
 
 새로운 문법은 없어요. 배운 것들을 조합하는 연습이에요!
 
@@ -56,7 +56,7 @@ export const cppLessonP2Data: LessonData = {
           id: "ch1-exp2",
           type: "explain",
           title: "📋 Character class 설계",
-          content: `RPG 캐릭터에 필요한 정보를 class로 만들어요. (레슨 22)
+          content: `RPG 캐릭터에 필요한 정보를 class로 만들어요. (레슨 16)
 
 \`\`\`cpp
 class Character {
@@ -86,7 +86,7 @@ cout << hero.hp;     // 100
 cout << hero.level;  // 1
 \`\`\`
 
-💡 레슨 22에서 배운 것처럼 class는 dict보다 안전해요 — 오타를 치면 컴파일 에러로 바로 잡아줘요!`
+💡 레슨 16에서 배운 것처럼 class는 dict보다 안전해요 — 오타를 치면 컴파일 에러로 바로 잡아줘요!`
         },
         {
           id: "ch1-fb1",
@@ -104,7 +104,7 @@ cout << hero.level;  // 1
           id: "ch1-exp3",
           type: "explain",
           title: "🗡️ struct Item 설계 + string 심화",
-          content: `캐릭터가 아이템을 가질 수 있도록 **struct**로 아이템 타입을 만들어요. (레슨 14)
+          content: `캐릭터가 아이템을 가질 수 있도록 **struct**로 아이템 타입을 만들어요. (레슨 15)
 
 \`\`\`cpp
 struct Item {
@@ -126,7 +126,7 @@ cout << sword.atkBonus;  // 5
 
 ---
 
-아이템 이름을 출력할 때 **string 심화** (레슨 11)도 써볼게요:
+아이템 이름을 출력할 때 **string 심화** (레슨 12)도 써볼게요:
 
 \`\`\`cpp
 // to_string(): 숫자 → 문자열
@@ -178,7 +178,7 @@ public:
           id: "ch2-exp1",
           type: "explain",
           title: "🔨 Step 1 — 캐릭터 출력 함수",
-          content: `캐릭터 정보를 출력하는 함수를 만들어요. (레슨 12 — 참조)
+          content: `캐릭터 정보를 출력하는 함수를 만들어요. (레슨 13 — 참조)
 
 \`\`\`cpp
 void printCharacter(const Character& c) {
@@ -190,7 +190,7 @@ void printCharacter(const Character& c) {
 \`\`\`
 
 \`const Character& c\`에서:
-- \`&\` → 복사하지 않고 **참조**로 전달해요 (레슨 12)
+- \`&\` → 복사하지 않고 **참조**로 전달해요 (레슨 13)
 - \`const\` → 함수 안에서 캐릭터를 **수정하지 않겠다**는 표시
 
 💡 읽기만 하는 함수 → \`const 타입&\`, 수정하는 함수 → \`타입&\``
@@ -254,19 +254,19 @@ party.push_back(Character("용사", 100, 15, 10));
 party.push_back(Character("마법사", 80, 20, 5));
 \`\`\`
 
-파티 전체 출력은 **range-for**로! (레슨 10)
+파티 전체 출력은 **range-for**로! (레슨 11)
 
 \`\`\`cpp
 void showParty(const vector<Character>& party) {
     cout << "=== 파티 현황 ===" << endl;
-    for (const auto& c : party) {   // 레슨 10 range-for
+    for (const auto& c : party) {   // 레슨 11 range-for
         printCharacter(c);
     }
 }
 \`\`\`
 
 여기서 \`const vector<Character>&\`:
-- \`&\` → vector 전체를 복사하지 않아요 (레슨 12)
+- \`&\` → vector 전체를 복사하지 않아요 (레슨 13)
 - \`const\` → 파티 목록을 수정하지 않겠다는 표시`
         },
         {
@@ -369,7 +369,7 @@ int main() {
           id: "ch2-exp-item",
           type: "explain",
           title: "🗡️ Step 3 — 아이템 장착 시스템",
-          content: `Character 클래스에 **인벤토리**를 추가해요. (레슨 9 vector + 레슨 14 struct 조합)
+          content: `Character 클래스에 **인벤토리**를 추가해요. (레슨 9 vector + 레슨 15 struct 조합)
 
 \`\`\`cpp
 class Character {
@@ -387,7 +387,7 @@ public:
 };
 \`\`\`
 
-아이템 장착 함수는 **참조(&)** 로 캐릭터를 직접 수정해요: (레슨 12)
+아이템 장착 함수는 **참조(&)** 로 캐릭터를 직접 수정해요: (레슨 13)
 
 \`\`\`cpp
 void equip(Character& c, Item item) {
@@ -398,13 +398,13 @@ void equip(Character& c, Item item) {
 }
 \`\`\`
 
-인벤토리 출력도 range-for로: (레슨 10)
+인벤토리 출력도 range-for로: (레슨 11)
 
 \`\`\`cpp
 void showInventory(const Character& c) {
     cout << c.name << "의 인벤토리:" << endl;
     for (const auto& item : c.inventory) {
-        // to_string()으로 숫자를 문자열로 변환 (레슨 11)
+        // to_string()으로 숫자를 문자열로 변환 (레슨 12)
         string info = item.name + " (ATK+" + to_string(item.atkBonus)
                     + " HP+" + to_string(item.hpBonus) + ")";
         cout << "  " << info << endl;
@@ -482,7 +482,7 @@ int main() {
           id: "ch2-exp3",
           type: "explain",
           title: "🔨 Step 4 — 레벨업 함수 (참조로 수정)",
-          content: `전투에서 이기면 캐릭터가 강해져야 해요. **참조(&)**로 원본을 직접 수정해요. (레슨 12)
+          content: `전투에서 이기면 캐릭터가 강해져야 해요. **참조(&)**로 원본을 직접 수정해요. (레슨 13)
 
 \`\`\`cpp
 void levelUp(Character& c) {   // & → 원본을 수정해요!
@@ -555,14 +555,14 @@ void battle(Character& hero) {
 #include <string>
 using namespace std;
 
-// ── struct: 레슨 14 ───────────────────────────
+// ── struct: 레슨 15 ───────────────────────────
 struct Item {
     string name;
     int atkBonus;
     int hpBonus;
 };
 
-// ── class: 레슨 22 ────────────────────────────
+// ── class: 레슨 16 ────────────────────────────
 class Character {
 public:
     string name;
@@ -577,9 +577,9 @@ public:
     }
 };
 
-// ── const 참조로 읽기: 레슨 12 ────────────────
+// ── const 참조로 읽기: 레슨 13 ────────────────
 void printCharacter(const Character& c) {
-    // to_string(): 레슨 11
+    // to_string(): 레슨 12
     string lvInfo = "LV" + to_string(c.level);
     cout << c.name << " [HP:" << c.hp
          << " ATK:" << c.attack
@@ -589,12 +589,12 @@ void printCharacter(const Character& c) {
 
 void showParty(const vector<Character>& party) {
     cout << "=== 파티 현황 (" << party.size() << "명) ===" << endl;
-    for (const auto& c : party) {   // range-for: 레슨 10
+    for (const auto& c : party) {   // range-for: 레슨 11
         printCharacter(c);
     }
 }
 
-// ── 참조로 수정: 레슨 12 ──────────────────────
+// ── 참조로 수정: 레슨 13 ──────────────────────
 void equip(Character& c, Item item) {
     c.attack += item.atkBonus;
     c.hp += item.hpBonus;
@@ -847,7 +847,7 @@ for (const auto& c : party) {
 cout << "최강: " << best.name << endl;
 \`\`\`
 
-**도전 4: 인벤토리에서 무기 찾기 — string find() (레슨 11)**
+**도전 4: 인벤토리에서 무기 찾기 — string find() (레슨 12)**
 \`\`\`cpp
 // "검"이 이름에 포함된 아이템만 출력
 for (const auto& item : hero.inventory) {
@@ -865,13 +865,13 @@ for (const auto& item : hero.inventory) {
           title: "🎉 Part 2 프로젝트 완성!",
           content: `## ✅ 이 프로젝트에서 복습한 것들
 
-- ✅ **struct** (레슨 14) — Item 타입 정의
-- ✅ **class** (레슨 22) — Character 데이터 + 생성자
+- ✅ **struct** (레슨 15) — Item 타입 정의
+- ✅ **class** (레슨 16) — Character 데이터 + 생성자
 - ✅ **vector** (레슨 9) — 파티 & 인벤토리 관리, push_back, size, empty
-- ✅ **range-for + auto** (레슨 10) — \`for (const auto& c : party)\`
-- ✅ **string 심화** (레슨 11) — \`to_string()\`, \`find()\`
-- ✅ **const 참조** (레슨 12) — 읽기 전용 전달 \`const Character&\`
-- ✅ **참조** (레슨 12) — 수정용 전달 \`Character&\`
+- ✅ **range-for + auto** (레슨 11) — \`for (const auto& c : party)\`
+- ✅ **string 심화** (레슨 12) — \`to_string()\`, \`find()\`
+- ✅ **const 참조** (레슨 13) — 읽기 전용 전달 \`const Character&\`
+- ✅ **참조** (레슨 13) — 수정용 전달 \`Character&\`
 
 class로 데이터를 묶고, vector로 관리하고, 참조로 효율적으로 전달하는 패턴 — 앞으로 C++ 코드에서 정말 많이 나와요!`
         }

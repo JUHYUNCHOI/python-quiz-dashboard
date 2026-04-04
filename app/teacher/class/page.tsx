@@ -157,6 +157,13 @@ interface LessonProgressRow {
   updated_at: string
 }
 
+interface StepVisitSummary {
+  lesson_id: string
+  visited_steps: number
+  total_steps: number
+  last_visited_at: string
+}
+
 interface StudentRow {
   id: string
   displayName: string
@@ -168,6 +175,7 @@ interface StudentRow {
   activeToday: boolean
   lessonProgress: LessonProgressRow[]
   quizSessions: QuizSession[]
+  stepVisits: StepVisitSummary[]  // 스텝 방문 현황 (미완료 레슨 포함)
 }
 
 
@@ -479,6 +487,12 @@ export default function ClassDetailPage() {
       .order("completed_at", { ascending: false })
       .limit(studentIds.length * 25)
 
+    // 스텝 방문 로그 — 레슨별 방문 스텝 수 집계
+    const { data: rawStepVisits } = await supabase
+      .from("lesson_step_visits")
+      .select("user_id, lesson_id, step_id, total_steps, last_visited_at")
+      .in("user_id", studentIds)
+
     // 조합
     const profileMap = new Map((profiles || []).map(p => [p.id, p]))
     const gamMap = new Map((gamification || []).map((g: { user_id: string; total_xp: number; daily_streak: number; last_active_date: string }) => [g.user_id, g]))
@@ -488,6 +502,21 @@ export default function ClassDetailPage() {
     for (const qs of quizSessions || []) {
       if (!quizMap.has(qs.user_id)) quizMap.set(qs.user_id, [])
       quizMap.get(qs.user_id)!.push(qs as QuizSession)
+    }
+
+    // 유저별 스텝 방문 집계: user_id → lesson_id → { visited, total, lastAt }
+    type VisitAgg = { visitedSteps: Set<string>; total: number; lastAt: string }
+    const stepVisitMap = new Map<string, Map<string, VisitAgg>>()
+    for (const v of rawStepVisits || []) {
+      if (!stepVisitMap.has(v.user_id)) stepVisitMap.set(v.user_id, new Map())
+      const lessonMap = stepVisitMap.get(v.user_id)!
+      if (!lessonMap.has(v.lesson_id)) {
+        lessonMap.set(v.lesson_id, { visitedSteps: new Set(), total: v.total_steps, lastAt: v.last_visited_at })
+      }
+      const agg = lessonMap.get(v.lesson_id)!
+      agg.visitedSteps.add(v.step_id)
+      if (v.total_steps > agg.total) agg.total = v.total_steps
+      if (v.last_visited_at > agg.lastAt) agg.lastAt = v.last_visited_at
     }
 
     // 유저별 진도 계산
@@ -547,6 +576,12 @@ export default function ClassDetailPage() {
         activeToday: activeTodaySet.has(sid),
         lessonProgress,
         quizSessions: quizMap.get(sid) || [],
+        stepVisits: Array.from(stepVisitMap.get(sid)?.entries() || []).map(([lessonId, agg]) => ({
+          lesson_id: lessonId,
+          visited_steps: agg.visitedSteps.size,
+          total_steps: agg.total,
+          last_visited_at: agg.lastAt,
+        })),
       }
     })
 
@@ -928,7 +963,7 @@ export default function ClassDetailPage() {
 
                         {/* 레슨 진도 탭 */}
                         {activeTab === "lessons" && (
-                          <StudentProgress lessonProgress={student.lessonProgress} studentId={student.id} homeworkLessonIds={hwLessonsByStudent.get(student.id)} />
+                          <StudentProgress lessonProgress={student.lessonProgress} studentId={student.id} homeworkLessonIds={hwLessonsByStudent.get(student.id)} stepVisits={student.stepVisits} />
                         )}
 
                         {/* 퀴즈 리포트 탭 */}
