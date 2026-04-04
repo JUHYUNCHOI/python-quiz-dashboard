@@ -472,12 +472,12 @@ export default function ClassDetailPage() {
       .select("user_id, total_xp, daily_streak, last_active_date")
       .in("user_id", studentIds)
 
-    // 전체 레슨 진도 (학생 1명당 최대 ~120행 = 52레슨×2타입+버퍼)
+    // 전체 레슨 진도 (학생당 최대 ~120행, 상한 5000으로 고정)
     const { data: progress } = await supabase
       .from("lesson_progress")
       .select("user_id, lesson_id, progress_type, completed, score, updated_at")
       .in("user_id", studentIds)
-      .limit(studentIds.length * 130)
+      .limit(5000)
 
     // 퀴즈 세션 — question_details 제외, 학생당 최대 25개 (개요 통계용)
     const { data: quizSessions } = await supabase
@@ -529,16 +529,19 @@ export default function ClassDetailPage() {
     for (const p of progress || []) {
       // 레슨 진도 목록
       if (!progressMap.has(p.user_id)) progressMap.set(p.user_id, [])
+      // progress_type: "quiz" → "review" 로 normalize (구버전 호환)
+      const normalizedType = p.progress_type === "quiz" ? "review" : (p.progress_type as "learn" | "review")
       progressMap.get(p.user_id)!.push({
         lesson_id: p.lesson_id,
-        progress_type: p.progress_type as "learn" | "review",
+        progress_type: normalizedType,
         completed: p.completed,
         score: p.score,
         updated_at: p.updated_at,
       })
 
       // 완료 수: "learn" 타입 + completed=true인 lesson_id만 unique하게 카운트
-      if (p.completed && p.progress_type === "learn") {
+      // completed가 null인 레거시 행도 progress_type=learn이면 완료로 처리
+      if ((p.completed === true || p.completed === null) && p.progress_type === "learn") {
         if (!completedLessonsSet.has(p.user_id)) completedLessonsSet.set(p.user_id, new Set())
         completedLessonsSet.get(p.user_id)!.add(p.lesson_id)
       }
