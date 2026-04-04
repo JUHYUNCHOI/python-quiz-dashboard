@@ -32,7 +32,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 3,
-    lessonId: 2,
+    lessonId: 3,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `x = None\nprint(x is None)`,
@@ -62,7 +62,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 5,
-    lessonId: 2,
+    lessonId: 3,
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
     code: `x = 5\ny = 2.0\nprint(type(x + y))`,
@@ -75,7 +75,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 7,
-    lessonId: 2,
+    lessonId: 3,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `a = 0.1 + 0.2\nprint(a == 0.3)\nprint(round(a, 1) == 0.3)`,
@@ -5188,7 +5188,7 @@ print(num + 5)`,
   },
   {
     id: 403,
-    lessonId: 10,
+    lessonId: 18,
     difficulty: "쉬움",
     question: "사용자가 '3 7'을 입력했을 때 다음 코드의 출력 결과는?",
     code: `a, b = input('두 숫자: ').split()
