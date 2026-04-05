@@ -147,6 +147,7 @@ export function PracticeStep({ step, lang = "ko", onSuccess, lessonId, isComplet
           lessonId={lessonId}
           stepId={step.id}
           stepTitle={step.title}
+          isCompleted={done}
         />
 
         {/* expectedOutput 없는 경우 — 실행 후 자유 완료 */}

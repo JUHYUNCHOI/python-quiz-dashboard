@@ -3,7 +3,7 @@
 import { useState, useEffect, use, useCallback, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { RequireAuth } from "@/components/require-auth"
-import { ChevronRight, ChevronLeft, X, Lock, PartyPopper, RotateCcw, LogIn } from "lucide-react"
+import { ChevronRight, ChevronLeft, X, Lock, PartyPopper, RotateCcw, LogIn, Pencil } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
 import { LanguageToggle } from "@/components/language-toggle"
@@ -28,6 +28,7 @@ import { CodeSubmissionProvider } from "@/contexts/code-submission-context"
 import { Confetti } from "@/components/learn/confetti"
 import { SuccessOverlay } from "@/components/learn/success-overlay"
 import { StepRenderer } from "@/components/learn/step-renderer"
+import { StepEditor } from "@/components/learn/step-editor"
 import { lessonsData, bilingualLessons, lessonVariants } from "@/components/learn/lesson-registry"
 import type { LessonStep } from "@/components/learn/types"
 
@@ -102,6 +103,17 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const [hintLevel, setHintLevel] = useState(0)
   const [quizAttempts, setQuizAttempts] = useState(0)
   const [showChapterList, setShowChapterList] = useState(false)
+  const [stepOverrides, setStepOverrides] = useState<Record<string, Partial<LessonStep>>>({})
+  const [editingStep, setEditingStep] = useState<LessonStep | null>(null)
+
+  // 레슨 오버라이드 로드
+  useEffect(() => {
+    fetch(`/api/admin/lesson-step?lessonId=${lessonId}`)
+      .then(r => r.json())
+      .then(d => { if (d.overrides) setStepOverrides(d.overrides) })
+      .catch(() => {})
+  }, [lessonId])
+
   // 선생님이 학생 시점으로 전환 (프로필에서 설정, localStorage 저장)
   // 복습 페이지에서 진입했는지 확인
   const fromReview = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("from") === "review"
@@ -111,6 +123,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
 
   const chapter = lesson?.chapters[currentChapter]
   const step = chapter?.steps[currentStep]
+  const mergedStep = step ? { ...step, ...(stepOverrides[step.id]?.[lang] ?? stepOverrides[step.id] ?? {}) } : step
 
   const isCurrentStepCompleted = step ? completedSteps.has(step.id) : false
   
@@ -314,6 +327,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     setShowExplanation(false)
     setHintLevel(0)
     setQuizAttempts(0)
+    setShowSuccess(false)
+    setShowConfetti(false)
   }
 
   const restoreCompletedStepState = useCallback((targetStep: LessonStep | undefined) => {
@@ -340,10 +355,10 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const handleSuccess = useCallback(() => {
     if (!step?.id || completedSteps.has(step.id)) return
     setCompletedSteps(prev => new Set([...prev, step.id]))
-    if (isIGCSE) {
+    if (isIGCSE || effectiveTeacher) {
       play("codeSuccess")
     } else {
-      if (!effectiveTeacher) setScore(prev => prev + 10)
+      setScore(prev => prev + 10)
       setShowConfetti(true)
       setSuccessMessage(t("잘했어요! 🎉", "Great job! 🎉"))
       setShowSuccess(true)
@@ -442,6 +457,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
 
   const goNext = () => {
     if (!canGoNext()) return
+    setShowSuccess(false)
+    setShowConfetti(false)
     // explain/interactive/practice 등 읽기 스텝만 자동 완료 처리
     // quiz/predict/fillblank는 실제로 풀어야 완료됨
     // 읽기 스텝은 넘어가면 자동 완료 (선생님 모드에서도 시각적 진행 표시, 저장은 useEffect에서 막음)
@@ -478,6 +495,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   }
 
   const goPrev = () => {
+    setShowSuccess(false)
+    setShowConfetti(false)
     if (currentStep > 0) {
       const prevStep = chapter.steps[currentStep - 1]
       setCurrentStep(currentStep - 1)
@@ -513,9 +532,9 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     if (isCorrect) {
       play("correct")
       if (!completedSteps.has(step.id)) {
-        if (!effectiveTeacher && !isIGCSE) setScore(prev => prev + 10)
         setCompletedSteps(prev => new Set([...prev, step.id]))
-        if (!isIGCSE) {
+        if (!isIGCSE && !effectiveTeacher) {
+          setScore(prev => prev + 10)
           setShowConfetti(true)
           setSuccessMessage(t("정답! 🎉", "Correct! 🎉"))
           setShowSuccess(true)
@@ -545,9 +564,9 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     if (correct) {
       play("correct")
       if (!completedSteps.has(step.id)) {
-        if (!effectiveTeacher && !isIGCSE) setScore(prev => prev + 10)
         setCompletedSteps(prev => new Set([...prev, step.id]))
-        if (!isIGCSE) {
+        if (!isIGCSE && !effectiveTeacher) {
+          setScore(prev => prev + 10)
           setShowConfetti(true)
           setSuccessMessage(t("정답! 🎉", "Correct! 🎉"))
           setShowSuccess(true)
@@ -891,9 +910,19 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
 
         {/* 메인 콘텐츠 */}
         <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6">
-          <div className="bg-white rounded-2xl p-6 pb-28 md:p-10 md:pb-28 shadow-sm">
+          <div className="relative bg-white rounded-2xl p-6 pb-28 md:p-10 md:pb-28 shadow-sm">
+            {/* 선생님 전용 편집 버튼 */}
+            {effectiveTeacher && mergedStep && (
+              <button
+                onClick={() => setEditingStep(mergedStep)}
+                className="absolute top-4 right-4 p-2 rounded-lg text-gray-300 hover:text-orange-500 hover:bg-orange-50 transition-colors"
+                title="스텝 내용 수정"
+              >
+                <Pencil className="h-4 w-4" />
+              </button>
+            )}
             <StepRenderer
-              step={step}
+              step={mergedStep}
               lang={lang}
               isCompleted={effectiveTeacher ? false : isCurrentStepCompleted}
               lessonId={lessonId}
@@ -974,6 +1003,20 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
           </div>
         </div>
       </div>
+    {editingStep && (
+      <StepEditor
+        step={editingStep}
+        lessonId={lessonId}
+        lang={lang}
+        onClose={() => setEditingStep(null)}
+        onSaved={(overrides) => {
+          setStepOverrides(prev => ({
+            ...prev,
+            [editingStep.id]: { ...(prev[editingStep.id] ?? {}), [lang]: { ...(prev[editingStep.id]?.[lang] ?? {}), ...overrides } }
+          }))
+        }}
+      />
+    )}
     </CodeSubmissionProvider>
   )
 }

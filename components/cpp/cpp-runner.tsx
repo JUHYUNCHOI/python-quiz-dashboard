@@ -93,6 +93,8 @@ interface CppRunnerProps {
   lessonId?: string
   stepId?: string
   stepTitle?: string
+  // 완료 후 Run 버튼 숨기기
+  isCompleted?: boolean
 }
 
 const WANDBOX_API = "https://wandbox.org/api/compile.json"
@@ -129,6 +131,7 @@ export function CppRunner({
   lessonId,
   stepId,
   stepTitle,
+  isCompleted = false,
 }: CppRunnerProps) {
   const storageKey = stepId ? `cpp-runner-${lessonId ?? "x"}-${stepId}` : null
 
@@ -414,31 +417,33 @@ export function CppRunner({
         </div>
       </div>
 
-      {/* 버튼 */}
-      <div className="flex gap-2">
-        <button
-          onClick={runCode}
-          disabled={!code.trim() || isLoading}
-          className={cn(
-            "flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl font-bold text-sm transition-all",
-            code.trim() && !isLoading
-              ? "bg-teal-600 hover:bg-teal-500 text-white shadow-md"
-              : "bg-gray-300 text-gray-500 cursor-not-allowed"
-          )}
-        >
-          {isLoading
-            ? <><Loader2 className="w-4 h-4 animate-spin" />{isEn ? "Running..." : "컴파일 중..."}</>
-            : <><Play className="w-4 h-4" />{isEn ? "▶ Run & Save" : "▶ 실행 및 저장"}</>
-          }
-        </button>
-        <button
-          onClick={reset}
-          title={isEn ? "Reset" : "초기화"}
-          className="px-4 py-2.5 rounded-xl font-bold transition-all bg-gray-200 hover:bg-gray-300 text-gray-700"
-        >
-          <RotateCcw className="w-4 h-4" />
-        </button>
-      </div>
+      {/* 버튼 — 완료된 스텝은 숨김 */}
+      {!isCompleted && (
+        <div className="flex gap-2">
+          <button
+            onClick={runCode}
+            disabled={!code.trim() || isLoading}
+            className={cn(
+              "flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl font-bold text-sm transition-all",
+              code.trim() && !isLoading
+                ? "bg-teal-600 hover:bg-teal-500 text-white shadow-md"
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+            )}
+          >
+            {isLoading
+              ? <><Loader2 className="w-4 h-4 animate-spin" />{isEn ? "Running..." : "컴파일 중..."}</>
+              : <><Play className="w-4 h-4" />{isEn ? "▶ Run & Save" : "▶ 실행 및 저장"}</>
+            }
+          </button>
+          <button
+            onClick={reset}
+            title={isEn ? "Reset" : "초기화"}
+            className="px-4 py-2.5 rounded-xl font-bold transition-all bg-gray-200 hover:bg-gray-300 text-gray-700"
+          >
+            <RotateCcw className="w-4 h-4" />
+          </button>
+        </div>
+      )}
 
       {/* 실행 결과 */}
       {(output || error) && (
