@@ -254,9 +254,11 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   useEffect(() => {
     if (!lesson || !progressLoaded) return
     if (effectiveTeacher) return // 선생님 모드에서는 진도 저장 안함
+    const totalSteps = lesson.chapters.reduce((sum, ch) => sum + ch.steps.length, 0)
     const progressData = {
       chapter: currentChapter, step: currentStep, score,
       completed: Array.from(completedSteps),
+      totalSteps,
     }
     localStorage.setItem(progressKey, JSON.stringify(progressData))
     // Supabase에도 동기화 (debounced, fire-and-forget)

@@ -83,14 +83,16 @@ export async function migrateLocalStorageToSupabase(userId: string) {
   const supabase = createClient()
 
   // 레거시 null variant → '' 정리 (UNIQUE 제약조건 호환성)
+  // null 행과 "" 행이 동시에 있으면 충돌 발생 → 먼저 "" 행에 merge 후 null 행 삭제
   try {
+    // null 행 삭제 (SQL로 이미 중복 정리됨 — 이후 재발 방지용)
     await supabase
       .from("lesson_progress")
-      .update({ variant: "" })
+      .delete()
       .eq("user_id", userId)
       .is("variant", null)
   } catch {
-    // variant 정리 실패 시 무시 — 이후 upsert가 새 행으로 생성됨
+    // variant 정리 실패 시 무시
   }
 
   // 클라우드 gamification 데이터 조회 (스마트 머지용)

@@ -4,18 +4,17 @@ import { useEffect, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
 import { createClient } from "@/lib/supabase/client"
-import type { Class, Profile, GamificationData } from "@/lib/supabase/types"
+import type { Class, Profile } from "@/lib/supabase/types"
 import type { QuizSession } from "@/lib/supabase/types"
 import { Card } from "@/components/ui/card"
-import { ArrowLeft, Copy, Check, Users, Trophy, Flame, BookOpen, ChevronDown, ClipboardCheck, ExternalLink, AlertTriangle, Clock } from "lucide-react"
+import { ArrowLeft, Copy, Check, Users, Trophy, Flame, BookOpen, ChevronDown, ClipboardCheck, ExternalLink } from "lucide-react"
 import Link from "next/link"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
-import { StudentQuizReport } from "@/components/teacher/student-quiz-report"
-import { StudentConsistency } from "@/components/teacher/student-consistency"
 import { StudentProgress } from "@/components/teacher/student-progress"
 import { ClassOverview } from "@/components/teacher/class-overview"
 import { getLessonName, pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
+import { StudentDetailPanel } from "@/components/teacher/student-detail-panel"
 
 const STUDENTS_PER_PAGE = 10
 
@@ -211,159 +210,6 @@ function formatLastActive(dateStr: string, lang: "ko" | "en" = "ko"): string {
   return lang === "en" ? "30d+" : "30일+"
 }
 
-// ─────────────────────────────────────────────────────────
-// 학생 자동 분석 카드
-// ─────────────────────────────────────────────────────────
-function StudentInsights({ lessonProgress, quizSessions, lang }: {
-  lessonProgress: LessonProgressRow[]
-  quizSessions: QuizSession[]
-  lang: "ko" | "en"
-}) {
-  // lesson_id 별로 learn/review 최신 행 수집
-  const learnMap = new Map<string, { updated_at: string }>()
-  const reviewMap = new Map<string, { score: number; updated_at: string }>()
-  for (const row of lessonProgress) {
-    if (row.progress_type === "learn" && row.completed) {
-      const ex = learnMap.get(row.lesson_id)
-      if (!ex || row.updated_at > ex.updated_at) learnMap.set(row.lesson_id, { updated_at: row.updated_at })
-    }
-    if (row.progress_type === "review" && row.completed) {
-      const ex = reviewMap.get(row.lesson_id)
-      if (!ex || row.updated_at > ex.updated_at) reviewMap.set(row.lesson_id, { score: row.score, updated_at: row.updated_at })
-    }
-  }
-
-  // 0. 자주 틀리는 문제 (퀴즈 세션 집계)
-  const conceptMap = new Map<number, { text: string; total: number; wrong: number }>()
-  for (const session of quizSessions) {
-    for (const q of (session.question_details ?? [])) {
-      const entry = conceptMap.get(q.question_id) ?? { text: q.question_text, total: 0, wrong: 0 }
-      entry.total++
-      if (!q.is_correct) entry.wrong++
-      conceptMap.set(q.question_id, entry)
-    }
-  }
-  const weakQuestions = [...conceptMap.entries()]
-    .map(([id, v]) => ({ id, text: v.text, total: v.total, wrong: v.wrong, pct: Math.round((v.wrong / v.total) * 100) }))
-    .filter(w => w.total >= 2 && w.wrong >= 2)   // 2번 이상 틀린 문제
-    .sort((a, b) => b.wrong - a.wrong || b.pct - a.pct)
-    .slice(0, 4)
-
-  // 1. 낮은 복습 점수 수업 (복습 완료했지만 점수 < 70%)
-  const lowScores = [...reviewMap.entries()]
-    .map(([lessonId, { score, updated_at }]) => ({ lessonId, score, updated_at }))
-    .filter(r => r.score > 0 && r.score < 70)
-    .sort((a, b) => a.score - b.score)
-    .slice(0, 3)
-
-  // 2. 복습이 밀린 수업 (학습 완료 후 D+3 이상 미복습)
-  const overdueReviews = [...learnMap.entries()]
-    .filter(([lessonId]) => !reviewMap.has(lessonId))
-    .map(([lessonId, { updated_at }]) => ({ lessonId, days: daysSince(updated_at) }))
-    .filter(r => r.days >= 3)
-    .sort((a, b) => b.days - a.days)
-    .slice(0, 3)
-
-  if (weakQuestions.length === 0 && lowScores.length === 0 && overdueReviews.length === 0) return null
-
-  return (
-    <div className="mt-3 mb-1 rounded-xl border border-orange-200 bg-orange-50 p-3 space-y-3">
-      <div className="flex items-center gap-1.5">
-        <AlertTriangle className="w-3.5 h-3.5 text-orange-500" />
-        <span className="text-xs font-black text-orange-700">{lang === "en" ? "Learning Analysis" : "학습 분석"}</span>
-        <span className="text-[10px] text-orange-400 ml-auto">{lang === "en" ? "Auto-detected" : "자동 감지"}</span>
-      </div>
-
-      {/* 자주 틀리는 문제 */}
-      {weakQuestions.length > 0 && (
-        <div className="space-y-1.5">
-          <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">🔁 {lang === "en" ? "Repeatedly wrong" : "반복해서 틀린 문제"}</p>
-          {weakQuestions.map(w => (
-            <div key={w.id} className="flex items-start gap-2 py-1 border-b border-orange-100 last:border-0">
-              <div className="flex-1 min-w-0">
-                <p className="text-[11px] text-gray-700 line-clamp-2 leading-snug">{w.text}</p>
-              </div>
-              <div className="flex-shrink-0 flex flex-col items-end gap-0.5">
-                <span className={cn(
-                  "text-[10px] font-black px-1.5 py-0.5 rounded",
-                  w.pct >= 80 ? "bg-red-100 text-red-600" : w.pct >= 60 ? "bg-orange-100 text-orange-600" : "bg-amber-100 text-amber-600"
-                )}>{lang === "en" ? `Wrong ${w.wrong}×` : `${w.wrong}번 틀림`}</span>
-                <span className="text-[9px] text-gray-400">{lang === "en" ? `${w.pct}% wrong of ${w.total}` : `${w.total}번 중 ${w.pct}% 오답`}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* 낮은 복습 점수 */}
-      {lowScores.length > 0 && (
-        <div className="space-y-1.5">
-          <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">📉 {lang === "en" ? "Low review scores — re-review recommended" : "낮은 복습 점수 — 재복습 권장"}</p>
-          {lowScores.map(r => (
-            <div key={r.lessonId} className="flex items-center gap-2">
-              <div className="flex-1 min-w-0">
-                <span className="text-[11px] text-gray-700 truncate block font-medium">{getLessonName(r.lessonId, lang)}</span>
-                <div className="flex items-center gap-1 mt-0.5">
-                  <div className="w-20 h-1 bg-red-100 rounded-full overflow-hidden">
-                    <div
-                      className={cn("h-full rounded-full", r.score < 40 ? "bg-red-500" : r.score < 60 ? "bg-orange-400" : "bg-amber-400")}
-                      style={{ width: `${r.score}%` }}
-                    />
-                  </div>
-                  <span className={cn(
-                    "text-[10px] font-black",
-                    r.score < 40 ? "text-red-600" : r.score < 60 ? "text-orange-600" : "text-amber-600"
-                  )}>{r.score}%</span>
-                </div>
-              </div>
-              <Link
-                href={`/review/${r.lessonId}`}
-                target="_blank"
-                className="flex-shrink-0 text-[10px] font-bold px-2 py-1 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition-colors flex items-center gap-0.5"
-              >
-                {lang === "en" ? "Review →" : "복습하기 →"}
-              </Link>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* 복습이 밀린 수업 */}
-      {overdueReviews.length > 0 && (
-        <div className="space-y-1.5">
-          <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wide">⏰ {lang === "en" ? "Overdue reviews" : "복습이 밀린 수업"}</p>
-          {overdueReviews.map(r => (
-            <div key={r.lessonId} className="flex items-center gap-2">
-              <div className="flex-1 min-w-0">
-                <span className="text-[11px] text-gray-700 truncate block font-medium">{getLessonName(r.lessonId, lang)}</span>
-                <span className={cn(
-                  "text-[10px] font-bold",
-                  r.days >= 14 ? "text-red-500" : r.days >= 7 ? "text-amber-500" : "text-yellow-600"
-                )}>{lang === "en" ? `No review for ${r.days}d` : `학습 후 ${r.days}일째 복습 없음`}</span>
-              </div>
-              <Link
-                href={`/review/${r.lessonId}`}
-                target="_blank"
-                className={cn(
-                  "flex-shrink-0 text-[10px] font-bold px-2 py-1 rounded-lg transition-colors flex items-center gap-0.5",
-                  r.days >= 14 ? "bg-red-100 text-red-600 hover:bg-red-200" :
-                  r.days >= 7  ? "bg-amber-100 text-amber-600 hover:bg-amber-200" :
-                                 "bg-yellow-100 text-yellow-600 hover:bg-yellow-200"
-                )}
-              >
-                {lang === "en" ? "Review →" : "복습하기 →"}
-              </Link>
-            </div>
-          ))}
-        </div>
-      )}
-
-      <p className="text-[9px] text-orange-300 border-t border-orange-200 pt-2">
-        {lang === "en" ? "Share the review link directly with the student, or guide them to review on their own." : "복습하기 링크를 학생에게 직접 공유하거나, 학생이 스스로 복습하도록 안내하세요."}
-      </p>
-    </div>
-  )
-}
 
 export default function ClassDetailPage() {
   const searchParams = useSearchParams()
@@ -376,8 +222,7 @@ export default function ClassDetailPage() {
   const [copiedCode, setCopiedCode] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [sortBy, setSortBy] = useState<"name" | "xp" | "lessons" | "streak" | "lastActive">("lastActive")
-  const [expandedStudent, setExpandedStudent] = useState<string | null>(null)
-  const [activeTab, setActiveTab] = useState<"lessons" | "quizzes" | "consistency">("lessons")
+  const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null)
   const [parentLinkCopied, setParentLinkCopied] = useState<string | null>(null)
   const [parentLinkError, setParentLinkError] = useState<string | null>(null)
   const [generatingLink, setGeneratingLink] = useState<string | null>(null)
@@ -397,27 +242,26 @@ export default function ClassDetailPage() {
     loadClassData()
   }, [user, classId])
 
-  // 학생 카드 펼칠 때 question_details 포함 상세 세션 로드 (lazy)
+  // 학생 패널 열릴 때 question_details 포함 상세 세션 로드 (lazy)
   useEffect(() => {
-    if (!expandedStudent || detailedSessions[expandedStudent]) return
+    if (!selectedStudentId || detailedSessions[selectedStudentId]) return
     const fetchDetail = async () => {
       const supabase = createClient()
       const { data } = await supabase
         .from("quiz_sessions")
         .select("*")
-        .eq("user_id", expandedStudent)
+        .eq("user_id", selectedStudentId)
         .order("completed_at", { ascending: false })
         .limit(30)
-      if (data) setDetailedSessions(prev => ({ ...prev, [expandedStudent]: data as QuizSession[] }))
+      if (data) setDetailedSessions(prev => ({ ...prev, [selectedStudentId]: data as QuizSession[] }))
     }
     fetchDetail()
-  }, [expandedStudent]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [selectedStudentId]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // URL에 student 파라미터 있으면 자동으로 해당 학생 펼치고 스크롤
+  // URL에 student 파라미터 있으면 자동으로 해당 학생 패널 열기
   useEffect(() => {
     if (!focusStudentId || students.length === 0) return
-    setExpandedStudent(focusStudentId)
-    setActiveTab("lessons")
+    setSelectedStudentId(focusStudentId)
     const sorted = [...students].sort((a, b) => {
       const da = Math.floor((Date.now() - new Date(a.lastActive).getTime()) / 86400000)
       const db = Math.floor((Date.now() - new Date(b.lastActive).getTime()) / 86400000)
@@ -425,9 +269,6 @@ export default function ClassDetailPage() {
     })
     const idx = sorted.findIndex(s => s.id === focusStudentId)
     if (idx >= 0) setStudentPage(Math.floor(idx / STUDENTS_PER_PAGE))
-    setTimeout(() => {
-      document.getElementById(`student-${focusStudentId}`)?.scrollIntoView({ behavior: "smooth", block: "center" })
-    }, 400)
   }, [focusStudentId, students]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadClassData = async () => {
@@ -472,12 +313,12 @@ export default function ClassDetailPage() {
       .select("user_id, total_xp, daily_streak, last_active_date")
       .in("user_id", studentIds)
 
-    // 전체 레슨 진도 (학생 1명당 최대 ~120행 = 52레슨×2타입+버퍼)
+    // 전체 레슨 진도 (학생당 최대 ~120행, 상한 5000으로 고정)
     const { data: progress } = await supabase
       .from("lesson_progress")
       .select("user_id, lesson_id, progress_type, completed, score, updated_at")
       .in("user_id", studentIds)
-      .limit(studentIds.length * 130)
+      .limit(5000)
 
     // 퀴즈 세션 — question_details 제외, 학생당 최대 25개 (개요 통계용)
     const { data: quizSessions } = await supabase
@@ -529,16 +370,19 @@ export default function ClassDetailPage() {
     for (const p of progress || []) {
       // 레슨 진도 목록
       if (!progressMap.has(p.user_id)) progressMap.set(p.user_id, [])
+      // progress_type: "quiz" → "review" 로 normalize (구버전 호환)
+      const normalizedType = p.progress_type === "quiz" ? "review" : (p.progress_type as "learn" | "review")
       progressMap.get(p.user_id)!.push({
         lesson_id: p.lesson_id,
-        progress_type: p.progress_type as "learn" | "review",
+        progress_type: normalizedType,
         completed: p.completed,
         score: p.score,
         updated_at: p.updated_at,
       })
 
       // 완료 수: "learn" 타입 + completed=true인 lesson_id만 unique하게 카운트
-      if (p.completed && p.progress_type === "learn") {
+      // completed가 null인 레거시 행도 progress_type=learn이면 완료로 처리
+      if ((p.completed === true || p.completed === null) && p.progress_type === "learn") {
         if (!completedLessonsSet.has(p.user_id)) completedLessonsSet.set(p.user_id, new Set())
         completedLessonsSet.get(p.user_id)!.add(p.lesson_id)
       }
@@ -752,13 +596,9 @@ export default function ClassDetailPage() {
                 hwStudentIds={hwStudentIds}
                 hwPendingIds={hwPendingIds}
                 onStudentClick={(studentId) => {
-                  setExpandedStudent(studentId)
-                  setActiveTab("lessons")
+                  setSelectedStudentId(studentId === selectedStudentId ? null : studentId)
                   const idx = sortedStudents.findIndex(s => s.id === studentId)
                   if (idx >= 0) setStudentPage(Math.floor(idx / STUDENTS_PER_PAGE))
-                  setTimeout(() => {
-                    document.getElementById(`student-${studentId}`)?.scrollIntoView({ behavior: "smooth", block: "center" })
-                  }, 150)
                 }}
               />
             )}
@@ -768,13 +608,9 @@ export default function ClassDetailPage() {
               students={students}
               joinCode={classInfo?.join_code}
               onStudentClick={(studentId) => {
-                setExpandedStudent(studentId)
-                setActiveTab("lessons")
+                setSelectedStudentId(studentId === selectedStudentId ? null : studentId)
                 const idx = sortedStudents.findIndex(s => s.id === studentId)
                 if (idx >= 0) setStudentPage(Math.floor(idx / STUDENTS_PER_PAGE))
-                setTimeout(() => {
-                  document.getElementById(`student-${studentId}`)?.scrollIntoView({ behavior: "smooth", block: "center" })
-                }, 100)
               }}
             />
 
@@ -819,14 +655,14 @@ export default function ClassDetailPage() {
                   const totalPages = Math.ceil(sortedStudents.length / STUDENTS_PER_PAGE)
                   return (<>
                 {pagedStudents.map((student, idx) => (
-                  <Card key={student.id} id={`student-${student.id}`} className="border border-gray-100 overflow-hidden">
+                  <Card key={student.id} id={`student-${student.id}`} className={cn("border overflow-hidden transition-all", selectedStudentId === student.id ? "border-orange-300 shadow-md" : "border-gray-100")}>
                     {/* 학생 요약 행 */}
                     <div
                       role="button"
                       tabIndex={0}
-                      onClick={() => setExpandedStudent(expandedStudent === student.id ? null : student.id)}
-                      onKeyDown={(e) => e.key === "Enter" && setExpandedStudent(expandedStudent === student.id ? null : student.id)}
-                      className="w-full p-4 flex items-center gap-3 hover:bg-gray-50/50 transition-colors text-left cursor-pointer"
+                      onClick={() => setSelectedStudentId(selectedStudentId === student.id ? null : student.id)}
+                      onKeyDown={(e) => e.key === "Enter" && setSelectedStudentId(selectedStudentId === student.id ? null : student.id)}
+                      className={cn("w-full p-4 flex items-center gap-3 transition-colors text-left cursor-pointer", selectedStudentId === student.id ? "bg-orange-50/60" : "hover:bg-gray-50/50")}
                     >
                       {/* 순위 + 오늘 활동 표시 */}
                       <div className="relative w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-sm font-bold text-orange-600 flex-shrink-0">
@@ -902,81 +738,12 @@ export default function ClassDetailPage() {
                         )}
                       </button>
 
-                      {/* 펼치기 화살표 */}
+                      {/* 패널 열기 화살표 */}
                       <ChevronDown className={cn(
                         "w-4 h-4 text-gray-400 transition-transform flex-shrink-0",
-                        expandedStudent === student.id && "rotate-180"
+                        selectedStudentId === student.id && "rotate-180"
                       )} />
                     </div>
-
-                    {/* 펼친 상세: 탭 UI */}
-                    {expandedStudent === student.id && (
-                      <div className="px-4 pb-4 border-t border-gray-100">
-                        {/* 자동 분석 카드 */}
-                        <StudentInsights
-                          lessonProgress={student.lessonProgress}
-                          quizSessions={detailedSessions[student.id] || student.quizSessions}
-                          lang={lang}
-                        />
-
-                        {/* 탭 버튼 + 학부모 링크 */}
-                        <div className="flex gap-1 mt-3 mb-1 items-center">
-                          {([
-                            { key: "lessons" as const, label: lang === "en" ? "Lesson Progress" : "레슨 진도" },
-                            { key: "quizzes" as const, label: lang === "en" ? "Quiz Report" : "퀴즈 리포트" },
-                            { key: "consistency" as const, label: lang === "en" ? "Consistency" : "꾸준함" },
-                          ]).map(({ key, label }) => (
-                            <button
-                              key={key}
-                              onClick={() => setActiveTab(key)}
-                              className={cn(
-                                "px-3 py-1.5 rounded-lg text-xs font-medium transition-all",
-                                activeTab === key
-                                  ? "bg-orange-500 text-white"
-                                  : "bg-gray-100 text-gray-500 hover:bg-gray-200"
-                              )}
-                            >
-                              {label}
-                            </button>
-                          ))}
-
-                          {/* 학부모 링크 버튼 */}
-                          <button
-                            onClick={(e) => { e.stopPropagation(); generateParentLink(student) }}
-                            disabled={generatingLink === student.id}
-                            className={cn(
-                              "ml-auto px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1",
-                              parentLinkCopied === student.id
-                                ? "bg-green-100 text-green-700"
-                                : "bg-indigo-100 text-indigo-600 hover:bg-indigo-200"
-                            )}
-                          >
-                            {parentLinkCopied === student.id ? (
-                              <><Check className="w-3 h-3" /> {lang === "en" ? "Copied!" : "복사됨!"}</>
-                            ) : generatingLink === student.id ? (
-                              lang === "en" ? "Generating..." : "생성 중..."
-                            ) : (
-                              <><ExternalLink className="w-3 h-3" /> {lang === "en" ? "Parent link" : "학부모 링크"}</>
-                            )}
-                          </button>
-                        </div>
-
-                        {/* 레슨 진도 탭 */}
-                        {activeTab === "lessons" && (
-                          <StudentProgress lessonProgress={student.lessonProgress} studentId={student.id} homeworkLessonIds={hwLessonsByStudent.get(student.id)} stepVisits={student.stepVisits} />
-                        )}
-
-                        {/* 퀴즈 리포트 탭 */}
-                        {activeTab === "quizzes" && (
-                          <StudentQuizReport quizSessions={detailedSessions[student.id] || student.quizSessions} />
-                        )}
-
-                        {/* 꾸준함 탭 */}
-                        {activeTab === "consistency" && (
-                          <StudentConsistency quizSessions={student.quizSessions} />
-                        )}
-                      </div>
-                    )}
                   </Card>
                 ))}
                 {totalPages > 1 && (
@@ -1007,6 +774,23 @@ export default function ClassDetailPage() {
           </>
         )}
       </main>
+
+      {/* 학생 상세 슬라이드 패널 */}
+      {selectedStudentId && (() => {
+        const selectedStudent = students.find(s => s.id === selectedStudentId)
+        return selectedStudent ? (
+          <StudentDetailPanel
+            student={selectedStudent}
+            detailedSessions={detailedSessions[selectedStudentId] || []}
+            homeworkLessonIds={hwLessonsByStudent.get(selectedStudentId)}
+            onClose={() => setSelectedStudentId(null)}
+            onGenerateParentLink={generateParentLink}
+            parentLinkCopied={parentLinkCopied}
+            generatingLink={generatingLink}
+            lang={lang}
+          />
+        ) : null
+      })()}
 
       <BottomNav />
     </div>

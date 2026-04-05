@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils"
 
 interface StepAnswerRow {
   step_id: string
-  step_type: string
   is_correct: boolean
   user_answer: Record<string, unknown>
   correct_answer: Record<string, unknown>
@@ -17,6 +16,7 @@ interface StepAnswerRow {
 
 interface StepInfo {
   title: string
+  type?: string
   options?: string[]
   fillBlanks?: Array<{ id: number; answer: string }>
 }
@@ -57,7 +57,7 @@ export function LessonStepAnswersView({ studentId, lessonId, progressType, lang 
     const supabase = createClient()
     supabase
       .from("lesson_step_answers")
-      .select("step_id, step_type, is_correct, user_answer, correct_answer, updated_at")
+      .select("step_id, is_correct, user_answer, correct_answer, updated_at")
       .eq("user_id", studentId)
       .eq("lesson_id", lessonId)
       .eq("progress_type", progressType)
@@ -83,6 +83,7 @@ export function LessonStepAnswersView({ studentId, lessonId, progressType, lang 
       for (const step of chapter.steps) {
         stepMap.set(step.id, {
           title: step.title,
+          type: step.type,
           options: step.options,
           fillBlanks: step.fillBlanks,
         })
@@ -129,8 +130,9 @@ export function LessonStepAnswersView({ studentId, lessonId, progressType, lang 
       {/* 스텝별 답변 */}
       {answers.map(answer => {
         const stepInfo = stepMap.get(answer.step_id)
-        const isQuizOrPredict = answer.step_type === "quiz" || answer.step_type === "predict"
-        const isFillblank = answer.step_type === "fillblank"
+        const stepType = stepInfo?.type || "quiz"
+        const isQuizOrPredict = stepType === "quiz" || stepType === "predict"
+        const isFillblank = stepType === "fillblank"
         const userIdx = (answer.user_answer as { selectedIdx?: number })?.selectedIdx
         const correctIdx = (answer.correct_answer as { selectedIdx?: number })?.selectedIdx
 
@@ -150,11 +152,11 @@ export function LessonStepAnswersView({ studentId, lessonId, progressType, lang 
                 ? <Check className="w-3.5 h-3.5 text-green-500 flex-shrink-0" />
                 : <X className="w-3.5 h-3.5 text-red-500 flex-shrink-0" />
               }
-              <StepTypeIcon type={answer.step_type} />
+              <StepTypeIcon type={stepType} />
               <span className="text-xs font-semibold text-gray-700 truncate flex-1">
                 {stepInfo?.title || answer.step_id}
               </span>
-              <StepTypeLabel type={answer.step_type} />
+              <StepTypeLabel type={stepType} />
               <span className="text-[9px] text-gray-400 flex-shrink-0">{formatDate(answer.updated_at)}</span>
             </div>
 

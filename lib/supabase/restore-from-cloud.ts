@@ -136,29 +136,36 @@ function restoreQuizHistory(sessions: Record<string, unknown>[]) {
   } catch {}
 }
 
-/** lesson_progress (completed, learn) → completedLessons localStorage */
+/** lesson_progress (completed, learn) → completedLessons localStorage
+ *  기존 localStorage 유무와 관계없이 항상 클라우드 데이터를 merge
+ *  (기존 데이터 보존 + 클라우드 데이터 추가 — 삭제 없음)
+ */
 function restoreCompletedLessons(lessons: Record<string, unknown>[]) {
-  const existingRaw = localStorage.getItem("completedLessons")
-  const existing: string[] = existingRaw ? JSON.parse(existingRaw) : []
-
-  const cloudIds = lessons.map(l => l.lesson_id as string)
-  const merged = Array.from(new Set([...existing, ...cloudIds]))
-
   try {
-    localStorage.setItem("completedLessons", JSON.stringify(merged))
+    const existingRaw = localStorage.getItem("completedLessons")
+    const existing: string[] = existingRaw ? JSON.parse(existingRaw) : []
+    // 기존 값은 숫자/문자 혼재 가능 → 전부 String으로 normalize
+    const existingSet = new Set(existing.map(id => String(id)))
+    // 클라우드 완료 기록 추가
+    for (const l of lessons) {
+      existingSet.add(String(l.lesson_id))
+    }
+    localStorage.setItem("completedLessons", JSON.stringify(Array.from(existingSet)))
   } catch {}
 }
 
-/** lesson_progress (completed, quiz) → completedQuizzes localStorage */
+/** lesson_progress (completed, quiz) → completedQuizzes localStorage
+ *  기존 localStorage 유무와 관계없이 항상 클라우드 데이터를 merge
+ */
 function restoreCompletedQuizzes(lessons: Record<string, unknown>[]) {
-  const existingRaw = localStorage.getItem("completedQuizzes")
-  const existing: string[] = existingRaw ? JSON.parse(existingRaw) : []
-
-  const cloudIds = lessons.map(l => l.lesson_id as string)
-  const merged = Array.from(new Set([...existing, ...cloudIds]))
-
   try {
-    localStorage.setItem("completedQuizzes", JSON.stringify(merged))
+    const existingRaw = localStorage.getItem("completedQuizzes")
+    const existing: string[] = existingRaw ? JSON.parse(existingRaw) : []
+    const existingSet = new Set(existing.map(id => String(id)))
+    for (const l of lessons) {
+      existingSet.add(String(l.lesson_id))
+    }
+    localStorage.setItem("completedQuizzes", JSON.stringify(Array.from(existingSet)))
   } catch {}
 }
 

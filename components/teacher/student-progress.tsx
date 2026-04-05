@@ -186,17 +186,18 @@ function LessonRow({ summary, name, lessonId, studentId, isHomework, stepVisit }
           <span className="text-[10px] text-gray-300">—</span>
         ) : review?.completed ? (
           <>
-            {review.score > 0 ? (
-              <span className={cn(
-                "text-[10px] font-black px-1.5 py-0.5 rounded",
-                review.score >= 80 ? "bg-blue-100 text-blue-700" :
-                review.score >= 60 ? "bg-amber-100 text-amber-700" : "bg-red-100 text-red-600"
-              )}>
-                {Math.min(review.score, 100)}%
-              </span>
-            ) : (
-              <span className="text-[10px] font-bold text-blue-600">복습 ✓</span>
-            )}
+            {(() => {
+              const displayScore = review.score > 0 ? Math.min(review.score, 100) : 100
+              return (
+                <span className={cn(
+                  "text-[10px] font-black px-1.5 py-0.5 rounded",
+                  displayScore >= 80 ? "bg-blue-100 text-blue-700" :
+                  displayScore >= 60 ? "bg-amber-100 text-amber-700" : "bg-red-100 text-red-600"
+                )}>
+                  {displayScore}%
+                </span>
+              )
+            })()}
             <span className="text-[9px] text-gray-400">{formatDate(review.updated_at)}</span>
           </>
         ) : review ? (

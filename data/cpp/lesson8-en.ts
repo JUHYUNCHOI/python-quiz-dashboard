@@ -492,6 +492,67 @@ Solution: Put prototypes in a **separate file (.h)**!
 💡 \`#include <iostream>\` = built-in C++ header. \`#include "file.h"\` = our custom header!`
         },
         {
+          id: "ch2-header-intro",
+          type: "explain",
+          title: "📄 The Header File — What Goes Inside?",
+          content: `When prototypes pile up, it's time to split files. Start with the **header file**!
+
+**.h file = prototypes (declarations) only:**
+
+\`\`\`cpp
+// mymath.h
+int add(int a, int b);
+int multiply(int a, int b);
+\`\`\`
+
+No \`{ }\` body — just declarations! It's like a table of contents saying "these functions exist somewhere."`,
+        },
+        {
+          id: "ch2-header-cpp",
+          type: "explain",
+          title: "📄 The Function Bodies → Go in the .cpp File",
+          content: `The actual function code goes in a **.cpp file**. By convention, use the same name as the header (\`mymath.h\` ↔ \`mymath.cpp\`).
+
+The .cpp file also **includes its own .h file** — so the compiler can check that the definitions match the declarations:
+
+\`\`\`cpp
+// mymath.cpp
+#include "mymath.h"      // ← include my own header!
+
+int add(int a, int b) {
+    return a + b;
+}
+
+int multiply(int a, int b) {
+    return a * b;
+}
+\`\`\`
+
+💡 \`<iostream>\` with angle brackets = C++ built-in library,
+\`"mymath.h"\` with quotes = our own file!`,
+        },
+        {
+          id: "ch2-header-main",
+          type: "explain",
+          title: "📄 Using It — Include the Header in main.cpp",
+          content: `In main.cpp, just **include the header** and you can use the functions — no need to know how they're implemented!
+
+\`\`\`cpp
+// main.cpp
+#include <iostream>
+#include "mymath.h"   // ← just this! add and multiply are ready to use!
+using namespace std;
+
+int main() {
+    cout << add(3, 5) << endl;      // ✅ 8
+    cout << multiply(4, 6) << endl; // ✅ 24
+    return 0;
+}
+\`\`\`
+
+Now we have 3 files. Next, see the full picture of how they connect!`,
+        },
+        {
           id: "ch2-header-guard",
           type: "explain",
           title: "🛡️ Wait, what's this weird code?",

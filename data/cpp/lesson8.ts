@@ -452,6 +452,38 @@ main() 위에 50개 함수를 전부 쓰면... main()이 어디 있는지도 못
         },
         // ===== 헤더 파일: .h → .cpp → main → 시뮬 → 인사이트 → #ifndef =====
         {
+          id: "ch2-header-why",
+          type: "explain",
+          title: "📁 함수가 100개? → 헤더 파일로 분리!",
+          content: `프로토타입이 1~2개면 괜찮지만... 엄청 많아지면 어떻게 될까요?
+
+\`\`\`cpp
+// 10개... 20개... 너무 많아!
+int add(int a, int b);
+int subtract(int a, int b);
+int multiply(int a, int b);
+double divide(double a, double b);
+int max(int a, int b);
+// ... 계속 늘어남 😱
+\`\`\`
+
+해결책: 프로토타입을 **별도 파일(.h)**에 넣으면 돼요!
+
+\`\`\`
+📂 project/
+├── math_utils.h    ← 프로토타입 (선언)
+├── math_utils.cpp  ← 함수 본체 (정의)
+└── main.cpp        ← main 함수
+\`\`\`
+
+| 파이썬 🐍 | C++ ⚡ |
+|---|---|
+| \`import math_utils\` | \`#include "math_utils.h"\` |
+| 파일 하나 | .h (선언) + .cpp (정의) |
+
+💡 \`#include <iostream>\` = C++ 내장 헤더, \`#include "파일.h"\` = 우리가 만든 헤더!`
+        },
+        {
           id: "ch2-header-intro",
           type: "explain",
           title: "📄 헤더 파일 만들어볼게요 — 여기엔 뭐가 들어가요?",
@@ -511,6 +543,50 @@ int main() {
 \`\`\`
 
 이제 3개 파일이 있어요. 이게 어떻게 연결되는지 다음 화면에서 확인해봐요!`
+        },
+        {
+          id: "ch2-header-full",
+          type: "explain",
+          title: "📋 전체 구조 한눈에 보기",
+          content: `3개 파일이 어떻게 연결되는지 보세요:
+
+**① math_utils.h** — 프로토타입 (선언만!)
+\`\`\`cpp
+#ifndef MATH_UTILS_H
+#define MATH_UTILS_H
+
+int add(int a, int b);       // 선언만!
+int multiply(int a, int b);  // 선언만!
+
+#endif
+\`\`\`
+
+**② math_utils.cpp** — 함수 본체 (실제 코드!)
+\`\`\`cpp
+#include "math_utils.h"
+
+int add(int a, int b) {
+    return a + b;
+}
+int multiply(int a, int b) {
+    return a * b;
+}
+\`\`\`
+
+**③ main.cpp** — 사용하는 파일!
+\`\`\`cpp
+#include <iostream>
+#include "math_utils.h"  // 우리 헤더!
+using namespace std;
+
+int main() {
+    cout << add(3, 5) << endl;
+    cout << multiply(4, 6) << endl;
+    return 0;
+}
+\`\`\`
+
+💡 대회용 코드는 파일 하나에 다 넣지만, 실제 팀 프로젝트는 항상 파일을 분리해요!`
         },
         {
           id: "ch2-header-anim",

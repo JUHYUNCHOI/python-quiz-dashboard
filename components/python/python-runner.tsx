@@ -35,6 +35,8 @@ interface PythonRunnerProps {
   storageKey?: string
   /** 이미 완료한 스텝 여부 — 저장된 코드 없어도 완료 상태 표시 */
   isStepDone?: boolean
+  /** false면 실행만 해도 onSuccess 호출 (tryit 모드). true(기본)면 정답 맞아야 호출 (mission 모드) */
+  requireCorrect?: boolean
 }
 
 // Pyodide 싱글톤
@@ -79,7 +81,8 @@ export function PythonRunner({
   minHeight = "100px",
   requireCodeChange = true,
   storageKey,
-  isStepDone = false
+  isStepDone = false,
+  requireCorrect = true,
 }: PythonRunnerProps) {
   const { t } = useLanguage()
   const lsKey = storageKey ? `python-runner-${storageKey}` : null
@@ -235,9 +238,15 @@ export function PythonRunner({
         setAttempts(prev => prev + 1)
 
         if (isMatch) {
+          // 정답: 항상 onSuccess
+          onSuccess?.()
+          if (storageKey) saveSubmission(storageKey, code)
+        } else if (!requireCorrect) {
+          // tryit 모드: 틀려도 실행 & 저장하면 다음으로 진행 허용
           onSuccess?.()
           if (storageKey) saveSubmission(storageKey, code)
         } else {
+          // mission 모드: 틀리면 막음
           onError?.()
           if (attempts >= 1 && hint) {
             setShowHint(true)
@@ -406,7 +415,7 @@ export function PythonRunner({
           ) : (
             <Play className="w-3.5 h-3.5 md:w-4 md:h-4" />
           )}
-          {isLoading ? t("실행중...", "Running...") : t("▶ 실행", "▶ Run")}
+          {isLoading ? t("실행중...", "Running...") : requireCorrect ? t("▶ 실행", "▶ Run") : t("▶ 실행 & 저장", "▶ Run & Save")}
         </button>
         
         <button
@@ -484,7 +493,7 @@ export function PythonRunner({
       )}
 
       {/* 건너뛰기 버튼 (3회 이상 실패 시) */}
-      {attempts >= 3 && isCorrect !== true && (
+      {requireCorrect && attempts >= 3 && isCorrect !== true && (
         <button
           onClick={() => { onSuccess?.() }}
           className="w-full py-2.5 rounded-xl text-sm font-medium text-gray-500 bg-gray-100 hover:bg-gray-200 border border-gray-200 transition-all"

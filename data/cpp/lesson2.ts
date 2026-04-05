@@ -172,6 +172,35 @@ std::string  → std 폴더 안의 string
 @핵심: 규칙: **그룹이름** + **::** + **도구이름** → \`std::cout\`, \`std::endl\``
         },
         {
+          id: "ch2-namespace",
+          type: "explain",
+          title: "📦 namespace = 이름 공간",
+          content: `이 "그룹"의 공식 이름이 **namespace**예요!
+
+namespace = **이름이 충돌하지 않는 공간**
+
+**폴더**랑 똑같아요! 📁
+
+\`\`\`
+문서/사진.jpg
+바탕화면/사진.jpg
+\`\`\`
+
+같은 "사진.jpg"지만 **다른 파일**이에요 — 폴더가 다르니까요!
+
+C++도 마찬가지예요:
+\`\`\`
+std::cout    → std 폴더 안에 있는 cout
+std::endl    → std 폴더 안에 있는 endl
+std::string  → std 폴더 안에 있는 string
+\`\`\`
+
+\`std\`는 C++의 **표준 라이브러리 namespace**예요.
+→ C++이 기본으로 제공하는 모든 도구들이 여기에 있어요!
+
+💡 그래서 지금까지 \`std::cout\`이라고 썼던 거예요 — "성"을 붙여서 정확히 지정하는 거예요!`
+        },
+        {
           id: "ch2-pred1",
           type: "predict" as const,
           title: "이 코드는 될까?",

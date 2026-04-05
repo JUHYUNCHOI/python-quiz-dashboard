@@ -372,6 +372,8 @@ export default function CurriculumPage() {
   const [skipConfirmId, setSkipConfirmId] = useState<number | string | null>(null)
   const [cppNudge, setCppNudge] = useState(false)
   const [showCppModal, setShowCppModal] = useState(false)
+  // 레슨별 진행 중 상태: lessonId → { visitedSteps, totalSteps }
+  const [lessonInProgress, setLessonInProgress] = useState<Map<string, { visited: number; total: number }>>(new Map())
   const [practiceClustersDone, setPracticeClustersDone] = useState(0)
   const [practiceProblemsTotal, setPracticeProblemsTotal] = useState(0)
   const [practiceProblemsDone, setPracticeProblemsDone] = useState(0)
@@ -409,6 +411,24 @@ export default function CurriculumPage() {
       setPracticeProblemsTotal(total)
       setPracticeProblemsDone(done)
       setPracticeClustersDone(clustersDone)
+    } catch { /* ignore */ }
+    // 레슨 스텝 방문 진도 (lesson_step_visits → localStorage 캐시 없이 직접 Supabase 쿼리)
+    // 여기서는 localStorage의 progress 데이터로 "이어보기" 여부만 판단
+    try {
+      const progressMap = new Map<string, { visited: number; total: number }>()
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i)
+        if (!key?.startsWith("practice-v2-")) continue
+        const raw = localStorage.getItem(key)
+        if (!raw) continue
+        const data = JSON.parse(raw)
+        // lessonId 추출: "practice-v2-cpp-7" → "cpp-7", "practice-v2-7" → "7"
+        const lessonId = key.replace(/^practice-v2-/, "").replace(/-(?:turtle|pygame)$/, "")
+        if (data.completed && Array.isArray(data.completed) && data.completed.length > 0) {
+          progressMap.set(lessonId, { visited: data.completed.length, total: data.totalSteps || 0 })
+        }
+      }
+      setLessonInProgress(progressMap)
     } catch { /* ignore */ }
     // 알고리즘 토픽 진도
     try {
@@ -1093,6 +1113,11 @@ export default function CurriculumPage() {
                           const isQuizDone = completedQuizzes.has(lesson.id)
                           const isNextLesson = nextLessonInfo?.lesson.id === lesson.id
                           const isLocked = !unlockedLessons.has(lesson.id)
+                          const inProgressData = !isCompleted ? lessonInProgress.get(String(lesson.id)) : undefined
+                          const hasProgress = !!inProgressData && inProgressData.visited > 0
+                          const progressPct = hasProgress && inProgressData!.total > 0
+                            ? Math.round((inProgressData!.visited / inProgressData!.total) * 100)
+                            : null
 
                           return (
                             <div
@@ -1158,6 +1183,19 @@ export default function CurriculumPage() {
                                     )}
                                   </div>
 
+                                  {/* 진행 중 프로그레스 바 */}
+                                  {hasProgress && progressPct !== null && (
+                                    <div className="mt-1.5 flex items-center gap-2">
+                                      <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                                        <div
+                                          className="h-full bg-purple-400 rounded-full transition-all"
+                                          style={{ width: `${progressPct}%` }}
+                                        />
+                                      </div>
+                                      <span className="text-[10px] text-purple-500 font-bold whitespace-nowrap">{progressPct}%</span>
+                                    </div>
+                                  )}
+
                                   {/* 버튼들: 타이틀 아래 배치로 텍스트 영역 확보 */}
                                   <div className="flex flex-wrap gap-1.5 mt-2">
                                     {isLocked ? (
@@ -1220,10 +1258,12 @@ export default function CurriculumPage() {
                                           className={`px-3 py-1.5 rounded-lg border-2 font-bold text-xs ${
                                             isCompleted
                                               ? "border-green-600 bg-green-50 text-green-700 hover:bg-green-100"
+                                              : hasProgress
+                                              ? `border-black text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${isPseudo ? "bg-purple-500 hover:bg-purple-600" : isCpp ? "bg-purple-500 hover:bg-purple-600" : "bg-purple-500 hover:bg-purple-600"}`
                                               : `border-black text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${isPseudo ? "bg-green-500 hover:bg-green-600" : isCpp ? "bg-blue-500 hover:bg-blue-600" : "bg-green-500 hover:bg-green-600"}`
                                           }`}
                                         >
-                                          {isCompleted ? t("✅ 수업완료", "✅ Done") : t("📺 수업", "📺 Lesson")}
+                                          {isCompleted ? t("✅ 수업완료", "✅ Done") : hasProgress ? t("▶️ 이어보기", "▶️ Continue") : t("📺 수업", "📺 Lesson")}
                                         </Link>
                                         {(isCompleted || isTeacher) && !isPseudo && (!isCpp || cppReviewIds.has(String(lesson.id))) && (
                                           <Link
