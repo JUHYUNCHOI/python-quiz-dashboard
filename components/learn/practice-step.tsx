@@ -61,8 +61,8 @@ export function PracticeStep({ step, lang = "ko", onSuccess, lessonId, isComplet
   }, [isCompleted, step.id])
 
   const isEn = lang === "en"
-  // starterCode가 있으면 그걸 초기 코드로, 없으면 code에서 skeleton 추출
-  const skeleton = step.starterCode ?? (step.code ? extractSkeleton(step.code) : "")
+  // starterCode → initialCode → code 순으로 초기 코드 결정
+  const skeleton = step.starterCode ?? step.initialCode ?? (step.code ? extractSkeleton(step.code) : "")
   const hasExpected = !!step.expectedOutput
 
   // 현재 힌트 레벨 (failCount 기준, 최대 3)
@@ -136,7 +136,7 @@ export function PracticeStep({ step, lang = "ko", onSuccess, lessonId, isComplet
 
         {/* C++ 코드 에디터 + 실행 (완료 후에도 항상 표시) */}
         <CppRunner
-          key={step.id}
+          key={step.id + (skeleton ?? "")}
           initialCode={skeleton || `#include <iostream>\nusing namespace std;\n\nint main() {\n    \n    return 0;\n}`}
           expectedOutput={step.expectedOutput}
           stdin={step.stdin}
