@@ -4,7 +4,7 @@ export const pythonQuestions: QuizQuestion[] = [
   // ── Lesson 1: print() ──
   {
     id: 1,
-    lessonId: 1,
+    lessonId: 3,
     difficulty: "쉬움",
     question: "다음 중 Python에서 주석을 작성하는 올바른 방법은?",
     code: `# 어떤 것이 주석일까요?`,
@@ -32,7 +32,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 3,
-    lessonId: 3,
+    lessonId: 2,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `x = None\nprint(x is None)`,
@@ -49,20 +49,20 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 4,
-    lessonId: 16,
+    lessonId: 9,
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
-    code: `x = bool(0)\ny = bool("")\nz = bool([])\nprint(x, y, z)`,
-    options: ["True True True", "False False False", "True False False", "0 '' []"],
+    code: `x = bool(0)\ny = bool("")\nz = bool(0.0)\nprint(x, y, z)`,
+    options: ["True True True", "False False False", "True False False", "0 '' 0.0"],
     correctAnswer: 1,
-    explanation: "0, 빈 문자열, 빈 리스트는 모두 Falsy 값이므로 bool()로 변환하면 False가 됩니다.",
+    explanation: "0, 빈 문자열, 0.0은 모두 Falsy 값이므로 bool()로 변환하면 False가 됩니다.",
     keyConceptTitle: "Truthy와 Falsy 값",
-    keyConceptDescription: "0, 0.0, '', [], {}, set(), None은 Falsy입니다. 그 외 대부분의 값은 Truthy입니다.",
+    keyConceptDescription: "0, 0.0, '', None 등은 Falsy입니다. 그 외 대부분의 값(비어있지 않은 문자열, 0이 아닌 수)은 Truthy입니다.",
     relatedTopics: ["bool 타입", "조건문", "타입 변환"],
   },
   {
     id: 5,
-    lessonId: 3,
+    lessonId: 2,
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
     code: `x = 5\ny = 2.0\nprint(type(x + y))`,
@@ -75,16 +75,16 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 7,
-    lessonId: 3,
+    lessonId: 2,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
-    code: `a = 0.1 + 0.2\nprint(a == 0.3)\nprint(round(a, 1) == 0.3)`,
-    options: ["False\\nTrue", "True\\nTrue", "False\\nFalse", "오류"],
+    code: `a = 0.1 + 0.2\nprint(a == 0.3)\nprint(a)`,
+    options: ["False\\n0.30000000000000004", "True\\n0.3", "False\\n0.3", "오류"],
     correctAnswer: 0,
-    explanation: "부동소수점 연산의 한계로 0.1+0.2는 정확히 0.3이 아닙니다. round()로 반올림하면 비교가 가능합니다.",
+    explanation: "부동소수점 연산의 한계로 0.1+0.2는 정확히 0.3이 아닙니다. print(a)를 하면 실제 저장된 값인 0.30000000000000004가 출력되고, a == 0.3은 False가 됩니다.",
     keyConceptTitle: "부동소수점 오차",
-    keyConceptDescription: "컴퓨터는 소수를 이진수로 저장하므로 미세한 오차가 발생합니다. 소수 비교 시 round()나 math.isclose()를 사용하세요.",
-    relatedTopics: ["float", "round()", "math.isclose()"],
+    keyConceptDescription: "컴퓨터는 소수를 이진수로 저장하므로 미세한 오차가 발생합니다. 0.1 + 0.2는 0.3처럼 보이지만 실제로는 0.30000000000000004입니다.",
+    relatedTopics: ["float", "부동소수점", "=="],
   },
   {
     id: 8,
@@ -176,11 +176,11 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 17,
-    lessonId: 9,
+    lessonId: 3,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
-    code: `x = 10\ny = x\nx += 5\nprint("x=" + str(x) + ", y=" + str(y))`,
-    options: ["x=15, y=10", "x=15, y=15", "x=10, y=10", "오류"],
+    code: `x = 10\ny = x\nx += 5\nprint(x, y)`,
+    options: ["15 10", "15 15", "10 10", "오류"],
     correctAnswer: 0,
     explanation: "정수는 불변(immutable) 타입이므로 y = x는 값을 복사합니다. x를 변경해도 y에 영향이 없습니다.",
     keyConceptTitle: "불변 타입과 변수 할당",
@@ -749,7 +749,7 @@ export const pythonQuestions: QuizQuestion[] = [
   // ── Lesson 13: for 반복문 ──
   {
     id: 60,
-    lessonId: 13,
+    lessonId: 14,
     animationKey: "pyForBuilder",
     difficulty: "쉬움",
     question: "다음 코드에서 break의 역할은?",
@@ -763,7 +763,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 61,
-    lessonId: 13,
+    lessonId: 14,
     animationKey: "pyForBuilder",
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
@@ -777,7 +777,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 63,
-    lessonId: 13,
+    lessonId: 14,
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
     code: `for i in range(5):\n    if i % 2 == 0:\n        continue\n    print(i, end=' ')`,
@@ -790,7 +790,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 64,
-    lessonId: 13,
+    lessonId: 14,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `for i in range(1, 4):\n    for j in range(1, 4):\n        if i * j > 4:\n            break\n    else:\n        print(i, end=" ")`,
@@ -816,7 +816,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 66,
-    lessonId: 13,
+    lessonId: 14,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `for i in range(5):\n    if i == 3:\n        break\nelse:\n    print("완료")\nprint("끝")`,
@@ -833,7 +833,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 67,
-    lessonId: 17,
+    lessonId: 35,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `for i, v in enumerate(["a", "b", "c"]):\n    print(f"{i}:{v}", end=" ")`,
@@ -885,7 +885,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 71,
-    lessonId: 13,
+    lessonId: 14,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `for i in range(1, 6):\n    if i % 2 == 0:\n        continue\n    print(i, end=" ")`,
@@ -928,7 +928,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 74,
-    lessonId: 13,
+    lessonId: 14,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `for i in range(3):\n    for j in range(3):\n        if j == 1:\n            break\n    print(i, end=' ')`,
@@ -941,7 +941,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 75,
-    lessonId: 13,
+    lessonId: 14,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `for i in range(3):\n    pass\nelse:\n    print('완료')`,
@@ -954,7 +954,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 76,
-    lessonId: 13,
+    lessonId: 14,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `for i in range(5):\n    if i == 3:\n        break\nelse:\n    print("완료")\nprint(i)`,
@@ -967,7 +967,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 77,
-    lessonId: 17,
+    lessonId: 35,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `result = [x**2 for x in range(5) if x % 2 != 0]\nprint(result)`,
@@ -980,7 +980,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 78,
-    lessonId: 17,
+    lessonId: 35,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `nums = [1, 2, 3, 4, 5]\nfor i, v in enumerate(nums, start=1):\n    if i == 3:\n        print(v)\n        break`,
@@ -1241,7 +1241,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 97,
-    lessonId: 16,
+    lessonId: 17,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `a = [1, [2, 3], 4]\nb = a.copy()\nb[1].append(99)\nprint(a)`,
@@ -1254,7 +1254,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 98,
-    lessonId: 16,
+    lessonId: 17,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `a = [[1, 2], [3, 4]]\nb = a.copy()\nb[0].append(5)\nprint(a)`,
@@ -1333,7 +1333,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 104,
-    lessonId: 17,
+    lessonId: 35,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `nums = [1, 2, 3, 4, 5]\neven = [n for n in nums if n % 2 == 0]\nprint(even)`,
@@ -1346,7 +1346,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 105,
-    lessonId: 17,
+    lessonId: 35,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `matrix = [[1, 2], [3, 4]]\nflat = [x for row in matrix for x in row]\nprint(flat)`,
@@ -1359,7 +1359,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 106,
-    lessonId: 17,
+    lessonId: 35,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `nums = [3, 1, 4, 1, 5]\nfor i, v in enumerate(nums):\n    if v == 1:\n        print(i, end=" ")`,
@@ -1756,7 +1756,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 135,
-    lessonId: 20,
+    lessonId: 35,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `d = {"a": 1, "b": 2}\nnew = {v: k for k, v in d.items()}\nprint(new)`,
@@ -2118,7 +2118,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 162,
-    lessonId: 17,
+    lessonId: 35,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `matrix = [[1, 2], [3, 4], [5, 6]]\ncol = [row[0] for row in matrix]\nprint(col)`,
@@ -2142,7 +2142,7 @@ export const pythonQuestions: QuizQuestion[] = [
     keyConceptDescription: "[[값]*n]*m은 같은 리스트를 m번 참조합니다. [[값]*n for _ in range(m)]으로 독립적인 행을 만들어야 합니다.",
     codeComparison: {
       wrong: `matrix = [[0]*3] * 3  # 같은 리스트 3개 참조`,
-      correct: `matrix = [[0]*3 for _ in range(3)]  # 독립적 3개`,
+      correct: `matrix = []\nfor _ in range(3):\n    matrix.append([0]*3)  # 독립적 3개`,
     },
     relatedTopics: ["참조 복사", "얕은 복사", "리스트 생성"],
   },
@@ -2346,7 +2346,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 178,
-    lessonId: 34,
+    lessonId: 33,
     animationKey: "keywordArgVisualizer",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
@@ -2606,7 +2606,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 201,
-    lessonId: 41,
+    lessonId: 36,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `def flatten(lst):\n    result = []\n    for item in lst:\n        if isinstance(item, list):\n            result.extend(flatten(item))\n        else:\n            result.append(item)\n    return result\n\nprint(flatten([1, [2, [3, 4]], 5]))`,
@@ -2825,7 +2825,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 219,
-    lessonId: 38,
+    lessonId: 45,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `import json\ndata = {"name": "Alice", "age": 25}\njson_str = json.dumps(data)\nprint(type(json_str))`,
@@ -2838,7 +2838,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 220,
-    lessonId: 38,
+    lessonId: 45,
     difficulty: "어려움",
     question: "다음 코드에서 CSV 파일을 올바르게 읽는 방법은?",
     code: `import csv\nwith open("data.csv") as f:\n    reader = csv._____(f)\n    for row in reader:\n        print(row)`,
@@ -2851,7 +2851,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 221,
-    lessonId: 38,
+    lessonId: 45,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `import os\npath = "/home/user/docs/file.txt"\nprint(os.path.basename(path))\nprint(os.path.dirname(path))`,
@@ -3467,7 +3467,7 @@ export const pythonQuestions: QuizQuestion[] = [
   // ── 추가 딕셔너리 심화 (Lesson 20) ──
   {
     id: 274,
-    lessonId: 34,
+    lessonId: 20,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `d = {"a": 1, "b": 2}\nnew = {**d, "c": 3, "a": 10}\nprint(new)`,
@@ -3523,7 +3523,7 @@ export const pythonQuestions: QuizQuestion[] = [
   // ── 추가 리스트/반복 (Lesson 17) ──
   {
     id: 281,
-    lessonId: 32,
+    lessonId: 35,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `def chunk(lst, size):\n    return [lst[i:i+size] for i in range(0, len(lst), size)]\n\nprint(chunk([1,2,3,4,5,6,7], 3))`,
@@ -3594,7 +3594,7 @@ export const pythonQuestions: QuizQuestion[] = [
   // ── 추가 함수 기초 (Lesson 32) ──
   {
     id: 287,
-    lessonId: 32,
+    lessonId: 35,
     animationKey: "functionStructure",
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
@@ -3705,10 +3705,10 @@ export const pythonQuestions: QuizQuestion[] = [
     keyConceptDescription: "a, b = b, a는 Python의 우아한 값 교환 방법입니다. 우변이 먼저 평가된 후 좌변에 할당됩니다.",
     relatedTopics: ["swap", "튜플 언패킹", "동시 대입"],
   },
-  // ── 추가 문자열 연산 (Lesson 5) ──
+  // ── 추가 문자열 연산 (Lesson 5 → 11: in 연산자는 조건문 레슨에서 첫 등장) ──
   {
     id: 298,
-    lessonId: 5,
+    lessonId: 12,
     difficulty: "보통",
     question: "다음 코드의 출력 결과는?",
     code: `s = "Python"\nprint(s * 2 + "!")\nprint("th" in s)`,
@@ -3722,7 +3722,7 @@ export const pythonQuestions: QuizQuestion[] = [
   // ── 자료구조 개요 (Lesson 15) ──
   {
     id: 356,
-    lessonId: 15,
+    lessonId: 16,
     difficulty: "쉬움",
     question: "학생 100명의 이름을 저장하는 가장 적절한 자료구조는?",
     code: `# 방법 A: 변수 100개\nname1 = '철수'\nname2 = '영희'\n# ... name100 = ...\n\n# 방법 B: 리스트 하나\nnames = ['철수', '영희', '민수', ...]`,
@@ -3735,7 +3735,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 357,
-    lessonId: 15,
+    lessonId: 20,
     difficulty: "쉬움",
     question: "번호(학번)와 이름을 짝지어 저장하기에 가장 적합한 자료구조는?",
     code: `# 어떤 자료구조가 적합할까?\n# 학번: 이름\n# 2024001: '철수'\n# 2024002: '영희'`,
@@ -3748,7 +3748,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 358,
-    lessonId: 15,
+    lessonId: 20,
     difficulty: "보통",
     question: "리스트와 딕셔너리의 차이로 올바른 것은?",
     code: `names = ['철수', '영희', '민수']  # 리스트\nscores = {'철수': 90, '영희': 85}  # 딕셔너리\n\nprint(names[0])       # 인덱스로 접근\nprint(scores['철수']) # 키로 접근`,
@@ -3766,7 +3766,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 359,
-    lessonId: 15,
+    lessonId: 26,
     difficulty: "보통",
     question: "다음 중 각 자료구조와 사용 예시가 올바르게 연결된 것은?",
     code: `# 어떤 자료구조가 적합할까?\nA = [90, 85, 78, 92]      # 시험 점수 목록\nB = {'이름': '철수', '나이': 15}  # 학생 정보\nC = (1920, 1080)           # 화면 해상도 (고정)`,
@@ -3908,7 +3908,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 332,
-    lessonId: 39,
+    lessonId: 45,
     difficulty: "어려움",
     question: "게임 세이브/로드 전체 흐름에서 올바른 것은?",
     code: `import json\n\ndef save_game(char):\n    with open('save.json', 'w') as f:\n        json.dump(char, f)\n    print('저장 완료!')\n\ndef load_game():\n    try:\n        with open('save.json', 'r') as f:\n            return json.load(f)\n    except FileNotFoundError:\n        return None\n\nsaved = load_game()\nif saved:\n    print(f'이어하기: {saved[\"name\"]}')\nelse:\n    print('새 게임')`,
@@ -4168,7 +4168,7 @@ export const pythonQuestions: QuizQuestion[] = [
   // ── 추가 조건 심화 (Lesson 12) ──
   {
     id: 299,
-    lessonId: 16,
+    lessonId: 12,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `x = 0\ny = ""\nz = []\nprint(not x and not y and not z)\nprint(bool(x or y or z or "hello"))`,
@@ -4283,16 +4283,16 @@ export const pythonQuestions: QuizQuestion[] = [
     difficulty: "보통",
     question: "로또 번호를 오름차순으로 출력하려면 어떤 메서드를 사용해야 하는가?",
     code: `numbers = [25, 3, 40, 14, 30, 45]\nnumbers.___()  # 오름차순 정렬\nprint(numbers)`,
-    options: ["reverse()", "sorted()", "sort()", "order()"],
+    options: ["reverse()", "ordering()", "sort()", "order()"],
     correctAnswer: 2,
-    explanation: "`list.sort()`는 리스트를 직접 오름차순으로 정렬합니다. `sorted()`는 새 리스트를 반환합니다.",
+    explanation: "`list.sort()`는 리스트를 직접 오름차순으로 정렬합니다. 원본 리스트가 직접 변경되며 None을 반환합니다.",
     keyConceptTitle: "sort() vs sorted()",
     keyConceptDescription: "`list.sort()`는 원본을 수정, `sorted(list)`는 새 리스트를 반환합니다. 로또 번호 정렬에는 sort() 사용.",
     relatedTopics: ["sort()", "sorted()", "리스트 정렬"],
   },
   {
     id: 309,
-    lessonId: 28,
+    lessonId: 45,
     difficulty: "어려움",
     question: "다음 코드에서 random.sample()을 사용한 로또 생성 결과가 올바른 것은?",
     code: `import random\nrandom.seed(1)\nnumbers = random.sample(range(1, 46), 6)\nnumbers.sort()\nprint(numbers)`,
@@ -4408,7 +4408,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 317,
-    lessonId: 30,
+    lessonId: 35,
     difficulty: "보통",
     question: "리스트 컴프리헨션으로 국어 점수만 뽑는 올바른 코드는?",
     code: `students = [\n    {'name': '철수', 'kor': 85},\n    {'name': '영희', 'kor': 95},\n    {'name': '민수', 'kor': 72},\n]\nkor_scores = ___\nprint(kor_scores)  # [85, 95, 72]`,
@@ -4426,7 +4426,7 @@ export const pythonQuestions: QuizQuestion[] = [
   },
   {
     id: 318,
-    lessonId: 30,
+    lessonId: 35,
     difficulty: "어려움",
     question: "다음 과락(70점 미만) 검사 코드에서 출력 결과는?",
     code: `students = [\n    {'name': '철수', 'kor': 85, 'eng': 92, 'math': 78},\n    {'name': '민수', 'kor': 72, 'eng': 65, 'math': 80},\n]\nfor s in students:\n    fails = [k for k in ['kor','eng','math'] if s[k] < 70]\n    print(f'{s[\"name\"]}: {len(fails)}과목 과락')`,
@@ -4792,7 +4792,7 @@ else:
   // ── Lesson 14: 반복문 (while, break, continue) ──
   {
     id: 378,
-    lessonId: 13,
+    lessonId: 14,
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
     code: `for i in range(10):
@@ -4808,7 +4808,7 @@ else:
   },
   {
     id: 379,
-    lessonId: 13,
+    lessonId: 14,
     difficulty: "쉬움",
     question: "다음 코드의 출력 결과는?",
     code: `for i in range(1, 6):
@@ -5043,7 +5043,7 @@ print(numbers[0] + numbers[1])`,
   // ── 추가 2D 리스트 (Lesson 17) ──
   {
     id: 300,
-    lessonId: 17,
+    lessonId: 35,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `matrix = [[1,2,3],[4,5,6],[7,8,9]]\ndiag = [matrix[i][i] for i in range(len(matrix))]\nanti = [matrix[i][len(matrix)-1-i] for i in range(len(matrix))]\nprint(diag, anti)`,
@@ -5233,7 +5233,7 @@ print(f'넓이: {area}')`,
   // ── Lesson 15: 자료구조 개요 추가 ──
   {
     id: 406,
-    lessonId: 15,
+    lessonId: 19,
     difficulty: "쉬움",
     question: "파이썬에서 수정이 불가능한(불변) 자료구조는?",
     code: `a = [1, 2, 3]   # ?
@@ -5262,7 +5262,7 @@ print(unique)`,
   },
   {
     id: 408,
-    lessonId: 15,
+    lessonId: 16,
     difficulty: "쉬움",
     question: "다음 중 리스트의 특징으로 올바른 것은?",
     code: `fruits = ['사과', '바나나', '포도']
@@ -5282,7 +5282,7 @@ print(fruits[0])`,
   },
   {
     id: 409,
-    lessonId: 15,
+    lessonId: 20,
     difficulty: "보통",
     question: "다음 상황에서 가장 적합한 자료구조는? '반 학생 30명의 이름과 각자의 점수를 저장하고, 이름으로 빠르게 점수를 찾고 싶다'",
     code: `# 어떤 자료구조가 가장 좋을까?
@@ -5312,7 +5312,7 @@ print(len(attendance))`,
   },
   {
     id: 411,
-    lessonId: 15,
+    lessonId: 19,
     difficulty: "보통",
     question: "리스트와 튜플의 차이를 묻는 질문에 올바른 답변은?",
     code: `my_list = [1, 2, 3]
@@ -5441,17 +5441,15 @@ print(f'{doc} 인쇄 완료')`,
     lessonId: 41,
     difficulty: "보통",
     question: "다음 코드에서 is_empty()가 True를 반환하는 조건은?",
-    code: `from collections import deque
-
-class Queue:
+    code: `class Queue:
     def __init__(self):
-        self.items = deque()
+        self.items = []
 
     def enqueue(self, item):
         self.items.append(item)
 
     def dequeue(self):
-        return self.items.popleft() if self.items else None
+        return self.items.pop(0) if self.items else None
 
     def is_empty(self):
         return len(self.items) == 0`,
@@ -5639,7 +5637,7 @@ print(list(d))`,
   },
   {
     id: 427,
-    lessonId: 32,
+    lessonId: 25,
     difficulty: "어려움",
     question: "덱으로 회문(팰린드롬)을 검사하는 코드에서 빈칸에 알맞은 코드는?",
     code: `from collections import deque
@@ -5687,9 +5685,9 @@ print(is_palindrome('hello'))   # False`,
     lessonId: 26,
     difficulty: "쉬움",
     question: "10만 개 데이터에서 특정 값이 있는지 검색할 때 가장 빠른 자료구조는?",
-    code: `data_list = [i for i in range(100000)]
+    code: `data_list = list(range(100000))
 data_set = set(range(100000))
-data_dict = {i: True for i in range(100000)}
+data_dict = {}  # 딕셔너리도 O(1) 검색
 
 # 어느 것이 가장 빠를까?
 # 99999 in data_list  →  O(?)
@@ -5723,7 +5721,7 @@ data_dict = {i: True for i in range(100000)}
   },
   {
     id: 431,
-    lessonId: 32,
+    lessonId: 26,
     difficulty: "보통",
     question: "다음 코드에서 set을 사용하는 이유로 가장 적절한 것은?",
     code: `visited = set()
@@ -7661,7 +7659,7 @@ print(x)`,
   },
   {
     id: 517,
-    lessonId: 1,
+    lessonId: 2,
     difficulty: "어려움",
     question: "다음 코드의 출력 결과는?",
     code: `print("3" + "5")
