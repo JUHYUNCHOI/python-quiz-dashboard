@@ -5,16 +5,50 @@ import { cn } from "@/lib/utils"
 
 type Step = "idle" | "h" | "cpp" | "main" | "link" | "done"
 
-const STEPS: { id: Step; label: string; desc: string }[] = [
-  { id: "h",    label: "① math.h 읽기",      desc: "컴파일러가 math.h를 읽어요. '이런 함수들이 있을 거야!' 하고 기억해둬요." },
-  { id: "cpp",  label: "② math.cpp 컴파일",  desc: "math.cpp에서 #include로 math.h를 가져와요. 선언대로 함수 본체가 맞는지 확인하고 컴파일해요." },
-  { id: "main", label: "③ main.cpp 컴파일",  desc: "main.cpp도 math.h를 include해요. 덕분에 add()가 어떻게 생겼는지 알고 사용할 수 있어요!" },
-  { id: "link", label: "④ 두 파일 연결!",    desc: "컴파일된 math.cpp와 main.cpp를 하나로 연결(링크)해요. add() 호출이 실제 본체와 연결돼요!" },
-  { id: "done", label: "✅ 실행 파일 완성!", desc: "세 파일이 협력해서 하나의 실행 프로그램이 됐어요! 본체(math.cpp)를 몰라도, 헤더(math.h)만 보면 함수를 쓸 수 있어요." },
-]
+function getSTEPS(isEn: boolean): { id: Step; label: string; desc: string }[] {
+  return [
+    {
+      id: "h",
+      label: isEn ? "① Read math.h" : "① math.h 읽기",
+      desc: isEn
+        ? "The compiler reads math.h. 'These functions will exist!' — it remembers them."
+        : "컴파일러가 math.h를 읽어요. '이런 함수들이 있을 거야!' 하고 기억해둬요.",
+    },
+    {
+      id: "cpp",
+      label: isEn ? "② Compile math.cpp" : "② math.cpp 컴파일",
+      desc: isEn
+        ? "math.cpp uses #include to import math.h. It verifies that function bodies match the declarations, then compiles."
+        : "math.cpp에서 #include로 math.h를 가져와요. 선언대로 함수 본체가 맞는지 확인하고 컴파일해요.",
+    },
+    {
+      id: "main",
+      label: isEn ? "③ Compile main.cpp" : "③ main.cpp 컴파일",
+      desc: isEn
+        ? "main.cpp also includes math.h. Thanks to it, we know what add() looks like and can use it!"
+        : "main.cpp도 math.h를 include해요. 덕분에 add()가 어떻게 생겼는지 알고 사용할 수 있어요!",
+    },
+    {
+      id: "link",
+      label: isEn ? "④ Link the two files!" : "④ 두 파일 연결!",
+      desc: isEn
+        ? "The compiled math.cpp and main.cpp are linked together. The add() call gets connected to its actual body!"
+        : "컴파일된 math.cpp와 main.cpp를 하나로 연결(링크)해요. add() 호출이 실제 본체와 연결돼요!",
+    },
+    {
+      id: "done",
+      label: isEn ? "✅ Executable ready!" : "✅ 실행 파일 완성!",
+      desc: isEn
+        ? "Three files collaborated to become one program! You only need the header (math.h) to use a function — the body (math.cpp) can stay hidden."
+        : "세 파일이 협력해서 하나의 실행 프로그램이 됐어요! 본체(math.cpp)를 몰라도, 헤더(math.h)만 보면 함수를 쓸 수 있어요.",
+    },
+  ]
+}
 
-export function HeaderFilesAnimation() {
+export function HeaderFilesAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
   const [step, setStep] = useState<Step>("idle")
+  const isEn = lang === "en"
+  const STEPS = getSTEPS(isEn)
 
   const stepIndex = STEPS.findIndex(s => s.id === step)
   const currentStepInfo = STEPS.find(s => s.id === step)
@@ -48,9 +82,9 @@ export function HeaderFilesAnimation() {
   return (
     <div className="bg-slate-900 rounded-2xl p-4 text-white text-sm select-none">
       <div className="flex items-center justify-between mb-4">
-        <span className="text-slate-400 text-xs">🔗 세 파일이 어떻게 연결되는지 봐요</span>
+        <span className="text-slate-400 text-xs">{isEn ? "🔗 See how these three files connect" : "🔗 세 파일이 어떻게 연결되는지 봐요"}</span>
         {step !== "idle" && (
-          <button onClick={reset} className="text-xs text-slate-500 hover:text-slate-300">↺ 처음</button>
+          <button onClick={reset} className="text-xs text-slate-500 hover:text-slate-300">{isEn ? "↺ Reset" : "↺ 처음"}</button>
         )}
       </div>
 
@@ -128,7 +162,7 @@ export function HeaderFilesAnimation() {
           <span className={cn(
             "text-yellow-400 font-bold",
             step === "link" && "animate-pulse"
-          )}>──▶ 🔗 링크!</span>
+          )}>{isEn ? "──▶ 🔗 Link!" : "──▶ 🔗 링크!"}</span>
         </div>
       )}
 
@@ -136,7 +170,7 @@ export function HeaderFilesAnimation() {
       {step === "done" && (
         <div className="mb-3 flex justify-center">
           <div className="bg-green-900/50 border border-green-500/50 rounded-xl px-4 py-2 text-green-300 font-bold text-sm">
-            🎉 실행 파일 완성!
+            {isEn ? "🎉 Executable ready!" : "🎉 실행 파일 완성!"}
           </div>
         </div>
       )}
@@ -147,7 +181,7 @@ export function HeaderFilesAnimation() {
         step === "idle" ? "bg-slate-800 text-slate-400" : "bg-slate-700 text-slate-200"
       )}>
         {step === "idle"
-          ? "▶ 시작 버튼을 눌러 컴파일 과정을 따라가봐요!"
+          ? (isEn ? "▶ Press Start to follow the compile process!" : "▶ 시작 버튼을 눌러 컴파일 과정을 따라가봐요!")
           : currentStepInfo?.desc}
       </div>
 
@@ -171,7 +205,7 @@ export function HeaderFilesAnimation() {
           onClick={next}
           className="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm transition-colors"
         >
-          {step === "idle" ? "▶ 시작" : `▶ 다음 (${STEPS[stepIndex + 1]?.label ?? ""})`}
+          {step === "idle" ? (isEn ? "▶ Start" : "▶ 시작") : (isEn ? `▶ Next (${STEPS[stepIndex + 1]?.label ?? ""})` : `▶ 다음 (${STEPS[stepIndex + 1]?.label ?? ""})`)}
         </button>
       )}
     </div>

@@ -12,24 +12,26 @@ import { motion, AnimatePresence } from "framer-motion"
 
 type Scenario = "copy" | "ref"
 
-const SCENARIOS: { id: Scenario; code: string; title: string; subtitle: string; color: string; bg: string }[] = [
-  {
-    id: "copy",
-    code: "int y = x;",
-    title: "① 복사 (C++ 기본)",
-    subtitle: "완전히 별개의 상자 생성",
-    color: "#f97316",
-    bg: "#fff7ed",
-  },
-  {
-    id: "ref",
-    code: "int& ref = x;",
-    title: "② 참조 (C++ reference)",
-    subtitle: "같은 상자, 이름표만 추가",
-    color: "#6366f1",
-    bg: "#eef2ff",
-  },
-]
+function getSCENARIOS(isEn: boolean) {
+  return [
+    {
+      id: "copy" as Scenario,
+      code: "int y = x;",
+      title: isEn ? "① Copy (C++ default)" : "① 복사 (C++ 기본)",
+      subtitle: isEn ? "Creates a completely separate box" : "완전히 별개의 상자 생성",
+      color: "#f97316",
+      bg: "#fff7ed",
+    },
+    {
+      id: "ref" as Scenario,
+      code: "int& ref = x;",
+      title: isEn ? "② Reference (C++ reference)" : "② 참조 (C++ reference)",
+      subtitle: isEn ? "Same box, just adds a name tag" : "같은 상자, 이름표만 추가",
+      color: "#6366f1",
+      bg: "#eef2ff",
+    },
+  ]
+}
 
 export function ReferenceBoxVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
   const [scenario, setScenario] = useState<Scenario>("copy")
@@ -38,6 +40,7 @@ export function ReferenceBoxVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) 
   const [modified, setModified] = useState(false)
 
   const isEn = lang === "en"
+  const SCENARIOS = getSCENARIOS(isEn)
   const s = SCENARIOS.find(s => s.id === scenario)!
 
   const handleScenario = (sc: Scenario) => {
@@ -103,12 +106,12 @@ export function ReferenceBoxVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) 
             <span className="text-emerald-400">int</span> <span className="text-white">x</span> = 10;
           </div>
           <div style={{ color: s.color }}>
-            {scenario === "copy" && <><span className="text-emerald-400">int</span> <span className="text-white">y</span> = x;  <span className="text-slate-500">// y라는 새 상자에 10 복사</span></>}
-            {scenario === "ref"  && <><span className="text-emerald-400">int</span><span style={{ color: "#f472b6" }}>&amp;</span> <span className="text-white">ref</span> = x;  <span className="text-slate-500">// ref = x의 또 다른 이름</span></>}
+            {scenario === "copy" && <><span className="text-emerald-400">int</span> <span className="text-white">y</span> = x;  <span className="text-slate-500">{isEn ? "// copy 10 into new box y" : "// y라는 새 상자에 10 복사"}</span></>}
+            {scenario === "ref"  && <><span className="text-emerald-400">int</span><span style={{ color: "#f472b6" }}>&amp;</span> <span className="text-white">ref</span> = x;  <span className="text-slate-500">{isEn ? "// ref = another name for x" : "// ref = x의 또 다른 이름"}</span></>}
           </div>
           {modified && (
             <div className="text-yellow-300">
-              {modifyCode}  <span className="text-slate-500">// 실행!</span>
+              {modifyCode}  <span className="text-slate-500">{isEn ? "// run!" : "// 실행!"}</span>
             </div>
           )}
         </div>
@@ -126,7 +129,7 @@ export function ReferenceBoxVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) 
                 </div>
                 <Box value={xVal} color="#64748b" label="x" />
                 <div className="text-xs text-slate-400">
-                  {modified ? "😊 그대로 10!" : ""}
+                  {modified ? (isEn ? "😊 Still 10!" : "😊 그대로 10!") : ""}
                 </div>
               </div>
 
@@ -147,14 +150,17 @@ export function ReferenceBoxVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) 
                 {modified && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                     className="text-xs font-bold text-orange-500">
-                    99로 바뀜! (x는 그대로)
+                    {isEn ? "Changed to 99! (x unchanged)" : "99로 바뀜! (x는 그대로)"}
                   </motion.div>
                 )}
               </div>
 
               {/* 설명 */}
               <div className="rounded-xl bg-orange-50 border border-orange-100 px-3 py-2 text-xs text-orange-700">
-                📦 <strong>복사</strong> — y 상자는 x 상자와 완전히 별개예요. y를 바꿔도 x는 그대로예요.
+                {isEn
+                  ? <>📦 <strong>Copy</strong> — box y is completely separate from box x. Changing y leaves x alone.</>
+                  : <>📦 <strong>복사</strong> — y 상자는 x 상자와 완전히 별개예요. y를 바꿔도 x는 그대로예요.</>
+                }
               </div>
             </div>
           )}
@@ -186,14 +192,17 @@ export function ReferenceBoxVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) 
                 {modified && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                     className="text-xs font-bold text-indigo-600 pt-2">
-                    x도 ref도 둘 다 99!<br />
-                    <span className="font-normal text-indigo-400">같은 상자니까요</span>
+                    {isEn ? "Both x and ref are 99!" : "x도 ref도 둘 다 99!"}<br />
+                    <span className="font-normal text-indigo-400">{isEn ? "They're the same box" : "같은 상자니까요"}</span>
                   </motion.div>
                 )}
               </div>
 
               <div className="rounded-xl bg-indigo-50 border border-indigo-100 px-3 py-2 text-xs text-indigo-700">
-                🏷️ <strong>참조</strong> — ref는 새 상자가 없어요! x 상자에 이름표만 하나 더 붙은 거예요. 상자는 하나, 이름은 두 개.
+                {isEn
+                  ? <>🏷️ <strong>Reference</strong> — ref has no new box! Just another name tag on x's box. One box, two names.</>
+                  : <>🏷️ <strong>참조</strong> — ref는 새 상자가 없어요! x 상자에 이름표만 하나 더 붙은 거예요. 상자는 하나, 이름은 두 개.</>
+                }
               </div>
             </div>
           )}
@@ -207,7 +216,7 @@ export function ReferenceBoxVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) 
         >
           {modified
             ? (isEn ? "↺ Reset" : "↺ 초기화")
-            : `▶ ${modifyCode} 실행해보기`}
+            : isEn ? `▶ Run ${modifyCode}` : `▶ ${modifyCode} 실행해보기`}
         </button>
       </div>
 
@@ -215,8 +224,16 @@ export function ReferenceBoxVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) 
       <div className="rounded-2xl bg-slate-50 border border-slate-100 p-3 space-y-2 text-xs">
         <p className="font-bold text-slate-600 mb-1">📊 {isEn ? "Summary" : "한눈에 비교"}</p>
         {[
-          { label: "복사", desc: "새 상자. y 바꿔도 x 그대로.", color: "#f97316" },
-          { label: "C++ 참조", desc: "상자 없음. x에 이름표만 추가. 하나가 바뀌면 둘 다 바뀜.", color: "#6366f1" },
+          {
+            label: isEn ? "Copy" : "복사",
+            desc: isEn ? "New box. Changing y doesn't affect x." : "새 상자. y 바꿔도 x 그대로.",
+            color: "#f97316"
+          },
+          {
+            label: isEn ? "C++ Reference" : "C++ 참조",
+            desc: isEn ? "No new box. Just adds a name tag to x. If one changes, both change." : "상자 없음. x에 이름표만 추가. 하나가 바뀌면 둘 다 바뀜.",
+            color: "#6366f1"
+          },
         ].map((row, i) => (
           <div key={i} className="flex items-start gap-2">
             <span className="font-mono font-bold shrink-0 pt-0.5" style={{ color: row.color }}>{row.label}</span>

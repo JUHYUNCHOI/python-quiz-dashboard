@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { FileUpload } from "@/components/admin/file-upload"
-import { AnalysisResults } from "@/components/admin/analysis-results"
 import { QuestionBank } from "@/components/admin/question-bank"
 import { QuestionEditor } from "@/components/admin/question-editor"
 import { GeneratedQuestionsReview } from "@/components/admin/generated-questions-review"
@@ -14,7 +13,15 @@ import { useAuth } from "@/contexts/auth-context"
 export default function AdminPage() {
   const { isAuthenticated, profile, isLoading: authLoading } = useAuth()
 
-  // 인증 가드: 로그인 + teacher 역할 필요
+  // hooks는 조건부 return 전에 모두 선언해야 함 (Rules of Hooks)
+  const [editingQuestion, setEditingQuestion] = useState<any | null>(null)
+  const [isNewQuestion, setIsNewQuestion] = useState(false)
+  const [generatedQuestions, setGeneratedQuestions] = useState<any[]>([])
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [bankKey, setBankKey] = useState(0)
+  const [activeTab, setActiveTab] = useState<"questions" | "upload">("questions")
+
+  // 인증 가드
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -34,25 +41,9 @@ export default function AdminPage() {
       </div>
     )
   }
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null)
-  const [isAnalyzing, setIsAnalyzing] = useState(false)
-  const [analysisComplete, setAnalysisComplete] = useState(false)
-  const [editingQuestion, setEditingQuestion] = useState<any>(null)
-  const [generatedQuestions, setGeneratedQuestions] = useState<any[]>([])
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  const handleFileUpload = (file: File) => {
-    setUploadedFile(file)
-    setIsAnalyzing(true)
-    // Simulate AI analysis
-    setTimeout(() => {
-      setIsAnalyzing(false)
-      setAnalysisComplete(true)
-    }, 3000)
-  }
-
-  const handleGenerateQuestions = (questions: any[]) => {
-    setGeneratedQuestions(questions)
+  const handleSaved = () => {
+    setBankKey(k => k + 1)
   }
 
   return (
@@ -92,34 +83,15 @@ export default function AdminPage() {
           <div className="md:hidden border-t bg-white">
             <div className="container mx-auto px-4 py-4 space-y-2">
               <Link href="/" className="block">
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start min-h-[44px]"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  학생 화면으로
+                <Button variant="ghost" className="w-full justify-start min-h-[44px]" onClick={() => setMobileMenuOpen(false)}>
+                  <ArrowLeft className="h-4 w-4 mr-2" />학생 화면으로
                 </Button>
               </Link>
-              <Button
-                variant="ghost"
-                className="w-full justify-start min-h-[44px]"
-                onClick={() => {
-                  setMobileMenuOpen(false)
-                  // Navigate to question bank
-                }}
-              >
+              <Button variant="ghost" className="w-full justify-start min-h-[44px]" onClick={() => { setActiveTab("questions"); setMobileMenuOpen(false) }}>
                 문제 은행
               </Button>
-              <Button
-                variant="ghost"
-                className="w-full justify-start min-h-[44px]"
-                onClick={() => {
-                  setMobileMenuOpen(false)
-                  // Navigate to analytics
-                }}
-              >
-                통계 보기
+              <Button variant="ghost" className="w-full justify-start min-h-[44px]" onClick={() => { setActiveTab("upload"); setMobileMenuOpen(false) }}>
+                파일 업로드
               </Button>
             </div>
           </div>
@@ -127,61 +99,58 @@ export default function AdminPage() {
       </header>
 
       <div className="flex">
-        {/* Sidebar for tablet/desktop */}
-        <aside className="hidden lg:block w-64 border-r bg-gray-50 min-h-screen sticky top-[73px] h-[calc(100vh-73px)] overflow-y-auto">
-          <nav className="p-4 space-y-2">
-            <Button variant="ghost" className="w-full justify-start min-h-[44px]">
-              파일 업로드
-            </Button>
-            <Button variant="ghost" className="w-full justify-start min-h-[44px]">
-              문제 은행
-            </Button>
-            <Button variant="ghost" className="w-full justify-start min-h-[44px]">
-              통계 보기
-            </Button>
-            <Button variant="ghost" className="w-full justify-start min-h-[44px]">
-              설정
-            </Button>
+        {/* Sidebar */}
+        <aside className="hidden lg:block w-56 border-r bg-gray-50 min-h-screen sticky top-[61px] h-[calc(100vh-61px)] overflow-y-auto shrink-0">
+          <nav className="p-3 space-y-1">
+            {[
+              { id: "questions", label: "📋 문제 은행" },
+              { id: "upload",    label: "📂 파일 업로드" },
+            ].map(({ id, label }) => (
+              <Button
+                key={id}
+                variant="ghost"
+                className={`w-full justify-start min-h-[44px] text-sm ${activeTab === id ? "bg-orange-100 text-orange-700 font-semibold" : ""}`}
+                onClick={() => setActiveTab(id as any)}
+              >
+                {label}
+              </Button>
+            ))}
           </nav>
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 container mx-auto px-4 py-6 md:py-8 max-w-6xl">
-          {/* File Upload Section */}
-          {!analysisComplete && <FileUpload onFileUpload={handleFileUpload} isAnalyzing={isAnalyzing} />}
-
-          {/* Analysis Results */}
-          {analysisComplete && !generatedQuestions.length && (
-            <AnalysisResults fileName={uploadedFile?.name || ""} onGenerateQuestions={handleGenerateQuestions} />
-          )}
-
-          {/* Generated Questions Review */}
-          {generatedQuestions.length > 0 && (
-            <GeneratedQuestionsReview
-              questions={generatedQuestions}
-              onComplete={() => {
-                setGeneratedQuestions([])
-                setAnalysisComplete(false)
-                setUploadedFile(null)
-              }}
+        <main className="flex-1 min-w-0 px-4 py-6 md:py-8">
+          {activeTab === "questions" && (
+            <QuestionBank
+              key={bankKey}
+              onEditQuestion={(q) => { setEditingQuestion(q); setIsNewQuestion(false) }}
+              onNewQuestion={() => { setEditingQuestion(null); setIsNewQuestion(true) }}
             />
           )}
 
-          {/* Question Bank - Always visible at bottom */}
-          <div className="mt-12">
-            <QuestionBank onEditQuestion={setEditingQuestion} />
-          </div>
+          {activeTab === "upload" && (
+            <>
+              {generatedQuestions.length === 0 ? (
+                <FileUpload
+                  onGenerated={(qs) => { setGeneratedQuestions(qs); }}
+                />
+              ) : (
+                <GeneratedQuestionsReview
+                  questions={generatedQuestions}
+                  onComplete={() => { setGeneratedQuestions([]); setBankKey(k => k + 1); setActiveTab("questions") }}
+                />
+              )}
+            </>
+          )}
         </main>
       </div>
 
       {/* Question Editor Modal */}
-      {editingQuestion && (
+      {(editingQuestion || isNewQuestion) && (
         <QuestionEditor
           question={editingQuestion}
-          onClose={() => setEditingQuestion(null)}
-          onSave={(question) => {
-            setEditingQuestion(null)
-          }}
+          onClose={() => { setEditingQuestion(null); setIsNewQuestion(false) }}
+          onSaved={handleSaved}
         />
       )}
     </div>

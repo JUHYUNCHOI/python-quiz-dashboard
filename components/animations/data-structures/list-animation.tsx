@@ -6,7 +6,8 @@ import { cn } from "@/lib/utils"
 import { FOOD_ITEMS, getNextId, ProblemCard, FridgeSlot } from "./shared"
 import type { LockerItem } from "./shared"
 
-export function ListAnimation() {
+export function ListAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
+  const isEn = lang === "en"
   const [items, setItems] = useState<LockerItem[]>([
     { id: "1", emoji: "🥚" }, { id: "2", emoji: "🥛" }, { id: "3", emoji: "🍞" }, { id: "4", emoji: "🥚" },
   ])
@@ -29,7 +30,7 @@ export function ListAnimation() {
   const accessByIndex = (index: number) => {
     if (mode !== "normal") return
     setOpenIndex(index)
-    showMsg(`⚡ #${index}번 칸 바로 열기! → "${items[index].emoji}" 발견!`, 'success')
+    showMsg(isEn ? `⚡ Opening slot #${index} directly! → "${items[index].emoji}" found!` : `⚡ #${index}번 칸 바로 열기! → "${items[index].emoji}" 발견!`, 'success')
     setTimeout(() => setOpenIndex(null), 2000)
   }
 
@@ -38,13 +39,14 @@ export function ListAnimation() {
     
     const targetIndex = items.length - 2
     const targetEmoji = items[targetIndex].emoji
-    const targetName = FOOD_ITEMS.find(f => f.emoji === targetEmoji)?.name || "음식"
+    const foodItem = FOOD_ITEMS.find(f => f.emoji === targetEmoji)
+    const targetName = isEn ? (foodItem?.nameEn || "food") : (foodItem?.name || "음식")
     
     setMode("searching")
     setScanIndex(-1)
     setFoundIndex(null)
     
-    setOverlay({ emoji: targetEmoji, text: `${targetName}을 찾아볼게요!`, subtext: "0번부터 하나씩 열어봐야 해요..." })
+    setOverlay({ emoji: targetEmoji, text: isEn ? `Let's find ${targetName}!` : `${targetName}을 찾아볼게요!`, subtext: isEn ? "Have to open one by one from #0..." : "0번부터 하나씩 열어봐야 해요..." })
     
     setTimeout(() => {
       setOverlay(null)
@@ -60,11 +62,11 @@ export function ListAnimation() {
             if (items[currentScan].emoji === targetEmoji) {
               clearInterval(intervalRef.current!)
               setFoundIndex(currentScan)
-              showMsg(`✅ #${currentScan}번에서 "${targetEmoji}" 발견!`, 'success')
-              
+              showMsg(isEn ? `✅ Found "${targetEmoji}" at #${currentScan}!` : `✅ #${currentScan}번에서 "${targetEmoji}" 발견!`, 'success')
+
               setTimeout(() => {
                 setOpenIndex(null)
-                setOverlay({ emoji: "😓", text: `${currentScan + 1}개나 열어봤어요!`, subtext: "번호로 찾으니까 처음부터 하나씩..." })
+                setOverlay({ emoji: "😓", text: isEn ? `Opened ${currentScan + 1} slots!` : `${currentScan + 1}개나 열어봤어요!`, subtext: isEn ? "Searching by value means starting from the beginning..." : "번호로 찾으니까 처음부터 하나씩..." })
                 
                 setTimeout(() => {
                   setOverlay(null)
@@ -74,12 +76,12 @@ export function ListAnimation() {
                 }, 2500)
               }, 1000)
             } else {
-              showMsg(`🔍 #${currentScan}번 열어보는 중... "${items[currentScan].emoji}" 아니네!`, 'warning')
+              showMsg(isEn ? `🔍 Opening #${currentScan}... "${items[currentScan].emoji}" nope!` : `🔍 #${currentScan}번 열어보는 중... "${items[currentScan].emoji}" 아니네!`, 'warning')
               currentScan++
-              
+
               if (currentScan >= items.length) {
                 clearInterval(intervalRef.current!)
-                showMsg(`❌ 못 찾았어요...`, 'error')
+                showMsg(isEn ? `❌ Couldn't find it...` : `❌ 못 찾았어요...`, 'error')
                 setTimeout(() => { setMode("normal"); setScanIndex(-1); setFoundIndex(null); setOpenIndex(null) }, 2000)
               }
             }
@@ -111,7 +113,7 @@ export function ListAnimation() {
     setShiftedIndices([])
     
     setPlaceholderAt(originalLength)
-    showMsg(`➡️ #${originalLength}번 위치에 새 빈칸 생성!`, 'warning')
+    showMsg(isEn ? `➡️ Creating new empty slot at position #${originalLength}!` : `➡️ #${originalLength}번 위치에 새 빈칸 생성!`, 'warning')
     
     const indicesToMove: number[] = []
     for (let i = originalLength - 1; i >= insertIndex; i--) {
@@ -124,7 +126,7 @@ export function ListAnimation() {
         
         setMovingIndex(fromIndex)
         setSlidingRight(true)
-        showMsg(`📦 #${fromIndex}번 → #${fromIndex + 1}번으로 이동 중...`, 'warning')
+        showMsg(isEn ? `📦 Moving #${fromIndex} → #${fromIndex + 1}...` : `📦 #${fromIndex}번 → #${fromIndex + 1}번으로 이동 중...`, 'warning')
         
         setTimeout(() => {
           setShiftedIndices(prev => [...prev, fromIndex])
@@ -133,7 +135,7 @@ export function ListAnimation() {
           setTimeout(() => doMove(step + 1), 300)
         }, 500)
       } else {
-        showMsg(`✨ 새 캐비넷이 #${insertIndex}번 자리로!`, 'warning')
+        showMsg(isEn ? `✨ New cabinet goes to position #${insertIndex}!` : `✨ 새 캐비넷이 #${insertIndex}번 자리로!`, 'warning')
         
         setNewItemAnimating(true)
         
@@ -156,22 +158,22 @@ export function ListAnimation() {
           })
           
           setTimeout(() => {
-            showMsg(`🔢 인덱스 번호 업데이트!`, 'warning')
-            
+            showMsg(isEn ? `🔢 Updating index numbers!` : `🔢 인덱스 번호 업데이트!`, 'warning')
+
             setLabelOverrides({ [insertIndex]: "✨" })
-            
+
             const doLabelUpdate = (idx: number) => {
               if (idx <= originalLength) {
                 setHighlightIndex(idx)
-                
+
                 if (idx === insertIndex) {
-                  showMsg(`✨ 새 캐비넷 → #${idx}번!`, 'success')
+                  showMsg(isEn ? `✨ New cabinet → #${idx}!` : `✨ 새 캐비넷 → #${idx}번!`, 'success')
                   setTimeout(() => {
                     setLabelOverrides(prev => prev ? { ...prev, [idx]: idx } : null)
                     setTimeout(() => doLabelUpdate(idx + 1), 350)
                   }, 400)
                 } else {
-                  showMsg(`🔄 #${idx - 1}번 → #${idx}번으로 변경!`, 'warning')
+                  showMsg(isEn ? `🔄 #${idx - 1} → #${idx} changed!` : `🔄 #${idx - 1}번 → #${idx}번으로 변경!`, 'warning')
                   setLabelOverrides(prev => prev ? { ...prev, [idx]: idx - 1 } : { [idx]: idx - 1 })
                   setTimeout(() => {
                     setLabelOverrides(prev => prev ? { ...prev, [idx]: idx } : null)
@@ -182,7 +184,7 @@ export function ListAnimation() {
                 setLabelOverrides(null)
                 setPendingInsert(null)
                 setHighlightIndex(insertIndex)
-                showMsg(`✅ "${newEmoji}" 삽입 완료! 총 ${originalLength + 1}개 캐비넷! (😓 ${originalLength - insertIndex}개가 밀렸어요)`, 'success')
+                showMsg(isEn ? `✅ "${newEmoji}" inserted! Total ${originalLength + 1} cabinets! (😓 ${originalLength - insertIndex} shifted)` : `✅ "${newEmoji}" 삽입 완료! 총 ${originalLength + 1}개 캐비넷! (😓 ${originalLength - insertIndex}개가 밀렸어요)`, 'success')
                 setMode("normal")
                 setTimeout(() => setHighlightIndex(null), 1500)
               }
@@ -215,8 +217,8 @@ export function ListAnimation() {
     setShiftedLeftIndices([])
     
     setDeletingIndex(removeIndex)
-    showMsg(`🗑️ #${removeIndex}번 "${removedEmoji}" 삭제!`, 'warning')
-    
+    showMsg(isEn ? `🗑️ Deleting #${removeIndex} "${removedEmoji}"!` : `🗑️ #${removeIndex}번 "${removedEmoji}" 삭제!`, 'warning')
+
     setTimeout(() => {
       setItems(prev => {
         const updated = [...prev]
@@ -225,7 +227,7 @@ export function ListAnimation() {
       })
       setEmptySlotAt(removeIndex)
       setDeletingIndex(null)
-      showMsg(`📤 "${removedEmoji}" 꺼냈어요! 이제 당겨요!`, 'warning')
+      showMsg(isEn ? `📤 "${removedEmoji}" removed! Now shift left!` : `📤 "${removedEmoji}" 꺼냈어요! 이제 당겨요!`, 'warning')
       
       const indicesToMove: number[] = []
       for (let i = removeIndex + 1; i < originalLength; i++) {
@@ -238,7 +240,7 @@ export function ListAnimation() {
           
           setMovingIndex(fromIndex)
           setSlidingLeft(true)
-          showMsg(`📦 #${fromIndex}번 → #${fromIndex - 1}번으로 이동 중...`, 'warning')
+          showMsg(isEn ? `📦 Moving #${fromIndex} → #${fromIndex - 1}...` : `📦 #${fromIndex}번 → #${fromIndex - 1}번으로 이동 중...`, 'warning')
           
           setTimeout(() => {
             setShiftedLeftIndices(prev => [...prev, fromIndex])
@@ -247,23 +249,23 @@ export function ListAnimation() {
             setTimeout(() => doMove(step + 1), 300)
           }, 500)
         } else {
-          showMsg(`✨ 이동 완료! 배열 업데이트 중...`, 'warning')
-          
+          showMsg(isEn ? `✨ Shift complete! Updating array...` : `✨ 이동 완료! 배열 업데이트 중...`, 'warning')
+
           setTimeout(() => {
             setDisableTransition(true)
-            
+
             setItems(prev => prev.filter((_, idx) => idx !== removeIndex))
             setEmptySlotAt(null)
             setShiftedLeftIndices([])
-            
+
             requestAnimationFrame(() => {
               requestAnimationFrame(() => {
                 setDisableTransition(false)
               })
             })
-            
+
             setTimeout(() => {
-              showMsg(`🔢 인덱스 번호 업데이트!`, 'warning')
+              showMsg(isEn ? `🔢 Updating index numbers!` : `🔢 인덱스 번호 업데이트!`, 'warning')
               
               const newLength = originalLength - 1
               
@@ -271,7 +273,7 @@ export function ListAnimation() {
                 if (idx < newLength) {
                   setHighlightIndex(idx)
                   
-                  showMsg(`🔄 #${idx + 1}번 → #${idx}번으로 변경!`, 'warning')
+                  showMsg(isEn ? `🔄 #${idx + 1} → #${idx} changed!` : `🔄 #${idx + 1}번 → #${idx}번으로 변경!`, 'warning')
                   setLabelOverrides(prev => prev ? { ...prev, [idx]: idx + 1 } : { [idx]: idx + 1 })
                   
                   setTimeout(() => {
@@ -282,7 +284,7 @@ export function ListAnimation() {
                   setLabelOverrides(null)
                   setDeletedEmoji(null)
                   setHighlightIndex(null)
-                  showMsg(`✅ "${removedEmoji}" 삭제 완료! 총 ${newLength}개 캐비넷! (😓 ${originalLength - removeIndex - 1}개가 당겨졌어요)`, 'success')
+                  showMsg(isEn ? `✅ "${removedEmoji}" deleted! Total ${newLength} cabinets! (😓 ${originalLength - removeIndex - 1} shifted)` : `✅ "${removedEmoji}" 삭제 완료! 총 ${newLength}개 캐비넷! (😓 ${originalLength - removeIndex - 1}개가 당겨졌어요)`, 'success')
                   setMode("normal")
                 }
               }
@@ -303,7 +305,7 @@ export function ListAnimation() {
     const newId = getNextId()
     setItems([...items, { id: newId, emoji: newEmoji }])
     setHighlightIndex(items.length)
-    showMsg(`✅ 맨 뒤에 "${newEmoji}" 추가! (간단!)`, 'success')
+    showMsg(isEn ? `✅ "${newEmoji}" added to the end! (Easy!)` : `✅ 맨 뒤에 "${newEmoji}" 추가! (간단!)`, 'success')
     setTimeout(() => setHighlightIndex(null), 1500)
   }
 
@@ -311,7 +313,7 @@ export function ListAnimation() {
     if (mode !== "normal" || items.length === 0) return
     const removed = items[items.length - 1]
     setItems(items.slice(0, -1))
-    showMsg(`✅ 맨 뒤 "${removed.emoji}" 삭제! (간단!)`, 'success')
+    showMsg(isEn ? `✅ "${removed.emoji}" removed from end! (Easy!)` : `✅ 맨 뒤 "${removed.emoji}" 삭제! (간단!)`, 'success')
   }
 
   const reset = () => {
@@ -330,27 +332,28 @@ export function ListAnimation() {
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div className="flex items-center gap-2">
           <Hash className="w-5 h-5 text-blue-600" />
-          <h3 className="font-bold text-lg text-blue-800">List - 리스트</h3>
+          <h3 className="font-bold text-lg text-blue-800">{isEn ? "List" : "List - 리스트"}</h3>
         </div>
-        <span className="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded-full">냉장고 칸 🧊</span>
+        <span className="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded-full">{isEn ? "Fridge Slots 🧊" : "냉장고 칸 🧊"}</span>
       </div>
 
       {showProblem ? (
         <ProblemCard
           problem={{
             emoji: "😱",
-            title: "이렇게 하면 힘들어요!",
-            subtitle: "100개면 변수도 100개?",
-            code: ['egg1 = "🥚"', 'egg2 = "🥚"', 'milk = "🥛"', '... 100개 더? 😵']
+            title: isEn ? "This gets hard fast!" : "이렇게 하면 힘들어요!",
+            subtitle: isEn ? "100 items = 100 variables?" : "100개면 변수도 100개?",
+            code: ['egg1 = "🥚"', 'egg2 = "🥚"', 'milk = "🥛"', isEn ? '... 100 more? 😵' : '... 100개 더? 😵']
           }}
           solution={{
             emoji: "✨",
-            title: "리스트 하나면 끝!",
-            subtitle: "몇 개든 OK!",
+            title: isEn ? "One list does it all!" : "리스트 하나면 끝!",
+            subtitle: isEn ? "Any amount, no problem!" : "몇 개든 OK!",
             code: 'fridge = ["🥚", "🥛", "🍞", "🥚"]'
           }}
           buttonColor="bg-blue-500 hover:bg-blue-600"
           onContinue={() => setShowProblem(false)}
+          lang={lang}
         />
       ) : (
         <>
@@ -483,40 +486,40 @@ export function ListAnimation() {
                 </div>
               </div>
             </div>
-            <p className="text-xs text-slate-500 mt-2 text-center">👆 칸 번호로 바로 열기 | 🥚 같은 거 여러 개 OK</p>
+            <p className="text-xs text-slate-500 mt-2 text-center">{isEn ? "👆 Open any slot by index | 🥚 Duplicates are OK" : "👆 칸 번호로 바로 열기 | 🥚 같은 거 여러 개 OK"}</p>
           </div>
 
           <div className="flex gap-2 flex-wrap">
             <button onClick={searchByValue} disabled={mode !== "normal" || items.length < 2} 
               className="flex items-center gap-1 px-3 py-2 bg-yellow-500 hover:bg-yellow-600 disabled:bg-gray-300 text-white rounded-lg text-sm font-bold shadow">
-              <ScanSearch className="w-4 h-4" /> 음식 찾기
+              <ScanSearch className="w-4 h-4" /> {isEn ? "Find food" : "음식 찾기"}
             </button>
-            <button onClick={addToEnd} disabled={mode !== "normal"} 
+            <button onClick={addToEnd} disabled={mode !== "normal"}
               className="flex items-center gap-1 px-3 py-2 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 text-white rounded-lg text-sm font-bold shadow">
-              <Plus className="w-4 h-4" /> 뒤에 추가
+              <Plus className="w-4 h-4" /> {isEn ? "Add to end" : "뒤에 추가"}
             </button>
-            <button onClick={insertInMiddle} disabled={mode !== "normal" || items.length < 2} 
+            <button onClick={insertInMiddle} disabled={mode !== "normal" || items.length < 2}
               className="flex items-center gap-1 px-3 py-2 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 text-white rounded-lg text-sm font-bold shadow">
-              <Plus className="w-4 h-4" /> 중간 삽입
+              <Plus className="w-4 h-4" /> {isEn ? "Insert middle" : "중간 삽입"}
             </button>
           </div>
           <div className="flex gap-2 flex-wrap">
-            <button onClick={removeFromEnd} disabled={mode !== "normal" || items.length === 0} 
+            <button onClick={removeFromEnd} disabled={mode !== "normal" || items.length === 0}
               className="flex items-center gap-1 px-3 py-2 bg-red-400 hover:bg-red-500 disabled:bg-gray-300 text-white rounded-lg text-sm font-bold shadow">
-              <Minus className="w-4 h-4" /> 뒤에서 삭제
+              <Minus className="w-4 h-4" /> {isEn ? "Remove from end" : "뒤에서 삭제"}
             </button>
-            <button onClick={removeFromMiddle} disabled={mode !== "normal" || items.length < 3} 
+            <button onClick={removeFromMiddle} disabled={mode !== "normal" || items.length < 3}
               className="flex items-center gap-1 px-3 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-300 text-white rounded-lg text-sm font-bold shadow">
-              <Minus className="w-4 h-4" /> 중간 삭제
+              <Minus className="w-4 h-4" /> {isEn ? "Delete middle" : "중간 삭제"}
             </button>
-            <button onClick={reset} 
+            <button onClick={reset}
               className="flex items-center gap-1 px-3 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg text-sm font-bold shadow">
-              <RefreshCw className="w-4 h-4" /> 리셋
+              <RefreshCw className="w-4 h-4" /> {isEn ? "Reset" : "리셋"}
             </button>
           </div>
 
           <div className="bg-gray-900 rounded-lg p-3 font-mono text-sm overflow-x-auto">
-            <span className="text-gray-400"># 리스트 = 순서O, 중복O, 수정O</span><br />
+            <span className="text-gray-400">{isEn ? "# List = ordered, duplicates OK, mutable" : "# 리스트 = 순서O, 중복O, 수정O"}</span><br />
             <span className="text-blue-400">fridge</span><span className="text-white"> = [</span>
             <span className="text-green-400">"{items.map(i => i.emoji).join('", "')}"</span>
             <span className="text-white">]</span>

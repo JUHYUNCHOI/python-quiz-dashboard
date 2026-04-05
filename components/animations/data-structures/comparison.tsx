@@ -7,7 +7,8 @@ import { ListAnimation } from "./list-animation"
 import { TupleAnimation } from "./tuple-animation"
 import { DictAnimation } from "./dict-animation"
 
-export function DataStructuresComparison() {
+export function DataStructuresComparison({ lang = "ko" }: { lang?: "ko" | "en" }) {
+  const isEn = lang === "en"
   const [activeTab, setActiveTab] = useState<"list" | "tuple" | "dict" | "set">("list")
 
   const tabs = [
@@ -37,23 +38,23 @@ export function DataStructuresComparison() {
       </div>
 
       <div className="bg-white rounded-xl p-4 shadow-sm">
-        <h4 className="font-bold text-gray-800 mb-3">📊 한눈에 비교!</h4>
+        <h4 className="font-bold text-gray-800 mb-3">{isEn ? "📊 Quick Comparison!" : "📊 한눈에 비교!"}</h4>
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
             <thead>
               <tr className="border-b">
-                <th className="text-left py-2 px-1">타입</th>
-                <th className="text-center py-2 px-1">언제 쓸까?</th>
-                <th className="text-center py-2 px-1">순서</th>
-                <th className="text-center py-2 px-1">중복</th>
-                <th className="text-center py-2 px-1">수정</th>
+                <th className="text-left py-2 px-1">{isEn ? "Type" : "타입"}</th>
+                <th className="text-center py-2 px-1">{isEn ? "When to use?" : "언제 쓸까?"}</th>
+                <th className="text-center py-2 px-1">{isEn ? "Order" : "순서"}</th>
+                <th className="text-center py-2 px-1">{isEn ? "Duplicates" : "중복"}</th>
+                <th className="text-center py-2 px-1">{isEn ? "Mutable" : "수정"}</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b bg-blue-50"><td className="py-2 px-1 font-bold text-blue-700">List</td><td className="text-center py-2 px-1">여러 개 저장</td><td className="text-center py-2 px-1 text-green-600">✅</td><td className="text-center py-2 px-1 text-green-600">✅</td><td className="text-center py-2 px-1 text-green-600">✅</td></tr>
-              <tr className="border-b bg-purple-50"><td className="py-2 px-1 font-bold text-purple-700">Tuple</td><td className="text-center py-2 px-1">바뀌면 안 됨</td><td className="text-center py-2 px-1 text-green-600">✅</td><td className="text-center py-2 px-1 text-green-600">✅</td><td className="text-center py-2 px-1 text-red-600">❌</td></tr>
-              <tr className="border-b bg-amber-50"><td className="py-2 px-1 font-bold text-amber-700">Dict</td><td className="text-center py-2 px-1">이름으로 찾기</td><td className="text-center py-2 px-1 text-gray-400">-</td><td className="text-center py-2 px-1 text-red-600">key❌</td><td className="text-center py-2 px-1 text-green-600">✅</td></tr>
-              <tr className="bg-green-50"><td className="py-2 px-1 font-bold text-green-700">Set</td><td className="text-center py-2 px-1">중복 없이</td><td className="text-center py-2 px-1 text-red-600">❌</td><td className="text-center py-2 px-1 text-red-600">❌</td><td className="text-center py-2 px-1 text-green-600">✅</td></tr>
+              <tr className="border-b bg-blue-50"><td className="py-2 px-1 font-bold text-blue-700">List</td><td className="text-center py-2 px-1">{isEn ? "Store multiple items" : "여러 개 저장"}</td><td className="text-center py-2 px-1 text-green-600">✅</td><td className="text-center py-2 px-1 text-green-600">✅</td><td className="text-center py-2 px-1 text-green-600">✅</td></tr>
+              <tr className="border-b bg-purple-50"><td className="py-2 px-1 font-bold text-purple-700">Tuple</td><td className="text-center py-2 px-1">{isEn ? "Should not change" : "바뀌면 안 됨"}</td><td className="text-center py-2 px-1 text-green-600">✅</td><td className="text-center py-2 px-1 text-green-600">✅</td><td className="text-center py-2 px-1 text-red-600">❌</td></tr>
+              <tr className="border-b bg-amber-50"><td className="py-2 px-1 font-bold text-amber-700">Dict</td><td className="text-center py-2 px-1">{isEn ? "Find by name" : "이름으로 찾기"}</td><td className="text-center py-2 px-1 text-gray-400">-</td><td className="text-center py-2 px-1 text-red-600">key❌</td><td className="text-center py-2 px-1 text-green-600">✅</td></tr>
+              <tr className="bg-green-50"><td className="py-2 px-1 font-bold text-green-700">Set</td><td className="text-center py-2 px-1">{isEn ? "No duplicates" : "중복 없이"}</td><td className="text-center py-2 px-1 text-red-600">❌</td><td className="text-center py-2 px-1 text-red-600">❌</td><td className="text-center py-2 px-1 text-green-600">✅</td></tr>
             </tbody>
           </table>
         </div>

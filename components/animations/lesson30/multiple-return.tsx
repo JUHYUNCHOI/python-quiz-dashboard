@@ -52,7 +52,7 @@ export function MultipleReturnVisualizer({ lang = "ko" }: VisualizerProps) {
             <span className="text-slate-400">=</span>
             <span className="text-purple-300">나누기</span>
             <span className="text-slate-400">(</span><span className="text-yellow-300">17, 5</span><span className="text-slate-400">)</span>
-            {step === 0 && (<button onClick={next} className="ml-2 px-3 py-1.5 rounded-lg bg-green-600 hover:bg-green-500 text-white text-xs font-bold flex items-center gap-1 transition-all"><Play className="w-3 h-3" /> 실행</button>)}
+            {step === 0 && (<button onClick={next} className="ml-2 px-3 py-1.5 rounded-lg bg-green-600 hover:bg-green-500 text-white text-xs font-bold flex items-center gap-1 transition-all"><Play className="w-3 h-3" /> {lang === "ko" ? "실행" : "Run"}</button>)}
           </div>
 
           {step >= 1 && (
@@ -75,7 +75,7 @@ export function MultipleReturnVisualizer({ lang = "ko" }: VisualizerProps) {
           {step === 1 && (
             <div className="flex justify-center">
               <button onClick={next} className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold flex items-center gap-2 transition-all">
-                <Zap className="w-4 h-4" /> 변수에 저장!
+                <Zap className="w-4 h-4" /> {lang === "ko" ? "변수에 저장!" : "Store in variables!"}
               </button>
             </div>
           )}

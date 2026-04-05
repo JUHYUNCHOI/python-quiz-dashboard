@@ -319,6 +319,10 @@ for (int& x : v)  // x is a reference → v changes!
 1. A swap function to exchange two values
 2. A function that doubles every element in a vector
 
+**Starting values:**
+- \`int a = 10, b = 20;\`
+- \`vector<int> nums = {1, 2, 3, 4, 5};\`
+
 When a vector is passed by reference, the original vector gets modified!
 
 \`vector<int>&\` means 'a reference to an integer vector.' Because of the &, the function can directly modify the original vector!`,

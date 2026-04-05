@@ -4,8 +4,6 @@ import { useState } from "react"
 import { X, BookOpen, Trophy, Flame, ChevronDown, ExternalLink, Check, AlertTriangle } from "lucide-react"
 import { StudentProgress } from "@/components/teacher/student-progress"
 import { StudentQuizReport } from "@/components/teacher/student-quiz-report"
-import { pythonQuestions } from "@/data/questions/python-questions"
-import { cppQuestions } from "@/data/questions/cpp-questions"
 import { cn } from "@/lib/utils"
 import { getLessonName } from "@/lib/curriculum-data"
 import type { QuizSession } from "@/lib/supabase/types"
@@ -39,11 +37,6 @@ interface StudentRow {
   quizSessions: QuizSession[]
   stepVisits: StepVisitSummary[]
 }
-
-// ─── 질문 맵 ─────────────────────────────────────────────────
-const QUESTION_MAP = new Map(
-  [...pythonQuestions, ...cppQuestions].map(q => [q.id, q])
-)
 
 // ─── 헬퍼 함수 ───────────────────────────────────────────────
 function daysSince(dateStr: string): number {
@@ -144,7 +137,7 @@ function buildDiagnosis(student: StudentRow, detailedSessions: QuizSession[]): D
 
   // 약점 컨셉 상위 3개
   const weakConcepts = weakQuestions
-    .map(w => w.conceptTitle || QUESTION_MAP.get(w.id)?.keyConceptTitle || "")
+    .map(w => w.conceptTitle || "")
     .filter(Boolean)
     .slice(0, 3)
 
@@ -235,6 +228,21 @@ export function StudentDetailPanel({
   lang,
 }: Props) {
   const [expandedQ, setExpandedQ] = useState<number | null>(null)
+  const [fetchedQuestions, setFetchedQuestions] = useState<Map<number, any>>(new Map())
+
+  const handleExpandQuestion = async (id: number) => {
+    if (expandedQ === id) { setExpandedQ(null); return }
+    setExpandedQ(id)
+    if (!fetchedQuestions.has(id)) {
+      try {
+        const res = await fetch(`/api/admin/questions/${id}`)
+        if (res.ok) {
+          const { question } = await res.json()
+          setFetchedQuestions(prev => new Map(prev).set(id, question))
+        }
+      } catch { /* 조용히 실패 */ }
+    }
+  }
 
   if (!student) return null
 
@@ -392,11 +400,11 @@ export function StudentDetailPanel({
                     </p>
                     {diagnosis.weakQuestions.map(w => {
                       const isExpanded = expandedQ === w.id
-                      const qDetail = QUESTION_MAP.get(w.id)
+                      const qDetail = fetchedQuestions.get(w.id)
                       return (
                         <div key={w.id} className="rounded-lg border border-orange-100 overflow-hidden">
                           <button
-                            onClick={() => setExpandedQ(isExpanded ? null : w.id)}
+                            onClick={() => handleExpandQuestion(w.id)}
                             className="w-full flex items-start gap-2 px-3 py-2 text-left hover:bg-orange-50 transition-colors"
                           >
                             <div className="flex-1 min-w-0">
@@ -407,7 +415,7 @@ export function StudentDetailPanel({
                               )}
                               {(w.topics.length > 0 || (qDetail?.relatedTopics?.length ?? 0) > 0) && (
                                 <div className="flex flex-wrap gap-1 mt-0.5">
-                                  {(w.topics.length > 0 ? w.topics : qDetail?.relatedTopics || []).slice(0, 3).map(t => (
+                                  {(w.topics.length > 0 ? w.topics : qDetail?.related_topics || []).slice(0, 3).map((t: string) => (
                                     <span key={t} className="text-[9px] bg-orange-100 text-orange-600 px-1 py-0.5 rounded font-medium">{t}</span>
                                   ))}
                                 </div>
@@ -438,14 +446,14 @@ export function StudentDetailPanel({
                                 </pre>
                               )}
                               <div className="space-y-1">
-                                {qDetail.options.map((opt, idx) => (
+                                {qDetail.options.map((opt: string, idx: number) => (
                                   <div key={idx} className={cn(
                                     "text-[10px] px-2 py-1 rounded flex items-center gap-1.5",
-                                    idx === qDetail.correctAnswer
+                                    idx === qDetail.correct_answer
                                       ? "bg-green-100 text-green-700 font-bold"
                                       : "bg-gray-100 text-gray-500"
                                   )}>
-                                    {idx === qDetail.correctAnswer && <Check className="w-3 h-3 flex-shrink-0" />}
+                                    {idx === qDetail.correct_answer && <Check className="w-3 h-3 flex-shrink-0" />}
                                     <span>{opt}</span>
                                   </div>
                                 ))}

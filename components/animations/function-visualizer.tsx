@@ -10,6 +10,7 @@ interface FunctionVisualizerProps {
   body?: string
   callArgs?: string[]
   output?: string
+  lang?: "ko" | "en"
 }
 
 export function FunctionVisualizer({
@@ -17,8 +18,10 @@ export function FunctionVisualizer({
   params = ["name"],
   body = 'print(f"Hello, {name}!")',
   callArgs = ["Tom"],
-  output = "Hello, Tom!"
+  output = "Hello, Tom!",
+  lang = "ko"
 }: FunctionVisualizerProps) {
+  const isEn = lang === "en"
   const [step, setStep] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
 
@@ -53,7 +56,7 @@ export function FunctionVisualizer({
     <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 text-white overflow-hidden">
       {/* 함수 정의 영역 */}
       <div className="mb-6">
-        <p className="text-xs text-slate-400 mb-2">📦 함수 정의</p>
+        <p className="text-xs text-slate-400 mb-2">{isEn ? "📦 Function definition" : "📦 함수 정의"}</p>
         <div className="bg-slate-800/50 rounded-xl p-4 font-mono text-sm md:text-base relative overflow-x-auto">
           {/* 코드 라인 */}
           <div className="flex flex-wrap items-center gap-1">
@@ -104,22 +107,22 @@ export function FunctionVisualizer({
             <div className="flex flex-wrap gap-4 mt-4 pt-4 border-t border-slate-700 animate-fade-in">
               <div className="flex items-center gap-2">
                 <span className="w-3 h-3 rounded bg-blue-500"></span>
-                <span className="text-xs text-slate-400">키워드 (만들기)</span>
+                <span className="text-xs text-slate-400">{isEn ? "keyword (create)" : "키워드 (만들기)"}</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-3 h-3 rounded bg-purple-500"></span>
-                <span className="text-xs text-slate-400">함수 이름</span>
+                <span className="text-xs text-slate-400">{isEn ? "function name" : "함수 이름"}</span>
               </div>
               {step >= 2 && (
                 <div className="flex items-center gap-2 animate-fade-in">
                   <span className="w-3 h-3 rounded bg-orange-500"></span>
-                  <span className="text-xs text-slate-400">파라미터 (재료)</span>
+                  <span className="text-xs text-slate-400">{isEn ? "parameter (ingredient)" : "파라미터 (재료)"}</span>
                 </div>
               )}
               {step >= 3 && (
                 <div className="flex items-center gap-2 animate-fade-in">
                   <span className="w-3 h-3 rounded bg-green-500"></span>
-                  <span className="text-xs text-slate-400">실행 코드</span>
+                  <span className="text-xs text-slate-400">{isEn ? "execution code" : "실행 코드"}</span>
                 </div>
               )}
             </div>
@@ -130,7 +133,7 @@ export function FunctionVisualizer({
       {/* 함수 호출 영역 */}
       {step >= 4 && (
         <div className="mb-6 animate-slide-up">
-          <p className="text-xs text-slate-400 mb-2">🚀 함수 호출</p>
+          <p className="text-xs text-slate-400 mb-2">{isEn ? "🚀 Function call" : "🚀 함수 호출"}</p>
           <div className="bg-slate-800/50 rounded-xl p-4 font-mono text-sm md:text-base">
             <div className="flex flex-wrap items-center gap-1">
               <span className="px-2 py-1 rounded bg-purple-500/30 text-purple-300">
@@ -152,7 +155,7 @@ export function FunctionVisualizer({
               <span className="px-2 py-1 rounded bg-orange-500/30 text-orange-300">
                 {params[0]}
               </span>
-              <span className="text-slate-500 text-xs">에 들어감!</span>
+              <span className="text-slate-500 text-xs">{isEn ? "assigned!" : "에 들어감!"}</span>
             </div>
           </div>
         </div>
@@ -161,7 +164,7 @@ export function FunctionVisualizer({
       {/* 출력 결과 */}
       {step >= 5 && (
         <div className="animate-scale-in">
-          <p className="text-xs text-slate-400 mb-2">✨ 결과</p>
+          <p className="text-xs text-slate-400 mb-2">{isEn ? "✨ Result" : "✨ 결과"}</p>
           <div className="bg-green-500/20 border border-green-500/30 rounded-xl p-4 font-mono animate-glow">
             <span className="text-green-400">{output}</span>
           </div>
@@ -181,7 +184,7 @@ export function FunctionVisualizer({
           )}
         >
           <Play className="w-4 h-4" />
-          {step === 0 ? "실행하기" : "다시 실행"}
+          {step === 0 ? (isEn ? "Run" : "실행하기") : (isEn ? "Run again" : "다시 실행")}
         </button>
         
         {step > 0 && (
@@ -190,7 +193,7 @@ export function FunctionVisualizer({
             className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium bg-slate-700 hover:bg-slate-600 text-slate-300 transition-all"
           >
             <RotateCcw className="w-4 h-4" />
-            초기화
+            {isEn ? "Reset" : "초기화"}
           </button>
         )}
       </div>

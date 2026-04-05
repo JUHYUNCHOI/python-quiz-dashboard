@@ -307,7 +307,11 @@ for (int& x : v)  // x는 원본의 참조(reference) → v가 바뀜!
           content: `참조를 활용하는 두 가지 함수가 어떻게 동작하는지 실행해봐요!
 
 - 두 정수를 서로 교환하는 함수
-- 벡터의 모든 원소를 2배로 만드는 함수`,
+- 벡터의 모든 원소를 2배로 만드는 함수
+
+**시작 값:**
+- \`int a = 10, b = 20;\`
+- \`vector<int> nums = {1, 2, 3, 4, 5};\``,
           code: `#include <iostream>
 #include <vector>
 using namespace std;

@@ -8,7 +8,8 @@ type MethodType = "substr" | "find" | "replace";
 
 const INPUT = "Hello World";
 
-export default function StringMethodVisualizer() {
+export default function StringMethodVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
+  const isEn = lang === "en"
   const [activeMethod, setActiveMethod] = useState<MethodType>("substr");
 
   const [substrPos, setSubstrPos] = useState(0);
@@ -52,20 +53,36 @@ export default function StringMethodVisualizer() {
   }, [activeMethod, substrPos, substrLen, findStr, replacePos, replaceLen, replaceNewStr]);
 
   const warning = {
-    substr: (
+    substr: isEn ? (
+      <>
+        <strong>It&apos;s a length, not an end index!</strong> Python&apos;s{" "}
+        <code className="bg-amber-200 px-1.5 py-0.5 rounded font-mono text-amber-900">s[0:5]</code> goes up to index 5, while C++&apos;s{" "}
+        <code className="bg-amber-200 px-1.5 py-0.5 rounded font-mono text-amber-900">substr(0,5)</code> takes 5 chars from position 0.
+      </>
+    ) : (
       <>
         <strong>끝 인덱스가 아니라 길이예요!</strong> 파이썬{" "}
         <code className="bg-amber-200 px-1.5 py-0.5 rounded font-mono text-amber-900">s[0:5]</code>는 인덱스 5 전까지, C++{" "}
         <code className="bg-amber-200 px-1.5 py-0.5 rounded font-mono text-amber-900">substr(0,5)</code>는 0부터 5글자.
       </>
     ),
-    find: (
+    find: isEn ? (
+      <>
+        <strong>Returns string::npos if not found!</strong> Python returns -1, but C++ returns{" "}
+        <code className="bg-amber-200 px-1.5 py-0.5 rounded font-mono text-amber-900">string::npos</code>.
+      </>
+    ) : (
       <>
         <strong>못 찾으면 string::npos!</strong> 파이썬은 -1을 반환하지만, C++는{" "}
         <code className="bg-amber-200 px-1.5 py-0.5 rounded font-mono text-amber-900">string::npos</code>를 반환해요.
       </>
     ),
-    replace: (
+    replace: isEn ? (
+      <>
+        <strong>Not a string search!</strong> Unlike Python&apos;s{" "}
+        <code className="bg-amber-200 px-1.5 py-0.5 rounded font-mono text-amber-900">s.replace(&quot;old&quot;,&quot;new&quot;)</code>, C++ replaces by position and length.
+      </>
+    ) : (
       <>
         <strong>문자열 검색이 아니에요!</strong> 파이썬{" "}
         <code className="bg-amber-200 px-1.5 py-0.5 rounded font-mono text-amber-900">s.replace(&quot;old&quot;,&quot;new&quot;)</code>와 달리, C++는 위치와 길이로 교체해요.
@@ -161,7 +178,7 @@ export default function StringMethodVisualizer() {
           {/* 파이썬 비교 */}
           <div className="flex items-center gap-3 bg-slate-50 rounded-xl px-4 py-3 border border-slate-200">
             <span className="text-xl">🐍</span>
-            <span className="text-slate-500 text-sm font-medium">파이썬:</span>
+            <span className="text-slate-500 text-sm font-medium">{isEn ? "Python:" : "파이썬:"}</span>
             <code className="font-mono font-bold text-slate-800 text-sm">{pythonEquivalent}</code>
           </div>
         </div>
@@ -185,7 +202,7 @@ export default function StringMethodVisualizer() {
 
           {activeMethod === "find" && (
             <div className="text-center space-y-2">
-              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">검색 문자열</label>
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">{isEn ? "SEARCH STRING" : "검색 문자열"}</label>
               <input
                 type="text" value={findStr} onChange={e => setFindStr(e.target.value)}
                 maxLength={11}
@@ -212,7 +229,7 @@ export default function StringMethodVisualizer() {
 
           {/* 결과 */}
           <div className="flex flex-col gap-1.5">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider text-center">결과</span>
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider text-center">{isEn ? "RESULT" : "결과"}</span>
             <div className={cn(
               "rounded-2xl py-6 md:py-8 px-4 border text-center",
               activeMethod === "find" && foundAt === -1
@@ -230,7 +247,7 @@ export default function StringMethodVisualizer() {
           {activeMethod === "find" && findStr.length > 0 && (
             <div className="rounded-xl overflow-hidden border border-slate-800 text-xs font-mono">
               <div className="bg-slate-800 px-3 py-1.5 text-slate-400 flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />if문 실행 흐름
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />{isEn ? "if statement flow" : "if문 실행 흐름"}
               </div>
               <div className="bg-slate-950 divide-y divide-slate-800/60">
                 <div className="px-3 py-2 text-slate-400">
@@ -238,14 +255,14 @@ export default function StringMethodVisualizer() {
                 </div>
                 <div className={cn("px-3 py-2.5 flex items-center justify-between transition-all", foundAt >= 0 ? "bg-emerald-950" : "opacity-20")}>
                   <div className={cn(foundAt >= 0 ? "border-l-2 border-emerald-500 pl-2.5 text-slate-300" : "pl-3 text-slate-500")}>
-                    <span className="text-sky-400">cout</span>{" << "}<span className="text-orange-300">"찾았어요! 위치: "</span>{" << "}<span className="text-sky-400">pos</span>{";"}
+                    <span className="text-sky-400">cout</span>{" << "}<span className="text-orange-300">{isEn ? '"Found! Position: "' : '"찾았어요! 위치: "'}</span>{" << "}<span className="text-sky-400">pos</span>{";"}
                   </div>
                   {foundAt >= 0 && <span className="ml-2 shrink-0 text-[10px] text-emerald-400 bg-emerald-900/60 px-1.5 py-0.5 rounded-full">✅ {foundAt}</span>}
                 </div>
                 <div className="px-3 py-2 text-slate-400">{"} "}<span className="text-purple-400">else</span>{" {"}</div>
                 <div className={cn("px-3 py-2.5 flex items-center justify-between transition-all", foundAt < 0 ? "bg-red-950" : "opacity-20")}>
                   <div className={cn(foundAt < 0 ? "border-l-2 border-red-500 pl-2.5 text-slate-300" : "pl-3 text-slate-500")}>
-                    <span className="text-sky-400">cout</span>{" << "}<span className="text-orange-300">"못 찾았어요!"</span>{";"}
+                    <span className="text-sky-400">cout</span>{" << "}<span className="text-orange-300">{isEn ? '"Not found!"' : '"못 찾았어요!"'}</span>{";"}
                   </div>
                   {foundAt < 0 && <span className="ml-2 shrink-0 text-[10px] text-red-400 bg-red-900/60 px-1.5 py-0.5 rounded-full">❌</span>}
                 </div>

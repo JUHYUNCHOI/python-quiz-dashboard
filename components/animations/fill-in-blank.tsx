@@ -18,6 +18,7 @@ interface FillInBlankProps {
   choices: string[]
   expectedOutput?: string
   onComplete?: () => void
+  lang?: "ko" | "en"
 }
 
 export function FillInBlank({
@@ -27,8 +28,10 @@ export function FillInBlank({
   blanks,
   choices,
   expectedOutput,
-  onComplete
+  onComplete,
+  lang = "ko"
 }: FillInBlankProps) {
+  const isEn = lang === "en"
   const [filledBlanks, setFilledBlanks] = useState<Record<string, string>>({})
   const [selectedBlank, setSelectedBlank] = useState<string | null>(null)
   const [isComplete, setIsComplete] = useState(false)
@@ -200,7 +203,7 @@ export function FillInBlank({
               </>
             ) : (
               <span className="text-sm">
-                {isSelected ? "여기!" : "?"}
+                {isSelected ? (isEn ? "here!" : "여기!") : "?"}
               </span>
             )}
           </span>
@@ -257,7 +260,7 @@ export function FillInBlank({
         {currentHint && !isComplete && (
           <div className="flex items-center gap-2 text-sm bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
             <HelpCircle className="w-4 h-4 text-amber-500 flex-shrink-0" />
-            <span className="text-amber-700">힌트: {currentHint}</span>
+            <span className="text-amber-700">{isEn ? "Hint: " : "힌트: "}{currentHint}</span>
           </div>
         )}
 
@@ -265,7 +268,7 @@ export function FillInBlank({
         {!isComplete && (
           <div className="space-y-2">
             <p className="text-xs md:text-sm text-gray-500">
-              👆 <span className="text-amber-600 font-medium">노란 빈칸</span>을 클릭하고, 아래에서 선택하세요:
+              👆 {isEn ? <>Click a <span className="text-amber-600 font-medium">yellow blank</span>, then choose below:</> : <><span className="text-amber-600 font-medium">노란 빈칸</span>을 클릭하고, 아래에서 선택하세요:</>}
             </p>
             <div className="flex flex-wrap gap-2">
               {choices.map((choice, idx) => {
@@ -304,18 +307,18 @@ export function FillInBlank({
             {isCorrect ? (
               <div className="flex items-center gap-2">
                 <CheckCircle className="w-5 h-5 text-green-600" />
-                <span className="font-bold text-green-700">정답이에요! 🎉</span>
+                <span className="font-bold text-green-700">{isEn ? "Correct! 🎉" : "정답이에요! 🎉"}</span>
               </div>
             ) : (
               <div>
-                <p className="font-bold text-red-700 mb-1">다시 확인해보세요!</p>
-                <p className="text-sm text-red-600">빨간색 빈칸을 클릭해서 다시 선택하세요.</p>
+                <p className="font-bold text-red-700 mb-1">{isEn ? "Check again!" : "다시 확인해보세요!"}</p>
+                <p className="text-sm text-red-600">{isEn ? "Click the red blanks to reselect." : "빨간색 빈칸을 클릭해서 다시 선택하세요."}</p>
               </div>
             )}
             
             {isCorrect && expectedOutput && (
               <div className="mt-3 pt-3 border-t border-green-200">
-                <p className="text-xs text-green-600 mb-1">실행 결과:</p>
+                <p className="text-xs text-green-600 mb-1">{isEn ? "Output:" : "실행 결과:"}</p>
                 <pre className="font-mono text-sm text-green-700 bg-green-100 rounded p-2">
                   {expectedOutput}
                 </pre>
@@ -328,7 +331,7 @@ export function FillInBlank({
         {isComplete && (
           <div className="bg-gradient-to-r from-indigo-100 to-purple-100 rounded-xl p-3 md:p-4 text-center">
             <Sparkles className="w-6 h-6 md:w-8 md:h-8 text-indigo-500 mx-auto mb-2" />
-            <p className="text-indigo-700 font-bold text-sm md:text-base">잘했어요!</p>
+            <p className="text-indigo-700 font-bold text-sm md:text-base">{isEn ? "Well done!" : "잘했어요!"}</p>
           </div>
         )}
 
@@ -340,7 +343,7 @@ export function FillInBlank({
               type="button"
               className="px-5 py-2.5 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl transition-all shadow-lg"
             >
-              ✓ 정답 확인
+              {isEn ? "✓ Check answers" : "✓ 정답 확인"}
             </button>
           )}
           
@@ -351,7 +354,7 @@ export function FillInBlank({
               className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl transition-all flex items-center gap-2"
             >
               <RotateCcw className="w-4 h-4" />
-              다시 하기
+              {isEn ? "Try again" : "다시 하기"}
             </button>
           )}
         </div>

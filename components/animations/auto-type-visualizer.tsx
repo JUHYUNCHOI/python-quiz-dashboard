@@ -8,68 +8,72 @@ import { motion, AnimatePresence } from "framer-motion"
 // auto가 오른쪽 값을 보고 타입을 결정하는 과정
 // ============================================
 
-const EXAMPLES = [
-  {
-    code: "auto x = 42;",
-    value: "42",
-    inferred: "int",
-    color: "#3b82f6",
-    bg: "#eff6ff",
-    reason: "정수 → int",
-    full: "int x = 42;",
-  },
-  {
-    code: "auto x = 3.14;",
-    value: "3.14",
-    inferred: "double",
-    color: "#8b5cf6",
-    bg: "#f5f3ff",
-    reason: "소수 → double",
-    full: "double x = 3.14;",
-  },
-  {
-    code: 'auto x = true;',
-    value: "true",
-    inferred: "bool",
-    color: "#ec4899",
-    bg: "#fdf2f8",
-    reason: "true/false → bool",
-    full: "bool x = true;",
-  },
-  {
-    code: 'auto x = "hi";',
-    value: '"hi"',
-    inferred: "string",
-    color: "#f59e0b",
-    bg: "#fffbeb",
-    reason: "문자열 → string",
-    full: 'string x = "hi";',
-  },
-  {
-    code: "// vector<int> v = {1,2,3};\nauto x = v[0];",
-    value: "v[0]",
-    inferred: "int",
-    color: "#10b981",
-    bg: "#f0fdf4",
-    reason: "vector<int>의 원소 → int",
-    full: "int x = v[0];",
-  },
-  {
-    code: "// vector<int> v = {1,2,3};\nfor (auto x : v)",
-    value: "v의 원소",
-    inferred: "int",
-    color: "#06b6d4",
-    bg: "#ecfeff",
-    reason: "vector<int>의 원소 타입 → int",
-    full: "for (int x : v)",
-  },
-]
+function getEXAMPLES(isEn: boolean) {
+  return [
+    {
+      code: "auto x = 42;",
+      value: "42",
+      inferred: "int",
+      color: "#3b82f6",
+      bg: "#eff6ff",
+      reason: isEn ? "integer → int" : "정수 → int",
+      full: "int x = 42;",
+    },
+    {
+      code: "auto x = 3.14;",
+      value: "3.14",
+      inferred: "double",
+      color: "#8b5cf6",
+      bg: "#f5f3ff",
+      reason: isEn ? "decimal → double" : "소수 → double",
+      full: "double x = 3.14;",
+    },
+    {
+      code: 'auto x = true;',
+      value: "true",
+      inferred: "bool",
+      color: "#ec4899",
+      bg: "#fdf2f8",
+      reason: "true/false → bool",
+      full: "bool x = true;",
+    },
+    {
+      code: 'auto x = "hi";',
+      value: '"hi"',
+      inferred: "string",
+      color: "#f59e0b",
+      bg: "#fffbeb",
+      reason: isEn ? "string literal → string" : "문자열 → string",
+      full: 'string x = "hi";',
+    },
+    {
+      code: "// vector<int> v = {1,2,3};\nauto x = v[0];",
+      value: "v[0]",
+      inferred: "int",
+      color: "#10b981",
+      bg: "#f0fdf4",
+      reason: isEn ? "vector<int> element → int" : "vector<int>의 원소 → int",
+      full: "int x = v[0];",
+    },
+    {
+      code: "// vector<int> v = {1,2,3};\nfor (auto x : v)",
+      value: isEn ? "element of v" : "v의 원소",
+      inferred: "int",
+      color: "#06b6d4",
+      bg: "#ecfeff",
+      reason: isEn ? "vector<int> element type → int" : "vector<int>의 원소 타입 → int",
+      full: "for (int x : v)",
+    },
+  ]
+}
 
 type Phase = "idle" | "scanning" | "revealing" | "done"
 
 export function AutoTypeVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
   const [selected, setSelected] = useState(0)
   const [phase, setPhase] = useState<Phase>("idle")
+  const isEn = lang === "en"
+  const EXAMPLES = getEXAMPLES(isEn)
   const ex = EXAMPLES[selected]
 
   const run = () => {
@@ -241,13 +245,19 @@ export function AutoTypeVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
           {lang === "en" ? "HOW AUTO WORKS" : "auto 동작 원리"}
         </div>
         <p className="text-sm text-gray-600 leading-relaxed">
-          <code className="font-mono font-bold text-gray-800">auto</code>는 "타입을 직접 안 써도 돼요" 라는 뜻이에요.
-          컴파일러가 오른쪽 값을 보고 <strong>스스로 타입을 결정</strong>해요. 실행 중이 아니라
-          <strong> 컴파일 시점</strong>에 결정되기 때문에 속도는 똑같아요!
+          {isEn
+            ? <><code className="font-mono font-bold text-gray-800">auto</code> means "you don't have to write the type yourself".
+              The compiler looks at the right-hand value and <strong>decides the type automatically</strong>. Because it happens at <strong>compile time</strong>, there's no speed cost!</>
+            : <><code className="font-mono font-bold text-gray-800">auto</code>는 "타입을 직접 안 써도 돼요" 라는 뜻이에요.
+              컴파일러가 오른쪽 값을 보고 <strong>스스로 타입을 결정</strong>해요. 실행 중이 아니라
+              <strong> 컴파일 시점</strong>에 결정되기 때문에 속도는 똑같아요!</>
+          }
         </p>
         <div className="bg-indigo-50 rounded-xl px-4 py-3 text-xs text-indigo-700 font-medium">
-          💡 range-based for에서 <code className="font-mono">auto x : v</code>라고 쓰면
-          v의 원소 타입을 알아서 추론해요. 타입이 길 때 특히 유용해요!
+          {isEn
+            ? <>💡 In a range-based for loop, writing <code className="font-mono">auto x : v</code> infers the element type of v automatically. Especially useful when types are long!</>
+            : <>💡 range-based for에서 <code className="font-mono">auto x : v</code>라고 쓰면 v의 원소 타입을 알아서 추론해요. 타입이 길 때 특히 유용해요!</>
+          }
         </div>
       </div>
     </div>

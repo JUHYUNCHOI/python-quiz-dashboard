@@ -11,22 +11,22 @@ export interface LockerItem {
 }
 
 export const FOOD_ITEMS = [
-  { emoji: "🥚", name: "계란" },
-  { emoji: "🥛", name: "우유" },
-  { emoji: "🍞", name: "빵" },
-  { emoji: "🧀", name: "치즈" },
-  { emoji: "🥓", name: "베이컨" },
-  { emoji: "🧈", name: "버터" },
-  { emoji: "🍎", name: "사과" },
-  { emoji: "🍊", name: "귀맘" },
-  { emoji: "🍓", name: "딸기" },
-  { emoji: "🥬", name: "브로콜리" },
-  { emoji: "🥕", name: "당근" },
-  { emoji: "🍗", name: "닭다리" },
-  { emoji: "🍔", name: "햄버거" },
-  { emoji: "🍕", name: "피자" },
-  { emoji: "🍦", name: "아이스크림" },
-  { emoji: "🧁", name: "컵케이크" },
+  { emoji: "🥚", name: "계란", nameEn: "egg" },
+  { emoji: "🥛", name: "우유", nameEn: "milk" },
+  { emoji: "🍞", name: "빵", nameEn: "bread" },
+  { emoji: "🧀", name: "치즈", nameEn: "cheese" },
+  { emoji: "🥓", name: "베이컨", nameEn: "bacon" },
+  { emoji: "🧈", name: "버터", nameEn: "butter" },
+  { emoji: "🍎", name: "사과", nameEn: "apple" },
+  { emoji: "🍊", name: "귀맘", nameEn: "orange" },
+  { emoji: "🍓", name: "딸기", nameEn: "strawberry" },
+  { emoji: "🥬", name: "브로콜리", nameEn: "broccoli" },
+  { emoji: "🥕", name: "당근", nameEn: "carrot" },
+  { emoji: "🍗", name: "닭다리", nameEn: "chicken" },
+  { emoji: "🍔", name: "햄버거", nameEn: "burger" },
+  { emoji: "🍕", name: "피자", nameEn: "pizza" },
+  { emoji: "🍦", name: "아이스크림", nameEn: "ice cream" },
+  { emoji: "🧁", name: "컵케이크", nameEn: "cupcake" },
 ]
 
 let uniqueIdCounter = 100
@@ -84,9 +84,11 @@ interface ProblemCardProps {
   }
   buttonColor: string
   onContinue: () => void
+  lang?: "ko" | "en"
 }
 
-export function ProblemCard({ problem, solution, buttonColor, onContinue }: ProblemCardProps) {
+export function ProblemCard({ problem, solution, buttonColor, onContinue, lang = "ko" }: ProblemCardProps) {
+  const isEn = lang === "en"
   return (
     <div className="space-y-4">
       <div className="bg-gradient-to-r from-red-500 to-red-600 rounded-2xl p-5 text-white shadow-lg">
@@ -123,7 +125,7 @@ export function ProblemCard({ problem, solution, buttonColor, onContinue }: Prob
         onClick={onContinue}
         className={`w-full py-4 ${buttonColor} text-white rounded-xl text-lg font-black shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98]`}
       >
-        👆 직접 해보기!
+        {isEn ? "👆 Try it yourself!" : "👆 직접 해보기!"}
       </button>
     </div>
   )

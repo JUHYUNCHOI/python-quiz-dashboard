@@ -9,18 +9,19 @@ import { HardDrive, Cpu, Power, PowerOff, Save, Upload } from "lucide-react"
  * - 왼쪽: RAM (변수) - 전원 끄면 사라짐
  * - 오른쪽: 디스크 (파일) - 전원 꺼도 남아있음
  */
-export function MemoryVsFileAnimation() {
+export function MemoryVsFileAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
+  const isEn = lang === "en"
   const [phase, setPhase] = useState<"running" | "off" | "restart">("running")
   const [saved, setSaved] = useState(false)
 
   const ramData = [
-    { name: "점수", value: "100" },
-    { name: "레벨", value: "5" },
-    { name: "이름", value: '"용사"' },
+    { name: isEn ? "score" : "점수", value: "100" },
+    { name: isEn ? "level" : "레벨", value: "5" },
+    { name: isEn ? "name" : "이름", value: isEn ? '"hero"' : '"용사"' },
   ]
 
   const fileData = [
-    { name: "save.txt", value: "100,5,용사" },
+    { name: "save.txt", value: isEn ? "100,5,hero" : "100,5,용사" },
   ]
 
   const handlePowerOff = () => {
@@ -51,7 +52,7 @@ export function MemoryVsFileAnimation() {
         )}>
           <div className="flex items-center gap-2 mb-3">
             <Cpu className={cn("w-5 h-5", phase === "running" ? "text-green-600" : "text-gray-400")} />
-            <span className="font-bold text-sm">RAM (변수)</span>
+            <span className="font-bold text-sm">{isEn ? "RAM (variables)" : "RAM (변수)"}</span>
           </div>
           <div className="space-y-2">
             {ramData.map((item, i) => (
@@ -69,7 +70,7 @@ export function MemoryVsFileAnimation() {
             "mt-3 text-center text-xs font-bold py-1 rounded-lg transition-all",
             phase === "running" ? "bg-green-200 text-green-700" : "bg-red-100 text-red-600"
           )}>
-            {phase === "running" ? "✅ 데이터 있음" : "💨 전부 사라짐!"}
+            {phase === "running" ? (isEn ? "✅ Data present" : "✅ 데이터 있음") : (isEn ? "💨 All gone!" : "💨 전부 사라짐!")}
           </div>
         </div>
 
@@ -80,7 +81,7 @@ export function MemoryVsFileAnimation() {
         )}>
           <div className="flex items-center gap-2 mb-3">
             <HardDrive className="w-5 h-5 text-blue-600" />
-            <span className="font-bold text-sm">디스크 (파일)</span>
+            <span className="font-bold text-sm">{isEn ? "Disk (file)" : "디스크 (파일)"}</span>
           </div>
           <div className="space-y-2">
             {saved || phase === "restart" ? (
@@ -91,7 +92,7 @@ export function MemoryVsFileAnimation() {
               ))
             ) : (
               <div className="rounded-lg px-3 py-3 text-xs text-gray-400 text-center bg-gray-100">
-                (비어있음)
+                {isEn ? "(empty)" : "(비어있음)"}
               </div>
             )}
           </div>
@@ -99,7 +100,7 @@ export function MemoryVsFileAnimation() {
             "mt-3 text-center text-xs font-bold py-1 rounded-lg",
             saved || phase === "restart" ? "bg-blue-200 text-blue-700" : "bg-gray-100 text-gray-400"
           )}>
-            {saved || phase === "restart" ? "💾 데이터 안전!" : "저장 안 됨"}
+            {saved || phase === "restart" ? (isEn ? "💾 Data safe!" : "💾 데이터 안전!") : (isEn ? "Not saved" : "저장 안 됨")}
           </div>
         </div>
       </div>
@@ -111,9 +112,9 @@ export function MemoryVsFileAnimation() {
         phase === "off" ? "bg-gray-800 text-gray-400" :
         "bg-yellow-100 text-yellow-700"
       )}>
-        {phase === "running" && "🟢 프로그램 실행 중"}
-        {phase === "off" && "⚫ 프로그램 종료됨..."}
-        {phase === "restart" && (saved ? "🎉 파일에서 데이터 복구!" : "😢 데이터 모두 잃어버림!")}
+        {phase === "running" && (isEn ? "🟢 Program running" : "🟢 프로그램 실행 중")}
+        {phase === "off" && (isEn ? "⚫ Program stopped..." : "⚫ 프로그램 종료됨...")}
+        {phase === "restart" && (saved ? (isEn ? "🎉 Data recovered from file!" : "🎉 파일에서 데이터 복구!") : (isEn ? "😢 All data lost!" : "😢 데이터 모두 잃어버림!"))}
       </div>
 
       {/* 버튼 */}
@@ -125,19 +126,19 @@ export function MemoryVsFileAnimation() {
               className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl text-sm font-bold flex items-center gap-1.5 transition-colors"
             >
               <PowerOff className="w-4 h-4" />
-              그냥 끄기
+              {isEn ? "Just quit" : "그냥 끄기"}
             </button>
             <button
               onClick={handleSaveAndOff}
               className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-xl text-sm font-bold flex items-center gap-1.5 transition-colors"
             >
               <Save className="w-4 h-4" />
-              저장하고 끄기
+              {isEn ? "Save and quit" : "저장하고 끄기"}
             </button>
           </>
         )}
         {phase === "running" && saved && (
-          <div className="text-blue-600 font-bold text-sm animate-pulse">💾 저장 중...</div>
+          <div className="text-blue-600 font-bold text-sm animate-pulse">{isEn ? "💾 Saving..." : "💾 저장 중..."}</div>
         )}
         {phase === "restart" && (
           <button
@@ -145,7 +146,7 @@ export function MemoryVsFileAnimation() {
             className="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl text-sm font-bold flex items-center gap-1.5 transition-colors"
           >
             <Power className="w-4 h-4" />
-            다시 해보기
+            {isEn ? "Try again" : "다시 해보기"}
           </button>
         )}
       </div>

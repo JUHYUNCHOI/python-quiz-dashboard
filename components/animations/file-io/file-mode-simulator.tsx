@@ -8,35 +8,38 @@ import { FileText, ArrowRight, ArrowDown, RotateCcw } from "lucide-react"
  * 파일 모드 비교 시뮬레이터
  * w, r, a 모드의 차이를 시각적으로 보여줌
  */
-export function FileModeSimulator() {
-  const [fileContent, setFileContent] = useState("기존 데이터\n이전 기록")
+export function FileModeSimulator({ lang = "ko" }: { lang?: "ko" | "en" }) {
+  const isEn = lang === "en"
+  const initialContent = isEn ? "existing data\nprevious record" : "기존 데이터\n이전 기록"
+  const newContent = isEn ? "new content!" : "새로운 내용!"
+  const [fileContent, setFileContent] = useState(initialContent)
   const [mode, setMode] = useState<"w" | "r" | "a" | null>(null)
   const [result, setResult] = useState<string | null>(null)
   const [step, setStep] = useState(0)
 
   const modes = [
-    { 
-      key: "w" as const, 
-      label: "w (쓰기)", 
+    {
+      key: "w" as const,
+      label: isEn ? "w (write)" : "w (쓰기)",
       color: "red",
-      desc: "기존 내용 삭제 → 새로 씀",
-      action: "새로운 내용!",
+      desc: isEn ? "Deletes existing → writes new" : "기존 내용 삭제 → 새로 씀",
+      action: newContent,
       emoji: "🗑️✏️"
     },
-    { 
-      key: "r" as const, 
-      label: "r (읽기)", 
+    {
+      key: "r" as const,
+      label: isEn ? "r (read)" : "r (읽기)",
       color: "green",
-      desc: "내용을 읽기만 함",
+      desc: isEn ? "Reads content only" : "내용을 읽기만 함",
       action: "",
       emoji: "👀"
     },
-    { 
-      key: "a" as const, 
-      label: "a (추가)", 
+    {
+      key: "a" as const,
+      label: isEn ? "a (append)" : "a (추가)",
       color: "blue",
-      desc: "기존 내용 뒤에 추가",
-      action: "새로운 내용!",
+      desc: isEn ? "Appends after existing content" : "기존 내용 뒤에 추가",
+      action: newContent,
       emoji: "➕"
     },
   ]
@@ -47,11 +50,11 @@ export function FileModeSimulator() {
 
     setTimeout(() => {
       if (m === "w") {
-        setResult("새로운 내용!")
+        setResult(newContent)
       } else if (m === "r") {
         setResult(fileContent)
       } else {
-        setResult(fileContent + "\n새로운 내용!")
+        setResult(fileContent + "\n" + newContent)
       }
       setStep(2)
     }, 1000)
@@ -61,7 +64,7 @@ export function FileModeSimulator() {
     setMode(null)
     setResult(null)
     setStep(0)
-    setFileContent("기존 데이터\n이전 기록")
+    setFileContent(initialContent)
   }
 
   const selectedMode = modes.find(m => m.key === mode)
@@ -72,7 +75,7 @@ export function FileModeSimulator() {
       <div className="mb-4">
         <div className="flex items-center gap-2 mb-2">
           <FileText className="w-5 h-5 text-amber-600" />
-          <span className="font-bold text-sm text-amber-800">📄 data.txt (현재 내용)</span>
+          <span className="font-bold text-sm text-amber-800">{isEn ? "📄 data.txt (current content)" : "📄 data.txt (현재 내용)"}</span>
         </div>
         <div className="bg-white rounded-xl p-3 border-2 border-amber-200 font-mono text-sm">
           <pre className="whitespace-pre-wrap text-gray-700">{fileContent}</pre>
@@ -83,7 +86,7 @@ export function FileModeSimulator() {
       {step === 0 && (
         <div className="space-y-2">
           <p className="text-sm font-bold text-gray-600 text-center mb-3">
-            open('data.txt', <span className="text-red-500">???</span>) — 어떤 모드로 열까요?
+            open('data.txt', <span className="text-red-500">???</span>) — {isEn ? "Which mode to open with?" : "어떤 모드로 열까요?"}
           </p>
           <div className="grid grid-cols-3 gap-2">
             {modes.map(m => (
@@ -119,7 +122,7 @@ export function FileModeSimulator() {
 
           {step === 1 && (
             <div className="text-center py-4 animate-pulse text-gray-500 text-sm">
-              처리 중...
+              {isEn ? "Processing..." : "처리 중..."}
             </div>
           )}
 
@@ -128,7 +131,7 @@ export function FileModeSimulator() {
               <div className="flex items-center gap-2 mb-2">
                 <ArrowDown className="w-4 h-4 text-gray-400" />
                 <span className="font-bold text-sm text-gray-600">
-                  {mode === "r" ? "읽은 결과:" : "파일 내용 변경:"}
+                  {mode === "r" ? (isEn ? "Read result:" : "읽은 결과:") : (isEn ? "File content changed:" : "파일 내용 변경:")}
                 </span>
               </div>
               <div className={cn(
@@ -142,12 +145,12 @@ export function FileModeSimulator() {
 
               {mode === "w" && (
                 <div className="text-center text-xs text-red-600 font-bold">
-                  ⚠️ 기존 내용이 사라졌어요!
+                  {isEn ? "⚠️ Existing content was deleted!" : "⚠️ 기존 내용이 사라졌어요!"}
                 </div>
               )}
               {mode === "a" && (
                 <div className="text-center text-xs text-blue-600 font-bold">
-                  ✅ 기존 내용 뒤에 추가됐어요!
+                  {isEn ? "✅ Appended after existing content!" : "✅ 기존 내용 뒤에 추가됐어요!"}
                 </div>
               )}
 
@@ -157,7 +160,7 @@ export function FileModeSimulator() {
                   className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-bold flex items-center gap-1.5 transition-colors"
                 >
                   <RotateCcw className="w-4 h-4" />
-                  다른 모드 시도
+                  {isEn ? "Try another mode" : "다른 모드 시도"}
                 </button>
               </div>
             </>
