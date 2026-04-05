@@ -36,7 +36,8 @@ const ITERATIONS = buildIterations()
 
 type Phase = "range" | "mid"
 
-export function BinarySearchAnimation() {
+export function BinarySearchAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
+  const isEn = lang === "en"
   const [iterIdx, setIterIdx] = useState(-1)
   const [phase, setPhase] = useState<Phase>("range")
   const [started, setStarted] = useState(false)
@@ -91,12 +92,12 @@ export function BinarySearchAnimation() {
     <div className="rounded-xl border-2 border-black bg-white p-5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <p className="text-sm font-bold text-gray-500">이진 탐색 (Binary Search)</p>
-          <p className="text-sm font-bold">찾는 값: <span className="text-blue-500">{TARGET}</span></p>
+          <p className="text-sm font-bold text-gray-500">{isEn ? "Binary Search" : "이진 탐색 (Binary Search)"}</p>
+          <p className="text-sm font-bold">{isEn ? "Target: " : "찾는 값: "}<span className="text-blue-500">{TARGET}</span></p>
         </div>
         {started && (
           <span className="text-sm font-black text-blue-500 bg-blue-50 px-3 py-1 rounded-full border border-blue-200">
-            {found ? `🎉 ${comparisons}번 만에 찾았어요!` : comparisons > 0 ? `${comparisons}번 확인` : "범위 확인 중"}
+            {found ? (isEn ? `🎉 Found in ${comparisons} step${comparisons === 1 ? "" : "s"}!` : `🎉 ${comparisons}번 만에 찾았어요!`) : comparisons > 0 ? (isEn ? `${comparisons} checked` : `${comparisons}번 확인`) : (isEn ? "Checking range" : "범위 확인 중")}
           </span>
         )}
       </div>
@@ -123,11 +124,11 @@ export function BinarySearchAnimation() {
       {/* 설명 */}
       <div className="text-center text-sm mb-4 min-h-[40px] flex items-center justify-center">
         {!started && (
-          <span className="text-gray-400">버튼을 눌러서 시작해봐요!</span>
+          <span className="text-gray-400">{isEn ? "Press the button to start!" : "버튼을 눌러서 시작해봐요!"}</span>
         )}
         {started && current && phase === "range" && (
           <span className="text-blue-600 font-bold">
-            탐색 범위: index {current.left} ~ {current.right}{" "}
+            {isEn ? `Search range: index ${current.left} ~ ${current.right}` : `탐색 범위: index ${current.left} ~ ${current.right}`}{" "}
             <span className="text-gray-500 font-normal">
               ({ARRAY[current.left]} ~ {ARRAY[current.right]})
             </span>
@@ -137,17 +138,17 @@ export function BinarySearchAnimation() {
           <>
             {current.result === "found" ? (
               <span className="text-green-600 font-bold">
-                arr[{current.mid}] = {ARRAY[current.mid]} ✓ 찾았어요!
+                arr[{current.mid}] = {ARRAY[current.mid]} ✓ {isEn ? "Found!" : "찾았어요!"}
               </span>
             ) : current.result === "less" ? (
               <span className="text-gray-700">
-                중간값 arr[{current.mid}] = <strong>{ARRAY[current.mid]}</strong> &lt; {TARGET} →{" "}
-                <span className="text-blue-500 font-bold">오른쪽 절반만 탐색!</span>
+                {isEn ? "mid" : "중간값"} arr[{current.mid}] = <strong>{ARRAY[current.mid]}</strong> &lt; {TARGET} →{" "}
+                <span className="text-blue-500 font-bold">{isEn ? "Search right half only!" : "오른쪽 절반만 탐색!"}</span>
               </span>
             ) : (
               <span className="text-gray-700">
-                중간값 arr[{current.mid}] = <strong>{ARRAY[current.mid]}</strong> &gt; {TARGET} →{" "}
-                <span className="text-blue-500 font-bold">왼쪽 절반만 탐색!</span>
+                {isEn ? "mid" : "중간값"} arr[{current.mid}] = <strong>{ARRAY[current.mid]}</strong> &gt; {TARGET} →{" "}
+                <span className="text-blue-500 font-bold">{isEn ? "Search left half only!" : "왼쪽 절반만 탐색!"}</span>
               </span>
             )}
           </>
@@ -161,14 +162,14 @@ export function BinarySearchAnimation() {
             onClick={start}
             className="px-5 py-2 bg-blue-500 text-white font-black rounded-lg border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5"
           >
-            ▶ 시작
+            ▶ {isEn ? "Start" : "시작"}
           </button>
         ) : found ? (
           <button
             onClick={reset}
             className="px-5 py-2 bg-gray-200 text-gray-700 font-black rounded-lg border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5"
           >
-            ↩ 다시
+            ↩ {isEn ? "Again" : "다시"}
           </button>
         ) : (
           <>
@@ -176,7 +177,7 @@ export function BinarySearchAnimation() {
               onClick={next}
               className="px-5 py-2 bg-blue-500 text-white font-black rounded-lg border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5"
             >
-              {phase === "range" ? "→ 중간값 확인" : "→ 다음 범위"}
+              {phase === "range" ? (isEn ? "→ Check midpoint" : "→ 중간값 확인") : (isEn ? "→ Next range" : "→ 다음 범위")}
             </button>
             <button
               onClick={reset}
@@ -190,7 +191,10 @@ export function BinarySearchAnimation() {
 
       {found && (
         <p className="text-center text-xs text-gray-500 mt-3">
-          10개 배열에서 {comparisons}번 확인 — 선형 탐색은 <strong>8번</strong>이었어요! 100만 개도 <strong>20번!</strong>
+          {isEn
+            ? <>Array of 10: {comparisons} checks — linear search would need <strong>8</strong>! Even 1 million items: only <strong>20</strong>!</>
+            : <>10개 배열에서 {comparisons}번 확인 — 선형 탐색은 <strong>8번</strong>이었어요! 100만 개도 <strong>20번!</strong></>
+          }
         </p>
       )}
     </div>

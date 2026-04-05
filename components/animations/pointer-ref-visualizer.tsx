@@ -26,14 +26,15 @@ export default function PointerRefVisualizer({ lang = "ko" }: { lang?: "ko" | "e
     setModified(false)
   }
 
+  const isEn = lang === "en"
   const color = tab === "ref" ? "#6366f1" : "#10b981"
 
   return (
     <div className="w-full max-w-md mx-auto space-y-3 select-none">
       {/* 탭 */}
       <div className="flex gap-2">
-        <TabBtn active={tab === "ref"} onClick={() => handleTab("ref")} label="참조 (int& ref)" color="#6366f1" />
-        <TabBtn active={tab === "ptr"} onClick={() => handleTab("ptr")} label="포인터 (int* ptr)" color="#10b981" />
+        <TabBtn active={tab === "ref"} onClick={() => handleTab("ref")} label={isEn ? "Reference (int& ref)" : "참조 (int& ref)"} color="#6366f1" />
+        <TabBtn active={tab === "ptr"} onClick={() => handleTab("ptr")} label={isEn ? "Pointer (int* ptr)" : "포인터 (int* ptr)"} color="#10b981" />
       </div>
 
       {/* 코드 */}
@@ -48,7 +49,7 @@ export default function PointerRefVisualizer({ lang = "ko" }: { lang?: "ko" | "e
             <span className="text-emerald-400">int</span>
             <span className="text-pink-400">&amp;</span>{" "}
             <span className="text-white">ref</span> = x;
-            <span className="text-slate-500">  // 직접 연결</span>
+            <span className="text-slate-500">  {isEn ? "// direct connection" : "// 직접 연결"}</span>
           </div>
         )}
         {tab === "ptr" && (
@@ -57,13 +58,13 @@ export default function PointerRefVisualizer({ lang = "ko" }: { lang?: "ko" | "e
             <span className="text-emerald-300">*</span>{" "}
             <span className="text-white">ptr</span> ={" "}
             <span className="text-pink-400">&amp;</span>x;
-            <span className="text-slate-500">  // x의 주소 저장</span>
+            <span className="text-slate-500">  {isEn ? "// store address of x" : "// x의 주소 저장"}</span>
           </div>
         )}
         {modified && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-yellow-300">
             {tab === "ref" ? "ref = 99;" : "*ptr = 99;"}
-            <span className="text-slate-500">  // 실행!</span>
+            <span className="text-slate-500">  {isEn ? "// run!" : "// 실행!"}</span>
           </motion.div>
         )}
       </div>
@@ -74,9 +75,9 @@ export default function PointerRefVisualizer({ lang = "ko" }: { lang?: "ko" | "e
         style={{ borderColor: color + "40" }}
       >
         {tab === "ref" ? (
-          <RefViz xVal={xVal} modified={modified} />
+          <RefViz xVal={xVal} modified={modified} isEn={isEn} />
         ) : (
-          <PtrViz xVal={xVal} modified={modified} />
+          <PtrViz xVal={xVal} modified={modified} isEn={isEn} />
         )}
       </div>
 
@@ -87,22 +88,22 @@ export default function PointerRefVisualizer({ lang = "ko" }: { lang?: "ko" | "e
         style={{ background: modified ? "#94a3b8" : color }}
       >
         {modified
-          ? "↺ 초기화"
+          ? (isEn ? "↺ Reset" : "↺ 초기화")
           : tab === "ref"
-          ? "▶ ref = 99; 실행해보기"
-          : "▶ *ptr = 99; 실행해보기"}
+          ? (isEn ? "▶ Run ref = 99;" : "▶ ref = 99; 실행해보기")
+          : (isEn ? "▶ Run *ptr = 99;" : "▶ *ptr = 99; 실행해보기")}
       </button>
 
       {/* 비교 요약 */}
       <div className="rounded-2xl bg-slate-50 border border-slate-100 p-3 text-xs space-y-2">
-        <p className="font-bold text-slate-600 mb-1">한눈에 비교</p>
+        <p className="font-bold text-slate-600 mb-1">{isEn ? "Side-by-side comparison" : "한눈에 비교"}</p>
         <div className="flex items-start gap-2">
-          <span className="font-mono font-bold text-indigo-500 shrink-0 pt-0.5">참조</span>
-          <span className="text-slate-500">새 메모리 없음. x에 이름표만 추가. ref = 99 하면 바로 x가 바뀜.</span>
+          <span className="font-mono font-bold text-indigo-500 shrink-0 pt-0.5">{isEn ? "Reference" : "참조"}</span>
+          <span className="text-slate-500">{isEn ? "No new memory. Just adds a name tag to x. ref = 99 immediately changes x." : "새 메모리 없음. x에 이름표만 추가. ref = 99 하면 바로 x가 바뀜."}</span>
         </div>
         <div className="flex items-start gap-2">
-          <span className="font-mono font-bold text-emerald-600 shrink-0 pt-0.5">포인터</span>
-          <span className="text-slate-500">별도 메모리에 x의 주소 저장. *ptr로 역참조해야 x에 접근.</span>
+          <span className="font-mono font-bold text-emerald-600 shrink-0 pt-0.5">{isEn ? "Pointer" : "포인터"}</span>
+          <span className="text-slate-500">{isEn ? "Stores x's address in separate memory. Must dereference with *ptr to access x." : "별도 메모리에 x의 주소 저장. *ptr로 역참조해야 x에 접근."}</span>
         </div>
       </div>
     </div>
@@ -170,7 +171,7 @@ function MemoryBox({
   )
 }
 
-function RefViz({ xVal, modified }: { xVal: number; modified: boolean }) {
+function RefViz({ xVal, modified, isEn }: { xVal: number; modified: boolean; isEn: boolean }) {
   return (
     <div className="space-y-4">
       <div className="flex flex-col items-center gap-2">
@@ -215,14 +216,18 @@ function RefViz({ xVal, modified }: { xVal: number; modified: boolean }) {
         </div>
       </div>
       <div className="rounded-xl bg-indigo-50 border border-indigo-100 px-3 py-2 text-xs text-indigo-700">
-        🏷️ ref는 새 메모리가 없어요. 같은 상자(0x1000)에 이름표만 추가.
-        {modified && <span className="font-bold"> ref = 99는 x = 99와 완전히 같아요!</span>}
+        {isEn
+          ? <>🏷️ ref has no new memory. Just adds a name tag to the same box (0x1000).
+            {modified && <span className="font-bold"> ref = 99 is exactly the same as x = 99!</span>}</>
+          : <>🏷️ ref는 새 메모리가 없어요. 같은 상자(0x1000)에 이름표만 추가.
+            {modified && <span className="font-bold"> ref = 99는 x = 99와 완전히 같아요!</span>}</>
+        }
       </div>
     </div>
   )
 }
 
-function PtrViz({ xVal, modified }: { xVal: number; modified: boolean }) {
+function PtrViz({ xVal, modified, isEn }: { xVal: number; modified: boolean; isEn: boolean }) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-center gap-4">
@@ -255,10 +260,16 @@ function PtrViz({ xVal, modified }: { xVal: number; modified: boolean }) {
       </div>
 
       <div className="rounded-xl bg-emerald-50 border border-emerald-100 px-3 py-2 text-xs text-emerald-700">
-        📍 ptr(0x2000)은 x의 주소(0x1000)를 저장해요.
-        {modified
-          ? <span className="font-bold"> *ptr = 99는 화살표를 따라가서 x를 바꿔요!</span>
-          : <span> *ptr로 역참조해야 x에 접근할 수 있어요.</span>}
+        {isEn
+          ? <>📍 ptr(0x2000) stores x's address (0x1000).
+            {modified
+              ? <span className="font-bold"> *ptr = 99 follows the arrow and changes x!</span>
+              : <span> Must dereference with *ptr to access x.</span>}</>
+          : <>📍 ptr(0x2000)은 x의 주소(0x1000)를 저장해요.
+            {modified
+              ? <span className="font-bold"> *ptr = 99는 화살표를 따라가서 x를 바꿔요!</span>
+              : <span> *ptr로 역참조해야 x에 접근할 수 있어요.</span>}</>
+        }
       </div>
     </div>
   )

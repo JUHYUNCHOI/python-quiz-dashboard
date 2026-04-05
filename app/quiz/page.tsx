@@ -1,16 +1,18 @@
 "use client"
 
-import { useEffect, useCallback, useMemo, useState, useRef } from "react"
+import { useEffect, useCallback, useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { RequireAuth } from "@/components/require-auth"
-import { X, Clock, ChevronLeft, ChevronRight, Check, AlertCircle, Coffee, Flag } from "lucide-react"
+import { X, Clock, ChevronLeft, ChevronRight, Check, AlertCircle, Coffee, Flag, Pencil } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { CodeDisplay } from "@/components/code-display"
 import { CelebrationScreen } from "@/components/celebration-screen"
 import { ExplanationPanel } from "@/components/explanation-panel"
+import { QuestionEditor } from "@/components/admin/question-editor"
 import { cn } from "@/lib/utils"
 import { useQuizState, getComboTier } from "@/hooks/use-quiz-state"
+import { useAuth } from "@/contexts/auth-context"
 import { getGradeInfo } from "@/lib/spaced-repetition"
 import { createSmartSession } from "@/lib/quiz-question-selector"
 import { useQuizTimer } from "@/hooks/use-quiz-timer"
@@ -21,8 +23,7 @@ import { useSoundEffect } from "@/hooks/use-sound-effect"
 import { SoundToggle } from "@/components/sound-toggle"
 import { useGamification } from "@/hooks/use-gamification"
 import { useLanguage } from "@/contexts/language-context"
-import { pythonQuestions } from "@/data/questions/python-questions"
-import { cppQuestions } from "@/data/questions/cpp-questions"
+import type { QuizQuestion } from "@/hooks/use-quiz-state"
 
 // 셔플 (Fisher-Yates)
 function shuffleArray<T>(arr: T[]): T[] {
@@ -36,6 +37,8 @@ function shuffleArray<T>(arr: T[]): T[] {
 
 export default function QuizPage() {
   const router = useRouter()
+  const { profile } = useAuth()
+  const isTeacher = profile?.role === "teacher"
 
   // 설정 없이 직접 접근하면 setup으로 redirect
   const hasSettings = useRef<boolean | null>(null)
@@ -48,68 +51,85 @@ export default function QuizPage() {
     }
   }, [router])
 
-  // 코스에 맞는 문제 배열 — 스마트 세션 (간격 반복 기반)
-  const smartSession = useMemo(() => {
-    if (typeof window === "undefined") return { questions: pythonQuestions, reviewCount: 0, newCount: 0 }
-    try {
-      const raw = sessionStorage.getItem("quizSettings")
-      if (raw) {
-        const parsed = JSON.parse(raw)
-        const pool = parsed.course === "cpp" ? cppQuestions : pythonQuestions
-        const count = parsed.questionCount || 20
+  // 코스에 맞는 문제 배열 — API에서 로드 후 스마트 세션 생성
+  const [shuffled, setShuffled] = useState<QuizQuestion[]>([])
+  const [isLoadingQuestions, setIsLoadingQuestions] = useState(true)
 
-        // 틀린 문제 다시 풀기: retryQuestionIds가 있으면 해당 문제들만 출제
-        // pool (코스별)만 사용해야 함 — Python/C++ 문제 ID가 겹치므로 allQuestions 사용 시 다른 코스 문제가 섞임
+  useEffect(() => {
+    const raw = sessionStorage.getItem("quizSettings")
+    if (!raw) {
+      router.replace("/quiz/setup")
+      return
+    }
+
+    let parsed: any
+    try { parsed = JSON.parse(raw) } catch { router.replace("/quiz/setup"); return }
+
+    const language = parsed.course === "cpp" ? "cpp" : "python"
+    const count = parsed.questionCount || 20
+
+    fetch(`/api/questions?language=${language}`)
+      .then(res => res.json())
+      .then(data => {
+        const pool: QuizQuestion[] = data.questions ?? []
+
+        // 틀린 문제 다시 풀기
         if (parsed.retryQuestionIds && parsed.retryQuestionIds.length > 0) {
           const retrySet = new Set<number>(parsed.retryQuestionIds)
           const retryPool = pool.filter(q => retrySet.has(q.id))
           if (retryPool.length > 0) {
-            return { questions: shuffleArray(retryPool), reviewCount: retryPool.length, newCount: 0 }
+            setShuffled(shuffleArray(retryPool))
+          } else {
+            sessionStorage.removeItem("quizSettings")
+            router.replace("/quiz/setup")
           }
-          // retryPool이 비어있으면 (삭제된 문제 ID) → 빈 배열 반환해서 리다이렉트 트리거
-          return { questions: [], reviewCount: 0, newCount: 0, retryQueue: new Map() }
+          setIsLoadingQuestions(false)
+          return
         }
 
-        // 레슨 집중 퀴즈: lessonFilter가 있으면 해당 레슨 문제만 출제
+        // 레슨 집중 퀴즈
         if (parsed.lessonFilter !== undefined) {
-          const filtered = pool.filter(
-            (q) => String(q.lessonId) === String(parsed.lessonFilter)
-          )
-          // 해당 레슨 문제가 3개 이상 있으면 집중 퀴즈, 아니면 일반 세션
+          const filtered = pool.filter(q => String(q.lessonId) === String(parsed.lessonFilter))
           if (filtered.length >= 3) {
-            return createSmartSession(filtered, Math.min(count, filtered.length), {
+            const session = createSmartSession(filtered, Math.min(count, filtered.length), {
               difficulty: parsed.difficulty || "mixed",
-              filterByProgress: false, // 레슨 집중이므로 진도 필터 끔
+              filterByProgress: false,
             })
+            setShuffled(session.questions)
+            setIsLoadingQuestions(false)
+            return
           }
         }
 
-        return createSmartSession(pool, count, {
+        const session = createSmartSession(pool, count, {
           difficulty: parsed.difficulty || "mixed",
           filterByProgress: true,
         })
-      }
-    } catch {}
-    return createSmartSession(pythonQuestions, 20)
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+        setShuffled(session.questions)
+        setIsLoadingQuestions(false)
+      })
+      .catch(() => {
+        setIsLoadingQuestions(false)
+        router.replace("/quiz/setup")
+      })
+  }, [router]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const shuffled = smartSession.questions
-
-  // 틀린 문제 retryPool이 비었으면 (삭제된 문제 ID) setup으로 리다이렉트
+  // 로드된 문제가 없으면 setup으로 리다이렉트
   useEffect(() => {
-    if (shuffled.length === 0) {
+    if (!isLoadingQuestions && shuffled.length === 0) {
       sessionStorage.removeItem("quizSettings")
       router.replace("/quiz/setup")
     }
-  }, [shuffled.length, router])
+  }, [isLoadingQuestions, shuffled.length, router])
 
   // 퀴즈 진행 중 플래그 — setup 페이지 "이어서 풀기" 배너용
   useEffect(() => {
     sessionStorage.setItem("quiz-in-progress", "1")
   }, [])
 
-  // shuffled가 비어있으면 리다이렉트 중 — hooks 순서 유지 위해 fallback 사용
-  const quiz = useQuizState(shuffled.length > 0 ? shuffled : pythonQuestions.slice(0, 1))
+  // 로딩 중이거나 비어있으면 최소 더미 배열로 hooks 순서 유지
+  const EMPTY_FALLBACK: QuizQuestion[] = []
+  const quiz = useQuizState(shuffled.length > 0 ? shuffled : EMPTY_FALLBACK)
   const { play, isMuted, toggleMute } = useSoundEffect()
   const gamification = useGamification()
   const { t } = useLanguage()
@@ -117,6 +137,15 @@ export default function QuizPage() {
   const comboTier = getComboTier(quiz.combo)
   const [reportedQuestions, setReportedQuestions] = useState<Set<number>>(new Set())
   const [showReportToast, setShowReportToast] = useState(false)
+  const [editingQuestion, setEditingQuestion] = useState<any | null>(null)
+
+  const handleEditQuestion = useCallback(async (id: number) => {
+    const res = await fetch(`/api/admin/questions/${id}`)
+    if (res.ok) {
+      const { question } = await res.json()
+      setEditingQuestion(question)
+    }
+  }, [])
 
   // 브라우저 뒤로가기 시 기존 나가기 확인 모달 재사용
   useEffect(() => {
@@ -199,6 +228,19 @@ export default function QuizPage() {
   }, [quiz.showResult, quiz.isCorrect, play, quiz.isSnapshotRestore])
 
   const question = quiz.question
+
+  if (isLoadingQuestions) {
+    return (
+      <RequireAuth>
+        <div className="min-h-screen bg-gradient-to-b from-orange-50 to-mint-50 flex items-center justify-center">
+          <div className="text-center">
+            <div className="text-5xl mb-4 animate-bounce">🦒</div>
+            <p className="text-gray-600 font-medium">{t("문제 불러오는 중...", "Loading questions...")}</p>
+          </div>
+        </div>
+      </RequireAuth>
+    )
+  }
 
   return (
     <RequireAuth>
@@ -525,6 +567,15 @@ export default function QuizPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-xs md:text-sm text-gray-500">{t("문제", "Q")} #{question.id}</span>
+                  {isTeacher && (
+                    <button
+                      onClick={() => handleEditQuestion(question.id)}
+                      title="문제 수정"
+                      className="p-1 rounded text-gray-300 hover:text-orange-500 transition-colors"
+                    >
+                      <Pencil className="h-3.5 w-3.5" />
+                    </button>
+                  )}
                   <button
                     onClick={() => handleReport(question.id)}
                     title={t("문제 오류 신고", "Report issue")}
@@ -556,7 +607,7 @@ export default function QuizPage() {
               <div className="space-y-3">
                 {question.options.map((option, index) => {
                   const isSelected = quiz.selectedAnswer === index
-                  const isCorrectAnswer = index === question.correctAnswer
+                  const isCorrectAnswer = quiz.serverCorrectAnswer !== null && index === quiz.serverCorrectAnswer
                   const showCorrect = quiz.showResult && isCorrectAnswer
                   const showWrong = quiz.showResult && isSelected && !quiz.isCorrect
 
@@ -642,16 +693,18 @@ export default function QuizPage() {
 
             <button
               onClick={quiz.handleNext}
-              disabled={quiz.selectedAnswer === null}
+              disabled={quiz.selectedAnswer === null || quiz.isCheckingAnswer}
               className={cn(
                 "flex items-center justify-center gap-1 rounded-xl font-bold min-h-[44px] px-5 py-3 md:px-6 md:py-3 transition-colors",
-                quiz.selectedAnswer !== null
+                quiz.selectedAnswer !== null && !quiz.isCheckingAnswer
                   ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg"
                   : "bg-gray-200 text-gray-400 cursor-not-allowed"
               )}
             >
-              {t("다음", "Next")}
-              <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
+              {quiz.isCheckingAnswer
+                ? <span className="animate-pulse">{t("채점 중...", "Checking...")}</span>
+                : <>{t("다음", "Next")}<ChevronRight className="w-4 h-4 md:w-5 md:h-5" /></>
+              }
             </button>
           </div>
 
@@ -674,7 +727,7 @@ export default function QuizPage() {
       <ExplanationPanel
         show={quiz.showExplanation}
         yourAnswer={quiz.selectedAnswer !== null ? question.options[quiz.selectedAnswer] : ""}
-        correctAnswer={question.options[question.correctAnswer]}
+        correctAnswer={quiz.serverCorrectAnswer !== null ? (question.options[quiz.serverCorrectAnswer] ?? "") : ""}
         explanation={question.explanation}
         keyConceptTitle={question.keyConceptTitle}
         keyConceptDescription={question.keyConceptDescription}
@@ -720,6 +773,14 @@ export default function QuizPage() {
         </div>
       )}
     </div>
+
+    {editingQuestion && (
+      <QuestionEditor
+        question={editingQuestion}
+        onClose={() => setEditingQuestion(null)}
+        onSaved={() => setEditingQuestion(null)}
+      />
+    )}
     </RequireAuth>
   )
 }

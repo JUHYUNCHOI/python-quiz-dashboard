@@ -4,35 +4,37 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 
 // ─── 비교할 pair 예제 ───────────────────────────────────────
-const EXAMPLES = [
-  {
-    label: "first가 다를 때",
-    a: { first: 2, second: 5 },
-    b: { first: 1, second: 9 },
-    description: "first: 2 vs 1 → 2 > 1 이니까 a > b!",
-    firstEqual: false,
-    result: "a > b",
-    resultColor: "text-orange-600",
-  },
-  {
-    label: "first가 같을 때",
-    a: { first: 1, second: 5 },
-    b: { first: 1, second: 3 },
-    description: "first: 1 == 1 → second로! 5 > 3 이니까 a > b!",
-    firstEqual: true,
-    result: "a > b",
-    resultColor: "text-orange-600",
-  },
-  {
-    label: "완전히 같을 때",
-    a: { first: 3, second: 7 },
-    b: { first: 3, second: 7 },
-    description: "first: 3 == 3 → second: 7 == 7 → a == b!",
-    firstEqual: true,
-    result: "a == b",
-    resultColor: "text-blue-600",
-  },
-]
+function getEXAMPLES(isEn: boolean) {
+  return [
+    {
+      label: isEn ? "When first differs" : "first가 다를 때",
+      a: { first: 2, second: 5 },
+      b: { first: 1, second: 9 },
+      description: isEn ? "first: 2 vs 1 → 2 > 1, so a > b!" : "first: 2 vs 1 → 2 > 1 이니까 a > b!",
+      firstEqual: false,
+      result: "a > b",
+      resultColor: "text-orange-600",
+    },
+    {
+      label: isEn ? "When first is equal" : "first가 같을 때",
+      a: { first: 1, second: 5 },
+      b: { first: 1, second: 3 },
+      description: isEn ? "first: 1 == 1 → check second! 5 > 3, so a > b!" : "first: 1 == 1 → second로! 5 > 3 이니까 a > b!",
+      firstEqual: true,
+      result: "a > b",
+      resultColor: "text-orange-600",
+    },
+    {
+      label: isEn ? "Completely equal" : "완전히 같을 때",
+      a: { first: 3, second: 7 },
+      b: { first: 3, second: 7 },
+      description: isEn ? "first: 3 == 3 → second: 7 == 7 → a == b!" : "first: 3 == 3 → second: 7 == 7 → a == b!",
+      firstEqual: true,
+      result: "a == b",
+      resultColor: "text-blue-600",
+    },
+  ]
+}
 
 // ─── 정렬 데모 ────────────────────────────────────────────
 const INITIAL_PAIRS = [
@@ -48,11 +50,13 @@ const SORTED_PAIRS = [
   { first: 3, second: "C", id: 0 },
 ]
 
-export function PairCompareAnimation() {
+export function PairCompareAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
   const [step, setStep] = useState<0 | 1 | 2>(0) // 0=시작, 1=first비교, 2=second비교/결과
   const [exIdx, setExIdx] = useState(0)
   const [sorted, setSorted] = useState(false)
 
+  const isEn = lang === "en"
+  const EXAMPLES = getEXAMPLES(isEn)
   const ex = EXAMPLES[exIdx]
 
   const reset = () => { setStep(0) }
@@ -63,14 +67,18 @@ export function PairCompareAnimation() {
     else { setExIdx((exIdx + 1) % EXAMPLES.length); setStep(0) }
   }
 
-  const btnLabel = step === 0 ? "▶ 비교 시작!" : step === 1 ? "→ 다음 단계" : "🔄 다음 예제"
+  const btnLabel = step === 0
+    ? (isEn ? "▶ Start comparison!" : "▶ 비교 시작!")
+    : step === 1
+    ? (isEn ? "→ Next step" : "→ 다음 단계")
+    : (isEn ? "🔄 Next example" : "🔄 다음 예제")
 
   return (
     <div className="space-y-6 select-none">
 
       {/* ── 섹션 1: 단계별 비교 ── */}
       <div className="bg-white rounded-2xl border-2 border-gray-200 p-5">
-        <p className="text-xs font-black text-gray-400 uppercase tracking-wider mb-3">📊 pair 비교 — 어떻게 작동할까?</p>
+        <p className="text-xs font-black text-gray-400 uppercase tracking-wider mb-3">{isEn ? "📊 pair comparison — how does it work?" : "📊 pair 비교 — 어떻게 작동할까?"}</p>
 
         {/* 예제 탭 */}
         <div className="flex gap-1.5 mb-4">
@@ -109,12 +117,12 @@ export function PairCompareAnimation() {
               {step === 1 && (
                 <motion.div key="step1" initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
                   className="space-y-1">
-                  <div className="text-[10px] font-bold text-gray-400">first 비교</div>
+                  <div className="text-[10px] font-bold text-gray-400">{isEn ? "first compare" : "first 비교"}</div>
                   <div className={`text-lg font-black ${ex.firstEqual ? "text-blue-500" : "text-orange-500"}`}>
                     {ex.a.first} {ex.firstEqual ? "==" : ex.a.first > ex.b.first ? ">" : "<"} {ex.b.first}
                   </div>
                   {ex.firstEqual && (
-                    <div className="text-[10px] font-bold text-blue-400">같아요! →</div>
+                    <div className="text-[10px] font-bold text-blue-400">{isEn ? "Equal! →" : "같아요! →"}</div>
                   )}
                 </motion.div>
               )}
@@ -122,7 +130,7 @@ export function PairCompareAnimation() {
                 <motion.div key="step2" initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
                   className="space-y-1">
                   {ex.firstEqual && (
-                    <div className="text-[10px] font-bold text-purple-400">second 비교</div>
+                    <div className="text-[10px] font-bold text-purple-400">{isEn ? "second compare" : "second 비교"}</div>
                   )}
                   <div className={`text-xl font-black ${ex.resultColor}`}>
                     {ex.result}
@@ -148,13 +156,16 @@ export function PairCompareAnimation() {
           {step === 0 && (
             <motion.p key="desc0" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               className="text-center text-sm text-gray-400 mb-4">
-              버튼을 눌러서 비교 과정을 확인해봐요!
+              {isEn ? "Press the button to see how comparison works!" : "버튼을 눌러서 비교 과정을 확인해봐요!"}
             </motion.p>
           )}
           {step === 1 && (
             <motion.p key="desc1" initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
               className={`text-center text-sm font-bold mb-4 ${ex.firstEqual ? "text-blue-600" : "text-orange-600"}`}>
-              {ex.firstEqual ? "① first값이 같아요 (1 == 1) → second도 비교해야 해요!" : `① first값이 달라요 (${ex.a.first} vs ${ex.b.first}) → 바로 결과 나와요!`}
+              {ex.firstEqual
+                ? (isEn ? "① first values are equal (1 == 1) → need to check second too!" : "① first값이 같아요 (1 == 1) → second도 비교해야 해요!")
+                : (isEn ? `① first values differ (${ex.a.first} vs ${ex.b.first}) → result is immediate!` : `① first값이 달라요 (${ex.a.first} vs ${ex.b.first}) → 바로 결과 나와요!`)
+              }
             </motion.p>
           )}
           {step === 2 && (
@@ -178,10 +189,12 @@ export function PairCompareAnimation() {
 
       {/* ── 섹션 2: 정렬 데모 ── */}
       <div className="bg-white rounded-2xl border-2 border-gray-200 p-5">
-        <p className="text-xs font-black text-gray-400 uppercase tracking-wider mb-1">📦 vector&lt;pair&gt; 정렬 데모</p>
+        <p className="text-xs font-black text-gray-400 uppercase tracking-wider mb-1">{isEn ? "📦 vector<pair> sort demo" : "📦 vector<pair> 정렬 데모"}</p>
         <p className="text-[12px] text-gray-500 mb-4">
-          pair 자체가 알아서 정렬되는 게 아니라, <span className="font-bold text-gray-700">vector에 pair를 담고 sort()를 호출</span>하면 pair의 비교 규칙대로 정렬돼요!<br/>
-          <span className="font-bold text-blue-600">first 기준 정렬</span>, first가 같으면 <span className="font-bold text-purple-600">second 기준 정렬</span>
+          {isEn
+            ? <><span className="font-bold text-gray-700">Put pairs in a vector and call sort()</span> — it sorts by pair's comparison rules!<br/><span className="font-bold text-blue-600">Sort by first</span>, then by <span className="font-bold text-purple-600">second if first is equal</span></>
+            : <>pair 자체가 알아서 정렬되는 게 아니라, <span className="font-bold text-gray-700">vector에 pair를 담고 sort()를 호출</span>하면 pair의 비교 규칙대로 정렬돼요!<br/><span className="font-bold text-blue-600">first 기준 정렬</span>, first가 같으면 <span className="font-bold text-purple-600">second 기준 정렬</span></>
+          }
         </p>
 
         <div className="space-y-2 mb-4">
@@ -207,7 +220,7 @@ export function PairCompareAnimation() {
                 {"}"}
               </span>
               {sorted && p.first === 1 && (
-                <span className="ml-auto text-[10px] font-bold text-purple-400">first 같음 → second 순</span>
+                <span className="ml-auto text-[10px] font-bold text-purple-400">{isEn ? "first equal → by second" : "first 같음 → second 순"}</span>
               )}
             </motion.div>
           ))}
@@ -221,7 +234,7 @@ export function PairCompareAnimation() {
               sorted ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700"
             }`}
           >
-            📊 sort() 실행!
+            {isEn ? "📊 Run sort()!" : "📊 sort() 실행!"}
           </button>
           <button
             onClick={() => setSorted(false)}
@@ -230,7 +243,7 @@ export function PairCompareAnimation() {
               !sorted ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}
           >
-            🔄 초기화
+            {isEn ? "🔄 Reset" : "🔄 초기화"}
           </button>
         </div>
       </div>

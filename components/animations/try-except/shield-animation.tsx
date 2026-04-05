@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-export function ShieldAnimation() {
+export function ShieldAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
+  const isEn = lang === "en"
   const [phase, setPhase] = useState<'ready' | 'attacking' | 'impact' | 'shatter' | 'safe'>('ready')
   
   const play = () => {
@@ -21,8 +22,8 @@ export function ShieldAnimation() {
 
   return (
     <div className="bg-white rounded-2xl border-2 border-gray-200 p-6 shadow-lg">
-      <h3 className="text-xl font-black text-gray-800 text-center mb-2">🛡️ except가 에러를 막아줘요!</h3>
-      <p className="text-center text-gray-500 mb-4">에러가 와도 프로그램은 안전해요</p>
+      <h3 className="text-xl font-black text-gray-800 text-center mb-2">{isEn ? "🛡️ except blocks the error!" : "🛡️ except가 에러를 막아줘요!"}</h3>
+      <p className="text-center text-gray-500 mb-4">{isEn ? "Even with errors, the program stays safe" : "에러가 와도 프로그램은 안전해요"}</p>
       
       <div className="relative bg-gradient-to-r from-red-50 via-white to-green-50 rounded-2xl h-64 overflow-hidden border-2 border-gray-200">
         <motion.div animate={phase === 'impact' ? { x: [0, -6, 6, -4, 4, 0] } : {}} transition={{ duration: 0.4 }} className="absolute inset-0 flex items-center">
@@ -31,7 +32,7 @@ export function ShieldAnimation() {
             {phase === 'ready' && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="absolute left-6 top-1/2 -translate-y-1/2 text-center">
                 <div className="text-5xl">⚠️</div>
-                <div className="text-red-500 font-black text-sm mt-1">에러</div>
+                <div className="text-red-500 font-black text-sm mt-1">{isEn ? "Error" : "에러"}</div>
               </motion.div>
             )}
           </AnimatePresence>
@@ -73,10 +74,10 @@ export function ShieldAnimation() {
             <motion.div animate={phase === 'attacking' ? { x: [0, 3, -3, 2, -2, 0] } : phase === 'impact' ? { x: [0, 5, -5, 0] } : phase === 'safe' ? { scale: [1, 1.2, 1] } : {}} transition={{ duration: 0.5, repeat: phase === 'attacking' ? Infinity : 0 }}>
               <div className="text-6xl">{phase === 'attacking' ? '😨' : phase === 'impact' || phase === 'shatter' ? '😲' : phase === 'safe' ? '😄' : '🎮'}</div>
             </motion.div>
-            <div className="text-green-700 font-black text-sm mt-1">프로그램</div>
+            <div className="text-green-700 font-black text-sm mt-1">{isEn ? "Program" : "프로그램"}</div>
             <AnimatePresence>
               {phase === 'safe' && (
-                <motion.div initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }} className="bg-green-500 text-white px-3 py-1 rounded-full font-black text-sm mt-1 shadow-md">무사! ✅</motion.div>
+                <motion.div initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }} className="bg-green-500 text-white px-3 py-1 rounded-full font-black text-sm mt-1 shadow-md">{isEn ? "Safe! ✅" : "무사! ✅"}</motion.div>
               )}
             </AnimatePresence>
           </div>
@@ -84,11 +85,11 @@ export function ShieldAnimation() {
       </div>
       
       <motion.div key={phase} initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className={`text-center text-lg font-black mt-4 py-3 rounded-xl ${phase === 'attacking' ? 'bg-red-100 text-red-600 border-2 border-red-300' : phase === 'impact' || phase === 'shatter' ? 'bg-orange-100 text-orange-600 border-2 border-orange-300' : phase === 'safe' ? 'bg-green-100 text-green-600 border-2 border-green-300' : 'bg-gray-50 text-gray-500 border-2 border-gray-200'}`}>
-        {phase === 'ready' ? '버튼을 눌러 에러를 보내보세요!' : phase === 'attacking' ? '🚀 에러가 돌진해요!' : phase === 'impact' || phase === 'shatter' ? '💥 쾅! except가 막았어요!' : '🎉 프로그램은 안전하게 계속 실행!'}
+        {phase === 'ready' ? (isEn ? 'Press the button to launch an error!' : '버튼을 눌러 에러를 보내보세요!') : phase === 'attacking' ? (isEn ? '🚀 Error charging!' : '🚀 에러가 돌진해요!') : phase === 'impact' || phase === 'shatter' ? (isEn ? '💥 Bang! except blocked it!' : '💥 쾅! except가 막았어요!') : (isEn ? '🎉 Program continues safely!' : '🎉 프로그램은 안전하게 계속 실행!')}
       </motion.div>
       
       <button onClick={play} disabled={phase !== 'ready'} className="w-full mt-4 px-5 py-4 bg-indigo-600 hover:bg-indigo-500 disabled:bg-gray-300 disabled:text-gray-500 text-white rounded-xl font-black text-lg transition-colors shadow-lg">
-        {phase === 'ready' ? '💥 에러 발사!' : '진행 중...'}
+        {phase === 'ready' ? (isEn ? '💥 Launch error!' : '💥 에러 발사!') : (isEn ? 'In progress...' : '진행 중...')}
       </button>
     </div>
   )

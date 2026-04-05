@@ -21,69 +21,79 @@ interface FlowStage {
   output?: string
 }
 
-const STAGES: FlowStage[] = [
-  {
-    id: "write",
-    icon: "📝",
-    label: "코드 작성",
-    desc: "main.cpp 파일에 코드를 작성했어!",
-    terminal: "# main.cpp 파일 내용\n#include <iostream>\n\nint main() {\n    std::cout << \"Hello\" << std::endl;\n    return 0;\n}",
-  },
-  {
-    id: "compile",
-    icon: "⚡",
-    label: "컴파일",
-    desc: "g++로 컴파일! 코드를 컴퓨터가 알아듣는 이진수로 변환해!",
-    terminal: "$ g++ main.cpp\n\n✓ 컴파일 성공!",
-  },
-  {
-    id: "binary",
-    icon: "📦",
-    label: "a.out 생성",
-    desc: "컴파일 결과로 a.out 실행 파일이 생겨났어!",
-    terminal: "$ ls\nmain.cpp    a.out\n\n# a.out = 이진수로 된 실행 파일",
-  },
-  {
-    id: "run",
-    icon: "▶️",
-    label: "실행",
-    desc: "./a.out으로 실행하면...",
-    terminal: "$ ./a.out",
-  },
-  {
-    id: "output",
-    icon: "🎉",
-    label: "출력!",
-    desc: "화면에 Hello가 뜬다!",
-    terminal: "$ ./a.out\nHello",
-    output: "Hello",
-  },
-]
+function getSTAGES(isEn: boolean): FlowStage[] {
+  return [
+    {
+      id: "write",
+      icon: "📝",
+      label: isEn ? "Write Code" : "코드 작성",
+      desc: isEn ? "We wrote code in main.cpp!" : "main.cpp 파일에 코드를 작성했어!",
+      terminal: isEn
+        ? "# contents of main.cpp\n#include <iostream>\n\nint main() {\n    std::cout << \"Hello\" << std::endl;\n    return 0;\n}"
+        : "# main.cpp 파일 내용\n#include <iostream>\n\nint main() {\n    std::cout << \"Hello\" << std::endl;\n    return 0;\n}",
+    },
+    {
+      id: "compile",
+      icon: "⚡",
+      label: isEn ? "Compile" : "컴파일",
+      desc: isEn ? "Compile with g++! Converts code into binary that the computer understands!" : "g++로 컴파일! 코드를 컴퓨터가 알아듣는 이진수로 변환해!",
+      terminal: isEn ? "$ g++ main.cpp\n\n✓ Compile success!" : "$ g++ main.cpp\n\n✓ 컴파일 성공!",
+    },
+    {
+      id: "binary",
+      icon: "📦",
+      label: isEn ? "a.out created" : "a.out 생성",
+      desc: isEn ? "Compiling produced the executable a.out!" : "컴파일 결과로 a.out 실행 파일이 생겨났어!",
+      terminal: isEn
+        ? "$ ls\nmain.cpp    a.out\n\n# a.out = executable in binary"
+        : "$ ls\nmain.cpp    a.out\n\n# a.out = 이진수로 된 실행 파일",
+    },
+    {
+      id: "run",
+      icon: "▶️",
+      label: isEn ? "Run" : "실행",
+      desc: isEn ? "Run it with ./a.out..." : "./a.out으로 실행하면...",
+      terminal: "$ ./a.out",
+    },
+    {
+      id: "output",
+      icon: "🎉",
+      label: isEn ? "Output!" : "출력!",
+      desc: isEn ? "Hello appears on screen!" : "화면에 Hello가 뜬다!",
+      terminal: "$ ./a.out\nHello",
+      output: "Hello",
+    },
+  ]
+}
 
-const NAMING_STAGES: FlowStage[] = [
-  {
-    id: "name-compile",
-    icon: "⚡",
-    label: "이름 붙여 컴파일",
-    desc: "-o 옵션으로 실행 파일 이름을 정할 수 있어!",
-    terminal: "$ g++ -o hello main.cpp\n\n✓ 컴파일 성공!",
-  },
-  {
-    id: "name-check",
-    icon: "📦",
-    label: "hello 생성",
-    desc: "a.out 대신 hello라는 이름의 실행 파일이 생겨났어!",
-    terminal: "$ ls\nmain.cpp    hello\n\n# hello = 내가 이름 붙인 실행 파일!",
-  },
-  {
-    id: "name-run",
-    icon: "🎉",
-    label: "실행!",
-    desc: "./hello로 실행!",
-    terminal: "$ ./hello\nHello",
-    output: "Hello",
-  },
-]
+function getNAMING_STAGES(isEn: boolean): FlowStage[] {
+  return [
+    {
+      id: "name-compile",
+      icon: "⚡",
+      label: isEn ? "Named Compile" : "이름 붙여 컴파일",
+      desc: isEn ? "The -o option lets you name the output file!" : "-o 옵션으로 실행 파일 이름을 정할 수 있어!",
+      terminal: isEn ? "$ g++ -o hello main.cpp\n\n✓ Compile success!" : "$ g++ -o hello main.cpp\n\n✓ 컴파일 성공!",
+    },
+    {
+      id: "name-check",
+      icon: "📦",
+      label: isEn ? "hello created" : "hello 생성",
+      desc: isEn ? "Instead of a.out, we got an executable named hello!" : "a.out 대신 hello라는 이름의 실행 파일이 생겨났어!",
+      terminal: isEn
+        ? "$ ls\nmain.cpp    hello\n\n# hello = my named executable!"
+        : "$ ls\nmain.cpp    hello\n\n# hello = 내가 이름 붙인 실행 파일!",
+    },
+    {
+      id: "name-run",
+      icon: "🎉",
+      label: isEn ? "Run!" : "실행!",
+      desc: isEn ? "Run with ./hello!" : "./hello로 실행!",
+      terminal: "$ ./hello\nHello",
+      output: "Hello",
+    },
+  ]
+}
 
 export function CompileFlow({ lang = "ko" }: CompileFlowProps) {
   const [currentStage, setCurrentStage] = useState(-1)
@@ -91,6 +101,9 @@ export function CompileFlow({ lang = "ko" }: CompileFlowProps) {
   const [namingStage, setNamingStage] = useState(-1)
   const [isAnimating, setIsAnimating] = useState(false)
 
+  const isEn = lang === "en"
+  const STAGES = getSTAGES(isEn)
+  const NAMING_STAGES = getNAMING_STAGES(isEn)
   const stages = phase === "flow" ? STAGES : NAMING_STAGES
   const activeStage = phase === "flow" ? currentStage : namingStage
 
@@ -134,7 +147,7 @@ export function CompileFlow({ lang = "ko" }: CompileFlowProps) {
               ? "bg-emerald-500 text-white"
               : "bg-gray-700 text-gray-400"
           }`}>
-            기본 흐름
+            {isEn ? "Basic Flow" : "기본 흐름"}
           </span>
           <span className="text-gray-600">→</span>
           <span className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
@@ -142,7 +155,7 @@ export function CompileFlow({ lang = "ko" }: CompileFlowProps) {
               ? "bg-purple-500 text-white"
               : "bg-gray-700 text-gray-400"
           }`}>
-            이름 붙이기
+            {isEn ? "Naming Output" : "이름 붙이기"}
           </span>
         </div>
 
@@ -204,12 +217,12 @@ export function CompileFlow({ lang = "ko" }: CompileFlowProps) {
               <span className="w-3 h-3 rounded-full bg-yellow-500/80" />
               <span className="w-3 h-3 rounded-full bg-green-500/80" />
             </div>
-            <span className="text-gray-500 text-xs font-mono">터미널</span>
+            <span className="text-gray-500 text-xs font-mono">{isEn ? "Terminal" : "터미널"}</span>
           </div>
           {/* Terminal content */}
           <div className="p-4 min-h-[120px] font-mono text-sm">
             {activeStage < 0 ? (
-              <p className="text-gray-600 italic">▶ 아래 버튼을 눌러서 시작해보자!</p>
+              <p className="text-gray-600 italic">{isEn ? "▶ Press the button below to start!" : "▶ 아래 버튼을 눌러서 시작해보자!"}</p>
             ) : (
               <div className="space-y-1">
                 {stages[activeStage].terminal?.split("\n").map((line, i) => (
@@ -229,7 +242,7 @@ export function CompileFlow({ lang = "ko" }: CompileFlowProps) {
                 {stages[activeStage].output && (
                   <div className="mt-3 px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
                     <span className="text-emerald-400 font-bold text-lg">{stages[activeStage].output}</span>
-                    <span className="text-gray-500 text-xs ml-2">← 출력 결과!</span>
+                    <span className="text-gray-500 text-xs ml-2">{isEn ? "← output!" : "← 출력 결과!"}</span>
                   </div>
                 )}
               </div>
@@ -253,10 +266,10 @@ export function CompileFlow({ lang = "ko" }: CompileFlowProps) {
               className="px-8 py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white font-black text-base transition-all hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/30 flex items-center gap-2 disabled:opacity-50"
             >
               {activeStage < 0
-                ? "▶ 시작!"
+                ? (isEn ? "▶ Start!" : "▶ 시작!")
                 : phase === "flow" && currentStage >= STAGES.length - 1
-                ? "🏷️ 이름 붙이기 배우기"
-                : "다음 단계 →"
+                ? (isEn ? "🏷️ Learn named output" : "🏷️ 이름 붙이기 배우기")
+                : (isEn ? "Next →" : "다음 단계 →")
               }
             </button>
           ) : (
@@ -264,7 +277,7 @@ export function CompileFlow({ lang = "ko" }: CompileFlowProps) {
               onClick={handleReset}
               className="px-6 py-2.5 rounded-full bg-gray-700 hover:bg-gray-600 text-gray-300 font-bold text-sm transition-all flex items-center gap-2"
             >
-              🔄 처음부터 다시 보기
+              {isEn ? "🔄 Watch from beginning" : "🔄 처음부터 다시 보기"}
             </button>
           )}
         </div>
@@ -272,7 +285,7 @@ export function CompileFlow({ lang = "ko" }: CompileFlowProps) {
         {/* Summary — only show at completion */}
         {isComplete && (
           <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4 space-y-2">
-            <p className="text-emerald-400 font-bold text-sm text-center">🎉 전체 흐름 정리!</p>
+            <p className="text-emerald-400 font-bold text-sm text-center">{isEn ? "🎉 Full flow summary!" : "🎉 전체 흐름 정리!"}</p>
             <div className="flex flex-wrap items-center justify-center gap-2 text-xs md:text-sm">
               <span className="bg-gray-800 px-3 py-1.5 rounded-lg text-gray-200 font-mono">main.cpp</span>
               <span className="text-emerald-400 font-bold">→</span>
@@ -285,7 +298,7 @@ export function CompileFlow({ lang = "ko" }: CompileFlowProps) {
               <span className="bg-emerald-500/20 px-3 py-1.5 rounded-lg text-emerald-400 font-bold">Hello!</span>
             </div>
             <p className="text-gray-500 text-xs text-center mt-1">
-              이름 붙이기: <code className="text-amber-300">g++ -o hello main.cpp</code> → <code className="text-emerald-300">./hello</code>
+              {isEn ? "Naming: " : "이름 붙이기: "}<code className="text-amber-300">g++ -o hello main.cpp</code> → <code className="text-emerald-300">./hello</code>
             </p>
           </div>
         )}

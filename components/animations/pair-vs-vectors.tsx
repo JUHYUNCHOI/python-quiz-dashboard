@@ -18,9 +18,10 @@ const INITIAL_DATA = [
 // 점수 기준 오름차순 정렬 인덱스
 const SORTED_ORDER = [0, 2, 1] // 78 < 88 < 95 → Kim, Park, Lee
 
-export function PairVsTwoVectorsAnimation() {
+export function PairVsTwoVectorsAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
   const [sorted, setSorted] = useState(false)
   const [animating, setAnimating] = useState(false)
+  const isEn = lang === "en"
 
   const handleSort = () => {
     if (animating) return
@@ -49,7 +50,7 @@ export function PairVsTwoVectorsAnimation() {
     <div className="space-y-4 select-none">
       {/* 설명 */}
       <p className="text-sm text-gray-600 text-center font-medium">
-        아래 버튼을 눌러서 정렬 시 어떤 차이가 생기는지 확인하세요!
+        {isEn ? "Press the button below to see what difference sorting makes!" : "아래 버튼을 눌러서 정렬 시 어떤 차이가 생기는지 확인하세요!"}
       </p>
 
       <div className="grid grid-cols-2 gap-3">
@@ -57,7 +58,7 @@ export function PairVsTwoVectorsAnimation() {
         <div className="space-y-2">
           <div className="text-center">
             <span className="text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-full border border-red-200">
-              ❌ vector 2개로 따로 저장
+              {isEn ? "❌ Two separate vectors" : "❌ vector 2개로 따로 저장"}
             </span>
           </div>
 
@@ -84,7 +85,7 @@ export function PairVsTwoVectorsAnimation() {
                 ? "text-red-600 bg-red-50 border border-red-200"
                 : "text-green-600 bg-green-50 border border-green-200"
             )}>
-              {sorted ? "😱 연결 끊김!" : "연결됨"}
+              {sorted ? (isEn ? "😱 Link broken!" : "😱 연결 끊김!") : (isEn ? "linked" : "연결됨")}
             </span>
           </div>
 
@@ -108,7 +109,7 @@ export function PairVsTwoVectorsAnimation() {
                       "w-full py-1.5 px-2 rounded text-center text-xs font-bold text-white relative",
                       mismatch ? "bg-red-400 ring-2 ring-red-300" : origColor
                     )}>
-                      {score}점
+                      {isEn ? score : `${score}점`}
                       {mismatch && (
                         <span className="absolute -top-1 -right-1 text-[8px] bg-red-600 text-white rounded-full px-1">❌</span>
                       )}
@@ -125,7 +126,7 @@ export function PairVsTwoVectorsAnimation() {
               animate={{ opacity: 1, y: 0 }}
               className="text-[10px] text-red-600 text-center bg-red-50 rounded p-1.5 border border-red-200"
             >
-              78점 = Kim? Lee?<br />알 수 없어요! 😱
+              {isEn ? <>78 = Kim? Lee?<br />Can't tell! 😱</> : <>78점 = Kim? Lee?<br />알 수 없어요! 😱</>}
             </motion.div>
           )}
         </div>
@@ -134,7 +135,7 @@ export function PairVsTwoVectorsAnimation() {
         <div className="space-y-2">
           <div className="text-center">
             <span className="text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full border border-green-200">
-              ✅ pair로 묶어서 저장
+              {isEn ? "✅ Stored together as pair" : "✅ pair로 묶어서 저장"}
             </span>
           </div>
 
@@ -154,7 +155,7 @@ export function PairVsTwoVectorsAnimation() {
                     "w-full py-1.5 px-2 rounded text-center text-xs font-bold text-white flex items-center justify-center gap-1",
                     item.color
                   )}>
-                    <span>{item.score}점</span>
+                    <span>{isEn ? item.score : `${item.score}점`}</span>
                     <span className="opacity-60">·</span>
                     <span>{item.name}</span>
                   </div>
@@ -165,7 +166,7 @@ export function PairVsTwoVectorsAnimation() {
 
           <div className="flex items-center justify-center">
             <span className="text-[10px] text-green-600 bg-green-50 border border-green-200 px-2 py-0.5 rounded font-bold">
-              항상 함께 이동 🔗
+              {isEn ? "Always move together 🔗" : "항상 함께 이동 🔗"}
             </span>
           </div>
 
@@ -175,7 +176,7 @@ export function PairVsTwoVectorsAnimation() {
               animate={{ opacity: 1, y: 0 }}
               className="text-[10px] text-green-700 text-center bg-green-50 rounded p-1.5 border border-green-200"
             >
-              78점 = Kim ✓<br />연결이 안 끊겨요! 🎉
+              {isEn ? <>78 = Kim ✓<br />Link never breaks! 🎉</> : <>78점 = Kim ✓<br />연결이 안 끊겨요! 🎉</>}
             </motion.div>
           )}
         </div>
@@ -190,7 +191,7 @@ export function PairVsTwoVectorsAnimation() {
             disabled={animating}
             className="px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 shadow-md transition-all disabled:opacity-60"
           >
-            📊 점수순 정렬!
+            {isEn ? "📊 Sort by score!" : "📊 점수순 정렬!"}
           </motion.button>
         ) : (
           <motion.button
@@ -198,7 +199,7 @@ export function PairVsTwoVectorsAnimation() {
             onClick={handleReset}
             className="px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 shadow-md transition-all"
           >
-            🔄 초기화
+            {isEn ? "🔄 Reset" : "🔄 초기화"}
           </motion.button>
         )}
       </div>
@@ -206,8 +207,10 @@ export function PairVsTwoVectorsAnimation() {
       {/* 요약 */}
       <div className="bg-indigo-50 rounded-xl p-3 border border-indigo-200">
         <p className="text-xs text-indigo-800 text-center leading-relaxed">
-          <strong>핵심:</strong> 관련 데이터는 pair로 묶어서 관리하면<br />
-          정렬해도 연결이 절대 끊기지 않아요! 🔗
+          {isEn
+            ? <><strong>Key point:</strong> When you store related data together as a pair,<br />sorting will never break their connection! 🔗</>
+            : <><strong>핵심:</strong> 관련 데이터는 pair로 묶어서 관리하면<br />정렬해도 연결이 절대 끊기지 않아요! 🔗</>
+          }
         </p>
       </div>
     </div>

@@ -5,7 +5,8 @@ import { RefreshCw, Key, Search } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { ProblemCard, Locker } from "./shared"
 
-export function DictAnimation() {
+export function DictAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
+  const isEn = lang === "en"
   const [items] = useState([
     { key: "철수", emoji: "⚽" }, 
     { key: "영희", emoji: "🎒" }, 
@@ -23,7 +24,7 @@ export function DictAnimation() {
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
   const targetEmoji = "📱"
-  const targetName = "현우의 핸드폰"
+  const targetName = isEn ? "Hyunwoo's phone" : "현우의 핸드폰"
   const targetKey = "현우"
   const targetIndex = items.findIndex(i => i.key === targetKey)
 
@@ -31,21 +32,21 @@ export function DictAnimation() {
     if (searchingList) return
     setMessage("")
     
-    setOverlay({ emoji: targetEmoji, text: `${targetName}을 찾아볼게요!`, subtext: `"현우" 이름표가 보이니까...` })
-    
+    setOverlay({ emoji: targetEmoji, text: isEn ? `Let's find ${targetName}!` : `${targetName}을 찾아볼게요!`, subtext: isEn ? `"Hyunwoo" label is visible...` : `"현우" 이름표가 보이니까...` })
+
     setTimeout(() => {
       setOverlay(null)
-      
+
       setTimeout(() => {
         setOpenKey(key)
         const item = items.find(i => i.key === key)
         if (item) {
-          setMessage(`⚡ "현우" 이름표 클릭! → ${item.emoji} ${targetName} 발견!`)
+          setMessage(isEn ? `⚡ Clicked "Hyunwoo" label! → ${item.emoji} ${targetName} found!` : `⚡ "현우" 이름표 클릭! → ${item.emoji} ${targetName} 발견!`)
         }
-        
+
         setTimeout(() => {
           setOpenKey(null)
-          setOverlay({ emoji: "⚡", text: "딱 1번에 찾았다!", subtext: "이름표가 있으니까 바로!" })
+          setOverlay({ emoji: "⚡", text: isEn ? "Found in just 1 try!" : "딱 1번에 찾았다!", subtext: isEn ? "Because we have a label!" : "이름표가 있으니까 바로!" })
           
           setTimeout(() => {
             setOverlay(null)
@@ -63,33 +64,33 @@ export function DictAnimation() {
     setFoundIndex(null)
     setMessage("")
     
-    setOverlay({ emoji: targetEmoji, text: `${targetName}을 찾아볼게요!`, subtext: "이름표가 없어서... 처음부터!" })
-    
+    setOverlay({ emoji: targetEmoji, text: isEn ? `Let's find ${targetName}!` : `${targetName}을 찾아볼게요!`, subtext: isEn ? "No label... starting from the beginning!" : "이름표가 없어서... 처음부터!" })
+
     setTimeout(() => {
       setOverlay(null)
-      
+
       setTimeout(() => {
         let idx = 0
         intervalRef.current = setInterval(() => {
           if (idx > 0) {
             setOpenKey(null)
           }
-          
+
           setTimeout(() => {
             setListScanIndex(idx)
             setOpenKey(items[idx].key)
-            
+
             if (idx < targetIndex) {
-              setMessage(`🔍 ${idx + 1}번째 열어보는 중... ${items[idx].emoji}? ${targetName} 아니네!`)
+              setMessage(isEn ? `🔍 Opening #${idx + 1}... ${items[idx].emoji}? Not ${targetName}!` : `🔍 ${idx + 1}번째 열어보는 중... ${items[idx].emoji}? ${targetName} 아니네!`)
               idx++
             } else if (idx === targetIndex) {
               setFoundIndex(idx)
-              setMessage(`✅ ${idx + 1}번째에서 ${targetEmoji} ${targetName} 찾았다!`)
+              setMessage(isEn ? `✅ Found ${targetEmoji} ${targetName} at #${idx + 1}!` : `✅ ${idx + 1}번째에서 ${targetEmoji} ${targetName} 찾았다!`)
               clearInterval(intervalRef.current!)
-              
+
               setTimeout(() => {
                 setOpenKey(null)
-                setOverlay({ emoji: "😓", text: `${idx + 1}개나 열어봤어요!`, subtext: "이름표가 없으니까 처음부터 하나씩..." })
+                setOverlay({ emoji: "😓", text: isEn ? `Opened ${idx + 1} lockers!` : `${idx + 1}개나 열어봤어요!`, subtext: isEn ? "No label, so one by one from the start..." : "이름표가 없으니까 처음부터 하나씩..." })
                 
                 setTimeout(() => { 
                   setOverlay(null)
@@ -122,36 +123,37 @@ export function DictAnimation() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Key className="w-5 h-5 text-amber-600" />
-          <h3 className="font-bold text-lg text-amber-800">Dictionary - 딕셔너리</h3>
+          <h3 className="font-bold text-lg text-amber-800">{isEn ? "Dictionary" : "Dictionary - 딕셔너리"}</h3>
         </div>
-        <span className="text-xs bg-amber-200 text-amber-800 px-2 py-1 rounded-full">이름표 사물함 🏷️</span>
+        <span className="text-xs bg-amber-200 text-amber-800 px-2 py-1 rounded-full">{isEn ? "Labeled Locker 🏷️" : "이름표 사물함 🏷️"}</span>
       </div>
 
       {showProblem ? (
         <ProblemCard
           problem={{
             emoji: "😱",
-            title: '리스트로 "현우 물건" 찾으면?',
-            subtitle: "처음부터 하나씩 열어봐야...",
-            code: ['students = ["철수", "영희", "민수", "지민", "현우"]', 'items = ["⚽", "🎒", "🍱", "📚", "🎮"]', '# "현우"가 몇 번째지? 5개 다 확인? 🤔']
+            title: isEn ? 'Finding "Hyunwoo\'s item" with a list?' : '리스트로 "현우 물건" 찾으면?',
+            subtitle: isEn ? "Have to open one by one from the start..." : "처음부터 하나씩 열어봐야...",
+            code: ['students = ["철수", "영희", "민수", "지민", "현우"]', 'items = ["⚽", "🎒", "🍱", "📚", "🎮"]', isEn ? '# What index is "Hyunwoo"? Check all 5? 🤔' : '# "현우"가 몇 번째지? 5개 다 확인? 🤔']
           }}
           solution={{
             emoji: "🏷️",
-            title: "딕셔너리는 이름으로 바로!",
-            subtitle: "몇 개든 즉시 찾기!",
+            title: isEn ? "Dictionary finds by name instantly!" : "딕셔너리는 이름으로 바로!",
+            subtitle: isEn ? "Instant lookup, no matter how many!" : "몇 개든 즉시 찾기!",
             code: 'locker["현우"]  # → "🎮" 바로!'
           }}
           buttonColor="bg-amber-500 hover:bg-amber-600"
           onContinue={() => setShowProblem(false)}
+          lang={lang}
         />
       ) : (
         <>
           <div className="bg-amber-100 border-2 border-amber-300 rounded-lg px-4 py-3">
             <p className="text-sm text-amber-800">
-              🎯 <strong>목표: {targetEmoji} {targetName} 찾기!</strong><br/>
+              🎯 <strong>{isEn ? `Goal: Find ${targetEmoji} ${targetName}!` : `목표: ${targetEmoji} ${targetName} 찾기!`}</strong><br/>
               <span className="text-amber-600">
-                🐢 이름표 없으면 → 처음부터 하나씩 열어봐야 해요<br/>
-                ⚡ 이름표 있으면 → "현우" 클릭하면 바로!
+                {isEn ? "🐢 Without label → open one by one from the start" : "🐢 이름표 없으면 → 처음부터 하나씩 열어봐야 해요"}<br/>
+                {isEn ? '⚡ With label → click "Hyunwoo" and it opens immediately!' : '⚡ 이름표 있으면 → "현우" 클릭하면 바로!'}
               </span>
             </p>
           </div>
@@ -193,9 +195,9 @@ export function DictAnimation() {
               ))}
             </div>
             <p className="text-xs text-slate-500 mt-3 text-center">
-              {searchingList 
-                ? "🔍 이름표가 없어서... 하나씩 열어봐야 해요!" 
-                : "👆 이름표 클릭하면 바로 열 수 있어요!"}
+              {searchingList
+                ? (isEn ? "🔍 No label... have to open one by one!" : "🔍 이름표가 없어서... 하나씩 열어봐야 해요!")
+                : (isEn ? "👆 Click a label to open it immediately!" : "👆 이름표 클릭하면 바로 열 수 있어요!")}
             </p>
           </div>
 
@@ -213,18 +215,18 @@ export function DictAnimation() {
 
           <div className="flex gap-2 flex-wrap">
             <button onClick={searchWithoutLabel} disabled={searchingList || overlay !== null} className="flex items-center gap-1 px-3 py-2 bg-red-500 hover:bg-red-600 disabled:bg-gray-300 text-white rounded-lg text-sm font-bold shadow">
-              <Search className="w-4 h-4" /> 이름표 없이 찾기 🐢
+              <Search className="w-4 h-4" /> {isEn ? "Find without label 🐢" : "이름표 없이 찾기 🐢"}
             </button>
             <button onClick={() => searchByKey(targetKey)} disabled={searchingList || overlay !== null} className="flex items-center gap-1 px-3 py-2 bg-green-500 hover:bg-green-600 disabled:bg-gray-300 text-white rounded-lg text-sm font-bold shadow">
-              <Key className="w-4 h-4" /> 이름표로 찾기 ⚡
+              <Key className="w-4 h-4" /> {isEn ? "Find with label ⚡" : "이름표로 찾기 ⚡"}
             </button>
             <button onClick={reset} className="flex items-center gap-1 px-3 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg text-sm font-bold shadow">
-              <RefreshCw className="w-4 h-4" /> 리셋
+              <RefreshCw className="w-4 h-4" /> {isEn ? "Reset" : "리셋"}
             </button>
           </div>
 
           <div className="bg-gray-900 rounded-lg p-3 font-mono text-sm">
-            <span className="text-gray-400"># 딕셔너리 = 이름으로 바로!</span><br />
+            <span className="text-gray-400">{isEn ? "# Dictionary = find by name instantly!" : "# 딕셔너리 = 이름으로 바로!"}</span><br />
             <span className="text-amber-400">locker</span><span className="text-white"> = {"{"}</span>
             <span className="text-cyan-400">"철수"</span><span className="text-white">: </span>
             <span className="text-green-400">"⚽"</span><span className="text-white">, ...</span>

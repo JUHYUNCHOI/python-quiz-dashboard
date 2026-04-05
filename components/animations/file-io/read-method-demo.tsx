@@ -8,31 +8,32 @@ import { FileText, Play, RotateCcw } from "lucide-react"
  * 파일 읽기 메서드 비교 시뮬레이터
  * read() vs readline() vs readlines() 의 차이를 시각화
  */
-export function ReadMethodDemo() {
+export function ReadMethodDemo({ lang = "ko" }: { lang?: "ko" | "en" }) {
+  const isEn = lang === "en"
   const [method, setMethod] = useState<"read" | "readline" | "readlines" | null>(null)
   const [step, setStep] = useState(0)
 
-  const fileLines = ["첫 번째 줄", "두 번째 줄", "세 번째 줄"]
+  const fileLines = isEn ? ["first line", "second line", "third line"] : ["첫 번째 줄", "두 번째 줄", "세 번째 줄"]
 
   const methods = [
-    { 
-      key: "read" as const, 
+    {
+      key: "read" as const,
       label: "read()",
-      desc: "전체 → 문자열",
+      desc: isEn ? "all → string" : "전체 → 문자열",
       emoji: "📄",
       color: "purple"
     },
-    { 
-      key: "readline" as const, 
+    {
+      key: "readline" as const,
       label: "readline()",
-      desc: "한 줄 → 문자열", 
+      desc: isEn ? "one line → string" : "한 줄 → 문자열",
       emoji: "📃",
       color: "teal"
     },
-    { 
-      key: "readlines" as const, 
+    {
+      key: "readlines" as const,
       label: "readlines()",
-      desc: "전체 → 리스트",
+      desc: isEn ? "all → list" : "전체 → 리스트",
       emoji: "📚",
       color: "indigo"
     },
@@ -105,7 +106,7 @@ export function ReadMethodDemo() {
       {step === 0 && (
         <div className="space-y-2">
           <p className="text-sm font-bold text-gray-600 text-center mb-3">
-            f.<span className="text-purple-600">???</span>() — 어떤 방법으로 읽을까요?
+            f.<span className="text-purple-600">???</span>() — {isEn ? "Which method to read with?" : "어떤 방법으로 읽을까요?"}
           </p>
           <div className="grid grid-cols-3 gap-2">
             {methods.map(m => (
@@ -131,7 +132,7 @@ export function ReadMethodDemo() {
         <div className="space-y-3">
           {step === 1 && (
             <div className="text-center py-3 animate-pulse text-purple-500 text-sm font-bold">
-              읽는 중... 📖
+              {isEn ? "Reading... 📖" : "읽는 중... 📖"}
             </div>
           )}
 
@@ -139,18 +140,18 @@ export function ReadMethodDemo() {
             <>
               <div className="bg-gray-800 rounded-xl p-3 md:p-4">
                 <div className="text-gray-400 text-xs mb-1 font-mono">
-                  결과 = f.{method}()
+                  {isEn ? "result" : "결과"} = f.{method}()
                 </div>
                 <div className="text-green-300 font-mono text-sm">
                   {getResult().value}
                 </div>
                 <div className="mt-2 pt-2 border-t border-gray-700">
-                  <span className="text-gray-500 text-xs">타입: </span>
+                  <span className="text-gray-500 text-xs">{isEn ? "type: " : "타입: "}</span>
                   <span className={cn(
                     "text-xs font-mono font-bold",
                     getResult().type === "str" ? "text-amber-300" : "text-cyan-300"
                   )}>
-                    {getResult().type === "str" ? "문자열 (str)" : "리스트 (list)"}
+                    {getResult().type === "str" ? (isEn ? "string (str)" : "문자열 (str)") : (isEn ? "list (list)" : "리스트 (list)")}
                   </span>
                 </div>
               </div>
@@ -161,7 +162,7 @@ export function ReadMethodDemo() {
                   className="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-xl text-sm font-bold flex items-center gap-1.5 transition-colors"
                 >
                   <RotateCcw className="w-4 h-4" />
-                  다른 메서드 시도
+                  {isEn ? "Try another method" : "다른 메서드 시도"}
                 </button>
               </div>
             </>

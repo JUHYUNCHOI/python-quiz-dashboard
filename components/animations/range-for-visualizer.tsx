@@ -196,7 +196,7 @@ export function RangeForVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
                           style={{ borderWidth: 2, borderStyle: "dashed", borderColor: "#e2e8f0" }}>
                           {INIT[idx!]}
                         </div>
-                        <span className="text-[9px] text-slate-300">복사됐을 때</span>
+                        <span className="text-[9px] text-slate-300">{isEn ? "when copied" : "복사됐을 때"}</span>
                       </div>
                       {/* 연산 */}
                       <div className="text-slate-400 text-sm font-bold">× 2 →</div>
@@ -210,11 +210,14 @@ export function RangeForVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
                           style={{ borderWidth: 3, borderStyle: "solid", background: "#fff7ed", borderColor: "#f97316", color: "#f97316", boxShadow: "0 0 0 4px #f9731620" }}>
                           {INIT[idx!] * 2}
                         </motion.div>
-                        <span className="text-[9px] font-bold text-orange-500">i (지금)</span>
+                        <span className="text-[9px] font-bold text-orange-500">{isEn ? "i (now)" : "i (지금)"}</span>
                       </div>
                     </div>
                     <p className="text-xs text-slate-400">
-                      v[{idx}]은 <span className="font-bold text-slate-500">{INIT[idx!]}</span> 그대로 😱
+                      {isEn
+                        ? <>v[{idx}] is still <span className="font-bold text-slate-500">{INIT[idx!]}</span> 😱</>
+                        : <>v[{idx}]은 <span className="font-bold text-slate-500">{INIT[idx!]}</span> 그대로 😱</>
+                      }
                     </p>
                   </motion.div>
                 )}
@@ -232,7 +235,7 @@ export function RangeForVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
                 {!modifying ? (
                   <>
                     <p className="font-bold text-indigo-700">
-                      {isEn ? `i = v[${idx}] 상자 그 자체 (새 상자 없음)` : `i는 v[${idx}] 상자 그 자체예요`}
+                      {isEn ? `i IS v[${idx}]'s box (no new box)` : `i는 v[${idx}] 상자 그 자체예요`}
                     </p>
                     <p className="text-indigo-400">
                       {isEn ? "same box, just a new name tag" : "새 상자 없이 이름표만 추가됐어요"}
@@ -241,9 +244,11 @@ export function RangeForVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
                 ) : (
                   <>
                     <p className="font-bold text-indigo-700">
-                      ✅ v[{idx}] 상자가 {INIT[idx!] * 2}으로 직접 바뀜!
+                      {isEn
+                        ? `✅ v[${idx}]'s box directly changed to ${INIT[idx!] * 2}!`
+                        : `✅ v[${idx}] 상자가 ${INIT[idx!] * 2}으로 직접 바뀜!`}
                     </p>
-                    <p className="text-indigo-400">i가 v[{idx}] 그 자체니까요</p>
+                    <p className="text-indigo-400">{isEn ? `Because i IS v[${idx}]` : `i가 v[${idx}] 그 자체니까요`}</p>
                   </>
                 )}
               </motion.div>

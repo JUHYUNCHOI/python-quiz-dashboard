@@ -90,12 +90,13 @@ function ScenarioTabs({ tabs, lang }: { tabs: ScenarioTab[]; lang: "ko" | "en" }
 /** 중괄호 함정: 없을 때 — score=80 vs score=96 */
 export function CodeTraceCppBraceTrapNoCombo({ lang = "ko" }: { lang?: string }) {
   const l = lang as "ko" | "en"
+  const isEn = l === "en"
   return (
     <ScenarioTabs
       lang={l}
       tabs={[
-        { label: "score = 80 (거짓)", preset: P.CPP_BRACE_TRAP_NO },
-        { label: "score = 96 (참)", preset: P.CPP_BRACE_TRAP_NO_TRUE },
+        { label: isEn ? "score = 80 (false)" : "score = 80 (거짓)", preset: P.CPP_BRACE_TRAP_NO },
+        { label: isEn ? "score = 96 (true)" : "score = 96 (참)", preset: P.CPP_BRACE_TRAP_NO_TRUE },
       ]}
     />
   )
@@ -104,12 +105,13 @@ export function CodeTraceCppBraceTrapNoCombo({ lang = "ko" }: { lang?: string })
 /** 중괄호 함정: 있을 때 — score=80 vs score=96 */
 export function CodeTraceCppBraceTrapYesCombo({ lang = "ko" }: { lang?: string }) {
   const l = lang as "ko" | "en"
+  const isEn = l === "en"
   return (
     <ScenarioTabs
       lang={l}
       tabs={[
-        { label: "score = 80 (거짓)", preset: P.CPP_BRACE_TRAP_YES },
-        { label: "score = 96 (참)", preset: P.CPP_BRACE_TRAP_YES_TRUE },
+        { label: isEn ? "score = 80 (false)" : "score = 80 (거짓)", preset: P.CPP_BRACE_TRAP_YES },
+        { label: isEn ? "score = 96 (true)" : "score = 96 (참)", preset: P.CPP_BRACE_TRAP_YES_TRUE },
       ]}
     />
   )

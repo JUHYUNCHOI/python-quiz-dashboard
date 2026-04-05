@@ -12,7 +12,7 @@ export interface QuizQuestion {
   question: string
   code: string
   options: string[]
-  correctAnswer: number
+  correctAnswer?: number  // API 방식에서는 서버에서만 반환
   explanation: string
   keyConceptTitle: string
   keyConceptDescription: string
@@ -128,6 +128,10 @@ export function useQuizState(questions: QuizQuestion[]) {
   const questionAttemptRef = useRef<Map<number, number>>(new Map())  // questionId → 시도 횟수
   const [retryInsertedQuestions, setRetryInsertedQuestions] = useState<QuizQuestion[]>([])
   const [gradeStats, setGradeStats] = useState({ perfect: 0, great: 0, good: 0, retryCorrect: 0 })
+
+  // Server-side answer checking
+  const [isCheckingAnswer, setIsCheckingAnswer] = useState(false)
+  const [serverCorrectAnswer, setServerCorrectAnswer] = useState<number | null>(null)
 
   // Mid check-in
   const [showMidCheckIn, setShowMidCheckIn] = useState(false)
@@ -300,7 +304,7 @@ export function useQuizState(questions: QuizQuestion[]) {
       }
     }
 
-    if (selectedAnswer === null || sessionOver || showResult) return
+    if (selectedAnswer === null || sessionOver || showResult || isCheckingAnswer) return
 
     const timeSpent = (Date.now() - questionStartTime) / 1000
     if (timeSpent < 3) {
@@ -309,128 +313,153 @@ export function useQuizState(questions: QuizQuestion[]) {
       return
     }
 
-    const correct = selectedAnswer === question.correctAnswer
-    setIsCorrect(correct)
-    setShowResult(true)
-
-    // 이전 문제로 돌아올 때 복원용 스냅샷 저장
-    questionSnapshots.current.set(currentQuestion, { selectedAnswer, isCorrect: correct })
-
-    // Record per-question result
     const timeTakenMs = Date.now() - questionStartTime
-    setQuestionResults(prev => [...prev, {
-      question_id: question.id,
-      question_text: question.question.slice(0, 50),
-      time_taken_ms: timeTakenMs,
-      selected_answer: selectedAnswer,
-      correct_answer: question.correctAnswer,
-      is_correct: correct,
-      related_topics: question.relatedTopics,
-      lesson_id: question.lessonId,
-    }])
+    const capturedSelected = selectedAnswer
+    const capturedQuestion = question
+    const capturedCurrentQuestion = currentQuestion
 
-    // 시도 횟수 추적
-    const prevAttempts = questionAttemptRef.current.get(question.id) || 0
-    const attempts = prevAttempts + 1
-    questionAttemptRef.current.set(question.id, attempts)
+    setIsCheckingAnswer(true)
 
-    // 간격 반복 기록
-    const mastery = recordAnswer(question.id, correct, attempts)
-    setCurrentGrade(mastery.lastGrade)
+    fetch("/api/check-answer", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ questionId: capturedQuestion.id, selectedAnswer: capturedSelected }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        const correct: boolean = data.correct
+        const serverAnswer: number = data.correctAnswer
 
-    // 재출제 큐 업데이트 (카운트다운) — 매 답변마다 항상 업데이트
-    // ❌ 이전: if (activeRetryQuestion) 조건 때문에 countdown이 영원히 감소 안 했음
-    retryQueueRef.current = retryCheck.updatedQueue
+        setIsCheckingAnswer(false)
+        setServerCorrectAnswer(serverAnswer)
+        setIsCorrect(correct)
+        setShowResult(true)
 
-    if (correct) {
-      const newScore = score + 1
-      setScore(newScore)
-      setWrongAnswerStreak(0)
+        // 이전 문제로 돌아올 때 복원용 스냅샷 저장
+        questionSnapshots.current.set(capturedCurrentQuestion, { selectedAnswer: capturedSelected, isCorrect: correct })
 
-      // 등급 통계 업데이트
-      setGradeStats(prev => ({
-        ...prev,
-        perfect: prev.perfect + (mastery.lastGrade === "perfect" ? 1 : 0),
-        great: prev.great + (mastery.lastGrade === "great" ? 1 : 0),
-        good: prev.good + (mastery.lastGrade === "good" ? 1 : 0),
-        retryCorrect: prev.retryCorrect + (isRetryQuestion ? 1 : 0),
-      }))
+        // Record per-question result
+        setQuestionResults(prev => [...prev, {
+          question_id: capturedQuestion.id,
+          question_text: capturedQuestion.question.slice(0, 50),
+          time_taken_ms: timeTakenMs,
+          selected_answer: capturedSelected,
+          correct_answer: serverAnswer,
+          is_correct: correct,
+          related_topics: capturedQuestion.relatedTopics,
+          lesson_id: capturedQuestion.lessonId,
+        }])
 
-      // Combo logic
-      const newCombo = combo + 1
-      setCombo(newCombo)
-      setMaxCombo((prev) => Math.max(prev, newCombo))
+        // 시도 횟수 추적
+        const prevAttempts = questionAttemptRef.current.get(capturedQuestion.id) || 0
+        const attempts = prevAttempts + 1
+        questionAttemptRef.current.set(capturedQuestion.id, attempts)
 
-      setShowCelebration(true)
-      setTimeout(() => {
-        setShowCelebration(false)
+        // 간격 반복 기록
+        const mastery = recordAnswer(capturedQuestion.id, correct, attempts)
+        setCurrentGrade(mastery.lastGrade)
 
-        // 재출제 문제를 풀었으면 currentQuestion은 안 올림
-        if (activeRetryQuestion) {
-          setSelectedAnswer(null)
-          setShowResult(false)
-          return
-        }
+        // 재출제 큐 업데이트 (카운트다운) — 매 답변마다 항상 업데이트
+        retryQueueRef.current = retryCheck.updatedQueue
 
-        if (currentQuestion < quizSettings.questionCount - 1) {
-          setCurrentQuestion((q) => q + 1)
-          setSelectedAnswer(null)
-          setShowResult(false)
-        } else {
-          saveSessionData("completed", newScore)
-          router.push("/quiz/session-complete")
-        }
-      }, 2000)
-    } else {
-      // Reset combo on wrong
-      setCombo(0)
+        if (correct) {
+          const newScore = score + 1
+          setScore(newScore)
+          setWrongAnswerStreak(0)
 
-      // 오답 재출제 큐에 추가 (2-3문제 뒤에 다시 나옴)
-      retryQueueRef.current = scheduleRetry(retryQueueRef.current, question.id)
+          // 등급 통계 업데이트
+          setGradeStats(prev => ({
+            ...prev,
+            perfect: prev.perfect + (mastery.lastGrade === "perfect" ? 1 : 0),
+            great: prev.great + (mastery.lastGrade === "great" ? 1 : 0),
+            good: prev.good + (mastery.lastGrade === "good" ? 1 : 0),
+            retryCorrect: prev.retryCorrect + (isRetryQuestion ? 1 : 0),
+          }))
 
-      // Hearts logic (복습 모드는 하트 차감 없음)
-      if (!quizSettings.isReview) {
-        const newHearts = hearts - 1
-        setHearts(newHearts)
-        setLastHeartLost(true)
+          // Combo logic
+          const newCombo = combo + 1
+          setCombo(newCombo)
+          setMaxCombo((prev) => Math.max(prev, newCombo))
 
-        if (newHearts <= 0) {
-          setSessionOver(true)
-          saveSessionData("hearts", score)
+          setShowCelebration(true)
           setTimeout(() => {
-            router.push("/quiz/session-complete?reason=hearts")
-          }, 1500)
-          return
+            setShowCelebration(false)
+
+            // 재출제 문제를 풀었으면 currentQuestion은 안 올림
+            if (activeRetryQuestion) {
+              setSelectedAnswer(null)
+              setShowResult(false)
+              return
+            }
+
+            if (capturedCurrentQuestion < quizSettings.questionCount - 1) {
+              setCurrentQuestion((q) => q + 1)
+              setSelectedAnswer(null)
+              setShowResult(false)
+            } else {
+              saveSessionData("completed", newScore)
+              router.push("/quiz/session-complete")
+            }
+          }, 2000)
+        } else {
+          // Reset combo on wrong
+          setCombo(0)
+
+          // 오답 재출제 큐에 추가 (2-3문제 뒤에 다시 나옴)
+          retryQueueRef.current = scheduleRetry(retryQueueRef.current, capturedQuestion.id)
+
+          // Hearts logic (복습 모드는 하트 차감 없음)
+          if (!quizSettings.isReview) {
+            const newHearts = hearts - 1
+            setHearts(newHearts)
+            setLastHeartLost(true)
+
+            if (newHearts <= 0) {
+              setSessionOver(true)
+              saveSessionData("hearts", score)
+              setTimeout(() => {
+                router.push("/quiz/session-complete?reason=hearts")
+              }, 1500)
+              return
+            }
+          }
+
+          const newStreak = wrongAnswerStreak + 1
+          setWrongAnswerStreak(newStreak)
+
+          if (newStreak >= 5) {
+            setShowPauseScreen(true)
+            return
+          }
+
+          setShowWrongToast(true)
+          setReviewCount((r) => r + 1)
+          setTimeout(() => setShowWrongToast(false), 3000)
+          setShowExplanation(true)
         }
-      }
-
-      const newStreak = wrongAnswerStreak + 1
-      setWrongAnswerStreak(newStreak)
-
-      if (newStreak >= 5) {
-        setShowPauseScreen(true)
-        return
-      }
-
-      setShowWrongToast(true)
-      setReviewCount((r) => r + 1)
-      setTimeout(() => setShowWrongToast(false), 3000)
-      setShowExplanation(true)
-    }
+      })
+      .catch(() => {
+        setIsCheckingAnswer(false)
+      })
   }, [
     selectedAnswer,
     questionStartTime,
     question,
     currentQuestion,
     quizSettings.questionCount,
+    quizSettings.isReview,
     wrongAnswerStreak,
     router,
     combo,
     hearts,
     sessionOver,
     showResult,
+    isCheckingAnswer,
     score,
     saveSessionData,
+    isRetryQuestion,
+    activeRetryQuestion,
+    retryCheck.updatedQueue,
   ])
 
   const handleSkip = useCallback(() => {
@@ -440,7 +469,7 @@ export function useQuizState(questions: QuizQuestion[]) {
       question_text: question.question.slice(0, 50),
       time_taken_ms: Date.now() - questionStartTime,
       selected_answer: -1,
-      correct_answer: question.correctAnswer,
+      correct_answer: -1,
       is_correct: false,
       related_topics: question.relatedTopics,
       lesson_id: question.lessonId,
@@ -587,6 +616,10 @@ export function useQuizState(questions: QuizQuestion[]) {
     currentGrade,
     isRetryQuestion,
     gradeStats,
+
+    // 서버 채점 결과
+    isCheckingAnswer,
+    serverCorrectAnswer,
 
     // Refs
     isSnapshotRestore,

@@ -5,9 +5,11 @@ import { cn } from "@/lib/utils"
 
 interface RepetitiveTypingProps {
   onComplete?: () => void
+  lang?: "ko" | "en"
 }
 
-export function RepetitiveTyping({ onComplete }: RepetitiveTypingProps) {
+export function RepetitiveTyping({ onComplete, lang = "ko" }: RepetitiveTypingProps) {
+  const isEn = lang === "en"
   const [currentLine, setCurrentLine] = useState(0)
   const [typedText, setTypedText] = useState("")
   const [isComplete, setIsComplete] = useState(false)
@@ -15,8 +17,10 @@ export function RepetitiveTyping({ onComplete }: RepetitiveTypingProps) {
   const [messageStep, setMessageStep] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const names = ["철수", "영희", "민수", "지훈", "수진", "현우", "예린", "도현", "하나", "준서"]
-  const baseMessage = "생일 축하해! 행복한 하루 보내, "
+  const names = isEn
+    ? ["Tom", "Anna", "Sam", "Jake", "Lucy", "Ben", "Mia", "Chris", "Lily", "Alex"]
+    : ["철수", "영희", "민수", "지훈", "수진", "현우", "예린", "도현", "하나", "준서"]
+  const baseMessage = isEn ? "Happy birthday! Hope you have a great day, " : "생일 축하해! 행복한 하루 보내, "
   
   // 줄별 타이핑 속도 (점점 빨라짐)
   const getTypingSpeed = (lineIndex: number) => {
@@ -133,10 +137,10 @@ export function RepetitiveTyping({ onComplete }: RepetitiveTypingProps) {
               <span className="text-3xl">😰</span>
               <div>
                 <p className="text-amber-200 font-bold text-lg">
-                  아직 7명이나 남았는데...
+                  {isEn ? "Still 7 more to go..." : "아직 7명이나 남았는데..."}
                 </p>
                 <p className="text-amber-300/80 text-sm mt-1">
-                  같은 코드를 10번이나 써야 해요!
+                  {isEn ? "We need to write the same code 10 times!" : "같은 코드를 10번이나 써야 해요!"}
                 </p>
               </div>
             </div>
@@ -147,11 +151,11 @@ export function RepetitiveTyping({ onComplete }: RepetitiveTypingProps) {
             <div className="px-4 pb-4 animate-fadeIn">
               <div className="bg-indigo-600/30 rounded-xl p-4 border-2 border-indigo-400/50">
                 <p className="text-indigo-200 font-bold text-base md:text-lg text-center">
-                  🤔 정말 이렇게만 해야 할까요?
+                  {isEn ? "🤔 Do we really have to do it this way?" : "🤔 정말 이렇게만 해야 할까요?"}
                 </p>
                 {messageStep >= 2 && (
                   <p className="text-indigo-300 text-sm md:text-base text-center mt-2 animate-fadeIn">
-                    반복되는 부분을 <strong className="text-white">덜 쓰는 방법</strong>이 있지 않을까요?
+                    {isEn ? <>Isn&apos;t there a way to <strong className="text-white">write less</strong> of the repeated part?</> : <>반복되는 부분을 <strong className="text-white">덜 쓰는 방법</strong>이 있지 않을까요?</>}
                   </p>
                 )}
               </div>

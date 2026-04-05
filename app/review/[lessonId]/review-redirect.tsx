@@ -2,8 +2,6 @@
 
 import { use, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { cppQuestions } from "@/data/questions/cpp-questions"
-import { pythonQuestions } from "@/data/questions/python-questions"
 import { useLanguage } from "@/contexts/language-context"
 
 export default function ReviewRedirect({ params }: { params: Promise<{ lessonId: string }> }) {
@@ -19,14 +17,10 @@ export default function ReviewRedirect({ params }: { params: Promise<{ lessonId:
       ? "pseudo"
       : "python"
 
-    const allQuestions = course === "cpp" ? cppQuestions : pythonQuestions
-    const lessonQuestions = allQuestions.filter(q => String(q.lessonId) === String(id))
-    const questionCount = Math.max(10, lessonQuestions.length)
-
     sessionStorage.setItem(
       "quizSettings",
       JSON.stringify({
-        questionCount,
+        questionCount: 20,
         difficulty: "mixed",
         course,
         startTime: Date.now(),

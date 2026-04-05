@@ -10,6 +10,7 @@ interface TypeAlongPracticeProps {
   targetCode: string
   expectedOutput: string
   onComplete?: () => void
+  lang?: "ko" | "en"
 }
 
 // Python 문법 하이라이팅
@@ -110,8 +111,10 @@ export function TypeAlongPractice({
   description,
   targetCode,
   expectedOutput,
-  onComplete
+  onComplete,
+  lang = "ko"
 }: TypeAlongPracticeProps) {
+  const isEn = lang === "en"
   const [userCode, setUserCode] = useState("")
   const [showGuide, setShowGuide] = useState(true)
   const [guideTimer, setGuideTimer] = useState<NodeJS.Timeout | null>(null)
@@ -194,7 +197,7 @@ export function TypeAlongPractice({
       setPhase("complete")
       onComplete?.()
     } else {
-      setOutput("❌ 코드를 다시 확인해보세요!")
+      setOutput(isEn ? "❌ Please check your code again!" : "❌ 코드를 다시 확인해보세요!")
       setIsCorrect(false)
     }
     
@@ -260,12 +263,12 @@ export function TypeAlongPractice({
             {showGuide ? (
               <>
                 <EyeOff className="w-4 h-4" />
-                가이드 숨기기
+                {isEn ? "Hide guide" : "가이드 숨기기"}
               </>
             ) : (
               <>
                 <Eye className="w-4 h-4" />
-                가이드 보기 (3초)
+                {isEn ? "Show guide (3s)" : "가이드 보기 (3초)"}
               </>
             )}
           </button>
@@ -277,7 +280,7 @@ export function TypeAlongPractice({
           )}>
             <div className="bg-gray-800 rounded-xl p-3 font-mono text-[13px] md:text-[15px]">
               <div className="flex items-center gap-2 mb-2 text-gray-400 text-xs">
-                <span>📖 이렇게 써보세요</span>
+                <span>{isEn ? "📖 Type it like this" : "📖 이렇게 써보세요"}</span>
               </div>
               <div className="whitespace-pre-wrap">{highlightPython(targetCode)}</div>
             </div>
@@ -291,13 +294,13 @@ export function TypeAlongPractice({
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-gray-500 font-medium flex items-center gap-1">
                 <Eye className="w-4 h-4" />
-                📖 이렇게 써보세요:
+                {isEn ? "📖 Type it like this:" : "📖 이렇게 써보세요:"}
               </span>
               <button
                 onClick={() => setShowGuide(!showGuide)}
                 className="text-xs text-gray-400 hover:text-gray-600"
               >
-                {showGuide ? "숨기기" : "보기"}
+                {showGuide ? (isEn ? "Hide" : "숨기기") : (isEn ? "Show" : "보기")}
               </button>
             </div>
             <div className={cn(
@@ -311,10 +314,10 @@ export function TypeAlongPractice({
           {/* 학생 입력 영역 */}
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <span className="text-sm text-gray-600 font-medium">✏️ 따라 써보세요:</span>
+              <span className="text-sm text-gray-600 font-medium">{isEn ? "✏️ Type it yourself:" : "✏️ 따라 써보세요:"}</span>
               {isFullMatch && (
                 <span className="text-green-600 text-xs font-bold flex items-center gap-1">
-                  <CheckCircle className="w-3 h-3" /> 완벽!
+                  <CheckCircle className="w-3 h-3" /> {isEn ? "Perfect!" : "완벽!"}
                 </span>
               )}
             </div>
@@ -399,9 +402,9 @@ export function TypeAlongPractice({
         {!isFullMatch && phase === "typing" && (
           <div className="flex items-center gap-2 text-xs md:text-sm">
             <span className="text-gray-400">
-              {userCode.length === 0 
-                ? `👆 위 가이드를 보고 첫 글자 ${getNextHint()} 부터 시작!`
-                : `다음 글자: ${getNextHint()}`
+              {userCode.length === 0
+                ? (isEn ? `👆 Check the guide above and start with ${getNextHint()}!` : `👆 위 가이드를 보고 첫 글자 ${getNextHint()} 부터 시작!`)
+                : (isEn ? `Next char: ${getNextHint()}` : `다음 글자: ${getNextHint()}`)
               }
             </span>
             <span className="text-gray-300">
@@ -420,7 +423,7 @@ export function TypeAlongPractice({
           )}>
             <div className="flex items-center gap-2 mb-1">
               <span className="text-xs md:text-sm font-medium">
-                {isCorrect ? "✅ 출력 결과:" : "⚠️ 결과:"}
+                {isCorrect ? (isEn ? "✅ Output:" : "✅ 출력 결과:") : (isEn ? "⚠️ Result:" : "⚠️ 결과:")}
               </span>
             </div>
             <pre className={cn(
@@ -434,8 +437,8 @@ export function TypeAlongPractice({
         {phase === "complete" && (
           <div className="bg-gradient-to-r from-indigo-100 to-purple-100 rounded-xl p-3 md:p-4 text-center animate-fadeIn">
             <Sparkles className="w-6 h-6 md:w-8 md:h-8 text-indigo-500 mx-auto mb-2" />
-            <p className="text-indigo-700 font-bold text-sm md:text-base">🎉 잘했어요!</p>
-            <p className="text-indigo-600 text-xs md:text-sm">코드를 완벽하게 따라 썼어요!</p>
+            <p className="text-indigo-700 font-bold text-sm md:text-base">{isEn ? "🎉 Well done!" : "🎉 잘했어요!"}</p>
+            <p className="text-indigo-600 text-xs md:text-sm">{isEn ? "You typed the code perfectly!" : "코드를 완벽하게 따라 썼어요!"}</p>
           </div>
         )}
 
@@ -449,7 +452,7 @@ export function TypeAlongPractice({
               className="px-4 py-2 md:px-6 md:py-2.5 bg-green-600 hover:bg-green-500 text-white font-bold text-sm md:text-base rounded-xl transition-all flex items-center gap-2 shadow-lg"
             >
               <Play className="w-4 h-4" />
-              {isRunning ? "실행 중..." : "실행하기"}
+              {isRunning ? (isEn ? "Running..." : "실행 중...") : (isEn ? "Run" : "실행하기")}
             </button>
           )}
 
@@ -460,7 +463,7 @@ export function TypeAlongPractice({
               className="px-4 py-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 font-medium text-sm rounded-xl transition-all flex items-center gap-2"
             >
               <RotateCcw className="w-4 h-4" />
-              다시 하기
+              {isEn ? "Try again" : "다시 하기"}
             </button>
           )}
         </div>

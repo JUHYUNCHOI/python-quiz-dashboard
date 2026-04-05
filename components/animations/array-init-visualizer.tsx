@@ -14,7 +14,7 @@ interface TypeInfo {
   bg: string
   border: string
   defaultValue: string
-  defaultLabel: string
+  defaultLabel: { ko: string; en: string }
   declaration: string
   values: string[]  // 명시적으로 넣은 값들
   total: number     // 배열 총 크기
@@ -27,7 +27,7 @@ const TYPES: TypeInfo[] = [
     bg: "#eff6ff",
     border: "#bfdbfe",
     defaultValue: "0",
-    defaultLabel: "정수 기본값",
+    defaultLabel: { ko: "정수 기본값", en: "integer default" },
     declaration: "int a[5] = {1, 2, 3};",
     values: ["1", "2", "3"],
     total: 5,
@@ -38,7 +38,7 @@ const TYPES: TypeInfo[] = [
     bg: "#f5f3ff",
     border: "#ddd6fe",
     defaultValue: "0.0",
-    defaultLabel: "실수 기본값",
+    defaultLabel: { ko: "실수 기본값", en: "decimal default" },
     declaration: "double a[5] = {1.5, 2.7};",
     values: ["1.5", "2.7"],
     total: 5,
@@ -49,7 +49,7 @@ const TYPES: TypeInfo[] = [
     bg: "#fdf2f8",
     border: "#fbcfe8",
     defaultValue: "false",
-    defaultLabel: "bool 기본값",
+    defaultLabel: { ko: "bool 기본값", en: "bool default" },
     declaration: "bool a[4] = {true, true};",
     values: ["true", "true"],
     total: 4,
@@ -60,7 +60,7 @@ const TYPES: TypeInfo[] = [
     bg: "#fffbeb",
     border: "#fde68a",
     defaultValue: '""',
-    defaultLabel: "빈 문자열",
+    defaultLabel: { ko: "빈 문자열", en: "empty string" },
     declaration: 'string a[4] = {"hi", "bye"};',
     values: ['"hi"', '"bye"'],
     total: 4,
@@ -151,7 +151,7 @@ export function ArrayInitVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
             <div className="flex items-center gap-1.5">
               <div className="w-4 h-4 rounded border-2" style={{ borderColor: t.border, borderStyle: "dashed", background: "white" }} />
               <span className="text-gray-600 font-medium">
-                {isEn ? `auto: ${t.defaultValue}` : `자동: ${t.defaultValue} (${t.defaultLabel})`}
+                {isEn ? `auto: ${t.defaultValue} (${t.defaultLabel.en})` : `자동: ${t.defaultValue} (${t.defaultLabel.ko})`}
               </span>
             </div>
           </div>

@@ -5,7 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 type Phase = 'menu' | 'playing' | 'input' | 'crash' | 'safe'
 
-export function GameCrashDemo() {
+export function GameCrashDemo({ lang = "ko" }: { lang?: "ko" | "en" }) {
+  const isEn = lang === "en"
   const [hasTryExcept, setHasTryExcept] = useState(false)
   const [phase, setPhase] = useState<Phase>('menu')
   const [score, setScore] = useState(0)
@@ -24,7 +25,7 @@ export function GameCrashDemo() {
   const startGame = () => {
     setPhase('playing')
     setScore(0)
-    setMessage('숫자를 맞춰보세요!')
+    setMessage(isEn ? 'Guess the number!' : '숫자를 맞춰보세요!')
     setTimeout(() => setPhase('input'), 800)
   }
 
@@ -33,25 +34,25 @@ export function GameCrashDemo() {
     
     if (value === 'abc' || value === '문자') {
       if (hasTryExcept) {
-        setMessage('🛡️ except가 잡았어요! "숫자만 입력해주세요!" 게임 계속!')
+        setMessage(isEn ? '🛡️ except caught it! "Numbers only please!" Game continues!' : '🛡️ except가 잡았어요! "숫자만 입력해주세요!" 게임 계속!')
         setPhase('safe')
         setTimeout(() => {
           setPhase('input')
           setInputValue('')
-          setMessage('다시 숫자를 입력하세요!')
+          setMessage(isEn ? 'Enter a number again!' : '다시 숫자를 입력하세요!')
         }, 2000)
       } else {
-        setMessage('💥 ValueError! 프로그램 종료!')
+        setMessage(isEn ? '💥 ValueError! Program terminated!' : '💥 ValueError! 프로그램 종료!')
         setPhase('crash')
       }
     } else {
       setScore(prev => prev + 10)
-      setMessage('✅ 정답! +10점')
+      setMessage(isEn ? '✅ Correct! +10 points' : '✅ 정답! +10점')
       setPhase('safe')
       setTimeout(() => {
         setPhase('input')
         setInputValue('')
-        setMessage('다음 숫자를 입력하세요!')
+        setMessage(isEn ? 'Enter the next number!' : '다음 숫자를 입력하세요!')
       }, 1500)
     }
   }
@@ -66,7 +67,7 @@ export function GameCrashDemo() {
   return (
     <div className="bg-white rounded-2xl border-2 border-gray-200 p-6 shadow-lg">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-xl font-black text-gray-800">🎮 게임 크래시 체험!</h3>
+        <h3 className="text-xl font-black text-gray-800">{isEn ? "🎮 Game Crash Experience!" : "🎮 게임 크래시 체험!"}</h3>
         <button
           onClick={() => { setHasTryExcept(!hasTryExcept); reset() }}
           className={`px-4 py-2 rounded-full text-sm font-bold transition-all border-2 ${
@@ -101,12 +102,12 @@ export function GameCrashDemo() {
         {phase === 'menu' && (
           <div className="flex flex-col items-center justify-center h-60 gap-4">
             <div className="text-6xl">🎮</div>
-            <div className="text-xl font-black text-gray-800">숫자 맞추기 게임</div>
+            <div className="text-xl font-black text-gray-800">{isEn ? "Number Guessing Game" : "숫자 맞추기 게임"}</div>
             <button
               onClick={startGame}
               className="px-8 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-lg transition-colors shadow-lg"
             >
-              ▶️ 게임 시작!
+              {isEn ? "▶️ Start game!" : "▶️ 게임 시작!"}
             </button>
           </div>
         )}
@@ -127,7 +128,7 @@ export function GameCrashDemo() {
             
             {phase === 'input' && (
               <div className="flex flex-col items-center gap-3">
-                <div className="text-sm text-gray-500 font-bold">어떤 입력을 해볼까요?</div>
+                <div className="text-sm text-gray-500 font-bold">{isEn ? "Which input will you try?" : "어떤 입력을 해볼까요?"}</div>
                 <div className="flex gap-2">
                   <motion.button
                     whileHover={{ scale: 1.05 }}
@@ -135,7 +136,7 @@ export function GameCrashDemo() {
                     onClick={() => handleInput('5')}
                     className="px-5 py-3 bg-green-100 hover:bg-green-200 border-2 border-green-300 rounded-xl font-bold text-green-700 transition-colors"
                   >
-                    🔢 숫자 "5"
+                    {isEn ? '🔢 Number "5"' : '🔢 숫자 "5"'}
                   </motion.button>
                   <motion.button
                     whileHover={{ scale: 1.05 }}
@@ -143,7 +144,7 @@ export function GameCrashDemo() {
                     onClick={() => handleInput('abc')}
                     className="px-5 py-3 bg-red-100 hover:bg-red-200 border-2 border-red-300 rounded-xl font-bold text-red-700 transition-colors"
                   >
-                    💣 문자 &quot;abc&quot;
+                    {isEn ? '💣 Text "abc"' : '💣 문자 "abc"'}
                   </motion.button>
                 </div>
               </div>
@@ -179,7 +180,7 @@ export function GameCrashDemo() {
               transition={{ delay: 1 }}
               className="text-red-400 font-black text-xl"
             >
-              게임 강제 종료! 😭
+              {isEn ? "Game force quit! 😭" : "게임 강제 종료! 😭"}
             </motion.div>
             <motion.div
               initial={{ opacity: 0 }}
@@ -187,7 +188,7 @@ export function GameCrashDemo() {
               transition={{ delay: 1.5 }}
               className="text-gray-500 text-sm"
             >
-              점수 {score}점 전부 날아갔어요...
+              {isEn ? `All ${score} points lost...` : `점수 ${score}점 전부 날아갔어요...`}
             </motion.div>
           </div>
         )}
@@ -197,17 +198,17 @@ export function GameCrashDemo() {
       <div className={`mt-4 p-4 rounded-xl border-2 font-mono text-sm ${
         hasTryExcept ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'
       }`}>
-        <div className="text-xs font-bold text-gray-400 mb-2">현재 코드:</div>
+        <div className="text-xs font-bold text-gray-400 mb-2">{isEn ? "Current code:" : "현재 코드:"}</div>
         {hasTryExcept ? (
           <div className="text-gray-700 leading-relaxed">
             <div><span className="text-blue-600 font-bold">try:</span></div>
             <div className="pl-4">추측 = int(input())</div>
             <div><span className="text-orange-600 font-bold">except ValueError:</span></div>
-            <div className="pl-4">print(&apos;숫자만 입력해주세요!&apos;) <span className="text-green-500">← 🛡️</span></div>
+            <div className="pl-4">print(&apos;{isEn ? 'Numbers only please!' : '숫자만 입력해주세요!'}&apos;) <span className="text-green-500">← 🛡️</span></div>
           </div>
         ) : (
           <div className="text-gray-700 leading-relaxed">
-            <div>추측 = int(input()) <span className="text-red-500">← 💥 에러나면 끝!</span></div>
+            <div>추측 = int(input()) <span className="text-red-500">{isEn ? "← 💥 Error = game over!" : "← 💥 에러나면 끝!"}</span></div>
           </div>
         )}
       </div>
@@ -221,7 +222,7 @@ export function GameCrashDemo() {
           onClick={reset}
           className="w-full mt-4 px-5 py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-black text-lg transition-colors"
         >
-          🔄 다시 시도 (try-except 켜보세요!)
+          {isEn ? "🔄 Try again (turn on try-except!)" : "🔄 다시 시도 (try-except 켜보세요!)"}
         </motion.button>
       )}
     </div>

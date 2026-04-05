@@ -5,7 +5,8 @@ import { motion } from "framer-motion"
 const ARRAY = [2, 5, 8, 12, 16, 23, 38, 45, 56, 72]
 const TARGET = 56
 
-export function LinearSearchAnimation() {
+export function LinearSearchAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
+  const isEn = lang === "en"
   const [currentIdx, setCurrentIdx] = useState<number>(-1)
   const [found, setFound] = useState(false)
   const [started, setStarted] = useState(false)
@@ -40,12 +41,12 @@ export function LinearSearchAnimation() {
     <div className="rounded-xl border-2 border-black bg-white p-5 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <p className="text-sm font-bold text-gray-500">선형 탐색 (Linear Search)</p>
-          <p className="text-sm font-bold">찾는 값: <span className="text-orange-500">{TARGET}</span></p>
+          <p className="text-sm font-bold text-gray-500">{isEn ? "Linear Search" : "선형 탐색 (Linear Search)"}</p>
+          <p className="text-sm font-bold">{isEn ? "Target: " : "찾는 값: "}<span className="text-orange-500">{TARGET}</span></p>
         </div>
         {started && (
           <span className="text-sm font-black text-orange-500 bg-orange-50 px-3 py-1 rounded-full border border-orange-200">
-            {found ? `🎉 ${currentIdx + 1}번 만에 찾았어요!` : `${currentIdx + 1}번 확인`}
+            {found ? (isEn ? `🎉 Found in ${currentIdx + 1} step${currentIdx + 1 === 1 ? "" : "s"}!` : `🎉 ${currentIdx + 1}번 만에 찾았어요!`) : (isEn ? `${currentIdx + 1} checked` : `${currentIdx + 1}번 확인`)}
           </span>
         )}
       </div>
@@ -77,12 +78,12 @@ export function LinearSearchAnimation() {
       {started && !found && currentIdx >= 0 && (
         <p className="text-center text-sm text-gray-600 mb-3">
           arr[{currentIdx}] = {ARRAY[currentIdx]} ...{" "}
-          <span className="text-red-500 font-bold">✗ {TARGET}이 아니에요</span>
+          <span className="text-red-500 font-bold">✗ {isEn ? `not ${TARGET}` : `${TARGET}이 아니에요`}</span>
         </p>
       )}
       {found && (
         <p className="text-center text-sm mb-3">
-          <span className="text-green-600 font-bold">arr[{currentIdx}] = {TARGET} ✓ 찾았어요! ({currentIdx + 1}번 확인)</span>
+          <span className="text-green-600 font-bold">arr[{currentIdx}] = {TARGET} ✓ {isEn ? `Found! (${currentIdx + 1} check${currentIdx + 1 === 1 ? "" : "s"})` : `찾았어요! (${currentIdx + 1}번 확인)`}</span>
         </p>
       )}
 
@@ -92,14 +93,14 @@ export function LinearSearchAnimation() {
             onClick={start}
             className="px-5 py-2 bg-orange-500 text-white font-black rounded-lg border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5"
           >
-            ▶ 시작
+            ▶ {isEn ? "Start" : "시작"}
           </button>
         ) : found ? (
           <button
             onClick={reset}
             className="px-5 py-2 bg-gray-200 text-gray-700 font-black rounded-lg border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5"
           >
-            ↩ 다시
+            ↩ {isEn ? "Again" : "다시"}
           </button>
         ) : (
           <>
@@ -107,7 +108,7 @@ export function LinearSearchAnimation() {
               onClick={next}
               className="px-5 py-2 bg-orange-500 text-white font-black rounded-lg border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5"
             >
-              → 다음 확인
+              → {isEn ? "Next check" : "다음 확인"}
             </button>
             <button
               onClick={reset}
@@ -121,7 +122,10 @@ export function LinearSearchAnimation() {
 
       {found && (
         <p className="text-center text-xs text-gray-500 mt-3">
-          10개 배열에서 {currentIdx + 1}번 확인 — 100만 개면 최악 <strong>100만 번!</strong>
+          {isEn
+            ? <>Array of 10: {currentIdx + 1} check{currentIdx + 1 === 1 ? "" : "s"} — worst case for 1 million items: <strong>1 million checks!</strong></>
+            : <>10개 배열에서 {currentIdx + 1}번 확인 — 100만 개면 최악 <strong>100만 번!</strong></>
+          }
         </p>
       )}
     </div>

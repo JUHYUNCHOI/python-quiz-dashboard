@@ -5,7 +5,8 @@ import { Plus, RefreshCw, Search, Shuffle } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { ProblemCard } from "./shared"
 
-export function SetAnimation() {
+export function SetAnimation({ lang = "ko" }: { lang?: "ko" | "en" }) {
+  const isEn = lang === "en"
   const [items, setItems] = useState<string[]>(["철수", "영희", "민수"])
   const [message, setMessage] = useState("")
   const [bounceItem, setBounceItem] = useState<string | null>(null)
@@ -21,7 +22,7 @@ export function SetAnimation() {
       const existing = items[Math.floor(Math.random() * items.length)]
       setRejectItem(existing); setBounceItem(existing)
       
-      setOverlay({ emoji: "❌", text: `"${existing}" 이미 있어요!`, subtext: "집합은 중복 불가!" })
+      setOverlay({ emoji: "❌", text: isEn ? `"${existing}" already exists!` : `"${existing}" 이미 있어요!`, subtext: isEn ? "Sets don't allow duplicates!" : "집합은 중복 불가!" })
       
       setTimeout(() => {
         setOverlay(null)
@@ -35,14 +36,14 @@ export function SetAnimation() {
         setItems([...items, newStudent])
         setBounceItem(newStudent)
         
-        setOverlay({ emoji: "✅", text: `"${newStudent}" 출석!`, subtext: "새로운 학생 추가!" })
+        setOverlay({ emoji: "✅", text: isEn ? `"${newStudent}" checked in!` : `"${newStudent}" 출석!`, subtext: isEn ? "New student added!" : "새로운 학생 추가!" })
         
         setTimeout(() => {
           setOverlay(null)
           setBounceItem(null)
         }, 1500)
       } else {
-        setOverlay({ emoji: "🎉", text: "모두 출석!", subtext: "더 이상 추가할 학생이 없어요" })
+        setOverlay({ emoji: "🎉", text: isEn ? "Everyone is here!" : "모두 출석!", subtext: isEn ? "No more students to add" : "더 이상 추가할 학생이 없어요" })
         setTimeout(() => setOverlay(null), 1500)
       }
     }
@@ -53,7 +54,7 @@ export function SetAnimation() {
     const student = items[Math.floor(Math.random() * items.length)]
     setBounceItem(student)
     
-    setOverlay({ emoji: "⚡", text: `"${student}" 왔나요?`, subtext: "Yes! 바로 확인!" })
+    setOverlay({ emoji: "⚡", text: isEn ? `Is "${student}" here?` : `"${student}" 왔나요?`, subtext: isEn ? "Yes! Instant check!" : "Yes! 바로 확인!" })
     
     setTimeout(() => {
       setOverlay(null)
@@ -70,32 +71,33 @@ export function SetAnimation() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Shuffle className="w-5 h-5 text-green-600" />
-          <h3 className="font-bold text-lg text-green-800">Set - 집합</h3>
+          <h3 className="font-bold text-lg text-green-800">{isEn ? "Set" : "Set - 집합"}</h3>
         </div>
-        <span className="text-xs bg-green-200 text-green-800 px-2 py-1 rounded-full">출석부 ✋</span>
+        <span className="text-xs bg-green-200 text-green-800 px-2 py-1 rounded-full">{isEn ? "Attendance ✋" : "출석부 ✋"}</span>
       </div>
 
       {showProblem ? (
         <ProblemCard
           problem={{
             emoji: "😱",
-            title: "리스트로 출석체크하면?",
-            subtitle: "중복도 되고, 찾기도 느려요!",
-            code: ['attendance = ["철수", "영희", "철수"]', '# 철수가 2번 출석? 🤔', '# "민수 왔나?" → 처음부터 확인...']
+            title: isEn ? "Attendance with a list?" : "리스트로 출석체크하면?",
+            subtitle: isEn ? "Duplicates allowed, search is slow!" : "중복도 되고, 찾기도 느려요!",
+            code: ['attendance = ["철수", "영희", "철수"]', isEn ? '# 철수 checked in twice? 🤔' : '# 철수가 2번 출석? 🤔', isEn ? '# "Is 민수 here?" → check from start...' : '# "민수 왔나?" → 처음부터 확인...']
           }}
           solution={{
             emoji: "✋",
-            title: "집합은 중복 자동 제거!",
-            subtitle: '"왔나?" 바로 확인!',
+            title: isEn ? "Sets auto-remove duplicates!" : "집합은 중복 자동 제거!",
+            subtitle: isEn ? '"Here?" instant check!' : '"왔나?" 바로 확인!',
             code: 'attendance = {"철수", "영희"}  # 중복 불가!'
           }}
           buttonColor="bg-green-500 hover:bg-green-600"
           onContinue={() => setShowProblem(false)}
+          lang={lang}
         />
       ) : (
         <>
           <div className="bg-green-100 border-2 border-green-300 rounded-lg px-4 py-2">
-            <p className="text-sm text-green-800">✋ <strong>출석부</strong> = 중복 없이, "왔나?" 바로 확인!</p>
+            <p className="text-sm text-green-800">{isEn ? '✋ Attendance = no duplicates, instant "here?" check!' : '✋ 출석부 = 중복 없이, "왔나?" 바로 확인!'}</p>
           </div>
 
           <div className="bg-gradient-to-b from-slate-100 to-slate-200 rounded-xl p-4 border-4 border-slate-300 shadow-inner relative overflow-hidden">
@@ -116,7 +118,7 @@ export function SetAnimation() {
             )}
             
             <div className="bg-white rounded-lg p-4">
-              <p className="text-xs text-gray-500 mb-2">📋 출석 명단</p>
+              <p className="text-xs text-gray-500 mb-2">{isEn ? "📋 Attendance list" : "📋 출석 명단"}</p>
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-2xl text-green-600 font-bold">{"{"}</span>
                 {items.map((student, i) => (
@@ -135,23 +137,23 @@ export function SetAnimation() {
                 )}
               </div>
             </div>
-            <p className="text-xs text-slate-500 mt-3 text-center">❌ 순서 없음 | ❌ 중복 불가 | ⚡ 멤버십 확인 빠름</p>
+            <p className="text-xs text-slate-500 mt-3 text-center">{isEn ? "❌ No order | ❌ No duplicates | ⚡ Fast membership check" : "❌ 순서 없음 | ❌ 중복 불가 | ⚡ 멤버십 확인 빠름"}</p>
           </div>
 
           <div className="flex gap-2 flex-wrap">
             <button onClick={addItem} className="flex items-center gap-1 px-3 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg text-sm font-medium">
-              <Plus className="w-4 h-4" /> 출석
+              <Plus className="w-4 h-4" /> {isEn ? "Check in" : "출석"}
             </button>
             <button onClick={checkMembership} disabled={items.length === 0} className="flex items-center gap-1 px-3 py-2 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 text-white rounded-lg text-sm font-medium">
-              <Search className="w-4 h-4" /> 왔나?
+              <Search className="w-4 h-4" /> {isEn ? "Here?" : "왔나?"}
             </button>
             <button onClick={reset} className="flex items-center gap-1 px-3 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg text-sm font-medium">
-              <RefreshCw className="w-4 h-4" /> 리셋
+              <RefreshCw className="w-4 h-4" /> {isEn ? "Reset" : "리셋"}
             </button>
           </div>
 
           <div className="bg-gray-900 rounded-lg p-3 font-mono text-sm">
-            <span className="text-gray-400"># 집합 = 중복X, 순서X</span><br />
+            <span className="text-gray-400">{isEn ? "# Set = no duplicates, no order" : "# 집합 = 중복X, 순서X"}</span><br />
             <span className="text-green-400">attendance</span><span className="text-white"> = {"{"}</span>
             <span className="text-yellow-400">"철수", "영희", "민수"</span><span className="text-white">{"}"}</span>
           </div>

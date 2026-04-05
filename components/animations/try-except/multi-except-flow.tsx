@@ -5,34 +5,35 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 type InputType = 'number' | 'text' | 'zero'
 
-const scenarios: { id: InputType; label: string; emoji: string; input: string; color: string }[] = [
-  { id: 'number', label: '숫자 입력', emoji: '✅', input: '5', color: 'green' },
-  { id: 'text', label: '문자 입력', emoji: '🔢', input: "'abc'", color: 'purple' },
-  { id: 'zero', label: '0 입력', emoji: '➗', input: '0', color: 'red' },
-]
-
-export function MultiExceptFlow() {
+export function MultiExceptFlow({ lang = "ko" }: { lang?: "ko" | "en" }) {
+  const isEn = lang === "en"
   const [selected, setSelected] = useState<InputType | null>(null)
   const [step, setStep] = useState(0)
 
+  const scenarios: { id: InputType; label: string; emoji: string; input: string; color: string }[] = [
+    { id: 'number', label: isEn ? 'Number input' : '숫자 입력', emoji: '✅', input: '5', color: 'green' },
+    { id: 'text', label: isEn ? 'Text input' : '문자 입력', emoji: '🔢', input: "'abc'", color: 'purple' },
+    { id: 'zero', label: isEn ? 'Zero input' : '0 입력', emoji: '➗', input: '0', color: 'red' },
+  ]
+
   const getSteps = (type: InputType) => {
     if (type === 'number') return [
-      { label: 'try 블록 실행', emoji: '📦', area: 'try', detail: 'x = int("5") → 성공!' },
-      { label: '10 / 5 계산', emoji: '🔢', area: 'try', detail: 'print(10 / 5) → 2.0' },
-      { label: 'except 모두 건너뜀!', emoji: '⏭️', area: 'skip', detail: '에러가 없어서 except 실행 안 됨' },
-      { label: '결과: 2.0 출력!', emoji: '🎉', area: 'done', detail: '정상 실행 완료!' },
+      { label: isEn ? 'Running try block' : 'try 블록 실행', emoji: '📦', area: 'try', detail: isEn ? 'x = int("5") → success!' : 'x = int("5") → 성공!' },
+      { label: isEn ? 'Calculate 10 / 5' : '10 / 5 계산', emoji: '🔢', area: 'try', detail: 'print(10 / 5) → 2.0' },
+      { label: isEn ? 'All except skipped!' : 'except 모두 건너뜀!', emoji: '⏭️', area: 'skip', detail: isEn ? 'No error, except not executed' : '에러가 없어서 except 실행 안 됨' },
+      { label: isEn ? 'Result: 2.0 printed!' : '결과: 2.0 출력!', emoji: '🎉', area: 'done', detail: isEn ? 'Normal execution complete!' : '정상 실행 완료!' },
     ]
     if (type === 'text') return [
-      { label: 'try 블록 실행', emoji: '📦', area: 'try', detail: "x = int('abc') 시도..." },
-      { label: '💥 ValueError 발생!', emoji: '💥', area: 'error', detail: "'abc'는 숫자가 아니에요!" },
-      { label: 'except ValueError가 잡음!', emoji: '🛡️', area: 'value', detail: "'숫자 아님!' 출력" },
-      { label: 'ZeroDivisionError는 건너뜀', emoji: '⏭️', area: 'skip-zero', detail: '이 에러가 아니라서 패스' },
+      { label: isEn ? 'Running try block' : 'try 블록 실행', emoji: '📦', area: 'try', detail: isEn ? "x = int('abc') attempted..." : "x = int('abc') 시도..." },
+      { label: isEn ? '💥 ValueError raised!' : '💥 ValueError 발생!', emoji: '💥', area: 'error', detail: isEn ? "'abc' is not a number!" : "'abc'는 숫자가 아니에요!" },
+      { label: isEn ? 'except ValueError caught it!' : 'except ValueError가 잡음!', emoji: '🛡️', area: 'value', detail: isEn ? "print('Not a number!') executed" : "'숫자 아님!' 출력" },
+      { label: isEn ? 'ZeroDivisionError skipped' : 'ZeroDivisionError는 건너뜀', emoji: '⏭️', area: 'skip-zero', detail: isEn ? 'Not this error, passed' : '이 에러가 아니라서 패스' },
     ]
     return [
-      { label: 'try 블록 실행', emoji: '📦', area: 'try', detail: 'x = int("0") → 성공!' },
-      { label: '10 / 0 계산 시도...', emoji: '💥', area: 'error-zero', detail: '0으로 나누기 불가!' },
-      { label: 'ValueError는 건너뜀', emoji: '⏭️', area: 'skip-value', detail: '이 에러가 아니라서 패스' },
-      { label: 'except ZeroDivisionError가 잡음!', emoji: '🛡️', area: 'zero', detail: "'0 안돼!' 출력" },
+      { label: isEn ? 'Running try block' : 'try 블록 실행', emoji: '📦', area: 'try', detail: isEn ? 'x = int("0") → success!' : 'x = int("0") → 성공!' },
+      { label: isEn ? 'Trying 10 / 0...' : '10 / 0 계산 시도...', emoji: '💥', area: 'error-zero', detail: isEn ? 'Cannot divide by zero!' : '0으로 나누기 불가!' },
+      { label: isEn ? 'ValueError skipped' : 'ValueError는 건너뜀', emoji: '⏭️', area: 'skip-value', detail: isEn ? 'Not this error, passed' : '이 에러가 아니라서 패스' },
+      { label: isEn ? 'except ZeroDivisionError caught it!' : 'except ZeroDivisionError가 잡음!', emoji: '🛡️', area: 'zero', detail: isEn ? "print('No zero!') executed" : "'0 안돼!' 출력" },
     ]
   }
 
@@ -73,8 +74,8 @@ export function MultiExceptFlow() {
 
   return (
     <div className="bg-white rounded-2xl border-2 border-gray-200 p-6 shadow-lg">
-      <h3 className="text-xl font-black text-gray-800 mb-2">🎯 여러 except 흐름 따라가기</h3>
-      <p className="text-gray-500 mb-4">입력값에 따라 어떤 except가 실행되는지 확인!</p>
+      <h3 className="text-xl font-black text-gray-800 mb-2">{isEn ? "🎯 Follow multiple except flow" : "🎯 여러 except 흐름 따라가기"}</h3>
+      <p className="text-gray-500 mb-4">{isEn ? "See which except runs based on the input!" : "입력값에 따라 어떤 except가 실행되는지 확인!"}</p>
 
       {/* 시나리오 선택 */}
       <div className="grid grid-cols-3 gap-3 mb-5">
@@ -108,7 +109,7 @@ export function MultiExceptFlow() {
               x = int(input())
               <AnimatePresence>
                 {currentStep?.area === 'error' && (
-                  <motion.span initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }} className="text-purple-500 font-bold text-xs">← 💥 ValueError!</motion.span>
+                  <motion.span initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }} className="text-purple-500 font-bold text-xs">{isEn ? "← 💥 ValueError!" : "← 💥 ValueError!"}</motion.span>
                 )}
               </AnimatePresence>
             </div>
@@ -129,7 +130,7 @@ export function MultiExceptFlow() {
             print(&apos;숫자 아님!&apos;)
             <AnimatePresence>
               {currentStep?.area === 'value' && (
-                <motion.span initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }} className="text-purple-500 font-bold text-xs">← 🛡️ 여기서 처리!</motion.span>
+                <motion.span initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }} className="text-purple-500 font-bold text-xs">{isEn ? "← 🛡️ Handled here!" : "← 🛡️ 여기서 처리!"}</motion.span>
               )}
             </AnimatePresence>
           </div>
@@ -141,7 +142,7 @@ export function MultiExceptFlow() {
             print(&apos;0 안돼!&apos;)
             <AnimatePresence>
               {currentStep?.area === 'zero' && (
-                <motion.span initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }} className="text-red-500 font-bold text-xs">← 🛡️ 여기서 처리!</motion.span>
+                <motion.span initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }} className="text-red-500 font-bold text-xs">{isEn ? "← 🛡️ Handled here!" : "← 🛡️ 여기서 처리!"}</motion.span>
               )}
             </AnimatePresence>
           </div>
@@ -175,20 +176,20 @@ export function MultiExceptFlow() {
           </motion.div>
         ) : (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-xl p-4 mb-4 bg-gray-50 border-2 border-gray-200 text-center text-gray-400 font-bold">
-            👆 위에서 입력값을 선택하세요!
+            {isEn ? "👆 Select an input above!" : "👆 위에서 입력값을 선택하세요!"}
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* 버튼 */}
       <div className="flex gap-3">
-        <button onClick={reset} className="px-5 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold text-gray-700 border-2 border-gray-200">🔄 초기화</button>
+        <button onClick={reset} className="px-5 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold text-gray-700 border-2 border-gray-200">{isEn ? "🔄 Reset" : "🔄 초기화"}</button>
         <button
           onClick={nextStep}
           disabled={!selected || step >= currentSteps.length - 1}
           className="flex-1 px-5 py-3 bg-indigo-600 hover:bg-indigo-500 disabled:bg-gray-200 disabled:text-gray-400 text-white rounded-xl font-bold text-lg transition-colors"
         >
-          {!selected ? '입력값 선택!' : step >= currentSteps.length - 1 ? '✅ 완료!' : '다음 ▶️'}
+          {!selected ? (isEn ? 'Select input!' : '입력값 선택!') : step >= currentSteps.length - 1 ? (isEn ? '✅ Done!' : '✅ 완료!') : (isEn ? 'Next ▶️' : '다음 ▶️')}
         </button>
       </div>
     </div>
