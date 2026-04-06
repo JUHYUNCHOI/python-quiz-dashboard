@@ -28,12 +28,28 @@ export { cppLesson22Data } from './lesson22'
 export { cppLesson23Data } from './lesson23'
 export { cppLesson23EnData } from './lesson23-en'
 
-// Checkpoint lessons
+// Checkpoint lessons (Korean)
 export { cppLessonCk1Data } from './lesson-ck1'
 export { cppLessonCk2Data } from './lesson-ck2'
 export { cppLessonCk3Data } from './lesson-ck3'
 export { cppLessonCk4Data } from './lesson-ck4'
 export { cppLessonCk5Data } from './lesson-ck5'
+export { cppLessonCk6Data } from './lesson-ck6'
+export { cppLessonCk7Data } from './lesson-ck7'
+export { cppLessonCk8Data } from './lesson-ck8'
+// Checkpoint lessons (English)
+export { cppLessonCk1EnData } from './lesson-ck1-en'
+export { cppLessonCk2EnData } from './lesson-ck2-en'
+export { cppLessonCk3EnData } from './lesson-ck3-en'
+export { cppLessonCk4EnData } from './lesson-ck4-en'
+export { cppLessonCk5EnData } from './lesson-ck5-en'
+export { cppLessonCk6EnData } from './lesson-ck6-en'
+export { cppLessonCk7EnData } from './lesson-ck7-en'
+export { cppLessonCk8EnData } from './lesson-ck8-en'
+export { cppLessonCk9Data } from './lesson-ck9'
+export { cppLessonCk9EnData } from './lesson-ck9-en'
+export { cppLessonCk10Data } from './lesson-ck10'
+export { cppLessonCk10EnData } from './lesson-ck10-en'
 
 // Korean projects
 export { cppLessonP1Data } from './lessonP1'

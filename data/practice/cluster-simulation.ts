@@ -5,12 +5,12 @@ export const simulationCluster: PracticeCluster = {
   title: "시뮬레이션",
   emoji: "🎮",
   description: "Bronze 핵심 — 문제를 그대로 코드로 구현하는 직접 시뮬레이션",
-  unlockAfter: "cpp-7",
+  unlockAfter: "cpp-p2",
   problems: [
     {
       id: "sim-001",
       cluster: "simulation",
-      unlockAfter: "cpp-7",
+      unlockAfter: "cpp-p2",
       difficulty: "쉬움",
       title: "공 튀기기",
       description: `공이 높이 H에서 떨어지기 시작합니다. 공은 바닥에 튕길 때마다 이전 높이의 절반으로 올라갑니다.
@@ -53,7 +53,7 @@ int main() {
     {
       id: "sim-002",
       cluster: "simulation",
-      unlockAfter: "cpp-7",
+      unlockAfter: "cpp-p2",
       difficulty: "쉬움",
       title: "로봇 이동",
       description: `로봇이 (0, 0)에서 시작합니다. 명령어 문자열이 주어질 때, 각 명령어에 따라 이동합니다.
@@ -102,7 +102,7 @@ int main() {
     {
       id: "sim-003",
       cluster: "simulation",
-      unlockAfter: "cpp-7",
+      unlockAfter: "cpp-p2",
       difficulty: "쉬움",
       title: "달팽이 탈출",
       description: `달팽이가 깊이 H인 우물에 빠졌습니다. 낮에는 U미터 올라가고, 밤에는 D미터 내려옵니다.
@@ -148,7 +148,7 @@ int main() {
     {
       id: "sim-004",
       cluster: "simulation",
-      unlockAfter: "cpp-7",
+      unlockAfter: "cpp-p2",
       difficulty: "쉬움",
       title: "자동판매기",
       description: `자동판매기에서 가격이 P인 음료를 사려 합니다.
@@ -196,7 +196,7 @@ int main() {
     {
       id: "sim-005",
       cluster: "simulation",
-      unlockAfter: "cpp-7",
+      unlockAfter: "cpp-p2",
       difficulty: "보통",
       title: "줄 서기 시뮬레이션",
       description: `N명이 한 줄로 서 있습니다. 매 분마다 인접한 두 사람 중 앞 사람 번호가 더 크면 두 사람이 자리를 바꿉니다.
@@ -248,7 +248,7 @@ int main() {
     {
       id: "sim-006",
       cluster: "simulation",
-      unlockAfter: "cpp-7",
+      unlockAfter: "cpp-p2",
       difficulty: "보통",
       title: "카드 뒤집기",
       description: `N장의 카드가 모두 앞면(1)으로 놓여 있습니다.
@@ -299,7 +299,7 @@ int main() {
     {
       id: "sim-007",
       cluster: "simulation",
-      unlockAfter: "cpp-7",
+      unlockAfter: "cpp-p2",
       difficulty: "보통",
       title: "점수판 업데이트",
       description: `두 팀 A, B가 경기를 합니다. N개의 이벤트가 주어집니다.
@@ -350,7 +350,7 @@ int main() {
     {
       id: "sim-008",
       cluster: "simulation",
-      unlockAfter: "cpp-7",
+      unlockAfter: "cpp-p2",
       difficulty: "보통",
       title: "엘리베이터 시뮬레이션",
       description: `엘리베이터가 1층에서 시작합니다. N개의 요청이 순서대로 주어질 때, 각 요청에 응답하기 위해 이동한 총 층수를 출력하세요.
@@ -397,7 +397,7 @@ int main() {
     {
       id: "sim-009",
       cluster: "simulation",
-      unlockAfter: "cpp-7",
+      unlockAfter: "cpp-p2",
       difficulty: "어려움",
       title: "숫자 폭탄 게임",
       description: `N개의 숫자 중 K의 배수가 나올 때마다 그 숫자를 제거합니다.
@@ -505,7 +505,7 @@ int main() {
     {
       id: "sim-011",
       cluster: "simulation",
-      unlockAfter: "cpp-7",
+      unlockAfter: "cpp-p2",
       difficulty: "어려움",
       title: "편의점 재고 관리",
       description: `편의점에 N개 품목이 있고 각 재고량이 주어집니다.
@@ -567,7 +567,7 @@ int main() {
     {
       id: "sim-012",
       cluster: "simulation",
-      unlockAfter: "cpp-7",
+      unlockAfter: "cpp-p2",
       difficulty: "어려움",
       title: "신호등 타이밍",
       description: `신호등이 빨간불 R초, 초록불 G초로 반복됩니다. T초 시점에 도착했을 때 기다려야 하는 시간을 출력하세요.
@@ -611,7 +611,7 @@ int main() {
     {
       id: "sim-013",
       cluster: "simulation",
-      unlockAfter: "cpp-7",
+      unlockAfter: "cpp-p2",
       difficulty: "어려움",
       title: "마라톤 물 보급",
       description: `마라톤 코스 길이가 L km입니다. 선수가 매 S km마다 물을 마십니다.
@@ -671,7 +671,7 @@ int main() {
     {
       id: "sim-014",
       cluster: "simulation",
-      unlockAfter: "cpp-7",
+      unlockAfter: "cpp-p2",
       difficulty: "어려움",
       title: "과제 제출 현황",
       description: `N명의 학생과 M개의 과제가 있습니다.
@@ -724,7 +724,7 @@ int main() {
     {
       id: "sim-015",
       cluster: "simulation",
-      unlockAfter: "cpp-7",
+      unlockAfter: "cpp-p2",
       difficulty: "어려움",
       title: "신호등 시뮬레이션",
       description: `N개의 신호등이 있고, 각 신호등은 빨간불 지속 시간 R초, 초록불 지속 시간 G초가 주어집니다.

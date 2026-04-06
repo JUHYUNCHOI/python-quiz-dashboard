@@ -1,5 +1,6 @@
 export * from "./types"
 // C++ clusters
+export { part1ComboCluster } from "./cluster-part1-combo"
 export { conditionalsCluster } from "./cluster-conditionals"
 export { loopsCluster } from "./cluster-loops"
 export { arraysCluster } from "./cluster-arrays"
@@ -22,6 +23,7 @@ export { pyDictsCluster } from "./py-cluster-dicts"
 export { pyFunctionsCluster } from "./py-cluster-functions"
 export { pyOopCluster } from "./py-cluster-oop"
 
+import { part1ComboCluster } from "./cluster-part1-combo"
 import { conditionalsCluster } from "./cluster-conditionals"
 import { loopsCluster } from "./cluster-loops"
 import { arraysCluster } from "./cluster-arrays"
@@ -49,8 +51,9 @@ export const ALL_CLUSTERS: PracticeCluster[] = [
   ioCluster,
   conditionalsCluster,
   loopsCluster,
-  simulationCluster,
+  part1ComboCluster,
   arraysCluster,
+  simulationCluster,
   stringsCluster,
   mapSetCluster,
   sortingCluster,

@@ -306,8 +306,9 @@ int main() {
       cluster: "conditionals",
       unlockAfter: "cpp-6",
       difficulty: "보통",
-      title: "FizzBuzz",
-      description: `정수 N이 주어질 때:
+      title: "배수 판별 (FizzBuzz)",
+      description: `정수 N 하나가 주어질 때 조건에 따라 출력하세요. (반복문 없이 if-else만 사용)
+
 - 15의 배수이면 \`FizzBuzz\`
 - 3의 배수이면 \`Fizz\`
 - 5의 배수이면 \`Buzz\`

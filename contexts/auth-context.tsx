@@ -24,7 +24,7 @@ function clearUserLocalStorage() {
     "question-mastery", "activity-log",
     "gamification-total-xp", "gamification-daily-streak",
     "gamification-last-active-date", "gamification-sessions-today",
-    "language", "sound-muted",
+    "sound-muted",
     "last-migrated-at",  // 마이그레이션 타임스탬프도 초기화 (계정 전환 시 다음 로그인에서 재업로드)
   ]
   fixedKeys.forEach(k => localStorage.removeItem(k))
