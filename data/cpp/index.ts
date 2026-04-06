@@ -28,6 +28,13 @@ export { cppLesson22Data } from './lesson22'
 export { cppLesson23Data } from './lesson23'
 export { cppLesson23EnData } from './lesson23-en'
 
+// Checkpoint lessons
+export { cppLessonCk1Data } from './lesson-ck1'
+export { cppLessonCk2Data } from './lesson-ck2'
+export { cppLessonCk3Data } from './lesson-ck3'
+export { cppLessonCk4Data } from './lesson-ck4'
+export { cppLessonCk5Data } from './lesson-ck5'
+
 // Korean projects
 export { cppLessonP1Data } from './lessonP1'
 export { cppLessonP2Data } from './lessonP2'

@@ -49,7 +49,8 @@ import {
   // C++ Korean lessons 15-22
   cppLesson15Data, cppLesson16Data, cppLesson17Data, cppLesson18Data,
   cppLesson19Data, cppLesson20Data, cppLesson21Data, cppLesson22Data, cppLesson23Data,
-  // C++ lesson 22 (Korean only, no English version yet)
+  // C++ checkpoint lessons
+  cppLessonCk1Data, cppLessonCk2Data, cppLessonCk3Data, cppLessonCk4Data, cppLessonCk5Data,
   // C++ project lessons
   cppLessonP1Data, cppLessonP2Data, cppLessonP3Data,
   // C++ English lessons
@@ -106,14 +107,14 @@ export const lessonsData: Record<string, LessonData> = {
   "p1": lessonP1Data, "p2": lessonP2Data, "p3": lessonP3Data, "p4": lessonP4Data,
   // C++ Part 1
   "cpp-1": cppLesson1Data, "cpp-2": cppLesson2Data, "cpp-3": cppLesson3Data, "cpp-4": cppLesson4Data,
-  "cpp-5": cppLesson5Data, "cpp-6": cppLesson6Data, "cpp-7": cppLesson7Data, "cpp-8": cppLesson8Data,
+  "cpp-5": cppLesson5Data, "cpp-6": cppLesson6Data, "cpp-7": cppLesson7Data, "cpp-ck1": cppLessonCk1Data, "cpp-8": cppLesson8Data,
   // C++ Part 2
-  "cpp-9": cppLesson9Data, "cpp-10": cppLesson10Data, "cpp-11": cppLesson11Data, "cpp-12": cppLesson12Data,
+  "cpp-9": cppLesson9Data, "cpp-ck2": cppLessonCk2Data, "cpp-10": cppLesson10Data, "cpp-11": cppLesson11Data, "cpp-12": cppLesson12Data,
   "cpp-13": cppLesson13Data, "cpp-14": cppLesson14Data,
-  "cpp-21": cppLesson21Data, "cpp-22": cppLesson22Data,
+  "cpp-21": cppLesson21Data, "cpp-22": cppLesson22Data, "cpp-ck3": cppLessonCk3Data,
   // C++ Part 3
-  "cpp-15": cppLesson15Data, "cpp-23": cppLesson23Data,
-  "cpp-16": cppLesson16Data, "cpp-17": cppLesson17Data, "cpp-18": cppLesson18Data,
+  "cpp-15": cppLesson15Data, "cpp-23": cppLesson23Data, "cpp-ck4": cppLessonCk4Data,
+  "cpp-16": cppLesson16Data, "cpp-ck5": cppLessonCk5Data, "cpp-17": cppLesson17Data, "cpp-18": cppLesson18Data,
   "cpp-19": cppLesson19Data, "cpp-20": cppLesson20Data,
   // C++ projects
   "cpp-p1": cppLessonP1Data, "cpp-p2": cppLessonP2Data, "cpp-p3": cppLessonP3Data,

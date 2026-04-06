@@ -296,11 +296,17 @@ const registry: Record<string, LessonEntry> = {
     load: () => import('./cpp/lesson8'), exportName: 'cppLesson8Data',
     enLoad: () => import('./cpp/lesson8-en'), enExportName: 'cppLesson8EnData',
   },
+  "cpp-ck1": {
+    load: () => import('./cpp/lesson-ck1'), exportName: 'cppLessonCk1Data',
+  },
 
   // C++ Part 2: 더 깊은 C++ (cpp-9 ~ cpp-14)
   "cpp-9": {
     load: () => import('./cpp/lesson9'), exportName: 'cppLesson9Data',
     enLoad: () => import('./cpp/lesson9-en'), enExportName: 'cppLesson9EnData',
+  },
+  "cpp-ck2": {
+    load: () => import('./cpp/lesson-ck2'), exportName: 'cppLessonCk2Data',
   },
   "cpp-10": {
     load: () => import('./cpp/lesson10'), exportName: 'cppLesson10Data',
@@ -326,6 +332,9 @@ const registry: Record<string, LessonEntry> = {
     load: () => import('./cpp/lesson22'), exportName: 'cppLesson22Data',
     enLoad: () => import('./cpp/lesson22-en'), enExportName: 'cppLesson22EnData',
   },
+  "cpp-ck3": {
+    load: () => import('./cpp/lesson-ck3'), exportName: 'cppLessonCk3Data',
+  },
 
   // C++ Part 3: USACO 준비 (cpp-21, cpp-15 ~ cpp-20)
   "cpp-21": {
@@ -340,9 +349,15 @@ const registry: Record<string, LessonEntry> = {
     load: () => import('./cpp/lesson23'), exportName: 'cppLesson23Data',
     enLoad: () => import('./cpp/lesson23-en'), enExportName: 'cppLesson23EnData',
   },
+  "cpp-ck4": {
+    load: () => import('./cpp/lesson-ck4'), exportName: 'cppLessonCk4Data',
+  },
   "cpp-16": {
     load: () => import('./cpp/lesson16'), exportName: 'cppLesson16Data',
     enLoad: () => import('./cpp/lesson16-en'), enExportName: 'cppLesson16EnData',
+  },
+  "cpp-ck5": {
+    load: () => import('./cpp/lesson-ck5'), exportName: 'cppLessonCk5Data',
   },
   "cpp-17": {
     load: () => import('./cpp/lesson17'), exportName: 'cppLesson17Data',
