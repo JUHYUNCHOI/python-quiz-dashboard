@@ -24,9 +24,9 @@ export const pythonParts: PartMeta[] = [
 ]
 
 export const cppParts: PartMeta[] = [
-  { id: "cpp-part1", title: "Part 1: C++ 기초", titleEn: "Part 1: C++ Basics", lessonIds: ["cpp-1", "cpp-2", "cpp-3", "cpp-4", "cpp-5", "cpp-6", "cpp-7", "cpp-8", "cpp-p1"] },
-  { id: "cpp-part2", title: "Part 2: 더 깊은 C++", titleEn: "Part 2: Deeper C++", lessonIds: ["cpp-9", "cpp-21", "cpp-10", "cpp-11", "cpp-12", "cpp-13", "cpp-14", "cpp-22", "cpp-p2"] },
-  { id: "cpp-part3", title: "Part 3: USACO 준비", titleEn: "Part 3: USACO Prep", lessonIds: ["cpp-15", "cpp-23", "cpp-16", "cpp-17", "cpp-18", "cpp-19", "cpp-20", "cpp-p3"] },
+  { id: "cpp-part1", title: "Part 1: C++ 기초", titleEn: "Part 1: C++ Basics", lessonIds: ["cpp-1", "cpp-2", "cpp-3", "cpp-4", "cpp-5", "cpp-6", "cpp-7", "cpp-ck1", "cpp-8", "cpp-p1"] },
+  { id: "cpp-part2", title: "Part 2: 더 깊은 C++", titleEn: "Part 2: Deeper C++", lessonIds: ["cpp-9", "cpp-ck2", "cpp-21", "cpp-10", "cpp-11", "cpp-12", "cpp-13", "cpp-14", "cpp-22", "cpp-ck3", "cpp-p2"] },
+  { id: "cpp-part3", title: "Part 3: USACO 준비", titleEn: "Part 3: USACO Prep", lessonIds: ["cpp-15", "cpp-23", "cpp-ck4", "cpp-16", "cpp-ck5", "cpp-17", "cpp-18", "cpp-19", "cpp-20", "cpp-p3"] },
 ]
 
 export const pseudoParts: PartMeta[] = [
@@ -61,11 +61,11 @@ export const lessonNames: Record<string, string> = {
   "49": "프로젝트1", "50": "프로젝트2", "51": "프로젝트3", "52": "프로젝트4", "p4": "🎮 최종",
   // C++
   "cpp-1": "파이썬 vs C++", "cpp-2": "cout & namespace", "cpp-3": "변수와 타입", "cpp-4": "cin 입력",
-  "cpp-5": "연산자", "cpp-6": "조건문 (if/else)", "cpp-7": "반복문 (for/while)", "cpp-8": "함수", "cpp-p1": "🎮 숫자 맞추기",
-  "cpp-9": "배열 & 벡터", "cpp-10": "Range-for & auto", "cpp-11": "문자열 심화", "cpp-12": "참조와 함수",
-  "cpp-13": "포인터 기초", "cpp-14": "구조체 (struct)", "cpp-22": "클래스 (class)", "cpp-p2": "⚔️ RPG 캐릭터",
+  "cpp-5": "연산자", "cpp-6": "조건문 (if/else)", "cpp-7": "반복문 (for/while)", "cpp-ck1": "🏋️ 반복문 연습", "cpp-8": "함수", "cpp-p1": "🎮 숫자 맞추기",
+  "cpp-9": "배열 & 벡터", "cpp-ck2": "🏋️ 벡터 연습", "cpp-10": "Range-for & auto", "cpp-11": "문자열 심화", "cpp-12": "참조와 함수",
+  "cpp-13": "포인터 기초", "cpp-14": "구조체 (struct)", "cpp-22": "클래스 (class)", "cpp-ck3": "🏋️ 구조체+벡터 연습", "cpp-p2": "⚔️ RPG 캐릭터",
   "cpp-21": "2차원 배열 & 2D vector",
-  "cpp-15": "pair & tuple", "cpp-23": "sort 마스터", "cpp-16": "map & set", "cpp-17": "STL 알고리즘", "cpp-18": "stack/queue/deque",
+  "cpp-15": "pair & tuple", "cpp-23": "sort 마스터", "cpp-ck4": "🏋️ 정렬 연습", "cpp-16": "map & set", "cpp-ck5": "🏋️ map/set 연습", "cpp-17": "STL 알고리즘", "cpp-18": "stack/queue/deque",
   "cpp-19": "파일 & Fast I/O", "cpp-20": "CP 실전 팁", "cpp-p3": "🏆 USACO 모의전",
   // Pseudocode
   "pseudo-1": "기초", "pseudo-2": "변수", "pseudo-3": "입출력", "pseudo-4": "조건문",
@@ -102,11 +102,11 @@ export const lessonNamesEn: Record<string, string> = {
   "49": "Project 1", "50": "Project 2", "51": "Project 3", "52": "Project 4", "p4": "🎮 Final",
   // C++
   "cpp-1": "Python vs C++", "cpp-2": "cout & namespace", "cpp-3": "Variables & Types", "cpp-4": "cin Input",
-  "cpp-5": "Operators", "cpp-6": "Conditionals (if/else)", "cpp-7": "Loops (for/while)", "cpp-8": "Functions", "cpp-p1": "🎮 Number Guessing",
-  "cpp-9": "Arrays & Vectors", "cpp-10": "Range-for & auto", "cpp-11": "Advanced Strings", "cpp-12": "References & Functions",
-  "cpp-13": "Pointers Basics", "cpp-14": "Structs", "cpp-22": "Classes", "cpp-p2": "⚔️ RPG Character",
+  "cpp-5": "Operators", "cpp-6": "Conditionals (if/else)", "cpp-7": "Loops (for/while)", "cpp-ck1": "🏋️ Loop Practice", "cpp-8": "Functions", "cpp-p1": "🎮 Number Guessing",
+  "cpp-9": "Arrays & Vectors", "cpp-ck2": "🏋️ Vector Practice", "cpp-10": "Range-for & auto", "cpp-11": "Advanced Strings", "cpp-12": "References & Functions",
+  "cpp-13": "Pointers Basics", "cpp-14": "Structs", "cpp-22": "Classes", "cpp-ck3": "🏋️ Struct+Vector Practice", "cpp-p2": "⚔️ RPG Character",
   "cpp-21": "2D Arrays & 2D Vectors",
-  "cpp-15": "pair & tuple", "cpp-23": "sort Master", "cpp-16": "map & set", "cpp-17": "STL Algorithms", "cpp-18": "stack/queue/deque",
+  "cpp-15": "pair & tuple", "cpp-23": "sort Master", "cpp-ck4": "🏋️ Sort Practice", "cpp-16": "map & set", "cpp-ck5": "🏋️ map/set Practice", "cpp-17": "STL Algorithms", "cpp-18": "stack/queue/deque",
   "cpp-19": "Files & Fast I/O", "cpp-20": "CP Tips", "cpp-p3": "🏆 USACO Mock",
   // Pseudocode
   "pseudo-1": "Basics", "pseudo-2": "Variables", "pseudo-3": "I/O", "pseudo-4": "Conditionals",
