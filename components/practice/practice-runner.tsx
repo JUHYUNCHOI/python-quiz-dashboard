@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback, useEffect } from "react"
+import { useState, useCallback } from "react"
 import dynamic from "next/dynamic"
 import { Play, Loader2, RotateCcw, ChevronDown, Check, X, Lightbulb, Eye } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -8,41 +8,77 @@ import type { PracticeProblem } from "@/data/practice/types"
 
 const SimpleEditor = dynamic(() => import("react-simple-code-editor"), { ssr: false })
 
-// Prism을 모듈 레벨에서 미리 로드 (타이밍 문제 방지)
-let prismLoaded = false
-function loadPrism() {
-  if (prismLoaded || typeof window === "undefined") return
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const Prism = require("prismjs")
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    require("prismjs/components/prism-clike")
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    require("prismjs/components/prism-cpp")
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    require("prismjs/components/prism-python")
-    prismLoaded = true
-    return Prism
-  } catch {
-    return null
+// ── Inline-style syntax highlighters (no external CSS needed) ──
+
+const CPP_KEYWORDS = /\b(alignas|alignof|and|and_eq|asm|auto|bitand|bitor|bool|break|case|catch|char|char8_t|char16_t|char32_t|class|compl|concept|const|consteval|constexpr|constinit|const_cast|continue|co_await|co_return|co_yield|decltype|default|delete|do|double|dynamic_cast|else|enum|explicit|export|extern|false|float|for|friend|goto|if|inline|int|long|mutable|namespace|new|noexcept|not|not_eq|nullptr|operator|or|or_eq|private|protected|public|register|reinterpret_cast|requires|return|short|signed|sizeof|static|static_assert|static_cast|struct|switch|template|this|thread_local|throw|true|try|typedef|typeid|typename|union|unsigned|using|virtual|void|volatile|wchar_t|while|xor|xor_eq|string|vector|map|set|pair|cout|cin|endl|std)\b/g
+const CPP_PREPROCESSOR = /^(#\s*(?:include|define|undef|if|ifdef|ifndef|elif|else|endif|error|pragma|line)\b.*)/gm
+const CPP_STRING = /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/g
+const CPP_COMMENT_LINE = /\/\/.*/g
+const CPP_COMMENT_BLOCK = /\/\*[\s\S]*?\*\//g
+const CPP_NUMBER = /\b\d+(?:\.\d+)?(?:[eE][+-]?\d+)?[uUlLfF]?\b/g
+
+const PY_KEYWORDS = /\b(False|None|True|and|as|assert|async|await|break|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|nonlocal|not|or|pass|raise|return|try|while|with|yield|print|input|range|len|int|float|str|bool|list|dict|set|tuple|type|isinstance|enumerate|zip|map|filter|sorted|reversed|min|max|sum|abs|round|open|append|extend|insert|remove|pop|clear|copy|update|get|keys|values|items|join|split|strip|replace|format|upper|lower|self)\b/g
+const PY_STRING = /"""[\s\S]*?"""|'''[\s\S]*?'''|"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/g
+const PY_COMMENT = /#.*/g
+const PY_DECORATOR = /@\w+/g
+const PY_NUMBER = /\b\d+(?:\.\d+)?(?:[eE][+-]?\d+)?\b/g
+
+function escapeHtml(s: string) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+}
+
+function buildHighlightHtml(code: string, patterns: Array<{ re: RegExp; cls: string }>): string {
+  type Match = { start: number; end: number; text: string; cls: string }
+  const matches: Match[] = []
+  for (const { re, cls } of patterns) {
+    const r = new RegExp(re.source, re.flags.includes("g") ? re.flags : re.flags + "g")
+    r.lastIndex = 0
+    let m
+    while ((m = r.exec(code)) !== null) {
+      matches.push({ start: m.index, end: m.index + m[0].length, text: m[0], cls })
+    }
   }
+  matches.sort((a, b) => a.start - b.start)
+  const filtered: Match[] = []
+  let cursor = 0
+  for (const m of matches) {
+    if (m.start >= cursor) { filtered.push(m); cursor = m.end }
+  }
+  const colorMap: Record<string, string> = {
+    keyword: "#ff7b72", comment: "#b0bec5", string: "#a5d6ff",
+    preprocessor: "#ff7b72", number: "#ffa657", decorator: "#d2a8ff",
+  }
+  cursor = 0
+  let html = ""
+  for (const m of filtered) {
+    if (m.start > cursor) html += escapeHtml(code.slice(cursor, m.start))
+    const color = colorMap[m.cls] || "#e6edf3"
+    const style = m.cls === "comment" ? `color:${color};font-style:italic` : `color:${color}`
+    html += `<span style="${style}">${escapeHtml(m.text)}</span>`
+    cursor = m.end
+  }
+  if (cursor < code.length) html += escapeHtml(code.slice(cursor))
+  return html
 }
 
 function highlightCode(code: string, language: "cpp" | "python" = "cpp"): string {
-  if (typeof window === "undefined") return code
-  try {
-    if (!prismLoaded) loadPrism()
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const Prism = require("prismjs")
-    if (language === "python" && Prism.languages.python) {
-      return Prism.highlight(code, Prism.languages.python, "python")
-    } else if (Prism.languages.cpp) {
-      return Prism.highlight(code, Prism.languages.cpp, "cpp")
-    }
-    return code
-  } catch {
-    return code
+  if (language === "python") {
+    return buildHighlightHtml(code, [
+      { re: PY_STRING, cls: "string" },
+      { re: PY_COMMENT, cls: "comment" },
+      { re: PY_DECORATOR, cls: "decorator" },
+      { re: PY_KEYWORDS, cls: "keyword" },
+      { re: PY_NUMBER, cls: "number" },
+    ])
   }
+  return buildHighlightHtml(code, [
+    { re: CPP_COMMENT_BLOCK, cls: "comment" },
+    { re: CPP_COMMENT_LINE, cls: "comment" },
+    { re: CPP_STRING, cls: "string" },
+    { re: CPP_PREPROCESSOR, cls: "preprocessor" },
+    { re: CPP_KEYWORDS, cls: "keyword" },
+    { re: CPP_NUMBER, cls: "number" },
+  ])
 }
 
 const WANDBOX_API = "https://wandbox.org/api/compile.json"
@@ -57,17 +93,6 @@ interface PracticeRunnerProps {
 export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
   const lang = problem.language ?? "cpp"
   const storageKey = `practice-code-${problem.id}`
-
-  // Eagerly load Prism on mount so the editor highlight function has it ready.
-  // prismReady state triggers a re-render after load, so the editor re-highlights
-  // with the correct syntax colours instead of showing plain text on first paint.
-  const [prismReady, setPrismReady] = useState(prismLoaded)
-  useEffect(() => {
-    if (!prismLoaded) {
-      loadPrism()
-      setPrismReady(true)
-    }
-  }, [])
 
   const [code, setCode] = useState(() => {
     const initial = problem.initialCode ?? ""
@@ -156,7 +181,7 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
         <SimpleEditor
           value={code}
           onValueChange={c => setCode(c)}
-          highlight={c => prismReady ? highlightCode(c, lang) : c}
+          highlight={c => highlightCode(c, lang)}
           padding={16}
           style={{ fontFamily: "monospace", fontSize: 14, minHeight: 260, color: "#cdd6f4", background: "transparent" }}
         />
