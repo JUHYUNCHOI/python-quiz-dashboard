@@ -602,6 +602,36 @@ switch (day) {
 💡 실수로 break를 빼먹는 건 C++ 초보자가 가장 많이 하는 실수 중 하나예요!`
         },
         {
+          id: "ch4-default",
+          type: "explain",
+          title: "🛡️ default — 어디에도 안 맞으면?",
+          content: `if-else에서 **else**가 있는 것처럼, switch에도 **default**가 있어요!
+
+\`\`\`cpp
+switch (score) {
+    case 10: cout << "완벽!"; break;
+    case 9:  cout << "아주 잘했어요!"; break;
+    case 8:  cout << "잘했어요!"; break;
+    default: cout << "더 노력해요!";  // 10, 9, 8이 아닌 모든 값
+}
+\`\`\`
+
+**default의 특징:**
+- 어떤 case에도 안 맞을 때 실행돼요
+- 보통 맨 마지막에 써요 (관례)
+- **선택 사항** — 없어도 돼요 (모든 경우를 case로 다 처리했다면)
+- default 뒤에도 break를 쓰는 게 좋은 습관이에요 (fall-through 방지)
+
+\`\`\`cpp
+// default가 없어도 되는 경우
+switch (day) {
+    case 1: cout << "월"; break;
+    case 2: cout << "화"; break;
+    // day가 1, 2가 아니면 → 아무것도 출력 안 함 (괜찮아요!)
+}
+\`\`\``,
+        },
+        {
           id: "ch4-fb1",
           type: "fillblank" as const,
           title: "switch문을 완성해봐요!",
