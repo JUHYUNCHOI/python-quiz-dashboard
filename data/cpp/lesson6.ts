@@ -447,7 +447,6 @@ using namespace std;
 
 int main() {
     int hp;
-    cout << "HP: ";
     cin >> hp;
 
     // 삼항 연산자로 한 줄에 작성하세요
@@ -462,7 +461,6 @@ using namespace std;
 
 int main() {
     int hp;
-    cout << "HP: ";
     cin >> hp;
 
     string result = (hp >= 1) ? "생존!" : "사망...";
@@ -471,7 +469,7 @@ int main() {
     return 0;
 }`,
           stdin: `50`,
-          expectedOutput: `HP: 생존!`
+          expectedOutput: `생존!`
         },
         {
           id: "ch3-pred1",

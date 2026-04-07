@@ -353,6 +353,12 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     }
   }, [completedSteps, effectiveTeacher])
 
+  // practice 3회 실패: 다음 버튼만 활성화, XP/애니메이션 없음
+  const handleUnlock = useCallback(() => {
+    if (!step?.id || completedSteps.has(step.id)) return
+    setCompletedSteps(prev => new Set([...prev, step.id]))
+  }, [completedSteps, step?.id])
+
   const handleSuccess = useCallback(() => {
     if (!step?.id || completedSteps.has(step.id)) return
     setCompletedSteps(prev => new Set([...prev, step.id]))
@@ -960,9 +966,11 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
               lang={lang}
               isCompleted={effectiveTeacher ? false : isCurrentStepCompleted}
               lessonId={lessonId}
+              userId={user?.id}
               hintLevel={hintLevel}
               onHintLevelChange={setHintLevel}
               onSuccess={handleSuccess}
+              onUnlock={handleUnlock}
               selectedAnswer={selectedAnswer}
               showExplanation={showExplanation}
               quizAttempts={quizAttempts}

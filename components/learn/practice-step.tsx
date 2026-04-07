@@ -14,7 +14,9 @@ interface PracticeStepProps {
   step: LessonStep
   lang?: "ko" | "en"
   onSuccess?: () => void
+  onUnlock?: () => void  // 3회 실패 시: XP 없이 다음만 활성화
   lessonId?: string
+  userId?: string
   isCompleted?: boolean
 }
 
@@ -28,7 +30,7 @@ int main() {
 }`
 }
 
-export function PracticeStep({ step, lang = "ko", onSuccess, lessonId, isCompleted = false }: PracticeStepProps) {
+export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId, userId, isCompleted = false }: PracticeStepProps) {
   const [done, setDone] = useState(false)
   const [failCount, setFailCount] = useState(0)
   const [hintOpen, setHintOpen] = useState(false)
@@ -79,7 +81,10 @@ export function PracticeStep({ step, lang = "ko", onSuccess, lessonId, isComplet
     const next = failCount + 1
     setFailCount(next)
     setHintOpen(true)
-    if (next >= 3) onSuccess?.() // Next 버튼 활성화
+    if (next >= 3) {
+      setDone(true)   // 완료 UI 표시
+      onUnlock?.()    // XP 없이 다음 버튼만 활성화
+    }
   }
 
   const hintColor = hintLevel === 1
@@ -133,6 +138,7 @@ export function PracticeStep({ step, lang = "ko", onSuccess, lessonId, isComplet
           lessonId={lessonId}
           stepId={step.id}
           stepTitle={step.title}
+          userId={userId}
           isCompleted={done}
         />
 

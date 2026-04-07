@@ -93,6 +93,7 @@ interface CppRunnerProps {
   lessonId?: string
   stepId?: string
   stepTitle?: string
+  userId?: string
   // 완료 후 Run 버튼 숨기기
   isCompleted?: boolean
 }
@@ -131,9 +132,11 @@ export function CppRunner({
   lessonId,
   stepId,
   stepTitle,
+  userId,
   isCompleted = false,
 }: CppRunnerProps) {
-  const storageKey = stepId ? `cpp-runner-${lessonId ?? "x"}-${stepId}` : null
+  // userId 포함 → 사용자별 독립 저장 (선생님 코드가 학생에게 보이는 문제 방지)
+  const storageKey = stepId ? `cpp-runner-${userId ?? "anon"}-${lessonId ?? "x"}-${stepId}` : null
 
   const [code, setCode] = useState(() => {
     if (!storageKey || typeof window === "undefined") return initialCode
