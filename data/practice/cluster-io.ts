@@ -264,5 +264,243 @@ int main() {
 }`,
       solutionExplanation: "cin >> n 이후 버퍼에 남은 줄바꿈을 cin.ignore()로 버린 뒤, getline(cin, line)으로 공백을 포함한 문장을 읽어 출력합니다.",
     },
+    {
+      id: "io-007",
+      cluster: "io",
+      unlockAfter: "cpp-4",
+      difficulty: "보통",
+      title: "온도 변환기",
+      description: `섭씨(Celsius) 온도가 주어질 때, 화씨와 켈빈으로 변환하여 출력하세요.
+
+- 첫 번째 줄: 화씨 (F = C × 9.0 / 5.0 + 32)
+- 두 번째 줄: 켈빈 (K = C + 273.15)
+
+소수점 둘째 자리까지 출력하세요.`,
+      constraints: "-273.15 ≤ C ≤ 10000",
+      initialCode: `#include <iostream>
+#include <iomanip>
+using namespace std;
+
+int main() {
+    double c;
+    cin >> c;
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+      testCases: [
+        { stdin: "0", expectedOutput: "32.00\n273.15", label: "0도" },
+        { stdin: "100", expectedOutput: "212.00\n373.15", label: "끓는점" },
+        { stdin: "-40", expectedOutput: "-40.00\n233.15", label: "화씨=섭씨 교차점" },
+      ],
+      hints: [
+        "double 타입으로 입력받아야 소수점 계산이 정확합니다.",
+        "fixed << setprecision(2)로 소수점 두 자리를 고정하세요.",
+      ],
+      solutionCode: `#include <iostream>
+#include <iomanip>
+using namespace std;
+
+int main() {
+    double c;
+    cin >> c;
+    double f = c * 9.0 / 5.0 + 32;
+    double k = c + 273.15;
+    cout << fixed << setprecision(2) << f << "\n" << k << "\n";
+    return 0;
+}`,
+      solutionExplanation: "9.0 / 5.0처럼 실수 리터럴을 사용해 정수 나눗셈을 방지합니다. fixed + setprecision(2)는 cout에 한 번만 설정하면 이후 출력 모두에 적용됩니다.",
+    },
+    {
+      id: "io-008",
+      cluster: "io",
+      unlockAfter: "cpp-4",
+      difficulty: "보통",
+      title: "거스름돈 계산기",
+      description: `물건 가격(price)과 지불 금액(paid)이 주어질 때, 거스름돈을 50원, 10원, 1원 단위로 분해하여 각각 몇 개인지 한 줄씩 출력하세요.
+
+출력 순서: 50원 개수, 10원 개수, 1원 개수`,
+      constraints: "1 ≤ price ≤ paid ≤ 10000, price와 paid는 모두 정수",
+      initialCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int price, paid;
+    cin >> price >> paid;
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+      testCases: [
+        { stdin: "730 1000", expectedOutput: "5\n2\n0", label: "270원 거스름돈" },
+        { stdin: "100 100", expectedOutput: "0\n0\n0", label: "거스름돈 없음" },
+        { stdin: "451 500", expectedOutput: "0\n4\n9", label: "49원 거스름돈" },
+      ],
+      hints: [
+        "거스름돈 = paid - price",
+        "50원짜리 개수 = 거스름돈 / 50, 나머지 = 거스름돈 % 50",
+        "같은 방식으로 10원, 1원 순서로 처리하세요.",
+      ],
+      solutionCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int price, paid;
+    cin >> price >> paid;
+    int change = paid - price;
+    int w50 = change / 50;
+    change %= 50;
+    int w10 = change / 10;
+    change %= 10;
+    int w1 = change;
+    cout << w50 << "\n" << w10 << "\n" << w1 << "\n";
+    return 0;
+}`,
+      solutionExplanation: "큰 단위부터 나눗셈으로 개수를 구하고, 나머지 연산으로 남은 금액을 줄여나가는 그리디 패턴입니다. 동전 거스름돈 문제의 기본 형태입니다.",
+    },
+    {
+      id: "io-009",
+      cluster: "io",
+      unlockAfter: "cpp-4",
+      difficulty: "보통",
+      title: "BMI 계산기",
+      description: `몸무게(kg)와 키(m)가 주어질 때 BMI를 계산하여 소수점 첫째 자리까지 출력하세요.
+
+BMI = 몸무게 / (키 × 키)`,
+      constraints: "1 ≤ 몸무게 ≤ 500, 0.5 ≤ 키 ≤ 3.0",
+      initialCode: `#include <iostream>
+#include <iomanip>
+using namespace std;
+
+int main() {
+    double weight, height;
+    cin >> weight >> height;
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+      testCases: [
+        { stdin: "70 1.75", expectedOutput: "22.9", label: "정상 범위" },
+        { stdin: "90 1.80", expectedOutput: "27.8", label: "과체중" },
+        { stdin: "50 1.60", expectedOutput: "19.5", label: "저체중 경계" },
+      ],
+      hints: [
+        "BMI = weight / (height * height)로 계산합니다.",
+        "fixed << setprecision(1)로 소수점 한 자리를 출력하세요.",
+      ],
+      solutionCode: `#include <iostream>
+#include <iomanip>
+using namespace std;
+
+int main() {
+    double weight, height;
+    cin >> weight >> height;
+    double bmi = weight / (height * height);
+    cout << fixed << setprecision(1) << bmi << "\n";
+    return 0;
+}`,
+      solutionExplanation: "height * height로 키의 제곱을 구하고 몸무게를 나눕니다. double 타입이므로 실수 나눗셈이 자동으로 수행됩니다. setprecision(1)로 소수 첫째 자리까지 반올림 출력합니다.",
+    },
+    {
+      id: "io-010",
+      cluster: "io",
+      unlockAfter: "cpp-4",
+      difficulty: "어려움",
+      title: "N개 정수 최대/최소/합",
+      description: `첫 줄에 정수 N이 주어지고, 다음 줄에 N개의 정수가 공백으로 구분되어 주어질 때, 최댓값, 최솟값, 합계를 각각 한 줄씩 출력하세요.`,
+      constraints: "1 ≤ N ≤ 100, -10000 ≤ 각 정수 ≤ 10000",
+      initialCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+      testCases: [
+        { stdin: "5\n3 1 4 1 5", expectedOutput: "5\n1\n14", label: "기본" },
+        { stdin: "3\n-2 -5 -1", expectedOutput: "-1\n-5\n-8", label: "음수만" },
+        { stdin: "1\n42", expectedOutput: "42\n42\n42", label: "단일 입력" },
+      ],
+      hints: [
+        "첫 번째 값을 읽어 maxVal, minVal, sum을 모두 초기화한 뒤, 나머지 N-1개를 처리하세요.",
+        "또는 maxVal = INT_MIN, minVal = INT_MAX로 초기화하고 N개 모두 처리해도 됩니다.",
+        "#include <climits>에서 INT_MIN, INT_MAX를 사용할 수 있어요.",
+      ],
+      solutionCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    int x;
+    cin >> x;
+    int maxVal = x, minVal = x, sum = x;
+    for (int i = 1; i < n; i++) {
+        cin >> x;
+        if (x > maxVal) maxVal = x;
+        if (x < minVal) minVal = x;
+        sum += x;
+    }
+    cout << maxVal << "\n" << minVal << "\n" << sum << "\n";
+    return 0;
+}`,
+      solutionExplanation: "첫 번째 값으로 최댓값/최솟값/합계를 초기화한 뒤 나머지를 순회합니다. N=1일 때도 올바르게 동작합니다. INT_MIN/INT_MAX 초기화 방식도 가능하지만, 첫 값으로 초기화하면 헤더 없이도 안전합니다.",
+    },
+    {
+      id: "io-011",
+      cluster: "io",
+      unlockAfter: "cpp-4",
+      difficulty: "어려움",
+      title: "성적 통계",
+      description: `첫 줄에 학생 수 N이 주어지고, 이후 N줄에 걸쳐 이름(문자열)과 점수(정수)가 주어질 때, 평균(소수점 첫째 자리)과 최고점 학생의 이름을 출력하세요.
+
+동점자가 있을 경우 먼저 입력된 학생의 이름을 출력합니다.`,
+      constraints: "1 ≤ N ≤ 100, 0 ≤ 점수 ≤ 100, 이름은 공백 없는 영문자",
+      initialCode: `#include <iostream>
+#include <string>
+#include <iomanip>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+      testCases: [
+        { stdin: "3\nalice 90\nbob 85\ncharlie 95", expectedOutput: "90.0\ncharlie", label: "기본" },
+        { stdin: "2\nlee 70\nkim 70", expectedOutput: "70.0\nlee", label: "동점 시 첫 번째" },
+        { stdin: "1\nsolo 100", expectedOutput: "100.0\nsolo", label: "단일 학생" },
+      ],
+      hints: [
+        "이름과 점수를 각각 string과 int로 읽으세요: cin >> name >> score",
+        "합계를 누적하고, 최고점과 해당 학생 이름을 별도 변수로 추적하세요.",
+        "동점 처리: 현재 점수가 최고점보다 strictly 클 때만 갱신하면 첫 번째 학생이 유지됩니다.",
+      ],
+      solutionCode: `#include <iostream>
+#include <string>
+#include <iomanip>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    string topName;
+    int topScore = -1, sum = 0;
+    for (int i = 0; i < n; i++) {
+        string name;
+        int score;
+        cin >> name >> score;
+        sum += score;
+        if (score > topScore) {
+            topScore = score;
+            topName = name;
+        }
+    }
+    cout << fixed << setprecision(1) << (double)sum / n << "\n";
+    cout << topName << "\n";
+    return 0;
+}`,
+      solutionExplanation: "topScore를 -1로 초기화하면 첫 학생이 반드시 최고점으로 등록됩니다. score > topScore (엄격한 부등호)를 사용하면 동점 시 첫 번째 학생이 유지됩니다. 평균은 (double)sum / n으로 실수 나눗셈합니다.",
+    },
   ],
 }

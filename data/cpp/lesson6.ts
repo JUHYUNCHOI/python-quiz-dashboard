@@ -266,12 +266,22 @@ if (score >= 90) {
 - 20 미만 → \`쓰러지기 직전!\`
 
 if, else if, else를 순서대로 사용해보세요.`,
+          starterCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int hp;
+    cin >> hp;
+
+    // if, else if, else를 사용해서 작성하세요
+
+    return 0;
+}`,
           code: `#include <iostream>
 using namespace std;
 
 int main() {
     int hp;
-    cout << "HP를 입력하세요: ";
     cin >> hp;
 
     if (hp >= 80) {
@@ -287,7 +297,7 @@ int main() {
     return 0;
 }`,
           stdin: `35`,
-          expectedOutput: `HP를 입력하세요: 위험!`
+          expectedOutput: `위험!`
         }
       ]
     },
@@ -448,7 +458,6 @@ using namespace std;
 
 int main() {
     int hp;
-    cout << "HP: ";
     cin >> hp;
 
     // 삼항 연산자로 한 줄에 작성하세요
@@ -463,7 +472,6 @@ using namespace std;
 
 int main() {
     int hp;
-    cout << "HP: ";
     cin >> hp;
 
     string result = (hp >= 1) ? "생존!" : "사망...";
@@ -472,7 +480,7 @@ int main() {
     return 0;
 }`,
           stdin: `50`,
-          expectedOutput: `HP: 생존!`
+          expectedOutput: `생존!`
         },
         {
           id: "ch3-pred1",
@@ -603,6 +611,60 @@ switch (day) {
 \`\`\`
 
 💡 실수로 break를 빼먹는 건 C++ 초보자가 가장 많이 하는 실수 중 하나예요!`
+        },
+        {
+          id: "ch4-default",
+          type: "explain",
+          title: "🛡️ default — 어디에도 안 맞으면?",
+          content: `if-else에서 **else**가 있는 것처럼, switch에도 **default**가 있어요!
+
+\`\`\`cpp
+switch (score) {
+    case 10: cout << "완벽!"; break;
+    case 9:  cout << "아주 잘했어요!"; break;
+    case 8:  cout << "잘했어요!"; break;
+    default: cout << "더 노력해요!";  // 10, 9, 8이 아닌 모든 값
+}
+\`\`\`
+
+**default의 특징:**
+- 어떤 case에도 안 맞을 때 실행돼요
+- 보통 맨 마지막에 써요 (관례)
+- **선택 사항** — 없어도 돼요 (모든 경우를 case로 다 처리했다면)
+- default 뒤에도 break를 쓰는 게 좋은 습관이에요 (fall-through 방지)
+
+\`\`\`cpp
+// default가 없어도 되는 경우
+switch (day) {
+    case 1: cout << "월"; break;
+    case 2: cout << "화"; break;
+    // day가 1, 2가 아니면 → 아무것도 출력 안 함 (괜찮아요!)
+}
+\`\`\``,
+        },
+        {
+          id: "ch4-intentional",
+          type: "explain",
+          title: "💡 일부러 break를 안 쓰는 경우!",
+          content: `break를 안 쓰는 게 항상 실수는 아니에요! **여러 case가 같은 코드**를 실행할 때 일부러 빼기도 해요:
+
+\`\`\`cpp
+switch (day) {
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+        cout << "평일";
+        break;
+    case 6:
+    case 7:
+        cout << "주말";
+        break;
+}
+\`\`\`
+
+case 1~5는 break 없이 쭉 떨어져서 **"평일"**을 출력해요. 이게 **의도적 fall-through**예요!`
         },
         {
           id: "ch4-fb1",
@@ -744,33 +806,6 @@ switch (x) { case x > 10: ... }   // 범위 비교 안 됨
           answer: 1,
           explanation: "x=2 → case 2 실행(B) → break 없음! → default도 실행(X)! default도 break가 없으면 fall-through의 대상이에요. 결과: \"BX\""
         },
-        // 의도적 fall-through (여러 case가 같은 코드)
-        {
-          id: "ch4-intentional",
-          type: "explain",
-          title: "💡 일부러 break를 안 쓰는 경우!",
-          content: `break를 안 쓰는 게 항상 실수는 아니에요! **여러 case가 같은 코드**를 실행할 때 일부러 빼기도 해요:
-
-\`\`\`cpp
-switch (day) {
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-        cout << "평일";
-        break;
-    case 6:
-    case 7:
-        cout << "주말";
-        break;
-}
-\`\`\`
-
-case 1~5는 break 없이 쭉 떨어져서 **"평일"**을 출력해요. 이게 **의도적 fall-through**예요!
-
-💡 default는 **선택사항**이에요! 모든 경우를 case로 다 처리했으면 default를 안 써도 돼요.`
-        },
         // 의도적 fall-through 퀴즈
         {
           id: "ch4-pred10",
@@ -792,6 +827,15 @@ case 1~5는 break 없이 쭉 떨어져서 **"평일"**을 출력해요. 이게 *
 - weapon = 2이면 "활"
 - weapon = 3이면 "마법"
 - 그 외에는 "맨손"`,
+          starterCode: `#include <iostream>
+using namespace std;
+int main() {
+    int weapon = 1;
+
+    // switch 문을 작성하세요
+
+    return 0;
+}`,
           code: `#include <iostream>
 using namespace std;
 int main() {

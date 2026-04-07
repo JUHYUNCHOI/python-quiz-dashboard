@@ -469,5 +469,440 @@ int main() {
 }`,
       solutionExplanation: "마감이 빠른 작업 우선 처리(EDF: Earliest Deadline First)가 최적입니다. 마감 기한 순으로 정렬 후 순서대로 시도하며, 마감 내에 완료 가능한 작업만 선택합니다.",
     },
+    {
+      id: "sq-009",
+      cluster: "stackqueue",
+      unlockAfter: "cpp-18",
+      difficulty: "쉬움",
+      title: "덱으로 앞뒤 추가/삭제",
+      description: `명령어를 처리하여 덱(deque)을 조작하세요.
+- "PF x": 덱 앞에 x를 추가 (push_front)
+- "PB x": 덱 뒤에 x를 추가 (push_back)
+- "DF": 덱 앞에서 제거 (pop_front)
+- "DB": 덱 뒤에서 제거 (pop_back)
+- "END": 종료
+모든 명령 처리 후 덱 내용을 앞에서부터 공백으로 구분하여 출력하세요.`,
+      constraints: "1 ≤ 명령 수 ≤ 30, -1000 ≤ x ≤ 1000, 제거 시 덱이 비어있지 않음을 보장",
+      initialCode: `#include <iostream>
+#include <deque>
+#include <string>
+using namespace std;
+
+int main() {
+    deque<int> dq;
+    string cmd;
+    while (cin >> cmd && cmd != "END") {
+        // 여기에 코드를 작성하세요
+    }
+    // 덱 내용 출력
+    return 0;
+}`,
+      testCases: [
+        {
+          stdin: "PF 1\nPB 2\nPF 3\nEND",
+          expectedOutput: "3 1 2",
+        },
+        {
+          stdin: "PB 10\nPB 20\nPB 30\nDF\nEND",
+          expectedOutput: "20 30",
+        },
+        {
+          stdin: "PF 5\nPF 4\nPF 3\nDB\nEND",
+          expectedOutput: "3 4",
+        },
+        {
+          stdin: "PB 1\nPB 2\nPB 3\nDF\nDB\nEND",
+          expectedOutput: "2",
+        },
+      ],
+      hints: [
+        "#include <deque>. push_front(), push_back(), pop_front(), pop_back() 를 사용합니다.",
+        "명령어 'PF'와 'PB'는 숫자 인수 유무로 구분합니다. 'DF'와 'DB'는 인수가 없습니다.",
+      ],
+      solutionCode: `#include <iostream>
+#include <deque>
+#include <string>
+using namespace std;
+
+int main() {
+    deque<int> dq;
+    string cmd;
+    while (cin >> cmd && cmd != "END") {
+        if (cmd == "PF") {
+            int x; cin >> x;
+            dq.push_front(x);
+        } else if (cmd == "PB") {
+            int x; cin >> x;
+            dq.push_back(x);
+        } else if (cmd == "DF") {
+            dq.pop_front();
+        } else if (cmd == "DB") {
+            dq.pop_back();
+        }
+    }
+    for (int i = 0; i < (int)dq.size(); i++) {
+        if (i > 0) cout << " ";
+        cout << dq[i];
+    }
+    cout << "\\n";
+    return 0;
+}`,
+      solutionExplanation: "deque는 앞뒤 모두 O(1) 삽입/삭제가 가능합니다. push_front/push_back으로 추가하고 pop_front/pop_back으로 제거합니다. 인덱스로도 접근 가능합니다.",
+    },
+    {
+      id: "sq-010",
+      cluster: "stackqueue",
+      unlockAfter: "cpp-18",
+      difficulty: "쉬움",
+      title: "스택으로 문자열 뒤집기",
+      description: `문자열을 입력받아 스택을 이용해 역순으로 출력하세요.`,
+      constraints: "1 ≤ 문자열 길이 ≤ 1000, 영문자와 숫자로만 구성",
+      initialCode: `#include <iostream>
+#include <stack>
+#include <string>
+using namespace std;
+
+int main() {
+    string s;
+    cin >> s;
+    stack<char> st;
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+      testCases: [
+        {
+          stdin: "hello",
+          expectedOutput: "olleh",
+        },
+        {
+          stdin: "12345",
+          expectedOutput: "54321",
+        },
+        {
+          stdin: "a",
+          expectedOutput: "a",
+        },
+        {
+          stdin: "abcde",
+          expectedOutput: "edcba",
+        },
+      ],
+      hints: [
+        "문자열의 각 문자를 스택에 push합니다.",
+        "스택에서 하나씩 pop하면 역순으로 나옵니다 (LIFO).",
+      ],
+      solutionCode: `#include <iostream>
+#include <stack>
+#include <string>
+using namespace std;
+
+int main() {
+    string s;
+    cin >> s;
+    stack<char> st;
+    for (char c : s) st.push(c);
+    while (!st.empty()) {
+        cout << st.top();
+        st.pop();
+    }
+    cout << "\\n";
+    return 0;
+}`,
+      solutionExplanation: "스택 LIFO 특성을 활용합니다. 문자를 순서대로 push하면 pop 시 역순으로 나옵니다. 문자열을 직접 뒤집는 것보다 스택 사용 원리를 익히는 것이 목적입니다.",
+    },
+    {
+      id: "sq-011",
+      cluster: "stackqueue",
+      unlockAfter: "cpp-18",
+      difficulty: "보통",
+      title: "카드 뒤집기",
+      description: `1부터 N까지 번호가 붙은 N장의 카드를 덱에 순서대로 넣습니다 (1이 앞).
+다음 동작을 덱이 빌 때까지 반복합니다:
+1. 덱 앞 카드를 버립니다.
+2. 덱이 비어있지 않으면, 덱 앞 카드를 덱 뒤로 이동합니다.
+남은 카드들을 버려진 순서대로 출력하세요.`,
+      constraints: "1 ≤ N ≤ 100",
+      initialCode: `#include <iostream>
+#include <deque>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    deque<int> dq;
+    for (int i = 1; i <= n; i++) dq.push_back(i);
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+      testCases: [
+        {
+          stdin: "4",
+          expectedOutput: "1 3 2 4",
+        },
+        {
+          stdin: "6",
+          expectedOutput: "1 3 5 2 6 4",
+        },
+        {
+          stdin: "1",
+          expectedOutput: "1",
+        },
+        {
+          stdin: "5",
+          expectedOutput: "1 3 5 4 2",
+        },
+      ],
+      hints: [
+        "덱 앞에서 pop_front()로 카드를 꺼냅니다. 버린 카드는 출력합니다.",
+        "다음 카드는 pop_front() 후 push_back()으로 덱 뒤로 이동합니다.",
+      ],
+      solutionCode: `#include <iostream>
+#include <deque>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    deque<int> dq;
+    for (int i = 1; i <= n; i++) dq.push_back(i);
+    bool first = true;
+    while (!dq.empty()) {
+        if (!first) cout << " ";
+        cout << dq.front();
+        dq.pop_front();
+        first = false;
+        if (!dq.empty()) {
+            dq.push_back(dq.front());
+            dq.pop_front();
+        }
+    }
+    cout << "\\n";
+    return 0;
+}`,
+      solutionExplanation: "덱 시뮬레이션: 앞 카드를 버리고(pop_front + 출력), 다음 앞 카드를 뒤로 보냅니다(pop_front + push_back). deque의 앞뒤 O(1) 연산이 핵심입니다.",
+    },
+    {
+      id: "sq-012",
+      cluster: "stackqueue",
+      unlockAfter: "cpp-18",
+      difficulty: "보통",
+      title: "최솟값 스택",
+      description: `push, pop, min 연산을 지원하는 스택을 구현하세요.
+- "PUSH x": x를 스택에 push
+- "POP": 스택 top을 제거
+- "MIN": 현재 스택의 최솟값을 출력
+- "END": 종료
+각 MIN 호출 결과를 출력하세요.`,
+      constraints: "1 ≤ 연산 수 ≤ 1000, -10000 ≤ x ≤ 10000, POP/MIN 시 스택이 비어있지 않음을 보장",
+      initialCode: `#include <iostream>
+#include <stack>
+#include <string>
+using namespace std;
+
+int main() {
+    stack<int> st;
+    stack<int> minSt;  // 보조 스택: 최솟값 추적
+    string cmd;
+    while (cin >> cmd && cmd != "END") {
+        // 여기에 코드를 작성하세요
+    }
+    return 0;
+}`,
+      testCases: [
+        {
+          stdin: "PUSH 3\nPUSH 1\nMIN\nPUSH 2\nMIN\nPOP\nMIN\nEND",
+          expectedOutput: "1\n1\n1",
+        },
+        {
+          stdin: "PUSH 5\nPUSH 3\nPUSH 7\nMIN\nPOP\nMIN\nPOP\nMIN\nEND",
+          expectedOutput: "3\n3\n5",
+        },
+        {
+          stdin: "PUSH 1\nMIN\nPUSH 2\nMIN\nEND",
+          expectedOutput: "1\n1",
+        },
+      ],
+      hints: [
+        "보조 스택(minSt)을 사용합니다. push 시 현재 최솟값을 minSt에도 push합니다.",
+        "pop 시 minSt도 함께 pop합니다. minSt.top()이 항상 현재 스택의 최솟값입니다.",
+      ],
+      solutionCode: `#include <iostream>
+#include <stack>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    stack<int> st;
+    stack<int> minSt;
+    string cmd;
+    while (cin >> cmd && cmd != "END") {
+        if (cmd == "PUSH") {
+            int x; cin >> x;
+            st.push(x);
+            if (minSt.empty()) minSt.push(x);
+            else minSt.push(min(x, minSt.top()));
+        } else if (cmd == "POP") {
+            st.pop();
+            minSt.pop();
+        } else if (cmd == "MIN") {
+            cout << minSt.top() << "\\n";
+        }
+    }
+    return 0;
+}`,
+      solutionExplanation: "보조 스택(minSt)에 push 시점의 최솟값을 함께 저장합니다. minSt[i]는 메인 스택 i번째까지의 최솟값입니다. pop 시 두 스택 모두 pop하면 항상 O(1)에 최솟값을 조회할 수 있습니다.",
+    },
+    {
+      id: "sq-013",
+      cluster: "stackqueue",
+      unlockAfter: "cpp-18",
+      difficulty: "어려움",
+      title: "중앙값 스트림",
+      description: `N개의 숫자가 하나씩 들어올 때, 각 숫자를 추가한 후 현재까지의 중앙값을 출력하세요.
+중앙값: 정렬 시 가운데 값. 원소가 짝수 개이면 두 중간값 중 작은 값을 출력합니다.`,
+      constraints: "1 ≤ N ≤ 1000, -10000 ≤ 각 정수 ≤ 10000",
+      initialCode: `#include <iostream>
+#include <queue>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    // 최대힙: 중앙값 이하의 수들
+    priority_queue<int> lower;
+    // 최소힙: 중앙값 초과의 수들
+    priority_queue<int, vector<int>, greater<int>> upper;
+    for (int i = 0; i < n; i++) {
+        int x;
+        cin >> x;
+        // 여기에 코드를 작성하세요
+    }
+    return 0;
+}`,
+      testCases: [
+        {
+          stdin: "5\n1 3 5 2 4",
+          expectedOutput: "1\n1\n3\n2\n3",
+        },
+        {
+          stdin: "4\n5 1 3 2",
+          expectedOutput: "5\n1\n3\n2",
+        },
+        {
+          stdin: "3\n10 5 8",
+          expectedOutput: "10\n5\n8",
+        },
+      ],
+      hints: [
+        "두 힙을 유지합니다: lower(최대힙)에는 중앙값 이하, upper(최소힙)에는 중앙값 초과 수를 저장합니다.",
+        "두 힙의 크기를 |lower.size() - upper.size()| ≤ 1 로 유지하면, lower.top()이 중앙값입니다.",
+      ],
+      solutionCode: `#include <iostream>
+#include <queue>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    priority_queue<int> lower;
+    priority_queue<int, vector<int>, greater<int>> upper;
+    for (int i = 0; i < n; i++) {
+        int x;
+        cin >> x;
+        // lower에 넣거나 upper에 넣기
+        if (lower.empty() || x <= lower.top()) lower.push(x);
+        else upper.push(x);
+        // 균형 맞추기: lower가 upper보다 최대 1 더 크게
+        if (lower.size() > upper.size() + 1) {
+            upper.push(lower.top());
+            lower.pop();
+        } else if (upper.size() > lower.size()) {
+            lower.push(upper.top());
+            upper.pop();
+        }
+        cout << lower.top() << "\\n";
+    }
+    return 0;
+}`,
+      solutionExplanation: "두 힙으로 스트리밍 중앙값을 O(log N)에 유지합니다. lower(최대힙)는 중앙값 포함 작은 절반, upper(최소힙)는 큰 절반입니다. lower.size() = upper.size()+1 또는 동일하게 유지하면 lower.top()이 중앙값입니다.",
+    },
+    {
+      id: "sq-014",
+      cluster: "stackqueue",
+      unlockAfter: "cpp-18",
+      difficulty: "어려움",
+      title: "슬라이딩 윈도우 최대값",
+      description: `N개의 정수와 윈도우 크기 K가 주어질 때, 크기 K인 윈도우가 슬라이딩하면서 각 위치에서의 최대값을 출력하세요.
+윈도우는 [0..K-1], [1..K], [2..K+1], ... 순으로 이동합니다.`,
+      constraints: "1 ≤ K ≤ N ≤ 100000, -10000 ≤ 각 정수 ≤ 10000",
+      initialCode: `#include <iostream>
+#include <deque>
+#include <vector>
+using namespace std;
+
+int main() {
+    int n, k;
+    cin >> n >> k;
+    vector<int> a(n);
+    for (int i = 0; i < n; i++) cin >> a[i];
+    deque<int> dq;  // 인덱스를 저장 (단조 감소 덱)
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+      testCases: [
+        {
+          stdin: "8 3\n1 3 -1 -3 5 3 6 7",
+          expectedOutput: "3 3 5 5 6 7",
+        },
+        {
+          stdin: "5 2\n4 3 2 1 5",
+          expectedOutput: "4 3 2 5",
+        },
+        {
+          stdin: "4 1\n2 1 4 3",
+          expectedOutput: "2 1 4 3",
+        },
+        {
+          stdin: "3 3\n1 2 3",
+          expectedOutput: "3",
+        },
+      ],
+      hints: [
+        "단조 감소 덱(monotone deque)을 사용합니다: 덱 앞이 현재 윈도우의 최대값 인덱스.",
+        "새 원소 추가 시 덱 뒤에서 새 원소보다 작거나 같은 인덱스를 pop_back합니다. 윈도우를 벗어난 인덱스는 앞에서 pop_front합니다.",
+      ],
+      solutionCode: `#include <iostream>
+#include <deque>
+#include <vector>
+using namespace std;
+
+int main() {
+    int n, k;
+    cin >> n >> k;
+    vector<int> a(n);
+    for (int i = 0; i < n; i++) cin >> a[i];
+    deque<int> dq;  // 인덱스 저장
+    bool first = true;
+    for (int i = 0; i < n; i++) {
+        // 윈도우를 벗어난 인덱스 제거
+        while (!dq.empty() && dq.front() < i - k + 1)
+            dq.pop_front();
+        // 새 원소보다 작은 뒤쪽 인덱스 제거
+        while (!dq.empty() && a[dq.back()] <= a[i])
+            dq.pop_back();
+        dq.push_back(i);
+        // 윈도우가 완성된 시점부터 출력
+        if (i >= k - 1) {
+            if (!first) cout << " ";
+            cout << a[dq.front()];
+            first = false;
+        }
+    }
+    cout << "\\n";
+    return 0;
+}`,
+      solutionExplanation: "단조 감소 덱 패턴: 덱은 항상 현재 윈도우 내에서 감소하는 순서의 인덱스를 유지합니다. 덱 front가 윈도우 최대값 인덱스이므로 O(N) 전체 풀이입니다.",
+    },
   ],
 }

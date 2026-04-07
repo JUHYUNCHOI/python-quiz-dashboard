@@ -93,6 +93,7 @@ interface CppRunnerProps {
   lessonId?: string
   stepId?: string
   stepTitle?: string
+  userId?: string
   // 완료 후 Run 버튼 숨기기
   isCompleted?: boolean
 }
@@ -131,9 +132,11 @@ export function CppRunner({
   lessonId,
   stepId,
   stepTitle,
+  userId,
   isCompleted = false,
 }: CppRunnerProps) {
-  const storageKey = stepId ? `cpp-runner-${lessonId ?? "x"}-${stepId}` : null
+  // userId 포함 → 사용자별 독립 저장 (선생님 코드가 학생에게 보이는 문제 방지)
+  const storageKey = stepId ? `cpp-runner-${userId ?? "anon"}-${lessonId ?? "x"}-${stepId}` : null
 
   const [code, setCode] = useState(() => {
     if (!storageKey || typeof window === "undefined") return initialCode
@@ -417,9 +420,9 @@ export function CppRunner({
         </div>
       </div>
 
-      {/* 버튼 — 완료된 스텝은 숨김 */}
-      {!isCompleted && (
-        <div className="flex gap-2">
+      {/* 버튼 */}
+      <div className="flex gap-2">
+        {!isCompleted && (
           <button
             onClick={runCode}
             disabled={!code.trim() || isLoading}
@@ -435,15 +438,15 @@ export function CppRunner({
               : <><Play className="w-4 h-4" />{isEn ? "▶ Run & Save" : "▶ 실행 및 저장"}</>
             }
           </button>
-          <button
-            onClick={reset}
-            title={isEn ? "Reset" : "초기화"}
-            className="px-4 py-2.5 rounded-xl font-bold transition-all bg-gray-200 hover:bg-gray-300 text-gray-700"
-          >
-            <RotateCcw className="w-4 h-4" />
-          </button>
-        </div>
-      )}
+        )}
+        <button
+          onClick={reset}
+          title={isEn ? "Reset" : "초기화"}
+          className="px-4 py-2.5 rounded-xl font-bold transition-all bg-gray-200 hover:bg-gray-300 text-gray-700"
+        >
+          <RotateCcw className="w-4 h-4" />
+        </button>
+      </div>
 
       {/* 실행 결과 */}
       {(output || error) && (

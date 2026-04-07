@@ -16,10 +16,12 @@ interface StepRendererProps {
   lang: "ko" | "en"
   isCompleted: boolean
   lessonId?: string
+  userId?: string
   // tryit/mission
   hintLevel: number
   onHintLevelChange: (level: number) => void
   onSuccess: () => void
+  onUnlock?: () => void  // practice 3회 실패 시 XP 없이 다음만 활성화
   // quiz + predict
   selectedAnswer: number | null
   showExplanation: boolean
@@ -33,8 +35,8 @@ interface StepRendererProps {
 }
 
 export function StepRenderer({
-  step, lang, isCompleted, lessonId,
-  hintLevel, onHintLevelChange, onSuccess,
+  step, lang, isCompleted, lessonId, userId,
+  hintLevel, onHintLevelChange, onSuccess, onUnlock,
   selectedAnswer, showExplanation, quizAttempts, onQuizAnswer, onQuizAcknowledge,
   onStepComplete, onStepAcknowledge, showNextOnCorrect
 }: StepRendererProps) {
@@ -99,7 +101,7 @@ export function StepRenderer({
       return <AnimationStep step={step} />
 
     case "practice":
-      return <PracticeStep step={step} lang={lang} onSuccess={onSuccess} lessonId={lessonId} isCompleted={isCompleted} />
+      return <PracticeStep step={step} lang={lang} onSuccess={onSuccess} onUnlock={onUnlock} lessonId={lessonId} userId={userId} isCompleted={isCompleted} />
 
     case "coding":
       return (

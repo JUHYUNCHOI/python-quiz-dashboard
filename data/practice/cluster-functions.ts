@@ -547,5 +547,245 @@ int main() {
 }`,
       solutionExplanation: "재귀와 반복문은 많은 경우 교환 가능합니다. 재귀는 '더 작은 문제로 쪼개기', 반복은 '쌓아가기'로 표현 방식이 다릅니다. 두 결과를 비교해 정확성을 검증합니다.",
     },
+    {
+      id: "fn-011",
+      cluster: "functions",
+      unlockAfter: "cpp-8",
+      difficulty: "쉬움",
+      title: "세 수 중 최솟값",
+      description: `세 정수 a, b, c 중 가장 작은 값을 반환하는 함수 minOfThree를 작성하세요. 세 정수가 주어질 때 최솟값을 출력하세요.`,
+      constraints: "-1000 ≤ a, b, c ≤ 1000",
+      initialCode: `#include <iostream>
+using namespace std;
+
+// minOfThree 함수를 여기에 작성하세요
+
+int main() {
+    int a, b, c;
+    cin >> a >> b >> c;
+    cout << minOfThree(a, b, c) << "\\n";
+    return 0;
+}`,
+      testCases: [
+        { stdin: "3 1 2", expectedOutput: "1", label: "기본" },
+        { stdin: "5 5 5", expectedOutput: "5", label: "모두 같은 수" },
+        { stdin: "-1 0 1", expectedOutput: "-1", label: "음수 포함" },
+      ],
+      hints: [
+        "먼저 a와 b를 비교해 더 작은 값을 구한 뒤, 그 결과와 c를 비교하세요.",
+        "int minOfThree(int a, int b, int c) { return (a < b ? a : b) < c ? (a < b ? a : b) : c; }",
+      ],
+      solutionCode: `#include <iostream>
+using namespace std;
+
+int minOfThree(int a, int b, int c) {
+    int m = a < b ? a : b;
+    return m < c ? m : c;
+}
+
+int main() {
+    int a, b, c;
+    cin >> a >> b >> c;
+    cout << minOfThree(a, b, c) << "\\n";
+    return 0;
+}`,
+      solutionExplanation: "두 값을 비교하는 연산을 두 번 적용합니다. 먼저 a와 b 중 작은 값을 m에 저장하고, m과 c를 비교합니다. 이 패턴은 여러 값의 최솟값을 구할 때 반복적으로 사용됩니다.",
+    },
+    {
+      id: "fn-012",
+      cluster: "functions",
+      unlockAfter: "cpp-8",
+      difficulty: "쉬움",
+      title: "문자열 반복 출력",
+      description: `문자열 s와 정수 n을 받아 s를 n번 줄바꿈 없이 연속으로 출력하는 함수 printRepeat를 작성하세요.
+
+입력: 문자열 s와 정수 n (공백으로 구분)`,
+      constraints: "1 ≤ n ≤ 10, 1 ≤ s의 길이 ≤ 10",
+      initialCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+// printRepeat 함수를 여기에 작성하세요
+
+int main() {
+    string s;
+    int n;
+    cin >> s >> n;
+    printRepeat(s, n);
+    cout << "\\n";
+    return 0;
+}`,
+      testCases: [
+        { stdin: "ab 3", expectedOutput: "ababab", label: "기본" },
+        { stdin: "hi 1", expectedOutput: "hi", label: "1번" },
+        { stdin: "x 5", expectedOutput: "xxxxx", label: "단일 문자" },
+      ],
+      hints: [
+        "void 함수는 return 값 없이 출력만 수행합니다.",
+        "for 루프로 n번 반복해 cout << s를 호출하세요.",
+      ],
+      solutionCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+void printRepeat(string s, int n) {
+    for (int i = 0; i < n; i++) {
+        cout << s;
+    }
+}
+
+int main() {
+    string s;
+    int n;
+    cin >> s >> n;
+    printRepeat(s, n);
+    cout << "\\n";
+    return 0;
+}`,
+      solutionExplanation: "void 함수는 반환값 없이 부수 효과(출력)만 수행합니다. main에서 줄바꿈을 처리하면 함수 내부를 단순하게 유지할 수 있습니다.",
+    },
+    {
+      id: "fn-013",
+      cluster: "functions",
+      unlockAfter: "cpp-8",
+      difficulty: "보통",
+      title: "배수 개수 세기",
+      description: `1부터 limit까지의 정수 중 n의 배수 개수를 반환하는 함수 countMultiples(int n, int limit)를 작성하세요.
+
+두 정수 n과 limit이 주어질 때 결과를 출력하세요.`,
+      constraints: "1 ≤ n ≤ limit ≤ 10000",
+      initialCode: `#include <iostream>
+using namespace std;
+
+// countMultiples 함수를 여기에 작성하세요
+
+int main() {
+    int n, limit;
+    cin >> n >> limit;
+    cout << countMultiples(n, limit) << "\\n";
+    return 0;
+}`,
+      testCases: [
+        { stdin: "3 10", expectedOutput: "3", label: "3의 배수 (3,6,9)" },
+        { stdin: "5 20", expectedOutput: "4", label: "5의 배수" },
+        { stdin: "7 7", expectedOutput: "1", label: "limit=n" },
+      ],
+      hints: [
+        "for 루프로 i = n, 2n, 3n, ... <= limit 까지 세거나",
+        "더 간단하게: return limit / n; 으로 정수 나눗셈만으로 구할 수 있어요.",
+      ],
+      solutionCode: `#include <iostream>
+using namespace std;
+
+int countMultiples(int n, int limit) {
+    return limit / n;
+}
+
+int main() {
+    int n, limit;
+    cin >> n >> limit;
+    cout << countMultiples(n, limit) << "\\n";
+    return 0;
+}`,
+      solutionExplanation: "1부터 limit까지 n의 배수 개수는 limit / n (정수 나눗셈)과 동일합니다. for 루프보다 O(1)로 훨씬 효율적입니다. 수학적 통찰로 코드를 단순화하는 좋은 예입니다.",
+    },
+    {
+      id: "fn-014",
+      cluster: "functions",
+      unlockAfter: "cpp-8",
+      difficulty: "보통",
+      title: "거듭제곱 함수 (재귀)",
+      description: `base의 exp 거듭제곱을 재귀로 계산하는 함수 power(int base, int exp)를 작성하세요.
+
+- 기저 조건: exp == 0이면 1을 반환
+- 재귀 호출: base * power(base, exp - 1)
+
+두 정수 base와 exp가 주어질 때 결과를 출력하세요.`,
+      constraints: "0 ≤ base ≤ 10, 0 ≤ exp ≤ 10",
+      initialCode: `#include <iostream>
+using namespace std;
+
+// power 재귀 함수를 여기에 작성하세요
+
+int main() {
+    int base, exp;
+    cin >> base >> exp;
+    cout << power(base, exp) << "\\n";
+    return 0;
+}`,
+      testCases: [
+        { stdin: "2 10", expectedOutput: "1024", label: "2의 10승" },
+        { stdin: "3 5", expectedOutput: "243", label: "3의 5승" },
+        { stdin: "5 0", expectedOutput: "1", label: "0승은 항상 1" },
+      ],
+      hints: [
+        "기저 조건: if (exp == 0) return 1;",
+        "재귀 호출: return base * power(base, exp - 1);",
+      ],
+      solutionCode: `#include <iostream>
+using namespace std;
+
+long long power(int base, int exp) {
+    if (exp == 0) return 1;
+    return base * power(base, exp - 1);
+}
+
+int main() {
+    int base, exp;
+    cin >> base >> exp;
+    cout << power(base, exp) << "\\n";
+    return 0;
+}`,
+      solutionExplanation: "재귀의 핵심: 'base^exp = base × base^(exp-1)'이라는 수학적 정의를 그대로 코드로 표현합니다. exp가 0에 도달하면 1을 반환해 재귀를 종료합니다. long long을 사용해 큰 값의 오버플로우를 방지합니다.",
+    },
+    {
+      id: "fn-015",
+      cluster: "functions",
+      unlockAfter: "cpp-8",
+      difficulty: "어려움",
+      title: "소수의 합",
+      description: `정수 N이 소수인지 판별하는 함수 isPrime을 작성한 뒤, 2부터 N까지의 소수를 모두 더한 합을 출력하세요.`,
+      constraints: "2 ≤ N ≤ 1000",
+      initialCode: `#include <iostream>
+using namespace std;
+
+// isPrime 함수를 여기에 작성하세요
+
+int main() {
+    int n;
+    cin >> n;
+    // 2부터 n까지 isPrime을 호출해 소수의 합을 구하세요
+    return 0;
+}`,
+      testCases: [
+        { stdin: "10", expectedOutput: "17", label: "2+3+5+7=17" },
+        { stdin: "20", expectedOutput: "77", label: "N=20" },
+        { stdin: "2", expectedOutput: "2", label: "N=2 (소수 하나)" },
+      ],
+      hints: [
+        "isPrime(n): 2부터 sqrt(n)까지 나누어 보세요. i*i <= n 조건 활용.",
+        "main에서 for 루프로 2부터 n까지 순회하며 isPrime이 true인 경우 합산하세요.",
+      ],
+      solutionCode: `#include <iostream>
+using namespace std;
+
+bool isPrime(int n) {
+    if (n < 2) return false;
+    for (int i = 2; i * i <= n; i++)
+        if (n % i == 0) return false;
+    return true;
+}
+
+int main() {
+    int n;
+    cin >> n;
+    int sum = 0;
+    for (int i = 2; i <= n; i++)
+        if (isPrime(i)) sum += i;
+    cout << sum << "\\n";
+    return 0;
+}`,
+      solutionExplanation: "isPrime 함수를 먼저 만들고, main에서 반복 호출하는 '함수 재사용' 패턴입니다. i*i <= n 조건으로 O(sqrt(n)) 시간에 소수를 판별합니다. 함수를 잘 분리하면 main 로직이 단순해집니다.",
+    },
   ],
 }
