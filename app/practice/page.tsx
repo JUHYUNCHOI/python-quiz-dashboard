@@ -6,10 +6,12 @@ import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { RequireAuth } from "@/components/require-auth"
 import { PracticeRunner } from "@/components/practice/practice-runner"
+import { McqRunner } from "@/components/practice/mcq-runner"
+import { PracticeSession } from "@/components/practice/practice-session"
 import { ALL_CLUSTERS } from "@/data/practice"
 import type { PracticeCluster, PracticeProblem } from "@/data/practice/types"
 import { usePracticeProgress } from "@/hooks/use-practice-progress"
-import { ArrowLeft, Lock, CheckCircle2, Star, FileText, Code2 } from "lucide-react"
+import { ArrowLeft, Lock, CheckCircle2, Star, FileText, Code2, HelpCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 type Lang = "cpp" | "python"
@@ -138,26 +140,40 @@ function ProblemList({
   cluster,
   onBack,
   onSelect,
+  onStartSession,
   solvedSet,
   starredSet,
 }: {
   cluster: PracticeCluster
   onBack: () => void
   onSelect: (problem: PracticeProblem) => void
+  onStartSession: () => void
   solvedSet: Set<string>
   starredSet: Set<string>
 }) {
+  const solvedCount = cluster.problems.filter(p => solvedSet.has(p.id)).length
+  const isAllMcq = cluster.problems.every(p => p.type === "mcq")
+
   return (
     <div className="flex flex-col gap-4 pb-24">
       <div className="flex items-center gap-3 mb-2">
         <button onClick={onBack} className="p-2 rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors">
           <ArrowLeft className="w-4 h-4 text-gray-600" />
         </button>
-        <div>
+        <div className="flex-1 min-w-0">
           <h1 className="text-xl font-bold text-gray-900">{cluster.emoji} {cluster.title}</h1>
-          <p className="text-gray-400 text-xs">{cluster.problems.length}문제</p>
+          <p className="text-gray-400 text-xs">{solvedCount}/{cluster.problems.length}문제 완료</p>
         </div>
       </div>
+
+      {/* 연속 풀기 버튼 */}
+      <button
+        onClick={onStartSession}
+        className="w-full py-3.5 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm transition-all shadow-sm flex items-center justify-center gap-2"
+      >
+        ▶ {isAllMcq ? "연속으로 풀기" : "순서대로 풀기"}
+        <span className="text-indigo-200 font-normal text-xs">({cluster.problems.length}문제 고정 순서)</span>
+      </button>
       {cluster.problems.map((problem, i) => {
         const solved = solvedSet.has(problem.id)
         const starred = starredSet.has(problem.id)
@@ -209,7 +225,7 @@ function ProblemPanel({ problem }: { problem: PracticeProblem }) {
       {/* 예제 */}
       <div className="flex flex-col gap-2">
         <p className="text-xs text-gray-400 font-semibold uppercase tracking-wide">예제</p>
-        {problem.testCases.slice(0, 2).map((tc, i) => (
+        {(problem.testCases ?? []).slice(0, 2).map((tc, i) => (
           <div key={i} className="rounded-xl bg-white border border-gray-200 shadow-sm p-3 text-xs font-mono">
             {tc.label && <p className="text-gray-400 mb-2">{tc.label}</p>}
             <div className="flex flex-col gap-1">
@@ -242,12 +258,41 @@ function ProblemDetail({
   onMarkStarred: (problemId: string) => Promise<void>
 }) {
   const [tab, setTab] = useState<"problem" | "code">("problem")
+  const isMcq = problem.type === "mcq"
 
   const handleSuccess = async (starred: boolean) => {
     await onMarkSolved(problem.id)
     if (starred) await onMarkStarred(problem.id)
   }
 
+  // ── MCQ: 단일 컬럼 레이아웃 ──
+  if (isMcq) {
+    return (
+      <div className="pb-24 md:pb-6">
+        {/* 헤더 행 */}
+        <div className="flex items-center gap-3 mb-4">
+          <button
+            onClick={onBack}
+            className="p-2 rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors shrink-0"
+          >
+            <ArrowLeft className="w-4 h-4 text-gray-600" />
+          </button>
+          <div className="flex items-center gap-2 min-w-0">
+            <HelpCircle className="w-4 h-4 text-indigo-400 shrink-0" />
+            <h1 className="text-base font-bold text-gray-900 truncate">{problem.title}</h1>
+            <span className={cn("text-xs px-2 py-0.5 rounded-full font-medium shrink-0", DIFFICULTY_COLOR[problem.difficulty])}>
+              {problem.difficulty}
+            </span>
+          </div>
+        </div>
+        <div className="max-w-xl">
+          <McqRunner problem={problem} onSuccess={handleSuccess} />
+        </div>
+      </div>
+    )
+  }
+
+  // ── 코드 문제: 기존 2열 레이아웃 ──
   return (
     <div className="pb-24 md:pb-6">
       {/* 헤더 행 */}
@@ -347,6 +392,36 @@ function PracticeContent() {
 
   const cluster = ALL_CLUSTERS.find(c => c.id === clusterId)
   const problem = cluster?.problems.find(p => p.id === problemId)
+  const sessionMode = searchParams.get("session") === "1"
+
+  const handleClusterBack = () => {
+    if (fromParam === "lesson" || fromParam === "curriculum") {
+      router.back()
+    } else {
+      setParam("cluster", null)
+    }
+  }
+
+  // cluster가 URL에 있지만 session 없으면 → 자동으로 세션 모드 진입
+  if (cluster && !sessionMode && !problem) {
+    const p = new URLSearchParams(searchParams.toString())
+    p.set("session", "1")
+    router.replace(`/practice?${p.toString()}`)
+    return null
+  }
+
+  // 세션 모드: 클러스터 내 문제를 연속으로 풀기
+  if (sessionMode && cluster) {
+    return (
+      <PracticeSession
+        cluster={cluster}
+        solvedSet={solvedSet}
+        onExit={handleClusterBack}
+        onMarkSolved={markSolved}
+        onMarkStarred={markStarred}
+      />
+    )
+  }
 
   if (problem && cluster) {
     return (
@@ -361,27 +436,23 @@ function PracticeContent() {
     )
   }
 
-  // 클러스터 목록에서 뒤로 가기: lesson에서 왔으면 커리큘럼으로, 아니면 클러스터 목록으로
-  const handleClusterBack = () => {
-    if (fromParam === "lesson" || fromParam === "curriculum") {
-      router.push("/curriculum")
-    } else {
-      setParam("cluster", null)
-    }
-  }
-
   return (
     <main className="max-w-2xl mx-auto px-4 pt-6">
-      {cluster
-        ? <ProblemList
-            cluster={cluster}
-            onBack={handleClusterBack}
-            onSelect={p => setParam("problem", p.id)}
-            solvedSet={solvedSet}
-            starredSet={starredSet}
+      {problem && cluster
+        ? <ProblemDetail
+            problem={problem}
+            onBack={() => setParam("problem", null)}
+            onMarkSolved={markSolved}
+            onMarkStarred={markStarred}
           />
         : <ClusterList
-            onSelect={c => setParam("cluster", c.id)}
+            onSelect={c => {
+              // 클러스터 클릭 → 바로 세션 모드 진입
+              const p = new URLSearchParams(searchParams.toString())
+              p.set("cluster", c.id)
+              p.set("session", "1")
+              router.push(`/practice?${p.toString()}`)
+            }}
             solvedSet={solvedSet}
             starredSet={starredSet}
             lang={lang}
