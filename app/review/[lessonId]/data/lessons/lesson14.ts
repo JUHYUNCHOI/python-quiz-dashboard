@@ -91,6 +91,7 @@ export const lesson14: LessonData = {
     {
       type: "practice",
       content: {
+        level: 3,
         task: "이렇게 나오게 해봐 ↓\n0\n1\n2",
         guide: "while문 전체를 직접 써봐! (i = 0부터 시작)",
         hint: "i = 0\nwhile i < 3:\n    print(i)\n    i += 1",
@@ -168,6 +169,7 @@ export const lesson14: LessonData = {
     {
       type: "practice",
       content: {
+        level: 3,
         task: "이렇게 나오게 해봐 ↓\n5\n4\n3\n2\n1",
         guide: "while 카운트다운 전체를 직접 써봐!",
         template: null,

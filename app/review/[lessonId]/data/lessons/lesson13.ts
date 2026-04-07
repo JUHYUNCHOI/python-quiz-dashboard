@@ -106,6 +106,7 @@ export const lesson13: LessonData = {
     {
       type: "practice",
       content: {
+        level: 3,
         task: "이렇게 나오게 해봐 ↓\n1\n2\n3\n4\n5",
         guide: "for i in range(...): 전체를 직접 써봐!",
         hint: "for i in range(1, 6):\n    print(i)",
@@ -222,6 +223,7 @@ export const lesson13: LessonData = {
     {
       type: "practice",
       content: {
+        level: 3,
         task: "이렇게 나오게 해봐 ↓\n안녕!\n안녕!\n안녕!",
         guide: "for + range(3) 전체를 직접 써봐!",
         template: null,
