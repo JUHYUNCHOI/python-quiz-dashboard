@@ -287,7 +287,6 @@ using namespace std;
 int main() {
     int scores[5];
 
-    cout << "점수 5개를 입력하세요:" << endl;
     for (int i = 0; i < 5; i++) {
         cin >> scores[i];
     }
@@ -307,8 +306,7 @@ int main() {
 78
 96
 88`,
-          expectedOutput: `점수 5개를 입력하세요:
-최고 점수: 96`
+          expectedOutput: `최고 점수: 96`
         },
         {
           id: "ch1-q1",

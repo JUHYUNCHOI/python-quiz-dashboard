@@ -417,9 +417,9 @@ export function CppRunner({
         </div>
       </div>
 
-      {/* 버튼 — 완료된 스텝은 숨김 */}
-      {!isCompleted && (
-        <div className="flex gap-2">
+      {/* 버튼 */}
+      <div className="flex gap-2">
+        {!isCompleted && (
           <button
             onClick={runCode}
             disabled={!code.trim() || isLoading}
@@ -435,15 +435,15 @@ export function CppRunner({
               : <><Play className="w-4 h-4" />{isEn ? "▶ Run & Save" : "▶ 실행 및 저장"}</>
             }
           </button>
-          <button
-            onClick={reset}
-            title={isEn ? "Reset" : "초기화"}
-            className="px-4 py-2.5 rounded-xl font-bold transition-all bg-gray-200 hover:bg-gray-300 text-gray-700"
-          >
-            <RotateCcw className="w-4 h-4" />
-          </button>
-        </div>
-      )}
+        )}
+        <button
+          onClick={reset}
+          title={isEn ? "Reset" : "초기화"}
+          className="px-4 py-2.5 rounded-xl font-bold transition-all bg-gray-200 hover:bg-gray-300 text-gray-700"
+        >
+          <RotateCcw className="w-4 h-4" />
+        </button>
+      </div>
 
       {/* 실행 결과 */}
       {(output || error) && (

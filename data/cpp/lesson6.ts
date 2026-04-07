@@ -271,7 +271,6 @@ using namespace std;
 
 int main() {
     int hp;
-    cout << "HP를 입력하세요: ";
     cin >> hp;
 
     if (hp >= 80) {
@@ -287,7 +286,7 @@ int main() {
     return 0;
 }`,
           stdin: `35`,
-          expectedOutput: `HP를 입력하세요: 위험!`
+          expectedOutput: `위험!`
         }
       ]
     },
