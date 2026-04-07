@@ -266,6 +266,17 @@ if (score >= 90) {
 - 20 미만 → \`쓰러지기 직전!\`
 
 if, else if, else를 순서대로 사용해보세요.`,
+          starterCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int hp;
+    cin >> hp;
+
+    // if, else if, else를 사용해서 작성하세요
+
+    return 0;
+}`,
           code: `#include <iostream>
 using namespace std;
 
@@ -816,6 +827,15 @@ switch (x) { case x > 10: ... }   // 범위 비교 안 됨
 - weapon = 2이면 "활"
 - weapon = 3이면 "마법"
 - 그 외에는 "맨손"`,
+          starterCode: `#include <iostream>
+using namespace std;
+int main() {
+    int weapon = 1;
+
+    // switch 문을 작성하세요
+
+    return 0;
+}`,
           code: `#include <iostream>
 using namespace std;
 int main() {
