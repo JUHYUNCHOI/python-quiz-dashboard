@@ -23,7 +23,7 @@ using namespace std;
 
 int main() {
     int a, b;
-    cin >> a >> b;
+    // cin으로 a, b를 입력받으세요
     // 여기에 코드를 작성하세요
     return 0;
 }`,
@@ -66,7 +66,7 @@ using namespace std;
 
 int main() {
     int a, b, c;
-    cin >> a >> b >> c;
+    // cin으로 a, b, c를 입력받으세요
     // 여기에 코드를 작성하세요
     return 0;
 }`,
@@ -111,7 +111,7 @@ using namespace std;
 int main() {
     string name;
     int age;
-    cin >> name >> age;
+    // cin으로 name, age를 입력받으세요
     // 여기에 코드를 작성하세요
     return 0;
 }`,
@@ -153,7 +153,7 @@ using namespace std;
 
 int main() {
     int w, h;
-    cin >> w >> h;
+    // cin으로 w, h를 입력받으세요
     // 여기에 코드를 작성하세요
     return 0;
 }`,
@@ -193,7 +193,7 @@ using namespace std;
 
 int main() {
     int seconds;
-    cin >> seconds;
+    // cin으로 seconds를 입력받으세요
     // 여기에 코드를 작성하세요
     return 0;
 }`,
@@ -236,8 +236,7 @@ using namespace std;
 int main() {
     int n;
     string line;
-    cin >> n;
-    // cin >> n 이후에 getline으로 문장을 읽어보세요
+    // cin으로 n을 입력받은 뒤, getline으로 문장을 읽어보세요
     return 0;
 }`,
       testCases: [
@@ -283,7 +282,7 @@ using namespace std;
 
 int main() {
     double c;
-    cin >> c;
+    // cin으로 c를 입력받으세요
     // 여기에 코드를 작성하세요
     return 0;
 }`,
@@ -325,7 +324,7 @@ using namespace std;
 
 int main() {
     int price, paid;
-    cin >> price >> paid;
+    // cin으로 price, paid를 입력받으세요
     // 여기에 코드를 작성하세요
     return 0;
 }`,
@@ -372,7 +371,7 @@ using namespace std;
 
 int main() {
     double weight, height;
-    cin >> weight >> height;
+    // cin으로 weight, height를 입력받으세요
     // 여기에 코드를 작성하세요
     return 0;
 }`,
