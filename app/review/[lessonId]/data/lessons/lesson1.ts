@@ -58,150 +58,84 @@ export const lesson1: LessonData = {
         content: {
           num: 2,
           title: "글자 띄우기",
-          desc: "따옴표를 배워보자!"
+          desc: "이렇게 나오게 해봐!"
         }
       },
 
-      // 동기 부여 - 바로 시작!
+      // 핵심 규칙 한 번에
       {
         type: "explain",
         content: {
           lines: [
-            "게임에서 \"Game Over\" 어떻게 보여줄까?",
-            "바로 해보자! 👇"
+            "글자는 따옴표로 감싸야 해",
+            "없으면 에러!"
           ],
-          code: "print('Game Over')",
-          result: "Game Over",
-          note: "print() = 화면에 띄워줘!"
+          code: "print('Game Over')  → Game Over\nprint(Game Over)    → ❌ 에러",
+          note: "' 또는 \" 둘 다 OK. 키보드 Enter 왼쪽!"
         }
       },
 
-      // 따옴표 설명
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "글자는 따옴표로 감싸야 해"
-          ],
-          code: "print('Hello')",
-          result: "Hello",
-          note: "따옴표 = \"이건 글자야!\" 라는 표시"
-        }
-      },
-
-      // 에러 체험 - 오개념 방지
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "따옴표 없으면? 에러!"
-          ],
-          code: "print(Hello)",
-          result: "❌ Error: Hello가 뭐야?",
-          isError: true,
-          note: "따옴표 없으면 컴퓨터가 '이게 뭐지?' 하고 헷갈려해"
-        }
-      },
-
-      // 따옴표 종류 - 둘 다 OK 강조
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "작은따옴표 ' 큰따옴표 \"",
-            "둘 다 OK!"
-          ],
-          code: "print('Hi')  → Hi\nprint(\"Hi\")  → Hi",
-          result: "둘 다 똑같이 나와!",
-          note: "편한 거 쓰면 돼"
-        }
-      },
-
-      // ===== Lv.1: 빈칸만 채우기 =====
+      // ===== 직접 쳐보기 (처음부터 끝까지) =====
       {
         type: "practice",
         content: {
-          level: 1,
-          task: "Hello를 화면에 띄워봐",
-          template: { before: "print('", after: "')" },
-          answer: "Hello",
+          task: "이렇게 나오게 해봐 ↓\nHello",
+          hint: "print('Hello')",
+          template: null,
+          answer: "print('Hello')",
+          alternateAnswers: ["print(\"Hello\")"],
           expect: "Hello"
         }
       },
       {
         type: "practice",
         content: {
-          level: 1,
-          task: "안녕을 화면에 띄워봐",
-          template: { before: "print('", after: "')" },
-          answer: "안녕",
-          expect: "안녕"
+          task: "이렇게 나오게 해봐 ↓\n안녕하세요",
+          hint: "print('안녕하세요')",
+          template: null,
+          answer: "print('안녕하세요')",
+          alternateAnswers: ["print(\"안녕하세요\")"],
+          expect: "안녕하세요"
         }
       },
       {
         type: "practice",
         content: {
-          level: 1,
-          task: "파이썬을 화면에 띄워봐",
-          template: { before: "print('", after: "')" },
-          answer: "파이썬",
-          expect: "파이썬"
-        }
-      },
-
-      // 중간 보상
-      {
-        type: "reward",
-        content: {
-          message: "좋아! 이제 따옴표도 써보자",
-          emoji: "👍"
-        }
-      },
-
-      // ===== Lv.2: 따옴표까지 =====
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "이제 따옴표도 직접 써볼까?"
-          ],
-          code: "print('OK')",
-          result: "OK",
-          note: "' 버튼 → 키보드 Enter 왼쪽!"
+          task: "이렇게 나오게 해봐 ↓\nGame Over",
+          template: null,
+          answer: "print('Game Over')",
+          alternateAnswers: ["print(\"Game Over\")"],
+          expect: "Game Over"
         }
       },
       {
         type: "practice",
         content: {
-          level: 2,
-          task: "Hi를 화면에 띄워봐",
-          guide: "따옴표 포함해서! 'Hi'",
-          template: { before: "print(", after: ")" },
-          answer: "'Hi'",
-          alternateAnswers: ["\"Hi\""],
-          expect: "Hi"
+          task: "이렇게 나오게 해봐 ↓\nLevel Clear!",
+          template: null,
+          answer: "print('Level Clear!')",
+          alternateAnswers: ["print(\"Level Clear!\")"],
+          expect: "Level Clear!"
         }
       },
       {
         type: "practice",
         content: {
-          level: 2,
-          task: "Good을 화면에 띄워봐",
-          template: { before: "print(", after: ")" },
-          answer: "'Good'",
-          alternateAnswers: ["\"Good\""],
-          expect: "Good"
+          task: "이렇게 나오게 해봐 ↓\n비밀번호 맞음",
+          template: null,
+          answer: "print('비밀번호 맞음')",
+          alternateAnswers: ["print(\"비밀번호 맞음\")"],
+          expect: "비밀번호 맞음"
         }
       },
       {
         type: "practice",
         content: {
-          level: 2,
-          task: "코딩을 화면에 띄워봐",
-          template: { before: "print(", after: ")" },
-          answer: "'코딩'",
-          alternateAnswers: ["\"코딩\""],
-          expect: "코딩"
+          task: "이렇게 나오게 해봐 ↓\nPython is fun",
+          template: null,
+          answer: "print('Python is fun')",
+          alternateAnswers: ["print(\"Python is fun\")"],
+          expect: "Python is fun"
         }
       },
 
@@ -217,75 +151,7 @@ export const lesson1: LessonData = {
             "괄호가 없어서"
           ],
           answer: 1,
-          explanation: "글자는 꼭 따옴표로 감싸야 해! print('Hello')"
-        }
-      },
-
-      // ===== Lv.3: 전체 코드 (힌트 있음) =====
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "이제 처음부터 끝까지 써보자!"
-          ],
-          code: "print('Nice')",
-          result: "Nice",
-          note: "print('내용') 형태!"
-        }
-      },
-      {
-        type: "practice",
-        content: {
-          level: 3,
-          task: "Yes를 화면에 띄워봐",
-          hint: "print('Yes')",
-          template: null,
-          answer: "print('Yes')",
-          expect: "Yes"
-        }
-      },
-      {
-        type: "practice",
-        content: {
-          level: 3,
-          task: "Python을 화면에 띄워봐",
-          hint: "print('___')",
-          template: null,
-          answer: "print('Python')",
-          expect: "Python"
-        }
-      },
-
-      // ===== Lv.4: 전체 코드 (힌트 없음) =====
-      {
-        type: "practice",
-        content: {
-          level: 4,
-          task: "Hello World를 화면에 띄워봐",
-          template: null,
-          answer: "print('Hello World')",
-          expect: "Hello World"
-        }
-      },
-      {
-        type: "practice",
-        content: {
-          level: 4,
-          task: "나는 코딩왕을 화면에 띄워봐",
-          template: null,
-          answer: "print('나는 코딩왕')",
-          expect: "나는 코딩왕"
-        }
-      },
-
-      // 퀴즈
-      {
-        type: "quiz",
-        content: {
-          question: "에러 나는 건?",
-          options: ["print('Hi')", "print(Hi)", "print(\"Hi\")"],
-          answer: 1,
-          explanation: "따옴표 없으면 에러! ' 또는 \" 둘 다 OK"
+          explanation: "글자는 꼭 따옴표로 감싸야 해! → print('Hello')"
         }
       },
 
@@ -296,9 +162,9 @@ export const lesson1: LessonData = {
           num: 2,
           title: "글자 띄우기",
           learned: [
-            "print()로 화면에 출력",
             "글자는 따옴표로 감싸기",
-            "' 또는 \" 둘 다 OK"
+            "' 또는 \" 둘 다 OK",
+            "따옴표 없으면 에러!"
           ],
           canDo: "원하는 글자를 화면에 출력할 수 있어!",
           emoji: "🎉"
@@ -778,6 +644,199 @@ export const lesson1: LessonData = {
           ],
           canDo: "실제로 쓸 수 있는 프로그램을 만들 수 있어!",
           emoji: "🏆"
+        }
+      },
+
+      // ==================== CHAPTER 4: 주관식 특훈 ====================
+      {
+        type: "chapter",
+        content: {
+          num: 5,
+          title: "출력 결과 맞추기",
+          desc: "코드를 보고 결과를 예측해보자!"
+        }
+      },
+
+      // 인터리빙
+      {
+        type: "interleaving",
+        content: {
+          message: "프로젝트 기억나지? 쉼표로 연결했었지!",
+          task: "이름: 철수 나이: 13 출력해봐",
+          guide: "쉼표 두 개 써서 3개 연결!",
+          template: null,
+          answer: "print('이름: 철수 나이:', 13)",
+          alternateAnswers: ["print('이름: 철수', '나이:', 13)"],
+          expect: "이름: 철수 나이: 13"
+        }
+      },
+
+      // 따옴표 안팎 설명
+      {
+        type: "explain",
+        content: {
+          lines: [
+            "따옴표 안 vs 밖 — 결과가 달라!"
+          ],
+          code: "print('10 + 20')  → 10 + 20\nprint(10 + 20)   → 30",
+          note: "따옴표 안 = 글자 그대로 / 따옴표 밖 = 계산!"
+        }
+      },
+
+      // ===== 따옴표 안팎 직접 써보기 =====
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "30이 출력되게 해봐 (더하기 계산으로)",
+          guide: "따옴표 없이 10 + 20",
+          template: { before: "print(", after: ")" },
+          answer: "10 + 20",
+          alternateAnswers: ["10+20", "20 + 10", "20+10", "30"],
+          expect: "30"
+        }
+      },
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "10 + 20 이라는 글자가 출력되게 해봐",
+          guide: "따옴표로 감싸야 글자!",
+          template: { before: "print(", after: ")" },
+          answer: "'10 + 20'",
+          alternateAnswers: ["\"10 + 20\""],
+          expect: "10 + 20"
+        }
+      },
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "12가 출력되게 해봐 (곱하기 계산으로)",
+          guide: "* 는 곱하기!",
+          template: { before: "print(", after: ")" },
+          answer: "3 * 4",
+          alternateAnswers: ["3*4", "4 * 3", "4*3", "2 * 6", "2*6", "12"],
+          expect: "12"
+        }
+      },
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "점수: 100 출력해봐 (80 + 20 계산으로)",
+          guide: "print('점수:', 80 + 20)",
+          template: { before: "print(", after: ")" },
+          answer: "'점수:', 80 + 20",
+          alternateAnswers: ["'점수:', 80+20", "\"점수:\", 80 + 20", "\"점수:\", 80+20"],
+          expect: "점수: 100"
+        }
+      },
+
+      // 빈 줄 설명
+      {
+        type: "explain",
+        content: {
+          lines: [
+            "print()만 쓰면 빈 줄이 나와!"
+          ],
+          code: "print('위')\nprint()\nprint('아래')",
+          result: "위\n\n아래",
+          note: "print() 안에 아무것도 안 넣으면 줄만 바꿔줘"
+        }
+      },
+
+      // 빈 줄 직접 써보기
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "아래처럼 출력해봐\n위\n\n아래",
+          hint: "print('위') → print() → print('아래')",
+          template: null,
+          answer: "print('위')\nprint()\nprint('아래')",
+          expect: "위\n\n아래"
+        }
+      },
+
+      // 종합: 여러 줄 출력
+      {
+        type: "practice",
+        content: {
+          level: 4,
+          task: "아래처럼 출력해봐\n===점수===\n국어: 90\n수학: 85",
+          template: null,
+          answer: "print('===점수===')\nprint('국어:', 90)\nprint('수학:', 85)",
+          alternateAnswers: [
+            "print('===점수===')\nprint('국어: 90')\nprint('수학: 85')"
+          ],
+          expect: "===점수===\n국어: 90\n수학: 85"
+        }
+      },
+
+      // 종합: 글자+계산 혼합
+      {
+        type: "practice",
+        content: {
+          level: 4,
+          task: "아래처럼 출력해봐\n치킨: 18000 원\n콜라: 2000 원\n합계: 20000 원",
+          guide: "마지막 줄은 계산식으로! print('합계:', 18000 + 2000, '원')",
+          template: null,
+          answer: "print('치킨:', 18000, '원')\nprint('콜라:', 2000, '원')\nprint('합계:', 18000 + 2000, '원')",
+          alternateAnswers: [
+            "print('치킨: 18000 원')\nprint('콜라: 2000 원')\nprint('합계: 20000 원')"
+          ],
+          expect: "치킨: 18000 원\n콜라: 2000 원\n합계: 20000 원"
+        }
+      },
+
+      // 최종 도전
+      {
+        type: "practice",
+        content: {
+          level: 4,
+          task: "구구단 5단 첫 3줄을 출력해봐\n5 * 1 = 5\n5 * 2 = 10\n5 * 3 = 15",
+          guide: "print('5 * 1 =', 5*1) 형태!",
+          template: null,
+          answer: "print('5 * 1 =', 5*1)\nprint('5 * 2 =', 5*2)\nprint('5 * 3 =', 5*3)",
+          alternateAnswers: [
+            "print('5 * 1 =', 5 * 1)\nprint('5 * 2 =', 5 * 2)\nprint('5 * 3 =', 5 * 3)",
+            "print('5 * 1 = 5')\nprint('5 * 2 = 10')\nprint('5 * 3 = 15')"
+          ],
+          expect: "5 * 1 = 5\n5 * 2 = 10\n5 * 3 = 15"
+        }
+      },
+
+      // 따옴표 안팎 차이 확인 (1개만)
+      {
+        type: "errorQuiz",
+        content: {
+          question: "두 코드의 출력이 왜 다를까?",
+          code: "print('3 + 4')  → 3 + 4\nprint(3 + 4)   → 7",
+          options: [
+            "따옴표 안은 글자 그대로, 밖은 계산한다",
+            "print는 숫자만 계산한다",
+            "두 코드는 같은 결과다"
+          ],
+          answer: 0,
+          explanation: "따옴표 안 = 글자 그대로 출력. 따옴표 밖 = 실제 계산해서 출력!"
+        }
+      },
+
+      // 챕터 4 요약
+      {
+        type: "summary",
+        content: {
+          num: 5,
+          title: "출력 결과 맞추기",
+          learned: [
+            "print()는 빈 줄 출력",
+            "따옴표 안 → 그대로 출력, 따옴표 밖 → 계산",
+            "쉼표 연결 시 자동 공백",
+            "여러 print()로 여러 줄 출력"
+          ],
+          canDo: "코드만 봐도 출력 결과를 예측할 수 있어!",
+          emoji: "🧠"
         }
       },
 

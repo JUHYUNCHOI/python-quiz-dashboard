@@ -56,6 +56,8 @@ import { lessonCpp17 } from './lessonCpp17';
 import { lessonCpp18 } from './lessonCpp18';
 import { lessonCpp19 } from './lessonCpp19';
 import { lessonCpp20 } from './lessonCpp20';
+import { lessonCpp21 } from './lessonCpp21';
+import { lessonCpp22 } from './lessonCpp22';
 import { lessonCppP1 } from './lessonCppP1';
 import { lessonCppP2 } from './lessonCppP2';
 import { lessonCppP3 } from './lessonCppP3';
@@ -120,8 +122,8 @@ export const lessonsData: Record<string, LessonData> = {
   // Part 7: 클래스
   "41": lesson41,
   // C++ 레슨
-  "cpp-21": createDummyLesson("cpp-21", "2차원 배열 & 2D vector"),
-  "cpp-22": createDummyLesson("cpp-22", "클래스 (class)"),
+  "cpp-21": lessonCpp21,
+  "cpp-22": lessonCpp22,
   "cpp-1": lessonCpp1,
   "cpp-2": lessonCpp2,
   "cpp-3": lessonCpp3,

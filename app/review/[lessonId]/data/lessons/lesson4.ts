@@ -402,18 +402,58 @@ export const lesson4: LessonData = {
         }
       },
 
-      // 퀴즈
+      // ===== 논리 연산자 직접 써보기 =====
       {
-        type: "quiz",
+        type: "practice",
         content: {
-          question: "(True and False) or True 의 결과는?",
-          options: [
-            "True",
-            "False",
-            "에러"
-          ],
-          answer: 0,
-          explanation: "True and False = False, False or True = True!"
+          task: "이렇게 나오게 해봐 ↓\nFalse",
+          guide: "True and False 계산!",
+          hint: "print(True and False)",
+          template: null,
+          answer: "print(True and False)",
+          expect: "False"
+        }
+      },
+      {
+        type: "practice",
+        content: {
+          task: "이렇게 나오게 해봐 ↓\nTrue",
+          guide: "True or False 계산!",
+          template: null,
+          answer: "print(True or False)",
+          expect: "True"
+        }
+      },
+      {
+        type: "practice",
+        content: {
+          task: "이렇게 나오게 해봐 ↓\nFalse",
+          guide: "not True 계산!",
+          template: null,
+          answer: "print(not True)",
+          expect: "False"
+        }
+      },
+      {
+        type: "practice",
+        content: {
+          task: "이렇게 나오게 해봐 ↓\nTrue",
+          guide: "10 > 5 이고 3 < 7 — 둘 다 참인지 확인!",
+          template: null,
+          answer: "print(10 > 5 and 3 < 7)",
+          alternateAnswers: ["print((10 > 5) and (3 < 7))"],
+          expect: "True"
+        }
+      },
+      {
+        type: "practice",
+        content: {
+          task: "이렇게 나오게 해봐 ↓\nFalse",
+          guide: "level = 5, gold = 500 / 입장 조건: level >= 10 and gold >= 1000",
+          template: null,
+          answer: "level = 5\ngold = 500\nprint(level >= 10 and gold >= 1000)",
+          alternateAnswers: ["level = 5\ngold = 500\nprint((level >= 10) and (gold >= 1000))"],
+          expect: "False"
         }
       },
 

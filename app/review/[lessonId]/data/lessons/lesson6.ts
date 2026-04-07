@@ -2,16 +2,29 @@ import { LessonData } from '../types';
 
 export const lesson6: LessonData = {
     id: "6",
-    title: "조건문 (if)",
-    description: "상황에 따라 다르게!",
+    title: "문자열 메서드",
+    description: "문자열을 마음대로 다루기!",
     steps: [
       // ==================== CHAPTER 1: 동기 부여 ====================
       {
         type: "chapter",
         content: {
           num: 1,
-          title: "자판기를 생각해봐",
-          desc: "상황에 따라 다르게 동작!"
+          title: "문자열 정리 도구",
+          desc: "대소문자, 공백, 찾기까지!"
+        }
+      },
+
+      // 프리뷰
+      {
+        type: "explain",
+        content: {
+          lines: [
+            "🛠️ 오늘 만들 것!"
+          ],
+          code: "원본: '  Hello, World!  '\n대문자: 'HELLO, WORLD!'\n소문자: 'hello, world!'\n공백제거: 'Hello, World!'\n치환: 'Hello, Python!'",
+          isPreview: true,
+          note: "메서드로 문자열을 자유자재로!"
         }
       },
 
@@ -19,41 +32,30 @@ export const lesson6: LessonData = {
         type: "explain",
         content: {
           lines: [
-            "🧋 음료 자판기는 어떻게 동작할까?"
+            "메서드란? 문자열이 가진 기능들!"
           ],
-          code: "돈이 충분하면 → 음료가 나와요! 🍺\n돈이 부족하면 → \"돈이 부족합니다\" 🙅",
+          code: "text.upper()         → 대문자\ntext.lower()         → 소문자\ntext.strip()         → 공백 제거\ntext.replace('a','b')→ 치환",
           isPreview: true,
-          note: "상황에 따라 다르게 동작해!"
+          note: "text.메서드() 형태로 사용!"
         }
       },
 
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "🎮 오늘 만들 것!"
-          ],
-          code: "=== RPG 직업 선택기 ===\n힘: 15 → 전사 ⚔️\n힘: 7 → 궁수 🏹",
-          isPreview: true,
-          note: "스탯에 따라 직업이 바뀌어!"
-        }
-      },
-
+      // 보상
       {
         type: "reward",
         content: {
-          message: "조건문을 배워보자!",
-          emoji: "🔀"
+          message: "문자열 메서드 시작!",
+          emoji: "🛠️"
         }
       },
 
-      // ==================== CHAPTER 2: 비교 연산자 복습 ====================
+      // ==================== CHAPTER 2: 대소문자 ====================
       {
         type: "chapter",
         content: {
           num: 2,
-          title: "비교 연산자 복습",
-          desc: "조건을 만드는 방법!"
+          title: "대소문자 변환",
+          desc: "upper()와 lower()!"
         }
       },
 
@@ -61,46 +63,76 @@ export const lesson6: LessonData = {
       {
         type: "interleaving",
         content: {
-          message: "비교 연산자 기억나?",
-          task: "10 > 5 출력해봐",
+          message: "잠깐! 문자열 이어붙이기 기억나?",
+          task: "'Hello' + ' ' + 'World' 출력해봐",
           template: null,
-          answer: "print(10 > 5)",
-          expect: "True"
+          answer: "print('Hello' + ' ' + 'World')",
+          expect: "Hello World"
         }
       },
 
+      // upper()
       {
         type: "explain",
         content: {
           lines: [
-            "비교 결과는 True/False!"
+            "upper() = 모두 대문자로!"
           ],
-          code: "10 > 5   → True\n10 < 5   → False\n10 == 10 → True\n10 != 5  → True",
-          note: "이 결과로 조건을 판단해!"
+          code: "text = 'hello'\nprint(text.upper())  → 'HELLO'\n\n'python'.upper()  → 'PYTHON'",
+          note: ".upper() 를 붙이면 대문자로 변환!"
         }
       },
 
-      // ===== Lv.1: 비교 연습 =====
+      // ===== Lv.1: upper() =====
       {
         type: "practice",
         content: {
-          level: 1,
-          task: "100 >= 100 비교해봐",
-          template: { before: "print(", after: ")" },
-          answer: "100 >= 100",
-          alternateAnswers: ["100>=100"],
-          expect: "True"
+          task: "이렇게 나오게 해봐 ↓\nHELLO WORLD",
+          guide: ".upper() 사용!",
+          hint: "print('hello world'.upper())",
+          template: null,
+          answer: "print('hello world'.upper())",
+          expect: "HELLO WORLD"
         }
       },
+
+      // lower()
+      {
+        type: "explain",
+        content: {
+          lines: [
+            "lower() = 모두 소문자로!"
+          ],
+          code: "text = 'PYTHON'\nprint(text.lower())  → 'python'\n\n'Hello World'.lower() → 'hello world'",
+          note: ".lower() 를 붙이면 소문자로 변환!"
+        }
+      },
+
+      // ===== Lv.1: lower() =====
       {
         type: "practice",
         content: {
-          level: 1,
-          task: "50 == 60 비교해봐",
-          template: { before: "print(", after: ")" },
-          answer: "50 == 60",
-          alternateAnswers: ["50==60"],
-          expect: "False"
+          task: "이렇게 나오게 해봐 ↓\nhello world",
+          guide: ".lower() 사용!",
+          hint: "print('HELLO WORLD'.lower())",
+          template: null,
+          answer: "print('HELLO WORLD'.lower())",
+          expect: "hello world"
+        }
+      },
+
+      // 퀴즈
+      {
+        type: "quiz",
+        content: {
+          question: "'Python'.upper() 의 결과는?",
+          options: [
+            "'PYTHON'",
+            "'python'",
+            "'Python' (변화 없음)"
+          ],
+          answer: 0,
+          explanation: "upper()는 모든 글자를 대문자로 바꿔! 'Python' → 'PYTHON'"
         }
       },
 
@@ -109,59 +141,74 @@ export const lesson6: LessonData = {
         type: "summary",
         content: {
           num: 2,
-          title: "비교 연산자",
+          title: "대소문자 변환",
           learned: [
-            "> < >= <= 크기 비교",
-            "== 같다, != 다르다",
-            "결과는 True/False"
+            ".upper() → 모두 대문자",
+            ".lower() → 모두 소문자",
+            "원본 문자열은 변하지 않음"
           ],
-          canDo: "조건을 만들 수 있어!",
-          emoji: "⚖️"
+          canDo: "문자열을 대소문자로 변환할 수 있어!",
+          emoji: "🔡"
         }
       },
 
-      // ==================== CHAPTER 3: if 기본 ====================
+      // ==================== CHAPTER 3: strip()과 replace() ====================
       {
         type: "chapter",
         content: {
           num: 3,
-          title: "if 기본",
-          desc: "조건이 맞으면 실행!"
+          title: "공백 제거와 치환",
+          desc: "strip()과 replace()!"
         }
       },
 
+      // strip()
       {
         type: "explain",
         content: {
           lines: [
-            "if = 만약 ~라면"
+            "strip() = 앞뒤 공백 제거!"
           ],
-          code: "if 조건:\n    실행할 코드",
-          note: "조건이 True면 실행!"
+          code: "text = '  Hello  '\nprint(text.strip())  → 'Hello'\n\n'  파이썬  '.strip()  → '파이썬'",
+          note: "앞뒤 공백만 제거! 중간 공백은 그대로."
         }
       },
 
+      // ===== Lv.1: strip() =====
+      {
+        type: "practice",
+        content: {
+          task: "이렇게 나오게 해봐 ↓\n코딩",
+          guide: ".strip() 사용!",
+          hint: "print('  코딩  '.strip())",
+          template: null,
+          answer: "print('  코딩  '.strip())",
+          expect: "코딩"
+        }
+      },
+
+      // replace()
       {
         type: "explain",
         content: {
           lines: [
-            "예시: 자판기"
+            "replace() = 문자열 치환!"
           ],
-          code: "money = 1500\nif money >= 1000:\n    print('음료 구매 가능!')",
-          result: "음료 구매 가능!",
-          note: "1500은 1000 이상이니까 실행!"
+          code: "text = 'Hello, World!'\nprint(text.replace('World', 'Python'))\n→ 'Hello, Python!'\n\n'aabbcc'.replace('b', 'X') → 'aaXXcc'",
+          note: "replace('찾을것', '바꿀것') 형태!"
         }
       },
 
-      // ⚠️ 들여쓰기
+      // ===== Lv.1: replace() =====
       {
-        type: "explain",
+        type: "practice",
         content: {
-          lines: [
-            "⚠️ 들여쓰기 필수!"
-          ],
-          code: "if money >= 1000:\n    print('OK')  # ✅ 들여쓰기 있음\nprint('끝')      # 들여쓰기 없음 = if 밖",
-          note: "들여쓰기 = 'if 안에 있다'는 표시!"
+          task: "이렇게 나오게 해봐 ↓\n나는 강아지",
+          guide: ".replace('고양이', '강아지') 사용!",
+          hint: "print('나는 고양이'.replace('고양이', '강아지'))",
+          template: null,
+          answer: "print('나는 고양이'.replace('고양이', '강아지'))",
+          expect: "나는 강아지"
         }
       },
 
@@ -169,30 +216,15 @@ export const lesson6: LessonData = {
       {
         type: "errorQuiz",
         content: {
-          question: "에러 나는 코드는?",
-          code: "a. if score >= 60:\n       print('합격')\n\nb. if score >= 60\n       print('합격')",
+          question: "이 코드의 결과는?",
+          code: "text = '  Python  '\nresult = text.strip()\nprint(result)",
           options: [
-            "a만 에러",
-            "b만 에러 (콜론 없음)",
-            "둘 다 에러"
+            "'Python' (앞뒤 공백 제거됨)",
+            "'  Python  ' (원본 그대로)",
+            "에러"
           ],
-          answer: 1,
-          explanation: "if 뒤에 콜론(:) 필수! b는 콜론이 없어서 에러야!"
-        }
-      },
-
-      // 퀴즈
-      {
-        type: "quiz",
-        content: {
-          question: "if 조건: 에서 꼭 필요한 것 2가지는?",
-          options: [
-            "콜론(:)과 괄호",
-            "콜론(:)과 들여쓰기",
-            "괄호와 세미콜론"
-          ],
-          answer: 1,
-          explanation: "if 뒤에 콜론(:), 다음 줄에 들여쓰기!"
+          answer: 0,
+          explanation: "strip()은 앞뒤 공백을 제거하고 결과를 반환해. result에 저장했으니 'Python'이 출력돼!"
         }
       },
 
@@ -201,47 +233,94 @@ export const lesson6: LessonData = {
         type: "summary",
         content: {
           num: 3,
-          title: "if 기본",
+          title: "strip()과 replace()",
           learned: [
-            "if 조건: 형태",
-            "콜론(:) 필수",
-            "들여쓰기 필수"
+            ".strip() → 앞뒤 공백 제거",
+            ".replace('a', 'b') → a를 b로 치환",
+            "모든 메서드는 새 문자열 반환"
           ],
-          canDo: "조건에 따라 코드를 실행할 수 있어!",
-          emoji: "✅"
+          canDo: "문자열의 공백을 제거하고 원하는 부분을 바꿀 수 있어!",
+          emoji: "✂️"
         }
       },
 
-      // ==================== CHAPTER 4: if-else ====================
+      // ==================== CHAPTER 4: len()과 find() ====================
       {
         type: "chapter",
         content: {
           num: 4,
-          title: "if-else",
-          desc: "맞으면/아니면!"
+          title: "길이와 위치 찾기",
+          desc: "len()과 find()!"
         }
       },
 
+      // len()
       {
         type: "explain",
         content: {
           lines: [
-            "else = 그렇지 않으면"
+            "len() = 문자열 길이!"
           ],
-          code: "if 조건:\n    맞으면 실행\nelse:\n    아니면 실행",
-          note: "두 가지 중 하나는 무조건 실행!"
+          code: "len('Hello')      → 5\nlen('Python')     → 6\nlen('안녕하세요')  → 5\nlen('')          → 0",
+          note: "공백도 글자 수에 포함돼!"
         }
       },
 
+      // ===== len() 직접 써보기 =====
+      {
+        type: "practice",
+        content: {
+          task: "이렇게 나오게 해봐 ↓\n6",
+          guide: "len('Python') 출력!",
+          hint: "print(len('Python'))",
+          template: null,
+          answer: "print(len('Python'))",
+          expect: "6"
+        }
+      },
+      {
+        type: "practice",
+        content: {
+          task: "이렇게 나오게 해봐 ↓\n11",
+          guide: "'Hello World' 길이 — 공백도 포함!",
+          template: null,
+          answer: "print(len('Hello World'))",
+          expect: "11"
+        }
+      },
+
+      // find()
       {
         type: "explain",
         content: {
           lines: [
-            "예시: 자판기"
+            "find() = 위치 찾기!"
           ],
-          code: "money = 500\nif money >= 1000:\n    print('구매 가능!')\nelse:\n    print('돈 부족!')",
-          result: "돈 부족!",
-          note: "500은 1000 미만이니까 else 실행!"
+          code: "text = 'Hello'\ntext.find('e')   → 1  (인덱스 1)\ntext.find('l')   → 2  (처음 나오는 위치)\ntext.find('z')   → -1 (없으면 -1)",
+          note: "위치는 0부터 시작! 없으면 -1 반환."
+        }
+      },
+
+      // ===== find() 직접 써보기 =====
+      {
+        type: "practice",
+        content: {
+          task: "이렇게 나오게 해봐 ↓\n1",
+          guide: "'Python'에서 'y' 위치 찾기!",
+          hint: "print('Python'.find('y'))",
+          template: null,
+          answer: "print('Python'.find('y'))",
+          expect: "1"
+        }
+      },
+      {
+        type: "practice",
+        content: {
+          task: "이렇게 나오게 해봐 ↓\n-1",
+          guide: "'Hello'에서 없는 글자 'z' 찾기!",
+          template: null,
+          answer: "print('Hello'.find('z'))",
+          expect: "-1"
         }
       },
 
@@ -249,14 +328,14 @@ export const lesson6: LessonData = {
       {
         type: "quiz",
         content: {
-          question: "hp = 0일 때 출력 결과는?",
+          question: "len('Hello World') 의 결과는?",
           options: [
-            "살아있음",
-            "Game Over",
-            "아무것도 안 나옴"
+            "10 (공백 제외)",
+            "11 (공백 포함)",
+            "9 (알파벳만)"
           ],
           answer: 1,
-          explanation: "hp > 0이 False니까 else가 실행돼!"
+          explanation: "len()은 공백도 글자로 세! 'Hello World' = H+e+l+l+o+' '+W+o+r+l+d = 11"
         }
       },
 
@@ -265,89 +344,24 @@ export const lesson6: LessonData = {
         type: "summary",
         content: {
           num: 4,
-          title: "if-else",
+          title: "len()과 find()",
           learned: [
-            "else = 조건이 아닐 때",
-            "둘 중 하나는 무조건 실행",
-            "else 뒤에도 콜론(:)"
+            "len(text) → 문자열 길이",
+            "text.find('x') → 위치 (0부터)",
+            "없으면 -1 반환"
           ],
-          canDo: "두 가지 경우를 처리할 수 있어!",
-          emoji: "🔀"
+          canDo: "문자열의 길이를 재고 원하는 글자의 위치를 찾을 수 있어!",
+          emoji: "🔍"
         }
       },
 
-      // ==================== CHAPTER 5: if-elif-else ====================
+      // ==================== CHAPTER 5: 메서드 체이닝 & 프로젝트 ====================
       {
         type: "chapter",
         content: {
           num: 5,
-          title: "if-elif-else",
-          desc: "여러 조건 비교!"
-        }
-      },
-
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "elif = else if (또 다른 조건)"
-          ],
-          code: "if 조건1:\n    조건1 맞으면\nelif 조건2:\n    조건2 맞으면\nelse:\n    다 아니면",
-          note: "조건을 여러 개 확인!"
-        }
-      },
-
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "예시: 게임 등급"
-          ],
-          code: "points = 750\nif points >= 1000:\n    print('다이아 💎')\nelif points >= 500:\n    print('골드 🥇')\nelse:\n    print('실버 🥈')",
-          result: "골드 🥇",
-          note: "750은 500 이상이니까 골드!"
-        }
-      },
-
-      // 에러 퀴즈
-      {
-        type: "errorQuiz",
-        content: {
-          question: "score = 85일 때 결과는?",
-          code: "if score >= 90:\n    print('A')\nelif score >= 80:\n    print('B')\nelif score >= 70:\n    print('C')\nelse:\n    print('F')",
-          options: [
-            "A",
-            "B",
-            "C"
-          ],
-          answer: 1,
-          explanation: "85는 90 미만이지만 80 이상! 첫 번째 True인 elif에서 멈춰!"
-        }
-      },
-
-      // 요약
-      {
-        type: "summary",
-        content: {
-          num: 5,
-          title: "if-elif-else",
-          learned: [
-            "elif = 또 다른 조건",
-            "위에서부터 순서대로 확인",
-            "첫 번째 True에서 멈춤"
-          ],
-          canDo: "여러 조건을 처리할 수 있어!",
-          emoji: "📊"
-        }
-      },
-
-      // ==================== CHAPTER 6: 프로젝트 ====================
-      {
-        type: "chapter",
-        content: {
-          num: 6,
-          title: "RPG 직업 선택기",
-          desc: "배운 걸 활용해서 만들기!"
+          title: "문자열 정리 도구 만들기",
+          desc: "메서드 조합 활용!"
         }
       },
 
@@ -355,12 +369,36 @@ export const lesson6: LessonData = {
       {
         type: "interleaving",
         content: {
-          message: "if 기억나?",
-          task: "level >= 10이면 '입장!' 출력",
-          hint: "if level >= 10:\n    print('입장!')",
+          message: "replace() 기억나?",
+          task: "'I like cats' 에서 'cats' 를 'dogs' 로 바꿔서 출력해봐",
           template: null,
-          answer: "if level >= 10:\n    print('입장!')",
-          expect: "입장!"
+          answer: "print('I like cats'.replace('cats', 'dogs'))",
+          expect: "I like dogs"
+        }
+      },
+
+      // 메서드 체이닝
+      {
+        type: "explain",
+        content: {
+          lines: [
+            "메서드를 이어서 사용할 수 있어!"
+          ],
+          code: "text = '  hello world  '\nresult = text.strip().upper()\nprint(result)  → 'HELLO WORLD'",
+          note: ".strip().upper() 처럼 이어서 연결!"
+        }
+      },
+
+      // ===== Lv.2: 체이닝 =====
+      {
+        type: "practice",
+        content: {
+          task: "이렇게 나오게 해봐 ↓\nPYTHON",
+          guide: ".strip().upper() 체이닝!",
+          hint: "print('  python  '.strip().upper())",
+          template: null,
+          answer: "print('  python  '.strip().upper())",
+          expect: "PYTHON"
         }
       },
 
@@ -369,9 +407,9 @@ export const lesson6: LessonData = {
         type: "explain",
         content: {
           lines: [
-            "⚔️ RPG 직업 선택기!"
+            "🛠️ 문자열 정리 도구!"
           ],
-          code: "=== RPG 직업 선택기 ===\n힘 15이상 → 전사\n힘 10이상 → 기사\n힘 5이상 → 궁수\n그 외 → 마법사",
+          code: "원본: '  Hello, World!  '\n길이: 19\n대문자: 'HELLO, WORLD!'\n치환: 'Hello, Python!'",
           isPreview: true,
           note: "한 줄씩 만들어보자!"
         }
@@ -383,11 +421,11 @@ export const lesson6: LessonData = {
         content: {
           step: 1,
           total: 4,
-          task: "제목 출력",
-          target: "=== RPG 직업 선택기 ===",
-          hint: "print('=== RPG 직업 선택기 ===')",
+          task: "원본 text 출력 (text = '  Hello, World!  ')",
+          target: "원본: '  Hello, World!  '",
+          hint: "print('원본:', repr(text))",
           done: [],
-          answer: "print('=== RPG 직업 선택기 ===')"
+          answer: "print('원본:', repr(text))"
         }
       },
       {
@@ -395,11 +433,11 @@ export const lesson6: LessonData = {
         content: {
           step: 2,
           total: 4,
-          task: "힘 15 이상이면 '전사 ⚔️' 출력 (if)",
-          target: "전사 ⚔️",
-          hint: "if strength >= 15:\n    print('전사 ⚔️')",
-          done: ["=== RPG 직업 선택기 ==="],
-          answer: "if strength >= 15:\n    print('전사 ⚔️')"
+          task: "text의 길이 출력 (len 사용)",
+          target: "길이: 19",
+          hint: "print('길이:', len(text))",
+          done: ["원본: '  Hello, World!  '"],
+          answer: "print('길이:', len(text))"
         }
       },
       {
@@ -407,11 +445,11 @@ export const lesson6: LessonData = {
         content: {
           step: 3,
           total: 4,
-          task: "힘 10 이상이면 '기사 🛡️' 출력 (elif)",
-          target: "기사 🛡️",
-          hint: "elif strength >= 10:\n    print('기사 🛡️')",
-          done: ["=== RPG 직업 선택기 ===", "if strength >= 15: 전사"],
-          answer: "elif strength >= 10:\n    print('기사 🛡️')"
+          task: "공백 제거 후 대문자 출력",
+          target: "대문자: HELLO, WORLD!",
+          hint: "print('대문자:', text.strip().upper())",
+          done: ["원본: '  Hello, World!  '", "길이: 19"],
+          answer: "print('대문자:', text.strip().upper())"
         }
       },
       {
@@ -419,11 +457,11 @@ export const lesson6: LessonData = {
         content: {
           step: 4,
           total: 4,
-          task: "그 외는 '마법사 🧙' 출력 (else)",
-          target: "마법사 🧙",
-          hint: "else:\n    print('마법사 🧙')",
-          done: ["=== RPG 직업 선택기 ===", "if: 전사", "elif: 기사"],
-          answer: "else:\n    print('마법사 🧙')"
+          task: "공백 제거 후 'World'를 'Python'으로 치환해서 출력",
+          target: "치환: Hello, Python!",
+          hint: "print('치환:', text.strip().replace('World', 'Python'))",
+          done: ["원본: '  Hello, World!  '", "길이: 19", "대문자: HELLO, WORLD!"],
+          answer: "print('치환:', text.strip().replace('World', 'Python'))"
         }
       },
 
@@ -431,15 +469,15 @@ export const lesson6: LessonData = {
       {
         type: "summary",
         content: {
-          num: 6,
-          title: "조건문 마스터",
+          num: 5,
+          title: "문자열 메서드 마스터",
           learned: [
-            "if: 조건이 맞으면",
-            "elif: 또 다른 조건",
-            "else: 다 아니면",
-            "콜론과 들여쓰기 필수!"
+            ".upper() / .lower() → 대소문자 변환",
+            ".strip() → 앞뒤 공백 제거",
+            ".replace('a','b') → 치환",
+            "len(text) → 길이, .find('x') → 위치"
           ],
-          canDo: "상황에 따라 다르게 동작하는 프로그램을 만들 수 있어!",
+          canDo: "문자열을 다양한 방법으로 다룰 수 있어!",
           emoji: "🏆"
         }
       },

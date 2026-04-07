@@ -1,467 +1,488 @@
 import { LessonData } from '../types';
 
 export const lesson12: LessonData = {
-    id: "12",
-    title: "딕셔너리",
-    description: "키-값 쌍으로 데이터 저장!",
-    steps: [
-      // ==================== CHAPTER 1: 동기 부여 ====================
-      {
-        type: "chapter",
-        content: {
-          num: 1,
-          title: "딕셔너리가 왜 필요해?",
-          desc: "이름표 붙은 데이터!"
-        }
-      },
-
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "학생 정보를 저장하고 싶어!"
-          ],
-          code: "name = '철수'\nage = 15\ngrade = 'A'",
-          isError: true,
-          note: "변수가 너무 많아..."
-        }
-      },
-
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "딕셔너리로 한 번에!"
-          ],
-          code: "student = {\n    'name': '철수',\n    'age': 15,\n    'grade': 'A'\n}",
-          result: "이름표와 값을 묶어서!",
-          note: "키: 값 형태로 저장!"
-        }
-      },
-
-      {
-        type: "reward",
-        content: {
-          message: "딕셔너리를 배워보자!",
-          emoji: "📖"
-        }
-      },
-
-      // ==================== CHAPTER 2: 딕셔너리 만들기 ====================
-      {
-        type: "chapter",
-        content: {
-          num: 2,
-          title: "딕셔너리 만들기",
-          desc: "중괄호 { } 사용!"
-        }
-      },
-
-      // 복습
-      {
-        type: "interleaving",
-        content: {
-          message: "리스트 복습!",
-          task: "fruits 리스트 만들기",
-          template: null,
-          answer: "fruits = ['사과', '바나나']",
-          expect: ""
-        }
-      },
-
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "딕셔너리 = 중괄호 { }"
-          ],
-          code: "person = {'name': '철수', 'age': 15}",
-          result: "키: 값 쌍으로 저장!",
-          note: "리스트는 [ ], 딕셔너리는 { }"
-        }
-      },
-
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "값 가져오기 = 키로 접근"
-          ],
-          code: "print(person['name'])\nprint(person['age'])",
-          result: "철수\n15",
-          note: "[키]로 값을 꺼내!"
-        }
-      },
-
-      // 퀴즈
-      {
-        type: "quiz",
-        content: {
-          question: "딕셔너리를 만드는 기호는?",
-          options: [
-            "[ ] 대괄호",
-            "{ } 중괄호",
-            "( ) 소괄호"
-          ],
-          answer: 1,
-          explanation: "딕셔너리는 중괄호 { }! 리스트는 [ ]!"
-        }
-      },
-
-      // 요약
-      {
-        type: "summary",
-        content: {
-          num: 2,
-          title: "딕셔너리 만들기",
-          learned: [
-            "{ } 중괄호로 만들기",
-            "'키': 값 형태",
-            "[키]로 값 접근"
-          ],
-          canDo: "딕셔너리를 만들고 값을 가져올 수 있어!",
-          emoji: "📖"
-        }
-      },
-
-      // ==================== CHAPTER 3: 딕셔너리 수정 ====================
-      {
-        type: "chapter",
-        content: {
-          num: 3,
-          title: "딕셔너리 수정",
-          desc: "추가, 변경, 삭제!"
-        }
-      },
-
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "새 키-값 추가"
-          ],
-          code: "person['school'] = '중학교'\nprint(person)",
-          result: "{'name': '철수', 'age': 15, 'school': '중학교'}",
-          note: "없는 키로 대입하면 추가!"
-        }
-      },
-
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "값 변경하기"
-          ],
-          code: "person['age'] = 16\nprint(person['age'])",
-          result: "16",
-          note: "있는 키로 대입하면 변경!"
-        }
-      },
-
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "키-값 삭제하기"
-          ],
-          code: "del person['school']\nprint(person)",
-          result: "{'name': '철수', 'age': 16}",
-          note: "del로 삭제!"
-        }
-      },
-
-      // 퀴즈
-      {
-        type: "quiz",
-        content: {
-          question: "없는 키로 값을 대입하면?",
-          options: [
-            "에러가 난다",
-            "새로운 키-값이 추가된다",
-            "아무 일도 안 일어난다"
-          ],
-          answer: 1,
-          explanation: "없는 키로 대입하면 새로 추가! 있는 키면 변경!"
-        }
-      },
-
-      // 요약
-      {
-        type: "summary",
-        content: {
-          num: 3,
-          title: "딕셔너리 수정",
-          learned: [
-            "dict[키] = 값 으로 추가/변경",
-            "del dict[키] 로 삭제",
-            "없는 키면 추가, 있으면 변경"
-          ],
-          canDo: "딕셔너리를 자유롭게 수정할 수 있어!",
-          emoji: "✏️"
-        }
-      },
-
-      // ==================== CHAPTER 4: 딕셔너리 메서드 ====================
-      {
-        type: "chapter",
-        content: {
-          num: 4,
-          title: "딕셔너리 메서드",
-          desc: "keys, values, items, get!"
-        }
-      },
-
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "keys() = 모든 키 가져오기"
-          ],
-          code: "person = {'name': '철수', 'age': 15}\nprint(person.keys())",
-          result: "dict_keys(['name', 'age'])",
-          note: "키만 모아서!"
-        }
-      },
-
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "values() = 모든 값 가져오기"
-          ],
-          code: "print(person.values())",
-          result: "dict_values(['철수', 15])",
-          note: "값만 모아서!"
-        }
-      },
-
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "items() = 키-값 쌍 가져오기"
-          ],
-          code: "print(person.items())",
-          result: "dict_items([('name', '철수'), ('age', 15)])",
-          note: "키와 값을 함께!"
-        }
-      },
-
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "get() = 안전하게 값 가져오기"
-          ],
-          code: "print(person.get('name'))\nprint(person.get('school', '없음'))",
-          result: "철수\n없음",
-          note: "없는 키면 기본값 반환!"
-        }
-      },
-
-      // 퀴즈
-      {
-        type: "quiz",
-        content: {
-          question: "person['school'] vs person.get('school') 차이는?",
-          options: [
-            "둘 다 같다",
-            "get은 없으면 기본값, []는 에러",
-            "[]이 더 빠르다"
-          ],
-          answer: 1,
-          explanation: "get()은 없는 키여도 에러 안 나고 기본값 반환!"
-        }
-      },
-
-      // 요약
-      {
-        type: "summary",
-        content: {
-          num: 4,
-          title: "딕셔너리 메서드",
-          learned: [
-            "keys() = 모든 키",
-            "values() = 모든 값",
-            "items() = 키-값 쌍",
-            "get(키, 기본값) = 안전하게"
-          ],
-          canDo: "딕셔너리 데이터를 다양하게 가져올 수 있어!",
-          emoji: "🔑"
-        }
-      },
-
-      // ==================== CHAPTER 5: 딕셔너리 반복 ====================
-      {
-        type: "chapter",
-        content: {
-          num: 5,
-          title: "딕셔너리 반복",
-          desc: "for문으로 순회!"
-        }
-      },
-
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "키로 반복하기"
-          ],
-          code: "for key in person:\n    print(key)",
-          result: "name\nage",
-          note: "기본은 키로 반복!"
-        }
-      },
-
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "키와 값 함께 반복"
-          ],
-          code: "for key, value in person.items():\n    print(key, ':', value)",
-          result: "name : 철수\nage : 15",
-          note: "items()로 둘 다!"
-        }
-      },
-
-      // 퀴즈
-      {
-        type: "quiz",
-        content: {
-          question: "for x in dict: 하면 x에 뭐가 들어갈까?",
-          options: [
-            "값",
-            "키",
-            "키-값 쌍"
-          ],
-          answer: 1,
-          explanation: "기본은 키! 값도 원하면 items() 사용!"
-        }
-      },
-
-      // 요약
-      {
-        type: "summary",
-        content: {
-          num: 5,
-          title: "딕셔너리 반복",
-          learned: [
-            "for key in dict: 키로 반복",
-            "for k, v in dict.items(): 둘 다",
-            "for v in dict.values(): 값만"
-          ],
-          canDo: "딕셔너리를 순회할 수 있어!",
-          emoji: "🔄"
-        }
-      },
-
-      // ==================== CHAPTER 6: 프로젝트 ====================
-      {
-        type: "chapter",
-        content: {
-          num: 6,
-          title: "학생 정보 시스템",
-          desc: "배운 걸 활용해서 만들기!"
-        }
-      },
-
-      // 복습
-      {
-        type: "interleaving",
-        content: {
-          message: "딕셔너리 접근 복습!",
-          task: "student['name'] 출력하기",
-          template: null,
-          answer: "print(student['name'])",
-          expect: "철수"
-        }
-      },
-
-      // 프로젝트 소개
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "📋 학생 정보 시스템!"
-          ],
-          code: "=== 학생 정보 ===\nname : 철수\nage : 15\ngrade : A\n총 3개 정보",
-          isPreview: true,
-          note: "한 줄씩 만들어보자!"
-        }
-      },
-
-      // 프로젝트
-      {
-        type: "project",
-        content: {
-          step: 1,
-          total: 4,
-          task: "제목 출력",
-          target: "=== 학생 정보 ===",
-          hint: "print('=== 학생 정보 ===')",
-          done: [],
-          answer: "print('=== 학생 정보 ===')"
-        }
-      },
-      {
-        type: "project",
-        content: {
-          step: 2,
-          total: 4,
-          task: "모든 정보 출력 (items 사용)",
-          target: "name : 철수",
-          hint: "for k, v in student.items():\n    print(k, ':', v)",
-          done: ["=== 학생 정보 ==="],
-          answer: "for k, v in student.items():\n    print(k, ':', v)"
-        }
-      },
-      {
-        type: "project",
-        content: {
-          step: 3,
-          total: 4,
-          task: "정보 개수 출력",
-          target: "총 3개 정보",
-          hint: "print('총', len(student), '개 정보')",
-          done: ["=== 학생 정보 ===", "name : 철수 ..."],
-          answer: "print('총', len(student), '개 정보')"
-        }
-      },
-      {
-        type: "project",
-        content: {
-          step: 4,
-          total: 4,
-          task: "성적 가져오기 (get 사용, 없으면 'N/A')",
-          target: "성적: A",
-          hint: "print('성적:', student.get('grade', 'N/A'))",
-          done: ["=== 학생 정보 ===", "정보 출력", "총 3개 정보"],
-          answer: "print('성적:', student.get('grade', 'N/A'))"
-        }
-      },
-
-      // 최종 요약
-      {
-        type: "summary",
-        content: {
-          num: 6,
-          title: "딕셔너리 마스터",
-          learned: [
-            "{ } 로 딕셔너리 만들기",
-            "[키]로 값 접근/수정",
-            "keys, values, items 메서드",
-            "get()으로 안전하게 접근"
-          ],
-          canDo: "딕셔너리로 데이터를 관리할 수 있어!",
-          emoji: "🏆"
-        }
-      },
-
-      // 완료
-      {
-        type: "done",
-        content: {}
+  id: "12",
+  title: "조건문 심화",
+  description: "and, or, not 으로 복합 조건!",
+  steps: [
+    // ==================== CHAPTER 1: 동기 부여 ====================
+    {
+      type: "chapter",
+      content: {
+        num: 1,
+        title: "논리 연산자 소개",
+        desc: "and, or, not 으로 조건 조합!"
       }
-    ]
-  };
+    },
+
+    // 프리뷰
+    {
+      type: "explain",
+      content: {
+        lines: [
+          "🎯 오늘 만들 것!"
+        ],
+        code: "age = 16\nhas_ticket = True\n\nif age >= 13 and has_ticket:\n    print('입장 가능!')\nelse:\n    print('입장 불가')",
+        result: "입장 가능!",
+        isPreview: true,
+        note: "여러 조건을 and, or, not 으로 조합해!"
+      }
+    },
+
+    {
+      type: "reward",
+      content: {
+        message: "조건문 심화 시작!",
+        emoji: "🔗"
+      }
+    },
+
+    // ==================== CHAPTER 2: and ====================
+    {
+      type: "chapter",
+      content: {
+        num: 2,
+        title: "and",
+        desc: "둘 다 True여야 True!"
+      }
+    },
+
+    // 복습
+    {
+      type: "interleaving",
+      content: {
+        message: "잠깐! 조건문 기억나?",
+        task: "score = 80 으로 변수 만들고\n80 이상이면 '합격' 출력해봐",
+        template: null,
+        answer: "score = 80\nif score >= 80:\n    print('합격')",
+        expect: "합격"
+      }
+    },
+
+    // and 기본
+    {
+      type: "explain",
+      content: {
+        lines: [
+          "and: 둘 다 True여야 True!"
+        ],
+        code: "True and True   # → True\nTrue and False  # → False\nFalse and True  # → False\nFalse and False # → False",
+        note: "하나라도 False면 전체가 False!"
+      }
+    },
+
+    // and 실전
+    {
+      type: "explain",
+      content: {
+        lines: [
+          "and 실전 예시!"
+        ],
+        code: "age = 16\nmoney = 10000\n\nif age >= 13 and money >= 8000:\n    print('영화 관람 가능!')\nelse:\n    print('조건 미충족')",
+        result: "영화 관람 가능!",
+        note: "나이도 맞고, 돈도 있어야 관람 가능!"
+      }
+    },
+
+    // ===== Lv.2: and =====
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "temp = 22, rain = False 로 변수 만들고,\n온도가 15~28이고 비가 안 오면 '소풍 가자!' 출력해봐",
+        guide: "if temp >= 15 and temp <= 28 and not rain:",
+        template: null,
+        answer: "temp = 22\nrain = False\nif temp >= 15 and temp <= 28 and not rain:\n    print('소풍 가자!')\nelse:\n    print('집에 있자')",
+        expect: "소풍 가자!"
+      }
+    },
+
+    // 퀴즈
+    {
+      type: "quiz",
+      content: {
+        question: "True and False and True 의 결과는?",
+        options: [
+          "True (True가 더 많으니까)",
+          "False (하나라도 False면)",
+          "에러"
+        ],
+        answer: 1,
+        explanation: "and는 모두 True여야 True! 하나라도 False면 전체 False. True and False = False!"
+      }
+    },
+
+    // 요약
+    {
+      type: "summary",
+      content: {
+        num: 2,
+        title: "and",
+        learned: [
+          "and: 둘 다 True여야 True",
+          "하나라도 False면 전체 False",
+          "여러 조건을 동시에 확인할 때 사용"
+        ],
+        canDo: "여러 조건이 모두 충족될 때를 처리할 수 있어!",
+        emoji: "✅"
+      }
+    },
+
+    // ==================== CHAPTER 3: or ====================
+    {
+      type: "chapter",
+      content: {
+        num: 3,
+        title: "or",
+        desc: "하나만 True여도 True!"
+      }
+    },
+
+    // or 기본
+    {
+      type: "explain",
+      content: {
+        lines: [
+          "or: 하나만 True여도 True!"
+        ],
+        code: "True or False   # → True\nFalse or True   # → True\nFalse or False  # → False\nTrue or True    # → True",
+        note: "둘 다 False일 때만 False!"
+      }
+    },
+
+    // or 실전
+    {
+      type: "explain",
+      content: {
+        lines: [
+          "or 실전 예시!"
+        ],
+        code: "has_card = False\nhas_cash = True\n\nif has_card or has_cash:\n    print('결제 가능!')\nelse:\n    print('결제 수단 없음')",
+        result: "결제 가능!",
+        note: "카드 OR 현금, 하나만 있어도 결제 가능!"
+      }
+    },
+
+    // ===== Lv.2: or =====
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "day = '토요일' 로 변수 만들고,\n'토요일' 또는 '일요일' 이면 '주말이다!' 출력해봐",
+        guide: "if day == '토요일' or day == '일요일':",
+        template: null,
+        answer: "day = '토요일'\nif day == '토요일' or day == '일요일':\n    print('주말이다!')\nelse:\n    print('평일이다')",
+        expect: "주말이다!"
+      }
+    },
+
+    // 퀴즈
+    {
+      type: "quiz",
+      content: {
+        question: "False or False or True 의 결과는?",
+        options: [
+          "False (False가 더 많으니까)",
+          "True (하나라도 True면)",
+          "에러"
+        ],
+        answer: 1,
+        explanation: "or는 하나라도 True면 True! 마지막 True 덕분에 전체가 True야."
+      }
+    },
+
+    // 요약
+    {
+      type: "summary",
+      content: {
+        num: 3,
+        title: "or",
+        learned: [
+          "or: 하나만 True여도 True",
+          "둘 다 False일 때만 False",
+          "선택지 중 하나라도 맞을 때 사용"
+        ],
+        canDo: "둘 중 하나라도 맞는 조건을 처리할 수 있어!",
+        emoji: "🔀"
+      }
+    },
+
+    // ==================== CHAPTER 4: not ====================
+    {
+      type: "chapter",
+      content: {
+        num: 4,
+        title: "not",
+        desc: "True ↔ False 반전!"
+      }
+    },
+
+    // not 기본
+    {
+      type: "explain",
+      content: {
+        lines: [
+          "not: True와 False를 뒤집어!"
+        ],
+        code: "not True   # → False\nnot False  # → True",
+        note: "not은 반대로 뒤집어!"
+      }
+    },
+
+    // not 실전
+    {
+      type: "explain",
+      content: {
+        lines: [
+          "not 실전 예시!"
+        ],
+        code: "is_raining = False\n\nif not is_raining:\n    print('산책 가자!')\nelse:\n    print('집에 있자')",
+        result: "산책 가자!",
+        note: "비가 안 오면(not is_raining) 산책!"
+      }
+    },
+
+    // ===== Lv.2: not =====
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "logged_in = False 로 변수 만들고,\n로그인이 안 됐으면 '로그인이 필요합니다' 출력해봐",
+        guide: "if not logged_in:",
+        template: null,
+        answer: "logged_in = False\nif not logged_in:\n    print('로그인이 필요합니다')",
+        expect: "로그인이 필요합니다"
+      }
+    },
+
+    // 퀴즈
+    {
+      type: "quiz",
+      content: {
+        question: "not (3 > 5) 의 결과는?",
+        options: [
+          "True",
+          "False",
+          "에러"
+        ],
+        answer: 0,
+        explanation: "3 > 5는 False! not False = True. 괄호 안이 먼저 계산돼."
+      }
+    },
+
+    // 요약
+    {
+      type: "summary",
+      content: {
+        num: 4,
+        title: "not",
+        learned: [
+          "not True → False",
+          "not False → True",
+          "조건을 반전시킬 때 사용"
+        ],
+        canDo: "조건을 반전시킬 수 있어!",
+        emoji: "🔄"
+      }
+    },
+
+    // ==================== CHAPTER 5: 복합 조건과 연결 비교 ====================
+    {
+      type: "chapter",
+      content: {
+        num: 5,
+        title: "복합 조건",
+        desc: "Python의 특별한 연결 비교!"
+      }
+    },
+
+    // 복합 조건
+    {
+      type: "explain",
+      content: {
+        lines: [
+          "and, or, not 을 함께 써!"
+        ],
+        code: "age = 16\nscore = 85\n\n# 나이가 13~19이고 점수가 80 이상이면 장학금!\nif age >= 13 and age < 19 and score >= 80:\n    print('장학금 대상!')",
+        result: "장학금 대상!",
+        note: "조건을 and로 여러 개 연결해!"
+      }
+    },
+
+    // Python 연결 비교
+    {
+      type: "explain",
+      content: {
+        lines: [
+          "Python 특성: 연결 비교가 가능해!"
+        ],
+        code: "x = 5\n\n# Python 방식 (간결!)\nif 1 < x < 10:\n    print('범위 안')\n\n# 다른 언어 방식\nif x > 1 and x < 10:\n    print('범위 안')",
+        result: "범위 안\n범위 안",
+        note: "1 < x < 10 처럼 수학처럼 쓸 수 있어! Python만의 특성!"
+      }
+    },
+
+    // ===== Lv.3: 복합 조건 =====
+    {
+      type: "practice",
+      content: {
+        level: 3,
+        task: "n = 7 로 변수 만들고,\n1 이상 10 미만이면 '범위 안' 출력해봐\n(Python 연결 비교 방식으로!)",
+        guide: "if 1 <= n < 10:",
+        template: null,
+        answer: "n = 7\nif 1 <= n < 10:\n    print('범위 안')",
+        expect: "범위 안"
+      }
+    },
+    {
+      type: "practice",
+      content: {
+        level: 3,
+        task: "score = 72, attend = True 로 변수 만들고,\n점수 60 이상이고 출석이 True면 '최종 합격'\n아니면 '불합격' 출력해봐",
+        template: null,
+        answer: "score = 72\nattend = True\nif score >= 60 and attend:\n    print('최종 합격')\nelse:\n    print('불합격')",
+        expect: "최종 합격"
+      }
+    },
+
+    // 퀴즈
+    {
+      type: "quiz",
+      content: {
+        question: "x = 5 일 때, 1 < x < 10 의 결과는?",
+        options: [
+          "True",
+          "False",
+          "Python에서는 에러"
+        ],
+        answer: 0,
+        explanation: "Python에서 1 < x < 10 처럼 수학처럼 연결 비교가 가능해! 5는 1초과 10미만이므로 True."
+      }
+    },
+
+    // 요약
+    {
+      type: "summary",
+      content: {
+        num: 5,
+        title: "복합 조건",
+        learned: [
+          "age >= 13 and age < 19 → 복합 조건",
+          "1 < x < 10 → Python 연결 비교",
+          "and / or / not 조합 가능"
+        ],
+        canDo: "복잡한 조건도 정확하게 표현할 수 있어!",
+        emoji: "🎯"
+      }
+    },
+
+    // ==================== CHAPTER 6: 프로젝트 ====================
+    {
+      type: "chapter",
+      content: {
+        num: 6,
+        title: "놀이공원 입장 시스템",
+        desc: "논리 연산자 총 활용!"
+      }
+    },
+
+    // 복습
+    {
+      type: "interleaving",
+      content: {
+        message: "연결 비교 기억나?",
+        task: "x = 15 로 변수 만들고\n10 이상 20 미만이면 '통과' 출력해봐",
+        template: null,
+        answer: "x = 15\nif 10 <= x < 20:\n    print('통과')",
+        expect: "통과"
+      }
+    },
+
+    // 프로젝트 소개
+    {
+      type: "explain",
+      content: {
+        lines: [
+          "🎡 놀이공원 입장 시스템!"
+        ],
+        code: "=== 놀이공원 입장 시스템 ===\n나이: 14살\n키: 150cm\n보호자 동반: 없음\n롤러코스터: 입장 가능\n어린이존: 입장 불가",
+        isPreview: true,
+        note: "and, or, not 으로 하나씩 만들어보자!"
+      }
+    },
+
+    // 프로젝트
+    {
+      type: "project",
+      content: {
+        step: 1,
+        total: 4,
+        task: "제목 출력",
+        target: "=== 놀이공원 입장 시스템 ===",
+        hint: "print('=== 놀이공원 입장 시스템 ===')",
+        done: [],
+        answer: "print('=== 놀이공원 입장 시스템 ===')"
+      }
+    },
+    {
+      type: "project",
+      content: {
+        step: 2,
+        total: 4,
+        task: "age = 14, height = 150, guardian = False 로 변수 만들고\n현재 상태 출력",
+        target: "나이: 14살\n키: 150cm\n보호자 동반: 없음",
+        hint: "print(f'나이: {age}살')\nprint(f'키: {height}cm')\nprint('보호자 동반:', '있음' if guardian else '없음')",
+        done: ["=== 놀이공원 입장 시스템 ==="],
+        answer: "age = 14\nheight = 150\nguardian = False\nprint(f'나이: {age}살')\nprint(f'키: {height}cm')\nprint('보호자 동반:', '있음' if guardian else '없음')"
+      }
+    },
+    {
+      type: "project",
+      content: {
+        step: 3,
+        total: 4,
+        task: "롤러코스터: 키 140 이상이고 나이 12 이상이면 입장 가능",
+        target: "롤러코스터: 입장 가능",
+        hint: "if height >= 140 and age >= 12:",
+        done: ["=== 놀이공원 입장 시스템 ===", "나이: 14살", "키: 150cm", "보호자 동반: 없음"],
+        answer: "if height >= 140 and age >= 12:\n    print('롤러코스터: 입장 가능')\nelse:\n    print('롤러코스터: 입장 불가')"
+      }
+    },
+    {
+      type: "project",
+      content: {
+        step: 4,
+        total: 4,
+        task: "어린이존: 나이 12 미만이거나 보호자 동반이면 입장 가능",
+        target: "어린이존: 입장 불가",
+        hint: "if age < 12 or guardian:",
+        done: ["=== 놀이공원 입장 시스템 ===", "나이: 14살", "키: 150cm", "보호자 동반: 없음", "롤러코스터: 입장 가능"],
+        answer: "if age < 12 or guardian:\n    print('어린이존: 입장 가능')\nelse:\n    print('어린이존: 입장 불가')"
+      }
+    },
+
+    // 최종 요약
+    {
+      type: "summary",
+      content: {
+        num: 6,
+        title: "조건문 심화 마스터",
+        learned: [
+          "and: 둘 다 True여야 True",
+          "or: 하나만 True여도 True",
+          "not: True ↔ False 반전",
+          "복합 조건: age >= 13 and age < 19",
+          "연결 비교: 1 < x < 10 (Python 특성)"
+        ],
+        canDo: "논리 연산자로 복잡한 조건도 정확하게 처리할 수 있어!",
+        emoji: "🏆"
+      }
+    },
+
+    // 완료
+    {
+      type: "done",
+      content: {}
+    }
+  ]
+};

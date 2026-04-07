@@ -109,82 +109,37 @@ export const lesson3: LessonData = {
         }
       },
 
-      // ===== Lv.1: 변수 만들기 =====
+      // ===== 변수 만들고 출력하기 =====
       {
         type: "practice",
         content: {
-          level: 1,
-          task: "chicken에 19000 넣어봐",
-          guide: "변수이름 = 값",
-          template: { before: "chicken = ", after: "" },
-          answer: "19000",
-          expect: ""
-        }
-      },
-      {
-        type: "practice",
-        content: {
-          level: 1,
-          task: "cola에 2000 넣어봐",
-          template: { before: "cola = ", after: "" },
-          answer: "2000",
-          expect: ""
-        }
-      },
-      {
-        type: "practice",
-        content: {
-          level: 1,
-          task: "price에 21000 넣어봐",
-          template: { before: "price = ", after: "" },
-          answer: "21000",
-          expect: ""
-        }
-      },
-
-      // 보상
-      {
-        type: "reward",
-        content: {
-          message: "변수 만들기 성공!",
-          emoji: "👍"
-        }
-      },
-
-      // 변수 출력
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "변수 값을 출력하려면?"
-          ],
-          code: "chicken = 19000\nprint(chicken)",
-          result: "19000",
-          note: "print() 안에 변수 이름을 넣어!"
-        }
-      },
-
-      // ===== Lv.3: 변수 출력 =====
-      {
-        type: "practice",
-        content: {
-          level: 3,
-          task: "chicken 값을 출력해봐",
-          hint: "print(chicken)",
+          task: "이렇게 나오게 해봐 ↓\n19000",
+          guide: "chicken = 19000 만들고 출력!",
+          hint: "chicken = 19000\nprint(chicken)",
           template: null,
-          answer: "print(chicken)",
+          answer: "chicken = 19000\nprint(chicken)",
           expect: "19000"
         }
       },
       {
         type: "practice",
         content: {
-          level: 3,
-          task: "cola 값을 출력해봐",
-          hint: "print(___)",
+          task: "이렇게 나오게 해봐 ↓\n2000",
+          guide: "cola = 2000 만들고 출력!",
           template: null,
-          answer: "print(cola)",
+          answer: "cola = 2000\nprint(cola)",
           expect: "2000"
+        }
+      },
+      {
+        type: "practice",
+        content: {
+          task: "이렇게 나오게 해봐 ↓\n홍길동",
+          guide: "name = '홍길동' — 문자열은 따옴표!",
+          template: null,
+          answer: "name = '홍길동'\nprint(name)",
+          alternateAnswers: ["name = \"홍길동\"\nprint(name)"],
+          expect: "홍길동"
         }
       },
 

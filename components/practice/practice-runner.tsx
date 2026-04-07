@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
 import dynamic from "next/dynamic"
 import { Play, Loader2, RotateCcw, ChevronDown, Check, X, Lightbulb, Eye } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -58,9 +58,21 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
   const lang = problem.language ?? "cpp"
   const storageKey = `practice-code-${problem.id}`
 
+  // Eagerly load Prism on mount so the editor highlight function has it ready.
+  // prismReady state triggers a re-render after load, so the editor re-highlights
+  // with the correct syntax colours instead of showing plain text on first paint.
+  const [prismReady, setPrismReady] = useState(prismLoaded)
+  useEffect(() => {
+    if (!prismLoaded) {
+      loadPrism()
+      setPrismReady(true)
+    }
+  }, [])
+
   const [code, setCode] = useState(() => {
-    if (typeof window === "undefined") return problem.initialCode
-    try { return localStorage.getItem(storageKey) || problem.initialCode } catch { return problem.initialCode }
+    const initial = problem.initialCode ?? ""
+    if (typeof window === "undefined") return initial
+    try { return localStorage.getItem(storageKey) || initial } catch { return initial }
   })
   const [results, setResults] = useState<TestResult[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -81,7 +93,7 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
     const newResults: TestResult[] = []
     let compileError = ""
 
-    for (const tc of problem.testCases) {
+    for (const tc of problem.testCases ?? []) {
       try {
         const body = lang === "python"
           ? { compiler: "cpython-3.12.2", code, stdin: tc.stdin }
@@ -122,7 +134,7 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
   }, [code, problem, isLoading, onSuccess, storageKey, hintsShown, showSolution])
 
   const reset = () => {
-    setCode(problem.initialCode)
+    setCode(problem.initialCode ?? "")
     setResults([])
     setError("")
     setAllPassed(false)
@@ -144,7 +156,7 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
         <SimpleEditor
           value={code}
           onValueChange={c => setCode(c)}
-          highlight={c => highlightCode(c, lang)}
+          highlight={c => prismReady ? highlightCode(c, lang) : c}
           padding={16}
           style={{ fontFamily: "monospace", fontSize: 14, minHeight: 260, color: "#cdd6f4", background: "transparent" }}
         />
@@ -182,14 +194,14 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
                   ? <Check className="w-4 h-4 text-emerald-400 shrink-0" />
                   : <X className="w-4 h-4 text-red-400 shrink-0" />}
                 <span className={cn("font-medium", r.passed ? "text-emerald-400" : "text-red-400")}>
-                  테스트 {i + 1}{problem.testCases[i]?.label ? ` — ${problem.testCases[i].label}` : ""}
+                  테스트 {i + 1}{(problem.testCases ?? [])[i]?.label ? ` — ${(problem.testCases ?? [])[i].label}` : ""}
                 </span>
               </div>
               {!r.passed && (
                 <div className="mt-2 grid grid-cols-2 gap-2 text-xs font-mono">
                   <div>
                     <span className="text-white/40">입력: </span>
-                    <span className="text-white/70">{problem.testCases[i].stdin}</span>
+                    <span className="text-white/70">{(problem.testCases ?? [])[i]?.stdin}</span>
                   </div>
                   <div />
                   <div>
@@ -229,15 +241,15 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
       )}
 
       {/* 힌트 */}
-      {problem.hints.length > 0 && (
+      {(problem.hints ?? []).length > 0 && (
         <div className="flex flex-col gap-2">
-          {problem.hints.slice(0, hintsShown).map((hint, i) => (
+          {(problem.hints ?? []).slice(0, hintsShown).map((hint, i) => (
             <div key={i} className="rounded-xl bg-yellow-500/10 border border-yellow-500/20 p-3 text-sm text-yellow-200">
               <span className="font-medium text-yellow-400">💡 힌트 {i + 1}</span>
               <p className="mt-1">{hint}</p>
             </div>
           ))}
-          {hintsShown < problem.hints.length && (
+          {hintsShown < (problem.hints ?? []).length && (
             <button
               onClick={() => setHintsShown(h => h + 1)}
               className="flex items-center gap-2 text-sm text-gray-400 hover:text-gray-600 transition-colors py-1"
