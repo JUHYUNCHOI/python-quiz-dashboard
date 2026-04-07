@@ -860,7 +860,7 @@ export default function CurriculumPage() {
                 {pendingPracticeClusters.length > 0 ? (
                   <>
                     <Link
-                      href={`/practice?cluster=${pendingPracticeClusters[0].id}`}
+                      href={`/practice?cluster=${pendingPracticeClusters[0].id}&from=curriculum&session=1`}
                       className="bg-green-500 text-white px-6 py-3 rounded-xl border-2 border-black font-bold hover:bg-green-600 transition-colors flex items-center justify-center gap-2 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
                     >
                       <span>{pendingPracticeClusters[0].emoji}</span>
@@ -1198,7 +1198,7 @@ export default function CurriculumPage() {
                                       // 잠긴 레슨: 건너뛰기
                                       !isTeacher && !isPseudo ? (
                                         skipConfirmId === lesson.id ? (
-                                          <div className="flex flex-col gap-1">
+                                          <div className="flex flex-col gap-2">
                                             {(() => {
                                               const data = selectedCourse === "python" ? pythonCurriculumData : selectedCourse === "cpp" ? cppCurriculumData : pseudoCurriculumData
                                               const allIds = data.flatMap(p => p.lessons.map(l => l.id))
@@ -1209,25 +1209,36 @@ export default function CurriculumPage() {
                                                 return found?.title ?? String(id)
                                               })
                                               return (
-                                                <div className="space-y-0.5">
-                                                  <p className="text-[10px] text-amber-600 font-bold leading-tight">
+                                                <div className="rounded-lg bg-amber-50 border border-amber-200 px-2.5 py-2 space-y-0.5">
+                                                  <p className="text-[11px] text-amber-700 font-bold leading-tight">
                                                     ⚠️ {t(`미학습 ${skippedIds.length}개 레슨이 완료 처리됩니다`, `${skippedIds.length} lessons will be marked done`)}
                                                   </p>
-                                                  <p className="text-[9px] text-amber-500 leading-tight">
+                                                  <p className="text-[10px] text-amber-500 leading-tight">
                                                     {skippedNames.join(", ")}{skippedIds.length > 3 ? ` 외 ${skippedIds.length - 3}개` : ""}
+                                                  </p>
+                                                  <p className="text-[10px] text-amber-600 font-medium pt-0.5">
+                                                    {t("이미 아는 내용이면 아래 버튼으로 확인하세요.", "Confirm below if you already know these.")}
                                                   </p>
                                                 </div>
                                               )
                                             })()}
-                                            <div className="flex gap-1">
-                                              <button onClick={() => setSkipConfirmId(null)} className="px-2 py-1 rounded-lg border border-gray-300 text-gray-400 text-[10px] font-bold hover:bg-gray-50">{t("취소", "Cancel")}</button>
-                                              <button onClick={() => skipToLesson(lesson.id)} className="px-2 py-1 rounded-lg border border-orange-400 bg-orange-50 text-orange-600 text-[10px] font-bold hover:bg-orange-100">{t("건너뛰기 ✓", "Skip ✓")}</button>
+                                            <div className="flex gap-1.5">
+                                              <button onClick={() => setSkipConfirmId(null)} className="flex-1 px-2 py-1.5 rounded-lg border border-gray-300 text-gray-500 text-xs font-semibold hover:bg-gray-50">{t("취소", "Cancel")}</button>
+                                              <button onClick={() => skipToLesson(lesson.id)} className="flex-1 px-2 py-1.5 rounded-lg bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition-colors">{t("✓ 네, 건너뛸게요", "✓ Yes, Skip")}</button>
                                             </div>
                                           </div>
                                         ) : (
-                                          <button onClick={() => setSkipConfirmId(lesson.id)} className="px-2 py-1.5 rounded-lg border-2 border-gray-300 text-gray-400 text-xs font-bold hover:border-orange-300 hover:text-orange-500 hover:bg-orange-50 transition-colors" title={t("이미 아는 내용이라면 건너뛰기", "Skip if you already know this")}>
-                                            🔓 {t("건너뛰기", "Skip")}
-                                          </button>
+                                          (() => {
+                                            const data = selectedCourse === "python" ? pythonCurriculumData : selectedCourse === "cpp" ? cppCurriculumData : pseudoCurriculumData
+                                            const allIds = data.flatMap(p => p.lessons.map(l => l.id))
+                                            const targetIdx = allIds.findIndex(id => String(id) === String(lesson.id))
+                                            const skipCount = allIds.slice(0, targetIdx + 1).filter(id => !completedLessons.has(String(id))).length
+                                            return (
+                                              <button onClick={() => setSkipConfirmId(lesson.id)} className="px-2 py-1.5 rounded-lg border-2 border-gray-300 text-gray-400 text-xs font-bold hover:border-orange-300 hover:text-orange-500 hover:bg-orange-50 transition-colors" title={t("이미 아는 내용이라면 건너뛰기", "Skip if you already know this")}>
+                                                🔓 {t("건너뛰기", "Skip")}{skipCount > 1 ? <span className="ml-1 text-[9px] opacity-60">(이전 {skipCount}개 포함)</span> : ""}
+                                              </button>
+                                            )
+                                          })()
                                         )
                                       ) : (
                                         <span className="px-2 py-1.5 rounded-lg border-2 border-gray-300 font-bold text-gray-400 text-xs cursor-not-allowed">🔒</span>
@@ -1245,13 +1256,41 @@ export default function CurriculumPage() {
                                           const activeBtn = "w-full px-3 py-1.5 rounded-lg border-2 border-black font-bold text-sm text-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-colors"
                                           const doneText = "text-xs text-gray-400"
                                           const lockedText = "text-xs text-gray-300"
+
+                                          // ── 선생님 모드: 내용 탐색 버튼만 표시 ──
+                                          if (isTeacher) {
+                                            const navBtn = "px-2.5 py-1 rounded-lg border border-gray-200 bg-white text-gray-500 text-[11px] font-medium hover:bg-gray-50 hover:border-gray-400 hover:text-gray-700 transition-colors"
+                                            return (
+                                              <div className="flex flex-wrap gap-1.5 pt-0.5">
+                                                <Link href={`/learn/${lesson.id}`} className={navBtn}>
+                                                  📖 {t("레슨 보기", "View Lesson")}
+                                                </Link>
+                                                {hasReview && (
+                                                  <Link href={getReviewPath(lesson.id)} className={navBtn}>
+                                                    📝 {t("복습 문제", "Quiz")}
+                                                  </Link>
+                                                )}
+                                                {cluster && (
+                                                  <Link href={`/practice?cluster=${cluster.id}&from=curriculum&session=1`} className={navBtn}>
+                                                    {cluster.emoji} {t("연습 문제", "Practice")} <span className="text-gray-300 font-normal">({cluster.problems.length})</span>
+                                                  </Link>
+                                                )}
+                                              </div>
+                                            )
+                                          }
+
                                           return (
                                             <>
                                               {/* 1단계: 수업 */}
                                               <div className="flex items-center gap-2">
                                                 <span className="text-[10px] font-black text-gray-300 w-3 shrink-0">1</span>
                                                 {step1Done ? (
-                                                  <span className={doneText}>✅ {t("수업완료", "Done")}</span>
+                                                  <div className="flex items-center gap-1.5">
+                                                    <span className={doneText}>✅ {t("수업완료", "Done")}</span>
+                                                    <Link href={`/learn/${lesson.id}`} className="text-[10px] text-gray-300 hover:text-blue-400 underline underline-offset-2 decoration-dotted transition-colors">
+                                                      {t("다시보기", "Re-watch")}
+                                                    </Link>
+                                                  </div>
                                                 ) : (
                                                   <Link href={`/learn/${lesson.id}`} className={`${activeBtn} ${isCpp ? "bg-blue-500 hover:bg-blue-600" : isPseudo ? "bg-green-500 hover:bg-green-600" : "bg-green-500 hover:bg-green-600"} text-white`}>
                                                     {hasProgress ? t("▶️ 이어보기", "▶️ Continue") : t("🎯 도전", "🎯 Start")}
@@ -1264,7 +1303,12 @@ export default function CurriculumPage() {
                                                 <div className="flex items-center gap-2">
                                                   <span className="text-[10px] font-black text-gray-300 w-3 shrink-0">2</span>
                                                   {step2Done ? (
-                                                    <span className={doneText}>📘 {t("복습완료", "Reviewed")}</span>
+                                                    <div className="flex items-center gap-1.5">
+                                                      <span className={doneText}>📘 {t("복습완료", "Reviewed")}</span>
+                                                      <Link href={getReviewPath(lesson.id)} className="text-[10px] text-gray-300 hover:text-orange-400 underline underline-offset-2 decoration-dotted transition-colors">
+                                                        {t("다시풀기", "Redo")}
+                                                      </Link>
+                                                    </div>
                                                   ) : cur === 2 ? (
                                                     <Link href={getReviewPath(lesson.id)} className={`${activeBtn} bg-orange-400 hover:bg-orange-500 text-white`}>
                                                       📝 {t("복습하기", "Review")}
@@ -1282,7 +1326,7 @@ export default function CurriculumPage() {
                                                   {step3Done ? (
                                                     <span className={doneText}>✅ {t("도전완료", "Done")}</span>
                                                   ) : cur === 3 ? (
-                                                    <Link href={`/practice?cluster=${cluster.id}`} className={`${activeBtn} bg-green-500 hover:bg-green-600 text-white flex items-center justify-center gap-1.5`}>
+                                                    <Link href={`/practice?cluster=${cluster.id}&from=curriculum&session=1`} className={`${activeBtn} bg-green-500 hover:bg-green-600 text-white flex items-center justify-center gap-1.5`}>
                                                       <span>{cluster.emoji}</span>
                                                       <span>{t("도전", "Challenge")} {cluster.problems.filter(p => practiceSolvedSet.has(p.id)).length}/{cluster.problems.length}</span>
                                                     </Link>

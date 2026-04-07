@@ -1,0 +1,427 @@
+import { LessonData } from '../types';
+
+export const lessonCpp22: LessonData = {
+    id: "cpp-22",
+    title: "클래스 (class)",
+    description: "객체지향 프로그래밍의 핵심, 클래스!",
+    language: "cpp",
+    steps: [
+      // ==================== CHAPTER 1: struct vs class ====================
+      {
+        type: "chapter",
+        content: {
+          num: 1,
+          title: "struct vs class",
+          desc: "struct와 class의 차이를 알아봐요!"
+        }
+      },
+
+      {
+        type: "explain",
+        content: {
+          lines: [
+            "cpp-14에서 struct를 배웠죠! class는 struct와 비슷하지만 한 가지 큰 차이가 있어요. 🔐",
+            "struct = 기본 public (외부 접근 가능)",
+            "class  = 기본 private (외부 접근 불가)"
+          ],
+          code: 'struct Dog {\n    string name;  // 기본 public\n};\n\nclass Cat {\n    string name;  // 기본 private!\n};\n\nDog d;\nd.name = "바둑이";  // OK!\n\nCat c;\n// c.name = "나비"; // 에러! private이라 못 써요',
+          note: "struct = 기본 public | class = 기본 private"
+        }
+      },
+
+      // struct vs class 퀴즈
+      {
+        type: "quiz",
+        content: {
+          question: "struct와 class의 가장 큰 차이는?",
+          options: [
+            "struct는 함수를 가질 수 없다",
+            "struct는 기본 public, class는 기본 private",
+            "class는 변수를 가질 수 없다",
+            "struct는 C++에서 사용 불가"
+          ],
+          answer: 1,
+          explanation: "struct는 기본 접근 제한이 public, class는 private이에요! 그 외에는 거의 동일하게 동작해요."
+        }
+      },
+
+      // public / private 예측
+      {
+        type: "explain",
+        content: {
+          lines: [
+            "public: 아래에 있는 멤버는 외부에서 접근 가능해요.",
+            "private: 아래에 있는 멤버는 클래스 안에서만 접근 가능해요."
+          ],
+          code: 'class Rectangle {\npublic:\n    int width;\n    int height;\n\nprivate:\n    int secret;\n};\n\nRectangle r;\nr.width = 5;   // OK\nr.height = 3;  // OK\n// r.secret = 1; // 에러! private이에요',
+          predict: {
+            question: "r.width = 5; 는 동작할까요?",
+            options: ["동작한다 (public이라서)", "에러 (private이라서)", "에러 (width가 없어서)", "에러 (class라서)"],
+            answer: 0,
+            feedback: "width는 public: 아래에 있어서 외부에서 접근 가능해요!"
+          }
+        }
+      },
+
+      // Lv.1: public 빈칸
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "멤버를 외부에서 접근 가능하게 만들어요!",
+          guide: "외부 접근을 허용하는 키워드는?",
+          template: "class Circle {\n___:\n    int radius;\n};",
+          answer: "public",
+          expect: "class Circle {\npublic:\n    int radius;\n};"
+        }
+      },
+
+      // 에러 퀴즈
+      {
+        type: "errorQuiz",
+        content: {
+          question: "이 코드는 왜 에러일까요?",
+          code: 'class Player {\n    string name;  // 기본 private!\n};\n\nPlayer p;\np.name = "철수";',
+          options: [
+            "name이 private이라 외부에서 접근 못 해서",
+            "Player 클래스 선언이 잘못돼서",
+            "string 타입을 못 써서"
+          ],
+          answer: 0,
+          explanation: "class는 기본이 private이에요! name을 외부에서 쓰려면 public: 아래에 넣어야 해요."
+        }
+      },
+
+      // 보상
+      {
+        type: "reward",
+        content: {
+          message: "public/private 이해 완료!",
+          emoji: "🔐"
+        }
+      },
+
+      // 챕터 1 요약
+      {
+        type: "summary",
+        content: {
+          num: 1,
+          title: "struct vs class",
+          learned: [
+            "struct = 기본 public / class = 기본 private",
+            "public: — 외부에서 자유롭게 접근 가능",
+            "private: — 클래스 안에서만 접근 가능",
+            "class에서 멤버를 쓰려면 public: 아래에 선언!",
+            "캡슐화(encapsulation) = 내부 구현 숨기기"
+          ],
+          canDo: "public/private로 클래스 멤버 접근을 제어할 수 있어요!",
+          emoji: "🔐"
+        }
+      },
+
+      // ==================== CHAPTER 2: 생성자와 멤버 함수 ====================
+      {
+        type: "chapter",
+        content: {
+          num: 2,
+          title: "생성자와 멤버 함수",
+          desc: "생성자와 메서드로 클래스를 풍부하게!"
+        }
+      },
+
+      // 인터리빙: 챕터1 복습
+      {
+        type: "interleaving",
+        content: {
+          message: "잠깐! class 기억나요?",
+          task: "Cat 클래스의 name을 외부에서 접근 가능하게 만들어요!",
+          template: "class Cat {\n___:\n    string name;\n};",
+          answer: "public",
+          expect: "class Cat {\npublic:\n    string name;\n};"
+        }
+      },
+
+      // 생성자 설명
+      {
+        type: "explain",
+        content: {
+          lines: [
+            "생성자(constructor)는 객체를 만들 때 자동으로 실행되는 함수예요! 🏗️",
+            "파이썬의 __init__과 같아요!",
+            "클래스 이름과 동일한 이름, 반환 타입 없음."
+          ],
+          code: 'class Character {\npublic:\n    string name;\n    int hp;\n\n    // 생성자: 클래스 이름과 같음, 반환 타입 없음!\n    Character(string n, int h) {\n        name = n;\n        hp = h;\n    }\n\n    void introduce() {\n        cout << name << " (HP: " << hp << ")" << endl;\n    }\n};\n\nCharacter hero("철수", 100);\nhero.introduce();',
+          result: "철수 (HP: 100)",
+          note: "Character(string n, int h) = 생성자 (파이썬의 __init__(self, n, h))"
+        }
+      },
+
+      // 생성자 예측
+      {
+        type: "explain",
+        content: {
+          lines: [
+            "this-> 를 써서 멤버 변수와 매개변수를 구분할 수 있어요!",
+            "파이썬의 self.name = name과 같아요."
+          ],
+          code: '#include <iostream>\nusing namespace std;\n\nclass Dog {\npublic:\n    string name;\n    int age;\n\n    Dog(string name, int age) {\n        this->name = name;  // this->name = 멤버변수\n        this->age = age;    // this->age  = 멤버변수\n    }\n\n    void bark() {\n        cout << this->name << ": 멍멍!" << endl;\n    }\n};\n\nint main() {\n    Dog d("바둑이", 3);\n    d.bark();\n    return 0;\n}',
+          predict: {
+            question: "출력 결과는?",
+            options: ["바둑이: 멍멍!", "3: 멍멍!", "name: 멍멍!", "에러"],
+            answer: 0,
+            feedback: "Dog d(\"바둑이\", 3)으로 name=\"바둑이\"가 저장됐고, bark()에서 this->name을 출력해요!"
+          }
+        }
+      },
+
+      // Lv.1: 생성자 빈칸
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "Circle 클래스의 생성자를 만들어요!",
+          guide: "생성자 이름은 클래스 이름과 같아요!",
+          template: "class Circle {\npublic:\n    int radius;\n    ___(int r) {\n        radius = r;\n    }\n};",
+          answer: "Circle",
+          expect: "class Circle {\npublic:\n    int radius;\n    Circle(int r) {\n        radius = r;\n    }\n};"
+        }
+      },
+
+      // Lv.2: this-> 빈칸
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "this->를 써서 멤버 변수를 초기화해요!",
+          guide: "this->멤버변수 = 매개변수;",
+          template: "class Box {\npublic:\n    int size;\n    Box(int size) {\n        ___->size = size;\n    }\n};",
+          answer: "this",
+          expect: "class Box {\npublic:\n    int size;\n    Box(int size) {\n        this->size = size;\n    }\n};"
+        }
+      },
+
+      // 퀴즈
+      {
+        type: "quiz",
+        content: {
+          question: "생성자의 특징은?",
+          options: [
+            "반환 타입이 void이다",
+            "클래스 이름과 다른 이름을 쓴다",
+            "객체 생성 시 자동 호출되고 반환 타입이 없다",
+            "private: 아래에만 선언 가능하다"
+          ],
+          answer: 2,
+          explanation: "생성자는 객체를 만들 때 자동 실행! 반환 타입이 아예 없어요 (void도 아님!). 파이썬의 __init__과 같아요."
+        }
+      },
+
+      // getter/setter 설명
+      {
+        type: "explain",
+        content: {
+          lines: [
+            "private 멤버에 접근하려면 getter/setter 메서드를 만들어요! 🔑",
+            "getter = 값을 읽는 함수, setter = 값을 바꾸는 함수"
+          ],
+          code: 'class BankAccount {\nprivate:\n    int balance;  // 외부에서 직접 접근 불가\n\npublic:\n    BankAccount(int b) {\n        balance = b;\n    }\n\n    int getBalance() {         // getter\n        return balance;\n    }\n\n    void deposit(int amount) { // setter 역할\n        balance += amount;\n    }\n};\n\nBankAccount acc(1000);\nacc.deposit(500);\ncout << acc.getBalance() << endl;',
+          result: "1500",
+          note: "private 데이터는 getter/setter로만 접근 — 캡슐화의 핵심!"
+        }
+      },
+
+      // Lv.2: getter 빈칸
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "hp를 반환하는 getter를 완성해요!",
+          guide: "반환 타입은 int, return this->hp;",
+          template: "class Character {\nprivate:\n    int hp;\npublic:\n    Character(int h) { hp = h; }\n    ___ getHp() {\n        return hp;\n    }\n};",
+          answer: "int",
+          expect: "class Character {\nprivate:\n    int hp;\npublic:\n    Character(int h) { hp = h; }\n    int getHp() {\n        return hp;\n    }\n};"
+        }
+      },
+
+      // 보상
+      {
+        type: "reward",
+        content: {
+          message: "생성자와 멤버 함수 마스터!",
+          emoji: "🏗️"
+        }
+      },
+
+      // 챕터 2 요약
+      {
+        type: "summary",
+        content: {
+          num: 2,
+          title: "생성자와 멤버 함수",
+          learned: [
+            "생성자 = 클래스 이름과 같은 함수, 반환 타입 없음",
+            "객체 생성 시 자동 호출 (파이썬 __init__)",
+            "this->멤버 = 매개변수; — 멤버 변수 구분",
+            "getter: 값을 읽는 함수 (int getName())",
+            "setter: 값을 바꾸는 함수 (void setName(...))"
+          ],
+          canDo: "생성자와 getter/setter를 만들어 클래스를 완성할 수 있어요!",
+          emoji: "🏗️"
+        }
+      },
+
+      // ==================== CHAPTER 3: 상속 ====================
+      {
+        type: "chapter",
+        content: {
+          num: 3,
+          title: "상속 (Inheritance)",
+          desc: "부모 클래스를 물려받아 확장해요!"
+        }
+      },
+
+      // 인터리빙: 챕터2 복습
+      {
+        type: "interleaving",
+        content: {
+          message: "잠깐! 생성자 기억나요?",
+          task: "Dog 클래스의 생성자 이름을 써봐요!",
+          template: "class Dog {\npublic:\n    string name;\n    ___(string n) {\n        name = n;\n    }\n};",
+          answer: "Dog",
+          expect: "class Dog {\npublic:\n    string name;\n    Dog(string n) {\n        name = n;\n    }\n};"
+        }
+      },
+
+      // 상속 설명
+      {
+        type: "explain",
+        content: {
+          lines: [
+            "상속(inheritance)은 부모 클래스의 멤버를 자식 클래스가 물려받는 것이에요! 👨‍👦",
+            "class 자식 : public 부모 { } 형태로 써요.",
+            "파이썬의 class Warrior(Character): 와 같아요!"
+          ],
+          code: 'class Character {\npublic:\n    string name;\n    int hp;\n\n    Character(string n, int h) {\n        name = n;\n        hp = h;\n    }\n\n    void showStatus() {\n        cout << name << " HP:" << hp << endl;\n    }\n};\n\n// Warrior는 Character를 상속!\nclass Warrior : public Character {\npublic:\n    int attackPower;\n\n    // 부모 생성자 호출: Character(n, h)\n    Warrior(string n, int h, int atk) : Character(n, h) {\n        attackPower = atk;\n    }\n\n    void attack() {\n        cout << name << " 공격! (데미지: " << attackPower << ")" << endl;\n    }\n};\n\nWarrior w("철수", 100, 30);\nw.showStatus();  // 부모 메서드 사용 가능!\nw.attack();',
+          result: "철수 HP:100\n철수 공격! (데미지: 30)",
+          note: "Warrior(n, h, atk) : Character(n, h) = 부모 생성자 호출 (파이썬의 super().__init__)"
+        }
+      },
+
+      // 상속 예측
+      {
+        type: "explain",
+        content: {
+          lines: [
+            "자식 클래스는 부모의 public 멤버를 모두 쓸 수 있어요!",
+            "자식만의 멤버도 추가할 수 있어요."
+          ],
+          code: '#include <iostream>\nusing namespace std;\n\nclass Animal {\npublic:\n    string name;\n    Animal(string n) : name(n) {}\n    void speak() {\n        cout << name << " 소리냄" << endl;\n    }\n};\n\nclass Cat : public Animal {\npublic:\n    Cat(string n) : Animal(n) {}\n    void purr() {\n        cout << name << ": 야옹!" << endl;\n    }\n};\n\nint main() {\n    Cat c("나비");\n    c.speak();\n    c.purr();\n    return 0;\n}',
+          predict: {
+            question: "출력 결과는?",
+            options: ["나비 소리냄\n나비: 야옹!", "나비: 야옹!\n나비 소리냄", "나비: 야옹!", "에러"],
+            answer: 0,
+            feedback: "c.speak()는 부모(Animal)의 메서드, c.purr()는 자식(Cat)의 메서드예요. 부모 것도 쓸 수 있어요!"
+          }
+        }
+      },
+
+      // Lv.1: 상속 선언 빈칸
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "Mage 클래스가 Character를 상속받게 해요!",
+          guide: "class 자식 : public 부모 { }",
+          template: "class Mage ___ Character {\npublic:\n    int mp;\n};",
+          answer: ": public",
+          expect: "class Mage : public Character {\npublic:\n    int mp;\n};"
+        }
+      },
+
+      // Lv.2: 부모 생성자 호출
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "Mage 생성자에서 부모 생성자를 호출해요!",
+          guide: "자식생성자(params) : 부모생성자(params) { }",
+          template: "class Mage : public Character {\npublic:\n    int mp;\n    Mage(string n, int h, int m) : ___(n, h) {\n        mp = m;\n    }\n};",
+          answer: "Character",
+          expect: "class Mage : public Character {\npublic:\n    int mp;\n    Mage(string n, int h, int m) : Character(n, h) {\n        mp = m;\n    }\n};"
+        }
+      },
+
+      // 퀴즈
+      {
+        type: "quiz",
+        content: {
+          question: "C++에서 상속을 선언하는 올바른 방법은?",
+          options: [
+            "class Child(Parent) { }",
+            "class Child extends Parent { }",
+            "class Child : public Parent { }",
+            "class Child inherits Parent { }"
+          ],
+          answer: 2,
+          explanation: "C++은 class Child : public Parent { } 형태로 써요! 파이썬은 class Child(Parent):, Java는 extends를 쓰지만 C++은 콜론(:)을 써요."
+        }
+      },
+
+      // 종합 프로젝트 Step 1
+      {
+        type: "project",
+        content: {
+          step: 1,
+          total: 3,
+          task: "Character 기본 클래스를 만들어요! (name, hp, 생성자, showStatus)",
+          target: "class Character {\npublic:\n    string name;\n    int hp;\n\n    Character(string n, int h) : name(n), hp(h) {}\n\n    void showStatus() {\n        cout << name << \" HP:\" << hp << endl;\n    }\n};",
+          hint: "name(n), hp(h) = 멤버 초기화 리스트 (this->name = n과 같아요)",
+          done: ["#include <iostream>\nusing namespace std;\n"],
+          answer: "class Character {\npublic:\n    string name;\n    int hp;\n\n    Character(string n, int h) : name(n), hp(h) {}\n\n    void showStatus() {\n        cout << name << \" HP:\" << hp << endl;\n    }\n};"
+        }
+      },
+
+      // 종합 프로젝트 Step 2
+      {
+        type: "project",
+        content: {
+          step: 2,
+          total: 3,
+          task: "Warrior 클래스를 Character에서 상속해요! (attackPower 추가, attack 메서드)",
+          target: "class Warrior : public Character {\npublic:\n    int attackPower;\n\n    Warrior(string n, int h, int atk) : Character(n, h) {\n        attackPower = atk;\n    }\n\n    void attack() {\n        cout << name << \" 공격! 데미지: \" << attackPower << endl;\n    }\n};",
+          hint: "Warrior(n, h, atk) : Character(n, h) { } 로 부모 생성자 호출!",
+          done: ["#include <iostream>\nusing namespace std;\n", "class Character {\npublic:\n    string name;\n    int hp;\n    Character(string n, int h) : name(n), hp(h) {}\n    void showStatus() { cout << name << \" HP:\" << hp << endl; }\n};"],
+          answer: "class Warrior : public Character {\npublic:\n    int attackPower;\n\n    Warrior(string n, int h, int atk) : Character(n, h) {\n        attackPower = atk;\n    }\n\n    void attack() {\n        cout << name << \" 공격! 데미지: \" << attackPower << endl;\n    }\n};"
+        }
+      },
+
+      // 종합 프로젝트 Step 3
+      {
+        type: "project",
+        content: {
+          step: 3,
+          total: 3,
+          task: "main에서 Warrior 객체를 만들고 showStatus와 attack을 호출해요!",
+          target: "int main() {\n    Warrior w(\"철수\", 100, 30);\n    w.showStatus();\n    w.attack();\n    return 0;\n}",
+          hint: "Warrior w(\"이름\", hp, attack); 로 생성 후 메서드 호출!",
+          done: ["#include <iostream>\nusing namespace std;\n", "// Character, Warrior 클래스 선언 완료"],
+          answer: "int main() {\n    Warrior w(\"철수\", 100, 30);\n    w.showStatus();\n    w.attack();\n    return 0;\n}"
+        }
+      },
+
+      // 보상
+      {
+        type: "reward",
+        content: {
+          message: "클래스와 상속 완전 정복!",
+          emoji: "🏆"
+        }
+      },
+
+      // done
+      {
+        type: "done",
+        content: {}
+      }
+    ]
+};

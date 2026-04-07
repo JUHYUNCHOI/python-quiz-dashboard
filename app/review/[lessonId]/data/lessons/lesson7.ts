@@ -2,16 +2,29 @@ import { LessonData } from '../types';
 
 export const lesson7: LessonData = {
     id: "7",
-    title: "반복문 (for)",
-    description: "같은 작업을 여러 번!",
+    title: "print() 옵션",
+    description: "sep와 end로 출력 형식 바꾸기!",
     steps: [
       // ==================== CHAPTER 1: 동기 부여 ====================
       {
         type: "chapter",
         content: {
           num: 1,
-          title: "반복의 힘",
-          desc: "100번도 한 줄로!"
+          title: "출력 형식을 바꿔보자",
+          desc: "sep와 end로 자유자재로!"
+        }
+      },
+
+      // 프리뷰
+      {
+        type: "explain",
+        content: {
+          lines: [
+            "🖨️ 오늘 만들 것!"
+          ],
+          code: "2024-03-15\nA B C D E\n로딩중... 완료!",
+          isPreview: true,
+          note: "sep와 end를 배우면 이렇게 만들 수 있어!"
         }
       },
 
@@ -19,41 +32,30 @@ export const lesson7: LessonData = {
         type: "explain",
         content: {
           lines: [
-            "Hello를 5번 출력하고 싶어"
+            "print()에는 옵션이 있어!"
           ],
-          code: "print('Hello')\nprint('Hello')\nprint('Hello')\nprint('Hello')\nprint('Hello')",
-          isError: true,
-          note: "100번이면? 😱"
+          code: "print('A', 'B', 'C')           → A B C\nprint('A', 'B', sep='-')      → A-B-C\nprint('Hello', end=' ')        → Hello (줄바꿈 없음)",
+          isPreview: true,
+          note: "sep = 구분자, end = 끝 문자!"
         }
       },
 
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "반복문으로 단 2줄!"
-          ],
-          code: "for i in range(5):\n    print('Hello')",
-          result: "Hello (5번 출력!)",
-          note: "이게 반복문의 힘! 💪"
-        }
-      },
-
+      // 보상
       {
         type: "reward",
         content: {
-          message: "for 반복문을 배워보자!",
-          emoji: "🔄"
+          message: "print() 옵션 마스터!",
+          emoji: "🖨️"
         }
       },
 
-      // ==================== CHAPTER 2: for 기본 ====================
+      // ==================== CHAPTER 2: sep 옵션 ====================
       {
         type: "chapter",
         content: {
           num: 2,
-          title: "for 기본",
-          desc: "range()로 반복!"
+          title: "sep 옵션",
+          desc: "값 사이 구분 문자 바꾸기!"
         }
       },
 
@@ -61,34 +63,86 @@ export const lesson7: LessonData = {
       {
         type: "interleaving",
         content: {
-          message: "잠깐! print 복습",
-          task: "Hello 출력해봐",
+          message: "잠깐! print() 기본 복습",
+          task: "'Hello' 와 'World' 를 한 번에 출력해봐",
           template: null,
-          answer: "print('Hello')",
-          expect: "Hello"
+          answer: "print('Hello', 'World')",
+          expect: "Hello World"
         }
       },
 
+      // sep 기본값
       {
         type: "explain",
         content: {
           lines: [
-            "for 기본 구조"
+            "print()의 기본 구분자는 공백!"
           ],
-          code: "for 변수 in range(횟수):\n    반복할 코드",
-          note: "range(5) = 5번 반복!"
+          code: "print('A', 'B', 'C')       → A B C\nprint(1, 2, 3)             → 1 2 3",
+          note: "값들 사이에 자동으로 공백이 들어가!"
         }
       },
 
+      // sep 사용
       {
         type: "explain",
         content: {
           lines: [
-            "변수 i는 뭘까?"
+            "sep= 로 구분자를 바꿀 수 있어!"
           ],
-          code: "for i in range(5):\n    print(i)",
-          result: "0\n1\n2\n3\n4",
-          note: "i는 0부터 4까지 변해!"
+          code: "print('A', 'B', 'C', sep='-')   → A-B-C\nprint('A', 'B', 'C', sep=', ')  → A, B, C\nprint('A', 'B', 'C', sep='')    → ABC",
+          note: "sep= 에 원하는 구분자를 넣어!"
+        }
+      },
+
+      // ===== Lv.1: sep 연습 =====
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "'사과', '바나나', '딸기' 를 '-' 로 구분해서 출력해봐",
+          guide: "sep='-' 사용!",
+          template: { before: "print(", after: ")" },
+          answer: "'사과', '바나나', '딸기', sep='-'",
+          alternateAnswers: ["'사과','바나나','딸기',sep='-'"],
+          expect: "사과-바나나-딸기"
+        }
+      },
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "2024, 3, 15 를 '-' 로 구분해서 출력해봐 (날짜 형식)",
+          guide: "sep='-' 사용!",
+          template: { before: "print(", after: ")" },
+          answer: "2024, 3, 15, sep='-'",
+          alternateAnswers: ["2024,3,15,sep='-'"],
+          expect: "2024-3-15"
+        }
+      },
+
+      // sep='' 활용
+      {
+        type: "explain",
+        content: {
+          lines: [
+            "sep='' 이면 구분자 없음!"
+          ],
+          code: "print('H', 'e', 'l', 'l', 'o', sep='')\n→ Hello\n\nprint(1, 2, 3, sep='+')\n→ 1+2+3",
+          note: "sep='' 는 구분자 없이 붙여서 출력!"
+        }
+      },
+
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "'H', 'i', '!' 를 구분자 없이 붙여서 출력해봐",
+          guide: "sep='' 사용!",
+          template: { before: "print(", after: ")" },
+          answer: "'H', 'i', '!', sep=''",
+          alternateAnswers: ["'H','i','!',sep=''"],
+          expect: "Hi!"
         }
       },
 
@@ -96,60 +150,14 @@ export const lesson7: LessonData = {
       {
         type: "quiz",
         content: {
-          question: "range(5)가 만드는 숫자는?",
+          question: "print('1', '2', '3', sep='/') 의 결과는?",
           options: [
-            "1, 2, 3, 4, 5",
-            "0, 1, 2, 3, 4",
-            "0, 1, 2, 3, 4, 5"
+            "1 2 3",
+            "1/2/3",
+            "123"
           ],
           answer: 1,
-          explanation: "range(5)는 0부터 4까지! 5는 포함 안 됨!"
-        }
-      },
-
-      // ===== Lv.1: range(n) 연습 =====
-      {
-        type: "practice",
-        content: {
-          level: 1,
-          task: "Hello를 3번 출력해봐",
-          guide: "range(3) 사용!",
-          template: { before: "for i in range(", after: "):\n    print('Hello')" },
-          answer: "3",
-          expect: "Hello\nHello\nHello"
-        }
-      },
-      {
-        type: "practice",
-        content: {
-          level: 1,
-          task: "i를 5번 출력해봐 (0~4)",
-          template: { before: "for i in range(", after: "):\n    print(i)" },
-          answer: "5",
-          expect: "0\n1\n2\n3\n4"
-        }
-      },
-
-      // ===== Lv.2: for 전체 작성 =====
-      {
-        type: "practice",
-        content: {
-          level: 2,
-          task: "0부터 3까지 출력해봐",
-          guide: "for i in range(4): 형태!",
-          template: null,
-          answer: "for i in range(4):\n    print(i)",
-          expect: "0\n1\n2\n3"
-        }
-      },
-      {
-        type: "practice",
-        content: {
-          level: 2,
-          task: "'안녕'을 4번 출력해봐",
-          template: null,
-          answer: "for i in range(4):\n    print('안녕')",
-          expect: "안녕\n안녕\n안녕\n안녕"
+          explanation: "sep='/'로 '/'가 구분자가 돼! 1/2/3"
         }
       },
 
@@ -158,125 +166,87 @@ export const lesson7: LessonData = {
         type: "summary",
         content: {
           num: 2,
-          title: "for 기본",
+          title: "sep 옵션",
           learned: [
-            "for i in range(n): 형태",
-            "range(5)는 0~4",
-            "콜론과 들여쓰기!"
+            "기본값: sep=' ' (공백)",
+            "sep='-' → 대시로 구분",
+            "sep='' → 구분자 없이 붙이기"
           ],
-          canDo: "코드를 여러 번 반복할 수 있어!",
-          emoji: "🔄"
+          canDo: "print()의 구분자를 원하는 대로 바꿀 수 있어!",
+          emoji: "↔️"
         }
       },
 
-      // ==================== CHAPTER 3: range() 더 알아보기 ====================
+      // ==================== CHAPTER 3: end 옵션 ====================
       {
         type: "chapter",
         content: {
           num: 3,
-          title: "range() 활용",
-          desc: "시작, 끝, 간격!"
+          title: "end 옵션",
+          desc: "줄바꿈 대신 다른 문자!"
         }
       },
 
+      // end 기본값
       {
         type: "explain",
         content: {
           lines: [
-            "range(시작, 끝)"
+            "print()는 기본으로 줄바꿈해!"
           ],
-          code: "for i in range(1, 6):\n    print(i)",
-          result: "1\n2\n3\n4\n5",
-          note: "1부터 5까지! (6은 안 됨)"
+          code: "print('Hello')\nprint('World')",
+          result: "Hello\nWorld",
+          note: "기본값: end='\\n' (줄바꿈)"
         }
       },
 
+      // end 사용
       {
         type: "explain",
         content: {
           lines: [
-            "range(시작, 끝, 간격)"
+            "end= 로 줄바꿈 대신 다른 걸!"
           ],
-          code: "for i in range(0, 10, 2):\n    print(i)",
-          result: "0\n2\n4\n6\n8",
-          note: "2씩 건너뛰기!"
+          code: "print('Hello', end=' ')\nprint('World')\n→ Hello World (한 줄!)\n\nprint('로딩', end='...')\nprint('완료!')\n→ 로딩...완료!",
+          note: "end=' ' 는 공백으로 끝냄. 줄바꿈 없음!"
         }
       },
 
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "카운트다운!"
-          ],
-          code: "for i in range(5, 0, -1):\n    print(i)",
-          result: "5\n4\n3\n2\n1",
-          note: "-1로 거꾸로!"
-        }
-      },
-
-      // ===== Lv.1: range(시작, 끝) 연습 =====
+      // ===== Lv.1: end 연습 =====
       {
         type: "practice",
         content: {
           level: 1,
-          task: "1부터 5까지 출력해봐",
-          guide: "range(시작, 끝+1) 형태!",
-          template: { before: "for i in range(", after: "):\n    print(i)" },
-          answer: "1, 6",
-          alternateAnswers: ["1,6"],
-          expect: "1\n2\n3\n4\n5"
-        }
-      },
-      {
-        type: "practice",
-        content: {
-          level: 1,
-          task: "10부터 15까지 출력해봐",
-          template: { before: "for i in range(", after: "):\n    print(i)" },
-          answer: "10, 16",
-          alternateAnswers: ["10,16"],
-          expect: "10\n11\n12\n13\n14\n15"
-        }
-      },
-
-      // ===== Lv.2: range(시작, 끝, 간격) 연습 =====
-      {
-        type: "practice",
-        content: {
-          level: 2,
-          task: "0부터 10까지 2씩 건너뛰며 출력해봐",
-          guide: "range(시작, 끝, 간격) 형태!",
-          template: { before: "for i in range(", after: "):\n    print(i)" },
-          answer: "0, 11, 2",
-          alternateAnswers: ["0,11,2", "0, 10, 2", "0,10,2"],
-          expect: "0\n2\n4\n6\n8\n10"
-        }
-      },
-      {
-        type: "practice",
-        content: {
-          level: 2,
-          task: "5부터 1까지 거꾸로 출력해봐 (카운트다운)",
-          guide: "range(시작, 끝, -1) 형태!",
-          template: { before: "for i in range(", after: "):\n    print(i)" },
-          answer: "5, 0, -1",
-          alternateAnswers: ["5,0,-1"],
-          expect: "5\n4\n3\n2\n1"
-        }
-      },
-
-      // ===== Lv.3: for 전체 작성 =====
-      {
-        type: "practice",
-        content: {
-          level: 3,
-          task: "2부터 10까지 짝수만 출력해봐",
-          hint: "for i in range(2, 11, 2):",
+          task: "'Hello' 출력 후 줄바꿈 없이 공백, 그 다음 'World' 출력해봐",
+          guide: "end=' ' 사용!",
           template: null,
-          answer: "for i in range(2, 11, 2):\n    print(i)",
-          alternateAnswers: ["for i in range(2, 10, 2):\n    print(i)"],
-          expect: "2\n4\n6\n8\n10"
+          answer: "print('Hello', end=' ')\nprint('World')",
+          expect: "Hello World"
+        }
+      },
+
+      // end='' 활용
+      {
+        type: "explain",
+        content: {
+          lines: [
+            "end='' 이면 줄바꿈도 없고 아무것도 없음!"
+          ],
+          code: "print('A', end='')\nprint('B', end='')\nprint('C')\n→ ABC",
+          note: "end='' 는 줄바꿈 없이 바로 붙여!"
+        }
+      },
+
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "1, 2, 3 을 줄바꿈 없이 한 줄에 출력해봐 (각각 print 3번)",
+          guide: "end='' 사용!",
+          template: null,
+          answer: "print(1, end='')\nprint(2, end='')\nprint(3)",
+          alternateAnswers: ["print(1, end='')\nprint(2, end='')\nprint(3, end='')"],
+          expect: "123"
         }
       },
 
@@ -284,14 +254,14 @@ export const lesson7: LessonData = {
       {
         type: "quiz",
         content: {
-          question: "range(2, 10, 3)이 만드는 숫자는?",
+          question: "print('안녕', end='!') 의 결과는?",
           options: [
-            "2, 5, 8",
-            "2, 5, 8, 11",
-            "3, 6, 9"
+            "안녕\n (줄바꿈 있음)",
+            "안녕! (줄바꿈 없이 ! 추가)",
+            "안녕 ! (공백 + !)"
           ],
-          answer: 0,
-          explanation: "2부터 시작, 3씩 증가, 10 전까지! → 2, 5, 8"
+          answer: 1,
+          explanation: "end='!'로 줄바꿈 대신 '!'가 붙어! '안녕!'"
         }
       },
 
@@ -300,24 +270,24 @@ export const lesson7: LessonData = {
         type: "summary",
         content: {
           num: 3,
-          title: "range() 활용",
+          title: "end 옵션",
           learned: [
-            "range(n): 0부터 n-1",
-            "range(a, b): a부터 b-1",
-            "range(a, b, c): c간격"
+            "기본값: end='\\n' (줄바꿈)",
+            "end=' ' → 공백으로 끝남",
+            "end='' → 아무것도 없이 바로 이어짐"
           ],
-          canDo: "원하는 범위로 반복할 수 있어!",
-          emoji: "🔢"
+          canDo: "줄바꿈 없이 원하는 방식으로 출력을 이어갈 수 있어!",
+          emoji: "↩️"
         }
       },
 
-      // ==================== CHAPTER 4: 프로젝트 ====================
+      // ==================== CHAPTER 4: sep + end 조합 & 프로젝트 ====================
       {
         type: "chapter",
         content: {
           num: 4,
-          title: "구구단 출력기",
-          desc: "배운 걸 활용해서 만들기!"
+          title: "sep + end 동시 활용",
+          desc: "두 옵션을 같이 써보자!"
         }
       },
 
@@ -325,11 +295,37 @@ export const lesson7: LessonData = {
       {
         type: "interleaving",
         content: {
-          message: "변수 출력 기억나?",
-          task: "i 변수를 출력해봐",
+          message: "sep 기억나?",
+          task: "1, 2, 3 을 ':' 로 구분해서 출력해봐",
           template: null,
-          answer: "print(i)",
-          expect: "1"
+          answer: "print(1, 2, 3, sep=':')",
+          expect: "1:2:3"
+        }
+      },
+
+      // sep + end 조합
+      {
+        type: "explain",
+        content: {
+          lines: [
+            "sep 와 end 를 같이 쓸 수 있어!"
+          ],
+          code: "print('A', 'B', 'C', sep='-', end='!')\n→ A-B-C!\n\nprint(1, 2, 3, sep='+', end='=?')\n→ 1+2+3=?",
+          note: "sep= 와 end= 를 쉼표로 구분해서 함께 사용!"
+        }
+      },
+
+      // ===== Lv.2: sep + end 조합 =====
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "'월', '화', '수' 를 '/' 로 구분하고 '~' 로 끝내서 출력해봐",
+          guide: "sep='/' 와 end='~' 같이!",
+          template: { before: "print(", after: ")" },
+          answer: "'월', '화', '수', sep='/', end='~'",
+          alternateAnswers: ["'월','화','수',sep='/',end='~'"],
+          expect: "월/화/수~"
         }
       },
 
@@ -338,9 +334,9 @@ export const lesson7: LessonData = {
         type: "explain",
         content: {
           lines: [
-            "✖️ 구구단 출력기!"
+            "🖨️ 출력 형식 도구 만들기!"
           ],
-          code: "=== 7단 ===\n7 x 1 = 7\n7 x 2 = 14\n...\n7 x 9 = 63",
+          code: "2024-03-15\nA B C D E\n로딩중... 완료!",
           isPreview: true,
           note: "한 줄씩 만들어보자!"
         }
@@ -352,11 +348,11 @@ export const lesson7: LessonData = {
         content: {
           step: 1,
           total: 3,
-          task: "제목 출력 (dan = 7)",
-          target: "=== 7단 ===",
-          hint: "print('===', dan, '단 ===')",
+          task: "2024, 3, 15 를 '-' 구분으로 출력해봐",
+          target: "2024-3-15",
+          hint: "print(2024, 3, 15, sep='-')",
           done: [],
-          answer: "print('===', dan, '단 ===')"
+          answer: "print(2024, 3, 15, sep='-')"
         }
       },
       {
@@ -364,11 +360,11 @@ export const lesson7: LessonData = {
         content: {
           step: 2,
           total: 3,
-          task: "for문 시작 (1부터 9까지)",
-          target: "for i in range(1, 10):",
-          hint: "for i in range(1, 10):",
-          done: ["=== 7단 ==="],
-          answer: "for i in range(1, 10):"
+          task: "'A', 'B', 'C', 'D', 'E' 를 공백으로 구분해서 출력해봐 (기본 sep)",
+          target: "A B C D E",
+          hint: "print('A', 'B', 'C', 'D', 'E')",
+          done: ["2024-3-15"],
+          answer: "print('A', 'B', 'C', 'D', 'E')"
         }
       },
       {
@@ -376,11 +372,11 @@ export const lesson7: LessonData = {
         content: {
           step: 3,
           total: 3,
-          task: "구구단 한 줄 출력",
-          target: "7 x 1 = 7",
-          hint: "print(dan, 'x', i, '=', dan * i)",
-          done: ["=== 7단 ===", "for i in range(1, 10):"],
-          answer: "    print(dan, 'x', i, '=', dan * i)"
+          task: "'로딩중' 끝에 '...' 붙이고, 다음 줄에 '완료!' 출력해봐",
+          target: "로딩중... 완료!",
+          hint: "print('로딩중', end='... ')\nprint('완료!')",
+          done: ["2024-3-15", "A B C D E"],
+          answer: "print('로딩중', end='... ')\nprint('완료!')"
         }
       },
 
@@ -389,13 +385,13 @@ export const lesson7: LessonData = {
         type: "summary",
         content: {
           num: 4,
-          title: "for 마스터",
+          title: "print() 옵션 마스터",
           learned: [
-            "for i in range(n): 반복",
-            "range(시작, 끝, 간격)",
-            "i 변수 활용"
+            "sep=' ' → 값 사이 구분자 (기본: 공백)",
+            "end='\\n' → 끝 문자 (기본: 줄바꿈)",
+            "sep 와 end 동시 사용 가능"
           ],
-          canDo: "반복 작업을 자동화할 수 있어!",
+          canDo: "print()의 출력 형식을 자유롭게 조절할 수 있어!",
           emoji: "🏆"
         }
       },

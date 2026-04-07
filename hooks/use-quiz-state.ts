@@ -178,9 +178,13 @@ export function useQuizState(questions: QuizQuestion[]) {
     }
   }, [router, questions.length])
 
-  // Mid check-in at 50%
+  // Mid check-in at 50% — only for sessions with 10+ questions
   useEffect(() => {
-    if (currentQuestion === Math.floor(quizSettings.questionCount / 2) && !midCheckInShown) {
+    if (
+      quizSettings.questionCount >= 10 &&
+      currentQuestion === Math.floor(quizSettings.questionCount / 2) &&
+      !midCheckInShown
+    ) {
       setMidCheckInShown(true)
       setShowMidCheckIn(true)
       const timer = setTimeout(() => setShowMidCheckIn(false), 3000)

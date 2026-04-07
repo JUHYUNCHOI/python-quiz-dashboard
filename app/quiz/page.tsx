@@ -659,7 +659,7 @@ export default function QuizPage() {
                             showWrong && "text-red-700",
                           )}
                         >
-                          {option.split(/\\n|\n/).map((line, i, arr) => (
+                          {option.replace(/^"|"$/g, '').split(/\\n|\n/).map((line, i, arr) => (
                             <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
                           ))}
                         </span>
