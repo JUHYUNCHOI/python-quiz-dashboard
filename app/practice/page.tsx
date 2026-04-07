@@ -12,6 +12,15 @@ import { usePracticeProgress } from "@/hooks/use-practice-progress"
 import { ArrowLeft, Lock, CheckCircle2, Star, FileText, Code2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
+type Lang = "cpp" | "python"
+
+function getClusterLang(cluster: PracticeCluster): Lang {
+  return String(cluster.unlockAfter).startsWith("cpp") ? "cpp" : "python"
+}
+
+const CPP_CLUSTERS = ALL_CLUSTERS.filter(c => getClusterLang(c) === "cpp")
+const PYTHON_CLUSTERS = ALL_CLUSTERS.filter(c => getClusterLang(c) === "python")
+
 const DIFFICULTY_COLOR: Record<string, string> = {
   "쉬움": "text-emerald-700 bg-emerald-100",
   "보통": "text-amber-700 bg-amber-100",
@@ -31,18 +40,48 @@ function ClusterList({
   onSelect,
   solvedSet,
   starredSet,
+  lang,
+  onLangChange,
 }: {
   onSelect: (cluster: PracticeCluster) => void
   solvedSet: Set<string>
   starredSet: Set<string>
+  lang: Lang
+  onLangChange: (lang: Lang) => void
 }) {
+  const clusters = lang === "cpp" ? CPP_CLUSTERS : PYTHON_CLUSTERS
+  const langLabel = lang === "cpp" ? "C++ 레슨" : "Python 레슨"
+
   return (
     <div className="flex flex-col gap-4 pb-24">
       <div className="mb-2">
         <h1 className="text-2xl font-bold text-gray-900">코딩 연습</h1>
-        <p className="text-gray-500 text-sm mt-1">C++ 레슨을 완료하면 연습 문제가 열립니다</p>
+        <p className="text-gray-500 text-sm mt-1">{langLabel}을 완료하면 연습 문제가 열립니다</p>
       </div>
-      {ALL_CLUSTERS.map(cluster => {
+
+      {/* 언어 탭 */}
+      <div className="flex bg-gray-100 rounded-xl p-1">
+        <button
+          onClick={() => onLangChange("cpp")}
+          className={cn(
+            "flex-1 py-2 rounded-lg text-sm font-semibold transition-all",
+            lang === "cpp" ? "bg-white text-gray-900 shadow-sm" : "text-gray-400 hover:text-gray-600"
+          )}
+        >
+          C++
+        </button>
+        <button
+          onClick={() => onLangChange("python")}
+          className={cn(
+            "flex-1 py-2 rounded-lg text-sm font-semibold transition-all",
+            lang === "python" ? "bg-white text-gray-900 shadow-sm" : "text-gray-400 hover:text-gray-600"
+          )}
+        >
+          Python
+        </button>
+      </div>
+
+      {clusters.map(cluster => {
         const unlocked = isClusterUnlocked(cluster)
         const total = cluster.problems.length
         const solved = cluster.problems.filter(p => solvedSet.has(p.id)).length
@@ -285,6 +324,7 @@ function PracticeContent() {
   const router = useRouter()
 
   const { solvedSet, starredSet, markSolved, markStarred } = usePracticeProgress()
+  const [lang, setLang] = useState<Lang>((searchParams.get("lang") as Lang) || "cpp")
 
   const clusterId = searchParams.get("cluster") || ""
   const problemId = searchParams.get("problem") || ""
@@ -293,6 +333,15 @@ function PracticeContent() {
   const setParam = (key: string, value: string | null) => {
     const p = new URLSearchParams(searchParams.toString())
     if (value) p.set(key, value); else p.delete(key)
+    router.push(`/practice?${p.toString()}`)
+  }
+
+  const handleLangChange = (l: Lang) => {
+    setLang(l)
+    const p = new URLSearchParams(searchParams.toString())
+    p.set("lang", l)
+    p.delete("cluster")
+    p.delete("problem")
     router.push(`/practice?${p.toString()}`)
   }
 
@@ -335,6 +384,8 @@ function PracticeContent() {
             onSelect={c => setParam("cluster", c.id)}
             solvedSet={solvedSet}
             starredSet={starredSet}
+            lang={lang}
+            onLangChange={handleLangChange}
           />
       }
     </main>
