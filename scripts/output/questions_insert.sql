@@ -12,7 +12,7 @@ INSERT INTO questions (id, language, lesson_id, difficulty, question, code, opti
 VALUES
 (1, 'python', '3', '쉬움', '다음 중 Python에서 주석을 작성하는 올바른 방법은?', '# 어떤 것이 주석일까요?', ARRAY['"# 주석"', '"// 주석"', '"/* 주석 */"', '"-- 주석"'], 0, 'Python에서 한 줄 주석은 # 기호로 시작합니다.', '주석 (Comment)', '# 뒤의 텍스트는 실행되지 않으며, 코드를 설명하는 데 사용됩니다.', ARRAY['"코드 가독성"', '"문서화"', '"docstring"'], NULL, NULL),
 (2, 'python', '2', '쉬움', '다음 코드의 출력 결과는?', 'print(type(3.14))', ARRAY['"<class ''int''>"', '"<class ''float''>"', '"<class ''str''>"', '"<class ''double''>"'], 1, '3.14는 소수점이 있는 숫자이므로 float 타입입니다. Python에는 double 타입이 없습니다.', '데이터 타입', 'Python의 기본 숫자 타입은 int(정수)와 float(실수)입니다. type() 함수로 타입을 확인할 수 있습니다.', ARRAY['"int"', '"float"', '"type() 함수"'], NULL, NULL),
-(3, 'python', '2', '보통', '다음 코드의 출력 결과는?', 'x = None
+(3, 'python', '32', '보통', '다음 코드의 출력 결과는?', 'x = None
 print(x is None)', ARRAY['"True"', '"False"', '"None"', '"오류"'], 0, 'is 연산자는 객체의 동일성을 비교합니다. None과의 비교는 is를 사용하는 것이 관례입니다.', 'None 타입과 is 연산자', 'None은 값이 없음을 나타내는 특별한 객체입니다. None 비교에는 == 대신 is를 사용합니다.', ARRAY['"None"', '"is 연산자"', '"== vs is"'], NULL, '{"wrong":"if x == None:   # 동작하지만 권장하지 않음","correct":"if x is None:   # 파이썬 권장 방식"}'::jsonb),
 (4, 'python', '9', '쉬움', '다음 코드의 출력 결과는?', 'x = bool(0)
 y = bool("")
@@ -21,10 +21,10 @@ print(x, y, z)', ARRAY['"True True True"', '"False False False"', '"True False F
 (5, 'python', '2', '쉬움', '다음 코드의 출력 결과는?', 'x = 5
 y = 2.0
 print(type(x + y))', ARRAY['"<class ''int''>"', '"<class ''float''>"', '"<class ''str''>"', '"오류"'], 1, 'int와 float를 연산하면 결과는 항상 float입니다. Python이 자동으로 더 넓은 타입으로 변환합니다.', '자동 타입 변환 (Type Promotion)', 'int와 float 연산 시 int가 자동으로 float로 변환됩니다. 이를 묵시적 타입 변환이라고 합니다.', ARRAY['"타입 변환"', '"int"', '"float"'], NULL, NULL),
-(7, 'python', '2', '보통', '다음 코드의 출력 결과는?', 'a = 0.1 + 0.2
+(7, 'python', '9', '보통', '다음 코드의 출력 결과는?', 'a = 0.1 + 0.2
 print(a == 0.3)
 print(a)', ARRAY['"False\n0.30000000000000004"', '"True\n0.3"', '"False\n0.3"', '"오류"'], 0, '부동소수점 연산의 한계로 0.1+0.2는 정확히 0.3이 아닙니다. print(a)를 하면 실제 저장된 값인 0.30000000000000004가 출력되고, a == 0.3은 False가 됩니다.', '부동소수점 오차', '컴퓨터는 소수를 이진수로 저장하므로 미세한 오차가 발생합니다. 0.1 + 0.2는 0.3처럼 보이지만 실제로는 0.30000000000000004입니다.', ARRAY['"float"', '"부동소수점"', '"=="'], NULL, NULL),
-(8, 'python', '2', '보통', '다음 코드의 출력 결과는?', 'print(0.1 + 0.2 == 0.3)', ARRAY['"True"', '"False"', '"0.3"', '"오류"'], 1, '부동소수점 연산의 정밀도 문제로 0.1 + 0.2는 0.30000000000000004가 됩니다. 따라서 0.3과 정확히 같지 않아 False입니다.', '부동소수점 정밀도', '컴퓨터는 실수를 이진수로 표현하므로 0.1 같은 값을 정확히 저장할 수 없습니다. math.isclose()를 사용하면 근사 비교가 가능합니다.', ARRAY['"float"', '"IEEE 754"', '"math.isclose()"'], NULL, NULL),
+(8, 'python', '9', '보통', '다음 코드의 출력 결과는?', 'print(0.1 + 0.2 == 0.3)', ARRAY['"True"', '"False"', '"0.3"', '"오류"'], 1, '부동소수점 연산의 정밀도 문제로 0.1 + 0.2는 0.30000000000000004가 됩니다. 따라서 0.3과 정확히 같지 않아 False입니다.', '부동소수점 정밀도', '컴퓨터는 실수를 이진수로 표현하므로 0.1 같은 값을 정확히 저장할 수 없습니다. math.isclose()를 사용하면 근사 비교가 가능합니다.', ARRAY['"float"', '"IEEE 754"', '"math.isclose()"'], NULL, NULL),
 (10, 'python', '9', '보통', '다음 코드의 출력 결과는?', 'print(bool(""), bool(" "), bool("0"), bool(0))', ARRAY['"False True True False"', '"False False False False"', '"True True True False"', '"False True False False"'], 0, '빈 문자열 ''''만 False이고, 공백 '' ''이나 문자 ''0''은 비어있지 않으므로 True입니다. 숫자 0은 False입니다.', 'Truthy와 Falsy 값', 'Python에서 빈 문자열, 0, None, 빈 컬렉션은 False로 평가됩니다. 문자열 ''0''은 비어있지 않으므로 True입니다.', ARRAY['"bool()"', '"truthy"', '"falsy"', '"조건 평가"'], NULL, NULL),
 (13, 'python', '3', '쉬움', '다음 중 Python에서 유효한 변수 이름이 아닌 것은?', '# 변수 이름 규칙을 생각해보세요', ARRAY['"my_var"', '"_count"', '"2nd_place"', '"firstName"'], 2, 'Python 변수 이름은 숫자로 시작할 수 없습니다. 문자 또는 밑줄(_)로 시작해야 합니다.', '변수 이름 규칙', '변수 이름은 문자나 _로 시작해야 하며, 숫자로 시작할 수 없고, 예약어(if, for 등)를 사용할 수 없습니다.', ARRAY['"예약어"', '"네이밍 컨벤션"', '"변수 선언"'], NULL, NULL),
 (14, 'python', '3', '쉬움', '다음 코드의 출력 결과는?', 'a, b, c = 1, 2, 3

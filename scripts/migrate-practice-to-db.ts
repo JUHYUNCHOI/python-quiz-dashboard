@@ -166,7 +166,7 @@ function generateSQL(): string {
       lines.push(`  '${esc(p.title)}',`)
       lines.push(`  '${esc(p.description)}',`)
       lines.push(`  '${esc(p.constraints ?? "")}',`)
-      lines.push(`  '${esc(p.initialCode)}',`)
+      lines.push(`  '${esc(p.initialCode ?? "")}',`)
       lines.push(`  ${toJsonb(p.testCases)},`)
       lines.push(`  ${toTextArray(p.hints ?? [])},`)
       lines.push(`  '${esc(p.solutionCode ?? "")}',`)
