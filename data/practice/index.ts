@@ -11,11 +11,16 @@ export { sortingCluster } from "./cluster-sorting"
 export { gridCluster } from "./cluster-grid"
 export { simulationCluster } from "./cluster-simulation"
 export { functionsCluster } from "./cluster-functions"
+export { refsPtrsCluster } from "./cluster-refs-ptrs"
 export { structsCluster } from "./cluster-structs"
 export { stackQueueCluster } from "./cluster-stackqueue"
 // Python clusters
+export { pyBasicsCluster } from "./py-cluster-basics"
+export { pyOutputCluster } from "./py-cluster-output"
+export { pyTypeConvCluster } from "./py-cluster-typeconv"
 export { pyIoCluster } from "./py-cluster-io"
 export { pyConditionalsCluster } from "./py-cluster-conditionals"
+export { pyLogicCluster } from "./py-cluster-logic"
 export { pyLoopsCluster } from "./py-cluster-loops"
 export { pyListsCluster } from "./py-cluster-lists"
 export { pyStringsCluster } from "./py-cluster-strings"
@@ -34,10 +39,15 @@ import { sortingCluster } from "./cluster-sorting"
 import { gridCluster } from "./cluster-grid"
 import { simulationCluster } from "./cluster-simulation"
 import { functionsCluster } from "./cluster-functions"
+import { refsPtrsCluster } from "./cluster-refs-ptrs"
 import { structsCluster } from "./cluster-structs"
 import { stackQueueCluster } from "./cluster-stackqueue"
+import { pyBasicsCluster } from "./py-cluster-basics"
+import { pyOutputCluster } from "./py-cluster-output"
+import { pyTypeConvCluster } from "./py-cluster-typeconv"
 import { pyIoCluster } from "./py-cluster-io"
 import { pyConditionalsCluster } from "./py-cluster-conditionals"
+import { pyLogicCluster } from "./py-cluster-logic"
 import { pyLoopsCluster } from "./py-cluster-loops"
 import { pyListsCluster } from "./py-cluster-lists"
 import { pyStringsCluster } from "./py-cluster-strings"
@@ -59,11 +69,17 @@ export const ALL_CLUSTERS: PracticeCluster[] = [
   sortingCluster,
   gridCluster,
   functionsCluster,
+  refsPtrsCluster,
   structsCluster,
   stackQueueCluster,
-  // Python clusters
+  // Python clusters (early — lessons 1–12)
+  pyBasicsCluster,
+  pyOutputCluster,
+  pyTypeConvCluster,
   pyIoCluster,
   pyConditionalsCluster,
+  pyLogicCluster,
+  // Python clusters (intermediate — lessons 13+)
   pyLoopsCluster,
   pyListsCluster,
   pyStringsCluster,
