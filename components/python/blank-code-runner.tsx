@@ -5,6 +5,8 @@ import { Play, Loader2, RotateCcw, Check, X, Lightbulb } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { highlightPythonInline } from "@/components/ui/code-block"
 import { useCodeSubmission } from "@/contexts/code-submission-context"
+import { useLanguage } from "@/contexts/language-context"
+import { useAuth } from "@/contexts/auth-context"
 
 // Pyodide 타입 정의
 declare global {
@@ -192,7 +194,9 @@ export function BlankCodeRunner({
   }, [])
 
   // DB 연동 context (localStorage 저장에도 lessonId 필요하므로 먼저 선언)
-  const { getSubmission, saveSubmission, loaded: dbLoaded, isAuthenticated: dbAuth, lessonId: dbLessonId } = useCodeSubmission()
+  const { getSubmission, saveSubmission, loaded: dbLoaded, lessonId: dbLessonId } = useCodeSubmission()
+  const { user } = useAuth()
+  const { t, lang } = useLanguage()
 
   // 최신 값을 ref로 동기 추적 (unmount cleanup에서 사용)
   const latestFilledValues = useRef(filledValues)
@@ -257,7 +261,7 @@ export function BlankCodeRunner({
     }
 
     if (!allFilled) {
-      setError("✏️ 모든 빈칸을 채워주세요!")
+      setError(t("✏️ 모든 빈칸을 채워주세요!", "✏️ Fill in all the blanks!"))
       return
     }
 
@@ -464,7 +468,7 @@ export function BlankCodeRunner({
   return (
     <div className="space-y-3">
       {/* 문제 */}
-      {task && (
+      {task && !expectedOutput && (
         <div className="bg-indigo-50 rounded-lg md:rounded-xl p-2.5 md:p-3 border border-indigo-200">
           <p className="text-indigo-800 font-bold text-sm md:text-base">🎯 {task}</p>
         </div>
@@ -473,8 +477,13 @@ export function BlankCodeRunner({
       {/* 기대 출력 미리보기 — 빈칸에 뭘 넣어야 하는지 유추 가능 */}
       {expectedOutput && (
         <div className="bg-amber-50 rounded-lg md:rounded-xl p-2.5 md:p-3 border border-amber-200">
-          <p className="text-amber-700 font-bold text-xs md:text-sm mb-1">📋 이렇게 출력되도록 빈칸을 채우세요:</p>
-          <pre className="font-mono text-xs md:text-sm text-amber-900 whitespace-pre-wrap bg-amber-100/50 rounded-md p-2">{expectedOutput}</pre>
+          <p className="text-amber-700 font-bold text-xs md:text-sm mb-1">{t("📋 이렇게 출력되도록 빈칸을 채우세요:", "📋 Fill in the blanks to get this output:")}</p>
+          <pre className="font-mono text-xs md:text-sm text-amber-900 whitespace-pre-wrap bg-amber-100/50 rounded-md p-2 select-all cursor-text">{expectedOutput}</pre>
+          {/[^\x00-\x7F]/.test(expectedOutput) && (
+            <p className="text-amber-600 text-xs mt-1.5">
+              {t("💡 위 텍스트를 드래그해서 복사하세요!", "💡 Drag to copy the text above!")}
+            </p>
+          )}
         </div>
       )}
 
@@ -513,7 +522,7 @@ export function BlankCodeRunner({
       {/* 빈칸 미완료 힌트 */}
       {!allFilled && (
         <p className="text-center text-xs text-amber-500 font-medium animate-pulse">
-          👆 위 빈칸을 채우면 실행 버튼이 활성화돼요!
+          {t("👆 위 빈칸을 채우면 실행 버튼이 활성화돼요!", "👆 Fill in the blanks to enable the run button!")}
         </p>
       )}
 
@@ -534,7 +543,7 @@ export function BlankCodeRunner({
           ) : (
             <Play className="w-3.5 h-3.5 md:w-4 md:h-4" />
           )}
-          {isLoading ? "실행중..." : allFilled ? "▶ 실행하기!" : "빈칸을 채워주세요"}
+          {isLoading ? t("실행중...", "Running...") : allFilled ? t("▶ 실행하기!", "▶ Run!") : t("빈칸을 채워주세요", "Fill in the blanks")}
         </button>
 
         <button
@@ -552,7 +561,7 @@ export function BlankCodeRunner({
           "rounded-lg md:rounded-xl p-2.5 md:p-3 border-2 transition-all",
           error ? "bg-red-50 border-red-300" :
           isCorrect ? "bg-green-50 border-green-300" :
-          "bg-gray-50 border-gray-300"
+          "bg-red-50 border-red-300"
         )}>
           <div className="flex items-center gap-1.5 md:gap-2 mb-1">
             {error ? (
@@ -560,13 +569,13 @@ export function BlankCodeRunner({
             ) : isCorrect ? (
               <Check className="w-3.5 h-3.5 md:w-4 md:h-4 text-green-600" />
             ) : (
-              <span className="text-gray-500 text-sm">→</span>
+              <X className="w-3.5 h-3.5 md:w-4 md:h-4 text-red-500" />
             )}
             <span className={cn(
               "font-bold text-xs md:text-sm",
-              error ? "text-red-600" : isCorrect ? "text-green-600" : "text-gray-700"
+              error ? "text-red-600" : isCorrect ? "text-green-600" : "text-red-500"
             )}>
-              {error ? "에러!" : isCorrect ? "정답! 🎉" : "결과:"}
+              {error ? t("에러!", "Error!") : isCorrect ? t("정답! 🎉", "Correct! 🎉") : t("틀렸어요! 다시 해봐요 🔄", "Incorrect! Try again 🔄")}
             </span>
           </div>
 
@@ -584,7 +593,7 @@ export function BlankCodeRunner({
         <div className="bg-purple-50 rounded-lg md:rounded-xl p-2.5 md:p-3 border border-purple-300 animate-fadeIn">
           <div className="flex items-center gap-1.5 md:gap-2 mb-1">
             <Lightbulb className="w-3.5 h-3.5 md:w-4 md:h-4 text-purple-600" />
-            <span className="font-bold text-purple-700 text-xs md:text-sm">💡 힌트!</span>
+            <span className="font-bold text-purple-700 text-xs md:text-sm">💡 {t("힌트!", "Hint!")}</span>
           </div>
           <p className="text-purple-800 font-mono text-xs md:text-sm">{hint}</p>
         </div>
@@ -595,7 +604,7 @@ export function BlankCodeRunner({
         <div className="bg-orange-50 rounded-lg md:rounded-xl p-2.5 md:p-3 border border-orange-300">
           <div className="flex items-center gap-1.5 md:gap-2 mb-1">
             <Lightbulb className="w-3.5 h-3.5 md:w-4 md:h-4 text-orange-600" />
-            <span className="font-bold text-orange-700 text-xs md:text-sm">🔑 정답 힌트!</span>
+            <span className="font-bold text-orange-700 text-xs md:text-sm">🔑 {t("정답 힌트!", "Answer Hint!")}</span>
           </div>
           <p className="text-orange-800 font-mono text-xs md:text-sm">{hint2}</p>
         </div>
@@ -607,18 +616,18 @@ export function BlankCodeRunner({
           onClick={() => { onSuccess?.() }}
           className="w-full py-2.5 rounded-xl text-sm font-medium text-gray-500 bg-gray-100 hover:bg-gray-200 border border-gray-200 transition-all"
         >
-          → 정답 확인했어요, 다음으로 넘어갈게요
+          {t("→ 정답 확인했어요, 다음으로 넘어갈게요", "→ I checked the answer, move on")}
         </button>
       )}
 
       {/* 비로그인 학생 로그인 유도 (정답 맞췄을 때 한 번만 표시) */}
-      {isCorrect === true && !dbAuth && (
+      {isCorrect === true && !user && (
         <p className="text-center text-xs text-gray-400">
-          💾 이 기기에만 저장돼요.{" "}
-          <a href="/login" className="text-indigo-500 hover:text-indigo-700 underline font-medium">
-            로그인
-          </a>
-          하면 어디서든 코드가 저장돼요!
+          {lang === 'ko' ? (
+            <>💾 이 기기에만 저장돼요.{" "}<a href="/login" className="text-indigo-500 hover:text-indigo-700 underline font-medium">로그인</a>하면 어디서든 코드가 저장돼요!</>
+          ) : (
+            <>💾 Saved on this device only.{" "}<a href="/login" className="text-indigo-500 hover:text-indigo-700 underline font-medium">Log in</a> to save everywhere!</>
+          )}
         </p>
       )}
 

@@ -87,6 +87,18 @@ export const lesson14: LessonData = {
         explanation: "True는 항상 참이므로 무한 반복! break로 탈출해야 해요."
       }
     },
+    // ===== 직접 써보기: while 기본 =====
+    {
+      type: "practice",
+      content: {
+        task: "이렇게 나오게 해봐 ↓\n0\n1\n2",
+        guide: "while문 전체를 직접 써봐! (i = 0부터 시작)",
+        hint: "i = 0\nwhile i < 3:\n    print(i)\n    i += 1",
+        template: null,
+        answer: "i = 0\nwhile i < 3:\n    print(i)\n    i += 1",
+        expect: "0\n1\n2"
+      }
+    },
     {
       type: "summary",
       content: {
@@ -150,6 +162,17 @@ export const lesson14: LessonData = {
         blanksAnswer: ["!=", "continue"],
         answer: "for i in range(1, 11):\n    if i % 2 != 0:\n        continue\n    print(i)",
         expect: "2\n4\n6\n8\n10"
+      }
+    },
+    // ===== 직접 써보기: while 카운트다운 =====
+    {
+      type: "practice",
+      content: {
+        task: "이렇게 나오게 해봐 ↓\n5\n4\n3\n2\n1",
+        guide: "while 카운트다운 전체를 직접 써봐!",
+        template: null,
+        answer: "n = 5\nwhile n >= 1:\n    print(n)\n    n -= 1",
+        expect: "5\n4\n3\n2\n1"
       }
     },
     {

@@ -21,7 +21,7 @@ export const lesson2EnData: LessonData = {
           content: `In real life, data comes in different forms, right?
 
 - **Numbers**: 100, 3.14, -5
-- **Text**: "안녕", "파이썬"
+- **Text**: "hello", "python"
 - **Yes/No**: True, False
 
 Python also distinguishes between these **data types**!`
@@ -30,25 +30,38 @@ Python also distinguishes between these **data types**!`
           id: "types-explain",
           type: "explain",
           title: "📋 4 Basic Types",
-          content: `**1. Integer (int)** - Numbers without a decimal point
+          content: `**1. Integer (int)** - Whole numbers, no decimal point
 \`\`\`python
 10, -5, 0, 1000
 \`\`\`
+Use this for counting things: age, score, number of items.
+
+---
 
 **2. Float (float)** - Numbers with a decimal point
 \`\`\`python
 3.14, -0.5, 2.0
 \`\`\`
+Even \`2.0\` is a float — the \`.0\` makes it one!
 
-**3. String (str)** - Text characters
+---
+
+**3. String (str)** - Text wrapped in quotes
 \`\`\`python
-"안녕", '파이썬', "123"
+"hello"    # double quotes ✅
+'python'   # single quotes ✅
+"123"      # looks like a number, but it's text! ✅
 \`\`\`
+⚠️ **Quotes make it a string!** \`123\` is a number, but \`"123"\` is text.
+Both \`"double"\` and \`'single'\` quotes work — just be consistent!
 
-**4. Boolean (bool)** - True/False
+---
+
+**4. Boolean (bool)** - Only two possible values
 \`\`\`python
 True, False
-\`\`\``
+\`\`\`
+⚠️ Must start with a **capital letter**: \`True\` ✅, \`true\` ❌`
         },
         {
           id: "quiz1",
@@ -70,14 +83,22 @@ True, False
           id: "type-explain",
           type: "explain",
           title: "🔍 The type() Function",
-          content: `Use **type()** to check the data type!
+          content: `Want to know what type a value is? Use **type()**!
 
 \`\`\`python
 print(type(10))       # <class 'int'>
 print(type(3.14))     # <class 'float'>
-print(type('안녕'))   # <class 'str'>
+print(type('hello'))  # <class 'str'>
 print(type(True))     # <class 'bool'>
-\`\`\``
+\`\`\`
+
+How to read the output:
+- \`<class 'int'>\` → it's an integer
+- \`<class 'str'>\` → it's a string
+- \`<class 'float'>\` → it's a decimal number
+- \`<class 'bool'>\` → it's True or False
+
+Just wrap any value with \`type()\` and Python tells you exactly what type it is!`
         },
         {
           id: "try1",
@@ -93,11 +114,11 @@ print(type(True))     # <class 'bool'>
           id: "try2",
           type: "tryit",
           title: "🖥️ Check a string type!",
-          task: "Check the type of '파이썬'!",
+          task: "Check the type of 'Python'!",
           initialCode: "print(type(___))",
           expectedOutput: "<class 'str'>",
           hint: "Strings are str!",
-          hint2: "print(type('파이썬'))"
+          hint2: "print(type('Python'))"
         },
         {
           id: "quiz2",
@@ -122,8 +143,8 @@ print(type(True))     # <class 'bool'>
           content: `**Boolean (bool)** has only two values: True and False!
 
 \`\`\`python
-print(True)   # 참
-print(False)  # 거짓
+print(True)   # True
+print(False)  # False
 \`\`\`
 
 ⚠️ They must **start with a capital letter**!
@@ -173,7 +194,7 @@ print(10 < 5)   # False
 |------|---------|-------------|
 | int | 10, -5 | Integer |
 | float | 3.14, 2.0 | Floating-point |
-| str | "안녕", '123' | String |
+| str | "hello", '123' | String |
 | bool | True, False | Boolean |
 
 **Remember!**
@@ -184,11 +205,11 @@ print(10 < 5)   # False
           id: "mission1",
           type: "mission",
           title: "🏆 Final Mission!",
-          task: "Print various data types along with their type()!",
+          task: "Each line prints a value AND its type. Fill in type(___) with the matching value from the same line!",
           initialCode: "print(42, type(___))\nprint(3.14, type(___))\nprint('Hello', type(___))\nprint(True, type(___))",
           expectedOutput: "42 <class 'int'>\n3.14 <class 'float'>\nHello <class 'str'>\nTrue <class 'bool'>",
-          hint: "Put the same value inside type() as the one before it!",
-          hint2: "type(42), type(3.14), type('Hello'), type(True)"
+          hint: "Line 1: print(42, type(42)) — put 42 inside type() too!",
+          hint2: "print(42, type(42))\nprint(3.14, type(3.14))\nprint('Hello', type('Hello'))\nprint(True, type(True))"
         },
         {
           id: "complete",
@@ -198,7 +219,7 @@ print(10 < 5)   # False
 
 ✅ **int** - Integer (10, -5)
 ✅ **float** - Float (3.14)
-✅ **str** - String ("안녕")
+✅ **str** - String ("hello")
 ✅ **bool** - Boolean (True, False)
 ✅ **type()** - Check the type
 
