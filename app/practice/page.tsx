@@ -303,6 +303,7 @@ function PracticeContent() {
 
   const clusterId = searchParams.get("cluster") || ""
   const problemId = searchParams.get("problem") || ""
+  const fromParam = searchParams.get("from") || ""
 
   const setParam = (key: string, value: string | null) => {
     const p = new URLSearchParams(searchParams.toString())
@@ -320,12 +321,22 @@ function PracticeContent() {
       </main>
     )
   }
+
+  // 클러스터 목록에서 뒤로 가기: lesson에서 왔으면 커리큘럼으로, 아니면 클러스터 목록으로
+  const handleClusterBack = () => {
+    if (fromParam === "lesson" || fromParam === "curriculum") {
+      router.push("/curriculum")
+    } else {
+      setParam("cluster", null)
+    }
+  }
+
   return (
     <main className="max-w-2xl mx-auto px-4 pt-6">
       {cluster
         ? <ProblemList
             cluster={cluster}
-            onBack={() => setParam("cluster", null)}
+            onBack={handleClusterBack}
             onSelect={p => setParam("problem", p.id)}
           />
         : <ClusterList onSelect={c => setParam("cluster", c.id)} />

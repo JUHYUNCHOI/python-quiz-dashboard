@@ -31,6 +31,7 @@ import { StepRenderer } from "@/components/learn/step-renderer"
 import { StepEditor } from "@/components/learn/step-editor"
 import { lessonsData, bilingualLessons, lessonVariants } from "@/components/learn/lesson-registry"
 import type { LessonStep } from "@/components/learn/types"
+import { ALL_CLUSTERS } from "@/data/practice"
 
 // ── 다음 레슨 ID 계산 ──────────────────────────────────────────────────
 function getNextLessonId(currentId: string): string | null {
@@ -645,8 +646,41 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             <LessonFeedbackCard feedback={lessonFeedback} t={t} />
 
             <div className="mt-4 space-y-3">
-              {/* 다음 레슨 바로 가기 / 트랙 완주 안내 */}
+              {/* 연습 클러스터 해금 CTA — 이 레슨이 연습 클러스터를 해금하면 주 버튼으로 */}
               {(() => {
+                const unlockedCluster = ALL_CLUSTERS.find(
+                  c => String(c.unlockAfter) === String(lessonId)
+                )
+                if (unlockedCluster) {
+                  const nextId = getNextLessonId(lessonId)
+                  return (
+                    <div className="space-y-2">
+                      {/* 주 CTA: 연습 문제 */}
+                      <button
+                        onClick={() => { localStorage.removeItem(progressKey); router.push(`/practice?cluster=${unlockedCluster.id}&from=lesson`) }}
+                        className="w-full py-3.5 bg-green-500 hover:bg-green-600 active:scale-95 text-white rounded-xl font-bold text-base transition-all flex items-center justify-center gap-2"
+                      >
+                        <span className="text-xl">{unlockedCluster.emoji}</span>
+                        <span>{unlockedCluster.title} {t("연습하기", "Practice")} 💪</span>
+                      </button>
+                      <p className="text-xs text-gray-400 text-center">{unlockedCluster.problems.length}{t("문제 · 방금 해금됐어요!", " problems · just unlocked!")}</p>
+                      {/* 보조: 다음 레슨 */}
+                      {nextId && (
+                        <button
+                          onClick={() => { localStorage.removeItem(progressKey); router.push(`/learn/${nextId}`) }}
+                          className="w-full py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-xl font-bold text-sm transition-all"
+                        >
+                          {t("다음 레슨으로 →", "Next Lesson →")}
+                        </button>
+                      )}
+                    </div>
+                  )
+                }
+                return null
+              })()}
+
+              {/* 다음 레슨 바로 가기 / 트랙 완주 안내 (연습 클러스터 없는 경우) */}
+              {!ALL_CLUSTERS.find(c => String(c.unlockAfter) === String(lessonId)) && (() => {
                 const nextId = getNextLessonId(lessonId)
                 // 다음 레슨 있으면 바로 이동 버튼
                 if (nextId) {
