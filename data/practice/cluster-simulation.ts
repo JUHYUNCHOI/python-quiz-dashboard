@@ -444,7 +444,7 @@ int main() {
     {
       id: "sim-010",
       cluster: "simulation",
-      unlockAfter: "cpp-21",
+      unlockAfter: "cpp-p2",
       difficulty: "어려움",
       title: "방향 전환 로봇",
       description: `N×M 격자에서 로봇이 (1,1)에서 시작해 오른쪽 방향으로 이동합니다.
