@@ -25,7 +25,7 @@ export interface ExplainContent {
 }
 
 export interface PracticeContent {
-  level: number;
+  level?: number;
   task: string;
   guide?: string;
   hint?: string;
@@ -54,6 +54,7 @@ export interface ErrorQuizContent {
 export interface InterleavingContent {
   message: string;
   task: string;
+  guide?: string;
   hint?: string;
   template: string | { before: string; after: string } | null;
   answer: string;
