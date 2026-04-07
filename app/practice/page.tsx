@@ -11,6 +11,7 @@ import { PracticeSession } from "@/components/practice/practice-session"
 import { ALL_CLUSTERS } from "@/data/practice"
 import type { PracticeCluster, PracticeProblem } from "@/data/practice/types"
 import { usePracticeProgress } from "@/hooks/use-practice-progress"
+import { useAuth } from "@/contexts/auth-context"
 import { ArrowLeft, Lock, CheckCircle2, Star, FileText, Code2, HelpCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -369,6 +370,7 @@ function PracticeContent() {
   const router = useRouter()
 
   const { solvedSet, starredSet, markSolved, markStarred } = usePracticeProgress()
+  const { user } = useAuth()
   const [lang, setLang] = useState<Lang>((searchParams.get("lang") as Lang) || "cpp")
 
   const clusterId = searchParams.get("cluster") || ""
@@ -419,6 +421,7 @@ function PracticeContent() {
         onExit={handleClusterBack}
         onMarkSolved={markSolved}
         onMarkStarred={markStarred}
+        userId={user?.id}
       />
     )
   }

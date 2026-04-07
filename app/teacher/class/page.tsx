@@ -15,6 +15,7 @@ import { StudentProgress } from "@/components/teacher/student-progress"
 import { ClassOverview } from "@/components/teacher/class-overview"
 import { getLessonName, pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
 import { StudentDetailPanel } from "@/components/teacher/student-detail-panel"
+import { PracticeSessionOverview } from "@/components/teacher/practice-session-overview"
 
 const STUDENTS_PER_PAGE = 10
 
@@ -602,6 +603,9 @@ export default function ClassDetailPage() {
                 }}
               />
             )}
+
+            {/* 도전문제 세션 현황 */}
+            <PracticeSessionOverview classId={classId} lang={lang} />
 
             {/* 반 전체 요약 + 위험 알림 + 약점 레슨 */}
             <ClassOverview
