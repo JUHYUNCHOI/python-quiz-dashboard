@@ -8,6 +8,7 @@ import { RequireAuth } from "@/components/require-auth"
 import { PracticeRunner } from "@/components/practice/practice-runner"
 import { ALL_CLUSTERS } from "@/data/practice"
 import type { PracticeCluster, PracticeProblem } from "@/data/practice/types"
+import { usePracticeProgress } from "@/hooks/use-practice-progress"
 import { ArrowLeft, Lock, CheckCircle2, Star, FileText, Code2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -25,42 +26,16 @@ function isClusterUnlocked(cluster: PracticeCluster): boolean {
   } catch { return false }
 }
 
-function isProblemSolved(problemId: string): boolean {
-  if (typeof window === "undefined") return false
-  try {
-    const solved = JSON.parse(localStorage.getItem("practice-solved") || "[]") as string[]
-    return solved.includes(problemId)
-  } catch { return false }
-}
-
-function isProblemStarred(problemId: string): boolean {
-  if (typeof window === "undefined") return false
-  try {
-    const starred = JSON.parse(localStorage.getItem("practice-starred") || "[]") as string[]
-    return starred.includes(problemId)
-  } catch { return false }
-}
-
-function markSolved(problemId: string) {
-  try {
-    const solved = JSON.parse(localStorage.getItem("practice-solved") || "[]") as string[]
-    if (!solved.includes(problemId)) {
-      localStorage.setItem("practice-solved", JSON.stringify([...solved, problemId]))
-    }
-  } catch {}
-}
-
-function markStarred(problemId: string) {
-  try {
-    const starred = JSON.parse(localStorage.getItem("practice-starred") || "[]") as string[]
-    if (!starred.includes(problemId)) {
-      localStorage.setItem("practice-starred", JSON.stringify([...starred, problemId]))
-    }
-  } catch {}
-}
-
 // ── 클러스터 목록 ──────────────────────────────────────────────────
-function ClusterList({ onSelect }: { onSelect: (cluster: PracticeCluster) => void }) {
+function ClusterList({
+  onSelect,
+  solvedSet,
+  starredSet,
+}: {
+  onSelect: (cluster: PracticeCluster) => void
+  solvedSet: Set<string>
+  starredSet: Set<string>
+}) {
   return (
     <div className="flex flex-col gap-4 pb-24">
       <div className="mb-2">
@@ -70,8 +45,8 @@ function ClusterList({ onSelect }: { onSelect: (cluster: PracticeCluster) => voi
       {ALL_CLUSTERS.map(cluster => {
         const unlocked = isClusterUnlocked(cluster)
         const total = cluster.problems.length
-        const solved = cluster.problems.filter(p => isProblemSolved(p.id)).length
-        const starred = cluster.problems.filter(p => isProblemStarred(p.id)).length
+        const solved = cluster.problems.filter(p => solvedSet.has(p.id)).length
+        const starred = cluster.problems.filter(p => starredSet.has(p.id)).length
         return (
           <button
             key={cluster.id}
@@ -124,10 +99,14 @@ function ProblemList({
   cluster,
   onBack,
   onSelect,
+  solvedSet,
+  starredSet,
 }: {
   cluster: PracticeCluster
   onBack: () => void
   onSelect: (problem: PracticeProblem) => void
+  solvedSet: Set<string>
+  starredSet: Set<string>
 }) {
   return (
     <div className="flex flex-col gap-4 pb-24">
@@ -141,8 +120,8 @@ function ProblemList({
         </div>
       </div>
       {cluster.problems.map((problem, i) => {
-        const solved = isProblemSolved(problem.id)
-        const starred = isProblemStarred(problem.id)
+        const solved = solvedSet.has(problem.id)
+        const starred = starredSet.has(problem.id)
         return (
           <button
             key={problem.id}
@@ -215,15 +194,19 @@ function ProblemPanel({ problem }: { problem: PracticeProblem }) {
 function ProblemDetail({
   problem,
   onBack,
+  onMarkSolved,
+  onMarkStarred,
 }: {
   problem: PracticeProblem
   onBack: () => void
+  onMarkSolved: (problemId: string) => Promise<void>
+  onMarkStarred: (problemId: string) => Promise<void>
 }) {
   const [tab, setTab] = useState<"problem" | "code">("problem")
 
-  const handleSuccess = (starred: boolean) => {
-    markSolved(problem.id)
-    if (starred) markStarred(problem.id)
+  const handleSuccess = async (starred: boolean) => {
+    await onMarkSolved(problem.id)
+    if (starred) await onMarkStarred(problem.id)
   }
 
   return (
@@ -301,6 +284,8 @@ function PracticeContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
 
+  const { solvedSet, starredSet, markSolved, markStarred } = usePracticeProgress()
+
   const clusterId = searchParams.get("cluster") || ""
   const problemId = searchParams.get("problem") || ""
   const fromParam = searchParams.get("from") || ""
@@ -317,7 +302,12 @@ function PracticeContent() {
   if (problem && cluster) {
     return (
       <main className="max-w-5xl mx-auto px-4 pt-4">
-        <ProblemDetail problem={problem} onBack={() => setParam("problem", null)} />
+        <ProblemDetail
+          problem={problem}
+          onBack={() => setParam("problem", null)}
+          onMarkSolved={markSolved}
+          onMarkStarred={markStarred}
+        />
       </main>
     )
   }
@@ -338,8 +328,14 @@ function PracticeContent() {
             cluster={cluster}
             onBack={handleClusterBack}
             onSelect={p => setParam("problem", p.id)}
+            solvedSet={solvedSet}
+            starredSet={starredSet}
           />
-        : <ClusterList onSelect={c => setParam("cluster", c.id)} />
+        : <ClusterList
+            onSelect={c => setParam("cluster", c.id)}
+            solvedSet={solvedSet}
+            starredSet={starredSet}
+          />
       }
     </main>
   )
