@@ -444,19 +444,37 @@ export default function CurriculumPage() {
     setLoaded(true)
   }, [])
 
-  // 진도에 따라 현재 파트만 열기 (완료 레슨이 있는 첫 미완료 파트만)
+  // 진도에 따라 파트 열기
+  // 모바일: 수업 미완료인 첫 파트만 (스크롤 최소화)
+  // 데스크탑(xl+): 도전 미완료 파트 전부 + 수업 미완료 첫 파트
   useEffect(() => {
     if (!loaded) return
     const allData = selectedCourse === "python" ? pythonCurriculumData : selectedCourse === "cpp" ? cppCurriculumData : pseudoCurriculumData
     const active = new Set<string>()
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 1280 // xl breakpoint
+
     for (const part of allData) {
       const ids = part.lessons.map(l => l.id)
-      const hasIncomplete = ids.some(id => !completedLessons.has(id))
-      if (hasIncomplete) {
+
+      // 데스크탑: 도전 미완료 파트도 펼침
+      if (!isMobile) {
+        const hasPendingDojeon = ids.some(lessonId => {
+          const cluster = ALL_CLUSTERS.find(c => String(c.unlockAfter) === String(lessonId))
+          if (!cluster) return false
+          if (!completedLessons.has(cluster.unlockAfter)) return false
+          return !cluster.problems.every(p => practiceSolvedSet.has(p.id))
+        })
+        if (hasPendingDojeon) active.add(part.id)
+      }
+
+      // 수업 미완료 파트: 첫 번째만 펼침
+      const hasIncompleteLesson = ids.some(id => !completedLessons.has(id))
+      if (hasIncompleteLesson) {
         active.add(part.id)
         break
       }
     }
+
     if (active.size === 0 && allData.length > 0) active.add(allData[0].id)
     setExpandedParts(active)
   }, [loaded, selectedCourse]) // eslint-disable-line react-hooks/exhaustive-deps
