@@ -893,5 +893,93 @@ int main() {
 }`,
       solutionExplanation: "i=2부터 sqrt(n)까지 반복하며 n을 나눌 수 있는 소인수를 추출합니다. while로 같은 소인수를 여러 번 나눕니다. 루프 후 n>1이면 남은 n 자체가 소인수(sqrt(n)보다 큰 소수 인수)입니다.",
     },
+    {
+      id: "io-007",
+      cluster: "loops",
+      unlockAfter: "cpp-7",
+      difficulty: "보통",
+      title: "최댓값과 위치",
+      description: `N개의 정수가 주어질 때, 최댓값과 그 값이 처음 등장하는 위치(1-based)를 출력하세요.
+
+- 첫 번째 줄: 최댓값
+- 두 번째 줄: 위치 (1-based)`,
+      constraints: "1 ≤ N ≤ 1000, -10000 ≤ 각 정수 ≤ 10000",
+      initialCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+      testCases: [
+        { stdin: "5\n3 7 2 7 1", expectedOutput: "7\n2", label: "기본 (첫 번째 최댓값)" },
+        { stdin: "4\n-1 -5 -2 -3", expectedOutput: "-1\n1", label: "음수만" },
+        { stdin: "1\n42", expectedOutput: "42\n1", label: "원소 1개" },
+        { stdin: "3\n10 10 10", expectedOutput: "10\n1", label: "전부 최댓값" },
+      ],
+      hints: [
+        "첫 번째 값을 최댓값으로 초기화하고, 나머지 값과 비교하면서 갱신하세요.",
+        "최댓값을 갱신할 때만 위치를 업데이트합니다 (같은 값이면 갱신하지 않음).",
+      ],
+      solutionCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    int maxVal, maxPos = 1, x;
+    cin >> maxVal;
+    for (int i = 2; i <= n; i++) {
+        cin >> x;
+        if (x > maxVal) {
+            maxVal = x;
+            maxPos = i;
+        }
+    }
+    cout << maxVal << "\n" << maxPos << "\n";
+    return 0;
+}`,
+      solutionExplanation: "첫 번째 원소로 초기화 후 2번째부터 비교합니다. 엄격하게 큰 경우(>)만 갱신하므로 같은 값이 있어도 처음 위치를 유지합니다.",
+    },
+    {
+      id: "io-008",
+      cluster: "loops",
+      unlockAfter: "cpp-7",
+      difficulty: "보통",
+      title: "EOF까지 합계",
+      description: `입력이 끝날 때까지 정수를 읽어 모두 더한 합계를 출력하세요.
+입력의 개수는 미리 주어지지 않습니다.`,
+      constraints: "정수 개수는 1 이상 100 이하, -10000 ≤ 각 정수 ≤ 10000",
+      initialCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int x, sum = 0;
+    // while과 cin을 함께 사용해보세요
+    return 0;
+}`,
+      testCases: [
+        { stdin: "1 2 3 4 5", expectedOutput: "15", label: "5개" },
+        { stdin: "10", expectedOutput: "10", label: "1개" },
+        { stdin: "-5 3 -2 10", expectedOutput: "6", label: "음수 포함" },
+        { stdin: "100 200 300", expectedOutput: "600", label: "3개" },
+      ],
+      hints: [
+        "while (cin >> x)는 입력 성공 여부를 반환합니다 — 입력이 없으면 false가 돼요.",
+        "루프 안에서 sum += x를 하고, 루프가 끝난 후 sum을 출력하세요.",
+      ],
+      solutionCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int x, sum = 0;
+    while (cin >> x) sum += x;
+    cout << sum << "\n";
+    return 0;
+}`,
+      solutionExplanation: "while (cin >> x)는 입력에 성공하면 true, EOF나 오류면 false를 반환합니다. 이 패턴으로 개수를 모르는 입력을 처리할 수 있습니다.",
+    },
   ],
 }

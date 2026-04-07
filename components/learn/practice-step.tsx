@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { createPortal } from "react-dom"
-import { Keyboard, Copy, CheckCheck, Eye, Lightbulb, X, ChevronRight } from "lucide-react"
+import { Keyboard, Copy, CheckCheck, Lightbulb, Eye, X, ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { LessonStep } from "./types"
 import { CodeBlock } from "@/components/ui/code-block"
@@ -18,10 +18,6 @@ interface PracticeStepProps {
   isCompleted?: boolean
 }
 
-function normalize(s: string) {
-  return s.trim().replace(/\s+/g, " ").toLowerCase()
-}
-
 function extractSkeleton(_code: string): string {
   return `#include <iostream>
 using namespace std;
@@ -35,37 +31,30 @@ int main() {
 export function PracticeStep({ step, lang = "ko", onSuccess, lessonId, isCompleted = false }: PracticeStepProps) {
   const [done, setDone] = useState(false)
   const [failCount, setFailCount] = useState(0)
-  const [copiedSkeleton, setCopiedSkeleton] = useState(false)
-  const [copiedFull, setCopiedFull] = useState(false)
   const [hintOpen, setHintOpen] = useState(false)
   const [showSkeleton, setShowSkeleton] = useState(false)
-  const [showFullCode, setShowFullCode] = useState(false)
+  const [copiedSkeleton, setCopiedSkeleton] = useState(false)
+  const [copiedFull, setCopiedFull] = useState(false)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => { setMounted(true) }, [])
 
-  // step이 바뀌면 모든 상태 리셋
   useEffect(() => {
     setDone(false)
     setFailCount(0)
-    setCopiedSkeleton(false)
-    setCopiedFull(false)
     setHintOpen(false)
     setShowSkeleton(false)
-    setShowFullCode(false)
+    setCopiedSkeleton(false)
+    setCopiedFull(false)
   }, [step.id])
 
-  // isCompleted가 true가 되면 done도 true로 동기화 (새로고침 후 완료 상태 복원)
   useEffect(() => {
     if (isCompleted) setDone(true)
   }, [isCompleted, step.id])
 
   const isEn = lang === "en"
-  // starterCode → initialCode → code 순으로 초기 코드 결정
   const skeleton = step.starterCode ?? step.initialCode ?? (step.code ? extractSkeleton(step.code) : "")
   const hasExpected = !!step.expectedOutput
-
-  // 현재 힌트 레벨 (failCount 기준, 최대 3)
   const hintLevel = Math.min(failCount, 3)
 
   const handleCopySkeleton = async () => {
@@ -82,44 +71,41 @@ export function PracticeStep({ step, lang = "ko", onSuccess, lessonId, isComplet
 
   const handleRunSuccess = () => {
     setDone(true)
+    setHintOpen(false)
     onSuccess?.()
   }
 
   const handleRunError = () => {
     const next = failCount + 1
     setFailCount(next)
-    setShowSkeleton(false)
-    setShowFullCode(false)
-    setHintOpen(true) // 틀리면 힌트 시트 자동 오픈
+    setHintOpen(true)
+    if (next >= 3) onSuccess?.() // Next 버튼 활성화
   }
 
-  const handleCloseHint = () => {
-    setHintOpen(false)
-    setShowSkeleton(false)
-    setShowFullCode(false)
-  }
+  const hintColor = hintLevel === 1
+    ? { bg: "bg-amber-50", border: "border-amber-200", text: "text-amber-800", badge: "text-amber-700 border-amber-300 bg-amber-50" }
+    : hintLevel === 2
+    ? { bg: "bg-orange-50", border: "border-orange-200", text: "text-orange-800", badge: "text-orange-700 border-orange-300 bg-orange-50" }
+    : { bg: "bg-red-50", border: "border-red-200", text: "text-red-800", badge: "text-red-700 border-red-300 bg-red-50" }
 
   return (
     <>
-      {/* ── 메인 콘텐츠 ── */}
-      <div className="space-y-4 md:space-y-6">
+      <div className="space-y-4 md:space-y-5">
 
         {/* 배지 + 제목 */}
         <div className="space-y-3">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <span className="px-3 py-1 rounded-full text-sm font-bold bg-teal-100 text-teal-700">
               <Keyboard className="w-4 h-4 inline mr-1" />
               {isEn ? "Try It Yourself" : "직접 해보기"}
             </span>
-            {/* 힌트 레벨 뱃지 — 데스크톱, 실패 후에만 표시 */}
+            {/* 힌트 버튼 — 실패 후 표시 */}
             {failCount > 0 && !done && (
               <button
                 onClick={() => setHintOpen(true)}
                 className={cn(
-                  "hidden md:flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold border transition-colors",
-                  hintLevel === 1 && "bg-amber-50 text-amber-700 border-amber-300",
-                  hintLevel === 2 && "bg-orange-50 text-orange-700 border-orange-300",
-                  hintLevel >= 3 && "bg-red-50 text-red-700 border-red-300",
+                  "flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold border transition-colors",
+                  hintColor.badge
                 )}
               >
                 💡 {isEn ? `Hint ${hintLevel}` : `힌트 ${hintLevel}`}
@@ -131,10 +117,10 @@ export function PracticeStep({ step, lang = "ko", onSuccess, lessonId, isComplet
 
         {/* 과제 설명 */}
         {step.content && (
-          <div className="space-y-2 md:space-y-3">{renderContent(step.content)}</div>
+          <div className="space-y-2">{renderContent(step.content)}</div>
         )}
 
-        {/* C++ 코드 에디터 + 실행 (완료 후에도 항상 표시) */}
+        {/* 에디터 */}
         <CppRunner
           key={step.id + (skeleton ?? "")}
           initialCode={skeleton || `#include <iostream>\nusing namespace std;\n\nint main() {\n    \n    return 0;\n}`}
@@ -143,14 +129,14 @@ export function PracticeStep({ step, lang = "ko", onSuccess, lessonId, isComplet
           onSuccess={handleRunSuccess}
           onError={handleRunError}
           isEn={isEn}
-          submissionMode={!!step.expectedOutput}
+          submissionMode={false}
           lessonId={lessonId}
           stepId={step.id}
           stepTitle={step.title}
           isCompleted={done}
         />
 
-        {/* expectedOutput 없는 경우 — 실행 후 자유 완료 */}
+        {/* expectedOutput 없는 경우 — 자유 완료 */}
         {!done && !hasExpected && (
           <motion.button
             whileTap={{ scale: 0.95 }}
@@ -163,11 +149,7 @@ export function PracticeStep({ step, lang = "ko", onSuccess, lessonId, isComplet
 
         {/* 완료 상태 */}
         {done && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="space-y-3"
-          >
+          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
             <div className="w-full py-4 rounded-xl text-base font-bold text-center text-teal-700 bg-teal-50 border-2 border-teal-200">
               {isEn ? "✅ Great job! Move on →" : "✅ 잘했어요! 다음으로 넘어가세요 →"}
             </div>
@@ -175,7 +157,7 @@ export function PracticeStep({ step, lang = "ko", onSuccess, lessonId, isComplet
         )}
       </div>
 
-      {/* ── 힌트 Bottom Sheet (portal → document.body) ── */}
+      {/* ── 힌트 Bottom Sheet ── */}
       {mounted && createPortal(
         <AnimatePresence>
           {hintOpen && (
@@ -185,7 +167,7 @@ export function PracticeStep({ step, lang = "ko", onSuccess, lessonId, isComplet
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                onClick={handleCloseHint}
+                onClick={() => setHintOpen(false)}
                 className="fixed inset-0 bg-black/40 z-40"
               />
 
@@ -195,61 +177,51 @@ export function PracticeStep({ step, lang = "ko", onSuccess, lessonId, isComplet
                 animate={{ y: 0 }}
                 exit={{ y: "100%" }}
                 transition={{ type: "spring", damping: 30, stiffness: 300 }}
-                className="fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-2xl shadow-2xl max-h-[75vh] flex flex-col"
+                className="fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-2xl shadow-2xl max-h-[80vh] flex flex-col"
               >
-                {/* 핸들 바 */}
-                <div className="flex justify-center pt-3 pb-1">
+                {/* 핸들 */}
+                <div className="flex justify-center pt-3 pb-1 flex-shrink-0">
                   <div className="w-10 h-1 rounded-full bg-gray-300" />
                 </div>
 
                 {/* 헤더 */}
-                <div className={cn(
-                  "flex items-center justify-between px-4 py-3 border-b",
-                  hintLevel === 1 && "border-amber-200",
-                  hintLevel === 2 && "border-orange-200",
-                  hintLevel >= 3 && "border-red-200",
-                )}>
+                <div className={cn("flex items-center justify-between px-4 py-3 border-b flex-shrink-0", hintColor.border)}>
                   <div className="flex items-center gap-2">
                     {hintLevel <= 2
-                      ? <Lightbulb className={cn("w-4 h-4", hintLevel === 1 ? "text-amber-600" : "text-orange-600")} />
-                      : <Eye className="w-4 h-4 text-red-600" />
+                      ? <Lightbulb className={cn("w-5 h-5", hintLevel === 1 ? "text-amber-500" : "text-orange-500")} />
+                      : <Eye className="w-5 h-5 text-red-500" />
                     }
-                    <span className={cn(
-                      "font-bold text-sm",
-                      hintLevel === 1 && "text-amber-800",
-                      hintLevel === 2 && "text-orange-800",
-                      hintLevel >= 3 && "text-red-800",
-                    )}>
-                      {hintLevel === 1 && (isEn ? "💡 Hint 1: Approach" : "💡 힌트 1: 접근 방법")}
-                      {hintLevel === 2 && (isEn ? "💡 Hint 2: Code skeleton" : "💡 힌트 2: 코드 뼈대")}
-                      {hintLevel >= 3 && (isEn ? "💡 Hint 3: Full answer" : "💡 힌트 3: 정답 코드")}
+                    <span className={cn("font-bold text-base", hintColor.text)}>
+                      {hintLevel === 1 && (isEn ? "Hint — Approach" : "힌트 — 접근 방법")}
+                      {hintLevel === 2 && (isEn ? "Hint — Code Skeleton" : "힌트 — 코드 뼈대")}
+                      {hintLevel >= 3 && (isEn ? "Answer Code" : "정답 코드")}
                     </span>
                   </div>
-                  <button onClick={handleCloseHint} className="p-1 rounded-full hover:bg-gray-100">
-                    <X className="w-5 h-5 text-gray-500" />
+                  <button onClick={() => setHintOpen(false)} className="p-1 rounded-full hover:bg-gray-100">
+                    <X className="w-5 h-5 text-gray-400" />
                   </button>
                 </div>
 
-                {/* 힌트 내용 (스크롤) */}
-                <div className="overflow-y-auto flex-1 px-4 py-3 space-y-3">
+                {/* 힌트 내용 */}
+                <div className="overflow-y-auto flex-1 px-4 py-4 space-y-4">
 
-                  {/* 힌트 1: 접근 방법 */}
-                  {hintLevel >= 1 && (
-                    <p className="text-gray-800 text-sm leading-relaxed">
+                  {/* 힌트 텍스트 — 레벨 1, 2 */}
+                  {hintLevel <= 2 && (
+                    <p className={cn("text-base leading-relaxed", hintColor.text)}>
                       {step.hint || (isEn
                         ? "Think about what variables you need and which loop structure fits best."
                         : "어떤 변수가 필요한지, 어떤 반복문 구조가 맞는지 생각해보세요.")}
                     </p>
                   )}
 
-                  {/* 힌트 2: 코드 뼈대 */}
-                  {hintLevel >= 2 && skeleton && (
+                  {/* 코드 뼈대 — 레벨 2 */}
+                  {hintLevel === 2 && skeleton && (
                     <div>
                       <button
                         onClick={() => setShowSkeleton(!showSkeleton)}
-                        className="w-full flex items-center justify-between px-3 py-2 bg-orange-50 rounded-lg text-sm text-orange-800 font-medium mb-1"
+                        className="w-full flex items-center justify-between px-3 py-2.5 bg-orange-100 rounded-xl text-sm text-orange-800 font-bold mb-2"
                       >
-                        <span>{isEn ? "Code skeleton" : "코드 뼈대 보기"}</span>
+                        <span>{isEn ? "Show starter code" : "시작 코드 보기"}</span>
                         <ChevronRight className={cn("w-4 h-4 transition-transform", showSkeleton && "rotate-90")} />
                       </button>
                       {showSkeleton && (
@@ -267,48 +239,48 @@ export function PracticeStep({ step, lang = "ko", onSuccess, lessonId, isComplet
                     </div>
                   )}
 
-                  {/* 힌트 3: 정답 코드 */}
+                  {/* 정답 코드 — 레벨 3: 바로 펼쳐서 표시 */}
                   {hintLevel >= 3 && step.code && (
-                    <div>
+                    <div className="relative rounded-xl overflow-hidden">
+                      <CodeBlock code={step.code} language="cpp" />
                       <button
-                        onClick={() => setShowFullCode(!showFullCode)}
-                        className="w-full flex items-center justify-between px-3 py-2 bg-red-50 rounded-lg text-sm text-red-800 font-medium mb-1"
+                        onClick={handleCopyFull}
+                        className="absolute top-2 right-2 px-2 py-1 rounded text-xs bg-white/90 text-gray-600 border border-gray-200 flex items-center gap-1"
                       >
-                        <span>{isEn ? "Full answer code" : "정답 코드 보기"}</span>
-                        <ChevronRight className={cn("w-4 h-4 transition-transform", showFullCode && "rotate-90")} />
+                        {copiedFull ? <CheckCheck className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                        {copiedFull ? (isEn ? "Copied!" : "복사됨!") : (isEn ? "Copy" : "복사")}
                       </button>
-                      {showFullCode && (
-                        <div className="relative rounded-xl overflow-hidden">
-                          <CodeBlock code={step.code} language="cpp" />
-                          <button
-                            onClick={handleCopyFull}
-                            className="absolute top-2 right-2 px-2 py-1 rounded text-xs bg-white/90 text-gray-600 border border-gray-200 flex items-center gap-1"
-                          >
-                            {copiedFull ? <CheckCheck className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-                            {copiedFull ? (isEn ? "Copied!" : "복사됨!") : (isEn ? "Copy" : "복사")}
-                          </button>
-                        </div>
-                      )}
                     </div>
                   )}
                 </div>
 
-                {/* 하단 액션 */}
-                <div className="px-4 py-3 border-t border-gray-100 space-y-2">
-                  <button
-                    onClick={handleCloseHint}
-                    className="w-full py-3 rounded-xl text-sm font-bold bg-teal-600 text-white hover:bg-teal-500"
-                  >
-                    {isEn ? "Got it, back to work!" : "확인했어요, 다시 해볼게요!"}
-                  </button>
-                  {/* 3번 실패 후 — 넘어가기 허용 */}
-                  {hintLevel >= 3 && (
+                {/* 하단 버튼 */}
+                <div className="px-4 py-4 border-t border-gray-100 flex-shrink-0 space-y-2">
+                  {/* 레벨 1, 2: 닫고 다시 시도 */}
+                  {hintLevel <= 2 && (
                     <button
-                      onClick={() => { setDone(true); onSuccess?.() }}
-                      className="w-full py-2.5 rounded-xl text-sm font-medium text-gray-500 bg-gray-100 hover:bg-gray-200 border border-gray-200"
+                      onClick={() => setHintOpen(false)}
+                      className="w-full py-3.5 rounded-xl text-base font-bold bg-teal-600 text-white hover:bg-teal-500"
                     >
-                      {isEn ? "→ I checked the answer, move on" : "→ 정답 확인했어요, 다음으로 넘어갈게요"}
+                      {isEn ? "Got it — try again!" : "알겠어요, 다시 해볼게요!"}
                     </button>
+                  )}
+                  {/* 레벨 3: 정답 확인 후 넘어가기 (크게) */}
+                  {hintLevel >= 3 && (
+                    <>
+                      <button
+                        onClick={() => setHintOpen(false)}
+                        className="w-full py-3.5 rounded-xl text-base font-bold bg-teal-600 text-white hover:bg-teal-500"
+                      >
+                        {isEn ? "Got it — try again!" : "이해했어요, 다시 써볼게요!"}
+                      </button>
+                      <button
+                        onClick={() => { setDone(true); setHintOpen(false); onSuccess?.() }}
+                        className="w-full py-3.5 rounded-xl text-base font-bold bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-200"
+                      >
+                        {isEn ? "→ Move to next problem" : "→ 다음 문제로 넘어갈게요"}
+                      </button>
+                    </>
                   )}
                 </div>
               </motion.div>

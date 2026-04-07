@@ -203,7 +203,7 @@ int main() {
       id: "arr-005",
       cluster: "arrays",
       unlockAfter: "cpp-9",
-      difficulty: "어려움",
+      difficulty: "보통",
       title: "특정 합 쌍 개수",
       description: `N개의 정수와 목표값 T가 주어질 때, 합이 T가 되는 쌍 (i, j)의 수를 출력하세요. (i < j)`,
       constraints: "2 ≤ N ≤ 100, -1000 ≤ 각 원소 ≤ 1000, -2000 ≤ T ≤ 2000",
@@ -717,7 +717,7 @@ int main() {
     {
       id: "arr-016",
       cluster: "arrays",
-      unlockAfter: "cpp-9",
+      unlockAfter: "cpp-p3",
       difficulty: "어려움",
       title: "누적 합 (Prefix Sum)",
       description: `N개의 정수가 주어질 때, 누적 합 배열 P를 출력하세요.
@@ -768,7 +768,7 @@ int main() {
     {
       id: "arr-017",
       cluster: "arrays",
-      unlockAfter: "cpp-9",
+      unlockAfter: "cpp-p3",
       difficulty: "어려움",
       title: "연속 구간 합 최대",
       description: `N개의 정수가 주어질 때, 연속된 부분 배열의 합 중 최댓값을 출력하세요. (최소 1개 이상 선택)`,
@@ -818,7 +818,7 @@ int main() {
       id: "arr-018",
       cluster: "arrays",
       unlockAfter: "cpp-9",
-      difficulty: "어려움",
+      difficulty: "보통",
       title: "중복 원소 확인",
       description: `N개의 정수가 주어질 때, 중복된 원소가 있으면 \`YES\`, 없으면 \`NO\`를 출력하세요.`,
       constraints: "2 ≤ N ≤ 100, -1000 ≤ 각 원소 ≤ 1000",
@@ -865,7 +865,7 @@ int main() {
     {
       id: "arr-019",
       cluster: "arrays",
-      unlockAfter: "cpp-9",
+      unlockAfter: "cpp-p3",
       difficulty: "어려움",
       title: "배열 병합",
       description: `두 개의 오름차순 정렬된 배열 A(크기 N)와 B(크기 M)를 하나의 정렬된 배열로 병합하여 출력하세요.`,
@@ -920,7 +920,7 @@ int main() {
     {
       id: "arr-020",
       cluster: "arrays",
-      unlockAfter: "cpp-9",
+      unlockAfter: "cpp-p3",
       difficulty: "어려움",
       title: "슬라이딩 윈도우 최댓값",
       description: `N개의 정수와 윈도우 크기 K가 주어질 때, 크기 K인 윈도우를 왼쪽부터 오른쪽으로 한 칸씩 이동하면서 각 윈도우의 최댓값을 출력하세요.`,

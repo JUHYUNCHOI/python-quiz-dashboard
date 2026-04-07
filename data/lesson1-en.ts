@@ -56,13 +56,9 @@ print('Hello!')
         },
         {
           id: "try2",
-          type: "tryit",
-          title: "🖥️ Korean Works Too!",
-          task: "Print '안녕하세요!'",
-          initialCode: "print(___)",
-          expectedOutput: "안녕하세요!",
-          hint: "Korean goes inside quotes too!",
-          hint2: "print('안녕하세요!')"
+          type: "explain",
+          title: "🌍 Any Language Works!",
+          content: `Python can print **any language** — not just English!\n\n\`\`\`python\nprint('안녕하세요!')  # Korean\nprint('Bonjour!')     # French\nprint('こんにちは!')  # Japanese\n\`\`\`\n\nAs long as it's inside quotes, Python prints it!`
         },
         {
           id: "quiz1",
@@ -158,11 +154,11 @@ Third line
           id: "try5",
           type: "tryit",
           title: "🖥️ Try It Yourself!",
-          task: "Print '나이: 15' and '취미: 게임'!",
-          initialCode: "print('이름: 홍길동')\n# Print age and hobby too\nprint(___)\nprint(___)",
-          expectedOutput: "이름: 홍길동\n나이: 15\n취미: 게임",
+          task: "Print 'Age: 15' and 'Hobby: Gaming'!",
+          initialCode: "print('Name: John')\n# Print age and hobby too\nprint(___)\nprint(___)",
+          expectedOutput: "Name: John\nAge: 15\nHobby: Gaming",
           hint: "Put what you want to print inside the quotes!",
-          hint2: "print('나이: 15')\nprint('취미: 게임')"
+          hint2: "print('Age: 15')\nprint('Hobby: Gaming')"
         },
         {
           id: "comma-explain",

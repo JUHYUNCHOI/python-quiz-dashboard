@@ -8,8 +8,18 @@ import { RequireAuth } from "@/components/require-auth"
 import { PracticeRunner } from "@/components/practice/practice-runner"
 import { ALL_CLUSTERS } from "@/data/practice"
 import type { PracticeCluster, PracticeProblem } from "@/data/practice/types"
+import { usePracticeProgress } from "@/hooks/use-practice-progress"
 import { ArrowLeft, Lock, CheckCircle2, Star, FileText, Code2 } from "lucide-react"
 import { cn } from "@/lib/utils"
+
+type Lang = "cpp" | "python"
+
+function getClusterLang(cluster: PracticeCluster): Lang {
+  return String(cluster.unlockAfter).startsWith("cpp") ? "cpp" : "python"
+}
+
+const CPP_CLUSTERS = ALL_CLUSTERS.filter(c => getClusterLang(c) === "cpp")
+const PYTHON_CLUSTERS = ALL_CLUSTERS.filter(c => getClusterLang(c) === "python")
 
 const DIFFICULTY_COLOR: Record<string, string> = {
   "쉬움": "text-emerald-700 bg-emerald-100",
@@ -25,53 +35,57 @@ function isClusterUnlocked(cluster: PracticeCluster): boolean {
   } catch { return false }
 }
 
-function isProblemSolved(problemId: string): boolean {
-  if (typeof window === "undefined") return false
-  try {
-    const solved = JSON.parse(localStorage.getItem("practice-solved") || "[]") as string[]
-    return solved.includes(problemId)
-  } catch { return false }
-}
-
-function isProblemStarred(problemId: string): boolean {
-  if (typeof window === "undefined") return false
-  try {
-    const starred = JSON.parse(localStorage.getItem("practice-starred") || "[]") as string[]
-    return starred.includes(problemId)
-  } catch { return false }
-}
-
-function markSolved(problemId: string) {
-  try {
-    const solved = JSON.parse(localStorage.getItem("practice-solved") || "[]") as string[]
-    if (!solved.includes(problemId)) {
-      localStorage.setItem("practice-solved", JSON.stringify([...solved, problemId]))
-    }
-  } catch {}
-}
-
-function markStarred(problemId: string) {
-  try {
-    const starred = JSON.parse(localStorage.getItem("practice-starred") || "[]") as string[]
-    if (!starred.includes(problemId)) {
-      localStorage.setItem("practice-starred", JSON.stringify([...starred, problemId]))
-    }
-  } catch {}
-}
-
 // ── 클러스터 목록 ──────────────────────────────────────────────────
-function ClusterList({ onSelect }: { onSelect: (cluster: PracticeCluster) => void }) {
+function ClusterList({
+  onSelect,
+  solvedSet,
+  starredSet,
+  lang,
+  onLangChange,
+}: {
+  onSelect: (cluster: PracticeCluster) => void
+  solvedSet: Set<string>
+  starredSet: Set<string>
+  lang: Lang
+  onLangChange: (lang: Lang) => void
+}) {
+  const clusters = lang === "cpp" ? CPP_CLUSTERS : PYTHON_CLUSTERS
+  const langLabel = lang === "cpp" ? "C++ 레슨" : "Python 레슨"
+
   return (
     <div className="flex flex-col gap-4 pb-24">
       <div className="mb-2">
         <h1 className="text-2xl font-bold text-gray-900">코딩 연습</h1>
-        <p className="text-gray-500 text-sm mt-1">C++ 레슨을 완료하면 연습 문제가 열립니다</p>
+        <p className="text-gray-500 text-sm mt-1">{langLabel}을 완료하면 연습 문제가 열립니다</p>
       </div>
-      {ALL_CLUSTERS.map(cluster => {
+
+      {/* 언어 탭 */}
+      <div className="flex bg-gray-100 rounded-xl p-1">
+        <button
+          onClick={() => onLangChange("cpp")}
+          className={cn(
+            "flex-1 py-2 rounded-lg text-sm font-semibold transition-all",
+            lang === "cpp" ? "bg-white text-gray-900 shadow-sm" : "text-gray-400 hover:text-gray-600"
+          )}
+        >
+          C++
+        </button>
+        <button
+          onClick={() => onLangChange("python")}
+          className={cn(
+            "flex-1 py-2 rounded-lg text-sm font-semibold transition-all",
+            lang === "python" ? "bg-white text-gray-900 shadow-sm" : "text-gray-400 hover:text-gray-600"
+          )}
+        >
+          Python
+        </button>
+      </div>
+
+      {clusters.map(cluster => {
         const unlocked = isClusterUnlocked(cluster)
         const total = cluster.problems.length
-        const solved = cluster.problems.filter(p => isProblemSolved(p.id)).length
-        const starred = cluster.problems.filter(p => isProblemStarred(p.id)).length
+        const solved = cluster.problems.filter(p => solvedSet.has(p.id)).length
+        const starred = cluster.problems.filter(p => starredSet.has(p.id)).length
         return (
           <button
             key={cluster.id}
@@ -124,10 +138,14 @@ function ProblemList({
   cluster,
   onBack,
   onSelect,
+  solvedSet,
+  starredSet,
 }: {
   cluster: PracticeCluster
   onBack: () => void
   onSelect: (problem: PracticeProblem) => void
+  solvedSet: Set<string>
+  starredSet: Set<string>
 }) {
   return (
     <div className="flex flex-col gap-4 pb-24">
@@ -141,8 +159,8 @@ function ProblemList({
         </div>
       </div>
       {cluster.problems.map((problem, i) => {
-        const solved = isProblemSolved(problem.id)
-        const starred = isProblemStarred(problem.id)
+        const solved = solvedSet.has(problem.id)
+        const starred = starredSet.has(problem.id)
         return (
           <button
             key={problem.id}
@@ -215,15 +233,19 @@ function ProblemPanel({ problem }: { problem: PracticeProblem }) {
 function ProblemDetail({
   problem,
   onBack,
+  onMarkSolved,
+  onMarkStarred,
 }: {
   problem: PracticeProblem
   onBack: () => void
+  onMarkSolved: (problemId: string) => Promise<void>
+  onMarkStarred: (problemId: string) => Promise<void>
 }) {
   const [tab, setTab] = useState<"problem" | "code">("problem")
 
-  const handleSuccess = (starred: boolean) => {
-    markSolved(problem.id)
-    if (starred) markStarred(problem.id)
+  const handleSuccess = async (starred: boolean) => {
+    await onMarkSolved(problem.id)
+    if (starred) await onMarkStarred(problem.id)
   }
 
   return (
@@ -301,12 +323,25 @@ function PracticeContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
 
+  const { solvedSet, starredSet, markSolved, markStarred } = usePracticeProgress()
+  const [lang, setLang] = useState<Lang>((searchParams.get("lang") as Lang) || "cpp")
+
   const clusterId = searchParams.get("cluster") || ""
   const problemId = searchParams.get("problem") || ""
+  const fromParam = searchParams.get("from") || ""
 
   const setParam = (key: string, value: string | null) => {
     const p = new URLSearchParams(searchParams.toString())
     if (value) p.set(key, value); else p.delete(key)
+    router.push(`/practice?${p.toString()}`)
+  }
+
+  const handleLangChange = (l: Lang) => {
+    setLang(l)
+    const p = new URLSearchParams(searchParams.toString())
+    p.set("lang", l)
+    p.delete("cluster")
+    p.delete("problem")
     router.push(`/practice?${p.toString()}`)
   }
 
@@ -316,19 +351,42 @@ function PracticeContent() {
   if (problem && cluster) {
     return (
       <main className="max-w-5xl mx-auto px-4 pt-4">
-        <ProblemDetail problem={problem} onBack={() => setParam("problem", null)} />
+        <ProblemDetail
+          problem={problem}
+          onBack={() => setParam("problem", null)}
+          onMarkSolved={markSolved}
+          onMarkStarred={markStarred}
+        />
       </main>
     )
   }
+
+  // 클러스터 목록에서 뒤로 가기: lesson에서 왔으면 커리큘럼으로, 아니면 클러스터 목록으로
+  const handleClusterBack = () => {
+    if (fromParam === "lesson" || fromParam === "curriculum") {
+      router.push("/curriculum")
+    } else {
+      setParam("cluster", null)
+    }
+  }
+
   return (
     <main className="max-w-2xl mx-auto px-4 pt-6">
       {cluster
         ? <ProblemList
             cluster={cluster}
-            onBack={() => setParam("cluster", null)}
+            onBack={handleClusterBack}
             onSelect={p => setParam("problem", p.id)}
+            solvedSet={solvedSet}
+            starredSet={starredSet}
           />
-        : <ClusterList onSelect={c => setParam("cluster", c.id)} />
+        : <ClusterList
+            onSelect={c => setParam("cluster", c.id)}
+            solvedSet={solvedSet}
+            starredSet={starredSet}
+            lang={lang}
+            onLangChange={handleLangChange}
+          />
       }
     </main>
   )

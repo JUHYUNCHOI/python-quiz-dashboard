@@ -227,8 +227,8 @@ int main() {
       unlockAfter: "cpp-4",
       difficulty: "보통",
       title: "공백 포함 문장 입력",
-      description: `첫 줄에 정수 N, 두 번째 줄에 공백을 포함한 문장이 주어질 때, 문장을 N번 반복 출력하세요.`,
-      constraints: "1 ≤ N ≤ 10, 문장은 최대 100자",
+      description: `첫 줄에 정수 N이 주어지고, 두 번째 줄에 공백을 포함한 문장이 주어질 때, 문장을 그대로 출력하세요.`,
+      constraints: "1 ≤ N ≤ 100, 문장은 최대 100자",
       initialCode: `#include <iostream>
 #include <string>
 using namespace std;
@@ -237,17 +237,17 @@ int main() {
     int n;
     string line;
     cin >> n;
-    // 여기에 코드를 작성하세요
+    // cin >> n 이후에 getline으로 문장을 읽어보세요
     return 0;
 }`,
       testCases: [
-        { stdin: "3\nhello world", expectedOutput: "hello world\nhello world\nhello world", label: "기본" },
-        { stdin: "1\nC++ is fun", expectedOutput: "C++ is fun", label: "1회" },
-        { stdin: "2\ngood morning everyone", expectedOutput: "good morning everyone\ngood morning everyone", label: "공백 3개" },
+        { stdin: "3\nhello world", expectedOutput: "hello world", label: "기본" },
+        { stdin: "5\nC++ is fun", expectedOutput: "C++ is fun", label: "다른 N" },
+        { stdin: "1\ngood morning everyone", expectedOutput: "good morning everyone", label: "공백 여러 개" },
       ],
       hints: [
-        "cin >> n 이후 줄바꿈이 남아 있으므로 getline 전에 cin.ignore()를 호출하세요.",
-        "getline(cin, line)으로 공백 포함 한 줄 전체를 읽을 수 있어요.",
+        "cin >> n 이후 버퍼에 줄바꿈 문자가 남아 있어요. getline 전에 cin.ignore()로 제거하세요.",
+        "getline(cin, line)으로 공백을 포함한 한 줄 전체를 읽을 수 있어요.",
       ],
       solutionCode: `#include <iostream>
 #include <string>
@@ -259,99 +259,10 @@ int main() {
     cin >> n;
     cin.ignore();
     getline(cin, line);
-    for (int i = 0; i < n; i++)
-        cout << line << "\n";
+    cout << line << "\n";
     return 0;
 }`,
-      solutionExplanation: "cin >> n 이후 버퍼에 남은 줄바꿈을 cin.ignore()로 버린 뒤 getline으로 공백 포함 문장을 읽습니다. for 루프로 n번 출력합니다.",
-    },
-    {
-      id: "io-007",
-      cluster: "io",
-      unlockAfter: "cpp-4",
-      difficulty: "보통",
-      title: "최댓값과 위치",
-      description: `N개의 정수가 주어질 때, 최댓값과 그 값이 처음 등장하는 위치(1-based)를 출력하세요.
-
-- 첫 번째 줄: 최댓값
-- 두 번째 줄: 위치 (1-based)`,
-      constraints: "1 ≤ N ≤ 1000, -10000 ≤ 각 정수 ≤ 10000",
-      initialCode: `#include <iostream>
-using namespace std;
-
-int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
-    return 0;
-}`,
-      testCases: [
-        { stdin: "5\n3 7 2 7 1", expectedOutput: "7\n2", label: "기본 (첫 번째 최댓값)" },
-        { stdin: "4\n-1 -5 -2 -3", expectedOutput: "-1\n1", label: "음수만" },
-        { stdin: "1\n42", expectedOutput: "42\n1", label: "원소 1개" },
-        { stdin: "3\n10 10 10", expectedOutput: "10\n1", label: "전부 최댓값" },
-      ],
-      hints: [
-        "첫 번째 값을 최댓값으로 초기화하고, 나머지 값과 비교하면서 갱신하세요.",
-        "최댓값을 갱신할 때만 위치를 업데이트합니다 (같은 값이면 갱신하지 않음).",
-      ],
-      solutionCode: `#include <iostream>
-using namespace std;
-
-int main() {
-    int n;
-    cin >> n;
-    int maxVal, maxPos = 1, x;
-    cin >> maxVal;
-    for (int i = 2; i <= n; i++) {
-        cin >> x;
-        if (x > maxVal) {
-            maxVal = x;
-            maxPos = i;
-        }
-    }
-    cout << maxVal << "\\n" << maxPos << "\\n";
-    return 0;
-}`,
-      solutionExplanation: "첫 번째 원소로 초기화 후 2번째부터 비교합니다. 엄격하게 큰 경우(>)만 갱신하므로 같은 값이 있어도 처음 위치를 유지합니다.",
-    },
-    {
-      id: "io-008",
-      cluster: "io",
-      unlockAfter: "cpp-4",
-      difficulty: "어려움",
-      title: "EOF까지 합계",
-      description: `입력이 끝날 때까지 정수를 읽어 모두 더한 합계를 출력하세요.
-입력의 개수는 미리 주어지지 않습니다.`,
-      constraints: "정수 개수는 1 이상 100 이하, -10000 ≤ 각 정수 ≤ 10000",
-      initialCode: `#include <iostream>
-using namespace std;
-
-int main() {
-    int x;
-    // 여기에 코드를 작성하세요
-    return 0;
-}`,
-      testCases: [
-        { stdin: "1 2 3 4 5", expectedOutput: "15", label: "5개" },
-        { stdin: "10", expectedOutput: "10", label: "1개" },
-        { stdin: "-5 3 -2 10", expectedOutput: "6", label: "음수 포함" },
-        { stdin: "100 200 300", expectedOutput: "600", label: "3개" },
-      ],
-      hints: [
-        "while (cin >> x)는 입력 성공 여부를 반환하므로 EOF 처리에 사용할 수 있어요.",
-        "루프 내에서 sum += x를 반복하고, 루프 종료 후 sum을 출력하세요.",
-      ],
-      solutionCode: `#include <iostream>
-using namespace std;
-
-int main() {
-    int x, sum = 0;
-    while (cin >> x) sum += x;
-    cout << sum << "\n";
-    return 0;
-}`,
-      solutionExplanation: "while (cin >> x)는 입력에 성공하면 true, EOF나 오류면 false를 반환합니다. 이 패턴으로 개수를 모르는 입력을 처리할 수 있습니다.",
+      solutionExplanation: "cin >> n 이후 버퍼에 남은 줄바꿈을 cin.ignore()로 버린 뒤, getline(cin, line)으로 공백을 포함한 문장을 읽어 출력합니다.",
     },
   ],
 }

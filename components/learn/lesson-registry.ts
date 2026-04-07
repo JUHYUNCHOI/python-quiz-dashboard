@@ -49,8 +49,14 @@ import {
   // C++ Korean lessons 15-22
   cppLesson15Data, cppLesson16Data, cppLesson17Data, cppLesson18Data,
   cppLesson19Data, cppLesson20Data, cppLesson21Data, cppLesson22Data, cppLesson23Data,
-  // C++ checkpoint lessons
+  // C++ lesson 23 English
+  cppLesson23EnData,
+  // C++ checkpoint lessons (Korean)
   cppLessonCk1Data, cppLessonCk2Data, cppLessonCk3Data, cppLessonCk4Data, cppLessonCk5Data,
+  cppLessonCk6Data, cppLessonCk7Data, cppLessonCk8Data, cppLessonCk9Data, cppLessonCk10Data,
+  // C++ checkpoint lessons (English)
+  cppLessonCk1EnData, cppLessonCk2EnData, cppLessonCk3EnData, cppLessonCk4EnData, cppLessonCk5EnData,
+  cppLessonCk6EnData, cppLessonCk7EnData, cppLessonCk8EnData, cppLessonCk9EnData, cppLessonCk10EnData,
   // C++ project lessons
   cppLessonP1Data, cppLessonP2Data, cppLessonP3Data,
   // C++ English lessons
@@ -115,6 +121,8 @@ export const lessonsData: Record<string, LessonData> = {
   // C++ Part 3
   "cpp-15": cppLesson15Data, "cpp-23": cppLesson23Data, "cpp-ck4": cppLessonCk4Data,
   "cpp-16": cppLesson16Data, "cpp-ck5": cppLessonCk5Data, "cpp-17": cppLesson17Data, "cpp-18": cppLesson18Data,
+  "cpp-ck6": cppLessonCk6Data, "cpp-ck7": cppLessonCk7Data, "cpp-ck8": cppLessonCk8Data,
+  "cpp-ck9": cppLessonCk9Data, "cpp-ck10": cppLessonCk10Data,
   "cpp-19": cppLesson19Data, "cpp-20": cppLesson20Data,
   // C++ projects
   "cpp-p1": cppLessonP1Data, "cpp-p2": cppLessonP2Data, "cpp-p3": cppLessonP3Data,
@@ -223,7 +231,9 @@ export const bilingualLessons: Record<string, { ko: LessonData, en: LessonData }
   "cpp-5": { ko: cppLesson5Data, en: cppLesson5EnData },
   "cpp-6": { ko: cppLesson6Data, en: cppLesson6EnData },
   "cpp-7": { ko: cppLesson7Data, en: cppLesson7EnData },
+  "cpp-ck1": { ko: cppLessonCk1Data, en: cppLessonCk1EnData },
   "cpp-8": { ko: cppLesson8Data, en: cppLesson8EnData },
+  "cpp-ck7": { ko: cppLessonCk7Data, en: cppLessonCk7EnData },
   // C++ Part 2
   "cpp-9": { ko: cppLesson9Data, en: cppLesson9EnData },
   "cpp-10": { ko: cppLesson10Data, en: cppLesson10EnData },
@@ -231,13 +241,22 @@ export const bilingualLessons: Record<string, { ko: LessonData, en: LessonData }
   "cpp-12": { ko: cppLesson12Data, en: cppLesson12EnData },
   "cpp-13": { ko: cppLesson13Data, en: cppLesson13EnData },
   "cpp-14": { ko: cppLesson14Data, en: cppLesson14EnData },
+  "cpp-ck2": { ko: cppLessonCk2Data, en: cppLessonCk2EnData },
   "cpp-21": { ko: cppLesson21Data, en: cppLesson21EnData },
+  "cpp-ck6": { ko: cppLessonCk6Data, en: cppLessonCk6EnData },
   "cpp-22": { ko: cppLesson22Data, en: cppLesson22EnData },
+  "cpp-ck3": { ko: cppLessonCk3Data, en: cppLessonCk3EnData },
+  "cpp-ck9": { ko: cppLessonCk9Data, en: cppLessonCk9EnData },
   // C++ Part 3
   "cpp-15": { ko: cppLesson15Data, en: cppLesson15EnData },
+  "cpp-23": { ko: cppLesson23Data, en: cppLesson23EnData },
+  "cpp-ck4": { ko: cppLessonCk4Data, en: cppLessonCk4EnData },
   "cpp-16": { ko: cppLesson16Data, en: cppLesson16EnData },
+  "cpp-ck5": { ko: cppLessonCk5Data, en: cppLessonCk5EnData },
   "cpp-17": { ko: cppLesson17Data, en: cppLesson17EnData },
   "cpp-18": { ko: cppLesson18Data, en: cppLesson18EnData },
+  "cpp-ck8": { ko: cppLessonCk8Data, en: cppLessonCk8EnData },
+  "cpp-ck10": { ko: cppLessonCk10Data, en: cppLessonCk10EnData },
   "cpp-19": { ko: cppLesson19Data, en: cppLesson19EnData },
   "cpp-20": { ko: cppLesson20Data, en: cppLesson20EnData },
   // C++ projects

@@ -101,6 +101,19 @@ export const lesson13: LessonData = {
         explanation: "range(5)는 0부터 시작해서 4까지!"
       }
     },
+
+    // ===== 직접 써보기: for + range =====
+    {
+      type: "practice",
+      content: {
+        task: "이렇게 나오게 해봐 ↓\n1\n2\n3\n4\n5",
+        guide: "for i in range(...): 전체를 직접 써봐!",
+        hint: "for i in range(1, 6):\n    print(i)",
+        template: null,
+        answer: "for i in range(1, 6):\n    print(i)",
+        expect: "1\n2\n3\n4\n5"
+      }
+    },
     {
       type: "summary",
       content: {
@@ -203,6 +216,17 @@ export const lesson13: LessonData = {
           feedback: "1+2+3+...+100 = 5050!"
         },
         result: "5050"
+      }
+    },
+    // ===== 직접 써보기: for + 리스트 =====
+    {
+      type: "practice",
+      content: {
+        task: "이렇게 나오게 해봐 ↓\n안녕!\n안녕!\n안녕!",
+        guide: "for + range(3) 전체를 직접 써봐!",
+        template: null,
+        answer: "for i in range(3):\n    print('안녕!')",
+        expect: "안녕!\n안녕!\n안녕!"
       }
     },
     {
