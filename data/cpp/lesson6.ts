@@ -632,6 +632,30 @@ switch (day) {
 \`\`\``,
         },
         {
+          id: "ch4-intentional",
+          type: "explain",
+          title: "💡 일부러 break를 안 쓰는 경우!",
+          content: `break를 안 쓰는 게 항상 실수는 아니에요! **여러 case가 같은 코드**를 실행할 때 일부러 빼기도 해요:
+
+\`\`\`cpp
+switch (day) {
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+        cout << "평일";
+        break;
+    case 6:
+    case 7:
+        cout << "주말";
+        break;
+}
+\`\`\`
+
+case 1~5는 break 없이 쭉 떨어져서 **"평일"**을 출력해요. 이게 **의도적 fall-through**예요!`
+        },
+        {
           id: "ch4-fb1",
           type: "fillblank" as const,
           title: "switch문을 완성해봐요!",
@@ -770,33 +794,6 @@ switch (x) { case x > 10: ... }   // 범위 비교 안 됨
           options: ["B", "BX", "X", "에러"],
           answer: 1,
           explanation: "x=2 → case 2 실행(B) → break 없음! → default도 실행(X)! default도 break가 없으면 fall-through의 대상이에요. 결과: \"BX\""
-        },
-        // 의도적 fall-through (여러 case가 같은 코드)
-        {
-          id: "ch4-intentional",
-          type: "explain",
-          title: "💡 일부러 break를 안 쓰는 경우!",
-          content: `break를 안 쓰는 게 항상 실수는 아니에요! **여러 case가 같은 코드**를 실행할 때 일부러 빼기도 해요:
-
-\`\`\`cpp
-switch (day) {
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-        cout << "평일";
-        break;
-    case 6:
-    case 7:
-        cout << "주말";
-        break;
-}
-\`\`\`
-
-case 1~5는 break 없이 쭉 떨어져서 **"평일"**을 출력해요. 이게 **의도적 fall-through**예요!
-
-💡 default는 **선택사항**이에요! 모든 경우를 case로 다 처리했으면 default를 안 써도 돼요.`
         },
         // 의도적 fall-through 퀴즈
         {
