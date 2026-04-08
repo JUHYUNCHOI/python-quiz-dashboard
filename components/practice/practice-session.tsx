@@ -6,6 +6,7 @@ import { McqRunner } from "./mcq-runner"
 import { PracticeRunner } from "./practice-runner"
 import { cn } from "@/lib/utils"
 import type { PracticeProblem, PracticeCluster } from "@/data/practice/types"
+import { localizeProblem, localizeCluster } from "@/data/practice/types"
 import { useLanguage } from "@/contexts/language-context"
 
 // ── 고정 세트 크기 ────────────────────────────────────────────────
@@ -213,7 +214,7 @@ export function PracticeSession({
   solvedSet,
   userId,
 }: PracticeSessionProps) {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const [phase, setPhase] = useState<Phase>("loading")
   const [dbSessions, setDbSessions] = useState<DbSession[]>([])
   const [currentSet, setCurrentSet] = useState(1)
@@ -392,7 +393,8 @@ export function PracticeSession({
     .filter(p => !passedInRound.has(p.id))
     .map(p => problemIndexInCluster(cluster.problems, p.id))
 
-  const current = roundProblems[index]
+  const current = roundProblems[index] ? localizeProblem(roundProblems[index], lang) : undefined
+  const localCluster = localizeCluster(cluster, lang)
   const isMcq = current?.type === "mcq"
   const progressPct = roundProblems.length > 0 ? (index / roundProblems.length) * 100 : 0
 
@@ -513,7 +515,7 @@ export function PracticeSession({
         <div className="flex-1 flex flex-col gap-1.5">
           <div className="flex items-center justify-between">
             <span className="text-sm font-semibold text-gray-700">
-              {cluster.emoji} {cluster.title}
+              {cluster.emoji} {localCluster.title}
               <span className="ml-1.5 text-xs text-gray-400">
                 {t("세트", "Set")} {currentSet}{isRetryMode ? ` (${t("재시도", "retry")})` : ""}
               </span>
@@ -581,7 +583,7 @@ export function PracticeSession({
                         <div key={i} className="flex gap-3 font-mono text-xs bg-gray-50 rounded-lg px-3 py-2">
                           <div className="flex-1 min-w-0">
                             <span className="text-gray-400">{t("입력", "Input")}: </span>
-                            <span className="text-gray-700 break-all">{tc.stdin || "(없음)"}</span>
+                            <span className="text-gray-700 break-all">{tc.stdin || t("(없음)", "(none)")}</span>
                           </div>
                           <div className="flex-1 min-w-0">
                             <span className="text-gray-400">{t("출력", "Output")}: </span>

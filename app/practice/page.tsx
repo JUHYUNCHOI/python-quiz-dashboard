@@ -10,6 +10,7 @@ import { McqRunner } from "@/components/practice/mcq-runner"
 import { PracticeSession } from "@/components/practice/practice-session"
 import { ALL_CLUSTERS } from "@/data/practice"
 import type { PracticeCluster, PracticeProblem } from "@/data/practice/types"
+import { localizeCluster, localizeProblem } from "@/data/practice/types"
 import { usePracticeProgress } from "@/hooks/use-practice-progress"
 import { useAuth } from "@/contexts/auth-context"
 import { ArrowLeft, Lock, CheckCircle2, Star, FileText, Code2, HelpCircle } from "lucide-react"
@@ -53,7 +54,7 @@ function ClusterList({
   lang: Lang
   onLangChange: (lang: Lang) => void
 }) {
-  const { t } = useLanguage()
+  const { t, lang: locale } = useLanguage()
   const clusters = lang === "cpp" ? CPP_CLUSTERS : PYTHON_CLUSTERS
   const langLabel = lang === "cpp" ? t("C++ 레슨", "C++ lessons") : t("Python 레슨", "Python lessons")
 
@@ -91,6 +92,7 @@ function ClusterList({
         const total = cluster.problems.length
         const solved = cluster.problems.filter(p => solvedSet.has(p.id)).length
         const starred = cluster.problems.filter(p => starredSet.has(p.id)).length
+        const locCluster = localizeCluster(cluster, locale)
         return (
           <button
             key={cluster.id}
@@ -106,8 +108,8 @@ function ClusterList({
               <div className="flex items-center gap-3">
                 <span className="text-2xl">{cluster.emoji}</span>
                 <div>
-                  <p className="font-semibold text-gray-900">{cluster.title}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">{cluster.description}</p>
+                  <p className="font-semibold text-gray-900">{locCluster.title}</p>
+                  <p className="text-xs text-gray-400 mt-0.5">{locCluster.description}</p>
                 </div>
               </div>
               {unlocked
@@ -154,13 +156,14 @@ function ProblemList({
   solvedSet: Set<string>
   starredSet: Set<string>
 }) {
-  const { t } = useLanguage()
+  const { t, lang: locale } = useLanguage()
   const diffLabel = (d: string) =>
     d === "쉬움" ? t("쉬움", "Easy") :
     d === "보통" ? t("보통", "Medium") :
     t("어려움", "Hard")
   const solvedCount = cluster.problems.filter(p => solvedSet.has(p.id)).length
   const isAllMcq = cluster.problems.every(p => p.type === "mcq")
+  const locCluster = localizeCluster(cluster, locale)
 
   return (
     <div className="flex flex-col gap-4 pb-24">
@@ -169,7 +172,7 @@ function ProblemList({
           <ArrowLeft className="w-4 h-4 text-gray-600" />
         </button>
         <div className="flex-1 min-w-0">
-          <h1 className="text-xl font-bold text-gray-900">{cluster.emoji} {cluster.title}</h1>
+          <h1 className="text-xl font-bold text-gray-900">{cluster.emoji} {locCluster.title}</h1>
           <p className="text-gray-400 text-xs">{solvedCount}/{cluster.problems.length} {t("문제 완료", "solved")}</p>
         </div>
       </div>
@@ -185,6 +188,7 @@ function ProblemList({
       {cluster.problems.map((problem, i) => {
         const solved = solvedSet.has(problem.id)
         const starred = starredSet.has(problem.id)
+        const locP = localizeProblem(problem, locale)
         return (
           <button
             key={problem.id}
@@ -195,8 +199,8 @@ function ProblemList({
               <div className="flex items-center gap-3">
                 <span className="text-gray-300 text-sm w-5 shrink-0">{i + 1}</span>
                 <div>
-                  <p className="font-medium text-gray-900">{problem.title}</p>
-                  <p className="text-xs text-gray-400 mt-0.5 line-clamp-1">{problem.description.split("\n")[0].replace(/\*\*/g, "")}</p>
+                  <p className="font-medium text-gray-900">{locP.title}</p>
+                  <p className="text-xs text-gray-400 mt-0.5 line-clamp-1">{locP.description.split("\n")[0].replace(/\*\*/g, "")}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2 shrink-0">
@@ -216,7 +220,7 @@ function ProblemList({
   )
 }
 
-// ── 문제 패널 (설명 + 예제) ────────────────────────────────────────
+// ── 문제 패널 (설명 + 예제) — receives already-localized problem ──
 function ProblemPanel({ problem }: { problem: PracticeProblem }) {
   const { t } = useLanguage()
   return (
@@ -266,8 +270,9 @@ function ProblemDetail({
   onMarkSolved: (problemId: string) => Promise<void>
   onMarkStarred: (problemId: string) => Promise<void>
 }) {
-  const { t } = useLanguage()
+  const { t, lang: locale } = useLanguage()
   const [tab, setTab] = useState<"problem" | "code">("problem")
+  const locProblem = localizeProblem(problem, locale)
   const isMcq = problem.type === "mcq"
   const diffLabel = (d: string) =>
     d === "쉬움" ? t("쉬움", "Easy") :
@@ -293,14 +298,14 @@ function ProblemDetail({
           </button>
           <div className="flex items-center gap-2 min-w-0">
             <HelpCircle className="w-4 h-4 text-indigo-400 shrink-0" />
-            <h1 className="text-base font-bold text-gray-900 truncate">{problem.title}</h1>
+            <h1 className="text-base font-bold text-gray-900 truncate">{locProblem.title}</h1>
             <span className={cn("text-xs px-2 py-0.5 rounded-full font-medium shrink-0", DIFFICULTY_COLOR[problem.difficulty])}>
               {diffLabel(problem.difficulty)}
             </span>
           </div>
         </div>
         <div className="max-w-xl">
-          <McqRunner problem={problem} onSuccess={handleSuccess} />
+          <McqRunner problem={locProblem} onSuccess={handleSuccess} />
         </div>
       </div>
     )
@@ -318,7 +323,7 @@ function ProblemDetail({
           <ArrowLeft className="w-4 h-4 text-gray-600" />
         </button>
         <div className="flex items-center gap-2 min-w-0">
-          <h1 className="text-base font-bold text-gray-900 truncate">{problem.title}</h1>
+          <h1 className="text-base font-bold text-gray-900 truncate">{locProblem.title}</h1>
           <span className={cn("text-xs px-2 py-0.5 rounded-full font-medium shrink-0", DIFFICULTY_COLOR[problem.difficulty])}>
             {diffLabel(problem.difficulty)}
           </span>
@@ -361,7 +366,7 @@ function ProblemDetail({
           "md:overflow-y-auto md:pr-1",
           tab === "code" ? "hidden md:block" : "block"
         )}>
-          <ProblemPanel problem={problem} />
+          <ProblemPanel problem={locProblem} />
         </div>
 
         {/* 우측: 코드 패널 */}
@@ -369,7 +374,7 @@ function ProblemDetail({
           "md:overflow-y-auto",
           tab === "problem" ? "hidden md:block" : "block"
         )}>
-          <PracticeRunner problem={problem} onSuccess={handleSuccess} />
+          <PracticeRunner problem={locProblem} onSuccess={handleSuccess} />
         </div>
 
       </div>
