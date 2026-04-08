@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Check, X, RotateCcw } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { PracticeProblem } from "@/data/practice/types"
+import { useLanguage } from "@/contexts/language-context"
 
 interface McqRunnerProps {
   problem: PracticeProblem
@@ -13,6 +14,7 @@ interface McqRunnerProps {
 const LABELS = ["①", "②", "③", "④", "⑤"]
 
 export function McqRunner({ problem, onSuccess }: McqRunnerProps) {
+  const { t } = useLanguage()
   const [selected, setSelected] = useState<number | null>(null)
   const correct = problem.correctOption ?? 0
   const options = problem.options ?? []
@@ -114,14 +116,14 @@ export function McqRunner({ problem, onSuccess }: McqRunnerProps) {
               "text-sm font-bold",
               isRight ? "text-emerald-700" : "text-red-600"
             )}>
-              {isRight ? "✅ 정답!" : "❌ 오답!"}
+              {isRight ? t("✅ 정답!", "✅ Correct!") : t("❌ 오답!", "❌ Wrong!")}
             </span>
             {!isRight && (
               <button
                 onClick={reset}
                 className="flex items-center gap-1 text-xs text-indigo-500 hover:text-indigo-700 font-medium"
               >
-                <RotateCcw className="w-3 h-3" /> 다시 풀기
+                <RotateCcw className="w-3 h-3" /> {t("다시 풀기", "Try again")}
               </button>
             )}
           </div>

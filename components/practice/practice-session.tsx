@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { ArrowLeft } from "lucide-react"
 import { McqRunner } from "./mcq-runner"
 import { PracticeRunner } from "./practice-runner"
@@ -20,6 +20,33 @@ function getSetProblems(problems: PracticeProblem[], setNum: number): PracticePr
 
 function problemIndexInCluster(problems: PracticeProblem[], problemId: string): number {
   return problems.findIndex(p => p.id === problemId) + 1
+}
+
+// ── 진행 상황 localStorage 키 ─────────────────────────────────────
+const progressKey = (clusterId: string) => `pp-${clusterId}`
+
+interface SavedProgress {
+  setNum: number
+  index: number
+  passedIds: string[]
+  isRetry: boolean
+  problemIds: string[]
+}
+
+function tryLoadProgress(clusterId: string, allProblems: PracticeProblem[]): { setNum: number; index: number; passedIds: string[]; isRetry: boolean; problems: PracticeProblem[] } | null {
+  try {
+    const raw = localStorage.getItem(progressKey(clusterId))
+    if (!raw) return null
+    const saved: SavedProgress = JSON.parse(raw)
+    const problems = saved.problemIds
+      .map(id => allProblems.find(p => p.id === id))
+      .filter(Boolean) as PracticeProblem[]
+    if (problems.length === 0) return null
+    const safeIndex = Math.min(saved.index ?? 0, problems.length - 1)
+    return { setNum: saved.setNum, index: safeIndex, passedIds: saved.passedIds ?? [], isRetry: saved.isRetry ?? false, problems }
+  } catch {
+    return null
+  }
 }
 
 // ── 문제 설명 렌더러 ──────────────────────────────────────────────
@@ -200,8 +227,20 @@ export function PracticeSession({
 
   const loadSessions = useCallback(async () => {
     if (!userId) {
-      setCurrentSet(1)
-      setPhase("intro")
+      // 로그인 없어도 localStorage 진행 상황 복원 가능
+      const saved = tryLoadProgress(cluster.id, cluster.problems)
+      if (saved) {
+        setCurrentSet(saved.setNum)
+        setRoundProblems(saved.problems)
+        setIndex(saved.index)
+        setPassedInRound(new Set(saved.passedIds))
+        setIsRetryMode(saved.isRetry)
+        setCanAdvance(saved.passedIds.includes(saved.problems[saved.index]?.id ?? ""))
+        setPhase("solving")
+      } else {
+        setCurrentSet(1)
+        setPhase("intro")
+      }
       return
     }
     try {
@@ -213,20 +252,52 @@ export function PracticeSession({
       const completed = sessions.filter(s => s.completed_at && !s.teacher_assigned)
       const pendingTeacher = sessions.find(s => s.teacher_assigned && !s.completed_at)
 
+      let expectedSet: number
       if (pendingTeacher) {
         setTeacherAssignedId(pendingTeacher.id)
-        setCurrentSet(pendingTeacher.round)
+        expectedSet = pendingTeacher.round
+        setCurrentSet(expectedSet)
       } else {
         const lastSet = completed.length > 0 ? Math.max(...completed.map(s => s.round)) : 0
-        setCurrentSet(lastSet + 1)
+        expectedSet = lastSet + 1
+        setCurrentSet(expectedSet)
+      }
+
+      // localStorage에 해당 세트의 진행 상황이 있으면 복원
+      const saved = tryLoadProgress(cluster.id, cluster.problems)
+      if (saved && saved.setNum === expectedSet) {
+        setRoundProblems(saved.problems)
+        setIndex(saved.index)
+        setPassedInRound(new Set(saved.passedIds))
+        setIsRetryMode(saved.isRetry)
+        setCanAdvance(saved.passedIds.includes(saved.problems[saved.index]?.id ?? ""))
+        setPhase("solving")
+        return
       }
     } catch {
       setCurrentSet(1)
     }
     setPhase("intro")
-  }, [cluster.id, userId])
+  }, [cluster.id, cluster.problems, userId])
 
   useEffect(() => { loadSessions() }, [loadSessions])
+
+  // ── 풀이 진행 상황 자동 저장 ──────────────────────────────────────
+  const prevPhase = useRef<string>("")
+  useEffect(() => {
+    if (phase === "solving" && roundProblems.length > 0) {
+      try {
+        localStorage.setItem(progressKey(cluster.id), JSON.stringify({
+          setNum: currentSet,
+          index,
+          passedIds: [...passedInRound],
+          isRetry: isRetryMode,
+          problemIds: roundProblems.map(p => p.id),
+        }))
+      } catch {}
+    }
+    prevPhase.current = phase
+  }, [phase, currentSet, index, passedInRound, isRetryMode, roundProblems, cluster.id])
 
   const saveSession = useCallback(async (
     setNum: number,
@@ -283,14 +354,24 @@ export function PracticeSession({
   const handleNext = useCallback(async () => {
     if (index + 1 < roundProblems.length) {
       setIndex(i => i + 1)
-      setCanAdvance(false)
+      setCanAdvance(passedInRound.has(roundProblems[index + 1]?.id ?? ""))
       return
     }
+    // 세트 완료 — 저장 후 progress 삭제
     setIsSaving(true)
     await saveSession(currentSet, roundProblems, passedInRound)
     setIsSaving(false)
+    try { localStorage.removeItem(progressKey(cluster.id)) } catch {}
     setPhase("round_complete")
-  }, [index, roundProblems, currentSet, passedInRound, saveSession])
+  }, [index, roundProblems, currentSet, passedInRound, saveSession, cluster.id])
+
+  // ── 이전 문제로 ────────────────────────────────────────────────────
+  const handlePrev = useCallback(() => {
+    if (index === 0) return
+    const prevIdx = index - 1
+    setIndex(prevIdx)
+    setCanAdvance(passedInRound.has(roundProblems[prevIdx]?.id ?? ""))
+  }, [index, roundProblems, passedInRound])
 
   const handleRetryWrong = useCallback(() => {
     const wrongProblems = roundProblems.filter(p => !passedInRound.has(p.id))
@@ -300,11 +381,12 @@ export function PracticeSession({
   }, [roundProblems, passedInRound, currentSet, startSet])
 
   const handleOptOut = useCallback(async () => {
+    try { localStorage.removeItem(progressKey(cluster.id)) } catch {}
     if (phase === "round_complete") {
       await saveSession(currentSet, roundProblems, passedInRound, true)
     }
     onExit()
-  }, [phase, currentSet, roundProblems, passedInRound, saveSession, onExit])
+  }, [phase, currentSet, roundProblems, passedInRound, saveSession, onExit, cluster.id])
 
   const wrongNums = roundProblems
     .filter(p => !passedInRound.has(p.id))
@@ -436,9 +518,19 @@ export function PracticeSession({
                 {t("세트", "Set")} {currentSet}{isRetryMode ? ` (${t("재시도", "retry")})` : ""}
               </span>
             </span>
-            <span className="text-xs text-gray-400 font-medium tabular-nums">
-              {index + 1} / {roundProblems.length}
-            </span>
+            <div className="flex items-center gap-2">
+              {index > 0 && (
+                <button
+                  onClick={handlePrev}
+                  className="text-xs text-gray-400 hover:text-gray-600 px-2 py-0.5 rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  ← {t("이전", "Prev")}
+                </button>
+              )}
+              <span className="text-xs text-gray-400 font-medium tabular-nums">
+                {index + 1} / {roundProblems.length}
+              </span>
+            </div>
           </div>
           <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
             <div
