@@ -2,51 +2,76 @@
 
 import { useState, useEffect, use, useCallback } from "react"
 import { useRouter } from "next/navigation"
-import { ChevronRight, ChevronLeft, X, BookOpen, RotateCcw, Trophy, CheckCircle2, XCircle } from "lucide-react"
+import { ChevronRight, ChevronLeft, X, BookOpen, RotateCcw } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
 import { useSoundEffect } from "@/hooks/use-sound-effect"
 import { markQuizComplete } from "@/lib/mark-lesson-complete"
 import { saveStepAnswer } from "@/lib/save-step-answer"
-import { StepRenderer } from "@/components/learn/step-renderer"
-import { renderContent } from "@/components/learn/render-content"
-import { lessonsData, bilingualLessons, lessonVariants } from "@/components/learn/lesson-registry"
-import type { LessonStep, LessonData } from "@/components/learn/types"
+import { ReviewStepRenderer } from "./ReviewStepRenderer"
+import { lessonsData } from "./data/lessons"
+import type { StepContent, LessonData } from "./data/types"
 
 // ============================================================
-// 수업 레슨에서 quiz/predict/fillblank 스텝만 추출
+// 유틸 함수들
 // ============================================================
-function extractReviewSteps(lesson: LessonData): { step: LessonStep; chapterId: string; chapterTitle: string; chapterEmoji: string }[] {
-  const reviewTypes = new Set(["quiz", "predict", "fillblank", "tryit", "practice", "mission"])
-  const steps: { step: LessonStep; chapterId: string; chapterTitle: string; chapterEmoji: string }[] = []
 
-  for (const chapter of lesson.chapters) {
-    for (const step of chapter.steps) {
-      if (reviewTypes.has(step.type)) {
-        steps.push({ step, chapterId: chapter.id, chapterTitle: chapter.title, chapterEmoji: chapter.emoji })
-      }
+interface ReviewStep {
+  step: StepContent
+  originalIndex: number   // lesson.steps 내 원래 인덱스
+  chapterTitle?: string   // 직전 chapter 스텝의 제목
+}
+
+// 복습용 스텝 추출 (quiz, errorQuiz, practice, interleaving, explain+predict)
+function extractReviewSteps(lesson: LessonData): ReviewStep[] {
+  const result: ReviewStep[] = []
+  let currentChapterTitle: string | undefined
+
+  for (let i = 0; i < lesson.steps.length; i++) {
+    const step = lesson.steps[i]
+    if (step.type === "chapter") {
+      currentChapterTitle = step.content.title
+    } else if (
+      step.type === "quiz" ||
+      step.type === "errorQuiz" ||
+      step.type === "practice" ||
+      step.type === "interleaving" ||
+      (step.type === "explain" && step.content.predict)
+    ) {
+      result.push({ step, originalIndex: i, chapterTitle: currentChapterTitle })
     }
   }
-  return steps
+  return result
 }
 
-// 해당 챕터에서 특정 스텝 직전에 나오는 explain 스텝들을 가져오기 (최대 2개)
-function getChapterExplains(lesson: LessonData, chapterId: string, stepId?: string): LessonStep[] {
-  const chapter = lesson.chapters.find(ch => ch.id === chapterId)
-  if (!chapter) return []
-  const stepIdx = stepId ? chapter.steps.findIndex(s => s.id === stepId) : -1
-  const stepsToScan = stepIdx >= 0 ? chapter.steps.slice(0, stepIdx) : chapter.steps
-  return stepsToScan.filter(s => s.type === "explain").slice(-2)
+// 힌트용: 직전에 나오는 explain 스텝들의 핵심 내용
+function getNearbyExplains(lesson: LessonData, beforeIndex: number): string[][] {
+  const hints: string[][] = []
+  for (let i = beforeIndex - 1; i >= 0 && hints.length < 2; i--) {
+    const s = lesson.steps[i]
+    if (s.type === "chapter") break
+    if (s.type === "explain" && s.content.lines?.length > 0) {
+      hints.unshift(s.content.lines)
+    }
+  }
+  return hints
 }
 
-// 복습 힌트용: 코드 블록 제거 후 텍스트(개념 설명)만 반환
-function extractProseHint(content: string): string {
-  return content
-    .replace(/```[\s\S]*?```/g, "")  // 코드 블록 제거
-    .replace(/\|.*\|.*\n?/g, "")     // 마크다운 테이블 제거
-    .replace(/\n{3,}/g, "\n\n")      // 연속 빈줄 정리
-    .trim()
+// 스텝 문제 미리보기 텍스트
+function getStepPreview(step: StepContent): string {
+  switch (step.type) {
+    case "quiz":
+    case "errorQuiz":
+      return step.content.question
+    case "practice":
+    case "interleaving":
+      return step.content.task
+    case "explain":
+      return step.content.predict?.question ?? "예측 퀴즈"
+    default:
+      return ""
+  }
 }
 
 // ============================================================
@@ -56,54 +81,28 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   const resolvedParams = use(params)
   const lessonId = resolvedParams.lessonId
   const router = useRouter()
-  const { t, lang } = useLanguage()
+  const { t } = useLanguage()
   const { user, profile, isLoading: authLoading } = useAuth()
   const isTeacher = profile?.role === "teacher"
 
   useEffect(() => {
     if (!authLoading && !user) router.replace("/login")
   }, [user, authLoading, router])
+
   const teacherAsStudent = typeof window !== "undefined" && localStorage.getItem("teacher-as-student") === "true"
   const effectiveTeacher = isTeacher && !teacherAsStudent
   const { play } = useSoundEffect()
 
-  // 수업 페이지와 동일한 한/영 레슨 선택 로직
-  const isBilingual = lessonId in bilingualLessons
-  const lesson = isBilingual ? bilingualLessons[lessonId][lang] : lessonsData[lessonId]
+  // 복습 레슨 데이터 로드
+  const lesson = lessonsData[lessonId]
   const reviewSteps = lesson ? extractReviewSteps(lesson) : []
 
-  // localStorage에서 진도 복원
+  // localStorage 진도 복원
   const storageKey = `review-progress-${lessonId}`
   const loadSaved = () => {
     try {
-      const saved = localStorage.getItem(storageKey)
-      if (saved) return JSON.parse(saved)
-    } catch {}
-    // 이미 완료한 학생: quiz/predict/fillblank만 자동 완료 (tryit/practice/mission은 직접 해야 함)
-    try {
-      const completedLessons = JSON.parse(localStorage.getItem("completedLessons") || "[]").map(String)
-      const completedQuizzes = JSON.parse(localStorage.getItem("completedQuizzes") || "[]").map(String)
-      const wasCompleted = completedLessons.includes(String(lessonId)) || completedQuizzes.includes(String(lessonId))
-      if (wasCompleted && reviewSteps.length > 0) {
-        const autoCompleteTypes = new Set(["quiz", "predict", "fillblank"])
-        const autoCompleted: number[] = []
-        const allAnswers: Record<number, number> = {}
-        reviewSteps.forEach((r, i) => {
-          if (autoCompleteTypes.has(r.step.type)) {
-            autoCompleted.push(i)
-            if (r.step.answer !== undefined) allAnswers[i] = r.step.answer
-          }
-        })
-        return {
-          currentIndex: 0,
-          score: 0,
-          totalAttempted: 0,
-          correctCount: 0,
-          completedSteps: autoCompleted,
-          wrongSteps: [],
-          savedAnswers: allAnswers,
-        }
-      }
+      const raw = localStorage.getItem(storageKey)
+      if (raw) return JSON.parse(raw)
     } catch {}
     return null
   }
@@ -113,24 +112,15 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   const [score, setScore] = useState<number>(saved?.score ?? 0)
   const [totalAttempted, setTotalAttempted] = useState<number>(saved?.totalAttempted ?? 0)
   const [correctCount, setCorrectCount] = useState<number>(saved?.correctCount ?? 0)
-  // 현재 세션에서 실제로 답한 문제 수 (이전 저장 데이터 제외)
   const [sessionAttempts, setSessionAttempts] = useState(0)
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set(saved?.completedSteps ?? []))
-  const [showResults, setShowResults] = useState(false)
   const [wrongSteps, setWrongSteps] = useState<number[]>(saved?.wrongSteps ?? [])
-
-  // StepRenderer 관련 상태
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
-  const [showExplanation, setShowExplanation] = useState(false)
-  const [quizAttempts, setQuizAttempts] = useState(0)
-  const [hintLevel, setHintLevel] = useState(0)
-  const [isCurrentStepCompleted, setIsCurrentStepCompleted] = useState(saved?.completedSteps?.includes(saved?.currentIndex ?? 0) ?? false)
+  const [showResults, setShowResults] = useState(false)
   const [showLesson, setShowLesson] = useState(false)
-
-  // 각 스텝별 선택한 답 저장 (quiz/predict용)
-  const [savedAnswers, setSavedAnswers] = useState<Record<number, number>>(saved?.savedAnswers ?? {})
-  // 리셋 카운터 (key 변경용)
+  // 리셋 카운터 — StepRenderer key 변경용
   const [resetCount, setResetCount] = useState(0)
+
+  const isCurrentStepCompleted = completedSteps.has(currentIndex)
 
   // 진도 저장
   useEffect(() => {
@@ -138,163 +128,68 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
       localStorage.setItem(storageKey, JSON.stringify({
         currentIndex, score, totalAttempted, correctCount,
         completedSteps: Array.from(completedSteps),
-        wrongSteps, savedAnswers,
+        wrongSteps,
       }))
     } catch {}
-  }, [currentIndex, score, totalAttempted, correctCount, completedSteps, wrongSteps, savedAnswers, storageKey])
+  }, [currentIndex, score, totalAttempted, correctCount, completedSteps, wrongSteps, storageKey])
 
-  // 현재 스텝
   const currentReview = reviewSteps[currentIndex]
 
-  // 해당 챕터 위치로 learn 페이지 이동
-  const goToLesson = (chapterId: string) => {
-    const chIdx = lesson.chapters.findIndex(ch => ch.id === chapterId)
-    if (chIdx >= 0) {
-      const hasVariants = lessonId in lessonVariants
-      const variant = hasVariants
-        ? (localStorage.getItem(`library-variant-${lessonId}`) || "turtle")
-        : null
-      const progressKey = hasVariants ? `practice-v2-${lessonId}-${variant}` : `practice-v2-${lessonId}`
-      const saved = localStorage.getItem(progressKey)
-      const prev = saved ? JSON.parse(saved) : {}
-      localStorage.setItem(progressKey, JSON.stringify({ ...prev, chapter: chIdx, step: 0 }))
-    }
-    router.push(`/learn/${lessonId}?from=review`)
-  }
+  // ──────────────────────────────────────────────
+  // 정답 처리
+  // ──────────────────────────────────────────────
+  const handleCorrect = useCallback(() => {
+    if (completedSteps.has(currentIndex)) return
+    play("correct")
+    setCorrectCount(prev => prev + 1)
+    setTotalAttempted(prev => prev + 1)
+    setSessionAttempts(prev => prev + 1)
+    setScore(prev => prev + 10)
+    setCompletedSteps(prev => new Set([...prev, currentIndex]))
 
-  // 레슨 없으면 에러
-  if (!lesson || reviewSteps.length === 0) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center space-y-4">
-          <p className="text-2xl font-bold text-gray-900">{t("복습할 문제가 없어요", "No review questions found")}</p>
-          <p className="text-gray-500">{t("먼저 수업을 완료해주세요!", "Complete the lesson first!")}</p>
-          <button
-            onClick={() => router.push(`/learn/${lessonId}`)}
-            className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-500"
-          >
-            {t("수업으로 가기", "Go to Lesson")}
-          </button>
-        </div>
-      </div>
-    )
-  }
-
-  // 퀴즈 정답 처리
-  const handleQuizAnswer = useCallback((idx: number) => {
-    setSelectedAnswer(idx)
-    setSavedAnswers(prev => ({ ...prev, [currentIndex]: idx }))
-    setQuizAttempts(prev => prev + 1)
-    const step = reviewSteps[currentIndex]?.step
-    if (!step) return
-
-    const isCorrect = idx === step.answer
-    // 스텝 답변 저장 (선생님이 학생 답 확인용)
-    if (!effectiveTeacher) {
+    if (!effectiveTeacher && currentReview) {
       saveStepAnswer({
         lessonId,
         progressType: "review",
-        stepId: step.id,
-        stepType: step.type,
-        isCorrect,
-        userAnswer: { selectedIdx: idx, option: step.options?.[idx] ?? "" },
-        correctAnswer: { selectedIdx: step.answer ?? 0, option: step.options?.[step.answer ?? 0] ?? "" },
+        stepId: String(currentReview.originalIndex),
+        stepType: currentReview.step.type,
+        isCorrect: true,
+        userAnswer: {},
+        correctAnswer: {},
       })
     }
-    if (isCorrect) {
-      play("correct")
-      setShowExplanation(true)
-      if (!completedSteps.has(currentIndex)) {
-        setCorrectCount(prev => prev + 1)
-        setTotalAttempted(prev => prev + 1)
-        setSessionAttempts(prev => prev + 1)
-        setScore(prev => prev + 10)
-        setCompletedSteps(prev => new Set([...prev, currentIndex]))
-        setIsCurrentStepCompleted(true)
-      }
-    } else {
-      play("wrong")
-      setShowExplanation(true)
-      if (!completedSteps.has(currentIndex)) {
-        setTotalAttempted(prev => prev + 1)
-        setSessionAttempts(prev => prev + 1)
-        setWrongSteps(prev => [...prev, currentIndex])
-        setCompletedSteps(prev => new Set([...prev, currentIndex]))
-        setIsCurrentStepCompleted(true)
-      }
-    }
-  }, [currentIndex, reviewSteps, completedSteps, play])
+  }, [currentIndex, completedSteps, play, effectiveTeacher, currentReview, lessonId])
 
-  // 퀴즈 설명 확인 후
-  const acknowledgeQuiz = useCallback(() => {
-    // 다음 문제로
-    if (currentIndex < reviewSteps.length - 1) {
-      goToStep(currentIndex + 1)
-    } else {
-      setShowResults(true)
-    }
-  }, [currentIndex, reviewSteps.length])
+  const handleWrong = useCallback(() => {
+    if (completedSteps.has(currentIndex)) return
+    play("wrong")
+    setTotalAttempted(prev => prev + 1)
+    setSessionAttempts(prev => prev + 1)
+    setWrongSteps(prev => [...prev, currentIndex])
+    setCompletedSteps(prev => new Set([...prev, currentIndex]))
 
-  // fillblank 완료 처리
-  const handleStepComplete = useCallback((correct: boolean, filledValues?: Record<number, string>) => {
-    if (!completedSteps.has(currentIndex)) {
-      const step = reviewSteps[currentIndex]?.step
-      // fillblank 스텝 답변 저장
-      if (!effectiveTeacher && step && step.type === "fillblank" && filledValues) {
-        const blanks: { id: number; answer: string }[] = step.fillBlanks ?? []
-        saveStepAnswer({
-          lessonId,
-          progressType: "review",
-          stepId: step.id,
-          stepType: step.type,
-          isCorrect: correct,
-          userAnswer: filledValues as Record<string, unknown>,
-          correctAnswer: Object.fromEntries(blanks.map(b => [b.id, b.answer])),
-        })
-      }
-      setTotalAttempted(prev => prev + 1)
-      setSessionAttempts(prev => prev + 1)
-      if (correct) {
-        setCorrectCount(prev => prev + 1)
-        setScore(prev => prev + 10)
-        play("correct")
-      } else {
-        setWrongSteps(prev => [...prev, currentIndex])
-        play("wrong")
-      }
-      setCompletedSteps(prev => new Set([...prev, currentIndex]))
-      setIsCurrentStepCompleted(true)
+    if (!effectiveTeacher && currentReview) {
+      saveStepAnswer({
+        lessonId,
+        progressType: "review",
+        stepId: String(currentReview.originalIndex),
+        stepType: currentReview.step.type,
+        isCorrect: false,
+        userAnswer: {},
+        correctAnswer: {},
+      })
     }
-  }, [currentIndex, completedSteps, play, effectiveTeacher, reviewSteps, lessonId])
+  }, [currentIndex, completedSteps, play, effectiveTeacher, currentReview, lessonId])
 
-  const handleStepAcknowledge = useCallback(() => {
-    if (currentIndex < reviewSteps.length - 1) {
-      goToStep(currentIndex + 1)
-    } else {
-      setShowResults(true)
-    }
-  }, [currentIndex, reviewSteps.length])
-
+  // ──────────────────────────────────────────────
   // 스텝 이동
+  // ──────────────────────────────────────────────
   const goToStep = (idx: number) => {
     setCurrentIndex(idx)
-    setHintLevel(0)
     setShowLesson(false)
-    const wasCompleted = completedSteps.has(idx)
-    setIsCurrentStepCompleted(wasCompleted)
-    // 이미 풀었던 문제면 답 복원
-    if (wasCompleted && savedAnswers[idx] !== undefined) {
-      setSelectedAnswer(savedAnswers[idx])
-      setShowExplanation(true)
-      setQuizAttempts(2) // 이미 풀었으므로
-    } else {
-      setSelectedAnswer(null)
-      setShowExplanation(false)
-      setQuizAttempts(0)
-    }
+    setResetCount(prev => prev + 1)
   }
 
-  // 이전/다음
   const goPrev = () => { if (currentIndex > 0) goToStep(currentIndex - 1) }
   const goNext = () => {
     if (currentIndex < reviewSteps.length - 1) {
@@ -313,7 +208,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
     return () => window.removeEventListener("keydown", handleKey)
   }, [router])
 
-  // 결과 화면 표시 시 완료 저장 — 현재 세션에서 실제 답변한 경우에만
+  // 결과 화면 표시 시 완료 저장 (세션에서 실제로 답변한 경우에만)
   useEffect(() => {
     if (showResults && sessionAttempts > 0) {
       const pct = totalAttempted > 0 ? Math.round((correctCount / totalAttempted) * 100) : 0
@@ -323,7 +218,29 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
 
   if (authLoading || !user) return null
 
+  // ──────────────────────────────────────────────
+  // 레슨 없음 or 복습 스텝 없음
+  // ──────────────────────────────────────────────
+  if (!lesson || reviewSteps.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center space-y-4">
+          <p className="text-2xl font-bold text-gray-900">{t("복습할 문제가 없어요", "No review questions found")}</p>
+          <p className="text-gray-500">{t("먼저 수업을 완료해주세요!", "Complete the lesson first!")}</p>
+          <button
+            onClick={() => router.push(`/learn/${lessonId}`)}
+            className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-500"
+          >
+            {t("수업으로 가기", "Go to Lesson")}
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // ──────────────────────────────────────────────
   // 결과 화면
+  // ──────────────────────────────────────────────
   if (showResults) {
     const percentage = totalAttempted > 0 ? Math.round((correctCount / totalAttempted) * 100) : 0
     const isPerfect = wrongSteps.length === 0
@@ -335,7 +252,9 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
             <button onClick={() => router.push("/curriculum")} className="rounded-full p-2 hover:bg-gray-100">
               <X className="h-5 w-5 text-gray-600" />
             </button>
-            <h1 className="text-lg font-bold text-gray-900 flex-1">{lesson.emoji} {lesson.title} — {t("복습 결과", "Review Results")}</h1>
+            <h1 className="text-lg font-bold text-gray-900 flex-1">
+              {lesson.title} — {t("복습 결과", "Review Results")}
+            </h1>
           </div>
         </div>
 
@@ -345,7 +264,11 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
               {isPerfect ? "🎉" : percentage >= 70 ? "👍" : "💪"}
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-              {isPerfect ? t("완벽해요!", "Perfect!") : percentage >= 70 ? t("잘했어요!", "Great job!") : t("더 연습해봐요!", "Keep practicing!")}
+              {isPerfect
+                ? t("완벽해요!", "Perfect!")
+                : percentage >= 70
+                  ? t("잘했어요!", "Great job!")
+                  : t("더 연습해봐요!", "Keep practicing!")}
             </h2>
 
             <div className="flex justify-center gap-6">
@@ -365,12 +288,14 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
 
             {wrongSteps.length > 0 && (
               <div className="bg-orange-50 rounded-xl p-4 text-left space-y-2">
-                <p className="font-bold text-orange-700 text-sm">{t("틀린 문제의 챕터:", "Wrong answers from:")}</p>
+                <p className="font-bold text-orange-700 text-sm">{t("틀린 문제:", "Wrong answers:")}</p>
                 {wrongSteps.map((idx, i) => {
                   const r = reviewSteps[idx]
+                  if (!r) return null
+                  const preview = getStepPreview(r.step)
                   return (
-                    <p key={i} className="text-sm text-orange-600">
-                      {r.chapterEmoji} {r.chapterTitle} — {r.step.title}
+                    <p key={i} className="text-sm text-orange-600 truncate">
+                      {i + 1}. {r.chapterTitle ? `[${r.chapterTitle}] ` : ""}{preview}
                     </p>
                   )
                 })}
@@ -394,10 +319,11 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                   setScore(0)
                   setTotalAttempted(0)
                   setCorrectCount(0)
+                  setSessionAttempts(0)
                   setCompletedSteps(new Set())
                   setWrongSteps([])
+                  setResetCount(prev => prev + 1)
                   try { localStorage.removeItem(storageKey) } catch {}
-                  goToStep(0)
                 }}
                 className="flex items-center justify-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold"
               >
@@ -417,9 +343,16 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
     )
   }
 
+  // ──────────────────────────────────────────────
+  // 메인 복습 화면
+  // ──────────────────────────────────────────────
+  const nearbyExplains = currentReview
+    ? getNearbyExplains(lesson, currentReview.originalIndex)
+    : []
+
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* 상단 바 — 수업 페이지와 동일 스타일 */}
+      {/* 상단 바 */}
       <div className="border-b border-orange-100 bg-white/95 backdrop-blur-lg sticky top-0 z-10">
         <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 md:py-3 flex items-center gap-3 md:gap-4">
           <button
@@ -429,7 +362,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
             <X className="h-5 w-5 md:h-6 md:w-6 text-gray-600" />
           </button>
 
-          {/* 진행 바 — 수업과 같은 점(dot) 스타일 */}
+          {/* 진행 바 */}
           <div className="flex-1 flex items-center gap-[2px] h-2.5 md:h-3">
             {reviewSteps.map((_, idx) => {
               const isCurrent = idx === currentIndex
@@ -463,12 +396,10 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
           </span>
         </div>
 
-        {/* 챕터 정보 */}
-        {currentReview && (
+        {/* 챕터 이름 */}
+        {currentReview?.chapterTitle && (
           <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 pb-2">
-            <p className="text-xs text-gray-500">
-              {currentReview.chapterEmoji} {currentReview.chapterTitle}
-            </p>
+            <p className="text-xs text-gray-500">{currentReview.chapterTitle}</p>
           </div>
         )}
       </div>
@@ -477,8 +408,8 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
       <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6 pb-40">
         <div className="bg-white rounded-2xl p-6 md:p-10 shadow-sm">
 
-          {/* 수업 내용 보기 — 문제 위에 배치 */}
-          {(!isCurrentStepCompleted || wrongSteps.includes(currentIndex)) && currentReview && (
+          {/* 수업 내용 힌트 */}
+          {currentReview && (
             <div className="mb-5">
               <button
                 onClick={() => setShowLesson(!showLesson)}
@@ -487,104 +418,55 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                 <BookOpen className="w-3.5 h-3.5" />
                 {showLesson
                   ? t("수업 내용 닫기 ▲", "Hide lesson ▲")
-                  : isCurrentStepCompleted
-                    ? t("📖 틀린 부분 수업 내용 보기", "📖 View lesson content")
-                    : t("📖 잘 모르겠으면 수업 내용 보기", "📖 Hint: View lesson content")}
+                  : t("📖 잘 모르겠으면 수업 내용 보기", "📖 View lesson hint")}
               </button>
-              {showLesson && (() => {
-                const reviewHint = currentReview.step.reviewHint
-                const explains = getChapterExplains(lesson, currentReview.chapterId, currentReview.step.id)
-                return (
-                  <div className="mt-2 p-3 bg-amber-50 rounded-xl border border-amber-200 max-h-52 overflow-y-auto">
-                    <p className="text-amber-700 font-bold text-xs mb-2">
-                      {currentReview.chapterEmoji} {currentReview.chapterTitle}
-                    </p>
-                    {reviewHint ? (
-                      <>
-                        <div className="text-xs [&_h1]:text-sm [&_h2]:text-xs [&_p]:text-xs">
-                          {renderContent(reviewHint)}
+              {showLesson && (
+                <div className="mt-2 p-3 bg-amber-50 rounded-xl border border-amber-200 max-h-52 overflow-y-auto">
+                  {nearbyExplains.length > 0 ? (
+                    <>
+                      {nearbyExplains.map((lines, i) => (
+                        <div key={i} className={cn("text-xs text-amber-800 leading-relaxed", i > 0 && "mt-2 pt-2 border-t border-amber-100")}>
+                          {lines.map((line, j) => <p key={j}>{line}</p>)}
                         </div>
-                        <button
-                          onClick={() => goToLesson(currentReview.chapterId)}
-                          className="mt-2 text-amber-600 font-bold text-xs hover:underline"
-                        >
-                          {t("전체 수업 보기 →", "View full lesson →")}
-                        </button>
-                      </>
-                    ) : explains.length > 0 ? (
-                      <>
-                        {explains.slice(0, 2).map((explain, i) => {
-                          const prose = explain.content ? extractProseHint(explain.content) : ""
-                          return (
-                            <div key={i} className={cn("text-xs [&_h1]:text-sm [&_h2]:text-xs [&_p]:text-xs", i > 0 && "mt-2 pt-2 border-t border-amber-100")}>
-                              {prose && renderContent(prose)}
-                            </div>
-                          )
-                        })}
-                        <button
-                          onClick={() => goToLesson(currentReview.chapterId)}
-                          className="mt-2 text-amber-600 font-bold text-xs hover:underline"
-                        >
-                          {t("전체 수업 보기 →", "View full lesson →")}
-                        </button>
-                      </>
-                    ) : (
+                      ))}
                       <button
-                        onClick={() => goToLesson(currentReview.chapterId)}
-                        className="text-amber-600 font-bold text-xs hover:underline"
+                        onClick={() => router.push(`/learn/${lessonId}`)}
+                        className="mt-2 text-amber-600 font-bold text-xs hover:underline"
                       >
-                        {t("수업 페이지에서 보기 →", "View in lesson →")}
+                        {t("전체 수업 보기 →", "View full lesson →")}
                       </button>
-                    )}
-                  </div>
-                )
-              })()}
+                    </>
+                  ) : (
+                    <button
+                      onClick={() => router.push(`/learn/${lessonId}`)}
+                      className="text-amber-600 font-bold text-xs hover:underline"
+                    >
+                      {t("수업 페이지에서 보기 →", "View in lesson →")}
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
           )}
 
+          {/* 복습 스텝 렌더러 */}
           {currentReview && (
-            <StepRenderer
+            <ReviewStepRenderer
               key={`review-${currentIndex}-${resetCount}`}
               step={currentReview.step}
-              lang={lang}
-              isCompleted={effectiveTeacher ? false : isCurrentStepCompleted}
-              hintLevel={hintLevel}
-              onHintLevelChange={setHintLevel}
-              onSuccess={() => {
-                if (!completedSteps.has(currentIndex)) {
-                  setCorrectCount(prev => prev + 1)
-                  setTotalAttempted(prev => prev + 1)
-                  setSessionAttempts(prev => prev + 1)
-                  setScore(prev => prev + 10)
-                  setCompletedSteps(prev => new Set([...prev, currentIndex]))
-                  setIsCurrentStepCompleted(true)
-                  play("correct")
-                }
-              }}
-              selectedAnswer={selectedAnswer}
-              showExplanation={showExplanation}
-              quizAttempts={quizAttempts}
-              onQuizAnswer={handleQuizAnswer}
-              onQuizAcknowledge={acknowledgeQuiz}
-              onStepComplete={handleStepComplete}
-              onStepAcknowledge={handleStepAcknowledge}
-              showNextOnCorrect={true}
+              onCorrect={handleCorrect}
+              onWrong={handleWrong}
             />
           )}
 
-          {/* 완료된 문제 — 다시 풀기 버튼 */}
+          {/* 완료된 문제 — 다시 풀기 */}
           {isCurrentStepCompleted && (
             <div className="mt-3 flex justify-end">
               <button
                 onClick={() => {
-                  setSelectedAnswer(null)
-                  setShowExplanation(false)
-                  setQuizAttempts(0)
-                  setIsCurrentStepCompleted(false)
-                  setResetCount(prev => prev + 1)
-                  setSavedAnswers(prev => { const next = { ...prev }; delete next[currentIndex]; return next })
                   setCompletedSteps(prev => { const next = new Set(prev); next.delete(currentIndex); return next })
                   setWrongSteps(prev => prev.filter(i => i !== currentIndex))
+                  setResetCount(prev => prev + 1)
                 }}
                 className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
               >
@@ -596,7 +478,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
         </div>
       </div>
 
-      {/* 하단 네비게이션 — 수업 페이지와 동일 */}
+      {/* 하단 네비게이션 */}
       <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-lg z-20">
         <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-2 md:py-2.5">
           <div className="flex gap-3 md:gap-4 justify-center">
