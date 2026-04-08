@@ -61,17 +61,17 @@ export const lessonCpp6: LessonData = {
         }
       },
 
-      // Lv.1: 괄호 넣기
+      // Lv.1: 조건 직접 쓰기
       {
         type: "practice",
         content: {
           level: 1,
-          task: "조건을 감싸는 괄호를 넣어요!",
-          guide: "C++에서 if 조건은 반드시 ()안에!",
-          template: 'if ___score >= 90___ {\n    cout << "합격" << endl;\n}',
-          answer: "(",
-          blanksAnswer: ["(", ")"],
-          expect: 'if (score >= 90) {\n    cout << "합격" << endl;\n}'
+          task: "age가 19 미만이면 '미성년'을 출력하는 조건을 채워요!",
+          guide: "if (조건) { ... } — 조건 자리에 뭘 써야 할까요?",
+          template: 'if (___) {\n    cout << "미성년" << endl;\n}',
+          answer: "age < 19",
+          alternateAnswers: ["age<19"],
+          expect: 'if (age < 19) {\n    cout << "미성년" << endl;\n}'
         }
       },
 
@@ -162,10 +162,10 @@ export const lessonCpp6: LessonData = {
         type: "interleaving",
         content: {
           message: "잠깐! 앞에서 배운 거 기억나요?",
-          task: "if 조건을 감싸는 괄호를 완성해요!",
-          template: 'if ___x > 0___ {',
-          answer: "(",
-          blanksAnswer: ["(", ")"],
+          task: "x가 0보다 크다는 조건을 if문에 써봐요!",
+          template: 'if (___) {',
+          answer: "x > 0",
+          alternateAnswers: ["x>0"],
           expect: "if (x > 0) {"
         }
       },

@@ -221,16 +221,17 @@ export const lessonCpp7: LessonData = {
         }
       },
 
-      // Lv.1: while 빈칸
+      // Lv.1: while 조건 쓰기
       {
         type: "practice",
         content: {
           level: 1,
-          task: "n이 0보다 큰 동안 반복하는 while문을 완성해요!",
-          guide: "while (조건) { ... }",
-          template: "___(n > 0) {\n    cout << n << endl;\n    n--;\n}",
-          answer: "while",
-          expect: "while (n > 0) {\n    cout << n << endl;\n    n--;\n}"
+          task: "count가 5 미만인 동안 반복하는 while 조건을 써봐요!",
+          guide: "while (___) 안에 조건을 넣어요!",
+          template: "while (___) {\n    cout << count << endl;\n    count++;\n}",
+          answer: "count < 5",
+          alternateAnswers: ["count<5"],
+          expect: "while (count < 5) {\n    cout << count << endl;\n    count++;\n}"
         }
       },
 

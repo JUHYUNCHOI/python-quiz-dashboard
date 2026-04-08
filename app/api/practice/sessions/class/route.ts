@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
+import { ALL_CLUSTERS } from "@/data/practice"
 
 // GET /api/practice/sessions/class?classId=xxx&clusterId=yyy
-// 선생님이 반 전체 학생의 특정 클러스터 세션 현황 조회
 export async function GET(req: NextRequest) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -23,6 +23,11 @@ export async function GET(req: NextRequest) {
     .single()
 
   if (!cls) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
+
+  // 클러스터 문제 목록 (번호 계산용)
+  const cluster = ALL_CLUSTERS.find(c => c.id === clusterId)
+  const clusterProblems = cluster?.problems ?? []
+  const problemIndexMap = new Map(clusterProblems.map((p, i) => [p.id, i + 1]))
 
   // 반 학생 목록
   const { data: members } = await supabase
@@ -56,19 +61,60 @@ export async function GET(req: NextRequest) {
     const pending = studentSessions.find(s => s.teacher_assigned && !s.completed_at)
     const totalPassed = completed.reduce((sum, s) => sum + s.problems_passed, 0)
     const totalAttempted = completed.reduce((sum, s) => sum + s.problems_attempted, 0)
-    const lastRound = completed[completed.length - 1]
-    const optedOut = lastRound?.opted_out ?? false
+    const lastSet = completed[completed.length - 1]
+    const optedOut = lastSet?.opted_out ?? false
+
+    // 문제별 틀린 횟수 집계 — 전체 세션에서 출제됐지만 통과 못 한 문제
+    const wrongCount = new Map<string, number>()
+    for (const s of completed) {
+      const problemIds: string[] = s.problem_ids ?? []
+      const passedIds = new Set<string>(s.passed_problem_ids ?? [])
+      for (const pid of problemIds) {
+        if (!passedIds.has(pid)) {
+          wrongCount.set(pid, (wrongCount.get(pid) ?? 0) + 1)
+        }
+      }
+    }
+
+    // 2번 이상 틀린 문제 번호 (클러스터 전체 1-based)
+    const persistentWrong = [...wrongCount.entries()]
+      .filter(([, cnt]) => cnt >= 2)
+      .map(([pid]) => problemIndexMap.get(pid) ?? 0)
+      .filter(n => n > 0)
+      .sort((a, b) => a - b)
+
+    // 마지막 세트에서 틀린 문제 번호
+    const lastWrongNums = lastSet
+      ? (lastSet.problem_ids as string[] ?? [])
+          .filter(pid => !(lastSet.passed_problem_ids as string[] ?? []).includes(pid))
+          .map(pid => problemIndexMap.get(pid) ?? 0)
+          .filter(n => n > 0)
+          .sort((a, b) => a - b)
+      : []
 
     return {
       studentId: m.student_id,
       name,
-      roundsDone: completed.length,
+      setsDone: completed.length,          // 완료한 세트 수
+      currentSet: completed.length + 1,    // 다음에 할 세트
       totalPassed,
       totalAttempted,
       optedOut,
       hasPendingAssignment: !!pending,
       pendingAssignmentId: pending?.id ?? null,
-      sessions: studentSessions,
+      lastWrongNums,       // 마지막 세트에서 틀린 문제 번호들
+      persistentWrong,     // 2번 이상 계속 틀린 문제 번호들 🚨
+      sessions: completed.map(s => ({
+        round: s.round,
+        passed: s.problems_passed,
+        attempted: s.problems_attempted,
+        optedOut: s.opted_out,
+        wrongNums: (s.problem_ids as string[] ?? [])
+          .filter(pid => !(s.passed_problem_ids as string[] ?? []).includes(pid))
+          .map(pid => problemIndexMap.get(pid) ?? 0)
+          .filter(n => n > 0)
+          .sort((a, b) => a - b),
+      })),
     }
   })
 

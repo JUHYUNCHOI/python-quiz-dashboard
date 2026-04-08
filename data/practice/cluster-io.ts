@@ -58,7 +58,9 @@ int main() {
       description: `세 정수 A, B, C가 주어질 때, 합계와 평균을 출력하세요.
 
 - 첫 번째 줄: 합계
-- 두 번째 줄: 평균 (소수점 첫째 자리까지)`,
+- 두 번째 줄: 평균 (소수점 첫째 자리까지)
+
+💡 **새 개념**: \`#include <iomanip>\` — 소수점 자리수를 지정하는 헤더입니다. \`fixed << setprecision(1)\` 로 소수점 한 자리를 고정할 수 있어요.`,
       constraints: "0 ≤ A, B, C ≤ 1000",
       initialCode: `#include <iostream>
 #include <iomanip>
