@@ -4,8 +4,7 @@ import { useState, useEffect, Suspense, lazy } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Header } from "@/components/header"
-import { BottomNav } from "@/components/bottom-nav"
-import { ChevronLeft, ChevronRight, CheckCircle, ExternalLink, Loader2 } from "lucide-react"
+import { ChevronLeft, ChevronRight, CheckCircle, Loader2 } from "lucide-react"
 import { ALL_PROBLEMS, PROBLEM_MAP, PROBLEM_INDEX, type ProblemMeta } from "./data"
 import { PROBLEM_LOADERS } from "./loaders"
 
@@ -34,38 +33,10 @@ function useQuestSolved(problemId: string) {
   return { solved, markSolved }
 }
 
-function ComingSoonPlaceholder({ meta }: { meta: ProblemMeta }) {
-  return (
-    <div className="flex flex-col items-center justify-center gap-6 py-16 px-6 text-center">
-      <div className="text-6xl">{meta.emoji}</div>
-      <div>
-        <div className="text-xl font-black text-gray-800 mb-1">{meta.title}</div>
-        <div className="text-sm font-semibold text-gray-500">{meta.sub}</div>
-      </div>
-      <div className="bg-blue-50 border-2 border-blue-200 rounded-xl px-6 py-4 max-w-sm">
-        <div className="text-sm font-bold text-blue-600 mb-2">튜토리얼 준비 중 🚧</div>
-        <div className="text-xs text-blue-500 leading-relaxed">
-          이 문제의 인터랙티브 풀이 튜토리얼을 준비하고 있어요.
-          지금 바로 풀어보고 싶다면 CodeQuest를 방문하세요!
-        </div>
-      </div>
-      <a
-        href="https://codequest.vercel.app"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-black bg-blue-600 text-white text-sm font-bold shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
-      >
-        <ExternalLink size={16} />
-        CodeQuest에서 풀기
-      </a>
-    </div>
-  )
-}
-
 function ProblemLoadingSpinner() {
   return (
     <div className="flex flex-col items-center justify-center gap-4 py-24">
-      <Loader2 size={36} className="animate-spin text-blue-500" />
+      <Loader2 size={36} className="animate-spin text-purple-500" />
       <div className="text-sm font-semibold text-gray-500">튜토리얼 로딩 중...</div>
     </div>
   )
@@ -83,20 +54,6 @@ function getLazyComponent(problemId: string) {
   return LazyComp
 }
 
-function ProblemContent({ meta, lang }: { meta: ProblemMeta; lang: string }) {
-  const LazyComp = getLazyComponent(meta.id)
-
-  if (!LazyComp) {
-    return <ComingSoonPlaceholder meta={meta} />
-  }
-
-  return (
-    <Suspense fallback={<ProblemLoadingSpinner />}>
-      <LazyComp lang={lang} />
-    </Suspense>
-  )
-}
-
 export default function QuestProblemClient({ problemId }: { problemId: string }) {
   const router = useRouter()
   const meta = PROBLEM_MAP.get(problemId)
@@ -104,7 +61,6 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
   const prevProblem = idx > 0 ? ALL_PROBLEMS[idx - 1] : null
   const nextProblem = idx < ALL_PROBLEMS.length - 1 ? ALL_PROBLEMS[idx + 1] : null
   const { solved, markSolved } = useQuestSolved(problemId)
-  const [lang, setLang] = useState("ko")
 
   if (!meta) {
     return (
@@ -117,75 +73,60 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
             문제 목록으로 돌아가기
           </Link>
         </main>
-        <BottomNav />
       </div>
     )
   }
 
+  const LazyComp = getLazyComponent(meta.id)
+
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    // No BottomNav — the problem App has its own fixed step-navigation bar at bottom
+    <div className="min-h-screen bg-[#f3f0ff] flex flex-col">
       <Header />
-      <main className="flex-1 max-w-4xl mx-auto w-full pb-24">
 
-        {/* Sticky header */}
-        <div className="bg-white border-b border-gray-200 px-4 py-3 sticky top-[57px] z-30">
-          <div className="flex items-center gap-2">
-            <Link href="/quest" className="text-gray-400 hover:text-gray-600 flex-shrink-0">
-              <ChevronLeft size={20} />
-            </Link>
-            <div className="flex-1 min-w-0">
-              <div className="font-bold text-gray-800 text-sm truncate">{meta.title}</div>
-              <div className="text-xs text-gray-500">{meta.sub}</div>
-            </div>
-
-            {/* Language toggle */}
-            <div className="flex items-center gap-1 border-2 border-gray-200 rounded-lg p-0.5 flex-shrink-0">
-              <button
-                onClick={() => setLang("ko")}
-                className={`px-2 py-1 rounded text-xs font-bold transition-all ${
-                  lang === "ko" ? "bg-gray-800 text-white" : "text-gray-500 hover:text-gray-800"
-                }`}
-              >
-                한국어
-              </button>
-              <button
-                onClick={() => setLang("en")}
-                className={`px-2 py-1 rounded text-xs font-bold transition-all ${
-                  lang === "en" ? "bg-gray-800 text-white" : "text-gray-500 hover:text-gray-800"
-                }`}
-              >
-                EN
-              </button>
-            </div>
-
-            {solved && (
-              <div className="flex items-center gap-1 text-green-600 text-xs font-bold flex-shrink-0">
-                <CheckCircle size={14} />
-                완료
-              </div>
-            )}
+      {/* Thin sticky breadcrumb — minimal, doesn't duplicate App's own header */}
+      <div className="bg-white border-b-2 border-black px-3 py-2 sticky top-[57px] z-30 flex items-center gap-2">
+        <Link href="/quest" className="text-gray-400 hover:text-gray-700 flex-shrink-0">
+          <ChevronLeft size={18} />
+        </Link>
+        <div className="flex-1 min-w-0">
+          <span className="text-xs font-bold text-gray-500 uppercase tracking-wide">
+            {meta.section}
+          </span>
+          <span className="text-gray-300 mx-1.5">·</span>
+          <span className="text-xs font-semibold text-gray-700 truncate">{meta.sub}</span>
+        </div>
+        {solved ? (
+          <div className="flex items-center gap-1 bg-green-50 border border-green-300 rounded-full px-2 py-0.5 flex-shrink-0">
+            <CheckCircle size={12} className="text-green-600" />
+            <span className="text-xs font-bold text-green-700">완료</span>
           </div>
-        </div>
+        ) : (
+          <button
+            onClick={markSolved}
+            className="flex-shrink-0 text-xs font-bold px-2.5 py-1 rounded-full border-2 border-black bg-green-400 text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
+          >
+            ✅ 완료
+          </button>
+        )}
+      </div>
 
-        {/* Problem content */}
-        <div className="px-4 py-4">
-          <ProblemContent meta={meta} lang={lang} />
-        </div>
-
-        {/* Mark complete */}
-        {!solved && (
-          <div className="px-4 pb-4">
-            <button
-              onClick={markSolved}
-              className="w-full py-3 rounded-xl border-2 border-black bg-green-500 text-white font-bold text-sm shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
-            >
-              ✅ 완료 표시
-            </button>
+      {/* Problem content — full width, App manages its own layout/nav */}
+      <main className="flex-1">
+        {LazyComp ? (
+          <Suspense fallback={<ProblemLoadingSpinner />}>
+            <LazyComp />
+          </Suspense>
+        ) : (
+          <div className="flex flex-col items-center justify-center gap-4 py-24 px-6 text-center">
+            <div className="text-5xl">🚧</div>
+            <div className="text-base font-bold text-gray-700">튜토리얼 준비 중입니다</div>
           </div>
         )}
 
-        {/* Prev / Next */}
-        <div className="flex gap-3 px-4 pb-4">
+        {/* Prev / Next problem navigation — sits below App content */}
+        {/* Extra padding so the App's fixed bottom nav doesn't cover this */}
+        <div className="flex gap-3 px-4 pb-6 pt-4 bg-white border-t-2 border-black" style={{ paddingBottom: "max(1.5rem, env(safe-area-inset-bottom))" }}>
           {prevProblem ? (
             <button
               onClick={() => router.push(`/quest/${prevProblem.id}`)}
@@ -193,7 +134,7 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
             >
               <ChevronLeft size={16} />
               <div className="text-left min-w-0">
-                <div className="text-xs text-gray-400">이전</div>
+                <div className="text-xs text-gray-400">이전 문제</div>
                 <div className="truncate text-xs">{prevProblem.title}</div>
               </div>
             </button>
@@ -205,16 +146,14 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
               className="flex-1 flex items-center justify-end gap-2 px-3 py-2.5 rounded-xl border-2 border-black bg-white text-sm font-bold text-gray-700 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-none transition-all"
             >
               <div className="text-right min-w-0">
-                <div className="text-xs text-gray-400">다음</div>
+                <div className="text-xs text-gray-400">다음 문제</div>
                 <div className="truncate text-xs">{nextProblem.title}</div>
               </div>
               <ChevronRight size={16} />
             </button>
           ) : <div className="flex-1" />}
         </div>
-
       </main>
-      <BottomNav />
     </div>
   )
 }
