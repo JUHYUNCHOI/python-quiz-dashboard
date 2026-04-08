@@ -88,8 +88,8 @@ export const lesson13: LessonData = {
         hint: "range(1, 6)을 사용해봐!",
         template: "for i in range(___,___):\n    print(i)",
         blanksAnswer: ["1", "6"],
-        answer: "for i in range(1, 6):\n    print(i)",
-        expect: "1\n2\n3\n4\n5"
+        answer: "for i in range(1, 10, 2):\n    print(i)",
+        expect: "1\n3\n5\n7\n9"
       }
     },
     {
@@ -107,9 +107,9 @@ export const lesson13: LessonData = {
       type: "practice",
       content: {
         level: 3,
-        task: "이렇게 나오게 해봐 ↓\n1\n2\n3\n4\n5",
-        guide: "for i in range(...): 전체를 직접 써봐!",
-        hint: "for i in range(1, 6):\n    print(i)",
+        task: "이렇게 나오게 해봐 ↓\n1\n3\n5\n7\n9\n\n힌트: range(시작, 끝, 간격) 써봐!",
+        guide: "range의 3번째 인자로 2씩 건너뛰어봐!",
+        hint: "range(1, 10, 2)를 써봐!",
         template: null,
         answer: "for i in range(1, 6):\n    print(i)",
         expect: "1\n2\n3\n4\n5"

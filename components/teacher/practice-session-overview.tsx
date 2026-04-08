@@ -34,7 +34,9 @@ interface Props {
 }
 
 export function PracticeSessionOverview({ classId, lang = "ko" }: Props) {
-  const [selectedClusterId, setSelectedClusterId] = useState(ALL_CLUSTERS[0]?.id ?? "")
+  const [progLang, setProgLang] = useState<"cpp" | "python">("cpp")
+  const filteredClusters = ALL_CLUSTERS.filter(c => progLang === "python" ? c.id.startsWith("py-") : !c.id.startsWith("py-"))
+  const [selectedClusterId, setSelectedClusterId] = useState(ALL_CLUSTERS.find(c => !c.id.startsWith("py-"))?.id ?? "")
   const [students, setStudents] = useState<StudentSessionSummary[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [assigning, setAssigning] = useState<string | null>(null)
@@ -43,6 +45,13 @@ export function PracticeSessionOverview({ classId, lang = "ko" }: Props) {
   const [expandedStudent, setExpandedStudent] = useState<string | null>(null)
 
   const selectedCluster = ALL_CLUSTERS.find(c => c.id === selectedClusterId)
+
+  // 언어 변경 시 해당 언어의 첫 번째 클러스터로 자동 이동
+  const handleProgLangChange = (lang: "cpp" | "python") => {
+    setProgLang(lang)
+    const first = ALL_CLUSTERS.find(c => lang === "python" ? c.id.startsWith("py-") : !c.id.startsWith("py-"))
+    if (first) setSelectedClusterId(first.id)
+  }
 
   const load = useCallback(async () => {
     if (!classId || !selectedClusterId) return
@@ -99,9 +108,27 @@ export function PracticeSessionOverview({ classId, lang = "ko" }: Props) {
 
       {open && (
         <div className="px-4 py-3 space-y-3">
+          {/* 언어 선택 */}
+          <div className="flex items-center gap-1 mb-1">
+            {(["cpp", "python"] as const).map(l => (
+              <button
+                key={l}
+                onClick={() => handleProgLangChange(l)}
+                className={cn(
+                  "px-2.5 py-1 rounded-lg text-xs font-bold border transition-all",
+                  progLang === l
+                    ? "bg-gray-800 text-white border-gray-800"
+                    : "bg-white text-gray-400 border-gray-200 hover:border-gray-400"
+                )}
+              >
+                {l === "cpp" ? "⚡ C++" : "🐍 Python"}
+              </button>
+            ))}
+          </div>
+
           {/* 클러스터 선택 */}
           <div className="flex items-center gap-2 flex-wrap">
-            {ALL_CLUSTERS.map(c => (
+            {filteredClusters.map(c => (
               <button
                 key={c.id}
                 onClick={() => setSelectedClusterId(c.id)}

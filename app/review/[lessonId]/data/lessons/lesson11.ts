@@ -22,10 +22,10 @@ export const lesson11: LessonData = {
         lines: [
           "🎯 오늘 만들 것!"
         ],
-        code: "score = 85\nif score >= 90:\n    print('A등급')\nelif score >= 80:\n    print('B등급')\nelse:\n    print('C등급')",
-        result: "B등급",
+        code: "temp = 22\nif temp >= 30:\n    print('🔥 더워요')\nelif temp >= 20:\n    print('😊 좋아요')\nelse:\n    print('🧥 추워요')",
+        result: "😊 좋아요",
         isPreview: true,
-        note: "점수에 따라 다른 결과를 출력해!"
+        note: "온도에 따라 다른 결과를 출력해!"
       }
     },
 
@@ -237,8 +237,8 @@ export const lesson11: LessonData = {
         lines: [
           "elif 로 조건을 여러 개 추가해!"
         ],
-        code: "score = 85\nif score >= 90:\n    print('A')\nelif score >= 80:\n    print('B')\nelif score >= 70:\n    print('C')\nelse:\n    print('D')",
-        result: "B",
+        code: "speed = 75\nif speed >= 100:\n    print('🚨 과속')\nelif speed >= 80:\n    print('⚠️ 주의')\nelif speed >= 60:\n    print('✅ 정상')\nelse:\n    print('🐢 너무 느림')",
+        result: "✅ 정상",
         note: "elif = else if! 위에서부터 순서대로 확인해"
       }
     },
