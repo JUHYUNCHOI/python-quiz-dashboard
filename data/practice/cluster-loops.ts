@@ -6,6 +6,10 @@ export const loopsCluster: PracticeCluster = {
   emoji: "🔁",
   description: "for/while, 누적, 중첩 루프, 패턴 출력",
   unlockAfter: "cpp-7",
+  en: {
+    title: "Loop Patterns",
+    description: "for/while loops, accumulation, nested loops, pattern printing",
+  },
   problems: [
     {
       id: "loop-001",
@@ -46,6 +50,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "누적 합계 패턴: sum=0으로 초기화 후 1부터 n까지 더합니다. n*(n+1)/2 공식으로도 가능합니다.",
+      en: {
+        title: "Sum from 1 to N",
+        description: `Given an integer N, print the sum of all integers from 1 to N.`,
+        constraints: "1 ≤ N ≤ 1000",
+        hints: [
+          "Initialize a sum variable to 0 and add using a for loop.",
+          "for (int i = 1; i <= n; i++) sum += i;",
+        ],
+        solutionExplanation: "Accumulation pattern: initialize sum=0, then add each number from 1 to n. You can also use the formula n*(n+1)/2.",
+      },
     },
     {
       id: "loop-002",
@@ -84,6 +98,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "i를 n으로 초기화하고 n씩 증가시키면 n의 배수만 순서대로 얻을 수 있습니다.",
+      en: {
+        title: "Multiples of N",
+        description: `Given two integers N and M, print all multiples of N that are between 1 and M (inclusive), one per line.`,
+        constraints: "1 ≤ N ≤ 100, N ≤ M ≤ 1000",
+        hints: [
+          "Start i at N and increase by N each step, or check i%N==0 for every i.",
+          "for (int i = n; i <= m; i += n)",
+        ],
+        solutionExplanation: "Initialize i to n and increase by n each iteration to get only multiples of n in order.",
+      },
     },
     {
       id: "loop-003",
@@ -126,6 +150,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "곱셈 누적 패턴: result=1로 초기화 후 1부터 n까지 곱합니다. 12!은 int 범위를 넘을 수 있으므로 long long을 사용합니다.",
+      en: {
+        title: "Factorial",
+        description: `Given an integer N, print N! (N factorial).\n\nN! = 1 × 2 × 3 × … × N`,
+        constraints: "1 ≤ N ≤ 12",
+        hints: [
+          "Initialize a result variable to 1 and multiply from 1 to n.",
+          "for (int i = 1; i <= n; i++) result *= i;",
+        ],
+        solutionExplanation: "Multiplication accumulation pattern: initialize result=1, then multiply each number from 1 to n. Use long long since 12! can exceed the int range.",
+      },
     },
     {
       id: "loop-004",
@@ -174,6 +208,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "i번째 행에서 별을 i개 출력합니다. 안쪽 루프의 상한을 i로 설정하는 것이 핵심입니다.",
+      en: {
+        title: "Star Triangle",
+        description: `Given an integer N, print a triangle of stars (*) as shown below.\n\nFor N=3:\n\`\`\`\n*\n**\n***\n\`\`\``,
+        constraints: "1 ≤ N ≤ 20",
+        hints: [
+          "The outer loop handles rows (i), and the inner loop prints the number of stars for that row (j).",
+          "for(i=1..n) { for(j=1..i) { cout << '*'; } cout << '\\n'; }",
+        ],
+        solutionExplanation: "Print i stars on the i-th row. The key is setting the inner loop's upper bound to i.",
+      },
     },
     {
       id: "loop-005",
@@ -218,6 +262,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "i*i <= n까지만 확인하면 O(√N)으로 효율적입니다. 나누어 떨어지면 즉시 break로 탈출합니다.",
+      en: {
+        title: "Prime Check",
+        description: `Given an integer N, print \`prime\` if it is a prime number, or \`not prime\` otherwise.\n\nPrime: a positive integer greater than 1 that is divisible only by 1 and itself.`,
+        constraints: "2 ≤ N ≤ 1000000",
+        hints: [
+          "If any number from 2 to N-1 divides N evenly, it is not prime.",
+          "Optimization: you only need to check up to √N. Use the condition i*i <= n.",
+        ],
+        solutionExplanation: "Checking only up to i*i <= n gives O(√N) efficiency. Break out immediately when a divisor is found.",
+      },
     },
     {
       id: "loop-006",
@@ -257,6 +311,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "for 루프 하나로 i=1~9를 순회하며 형식에 맞춰 출력합니다.",
+      en: {
+        title: "Multiplication Table",
+        description: `Given an integer N, print the N-times table.\n\nFormat: \`N x i = result\` (i from 1 to 9)`,
+        constraints: "2 ≤ N ≤ 9",
+        hints: [
+          "Loop i from 1 to 9 and print n * i each time.",
+          `cout << n << " x " << i << " = " << n*i << "\\n";`,
+        ],
+        solutionExplanation: "Iterate i from 1 to 9 with a single for loop and print in the required format.",
+      },
     },
     {
       id: "loop-007",
@@ -298,6 +362,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "i를 2부터 시작해 2씩 증가시키면 2, 4, 6, ... 짝수만 순회합니다. i % 2 == 0 조건으로 필터링해도 동일합니다.",
+      en: {
+        title: "Sum of Even Numbers",
+        description: `Given an integer N, print the sum of all even numbers from 1 to N.`,
+        constraints: "1 ≤ N ≤ 1000",
+        hints: [
+          "Inside the loop, use i % 2 == 0 to pick only even numbers.",
+          "Alternatively, start i at 2 and increment by 2 to iterate over only even numbers.",
+        ],
+        solutionExplanation: "Starting i at 2 and incrementing by 2 visits 2, 4, 6, ... Filtering with i % 2 == 0 gives the same result.",
+      },
     },
     {
       id: "loop-008",
@@ -343,6 +417,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "n % 10으로 일의 자리를 추출하고 n /= 10으로 해당 자리를 제거합니다. while 루프로 n이 0이 될 때까지 반복합니다.",
+      en: {
+        title: "Sum of Digits",
+        description: `Given a positive integer N, print the sum of its digits.\n\nExample: 1234 → 1+2+3+4 = 10`,
+        constraints: "1 ≤ N ≤ 1000000",
+        hints: [
+          "Extract the last digit with n % 10, then remove it with n /= 10.",
+          "while (n > 0) { sum += n % 10; n /= 10; }",
+        ],
+        solutionExplanation: "Extract the last digit with n % 10 and remove it with n /= 10. Repeat in a while loop until n becomes 0.",
+      },
     },
     {
       id: "loop-009",
@@ -384,6 +468,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "시작값을 a로, 종료 조건을 i <= b로 설정하면 됩니다.",
+      en: {
+        title: "Sum from A to B",
+        description: `Given two integers A and B (A ≤ B), print the sum of all integers from A to B inclusive.`,
+        constraints: "1 ≤ A ≤ B ≤ 1000",
+        hints: [
+          "Similar to loop-001: iterate i from a to b and accumulate.",
+          "You can also use the formula (A+B)*(B-A+1)/2.",
+        ],
+        solutionExplanation: "Set the start value to a and the termination condition to i <= b.",
+      },
     },
     {
       id: "loop-010",
@@ -427,6 +521,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "x % 2 != 0으로 홀수를 판별합니다. 음수의 경우 C++에서 -3 % 2 = -1이므로 != 0 조건이 올바릅니다.",
+      en: {
+        title: "Count Odd Numbers",
+        description: `Given N integers, print how many of them are odd.`,
+        constraints: "1 ≤ N ≤ 100, -1000 ≤ each element ≤ 1000",
+        hints: [
+          "You can check for odd numbers as you read input without storing in an array.",
+          "x % 2 != 0 means odd. This also works correctly for negative numbers.",
+        ],
+        solutionExplanation: "Use x % 2 != 0 to detect odd numbers. In C++, -3 % 2 = -1, so the != 0 condition is correct for negatives too.",
+      },
     },
     {
       id: "loop-011",
@@ -475,6 +579,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "a와 b로 이전 두 값을 관리합니다. N=45이면 약 11억으로 int 범위를 넘으므로 long long을 씁니다.",
+      en: {
+        title: "N-th Fibonacci Number",
+        description: `Given an integer N, print the N-th Fibonacci number.\n\nFibonacci sequence: 1, 1, 2, 3, 5, 8, 13, 21, ...\nF(1)=1, F(2)=1, F(N)=F(N-1)+F(N-2)`,
+        constraints: "1 ≤ N ≤ 45",
+        hints: [
+          "Track the previous two values in variables and update them. Start with a=1, b=1.",
+          "for i=3..n: temp=a+b; a=b; b=temp;",
+        ],
+        solutionExplanation: "Maintain the previous two values with a and b. At N=45 the result is about 1.1 billion, which exceeds int range, so use long long.",
+      },
     },
     {
       id: "loop-012",
@@ -520,6 +634,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "유클리드 알고리즘입니다. b가 0이 될 때 a가 GCD입니다. O(log min(A,B)) 복잡도로 매우 빠릅니다.",
+      en: {
+        title: "GCD (Greatest Common Divisor)",
+        description: `Print the GCD of two positive integers A and B.\n\nEuclidean algorithm: GCD(A, B) = GCD(B, A % B), GCD(A, 0) = A`,
+        constraints: "1 ≤ A, B ≤ 1000000",
+        hints: [
+          "Repeat a, b = b, a%b until b becomes 0.",
+          "while (b != 0) { int t = b; b = a % b; a = t; } → a is the GCD",
+        ],
+        solutionExplanation: "This is the Euclidean algorithm. When b reaches 0, a holds the GCD. The complexity is O(log min(A,B)), making it very fast.",
+      },
     },
     {
       id: "loop-013",
@@ -561,6 +685,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "중첩 루프의 기본입니다. 바깥 루프(행)와 안쪽 루프(열)를 독립적으로 제어합니다.",
+      en: {
+        title: "Star Rectangle",
+        description: `Given two integers N and M, print a rectangle of stars (*) with N rows and M columns.`,
+        constraints: "1 ≤ N, M ≤ 20",
+        hints: [
+          "Outer loop: N rows, inner loop: print M stars per row.",
+          "Print a newline after each row.",
+        ],
+        solutionExplanation: "This is the fundamental nested loop pattern. The outer loop (rows) and inner loop (columns) are controlled independently.",
+      },
     },
     {
       id: "loop-014",
@@ -599,6 +733,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "1부터 n까지 순회하며 n을 나누어 떨어지게 하는 수를 출력합니다. O(N)이지만 N≤1000이므로 충분합니다.",
+      en: {
+        title: "List Divisors",
+        description: `Given an integer N, print all divisors of N in ascending order, one per line.`,
+        constraints: "1 ≤ N ≤ 1000",
+        hints: [
+          "Iterate from 1 to n and print i whenever n % i == 0.",
+          "Optimization: you can check only up to √n and add divisors in pairs — but not required here.",
+        ],
+        solutionExplanation: "Iterate from 1 to n and print any i that divides n evenly. O(N) is acceptable since N ≤ 1000.",
+      },
     },
     {
       id: "loop-015",
@@ -644,6 +788,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "rev에 한 자리씩 붙여나갑니다. 끝자리 0은 rev * 10 + 0이 되어 정수 앞의 0이 자동 제거됩니다.",
+      en: {
+        title: "Reverse Digits",
+        description: `Given a positive integer N, print its digits reversed.\n\nExamples: 1234 → 4321, 1200 → 21`,
+        constraints: "1 ≤ N ≤ 1000000",
+        hints: [
+          "Extract the last digit with n % 10 and accumulate with reversed = reversed * 10 + digit.",
+          "while (n > 0) { reversed = reversed * 10 + n % 10; n /= 10; }",
+        ],
+        solutionExplanation: "Append one digit at a time to rev. Trailing zeros produce rev * 10 + 0, which leading zeros in the reversed integer are automatically dropped.",
+      },
     },
     {
       id: "loop-016",
@@ -690,6 +844,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "규칙을 그대로 while 루프로 구현합니다. 3n+1 과정에서 n이 커질 수 있으므로 long long이 필요합니다.",
+      en: {
+        title: "Collatz Conjecture",
+        description: `Given a positive integer N, apply the following rule repeatedly until N becomes 1, and print the number of steps taken.\n\n- If N is even: N = N / 2\n- If N is odd: N = 3 * N + 1`,
+        constraints: "1 ≤ N ≤ 1000000",
+        hints: [
+          "Use while (n != 1) and apply the even/odd rule, counting iterations.",
+          "N can grow beyond the int range during 3n+1 steps, so use long long.",
+        ],
+        solutionExplanation: "Implement the rules directly with a while loop. The 3n+1 step can cause n to grow large, so long long is needed.",
+      },
     },
     {
       id: "loop-017",
@@ -742,6 +906,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "소수 판별 함수를 분리해 candidate를 2부터 하나씩 늘려가며 n번째 소수를 찾습니다.",
+      en: {
+        title: "N-th Prime",
+        description: `Given an integer N, print the N-th prime number.\n\nThe 1st prime is 2, the 2nd is 3, the 3rd is 5, ...`,
+        constraints: "1 ≤ N ≤ 1000",
+        hints: [
+          "Start candidate at 2, check if it is prime, and increment count each time.",
+          "Prime check: for (int i = 2; i * i <= candidate; i++) if (candidate % i == 0) → not prime",
+        ],
+        solutionExplanation: "Separate the primality test into its own function, then find the N-th prime by incrementing candidate from 2.",
+      },
     },
     {
       id: "loop-018",
@@ -791,6 +965,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "첫 원소로 mn과 cnt=1을 초기화합니다. 이후 새 원소가 mn보다 작을 때만 갱신합니다. USACO에서 자주 나오는 최솟값 트래킹 패턴입니다.",
+      en: {
+        title: "Minimum Update Count",
+        description: `Given N integers, print how many times a new minimum is set. An element sets a new minimum only when it is strictly less than the current minimum.\n\nExample: 3 1 4 1 5 → 3 sets the minimum first (count=1), then 1 is smaller (count=2), then 1 equals the minimum (no update). Answer: 2`,
+        constraints: "1 ≤ N ≤ 100, -1000 ≤ each element ≤ 1000",
+        hints: [
+          "The first element always sets the minimum, so start count=1.",
+          "Only increment count and update the minimum when the new element is strictly less than the current minimum.",
+        ],
+        solutionExplanation: "Initialize mn and cnt=1 with the first element. Update only when a new element is strictly less than mn. This minimum-tracking pattern appears frequently in USACO.",
+      },
     },
     {
       id: "loop-019",
@@ -836,6 +1020,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "n % 2로 현재 비트를 꺼내고 string 앞에 붙입니다. 나머지가 역순으로 나오므로 앞에 붙여야 올바른 순서가 됩니다.",
+      en: {
+        title: "Binary Conversion",
+        description: `Given a positive integer N, print its binary representation.`,
+        constraints: "1 ≤ N ≤ 1000000",
+        hints: [
+          "Divide n by 2 repeatedly and prepend the remainder (0 or 1) to a string.",
+          "bits = (n % 2 ? \"1\" : \"0\") + bits; n /= 2;",
+        ],
+        solutionExplanation: "Extract the current bit with n % 2 and prepend it to the string. Since remainders come out in reverse order, prepending gives the correct result.",
+      },
     },
     {
       id: "loop-020",
@@ -892,6 +1086,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "i=2부터 sqrt(n)까지 반복하며 n을 나눌 수 있는 소인수를 추출합니다. while로 같은 소인수를 여러 번 나눕니다. 루프 후 n>1이면 남은 n 자체가 소인수(sqrt(n)보다 큰 소수 인수)입니다.",
+      en: {
+        title: "Prime Factorization",
+        description: `Given an integer N, print its prime factors in ascending order separated by spaces (with repetition). Print "1" if N is 1.`,
+        constraints: "1 ≤ N ≤ 10000",
+        hints: [
+          "Try each divisor i from 2 upward. For each i, divide n by i as many times as possible.",
+          "for (int i = 2; i * i <= n; i++) — after the loop, if n > 1 then n itself is a prime factor.",
+        ],
+        solutionExplanation: "Iterate i from 2 to √n and repeatedly divide n when possible. Using while extracts the same prime factor multiple times. After the loop, if n > 1, the remaining n is a prime factor larger than √n.",
+      },
     },
     {
       id: "io-007",
@@ -942,6 +1146,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "첫 번째 원소로 초기화 후 2번째부터 비교합니다. 엄격하게 큰 경우(>)만 갱신하므로 같은 값이 있어도 처음 위치를 유지합니다.",
+      en: {
+        title: "Maximum Value and Position",
+        description: `Given N integers, print the maximum value on the first line and its first occurrence position (1-based) on the second line.`,
+        constraints: "1 ≤ N ≤ 1000, -10000 ≤ each integer ≤ 10000",
+        hints: [
+          "Initialize with the first value and compare from the second onward.",
+          "Update the position only when a strictly larger value is found (same value does not update).",
+        ],
+        solutionExplanation: "Initialize with the first element and compare from index 2 onward. Using strict greater-than (>) means the first occurrence position is preserved even when duplicates exist.",
+      },
     },
     {
       id: "io-008",
@@ -980,6 +1194,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "while (cin >> x)는 입력에 성공하면 true, EOF나 오류면 false를 반환합니다. 이 패턴으로 개수를 모르는 입력을 처리할 수 있습니다.",
+      en: {
+        title: "Sum Until EOF",
+        description: `Read integers until end-of-input and print their total sum. The count of integers is not given in advance.`,
+        constraints: "1 to 100 integers, -10000 ≤ each integer ≤ 10000",
+        hints: [
+          "while (cin >> x) returns true on successful read and false on EOF or error.",
+          "Accumulate sum += x inside the loop, then print sum after the loop ends.",
+        ],
+        solutionExplanation: "while (cin >> x) returns true when input succeeds, and false at EOF or on error. This pattern handles an unknown number of inputs.",
+      },
     },
   ],
 }

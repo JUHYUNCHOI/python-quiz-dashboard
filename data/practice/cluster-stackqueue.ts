@@ -6,6 +6,7 @@ export const stackQueueCluster: PracticeCluster = {
   emoji: "📚",
   description: "stack, queue, deque, priority_queue STL 컨테이너 활용",
   unlockAfter: "cpp-18",
+  en: { title: "Stack & Queue", description: "std::stack, std::queue, std::deque, priority_queue" },
   problems: [
     {
       id: "sq-001",
@@ -55,6 +56,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "스택은 LIFO(Last In First Out): 마지막에 넣은 것이 먼저 나옵니다. push로 넣고 top/pop으로 꺼냅니다.",
+      en: {
+        title: "Reverse Print with Stack",
+        description: `Push N integers onto a stack and pop them to print in reverse order.`,
+        constraints: "1 ≤ N ≤ 100, -10000 ≤ each integer ≤ 10000",
+        hints: [
+          "`#include <stack>`. Declare with `stack<int> st;`.",
+          "Push with `st.push(x)`, then pop with `while (!st.empty()) { cout << st.top(); st.pop(); }`.",
+        ],
+        solutionExplanation: "A stack is LIFO (Last In First Out): the last element pushed is the first one popped. Use `push` to insert and `top`/`pop` to retrieve.",
+      },
     },
     {
       id: "sq-002",
@@ -109,6 +120,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "큐는 FIFO(First In First Out): 먼저 넣은 것이 먼저 나옵니다. front()로 앞 원소를 확인하고 pop()으로 제거합니다.",
+      en: {
+        title: "Queue-Based Order Processing",
+        description: `N people are waiting in line, each with a name and processing time. Process them front to back and print each person's completion time. (Starting time is 0)`,
+        constraints: "1 ≤ N ≤ 20, 1 ≤ processing time ≤ 100, names are English up to 20 characters",
+        hints: [
+          "`#include <queue>`. Declare with `queue<pair<string,int>> q;`.",
+          "Accumulate elapsed time as you process each person to find their completion time.",
+        ],
+        solutionExplanation: "A queue is FIFO (First In First Out): the first element enqueued is the first one dequeued. Use `front()` to peek and `pop()` to remove.",
+      },
     },
     {
       id: "sq-003",
@@ -171,6 +192,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "스택으로 여는 괄호를 추적합니다. 닫는 괄호를 만날 때 스택이 비어있으면 대응 쌍이 없으므로 실패. 마지막에 스택이 비어있어야 모든 괄호가 매칭된 것입니다.",
+      en: {
+        title: "Bracket Matching",
+        description: `Check whether the parentheses '(' and ')' in a string are correctly matched. Print "YES" if valid, "NO" otherwise. There are T test cases.`,
+        constraints: "1 ≤ T ≤ 20, 1 ≤ string length ≤ 100, may contain '(' ')' and other characters (ignore others)",
+        hints: [
+          "Push '(' onto the stack. When you see ')', if the stack is empty output NO; otherwise pop.",
+          "After processing the entire string, output YES only if the stack is empty.",
+        ],
+        solutionExplanation: "Use the stack to track unmatched open brackets. Encountering ')' with an empty stack means there is no matching '(' — fail immediately. If the stack is empty at the end, all brackets were matched.",
+      },
     },
     {
       id: "sq-004",
@@ -248,6 +279,20 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "큐 시뮬레이션: 꺼낸 문서보다 높은 우선순위가 남아있으면 뒤로 보냅니다. 큐를 복사해서 남은 원소를 확인하는 방법을 씁니다.",
+      en: {
+        title: "Printer Queue",
+        description: `N documents are waiting in a queue, each with a priority (1–9). The printer works as follows:
+1. Dequeue the front document.
+2. If any remaining document has higher priority, re-enqueue it at the back.
+3. Otherwise, print it.
+Print the original 0-based position of the M-th document to be printed.`,
+        constraints: "1 ≤ N ≤ 100, 1 ≤ M ≤ N, 1 ≤ priority ≤ 9",
+        hints: [
+          "Use `queue<pair<int,int>>` storing `{priority, original_index}`.",
+          "To check for a higher-priority document, scan the remaining queue or track the max priority with a separate structure.",
+        ],
+        solutionExplanation: "Queue simulation: if a higher-priority document still exists, re-enqueue the current one. Copy the queue to scan remaining elements for a higher priority.",
+      },
     },
     {
       id: "sq-005",
@@ -308,6 +353,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "deque는 앞뒤 모두 삽입/삭제가 O(1)입니다. 윈도우 크기가 K를 초과하면 앞에서 제거합니다. sum을 유지하면 매번 재계산 없이 O(1)에 평균을 구할 수 있습니다.",
+      en: {
+        title: "Rolling Average of Last K Elements",
+        description: `N integers arrive one by one. After each arrival, print the average of the most recent K integers to 2 decimal places. (If fewer than K have arrived, use all available integers.)`,
+        constraints: "1 ≤ K ≤ N ≤ 1000, -10000 ≤ each integer ≤ 10000",
+        hints: [
+          "Use `deque<int>` — remove from the front, add to the back.",
+          "When the deque exceeds size K, call `pop_front()` to drop the oldest element.",
+        ],
+        solutionExplanation: "A deque supports O(1) insertion and deletion at both ends. When the window exceeds K, remove from the front. Maintaining a running `sum` avoids recomputing the average from scratch each time — O(1) per step.",
+      },
     },
     {
       id: "sq-006",
@@ -359,6 +414,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "min-heap을 크기 K로 유지하면 top()이 힙 내 가장 작은 수 = K번째로 큰 수입니다. 새 수가 들어오면 push 후 K 초과 시 가장 작은 수(top)를 제거합니다.",
+      en: {
+        title: "K-th Largest in a Stream",
+        description: `As N integers arrive one by one, after each arrival print the K-th largest number seen so far. Print -1 if fewer than K numbers have arrived.`,
+        constraints: "1 ≤ K ≤ N ≤ 1000, -10000 ≤ each integer ≤ 10000",
+        hints: [
+          "Use a min-heap: `priority_queue<int, vector<int>, greater<int>>`.",
+          "Keeping the heap at size K means `top()` is always the K-th largest element.",
+        ],
+        solutionExplanation: "Maintaining a min-heap of size K ensures `top()` is the smallest element in the heap, which equals the K-th largest overall. When the heap grows beyond K, pop the minimum to keep only the K largest values.",
+      },
     },
     {
       id: "sq-007",
@@ -414,6 +479,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "단조 스택(monotone stack) 패턴: 현재 원소보다 작은 것들을 pop하면, 스택 top이 현재 원소 왼쪽에서 처음으로 크거나 같은 원소입니다. O(N) 풀이입니다.",
+      en: {
+        title: "Tower Spy (Stack Application)",
+        description: `N towers stand in a row with given heights. Each tower fires a laser to the left. The laser is received by the first tower it encounters that is at least as tall as the firing tower. For each tower, print the 1-based index of its receiver, or 0 if there is none.`,
+        constraints: "1 ≤ N ≤ 1000, 1 ≤ height ≤ 10000",
+        hints: [
+          "Store tower indices in the stack. Pop indices whose height is less than the current tower's height.",
+          "If the stack is not empty after popping, `st.top()` is the receiver for the current tower.",
+        ],
+        solutionExplanation: "Monotone stack pattern: popping all towers shorter than the current one leaves the stack top as the first tower to the left that is at least as tall. This gives an O(N) solution.",
+      },
     },
     {
       id: "sq-008",
@@ -468,6 +543,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "마감이 빠른 작업 우선 처리(EDF: Earliest Deadline First)가 최적입니다. 마감 기한 순으로 정렬 후 순서대로 시도하며, 마감 내에 완료 가능한 작업만 선택합니다.",
+      en: {
+        title: "Task Scheduling",
+        description: `N tasks are given, each with a duration and a deadline. Only one task can run at a time. Find the maximum number of tasks that can be completed on time. (Processing starts at time 0; a task must finish at or before its deadline — completion time ≤ deadline)`,
+        constraints: "1 ≤ N ≤ 100, 1 ≤ duration ≤ 100, 1 ≤ deadline ≤ 1000",
+        hints: [
+          "Sort tasks by deadline in ascending order, then process greedily (Earliest Deadline First).",
+          "You can use a simple sort followed by a linear pass — no priority_queue required.",
+        ],
+        solutionExplanation: "Earliest Deadline First (EDF) is the optimal greedy strategy here. Sort by deadline, then attempt each task in order; accept it if it can finish within its deadline.",
+      },
     },
     {
       id: "sq-009",
@@ -548,6 +633,22 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "deque는 앞뒤 모두 O(1) 삽입/삭제가 가능합니다. push_front/push_back으로 추가하고 pop_front/pop_back으로 제거합니다. 인덱스로도 접근 가능합니다.",
+      en: {
+        title: "Deque Front/Back Operations",
+        description: `Simulate deque (double-ended queue) operations using commands:
+- "PF x": push x to the front
+- "PB x": push x to the back
+- "DF": pop from the front
+- "DB": pop from the back
+- "END": stop
+After all commands, print the deque contents front to back, space-separated.`,
+        constraints: "1 ≤ number of commands ≤ 30, -1000 ≤ x ≤ 1000, guaranteed non-empty before any removal",
+        hints: [
+          "`#include <deque>`. Use `push_front()`, `push_back()`, `pop_front()`, `pop_back()`.",
+          "Commands 'PF' and 'PB' are followed by a number argument; 'DF' and 'DB' have no argument.",
+        ],
+        solutionExplanation: "A deque supports O(1) insertion and deletion at both ends. Use `push_front`/`push_back` to insert and `pop_front`/`pop_back` to remove. Elements can also be accessed by index.",
+      },
     },
     {
       id: "sq-010",
@@ -609,6 +710,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "스택 LIFO 특성을 활용합니다. 문자를 순서대로 push하면 pop 시 역순으로 나옵니다. 문자열을 직접 뒤집는 것보다 스택 사용 원리를 익히는 것이 목적입니다.",
+      en: {
+        title: "Reverse a String with Stack",
+        description: `Read a string and use a stack to print it in reverse order.`,
+        constraints: "1 ≤ string length ≤ 1000, contains only letters and digits",
+        hints: [
+          "Push each character of the string onto the stack.",
+          "Popping one by one yields the characters in reverse order (LIFO).",
+        ],
+        solutionExplanation: "Leverages the LIFO property of a stack. Pushing characters in order and then popping produces reverse order. The goal is to practice the stack concept rather than use a direct reverse method.",
+      },
     },
     {
       id: "sq-011",
@@ -680,6 +791,19 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "덱 시뮬레이션: 앞 카드를 버리고(pop_front + 출력), 다음 앞 카드를 뒤로 보냅니다(pop_front + push_back). deque의 앞뒤 O(1) 연산이 핵심입니다.",
+      en: {
+        title: "Card Flip Simulation",
+        description: `Place N cards numbered 1 to N into a deque in order (1 at the front). Repeat until empty:
+1. Discard the front card (print it).
+2. If the deque is not empty, move the new front card to the back.
+Print the discarded cards in order.`,
+        constraints: "1 ≤ N ≤ 100",
+        hints: [
+          "Use `pop_front()` to take the front card; print it as the discarded card.",
+          "Move the next front card to the back with `pop_front()` followed by `push_back()`.",
+        ],
+        solutionExplanation: "Deque simulation: discard the front card (pop_front + print), then move the new front to the back (pop_front + push_back). The O(1) front/back operations of deque are the key.",
+      },
     },
     {
       id: "sq-012",
@@ -752,6 +876,21 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "보조 스택(minSt)에 push 시점의 최솟값을 함께 저장합니다. minSt[i]는 메인 스택 i번째까지의 최솟값입니다. pop 시 두 스택 모두 pop하면 항상 O(1)에 최솟값을 조회할 수 있습니다.",
+      en: {
+        title: "Min Stack",
+        description: `Implement a stack that supports push, pop, and min operations.
+- "PUSH x": push x onto the stack
+- "POP": remove the top element
+- "MIN": print the current minimum in the stack
+- "END": stop
+Print the result of each MIN call.`,
+        constraints: "1 ≤ number of operations ≤ 1000, -10000 ≤ x ≤ 10000, POP/MIN guaranteed non-empty stack",
+        hints: [
+          "Use an auxiliary stack (`minSt`). On each push, also push the current minimum onto `minSt`.",
+          "On each pop, also pop `minSt`. Then `minSt.top()` always holds the current stack minimum.",
+        ],
+        solutionExplanation: "The auxiliary stack stores the running minimum at each stack depth. `minSt[i]` is the minimum of the main stack up to depth i. Keeping both stacks in sync means MIN queries run in O(1).",
+      },
     },
     {
       id: "sq-013",
@@ -826,6 +965,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "두 힙으로 스트리밍 중앙값을 O(log N)에 유지합니다. lower(최대힙)는 중앙값 포함 작은 절반, upper(최소힙)는 큰 절반입니다. lower.size() = upper.size()+1 또는 동일하게 유지하면 lower.top()이 중앙값입니다.",
+      en: {
+        title: "Streaming Median",
+        description: `As N numbers arrive one by one, after each arrival print the current median. Median: the middle value when sorted. If there is an even number of elements, print the smaller of the two middle values.`,
+        constraints: "1 ≤ N ≤ 1000, -10000 ≤ each integer ≤ 10000",
+        hints: [
+          "Maintain two heaps: `lower` (max-heap) for values ≤ median, `upper` (min-heap) for values > median.",
+          "Keep the sizes balanced so `|lower.size() - upper.size()| ≤ 1`; then `lower.top()` is always the median.",
+        ],
+        solutionExplanation: "Two heaps maintain the streaming median in O(log N) per insertion. `lower` (max-heap) holds the smaller half including the median; `upper` (min-heap) holds the larger half. Keeping `lower.size() = upper.size() + 1` or equal ensures `lower.top()` is always the median.",
+      },
     },
     {
       id: "sq-014",
@@ -903,6 +1052,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "단조 감소 덱 패턴: 덱은 항상 현재 윈도우 내에서 감소하는 순서의 인덱스를 유지합니다. 덱 front가 윈도우 최대값 인덱스이므로 O(N) 전체 풀이입니다.",
+      en: {
+        title: "Sliding Window Maximum",
+        description: `Given N integers and a window size K, print the maximum value in each window position as the window slides from left to right. Windows cover [0..K-1], [1..K], [2..K+1], etc.`,
+        constraints: "1 ≤ K ≤ N ≤ 100000, -10000 ≤ each integer ≤ 10000",
+        hints: [
+          "Use a monotone decreasing deque: the front always holds the index of the current window's maximum.",
+          "When adding a new element, pop from the back any indices with values ≤ the new element. Pop from the front any indices that have fallen outside the window.",
+        ],
+        solutionExplanation: "Monotone decreasing deque pattern: the deque maintains indices in decreasing value order within the current window. The front is always the max-value index, giving an O(N) overall solution.",
+      },
     },
   ],
 }

@@ -5,6 +5,7 @@ export const refsPtrsCluster: PracticeCluster = {
   title: "참조와 포인터",
   emoji: "🔗",
   description: "레퍼런스 매개변수, call-by-reference, 포인터 기초",
+  en: { title: "References & Pointers", description: "Pass by reference, pointer basics, swap patterns" },
   unlockAfter: "cpp-13",
   problems: [
     {
@@ -53,6 +54,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "레퍼런스 매개변수 int& a는 호출자의 변수를 직접 가리킵니다. temp로 a의 원래 값을 보존한 뒤 교환하면, 함수 종료 후 호출자의 변수도 바뀝니다.",
+      en: {
+        title: "Swap Function (Reference)",
+        description: `Implement a swap function using reference parameters to exchange two integers. Read two numbers, swap them, and output the result.`,
+        constraints: "-10000 ≤ A, B ≤ 10000",
+        hints: [
+          "void swap(int& a, int& b) — no return value; modify directly through references.",
+          "Declare a temporary variable temp and exchange: a → temp → b → a.",
+        ],
+        solutionExplanation: "The reference parameter int& a directly refers to the caller's variable. Saving a's original value in temp before swapping ensures both variables are correctly exchanged after the function returns.",
+      },
     },
     {
       id: "refs-002",
@@ -108,6 +119,15 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "n *= 2 한 줄로 충분합니다. 레퍼런스이기 때문에 함수 안에서 n을 수정하면 호출자의 x도 함께 바뀝니다.",
+      en: {
+        title: "Double Value via Reference",
+        description: `Write a function doubleValue that takes a reference parameter and doubles its value. Read N integers, apply doubleValue to each, and print them on one line.`,
+        constraints: "1 ≤ N ≤ 10, -1000 ≤ each integer ≤ 1000",
+        hints: [
+          "void doubleValue(int& n) { n *= 2; } — because it is a reference, the caller's variable changes directly.",
+        ],
+        solutionExplanation: "A single n *= 2 is all it takes. Because n is a reference, modifying it inside the function also changes the caller's variable x.",
+      },
     },
     {
       id: "refs-003",
@@ -164,6 +184,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "int* p = arr로 배열 첫 원소를 가리키는 포인터를 만들고, p++로 다음 원소로 이동합니다. *p는 현재 포인터가 가리키는 값이므로 *p = 0으로 직접 수정합니다.",
+      en: {
+        title: "Zero Out Minimum via Pointer",
+        description: `Read N integers. Using a pointer, set all elements equal to the minimum value to 0, then output the array.`,
+        constraints: "1 ≤ N ≤ 10, 1 ≤ each integer ≤ 100",
+        hints: [
+          "First find minVal by comparing arr[i] in a for loop.",
+          "Set int* p = arr; then for each element, if *p == minVal set *p = 0.",
+        ],
+        solutionExplanation: "int* p = arr creates a pointer to the first element. p++ advances to the next element. *p is the value at the current pointer position, so *p = 0 modifies it directly in the array.",
+      },
     },
     {
       id: "refs-004",
@@ -223,6 +253,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "레퍼런스 매개변수로 두 값을 동시에 '반환'하는 패턴입니다. return은 하나의 값만 돌려줄 수 있지만, 레퍼런스를 여러 개 쓰면 여러 결과를 전달할 수 있습니다.",
+      en: {
+        title: "minmax via Reference Parameters",
+        description: `Write a function minmax that takes a vector and two reference parameters, and fills them with the minimum and maximum values simultaneously.\n\n\`void minmax(vector<int>& v, int& mn, int& mx)\`\n\nOutput:\n- Line 1: minimum\n- Line 2: maximum`,
+        constraints: "1 ≤ N ≤ 100, -1000 ≤ each integer ≤ 1000",
+        hints: [
+          "Initialize mn = v[0]; mx = v[0]; then update in a loop.",
+          "Since mn and mx are references, changes inside the function are reflected in the caller.",
+        ],
+        solutionExplanation: "Using reference parameters to 'return' multiple values at once. A return statement can only send back one value, but multiple reference parameters let you deliver several results simultaneously.",
+      },
     },
     {
       id: "refs-005",
@@ -274,6 +314,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "p < arr + n은 포인터가 배열 마지막 원소 다음 위치를 넘지 않는 조건입니다. p++는 포인터를 다음 int 위치(4바이트 앞)로 이동시킵니다.",
+      en: {
+        title: "Pointer Traversal — Sum of Evens",
+        description: `Read N integers. Traverse the array using a pointer and sum only the even numbers.`,
+        constraints: "1 ≤ N ≤ 20, 1 ≤ each integer ≤ 100",
+        hints: [
+          "for (int* p = arr; p < arr + n; p++) — advance the pointer to the end of the array.",
+          "*p % 2 == 0 means the value is even.",
+        ],
+        solutionExplanation: "p < arr + n ensures the pointer does not go past the last element. p++ advances the pointer by one int (4 bytes) to the next element.",
+      },
     },
     {
       id: "refs-006",
@@ -324,6 +374,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "const string& s는 '읽기 전용 레퍼런스'입니다. 복사 비용 없이 원본 문자열을 읽을 수 있고, 실수로 수정하면 컴파일 오류가 납니다. 긴 문자열을 함수에 전달할 때 권장되는 패턴입니다.",
+      en: {
+        title: "Character Count via const Reference",
+        description: `Write a function countChar that takes a string by const reference and returns the count of a specific character.\n\n\`int countChar(const string& s, char c)\`\n\nRead a string and a character, then output how many times that character appears.`,
+        constraints: "1 ≤ string length ≤ 100, lowercase letters only",
+        hints: [
+          "const string& s — receives the string read-only without copying it.",
+          "Traverse with for (char ch : s) and count where ch == c.",
+        ],
+        solutionExplanation: "const string& s is a 'read-only reference'. It avoids copying the string while preventing accidental modification (a compile error if you try). This is the recommended pattern when passing large strings to functions.",
+      },
     },
     {
       id: "refs-007",
@@ -387,6 +447,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "for (int& elem : v)는 range-for에서 레퍼런스로 원소를 받는 패턴입니다. &가 없으면 복사본이라 원본이 바뀌지 않습니다. 벡터를 수정하는 범위 루프에서 자주 쓰입니다.",
+      en: {
+        title: "Modify Vector via Reference",
+        description: `Write a function addToAll that takes a vector by reference and an integer x, and adds x to every element.\n\n\`void addToAll(vector<int>& v, int x)\`\n\nRead N integers and a value x, then output the modified vector on one line.`,
+        constraints: "1 ≤ N ≤ 10, -100 ≤ each integer ≤ 100, -100 ≤ x ≤ 100",
+        hints: [
+          "for (int& elem : v) — iterating by reference lets you modify elements directly.",
+          "elem += x; adds x to each element.",
+        ],
+        solutionExplanation: "for (int& elem : v) is the range-for pattern that receives elements by reference. Without &, elem would be a copy and the original would remain unchanged. This is the standard idiom for modifying vectors in a range loop.",
+      },
     },
     {
       id: "refs-008",
@@ -447,6 +517,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "next[] 배열이 포인터 역할을 합니다. next[i] = i-1은 '현재 노드의 다음은 앞 인덱스'를 의미합니다. n-1에서 시작해 next를 따라가면 역순으로 순회됩니다. 실제 연결 리스트에서는 이 인덱스 대신 메모리 주소(포인터)를 사용합니다.",
+      en: {
+        title: "Reverse Linked List via Pointer Array",
+        description: `Read N integers. Use a next[] array as a pointer-like structure to build a reverse-order linked list and traverse it.\n\nnext[i] stores the index of the next element. -1 means end.\nReverse linkage: next[N-1] = -1, next[N-2] = N-1, ..., next[0] = 1\nStart traversal from index N-1.`,
+        constraints: "1 ≤ N ≤ 10",
+        hints: [
+          "Set next[i] = i - 1 for reverse traversal, and next[0] = -1 to mark the end.",
+          "Traverse with: int cur = n - 1; while (cur != -1) { cout << arr[cur]; cur = next[cur]; }",
+        ],
+        solutionExplanation: "The next[] array acts as a pointer. next[i] = i-1 means 'the next node is the previous index'. Starting from n-1 and following next[] produces reverse order. In a real linked list, these indices would be memory addresses (actual pointers).",
+      },
     },
     {
       id: "refs-009",
@@ -506,6 +586,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "포인터를 반환하는 함수의 핵심 패턴입니다. result - arr는 포인터 뺄셈으로, 두 포인터 사이의 원소 수(= 인덱스)를 구합니다. nullptr는 '유효하지 않음'을 나타내는 포인터 값입니다.",
+      en: {
+        title: "Find First Occurrence via Pointer",
+        description: `Write a function findFirst that takes an array, its size, and a target value, and returns a pointer to the first occurrence of target.\n\n\`int* findFirst(int* arr, int n, int target)\`\n\nOutput the 0-based index if found, or -1 if not found.`,
+        constraints: "1 ≤ N ≤ 20, -100 ≤ each integer and target ≤ 100",
+        hints: [
+          "Traverse with for (int* p = arr; p < arr + n; p++) and find where *p == target.",
+          "Return p if found; return nullptr if the loop ends without a match.",
+        ],
+        solutionExplanation: "This is the canonical pattern for a pointer-returning function. result - arr is pointer subtraction, giving the number of elements between two pointers (i.e., the index). nullptr represents an invalid/not-found pointer.",
+      },
     },
     {
       id: "refs-010",
@@ -576,6 +666,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "정렬 후 인접한 중복을 제거하는 패턴입니다. i == 0이거나 이전 원소와 다를 때만 result에 추가합니다. 마지막에 v = result로 원본 벡터를 교체합니다. vector는 레퍼런스로 받았으므로 호출자의 벡터도 바뀝니다.",
+      en: {
+        title: "Remove Duplicates via Vector Reference",
+        description: `Write a function removeDuplicates that takes a vector by reference and removes duplicate elements.\n\n\`void removeDuplicates(vector<int>& v)\`\n\nOutput the deduplicated result in ascending order. (You may use sort.)\n\nRead N integers, remove duplicates, and output the sorted result.`,
+        constraints: "1 ≤ N ≤ 20, -100 ≤ each integer ≤ 100",
+        hints: [
+          "First sort with sort(v.begin(), v.end());",
+          "After sorting, add to a new vector only elements that differ from the previous one.",
+        ],
+        solutionExplanation: "Sort first, then remove adjacent duplicates. Add to result only when i == 0 or v[i] != v[i-1]. Finally, assign v = result to replace the original vector. Because v is a reference, the caller's vector is updated as well.",
+      },
     },
   ],
 }

@@ -6,6 +6,10 @@ export const conditionalsCluster: PracticeCluster = {
   emoji: "🔀",
   description: "if-else, 논리 연산자, 경계값 처리",
   unlockAfter: "cpp-6",
+  en: {
+    title: "Conditionals & Logic",
+    description: "if-else, logical operators, boundary value handling",
+  },
   problems: [
     {
       id: "cond-001",
@@ -50,6 +54,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "n이 음수이면 -n으로 부호를 반전합니다. 표준 라이브러리의 abs() 함수를 써도 됩니다.",
+      en: {
+        title: "Print Absolute Value",
+        description: `Given an integer N, print its absolute value.\n\n**Examples**\n- Input: \`-7\` → Output: \`7\`\n- Input: \`5\` → Output: \`5\`\n- Input: \`0\` → Output: \`0\``,
+        constraints: "-1000 ≤ N ≤ 1000",
+        hints: [
+          "If n is less than 0, you need to flip its sign.",
+          "Use if (n < 0) n = -n; to negate the value.",
+        ],
+        solutionExplanation: "If n is negative, we reverse its sign with -n. You can also use the standard library abs() function.",
+      },
     },
     {
       id: "cond-002",
@@ -89,6 +103,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "n % 2로 2로 나눈 나머지를 구합니다. 0이면 짝수, 1이면 홀수입니다.",
+      en: {
+        title: "Odd or Even",
+        description: `Given an integer N, print \`odd\` if it is odd, or \`even\` if it is even.`,
+        constraints: "1 ≤ N ≤ 10000",
+        hints: [
+          "Use the modulo operator %.",
+          "If n % 2 == 0, it is even.",
+        ],
+        solutionExplanation: "We use n % 2 to get the remainder when divided by 2. If it is 0, the number is even; if 1, it is odd.",
+      },
     },
     {
       id: "cond-003",
@@ -130,6 +154,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "mx를 a로 초기화한 후 b, c와 차례로 비교해 더 큰 값으로 갱신합니다.",
+      en: {
+        title: "Maximum of Three Numbers",
+        description: `Given three integers A, B, and C, print the largest one.`,
+        constraints: "-1000 ≤ A, B, C ≤ 1000",
+        hints: [
+          "Find the larger of two numbers first, then compare with the third.",
+          "int mx = a; if (b > mx) mx = b; if (c > mx) mx = c;",
+        ],
+        solutionExplanation: "Initialize mx to a, then update it by comparing with b and c in turn.",
+      },
     },
     {
       id: "cond-004",
@@ -178,6 +212,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "90 이상부터 내림차순으로 검사합니다. else if를 쓰면 앞 조건이 이미 걸러졌으므로 &&를 쓸 필요가 없습니다.",
+      en: {
+        title: "Grade Classification",
+        description: `Given a test score N, print the grade.\n\n- 90 or above: \`A\`\n- 80 to 89: \`B\`\n- 70 to 79: \`C\`\n- Below 70: \`F\``,
+        constraints: "0 ≤ N ≤ 100",
+        hints: [
+          "Use an if-else if chain.",
+          "Check from 90 and above downward — this simplifies the range conditions.",
+        ],
+        solutionExplanation: "Check from 90 downward. Using else if means the previous condition already filtered out higher values, so no && is needed.",
+      },
     },
     {
       id: "cond-005",
@@ -223,6 +267,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "윤년 조건을 &&와 ||로 정확히 표현합니다. 400의 배수는 무조건 윤년이므로 || 뒤에 배치합니다.",
+      en: {
+        title: "Leap Year",
+        description: `Given a year Y, print \`yes\` if it is a leap year, or \`no\` otherwise.\n\n**Leap year conditions:**\n- Divisible by 4 but not by 100, OR\n- Divisible by 400`,
+        constraints: "1 ≤ Y ≤ 4000",
+        hints: [
+          "Use the % operator to check divisibility.",
+          "(y%4==0 && y%100!=0) || (y%400==0)",
+        ],
+        solutionExplanation: "Express the leap year condition precisely with && and ||. Years divisible by 400 are always leap years, so that goes after ||.",
+      },
     },
     {
       id: "cond-006",
@@ -259,6 +313,13 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "양수 → 음수 → 0 순서로 확인합니다. else if 체인으로 세 경우를 처리합니다.",
+      en: {
+        title: "Positive, Negative, or Zero",
+        description: `Given an integer N, print \`positive\` if it is positive, \`negative\` if it is negative, or \`zero\` if it is 0.`,
+        constraints: "-1000 ≤ N ≤ 1000",
+        hints: ["Handle the three cases with if-else if-else."],
+        solutionExplanation: "Check positive → negative → zero in order. The else if chain handles all three cases.",
+      },
     },
     {
       id: "cond-007",
@@ -300,6 +361,13 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "세 경우(크다/작다/같다)를 if-else if-else로 처리합니다.",
+      en: {
+        title: "Compare Two Numbers",
+        description: `Given two integers A and B:\n- If A > B, print \`>\`\n- If A < B, print \`<\`\n- If A == B, print \`==\``,
+        constraints: "-1000 ≤ A, B ≤ 1000",
+        hints: ["Distinguish the three cases with if-else if-else."],
+        solutionExplanation: "Handle the three cases (greater/less/equal) with if-else if-else.",
+      },
     },
     {
       id: "cond-008",
@@ -347,6 +415,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "15의 배수를 먼저 처리해야 합니다. 3 또는 5만 확인하면 15의 배수도 걸려버리므로 순서가 중요합니다.",
+      en: {
+        title: "Multiple Check (FizzBuzz)",
+        description: `Given a single integer N, print the following (no loops, use only if-else):\n\n- Multiple of 15: \`FizzBuzz\`\n- Multiple of 3: \`Fizz\`\n- Multiple of 5: \`Buzz\`\n- Otherwise: print N itself`,
+        constraints: "1 ≤ N ≤ 1000",
+        hints: [
+          "Check multiples of 15 first, so numbers divisible by both 3 and 5 are caught correctly.",
+          "if (n%15==0) → watch the Fizz/Buzz order!",
+        ],
+        solutionExplanation: "Multiples of 15 must be handled first. If you only check 3 or 5 first, multiples of 15 will be caught by those branches, so order matters.",
+      },
     },
     {
       id: "cond-009",
@@ -393,6 +471,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "12, 1, 2월은 나머지(else)로 처리하면 깔끔합니다. &&로 범위를 표현합니다.",
+      en: {
+        title: "Season Classifier",
+        description: `Given a month (1~12), print the season:\n- March, April, May: \`spring\`\n- June, July, August: \`summer\`\n- September, October, November: \`fall\`\n- December, January, February: \`winter\``,
+        constraints: "1 ≤ M ≤ 12",
+        hints: [
+          "Use an if-else if chain to check the range.",
+          "December falls together with January and February — use || since the range is non-contiguous.",
+        ],
+        solutionExplanation: "Months 12, 1, and 2 can be handled by the final else. Use && to express the range conditions.",
+      },
     },
     {
       id: "cond-010",
@@ -439,6 +527,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "세 삼각형 부등식을 &&로 묶습니다. 1+1>2는 거짓(2>2)이므로 NO입니다.",
+      en: {
+        title: "Triangle Check",
+        description: `Given three side lengths A, B, and C, determine whether they can form a triangle.\n\nTriangle condition: the sum of any two sides must be greater than the third side (all three conditions must hold).\n\n- If possible: \`YES\`\n- If not: \`NO\``,
+        constraints: "1 ≤ A, B, C ≤ 1000",
+        hints: [
+          "All three conditions must be true: a+b>c, a+c>b, b+c>a.",
+          "Connect the three conditions with the && operator.",
+        ],
+        solutionExplanation: "Combine the three triangle inequalities with &&. Note that 1+1>2 is false (2>2), so that case outputs NO.",
+      },
     },
     {
       id: "cond-011",
@@ -486,6 +584,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "char도 정수처럼 비교할 수 있습니다. 'A'(65)~'Z'(90), 'a'(97)~'z'(122), '0'(48)~'9'(57).",
+      en: {
+        title: "Character Classification",
+        description: `Given a single character:\n- Uppercase (A-Z): \`upper\`\n- Lowercase (a-z): \`lower\`\n- Digit (0-9): \`digit\`\n- Other: \`other\``,
+        constraints: "One character in the ASCII range 33–126",
+        hints: [
+          "Characters are compared by ASCII code. Check uppercase range with 'A'<=c && c<='Z'.",
+          "You can also use standard functions isupper(), islower(), isdigit().",
+        ],
+        solutionExplanation: "char values can be compared like integers. 'A'(65)–'Z'(90), 'a'(97)–'z'(122), '0'(48)–'9'(57).",
+      },
     },
     {
       id: "cond-012",
@@ -537,6 +645,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "윤년 판별을 먼저 bool로 계산합니다. 2월은 윤년 여부에 따라 분기하고, 4/6/9/11월은 30일, 나머지는 31일입니다.",
+      en: {
+        title: "Days in a Month",
+        description: `Given a year Y and month M, print the number of days in that month.\n\n- January, March, May, July, August, October, December: 31 days\n- April, June, September, November: 30 days\n- February: 28 days (common year) or 29 days (leap year)\n\nLeap year: divisible by 4 but not 100, OR divisible by 400`,
+        constraints: "1 ≤ Y ≤ 9999, 1 ≤ M ≤ 12",
+        hints: [
+          "First compute whether it is a leap year using a bool variable.",
+          "You can use switch(m) for clean month-based branching. Consecutive case labels like case 1: case 3: can share a result.",
+        ],
+        solutionExplanation: "Compute leap year first as a bool. Branch on February using the leap year flag, months 4/6/9/11 get 30 days, and the rest get 31.",
+      },
     },
     {
       id: "cond-013",
@@ -579,6 +697,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "3번의 비교로 세 수를 정렬할 수 있습니다. 첫 swap 후 a가 최솟값, 두 번째 후 순서 확정, 세 번째로 b,c 정렬 완료.",
+      en: {
+        title: "Sort Three Numbers (Ascending)",
+        description: `Given three integers A, B, and C, sort and print them in ascending order using only if-else (no sort() allowed).`,
+        constraints: "-1000 ≤ A, B, C ≤ 1000",
+        hints: [
+          "Repeatedly apply swap conditions: if a>b, swap(a,b).",
+          "Like bubble sort: compare (a,b) → (a,c) → (b,c) in that order.",
+        ],
+        solutionExplanation: "Three comparisons are enough to sort three numbers. After the first swap a holds the minimum, after the second the order is determined, and the third sorts b and c.",
+      },
     },
     {
       id: "cond-014",
@@ -621,6 +749,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "각 값이 중간값인지 조건을 확인합니다. b가 a와 c 사이에 있으면 b가 중간값입니다.",
+      en: {
+        title: "Median of Three",
+        description: `Given three integers A, B, and C, print the median (middle value).`,
+        constraints: "-1000 ≤ A, B, C ≤ 1000, all three values are distinct",
+        hints: [
+          "The median is the value that is neither the minimum nor the maximum.",
+          "Alternatively: b is the median if (a<=b && b<=c) || (c<=b && b<=a).",
+        ],
+        solutionExplanation: "Check which value lies between the other two. If b is between a and c, then b is the median.",
+      },
     },
     {
       id: "cond-015",
@@ -669,6 +807,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "범위 밖을 먼저 처리하고, 경계값, 마지막으로 내부 순서로 확인합니다. USACO에서 경계 처리 실수가 자주 오답 원인이 됩니다.",
+      en: {
+        title: "Interval Boundary Classification",
+        description: `Given three integers L, R, and X (L ≤ R):\n- X < L: \`left\`\n- X > R: \`right\`\n- X == L or X == R: \`boundary\`\n- L < X < R: \`inside\``,
+        constraints: "-1000 ≤ L ≤ R ≤ 1000, -1000 ≤ X ≤ 1000",
+        hints: [
+          "Check boundary conditions (x==l || x==r) before checking inside.",
+          "Order: left → right → boundary → inside",
+        ],
+        solutionExplanation: "Handle out-of-range first, then boundary, then inside. In USACO, mistakes in boundary handling are a common source of wrong answers.",
+      },
     },
     {
       id: "cond-016",
@@ -725,6 +873,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "조건을 높은 점수부터 확인합니다. 앞 조건을 통과하면 자동으로 그보다 낮은 범위임이 보장되므로 else if가 정확하게 동작합니다.",
+      en: {
+        title: "Print Grade with Name",
+        description: `Given a name and a score (0~100), print the grade in the format \`[name]: [grade]\`.\n\n- 90 or above: A\n- 80 or above: B\n- 70 or above: C\n- 60 or above: D\n- Below 60: F`,
+        constraints: "0 ≤ score ≤ 100, name is up to 20 English characters",
+        hints: [
+          "Use an else if chain checking from the highest score down.",
+          "Store the grade in a char variable and print it all at once at the end.",
+        ],
+        solutionExplanation: "Check conditions from the highest score downward. Once an else if passes, lower ranges are guaranteed by exclusion, so no && is needed.",
+      },
     },
     // ── 삼항 연산자 ──────────────────────────────────────────────────
     {
@@ -776,6 +934,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "(a > b) ? a : b 는 a가 b보다 크면 a, 아니면 b를 반환합니다. if-else를 한 줄로 표현한 것입니다.",
+      en: {
+        title: "Ternary Operator — Larger Number",
+        description: `Given two integers A and B, use the **ternary operator (?:)** to print the larger one.\nIf A == B, either value is acceptable.\n\n**Ternary operator syntax:**\n\`condition ? value_if_true : value_if_false\`\n\n**Examples**\n- Input: \`3 7\` → Output: \`7\`\n- Input: \`9 4\` → Output: \`9\`\n- Input: \`5 5\` → Output: \`5\``,
+        constraints: "-1000 ≤ A, B ≤ 1000",
+        hints: [
+          "Ternary operator: condition ? if_true : if_false",
+          "int result = (a > b) ? a : b;",
+        ],
+        solutionExplanation: "(a > b) ? a : b returns a if a is greater than b, otherwise b. It is a one-line equivalent of if-else.",
+      },
     },
     {
       id: "cond-018",
@@ -826,6 +994,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "중첩 삼항 연산자입니다. n>0이면 positive, 아니면 다시 n<0을 검사해 negative, 둘 다 아니면 zero.",
+      en: {
+        title: "Ternary Operator — Sign Classification",
+        description: `Given an integer N, use **only the ternary operator** to print:\n\n- N > 0: \`positive\`\n- N < 0: \`negative\`\n- N == 0: \`zero\`\n\n**Hint:** Ternary operators can be nested.\n\`condition1 ? value1 : (condition2 ? value2 : value3)\``,
+        constraints: "-1000 ≤ N ≤ 1000",
+        hints: [
+          "Nested ternary: (n > 0) ? \"positive\" : (n < 0) ? \"negative\" : \"zero\"",
+          "Chaining ternary operators is equivalent to if-else if-else.",
+        ],
+        solutionExplanation: "This is a nested ternary operator. If n>0 → positive; otherwise check n<0 → negative; if neither → zero.",
+      },
     },
     // ── switch / case ─────────────────────────────────────────────────
     {
@@ -884,6 +1062,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "switch는 변수 값에 따라 해당 case로 점프합니다. break가 없으면 아래 case까지 연속 실행되므로 반드시 break를 씁니다.",
+      en: {
+        title: "switch — Day of the Week",
+        description: `Given an integer 1~7, use a **switch** statement to print the day of the week.\n\n- 1: \`Monday\`\n- 2: \`Tuesday\`\n- 3: \`Wednesday\`\n- 4: \`Thursday\`\n- 5: \`Friday\`\n- 6: \`Saturday\`\n- 7: \`Sunday\``,
+        constraints: "1 ≤ N ≤ 7",
+        hints: [
+          "Don't forget break after each case. Without break, execution falls through to the next case.",
+          "case 2: cout << \"Tuesday\" << endl; break;",
+        ],
+        solutionExplanation: "switch jumps to the matching case based on the variable value. Always use break to prevent fall-through to subsequent cases.",
+      },
     },
     {
       id: "cond-020",
@@ -949,6 +1137,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "fall-through를 이용해 여러 case를 한 번에 처리합니다. 마지막 case에만 break를 씁니다. default는 입력이 보장될 때 생략 가능합니다.",
+      en: {
+        title: "switch Fall-Through — Seasons",
+        description: `Given a month (1~12), use **switch fall-through** to print the season.\n\n- March, April, May: \`spring\`\n- June, July, August: \`summer\`\n- September, October, November: \`fall\`\n- December, January, February: \`winter\`\n\n**Fall-through:** omitting break in a case causes execution to continue to the next case.\n\`\`\`\ncase 3:\ncase 4:\ncase 5: cout << "spring"; break;\n\`\`\``,
+        constraints: "1 ≤ M ≤ 12",
+        hints: [
+          "Without break, execution falls through to the next case. This is called fall-through.",
+          "December, January, and February share the same season, so use case 12: case 1: case 2: together.",
+        ],
+        solutionExplanation: "Use fall-through to group multiple cases together. Only place break after the last case in each group. When input is guaranteed valid, default can be omitted.",
+      },
     },
     {
       id: "cond-021",
@@ -1006,6 +1204,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "switch는 char 타입에도 동작합니다. case '+'처럼 문자 리터럴을 씁니다. int a / int b는 자동으로 정수 나눗셈(몫)이 됩니다.",
+      en: {
+        title: "switch — Four-Operation Calculator",
+        description: `Given two integers A and B and an operator character (+, -, *, /), use a **switch** statement to print the result.\n\n- Division outputs integer quotient.\n- Division by zero will not appear in the input.\n\n**Examples**\n- Input: \`10 3 +\` → Output: \`13\`\n- Input: \`10 3 -\` → Output: \`7\`\n- Input: \`10 3 *\` → Output: \`30\`\n- Input: \`10 3 /\` → Output: \`3\``,
+        constraints: "-1000 ≤ A, B ≤ 1000, B ≠ 0 (for division)",
+        hints: [
+          "switch works with char too. Use case '+':",
+          "Write a case for each operator and don't forget break.",
+        ],
+        solutionExplanation: "switch works on char values. Use character literals like case '+':. Integer division a / b automatically truncates toward zero.",
+      },
     },
   ],
 }

@@ -6,6 +6,7 @@ export const ioCluster: PracticeCluster = {
   emoji: "⌨️",
   description: "cin 다중 입력, 포맷 출력, 여러 값 처리 패턴",
   unlockAfter: "cpp-4",
+  en: { title: "I/O Basics", description: "Multiple cin inputs, formatted output, handling multiple values" },
   problems: [
     {
       id: "io-001",
@@ -43,11 +44,24 @@ using namespace std;
 int main() {
     int a, b;
     cin >> a >> b;
-    cout << a + b << "\n";
-    cout << a - b << "\n";
+    cout << a + b << "\\n";
+    cout << a - b << "\\n";
     return 0;
 }`,
       solutionExplanation: "cin >> a >> b는 공백이나 줄바꿈으로 구분된 두 값을 순서대로 읽습니다. cout으로 각 결과를 줄바꿈 문자와 함께 출력합니다.",
+      en: {
+        title: "Sum and Difference of Two Numbers",
+        description: `Given two integers A and B, print their sum and difference.
+
+- First line: A + B
+- Second line: A - B`,
+        constraints: "-1000 ≤ A, B ≤ 1000",
+        hints: [
+          "Use `cin >> a >> b` to read two variables on one line.",
+          "Print `a + b` and `a - b` each followed by a newline.",
+        ],
+        solutionExplanation: "`cin >> a >> b` reads two values separated by whitespace or newline in order. Use `cout` to print each result with a newline character.",
+      },
     },
     {
       id: "io-002",
@@ -90,11 +104,26 @@ int main() {
     int a, b, c;
     cin >> a >> b >> c;
     int sum = a + b + c;
-    cout << sum << "\n";
-    cout << fixed << setprecision(1) << (double)sum / 3 << "\n";
+    cout << sum << "\\n";
+    cout << fixed << setprecision(1) << (double)sum / 3 << "\\n";
     return 0;
 }`,
       solutionExplanation: "세 값을 더해 sum을 구합니다. 평균은 (double)sum / 3으로 실수 나눗셈을 수행하고, fixed + setprecision(1)로 소수점 한 자리를 출력합니다.",
+      en: {
+        title: "Sum and Average of Three Numbers",
+        description: `Given three integers A, B, C, print their sum and average.
+
+- First line: sum
+- Second line: average (to one decimal place)
+
+💡 **New concept**: \`#include <iomanip>\` — a header for controlling decimal precision. Use \`fixed << setprecision(1)\` to fix output to one decimal place.`,
+        constraints: "0 ≤ A, B, C ≤ 1000",
+        hints: [
+          "Compute the sum first, then calculate the average with `(double)sum / 3`.",
+          "Use `fixed << setprecision(1)` to fix the output to one decimal place.",
+        ],
+        solutionExplanation: "Add the three values to get `sum`. Compute the average with `(double)sum / 3` for floating-point division, then use `fixed + setprecision(1)` to print one decimal place.",
+      },
     },
     {
       id: "io-003",
@@ -134,10 +163,24 @@ int main() {
     string name;
     int age;
     cin >> name >> age;
-    cout << "안녕하세요, " << name << "님! 내년에는 " << age + 1 << "살이 되시는군요." << "\n";
+    cout << "안녕하세요, " << name << "님! 내년에는 " << age + 1 << "살이 되시는군요." << "\\n";
     return 0;
 }`,
       solutionExplanation: "cin >> name은 공백 전까지의 문자열을 읽습니다. cout에서 << 연산자로 문자열 리터럴과 변수를 이어 출력합니다. age + 1은 출력 중에 바로 계산합니다.",
+      en: {
+        title: "Name and Age Greeting",
+        description: `Given a name (string) and an age (integer), print a greeting in the following format.
+
+Format: \`안녕하세요, [name]님! 내년에는 [age+1]살이 되시는군요.\`
+
+Note: the Korean characters in the output (안녕하세요, 님!, 내년에는, 살이 되시는군요.) must be printed exactly as shown to match the test cases.`,
+        constraints: "Name is up to 20 characters (English or Korean). 1 ≤ age ≤ 120",
+        hints: [
+          "Use `cin >> name` to read the string and `cin >> age` to read the integer.",
+          "Chain string literals and variables with `<<` in `cout`.",
+        ],
+        solutionExplanation: "`cin >> name` reads the string up to the first whitespace. In `cout`, use `<<` to concatenate string literals and variables. `age + 1` is evaluated inline during output.",
+      },
     },
     {
       id: "io-004",
@@ -174,11 +217,24 @@ using namespace std;
 int main() {
     int w, h;
     cin >> w >> h;
-    cout << w * h << "\n";
-    cout << 2 * (w + h) << "\n";
+    cout << w * h << "\\n";
+    cout << 2 * (w + h) << "\\n";
     return 0;
 }`,
       solutionExplanation: "넓이는 두 변의 곱, 둘레는 두 변의 합에 2를 곱합니다. 괄호 안을 먼저 계산하도록 2 * (w + h) 형태로 작성합니다.",
+      en: {
+        title: "Rectangle Area and Perimeter",
+        description: `Given the width (W) and height (H) of a rectangle, print its area and perimeter.
+
+- First line: area (W × H)
+- Second line: perimeter (2 × (W + H))`,
+        constraints: "1 ≤ W, H ≤ 1000",
+        hints: [
+          "Area is `w * h`, perimeter is `2 * (w + h)`.",
+          "Print each result on a separate line.",
+        ],
+        solutionExplanation: "Area is the product of the two sides; perimeter is twice their sum. Write `2 * (w + h)` to ensure the addition happens before multiplication.",
+      },
     },
     {
       id: "io-005",
@@ -218,10 +274,24 @@ int main() {
     int h = seconds / 3600;
     int m = (seconds % 3600) / 60;
     int s = seconds % 60;
-    cout << h << "시간 " << m << "분 " << s << "초" << "\n";
+    cout << h << "시간 " << m << "분 " << s << "초" << "\\n";
     return 0;
 }`,
       solutionExplanation: "3600으로 나눠 시간을 구하고, 나머지를 60으로 나눠 분을 구합니다. 최종 나머지가 초입니다. 정수 나눗셈은 자동으로 내림 처리됩니다.",
+      en: {
+        title: "Time Conversion",
+        description: `Given a time value in seconds, convert it to hours, minutes, and seconds and print it in the following format.
+
+Format: \`[h]시간 [m]분 [s]초\`
+
+Note: the Korean labels (시간, 분, 초) in the output must be printed exactly as shown to match the test cases.`,
+        constraints: "0 ≤ seconds ≤ 86400",
+        hints: [
+          "hours = seconds / 3600, minutes = (seconds % 3600) / 60, seconds = seconds % 60",
+          "Use integer division and the modulo operator `%`.",
+        ],
+        solutionExplanation: "Divide by 3600 to get hours, then divide the remainder by 60 to get minutes. The final remainder is the seconds. Integer division truncates automatically.",
+      },
     },
     {
       id: "io-006",
@@ -260,10 +330,20 @@ int main() {
     cin >> n;
     cin.ignore();
     getline(cin, line);
-    cout << line << "\n";
+    cout << line << "\\n";
     return 0;
 }`,
       solutionExplanation: "cin >> n 이후 버퍼에 남은 줄바꿈을 cin.ignore()로 버린 뒤, getline(cin, line)으로 공백을 포함한 문장을 읽어 출력합니다.",
+      en: {
+        title: "Reading a Sentence with Spaces",
+        description: `An integer N is given on the first line, and a sentence (which may contain spaces) is given on the second line. Print the sentence as-is.`,
+        constraints: "1 ≤ N ≤ 100, sentence is at most 100 characters",
+        hints: [
+          "After `cin >> n`, a newline character remains in the buffer. Call `cin.ignore()` before `getline` to discard it.",
+          "Use `getline(cin, line)` to read an entire line including spaces.",
+        ],
+        solutionExplanation: "After `cin >> n`, the leftover newline in the buffer must be discarded with `cin.ignore()`. Then `getline(cin, line)` reads the full sentence including spaces.",
+      },
     },
     {
       id: "io-007",
@@ -306,10 +386,25 @@ int main() {
     cin >> c;
     double f = c * 9.0 / 5.0 + 32;
     double k = c + 273.15;
-    cout << fixed << setprecision(2) << f << "\n" << k << "\n";
+    cout << fixed << setprecision(2) << f << "\\n" << k << "\\n";
     return 0;
 }`,
       solutionExplanation: "9.0 / 5.0처럼 실수 리터럴을 사용해 정수 나눗셈을 방지합니다. fixed + setprecision(2)는 cout에 한 번만 설정하면 이후 출력 모두에 적용됩니다.",
+      en: {
+        title: "Temperature Converter",
+        description: `Given a temperature in Celsius, convert it to Fahrenheit and Kelvin and print both.
+
+- First line: Fahrenheit (F = C × 9.0 / 5.0 + 32)
+- Second line: Kelvin (K = C + 273.15)
+
+Print to two decimal places.`,
+        constraints: "-273.15 ≤ C ≤ 10000",
+        hints: [
+          "Read the input as `double` to ensure accurate decimal calculations.",
+          "Use `fixed << setprecision(2)` to fix output to two decimal places.",
+        ],
+        solutionExplanation: "Using floating-point literals like `9.0 / 5.0` prevents integer division. Setting `fixed + setprecision(2)` once on `cout` applies to all subsequent outputs.",
+      },
     },
     {
       id: "io-008",
@@ -352,10 +447,23 @@ int main() {
     int w10 = change / 10;
     change %= 10;
     int w1 = change;
-    cout << w50 << "\n" << w10 << "\n" << w1 << "\n";
+    cout << w50 << "\\n" << w10 << "\\n" << w1 << "\\n";
     return 0;
 }`,
       solutionExplanation: "큰 단위부터 나눗셈으로 개수를 구하고, 나머지 연산으로 남은 금액을 줄여나가는 그리디 패턴입니다. 동전 거스름돈 문제의 기본 형태입니다.",
+      en: {
+        title: "Change Calculator",
+        description: `Given an item price and the amount paid, break down the change into 50-won, 10-won, and 1-won coins and print the count of each on separate lines.
+
+Output order: count of 50-won, count of 10-won, count of 1-won`,
+        constraints: "1 ≤ price ≤ paid ≤ 10000, both are integers",
+        hints: [
+          "change = paid - price",
+          "Count of 50-won coins = change / 50, remainder = change % 50",
+          "Apply the same process for 10-won and 1-won coins in order.",
+        ],
+        solutionExplanation: "This is a greedy pattern: divide by the largest denomination first to get the coin count, then use modulo to reduce the remaining amount. Repeat for smaller denominations.",
+      },
     },
     {
       id: "io-009",
@@ -394,10 +502,22 @@ int main() {
     double weight, height;
     cin >> weight >> height;
     double bmi = weight / (height * height);
-    cout << fixed << setprecision(1) << bmi << "\n";
+    cout << fixed << setprecision(1) << bmi << "\\n";
     return 0;
 }`,
       solutionExplanation: "height * height로 키의 제곱을 구하고 몸무게를 나눕니다. double 타입이므로 실수 나눗셈이 자동으로 수행됩니다. setprecision(1)로 소수 첫째 자리까지 반올림 출력합니다.",
+      en: {
+        title: "BMI Calculator",
+        description: `Given weight (kg) and height (m), calculate BMI and print it to one decimal place.
+
+BMI = weight / (height × height)`,
+        constraints: "1 ≤ weight ≤ 500, 0.5 ≤ height ≤ 3.0",
+        hints: [
+          "Compute `bmi = weight / (height * height)`.",
+          "Use `fixed << setprecision(1)` to print one decimal place.",
+        ],
+        solutionExplanation: "Square the height with `height * height` and divide the weight by it. Since both are `double`, floating-point division happens automatically. `setprecision(1)` rounds the output to one decimal place.",
+      },
     },
     {
       id: "io-010",
@@ -441,10 +561,21 @@ int main() {
         if (x < minVal) minVal = x;
         sum += x;
     }
-    cout << maxVal << "\n" << minVal << "\n" << sum << "\n";
+    cout << maxVal << "\\n" << minVal << "\\n" << sum << "\\n";
     return 0;
 }`,
       solutionExplanation: "첫 번째 값으로 최댓값/최솟값/합계를 초기화한 뒤 나머지를 순회합니다. N=1일 때도 올바르게 동작합니다. INT_MIN/INT_MAX 초기화 방식도 가능하지만, 첫 값으로 초기화하면 헤더 없이도 안전합니다.",
+      en: {
+        title: "Max / Min / Sum of N Integers",
+        description: `Given N on the first line and N space-separated integers on the second line, print the maximum, minimum, and sum each on their own line.`,
+        constraints: "1 ≤ N ≤ 100, -10000 ≤ each integer ≤ 10000",
+        hints: [
+          "Read the first value and use it to initialize `maxVal`, `minVal`, and `sum`, then process the remaining N-1 values.",
+          "Alternatively, initialize `maxVal = INT_MIN` and `minVal = INT_MAX` and process all N values.",
+          "`INT_MIN` and `INT_MAX` are available with `#include <climits>`.",
+        ],
+        solutionExplanation: "Initialize max/min/sum with the first value, then iterate over the rest. This handles N=1 correctly without any special case. Using the first value for initialization is safe without needing extra headers.",
+      },
     },
     {
       id: "io-011",
@@ -497,11 +628,24 @@ int main() {
             topName = name;
         }
     }
-    cout << fixed << setprecision(1) << (double)sum / n << "\n";
-    cout << topName << "\n";
+    cout << fixed << setprecision(1) << (double)sum / n << "\\n";
+    cout << topName << "\\n";
     return 0;
 }`,
       solutionExplanation: "topScore를 -1로 초기화하면 첫 학생이 반드시 최고점으로 등록됩니다. score > topScore (엄격한 부등호)를 사용하면 동점 시 첫 번째 학생이 유지됩니다. 평균은 (double)sum / n으로 실수 나눗셈합니다.",
+      en: {
+        title: "Grade Statistics",
+        description: `Given N on the first line, followed by N lines each containing a name (string) and a score (integer), print the average (to one decimal place) and the name of the top scorer.
+
+If there is a tie for the highest score, print the name of the student who appeared first in the input.`,
+        constraints: "1 ≤ N ≤ 100, 0 ≤ score ≤ 100, names contain only English letters with no spaces",
+        hints: [
+          "Read name and score with `cin >> name >> score`.",
+          "Accumulate the sum and track the top score and the corresponding student name separately.",
+          "Tie-breaking: only update when the current score is strictly greater than the top score — this preserves the first student in case of a tie.",
+        ],
+        solutionExplanation: "Initializing `topScore` to -1 ensures the first student is always recorded as the top scorer. Using a strict `>` comparison means ties do not replace the existing top name. Compute the average with `(double)sum / n` for floating-point division.",
+      },
     },
   ],
 }

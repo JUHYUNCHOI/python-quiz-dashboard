@@ -5,6 +5,7 @@ export const simulationCluster: PracticeCluster = {
   title: "시뮬레이션",
   emoji: "🎮",
   description: "Bronze 핵심 — 문제를 그대로 코드로 구현하는 직접 시뮬레이션",
+  en: { title: "Simulation", description: "Direct simulation — USACO Bronze core skill" },
   unlockAfter: "cpp-p2",
   problems: [
     {
@@ -49,6 +50,17 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "매번 높이를 절반으로 줄이는 반복입니다. 2.0으로 나눠 실수 나눗셈을 유지합니다. fixed + setprecision(2)로 소수점 두 자리를 출력합니다.",
+      en: {
+        title: "Bouncing Ball",
+        description: `A ball starts falling from height H. Each time it bounces off the ground, it rises to half the previous height.
+Output the maximum height after N bounces. (Print as a decimal to two decimal places.)`,
+        constraints: "1 ≤ H ≤ 10000, 1 ≤ N ≤ 20",
+        hints: [
+          "Repeat h = h / 2.0 exactly N times.",
+          "After the for loop finishes, output h.",
+        ],
+        solutionExplanation: "Each iteration halves the height. Dividing by 2.0 keeps it floating-point. Use fixed + setprecision(2) to print exactly two decimal places.",
+      },
     },
     {
       id: "sim-002",
@@ -98,6 +110,19 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "각 문자를 순회하며 x, y를 갱신합니다. 시뮬레이션 문제에서 상태(여기서는 좌표)를 변수로 관리하는 기본 패턴입니다.",
+      en: {
+        title: "Robot Movement",
+        description: `A robot starts at (0, 0). Given a command string, move according to each character:
+- R: x+1, L: x-1, U: y+1, D: y-1
+
+Output the final position (x, y).`,
+        constraints: "Command string length: 1 to 10000",
+        hints: [
+          "Initialize x and y to 0, then increment or decrement based on each character.",
+          "Use switch or if-else to distinguish 'R', 'L', 'U', 'D'.",
+        ],
+        solutionExplanation: "Iterate over each character and update x or y. This is the fundamental pattern for simulation problems: manage state (here, coordinates) in variables.",
+      },
     },
     {
       id: "sim-003",
@@ -144,6 +169,18 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "매 반복마다 1일이 지납니다. 낮에 올라간 후 탈출 여부를 확인합니다. 탈출했으면 loop 종료, 아니면 밤에 다시 내려갑니다.",
+      en: {
+        title: "Snail Escape",
+        description: `A snail is stuck in a well of depth H. During the day it climbs U meters; at night it slides back D meters.
+Output how many days it takes to escape.
+(If the snail reaches height H during the day, it escapes that day.)`,
+        constraints: "1 ≤ D < U ≤ H ≤ 10000",
+        hints: [
+          "Each day: climb u meters during the day; if not escaped, slide d meters at night.",
+          "Check pos >= h after the daytime climb to detect escape.",
+        ],
+        solutionExplanation: "Each loop iteration represents one day. After climbing during the day, check for escape. If escaped, break; otherwise slide back at night.",
+      },
     },
     {
       id: "sim-004",
@@ -192,6 +229,19 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "탐욕 알고리즘: 큰 동전부터 최대한 사용합니다. change / coin이 해당 동전 개수, change %= coin이 남은 금액입니다.",
+      en: {
+        title: "Vending Machine",
+        description: `You want to buy a drink priced at P won from a vending machine.
+Available coin denominations: 500, 100, 50, 10 won.
+Given that you pay M won, output the minimum number of coins you receive as change.
+(M is always ≥ P; use the largest coins first for change.)`,
+        constraints: "10 ≤ P ≤ M ≤ 10000, P and M are multiples of 10",
+        hints: [
+          "change = m - p; divide by each coin denomination from largest to smallest.",
+          "Use coins[] = {500, 100, 50, 10}; divide and take the remainder for each.",
+        ],
+        solutionExplanation: "Greedy algorithm: use the largest coin denomination as much as possible. change / coin gives the count for that denomination; change %= coin is the remaining amount.",
+      },
     },
     {
       id: "sim-005",
@@ -244,6 +294,18 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "버블 정렬의 T번 패스를 수행합니다. T가 충분히 크면 완전히 정렬됩니다. 각 패스에서 가장 큰 미정렬 원소가 제자리를 찾아갑니다.",
+      en: {
+        title: "Queue Sorting Simulation",
+        description: `N people stand in a line. Each minute, for every pair of adjacent people, if the person in front has a larger number they swap places.
+(One pass of bubble sort.)
+Output the order of the line after T minutes.`,
+        constraints: "1 ≤ N ≤ 100, 1 ≤ T ≤ 100",
+        hints: [
+          "Repeat T times: compare and swap adjacent elements.",
+          "One pass: for(i=0..n-2) if(v[i] > v[i+1]) swap(v[i], v[i+1]);",
+        ],
+        solutionExplanation: "Perform T passes of bubble sort. If T is large enough the array becomes fully sorted. Each pass bubbles the largest unsorted element to its correct position.",
+      },
     },
     {
       id: "sim-006",
@@ -295,6 +357,19 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "XOR 연산 ^= 1로 0↔1을 토글합니다. 각 조작을 그대로 시뮬레이션한 후 최종 앞면 카드를 셉니다.",
+      en: {
+        title: "Card Flipping",
+        description: `N cards are all face-up (1).
+M operations are given. Each operation (l, r) flips all cards from position l to r.
+(1 becomes 0, 0 becomes 1.)
+Output the number of face-up (1) cards after all operations.`,
+        constraints: "1 ≤ N ≤ 1000, 1 ≤ M ≤ 100, 1 ≤ l ≤ r ≤ N",
+        hints: [
+          "For each operation, toggle cards at indices l through r.",
+          "Use cards[i] ^= 1 or cards[i] = 1 - cards[i] to flip.",
+        ],
+        solutionExplanation: "XOR ^= 1 toggles between 0 and 1. Simulate each operation directly, then count face-up cards at the end.",
+      },
     },
     {
       id: "sim-007",
@@ -346,6 +421,21 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "상태(점수)를 변수로 관리하고 이벤트에 따라 갱신/출력합니다. 이벤트 기반 시뮬레이션의 기본 패턴입니다.",
+      en: {
+        title: "Scoreboard Update",
+        description: `Two teams A and B are playing. N events are given:
+- \`A\`: Team A scores 1 point
+- \`B\`: Team B scores 1 point
+- \`?\`: Print the current score (A's score then B's score)
+
+Output the result for every \`?\` event in order.`,
+        constraints: "1 ≤ N ≤ 1000",
+        hints: [
+          "Maintain two variables scoreA and scoreB; update or print based on each event.",
+          "Reading '?' with cin >> works fine.",
+        ],
+        solutionExplanation: "Maintain state (scores) in variables and update or print based on events. This is the core pattern for event-driven simulation.",
+      },
     },
     {
       id: "sim-008",
@@ -393,6 +483,17 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "현재 층에서 목적 층까지의 절댓값 차이가 이동 층수입니다. 매 요청 후 current를 갱신해 다음 이동의 시작점으로 사용합니다.",
+      en: {
+        title: "Elevator Simulation",
+        description: `An elevator starts at floor 1. Given N requests in order, output the total number of floors traveled to fulfill all requests.
+Each request is a destination floor number.`,
+        constraints: "1 ≤ N ≤ 1000, 1 ≤ destination floor ≤ 100",
+        hints: [
+          "For each request, add abs(destination - current) to the total.",
+          "After each move, update current to the destination floor.",
+        ],
+        solutionExplanation: "The absolute difference between the current floor and the destination is the distance traveled. Update current after each request to use as the starting point for the next move.",
+      },
     },
     {
       id: "sim-009",
@@ -440,6 +541,17 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "1부터 N까지 순회하며 K의 배수인 경우만 출력합니다. first 플래그로 첫 원소 앞 공백을 방지합니다.",
+      en: {
+        title: "Number Bomb Game",
+        description: `Numbers 1 through N are called out in order. Any number that is a multiple of K is eliminated.
+Output the eliminated numbers in order.`,
+        constraints: "1 ≤ N ≤ 100, 2 ≤ K ≤ N",
+        hints: [
+          "Iterate from 1 to N and output when i % k == 0.",
+          "Do not print a leading space before the first number.",
+        ],
+        solutionExplanation: "Iterate from 1 to N and print only multiples of K. Use a first flag to avoid a leading space.",
+      },
     },
     {
       id: "sim-010",
@@ -501,6 +613,18 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "현재 방향부터 4방향을 시도합니다. 이동 가능한 방향을 찾으면 이동, 못 찾으면 종료합니다. 방향 배열과 (dir+1)%4 패턴이 핵심입니다.",
+      en: {
+        title: "Direction-Turning Robot",
+        description: `A robot starts at (1,1) in an N×M grid moving right.
+When it hits a wall (outside the grid) or an already-visited cell, it rotates 90 degrees clockwise.
+If it cannot move in any direction, it stops. Output the total number of cells visited.`,
+        constraints: "1 ≤ N, M ≤ 20",
+        hints: [
+          "Directions: right(0), down(1), left(2), up(3). Clockwise rotation: (dir+1)%4.",
+          "Try to move → if blocked, rotate; if all 4 directions blocked, stop.",
+        ],
+        solutionExplanation: "Try all 4 directions starting from the current one. If a valid move is found, take it; otherwise stop. The direction array and (dir+1)%4 pattern are the key ingredients.",
+      },
     },
     {
       id: "sim-011",
@@ -563,6 +687,19 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "상태 배열(stock)을 관리하며 각 이벤트에 따라 갱신합니다. 조건 확인 → 상태 변경의 패턴이 시뮬레이션의 핵심입니다.",
+      en: {
+        title: "Convenience Store Inventory",
+        description: `A convenience store has N items, each with a given stock quantity.
+M orders arrive in sequence. Each order is (item number, quantity).
+If stock is sufficient, sell it; otherwise print \`OUT OF STOCK\`.
+After all orders, print the remaining stock.`,
+        constraints: "1 ≤ N ≤ 100, 1 ≤ M ≤ 100, 0 ≤ stock/quantity ≤ 1000",
+        hints: [
+          "For each order: if stock[item] >= qty, sell (stock[item] -= qty); else print OUT OF STOCK.",
+          "After all orders, print the remaining stock separated by spaces.",
+        ],
+        solutionExplanation: "Maintain a state array (stock) and update it per event. The pattern of check condition → update state is the core of simulation problems.",
+      },
     },
     {
       id: "sim-012",
@@ -607,6 +744,19 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "t % (r+g)로 현재 사이클에서의 위치를 구합니다. 0~r-1은 빨간불, r~r+g-1은 초록불입니다. 빨간불이면 남은 시간 r-pos를 출력합니다.",
+      en: {
+        title: "Traffic Light Timing",
+        description: `A traffic light cycles: red for R seconds, then green for G seconds.
+You arrive at second T. Output how long you must wait.
+(0 if green; remaining red time if red.)
+The light starts red at T=0.`,
+        constraints: "1 ≤ R, G ≤ 1000, 0 ≤ T ≤ 1000000",
+        hints: [
+          "Use t % (r + g) to find your position within the current cycle.",
+          "If that position is less than r, you are in the red phase; wait r - position seconds.",
+        ],
+        solutionExplanation: "t % (r+g) gives the position within the current cycle. Positions 0~r-1 are red; r~r+g-1 are green. If red, output r-pos as the remaining wait time.",
+      },
     },
     {
       id: "sim-013",
@@ -667,6 +817,19 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "물 마시는 위치를 s, 2s, ... 순서로 생성합니다. 각 위치에서 가장 가까운 보급소를 선형 탐색합니다. 같은 거리면 먼저 등장한(인덱스 작은) 보급소를 선택합니다.",
+      en: {
+        title: "Marathon Water Supply",
+        description: `A marathon course is L km long. A runner drinks water every S km.
+There are M water stations at given positions. The runner uses the nearest station at each drinking point.
+(Ties broken by smaller station number.)
+Output the station number used at each drinking point (only up to — not including — the finish line).`,
+        constraints: "1 ≤ L ≤ 1000, 1 ≤ S ≤ L, 1 ≤ M ≤ 100, 1 ≤ station position ≤ L",
+        hints: [
+          "Drinking points: s, 2s, 3s, ... (only those strictly less than L).",
+          "For each point, find the station index with the minimum |station[i] - point|.",
+        ],
+        solutionExplanation: "Generate drinking positions at s, 2s, ... up to (but not including) L. For each position, linear search for the nearest station. Ties are broken by the first (smallest-index) station found.",
+      },
     },
     {
       id: "sim-014",
@@ -720,6 +883,18 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "set에 중복 없이 과제를 저장하면 실제 제출한 고유 과제 수를 알 수 있습니다. size() == m이면 전체 제출, empty()면 아무것도 안 제출입니다.",
+      en: {
+        title: "Assignment Submission Status",
+        description: `There are N students and M assignments.
+Each student provides a list of assignment numbers they submitted.
+Output: the number of students who submitted all M assignments, and the number who submitted none.`,
+        constraints: "1 ≤ N ≤ 100, 1 ≤ M ≤ 20, each student submits 0 to M assignments",
+        hints: [
+          "Store each student's submissions in a set; size == M means all done, empty means none submitted.",
+          "The first number per student is k (submission count), followed by k assignment numbers.",
+        ],
+        solutionExplanation: "Storing submissions in a set automatically deduplicates them, giving the true count of unique assignments submitted. size() == m means complete; empty() means none submitted.",
+      },
     },
     {
       id: "sim-015",
@@ -769,6 +944,18 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "신호등은 R+G초 주기로 반복됩니다. T를 주기로 나눈 나머지가 현재 사이클 내 위치입니다. 위치 < R이면 빨간불, R 이상이면 초록불입니다.",
+      en: {
+        title: "Traffic Light Simulation",
+        description: `There are N traffic lights, each with a red duration R seconds and green duration G seconds.
+All lights start red at time 0.
+Output the state of each light after T seconds, one per line. ("RED" or "GREEN")`,
+        constraints: "1 ≤ N ≤ 100, 1 ≤ R, G ≤ 100, 0 ≤ T ≤ 10000",
+        hints: [
+          "Each light cycles every R+G seconds. Use T % (R+G) to find position within the current cycle.",
+          "If position < R: RED; otherwise: GREEN.",
+        ],
+        solutionExplanation: "Traffic lights repeat on an R+G second cycle. The remainder of T divided by the cycle length gives the position in the current cycle. Position < R is red; R or above is green.",
+      },
     },
   ],
 }

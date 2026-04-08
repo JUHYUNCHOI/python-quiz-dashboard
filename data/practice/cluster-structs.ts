@@ -6,6 +6,10 @@ export const structsCluster: PracticeCluster = {
   emoji: "📦",
   description: "struct 선언과 멤버 접근, struct 배열 정렬, 복합 조건 처리",
   unlockAfter: "cpp-14",
+  en: {
+    title: "Structs",
+    description: "struct declarations, member access, struct arrays",
+  },
   problems: [
     {
       id: "struct-001",
@@ -75,6 +79,16 @@ int main() {
 }`,
       solutionExplanation:
         "struct로 이름과 점수를 하나의 단위로 묶습니다. vector<Student>로 여러 학생을 관리하고, 범위 기반 for문으로 출력합니다.",
+      en: {
+        title: "Student Score Average",
+        description: `Given N students (name, score), print each student's name and score, then print the overall average to two decimal places on the last line.`,
+        constraints: "1 ≤ N ≤ 20, 0 ≤ score ≤ 100, names are up to 20 English characters",
+        hints: [
+          "Declare the struct as: struct Student { string name; int score; };",
+          "Use printf(\"%.2f\", avg) or cout << fixed << setprecision(2) << avg to print two decimal places.",
+        ],
+        solutionExplanation: "Use a struct to bundle name and score as a single unit. Manage multiple students with vector<Student> and print with a range-based for loop.",
+      },
     },
     {
       id: "struct-002",
@@ -149,6 +163,16 @@ int main() {
 }`,
       solutionExplanation:
         "struct + 함수 조합: dist2 함수가 Point를 받아 거리 제곱을 반환합니다. struct를 const 참조로 전달해 복사를 방지합니다.",
+      en: {
+        title: "Coordinate Distance",
+        description: `Given N points (x, y), print the squared distance from each point to the origin (0, 0) (no floating-point needed). Then print the 1-based index of the point closest to the origin.`,
+        constraints: "1 ≤ N ≤ 100, -1000 ≤ x, y ≤ 1000",
+        hints: [
+          "struct Point { int x, y; };",
+          "Squared distance: p.x*p.x + p.y*p.y",
+        ],
+        solutionExplanation: "Combining a struct with a function: dist2 receives a Point and returns its squared distance. Pass the struct by const reference to avoid copying.",
+      },
     },
     {
       id: "struct-003",
@@ -220,6 +244,16 @@ int main() {
 }`,
       solutionExplanation:
         "struct로 상품 속성을 묶어 vector<Product>로 관리합니다. 가격×재고 합이 int 범위를 초과할 수 있으므로 long long을 사용합니다.",
+      en: {
+        title: "Inventory Management",
+        description: `Given N products (name, price, stock), print: 1) the number of out-of-stock products (stock == 0), 2) the total inventory value (price × stock summed over all products).`,
+        constraints: "1 ≤ N ≤ 100, 1 ≤ price ≤ 100000, 0 ≤ stock ≤ 1000, product names are lowercase English up to 20 characters",
+        hints: [
+          "struct Product { string name; int price, stock; };",
+          "Inventory value: accumulate p.price * p.stock for each product.",
+        ],
+        solutionExplanation: "Bundle product attributes in a struct and manage them with vector<Product>. Use long long for the total value since price × stock can exceed the int range.",
+      },
     },
     {
       id: "struct-004",
@@ -294,6 +328,16 @@ int main() {
 }`,
       solutionExplanation:
         "struct 내 멤버 함수 total()으로 총점을 계산합니다. 람다 comparator로 다중 기준 정렬을 구현합니다.",
+      en: {
+        title: "Student Info Sort",
+        description: `Given N students (name, Korean score, English score), sort them by total score (descending). If two students have the same total, sort by name (ascending). Print each student's name and total score.`,
+        constraints: "1 ≤ N ≤ 100, 0 ≤ score ≤ 100, names are lowercase English up to 20 characters",
+        hints: [
+          "struct Student { string name; int kor, eng; };",
+          "total = kor + eng. Sort lambda: descending by total, then ascending by name if totals are equal.",
+        ],
+        solutionExplanation: "Use a member function total() inside the struct to compute the sum. Implement multi-key sorting with a lambda comparator.",
+      },
     },
     {
       id: "struct-005",
@@ -366,6 +410,16 @@ int main() {
 }`,
       solutionExplanation:
         "정렬 후 앞 K개만 접근하면 됩니다. 정렬 기준이 점수 내림차순+이름 오름차순이므로, 상위 K명이 앞에 정렬됩니다.",
+      en: {
+        title: "Top K Students",
+        description: `Given N students (name, score), print the average score of the top K students to two decimal places, then print their names in order. Sort by score descending; break ties by name ascending.`,
+        constraints: "1 ≤ K ≤ N ≤ 100, 0 ≤ score ≤ 100, names are lowercase English up to 20 characters",
+        hints: [
+          "Sort first, then only process the first K entries.",
+          "cout << fixed << setprecision(2) << average",
+        ],
+        solutionExplanation: "After sorting, access only the first K elements. Since the sort key is score descending then name ascending, the top K students are already at the front.",
+      },
     },
     {
       id: "struct-006",
@@ -456,6 +510,16 @@ int main() {
 }`,
       solutionExplanation:
         "평균 이상 카운트, 최고 급여자 (정렬 후 첫 번째), 부서별 카운트를 단계별로 처리합니다. map을 쓰지 않고 이중 루프로 부서별 카운트를 구현합니다.",
+      en: {
+        title: "Employee Salary Statistics",
+        description: `Given N employees (name, department, salary), print: 1) the number of employees earning at or above average, 2) the name of the highest-paid employee (ties broken by name ascending), 3) the employee count per department in alphabetical order. The number of departments D and their names are given at the end of the input.`,
+        constraints: "1 ≤ N ≤ 100, 1 ≤ D ≤ 10, 1 ≤ salary ≤ 10000000, names/departments are lowercase English up to 20 characters",
+        hints: [
+          "struct Employee { string name, dept; int salary; };",
+          "For department counts, don't use a map — iterate over the D given department names and count with a nested loop.",
+        ],
+        solutionExplanation: "Handle each part in sequence: count above-average earners, find the top earner (first after sorting), then count per department using a nested loop instead of a map.",
+      },
     },
     {
       id: "struct-007",
@@ -529,6 +593,16 @@ int main() {
 }`,
       solutionExplanation:
         "struct로 도서 속성을 묶고 vector<Book>으로 관리합니다. sort 람다에서 title 기준으로 오름차순 정렬합니다.",
+      en: {
+        title: "Book Info Print",
+        description: `Given N books (title, author, publication year), sort them by title in ascending order and print each book's information.`,
+        constraints: "1 ≤ N ≤ 50, title/author are lowercase English up to 20 characters, 1900 ≤ year ≤ 2100",
+        hints: [
+          "Declare the struct as: struct Book { string title; string author; int year; };",
+          "In the sort lambda, use a.title < b.title for ascending title order.",
+        ],
+        solutionExplanation: "Bundle book attributes in a struct and manage them with vector<Book>. Sort using a lambda that compares by title.",
+      },
     },
     {
       id: "struct-008",
@@ -595,6 +669,16 @@ int main() {
 }`,
       solutionExplanation:
         "struct 멤버 함수 area()로 넓이를 캡슐화합니다. 두 넓이를 비교해 큰 값 출력 또는 SAME을 출력합니다.",
+      en: {
+        title: "Rectangle Comparison",
+        description: `Given the width and height of two rectangles, print the area of the larger rectangle. If both areas are equal, print "SAME".`,
+        constraints: "1 ≤ w, h ≤ 10000",
+        hints: [
+          "Declare a member function: struct Rect { int w, h; int area() { return w * h; } };",
+          "Compare r1.area() and r2.area(), then print the larger or SAME.",
+        ],
+        solutionExplanation: "Encapsulate the area calculation in a struct member function area(). Compare the two areas and print the larger value or SAME.",
+      },
     },
     {
       id: "struct-009",
@@ -662,6 +746,16 @@ int main() {
 }`,
       solutionExplanation:
         "초 → 분 → 시간 순으로 올림을 처리합니다. 각 단위를 더한 뒤 / 60으로 올림 값을 구하고 % 60으로 나머지를 구합니다. 시간은 % 24로 하루를 순환합니다.",
+      en: {
+        title: "Add Two Times",
+        description: `Given two times (hours, minutes, seconds), print their sum in h:m:s format. Carry seconds into minutes when ≥ 60, carry minutes into hours when ≥ 60, and wrap hours modulo 24.`,
+        constraints: "0 ≤ h < 24, 0 ≤ m < 60, 0 ≤ s < 60",
+        hints: [
+          "Add seconds first, carry into minutes if ≥ 60, then carry minutes into hours the same way.",
+          "Apply % 24 to hours to wrap around a full day.",
+        ],
+        solutionExplanation: "Carry in order: seconds → minutes → hours. After adding each unit, use / 60 to get the carry and % 60 for the remainder. Apply % 24 to hours to handle day wraparound.",
+      },
     },
     {
       id: "struct-010",
@@ -732,6 +826,16 @@ int main() {
 }`,
       solutionExplanation:
         "기록(time) 오름차순으로 정렬하면 앞에서부터 1등, 2등, ... 순서가 됩니다. 정렬 후 인덱스+1을 순위로 출력합니다.",
+      en: {
+        title: "Race Rankings",
+        description: `Given N runners (name, time in seconds), print their rankings sorted by time ascending. Output format: "name rank"`,
+        constraints: "1 ≤ N ≤ 50, 1 ≤ time ≤ 10000, names are lowercase English up to 20 characters",
+        hints: [
+          "struct Runner { string name; int time; };",
+          "Sorting by time ascending makes rank = index + 1 after sorting.",
+        ],
+        solutionExplanation: "Sorting by time ascending puts rank 1 at index 0, rank 2 at index 1, etc. Output the rank as index + 1 after sorting.",
+      },
     },
     {
       id: "struct-011",
@@ -819,6 +923,16 @@ int main() {
 }`,
       solutionExplanation:
         "struct 내 vector<int>로 여러 점수를 저장합니다. 각 학생의 평균을 계산해 최고 평균 학생을 찾고, 전체 평균은 누적 합을 N*M으로 나눕니다.",
+      en: {
+        title: "Student Score Statistics II",
+        description: `Given N students each with M scores, print the name of the student with the highest average, then print the overall average (average of all scores from all students) to one decimal place.`,
+        constraints: "1 ≤ N ≤ 20, 1 ≤ M ≤ 10, 0 ≤ score ≤ 100, names are lowercase English up to 20 characters",
+        hints: [
+          "Compute each student's average (sum of scores / M) and find the one with the highest average.",
+          "Overall average = total of all scores / (N * M). Use cout << fixed << setprecision(1).",
+        ],
+        solutionExplanation: "Store multiple scores per student using vector<int> inside the struct. Compute each student's average to find the best, and divide the grand total by N*M for the overall average.",
+      },
     },
     {
       id: "struct-012",
@@ -911,6 +1025,16 @@ int main() {
 }`,
       solutionExplanation:
         "복소수 덧셈은 실수/허수 각각 더합니다. 곱셈은 (ac-bd)+(ad+bc)i 공식을 사용합니다. 허수부가 음수면 cout이 자동으로 '-' 부호를 출력하므로 조건 분기만 처리합니다.",
+      en: {
+        title: "Complex Number Arithmetic",
+        description: `Given two complex numbers (real part, imaginary part), print their sum and product.\nOutput format: "real+imagi" (e.g. "4.0+6.0i"). If the imaginary part is negative, use "real-|imag|i".`,
+        constraints: "-100 ≤ real, imag ≤ 100",
+        hints: [
+          "Complex multiplication: (a+bi)(c+di) = (ac-bd) + (ad+bc)i",
+          "Handle the sign of the imaginary part separately. Use cout << fixed << setprecision(1).",
+        ],
+        solutionExplanation: "Complex addition adds real and imaginary parts separately. Multiplication uses the formula (ac-bd)+(ad+bc)i. When the imaginary part is negative, cout already prints the '-' sign, so only branch on the condition.",
+      },
     },
   ],
 }

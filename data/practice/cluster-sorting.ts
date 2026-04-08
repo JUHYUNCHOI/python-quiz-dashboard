@@ -6,6 +6,7 @@ export const sortingCluster: PracticeCluster = {
   emoji: "📊",
   description: "sort(), 커스텀 comparator, lambda 정렬, 정렬 후 처리",
   unlockAfter: "cpp-23",
+  en: { title: "Sorting", description: "Custom sort, sort + process patterns, USACO-style ranking" },
   problems: [
     {
       id: "sort-001",
@@ -56,6 +57,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "sort(v.begin(), v.end())는 O(N log N)으로 오름차순 정렬합니다. 비교 함수를 생략하면 기본값(less<int>)이 사용됩니다.",
+      en: {
+        title: "Ascending Sort",
+        description: `Given N integers, sort them in ascending order and print the result.`,
+        constraints: "1 ≤ N ≤ 1000, -10000 ≤ each integer ≤ 10000",
+        hints: [
+          "`sort(v.begin(), v.end())` sorts in ascending order by default.",
+          "After sorting, print the elements separated by spaces.",
+        ],
+        solutionExplanation: "`sort(v.begin(), v.end())` runs in O(N log N) and sorts in ascending order. Omitting the comparator uses the default `less<int>`.",
+      },
     },
     {
       id: "sort-002",
@@ -106,6 +117,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "greater<int>()는 a > b가 true일 때 a를 앞에 놓으므로 내림차순이 됩니다. 람다로 작성하면 [](int a, int b){ return a > b; }와 동일합니다.",
+      en: {
+        title: "Descending Sort",
+        description: `Given N integers, sort them in descending order and print the result.`,
+        constraints: "1 ≤ N ≤ 1000, -10000 ≤ each integer ≤ 10000",
+        hints: [
+          "Pass `greater<int>()` as the third argument to `sort` for descending order.",
+          "Alternatively, you can sort in ascending order and then call `reverse()`.",
+        ],
+        solutionExplanation: "`greater<int>()` places `a` before `b` when `a > b`, producing descending order. Writing it as a lambda: `[](int a, int b){ return a > b; }` is equivalent.",
+      },
     },
     {
       id: "sort-003",
@@ -162,6 +183,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "람다의 반환값은 'a가 b보다 앞에 와야 하면 true'입니다. 절댓값이 다르면 절댓값으로 비교하고, 같으면 원래 값으로 비교해 음수를 앞에 놓습니다.",
+      en: {
+        title: "Sort by Absolute Value",
+        description: `Given N integers, sort them in ascending order by absolute value. If two values have the same absolute value, the negative one comes first.`,
+        constraints: "1 ≤ N ≤ 1000, -10000 ≤ each integer ≤ 10000",
+        hints: [
+          "In the lambda comparator, compare by `abs` when `abs(a) != abs(b)`, otherwise compare by original value `a < b`.",
+          "`[](int a, int b){ return abs(a) != abs(b) ? abs(a) < abs(b) : a < b; }`",
+        ],
+        solutionExplanation: "The lambda returns `true` if `a` should come before `b`. When absolute values differ, sort by absolute value; when equal, sort by original value so negatives come first.",
+      },
     },
     {
       id: "sort-004",
@@ -218,6 +249,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "다중 조건 정렬은 첫 번째 조건이 다를 때와 같을 때를 분기합니다. string의 < 연산자는 사전순 비교를 수행합니다.",
+      en: {
+        title: "Sort Strings by Length",
+        description: `Given N strings, sort them in ascending order by length. Strings of the same length should be sorted lexicographically.`,
+        constraints: "1 ≤ N ≤ 1000, each string is lowercase English letters, length 1 to 50",
+        hints: [
+          "In the lambda, when lengths are equal, fall back to lexicographic comparison (`a < b`).",
+          "`[](const string& a, const string& b){ return a.size() != b.size() ? a.size() < b.size() : a < b; }`",
+        ],
+        solutionExplanation: "Multi-key sorting branches on whether the first key differs. The `<` operator on strings performs lexicographic comparison.",
+      },
     },
     {
       id: "sort-005",
@@ -271,6 +312,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "a.second > b.second는 점수가 높은 것을 앞에 놓습니다. 점수가 같으면 이름 알파벳 순(a.first < b.first)으로 결정합니다.",
+      en: {
+        title: "Pair Sort — Score Primary Key",
+        description: `Given N (name, score) pairs, sort them by score in descending order. If scores are equal, sort by name alphabetically.`,
+        constraints: "1 ≤ N ≤ 1000, names are lowercase English letters, 0 ≤ score ≤ 100",
+        hints: [
+          "Write a comparator that sorts by score descending, then by name ascending.",
+          "If `a.second != b.second`, compare scores (`a.second > b.second`); otherwise compare names.",
+        ],
+        solutionExplanation: "`a.second > b.second` places higher scores first. When scores tie, `a.first < b.first` resolves by alphabetical name order.",
+      },
     },
     {
       id: "sort-006",
@@ -318,6 +369,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "정렬 후 v[K-1]이 K번째로 작은 수입니다. nth_element()로 O(N) 시간에 구할 수도 있지만, sort + 인덱스가 더 직관적입니다.",
+      en: {
+        title: "K-th Smallest After Sorting",
+        description: `Given N integers, find and print the K-th smallest value after sorting. (1-based index)`,
+        constraints: "1 ≤ K ≤ N ≤ 1000, -10000 ≤ each integer ≤ 10000",
+        hints: [
+          "Sort in ascending order and access the element at index K-1.",
+          "K is 1-based, so the 0-based index is `v[K-1]`.",
+        ],
+        solutionExplanation: "After sorting, `v[K-1]` is the K-th smallest element. `nth_element()` can find it in O(N), but sort + index is more intuitive.",
+      },
     },
     {
       id: "sort-007",
@@ -373,6 +434,19 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "sort → unique → erase 패턴은 벡터에서 중복을 제거하는 관용적 방법입니다. unique()는 정렬된 상태에서만 정확히 동작합니다.",
+      en: {
+        title: "Remove Duplicates Then Sort (Vector)",
+        description: `Given N integers, remove duplicates, sort in ascending order, then output the count of distinct values and the values themselves.
+
+- First line: count of distinct values
+- Second line: the values (space-separated)`,
+        constraints: "1 ≤ N ≤ 10000, -10000 ≤ each integer ≤ 10000",
+        hints: [
+          "After sorting, use `unique()` to remove duplicates.",
+          "`unique()` moves duplicates to the back and returns an iterator to the new end. Use `erase()` to trim the vector.",
+        ],
+        solutionExplanation: "The sort → unique → erase pattern is the idiomatic way to deduplicate a vector. `unique()` only works correctly on a sorted container.",
+      },
     },
     {
       id: "sort-008",
@@ -425,6 +499,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "stable_sort()는 sort()와 동일하지만, 비교값이 같은 원소들의 원래 순서를 보장합니다. O(N log² N) 또는 O(N log N)으로 동작합니다.",
+      en: {
+        title: "Roster Sort by Age",
+        description: `Given N (name, age) pairs, sort by age in ascending order, preserving the original input order for ties. (stable sort)`,
+        constraints: "1 ≤ N ≤ 1000, 1 ≤ age ≤ 100, names are English up to 20 characters",
+        hints: [
+          "`stable_sort()` preserves the relative order of elements with equal keys.",
+          "Regular `sort()` does not guarantee order among equal elements, so `stable_sort` is required here.",
+        ],
+        solutionExplanation: "`stable_sort()` behaves like `sort()` but guarantees that equal elements retain their original relative order. It runs in O(N log² N) or O(N log N).",
+      },
     },
     {
       id: "sort-009",
@@ -481,6 +565,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "l 기준 정렬 후 선형 순회합니다. 현재 구간의 시작이 마지막 병합 구간 끝 이하면 겹치므로 끝을 확장합니다. 그렇지 않으면 새 구간으로 추가합니다.",
+      en: {
+        title: "Interval Merging",
+        description: `Given N intervals [l, r], merge all overlapping or adjacent intervals and print the result. Output the count of merged intervals followed by each interval in ascending order of left endpoint.`,
+        constraints: "1 ≤ N ≤ 1000, 0 ≤ l ≤ r ≤ 10000",
+        hints: [
+          "Sort the intervals by left endpoint first.",
+          "If the current interval's `l` is ≤ the last merged interval's `r`, extend `r` to `max(r, current r)`.",
+        ],
+        solutionExplanation: "Sort by `l`, then do a linear sweep. If the current interval overlaps or touches the last merged one, extend its right endpoint; otherwise start a new merged interval.",
+      },
     },
     {
       id: "sort-010",
@@ -533,6 +627,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "커스텀 comparator: 점수가 다르면 점수 기준(내림차순), 같으면 이름 기준(오름차순)으로 비교합니다. USACO Bronze 정렬 문제의 전형적인 패턴입니다.",
+      en: {
+        title: "Multi-Key Sort",
+        description: `Given N students with (name, score), sort by score descending; break ties by name ascending.`,
+        constraints: "1 ≤ N ≤ 1000, 0 ≤ score ≤ 100, names are lowercase English up to 20 characters",
+        hints: [
+          "Use a lambda as the third argument to sort: `sort(v.begin(), v.end(), [](...){})` .",
+          "If scores differ, sort descending by score (`a.second > b.second`); otherwise sort ascending by name (`a.first < b.first`).",
+        ],
+        solutionExplanation: "Custom comparator: when scores differ sort by score (descending), when equal sort by name (ascending). This is the classic pattern for USACO Bronze ranking problems.",
+      },
     },
     {
       id: "sort-011",
@@ -581,6 +685,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "sort() 후 인덱스 (n-1)/2가 중앙값입니다. 홀수면 정확히 중간, 짝수면 가운데 두 값 중 작은 쪽이 선택됩니다. 정렬 후 인덱싱은 USACO Bronze 단골 패턴입니다.",
+      en: {
+        title: "Median After Sorting",
+        description: `Given N integers, sort them and print the median. If N is odd, print the middle value; if N is even, print the smaller of the two middle values.`,
+        constraints: "1 ≤ N ≤ 100, -10000 ≤ each integer ≤ 10000",
+        hints: [
+          "After `sort()`, print the element at index `(n-1)/2`.",
+          "n=5: (5-1)/2=2 → index 2 (exact middle). n=4: (4-1)/2=1 → index 1 (smaller of the two middle values).",
+        ],
+        solutionExplanation: "After sorting, index `(n-1)/2` gives the median. For odd N it lands exactly in the middle; for even N it picks the smaller of the two center elements. Index-after-sort is a staple USACO Bronze pattern.",
+      },
     },
     {
       id: "sort-012",
@@ -634,6 +748,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "pair<값, 원래인덱스>로 묶어서 정렬합니다. pair의 기본 비교는 first 우선, 같으면 second 비교이므로 값이 같을 때 원래 인덱스가 작은 것이 앞에 옵니다. USACO에서 정렬 후 원래 위치를 추적할 때 쓰는 핵심 패턴입니다.",
+      en: {
+        title: "Sort While Tracking Original Indices",
+        description: `Given N integers, sort them in ascending order and output the original 1-based positions of the elements in sorted order. When values are equal, the element with the smaller original index comes first.`,
+        constraints: "1 ≤ N ≤ 100, -10000 ≤ each integer ≤ 10000",
+        hints: [
+          "Store `{value, original_index}` as a `pair<int,int>` and sort.",
+          "After sorting, print `pair.second` (the original index) in order.",
+        ],
+        solutionExplanation: "Pack each element with its original index as a `pair<value, index>`. The default pair comparison sorts by first key, then second, so equal values are automatically ordered by original index. This is a core USACO pattern for tracking positions after sorting.",
+      },
     },
     {
       id: "sort-013",
@@ -691,6 +815,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "활동 선택 문제의 그리디 해법: 끝 시간이 빠른 회의를 먼저 선택하면 최대 회의 수가 보장됩니다. 끝 시간이 같으면 시작 시간이 빠른 것을 우선합니다.",
+      en: {
+        title: "Meeting Room Scheduling",
+        description: `Given N meetings with (start time, end time), find the maximum number of meetings that can be scheduled in one room. A new meeting can start exactly when the previous one ends.`,
+        constraints: "1 ≤ N ≤ 1000, 0 ≤ start time < end time ≤ 100000",
+        hints: [
+          "The key is to sort by end time (greedy algorithm).",
+          "Select a meeting if its start time is ≥ the end time of the last selected meeting.",
+        ],
+        solutionExplanation: "Greedy solution for the activity selection problem: always picking the meeting that ends earliest maximizes the total count. Break end-time ties by start time.",
+      },
     },
     {
       id: "sort-014",
@@ -747,6 +881,17 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "정렬 + unique로 고유값만 남긴 후, 인접 원소가 1 차이면 같은 구간으로 봅니다. 선형 순회로 최대 연속 구간 길이를 추적합니다.",
+      en: {
+        title: "Longest Consecutive Sequence After Sort",
+        description: `Given N integers, sort them, remove duplicates, then find the length of the longest run of consecutive integers.
+Example: [4, 2, 2, 3, 5] → sort+dedup → [2, 3, 4, 5] → length 4`,
+        constraints: "1 ≤ N ≤ 1000, -10000 ≤ each integer ≤ 10000",
+        hints: [
+          "Sort then use `unique` to remove duplicates.",
+          "Two adjacent elements are consecutive if their difference is 1. Track the current run length and the maximum.",
+        ],
+        solutionExplanation: "After sort + unique, only distinct values remain. A linear sweep checks whether adjacent elements differ by 1; track current and max run lengths.",
+      },
     },
     {
       id: "sort-015",
@@ -805,6 +950,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "comparator a+b > b+a는 이어 붙였을 때 더 큰 문자열을 만드는 순서를 정합니다. 예: '3'+'30'='330' vs '30'+'3'='303', 330>303이므로 '3'이 앞에 옵니다.",
+      en: {
+        title: "Largest Number from Parts",
+        description: `Given N non-negative integers, concatenate them in some order to form the largest possible number and print it.`,
+        constraints: "1 ≤ N ≤ 100, 0 ≤ each integer ≤ 1000",
+        hints: [
+          "When comparing two numbers `a` and `b`, compare `to_string(a)+to_string(b)` vs `to_string(b)+to_string(a)` as strings.",
+          "Don't forget to handle the all-zeros edge case — output `\"0\"` instead of `\"000...\"`.",
+        ],
+        solutionExplanation: "The comparator `a+b > b+a` orders numbers so that concatenating them produces the largest result. Example: `'3'+'30'='330'` vs `'30'+'3'='303'`; since 330>303, `'3'` comes first.",
+      },
     },
   ],
 }

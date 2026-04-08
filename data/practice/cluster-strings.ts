@@ -6,6 +6,7 @@ export const stringsCluster: PracticeCluster = {
   emoji: "🔤",
   description: "substr, find, length, 문자 비교, 변환 패턴",
   unlockAfter: "cpp-11",
+  en: { title: "Strings", description: "substr, find, length, character comparison, and transformation patterns" },
   problems: [
     {
       id: "str-001",
@@ -40,10 +41,19 @@ using namespace std;
 int main() {
     string s;
     cin >> s;
-    cout << s.length() << "\n";
+    cout << s.length() << "\\n";
     return 0;
 }`,
       solutionExplanation: "s.length()는 문자열의 문자 수를 반환합니다. s.size()도 동일한 결과를 줍니다.",
+      en: {
+        title: "String Length",
+        description: `Given a string, print its length.`,
+        constraints: "String consists of lowercase English letters only, length between 1 and 100",
+        hints: [
+          "Use the `.length()` or `.size()` method of string.",
+        ],
+        solutionExplanation: "`s.length()` returns the number of characters in the string. `s.size()` gives the same result.",
+      },
     },
     {
       id: "str-002",
@@ -79,10 +89,20 @@ using namespace std;
 int main() {
     string s;
     cin >> s;
-    cout << s[0] << " " << s.back() << "\n";
+    cout << s[0] << " " << s.back() << "\\n";
     return 0;
 }`,
       solutionExplanation: "s[0]으로 첫 번째 문자, s.back()으로 마지막 문자에 접근합니다. s[s.length()-1]도 동일합니다.",
+      en: {
+        title: "First and Last Characters",
+        description: `Given a string, print its first and last characters separated by a space.`,
+        constraints: "String consists of English letters only, length between 1 and 100",
+        hints: [
+          "`s[0]` is the first character; `s[s.length()-1]` is the last.",
+          "`s.back()` is a convenient way to access the last character.",
+        ],
+        solutionExplanation: "Access the first character with `s[0]` and the last with `s.back()`. `s[s.length()-1]` is equivalent.",
+      },
     },
     {
       id: "str-003",
@@ -121,10 +141,20 @@ int main() {
     string s;
     cin >> s;
     reverse(s.begin(), s.end());
-    cout << s << "\n";
+    cout << s << "\\n";
     return 0;
 }`,
       solutionExplanation: "reverse(s.begin(), s.end())는 문자열을 제자리에서 뒤집습니다. for 루프로 s[n-1-i]를 출력하는 방법도 가능합니다.",
+      en: {
+        title: "Reverse a String",
+        description: `Given a string, print it reversed.`,
+        constraints: "String consists of lowercase English letters only, length between 1 and 50",
+        hints: [
+          "Iterate through the string in reverse order, or use the `reverse()` function.",
+          "Add `#include <algorithm>` and call `reverse(s.begin(), s.end())`.",
+        ],
+        solutionExplanation: "`reverse(s.begin(), s.end())` reverses the string in place. Alternatively, print `s[n-1-i]` in a for loop.",
+      },
     },
     {
       id: "str-004",
@@ -166,10 +196,20 @@ int main() {
     int cnt = 0;
     for (char ch : s)
         if (ch == c) cnt++;
-    cout << cnt << "\n";
+    cout << cnt << "\\n";
     return 0;
 }`,
       solutionExplanation: "범위 기반 for 루프로 문자열의 각 문자를 순회하며 일치 여부를 확인합니다. 표준 라이브러리의 count() 함수로도 한 줄에 처리할 수 있습니다.",
+      en: {
+        title: "Count a Specific Character",
+        description: `Given a string and a single character, print how many times that character appears in the string.`,
+        constraints: "String length between 1 and 1000, character is a lowercase English letter",
+        hints: [
+          "Iterate through the string and increment a counter each time a character matches `c`.",
+          "Alternatively, use `count(s.begin(), s.end(), c)`.",
+        ],
+        solutionExplanation: "A range-based for loop iterates over each character and checks for a match. The standard library `count()` function can do the same in one line.",
+      },
     },
     {
       id: "str-005",
@@ -208,10 +248,20 @@ int main() {
     string s;
     int i, l;
     cin >> s >> i >> l;
-    cout << s.substr(i, l) << "\n";
+    cout << s.substr(i, l) << "\\n";
     return 0;
 }`,
       solutionExplanation: "s.substr(i, l)은 인덱스 i부터 l개의 문자를 새 문자열로 반환합니다. 두 번째 인수를 생략하면 끝까지 추출합니다.",
+      en: {
+        title: "Extract a Substring",
+        description: `Given a string S, a start index i, and a length l, extract and print l characters from S starting at index i.`,
+        constraints: "String length between 1 and 100, 0 ≤ i, i+l ≤ string length",
+        hints: [
+          "Use `s.substr(startIndex, length)`.",
+          "The first argument is the 0-based start index; the second is the number of characters to extract.",
+        ],
+        solutionExplanation: "`s.substr(i, l)` returns a new string of `l` characters starting at index `i`. Omitting the second argument extracts to the end of the string.",
+      },
     },
     {
       id: "str-006",
@@ -251,12 +301,23 @@ int main() {
     cin >> s >> t;
     size_t pos = s.find(t);
     if (pos == string::npos)
-        cout << -1 << "\n";
+        cout << -1 << "\\n";
     else
-        cout << pos << "\n";
+        cout << pos << "\\n";
     return 0;
 }`,
       solutionExplanation: "s.find(t)는 부분 문자열의 시작 위치를 반환합니다. 없으면 string::npos(매우 큰 값)를 반환하므로, npos와 비교하여 -1을 출력합니다.",
+      en: {
+        title: "Find a Word in a String",
+        description: `Given a string S and a search term T, print the 0-based index of the first occurrence of T in S.
+If T is not found in S, print \`-1\`.`,
+        constraints: "S length between 1 and 1000, T length between 1 and 100",
+        hints: [
+          "`s.find(t)` returns the index of the first occurrence of `t`.",
+          "If not found, it returns `string::npos`. Compare with `npos` and print -1 in that case.",
+        ],
+        solutionExplanation: "`s.find(t)` returns the starting position of the substring. If absent, it returns `string::npos` (a very large value), so compare against `npos` and output -1 accordingly.",
+      },
     },
     {
       id: "str-007",
@@ -298,10 +359,20 @@ int main() {
         if (isupper(c)) c = tolower(c);
         else c = toupper(c);
     }
-    cout << s << "\n";
+    cout << s << "\\n";
     return 0;
 }`,
       solutionExplanation: "참조형 char& c를 사용해 원본 문자열을 직접 수정합니다. isupper로 대문자 여부를 확인하고 tolower/toupper로 변환합니다.",
+      en: {
+        title: "Swap Case",
+        description: `Given an English string, convert every uppercase letter to lowercase and every lowercase letter to uppercase, then print the result.`,
+        constraints: "String consists of English letters only, length between 1 and 100",
+        hints: [
+          "Use `isupper(c)`, `islower(c)`, `toupper(c)`, and `tolower(c)` from `<cctype>`.",
+          "Iterate through each character: if uppercase, convert to lowercase; otherwise convert to uppercase.",
+        ],
+        solutionExplanation: "Using `char& c` (reference) modifies the original string in place. `isupper` checks for uppercase, then `tolower`/`toupper` performs the conversion.",
+      },
     },
     {
       id: "str-008",
@@ -344,10 +415,21 @@ int main() {
     istringstream iss(line);
     int cnt = 0;
     while (iss >> word) cnt++;
-    cout << cnt << "\n";
+    cout << cnt << "\\n";
     return 0;
 }`,
       solutionExplanation: "istringstream으로 문자열을 스트림처럼 처리합니다. iss >> word는 공백을 자동으로 건너뛰고 단어를 읽으므로, 연속 공백도 자연스럽게 처리됩니다.",
+      en: {
+        title: "Count Words",
+        description: `Given a sentence containing multiple words separated by spaces, print the number of words.
+There may be consecutive spaces between words.`,
+        constraints: "Sentence length between 1 and 200",
+        hints: [
+          "Use `istringstream` to split words by whitespace easily.",
+          "`istringstream iss(line); while (iss >> word) cnt++;`",
+        ],
+        solutionExplanation: "`istringstream` lets you treat a string like a stream. `iss >> word` automatically skips whitespace when reading, so consecutive spaces are handled naturally.",
+      },
     },
     {
       id: "str-009",
@@ -391,10 +473,21 @@ int main() {
     for (int i = 0; i < n / 2; i++) {
         if (s[i] != s[n - 1 - i]) { ok = false; break; }
     }
-    cout << (ok ? "YES" : "NO") << "\n";
+    cout << (ok ? "YES" : "NO") << "\\n";
     return 0;
 }`,
       solutionExplanation: "앞 인덱스 i와 뒤 인덱스 n-1-i의 문자를 비교합니다. n/2번만 비교하면 전체 확인이 완료됩니다. 불일치 발견 즉시 break로 탈출합니다.",
+      en: {
+        title: "Palindrome Check",
+        description: `Given a string, check whether it is a palindrome (reads the same forwards and backwards).
+Print \`YES\` if it is a palindrome, \`NO\` otherwise.`,
+        constraints: "String consists of lowercase English letters only, length between 1 and 1000",
+        hints: [
+          "Compare the string with its reverse, or compare characters from both ends moving inward.",
+          "Use two pointers: compare `s[i]` with `s[n-1-i]`.",
+        ],
+        solutionExplanation: "Compare the character at front index `i` with the one at back index `n-1-i`. Only `n/2` comparisons are needed to check the whole string. Break out immediately upon finding a mismatch.",
+      },
     },
     {
       id: "str-010",
@@ -435,10 +528,20 @@ int main() {
         s.replace(pos, from.length(), to);
         pos += to.length();
     }
-    cout << s << "\n";
+    cout << s << "\\n";
     return 0;
 }`,
       solutionExplanation: "find의 두 번째 인수로 검색 시작 위치를 지정합니다. replace 후 pos를 to.length()만큼 앞으로 이동해 이미 교체한 부분을 다시 검색하지 않도록 합니다.",
+      en: {
+        title: "String Replace",
+        description: `Given a string S, a search string from, and a replacement string to, replace every occurrence of from in S with to and print the result.`,
+        constraints: "S length between 1 and 1000, from length between 1 and 50",
+        hints: [
+          "Use `s.find(from)` to locate occurrences, and `s.replace(pos, from.length(), to)` to replace them.",
+          "After replacing, advance `pos` by `to.length()` to avoid re-examining the replaced section and causing an infinite loop.",
+        ],
+        solutionExplanation: "Pass a start position as the second argument to `find` to resume the search after each replacement. Advancing `pos` by `to.length()` ensures already-replaced text is skipped.",
+      },
     },
     {
       id: "str-011",
@@ -483,10 +586,21 @@ int main() {
         if (word.length() > best.length())
             best = word;
     }
-    cout << best << "\n";
+    cout << best << "\\n";
     return 0;
 }`,
       solutionExplanation: "best를 빈 문자열로 초기화하고, 더 긴 단어를 만날 때만 업데이트합니다. 길이가 같으면 업데이트하지 않으므로 자연스럽게 첫 번째 최장 단어가 유지됩니다.",
+      en: {
+        title: "Longest Word",
+        description: `Given a line of words separated by spaces, print the longest word.
+If multiple words share the maximum length, print the one that appears first.`,
+        constraints: "Between 1 and 100 words, each word length between 1 and 50",
+        hints: [
+          "Read words one by one with `istringstream` and track the longest word seen so far.",
+          "Only update when the current word length is strictly greater than the best — this keeps the first longest word.",
+        ],
+        solutionExplanation: "Initialize `best` as an empty string and update only when a strictly longer word is found. Ties are not updated, so the first longest word is preserved naturally.",
+      },
     },
     {
       id: "str-012",
@@ -528,10 +642,20 @@ int main() {
     istringstream iss(line);
     int x, sum = 0;
     while (iss >> x) sum += x;
-    cout << sum << "\n";
+    cout << sum << "\\n";
     return 0;
 }`,
       solutionExplanation: "istringstream을 통해 iss >> x로 정수를 직접 읽을 수 있습니다. stoi(word) 방식보다 더 간결합니다.",
+      en: {
+        title: "Sum of Number Strings",
+        description: `Given a line of number strings separated by spaces, convert each to an integer and print their sum.`,
+        constraints: "Between 1 and 50 numbers, each between -10000 and 10000",
+        hints: [
+          "Parse the string with `istringstream` and convert each token to an integer with `stoi()`.",
+          "Or read directly into an `int` variable with `iss >> x` — simpler and more concise.",
+        ],
+        solutionExplanation: "Using `iss >> x` reads integers directly from an `istringstream`, which is more concise than using `stoi(word)` on each token.",
+      },
     },
   ],
 }
