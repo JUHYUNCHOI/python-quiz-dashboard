@@ -68,7 +68,7 @@ export default function QuizPage() {
     const language = parsed.course === "cpp" ? "cpp" : "python"
     const count = parsed.questionCount || 20
 
-    fetch(`/api/questions?language=${language}`)
+    fetch(`/api/questions?language=${language}&lang=${lang}`)
       .then(res => res.json())
       .then(data => {
         const pool: QuizQuestion[] = data.questions ?? []
@@ -132,7 +132,7 @@ export default function QuizPage() {
   const quiz = useQuizState(shuffled.length > 0 ? shuffled : EMPTY_FALLBACK)
   const { play, isMuted, toggleMute } = useSoundEffect()
   const gamification = useGamification()
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const { isFocused, justReturnedFocus } = useFocusTracker()
   const comboTier = getComboTier(quiz.combo)
   const [reportedQuestions, setReportedQuestions] = useState<Set<number>>(new Set())
