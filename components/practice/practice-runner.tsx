@@ -122,7 +122,7 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
       try {
         const body = lang === "python"
           ? { compiler: "cpython-3.12.2", code, stdin: tc.stdin }
-          : { compiler: "gcc-head", code, options: "warning,gnu++17", stdin: tc.stdin, "compiler-option-raw": "-O2 -std=c++17" }
+          : { compiler: "gcc-head", code, stdin: tc.stdin, "compiler-option-raw": "-std=c++17\n-O2" }
         const res = await fetch(WANDBOX_API, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
