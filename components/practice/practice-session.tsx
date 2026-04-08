@@ -344,9 +344,17 @@ export function PracticeSession({
             <h2 className="text-xl font-bold text-gray-900">모든 세트 완료!</h2>
             <p className="text-gray-400 text-sm mt-1">클러스터의 모든 문제를 풀었어요.</p>
           </div>
-          <button onClick={onExit} className="w-full py-3.5 rounded-2xl bg-indigo-500 text-white font-bold text-sm">
-            목록으로
-          </button>
+          <div className="flex flex-col gap-3 w-full">
+            <button
+              onClick={() => { setCurrentSet(1); setPhase("intro") }}
+              className="w-full py-3.5 rounded-2xl border-2 border-indigo-200 text-indigo-600 font-bold text-sm hover:bg-indigo-50 transition-colors"
+            >
+              🔄 처음부터 다시 하기
+            </button>
+            <button onClick={onExit} className="w-full py-3.5 rounded-2xl bg-indigo-500 text-white font-bold text-sm hover:bg-indigo-600 transition-colors">
+              목록으로
+            </button>
+          </div>
         </div>
       )
     }

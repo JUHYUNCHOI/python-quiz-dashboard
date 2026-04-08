@@ -59,14 +59,13 @@ int main() {
       unlockAfter: "cpp-9",
       difficulty: "쉬움",
       title: "배열 합계와 평균",
-      description: `N개의 정수가 주어질 때, 합계와 평균을 출력하세요.
+      description: `N개의 정수가 주어질 때, 합계와 평균(소수점 버림)을 출력하세요.
 
 - 첫 번째 줄: 합계
-- 두 번째 줄: 평균 (소수점 둘째 자리까지, 반올림 없이)`,
+- 두 번째 줄: 평균 (소수점 이하 버림)`,
       constraints: "1 ≤ N ≤ 100, 0 ≤ 각 원소 ≤ 1000",
       initialCode: `#include <iostream>
 #include <vector>
-#include <iomanip>
 using namespace std;
 
 int main() {
@@ -78,17 +77,16 @@ int main() {
     return 0;
 }`,
       testCases: [
-        { stdin: "4\n10 20 30 40", expectedOutput: "100\n25.00", label: "기본" },
-        { stdin: "3\n1 2 3", expectedOutput: "6\n2.00", label: "정수 평균" },
-        { stdin: "3\n1 2 4", expectedOutput: "7\n2.33", label: "소수 평균" },
+        { stdin: "4\n10 20 30 40", expectedOutput: "100\n25", label: "기본" },
+        { stdin: "3\n1 2 3", expectedOutput: "6\n2", label: "정수 평균" },
+        { stdin: "3\n1 2 4", expectedOutput: "7\n2", label: "소수점 버림" },
       ],
       hints: [
-        "합계는 int, 평균은 double로 계산하세요.",
-        "cout << fixed << setprecision(2) << (double)sum/n 으로 소수점 형식을 지정할 수 있어요.",
+        "합계는 반복문으로 누적합을 구하세요.",
+        "정수 나눗셈 sum / n은 자동으로 소수점이 버려집니다.",
       ],
       solutionCode: `#include <iostream>
 #include <vector>
-#include <iomanip>
 using namespace std;
 
 int main() {
@@ -99,10 +97,10 @@ int main() {
     int sum = 0;
     for (int x : v) sum += x;
     cout << sum << "\n";
-    cout << fixed << setprecision(2) << (double)sum / n << "\n";
+    cout << sum / n << "\n";
     return 0;
 }`,
-      solutionExplanation: "합계를 먼저 구한 후, (double)로 형변환해서 실수 나눗셈을 수행합니다. fixed와 setprecision(2)로 소수점 두 자리를 고정합니다.",
+      solutionExplanation: "합계를 구한 후 sum / n으로 평균을 계산합니다. int끼리의 나눗셈은 소수점 이하가 자동으로 버려집니다.",
     },
     {
       id: "arr-003",
