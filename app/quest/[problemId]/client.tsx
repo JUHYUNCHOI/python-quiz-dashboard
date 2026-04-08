@@ -1,12 +1,13 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense, lazy } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
-import { ChevronLeft, ChevronRight, CheckCircle, ExternalLink } from "lucide-react"
+import { ChevronLeft, ChevronRight, CheckCircle, ExternalLink, Loader2 } from "lucide-react"
 import { ALL_PROBLEMS, PROBLEM_MAP, PROBLEM_INDEX, type ProblemMeta } from "./data"
+import { PROBLEM_LOADERS } from "./loaders"
 
 const STORAGE_KEY = "quest-solved"
 
@@ -61,6 +62,41 @@ function ComingSoonPlaceholder({ meta }: { meta: ProblemMeta }) {
   )
 }
 
+function ProblemLoadingSpinner() {
+  return (
+    <div className="flex flex-col items-center justify-center gap-4 py-24">
+      <Loader2 size={36} className="animate-spin text-blue-500" />
+      <div className="text-sm font-semibold text-gray-500">튜토리얼 로딩 중...</div>
+    </div>
+  )
+}
+
+// Cache of lazily-created components so we don't recreate them on every render
+const LAZY_CACHE = new Map<string, React.LazyExoticComponent<React.ComponentType<{ lang?: string }>>>()
+
+function getLazyComponent(problemId: string) {
+  if (LAZY_CACHE.has(problemId)) return LAZY_CACHE.get(problemId)!
+  const loader = PROBLEM_LOADERS[problemId]
+  if (!loader) return null
+  const LazyComp = lazy(loader)
+  LAZY_CACHE.set(problemId, LazyComp)
+  return LazyComp
+}
+
+function ProblemContent({ meta, lang }: { meta: ProblemMeta; lang: string }) {
+  const LazyComp = getLazyComponent(meta.id)
+
+  if (!LazyComp) {
+    return <ComingSoonPlaceholder meta={meta} />
+  }
+
+  return (
+    <Suspense fallback={<ProblemLoadingSpinner />}>
+      <LazyComp lang={lang} />
+    </Suspense>
+  )
+}
+
 export default function QuestProblemClient({ problemId }: { problemId: string }) {
   const router = useRouter()
   const meta = PROBLEM_MAP.get(problemId)
@@ -68,6 +104,7 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
   const prevProblem = idx > 0 ? ALL_PROBLEMS[idx - 1] : null
   const nextProblem = idx < ALL_PROBLEMS.length - 1 ? ALL_PROBLEMS[idx + 1] : null
   const { solved, markSolved } = useQuestSolved(problemId)
+  const [lang, setLang] = useState("ko")
 
   if (!meta) {
     return (
@@ -88,7 +125,7 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header />
-      <main className="flex-1 max-w-lg mx-auto w-full pb-24">
+      <main className="flex-1 max-w-4xl mx-auto w-full pb-24">
 
         {/* Sticky header */}
         <div className="bg-white border-b border-gray-200 px-4 py-3 sticky top-[57px] z-30">
@@ -100,6 +137,27 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
               <div className="font-bold text-gray-800 text-sm truncate">{meta.title}</div>
               <div className="text-xs text-gray-500">{meta.sub}</div>
             </div>
+
+            {/* Language toggle */}
+            <div className="flex items-center gap-1 border-2 border-gray-200 rounded-lg p-0.5 flex-shrink-0">
+              <button
+                onClick={() => setLang("ko")}
+                className={`px-2 py-1 rounded text-xs font-bold transition-all ${
+                  lang === "ko" ? "bg-gray-800 text-white" : "text-gray-500 hover:text-gray-800"
+                }`}
+              >
+                한국어
+              </button>
+              <button
+                onClick={() => setLang("en")}
+                className={`px-2 py-1 rounded text-xs font-bold transition-all ${
+                  lang === "en" ? "bg-gray-800 text-white" : "text-gray-500 hover:text-gray-800"
+                }`}
+              >
+                EN
+              </button>
+            </div>
+
             {solved && (
               <div className="flex items-center gap-1 text-green-600 text-xs font-bold flex-shrink-0">
                 <CheckCircle size={14} />
@@ -109,9 +167,9 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
           </div>
         </div>
 
-        {/* Content */}
+        {/* Problem content */}
         <div className="px-4 py-4">
-          <ComingSoonPlaceholder meta={meta} />
+          <ProblemContent meta={meta} lang={lang} />
         </div>
 
         {/* Mark complete */}
