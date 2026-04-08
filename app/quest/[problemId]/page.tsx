@@ -5,6 +5,7 @@ export function generateStaticParams() {
   return ALL_PROBLEMS.map(p => ({ problemId: p.id }))
 }
 
-export default function QuestProblemPage({ params }: { params: { problemId: string } }) {
-  return <QuestProblemClient problemId={params.problemId} />
+export default async function QuestProblemPage({ params }: { params: Promise<{ problemId: string }> }) {
+  const { problemId } = await params
+  return <QuestProblemClient problemId={problemId} />
 }
