@@ -570,6 +570,28 @@ export function PracticeSession({
                     {current.constraints}
                   </p>
                 )}
+                {/* 예시 입출력 */}
+                {current.testCases && current.testCases.length > 0 && (
+                  <div className="mt-3 pt-3 border-t border-gray-100">
+                    <p className="text-[11px] font-bold text-gray-400 mb-2 uppercase tracking-wide">
+                      {t("예시 입출력", "Sample I/O")}
+                    </p>
+                    <div className="flex flex-col gap-1.5">
+                      {current.testCases.slice(0, 2).map((tc, i) => (
+                        <div key={i} className="flex gap-3 font-mono text-xs bg-gray-50 rounded-lg px-3 py-2">
+                          <div className="flex-1 min-w-0">
+                            <span className="text-gray-400">{t("입력", "Input")}: </span>
+                            <span className="text-gray-700 break-all">{tc.stdin || "(없음)"}</span>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <span className="text-gray-400">{t("출력", "Output")}: </span>
+                            <span className="text-emerald-600 font-semibold break-all">{tc.expectedOutput}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
             <PracticeRunner key={current.id} problem={current} onSuccess={handleSuccess} />

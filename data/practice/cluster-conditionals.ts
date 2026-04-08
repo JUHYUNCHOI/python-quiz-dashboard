@@ -726,5 +726,286 @@ int main() {
 }`,
       solutionExplanation: "조건을 높은 점수부터 확인합니다. 앞 조건을 통과하면 자동으로 그보다 낮은 범위임이 보장되므로 else if가 정확하게 동작합니다.",
     },
+    // ── 삼항 연산자 ──────────────────────────────────────────────────
+    {
+      id: "cond-017",
+      cluster: "conditionals",
+      unlockAfter: "cpp-6",
+      difficulty: "쉬움",
+      title: "삼항 연산자 — 큰 수",
+      description: `두 정수 A, B가 주어질 때, **삼항 연산자 (?:)** 를 사용해 더 큰 수를 출력하세요.
+A == B이면 둘 중 아무 값이나 출력해도 됩니다.
+
+**삼항 연산자 문법:**
+\`조건 ? 참일 때 값 : 거짓일 때 값\`
+
+**예시**
+- 입력: \`3 7\` → 출력: \`7\`
+- 입력: \`9 4\` → 출력: \`9\`
+- 입력: \`5 5\` → 출력: \`5\``,
+      constraints: "-1000 ≤ A, B ≤ 1000",
+      initialCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int a, b;
+    cin >> a >> b;
+    // 삼항 연산자를 사용하세요: 조건 ? 값1 : 값2
+    int result = /* 여기를 채우세요 */;
+    cout << result << endl;
+    return 0;
+}`,
+      testCases: [
+        { stdin: "3 7", expectedOutput: "7", label: "b가 큼" },
+        { stdin: "9 4", expectedOutput: "9", label: "a가 큼" },
+        { stdin: "5 5", expectedOutput: "5", label: "같음" },
+        { stdin: "-3 -1", expectedOutput: "-1", label: "음수" },
+      ],
+      hints: [
+        "삼항 연산자: 조건 ? 참일 때 : 거짓일 때",
+        "int result = (a > b) ? a : b;",
+      ],
+      solutionCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int a, b;
+    cin >> a >> b;
+    int result = (a > b) ? a : b;
+    cout << result << endl;
+    return 0;
+}`,
+      solutionExplanation: "(a > b) ? a : b 는 a가 b보다 크면 a, 아니면 b를 반환합니다. if-else를 한 줄로 표현한 것입니다.",
+    },
+    {
+      id: "cond-018",
+      cluster: "conditionals",
+      unlockAfter: "cpp-6",
+      difficulty: "보통",
+      title: "삼항 연산자 — 부호 분류",
+      description: `정수 N이 주어질 때, **삼항 연산자만 사용해서** 다음을 출력하세요.
+
+- N > 0: \`positive\`
+- N < 0: \`negative\`
+- N == 0: \`zero\`
+
+**힌트:** 삼항 연산자는 중첩할 수 있습니다.
+\`조건1 ? 값1 : (조건2 ? 값2 : 값3)\``,
+      constraints: "-1000 ≤ N ≤ 1000",
+      initialCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    // 삼항 연산자만 사용해서 result에 결과를 저장하세요
+    string result = (n > 0) ? "positive" : /* 여기를 채우세요 */;
+    cout << result << endl;
+    return 0;
+}`,
+      testCases: [
+        { stdin: "7", expectedOutput: "positive", label: "양수" },
+        { stdin: "-3", expectedOutput: "negative", label: "음수" },
+        { stdin: "0", expectedOutput: "zero", label: "0" },
+        { stdin: "1000", expectedOutput: "positive", label: "최댓값" },
+      ],
+      hints: [
+        "중첩 삼항: (n > 0) ? \"positive\" : (n < 0) ? \"negative\" : \"zero\"",
+        "삼항 연산자를 연달아 쓰면 if-else if-else와 같습니다.",
+      ],
+      solutionCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    string result = (n > 0) ? "positive" : (n < 0) ? "negative" : "zero";
+    cout << result << endl;
+    return 0;
+}`,
+      solutionExplanation: "중첩 삼항 연산자입니다. n>0이면 positive, 아니면 다시 n<0을 검사해 negative, 둘 다 아니면 zero.",
+    },
+    // ── switch / case ─────────────────────────────────────────────────
+    {
+      id: "cond-019",
+      cluster: "conditionals",
+      unlockAfter: "cpp-6",
+      difficulty: "쉬움",
+      title: "switch — 요일 출력",
+      description: `1~7의 정수가 주어질 때, **switch** 문을 사용해 요일을 출력하세요.
+
+- 1: \`Monday\`
+- 2: \`Tuesday\`
+- 3: \`Wednesday\`
+- 4: \`Thursday\`
+- 5: \`Friday\`
+- 6: \`Saturday\`
+- 7: \`Sunday\``,
+      constraints: "1 ≤ N ≤ 7",
+      initialCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    switch (n) {
+        case 1: cout << "Monday" << endl; break;
+        // 나머지를 채우세요
+    }
+    return 0;
+}`,
+      testCases: [
+        { stdin: "1", expectedOutput: "Monday", label: "월요일" },
+        { stdin: "5", expectedOutput: "Friday", label: "금요일" },
+        { stdin: "7", expectedOutput: "Sunday", label: "일요일" },
+        { stdin: "3", expectedOutput: "Wednesday", label: "수요일" },
+      ],
+      hints: [
+        "각 case마다 break를 잊지 마세요. break 없으면 다음 case도 실행됩니다.",
+        "case 2: cout << \"Tuesday\" << endl; break;",
+      ],
+      solutionCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    switch (n) {
+        case 1: cout << "Monday" << endl; break;
+        case 2: cout << "Tuesday" << endl; break;
+        case 3: cout << "Wednesday" << endl; break;
+        case 4: cout << "Thursday" << endl; break;
+        case 5: cout << "Friday" << endl; break;
+        case 6: cout << "Saturday" << endl; break;
+        case 7: cout << "Sunday" << endl; break;
+    }
+    return 0;
+}`,
+      solutionExplanation: "switch는 변수 값에 따라 해당 case로 점프합니다. break가 없으면 아래 case까지 연속 실행되므로 반드시 break를 씁니다.",
+    },
+    {
+      id: "cond-020",
+      cluster: "conditionals",
+      unlockAfter: "cpp-6",
+      difficulty: "보통",
+      title: "switch fall-through — 계절",
+      description: `월(1~12)이 주어질 때, **switch의 fall-through**를 활용해 계절을 출력하세요.
+
+- 3, 4, 5월: \`spring\`
+- 6, 7, 8월: \`summer\`
+- 9, 10, 11월: \`fall\`
+- 12, 1, 2월: \`winter\`
+
+**fall-through:** case에 break를 생략하면 다음 case로 이어집니다.
+\`\`\`
+case 3:
+case 4:
+case 5: cout << "spring"; break;
+\`\`\``,
+      constraints: "1 ≤ M ≤ 12",
+      initialCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int m;
+    cin >> m;
+    switch (m) {
+        case 3:
+        case 4:
+        case 5: cout << "spring" << endl; break;
+        // 나머지 계절을 채우세요
+    }
+    return 0;
+}`,
+      testCases: [
+        { stdin: "4", expectedOutput: "spring", label: "봄" },
+        { stdin: "7", expectedOutput: "summer", label: "여름" },
+        { stdin: "10", expectedOutput: "fall", label: "가을" },
+        { stdin: "1", expectedOutput: "winter", label: "겨울(1월)" },
+        { stdin: "12", expectedOutput: "winter", label: "겨울(12월)" },
+      ],
+      hints: [
+        "case에 break가 없으면 다음 case로 이어집니다. 이를 fall-through라 합니다.",
+        "12월은 1, 2월과 같은 계절이라 case 12: case 1: case 2: 로 묶을 수 있어요.",
+      ],
+      solutionCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int m;
+    cin >> m;
+    switch (m) {
+        case 3: case 4: case 5:
+            cout << "spring" << endl; break;
+        case 6: case 7: case 8:
+            cout << "summer" << endl; break;
+        case 9: case 10: case 11:
+            cout << "fall" << endl; break;
+        case 12: case 1: case 2:
+            cout << "winter" << endl; break;
+    }
+    return 0;
+}`,
+      solutionExplanation: "fall-through를 이용해 여러 case를 한 번에 처리합니다. 마지막 case에만 break를 씁니다. default는 입력이 보장될 때 생략 가능합니다.",
+    },
+    {
+      id: "cond-021",
+      cluster: "conditionals",
+      unlockAfter: "cpp-6",
+      difficulty: "보통",
+      title: "switch — 사칙연산 계산기",
+      description: `두 정수 A, B와 연산자 문자(+, -, *, /) 가 주어질 때, **switch** 문을 사용해 계산 결과를 출력하세요.
+
+- 나눗셈은 정수 나눗셈(몫)을 출력합니다.
+- 0으로 나누는 입력은 주어지지 않습니다.
+
+**예시**
+- 입력: \`10 3 +\` → 출력: \`13\`
+- 입력: \`10 3 -\` → 출력: \`7\`
+- 입력: \`10 3 *\` → 출력: \`30\`
+- 입력: \`10 3 /\` → 출력: \`3\``,
+      constraints: "-1000 ≤ A, B ≤ 1000, B ≠ 0 (나눗셈의 경우)",
+      initialCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int a, b;
+    char op;
+    cin >> a >> b >> op;
+    switch (op) {
+        // 각 연산자 case를 작성하세요
+    }
+    return 0;
+}`,
+      testCases: [
+        { stdin: "10 3 +", expectedOutput: "13", label: "덧셈" },
+        { stdin: "10 3 -", expectedOutput: "7", label: "뺄셈" },
+        { stdin: "10 3 *", expectedOutput: "30", label: "곱셈" },
+        { stdin: "10 3 /", expectedOutput: "3", label: "나눗셈(몫)" },
+        { stdin: "-5 2 +", expectedOutput: "-3", label: "음수 덧셈" },
+      ],
+      hints: [
+        "switch는 char에도 사용할 수 있습니다. case '+':",
+        "각 연산자마다 case를 작성하고 break를 잊지 마세요.",
+      ],
+      solutionCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int a, b;
+    char op;
+    cin >> a >> b >> op;
+    switch (op) {
+        case '+': cout << a + b << endl; break;
+        case '-': cout << a - b << endl; break;
+        case '*': cout << a * b << endl; break;
+        case '/': cout << a / b << endl; break;
+    }
+    return 0;
+}`,
+      solutionExplanation: "switch는 char 타입에도 동작합니다. case '+'처럼 문자 리터럴을 씁니다. int a / int b는 자동으로 정수 나눗셈(몫)이 됩니다.",
+    },
   ],
 }
