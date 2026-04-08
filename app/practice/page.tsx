@@ -14,6 +14,7 @@ import { usePracticeProgress } from "@/hooks/use-practice-progress"
 import { useAuth } from "@/contexts/auth-context"
 import { ArrowLeft, Lock, CheckCircle2, Star, FileText, Code2, HelpCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useLanguage } from "@/contexts/language-context"
 
 type Lang = "cpp" | "python"
 
@@ -52,14 +53,15 @@ function ClusterList({
   lang: Lang
   onLangChange: (lang: Lang) => void
 }) {
+  const { t } = useLanguage()
   const clusters = lang === "cpp" ? CPP_CLUSTERS : PYTHON_CLUSTERS
-  const langLabel = lang === "cpp" ? "C++ 레슨" : "Python 레슨"
+  const langLabel = lang === "cpp" ? t("C++ 레슨", "C++ lessons") : t("Python 레슨", "Python lessons")
 
   return (
     <div className="flex flex-col gap-4 pb-24">
       <div className="mb-2">
-        <h1 className="text-2xl font-bold text-gray-900">코딩 연습</h1>
-        <p className="text-gray-500 text-sm mt-1">{langLabel}을 완료하면 연습 문제가 열립니다</p>
+        <h1 className="text-2xl font-bold text-gray-900">{t("코딩 연습", "Practice")}</h1>
+        <p className="text-gray-500 text-sm mt-1">{langLabel} {t("을 완료하면 연습 문제가 열립니다", "— complete lessons to unlock problems")}</p>
       </div>
 
       {/* 언어 탭 */}
@@ -152,6 +154,11 @@ function ProblemList({
   solvedSet: Set<string>
   starredSet: Set<string>
 }) {
+  const { t } = useLanguage()
+  const diffLabel = (d: string) =>
+    d === "쉬움" ? t("쉬움", "Easy") :
+    d === "보통" ? t("보통", "Medium") :
+    t("어려움", "Hard")
   const solvedCount = cluster.problems.filter(p => solvedSet.has(p.id)).length
   const isAllMcq = cluster.problems.every(p => p.type === "mcq")
 
@@ -163,7 +170,7 @@ function ProblemList({
         </button>
         <div className="flex-1 min-w-0">
           <h1 className="text-xl font-bold text-gray-900">{cluster.emoji} {cluster.title}</h1>
-          <p className="text-gray-400 text-xs">{solvedCount}/{cluster.problems.length}문제 완료</p>
+          <p className="text-gray-400 text-xs">{solvedCount}/{cluster.problems.length} {t("문제 완료", "solved")}</p>
         </div>
       </div>
 
@@ -172,8 +179,8 @@ function ProblemList({
         onClick={onStartSession}
         className="w-full py-3.5 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm transition-all shadow-sm flex items-center justify-center gap-2"
       >
-        ▶ {isAllMcq ? "연속으로 풀기" : "순서대로 풀기"}
-        <span className="text-indigo-200 font-normal text-xs">({cluster.problems.length}문제 고정 순서)</span>
+        ▶ {isAllMcq ? t("연속으로 풀기", "Play all") : t("순서대로 풀기", "Start in order")}
+        <span className="text-indigo-200 font-normal text-xs">({cluster.problems.length} {t("문제 고정 순서", "problems · fixed order")})</span>
       </button>
       {cluster.problems.map((problem, i) => {
         const solved = solvedSet.has(problem.id)
@@ -194,7 +201,7 @@ function ProblemList({
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 <span className={cn("text-xs px-2 py-0.5 rounded-full font-medium", DIFFICULTY_COLOR[problem.difficulty])}>
-                  {problem.difficulty}
+                  {diffLabel(problem.difficulty)}
                 </span>
                 {starred
                   ? <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
@@ -211,31 +218,32 @@ function ProblemList({
 
 // ── 문제 패널 (설명 + 예제) ────────────────────────────────────────
 function ProblemPanel({ problem }: { problem: PracticeProblem }) {
+  const { t } = useLanguage()
   return (
     <div className="flex flex-col gap-4">
-      {/* 문제 설명 */}
       <div className="rounded-2xl bg-white border border-gray-200 shadow-sm p-5">
         <p className="text-gray-700 text-sm whitespace-pre-wrap leading-relaxed">
           {problem.description.replace(/\*\*/g, "")}
         </p>
-        <p className="text-gray-400 text-xs mt-4 pt-4 border-t border-gray-100">
-          제약: {problem.constraints}
-        </p>
+        {problem.constraints && (
+          <p className="text-gray-400 text-xs mt-4 pt-4 border-t border-gray-100">
+            {t("제약: ", "Constraints: ")}{problem.constraints}
+          </p>
+        )}
       </div>
 
-      {/* 예제 */}
       <div className="flex flex-col gap-2">
-        <p className="text-xs text-gray-400 font-semibold uppercase tracking-wide">예제</p>
+        <p className="text-xs text-gray-400 font-semibold uppercase tracking-wide">{t("예제", "Examples")}</p>
         {(problem.testCases ?? []).slice(0, 2).map((tc, i) => (
           <div key={i} className="rounded-xl bg-white border border-gray-200 shadow-sm p-3 text-xs font-mono">
             {tc.label && <p className="text-gray-400 mb-2">{tc.label}</p>}
             <div className="flex flex-col gap-1">
               <div>
-                <span className="text-gray-400">입력</span>
+                <span className="text-gray-400">{t("입력", "Input")}</span>
                 <span className="ml-2 text-gray-700 whitespace-pre">{tc.stdin}</span>
               </div>
               <div>
-                <span className="text-gray-400">출력</span>
+                <span className="text-gray-400">{t("출력", "Output")}</span>
                 <span className="ml-2 text-emerald-600 font-semibold whitespace-pre">{tc.expectedOutput}</span>
               </div>
             </div>
@@ -258,8 +266,13 @@ function ProblemDetail({
   onMarkSolved: (problemId: string) => Promise<void>
   onMarkStarred: (problemId: string) => Promise<void>
 }) {
+  const { t } = useLanguage()
   const [tab, setTab] = useState<"problem" | "code">("problem")
   const isMcq = problem.type === "mcq"
+  const diffLabel = (d: string) =>
+    d === "쉬움" ? t("쉬움", "Easy") :
+    d === "보통" ? t("보통", "Medium") :
+    t("어려움", "Hard")
 
   const handleSuccess = async (starred: boolean) => {
     await onMarkSolved(problem.id)
@@ -282,7 +295,7 @@ function ProblemDetail({
             <HelpCircle className="w-4 h-4 text-indigo-400 shrink-0" />
             <h1 className="text-base font-bold text-gray-900 truncate">{problem.title}</h1>
             <span className={cn("text-xs px-2 py-0.5 rounded-full font-medium shrink-0", DIFFICULTY_COLOR[problem.difficulty])}>
-              {problem.difficulty}
+              {diffLabel(problem.difficulty)}
             </span>
           </div>
         </div>
@@ -307,7 +320,7 @@ function ProblemDetail({
         <div className="flex items-center gap-2 min-w-0">
           <h1 className="text-base font-bold text-gray-900 truncate">{problem.title}</h1>
           <span className={cn("text-xs px-2 py-0.5 rounded-full font-medium shrink-0", DIFFICULTY_COLOR[problem.difficulty])}>
-            {problem.difficulty}
+            {diffLabel(problem.difficulty)}
           </span>
         </div>
       </div>
@@ -324,7 +337,7 @@ function ProblemDetail({
           )}
         >
           <FileText className="w-3.5 h-3.5" />
-          문제
+          {t("문제", "Problem")}
         </button>
         <button
           onClick={() => setTab("code")}
@@ -336,7 +349,7 @@ function ProblemDetail({
           )}
         >
           <Code2 className="w-3.5 h-3.5" />
-          코드
+          {t("코드", "Code")}
         </button>
       </div>
 
@@ -471,7 +484,7 @@ export default function PracticePage() {
     <RequireAuth>
       <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
         <Header />
-        <Suspense fallback={<div className="text-gray-400 text-sm p-4">로딩 중...</div>}>
+        <Suspense fallback={<div className="text-gray-400 text-sm p-4">Loading...</div>}>
           <PracticeContent />
         </Suspense>
         <BottomNav />

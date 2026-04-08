@@ -6,19 +6,18 @@ import { McqRunner } from "./mcq-runner"
 import { PracticeRunner } from "./practice-runner"
 import { cn } from "@/lib/utils"
 import type { PracticeProblem, PracticeCluster } from "@/data/practice/types"
+import { useLanguage } from "@/contexts/language-context"
 
 // ── 고정 세트 크기 ────────────────────────────────────────────────
 const SET1_SIZE = 7
 const SET_N_SIZE = 3
 
-// 세트 번호로 문제 범위 반환 (1-based, 고정 슬라이스)
 function getSetProblems(problems: PracticeProblem[], setNum: number): PracticeProblem[] {
   if (setNum === 1) return problems.slice(0, SET1_SIZE)
   const start = SET1_SIZE + (setNum - 2) * SET_N_SIZE
   return problems.slice(start, start + SET_N_SIZE)
 }
 
-// 세트 내 문제 번호 (1-based, 클러스터 전체 기준)
 function problemIndexInCluster(problems: PracticeProblem[], problemId: string): number {
   return problems.findIndex(p => p.id === problemId) + 1
 }
@@ -68,7 +67,7 @@ function RoundResult({
   setNum,
   passed,
   total,
-  wrongNums,       // 클러스터 전체 기준 번호 (1-based)
+  wrongNums,
   teacherAssigned,
   onRetryWrong,
   onDone,
@@ -81,6 +80,7 @@ function RoundResult({
   onRetryWrong: () => void
   onDone: () => void
 }) {
+  const { t } = useLanguage()
   const pct = Math.round((passed / total) * 100)
   const isGood = pct >= 70
 
@@ -89,10 +89,10 @@ function RoundResult({
       <div className="text-6xl">{isGood ? (passed === total ? "🎉" : "👍") : "💪"}</div>
 
       <div>
-        <p className="text-xs text-gray-400 mb-1">세트 {setNum}</p>
+        <p className="text-xs text-gray-400 mb-1">{t("세트", "Set")} {setNum}</p>
         <p className="text-3xl font-bold text-gray-900">{passed} / {total}</p>
         <p className="text-gray-400 text-sm mt-1">
-          {isGood ? "잘 했어요!" : "조금 더 연습이 필요해요"}
+          {isGood ? t("잘 했어요!", "Great job!") : t("조금 더 연습이 필요해요", "Keep practicing!")}
         </p>
       </div>
 
@@ -114,16 +114,17 @@ function RoundResult({
         </div>
       </div>
 
-      {/* 틀린 문제 번호 표시 */}
       {!isGood && wrongNums.length > 0 && (
         <div className="bg-amber-50 border border-amber-200 rounded-2xl px-5 py-3 w-full text-left">
           <p className="text-amber-700 text-xs font-semibold mb-2">
-            {teacherAssigned ? "📩 선생님이 추가로 준비한 연습이에요" : "틀린 문제를 다시 풀어봐요"}
+            {teacherAssigned
+              ? t("📩 선생님이 추가로 준비한 연습이에요", "📩 Extra practice from your teacher")
+              : t("틀린 문제를 다시 풀어봐요", "Review the problems you missed")}
           </p>
           <div className="flex flex-wrap gap-1.5">
             {wrongNums.map(n => (
               <span key={n} className="text-xs font-bold bg-white border border-amber-300 text-amber-700 rounded-lg px-2 py-0.5">
-                {n}번
+                #{n}
               </span>
             ))}
           </div>
@@ -133,7 +134,9 @@ function RoundResult({
       {isGood && (
         <div className="bg-emerald-50 border border-emerald-200 rounded-2xl px-5 py-3 w-full">
           <p className="text-emerald-700 text-sm font-medium">
-            {setNum === 1 ? "🌟 세트 1 완료!" : `세트 ${setNum} 완료! 계속 잘 하고 있어요.`}
+            {setNum === 1
+              ? t("🌟 세트 1 완료!", "🌟 Set 1 complete!")
+              : t(`세트 ${setNum} 완료! 계속 잘 하고 있어요.`, `Set ${setNum} complete! Keep it up.`)}
           </p>
         </div>
       )}
@@ -144,7 +147,7 @@ function RoundResult({
             onClick={onRetryWrong}
             className="w-full py-3.5 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm transition-colors"
           >
-            틀린 {wrongNums.length}문제 다시 풀기 →
+            {t(`틀린 ${wrongNums.length}문제 다시 풀기 →`, `Retry ${wrongNums.length} wrong →`)}
           </button>
         )}
         <button
@@ -156,7 +159,7 @@ function RoundResult({
               : "bg-gray-100 hover:bg-gray-200 text-gray-600"
           )}
         >
-          {isGood ? "완료!" : "오늘은 여기까지"}
+          {isGood ? t("완료!", "Done!") : t("오늘은 여기까지", "That's enough for now")}
         </button>
       </div>
     </div>
@@ -183,6 +186,7 @@ export function PracticeSession({
   solvedSet,
   userId,
 }: PracticeSessionProps) {
+  const { t } = useLanguage()
   const [phase, setPhase] = useState<Phase>("loading")
   const [dbSessions, setDbSessions] = useState<DbSession[]>([])
   const [currentSet, setCurrentSet] = useState(1)
@@ -192,9 +196,8 @@ export function PracticeSession({
   const [canAdvance, setCanAdvance] = useState(false)
   const [teacherAssignedId, setTeacherAssignedId] = useState<string | null>(null)
   const [isSaving, setIsSaving] = useState(false)
-  const [isRetryMode, setIsRetryMode] = useState(false) // 틀린 문제 재시도 중
+  const [isRetryMode, setIsRetryMode] = useState(false)
 
-  // ── 세션 불러오기 ────────────────────────────────────────────────
   const loadSessions = useCallback(async () => {
     if (!userId) {
       setCurrentSet(1)
@@ -214,7 +217,6 @@ export function PracticeSession({
         setTeacherAssignedId(pendingTeacher.id)
         setCurrentSet(pendingTeacher.round)
       } else {
-        // 완료된 세션 중 마지막 세트 번호 + 1
         const lastSet = completed.length > 0 ? Math.max(...completed.map(s => s.round)) : 0
         setCurrentSet(lastSet + 1)
       }
@@ -226,7 +228,6 @@ export function PracticeSession({
 
   useEffect(() => { loadSessions() }, [loadSessions])
 
-  // ── 세션 저장 ─────────────────────────────────────────────────────
   const saveSession = useCallback(async (
     setNum: number,
     problems: PracticeProblem[],
@@ -261,7 +262,6 @@ export function PracticeSession({
     } catch {}
   }, [userId, cluster.id, teacherAssignedId])
 
-  // ── 라운드 시작 ───────────────────────────────────────────────────
   const startSet = useCallback((setNum: number, problems?: PracticeProblem[]) => {
     const p = problems ?? getSetProblems(cluster.problems, setNum)
     setRoundProblems(p)
@@ -271,7 +271,6 @@ export function PracticeSession({
     setPhase("solving")
   }, [cluster.problems])
 
-  // ── 문제 통과 ─────────────────────────────────────────────────────
   const handleSuccess = useCallback(async (starred: boolean) => {
     const p = roundProblems[index]
     if (!p) return
@@ -281,21 +280,18 @@ export function PracticeSession({
     setCanAdvance(true)
   }, [roundProblems, index, onMarkSolved, onMarkStarred])
 
-  // ── 다음 문제 / 세트 종료 ─────────────────────────────────────────
   const handleNext = useCallback(async () => {
     if (index + 1 < roundProblems.length) {
       setIndex(i => i + 1)
       setCanAdvance(false)
       return
     }
-    // 세트 끝: 저장
     setIsSaving(true)
     await saveSession(currentSet, roundProblems, passedInRound)
     setIsSaving(false)
     setPhase("round_complete")
   }, [index, roundProblems, currentSet, passedInRound, saveSession])
 
-  // ── 틀린 문제 재시도 ──────────────────────────────────────────────
   const handleRetryWrong = useCallback(() => {
     const wrongProblems = roundProblems.filter(p => !passedInRound.has(p.id))
     setIsRetryMode(true)
@@ -303,7 +299,6 @@ export function PracticeSession({
     startSet(currentSet, wrongProblems)
   }, [roundProblems, passedInRound, currentSet, startSet])
 
-  // ── 포기 ─────────────────────────────────────────────────────────
   const handleOptOut = useCallback(async () => {
     if (phase === "round_complete") {
       await saveSession(currentSet, roundProblems, passedInRound, true)
@@ -311,7 +306,6 @@ export function PracticeSession({
     onExit()
   }, [phase, currentSet, roundProblems, passedInRound, saveSession, onExit])
 
-  // ── 틀린 문제 번호 계산 (클러스터 전체 1-based) ────────────────────
   const wrongNums = roundProblems
     .filter(p => !passedInRound.has(p.id))
     .map(p => problemIndexInCluster(cluster.problems, p.id))
@@ -319,6 +313,11 @@ export function PracticeSession({
   const current = roundProblems[index]
   const isMcq = current?.type === "mcq"
   const progressPct = roundProblems.length > 0 ? (index / roundProblems.length) * 100 : 0
+
+  const diffLabel = (d: string) =>
+    d === "쉬움" ? t("쉬움", "Easy") :
+    d === "보통" ? t("보통", "Medium") :
+    t("어려움", "Hard")
 
   // ── 로딩 ─────────────────────────────────────────────────────────
   if (phase === "loading") {
@@ -341,18 +340,18 @@ export function PracticeSession({
         <div className="max-w-sm mx-auto px-4 pt-8 flex flex-col items-center gap-6 text-center">
           <div className="text-5xl">🏆</div>
           <div>
-            <h2 className="text-xl font-bold text-gray-900">모든 세트 완료!</h2>
-            <p className="text-gray-400 text-sm mt-1">클러스터의 모든 문제를 풀었어요.</p>
+            <h2 className="text-xl font-bold text-gray-900">{t("모든 세트 완료!", "All sets complete!")}</h2>
+            <p className="text-gray-400 text-sm mt-1">{t("클러스터의 모든 문제를 풀었어요.", "You've completed all problems in this cluster.")}</p>
           </div>
           <div className="flex flex-col gap-3 w-full">
             <button
               onClick={() => { setCurrentSet(1); setPhase("intro") }}
               className="w-full py-3.5 rounded-2xl border-2 border-indigo-200 text-indigo-600 font-bold text-sm hover:bg-indigo-50 transition-colors"
             >
-              🔄 처음부터 다시 하기
+              {t("🔄 처음부터 다시 하기", "🔄 Start over")}
             </button>
             <button onClick={onExit} className="w-full py-3.5 rounded-2xl bg-indigo-500 text-white font-bold text-sm hover:bg-indigo-600 transition-colors">
-              목록으로
+              {t("목록으로", "Back to list")}
             </button>
           </div>
         </div>
@@ -365,35 +364,37 @@ export function PracticeSession({
         <div>
           <h2 className="text-xl font-bold text-gray-900">{cluster.title}</h2>
           {completedSets.length > 0 && (
-            <p className="text-sm text-gray-400 mt-1">세트 {completedSets.map(s => s.round).join(", ")} 완료</p>
+            <p className="text-sm text-gray-400 mt-1">
+              {t("세트", "Set")} {completedSets.map(s => s.round).join(", ")} {t("완료", "done")}
+            </p>
           )}
         </div>
 
         {isTeacherRound && (
           <div className="bg-orange-50 border border-orange-200 rounded-2xl px-5 py-3 w-full">
             <p className="text-orange-700 text-sm font-medium">
-              📩 선생님이 추가 연습을 준비했어요!
+              {t("📩 선생님이 추가 연습을 준비했어요!", "📩 Your teacher has prepared extra practice!")}
             </p>
           </div>
         )}
 
         <div className="bg-indigo-50 border border-indigo-100 rounded-2xl px-5 py-4 w-full text-left space-y-1">
           <p className="text-sm font-bold text-indigo-800">
-            세트 {currentSet} — {setProblems.length}문제
+            {t("세트", "Set")} {currentSet} — {setProblems.length} {t("문제", "problems")}
           </p>
           <p className="text-xs text-indigo-400">
             {currentSet === 1
-              ? `문제 1~${SET1_SIZE}번`
-              : `문제 ${SET1_SIZE + (currentSet - 2) * SET_N_SIZE + 1}~${SET1_SIZE + (currentSet - 1) * SET_N_SIZE}번`}
+              ? `#1 – #${SET1_SIZE}`
+              : `#${SET1_SIZE + (currentSet - 2) * SET_N_SIZE + 1} – #${SET1_SIZE + (currentSet - 1) * SET_N_SIZE}`}
           </p>
         </div>
 
         <div className="flex flex-col gap-3 w-full">
           <button onClick={() => startSet(currentSet)} className="w-full py-4 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm transition-colors">
-            시작하기 →
+            {t("시작하기 →", "Start →")}
           </button>
           <button onClick={onExit} className="w-full py-3 rounded-2xl bg-gray-100 hover:bg-gray-200 text-gray-500 font-medium text-sm transition-colors">
-            나중에 하기
+            {t("나중에 하기", "Later")}
           </button>
         </div>
       </div>
@@ -432,7 +433,7 @@ export function PracticeSession({
             <span className="text-sm font-semibold text-gray-700">
               {cluster.emoji} {cluster.title}
               <span className="ml-1.5 text-xs text-gray-400">
-                세트 {currentSet}{isRetryMode ? " 재시도" : ""}
+                {t("세트", "Set")} {currentSet}{isRetryMode ? ` (${t("재시도", "retry")})` : ""}
               </span>
             </span>
             <span className="text-xs text-gray-400 font-medium tabular-nums">
@@ -451,7 +452,7 @@ export function PracticeSession({
       {/* 문제 번호 + 난이도 */}
       <div className="flex items-center gap-2 mb-3">
         <span className="text-xs font-bold text-gray-400">
-          #{problemIndexInCluster(cluster.problems, current.id)}번
+          #{problemIndexInCluster(cluster.problems, current.id)}
         </span>
         <span className={cn(
           "text-xs px-2 py-0.5 rounded-full font-medium",
@@ -459,7 +460,7 @@ export function PracticeSession({
           current.difficulty === "보통" ? "text-amber-700 bg-amber-100" :
           "text-red-700 bg-red-100"
         )}>
-          {current.difficulty}
+          {diffLabel(current.difficulty)}
         </span>
         <span className="text-sm font-semibold text-gray-800">{current.title}</span>
       </div>
@@ -493,8 +494,8 @@ export function PracticeSession({
             className="w-full py-3.5 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm transition-colors disabled:opacity-50"
           >
             {index + 1 >= roundProblems.length
-              ? (isSaving ? "저장 중..." : "🏁 결과 보기")
-              : "다음 문제 →"}
+              ? (isSaving ? t("저장 중...", "Saving...") : t("🏁 결과 보기", "🏁 See results"))
+              : t("다음 문제 →", "Next →")}
           </button>
         )}
       </div>

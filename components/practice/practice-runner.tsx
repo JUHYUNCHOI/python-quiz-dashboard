@@ -5,6 +5,7 @@ import dynamic from "next/dynamic"
 import { Play, Loader2, RotateCcw, ChevronDown, Check, X, Lightbulb, Eye } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { PracticeProblem } from "@/data/practice/types"
+import { useLanguage } from "@/contexts/language-context"
 
 const SimpleEditor = dynamic(() => import("react-simple-code-editor"), { ssr: false })
 
@@ -91,6 +92,7 @@ interface PracticeRunnerProps {
 }
 
 export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
+  const { t } = useLanguage()
   const lang = problem.language ?? "cpp"
   const storageKey = `practice-code-${problem.id}`
 
@@ -122,7 +124,7 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
       try {
         const body = lang === "python"
           ? { compiler: "cpython-3.12.2", code, stdin: tc.stdin }
-          : { compiler: "gcc-head", code, options: "warning,gnu++17", stdin: tc.stdin, "compiler-option-raw": "-O2 -std=c++17" }
+          : { compiler: "gcc-head", code, stdin: tc.stdin, "compiler-option-raw": "-std=c++17\n-O2" }
         const res = await fetch(WANDBOX_API, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -131,15 +133,15 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
         const data = await res.json()
         if (data.status === "1") {
           compileError = lang === "python"
-            ? (data.program_error || data.compiler_error || "런타임 오류")
-            : (data.compiler_error || "컴파일 오류")
+            ? (data.program_error || data.compiler_error || t("런타임 오류", "Runtime Error"))
+            : (data.compiler_error || t("컴파일 오류", "Compile Error"))
           break
         }
         const actual = (data.program_output || "").trim()
         const expected = tc.expectedOutput.trim()
         newResults.push({ passed: actual === expected, output: actual, expected })
       } catch {
-        compileError = "네트워크 오류. 잠시 후 다시 시도해주세요."
+        compileError = t("네트워크 오류. 잠시 후 다시 시도해주세요.", "Network error. Please try again.")
         break
       }
     }
@@ -156,7 +158,7 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
       }
     }
     setIsLoading(false)
-  }, [code, problem, isLoading, onSuccess, storageKey, hintsShown, showSolution])
+  }, [code, problem, isLoading, onSuccess, storageKey, hintsShown, showSolution, t])
 
   const reset = () => {
     setCode(problem.initialCode ?? "")
@@ -175,7 +177,7 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
         <div className="flex items-center justify-between px-4 py-2 bg-[#181825] border-b border-white/10">
           <span className="text-xs text-white/40 font-mono">{lang === "python" ? "main.py" : "main.cpp"}</span>
           <button onClick={reset} className="flex items-center gap-1 text-xs text-white/40 hover:text-white/70 transition-colors">
-            <RotateCcw className="w-3 h-3" /> 초기화
+            <RotateCcw className="w-3 h-3" /> {t("초기화", "Reset")}
           </button>
         </div>
         <SimpleEditor
@@ -196,7 +198,9 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
           isLoading ? "bg-white/10 text-white/40" : "bg-emerald-500 hover:bg-emerald-400 text-white"
         )}
       >
-        {isLoading ? <><Loader2 className="w-4 h-4 animate-spin" /> 테스트 실행 중...</> : <><Play className="w-4 h-4" /> 테스트 실행</>}
+        {isLoading
+          ? <><Loader2 className="w-4 h-4 animate-spin" /> {t("테스트 실행 중...", "Running...")}</>
+          : <><Play className="w-4 h-4" /> {t("테스트 실행", "Run Tests")}</>}
       </button>
 
       {/* 컴파일 오류 */}
@@ -219,23 +223,23 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
                   ? <Check className="w-4 h-4 text-emerald-400 shrink-0" />
                   : <X className="w-4 h-4 text-red-400 shrink-0" />}
                 <span className={cn("font-medium", r.passed ? "text-emerald-400" : "text-red-400")}>
-                  테스트 {i + 1}{(problem.testCases ?? [])[i]?.label ? ` — ${(problem.testCases ?? [])[i].label}` : ""}
+                  {t("테스트", "Test")} {i + 1}{(problem.testCases ?? [])[i]?.label ? ` — ${(problem.testCases ?? [])[i].label}` : ""}
                 </span>
               </div>
               {!r.passed && (
                 <div className="mt-2 grid grid-cols-2 gap-2 text-xs font-mono">
                   <div>
-                    <span className="text-white/40">입력: </span>
+                    <span className="text-white/40">{t("입력: ", "Input: ")}</span>
                     <span className="text-white/70">{(problem.testCases ?? [])[i]?.stdin}</span>
                   </div>
                   <div />
                   <div>
-                    <span className="text-white/40">예상: </span>
+                    <span className="text-white/40">{t("예상: ", "Expected: ")}</span>
                     <span className="text-emerald-400">{r.expected}</span>
                   </div>
                   <div>
-                    <span className="text-white/40">실제: </span>
-                    <span className="text-red-400">{r.output || "(출력 없음)"}</span>
+                    <span className="text-white/40">{t("실제: ", "Actual: ")}</span>
+                    <span className="text-red-400">{r.output || t("(출력 없음)", "(no output)")}</span>
                   </div>
                 </div>
               )}
@@ -251,13 +255,13 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
             )}>
               {hintsShown === 0 && !showSolution ? (
                 <>
-                  <p className="text-yellow-400 font-bold text-lg">⭐ 힌트 없이 통과!</p>
-                  <p className="text-yellow-300/60 text-xs mt-1">스스로 풀었어요</p>
+                  <p className="text-yellow-400 font-bold text-lg">{t("⭐ 힌트 없이 통과!", "⭐ Solved without hints!")}</p>
+                  <p className="text-yellow-300/60 text-xs mt-1">{t("스스로 풀었어요", "You figured it out!")}</p>
                 </>
               ) : (
                 <>
-                  <p className="text-emerald-400 font-bold">🎉 모든 테스트 통과!</p>
-                  <p className="text-emerald-300/60 text-xs mt-1">힌트 없이 다시 도전하면 ⭐를 획득할 수 있어요</p>
+                  <p className="text-emerald-400 font-bold">{t("🎉 모든 테스트 통과!", "🎉 All tests passed!")}</p>
+                  <p className="text-emerald-300/60 text-xs mt-1">{t("힌트 없이 다시 도전하면 ⭐를 획득할 수 있어요", "Try again without hints to earn ⭐")}</p>
                 </>
               )}
             </div>
@@ -270,7 +274,7 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
         <div className="flex flex-col gap-2">
           {(problem.hints ?? []).slice(0, hintsShown).map((hint, i) => (
             <div key={i} className="rounded-xl bg-yellow-500/10 border border-yellow-500/20 p-3 text-sm text-yellow-200">
-              <span className="font-medium text-yellow-400">💡 힌트 {i + 1}</span>
+              <span className="font-medium text-yellow-400">💡 {t("힌트", "Hint")} {i + 1}</span>
               <p className="mt-1">{hint}</p>
             </div>
           ))}
@@ -280,19 +284,19 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
               className="flex items-center gap-2 text-sm text-gray-400 hover:text-gray-600 transition-colors py-1"
             >
               <Lightbulb className="w-4 h-4" />
-              힌트 {hintsShown + 1} 보기
+              {t(`힌트 ${hintsShown + 1} 보기`, `Show hint ${hintsShown + 1}`)}
             </button>
           )}
         </div>
       )}
 
-      {/* 정답 코드 보기 */}
+      {/* 정답 코드 */}
       <button
         onClick={() => setShowSolution(s => !s)}
         className="flex items-center gap-2 text-sm text-gray-400 hover:text-gray-600 transition-colors py-1"
       >
         <Eye className="w-4 h-4" />
-        {showSolution ? "정답 숨기기" : "정답 보기"}
+        {showSolution ? t("정답 숨기기", "Hide solution") : t("정답 보기", "Show solution")}
         <ChevronDown className={cn("w-4 h-4 transition-transform", showSolution && "rotate-180")} />
       </button>
       {showSolution && (
