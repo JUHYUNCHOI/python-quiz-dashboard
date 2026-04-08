@@ -6,6 +6,10 @@ export const pyStringsCluster: PracticeCluster = {
   emoji: "🔤",
   description: "split/join, 슬라이싱, 문자열 메서드, 파싱",
   unlockAfter: "18",
+  en: {
+    title: "String Manipulation",
+    description: "split/join, slicing, string methods, parsing",
+  },
   problems: [
     {
       id: "pystr-001",
@@ -34,6 +38,16 @@ export const pyStringsCluster: PracticeCluster = {
       solutionCode: `sentence = input()
 print(' '.join(word[::-1] for word in sentence.split()))`,
       solutionExplanation: "split()으로 단어 분리, [::-1]로 각 단어 역순, join()으로 재조합합니다.",
+      en: {
+        title: "Reverse Each Word",
+        description: `Given a sentence on one line, reverse each word individually and print them separated by spaces. The word order stays the same.`,
+        constraints: "1 ≤ number of words ≤ 100, 1 ≤ word length ≤ 100",
+        hints: [
+          "Use split() to separate words, then apply [::-1] slicing to each word.",
+          "' '.join(word[::-1] for word in sentence.split())",
+        ],
+        solutionExplanation: "split() separates words, [::-1] reverses each one, and join() reassembles them.",
+      },
       language: "python",
     },
     {
@@ -62,6 +76,16 @@ print(' '.join(word[::-1] for word in sentence.split()))`,
       solutionCode: `s = input()
 print(sum(1 for c in s.lower() if c in 'aeiou'))`,
       solutionExplanation: "lower()로 대소문자를 통일하고, 'aeiou' 문자열 멤버십 검사로 모음을 셉니다.",
+      en: {
+        title: "Count Vowels",
+        description: `Given a string on one line, count the number of English vowels (a, e, i, o, u), case-insensitive.`,
+        constraints: "1 ≤ string length ≤ 1000",
+        hints: [
+          "Convert to lowercase with s.lower(), then check each character against 'aeiou'.",
+          "sum(1 for c in s.lower() if c in 'aeiou')",
+        ],
+        solutionExplanation: "lower() normalizes case, then membership testing against 'aeiou' counts the vowels.",
+      },
       language: "python",
     },
     {
@@ -90,6 +114,16 @@ print(sum(1 for c in s.lower() if c in 'aeiou'))`,
       solutionCode: `word = input()
 print("Yes" if word == word[::-1] else "No")`,
       solutionExplanation: "슬라이싱 [::-1]로 역순 문자열을 만들어 원본과 비교합니다.",
+      en: {
+        title: "Palindrome Check",
+        description: `Given a word made up of lowercase English letters, print "Yes" if it reads the same forwards and backwards, otherwise print "No".`,
+        constraints: "1 ≤ word length ≤ 1000",
+        hints: [
+          "Compare word == word[::-1] to check for a palindrome.",
+          "Or use a two-pointer approach comparing characters from both ends one by one.",
+        ],
+        solutionExplanation: "Slicing [::-1] creates the reversed string; comparing it to the original determines whether it's a palindrome.",
+      },
       language: "python",
     },
     {
@@ -131,6 +165,18 @@ for w in sorted(freq.keys()):
         best = w
 print(best)`,
       solutionExplanation: "알파벳 순으로 정렬된 키를 순회하며 빈도가 더 높은 경우에만 갱신하면, 동수일 때 알파벳 앞선 단어가 유지됩니다.",
+      en: {
+        title: "Most Frequent Word",
+        description: `Given a sentence on one line, print the most frequently occurring word. If there is a tie, print the word that comes first alphabetically.
+All words are lowercase.`,
+        constraints: "1 ≤ number of words ≤ 1000",
+        hints: [
+          "Use a dictionary to count the frequency of each word.",
+          "After building the frequency dict, iterate over sorted keys and update the best word only when the frequency is strictly higher — ties preserve the alphabetically earlier word.",
+          "Create the freq dict, then use sorted(freq.keys()) and find the max-frequency entry.",
+        ],
+        solutionExplanation: "Iterating over alphabetically sorted keys and only updating when frequency is strictly higher ensures that ties keep the alphabetically earlier word.",
+      },
       language: "python",
     },
     {
@@ -162,6 +208,16 @@ parts = s.split('_')
 result = parts[0] + ''.join(p.capitalize() for p in parts[1:])
 print(result)`,
       solutionExplanation: "첫 단어는 그대로 두고, 나머지 단어들은 capitalize()로 첫 글자를 대문자로 만든 후 이어붙입니다.",
+      en: {
+        title: "snake_case to camelCase",
+        description: `Given a snake_case identifier on one line, convert it to camelCase and print the result. The first word starts with a lowercase letter.`,
+        constraints: "1 ≤ number of words ≤ 20, words separated by underscores (_)",
+        hints: [
+          "Use split('_') to split by underscore, leave the first part as-is, and capitalize() all remaining parts.",
+          "parts = s.split('_'); result = parts[0] + ''.join(p.capitalize() for p in parts[1:])",
+        ],
+        solutionExplanation: "Keep the first word unchanged and capitalize the first letter of each subsequent word using capitalize(), then concatenate.",
+      },
       language: "python",
     },
     {
@@ -204,6 +260,16 @@ while i < len(s):
     i += cnt
 print(''.join(result))`,
       solutionExplanation: "연속 구간을 세는 두 포인터 패턴입니다. 내부 while로 같은 문자가 얼마나 이어지는지 확인합니다.",
+      en: {
+        title: "String Compression (RLE)",
+        description: `Given a string of English letters on one line, compress consecutive identical characters using the format "character+count". If the count is 1, omit the number.`,
+        constraints: "1 ≤ string length ≤ 1000, lowercase English letters only",
+        hints: [
+          "Compare the current character to the previous one and count consecutive runs.",
+          "When the character changes or the end is reached, append to the result. If count is 1, append just the character; otherwise append character+count.",
+        ],
+        solutionExplanation: "A two-pointer pattern counts consecutive runs. The inner while checks how far the same character extends.",
+      },
       language: "python",
     },
     {
@@ -235,6 +301,16 @@ b = input()
 b = input()
 print("Yes" if sorted(a) == sorted(b) else "No")`,
       solutionExplanation: "문자를 정렬하면 아나그램끼리는 동일한 결과가 나옵니다. O(N log N)으로 간단합니다.",
+      en: {
+        title: "Anagram Check",
+        description: `Given two lowercase words on separate lines, print "Yes" if they are anagrams (made of the same characters), otherwise print "No".`,
+        constraints: "1 ≤ word length ≤ 1000",
+        hints: [
+          "Sorting both words and comparing gives the same result for anagrams.",
+          "sorted(a) == sorted(b) is a simple one-liner check.",
+        ],
+        solutionExplanation: "Sorting both strings yields identical results for anagrams. Simple and runs in O(N log N).",
+      },
       language: "python",
     },
     {
@@ -266,6 +342,16 @@ s = input()
 numbers = re.findall(r'\\d+', s)
 print(sum(int(x) for x in numbers))`,
       solutionExplanation: "정규식 \\d+로 연속된 숫자 그룹을 모두 찾아 정수로 변환 후 합산합니다.",
+      en: {
+        title: "Extract and Sum Numbers",
+        description: `Given a string of mixed letters, spaces, and digits on one line, extract all integers (groups of consecutive digits) and print their sum.`,
+        constraints: "1 ≤ string length ≤ 1000, no negative numbers",
+        hints: [
+          "Use re.findall or implement manually: parse consecutive digit characters as one number.",
+          "import re; sum(int(x) for x in re.findall(r'\\d+', s))",
+        ],
+        solutionExplanation: "The regex \\d+ finds all consecutive digit groups, which are converted to integers and summed.",
+      },
       language: "python",
     },
     {
@@ -308,6 +394,16 @@ if stack:
     valid = False
 print("Valid" if valid else "Invalid")`,
       solutionExplanation: "스택으로 괄호 유효성 검사: 열린 괄호를 push하고, 닫힌 괄호마다 스택 top이 쌍인지 확인합니다.",
+      en: {
+        title: "Bracket Validity Check",
+        description: `Given a string consisting only of brackets — '(', ')', '[', ']', '{', '}' — print "Valid" if all brackets are properly matched and nested, otherwise print "Invalid".`,
+        constraints: "1 ≤ string length ≤ 10000",
+        hints: [
+          "Use a stack (list): push opening brackets, and for closing brackets check that the top of the stack matches.",
+          "matching = {')': '(', ']': '[', '}': '{'}; if the stack is empty or the top doesn't match, it's Invalid.",
+        ],
+        solutionExplanation: "Stack-based bracket validation: push opening brackets and for each closing bracket verify the stack top is the matching pair.",
+      },
       language: "python",
     },
     {
@@ -358,6 +454,17 @@ for k in range(1, n // 2 + 1):
     best = min(best, compress(s, k))
 print(best)`,
       solutionExplanation: "단위 크기 k마다 압축 함수를 실행해 최소 길이를 구합니다. 카카오 코딩 테스트 유형입니다.",
+      en: {
+        title: "String Compression (Unit Size)",
+        description: `Given a lowercase string on one line, try all unit sizes from 1 to half the string length. Compress consecutive repeated units as "count+unit" (if a unit appears only once, keep it as-is). Print the length of the shortest compressed result.
+Example: "ababab" with unit size 2 → "3ab" (length 3), shorter than the original length 6.`,
+        constraints: "1 ≤ string length ≤ 1000",
+        hints: [
+          "For each unit size k, slice s into k-character chunks and count consecutive repetitions.",
+          "Compare the compressed length to the original and keep the minimum.",
+        ],
+        solutionExplanation: "Run a compression function for each unit size k and track the minimum length. This is a classic Kakao coding test problem type.",
+      },
       language: "python",
     },
     {
@@ -396,6 +503,18 @@ for i in range(len(s)):
         result += roman[s[i]]
 print(result)`,
       solutionExplanation: "왼쪽에서 순회하며 다음 문자가 더 크면 현재 문자를 뺍니다. 나머지는 더합니다.",
+      en: {
+        title: "Roman Numerals to Integer",
+        description: `Given a Roman numeral string on one line, print the corresponding integer.
+I=1, V=5, X=10, L=50, C=100, D=500, M=1000
+If a smaller value appears before a larger one, subtract it (e.g. IV=4, IX=9, XL=40, XC=90, CD=400, CM=900).`,
+        constraints: "1 ≤ input value ≤ 3999",
+        hints: [
+          "Read right to left: if the current value is less than the previous one, subtract it; otherwise add it.",
+          "Or read left to right: if the next character has a greater value, subtract the current character.",
+        ],
+        solutionExplanation: "Traverse left to right: if the next character's value is greater, subtract the current character. Otherwise add it.",
+      },
       language: "python",
     },
     {
@@ -429,6 +548,16 @@ for _ in range(n):
     total += int(row[k])
 print(total)`,
       solutionExplanation: "split(',')으로 CSV를 파싱하고 k번째 인덱스를 정수로 변환해 합산합니다.",
+      en: {
+        title: "CSV Parsing",
+        description: `The first line gives two integers N and K (0-based column index). The following N lines are CSV data (each line has numbers separated by commas). Print the sum of the K-th column.`,
+        constraints: "1 ≤ N ≤ 1000, 0 ≤ K < number of columns",
+        hints: [
+          "Use split(',') on each line to parse the CSV columns.",
+          "total = sum(int(input().split(',')[k]) for _ in range(n))",
+        ],
+        solutionExplanation: "split(',') parses each CSV row, then index k is converted to an integer and summed.",
+      },
       language: "python",
     },
   ],

@@ -6,6 +6,10 @@ export const pyDictsCluster: PracticeCluster = {
   emoji: "🗂️",
   description: "dict, set, 빈도수, 그루핑, 집합 연산",
   unlockAfter: "21",
+  en: {
+    title: "Dictionary / Set Operations",
+    description: "dict, set, frequency counting, grouping, set operations",
+  },
   problems: [
     {
       id: "pydict-001",
@@ -40,6 +44,18 @@ for w in words:
 for word in sorted(freq):
     print(f"{word}: {freq[word]}")`,
       solutionExplanation: "딕셔너리로 빈도를 집계하고 sorted()로 키를 알파벳 순 정렬해 출력합니다.",
+      en: {
+        title: "Word Frequency Dictionary",
+        description: `Given an integer N on the first line, followed by N words one per line,
+count the occurrences of each word and print them in the format "word: count".
+Output in alphabetical order.`,
+        constraints: "1 ≤ N ≤ 1000, all words are lowercase English letters",
+        hints: [
+          "Use freq.get(key, 0) + 1 to update the frequency of each word.",
+          "for word in sorted(freq): print(f'{word}: {freq[word]}')",
+        ],
+        solutionExplanation: "Tally frequencies in a dictionary, then use sorted() to iterate keys in alphabetical order.",
+      },
       language: "python",
     },
     {
@@ -70,6 +86,17 @@ nums = list(map(int, input().split()))
 nums = list(map(int, input().split()))
 print("Yes" if len(nums) != len(set(nums)) else "No")`,
       solutionExplanation: "set은 중복을 허용하지 않으므로, 원본과 set 변환 후 크기 비교로 중복을 확인합니다.",
+      en: {
+        title: "Duplicate Check",
+        description: `Given an integer N on the first line and N integers separated by spaces on the second line,
+print "Yes" if there is any duplicate number, or "No" if all numbers are distinct.`,
+        constraints: "1 ≤ N ≤ 100000, -10^9 ≤ each number ≤ 10^9",
+        hints: [
+          "Converting to a set removes duplicates. Compare the original length with the set length.",
+          "len(nums) != len(set(nums)) means there is a duplicate.",
+        ],
+        solutionExplanation: "Since sets do not allow duplicates, comparing the size of the original list and the converted set reveals whether duplicates exist.",
+      },
       language: "python",
     },
     {
@@ -105,6 +132,17 @@ m = int(input())
 b = set(map(int, input().split()))
 print(len(a | b), len(a & b))`,
       solutionExplanation: "파이썬 set의 | (합집합), & (교집합) 연산자로 간결하게 처리합니다.",
+      en: {
+        title: "Two Set Operations",
+        description: `Given set A (N integers) and set B (M integers),
+print the size of the union and the size of the intersection separated by a space on one line.`,
+        constraints: "1 ≤ N, M ≤ 1000",
+        hints: [
+          "The | operator is union, the & operator is intersection.",
+          "print(len(a | b), len(a & b))",
+        ],
+        solutionExplanation: "Python's set | (union) and & (intersection) operators handle this concisely.",
+      },
       language: "python",
     },
     {
@@ -140,6 +178,17 @@ for x in nums:
 best = sorted(freq.items(), key=lambda x: (-x[1], x[0]))[0][0]
 print(best)`,
       solutionExplanation: "정렬 키를 (-빈도, 값)으로 설정하면 빈도가 높을수록, 동수면 값이 작을수록 앞에 옵니다.",
+      en: {
+        title: "Mode (Most Frequent Value)",
+        description: `Given N integers, find the most frequently occurring number (mode).
+If multiple numbers share the highest frequency, output the smallest one.`,
+        constraints: "1 ≤ N ≤ 1000, 0 ≤ each number ≤ 10000",
+        hints: [
+          "Build a frequency dictionary, then sort by frequency descending and value ascending.",
+          "sorted(freq.items(), key=lambda x: (-x[1], x[0]))[0][0]",
+        ],
+        solutionExplanation: "Using sort key (-frequency, value) places the highest frequency first, and breaks ties by choosing the smallest value.",
+      },
       language: "python",
     },
     {
@@ -181,6 +230,17 @@ for _ in range(m):
     name = input()
     print(phonebook.get(name, "없음"))`,
       solutionExplanation: "딕셔너리 get(key, default)은 키가 없을 때 기본값을 반환하므로 없음 처리가 한 줄로 가능합니다.",
+      en: {
+        title: "Phone Book",
+        description: `Given N contact entries in the format "name number", then M search queries,
+print the phone number for each name, or "없음" if not found.`,
+        constraints: "1 ≤ N, M ≤ 10000, names are lowercase English letters",
+        hints: [
+          "Store entries as phonebook[name] = number.",
+          "Use phonebook.get(name, '없음') to return the default value when the key is missing.",
+        ],
+        solutionExplanation: "dict.get(key, default) returns the default value when the key is absent, allowing the lookup and the missing-case handling in a single line.",
+      },
       language: "python",
     },
     {
@@ -222,6 +282,18 @@ for key in sorted(groups):
     avg = sum(groups[key]) / len(groups[key])
     print(f"{key}: {avg:.2f}")`,
       solutionExplanation: "첫 글자를 키로 점수 리스트를 모은 후, 각 그룹 평균을 계산합니다.",
+      en: {
+        title: "Average Score by Group",
+        description: `Given N entries in the format "name score", group them by the first letter of the name
+and print the average score of each group.
+Output in alphabetical order by first letter, formatted as "letter: average (2 decimal places)".`,
+        constraints: "1 ≤ N ≤ 1000, 0 ≤ score ≤ 100, names are lowercase English letters",
+        hints: [
+          "Use a dictionary with the first letter as the key and a list of scores as the value.",
+          "for key in sorted(groups): avg = sum(groups[key]) / len(groups[key]); print(f'{key}: {avg:.2f}')",
+        ],
+        solutionExplanation: "Collect score lists keyed by first letter, then compute the average for each group.",
+      },
       language: "python",
     },
     {
@@ -261,6 +333,17 @@ for w in words:
 for key in sorted(groups):
     print(' '.join(groups[key]))`,
       solutionExplanation: "정렬된 문자열을 키로 사용하면 아나그램끼리 동일한 키를 가집니다.",
+      en: {
+        title: "Anagram Grouping",
+        description: `Given N words, group anagrams together and print each group on one line, words separated by spaces.
+Within each group, preserve the input order. Sort groups by their sorted-character key in alphabetical order.`,
+        constraints: "1 ≤ N ≤ 1000, all words are lowercase English letters",
+        hints: [
+          "Use ''.join(sorted(word)) as the key to group anagrams.",
+          "Append words to their group in a dictionary, then iterate over sorted(groups) to print.",
+        ],
+        solutionExplanation: "Sorting the characters of each word produces the same key for all anagrams, making it easy to group them in a dictionary.",
+      },
       language: "python",
     },
     {
@@ -296,6 +379,17 @@ ranked = sorted(freq.items(), key=lambda x: (-x[1], x[0]))
 for word, _ in ranked[:k]:
     print(word)`,
       solutionExplanation: "정렬 키 (-빈도, 단어)로 빈도 내림차순, 동수면 알파벳 오름차순을 동시에 처리합니다.",
+      en: {
+        title: "Top K Frequent Words",
+        description: `Given N words and an integer K, print the K most frequent words, one per line.
+If words share the same frequency, output them in alphabetical order.`,
+        constraints: "1 ≤ K ≤ N ≤ 10000",
+        hints: [
+          "Build a frequency dictionary, then sort with sorted(freq.items(), key=lambda x: (-x[1], x[0])).",
+          "Slice the sorted result with [:k] to get the top K words.",
+        ],
+        solutionExplanation: "Sort key (-frequency, word) handles frequency descending and alphabetical tie-breaking simultaneously.",
+      },
       language: "python",
     },
     {
@@ -335,6 +429,18 @@ if result:
 else:
     print()`,
       solutionExplanation: "집합 차집합 연산 set(a) - set(b)로 A에만 있는 원소를 O(N+M)에 구합니다.",
+      en: {
+        title: "Set Difference of Two Arrays",
+        description: `Given array A (N integers) and array B (M integers),
+print the elements that are in A but not in B, deduplicated and in ascending order.
+If there are no such elements, print an empty line.`,
+        constraints: "1 ≤ N, M ≤ 100000",
+        hints: [
+          "Build set(b) and filter out elements of a that are in b_set.",
+          "result = sorted(set(a) - set(b))",
+        ],
+        solutionExplanation: "The set difference set(a) - set(b) finds elements only in A in O(N+M) time.",
+      },
       language: "python",
     },
     {
@@ -368,6 +474,16 @@ for _ in range(n):
     input()
 print(2 ** n)`,
       solutionExplanation: "N개의 서로 다른 원소의 멱집합 크기는 항상 2^N입니다. 각 원소를 포함하거나 제외하는 2가지 선택이 독립적으로 적용됩니다.",
+      en: {
+        title: "Power Set Size",
+        description: `Given N distinct elements, print the number of subsets in their power set (the set of all subsets).`,
+        constraints: "0 ≤ N ≤ 30",
+        hints: [
+          "The number of subsets of N distinct elements is 2^N.",
+          "Each element has 2 independent choices — include or exclude — so multiply 2 by itself N times.",
+        ],
+        solutionExplanation: "The power set of N distinct elements always has 2^N subsets, since each element independently has two choices: included or not.",
+      },
       language: "python",
     },
     {
@@ -406,6 +522,17 @@ for x in nums:
     seen[x] = seen.get(x, 0) + 1
 print(count)`,
       solutionExplanation: "각 원소를 볼 때 이전에 등장한 숫자 중 t-x가 몇 번 있었는지를 딕셔너리로 O(1)에 조회합니다.",
+      en: {
+        title: "Two Sum — Count Pairs",
+        description: `Given N integers and a target T, count the number of index pairs (i, j) where i < j and nums[i] + nums[j] == T.
+Note: index-based, so the same value appearing at different indices counts as different pairs.`,
+        constraints: "1 ≤ N ≤ 100000, -10^9 ≤ T, each number ≤ 10^9",
+        hints: [
+          "Use a 'seen' dictionary to track how many times each number has appeared so far.",
+          "count += seen.get(t - nums[i], 0), then update seen[nums[i]] += 1",
+        ],
+        solutionExplanation: "For each element, look up in the dictionary how many previous elements equal t - x. This gives an O(1) lookup per element.",
+      },
       language: "python",
     },
     {
@@ -457,6 +584,19 @@ for i in range(k, n):
         del freq[old]
     print(get_mode(freq))`,
       solutionExplanation: "딕셔너리를 유지하며 윈도우를 슬라이딩합니다. 매 이동마다 하나씩 추가·제거하고 최빈값을 정렬로 구합니다.",
+      en: {
+        title: "Sliding Window Mode",
+        description: `Given N integers and window size K, slide a window of size K from left to right
+and print the most frequent number in each window, one per line.
+Print N-K+1 values total. Break ties by choosing the smaller number.`,
+        constraints: "1 ≤ K ≤ N ≤ 10000",
+        hints: [
+          "Initialize the freq dictionary with the first K elements.",
+          "When the window slides, decrease the frequency of the outgoing element (delete if 0) and increase the frequency of the incoming element.",
+          "Use sorted(freq.items(), key=lambda x: (-x[1], x[0]))[0][0] to find the mode.",
+        ],
+        solutionExplanation: "Maintain a frequency dictionary as the window slides — add one element and remove one per step, then find the mode by sorting.",
+      },
       language: "python",
     },
   ],

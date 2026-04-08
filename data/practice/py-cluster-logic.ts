@@ -6,6 +6,10 @@ export const pyLogicCluster: PracticeCluster = {
   emoji: "🧠",
   description: "and, or, not, 연산자 우선순위 — True/False 맞추기",
   unlockAfter: "12",
+  en: {
+    title: "Logical Operations",
+    description: "and, or, not, operator precedence — predict True/False outcomes",
+  },
   problems: [
     {
       id: "pylogic-001",
@@ -21,6 +25,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 1,
       explanation: "4%2=0 → True, 5%2=1 → 1==0은 False. True and False = False",
+      en: {
+        title: "and — One is False",
+        description: "What is the result of the following expression?",
+        explanation: "4%2=0 → True, 5%2=1 → 1==0 is False. True and False = False",
+      },
     },
     {
       id: "pylogic-002",
@@ -36,6 +45,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 0,
       explanation: "9<2 → False, 9>2 → True. False or True = True",
+      en: {
+        title: "or — One is True",
+        description: "What is the result of the following expression?",
+        explanation: "9<2 → False, 9>2 → True. False or True = True",
+      },
     },
     {
       id: "pylogic-003",
@@ -51,6 +65,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 1,
       explanation: "5%2=1 → 1==0은 False, 6%2=0 → True. False and True = False",
+      en: {
+        title: "and — Both False",
+        description: "What is the result of the following expression?",
+        explanation: "5%2=1 → 1==0 is False, 6%2=0 → True. False and True = False",
+      },
     },
     {
       id: "pylogic-004",
@@ -66,6 +85,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 0,
       explanation: "5%2=1 → False, 6%2=0 → True. False or True = True",
+      en: {
+        title: "or — Even Check",
+        description: "What is the result of the following expression?",
+        explanation: "5%2=1 → False, 6%2=0 → True. False or True = True",
+      },
     },
     {
       id: "pylogic-005",
@@ -81,6 +105,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 0,
       explanation: "5>2 → True, 5<8 → True. True and True = True",
+      en: {
+        title: "and — Both True",
+        description: "What is the result of the following expression?",
+        explanation: "5>2 → True, 5<8 → True. True and True = True",
+      },
     },
     {
       id: "pylogic-006",
@@ -96,6 +125,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 1,
       explanation: "not은 논리값을 반전합니다. not True = False",
+      en: {
+        title: "not True",
+        description: "What is the result of the following expression?",
+        explanation: "not inverts a boolean value. not True = False",
+      },
     },
     {
       id: "pylogic-007",
@@ -111,6 +145,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 1,
       explanation: "10%2=0 → 0==0 → True. not True = False",
+      en: {
+        title: "not even",
+        description: "What is the result of the following expression?",
+        explanation: "10%2=0 → 0==0 → True. not True = False",
+      },
     },
     {
       id: "pylogic-008",
@@ -126,6 +165,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 0,
       explanation: "6>4 → True, 3<9 → True. True and True = True",
+      en: {
+        title: "and comparison",
+        description: "What is the result of the following expression?",
+        explanation: "6>4 → True, 3<9 → True. True and True = True",
+      },
     },
     {
       id: "pylogic-009",
@@ -141,6 +185,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 0,
       explanation: "8!=6 → True, 2<=1 → False. True or False = True",
+      en: {
+        title: "or != <=",
+        description: "What is the result of the following expression?",
+        explanation: "8!=6 → True, 2<=1 → False. True or False = True",
+      },
     },
     {
       id: "pylogic-010",
@@ -156,6 +205,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 0,
       explanation: "4%2=0 → True, 6%3=0 → True. True and True = True",
+      en: {
+        title: "and two evens",
+        description: "What is the result of the following expression?",
+        explanation: "4%2=0 → True, 6%3=0 → True. True and True = True",
+      },
     },
     {
       id: "pylogic-011",
@@ -171,6 +225,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 0,
       explanation: "not True = False, not False = True. 두 번 not하면 원래값으로 돌아옵니다.",
+      en: {
+        title: "not not",
+        description: "What is the result of the following expression?",
+        explanation: "not True = False, not False = True. Applying not twice returns the original value.",
+      },
     },
     {
       id: "pylogic-012",
@@ -186,6 +245,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 1,
       explanation: "8%2=0 → True. not True = False",
+      en: {
+        title: "not odd",
+        description: "What is the result of the following expression?",
+        explanation: "8%2=0 → True. not True = False",
+      },
     },
     {
       id: "pylogic-013",
@@ -201,6 +265,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 0,
       explanation: "and가 or보다 먼저 계산됩니다. (2*3>10 and 5>9) or 10>4 = (False and False) or True = False or True = True",
+      en: {
+        title: "Precedence — and > or",
+        description: "What is the result of the following expression? (Watch the order of operations!)",
+        explanation: "and is evaluated before or. (2*3>10 and 5>9) or 10>4 = (False and False) or True = False or True = True",
+      },
     },
     {
       id: "pylogic-014",
@@ -216,6 +285,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 0,
       explanation: "and가 먼저: (5>9 and 10>4) = False. 그 다음 or: 2*3<10(True) or False = True",
+      en: {
+        title: "Precedence — or first?",
+        description: "What is the result of the following expression?",
+        explanation: "and first: (5>9 and 10>4) = False. Then or: 2*3<10(True) or False = True",
+      },
     },
     {
       id: "pylogic-015",
@@ -231,6 +305,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 0,
       explanation: "괄호 먼저: (5>9 or 10>4) = False or True = True. 그 다음 and: 6<10(True) and True = True",
+      en: {
+        title: "Parentheses change precedence",
+        description: "What is the result of the following expression?",
+        explanation: "Parentheses first: (5>9 or 10>4) = False or True = True. Then and: 6<10(True) and True = True",
+      },
     },
     {
       id: "pylogic-016",
@@ -246,6 +325,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 0,
       explanation: "and 먼저: (3*2==6 and 5>2) = (True and True) = True. True or True(10!=5) = True",
+      en: {
+        title: "Mixed and + or",
+        description: "What is the result of the following expression?",
+        explanation: "and first: (3*2==6 and 5>2) = (True and True) = True. True or True(10!=5) = True",
+      },
     },
     {
       id: "pylogic-017",
@@ -261,6 +345,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 0,
       explanation: "and 먼저: (3>=2 and 4!=4) = (True and False) = False. 7==7(True) or False = True",
+      en: {
+        title: "Mixed or + and",
+        description: "What is the result of the following expression?",
+        explanation: "and first: (3>=2 and 4!=4) = (True and False) = False. 7==7(True) or False = True",
+      },
     },
     {
       id: "pylogic-018",
@@ -276,6 +365,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 0,
       explanation: "11%2=1 → 1==0은 False. not False = True (11은 홀수)",
+      en: {
+        title: "and + not",
+        description: "What is the result of the following expression?",
+        explanation: "11%2=1 → 1==0 is False. not False = True (11 is odd)",
+      },
     },
     {
       id: "pylogic-019",
@@ -291,6 +385,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 1,
       explanation: "왼쪽: (6==6 or 4!=3) = (True or True) = True\nnot 부분: not(4>2 and 5==5) = not(True and True) = not True = False\nTrue and False = False",
+      en: {
+        title: "Complex not 1",
+        description: "What is the result of the following expression?",
+        explanation: "Left: (6==6 or 4!=3) = (True or True) = True\nnot part: not(4>2 and 5==5) = not(True and True) = not True = False\nTrue and False = False",
+      },
     },
     {
       id: "pylogic-020",
@@ -306,6 +405,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 0,
       explanation: "not(7>=8 and 3<2) = not(False and False) = not False = True\n(not 1==1 and 4>6) = (False and False) = False\nTrue or False = True",
+      en: {
+        title: "Complex not 2",
+        description: "What is the result of the following expression?",
+        explanation: "not(7>=8 and 3<2) = not(False and False) = not False = True\n(not 1==1 and 4>6) = (False and False) = False\nTrue or False = True",
+      },
     },
     {
       id: "pylogic-021",
@@ -321,6 +425,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 0,
       explanation: "(not True and False) = (False and False) = False\n(7>2 and 6==6) = (True and True) = True\nFalse or True = True",
+      en: {
+        title: "Complex not 3",
+        description: "What is the result of the following expression?",
+        explanation: "(not True and False) = (False and False) = False\n(7>2 and 6==6) = (True and True) = True\nFalse or True = True",
+      },
     },
     {
       id: "pylogic-022",
@@ -336,6 +445,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 1,
       explanation: "(2>3 and 5<=5) = (False and True) = False\n(not True and False) = (False and False) = False\nFalse or False = False",
+      en: {
+        title: "Complex not 4",
+        description: "What is the result of the following expression?",
+        explanation: "(2>3 and 5<=5) = (False and True) = False\n(not True and False) = (False and False) = False\nFalse or False = False",
+      },
     },
     {
       id: "pylogic-023",
@@ -351,6 +465,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 0,
       explanation: "안쪽: (6<8 or 2==2) = True. 4>=5 → False. (False and True) = False. not False = True",
+      en: {
+        title: "Complex not 5",
+        description: "What is the result of the following expression?",
+        explanation: "Inner: (6<8 or 2==2) = True. 4>=5 → False. (False and True) = False. not False = True",
+      },
     },
     {
       id: "pylogic-024",
@@ -366,6 +485,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 0,
       explanation: "(1<3 and 4>=4) = (True and True) = True. or 이후는 단락 평가로 생략. True",
+      en: {
+        title: "Complex not 6",
+        description: "What is the result of the following expression?",
+        explanation: "(1<3 and 4>=4) = (True and True) = True. The rest after or is skipped due to short-circuit evaluation. True",
+      },
     },
     {
       id: "pylogic-025",
@@ -381,6 +505,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 1,
       explanation: "왼쪽: (not False or (True and True)) = (True or True) = True\nnot 8!=8 = not True = False\n오른쪽: (6>5 and False) = False\nTrue and False = False",
+      en: {
+        title: "Complex not 7",
+        description: "What is the result of the following expression?",
+        explanation: "Left: (not False or (True and True)) = (True or True) = True\nnot 8!=8 = not True = False\nRight: (6>5 and False) = False\nTrue and False = False",
+      },
     },
     {
       id: "pylogic-026",
@@ -396,6 +525,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 0,
       explanation: "not(5<2 and 9==9) = not(False and True) = not False = True\nTrue or ... = True (단락 평가)",
+      en: {
+        title: "Complex not 8",
+        description: "What is the result of the following expression?",
+        explanation: "not(5<2 and 9==9) = not(False and True) = not False = True\nTrue or ... = True (short-circuit evaluation)",
+      },
     },
     {
       id: "pylogic-027",
@@ -411,6 +545,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 0,
       explanation: "(10>7 and 5<9) = (True and True) = True. True or ... = True (단락 평가)",
+      en: {
+        title: "Complex not 9",
+        description: "What is the result of the following expression?",
+        explanation: "(10>7 and 5<9) = (True and True) = True. True or ... = True (short-circuit evaluation)",
+      },
     },
     {
       id: "pylogic-028",
@@ -426,6 +565,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 1,
       explanation: "왼쪽: 7<=9 → True, 전체 or → True\n오른쪽: 5!=5 → False. (False and True) = False\nTrue and False = False",
+      en: {
+        title: "Complex not 10",
+        description: "What is the result of the following expression?",
+        explanation: "Left: 7<=9 → True, whole or → True\nRight: 5!=5 → False. (False and True) = False\nTrue and False = False",
+      },
     },
     {
       id: "pylogic-029",
@@ -441,6 +585,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 0,
       explanation: "Python은 연쇄 비교를 지원합니다. 1<5<10 은 (1<5) and (5<10) = True and True = True",
+      en: {
+        title: "Chained comparison",
+        description: "What is the result of the following expression? (Python chained comparison!)",
+        explanation: "Python supports chained comparisons. 1<5<10 is equivalent to (1<5) and (5<10) = True and True = True",
+      },
     },
     {
       id: "pylogic-030",
@@ -456,6 +605,11 @@ export const pyLogicCluster: PracticeCluster = {
       options: ["True", "False"],
       correctOption: 1,
       explanation: "10>5>8 = (10>5) and (5>8) = True and False = False",
+      en: {
+        title: "Chained comparison — fails",
+        description: "What is the result of the following expression?",
+        explanation: "10>5>8 = (10>5) and (5>8) = True and False = False",
+      },
     },
   ],
 }

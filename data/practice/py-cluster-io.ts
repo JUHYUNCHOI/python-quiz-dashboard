@@ -6,6 +6,10 @@ export const pyIoCluster: PracticeCluster = {
   emoji: "⌨️",
   description: "input(), print(), 타입변환, 포맷 출력",
   unlockAfter: "10",
+  en: {
+    title: "Input / Output Basics",
+    description: "input(), print(), type conversion, and formatted output",
+  },
   problems: [
     {
       id: "pyio-001",
@@ -30,6 +34,16 @@ name = input()
       solutionCode: `name = input()
 print(f'Hello, {name}!')`,
       solutionExplanation: "f-string으로 변수를 문자열에 삽입합니다. f'...' 안에서 {변수명}으로 값을 넣을 수 있습니다.",
+      en: {
+        title: "Print a Name",
+        description: `Read a name and print it in the format 'Hello, {name}!'`,
+        constraints: "Name consists of letters only, length ≤ 20",
+        hints: [
+          "Use an f-string: f'Hello, {name}!'",
+          "Use the print() function to output the result.",
+        ],
+        solutionExplanation: "f-strings let you embed variables inside a string. Use {variable_name} inside f'...' to insert the value.",
+      },
       language: "python",
     },
     {
@@ -58,6 +72,16 @@ b = int(input())
 b = int(input())
 print(a + b)`,
       solutionExplanation: "input()은 항상 문자열을 반환하므로 int()로 변환이 필요합니다. 두 정수를 더한 결과를 print()로 출력합니다.",
+      en: {
+        title: "Sum of Two Integers",
+        description: `Given two integers A and B, each on a separate line, print their sum.`,
+        constraints: "-1000 ≤ A, B ≤ 1000",
+        hints: [
+          "input() returns a string. Wrap it with int() to convert to an integer.",
+          "Use print(a + b) to output the sum.",
+        ],
+        solutionExplanation: "input() always returns a string, so int() conversion is required. Add the two integers and print the result.",
+      },
       language: "python",
     },
     {
@@ -86,6 +110,16 @@ a, b, c = map(int, input().split())
 avg = (a + b + c) / 3
 print(f'{avg:.2f}')`,
       solutionExplanation: "map(int, input().split())은 공백으로 나눈 문자열 각각을 int로 변환합니다. f-string의 :.2f 형식 지정자로 소수점 2자리를 출력합니다.",
+      en: {
+        title: "Average of Three Numbers",
+        description: `Given three integers separated by spaces on one line, print their average to 2 decimal places.`,
+        constraints: "0 ≤ each integer ≤ 1000",
+        hints: [
+          "map(int, input().split()) reads multiple integers separated by spaces in one line.",
+          "Use print(f'{avg:.2f}') to print to 2 decimal places.",
+        ],
+        solutionExplanation: "map(int, input().split()) splits the input by spaces and converts each part to int. The :.2f format specifier in an f-string prints to 2 decimal places.",
+      },
       language: "python",
     },
     {
@@ -118,6 +152,17 @@ PI = 3.14159
 area = PI * r * r
 print(f'{area:.2f}')`,
       solutionExplanation: "넓이 = π × r²를 계산합니다. f-string의 :.2f로 소수점 2자리에서 반올림하여 출력합니다.",
+      en: {
+        title: "Area of a Circle",
+        description: `Given the radius of a circle, print its area to 2 decimal places.\nUse π = 3.14159.`,
+        constraints: "1 ≤ radius ≤ 1000 (integer)",
+        hints: [
+          "The area formula is π × r².",
+          "Use r ** 2 or r * r to compute the square.",
+          "Use print(f'{area:.2f}') to print to 2 decimal places.",
+        ],
+        solutionExplanation: "Compute area = π × r². The :.2f format specifier rounds and prints to 2 decimal places.",
+      },
       language: "python",
     },
     {
@@ -149,6 +194,17 @@ c = float(input())
 f = c * 9/5 + 32
 print(f'{f:.1f}')`,
       solutionExplanation: "Python에서 9/5는 자동으로 실수 나눗셈(1.8)을 수행합니다. :.1f 형식 지정자로 소수점 첫째 자리까지 출력합니다.",
+      en: {
+        title: "Celsius to Fahrenheit",
+        description: `Convert a Celsius temperature to Fahrenheit and print to 1 decimal place.\n\nFormula: F = C × 9/5 + 32`,
+        constraints: "-100 ≤ C ≤ 100 (decimal input allowed)",
+        hints: [
+          "Use float(input()) to read a decimal number.",
+          "Apply the formula F = C * 9/5 + 32 directly in code.",
+          "Use print(f'{f:.1f}') to print to 1 decimal place.",
+        ],
+        solutionExplanation: "In Python, 9/5 automatically performs float division (1.8). The :.1f format specifier prints to 1 decimal place.",
+      },
       language: "python",
     },
     {
@@ -179,6 +235,16 @@ m = (seconds % 3600) // 60
 s = seconds % 60
 print(f'{h:02d}:{m:02d}:{s:02d}')`,
       solutionExplanation: "//는 정수 나눗셈, %는 나머지입니다. :02d 형식 지정자는 최소 2자리, 빈 자리는 0으로 채웁니다.",
+      en: {
+        title: "Time Format Conversion",
+        description: `Given a total number of seconds, print it in "HH:MM:SS" format.\nHours, minutes, and seconds should each be two digits, padded with a leading zero if needed.`,
+        constraints: "0 ≤ seconds ≤ 86399",
+        hints: [
+          "hours = seconds // 3600, minutes = (seconds % 3600) // 60, seconds = seconds % 60",
+          "Use {h:02d} in an f-string to print a 2-digit integer with leading zero.",
+        ],
+        solutionExplanation: "// is integer division and % is the remainder. The :02d format specifier ensures at least 2 digits, padding with zeros.",
+      },
       language: "python",
     },
     {
@@ -208,6 +274,16 @@ n = int(input())
 for i in range(1, 10):
     print(f'{n} x {i} = {n * i}')`,
       solutionExplanation: "range(1, 10)은 1 이상 10 미만, 즉 1~9를 생성합니다. f-string으로 n, i, 곱을 포맷에 맞게 출력합니다.",
+      en: {
+        title: "Multiplication Table",
+        description: `Given an integer N, print the N times table.\n\nFormat: "N x i = result" (i from 1 to 9)`,
+        constraints: "2 ≤ N ≤ 9",
+        hints: [
+          "Use for i in range(1, 10): to loop from 1 to 9.",
+          "Use print(f'{n} x {i} = {n*i}') to print each line.",
+        ],
+        solutionExplanation: "range(1, 10) generates numbers from 1 up to (but not including) 10, i.e. 1–9. Use an f-string to format each line with n, i, and their product.",
+      },
       language: "python",
     },
     {
@@ -242,6 +318,17 @@ n = int(input())
 for i in range(1, n + 1):
     print('*' * i)`,
       solutionExplanation: "Python에서 문자열 * 정수는 문자열을 반복합니다. range(1, n+1)로 1부터 n까지 순회하며 각 단계에서 i개의 별을 출력합니다.",
+      en: {
+        title: "Star Triangle",
+        description: `Given an integer N, print a triangle of stars with N rows.\n\n- Row 1: * (1 star)\n- Row 2: ** (2 stars)\n- ...\n- Row N: *** (N stars)`,
+        constraints: "1 ≤ N ≤ 20",
+        hints: [
+          "Use for i in range(1, n+1): to loop from 1 to n.",
+          "'*' * i creates a string of i repeated asterisks.",
+          "Use print('*' * i) to print each row.",
+        ],
+        solutionExplanation: "In Python, string * integer repeats the string. Iterate from 1 to n with range(1, n+1) and print i stars on each step.",
+      },
       language: "python",
     },
   ],

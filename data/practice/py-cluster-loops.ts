@@ -6,6 +6,10 @@ export const pyLoopsCluster: PracticeCluster = {
   emoji: "🔁",
   description: "for/while, range, 누적합, 중첩 루프",
   unlockAfter: "14",
+  en: {
+    title: "Loop Patterns",
+    description: "for/while loops, range, cumulative sums, nested loops",
+  },
   problems: [
     {
       id: "pyloop-001",
@@ -35,6 +39,17 @@ for i in range(1, n + 1):
     total += i
 print(total)`,
       solutionExplanation: "누적합 패턴입니다. total 변수를 0으로 초기화하고 반복할 때마다 i를 더합니다. sum(range(1, n+1))로도 같은 결과를 얻을 수 있습니다.",
+      en: {
+        title: "Sum from 1 to N",
+        description: `Given an integer N, print the sum of all integers from 1 to N.`,
+        constraints: "1 ≤ N ≤ 1000",
+        hints: [
+          "Use for i in range(1, n+1): to iterate from 1 to n.",
+          "Accumulate i into a variable total, or use sum(range(1, n+1)) in one line.",
+          "Or write it as sum(range(1, n+1)) in a single line.",
+        ],
+        solutionExplanation: "This is the cumulative sum pattern. Initialize total to 0 and add i at each step. sum(range(1, n+1)) gives the same result.",
+      },
       language: "python",
     },
     {
@@ -64,6 +79,16 @@ for i in range(2, n + 1, 2):
     total += i
 print(total)`,
       solutionExplanation: "range(2, n+1, 2)는 2부터 n 이하까지 2씩 증가하는 수열(짝수만)을 생성합니다. 세 번째 인수가 step(간격)입니다.",
+      en: {
+        title: "Sum of Even Numbers",
+        description: `Given an integer N, print the sum of all even numbers from 1 to N.`,
+        constraints: "1 ≤ N ≤ 1000",
+        hints: [
+          "Use if i % 2 == 0: to add only even numbers.",
+          "Or use range(2, n+1, 2) to iterate over even numbers directly.",
+        ],
+        solutionExplanation: "range(2, n+1, 2) generates a sequence starting at 2, up to n, stepping by 2 — even numbers only. The third argument is the step.",
+      },
       language: "python",
     },
     {
@@ -95,6 +120,18 @@ for i in range(1, n + 1):
     result *= i
 print(result)`,
       solutionExplanation: "result를 1로 초기화합니다. n=0이면 range(1, 1)이 빈 범위라 반복이 없고 result=1이 유지되어 0!=1을 자동으로 처리합니다.",
+      en: {
+        title: "Factorial",
+        description: `Given an integer N, print N! (N factorial).
+N! = 1 × 2 × 3 × ... × N`,
+        constraints: "0 ≤ N ≤ 12",
+        hints: [
+          "Initialize result to 1 and multiply at each step.",
+          "for i in range(1, n+1): result *= i",
+          "Check that 0! = 1 is handled correctly (an empty range leaves result as 1).",
+        ],
+        solutionExplanation: "Initialize result to 1. When n=0, range(1, 1) is empty so no iterations occur, leaving result=1 — which correctly handles 0!=1.",
+      },
       language: "python",
     },
     {
@@ -122,6 +159,16 @@ n = int(input())
 numbers = [int(input()) for _ in range(n)]
 print(min(numbers))`,
       solutionExplanation: "리스트 컴프리헨션으로 n개의 정수를 한 번에 읽습니다. Python의 내장 min() 함수로 최솟값을 구합니다.",
+      en: {
+        title: "Find the Minimum",
+        description: `Given N on the first line and N integers on the following lines (one per line), print the smallest number.`,
+        constraints: "1 ≤ N ≤ 100, -10000 ≤ each integer ≤ 10000",
+        hints: [
+          "Initialize the minimum with the first number, then compare the rest.",
+          "Or collect all into a list and use min(numbers).",
+        ],
+        solutionExplanation: "A list comprehension reads n integers at once. Python's built-in min() function finds the minimum value.",
+      },
       language: "python",
     },
     {
@@ -148,6 +195,16 @@ n = int(input())
 for i in range(n, 0, -1):
     print(i)`,
       solutionExplanation: "range(n, 0, -1)은 n에서 시작해 1씩 감소하며 1까지(0은 미포함) 생성합니다. 세 번째 인수 -1이 음수 step입니다.",
+      en: {
+        title: "Print in Reverse",
+        description: `Given an integer N, print the numbers from N down to 1.`,
+        constraints: "1 ≤ N ≤ 100",
+        hints: [
+          "range(n, 0, -1) generates a sequence from n down to 1 (exclusive of 0).",
+          "Or wrap range(1, n+1) with reversed().",
+        ],
+        solutionExplanation: "range(n, 0, -1) starts at n and decrements by 1 each step, stopping before 0. The third argument -1 is the negative step.",
+      },
       language: "python",
     },
     {
@@ -185,6 +242,18 @@ else:
             break
     print("소수" if is_prime else "소수 아님")`,
       solutionExplanation: "N의 약수는 √N 이하에서 반드시 하나가 발견됩니다. 따라서 2부터 √N까지만 나눠보면 충분합니다. 나눠지면 소수가 아니고, break로 루프를 빠져나옵니다.",
+      en: {
+        title: "Prime Number Check",
+        description: `Determine whether N is a prime number and print "소수" or "소수 아님".
+1 is not a prime number.`,
+        constraints: "1 ≤ N ≤ 10000",
+        hints: [
+          "If any number from 2 to n-1 divides N evenly, it is not prime.",
+          "More efficiently, only check up to √n: range(2, int(n**0.5)+1).",
+          "If n is 1, immediately print '소수 아님'.",
+        ],
+        solutionExplanation: "Every divisor of N has a corresponding factor at or below √N. So checking 2 through √N is sufficient. If a divisor is found, it's not prime; break exits the loop.",
+      },
       language: "python",
     },
     {
@@ -215,6 +284,18 @@ else:
     for i in range(1, 10):
         print(f'{n} x {i} = {n * i}')`,
       solutionExplanation: "중첩 반복문 패턴입니다. 바깥 루프가 단(2~9)을 순회하고, 안쪽 루프가 각 단의 1~9를 순회합니다.",
+      en: {
+        title: "Full Multiplication Table",
+        description: `Print the full multiplication table from the 2-times table through the 9-times table.
+
+Format: "N x i = result"
+Print all rows continuously with no blank lines between tables.`,
+        hints: [
+          "Use a nested for loop: outer loop for the table (2~9), inner loop for the multiplier (1~9).",
+          "for n in range(2, 10): for i in range(1, 10):",
+        ],
+        solutionExplanation: "Nested loop pattern: the outer loop iterates over table numbers (2–9), the inner loop iterates over multipliers (1–9).",
+      },
       language: "python",
     },
     {
@@ -246,6 +327,17 @@ for _ in range(n - 1):
     a, b = b, a + b
 print(a)`,
       solutionExplanation: "a, b를 이전 항과 현재 항으로 유지합니다. 한 번 반복할 때마다 a←b, b←a+b로 동시에 갱신(튜플 대입)합니다. n-1번 반복하면 a가 n번째 항이 됩니다.",
+      en: {
+        title: "Nth Fibonacci Number",
+        description: `Given an integer N, print the Nth Fibonacci number.
+(1st=1, 2nd=1, 3rd=2, 4th=3, 5th=5, ...)`,
+        constraints: "1 ≤ N ≤ 50",
+        hints: [
+          "Initialize a, b = 1, 1, then update a, b = b, a+b each iteration.",
+          "After n-1 iterations, a holds the Nth Fibonacci number.",
+        ],
+        solutionExplanation: "Track the previous and current terms as a and b. Each iteration simultaneously updates a←b and b←a+b using tuple assignment. After n-1 iterations, a is the nth term.",
+      },
       language: "python",
     },
     {
@@ -274,6 +366,18 @@ n = int(input())
       solutionCode: `n = int(input())
 print(sum(int(d) for d in str(n)))`,
       solutionExplanation: "str(n)으로 정수를 문자열로 변환하면 각 문자가 한 자리 숫자가 됩니다. 제너레이터 표현식으로 각 문자를 int로 변환하며 합산합니다.",
+      en: {
+        title: "Sum of Digits",
+        description: `Given an integer N, print the sum of all its digits.
+(e.g. 1234 → 1+2+3+4 = 10)`,
+        constraints: "1 ≤ N ≤ 1000000",
+        hints: [
+          "Method 1: Convert to a string and sum each character as an integer.",
+          "Method 2: Use while n > 0: digit = n % 10, n //= 10 to extract each digit.",
+          "sum(int(d) for d in str(n)) works in one line.",
+        ],
+        solutionExplanation: "Converting the integer to a string gives each digit as a single character. A generator expression converts each character back to int for summing.",
+      },
       language: "python",
     },
     {
@@ -304,6 +408,18 @@ n = int(input())
 for i in range(1, n + 1):
     print(' ' * (n - i) + '*' * (2 * i - 1))`,
       solutionExplanation: "i번째 줄은 앞에 (n-i)개의 공백, 그 뒤에 (2i-1)개의 별로 구성됩니다. 문자열 반복으로 두 부분을 만들어 이어 붙입니다.",
+      en: {
+        title: "Star Pyramid",
+        description: `Given an integer N, print an N-row pyramid of stars.
+
+Each row i has (N-i) spaces followed by (2i-1) stars.`,
+        constraints: "1 ≤ N ≤ 20",
+        hints: [
+          "Row i (1-indexed): (N-i) spaces then (2*i-1) stars.",
+          "Build each row as ' ' * (n-i) + '*' * (2*i-1).",
+        ],
+        solutionExplanation: "Row i consists of (n-i) leading spaces followed by (2i-1) stars. String repetition builds each part, which are then concatenated.",
+      },
       language: "python",
     },
     {
@@ -335,6 +451,21 @@ n = int(input())
 for i in range(n, 0, -1):
     print('*' * i)`,
       solutionExplanation: "range(n, 0, -1)로 n에서 1까지 1씩 감소하며 반복합니다. 각 i에서 '*' * i로 i개의 별을 출력합니다.",
+      en: {
+        title: "Reverse Star Triangle",
+        description: `Given an integer N, print an inverted star triangle.
+
+- Row 1: N stars
+- Row 2: N-1 stars
+- ...
+- Row N: 1 star`,
+        constraints: "1 ≤ N ≤ 20",
+        hints: [
+          "Use range(n, 0, -1) to loop from n down to 1.",
+          "Print the current number of stars at each step.",
+        ],
+        solutionExplanation: "range(n, 0, -1) iterates from n down to 1 (decrementing by 1 each step). At each i, '*' * i prints i stars.",
+      },
       language: "python",
     },
     {
@@ -364,6 +495,17 @@ while b:
     a, b = b, a % b
 print(a)`,
       solutionExplanation: "유클리드 호제법: a를 b로 나눈 나머지를 새로운 b로 설정하며 반복합니다. b가 0이 되면 a가 최대공약수입니다. while b는 while b != 0과 동일합니다.",
+      en: {
+        title: "Greatest Common Divisor (GCD)",
+        description: `Given two positive integers A and B, print their greatest common divisor (GCD).`,
+        constraints: "1 ≤ A, B ≤ 100000",
+        hints: [
+          "Use the Euclidean algorithm: repeatedly apply a, b = b, a % b until b is 0.",
+          "When b becomes 0, a is the GCD.",
+          "while b != 0: a, b = b, a % b",
+        ],
+        solutionExplanation: "Euclidean algorithm: set the new b to a % b and repeat. When b reaches 0, a is the GCD. while b is equivalent to while b != 0.",
+      },
       language: "python",
     },
     {
@@ -392,6 +534,16 @@ for i in range(1, n + 1):
     total += int(input())
     print(f'{total / i:.2f}')`,
       solutionExplanation: "매 반복에서 새 수를 total에 더한 뒤, total / i (현재까지 입력받은 개수)로 누적 평균을 계산합니다. :.2f로 소수점 2자리 출력합니다.",
+      en: {
+        title: "Running Average",
+        description: `Given N on the first line, then N integers (one per line), print the cumulative average after each input, rounded to 2 decimal places.`,
+        constraints: "1 ≤ N ≤ 100, 1 ≤ each integer ≤ 10000",
+        hints: [
+          "Track total and count, printing total/count after each step.",
+          "Use for i in range(1, n+1): to read and compute the average at each step.",
+        ],
+        solutionExplanation: "At each step, add the new number to total then compute total / i (the count so far). Use :.2f to format to 2 decimal places.",
+      },
       language: "python",
     },
     {
@@ -426,6 +578,17 @@ for num in range(2, n + 1):
     if is_prime:
         print(num)`,
       solutionExplanation: "2부터 n까지 각 수를 순회하며 소수 여부를 판별합니다. 각 수에 대해 2부터 √num까지 나눠지는 수가 있으면 소수가 아닙니다.",
+      en: {
+        title: "List of Primes",
+        description: `Given an integer N, print all prime numbers from 2 to N (inclusive), one per line, in ascending order.`,
+        constraints: "2 ≤ N ≤ 1000",
+        hints: [
+          "Apply a primality check to each number from 2 to n.",
+          "Primality check: no number from 2 to √i divides it evenly.",
+          "Use nested loops or write a separate primality function.",
+        ],
+        solutionExplanation: "Iterate through each number from 2 to n and check primality. For each number, if any value from 2 to √num divides it, it's not prime.",
+      },
       language: "python",
     },
     {
@@ -460,6 +623,23 @@ n = int(input())
 for i in range(1, n + 1):
     print(''.join(str(j) for j in range(1, i + 1)))`,
       solutionExplanation: "i번째 줄은 1부터 i까지의 숫자를 이어 붙인 문자열입니다. 내부 제너레이터로 각 숫자를 문자열로 변환해 join으로 합칩니다.",
+      en: {
+        title: "Number Pattern",
+        description: `Given an integer N, print the following pattern.
+
+Example for N=4:
+1
+12
+123
+1234`,
+        constraints: "1 ≤ N ≤ 9",
+        hints: [
+          "The outer loop handles rows (1~N), the inner loop handles digits to print per row (1~row number).",
+          "Use print(j, end='') to print without newlines, then print() for the line break after the inner loop.",
+          "Or use ''.join(str(j) for j in range(1, i+1)) to build each row as a string.",
+        ],
+        solutionExplanation: "Row i is the digits 1 through i joined together. An inner generator converts each digit to a string, then join combines them.",
+      },
       language: "python",
     },
     {
@@ -500,6 +680,24 @@ for i in range(n - 2, 0, -2):
     spaces = (n - i) // 2
     print(' ' * spaces + '*' * i)`,
       solutionExplanation: "위쪽은 별 개수를 1, 3, 5, ..., N으로 증가시키고, 아래쪽은 N-2, N-4, ..., 1로 감소시킵니다. 각 줄의 앞 공백 수는 (N-별개수)//2입니다.",
+      en: {
+        title: "Diamond Pattern",
+        description: `Given an odd integer N, print an N-row diamond (rhombus) shape.
+
+Example for N=5:
+  *
+ ***
+*****
+ ***
+  *`,
+        constraints: "N is odd, 1 ≤ N ≤ 21",
+        hints: [
+          "Top half (including center): star counts 1, 3, 5, ..., N (odd increments).",
+          "Bottom half: star counts N-2, N-4, ..., 1 (odd decrements).",
+          "Leading spaces for each row = (N - star count) // 2.",
+        ],
+        solutionExplanation: "The top half increases star counts from 1, 3, 5, ..., N; the bottom half decreases from N-2, N-4, ..., 1. Leading spaces = (N - star count) // 2.",
+      },
       language: "python",
     },
     {
@@ -538,6 +736,21 @@ while n != 1:
     count += 1
 print(count)`,
       solutionExplanation: "while 루프로 n이 1이 될 때까지 반복합니다. 짝수면 2로 나누고, 홀수면 3배+1로 변환하며 count를 셉니다.",
+      en: {
+        title: "Collatz Conjecture",
+        description: `Given a positive integer N, print the number of steps to reach 1 using the Collatz rules.
+
+Rules:
+- If N is even: N = N / 2
+- If N is odd: N = N * 3 + 1
+- Repeat until N equals 1, counting the steps.`,
+        constraints: "1 ≤ N ≤ 1000000",
+        hints: [
+          "Use while n != 1: apply the rule and increment count.",
+          "Initialize count to 0; the loop runs while n is not 1.",
+        ],
+        solutionExplanation: "A while loop repeats until n equals 1. If even, divide by 2; if odd, multiply by 3 and add 1. Increment count each step.",
+      },
       language: "python",
     },
     {
@@ -583,6 +796,21 @@ if n % 2 == 1:
     total -= matrix[mid][mid]
 print(total)`,
       solutionExplanation: "주대각선과 부대각선을 각각 더합니다. N이 홀수면 중심 원소가 두 번 더해지므로 한 번 빼서 보정합니다.",
+      en: {
+        title: "Matrix Diagonal Sum",
+        description: `Given an integer N and an N×N matrix, print the sum of both diagonals.
+(If the center element is shared, count it only once.)
+
+Main diagonal: [0][0], [1][1], ..., [N-1][N-1]
+Anti-diagonal: [0][N-1], [1][N-2], ..., [N-1][0]`,
+        constraints: "1 ≤ N ≤ 100, -1000 ≤ matrix element ≤ 1000",
+        hints: [
+          "Main diagonal: index i and i (matrix[i][i]).",
+          "Anti-diagonal: index i and n-1-i (matrix[i][n-1-i]).",
+          "If N is odd, the center element (matrix[n//2][n//2]) is counted twice — subtract it once.",
+        ],
+        solutionExplanation: "Sum both diagonals separately. If N is odd, the center element is counted twice (once per diagonal), so subtract it once to correct.",
+      },
       language: "python",
     },
     {
@@ -617,6 +845,17 @@ for i in range(n - 1):
             arr[j], arr[j + 1] = arr[j + 1], arr[j]
 print(' '.join(map(str, arr)))`,
       solutionExplanation: "버블 정렬은 인접 원소를 비교·교환하며 큰 값을 오른쪽으로 밀어냅니다. i번 반복 후 뒤에서 i개 원소가 정렬되므로 안쪽 루프는 n-1-i까지만 실행합니다.",
+      en: {
+        title: "Bubble Sort Implementation",
+        description: `Given N on the first line and N integers on the next line, sort them in ascending order using bubble sort and print the result on one line separated by spaces.`,
+        constraints: "1 ≤ N ≤ 100, -1000 ≤ each integer ≤ 1000",
+        hints: [
+          "Bubble sort: compare adjacent elements and move the larger one right.",
+          "Outer loop runs n-1 times, inner loop runs n-1-i times.",
+          "If arr[j] > arr[j+1], swap the two elements.",
+        ],
+        solutionExplanation: "Bubble sort compares and swaps adjacent elements, pushing larger values to the right. After i passes, the last i elements are sorted, so the inner loop only needs to run to n-1-i.",
+      },
       language: "python",
     },
     {
@@ -653,6 +892,17 @@ for i in range(2, n + 1):
     if is_prime[i]:
         print(i)`,
       solutionExplanation: "에라토스테네스의 체: 각 소수의 배수를 제거합니다. i*i부터 시작하는 이유는 그보다 작은 배수는 이미 이전 소수에서 제거되었기 때문입니다. 시간복잡도 O(N log log N)으로 단순 소수 판별보다 훨씬 빠릅니다.",
+      en: {
+        title: "Sieve of Eratosthenes",
+        description: `Given an integer N, find all prime numbers from 2 to N using the Sieve of Eratosthenes algorithm and print them one per line.`,
+        constraints: "2 ≤ N ≤ 10000",
+        hints: [
+          "Initialize is_prime = [True] * (n+1), then set is_prime[0] = is_prime[1] = False.",
+          "For each i from 2 to √N: if is_prime[i] is True, mark all multiples of i as False.",
+          "Multiples start from i*i: range(i*i, n+1, i).",
+        ],
+        solutionExplanation: "The Sieve of Eratosthenes eliminates multiples of each prime. Starting from i*i is sufficient because smaller multiples were already eliminated by earlier primes. Time complexity: O(N log log N).",
+      },
       language: "python",
     },
   ],

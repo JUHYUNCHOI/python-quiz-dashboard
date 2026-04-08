@@ -11,6 +11,7 @@ export interface ProblemI18n {
   hints?: string[]
   constraints?: string
   solutionExplanation?: string
+  explanation?: string  // MCQ problems use explanation instead of solutionExplanation
 }
 
 /** Optional English translation fields for a cluster */
@@ -77,6 +78,7 @@ export function localizeProblem(p: PracticeProblem, lang: string): PracticeProbl
     constraints: p.en.constraints ?? p.constraints,
     hints: p.en.hints ?? p.hints,
     solutionExplanation: p.en.solutionExplanation ?? p.solutionExplanation,
+    explanation: p.en.explanation ?? p.explanation,
   }
 }
 
