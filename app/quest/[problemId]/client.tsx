@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, Suspense, lazy } from "react"
+import { useState, useEffect, Suspense, lazy } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Header } from "@/components/header"
