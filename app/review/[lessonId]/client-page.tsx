@@ -363,8 +363,8 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
             <X className="h-5 w-5 md:h-6 md:w-6 text-gray-600" />
           </button>
 
-          {/* 진행 도트 */}
-          <div className="flex-1 flex items-center gap-1 overflow-hidden min-w-0">
+          {/* 진행 바 (세그먼트 바 — 클릭 가능, 툴팁) */}
+          <div className="flex-1 flex items-center gap-[2px] h-2.5 md:h-3">
             {reviewSteps.map((rs, idx) => {
               const isCurrent = idx === currentIndex
               const isCompleted = completedSteps.has(idx)
@@ -372,19 +372,21 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
               const isClickable = effectiveTeacher || isCompleted || isCurrent
               const typeLabel = rs.step.type === "quiz" ? "객관식" : rs.step.type === "practice" ? "빈칸" : rs.step.type === "interleaving" ? "복습" : rs.step.type === "errorQuiz" ? "오류찾기" : rs.step.type
               return (
-                <div key={idx} className="relative group shrink-0">
+                <div key={idx} className="relative group h-full flex-1 min-w-[3px]">
                   <button
                     disabled={!isClickable}
                     onClick={() => { if (isClickable && !isCurrent) goToStep(idx) }}
                     className={cn(
-                      "block rounded-full transition-all duration-200 p-0",
+                      "w-full h-full transition-all duration-300",
                       isCurrent
-                        ? "w-4 h-2.5 bg-indigo-500"
+                        ? "bg-indigo-500 scale-y-125"
                         : isWrong
-                          ? "w-2.5 h-2.5 bg-red-400 hover:bg-red-300 cursor-pointer"
+                          ? "bg-red-400 hover:bg-red-300 cursor-pointer"
                           : (effectiveTeacher || isCompleted)
-                            ? "w-2.5 h-2.5 bg-emerald-400 hover:bg-emerald-500 cursor-pointer"
-                            : "w-2.5 h-2.5 bg-gray-200 cursor-default"
+                            ? "bg-emerald-400 hover:bg-emerald-300 cursor-pointer"
+                            : "bg-gray-200 cursor-default",
+                      idx === 0 && "rounded-l-full",
+                      idx === reviewSteps.length - 1 && "rounded-r-full",
                     )}
                   />
                   {/* 툴팁 */}

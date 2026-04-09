@@ -66,7 +66,7 @@ function McqStep({
     <div className="flex flex-col gap-3">
       <p className="font-semibold text-gray-800 text-base leading-relaxed">{question}</p>
       {"code" in content && content.code && (
-        <div className="rounded-xl bg-[#1a1b2e] px-4 py-3 font-mono text-sm overflow-x-auto leading-6">
+        <div className="rounded-xl bg-[#1a1b2e] px-4 py-3 font-mono text-sm overflow-x-auto leading-6 whitespace-pre-wrap">
           {language === "cpp"
             ? highlightCpp(content.code, true)
             : highlightPython(content.code, true)}
@@ -370,7 +370,7 @@ function PredictStep({
 
       {/* Code */}
       {content.code && (
-        <div className="rounded-xl bg-[#1a1b2e] px-4 py-3 font-mono text-sm overflow-x-auto leading-6">
+        <div className="rounded-xl bg-[#1a1b2e] px-4 py-3 font-mono text-sm overflow-x-auto leading-6 whitespace-pre-wrap">
           {language === "cpp"
             ? highlightCpp(content.code, true)
             : highlightPython(content.code, true)}
