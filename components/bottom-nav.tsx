@@ -23,7 +23,7 @@ export function BottomNav() {
     { icon: Home,    label: t("홈", "Home"),         href: "/portal"     },
     { icon: BookOpen,label: t("수업", "Lessons"),    href: "/curriculum" },
     { icon: Brain,   label: t("연습", "Practice"),    href: "/quiz/setup" },
-    { icon: Puzzle,  label: t("알고리즘", "Algo"),   href: "/algorithm"  },
+    { icon: Puzzle,  label: t("알고리즘", "Algo"),   href: "/algo"  },
     { icon: User,    label: t("내정보", "Profile"),  href: "/profile"    },
   ]
 
@@ -37,7 +37,7 @@ export function BottomNav() {
   const guestNav: NavItem[] = [
     { icon: Home,     label: t("홈", "Home"),      href: "/"           },
     { icon: BookOpen, label: t("수업", "Lessons"),  href: "/curriculum" },
-    { icon: Puzzle,   label: t("알고리즘", "Algo"),  href: "/algorithm"  },
+    { icon: Puzzle,   label: t("알고리즘", "Algo"),  href: "/algo"  },
     { icon: User,     label: t("내정보", "Profile"), href: "/profile"    },
   ]
 

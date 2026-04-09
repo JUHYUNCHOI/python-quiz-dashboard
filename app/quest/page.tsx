@@ -303,7 +303,7 @@ export default function QuestPage() {
             </div>
 
             <Link
-              href="/algorithm"
+              href="/algo"
               className="mt-4 inline-block border-2 border-black rounded-lg px-5 py-2 font-bold bg-amber-400 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
             >
               {t("알고리즘 학습하러 가기", "Go to Algorithm Lab")}
