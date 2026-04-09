@@ -205,7 +205,7 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
         disabled={isLoading}
         className={cn(
           "flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm transition-all",
-          isLoading ? "bg-white/10 text-white/40" : "bg-emerald-500 hover:bg-emerald-400 text-white"
+          isLoading ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-emerald-500 hover:bg-emerald-400 text-white"
         )}
       >
         {isLoading
@@ -215,8 +215,8 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
 
       {/* 컴파일 오류 */}
       {error && (
-        <div className="rounded-xl bg-red-500/10 border border-red-500/20 p-4">
-          <p className="text-red-400 text-sm font-mono whitespace-pre-wrap">{error}</p>
+        <div className="rounded-xl bg-red-50 border border-red-200 p-4">
+          <p className="text-red-600 text-sm font-mono whitespace-pre-wrap">{error}</p>
         </div>
       )}
 
@@ -226,30 +226,30 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
           {results.map((r, i) => (
             <div key={i} className={cn(
               "rounded-xl border p-3 text-sm",
-              r.passed ? "bg-emerald-500/10 border-emerald-500/20" : "bg-red-500/10 border-red-500/20"
+              r.passed ? "bg-emerald-50 border-emerald-200" : "bg-red-50 border-red-200"
             )}>
               <div className="flex items-center gap-2 mb-1">
                 {r.passed
-                  ? <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  : <X className="w-4 h-4 text-red-400 shrink-0" />}
-                <span className={cn("font-medium", r.passed ? "text-emerald-400" : "text-red-400")}>
+                  ? <Check className="w-4 h-4 text-emerald-500 shrink-0" />
+                  : <X className="w-4 h-4 text-red-500 shrink-0" />}
+                <span className={cn("font-medium", r.passed ? "text-emerald-700" : "text-red-700")}>
                   {t("테스트", "Test")} {i + 1}{(problem.testCases ?? [])[i]?.label ? ` — ${(problem.testCases ?? [])[i].label}` : ""}
                 </span>
               </div>
               {!r.passed && (
                 <div className="mt-2 grid grid-cols-2 gap-2 text-xs font-mono">
                   <div>
-                    <span className="text-white/40">{t("입력: ", "Input: ")}</span>
-                    <span className="text-white/70">{(problem.testCases ?? [])[i]?.stdin}</span>
+                    <span className="text-gray-400">{t("입력: ", "Input: ")}</span>
+                    <span className="text-gray-600">{(problem.testCases ?? [])[i]?.stdin}</span>
                   </div>
                   <div />
                   <div>
-                    <span className="text-white/40">{t("예상: ", "Expected: ")}</span>
-                    <span className="text-emerald-400">{r.expected}</span>
+                    <span className="text-gray-400">{t("예상: ", "Expected: ")}</span>
+                    <span className="text-emerald-600 font-semibold">{r.expected}</span>
                   </div>
                   <div>
-                    <span className="text-white/40">{t("실제: ", "Actual: ")}</span>
-                    <span className="text-red-400">{r.output || t("(출력 없음)", "(no output)")}</span>
+                    <span className="text-gray-400">{t("실제: ", "Actual: ")}</span>
+                    <span className="text-red-600">{r.output || t("(출력 없음)", "(no output)")}</span>
                   </div>
                 </div>
               )}
@@ -260,18 +260,18 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
             <div className={cn(
               "rounded-xl border p-4 text-center",
               hintsShown === 0 && !showSolution
-                ? "bg-yellow-500/10 border-yellow-500/30"
-                : "bg-emerald-500/10 border-emerald-500/30"
+                ? "bg-amber-50 border-amber-200"
+                : "bg-emerald-50 border-emerald-200"
             )}>
               {hintsShown === 0 && !showSolution ? (
                 <>
-                  <p className="text-yellow-400 font-bold text-lg">{t("⭐ 힌트 없이 통과!", "⭐ Solved without hints!")}</p>
-                  <p className="text-yellow-300/60 text-xs mt-1">{t("스스로 풀었어요", "You figured it out!")}</p>
+                  <p className="text-amber-700 font-bold text-lg">{t("⭐ 힌트 없이 통과!", "⭐ Solved without hints!")}</p>
+                  <p className="text-amber-500 text-xs mt-1">{t("스스로 풀었어요", "You figured it out!")}</p>
                 </>
               ) : (
                 <>
-                  <p className="text-emerald-400 font-bold">{t("🎉 모든 테스트 통과!", "🎉 All tests passed!")}</p>
-                  <p className="text-emerald-300/60 text-xs mt-1">{t("힌트 없이 다시 도전하면 ⭐를 획득할 수 있어요", "Try again without hints to earn ⭐")}</p>
+                  <p className="text-emerald-700 font-bold">{t("🎉 모든 테스트 통과!", "🎉 All tests passed!")}</p>
+                  <p className="text-emerald-500 text-xs mt-1">{t("힌트 없이 다시 도전하면 ⭐를 획득할 수 있어요", "Try again without hints to earn ⭐")}</p>
                 </>
               )}
             </div>
@@ -283,13 +283,13 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
       {(problem.hints ?? []).length > 0 && (
         <div className="flex flex-col gap-2">
           {(problem.hints ?? []).slice(0, hintsShown).map((hint, i) => (
-            <div key={i} className="rounded-xl bg-yellow-500/10 border border-yellow-500/20 p-3 text-sm text-yellow-200">
-              <span className="font-medium text-yellow-400">💡 {t("힌트", "Hint")} {i + 1}</span>
-              <p className="mt-1 leading-relaxed">{hint.split(/(\*\*[^*\n]+\*\*|`[^`\n]+`)/g).map((seg, j) => {
+            <div key={i} className="rounded-xl bg-amber-50 border border-amber-200 p-3 text-sm">
+              <span className="font-medium text-amber-700">💡 {t("힌트", "Hint")} {i + 1}</span>
+              <p className="mt-1 leading-relaxed text-amber-900">{hint.split(/(\*\*[^*\n]+\*\*|`[^`\n]+`)/g).map((seg, j) => {
                 if (seg.startsWith("**") && seg.endsWith("**"))
-                  return <strong key={j} className="font-semibold text-yellow-200">{seg.slice(2, -2)}</strong>
+                  return <strong key={j} className="font-semibold text-amber-900">{seg.slice(2, -2)}</strong>
                 if (seg.startsWith("`") && seg.endsWith("`"))
-                  return <code key={j} className="bg-yellow-900/40 text-yellow-100 rounded px-1 font-mono text-[12px]">{seg.slice(1, -1)}</code>
+                  return <code key={j} className="bg-amber-100 text-amber-800 rounded px-1 font-mono text-[12px]">{seg.slice(1, -1)}</code>
                 return <span key={j}>{seg}</span>
               })}</p>
             </div>

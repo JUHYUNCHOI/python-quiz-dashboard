@@ -70,7 +70,7 @@ function DescriptionBlock({ text }: { text: string }) {
         if (part.startsWith("```")) {
           const code = part.replace(/^```[^\n]*\n?/, "").replace(/```$/, "").trim()
           return (
-            <pre key={i} className="rounded-lg bg-gray-900 px-4 py-3 font-mono text-sm text-[#cdd6f4] overflow-x-auto whitespace-pre">
+            <pre key={i} className="rounded-lg bg-[#1a1b2e] px-4 py-3 font-mono text-sm text-[#cdd6f4] overflow-x-auto whitespace-pre">
               {code}
             </pre>
           )
