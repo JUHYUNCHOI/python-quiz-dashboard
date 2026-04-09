@@ -20,6 +20,8 @@ import {
 } from "lucide-react"
 import type { CodingBankProblem } from "@/data/coding-bank"
 import { CODING_BANK_PROBLEMS } from "@/data/coding-bank"
+import { PracticeRunner } from "@/components/practice/practice-runner"
+import type { PracticeProblem } from "@/data/practice/types"
 
 // ── 상수 ────────────────────────────────────────────────────────────
 
@@ -303,11 +305,13 @@ function ProblemDetail({
   solvedSet,
   onBack,
   onSolved,
+  userId,
 }: {
   problem: CodingBankProblem
   solvedSet: Set<string>
   onBack: () => void
   onSolved: (id: string) => void
+  userId?: string
 }) {
   const { t, lang } = useLanguage()
   const [revealedHints, setRevealedHints] = useState(0)
@@ -332,6 +336,22 @@ function ProblemDetail({
       ? t("보통", "Medium")
       : t("어려움", "Hard")
 
+  const adaptedProblem: PracticeProblem = {
+    id: problem.id,
+    cluster: "coding-bank",
+    unlockAfter: "cpp-p3",
+    difficulty: problem.difficulty,
+    title: problem.title,
+    description: "",
+    constraints: "",
+    initialCode: `#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    \n    return 0;\n}`,
+    language: "cpp",
+    testCases: problem.testCases.map(tc => ({ stdin: tc.input, expectedOutput: tc.output })),
+    hints: [],
+    solutionCode: problem.solutionCode,
+    solutionExplanation: localSolutionExplanation,
+  }
+
   const handleRevealNextHint = () => {
     if (revealedHints < localHints.length) {
       setRevealedHints((v) => v + 1)
@@ -341,6 +361,12 @@ function ProblemDetail({
   const handleMarkSolved = () => {
     markSolved(problem.id)
     onSolved(problem.id)
+    // DB 저장 (백그라운드)
+    fetch("/api/coding-bank/progress", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ problemId: problem.id }),
+    }).catch(() => {})
   }
 
   return (
@@ -481,6 +507,20 @@ function ProblemDetail({
         </div>
       )}
 
+      {/* 코드 에디터 */}
+      <div className="rounded-2xl border-2 border-black bg-[#1e1e2e] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] p-4">
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
+          {t("코드 작성", "Write Code")}
+        </p>
+        <PracticeRunner
+          key={problem.id}
+          problem={adaptedProblem}
+          onSuccess={() => {
+            if (!solved) handleMarkSolved()
+          }}
+        />
+      </div>
+
       {/* 솔루션 섹션 */}
       <div className="rounded-2xl border-2 border-black bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
         <button
@@ -562,8 +602,21 @@ function CodingBankContent() {
       setIsUnlocked(isTeacher)
     }
 
-    // 완료한 문제 불러오기
+    // localStorage 즉시 로드
     setSolvedSet(getSolvedSet())
+
+    // DB 로드 (백그라운드)
+    fetch("/api/coding-bank/progress")
+      .then(r => r.ok ? r.json() : { solved: [] })
+      .then(({ solved: dbSolved }: { solved: string[] }) => {
+        setSolvedSet(prev => {
+          const merged = new Set([...prev, ...dbSolved])
+          // localStorage도 최신화
+          try { localStorage.setItem(LS_KEY, JSON.stringify([...merged])) } catch {}
+          return merged
+        })
+      })
+      .catch(() => {})
   }, [isTeacher])
 
   const handleSolved = (id: string) => {
@@ -580,6 +633,7 @@ function CodingBankContent() {
           solvedSet={solvedSet}
           onBack={() => setSelectedProblem(null)}
           onSolved={handleSolved}
+          userId={user?.id}
         />
       ) : (
         <ProblemList
