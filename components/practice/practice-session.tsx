@@ -218,6 +218,7 @@ interface PracticeSessionProps {
   onMarkStarred: (id: string) => Promise<void>
   solvedSet: Set<string>
   userId?: string
+  isTeacher?: boolean
 }
 
 type Phase = "loading" | "intro" | "solving" | "round_complete" | "done"
@@ -229,6 +230,7 @@ export function PracticeSession({
   onMarkStarred,
   solvedSet,
   userId,
+  isTeacher = false,
 }: PracticeSessionProps) {
   const { t, lang } = useLanguage()
   const [phase, setPhase] = useState<Phase>("loading")
@@ -454,6 +456,56 @@ export function PracticeSession({
               {t("목록으로", "Back to list")}
             </button>
           </div>
+        </div>
+      )
+    }
+
+    // ── 선생님 인트로: 모든 세트 선택 가능 ──────────────────────────
+    if (isTeacher) {
+      const allSets = (() => {
+        const sets = []
+        let s = 1
+        while (true) {
+          const problems = getSetProblems(cluster.problems, s)
+          if (problems.length === 0) break
+          sets.push({ setNum: s, problems })
+          s++
+        }
+        return sets
+      })()
+
+      return (
+        <div className="max-w-sm mx-auto px-4 pt-8 flex flex-col items-center gap-5">
+          <div className="text-5xl">{cluster.emoji}</div>
+          <div className="text-center">
+            <h2 className="text-xl font-bold text-gray-900">{localCluster.title}</h2>
+            <p className="text-xs text-orange-500 font-semibold mt-1">👨‍🏫 {t("선생님 모드 — 세트 자유 선택", "Teacher mode — select any set")}</p>
+          </div>
+          <div className="flex flex-col gap-2 w-full">
+            {allSets.map(({ setNum, problems: sp }) => {
+              const rangeLabel = setNum === 1
+                ? `#1 – #${SET1_SIZE}`
+                : `#${SET1_SIZE + (setNum - 2) * SET_N_SIZE + 1} – #${SET1_SIZE + (setNum - 1) * SET_N_SIZE}`
+              return (
+                <button
+                  key={setNum}
+                  onClick={() => startSet(setNum)}
+                  className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition-colors"
+                >
+                  <div className="text-left">
+                    <p className="text-sm font-bold text-indigo-800">
+                      {setNum === 1 ? `SET 1 — ${t("기본", "Base")} (${sp.length}${t("문제", "q")})` : `SET ${setNum} (${sp.length}${t("문제", "q")})`}
+                    </p>
+                    <p className="text-xs text-indigo-400">{rangeLabel}</p>
+                  </div>
+                  <span className="text-indigo-400 text-sm">→</span>
+                </button>
+              )
+            })}
+          </div>
+          <button onClick={onExit} className="w-full py-3 rounded-2xl bg-gray-100 hover:bg-gray-200 text-gray-500 font-medium text-sm transition-colors">
+            {t("목록으로", "Back to list")}
+          </button>
         </div>
       )
     }

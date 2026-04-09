@@ -483,7 +483,8 @@ function PracticeContent() {
   const router = useRouter()
 
   const { solvedSet, starredSet, markSolved, markStarred } = usePracticeProgress()
-  const { user } = useAuth()
+  const { user, profile } = useAuth()
+  const isTeacher = profile?.role === "teacher"
   const [lang, setLang] = useState<Lang>((searchParams.get("lang") as Lang) || "cpp")
 
   const clusterId = searchParams.get("cluster") || ""
@@ -535,6 +536,7 @@ function PracticeContent() {
         onMarkSolved={markSolved}
         onMarkStarred={markStarred}
         userId={user?.id}
+        isTeacher={isTeacher}
       />
     )
   }
