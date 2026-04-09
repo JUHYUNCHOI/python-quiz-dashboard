@@ -39,6 +39,8 @@ export default function QuizPage() {
   const router = useRouter()
   const { profile } = useAuth()
   const isTeacher = profile?.role === "teacher"
+  // useLanguage는 최상단에서 — lang이 fetch에 필요하므로 먼저 선언
+  const { t, lang, setLang } = useLanguage()
 
   // 설정 없이 직접 접근하면 setup으로 redirect
   const hasSettings = useRef<boolean | null>(null)
@@ -112,7 +114,7 @@ export default function QuizPage() {
         setIsLoadingQuestions(false)
         router.replace("/quiz/setup")
       })
-  }, [router]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [router, lang]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // 로드된 문제가 없으면 setup으로 리다이렉트
   useEffect(() => {
@@ -132,7 +134,6 @@ export default function QuizPage() {
   const quiz = useQuizState(shuffled.length > 0 ? shuffled : EMPTY_FALLBACK)
   const { play, isMuted, toggleMute } = useSoundEffect()
   const gamification = useGamification()
-  const { t, lang } = useLanguage()
   const { isFocused, justReturnedFocus } = useFocusTracker()
   const comboTier = getComboTier(quiz.combo)
   const [reportedQuestions, setReportedQuestions] = useState<Set<number>>(new Set())
@@ -345,6 +346,24 @@ export default function QuizPage() {
                   <span>{quiz.combo}x</span>
                 </div>
               )}
+
+              {/* Language toggle */}
+              <div className="flex items-center gap-0.5 border border-gray-200 rounded-full p-0.5">
+                <button
+                  onClick={() => setLang("ko")}
+                  className={cn(
+                    "px-2 py-0.5 rounded-full text-xs font-bold transition-all",
+                    lang === "ko" ? "bg-gray-800 text-white" : "text-gray-400 hover:text-gray-600"
+                  )}
+                >한</button>
+                <button
+                  onClick={() => setLang("en")}
+                  className={cn(
+                    "px-2 py-0.5 rounded-full text-xs font-bold transition-all",
+                    lang === "en" ? "bg-gray-800 text-white" : "text-gray-400 hover:text-gray-600"
+                  )}
+                >EN</button>
+              </div>
 
               <SoundToggle isMuted={isMuted} onToggle={toggleMute} />
 
