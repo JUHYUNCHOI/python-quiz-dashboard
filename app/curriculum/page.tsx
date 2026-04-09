@@ -576,7 +576,7 @@ export default function CurriculumPage() {
     "cpp-15","cpp-23","cpp-16","cpp-17","cpp-18","cpp-19","cpp-20"]
   const cppLessonsDone = cppLessonIds.filter(id => completedLessons.has(id)).length
   const practiceUnlocked = isTeacher || cppLessonsDone >= 8
-  const algoUnlocked = isTeacher || practiceClustersDone >= 5
+  const algoUnlocked = isTeacher || practiceProblemsDone >= 40
   const questUnlocked = isTeacher || algoTopicsDone >= 8
 
   // Python 진도가 없으면 C++ 탭에 힌트 표시 (차단은 아님)
@@ -922,7 +922,7 @@ export default function CurriculumPage() {
                 <span className="flex items-center gap-1 text-xs font-bold text-blue-600">⚡ {cppLessonsDone}/23</span>
                 <ChevronRight className="w-3 h-3 text-gray-300 flex-shrink-0" />
                 {practiceUnlocked
-                  ? <Link href="/practice" className="flex items-center gap-1 text-xs font-bold text-green-600">💪 {practiceClustersDone}/12</Link>
+                  ? <Link href="/practice" className="flex items-center gap-1 text-xs font-bold text-green-600">💪 {practiceProblemsDone}/40</Link>
                   : <span className="flex items-center gap-1 text-xs text-gray-300">💪 <Lock className="w-3 h-3" /></span>}
                 <ChevronRight className="w-3 h-3 text-gray-300 flex-shrink-0" />
                 {algoUnlocked
@@ -974,17 +974,17 @@ export default function CurriculumPage() {
                     <span className="text-2xl">{practiceUnlocked ? "💪" : "🔒"}</span>
                     <div>
                       <p className={`font-black text-sm ${practiceUnlocked ? "text-green-800" : "text-gray-500"}`}>{t("2. 연습", "2. Practice")}</p>
-                      <p className={`text-xs ${practiceUnlocked ? "text-green-500" : "text-gray-400"}`}>{t("클러스터 12개", "12 clusters")}</p>
+                      <p className={`text-xs ${practiceUnlocked ? "text-green-500" : "text-gray-400"}`}>{t("40문제 목표", "40 problems goal")}</p>
                     </div>
                   </div>
                   {practiceUnlocked ? (
                     <>
                       <div className="h-2 bg-green-200 rounded-full overflow-hidden">
-                        <div className="h-full bg-green-500 rounded-full transition-all duration-500" style={{ width: `${Math.round((practiceClustersDone / 12) * 100)}%` }} />
+                        <div className="h-full bg-green-500 rounded-full transition-all duration-500" style={{ width: `${Math.min(100, Math.round((practiceProblemsDone / 40) * 100))}%` }} />
                       </div>
-                      <p className="text-xs font-bold text-green-700">{practiceClustersDone}/12 {t("완료", "done")}</p>
+                      <p className="text-xs font-bold text-green-700">{practiceProblemsDone}/{t("40문제", "40 problems")} {t("완료", "done")}</p>
                       <Link href="/practice" className="mt-1 text-xs text-center bg-green-500 text-white rounded-lg py-1.5 font-bold hover:bg-green-600 transition-colors">
-                        {practiceClustersDone === 12 ? `✅ ${t("완료!", "Done!")}` : t("연습하기 →", "Practice →")}
+                        {practiceProblemsDone >= 40 ? `✅ ${t("알고리즘 해금!", "Algorithms Unlocked!")}` : t("연습하기 →", "Practice →")}
                       </Link>
                       {completedLessons.has("cpp-p3") && (
                         <Link href="/coding-bank" className="text-xs text-center border border-teal-400 text-teal-600 rounded-lg py-1.5 font-bold hover:bg-teal-50 transition-colors">
@@ -1023,7 +1023,7 @@ export default function CurriculumPage() {
                   ) : (
                     <>
                       <div className="h-2 bg-gray-200 rounded-full" />
-                      <p className="text-xs text-gray-400">{t(`연습 클러스터 5개 완료 후 해금`, `Unlocks after 5 clusters`)}</p>
+                      <p className="text-xs text-gray-400">{t(`연습 문제 40개 완료 후 해금`, `Unlocks after 40 practice problems`)}</p>
                       <span className="mt-1 text-xs text-center bg-gray-200 text-gray-400 rounded-lg py-1.5 font-bold">{t("잠금", "Locked")}</span>
                     </>
                   )}
