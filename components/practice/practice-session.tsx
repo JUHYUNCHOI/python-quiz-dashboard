@@ -245,6 +245,13 @@ export function PracticeSession({
   const [isRetryMode, setIsRetryMode] = useState(false)
 
   const loadSessions = useCallback(async () => {
+    // 선생님은 항상 인트로(세트 선택)로 이동
+    if (isTeacher) {
+      setCurrentSet(1)
+      setPhase("intro")
+      return
+    }
+
     if (!userId) {
       // 로그인 없어도 localStorage 진행 상황 복원 가능
       const saved = tryLoadProgress(cluster.id, cluster.problems)
@@ -297,7 +304,7 @@ export function PracticeSession({
       setCurrentSet(1)
     }
     setPhase("intro")
-  }, [cluster.id, cluster.problems, userId])
+  }, [cluster.id, cluster.problems, userId, isTeacher])
 
   useEffect(() => { loadSessions() }, [loadSessions])
 
