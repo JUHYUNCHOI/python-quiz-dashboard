@@ -39,10 +39,16 @@ function McqStep({
   onCorrect: () => void
   onWrong: () => void
 }) {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
+  const E = lang === "en"
   const [selected, setSelected] = useState<number | null>(null)
   const answered = selected !== null
   const isRight = selected === content.answer
+
+  // EN 필드 우선 사용 (없으면 Korean fallback)
+  const question = (E && content.en?.question) ? content.en.question : content.question
+  const options = (E && content.en?.options?.length) ? content.en.options : content.options
+  const explanation = (E && content.en?.explanation) ? content.en.explanation : content.explanation
 
   const select = (i: number) => {
     if (answered) return
@@ -55,14 +61,14 @@ function McqStep({
 
   return (
     <div className="flex flex-col gap-3">
-      <p className="font-semibold text-gray-800 text-base leading-relaxed">{content.question}</p>
+      <p className="font-semibold text-gray-800 text-base leading-relaxed">{question}</p>
       {"code" in content && content.code && (
         <pre className="rounded-xl bg-[#1a1b2e] px-4 py-3 font-mono text-sm text-[#cdd6f4] overflow-x-auto leading-6 whitespace-pre-wrap">
           {content.code}
         </pre>
       )}
       <div className="flex flex-col gap-2">
-        {content.options.map((opt, i) => {
+        {options.map((opt, i) => {
           const isSelected = selected === i
           const isCorrect = i === content.answer
           return (
@@ -108,7 +114,7 @@ function McqStep({
           <p className={cn("font-bold mb-1", isRight ? "text-emerald-700" : "text-red-600")}>
             {isRight ? t("✅ 정답!", "✅ Correct!") : t("❌ 오답!", "❌ Wrong!")}
           </p>
-          <p className="text-gray-600 leading-relaxed">{content.explanation}</p>
+          <p className="text-gray-600 leading-relaxed">{explanation}</p>
         </div>
       )}
     </div>
@@ -127,7 +133,8 @@ function PracticeStep({
   onCorrect: () => void
   onWrong: () => void
 }) {
-  const { t } = useLanguage()
+  const { t, lang: curLang } = useLanguage()
+  const isEn = curLang === "en"
   const [input, setInput] = useState("")
   const [result, setResult] = useState<"idle" | "correct" | "wrong">("idle")
   const [showHint, setShowHint] = useState(false)
@@ -155,14 +162,24 @@ function PracticeStep({
     setTimeout(() => inputRef.current?.focus(), 50)
   }
 
-  const task = content.task
-  const guide = "guide" in content ? (content as { guide?: string }).guide : undefined
-  const hint = "hint" in content ? (content as { hint?: string }).hint : undefined
+  // EN 필드 우선 (없으면 KO fallback)
+  const task = (isEn && content.en?.task) ? content.en.task : content.task
+  const guide = isEn && content.en?.guide
+    ? content.en.guide
+    : "guide" in content ? (content as { guide?: string }).guide : undefined
+  const hint = isEn && content.en?.hint
+    ? content.en.hint
+    : "hint" in content ? (content as { hint?: string }).hint : undefined
 
   return (
     <div className="flex flex-col gap-3">
-      {"message" in content && content.message && (
-        <p className="text-xs text-indigo-500 font-semibold bg-indigo-50 rounded-lg px-3 py-2">{content.message}</p>
+      {"message" in content && (
+        (() => {
+          const msg = (isEn && content.en && "message" in content.en && content.en.message)
+            ? (content.en as { message?: string }).message
+            : (content as any).message
+          return msg ? <p className="text-xs text-indigo-500 font-semibold bg-indigo-50 rounded-lg px-3 py-2">{msg}</p> : null
+        })()
       )}
       {"level" in content && content.level !== undefined && (
         <span className="text-xs font-bold text-indigo-400">Lv.{content.level}</span>

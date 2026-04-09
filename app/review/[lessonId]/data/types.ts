@@ -34,6 +34,12 @@ export interface PracticeContent {
   alternateAnswers?: string[];
   blanksAnswer?: string[];
   expect: string;
+  // optional English translations
+  en?: {
+    task?: string;
+    guide?: string;
+    hint?: string;
+  };
 }
 
 export interface QuizContent {
@@ -41,6 +47,12 @@ export interface QuizContent {
   options: string[];
   answer: number;
   explanation: string;
+  // optional English translations
+  en?: {
+    question?: string;
+    options?: string[];
+    explanation?: string;
+  };
 }
 
 export interface ErrorQuizContent {
@@ -49,6 +61,12 @@ export interface ErrorQuizContent {
   options: string[];
   answer: number;
   explanation: string;
+  // optional English translations
+  en?: {
+    question?: string;
+    options?: string[];
+    explanation?: string;
+  };
 }
 
 export interface InterleavingContent {
@@ -61,6 +79,13 @@ export interface InterleavingContent {
   alternateAnswers?: string[];
   blanksAnswer?: string[];
   expect: string;
+  // optional English translations
+  en?: {
+    message?: string;
+    task?: string;
+    guide?: string;
+    hint?: string;
+  };
 }
 
 export interface RewardContent {
