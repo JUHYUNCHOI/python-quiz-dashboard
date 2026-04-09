@@ -86,6 +86,19 @@ export function PracticeSessionOverview({ classId, lang = "ko" }: Props) {
   const inProgress = students.filter(s => s.setsDone > 0 || s.hasPendingAssignment)
   const flagged = inProgress.filter(s => s.persistentWrong.length > 0)
 
+  // 더 연습 필요: 반복 오답 OR 정답률 < 70%, 아직 배정 안 된 학생
+  const needsMore = inProgress.filter(s => {
+    if (s.hasPendingAssignment) return false  // 이미 대기 중
+    const pct = s.totalAttempted > 0 ? (s.totalPassed / s.totalAttempted) * 100 : 0
+    return s.persistentWrong.length > 0 || (s.totalAttempted > 0 && pct < 70) || s.optedOut
+  })
+
+  const handleAssignAll = async () => {
+    for (const s of needsMore) {
+      if (!assignedIds.has(s.studentId)) await handleAssign(s.studentId)
+    }
+  }
+
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-4">
       {/* 헤더 */}
@@ -93,13 +106,18 @@ export function PracticeSessionOverview({ classId, lang = "ko" }: Props) {
         onClick={() => setOpen(o => !o)}
         className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-50 hover:bg-gray-50 transition-colors"
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <h3 className="text-sm font-black text-gray-700">
             🧩 도전문제 현황
           </h3>
+          {needsMore.length > 0 && (
+            <span className="text-[10px] font-bold bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full">
+              💪 더 연습 필요 {needsMore.length}명
+            </span>
+          )}
           {flagged.length > 0 && (
             <span className="text-[10px] font-bold bg-red-100 text-red-600 px-2 py-0.5 rounded-full">
-              🚨 {flagged.length}명 주의
+              🚨 반복 오답 {flagged.length}명
             </span>
           )}
         </div>
@@ -155,6 +173,54 @@ export function PracticeSessionOverview({ classId, lang = "ko" }: Props) {
             <p className="text-[11px] text-gray-400">
               {selectedCluster.emoji} {selectedCluster.title} · 세트1=1~7번, 세트2=8~10번, 세트3=11~13번...
             </p>
+          )}
+
+          {/* 💪 더 연습 필요 섹션 */}
+          {!isLoading && needsMore.length > 0 && (
+            <div className="rounded-xl border-2 border-orange-200 bg-orange-50 p-3 space-y-2">
+              <div className="flex items-center justify-between">
+                <p className="text-xs font-black text-orange-700">
+                  💪 더 연습이 필요한 학생 ({needsMore.length}명)
+                </p>
+                <button
+                  onClick={handleAssignAll}
+                  className="flex items-center gap-1 text-[11px] font-bold text-white bg-orange-500 hover:bg-orange-600 px-3 py-1 rounded-lg transition-colors"
+                >
+                  <Plus className="w-3 h-3" />
+                  전체 추가 배정
+                </button>
+              </div>
+              <div className="space-y-1">
+                {needsMore.map(s => {
+                  const pct = s.totalAttempted > 0 ? Math.round((s.totalPassed / s.totalAttempted) * 100) : 0
+                  const reasons = [
+                    s.persistentWrong.length > 0 && `반복 오답: ${s.persistentWrong.map(n => `${n}번`).join(", ")}`,
+                    s.totalAttempted > 0 && pct < 70 && `정답률 ${pct}%`,
+                    s.optedOut && "포기",
+                  ].filter(Boolean).join(" · ")
+                  return (
+                    <div key={s.studentId} className="flex items-center justify-between bg-white rounded-lg px-3 py-2 border border-orange-100">
+                      <div>
+                        <span className="text-sm font-semibold text-gray-800">{s.name}</span>
+                        <span className="text-[10px] text-orange-500 ml-2">{reasons}</span>
+                      </div>
+                      {assignedIds.has(s.studentId) ? (
+                        <span className="text-[10px] text-emerald-600 font-bold">✅ 배정됨</span>
+                      ) : (
+                        <button
+                          onClick={() => handleAssign(s.studentId)}
+                          disabled={assigning === s.studentId}
+                          className="flex items-center gap-1 text-[10px] font-bold text-orange-600 hover:text-orange-800 px-2 py-1 rounded-lg hover:bg-orange-100 transition-colors disabled:opacity-50"
+                        >
+                          <Plus className="w-3 h-3" />
+                          {assigning === s.studentId ? "..." : "추가 배정"}
+                        </button>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
           )}
 
           {isLoading ? (
