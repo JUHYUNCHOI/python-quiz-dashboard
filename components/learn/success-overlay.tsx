@@ -24,9 +24,11 @@ export function SuccessOverlay({ show, message, xp = 10, onClose }: SuccessOverl
   if (!show) return null
 
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+    <div className="fixed inset-0 z-40 flex items-center justify-center pointer-events-none">
+      {/* 배경 블러 — 클릭은 통과시킴 (다음 버튼 즉시 클릭 가능) */}
+      <div className="absolute inset-0 bg-black/25 backdrop-blur-[2px]" />
       {/* 컨페티 파티클 */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+      <div className="fixed inset-0 overflow-hidden">
         {[...Array(30)].map((_, i) => (
           <div
             key={i}
@@ -49,8 +51,8 @@ export function SuccessOverlay({ show, message, xp = 10, onClose }: SuccessOverl
         ))}
       </div>
 
-      {/* 메인 카드 */}
-      <div className="bg-white rounded-3xl px-10 py-8 shadow-2xl text-center animate-pop-in mx-4 max-w-xs w-full">
+      {/* 메인 카드 — 클릭하면 즉시 닫기 */}
+      <div className="relative bg-white rounded-3xl px-10 py-8 shadow-2xl text-center animate-pop-in mx-4 max-w-xs w-full pointer-events-auto cursor-pointer" onClick={onClose}>
         {/* 별 아이콘 */}
         <div className="relative w-24 h-24 mx-auto mb-4">
           <div className="absolute inset-0 rounded-full bg-yellow-400 animate-pulse-soft" />
