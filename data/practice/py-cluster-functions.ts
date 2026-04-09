@@ -200,6 +200,117 @@ Print the result to 2 decimal places.`,
       },
       language: "python",
     },
+    // ── 기본값 매개변수 ────────────────────────────────────────────
+    {
+      id: "pyfunc-DF01",
+      cluster: "py-functions",
+      unlockAfter: "33",
+      difficulty: "쉬움",
+      title: "기본값 매개변수",
+      description: `**기본값 매개변수(default parameter)** 를 사용해 함수를 작성하세요.
+
+\`greet(name, greeting="Hello")\` 함수를 작성하세요:
+- greeting이 주어지면 \`{greeting}, {name}!\`
+- 주어지지 않으면 \`Hello, {name}!\` (기본값 사용)
+
+T개 줄 입력: 단어가 1개면 이름만, 2개면 인사말+이름 순으로 주어집니다.
+
+**기본값 매개변수:** \`def f(x, y=10):\` — y를 생략하면 자동으로 10이 사용됩니다.`,
+      constraints: "1 ≤ T ≤ 5",
+      initialCode: `def greet(name, greeting="Hello"):
+    # greeting, name을 조합해 출력하는 함수
+
+t = int(input())
+for _ in range(t):
+    parts = input().split()
+    if len(parts) == 1:
+        print(greet(parts[0]))
+    else:
+        print(greet(parts[1], parts[0]))`,
+      testCases: [
+        { stdin: "3\nAlice\nHi Bob\nBye Charlie", expectedOutput: "Hello, Alice!\nHi, Bob!\nBye, Charlie!", label: "기본" },
+        { stdin: "1\nWorld", expectedOutput: "Hello, World!", label: "기본값만" },
+        { stdin: "2\nGoodmorning Dave\nEve", expectedOutput: "Goodmorning, Dave!\nHello, Eve!", label: "혼합" },
+      ],
+      hints: [
+        "def greet(name, greeting='Hello'): return f'{greeting}, {name}!'",
+        "기본값 매개변수는 뒤쪽에 위치해야 합니다. def f(x=1, y)는 오류 — 항상 def f(y, x=1)처럼.",
+      ],
+      solutionCode: `def greet(name, greeting="Hello"):
+    return f"{greeting}, {name}!"
+
+t = int(input())
+for _ in range(t):
+    parts = input().split()
+    if len(parts) == 1:
+        print(greet(parts[0]))
+    else:
+        print(greet(parts[1], parts[0]))`,
+      solutionExplanation: "기본값 매개변수는 def f(x, y=기본값) 처럼 선언합니다. 호출 시 y를 생략하면 기본값이 사용됩니다. 기본값이 있는 매개변수는 반드시 뒤쪽에 위치해야 합니다.",
+      language: "python",
+      en: {
+        title: "Default Parameters",
+        description: `Write a function using **default parameter** values.\n\nWrite \`greet(name, greeting="Hello")\`:\n- If greeting is provided: \`{greeting}, {name}!\`\n- If omitted: \`Hello, {name}!\` (uses default)\n\nT lines of input: 1 word = name only, 2 words = greeting + name.\n\n**Default parameters:** \`def f(x, y=10):\` — y defaults to 10 if not provided.`,
+        constraints: "1 ≤ T ≤ 5",
+        hints: [
+          "def greet(name, greeting='Hello'): return f'{greeting}, {name}!'",
+          "Default parameters must come last: def f(x=1, y) is invalid — always write def f(y, x=1).",
+        ],
+        solutionExplanation: "Default parameters are declared as def f(x, y=default). If y is omitted in the call, the default is used. Parameters with defaults must always come after those without.",
+      },
+    },
+    // ── 여러 반환값 ────────────────────────────────────────────────
+    {
+      id: "pyfunc-MR01",
+      cluster: "py-functions",
+      unlockAfter: "33",
+      difficulty: "쉬움",
+      title: "여러 값 반환",
+      description: `파이썬 함수는 **여러 값을 한 번에 반환**할 수 있습니다. 이를 활용해 함수를 작성하세요.
+
+\`stats(nums)\` 함수를 작성하세요 — 리스트를 받아 **최솟값, 최댓값, 합계를 동시에 반환**합니다.
+
+N개의 정수를 입력받아 stats() 결과를 한 줄에 출력하세요: \`최솟값 최댓값 합계\`
+
+**여러 반환:** \`return a, b, c\` → 호출 쪽에서 \`x, y, z = f()\` 로 받습니다.`,
+      constraints: "1 ≤ N ≤ 10",
+      initialCode: `def stats(nums):
+    # 최솟값, 최댓값, 합계를 동시에 반환하세요
+    return  # return a, b, c 형태
+
+n = int(input())
+nums = list(map(int, input().split()))
+mn, mx, total = stats(nums)
+print(mn, mx, total)`,
+      testCases: [
+        { stdin: "5\n3 1 4 1 5", expectedOutput: "1 5 14", label: "기본" },
+        { stdin: "3\n-2 0 2", expectedOutput: "-2 2 0", label: "음수 포함" },
+        { stdin: "1\n7", expectedOutput: "7 7 7", label: "단일" },
+      ],
+      hints: [
+        "return min(nums), max(nums), sum(nums) 처럼 쉼표로 구분해 반환합니다.",
+        "mn, mx, total = stats(nums) 처럼 여러 변수에 한 번에 받을 수 있어요 (unpacking).",
+      ],
+      solutionCode: `def stats(nums):
+    return min(nums), max(nums), sum(nums)
+
+n = int(input())
+nums = list(map(int, input().split()))
+mn, mx, total = stats(nums)
+print(mn, mx, total)`,
+      solutionExplanation: "return a, b, c는 실제로 튜플 (a, b, c)를 반환합니다. 받는 쪽에서 x, y, z = f()로 unpack하면 각 변수에 자동으로 배정됩니다.",
+      language: "python",
+      en: {
+        title: "Multiple Return Values",
+        description: `Python functions can **return multiple values at once**. Use this to write a function.\n\nWrite \`stats(nums)\` — takes a list and **returns minimum, maximum, and sum simultaneously**.\n\nInput N integers and print the stats() result on one line: \`min max sum\`\n\n**Multiple return:** \`return a, b, c\` → caller receives with \`x, y, z = f()\``,
+        constraints: "1 ≤ N ≤ 10",
+        hints: [
+          "return min(nums), max(nums), sum(nums) — separate values with commas.",
+          "mn, mx, total = stats(nums) receives all values at once (unpacking).",
+        ],
+        solutionExplanation: "return a, b, c actually returns a tuple (a, b, c). The caller can unpack with x, y, z = f(), assigning each value to its variable.",
+      },
+    },
     {
       id: "pyfunc-005",
       cluster: "py-functions",

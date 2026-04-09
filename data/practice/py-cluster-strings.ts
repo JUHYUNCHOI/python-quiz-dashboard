@@ -50,6 +50,134 @@ print(' '.join(word[::-1] for word in sentence.split()))`,
       },
       language: "python",
     },
+    // ── strip ─────────────────────────────────────────────────────
+    {
+      id: "pystr-ST01",
+      cluster: "py-strings",
+      unlockAfter: "6",
+      difficulty: "쉬움",
+      title: "공백 제거 (strip)",
+      description: `N개의 문자열이 주어집니다. 각 문자열의 **양쪽 공백을 strip()으로 제거**하고 출력하세요.
+
+**strip()** — 문자열 양쪽 공백(또는 지정 문자)을 모두 제거합니다.
+- \`"  hello  ".strip()\` → \`"hello"\`
+- \`lstrip()\` : 왼쪽만, \`rstrip()\` : 오른쪽만`,
+      constraints: "1 ≤ N ≤ 10",
+      initialCode: `n = int(input())
+for _ in range(n):
+    s = input()
+    # strip()을 사용해 양쪽 공백 제거 후 출력`,
+      testCases: [
+        { stdin: "3\n  hello  \n world\npython   ", expectedOutput: "hello\nworld\npython", label: "기본" },
+        { stdin: "1\n   spaces   ", expectedOutput: "spaces", label: "양쪽 공백" },
+        { stdin: "2\nnospace\n  both  ", expectedOutput: "nospace\nboth", label: "혼합" },
+      ],
+      hints: [
+        "s.strip()은 문자열 양쪽의 공백을 제거합니다.",
+        "print(s.strip())으로 바로 출력할 수 있어요.",
+      ],
+      solutionCode: `n = int(input())
+for _ in range(n):
+    s = input()
+    print(s.strip())`,
+      solutionExplanation: "s.strip()은 문자열 양쪽의 공백 문자(스페이스, 탭, 줄바꿈)를 모두 제거합니다. lstrip()은 왼쪽만, rstrip()은 오른쪽만 제거합니다.",
+      language: "python",
+      en: {
+        title: "Remove Whitespace (strip)",
+        description: `Given N strings, remove the whitespace from both sides of each string using **strip()** and print.\n\n**strip()** — removes leading and trailing whitespace (or specified characters).\n- \`"  hello  ".strip()\` → \`"hello"\`\n- \`lstrip()\`: left only, \`rstrip()\`: right only`,
+        constraints: "1 ≤ N ≤ 10",
+        hints: [
+          "s.strip() removes whitespace from both ends of the string.",
+          "You can print directly: print(s.strip())",
+        ],
+        solutionExplanation: "s.strip() removes all whitespace (spaces, tabs, newlines) from both ends. lstrip() removes only from the left, rstrip() only from the right.",
+      },
+    },
+    // ── replace ───────────────────────────────────────────────────
+    {
+      id: "pystr-RP01",
+      cluster: "py-strings",
+      unlockAfter: "6",
+      difficulty: "쉬움",
+      title: "문자 바꾸기 (replace)",
+      description: `문자열 S와 바꿀 문자 A, 바뀔 문자 B가 주어집니다. **replace()를 사용해** S에서 A를 모두 B로 바꿔 출력하세요.
+
+**replace()** — \`s.replace(old, new)\` : old를 모두 new로 교체합니다.
+- \`"banana".replace("a", "o")\` → \`"bonono"\``,
+      constraints: "S 길이 ≤ 100",
+      initialCode: `s = input()
+a = input()
+b = input()
+# replace()를 사용해 a를 b로 교체 후 출력`,
+      testCases: [
+        { stdin: "banana\na\no", expectedOutput: "bonono", label: "기본" },
+        { stdin: "hello world\no\n0", expectedOutput: "hell0 w0rld", label: "다중 교체" },
+        { stdin: "python\nz\nZ", expectedOutput: "python", label: "없는 문자" },
+        { stdin: "aaa\na\nbb", expectedOutput: "bbbbbb", label: "길이 변화" },
+      ],
+      hints: [
+        "s.replace(a, b)는 s에서 a를 모두 b로 바꾼 새 문자열을 반환합니다.",
+        "replace()는 원본 문자열을 바꾸지 않으므로 결과를 출력하거나 변수에 저장하세요.",
+      ],
+      solutionCode: `s = input()
+a = input()
+b = input()
+print(s.replace(a, b))`,
+      solutionExplanation: "s.replace(a, b)는 문자열 s에서 a를 모두 b로 교체한 새 문자열을 반환합니다. 파이썬 문자열은 불변(immutable)이므로 원본은 바뀌지 않습니다.",
+      language: "python",
+      en: {
+        title: "Replace Characters (replace)",
+        description: `Given string S, character A, and character B, use **replace()** to replace all occurrences of A with B in S.\n\n**replace()** — \`s.replace(old, new)\`: replaces all occurrences of old with new.\n- \`"banana".replace("a", "o")\` → \`"bonono"\``,
+        constraints: "Length of S ≤ 100",
+        hints: [
+          "s.replace(a, b) returns a new string with all occurrences of a replaced by b.",
+          "replace() doesn't modify the original string — print the result or store it in a variable.",
+        ],
+        solutionExplanation: "s.replace(a, b) returns a new string with all a replaced by b. Python strings are immutable, so the original is unchanged.",
+      },
+    },
+    // ── find ──────────────────────────────────────────────────────
+    {
+      id: "pystr-FD01",
+      cluster: "py-strings",
+      unlockAfter: "6",
+      difficulty: "쉬움",
+      title: "위치 찾기 (find)",
+      description: `문자열 S와 찾을 문자열 T가 주어집니다. **find()를 사용해** T가 S에서 처음 등장하는 위치(인덱스)를 출력하세요. 없으면 \`-1\`을 출력합니다.
+
+**find()** — \`s.find(t)\` : t의 첫 등장 위치(0-based) 반환. 없으면 **-1** 반환.
+- \`"hello".find("ll")\` → \`2\`
+- \`"hello".find("z")\` → \`-1\``,
+      constraints: "S 길이 ≤ 100, T 길이 ≥ 1",
+      initialCode: `s = input()
+t = input()
+# find()를 사용해 t의 위치 출력`,
+      testCases: [
+        { stdin: "hello\nll", expectedOutput: "2", label: "기본" },
+        { stdin: "python\nz", expectedOutput: "-1", label: "없는 경우" },
+        { stdin: "banana\nan", expectedOutput: "1", label: "첫 등장" },
+        { stdin: "abcabc\nabc", expectedOutput: "0", label: "시작" },
+      ],
+      hints: [
+        "s.find(t)는 t의 첫 등장 위치를 반환합니다. 없으면 -1.",
+        "find()와 index()의 차이: find()는 없을 때 -1, index()는 ValueError 발생.",
+      ],
+      solutionCode: `s = input()
+t = input()
+print(s.find(t))`,
+      solutionExplanation: "s.find(t)는 t의 첫 번째 등장 위치(0-based 인덱스)를 반환합니다. 없으면 -1을 반환하므로 별도 예외 처리 없이 안전하게 사용할 수 있습니다.",
+      language: "python",
+      en: {
+        title: "Find Position (find)",
+        description: `Given string S and search string T, use **find()** to print the index of T's first occurrence in S. Print \`-1\` if not found.\n\n**find()** — \`s.find(t)\`: returns first occurrence index (0-based). Returns **-1** if absent.\n- \`"hello".find("ll")\` → \`2\`\n- \`"hello".find("z")\` → \`-1\``,
+        constraints: "Length of S ≤ 100, length of T ≥ 1",
+        hints: [
+          "s.find(t) returns the first occurrence index. Returns -1 if not found.",
+          "Difference between find() and index(): find() returns -1 when absent, index() raises ValueError.",
+        ],
+        solutionExplanation: "s.find(t) returns the 0-based index of t's first occurrence. Returning -1 when absent makes it safe to use without exception handling.",
+      },
+    },
     {
       id: "pystr-002",
       cluster: "py-strings",

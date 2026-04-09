@@ -52,6 +52,104 @@ print(total)`,
       },
       language: "python",
     },
+    // ── while ─────────────────────────────────────────────────────
+    {
+      id: "pyloop-W01",
+      cluster: "py-loops",
+      unlockAfter: "14",
+      difficulty: "쉬움",
+      title: "0 전까지 합산 (while)",
+      description: `정수를 한 줄에 하나씩 입력받습니다. **while 루프를 사용해** 0이 입력되면 멈추고, 그 전까지 받은 수의 합을 출력하세요.
+
+**while 특징:** 반복 횟수를 미리 모를 때 적합합니다.
+\`\`\`python
+while 조건:
+    반복할 코드
+\`\`\``,
+      constraints: "입력 수 최대 50개, 각 수 -1000 이상 1000 이하 (0 제외)",
+      initialCode: `total = 0
+# while 루프를 사용하세요
+# 0이 입력되면 종료
+print(total)`,
+      testCases: [
+        { stdin: "3\n5\n2\n0", expectedOutput: "10", label: "기본" },
+        { stdin: "0", expectedOutput: "0", label: "바로 0" },
+        { stdin: "10\n0", expectedOutput: "10", label: "값 하나" },
+        { stdin: "-3\n7\n0", expectedOutput: "4", label: "음수 포함" },
+      ],
+      hints: [
+        "n = int(input()) 으로 읽고, while n != 0: total += n 후 n = int(input()) 패턴을 써보세요.",
+        "또는 while True: n = int(input()); if n == 0: break; total += n 패턴도 됩니다.",
+      ],
+      solutionCode: `total = 0
+n = int(input())
+while n != 0:
+    total += n
+    n = int(input())
+print(total)`,
+      solutionExplanation: "for 루프는 반복 횟수가 정해져 있을 때, while 루프는 조건이 참인 동안 계속 반복할 때 씁니다. 종료 조건을 먼저 읽고 루프에 진입하는 패턴입니다.",
+      language: "python",
+      en: {
+        title: "Sum Until Zero (while)",
+        description: `Integers are entered one per line. Use a **while loop** to stop when 0 is entered and print the sum of all numbers before it.\n\n**while characteristic:** ideal when the number of iterations is unknown.\n\`\`\`python\nwhile condition:\n    code to repeat\n\`\`\``,
+        constraints: "At most 50 inputs, each value -1000 to 1000 (no zeros)",
+        hints: [
+          "Read n = int(input()), then while n != 0: total += n; n = int(input())",
+          "Or use while True: n = int(input()); if n == 0: break; total += n",
+        ],
+        solutionExplanation: "Use for when the iteration count is known; use while when repeating until a condition is met. This pattern reads the first value before entering the loop.",
+      },
+    },
+    // ── continue ──────────────────────────────────────────────────
+    {
+      id: "pyloop-C01",
+      cluster: "py-loops",
+      unlockAfter: "14",
+      difficulty: "쉬움",
+      title: "3의 배수 건너뛰기 (continue)",
+      description: `1부터 N까지 정수 중 **3의 배수를 건너뛰고** 나머지를 출력하세요. **continue를 반드시 사용하세요.**
+
+**continue 특징:** 현재 반복의 나머지를 건너뛰고 다음 반복으로 이동합니다.
+\`\`\`python
+for i in range(1, n+1):
+    if 건너뛸 조건:
+        continue   # 나머지 코드 건너뜀
+    print(i)
+\`\`\``,
+      constraints: "1 ≤ N ≤ 30",
+      initialCode: `n = int(input())
+for i in range(1, n + 1):
+    if i % 3 == 0:
+        continue  # 3의 배수 건너뛰기
+    # 나머지 출력`,
+      testCases: [
+        { stdin: "10", expectedOutput: "1\n2\n4\n5\n7\n8\n10", label: "N=10" },
+        { stdin: "6", expectedOutput: "1\n2\n4\n5", label: "N=6" },
+        { stdin: "3", expectedOutput: "1\n2", label: "N=3" },
+        { stdin: "1", expectedOutput: "1", label: "N=1" },
+      ],
+      hints: [
+        "if i % 3 == 0: continue 로 3의 배수를 건너뜁니다.",
+        "continue 아래의 코드(print(i))는 continue가 실행되면 건너뛰어집니다.",
+      ],
+      solutionCode: `n = int(input())
+for i in range(1, n + 1):
+    if i % 3 == 0:
+        continue
+    print(i)`,
+      solutionExplanation: "continue는 현재 반복의 나머지 코드를 건너뛰고 다음 반복으로 이동합니다. if 조건이 참이면 print(i)를 실행하지 않고 다음 i로 넘어갑니다.",
+      language: "python",
+      en: {
+        title: "Skip Multiples of 3 (continue)",
+        description: `Print all integers from 1 to N **except multiples of 3**. **You must use continue.**\n\n**continue characteristic:** skips the rest of the current iteration and moves to the next.\n\`\`\`python\nfor i in range(1, n+1):\n    if skip_condition:\n        continue\n    print(i)\n\`\`\``,
+        constraints: "1 ≤ N ≤ 30",
+        hints: [
+          "if i % 3 == 0: continue skips multiples of 3.",
+          "Code after continue (print(i)) is skipped when continue executes.",
+        ],
+        solutionExplanation: "continue skips the rest of the current iteration and moves to the next. When the condition is true, print(i) is not executed and we move to the next i.",
+      },
+    },
     {
       id: "pyloop-002",
       cluster: "py-loops",

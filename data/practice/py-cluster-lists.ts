@@ -53,6 +53,114 @@ print(sum(nums))`,
       },
       language: "python",
     },
+    // ── append / pop / index ──────────────────────────────────────
+    {
+      id: "pylist-AP01",
+      cluster: "py-lists",
+      unlockAfter: "16",
+      difficulty: "쉬움",
+      title: "리스트 추가/삭제 (append · pop)",
+      description: `빈 리스트에서 시작해 명령을 처리하세요. **append와 pop을 반드시 사용하세요.**
+
+- \`+ x\` → **append(x)** : 리스트 끝에 x 추가
+- \`-\` → **pop()** : 마지막 원소 제거 후 출력 (비어있으면 \`empty\` 출력)
+
+모든 명령 처리 후 리스트를 공백으로 구분해 출력합니다. (비어있으면 빈 줄)`,
+      constraints: "1 ≤ 명령 수 ≤ 15",
+      initialCode: `n = int(input())
+lst = []
+for _ in range(n):
+    cmd = input().split()
+    if cmd[0] == '+':
+        # append 사용
+        pass
+    else:
+        # pop 사용, 비어있으면 'empty'
+        pass
+print(*lst)`,
+      testCases: [
+        { stdin: "5\n+ 1\n+ 2\n-\n+ 3\n-", expectedOutput: "2\n3\n1", label: "기본" },
+        { stdin: "3\n+ 10\n+ 20\n+ 30", expectedOutput: "10 20 30", label: "추가만" },
+        { stdin: "2\n-\n+ 5", expectedOutput: "empty\n5", label: "빈 리스트 pop" },
+      ],
+      hints: [
+        "lst.append(x)는 리스트 끝에 x를 추가합니다.",
+        "lst.pop()은 마지막 원소를 제거하고 반환합니다. 비어있으면 IndexError — if lst: 로 확인하세요.",
+      ],
+      solutionCode: `n = int(input())
+lst = []
+for _ in range(n):
+    cmd = input().split()
+    if cmd[0] == '+':
+        lst.append(int(cmd[1]))
+    else:
+        if lst:
+            print(lst.pop())
+        else:
+            print('empty')
+print(*lst)`,
+      solutionExplanation: "append(x)는 끝에 추가, pop()은 끝 원소를 제거하며 반환합니다. pop(0)은 앞 원소 제거(O(n))이므로 앞뒤 모두 빠르게 필요하면 deque를 씁니다.",
+      language: "python",
+      en: {
+        title: "List Add/Remove (append · pop)",
+        description: `Starting from an empty list, process commands. **You must use append and pop.**\n\n- \`+ x\` → **append(x)**: add x to the end\n- \`-\` → **pop()**: remove last element and print it (print \`empty\` if list is empty)\n\nAfter all commands, print the list separated by spaces (empty line if empty).`,
+        constraints: "1 ≤ number of commands ≤ 15",
+        hints: [
+          "lst.append(x) adds x to the end of the list.",
+          "lst.pop() removes and returns the last element. Check if lst: to avoid IndexError on empty list.",
+        ],
+        solutionExplanation: "append(x) adds to the end, pop() removes and returns the last element. pop(0) removes from the front but is O(n) — use deque for fast front operations.",
+      },
+    },
+    {
+      id: "pylist-IDX01",
+      cluster: "py-lists",
+      unlockAfter: "16",
+      difficulty: "쉬움",
+      title: "원소 위치 찾기 (index)",
+      description: `리스트에서 특정 값의 위치를 **index()를 사용해** 찾으세요.
+
+N개의 정수 리스트와 찾을 값 T가 주어집니다.
+- T가 있으면 **index(T)** 로 위치(0-based) 출력
+- T가 없으면 \`-1\` 출력
+
+**index()** — \`lst.index(x)\` : x의 첫 등장 인덱스 반환. 없으면 ValueError 발생.`,
+      constraints: "1 ≤ N ≤ 20",
+      initialCode: `n = int(input())
+lst = list(map(int, input().split()))
+t = int(input())
+# index()를 사용해 t의 위치를 찾으세요
+# 없으면 -1 출력`,
+      testCases: [
+        { stdin: "5\n3 1 4 1 5\n4", expectedOutput: "2", label: "기본" },
+        { stdin: "4\n10 20 30 40\n99", expectedOutput: "-1", label: "없는 값" },
+        { stdin: "3\n5 5 5\n5", expectedOutput: "0", label: "첫 위치" },
+        { stdin: "1\n7\n7", expectedOutput: "0", label: "단일" },
+      ],
+      hints: [
+        "t in lst 로 먼저 존재 여부를 확인하고, 있으면 lst.index(t)로 위치를 찾으세요.",
+        "또는 try: print(lst.index(t)) except ValueError: print(-1) 로 예외 처리할 수 있어요.",
+      ],
+      solutionCode: `n = int(input())
+lst = list(map(int, input().split()))
+t = int(input())
+if t in lst:
+    print(lst.index(t))
+else:
+    print(-1)`,
+      solutionExplanation: "lst.index(t)는 t의 첫 등장 인덱스를 반환하지만 없으면 ValueError를 발생시킵니다. 'in' 연산자로 먼저 존재 여부를 확인하거나 try-except를 사용합니다.",
+      language: "python",
+      en: {
+        title: "Find Element Position (index)",
+        description: `Find the position of a specific value in a list using **index()**.\n\nGiven a list of N integers and a target T:\n- If T exists, use **index(T)** to print its position (0-based)\n- If T doesn't exist, print \`-1\`\n\n**index()** — \`lst.index(x)\`: returns first occurrence index. Raises ValueError if absent.`,
+        constraints: "1 ≤ N ≤ 20",
+        hints: [
+          "Check existence first with t in lst, then use lst.index(t) if found.",
+          "Alternatively: try: print(lst.index(t)) except ValueError: print(-1)",
+        ],
+        solutionExplanation: "lst.index(t) returns the first occurrence index but raises ValueError if absent. Check with 'in' first or use try-except.",
+      },
+    },
     {
       id: "pylist-002",
       cluster: "py-lists",
