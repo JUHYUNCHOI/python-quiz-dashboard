@@ -6,6 +6,10 @@ export const pyConditionalsCluster: PracticeCluster = {
   emoji: "🔀",
   description: "if/elif/else, 논리 연산자, 경계값 처리",
   unlockAfter: "12",
+  en: {
+    title: "Conditionals / Logic",
+    description: "if/elif/else, logical operators, and boundary value handling",
+  },
   problems: [
     {
       id: "pycond-001",
@@ -36,6 +40,16 @@ elif n < 0:
 else:
     print("영")`,
       solutionExplanation: "if/elif/else로 세 가지 경우를 처리합니다. n > 0과 n < 0이 모두 해당하지 않으면 n은 0이므로 else에서 '영'을 출력합니다.",
+      en: {
+        title: "Positive / Negative / Zero",
+        description: `Read an integer and print "positive" if it's positive, "negative" if it's negative, or "zero" if it's 0.`,
+        constraints: "-1000 ≤ N ≤ 1000",
+        hints: [
+          "Use if/elif/else to handle all three cases.",
+          "n > 0 is positive, n < 0 is negative, and anything else is zero.",
+        ],
+        solutionExplanation: "if/elif/else handles all three cases. If neither n > 0 nor n < 0 applies, n must be 0, so the else branch prints 'zero'.",
+      },
       language: "python",
     },
     {
@@ -65,6 +79,16 @@ if n % 2 == 0:
 else:
     print("홀수")`,
       solutionExplanation: "% 2의 결과가 0이면 짝수, 1이면 홀수입니다. if/else 두 경우로 충분합니다.",
+      en: {
+        title: "Even or Odd",
+        description: `Read an integer and print "even" if it's even, or "odd" if it's odd.`,
+        constraints: "1 ≤ N ≤ 10000",
+        hints: [
+          "Use the % operator (remainder).",
+          "If n % 2 == 0, it's even; if n % 2 == 1, it's odd.",
+        ],
+        solutionExplanation: "If the remainder when dividing by 2 is 0, the number is even; otherwise it's odd. Two cases are enough — use if/else.",
+      },
       language: "python",
     },
     {
@@ -94,6 +118,16 @@ if a >= b:
 else:
     print(b)`,
       solutionExplanation: "a >= b 조건으로 같거나 큰 경우를 처리합니다. 또는 print(max(a, b))로 한 줄로도 작성할 수 있습니다.",
+      en: {
+        title: "Larger of Two Numbers",
+        description: `Read two integers A and B, then print the larger one. If they are equal, print A.`,
+        constraints: "-1000 ≤ A, B ≤ 1000",
+        hints: [
+          "If a >= b, print a; otherwise print b.",
+          "You can also use Python's max(a, b) function.",
+        ],
+        solutionExplanation: "The condition a >= b covers the case where they are equal or a is larger. Alternatively, print(max(a, b)) achieves the same in one line.",
+      },
       language: "python",
     },
     {
@@ -120,6 +154,16 @@ a, b, c = map(int, input().split())
       solutionCode: `a, b, c = map(int, input().split())
 print(max(a, b, c))`,
       solutionExplanation: "Python의 max() 함수는 여러 인수를 받아 최대값을 반환합니다. if/elif로 직접 비교해도 동일한 결과를 얻을 수 있습니다.",
+      en: {
+        title: "Maximum of Three Numbers",
+        description: `Read three integers A, B, and C, then print the largest.`,
+        constraints: "-1000 ≤ A, B, C ≤ 1000",
+        hints: [
+          "Use if/elif/else to compare the three numbers, or use max(a, b, c).",
+          "Find the larger of a and b first, then compare that result with c.",
+        ],
+        solutionExplanation: "Python's max() function accepts multiple arguments and returns the maximum. You can also compare directly using if/elif to get the same result.",
+      },
       language: "python",
     },
     {
@@ -162,6 +206,16 @@ elif score >= 60:
 else:
     print("F")`,
       solutionExplanation: "높은 점수부터 확인하면 앞 조건을 통과한 경우 자동으로 그보다 낮은 범위임이 보장됩니다. 예를 들어 elif score >= 80은 이미 90 미만임을 전제합니다.",
+      en: {
+        title: "Grade Output",
+        description: `Read a score and print the corresponding letter grade.\n\n- 90 or above: A\n- 80 or above: B\n- 70 or above: C\n- 60 or above: D\n- Below 60: F`,
+        constraints: "0 ≤ score ≤ 100",
+        hints: [
+          "Use an elif chain and check from highest to lowest.",
+          "Check score >= 90, then score >= 80, and so on.",
+        ],
+        solutionExplanation: "Checking from highest first ensures each subsequent elif implicitly means a lower range. For example, elif score >= 80 already assumes score < 90.",
+      },
       language: "python",
     },
     {
@@ -196,6 +250,17 @@ if year % 400 == 0 or (year % 4 == 0 and year % 100 != 0):
 else:
     print("평년")`,
       solutionExplanation: "400의 배수는 항상 윤년이고, 4의 배수이면서 100의 배수가 아닌 경우도 윤년입니다. 두 조건을 or로 연결합니다.",
+      en: {
+        title: "Leap Year",
+        description: `Given a year, print "leap year" if it's a leap year, or "common year" otherwise.\n\nLeap year conditions:\n- Divisible by 4 but not by 100\n- Or divisible by 400`,
+        constraints: "1 ≤ year ≤ 9999",
+        hints: [
+          "A year is a leap year if divisible by 400, or divisible by 4 but not by 100.",
+          "Combine the conditions with and, or, not operators.",
+          "year % 400 == 0 or (year % 4 == 0 and year % 100 != 0)",
+        ],
+        solutionExplanation: "Multiples of 400 are always leap years. Multiples of 4 that are not multiples of 100 are also leap years. Connect both conditions with or.",
+      },
       language: "python",
     },
     {
@@ -235,6 +300,16 @@ elif month in [9, 10, 11]:
 else:
     print("겨울")`,
       solutionExplanation: "in 연산자로 값이 리스트 안에 있는지 확인합니다. 12, 1, 2월이 모두 겨울이므로 나머지를 else로 처리합니다.",
+      en: {
+        title: "Season Identifier",
+        description: `Given a month (1–12), print the corresponding season.\n\n- Spring: March, April, May\n- Summer: June, July, August\n- Fall: September, October, November\n- Winter: December, January, February`,
+        constraints: "1 ≤ month ≤ 12",
+        hints: [
+          "Use the in operator to check membership: month in [3, 4, 5]",
+          "Winter spans December and January–February, so it splits across two ranges.",
+        ],
+        solutionExplanation: "The in operator checks if a value belongs to a list. Since December, January, and February are all winter, the else branch handles them all.",
+      },
       language: "python",
     },
     {
@@ -275,6 +350,17 @@ elif c ** 2 > a ** 2 + b ** 2:
 else:
     print("예각삼각형")`,
       solutionExplanation: "sorted()로 정렬하면 c가 가장 큰 변이 됩니다. 먼저 삼각형 성립 여부를 확인(a+b > c)한 뒤, 피타고라스 정리로 삼각형 종류를 판별합니다.",
+      en: {
+        title: "Triangle Classification",
+        description: `Given three side lengths a, b, c, print the type of triangle.\n\n- Not a triangle: longest side ≥ sum of the other two\n- Right triangle: longest side² = sum of squares of the other two\n- Obtuse triangle: longest side² > sum of squares of the other two\n- Acute triangle: longest side² < sum of squares of the other two`,
+        constraints: "1 ≤ a, b, c ≤ 1000 (integers)",
+        hints: [
+          "Sort the three sides with sorted() so that c is the longest.",
+          "Check if a triangle is valid first: a + b > c",
+          "Right: c² == a² + b², Obtuse: c² > a² + b², Acute: c² < a² + b²",
+        ],
+        solutionExplanation: "After sorting, c is the longest side. First verify the triangle inequality (a+b > c), then use the Pythagorean theorem to classify the triangle type.",
+      },
       language: "python",
     },
     {
@@ -314,6 +400,16 @@ elif password != "1234":
 else:
     print("로그인 성공")`,
       solutionExplanation: "아이디를 먼저 확인합니다. 아이디가 맞으면(elif로 이어서) 비밀번호를 확인합니다. 두 조건이 모두 맞으면 로그인 성공입니다.",
+      en: {
+        title: "Login Simulation",
+        description: `Read a username and password, then print the login result.\n\n- Correct username: admin\n- Correct password: 1234\n- Success: "login success"\n- Wrong username: "username error"\n- Wrong password: "password error"`,
+        constraints: "Username/password is a string of 1–20 characters",
+        hints: [
+          "Check the username first; only check the password if the username is correct.",
+          "Use nested if or elif to handle the cases in order.",
+        ],
+        solutionExplanation: "Check the username first. If it's correct (handled by elif), check the password. If both are correct, login succeeds.",
+      },
       language: "python",
     },
     {
@@ -350,6 +446,16 @@ elif age < 19:
 else:
     print(1200)`,
       solutionExplanation: "age < 13을 먼저 확인합니다. 이 조건을 통과하면 age >= 13이므로 다음 elif에서 age < 19는 13 이상 19 미만을 의미합니다.",
+      en: {
+        title: "Age-Based Fare",
+        description: `Given an age, print the corresponding fare.\n\n- Child (under 13): 500\n- Teen (under 19): 800\n- Adult (19 or older): 1200`,
+        constraints: "1 ≤ age ≤ 120",
+        hints: [
+          "Check from the lowest range upward: age < 13 → age < 19 → else",
+          "Print the fare corresponding to each condition.",
+        ],
+        solutionExplanation: "Check age < 13 first. Once that condition passes, age >= 13 is guaranteed, so elif age < 19 implicitly means 13 ≤ age < 19.",
+      },
       language: "python",
     },
     {
@@ -395,6 +501,17 @@ elif bmi < 30.0:
 else:
     print("비만")`,
       solutionExplanation: "키를 100으로 나눠 미터 단위로 변환합니다. BMI = 체중 / 키²를 계산한 뒤, 기준값과 비교하여 체중 상태를 출력합니다.",
+      en: {
+        title: "BMI Calculator",
+        description: `Given height (cm) and weight (kg), calculate BMI and print the weight status.\n\nBMI = weight(kg) / (height(m))²\n\n- Underweight: BMI < 18.5\n- Normal: BMI < 25.0\n- Overweight: BMI < 30.0\n- Obese: BMI ≥ 30.0`,
+        constraints: "100 ≤ height ≤ 250 (cm), 30 ≤ weight ≤ 300 (kg)",
+        hints: [
+          "Convert height from cm to m: height = height_cm / 100",
+          "Compute BMI = weight / (height ** 2).",
+          "Use if/elif/else with thresholds 18.5, 25.0, and 30.0.",
+        ],
+        solutionExplanation: "Divide height by 100 to convert to meters, then compute BMI = weight / height². Compare against the thresholds to determine the weight status.",
+      },
       language: "python",
     },
     {
@@ -432,6 +549,17 @@ elif (y1, m1, d1) > (y2, m2, d2):
 else:
     print("같은 날")`,
       solutionExplanation: "Python의 튜플 비교는 첫 번째 원소부터 순서대로 비교합니다. (y1, m1, d1) < (y2, m2, d2)는 연도→월→일 순서로 자동으로 비교해 줍니다.",
+      en: {
+        title: "Date Comparison",
+        description: `Read two dates each in "YYYY MM DD" format and print the earlier one.\nIf both dates are the same, print "same day".\n\nOutput format: "YYYY-MM-DD"`,
+        constraints: "1900 ≤ year ≤ 2100, valid dates are guaranteed",
+        hints: [
+          "Compare year → month → day in order.",
+          "If the year is the same, compare the month; if the month is the same, compare the day.",
+          "Use f'{y:04d}-{m:02d}-{d:02d}' to format the output.",
+        ],
+        solutionExplanation: "Python compares tuples element by element from left to right. (y1, m1, d1) < (y2, m2, d2) automatically compares year → month → day in order.",
+      },
       language: "python",
     },
     {
@@ -494,6 +622,17 @@ if winner:
 else:
     print("무승부")`,
       solutionExplanation: "8개의 라인(행 3 + 열 3 + 대각 2)을 리스트에 담아 반복문으로 검사합니다. 세 값이 모두 같은 문자면 해당 플레이어의 승리입니다.",
+      en: {
+        title: "Tic-Tac-Toe Winner",
+        description: `Given the state of a 3×3 tic-tac-toe board, determine the winner.\n\nInput: 9 values, one per line ('X', 'O', or '.')\n(. = empty, from top-left to bottom-right)\n\nOutput:\n- "X wins", "O wins", or "draw"`,
+        constraints: "Input contains only X, O, and . — a valid tic-tac-toe state is guaranteed",
+        hints: [
+          "Check all 8 lines: 3 rows, 3 columns, and 2 diagonals.",
+          "If all three values in a line are 'X', X wins; if all are 'O', O wins.",
+          "Collect all lines into a list and loop through them for cleaner code.",
+        ],
+        solutionExplanation: "Store all 8 lines (3 rows + 3 columns + 2 diagonals) in a list and check each one. If all three values match, that player wins.",
+      },
       language: "python",
     },
     {
@@ -541,6 +680,17 @@ else:
     print(f'100원: {c100}개')
     print(f'10원: {c10}개')`,
       solutionExplanation: "거스름돈에서 큰 단위부터 몫을 계산하고 나머지를 다음 단위 계산에 사용합니다. 이를 탐욕 알고리즘(greedy)이라고 합니다.",
+      en: {
+        title: "Vending Machine Change",
+        description: `Given the amount inserted and the item price, print the change in 500, 100, and 10 coin denominations.\n\nOutput format:\n500: N coins\n100: N coins\n10: N coins\n\nIf the amount inserted is less than the price, print "insufficient funds".`,
+        constraints: "10 ≤ price ≤ 10000 (multiple of 10), 10 ≤ inserted ≤ 10000 (multiple of 10)",
+        hints: [
+          "First compute change = inserted - price.",
+          "Count of 500 coins = change // 500; use the remainder for 100 and 10 coins.",
+          "After each denomination, use // and % to find the next denomination's count.",
+        ],
+        solutionExplanation: "Compute the quotient for each denomination from largest to smallest, using the remainder for the next one. This approach is called a greedy algorithm.",
+      },
       language: "python",
     },
     {
@@ -581,6 +731,17 @@ for i in range(1, n + 1):
     else:
         print(i)`,
       solutionExplanation: "15의 배수를 먼저 확인하는 것이 핵심입니다. 15는 3과 5의 공배수이므로 3의 배수나 5의 배수 조건보다 먼저 검사해야 FizzBuzz가 올바르게 출력됩니다.",
+      en: {
+        title: "FizzBuzz",
+        description: `Given an integer N, print FizzBuzz from 1 to N.\n\n- Multiple of 15: FizzBuzz\n- Multiple of 3: Fizz\n- Multiple of 5: Buzz\n- Otherwise: the number itself`,
+        constraints: "1 ≤ N ≤ 100",
+        hints: [
+          "Check for multiples of 15 first (divisible by both 3 and 5).",
+          "Use for i in range(1, n+1): to loop.",
+          "Order: if i % 15 == 0 → elif i % 3 == 0 → elif i % 5 == 0 → else",
+        ],
+        solutionExplanation: "Checking multiples of 15 first is the key. Since 15 is a common multiple of 3 and 5, it must be checked before the 3 and 5 conditions for FizzBuzz to print correctly.",
+      },
       language: "python",
     },
   ],

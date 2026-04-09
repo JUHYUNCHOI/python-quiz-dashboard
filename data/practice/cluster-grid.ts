@@ -5,6 +5,7 @@ export const gridCluster: PracticeCluster = {
   title: "2D 그리드",
   emoji: "🔲",
   description: "격자 탐색, 행/열 처리, 대각선, 인접 셀 순회",
+  en: { title: "2D Grid", description: "Grid traversal, row/column processing, 2D array patterns" },
   unlockAfter: "cpp-21",
   problems: [
     {
@@ -57,6 +58,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "이중 for 루프로 격자의 모든 원소를 순회하며 합계를 구합니다. 격자 크기가 N×M이므로 총 N*M번의 덧셈이 수행됩니다.",
+      en: {
+        title: "Grid Sum",
+        description: `Given an N×M grid, output the sum of all elements.`,
+        constraints: "1 ≤ N, M ≤ 100, 0 ≤ each element ≤ 100",
+        hints: [
+          "Use a nested for loop to add all grid[i][j] values.",
+          "Initialize a sum variable to 0 and accumulate each cell value.",
+        ],
+        solutionExplanation: "A nested for loop traverses every element in the grid and accumulates the total. Since the grid is N×M, exactly N*M additions are performed.",
+      },
     },
     {
       id: "grid-002",
@@ -108,6 +119,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "각 행 i에 대해 rowSum을 0으로 초기화하고 해당 행의 모든 원소를 더합니다. 행마다 rowSum을 출력합니다.",
+      en: {
+        title: "Row Sums",
+        description: `Given an N×M grid, output the sum of each row on a separate line.`,
+        constraints: "1 ≤ N, M ≤ 100, 0 ≤ each element ≤ 100",
+        hints: [
+          "For each row i, sum elements from j=0 to m-1.",
+          "Outer loop: row i, inner loop: column j.",
+        ],
+        solutionExplanation: "For each row i, initialize rowSum to 0 and add all elements in that row. Print rowSum after each row.",
+      },
     },
     {
       id: "grid-003",
@@ -157,6 +178,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "주대각선 원소는 grid[0][0], grid[1][1], ..., grid[n-1][n-1]입니다. 행과 열 인덱스가 같으므로 단일 루프로 처리합니다.",
+      en: {
+        title: "Main Diagonal Sum",
+        description: `Given an N×N square grid, output the sum of the main diagonal (top-left to bottom-right).`,
+        constraints: "1 ≤ N ≤ 100, 0 ≤ each element ≤ 100",
+        hints: [
+          "Main diagonal elements are those where row index equals column index: grid[i][i].",
+          "Sum grid[i][i] for i = 0 to n-1.",
+        ],
+        solutionExplanation: "The main diagonal consists of grid[0][0], grid[1][1], ..., grid[n-1][n-1]. Since row and column indices are equal, a single loop handles it.",
+      },
     },
     {
       id: "grid-004",
@@ -211,6 +242,17 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "두 대각선을 각각 더하면 중심 원소가 두 번 포함됩니다. N이 홀수일 때 중심 인덱스는 n/2이므로 한 번 빼서 보정합니다.",
+      en: {
+        title: "Both Diagonals Sum",
+        description: `Given an N×N square grid, output the sum of both diagonals, counting overlapping elements only once.
+(When N is odd, the center element grid[N/2][N/2] is counted only once.)`,
+        constraints: "1 ≤ N ≤ 100 (odd), 0 ≤ each element ≤ 100",
+        hints: [
+          "Main diagonal: grid[i][i], anti-diagonal: grid[i][n-1-i].",
+          "After adding both diagonals, subtract grid[n/2][n/2] once since it was counted twice.",
+        ],
+        solutionExplanation: "Adding both diagonals causes the center element to be included twice. When N is odd, the center index is n/2, so subtract it once to correct the count.",
+      },
     },
     {
       id: "grid-005",
@@ -267,6 +309,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "열 기준 순회: 바깥 루프를 열(j), 안쪽 루프를 행(i)으로 설정합니다. INT_MIN으로 초기화하면 음수 원소도 올바르게 처리됩니다.",
+      en: {
+        title: "Column Maximums",
+        description: `Given an N×M grid, output the maximum value of each column, separated by spaces.`,
+        constraints: "1 ≤ N, M ≤ 100, -1000 ≤ each element ≤ 1000",
+        hints: [
+          "The maximum of column j is the largest among grid[0][j] through grid[n-1][j].",
+          "Initialize with INT_MIN and iterate over rows — this handles negative values correctly.",
+        ],
+        solutionExplanation: "Column-first traversal: set the outer loop to column (j) and the inner loop to row (i). Initializing with INT_MIN ensures negative elements are handled correctly.",
+      },
     },
     {
       id: "grid-006",
@@ -319,6 +371,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "테두리는 첫 행, 마지막 행, 첫 열, 마지막 열입니다. 네 조건 중 하나라도 만족하면 테두리 원소입니다.",
+      en: {
+        title: "Border Sum",
+        description: `Given an N×M grid, output the sum of the border (edge) elements.`,
+        constraints: "2 ≤ N, M ≤ 100, 0 ≤ each element ≤ 100",
+        hints: [
+          "Border condition: i==0, or i==n-1, or j==0, or j==m-1.",
+          "In the nested loop, only add cells that satisfy the border condition.",
+        ],
+        solutionExplanation: "The border consists of the first row, last row, first column, and last column. Any cell satisfying at least one of the four conditions is a border element.",
+      },
     },
     {
       id: "grid-007",
@@ -376,6 +438,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "시계 방향 90도 회전 공식: 원본 [i][j] → 결과 [j][n-1-i]. 직사각형이면 결과 크기가 M×N으로 바뀌지만, 정방 행렬은 크기가 유지됩니다.",
+      en: {
+        title: "Grid Rotation (90°)",
+        description: `Given an N×N grid, output the result of rotating it 90 degrees clockwise.`,
+        constraints: "1 ≤ N ≤ 50, 0 ≤ each element ≤ 9",
+        hints: [
+          "Clockwise 90°: result[j][n-1-i] = grid[i][j].",
+          "Alternatively: result[i][j] = grid[n-1-j][i].",
+        ],
+        solutionExplanation: "Clockwise 90° rotation formula: original [i][j] → result [j][n-1-i]. For a square matrix the size stays the same; for rectangles the result would be M×N.",
+      },
     },
     {
       id: "grid-008",
@@ -432,6 +504,18 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "이중 루프를 행 우선으로 순회하면 자동으로 행 오름차순, 열 오름차순이 됩니다. 0-based 인덱스에 1을 더해 1-based로 변환합니다.",
+      en: {
+        title: "Find Value Positions",
+        description: `Given an N×M grid and a search value K, output all positions where K appears in (row, col) format.
+Rows and columns are 1-based. Output in ascending row order; for the same row, ascending column order.
+If K is not found, output \`NOT FOUND\`.`,
+        constraints: "1 ≤ N, M ≤ 100, 0 ≤ each element ≤ 100, 0 ≤ K ≤ 100",
+        hints: [
+          "Use a nested for loop to find positions where grid[i][j] == k.",
+          "Add 1 to the 0-based index to convert to 1-based output.",
+        ],
+        solutionExplanation: "Row-first traversal of the nested loop naturally produces results in ascending row then column order. Add 1 to each 0-based index for 1-based output.",
+      },
     },
     {
       id: "grid-009",
@@ -494,6 +578,17 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "방향 배열 패턴: dx, dy 배열에 4방향 오프셋을 저장하고 반복합니다. 범위 체크로 격자 밖 접근을 방지합니다. 이 패턴은 BFS/DFS에서도 자주 사용됩니다.",
+      en: {
+        title: "Adjacent Cell Sum",
+        description: `Given an N×M grid, for each cell output the sum of its four adjacent neighbors (up, down, left, right).
+Cells outside the grid are treated as 0.`,
+        constraints: "1 ≤ N, M ≤ 50, 0 ≤ each element ≤ 100",
+        hints: [
+          "Use direction arrays: int dx[] = {-1,1,0,0}; int dy[] = {0,0,-1,1};",
+          "Bounds check: only add neighbors where 0 <= ni < n && 0 <= nj < m.",
+        ],
+        solutionExplanation: "Direction array pattern: store 4-directional offsets in dx/dy and iterate. Bounds checking prevents out-of-grid access. This pattern is also commonly used in BFS/DFS.",
+      },
     },
     {
       id: "grid-010",
@@ -558,6 +653,18 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "각 셀에서 4방향 이웃을 확인합니다. 범위 내 이웃이 현재 셀보다 크거나 같으면 로컬 최댓값이 아닙니다. 방향 배열 패턴으로 경계 처리를 단순화합니다.",
+      en: {
+        title: "Local Maximum Count",
+        description: `Given an N×M grid, count cells that are strictly greater than all four adjacent neighbors (up, down, left, right).
+Edge cells have no out-of-grid neighbors, so they only need to be greater than their existing neighbors.`,
+        constraints: "2 ≤ N, M ≤ 50, 1 ≤ each element ≤ 10000",
+        hints: [
+          "For each cell, check its 4-directional neighbors. Ignore neighbors outside the grid.",
+          "Use direction arrays dx[] = {-1,1,0,0}, dy[] = {0,0,-1,1} to iterate all 4 directions.",
+          "Start isLocal as true; set it to false if any existing neighbor is greater than or equal to the cell.",
+        ],
+        solutionExplanation: "For each cell, check all in-bounds neighbors. If any neighbor is >= the current cell, it is not a local maximum. The direction array pattern simplifies boundary handling.",
+      },
     },
     {
       id: "grid-011",
@@ -618,6 +725,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "2패스 방법: 1패스에서 0의 위치를 기록, 2패스에서 해당 행/열을 0으로 채웁니다. 한 번에 처리하면 새로 0이 된 셀이 다른 셀에 영향을 주는 문제가 생깁니다.",
+      en: {
+        title: "Zero Out Rows and Columns",
+        description: `Given an N×M grid, set the entire row and column of any cell containing 0 to all zeros, then output the result.`,
+        constraints: "1 ≤ N, M ≤ 50, 0 ≤ each element ≤ 100",
+        hints: [
+          "First collect all row/column indices that contain a 0, then set those rows/columns to 0.",
+          "If you zero them out during traversal, you cannot distinguish original zeros from newly added ones.",
+        ],
+        solutionExplanation: "Two-pass approach: first pass records which rows/columns contain a zero; second pass sets those rows/columns to 0. Doing it in one pass causes newly zeroed cells to incorrectly affect other cells.",
+      },
     },
     {
       id: "grid-012",
@@ -681,6 +798,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "경계값(top/bottom/left/right) 4개를 관리하며 한 레이어씩 나선형으로 탐색합니다. 각 방향 순회 후 해당 경계를 한 칸 좁힙니다.",
+      en: {
+        title: "Spiral Order",
+        description: `Given an N×M grid, print its elements in clockwise spiral order from the outside in.`,
+        constraints: "1 ≤ N, M ≤ 20, 1 ≤ each element ≤ 100",
+        hints: [
+          "Maintain four boundary variables: top, bottom, left, right; traverse clockwise.",
+          "Print one row right → one column down → one row left → one column up, then shrink each boundary by one.",
+        ],
+        solutionExplanation: "Manage four boundaries (top/bottom/left/right) and traverse one layer at a time in spiral order. After traversing each direction, shrink the corresponding boundary by one.",
+      },
     },
     {
       id: "grid-013",
@@ -746,6 +873,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "시계 방향 90도 회전: (i,j) → (j, n-1-i). 회전을 함수로 분리해 K번 적용합니다. K%4로 실제 필요한 회전 수를 구합니다 (4번 = 원래 상태).",
+      en: {
+        title: "Grid K Rotations",
+        description: `Given an N×N grid and a rotation count K, output the grid after rotating it clockwise by 90 degrees K times.`,
+        constraints: "1 ≤ N ≤ 50, 0 ≤ K ≤ 3",
+        hints: [
+          "One clockwise 90° rotation: result[j][n-1-i] = g[i][j].",
+          "Repeat the single rotation K times, or use K%4 to find the minimal equivalent rotation.",
+        ],
+        solutionExplanation: "Clockwise 90°: (i,j) → (j, n-1-i). Isolate the rotation into a function and apply it K times. K%4 gives the effective number of rotations (4 rotations = original).",
+      },
     },
     {
       id: "grid-014",
@@ -799,6 +936,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "전치: 원본의 j번째 열이 결과의 j번째 행이 됩니다. 바깥 루프를 j(원본 열), 안쪽 루프를 i(원본 행)로 설정하면 별도 배열 없이 출력할 수 있습니다.",
+      en: {
+        title: "Grid Transpose",
+        description: `Given an N×M grid, output its transpose (an M×N grid with rows and columns swapped).`,
+        constraints: "1 ≤ N, M ≤ 100, 0 ≤ each element ≤ 100",
+        hints: [
+          "Transpose formula: result[j][i] = grid[i][j].",
+          "The new grid has size M×N.",
+        ],
+        solutionExplanation: "Transpose: the j-th column of the original becomes the j-th row of the result. Setting the outer loop to j (original column) and inner to i (original row) allows direct output without an extra array.",
+      },
     },
     {
       id: "grid-015",
@@ -868,6 +1015,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "테두리를 1D 벡터로 추출 → 회전 → 다시 채우기 3단계로 처리합니다. 시계 방향 한 칸 회전은 마지막 원소를 맨 앞으로 이동하는 것과 같습니다.",
+      en: {
+        title: "Border Rotation",
+        description: `Given an N×M grid, rotate the outermost border one step clockwise and output the result.`,
+        constraints: "2 ≤ N, M ≤ 20, 0 ≤ each element ≤ 9",
+        hints: [
+          "Extract the border elements in order into a 1D vector, rotate clockwise (move last to front), then place them back.",
+          "Extraction order: top row left→right, right column top→bottom, bottom row right→left, left column bottom→top.",
+        ],
+        solutionExplanation: "Three steps: extract border → rotate → fill back. A clockwise one-step rotation is equivalent to moving the last element to the front of the vector.",
+      },
     },
   ],
 }

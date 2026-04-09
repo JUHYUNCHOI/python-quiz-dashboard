@@ -55,7 +55,11 @@ export const lesson20: LessonData = {
         template: "letters = ['a', 'b', 'c']\nprint(letters[___])",
         blanksAnswer: ["-1"],
         answer: "letters = ['a', 'b', 'c']\nprint(letters[-1])",
-        expect: "c"
+        expect: "c",
+        en: {
+          message: "List review! Access by index",
+          task: "Print the last element from the list ['a', 'b', 'c']"
+        }
       }
     },
     {
@@ -68,7 +72,12 @@ export const lesson20: LessonData = {
         template: "prices = {'사과': 1000, '바나나': 500}\nprint(prices[___])",
         blanksAnswer: ["'사과'"],
         answer: "prices = {'사과': 1000, '바나나': 500}\nprint(prices['사과'])",
-        expect: "1000"
+        expect: "1000",
+        en: {
+          task: "Create a fruit price dictionary and print the price of 'apple'",
+          guide: "Use {'key': value} format!",
+          hint: "prices = {'apple': 1000, 'banana': 500}"
+        }
       }
     },
     {
@@ -82,7 +91,17 @@ export const lesson20: LessonData = {
           "튜플 (1, 2)"
         ],
         answer: 2,
-        explanation: "리스트는 변경 가능(mutable)이라 키로 사용 불가! 문자열, 숫자, 튜플은 OK!"
+        explanation: "리스트는 변경 가능(mutable)이라 키로 사용 불가! 문자열, 숫자, 튜플은 OK!",
+        en: {
+          question: "Which of the following cannot be used as a dictionary key?",
+          options: [
+            "String 'name'",
+            "Number 42",
+            "List [1, 2]",
+            "Tuple (1, 2)"
+          ],
+          explanation: "Lists are mutable, so they cannot be dictionary keys! Strings, numbers, and tuples are OK!"
+        }
       }
     },
     {
@@ -157,7 +176,11 @@ export const lesson20: LessonData = {
         template: "t = (1, 2, 3)\nprint(___(t))",
         blanksAnswer: ["len"],
         answer: "t = (1, 2, 3)\nprint(len(t))",
-        expect: "3"
+        expect: "3",
+        en: {
+          message: "Tuple review! Can tuples be modified?",
+          task: "Print the length of tuple (1, 2, 3) (can't modify, but len() works!)"
+        }
       }
     },
     {
@@ -170,7 +193,12 @@ export const lesson20: LessonData = {
         template: "info = {'이름': '영희'}\ninfo[___] = ___\nprint(info)",
         blanksAnswer: ["'학교'", "'중학교'"],
         answer: "info = {'이름': '영희'}\ninfo['학교'] = '중학교'\nprint(info)",
-        expect: "{'이름': '영희', '학교': '중학교'}"
+        expect: "{'이름': '영희', '학교': '중학교'}",
+        en: {
+          task: "Add 'school': 'middle school' to the dictionary and print",
+          guide: "Use dict['new key'] = value format!",
+          hint: "info['school'] = 'middle school'"
+        }
       }
     },
     {
@@ -183,7 +211,12 @@ export const lesson20: LessonData = {
         template: "info = {'이름': '민수', '나이': 15}\nremoved = info.___(___)\nprint(removed)",
         blanksAnswer: ["pop", "'나이'"],
         answer: "info = {'이름': '민수', '나이': 15}\nremoved = info.pop('나이')\nprint(removed)",
-        expect: "15"
+        expect: "15",
+        en: {
+          task: "Remove the 'age' key with pop() and print the removed value",
+          guide: "pop() removes and returns the value!",
+          hint: "removed = info.pop('age')"
+        }
       }
     },
     {
@@ -197,7 +230,17 @@ export const lesson20: LessonData = {
           "에러"
         ],
         answer: 2,
-        explanation: "없는 키에 값을 넣으면 새 키-값 쌍이 추가돼요!"
+        explanation: "없는 키에 값을 넣으면 새 키-값 쌍이 추가돼요!",
+        en: {
+          question: "After d = {'a': 1}; d['b'] = 2, what is d?",
+          options: [
+            "{'a': 1}",
+            "{'b': 2}",
+            "{'a': 1, 'b': 2}",
+            "Error"
+          ],
+          explanation: "Assigning a value to a new key adds a new key-value pair!"
+        }
       }
     },
     {
@@ -272,7 +315,11 @@ export const lesson20: LessonData = {
         template: "___, ___ = ('민수', 100)\nprint(f'{name}: {score}점')",
         blanksAnswer: ["name", "score"],
         answer: "name, score = ('민수', 100)\nprint(f'{name}: {score}점')",
-        expect: "민수: 100점"
+        expect: "민수: 100점",
+        en: {
+          message: "Tuple unpacking review!",
+          task: "Unpack tuple ('Minsu', 100) into name and score, then print"
+        }
       }
     },
     {
@@ -285,7 +332,12 @@ export const lesson20: LessonData = {
         template: "ages = {'민수': 15, '영희': 14, '철수': 16}\nfor age in ages.___():\n    print(age)",
         blanksAnswer: ["values"],
         answer: "ages = {'민수': 15, '영희': 14, '철수': 16}\nfor age in ages.values():\n    print(age)",
-        expect: "15\n14\n16"
+        expect: "15\n14\n16",
+        en: {
+          task: "Iterate over all values in the dictionary and print them",
+          guide: "Put values() in the for loop!",
+          hint: "for v in ages.values(): print(v)"
+        }
       }
     },
     {
@@ -298,7 +350,12 @@ export const lesson20: LessonData = {
         template: "ages = {'민수': 15, '영희': 14}\nfor ___, ___ in ages.items():\n    print(f'{name}: {age}살')",
         blanksAnswer: ["name", "age"],
         answer: "ages = {'민수': 15, '영희': 14}\nfor name, age in ages.items():\n    print(f'{name}: {age}살')",
-        expect: "민수: 15살\n영희: 14살"
+        expect: "민수: 15살\n영희: 14살",
+        en: {
+          task: "Print in 'name: age years old' format using items()",
+          guide: "for name, age in dict.items():",
+          hint: "f'{name}: {age} years old' format!"
+        }
       }
     },
     {
@@ -312,7 +369,17 @@ export const lesson20: LessonData = {
           "에러 발생"
         ],
         answer: 1,
-        explanation: "for x in dict: 하면 기본으로 키를 순회해요! dict.keys()와 같아요."
+        explanation: "for x in dict: 하면 기본으로 키를 순회해요! dict.keys()와 같아요.",
+        en: {
+          question: "When you put a dictionary directly in a for loop, what does it iterate over?",
+          options: [
+            "Values",
+            "Keys",
+            "(key, value) pairs",
+            "Error"
+          ],
+          explanation: "for x in dict: iterates over keys by default! Same as dict.keys()."
+        }
       }
     },
     {
@@ -380,7 +447,12 @@ export const lesson20: LessonData = {
         template: "scores = {'국어': 80, '영어': 90, '수학': 100}\ntotal = ___(scores.___())\nprint(f'합계: {total}')",
         blanksAnswer: ["sum", "values"],
         answer: "scores = {'국어': 80, '영어': 90, '수학': 100}\ntotal = sum(scores.values())\nprint(f'합계: {total}')",
-        expect: "합계: 270"
+        expect: "합계: 270",
+        en: {
+          task: "Sum the values() of the score dictionary and print",
+          guide: "Use sum() to get the total!",
+          hint: "sum(scores.values())"
+        }
       }
     },
     {
@@ -391,7 +463,11 @@ export const lesson20: LessonData = {
         template: "nums = [10, 20, 30]\nprint(___)",
         blanksAnswer: ["sum(nums)"],
         answer: "nums = [10, 20, 30]\nprint(sum(nums))",
-        expect: "60"
+        expect: "60",
+        en: {
+          message: "List review! Sum with sum()",
+          task: "Print the sum of list [10, 20, 30]"
+        }
       }
     },
     {
@@ -404,7 +480,12 @@ export const lesson20: LessonData = {
         template: "scores = {'국어': 80, '영어': 90}\nif '과학' ___ ___ scores:\n    scores['과학'] = 90\nprint(scores)",
         blanksAnswer: ["not", "in"],
         answer: "scores = {'국어': 80, '영어': 90}\nif '과학' not in scores:\n    scores['과학'] = 90\nprint(scores)",
-        expect: "{'국어': 80, '영어': 90, '과학': 90}"
+        expect: "{'국어': 80, '영어': 90, '과학': 90}",
+        en: {
+          task: "Check if 'science' key exists; if not, add it with 90 points and print",
+          guide: "Check with: if 'key' not in dict:",
+          hint: "if 'science' not in scores: scores['science'] = 90"
+        }
       }
     },
     {
@@ -418,7 +499,17 @@ export const lesson20: LessonData = {
           "sum(d.items())"
         ],
         answer: 2,
-        explanation: "sum(d.values())로 모든 값의 합계를 구해요! sum(d)는 키의 합을 구하려 해요."
+        explanation: "sum(d.values())로 모든 값의 합계를 구해요! sum(d)는 키의 합을 구하려 해요.",
+        en: {
+          question: "How do you sum all values in dictionary d?",
+          options: [
+            "sum(d)",
+            "sum(d.keys())",
+            "sum(d.values())",
+            "sum(d.items())"
+          ],
+          explanation: "sum(d.values()) sums all values! sum(d) tries to sum the keys."
+        }
       }
     },
     {

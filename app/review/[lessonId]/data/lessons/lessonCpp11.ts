@@ -56,7 +56,11 @@ export const lessonCpp11: LessonData = {
           guide: "파이썬 len() = C++ .length()!",
           template: 'string s = "Hello";\ncout << s.___() << endl;',
           answer: "length",
-          expect: 'string s = "Hello";\ncout << s.length() << endl;'
+          expect: 'string s = "Hello";\ncout << s.length() << endl;',
+          en: {
+            task: "Print the length of the string!",
+            guide: "Python's len() = C++ .length()!"
+          }
         }
       },
 
@@ -83,7 +87,11 @@ export const lessonCpp11: LessonData = {
           guide: "시작 0, 길이 5!",
           template: 'string s = "Hello World";\ncout << s.___(0, 5) << endl;',
           answer: "substr",
-          expect: 'string s = "Hello World";\ncout << s.substr(0, 5) << endl;'
+          expect: 'string s = "Hello World";\ncout << s.substr(0, 5) << endl;',
+          en: {
+            task: 'Extract "Hello" from "Hello World"!',
+            guide: "Start position 0, length 5!"
+          }
         }
       },
 
@@ -99,7 +107,17 @@ export const lessonCpp11: LessonData = {
             "s[2:5]"
           ],
           answer: 1,
-          explanation: "파이썬 s[2:5]는 인덱스 2부터 3글자! C++은 substr(시작, 길이)이니까 s.substr(2, 3)!"
+          explanation: "파이썬 s[2:5]는 인덱스 2부터 3글자! C++은 substr(시작, 길이)이니까 s.substr(2, 3)!",
+          en: {
+            question: "How do you write Python's s[2:5] in C++?",
+            options: [
+              "s.substr(2, 5)",
+              "s.substr(2, 3)",
+              "s.slice(2, 5)",
+              "s[2:5]"
+            ],
+            explanation: "Python's s[2:5] means 3 characters starting from index 2! In C++, substr(start, length) → s.substr(2, 3)!"
+          }
         }
       },
 
@@ -143,7 +161,11 @@ export const lessonCpp11: LessonData = {
           guide: ".find() 메서드를 써요!",
           template: 'string s = "Hello World";\ncout << s.___("World") << endl;',
           answer: "find",
-          expect: 'string s = "Hello World";\ncout << s.find("World") << endl;'
+          expect: 'string s = "Hello World";\ncout << s.find("World") << endl;',
+          en: {
+            task: 'Find the position of "World" in "Hello World"!',
+            guide: "Use the .find() method!"
+          }
         }
       },
 
@@ -159,7 +181,16 @@ export const lessonCpp11: LessonData = {
             "char 대신 string을 써야 해요"
           ],
           answer: 0,
-          explanation: "\"Hello\"는 5글자 → 인덱스 0~4만 가능! s.at(5)는 범위 밖이라 에러가 나요."
+          explanation: "\"Hello\"는 5글자 → 인덱스 0~4만 가능! s.at(5)는 범위 밖이라 에러가 나요.",
+          en: {
+            question: "What is wrong with this code?",
+            options: [
+              "Index 5 is out of bounds (only 0~4 are valid)",
+              "Should use [] instead of at()",
+              "Should use string instead of char"
+            ],
+            explanation: "\"Hello\" has 5 characters → valid indices are 0~4! s.at(5) is out of bounds and throws an error."
+          }
         }
       },
 
@@ -172,7 +203,11 @@ export const lessonCpp11: LessonData = {
           guide: "마지막 인덱스 = length() - 1!",
           template: 'string s = "Hello";\ncout << s.at(s.___() - 1) << endl;',
           answer: "length",
-          expect: 'string s = "Hello";\ncout << s.at(s.length() - 1) << endl;'
+          expect: 'string s = "Hello";\ncout << s.at(s.length() - 1) << endl;',
+          en: {
+            task: "Print the last character of the string!",
+            guide: "Last index = length() - 1!"
+          }
         }
       },
 
@@ -221,7 +256,11 @@ export const lessonCpp11: LessonData = {
           task: '"Hello World"에서 "World"를 잘라내는 코드를 완성해요!',
           template: 'string s = "Hello World";\ncout << s.___(6, 5) << endl;',
           answer: "substr",
-          expect: 'string s = "Hello World";\ncout << s.substr(6, 5) << endl;'
+          expect: 'string s = "Hello World";\ncout << s.substr(6, 5) << endl;',
+          en: {
+            message: "Quick! Remember what we learned earlier?",
+            task: 'Complete the code to extract "World" from "Hello World"!'
+          }
         }
       },
 
@@ -279,7 +318,11 @@ export const lessonCpp11: LessonData = {
           guide: "+ 연산자로 연결해요!",
           template: 'string a = "Hello";\nstring b = " World";\nstring c = a ___ b;',
           answer: "+",
-          expect: 'string a = "Hello";\nstring b = " World";\nstring c = a + b;'
+          expect: 'string a = "Hello";\nstring b = " World";\nstring c = a + b;',
+          en: {
+            task: "Concatenate two strings!",
+            guide: "Use the + operator to connect them!"
+          }
         }
       },
 
@@ -307,7 +350,11 @@ export const lessonCpp11: LessonData = {
           guide: "파이썬 str() = C++ to_string()!",
           template: 'string s = ___(100);',
           answer: "to_string",
-          expect: 'string s = to_string(100);'
+          expect: 'string s = to_string(100);',
+          en: {
+            task: "Convert the number 100 to a string!",
+            guide: "Python's str() = C++ to_string()!"
+          }
         }
       },
 
@@ -320,7 +367,11 @@ export const lessonCpp11: LessonData = {
           guide: "파이썬 int() = C++ stoi()!",
           template: 'string s = "42";\nint n = ___(s);',
           answer: "stoi",
-          expect: 'string s = "42";\nint n = stoi(s);'
+          expect: 'string s = "42";\nint n = stoi(s);',
+          en: {
+            task: 'Convert the string "42" to an integer!',
+            guide: "Python's int() = C++ stoi()!"
+          }
         }
       },
 
@@ -336,7 +387,17 @@ export const lessonCpp11: LessonData = {
             "str(100)"
           ],
           answer: 1,
-          explanation: "파이썬 str() = C++ to_string()! 숫자를 문자열로 바꿔줘요."
+          explanation: "파이썬 str() = C++ to_string()! 숫자를 문자열로 바꿔줘요.",
+          en: {
+            question: "What is the C++ equivalent of Python's str(100)?",
+            options: [
+              "string(100)",
+              "to_string(100)",
+              "stoi(100)",
+              "str(100)"
+            ],
+            explanation: "Python's str() = C++ to_string()! It converts a number to a string."
+          }
         }
       },
 
@@ -352,7 +413,16 @@ export const lessonCpp11: LessonData = {
             "95는 문자열이라 에러가 나요"
           ],
           answer: 0,
-          explanation: "C++에서는 문자열 + 정수가 안 돼요! to_string(95)로 먼저 문자열로 바꿔야 해요. (파이썬도 str() 필요하죠!)"
+          explanation: "C++에서는 문자열 + 정수가 안 돼요! to_string(95)로 먼저 문자열로 바꿔야 해요. (파이썬도 str() 필요하죠!)",
+          en: {
+            question: "What is wrong with this code?",
+            options: [
+              "Cannot directly concatenate a string and an integer with +",
+              "The string declaration is wrong",
+              "95 is already a string so it causes an error"
+            ],
+            explanation: "In C++, you can't do string + integer! Convert first with to_string(95). (Python also needs str()!)"
+          }
         }
       },
 
@@ -365,7 +435,11 @@ export const lessonCpp11: LessonData = {
           guide: "정수를 to_string()으로 먼저 바꿔요!",
           template: 'string msg = "나이: " + ___(14);',
           answer: "to_string",
-          expect: 'string msg = "나이: " + to_string(14);'
+          expect: 'string msg = "나이: " + to_string(14);',
+          en: {
+            task: 'Create a string combining "Age: " and 14!',
+            guide: "Convert the integer to string with to_string() first!"
+          }
         }
       },
 
@@ -414,7 +488,11 @@ export const lessonCpp11: LessonData = {
           task: "숫자 42를 문자열로 바꾸는 코드를 써봐요!",
           template: "string s = ___(42);",
           answer: "to_string",
-          expect: "string s = to_string(42);"
+          expect: "string s = to_string(42);",
+          en: {
+            message: "Quick! Remember how to convert a number to a string?",
+            task: "Write the code to convert the number 42 to a string!"
+          }
         }
       },
 

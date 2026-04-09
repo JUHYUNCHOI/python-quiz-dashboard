@@ -7,25 +7,32 @@ export const linkedListTopic: AlgoTopic = {
     category: '기초 (Bronze~Silver)',
     order: 5,
     description: '노드와 포인터, 단일/이중 연결 리스트, 순환 탐지와 뒤집기',
+    titleEn: 'Linked List',
+    categoryEn: 'Basics (Bronze~Silver)',
+    descriptionEn: 'Nodes and pointers, singly/doubly linked lists, cycle detection and reversal',
     track: 'cpp',
     stages: [
         {
             num: 1,
             title: '기본 연결 리스트',
+            titleEn: 'Basic Linked List',
             problemIds: [
                 'lc-206',
                 'lc-21'
             ],
-            desc: '뒤집기와 병합의 기본 (Easy)'
+            desc: '뒤집기와 병합의 기본 (Easy)',
+            descEn: 'Basics of reversal and merging (Easy)'
         },
         {
             num: 2,
             title: '연결 리스트 응용',
+            titleEn: 'Applied Linked List',
             problemIds: [
                 'lc-141',
                 'boj-1158'
             ],
-            desc: '사이클 탐지와 시뮬레이션 (Easy~Silver)'
+            desc: '사이클 탐지와 시뮬레이션 (Easy~Silver)',
+            descEn: 'Cycle detection and simulation (Easy~Silver)'
         }
     ],
     problems: [

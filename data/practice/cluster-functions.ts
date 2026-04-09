@@ -5,6 +5,7 @@ export const functionsCluster: PracticeCluster = {
   title: "함수 활용",
   emoji: "🔧",
   description: "함수 선언/정의, 매개변수, return, 재귀 함수 기초",
+  en: { title: "Functions", description: "Function design, overloading, decomposition" },
   unlockAfter: "cpp-8",
   problems: [
     {
@@ -55,6 +56,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "함수를 main() 위에 정의해 선언 없이 사용합니다. 삼항 연산자로 간결하게 작성할 수 있습니다.",
+      en: {
+        title: "Min/Max Functions",
+        description: `Write a function myMax that returns the larger of two integers A and B, and myMin that returns the smaller. For N pairs of input, output the maximum and minimum on each line.`,
+        constraints: "1 ≤ N ≤ 10, -1000 ≤ A, B ≤ 1000",
+        hints: [
+          "Write: int myMax(int a, int b) { return a > b ? a : b; }",
+          "Functions must be declared above main().",
+        ],
+        solutionExplanation: "Define functions above main() so they can be used without a forward declaration. The ternary operator keeps each function concise.",
+      },
     },
     {
       id: "fn-002",
@@ -110,6 +121,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "myAbs 함수로 부호 처리를 분리하면 main이 깔끔해집니다. 같은 로직을 여러 번 써야 할 때 함수로 추출하는 것이 핵심입니다.",
+      en: {
+        title: "Sum of Absolute Values",
+        description: `Write a function myAbs that returns the absolute value of an integer. Output the sum of absolute values of N integers.`,
+        constraints: "1 ≤ N ≤ 100, -10000 ≤ each integer ≤ 10000",
+        hints: [
+          "if (x < 0) return -x; else return x;",
+          "Call myAbs for each value and add the result to a running sum.",
+        ],
+        solutionExplanation: "Extracting the sign-handling into myAbs keeps main clean. Pulling repeated logic into a function is a fundamental programming practice.",
+      },
     },
     {
       id: "fn-003",
@@ -160,6 +181,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "bool 반환 함수는 조건을 직접 반환합니다. 삼항 연산자로 출력을 결정합니다.",
+      en: {
+        title: "Even/Odd Check Function",
+        description: `Write a function isEven that returns true if an integer is even and false if odd. For N integers, output "even" or "odd" for each.`,
+        constraints: "1 ≤ N ≤ 20, -1000 ≤ each integer ≤ 1000",
+        hints: [
+          "bool isEven(int x) { return x % 2 == 0; }",
+          "For negative numbers, % == 0 also means even.",
+        ],
+        solutionExplanation: "A bool-returning function directly returns a condition expression. Use the ternary operator to choose the output string.",
+      },
     },
     {
       id: "fn-004",
@@ -216,6 +247,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "같은 함수를 여러 목적(합산, 최댓값)에 반복 호출합니다. 이것이 함수 재사용의 기본 패턴입니다.",
+      en: {
+        title: "Repeated Function Calls",
+        description: `Write a function square that returns X². For N integers, output the sum of squares and the maximum square value.\n\nOutput:\n- Line 1: sum of squares\n- Line 2: maximum square value`,
+        constraints: "1 ≤ N ≤ 100, 1 ≤ each integer ≤ 100",
+        hints: [
+          "int square(int x) { return x * x; }",
+          "Use sum += square(x) and maxSq = max(maxSq, square(x)).",
+        ],
+        solutionExplanation: "The same function is called multiple times for different purposes (summing, finding max). This is the fundamental pattern of function reuse.",
+      },
     },
     {
       id: "fn-005",
@@ -271,6 +312,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "isPrime 함수는 2부터 sqrt(n)까지만 나눠보면 됩니다. i*i <= n 조건으로 sqrt 없이 처리합니다. 1의 경우는 main에서 별도 처리합니다.",
+      en: {
+        title: "Primality Test Function",
+        description: `Write a function isPrime that returns true if N is prime. For Q integers, output "prime", "composite", or "neither" (1 is neither prime nor composite).`,
+        constraints: "1 ≤ Q ≤ 20, 1 ≤ each integer ≤ 10000",
+        hints: [
+          "Try dividing from 2 to sqrt(n): for (int i = 2; i*i <= n; i++)",
+          "Handle 1 as a special case first.",
+        ],
+        solutionExplanation: "isPrime only needs to check divisors up to sqrt(n). The condition i*i <= n avoids using sqrt. The case n==1 is handled separately in main.",
+      },
     },
     {
       id: "fn-006",
@@ -322,6 +373,104 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "재귀의 두 요소: 기저 조건(0! = 1)과 재귀 호출(n * (n-1)!). 재귀는 '현재 문제를 더 작은 같은 문제로 표현'하는 것입니다.",
+      en: {
+        title: "Factorial (Recursive)",
+        description: `Implement N! using a recursive function. For T test cases, output N!.`,
+        constraints: "1 ≤ T ≤ 10, 0 ≤ N ≤ 12",
+        hints: [
+          "Base case: if n == 0, return 1.",
+          "Recursive call: return n * factorial(n-1);",
+        ],
+        solutionExplanation: "Two elements of recursion: base case (0! = 1) and recursive call (n * (n-1)!). Recursion expresses the current problem in terms of a smaller instance of the same problem.",
+      },
+    },
+    // ── 함수 오버로딩 ─────────────────────────────────────────────
+    {
+      id: "fn-OL01",
+      cluster: "functions",
+      unlockAfter: "cpp-8",
+      difficulty: "쉬움",
+      title: "오버로딩 — 면적 계산",
+      description: `**함수 오버로딩**을 사용해 같은 이름 \`area\`로 두 가지 도형의 넓이를 계산하세요.
+
+- \`area(int r)\` → 원의 넓이 (r²×3 출력, π≈3 사용)
+- \`area(int w, int h)\` → 직사각형의 넓이 (w×h 출력)
+
+입력 첫 줄: \`circle 5\` 또는 \`rect 4 3\` 형식. 케이스 수 T가 먼저 주어집니다.
+
+**반드시 함수 오버로딩을 사용하세요.** (같은 이름, 다른 매개변수)`,
+      constraints: "1 ≤ T ≤ 5, 1 ≤ r, w, h ≤ 100",
+      initialCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+// 오버로딩: area 함수를 두 가지 버전으로 작성하세요
+int area(int r) {
+    // 원: r * r * 3
+}
+int area(int w, int h) {
+    // 직사각형: w * h
+}
+
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        string shape;
+        cin >> shape;
+        if (shape == "circle") {
+            int r; cin >> r;
+            cout << area(r) << "\\n";
+        } else {
+            int w, h; cin >> w >> h;
+            cout << area(w, h) << "\\n";
+        }
+    }
+    return 0;
+}`,
+      testCases: [
+        { stdin: "3\ncircle 5\nrect 4 3\ncircle 2", expectedOutput: "75\n12\n12", label: "혼합" },
+        { stdin: "1\nrect 10 5", expectedOutput: "50", label: "직사각형" },
+        { stdin: "2\ncircle 1\nrect 1 1", expectedOutput: "3\n1", label: "최솟값" },
+      ],
+      hints: [
+        "C++에서 함수 오버로딩은 매개변수 개수나 타입이 다르면 같은 이름을 사용할 수 있어요.",
+        "area(int r)와 area(int w, int h)는 이름은 같지만 매개변수 수가 달라 C++이 자동으로 구분합니다.",
+      ],
+      solutionCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+int area(int r) { return r * r * 3; }
+int area(int w, int h) { return w * h; }
+
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        string shape;
+        cin >> shape;
+        if (shape == "circle") {
+            int r; cin >> r;
+            cout << area(r) << "\\n";
+        } else {
+            int w, h; cin >> w >> h;
+            cout << area(w, h) << "\\n";
+        }
+    }
+    return 0;
+}`,
+      solutionExplanation: "함수 오버로딩: 같은 이름 area를 매개변수 수에 따라 두 버전으로 정의합니다. 호출 시 컴파일러가 인자 수/타입을 보고 자동으로 알맞은 버전을 선택합니다.",
+      en: {
+        title: "Overloading — Area Calculator",
+        description: `Use **function overloading** to calculate the area of two shapes using the same function name \`area\`.\n\n- \`area(int r)\` → circle area (r²×3, using π≈3)\n- \`area(int w, int h)\` → rectangle area (w×h)\n\nInput: T test cases, each line is \`circle 5\` or \`rect 4 3\`.\n\n**You must use function overloading.** (Same name, different parameters)`,
+        constraints: "1 ≤ T ≤ 5, 1 ≤ r, w, h ≤ 100",
+        hints: [
+          "In C++, function overloading allows the same name if parameter count or types differ.",
+          "area(int r) and area(int w, int h) have the same name but different parameter counts — C++ distinguishes them automatically.",
+        ],
+        solutionExplanation: "Function overloading: define two versions of area based on parameter count. When called, the compiler automatically selects the right version based on the number/type of arguments.",
+      },
     },
     {
       id: "fn-007",
@@ -374,6 +523,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "피보나치는 두 개의 기저 조건이 필요합니다. N이 커지면 중복 계산으로 느려지지만, N ≤ 15에서는 충분히 빠릅니다.",
+      en: {
+        title: "Fibonacci (Recursive)",
+        description: `Implement the N-th Fibonacci number using a recursive function. (fib(0) = 0, fib(1) = 1, fib(n) = fib(n-1) + fib(n-2))\nFor T test cases, output fib(N).`,
+        constraints: "1 ≤ T ≤ 10, 0 ≤ N ≤ 15",
+        hints: [
+          "Base cases: n == 0 returns 0, n == 1 returns 1.",
+          "return fib(n-1) + fib(n-2);",
+        ],
+        solutionExplanation: "Fibonacci requires two base cases. For large N it becomes slow due to redundant calls, but N ≤ 15 is fast enough for a naive recursive solution.",
+      },
     },
     {
       id: "fn-008",
@@ -428,6 +587,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "유클리드 알고리즘: gcd(a, b) = gcd(b, a%b). b가 0이 될 때까지 반복합니다. LCM은 a*b/gcd로 구하되, 오버플로우를 막기 위해 a/gcd를 먼저 계산합니다.",
+      en: {
+        title: "GCD/LCM Functions",
+        description: `Write functions to compute the GCD and LCM of two positive integers A and B. For T test cases, output GCD and LCM on one line.\n\nGCD via Euclidean algorithm: gcd(a, b) = gcd(b, a%b), base case gcd(a, 0) = a\nLCM = a * b / GCD(a, b)`,
+        constraints: "1 ≤ T ≤ 10, 1 ≤ A, B ≤ 10000",
+        hints: [
+          "int gcd(int a, int b) { return b == 0 ? a : gcd(b, a % b); }",
+          "lcm = a / gcd(a, b) * b (divide first to prevent overflow)",
+        ],
+        solutionExplanation: "Euclidean algorithm: gcd(a, b) = gcd(b, a%b), stopping when b reaches 0. For LCM, compute a/gcd first to prevent integer overflow before multiplying by b.",
+      },
     },
     {
       id: "fn-009",
@@ -491,6 +660,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "각 기능을 함수로 분리하면 코드가 읽기 쉬워집니다. countVowels는 const 참조로 받아 복사 비용을 아끼고, reverseStr는 값으로 받아 내부에서 수정합니다.",
+      en: {
+        title: "String Processing Functions",
+        description: `Decompose string processing into functions:\n- countVowels(s): return the count of vowels (a,e,i,o,u) in s\n- reverseStr(s): return the reversed string\n\nFor N strings, output "vowel_count reversed_string" on each line.`,
+        constraints: "1 ≤ N ≤ 10, 1 ≤ string length ≤ 50, lowercase letters only",
+        hints: [
+          "countVowels: loop over each character and check if it is a vowel.",
+          "reverseStr: string result = s; reverse(result.begin(), result.end()); return result;",
+        ],
+        solutionExplanation: "Separating each feature into a function improves readability. countVowels takes a const reference to avoid copying; reverseStr takes a value so it can be modified internally.",
+      },
     },
     {
       id: "fn-010",
@@ -546,6 +725,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "재귀와 반복문은 많은 경우 교환 가능합니다. 재귀는 '더 작은 문제로 쪼개기', 반복은 '쌓아가기'로 표현 방식이 다릅니다. 두 결과를 비교해 정확성을 검증합니다.",
+      en: {
+        title: "Recursive Sum (1+2+...+N)",
+        description: `Implement both a recursive function sumTo and an iterative function sumToIter to compute 1+2+...+N. For a given N, verify both produce the same result and output it.\n\nIf they match, output the result; otherwise output "ERROR".`,
+        constraints: "1 ≤ N ≤ 100",
+        hints: [
+          "sumTo(n) = n + sumTo(n-1), base case: sumTo(0) = 0",
+          "sumToIter: use a for loop to add 1 through n.",
+        ],
+        solutionExplanation: "Recursion and iteration are often interchangeable. Recursion 'decomposes' the problem; iteration 'builds up' the answer. Comparing both results validates correctness.",
+      },
     },
     {
       id: "fn-011",
@@ -590,6 +779,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "두 값을 비교하는 연산을 두 번 적용합니다. 먼저 a와 b 중 작은 값을 m에 저장하고, m과 c를 비교합니다. 이 패턴은 여러 값의 최솟값을 구할 때 반복적으로 사용됩니다.",
+      en: {
+        title: "Minimum of Three",
+        description: `Write a function minOfThree that returns the smallest of three integers a, b, c. Output the minimum for given inputs.`,
+        constraints: "-1000 ≤ a, b, c ≤ 1000",
+        hints: [
+          "First compare a and b to find the smaller, then compare that result with c.",
+          "int minOfThree(int a, int b, int c) { int m = a < b ? a : b; return m < c ? m : c; }",
+        ],
+        solutionExplanation: "Apply a two-value comparison twice: store the smaller of a and b in m, then compare m with c. This pattern extends naturally to finding the minimum of any number of values.",
+      },
     },
     {
       id: "fn-012",
@@ -643,6 +842,18 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "void 함수는 반환값 없이 부수 효과(출력)만 수행합니다. main에서 줄바꿈을 처리하면 함수 내부를 단순하게 유지할 수 있습니다.",
+      en: {
+        title: "Repeated String Print",
+        description: `Write a function printRepeat that takes a string s and integer n, and prints s n times consecutively without a newline.
+
+Input: string s and integer n (space-separated)`,
+        constraints: "1 ≤ n ≤ 10, 1 ≤ length of s ≤ 10",
+        hints: [
+          "A void function performs output as a side effect with no return value.",
+          "Use a for loop to call cout << s exactly n times.",
+        ],
+        solutionExplanation: "A void function performs a side effect (output) with no return value. Handling the newline in main keeps the function itself simple.",
+      },
     },
     {
       id: "fn-013",
@@ -688,6 +899,18 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "1부터 limit까지 n의 배수 개수는 limit / n (정수 나눗셈)과 동일합니다. for 루프보다 O(1)로 훨씬 효율적입니다. 수학적 통찰로 코드를 단순화하는 좋은 예입니다.",
+      en: {
+        title: "Count Multiples",
+        description: `Write a function countMultiples(int n, int limit) that returns the count of multiples of n from 1 to limit.
+
+Given two integers n and limit, output the result.`,
+        constraints: "1 ≤ n ≤ limit ≤ 10000",
+        hints: [
+          "Count with a for loop: i = n, 2n, 3n, ... while i <= limit, or",
+          "More simply: return limit / n; — integer division gives the answer directly.",
+        ],
+        solutionExplanation: "The count of multiples of n up to limit equals limit / n (integer division). This is O(1) and far more efficient than a loop. A good example of simplifying code with a mathematical insight.",
+      },
     },
     {
       id: "fn-014",
@@ -737,6 +960,21 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "재귀의 핵심: 'base^exp = base × base^(exp-1)'이라는 수학적 정의를 그대로 코드로 표현합니다. exp가 0에 도달하면 1을 반환해 재귀를 종료합니다. long long을 사용해 큰 값의 오버플로우를 방지합니다.",
+      en: {
+        title: "Power Function (Recursive)",
+        description: `Write a recursive function power(int base, int exp) to compute base raised to exp.
+
+- Base case: if exp == 0, return 1
+- Recursive call: base * power(base, exp - 1)
+
+Given base and exp, output the result.`,
+        constraints: "0 ≤ base ≤ 10, 0 ≤ exp ≤ 10",
+        hints: [
+          "Base case: if (exp == 0) return 1;",
+          "Recursive call: return base * power(base, exp - 1);",
+        ],
+        solutionExplanation: "The key idea: 'base^exp = base × base^(exp-1)' translates the mathematical definition directly into code. When exp reaches 0, return 1 to end the recursion. Use long long to avoid overflow for large values.",
+      },
     },
     {
       id: "fn-015",
@@ -786,6 +1024,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "isPrime 함수를 먼저 만들고, main에서 반복 호출하는 '함수 재사용' 패턴입니다. i*i <= n 조건으로 O(sqrt(n)) 시간에 소수를 판별합니다. 함수를 잘 분리하면 main 로직이 단순해집니다.",
+      en: {
+        title: "Sum of Primes",
+        description: `Write an isPrime function to check whether an integer is prime, then output the sum of all primes from 2 to N.`,
+        constraints: "2 ≤ N ≤ 1000",
+        hints: [
+          "isPrime(n): try dividing from 2 to sqrt(n) using i*i <= n.",
+          "In main, loop from 2 to n and accumulate whenever isPrime returns true.",
+        ],
+        solutionExplanation: "Build isPrime first, then call it repeatedly in main — this is the 'function reuse' pattern. The condition i*i <= n gives O(sqrt(n)) primality testing. Good function decomposition keeps main logic simple.",
+      },
     },
   ],
 }

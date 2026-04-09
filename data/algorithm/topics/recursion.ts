@@ -7,35 +7,44 @@ export const recursionTopic: AlgoTopic = {
     category: '탐색 (Silver)',
     order: 6,
     description: '자기 자신을 호출하여 문제를 쪼개는 기법',
+    titleEn: 'Recursion',
+    categoryEn: 'Search (Silver)',
+    descriptionEn: 'A technique that breaks problems down by calling itself',
     track: 'both',
     stages: [
         {
             num: 1,
             title: '재귀 입문',
+            titleEn: 'Recursion Intro',
             problemIds: [
                 'boj-27433',
                 'boj-10870'
             ],
-            desc: '기본 재귀 함수 연습'
+            desc: '기본 재귀 함수 연습',
+            descEn: 'Basic recursion function practice'
         },
         {
             num: 2,
             title: '재귀 활용',
+            titleEn: 'Recursion Applications',
             problemIds: [
                 'boj-25501',
                 'boj-24060'
             ],
-            desc: '재귀 호출 추적과 이해'
+            desc: '재귀 호출 추적과 이해',
+            descEn: 'Tracing and understanding recursive calls'
         },
         {
             num: 3,
             title: '나누어 풀기',
+            titleEn: 'Divide and Conquer',
             problemIds: [
                 'boj-4779',
                 'boj-2447',
                 'boj-11729'
             ],
-            desc: '재귀적 패턴과 하노이 탑'
+            desc: '재귀적 패턴과 하노이 탑',
+            descEn: 'Recursive patterns and Tower of Hanoi'
         }
     ],
     problems: [

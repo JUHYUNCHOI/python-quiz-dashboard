@@ -6,6 +6,10 @@ export const pyListsCluster: PracticeCluster = {
   emoji: "📋",
   description: "리스트 생성, 순회, 최대/최소, 정렬, 이중 리스트",
   unlockAfter: "17",
+  en: {
+    title: "List Operations",
+    description: "List creation, traversal, maximum/minimum, sorting, 2D lists",
+  },
   problems: [
     {
       id: "pylist-001",
@@ -37,7 +41,125 @@ nums = list(map(int, input().split()))
 nums = list(map(int, input().split()))
 print(sum(nums))`,
       solutionExplanation: "파이썬 내장 sum() 함수로 리스트 합계를 한 줄에 구할 수 있습니다.",
+      en: {
+        title: "List Sum",
+        description: `Given N on the first line and N integers on the second line (space-separated), print the sum of all N numbers.`,
+        constraints: "1 ≤ N ≤ 1000, -10000 ≤ each number ≤ 10000",
+        hints: [
+          "Use the sum() function or accumulate with a for loop.",
+          "print(sum(nums)) or total = 0; for x in nums: total += x",
+        ],
+        solutionExplanation: "Python's built-in sum() function computes the list total in a single line.",
+      },
       language: "python",
+    },
+    // ── append / pop / index ──────────────────────────────────────
+    {
+      id: "pylist-AP01",
+      cluster: "py-lists",
+      unlockAfter: "16",
+      difficulty: "쉬움",
+      title: "리스트 추가/삭제 (append · pop)",
+      description: `빈 리스트에서 시작해 명령을 처리하세요. **append와 pop을 반드시 사용하세요.**
+
+- \`+ x\` → **append(x)** : 리스트 끝에 x 추가
+- \`-\` → **pop()** : 마지막 원소 제거 후 출력 (비어있으면 \`empty\` 출력)
+
+모든 명령 처리 후 리스트를 공백으로 구분해 출력합니다. (비어있으면 빈 줄)`,
+      constraints: "1 ≤ 명령 수 ≤ 15",
+      initialCode: `n = int(input())
+lst = []
+for _ in range(n):
+    cmd = input().split()
+    if cmd[0] == '+':
+        # append 사용
+        pass
+    else:
+        # pop 사용, 비어있으면 'empty'
+        pass
+print(*lst)`,
+      testCases: [
+        { stdin: "5\n+ 1\n+ 2\n-\n+ 3\n-", expectedOutput: "2\n3\n1", label: "기본" },
+        { stdin: "3\n+ 10\n+ 20\n+ 30", expectedOutput: "10 20 30", label: "추가만" },
+        { stdin: "2\n-\n+ 5", expectedOutput: "empty\n5", label: "빈 리스트 pop" },
+      ],
+      hints: [
+        "lst.append(x)는 리스트 끝에 x를 추가합니다.",
+        "lst.pop()은 마지막 원소를 제거하고 반환합니다. 비어있으면 IndexError — if lst: 로 확인하세요.",
+      ],
+      solutionCode: `n = int(input())
+lst = []
+for _ in range(n):
+    cmd = input().split()
+    if cmd[0] == '+':
+        lst.append(int(cmd[1]))
+    else:
+        if lst:
+            print(lst.pop())
+        else:
+            print('empty')
+print(*lst)`,
+      solutionExplanation: "append(x)는 끝에 추가, pop()은 끝 원소를 제거하며 반환합니다. pop(0)은 앞 원소 제거(O(n))이므로 앞뒤 모두 빠르게 필요하면 deque를 씁니다.",
+      language: "python",
+      en: {
+        title: "List Add/Remove (append · pop)",
+        description: `Starting from an empty list, process commands. **You must use append and pop.**\n\n- \`+ x\` → **append(x)**: add x to the end\n- \`-\` → **pop()**: remove last element and print it (print \`empty\` if list is empty)\n\nAfter all commands, print the list separated by spaces (empty line if empty).`,
+        constraints: "1 ≤ number of commands ≤ 15",
+        hints: [
+          "lst.append(x) adds x to the end of the list.",
+          "lst.pop() removes and returns the last element. Check if lst: to avoid IndexError on empty list.",
+        ],
+        solutionExplanation: "append(x) adds to the end, pop() removes and returns the last element. pop(0) removes from the front but is O(n) — use deque for fast front operations.",
+      },
+    },
+    {
+      id: "pylist-IDX01",
+      cluster: "py-lists",
+      unlockAfter: "16",
+      difficulty: "쉬움",
+      title: "원소 위치 찾기 (index)",
+      description: `리스트에서 특정 값의 위치를 **index()를 사용해** 찾으세요.
+
+N개의 정수 리스트와 찾을 값 T가 주어집니다.
+- T가 있으면 **index(T)** 로 위치(0-based) 출력
+- T가 없으면 \`-1\` 출력
+
+**index()** — \`lst.index(x)\` : x의 첫 등장 인덱스 반환. 없으면 ValueError 발생.`,
+      constraints: "1 ≤ N ≤ 20",
+      initialCode: `n = int(input())
+lst = list(map(int, input().split()))
+t = int(input())
+# index()를 사용해 t의 위치를 찾으세요
+# 없으면 -1 출력`,
+      testCases: [
+        { stdin: "5\n3 1 4 1 5\n4", expectedOutput: "2", label: "기본" },
+        { stdin: "4\n10 20 30 40\n99", expectedOutput: "-1", label: "없는 값" },
+        { stdin: "3\n5 5 5\n5", expectedOutput: "0", label: "첫 위치" },
+        { stdin: "1\n7\n7", expectedOutput: "0", label: "단일" },
+      ],
+      hints: [
+        "t in lst 로 먼저 존재 여부를 확인하고, 있으면 lst.index(t)로 위치를 찾으세요.",
+        "또는 try: print(lst.index(t)) except ValueError: print(-1) 로 예외 처리할 수 있어요.",
+      ],
+      solutionCode: `n = int(input())
+lst = list(map(int, input().split()))
+t = int(input())
+if t in lst:
+    print(lst.index(t))
+else:
+    print(-1)`,
+      solutionExplanation: "lst.index(t)는 t의 첫 등장 인덱스를 반환하지만 없으면 ValueError를 발생시킵니다. 'in' 연산자로 먼저 존재 여부를 확인하거나 try-except를 사용합니다.",
+      language: "python",
+      en: {
+        title: "Find Element Position (index)",
+        description: `Find the position of a specific value in a list using **index()**.\n\nGiven a list of N integers and a target T:\n- If T exists, use **index(T)** to print its position (0-based)\n- If T doesn't exist, print \`-1\`\n\n**index()** — \`lst.index(x)\`: returns first occurrence index. Raises ValueError if absent.`,
+        constraints: "1 ≤ N ≤ 20",
+        hints: [
+          "Check existence first with t in lst, then use lst.index(t) if found.",
+          "Alternatively: try: print(lst.index(t)) except ValueError: print(-1)",
+        ],
+        solutionExplanation: "lst.index(t) returns the first occurrence index but raises ValueError if absent. Check with 'in' first or use try-except.",
+      },
     },
     {
       id: "pylist-002",
@@ -68,6 +190,16 @@ nums = list(map(int, input().split()))
 nums = list(map(int, input().split()))
 print(max(nums), min(nums))`,
       solutionExplanation: "max()와 min() 함수로 최댓값·최솟값을 구하고, print에 두 값을 넘기면 자동으로 공백 구분됩니다.",
+      en: {
+        title: "Maximum and Minimum",
+        description: `Given N on the first line and N integers on the second line (space-separated), print the maximum and minimum values separated by a space on one line.`,
+        constraints: "1 ≤ N ≤ 1000, -10000 ≤ each number ≤ 10000",
+        hints: [
+          "Use the max() and min() built-in functions.",
+          "print(max(nums), min(nums)) — passing two values to print separates them with a space automatically.",
+        ],
+        solutionExplanation: "max() and min() find the maximum and minimum respectively. Passing both to print() automatically separates them with a space.",
+      },
       language: "python",
     },
     {
@@ -98,6 +230,16 @@ nums = list(map(int, input().split()))
 nums = list(map(int, input().split()))
 print(*nums[::-1])`,
       solutionExplanation: "슬라이싱 [::-1]로 역순 리스트를 만들고, *언패킹으로 공백 구분 출력합니다.",
+      en: {
+        title: "Reverse a List",
+        description: `Given N on the first line and N integers on the second line (space-separated), print the numbers in reversed order separated by spaces.`,
+        constraints: "1 ≤ N ≤ 1000",
+        hints: [
+          "Use slicing nums[::-1] or reversed(nums).",
+          "print(*nums[::-1]) — * unpacking prints elements space-separated.",
+        ],
+        solutionExplanation: "Slicing [::-1] creates a reversed list, and * unpacking prints it space-separated.",
+      },
       language: "python",
     },
     {
@@ -132,6 +274,17 @@ result = sorted([x for x in nums if x > avg])
 if result:
     print(*result)`,
       solutionExplanation: "평균 계산 후 리스트 컴프리헨션으로 필터링, sorted()로 오름차순 정렬합니다.",
+      en: {
+        title: "Numbers Above Average",
+        description: `Given N on the first line and N integers on the second line (space-separated), print the numbers that are strictly greater than the average, in ascending order separated by spaces.
+If no numbers qualify, print nothing.`,
+        constraints: "1 ≤ N ≤ 1000, 0 ≤ each number ≤ 10000",
+        hints: [
+          "Compute avg = sum(nums) / len(nums).",
+          "List comprehension: [x for x in nums if x > avg], then sort with sorted().",
+        ],
+        solutionExplanation: "After computing the average, filter with a list comprehension and sort the result with sorted().",
+      },
       language: "python",
     },
     {
@@ -168,6 +321,16 @@ for x in nums:
         result.append(x)
 print(*result)`,
       solutionExplanation: "set으로 방문 여부를 O(1)에 확인하면서 순서를 유지한 채 중복을 제거합니다.",
+      en: {
+        title: "Remove Duplicates",
+        description: `Given N on the first line and N integers on the second line (space-separated), remove duplicates while preserving the original order and print the result separated by spaces.`,
+        constraints: "1 ≤ N ≤ 1000, 0 ≤ each number ≤ 1000",
+        hints: [
+          "Create seen = set() and only add numbers not yet in seen to the result.",
+          "for x in nums: if x not in seen: seen.add(x); result.append(x)",
+        ],
+        solutionExplanation: "Using a set to check membership in O(1), duplicates are removed while preserving order.",
+      },
       language: "python",
     },
     {
@@ -200,6 +363,16 @@ nums = list(map(int, input().split()))
 sorted_nums = sorted(nums, reverse=True)
 print(sorted_nums[1])`,
       solutionExplanation: "내림차순 정렬 후 인덱스 [1]이 두 번째로 큰 값입니다. 중복을 제거하지 않으므로 [5,5,3]→5가 올바르게 출력됩니다.",
+      en: {
+        title: "Second Largest Number",
+        description: `Given N on the first line and N integers on the second line (space-separated), print the second largest number. (Duplicates count — e.g., the second largest in [5, 5, 3] is 5.)`,
+        constraints: "2 ≤ N ≤ 1000, -10000 ≤ each number ≤ 10000",
+        hints: [
+          "Sort in descending order and take index [1].",
+          "sorted(nums, reverse=True)[1] — index 1 is the second largest value.",
+        ],
+        solutionExplanation: "After sorting in descending order, index [1] is the second largest. Duplicates are not removed, so [5,5,3] correctly outputs 5.",
+      },
       language: "python",
     },
     {
@@ -237,6 +410,17 @@ else:
     rotated = nums[-k:] + nums[:-k]
     print(*rotated)`,
       solutionExplanation: "k % n으로 실제 회전량을 구하고, 슬라이싱으로 뒤쪽 k개를 앞으로 붙입니다.",
+      en: {
+        title: "List Rotation",
+        description: `Given N and K on the first line and N integers on the second line (space-separated), print the list after rotating it K positions to the right.
+(Right rotation: the last element moves to the front.)`,
+        constraints: "1 ≤ N ≤ 1000, 0 ≤ K ≤ 10000",
+        hints: [
+          "K can exceed N, so reduce it with k = k % n first.",
+          "nums[-k:] + nums[:-k] slicing produces the rotated result.",
+        ],
+        solutionExplanation: "k % n gives the effective rotation count, and slicing appends the last k elements to the front.",
+      },
       language: "python",
     },
     {
@@ -271,6 +455,16 @@ for x in nums:
 for i in range(10):
     print(f"{i}: {count[i]}")`,
       solutionExplanation: "크기 10의 배열을 빈도 카운터로 활용합니다. 0~9 인덱스가 각 숫자에 대응합니다.",
+      en: {
+        title: "Frequency Count",
+        description: `Given N on the first line and N integers (each 0–9) on the second line (space-separated), print how many times each digit 0 through 9 appears, one per line in the format "digit: count".`,
+        constraints: "1 ≤ N ≤ 1000, 0 ≤ each number ≤ 9",
+        hints: [
+          "Initialize a count list of size 10 with zeros and increment count[x] for each x.",
+          "for i in range(10): print(f'{i}: {count[i]}')",
+        ],
+        solutionExplanation: "An array of size 10 acts as a frequency counter. Indices 0–9 map directly to each digit.",
+      },
       language: "python",
     },
     {
@@ -309,6 +503,16 @@ for i, x in enumerate(nums):
         break
 print(result)`,
       solutionExplanation: "enumerate()로 인덱스와 값을 동시에 순회하며 첫 등장 위치를 기록합니다.",
+      en: {
+        title: "Linear Search",
+        description: `Given N on the first line, N integers on the second line (space-separated), and a target integer T on the third line, print the 0-based index of T's first occurrence. If T is not found, print -1.`,
+        constraints: "1 ≤ N ≤ 1000, -10000 ≤ each number ≤ 10000",
+        hints: [
+          "Use for i, x in enumerate(nums): if x == t: print(i); break to find the first occurrence.",
+          "nums.index(t) also works but raises ValueError if not found — requires try-except.",
+        ],
+        solutionExplanation: "enumerate() iterates with both index and value simultaneously, letting us record the first occurrence position.",
+      },
       language: "python",
     },
     {
@@ -347,6 +551,17 @@ common = sorted(set(a) & set(b))
 if common:
     print(*common)`,
       solutionExplanation: "set() 변환 후 & 연산으로 교집합을 구하면 O(N+M)으로 효율적입니다.",
+      en: {
+        title: "List Intersection",
+        description: `Given two lists (N integers and M integers on separate lines), print the numbers that appear in both lists — no duplicates, in ascending order separated by spaces.
+If there are no common elements, print nothing.`,
+        constraints: "1 ≤ N, M ≤ 1000",
+        hints: [
+          "Use set(a) & set(b) for the intersection.",
+          "sorted(set(a) & set(b)) gives the sorted result.",
+        ],
+        solutionExplanation: "Converting to sets and using & finds the intersection in O(N+M) efficiently.",
+      },
       language: "python",
     },
     {
@@ -382,6 +597,16 @@ for x in nums[1:]:
     best = max(best, current)
 print(best)`,
       solutionExplanation: "Kadane 알고리즘: 현재 원소만 선택(새로 시작)하는 것과 이전 합에 더하는 것 중 큰 쪽을 선택합니다.",
+      en: {
+        title: "Maximum Subarray Sum",
+        description: `Given N on the first line and N integers on the second line (space-separated), print the maximum sum of any contiguous subarray. (Kadane's Algorithm)`,
+        constraints: "1 ≤ N ≤ 1000, -10000 ≤ each number ≤ 10000",
+        hints: [
+          "Start with current = best = nums[0] (not 0) to handle all-negative inputs.",
+          "for x in nums[1:]: current = max(x, current + x); best = max(best, current)",
+        ],
+        solutionExplanation: "Kadane's algorithm: at each step, choose the larger of starting fresh (current element alone) or extending the previous sum.",
+      },
       language: "python",
     },
     {
@@ -416,6 +641,16 @@ for i in range(1, n):
     prefix[i] = prefix[i-1] + nums[i]
 print(*prefix)`,
       solutionExplanation: "누적합 배열은 prefix[i] = prefix[i-1] + nums[i] 점화식으로 O(N)에 구성합니다.",
+      en: {
+        title: "Prefix Sum Array",
+        description: `Given N on the first line and N integers on the second line (space-separated), print the prefix sum array. The i-th element is the sum of all elements from index 0 to i.`,
+        constraints: "1 ≤ N ≤ 1000, -10000 ≤ each number ≤ 10000",
+        hints: [
+          "Build a prefix list and fill it using prefix[i] = prefix[i-1] + nums[i].",
+          "for i in range(1, n): prefix[i] = prefix[i-1] + nums[i]",
+        ],
+        solutionExplanation: "The prefix sum array is built in O(N) using the recurrence prefix[i] = prefix[i-1] + nums[i].",
+      },
       language: "python",
     },
     {
@@ -461,6 +696,16 @@ while left <= right:
         right = mid - 1
 print(result)`,
       solutionExplanation: "이진 탐색: 매 단계마다 탐색 범위를 절반으로 줄여 O(log N)에 검색합니다.",
+      en: {
+        title: "Binary Search Implementation",
+        description: `Given N on the first line, a sorted list of N integers on the second line, and a target T on the third line, use binary search to find the 0-based index of T. Print -1 if T is not found.`,
+        constraints: "1 ≤ N ≤ 100000, -10^9 ≤ each number ≤ 10^9",
+        hints: [
+          "Start with left=0, right=n-1 and compute mid=(left+right)//2.",
+          "Compare nums[mid] to t, then narrow left or right accordingly. Stop when left > right (not found).",
+        ],
+        solutionExplanation: "Binary search halves the search range at every step, finding the target in O(log N).",
+      },
       language: "python",
     },
     {
@@ -498,6 +743,16 @@ for i in range(n):
             count += 1
 print(count)`,
       solutionExplanation: "버블정렬의 스왑 횟수는 역순 쌍(inversion)의 수와 같습니다. O(N²) 이중 루프로 직접 셉니다.",
+      en: {
+        title: "Bubble Sort Swap Count",
+        description: `Given N on the first line and N integers on the second line (space-separated), print the total number of swaps bubble sort would perform to sort the list in ascending order.`,
+        constraints: "1 ≤ N ≤ 1000, -10000 ≤ each number ≤ 10000",
+        hints: [
+          "Implement bubble sort with a double for loop and increment count whenever a swap occurs.",
+          "for i in range(n): for j in range(n-i-1): if nums[j] > nums[j+1]: swap and count += 1",
+        ],
+        solutionExplanation: "The swap count in bubble sort equals the number of inversions (out-of-order pairs). An O(N²) double loop counts them directly.",
+      },
       language: "python",
     },
     {
@@ -541,6 +796,16 @@ while i < n:
     i += cnt
 print(" ".join(result))`,
       solutionExplanation: "연속 구간을 찾는 두 포인터 패턴입니다. 내부 while로 같은 값이 얼마나 이어지는지 세고 결과를 조합합니다.",
+      en: {
+        title: "List Compression (RLE)",
+        description: `Given N on the first line and N integers on the second line (space-separated), compress consecutive repeated values in "(value count)" format, or "(value)" if the count is 1. Print the compressed groups separated by spaces.`,
+        constraints: "1 ≤ N ≤ 1000",
+        hints: [
+          "Compare each value to the previous; when the value changes, append the current group to the result and reset count.",
+          "If count is 1, output f'({val})'; otherwise f'({val} {cnt})'.",
+        ],
+        solutionExplanation: "A two-pointer pattern finds consecutive runs. An inner while counts how many times the same value repeats, then the group is formatted and appended.",
+      },
       language: "python",
     },
     {
@@ -578,6 +843,16 @@ for _ in range(n):
 for row in zip(*matrix):
     print(*row)`,
       solutionExplanation: "zip(*matrix)는 행렬 전치의 파이썬다운 표현입니다. *로 언패킹하면 각 열이 zip의 인수로 전달됩니다.",
+      en: {
+        title: "Matrix Transpose",
+        description: `Given N and M on the first line, then N rows each with M integers (space-separated), print the transposed M×N matrix.`,
+        constraints: "1 ≤ N, M ≤ 100",
+        hints: [
+          "Use a nested list comprehension or zip(*matrix).",
+          "for row in zip(*matrix): print(*row) — zip(*matrix) automatically transposes.",
+        ],
+        solutionExplanation: "zip(*matrix) is the Pythonic way to transpose a matrix. The * unpacking passes each column as a separate argument to zip.",
+      },
       language: "python",
     },
     {
@@ -621,6 +896,17 @@ while left <= right:
     turn += 1
 print(*result)`,
       solutionExplanation: "두 포인터로 양끝을 번갈아 선택합니다. turn % 2로 앞/뒤 선택을 결정합니다.",
+      en: {
+        title: "Alternating Pick Sequence",
+        description: `Given N on the first line and N integers on the second line (space-separated), alternately pick from the front and back: 1st pick from the front, 2nd from the back, 3rd from the front, and so on.
+Print the picks in selection order, separated by spaces.`,
+        constraints: "1 ≤ N ≤ 1000",
+        hints: [
+          "Use two pointers: left=0, right=n-1, and alternate between them.",
+          "A turn variable (or turn % 2) decides whether to pick from the front or back.",
+        ],
+        solutionExplanation: "Two pointers alternate picking from both ends. turn % 2 determines front or back selection each step.",
+      },
       language: "python",
     },
     {
@@ -655,6 +941,16 @@ for x in nums:
     dp = dp | {s + x for s in dp}
 print("YES" if t in dp else "NO")`,
       solutionExplanation: "집합 DP: 현재까지 만들 수 있는 모든 합을 집합으로 유지합니다. 각 원소를 추가하거나 건너뜁니다.",
+      en: {
+        title: "Subset Sum",
+        description: `Given N and T on the first line and N positive integers on the second line (space-separated), print "YES" if any subset of the N numbers sums to T, otherwise print "NO".`,
+        constraints: "1 ≤ N ≤ 20, 1 ≤ T ≤ 1000, 1 ≤ each number ≤ 100",
+        hints: [
+          "DP approach: maintain dp as a set of all reachable sums. Start with dp = {0}.",
+          "For each number x, add s + x for every s in dp to the new set.",
+        ],
+        solutionExplanation: "Set-based DP: maintain all reachable sums as a set. For each element, we either include it or skip it.",
+      },
       language: "python",
     },
     {
@@ -698,6 +994,16 @@ for r in range(r1, r2 + 1):
         total += matrix[r][c]
 print(total)`,
       solutionExplanation: "이중 루프로 직사각형 범위를 순회해 합산합니다. 2D 누적합(prefix sum)으로 O(1) 쿼리도 가능합니다.",
+      en: {
+        title: "Matrix Rectangle Sum",
+        description: `Given N on the first line, then an N×N matrix (N rows, each with N space-separated integers), then coordinates r1 c1 r2 c2 (0-based), print the sum of all elements in the rectangle from (r1, c1) to (r2, c2) inclusive.`,
+        constraints: "1 ≤ N ≤ 100, 0 ≤ r1 ≤ r2 < N, 0 ≤ c1 ≤ c2 < N",
+        hints: [
+          "Use a double for loop to iterate rows r1 to r2 and columns c1 to c2.",
+          "total = sum(matrix[r][c] for r in range(r1, r2+1) for c in range(c1, c2+1))",
+        ],
+        solutionExplanation: "A double loop iterates over the rectangular region and sums all elements. A 2D prefix sum array would allow O(1) queries.",
+      },
       language: "python",
     },
     {
@@ -733,6 +1039,16 @@ for i in range(k, n):
     window_sum += nums[i] - nums[i - k]
     print(f"{window_sum / k:.2f}")`,
       solutionExplanation: "슬라이딩 윈도우: 매번 전체를 다시 합산하는 O(NK) 대신, 윈도우를 한 칸 이동할 때 하나 빼고 하나 더해 O(N)으로 처리합니다.",
+      en: {
+        title: "Moving Average",
+        description: `Given N and K on the first line and N floats on the second line (space-separated), print the sliding window average of size K to 2 decimal places. Print N-K+1 averages, one per line.`,
+        constraints: "1 ≤ K ≤ N ≤ 1000",
+        hints: [
+          "Compute the first window sum, then slide by adding the incoming element and subtracting the outgoing one.",
+          "window_sum = sum(nums[:k]) then for i in range(k, n): window_sum += nums[i] - nums[i-k]",
+        ],
+        solutionExplanation: "Sliding window: instead of recomputing the full sum each step in O(NK), shift the window by adding one element and removing one, running in O(N).",
+      },
       language: "python",
     },
   ],

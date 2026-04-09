@@ -72,7 +72,11 @@ export const lessonCpp8: LessonData = {
           guide: "정수 = int!",
           template: "___ multiply(int a, int b) {\n    return a * b;\n}",
           answer: "int",
-          expect: "int multiply(int a, int b) {\n    return a * b;\n}"
+          expect: "int multiply(int a, int b) {\n    return a * b;\n}",
+          en: {
+            task: "Write the return type of a function that returns an integer!",
+            guide: "integer = int!"
+          }
         }
       },
 
@@ -85,7 +89,11 @@ export const lessonCpp8: LessonData = {
           guide: "반환값 없음 = void!",
           template: '___ greet() {\n    cout << "Hi!" << endl;\n}',
           answer: "void",
-          expect: 'void greet() {\n    cout << "Hi!" << endl;\n}'
+          expect: 'void greet() {\n    cout << "Hi!" << endl;\n}',
+          en: {
+            task: "Write the type for a function with no return value!",
+            guide: "no return value = void!"
+          }
         }
       },
 
@@ -101,7 +109,17 @@ export const lessonCpp8: LessonData = {
             "return 키워드"
           ],
           answer: 2,
-          explanation: "C++에서는 def 대신 반환 타입을 써요! int add(...)는 정수를 반환하는 함수, void hello(...)는 반환값 없는 함수!"
+          explanation: "C++에서는 def 대신 반환 타입을 써요! int add(...)는 정수를 반환하는 함수, void hello(...)는 반환값 없는 함수!",
+          en: {
+            question: "What is the C++ equivalent of Python's def in functions?",
+            options: [
+              "func keyword",
+              "def keyword",
+              "Return type (int, void, etc.)",
+              "return keyword"
+            ],
+            explanation: "In C++, you write the return type instead of def! int add(...) returns an integer, void hello(...) returns nothing!"
+          }
         }
       },
 
@@ -117,7 +135,16 @@ export const lessonCpp8: LessonData = {
             "return x * 2가 잘못돼서"
           ],
           answer: 1,
-          explanation: "C++에서 함수는 호출하기 전에 (main 위에) 정의하거나, 프로토타입을 선언해야 해요!"
+          explanation: "C++에서 함수는 호출하기 전에 (main 위에) 정의하거나, 프로토타입을 선언해야 해요!",
+          en: {
+            question: "Why does this code cause an error?",
+            options: [
+              "Cannot use the name 'double'",
+              "Function is defined below main()",
+              "return x * 2 is wrong"
+            ],
+            explanation: "In C++, functions must be defined before they are called (above main), or a prototype must be declared!"
+          }
         }
       },
 
@@ -131,7 +158,11 @@ export const lessonCpp8: LessonData = {
           template: "int add(___ a, ___ b) {\n    return a + b;\n}",
           answer: "int",
           blanksAnswer: ["int", "int"],
-          expect: "int add(int a, int b) {\n    return a + b;\n}"
+          expect: "int add(int a, int b) {\n    return a + b;\n}",
+          en: {
+            task: "Complete the function by adding types to the parameters!",
+            guide: "In C++, parameters must always have a type!"
+          }
         }
       },
 
@@ -180,7 +211,11 @@ export const lessonCpp8: LessonData = {
           task: "반환값이 없는 함수의 반환 타입은?",
           template: '___ sayHi() {\n    cout << "Hi!" << endl;\n}',
           answer: "void",
-          expect: 'void sayHi() {\n    cout << "Hi!" << endl;\n}'
+          expect: 'void sayHi() {\n    cout << "Hi!" << endl;\n}',
+          en: {
+            message: "Wait! Do you remember function basics?",
+            task: "What is the return type of a function with no return value?"
+          }
         }
       },
 
@@ -243,7 +278,17 @@ export const lessonCpp8: LessonData = {
             "함수 안의 코드가 다를 때"
           ],
           answer: 1,
-          explanation: "오버로딩은 매개변수의 타입이나 개수가 달라야 해요! 반환 타입만 다른 건 안 돼요!"
+          explanation: "오버로딩은 매개변수의 타입이나 개수가 달라야 해요! 반환 타입만 다른 건 안 돼요!",
+          en: {
+            question: "When is function overloading allowed?",
+            options: [
+              "When function names are different",
+              "When parameter types or count differ",
+              "When only return types differ",
+              "When the code inside differs"
+            ],
+            explanation: "Overloading requires different parameter types or count! Differing only in return type is not allowed!"
+          }
         }
       },
 
@@ -257,7 +302,11 @@ export const lessonCpp8: LessonData = {
           template: "void repeat(int times ___) {",
           answer: "= 5",
           alternateAnswers: ["=5"],
-          expect: "void repeat(int times = 5) {"
+          expect: "void repeat(int times = 5) {",
+          en: {
+            task: "Add a default value of 5 to the parameter!",
+            guide: "Use the form: type name = defaultValue"
+          }
         }
       },
 
@@ -273,7 +322,16 @@ export const lessonCpp8: LessonData = {
             "double을 쓸 수 없어서"
           ],
           answer: 1,
-          explanation: "오버로딩은 매개변수가 달라야 해요! 반환 타입만 다른 건 컴파일러가 구분할 수 없어서 에러!"
+          explanation: "오버로딩은 매개변수가 달라야 해요! 반환 타입만 다른 건 컴파일러가 구분할 수 없어서 에러!",
+          en: {
+            question: "Why is this overloading an error?",
+            options: [
+              "Because function names are the same",
+              "Parameters are the same and only return type differs",
+              "Cannot use double"
+            ],
+            explanation: "Overloading requires different parameters! The compiler cannot distinguish functions that differ only in return type, causing an error!"
+          }
         }
       },
 
@@ -287,7 +345,11 @@ export const lessonCpp8: LessonData = {
           template: "___ add(___ a, ___ b) {\n    return a + b;\n}",
           answer: "double",
           blanksAnswer: ["double", "double", "double"],
-          expect: "double add(double a, double b) {\n    return a + b;\n}"
+          expect: "double add(double a, double b) {\n    return a + b;\n}",
+          en: {
+            task: "Complete the overloaded function that takes double parameters!",
+            guide: "int add(int, int) exists — now make the double version!"
+          }
         }
       },
 
@@ -337,7 +399,12 @@ export const lessonCpp8: LessonData = {
           template: "// 오버로딩: 매개변수의 타입이나 ___가 달라야 함",
           answer: "개수",
           alternateAnswers: ["갯수", "수"],
-          expect: "// 오버로딩: 매개변수의 타입이나 개수가 달라야 함"
+          expect: "// 오버로딩: 매개변수의 타입이나 개수가 달라야 함",
+          en: {
+            message: "Wait! Do you remember function overloading?",
+            task: "What must differ for overloading to work? (type or ___)",
+            guide: "// Overloading: parameter type or ___ must differ"
+          }
         }
       },
 

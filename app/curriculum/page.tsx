@@ -575,9 +575,9 @@ export default function CurriculumPage() {
     "cpp-9","cpp-21","cpp-10","cpp-11","cpp-12","cpp-13","cpp-14","cpp-22",
     "cpp-15","cpp-23","cpp-16","cpp-17","cpp-18","cpp-19","cpp-20"]
   const cppLessonsDone = cppLessonIds.filter(id => completedLessons.has(id)).length
-  const practiceUnlocked = cppLessonsDone >= 8
-  const algoUnlocked = practiceClustersDone >= 5
-  const questUnlocked = algoTopicsDone >= 8
+  const practiceUnlocked = isTeacher || cppLessonsDone >= 8
+  const algoUnlocked = isTeacher || practiceProblemsDone >= 40
+  const questUnlocked = isTeacher || algoTopicsDone >= 8
 
   // Python 진도가 없으면 C++ 탭에 힌트 표시 (차단은 아님)
   const pythonLessonIds = pythonCurriculumData.flatMap(p => p.lessons.map(l => String(l.id)))
@@ -916,40 +916,149 @@ export default function CurriculumPage() {
               </div>
             </div>
 
-            {/* 학습 여정 한 줄 요약 — C++ 전용 */}
+            {/* 학습 여정 한 줄 요약 — C++ 전용 (모바일) */}
             {isCpp && loaded && (
-              <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100 flex-wrap">
-                <Link href="/curriculum" className="flex items-center gap-1 text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors">
-                  ⚡ {t("문법", "Syntax")} {cppLessonsDone}/23
-                </Link>
+              <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100 flex-wrap sm:hidden">
+                <span className="flex items-center gap-1 text-xs font-bold text-blue-600">⚡ {cppLessonsDone}/23</span>
                 <ChevronRight className="w-3 h-3 text-gray-300 flex-shrink-0" />
-                {practiceUnlocked ? (
-                  <Link href="/practice" className="flex items-center gap-1 text-xs font-bold text-green-600 hover:text-green-700 transition-colors">
-                    💪 {t("연습", "Practice")} {practiceClustersDone}/12
-                  </Link>
-                ) : (
-                  <span className="flex items-center gap-1 text-xs text-gray-300">💪 {t("연습", "Practice")} <Lock className="w-3 h-3" /></span>
-                )}
+                {practiceUnlocked
+                  ? <Link href="/practice" className="flex items-center gap-1 text-xs font-bold text-green-600">💪 {practiceProblemsDone}/40</Link>
+                  : <span className="flex items-center gap-1 text-xs text-gray-300">💪 <Lock className="w-3 h-3" /></span>}
                 <ChevronRight className="w-3 h-3 text-gray-300 flex-shrink-0" />
-                {algoUnlocked ? (
-                  <Link href="/algorithm" className="flex items-center gap-1 text-xs font-bold text-purple-600 hover:text-purple-700 transition-colors">
-                    🧠 {t("알고리즘", "Algorithm")} {algoTopicsDone}/{algoTopicsTotal}
-                  </Link>
-                ) : (
-                  <span className="flex items-center gap-1 text-xs text-gray-300">🧠 {t("알고리즘", "Algorithm")} <Lock className="w-3 h-3" /></span>
-                )}
+                {algoUnlocked
+                  ? <Link href="/algorithm" className="flex items-center gap-1 text-xs font-bold text-purple-600">🧠 {algoTopicsDone}/{algoTopicsTotal}</Link>
+                  : <span className="flex items-center gap-1 text-xs text-gray-300">🧠 <Lock className="w-3 h-3" /></span>}
                 <ChevronRight className="w-3 h-3 text-gray-300 flex-shrink-0" />
-                {questUnlocked ? (
-                  <Link href="/quest" className="flex items-center gap-1 text-xs font-bold text-orange-600 hover:text-orange-700 transition-colors">
-                    🏆 {t("실전", "Contest")}
-                  </Link>
-                ) : (
-                  <span className="flex items-center gap-1 text-xs text-gray-300">🏆 {t("실전", "Contest")} <Lock className="w-3 h-3" /></span>
-                )}
+                {questUnlocked
+                  ? <Link href="/quest" className="flex items-center gap-1 text-xs font-bold text-orange-600">🏆 {t("실전", "Contest")}</Link>
+                  : <span className="flex items-center gap-1 text-xs text-gray-300">🏆 <Lock className="w-3 h-3" /></span>}
               </div>
             )}
           </div>
         </div>
+
+        {/* 🗺️ 학습 여정 맵 — C++ 전용 (데스크탑) */}
+        {isCpp && loaded && (
+          <div className="max-w-[1600px] mx-auto mb-6 hidden sm:block">
+            <div className="bg-white rounded-2xl border-4 border-black shadow-lg p-5">
+              <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">{t("🗺️ 나의 학습 여정", "🗺️ My Learning Journey")}</p>
+              <div className="grid grid-cols-4 gap-3">
+
+                {/* 1단계: 문법 */}
+                <div className="relative flex flex-col gap-2 rounded-xl border-2 border-blue-200 bg-blue-50 p-4">
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">⚡</span>
+                    <div>
+                      <p className="font-black text-sm text-blue-800">{t("1. 문법", "1. Syntax")}</p>
+                      <p className="text-xs text-blue-500">C++ 23{t("레슨", " lessons")}</p>
+                    </div>
+                  </div>
+                  <div className="h-2 bg-blue-200 rounded-full overflow-hidden">
+                    <div className="h-full bg-blue-500 rounded-full transition-all duration-500" style={{ width: `${Math.round((cppLessonsDone / 23) * 100)}%` }} />
+                  </div>
+                  <p className="text-xs font-bold text-blue-700">{cppLessonsDone}/23 {t("완료", "done")}</p>
+                  {cppLessonsDone < 23 && (
+                    <Link href={`/learn/${cppLessonIds.find(id => !completedLessons.has(id)) ?? "cpp-1"}`}
+                      className="mt-1 text-xs text-center bg-blue-500 text-white rounded-lg py-1.5 font-bold hover:bg-blue-600 transition-colors">
+                      {t("이어서 →", "Continue →")}
+                    </Link>
+                  )}
+                  {cppLessonsDone === 23 && (
+                    <span className="mt-1 text-xs text-center bg-blue-100 text-blue-600 rounded-lg py-1.5 font-bold">✅ {t("완료!", "Done!")}</span>
+                  )}
+                </div>
+
+                {/* 2단계: 연습 */}
+                <div className={`relative flex flex-col gap-2 rounded-xl border-2 p-4 ${practiceUnlocked ? "border-green-200 bg-green-50" : "border-gray-200 bg-gray-50 opacity-60"}`}>
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">{practiceUnlocked ? "💪" : "🔒"}</span>
+                    <div>
+                      <p className={`font-black text-sm ${practiceUnlocked ? "text-green-800" : "text-gray-500"}`}>{t("2. 연습", "2. Practice")}</p>
+                      <p className={`text-xs ${practiceUnlocked ? "text-green-500" : "text-gray-400"}`}>{t("40문제 목표", "40 problems goal")}</p>
+                    </div>
+                  </div>
+                  {practiceUnlocked ? (
+                    <>
+                      <div className="h-2 bg-green-200 rounded-full overflow-hidden">
+                        <div className="h-full bg-green-500 rounded-full transition-all duration-500" style={{ width: `${Math.min(100, Math.round((practiceProblemsDone / 40) * 100))}%` }} />
+                      </div>
+                      <p className="text-xs font-bold text-green-700">{practiceProblemsDone}/{t("40문제", "40 problems")} {t("완료", "done")}</p>
+                      <Link href="/practice" className="mt-1 text-xs text-center bg-green-500 text-white rounded-lg py-1.5 font-bold hover:bg-green-600 transition-colors">
+                        {practiceProblemsDone >= 40 ? `✅ ${t("알고리즘 해금!", "Algorithms Unlocked!")}` : t("연습하기 →", "Practice →")}
+                      </Link>
+                      {completedLessons.has("cpp-p3") && (
+                        <Link href="/coding-bank" className="text-xs text-center border border-teal-400 text-teal-600 rounded-lg py-1.5 font-bold hover:bg-teal-50 transition-colors">
+                          🏦 {t("코딩 뱅크 →", "Coding Bank →")}
+                        </Link>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <div className="h-2 bg-gray-200 rounded-full" />
+                      <p className="text-xs text-gray-400">{t(`레슨 8개 완료 후 해금`, `Unlocks after 8 lessons`)}</p>
+                      <span className="mt-1 text-xs text-center bg-gray-200 text-gray-400 rounded-lg py-1.5 font-bold">{t("잠금", "Locked")}</span>
+                    </>
+                  )}
+                </div>
+
+                {/* 3단계: 알고리즘 */}
+                <div className={`relative flex flex-col gap-2 rounded-xl border-2 p-4 ${algoUnlocked ? "border-purple-200 bg-purple-50" : "border-gray-200 bg-gray-50 opacity-60"}`}>
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">{algoUnlocked ? "🧠" : "🔒"}</span>
+                    <div>
+                      <p className={`font-black text-sm ${algoUnlocked ? "text-purple-800" : "text-gray-500"}`}>{t("3. 알고리즘", "3. Algorithms")}</p>
+                      <p className={`text-xs ${algoUnlocked ? "text-purple-500" : "text-gray-400"}`}>{algoTopicsTotal}{t("개 토픽", " topics")}</p>
+                    </div>
+                  </div>
+                  {algoUnlocked ? (
+                    <>
+                      <div className="h-2 bg-purple-200 rounded-full overflow-hidden">
+                        <div className="h-full bg-purple-500 rounded-full transition-all duration-500" style={{ width: algoTopicsTotal > 0 ? `${Math.round((algoTopicsDone / algoTopicsTotal) * 100)}%` : "0%" }} />
+                      </div>
+                      <p className="text-xs font-bold text-purple-700">{algoTopicsDone}/{algoTopicsTotal} {t("완료", "done")}</p>
+                      <Link href="/algorithm" className="mt-1 text-xs text-center bg-purple-500 text-white rounded-lg py-1.5 font-bold hover:bg-purple-600 transition-colors">
+                        {t("학습하기 →", "Study →")}
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <div className="h-2 bg-gray-200 rounded-full" />
+                      <p className="text-xs text-gray-400">{t(`연습 문제 40개 완료 후 해금`, `Unlocks after 40 practice problems`)}</p>
+                      <span className="mt-1 text-xs text-center bg-gray-200 text-gray-400 rounded-lg py-1.5 font-bold">{t("잠금", "Locked")}</span>
+                    </>
+                  )}
+                </div>
+
+                {/* 4단계: 실전 */}
+                <div className={`relative flex flex-col gap-2 rounded-xl border-2 p-4 ${questUnlocked ? "border-orange-200 bg-orange-50" : "border-gray-200 bg-gray-50 opacity-60"}`}>
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">{questUnlocked ? "🏆" : "🔒"}</span>
+                    <div>
+                      <p className={`font-black text-sm ${questUnlocked ? "text-orange-800" : "text-gray-500"}`}>{t("4. 실전", "4. Contest")}</p>
+                      <p className={`text-xs ${questUnlocked ? "text-orange-500" : "text-gray-400"}`}>USACO / MCC</p>
+                    </div>
+                  </div>
+                  {questUnlocked ? (
+                    <>
+                      <div className="h-2 bg-orange-200 rounded-full" />
+                      <p className="text-xs font-bold text-orange-700">{t("161개 문제 도전!", "161 problems!")}</p>
+                      <Link href="/quest" className="mt-1 text-xs text-center bg-orange-500 text-white rounded-lg py-1.5 font-bold hover:bg-orange-600 transition-colors">
+                        {t("도전하기 →", "Challenge →")}
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <div className="h-2 bg-gray-200 rounded-full" />
+                      <p className="text-xs text-gray-400">{t(`알고리즘 8개 완료 후 해금`, `Unlocks after 8 algo topics`)}</p>
+                      <span className="mt-1 text-xs text-center bg-gray-200 text-gray-400 rounded-lg py-1.5 font-bold">{t("잠금", "Locked")}</span>
+                    </>
+                  )}
+                </div>
+
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* 커리큘럼 완료 → 알고리즘 진입 배너 */}
         {loaded && progress === 100 && !isPseudo && (

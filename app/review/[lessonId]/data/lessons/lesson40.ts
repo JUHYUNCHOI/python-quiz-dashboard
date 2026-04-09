@@ -62,7 +62,12 @@ export const lesson40: LessonData = {
         template: "___ open('data.txt', 'r') ___ f:\n    text = f.read()\n    print(text)",
         blanksAnswer: ["with", "as"],
         answer: "with open('data.txt', 'r') as f:\n    text = f.read()\n    print(text)",
-        alternateAnswers: [], expect: ""
+        alternateAnswers: [], expect: "",
+        en: {
+          task: "Fill in the blanks!",
+          guide: "Basic file opening structure",
+          hint: "with ... as syntax!"
+        }
       }
     },
     {
@@ -72,7 +77,12 @@ export const lesson40: LessonData = {
         template: "try:\n    x = int(input())\n___ ValueError:\n    print('숫자를 입력하세요!')",
         blanksAnswer: ["except"],
         answer: "try:\n    x = int(input())\nexcept ValueError:\n    print('숫자를 입력하세요!')",
-        alternateAnswers: [], expect: ""
+        alternateAnswers: [], expect: "",
+        en: {
+          task: "Fill in the blanks!",
+          guide: "What do you write to catch an error?",
+          hint: "except!"
+        }
       }
     },
     { type: "reward", content: { emoji: "⭐", message: "쉬움 7문제 완료!" } },
@@ -117,7 +127,12 @@ export const lesson40: LessonData = {
         template: "___:\n    with open('x.txt', '___') as f:\n        print(f.read())\nexcept ___:\n    print('파일 없음!')",
         blanksAnswer: ["try", "r", "FileNotFoundError"],
         answer: "try:\n    with open('x.txt', 'r') as f:\n        print(f.read())\nexcept FileNotFoundError:\n    print('파일 없음!')",
-        alternateAnswers: [], expect: "파일 없음!"
+        alternateAnswers: [], expect: "파일 없음!",
+        en: {
+          task: "Fill in the blanks to handle file read errors!",
+          guide: "Handle missing file error",
+          hint: "try + 'r' + FileNotFoundError"
+        }
       }
     },
     {
@@ -128,7 +143,12 @@ export const lesson40: LessonData = {
         template: "names = ['철수', '영희', '민수']\nwith open('names.txt', '___') as f:\n    for name in names:\n        f.___(name + '___')\nprint('저장!')",
         blanksAnswer: ["w", "write", "\\n"],
         answer: "names = ['철수', '영희', '민수']\nwith open('names.txt', 'w') as f:\n    for name in names:\n        f.write(name + '\\n')\nprint('저장!')",
-        alternateAnswers: [], expect: "저장!"
+        alternateAnswers: [], expect: "저장!",
+        en: {
+          task: "Fill in the blanks to save a list to a file!",
+          guide: "Loop through list → file with for",
+          hint: "'w' / write / '\\n'"
+        }
       }
     },
     {
@@ -148,7 +168,12 @@ export const lesson40: LessonData = {
         template: "while True:\n    ___:\n        x = int(input('숫자: '))\n        ___\n    except ___:\n        print('숫자를 입력하세요!')",
         blanksAnswer: ["try", "break", "ValueError"],
         answer: "while True:\n    try:\n        x = int(input('숫자: '))\n        break\n    except ValueError:\n        print('숫자를 입력하세요!')",
-        alternateAnswers: [], expect: ""
+        alternateAnswers: [], expect: "",
+        en: {
+          task: "Fill in the blanks to accept only numbers!",
+          guide: "Loop + error handling",
+          hint: "while True + try + break + ValueError"
+        }
       }
     },
     {
@@ -159,7 +184,12 @@ export const lesson40: LessonData = {
         template: "with open('log.txt', '___') as f:\n    f.___('새 기록\\n')\nprint('추가!')",
         blanksAnswer: ["a", "write"],
         answer: "with open('log.txt', 'a') as f:\n    f.write('새 기록\\n')\nprint('추가!')",
-        alternateAnswers: [], expect: "추가!"
+        alternateAnswers: [], expect: "추가!",
+        en: {
+          message: "🔄 File mode review!",
+          task: "Fill in the blanks!",
+          hint: "'a' / write"
+        }
       }
     },
     { type: "reward", content: { emoji: "⭐⭐", message: "보통 7문제 완료!" } },
@@ -177,7 +207,12 @@ export const lesson40: LessonData = {
         template: "___ True:\n    ___:\n        x = int(input('숫자(1-100): '))\n        if 1 <= x <= 100:\n            ___\n        print('범위 벗어남!')\n    except ___:\n        print('숫자를 입력하세요!')",
         blanksAnswer: ["while", "try", "break", "ValueError"],
         answer: "while True:\n    try:\n        x = int(input('숫자(1-100): '))\n        if 1 <= x <= 100:\n            break\n        print('범위 벗어남!')\n    except ValueError:\n        print('숫자를 입력하세요!')",
-        alternateAnswers: [], expect: ""
+        alternateAnswers: [], expect: "",
+        en: {
+          task: "Fill in the blanks to accept only numbers between 1~100!",
+          guide: "Loop + error handling + range check",
+          hint: "while / try / break / ValueError"
+        }
       }
     },
     {
@@ -188,7 +223,12 @@ export const lesson40: LessonData = {
         template: "def save(name, score):\n    with open('score.txt', '___') as f:\n        f.___(f'{name},{score}')\n\ndef load():\n    ___:\n        with open('score.txt', 'r') as f:\n            print(f.read())\n    except ___:\n        print('파일 없음!')",
         blanksAnswer: ["w", "write", "try", "FileNotFoundError"],
         answer: "def save(name, score):\n    with open('score.txt', 'w') as f:\n        f.write(f'{name},{score}')\n\ndef load():\n    try:\n        with open('score.txt', 'r') as f:\n            print(f.read())\n    except FileNotFoundError:\n        print('파일 없음!')",
-        alternateAnswers: [], expect: ""
+        alternateAnswers: [], expect: "",
+        en: {
+          task: "Fill in the blanks to create score save/load functions!",
+          guide: "'w' + write + try + FileNotFoundError",
+          hint: "'w' / write / try / FileNotFoundError"
+        }
       }
     },
     {
@@ -199,7 +239,12 @@ export const lesson40: LessonData = {
         template: "with open('memo.txt', '___') as f:\n    f.___('새 메모\\n')\nprint('저장!')\n\n___:\n    with open('memo.txt', 'r') as f:\n        print(f.read())\nexcept ___:\n    print('메모 없음!')",
         blanksAnswer: ["a", "write", "try", "FileNotFoundError"],
         answer: "with open('memo.txt', 'a') as f:\n    f.write('새 메모\\n')\nprint('저장!')\n\ntry:\n    with open('memo.txt', 'r') as f:\n        print(f.read())\nexcept FileNotFoundError:\n    print('메모 없음!')",
-        alternateAnswers: [], expect: "저장!"
+        alternateAnswers: [], expect: "저장!",
+        en: {
+          task: "Fill in the blanks to create a notepad app!",
+          guide: "'a' + write + try + FileNotFoundError",
+          hint: "'a' / write / try / FileNotFoundError"
+        }
       }
     },
     {
@@ -210,7 +255,12 @@ export const lesson40: LessonData = {
         template: "def safe_divide(a, b):\n    ___:\n        return a / b\n    except ___:\n        return ___\n\nprint(safe_divide(10, 2))\nprint(safe_divide(10, 0))",
         blanksAnswer: ["try", "ZeroDivisionError", "None"],
         answer: "def safe_divide(a, b):\n    try:\n        return a / b\n    except ZeroDivisionError:\n        return None\n\nprint(safe_divide(10, 2))\nprint(safe_divide(10, 0))",
-        alternateAnswers: [], expect: "5.0\nNone"
+        alternateAnswers: [], expect: "5.0\nNone",
+        en: {
+          task: "Fill in the blanks to create a safe division function!",
+          guide: "try / ZeroDivisionError / None",
+          hint: "try / ZeroDivisionError / None"
+        }
       }
     },
     {
@@ -221,7 +271,12 @@ export const lesson40: LessonData = {
         template: "___:\n    x = int('abc')\nexcept ___:\n    print('변환 실패!')",
         blanksAnswer: ["try", "ValueError"],
         answer: "try:\n    x = int('abc')\nexcept ValueError:\n    print('변환 실패!')",
-        alternateAnswers: [], expect: "변환 실패!"
+        alternateAnswers: [], expect: "변환 실패!",
+        en: {
+          message: "🔄 Basic review!",
+          task: "Fill in the blanks!",
+          hint: "try + ValueError"
+        }
       }
     },
     {
@@ -232,7 +287,12 @@ export const lesson40: LessonData = {
         template: "total = 0\nlines = ['10', 'abc', '20', '30']\n___ line in lines:\n    ___:\n        total += ___(line)\n    except ___:\n        pass\nprint(f'합계: {total}')",
         blanksAnswer: ["for", "try", "int", "ValueError"],
         answer: "total = 0\nlines = ['10', 'abc', '20', '30']\nfor line in lines:\n    try:\n        total += int(line)\n    except ValueError:\n        pass\nprint(f'합계: {total}')",
-        alternateAnswers: [], expect: "합계: 60"
+        alternateAnswers: [], expect: "합계: 60",
+        en: {
+          task: "Fill in the blanks to calculate the sum of numbers!",
+          guide: "for + try + int + ValueError",
+          hint: "for / try / int / ValueError"
+        }
       }
     },
     {
@@ -243,7 +303,12 @@ export const lesson40: LessonData = {
         template: "character = {'name': '용사', 'level': 5}\n\ndef save_game():\n    with open('save.txt', '___') as f:\n        f.write(character['name'] + '\\n')\n        f.___(str(character['level']))\n    print('저장!')\n\ndef load_game():\n    ___:\n        with open('save.txt', 'r') as f:\n            character['name'] = f.readline().strip()\n            character['level'] = int(f.readline().strip())\n        print('불러오기!')\n    except ___:\n        print('세이브 없음!')\n\nsave_game()",
         blanksAnswer: ["w", "write", "try", "FileNotFoundError"],
         answer: "character = {'name': '용사', 'level': 5}\n\ndef save_game():\n    with open('save.txt', 'w') as f:\n        f.write(character['name'] + '\\n')\n        f.write(str(character['level']))\n    print('저장!')\n\ndef load_game():\n    try:\n        with open('save.txt', 'r') as f:\n            character['name'] = f.readline().strip()\n            character['level'] = int(f.readline().strip())\n        print('불러오기!')\n    except FileNotFoundError:\n        print('세이브 없음!')\n\nsave_game()",
-        alternateAnswers: [], expect: "저장!"
+        alternateAnswers: [], expect: "저장!",
+        en: {
+          task: "Fill in the blanks to complete a game save system!",
+          guide: "'w' + write + try + FileNotFoundError",
+          hint: "'w' / write / try / FileNotFoundError"
+        }
       }
     },
     { type: "reward", content: { emoji: "⭐⭐⭐", message: "어려움 6문제 완료!" } },

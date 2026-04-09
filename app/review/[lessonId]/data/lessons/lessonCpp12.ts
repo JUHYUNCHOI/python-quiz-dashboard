@@ -57,7 +57,11 @@ export const lessonCpp12: LessonData = {
           guide: "타입& 이름 = 원본; 형태예요!",
           template: "int___ ref = x;",
           answer: "&",
-          expect: "int& ref = x;"
+          expect: "int& ref = x;",
+          en: {
+            task: "Create a reference (alias) named ref for x!",
+            guide: "Use the form: type& name = original;"
+          }
         }
       },
 
@@ -73,7 +77,17 @@ export const lessonCpp12: LessonData = {
             "x를 복사한다"
           ],
           answer: 1,
-          explanation: "타입 뒤에 붙는 &는 참조 선언이에요! ref는 x의 별명이 돼요."
+          explanation: "타입 뒤에 붙는 &는 참조 선언이에요! ref는 x의 별명이 돼요.",
+          en: {
+            question: "What does & mean in int& ref = x;?",
+            options: [
+              "Gets the address of x",
+              "Makes ref a reference (alias) to x",
+              "Compares x and ref",
+              "Copies x"
+            ],
+            explanation: "& after a type declares a reference! ref becomes an alias for x."
+          }
         }
       },
 
@@ -103,7 +117,16 @@ export const lessonCpp12: LessonData = {
             "int& 대신 int*를 써야 해서"
           ],
           answer: 1,
-          explanation: "const 참조는 읽기 전용이에요! 값을 바꾸려면 const를 빼야 해요."
+          explanation: "const 참조는 읽기 전용이에요! 값을 바꾸려면 const를 빼야 해요.",
+          en: {
+            question: "Why does this code cause an error?",
+            options: [
+              "A reference can only be used once",
+              "A const reference cannot modify the value",
+              "Should use int* instead of int&"
+            ],
+            explanation: "A const reference is read-only! To modify the value, remove const."
+          }
         }
       },
 
@@ -116,7 +139,11 @@ export const lessonCpp12: LessonData = {
           guide: "값을 못 바꾸게 하려면 뭘 붙여야 할까요?",
           template: "___ int& ref = x;",
           answer: "const",
-          expect: "const int& ref = x;"
+          expect: "const int& ref = x;",
+          en: {
+            task: "Create a read-only reference!",
+            guide: "What keyword prevents the value from being changed?"
+          }
         }
       },
 
@@ -164,7 +191,11 @@ export const lessonCpp12: LessonData = {
           task: "x의 참조 ref를 선언해요!",
           template: "int___ ref = x;",
           answer: "&",
-          expect: "int& ref = x;"
+          expect: "int& ref = x;",
+          en: {
+            message: "Quick! Remember what we learned earlier?",
+            task: "Declare a reference ref for x!"
+          }
         }
       },
 
@@ -223,7 +254,11 @@ export const lessonCpp12: LessonData = {
           guide: "매개변수에 &를 붙여야 원본이 바뀌어요!",
           template: "void addTen(int___ n) {",
           answer: "&",
-          expect: "void addTen(int& n) {"
+          expect: "void addTen(int& n) {",
+          en: {
+            task: "Create a function that modifies the original value!",
+            guide: "Add & to the parameter to allow modifying the original!"
+          }
         }
       },
 
@@ -252,7 +287,16 @@ export const lessonCpp12: LessonData = {
             "컴파일 에러가 난다"
           ],
           answer: 1,
-          explanation: "&가 없으면 Call by Value라서 복사본끼리만 swap되고, 원본 x, y는 안 바뀌어요!"
+          explanation: "&가 없으면 Call by Value라서 복사본끼리만 swap되고, 원본 x, y는 안 바뀌어요!",
+          en: {
+            question: "What happens if you remove & from the swap function?",
+            options: [
+              "Values swap correctly",
+              "Only the copies are swapped; the originals stay the same",
+              "Compile error"
+            ],
+            explanation: "Without &, it's Call by Value — only the copies get swapped, and the original x, y stay unchanged!"
+          }
         }
       },
 
@@ -268,7 +312,16 @@ export const lessonCpp12: LessonData = {
             "return이 없어서"
           ],
           answer: 1,
-          explanation: "int a, int b는 복사본! &를 붙여서 int& a, int& b로 해야 원본이 바뀌어요."
+          explanation: "int a, int b는 복사본! &를 붙여서 int& a, int& b로 해야 원본이 바뀌어요.",
+          en: {
+            question: "Why doesn't this swap function work?",
+            options: [
+              "The temp variable is wrong",
+              "Parameters are missing & (Call by Value)",
+              "There is no return statement"
+            ],
+            explanation: "int a, int b are copies! Use int& a, int& b to modify the originals."
+          }
         }
       },
 
@@ -282,7 +335,11 @@ export const lessonCpp12: LessonData = {
           template: "void mySwap(int___ a, int___ b) {",
           answer: "&",
           blanksAnswer: ["&", "&"],
-          expect: "void mySwap(int& a, int& b) {"
+          expect: "void mySwap(int& a, int& b) {",
+          en: {
+            task: "Make both parameters of the swap function references!",
+            guide: "Both parameters need &!"
+          }
         }
       },
 
@@ -330,7 +387,11 @@ export const lessonCpp12: LessonData = {
           task: "원본을 바꾸는 매개변수를 써봐요!",
           template: "void addOne(int___ n) {\n    n = n + 1;\n}",
           answer: "&",
-          expect: "void addOne(int& n) {\n    n = n + 1;\n}"
+          expect: "void addOne(int& n) {\n    n = n + 1;\n}",
+          en: {
+            message: "Quick! Remember Call by Reference?",
+            task: "Write a parameter that allows modifying the original value!"
+          }
         }
       },
 

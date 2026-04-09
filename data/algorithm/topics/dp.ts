@@ -7,57 +7,70 @@ export const dpTopic: AlgoTopic = {
     category: '문제 해결 기법 (Silver~Gold)',
     order: 12,
     description: '다이나믹 프로그래밍 — 한 번 푼 건 다시 안 풀기!',
+    titleEn: 'Dynamic Programming (DP)',
+    categoryEn: 'Problem Solving (Silver~Gold)',
+    descriptionEn: 'Dynamic programming — never solve the same subproblem twice!',
     track: 'both',
     stages: [
         {
             num: 1,
             title: 'DP 입문',
+            titleEn: 'DP Introduction',
             problemIds: [
                 'boj-24416',
                 'boj-9184',
                 'boj-1463',
                 'boj-1904'
             ],
-            desc: '기본 계산 규칙 연습'
+            desc: '기본 계산 규칙 연습',
+            descEn: 'Practicing basic recurrence relations'
         },
         {
             num: 2,
             title: '1차원 DP 심화',
+            titleEn: '1D DP Advanced',
             problemIds: [
                 'boj-2579',
                 'boj-2156',
                 'boj-1912',
                 'boj-10844'
             ],
-            desc: '조건이 있는 1차원 DP'
+            desc: '조건이 있는 1차원 DP',
+            descEn: '1D DP with constraints'
         },
         {
             num: 3,
             title: '2차원 DP',
+            titleEn: '2D DP',
             problemIds: [
                 'boj-1149',
                 'boj-1932'
             ],
-            desc: '테이블을 2차원으로 확장'
+            desc: '테이블을 2차원으로 확장',
+            descEn: 'Extending the DP table to 2 dimensions'
         },
         {
             num: 4,
             title: '가장 긴 증가 수열',
+            titleEn: 'Longest Increasing Subsequence',
             problemIds: [
                 'boj-11053',
                 'boj-11054',
                 'boj-2565'
             ],
-            desc: '증가 수열 찾기'
+            desc: '증가 수열 찾기',
+            descEn: 'Finding the longest increasing subsequence'
         },
         {
             num: 5,
             title: '고전 DP',
+            titleEn: 'Classic DP',
             problemIds: [
                 'boj-9251',
                 'boj-12865'
             ],
-            desc: '가장 긴 공통 수열, 배낭 문제'
+            desc: '가장 긴 공통 수열, 배낭 문제',
+            descEn: 'Longest common subsequence, knapsack problem'
         }
     ],
     problems: [

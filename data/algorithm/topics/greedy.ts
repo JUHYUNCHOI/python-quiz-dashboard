@@ -7,33 +7,42 @@ export const greedyTopic: AlgoTopic = {
     category: '문제 해결 기법 (Silver~Gold)',
     order: 13,
     description: '지금 당장 가장 좋은 선택을 반복하는 기법',
+    titleEn: 'Greedy',
+    categoryEn: 'Problem Solving (Silver~Gold)',
+    descriptionEn: 'A technique that repeatedly makes the locally optimal choice',
     track: 'both',
     stages: [
         {
             num: 1,
             title: '기본 그리디',
+            titleEn: 'Basic Greedy',
             problemIds: [
                 'boj-11047',
                 'boj-11399'
             ],
-            desc: '간단한 탐욕 선택 (Silver IV)'
+            desc: '간단한 탐욕 선택 (Silver IV)',
+            descEn: 'Simple greedy selection (Silver IV)'
         },
         {
             num: 2,
             title: '정렬 + 그리디',
+            titleEn: 'Sort + Greedy',
             problemIds: [
                 'boj-1931',
                 'boj-1541'
             ],
-            desc: '정렬이 핵심인 그리디 (Silver I~II)'
+            desc: '정렬이 핵심인 그리디 (Silver I~II)',
+            descEn: 'Greedy where sorting is key (Silver I~II)'
         },
         {
             num: 3,
             title: '응용 그리디',
+            titleEn: 'Applied Greedy',
             problemIds: [
                 'boj-13305'
             ],
-            desc: '조건이 복잡한 그리디 (Silver III)'
+            desc: '조건이 복잡한 그리디 (Silver III)',
+            descEn: 'Greedy with complex conditions (Silver III)'
         }
     ],
     problems: [

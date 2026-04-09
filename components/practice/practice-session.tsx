@@ -1,11 +1,12 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { ArrowLeft } from "lucide-react"
 import { McqRunner } from "./mcq-runner"
 import { PracticeRunner } from "./practice-runner"
 import { cn } from "@/lib/utils"
 import type { PracticeProblem, PracticeCluster } from "@/data/practice/types"
+import { localizeProblem, localizeCluster } from "@/data/practice/types"
 import { useLanguage } from "@/contexts/language-context"
 
 // ── 고정 세트 크기 ────────────────────────────────────────────────
@@ -22,7 +23,45 @@ function problemIndexInCluster(problems: PracticeProblem[], problemId: string): 
   return problems.findIndex(p => p.id === problemId) + 1
 }
 
+// ── 진행 상황 localStorage 키 ─────────────────────────────────────
+const progressKey = (clusterId: string) => `pp-${clusterId}`
+
+interface SavedProgress {
+  setNum: number
+  index: number
+  passedIds: string[]
+  isRetry: boolean
+  problemIds: string[]
+}
+
+function tryLoadProgress(clusterId: string, allProblems: PracticeProblem[]): { setNum: number; index: number; passedIds: string[]; isRetry: boolean; problems: PracticeProblem[] } | null {
+  try {
+    const raw = localStorage.getItem(progressKey(clusterId))
+    if (!raw) return null
+    const saved: SavedProgress = JSON.parse(raw)
+    const problems = saved.problemIds
+      .map(id => allProblems.find(p => p.id === id))
+      .filter(Boolean) as PracticeProblem[]
+    if (problems.length === 0) return null
+    const safeIndex = Math.min(saved.index ?? 0, problems.length - 1)
+    return { setNum: saved.setNum, index: safeIndex, passedIds: saved.passedIds ?? [], isRetry: saved.isRetry ?? false, problems }
+  } catch {
+    return null
+  }
+}
+
 // ── 문제 설명 렌더러 ──────────────────────────────────────────────
+// 인라인 마크다운: **bold**, `code` 파싱
+function renderInline(text: string): React.ReactNode[] {
+  return text.split(/(\*\*[^*\n]+\*\*|`[^`\n]+`)/g).map((seg, j) => {
+    if (seg.startsWith("**") && seg.endsWith("**"))
+      return <strong key={j} className="font-semibold text-gray-900">{seg.slice(2, -2)}</strong>
+    if (seg.startsWith("`") && seg.endsWith("`"))
+      return <code key={j} className="bg-gray-100 text-indigo-600 rounded px-1 py-0.5 font-mono text-[13px]">{seg.slice(1, -1)}</code>
+    return <span key={j}>{seg}</span>
+  })
+}
+
 function DescriptionBlock({ text }: { text: string }) {
   const parts = text.split(/(```[\s\S]*?```)/g)
   return (
@@ -31,18 +70,15 @@ function DescriptionBlock({ text }: { text: string }) {
         if (part.startsWith("```")) {
           const code = part.replace(/^```[^\n]*\n?/, "").replace(/```$/, "").trim()
           return (
-            <pre key={i} className="rounded-lg bg-gray-900 px-4 py-3 font-mono text-sm text-[#cdd6f4] overflow-x-auto">
+            <pre key={i} className="rounded-lg bg-gray-900 px-4 py-3 font-mono text-sm text-[#cdd6f4] overflow-x-auto whitespace-pre">
               {code}
             </pre>
           )
         }
-        const inline = part.split(/(`[^`]+`)/g).map((seg, j) =>
-          seg.startsWith("`")
-            ? <code key={j} className="bg-gray-100 text-indigo-600 rounded px-1 py-0.5 font-mono text-[13px]">{seg.slice(1, -1)}</code>
-            : <span key={j}>{seg}</span>
-        )
         return (
-          <p key={i} className="text-gray-700 text-sm leading-relaxed whitespace-pre-wrap">{inline}</p>
+          <p key={i} className="text-gray-700 text-sm leading-relaxed whitespace-pre-wrap">
+            {renderInline(part)}
+          </p>
         )
       })}
     </div>
@@ -161,6 +197,14 @@ function RoundResult({
         >
           {isGood ? t("완료!", "Done!") : t("오늘은 여기까지", "That's enough for now")}
         </button>
+        {isGood && wrongNums.length > 0 && (
+          <button
+            onClick={onRetryWrong}
+            className="w-full py-3 rounded-2xl border-2 border-amber-300 text-amber-700 font-bold text-sm hover:bg-amber-50 transition-colors"
+          >
+            {t(`⚡ 틀린 ${wrongNums.length}문제 복습하기`, `⚡ Review ${wrongNums.length} missed`)}
+          </button>
+        )}
       </div>
     </div>
   )
@@ -186,7 +230,7 @@ export function PracticeSession({
   solvedSet,
   userId,
 }: PracticeSessionProps) {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const [phase, setPhase] = useState<Phase>("loading")
   const [dbSessions, setDbSessions] = useState<DbSession[]>([])
   const [currentSet, setCurrentSet] = useState(1)
@@ -200,8 +244,20 @@ export function PracticeSession({
 
   const loadSessions = useCallback(async () => {
     if (!userId) {
-      setCurrentSet(1)
-      setPhase("intro")
+      // 로그인 없어도 localStorage 진행 상황 복원 가능
+      const saved = tryLoadProgress(cluster.id, cluster.problems)
+      if (saved) {
+        setCurrentSet(saved.setNum)
+        setRoundProblems(saved.problems)
+        setIndex(saved.index)
+        setPassedInRound(new Set(saved.passedIds))
+        setIsRetryMode(saved.isRetry)
+        setCanAdvance(saved.passedIds.includes(saved.problems[saved.index]?.id ?? ""))
+        setPhase("solving")
+      } else {
+        setCurrentSet(1)
+        setPhase("intro")
+      }
       return
     }
     try {
@@ -213,20 +269,52 @@ export function PracticeSession({
       const completed = sessions.filter(s => s.completed_at && !s.teacher_assigned)
       const pendingTeacher = sessions.find(s => s.teacher_assigned && !s.completed_at)
 
+      let expectedSet: number
       if (pendingTeacher) {
         setTeacherAssignedId(pendingTeacher.id)
-        setCurrentSet(pendingTeacher.round)
+        expectedSet = pendingTeacher.round
+        setCurrentSet(expectedSet)
       } else {
         const lastSet = completed.length > 0 ? Math.max(...completed.map(s => s.round)) : 0
-        setCurrentSet(lastSet + 1)
+        expectedSet = lastSet + 1
+        setCurrentSet(expectedSet)
+      }
+
+      // localStorage에 해당 세트의 진행 상황이 있으면 복원
+      const saved = tryLoadProgress(cluster.id, cluster.problems)
+      if (saved && saved.setNum === expectedSet) {
+        setRoundProblems(saved.problems)
+        setIndex(saved.index)
+        setPassedInRound(new Set(saved.passedIds))
+        setIsRetryMode(saved.isRetry)
+        setCanAdvance(saved.passedIds.includes(saved.problems[saved.index]?.id ?? ""))
+        setPhase("solving")
+        return
       }
     } catch {
       setCurrentSet(1)
     }
     setPhase("intro")
-  }, [cluster.id, userId])
+  }, [cluster.id, cluster.problems, userId])
 
   useEffect(() => { loadSessions() }, [loadSessions])
+
+  // ── 풀이 진행 상황 자동 저장 ──────────────────────────────────────
+  const prevPhase = useRef<string>("")
+  useEffect(() => {
+    if (phase === "solving" && roundProblems.length > 0) {
+      try {
+        localStorage.setItem(progressKey(cluster.id), JSON.stringify({
+          setNum: currentSet,
+          index,
+          passedIds: [...passedInRound],
+          isRetry: isRetryMode,
+          problemIds: roundProblems.map(p => p.id),
+        }))
+      } catch {}
+    }
+    prevPhase.current = phase
+  }, [phase, currentSet, index, passedInRound, isRetryMode, roundProblems, cluster.id])
 
   const saveSession = useCallback(async (
     setNum: number,
@@ -283,14 +371,24 @@ export function PracticeSession({
   const handleNext = useCallback(async () => {
     if (index + 1 < roundProblems.length) {
       setIndex(i => i + 1)
-      setCanAdvance(false)
+      setCanAdvance(passedInRound.has(roundProblems[index + 1]?.id ?? ""))
       return
     }
+    // 세트 완료 — 저장 후 progress 삭제
     setIsSaving(true)
     await saveSession(currentSet, roundProblems, passedInRound)
     setIsSaving(false)
+    try { localStorage.removeItem(progressKey(cluster.id)) } catch {}
     setPhase("round_complete")
-  }, [index, roundProblems, currentSet, passedInRound, saveSession])
+  }, [index, roundProblems, currentSet, passedInRound, saveSession, cluster.id])
+
+  // ── 이전 문제로 ────────────────────────────────────────────────────
+  const handlePrev = useCallback(() => {
+    if (index === 0) return
+    const prevIdx = index - 1
+    setIndex(prevIdx)
+    setCanAdvance(passedInRound.has(roundProblems[prevIdx]?.id ?? ""))
+  }, [index, roundProblems, passedInRound])
 
   const handleRetryWrong = useCallback(() => {
     const wrongProblems = roundProblems.filter(p => !passedInRound.has(p.id))
@@ -300,17 +398,19 @@ export function PracticeSession({
   }, [roundProblems, passedInRound, currentSet, startSet])
 
   const handleOptOut = useCallback(async () => {
+    try { localStorage.removeItem(progressKey(cluster.id)) } catch {}
     if (phase === "round_complete") {
       await saveSession(currentSet, roundProblems, passedInRound, true)
     }
     onExit()
-  }, [phase, currentSet, roundProblems, passedInRound, saveSession, onExit])
+  }, [phase, currentSet, roundProblems, passedInRound, saveSession, onExit, cluster.id])
 
   const wrongNums = roundProblems
     .filter(p => !passedInRound.has(p.id))
     .map(p => problemIndexInCluster(cluster.problems, p.id))
 
-  const current = roundProblems[index]
+  const current = roundProblems[index] ? localizeProblem(roundProblems[index], lang) : undefined
+  const localCluster = localizeCluster(cluster, lang)
   const isMcq = current?.type === "mcq"
   const progressPct = roundProblems.length > 0 ? (index / roundProblems.length) * 100 : 0
 
@@ -362,7 +462,7 @@ export function PracticeSession({
       <div className="max-w-sm mx-auto px-4 pt-8 flex flex-col items-center gap-6 text-center">
         <div className="text-5xl">{cluster.emoji}</div>
         <div>
-          <h2 className="text-xl font-bold text-gray-900">{cluster.title}</h2>
+          <h2 className="text-xl font-bold text-gray-900">{localCluster.title}</h2>
           {completedSets.length > 0 && (
             <p className="text-sm text-gray-400 mt-1">
               {t("세트", "Set")} {completedSets.map(s => s.round).join(", ")} {t("완료", "done")}
@@ -431,14 +531,24 @@ export function PracticeSession({
         <div className="flex-1 flex flex-col gap-1.5">
           <div className="flex items-center justify-between">
             <span className="text-sm font-semibold text-gray-700">
-              {cluster.emoji} {cluster.title}
+              {cluster.emoji} {localCluster.title}
               <span className="ml-1.5 text-xs text-gray-400">
                 {t("세트", "Set")} {currentSet}{isRetryMode ? ` (${t("재시도", "retry")})` : ""}
               </span>
             </span>
-            <span className="text-xs text-gray-400 font-medium tabular-nums">
-              {index + 1} / {roundProblems.length}
-            </span>
+            <div className="flex items-center gap-2">
+              {index > 0 && (
+                <button
+                  onClick={handlePrev}
+                  className="text-xs text-gray-400 hover:text-gray-600 px-2 py-0.5 rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  ← {t("이전", "Prev")}
+                </button>
+              )}
+              <span className="text-xs text-gray-400 font-medium tabular-nums">
+                {index + 1} / {roundProblems.length}
+              </span>
+            </div>
           </div>
           <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
             <div
@@ -477,6 +587,28 @@ export function PracticeSession({
                   <p className="text-gray-400 text-xs mt-3 pt-3 border-t border-gray-100">
                     {current.constraints}
                   </p>
+                )}
+                {/* 예시 입출력 */}
+                {current.testCases && current.testCases.length > 0 && (
+                  <div className="mt-3 pt-3 border-t border-gray-100">
+                    <p className="text-[11px] font-bold text-gray-400 mb-2 uppercase tracking-wide">
+                      {t("예시 입출력", "Sample I/O")}
+                    </p>
+                    <div className="flex flex-col gap-1.5">
+                      {current.testCases.slice(0, 2).map((tc, i) => (
+                        <div key={i} className="flex gap-3 font-mono text-xs bg-gray-50 rounded-lg px-3 py-2">
+                          <div className="flex-1 min-w-0">
+                            <span className="text-gray-400">{t("입력", "Input")}: </span>
+                            <span className="text-gray-700 break-all">{tc.stdin || t("(없음)", "(none)")}</span>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <span className="text-gray-400">{t("출력", "Output")}: </span>
+                            <span className="text-emerald-600 font-semibold break-all">{tc.expectedOutput}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 )}
               </div>
             )}

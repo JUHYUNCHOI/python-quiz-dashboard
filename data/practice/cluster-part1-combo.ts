@@ -6,6 +6,7 @@ export const part1ComboCluster: PracticeCluster = {
   emoji: "🎯",
   description: "입출력 + 조건문 + 반복문을 조합한 종합 문제",
   unlockAfter: "cpp-p1",
+  en: { title: "Part 1 Combined", description: "Comprehensive problems combining I/O, conditionals, and loops" },
   problems: [
     {
       id: "p1c-001",
@@ -44,10 +45,20 @@ int main() {
     for (int i = 1; i <= n; i++) {
         if (i % 2 != 0) sum += i;
     }
-    cout << sum << "\n";
+    cout << sum << "\\n";
     return 0;
 }`,
       solutionExplanation: "1부터 n까지 반복하며 홀수(i % 2 != 0)인 경우만 합산합니다.",
+      en: {
+        title: "Sum of Odd Numbers",
+        description: `Given an integer N, print the sum of all odd numbers from 1 to N.`,
+        constraints: "1 ≤ N ≤ 1000",
+        hints: [
+          "Use a for loop to iterate from 1 to n.",
+          "Use `if (i % 2 != 0)` to filter odd numbers and add them to sum.",
+        ],
+        solutionExplanation: "Iterate from 1 to n and accumulate only the odd values (where `i % 2 != 0`).",
+      },
     },
     {
       id: "p1c-002",
@@ -88,10 +99,20 @@ int main() {
         cin >> x;
         if (x > 0) count++;
     }
-    cout << count << "\n";
+    cout << count << "\\n";
     return 0;
 }`,
       solutionExplanation: "N개를 순서대로 읽으며 양수인 경우 count를 증가시킵니다. 0은 양수가 아니므로 x > 0 조건으로 처리합니다.",
+      en: {
+        title: "Count Positive Numbers",
+        description: `Given N integers, print how many of them are positive (greater than 0).`,
+        constraints: "1 ≤ N ≤ 100, -1000 ≤ each integer ≤ 1000",
+        hints: [
+          "Read each of the N numbers one by one in a for loop.",
+          "Increment a counter when the value is greater than 0.",
+        ],
+        solutionExplanation: "Read the numbers in order and increment `count` for each positive value. Note that 0 is not positive, so use the strict `x > 0` condition.",
+      },
     },
     {
       id: "p1c-003",
@@ -127,11 +148,23 @@ int main() {
     int n;
     cin >> n;
     for (int i = 1; i <= 9; i++) {
-        cout << n << " x " << i << " = " << n * i << "\n";
+        cout << n << " x " << i << " = " << n * i << "\\n";
     }
     return 0;
 }`,
       solutionExplanation: "i를 1부터 9까지 반복하며 n * i를 계산해 지정된 형식으로 출력합니다.",
+      en: {
+        title: "Multiplication Table Row",
+        description: `Given an integer N, print the N times table from 1 to 9.
+
+Format: \`N x i = result\``,
+        constraints: "1 ≤ N ≤ 9",
+        hints: [
+          "Use `for (int i = 1; i <= 9; i++)` to iterate from 1 to 9.",
+          "Print with `cout << n << \" x \" << i << \" = \" << n * i`.",
+        ],
+        solutionExplanation: "Loop `i` from 1 to 9, compute `n * i`, and print it in the specified format.",
+      },
     },
     {
       id: "p1c-004",
@@ -170,10 +203,20 @@ int main() {
     for (int i = 1; i <= n; i++) {
         if (n % i == 0) sum += i;
     }
-    cout << sum << "\n";
+    cout << sum << "\\n";
     return 0;
 }`,
       solutionExplanation: "1부터 n까지 모든 수를 시도해 n을 나누어 떨어지게 하는 수(약수)를 찾아 합산합니다.",
+      en: {
+        title: "Sum of Divisors",
+        description: `Given an integer N, print the sum of all its divisors.`,
+        constraints: "1 ≤ N ≤ 10000",
+        hints: [
+          "Iterate from 1 to n; if `n % i == 0`, then i is a divisor.",
+          "Add each divisor to sum and print the total at the end.",
+        ],
+        solutionExplanation: "Try every number from 1 to n and add those that divide n evenly (divisors) to the running sum.",
+      },
     },
     {
       id: "p1c-005",
@@ -217,10 +260,22 @@ int main() {
             break;
         }
     }
-    cout << (isPrime ? "YES" : "NO") << "\n";
+    cout << (isPrime ? "YES" : "NO") << "\\n";
     return 0;
 }`,
       solutionExplanation: "2부터 n-1까지 시도해 나누어 떨어지는 수가 하나라도 있으면 소수가 아닙니다. break로 조기 종료해 불필요한 반복을 줄입니다.",
+      en: {
+        title: "Prime Number Check",
+        description: `Given an integer N, print \`YES\` if it is prime, \`NO\` otherwise.
+
+A prime number is greater than 1 and divisible only by 1 and itself.`,
+        constraints: "2 ≤ N ≤ 10000",
+        hints: [
+          "Try every number from 2 to n-1; if any divides n evenly, it is not prime.",
+          "Start with `bool isPrime = true` and set it to false if a divisor is found.",
+        ],
+        solutionExplanation: "If any number from 2 to n-1 divides n evenly, n is not prime. Use `break` to exit early and avoid unnecessary iterations.",
+      },
     },
     {
       id: "p1c-006",
@@ -266,11 +321,29 @@ int main() {
         for (int j = 0; j < i; j++) {
             cout << "*";
         }
-        cout << "\n";
+        cout << "\\n";
     }
     return 0;
 }`,
       solutionExplanation: "바깥 루프가 줄 번호 i를 1~n으로 증가시키고, 안쪽 루프가 i번 별을 출력합니다. 중첩 반복문의 기본 패턴입니다.",
+      en: {
+        title: "Staircase Pattern",
+        description: `Given an integer N, print a staircase pattern of stars as shown below.
+
+Example for N=4:
+\`\`\`
+*
+**
+***
+****
+\`\`\``,
+        constraints: "1 ≤ N ≤ 20",
+        hints: [
+          "Use an outer for loop for the row number (1 to n).",
+          "Use an inner for loop to print that many stars, then print a newline.",
+        ],
+        solutionExplanation: "The outer loop increases the row number `i` from 1 to n, and the inner loop prints `i` stars. This is the classic nested loop pattern.",
+      },
     },
     {
       id: "p1c-007",
@@ -322,12 +395,26 @@ int main() {
     for (int i = 0; i < n; i++) {
         if (scores[i] >= avg) count++;
     }
-    cout << fixed << setprecision(1) << avg << "\n";
-    cout << maxScore << "\n";
-    cout << count << "\n";
+    cout << fixed << setprecision(1) << avg << "\\n";
+    cout << maxScore << "\\n";
+    cout << count << "\\n";
     return 0;
 }`,
       solutionExplanation: "배열에 점수를 저장하며 합계와 최대값을 구합니다. 평균 계산 후 다시 순회해 평균 이상인 학생 수를 셉니다.",
+      en: {
+        title: "Score Statistics",
+        description: `Given the scores (0–100) of N students, print the following:
+
+- First line: average (to one decimal place, no rounding)
+- Second line: highest score
+- Third line: number of students at or above the average`,
+        constraints: "1 ≤ N ≤ 100, 0 ≤ score ≤ 100",
+        hints: [
+          "Without an array you would need two passes over the input, which is tricky. Store the scores in `int scores[100]`.",
+          "After computing the average, iterate over the array again to count students at or above it.",
+        ],
+        solutionExplanation: "Store scores in an array while computing the sum and maximum in one pass. Then compute the average and do a second pass to count students who meet or exceed it.",
+      },
     },
   ],
 }

@@ -55,7 +55,11 @@ export const lesson11: LessonData = {
         task: "100 > 50 출력해봐",
         template: { before: "print(", after: ")" },
         answer: "100 > 50",
-        expect: "True"
+        expect: "True",
+        en: {
+          message: "Wait! Remember comparison operators?",
+          task: "Print 100 > 50"
+        }
       }
     },
 
@@ -81,7 +85,11 @@ export const lesson11: LessonData = {
         guide: "if age >= 18:\n    print(...)",
         template: null,
         answer: "age = 18\nif age >= 18:\n    print('성인입니다')",
-        expect: "성인입니다"
+        expect: "성인입니다",
+        en: {
+          task: "Create variable age = 18,\nif age >= 18 print '성인입니다'",
+          guide: "if age >= 18:\n    print(...)"
+        }
       }
     },
     {
@@ -91,7 +99,10 @@ export const lesson11: LessonData = {
         task: "temp = 35 로 변수 만들고,\ntemp > 30 이면 '더워요!' 출력해봐",
         template: null,
         answer: "temp = 35\nif temp > 30:\n    print('더워요!')",
-        expect: "더워요!"
+        expect: "더워요!",
+        en: {
+          task: "Create variable temp = 35,\nif temp > 30 print '더워요!'"
+        }
       }
     },
 
@@ -107,7 +118,16 @@ export const lesson11: LessonData = {
           "== 대신 = 를 써야 해"
         ],
         answer: 1,
-        explanation: "if 아래의 코드는 반드시 들여쓰기(4칸 또는 Tab)가 있어야 해! 없으면 IndentationError가 발생해."
+        explanation: "if 아래의 코드는 반드시 들여쓰기(4칸 또는 Tab)가 있어야 해! 없으면 IndentationError가 발생해.",
+        en: {
+          question: "What is the problem with this code?",
+          options: [
+            "The score variable is missing",
+            "No indentation causes IndentationError!",
+            "Should use = instead of =="
+          ],
+          explanation: "Code under if must have indentation (4 spaces or Tab)! Without it, IndentationError occurs."
+        }
       }
     },
 
@@ -122,7 +142,16 @@ export const lesson11: LessonData = {
           "따옴표와 괄호"
         ],
         answer: 0,
-        explanation: "Python if 문은 조건 뒤에 콜론(:), 실행 코드는 들여쓰기! C/Java의 {} 와 달라."
+        explanation: "Python if 문은 조건 뒤에 콜론(:), 실행 코드는 들여쓰기! C/Java의 {} 와 달라.",
+        en: {
+          question: "What are the 2 required things in an if statement?",
+          options: [
+            "Colon (:) and indentation",
+            "Semicolon (;) and curly braces ({})",
+            "Quotes and parentheses"
+          ],
+          explanation: "Python if statement needs a colon (:) after the condition, and indentation for the code! Unlike C/Java's {}."
+        }
       }
     },
 
@@ -174,7 +203,11 @@ export const lesson11: LessonData = {
         guide: "if score >= 60:\n    print('합격')\nelse:\n    print('불합격')",
         template: null,
         answer: "score = 75\nif score >= 60:\n    print('합격')\nelse:\n    print('불합격')",
-        expect: "합격"
+        expect: "합격",
+        en: {
+          task: "Create variable score = 75,\nif 60 or above print '합격', otherwise print '불합격'",
+          guide: "if score >= 60:\n    print('합격')\nelse:\n    print('불합격')"
+        }
       }
     },
     {
@@ -185,7 +218,11 @@ export const lesson11: LessonData = {
         guide: "if num % 2 == 0:",
         template: null,
         answer: "num = 7\nif num % 2 == 0:\n    print('짝수')\nelse:\n    print('홀수')",
-        expect: "홀수"
+        expect: "홀수",
+        en: {
+          task: "Create variable num = 7,\nif even print '짝수', if odd print '홀수'",
+          guide: "if num % 2 == 0:"
+        }
       }
     },
 
@@ -200,7 +237,16 @@ export const lesson11: LessonData = {
           "아무것도 안 나와"
         ],
         answer: 1,
-        explanation: "10 > 10은 False! 그래서 else 블록의 '작거나 같다'가 출력돼."
+        explanation: "10 > 10은 False! 그래서 else 블록의 '작거나 같다'가 출력돼.",
+        en: {
+          question: "When n = 10, what does this code print?\nif n > 10:\n    print('크다')\nelse:\n    print('작거나 같다')",
+          options: [
+            "크다",
+            "작거나 같다",
+            "Nothing prints"
+          ],
+          explanation: "10 > 10 is False! So the else block's '작거나 같다' prints."
+        }
       }
     },
 
@@ -252,7 +298,11 @@ export const lesson11: LessonData = {
         guide: "if temp >= 30:\nelif temp >= 20:\nelif temp >= 10:\nelse:",
         template: null,
         answer: "temp = 10\nif temp >= 30:\n    print('더워')\nelif temp >= 20:\n    print('따뜻해')\nelif temp >= 10:\n    print('선선해')\nelse:\n    print('추워')",
-        expect: "선선해"
+        expect: "선선해",
+        en: {
+          task: "Create variable temp = 10,\nif 30+ print '더워', if 20+ print '따뜻해',\nif 10+ print '선선해', otherwise print '추워'",
+          guide: "if temp >= 30:\nelif temp >= 20:\nelif temp >= 10:\nelse:"
+        }
       }
     },
 
@@ -280,7 +330,16 @@ export const lesson11: LessonData = {
           "상황에 따라 다름"
         ],
         answer: 1,
-        explanation: "if-elif-else 는 위에서 아래로 확인하다가 처음 True인 블록 하나만 실행해! 나머지는 건너뜀."
+        explanation: "if-elif-else 는 위에서 아래로 확인하다가 처음 True인 블록 하나만 실행해! 나머지는 건너뜀.",
+        en: {
+          question: "How many blocks execute in if-elif-else?",
+          options: [
+            "All blocks that are True",
+            "Only one",
+            "Depends on the situation"
+          ],
+          explanation: "if-elif-else checks from top to bottom and runs only the first True block! The rest are skipped."
+        }
       }
     },
 
@@ -318,7 +377,11 @@ export const lesson11: LessonData = {
         task: "num = 8 로 변수 만들고\n짝수면 '짝수', 홀수면 '홀수' 출력해봐",
         template: null,
         answer: "num = 8\nif num % 2 == 0:\n    print('짝수')\nelse:\n    print('홀수')",
-        expect: "짝수"
+        expect: "짝수",
+        en: {
+          message: "Remember even/odd checking?",
+          task: "Create variable num = 8\nif even print '짝수', if odd print '홀수'"
+        }
       }
     },
 

@@ -55,7 +55,11 @@ export const lesson9: LessonData = {
         task: "type(42) 출력해봐",
         template: null,
         answer: "print(type(42))",
-        expect: "<class 'int'>"
+        expect: "<class 'int'>",
+        en: {
+          message: "Wait! Remember data types?",
+          task: "Print type(42)"
+        }
       }
     },
 
@@ -80,7 +84,12 @@ export const lesson9: LessonData = {
         hint: "print(int('200'))",
         template: null,
         answer: "print(int('200'))",
-        expect: "200"
+        expect: "200",
+        en: {
+          task: "Make it print like this ↓\n200",
+          guide: "Convert with int() and print!",
+          hint: "print(int('200'))"
+        }
       }
     },
     {
@@ -90,7 +99,11 @@ export const lesson9: LessonData = {
         guide: "소수점 버림! 반올림 아님!",
         template: null,
         answer: "print(int(9.9))",
-        expect: "9"
+        expect: "9",
+        en: {
+          task: "Make it print like this ↓\n9",
+          guide: "Truncates decimal! Not rounding!"
+        }
       }
     },
 
@@ -106,7 +119,16 @@ export const lesson9: LessonData = {
           "ValueError 에러!"
         ],
         answer: 2,
-        explanation: "숫자가 아닌 문자열은 int()로 변환할 수 없어! ValueError가 발생해."
+        explanation: "숫자가 아닌 문자열은 int()로 변환할 수 없어! ValueError가 발생해.",
+        en: {
+          question: "What happens with this code?",
+          options: [
+            "Prints hello",
+            "Prints 0",
+            "ValueError error!"
+          ],
+          explanation: "Non-numeric strings can't be converted with int()! A ValueError occurs."
+        }
       }
     },
 
@@ -121,7 +143,16 @@ export const lesson9: LessonData = {
           "에러"
         ],
         answer: 1,
-        explanation: "int()는 반올림이 아니라 소수점을 버려! 4.99도 그냥 4가 돼."
+        explanation: "int()는 반올림이 아니라 소수점을 버려! 4.99도 그냥 4가 돼.",
+        en: {
+          question: "What is the result of int(4.99)?",
+          options: [
+            "5 (rounded)",
+            "4 (decimal truncated)",
+            "Error"
+          ],
+          explanation: "int() truncates the decimal, not rounds! 4.99 becomes just 4."
+        }
       }
     },
 
@@ -172,7 +203,12 @@ export const lesson9: LessonData = {
         hint: "print(float('3.14'))",
         template: null,
         answer: "print(float('3.14'))",
-        expect: "3.14"
+        expect: "3.14",
+        en: {
+          task: "Make it print like this ↓\n3.14",
+          guide: "Convert with float() and print!",
+          hint: "print(float('3.14'))"
+        }
       }
     },
     {
@@ -182,7 +218,11 @@ export const lesson9: LessonData = {
         guide: "정수 → 소수로 변환!",
         template: null,
         answer: "print(float(10))",
-        expect: "10.0"
+        expect: "10.0",
+        en: {
+          task: "Make it print like this ↓\n10.0",
+          guide: "Convert integer → float!"
+        }
       }
     },
 
@@ -207,7 +247,12 @@ export const lesson9: LessonData = {
         hint: "print(str(2025))",
         template: null,
         answer: "print(str(2025))",
-        expect: "2025"
+        expect: "2025",
+        en: {
+          task: "Make it print like this ↓\n2025",
+          guide: "Convert number to string with str()!",
+          hint: "print(str(2025))"
+        }
       }
     },
 
@@ -222,7 +267,16 @@ export const lesson9: LessonData = {
           "float (소수)"
         ],
         answer: 2,
-        explanation: "float()은 소수로 변환하는 함수! 결과는 float 타입이야."
+        explanation: "float()은 소수로 변환하는 함수! 결과는 float 타입이야.",
+        en: {
+          question: "What is the result type of float('3.14')?",
+          options: [
+            "str (string)",
+            "int (integer)",
+            "float (decimal)"
+          ],
+          explanation: "float() converts to decimal! The result type is float."
+        }
       }
     },
 
@@ -285,7 +339,12 @@ export const lesson9: LessonData = {
         hint: "print(bool(0))",
         template: null,
         answer: "print(bool(0))",
-        expect: "False"
+        expect: "False",
+        en: {
+          task: "Make it print like this ↓\nFalse",
+          guide: "0 is False!",
+          hint: "print(bool(0))"
+        }
       }
     },
     {
@@ -295,7 +354,11 @@ export const lesson9: LessonData = {
         guide: "내용 있는 문자열은 True!",
         template: null,
         answer: "print(bool('hello'))",
-        expect: "True"
+        expect: "True",
+        en: {
+          task: "Make it print like this ↓\nTrue",
+          guide: "Non-empty strings are True!"
+        }
       }
     },
     {
@@ -305,7 +368,11 @@ export const lesson9: LessonData = {
         guide: "'' 빈 문자열은 False야!",
         template: null,
         answer: "print(bool(''))",
-        expect: "False"
+        expect: "False",
+        en: {
+          task: "Make it print like this ↓\nFalse",
+          guide: "'' empty string is False!"
+        }
       }
     },
 
@@ -320,7 +387,16 @@ export const lesson9: LessonData = {
           "에러"
         ],
         answer: 1,
-        explanation: "0이 아닌 숫자는 모두 True야! 음수도 포함이야."
+        explanation: "0이 아닌 숫자는 모두 True야! 음수도 포함이야.",
+        en: {
+          question: "What is the result of bool(-100)?",
+          options: [
+            "False (because it's negative)",
+            "True (because it's not 0)",
+            "Error"
+          ],
+          explanation: "Any non-zero number is True! Negative numbers included."
+        }
       }
     },
 
@@ -359,7 +435,11 @@ export const lesson9: LessonData = {
         task: "int('500') + 200 을 출력해봐",
         template: null,
         answer: "print(int('500') + 200)",
-        expect: "700"
+        expect: "700",
+        en: {
+          message: "Remember int conversion?",
+          task: "Print int('500') + 200"
+        }
       }
     },
 

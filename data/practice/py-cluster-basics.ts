@@ -6,6 +6,10 @@ export const pyBasicsCluster: PracticeCluster = {
   emoji: "🔢",
   description: "사칙연산, //, %, **, 우선순위, 타입 특성 — 출력 결과 맞추기",
   unlockAfter: "4",
+  en: {
+    title: "Operators",
+    description: "Arithmetic, //, %, **, operator precedence, type behavior — predict output",
+  },
   problems: [
     {
       id: "pybasics-001",
@@ -21,6 +25,15 @@ export const pyBasicsCluster: PracticeCluster = {
       options: ["30", '"1020"', "1020", "오류"],
       correctOption: 2,
       explanation: "문자열끼리 +는 이어붙이기(concatenation)입니다. '10'+'20' = '1020'. 숫자로 더하려면 int()로 변환해야 합니다.",
+      en: {
+        title: "String + String",
+        description: "What is the output of the following code?",
+        constraints: "",
+        hints: [],
+        options: ["30", '"1020"', "1020", "Error"],
+        explanation: "The + operator between strings is concatenation. '10'+'20' = '1020'. Use int() to add them as numbers.",
+        solutionExplanation: "The + operator between strings is concatenation. '10'+'20' = '1020'. Use int() to add them as numbers.",
+      },
     },
     {
       id: "pybasics-002",
@@ -36,6 +49,15 @@ export const pyBasicsCluster: PracticeCluster = {
       options: ["3", "3.0", "3.3333333333333335", "3.33"],
       correctOption: 2,
       explanation: "Python 3에서 /는 항상 float 나눗셈입니다. 10/3 = 3.3333... (소수점 계속). 정수 나눗셈은 // 연산자를 사용합니다.",
+      en: {
+        title: "Integer Division",
+        description: "What is the output of the following code?",
+        constraints: "",
+        hints: [],
+        options: ["3", "3.0", "3.3333333333333335", "3.33"],
+        explanation: "In Python 3, / always performs float division. 10/3 = 3.3333... Use // for integer division.",
+        solutionExplanation: "In Python 3, / always performs float division. 10/3 = 3.3333... Use // for integer division.",
+      },
     },
     {
       id: "pybasics-003",
@@ -51,6 +73,15 @@ export const pyBasicsCluster: PracticeCluster = {
       options: ["3", "3.0", "3.3333...", "3.33"],
       correctOption: 0,
       explanation: "// 연산자는 floor division(정수 나눗셈)으로 소수점 이하를 버립니다. 10 // 3 = 3",
+      en: {
+        title: "Floor Division",
+        description: "What is the output of the following code?",
+        constraints: "",
+        hints: [],
+        options: ["3", "3.0", "3.3333...", "3.33"],
+        explanation: "The // operator is floor division — it discards the decimal part. 10 // 3 = 3.",
+        solutionExplanation: "The // operator is floor division — it discards the decimal part. 10 // 3 = 3.",
+      },
     },
     {
       id: "pybasics-004",
@@ -66,6 +97,15 @@ export const pyBasicsCluster: PracticeCluster = {
       options: ["0", "2", "3", "5"],
       correctOption: 1,
       explanation: "% 는 나머지(모듈로) 연산입니다. 17 = 5×3 + 2이므로 17 % 5 = 2",
+      en: {
+        title: "Modulo Operator",
+        description: "What is the output of the following code?",
+        constraints: "",
+        hints: [],
+        options: ["0", "2", "3", "5"],
+        explanation: "% is the modulo (remainder) operator. 17 = 5×3 + 2, so 17 % 5 = 2.",
+        solutionExplanation: "% is the modulo (remainder) operator. 17 = 5×3 + 2, so 17 % 5 = 2.",
+      },
     },
     {
       id: "pybasics-005",
@@ -77,10 +117,19 @@ export const pyBasicsCluster: PracticeCluster = {
       description: "다음 코드의 출력 결과는?",
       constraints: "",
       language: "python",
-      codeSnippet: `print(2 ** 8)`,
-      options: ["16", "64", "256", "512"],
-      correctOption: 2,
-      explanation: "** 는 거듭제곱 연산자입니다. 2⁸ = 256",
+      codeSnippet: `print(2 ** 3)`,
+      options: ["6", "8", "9", "16"],
+      correctOption: 1,
+      explanation: "** 는 거듭제곱 연산자입니다. 2 ** 3 = 2×2×2 = 8",
+      en: {
+        title: "Exponentiation",
+        description: "What is the output of the following code?",
+        constraints: "",
+        hints: [],
+        options: ["6", "8", "9", "16"],
+        explanation: "** is the exponentiation operator. 2 ** 3 = 2×2×2 = 8.",
+        solutionExplanation: "** is the exponentiation operator. 2 ** 3 = 2×2×2 = 8.",
+      },
     },
     {
       id: "pybasics-006",
@@ -96,6 +145,15 @@ export const pyBasicsCluster: PracticeCluster = {
       options: ["26", "16", "11", "32"],
       correctOption: 1,
       explanation: "곱셈(*)이 덧셈(+)보다 먼저 계산됩니다. 3*2=6, 10+6=16",
+      en: {
+        title: "Operator Precedence",
+        description: "What is the output of the following code?",
+        constraints: "",
+        hints: [],
+        options: ["26", "16", "11", "32"],
+        explanation: "Multiplication (*) is evaluated before addition (+). 3*2=6, then 10+6=16.",
+        solutionExplanation: "Multiplication (*) is evaluated before addition (+). 3*2=6, then 10+6=16.",
+      },
     },
     {
       id: "pybasics-007",
@@ -111,6 +169,15 @@ export const pyBasicsCluster: PracticeCluster = {
       options: ["ab3", "ababab", "ab ab ab", "오류"],
       correctOption: 1,
       explanation: "문자열 * 정수는 문자열을 반복합니다. 'ab' * 3 = 'ababab'",
+      en: {
+        title: "String Repetition",
+        description: "What is the output of the following code?",
+        constraints: "",
+        hints: [],
+        options: ["ab3", "ababab", "ab ab ab", "Error"],
+        explanation: "String * integer repeats the string. 'ab' * 3 = 'ababab'.",
+        solutionExplanation: "String * integer repeats the string. 'ab' * 3 = 'ababab'.",
+      },
     },
     {
       id: "pybasics-008",
@@ -126,6 +193,15 @@ export const pyBasicsCluster: PracticeCluster = {
       options: ["True", "False", "0", "오류"],
       correctOption: 1,
       explanation: "Python에서 0, 0.0, '', [], {} 등은 거짓(False)입니다. bool(0) = False",
+      en: {
+        title: "bool(0)",
+        description: "What is the output of the following code?",
+        constraints: "",
+        hints: [],
+        options: ["True", "False", "0", "Error"],
+        explanation: "In Python, 0, 0.0, '', [], {} are all falsy. bool(0) = False.",
+        solutionExplanation: "In Python, 0, 0.0, '', [], {} are all falsy. bool(0) = False.",
+      },
     },
     {
       id: "pybasics-009",
@@ -141,6 +217,15 @@ export const pyBasicsCluster: PracticeCluster = {
       options: ["True", "False", "오류", "None"],
       correctOption: 0,
       explanation: "비어있지 않은 문자열은 모두 True입니다! 'False'는 'False'라는 내용의 문자열이지, Python의 False가 아닙니다.",
+      en: {
+        title: `bool("False")`,
+        description: "What is the output of the following code?",
+        constraints: "",
+        hints: [],
+        options: ["True", "False", "Error", "None"],
+        explanation: "Any non-empty string is truthy! 'False' is a string containing the text \"False\", not the Python boolean False.",
+        solutionExplanation: "Any non-empty string is truthy! 'False' is a string containing the text \"False\", not the Python boolean False.",
+      },
     },
     {
       id: "pybasics-010",
@@ -156,6 +241,15 @@ export const pyBasicsCluster: PracticeCluster = {
       options: ["True", "False", "오류", "1"],
       correctOption: 0,
       explanation: "Python에서 True는 내부적으로 1, False는 0과 같습니다. 1 == True는 True입니다.",
+      en: {
+        title: "1 == True",
+        description: "What is the output of the following code?",
+        constraints: "",
+        hints: [],
+        options: ["True", "False", "Error", "1"],
+        explanation: "In Python, True is internally equal to 1, and False to 0. So 1 == True is True.",
+        solutionExplanation: "In Python, True is internally equal to 1, and False to 0. So 1 == True is True.",
+      },
     },
     {
       id: "pybasics-013",
@@ -174,6 +268,15 @@ print(x)`,
       options: ["10", "15", "30", "25"],
       correctOption: 2,
       explanation: "x = 10 → x = 10+5 = 15 → x = 15*2 = 30",
+      en: {
+        title: "Variable Reassignment",
+        description: "What is the output of the following code?",
+        constraints: "",
+        hints: [],
+        options: ["10", "15", "30", "25"],
+        explanation: "x = 10 → x = 10+5 = 15 → x = 15*2 = 30.",
+        solutionExplanation: "x = 10 → x = 10+5 = 15 → x = 15*2 = 30.",
+      },
     },
     {
       id: "pybasics-015",
@@ -189,6 +292,15 @@ print(x)`,
       options: ["True", "False", "오류", "None"],
       correctOption: 0,
       explanation: "Python은 int와 float를 비교할 때 값을 기준으로 비교합니다. 10과 10.0은 같은 값이므로 True입니다.",
+      en: {
+        title: "Comparison Operator",
+        description: "What is the output of the following code?",
+        constraints: "",
+        hints: [],
+        options: ["True", "False", "Error", "None"],
+        explanation: "Python compares int and float by value. 10 and 10.0 are equal in value, so the result is True.",
+        solutionExplanation: "Python compares int and float by value. 10 and 10.0 are equal in value, so the result is True.",
+      },
     },
 
     // ── 코딩 직접 해보기 ──────────────────────────────────────
@@ -223,6 +335,16 @@ print(a * b)
 print(a // b)
 print(a % b)`,
       solutionExplanation: "각 연산 결과를 print()로 출력합니다. //는 정수 나눗셈(몫), %는 나머지입니다.",
+      en: {
+        title: "Calculate with Variables",
+        description: "Declare variables `a = 15`, `b = 4`, then print the following 5 results, one per line.\n\n- a + b\n- a - b\n- a * b\n- a // b  (floor division)\n- a % b   (remainder)",
+        constraints: "No input. Use print() 5 times.",
+        hints: [
+          "// is floor division that discards the decimal. 15 // 4 = 3",
+          "% is the remainder operator. 15 % 4 = 3",
+        ],
+        solutionExplanation: "Print the result of each operation with print(). // is floor division (quotient), % is remainder.",
+      },
     },
     {
       id: "pybasics-c02",
@@ -252,6 +374,16 @@ print(2**5)
 print(2**6)
 print(2**7)`,
       solutionExplanation: "** 연산자로 거듭제곱을 계산합니다. 2**7 = 128",
+      en: {
+        title: "Powers of 2",
+        description: "Print the values from 2⁰ to 2⁷ (8 values total), one per line.\n\nExample:\n```\n1\n2\n4\n8\n...\n128\n```",
+        constraints: "No input. Use the ** operator.",
+        hints: [
+          "2 ** 0 = 1, 2 ** 1 = 2, 2 ** 2 = 4 ...",
+          "Use print(2**0), print(2**1), etc. — repeat 8 times.",
+        ],
+        solutionExplanation: "Use the ** operator for exponentiation. 2**7 = 128.",
+      },
     },
     {
       id: "pybasics-c03",
@@ -275,6 +407,16 @@ print(2**7)`,
       solutionCode: `print(2 + 3 * 4 - 1)
 print((2 + 3) * (4 - 1))`,
       solutionExplanation: "괄호 없이는 곱셈이 먼저: 2+12-1=13. 괄호로 묶으면 (5)*(3)=15",
+      en: {
+        title: "Verify Operator Precedence",
+        description: "Print the result of each expression below.\n\n1. `2 + 3 * 4 - 1`\n2. `(2 + 3) * (4 - 1)`\n\nVerify that the two expressions give different results.",
+        constraints: "No input.",
+        hints: [
+          "First expression: multiplication first! 3*4=12, then 2+12-1",
+          "Second expression: parentheses first! (2+3)=5, (4-1)=3, 5*3=15",
+        ],
+        solutionExplanation: "Without parentheses, multiplication comes first: 2+12-1=13. With parentheses: (5)*(3)=15.",
+      },
     },
     {
       id: "pybasics-c04",
@@ -302,6 +444,16 @@ pi = 3.14
 pi = 3.14
 print(pi * r * r)`,
       solutionExplanation: "3.14 * 5 * 5 = 78.5",
+      en: {
+        title: "Area of a Circle",
+        description: "Calculate and print the area of a circle with radius `r = 5`.\n\nFormula: `area = 3.14 * r * r`\n\nExpected output:\n```\n78.5\n```",
+        constraints: "No input. Use pi = 3.14.",
+        hints: [
+          "area = pi * r * r",
+          "3.14 * 5 * 5 = ?",
+        ],
+        solutionExplanation: "3.14 * 5 * 5 = 78.5.",
+      },
     },
     {
       id: "pybasics-c05",
@@ -328,6 +480,16 @@ print(pi * r * r)`,
 print(n % 2 == 0)
 print(n % 2 != 0)`,
       solutionExplanation: "17 % 2 = 1 (나머지가 1). 17은 홀수이므로 짝수 판별은 False, 홀수 판별은 True.",
+      en: {
+        title: "Even or Odd",
+        description: "Declare `n = 17` and print the following two lines:\n\n- Line 1: whether n is even → n % 2 == 0\n- Line 2: whether n is odd → n % 2 != 0",
+        constraints: "No input. Output: False / True",
+        hints: [
+          "Even: n % 2 == 0",
+          "Odd: n % 2 != 0  or  n % 2 == 1",
+        ],
+        solutionExplanation: "17 % 2 = 1 (remainder is 1). 17 is odd, so even check is False and odd check is True.",
+      },
     },
   ],
 }

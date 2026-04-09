@@ -1,0 +1,236 @@
+import { C, t } from "@/components/quest/theme";
+
+/* ================================================================
+   SOLUTION CODE
+   ================================================================ */
+export const SOLUTION_CODE = [
+  "import heapq",
+  "",
+  "N, K = map(int, input().split())",
+  "times = list(map(int, input().split()))",
+  "",
+  "# min-heap: (finish_time, counter_id)",
+  "heap = []",
+  "for i in range(K):",
+  "    heapq.heappush(heap, (times[i], i))",
+  "",
+  "# For cow K..N-1, assign to earliest counter",
+  "assignment = list(range(K))  # first K cows → counters 0..K-1",
+  "for i in range(K, N):",
+  "    finish, counter = heapq.heappop(heap)",
+  "    assignment.append(counter)",
+  "    heapq.heappush(heap, (finish + times[i], counter))",
+  "",
+  "# Find when Bessie (last cow, index N-1) finishes",
+  "# Actually: which counter does cow N-1 go to?",
+  "# Bessie's start time = when her counter becomes free",
+  "# All cows that could give same result as Bessie",
+  "bessie_counter = assignment[N-1]",
+  "",
+  "# Find Bessie's start time",
+  "# Simulate again tracking start times",
+  "heap2 = []",
+  "for i in range(K):",
+  "    heapq.heappush(heap2, (times[i], i))",
+  "",
+  "start_times = [0] * N",
+  "for i in range(K, N):",
+  "    finish, counter = heapq.heappop(heap2)",
+  "    start_times[i] = finish",
+  "    heapq.heappush(heap2, (finish + times[i], counter))",
+  "",
+  "bessie_start = start_times[N-1]",
+  "",
+  "# Which counters have the same free time as Bessie's start?",
+  "# Those are the ones Bessie could have gone to",
+  "result = []",
+  "# Recompute free times just before Bessie arrives",
+  "heap3 = []",
+  "for i in range(K):",
+  "    heapq.heappush(heap3, (times[i], i))",
+  "for i in range(K, N-1):",
+  "    finish, counter = heapq.heappop(heap3)",
+  "    heapq.heappush(heap3, (finish + times[i], counter))",
+  "",
+  "# Check all counters with min finish time",
+  "min_finish = heap3[0][0]",
+  "for ft, cid in heap3:",
+  "    if ft == min_finish:",
+  "        result.append(cid + 1)",
+  "",
+  "result.sort()",
+  "print(len(result))",
+  "print(' '.join(map(str, result)))",
+];
+
+
+/* ═══════════════════════════════════════════════════════════════
+   Chapter 1: 📋 문제 이해
+   ═══════════════════════════════════════════════════════════════ */
+export function makeInterviewCh1(E) {
+  return [
+    {
+      type: "reveal",
+      narr: t(E,
+        "N cows line up for interviews at K counters. Each cow takes a certain time. Which counter will Bessie (last cow) go to? 🐄",
+        "N마리 소가 K개의 카운터에서 인터뷰! 각 소는 정해진 시간이 걸려. 마지막 소 베시는 어느 카운터로? 🐄"),
+      content: (
+        <div style={{ padding: 16, textAlign: "center" }}>
+          <div style={{ fontSize: 48, marginBottom: 8 }}>🐄</div>
+          <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Bessie's Interview</div>
+          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2025 Bronze #2</div>
+          <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
+            {t(E,
+              "K counters, N cows in line. Each cow goes to the first available counter. Find all possible counters for the last cow!",
+              "K개 카운터, N마리 소가 줄 서있어. 각 소는 가장 먼저 비는 카운터로! 마지막 소가 갈 수 있는 카운터를 모두 찾아!")}
+          </div>
+        </div>),
+    },
+    {
+      type: "reveal",
+      narr: t(E,
+        "First K cows go to counters 1..K immediately. After that, each cow waits for the earliest counter to finish, then goes there.",
+        "처음 K마리는 카운터 1~K에 바로 들어가. 그 이후 소들은 가장 먼저 끝나는 카운터로!"),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 14, padding: 14 }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: "#059669", marginBottom: 10 }}>
+              {t(E, "Example: N=5, K=2, times=[3,5,2,4,1]", "예시: N=5, K=2, times=[3,5,2,4,1]")}
+            </div>
+            <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", lineHeight: 2, color: C.text }}>
+              {t(E,
+                "t=0: Cow1→C1(done@3), Cow2→C2(done@5)\nt=3: Cow3→C1(done@5)\nt=5: Cow4→C1 or C2 (tie!)\nCow5 goes to whichever is free first",
+                "t=0: 소1→C1(끝@3), 소2→C2(끝@5)\nt=3: 소3→C1(끝@5)\nt=5: 소4→C1 또는 C2 (동시!)\n소5는 먼저 비는 곳으로")}
+            </div>
+          </div>
+        </div>),
+    },
+    {
+      type: "quiz",
+      narr: t(E,
+        "When multiple counters finish at the same time, the cow could go to ANY of them. That's why we need to find ALL possible counters for Bessie!",
+        "여러 카운터가 동시에 끝나면, 소는 어디든 갈 수 있어. 그래서 베시가 갈 수 있는 모든 카운터를 찾아야 해!"),
+      question: t(E,
+        "If counters 1, 3, 5 all finish at the same time and Bessie is next, how many possible counters does she have?",
+        "카운터 1, 3, 5가 동시에 끝나고 베시가 다음이면, 가능한 카운터 수는?"),
+      options: ["1", "3", "5", t(E, "Depends on cow order", "소 순서에 따라 다름")],
+      correct: 1,
+      explain: t(E,
+        "Bessie could go to any of the 3 tied counters. So the answer lists all 3!",
+        "베시는 동점인 3개 카운터 중 아무 곳이나 갈 수 있어. 그래서 3개 모두 답!"),
+    },
+    {
+      type: "input",
+      narr: t(E,
+        "N=4, K=2, times=[3,1,2,1]. Cow1→C1(done@3), Cow2→C2(done@1). At t=1, Cow3→C2(done@3). At t=3, Cow4(Bessie) can go to C1 or C2. How many possible counters?",
+        "N=4, K=2, times=[3,1,2,1]. 소1→C1(끝@3), 소2→C2(끝@1). t=1에 소3→C2(끝@3). t=3에 소4(베시)는 C1 또는 C2. 가능한 카운터 수는?"),
+      question: t(E, "How many counters can Bessie go to?", "베시가 갈 수 있는 카운터 수는?"),
+      answer: 2,
+    },
+  ];
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   Chapter 2: 🔍 시뮬레이션
+   ═══════════════════════════════════════════════════════════════ */
+export function makeInterviewCh2(E) {
+  return [
+    {
+      type: "reveal",
+      narr: t(E,
+        "We use a min-heap (priority queue) to track when each counter finishes. The cow always goes to the counter that finishes earliest!",
+        "최소 힙(우선순위 큐)으로 각 카운터의 종료 시간을 추적해. 소는 항상 가장 먼저 끝나는 카운터로!"),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ background: C.accentBg, border: `2px solid ${C.accentBd}`, borderRadius: 14, padding: 14, fontSize: 13, lineHeight: 1.8, color: C.text }}>
+            <div style={{ fontWeight: 800, color: C.accent, marginBottom: 6 }}>
+              {t(E, "🔧 Algorithm: Min-Heap Simulation", "🔧 알고리즘: 최소 힙 시뮬레이션")}
+            </div>
+            {t(E,
+              "1. Push first K cows' finish times into heap\n2. For each remaining cow: pop min, assign that counter\n3. Push new finish time (old finish + cow's time)\n4. For Bessie: check all counters with minimum finish time",
+              "1. 처음 K마리의 종료 시간을 힙에 넣기\n2. 나머지 소마다: 최솟값 pop, 그 카운터 배정\n3. 새 종료 시간 push (이전 종료 + 소의 시간)\n4. 베시: 최소 종료 시간인 모든 카운터 찾기")}
+          </div>
+        </div>),
+    },
+    {
+      type: "quiz",
+      narr: t(E,
+        "Why do we use a min-heap instead of just scanning all K counters each time?",
+        "왜 매번 K개 카운터를 다 스캔하지 않고 최소 힙을 쓸까?"),
+      question: t(E,
+        "What's the time complexity advantage of using a min-heap?",
+        "최소 힙의 시간복잡도 이점은?"),
+      options: [
+        t(E, "O(N log K) vs O(NK)", "O(N log K) vs O(NK)"),
+        t(E, "O(N) vs O(NK)", "O(N) vs O(NK)"),
+        t(E, "O(K) vs O(N)", "O(K) vs O(N)"),
+      ],
+      correct: 0,
+      explain: t(E,
+        "Heap push/pop is O(log K), and we do it N times → O(N log K). Without heap: O(NK) scanning all counters each time.",
+        "힙 push/pop은 O(log K), N번 수행 → O(N log K). 힙 없이: 매번 K개 스캔 → O(NK)"),
+    },
+    {
+      type: "input",
+      narr: t(E,
+        "N=6, K=3, times=[2,3,1,4,2,1]. Heap after first 3: [(2,0),(3,1),(1,2)]. Pop min (1,2), cow4→C3, push (1+4=5,2). Pop min (2,0), cow5→C1, push (2+2=4,0). Pop min (3,1), cow6→C2. Bessie goes to counter...?",
+        "N=6, K=3, times=[2,3,1,4,2,1]. 처음 3마리 힙: [(2,0),(3,1),(1,2)]. Pop (1,2), 소4→C3, push (5,2). Pop (2,0), 소5→C1, push (4,0). Pop (3,1), 소6→C2. 베시는 카운터...?"),
+      question: t(E, "Bessie (cow 6) goes to counter #? (1-indexed)", "베시(소6)는 카운터 몇번? (1부터)"),
+      answer: 2,
+    },
+  ];
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   Chapter 3: ⚡ 코드
+   ═══════════════════════════════════════════════════════════════ */
+export function makeInterviewCh3(E) {
+  return [
+    {
+      type: "reveal",
+      narr: t(E,
+        "The key insight: we need to find not just ONE counter for Bessie, but ALL counters that finish at the same minimum time when it's Bessie's turn.",
+        "핵심: 베시 차례에 최소 종료 시간인 카운터를 하나가 아니라 전부 찾아야 해."),
+      content: (
+        <div style={{ padding: 16, textAlign: "center" }}>
+          <div style={{ fontSize: 14, fontWeight: 800, color: C.accent, marginBottom: 8 }}>
+            {t(E, "⏱️ Complexity", "⏱️ 복잡도")}
+          </div>
+          <div style={{ fontSize: 28, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>
+            O(N log K)
+          </div>
+          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>
+            {t(E, "N cows × log K heap operations", "N마리 × log K 힙 연산")}
+          </div>
+        </div>),
+    },
+    {
+      type: "quiz",
+      narr: t(E,
+        "After simulating N-1 cows, we check the heap. All counters with the minimum finish time are valid for Bessie.",
+        "N-1마리를 시뮬레이션한 후, 힙에서 최소 종료 시간인 카운터를 모두 찾으면 그게 베시의 가능한 카운터!"),
+      question: t(E,
+        "If the heap has [(5,0),(5,2),(7,1),(8,3)], which counters can Bessie go to?",
+        "힙이 [(5,0),(5,2),(7,1),(8,3)]이면 베시가 갈 수 있는 카운터는?"),
+      options: [
+        t(E, "Counter 1 and 3 (0-indexed: 0,2)", "카운터 1, 3 (0-indexed: 0,2)"),
+        t(E, "Counter 1 only", "카운터 1만"),
+        t(E, "All 4 counters", "4개 전부"),
+      ],
+      correct: 0,
+      explain: t(E,
+        "Min finish = 5. Counters 0 and 2 both have finish time 5, so Bessie can go to either!",
+        "최소 종료 = 5. 카운터 0과 2 모두 5니까 베시는 둘 중 하나!"),
+    },
+    {
+      type: "code",
+      narr: t(E,
+        "Here's the complete solution using heapq!",
+        "heapq를 사용한 전체 솔루션!"),
+      label: t(E, "💻 Complete Solution", "💻 전체 솔루션"),
+      code: SOLUTION_CODE,
+    },
+  ];
+}

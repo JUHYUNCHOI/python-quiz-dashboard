@@ -159,6 +159,7 @@ export function CppRunner({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [teacherGrade, setTeacherGrade] = useState<"pass" | "fail" | "auto" | null | undefined>(undefined) // undefined = 아직 로딩
+  const [teacherComment, setTeacherComment] = useState<string | null>(null)
 
   // 마운트 시 이전 제출 결과 확인 (submissionMode만)
   useEffect(() => {
@@ -169,7 +170,7 @@ export function CppRunner({
       if (!user) return
       const { data } = await supabase
         .from("homework_submissions")
-        .select("teacher_grade")
+        .select("teacher_grade, teacher_comment")
         .eq("student_id", user.id)
         .eq("step_id", stepId)
         .order("submitted_at", { ascending: false })
@@ -179,6 +180,7 @@ export function CppRunner({
         setIsSubmitted(true)
         const grade = (data.teacher_grade as "pass" | "fail" | "auto" | null) ?? null
         setTeacherGrade(grade)
+        setTeacherComment(data.teacher_comment ?? null)
         // 선생님이 이미 확인했거나 자동 채점 완료된 경우 레슨 진도 동기화
         if (grade === "pass" || grade === "auto") {
           onSuccess?.()
@@ -502,6 +504,16 @@ export function CppRunner({
           {teacherGrade === "auto" && (isEn ? "✅ Correct! (auto-graded)" : "✅ 정답이에요! (자동 채점)")}
           {teacherGrade === "fail" && (isEn ? "❌ Try again! Teacher left feedback." : "❌ 다시 도전해보세요! 선생님이 확인했어요.")}
           {(teacherGrade === null || teacherGrade === undefined) && (isEn ? "📬 Submitted — waiting for teacher review" : "📬 제출됨 — 선생님 확인 대기 중")}
+          {teacherComment && (
+            <p className={cn(
+              "mt-2 text-sm font-normal leading-relaxed border-t pt-2",
+              teacherGrade === "pass" || teacherGrade === "auto" ? "border-green-200 text-green-800" :
+              teacherGrade === "fail" ? "border-red-200 text-red-800" :
+              "border-gray-200 text-gray-600"
+            )}>
+              💬 {teacherComment}
+            </p>
+          )}
         </div>
       )}
 

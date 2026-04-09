@@ -6,6 +6,10 @@ export const pyOopCluster: PracticeCluster = {
   emoji: "🏗️",
   description: "class, __init__, 메서드, 상속, 캡슐화",
   unlockAfter: "42",
+  en: {
+    title: "Classes / OOP",
+    description: "class, __init__, methods, inheritance, encapsulation",
+  },
   problems: [
     {
       id: "pyoop-001",
@@ -67,6 +71,21 @@ if method == "area":
 else:
     print(rect.perimeter())`,
       solutionExplanation: "__init__은 객체 생성 시 자동으로 호출됩니다. self는 현재 인스턴스를 가리키며, self.w처럼 인스턴스 변수를 정의합니다.",
+      en: {
+        title: "Rectangle Class",
+        description: `Implement a Rectangle class that accepts width (w) and height (h).
+- area(): returns the area (w × h)
+- perimeter(): returns the perimeter (2 × (w + h))
+
+Input: w h on the first line, then the method name (area or perimeter)`,
+        constraints: "1 ≤ w, h ≤ 1000",
+        hints: [
+          "In __init__, store the values as self.w = w and self.h = h.",
+          "area() returns self.w * self.h.",
+          "perimeter() returns 2 * (self.w + self.h).",
+        ],
+        solutionExplanation: "__init__ is called automatically when an object is created. self refers to the current instance, and instance attributes like self.w are defined here.",
+      },
       language: "python",
     },
     {
@@ -140,6 +159,22 @@ for _ in range(n):
     elif cmd == "get":
         print(c.get_count())`,
       solutionExplanation: "클래스의 상태는 인스턴스 변수(self.count)에 저장됩니다. 각 메서드는 self를 통해 인스턴스 변수에 접근하고 수정합니다.",
+      en: {
+        title: "Counter Class",
+        description: `Implement a Counter class.
+- increment(): increases the counter by 1
+- decrement(): decreases the counter by 1
+- get_count(): returns the current counter value (initial value 0)
+
+Input: number of commands, then each command (inc / dec / get)`,
+        constraints: "1 ≤ number of commands ≤ 20",
+        hints: [
+          "Initialize with self.count = 0.",
+          "increment: self.count += 1",
+          "get_count: return self.count",
+        ],
+        solutionExplanation: "A class stores its state in instance attributes (self.count). Each method accesses and modifies the instance attribute through self.",
+      },
       language: "python",
     },
     {
@@ -219,6 +254,20 @@ for _ in range(q):
     elif cmd == "balance":
         print(account.get_balance())`,
       solutionExplanation: "잔액 부족 조건을 먼저 확인하고 early return으로 처리합니다. 클래스가 상태(잔액)를 관리하고, 메서드가 상태를 안전하게 변경합니다.",
+      en: {
+        title: "Bank Account Class",
+        description: `Implement a BankAccount class.
+- __init__(balance): set the initial balance
+- deposit(n): add n to the balance
+- withdraw(n): subtract n from the balance. Print "잔액 부족" if insufficient funds
+- get_balance(): return the current balance`,
+        constraints: "0 ≤ initial balance ≤ 1000000, 0 < n ≤ 1000000",
+        hints: [
+          "Initialize with self.balance = balance.",
+          "In withdraw, check if n > self.balance first; if so, print '잔액 부족' and return.",
+        ],
+        solutionExplanation: "Check the insufficient funds condition first and use an early return. The class manages state (balance), and the methods modify that state safely.",
+      },
       language: "python",
     },
     {
@@ -321,6 +370,23 @@ for _ in range(n):
     elif cmd == "size":
         print(s.size())`,
       solutionExplanation: "스택은 LIFO(Last In First Out) 구조입니다. Python 리스트의 append()/pop()은 O(1)이라 스택 구현에 적합합니다. 빈 스택 처리를 항상 먼저 확인해야 합니다.",
+      en: {
+        title: "Stack Class",
+        description: `Implement a Stack class.
+- push(x): add x to the top of the stack
+- pop(): remove and return the top value. Print "비어있음" if empty
+- peek(): return the top value without removing it. Print "비어있음" if empty
+- is_empty(): return True if empty, False otherwise
+- size(): return the number of elements`,
+        constraints: "1 ≤ number of commands ≤ 30",
+        hints: [
+          "push: self.data.append(x)",
+          "pop: check is_empty() first, then call self.data.pop()",
+          "peek: access self.data[-1] for the last element",
+          "LIFO: Last In, First Out — the most recently added item comes out first.",
+        ],
+        solutionExplanation: "A stack is LIFO (Last In First Out). Python list's append()/pop() are both O(1), making it ideal for stack implementation. Always check for an empty stack before popping or peeking.",
+      },
       language: "python",
     },
     {
@@ -416,6 +482,22 @@ for _ in range(n):
     elif cmd == "empty":
         print(q.is_empty())`,
       solutionExplanation: "큐는 FIFO(First In First Out) 구조입니다. 리스트의 pop(0)은 O(n)이지만 deque의 popleft()는 O(1)입니다. 항상 deque를 사용하는 것이 좋습니다.",
+      en: {
+        title: "Queue Class",
+        description: `Implement a Queue class.
+- enqueue(x): add x to the back of the queue
+- dequeue(): remove and return the front element. Print "비어있음" if empty
+- front(): return the front element without removing it. Print "비어있음" if empty
+- is_empty(): return True if empty`,
+        constraints: "1 ≤ number of commands ≤ 30",
+        hints: [
+          "deque's append() adds to the back; popleft() removes from the front.",
+          "enqueue: self.data.append(x)",
+          "dequeue: self.data.popleft()",
+          "front: access self.data[0] for the first element",
+        ],
+        solutionExplanation: "A queue is FIFO (First In First Out). list's pop(0) is O(n), but deque's popleft() is O(1). Always prefer deque for queue implementations.",
+      },
       language: "python",
     },
     {
@@ -498,6 +580,22 @@ else:
     shape = Rectangle(w, h)
 print(f'{shape.area():.2f}')`,
       solutionExplanation: "상속(inheritance)으로 공통 인터페이스를 정의하고 각 자식 클래스가 area()를 오버라이드합니다. 다형성 덕분에 shape.area()를 호출하면 각 클래스에 맞는 메서드가 실행됩니다.",
+      en: {
+        title: "Inheritance: Shape Area",
+        description: `Inherit from the Shape base class to implement Circle and Rectangle.
+- Shape: area() method (returns 0 by default)
+- Circle(r): area() = π × r² (π = 3.14159)
+- Rectangle(w, h): area() = w × h
+
+Input: shape type (circle/rectangle) + parameters. Output: area to 2 decimal places.`,
+        constraints: "1 ≤ r, w, h ≤ 1000",
+        hints: [
+          "Declare inheritance with class Circle(Shape):.",
+          "Override area() in each child class.",
+          "Use π = 3.14159.",
+        ],
+        solutionExplanation: "Inheritance defines a common interface in Shape, and each child class overrides area(). Thanks to polymorphism, shape.area() calls the correct method for each class.",
+      },
       language: "python",
     },
     {
@@ -569,6 +667,21 @@ student = Student(name, scores)
 print(f'{student.average():.1f}')
 print(student.grade())`,
       solutionExplanation: "grade() 메서드에서 average()를 재사용합니다. elif 체인으로 높은 조건부터 낮은 순으로 확인합니다. 메서드가 다른 메서드를 호출하는 패턴은 코드 재사용의 핵심입니다.",
+      en: {
+        title: "Student Class",
+        description: `Implement a Student(name, scores) class.
+- scores: a list of integer scores
+- average(): return the average to 1 decimal place
+- grade(): return the letter grade based on the average (≥90=A, ≥80=B, ≥70=C, ≥60=D, otherwise=F)
+
+Input: name, number of scores N, then N scores`,
+        constraints: "1 ≤ number of scores ≤ 10, 0 ≤ score ≤ 100",
+        hints: [
+          "average: sum(self.scores) / len(self.scores)",
+          "grade: call avg = self.average(), then determine the grade with if/elif",
+        ],
+        solutionExplanation: "grade() reuses average() internally. The elif chain checks from highest to lowest. One method calling another method is a key code reuse pattern.",
+      },
       language: "python",
     },
     {
@@ -636,6 +749,21 @@ print(p1)
 print(p2)
 print(f'{p1.distance_to(p2):.2f}')`,
       solutionExplanation: "__str__은 print()나 str()로 객체를 문자열로 변환할 때 호출되는 매직 메서드입니다. distance_to에서 other는 다른 Point 인스턴스이며, other.x, other.y로 속성에 접근합니다.",
+      en: {
+        title: "Implementing __str__",
+        description: `Implement a Point(x, y) class.
+- __str__: return the point as "(x, y)"
+- distance_to(other): return the distance to another Point (to 2 decimal places)
+
+Input: x1 y1, then x2 y2`,
+        constraints: "-1000 ≤ x, y ≤ 1000",
+        hints: [
+          "__str__: return f'({self.x}, {self.y})'",
+          "distance_to: math.sqrt((self.x - other.x)**2 + (self.y - other.y)**2)",
+          "print(p1) automatically calls p1.__str__().",
+        ],
+        solutionExplanation: "__str__ is a magic method called when an object is converted to a string via print() or str(). In distance_to, other is another Point instance accessed through other.x and other.y.",
+      },
       language: "python",
     },
     {
@@ -701,6 +829,21 @@ print(v1)
 print(v2)
 print(v3)`,
       solutionExplanation: "__add__는 + 연산자를 오버로딩합니다. v1 + v2는 v1.__add__(v2)를 호출합니다. 새 객체를 반환해야 원본이 변경되지 않습니다.",
+      en: {
+        title: "Operator Overloading: Vector Addition",
+        description: `Implement a Vector(x, y) class.
+- __add__(other): return the sum of two vectors as a new Vector
+- __str__: return "Vector(x, y)"
+
+Input: x1 y1, then x2 y2`,
+        constraints: "-1000 ≤ x, y ≤ 1000",
+        hints: [
+          "__add__ overloads the + operator.",
+          "return Vector(self.x + other.x, self.y + other.y) to return a new vector.",
+          "__str__: return f'Vector({self.x}, {self.y})'",
+        ],
+        solutionExplanation: "__add__ overloads the + operator. v1 + v2 calls v1.__add__(v2). Always return a new object so the originals remain unchanged.",
+      },
       language: "python",
     },
     {
@@ -769,6 +912,21 @@ for _ in range(n):
     elif line[0] == "set":
         obj.x = int(line[1])`,
       solutionExplanation: "__setattr__을 오버라이드하면 속성 대입 시 자동 호출됩니다. __init__ 중에는 object.__setattr__로 우회합니다. _initialized 플래그로 초기화 완료 후 변경을 차단합니다.",
+      en: {
+        title: "Immutable Class",
+        description: `Implement an Immutable class whose attributes cannot be changed after creation.
+Override __setattr__ to block any attribute assignment after __init__ completes.
+Print "변경 불가" and ignore the change when an attempt is made.
+
+Input: x y values, then "get" or "set x_val y_val" commands`,
+        constraints: "-1000 ≤ x, y ≤ 1000",
+        hints: [
+          "__setattr__ is called automatically whenever an attribute is assigned (obj.x = ...).",
+          "Use the _initialized flag to track whether __init__ has completed.",
+          "Use object.__setattr__ inside __init__ to bypass your custom __setattr__ and avoid infinite recursion.",
+        ],
+        solutionExplanation: "Overriding __setattr__ intercepts every attribute assignment. Inside __init__, use object.__setattr__ to bypass it. The _initialized flag blocks changes once construction is done.",
+      },
       language: "python",
     },
     {
@@ -825,6 +983,18 @@ a.value = 42
 print(a is b)
 print(b.value)`,
       solutionExplanation: "__new__는 __init__ 이전에 호출되는 인스턴스 생성 메서드입니다. 클래스 변수 _instance로 유일한 인스턴스를 저장합니다. a is b는 두 변수가 같은 메모리 주소를 가리키는지 확인합니다.",
+      en: {
+        title: "Singleton Pattern",
+        description: `Implement a Singleton class. Override __new__ so that it always returns the same instance.
+When two variables are each assigned Singleton(), confirm they are the same object using the is operator.`,
+        constraints: "none",
+        hints: [
+          "if cls._instance is None: cls._instance = super().__new__(cls)",
+          "return cls._instance",
+          "After a.value = 42, reading b.value will return 42 because they point to the same object.",
+        ],
+        solutionExplanation: "__new__ is the instance creation method called before __init__. The class variable _instance stores the single instance. a is b checks whether two variables point to the same memory address.",
+      },
       language: "python",
     },
     {
@@ -907,6 +1077,23 @@ if not c1.is_alive():
 else:
     print(f'{c2.name} 패배!')`,
       solutionExplanation: "attack() 후 즉시 is_alive()를 확인해야 죽은 캐릭터가 반격하지 않습니다. 전투 루프는 양쪽 모두 살아있는 동안 지속되며, 쓰러진 캐릭터를 루프 후에 판별합니다.",
+      en: {
+        title: "RPG Character Battle",
+        description: `Implement a Character(name, hp, atk) class.
+- attack(enemy): reduce enemy.hp by self.atk and print "{name}이(가) {enemy.name}을(를) 공격! ({enemy.name} HP: {enemy.hp})"
+- is_alive(): return True if hp > 0
+- Battle: characters attack in turns starting with c1. When one character falls (hp ≤ 0), print "{name} 패배!" and stop.
+
+Input: name1 hp1 atk1, then name2 hp2 atk2`,
+        constraints: "1 ≤ hp ≤ 200, 1 ≤ atk ≤ 50, battle lasts at most 100 rounds",
+        hints: [
+          "Use while c1.is_alive() and c2.is_alive(): to structure the battle loop.",
+          "After c1.attack(c2), immediately check c2.is_alive(); break if False.",
+          "Check c1.is_alive() after c2.attack(c1) as well.",
+          "After the loop, check which character is not alive and print '{name} 패배!'.",
+        ],
+        solutionExplanation: "Check is_alive() immediately after each attack() so a defeated character cannot counter-attack. The battle loop continues while both are alive; the loser is determined after the loop ends.",
+      },
       language: "python",
     },
   ],

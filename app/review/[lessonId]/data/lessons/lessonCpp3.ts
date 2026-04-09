@@ -57,7 +57,11 @@ export const lessonCpp3: LessonData = {
           guide: "타입 이름 변수이름 = 값; 형태!",
           template: "___ age = 14;",
           answer: "int",
-          expect: "int age = 14;"
+          expect: "int age = 14;",
+          en: {
+            task: "Create an integer variable age and assign 14!",
+            guide: "Use the form: type variableName = value;"
+          }
         }
       },
 
@@ -83,7 +87,11 @@ export const lessonCpp3: LessonData = {
           guide: "소수점 있는 숫자는 double!",
           template: "___ pi = 3.14;",
           answer: "double",
-          expect: "double pi = 3.14;"
+          expect: "double pi = 3.14;",
+          en: {
+            task: "Assign 3.14 to a floating-point variable pi!",
+            guide: "Numbers with decimals use double!"
+          }
         }
       },
 
@@ -110,7 +118,11 @@ export const lessonCpp3: LessonData = {
           guide: "문자열은 string 타입!",
           template: '___ name = "주현";',
           answer: "string",
-          expect: 'string name = "주현";'
+          expect: 'string name = "주현";',
+          en: {
+            task: 'Assign "Juhyun" to a string variable name!',
+            guide: "Strings use the string type!"
+          }
         }
       },
 
@@ -121,7 +133,12 @@ export const lessonCpp3: LessonData = {
           question: "키(165.5)를 저장하려면 어떤 타입?",
           options: ["int", "double", "string", "char"],
           answer: 1,
-          explanation: "소수점이 있는 숫자는 double! int에 넣으면 165만 남아요."
+          explanation: "소수점이 있는 숫자는 double! int에 넣으면 165만 남아요.",
+          en: {
+            question: "Which type should be used to store height (165.5)?",
+            options: ["int", "double", "string", "char"],
+            explanation: "Numbers with decimals use double! If you use int, only 165 remains."
+          }
         }
       },
 
@@ -137,7 +154,16 @@ export const lessonCpp3: LessonData = {
             "string을 써야 한다"
           ],
           answer: 0,
-          explanation: "int에 95.7을 넣으면 소수점이 잘려서 95만 남아요! 경고가 나올 수 있어요."
+          explanation: "int에 95.7을 넣으면 소수점이 잘려서 95만 남아요! 경고가 나올 수 있어요.",
+          en: {
+            question: "What is the problem with this code?",
+            options: [
+              "Only 95 is printed — data loss (warning)",
+              "95.7 is printed without error",
+              "Should use string"
+            ],
+            explanation: "Assigning 95.7 to int truncates the decimal — only 95 remains! A warning may be raised."
+          }
         }
       },
 
@@ -151,7 +177,11 @@ export const lessonCpp3: LessonData = {
           template: '___ count = 5;\n___ average = 87.5;\n___ greeting = "안녕";',
           answer: "int",
           blanksAnswer: ["int", "double", "string"],
-          expect: 'int count = 5;\ndouble average = 87.5;\nstring greeting = "안녕";'
+          expect: 'int count = 5;\ndouble average = 87.5;\nstring greeting = "안녕";',
+          en: {
+            task: "Fill in the correct type for each variable!",
+            guide: "integer = int, decimal = double, text = string"
+          }
         }
       },
 
@@ -200,7 +230,11 @@ export const lessonCpp3: LessonData = {
           task: "소수점 있는 숫자의 타입은?",
           template: "___ pi = 3.14;",
           answer: "double",
-          expect: "double pi = 3.14;"
+          expect: "double pi = 3.14;",
+          en: {
+            message: "Wait! Do you remember what we learned earlier?",
+            task: "What is the type for a number with a decimal point?"
+          }
         }
       },
 
@@ -233,7 +267,11 @@ export const lessonCpp3: LessonData = {
           template: "___ isPassed = ___;",
           answer: "bool",
           blanksAnswer: ["bool", "true"],
-          expect: "bool isPassed = true;"
+          expect: "bool isPassed = true;",
+          en: {
+            task: "Assign true to a boolean variable isPassed!",
+            guide: "true/false values use the bool type!"
+          }
         }
       },
 
@@ -263,7 +301,17 @@ export const lessonCpp3: LessonData = {
             "둘 다 에러"
           ],
           answer: 1,
-          explanation: "작은따옴표 'A'는 char (글자 1개), 큰따옴표 \"A\"는 string (문자열)이에요!"
+          explanation: "작은따옴표 'A'는 char (글자 1개), 큰따옴표 \"A\"는 string (문자열)이에요!",
+          en: {
+            question: "What is the difference between 'A' and \"A\"?",
+            options: [
+              "They are the same",
+              "'A' is char, \"A\" is string",
+              "'A' is string, \"A\" is char",
+              "Both are errors"
+            ],
+            explanation: "Single-quote 'A' is char (1 character), double-quote \"A\" is string (text)!"
+          }
         }
       },
 
@@ -277,7 +325,11 @@ export const lessonCpp3: LessonData = {
           template: "___ grade = ___;",
           answer: "char",
           blanksAnswer: ["char", "'A'"],
-          expect: "char grade = 'A';"
+          expect: "char grade = 'A';",
+          en: {
+            task: "Assign 'A' to a character variable grade!",
+            guide: "A single character uses char with single quotes!"
+          }
         }
       },
 
@@ -307,7 +359,16 @@ export const lessonCpp3: LessonData = {
             "= 대신 ==을 써야 해서"
           ],
           answer: 0,
-          explanation: "const로 선언한 변수는 상수! 한 번 정하면 절대 바꿀 수 없어요."
+          explanation: "const로 선언한 변수는 상수! 한 번 정하면 절대 바꿀 수 없어요.",
+          en: {
+            question: "Why does this code cause an error?",
+            options: [
+              "Cannot change a const variable's value",
+              "Should use double instead of int",
+              "Should use == instead of ="
+            ],
+            explanation: "A variable declared with const is a constant! Once set, it can never be changed."
+          }
         }
       },
 
@@ -320,7 +381,11 @@ export const lessonCpp3: LessonData = {
           guide: "const를 타입 앞에 붙여요!",
           template: "___ double PI = 3.14159;",
           answer: "const",
-          expect: "const double PI = 3.14159;"
+          expect: "const double PI = 3.14159;",
+          en: {
+            task: "Create a constant PI that cannot be changed!",
+            guide: "Add const before the type!"
+          }
         }
       },
 
@@ -369,7 +434,11 @@ export const lessonCpp3: LessonData = {
           task: "true를 cout으로 출력하면?",
           template: { before: "// cout << true;\n// 출력: ", after: "" },
           answer: "1",
-          expect: "1"
+          expect: "1",
+          en: {
+            message: "Wait! Do you remember the output value of bool?",
+            task: "What happens when you print true with cout?"
+          }
         }
       },
 

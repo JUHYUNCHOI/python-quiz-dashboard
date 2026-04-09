@@ -70,7 +70,11 @@ export const lessonCpp10: LessonData = {
           guide: "for (타입 변수 : 컨테이너) 형태!",
           template: "for (int x ___ v) {",
           answer: ":",
-          expect: "for (int x : v) {"
+          expect: "for (int x : v) {",
+          en: {
+            task: "Fill in the colon for range-for!",
+            guide: "Use the form: for (type variable : container)"
+          }
         }
       },
 
@@ -83,7 +87,11 @@ export const lessonCpp10: LessonData = {
           guide: "벡터가 int이면 변수도 int!",
           template: "for (___ x : nums) {",
           answer: "int",
-          expect: "for (int x : nums) {"
+          expect: "for (int x : nums) {",
+          en: {
+            task: "Complete the range-for loop to iterate over an integer vector!",
+            guide: "If the vector holds int, the variable type should also be int!"
+          }
         }
       },
 
@@ -99,7 +107,17 @@ export const lessonCpp10: LessonData = {
             "if x in list:"
           ],
           answer: 2,
-          explanation: "for (int x : v)는 파이썬의 for x in list:와 같아요! 각 원소를 하나씩 꺼내서 반복해요."
+          explanation: "for (int x : v)는 파이썬의 for x in list:와 같아요! 각 원소를 하나씩 꺼내서 반복해요.",
+          en: {
+            question: "Which Python syntax is range-for similar to?",
+            options: [
+              "while True:",
+              "for i in range(10):",
+              "for x in list:",
+              "if x in list:"
+            ],
+            explanation: "for (int x : v) is equivalent to Python's for x in list: — it iterates over each element one by one!"
+          }
         }
       },
 
@@ -115,7 +133,16 @@ export const lessonCpp10: LessonData = {
             "콜론(:) 대신 세미콜론(;)을 써야 해요"
           ],
           answer: 0,
-          explanation: "vector<int>의 원소는 int인데 string으로 받으면 타입이 안 맞아요! int x로 써야 해요."
+          explanation: "vector<int>의 원소는 int인데 string으로 받으면 타입이 안 맞아요! int x로 써야 해요.",
+          en: {
+            question: "What is wrong with this code?",
+            options: [
+              "v holds int but x is declared as string — type mismatch",
+              "string cannot be used in range-for",
+              "Should use semicolon (;) instead of colon (:)"
+            ],
+            explanation: "The elements of vector<int> are int, but receiving them as string causes a type mismatch! Use int x instead."
+          }
         }
       },
 
@@ -129,7 +156,11 @@ export const lessonCpp10: LessonData = {
           template: 'for (___ x ___ v) {\n    cout << x << " ";\n}',
           answer: "int",
           blanksAnswer: ["int", ":"],
-          expect: 'for (int x : v) {\n    cout << x << " ";\n}'
+          expect: 'for (int x : v) {\n    cout << x << " ";\n}',
+          en: {
+            task: "Print all values in the vector using range-for!",
+            guide: "for (int x : v) { cout << x; }"
+          }
         }
       },
 
@@ -145,7 +176,17 @@ export const lessonCpp10: LessonData = {
             "for (names : string x)"
           ],
           answer: 1,
-          explanation: "벡터의 타입이 string이면 변수도 string으로 받아야 해요!"
+          explanation: "벡터의 타입이 string이면 변수도 string으로 받아야 해요!",
+          en: {
+            question: 'To iterate over vector<string> names = {"A", "B"}; with range-for, you should write:',
+            options: [
+              "for (int x : names)",
+              "for (string x : names)",
+              "for (char x : names)",
+              "for (names : string x)"
+            ],
+            explanation: "Since the vector holds strings, the loop variable must also be string!"
+          }
         }
       },
 
@@ -194,7 +235,11 @@ export const lessonCpp10: LessonData = {
           task: "정수 벡터 v를 range-for로 순회하는 코드의 빈칸을 채워요!",
           template: "for (int x ___ v) {",
           answer: ":",
-          expect: "for (int x : v) {"
+          expect: "for (int x : v) {",
+          en: {
+            message: "Quick! Remember range-for?",
+            task: "Fill in the blank for range-for that iterates over integer vector v!"
+          }
         }
       },
 
@@ -250,7 +295,11 @@ export const lessonCpp10: LessonData = {
           guide: "int 대신 auto를 써요!",
           template: "for (___ x : v) {",
           answer: "auto",
-          expect: "for (auto x : v) {"
+          expect: "for (auto x : v) {",
+          en: {
+            task: "Write range-for using auto!",
+            guide: "Use auto instead of int!"
+          }
         }
       },
 
@@ -266,7 +315,17 @@ export const lessonCpp10: LessonData = {
             "벡터를 정렬한다"
           ],
           answer: 1,
-          explanation: "&는 참조! 원본 벡터의 값을 직접 수정할 수 있어요. & 없으면 복사본이라 원본이 안 바뀌어요."
+          explanation: "&는 참조! 원본 벡터의 값을 직접 수정할 수 있어요. & 없으면 복사본이라 원본이 안 바뀌어요.",
+          en: {
+            question: "What does & do in for (auto& x : v)?",
+            options: [
+              "Prints the address",
+              "Allows directly modifying the original value",
+              "Converts the type to string",
+              "Sorts the vector"
+            ],
+            explanation: "& means reference! You can directly modify the original vector values. Without &, x is a copy and the original stays unchanged."
+          }
         }
       },
 
@@ -296,7 +355,11 @@ export const lessonCpp10: LessonData = {
           guide: "원본을 수정하려면 & 가 필요해요!",
           template: "for (___& x : v) {\n    x = x + 10;\n}",
           answer: "auto",
-          expect: "for (auto& x : v) {\n    x = x + 10;\n}"
+          expect: "for (auto& x : v) {\n    x = x + 10;\n}",
+          en: {
+            task: "Complete the code to add 10 to every element in the vector!",
+            guide: "You need & to modify the original values!"
+          }
         }
       },
 
@@ -312,7 +375,16 @@ export const lessonCpp10: LessonData = {
             "x = x * 10 문법이 틀렸어요"
           ],
           answer: 0,
-          explanation: "auto는 복사본이에요! 원본을 바꾸려면 auto& x 로 써야 해요. 지금은 v[0]이 여전히 1이에요."
+          explanation: "auto는 복사본이에요! 원본을 바꾸려면 auto& x 로 써야 해요. 지금은 v[0]이 여전히 1이에요.",
+          en: {
+            question: "What is wrong with this code?",
+            options: [
+              "auto is a copy, so the original v is not changed (v[0] is still 1)",
+              "Should use int instead of auto",
+              "x = x * 10 syntax is wrong"
+            ],
+            explanation: "auto is a copy! To modify the original, use auto& x instead. Currently v[0] is still 1."
+          }
         }
       },
 
@@ -361,7 +433,11 @@ export const lessonCpp10: LessonData = {
           task: "벡터의 모든 값을 2배로 만드는 for 문의 빈칸을 채워요!",
           template: "for (auto___ x : v) {\n    x = x * 2;\n}",
           answer: "&",
-          expect: "for (auto& x : v) {\n    x = x * 2;\n}"
+          expect: "for (auto& x : v) {\n    x = x * 2;\n}",
+          en: {
+            message: "Quick! Remember how to modify originals with auto&?",
+            task: "Fill in the blank to double every value in the vector!"
+          }
         }
       },
 

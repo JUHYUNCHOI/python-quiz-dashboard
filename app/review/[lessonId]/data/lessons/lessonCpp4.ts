@@ -56,7 +56,11 @@ export const lessonCpp4: LessonData = {
           guide: "cin >> 변수이름; 형태!",
           template: "___ >> age;",
           answer: "cin",
-          expect: "cin >> age;"
+          expect: "cin >> age;",
+          en: {
+            task: "Read the age as input!",
+            guide: "Use the form: cin >> variableName;"
+          }
         }
       },
 
@@ -83,7 +87,11 @@ export const lessonCpp4: LessonData = {
           template: "double height;\ncin ___ ___;",
           answer: ">>",
           blanksAnswer: [">>", "height"],
-          expect: "double height;\ncin >> height;"
+          expect: "double height;\ncin >> height;",
+          en: {
+            task: "Read the height as input!",
+            guide: "Use the form: cin >> variable;"
+          }
         }
       },
 
@@ -117,7 +125,16 @@ export const lessonCpp4: LessonData = {
             "cout은 큰 값, cin은 작은 값이라서"
           ],
           answer: 0,
-          explanation: "<< 는 '보내다' (변수 → 화면), >> 는 '받다' (키보드 → 변수)! 화살표 방향을 생각하면 쉬워요!"
+          explanation: "<< 는 '보내다' (변수 → 화면), >> 는 '받다' (키보드 → 변수)! 화살표 방향을 생각하면 쉬워요!",
+          en: {
+            question: "Why do cout << and cin >> have opposite arrow directions?",
+            options: [
+              "cout sends to screen (<<), cin receives into variable (>>)",
+              "Just a rule",
+              "cout is for large values, cin for small values"
+            ],
+            explanation: "<< means 'send' (variable → screen), >> means 'receive' (keyboard → variable)! Think of the arrow direction!"
+          }
         }
       },
 
@@ -133,7 +150,16 @@ export const lessonCpp4: LessonData = {
             "cout이 잘못돼서"
           ],
           answer: 0,
-          explanation: "cin은 >> (받는 방향)을 써야 해요! cin >> num; 이 맞아요."
+          explanation: "cin은 >> (받는 방향)을 써야 해요! cin >> num; 이 맞아요.",
+          en: {
+            question: "What is the problem with this code?",
+            options: [
+              "cin should use >> not <<",
+              "num is not initialized",
+              "cout is wrong"
+            ],
+            explanation: "cin needs >> (receiving direction)! cin >> num; is correct."
+          }
         }
       },
 
@@ -147,7 +173,11 @@ export const lessonCpp4: LessonData = {
           template: 'string name;\ncout ___ "이름: ";\n___ >> name;',
           answer: "<<",
           blanksAnswer: ["<<", "cin"],
-          expect: 'string name;\ncout << "이름: ";\ncin >> name;'
+          expect: 'string name;\ncout << "이름: ";\ncin >> name;',
+          en: {
+            task: "Complete the code to ask for and read the name!",
+            guide: "Ask with cout, receive with cin!"
+          }
         }
       },
 
@@ -196,7 +226,11 @@ export const lessonCpp4: LessonData = {
           task: "변수 num에 값을 입력받는 코드를 써봐요!",
           template: "___ >> num;",
           answer: "cin",
-          expect: "cin >> num;"
+          expect: "cin >> num;",
+          en: {
+            message: "Wait! Do you remember cin?",
+            task: "Write the code to read a value into variable num!"
+          }
         }
       },
 
@@ -226,7 +260,17 @@ export const lessonCpp4: LessonData = {
             "input(sentence);"
           ],
           answer: 1,
-          explanation: "getline(cin, 변수)는 공백 포함 한 줄 전체를 입력받아요! cin >>은 공백에서 멈춰요."
+          explanation: "getline(cin, 변수)는 공백 포함 한 줄 전체를 입력받아요! cin >>은 공백에서 멈춰요.",
+          en: {
+            question: "How do you read a sentence that includes spaces?",
+            options: [
+              "cin >> sentence;",
+              "getline(cin, sentence);",
+              "cin.getline(sentence);",
+              "input(sentence);"
+            ],
+            explanation: "getline(cin, variable) reads an entire line including spaces! cin >> stops at spaces."
+          }
         }
       },
 
@@ -239,7 +283,11 @@ export const lessonCpp4: LessonData = {
           guide: "getline(cin, 변수) 형태!",
           template: "string address;\n___(cin, address);",
           answer: "getline",
-          expect: "string address;\ngetline(cin, address);"
+          expect: "string address;\ngetline(cin, address);",
+          en: {
+            task: "Read the address including spaces!",
+            guide: "Use the form: getline(cin, variable)"
+          }
         }
       },
 
@@ -271,7 +319,11 @@ export const lessonCpp4: LessonData = {
           template: "string name;\nint age;\ncin >> ___ >> ___;",
           answer: "name",
           blanksAnswer: ["name", "age"],
-          expect: "string name;\nint age;\ncin >> name >> age;"
+          expect: "string name;\nint age;\ncin >> name >> age;",
+          en: {
+            task: "Read name and age at once!",
+            guide: "Use the form: cin >> variable1 >> variable2;"
+          }
         }
       },
 
@@ -302,7 +354,16 @@ export const lessonCpp4: LessonData = {
             "string을 cin으로 못 읽어서"
           ],
           answer: 0,
-          explanation: "cin >> age 후 엔터(\\n)가 남아있어요. getline이 그 엔터를 읽어서 빈 문자열이 돼요! cin.ignore()로 엔터를 지워줘야 해요."
+          explanation: "cin >> age 후 엔터(\\n)가 남아있어요. getline이 그 엔터를 읽어서 빈 문자열이 돼요! cin.ignore()로 엔터를 지워줘야 해요.",
+          en: {
+            question: "When this code runs, the name input is skipped. Why?",
+            options: [
+              "getline reads the leftover newline from cin >>",
+              "getline syntax is wrong",
+              "cin cannot read strings"
+            ],
+            explanation: "After cin >> age, a newline (\\n) remains. getline reads that newline and gets an empty string! Use cin.ignore() to clear the newline."
+          }
         }
       },
 
@@ -350,7 +411,11 @@ export const lessonCpp4: LessonData = {
           task: "공백 포함해서 입력받는 함수는?",
           template: "___(cin, text);",
           answer: "getline",
-          expect: "getline(cin, text);"
+          expect: "getline(cin, text);",
+          en: {
+            message: "Wait! Do you remember input with spaces?",
+            task: "What function reads input including spaces?"
+          }
         }
       },
 

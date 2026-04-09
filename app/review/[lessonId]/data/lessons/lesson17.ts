@@ -62,7 +62,12 @@ export const lesson17: LessonData = {
         template: "names = [\"지민\", \"유진\", \"민수\"]\nfor ___ in names:\n    print(f'{___}님')",
         blanksAnswer: ["name", "name"],
         answer: "names = [\"지민\", \"유진\", \"민수\"]\nfor name in names:\n    print(f'{name}님')",
-        expect: "지민님\n유진님\n민수님"
+        expect: "지민님\n유진님\n민수님",
+        en: {
+          task: "Print all names in the list with '님' attached",
+          guide: "Use f-string!",
+          hint: "Use the f'{name}님' format!"
+        }
       }
     },
     {
@@ -75,7 +80,12 @@ export const lesson17: LessonData = {
         template: "scores = [75, 90, 60, 85, 100]\nfor score in scores:\n    ___ score ___ 80:\n        print(score)",
         blanksAnswer: ["if", ">="],
         answer: "scores = [75, 90, 60, 85, 100]\nfor score in scores:\n    if score >= 80:\n        print(score)",
-        expect: "90\n85\n100"
+        expect: "90\n85\n100",
+        en: {
+          task: "Print only scores of 80 or higher from a number list",
+          guide: "Check with an if statement!",
+          hint: "if score >= 80:"
+        }
       }
     },
     {
@@ -84,7 +94,12 @@ export const lesson17: LessonData = {
         question: "다음 코드의 출력은?\nfor x in [10, 20, 30]:\n    print(x * 2)",
         options: ["10 20 30", "20 40 60", "[20, 40, 60]", "에러"],
         answer: 1,
-        explanation: "각 요소에 2를 곱해서 출력: 20, 40, 60!"
+        explanation: "각 요소에 2를 곱해서 출력: 20, 40, 60!",
+        en: {
+          question: "What is the output of this code?\nfor x in [10, 20, 30]:\n    print(x * 2)",
+          options: ["10 20 30", "20 40 60", "[20, 40, 60]", "Error"],
+          explanation: "Multiply each element by 2 and print: 20, 40, 60!"
+        }
       }
     },
     {
@@ -126,7 +141,11 @@ export const lesson17: LessonData = {
         template: "colors = [\"빨강\", \"파랑\", \"초록\"]\nprint(colors[___])",
         blanksAnswer: ["0"],
         answer: "colors = [\"빨강\", \"파랑\", \"초록\"]\nprint(colors[0])",
-        expect: "빨강"
+        expect: "빨강",
+        en: {
+          message: "🔄 List indexing review! (Lesson 16)",
+          task: "Print the first element of the list"
+        }
       }
     },
     {
@@ -171,7 +190,12 @@ export const lesson17: LessonData = {
         template: "students = [\"철수\", \"영희\", \"민수\"]\nfor i, name in ___(students, ___):\n    print(f\"{i}번: {name}\")",
         blanksAnswer: ["enumerate", "1"],
         answer: "students = [\"철수\", \"영희\", \"민수\"]\nfor i, name in enumerate(students, 1):\n    print(f\"{i}번: {name}\")",
-        expect: "1번: 철수\n2번: 영희\n3번: 민수"
+        expect: "1번: 철수\n2번: 영희\n3번: 민수",
+        en: {
+          task: "Number student names starting from 1 using enumerate",
+          guide: "Remember enumerate(list, start)!",
+          hint: "Use enumerate(students, 1)!"
+        }
       }
     },
     {
@@ -180,7 +204,12 @@ export const lesson17: LessonData = {
         question: "enumerate([\"a\", \"b\", \"c\"])의 첫 번째 값은?",
         options: ["(1, \"a\")", "(0, \"a\")", "\"a\"", "[0, \"a\"]"],
         answer: 1,
-        explanation: "enumerate()는 기본적으로 0부터 시작하는 (인덱스, 값) 쌍을 줘요!"
+        explanation: "enumerate()는 기본적으로 0부터 시작하는 (인덱스, 값) 쌍을 줘요!",
+        en: {
+          question: "What is the first value from enumerate([\"a\", \"b\", \"c\"])?",
+          options: ["(1, \"a\")", "(0, \"a\")", "\"a\"", "[0, \"a\"]"],
+          explanation: "enumerate() gives (index, value) pairs starting from 0 by default!"
+        }
       }
     },
     {
@@ -215,7 +244,11 @@ export const lesson17: LessonData = {
         template: "fruits = [\"사과\", \"바나나\"]\nfruits.___(___)  \nprint(fruits)",
         blanksAnswer: ["append", "\"딸기\""],
         answer: "fruits = [\"사과\", \"바나나\"]\nfruits.append(\"딸기\")\nprint(fruits)",
-        expect: "['사과', '바나나', '딸기']"
+        expect: "['사과', '바나나', '딸기']",
+        en: {
+          message: "🔄 List append review! (Lesson 16)",
+          task: "Add \"strawberry\" to the list"
+        }
       }
     },
     {
@@ -274,7 +307,12 @@ export const lesson17: LessonData = {
         template: "squares = [___ for n in range(1, 6)]\nprint(squares)",
         blanksAnswer: ["n ** 2"],
         answer: "squares = [n ** 2 for n in range(1, 6)]\nprint(squares)",
-        expect: "[1, 4, 9, 16, 25]"
+        expect: "[1, 4, 9, 16, 25]",
+        en: {
+          task: "Create a list of squares from 1 to 5 using list comprehension",
+          guide: "[expression for variable in range] format!",
+          hint: "Use n ** 2 or n * n!"
+        }
       }
     },
     {
@@ -287,7 +325,12 @@ export const lesson17: LessonData = {
         template: "words = [\"나\", \"사과\", \"안녕하세요\", \"밥\"]\nlong = [w for w in words ___ len(w) >= ___]\nprint(long)",
         blanksAnswer: ["if", "3"],
         answer: "words = [\"나\", \"사과\", \"안녕하세요\", \"밥\"]\nlong = [w for w in words if len(w) >= 3]\nprint(long)",
-        expect: "['안녕하세요']"
+        expect: "['안녕하세요']",
+        en: {
+          task: "Collect only words with 3 or more characters from the list",
+          guide: "Attach an if condition at the end!",
+          hint: "Use the condition len(w) >= 3!"
+        }
       }
     },
     {
@@ -296,7 +339,12 @@ export const lesson17: LessonData = {
         question: "[x + 1 for x in [10, 20, 30]]의 결과는?",
         options: ["[10, 20, 30]", "[11, 21, 31]", "[1, 1, 1]", "에러"],
         answer: 1,
-        explanation: "각 요소에 1을 더한 새 리스트 [11, 21, 31]이 만들어져요!"
+        explanation: "각 요소에 1을 더한 새 리스트 [11, 21, 31]이 만들어져요!",
+        en: {
+          question: "What is the result of [x + 1 for x in [10, 20, 30]]?",
+          options: ["[10, 20, 30]", "[11, 21, 31]", "[1, 1, 1]", "Error"],
+          explanation: "A new list is created by adding 1 to each element: [11, 21, 31]!"
+        }
       }
     },
     {

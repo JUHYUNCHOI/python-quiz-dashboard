@@ -6,6 +6,7 @@ export const mapSetCluster: PracticeCluster = {
   emoji: "🗃️",
   description: "빈도수 세기, 중복 제거, 존재 확인 패턴",
   unlockAfter: "cpp-16",
+  en: { title: "Map & Set", description: "Frequency counting, duplicate removal, existence checks" },
   problems: [
     {
       id: "ms-001",
@@ -56,6 +57,18 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "map은 키를 자동으로 정렬하므로 별도 정렬 없이 알파벳 순으로 출력됩니다. freq[word]++는 존재하지 않는 키에 접근 시 0으로 초기화 후 증가합니다.",
+      en: {
+        title: "Word Frequency Count",
+        description: `Given N words, print how many times each word appears, in alphabetical order.
+
+Format: \`word count\` (one per line)`,
+        constraints: "1 ≤ N ≤ 100, each word is lowercase English letters, length 1 to 20",
+        hints: [
+          "Use `map<string, int>` — it automatically stores keys in alphabetical order.",
+          "When iterating the map, `pair.first` is the word and `pair.second` is the count.",
+        ],
+        solutionExplanation: "The map automatically keeps keys sorted, so no separate sort step is needed. Accessing `freq[word]++` on a missing key initializes it to 0 before incrementing.",
+      },
     },
     {
       id: "ms-002",
@@ -106,6 +119,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "set은 중복 없이 정렬된 상태로 원소를 관리합니다. insert()로 추가하면 자동으로 중복을 제거합니다.",
+      en: {
+        title: "Remove Duplicates and Sort",
+        description: `Given N integers, remove duplicates and print them in ascending order.`,
+        constraints: "1 ≤ N ≤ 1000, -1000 ≤ each integer ≤ 1000",
+        hints: [
+          "`set<int>` automatically removes duplicates and keeps elements in ascending order.",
+          "Insert all elements into the set, then iterate over it.",
+        ],
+        solutionExplanation: "A set stores elements without duplicates in sorted order. Calling `insert()` automatically discards duplicates.",
+      },
     },
     {
       id: "ms-003",
@@ -163,6 +186,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "set의 count()는 O(log N)으로 존재 여부를 확인합니다. 선형 탐색 O(N)보다 훨씬 빠르므로 N, Q가 클 때 특히 중요합니다.",
+      en: {
+        title: "Existence Check",
+        description: `Given a set of N integers and Q queries, for each query print \`YES\` if the integer is in the set, otherwise \`NO\`.`,
+        constraints: "1 ≤ N, Q ≤ 100000, -1000000 ≤ integers ≤ 1000000",
+        hints: [
+          "`s.count(x)` returns 1 if x is in the set, 0 otherwise.",
+          "Alternatively, `s.find(x) != s.end()` also checks existence.",
+        ],
+        solutionExplanation: "`set::count()` checks existence in O(log N), far faster than linear search O(N) — especially important when N and Q are large.",
+      },
     },
     {
       id: "ms-004",
@@ -215,6 +248,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "map은 키를 오름차순으로 순회하므로, 빈도가 같을 때 자동으로 더 작은 숫자가 먼저 처리됩니다. 엄격한 > 비교로 앞서 저장된 값을 유지합니다.",
+      en: {
+        title: "Most Frequent Number",
+        description: `Given N integers, print the number that appears most often. If multiple numbers share the highest frequency, print the smallest one.`,
+        constraints: "1 ≤ N ≤ 1000, 1 ≤ each integer ≤ 1000",
+        hints: [
+          "Count frequencies with `map<int, int>`, then scan for the max frequency and its associated number.",
+          "Since `map` iterates keys in ascending order, the first key that reaches the max frequency is automatically the smallest.",
+        ],
+        solutionExplanation: "The map iterates in ascending key order, so when frequencies tie the smaller number is encountered first. The strict `>` comparison preserves the earlier (smaller) answer.",
+      },
     },
     {
       id: "ms-005",
@@ -284,6 +327,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "A를 set으로 변환해 O(log N) 검색을 활용합니다. 공통 원소를 별도 set에 저장하면 중복 제거와 정렬이 자동으로 처리됩니다.",
+      en: {
+        title: "Common Elements of Two Arrays",
+        description: `Given integer array A of size N and integer array B of size M, print the integers that appear in both arrays in ascending order. Print \`NONE\` if there are no common elements.`,
+        constraints: "1 ≤ N, M ≤ 1000, 1 ≤ each integer ≤ 10000",
+        hints: [
+          "Store array A in a set, then check whether each element of B exists in the set.",
+          "Storing common elements in a set automatically handles deduplication and sorting.",
+        ],
+        solutionExplanation: "Converting A to a set enables O(log N) lookups. Storing common elements in a separate set handles deduplication and sorted order automatically.",
+      },
     },
     {
       id: "ms-006",
@@ -336,6 +389,18 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "처음 등장하는 이름이거나 기존 점수보다 높을 때 업데이트합니다. map의 자동 정렬 특성 덕분에 출력 시 별도 정렬이 불필요합니다.",
+      en: {
+        title: "Name-Score Tracker",
+        description: `Given N (name, score) pairs, print the best (highest) score for each name in alphabetical order.
+
+Format: \`name best_score\``,
+        constraints: "1 ≤ N ≤ 100, each name is lowercase English letters, 0 ≤ score ≤ 100",
+        hints: [
+          "Use `map<string, int>` and update only when the new score is higher than the stored one.",
+          "The map's automatic alphabetical sorting means no extra sort is needed at output time.",
+        ],
+        solutionExplanation: "Update the stored score when a name is seen for the first time or when the new score is higher. The map's sorted keys eliminate the need for a separate sort step.",
+      },
     },
     {
       id: "ms-007",
@@ -390,6 +455,95 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "map을 순회하며 빈도가 2 이상인 키만 출력합니다. found 플래그로 NONE 처리와 공백 구분을 제어합니다.",
+      en: {
+        title: "Elements Appearing At Least Twice",
+        description: `Given N integers, print all integers that appear two or more times, in ascending order on one line. Print \`NONE\` if no such integer exists.`,
+        constraints: "1 ≤ N ≤ 10000, 1 ≤ each integer ≤ 100000",
+        hints: [
+          "Count frequencies with a map, then print keys whose count is ≥ 2.",
+          "Map keys are automatically iterated in ascending order, so no extra sort is needed.",
+        ],
+        solutionExplanation: "Iterate the map and print only keys with frequency ≥ 2. The `found` flag controls the `NONE` output and space separation.",
+      },
+    },
+    // ── unordered_map ─────────────────────────────────────────────
+    {
+      id: "ms-UM01",
+      cluster: "map-set",
+      unlockAfter: "cpp-16",
+      difficulty: "쉬움",
+      title: "빈도수 세기 (unordered_map)",
+      description: `N개의 단어를 입력받아 각 단어의 등장 횟수를 출력하세요. **unordered_map을 사용하세요.**
+
+출력은 입력에 처음 등장한 순서대로 하세요.
+
+**map vs unordered_map:** map은 키 순서 정렬 O(log n), unordered_map은 순서 없지만 평균 O(1)
+
+**예시:** \`apple banana apple\` → \`apple 2\`, \`banana 1\``,
+      constraints: "1 ≤ N ≤ 100",
+      initialCode: `#include <iostream>
+#include <unordered_map>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    unordered_map<string, int> freq;  // unordered_map 사용
+    vector<string> order;
+    for (int i = 0; i < n; i++) {
+        string w;
+        cin >> w;
+        // freq에 단어 카운트, order에 첫 등장 순서 기록
+    }
+    for (const string& w : order) {
+        cout << w << " " << freq[w] << "\\n";
+    }
+    return 0;
+}`,
+      testCases: [
+        { stdin: "3\napple banana apple", expectedOutput: "apple 2\nbanana 1", label: "기본" },
+        { stdin: "5\na b a c b", expectedOutput: "a 2\nb 2\nc 1", label: "순서 유지" },
+        { stdin: "1\nhello", expectedOutput: "hello 1", label: "단일" },
+      ],
+      hints: [
+        "unordered_map<string, int> freq; 로 선언하고 freq[word]++ 로 카운트하세요.",
+        "첫 등장 여부 확인: if (freq.count(w) == 0) order.push_back(w); 후 freq[w]++",
+      ],
+      solutionCode: `#include <iostream>
+#include <unordered_map>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    unordered_map<string, int> freq;
+    vector<string> order;
+    for (int i = 0; i < n; i++) {
+        string w;
+        cin >> w;
+        if (freq.count(w) == 0) order.push_back(w);
+        freq[w]++;
+    }
+    for (const string& w : order) {
+        cout << w << " " << freq[w] << "\\n";
+    }
+    return 0;
+}`,
+      solutionExplanation: "unordered_map은 해시 테이블 기반으로 평균 O(1) 조회/삽입입니다. map과 달리 키 정렬이 없어 순서를 별도로 vector에 기록합니다. freq.count(w)==0 으로 첫 등장 여부를 확인합니다.",
+      en: {
+        title: "Word Frequency (unordered_map)",
+        description: `Given N words, count how many times each word appears. **Use unordered_map.**\n\nPrint in the order of first appearance.\n\n**map vs unordered_map:** map sorts keys O(log n), unordered_map has no order but averages O(1)\n\n**Example:** \`apple banana apple\` → \`apple 2\`, \`banana 1\``,
+        constraints: "1 ≤ N ≤ 100",
+        hints: [
+          "Declare unordered_map<string, int> freq; and use freq[word]++ to count.",
+          "Track first appearance: if (freq.count(w) == 0) order.push_back(w); before freq[w]++",
+        ],
+        solutionExplanation: "unordered_map is hash-table based with average O(1) lookup/insert. Unlike map, keys are not sorted, so we track order separately with a vector. freq.count(w)==0 checks first appearance.",
+      },
     },
     {
       id: "ms-008",
@@ -442,6 +596,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "단어를 정렬하면 애너그램이 동일한 문자열이 됩니다. 이를 map의 키로 사용해 그룹을 자동으로 분류하고, map의 크기가 고유 그룹 수입니다.",
+      en: {
+        title: "Anagram Groups",
+        description: `Given N words, group words made of the same letters together and print the number of groups. (Anagram: a word formed by rearranging the letters of another word)`,
+        constraints: "1 ≤ N ≤ 1000, each word is lowercase English letters, length 1 to 20",
+        hints: [
+          "Sort each word's characters alphabetically and use it as the map key — anagrams will share the same key.",
+          "The size of the map equals the number of unique groups.",
+        ],
+        solutionExplanation: "Sorting a word's characters produces a canonical form that is identical for all its anagrams. Using this as a map key automatically groups anagrams; the map size is the number of distinct groups.",
+      },
     },
     {
       id: "ms-009",
@@ -491,6 +655,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "왼쪽에서 오른쪽으로 순회하면서, 현재 값의 보완값(k-x)이 이미 등장했는지 확인합니다. seen[need]는 그 값이 현재까지 등장한 횟수이므로, 이만큼의 쌍이 생깁니다.",
+      en: {
+        title: "Count Pairs Summing to K",
+        description: `Given N integers and a target K, count the number of distinct index pairs (i, j) with i < j such that the two elements sum to K. The array may contain duplicates.`,
+        constraints: "1 ≤ N ≤ 100000, -100000 ≤ each integer and K ≤ 100000",
+        hints: [
+          "Store previously seen numbers in a map, then for each new number check whether `k - x` is already in the map.",
+          "Since duplicates exist, use `map<int, int>` to track how many times each value has appeared.",
+        ],
+        solutionExplanation: "Scan left to right. For each element `x`, the complement `k-x` may have appeared multiple times before — `seen[need]` gives that count, which is exactly how many new pairs are formed. Then record `x` in `seen`.",
+      },
     },
     {
       id: "ms-010",
@@ -553,6 +727,20 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "sort 후 최댓값/최솟값은 인덱스로 직접 접근합니다. 중앙값은 N 홀수/짝수 경우를 나눠 처리합니다. 짝수 평균은 2.0으로 나눠 실수 나눗셈을 보장합니다.",
+      en: {
+        title: "Student Score Statistics",
+        description: `Given N student scores, output the following:
+- Highest score
+- Lowest score
+- Average score (to 2 decimal places)
+- Median (middle value when sorted; if N is even, the average of the two middle values)`,
+        constraints: "1 ≤ N ≤ 1000, 0 ≤ score ≤ 100",
+        hints: [
+          "After sorting, the first element is the minimum and the last is the maximum.",
+          "Median: if N is odd use `scores[N/2]`; if N is even use `(scores[N/2-1] + scores[N/2]) / 2.0`.",
+        ],
+        solutionExplanation: "After sorting, min and max are directly accessible by index. Median splits on odd/even N. Dividing by `2.0` ensures floating-point division for the even-N case.",
+      },
     },
     {
       id: "ms-011",
@@ -611,6 +799,16 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "map<string, string>은 이름을 O(log N)으로 검색합니다. find()는 iterator를 반환하며, end()와 같으면 없는 키입니다. it->second로 연관된 값에 접근합니다.",
+      en: {
+        title: "Phone Book Lookup",
+        description: `Store N (name, phone number) pairs, then for each of Q name queries print the corresponding phone number. Print \`NOT FOUND\` for unknown names.`,
+        constraints: "1 ≤ N, Q ≤ 100000, names and numbers are at most 20 characters each",
+        hints: [
+          "Use `map<string, string>` with name as key and phone number as value.",
+          "Use `find()` to check existence; if it returns `end()`, print NOT FOUND.",
+        ],
+        solutionExplanation: "`map<string, string>` looks up names in O(log N). `find()` returns an iterator; comparing to `end()` tells you whether the key exists. Access the associated value via `it->second`.",
+      },
     },
     {
       id: "ms-012",
@@ -662,6 +860,22 @@ int main() {
     return 0;
 }`,
       solutionExplanation: "int bucket[11] = {}로 0으로 초기화한 배열을 사용합니다. 점수/10이 구간 인덱스가 됩니다. 100점은 별도로 처리해 bucket[10]에 저장합니다.",
+      en: {
+        title: "Score Distribution Histogram",
+        description: `Given N scores (0–100), print the number of students in each 10-point range.
+
+Format:
+\`0-9: X명\`
+\`10-19: X명\`
+...
+\`100: X명\``,
+        constraints: "1 ≤ N ≤ 1000, 0 ≤ score ≤ 100",
+        hints: [
+          "Compute the bucket index as `score / 10` (range 0–10). Handle the score of 100 as index 10.",
+          "You can manage bucket counts with a simple array: `int bucket[11] = {};`.",
+        ],
+        solutionExplanation: "`int bucket[11] = {}` initializes all counts to 0. `score / 10` gives the bucket index. Score 100 is handled separately and placed in `bucket[10]`.",
+      },
     },
   ],
 }

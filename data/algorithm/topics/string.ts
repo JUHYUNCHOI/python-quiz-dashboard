@@ -7,47 +7,60 @@ export const stringTopic: AlgoTopic = {
     category: '기초 (Bronze~Silver)',
     order: 1,
     description: '빈도수 분석, 팰린드롬, 애너그램 등 문자열 핵심 유형과 풀이법',
+    titleEn: 'String Manipulation',
+    categoryEn: 'Basics (Bronze~Silver)',
+    descriptionEn: 'Key string problem types and solutions: frequency analysis, palindromes, anagrams',
     track: 'both',
     stages: [
         {
             num: 1,
             title: '알파벳 찾기',
+            titleEn: 'Finding Alphabets',
             problemIds: [
                 'boj-10809'
             ],
-            desc: '문자열 순회 입문'
+            desc: '문자열 순회 입문',
+            descEn: 'Introduction to string traversal'
         },
         {
             num: 2,
             title: '빈도수 분석',
+            titleEn: 'Frequency Analysis',
             problemIds: [
                 'boj-1157'
             ],
-            desc: '문자 등장 횟수 세기'
+            desc: '문자 등장 횟수 세기',
+            descEn: 'Counting character occurrences'
         },
         {
             num: 3,
             title: '팰린드롬 판별',
+            titleEn: 'Palindrome Check',
             problemIds: [
                 'lc-125'
             ],
-            desc: '투 포인터 기본 패턴'
+            desc: '투 포인터 기본 패턴',
+            descEn: 'Basic two-pointer pattern'
         },
         {
             num: 4,
             title: '애너그램 그룹화',
+            titleEn: 'Anagram Grouping',
             problemIds: [
                 'lc-49'
             ],
-            desc: '정렬 키 + 해시맵'
+            desc: '정렬 키 + 해시맵',
+            descEn: 'Sort key + hashmap'
         },
         {
             num: 5,
             title: '문자열 재구성',
+            titleEn: 'String Reconstruction',
             problemIds: [
                 'boj-1213'
             ],
-            desc: '빈도수 활용한 재배열'
+            desc: '빈도수 활용한 재배열',
+            descEn: 'Rearrangement using frequency counts'
         }
     ],
     problems: [

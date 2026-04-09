@@ -81,7 +81,12 @@ export const lesson18: LessonData = {
         template: "data = \"딸기,망고,키위\"\nfruits = data.___(___)\nprint(fruits)",
         blanksAnswer: ["split", "\",\""],
         answer: "data = \"딸기,망고,키위\"\nfruits = data.split(\",\")\nprint(fruits)",
-        expect: "['딸기', '망고', '키위']"
+        expect: "['딸기', '망고', '키위']",
+        en: {
+          task: "Split comma-separated fruits into a list",
+          guide: "Use split(delimiter)!",
+          hint: "Use split(\",\")!"
+        }
       }
     },
     {
@@ -90,7 +95,12 @@ export const lesson18: LessonData = {
         question: "\"a-b-c\".split(\"-\")의 결과는?",
         options: ["\"abc\"", "[\"a-b-c\"]", "[\"a\", \"b\", \"c\"]", "[\"a\", \"-\", \"b\", \"-\", \"c\"]"],
         answer: 2,
-        explanation: "\"-\"를 기준으로 쪼개면 [\"a\", \"b\", \"c\"]가 돼요!"
+        explanation: "\"-\"를 기준으로 쪼개면 [\"a\", \"b\", \"c\"]가 돼요!",
+        en: {
+          question: "What is the result of \"a-b-c\".split(\"-\")?",
+          options: ["\"abc\"", "[\"a-b-c\"]", "[\"a\", \"b\", \"c\"]", "[\"a\", \"-\", \"b\", \"-\", \"c\"]"],
+          explanation: "Splitting by \"-\" gives [\"a\", \"b\", \"c\"]!"
+        }
       }
     },
     {
@@ -132,7 +142,11 @@ export const lesson18: LessonData = {
         template: "fruits = [\"사과\", \"바나나\", \"포도\"]\nprint(fruits[___])",
         blanksAnswer: ["-1"],
         answer: "fruits = [\"사과\", \"바나나\", \"포도\"]\nprint(fruits[-1])",
-        expect: "포도"
+        expect: "포도",
+        en: {
+          message: "🔄 List basics review! (Lesson 16)",
+          task: "Print the last element of the list"
+        }
       }
     },
     {
@@ -196,7 +210,12 @@ export const lesson18: LessonData = {
         template: "words = [\"Hello\", \"Python\", \"World\"]\nresult = ___.join(___)\nprint(result)",
         blanksAnswer: ["\" \"", "words"],
         answer: "words = [\"Hello\", \"Python\", \"World\"]\nresult = \" \".join(words)\nprint(result)",
-        expect: "Hello Python World"
+        expect: "Hello Python World",
+        en: {
+          task: "Join a list of words with spaces",
+          guide: "Use the delimiter.join(list) format!",
+          hint: "\" \".join(words)"
+        }
       }
     },
     {
@@ -209,7 +228,12 @@ export const lesson18: LessonData = {
         template: "fruits = [\"사과\", \"바나나\", \"포도\"]\nresult = ___.join(fruits)\nprint(result)",
         blanksAnswer: ["\" / \""],
         answer: "fruits = [\"사과\", \"바나나\", \"포도\"]\nresult = \" / \".join(fruits)\nprint(result)",
-        expect: "사과 / 바나나 / 포도"
+        expect: "사과 / 바나나 / 포도",
+        en: {
+          task: "Join the fruit list with \" / \"",
+          guide: "Set the delimiter to \" / \"!",
+          hint: "\" / \".join(fruits)"
+        }
       }
     },
     {
@@ -218,7 +242,12 @@ export const lesson18: LessonData = {
         question: "\"-\".join([\"2025\", \"01\", \"15\"])의 결과는?",
         options: ["[\"2025\", \"01\", \"15\"]", "2025-01-15", "20250115", "에러"],
         answer: 1,
-        explanation: "\"-\"를 사이에 넣어서 합치면 \"2025-01-15\"가 돼요!"
+        explanation: "\"-\"를 사이에 넣어서 합치면 \"2025-01-15\"가 돼요!",
+        en: {
+          question: "What is the result of \"-\".join([\"2025\", \"01\", \"15\"])?",
+          options: ["[\"2025\", \"01\", \"15\"]", "2025-01-15", "20250115", "Error"],
+          explanation: "Joining with \"-\" between each element gives \"2025-01-15\"!"
+        }
       }
     },
     {
@@ -253,7 +282,11 @@ export const lesson18: LessonData = {
         template: "squares = [___ for n in range(1, 5)]\nprint(squares)",
         blanksAnswer: ["n ** 2"],
         answer: "squares = [n ** 2 for n in range(1, 5)]\nprint(squares)",
-        expect: "[1, 4, 9, 16]"
+        expect: "[1, 4, 9, 16]",
+        en: {
+          message: "🔄 List comprehension review!",
+          task: "Create a list of squares from 1 to 4"
+        }
       }
     },
     {
@@ -317,7 +350,12 @@ export const lesson18: LessonData = {
         template: "date = \"2025.01.15\"\nparts = date.___(___)\nresult = ___.join(parts)\nprint(result)",
         blanksAnswer: ["split", "\".\"", "\"-\""],
         answer: "date = \"2025.01.15\"\nparts = date.split(\".\")\nresult = \"-\".join(parts)\nprint(result)",
-        expect: "2025-01-15"
+        expect: "2025-01-15",
+        en: {
+          task: "Convert date format from \"2025.01.15\" to \"2025-01-15\"",
+          guide: "Split first, then join!",
+          hint: "Split by \".\" then join with \"-\"!"
+        }
       }
     },
     {
@@ -330,7 +368,12 @@ export const lesson18: LessonData = {
         template: "text = \"hello python world\"\nwords = text.split()\ncapitalized = [w.___() for w in words]\nresult = \" \".join(___)\nprint(result)",
         blanksAnswer: ["capitalize", "capitalized"],
         answer: "text = \"hello python world\"\nwords = text.split()\ncapitalized = [w.capitalize() for w in words]\nresult = \" \".join(capitalized)\nprint(result)",
-        expect: "Hello Python World"
+        expect: "Hello Python World",
+        en: {
+          task: "Capitalize the first letter of each word in the sentence",
+          guide: "Combine split, capitalize, and join!",
+          hint: "Use list comprehension with .capitalize()!"
+        }
       }
     },
     {
@@ -344,7 +387,17 @@ export const lesson18: LessonData = {
           "에러"
         ],
         answer: 1,
-        explanation: "split()으로 쪼갠 후 공백으로 다시 합치면 원래 문장이 돼요! (여러 공백이 있었다면 깔끔해짐)"
+        explanation: "split()으로 쪼갠 후 공백으로 다시 합치면 원래 문장이 돼요! (여러 공백이 있었다면 깔끔해짐)",
+        en: {
+          question: "What is the result of \" \".join(\"hello world\".split())?",
+          options: [
+            "[\"hello\", \"world\"]",
+            "\"hello world\"",
+            "\"helloworld\"",
+            "Error"
+          ],
+          explanation: "After splitting and joining back with a space, you get the original sentence! (Extra spaces get cleaned up)"
+        }
       }
     },
     {

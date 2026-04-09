@@ -67,7 +67,11 @@ export const lesson4: LessonData = {
           task: "10 + 5 계산해서 출력해봐",
           template: null,
           answer: "print(10 + 5)",
-          expect: "15"
+          expect: "15",
+          en: {
+            message: "Wait! Remember printing calculations?",
+            task: "Calculate 10 + 5 and print it"
+          }
         }
       },
 
@@ -93,7 +97,11 @@ export const lesson4: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "19000 + 2000",
           alternateAnswers: ["19000+2000"],
-          expect: "21000"
+          expect: "21000",
+          en: {
+            task: "Calculate 19000 + 2000 and print it",
+            guide: "Chicken + Cola!"
+          }
         }
       },
       {
@@ -105,7 +113,11 @@ export const lesson4: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "50000 - 21000",
           alternateAnswers: ["50000-21000"],
-          expect: "29000"
+          expect: "29000",
+          en: {
+            task: "Calculate 50000 - 21000 and print it",
+            guide: "Allowance - spending!"
+          }
         }
       },
       {
@@ -117,7 +129,11 @@ export const lesson4: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "25 * 2",
           alternateAnswers: ["25*2"],
-          expect: "50"
+          expect: "50",
+          en: {
+            task: "Calculate 25 * 2 and print it",
+            guide: "Attack × critical hit!"
+          }
         }
       },
 
@@ -143,7 +159,11 @@ export const lesson4: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "17 // 5",
           alternateAnswers: ["17//5"],
-          expect: "3"
+          expect: "3",
+          en: {
+            task: "Calculate 17 // 5 and print it (quotient)",
+            guide: "// is floor division!"
+          }
         }
       },
       {
@@ -155,7 +175,11 @@ export const lesson4: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "17 % 5",
           alternateAnswers: ["17%5"],
-          expect: "2"
+          expect: "2",
+          en: {
+            task: "Calculate 17 % 5 and print it (remainder)",
+            guide: "% is modulo (remainder)!"
+          }
         }
       },
       {
@@ -167,7 +191,11 @@ export const lesson4: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "2 ** 4",
           alternateAnswers: ["2**4"],
-          expect: "16"
+          expect: "16",
+          en: {
+            task: "Calculate 2 ** 4 and print it (2 to the power of 4)",
+            guide: "** is exponentiation!"
+          }
         }
       },
 
@@ -182,7 +210,16 @@ export const lesson4: LessonData = {
             "12 % 5 = 2조각"
           ],
           answer: 1,
-          explanation: "// 는 몫이니까 12 // 5 = 2조각! % 는 나머지야 (남는 조각)."
+          explanation: "// 는 몫이니까 12 // 5 = 2조각! % 는 나머지야 (남는 조각).",
+          en: {
+            question: "When 12 slices are divided among 5 people, how many slices per person?",
+            options: [
+              "12 / 5 = 2.4 slices",
+              "12 // 5 = 2 slices",
+              "12 % 5 = 2 slices"
+            ],
+            explanation: "// is floor division so 12 // 5 = 2 slices! % is remainder (leftover slices)."
+          }
         }
       },
 
@@ -233,7 +270,10 @@ export const lesson4: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "100 > 50",
           alternateAnswers: ["100>50"],
-          expect: "True"
+          expect: "True",
+          en: {
+            task: "Compare 100 > 50 and print it"
+          }
         }
       },
       {
@@ -244,7 +284,10 @@ export const lesson4: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "3 < 7",
           alternateAnswers: ["3<7"],
-          expect: "True"
+          expect: "True",
+          en: {
+            task: "Compare 3 < 7 and print it"
+          }
         }
       },
       {
@@ -256,7 +299,11 @@ export const lesson4: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "10 == 10",
           alternateAnswers: ["10==10"],
-          expect: "True"
+          expect: "True",
+          en: {
+            task: "Compare 10 == 10 and print it",
+            guide: "== means equals!"
+          }
         }
       },
       {
@@ -268,7 +315,11 @@ export const lesson4: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "5 != 3",
           alternateAnswers: ["5!=3"],
-          expect: "True"
+          expect: "True",
+          en: {
+            task: "Compare 5 != 3 and print it",
+            guide: "!= means not equal!"
+          }
         }
       },
 
@@ -295,7 +346,16 @@ export const lesson4: LessonData = {
             "에러"
           ],
           answer: 0,
-          explanation: ">= 는 '크거나 같다'니까 10 >= 10은 True야!"
+          explanation: ">= 는 '크거나 같다'니까 10 >= 10은 True야!",
+          en: {
+            question: "What is the result of 10 >= 10?",
+            options: [
+              "True (10 is greater than or equal to 10)",
+              "False (equal doesn't count)",
+              "Error"
+            ],
+            explanation: ">= means 'greater than or equal to' so 10 >= 10 is True!"
+          }
         }
       },
 
@@ -323,7 +383,16 @@ export const lesson4: LessonData = {
             "에러!"
           ],
           answer: 0,
-          explanation: "= 는 넣기, == 는 비교! 첫 줄은 저장, 둘째 줄은 True 반환!"
+          explanation: "= 는 넣기, == 는 비교! 첫 줄은 저장, 둘째 줄은 True 반환!",
+          en: {
+            question: "What does this code do?",
+            options: [
+              "Store 100 in score, then check if it equals 100",
+              "Store 100 in score twice",
+              "Error!"
+            ],
+            explanation: "= assigns, == compares! First line stores, second line returns True!"
+          }
         }
       },
 
@@ -411,7 +480,12 @@ export const lesson4: LessonData = {
           hint: "print(True and False)",
           template: null,
           answer: "print(True and False)",
-          expect: "False"
+          expect: "False",
+          en: {
+            task: "Make it print like this ↓\nFalse",
+            guide: "Calculate True and False!",
+            hint: "print(True and False)"
+          }
         }
       },
       {
@@ -421,7 +495,11 @@ export const lesson4: LessonData = {
           guide: "True or False 계산!",
           template: null,
           answer: "print(True or False)",
-          expect: "True"
+          expect: "True",
+          en: {
+            task: "Make it print like this ↓\nTrue",
+            guide: "Calculate True or False!"
+          }
         }
       },
       {
@@ -431,7 +509,11 @@ export const lesson4: LessonData = {
           guide: "not True 계산!",
           template: null,
           answer: "print(not True)",
-          expect: "False"
+          expect: "False",
+          en: {
+            task: "Make it print like this ↓\nFalse",
+            guide: "Calculate not True!"
+          }
         }
       },
       {
@@ -442,7 +524,11 @@ export const lesson4: LessonData = {
           template: null,
           answer: "print(10 > 5 and 3 < 7)",
           alternateAnswers: ["print((10 > 5) and (3 < 7))"],
-          expect: "True"
+          expect: "True",
+          en: {
+            task: "Make it print like this ↓\nTrue",
+            guide: "10 > 5 AND 3 < 7 — check if both are true!"
+          }
         }
       },
       {
@@ -453,7 +539,11 @@ export const lesson4: LessonData = {
           template: null,
           answer: "level = 5\ngold = 500\nprint(level >= 10 and gold >= 1000)",
           alternateAnswers: ["level = 5\ngold = 500\nprint((level >= 10) and (gold >= 1000))"],
-          expect: "False"
+          expect: "False",
+          en: {
+            task: "Make it print like this ↓\nFalse",
+            guide: "level = 5, gold = 500 / Entry condition: level >= 10 and gold >= 1000"
+          }
         }
       },
 
@@ -506,7 +596,16 @@ export const lesson4: LessonData = {
             "에러"
           ],
           answer: 1,
-          explanation: "곱셈 먼저! 3 * 4 = 12, 2 + 12 = 14!"
+          explanation: "곱셈 먼저! 3 * 4 = 12, 2 + 12 = 14!",
+          en: {
+            question: "What is the result of 2 + 3 * 4?",
+            options: [
+              "20 (left to right)",
+              "14 (multiplication first)",
+              "Error"
+            ],
+            explanation: "Multiplication first! 3 * 4 = 12, 2 + 12 = 14!"
+          }
         }
       },
 
@@ -519,7 +618,11 @@ export const lesson4: LessonData = {
           hint: "치명타 데미지 - 방어력!",
           template: null,
           answer: "print((25 * 2) - 15)",
-          expect: "35"
+          expect: "35",
+          en: {
+            task: "Calculate (25 * 2) - 15 and print it",
+            hint: "Critical hit damage - defense!"
+          }
         }
       },
 
@@ -557,7 +660,11 @@ export const lesson4: LessonData = {
           task: "100 > 50 출력해봐",
           template: null,
           answer: "print(100 > 50)",
-          expect: "True"
+          expect: "True",
+          en: {
+            message: "Remember comparison operators?",
+            task: "Print 100 > 50"
+          }
         }
       },
 

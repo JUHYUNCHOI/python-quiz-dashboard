@@ -48,7 +48,11 @@ export const lesson13: LessonData = {
         template: "x = 15\n___ x > 10:\n    print('크다')",
         blanksAnswer: ["if"],
         answer: "x = 15\nif x > 10:\n    print('크다')",
-        expect: "크다"
+        expect: "크다",
+        en: {
+          message: "🔄 Conditional review!",
+          task: "If x is greater than 10 print '크다'"
+        }
       }
     },
     {
@@ -89,7 +93,12 @@ export const lesson13: LessonData = {
         template: "for i in range(___,___):\n    print(i)",
         blanksAnswer: ["1", "6"],
         answer: "for i in range(1, 10, 2):\n    print(i)",
-        expect: "1\n3\n5\n7\n9"
+        expect: "1\n3\n5\n7\n9",
+        en: {
+          task: "Print numbers from 1 to 5",
+          guide: "Remember range(start, end+1)!",
+          hint: "Use range(1, 6)!"
+        }
       }
     },
     {
@@ -98,7 +107,12 @@ export const lesson13: LessonData = {
         question: "range(5)는 어떤 숫자를 만들까?",
         options: ["1, 2, 3, 4, 5", "0, 1, 2, 3, 4", "0, 1, 2, 3, 4, 5", "1, 2, 3, 4"],
         answer: 1,
-        explanation: "range(5)는 0부터 시작해서 4까지!"
+        explanation: "range(5)는 0부터 시작해서 4까지!",
+        en: {
+          question: "What numbers does range(5) generate?",
+          options: ["1, 2, 3, 4, 5", "0, 1, 2, 3, 4", "0, 1, 2, 3, 4, 5", "1, 2, 3, 4"],
+          explanation: "range(5) starts from 0 and goes to 4!"
+        }
       }
     },
 
@@ -112,7 +126,12 @@ export const lesson13: LessonData = {
         hint: "range(1, 10, 2)를 써봐!",
         template: null,
         answer: "for i in range(1, 6):\n    print(i)",
-        expect: "1\n2\n3\n4\n5"
+        expect: "1\n2\n3\n4\n5",
+        en: {
+          task: "Make it print like this ↓\n1\n3\n5\n7\n9\n\nHint: Use range(start, end, step)!",
+          guide: "Skip by 2 using the 3rd argument of range!",
+          hint: "Use range(1, 10, 2)!"
+        }
       }
     },
     {
@@ -158,7 +177,12 @@ export const lesson13: LessonData = {
         template: "names = ['지민', '유진', '민수']\nfor ___ in names:\n    print(f'{___}님')",
         blanksAnswer: ["name", "name"],
         answer: "names = ['지민', '유진', '민수']\nfor name in names:\n    print(f'{name}님')",
-        expect: "지민님\n유진님\n민수님"
+        expect: "지민님\n유진님\n민수님",
+        en: {
+          task: "Print each name from the list with '님' appended",
+          guide: "Combine with f-string!",
+          hint: "Use the form f'{name}님'!"
+        }
       }
     },
     {
@@ -167,7 +191,12 @@ export const lesson13: LessonData = {
         question: "for x in [10, 20, 30]: print(x) 의 결과는?",
         options: ["10 20 30 (한 줄)", "10\\n20\\n30 (각 줄)", "[10, 20, 30]", "에러"],
         answer: 1,
-        explanation: "for문은 각 요소를 하나씩 꺼내서 print하므로 줄바꿈됩니다!"
+        explanation: "for문은 각 요소를 하나씩 꺼내서 print하므로 줄바꿈됩니다!",
+        en: {
+          question: "What is the result of: for x in [10, 20, 30]: print(x)?",
+          options: ["10 20 30 (one line)", "10\\n20\\n30 (each on own line)", "[10, 20, 30]", "Error"],
+          explanation: "The for loop takes each element one at a time and prints it, so each is on its own line!"
+        }
       }
     },
     {
@@ -202,7 +231,11 @@ export const lesson13: LessonData = {
         template: "for i in range(___, ___):\n    print(i)",
         blanksAnswer: ["1", "4"],
         answer: "for i in range(1, 4):\n    print(i)",
-        expect: "1\n2\n3"
+        expect: "1\n2\n3",
+        en: {
+          message: "🔄 range review!",
+          task: "Print from 1 to 3"
+        }
       }
     },
     {
@@ -228,7 +261,11 @@ export const lesson13: LessonData = {
         guide: "for + range(3) 전체를 직접 써봐!",
         template: null,
         answer: "for i in range(3):\n    print('안녕!')",
-        expect: "안녕!\n안녕!\n안녕!"
+        expect: "안녕!\n안녕!\n안녕!",
+        en: {
+          task: "Make it print like this ↓\n안녕!\n안녕!\n안녕!",
+          guide: "Write the full for + range(3) yourself!"
+        }
       }
     },
     {
@@ -241,7 +278,12 @@ export const lesson13: LessonData = {
         template: "for i in range(1, 10):\n    print(f'3 * {i} = {___}')",
         blanksAnswer: ["3*i"],
         answer: "for i in range(1, 10):\n    print(f'3 * {i} = {3*i}')",
-        expect: "3 * 1 = 3\n3 * 2 = 6\n3 * 3 = 9\n3 * 4 = 12\n3 * 5 = 15\n3 * 6 = 18\n3 * 7 = 21\n3 * 8 = 24\n3 * 9 = 27"
+        expect: "3 * 1 = 3\n3 * 2 = 6\n3 * 3 = 9\n3 * 4 = 12\n3 * 5 = 15\n3 * 6 = 18\n3 * 7 = 21\n3 * 8 = 24\n3 * 9 = 27",
+        en: {
+          task: "Print the 3 times table",
+          guide: "Use f-string in the format 3 * i = result!",
+          hint: "Use range(1, 10) and 3*i!"
+        }
       }
     },
     {

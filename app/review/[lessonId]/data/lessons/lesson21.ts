@@ -69,7 +69,11 @@ export const lesson21: LessonData = {
         template: "info = {'이름': '민수', '나이': 15}\nprint(info[___])",
         blanksAnswer: ["'이름'"],
         answer: "info = {'이름': '민수', '나이': 15}\nprint(info['이름'])",
-        expect: "민수"
+        expect: "민수",
+        en: {
+          message: "Dictionary review! Access value by key",
+          task: "Print the value of the 'name' key from the dictionary"
+        }
       }
     },
     {
@@ -82,7 +86,12 @@ export const lesson21: LessonData = {
         template: "nums = [1, 2, 2, 3, 3, 3]\nunique = ___(nums)\nprint(unique)",
         blanksAnswer: ["set"],
         answer: "nums = [1, 2, 2, 3, 3, 3]\nunique = set(nums)\nprint(unique)",
-        expect: "{1, 2, 3}"
+        expect: "{1, 2, 3}",
+        en: {
+          task: "Remove duplicates from list [1, 2, 2, 3, 3, 3] using set() and print",
+          guide: "Putting a list in set() removes duplicates!",
+          hint: "unique = set([1, 2, 2, 3, 3, 3])"
+        }
       }
     },
     {
@@ -96,7 +105,17 @@ export const lesson21: LessonData = {
           "s = ()"
         ],
         answer: 1,
-        explanation: "{}는 빈 딕셔너리! 빈 집합은 반드시 set()으로 만들어요."
+        explanation: "{}는 빈 딕셔너리! 빈 집합은 반드시 set()으로 만들어요.",
+        en: {
+          question: "What is the correct way to create an empty set?",
+          options: [
+            "s = {}",
+            "s = set()",
+            "s = set{}",
+            "s = ()"
+          ],
+          explanation: "{} is an empty dictionary! An empty set must be created with set()."
+        }
       }
     },
     {
@@ -185,7 +204,11 @@ export const lesson21: LessonData = {
         template: "d = {'a': 1, 'b': 2, 'c': 3}\nfor key in d.___():\n    print(key)",
         blanksAnswer: ["keys"],
         answer: "d = {'a': 1, 'b': 2, 'c': 3}\nfor key in d.keys():\n    print(key)",
-        expect: "a\nb\nc"
+        expect: "a\nb\nc",
+        en: {
+          message: "Dictionary review! Check keys with keys()",
+          task: "Print all keys in the dictionary"
+        }
       }
     },
     {
@@ -198,7 +221,12 @@ export const lesson21: LessonData = {
         template: "a = {1, 2, 3, 4, 5}\nb = {4, 5, 6, 7, 8}\nprint(a ___ b)",
         blanksAnswer: ["&"],
         answer: "a = {1, 2, 3, 4, 5}\nb = {4, 5, 6, 7, 8}\nprint(a & b)",
-        expect: "{4, 5}"
+        expect: "{4, 5}",
+        en: {
+          task: "Find and print the intersection (&) of two sets",
+          guide: "Use the & operator for intersection!",
+          hint: "a & b"
+        }
       }
     },
     {
@@ -211,7 +239,12 @@ export const lesson21: LessonData = {
         template: "a = {1, 2, 3}\nb = {2, 3, 4}\nprint(a ___ b)\nprint(a ___ b)",
         blanksAnswer: ["|", "-"],
         answer: "a = {1, 2, 3}\nb = {2, 3, 4}\nprint(a | b)\nprint(a - b)",
-        expect: "{1, 2, 3, 4}\n{1}"
+        expect: "{1, 2, 3, 4}\n{1}",
+        en: {
+          task: "Print the union (|) and difference (-) of two sets separately",
+          guide: "Use | and - operators!",
+          hint: "a | b and a - b"
+        }
       }
     },
     {
@@ -225,7 +258,17 @@ export const lesson21: LessonData = {
           "{1}"
         ],
         answer: 1,
-        explanation: "&는 교집합! 양쪽 모두에 있는 2, 3만 남아요."
+        explanation: "&는 교집합! 양쪽 모두에 있는 2, 3만 남아요.",
+        en: {
+          question: "What is the result of {1, 2, 3} & {2, 3, 4}?",
+          options: [
+            "{1, 2, 3, 4}",
+            "{2, 3}",
+            "{1, 4}",
+            "{1}"
+          ],
+          explanation: "& is intersection! Only 2 and 3 exist in both sets."
+        }
       }
     },
     {
@@ -309,7 +352,11 @@ export const lesson21: LessonData = {
         template: "prices = {'사과': 1000, '바나나': 500}\nprint('사과' ___ prices)",
         blanksAnswer: ["in"],
         answer: "prices = {'사과': 1000, '바나나': 500}\nprint('사과' in prices)",
-        expect: "True"
+        expect: "True",
+        en: {
+          message: "Dictionary review! Check key existence with in",
+          task: "Check if 'apple' is in the dictionary and print"
+        }
       }
     },
     {
@@ -322,7 +369,12 @@ export const lesson21: LessonData = {
         template: "fruits = {'사과', '바나나'}\nfruits.___(___)\nprint(fruits)",
         blanksAnswer: ["add", "'딸기'"],
         answer: "fruits = {'사과', '바나나'}\nfruits.add('딸기')\nprint(fruits)",
-        expect: "{'사과', '바나나', '딸기'}"
+        expect: "{'사과', '바나나', '딸기'}",
+        en: {
+          task: "Add 'strawberry' to the set with add() and print",
+          guide: "Use set.add(value)!",
+          hint: "fruits.add('strawberry')"
+        }
       }
     },
     {
@@ -335,7 +387,12 @@ export const lesson21: LessonData = {
         template: "class_a = {'민수', '영희', '철수'}\nclass_b = {'영희', '지민', '철수'}\nboth = class_a ___ class_b\nprint(f'공통 학생: {both}')",
         blanksAnswer: ["&"],
         answer: "class_a = {'민수', '영희', '철수'}\nclass_b = {'영희', '지민', '철수'}\nboth = class_a & class_b\nprint(f'공통 학생: {both}')",
-        expect: "공통 학생: {'영희', '철수'}"
+        expect: "공통 학생: {'영희', '철수'}",
+        en: {
+          task: "Find students that appear in both class sets (intersection)",
+          guide: "Use the & operator for intersection!",
+          hint: "class_a & class_b"
+        }
       }
     },
     {
@@ -348,7 +405,12 @@ export const lesson21: LessonData = {
         template: "nums = [3, 1, 2, 3, 1, 2]\nresult = sorted(___(nums))\nprint(result)",
         blanksAnswer: ["set"],
         answer: "nums = [3, 1, 2, 3, 1, 2]\nresult = sorted(set(nums))\nprint(result)",
-        expect: "[1, 2, 3]"
+        expect: "[1, 2, 3]",
+        en: {
+          task: "Remove duplicates from the list and print as a sorted list",
+          guide: "Remove duplicates with set(), then use sorted()!",
+          hint: "sorted(set(nums))"
+        }
       }
     },
     {
@@ -362,7 +424,17 @@ export const lesson21: LessonData = {
           "remove()로 삭제"
         ],
         answer: 1,
-        explanation: "set()에 넣으면 중복이 자동 제거! 가장 간단하고 빠른 방법이에요."
+        explanation: "set()에 넣으면 중복이 자동 제거! 가장 간단하고 빠른 방법이에요.",
+        en: {
+          question: "What is the simplest way to remove duplicates from [1, 1, 2, 2, 3]?",
+          options: [
+            "Check one by one with a for loop",
+            "Convert with set()",
+            "Sort with sort()",
+            "Delete with remove()"
+          ],
+          explanation: "Putting it in set() automatically removes duplicates! Simplest and fastest."
+        }
       }
     },
     {

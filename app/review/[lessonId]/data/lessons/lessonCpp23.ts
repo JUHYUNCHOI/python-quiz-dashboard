@@ -55,7 +55,11 @@ export const lessonCpp23: LessonData = {
           template: "sort(v.___(), v.___());",
           answer: "begin",
           blanksAnswer: ["begin", "end"],
-          expect: "sort(v.begin(), v.end());"
+          expect: "sort(v.begin(), v.end());",
+          en: {
+            task: "Sort a vector in ascending order!",
+            guide: "Use the form sort(begin, end)!"
+          }
         }
       },
 
@@ -65,7 +69,12 @@ export const lessonCpp23: LessonData = {
           question: "sort()를 쓰려면 어떤 헤더가 필요할까요?",
           options: ["<iostream>", "<vector>", "<algorithm>", "<sort>"],
           answer: 2,
-          explanation: "sort()는 <algorithm> 헤더에 들어있어요!"
+          explanation: "sort()는 <algorithm> 헤더에 들어있어요!",
+          en: {
+            question: "Which header is required to use sort()?",
+            options: ["<iostream>", "<vector>", "<algorithm>", "<sort>"],
+            explanation: "sort() is found in the <algorithm> header!"
+          }
         }
       },
 
@@ -91,7 +100,11 @@ export const lessonCpp23: LessonData = {
           guide: "세 번째 인자로 greater를 써요!",
           template: "sort(v.begin(), v.end(), ___<int>());",
           answer: "greater",
-          expect: "sort(v.begin(), v.end(), greater<int>());"
+          expect: "sort(v.begin(), v.end(), greater<int>());",
+          en: {
+            task: "Sort a vector in descending order!",
+            guide: "Use greater as the third argument!"
+          }
         }
       },
 
@@ -106,7 +119,16 @@ export const lessonCpp23: LessonData = {
             "sort()의 인자가 틀려서"
           ],
           answer: 0,
-          explanation: "sort()는 <algorithm> 헤더에 있어요! #include <algorithm>을 추가해야 해요."
+          explanation: "sort()는 <algorithm> 헤더에 있어요! #include <algorithm>을 추가해야 해요.",
+          en: {
+            question: "Why does this code cause an error?",
+            options: [
+              "#include <algorithm> is missing",
+              "The vector is empty",
+              "The arguments to sort() are wrong"
+            ],
+            explanation: "sort() is in the <algorithm> header! You need to add #include <algorithm>."
+          }
         }
       },
 
@@ -154,7 +176,11 @@ export const lessonCpp23: LessonData = {
           alternateAnswers: [
             "sort(v.begin(), v.end())"
           ],
-          expect: "sort(v.begin(), v.end());"
+          expect: "sort(v.begin(), v.end());",
+          en: {
+            message: "Quick check! Do you remember how to use sort?",
+            task: "Write the code to sort vector v in ascending order!"
+          }
         }
       },
 
@@ -195,7 +221,12 @@ export const lessonCpp23: LessonData = {
           question: "lower_bound()를 쓰기 전에 반드시 해야 하는 것은?",
           options: ["벡터를 비워야 함", "벡터를 정렬해야 함", "헤더를 <utility>로 해야 함"],
           answer: 1,
-          explanation: "lower_bound는 이진 탐색이라 반드시 정렬된 배열에서만 동작해요! sort() 먼저!"
+          explanation: "lower_bound는 이진 탐색이라 반드시 정렬된 배열에서만 동작해요! sort() 먼저!",
+          en: {
+            question: "What must you do before using lower_bound()?",
+            options: ["Empty the vector", "Sort the vector", "Change the header to <utility>"],
+            explanation: "lower_bound is a binary search and only works on sorted arrays! sort() first!"
+          }
         }
       },
 
@@ -220,7 +251,11 @@ export const lessonCpp23: LessonData = {
           guide: "lower_bound(begin, end, 값) - begin = 인덱스!",
           template: "auto it = ___(v.begin(), v.end(), 5);\nint idx = it - v.begin();",
           answer: "lower_bound",
-          expect: "auto it = lower_bound(v.begin(), v.end(), 5);\nint idx = it - v.begin();"
+          expect: "auto it = lower_bound(v.begin(), v.end(), 5);\nint idx = it - v.begin();",
+          en: {
+            task: "Use lower_bound to find the index of value 5!",
+            guide: "lower_bound(begin, end, value) - begin = index!"
+          }
         }
       },
 
@@ -265,7 +300,11 @@ export const lessonCpp23: LessonData = {
           task: "정렬된 벡터 v에서 값 7 이상의 첫 위치 찾기!",
           template: "auto it = ___(v.begin(), v.end(), 7);",
           answer: "lower_bound",
-          expect: "auto it = lower_bound(v.begin(), v.end(), 7);"
+          expect: "auto it = lower_bound(v.begin(), v.end(), 7);",
+          en: {
+            message: "Quick check! Do you remember lower_bound?",
+            task: "Find the first position in sorted vector v that is >= 7!"
+          }
         }
       },
 

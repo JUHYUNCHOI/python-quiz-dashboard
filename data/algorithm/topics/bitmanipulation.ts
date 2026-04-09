@@ -7,25 +7,32 @@ export const bitManipulationTopic: AlgoTopic = {
     category: '심화 (Gold~Platinum)',
     order: 20,
     description: '비트 연산과 비트 마스크를 활용한 효율적인 문제 해결 기법',
+    titleEn: 'Bit Manipulation',
+    categoryEn: 'Advanced (Gold~Platinum)',
+    descriptionEn: 'Efficient problem solving with bitwise operations and bitmasks',
     track: 'cpp',
     stages: [
         {
             num: 1,
             title: '기본 비트 연산',
+            titleEn: 'Basic Bit Operations',
             problemIds: [
                 'lc-191',
                 'lc-136'
             ],
-            desc: '비트 연산의 기초와 XOR 활용 (Easy)'
+            desc: '비트 연산의 기초와 XOR 활용 (Easy)',
+            descEn: 'Bitwise operation fundamentals and XOR tricks (Easy)'
         },
         {
             num: 2,
             title: '비트 마스크 응용',
+            titleEn: 'Bitmask Applications',
             problemIds: [
                 'boj-11723',
                 'lc-78'
             ],
-            desc: '비트 마스크로 집합과 부분집합 다루기 (Silver~Medium)'
+            desc: '비트 마스크로 집합과 부분집합 다루기 (Silver~Medium)',
+            descEn: 'Sets and subsets with bitmasks (Silver~Medium)'
         }
     ],
     problems: [

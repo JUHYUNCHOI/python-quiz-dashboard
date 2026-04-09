@@ -7,25 +7,32 @@ export const treeTopic: AlgoTopic = {
     category: '심화 (Gold~Platinum)',
     order: 15,
     description: '계층 구조를 표현하는 트리와 다양한 순회 방법을 배웁니다',
+    titleEn: 'Tree',
+    categoryEn: 'Advanced Algorithms (Gold~Platinum)',
+    descriptionEn: 'Trees that represent hierarchical structures and various traversal methods',
     track: 'cpp',
     stages: [
         {
             num: 1,
             title: '기본 트리',
+            titleEn: 'Basic Tree',
             problemIds: [
                 'lc-104',
                 'lc-226'
             ],
-            desc: '트리의 기본적인 DFS/BFS 문제를 연습합니다 (Easy)'
+            desc: '트리의 기본적인 DFS/BFS 문제를 연습합니다 (Easy)',
+            descEn: 'Practice basic DFS/BFS tree problems (Easy)'
         },
         {
             num: 2,
             title: '트리 응용',
+            titleEn: 'Applied Tree',
             problemIds: [
                 'lc-102',
                 'boj-1991'
             ],
-            desc: '트리 순회와 레벨별 처리를 연습합니다 (Medium ~ Silver)'
+            desc: '트리 순회와 레벨별 처리를 연습합니다 (Medium ~ Silver)',
+            descEn: 'Practice tree traversal and level-by-level processing (Medium ~ Silver)'
         }
     ],
     problems: [

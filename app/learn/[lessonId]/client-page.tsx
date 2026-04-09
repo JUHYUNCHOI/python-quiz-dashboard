@@ -870,19 +870,27 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                           >
                             {/* Hover tooltip */}
                             <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:flex flex-col items-center pointer-events-none z-50">
-                              <div className="bg-indigo-500/90 text-white text-[10px] font-bold rounded px-1.5 py-0.5 whitespace-nowrap shadow leading-tight">
-                                {globalIdx + 1}
+                              <div className={cn(
+                                "text-white text-[10px] font-bold rounded px-1.5 py-0.5 whitespace-nowrap shadow leading-tight",
+                                effectiveTeacher && st.type === "practice" ? "bg-orange-500/90" : "bg-indigo-500/90"
+                              )}>
+                                {globalIdx + 1}{effectiveTeacher ? ` · ${st.type}` : ""}
                               </div>
-                              <div className="w-1.5 h-1.5 bg-indigo-500/90 rotate-45 -mt-[3px]" />
+                              <div className={cn(
+                                "w-1.5 h-1.5 rotate-45 -mt-[3px]",
+                                effectiveTeacher && st.type === "practice" ? "bg-orange-500/90" : "bg-indigo-500/90"
+                              )} />
                             </div>
                             <button
                               className={cn(
                                 "h-full w-full transition-all duration-150 origin-center group-hover:scale-y-[2.5] group-hover:rounded-sm",
                                 isCurrent && hasProgress
                                   ? "bg-indigo-500 scale-y-125"
-                                  : (effectiveTeacher || isCompleted || isBeforeCurrent || isAlreadyDone)
-                                    ? "bg-emerald-400 hover:bg-emerald-300 cursor-pointer"
-                                    : "bg-gray-200",
+                                  : effectiveTeacher && st.type === "practice"
+                                    ? "bg-orange-400 hover:bg-orange-300 cursor-pointer"
+                                    : (effectiveTeacher || isCompleted || isBeforeCurrent || isAlreadyDone)
+                                      ? "bg-emerald-400 hover:bg-emerald-300 cursor-pointer"
+                                      : "bg-gray-200",
                                 globalIdx === 0 && "rounded-l-full",
                                 globalIdx === totalSteps - 1 && "rounded-r-full",
                               )}

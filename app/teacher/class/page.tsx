@@ -16,6 +16,17 @@ import { ClassOverview } from "@/components/teacher/class-overview"
 import { getLessonName, pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
 import { StudentDetailPanel } from "@/components/teacher/student-detail-panel"
 import { PracticeSessionOverview } from "@/components/teacher/practice-session-overview"
+import { ALL_CLUSTERS } from "@/data/practice"
+
+// ─── 연습문제 클러스터 요약 타입 ─────────────────────────────
+interface ClusterSummary {
+  clusterId: string
+  clusterTitle: string
+  clusterEmoji: string
+  totalProblems: number
+  solvedProblems: number
+  stuckProblems: { problemId: string; problemTitle: string; attempts: number }[]
+}
 
 const STUDENTS_PER_PAGE = 10
 
@@ -233,6 +244,7 @@ export default function ClassDetailPage() {
   const [hwLessonsByStudent, setHwLessonsByStudent] = useState<Map<string, Set<string>>>(new Map())
   // 학생 카드 펼칠 때만 question_details 포함한 상세 세션 로드
   const [detailedSessions, setDetailedSessions] = useState<Record<string, QuizSession[]>>({})
+  const [practiceData, setPracticeData] = useState<Record<string, ClusterSummary[]>>({})
 
   useEffect(() => {
     if (!user) return
@@ -257,6 +269,50 @@ export default function ClassDetailPage() {
       if (data) setDetailedSessions(prev => ({ ...prev, [selectedStudentId]: data as QuizSession[] }))
     }
     fetchDetail()
+  }, [selectedStudentId]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // 학생 패널 열릴 때 연습문제 진도 로드 (lazy)
+  useEffect(() => {
+    if (!selectedStudentId || practiceData[selectedStudentId]) return
+    const fetchPractice = async () => {
+      const supabase = createClient()
+      const { data } = await supabase
+        .from("practice_progress")
+        .select("problem_id, solved, attempts")
+        .eq("user_id", selectedStudentId)
+      if (!data) return
+
+      const summaries: ClusterSummary[] = []
+      for (const cluster of ALL_CLUSTERS) {
+        let solvedCount = 0
+        const stuckProblems: ClusterSummary["stuckProblems"] = []
+        for (const problem of cluster.problems) {
+          const row = data.find(r => r.problem_id === problem.id)
+          if (!row) continue
+          if (row.solved) {
+            solvedCount++
+          } else if ((row.attempts ?? 0) >= 2) {
+            stuckProblems.push({
+              problemId: problem.id,
+              problemTitle: problem.title,
+              attempts: row.attempts ?? 0,
+            })
+          }
+        }
+        if (solvedCount > 0 || stuckProblems.length > 0) {
+          summaries.push({
+            clusterId: cluster.id,
+            clusterTitle: cluster.title,
+            clusterEmoji: cluster.emoji,
+            totalProblems: cluster.problems.length,
+            solvedProblems: solvedCount,
+            stuckProblems,
+          })
+        }
+      }
+      setPracticeData(prev => ({ ...prev, [selectedStudentId]: summaries }))
+    }
+    fetchPractice()
   }, [selectedStudentId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // URL에 student 파라미터 있으면 자동으로 해당 학생 패널 열기
@@ -787,6 +843,7 @@ export default function ClassDetailPage() {
             student={selectedStudent}
             detailedSessions={detailedSessions[selectedStudentId] || []}
             homeworkLessonIds={hwLessonsByStudent.get(selectedStudentId)}
+            practiceData={practiceData[selectedStudentId]}
             onClose={() => setSelectedStudentId(null)}
             onGenerateParentLink={generateParentLink}
             parentLinkCopied={parentLinkCopied}

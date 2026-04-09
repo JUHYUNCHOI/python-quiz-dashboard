@@ -91,13 +91,23 @@ interface PracticeRunnerProps {
   onSuccess?: (starred: boolean) => void
 }
 
+function localizeInitialCode(code: string, isEn: boolean): string {
+  if (!isEn) return code
+  return code
+    .replace(/\/\/ 여기에 코드를 작성하세요/g, "// Write your code here")
+    .replace(/# 여기에 코드를 작성하세요/g, "# Write your code here")
+    .replace(/\/\/ 여기에 코드 작성/g, "// Write your code here")
+    .replace(/# 여기에 코드 작성/g, "# Write your code here")
+}
+
 export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
-  const { t } = useLanguage()
+  const { t, lang: locale } = useLanguage()
+  const isEn = locale === "en"
   const lang = problem.language ?? "cpp"
   const storageKey = `practice-code-${problem.id}`
 
   const [code, setCode] = useState(() => {
-    const initial = problem.initialCode ?? ""
+    const initial = localizeInitialCode(problem.initialCode ?? "", isEn)
     if (typeof window === "undefined") return initial
     try { return localStorage.getItem(storageKey) || initial } catch { return initial }
   })
@@ -161,7 +171,7 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
   }, [code, problem, isLoading, onSuccess, storageKey, hintsShown, showSolution, t])
 
   const reset = () => {
-    setCode(problem.initialCode ?? "")
+    setCode(localizeInitialCode(problem.initialCode ?? "", isEn))
     setResults([])
     setError("")
     setAllPassed(false)
@@ -275,7 +285,13 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
           {(problem.hints ?? []).slice(0, hintsShown).map((hint, i) => (
             <div key={i} className="rounded-xl bg-yellow-500/10 border border-yellow-500/20 p-3 text-sm text-yellow-200">
               <span className="font-medium text-yellow-400">💡 {t("힌트", "Hint")} {i + 1}</span>
-              <p className="mt-1">{hint}</p>
+              <p className="mt-1 leading-relaxed">{hint.split(/(\*\*[^*\n]+\*\*|`[^`\n]+`)/g).map((seg, j) => {
+                if (seg.startsWith("**") && seg.endsWith("**"))
+                  return <strong key={j} className="font-semibold text-yellow-200">{seg.slice(2, -2)}</strong>
+                if (seg.startsWith("`") && seg.endsWith("`"))
+                  return <code key={j} className="bg-yellow-900/40 text-yellow-100 rounded px-1 font-mono text-[12px]">{seg.slice(1, -1)}</code>
+                return <span key={j}>{seg}</span>
+              })}</p>
             </div>
           ))}
           {hintsShown < (problem.hints ?? []).length && (

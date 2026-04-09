@@ -59,6 +59,11 @@ print(sum(점수) / len(점수))  # 평균!`,
         hint: "합계를 개수로 나누면 평균!",
         template: null,
         answer: "점수 = [80, 90, 70, 85, 95]\n\n평균 = sum(점수) / len(점수)\nprint(f'평균: {평균}')",
+        en: {
+          task: "Find the average of the score list",
+          guide: "Use sum() / len()!",
+          hint: "Average = total divided by count!"
+        },
         alternateAnswers: [
           "점수 = [80, 90, 70, 85, 95]\n평균 = sum(점수) / len(점수)\nprint(f'평균: {평균}')"
         ],
@@ -129,6 +134,11 @@ print(min('apple', 'banana', 'cat'))`,
         hint: "가장 큰 값에서 가장 작은 값을 빼면?",
         template: null,
         answer: "숫자 = [15, 8, 23, 4, 16]\n\nprint(max(숫자) - min(숫자))",
+        en: {
+          task: "Print the difference between the maximum and minimum values of a list",
+          guide: "Use max() - min()!",
+          hint: "Subtract the smallest value from the largest!"
+        },
         alternateAnswers: [
           "숫자 = [15, 8, 23, 4, 16]\nprint(max(숫자) - min(숫자))"
         ],
@@ -202,6 +212,11 @@ print(결과[0][0])`,
         hint: "정렬 후 [0][0]으로 1등 이름!",
         template: null,
         answer: "학생 = [('철수', 85), ('영희', 92), ('민수', 78)]\n\n결과 = sorted(학생, key=lambda x: x[1], reverse=True)\nprint(f'1등: {결과[0][0]}')",
+        en: {
+          task: "Print the name of the 1st place student sorted by score in descending order",
+          guide: "Use reverse=True for descending order!",
+          hint: "After sorting, use [0][0] to get the 1st place name!"
+        },
         alternateAnswers: [
           "학생 = [('철수', 85), ('영희', 92), ('민수', 78)]\n결과 = sorted(학생, key=lambda x: x[1], reverse=True)\nprint(f'1등: {결과[0][0]}')"
         ],
@@ -276,6 +291,11 @@ print(sum(결과))`,
         hint: "list(map(int, ...))로 변환!",
         template: null,
         answer: "문자 = ['80', '90', '70']\n\n숫자 = list(map(int, 문자))\nprint(sum(숫자) / len(숫자))",
+        en: {
+          task: "Convert string numbers to integers then find the average",
+          guide: "map() + sum() / len()",
+          hint: "Use list(map(int, ...)) to convert!"
+        },
         alternateAnswers: [
           "문자 = ['80', '90', '70']\n숫자 = list(map(int, 문자))\nprint(sum(숫자) / len(숫자))"
         ],
@@ -292,6 +312,11 @@ print(sum(결과))`,
         hint: "max() * min()",
         template: null,
         answer: "숫자 = [2, 5, 1, 8, 3]\n\nprint(max(숫자) * min(숫자))",
+        en: {
+          message: "🔄 Quick review! max/min!",
+          task: "Print the product of the maximum and minimum values of a list",
+          hint: "max() * min()"
+        },
         alternateAnswers: [
           "숫자 = [2, 5, 1, 8, 3]\nprint(max(숫자) * min(숫자))"
         ],
@@ -363,6 +388,11 @@ print(결과)`,
         hint: "lambda x: x > 0 조건 사용!",
         template: null,
         answer: "숫자 = [3, -1, 4, -2, 5]\n\n양수 = list(filter(lambda x: x > 0, 숫자))\nprint(sum(양수))",
+        en: {
+          task: "Filter only positive numbers and find the sum",
+          guide: "filter() + sum()",
+          hint: "Use the condition lambda x: x > 0!"
+        },
         alternateAnswers: [
           "숫자 = [3, -1, 4, -2, 5]\n양수 = list(filter(lambda x: x > 0, 숫자))\nprint(sum(양수))"
         ],
@@ -394,6 +424,11 @@ for i, f in enumerate(과일):
         hint: "두 번째 인자로 시작 번호 지정!",
         template: null,
         answer: "학생 = ['철수', '영희', '민수']\n\nfor i, name in enumerate(학생, 1):\n    print(f'{i}등: {name}')",
+        en: {
+          task: "Print rankings starting from 1 using enumerate",
+          guide: "Use enumerate(list, 1) to start from 1!",
+          hint: "Specify the starting number as the second argument!"
+        },
         alternateAnswers: [
           "학생 = ['철수', '영희', '민수']\nfor i, name in enumerate(학생, 1):\n    print(f'{i}등: {name}')"
         ],
@@ -427,6 +462,11 @@ for name, score in zip(이름, 점수):
         hint: "zip을 dict()로 감싸면 딕셔너리!",
         template: null,
         answer: "과목 = ['국어', '영어', '수학']\n점수 = [90, 85, 95]\n\n성적표 = dict(zip(과목, 점수))\nprint(성적표)",
+        en: {
+          task: "Use zip to combine two lists into a dictionary",
+          guide: "dict(zip(keys, values))",
+          hint: "Wrap zip with dict() to get a dictionary!"
+        },
         alternateAnswers: [
           "과목 = ['국어', '영어', '수학']\n점수 = [90, 85, 95]\n성적표 = dict(zip(과목, 점수))\nprint(성적표)"
         ],

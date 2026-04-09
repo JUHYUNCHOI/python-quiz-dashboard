@@ -70,7 +70,12 @@ print(nums[2:])`,
         template: "colors = ['빨강', '주황', '노랑', '초록', '파랑']\nprint(colors[:___])",
         blanksAnswer: ["3"],
         answer: "colors = ['빨강', '주황', '노랑', '초록', '파랑']\nprint(colors[:3])",
-        expect: "['빨강', '주황', '노랑']"
+        expect: "['빨강', '주황', '노랑']",
+        en: {
+          task: "Slice only the first 3 elements from the list",
+          guide: "Use [:3]!",
+          hint: "Omitting start means from the beginning!"
+        }
       }
     },
     {
@@ -79,7 +84,12 @@ print(nums[2:])`,
         question: "nums = [1,2,3,4,5] 일 때 nums[1:3]의 결과는?",
         options: ["[1, 2, 3]", "[2, 3]", "[2, 3, 4]", "[1, 2]"],
         answer: 1,
-        explanation: "인덱스 1부터 2까지! end(3)는 포함 안 돼요. 결과: [2, 3]"
+        explanation: "인덱스 1부터 2까지! end(3)는 포함 안 돼요. 결과: [2, 3]",
+        en: {
+          question: "Given nums = [1,2,3,4,5], what is nums[1:3]?",
+          options: ["[1, 2, 3]", "[2, 3]", "[2, 3, 4]", "[1, 2]"],
+          explanation: "From index 1 to 2! end(3) is not included. Result: [2, 3]"
+        }
       }
     },
     {
@@ -115,7 +125,11 @@ print(nums[2:])`,
         template: "data = [10, 20, 30, 40, 50]\nprint(data[___:___])",
         blanksAnswer: ["1", "3"],
         answer: "data = [10, 20, 30, 40, 50]\nprint(data[1:3])",
-        expect: "[20, 30]"
+        expect: "[20, 30]",
+        en: {
+          message: "🔄 Basic slicing review!",
+          task: "Slice the list from index 1 to 3 (3 not included)"
+        }
       }
     },
     {
@@ -159,7 +173,12 @@ print(nums[::-1])`,
         template: "data = ['a', 'b', 'c', 'd', 'e', 'f']\nprint(data[___::___])",
         blanksAnswer: ["1", "2"],
         answer: "data = ['a', 'b', 'c', 'd', 'e', 'f']\nprint(data[1::2])",
-        expect: "['b', 'd', 'f']"
+        expect: "['b', 'd', 'f']",
+        en: {
+          task: "Get only the elements at odd indices (1, 3, 5) from the list",
+          guide: "[1::2] → every 2 steps starting from index 1!",
+          hint: "Set start to 1, step to 2!"
+        }
       }
     },
     {
@@ -172,7 +191,12 @@ print(nums[::-1])`,
         template: "words = ['I', 'love', 'Python']\nprint(words[::___])",
         blanksAnswer: ["-1"],
         answer: "words = ['I', 'love', 'Python']\nprint(words[::-1])",
-        expect: "['Python', 'love', 'I']"
+        expect: "['Python', 'love', 'I']",
+        en: {
+          task: "Reverse and print the list",
+          guide: "Use [::-1]!",
+          hint: "Setting step to -1 reverses it!"
+        }
       }
     },
     {
@@ -181,7 +205,12 @@ print(nums[::-1])`,
         question: "[0,1,2,3,4,5][::3]의 결과는?",
         options: ["[0, 3]", "[0, 1, 2]", "[3, 4, 5]", "[0, 3, 6]"],
         answer: 0,
-        explanation: "인덱스 0에서 시작해서 3칸씩 건너뛰면 인덱스 0, 3 → [0, 3]"
+        explanation: "인덱스 0에서 시작해서 3칸씩 건너뛰면 인덱스 0, 3 → [0, 3]",
+        en: {
+          question: "What is the result of [0,1,2,3,4,5][::3]?",
+          options: ["[0, 3]", "[0, 1, 2]", "[3, 4, 5]", "[0, 3, 6]"],
+          explanation: "Starting at index 0, skip every 3 steps → indices 0, 3 → [0, 3]"
+        }
       }
     },
     {
@@ -217,7 +246,11 @@ print(nums[::-1])`,
         template: "nums = [5, 10, 15, 20]\nprint(nums[::___])",
         blanksAnswer: ["-1"],
         answer: "nums = [5, 10, 15, 20]\nprint(nums[::-1])",
-        expect: "[20, 15, 10, 5]"
+        expect: "[20, 15, 10, 5]",
+        en: {
+          message: "🔄 Step slicing review!",
+          task: "Reverse and print the list"
+        }
       }
     },
     {
@@ -271,7 +304,12 @@ print(ext)`,
         template: "text = \"프로그래밍은 재밌다!\"\nprint(text[:___])",
         blanksAnswer: ["5"],
         answer: "text = \"프로그래밍은 재밌다!\"\nprint(text[:5])",
-        expect: "프로그래밍은"
+        expect: "프로그래밍은",
+        en: {
+          task: "Print only the first 5 characters of the string",
+          guide: "Use [:5]!",
+          hint: "Set end to 5!"
+        }
       }
     },
     {
@@ -284,7 +322,12 @@ print(ext)`,
         template: "word = 'level'\nprint(word ___ word[::___])",
         blanksAnswer: ["==", "-1"],
         answer: "word = 'level'\nprint(word == word[::-1])",
-        expect: "True"
+        expect: "True",
+        en: {
+          task: "Check if 'level' is a palindrome (reads the same forwards and backwards)",
+          guide: "Compare original == reversed!",
+          hint: "Compare with word == word[::-1]!"
+        }
       }
     },
     {

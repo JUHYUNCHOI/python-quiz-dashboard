@@ -67,7 +67,11 @@ export const lesson6: LessonData = {
           task: "'Hello' + ' ' + 'World' 출력해봐",
           template: null,
           answer: "print('Hello' + ' ' + 'World')",
-          expect: "Hello World"
+          expect: "Hello World",
+          en: {
+            message: "Wait! Remember string concatenation?",
+            task: "Print 'Hello' + ' ' + 'World'"
+          }
         }
       },
 
@@ -92,7 +96,12 @@ export const lesson6: LessonData = {
           hint: "print('hello world'.upper())",
           template: null,
           answer: "print('hello world'.upper())",
-          expect: "HELLO WORLD"
+          expect: "HELLO WORLD",
+          en: {
+            task: "Make it print like this ↓\nHELLO WORLD",
+            guide: "Use .upper()!",
+            hint: "print('hello world'.upper())"
+          }
         }
       },
 
@@ -117,7 +126,12 @@ export const lesson6: LessonData = {
           hint: "print('HELLO WORLD'.lower())",
           template: null,
           answer: "print('HELLO WORLD'.lower())",
-          expect: "hello world"
+          expect: "hello world",
+          en: {
+            task: "Make it print like this ↓\nhello world",
+            guide: "Use .lower()!",
+            hint: "print('HELLO WORLD'.lower())"
+          }
         }
       },
 
@@ -132,7 +146,16 @@ export const lesson6: LessonData = {
             "'Python' (변화 없음)"
           ],
           answer: 0,
-          explanation: "upper()는 모든 글자를 대문자로 바꿔! 'Python' → 'PYTHON'"
+          explanation: "upper()는 모든 글자를 대문자로 바꿔! 'Python' → 'PYTHON'",
+          en: {
+            question: "What is the result of 'Python'.upper()?",
+            options: [
+              "'PYTHON'",
+              "'python'",
+              "'Python' (no change)"
+            ],
+            explanation: "upper() converts all letters to uppercase! 'Python' → 'PYTHON'"
+          }
         }
       },
 
@@ -183,7 +206,12 @@ export const lesson6: LessonData = {
           hint: "print('  코딩  '.strip())",
           template: null,
           answer: "print('  코딩  '.strip())",
-          expect: "코딩"
+          expect: "코딩",
+          en: {
+            task: "Make it print like this ↓\n코딩",
+            guide: "Use .strip()!",
+            hint: "print('  코딩  '.strip())"
+          }
         }
       },
 
@@ -208,7 +236,12 @@ export const lesson6: LessonData = {
           hint: "print('나는 고양이'.replace('고양이', '강아지'))",
           template: null,
           answer: "print('나는 고양이'.replace('고양이', '강아지'))",
-          expect: "나는 강아지"
+          expect: "나는 강아지",
+          en: {
+            task: "Make it print like this ↓\n나는 강아지",
+            guide: "Use .replace('고양이', '강아지')!",
+            hint: "print('나는 고양이'.replace('고양이', '강아지'))"
+          }
         }
       },
 
@@ -224,7 +257,16 @@ export const lesson6: LessonData = {
             "에러"
           ],
           answer: 0,
-          explanation: "strip()은 앞뒤 공백을 제거하고 결과를 반환해. result에 저장했으니 'Python'이 출력돼!"
+          explanation: "strip()은 앞뒤 공백을 제거하고 결과를 반환해. result에 저장했으니 'Python'이 출력돼!",
+          en: {
+            question: "What is the result of this code?",
+            options: [
+              "'Python' (leading/trailing spaces removed)",
+              "'  Python  ' (original unchanged)",
+              "Error"
+            ],
+            explanation: "strip() removes leading/trailing spaces and returns the result. We stored it in result so 'Python' is printed!"
+          }
         }
       },
 
@@ -275,7 +317,12 @@ export const lesson6: LessonData = {
           hint: "print(len('Python'))",
           template: null,
           answer: "print(len('Python'))",
-          expect: "6"
+          expect: "6",
+          en: {
+            task: "Make it print like this ↓\n6",
+            guide: "Print len('Python')!",
+            hint: "print(len('Python'))"
+          }
         }
       },
       {
@@ -285,7 +332,11 @@ export const lesson6: LessonData = {
           guide: "'Hello World' 길이 — 공백도 포함!",
           template: null,
           answer: "print(len('Hello World'))",
-          expect: "11"
+          expect: "11",
+          en: {
+            task: "Make it print like this ↓\n11",
+            guide: "Length of 'Hello World' — space counts too!"
+          }
         }
       },
 
@@ -310,7 +361,12 @@ export const lesson6: LessonData = {
           hint: "print('Python'.find('y'))",
           template: null,
           answer: "print('Python'.find('y'))",
-          expect: "1"
+          expect: "1",
+          en: {
+            task: "Make it print like this ↓\n1",
+            guide: "Find position of 'y' in 'Python'!",
+            hint: "print('Python'.find('y'))"
+          }
         }
       },
       {
@@ -320,7 +376,11 @@ export const lesson6: LessonData = {
           guide: "'Hello'에서 없는 글자 'z' 찾기!",
           template: null,
           answer: "print('Hello'.find('z'))",
-          expect: "-1"
+          expect: "-1",
+          en: {
+            task: "Make it print like this ↓\n-1",
+            guide: "Find a character 'z' that doesn't exist in 'Hello'!"
+          }
         }
       },
 
@@ -335,7 +395,16 @@ export const lesson6: LessonData = {
             "9 (알파벳만)"
           ],
           answer: 1,
-          explanation: "len()은 공백도 글자로 세! 'Hello World' = H+e+l+l+o+' '+W+o+r+l+d = 11"
+          explanation: "len()은 공백도 글자로 세! 'Hello World' = H+e+l+l+o+' '+W+o+r+l+d = 11",
+          en: {
+            question: "What is the result of len('Hello World')?",
+            options: [
+              "10 (excluding space)",
+              "11 (including space)",
+              "9 (letters only)"
+            ],
+            explanation: "len() counts spaces too! 'Hello World' = H+e+l+l+o+' '+W+o+r+l+d = 11"
+          }
         }
       },
 
@@ -373,7 +442,11 @@ export const lesson6: LessonData = {
           task: "'I like cats' 에서 'cats' 를 'dogs' 로 바꿔서 출력해봐",
           template: null,
           answer: "print('I like cats'.replace('cats', 'dogs'))",
-          expect: "I like dogs"
+          expect: "I like dogs",
+          en: {
+            message: "Remember replace()?",
+            task: "Replace 'cats' with 'dogs' in 'I like cats' and print it"
+          }
         }
       },
 
@@ -398,7 +471,12 @@ export const lesson6: LessonData = {
           hint: "print('  python  '.strip().upper())",
           template: null,
           answer: "print('  python  '.strip().upper())",
-          expect: "PYTHON"
+          expect: "PYTHON",
+          en: {
+            task: "Make it print like this ↓\nPYTHON",
+            guide: "Chain .strip().upper()!",
+            hint: "print('  python  '.strip().upper())"
+          }
         }
       },
 

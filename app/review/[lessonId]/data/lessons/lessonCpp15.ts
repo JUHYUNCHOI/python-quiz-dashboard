@@ -67,7 +67,11 @@ export const lessonCpp15: LessonData = {
           template: 'pair<___, ___> student("철수", 95);',
           answer: "string",
           blanksAnswer: ["string", "int"],
-          expect: 'pair<string, int> student("철수", 95);'
+          expect: 'pair<string, int> student("철수", 95);',
+          en: {
+            task: "Declare a pair that combines string and int!",
+            guide: "Use the form: pair<type1, type2>"
+          }
         }
       },
 
@@ -79,7 +83,11 @@ export const lessonCpp15: LessonData = {
           guide: ".first 또는 .second를 써요!",
           template: "cout << student.___ << endl;",
           answer: "first",
-          expect: "cout << student.first << endl;"
+          expect: "cout << student.first << endl;",
+          en: {
+            task: "Get the first value from the pair!",
+            guide: "Use .first or .second!"
+          }
         }
       },
 
@@ -89,7 +97,12 @@ export const lessonCpp15: LessonData = {
           question: "pair<int, string> p(1, \"hello\"); 에서 p.second의 값은?",
           options: ["1", "\"hello\"", "에러", "(1, \"hello\")"],
           answer: 1,
-          explanation: ".second는 두 번째 값이에요! pair<int, string>이니까 second는 string 타입으로 \"hello\"!"
+          explanation: ".second는 두 번째 값이에요! pair<int, string>이니까 second는 string 타입으로 \"hello\"!",
+          en: {
+            question: "What is the value of p.second in pair<int, string> p(1, \"hello\");?",
+            options: ["1", "\"hello\"", "error", "(1, \"hello\")"],
+            explanation: ".second is the second value! Since it's pair<int, string>, second is of type string — \"hello\"!"
+          }
         }
       },
 
@@ -104,7 +117,16 @@ export const lessonCpp15: LessonData = {
             "pair를 초기화 안 해서"
           ],
           answer: 0,
-          explanation: "pair는 딱 2개의 값만 저장해요! .first와 .second만 있고, .third는 없어요!"
+          explanation: "pair는 딱 2개의 값만 저장해요! .first와 .second만 있고, .third는 없어요!",
+          en: {
+            question: "Why does this code cause an error?",
+            options: [
+              "pair only has first and second — there is no third!",
+              "Cannot assign values to a pair",
+              "pair is not initialized"
+            ],
+            explanation: "pair stores exactly 2 values! Only .first and .second exist — .third does not!"
+          }
         }
       },
 
@@ -116,7 +138,11 @@ export const lessonCpp15: LessonData = {
           guide: "make_pair(값1, 값2) 형태!",
           template: 'auto p = ___("철수", 100);',
           answer: "make_pair",
-          expect: 'auto p = make_pair("철수", 100);'
+          expect: 'auto p = make_pair("철수", 100);',
+          en: {
+            task: "Create a pair using make_pair!",
+            guide: "Use the form: make_pair(value1, value2)"
+          }
         }
       },
 
@@ -161,7 +187,11 @@ export const lessonCpp15: LessonData = {
           task: "pair에서 두 번째 값을 꺼내는 멤버 이름은?",
           template: "cout << p.___ << endl;",
           answer: "second",
-          expect: "cout << p.second << endl;"
+          expect: "cout << p.second << endl;",
+          en: {
+            message: "Quick! Remember what we learned earlier?",
+            task: "What is the member name to get the second value from a pair?"
+          }
         }
       },
 
@@ -203,7 +233,11 @@ export const lessonCpp15: LessonData = {
           template: 'vector<pair<string, int>> v;\nv.___({\"Kim\", 95});\nv.___({\"Lee\", 88});',
           answer: "push_back",
           blanksAnswer: ["push_back", "push_back"],
-          expect: 'vector<pair<string, int>> v;\nv.push_back({"Kim", 95});\nv.push_back({"Lee", 88});'
+          expect: 'vector<pair<string, int>> v;\nv.push_back({"Kim", 95});\nv.push_back({"Lee", 88});',
+          en: {
+            task: "Add 2 students to vector<pair<string, int>>!",
+            guide: "Use the form: push_back({name, score})"
+          }
         }
       },
 
@@ -213,7 +247,12 @@ export const lessonCpp15: LessonData = {
           question: "pair<int,int> a={2,5}; pair<int,int> b={2,3}; 일 때 a < b 는?",
           options: ["true (2<2 이니까)", "false (5>3 이니까)", "에러"],
           answer: 1,
-          explanation: "first가 같으면(2==2) second를 비교해요. 5 > 3이므로 a > b → a < b는 false!"
+          explanation: "first가 같으면(2==2) second를 비교해요. 5 > 3이므로 a > b → a < b는 false!",
+          en: {
+            question: "Given pair<int,int> a={2,5}; pair<int,int> b={2,3};, what is a < b?",
+            options: ["true (because 2<2)", "false (because 5>3)", "error"],
+            explanation: "When first values are equal (2==2), compare second. 5 > 3 means a > b → a < b is false!"
+          }
         }
       },
 

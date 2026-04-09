@@ -48,7 +48,11 @@ export const lesson14: LessonData = {
         template: "for i in ___(___):\n    print(i)",
         blanksAnswer: ["range", "3"],
         answer: "for i in range(3):\n    print(i)",
-        expect: "0\n1\n2"
+        expect: "0\n1\n2",
+        en: {
+          message: "🔄 for loop review!",
+          task: "Print 0 to 2 (using for loop)"
+        }
       }
     },
     {
@@ -75,7 +79,12 @@ export const lesson14: LessonData = {
         template: "n = 5\nwhile n >= ___:\n    print(n)\n    n ___ 1",
         blanksAnswer: ["1", "-="],
         answer: "n = 5\nwhile n >= 1:\n    print(n)\n    n -= 1",
-        expect: "5\n4\n3\n2\n1"
+        expect: "5\n4\n3\n2\n1",
+        en: {
+          task: "Countdown from 5 to 1",
+          guide: "Decrease the number by 1 each time!",
+          hint: "Use n -= 1!"
+        }
       }
     },
     {
@@ -84,7 +93,12 @@ export const lesson14: LessonData = {
         question: "while True:는 어떻게 될까?",
         options: ["1번 실행", "에러", "무한 반복", "실행 안 됨"],
         answer: 2,
-        explanation: "True는 항상 참이므로 무한 반복! break로 탈출해야 해요."
+        explanation: "True는 항상 참이므로 무한 반복! break로 탈출해야 해요.",
+        en: {
+          question: "What happens with while True:?",
+          options: ["Runs once", "Error", "Infinite loop", "Doesn't run"],
+          explanation: "True is always truthy, so it loops forever! Use break to exit."
+        }
       }
     },
     // ===== 직접 써보기: while 기본 =====
@@ -97,7 +111,12 @@ export const lesson14: LessonData = {
         hint: "i = 0\nwhile i < 3:\n    print(i)\n    i += 1",
         template: null,
         answer: "i = 0\nwhile i < 3:\n    print(i)\n    i += 1",
-        expect: "0\n1\n2"
+        expect: "0\n1\n2",
+        en: {
+          task: "Make it print like this ↓\n0\n1\n2",
+          guide: "Write the entire while loop yourself! (start with i = 0)",
+          hint: "i = 0\nwhile i < 3:\n    print(i)\n    i += 1"
+        }
       }
     },
     {
@@ -162,7 +181,12 @@ export const lesson14: LessonData = {
         template: "for i in range(1, 11):\n    if i % 2 ___ 0:\n        ___\n    print(i)",
         blanksAnswer: ["!=", "continue"],
         answer: "for i in range(1, 11):\n    if i % 2 != 0:\n        continue\n    print(i)",
-        expect: "2\n4\n6\n8\n10"
+        expect: "2\n4\n6\n8\n10",
+        en: {
+          task: "Print only even numbers from 1 to 10 (using continue)",
+          guide: "Use continue when odd!",
+          hint: "Skip if i % 2 != 0!"
+        }
       }
     },
     // ===== 직접 써보기: while 카운트다운 =====
@@ -174,7 +198,11 @@ export const lesson14: LessonData = {
         guide: "while 카운트다운 전체를 직접 써봐!",
         template: null,
         answer: "n = 5\nwhile n >= 1:\n    print(n)\n    n -= 1",
-        expect: "5\n4\n3\n2\n1"
+        expect: "5\n4\n3\n2\n1",
+        en: {
+          task: "Make it print like this ↓\n5\n4\n3\n2\n1",
+          guide: "Write the entire while countdown yourself!"
+        }
       }
     },
     {

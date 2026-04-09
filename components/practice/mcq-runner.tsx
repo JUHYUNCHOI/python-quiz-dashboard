@@ -4,6 +4,8 @@ import { useState } from "react"
 import { Check, X, RotateCcw } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { PracticeProblem } from "@/data/practice/types"
+import { localizeProblem } from "@/data/practice/types"
+import { useLanguage } from "@/contexts/language-context"
 
 interface McqRunnerProps {
   problem: PracticeProblem
@@ -13,9 +15,11 @@ interface McqRunnerProps {
 const LABELS = ["①", "②", "③", "④", "⑤"]
 
 export function McqRunner({ problem, onSuccess }: McqRunnerProps) {
+  const { t, lang } = useLanguage()
+  const loc = localizeProblem(problem, lang)
   const [selected, setSelected] = useState<number | null>(null)
-  const correct = problem.correctOption ?? 0
-  const options = problem.options ?? []
+  const correct = loc.correctOption ?? 0
+  const options = loc.options ?? []
 
   const handleSelect = (i: number) => {
     if (selected !== null) return
@@ -31,25 +35,25 @@ export function McqRunner({ problem, onSuccess }: McqRunnerProps) {
     <div className="flex flex-col gap-3">
       {/* 문제 카드: 설명 + 코드 함께 */}
       <div className="rounded-2xl bg-white border border-gray-200 shadow-sm overflow-hidden">
-        {problem.description && (
+        {loc.description && (
           <p className="px-5 pt-4 pb-3 text-gray-700 text-sm leading-relaxed border-b border-gray-100">
-            {problem.description}
+            {loc.description}
           </p>
         )}
 
-        {problem.codeSnippet && (
+        {loc.codeSnippet && (
           <div className="relative bg-[#1a1b2e] px-5 py-4">
             <span className="absolute top-2.5 right-3 text-[10px] text-white/25 font-mono select-none">
-              {problem.language === "python" ? "Python" : "C++"}
+              {loc.language === "python" ? "Python" : "C++"}
             </span>
             <pre className="font-mono text-sm text-[#cdd6f4] overflow-x-auto leading-6 whitespace-pre-wrap">
-              {problem.codeSnippet}
+              {loc.codeSnippet}
             </pre>
           </div>
         )}
 
         {/* 문제만 있고 코드 없을 때 여백 보정 */}
-        {!problem.codeSnippet && !problem.description && null}
+        {!loc.codeSnippet && !loc.description && null}
       </div>
 
       {/* 선택지 */}
@@ -87,7 +91,7 @@ export function McqRunner({ problem, onSuccess }: McqRunnerProps) {
 
               {/* 선택지 텍스트 */}
               <span className={cn(
-                "flex-1 font-mono text-sm",
+                "flex-1 font-mono text-sm whitespace-pre-wrap",
                 !answered ? "text-gray-800" :
                 isCorrect ? "text-emerald-700 font-semibold" :
                 isSelected ? "text-red-700" : "text-gray-500"
@@ -114,19 +118,19 @@ export function McqRunner({ problem, onSuccess }: McqRunnerProps) {
               "text-sm font-bold",
               isRight ? "text-emerald-700" : "text-red-600"
             )}>
-              {isRight ? "✅ 정답!" : "❌ 오답!"}
+              {isRight ? t("✅ 정답!", "✅ Correct!") : t("❌ 오답!", "❌ Wrong!")}
             </span>
             {!isRight && (
               <button
                 onClick={reset}
                 className="flex items-center gap-1 text-xs text-indigo-500 hover:text-indigo-700 font-medium"
               >
-                <RotateCcw className="w-3 h-3" /> 다시 풀기
+                <RotateCcw className="w-3 h-3" /> {t("다시 풀기", "Try again")}
               </button>
             )}
           </div>
-          {problem.explanation && (
-            <p className="text-gray-600 text-sm leading-relaxed">{problem.explanation}</p>
+          {loc.explanation && (
+            <p className="text-gray-600 text-sm leading-relaxed">{loc.explanation}</p>
           )}
         </div>
       )}

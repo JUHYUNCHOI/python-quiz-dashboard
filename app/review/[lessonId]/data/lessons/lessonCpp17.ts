@@ -70,7 +70,11 @@ export const lessonCpp17: LessonData = {
           guide: "find(시작, 끝, 찾을 값) 형태!",
           template: "auto it = ___(v.begin(), v.end(), 30);",
           answer: "find",
-          expect: "auto it = find(v.begin(), v.end(), 30);"
+          expect: "auto it = find(v.begin(), v.end(), 30);",
+          en: {
+            task: "Find the value 30 in a vector!",
+            guide: "Use the form find(begin, end, value)!"
+          }
         }
       },
 
@@ -83,7 +87,11 @@ export const lessonCpp17: LessonData = {
           guide: "count(시작, 끝, 값) 형태!",
           template: "int cnt = ___(v.begin(), v.end(), 2);",
           answer: "count",
-          expect: "int cnt = count(v.begin(), v.end(), 2);"
+          expect: "int cnt = count(v.begin(), v.end(), 2);",
+          en: {
+            task: "Count how many times the value 2 appears in the vector!",
+            guide: "Use the form count(begin, end, value)!"
+          }
         }
       },
 
@@ -128,7 +136,17 @@ export const lessonCpp17: LessonData = {
             "벡터를 복사해야 한다"
           ],
           answer: 1,
-          explanation: "binary_search(이진 탐색)는 정렬된 데이터에서만 올바르게 동작해요! 먼저 sort() 하세요."
+          explanation: "binary_search(이진 탐색)는 정렬된 데이터에서만 올바르게 동작해요! 먼저 sort() 하세요.",
+          en: {
+            question: "What must you do before using binary_search()?",
+            options: [
+              "Empty the vector",
+              "Sort the vector",
+              "Check the vector size",
+              "Copy the vector"
+            ],
+            explanation: "binary_search (binary search) only works correctly on sorted data! Use sort() first."
+          }
         }
       },
 
@@ -144,7 +162,16 @@ export const lessonCpp17: LessonData = {
             "bool 타입에 저장할 수 없다"
           ],
           answer: 0,
-          explanation: "binary_search는 정렬된 벡터에서만 정확해요! 먼저 sort(v.begin(), v.end());를 해야 해요."
+          explanation: "binary_search는 정렬된 벡터에서만 정확해요! 먼저 sort(v.begin(), v.end());를 해야 해요.",
+          en: {
+            question: "What is wrong with this code?",
+            options: [
+              "The vector is not sorted, so the result may be wrong",
+              "The arguments to binary_search are incorrect",
+              "The result cannot be stored in a bool type"
+            ],
+            explanation: "binary_search is only accurate on a sorted vector! You need to call sort(v.begin(), v.end()); first."
+          }
         }
       },
 
@@ -157,7 +184,11 @@ export const lessonCpp17: LessonData = {
           guide: "binary_search(시작, 끝, 값) — true/false 리턴!",
           template: "bool found = ___(v.begin(), v.end(), 3);",
           answer: "binary_search",
-          expect: "bool found = binary_search(v.begin(), v.end(), 3);"
+          expect: "bool found = binary_search(v.begin(), v.end(), 3);",
+          en: {
+            task: "Binary search a sorted vector for the value 3!",
+            guide: "binary_search(begin, end, value) — returns true/false!"
+          }
         }
       },
 
@@ -206,7 +237,11 @@ export const lessonCpp17: LessonData = {
           task: "벡터에서 값을 찾는 STL 함수 이름은?",
           template: "auto it = ___(v.begin(), v.end(), 30);",
           answer: "find",
-          expect: "auto it = find(v.begin(), v.end(), 30);"
+          expect: "auto it = find(v.begin(), v.end(), 30);",
+          en: {
+            message: "Quick check! Do you remember what we learned earlier?",
+            task: "What is the name of the STL function that finds a value in a vector?"
+          }
         }
       },
 
@@ -265,7 +300,11 @@ export const lessonCpp17: LessonData = {
           guide: "accumulate(시작, 끝, 초기값) 형태!",
           template: "int total = ___(v.begin(), v.end(), 0);",
           answer: "accumulate",
-          expect: "int total = accumulate(v.begin(), v.end(), 0);"
+          expect: "int total = accumulate(v.begin(), v.end(), 0);",
+          en: {
+            task: "Get the sum of a vector!",
+            guide: "Use the form accumulate(begin, end, initial_value)!"
+          }
         }
       },
 
@@ -278,7 +317,11 @@ export const lessonCpp17: LessonData = {
           guide: "*max_element(시작, 끝) 형태!",
           template: "int mx = *___(v.begin(), v.end());",
           answer: "max_element",
-          expect: "int mx = *max_element(v.begin(), v.end());"
+          expect: "int mx = *max_element(v.begin(), v.end());",
+          en: {
+            task: "Find the maximum value in a vector!",
+            guide: "Use the form *max_element(begin, end)!"
+          }
         }
       },
 
@@ -302,7 +345,12 @@ export const lessonCpp17: LessonData = {
           question: "accumulate()는 어떤 헤더에 있을까요?",
           options: ["<algorithm>", "<numeric>", "<cmath>", "<vector>"],
           answer: 1,
-          explanation: "accumulate는 <numeric> 헤더에 있어요! 다른 STL 알고리즘은 <algorithm>!"
+          explanation: "accumulate는 <numeric> 헤더에 있어요! 다른 STL 알고리즘은 <algorithm>!",
+          en: {
+            question: "Which header contains accumulate()?",
+            options: ["<algorithm>", "<numeric>", "<cmath>", "<vector>"],
+            explanation: "accumulate is in the <numeric> header! Other STL algorithms are in <algorithm>!"
+          }
         }
       },
 
@@ -318,7 +366,16 @@ export const lessonCpp17: LessonData = {
             "unique는 vector에 못 쓴다"
           ],
           answer: 0,
-          explanation: "unique()는 '연속' 중복만 제거해요! 먼저 sort()로 정렬해야 모든 중복이 제거돼요."
+          explanation: "unique()는 '연속' 중복만 제거해요! 먼저 sort()로 정렬해야 모든 중복이 제거돼요.",
+          en: {
+            question: "What is wrong with this code?",
+            options: [
+              "Not sorted, so unique doesn't work properly",
+              "The arguments to erase are incorrect",
+              "unique cannot be used with vector"
+            ],
+            explanation: "unique() only removes consecutive duplicates! You need to sort() first so all duplicates are removed."
+          }
         }
       },
 
@@ -331,7 +388,11 @@ export const lessonCpp17: LessonData = {
           guide: "reverse(시작, 끝) 형태!",
           template: "___(v.begin(), v.end());",
           answer: "reverse",
-          expect: "reverse(v.begin(), v.end());"
+          expect: "reverse(v.begin(), v.end());",
+          en: {
+            task: "Reverse a vector!",
+            guide: "Use the form reverse(begin, end)!"
+          }
         }
       },
 
@@ -380,7 +441,11 @@ export const lessonCpp17: LessonData = {
           task: "벡터의 합계를 구하는 코드를 써봐요!",
           template: "int total = ___(v.begin(), v.end(), 0);",
           answer: "accumulate",
-          expect: "int total = accumulate(v.begin(), v.end(), 0);"
+          expect: "int total = accumulate(v.begin(), v.end(), 0);",
+          en: {
+            message: "Quick check! Do you remember the function that computes the sum?",
+            task: "Write the code to get the sum of a vector!"
+          }
         }
       },
 

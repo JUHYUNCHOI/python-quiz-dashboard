@@ -21,6 +21,7 @@ import { useSwipe } from "@/hooks/use-swipe"
 import { useQuizKeyboard } from "@/hooks/use-quiz-keyboard"
 import { useSoundEffect } from "@/hooks/use-sound-effect"
 import { SoundToggle } from "@/components/sound-toggle"
+import { LanguageToggle } from "@/components/language-toggle"
 import { useGamification } from "@/hooks/use-gamification"
 import { useLanguage } from "@/contexts/language-context"
 import type { QuizQuestion } from "@/hooks/use-quiz-state"
@@ -39,6 +40,8 @@ export default function QuizPage() {
   const router = useRouter()
   const { profile } = useAuth()
   const isTeacher = profile?.role === "teacher"
+  // useLanguage는 최상단에서 — lang이 fetch에 필요하므로 먼저 선언
+  const { t, lang } = useLanguage()
 
   // 설정 없이 직접 접근하면 setup으로 redirect
   const hasSettings = useRef<boolean | null>(null)
@@ -68,7 +71,7 @@ export default function QuizPage() {
     const language = parsed.course === "cpp" ? "cpp" : "python"
     const count = parsed.questionCount || 20
 
-    fetch(`/api/questions?language=${language}`)
+    fetch(`/api/questions?language=${language}&lang=${lang}`)
       .then(res => res.json())
       .then(data => {
         const pool: QuizQuestion[] = data.questions ?? []
@@ -112,7 +115,7 @@ export default function QuizPage() {
         setIsLoadingQuestions(false)
         router.replace("/quiz/setup")
       })
-  }, [router]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [router, lang]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // 로드된 문제가 없으면 setup으로 리다이렉트
   useEffect(() => {
@@ -132,7 +135,6 @@ export default function QuizPage() {
   const quiz = useQuizState(shuffled.length > 0 ? shuffled : EMPTY_FALLBACK)
   const { play, isMuted, toggleMute } = useSoundEffect()
   const gamification = useGamification()
-  const { t } = useLanguage()
   const { isFocused, justReturnedFocus } = useFocusTracker()
   const comboTier = getComboTier(quiz.combo)
   const [reportedQuestions, setReportedQuestions] = useState<Set<number>>(new Set())
@@ -346,6 +348,7 @@ export default function QuizPage() {
                 </div>
               )}
 
+              <LanguageToggle />
               <SoundToggle isMuted={isMuted} onToggle={toggleMute} />
 
               {!isBeginnerMode && (

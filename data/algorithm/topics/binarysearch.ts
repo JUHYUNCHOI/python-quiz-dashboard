@@ -7,42 +7,53 @@ export const binarySearchTopic: AlgoTopic = {
     category: '탐색 (Silver)',
     order: 8,
     description: '정렬된 데이터에서 원하는 값을 빠르게 찾는 기법',
+    titleEn: 'Binary Search',
+    categoryEn: 'Search (Silver)',
+    descriptionEn: 'Quickly find values in sorted data by halving the search space',
     track: 'both',
     stages: [
         {
             num: 1,
             title: '기본 이분 탐색',
+            titleEn: 'Basic Binary Search',
             problemIds: [
                 'boj-1920',
                 'boj-10816'
             ],
-            desc: '배열에서 값 찾기 (Silver IV)'
+            desc: '배열에서 값 찾기 (Silver IV)',
+            descEn: 'Finding values in an array (Silver IV)'
         },
         {
             num: 2,
             title: '매개변수 탐색 입문',
+            titleEn: 'Parametric Search Intro',
             problemIds: [
                 'boj-1654',
                 'boj-2805'
             ],
-            desc: '최적값을 이분 탐색으로 (Silver II)'
+            desc: '최적값을 이분 탐색으로 (Silver II)',
+            descEn: 'Binary search for optimal values (Silver II)'
         },
         {
             num: 3,
             title: '매개변수 탐색 심화',
+            titleEn: 'Parametric Search Advanced',
             problemIds: [
                 'boj-2110',
                 'boj-1300'
             ],
-            desc: '복잡한 판별 함수 (Gold)'
+            desc: '복잡한 판별 함수 (Gold)',
+            descEn: 'Complex decision functions (Gold)'
         },
         {
             num: 4,
             title: '응용',
+            titleEn: 'Applications',
             problemIds: [
                 'boj-12015'
             ],
-            desc: 'LIS + 이분 탐색 (Gold II)'
+            desc: 'LIS + 이분 탐색 (Gold II)',
+            descEn: 'LIS + binary search (Gold II)'
         }
     ],
     problems: [

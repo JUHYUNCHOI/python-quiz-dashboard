@@ -6,6 +6,10 @@ export const pyTypeConvCluster: PracticeCluster = {
   emoji: "🔄",
   description: "int/float/str 변환, 자주 나오는 오류 — 출력 결과 맞추기",
   unlockAfter: "9",
+  en: {
+    title: "Type Conversion",
+    description: "int/float/str conversion, common errors — predict output",
+  },
   problems: [
     {
       id: "pytypeconv-001",
@@ -21,6 +25,15 @@ export const pyTypeConvCluster: PracticeCluster = {
       options: ['"42"', "42", "42.0", "오류"],
       correctOption: 1,
       explanation: "int('42')는 문자열 '42'를 정수 42로 변환합니다.",
+      en: {
+        title: "int() Basics",
+        description: "What is the output of the following code?",
+        constraints: "",
+        hints: [],
+        options: ['"42"', "42", "42.0", "Error"],
+        explanation: "int('42') converts the string '42' to the integer 42.",
+        solutionExplanation: "int('42') converts the string '42' to the integer 42.",
+      },
     },
     {
       id: "pytypeconv-002",
@@ -36,6 +49,15 @@ export const pyTypeConvCluster: PracticeCluster = {
       options: ["3", "3.14", "3.0", "ValueError"],
       correctOption: 3,
       explanation: "int()는 소수점이 있는 문자열을 직접 변환할 수 없습니다. int(float('3.14'))처럼 float()을 먼저 거쳐야 합니다.",
+      en: {
+        title: "int() with Decimal String",
+        description: "What is the result of running the following code?",
+        constraints: "",
+        hints: [],
+        options: ["3", "3.14", "3.0", "ValueError"],
+        explanation: "int() cannot directly convert a string with a decimal point. You must pass it through float() first, like int(float('3.14')).",
+        solutionExplanation: "int() cannot directly convert a string with a decimal point. You must pass it through float() first, like int(float('3.14')).",
+      },
     },
     {
       id: "pytypeconv-003",
@@ -51,6 +73,15 @@ export const pyTypeConvCluster: PracticeCluster = {
       options: ["3", "4", "3.99", "오류"],
       correctOption: 0,
       explanation: "int()로 소수를 변환하면 반올림이 아니라 소수점 이하를 버립니다. int(3.99) = 3",
+      en: {
+        title: "int() Truncates Decimals",
+        description: "What is the output of the following code?",
+        constraints: "",
+        hints: [],
+        options: ["3", "4", "3.99", "Error"],
+        explanation: "Converting a float with int() truncates (not rounds) the decimal part. int(3.99) = 3.",
+        solutionExplanation: "Converting a float with int() truncates (not rounds) the decimal part. int(3.99) = 3.",
+      },
     },
     {
       id: "pytypeconv-004",
@@ -66,6 +97,15 @@ export const pyTypeConvCluster: PracticeCluster = {
       options: ["50", "428", '"428"', "오류"],
       correctOption: 1,
       explanation: "str(42)='42', str(8)='8'. 문자열끼리 +는 이어붙이기입니다. '42'+'8'='428'",
+      en: {
+        title: "str() Then +",
+        description: "What is the output of the following code?",
+        constraints: "",
+        hints: [],
+        options: ["50", "428", '"428"', "Error"],
+        explanation: "str(42)='42', str(8)='8'. Adding strings concatenates them. '42'+'8'='428'.",
+        solutionExplanation: "str(42)='42', str(8)='8'. Adding strings concatenates them. '42'+'8'='428'.",
+      },
     },
     {
       id: "pytypeconv-005",
@@ -81,6 +121,16 @@ export const pyTypeConvCluster: PracticeCluster = {
       options: ["10", "5", "0", "ValueError"],
       correctOption: 3,
       explanation: "int()는 숫자 문자열만 변환할 수 있습니다. '열'은 숫자가 아니므로 ValueError가 발생합니다.",
+      en: {
+        title: "int() with Non-Numeric String",
+        description: "What is the result of running the following code?",
+        constraints: "",
+        hints: [],
+        codeSnippet: `print(int("ten"))`,
+        options: ["10", "5", "0", "ValueError"],
+        explanation: "int() can only convert numeric strings. 'ten' is not a number, so a ValueError is raised.",
+        solutionExplanation: "int() can only convert numeric strings. 'ten' is not a number, so a ValueError is raised.",
+      },
     },
     {
       id: "pytypeconv-006",
@@ -96,6 +146,15 @@ export const pyTypeConvCluster: PracticeCluster = {
       options: ["True False", "1 0", "0 1", "오류"],
       correctOption: 1,
       explanation: "Python에서 True = 1, False = 0입니다. 불리언은 정수의 서브타입이므로 int() 변환이 가능합니다.",
+      en: {
+        title: "int(True) / int(False)",
+        description: "What is the output of the following code?",
+        constraints: "",
+        hints: [],
+        options: ["True False", "1 0", "0 1", "Error"],
+        explanation: "In Python, True = 1 and False = 0. Boolean is a subtype of int, so int() conversion works.",
+        solutionExplanation: "In Python, True = 1 and False = 0. Boolean is a subtype of int, so int() conversion works.",
+      },
     },
     {
       id: "pytypeconv-007",
@@ -111,6 +170,15 @@ export const pyTypeConvCluster: PracticeCluster = {
       options: ["42", "42.0", '"42.0"', "오류"],
       correctOption: 1,
       explanation: "float(42)는 정수 42를 실수 42.0으로 변환합니다.",
+      en: {
+        title: "float() Conversion",
+        description: "What is the output of the following code?",
+        constraints: "",
+        hints: [],
+        options: ["42", "42.0", '"42.0"', "Error"],
+        explanation: "float(42) converts the integer 42 to the float 42.0.",
+        solutionExplanation: "float(42) converts the integer 42 to the float 42.0.",
+      },
     },
     {
       id: "pytypeconv-008",
@@ -126,6 +194,15 @@ export const pyTypeConvCluster: PracticeCluster = {
       options: ["오류", "42", '"  42  "', "0"],
       correctOption: 1,
       explanation: "int()는 앞뒤 공백을 자동으로 무시합니다. int('  42  ') = 42",
+      en: {
+        title: "int() with Whitespace String",
+        description: "What is the output of the following code?",
+        constraints: "",
+        hints: [],
+        options: ["Error", "42", '"  42  "', "0"],
+        explanation: "int() automatically ignores leading and trailing whitespace. int('  42  ') = 42.",
+        solutionExplanation: "int() automatically ignores leading and trailing whitespace. int('  42  ') = 42.",
+      },
     },
     {
       id: "pytypeconv-009",
@@ -141,6 +218,15 @@ export const pyTypeConvCluster: PracticeCluster = {
       options: ["3.14", "3", "오류", "4"],
       correctOption: 1,
       explanation: "float('3.14') = 3.14, int(3.14) = 3. 두 단계로 변환하면 소수 문자열을 정수로 만들 수 있습니다.",
+      en: {
+        title: "Two-Step Conversion",
+        description: "What is the output of the following code?",
+        constraints: "",
+        hints: [],
+        options: ["3.14", "3", "Error", "4"],
+        explanation: "float('3.14') = 3.14, then int(3.14) = 3. A two-step conversion lets you turn a decimal string into an integer.",
+        solutionExplanation: "float('3.14') = 3.14, then int(3.14) = 3. A two-step conversion lets you turn a decimal string into an integer.",
+      },
     },
     {
       id: "pytypeconv-010",
@@ -156,6 +242,15 @@ export const pyTypeConvCluster: PracticeCluster = {
       options: ["42", "오류", "42.0", "0"],
       correctOption: 1,
       explanation: "int()는 순수한 숫자 문자열만 변환합니다. '42abc'에는 문자가 포함되어 ValueError가 발생합니다.",
+      en: {
+        title: "int() with Letters",
+        description: "What is the result of running the following code?",
+        constraints: "",
+        hints: [],
+        options: ["42", "Error", "42.0", "0"],
+        explanation: "int() only converts pure numeric strings. '42abc' contains letters, so a ValueError is raised.",
+        solutionExplanation: "int() only converts pure numeric strings. '42abc' contains letters, so a ValueError is raised.",
+      },
     },
     {
       id: "pytypeconv-011",
@@ -173,6 +268,18 @@ print(type(x))`,
       options: ["<class 'int'>", "<class 'float'>", "<class 'str'>", "타입 없음"],
       correctOption: 2,
       explanation: "input()은 항상 문자열(str)을 반환합니다. 숫자를 입력해도 '42'처럼 문자열로 받습니다. 정수로 쓰려면 int(input())이 필요합니다.",
+      en: {
+        title: "input() Type",
+        description: "What type does input() return?",
+        constraints: "",
+        hints: [],
+        codeSnippet: `x = input()
+# when the user enters 42
+print(type(x))`,
+        options: ["<class 'int'>", "<class 'float'>", "<class 'str'>", "No type"],
+        explanation: "input() always returns a string (str). Even if you enter a number, it is received as '42'. Use int(input()) to get an integer.",
+        solutionExplanation: "input() always returns a string (str). Even if you enter a number, it is received as '42'. Use int(input()) to get an integer.",
+      },
     },
     {
       id: "pytypeconv-012",
@@ -189,6 +296,15 @@ print(n * 2)`,
       options: ["SyntaxError", "TypeError", "ValueError", "NameError"],
       correctOption: 2,
       explanation: "int('안녕')처럼 숫자로 변환 불가능한 값이 입력되면 ValueError가 발생합니다. 사용자 입력을 받을 때는 주의가 필요합니다.",
+      en: {
+        title: "int(input()) Error Case",
+        description: "What error occurs when the user enters '안녕' in the following code?",
+        constraints: "",
+        hints: [],
+        options: ["SyntaxError", "TypeError", "ValueError", "NameError"],
+        explanation: "When a value that cannot be converted to int (like '안녕') is passed to int(), a ValueError is raised. Always be careful with user input.",
+        solutionExplanation: "When a value that cannot be converted to int (like '안녕') is passed to int(), a ValueError is raised. Always be careful with user input.",
+      },
     },
 
     // ── 코딩 직접 해보기 ──────────────────────────────────────
@@ -217,6 +333,16 @@ n = int(input())
       solutionCode: `n = int(input())
 print(n * 2)`,
       solutionExplanation: "input()은 문자열을 반환하므로 int()로 변환한 후 계산합니다.",
+      en: {
+        title: "Read a Number with input()",
+        description: "Read an integer from input and print its doubled value.\n\nExamples:\n- Input: `7`  →  Output: `14`\n- Input: `15` →  Output: `30`",
+        constraints: "1 ≤ n ≤ 1000",
+        hints: [
+          "Use int(input()) to read an integer",
+          "Print the result with print(n * 2)",
+        ],
+        solutionExplanation: "input() returns a string, so convert it with int() before calculating.",
+      },
     },
     {
       id: "pytypeconv-c02",
@@ -245,6 +371,16 @@ print(n * 2)`,
 print(int(x))
 print(round(x))`,
       solutionExplanation: "int()는 소수점을 버리고, round()는 반올림합니다. 3.7 → int는 3, round는 4",
+      en: {
+        title: "Integer and Float Conversion",
+        description: "Read a float from input and print two lines:\n\n1. Truncated integer (discard decimal)\n2. Rounded result\n\nExample:\n- Input: `3.7`  →  Output:\n```\n3\n4\n```",
+        constraints: "Positive float input",
+        hints: [
+          "int(x) truncates (floor)",
+          "round(x) rounds to nearest integer",
+        ],
+        solutionExplanation: "int() truncates the decimal, round() rounds. 3.7 → int is 3, round is 4.",
+      },
     },
     {
       id: "pytypeconv-c03",
@@ -273,6 +409,16 @@ print(round(x))`,
 print(int(a) + int(b))
 print(a + b)`,
       solutionExplanation: "split()으로 나눈 값은 문자열입니다. 합은 int()로 변환 후 더하고, 이어붙이기는 문자열 그대로 + 연산합니다.",
+      en: {
+        title: "Sum and Concatenation",
+        description: "Read two integers separated by a space, then print:\n\n1. Their numeric sum\n2. Their string concatenation\n\nExample:\n- Input: `12 34`\n- Output:\n```\n46\n1234\n```",
+        constraints: "1 ≤ a, b ≤ 999",
+        hints: [
+          "For the sum: int(a) + int(b)",
+          "For concatenation: a + b (they are already strings after split)",
+        ],
+        solutionExplanation: "Values from split() are strings. Convert with int() for addition; use string + directly for concatenation.",
+      },
     },
     {
       id: "pytypeconv-c04",
@@ -298,6 +444,141 @@ print(a + b)`,
       solutionCode: `s = "   42   "
 print(int(s) + 8)`,
       solutionExplanation: "int()는 문자열 앞뒤 공백을 자동으로 무시하고 숫자만 변환합니다. '   42   ' → 42, 42+8=50",
+      en: {
+        title: "Type Conversion Chain",
+        description: "Convert the string `\"   42   \"` (with leading/trailing spaces) to an integer, add 8, and print the result.\n\nExpected output:\n```\n50\n```\n\nHint: int() automatically ignores leading/trailing whitespace.",
+        constraints: "No input. Declare the variable directly.",
+        hints: [
+          "int('   42   ') → 42  (whitespace is removed automatically)",
+          "42 + 8 = 50",
+        ],
+        solutionExplanation: "int() automatically strips leading/trailing whitespace and converts only the number. '   42   ' → 42, 42+8=50.",
+      },
+    },
+    {
+      id: "pytypeconv-c05",
+      cluster: "py-typeconv",
+      unlockAfter: "9",
+      type: "code",
+      difficulty: "보통",
+      title: "두 수 입력받아 나누기",
+      description: "두 정수 `a`, `b`를 한 줄에 공백으로 구분해 입력받고, 다음 세 줄을 출력하세요.\n\n- 정수 나눗셈 결과 (몫)\n- 나머지\n- 실수 나눗셈 결과 (소수점 2자리)\n\n예시:\n- 입력: `17 5`\n- 출력:\n```\n3\n2\n3.40\n```",
+      constraints: "1 ≤ b ≤ a ≤ 1000",
+      language: "python",
+      initialCode: `a, b = input().split()
+
+# a, b를 적절한 타입으로 변환해서 계산하세요
+`,
+      testCases: [
+        { stdin: "17 5", expectedOutput: "3\n2\n3.40" },
+        { stdin: "10 3", expectedOutput: "3\n1\n3.33" },
+        { stdin: "8 4", expectedOutput: "2\n0\n2.00" },
+      ],
+      hints: [
+        "split()으로 받은 값은 문자열이므로 int()로 변환",
+        "몫: a // b, 나머지: a % b",
+        "실수 나눗셈: a / b, f-string :.2f로 포맷",
+      ],
+      solutionCode: `a, b = input().split()
+a, b = int(a), int(b)
+print(a // b)
+print(a % b)
+print(f"{a / b:.2f}")`,
+      solutionExplanation: "split()은 문자열을 반환하므로 int()로 변환해야 산술 연산이 가능합니다. //는 몫, %는 나머지, /는 실수 나눗셈입니다.",
+      en: {
+        title: "Division with Two Inputs",
+        description: "Read two integers `a` and `b` on one line separated by space, then print:\n\n- Integer division (quotient)\n- Remainder\n- Float division (2 decimal places)\n\nExample:\n- Input: `17 5`\n- Output:\n```\n3\n2\n3.40\n```",
+        constraints: "1 ≤ b ≤ a ≤ 1000",
+        hints: [
+          "Values from split() are strings — convert with int()",
+          "Quotient: a // b, Remainder: a % b",
+          "Float division: a / b, format with f-string :.2f",
+        ],
+        solutionExplanation: "split() returns strings, so convert with int() before arithmetic. // is floor division, % is remainder, / is float division.",
+      },
+    },
+    {
+      id: "pytypeconv-c06",
+      cluster: "py-typeconv",
+      unlockAfter: "9",
+      type: "code",
+      difficulty: "어려움",
+      title: "온도 변환기",
+      description: "섭씨 온도를 실수로 입력받아 화씨로 변환해 출력하세요.\n\n공식: `F = C × 9 / 5 + 32`\n\n예시:\n- 입력: `0`  →  출력: `32.00`\n- 입력: `100` →  출력: `212.00`\n- 입력: `37.5` →  출력: `99.50`\n\n출력은 소수점 2자리로 맞춥니다.",
+      constraints: "-273.15 ≤ C ≤ 1000",
+      language: "python",
+      initialCode: `# 섭씨를 입력받아 화씨로 변환하세요
+`,
+      testCases: [
+        { stdin: "0", expectedOutput: "32.00" },
+        { stdin: "100", expectedOutput: "212.00" },
+        { stdin: "37.5", expectedOutput: "99.50" },
+        { stdin: "-40", expectedOutput: "-40.00" },
+      ],
+      hints: [
+        "float(input())으로 실수를 입력받습니다",
+        "F = C * 9 / 5 + 32",
+        "f\"{F:.2f}\"로 소수점 2자리 출력",
+      ],
+      solutionCode: `C = float(input())
+F = C * 9 / 5 + 32
+print(f"{F:.2f}")`,
+      solutionExplanation: "float(input())으로 실수 입력을 받습니다. 공식 적용 후 f-string :.2f로 2자리 포맷합니다.",
+      en: {
+        title: "Temperature Converter",
+        description: "Read a Celsius temperature as a float and convert it to Fahrenheit.\n\nFormula: `F = C × 9 / 5 + 32`\n\nExamples:\n- Input: `0`   →  Output: `32.00`\n- Input: `100`  →  Output: `212.00`\n- Input: `37.5` →  Output: `99.50`\n\nPrint with 2 decimal places.",
+        constraints: "-273.15 ≤ C ≤ 1000",
+        hints: [
+          "Read a float with float(input())",
+          "F = C * 9 / 5 + 32",
+          'Format with f"{F:.2f}"',
+        ],
+        solutionExplanation: "Use float(input()) to read a decimal input. Apply the formula, then format with f-string :.2f.",
+      },
+    },
+    {
+      id: "pytypeconv-c07",
+      cluster: "py-typeconv",
+      unlockAfter: "9",
+      type: "code",
+      difficulty: "어려움",
+      title: "물건 가격 계산",
+      description: "물건 가격(`price`)과 개수(`count`)를 각각 한 줄씩 입력받아, 총 금액과 10% 할인된 금액을 출력하세요.\n\n예시:\n- 입력:\n```\n1500\n4\n```\n- 출력:\n```\n총 금액: 6000원\n할인 금액: 5400원\n```\n\n할인 금액은 정수로 출력합니다 (소수점 버림).",
+      constraints: "1 ≤ price ≤ 100000, 1 ≤ count ≤ 100",
+      language: "python",
+      initialCode: `price = int(input())
+count = int(input())
+
+# 총 금액과 10% 할인 금액을 계산해 출력하세요
+`,
+      testCases: [
+        { stdin: "1500\n4", expectedOutput: "총 금액: 6000원\n할인 금액: 5400원" },
+        { stdin: "3000\n3", expectedOutput: "총 금액: 9000원\n할인 금액: 8100원" },
+        { stdin: "999\n1", expectedOutput: "총 금액: 999원\n할인 금액: 899원" },
+      ],
+      hints: [
+        "총 금액 = price * count",
+        "할인 금액 = 총 금액 * 0.9 → int()로 소수점 버림",
+        'f-string으로 "총 금액: {total}원" 형식 출력',
+      ],
+      solutionCode: `price = int(input())
+count = int(input())
+total = price * count
+discounted = int(total * 0.9)
+print(f"총 금액: {total}원")
+print(f"할인 금액: {discounted}원")`,
+      solutionExplanation: "총 금액 = price * count. 할인 금액 = 총 금액 × 0.9이며, int()로 소수점을 버립니다.",
+      en: {
+        title: "Item Price Calculator",
+        description: "Read a `price` and `count` (one per line), then print the total and 10%-discounted amount.\n\nExample:\n- Input:\n```\n1500\n4\n```\n- Output:\n```\n총 금액: 6000원\n할인 금액: 5400원\n```\n\nPrint the discounted amount as an integer (truncate decimals).",
+        constraints: "1 ≤ price ≤ 100000, 1 ≤ count ≤ 100",
+        hints: [
+          "Total = price * count",
+          "Discounted = total * 0.9 → use int() to truncate",
+          'Format with f"총 금액: {total}원"',
+        ],
+        solutionExplanation: "Total = price × count. Discounted = total × 0.9, truncated with int().",
+      },
     },
   ],
 }

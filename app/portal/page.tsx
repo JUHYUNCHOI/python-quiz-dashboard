@@ -196,6 +196,7 @@ function PortalContent() {
   const [homeworks, setHomeworks] = useState<HomeworkItem[]>([])
   const [parentLinkCopied, setParentLinkCopied] = useState(false)
   const [parentLinkLoading, setParentLinkLoading] = useState(false)
+  const [isTeacher, setIsTeacher] = useState(false)
 
   const handleRoleSelect = async (role: "student" | "teacher", joinCode?: string) => {
     setShowRoleModal(false)
@@ -221,12 +222,11 @@ function PortalContent() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
 
-      // 역할 체크: null이면 온보딩 모달, teacher면 대시보드로
+      // 역할 체크: null이면 온보딩 모달, teacher면 포털에서 전체 unlock 상태로 표시
       const { data: profileData } = await supabase
         .from("profiles").select("role").eq("id", user.id).maybeSingle()
       if (profileData?.role === "teacher") {
-        router.replace("/teacher")
-        return
+        setIsTeacher(true)
       }
       if (!profileData?.role) setShowRoleModal(true)
 
@@ -291,15 +291,8 @@ function PortalContent() {
       return
     }
 
-    // CodeQuest — 외부 사이트 (SSO 토큰 전달)
-    const supabase = createClient()
-    const { data: { session } } = await supabase.auth.getSession()
-    const trackParam = `&track=${track}`
-    if (session) {
-      window.open(`${CODEQUEST_URL}?access_token=${session.access_token}&refresh_token=${session.refresh_token}${trackParam}`, "_blank")
-    } else {
-      window.open(`${CODEQUEST_URL}?track=${track}`, "_blank")
-    }
+    // CodeQuest — 코드린 내부 /quest 페이지로 이동
+    router.push("/quest")
   }
 
   const handleShareParentReport = async () => {
@@ -350,6 +343,8 @@ function PortalContent() {
 
   // 현재 활성 단계 찾기
   function getStageStatus(stage: Stage): "completed" | "active" | "locked" {
+    // 선생님 계정: 모든 단계 unlock
+    if (isTeacher) return "active"
     if (stage.platform === "codequest") {
       // 이전 단계 완료 여부로 판단
       const idx = stages.indexOf(stage)
@@ -388,6 +383,20 @@ function PortalContent() {
       <Header />
 
       <main className="max-w-[1200px] mx-auto px-4 py-6">
+        {/* 선생님 배너 */}
+        {isTeacher && (
+          <div className="mb-4 rounded-2xl bg-indigo-50 border border-indigo-200 px-4 py-3 flex items-center justify-between gap-3">
+            <p className="text-sm text-indigo-700 font-medium">
+              📋 {t("선생님 계정 — 모든 단계가 잠금 해제됩니다", "Teacher account — all stages unlocked")}
+            </p>
+            <button
+              onClick={() => router.push("/teacher")}
+              className="shrink-0 text-xs font-bold text-indigo-600 hover:text-indigo-800 underline"
+            >
+              {t("대시보드 →", "Dashboard →")}
+            </button>
+          </div>
+        )}
         <div className="lg:flex lg:gap-8 lg:items-start">
 
         {/* ── 왼쪽: 인사 + 빠른이동 + 부모 리포트 ── */}

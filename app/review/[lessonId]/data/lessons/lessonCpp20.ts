@@ -55,7 +55,11 @@ export const lessonCpp20: LessonData = {
           guide: "bits/stdc++.h를 include 해요!",
           template: "#include <___>",
           answer: "bits/stdc++.h",
-          expect: "#include <bits/stdc++.h>"
+          expect: "#include <bits/stdc++.h>",
+          en: {
+            task: "Write the all-in-one competition header!",
+            guide: "Include bits/stdc++.h!"
+          }
         }
       },
 
@@ -71,7 +75,17 @@ export const lessonCpp20: LessonData = {
             "endl은 C++에서 없어질 예정이라"
           ],
           answer: 1,
-          explanation: "endl은 줄바꿈 + 버퍼 flush를 하지만, '\\n'은 줄바꿈만 해서 빨라요!"
+          explanation: "endl은 줄바꿈 + 버퍼 flush를 하지만, '\\n'은 줄바꿈만 해서 빨라요!",
+          en: {
+            question: "Why use '\\n' instead of endl in competitive programming?",
+            options: [
+              "endl causes errors",
+              "endl flushes the buffer and is slow",
+              "'\\n' is shorter to type",
+              "endl is scheduled to be removed from C++"
+            ],
+            explanation: "endl does newline + buffer flush, but '\\n' only does newline — which is faster!"
+          }
         }
       },
 
@@ -85,7 +99,11 @@ export const lessonCpp20: LessonData = {
           template: "ios::sync_with_stdio(___);\ncin.tie(___);",
           answer: "false",
           blanksAnswer: ["false", "NULL"],
-          expect: "ios::sync_with_stdio(false);\ncin.tie(NULL);"
+          expect: "ios::sync_with_stdio(false);\ncin.tie(NULL);",
+          en: {
+            task: "Complete the two Fast I/O lines!",
+            guide: "sync_with_stdio(false) and cin.tie(NULL)!"
+          }
         }
       },
 
@@ -101,7 +119,16 @@ export const lessonCpp20: LessonData = {
             "int 대신 long long을 써야 해요"
           ],
           answer: 0,
-          explanation: "반복문 안에서 endl을 쓰면 매번 flush해서 느려요! \"\\n\"으로 바꾸세요!"
+          explanation: "반복문 안에서 endl을 쓰면 매번 flush해서 느려요! \"\\n\"으로 바꾸세요!",
+          en: {
+            question: "This competition code has a performance issue. Where is it?",
+            options: [
+              "Using endl instead of \"\\n\" makes it slow",
+              "cin.tie(NULL) causes an error",
+              "Should use long long instead of int"
+            ],
+            explanation: "Using endl inside a loop flushes the buffer every iteration — use \"\\n\" instead!"
+          }
         }
       },
 
@@ -115,7 +142,11 @@ export const lessonCpp20: LessonData = {
           template: 'cout << n << ___;',
           answer: '"\\n"',
           alternateAnswers: ["'\\n'"],
-          expect: 'cout << n << "\\n";'
+          expect: 'cout << n << "\\n";',
+          en: {
+            task: "Output with a fast newline!",
+            guide: "Use \"\\n\" instead of endl!"
+          }
         }
       },
 
@@ -163,7 +194,11 @@ export const lessonCpp20: LessonData = {
           task: "모든 헤더를 한 번에 포함하는 include를 써봐요!",
           template: "#include <___>",
           answer: "bits/stdc++.h",
-          expect: "#include <bits/stdc++.h>"
+          expect: "#include <bits/stdc++.h>",
+          en: {
+            message: "Quick check! Do you remember the all-in-one competition header?",
+            task: "Write the include that brings in all headers at once!"
+          }
         }
       },
 
@@ -191,7 +226,17 @@ export const lessonCpp20: LessonData = {
             "에러가 난다"
           ],
           answer: 1,
-          explanation: "typedef long long ll; 은 ll을 long long의 별명으로 만들어요! ll n = long long n;"
+          explanation: "typedef long long ll; 은 ll을 long long의 별명으로 만들어요! ll n = long long n;",
+          en: {
+            question: "After typedef long long ll;, what does ll n; mean?",
+            options: [
+              "Same as long n;",
+              "Same as long long n;",
+              "Same as int n;",
+              "Causes an error"
+            ],
+            explanation: "typedef long long ll; creates ll as an alias for long long! ll n = long long n"
+          }
         }
       },
 
@@ -204,7 +249,11 @@ export const lessonCpp20: LessonData = {
           guide: "typedef 원래타입 별명; 형태!",
           template: "typedef long long ___;",
           answer: "ll",
-          expect: "typedef long long ll;"
+          expect: "typedef long long ll;",
+          en: {
+            task: "Shorten long long to ll!",
+            guide: "Use the form typedef original_type alias!"
+          }
         }
       },
 
@@ -248,7 +297,11 @@ export const lessonCpp20: LessonData = {
           guide: "#define 별명 원래코드 형태!",
           template: "#define ___ push_back",
           answer: "pb",
-          expect: "#define pb push_back"
+          expect: "#define pb push_back",
+          en: {
+            task: "Shorten push_back to pb!",
+            guide: "Use the form #define alias original_code!"
+          }
         }
       },
 
@@ -264,7 +317,16 @@ export const lessonCpp20: LessonData = {
             "#define은 함수 대신 쓸 수 없어요"
           ],
           answer: 0,
-          explanation: "x*x에서 x가 2+1이면 2+1*2+1 = 5! ((x)*(x))로 괄호를 써야 9가 돼요."
+          explanation: "x*x에서 x가 2+1이면 2+1*2+1 = 5! ((x)*(x))로 괄호를 써야 9가 돼요.",
+          en: {
+            question: "What is wrong with this macro?",
+            options: [
+              "2+1*2+1 = 5, so parentheses are needed",
+              "SQ is a reserved keyword and cannot be used as a macro name",
+              "#define cannot be used instead of a function"
+            ],
+            explanation: "In x*x, when x is 2+1 it becomes 2+1*2+1 = 5! Use ((x)*(x)) with parentheses to get 9."
+          }
         }
       },
 
@@ -278,7 +340,11 @@ export const lessonCpp20: LessonData = {
           template: "#define all(v) (v).___(), (v).___() ",
           answer: "begin",
           blanksAnswer: ["begin", "end"],
-          expect: "#define all(v) (v).begin(), (v).end()"
+          expect: "#define all(v) (v).begin(), (v).end()",
+          en: {
+            task: "Create a macro for the full range of a vector!",
+            guide: "Shorten begin() and end()!"
+          }
         }
       },
 
@@ -332,7 +398,11 @@ export const lessonCpp20: LessonData = {
             "using ll = long long;",
             "using ll = long long"
           ],
-          expect: "typedef long long ll;"
+          expect: "typedef long long ll;",
+          en: {
+            message: "Quick check! Do you remember typedef?",
+            task: "Write the code that shortens long long to ll!"
+          }
         }
       },
 

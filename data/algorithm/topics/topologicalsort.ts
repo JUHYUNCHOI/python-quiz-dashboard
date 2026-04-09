@@ -7,32 +7,41 @@ export const topologicalSortTopic: AlgoTopic = {
     category: '심화 (Gold~Platinum)',
     order: 17,
     description: 'DAG에서 선후관계를 지키며 모든 노드를 일렬로 나열하는 기법',
+    titleEn: 'Topological Sort',
+    categoryEn: 'Advanced Algorithms (Gold~Platinum)',
+    descriptionEn: 'A technique to linearly order all nodes in a DAG while respecting dependencies',
     track: 'cpp',
     stages: [
         {
             num: 1,
             title: '선수과목 (입문)',
+            titleEn: 'Prerequisites (Intro)',
             problemIds: [
                 'boj-14567'
             ],
-            desc: '위상 정렬 입문 — 선수과목 순서 구하기 (Gold V)'
+            desc: '위상 정렬 입문 — 선수과목 순서 구하기 (Gold V)',
+            descEn: 'Topological sort intro — finding prerequisite course order (Gold V)'
         },
         {
             num: 2,
             title: '기본 위상 정렬',
+            titleEn: 'Basic Topological Sort',
             problemIds: [
                 'boj-2252'
             ],
-            desc: '진입 차수와 BFS를 활용한 기본 위상 정렬 (Gold III)'
+            desc: '진입 차수와 BFS를 활용한 기본 위상 정렬 (Gold III)',
+            descEn: 'Basic topological sort using in-degree and BFS (Gold III)'
         },
         {
             num: 3,
             title: '심화 위상 정렬',
+            titleEn: 'Advanced Topological Sort',
             problemIds: [
                 'boj-1766',
                 'boj-3665'
             ],
-            desc: '우선순위 큐, 사이클 판별 등 심화 응용 (Gold I~II)'
+            desc: '우선순위 큐, 사이클 판별 등 심화 응용 (Gold I~II)',
+            descEn: 'Advanced applications: priority queue, cycle detection (Gold I~II)'
         }
     ],
     problems: [

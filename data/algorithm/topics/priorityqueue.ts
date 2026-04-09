@@ -7,34 +7,43 @@ export const priorityQueueTopic: AlgoTopic = {
     category: '심화 (Gold~Platinum)',
     order: 16,
     description: '가장 중요한 것부터 꺼내는 자료구조',
+    titleEn: 'Priority Queue',
+    categoryEn: 'Advanced Algorithms (Gold~Platinum)',
+    descriptionEn: 'A data structure that always retrieves the most important element first',
     track: 'cpp',
     stages: [
         {
             num: 1,
             title: '기본 힙 연산',
+            titleEn: 'Basic Heap Operations',
             problemIds: [
                 'boj-11279',
                 'boj-1927',
                 'boj-11286'
             ],
-            desc: '최대/최소/절댓값 힙 (Silver II)'
+            desc: '최대/최소/절댓값 힙 (Silver II)',
+            descEn: 'Max/min/absolute value heap (Silver II)'
         },
         {
             num: 2,
             title: '힙 활용',
+            titleEn: 'Heap Applications',
             problemIds: [
                 'boj-2075',
                 'boj-2696'
             ],
-            desc: '크기 제한 힙, 두 개의 힙 (Gold)'
+            desc: '크기 제한 힙, 두 개의 힙 (Gold)',
+            descEn: 'Size-limited heap, two heaps (Gold)'
         },
         {
             num: 3,
             title: '그리디 + 힙',
+            titleEn: 'Greedy + Heap',
             problemIds: [
                 'boj-1202'
             ],
-            desc: '정렬 + 힙으로 최적해 (Gold II)'
+            desc: '정렬 + 힙으로 최적해 (Gold II)',
+            descEn: 'Optimal solution with sort + heap (Gold II)'
         }
     ],
     problems: [
