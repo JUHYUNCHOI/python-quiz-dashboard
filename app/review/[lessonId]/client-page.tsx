@@ -363,31 +363,39 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
             <X className="h-5 w-5 md:h-6 md:w-6 text-gray-600" />
           </button>
 
-          {/* 진행 바 */}
-          <div className="flex-1 flex items-center gap-[2px] h-2.5 md:h-3">
-            {reviewSteps.map((_, idx) => {
+          {/* 진행 도트 */}
+          <div className="flex-1 flex items-center gap-1 flex-wrap">
+            {reviewSteps.map((rs, idx) => {
               const isCurrent = idx === currentIndex
               const isCompleted = completedSteps.has(idx)
               const isWrong = wrongSteps.includes(idx)
               const isClickable = effectiveTeacher || isCompleted || isCurrent
+              const typeLabel = rs.step.type === "quiz" ? "객관식" : rs.step.type === "practice" ? "빈칸" : rs.step.type === "interleaving" ? "복습" : rs.step.type === "errorQuiz" ? "오류찾기" : rs.step.type
               return (
-                <button
-                  key={idx}
-                  disabled={!isClickable}
-                  onClick={() => { if (isClickable && !isCurrent) goToStep(idx) }}
-                  className={cn(
-                    "h-full flex-1 transition-all duration-300 min-w-[3px]",
-                    isCurrent
-                      ? "bg-indigo-500 scale-y-125"
-                      : isWrong
-                        ? "bg-red-400 hover:bg-red-300 cursor-pointer"
-                        : (effectiveTeacher || isCompleted)
-                          ? "bg-emerald-400 hover:bg-emerald-300 cursor-pointer"
-                          : "bg-gray-200",
-                    idx === 0 && "rounded-l-full",
-                    idx === reviewSteps.length - 1 && "rounded-r-full",
-                  )}
-                />
+                <div key={idx} className="relative group">
+                  <button
+                    disabled={!isClickable}
+                    onClick={() => { if (isClickable && !isCurrent) goToStep(idx) }}
+                    className={cn(
+                      "rounded-full transition-all duration-200",
+                      isCurrent
+                        ? "w-4 h-2.5 bg-indigo-500"
+                        : isWrong
+                          ? "w-2.5 h-2.5 bg-red-400 hover:bg-red-300 cursor-pointer"
+                          : (effectiveTeacher || isCompleted)
+                            ? "w-2.5 h-2.5 bg-emerald-400 hover:bg-emerald-500 cursor-pointer"
+                            : "w-2.5 h-2.5 bg-gray-200 cursor-default"
+                    )}
+                  />
+                  {/* 툴팁 */}
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:flex flex-col items-center pointer-events-none z-50">
+                    <div className="bg-gray-800 text-white text-[11px] rounded-lg px-2.5 py-1.5 whitespace-nowrap shadow-lg">
+                      <p className="font-semibold">{idx + 1}번 · {typeLabel}</p>
+                      {rs.chapterTitle && <p className="text-gray-300 mt-0.5">{rs.chapterTitle}</p>}
+                    </div>
+                    <div className="w-2 h-2 bg-gray-800 rotate-45 -mt-1" />
+                  </div>
+                </div>
               )
             })}
           </div>
@@ -400,12 +408,16 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
           <LanguageToggle className="shrink-0" />
         </div>
 
-        {/* 챕터 이름 */}
-        {currentReview?.chapterTitle && (
-          <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 pb-2">
-            <p className="text-xs text-gray-500">{currentReview.chapterTitle}</p>
-          </div>
-        )}
+        {/* 레슨명 + 챕터명 */}
+        <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 pb-2 flex items-center gap-1.5">
+          <span className="text-xs font-semibold text-orange-500">{lesson.title}</span>
+          {currentReview?.chapterTitle && (
+            <>
+              <span className="text-xs text-gray-300">›</span>
+              <span className="text-xs text-gray-400">{currentReview.chapterTitle}</span>
+            </>
+          )}
+        </div>
       </div>
 
       {/* 메인 콘텐츠 */}
