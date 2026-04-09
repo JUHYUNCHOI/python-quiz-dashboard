@@ -469,8 +469,8 @@ for (int i = 0; i < 5; i++) {
         {
           id: "ch3-q1",
           type: "quiz",
-          title: "1부터 5까지 합",
-          content: `출력은?
+          title: "이 코드의 출력은?",
+          content: `sum의 최종값을 맞혀보세요.
 
 \`\`\`cpp
 int sum = 0;
