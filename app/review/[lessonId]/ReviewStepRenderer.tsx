@@ -337,10 +337,12 @@ function PredictStep({
   content,
   onCorrect,
   onWrong,
+  language = "cpp",
 }: {
   content: ExplainContent & { predict: NonNullable<ExplainContent["predict"]> }
   onCorrect: () => void
   onWrong: () => void
+  language?: "python" | "cpp"
 }) {
   const { t } = useLanguage()
   const [selected, setSelected] = useState<number | null>(null)
@@ -368,9 +370,11 @@ function PredictStep({
 
       {/* Code */}
       {content.code && (
-        <pre className="rounded-xl bg-[#1a1b2e] px-4 py-3 font-mono text-sm text-[#cdd6f4] overflow-x-auto leading-6 whitespace-pre-wrap">
-          {content.code}
-        </pre>
+        <div className="rounded-xl bg-[#1a1b2e] px-4 py-3 font-mono text-sm overflow-x-auto leading-6">
+          {language === "cpp"
+            ? highlightCpp(content.code, true)
+            : highlightPython(content.code, true)}
+        </div>
       )}
 
       {/* Prediction question */}
@@ -467,6 +471,7 @@ export function ReviewStepRenderer({ step, onCorrect, onWrong, language = "cpp" 
             content={step.content as ExplainContent & { predict: NonNullable<ExplainContent["predict"]> }}
             onCorrect={onCorrect}
             onWrong={onWrong}
+            language={language}
           />
         )
       }

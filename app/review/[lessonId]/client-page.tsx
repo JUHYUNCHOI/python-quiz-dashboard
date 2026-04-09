@@ -364,7 +364,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
           </button>
 
           {/* 진행 도트 */}
-          <div className="flex-1 flex items-center gap-1 flex-wrap">
+          <div className="flex-1 flex items-center gap-1 overflow-hidden min-w-0">
             {reviewSteps.map((rs, idx) => {
               const isCurrent = idx === currentIndex
               const isCompleted = completedSteps.has(idx)
@@ -372,12 +372,12 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
               const isClickable = effectiveTeacher || isCompleted || isCurrent
               const typeLabel = rs.step.type === "quiz" ? "객관식" : rs.step.type === "practice" ? "빈칸" : rs.step.type === "interleaving" ? "복습" : rs.step.type === "errorQuiz" ? "오류찾기" : rs.step.type
               return (
-                <div key={idx} className="relative group">
+                <div key={idx} className="relative group shrink-0">
                   <button
                     disabled={!isClickable}
                     onClick={() => { if (isClickable && !isCurrent) goToStep(idx) }}
                     className={cn(
-                      "rounded-full transition-all duration-200",
+                      "block rounded-full transition-all duration-200 p-0",
                       isCurrent
                         ? "w-4 h-2.5 bg-indigo-500"
                         : isWrong
