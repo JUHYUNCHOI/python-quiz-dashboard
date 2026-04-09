@@ -315,6 +315,23 @@ export default function QuestPage() {
     )
   }
 
+  // ── Group problems by contest (for USACO) or year (for MCC/MCO) ──
+  function groupByContest(problems: Problem[]): { contest: string; items: Problem[] }[] {
+    const map = new Map<string, Problem[]>()
+    for (const p of problems) {
+      // sub format: "Dec 2024 Bronze #1" or "MCC 2024 P1"
+      // group key = everything before the #N or PN
+      const key = p.sub.replace(/\s*#\d+$/, "").replace(/\s*P\d+$/, "").trim()
+      if (!map.has(key)) map.set(key, [])
+      map.get(key)!.push(p)
+    }
+    return Array.from(map.entries()).map(([contest, items]) => ({ contest, items }))
+  }
+
+  // Badge color per problem number within contest
+  const NUM_COLORS = ["bg-amber-100 text-amber-800", "bg-sky-100 text-sky-800", "bg-purple-100 text-purple-800",
+    "bg-green-100 text-green-800", "bg-rose-100 text-rose-800", "bg-teal-100 text-teal-800", "bg-indigo-100 text-indigo-800"]
+
   // ── Main page ────────────────────────────────
   return (
     <div className="min-h-screen bg-yellow-50">
@@ -347,10 +364,7 @@ export default function QuestPage() {
               </span>
             </div>
             <div className="h-4 bg-gray-100 border-2 border-black rounded-full overflow-hidden">
-              <div
-                className="h-full bg-green-400 transition-all duration-500"
-                style={{ width: `${overallPct}%` }}
-              />
+              <div className="h-full bg-green-400 transition-all duration-500" style={{ width: `${overallPct}%` }} />
             </div>
           </div>
         )}
@@ -361,66 +375,87 @@ export default function QuestPage() {
             const sectionSolved = section.problems.filter(p => solvedSet.has(p.id)).length
             const sectionTotal = section.problems.length
             const isExpanded = expandedSections.has(section.label)
+            const groups = groupByContest(section.problems)
 
             return (
-              <div
-                key={section.label}
-                className="border-2 border-black rounded-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] bg-white overflow-hidden"
-              >
-                {/* Section header — clickable to collapse */}
+              <div key={section.label} className="border-2 border-black rounded-xl shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] bg-white overflow-hidden">
+
+                {/* Section header */}
                 <button
                   onClick={() => toggleSection(section.label)}
                   className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors"
                 >
                   <div className="flex items-center gap-2">
                     <span className="text-xl">{section.icon}</span>
-                    <span
-                      className="font-black text-base tracking-wide uppercase"
-                      style={{ color: section.color }}
-                    >
+                    <span className="font-black text-base tracking-wide uppercase" style={{ color: section.color }}>
                       {section.label}
                     </span>
                     <span className="text-xs font-bold text-gray-500 bg-gray-100 border border-gray-300 rounded-full px-2 py-0.5">
                       {sectionSolved}/{sectionTotal}
                     </span>
                   </div>
-                  <span className="text-gray-400 font-bold text-lg">
-                    {isExpanded ? "▲" : "▼"}
-                  </span>
+                  <span className="text-gray-400 font-bold text-lg">{isExpanded ? "▲" : "▼"}</span>
                 </button>
 
-                {/* Problem grid */}
+                {/* Contest-grouped problem list */}
                 {isExpanded && (
-                  <div className="px-3 pb-3 grid grid-cols-2 sm:grid-cols-3 gap-2 border-t-2 border-black pt-3">
-                    {section.problems.map(problem => {
-                      const isSolved = solvedSet.has(problem.id)
+                  <div className="border-t-2 border-black divide-y divide-gray-100">
+                    {groups.map(({ contest, items }) => {
+                      const groupSolved = items.filter(p => solvedSet.has(p.id)).length
                       return (
-                        <Link
-                          key={problem.id}
-                          href={`/quest/${problem.id}`}
-                          className={[
-                            "flex flex-col gap-1 p-3 rounded-xl border-2 border-black",
-                            "shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]",
-                            "hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px]",
-                            "transition-all",
-                            isSolved
-                              ? "bg-green-50"
-                              : "bg-white hover:bg-gray-50",
-                          ].join(" ")}
-                        >
-                          <div className="flex items-start justify-between">
-                            <span className="text-2xl leading-none">{problem.emoji}</span>
-                            {isSolved && (
-                              <span className="text-base leading-none">✅</span>
-                            )}
+                        <div key={contest}>
+                          {/* Contest header row */}
+                          <div className="flex items-center justify-between px-4 py-2 bg-gray-50">
+                            <span className="text-xs font-black text-gray-600 uppercase tracking-wider">
+                              {section.icon} {contest}
+                            </span>
+                            <span className="text-xs font-bold text-gray-400">
+                              {groupSolved}/{items.length}
+                            </span>
                           </div>
-                          <p className="font-bold text-xs leading-tight line-clamp-2">
-                            {problem.title}
-                          </p>
-                          <p className="text-xs text-gray-500 font-medium truncate">
-                            {problem.sub}
-                          </p>
-                        </Link>
+                          {/* Problems */}
+                          <div className="flex flex-col">
+                            {items.map((problem, idx) => {
+                              const isSolved = solvedSet.has(problem.id)
+                              // Extract problem number from sub: "Bronze #2" → "#2", "P3" → "P3"
+                              const numMatch = problem.sub.match(/#(\d+)$/) || problem.sub.match(/P(\d+)$/)
+                              const numLabel = numMatch ? (problem.sub.includes("#") ? `#${numMatch[1]}` : `P${numMatch[1]}`) : `${idx + 1}`
+                              const badgeColor = NUM_COLORS[(parseInt(numMatch?.[1] ?? "1") - 1) % NUM_COLORS.length]
+
+                              return (
+                                <Link
+                                  key={problem.id}
+                                  href={`/quest/${problem.id}`}
+                                  className={[
+                                    "flex items-center gap-3 px-4 py-3 transition-all group",
+                                    isSolved
+                                      ? "bg-green-50 hover:bg-green-100"
+                                      : "bg-white hover:bg-amber-50",
+                                    "border-b border-gray-100 last:border-b-0",
+                                  ].join(" ")}
+                                >
+                                  {/* Problem number badge */}
+                                  <span className={`flex-shrink-0 text-xs font-black px-2 py-0.5 rounded-full ${badgeColor}`}>
+                                    {numLabel}
+                                  </span>
+                                  {/* Emoji */}
+                                  <span className="text-xl flex-shrink-0">{problem.emoji}</span>
+                                  {/* Title + sub */}
+                                  <div className="flex-1 min-w-0">
+                                    <p className={`font-bold text-sm truncate ${isSolved ? "text-green-700" : "text-gray-900 group-hover:text-amber-700"}`}>
+                                      {problem.title}
+                                    </p>
+                                    <p className="text-xs text-gray-400 font-medium">{problem.sub}</p>
+                                  </div>
+                                  {/* Done indicator / arrow */}
+                                  <span className="flex-shrink-0 text-base">
+                                    {isSolved ? "✅" : <span className="text-gray-300 group-hover:text-amber-400 transition-colors">→</span>}
+                                  </span>
+                                </Link>
+                              )
+                            })}
+                          </div>
+                        </div>
                       )
                     })}
                   </div>

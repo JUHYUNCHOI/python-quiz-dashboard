@@ -4,7 +4,7 @@ import { Narration, Quiz, NumInput, CodeReveal } from "@/components/quest/shared
 import { makeMooLangCh1, makeMooLangCh2 } from "./chapters";
 const A = "#2563eb";
 export default function MooLangApp() {
-  const [lang, setLang] = useState(() => typeof window !== "undefined" && (window._questLang === "en" || window.localStorage?.getItem("lang") === "en") ? "en" : "ko"); const E = lang === "en"; const [tab, setTab] = useState(0); const [si, setSi] = useState(0);
+  const [lang, setLang] = useState(() => typeof window !== "undefined" && (window._questLang === "en" || window.localStorage?.getItem("language") === "en") ? "en" : "ko"); const E = lang === "en"; const [tab, setTab] = useState(0); const [si, setSi] = useState(0);
   const [ch1Q, setCh1Q] = useState(() => makeMooLangCh1(false)); const [ch2Q, setCh2Q] = useState(() => makeMooLangCh2(false));
   const TABS = E ? ["\ud83d\udccb Problem", "\u26a1 Code"] : ["\ud83d\udccb \ubb38\uc81c", "\u26a1 \ucf54\ub4dc"];
   const setters = { 0: setCh1Q, 1: setCh2Q }, states = { 0: ch1Q, 1: ch2Q }, makers = { 0: makeMooLangCh1, 1: makeMooLangCh2 };

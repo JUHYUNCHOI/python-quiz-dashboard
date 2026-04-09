@@ -7,7 +7,7 @@ import { makeReachCh1, makeReachCh2, makeReachCh3 } from "./chapters";
 const A = "#8b5cf6";
 
 export default function ReachApp() {
-  const [lang, setLang] = useState(() => typeof window !== "undefined" && (window._questLang === "en" || window.localStorage?.getItem("lang") === "en") ? "en" : "ko");
+  const [lang, setLang] = useState(() => typeof window !== "undefined" && (window._questLang === "en" || window.localStorage?.getItem("language") === "en") ? "en" : "ko");
   const E = lang === "en";
   const [tab, setTab] = useState(0);
   const [si, setSi] = useState(0);
@@ -74,7 +74,7 @@ export default function ReachApp() {
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
         <h1 style={{ fontSize: 16, fontWeight: 800, color: A, margin: 0, fontFamily: "'Jua',sans-serif" }}>🐉 Reachability Queries</h1>
         <div style={{ display: "flex", gap: 2, background: C.card, borderRadius: 8, border: `1.5px solid ${C.border}`, padding: 2 }}>
-          {[["ko", "🇰🇷"], ["en", "🇺🇸"]].map(([v, flag]) =>
+          { false && [["ko", "🇰🇷"], ["en", "🇺🇸"]].map(([v, flag]) =>
             <button key={v} onClick={() => switchLang(v)} style={{
               background: lang === v ? C.accent : "transparent", border: "none", borderRadius: 6,
               padding: "4px 8px", cursor: "pointer", fontSize: 14, color: lang === v ? "#fff" : C.dim,

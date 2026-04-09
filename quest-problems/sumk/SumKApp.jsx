@@ -6,7 +6,7 @@ import { makeSumKCh1, makeSumKCh2 } from "./chapters";
 const A = "#8b5cf6";
 
 export default function SumKApp() {
-  const [lang, setLang] = useState(() => typeof window !== "undefined" && (window._questLang === "en" || window.localStorage?.getItem("lang") === "en") ? "en" : "ko");
+  const [lang, setLang] = useState(() => typeof window !== "undefined" && (window._questLang === "en" || window.localStorage?.getItem("language") === "en") ? "en" : "ko");
   const E = lang === "en";
   const [tab, setTab] = useState(0);
   const [si, setSi] = useState(0);

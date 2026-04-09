@@ -62,12 +62,10 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
   const { lang } = useLanguage()
   const meta = PROBLEM_MAP.get(problemId)
 
-  // Sync Coderin's language setting to quest problems
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      window._questLang = lang
-    }
-  }, [lang])
+  // Sync synchronously so lazy-loaded App components initialize with correct lang
+  if (typeof window !== "undefined") {
+    window._questLang = lang
+  }
   const idx = PROBLEM_INDEX.get(problemId) ?? -1
   const prevProblem = idx > 0 ? ALL_PROBLEMS[idx - 1] : null
   const nextProblem = idx < ALL_PROBLEMS.length - 1 ? ALL_PROBLEMS[idx + 1] : null

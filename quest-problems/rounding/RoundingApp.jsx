@@ -10,7 +10,7 @@ import {
 
 export default function RoundingApp() {
   // --- Language ---
-  const [lang, setLang] = useState(() => typeof window !== "undefined" && (window._questLang === "en" || window.localStorage?.getItem("lang") === "en") ? "en" : "ko");
+  const [lang, setLang] = useState(() => typeof window !== "undefined" && (window._questLang === "en" || window.localStorage?.getItem("language") === "en") ? "en" : "ko");
   const E = lang === "en";
 
   // --- Navigation ---

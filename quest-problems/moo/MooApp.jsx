@@ -5,7 +5,7 @@ import { MooSim, MooBruteRunner } from "./components";
 import { makeMooCh1, makeMooCh2, makeMooCh3, makeMooCh4, makeMooCh5 } from "./chapters";
 
 export default function MooApp() {
-  const [lang, setLang] = useState(() => typeof window !== "undefined" && (window._questLang === "en" || window.localStorage?.getItem("lang") === "en") ? "en" : "ko");
+  const [lang, setLang] = useState(() => typeof window !== "undefined" && (window._questLang === "en" || window.localStorage?.getItem("language") === "en") ? "en" : "ko");
   const E = lang === "en";
   const [tab, setTab] = useState(0);
   const [si, setSi] = useState(0);
