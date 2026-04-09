@@ -319,6 +319,134 @@ If T is not found in S, print \`-1\`.`,
         solutionExplanation: "`s.find(t)` returns the starting position of the substring. If absent, it returns `string::npos` (a very large value), so compare against `npos` and output -1 accordingly.",
       },
     },
+    // ── replace ───────────────────────────────────────────────────
+    {
+      id: "str-R01",
+      cluster: "strings",
+      unlockAfter: "cpp-11",
+      difficulty: "쉬움",
+      title: "단어 치환 (replace)",
+      description: `문자열 S에서 단어 A를 단어 B로 **replace를 사용해** 모두 바꾸세요.
+
+**s.replace(pos, len, newStr)** — pos 위치부터 len 글자를 newStr로 교체합니다.
+find()와 조합해 모든 등장 위치를 찾아 교체하세요.
+
+**예시:** S=\`"hello world hello"\`, A=\`"hello"\`, B=\`"hi"\` → \`"hi world hi"\``,
+      constraints: "S의 길이 ≤ 100, A 길이 ≥ 1",
+      initialCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    string s, a, b;
+    getline(cin, s);
+    getline(cin, a);
+    getline(cin, b);
+    // find()로 위치를 찾고 replace()로 교체하세요
+    // 모든 등장 위치를 바꿔야 합니다
+    cout << s << "\\n";
+    return 0;
+}`,
+      testCases: [
+        { stdin: "hello world hello\nhello\nhi", expectedOutput: "hi world hi", label: "기본" },
+        { stdin: "aaa\na\nbb", expectedOutput: "bbbbbb", label: "연속 교체" },
+        { stdin: "no match here\nxxx\nyyy", expectedOutput: "no match here", label: "없는 단어" },
+        { stdin: "cat and cat\ncat\ndog", expectedOutput: "dog and dog", label: "두 번" },
+      ],
+      hints: [
+        "size_t pos = s.find(a); 로 a의 위치를 찾고, pos != string::npos 이면 s.replace(pos, a.size(), b); 로 교체",
+        "교체 후 pos를 b.size()만큼 이동해야 다음 find()가 이미 교체된 부분을 다시 건드리지 않아요.",
+      ],
+      solutionCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    string s, a, b;
+    getline(cin, s);
+    getline(cin, a);
+    getline(cin, b);
+    size_t pos = 0;
+    while ((pos = s.find(a, pos)) != string::npos) {
+        s.replace(pos, a.size(), b);
+        pos += b.size();
+    }
+    cout << s << "\\n";
+    return 0;
+}`,
+      solutionExplanation: "find(a, pos)로 pos 이후 첫 등장 위치를 찾고, replace(pos, a.size(), b)로 교체합니다. 교체 후 pos += b.size()로 이동해 무한 루프를 방지합니다.",
+      en: {
+        title: "Word Replacement (replace)",
+        description: `In string S, replace all occurrences of word A with word B **using replace**.\n\n**s.replace(pos, len, newStr)** — replaces len characters starting at pos with newStr.\nCombine with find() to locate all occurrences.\n\n**Example:** S=\`"hello world hello"\`, A=\`"hello"\`, B=\`"hi"\` → \`"hi world hi"\``,
+        constraints: "Length of S ≤ 100, length of A ≥ 1",
+        hints: [
+          "size_t pos = s.find(a); finds the position. If pos != string::npos, use s.replace(pos, a.size(), b);",
+          "After replacing, advance pos by b.size() so find() doesn't revisit the replaced part.",
+        ],
+        solutionExplanation: "find(a, pos) finds the first occurrence after pos, replace(pos, a.size(), b) replaces it. Advancing pos += b.size() prevents infinite loops.",
+      },
+    },
+    // ── compare ───────────────────────────────────────────────────
+    {
+      id: "str-CMP01",
+      cluster: "strings",
+      unlockAfter: "cpp-11",
+      difficulty: "쉬움",
+      title: "사전 순서 비교 (compare)",
+      description: `두 문자열 A, B를 **s.compare()를 사용해** 사전순으로 비교하세요.
+
+- A가 B보다 앞이면 \`A first\`
+- B가 A보다 앞이면 \`B first\`
+- 같으면 \`equal\`
+
+**s.compare(t)** — s < t면 음수, s > t면 양수, 같으면 0을 반환합니다.`,
+      constraints: "각 문자열 길이 ≤ 50, 소문자만 사용",
+      initialCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    string a, b;
+    cin >> a >> b;
+    int result = a.compare(b);  // compare 사용
+    // result로 출력 결정
+    return 0;
+}`,
+      testCases: [
+        { stdin: "apple banana", expectedOutput: "A first", label: "apple < banana" },
+        { stdin: "zebra ant", expectedOutput: "B first", label: "zebra > ant" },
+        { stdin: "hello hello", expectedOutput: "equal", label: "같음" },
+        { stdin: "abc abcd", expectedOutput: "A first", label: "접두사" },
+      ],
+      hints: [
+        "a.compare(b)의 반환값: 음수면 a가 사전순 앞, 양수면 b가 앞, 0이면 같아요.",
+        "if (result < 0) → A first, if (result > 0) → B first, if (result == 0) → equal",
+      ],
+      solutionCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    string a, b;
+    cin >> a >> b;
+    int result = a.compare(b);
+    if (result < 0) cout << "A first\\n";
+    else if (result > 0) cout << "B first\\n";
+    else cout << "equal\\n";
+    return 0;
+}`,
+      solutionExplanation: "compare()는 사전순 비교 결과를 정수로 반환합니다. 음수=a가 앞, 양수=b가 앞, 0=같음. < 연산자로도 같은 결과를 낼 수 있지만, compare()는 부분 문자열 비교 등 확장이 가능합니다.",
+      en: {
+        title: "Lexicographic Comparison (compare)",
+        description: `Compare two strings A and B in lexicographic order **using s.compare()**.\n\n- A comes first → print \`A first\`\n- B comes first → print \`B first\`\n- Equal → print \`equal\`\n\n**s.compare(t)** — returns negative if s < t, positive if s > t, 0 if equal.`,
+        constraints: "Each string length ≤ 50, lowercase letters only",
+        hints: [
+          "a.compare(b): negative means a comes first, positive means b comes first, 0 means equal.",
+          "if (result < 0) → A first, if (result > 0) → B first, if (result == 0) → equal",
+        ],
+        solutionExplanation: "compare() returns an integer for lexicographic comparison. Negative=a first, positive=b first, 0=equal. < operator would also work, but compare() supports extensions like partial string comparison.",
+      },
+    },
     {
       id: "str-007",
       cluster: "strings",

@@ -294,6 +294,98 @@ Print the original 0-based position of the M-th document to be printed.`,
         solutionExplanation: "Queue simulation: if a higher-priority document still exists, re-enqueue the current one. Copy the queue to scan remaining elements for a higher priority.",
       },
     },
+    // ── deque 고유 연산 ───────────────────────────────────────────
+    {
+      id: "sq-DQ01",
+      cluster: "stackqueue",
+      unlockAfter: "cpp-18",
+      difficulty: "쉬움",
+      title: "양쪽 입출력 (deque)",
+      description: `**deque를 사용해** 명령에 따라 앞/뒤로 삽입하세요.
+
+명령어:
+- \`PB x\` → **push_back(x)** : 뒤에 추가
+- \`PF x\` → **push_front(x)** : 앞에 추가
+- \`POP\` → **pop_front()** : 앞에서 제거하고 출력 (비어있으면 \`-1\`)
+
+T개의 명령을 처리한 후 deque의 모든 원소를 앞에서부터 출력하세요.
+
+**deque는 앞·뒤 모두 O(1)** — vector는 앞 삽입이 O(n)이므로 이 상황엔 deque가 적합합니다.`,
+      constraints: "1 ≤ T ≤ 20",
+      initialCode: `#include <iostream>
+#include <deque>
+#include <string>
+using namespace std;
+
+int main() {
+    int t;
+    cin >> t;
+    deque<int> dq;  // deque 사용
+    while (t--) {
+        string cmd;
+        cin >> cmd;
+        if (cmd == "PB") {
+            int x; cin >> x;
+            // push_back 사용
+        } else if (cmd == "PF") {
+            int x; cin >> x;
+            // push_front 사용
+        } else {
+            // pop_front 사용, 비어있으면 -1
+        }
+    }
+    for (int x : dq) cout << x << " ";
+    cout << "\\n";
+    return 0;
+}`,
+      testCases: [
+        { stdin: "5\nPB 1\nPF 2\nPB 3\nPOP\nPB 4", expectedOutput: "1 3 4", label: "혼합" },
+        { stdin: "3\nPF 5\nPF 3\nPF 1", expectedOutput: "1 3 5", label: "앞만" },
+        { stdin: "2\nPOP\nPB 7", expectedOutput: "-1\n7", label: "빈 deque pop" },
+      ],
+      hints: [
+        "dq.push_back(x), dq.push_front(x), dq.pop_front() 세 연산을 모두 사용해야 합니다.",
+        "POP 명령에서 dq.empty() 확인 후 비어있으면 -1, 아니면 dq.front() 출력 후 pop_front().",
+      ],
+      solutionCode: `#include <iostream>
+#include <deque>
+#include <string>
+using namespace std;
+
+int main() {
+    int t;
+    cin >> t;
+    deque<int> dq;
+    while (t--) {
+        string cmd;
+        cin >> cmd;
+        if (cmd == "PB") {
+            int x; cin >> x;
+            dq.push_back(x);
+        } else if (cmd == "PF") {
+            int x; cin >> x;
+            dq.push_front(x);
+        } else {
+            if (dq.empty()) cout << "-1\\n";
+            else { cout << dq.front() << "\\n"; dq.pop_front(); }
+        }
+    }
+    for (int x : dq) cout << x << " ";
+    cout << "\\n";
+    return 0;
+}`,
+      solutionExplanation: "deque는 push_front/pop_front가 O(1)입니다. vector는 앞 삽입이 O(n)이므로 앞뒤 모두 빠른 삽입/삭제가 필요하면 deque를 씁니다.",
+      en: {
+        title: "Double-Ended Operations (deque)",
+        description: `Use a **deque** to handle front/back insertions based on commands.\n\nCommands:\n- \`PB x\` → **push_back(x)**: add to back\n- \`PF x\` → **push_front(x)**: add to front\n- \`POP\` → **pop_front()**: remove from front and print it (\`-1\` if empty)\n\nAfter T commands, print all remaining elements front to back.\n\n**deque has O(1) at both ends** — unlike vector where front insertion is O(n).`,
+        constraints: "1 ≤ T ≤ 20",
+        hints: [
+          "Use all three operations: dq.push_back(x), dq.push_front(x), dq.pop_front().",
+          "For POP: check dq.empty() first — print -1 if empty, else print dq.front() then pop_front().",
+        ],
+        solutionExplanation: "deque provides O(1) push_front/pop_front. Use deque over vector when you need fast insertion/removal at both ends.",
+      },
+    },
     {
       id: "sq-005",
       cluster: "stackqueue",

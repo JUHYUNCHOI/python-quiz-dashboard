@@ -67,6 +67,89 @@ int main() {
         solutionExplanation: "Initialize mx to v[0]. Initializing to 0 would give the wrong answer when all elements are negative.",
       },
     },
+    // ── push_back / pop_back ──────────────────────────────────────
+    {
+      id: "arr-PB01",
+      cluster: "arrays",
+      unlockAfter: "cpp-9",
+      difficulty: "쉬움",
+      title: "조건부 추가/삭제 (push_back · pop_back)",
+      description: `N개의 정수를 순서대로 처리하세요. **push_back과 pop_back을 반드시 사용하세요.**
+
+- 양수이면 벡터에 **push_back**으로 추가
+- 음수이면 벡터가 비어있지 않을 때 **pop_back**으로 마지막 원소 제거
+
+최종 벡터의 원소를 공백으로 구분해 출력하세요. (비어있으면 빈 줄 출력)
+
+**예시:** 입력 \`3 5 -1 2 -1 -1 4\` → \`4\` (3 추가→5 추가→5제거→2 추가→2제거→3제거→4 추가)`,
+      constraints: "1 ≤ N ≤ 20, -100 ≤ 각 수 ≤ 100 (0 제외)",
+      initialCode: `#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v;
+    for (int i = 0; i < n; i++) {
+        int x;
+        cin >> x;
+        if (x > 0) {
+            // push_back 사용
+        } else {
+            // pop_back 사용 (비어있지 않을 때만)
+        }
+    }
+    for (int i = 0; i < (int)v.size(); i++) {
+        if (i) cout << " ";
+        cout << v[i];
+    }
+    cout << "\\n";
+    return 0;
+}`,
+      testCases: [
+        { stdin: "7\n3 5 -1 2 -1 -1 4", expectedOutput: "4", label: "기본" },
+        { stdin: "3\n1 2 3", expectedOutput: "1 2 3", label: "모두 추가" },
+        { stdin: "4\n-1 5 -1 -1", expectedOutput: "", label: "빈 벡터" },
+        { stdin: "5\n10 20 -1 30 -1", expectedOutput: "10 30", label: "교차" },
+      ],
+      hints: [
+        "v.push_back(x)는 벡터 끝에 x를 추가합니다.",
+        "v.pop_back()은 벡터 마지막 원소를 제거합니다. v.empty()로 비어있는지 먼저 확인하세요.",
+      ],
+      solutionCode: `#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v;
+    for (int i = 0; i < n; i++) {
+        int x;
+        cin >> x;
+        if (x > 0) v.push_back(x);
+        else if (!v.empty()) v.pop_back();
+    }
+    for (int i = 0; i < (int)v.size(); i++) {
+        if (i) cout << " ";
+        cout << v[i];
+    }
+    cout << "\\n";
+    return 0;
+}`,
+      solutionExplanation: "push_back(x)는 벡터 끝에 추가, pop_back()은 끝 원소 제거입니다. pop_back 전에 empty() 확인이 필수 — 빈 벡터에서 호출하면 undefined behavior입니다.",
+      en: {
+        title: "Conditional Add/Remove (push_back · pop_back)",
+        description: `Process N integers in order. **You must use push_back and pop_back.**\n\n- Positive: **push_back** to add to the vector\n- Negative: **pop_back** to remove the last element (if non-empty)\n\nPrint the final vector elements separated by spaces (empty line if empty).\n\n**Example:** Input \`3 5 -1 2 -1 -1 4\` → \`4\``,
+        constraints: "1 ≤ N ≤ 20, -100 ≤ each value ≤ 100 (no zeros)",
+        hints: [
+          "v.push_back(x) adds x to the end of the vector.",
+          "v.pop_back() removes the last element. Check v.empty() first to avoid undefined behavior.",
+        ],
+        solutionExplanation: "push_back(x) adds to the end, pop_back() removes the last element. Always check empty() before pop_back — calling it on an empty vector is undefined behavior.",
+      },
+    },
     {
       id: "arr-002",
       cluster: "arrays",

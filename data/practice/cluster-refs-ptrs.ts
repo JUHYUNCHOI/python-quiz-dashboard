@@ -129,6 +129,92 @@ int main() {
         solutionExplanation: "A single n *= 2 is all it takes. Because n is a reference, modifying it inside the function also changes the caller's variable x.",
       },
     },
+    // ── nullptr ───────────────────────────────────────────────────
+    {
+      id: "refs-NP01",
+      cluster: "refs-ptrs",
+      unlockAfter: "cpp-13",
+      difficulty: "쉬움",
+      title: "nullptr 안전 역참조",
+      description: `포인터가 **nullptr인지 확인하고** 안전하게 역참조하세요.
+
+함수 \`safeDouble(int* p)\`를 작성하세요:
+- p가 **nullptr이면** \`-1\`을 반환
+- 아니면 \`*p × 2\`를 반환
+
+**nullptr을 반드시 직접 비교해야 합니다.** (\`if (p == nullptr)\` 또는 \`if (!p)\`)
+
+T개의 테스트케이스: \`null\` 이면 nullptr 전달, 정수면 그 값을 가진 포인터 전달.`,
+      constraints: "1 ≤ T ≤ 5, -100 ≤ 값 ≤ 100",
+      initialCode: `#include <iostream>
+using namespace std;
+
+int safeDouble(int* p) {
+    if (p == nullptr) {  // nullptr 체크
+        // -1 반환
+    }
+    // 아니면 *p × 2 반환
+}
+
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        string s;
+        cin >> s;
+        if (s == "null") {
+            cout << safeDouble(nullptr) << "\\n";
+        } else {
+            int val = stoi(s);
+            cout << safeDouble(&val) << "\\n";
+        }
+    }
+    return 0;
+}`,
+      testCases: [
+        { stdin: "3\nnull\n5\nnull", expectedOutput: "-1\n10\n-1", label: "혼합" },
+        { stdin: "2\n3\n7", expectedOutput: "6\n14", label: "유효값만" },
+        { stdin: "1\nnull", expectedOutput: "-1", label: "nullptr만" },
+      ],
+      hints: [
+        "if (p == nullptr) return -1; 로 null 포인터를 먼저 걸러내세요.",
+        "nullptr을 역참조(*p)하면 프로그램이 충돌합니다. 반드시 먼저 확인해야 해요.",
+      ],
+      solutionCode: `#include <iostream>
+using namespace std;
+
+int safeDouble(int* p) {
+    if (p == nullptr) return -1;
+    return *p * 2;
+}
+
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        string s;
+        cin >> s;
+        if (s == "null") {
+            cout << safeDouble(nullptr) << "\\n";
+        } else {
+            int val = stoi(s);
+            cout << safeDouble(&val) << "\\n";
+        }
+    }
+    return 0;
+}`,
+      solutionExplanation: "nullptr은 포인터가 아무것도 가리키지 않음을 나타냅니다. 역참조(*p) 전에 반드시 nullptr 확인이 필요합니다. if (p == nullptr) 또는 if (!p) 로 확인합니다.",
+      en: {
+        title: "Safe Nullptr Dereference",
+        description: `Check if a pointer is **nullptr** before dereferencing it safely.\n\nWrite a function \`safeDouble(int* p)\`:\n- If p is **nullptr**, return \`-1\`\n- Otherwise return \`*p × 2\`\n\n**You must explicitly compare with nullptr.** (\`if (p == nullptr)\` or \`if (!p)\`)`,
+        constraints: "1 ≤ T ≤ 5, -100 ≤ value ≤ 100",
+        hints: [
+          "Use if (p == nullptr) return -1; to filter out null pointers first.",
+          "Dereferencing (*p) a nullptr crashes the program — always check first.",
+        ],
+        solutionExplanation: "nullptr indicates a pointer pointing to nothing. Always check for nullptr before dereferencing (*p). Use if (p == nullptr) or if (!p).",
+      },
+    },
     {
       id: "refs-003",
       cluster: "refs-ptrs",

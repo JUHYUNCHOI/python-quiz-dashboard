@@ -466,6 +466,85 @@ int main() {
         solutionExplanation: "Iterate the map and print only keys with frequency ≥ 2. The `found` flag controls the `NONE` output and space separation.",
       },
     },
+    // ── unordered_map ─────────────────────────────────────────────
+    {
+      id: "ms-UM01",
+      cluster: "map-set",
+      unlockAfter: "cpp-16",
+      difficulty: "쉬움",
+      title: "빈도수 세기 (unordered_map)",
+      description: `N개의 단어를 입력받아 각 단어의 등장 횟수를 출력하세요. **unordered_map을 사용하세요.**
+
+출력은 입력에 처음 등장한 순서대로 하세요.
+
+**map vs unordered_map:** map은 키 순서 정렬 O(log n), unordered_map은 순서 없지만 평균 O(1)
+
+**예시:** \`apple banana apple\` → \`apple 2\`, \`banana 1\``,
+      constraints: "1 ≤ N ≤ 100",
+      initialCode: `#include <iostream>
+#include <unordered_map>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    unordered_map<string, int> freq;  // unordered_map 사용
+    vector<string> order;
+    for (int i = 0; i < n; i++) {
+        string w;
+        cin >> w;
+        // freq에 단어 카운트, order에 첫 등장 순서 기록
+    }
+    for (const string& w : order) {
+        cout << w << " " << freq[w] << "\\n";
+    }
+    return 0;
+}`,
+      testCases: [
+        { stdin: "3\napple banana apple", expectedOutput: "apple 2\nbanana 1", label: "기본" },
+        { stdin: "5\na b a c b", expectedOutput: "a 2\nb 2\nc 1", label: "순서 유지" },
+        { stdin: "1\nhello", expectedOutput: "hello 1", label: "단일" },
+      ],
+      hints: [
+        "unordered_map<string, int> freq; 로 선언하고 freq[word]++ 로 카운트하세요.",
+        "첫 등장 여부 확인: if (freq.count(w) == 0) order.push_back(w); 후 freq[w]++",
+      ],
+      solutionCode: `#include <iostream>
+#include <unordered_map>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    unordered_map<string, int> freq;
+    vector<string> order;
+    for (int i = 0; i < n; i++) {
+        string w;
+        cin >> w;
+        if (freq.count(w) == 0) order.push_back(w);
+        freq[w]++;
+    }
+    for (const string& w : order) {
+        cout << w << " " << freq[w] << "\\n";
+    }
+    return 0;
+}`,
+      solutionExplanation: "unordered_map은 해시 테이블 기반으로 평균 O(1) 조회/삽입입니다. map과 달리 키 정렬이 없어 순서를 별도로 vector에 기록합니다. freq.count(w)==0 으로 첫 등장 여부를 확인합니다.",
+      en: {
+        title: "Word Frequency (unordered_map)",
+        description: `Given N words, count how many times each word appears. **Use unordered_map.**\n\nPrint in the order of first appearance.\n\n**map vs unordered_map:** map sorts keys O(log n), unordered_map has no order but averages O(1)\n\n**Example:** \`apple banana apple\` → \`apple 2\`, \`banana 1\``,
+        constraints: "1 ≤ N ≤ 100",
+        hints: [
+          "Declare unordered_map<string, int> freq; and use freq[word]++ to count.",
+          "Track first appearance: if (freq.count(w) == 0) order.push_back(w); before freq[w]++",
+        ],
+        solutionExplanation: "unordered_map is hash-table based with average O(1) lookup/insert. Unlike map, keys are not sorted, so we track order separately with a vector. freq.count(w)==0 checks first appearance.",
+      },
+    },
     {
       id: "ms-008",
       cluster: "map-set",

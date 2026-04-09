@@ -384,6 +384,94 @@ int main() {
         solutionExplanation: "Two elements of recursion: base case (0! = 1) and recursive call (n * (n-1)!). Recursion expresses the current problem in terms of a smaller instance of the same problem.",
       },
     },
+    // ── 함수 오버로딩 ─────────────────────────────────────────────
+    {
+      id: "fn-OL01",
+      cluster: "functions",
+      unlockAfter: "cpp-8",
+      difficulty: "쉬움",
+      title: "오버로딩 — 면적 계산",
+      description: `**함수 오버로딩**을 사용해 같은 이름 \`area\`로 두 가지 도형의 넓이를 계산하세요.
+
+- \`area(int r)\` → 원의 넓이 (r²×3 출력, π≈3 사용)
+- \`area(int w, int h)\` → 직사각형의 넓이 (w×h 출력)
+
+입력 첫 줄: \`circle 5\` 또는 \`rect 4 3\` 형식. 케이스 수 T가 먼저 주어집니다.
+
+**반드시 함수 오버로딩을 사용하세요.** (같은 이름, 다른 매개변수)`,
+      constraints: "1 ≤ T ≤ 5, 1 ≤ r, w, h ≤ 100",
+      initialCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+// 오버로딩: area 함수를 두 가지 버전으로 작성하세요
+int area(int r) {
+    // 원: r * r * 3
+}
+int area(int w, int h) {
+    // 직사각형: w * h
+}
+
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        string shape;
+        cin >> shape;
+        if (shape == "circle") {
+            int r; cin >> r;
+            cout << area(r) << "\\n";
+        } else {
+            int w, h; cin >> w >> h;
+            cout << area(w, h) << "\\n";
+        }
+    }
+    return 0;
+}`,
+      testCases: [
+        { stdin: "3\ncircle 5\nrect 4 3\ncircle 2", expectedOutput: "75\n12\n12", label: "혼합" },
+        { stdin: "1\nrect 10 5", expectedOutput: "50", label: "직사각형" },
+        { stdin: "2\ncircle 1\nrect 1 1", expectedOutput: "3\n1", label: "최솟값" },
+      ],
+      hints: [
+        "C++에서 함수 오버로딩은 매개변수 개수나 타입이 다르면 같은 이름을 사용할 수 있어요.",
+        "area(int r)와 area(int w, int h)는 이름은 같지만 매개변수 수가 달라 C++이 자동으로 구분합니다.",
+      ],
+      solutionCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+int area(int r) { return r * r * 3; }
+int area(int w, int h) { return w * h; }
+
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        string shape;
+        cin >> shape;
+        if (shape == "circle") {
+            int r; cin >> r;
+            cout << area(r) << "\\n";
+        } else {
+            int w, h; cin >> w >> h;
+            cout << area(w, h) << "\\n";
+        }
+    }
+    return 0;
+}`,
+      solutionExplanation: "함수 오버로딩: 같은 이름 area를 매개변수 수에 따라 두 버전으로 정의합니다. 호출 시 컴파일러가 인자 수/타입을 보고 자동으로 알맞은 버전을 선택합니다.",
+      en: {
+        title: "Overloading — Area Calculator",
+        description: `Use **function overloading** to calculate the area of two shapes using the same function name \`area\`.\n\n- \`area(int r)\` → circle area (r²×3, using π≈3)\n- \`area(int w, int h)\` → rectangle area (w×h)\n\nInput: T test cases, each line is \`circle 5\` or \`rect 4 3\`.\n\n**You must use function overloading.** (Same name, different parameters)`,
+        constraints: "1 ≤ T ≤ 5, 1 ≤ r, w, h ≤ 100",
+        hints: [
+          "In C++, function overloading allows the same name if parameter count or types differ.",
+          "area(int r) and area(int w, int h) have the same name but different parameter counts — C++ distinguishes them automatically.",
+        ],
+        solutionExplanation: "Function overloading: define two versions of area based on parameter count. When called, the compiler automatically selects the right version based on the number/type of arguments.",
+      },
+    },
     {
       id: "fn-007",
       cluster: "functions",
