@@ -611,5 +611,262 @@ export const pyLogicCluster: PracticeCluster = {
         explanation: "10>5>8 = (10>5) and (5>8) = True and False = False",
       },
     },
+
+    // ── 코딩 직접 해보기 ──────────────────────────────────────
+    {
+      id: "pylogic-c01",
+      cluster: "py-logic",
+      unlockAfter: "12",
+      type: "code",
+      difficulty: "쉬움",
+      title: "짝수이면서 양수",
+      description: "정수 하나를 입력받아, 짝수이면서 양수이면 `True`, 아니면 `False`를 출력하세요.\n\n예시:\n- 입력: `4`  → 출력: `True`\n- 입력: `-2` → 출력: `False`\n- 입력: `3`  → 출력: `False`",
+      constraints: "-1000 ≤ n ≤ 1000",
+      language: "python",
+      initialCode: `n = int(input())
+# and를 사용해 두 조건을 동시에 확인하세요
+`,
+      testCases: [
+        { stdin: "4",   expectedOutput: "True" },
+        { stdin: "-2",  expectedOutput: "False" },
+        { stdin: "3",   expectedOutput: "False" },
+        { stdin: "0",   expectedOutput: "False" },
+        { stdin: "100", expectedOutput: "True" },
+      ],
+      hints: [
+        "짝수: n % 2 == 0",
+        "양수: n > 0",
+        "두 조건을 and로 연결: print(n % 2 == 0 and n > 0)",
+      ],
+      solutionCode: `n = int(input())
+print(n % 2 == 0 and n > 0)`,
+      solutionExplanation: "두 조건을 and로 연결합니다. 짝수(n%2==0) AND 양수(n>0) 둘 다 True일 때만 True를 출력합니다.",
+      en: {
+        title: "Even and Positive",
+        description: "Read an integer. Print `True` if it is both even and positive, otherwise `False`.\n\nExamples:\n- Input: `4`  → Output: `True`\n- Input: `-2` → Output: `False`\n- Input: `3`  → Output: `False`",
+        constraints: "-1000 ≤ n ≤ 1000",
+        hints: [
+          "Even: n % 2 == 0",
+          "Positive: n > 0",
+          "Combine with and: print(n % 2 == 0 and n > 0)",
+        ],
+        solutionExplanation: "Connect both conditions with and. Returns True only when both even (n%2==0) AND positive (n>0) are True.",
+      },
+    },
+    {
+      id: "pylogic-c02",
+      cluster: "py-logic",
+      unlockAfter: "12",
+      type: "code",
+      difficulty: "쉬움",
+      title: "범위 안에 있는지",
+      description: "정수 하나를 입력받아, 1 이상 100 이하이면 `True`, 아니면 `False`를 출력하세요.\n\n예시:\n- 입력: `50`  → 출력: `True`\n- 입력: `0`   → 출력: `False`\n- 입력: `101` → 출력: `False`",
+      constraints: "-1000 ≤ n ≤ 1000",
+      language: "python",
+      initialCode: `n = int(input())
+# 1 <= n <= 100 인지 확인하세요
+`,
+      testCases: [
+        { stdin: "50",   expectedOutput: "True" },
+        { stdin: "1",    expectedOutput: "True" },
+        { stdin: "100",  expectedOutput: "True" },
+        { stdin: "0",    expectedOutput: "False" },
+        { stdin: "101",  expectedOutput: "False" },
+      ],
+      hints: [
+        "Python의 연쇄 비교: 1 <= n <= 100",
+        "또는 and로: n >= 1 and n <= 100",
+      ],
+      solutionCode: `n = int(input())
+print(1 <= n <= 100)`,
+      solutionExplanation: "Python의 연쇄 비교 1 <= n <= 100은 (1<=n) and (n<=100)과 동일합니다.",
+      en: {
+        title: "In Range",
+        description: "Read an integer. Print `True` if it is between 1 and 100 (inclusive), otherwise `False`.\n\nExamples:\n- Input: `50`  → Output: `True`\n- Input: `0`   → Output: `False`\n- Input: `101` → Output: `False`",
+        constraints: "-1000 ≤ n ≤ 1000",
+        hints: [
+          "Python chained comparison: 1 <= n <= 100",
+          "Or with and: n >= 1 and n <= 100",
+        ],
+        solutionExplanation: "Python's chained comparison 1 <= n <= 100 is equivalent to (1<=n) and (n<=100).",
+      },
+    },
+    {
+      id: "pylogic-c03",
+      cluster: "py-logic",
+      unlockAfter: "12",
+      type: "code",
+      difficulty: "보통",
+      title: "로그인 검증",
+      description: "아이디와 비밀번호를 각각 한 줄씩 입력받으세요.\n아이디가 `admin`이고 비밀번호가 `1234`이면 `로그인 성공`, 아니면 `로그인 실패`를 출력하세요.\n\n예시:\n- 입력: `admin` / `1234` → `로그인 성공`\n- 입력: `admin` / `0000` → `로그인 실패`\n- 입력: `user` / `1234`  → `로그인 실패`",
+      constraints: "",
+      language: "python",
+      initialCode: `username = input()
+password = input()
+# and로 두 조건을 동시에 확인하세요
+`,
+      testCases: [
+        { stdin: "admin\n1234", expectedOutput: "로그인 성공" },
+        { stdin: "admin\n0000", expectedOutput: "로그인 실패" },
+        { stdin: "user\n1234",  expectedOutput: "로그인 실패" },
+        { stdin: "guest\n9999", expectedOutput: "로그인 실패" },
+      ],
+      hints: [
+        'username == "admin" and password == "1234"',
+        "if/else로 출력 분기",
+      ],
+      solutionCode: `username = input()
+password = input()
+if username == "admin" and password == "1234":
+    print("로그인 성공")
+else:
+    print("로그인 실패")`,
+      solutionExplanation: "and를 사용해 두 조건을 동시에 확인합니다. 둘 중 하나라도 틀리면 False가 되어 실패 분기로 갑니다.",
+      en: {
+        title: "Login Validation",
+        description: "Read a username and password (one per line).\nPrint `로그인 성공` if username is `admin` AND password is `1234`, otherwise print `로그인 실패`.\n\nExamples:\n- Input: `admin` / `1234` → `로그인 성공`\n- Input: `admin` / `0000` → `로그인 실패`",
+        constraints: "",
+        hints: [
+          'username == "admin" and password == "1234"',
+          "Use if/else to branch output",
+        ],
+        solutionExplanation: "Use and to check both conditions at once. If either is wrong, the whole expression is False and we print the failure message.",
+      },
+    },
+    {
+      id: "pylogic-c04",
+      cluster: "py-logic",
+      unlockAfter: "12",
+      type: "code",
+      difficulty: "보통",
+      title: "삼각형 판별",
+      description: "세 변의 길이 a, b, c를 한 줄에 공백으로 입력받아, 삼각형을 만들 수 있으면 `가능`, 없으면 `불가능`을 출력하세요.\n\n삼각형 조건: 두 변의 합이 나머지 한 변보다 커야 합니다.\n\n예시:\n- 입력: `3 4 5` → `가능`\n- 입력: `1 2 10` → `불가능`\n- 입력: `5 5 5` → `가능`",
+      constraints: "1 ≤ a, b, c ≤ 1000",
+      language: "python",
+      initialCode: `a, b, c = map(int, input().split())
+# 세 조건을 and로 연결하세요
+`,
+      testCases: [
+        { stdin: "3 4 5",  expectedOutput: "가능" },
+        { stdin: "1 2 10", expectedOutput: "불가능" },
+        { stdin: "5 5 5",  expectedOutput: "가능" },
+        { stdin: "1 1 2",  expectedOutput: "불가능" },
+      ],
+      hints: [
+        "조건 1: a + b > c",
+        "조건 2: b + c > a",
+        "조건 3: a + c > b",
+        "셋 다 and로 연결",
+      ],
+      solutionCode: `a, b, c = map(int, input().split())
+if a + b > c and b + c > a and a + c > b:
+    print("가능")
+else:
+    print("불가능")`,
+      solutionExplanation: "삼각형이 되려면 세 쌍의 두 변의 합이 모두 나머지 변보다 커야 합니다. and로 세 조건을 동시에 확인합니다.",
+      en: {
+        title: "Triangle Check",
+        description: "Read three side lengths a, b, c (space-separated). Print `가능` if they can form a triangle, otherwise `불가능`.\n\nTriangle rule: the sum of any two sides must be greater than the third.\n\nExamples:\n- Input: `3 4 5` → `가능`\n- Input: `1 2 10` → `불가능`",
+        constraints: "1 ≤ a, b, c ≤ 1000",
+        hints: [
+          "Condition 1: a + b > c",
+          "Condition 2: b + c > a",
+          "Condition 3: a + c > b",
+          "Connect all three with and",
+        ],
+        solutionExplanation: "All three pairs of sides must satisfy the triangle inequality. Use and to check all conditions at once.",
+      },
+    },
+    {
+      id: "pylogic-c05",
+      cluster: "py-logic",
+      unlockAfter: "12",
+      type: "code",
+      difficulty: "어려움",
+      title: "윤년 판별",
+      description: "연도를 입력받아 윤년이면 `True`, 아니면 `False`를 출력하세요.\n\n윤년 조건:\n- 4의 배수이면서\n- 100의 배수가 아니거나\n- 400의 배수이면\n\n예시:\n- 2000 → `True` (400의 배수)\n- 1900 → `False` (100의 배수, 400 아님)\n- 2024 → `True` (4의 배수, 100 아님)\n- 2023 → `False`",
+      constraints: "1 ≤ year ≤ 9999",
+      language: "python",
+      initialCode: `year = int(input())
+# and, or, not을 활용해 윤년 조건을 구현하세요
+`,
+      testCases: [
+        { stdin: "2000", expectedOutput: "True" },
+        { stdin: "1900", expectedOutput: "False" },
+        { stdin: "2024", expectedOutput: "True" },
+        { stdin: "2023", expectedOutput: "False" },
+        { stdin: "1600", expectedOutput: "True" },
+      ],
+      hints: [
+        "400의 배수: year % 400 == 0",
+        "100의 배수: year % 100 == 0",
+        "4의 배수: year % 4 == 0",
+        "윤년: (year % 4 == 0 and year % 100 != 0) or year % 400 == 0",
+      ],
+      solutionCode: `year = int(input())
+is_leap = (year % 4 == 0 and year % 100 != 0) or year % 400 == 0
+print(is_leap)`,
+      solutionExplanation: "and와 or를 함께 씁니다. (4의 배수 AND 100의 배수 아님) OR (400의 배수). 괄호로 우선순위를 명확히 해야 합니다.",
+      en: {
+        title: "Leap Year",
+        description: "Read a year and print `True` if it's a leap year, otherwise `False`.\n\nLeap year rules:\n- Divisible by 4, AND\n- NOT divisible by 100, OR\n- Divisible by 400\n\nExamples:\n- 2000 → `True`\n- 1900 → `False`\n- 2024 → `True`\n- 2023 → `False`",
+        constraints: "1 ≤ year ≤ 9999",
+        hints: [
+          "Divisible by 400: year % 400 == 0",
+          "Divisible by 100: year % 100 == 0",
+          "Divisible by 4: year % 4 == 0",
+          "Leap: (year % 4 == 0 and year % 100 != 0) or year % 400 == 0",
+        ],
+        solutionExplanation: "Combine and and or. (divisible by 4 AND not by 100) OR (divisible by 400). Parentheses are crucial for correct precedence.",
+      },
+    },
+    {
+      id: "pylogic-c06",
+      cluster: "py-logic",
+      unlockAfter: "12",
+      type: "code",
+      difficulty: "어려움",
+      title: "FizzBuzz 변형",
+      description: "1부터 n까지 숫자를 출력하되:\n- 3과 5의 공배수면 `FizzBuzz`\n- 3의 배수면 `Fizz`\n- 5의 배수면 `Buzz`\n- 나머지는 숫자 그대로\n\n입력: `15`\n```\n1\n2\nFizz\n4\nBuzz\nFizz\n7\n8\nFizz\nBuzz\n11\nFizz\n13\n14\nFizzBuzz\n```",
+      constraints: "1 ≤ n ≤ 100",
+      language: "python",
+      initialCode: `n = int(input())
+for i in range(1, n + 1):
+    # 조건 순서가 중요해요! 가장 구체적인 조건부터
+    pass
+`,
+      testCases: [
+        { stdin: "15", expectedOutput: "1\n2\nFizz\n4\nBuzz\nFizz\n7\n8\nFizz\nBuzz\n11\nFizz\n13\n14\nFizzBuzz" },
+        { stdin: "5",  expectedOutput: "1\n2\nFizz\n4\nBuzz" },
+        { stdin: "1",  expectedOutput: "1" },
+      ],
+      hints: [
+        "FizzBuzz 먼저 체크: i % 3 == 0 and i % 5 == 0",
+        "그 다음 Fizz (3의 배수), 그 다음 Buzz (5의 배수)",
+        "elif 체인으로 구현",
+      ],
+      solutionCode: `n = int(input())
+for i in range(1, n + 1):
+    if i % 3 == 0 and i % 5 == 0:
+        print("FizzBuzz")
+    elif i % 3 == 0:
+        print("Fizz")
+    elif i % 5 == 0:
+        print("Buzz")
+    else:
+        print(i)`,
+      solutionExplanation: "FizzBuzz를 먼저 확인해야 합니다. 3의 배수 조건을 먼저 쓰면 15도 'Fizz'로 처리됩니다. and로 두 조건을 결합한 경우를 최우선으로 처리하세요.",
+      en: {
+        title: "FizzBuzz",
+        description: "Print numbers from 1 to n, but:\n- Multiples of both 3 and 5 → `FizzBuzz`\n- Multiples of 3 → `Fizz`\n- Multiples of 5 → `Buzz`\n- Otherwise → the number\n\nInput: `15`\n```\n1\n2\nFizz\n4\nBuzz\nFizz\n7\n8\nFizz\nBuzz\n11\nFizz\n13\n14\nFizzBuzz\n```",
+        constraints: "1 ≤ n ≤ 100",
+        hints: [
+          "Check FizzBuzz first: i % 3 == 0 and i % 5 == 0",
+          "Then Fizz (div by 3), then Buzz (div by 5)",
+          "Use elif chain",
+        ],
+        solutionExplanation: "Always check FizzBuzz first. If you check Fizz first, 15 would be printed as 'Fizz'. Handle the combined condition (and) before the individual ones.",
+      },
+    },
   ],
 }
