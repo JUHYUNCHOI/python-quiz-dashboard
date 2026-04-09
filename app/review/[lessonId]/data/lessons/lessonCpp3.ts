@@ -57,7 +57,11 @@ export const lessonCpp3: LessonData = {
           guide: "타입 이름 변수이름 = 값; 형태!",
           template: "___ age = 14;",
           answer: "int",
-          expect: "int age = 14;"
+          expect: "int age = 14;",
+          en: {
+            task: "Create an integer variable age and assign 14!",
+            guide: "Use the form: type variableName = value;"
+          }
         }
       },
 
@@ -83,7 +87,11 @@ export const lessonCpp3: LessonData = {
           guide: "소수점 있는 숫자는 double!",
           template: "___ pi = 3.14;",
           answer: "double",
-          expect: "double pi = 3.14;"
+          expect: "double pi = 3.14;",
+          en: {
+            task: "Assign 3.14 to a floating-point variable pi!",
+            guide: "Numbers with decimals use double!"
+          }
         }
       },
 
@@ -110,7 +118,11 @@ export const lessonCpp3: LessonData = {
           guide: "문자열은 string 타입!",
           template: '___ name = "주현";',
           answer: "string",
-          expect: 'string name = "주현";'
+          expect: 'string name = "주현";',
+          en: {
+            task: 'Assign "Juhyun" to a string variable name!',
+            guide: "Strings use the string type!"
+          }
         }
       },
 

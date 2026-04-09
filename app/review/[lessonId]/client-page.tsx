@@ -12,6 +12,7 @@ import { saveStepAnswer } from "@/lib/save-step-answer"
 import { ReviewStepRenderer } from "./ReviewStepRenderer"
 import { lessonsData } from "./data/lessons"
 import type { StepContent, LessonData } from "./data/types"
+import { LanguageToggle } from "@/components/language-toggle"
 
 // ============================================================
 // 유틸 함수들
@@ -394,6 +395,9 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
           <span className="text-sm md:text-base font-bold text-gray-500 tabular-nums shrink-0">
             {currentIndex + 1}<span className="text-gray-300">/</span>{reviewSteps.length}
           </span>
+
+          {/* Language toggle */}
+          <LanguageToggle className="shrink-0" />
         </div>
 
         {/* 챕터 이름 */}

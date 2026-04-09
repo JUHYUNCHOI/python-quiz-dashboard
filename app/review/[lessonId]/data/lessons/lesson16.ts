@@ -71,7 +71,12 @@ export const lesson16: LessonData = {
         template: "colors = [___, ___, ___]\nprint(colors)",
         blanksAnswer: ["\"빨강\"", "\"파랑\"", "\"초록\""],
         answer: "colors = [\"빨강\", \"파랑\", \"초록\"]\nprint(colors)",
-        expect: "['빨강', '파랑', '초록']"
+        expect: "['빨강', '파랑', '초록']",
+        en: {
+          task: "Create a list of 3 favorite colors",
+          guide: "Use square brackets and quotes!",
+          hint: "colors = [\"red\", \"blue\", \"green\"]"
+        }
       }
     },
     {
@@ -85,7 +90,17 @@ export const lesson16: LessonData = {
           "fruits = \"사과\", \"바나나\""
         ],
         answer: 1,
-        explanation: "리스트는 대괄호 [ ]를 사용해요! ( )는 튜플, { }는 딕셔너리나 집합이에요."
+        explanation: "리스트는 대괄호 [ ]를 사용해요! ( )는 튜플, { }는 딕셔너리나 집합이에요.",
+        en: {
+          question: "What is the correct way to create a list?",
+          options: [
+            "fruits = (\"apple\", \"banana\")",
+            "fruits = [\"apple\", \"banana\"]",
+            "fruits = {\"apple\", \"banana\"}",
+            "fruits = \"apple\", \"banana\""
+          ],
+          explanation: "Lists use square brackets [ ]! ( ) is tuple, { } is dict or set."
+        }
       }
     },
     {
@@ -127,7 +142,11 @@ export const lesson16: LessonData = {
         template: "for i in ___(___):\n    print(i)",
         blanksAnswer: ["range", "3"],
         answer: "for i in range(3):\n    print(i)",
-        expect: "0\n1\n2"
+        expect: "0\n1\n2",
+        en: {
+          message: "🔄 for loop review! (Lesson 13)",
+          task: "Print 0 to 2"
+        }
       }
     },
     {
@@ -173,7 +192,12 @@ export const lesson16: LessonData = {
         template: "animals = [\"강아지\", \"고양이\", \"토끼\"]\nprint(animals[___])",
         blanksAnswer: ["1"],
         answer: "animals = [\"강아지\", \"고양이\", \"토끼\"]\nprint(animals[1])",
-        expect: "고양이"
+        expect: "고양이",
+        en: {
+          task: "Print the second element of the list",
+          guide: "Index starts at 0!",
+          hint: "Second element = index 1"
+        }
       }
     },
     {
@@ -186,7 +210,12 @@ export const lesson16: LessonData = {
         template: "numbers = [10, 20, 30, 40, 50]\nprint(numbers[___])",
         blanksAnswer: ["-1"],
         answer: "numbers = [10, 20, 30, 40, 50]\nprint(numbers[-1])",
-        expect: "50"
+        expect: "50",
+        en: {
+          task: "Print the last element of the list using a negative index",
+          guide: "First from the back = -1",
+          hint: "Use [-1]!"
+        }
       }
     },
     {
@@ -195,7 +224,12 @@ export const lesson16: LessonData = {
         question: "colors = [\"빨강\", \"파랑\", \"초록\"]일 때 colors[2]는?",
         options: ["빨강", "파랑", "초록", "에러"],
         answer: 2,
-        explanation: "인덱스 0=빨강, 1=파랑, 2=초록!"
+        explanation: "인덱스 0=빨강, 1=파랑, 2=초록!",
+        en: {
+          question: "Given colors = [\"red\", \"blue\", \"green\"], what is colors[2]?",
+          options: ["red", "blue", "green", "Error"],
+          explanation: "Index 0=red, 1=blue, 2=green!"
+        }
       }
     },
     {
@@ -230,7 +264,11 @@ export const lesson16: LessonData = {
         template: "for i in range(___, ___):\n    print(i)",
         blanksAnswer: ["1", "4"],
         answer: "for i in range(1, 4):\n    print(i)",
-        expect: "1\n2\n3"
+        expect: "1\n2\n3",
+        en: {
+          message: "🔄 for loop + range review! (Lesson 13)",
+          task: "Print 1 to 3"
+        }
       }
     },
     {
@@ -294,7 +332,12 @@ export const lesson16: LessonData = {
         template: "fruits = [\"사과\", \"바나나\"]\nfruits.___(___)  \nprint(fruits)",
         blanksAnswer: ["append", "\"망고\""],
         answer: "fruits = [\"사과\", \"바나나\"]\nfruits.append(\"망고\")\nprint(fruits)",
-        expect: "['사과', '바나나', '망고']"
+        expect: "['사과', '바나나', '망고']",
+        en: {
+          task: "Add \"mango\" to the list and print everything",
+          guide: "Use append()!",
+          hint: ".append(\"mango\")"
+        }
       }
     },
     {
@@ -307,7 +350,12 @@ export const lesson16: LessonData = {
         template: "fruits = [\"사과\", \"바나나\", \"포도\"]\nfruits.___(___)\nprint(len(___))",
         blanksAnswer: ["remove", "\"바나나\"", "fruits"],
         answer: "fruits = [\"사과\", \"바나나\", \"포도\"]\nfruits.remove(\"바나나\")\nprint(len(fruits))",
-        expect: "2"
+        expect: "2",
+        en: {
+          task: "Remove \"banana\" from the list and print the length",
+          guide: "Use remove() to delete, len() for length!",
+          hint: "After remove(\"banana\"), use len()"
+        }
       }
     },
     {
@@ -316,7 +364,12 @@ export const lesson16: LessonData = {
         question: "다음 코드의 결과는?\nnums = [1, 2, 3]\nnums.append(4)\nprint(len(nums))",
         options: ["3", "4", "5", "[1, 2, 3, 4]"],
         answer: 1,
-        explanation: "append(4)로 4를 추가하면 [1, 2, 3, 4]가 되고 len()은 4!"
+        explanation: "append(4)로 4를 추가하면 [1, 2, 3, 4]가 되고 len()은 4!",
+        en: {
+          question: "What is the result of this code?\nnums = [1, 2, 3]\nnums.append(4)\nprint(len(nums))",
+          options: ["3", "4", "5", "[1, 2, 3, 4]"],
+          explanation: "After append(4), list becomes [1, 2, 3, 4] and len() returns 4!"
+        }
       }
     },
     {

@@ -62,7 +62,12 @@ export const lesson17: LessonData = {
         template: "names = [\"지민\", \"유진\", \"민수\"]\nfor ___ in names:\n    print(f'{___}님')",
         blanksAnswer: ["name", "name"],
         answer: "names = [\"지민\", \"유진\", \"민수\"]\nfor name in names:\n    print(f'{name}님')",
-        expect: "지민님\n유진님\n민수님"
+        expect: "지민님\n유진님\n민수님",
+        en: {
+          task: "Print all names in the list with '님' attached",
+          guide: "Use f-string!",
+          hint: "Use the f'{name}님' format!"
+        }
       }
     },
     {
@@ -75,7 +80,12 @@ export const lesson17: LessonData = {
         template: "scores = [75, 90, 60, 85, 100]\nfor score in scores:\n    ___ score ___ 80:\n        print(score)",
         blanksAnswer: ["if", ">="],
         answer: "scores = [75, 90, 60, 85, 100]\nfor score in scores:\n    if score >= 80:\n        print(score)",
-        expect: "90\n85\n100"
+        expect: "90\n85\n100",
+        en: {
+          task: "Print only scores of 80 or higher from a number list",
+          guide: "Check with an if statement!",
+          hint: "if score >= 80:"
+        }
       }
     },
     {
@@ -84,7 +94,12 @@ export const lesson17: LessonData = {
         question: "다음 코드의 출력은?\nfor x in [10, 20, 30]:\n    print(x * 2)",
         options: ["10 20 30", "20 40 60", "[20, 40, 60]", "에러"],
         answer: 1,
-        explanation: "각 요소에 2를 곱해서 출력: 20, 40, 60!"
+        explanation: "각 요소에 2를 곱해서 출력: 20, 40, 60!",
+        en: {
+          question: "What is the output of this code?\nfor x in [10, 20, 30]:\n    print(x * 2)",
+          options: ["10 20 30", "20 40 60", "[20, 40, 60]", "Error"],
+          explanation: "Multiply each element by 2 and print: 20, 40, 60!"
+        }
       }
     },
     {
@@ -126,7 +141,11 @@ export const lesson17: LessonData = {
         template: "colors = [\"빨강\", \"파랑\", \"초록\"]\nprint(colors[___])",
         blanksAnswer: ["0"],
         answer: "colors = [\"빨강\", \"파랑\", \"초록\"]\nprint(colors[0])",
-        expect: "빨강"
+        expect: "빨강",
+        en: {
+          message: "🔄 List indexing review! (Lesson 16)",
+          task: "Print the first element of the list"
+        }
       }
     },
     {

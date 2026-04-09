@@ -56,7 +56,11 @@ export const lessonCpp2: LessonData = {
           guide: "따옴표 없이 숫자만 넣으면 돼요!",
           template: { before: 'std::cout << ', after: ' << std::endl;' },
           answer: "100",
-          expect: 'std::cout << 100 << std::endl;'
+          expect: 'std::cout << 100 << std::endl;',
+          en: {
+            task: "Print the number 100!",
+            guide: "Just put the number without quotes!"
+          }
         }
       },
 
@@ -72,7 +76,17 @@ export const lessonCpp2: LessonData = {
             "에러"
           ],
           answer: 1,
-          explanation: "따옴표 없는 10 + 20은 수식이라 계산돼요! 10 + 20 = 30이 출력!"
+          explanation: "따옴표 없는 10 + 20은 수식이라 계산돼요! 10 + 20 = 30이 출력!",
+          en: {
+            question: "What is the output of cout << 10 + 20 << endl;?",
+            options: [
+              "10 + 20",
+              "30",
+              "1020",
+              "Error"
+            ],
+            explanation: "10 + 20 without quotes is an expression, so it gets calculated! 10 + 20 = 30 is printed!"
+          }
         }
       },
 
@@ -85,7 +99,11 @@ export const lessonCpp2: LessonData = {
           guide: '<< 로 문자열과 숫자를 이어붙여요!',
           template: 'std::cout << "점수: " ___ 100 << std::endl;',
           answer: "<<",
-          expect: 'std::cout << "점수: " << 100 << std::endl;'
+          expect: 'std::cout << "점수: " << 100 << std::endl;',
+          en: {
+            task: 'Print "Score: 100"!',
+            guide: "Chain string and number together with <<"
+          }
         }
       },
 
@@ -101,7 +119,17 @@ export const lessonCpp2: LessonData = {
             "\\r"
           ],
           answer: 1,
-          explanation: "\\n은 줄바꿈이에요! endl 대신 쓸 수도 있어요. \\t는 탭(넓은 공백)!"
+          explanation: "\\n은 줄바꿈이에요! endl 대신 쓸 수도 있어요. \\t는 탭(넓은 공백)!",
+          en: {
+            question: "How do you insert a newline inside a string?",
+            options: [
+              "\\s",
+              "\\n",
+              "\\t",
+              "\\r"
+            ],
+            explanation: "\\n is a newline! It can be used instead of endl. \\t is a tab (wide space)!"
+          }
         }
       },
 
@@ -117,7 +145,17 @@ export const lessonCpp2: LessonData = {
             "불가능하다"
           ],
           answer: 1,
-          explanation: '문자열 안에서 \\"를 쓰면 따옴표 자체가 출력돼요! 그냥 "를 쓰면 문자열이 끝나버려요.'
+          explanation: '문자열 안에서 \\"를 쓰면 따옴표 자체가 출력돼요! 그냥 "를 쓰면 문자열이 끝나버려요.',
+          en: {
+            question: 'How do you include a double quote (") inside a string?',
+            options: [
+              'Use " directly',
+              'Use \\"',
+              "Use ' instead",
+              "Impossible"
+            ],
+            explanation: 'Using \\" inside a string prints the quote itself! Using " directly ends the string.'
+          }
         }
       },
 
@@ -130,7 +168,11 @@ export const lessonCpp2: LessonData = {
           guide: "탭 문자는 \\t 예요!",
           template: { before: 'std::cout << "이름', after: '나이" << std::endl;' },
           answer: "\\t",
-          expect: 'std::cout << "이름\\t나이" << std::endl;'
+          expect: 'std::cout << "이름\\t나이" << std::endl;',
+          en: {
+            task: "Separate name and age with a tab!",
+            guide: "The tab character is \\t!"
+          }
         }
       },
 
@@ -146,7 +188,16 @@ export const lessonCpp2: LessonData = {
             "Hello만 출력된다"
           ],
           answer: 0,
-          explanation: "endl이나 \\n이 없으면 줄바꿈 없이 한 줄에 이어서 출력돼요!"
+          explanation: "endl이나 \\n이 없으면 줄바꿈 없이 한 줄에 이어서 출력돼요!",
+          en: {
+            question: "The output of this code looks strange. Why?",
+            options: [
+              "HelloWorld appears on one line",
+              "It causes an error",
+              "Only Hello is printed"
+            ],
+            explanation: "Without endl or \\n, output continues on the same line without a newline!"
+          }
         }
       },
 
@@ -195,7 +246,11 @@ export const lessonCpp2: LessonData = {
           task: "수식 10 + 20의 출력 결과를 적어요!",
           template: { before: '// std::cout << 10 + 20;\n// 출력: ', after: '' },
           answer: "30",
-          expect: "30"
+          expect: "30",
+          en: {
+            message: "Wait! Do you remember what we learned earlier?",
+            task: "Write the output result of the expression 10 + 20!"
+          }
         }
       },
 
@@ -224,7 +279,17 @@ export const lessonCpp2: LessonData = {
             "start"
           ],
           answer: 1,
-          explanation: "std = standard (표준)! C++의 표준 라이브러리 namespace예요."
+          explanation: "std = standard (표준)! C++의 표준 라이브러리 namespace예요.",
+          en: {
+            question: "What does std stand for in std::cout?",
+            options: [
+              "student",
+              "standard",
+              "studio",
+              "start"
+            ],
+            explanation: "std = standard! It's the namespace of C++'s standard library."
+          }
         }
       },
 
@@ -240,7 +305,17 @@ export const lessonCpp2: LessonData = {
             "헤더 파일을 불러온다"
           ],
           answer: 1,
-          explanation: "namespace는 이름이 겹칠 때 구분하기 위한 '공간'이에요! 폴더처럼 같은 이름도 다른 namespace면 OK!"
+          explanation: "namespace는 이름이 겹칠 때 구분하기 위한 '공간'이에요! 폴더처럼 같은 이름도 다른 namespace면 OK!",
+          en: {
+            question: "What is the role of namespace?",
+            options: [
+              "Makes the program faster",
+              "Separates names to avoid conflicts",
+              "Auto-completes code",
+              "Loads header files"
+            ],
+            explanation: "A namespace is a 'space' to distinguish names when they conflict! Like folders — same name is OK in different namespaces!"
+          }
         }
       },
 
@@ -256,7 +331,16 @@ export const lessonCpp2: LessonData = {
             "endl 대신 \\n을 써야 해서"
           ],
           answer: 1,
-          explanation: "std:: 없이 cout만 쓰면 컴파일러가 cout을 못 찾아요! std::cout이라고 써야 해요."
+          explanation: "std:: 없이 cout만 쓰면 컴파일러가 cout을 못 찾아요! std::cout이라고 써야 해요.",
+          en: {
+            question: "Why does this code cause an error?",
+            options: [
+              "iostream is wrong",
+              "Missing std:: so cout cannot be found",
+              "Should use \\n instead of endl"
+            ],
+            explanation: "Without std::, the compiler can't find cout! You must write std::cout."
+          }
         }
       },
 
@@ -286,7 +370,17 @@ export const lessonCpp2: LessonData = {
             "main() 함수를 자동으로 만든다"
           ],
           answer: 1,
-          explanation: "using namespace std; 를 쓰면 std:: 없이 cout, endl 등을 바로 쓸 수 있어요!"
+          explanation: "using namespace std; 를 쓰면 std:: 없이 cout, endl 등을 바로 쓸 수 있어요!",
+          en: {
+            question: "What does using namespace std; do?",
+            options: [
+              "Loads iostream",
+              "Allows omitting std::",
+              "Makes the program faster",
+              "Auto-creates the main() function"
+            ],
+            explanation: "With using namespace std;, you can use cout, endl etc. directly without std::!"
+          }
         }
       },
 
@@ -299,7 +393,11 @@ export const lessonCpp2: LessonData = {
           guide: "using namespace ___; 형태!",
           template: "using namespace ___;",
           answer: "std",
-          expect: "using namespace std;"
+          expect: "using namespace std;",
+          en: {
+            task: "Write the magic spell to omit std::!",
+            guide: "Use the form: using namespace ___;"
+          }
         }
       },
 
@@ -313,7 +411,11 @@ export const lessonCpp2: LessonData = {
           template: '___ << "Hello!" << ___;',
           answer: "cout",
           blanksAnswer: ["cout", "endl"],
-          expect: 'cout << "Hello!" << endl;'
+          expect: 'cout << "Hello!" << endl;',
+          en: {
+            task: "After using namespace std;, print Hello!",
+            guide: "Just use cout without std::!"
+          }
         }
       },
 
@@ -365,7 +467,11 @@ export const lessonCpp2: LessonData = {
           alternateAnswers: [
             "using namespace std"
           ],
-          expect: "using namespace std;"
+          expect: "using namespace std;",
+          en: {
+            message: "Wait! Do you remember using namespace std;?",
+            task: "Write the line that allows you to omit std::!"
+          }
         }
       },
 

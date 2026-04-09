@@ -51,7 +51,12 @@ print('안녕, 민수!')`,
         question: "함수를 만들 때 맨 앞에 쓰는 키워드는?",
         options: ["function", "def", "func", "make"],
         answer: 1,
-        explanation: "def는 'define(정의하다)'의 줄임말! 파이썬에서 함수를 만들 때 써요."
+        explanation: "def는 'define(정의하다)'의 줄임말! 파이썬에서 함수를 만들 때 써요.",
+        en: {
+          question: "What keyword do you write at the start when creating a function?",
+          options: ["function", "def", "func", "make"],
+          explanation: "def is short for 'define'! It's used to create functions in Python."
+        }
       }
     },
     
@@ -97,6 +102,11 @@ print('안녕, 민수!')`,
         hint: "def 함수이름(): 으로 시작하고, 안에 print()를 써요!",
         template: null,
         answer: "def fun():\n    print('파이썬 재밌다!')\n\nfun()",
+        en: {
+          task: "Create a fun() function that prints '파이썬 재밌다!' and call it",
+          guide: "Define with def fun():, then call with fun()!",
+          hint: "Start with def function_name(): and use print() inside!"
+        },
         alternateAnswers: [
           "def fun():\n    print('파이썬 재밌다!')\nfun()",
           "def fun():\n    print(\"파이썬 재밌다!\")\n\nfun()"
@@ -114,6 +124,11 @@ print('안녕, 민수!')`,
         hint: "함수 정의 후, greet()를 3줄 써보세요!",
         template: null,
         answer: "def greet():\n    print('안녕하세요!')\n\ngreet()\ngreet()\ngreet()",
+        en: {
+          message: "🔄 Quick check! Remember the advantages of functions?",
+          task: "Create a greet() function that prints '안녕하세요!' and call it 3 times",
+          hint: "After defining the function, write greet() 3 times!"
+        },
         alternateAnswers: [
           "def greet():\n    print('안녕하세요!')\ngreet()\ngreet()\ngreet()",
           "def greet():\n    print(\"안녕하세요!\")\n\ngreet()\ngreet()\ngreet()"
@@ -172,6 +187,11 @@ print('안녕, 민수!')`,
         hint: "f-string 안에 {food}를 넣어보세요!",
         template: null,
         answer: "def order(food):\n    print(f'{food} 주문이요!')\n\norder('피자')",
+        en: {
+          task: "Create an order(food) function that prints '[food] 주문이요!'",
+          guide: "Print {food} using an f-string!",
+          hint: "Put {food} inside the f-string!"
+        },
         alternateAnswers: [
           "def order(food):\n    print(f'{food} 주문이요!')\norder('피자')",
           "def order(food):\n    print(f\"{food} 주문이요!\")\n\norder('피자')",
@@ -210,6 +230,11 @@ print('안녕, 민수!')`,
         hint: "def intro(name, age): 먼저 만들고, print(f'...')로 출력!",
         template: null,
         answer: "def intro(name, age):\n    print(f'{name}, {age}살!')\n\nintro('철수', 15)",
+        en: {
+          task: "Create an intro(name, age) function that prints '[name], [age]살!'",
+          guide: "Print {name} and {age} using an f-string!",
+          hint: "First define def intro(name, age): then use print(f'...')!"
+        },
         alternateAnswers: [
           "def intro(name, age):\n    print(f'{name}, {age}살!')\nintro('철수', 15)",
           "def intro(name, age):\n    print(f\"{name}, {age}살!\")\n\nintro('철수', 15)"
@@ -271,7 +296,17 @@ print(결과)`,
           "둘 다 값을 돌려준다"
         ],
         answer: 1,
-        explanation: "print는 화면에 보여주기만! return은 값을 돌려줘서 저장하거나 계산에 쓸 수 있어요."
+        explanation: "print는 화면에 보여주기만! return은 값을 돌려줘서 저장하거나 계산에 쓸 수 있어요.",
+        en: {
+          question: "What is the difference between print and return?",
+          options: [
+            "They are exactly the same",
+            "print only displays, return gives back a value",
+            "return only displays, print gives back a value",
+            "Both give back values"
+          ],
+          explanation: "print just shows on screen! return gives back a value that can be stored or used in calculations."
+        }
       }
     },
     
@@ -285,6 +320,11 @@ print(결과)`,
         hint: "return 키워드로 a에서 b를 뺀 결과를 돌려줘요!",
         template: null,
         answer: "def subtract(a, b):\n    return a - b\n\nprint(subtract(10, 3))",
+        en: {
+          task: "Create a subtract(a, b) function that returns the difference of two numbers",
+          guide: "Use return a - b!",
+          hint: "Use the return keyword to give back the result of a minus b!"
+        },
         alternateAnswers: [
           "def subtract(a, b):\n    return a - b\nprint(subtract(10, 3))",
           "def subtract(a,b):\n    return a-b\n\nprint(subtract(10,3))"
@@ -302,6 +342,11 @@ print(결과)`,
         hint: "n을 두 번 곱하면 제곱이에요!",
         template: null,
         answer: "def square(n):\n    return n * n\n\nprint(square(3))",
+        en: {
+          message: "🔄 Combining parameters and return!",
+          task: "Create a square(n) function that returns the square of a number (square of 3 = 9)",
+          hint: "Multiply n by itself to get the square!"
+        },
         alternateAnswers: [
           "def square(n):\n    return n * n\nprint(square(3))",
           "def square(n):\n    return n*n\n\nprint(square(3))"
@@ -359,6 +404,11 @@ print(subtract(10, 4)) # 6`,
         hint: "두 수를 곱하는 연산자는 *예요!",
         template: null,
         answer: "def multiply(a, b):\n    return a * b\n\nprint(multiply(3, 4))",
+        en: {
+          task: "Create a multiply(a, b) function that returns the product of two numbers",
+          guide: "return a * b",
+          hint: "The operator for multiplying two numbers is *!"
+        },
         alternateAnswers: [
           "def multiply(a, b):\n    return a * b\nprint(multiply(3, 4))",
           "def multiply(a,b):\n    return a*b\n\nprint(multiply(3,4))"
@@ -377,6 +427,11 @@ print(subtract(10, 4)) # 6`,
         hint: "두 수를 나누는 연산자는 /예요!",
         template: null,
         answer: "def divide(a, b):\n    return a / b\n\nprint(divide(10, 2))",
+        en: {
+          task: "Create a divide(a, b) function that returns the division of two numbers",
+          guide: "return a / b",
+          hint: "The operator for dividing two numbers is /!"
+        },
         alternateAnswers: [
           "def divide(a, b):\n    return a / b\nprint(divide(10, 2))",
           "def divide(a,b):\n    return a/b\n\nprint(divide(10,2))"

@@ -56,7 +56,11 @@ export const lessonCpp18: LessonData = {
           guide: "push(값) 형태!",
           template: "s.___(42);",
           answer: "push",
-          expect: "s.push(42);"
+          expect: "s.push(42);",
+          en: {
+            task: "Push the value 42 onto a stack!",
+            guide: "Use the form push(value)!"
+          }
         }
       },
 
@@ -69,7 +73,11 @@ export const lessonCpp18: LessonData = {
           guide: "top()으로 맨 위를 볼 수 있어요!",
           template: "cout << s.___() << endl;",
           answer: "top",
-          expect: "cout << s.top() << endl;"
+          expect: "cout << s.top() << endl;",
+          en: {
+            task: "Print the top value of a stack!",
+            guide: "Use top() to peek at the top!"
+          }
         }
       },
 
@@ -100,7 +108,17 @@ export const lessonCpp18: LessonData = {
             "차이가 없다"
           ],
           answer: 1,
-          explanation: "stack은 LIFO(후입선출 — 마지막 넣은 게 먼저), queue는 FIFO(선입선출 — 먼저 넣은 게 먼저)!"
+          explanation: "stack은 LIFO(후입선출 — 마지막 넣은 게 먼저), queue는 FIFO(선입선출 — 먼저 넣은 게 먼저)!",
+          en: {
+            question: "What is the biggest difference between stack and queue?",
+            options: [
+              "stack is faster and queue is slower",
+              "stack is LIFO, queue is FIFO",
+              "stack accepts only integers, queue accepts only strings",
+              "There is no difference"
+            ],
+            explanation: "stack is LIFO (last in, first out — the last inserted comes out first), queue is FIFO (first in, first out — the first inserted comes out first)!"
+          }
         }
       },
 
@@ -111,7 +129,12 @@ export const lessonCpp18: LessonData = {
           question: "stack에서 맨 위를 보려면 top(), queue에서 맨 앞을 보려면?",
           options: ["top()", "front()", "first()", "peek()"],
           answer: 1,
-          explanation: "stack은 top()으로 맨 위, queue는 front()로 맨 앞을 봐요! (queue에는 back()도 있어요)"
+          explanation: "stack은 top()으로 맨 위, queue는 front()로 맨 앞을 봐요! (queue에는 back()도 있어요)",
+          en: {
+            question: "To peek at the top of a stack use top(); to peek at the front of a queue use?",
+            options: ["top()", "front()", "first()", "peek()"],
+            explanation: "stack uses top() to see the top, queue uses front() to see the front! (queue also has back())"
+          }
         }
       },
 
@@ -124,7 +147,11 @@ export const lessonCpp18: LessonData = {
           guide: "front()로 맨 앞을 볼 수 있어요!",
           template: "cout << q.___() << endl;",
           answer: "front",
-          expect: "cout << q.front() << endl;"
+          expect: "cout << q.front() << endl;",
+          en: {
+            task: "Print the front value of a queue!",
+            guide: "Use front() to see the front!"
+          }
         }
       },
 
@@ -140,7 +167,16 @@ export const lessonCpp18: LessonData = {
             "stack에는 top()이 없어서"
           ],
           answer: 0,
-          explanation: "push(10) 후 pop()하면 stack이 비어요! 빈 stack에서 top()은 정의되지 않은 동작(undefined behavior)!"
+          explanation: "push(10) 후 pop()하면 stack이 비어요! 빈 stack에서 top()은 정의되지 않은 동작(undefined behavior)!",
+          en: {
+            question: "What is wrong with this code?",
+            options: [
+              "Calling top() on an empty stack is dangerous!",
+              "Should use erase() instead of pop()",
+              "stack doesn't have top()"
+            ],
+            explanation: "After push(10) and pop(), the stack is empty! Calling top() on an empty stack is undefined behavior!"
+          }
         }
       },
 
@@ -153,7 +189,11 @@ export const lessonCpp18: LessonData = {
           guide: "empty()는 비어있으면 true!",
           template: "if (s.___()) {\n    cout << \"비어있다!\" << endl;\n}",
           answer: "empty",
-          expect: "if (s.empty()) {\n    cout << \"비어있다!\" << endl;\n}"
+          expect: "if (s.empty()) {\n    cout << \"비어있다!\" << endl;\n}",
+          en: {
+            task: "Check whether a stack is empty!",
+            guide: "empty() returns true if the stack is empty!"
+          }
         }
       },
 
@@ -202,7 +242,11 @@ export const lessonCpp18: LessonData = {
           task: "stack에서 맨 위 값을 보는 함수 이름은?",
           template: "cout << s.___() << endl;",
           answer: "top",
-          expect: "cout << s.top() << endl;"
+          expect: "cout << s.top() << endl;",
+          en: {
+            message: "Quick check! Do you remember what we learned earlier?",
+            task: "What is the name of the function that peeks at the top of a stack?"
+          }
         }
       },
 
@@ -246,7 +290,11 @@ export const lessonCpp18: LessonData = {
           guide: "push_front(값) 형태!",
           template: "dq.___(1);",
           answer: "push_front",
-          expect: "dq.push_front(1);"
+          expect: "dq.push_front(1);",
+          en: {
+            task: "Insert the value 1 at the front of a deque!",
+            guide: "Use the form push_front(value)!"
+          }
         }
       },
 
@@ -259,7 +307,11 @@ export const lessonCpp18: LessonData = {
           guide: "push_back(값) 형태!",
           template: "dq.___(99);",
           answer: "push_back",
-          expect: "dq.push_back(99);"
+          expect: "dq.push_back(99);",
+          en: {
+            task: "Insert the value 99 at the back of a deque!",
+            guide: "Use the form push_back(value)!"
+          }
         }
       },
 
@@ -289,7 +341,17 @@ export const lessonCpp18: LessonData = {
             "차이 없다"
           ],
           answer: 1,
-          explanation: "deque는 vector에 push_front/pop_front가 추가된 버전! 양쪽 끝에서 넣고 빼요."
+          explanation: "deque는 vector에 push_front/pop_front가 추가된 버전! 양쪽 끝에서 넣고 빼요.",
+          en: {
+            question: "What is the difference between vector and deque?",
+            options: [
+              "deque does not support [] access",
+              "deque supports push_front",
+              "vector does not support push_back",
+              "There is no difference"
+            ],
+            explanation: "deque is like vector but with push_front/pop_front added! You can insert and remove from both ends."
+          }
         }
       },
 
@@ -305,7 +367,16 @@ export const lessonCpp18: LessonData = {
             "헤더가 잘못됐다"
           ],
           answer: 0,
-          explanation: "vector는 push_back만 있어요! push_front를 쓰려면 deque를 써야 해요."
+          explanation: "vector는 push_back만 있어요! push_front를 쓰려면 deque를 써야 해요.",
+          en: {
+            question: "What is wrong with this code?",
+            options: [
+              "vector does not have push_front!",
+              "The argument to push_front is incorrect",
+              "The header is wrong"
+            ],
+            explanation: "vector only has push_back! To use push_front, you need deque."
+          }
         }
       },
 

@@ -21,6 +21,7 @@ import { useSwipe } from "@/hooks/use-swipe"
 import { useQuizKeyboard } from "@/hooks/use-quiz-keyboard"
 import { useSoundEffect } from "@/hooks/use-sound-effect"
 import { SoundToggle } from "@/components/sound-toggle"
+import { LanguageToggle } from "@/components/language-toggle"
 import { useGamification } from "@/hooks/use-gamification"
 import { useLanguage } from "@/contexts/language-context"
 import type { QuizQuestion } from "@/hooks/use-quiz-state"
@@ -40,7 +41,7 @@ export default function QuizPage() {
   const { profile } = useAuth()
   const isTeacher = profile?.role === "teacher"
   // useLanguage는 최상단에서 — lang이 fetch에 필요하므로 먼저 선언
-  const { t, lang, setLang } = useLanguage()
+  const { t, lang } = useLanguage()
 
   // 설정 없이 직접 접근하면 setup으로 redirect
   const hasSettings = useRef<boolean | null>(null)
@@ -347,24 +348,7 @@ export default function QuizPage() {
                 </div>
               )}
 
-              {/* Language toggle */}
-              <div className="flex items-center gap-0.5 border border-gray-200 rounded-full p-0.5">
-                <button
-                  onClick={() => setLang("ko")}
-                  className={cn(
-                    "px-2 py-0.5 rounded-full text-xs font-bold transition-all",
-                    lang === "ko" ? "bg-gray-800 text-white" : "text-gray-400 hover:text-gray-600"
-                  )}
-                >한</button>
-                <button
-                  onClick={() => setLang("en")}
-                  className={cn(
-                    "px-2 py-0.5 rounded-full text-xs font-bold transition-all",
-                    lang === "en" ? "bg-gray-800 text-white" : "text-gray-400 hover:text-gray-600"
-                  )}
-                >EN</button>
-              </div>
-
+              <LanguageToggle />
               <SoundToggle isMuted={isMuted} onToggle={toggleMute} />
 
               {!isBeginnerMode && (

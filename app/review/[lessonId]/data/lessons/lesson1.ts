@@ -84,7 +84,11 @@ export const lesson1: LessonData = {
           template: null,
           answer: "print('Hello')",
           alternateAnswers: ["print(\"Hello\")"],
-          expect: "Hello"
+          expect: "Hello",
+          en: {
+            task: "Make it print like this ↓\nHello",
+            hint: "print('Hello')"
+          }
         }
       },
       {
@@ -95,7 +99,11 @@ export const lesson1: LessonData = {
           template: null,
           answer: "print('안녕하세요')",
           alternateAnswers: ["print(\"안녕하세요\")"],
-          expect: "안녕하세요"
+          expect: "안녕하세요",
+          en: {
+            task: "Make it print like this ↓\n안녕하세요",
+            hint: "print('안녕하세요')"
+          }
         }
       },
       {
@@ -105,7 +113,10 @@ export const lesson1: LessonData = {
           template: null,
           answer: "print('Game Over')",
           alternateAnswers: ["print(\"Game Over\")"],
-          expect: "Game Over"
+          expect: "Game Over",
+          en: {
+            task: "Make it print like this ↓\nGame Over"
+          }
         }
       },
       {
@@ -115,7 +126,10 @@ export const lesson1: LessonData = {
           template: null,
           answer: "print('Level Clear!')",
           alternateAnswers: ["print(\"Level Clear!\")"],
-          expect: "Level Clear!"
+          expect: "Level Clear!",
+          en: {
+            task: "Make it print like this ↓\nLevel Clear!"
+          }
         }
       },
       {
@@ -125,7 +139,10 @@ export const lesson1: LessonData = {
           template: null,
           answer: "print('비밀번호 맞음')",
           alternateAnswers: ["print(\"비밀번호 맞음\")"],
-          expect: "비밀번호 맞음"
+          expect: "비밀번호 맞음",
+          en: {
+            task: "Make it print like this ↓\n비밀번호 맞음"
+          }
         }
       },
       {
@@ -135,7 +152,10 @@ export const lesson1: LessonData = {
           template: null,
           answer: "print('Python is fun')",
           alternateAnswers: ["print(\"Python is fun\")"],
-          expect: "Python is fun"
+          expect: "Python is fun",
+          en: {
+            task: "Make it print like this ↓\nPython is fun"
+          }
         }
       },
 
@@ -151,7 +171,16 @@ export const lesson1: LessonData = {
             "괄호가 없어서"
           ],
           answer: 1,
-          explanation: "글자는 꼭 따옴표로 감싸야 해! → print('Hello')"
+          explanation: "글자는 꼭 따옴표로 감싸야 해! → print('Hello')",
+          en: {
+            question: "Why does this code cause an error?",
+            options: [
+              "Wrong spelling of print",
+              "Hello is missing quotes",
+              "Missing parentheses"
+            ],
+            explanation: "Strings must be wrapped in quotes! → print('Hello')"
+          }
         }
       },
 
@@ -189,7 +218,11 @@ export const lesson1: LessonData = {
           task: "Hello 출력해봐",
           template: null,
           answer: "print('Hello')",
-          expect: "Hello"
+          expect: "Hello",
+          en: {
+            message: "Wait! Do you remember what we learned?",
+            task: "Print Hello"
+          }
         }
       },
 
@@ -243,7 +276,11 @@ export const lesson1: LessonData = {
           guide: "숫자는 따옴표 없이!",
           template: { before: "print(", after: ")" },
           answer: "123",
-          expect: "123"
+          expect: "123",
+          en: {
+            task: "Display 123 on the screen",
+            guide: "Numbers don't need quotes!"
+          }
         }
       },
       {
@@ -253,7 +290,10 @@ export const lesson1: LessonData = {
           task: "2024를 화면에 띄워봐",
           template: { before: "print(", after: ")" },
           answer: "2024",
-          expect: "2024"
+          expect: "2024",
+          en: {
+            task: "Display 2024 on the screen"
+          }
         }
       },
 
@@ -266,7 +306,11 @@ export const lesson1: LessonData = {
           hint: "print(9999)",
           template: null,
           answer: "print(9999)",
-          expect: "9999"
+          expect: "9999",
+          en: {
+            task: "Display 9999 on the screen",
+            hint: "print(9999)"
+          }
         }
       },
 
@@ -302,7 +346,10 @@ export const lesson1: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "5 + 3",
           alternateAnswers: ["5+3"],
-          expect: "8"
+          expect: "8",
+          en: {
+            task: "Calculate 5 + 3 and print it"
+          }
         }
       },
       {
@@ -313,7 +360,10 @@ export const lesson1: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "100 - 30",
           alternateAnswers: ["100-30"],
-          expect: "70"
+          expect: "70",
+          en: {
+            task: "Calculate 100 - 30 and print it"
+          }
         }
       },
       {
@@ -325,7 +375,11 @@ export const lesson1: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "7 * 8",
           alternateAnswers: ["7*8"],
-          expect: "56"
+          expect: "56",
+          en: {
+            task: "Calculate 7 * 8 and print it",
+            guide: "* means multiply!"
+          }
         }
       },
       {
@@ -337,7 +391,11 @@ export const lesson1: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "20 / 4",
           alternateAnswers: ["20/4"],
-          expect: "5"
+          expect: "5",
+          en: {
+            task: "Calculate 20 / 4 and print it",
+            guide: "/ means divide!"
+          }
         }
       },
 
@@ -349,7 +407,11 @@ export const lesson1: LessonData = {
           task: "계산중 출력해봐",
           template: null,
           answer: "print('계산중')",
-          expect: "계산중"
+          expect: "계산중",
+          en: {
+            message: "Remember how to print text too?",
+            task: "Print 계산중"
+          }
         }
       },
 
@@ -362,7 +424,11 @@ export const lesson1: LessonData = {
           hint: "print(50 + 50)",
           template: null,
           answer: "print(50 + 50)",
-          expect: "100"
+          expect: "100",
+          en: {
+            task: "Calculate 50 + 50 and print it",
+            hint: "print(50 + 50)"
+          }
         }
       },
       {
@@ -372,7 +438,10 @@ export const lesson1: LessonData = {
           task: "9 * 9 계산해서 출력해봐",
           template: null,
           answer: "print(9 * 9)",
-          expect: "81"
+          expect: "81",
+          en: {
+            task: "Calculate 9 * 9 and print it"
+          }
         }
       },
       {
@@ -382,7 +451,10 @@ export const lesson1: LessonData = {
           task: "1000 - 1 계산해서 출력해봐",
           template: null,
           answer: "print(1000 - 1)",
-          expect: "999"
+          expect: "999",
+          en: {
+            task: "Calculate 1000 - 1 and print it"
+          }
         }
       },
 
@@ -397,7 +469,16 @@ export const lesson1: LessonData = {
             "'100'만 출력된다"
           ],
           answer: 0,
-          explanation: "'100'은 글자라서 계산 불가! 100은 숫자라서 계산 가능!"
+          explanation: "'100'은 글자라서 계산 불가! 100은 숫자라서 계산 가능!",
+          en: {
+            question: "What is the difference between '100' and 100?",
+            options: [
+              "'100' is a string, 100 is a number",
+              "They are the same",
+              "Only '100' can be printed"
+            ],
+            explanation: "'100' is a string so you can't do math with it! 100 is a number so you can calculate with it!"
+          }
         }
       },
 
@@ -435,7 +516,11 @@ export const lesson1: LessonData = {
           task: "2024 출력해봐",
           template: null,
           answer: "print(2024)",
-          expect: "2024"
+          expect: "2024",
+          en: {
+            message: "Remember how to print numbers?",
+            task: "Print 2024"
+          }
         }
       },
 
@@ -461,7 +546,11 @@ export const lesson1: LessonData = {
           guide: "숫자만 채워!",
           template: { before: "print('나이:', ", after: ")" },
           answer: "15",
-          expect: "나이: 15"
+          expect: "나이: 15",
+          en: {
+            task: "Print: Age: 15",
+            guide: "Fill in the number only!"
+          }
         }
       },
       {
@@ -471,7 +560,10 @@ export const lesson1: LessonData = {
           task: "점수: 100 출력해봐",
           template: { before: "print('점수:', ", after: ")" },
           answer: "100",
-          expect: "점수: 100"
+          expect: "점수: 100",
+          en: {
+            task: "Print: Score: 100"
+          }
         }
       },
 
@@ -485,7 +577,11 @@ export const lesson1: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "'레벨:', 5",
           alternateAnswers: ["\"레벨:\", 5"],
-          expect: "레벨: 5"
+          expect: "레벨: 5",
+          en: {
+            task: "Print: Level: 5",
+            guide: "'Level:', 5 ← connect with comma!"
+          }
         }
       },
       {
@@ -496,7 +592,10 @@ export const lesson1: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "'코인:', 999",
           alternateAnswers: ["\"코인:\", 999"],
-          expect: "코인: 999"
+          expect: "코인: 999",
+          en: {
+            task: "Print: Coins: 999"
+          }
         }
       },
 
@@ -522,7 +621,11 @@ export const lesson1: LessonData = {
           guide: "'치킨', 19000, '원'",
           template: { before: "print(", after: ")" },
           answer: "'치킨', 19000, '원'",
-          expect: "치킨 19000 원"
+          expect: "치킨 19000 원",
+          en: {
+            task: "Print: 치킨 19000 원",
+            guide: "'치킨', 19000, '원'"
+          }
         }
       },
       {
@@ -532,7 +635,10 @@ export const lesson1: LessonData = {
           task: "콜라 2000 원 출력해봐",
           template: { before: "print(", after: ")" },
           answer: "'콜라', 2000, '원'",
-          expect: "콜라 2000 원"
+          expect: "콜라 2000 원",
+          en: {
+            task: "Print: 콜라 2000 원"
+          }
         }
       },
 
@@ -545,7 +651,11 @@ export const lesson1: LessonData = {
           hint: "print('피자', 25000, '원')",
           template: null,
           answer: "print('피자', 25000, '원')",
-          expect: "피자 25000 원"
+          expect: "피자 25000 원",
+          en: {
+            task: "Print: 피자 25000 원",
+            hint: "print('피자', 25000, '원')"
+          }
         }
       },
       {
@@ -555,7 +665,10 @@ export const lesson1: LessonData = {
           task: "햄버거 8000 원 출력해봐",
           template: null,
           answer: "print('햄버거', 8000, '원')",
-          expect: "햄버거 8000 원"
+          expect: "햄버거 8000 원",
+          en: {
+            task: "Print: 햄버거 8000 원"
+          }
         }
       },
 
@@ -667,7 +780,12 @@ export const lesson1: LessonData = {
           template: null,
           answer: "print('이름: 철수 나이:', 13)",
           alternateAnswers: ["print('이름: 철수', '나이:', 13)"],
-          expect: "이름: 철수 나이: 13"
+          expect: "이름: 철수 나이: 13",
+          en: {
+            message: "Remember the project? We connected values with commas!",
+            task: "Print: 이름: 철수 나이: 13",
+            guide: "Use two commas to connect 3 items!"
+          }
         }
       },
 
@@ -693,7 +811,11 @@ export const lesson1: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "10 + 20",
           alternateAnswers: ["10+20", "20 + 10", "20+10", "30"],
-          expect: "30"
+          expect: "30",
+          en: {
+            task: "Make 30 print out (using addition)",
+            guide: "Without quotes: 10 + 20"
+          }
         }
       },
       {
@@ -705,7 +827,11 @@ export const lesson1: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "'10 + 20'",
           alternateAnswers: ["\"10 + 20\""],
-          expect: "10 + 20"
+          expect: "10 + 20",
+          en: {
+            task: "Make the text '10 + 20' print out",
+            guide: "Wrap it in quotes to make it text!"
+          }
         }
       },
       {
@@ -717,7 +843,11 @@ export const lesson1: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "3 * 4",
           alternateAnswers: ["3*4", "4 * 3", "4*3", "2 * 6", "2*6", "12"],
-          expect: "12"
+          expect: "12",
+          en: {
+            task: "Make 12 print out (using multiplication)",
+            guide: "* means multiply!"
+          }
         }
       },
       {
@@ -729,7 +859,11 @@ export const lesson1: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "'점수:', 80 + 20",
           alternateAnswers: ["'점수:', 80+20", "\"점수:\", 80 + 20", "\"점수:\", 80+20"],
-          expect: "점수: 100"
+          expect: "점수: 100",
+          en: {
+            task: "Print: Score: 100 (using 80 + 20 calculation)",
+            guide: "print('점수:', 80 + 20)"
+          }
         }
       },
 
@@ -755,7 +889,11 @@ export const lesson1: LessonData = {
           hint: "print('위') → print() → print('아래')",
           template: null,
           answer: "print('위')\nprint()\nprint('아래')",
-          expect: "위\n\n아래"
+          expect: "위\n\n아래",
+          en: {
+            task: "Make it print like this\n위\n\n아래",
+            hint: "print('위') → print() → print('아래')"
+          }
         }
       },
 

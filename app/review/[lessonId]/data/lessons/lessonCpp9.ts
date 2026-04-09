@@ -56,7 +56,11 @@ export const lessonCpp9: LessonData = {
           guide: "int 이름[크기]; 형태예요!",
           template: "int nums[___];",
           answer: "5",
-          expect: "int nums[5];"
+          expect: "int nums[5];",
+          en: {
+            task: "Declare an array of 5 integers!",
+            guide: "Use the form: int name[size];"
+          }
         }
       },
 
@@ -70,7 +74,11 @@ export const lessonCpp9: LessonData = {
           template: "int arr[3] = {___};",
           answer: "1, 2, 3",
           alternateAnswers: ["1,2,3"],
-          expect: "int arr[3] = {1, 2, 3};"
+          expect: "int arr[3] = {1, 2, 3};",
+          en: {
+            task: "Initialize the array with 1, 2, 3!",
+            guide: "Put the values inside curly braces {}!"
+          }
         }
       },
 
@@ -86,7 +94,17 @@ export const lessonCpp9: LessonData = {
             "1 ~ 4"
           ],
           answer: 2,
-          explanation: "배열 인덱스는 0부터 시작해요! 크기가 5면 0, 1, 2, 3, 4 — 총 5개!"
+          explanation: "배열 인덱스는 0부터 시작해요! 크기가 5면 0, 1, 2, 3, 4 — 총 5개!",
+          en: {
+            question: "What is the valid index range for int arr[5];?",
+            options: [
+              "1 ~ 5",
+              "0 ~ 5",
+              "0 ~ 4",
+              "1 ~ 4"
+            ],
+            explanation: "Array indices start at 0! With size 5, valid indices are 0, 1, 2, 3, 4 — 5 total!"
+          }
         }
       },
 
@@ -102,7 +120,16 @@ export const lessonCpp9: LessonData = {
             "cout 사용법이 틀렸어요"
           ],
           answer: 0,
-          explanation: "크기가 3인 배열은 인덱스 0, 1, 2만 가능! arr[3]은 범위 밖이라 엉뚱한 값이 나와요."
+          explanation: "크기가 3인 배열은 인덱스 0, 1, 2만 가능! arr[3]은 범위 밖이라 엉뚱한 값이 나와요.",
+          en: {
+            question: "What is wrong with this code?",
+            options: [
+              "arr[3] is out of bounds — only 0~2 are valid",
+              "The array declaration is wrong",
+              "cout usage is incorrect"
+            ],
+            explanation: "An array of size 3 only has indices 0, 1, 2! arr[3] is out of bounds and may produce garbage values."
+          }
         }
       },
 
@@ -115,7 +142,11 @@ export const lessonCpp9: LessonData = {
           guide: "두 번째는 인덱스 1이에요!",
           template: 'int arr[3] = {10, 20, 30};\ncout << arr[___] << endl;',
           answer: "1",
-          expect: 'int arr[3] = {10, 20, 30};\ncout << arr[1] << endl;'
+          expect: 'int arr[3] = {10, 20, 30};\ncout << arr[1] << endl;',
+          en: {
+            task: "Print the second value of the array!",
+            guide: "The second element is at index 1!"
+          }
         }
       },
 
@@ -131,7 +162,17 @@ export const lessonCpp9: LessonData = {
             "중괄호 대신 대괄호를 쓴다"
           ],
           answer: 1,
-          explanation: "C 배열은 선언할 때 크기가 정해지고, 나중에 늘리거나 줄일 수 없어요! 파이썬 리스트는 append로 자유롭게 추가 가능하죠."
+          explanation: "C 배열은 선언할 때 크기가 정해지고, 나중에 늘리거나 줄일 수 없어요! 파이썬 리스트는 append로 자유롭게 추가 가능하죠.",
+          en: {
+            question: "How is a C++ array different from a Python list?",
+            options: [
+              "Indices start at 1",
+              "Size is fixed — cannot add or remove elements later",
+              "Cannot store strings",
+              "Uses curly braces instead of square brackets"
+            ],
+            explanation: "A C array has a fixed size set at declaration and cannot be resized! Python lists can freely grow with append()."
+          }
         }
       },
 
@@ -180,7 +221,11 @@ export const lessonCpp9: LessonData = {
           task: "정수 3개짜리 배열을 선언해요!",
           template: "int arr[___];",
           answer: "3",
-          expect: "int arr[3];"
+          expect: "int arr[3];",
+          en: {
+            message: "Quick! Remember what we learned earlier?",
+            task: "Declare an array of 3 integers!"
+          }
         }
       },
 
@@ -224,7 +269,11 @@ export const lessonCpp9: LessonData = {
           guide: "vector<타입> 이름; 형태예요!",
           template: "vector<___> nums;",
           answer: "int",
-          expect: "vector<int> nums;"
+          expect: "vector<int> nums;",
+          en: {
+            task: "Declare an integer vector!",
+            guide: "Use the form: vector<type> name;"
+          }
         }
       },
 
@@ -237,7 +286,11 @@ export const lessonCpp9: LessonData = {
           guide: "파이썬 append = C++ push_back!",
           template: "nums.___(100);",
           answer: "push_back",
-          expect: "nums.push_back(100);"
+          expect: "nums.push_back(100);",
+          en: {
+            task: "Add 100 to the vector!",
+            guide: "Python's append = C++ push_back!"
+          }
         }
       },
 
@@ -253,7 +306,17 @@ export const lessonCpp9: LessonData = {
             "메모리를 더 적게 쓴다"
           ],
           answer: 1,
-          explanation: "vector는 push_back으로 자유롭게 추가할 수 있어요! C 배열처럼 크기를 미리 정할 필요가 없어요."
+          explanation: "vector는 push_back으로 자유롭게 추가할 수 있어요! C 배열처럼 크기를 미리 정할 필요가 없어요.",
+          en: {
+            question: "What is the advantage of vector over a C-style array?",
+            options: [
+              "It is faster",
+              "You don't need to specify the size in advance",
+              "Indices start at 1",
+              "It uses less memory"
+            ],
+            explanation: "With vector, you can freely add elements using push_back! No need to fix the size upfront like C arrays."
+          }
         }
       },
 
@@ -266,7 +329,11 @@ export const lessonCpp9: LessonData = {
           guide: "파이썬 len() = C++ .size()!",
           template: 'vector<int> v = {1, 2, 3};\ncout << v.___() << endl;',
           answer: "size",
-          expect: 'vector<int> v = {1, 2, 3};\ncout << v.size() << endl;'
+          expect: 'vector<int> v = {1, 2, 3};\ncout << v.size() << endl;',
+          en: {
+            task: "Print the size of the vector!",
+            guide: "Python's len() = C++ .size()!"
+          }
         }
       },
 
@@ -295,7 +362,16 @@ export const lessonCpp9: LessonData = {
             "cout 사용법이 틀렸어요"
           ],
           answer: 0,
-          explanation: "빈 벡터에는 아무 값도 없어요! v[0]은 범위 밖이라 엉뚱한 값이 나오거나 크래시할 수 있어요."
+          explanation: "빈 벡터에는 아무 값도 없어요! v[0]은 범위 밖이라 엉뚱한 값이 나오거나 크래시할 수 있어요.",
+          en: {
+            question: "What is wrong with this code?",
+            options: [
+              "Trying to read v[0] from an empty vector is dangerous",
+              "The vector declaration is wrong",
+              "cout usage is incorrect"
+            ],
+            explanation: "An empty vector has no elements! v[0] is out of bounds and may return garbage or cause a crash."
+          }
         }
       },
 
@@ -327,7 +403,11 @@ export const lessonCpp9: LessonData = {
           template: "v.___;",
           answer: "pop_back()",
           alternateAnswers: ["pop_back ()"],
-          expect: "v.pop_back();"
+          expect: "v.pop_back();",
+          en: {
+            task: "Remove the last element from the vector!",
+            guide: "Python's pop() = C++ pop_back()!"
+          }
         }
       },
 
@@ -379,7 +459,11 @@ export const lessonCpp9: LessonData = {
           alternateAnswers: [
             "v.push_back(50)"
           ],
-          expect: "v.push_back(50);"
+          expect: "v.push_back(50);",
+          en: {
+            message: "Quick! Remember how to add a value to a vector?",
+            task: "Write the code to add 50 to vector v!"
+          }
         }
       },
 

@@ -66,7 +66,17 @@ def 주문(음료, 사이즈='중'):
           "def f(a, =1): ..."
         ],
         answer: 1,
-        explanation: "기본값이 있는 매개변수는 뒤에! 앞에 오면 에러나요 🚨"
+        explanation: "기본값이 있는 매개변수는 뒤에! 앞에 오면 에러나요 🚨",
+        en: {
+          question: "Which of the following is a valid function definition?",
+          options: [
+            "def f(a=1, b): ...",
+            "def f(a, b=1): ...",
+            "def f(=1, b): ...",
+            "def f(a, =1): ..."
+          ],
+          explanation: "Parameters with default values must come last! Putting them first causes an error 🚨"
+        }
       }
     },
     
@@ -80,6 +90,11 @@ def 주문(음료, 사이즈='중'):
         hint: "할인된 가격 = price * (100 - rate) / 100",
         template: null,
         answer: "def discount(price, rate=10):\n    return price * (100 - rate) / 100\n\nprint(discount(10000))\nprint(discount(10000, 20))",
+        en: {
+          task: "Complete the discount function with a default discount rate of 10%!",
+          guide: "Start with def discount(price, rate=10):!",
+          hint: "Discounted price = price * (100 - rate) / 100"
+        },
         alternateAnswers: [
           "def discount(price, rate=10):\n    return price * (100 - rate) / 100\nprint(discount(10000))\nprint(discount(10000, 20))"
         ],
@@ -97,6 +112,11 @@ def 주문(음료, 사이즈='중'):
         hint: "n ** exp 가 n의 exp 거듭제곱이에요!",
         template: null,
         answer: "def power(n, exp=2):\n    return n ** exp\n\nprint(power(3))\nprint(power(2, 10))",
+        en: {
+          task: "Create a power function that returns exponentiation (default exponent=2)!",
+          guide: "Start with def power(n, exp=2):! Use the ** operator",
+          hint: "n ** exp is n to the power of exp!"
+        },
         alternateAnswers: [
           "def power(n, exp=2):\n    return n ** exp\nprint(power(3))\nprint(power(2, 10))"
         ],
@@ -172,6 +192,11 @@ print(합, 차)`,
         hint: "return max(숫자들), min(숫자들)",
         template: null,
         answer: "def 최대최소(숫자들):\n    return max(숫자들), min(숫자들)\n\n최대, 최소 = 최대최소([3, 7, 1, 9, 4])\nprint(f'최대: {최대}, 최소: {최소}')",
+        en: {
+          task: "Create a function that returns both the maximum and minimum values of a list!",
+          guide: "max() for maximum, min() for minimum!",
+          hint: "return max(numbers), min(numbers)"
+        },
         alternateAnswers: [
           "def 최대최소(숫자들):\n    return max(숫자들), min(숫자들)\n최대, 최소 = 최대최소([3, 7, 1, 9, 4])\nprint(f'최대: {최대}, 최소: {최소}')"
         ],
@@ -189,6 +214,11 @@ print(합, 차)`,
         hint: "평균 = 합계 / len(숫자들)",
         template: null,
         answer: "def 통계(숫자들):\n    합계 = sum(숫자들)\n    평균 = 합계 / len(숫자들)\n    return 합계, 평균\n\n합계, 평균 = 통계([10, 20, 30])\nprint(f'합계: {합계}, 평균: {평균}')",
+        en: {
+          task: "Create a statistics function that returns both total and average at once!",
+          guide: "Use sum() for total, len() for count!",
+          hint: "average = total / len(numbers)"
+        },
         alternateAnswers: [
           "def 통계(숫자들):\n    합계 = sum(숫자들)\n    평균 = 합계 / len(숫자들)\n    return 합계, 평균\n합계, 평균 = 통계([10, 20, 30])\nprint(f'합계: {합계}, 평균: {평균}')"
         ],
@@ -205,6 +235,11 @@ print(합, 차)`,
         hint: "기본값이 있는 건 뒤에! name 먼저, msg='Hello' 나중에",
         template: null,
         answer: "def greet(name, msg='Hello'):\n    print(f'{msg}, {name}!')\n\ngreet('철수')\ngreet('영희', 'Hi')",
+        en: {
+          message: "🔄 Quick check! Remember default values?",
+          task: "Create a greet function that takes a name and greeting message (default='Hello')!",
+          hint: "Parameter with default value goes last! name first, msg='Hello' second"
+        },
         alternateAnswers: [
           "def greet(name, msg='Hello'):\n    print(f'{msg}, {name}!')\ngreet('철수')\ngreet('영희', 'Hi')"
         ],
@@ -280,6 +315,11 @@ greet(msg='반가워', name='민수')`,
         hint: "배달(주소='학교', 메뉴='치킨', 수량=1) 처럼!",
         template: null,
         answer: "def 배달(메뉴, 수량, 주소):\n    print(f'{메뉴} {수량}개를 {주소}로!')\n\n배달(주소='학교', 메뉴='치킨', 수량=1)",
+        en: {
+          task: "Call the 배달(메뉴, 수량, 주소) function using keyword arguments!",
+          guide: "Try calling with a different order!",
+          hint: "Like 배달(주소='학교', 메뉴='치킨', 수량=1)!"
+        },
         alternateAnswers: [
           "def 배달(메뉴, 수량, 주소):\n    print(f'{메뉴} {수량}개를 {주소}로!')\n배달(주소='학교', 메뉴='치킨', 수량=1)",
           "def 배달(메뉴, 수량, 주소):\n    print(f'{메뉴} {수량}개를 {주소}로!')\n\n배달(수량=1, 주소='학교', 메뉴='치킨')",
@@ -410,6 +450,11 @@ print(합, 차)`,
         hint: "a+b, a-b, a*b, a//b 를 쉼표로!",
         template: null,
         answer: "def calc(a, b):\n    return a + b, a - b, a * b, a // b\n\n합, 차, 곱, 몫 = calc(10, 3)\nprint(f'합:{합} 차:{차} 곱:{곱} 몫:{몫}')",
+        en: {
+          task: "Create a calc function that returns all 4 arithmetic results at once!",
+          guide: "return sum, difference, product, quotient",
+          hint: "a+b, a-b, a*b, a//b separated by commas!"
+        },
         alternateAnswers: [
           "def calc(a, b):\n    return a + b, a - b, a * b, a // b\n합, 차, 곱, 몫 = calc(10, 3)\nprint(f'합:{합} 차:{차} 곱:{곱} 몫:{몫}')"
         ],
