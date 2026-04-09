@@ -8,15 +8,10 @@ interface AlgoViewerProps {
   topicId: string
 }
 
+// Window augmentation is defined in components/algorithm/AlgoConceptViz.tsx (AlgoTopics, _algoLang)
+// We only declare _algoTrack here which is not declared elsewhere
 declare global {
   interface Window {
-    AlgoTopics: Record<string, {
-      id: string
-      title: string
-      renderConcept: (container: HTMLElement) => void
-      renderProblemContent?: (container: HTMLElement, problemId: string, tabId: string) => void
-    }>
-    _algoLang: string
     _algoTrack: string
   }
 }

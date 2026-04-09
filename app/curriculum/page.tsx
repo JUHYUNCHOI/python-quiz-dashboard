@@ -907,7 +907,7 @@ export default function CurriculumPage() {
                     )}
                     {completedCount > 0 && (
                       <Link
-                        href="/algorithm"
+                        href="/algo"
                         className="bg-purple-500 text-white px-5 py-3 rounded-xl border-2 border-black font-bold hover:bg-purple-600 transition-colors flex items-center justify-center gap-2 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
                       >
                         🧠 {t("퀴즈 연습", "Quiz")}
@@ -944,7 +944,7 @@ export default function CurriculumPage() {
                   : <span className="flex items-center gap-1 text-xs text-gray-300">💪 <Lock className="w-3 h-3" /></span>}
                 <ChevronRight className="w-3 h-3 text-gray-300 flex-shrink-0" />
                 {algoUnlocked
-                  ? <Link href="/algorithm" className="flex items-center gap-1 text-xs font-bold text-purple-600">🧠 {algoTopicsDone}/{algoTopicsTotal}</Link>
+                  ? <Link href="/algo" className="flex items-center gap-1 text-xs font-bold text-purple-600">🧠 {algoTopicsDone}/{algoTopicsTotal}</Link>
                   : <span className="flex items-center gap-1 text-xs text-gray-300">🧠 <Lock className="w-3 h-3" /></span>}
                 <ChevronRight className="w-3 h-3 text-gray-300 flex-shrink-0" />
                 {questUnlocked
@@ -963,7 +963,7 @@ export default function CurriculumPage() {
                   : <span className="flex items-center gap-1 text-xs text-gray-300">💪 <Lock className="w-3 h-3" /></span>}
                 <ChevronRight className="w-3 h-3 text-gray-300 flex-shrink-0" />
                 {pyAlgoUnlocked
-                  ? <Link href="/algorithm" className="flex items-center gap-1 text-xs font-bold text-purple-600">🧠 {algoTopicsDone}/{algoTopicsTotal}</Link>
+                  ? <Link href="/algo" className="flex items-center gap-1 text-xs font-bold text-purple-600">🧠 {algoTopicsDone}/{algoTopicsTotal}</Link>
                   : <span className="flex items-center gap-1 text-xs text-gray-300">🧠 <Lock className="w-3 h-3" /></span>}
                 <ChevronRight className="w-3 h-3 text-gray-300 flex-shrink-0" />
                 {pyQuestUnlocked
@@ -1053,7 +1053,7 @@ export default function CurriculumPage() {
                         <div className="h-full bg-purple-500 rounded-full transition-all duration-500" style={{ width: algoTopicsTotal > 0 ? `${Math.round((algoTopicsDone / algoTopicsTotal) * 100)}%` : "0%" }} />
                       </div>
                       <p className="text-xs font-bold text-purple-700">{algoTopicsDone}/{algoTopicsTotal} {t("완료", "done")}</p>
-                      <Link href="/algorithm" className="mt-1 text-xs text-center bg-purple-500 text-white rounded-lg py-1.5 font-bold hover:bg-purple-600 transition-colors">
+                      <Link href="/algo" className="mt-1 text-xs text-center bg-purple-500 text-white rounded-lg py-1.5 font-bold hover:bg-purple-600 transition-colors">
                         {t("학습하기 →", "Study →")}
                       </Link>
                     </>
@@ -1171,7 +1171,7 @@ export default function CurriculumPage() {
                         <div className="h-full bg-purple-500 rounded-full transition-all duration-500" style={{ width: algoTopicsTotal > 0 ? `${Math.round((algoTopicsDone / algoTopicsTotal) * 100)}%` : "0%" }} />
                       </div>
                       <p className="text-xs font-bold text-purple-700">{algoTopicsDone}/{algoTopicsTotal} {t("완료", "done")}</p>
-                      <Link href="/algorithm" className="mt-1 text-xs text-center bg-purple-500 text-white rounded-lg py-1.5 font-bold hover:bg-purple-600 transition-colors">
+                      <Link href="/algo" className="mt-1 text-xs text-center bg-purple-500 text-white rounded-lg py-1.5 font-bold hover:bg-purple-600 transition-colors">
                         {t("학습하기 →", "Study →")}
                       </Link>
                     </>
@@ -1232,7 +1232,7 @@ export default function CurriculumPage() {
                   </p>
                 </div>
                 <Link
-                  href="/algorithm"
+                  href="/algo"
                   className="shrink-0 bg-white text-purple-700 font-black px-6 py-3 rounded-xl border-2 border-black hover:bg-purple-50 transition-colors shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] whitespace-nowrap"
                 >
                   🧠 {t("알고리즘 시작하기", "Start Algorithms")}
