@@ -446,7 +446,7 @@ export function PracticeSession({
       <div className="max-w-sm mx-auto px-4 pt-8 flex flex-col items-center gap-6 text-center">
         <div className="text-5xl">{cluster.emoji}</div>
         <div>
-          <h2 className="text-xl font-bold text-gray-900">{cluster.title}</h2>
+          <h2 className="text-xl font-bold text-gray-900">{localCluster.title}</h2>
           {completedSets.length > 0 && (
             <p className="text-sm text-gray-400 mt-1">
               {t("세트", "Set")} {completedSets.map(s => s.round).join(", ")} {t("완료", "done")}

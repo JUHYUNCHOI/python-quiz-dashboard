@@ -91,13 +91,23 @@ interface PracticeRunnerProps {
   onSuccess?: (starred: boolean) => void
 }
 
+function localizeInitialCode(code: string, isEn: boolean): string {
+  if (!isEn) return code
+  return code
+    .replace(/\/\/ 여기에 코드를 작성하세요/g, "// Write your code here")
+    .replace(/# 여기에 코드를 작성하세요/g, "# Write your code here")
+    .replace(/\/\/ 여기에 코드 작성/g, "// Write your code here")
+    .replace(/# 여기에 코드 작성/g, "# Write your code here")
+}
+
 export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
-  const { t } = useLanguage()
+  const { t, lang: locale } = useLanguage()
+  const isEn = locale === "en"
   const lang = problem.language ?? "cpp"
   const storageKey = `practice-code-${problem.id}`
 
   const [code, setCode] = useState(() => {
-    const initial = problem.initialCode ?? ""
+    const initial = localizeInitialCode(problem.initialCode ?? "", isEn)
     if (typeof window === "undefined") return initial
     try { return localStorage.getItem(storageKey) || initial } catch { return initial }
   })
@@ -161,7 +171,7 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
   }, [code, problem, isLoading, onSuccess, storageKey, hintsShown, showSolution, t])
 
   const reset = () => {
-    setCode(problem.initialCode ?? "")
+    setCode(localizeInitialCode(problem.initialCode ?? "", isEn))
     setResults([])
     setError("")
     setAllPassed(false)
