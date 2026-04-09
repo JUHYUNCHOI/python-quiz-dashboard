@@ -15,20 +15,51 @@ function useQuestSolved(problemId: string) {
   const [solved, setSolved] = useState(false)
 
   useEffect(() => {
+    // 1단계: localStorage 즉시 확인
     try {
       const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]") as string[]
-      setSolved(stored.includes(problemId))
-    } catch { /* ignore */ }
+      if (stored.includes(problemId)) setSolved(true)
+    } catch {}
+
+    // 2단계: DB 확인 (비로그인 시 빈 배열 반환)
+    fetch("/api/quest/progress")
+      .then(r => r.ok ? r.json() : { solved: [] })
+      .then(({ solved: dbSolved }: { solved: string[] }) => {
+        if (dbSolved.includes(problemId)) setSolved(true)
+        // localStorage에만 있는 항목 → DB 마이그레이션
+        const lsSolved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]") as string[]
+        const toMigrate = lsSolved.filter((id: string) => !dbSolved.includes(id))
+        if (toMigrate.length > 0) {
+          for (const id of toMigrate) {
+            fetch("/api/quest/progress", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ problemId: id }),
+            }).catch(() => {})
+          }
+        }
+        // localStorage 최신화
+        const merged = [...new Set([...dbSolved, ...lsSolved])]
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(merged))
+      })
+      .catch(() => {})
   }, [problemId])
 
   const markSolved = () => {
+    // 즉시 UI 반영
+    setSolved(true)
     try {
       const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]") as string[]
       if (!stored.includes(problemId)) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify([...stored, problemId]))
       }
-      setSolved(true)
-    } catch { /* ignore */ }
+    } catch {}
+    // DB 저장
+    fetch("/api/quest/progress", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ problemId }),
+    }).catch(() => {})
   }
 
   return { solved, markSolved }
