@@ -223,6 +223,130 @@ int main() {
         solutionExplanation: "Check from 90 downward. Using else if means the previous condition already filtered out higher values, so no && is needed.",
       },
     },
+    // ── switch 문 ─────────────────────────────────────────────────
+    {
+      id: "cond-022",
+      cluster: "conditionals",
+      unlockAfter: "cpp-6",
+      difficulty: "쉬움",
+      title: "요일 출력 (switch)",
+      description: `1~7 사이의 정수가 입력됩니다. **switch 문을 사용해** 해당 요일 이름을 영어로 출력하세요.
+
+- 1 → \`Mon\`
+- 2 → \`Tue\`
+- 3 → \`Wed\`
+- 4 → \`Thu\`
+- 5 → \`Fri\`
+- 6 → \`Sat\`
+- 7 → \`Sun\``,
+      constraints: "1 ≤ N ≤ 7",
+      initialCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    switch (n) {
+        // 각 case를 채우세요
+    }
+    return 0;
+}`,
+      testCases: [
+        { stdin: "1", expectedOutput: "Mon", label: "월요일" },
+        { stdin: "5", expectedOutput: "Fri", label: "금요일" },
+        { stdin: "6", expectedOutput: "Sat", label: "토요일" },
+        { stdin: "7", expectedOutput: "Sun", label: "일요일" },
+        { stdin: "3", expectedOutput: "Wed", label: "수요일" },
+      ],
+      hints: [
+        "switch (n) { case 1: ... break; case 2: ... break; ... } 구조를 사용하세요.",
+        "각 case 끝에 break;를 반드시 써야 다음 case로 넘어가지 않아요.",
+      ],
+      solutionCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    switch (n) {
+        case 1: cout << "Mon" << endl; break;
+        case 2: cout << "Tue" << endl; break;
+        case 3: cout << "Wed" << endl; break;
+        case 4: cout << "Thu" << endl; break;
+        case 5: cout << "Fri" << endl; break;
+        case 6: cout << "Sat" << endl; break;
+        case 7: cout << "Sun" << endl; break;
+    }
+    return 0;
+}`,
+      solutionExplanation: "switch (n)으로 n 값에 따라 분기합니다. 각 case 끝에 break;를 쓰지 않으면 다음 case까지 실행되는 'fall-through'가 발생합니다.",
+      en: {
+        title: "Day of Week (switch)",
+        description: `An integer from 1 to 7 is given. Using a **switch statement**, print the day name in English.\n\n- 1 → \`Mon\`\n- 2 → \`Tue\`\n- 3 → \`Wed\`\n- 4 → \`Thu\`\n- 5 → \`Fri\`\n- 6 → \`Sat\`\n- 7 → \`Sun\``,
+        constraints: "1 ≤ N ≤ 7",
+        hints: [
+          "Use the structure: switch (n) { case 1: ... break; case 2: ... break; ... }",
+          "Always put break; at the end of each case to prevent fall-through.",
+        ],
+        solutionExplanation: "switch (n) branches based on the value of n. Without break; at the end of a case, execution falls through to the next case.",
+      },
+    },
+    // ── 삼항 연산자 ───────────────────────────────────────────────
+    {
+      id: "cond-023",
+      cluster: "conditionals",
+      unlockAfter: "cpp-6",
+      difficulty: "쉬움",
+      title: "큰 수 선택 (삼항)",
+      description: `두 정수 A, B가 입력됩니다. **삼항 연산자 (?:)** 를 사용해 더 큰 수를 출력하세요. A와 B가 같으면 A를 출력합니다.
+
+**삼항 연산자 문법:**
+\`조건 ? 참일 때 값 : 거짓일 때 값\`
+
+**예시:** \`int max = (a > b) ? a : b;\``,
+      constraints: "-1000 ≤ A, B ≤ 1000",
+      initialCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int a, b;
+    cin >> a >> b;
+    int result = // 삼항 연산자로 채우세요
+    cout << result << endl;
+    return 0;
+}`,
+      testCases: [
+        { stdin: "5 3", expectedOutput: "5", label: "a > b" },
+        { stdin: "2 9", expectedOutput: "9", label: "a < b" },
+        { stdin: "7 7", expectedOutput: "7", label: "같음" },
+        { stdin: "-3 -1", expectedOutput: "-1", label: "음수" },
+      ],
+      hints: [
+        "삼항 연산자: (a > b) ? a : b",
+        "결과를 변수에 저장한 뒤 출력하거나, cout << ((a > b) ? a : b); 처럼 직접 출력해도 됩니다.",
+      ],
+      solutionCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int a, b;
+    cin >> a >> b;
+    int result = (a >= b) ? a : b;
+    cout << result << endl;
+    return 0;
+}`,
+      solutionExplanation: "삼항 연산자 (a >= b) ? a : b 는 a가 b보다 크거나 같으면 a, 아니면 b를 반환합니다. if-else 한 줄 버전이라고 생각하면 돼요.",
+      en: {
+        title: "Select Larger Number (Ternary)",
+        description: `Two integers A and B are given. Use the **ternary operator (?:)** to print the larger one. If A equals B, print A.\n\n**Ternary operator syntax:**\n\`condition ? value_if_true : value_if_false\`\n\n**Example:** \`int max = (a > b) ? a : b;\``,
+        constraints: "-1000 ≤ A, B ≤ 1000",
+        hints: [
+          "Ternary operator: (a > b) ? a : b",
+          "You can store the result in a variable or use it directly: cout << ((a > b) ? a : b);",
+        ],
+        solutionExplanation: "The ternary operator (a >= b) ? a : b returns a if a is greater than or equal to b, otherwise b. Think of it as a one-line if-else.",
+      },
+    },
     {
       id: "cond-005",
       cluster: "conditionals",
