@@ -91,6 +91,11 @@ except:
         template: "___:\n    x = int('abc')\n    print(x)\nexcept:\n    print('변환 실패!')",
         blanksAnswer: ["try"],
         answer: "try:\n    x = int('abc')\n    print(x)\nexcept:\n    print('변환 실패!')",
+        en: {
+          task: "Fill in the blank with the right word!",
+          guide: "What do you write before code that might cause an error?",
+          hint: "'To attempt' in English! Starts with t"
+        },
         alternateAnswers: [
           "try:\n    x = int('abc')\n    print(x)\nexcept ValueError:\n    print('변환 실패!')"
         ],
@@ -155,7 +160,12 @@ except:
         question: "int('hello')는 어떤 에러?",
         options: ["ZeroDivisionError", "ValueError", "FileNotFoundError", "에러 없음"],
         answer: 1,
-        explanation: "'hello'는 숫자가 아니라서 ValueError!"
+        explanation: "'hello'는 숫자가 아니라서 ValueError!",
+        en: {
+          question: "What error does int('hello') cause?",
+          options: ["ZeroDivisionError", "ValueError", "FileNotFoundError", "No error"],
+          explanation: "'hello' is not a number, so it causes ValueError!"
+        }
       }
     },
     {
@@ -164,7 +174,12 @@ except:
         question: "10 / 0은 어떤 에러?",
         options: ["ValueError", "ZeroDivisionError", "FileNotFoundError", "에러 없음"],
         answer: 1,
-        explanation: "0으로 나누면 ZeroDivisionError!"
+        explanation: "0으로 나누면 ZeroDivisionError!",
+        en: {
+          question: "What error does 10 / 0 cause?",
+          options: ["ValueError", "ZeroDivisionError", "FileNotFoundError", "No error"],
+          explanation: "Dividing by 0 causes ZeroDivisionError!"
+        }
       }
     },
     
@@ -192,6 +207,11 @@ except ValueError:
         template: "try:\n    숫자 = int('abc')\n___ ___:\n    print('숫자가 아니에요!')",
         blanksAnswer: ["except", "ValueError"],
         answer: "try:\n    숫자 = int('abc')\nexcept ValueError:\n    print('숫자가 아니에요!')",
+        en: {
+          task: "Fill in the blanks to catch only ValueError!",
+          guide: "Write the error name after except!",
+          hint: "What is the name of the error when a value is wrong?"
+        },
         alternateAnswers: [],
         expect: "숫자가 아니에요!"
       }
@@ -286,6 +306,11 @@ except ZeroDivisionError:
         template: "___:\n    x = int(input('숫자: '))\n    print(10 / x)\nexcept ___:\n    print('숫자가 아니에요!')\nexcept ___:\n    print('0으로 못 나눠!')",
         blanksAnswer: ["try", "ValueError", "ZeroDivisionError"],
         answer: "try:\n    x = int(input('숫자: '))\n    print(10 / x)\nexcept ValueError:\n    print('숫자가 아니에요!')\nexcept ZeroDivisionError:\n    print('0으로 못 나눠!')",
+        en: {
+          task: "Fill in the blanks to catch two types of errors!",
+          guide: "Catch ValueError and ZeroDivisionError separately",
+          hint: "Wrap with try, and write the error name after except!"
+        },
         alternateAnswers: [],
         expect: ""
       }
@@ -301,6 +326,11 @@ except ZeroDivisionError:
         template: "___:\n    x = int('abc')\n___:\n    print('에러!')\n\nprint('완료')",
         blanksAnswer: ["try", "except"],
         answer: "try:\n    x = int('abc')\nexcept:\n    print('에러!')\n\nprint('완료')",
+        en: {
+          message: "🔄 Quick review! Basics!",
+          task: "Fill in the blanks so '완료' still prints even when an error occurs!",
+          hint: "Catch the error with try-except, and put the last print outside try!"
+        },
         alternateAnswers: [
           "try:\n    x = int('abc')\nexcept ValueError:\n    print('에러!')\n\nprint('완료')"
         ],
@@ -357,6 +387,11 @@ except ZeroDivisionError:
         template: "while True:\n    print('1.새게임 2.저장 3.종료')\n    ___:\n        선택 = int(input('선택: '))\n        if 선택 == 1:\n            print('새 게임!')\n        elif 선택 == 2:\n            print('저장!')\n        elif 선택 == 3:\n            ___\n        else:\n            print('1-3 사이로!')\n    except ___:\n        print('숫자만!')",
         blanksAnswer: ["try", "break", "ValueError"],
         answer: "while True:\n    print('1.새게임 2.저장 3.종료')\n    try:\n        선택 = int(input('선택: '))\n        if 선택 == 1:\n            print('새 게임!')\n        elif 선택 == 2:\n            print('저장!')\n        elif 선택 == 3:\n            break\n        else:\n            print('1-3 사이로!')\n    except ValueError:\n        print('숫자만!')",
+        en: {
+          task: "Fill in the blanks to complete the game menu!",
+          guide: "Handle menu with while + try-except + if-elif!",
+          hint: "Wrap with try, break for option 3, ValueError for non-number input!"
+        },
         alternateAnswers: [
           "while True:\n    print('1.새게임 2.저장 3.종료')\n    try:\n        선택 = int(input('선택: '))\n        if 선택 == 1:\n            print('새 게임!')\n        elif 선택 == 2:\n            print('저장!')\n        elif 선택 == 3:\n            break\n        else:\n            print('1-3 사이로!')\n    except:\n        print('숫자만!')"
         ],
@@ -396,6 +431,11 @@ except ZeroDivisionError:
         template: "while True:\n    try:\n        숫자 = int(input('숫자: '))\n        print(100 / 숫자)\n        ___\n    except ___:\n        print('숫자를 입력!')\n    except ___:\n        print('0은 안돼!')",
         blanksAnswer: ["break", "ValueError", "ZeroDivisionError"],
         answer: "while True:\n    try:\n        숫자 = int(input('숫자: '))\n        print(100 / 숫자)\n        break\n    except ValueError:\n        print('숫자를 입력!')\n    except ZeroDivisionError:\n        print('0은 안돼!')",
+        en: {
+          task: "Fill in the blanks to create a safe calculator!",
+          guide: "Loop with while and catch two types of errors!",
+          hint: "break on success, ValueError for text input, ZeroDivisionError for 0!"
+        },
         alternateAnswers: [],
         expect: ""
       }
@@ -412,6 +452,11 @@ except ZeroDivisionError:
         template: "while True:\n    ___:\n        x = int(input('숫자: '))\n        print(f'입력: {x}')\n        ___\n    ___ ___:\n        print('숫자를 입력하세요!')",
         blanksAnswer: ["try", "break", "except", "ValueError"],
         answer: "while True:\n    try:\n        x = int(input('숫자: '))\n        print(f'입력: {x}')\n        break\n    except ValueError:\n        print('숫자를 입력하세요!')",
+        en: {
+          task: "Fill in the blanks to complete the repeated number input code!",
+          guide: "Combine while True + try-except + break!",
+          hint: "break on success inside try, ValueError on failure"
+        },
         alternateAnswers: [
           "while True:\n    try:\n        x = int(input('숫자: '))\n        print(f'입력: {x}')\n        break\n    except:\n        print('숫자를 입력하세요!')"
         ],
@@ -429,6 +474,11 @@ except ZeroDivisionError:
         template: "___:\n    print(10 / 0)\nexcept ___:\n    print('0으로 못 나눠!')",
         blanksAnswer: ["try", "ZeroDivisionError"],
         answer: "try:\n    print(10 / 0)\nexcept ZeroDivisionError:\n    print('0으로 못 나눠!')",
+        en: {
+          message: "🔄 Review error types!",
+          task: "Fill in the blanks to catch the divide-by-zero error!",
+          hint: "The error name for dividing by zero is ZeroDivision...Error"
+        },
         alternateAnswers: [],
         expect: "0으로 못 나눠!"
       }
@@ -444,6 +494,11 @@ except ZeroDivisionError:
         template: "데이터 = ['10', 'abc', '30']\n결과 = []\nfor x in 데이터:\n    ___:\n        결과.append(___(x))\n    except ___:\n        print(f'{x}는 숫자가 아님!')\nprint(결과)",
         blanksAnswer: ["try", "int", "ValueError"],
         answer: "데이터 = ['10', 'abc', '30']\n결과 = []\nfor x in 데이터:\n    try:\n        결과.append(int(x))\n    except ValueError:\n        print(f'{x}는 숫자가 아님!')\nprint(결과)",
+        en: {
+          message: "🔄 Advanced review!",
+          task: "Fill in the blanks to safely convert strings in a list to numbers!",
+          hint: "Loop through the list with for, and wrap int() conversion with try-except!"
+        },
         alternateAnswers: [],
         expect: "abc는 숫자가 아님!\n[10, 30]"
       }

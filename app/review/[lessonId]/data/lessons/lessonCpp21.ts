@@ -57,7 +57,11 @@ export const lessonCpp21: LessonData = {
           template: "int table[___][___];",
           answer: "3",
           blanksAnswer: ["3", "4"],
-          expect: "int table[3][4];"
+          expect: "int table[3][4];",
+          en: {
+            task: "Declare a 3-row 4-column integer 2D array!",
+            guide: "Use the form int name[rows][cols]!"
+          }
         }
       },
 
@@ -71,7 +75,11 @@ export const lessonCpp21: LessonData = {
           template: "cout << grid[___][___] << endl;",
           answer: "1",
           blanksAnswer: ["1", "2"],
-          expect: "cout << grid[1][2] << endl;"
+          expect: "cout << grid[1][2] << endl;",
+          en: {
+            task: "Access the value at row 1, column 2 of grid!",
+            guide: "Row first, column second! grid[row][col]"
+          }
         }
       },
 
@@ -87,7 +95,17 @@ export const lessonCpp21: LessonData = {
             "4번째 행, 3번째 열"
           ],
           answer: 2,
-          explanation: "인덱스는 0부터 시작해요! grid[2][3]은 0-based로 3번째 행, 4번째 열이지만, 표현상으로는 마지막 행(2)의 마지막 열(3)이에요. grid[3][4]처럼 범위를 넘으면 안 돼요!"
+          explanation: "인덱스는 0부터 시작해요! grid[2][3]은 0-based로 3번째 행, 4번째 열이지만, 표현상으로는 마지막 행(2)의 마지막 열(3)이에요. grid[3][4]처럼 범위를 넘으면 안 돼요!",
+          en: {
+            question: "In int grid[3][4];, which row and column is grid[2][3]?",
+            options: [
+              "3rd row, 4th column",
+              "3rd row, 3rd column",
+              "2nd row, 3rd column (0-based: last row, last column)",
+              "4th row, 3rd column"
+            ],
+            explanation: "Indices start from 0! grid[2][3] is 0-based 3rd row, 4th column — the last row (2) and last column (3). Never go out of bounds like grid[3][4]!"
+          }
         }
       },
 
@@ -103,7 +121,16 @@ export const lessonCpp21: LessonData = {
             "cout 사용법이 틀렸어요"
           ],
           answer: 0,
-          explanation: "grid[2][3]이면 행 인덱스는 0, 1만 가능해요! grid[2]는 세 번째 행인데 없어요. 범위 밖 접근은 위험해요!"
+          explanation: "grid[2][3]이면 행 인덱스는 0, 1만 가능해요! grid[2]는 세 번째 행인데 없어요. 범위 밖 접근은 위험해요!",
+          en: {
+            question: "What is wrong with this code?",
+            options: [
+              "grid[2][0] is out of bounds (row indices are only 0 and 1)",
+              "The 2D array declaration is wrong",
+              "The cout usage is incorrect"
+            ],
+            explanation: "For int grid[2][3], valid row indices are only 0 and 1! grid[2] would be a third row that doesn't exist. Out-of-bounds access is dangerous!"
+          }
         }
       },
 
@@ -153,7 +180,11 @@ export const lessonCpp21: LessonData = {
           template: "int grid[___][___];",
           answer: "2",
           blanksAnswer: ["2", "3"],
-          expect: "int grid[2][3];"
+          expect: "int grid[2][3];",
+          en: {
+            message: "Quick check! Do you remember 2D arrays?",
+            task: "Declare a 2-row 3-column 2D array!"
+          }
         }
       },
 
@@ -198,7 +229,11 @@ export const lessonCpp21: LessonData = {
           template: "vector<vector<int>> grid(___, vector<int>(___, 0));",
           answer: "2",
           blanksAnswer: ["2", "3"],
-          expect: "vector<vector<int>> grid(2, vector<int>(3, 0));"
+          expect: "vector<vector<int>> grid(2, vector<int>(3, 0));",
+          en: {
+            task: "Initialize a 2-row 3-column 2D vector with all zeros!",
+            guide: "vector<vector<int>> name(rows, vector<int>(cols, 0));"
+          }
         }
       },
 
@@ -211,7 +246,11 @@ export const lessonCpp21: LessonData = {
           guide: "행 수 = grid.size()",
           template: 'vector<vector<int>> grid(4, vector<int>(5, 0));\ncout << grid.___() << endl;',
           answer: "size",
-          expect: 'vector<vector<int>> grid(4, vector<int>(5, 0));\ncout << grid.size() << endl;'
+          expect: 'vector<vector<int>> grid(4, vector<int>(5, 0));\ncout << grid.size() << endl;',
+          en: {
+            task: "Print the number of rows in a 2D vector!",
+            guide: "number of rows = grid.size()"
+          }
         }
       },
 
@@ -227,7 +266,17 @@ export const lessonCpp21: LessonData = {
             "grid.length()"
           ],
           answer: 1,
-          explanation: "grid.size()는 행의 수, grid[0].size()는 첫 번째 행의 크기 = 열의 수예요! .cols()나 .length()는 vector에 없어요."
+          explanation: "grid.size()는 행의 수, grid[0].size()는 첫 번째 행의 크기 = 열의 수예요! .cols()나 .length()는 vector에 없어요.",
+          en: {
+            question: "What is the code to get the number of columns in a 2D vector?",
+            options: [
+              "grid.size()",
+              "grid[0].size()",
+              "grid.cols()",
+              "grid.length()"
+            ],
+            explanation: "grid.size() gives the number of rows; grid[0].size() gives the size of the first row = number of columns! .cols() and .length() don't exist on vector."
+          }
         }
       },
 
@@ -243,7 +292,16 @@ export const lessonCpp21: LessonData = {
             "cout 사용법이 틀렸어요"
           ],
           answer: 0,
-          explanation: "아무 행도 없는 빈 2D vector에서 grid[0]을 접근하면 위험해요! 먼저 크기를 지정해서 초기화해야 해요."
+          explanation: "아무 행도 없는 빈 2D vector에서 grid[0]을 접근하면 위험해요! 먼저 크기를 지정해서 초기화해야 해요.",
+          en: {
+            question: "Why is this code problematic?",
+            options: [
+              "Accessing grid[0][0] on an empty 2D vector is dangerous",
+              "The vector declaration is wrong",
+              "The cout usage is incorrect"
+            ],
+            explanation: "Accessing grid[0] on an empty 2D vector with no rows is dangerous! You must initialize with a specified size first."
+          }
         }
       },
 
@@ -295,7 +353,11 @@ export const lessonCpp21: LessonData = {
           alternateAnswers: [
             "vector<vector<int>> grid(5, vector<int>(6, 0))"
           ],
-          expect: "vector<vector<int>> grid(5, vector<int>(6, 0));"
+          expect: "vector<vector<int>> grid(5, vector<int>(6, 0));",
+          en: {
+            message: "Quick check! Do you remember 2D vectors?",
+            task: "Declare a 5-row 6-column 2D vector initialized to 0!"
+          }
         }
       },
 
@@ -325,7 +387,11 @@ export const lessonCpp21: LessonData = {
           guide: "total += grid[i][j]; 패턴!",
           template: 'int total = 0;\nfor (int i = 0; i < grid.size(); i++) {\n    for (int j = 0; j < grid[0].size(); j++) {\n        total ___ grid[i][j];\n    }\n}',
           answer: "+=",
-          expect: 'int total = 0;\nfor (int i = 0; i < grid.size(); i++) {\n    for (int j = 0; j < grid[0].size(); j++) {\n        total += grid[i][j];\n    }\n}'
+          expect: 'int total = 0;\nfor (int i = 0; i < grid.size(); i++) {\n    for (int j = 0; j < grid[0].size(); j++) {\n        total += grid[i][j];\n    }\n}',
+          en: {
+            task: "Use nested for loops to sum all values in grid!",
+            guide: "Use the pattern total += grid[i][j]!"
+          }
         }
       },
 
@@ -357,7 +423,11 @@ export const lessonCpp21: LessonData = {
           template: 'vector<vector<int>> grid(3, vector<int>(3, 0));\nfor (int i = 0; i < 3; i++) {\n    for (int j = 0; j < 3; j++) {\n        grid[i][j] = ___;\n    }\n}',
           answer: "i + j",
           alternateAnswers: ["i+j"],
-          expect: 'vector<vector<int>> grid(3, vector<int>(3, 0));\nfor (int i = 0; i < 3; i++) {\n    for (int j = 0; j < 3; j++) {\n        grid[i][j] = i + j;\n    }\n}'
+          expect: 'vector<vector<int>> grid(3, vector<int>(3, 0));\nfor (int i = 0; i < 3; i++) {\n    for (int j = 0; j < 3; j++) {\n        grid[i][j] = i + j;\n    }\n}',
+          en: {
+            task: "Fill grid[i][j] with the value i+j! (diagonal pattern)",
+            guide: "grid[i][j] = i + j;"
+          }
         }
       },
 
@@ -373,7 +443,17 @@ export const lessonCpp21: LessonData = {
             "j < grid[j].size()"
           ],
           answer: 1,
-          explanation: "안쪽 루프는 열(column)을 순회해요! 열의 수는 grid[0].size()로 구해요. grid.size()는 행의 수예요."
+          explanation: "안쪽 루프는 열(column)을 순회해요! 열의 수는 grid[0].size()로 구해요. grid.size()는 행의 수예요.",
+          en: {
+            question: "When traversing a 3-row 4-column 2D vector with nested for loops, what is the inner loop condition?",
+            options: [
+              "j < grid.size()",
+              "j < grid[0].size()",
+              "j < 3",
+              "j < grid[j].size()"
+            ],
+            explanation: "The inner loop traverses columns! The number of columns is grid[0].size(). grid.size() gives the number of rows."
+          }
         }
       },
 

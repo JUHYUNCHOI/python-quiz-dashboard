@@ -57,7 +57,11 @@ export const lessonCppP3: LessonData = {
           template: "sort(v.___(), v.___());",
           answer: "begin",
           blanksAnswer: ["begin", "end"],
-          expect: "sort(v.begin(), v.end());"
+          expect: "sort(v.begin(), v.end());",
+          en: {
+            task: "Sort a vector in ascending order!",
+            guide: "Use the form sort(begin, end)!"
+          }
         }
       },
 
@@ -87,7 +91,17 @@ export const lessonCppP3: LessonData = {
             "apple을 출력해요"
           ],
           answer: 1,
-          explanation: "map에서 없는 키를 접근하면 자동으로 0으로 초기화! ++로 1을 더해요."
+          explanation: "map에서 없는 키를 접근하면 자동으로 0으로 초기화! ++로 1을 더해요.",
+          en: {
+            question: "In map<string, int> count;, what does count[\"apple\"]++; do?",
+            options: [
+              "Deletes the apple key",
+              "Increments the value of apple by 1 (starts from 0 if not present)",
+              "Causes an error",
+              "Prints apple"
+            ],
+            explanation: "Accessing a missing key in a map auto-initializes it to 0! ++ then adds 1."
+          }
         }
       },
 
@@ -101,7 +115,11 @@ export const lessonCppP3: LessonData = {
           template: "map<int, int> cnt;\nfor (int x : v) {\n    ___[x]___;\n}",
           answer: "cnt",
           blanksAnswer: ["cnt", "++"],
-          expect: "map<int, int> cnt;\nfor (int x : v) {\n    cnt[x]++;\n}"
+          expect: "map<int, int> cnt;\nfor (int x : v) {\n    cnt[x]++;\n}",
+          en: {
+            task: "Count how many times each number appears in an array!",
+            guide: "Use the map[value]++ pattern!"
+          }
         }
       },
 
@@ -131,7 +149,16 @@ export const lessonCppP3: LessonData = {
             "stack 헤더가 빠졌어요"
           ],
           answer: 0,
-          explanation: "빈 스택에서 top()을 부르면 런타임 에러! 항상 empty()로 확인 먼저!"
+          explanation: "빈 스택에서 top()을 부르면 런타임 에러! 항상 empty()로 확인 먼저!",
+          en: {
+            question: "What is wrong with this code?",
+            options: [
+              "Calling top() on an empty stack causes a runtime error (undefined behavior)",
+              "stack doesn't have a top() function",
+              "The stack header is missing"
+            ],
+            explanation: "Calling top() on an empty stack causes a runtime error! Always check with empty() first!"
+          }
         }
       },
 
@@ -145,7 +172,11 @@ export const lessonCppP3: LessonData = {
           template: "stack<int> s;\ns.___(42);\ncout << s.___() << \"\\n\";\ns.___();",
           answer: "push",
           blanksAnswer: ["push", "top", "pop"],
-          expect: "stack<int> s;\ns.push(42);\ncout << s.top() << \"\\n\";\ns.pop();"
+          expect: "stack<int> s;\ns.push(42);\ncout << s.top() << \"\\n\";\ns.pop();",
+          en: {
+            task: "Push a value onto the stack and pop it!",
+            guide: "Use push to insert and pop to remove!"
+          }
         }
       },
 
@@ -197,7 +228,11 @@ export const lessonCppP3: LessonData = {
           alternateAnswers: [
             "sort(v.begin(), v.end())"
           ],
-          expect: "sort(v.begin(), v.end());"
+          expect: "sort(v.begin(), v.end());",
+          en: {
+            message: "Quick check! Do you remember sort?",
+            task: "Write the code to sort vector v in ascending order!"
+          }
         }
       },
 

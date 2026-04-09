@@ -312,6 +312,11 @@ print(sum(결과))`,
         hint: "max() * min()",
         template: null,
         answer: "숫자 = [2, 5, 1, 8, 3]\n\nprint(max(숫자) * min(숫자))",
+        en: {
+          message: "🔄 Quick review! max/min!",
+          task: "Print the product of the maximum and minimum values of a list",
+          hint: "max() * min()"
+        },
         alternateAnswers: [
           "숫자 = [2, 5, 1, 8, 3]\nprint(max(숫자) * min(숫자))"
         ],
@@ -383,6 +388,11 @@ print(결과)`,
         hint: "lambda x: x > 0 조건 사용!",
         template: null,
         answer: "숫자 = [3, -1, 4, -2, 5]\n\n양수 = list(filter(lambda x: x > 0, 숫자))\nprint(sum(양수))",
+        en: {
+          task: "Filter only positive numbers and find the sum",
+          guide: "filter() + sum()",
+          hint: "Use the condition lambda x: x > 0!"
+        },
         alternateAnswers: [
           "숫자 = [3, -1, 4, -2, 5]\n양수 = list(filter(lambda x: x > 0, 숫자))\nprint(sum(양수))"
         ],
@@ -414,6 +424,11 @@ for i, f in enumerate(과일):
         hint: "두 번째 인자로 시작 번호 지정!",
         template: null,
         answer: "학생 = ['철수', '영희', '민수']\n\nfor i, name in enumerate(학생, 1):\n    print(f'{i}등: {name}')",
+        en: {
+          task: "Print rankings starting from 1 using enumerate",
+          guide: "Use enumerate(list, 1) to start from 1!",
+          hint: "Specify the starting number as the second argument!"
+        },
         alternateAnswers: [
           "학생 = ['철수', '영희', '민수']\nfor i, name in enumerate(학생, 1):\n    print(f'{i}등: {name}')"
         ],
@@ -447,6 +462,11 @@ for name, score in zip(이름, 점수):
         hint: "zip을 dict()로 감싸면 딕셔너리!",
         template: null,
         answer: "과목 = ['국어', '영어', '수학']\n점수 = [90, 85, 95]\n\n성적표 = dict(zip(과목, 점수))\nprint(성적표)",
+        en: {
+          task: "Use zip to combine two lists into a dictionary",
+          guide: "dict(zip(keys, values))",
+          hint: "Wrap zip with dict() to get a dictionary!"
+        },
         alternateAnswers: [
           "과목 = ['국어', '영어', '수학']\n점수 = [90, 85, 95]\n성적표 = dict(zip(과목, 점수))\nprint(성적표)"
         ],

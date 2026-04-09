@@ -55,7 +55,11 @@ export const lesson12: LessonData = {
         task: "score = 80 으로 변수 만들고\n80 이상이면 '합격' 출력해봐",
         template: null,
         answer: "score = 80\nif score >= 80:\n    print('합격')",
-        expect: "합격"
+        expect: "합격",
+        en: {
+          message: "Wait! Remember conditionals?",
+          task: "Create variable score = 80\nif 80 or above print '합격'"
+        }
       }
     },
 
@@ -93,7 +97,11 @@ export const lesson12: LessonData = {
         guide: "if temp >= 15 and temp <= 28 and not rain:",
         template: null,
         answer: "temp = 22\nrain = False\nif temp >= 15 and temp <= 28 and not rain:\n    print('소풍 가자!')\nelse:\n    print('집에 있자')",
-        expect: "소풍 가자!"
+        expect: "소풍 가자!",
+        en: {
+          task: "Create variables temp = 22, rain = False,\nif temperature is 15~28 and it's not raining print '소풍 가자!'",
+          guide: "if temp >= 15 and temp <= 28 and not rain:"
+        }
       }
     },
 
@@ -108,7 +116,16 @@ export const lesson12: LessonData = {
           "에러"
         ],
         answer: 1,
-        explanation: "and는 모두 True여야 True! 하나라도 False면 전체 False. True and False = False!"
+        explanation: "and는 모두 True여야 True! 하나라도 False면 전체 False. True and False = False!",
+        en: {
+          question: "What is the result of True and False and True?",
+          options: [
+            "True (because more Trues)",
+            "False (even one False makes it False)",
+            "Error"
+          ],
+          explanation: "and requires ALL to be True! Even one False makes the whole thing False. True and False = False!"
+        }
       }
     },
 
@@ -172,7 +189,11 @@ export const lesson12: LessonData = {
         guide: "if day == '토요일' or day == '일요일':",
         template: null,
         answer: "day = '토요일'\nif day == '토요일' or day == '일요일':\n    print('주말이다!')\nelse:\n    print('평일이다')",
-        expect: "주말이다!"
+        expect: "주말이다!",
+        en: {
+          task: "Create variable day = '토요일',\nif '토요일' or '일요일' print '주말이다!'",
+          guide: "if day == '토요일' or day == '일요일':"
+        }
       }
     },
 
@@ -187,7 +208,16 @@ export const lesson12: LessonData = {
           "에러"
         ],
         answer: 1,
-        explanation: "or는 하나라도 True면 True! 마지막 True 덕분에 전체가 True야."
+        explanation: "or는 하나라도 True면 True! 마지막 True 덕분에 전체가 True야.",
+        en: {
+          question: "What is the result of False or False or True?",
+          options: [
+            "False (because more Falses)",
+            "True (even one True makes it True)",
+            "Error"
+          ],
+          explanation: "or is True if even one is True! Thanks to the last True, the whole thing is True."
+        }
       }
     },
 
@@ -251,7 +281,11 @@ export const lesson12: LessonData = {
         guide: "if not logged_in:",
         template: null,
         answer: "logged_in = False\nif not logged_in:\n    print('로그인이 필요합니다')",
-        expect: "로그인이 필요합니다"
+        expect: "로그인이 필요합니다",
+        en: {
+          task: "Create variable logged_in = False,\nif not logged in print '로그인이 필요합니다'",
+          guide: "if not logged_in:"
+        }
       }
     },
 
@@ -266,7 +300,16 @@ export const lesson12: LessonData = {
           "에러"
         ],
         answer: 0,
-        explanation: "3 > 5는 False! not False = True. 괄호 안이 먼저 계산돼."
+        explanation: "3 > 5는 False! not False = True. 괄호 안이 먼저 계산돼.",
+        en: {
+          question: "What is the result of not (3 > 5)?",
+          options: [
+            "True",
+            "False",
+            "Error"
+          ],
+          explanation: "3 > 5 is False! not False = True. The inside of the parentheses is calculated first."
+        }
       }
     },
 
@@ -331,7 +374,11 @@ export const lesson12: LessonData = {
         guide: "if 1 <= n < 10:",
         template: null,
         answer: "n = 7\nif 1 <= n < 10:\n    print('범위 안')",
-        expect: "범위 안"
+        expect: "범위 안",
+        en: {
+          task: "Create variable n = 7,\nif 1 or above and less than 10 print '범위 안'\n(Using Python chained comparison!)",
+          guide: "if 1 <= n < 10:"
+        }
       }
     },
     {
@@ -341,7 +388,10 @@ export const lesson12: LessonData = {
         task: "score = 72, attend = True 로 변수 만들고,\n점수 60 이상이고 출석이 True면 '최종 합격'\n아니면 '불합격' 출력해봐",
         template: null,
         answer: "score = 72\nattend = True\nif score >= 60 and attend:\n    print('최종 합격')\nelse:\n    print('불합격')",
-        expect: "최종 합격"
+        expect: "최종 합격",
+        en: {
+          task: "Create variables score = 72, attend = True,\nif score 60+ and attendance is True print '최종 합격'\notherwise print '불합격'"
+        }
       }
     },
 
@@ -356,7 +406,16 @@ export const lesson12: LessonData = {
           "Python에서는 에러"
         ],
         answer: 0,
-        explanation: "Python에서 1 < x < 10 처럼 수학처럼 연결 비교가 가능해! 5는 1초과 10미만이므로 True."
+        explanation: "Python에서 1 < x < 10 처럼 수학처럼 연결 비교가 가능해! 5는 1초과 10미만이므로 True.",
+        en: {
+          question: "When x = 5, what is the result of 1 < x < 10?",
+          options: [
+            "True",
+            "False",
+            "Error in Python"
+          ],
+          explanation: "In Python, you can chain comparisons like 1 < x < 10 just like in math! 5 is greater than 1 and less than 10, so True."
+        }
       }
     },
 
@@ -394,7 +453,11 @@ export const lesson12: LessonData = {
         task: "x = 15 로 변수 만들고\n10 이상 20 미만이면 '통과' 출력해봐",
         template: null,
         answer: "x = 15\nif 10 <= x < 20:\n    print('통과')",
-        expect: "통과"
+        expect: "통과",
+        en: {
+          message: "Remember chained comparison?",
+          task: "Create variable x = 15\nif 10 or above and less than 20 print '통과'"
+        }
       }
     },
 

@@ -55,7 +55,11 @@ export const lesson8: LessonData = {
         task: "name = '코린이' 로 변수 만들고 출력해봐",
         template: null,
         answer: "name = '코린이'\nprint(name)",
-        expect: "코린이"
+        expect: "코린이",
+        en: {
+          message: "Wait! Remember variables?",
+          task: "Create name = '코린이' and print it"
+        }
       }
     },
 
@@ -80,7 +84,11 @@ export const lesson8: LessonData = {
         guide: "f'나는 {city}에 살아'",
         template: null,
         answer: "city = '서울'\nprint(f'나는 {city}에 살아')",
-        expect: "나는 서울에 살아"
+        expect: "나는 서울에 살아",
+        en: {
+          task: "Create city = '서울' and print '나는 서울에 살아' using f-string",
+          guide: "f'나는 {city}에 살아'"
+        }
       }
     },
     {
@@ -91,7 +99,11 @@ export const lesson8: LessonData = {
         guide: "f'내 나이는 {age}살이야'",
         template: null,
         answer: "age = 15\nprint(f'내 나이는 {age}살이야')",
-        expect: "내 나이는 15살이야"
+        expect: "내 나이는 15살이야",
+        en: {
+          task: "Create age = 15 and print '내 나이는 15살이야' using f-string",
+          guide: "f'내 나이는 {age}살이야'"
+        }
       }
     },
 
@@ -106,7 +118,16 @@ export const lesson8: LessonData = {
           "에러"
         ],
         answer: 1,
-        explanation: "f-string에서 {name}은 변수의 값으로 바뀌어! 그래서 '안녕 민준'이 출력돼."
+        explanation: "f-string에서 {name}은 변수의 값으로 바뀌어! 그래서 '안녕 민준'이 출력돼.",
+        en: {
+          question: "When name = '민준', what does f'안녕 {name}' print?",
+          options: [
+            "안녕 {name}",
+            "안녕 민준",
+            "Error"
+          ],
+          explanation: "In f-strings, {name} is replaced with the variable's value! So '안녕 민준' is printed."
+        }
       }
     },
 
@@ -158,7 +179,11 @@ export const lesson8: LessonData = {
         guide: "f'총 가격: {price * count}원'",
         template: null,
         answer: "price = 1000\ncount = 3\nprint(f'총 가격: {price * count}원')",
-        expect: "총 가격: 3000원"
+        expect: "총 가격: 3000원",
+        en: {
+          task: "Create price = 1000, count = 3 and print '총 가격: 3000원' using f-string",
+          guide: "f'총 가격: {price * count}원'"
+        }
       }
     },
     {
@@ -168,7 +193,10 @@ export const lesson8: LessonData = {
         task: "x = 7, y = 3 으로 변수 만들고,\nf'{x} - {y} = {x - y}' 출력해봐",
         template: null,
         answer: "x = 7\ny = 3\nprint(f'{x} - {y} = {x - y}')",
-        expect: "7 - 3 = 4"
+        expect: "7 - 3 = 4",
+        en: {
+          task: "Create x = 7, y = 3 and print f'{x} - {y} = {x - y}'"
+        }
       }
     },
 
@@ -183,7 +211,16 @@ export const lesson8: LessonData = {
           "12"
         ],
         answer: 2,
-        explanation: "{ } 안의 식이 계산돼서 6 * 2 = 12가 출력돼!"
+        explanation: "{ } 안의 식이 계산돼서 6 * 2 = 12가 출력돼!",
+        en: {
+          question: "When a = 6, b = 2, what does f'{a * b}' print?",
+          options: [
+            "{a * b}",
+            "6 * 2",
+            "12"
+          ],
+          explanation: "The expression inside { } is calculated! 6 * 2 = 12 is printed!"
+        }
       }
     },
 
@@ -234,7 +271,11 @@ export const lesson8: LessonData = {
         guide: "f'{avg:.2f}'",
         template: null,
         answer: "avg = 87.6789\nprint(f'{avg:.2f}')",
-        expect: "87.68"
+        expect: "87.68",
+        en: {
+          task: "Create avg = 87.6789 and print it with 2 decimal places using f-string (87.68)",
+          guide: "f'{avg:.2f}'"
+        }
       }
     },
     {
@@ -245,7 +286,11 @@ export const lesson8: LessonData = {
         guide: "f'가격: {price:.2f}원'",
         template: null,
         answer: "price = 1234.5\nprint(f'가격: {price:.2f}원')",
-        expect: "가격: 1234.50원"
+        expect: "가격: 1234.50원",
+        en: {
+          task: "Create price = 1234.5 and print it in '가격: 1234.50원' format",
+          guide: "f'가격: {price:.2f}원'"
+        }
       }
     },
 
@@ -260,7 +305,16 @@ export const lesson8: LessonData = {
           "3.14159"
         ],
         answer: 1,
-        explanation: ":.1f는 소수점 1자리! 그래서 3.1이 출력돼 (반올림)."
+        explanation: ":.1f는 소수점 1자리! 그래서 3.1이 출력돼 (반올림).",
+        en: {
+          question: "When n = 3.14159, what does f'{n:.1f}' print?",
+          options: [
+            "3.14",
+            "3.1",
+            "3.14159"
+          ],
+          explanation: ":.1f means 1 decimal place! So 3.1 is printed (rounded)."
+        }
       }
     },
 
@@ -311,7 +365,11 @@ export const lesson8: LessonData = {
         guide: "f'{num:03d}'",
         template: null,
         answer: "num = 42\nprint(f'{num:03d}')",
-        expect: "042"
+        expect: "042",
+        en: {
+          task: "Create num = 42 and print it zero-padded to 3 digits like '042'",
+          guide: "f'{num:03d}'"
+        }
       }
     },
 
@@ -336,7 +394,11 @@ export const lesson8: LessonData = {
         guide: "f'{lang.upper()}'",
         template: null,
         answer: "lang = 'python'\nprint(f'{lang.upper()}')",
-        expect: "PYTHON"
+        expect: "PYTHON",
+        en: {
+          task: "Create lang = 'python' and print 'PYTHON' (uppercase) using f-string",
+          guide: "f'{lang.upper()}'"
+        }
       }
     },
 
@@ -351,7 +413,16 @@ export const lesson8: LessonData = {
           "5000"
         ],
         answer: 1,
-        explanation: ":04d는 4자리! 빈 자리를 0으로 채우니까 0005가 출력돼."
+        explanation: ":04d는 4자리! 빈 자리를 0으로 채우니까 0005가 출력돼.",
+        en: {
+          question: "When n = 5, what does f'{n:04d}' print?",
+          options: [
+            "5",
+            "0005",
+            "5000"
+          ],
+          explanation: ":04d means 4 digits! Empty spaces are filled with 0, so 0005 is printed."
+        }
       }
     },
 
@@ -389,7 +460,11 @@ export const lesson8: LessonData = {
         task: "pi = 3.14159 를 소수점 2자리로 출력해봐",
         template: null,
         answer: "pi = 3.14159\nprint(f'{pi:.2f}')",
-        expect: "3.14"
+        expect: "3.14",
+        en: {
+          message: "Remember decimal formatting?",
+          task: "Print pi = 3.14159 with 2 decimal places"
+        }
       }
     },
 

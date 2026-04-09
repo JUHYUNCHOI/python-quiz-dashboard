@@ -91,6 +91,11 @@ print(결과)`,
         hint: "** 연산자가 제곱!",
         template: null,
         answer: "def square(n):\n    return n ** 2\n\nprint(square(5))\nprint(square(3))",
+        en: {
+          task: "Create a square(n) function that returns the square of a number",
+          guide: "return n ** 2",
+          hint: "The ** operator is for exponentiation!"
+        },
         alternateAnswers: [
           "def square(n):\n    return n ** 2\nprint(square(5))\nprint(square(3))",
           "def square(n):\n    return n * n\n\nprint(square(5))\nprint(square(3))"
@@ -184,6 +189,11 @@ print(x, y)`,
         hint: "2로 나눈 나머지가 0이면 짝수!",
         template: null,
         answer: "def is_even(n):\n    return n % 2 == 0\n\nprint(is_even(4))\nprint(is_even(7))",
+        en: {
+          task: "Create an is_even(n) function that returns True for even numbers and False for odd",
+          guide: "n % 2 == 0",
+          hint: "If the remainder when divided by 2 is 0, it's even!"
+        },
         alternateAnswers: [
           "def is_even(n):\n    return n % 2 == 0\nprint(is_even(4))\nprint(is_even(7))"
         ],
@@ -200,6 +210,11 @@ print(x, y)`,
         hint: "return a + b",
         template: null,
         answer: "def add(a, b):\n    return a + b\n\nprint(add(3, 5))",
+        en: {
+          message: "🔄 Quick review! Function basics!",
+          task: "Create an add(a, b) function that returns the sum of two numbers",
+          hint: "return a + b"
+        },
         alternateAnswers: [
           "def add(a, b):\n    return a + b\nprint(add(3, 5))"
         ],
@@ -284,7 +299,17 @@ print(x)`,
           "새 변수를 만들 때"
         ],
         answer: 1,
-        explanation: "global x 하면 함수 안에서 밖의 x를 수정 가능! (하지만 return 권장)"
+        explanation: "global x 하면 함수 안에서 밖의 x를 수정 가능! (하지만 return 권장)",
+        en: {
+          question: "What is the purpose of the global keyword?",
+          options: [
+            "Makes a function global",
+            "Used to modify global variables inside a function",
+            "Used to delete variables",
+            "Used to create new variables"
+          ],
+          explanation: "global x allows modifying x from outside the function! (but using return is preferred)"
+        }
       }
     },
     
@@ -298,6 +323,11 @@ print(x)`,
         hint: "count = increase(count) 패턴!",
         template: null,
         answer: "count = 0\n\ndef increase(n):\n    return n + 1\n\ncount = increase(count)\ncount = increase(count)\nprint(count)",
+        en: {
+          task: "Increment a counter using return (without using global)!",
+          guide: "Function returns n+1, and the result gets stored back!",
+          hint: "Use the pattern count = increase(count)!"
+        },
         alternateAnswers: [
           "count = 0\ndef increase(n):\n    return n + 1\ncount = increase(count)\ncount = increase(count)\nprint(count)"
         ],
@@ -391,6 +421,11 @@ print(결과[0][0])`,
         hint: "len()으로 길이!",
         template: null,
         answer: "단어 = ['apple', 'hi', 'banana', 'cat']\n\n결과 = sorted(단어, key=lambda x: len(x))\nprint(결과)",
+        en: {
+          task: "Sort the words by their length",
+          guide: "key=lambda x: len(x)",
+          hint: "Use len() for length!"
+        },
         alternateAnswers: [
           "단어 = ['apple', 'hi', 'banana', 'cat']\n결과 = sorted(단어, key=lambda x: len(x))\nprint(결과)",
           "단어 = ['apple', 'hi', 'banana', 'cat']\n결과 = sorted(단어, key=len)\nprint(결과)"
@@ -408,6 +443,11 @@ print(결과[0][0])`,
         hint: "기본값 있는 건 뒤에! def greet(name, msg='안녕'):",
         template: null,
         answer: "def greet(name, msg='안녕'):\n    print(f'{msg}, {name}!')\n\ngreet('철수')\ngreet('영희', '반가워')",
+        en: {
+          message: "🔄 Quick review! Default values!",
+          task: "Create a greet function that takes a name and greeting (default='안녕') and prints them",
+          hint: "Default value parameter goes last! def greet(name, msg='안녕'):"
+        },
         alternateAnswers: [
           "def greet(name, msg='안녕'):\n    print(f'{msg}, {name}!')\ngreet('철수')\ngreet('영희', '반가워')"
         ],
@@ -497,6 +537,11 @@ print(sum(결과))`,
         hint: "filter(lambda x: x >= 60, 리스트)",
         template: null,
         answer: "점수 = [85, 45, 92, 55, 78]\n\n합격 = list(filter(lambda x: x >= 60, 점수))\nprint(sum(합격) / len(합격))",
+        en: {
+          task: "Filter scores of 60 or above and find the average",
+          guide: "filter() + sum() / len()",
+          hint: "filter(lambda x: x >= 60, list)"
+        },
         alternateAnswers: [
           "점수 = [85, 45, 92, 55, 78]\n합격 = list(filter(lambda x: x >= 60, 점수))\nprint(sum(합격) / len(합격))"
         ],
@@ -514,6 +559,11 @@ print(sum(결과))`,
         hint: "list(map(int, ...))로 변환 후 max - min!",
         template: null,
         answer: "문자 = ['5', '12', '3', '8']\n\n숫자 = list(map(int, 문자))\nprint(max(숫자) - min(숫자))",
+        en: {
+          task: "Convert string numbers to integers then find the difference between max and min values",
+          guide: "map() + max() - min()",
+          hint: "Convert with list(map(int, ...)) then max - min!"
+        },
         alternateAnswers: [
           "문자 = ['5', '12', '3', '8']\n숫자 = list(map(int, 문자))\nprint(max(숫자) - min(숫자))"
         ],

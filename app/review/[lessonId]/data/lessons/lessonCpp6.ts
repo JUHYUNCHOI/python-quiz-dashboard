@@ -57,7 +57,11 @@ export const lessonCpp6: LessonData = {
           guide: "if (조건) { ... } 형태!",
           template: '___(x > 0) {\n    cout << "양수" << endl;\n}',
           answer: "if",
-          expect: 'if (x > 0) {\n    cout << "양수" << endl;\n}'
+          expect: 'if (x > 0) {\n    cout << "양수" << endl;\n}',
+          en: {
+            task: "Complete the if statement that prints 'positive' when x > 0!",
+            guide: "Use the form: if (condition) { ... }"
+          }
         }
       },
 
@@ -71,7 +75,11 @@ export const lessonCpp6: LessonData = {
           template: 'if (___) {\n    cout << "미성년" << endl;\n}',
           answer: "age < 19",
           alternateAnswers: ["age<19"],
-          expect: 'if (age < 19) {\n    cout << "미성년" << endl;\n}'
+          expect: 'if (age < 19) {\n    cout << "미성년" << endl;\n}',
+          en: {
+            task: "Fill in the condition to print 'minor' when age is under 19!",
+            guide: "if (condition) { ... } — what goes in the condition?"
+          }
         }
       },
 
@@ -87,7 +95,17 @@ export const lessonCpp6: LessonData = {
             "C++은 조건에 숫자를 못 쓴다"
           ],
           answer: 1,
-          explanation: "파이썬: if 조건: 들여쓰기 → C++: if (조건) { 코드 } — 괄호와 중괄호가 핵심!"
+          explanation: "파이썬: if 조건: 들여쓰기 → C++: if (조건) { 코드 } — 괄호와 중괄호가 핵심!",
+          en: {
+            question: "What is the biggest difference between Python and C++ if statements?",
+            options: [
+              "C++ cannot use if",
+              "C++ uses parentheses () and braces {}, Python uses colon (:) and indentation",
+              "Python has no else",
+              "C++ cannot use numbers in conditions"
+            ],
+            explanation: "Python: if condition: indentation → C++: if (condition) { code } — parentheses and braces are key!"
+          }
         }
       },
 
@@ -103,7 +121,16 @@ export const lessonCpp6: LessonData = {
             "중괄호가 잘못돼서"
           ],
           answer: 1,
-          explanation: "C++에서는 if 조건을 반드시 괄호 ()로 감싸야 해요! if (score >= 90) 이렇게!"
+          explanation: "C++에서는 if 조건을 반드시 괄호 ()로 감싸야 해요! if (score >= 90) 이렇게!",
+          en: {
+            question: "Why does this code cause an error?",
+            options: [
+              "Because score variable is missing",
+              "Because the condition is not wrapped in parentheses ()",
+              "Because the braces are wrong"
+            ],
+            explanation: "In C++, the if condition must always be wrapped in parentheses ()! Like: if (score >= 90)"
+          }
         }
       },
 
@@ -116,7 +143,11 @@ export const lessonCpp6: LessonData = {
           guide: "if 블록 뒤에 else { ... }!",
           template: 'if (score >= 60) {\n    cout << "합격" << endl;\n} ___ {\n    cout << "불합격" << endl;\n}',
           answer: "else",
-          expect: 'if (score >= 60) {\n    cout << "합격" << endl;\n} else {\n    cout << "불합격" << endl;\n}'
+          expect: 'if (score >= 60) {\n    cout << "합격" << endl;\n} else {\n    cout << "불합격" << endl;\n}',
+          en: {
+            task: "Use else to also print 'fail'!",
+            guide: "Add else { ... } after the if block!"
+          }
         }
       },
 
@@ -166,7 +197,11 @@ export const lessonCpp6: LessonData = {
           template: 'if (___) {',
           answer: "x > 0",
           alternateAnswers: ["x>0"],
-          expect: "if (x > 0) {"
+          expect: "if (x > 0) {",
+          en: {
+            message: "Wait! Do you remember what we learned earlier?",
+            task: "Write the condition 'x is greater than 0' in an if statement!"
+          }
         }
       },
 
@@ -212,7 +247,11 @@ export const lessonCpp6: LessonData = {
           template: 'if (x >= 90) {\n    cout << "A" << endl;\n} ___ ___(x >= 80) {\n    cout << "B" << endl;\n}',
           answer: "else if",
           blanksAnswer: ["else", "if"],
-          expect: 'if (x >= 90) {\n    cout << "A" << endl;\n} else if (x >= 80) {\n    cout << "B" << endl;\n}'
+          expect: 'if (x >= 90) {\n    cout << "A" << endl;\n} else if (x >= 80) {\n    cout << "B" << endl;\n}',
+          en: {
+            task: "Add a second condition! (equivalent to Python's elif)",
+            guide: "In C++, it's two words: else if!"
+          }
         }
       },
 
@@ -243,7 +282,17 @@ export const lessonCpp6: LessonData = {
             "switch문이 무시된다"
           ],
           answer: 2,
-          explanation: "break;가 없으면 아래 case들이 연속 실행돼요! 이걸 fall-through라고 해요. 꼭 break;를 넣어주세요!"
+          explanation: "break;가 없으면 아래 case들이 연속 실행돼요! 이걸 fall-through라고 해요. 꼭 break;를 넣어주세요!",
+          en: {
+            question: "What happens if you forget break; in a switch statement?",
+            options: [
+              "An error occurs",
+              "Only that case executes",
+              "All cases below also execute consecutively",
+              "The switch is ignored"
+            ],
+            explanation: "Without break;, all the cases below execute consecutively! This is called fall-through. Always include break;!"
+          }
         }
       },
 
@@ -259,7 +308,16 @@ export const lessonCpp6: LessonData = {
             "case 뒤에 중괄호가 없어서 에러"
           ],
           answer: 0,
-          explanation: "case 1에 break;가 없어서 '하나' 출력 후 case 2로 넘어가 '둘'도 출력돼요! break;를 꼭 넣어야 해요!"
+          explanation: "case 1에 break;가 없어서 '하나' 출력 후 case 2로 넘어가 '둘'도 출력돼요! break;를 꼭 넣어야 해요!",
+          en: {
+            question: "What is the problem with this code?",
+            options: [
+              "case 1 has no break; so both 'one' and 'two' are printed",
+              "Error because switch has no default",
+              "Error because case has no braces"
+            ],
+            explanation: "case 1 has no break; so after printing 'one', it falls through to case 2 and prints 'two'! Always include break;!"
+          }
         }
       },
 
@@ -272,7 +330,11 @@ export const lessonCpp6: LessonData = {
           guide: "각 case 끝에는 꼭 이걸 넣어야 해요!",
           template: 'case 1:\n    cout << "하나" << endl;\n    ___;',
           answer: "break",
-          expect: 'case 1:\n    cout << "하나" << endl;\n    break;'
+          expect: 'case 1:\n    cout << "하나" << endl;\n    break;',
+          en: {
+            task: "Fill in the missing keyword in the switch statement!",
+            guide: "This keyword must be added at the end of each case!"
+          }
         }
       },
 
@@ -321,7 +383,11 @@ export const lessonCpp6: LessonData = {
           task: "case 끝에 써야 하는 키워드는?",
           template: 'case 1:\n    cout << "하나" << endl;\n    ___;',
           answer: "break",
-          expect: 'case 1:\n    cout << "하나" << endl;\n    break;'
+          expect: 'case 1:\n    cout << "하나" << endl;\n    break;',
+          en: {
+            message: "Wait! Do you remember the important keyword in switch?",
+            task: "What keyword must be written at the end of a case?"
+          }
         }
       },
 

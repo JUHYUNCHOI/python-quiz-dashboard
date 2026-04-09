@@ -42,7 +42,17 @@ export const lessonCpp14: LessonData = {
             "포인터를 저장하는 것"
           ],
           answer: 1,
-          explanation: "struct는 관련된 변수(멤버)를 하나의 타입으로 묶어주는 거예요! 파이썬 딕셔너리와 비슷해요."
+          explanation: "struct는 관련된 변수(멤버)를 하나의 타입으로 묶어주는 거예요! 파이썬 딕셔너리와 비슷해요.",
+          en: {
+            question: "What is the role of struct?",
+            options: [
+              "Groups functions together",
+              "Groups related variables into one type",
+              "Creates an array",
+              "Stores pointers"
+            ],
+            explanation: "struct groups related variables (members) into one type! Similar to a Python dictionary."
+          }
         }
       },
 
@@ -73,7 +83,11 @@ export const lessonCpp14: LessonData = {
           guide: "struct 이름 { 멤버들 }; 형태!",
           template: "___ Student {\n    string name;\n    int age;\n};",
           answer: "struct",
-          expect: "struct Student {\n    string name;\n    int age;\n};"
+          expect: "struct Student {\n    string name;\n    int age;\n};",
+          en: {
+            task: "Declare a Student struct!",
+            guide: "Use the form: struct Name { members };"
+          }
         }
       },
 
@@ -86,7 +100,11 @@ export const lessonCpp14: LessonData = {
           guide: "점(.)으로 멤버에 접근해요!",
           template: 'Student s;\ns___name = "주현";',
           answer: ".",
-          expect: 'Student s;\ns.name = "주현";'
+          expect: 'Student s;\ns.name = "주현";',
+          en: {
+            task: "Access the student's name!",
+            guide: "Use dot notation (.) to access members!"
+          }
         }
       },
 
@@ -116,7 +134,16 @@ export const lessonCpp14: LessonData = {
             "멤버 변수가 너무 적어서"
           ],
           answer: 1,
-          explanation: "struct 선언 끝에는 반드시 세미콜론(;)이 있어야 해요! struct Student { ... }; 이렇게요."
+          explanation: "struct 선언 끝에는 반드시 세미콜론(;)이 있어야 해요! struct Student { ... }; 이렇게요.",
+          en: {
+            question: "Why does this code cause an error?",
+            options: [
+              "Cannot create a Student",
+              "Missing semicolon (;) after the struct declaration",
+              "Too few member variables"
+            ],
+            explanation: "A struct declaration must end with a semicolon (;)! Write it as: struct Student { ... };"
+          }
         }
       },
 
@@ -130,7 +157,11 @@ export const lessonCpp14: LessonData = {
           template: "Point p = {___, ___};",
           answer: "5",
           blanksAnswer: ["5", "3"],
-          expect: "Point p = {5, 3};"
+          expect: "Point p = {5, 3};",
+          en: {
+            task: "Initialize Point with x=5, y=3!",
+            guide: "Put the values in order inside curly braces {}!"
+          }
         }
       },
 
@@ -180,7 +211,11 @@ export const lessonCpp14: LessonData = {
           template: "Point p = {___, ___};",
           answer: "1",
           blanksAnswer: ["1", "2"],
-          expect: "Point p = {1, 2};"
+          expect: "Point p = {1, 2};",
+          en: {
+            message: "Quick! Remember struct?",
+            task: "Initialize a Point struct with x=1, y=2!"
+          }
         }
       },
 
@@ -210,7 +245,17 @@ export const lessonCpp14: LessonData = {
             "main 함수에서만 접근 가능하다"
           ],
           answer: 1,
-          explanation: "private 멤버는 클래스 내부(메서드)에서만 접근할 수 있어요! 외부에서 직접 접근하면 에러!"
+          explanation: "private 멤버는 클래스 내부(메서드)에서만 접근할 수 있어요! 외부에서 직접 접근하면 에러!",
+          en: {
+            question: "What is true about private members in a class?",
+            options: [
+              "Accessible from anywhere",
+              "Accessible only inside the class",
+              "Accessible only in derived classes",
+              "Accessible only from main"
+            ],
+            explanation: "Private members can only be accessed from inside the class (its methods)! Direct access from outside causes an error!"
+          }
         }
       },
 
@@ -244,7 +289,16 @@ export const lessonCpp14: LessonData = {
             "string 타입을 못 써서"
           ],
           answer: 1,
-          explanation: "class는 기본이 private이에요! name을 쓰려면 public: 아래에 넣어야 해요."
+          explanation: "class는 기본이 private이에요! name을 쓰려면 public: 아래에 넣어야 해요.",
+          en: {
+            question: "Why does this code cause an error?",
+            options: [
+              "The Dog class declaration is wrong",
+              "name is private, so it cannot be accessed from outside",
+              "Cannot use string type"
+            ],
+            explanation: "class members are private by default! To use name from outside, put it under public:."
+          }
         }
       },
 
@@ -272,7 +326,11 @@ export const lessonCpp14: LessonData = {
           guide: "외부 접근을 허용하는 키워드는?",
           template: "class Cat {\n___:\n    string name;\n};",
           answer: "public",
-          expect: "class Cat {\npublic:\n    string name;\n};"
+          expect: "class Cat {\npublic:\n    string name;\n};",
+          en: {
+            task: "Make the member accessible from outside!",
+            guide: "What keyword allows external access?"
+          }
         }
       },
 
@@ -285,7 +343,11 @@ export const lessonCpp14: LessonData = {
           guide: "생성자 이름은 클래스 이름과 같아요!",
           template: "class Dog {\npublic:\n    string name;\n    ___(string n) {\n        name = n;\n    }\n};",
           answer: "Dog",
-          expect: "class Dog {\npublic:\n    string name;\n    Dog(string n) {\n        name = n;\n    }\n};"
+          expect: "class Dog {\npublic:\n    string name;\n    Dog(string n) {\n        name = n;\n    }\n};",
+          en: {
+            task: "Create a constructor for the Dog class!",
+            guide: "The constructor name is the same as the class name!"
+          }
         }
       },
 
@@ -301,7 +363,17 @@ export const lessonCpp14: LessonData = {
             "struct는 C++에서 사용 불가"
           ],
           answer: 1,
-          explanation: "struct는 기본 접근 제한이 public, class는 private이에요! 그 외에는 거의 같아요."
+          explanation: "struct는 기본 접근 제한이 public, class는 private이에요! 그 외에는 거의 같아요.",
+          en: {
+            question: "What is the biggest difference between struct and class?",
+            options: [
+              "struct cannot have members",
+              "struct is public by default, class is private by default",
+              "class cannot have functions",
+              "struct cannot be used in C++"
+            ],
+            explanation: "struct defaults to public access, class defaults to private! Otherwise they are nearly identical."
+          }
         }
       },
 
@@ -350,7 +422,11 @@ export const lessonCpp14: LessonData = {
           task: "Cat 클래스의 생성자 이름을 써봐요!",
           template: "class Cat {\npublic:\n    ___(string n) {\n        name = n;\n    }\n};",
           answer: "Cat",
-          expect: "class Cat {\npublic:\n    Cat(string n) {\n        name = n;\n    }\n};"
+          expect: "class Cat {\npublic:\n    Cat(string n) {\n        name = n;\n    }\n};",
+          en: {
+            message: "Quick! Remember constructors?",
+            task: "Write the constructor name for the Cat class!"
+          }
         }
       },
 

@@ -57,7 +57,11 @@ export const lessonCppP1: LessonData = {
           template: "srand(___);",
           answer: "time(0)",
           alternateAnswers: ["time(NULL)", "time(nullptr)"],
-          expect: "srand(time(0));"
+          expect: "srand(time(0));",
+          en: {
+            task: "Set the random seed!",
+            guide: "Pass time(0) to srand!"
+          }
         }
       },
 
@@ -73,7 +77,17 @@ export const lessonCppP1: LessonData = {
             "rand() % 21 + 1"
           ],
           answer: 1,
-          explanation: "rand() % 20 = 0~19, +1 하면 1~20이 돼요!"
+          explanation: "rand() % 20 = 0~19, +1 하면 1~20이 돼요!",
+          en: {
+            question: "Which code generates a random number from 1 to 20?",
+            options: [
+              "rand() % 20",
+              "rand() % 20 + 1",
+              "rand() % 21",
+              "rand() % 21 + 1"
+            ],
+            explanation: "rand() % 20 = 0~19, add 1 and you get 1~20!"
+          }
         }
       },
 
@@ -99,7 +113,11 @@ export const lessonCppP1: LessonData = {
           guide: "guess가 answer보다 작으면 '더 크게!'",
           template: "if (guess ___ answer) {\n    cout << \"더 크게!\" << \"\\n\";\n}",
           answer: "<",
-          expect: "if (guess < answer) {\n    cout << \"더 크게!\" << \"\\n\";\n}"
+          expect: "if (guess < answer) {\n    cout << \"더 크게!\" << \"\\n\";\n}",
+          en: {
+            task: "Write the condition for when the guess is smaller than the answer!",
+            guide: "If guess is less than answer, print 'Go higher!'"
+          }
         }
       },
 
@@ -115,7 +133,16 @@ export const lessonCppP1: LessonData = {
             "% 100 대신 % 101을 써야 해요"
           ],
           answer: 0,
-          explanation: "srand()로 시드를 설정하지 않으면 매번 같은 순서의 랜덤 숫자가 나와요!"
+          explanation: "srand()로 시드를 설정하지 않으면 매번 같은 순서의 랜덤 숫자가 나와요!",
+          en: {
+            question: "What is wrong with this code?",
+            options: [
+              "Without srand(), the same sequence of random numbers appears every time",
+              "rand() cannot be used in C++",
+              "Should use % 101 instead of % 100"
+            ],
+            explanation: "Without setting a seed with srand(), the same sequence of random numbers is generated every run!"
+          }
         }
       },
 
@@ -128,7 +155,11 @@ export const lessonCppP1: LessonData = {
           guide: "guess와 answer가 같으면 break!",
           template: "if (guess == answer) {\n    cout << \"정답!\" << \"\\n\";\n    ___;\n}",
           answer: "break",
-          expect: "if (guess == answer) {\n    cout << \"정답!\" << \"\\n\";\n    break;\n}"
+          expect: "if (guess == answer) {\n    cout << \"정답!\" << \"\\n\";\n    break;\n}",
+          en: {
+            task: "Exit the loop when the correct answer is guessed!",
+            guide: "If guess equals answer, break!"
+          }
         }
       },
 
@@ -177,7 +208,11 @@ export const lessonCppP1: LessonData = {
           template: "int answer = rand() % ___ + ___;",
           answer: "100",
           blanksAnswer: ["100", "1"],
-          expect: "int answer = rand() % 100 + 1;"
+          expect: "int answer = rand() % 100 + 1;",
+          en: {
+            message: "Quick check! Do you remember how to generate a random number?",
+            task: "Write the code to generate a random number from 1 to 100!"
+          }
         }
       },
 

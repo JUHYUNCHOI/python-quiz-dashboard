@@ -70,7 +70,11 @@ export const lessonCpp16: LessonData = {
           template: "map<___, ___> scores;",
           answer: "string",
           blanksAnswer: ["string", "int"],
-          expect: "map<string, int> scores;"
+          expect: "map<string, int> scores;",
+          en: {
+            task: "Declare a map with string keys and int values!",
+            guide: "Use the form: map<keyType, valueType>"
+          }
         }
       },
 
@@ -84,7 +88,11 @@ export const lessonCpp16: LessonData = {
           template: 'scores[___] = ___;',
           answer: '"철수"',
           blanksAnswer: ['"철수"', '95'],
-          expect: 'scores["철수"] = 95;'
+          expect: 'scores["철수"] = 95;',
+          en: {
+            task: 'Insert value 95 with key "Cheolsu" into the map!',
+            guide: 'Use the form: mapName["key"] = value;'
+          }
         }
       },
 
@@ -114,7 +122,17 @@ export const lessonCpp16: LessonData = {
             "m.contains(\"key\")"
           ],
           answer: 1,
-          explanation: "find()가 end()가 아니면 키가 있다는 뜻이에요! (C++20부터는 contains()도 사용 가능!)"
+          explanation: "find()가 end()가 아니면 키가 있다는 뜻이에요! (C++20부터는 contains()도 사용 가능!)",
+          en: {
+            question: "How do you check if a key exists in a map?",
+            options: [
+              "m.exists(\"key\")",
+              "m.find(\"key\") != m.end()",
+              "m.has(\"key\")",
+              "m.contains(\"key\")"
+            ],
+            explanation: "If find() doesn't return end(), the key exists! (C++20 also supports contains()!)"
+          }
         }
       },
 
@@ -130,7 +148,16 @@ export const lessonCpp16: LessonData = {
             "런타임 에러가 난다"
           ],
           answer: 0,
-          explanation: "map에서 없는 키를 []로 접근하면 기본값(0)이 자동으로 생성돼요! 의도치 않은 키가 추가될 수 있어요."
+          explanation: "map에서 없는 키를 []로 접근하면 기본값(0)이 자동으로 생성돼요! 의도치 않은 키가 추가될 수 있어요.",
+          en: {
+            question: "What is the problem with this code?",
+            options: [
+              "No error — 0 is printed (the key is automatically created!)",
+              "Compile error",
+              "Runtime error"
+            ],
+            explanation: "Accessing a missing key with [] in a map auto-creates it with a default value (0)! An unintended key may be added."
+          }
         }
       },
 
@@ -144,7 +171,11 @@ export const lessonCpp16: LessonData = {
           template: 'if (m.___("apple") != m.___()) {',
           answer: "find",
           blanksAnswer: ["find", "end"],
-          expect: 'if (m.find("apple") != m.end()) {'
+          expect: 'if (m.find("apple") != m.end()) {',
+          en: {
+            task: 'Find the key "apple" in the map!',
+            guide: "Use the form: find(key) != end()"
+          }
         }
       },
 
@@ -193,7 +224,11 @@ export const lessonCpp16: LessonData = {
           task: "map에서 키를 찾는 함수 이름은?",
           template: 'm.___("apple")',
           answer: "find",
-          expect: 'm.find("apple")'
+          expect: 'm.find("apple")',
+          en: {
+            message: "Quick! Remember what we learned earlier?",
+            task: "What is the function name for finding a key in a map?"
+          }
         }
       },
 
@@ -251,7 +286,11 @@ export const lessonCpp16: LessonData = {
           guide: "insert(값) 형태!",
           template: "s.___(10);",
           answer: "insert",
-          expect: "s.insert(10);"
+          expect: "s.insert(10);",
+          en: {
+            task: "Insert the value 10 into the set!",
+            guide: "Use the form: insert(value)"
+          }
         }
       },
 
@@ -281,7 +320,17 @@ export const lessonCpp16: LessonData = {
             "차이 없다"
           ],
           answer: 1,
-          explanation: "set은 자동 정렬(레드블랙트리), unordered_set은 정렬 없음(해시테이블)! 정렬 필요 없으면 unordered가 더 빨라요."
+          explanation: "set은 자동 정렬(레드블랙트리), unordered_set은 정렬 없음(해시테이블)! 정렬 필요 없으면 unordered가 더 빨라요.",
+          en: {
+            question: "What is the difference between set and unordered_set?",
+            options: [
+              "set allows duplicates, unordered_set does not",
+              "set is automatically sorted, unordered_set is not",
+              "Both set and unordered_set are slow",
+              "No difference"
+            ],
+            explanation: "set is automatically sorted (red-black tree), unordered_set is not (hash table)! If you don't need sorting, unordered is faster."
+          }
         }
       },
 
@@ -297,7 +346,16 @@ export const lessonCpp16: LessonData = {
             "set은 정수를 못 넣는다"
           ],
           answer: 0,
-          explanation: "set은 중복을 허용하지 않아요! {3, 1, 4, 5} 이렇게 4개만 들어가요. (1이 중복!)"
+          explanation: "set은 중복을 허용하지 않아요! {3, 1, 4, 5} 이렇게 4개만 들어가요. (1이 중복!)",
+          en: {
+            question: "What is the problem with this code?",
+            options: [
+              "set ignores duplicates so size is 4, not 5",
+              "The initialization syntax is wrong",
+              "set cannot hold integers"
+            ],
+            explanation: "set does not allow duplicates! Only {3, 1, 4, 5} — 4 elements go in. (1 is duplicated!)"
+          }
         }
       },
 
@@ -310,7 +368,11 @@ export const lessonCpp16: LessonData = {
           guide: "count(값)는 있으면 1, 없으면 0!",
           template: "if (s.___(5)) {\n    cout << \"있다!\" << endl;\n}",
           answer: "count",
-          expect: "if (s.count(5)) {\n    cout << \"있다!\" << endl;\n}"
+          expect: "if (s.count(5)) {\n    cout << \"있다!\" << endl;\n}",
+          en: {
+            task: "Check if the value 5 exists in the set!",
+            guide: "count(value) returns 1 if found, 0 if not!"
+          }
         }
       },
 
@@ -359,7 +421,11 @@ export const lessonCpp16: LessonData = {
           task: "set에서 count()로 3이 있는지 확인해요!",
           template: "s.___(3)",
           answer: "count",
-          expect: "s.count(3)"
+          expect: "s.count(3)",
+          en: {
+            message: "Quick! How do you check if a value exists in a set?",
+            task: "Use count() to check if 3 exists in the set!"
+          }
         }
       },
 

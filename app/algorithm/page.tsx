@@ -9,6 +9,7 @@ import type { AlgoTopic, AlgoProblem, Track } from "@/data/algorithm/types"
 import { AlgoSidebar } from "@/components/algorithm/AlgoSidebar"
 import { TopicPage } from "@/components/algorithm/TopicPage"
 import { ProblemPage } from "@/components/algorithm/ProblemPage"
+import { LanguageToggle } from "@/components/language-toggle"
 
 // Python 트랙에서 보여줄 토픽
 const PYTHON_TOPIC_IDS = new Set([
@@ -91,9 +92,10 @@ function AlgorithmContent() {
             >
               ☰
             </button>
-            <span className="font-bold text-sm text-gray-800 truncate">
+            <span className="font-bold text-sm text-gray-800 truncate flex-1">
               {currentTopic?.icon} {currentTopic?.title}
             </span>
+            <LanguageToggle />
           </div>
 
           {currentProblem && currentTopic ? (

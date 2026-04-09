@@ -70,7 +70,11 @@ export const lesson19: LessonData = {
         template: "nums = [10, 20, 30]\nprint(nums[___])",
         blanksAnswer: ["1"],
         answer: "nums = [10, 20, 30]\nprint(nums[1])",
-        expect: "20"
+        expect: "20",
+        en: {
+          message: "List review! Compare with tuples!",
+          task: "Print the second value from the list [10, 20, 30]"
+        }
       }
     },
     {
@@ -83,7 +87,12 @@ export const lesson19: LessonData = {
         template: "days = (___)\nprint(days[___])",
         blanksAnswer: ["'월', '화', '수'", "0"],
         answer: "days = ('월', '화', '수')\nprint(days[0])",
-        expect: "월"
+        expect: "월",
+        en: {
+          task: "Create a tuple ('Mon', 'Tue', 'Wed') and print the first element",
+          guide: "Use parentheses and access with [0]!",
+          hint: "days = ('Mon', 'Tue', 'Wed') then print(days[0])"
+        }
       }
     },
     {
@@ -97,7 +106,17 @@ export const lesson19: LessonData = {
           "튜플은 3개까지만 저장 가능"
         ],
         answer: 1,
-        explanation: "튜플은 immutable(불변)! 한 번 만들면 요소를 추가, 삭제, 변경할 수 없어요."
+        explanation: "튜플은 immutable(불변)! 한 번 만들면 요소를 추가, 삭제, 변경할 수 없어요.",
+        en: {
+          question: "What is the biggest difference between a tuple and a list?",
+          options: [
+            "Tuples can only store numbers",
+            "Tuples cannot be modified",
+            "Tuples don't support indexing",
+            "Tuples can hold at most 3 elements"
+          ],
+          explanation: "Tuples are immutable! Once created, you cannot add, remove, or change elements."
+        }
       }
     },
     {
@@ -188,7 +207,12 @@ export const lesson19: LessonData = {
         template: "___, ___ = ('파이썬', 2024)\nprint(f'{name} {year}')",
         blanksAnswer: ["name", "year"],
         answer: "name, year = ('파이썬', 2024)\nprint(f'{name} {year}')",
-        expect: "파이썬 2024"
+        expect: "파이썬 2024",
+        en: {
+          task: "Unpack the tuple ('Python', 2024) into name and year, then print",
+          guide: "Use name, year = tuple format!",
+          hint: "name, year = ('Python', 2024) then print!"
+        }
       }
     },
     {
@@ -201,7 +225,12 @@ export const lesson19: LessonData = {
         template: "x = 5\ny = 10\nx, y = ___, ___\nprint(f'x={x}, y={y}')",
         blanksAnswer: ["y", "x"],
         answer: "x = 5\ny = 10\nx, y = y, x\nprint(f'x={x}, y={y}')",
-        expect: "x=10, y=5"
+        expect: "x=10, y=5",
+        en: {
+          task: "Swap the values x=5, y=10 and print",
+          guide: "Use the a, b = b, a pattern!",
+          hint: "Just one line: x, y = y, x!"
+        }
       }
     },
     {
@@ -212,7 +241,11 @@ export const lesson19: LessonData = {
         template: "nums = [4, 9, 2, 7]\nprint(___)",
         blanksAnswer: ["max(nums)"],
         answer: "nums = [4, 9, 2, 7]\nprint(max(nums))",
-        expect: "9"
+        expect: "9",
+        en: {
+          message: "List review! Find the maximum value",
+          task: "Print the max value from [4, 9, 2, 7] using max()"
+        }
       }
     },
     {
@@ -280,7 +313,17 @@ export const lesson19: LessonData = {
           "게임 점수를 기록할 때"
         ],
         answer: 1,
-        explanation: "월, 화, 수...처럼 변하지 않는 데이터에 튜플이 딱! 바뀌어야 하면 리스트!"
+        explanation: "월, 화, 수...처럼 변하지 않는 데이터에 튜플이 딱! 바뀌어야 하면 리스트!",
+        en: {
+          question: "Which situation calls for using a tuple?",
+          options: [
+            "When you need to add/remove students from a list",
+            "For data that never changes, like day names",
+            "When adding/removing items from a shopping cart",
+            "When recording game scores"
+          ],
+          explanation: "Tuples are perfect for data that never changes, like Mon, Tue, Wed! Use a list if it needs to change."
+        }
       }
     },
     {
@@ -293,7 +336,12 @@ export const lesson19: LessonData = {
         template: "point = (3, 5)\n___, ___ = point\nprint(f'x좌표: {x}, y좌표: {y}')",
         blanksAnswer: ["x", "y"],
         answer: "point = (3, 5)\nx, y = point\nprint(f'x좌표: {x}, y좌표: {y}')",
-        expect: "x좌표: 3, y좌표: 5"
+        expect: "x좌표: 3, y좌표: 5",
+        en: {
+          task: "Unpack coordinate tuple (3, 5) into x, y and print in 'x: 3, y: 5' format",
+          guide: "x, y = (3, 5) then use f-string!",
+          hint: "f'x: {x}, y: {y}'"
+        }
       }
     },
     {
@@ -304,7 +352,11 @@ export const lesson19: LessonData = {
         template: "letters = ['a', 'b']\nletters.___(___)\nprint(letters)",
         blanksAnswer: ["append", "'c'"],
         answer: "letters = ['a', 'b']\nletters.append('c')\nprint(letters)",
-        expect: "['a', 'b', 'c']"
+        expect: "['a', 'b', 'c']",
+        en: {
+          message: "List review! Add with append",
+          task: "Add 'c' to the list ['a', 'b'] and print"
+        }
       }
     },
     {
@@ -318,7 +370,17 @@ export const lesson19: LessonData = {
           "t = (1, 2, 3); del t[0]  # 가능"
         ],
         answer: 2,
-        explanation: "튜플은 읽기만 가능! 수정, 추가, 삭제는 불가능해요."
+        explanation: "튜플은 읽기만 가능! 수정, 추가, 삭제는 불가능해요.",
+        en: {
+          question: "Which of the following is valid?",
+          options: [
+            "t = (1, 2, 3); t[0] = 10  # possible",
+            "t = (1, 2, 3); t.append(4)  # possible",
+            "t = (1, 2, 3); print(t[0])  # possible",
+            "t = (1, 2, 3); del t[0]  # possible"
+          ],
+          explanation: "Tuples are read-only! You cannot modify, add, or delete elements."
+        }
       }
     },
     {

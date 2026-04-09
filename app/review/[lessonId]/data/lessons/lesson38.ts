@@ -53,6 +53,11 @@ export const lesson38: LessonData = {
         template: "with open('player.txt', '___') as f:\n    f.write('홍길동\\n')\n    f.write('100')\nprint('저장 완료!')",
         blanksAnswer: ["w"],
         answer: "with open('player.txt', 'w') as f:\n    f.write('홍길동\\n')\n    f.write('100')\nprint('저장 완료!')",
+        en: {
+          task: "Fill in the blank with the right letter!",
+          guide: "What mode do you use to write to a file?",
+          hint: "First letter of 'write'!"
+        },
         alternateAnswers: [],
         expect: "저장 완료!"
       }
@@ -99,7 +104,17 @@ export const lesson38: LessonData = {
           "read()는 숫자, readlines()는 문자"
         ],
         answer: 1,
-        explanation: "read()는 전체를 문자열로, readlines()는 줄별로 리스트로!"
+        explanation: "read()는 전체를 문자열로, readlines()는 줄별로 리스트로!",
+        en: {
+          question: "What is the difference between read() and readlines()?",
+          options: [
+            "No difference",
+            "read() returns a string, readlines() returns a list",
+            "read() reads one line, readlines() reads everything",
+            "read() returns numbers, readlines() returns text"
+          ],
+          explanation: "read() returns the whole file as a string, readlines() returns a list of lines!"
+        }
       }
     },
     
@@ -114,6 +129,11 @@ export const lesson38: LessonData = {
         template: "with ___('player.txt', '___') as f:\n    내용 = f.read()\n    print(내용)",
         blanksAnswer: ["open", "r"],
         answer: "with open('player.txt', 'r') as f:\n    내용 = f.read()\n    print(내용)",
+        en: {
+          task: "Fill in the blanks to read a file!",
+          guide: "What function opens a file and what is the read mode?",
+          hint: "Function to open file: open / Read mode: 'r'"
+        },
         alternateAnswers: [],
         expect: "홍길동\n100"
       }
@@ -155,7 +175,12 @@ export const lesson38: LessonData = {
         question: "랭킹을 계속 기록하려면?",
         options: ["'w' 모드", "'r' 모드", "'a' 모드", "'x' 모드"],
         answer: 2,
-        explanation: "'a' 모드로 열면 기존 기록 유지하면서 새 기록 추가!"
+        explanation: "'a' 모드로 열면 기존 기록 유지하면서 새 기록 추가!",
+        en: {
+          question: "What mode should you use to keep adding rankings?",
+          options: ["'w' mode", "'r' mode", "'a' mode", "'x' mode"],
+          explanation: "Opening with 'a' mode keeps existing records and adds new ones!"
+        }
       }
     },
     
@@ -186,6 +211,11 @@ export const lesson38: LessonData = {
         template: "with open('scores.txt', '___') as f:\n    f.___('150점\\n')\nprint('점수 추가!')",
         blanksAnswer: ["a", "write"],
         answer: "with open('scores.txt', 'a') as f:\n    f.write('150점\\n')\nprint('점수 추가!')",
+        en: {
+          task: "Fill in the blanks to add a record!",
+          guide: "What do you use to add while keeping existing content?",
+          hint: "Append mode: 'a' / Write function: write"
+        },
         alternateAnswers: [],
         expect: "점수 추가!"
       }
@@ -201,6 +231,11 @@ export const lesson38: LessonData = {
         template: "with open('memo.txt', '___') as f:\n    내용 = f.___()\n    print(내용)",
         blanksAnswer: ["r", "read"],
         answer: "with open('memo.txt', 'r') as f:\n    내용 = f.read()\n    print(내용)",
+        en: {
+          message: "🔄 Quick review! File reading!",
+          task: "Fill in the blanks to read a file!",
+          hint: "Read mode: 'r' / Read all: read()"
+        },
         alternateAnswers: [],
         expect: ""
       }
@@ -262,6 +297,11 @@ export const lesson38: LessonData = {
         template: "___:\n    with open('score.txt', '___') as f:\n        점수 = f.read()\n        print(f'점수: {점수}')\nexcept ___:\n    print('저장 없음!')",
         blanksAnswer: ["try", "r", "FileNotFoundError"],
         answer: "try:\n    with open('score.txt', 'r') as f:\n        점수 = f.read()\n        print(f'점수: {점수}')\nexcept FileNotFoundError:\n    print('저장 없음!')",
+        en: {
+          task: "Fill in the blanks to safely read a file!",
+          guide: "Print '저장 없음!' if file doesn't exist!",
+          hint: "Wrap with try, read mode 'r', file missing error is FileNotFoundError!"
+        },
         alternateAnswers: [],
         expect: "저장 없음!"
       }
@@ -277,6 +317,11 @@ export const lesson38: LessonData = {
         template: "점수 = 100\nwith open('score.txt', '___') as f:\n    f.___(___(\uc810\uc218))\nprint('저장!')",
         blanksAnswer: ["w", "write", "str"],
         answer: "점수 = 100\nwith open('score.txt', 'w') as f:\n    f.write(str(점수))\nprint('저장!')",
+        en: {
+          message: "🔄 Writing review!",
+          task: "Fill in the blanks to save the score!",
+          hint: "Write mode: 'w' / Write function: write / Number to string: str()"
+        },
         alternateAnswers: [],
         expect: "저장!"
       }
@@ -293,6 +338,11 @@ export const lesson38: LessonData = {
         template: "이름 = '홍길동'\n점수 = 100\nwith open('ranking.txt', '___') as f:\n    f.___(이름 + ': ' + ___(점수) + '\\n')\nprint('랭킹 추가!')",
         blanksAnswer: ["a", "write", "str"],
         answer: "이름 = '홍길동'\n점수 = 100\nwith open('ranking.txt', 'a') as f:\n    f.write(이름 + ': ' + str(점수) + '\\n')\nprint('랭킹 추가!')",
+        en: {
+          task: "Fill in the blanks to add a ranking record!",
+          guide: "Keep existing records + add new name and score!",
+          hint: "Append mode: 'a', writing: write, number to string: str"
+        },
         alternateAnswers: [],
         expect: "랭킹 추가!"
       }
@@ -308,6 +358,11 @@ export const lesson38: LessonData = {
         template: "___:\n    with open('data.txt', 'r') as f:\n        print(f.___())\nexcept ___:\n    print('파일 없음!')",
         blanksAnswer: ["try", "read", "FileNotFoundError"],
         answer: "try:\n    with open('data.txt', 'r') as f:\n        print(f.read())\nexcept FileNotFoundError:\n    print('파일 없음!')",
+        en: {
+          message: "🔄 Error handling review!",
+          task: "Fill in the blanks to safely read a file!",
+          hint: "Wrap with try, read with read(), file missing is FileNotFoundError!"
+        },
         alternateAnswers: [],
         expect: "파일 없음!"
       }

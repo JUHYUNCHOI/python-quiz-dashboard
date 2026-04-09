@@ -67,7 +67,11 @@ export const lesson7: LessonData = {
           task: "'Hello' 와 'World' 를 한 번에 출력해봐",
           template: null,
           answer: "print('Hello', 'World')",
-          expect: "Hello World"
+          expect: "Hello World",
+          en: {
+            message: "Wait! Quick review of print() basics",
+            task: "Print 'Hello' and 'World' at once"
+          }
         }
       },
 
@@ -105,7 +109,11 @@ export const lesson7: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "'사과', '바나나', '딸기', sep='-'",
           alternateAnswers: ["'사과','바나나','딸기',sep='-'"],
-          expect: "사과-바나나-딸기"
+          expect: "사과-바나나-딸기",
+          en: {
+            task: "Print '사과', '바나나', '딸기' separated by '-'",
+            guide: "Use sep='-'!"
+          }
         }
       },
       {
@@ -117,7 +125,11 @@ export const lesson7: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "2024, 3, 15, sep='-'",
           alternateAnswers: ["2024,3,15,sep='-'"],
-          expect: "2024-3-15"
+          expect: "2024-3-15",
+          en: {
+            task: "Print 2024, 3, 15 separated by '-' (date format)",
+            guide: "Use sep='-'!"
+          }
         }
       },
 
@@ -142,7 +154,11 @@ export const lesson7: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "'H', 'i', '!', sep=''",
           alternateAnswers: ["'H','i','!',sep=''"],
-          expect: "Hi!"
+          expect: "Hi!",
+          en: {
+            task: "Print 'H', 'i', '!' joined without any separator",
+            guide: "Use sep=''!"
+          }
         }
       },
 
@@ -157,7 +173,16 @@ export const lesson7: LessonData = {
             "123"
           ],
           answer: 1,
-          explanation: "sep='/'로 '/'가 구분자가 돼! 1/2/3"
+          explanation: "sep='/'로 '/'가 구분자가 돼! 1/2/3",
+          en: {
+            question: "What is the result of print('1', '2', '3', sep='/')?",
+            options: [
+              "1 2 3",
+              "1/2/3",
+              "123"
+            ],
+            explanation: "sep='/' makes '/' the separator! 1/2/3"
+          }
         }
       },
 
@@ -221,7 +246,11 @@ export const lesson7: LessonData = {
           guide: "end=' ' 사용!",
           template: null,
           answer: "print('Hello', end=' ')\nprint('World')",
-          expect: "Hello World"
+          expect: "Hello World",
+          en: {
+            task: "Print 'Hello' then without newline add a space, then print 'World'",
+            guide: "Use end=' '!"
+          }
         }
       },
 
@@ -246,7 +275,11 @@ export const lesson7: LessonData = {
           template: null,
           answer: "print(1, end='')\nprint(2, end='')\nprint(3)",
           alternateAnswers: ["print(1, end='')\nprint(2, end='')\nprint(3, end='')"],
-          expect: "123"
+          expect: "123",
+          en: {
+            task: "Print 1, 2, 3 on one line without newlines (3 separate print calls)",
+            guide: "Use end=''!"
+          }
         }
       },
 
@@ -261,7 +294,16 @@ export const lesson7: LessonData = {
             "안녕 ! (공백 + !)"
           ],
           answer: 1,
-          explanation: "end='!'로 줄바꿈 대신 '!'가 붙어! '안녕!'"
+          explanation: "end='!'로 줄바꿈 대신 '!'가 붙어! '안녕!'",
+          en: {
+            question: "What is the result of print('안녕', end='!')?",
+            options: [
+              "안녕\\n (with newline)",
+              "안녕! (no newline, ! appended)",
+              "안녕 ! (space + !)"
+            ],
+            explanation: "end='!' replaces the newline with '!'! '안녕!'"
+          }
         }
       },
 
@@ -299,7 +341,11 @@ export const lesson7: LessonData = {
           task: "1, 2, 3 을 ':' 로 구분해서 출력해봐",
           template: null,
           answer: "print(1, 2, 3, sep=':')",
-          expect: "1:2:3"
+          expect: "1:2:3",
+          en: {
+            message: "Remember sep?",
+            task: "Print 1, 2, 3 separated by ':'"
+          }
         }
       },
 
@@ -325,7 +371,11 @@ export const lesson7: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "'월', '화', '수', sep='/', end='~'",
           alternateAnswers: ["'월','화','수',sep='/',end='~'"],
-          expect: "월/화/수~"
+          expect: "월/화/수~",
+          en: {
+            task: "Print '월', '화', '수' separated by '/' and ending with '~'",
+            guide: "Use both sep='/' and end='~'!"
+          }
         }
       },
 

@@ -59,7 +59,17 @@ print("큐 개념: 1이 먼저 나가야 해!")`,
           "Fast In, Fast Out (빨리 넣고 빨리 나옴)"
         ],
         answer: 0,
-        explanation: "FIFO = First In, First Out! 큐는 먼저 넣은 데이터가 먼저 나와요."
+        explanation: "FIFO = First In, First Out! 큐는 먼저 넣은 데이터가 먼저 나와요.",
+        en: {
+          question: "What does FIFO mean?",
+          options: [
+            "First In, First Out",
+            "Last In, First Out",
+            "First In, Last Out",
+            "Fast In, Fast Out"
+          ],
+          explanation: "FIFO = First In, First Out! The queue returns the first inserted data first."
+        }
       }
     },
     {
@@ -94,7 +104,11 @@ print("큐 개념: 1이 먼저 나가야 해!")`,
         template: "stack = []\nstack.append(10)\nstack.___(20)\nprint(stack.pop())",
         blanksAnswer: ["append"],
         answer: "stack = []\nstack.append(10)\nstack.append(20)\nprint(stack.pop())",
-        expect: "20"
+        expect: "20",
+        en: {
+          message: "🔄 Stack review!",
+          task: "Push 10, 20 onto the stack and print the pop result"
+        }
       }
     },
     {
@@ -155,7 +169,12 @@ print(list(q))`,
         template: "from collections import ___\n\nqueue = deque()\nqueue.append('a')\nqueue.append('b')\nprint(queue.___())",
         blanksAnswer: ["deque", "popleft"],
         answer: "from collections import deque\n\nqueue = deque()\nqueue.append('a')\nqueue.append('b')\nprint(queue.popleft())",
-        expect: "a"
+        expect: "a",
+        en: {
+          task: "Import deque, add 'a', 'b' to the queue, then popleft",
+          guide: "from collections import deque!",
+          hint: "Create with deque() then append → popleft!"
+        }
       }
     },
     {
@@ -170,7 +189,12 @@ print(list(q))`,
         alternateAnswers: [
           "from collections import deque\n\nqueue = deque([1, 2, 3])\nwhile queue:\n    print(queue.popleft())"
         ],
-        expect: "1\n2\n3"
+        expect: "1\n2\n3",
+        en: {
+          task: "Add 1, 2, 3 to the queue and print each as you popleft",
+          guide: "Use while to loop and popleft!",
+          hint: "while len(queue) > 0: to keep going until empty!"
+        }
       }
     },
     {
@@ -179,7 +203,12 @@ print(list(q))`,
         question: "deque(['A','B','C'])에서 popleft()하면?",
         options: ["'C' (마지막)", "'A' (처음)", "'B' (중간)", "에러"],
         answer: 1,
-        explanation: "popleft()는 왼쪽(앞쪽)에서 빼기! 'A'가 먼저 나와요."
+        explanation: "popleft()는 왼쪽(앞쪽)에서 빼기! 'A'가 먼저 나와요.",
+        en: {
+          question: "What does popleft() return from deque(['A','B','C'])?",
+          options: ["'C' (last)", "'A' (first)", "'B' (middle)", "Error"],
+          explanation: "popleft() removes from the left (front)! 'A' comes out first."
+        }
       }
     },
     {
@@ -215,7 +244,11 @@ print(list(q))`,
         template: "from collections import deque\nq = deque()\nq.append(10)\nq.append(20)\nq.append(30)\nprint(q.___())",
         blanksAnswer: ["popleft"],
         answer: "from collections import deque\nq = deque()\nq.append(10)\nq.append(20)\nq.append(30)\nprint(q.popleft())",
-        expect: "10"
+        expect: "10",
+        en: {
+          message: "🔄 deque basics review!",
+          task: "Add 10, 20, 30 to a deque and print the popleft result"
+        }
       }
     },
     {
@@ -276,7 +309,12 @@ print("4 추가 후:", list(queue))`,
         template: "from collections import deque\n\norders = ___()\norders.append('피자')\norders.append('치킨')\ndone = orders.___()\nprint(f'{done} 주문 완료!')",
         blanksAnswer: ["deque", "popleft"],
         answer: "from collections import deque\n\norders = deque()\norders.append('피자')\norders.append('치킨')\ndone = orders.popleft()\nprint(f'{done} 주문 완료!')",
-        expect: "피자 주문 완료!"
+        expect: "피자 주문 완료!",
+        en: {
+          task: "Create an order queue, add 'pizza' and 'chicken', then process one",
+          guide: "Use append to add orders, popleft to process!",
+          hint: "Process the first order with popleft()!"
+        }
       }
     },
     {

@@ -42,7 +42,17 @@ export const lessonCpp13: LessonData = {
             "x를 삭제한다"
           ],
           answer: 1,
-          explanation: "변수 앞에 &를 붙이면 그 변수의 메모리 주소를 가져와요! (참조 선언의 &와는 다른 용도!)"
+          explanation: "변수 앞에 &를 붙이면 그 변수의 메모리 주소를 가져와요! (참조 선언의 &와는 다른 용도!)",
+          en: {
+            question: "What does & mean in &x?",
+            options: [
+              "Makes x a reference",
+              "Gets the memory address of x",
+              "Copies x",
+              "Deletes x"
+            ],
+            explanation: "Putting & before a variable gets its memory address! (Different usage from the & in reference declarations!)"
+          }
         }
       },
 
@@ -89,7 +99,11 @@ export const lessonCpp13: LessonData = {
           template: "int___ ptr = ___x;",
           answer: "*",
           blanksAnswer: ["*", "&"],
-          expect: "int* ptr = &x;"
+          expect: "int* ptr = &x;",
+          en: {
+            task: "Create a pointer ptr that points to x!",
+            guide: "Use the form: type* name = &variable;"
+          }
         }
       },
 
@@ -102,7 +116,11 @@ export const lessonCpp13: LessonData = {
           guide: "*ptr 로 값을 읽어와요!",
           template: "cout << ___ptr << endl;",
           answer: "*",
-          expect: "cout << *ptr << endl;"
+          expect: "cout << *ptr << endl;",
+          en: {
+            task: "Print the value that pointer ptr points to!",
+            guide: "Use *ptr to dereference and read the value!"
+          }
         }
       },
 
@@ -118,7 +136,16 @@ export const lessonCpp13: LessonData = {
             "*를 빼야 해서"
           ],
           answer: 1,
-          explanation: "ptr이 초기화 안 된 상태에서 *ptr에 값을 넣으면 위험해요! 반드시 주소를 먼저 넣어야 해요."
+          explanation: "ptr이 초기화 안 된 상태에서 *ptr에 값을 넣으면 위험해요! 반드시 주소를 먼저 넣어야 해요.",
+          en: {
+            question: "Why does this code cause an error?",
+            options: [
+              "ptr is not declared",
+              "ptr points to nothing, yet we are writing a value through it",
+              "Should remove the *"
+            ],
+            explanation: "Writing *ptr without initializing ptr is dangerous! You must assign a valid address first."
+          }
         }
       },
 
@@ -131,7 +158,11 @@ export const lessonCpp13: LessonData = {
           guide: "*ptr = 값; 으로 원본을 바꿀 수 있어요!",
           template: "int x = 10;\nint* ptr = &x;\n___ptr = 50;",
           answer: "*",
-          expect: "int x = 10;\nint* ptr = &x;\n*ptr = 50;"
+          expect: "int x = 10;\nint* ptr = &x;\n*ptr = 50;",
+          en: {
+            task: "Change the value of x to 50 through the pointer!",
+            guide: "Use *ptr = value; to modify the original!"
+          }
         }
       },
 
@@ -181,7 +212,11 @@ export const lessonCpp13: LessonData = {
           template: "int___ p = ___x;",
           answer: "*",
           blanksAnswer: ["*", "&"],
-          expect: "int* p = &x;"
+          expect: "int* p = &x;",
+          en: {
+            message: "Quick! Remember how to declare a pointer?",
+            task: "Declare a pointer p that points to x!"
+          }
         }
       },
 
@@ -212,7 +247,17 @@ export const lessonCpp13: LessonData = {
             "메모리를 해제한다"
           ],
           answer: 1,
-          explanation: "nullptr은 '이 포인터는 아무것도 가리키지 않아요'라는 표시예요! 파이썬의 None과 비슷해요."
+          explanation: "nullptr은 '이 포인터는 아무것도 가리키지 않아요'라는 표시예요! 파이썬의 None과 비슷해요.",
+          en: {
+            question: "What is the role of nullptr?",
+            options: [
+              "Sends the pointer to address 0",
+              "Indicates that the pointer points to nothing",
+              "Deletes the pointer",
+              "Frees memory"
+            ],
+            explanation: "nullptr means 'this pointer points to nothing'! It's similar to Python's None."
+          }
         }
       },
 
@@ -256,7 +301,11 @@ export const lessonCpp13: LessonData = {
           guide: "p + 1 은 두 번째 원소의 주소!",
           template: "cout << *(p + ___) << endl;",
           answer: "1",
-          expect: "cout << *(p + 1) << endl;"
+          expect: "cout << *(p + 1) << endl;",
+          en: {
+            task: "Print the second element of the array using a pointer!",
+            guide: "p + 1 is the address of the second element!"
+          }
         }
       },
 
@@ -284,7 +333,16 @@ export const lessonCpp13: LessonData = {
             "참조가 포인터보다 항상 느리다"
           ],
           answer: 1,
-          explanation: "포인터는 nullptr도 되고 나중에 다른 주소를 넣을 수도 있어요. 참조는 한 번 정하면 못 바꿔요!"
+          explanation: "포인터는 nullptr도 되고 나중에 다른 주소를 넣을 수도 있어요. 참조는 한 번 정하면 못 바꿔요!",
+          en: {
+            question: "What is the difference between a reference and a pointer?",
+            options: [
+              "A reference can be rebound to another variable later",
+              "A pointer can be nullptr, but a reference cannot",
+              "A reference is always slower than a pointer"
+            ],
+            explanation: "A pointer can be nullptr and reassigned to a different address. A reference is fixed once set!"
+          }
         }
       },
 
@@ -300,7 +358,16 @@ export const lessonCpp13: LessonData = {
             "cout이 포인터를 출력 못 해서"
           ],
           answer: 1,
-          explanation: "nullptr을 역참조하면 프로그램이 죽어요! 반드시 nullptr 체크 후에 *를 써야 해요."
+          explanation: "nullptr을 역참조하면 프로그램이 죽어요! 반드시 nullptr 체크 후에 *를 써야 해요.",
+          en: {
+            question: "What is wrong with this code?",
+            options: [
+              "The ptr declaration is wrong",
+              "Dereferencing nullptr reads a non-existent value",
+              "cout cannot print a pointer"
+            ],
+            explanation: "Dereferencing nullptr crashes the program! Always check for nullptr before using *."
+          }
         }
       },
 
@@ -348,7 +415,11 @@ export const lessonCpp13: LessonData = {
           task: "포인터를 안전하게 초기화해요!",
           template: "int* ptr = ___;",
           answer: "nullptr",
-          expect: "int* ptr = nullptr;"
+          expect: "int* ptr = nullptr;",
+          en: {
+            message: "Quick! Remember nullptr?",
+            task: "Initialize the pointer safely!"
+          }
         }
       },
 

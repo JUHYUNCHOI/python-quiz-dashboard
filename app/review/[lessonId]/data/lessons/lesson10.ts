@@ -55,7 +55,11 @@ export const lesson10: LessonData = {
         task: "int('42') + 8 을 출력해봐",
         template: { before: "print(", after: ")" },
         answer: "int('42') + 8",
-        expect: "50"
+        expect: "50",
+        en: {
+          message: "Wait! Remember type conversion?",
+          task: "Print int('42') + 8"
+        }
       }
     },
 
@@ -92,7 +96,11 @@ export const lesson10: LessonData = {
         guide: "food = input('좋아하는 음식: ')\nprint(f'좋아하는 음식: {food}')",
         template: null,
         answer: "food = input('좋아하는 음식: ')\nprint(f'좋아하는 음식: {food}')",
-        expect: "좋아하는 음식: 피자"
+        expect: "좋아하는 음식: 피자",
+        en: {
+          task: "Use input() to get a favorite food\nPrint it in '좋아하는 음식: 피자' format\n(input: 피자)",
+          guide: "food = input('좋아하는 음식: ')\nprint(f'좋아하는 음식: {food}')"
+        }
       }
     },
 
@@ -107,7 +115,16 @@ export const lesson10: LessonData = {
           "str (문자열)"
         ],
         answer: 2,
-        explanation: "input()은 항상 문자열(str)로 반환해! 숫자를 입력해도 '123' 같은 문자열이야."
+        explanation: "input()은 항상 문자열(str)로 반환해! 숫자를 입력해도 '123' 같은 문자열이야.",
+        en: {
+          question: "What type does input() return?",
+          options: [
+            "int (integer)",
+            "float (decimal)",
+            "str (string)"
+          ],
+          explanation: "input() always returns a string (str)! Even if you type numbers, it returns '123' as a string."
+        }
       }
     },
 
@@ -162,7 +179,16 @@ export const lesson10: LessonData = {
           "출력이 100이 나와"
         ],
         answer: 1,
-        explanation: "input()은 str을 반환해! '90' + 10은 문자열 + 정수라 TypeError가 발생해. int(input('점수: '))로 변환해야 해!"
+        explanation: "input()은 str을 반환해! '90' + 10은 문자열 + 정수라 TypeError가 발생해. int(input('점수: '))로 변환해야 해!",
+        en: {
+          question: "What is the problem with this code?",
+          options: [
+            "Can't receive input",
+            "TypeError: str + int not allowed",
+            "Output is 100"
+          ],
+          explanation: "input() returns str! '90' + 10 is string + integer so TypeError occurs. Must convert with int(input('점수: '))!"
+        }
       }
     },
 
@@ -175,7 +201,11 @@ export const lesson10: LessonData = {
         guide: "age = int(input('나이: '))",
         template: null,
         answer: "age = int(input('나이: '))\nprint(age + 10)",
-        expect: "25"
+        expect: "25",
+        en: {
+          task: "Get age as int input\nPrint the age 10 years later\n(input: 15 → output: 25)",
+          guide: "age = int(input('나이: '))"
+        }
       }
     },
     {
@@ -186,7 +216,11 @@ export const lesson10: LessonData = {
         guide: "a = int(input(...))\nb = int(input(...))",
         template: null,
         answer: "a = int(input('첫 번째 수: '))\nb = int(input('두 번째 수: '))\nprint(a + b)",
-        expect: "100"
+        expect: "100",
+        en: {
+          task: "Get two numbers as input and print their sum\n(input: 30, 70 → output: 100)",
+          guide: "a = int(input(...))\nb = int(input(...))"
+        }
       }
     },
 
@@ -201,7 +235,16 @@ export const lesson10: LessonData = {
           "float 만 가능해"
         ],
         answer: 1,
-        explanation: "input()은 항상 str! 계산하려면 int(input()) 또는 float(input())으로 변환해야 해."
+        explanation: "input()은 항상 str! 계산하려면 int(input()) 또는 float(input())으로 변환해야 해.",
+        en: {
+          question: "To receive a number with input() and calculate with it?",
+          options: [
+            "You can calculate directly",
+            "Must convert with int(input())",
+            "Only float is possible"
+          ],
+          explanation: "input() always returns str! To calculate, you must convert with int(input()) or float(input())."
+        }
       }
     },
 
@@ -239,7 +282,11 @@ export const lesson10: LessonData = {
         task: "name = '코린이', age = 13 으로\n'코린이는 13살이야' 출력해봐",
         template: null,
         answer: "name = '코린이'\nage = 13\nprint(f'{name}는 {age}살이야')",
-        expect: "코린이는 13살이야"
+        expect: "코린이는 13살이야",
+        en: {
+          message: "Remember f-strings?",
+          task: "With name = '코린이', age = 13\nPrint '코린이는 13살이야'"
+        }
       }
     },
 

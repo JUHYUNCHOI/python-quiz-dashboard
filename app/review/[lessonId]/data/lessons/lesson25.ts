@@ -67,7 +67,17 @@ print(f"남은 덱: {list(d)}")`,
           "Data Extended Queue"
         ],
         answer: 0,
-        explanation: "Deque = Double-Ended Queue! 양쪽 끝(Double-Ended)에서 작동하는 큐예요."
+        explanation: "Deque = Double-Ended Queue! 양쪽 끝(Double-Ended)에서 작동하는 큐예요.",
+        en: {
+          question: "What is the full name of Deque?",
+          options: [
+            "Double-Ended Queue",
+            "Dynamic Efficient Queue",
+            "Dual Entry Queue",
+            "Data Extended Queue"
+          ],
+          explanation: "Deque = Double-Ended Queue! A queue that operates at both ends."
+        }
       }
     },
     {
@@ -102,7 +112,11 @@ print(f"남은 덱: {list(d)}")`,
         template: "from collections import deque\nq = deque()\nq.append('a')\nq.append('b')\nprint(q.___())",
         blanksAnswer: ["popleft"],
         answer: "from collections import deque\nq = deque()\nq.append('a')\nq.append('b')\nprint(q.popleft())",
-        expect: "a"
+        expect: "a",
+        en: {
+          message: "🔄 Queue review!",
+          task: "Add 'a', 'b' to the queue and popleft to print the first one"
+        }
       }
     },
     {
@@ -176,7 +190,12 @@ print("왼쪽 1칸:", list(d))`,
         template: "from collections import deque\n\nd = deque([1, 2, 3])\nd.___(0)\nprint(list(d))",
         blanksAnswer: ["appendleft"],
         answer: "from collections import deque\n\nd = deque([1, 2, 3])\nd.appendleft(0)\nprint(list(d))",
-        expect: "[0, 1, 2, 3]"
+        expect: "[0, 1, 2, 3]",
+        en: {
+          task: "Add 0 to the left side of the deque",
+          guide: "Use appendleft()!",
+          hint: "Use d.appendleft(value) to add to the left!"
+        }
       }
     },
     {
@@ -189,7 +208,12 @@ print("왼쪽 1칸:", list(d))`,
         template: "from collections import deque\n\nd = deque(['a', 'b', 'c', 'd'])\nd.___(___)\nprint(list(d))",
         blanksAnswer: ["rotate", "1"],
         answer: "from collections import deque\n\nd = deque(['a', 'b', 'c', 'd'])\nd.rotate(1)\nprint(list(d))",
-        expect: "['d', 'a', 'b', 'c']"
+        expect: "['d', 'a', 'b', 'c']",
+        en: {
+          task: "Rotate the deque one step to the right",
+          guide: "Use rotate(1)!",
+          hint: "Positive value rotates right!"
+        }
       }
     },
     {
@@ -198,7 +222,12 @@ print("왼쪽 1칸:", list(d))`,
         question: "deque([1,2,3])에서 appendleft(0) 후 popleft()하면?",
         options: ["0", "1", "3", "에러"],
         answer: 0,
-        explanation: "appendleft(0) → [0,1,2,3], popleft() → 0이 나오고 [1,2,3] 남음!"
+        explanation: "appendleft(0) → [0,1,2,3], popleft() → 0이 나오고 [1,2,3] 남음!",
+        en: {
+          question: "After appendleft(0) on deque([1,2,3]), what does popleft() return?",
+          options: ["0", "1", "3", "Error"],
+          explanation: "appendleft(0) → [0,1,2,3], popleft() → returns 0, leaving [1,2,3]!"
+        }
       }
     },
     {
@@ -234,7 +263,11 @@ print("왼쪽 1칸:", list(d))`,
         template: "from collections import deque\nd = deque([1, 2, 3, 4, 5])\nd.rotate(___)\nprint(list(d))",
         blanksAnswer: ["-2"],
         answer: "from collections import deque\nd = deque([1, 2, 3, 4, 5])\nd.rotate(-2)\nprint(list(d))",
-        expect: "[3, 4, 5, 1, 2]"
+        expect: "[3, 4, 5, 1, 2]",
+        en: {
+          message: "🔄 rotate review!",
+          task: "Rotate the deque two steps to the left"
+        }
       }
     },
     {
@@ -288,7 +321,17 @@ print("deque 하나면 다 됩니다!")`,
           "양쪽 끝에서 추가/삭제"
         ],
         answer: 2,
-        explanation: "deque는 양쪽 끝 연산은 O(1)이지만, 중간 접근은 O(n)으로 리스트보다 느려요!"
+        explanation: "deque는 양쪽 끝 연산은 O(1)이지만, 중간 접근은 O(n)으로 리스트보다 느려요!",
+        en: {
+          question: "Which of the following cannot be done efficiently with deque?",
+          options: [
+            "Use as a stack (LIFO)",
+            "Use as a queue (FIFO)",
+            "Fast access to middle elements by index",
+            "Add/remove at both ends"
+          ],
+          explanation: "deque is O(1) at both ends, but middle access is O(n) — slower than a list!"
+        }
       }
     },
     {
@@ -301,7 +344,12 @@ print("deque 하나면 다 됩니다!")`,
         template: "from collections import deque\n\nstack = deque()\nstack.append('a')\nstack.append('b')\nstack.append('c')\nprint(stack.___())",
         blanksAnswer: ["pop"],
         answer: "from collections import deque\n\nstack = deque()\nstack.append('a')\nstack.append('b')\nstack.append('c')\nprint(stack.pop())",
-        expect: "c"
+        expect: "c",
+        en: {
+          task: "Use deque as a stack to push 'a', 'b', 'c' and then pop",
+          guide: "Use append and pop!",
+          hint: "Stack = append + pop (LIFO)"
+        }
       }
     },
     {

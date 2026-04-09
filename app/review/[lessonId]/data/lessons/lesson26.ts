@@ -62,7 +62,12 @@ print("7가지 자료구조 완료!")`,
         question: "수정이 불가능한 자료구조는?",
         options: ["리스트 (list)", "튜플 (tuple)", "딕셔너리 (dict)", "덱 (deque)"],
         answer: 1,
-        explanation: "튜플은 한 번 만들면 수정, 추가, 삭제가 불가능해요! 안전하게 데이터를 보관할 때 써요."
+        explanation: "튜플은 한 번 만들면 수정, 추가, 삭제가 불가능해요! 안전하게 데이터를 보관할 때 써요.",
+        en: {
+          question: "Which data structure is immutable?",
+          options: ["List (list)", "Tuple (tuple)", "Dictionary (dict)", "Deque (deque)"],
+          explanation: "Tuples cannot be modified, added to, or deleted once created! Use them to safely store constant data."
+        }
       }
     },
     {
@@ -71,7 +76,12 @@ print("7가지 자료구조 완료!")`,
         question: "중복을 자동으로 제거해주는 자료구조는?",
         options: ["리스트 (list)", "튜플 (tuple)", "딕셔너리 (dict)", "집합 (set)"],
         answer: 3,
-        explanation: "set은 중복을 허용하지 않아요! {1, 1, 2, 2} → {1, 2}"
+        explanation: "set은 중복을 허용하지 않아요! {1, 1, 2, 2} → {1, 2}",
+        en: {
+          question: "Which data structure automatically removes duplicates?",
+          options: ["List (list)", "Tuple (tuple)", "Dictionary (dict)", "Set (set)"],
+          explanation: "set doesn't allow duplicates! {1, 1, 2, 2} → {1, 2}"
+        }
       }
     },
     {
@@ -84,7 +94,12 @@ print("7가지 자료구조 완료!")`,
         template: "nums = [1, 2, 2, 3, 3, 3]\nresult = list(___(nums))\nprint(sorted(result))",
         blanksAnswer: ["set"],
         answer: "nums = [1, 2, 2, 3, 3, 3]\nresult = list(set(nums))\nprint(sorted(result))",
-        expect: "[1, 2, 3]"
+        expect: "[1, 2, 3]",
+        en: {
+          task: "Remove duplicates from the list (using set)",
+          guide: "Convert with set(), then back to list()!",
+          hint: "Remove duplicates with list(set(list))!"
+        }
       }
     },
     {
@@ -123,7 +138,11 @@ print("7가지 자료구조 완료!")`,
         template: "from collections import deque\nd = deque([1, 2, 3])\nd.___(0)\nprint(list(d))",
         blanksAnswer: ["appendleft"],
         answer: "from collections import deque\nd = deque([1, 2, 3])\nd.appendleft(0)\nprint(list(d))",
-        expect: "[0, 1, 2, 3]"
+        expect: "[0, 1, 2, 3]",
+        en: {
+          message: "🔄 Deque review!",
+          task: "Add 0 to the left side of the deque"
+        }
       }
     },
     {
@@ -192,7 +211,12 @@ print(f"남은 기록: {undo_stack}")`,
         question: "은행 번호표 시스템에 적합한 자료구조는?",
         options: ["스택 (Stack)", "큐 (Queue)", "집합 (Set)", "튜플 (Tuple)"],
         answer: 1,
-        explanation: "먼저 번호표를 뽑은 사람이 먼저 서비스 받아요! FIFO = 큐!"
+        explanation: "먼저 번호표를 뽑은 사람이 먼저 서비스 받아요! FIFO = 큐!",
+        en: {
+          question: "Which data structure is best for a bank ticket number system?",
+          options: ["Stack", "Queue", "Set", "Tuple"],
+          explanation: "The first person to take a number gets served first! FIFO = Queue!"
+        }
       }
     },
     {
@@ -201,7 +225,12 @@ print(f"남은 기록: {undo_stack}")`,
         question: "좌표 (x, y)를 저장할 때 적합한 자료구조는?",
         options: ["리스트 (list)", "튜플 (tuple)", "딕셔너리 (dict)", "집합 (set)"],
         answer: 1,
-        explanation: "좌표는 한번 정하면 바꿀 일이 없어요! 수정 불가인 튜플이 안전해요."
+        explanation: "좌표는 한번 정하면 바꿀 일이 없어요! 수정 불가인 튜플이 안전해요.",
+        en: {
+          question: "Which data structure is best for storing a coordinate (x, y)?",
+          options: ["List (list)", "Tuple (tuple)", "Dictionary (dict)", "Set (set)"],
+          explanation: "Coordinates don't change once set! Immutable tuple is the safe choice."
+        }
       }
     },
     {
@@ -214,7 +243,12 @@ print(f"남은 기록: {undo_stack}")`,
         template: "prices = {___: 1000, '바나나': 500}\nprint(prices[___])",
         blanksAnswer: ["'사과'", "'사과'"],
         answer: "prices = {'사과': 1000, '바나나': 500}\nprint(prices['사과'])",
-        expect: "1000"
+        expect: "1000",
+        en: {
+          task: "Create a fruit price dictionary and print the apple price",
+          guide: "Use { key: value } format!",
+          hint: "Like prices = {'apple': 1000, ...}!"
+        }
       }
     },
     {
@@ -227,7 +261,12 @@ print(f"남은 기록: {undo_stack}")`,
         template: "from collections import ___\n\nwait = deque()\nwait.append('1번')\nwait.append('2번')\nwait.append('3번')\nprint(f'{wait.___()}님 차례입니다!')",
         blanksAnswer: ["deque", "popleft"],
         answer: "from collections import deque\n\nwait = deque()\nwait.append('1번')\nwait.append('2번')\nwait.append('3번')\nprint(f'{wait.popleft()}님 차례입니다!')",
-        expect: "1번님 차례입니다!"
+        expect: "1번님 차례입니다!",
+        en: {
+          task: "Create a waiting queue and process the first person",
+          guide: "deque + append + popleft!",
+          hint: "Start with: from collections import deque!"
+        }
       }
     },
     {
@@ -264,7 +303,11 @@ print(f"남은 기록: {undo_stack}")`,
         template: "nums = [1, 2, 3, 4, 5]\nprint(nums[::___])",
         blanksAnswer: ["-1"],
         answer: "nums = [1, 2, 3, 4, 5]\nprint(nums[::-1])",
-        expect: "[5, 4, 3, 2, 1]"
+        expect: "[5, 4, 3, 2, 1]",
+        en: {
+          message: "🔄 Slicing review!",
+          task: "Reverse and print the list"
+        }
       }
     },
     {
@@ -273,7 +316,12 @@ print(f"남은 기록: {undo_stack}")`,
         question: "다음 중 LIFO 방식의 자료구조는?",
         options: ["큐 (Queue)", "스택 (Stack)", "덱 (Deque)", "리스트 (List)"],
         answer: 1,
-        explanation: "LIFO = Last In, First Out! 마지막에 넣은 게 먼저 나오는 스택이에요."
+        explanation: "LIFO = Last In, First Out! 마지막에 넣은 게 먼저 나오는 스택이에요.",
+        en: {
+          question: "Which of the following is a LIFO data structure?",
+          options: ["Queue", "Stack", "Deque", "List"],
+          explanation: "LIFO = Last In, First Out! The stack returns the last inserted item first."
+        }
       }
     },
     {
@@ -282,7 +330,12 @@ print(f"남은 기록: {undo_stack}")`,
         question: "deque의 popleft()와 같은 동작을 리스트로 하면?",
         options: ["list.pop()", "list.pop(0)", "list.remove(0)", "list.popleft()"],
         answer: 1,
-        explanation: "list.pop(0)은 첫 번째 요소를 제거해요. 하지만 deque.popleft()보다 느려요!"
+        explanation: "list.pop(0)은 첫 번째 요소를 제거해요. 하지만 deque.popleft()보다 느려요!",
+        en: {
+          question: "What is the list equivalent of deque's popleft()?",
+          options: ["list.pop()", "list.pop(0)", "list.remove(0)", "list.popleft()"],
+          explanation: "list.pop(0) removes the first element. But it's slower than deque.popleft()!"
+        }
       }
     },
     {
@@ -291,7 +344,12 @@ print(f"남은 기록: {undo_stack}")`,
         question: "딕셔너리에서 키가 존재하는지 확인하는 방법은?",
         options: ["key in dict", "dict.has(key)", "dict.find(key)", "dict.exists(key)"],
         answer: 0,
-        explanation: "'key' in dict로 키 존재 여부를 확인할 수 있어요!"
+        explanation: "'key' in dict로 키 존재 여부를 확인할 수 있어요!",
+        en: {
+          question: "How do you check if a key exists in a dictionary?",
+          options: ["key in dict", "dict.has(key)", "dict.find(key)", "dict.exists(key)"],
+          explanation: "Use 'key' in dict to check if a key exists!"
+        }
       }
     },
     {
@@ -320,7 +378,12 @@ point[0] = 5`,
         template: "a = [1, 2, 3, 4]\nb = [3, 4, 5, 6]\ncommon = ___(a) ___ set(b)\nprint(sorted(common))",
         blanksAnswer: ["set", "&"],
         answer: "a = [1, 2, 3, 4]\nb = [3, 4, 5, 6]\ncommon = set(a) & set(b)\nprint(sorted(common))",
-        expect: "[3, 4]"
+        expect: "[3, 4]",
+        en: {
+          task: "Use set to find common elements in two lists",
+          guide: "Use the intersection operator &!",
+          hint: "Intersection with set(a) & set(b)!"
+        }
       }
     },
     {
@@ -335,7 +398,12 @@ point[0] = 5`,
         alternateAnswers: [
           "stack = []\nfor ch in 'hello':\n    stack.append(ch)\nresult = ''\nwhile stack:\n    result += stack.pop()\nprint(result)"
         ],
-        expect: "olleh"
+        expect: "olleh",
+        en: {
+          task: "Use a stack to reverse the string 'hello'",
+          guide: "Push each character then pop!",
+          hint: "Append each char, then pop while building the new string!"
+        }
       }
     },
     {
@@ -344,7 +412,12 @@ point[0] = 5`,
         question: "deque([1,2,3]).rotate(-1) 의 결과는?",
         options: ["[2, 3, 1]", "[3, 1, 2]", "[1, 2, 3]", "[3, 2, 1]"],
         answer: 0,
-        explanation: "rotate(-1)은 왼쪽으로 1칸 회전! 맨 앞의 1이 맨 뒤로 → [2, 3, 1]"
+        explanation: "rotate(-1)은 왼쪽으로 1칸 회전! 맨 앞의 1이 맨 뒤로 → [2, 3, 1]",
+        en: {
+          question: "What is the result of deque([1,2,3]).rotate(-1)?",
+          options: ["[2, 3, 1]", "[3, 1, 2]", "[1, 2, 3]", "[3, 2, 1]"],
+          explanation: "rotate(-1) rotates left by 1! The front 1 moves to the back → [2, 3, 1]"
+        }
       }
     },
     {

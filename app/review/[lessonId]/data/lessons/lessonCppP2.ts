@@ -55,7 +55,11 @@ export const lessonCppP2: LessonData = {
           guide: "struct 키워드로 시작!",
           template: "___ Character {\n    string name;\n    int hp;\n};",
           answer: "struct",
-          expect: "struct Character {\n    string name;\n    int hp;\n};"
+          expect: "struct Character {\n    string name;\n    int hp;\n};",
+          en: {
+            task: "Declare the character struct!",
+            guide: "Start with the struct keyword!"
+          }
         }
       },
 
@@ -66,7 +70,12 @@ export const lessonCppP2: LessonData = {
           question: "구조체의 멤버에 접근할 때 쓰는 연산자는?",
           options: ["->", ".", "::", "#"],
           answer: 1,
-          explanation: ". (점) 연산자로 멤버에 접근해요! hero.name, hero.hp 이런 식으로!"
+          explanation: ". (점) 연산자로 멤버에 접근해요! hero.name, hero.hp 이런 식으로!",
+          en: {
+            question: "Which operator is used to access struct members?",
+            options: ["->", ".", "::", "#"],
+            explanation: "Use the . (dot) operator to access members! Like hero.name, hero.hp!"
+          }
         }
       },
 
@@ -93,7 +102,11 @@ export const lessonCppP2: LessonData = {
           guide: "push_back으로 벡터에 추가!",
           template: "party.___(warrior);",
           answer: "push_back",
-          expect: "party.push_back(warrior);"
+          expect: "party.push_back(warrior);",
+          en: {
+            task: "Add a character to the party!",
+            guide: "Use push_back to add to the vector!"
+          }
         }
       },
 
@@ -107,7 +120,11 @@ export const lessonCppP2: LessonData = {
           template: "for (int i = 0; i < party.___(); i++) {\n    cout << party[i].___ << \"\\n\";\n}",
           answer: "size",
           blanksAnswer: ["size", "name"],
-          expect: "for (int i = 0; i < party.size(); i++) {\n    cout << party[i].name << \"\\n\";\n}"
+          expect: "for (int i = 0; i < party.size(); i++) {\n    cout << party[i].name << \"\\n\";\n}",
+          en: {
+            task: "Print the name of every character!",
+            guide: "Iterate through the vector with a for loop!"
+          }
         }
       },
 
@@ -123,7 +140,16 @@ export const lessonCppP2: LessonData = {
             "hero를 초기화하지 않아서 에러"
           ],
           answer: 0,
-          explanation: "C++에서 struct 정의 끝에는 반드시 세미콜론(;)이 필요해요! }; 이렇게!"
+          explanation: "C++에서 struct 정의 끝에는 반드시 세미콜론(;)이 필요해요! }; 이렇게!",
+          en: {
+            question: "What is wrong with this code?",
+            options: [
+              "A semicolon (;) is missing after the struct definition",
+              "string cannot be used",
+              "hero must be initialized to cause an error"
+            ],
+            explanation: "In C++, a semicolon (;) is required at the end of a struct definition! Like };"
+          }
         }
       },
 
@@ -185,7 +211,11 @@ export const lessonCppP2: LessonData = {
           task: "Character 구조체의 시작 부분을 써봐요!",
           template: "___ Character {",
           answer: "struct",
-          expect: "struct Character {"
+          expect: "struct Character {",
+          en: {
+            message: "Quick check! Do you remember struct declarations?",
+            task: "Write the opening part of the Character struct!"
+          }
         }
       },
 

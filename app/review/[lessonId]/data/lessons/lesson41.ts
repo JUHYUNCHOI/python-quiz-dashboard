@@ -58,7 +58,17 @@ archer = Character('궁수', 90, 25)`,
           "클래스 = 속재료, 객체 = 붕어빵"
         ],
         answer: 1,
-        explanation: "클래스(틀)로 객체(붕어빵)를 찍어내요! 틀 하나로 여러 개를 만들 수 있어요!"
+        explanation: "클래스(틀)로 객체(붕어빵)를 찍어내요! 틀 하나로 여러 개를 만들 수 있어요!",
+        en: {
+          question: "Using a fish-shaped bread analogy, how is the class-object relationship?",
+          options: [
+            "class = bread, object = mold",
+            "class = bread mold, object = bread",
+            "class = shop, object = customer",
+            "class = filling, object = bread"
+          ],
+          explanation: "You use the class (mold) to create objects (bread)! One mold can make many!"
+        }
       }
     },
 
@@ -123,7 +133,17 @@ print(hero.hp)`,
           "print() 할 때"
         ],
         answer: 2,
-        explanation: "Character('용사', 100) 이렇게 객체를 만들 때 자동으로 실행돼요!"
+        explanation: "Character('용사', 100) 이렇게 객체를 만들 때 자동으로 실행돼요!",
+        en: {
+          question: "When does __init__ run?",
+          options: [
+            "When the program starts",
+            "When the class is defined",
+            "When an object is created (when Character() is called)",
+            "When print() is called"
+          ],
+          explanation: "It runs automatically when you create an object like Character('용사', 100)!"
+        }
       }
     },
 
@@ -153,6 +173,11 @@ hero = Character('용사')
         template: "___ Dog:\n    def __init__(s, name):\n        s.name = name\n\ndog = Dog('멍멍이')\nprint(dog.name)",
         blanksAnswer: ["class"],
         answer: "class Dog:\n    def __init__(s, name):\n        s.name = name\n\ndog = Dog('멍멍이')\nprint(dog.name)",
+        en: {
+          task: "Fill in the blank!",
+          guide: "Basic class definition structure",
+          hint: "The keyword used to define a class!"
+        },
         alternateAnswers: [],
         expect: "멍멍이"
       }
@@ -168,6 +193,11 @@ hero = Character('용사')
         template: "class Cat:\n    def ___(s, name):\n        s.name = name\n\ncat = Cat('냥이')\nprint(cat.name)",
         blanksAnswer: ["__init__"],
         answer: "class Cat:\n    def __init__(s, name):\n        s.name = name\n\ncat = Cat('냥이')\nprint(cat.name)",
+        en: {
+          task: "Fill in the blank!",
+          guide: "What is the name of the initialization function?",
+          hint: "A special function wrapped with two underscores on each side!"
+        },
         alternateAnswers: [],
         expect: "냥이"
       }
@@ -262,6 +292,11 @@ print(a.hp, b.hp)`,
         template: "class Item:\n    def __init__(s, name, price):\n        s.name = name\n        s.price = price\n\nsword = ___('검', 500)\nprint(sword.name)",
         blanksAnswer: ["Item"],
         answer: "class Item:\n    def __init__(s, name, price):\n        s.name = name\n        s.price = price\n\nsword = Item('검', 500)\nprint(sword.name)",
+        en: {
+          task: "Fill in the blank!",
+          guide: "Create an item using the Item class",
+          hint: "Create an object using the class name!"
+        },
         alternateAnswers: [],
         expect: "검"
       }
@@ -277,6 +312,11 @@ print(a.hp, b.hp)`,
         template: "class Pet:\n    def __init__(s, name, age):\n        s.name = name\n        s.age = age\n\ndog = Pet('멍멍이', 3)\nprint(dog.___)",
         blanksAnswer: ["name"],
         answer: "class Pet:\n    def __init__(s, name, age):\n        s.name = name\n        s.age = age\n\ndog = Pet('멍멍이', 3)\nprint(dog.name)",
+        en: {
+          task: "Fill in the blank!",
+          guide: "How do you access an object's attribute?",
+          hint: "Access attributes using a dot (.)!"
+        },
         alternateAnswers: [],
         expect: "멍멍이"
       }
@@ -371,7 +411,17 @@ print(hero.name)`,
           "class Character:\n    __init__(s, name):"
         ],
         answer: 1,
-        explanation: "class로 시작, __init__에 s(self)가 첫 번째 매개변수, s.으로 속성 저장!"
+        explanation: "class로 시작, __init__에 s(self)가 첫 번째 매개변수, s.으로 속성 저장!",
+        en: {
+          question: "Which of the following is a correct class definition?",
+          options: [
+            "class character:\n    def __init__(name):",
+            "class Character:\n    def __init__(s, name):\n        s.name = name",
+            "def Character:\n    def __init__(s, name):",
+            "class Character:\n    __init__(s, name):"
+          ],
+          explanation: "Start with class, s(self) as first parameter in __init__, store attributes with s.!"
+        }
       }
     },
 
@@ -386,6 +436,11 @@ print(hero.name)`,
         template: "class Monster:\n    def __init__(s, name, hp):\n        ___ = name\n        ___ = hp\n\nslime = Monster('슬라임', 30)\nprint(f'{slime.name}: HP {slime.hp}')",
         blanksAnswer: ["s.name", "s.hp"],
         answer: "class Monster:\n    def __init__(s, name, hp):\n        s.name = name\n        s.hp = hp\n\nslime = Monster('슬라임', 30)\nprint(f'{slime.name}: HP {slime.hp}')",
+        en: {
+          task: "Fill in the 2 blanks!",
+          guide: "Complete the Monster class",
+          hint: "Use the pattern s.attribute = parameter!"
+        },
         alternateAnswers: [],
         expect: "슬라임: HP 30"
       }
@@ -401,6 +456,11 @@ print(hero.name)`,
         template: "___ Book:\n    def ___(s, title, author):\n        ___.title = title\n        s.author = author\n\nb = Book('해리포터', 'J.K.롤링')\nprint(f'{b.title} - {b.author}')",
         blanksAnswer: ["class", "__init__", "s"],
         answer: "class Book:\n    def __init__(s, title, author):\n        s.title = title\n        s.author = author\n\nb = Book('해리포터', 'J.K.롤링')\nprint(f'{b.title} - {b.author}')",
+        en: {
+          task: "Fill in the 3 blanks!",
+          guide: "Build a class from scratch!",
+          hint: "class, __init__, s!"
+        },
         alternateAnswers: [],
         expect: "해리포터 - J.K.롤링"
       }

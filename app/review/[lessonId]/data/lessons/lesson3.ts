@@ -80,7 +80,11 @@ export const lesson3: LessonData = {
           task: "100을 출력해봐",
           template: null,
           answer: "print(100)",
-          expect: "100"
+          expect: "100",
+          en: {
+            message: "Wait! Let's review last time",
+            task: "Print 100"
+          }
         }
       },
 
@@ -118,7 +122,12 @@ export const lesson3: LessonData = {
           hint: "chicken = 19000\nprint(chicken)",
           template: null,
           answer: "chicken = 19000\nprint(chicken)",
-          expect: "19000"
+          expect: "19000",
+          en: {
+            task: "Make it print like this ↓\n19000",
+            guide: "Create chicken = 19000 and print it!",
+            hint: "chicken = 19000\nprint(chicken)"
+          }
         }
       },
       {
@@ -128,7 +137,11 @@ export const lesson3: LessonData = {
           guide: "cola = 2000 만들고 출력!",
           template: null,
           answer: "cola = 2000\nprint(cola)",
-          expect: "2000"
+          expect: "2000",
+          en: {
+            task: "Make it print like this ↓\n2000",
+            guide: "Create cola = 2000 and print it!"
+          }
         }
       },
       {
@@ -139,7 +152,11 @@ export const lesson3: LessonData = {
           template: null,
           answer: "name = '홍길동'\nprint(name)",
           alternateAnswers: ["name = \"홍길동\"\nprint(name)"],
-          expect: "홍길동"
+          expect: "홍길동",
+          en: {
+            task: "Make it print like this ↓\n홍길동",
+            guide: "name = '홍길동' — strings need quotes!"
+          }
         }
       },
 
@@ -154,7 +171,16 @@ export const lesson3: LessonData = {
             "chicken을 19000번 반복해라"
           ],
           answer: 1,
-          explanation: "= 는 '같다'가 아니라 '넣어라'야! 오른쪽 값을 왼쪽 변수에 저장해!"
+          explanation: "= 는 '같다'가 아니라 '넣어라'야! 오른쪽 값을 왼쪽 변수에 저장해!",
+          en: {
+            question: "What does = mean in chicken = 19000?",
+            options: [
+              "chicken equals 19000",
+              "Store 19000 in the chicken box",
+              "Repeat chicken 19000 times"
+            ],
+            explanation: "= means 'assign', not 'equals'! It stores the right value into the left variable!"
+          }
         }
       },
 
@@ -193,7 +219,11 @@ export const lesson3: LessonData = {
           template: null,
           answer: "pizza = 18000",
           alternateAnswers: ["pizza=18000"],
-          expect: ""
+          expect: "",
+          en: {
+            message: "Remember making variables?",
+            task: "Store 18000 in pizza"
+          }
         }
       },
 
@@ -220,7 +250,11 @@ export const lesson3: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "chicken + cola",
           alternateAnswers: ["chicken+cola"],
-          expect: "21000"
+          expect: "21000",
+          en: {
+            task: "Print chicken + cola",
+            guide: "Add variables together!"
+          }
         }
       },
       {
@@ -231,7 +265,10 @@ export const lesson3: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "chicken - cola",
           alternateAnswers: ["chicken-cola"],
-          expect: "17000"
+          expect: "17000",
+          en: {
+            task: "Print chicken - cola"
+          }
         }
       },
       {
@@ -243,7 +280,11 @@ export const lesson3: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "chicken * 3",
           alternateAnswers: ["chicken*3"],
-          expect: "57000"
+          expect: "57000",
+          en: {
+            task: "Print chicken * 3",
+            guide: "Variable × number works too!"
+          }
         }
       },
 
@@ -294,7 +335,16 @@ export const lesson3: LessonData = {
             "29000"
           ],
           answer: 2,
-          explanation: "50000 → 31000 → 29000! 순서대로 계산돼!"
+          explanation: "50000 → 31000 → 29000! 순서대로 계산돼!",
+          en: {
+            question: "What is the final value of money?",
+            options: [
+              "50000",
+              "31000",
+              "29000"
+            ],
+            explanation: "50000 → 31000 → 29000! Calculated in order!"
+          }
         }
       },
 
@@ -359,7 +409,16 @@ export const lesson3: LessonData = {
             "myChicken"
           ],
           answer: 1,
-          explanation: "2nd_menu는 숫자로 시작해서 안 돼! second_menu로 바꿔야 해!"
+          explanation: "2nd_menu는 숫자로 시작해서 안 돼! second_menu로 바꿔야 해!",
+          en: {
+            question: "Which variable name is NOT allowed?",
+            options: [
+              "chicken_price",
+              "2nd_menu",
+              "myChicken"
+            ],
+            explanation: "2nd_menu starts with a number which is not allowed! Change it to second_menu!"
+          }
         }
       },
 
@@ -389,7 +448,16 @@ export const lesson3: LessonData = {
             "c만 에러"
           ],
           answer: 2,
-          explanation: "my name은 공백이 있어서 에러! my_name이나 myName으로 써야 해!"
+          explanation: "my name은 공백이 있어서 에러! my_name이나 myName으로 써야 해!",
+          en: {
+            question: "Which code causes an error?",
+            options: [
+              "Only a causes error",
+              "Only b causes error",
+              "Only c causes error"
+            ],
+            explanation: "my name has a space so it causes an error! Use my_name or myName instead!"
+          }
         }
       },
 
@@ -458,7 +526,16 @@ export const lesson3: LessonData = {
             "100에 따옴표가 없어서"
           ],
           answer: 1,
-          explanation: "score를 만들기 전에 print(score)를 했어! 순서를 바꿔야 해!"
+          explanation: "score를 만들기 전에 print(score)를 했어! 순서를 바꿔야 해!",
+          en: {
+            question: "Why does this code cause an error?",
+            options: [
+              "Wrong spelling of print",
+              "Using score before it's created",
+              "100 is missing quotes"
+            ],
+            explanation: "print(score) is called before score is created! You need to swap the order!"
+          }
         }
       },
 
@@ -496,7 +573,11 @@ export const lesson3: LessonData = {
           task: "money 값을 출력해봐",
           template: null,
           answer: "print(money)",
-          expect: "50000"
+          expect: "50000",
+          en: {
+            message: "Remember printing variables?",
+            task: "Print the value of money"
+          }
         }
       },
 

@@ -1,6 +1,7 @@
 "use client"
 
 import { useRef, useEffect, useState } from "react"
+import { useLanguage } from "@/contexts/language-context"
 
 interface AlgoConceptVizProps {
   topicId: string  // e.g. "string", "sorting"
@@ -49,6 +50,12 @@ export function AlgoConceptViz({ topicId }: AlgoConceptVizProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
+  const { lang } = useLanguage()
+
+  useEffect(() => {
+    // Algo Lab Vanilla JS가 window._algoLang을 참조함
+    window._algoLang = lang
+  }, [lang])
 
   useEffect(() => {
     let cancelled = false
@@ -75,6 +82,7 @@ export function AlgoConceptViz({ topicId }: AlgoConceptVizProps) {
 
         if (containerRef.current) {
           containerRef.current.innerHTML = ''
+          window._algoLang = lang
           topic.renderConcept(containerRef.current)
           setLoading(false)
         }
@@ -94,7 +102,7 @@ export function AlgoConceptViz({ topicId }: AlgoConceptVizProps) {
         try { window.AlgoTopics[topicId]._clearVizState() } catch {}
       }
     }
-  }, [topicId])
+  }, [topicId, lang])
 
   if (error) {
     return null  // 개념 뷰 없으면 조용히 숨김

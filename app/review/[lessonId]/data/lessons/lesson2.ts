@@ -681,7 +681,16 @@ export const lesson2: LessonData = {
             "c만 에러"
           ],
           answer: 1,
-          explanation: "아이유에 따옴표가 없어서 에러! print('아이유')로 해야 해!"
+          explanation: "아이유에 따옴표가 없어서 에러! print('아이유')로 해야 해!",
+          en: {
+            question: "Which code causes an error?",
+            options: [
+              "Only a causes error",
+              "Only b causes error",
+              "Only c causes error"
+            ],
+            explanation: "아이유 has no quotes so it causes an error! It should be print('아이유')!"
+          }
         }
       },
 
@@ -720,7 +729,11 @@ export const lesson2: LessonData = {
           template: null,
           answer: "print('이름:', '홍길동')",
           alternateAnswers: ["print('이름: 홍길동')", "print(\"이름:\", \"홍길동\")"],
-          expect: "이름: 홍길동"
+          expect: "이름: 홍길동",
+          en: {
+            message: "Remember printing multiple values?",
+            task: "Print: 이름: 홍길동"
+          }
         }
       },
 

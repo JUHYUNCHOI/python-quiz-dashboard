@@ -41,7 +41,17 @@ export const lessonCpp22: LessonData = {
             "struct는 C++에서 사용 불가"
           ],
           answer: 1,
-          explanation: "struct는 기본 접근 제한이 public, class는 private이에요! 그 외에는 거의 동일하게 동작해요."
+          explanation: "struct는 기본 접근 제한이 public, class는 private이에요! 그 외에는 거의 동일하게 동작해요.",
+          en: {
+            question: "What is the biggest difference between struct and class?",
+            options: [
+              "struct cannot have functions",
+              "struct is public by default, class is private by default",
+              "class cannot have variables",
+              "struct cannot be used in C++"
+            ],
+            explanation: "struct defaults to public access and class defaults to private! Otherwise they behave almost identically."
+          }
         }
       },
 
@@ -72,7 +82,11 @@ export const lessonCpp22: LessonData = {
           guide: "외부 접근을 허용하는 키워드는?",
           template: "class Circle {\n___:\n    int radius;\n};",
           answer: "public",
-          expect: "class Circle {\npublic:\n    int radius;\n};"
+          expect: "class Circle {\npublic:\n    int radius;\n};",
+          en: {
+            task: "Make a member accessible from outside the class!",
+            guide: "What keyword allows external access?"
+          }
         }
       },
 
@@ -88,7 +102,16 @@ export const lessonCpp22: LessonData = {
             "string 타입을 못 써서"
           ],
           answer: 0,
-          explanation: "class는 기본이 private이에요! name을 외부에서 쓰려면 public: 아래에 넣어야 해요."
+          explanation: "class는 기본이 private이에요! name을 외부에서 쓰려면 public: 아래에 넣어야 해요.",
+          en: {
+            question: "Why does this code cause an error?",
+            options: [
+              "name is private so it cannot be accessed from outside",
+              "The Player class declaration is wrong",
+              "string type cannot be used"
+            ],
+            explanation: "class defaults to private! To use name from outside, it must be declared under public:."
+          }
         }
       },
 
@@ -137,7 +160,11 @@ export const lessonCpp22: LessonData = {
           task: "Cat 클래스의 name을 외부에서 접근 가능하게 만들어요!",
           template: "class Cat {\n___:\n    string name;\n};",
           answer: "public",
-          expect: "class Cat {\npublic:\n    string name;\n};"
+          expect: "class Cat {\npublic:\n    string name;\n};",
+          en: {
+            message: "Quick check! Do you remember class?",
+            task: "Make the name member of the Cat class accessible from outside!"
+          }
         }
       },
 
@@ -183,7 +210,11 @@ export const lessonCpp22: LessonData = {
           guide: "생성자 이름은 클래스 이름과 같아요!",
           template: "class Circle {\npublic:\n    int radius;\n    ___(int r) {\n        radius = r;\n    }\n};",
           answer: "Circle",
-          expect: "class Circle {\npublic:\n    int radius;\n    Circle(int r) {\n        radius = r;\n    }\n};"
+          expect: "class Circle {\npublic:\n    int radius;\n    Circle(int r) {\n        radius = r;\n    }\n};",
+          en: {
+            task: "Create the constructor for the Circle class!",
+            guide: "The constructor name is the same as the class name!"
+          }
         }
       },
 
@@ -196,7 +227,11 @@ export const lessonCpp22: LessonData = {
           guide: "this->멤버변수 = 매개변수;",
           template: "class Box {\npublic:\n    int size;\n    Box(int size) {\n        ___->size = size;\n    }\n};",
           answer: "this",
-          expect: "class Box {\npublic:\n    int size;\n    Box(int size) {\n        this->size = size;\n    }\n};"
+          expect: "class Box {\npublic:\n    int size;\n    Box(int size) {\n        this->size = size;\n    }\n};",
+          en: {
+            task: "Use this-> to initialize a member variable!",
+            guide: "this->memberVariable = parameter;"
+          }
         }
       },
 
@@ -212,7 +247,17 @@ export const lessonCpp22: LessonData = {
             "private: 아래에만 선언 가능하다"
           ],
           answer: 2,
-          explanation: "생성자는 객체를 만들 때 자동 실행! 반환 타입이 아예 없어요 (void도 아님!). 파이썬의 __init__과 같아요."
+          explanation: "생성자는 객체를 만들 때 자동 실행! 반환 타입이 아예 없어요 (void도 아님!). 파이썬의 __init__과 같아요.",
+          en: {
+            question: "What are the characteristics of a constructor?",
+            options: [
+              "Its return type is void",
+              "It uses a different name from the class",
+              "It is automatically called when an object is created and has no return type",
+              "It can only be declared under private:"
+            ],
+            explanation: "A constructor is automatically called when an object is created! It has no return type at all (not even void!). Same as Python's __init__."
+          }
         }
       },
 
@@ -239,7 +284,11 @@ export const lessonCpp22: LessonData = {
           guide: "반환 타입은 int, return this->hp;",
           template: "class Character {\nprivate:\n    int hp;\npublic:\n    Character(int h) { hp = h; }\n    ___ getHp() {\n        return hp;\n    }\n};",
           answer: "int",
-          expect: "class Character {\nprivate:\n    int hp;\npublic:\n    Character(int h) { hp = h; }\n    int getHp() {\n        return hp;\n    }\n};"
+          expect: "class Character {\nprivate:\n    int hp;\npublic:\n    Character(int h) { hp = h; }\n    int getHp() {\n        return hp;\n    }\n};",
+          en: {
+            task: "Complete the getter that returns hp!",
+            guide: "Return type is int, return this->hp;"
+          }
         }
       },
 
@@ -288,7 +337,11 @@ export const lessonCpp22: LessonData = {
           task: "Dog 클래스의 생성자 이름을 써봐요!",
           template: "class Dog {\npublic:\n    string name;\n    ___(string n) {\n        name = n;\n    }\n};",
           answer: "Dog",
-          expect: "class Dog {\npublic:\n    string name;\n    Dog(string n) {\n        name = n;\n    }\n};"
+          expect: "class Dog {\npublic:\n    string name;\n    Dog(string n) {\n        name = n;\n    }\n};",
+          en: {
+            message: "Quick check! Do you remember constructors?",
+            task: "Write the constructor name for the Dog class!"
+          }
         }
       },
 
@@ -334,7 +387,11 @@ export const lessonCpp22: LessonData = {
           guide: "class 자식 : public 부모 { }",
           template: "class Mage ___ Character {\npublic:\n    int mp;\n};",
           answer: ": public",
-          expect: "class Mage : public Character {\npublic:\n    int mp;\n};"
+          expect: "class Mage : public Character {\npublic:\n    int mp;\n};",
+          en: {
+            task: "Make the Mage class inherit from Character!",
+            guide: "class Child : public Parent { }"
+          }
         }
       },
 
@@ -347,7 +404,11 @@ export const lessonCpp22: LessonData = {
           guide: "자식생성자(params) : 부모생성자(params) { }",
           template: "class Mage : public Character {\npublic:\n    int mp;\n    Mage(string n, int h, int m) : ___(n, h) {\n        mp = m;\n    }\n};",
           answer: "Character",
-          expect: "class Mage : public Character {\npublic:\n    int mp;\n    Mage(string n, int h, int m) : Character(n, h) {\n        mp = m;\n    }\n};"
+          expect: "class Mage : public Character {\npublic:\n    int mp;\n    Mage(string n, int h, int m) : Character(n, h) {\n        mp = m;\n    }\n};",
+          en: {
+            task: "Call the parent constructor from the Mage constructor!",
+            guide: "ChildConstructor(params) : ParentConstructor(params) { }"
+          }
         }
       },
 
@@ -363,7 +424,17 @@ export const lessonCpp22: LessonData = {
             "class Child inherits Parent { }"
           ],
           answer: 2,
-          explanation: "C++은 class Child : public Parent { } 형태로 써요! 파이썬은 class Child(Parent):, Java는 extends를 쓰지만 C++은 콜론(:)을 써요."
+          explanation: "C++은 class Child : public Parent { } 형태로 써요! 파이썬은 class Child(Parent):, Java는 extends를 쓰지만 C++은 콜론(:)을 써요.",
+          en: {
+            question: "What is the correct way to declare inheritance in C++?",
+            options: [
+              "class Child(Parent) { }",
+              "class Child extends Parent { }",
+              "class Child : public Parent { }",
+              "class Child inherits Parent { }"
+            ],
+            explanation: "C++ uses class Child : public Parent { }! Python uses class Child(Parent):, Java uses extends, but C++ uses a colon (:)."
+          }
         }
       },
 

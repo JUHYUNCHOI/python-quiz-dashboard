@@ -67,7 +67,11 @@ export const lesson5: LessonData = {
           task: "'안녕하세요' 출력해봐",
           template: null,
           answer: "print('안녕하세요')",
-          expect: "안녕하세요"
+          expect: "안녕하세요",
+          en: {
+            message: "Wait! Remember printing strings?",
+            task: "Print '안녕하세요'"
+          }
         }
       },
 
@@ -93,7 +97,11 @@ export const lesson5: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "'Hello' + 'World'",
           alternateAnswers: ["'Hello'+'World'"],
-          expect: "HelloWorld"
+          expect: "HelloWorld",
+          en: {
+            task: "Print 'Hello' + 'World'",
+            guide: "Use + to concatenate!"
+          }
         }
       },
       {
@@ -105,7 +113,11 @@ export const lesson5: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "'김' + '코딩'",
           alternateAnswers: ["'김'+'코딩'"],
-          expect: "김코딩"
+          expect: "김코딩",
+          en: {
+            task: "Print '김' + '코딩'",
+            guide: "Last name + first name!"
+          }
         }
       },
 
@@ -130,7 +142,11 @@ export const lesson5: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "'코딩중학교' + ' ' + '1학년'",
           alternateAnswers: ["'코딩중학교'+' '+'1학년'"],
-          expect: "코딩중학교 1학년"
+          expect: "코딩중학교 1학년",
+          en: {
+            task: "Print '코딩중학교' + ' ' + '1학년'",
+            guide: "Add the space ' ' too!"
+          }
         }
       },
 
@@ -155,7 +171,11 @@ export const lesson5: LessonData = {
           guide: "변수를 + 로 이어붙이기!",
           template: null,
           answer: "name = '코딩'\nprint('안녕, ' + name + '!')",
-          expect: "안녕, 코딩!"
+          expect: "안녕, 코딩!",
+          en: {
+            task: "Store name = '코딩' and print '안녕, ' + name + '!'",
+            guide: "Concatenate variables with +!"
+          }
         }
       },
 
@@ -170,7 +190,16 @@ export const lesson5: LessonData = {
             "에러"
           ],
           answer: 0,
-          explanation: "문자열 + 는 그냥 이어붙이기야! 공백은 자동으로 안 들어가."
+          explanation: "문자열 + 는 그냥 이어붙이기야! 공백은 자동으로 안 들어가.",
+          en: {
+            question: "What is the result of '파이' + '썬'?",
+            options: [
+              "'파이썬'",
+              "'파이 썬' (space auto-added)",
+              "Error"
+            ],
+            explanation: "String + just concatenates! No space is added automatically."
+          }
         }
       },
 
@@ -222,7 +251,11 @@ export const lesson5: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "'ha' * 3",
           alternateAnswers: ["'ha'*3"],
-          expect: "hahaha"
+          expect: "hahaha",
+          en: {
+            task: "Print 'ha' * 3",
+            guide: "* repeats!"
+          }
         }
       },
       {
@@ -234,7 +267,11 @@ export const lesson5: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "'화이팅! ' * 3",
           alternateAnswers: ["'화이팅! '*3"],
-          expect: "화이팅! 화이팅! 화이팅! "
+          expect: "화이팅! 화이팅! 화이팅! ",
+          en: {
+            task: "Print '화이팅! ' * 3",
+            guide: "Repeat the cheer 3 times!"
+          }
         }
       },
 
@@ -259,7 +296,11 @@ export const lesson5: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "'=' * 15",
           alternateAnswers: ["'='*15"],
-          expect: "==============="
+          expect: "===============",
+          en: {
+            task: "Print '=' * 15 (create a divider line)",
+            guide: "Use * to repeat!"
+          }
         }
       },
 
@@ -274,7 +315,16 @@ export const lesson5: LessonData = {
             "'aabbbb' (각 글자 반복)"
           ],
           answer: 0,
-          explanation: "* 는 문자열 전체를 반복해! 'ab' * 3 = 'ababab'"
+          explanation: "* 는 문자열 전체를 반복해! 'ab' * 3 = 'ababab'",
+          en: {
+            question: "What is the result of 'ab' * 3?",
+            options: [
+              "'ababab'",
+              "'ab ab ab' (space added)",
+              "'aabbbb' (each char repeated)"
+            ],
+            explanation: "* repeats the whole string! 'ab' * 3 = 'ababab'"
+          }
         }
       },
 
@@ -329,7 +379,16 @@ export const lesson5: LessonData = {
             "나이:  출력 (숫자 무시)"
           ],
           answer: 1,
-          explanation: "Python에서 문자열과 숫자는 + 로 합칠 수 없어. str()로 변환해야 해!"
+          explanation: "Python에서 문자열과 숫자는 + 로 합칠 수 없어. str()로 변환해야 해!",
+          en: {
+            question: "What happens when this code runs?",
+            options: [
+              "Prints: 나이: 16",
+              "TypeError! Cannot concatenate string + int",
+              "Prints: 나이:  (number ignored)"
+            ],
+            explanation: "In Python you can't concatenate strings and numbers with +. You need to convert with str()!"
+          }
         }
       },
 
@@ -355,7 +414,11 @@ export const lesson5: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "'점수: ' + str(100)",
           alternateAnswers: ["'점수: '+str(100)"],
-          expect: "점수: 100"
+          expect: "점수: 100",
+          en: {
+            task: "Print '점수: ' + str(100)",
+            guide: "Convert with str() then +!"
+          }
         }
       },
       {
@@ -366,7 +429,11 @@ export const lesson5: LessonData = {
           guide: "변수를 str()로 변환!",
           template: null,
           answer: "score = 95\nprint('내 점수는 ' + str(score) + '점!')",
-          expect: "내 점수는 95점!"
+          expect: "내 점수는 95점!",
+          en: {
+            task: "Store score = 95 and print '내 점수는 ' + str(score) + '점!'",
+            guide: "Convert the variable with str()!"
+          }
         }
       },
 
@@ -381,7 +448,16 @@ export const lesson5: LessonData = {
             "에러라서 불가능"
           ],
           answer: 1,
-          explanation: "숫자 7을 str(7)로 변환해야 해! '오늘은 ' + str(7) + '월이야!' = '오늘은 7월이야!'"
+          explanation: "숫자 7을 str(7)로 변환해야 해! '오늘은 ' + str(7) + '월이야!' = '오늘은 7월이야!'",
+          en: {
+            question: "To print '오늘은 ' + 7 + '월이야!', what should you do?",
+            options: [
+              "Use '오늘은 ' + 7 + '월이야!' as-is",
+              "Use '오늘은 ' + str(7) + '월이야!'",
+              "Impossible due to error"
+            ],
+            explanation: "Convert the number 7 to str(7)! '오늘은 ' + str(7) + '월이야!' = '오늘은 7월이야!'"
+          }
         }
       },
 
@@ -419,7 +495,11 @@ export const lesson5: LessonData = {
           task: "'나이: ' + str(14) 출력해봐",
           template: null,
           answer: "print('나이: ' + str(14))",
-          expect: "나이: 14"
+          expect: "나이: 14",
+          en: {
+            message: "Remember str() conversion?",
+            task: "Print '나이: ' + str(14)"
+          }
         }
       },
 

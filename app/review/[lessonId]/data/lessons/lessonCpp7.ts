@@ -58,7 +58,11 @@ export const lessonCpp7: LessonData = {
           template: "for (___; i < 5; i++) {",
           answer: "int i = 0",
           alternateAnswers: ["int i=0"],
-          expect: "for (int i = 0; i < 5; i++) {"
+          expect: "for (int i = 0; i < 5; i++) {",
+          en: {
+            task: "Make i start from 0!",
+            guide: "Initialize with int i = 0!"
+          }
         }
       },
 
@@ -72,7 +76,11 @@ export const lessonCpp7: LessonData = {
           template: "for (int i = 0; i < 10; ___) {",
           answer: "i++",
           alternateAnswers: ["i ++", "i+=1", "i = i + 1", "i=i+1"],
-          expect: "for (int i = 0; i < 10; i++) {"
+          expect: "for (int i = 0; i < 10; i++) {",
+          en: {
+            task: "Complete the part that increments i by 1!",
+            guide: "i++ is the same as i = i + 1!"
+          }
         }
       },
 
@@ -88,7 +96,17 @@ export const lessonCpp7: LessonData = {
             "for (int i = 3; i > 0; i--)"
           ],
           answer: 0,
-          explanation: "range(3)은 0, 1, 2를 만들어요! C++에서 i=0부터 시작해서 i<3까지 (0,1,2) 반복하는 것과 같아요!"
+          explanation: "range(3)은 0, 1, 2를 만들어요! C++에서 i=0부터 시작해서 i<3까지 (0,1,2) 반복하는 것과 같아요!",
+          en: {
+            question: "Which C++ code is equivalent to Python's for i in range(3):?",
+            options: [
+              "for (int i = 0; i < 3; i++)",
+              "for (int i = 1; i <= 3; i++)",
+              "for (int i = 0; i <= 3; i++)",
+              "for (int i = 3; i > 0; i--)"
+            ],
+            explanation: "range(3) generates 0, 1, 2! C++ repeats from i=0 up to i<3 (0,1,2), same thing!"
+          }
         }
       },
 
@@ -104,7 +122,16 @@ export const lessonCpp7: LessonData = {
             "i++ 대신 ++i를 써야 해서"
           ],
           answer: 1,
-          explanation: "for문의 3가지 요소는 세미콜론(;)으로 구분해요! 쉼표가 아니에요! for (int i = 0; i < 5; i++)"
+          explanation: "for문의 3가지 요소는 세미콜론(;)으로 구분해요! 쉼표가 아니에요! for (int i = 0; i < 5; i++)",
+          en: {
+            question: "What is the problem with this code?",
+            options: [
+              "Declaring i as int",
+              "Should use semicolons (;) instead of commas (,)",
+              "Should use ++i instead of i++"
+            ],
+            explanation: "The 3 parts of a for loop are separated by semicolons (;)! Not commas! for (int i = 0; i < 5; i++)"
+          }
         }
       },
 
@@ -118,7 +145,11 @@ export const lessonCpp7: LessonData = {
           template: "for (int i = ___; i ___ 5; i++) {",
           answer: "1",
           blanksAnswer: ["1", "<="],
-          expect: "for (int i = 1; i <= 5; i++) {"
+          expect: "for (int i = 1; i <= 5; i++) {",
+          en: {
+            task: "Complete the for loop that prints 1 through 5!",
+            guide: "for (int i = 1; i <= 5; i++)"
+          }
         }
       },
 
@@ -169,7 +200,12 @@ export const lessonCpp7: LessonData = {
           template: "for (int i = 0___ i < 5___ i++)",
           answer: ";",
           blanksAnswer: [";", ";"],
-          expect: "for (int i = 0; i < 5; i++)"
+          expect: "for (int i = 0; i < 5; i++)",
+          en: {
+            message: "Wait! Do you remember the structure of a for loop?",
+            task: "What character separates the 3 parts of a for loop?",
+            hint: "Not a comma...!"
+          }
         }
       },
 
@@ -231,7 +267,11 @@ export const lessonCpp7: LessonData = {
           template: "while (___) {\n    cout << count << endl;\n    count++;\n}",
           answer: "count < 5",
           alternateAnswers: ["count<5"],
-          expect: "while (count < 5) {\n    cout << count << endl;\n    count++;\n}"
+          expect: "while (count < 5) {\n    cout << count << endl;\n    count++;\n}",
+          en: {
+            task: "Write the while condition to repeat while count is less than 5!",
+            guide: "Put the condition inside while (___)"
+          }
         }
       },
 
@@ -247,7 +287,17 @@ export const lessonCpp7: LessonData = {
             "차이가 없다"
           ],
           answer: 1,
-          explanation: "while은 조건이 거짓이면 아예 실행 안 해요. do-while은 일단 한 번은 꼭 실행한 후 조건을 검사해요!"
+          explanation: "while은 조건이 거짓이면 아예 실행 안 해요. do-while은 일단 한 번은 꼭 실행한 후 조건을 검사해요!",
+          en: {
+            question: "What is the difference between while and do-while?",
+            options: [
+              "do-while is faster",
+              "while checks condition first; do-while executes first then checks",
+              "do-while only loops infinitely",
+              "No difference"
+            ],
+            explanation: "while doesn't execute at all if the condition is false. do-while always executes at least once before checking the condition!"
+          }
         }
       },
 
@@ -260,7 +310,11 @@ export const lessonCpp7: LessonData = {
           guide: "break;로 탈출!",
           template: 'for (int i = 0; i < 10; i++) {\n    if (i == 5) ___;\n    cout << i << " ";\n}',
           answer: "break",
-          expect: 'for (int i = 0; i < 10; i++) {\n    if (i == 5) break;\n    cout << i << " ";\n}'
+          expect: 'for (int i = 0; i < 10; i++) {\n    if (i == 5) break;\n    cout << i << " ";\n}',
+          en: {
+            task: "Exit the loop when i becomes 5!",
+            guide: "Use break; to exit!"
+          }
         }
       },
 
@@ -276,7 +330,16 @@ export const lessonCpp7: LessonData = {
             "x++ 대신 ++x를 써야 해서"
           ],
           answer: 1,
-          explanation: "do-while문에서 while(조건) 뒤에는 반드시 세미콜론(;)이 필요해요! while (x < 5); 이렇게!"
+          explanation: "do-while문에서 while(조건) 뒤에는 반드시 세미콜론(;)이 필요해요! while (x < 5); 이렇게!",
+          en: {
+            question: "What is the problem with this code?",
+            options: [
+              "No braces after do",
+              "Missing semicolon (;) after while condition",
+              "Should use ++x instead of x++"
+            ],
+            explanation: "In a do-while loop, a semicolon (;) is required after while(condition)! Like: while (x < 5);"
+          }
         }
       },
 
@@ -289,7 +352,11 @@ export const lessonCpp7: LessonData = {
           guide: "continue;로 건너뛰기!",
           template: 'for (int i = 0; i < 6; i++) {\n    if (i % 2 == 0) ___;\n    cout << i << " ";\n}',
           answer: "continue",
-          expect: 'for (int i = 0; i < 6; i++) {\n    if (i % 2 == 0) continue;\n    cout << i << " ";\n}'
+          expect: 'for (int i = 0; i < 6; i++) {\n    if (i % 2 == 0) continue;\n    cout << i << " ";\n}',
+          en: {
+            task: "Skip when i is even (i%2==0)!",
+            guide: "Use continue; to skip!"
+          }
         }
       },
 
@@ -339,7 +406,12 @@ export const lessonCpp7: LessonData = {
           hint: "문장 끝에 붙이는 거예요!",
           template: "do {\n    // 코드\n} while (조건)___",
           answer: ";",
-          expect: "do {\n    // 코드\n} while (조건);"
+          expect: "do {\n    // 코드\n} while (조건);",
+          en: {
+            message: "Wait! Do you remember do-while syntax?",
+            task: "What must be placed after the while condition in do-while?",
+            hint: "It goes at the end of a statement!"
+          }
         }
       },
 

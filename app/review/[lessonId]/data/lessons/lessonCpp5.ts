@@ -57,7 +57,11 @@ export const lessonCpp5: LessonData = {
           guide: "cout << a + b;",
           template: "int a = 15, b = 7;\ncout << a ___ b << endl;",
           answer: "+",
-          expect: "int a = 15, b = 7;\ncout << a + b << endl;"
+          expect: "int a = 15, b = 7;\ncout << a + b << endl;",
+          en: {
+            task: "Print the result of a + b!",
+            guide: "cout << a + b;"
+          }
         }
       },
 
@@ -68,7 +72,12 @@ export const lessonCpp5: LessonData = {
           question: "C++에서 7 / 2 의 결과는?",
           options: ["3.5", "3", "4", "에러"],
           answer: 1,
-          explanation: "정수 / 정수 = 정수! 7 / 2 = 3 (소수점 버림). 3.5를 원하면 7.0 / 2 로 써야 해요!"
+          explanation: "정수 / 정수 = 정수! 7 / 2 = 3 (소수점 버림). 3.5를 원하면 7.0 / 2 로 써야 해요!",
+          en: {
+            question: "What is the result of 7 / 2 in C++?",
+            options: ["3.5", "3", "4", "Error"],
+            explanation: "integer / integer = integer! 7 / 2 = 3 (decimal truncated). Write 7.0 / 2 for 3.5!"
+          }
         }
       },
 
@@ -100,7 +109,11 @@ export const lessonCpp5: LessonData = {
           guide: "나머지 연산자는 %!",
           template: "int num = 17;\ncout << num ___ 2 << endl;",
           answer: "%",
-          expect: "int num = 17;\ncout << num % 2 << endl;"
+          expect: "int num = 17;\ncout << num % 2 << endl;",
+          en: {
+            task: "Find the remainder of num divided by 2!",
+            guide: "The remainder operator is %!"
+          }
         }
       },
 
@@ -111,7 +124,12 @@ export const lessonCpp5: LessonData = {
           question: "n % 2 == 0 이면 n은?",
           options: ["홀수", "짝수", "소수", "음수"],
           answer: 1,
-          explanation: "2로 나눈 나머지가 0이면 짝수! 1이면 홀수예요."
+          explanation: "2로 나눈 나머지가 0이면 짝수! 1이면 홀수예요.",
+          en: {
+            question: "If n % 2 == 0, then n is?",
+            options: ["Odd", "Even", "Prime", "Negative"],
+            explanation: "If the remainder when divided by 2 is 0, it's even! If 1, it's odd."
+          }
         }
       },
 
@@ -127,7 +145,16 @@ export const lessonCpp5: LessonData = {
             "변수 이름이 틀려서"
           ],
           answer: 0,
-          explanation: "95 / 3 = 31.666... 인데 int끼리 나누면 31만 남아요! (double)sum / count로 바꿔야 해요."
+          explanation: "95 / 3 = 31.666... 인데 int끼리 나누면 31만 남아요! (double)sum / count로 바꿔야 해요.",
+          en: {
+            question: "The average calculation gives a wrong result. Why?",
+            options: [
+              "integer/integer truncates the decimal",
+              "cout is wrong",
+              "Variable name is wrong"
+            ],
+            explanation: "95 / 3 = 31.666... but int divided by int only keeps 31! Change to (double)sum / count."
+          }
         }
       },
 
@@ -141,7 +168,11 @@ export const lessonCpp5: LessonData = {
           template: "int a = 10, b = 3;\ncout << ___ / b << endl;",
           answer: "(double)a",
           alternateAnswers: ["(double) a", "10.0"],
-          expect: "int a = 10, b = 3;\ncout << (double)a / b << endl;"
+          expect: "int a = 10, b = 3;\ncout << (double)a / b << endl;",
+          en: {
+            task: "Write the division to get a decimal result!",
+            guide: "Cast one of them to double!"
+          }
         }
       },
 
@@ -190,7 +221,11 @@ export const lessonCpp5: LessonData = {
           task: "15를 4로 나눈 나머지를 구해요!",
           template: "cout << 15 ___ 4 << endl;",
           answer: "%",
-          expect: "cout << 15 % 4 << endl;"
+          expect: "cout << 15 % 4 << endl;",
+          en: {
+            message: "Wait! Do you remember the remainder operator?",
+            task: "Find the remainder of 15 divided by 4!"
+          }
         }
       },
 
@@ -234,7 +269,11 @@ export const lessonCpp5: LessonData = {
           guide: "크거나 같다 = >=",
           template: "int score = 95;\ncout << (score ___ 90) << endl;",
           answer: ">=",
-          expect: "int score = 95;\ncout << (score >= 90) << endl;"
+          expect: "int score = 95;\ncout << (score >= 90) << endl;",
+          en: {
+            task: "Check if score is 90 or more!",
+            guide: "greater than or equal to = >="
+          }
         }
       },
 
@@ -245,7 +284,12 @@ export const lessonCpp5: LessonData = {
           question: "C++에서 '같은지 비교'하는 연산자는?",
           options: ["=", "==", "===", "equals()"],
           answer: 1,
-          explanation: "== 가 비교! = 는 대입(값 넣기)이에요. 이걸 헷갈리면 찾기 어려운 버그가 생겨요!"
+          explanation: "== 가 비교! = 는 대입(값 넣기)이에요. 이걸 헷갈리면 찾기 어려운 버그가 생겨요!",
+          en: {
+            question: "Which operator checks equality in C++?",
+            options: ["=", "==", "===", "equals()"],
+            explanation: "== is for comparison! = is for assignment. Confusing these creates hard-to-find bugs!"
+          }
         }
       },
 
@@ -291,7 +335,11 @@ export const lessonCpp5: LessonData = {
           guide: "두 조건을 &&로 연결!",
           template: "int age = 15;\nbool teen = (age >= 13) ___ (age <= 19);",
           answer: "&&",
-          expect: "int age = 15;\nbool teen = (age >= 13) && (age <= 19);"
+          expect: "int age = 15;\nbool teen = (age >= 13) && (age <= 19);",
+          en: {
+            task: "Check if age is between 13 and 19 (inclusive)!",
+            guide: "Connect two conditions with &&!"
+          }
         }
       },
 
@@ -304,7 +352,11 @@ export const lessonCpp5: LessonData = {
           guide: "'또는'은 ||!",
           template: "char grade = 'A';\nbool pass = (grade == 'A') ___ (grade == 'B');",
           answer: "||",
-          expect: "char grade = 'A';\nbool pass = (grade == 'A') || (grade == 'B');"
+          expect: "char grade = 'A';\nbool pass = (grade == 'A') || (grade == 'B');",
+          en: {
+            task: "Check if grade is 'A' or 'B'!",
+            guide: "'or' is ||!"
+          }
         }
       },
 
@@ -320,7 +372,16 @@ export const lessonCpp5: LessonData = {
             "cout이 잘못됐어요"
           ],
           answer: 0,
-          explanation: "x = 5 는 x에 5를 넣는 대입! 비교하려면 x == 5 로 써야 해요. 매우 흔한 버그예요!"
+          explanation: "x = 5 는 x에 5를 넣는 대입! 비교하려면 x == 5 로 써야 해요. 매우 흔한 버그예요!",
+          en: {
+            question: "What is the bug in this code?",
+            options: [
+              "Should change = to == (assignment, not comparison)",
+              "if syntax is wrong",
+              "cout is wrong"
+            ],
+            explanation: "x = 5 is assignment, putting 5 into x! Use x == 5 for comparison. A very common bug!"
+          }
         }
       },
 
@@ -336,7 +397,17 @@ export const lessonCpp5: LessonData = {
             "and, or, not (같음)"
           ],
           answer: 1,
-          explanation: "C++에서는 && (and), || (or), ! (not)을 써요! 기호로 쓰는 게 차이점!"
+          explanation: "C++에서는 && (and), || (or), ! (not)을 써요! 기호로 쓰는 게 차이점!",
+          en: {
+            question: "What is the C++ equivalent of Python's and, or, not?",
+            options: [
+              "AND, OR, NOT",
+              "&&, ||, !",
+              "&, |, ~",
+              "and, or, not (same)"
+            ],
+            explanation: "In C++, use && (and), || (or), ! (not)! Using symbols is the difference!"
+          }
         }
       },
 
@@ -385,7 +456,11 @@ export const lessonCpp5: LessonData = {
           task: "파이썬의 and를 C++로 쓰면?",
           template: "bool result = (a > 0) ___ (b > 0);",
           answer: "&&",
-          expect: "bool result = (a > 0) && (b > 0);"
+          expect: "bool result = (a > 0) && (b > 0);",
+          en: {
+            message: "Wait! Do you remember the logical operators?",
+            task: "What is the C++ equivalent of Python's and?"
+          }
         }
       },
 

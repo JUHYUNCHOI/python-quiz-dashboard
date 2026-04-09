@@ -56,7 +56,17 @@ print(f"남은 접시: {접시들}")`,
           "First In, Last Out (먼저 넣은 게 마지막에 나옴)"
         ],
         answer: 0,
-        explanation: "LIFO = Last In, First Out! 스택은 마지막에 넣은 데이터가 먼저 나와요."
+        explanation: "LIFO = Last In, First Out! 스택은 마지막에 넣은 데이터가 먼저 나와요.",
+        en: {
+          question: "What does LIFO mean?",
+          options: [
+            "Last In, First Out",
+            "First In, First Out",
+            "Last In, Last Out",
+            "First In, Last Out"
+          ],
+          explanation: "LIFO = Last In, First Out! The stack returns the last inserted data first."
+        }
       }
     },
     {
@@ -91,7 +101,11 @@ print(f"남은 접시: {접시들}")`,
         template: "data = [10, 20, 30, 40, 50]\nprint(data[___:])",
         blanksAnswer: ["-2"],
         answer: "data = [10, 20, 30, 40, 50]\nprint(data[-2:])",
-        expect: "[40, 50]"
+        expect: "[40, 50]",
+        en: {
+          message: "🔄 Slicing review!",
+          task: "Get only the last 2 elements from the list"
+        }
       }
     },
     {
@@ -140,7 +154,12 @@ print("스택 변화 없음:", stack)`,
         template: "stack = []\nstack.append(1)\nstack.append(2)\nstack.___(3)\nprint(stack.___())",
         blanksAnswer: ["append", "pop"],
         answer: "stack = []\nstack.append(1)\nstack.append(2)\nstack.append(3)\nprint(stack.pop())",
-        expect: "3"
+        expect: "3",
+        en: {
+          task: "Push 1, 2, 3 onto the stack and pop one to print",
+          guide: "Use append to push, pop to remove!",
+          hint: "Use stack.append() to push and stack.pop() to pop!"
+        }
       }
     },
     {
@@ -156,7 +175,12 @@ print("스택 변화 없음:", stack)`,
         alternateAnswers: [
           "stack = []\nif not stack:\n    print('스택이 비어있어요!')"
         ],
-        expect: "스택이 비어있어요!"
+        expect: "스택이 비어있어요!",
+        en: {
+          task: "Complete the code to check if the stack is empty",
+          guide: "If len() is 0, it's empty!",
+          hint: "len(stack) == 0 or not stack"
+        }
       }
     },
     {
@@ -165,7 +189,12 @@ print("스택 변화 없음:", stack)`,
         question: "stack = [1, 2, 3]에서 stack.pop()을 2번 하면 남는 것은?",
         options: ["[1]", "[3]", "[1, 2]", "[]"],
         answer: 0,
-        explanation: "pop() 1번 → 3 제거 → [1, 2], pop() 2번 → 2 제거 → [1]"
+        explanation: "pop() 1번 → 3 제거 → [1, 2], pop() 2번 → 2 제거 → [1]",
+        en: {
+          question: "After calling stack.pop() twice on stack = [1, 2, 3], what remains?",
+          options: ["[1]", "[3]", "[1, 2]", "[]"],
+          explanation: "pop() once → removes 3 → [1, 2], pop() twice → removes 2 → [1]"
+        }
       }
     },
     {
@@ -201,7 +230,11 @@ print("스택 변화 없음:", stack)`,
         template: "stack = []\nstack.append('x')\nstack.append('y')\nprint(stack[___])",
         blanksAnswer: ["-1"],
         answer: "stack = []\nstack.append('x')\nstack.append('y')\nprint(stack[-1])",
-        expect: "y"
+        expect: "y",
+        en: {
+          message: "🔄 Stack basics review!",
+          task: "Push 'x', 'y' onto the stack and peek (just check) the top value"
+        }
       }
     },
     {
@@ -261,7 +294,12 @@ print("뒤로가기:", history[-1])`,
         alternateAnswers: [
           "stack = []\nfor ch in 'abc':\n    stack.append(ch)\nresult = ''\nwhile stack:\n    result += stack.pop()\nprint(result)"
         ],
-        expect: "cba"
+        expect: "cba",
+        en: {
+          task: "Reverse a string using a stack and print it",
+          guide: "Push each character, then pop one by one!",
+          hint: "append each char with for, then pop with while!"
+        }
       }
     },
     {

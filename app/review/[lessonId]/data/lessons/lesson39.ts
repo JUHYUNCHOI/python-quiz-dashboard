@@ -66,6 +66,11 @@ export const lesson39: LessonData = {
         template: "def 저장하기():\n    with open('save.txt', '___') as f:\n        f.write('용사\\n')\n        f.write('100')\n    print('저장 완료!')\n\n저장하기()",
         blanksAnswer: ["w"],
         answer: "def 저장하기():\n    with open('save.txt', 'w') as f:\n        f.write('용사\\n')\n        f.write('100')\n    print('저장 완료!')\n\n저장하기()",
+        en: {
+          task: "Fill in the blank with the right word!",
+          guide: "What mode do you use to save to a file?",
+          hint: "First letter of 'write'! 'w'"
+        },
         alternateAnswers: [],
         expect: "저장 완료!"
       }
@@ -110,6 +115,11 @@ export const lesson39: LessonData = {
         template: "def 불러오기():\n    ___:\n        with open('save.txt', 'r') as f:\n            이름 = f.readline().strip()\n        print(f'{이름}님 환영!')\n    except ___:\n        print('세이브 없음!')\n\n불러오기()",
         blanksAnswer: ["try", "FileNotFoundError"],
         answer: "def 불러오기():\n    try:\n        with open('save.txt', 'r') as f:\n            이름 = f.readline().strip()\n        print(f'{이름}님 환영!')\n    except FileNotFoundError:\n        print('세이브 없음!')\n\n불러오기()",
+        en: {
+          task: "Fill in the blanks to create a safe load function!",
+          guide: "How do you handle errors when the file doesn't exist?",
+          hint: "Wrap with try, file missing error: FileNotFoundError"
+        },
         alternateAnswers: [],
         expect: "세이브 없음!"
       }
@@ -140,6 +150,11 @@ export const lesson39: LessonData = {
         template: "___ True:\n    print('1.시작 2.종료')\n    ___:\n        선택 = int(input('선택: '))\n        if 선택 == 2:\n            break\n    except ___:\n        print('숫자만!')",
         blanksAnswer: ["while", "try", "ValueError"],
         answer: "while True:\n    print('1.시작 2.종료')\n    try:\n        선택 = int(input('선택: '))\n        if 선택 == 2:\n            break\n    except ValueError:\n        print('숫자만!')",
+        en: {
+          task: "Fill in the blanks to create a safe menu!",
+          guide: "Combine infinite loop + error handling!",
+          hint: "Infinite loop: while True / Error wrap: try / Invalid value: ValueError"
+        },
         alternateAnswers: [],
         expect: ""
       }
@@ -153,6 +168,11 @@ export const lesson39: LessonData = {
         template: "with open('save.txt', '___') as f:\n    f.write('용사\\n')\n    f.write(___(85) + '\\n')\nprint('저장!')",
         blanksAnswer: ["w", "str"],
         answer: "with open('save.txt', 'w') as f:\n    f.write('용사\\n')\n    f.write(str(85) + '\\n')\nprint('저장!')",
+        en: {
+          message: "🔄 Quick review! Saving!",
+          task: "Fill in the blanks to save data!",
+          hint: "Write mode: 'w' / Number to string: str()"
+        },
         alternateAnswers: [],
         expect: "저장!"
       }
@@ -174,6 +194,11 @@ export const lesson39: LessonData = {
         template: "def save(name):\n    with open('save.txt', '___') as f:\n        f.write(name)\n    print('저장!')\n\ndef load():\n    ___:\n        with open('save.txt', '___') as f:\n            print(f.read())\n    except ___:\n        print('파일 없음!')\n\nsave('용사')\nload()",
         blanksAnswer: ["w", "try", "r", "FileNotFoundError"],
         answer: "def save(name):\n    with open('save.txt', 'w') as f:\n        f.write(name)\n    print('저장!')\n\ndef load():\n    try:\n        with open('save.txt', 'r') as f:\n            print(f.read())\n    except FileNotFoundError:\n        print('파일 없음!')\n\nsave('용사')\nload()",
+        en: {
+          task: "Fill in the blanks to complete save/load functions!",
+          guide: "Save with 'w', load with try + 'r'!",
+          hint: "Save: 'w' mode / Load: try + 'r' mode / Error: FileNotFoundError"
+        },
         alternateAnswers: [],
         expect: "저장!"
       }
@@ -187,6 +212,11 @@ export const lesson39: LessonData = {
         template: "while True:\n    ___:\n        x = int(input('숫자: '))\n        ___\n    except ___:\n        print('다시!')",
         blanksAnswer: ["try", "break", "ValueError"],
         answer: "while True:\n    try:\n        x = int(input('숫자: '))\n        break\n    except ValueError:\n        print('다시!')",
+        en: {
+          message: "🔄 Menu structure review!",
+          task: "Fill in the blanks to create safe input!",
+          hint: "Wrap with try, break to exit, ValueError for invalid input"
+        },
         alternateAnswers: [],
         expect: ""
       }

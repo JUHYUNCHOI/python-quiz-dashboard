@@ -488,7 +488,11 @@ export const lessonCpp11: LessonData = {
           task: "숫자 42를 문자열로 바꾸는 코드를 써봐요!",
           template: "string s = ___(42);",
           answer: "to_string",
-          expect: "string s = to_string(42);"
+          expect: "string s = to_string(42);",
+          en: {
+            message: "Quick! Remember how to convert a number to a string?",
+            task: "Write the code to convert the number 42 to a string!"
+          }
         }
       },
 
