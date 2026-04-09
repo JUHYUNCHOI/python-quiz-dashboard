@@ -583,6 +583,16 @@ export default function CurriculumPage() {
   const pythonLessonIds = pythonCurriculumData.flatMap(p => p.lessons.map(l => String(l.id)))
   const hasPythonProgress = pythonLessonIds.some(id => completedLessons.has(id) || completedLessons.has(Number(id)))
 
+  // Python 여정 진도 계산
+  const pythonLessonsTotal = pythonLessonIds.length
+  const pythonLessonsDone = pythonLessonIds.filter(id => completedLessons.has(id) || completedLessons.has(Number(id))).length
+  const pyClusters = ALL_CLUSTERS.filter(c => c.id.startsWith("py-"))
+  const pyPracticeDone = pyClusters.reduce((acc, c) => acc + c.problems.filter(p => practiceSolvedSet.has(p.id)).length, 0)
+  const pyPracticeGoal = 40
+  const pyPracticeUnlocked = isTeacher || pythonLessonsDone >= 15
+  const pyAlgoUnlocked = isTeacher || pyPracticeDone >= pyPracticeGoal
+  const pyQuestUnlocked = isTeacher || algoTopicsDone >= 8
+
   const handleCourseChange = (course: CourseType) => {
     if (course === "cpp" && !hasPythonProgress) {
       setShowCppModal(true)
@@ -934,6 +944,25 @@ export default function CurriculumPage() {
                   : <span className="flex items-center gap-1 text-xs text-gray-300">🏆 <Lock className="w-3 h-3" /></span>}
               </div>
             )}
+
+            {/* 학습 여정 한 줄 요약 — Python 전용 (모바일) */}
+            {!isCpp && !isPseudo && loaded && (
+              <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100 flex-wrap sm:hidden">
+                <span className="flex items-center gap-1 text-xs font-bold text-orange-600">📚 {pythonLessonsDone}/{pythonLessonsTotal}</span>
+                <ChevronRight className="w-3 h-3 text-gray-300 flex-shrink-0" />
+                {pyPracticeUnlocked
+                  ? <Link href="/practice" className="flex items-center gap-1 text-xs font-bold text-green-600">💪 {pyPracticeDone}/{pyPracticeGoal}</Link>
+                  : <span className="flex items-center gap-1 text-xs text-gray-300">💪 <Lock className="w-3 h-3" /></span>}
+                <ChevronRight className="w-3 h-3 text-gray-300 flex-shrink-0" />
+                {pyAlgoUnlocked
+                  ? <Link href="/algorithm" className="flex items-center gap-1 text-xs font-bold text-purple-600">🧠 {algoTopicsDone}/{algoTopicsTotal}</Link>
+                  : <span className="flex items-center gap-1 text-xs text-gray-300">🧠 <Lock className="w-3 h-3" /></span>}
+                <ChevronRight className="w-3 h-3 text-gray-300 flex-shrink-0" />
+                {pyQuestUnlocked
+                  ? <Link href="/quest" className="flex items-center gap-1 text-xs font-bold text-orange-600">🏆 {t("실전", "Contest")}</Link>
+                  : <span className="flex items-center gap-1 text-xs text-gray-300">🏆 <Lock className="w-3 h-3" /></span>}
+              </div>
+            )}
           </div>
         </div>
 
@@ -1050,6 +1079,124 @@ export default function CurriculumPage() {
                     <>
                       <div className="h-2 bg-gray-200 rounded-full" />
                       <p className="text-xs text-gray-400">{t(`알고리즘 8개 완료 후 해금`, `Unlocks after 8 algo topics`)}</p>
+                      <span className="mt-1 text-xs text-center bg-gray-200 text-gray-400 rounded-lg py-1.5 font-bold">{t("잠금", "Locked")}</span>
+                    </>
+                  )}
+                </div>
+
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 🗺️ 학습 여정 맵 — Python 전용 (데스크탑) */}
+        {!isCpp && !isPseudo && loaded && (
+          <div className="max-w-[1600px] mx-auto mb-6 hidden sm:block">
+            <div className="bg-white rounded-2xl border-4 border-black shadow-lg p-5">
+              <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">{t("🗺️ 나의 학습 여정", "🗺️ My Learning Journey")}</p>
+              <div className="grid grid-cols-4 gap-3">
+
+                {/* 1단계: 문법 */}
+                <div className="relative flex flex-col gap-2 rounded-xl border-2 border-orange-200 bg-orange-50 p-4">
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">📚</span>
+                    <div>
+                      <p className="font-black text-sm text-orange-800">{t("1. 문법", "1. Syntax")}</p>
+                      <p className="text-xs text-orange-500">Python {pythonLessonsTotal}{t("레슨", " lessons")}</p>
+                    </div>
+                  </div>
+                  <div className="h-2 bg-orange-200 rounded-full overflow-hidden">
+                    <div className="h-full bg-orange-500 rounded-full transition-all duration-500" style={{ width: `${pythonLessonsTotal > 0 ? Math.round((pythonLessonsDone / pythonLessonsTotal) * 100) : 0}%` }} />
+                  </div>
+                  <p className="text-xs font-bold text-orange-700">{pythonLessonsDone}/{pythonLessonsTotal} {t("완료", "done")}</p>
+                  {pythonLessonsDone < pythonLessonsTotal && (
+                    <Link href={`/learn/${pythonLessonIds.find(id => !completedLessons.has(id) && !completedLessons.has(Number(id))) ?? "1"}`}
+                      className="mt-1 text-xs text-center bg-orange-500 text-white rounded-lg py-1.5 font-bold hover:bg-orange-600 transition-colors">
+                      {t("이어서 →", "Continue →")}
+                    </Link>
+                  )}
+                  {pythonLessonsDone === pythonLessonsTotal && pythonLessonsTotal > 0 && (
+                    <span className="mt-1 text-xs text-center bg-orange-100 text-orange-600 rounded-lg py-1.5 font-bold">✅ {t("완료!", "Done!")}</span>
+                  )}
+                </div>
+
+                {/* 2단계: 연습 */}
+                <div className={`relative flex flex-col gap-2 rounded-xl border-2 p-4 ${pyPracticeUnlocked ? "border-green-200 bg-green-50" : "border-gray-200 bg-gray-50 opacity-60"}`}>
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">{pyPracticeUnlocked ? "💪" : "🔒"}</span>
+                    <div>
+                      <p className={`font-black text-sm ${pyPracticeUnlocked ? "text-green-800" : "text-gray-500"}`}>{t("2. 연습", "2. Practice")}</p>
+                      <p className={`text-xs ${pyPracticeUnlocked ? "text-green-500" : "text-gray-400"}`}>{t(`${pyPracticeGoal}문제 목표`, `${pyPracticeGoal} problems goal`)}</p>
+                    </div>
+                  </div>
+                  {pyPracticeUnlocked ? (
+                    <>
+                      <div className="h-2 bg-green-200 rounded-full overflow-hidden">
+                        <div className="h-full bg-green-500 rounded-full transition-all duration-500" style={{ width: `${Math.min(100, Math.round((pyPracticeDone / pyPracticeGoal) * 100))}%` }} />
+                      </div>
+                      <p className="text-xs font-bold text-green-700">{pyPracticeDone}/{t(`${pyPracticeGoal}문제`, `${pyPracticeGoal} problems`)} {t("완료", "done")}</p>
+                      <Link href="/practice" className="mt-1 text-xs text-center bg-green-500 text-white rounded-lg py-1.5 font-bold hover:bg-green-600 transition-colors">
+                        {pyPracticeDone >= pyPracticeGoal ? `✅ ${t("알고리즘 해금!", "Algorithms Unlocked!")}` : t("연습하기 →", "Practice →")}
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <div className="h-2 bg-gray-200 rounded-full" />
+                      <p className="text-xs text-gray-400">{t("레슨 15개 완료 후 해금", "Unlocks after 15 lessons")}</p>
+                      <span className="mt-1 text-xs text-center bg-gray-200 text-gray-400 rounded-lg py-1.5 font-bold">{t("잠금", "Locked")}</span>
+                    </>
+                  )}
+                </div>
+
+                {/* 3단계: 알고리즘 */}
+                <div className={`relative flex flex-col gap-2 rounded-xl border-2 p-4 ${pyAlgoUnlocked ? "border-purple-200 bg-purple-50" : "border-gray-200 bg-gray-50 opacity-60"}`}>
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">{pyAlgoUnlocked ? "🧠" : "🔒"}</span>
+                    <div>
+                      <p className={`font-black text-sm ${pyAlgoUnlocked ? "text-purple-800" : "text-gray-500"}`}>{t("3. 알고리즘", "3. Algorithms")}</p>
+                      <p className={`text-xs ${pyAlgoUnlocked ? "text-purple-500" : "text-gray-400"}`}>{algoTopicsTotal}{t("개 토픽", " topics")}</p>
+                    </div>
+                  </div>
+                  {pyAlgoUnlocked ? (
+                    <>
+                      <div className="h-2 bg-purple-200 rounded-full overflow-hidden">
+                        <div className="h-full bg-purple-500 rounded-full transition-all duration-500" style={{ width: algoTopicsTotal > 0 ? `${Math.round((algoTopicsDone / algoTopicsTotal) * 100)}%` : "0%" }} />
+                      </div>
+                      <p className="text-xs font-bold text-purple-700">{algoTopicsDone}/{algoTopicsTotal} {t("완료", "done")}</p>
+                      <Link href="/algorithm" className="mt-1 text-xs text-center bg-purple-500 text-white rounded-lg py-1.5 font-bold hover:bg-purple-600 transition-colors">
+                        {t("학습하기 →", "Study →")}
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <div className="h-2 bg-gray-200 rounded-full" />
+                      <p className="text-xs text-gray-400">{t(`연습 ${pyPracticeGoal}개 완료 후 해금`, `Unlocks after ${pyPracticeGoal} practice problems`)}</p>
+                      <span className="mt-1 text-xs text-center bg-gray-200 text-gray-400 rounded-lg py-1.5 font-bold">{t("잠금", "Locked")}</span>
+                    </>
+                  )}
+                </div>
+
+                {/* 4단계: 실전 */}
+                <div className={`relative flex flex-col gap-2 rounded-xl border-2 p-4 ${pyQuestUnlocked ? "border-amber-200 bg-amber-50" : "border-gray-200 bg-gray-50 opacity-60"}`}>
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">{pyQuestUnlocked ? "🏆" : "🔒"}</span>
+                    <div>
+                      <p className={`font-black text-sm ${pyQuestUnlocked ? "text-amber-800" : "text-gray-500"}`}>{t("4. 실전", "4. Contest")}</p>
+                      <p className={`text-xs ${pyQuestUnlocked ? "text-amber-500" : "text-gray-400"}`}>USACO / MCC</p>
+                    </div>
+                  </div>
+                  {pyQuestUnlocked ? (
+                    <>
+                      <div className="h-2 bg-amber-200 rounded-full" />
+                      <p className="text-xs font-bold text-amber-700">{t("161개 문제 도전!", "161 problems!")}</p>
+                      <Link href="/quest" className="mt-1 text-xs text-center bg-amber-500 text-white rounded-lg py-1.5 font-bold hover:bg-amber-600 transition-colors">
+                        {t("도전하기 →", "Challenge →")}
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <div className="h-2 bg-gray-200 rounded-full" />
+                      <p className="text-xs text-gray-400">{t("알고리즘 8개 완료 후 해금", "Unlocks after 8 algo topics")}</p>
                       <span className="mt-1 text-xs text-center bg-gray-200 text-gray-400 rounded-lg py-1.5 font-bold">{t("잠금", "Locked")}</span>
                     </>
                   )}
