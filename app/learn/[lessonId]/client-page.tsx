@@ -131,9 +131,11 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const canGoNext = () => {
     if (!step) return false
     if (effectiveTeacher) return true // 선생님은 어디서든 자유롭게 이동
-    if (isAlreadyDone) return true // 이미 완료한 레슨: 자유 탐색 (복습용)
     if (step.type === "explain" || step.type === "interactive" || step.type === "animation") return true
+    // practice/coding/mission은 isAlreadyDone이어도 반드시 완료 필요
+    // (재방문 시 미완료 상태로 스킵 방지)
     if (step.type === "tryit" || step.type === "mission" || step.type === "coding" || step.type === "practice") return isCurrentStepCompleted
+    if (isAlreadyDone) return true // 이미 완료한 레슨: quiz/predict 등 자유 탐색
     return isCurrentStepCompleted
   }
 
@@ -442,10 +444,13 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       // 마지막 챕터 완료 → 레슨 완료 기록 (선생님 모드에서도 completedLessons는 기록)
       markLessonComplete(lessonId)
       if (!effectiveTeacher) {
-        syncCompletion(score)
-        if (!isIGCSE && !xpAwardedRef.current) {
-          xpAwardedRef.current = true
-          gamification.addDirectXp(30)
+        // 이미 완료한 레슨 재방문 시 XP/점수 재지급 방지
+        if (!isAlreadyDone) {
+          syncCompletion(score)
+          if (!isIGCSE && !xpAwardedRef.current) {
+            xpAwardedRef.current = true
+            gamification.addDirectXp(30)
+          }
         }
         logActivity("lesson")
       }
