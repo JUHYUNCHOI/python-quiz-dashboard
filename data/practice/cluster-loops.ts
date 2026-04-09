@@ -139,7 +139,7 @@ int main() {
 - 입력: \`7\` → 출력: \`3  1\`
 
 **do-while 특성:** 조건을 나중에 검사하므로 **무조건 한 번은 실행**됩니다.`,
-      constraints: "1 ≤ N ≤ 1000",
+      constraints: "2 ≤ N ≤ 1000",
       initialCode: `#include <iostream>
 using namespace std;
 
@@ -178,7 +178,7 @@ int main() {
       en: {
         title: "Halve Repeatedly (do-while)",
         description: `Given a positive integer N, use a **do-while loop** to repeatedly divide N by 2 and print each result. Stop when the result becomes 0.\n\n**Examples**\n- Input: \`16\` → Output: \`8  4  2  1\` (one per line)\n- Input: \`7\` → Output: \`3  1\`\n\n**do-while characteristic:** The condition is checked after the body, so it **always executes at least once**.`,
-        constraints: "1 ≤ N ≤ 1000",
+        constraints: "2 ≤ N ≤ 1000",
         hints: [
           "do { n /= 2; ... } while (n > 0); continues as long as n is greater than 0.",
           "do-while executes the loop body first, then checks the condition.",

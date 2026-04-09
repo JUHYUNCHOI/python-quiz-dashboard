@@ -1,9 +1,10 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, Fragment } from "react"
 import { Check, X, Lightbulb, RotateCcw } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
+import { highlightCpp, highlightCppInline, highlightPython, highlightPythonInline } from "@/components/ui/code-block"
 import type {
   StepContent,
   QuizContent,
@@ -34,10 +35,12 @@ function McqStep({
   content,
   onCorrect,
   onWrong,
+  language = "cpp",
 }: {
   content: QuizContent | ErrorQuizContent
   onCorrect: () => void
   onWrong: () => void
+  language?: "python" | "cpp"
 }) {
   const { t, lang } = useLanguage()
   const E = lang === "en"
@@ -63,9 +66,11 @@ function McqStep({
     <div className="flex flex-col gap-3">
       <p className="font-semibold text-gray-800 text-base leading-relaxed">{question}</p>
       {"code" in content && content.code && (
-        <pre className="rounded-xl bg-[#1a1b2e] px-4 py-3 font-mono text-sm text-[#cdd6f4] overflow-x-auto leading-6 whitespace-pre-wrap">
-          {content.code}
-        </pre>
+        <div className="rounded-xl bg-[#1a1b2e] px-4 py-3 font-mono text-sm overflow-x-auto leading-6">
+          {language === "cpp"
+            ? highlightCpp(content.code, true)
+            : highlightPython(content.code, true)}
+        </div>
       )}
       <div className="flex flex-col gap-2">
         {options.map((opt, i) => {
@@ -126,14 +131,30 @@ function McqStep({
 // ─────────────────────────────────────────────────────────────
 const BLANK_LABELS = ["①", "②", "③", "④", "⑤"]
 
+// 다중 줄 템플릿 파트를 인라인 하이라이팅으로 렌더링
+function renderTemplatePart(text: string, lang: "python" | "cpp"): React.ReactNode[] {
+  const inlineFn = lang === "cpp"
+    ? (l: string) => highlightCppInline(l, true)
+    : (l: string) => highlightPythonInline(l, true)
+  const lines = text.split('\n')
+  const result: React.ReactNode[] = []
+  lines.forEach((line, i) => {
+    result.push(...inlineFn(line))
+    if (i < lines.length - 1) result.push('\n')
+  })
+  return result
+}
+
 function PracticeStep({
   content,
   onCorrect,
   onWrong,
+  language = "cpp",
 }: {
   content: PracticeContent | InterleavingContent
   onCorrect: () => void
   onWrong: () => void
+  language?: "python" | "cpp"
 }) {
   const { t, lang: curLang } = useLanguage()
   const isEn = curLang === "en"
@@ -186,11 +207,8 @@ function PracticeStep({
     ? content.en.hint
     : "hint" in content ? (content as { hint?: string }).hint : undefined
 
-  // 템플릿에서 ___ 자리에 ①② 번호 표시
-  const numberedTemplate = (() => {
-    let n = 0
-    return template.replace(/___/g, () => `___${BLANK_LABELS[n++] ?? ""}`)
-  })()
+  // 템플릿을 ___ 기준으로 분할해 인라인 input 렌더링
+  const templateParts = template.split("___")
 
   return (
     <div className="flex flex-col gap-3">
@@ -208,81 +226,72 @@ function PracticeStep({
       <p className="font-semibold text-gray-800">{task}</p>
       {guide && <p className="text-xs text-gray-500">{guide}</p>}
 
-      {/* 템플릿: 빈칸에 번호 표시 */}
+      {/* 인라인 빈칸 코드 블록 */}
       {typeof content.template === "string" && (
-        <pre className="rounded-xl bg-[#1a1b2e] px-4 py-3 font-mono text-sm text-[#cdd6f4] overflow-x-auto leading-6 whitespace-pre-wrap">
-          {numberedTemplate}
-        </pre>
-      )}
-
-      {/* 입력 영역 */}
-      {result === "idle" && (
-        <div className="flex flex-col gap-2">
-          {isFullCode ? (
-            <div className="flex gap-2">
-              <textarea
-                ref={firstInputRef as React.RefObject<HTMLTextAreaElement>}
-                value={inputs[0]}
-                onChange={e => setInputs([e.target.value])}
-                placeholder={t("코드를 작성하세요...", "Write your code...")}
-                rows={3}
-                className="flex-1 rounded-xl border border-gray-200 px-3 py-2 font-mono text-sm focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200 resize-none"
-              />
-              <button
-                onClick={check}
-                disabled={!inputs[0].trim()}
-                className="px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm disabled:opacity-40 transition-colors shrink-0 self-end"
-              >
-                {t("확인", "Check")}
-              </button>
-            </div>
-          ) : isMultiBlank ? (
-            // 빈칸 여러 개: 각각 따로 입력창
-            <div className="flex flex-col gap-2">
-              {Array.from({ length: blankCount }).map((_, i) => (
-                <div key={i} className="flex items-center gap-2">
-                  <span className="text-sm font-bold text-indigo-400 w-5 shrink-0">{BLANK_LABELS[i]}</span>
+        <div className="rounded-xl bg-[#1a1b2e] px-4 py-3 font-mono text-sm text-[#cdd6f4] overflow-x-auto leading-7 whitespace-pre-wrap">
+          {templateParts.map((part, i) => (
+            <Fragment key={i}>
+              {renderTemplatePart(part, language)}
+              {i < templateParts.length - 1 && (
+                result === "idle" ? (
                   <input
                     ref={i === 0 ? firstInputRef as React.RefObject<HTMLInputElement> : undefined}
                     type="text"
                     value={inputs[i] ?? ""}
-                    onChange={e => setInputs(prev => { const next = [...prev]; next[i] = e.target.value; return next })}
-                    onKeyDown={e => e.key === "Enter" && i === blankCount - 1 && check()}
-                    placeholder={`빈칸 ${BLANK_LABELS[i]}`}
-                    className="flex-1 rounded-xl border border-gray-200 px-3 py-2 font-mono text-sm focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200"
+                    onChange={e => {
+                      const val = e.target.value
+                      setInputs(prev => { const next = [...prev]; next[i] = val; return next })
+                    }}
+                    onKeyDown={e => { if (e.key === "Enter" && i === blankCount - 1) check() }}
+                    className="inline-block bg-[#2a2b3e] border-b-2 border-indigo-400 text-indigo-200 font-mono text-sm px-1 mx-0.5 focus:outline-none focus:border-indigo-300 focus:bg-[#32345a] rounded-sm transition-colors align-baseline"
+                    style={{ width: `${Math.max((inputs[i] ?? "").length + 2, 7)}ch`, minWidth: "7ch" }}
                   />
-                </div>
-              ))}
-              <button
-                onClick={check}
-                disabled={inputs.some(v => !v.trim())}
-                className="self-end px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm disabled:opacity-40 transition-colors"
-              >
-                {t("확인", "Check")}
-              </button>
-            </div>
-          ) : (
-            // 빈칸 1개: 기존 단일 입력창
-            <div className="flex gap-2">
-              <input
-                ref={firstInputRef as React.RefObject<HTMLInputElement>}
-                type="text"
-                value={inputs[0]}
-                onChange={e => setInputs([e.target.value])}
-                onKeyDown={e => e.key === "Enter" && check()}
-                placeholder={t("빈칸을 채워보세요...", "Fill in the blank...")}
-                className="flex-1 rounded-xl border border-gray-200 px-3 py-2 font-mono text-sm focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200"
-              />
-              <button
-                onClick={check}
-                disabled={!inputs[0].trim()}
-                className="px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm disabled:opacity-40 transition-colors shrink-0"
-              >
-                {t("확인", "Check")}
-              </button>
-            </div>
-          )}
+                ) : (
+                  <span className={cn(
+                    "inline-block border-b-2 px-1 mx-0.5 font-mono text-sm rounded-sm align-baseline",
+                    result === "correct"
+                      ? "border-emerald-400 text-emerald-300 bg-emerald-900/30"
+                      : "border-red-400 text-red-300 bg-red-900/30"
+                  )}>
+                    {inputs[i] || "　"}
+                  </span>
+                )
+              )}
+            </Fragment>
+          ))}
         </div>
+      )}
+
+      {/* 전체 코드 작성 (template=null) */}
+      {result === "idle" && isFullCode && (
+        <div className="flex gap-2">
+          <textarea
+            ref={firstInputRef as React.RefObject<HTMLTextAreaElement>}
+            value={inputs[0]}
+            onChange={e => setInputs([e.target.value])}
+            placeholder={t("코드를 작성하세요...", "Write your code...")}
+            rows={3}
+            className="flex-1 rounded-xl border border-gray-200 px-3 py-2 font-mono text-sm focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200 resize-none"
+          />
+          <button
+            onClick={check}
+            disabled={!inputs[0].trim()}
+            className="px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm disabled:opacity-40 transition-colors shrink-0 self-end"
+          >
+            {t("확인", "Check")}
+          </button>
+        </div>
+      )}
+
+      {/* 인라인 빈칸용 확인 버튼 */}
+      {result === "idle" && !isFullCode && (
+        <button
+          onClick={check}
+          disabled={inputs.some((v, i) => i < blankCount && !v.trim())}
+          className="self-end px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm disabled:opacity-40 transition-colors"
+        >
+          {t("확인", "Check")}
+        </button>
       )}
 
       {result === "correct" && (
@@ -434,21 +443,22 @@ export interface ReviewStepRendererProps {
   step: StepContent
   onCorrect: () => void
   onWrong: () => void
+  language?: "python" | "cpp"
 }
 
-export function ReviewStepRenderer({ step, onCorrect, onWrong }: ReviewStepRendererProps) {
+export function ReviewStepRenderer({ step, onCorrect, onWrong, language = "cpp" }: ReviewStepRendererProps) {
   switch (step.type) {
     case "quiz":
-      return <McqStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} />
+      return <McqStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} language={language} />
 
     case "errorQuiz":
-      return <McqStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} />
+      return <McqStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} language={language} />
 
     case "practice":
-      return <PracticeStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} />
+      return <PracticeStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} language={language} />
 
     case "interleaving":
-      return <PracticeStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} />
+      return <PracticeStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} language={language} />
 
     case "explain":
       if (step.content.predict) {

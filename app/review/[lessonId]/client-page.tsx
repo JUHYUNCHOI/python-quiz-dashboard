@@ -460,6 +460,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
               step={currentReview.step}
               onCorrect={handleCorrect}
               onWrong={handleWrong}
+              language={lesson.language ?? "cpp"}
             />
           )}
 

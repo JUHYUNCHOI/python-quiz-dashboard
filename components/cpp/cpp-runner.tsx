@@ -182,7 +182,8 @@ export function CppRunner({
         setTeacherGrade(grade)
         setTeacherComment(data.teacher_comment ?? null)
         // 선생님이 이미 확인했거나 자동 채점 완료된 경우 레슨 진도 동기화
-        if (grade === "pass" || grade === "auto") {
+        // isCompleted이면 이미 진도에 반영됨 — 중복 onSuccess 방지
+        if ((grade === "pass" || grade === "auto") && !isCompleted) {
           onSuccess?.()
         }
       } else {

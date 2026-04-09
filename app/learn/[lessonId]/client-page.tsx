@@ -319,11 +319,8 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     const trackIds = trackParts.flatMap(p => p.lessonIds)
     const idx = trackIds.indexOf(idNormalized)
     if (idx <= 0) return false // 첫 수업 또는 알 수 없는 ID → 열림
-    // 이전 수업이 모두 완료되었는지 확인
-    for (let i = 0; i < idx; i++) {
-      if (!completed.has(trackIds[i])) return true
-    }
-    return false
+    // 직전 1개만 확인 (커리큘럼 페이지 잠금 기준과 동일)
+    return !completed.has(trackIds[idx - 1])
   })()
 
   // ── 훅은 반드시 early return 앞에 선언해야 함 (Rules of Hooks) ──

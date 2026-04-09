@@ -1585,30 +1585,46 @@ export default function CurriculumPage() {
                                                 </div>
                                               )}
 
-                                              {/* 3단계: 도전 */}
-                                              {cluster && (
-                                                <div className="flex items-center gap-2">
-                                                  <span className="text-[10px] font-black text-gray-300 w-3 shrink-0">3</span>
-                                                  {step3Done ? (
-                                                    <div className="flex items-center gap-1.5 flex-wrap">
-                                                      <span className={doneText}>✅ {t("도전완료", "Done")}</span>
-                                                      {!step3FullyDone && (
-                                                        <Link href={`/practice?cluster=${cluster.id}&from=curriculum`}
-                                                          className="text-[10px] text-gray-300 hover:text-green-500 underline underline-offset-2 decoration-dotted transition-colors">
-                                                          {t("더 연습하기", "More practice")}
+                                              {/* 3단계: 도전 (보너스 배지) */}
+                                              {cluster && (() => {
+                                                const set1Total = Math.min(SET1_SIZE, cluster.problems.length)
+                                                const solvedCount = cluster.problems.filter(p => practiceSolvedSet.has(p.id)).length
+                                                const stars = step3Done ? "⭐⭐⭐" : solvedCount > 0 ? "⭐" : "☆"
+                                                return (
+                                                  <div className="flex items-center gap-2">
+                                                    <span className="text-[10px] font-black text-gray-300 w-3 shrink-0">3</span>
+                                                    {step3Done ? (
+                                                      <div className="flex items-center gap-1.5 flex-wrap">
+                                                        <span className="text-xs text-amber-500 font-bold">⭐⭐⭐ {t("도전완료!", "Challenge done!")}</span>
+                                                        {!step3FullyDone && (
+                                                          <Link href={`/practice?cluster=${cluster.id}&from=curriculum`}
+                                                            className="text-[10px] text-gray-300 hover:text-amber-500 underline underline-offset-2 decoration-dotted transition-colors">
+                                                            {t("더 하기", "More")}
+                                                          </Link>
+                                                        )}
+                                                      </div>
+                                                    ) : step1Done ? (
+                                                      solvedCount === 0 ? (
+                                                        // 한 번도 안 해봤을 때: 크고 눈에 띄게
+                                                        <Link href={`/practice?cluster=${cluster.id}&from=curriculum&session=1`}
+                                                          className={`${activeBtn} bg-amber-400 hover:bg-amber-500 text-white flex items-center justify-center gap-1.5`}>
+                                                          <span>{cluster.emoji}</span>
+                                                          <span>☆ {t("도전해보기!", "Try Challenge!")}</span>
                                                         </Link>
-                                                      )}
-                                                    </div>
-                                                  ) : step1Done ? (
-                                                    <Link href={`/practice?cluster=${cluster.id}&from=curriculum&session=1`} className={`${activeBtn} bg-green-500 hover:bg-green-600 text-white flex items-center justify-center gap-1.5`}>
-                                                      <span>{cluster.emoji}</span>
-                                                      <span>{t("도전", "Challenge")} {cluster.problems.filter(p => practiceSolvedSet.has(p.id)).length}/{cluster.problems.length}</span>
-                                                    </Link>
-                                                  ) : (
-                                                    <span className={lockedText}>{cluster.emoji} {t("도전", "Challenge")}</span>
-                                                  )}
-                                                </div>
-                                              )}
+                                                      ) : (
+                                                        // 진행 중: 작은 amber 버튼
+                                                        <Link href={`/practice?cluster=${cluster.id}&from=curriculum&session=1`}
+                                                          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-amber-200 bg-amber-50 text-amber-700 text-[11px] font-semibold hover:bg-amber-100 hover:border-amber-300 transition-colors">
+                                                          <span>⭐</span>
+                                                          <span>{t("도전", "Challenge")} {solvedCount}/{set1Total}</span>
+                                                        </Link>
+                                                      )
+                                                    ) : (
+                                                      <span className={lockedText}>☆ {t("도전", "Challenge")}</span>
+                                                    )}
+                                                  </div>
+                                                )
+                                              })()}
                                             </>
                                           )
                                         })()}

@@ -609,11 +609,35 @@ export function PracticeSession({
               </span>
             </div>
           </div>
-          <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-indigo-500 rounded-full transition-all duration-300"
-              style={{ width: `${progressPct}%` }}
-            />
+          {/* 진도 도트 */}
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {roundProblems.map((p, i) => {
+              const isPassed = passedInRound.has(p.id)
+              const isCurrent = i === index
+              const isClickable = isTeacher || isPassed || isCurrent
+              return (
+                <button
+                  key={p.id}
+                  disabled={!isClickable}
+                  onClick={() => {
+                    if (!isClickable) return
+                    setIndex(i)
+                    setCanAdvance(isPassed)
+                  }}
+                  title={`${i + 1}. ${p.title}`}
+                  className={cn(
+                    "rounded-full transition-all duration-200",
+                    isCurrent
+                      ? "w-4 h-2.5 bg-indigo-500"
+                      : isPassed
+                        ? "w-2.5 h-2.5 bg-emerald-400 hover:bg-emerald-500 cursor-pointer"
+                        : isTeacher
+                          ? "w-2.5 h-2.5 bg-gray-200 hover:bg-indigo-300 cursor-pointer"
+                          : "w-2.5 h-2.5 bg-gray-200 cursor-default"
+                  )}
+                />
+              )
+            })}
           </div>
         </div>
       </div>
