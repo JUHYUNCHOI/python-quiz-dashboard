@@ -7,6 +7,7 @@ import { Header } from "@/components/header"
 import { ChevronLeft, ChevronRight, CheckCircle, Loader2 } from "lucide-react"
 import { ALL_PROBLEMS, PROBLEM_MAP, PROBLEM_INDEX, type ProblemMeta } from "./data"
 import { PROBLEM_LOADERS } from "./loaders"
+import { useLanguage } from "@/contexts/language-context"
 
 const STORAGE_KEY = "quest-solved"
 
@@ -54,9 +55,19 @@ function getLazyComponent(problemId: string) {
   return LazyComp
 }
 
+declare global { interface Window { _questLang?: string } }
+
 export default function QuestProblemClient({ problemId }: { problemId: string }) {
   const router = useRouter()
+  const { lang } = useLanguage()
   const meta = PROBLEM_MAP.get(problemId)
+
+  // Sync Coderin's language setting to quest problems
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window._questLang = lang
+    }
+  }, [lang])
   const idx = PROBLEM_INDEX.get(problemId) ?? -1
   const prevProblem = idx > 0 ? ALL_PROBLEMS[idx - 1] : null
   const nextProblem = idx < ALL_PROBLEMS.length - 1 ? ALL_PROBLEMS[idx + 1] : null

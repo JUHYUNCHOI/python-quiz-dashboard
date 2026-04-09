@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils"
 import type { AlgoTopic } from "@/data/algorithm/types"
 import { useAlgoProgress } from "@/hooks/use-algo-progress"
 import { AlgoConceptViz } from "./AlgoConceptViz"
+import { useLanguage } from "@/contexts/language-context"
 
 interface Props {
   topic: AlgoTopic
@@ -22,6 +23,7 @@ const DIFFICULTY_LABEL: Record<string, { label: string; color: string }> = {
 
 export function TopicPage({ topic, onSelectProblem }: Props) {
   const { isComplete, getTopicProgress } = useAlgoProgress()
+  const { t, lang } = useLanguage()
   const totalProblems = topic.problems.length
   const completedCount = getTopicProgress(topic.problems.map(p => p.id))
   const progressPct = totalProblems > 0 ? Math.round((completedCount / totalProblems) * 100) : 0
@@ -33,12 +35,12 @@ export function TopicPage({ topic, onSelectProblem }: Props) {
         <div className="flex items-center gap-3 mb-2">
           <span className="text-4xl">{topic.icon}</span>
           <div className="flex-1">
-            <h1 className="text-2xl font-black text-gray-900">{topic.title}</h1>
-            <p className="text-sm text-gray-500">{topic.category}</p>
+            <h1 className="text-2xl font-black text-gray-900">{lang === 'en' && (topic as any).titleEn ? (topic as any).titleEn : topic.title}</h1>
+            <p className="text-sm text-gray-500">{lang === 'en' && (topic as any).categoryEn ? (topic as any).categoryEn : topic.category}</p>
           </div>
           {completedCount > 0 && (
             <div className="text-right flex-shrink-0">
-              <p className="text-xs text-gray-400">{completedCount}/{totalProblems} 완료</p>
+              <p className="text-xs text-gray-400">{completedCount}/{totalProblems} {t('완료', 'done')}</p>
               <div className="w-16 h-1.5 bg-gray-100 rounded-full mt-1 overflow-hidden">
                 <div
                   className="h-full bg-orange-400 rounded-full transition-all"
@@ -48,7 +50,7 @@ export function TopicPage({ topic, onSelectProblem }: Props) {
             </div>
           )}
         </div>
-        <p className="text-gray-600 text-sm">{topic.description}</p>
+        <p className="text-gray-600 text-sm">{lang === 'en' && (topic as any).descriptionEn ? (topic as any).descriptionEn : topic.description}</p>
       </div>
 
       {/* 개념 시각화 (Algorithm Lab JS 래퍼) */}
@@ -56,7 +58,7 @@ export function TopicPage({ topic, onSelectProblem }: Props) {
 
       {/* 학습 로드맵 */}
       <div>
-        <h2 className="text-base font-black text-gray-800 mb-3">📍 학습 순서</h2>
+        <h2 className="text-base font-black text-gray-800 mb-3">📍 {t('학습 순서', 'Learning Path')}</h2>
         <div className="space-y-3">
           {topic.stages.map(stage => {
             const stageCompleted = stage.problemIds.filter(id => isComplete(id)).length
@@ -71,9 +73,9 @@ export function TopicPage({ topic, onSelectProblem }: Props) {
                   )}>
                     {stageCompleted === stage.problemIds.length && stage.problemIds.length > 0 ? '✓' : stage.num}
                   </span>
-                  <p className="font-bold text-gray-800 text-sm">{stage.title}</p>
+                  <p className="font-bold text-gray-800 text-sm">{lang === 'en' && (stage as any).titleEn ? (stage as any).titleEn : stage.title}</p>
                   {stage.desc && (
-                    <p className="text-xs text-gray-400 ml-1">· {stage.desc}</p>
+                    <p className="text-xs text-gray-400 ml-1">· {lang === 'en' && (stage as any).descEn ? (stage as any).descEn : stage.desc}</p>
                   )}
                 </div>
 
@@ -116,7 +118,7 @@ export function TopicPage({ topic, onSelectProblem }: Props) {
                           )}
                           {problem.sim && (
                             <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-purple-50 border border-purple-200 text-purple-700">
-                              시뮬
+                              {t('시뮬', 'Sim')}
                             </span>
                           )}
                           <span className={cn(

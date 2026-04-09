@@ -7,6 +7,7 @@ import { CodeStepper } from "./CodeStepper"
 import { HintSystem } from "./HintSystem"
 import { AlgoTopicViz } from "./AlgoTopicViz"
 import { useAlgoProgress } from "@/hooks/use-algo-progress"
+import { useLanguage } from "@/contexts/language-context"
 
 function injectAlgoStyle() {
   if (typeof document === 'undefined') return
@@ -31,6 +32,7 @@ export function ProblemPage({ topic, problem, onBack }: Props) {
   const [tab, setTab] = useState<Tab>('problem')
   const [lang, setLang] = useState<'python' | 'cpp'>('python')
   const { isComplete, markComplete } = useAlgoProgress()
+  const { t } = useLanguage()
 
   useEffect(() => { injectAlgoStyle() }, [])
 
@@ -38,10 +40,10 @@ export function ProblemPage({ topic, problem, onBack }: Props) {
   const done = isComplete(problem.id)
 
   const tabs: { id: Tab; label: string; emoji: string; hidden?: boolean }[] = [
-    { id: 'problem', label: '문제',   emoji: '📋' },
-    { id: 'sim',     label: '시뮬',   emoji: '▶️', hidden: !hasSim },
-    { id: 'think',   label: '힌트',   emoji: '💡' },
-    { id: 'code',    label: '코드',   emoji: '💻' },
+    { id: 'problem', label: t('문제', 'Problem'),   emoji: '📋' },
+    { id: 'sim',     label: t('시뮬', 'Sim'),        emoji: '▶️', hidden: !hasSim },
+    { id: 'think',   label: t('힌트', 'Hints'),      emoji: '💡' },
+    { id: 'code',    label: t('코드', 'Code'),       emoji: '💻' },
   ]
 
   return (
@@ -68,7 +70,7 @@ export function ProblemPage({ topic, problem, onBack }: Props) {
                   : "border-gray-200 text-gray-400 hover:border-orange-300 hover:text-orange-600"
               )}
             >
-              {done ? '✓ 완료' : '완료 표시'}
+              {done ? t('✓ 완료', '✓ Done') : t('완료 표시', 'Mark done')}
             </button>
             <a
               href={problem.link}
@@ -76,7 +78,7 @@ export function ProblemPage({ topic, problem, onBack }: Props) {
               rel="noopener noreferrer"
               className="text-xs px-2 py-1 rounded-lg border border-gray-200 text-gray-500 hover:border-orange-300 hover:text-orange-600 transition-colors"
             >
-              원문 →
+              {t('원문 →', 'Source →')}
             </a>
           </div>
         </div>
@@ -112,7 +114,7 @@ export function ProblemPage({ topic, problem, onBack }: Props) {
                     onClick={() => setTab('sim')}
                     className="ml-2 underline font-medium hover:text-orange-900"
                   >
-                    시뮬레이션 보기 →
+                    {t('시뮬레이션 보기 →', 'View simulation →')}
                   </button>
                 )}
               </div>
