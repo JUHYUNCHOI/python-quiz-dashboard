@@ -12,6 +12,8 @@ export interface ProblemI18n {
   constraints?: string
   solutionExplanation?: string
   explanation?: string  // MCQ problems use explanation instead of solutionExplanation
+  options?: string[]    // MCQ option texts in English
+  codeSnippet?: string  // English version of code snippet (replaces Korean string literals)
 }
 
 /** Optional English translation fields for a cluster */
@@ -79,6 +81,8 @@ export function localizeProblem(p: PracticeProblem, lang: string): PracticeProbl
     hints: p.en.hints ?? p.hints,
     solutionExplanation: p.en.solutionExplanation ?? p.solutionExplanation,
     explanation: p.en.explanation ?? p.explanation,
+    options: p.en.options ?? p.options,
+    codeSnippet: p.en.codeSnippet ?? p.codeSnippet,
   }
 }
 
