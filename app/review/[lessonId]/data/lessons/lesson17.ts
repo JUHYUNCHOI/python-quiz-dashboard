@@ -190,7 +190,12 @@ export const lesson17: LessonData = {
         template: "students = [\"철수\", \"영희\", \"민수\"]\nfor i, name in ___(students, ___):\n    print(f\"{i}번: {name}\")",
         blanksAnswer: ["enumerate", "1"],
         answer: "students = [\"철수\", \"영희\", \"민수\"]\nfor i, name in enumerate(students, 1):\n    print(f\"{i}번: {name}\")",
-        expect: "1번: 철수\n2번: 영희\n3번: 민수"
+        expect: "1번: 철수\n2번: 영희\n3번: 민수",
+        en: {
+          task: "Number student names starting from 1 using enumerate",
+          guide: "Remember enumerate(list, start)!",
+          hint: "Use enumerate(students, 1)!"
+        }
       }
     },
     {
@@ -199,7 +204,12 @@ export const lesson17: LessonData = {
         question: "enumerate([\"a\", \"b\", \"c\"])의 첫 번째 값은?",
         options: ["(1, \"a\")", "(0, \"a\")", "\"a\"", "[0, \"a\"]"],
         answer: 1,
-        explanation: "enumerate()는 기본적으로 0부터 시작하는 (인덱스, 값) 쌍을 줘요!"
+        explanation: "enumerate()는 기본적으로 0부터 시작하는 (인덱스, 값) 쌍을 줘요!",
+        en: {
+          question: "What is the first value from enumerate([\"a\", \"b\", \"c\"])?",
+          options: ["(1, \"a\")", "(0, \"a\")", "\"a\"", "[0, \"a\"]"],
+          explanation: "enumerate() gives (index, value) pairs starting from 0 by default!"
+        }
       }
     },
     {
@@ -234,7 +244,11 @@ export const lesson17: LessonData = {
         template: "fruits = [\"사과\", \"바나나\"]\nfruits.___(___)  \nprint(fruits)",
         blanksAnswer: ["append", "\"딸기\""],
         answer: "fruits = [\"사과\", \"바나나\"]\nfruits.append(\"딸기\")\nprint(fruits)",
-        expect: "['사과', '바나나', '딸기']"
+        expect: "['사과', '바나나', '딸기']",
+        en: {
+          message: "🔄 List append review! (Lesson 16)",
+          task: "Add \"strawberry\" to the list"
+        }
       }
     },
     {
@@ -293,7 +307,12 @@ export const lesson17: LessonData = {
         template: "squares = [___ for n in range(1, 6)]\nprint(squares)",
         blanksAnswer: ["n ** 2"],
         answer: "squares = [n ** 2 for n in range(1, 6)]\nprint(squares)",
-        expect: "[1, 4, 9, 16, 25]"
+        expect: "[1, 4, 9, 16, 25]",
+        en: {
+          task: "Create a list of squares from 1 to 5 using list comprehension",
+          guide: "[expression for variable in range] format!",
+          hint: "Use n ** 2 or n * n!"
+        }
       }
     },
     {
@@ -306,7 +325,12 @@ export const lesson17: LessonData = {
         template: "words = [\"나\", \"사과\", \"안녕하세요\", \"밥\"]\nlong = [w for w in words ___ len(w) >= ___]\nprint(long)",
         blanksAnswer: ["if", "3"],
         answer: "words = [\"나\", \"사과\", \"안녕하세요\", \"밥\"]\nlong = [w for w in words if len(w) >= 3]\nprint(long)",
-        expect: "['안녕하세요']"
+        expect: "['안녕하세요']",
+        en: {
+          task: "Collect only words with 3 or more characters from the list",
+          guide: "Attach an if condition at the end!",
+          hint: "Use the condition len(w) >= 3!"
+        }
       }
     },
     {
@@ -315,7 +339,12 @@ export const lesson17: LessonData = {
         question: "[x + 1 for x in [10, 20, 30]]의 결과는?",
         options: ["[10, 20, 30]", "[11, 21, 31]", "[1, 1, 1]", "에러"],
         answer: 1,
-        explanation: "각 요소에 1을 더한 새 리스트 [11, 21, 31]이 만들어져요!"
+        explanation: "각 요소에 1을 더한 새 리스트 [11, 21, 31]이 만들어져요!",
+        en: {
+          question: "What is the result of [x + 1 for x in [10, 20, 30]]?",
+          options: ["[10, 20, 30]", "[11, 21, 31]", "[1, 1, 1]", "Error"],
+          explanation: "A new list is created by adding 1 to each element: [11, 21, 31]!"
+        }
       }
     },
     {

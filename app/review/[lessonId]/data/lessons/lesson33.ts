@@ -472,6 +472,11 @@ print(합, 차)`,
         hint: "if b == 0:\n    return '나눌 수 없어요!'\nreturn a / b",
         template: null,
         answer: "def safe_divide(a, b):\n    if b == 0:\n        return '나눌 수 없어요!'\n    return a / b\n\nprint(safe_divide(10, 2))\nprint(safe_divide(10, 0))",
+        en: {
+          task: "Safe division function: return '나눌 수 없어요!' when dividing by 0!",
+          guide: "Check with if b == 0:!",
+          hint: "if b == 0:\n    return '나눌 수 없어요!'\nreturn a / b"
+        },
         alternateAnswers: [
           "def safe_divide(a, b):\n    if b == 0:\n        return '나눌 수 없어요!'\n    return a / b\nprint(safe_divide(10, 2))\nprint(safe_divide(10, 0))"
         ],

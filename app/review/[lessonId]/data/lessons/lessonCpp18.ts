@@ -389,7 +389,11 @@ export const lessonCpp18: LessonData = {
           guide: "pop_front() 형태!",
           template: "dq.___();",
           answer: "pop_front",
-          expect: "dq.pop_front();"
+          expect: "dq.pop_front();",
+          en: {
+            task: "Remove the front element of a deque!",
+            guide: "Use the form pop_front()!"
+          }
         }
       },
 
@@ -438,7 +442,11 @@ export const lessonCpp18: LessonData = {
           task: "deque 앞에 값을 넣는 함수를 써봐요!",
           template: "dq.___(값);",
           answer: "push_front",
-          expect: "dq.push_front(값);"
+          expect: "dq.push_front(값);",
+          en: {
+            message: "Quick check! Do you remember the function that inserts at the front of a deque?",
+            task: "Write the function that inserts a value at the front of a deque!"
+          }
         }
       },
 

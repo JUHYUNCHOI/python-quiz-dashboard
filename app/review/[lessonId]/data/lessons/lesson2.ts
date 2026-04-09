@@ -60,7 +60,11 @@ export const lesson2: LessonData = {
           task: "Hello 출력해봐",
           template: null,
           answer: "print('Hello')",
-          expect: "Hello"
+          expect: "Hello",
+          en: {
+            message: "Wait! Do you remember last time?",
+            task: "Print Hello"
+          }
         }
       },
 
@@ -114,7 +118,16 @@ export const lesson2: LessonData = {
             "에러"
           ],
           answer: 1,
-          explanation: "따옴표 있으면 글자! 글자끼리 +하면 이어붙여서 '102030'이 돼!"
+          explanation: "따옴표 있으면 글자! 글자끼리 +하면 이어붙여서 '102030'이 돼!",
+          en: {
+            question: "What is the result of '10' + '20' + '30'?",
+            options: [
+              "60",
+              "'102030'",
+              "Error"
+            ],
+            explanation: "With quotes they're strings! Adding strings concatenates them, so you get '102030'!"
+          }
         }
       },
 
@@ -173,7 +186,11 @@ export const lesson2: LessonData = {
           guide: "숫자는 따옴표 없이!",
           template: { before: "print(", after: ")" },
           answer: "15",
-          expect: "15"
+          expect: "15",
+          en: {
+            task: "Print the age 15",
+            guide: "Numbers don't need quotes!"
+          }
         }
       },
 
@@ -184,7 +201,10 @@ export const lesson2: LessonData = {
           task: "치킨 가격 19000을 출력해봐",
           template: { before: "print(", after: ")" },
           answer: "19000",
-          expect: "19000"
+          expect: "19000",
+          en: {
+            task: "Print the chicken price 19000"
+          }
         }
       },
 
@@ -209,7 +229,10 @@ export const lesson2: LessonData = {
           task: "키 165.5를 출력해봐",
           template: { before: "print(", after: ")" },
           answer: "165.5",
-          expect: "165.5"
+          expect: "165.5",
+          en: {
+            task: "Print the height 165.5"
+          }
         }
       },
 
@@ -220,7 +243,10 @@ export const lesson2: LessonData = {
           task: "원주율 3.14를 출력해봐",
           template: { before: "print(", after: ")" },
           answer: "3.14",
-          expect: "3.14"
+          expect: "3.14",
+          en: {
+            task: "Print pi 3.14"
+          }
         }
       },
 
@@ -235,7 +261,16 @@ export const lesson2: LessonData = {
             "완전히 다르다"
           ],
           answer: 1,
-          explanation: "15는 정수(int), 15.0은 실수(float)! 값은 같지만 타입이 달라!"
+          explanation: "15는 정수(int), 15.0은 실수(float)! 값은 같지만 타입이 달라!",
+          en: {
+            question: "Are 15 and 15.0 the same?",
+            options: [
+              "Completely the same",
+              "Same value but different types",
+              "Completely different"
+            ],
+            explanation: "15 is int, 15.0 is float! Same value but different types!"
+          }
         }
       },
 
@@ -261,7 +296,11 @@ export const lesson2: LessonData = {
           task: "파이썬 출력해봐",
           template: null,
           answer: "print('파이썬')",
-          expect: "파이썬"
+          expect: "파이썬",
+          en: {
+            message: "Remember how to print strings?",
+            task: "Print 파이썬"
+          }
         }
       },
 
@@ -274,7 +313,11 @@ export const lesson2: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "'이름'",
           alternateAnswers: ["\"이름\"", "'홍길동'", "\"홍길동\""],
-          expect: "이름"
+          expect: "이름",
+          en: {
+            task: "Print your name (any name is OK)",
+            guide: "Strings need quotes!"
+          }
         }
       },
 
@@ -302,7 +345,16 @@ export const lesson2: LessonData = {
             "에러! (글자 + 숫자는 안 됨)"
           ],
           answer: 2,
-          explanation: "글자랑 숫자는 직접 더할 수 없어! 둘 다 같은 타입이어야 해!"
+          explanation: "글자랑 숫자는 직접 더할 수 없어! 둘 다 같은 타입이어야 해!",
+          en: {
+            question: "What happens with '19000' + 1000?",
+            options: [
+              "20000",
+              "'190001000'",
+              "Error! (string + number not allowed)"
+            ],
+            explanation: "You can't add strings and numbers directly! Both need to be the same type!"
+          }
         }
       },
 
@@ -353,7 +405,11 @@ export const lesson2: LessonData = {
           guide: "대문자 T로 시작!",
           template: { before: "print(", after: ")" },
           answer: "True",
-          expect: "True"
+          expect: "True",
+          en: {
+            task: "Print True",
+            guide: "Starts with capital T!"
+          }
         }
       },
 
@@ -365,7 +421,10 @@ export const lesson2: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "10 > 5",
           alternateAnswers: ["10>5"],
-          expect: "True"
+          expect: "True",
+          en: {
+            task: "Print 10 > 5"
+          }
         }
       },
 
@@ -377,7 +436,10 @@ export const lesson2: LessonData = {
           template: { before: "print(", after: ")" },
           answer: "1 > 100",
           alternateAnswers: ["1>100"],
-          expect: "False"
+          expect: "False",
+          en: {
+            task: "Print 1 > 100"
+          }
         }
       },
 
@@ -393,7 +455,16 @@ export const lesson2: LessonData = {
             "c만 에러"
           ],
           answer: 1,
-          explanation: "true는 에러! 대문자 T로 True라고 써야 해!"
+          explanation: "true는 에러! 대문자 T로 True라고 써야 해!",
+          en: {
+            question: "Which one causes an error?",
+            options: [
+              "Only a is error",
+              "Only b is error",
+              "Only c is error"
+            ],
+            explanation: "true causes an error! You must write True with capital T!"
+          }
         }
       },
 
@@ -432,7 +503,11 @@ export const lesson2: LessonData = {
           task: "숫자 100을 출력해봐",
           template: null,
           answer: "print(100)",
-          expect: "100"
+          expect: "100",
+          en: {
+            message: "Remember printing 100?",
+            task: "Print the number 100"
+          }
         }
       },
 
@@ -497,7 +572,16 @@ export const lesson2: LessonData = {
             "<class 'float'>"
           ],
           answer: 1,
-          explanation: "'100'은 따옴표가 있으니까 문자열(str)이야!"
+          explanation: "'100'은 따옴표가 있으니까 문자열(str)이야!",
+          en: {
+            question: "What is the result of type('100')?",
+            options: [
+              "<class 'int'>",
+              "<class 'str'>",
+              "<class 'float'>"
+            ],
+            explanation: "'100' has quotes so it's a string (str)!"
+          }
         }
       },
 
@@ -511,7 +595,16 @@ export const lesson2: LessonData = {
             "<class 'float'>"
           ],
           answer: 0,
-          explanation: "100은 따옴표가 없으니까 정수(int)야!"
+          explanation: "100은 따옴표가 없으니까 정수(int)야!",
+          en: {
+            question: "What is the result of type(100)?",
+            options: [
+              "<class 'int'>",
+              "<class 'str'>",
+              "<class 'float'>"
+            ],
+            explanation: "100 has no quotes so it's an integer (int)!"
+          }
         }
       },
 

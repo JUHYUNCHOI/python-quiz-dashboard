@@ -55,7 +55,11 @@ export const lessonCpp20: LessonData = {
           guide: "bits/stdc++.h를 include 해요!",
           template: "#include <___>",
           answer: "bits/stdc++.h",
-          expect: "#include <bits/stdc++.h>"
+          expect: "#include <bits/stdc++.h>",
+          en: {
+            task: "Write the all-in-one competition header!",
+            guide: "Include bits/stdc++.h!"
+          }
         }
       },
 
@@ -71,7 +75,17 @@ export const lessonCpp20: LessonData = {
             "endl은 C++에서 없어질 예정이라"
           ],
           answer: 1,
-          explanation: "endl은 줄바꿈 + 버퍼 flush를 하지만, '\\n'은 줄바꿈만 해서 빨라요!"
+          explanation: "endl은 줄바꿈 + 버퍼 flush를 하지만, '\\n'은 줄바꿈만 해서 빨라요!",
+          en: {
+            question: "Why use '\\n' instead of endl in competitive programming?",
+            options: [
+              "endl causes errors",
+              "endl flushes the buffer and is slow",
+              "'\\n' is shorter to type",
+              "endl is scheduled to be removed from C++"
+            ],
+            explanation: "endl does newline + buffer flush, but '\\n' only does newline — which is faster!"
+          }
         }
       },
 

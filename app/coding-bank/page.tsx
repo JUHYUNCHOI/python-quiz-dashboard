@@ -6,6 +6,7 @@ import { BottomNav } from "@/components/bottom-nav"
 import { RequireAuth } from "@/components/require-auth"
 import { useAuth } from "@/contexts/auth-context"
 import { useLanguage } from "@/contexts/language-context"
+import { LanguageToggle } from "@/components/language-toggle"
 import { cn } from "@/lib/utils"
 import {
   Lock,
@@ -125,14 +126,17 @@ function ProblemList({
   return (
     <div className="flex flex-col gap-4 pb-24">
       {/* 헤더 */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">{t("코딩 뱅크", "Coding Bank")}</h1>
-        <p className="text-gray-500 text-sm mt-1">
-          {t(
-            "알고리즘 없이, 배운 STL만으로 도전하는 복합 문제",
-            "Complex problems solvable with just STL — no algorithms needed"
-          )}
-        </p>
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">{t("코딩 뱅크", "Coding Bank")}</h1>
+          <p className="text-gray-500 text-sm mt-1">
+            {t(
+              "알고리즘 없이, 배운 STL만으로 도전하는 복합 문제",
+              "Complex problems solvable with just STL — no algorithms needed"
+            )}
+          </p>
+        </div>
+        <LanguageToggle className="shrink-0 mt-1" />
       </div>
 
       {/* 진도 바 */}

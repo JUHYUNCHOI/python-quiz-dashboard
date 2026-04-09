@@ -70,7 +70,11 @@ export const lessonCpp19: LessonData = {
           guide: "파일 스트림을 쓰려면 어떤 헤더가 필요할까요?",
           template: "#include <___>",
           answer: "fstream",
-          expect: "#include <fstream>"
+          expect: "#include <fstream>",
+          en: {
+            task: "Include the file I/O header!",
+            guide: "What header is needed for file streams?"
+          }
         }
       },
 
@@ -83,7 +87,11 @@ export const lessonCpp19: LessonData = {
           guide: "output file stream의 줄임말이에요!",
           template: '___ fout("output.txt");',
           answer: "ofstream",
-          expect: 'ofstream fout("output.txt");'
+          expect: 'ofstream fout("output.txt");',
+          en: {
+            task: "Create a stream for writing to a file!",
+            guide: "It's short for output file stream!"
+          }
         }
       },
 
@@ -94,7 +102,12 @@ export const lessonCpp19: LessonData = {
           question: "파일에서 데이터를 읽어오는 스트림은?",
           options: ["ofstream", "ifstream", "fstream", "iostream"],
           answer: 1,
-          explanation: "ifstream = input file stream! 파일에서 읽어오는 스트림이에요."
+          explanation: "ifstream = input file stream! 파일에서 읽어오는 스트림이에요.",
+          en: {
+            question: "Which stream is used to read data from a file?",
+            options: ["ofstream", "ifstream", "fstream", "iostream"],
+            explanation: "ifstream = input file stream! It's the stream for reading from a file."
+          }
         }
       },
 
@@ -110,7 +123,16 @@ export const lessonCpp19: LessonData = {
             "ofstream 대신 ifstream을 써야 함"
           ],
           answer: 0,
-          explanation: "파일을 다 쓴 후 fout.close()를 호출해야 안전하게 저장돼요!"
+          explanation: "파일을 다 쓴 후 fout.close()를 호출해야 안전하게 저장돼요!",
+          en: {
+            question: "What is wrong with this code?",
+            options: [
+              "Not calling fout.close() may prevent the file from being saved properly",
+              "Should use \\n instead of endl",
+              "Should use ifstream instead of ofstream"
+            ],
+            explanation: "After writing to a file, you need to call fout.close() to ensure it is saved safely!"
+          }
         }
       },
 
@@ -124,7 +146,11 @@ export const lessonCpp19: LessonData = {
           template: 'ifstream fin("input.txt");\nint n;\n___ >> ___;',
           answer: "fin",
           blanksAnswer: ["fin", "n"],
-          expect: 'ifstream fin("input.txt");\nint n;\nfin >> n;'
+          expect: 'ifstream fin("input.txt");\nint n;\nfin >> n;',
+          en: {
+            task: "Read an integer from a file!",
+            guide: "Use fin >> just like cin >>!"
+          }
         }
       },
 
@@ -173,7 +199,11 @@ export const lessonCpp19: LessonData = {
           task: "파일 입출력 헤더 이름은?",
           template: "#include <___>",
           answer: "fstream",
-          expect: "#include <fstream>"
+          expect: "#include <fstream>",
+          en: {
+            message: "Quick check! Do you remember what we learned earlier?",
+            task: "What is the name of the file I/O header?"
+          }
         }
       },
 
@@ -203,7 +233,17 @@ export const lessonCpp19: LessonData = {
             "endl을 자동으로 넣어준다"
           ],
           answer: 1,
-          explanation: "C의 scanf/printf와 C++의 cin/cout 사이 동기화를 끊어서 cin/cout이 훨씬 빨라져요!"
+          explanation: "C의 scanf/printf와 C++의 cin/cout 사이 동기화를 끊어서 cin/cout이 훨씬 빨라져요!",
+          en: {
+            question: "What does ios::sync_with_stdio(false) do?",
+            options: [
+              "Disables cin/cout",
+              "Breaks the synchronization between C and C++ I/O to speed things up",
+              "Enables file input/output",
+              "Automatically inserts endl"
+            ],
+            explanation: "Breaking the sync between C's scanf/printf and C++'s cin/cout makes cin/cout much faster!"
+          }
         }
       },
 
@@ -219,7 +259,17 @@ export const lessonCpp19: LessonData = {
             "cout의 버퍼를 비운다"
           ],
           answer: 1,
-          explanation: "cin.tie(NULL)은 cin과 cout의 연결을 끊어서 불필요한 flush를 막아요!"
+          explanation: "cin.tie(NULL)은 cin과 cout의 연결을 끊어서 불필요한 flush를 막아요!",
+          en: {
+            question: "What does cin.tie(NULL) do?",
+            options: [
+              "Disables cin",
+              "Unties cin from cout to prevent unnecessary flushes",
+              "Makes cin use scanf instead",
+              "Clears the cout buffer"
+            ],
+            explanation: "cin.tie(NULL) unties cin from cout to prevent unnecessary flushes!"
+          }
         }
       },
 
@@ -232,7 +282,11 @@ export const lessonCpp19: LessonData = {
           guide: "ios::sync_with_stdio에 false를 넣어요!",
           template: "ios::sync_with_stdio(___);",
           answer: "false",
-          expect: "ios::sync_with_stdio(false);"
+          expect: "ios::sync_with_stdio(false);",
+          en: {
+            task: "Write the code that breaks C/C++ synchronization!",
+            guide: "Pass false to ios::sync_with_stdio!"
+          }
         }
       },
 
@@ -246,7 +300,11 @@ export const lessonCpp19: LessonData = {
           template: "cin.tie(___);",
           answer: "NULL",
           alternateAnswers: ["nullptr", "0"],
-          expect: "cin.tie(NULL);"
+          expect: "cin.tie(NULL);",
+          en: {
+            task: "Untie cin from cout!",
+            guide: "Pass NULL to cin.tie!"
+          }
         }
       },
 
@@ -276,7 +334,17 @@ export const lessonCpp19: LessonData = {
             "endl은 C++20부터 사라져서"
           ],
           answer: 1,
-          explanation: "endl은 줄바꿈 + flush를 하지만, \"\\n\"은 줄바꿈만 해서 빨라요!"
+          explanation: "endl은 줄바꿈 + flush를 하지만, \"\\n\"은 줄바꿈만 해서 빨라요!",
+          en: {
+            question: "Why use \"\\n\" instead of endl in competitive programming?",
+            options: [
+              "endl causes errors",
+              "endl flushes the buffer and is slow",
+              "\\n looks better",
+              "endl is being removed from C++20"
+            ],
+            explanation: "endl does newline + flush, but \"\\n\" only does newline — which is faster!"
+          }
         }
       },
 
@@ -303,7 +371,11 @@ export const lessonCpp19: LessonData = {
           template: 'freopen("input.txt", "___", ___);',
           answer: "r",
           blanksAnswer: ["r", "stdin"],
-          expect: 'freopen("input.txt", "r", stdin);'
+          expect: 'freopen("input.txt", "r", stdin);',
+          en: {
+            task: "Make cin read from input.txt!",
+            guide: "Use the form freopen(filename, mode, stdin)!"
+          }
         }
       },
 
@@ -319,7 +391,16 @@ export const lessonCpp19: LessonData = {
             "freopen은 C++에서 못 써요"
           ],
           answer: 0,
-          explanation: "출력 파일에는 \"w\"(write) 모드를 써야 해요! \"r\"은 읽기(read) 모드예요."
+          explanation: "출력 파일에는 \"w\"(write) 모드를 써야 해요! \"r\"은 읽기(read) 모드예요.",
+          en: {
+            question: "What is wrong with this code?",
+            options: [
+              "Should use \"w\" mode for writing to output.txt",
+              "Should use stdin instead of stdout",
+              "freopen cannot be used in C++"
+            ],
+            explanation: "For an output file, use \"w\" (write) mode! \"r\" is for reading (read mode)."
+          }
         }
       },
 
@@ -370,7 +451,11 @@ export const lessonCpp19: LessonData = {
           alternateAnswers: [
             "ios::sync_with_stdio(false)"
           ],
-          expect: "ios::sync_with_stdio(false);"
+          expect: "ios::sync_with_stdio(false);",
+          en: {
+            message: "Quick check! Do you remember the two Fast I/O lines?",
+            task: "Write the code that breaks C/C++ synchronization!"
+          }
         }
       },
 

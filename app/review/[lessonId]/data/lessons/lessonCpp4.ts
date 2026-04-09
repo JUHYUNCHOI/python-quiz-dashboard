@@ -56,7 +56,11 @@ export const lessonCpp4: LessonData = {
           guide: "cin >> 변수이름; 형태!",
           template: "___ >> age;",
           answer: "cin",
-          expect: "cin >> age;"
+          expect: "cin >> age;",
+          en: {
+            task: "Read the age as input!",
+            guide: "Use the form: cin >> variableName;"
+          }
         }
       },
 
@@ -83,7 +87,11 @@ export const lessonCpp4: LessonData = {
           template: "double height;\ncin ___ ___;",
           answer: ">>",
           blanksAnswer: [">>", "height"],
-          expect: "double height;\ncin >> height;"
+          expect: "double height;\ncin >> height;",
+          en: {
+            task: "Read the height as input!",
+            guide: "Use the form: cin >> variable;"
+          }
         }
       },
 
@@ -117,7 +125,16 @@ export const lessonCpp4: LessonData = {
             "cout은 큰 값, cin은 작은 값이라서"
           ],
           answer: 0,
-          explanation: "<< 는 '보내다' (변수 → 화면), >> 는 '받다' (키보드 → 변수)! 화살표 방향을 생각하면 쉬워요!"
+          explanation: "<< 는 '보내다' (변수 → 화면), >> 는 '받다' (키보드 → 변수)! 화살표 방향을 생각하면 쉬워요!",
+          en: {
+            question: "Why do cout << and cin >> have opposite arrow directions?",
+            options: [
+              "cout sends to screen (<<), cin receives into variable (>>)",
+              "Just a rule",
+              "cout is for large values, cin for small values"
+            ],
+            explanation: "<< means 'send' (variable → screen), >> means 'receive' (keyboard → variable)! Think of the arrow direction!"
+          }
         }
       },
 
@@ -133,7 +150,16 @@ export const lessonCpp4: LessonData = {
             "cout이 잘못돼서"
           ],
           answer: 0,
-          explanation: "cin은 >> (받는 방향)을 써야 해요! cin >> num; 이 맞아요."
+          explanation: "cin은 >> (받는 방향)을 써야 해요! cin >> num; 이 맞아요.",
+          en: {
+            question: "What is the problem with this code?",
+            options: [
+              "cin should use >> not <<",
+              "num is not initialized",
+              "cout is wrong"
+            ],
+            explanation: "cin needs >> (receiving direction)! cin >> num; is correct."
+          }
         }
       },
 

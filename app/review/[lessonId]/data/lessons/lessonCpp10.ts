@@ -355,7 +355,11 @@ export const lessonCpp10: LessonData = {
           guide: "원본을 수정하려면 & 가 필요해요!",
           template: "for (___& x : v) {\n    x = x + 10;\n}",
           answer: "auto",
-          expect: "for (auto& x : v) {\n    x = x + 10;\n}"
+          expect: "for (auto& x : v) {\n    x = x + 10;\n}",
+          en: {
+            task: "Complete the code to add 10 to every element in the vector!",
+            guide: "You need & to modify the original values!"
+          }
         }
       },
 
@@ -371,7 +375,16 @@ export const lessonCpp10: LessonData = {
             "x = x * 10 문법이 틀렸어요"
           ],
           answer: 0,
-          explanation: "auto는 복사본이에요! 원본을 바꾸려면 auto& x 로 써야 해요. 지금은 v[0]이 여전히 1이에요."
+          explanation: "auto는 복사본이에요! 원본을 바꾸려면 auto& x 로 써야 해요. 지금은 v[0]이 여전히 1이에요.",
+          en: {
+            question: "What is wrong with this code?",
+            options: [
+              "auto is a copy, so the original v is not changed (v[0] is still 1)",
+              "Should use int instead of auto",
+              "x = x * 10 syntax is wrong"
+            ],
+            explanation: "auto is a copy! To modify the original, use auto& x instead. Currently v[0] is still 1."
+          }
         }
       },
 
@@ -420,7 +433,11 @@ export const lessonCpp10: LessonData = {
           task: "벡터의 모든 값을 2배로 만드는 for 문의 빈칸을 채워요!",
           template: "for (auto___ x : v) {\n    x = x * 2;\n}",
           answer: "&",
-          expect: "for (auto& x : v) {\n    x = x * 2;\n}"
+          expect: "for (auto& x : v) {\n    x = x * 2;\n}",
+          en: {
+            message: "Quick! Remember how to modify originals with auto&?",
+            task: "Fill in the blank to double every value in the vector!"
+          }
         }
       },
 

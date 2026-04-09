@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { useLanguage } from "@/contexts/language-context"
+import { LanguageToggle } from "@/components/language-toggle"
 import { useAuth } from "@/contexts/auth-context"
 import { ALL_TOPICS } from "@/data/algorithm/topics"
 
@@ -321,14 +322,17 @@ export default function QuestPage() {
       <main className="max-w-3xl mx-auto px-4 pt-6 pb-28">
 
         {/* Page header */}
-        <div className="mb-6">
-          <div className="flex items-center gap-3 mb-1">
-            <span className="text-4xl">⚔️</span>
-            <h1 className="text-3xl font-black">CodeQuest</h1>
+        <div className="mb-6 flex items-start justify-between gap-3">
+          <div>
+            <div className="flex items-center gap-3 mb-1">
+              <span className="text-4xl">⚔️</span>
+              <h1 className="text-3xl font-black">CodeQuest</h1>
+            </div>
+            <p className="text-gray-600 font-semibold text-sm">
+              {t("인터랙티브 알고리즘 풀이", "Interactive algorithm problem walkthroughs")}
+            </p>
           </div>
-          <p className="text-gray-600 font-semibold text-sm">
-            {t("인터랙티브 알고리즘 풀이", "Interactive algorithm problem walkthroughs")}
-          </p>
+          <LanguageToggle className="shrink-0 mt-1" />
         </div>
 
         {/* Overall progress bar */}

@@ -73,7 +73,17 @@ print(y)`,
           "불가능"
         ],
         answer: 1,
-        explanation: "global 키워드를 쓰면 수정 가능! 하지만 return 쓰는 게 더 좋아요 👍"
+        explanation: "global 키워드를 쓰면 수정 가능! 하지만 return 쓰는 게 더 좋아요 👍",
+        en: {
+          question: "How do you modify a global variable inside a function?",
+          options: [
+            "Just use variable = value",
+            "Use global variable_name",
+            "Only possible from outside",
+            "Impossible"
+          ],
+          explanation: "Using the global keyword makes it possible! But using return is better practice 👍"
+        }
       }
     },
     
@@ -87,6 +97,11 @@ print(y)`,
         hint: "count = count + 1 하고 print!",
         template: null,
         answer: "count = 0\n\ndef increase():\n    count = 1\n    print(f'함수 안: {count}')\n\nincrease()\nprint(f'함수 밖: {count}')",
+        en: {
+          task: "Create a function that increments count by 1 inside the function and prints it",
+          guide: "Handle count as a local variable inside the function!",
+          hint: "Set count = count + 1 then print!"
+        },
         alternateAnswers: [
           "count = 0\ndef increase():\n    count = 1\n    print(f'함수 안: {count}')\nincrease()\nprint(f'함수 밖: {count}')"
         ],
@@ -162,6 +177,11 @@ print(double(7))`,
         hint: "곱하기 연산자 *를 사용!",
         template: null,
         answer: "triple = lambda x: x * 3\n\nprint(triple(5))\nprint(triple(10))",
+        en: {
+          task: "Create a lambda function called triple that multiplies a number by 3",
+          guide: "lambda x: x * 3",
+          hint: "Use the multiplication operator *!"
+        },
         alternateAnswers: [
           "triple = lambda x: x * 3\nprint(triple(5))\nprint(triple(10))"
         ],
@@ -179,6 +199,11 @@ print(double(7))`,
         hint: "쉼표로 매개변수 2개를 받아요!",
         template: null,
         answer: "add = lambda a, b: a + b\n\nprint(add(3, 5))\nprint(add(10, 20))",
+        en: {
+          task: "Create a lambda function called add that returns the sum of two numbers",
+          guide: "Two parameters: lambda a, b: ...",
+          hint: "Accept two parameters separated by a comma!"
+        },
         alternateAnswers: [
           "add = lambda a, b: a + b\nprint(add(3, 5))\nprint(add(10, 20))"
         ],
@@ -196,6 +221,11 @@ print(double(7))`,
         hint: "나머지 연산자 %를 사용!",
         template: null,
         answer: "is_odd = lambda x: x % 2 == 1\n\nprint(is_odd(7))\nprint(is_odd(4))",
+        en: {
+          task: "Create a lambda function called is_odd that returns True for odd numbers and False for even",
+          guide: "x % 2 == 1 means odd!",
+          hint: "Use the modulo operator %!"
+        },
         alternateAnswers: [
           "is_odd = lambda x: x % 2 == 1\nprint(is_odd(7))\nprint(is_odd(4))",
           "is_odd = lambda x: x % 2 != 0\n\nprint(is_odd(7))\nprint(is_odd(4))"
@@ -270,6 +300,11 @@ print(결과)`,
         hint: "x[1]이 점수예요!",
         template: null,
         answer: "학생 = [('철수', 85), ('영희', 92), ('민수', 78)]\n\n결과 = sorted(학생, key=lambda x: x[1])\nprint(결과)",
+        en: {
+          task: "Sort the student data in ascending order by score",
+          guide: "key=lambda x: x[1]",
+          hint: "x[1] is the score!"
+        },
         alternateAnswers: [
           "학생 = [('철수', 85), ('영희', 92), ('민수', 78)]\n결과 = sorted(학생, key=lambda x: x[1])\nprint(결과)"
         ],
@@ -287,6 +322,11 @@ print(결과)`,
         hint: "key=lambda x: x[1], reverse=True",
         template: null,
         answer: "학생 = [('철수', 85), ('영희', 92), ('민수', 78)]\n\n결과 = sorted(학생, key=lambda x: x[1], reverse=True)\nprint(결과)",
+        en: {
+          task: "Sort the student data in descending order by score",
+          guide: "Add reverse=True!",
+          hint: "key=lambda x: x[1], reverse=True"
+        },
         alternateAnswers: [
           "학생 = [('철수', 85), ('영희', 92), ('민수', 78)]\n결과 = sorted(학생, key=lambda x: x[1], reverse=True)\nprint(결과)"
         ],
@@ -304,6 +344,11 @@ print(결과)`,
         hint: "key=lambda x: len(x)",
         template: null,
         answer: "단어 = ['apple', 'hi', 'banana', 'cat']\n\n결과 = sorted(단어, key=lambda x: len(x))\nprint(결과)",
+        en: {
+          task: "Sort the words by their length",
+          guide: "len(x) is the string length!",
+          hint: "key=lambda x: len(x)"
+        },
         alternateAnswers: [
           "단어 = ['apple', 'hi', 'banana', 'cat']\n결과 = sorted(단어, key=lambda x: len(x))\nprint(결과)"
         ],
@@ -320,6 +365,11 @@ print(결과)`,
         hint: "lambda a, b: a * b",
         template: null,
         answer: "multiply = lambda a, b: a * b\n\nprint(multiply(3, 5))",
+        en: {
+          message: "🔄 Quick review! Lambda functions!",
+          task: "Create a lambda function called multiply that returns the product of two numbers",
+          hint: "lambda a, b: a * b"
+        },
         alternateAnswers: [
           "multiply = lambda a, b: a * b\nprint(multiply(3, 5))"
         ],
@@ -404,6 +454,11 @@ print(두배후제곱(3))`,
         hint: "함수 안에서 다른 함수 호출!",
         template: null,
         answer: "def 섭씨to화씨(c):\n    return c * 9/5 + 32\n\ndef 온도출력():\n    print(f'0°C = {섭씨to화씨(0)}°F')\n    print(f'100°C = {섭씨to화씨(100)}°F')\n\n온도출력()",
+        en: {
+          task: "Create a Celsius-to-Fahrenheit conversion function and another that uses it to convert 0~100 degrees",
+          guide: "Fahrenheit = Celsius * 9/5 + 32",
+          hint: "Call another function inside a function!"
+        },
         alternateAnswers: [
           "def 섭씨to화씨(c):\n    return c * 9/5 + 32\ndef 온도출력():\n    print(f'0°C = {섭씨to화씨(0)}°F')\n    print(f'100°C = {섭씨to화씨(100)}°F')\n온도출력()"
         ],

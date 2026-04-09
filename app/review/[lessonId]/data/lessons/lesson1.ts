@@ -908,7 +908,10 @@ export const lesson1: LessonData = {
           alternateAnswers: [
             "print('===점수===')\nprint('국어: 90')\nprint('수학: 85')"
           ],
-          expect: "===점수===\n국어: 90\n수학: 85"
+          expect: "===점수===\n국어: 90\n수학: 85",
+          en: {
+            task: "Make it print like this\n===점수===\n국어: 90\n수학: 85"
+          }
         }
       },
 
@@ -924,7 +927,11 @@ export const lesson1: LessonData = {
           alternateAnswers: [
             "print('치킨: 18000 원')\nprint('콜라: 2000 원')\nprint('합계: 20000 원')"
           ],
-          expect: "치킨: 18000 원\n콜라: 2000 원\n합계: 20000 원"
+          expect: "치킨: 18000 원\n콜라: 2000 원\n합계: 20000 원",
+          en: {
+            task: "Make it print like this\n치킨: 18000 원\n콜라: 2000 원\n합계: 20000 원",
+            guide: "Use a calculation for the last line! print('합계:', 18000 + 2000, '원')"
+          }
         }
       },
 
@@ -941,7 +948,11 @@ export const lesson1: LessonData = {
             "print('5 * 1 =', 5 * 1)\nprint('5 * 2 =', 5 * 2)\nprint('5 * 3 =', 5 * 3)",
             "print('5 * 1 = 5')\nprint('5 * 2 = 10')\nprint('5 * 3 = 15')"
           ],
-          expect: "5 * 1 = 5\n5 * 2 = 10\n5 * 3 = 15"
+          expect: "5 * 1 = 5\n5 * 2 = 10\n5 * 3 = 15",
+          en: {
+            task: "Print the first 3 lines of the 5 times table\n5 * 1 = 5\n5 * 2 = 10\n5 * 3 = 15",
+            guide: "Use print('5 * 1 =', 5*1) format!"
+          }
         }
       },
 
@@ -957,7 +968,16 @@ export const lesson1: LessonData = {
             "두 코드는 같은 결과다"
           ],
           answer: 0,
-          explanation: "따옴표 안 = 글자 그대로 출력. 따옴표 밖 = 실제 계산해서 출력!"
+          explanation: "따옴표 안 = 글자 그대로 출력. 따옴표 밖 = 실제 계산해서 출력!",
+          en: {
+            question: "Why do the two codes produce different output?",
+            options: [
+              "Inside quotes prints text literally, outside quotes calculates",
+              "print only calculates numbers",
+              "Both codes produce the same result"
+            ],
+            explanation: "Inside quotes = prints text as-is. Outside quotes = calculates and prints the result!"
+          }
         }
       },
 
