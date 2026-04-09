@@ -279,7 +279,7 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
         </div>
       )}
 
-      {/* 힌트 */}
+      {/* 힌트 — problem은 이미 localize된 상태로 전달됨 */}
       {(problem.hints ?? []).length > 0 && (
         <div className="flex flex-col gap-2">
           {(problem.hints ?? []).slice(0, hintsShown).map((hint, i) => (

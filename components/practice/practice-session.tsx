@@ -595,19 +595,9 @@ export function PracticeSession({
                 {t("세트", "Set")} {currentSet}{isRetryMode ? ` (${t("재시도", "retry")})` : ""}
               </span>
             </span>
-            <div className="flex items-center gap-2">
-              {index > 0 && (
-                <button
-                  onClick={handlePrev}
-                  className="text-xs text-gray-400 hover:text-gray-600 px-2 py-0.5 rounded-lg hover:bg-gray-100 transition-colors"
-                >
-                  ← {t("이전", "Prev")}
-                </button>
-              )}
-              <span className="text-xs text-gray-400 font-medium tabular-nums">
-                {index + 1} / {roundProblems.length}
-              </span>
-            </div>
+            <span className="text-xs text-gray-400 font-medium tabular-nums">
+              {index + 1} / {roundProblems.length}
+            </span>
           </div>
           {/* 진도 도트 */}
           <div className="flex items-center gap-1.5 flex-wrap">
@@ -665,7 +655,7 @@ export function PracticeSession({
           <>
             {current.description && (
               <div className="rounded-2xl bg-white border border-gray-200 shadow-sm px-5 py-4 mb-3">
-                <DescriptionBlock text={current.description} />
+                <DescriptionBlock text={current.description ?? ""} />
                 {current.constraints && (
                   <p className="text-gray-400 text-xs mt-3 pt-3 border-t border-gray-100">
                     {current.constraints}
@@ -700,13 +690,21 @@ export function PracticeSession({
         )
       }
 
-      {/* 다음 버튼 */}
-      <div className="mt-5">
+      {/* 하단 네비게이션 */}
+      <div className="mt-5 flex gap-2">
+        {index > 0 && (
+          <button
+            onClick={handlePrev}
+            className="px-4 py-3.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold text-sm transition-colors shrink-0"
+          >
+            ← {t("이전", "Prev")}
+          </button>
+        )}
         {(canAdvance || !isMcq) && (
           <button
             onClick={handleNext}
             disabled={isSaving}
-            className="w-full py-3.5 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm transition-colors disabled:opacity-50"
+            className="flex-1 py-3.5 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm transition-colors disabled:opacity-50"
           >
             {index + 1 >= roundProblems.length
               ? (isSaving ? t("저장 중...", "Saving...") : t("🏁 결과 보기", "🏁 See results"))
