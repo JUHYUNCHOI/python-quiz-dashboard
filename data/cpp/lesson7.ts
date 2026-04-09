@@ -303,7 +303,7 @@ while (true) {
 - **2번** → \`현재 HP: 100\`
 - **3번** → 반복 종료 후 \`도망쳤다...\`
 
-do-while 골격은 이미 있어요 — if/else 부분을 채워보세요!`,
+do-while 골격은 이미 있어요 — 선택에 따른 출력을 채워보세요!`,
           starterCode: `#include <iostream>
 using namespace std;
 
@@ -318,11 +318,8 @@ int main() {
         cout << "선택: ";
         cin >> choice;
 
-        if (choice == 1) {
-            // 여기에 코드를 작성하세요
-        } else if (choice == 2) {
-            // 여기에 코드를 작성하세요
-        }
+        // 여기에 if/else로 choice에 따른 출력을 작성하세요
+
     } while (choice != 3);
 
     cout << "도망쳤다..." << endl;

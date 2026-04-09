@@ -3,7 +3,7 @@
 import { useState, useEffect, use, useCallback, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { RequireAuth } from "@/components/require-auth"
-import { ChevronRight, ChevronLeft, X, Lock, PartyPopper, RotateCcw, LogIn, Pencil } from "lucide-react"
+import { ChevronRight, ChevronLeft, X, Lock, PartyPopper, RotateCcw, LogIn, Pencil, Code2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
 import { LanguageToggle } from "@/components/language-toggle"
@@ -32,6 +32,7 @@ import { StepEditor } from "@/components/learn/step-editor"
 import { lessonsData, bilingualLessons, lessonVariants } from "@/components/learn/lesson-registry"
 import type { LessonStep } from "@/components/learn/types"
 import { ALL_CLUSTERS } from "@/data/practice"
+import { TeacherLiveEditor } from "@/components/teacher/live-editor"
 
 // ── 다음 레슨 ID 계산 ──────────────────────────────────────────────────
 function getNextLessonId(currentId: string): string | null {
@@ -106,6 +107,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const [showChapterList, setShowChapterList] = useState(false)
   const [stepOverrides, setStepOverrides] = useState<Record<string, Partial<LessonStep>>>({})
   const [editingStep, setEditingStep] = useState<LessonStep | null>(null)
+  const [showLiveEditor, setShowLiveEditor] = useState(false)
 
   // 레슨 오버라이드 로드
   useEffect(() => {
@@ -928,6 +930,21 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
               <div className="flex items-center gap-2">
                 {hasVariants && <LibraryToggle variant={variant} setVariant={handleVariantChange} />}
                 <SoundToggle isMuted={isMuted} onToggle={toggleMute} />
+                {effectiveTeacher && (
+                  <button
+                    onClick={() => setShowLiveEditor(v => !v)}
+                    className={cn(
+                      "flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold transition-colors border",
+                      showLiveEditor
+                        ? "bg-indigo-600 text-white border-indigo-500"
+                        : "bg-gray-100 hover:bg-indigo-50 text-gray-600 hover:text-indigo-600 border-gray-200"
+                    )}
+                    title="라이브 에디터 열기"
+                  >
+                    <Code2 className="w-3.5 h-3.5" />
+                    <span className="hidden sm:inline">에디터</span>
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -1070,6 +1087,12 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             [editingStep.id]: { ...(prev[editingStep.id] ?? {}), [lang]: { ...(prev[editingStep.id]?.[lang] ?? {}), ...overrides } }
           }))
         }}
+      />
+    )}
+    {showLiveEditor && effectiveTeacher && (
+      <TeacherLiveEditor
+        defaultLang={currentProgrammingLang === "python" ? "python" : "cpp"}
+        onClose={() => setShowLiveEditor(false)}
       />
     )}
     </CodeSubmissionProvider>
