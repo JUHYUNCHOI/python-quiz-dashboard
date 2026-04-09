@@ -124,6 +124,8 @@ function McqStep({
 // ─────────────────────────────────────────────────────────────
 // Practice / Interleaving (fill-in-blank or write code)
 // ─────────────────────────────────────────────────────────────
+const BLANK_LABELS = ["①", "②", "③", "④", "⑤"]
+
 function PracticeStep({
   content,
   onCorrect,
@@ -135,18 +137,31 @@ function PracticeStep({
 }) {
   const { t, lang: curLang } = useLanguage()
   const isEn = curLang === "en"
-  const [input, setInput] = useState("")
+
+  const isFullCode = content.template === null
+  const template = typeof content.template === "string" ? content.template : ""
+  // 빈칸 개수 카운트
+  const blankCount = isFullCode ? 0 : (template.match(/___/g) || []).length
+  const isMultiBlank = blankCount > 1
+
+  // 빈칸 개수에 따라 inputs 배열 or 단일 string 관리
+  const [inputs, setInputs] = useState<string[]>(() => Array(Math.max(blankCount, 1)).fill(""))
   const [result, setResult] = useState<"idle" | "correct" | "wrong">("idle")
   const [showHint, setShowHint] = useState(false)
-  const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null)
-  const isBlank = typeof content.template === "string" && content.template.includes("___")
-  const isFullCode = content.template === null
+  const firstInputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null)
 
-  useEffect(() => { inputRef.current?.focus() }, [])
+  useEffect(() => { firstInputRef.current?.focus() }, [])
+
+  // answer: "1, <=" 형태를 개별 블랭크로 분리
+  const expectedParts = content.answer.split(",").map(s => s.trim())
 
   const check = () => {
-    if (!input.trim()) return
-    if (isAnswerCorrect(input, content)) {
+    const combined = isMultiBlank
+      ? inputs.map(s => s.trim()).join(", ")
+      : inputs[0]
+    if (!combined.trim()) return
+
+    if (isAnswerCorrect(combined, content)) {
       setResult("correct")
       onCorrect()
     } else {
@@ -156,10 +171,10 @@ function PracticeStep({
   }
 
   const retry = () => {
-    setInput("")
+    setInputs(Array(Math.max(blankCount, 1)).fill(""))
     setResult("idle")
     setShowHint(false)
-    setTimeout(() => inputRef.current?.focus(), 50)
+    setTimeout(() => firstInputRef.current?.focus(), 50)
   }
 
   // EN 필드 우선 (없으면 KO fallback)
@@ -170,6 +185,12 @@ function PracticeStep({
   const hint = isEn && content.en?.hint
     ? content.en.hint
     : "hint" in content ? (content as { hint?: string }).hint : undefined
+
+  // 템플릿에서 ___ 자리에 ①② 번호 표시
+  const numberedTemplate = (() => {
+    let n = 0
+    return template.replace(/___/g, () => `___${BLANK_LABELS[n++] ?? ""}`)
+  })()
 
   return (
     <div className="flex flex-col gap-3">
@@ -187,51 +208,80 @@ function PracticeStep({
       <p className="font-semibold text-gray-800">{task}</p>
       {guide && <p className="text-xs text-gray-500">{guide}</p>}
 
-      {/* Template display */}
+      {/* 템플릿: 빈칸에 번호 표시 */}
       {typeof content.template === "string" && (
         <pre className="rounded-xl bg-[#1a1b2e] px-4 py-3 font-mono text-sm text-[#cdd6f4] overflow-x-auto leading-6 whitespace-pre-wrap">
-          {typeof content.template === "string"
-            ? (content.template as string).replace(/___/g, "___")
-            : ""}
+          {numberedTemplate}
         </pre>
       )}
 
-      {/* Expected result preview */}
-      {content.expect && (
-        <p className="text-xs text-gray-400">
-          {t("완성 코드:", "Complete as:")} <code className="bg-gray-100 px-1 rounded text-gray-700 font-mono">{content.expect}</code>
-        </p>
-      )}
-
+      {/* 입력 영역 */}
       {result === "idle" && (
-        <div className="flex gap-2">
+        <div className="flex flex-col gap-2">
           {isFullCode ? (
-            <textarea
-              ref={inputRef as React.RefObject<HTMLTextAreaElement>}
-              value={input}
-              onChange={e => setInput(e.target.value)}
-              placeholder={t("코드를 작성하세요...", "Write your code...")}
-              rows={3}
-              className="flex-1 rounded-xl border border-gray-200 px-3 py-2 font-mono text-sm focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200 resize-none"
-            />
+            <div className="flex gap-2">
+              <textarea
+                ref={firstInputRef as React.RefObject<HTMLTextAreaElement>}
+                value={inputs[0]}
+                onChange={e => setInputs([e.target.value])}
+                placeholder={t("코드를 작성하세요...", "Write your code...")}
+                rows={3}
+                className="flex-1 rounded-xl border border-gray-200 px-3 py-2 font-mono text-sm focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200 resize-none"
+              />
+              <button
+                onClick={check}
+                disabled={!inputs[0].trim()}
+                className="px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm disabled:opacity-40 transition-colors shrink-0 self-end"
+              >
+                {t("확인", "Check")}
+              </button>
+            </div>
+          ) : isMultiBlank ? (
+            // 빈칸 여러 개: 각각 따로 입력창
+            <div className="flex flex-col gap-2">
+              {Array.from({ length: blankCount }).map((_, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <span className="text-sm font-bold text-indigo-400 w-5 shrink-0">{BLANK_LABELS[i]}</span>
+                  <input
+                    ref={i === 0 ? firstInputRef as React.RefObject<HTMLInputElement> : undefined}
+                    type="text"
+                    value={inputs[i] ?? ""}
+                    onChange={e => setInputs(prev => { const next = [...prev]; next[i] = e.target.value; return next })}
+                    onKeyDown={e => e.key === "Enter" && i === blankCount - 1 && check()}
+                    placeholder={`빈칸 ${BLANK_LABELS[i]}`}
+                    className="flex-1 rounded-xl border border-gray-200 px-3 py-2 font-mono text-sm focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200"
+                  />
+                </div>
+              ))}
+              <button
+                onClick={check}
+                disabled={inputs.some(v => !v.trim())}
+                className="self-end px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm disabled:opacity-40 transition-colors"
+              >
+                {t("확인", "Check")}
+              </button>
+            </div>
           ) : (
-            <input
-              ref={inputRef as React.RefObject<HTMLInputElement>}
-              type="text"
-              value={input}
-              onChange={e => setInput(e.target.value)}
-              onKeyDown={e => e.key === "Enter" && check()}
-              placeholder={isBlank ? t("빈칸을 채워보세요...", "Fill in the blank...") : t("코드를 입력하세요...", "Enter code...")}
-              className="flex-1 rounded-xl border border-gray-200 px-3 py-2 font-mono text-sm focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200"
-            />
+            // 빈칸 1개: 기존 단일 입력창
+            <div className="flex gap-2">
+              <input
+                ref={firstInputRef as React.RefObject<HTMLInputElement>}
+                type="text"
+                value={inputs[0]}
+                onChange={e => setInputs([e.target.value])}
+                onKeyDown={e => e.key === "Enter" && check()}
+                placeholder={t("빈칸을 채워보세요...", "Fill in the blank...")}
+                className="flex-1 rounded-xl border border-gray-200 px-3 py-2 font-mono text-sm focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200"
+              />
+              <button
+                onClick={check}
+                disabled={!inputs[0].trim()}
+                className="px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm disabled:opacity-40 transition-colors shrink-0"
+              >
+                {t("확인", "Check")}
+              </button>
+            </div>
           )}
-          <button
-            onClick={check}
-            disabled={!input.trim()}
-            className="px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm disabled:opacity-40 transition-colors shrink-0"
-          >
-            {t("확인", "Check")}
-          </button>
         </div>
       )}
 
@@ -252,7 +302,6 @@ function PracticeStep({
               <RotateCcw className="w-3 h-3" /> {t("다시", "Retry")}
             </button>
           </div>
-          <p className="text-xs text-red-500 font-mono">{t("내 답:", "Your answer:")} {input}</p>
         </div>
       )}
 
