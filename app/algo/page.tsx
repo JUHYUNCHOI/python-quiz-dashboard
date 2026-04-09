@@ -31,7 +31,7 @@ export default function AlgoPage() {
           </button>
           <div className="flex-1">
             <h1 className="text-lg font-bold text-gray-900">🧪 Algorithm Lab</h1>
-            <p className="text-xs text-gray-400">{t("22 topics · BFS/DFS, DP, Greedy and more", "22개 토픽 · BFS/DFS, DP, 그리디 등")}</p>
+            <p className="text-xs text-gray-400">{t("22개 토픽 · BFS/DFS, DP, 그리디 등", "22 topics · BFS/DFS, DP, Greedy and more")}</p>
           </div>
           <LanguageToggle className="shrink-0" />
         </div>
@@ -47,7 +47,7 @@ export default function AlgoPage() {
                 "text-sm font-bold px-3 py-1.5 rounded-lg border inline-block mb-3",
                 info.badge
               )}>
-                {t(info.labelEn, info.label)}
+                {t(info.label, info.labelEn)}
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                 {waveTopics.map(topic => (
@@ -62,10 +62,10 @@ export default function AlgoPage() {
                     <span className="text-3xl">{topic.icon}</span>
                     <div className="text-center">
                       <p className="text-sm font-bold text-gray-900 leading-tight">
-                        {t(topic.titleEn, topic.title)}
+                        {t(topic.title, topic.titleEn)}
                       </p>
                       <p className="text-[10px] text-gray-400 mt-0.5">
-                        {t(topic.categoryEn, topic.category)}
+                        {t(topic.category, topic.categoryEn)}
                       </p>
                     </div>
                   </Link>
