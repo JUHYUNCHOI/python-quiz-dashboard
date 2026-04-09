@@ -197,6 +197,14 @@ function RoundResult({
         >
           {isGood ? t("완료!", "Done!") : t("오늘은 여기까지", "That's enough for now")}
         </button>
+        {isGood && wrongNums.length > 0 && (
+          <button
+            onClick={onRetryWrong}
+            className="w-full py-3 rounded-2xl border-2 border-amber-300 text-amber-700 font-bold text-sm hover:bg-amber-50 transition-colors"
+          >
+            {t(`⚡ 틀린 ${wrongNums.length}문제 복습하기`, `⚡ Review ${wrongNums.length} missed`)}
+          </button>
+        )}
       </div>
     </div>
   )
