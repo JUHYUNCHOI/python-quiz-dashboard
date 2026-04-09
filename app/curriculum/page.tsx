@@ -575,9 +575,9 @@ export default function CurriculumPage() {
     "cpp-9","cpp-21","cpp-10","cpp-11","cpp-12","cpp-13","cpp-14","cpp-22",
     "cpp-15","cpp-23","cpp-16","cpp-17","cpp-18","cpp-19","cpp-20"]
   const cppLessonsDone = cppLessonIds.filter(id => completedLessons.has(id)).length
-  const practiceUnlocked = cppLessonsDone >= 8
-  const algoUnlocked = practiceClustersDone >= 5
-  const questUnlocked = algoTopicsDone >= 8
+  const practiceUnlocked = isTeacher || cppLessonsDone >= 8
+  const algoUnlocked = isTeacher || practiceClustersDone >= 5
+  const questUnlocked = isTeacher || algoTopicsDone >= 8
 
   // Python 진도가 없으면 C++ 탭에 힌트 표시 (차단은 아님)
   const pythonLessonIds = pythonCurriculumData.flatMap(p => p.lessons.map(l => String(l.id)))
