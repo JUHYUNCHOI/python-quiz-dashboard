@@ -7,25 +7,32 @@ export const unionFindTopic: AlgoTopic = {
     category: '심화 (Gold~Platinum)',
     order: 21,
     description: '서로소 집합을 효율적으로 관리하는 자료구조',
+    titleEn: 'Union-Find',
+    categoryEn: 'Advanced Algorithms (Gold~Platinum)',
+    descriptionEn: 'A data structure for efficiently managing disjoint sets',
     track: 'cpp',
     stages: [
         {
             num: 1,
             title: '기본 유니온 파인드',
+            titleEn: 'Basic Union-Find',
             problemIds: [
                 'boj-1717',
                 'boj-1976'
             ],
-            desc: '유니온 파인드의 기본 구현과 집합 판별 (Gold IV~V)'
+            desc: '유니온 파인드의 기본 구현과 집합 판별 (Gold IV~V)',
+            descEn: 'Basic Union-Find implementation and set membership check (Gold IV~V)'
         },
         {
             num: 2,
             title: '유니온 파인드 응용',
+            titleEn: 'Applied Union-Find',
             problemIds: [
                 'lc-200',
                 'boj-4195'
             ],
-            desc: '섬 개수, 네트워크 크기 등 응용 문제 (Medium~Gold)'
+            desc: '섬 개수, 네트워크 크기 등 응용 문제 (Medium~Gold)',
+            descEn: 'Applied problems: island count, network size (Medium~Gold)'
         }
     ],
     problems: [

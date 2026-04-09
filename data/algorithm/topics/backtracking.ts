@@ -7,36 +7,45 @@ export const backtrackingTopic: AlgoTopic = {
     category: '문제 해결 기법 (Silver~Gold)',
     order: 11,
     description: '끝까지 해보고, 안 되면 돌아와서 다른 길을 가보는 기법',
+    titleEn: 'Backtracking',
+    categoryEn: 'Problem Solving (Silver~Gold)',
+    descriptionEn: 'Try every possibility — if it fails, backtrack and try another path',
     track: 'cpp',
     stages: [
         {
             num: 1,
             title: '기본 백트래킹',
+            titleEn: 'Basic Backtracking',
             problemIds: [
                 'boj-15649',
                 'boj-15650',
                 'boj-15651',
                 'boj-15652'
             ],
-            desc: 'N과 M 시리즈 (Silver III)'
+            desc: 'N과 M 시리즈 (Silver III)',
+            descEn: 'N and M series (Silver III)'
         },
         {
             num: 2,
             title: '응용 백트래킹',
+            titleEn: 'Applied Backtracking',
             problemIds: [
                 'boj-14888',
                 'boj-14889'
             ],
-            desc: '조건이 복잡한 문제 (Silver I)'
+            desc: '조건이 복잡한 문제 (Silver I)',
+            descEn: 'Problems with complex conditions (Silver I)'
         },
         {
             num: 3,
             title: '심화 백트래킹',
+            titleEn: 'Advanced Backtracking',
             problemIds: [
                 'boj-9663',
                 'boj-2580'
             ],
-            desc: '고전 백트래킹 문제 (Gold IV~V)'
+            desc: '고전 백트래킹 문제 (Gold IV~V)',
+            descEn: 'Classic backtracking problems (Gold IV~V)'
         }
     ],
     problems: [

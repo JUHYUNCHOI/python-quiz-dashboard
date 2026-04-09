@@ -7,37 +7,46 @@ export const divideConquerTopic: AlgoTopic = {
     category: '문제 해결 기법 (Silver~Gold)',
     order: 14,
     description: '큰 문제를 작게 나눠서 풀고 합치는 기법',
+    titleEn: 'Divide & Conquer',
+    categoryEn: 'Problem Solving (Silver~Gold)',
+    descriptionEn: 'Break big problems into smaller pieces, solve them, and combine the results',
     track: 'cpp',
     stages: [
         {
             num: 1,
             title: '영역 나누기',
+            titleEn: 'Region Splitting',
             problemIds: [
                 'boj-2630',
                 'boj-1992',
                 'boj-1780'
             ],
-            desc: '2D 영역을 재귀로 분할 (Silver)'
+            desc: '2D 영역을 재귀로 분할 (Silver)',
+            descEn: 'Recursive 2D region partitioning (Silver)'
         },
         {
             num: 2,
             title: '거듭제곱 + 행렬',
+            titleEn: 'Exponentiation + Matrix',
             problemIds: [
                 'boj-1629',
                 'boj-2740',
                 'boj-10830',
                 'boj-11444'
             ],
-            desc: '분할정복 거듭제곱, 행렬 곱셈 (Silver~Gold)'
+            desc: '분할정복 거듭제곱, 행렬 곱셈 (Silver~Gold)',
+            descEn: 'Fast exponentiation, matrix multiplication (Silver~Gold)'
         },
         {
             num: 3,
             title: '심화',
+            titleEn: 'Advanced',
             problemIds: [
                 'boj-11401',
                 'boj-6549'
             ],
-            desc: '페르마 소정리, 구간 분할정복 (Gold~Platinum)'
+            desc: '페르마 소정리, 구간 분할정복 (Gold~Platinum)',
+            descEn: "Fermat's little theorem, range divide & conquer (Gold~Platinum)"
         }
     ],
     problems: [

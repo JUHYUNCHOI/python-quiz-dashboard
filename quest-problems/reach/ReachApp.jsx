@@ -7,7 +7,7 @@ import { makeReachCh1, makeReachCh2, makeReachCh3 } from "./chapters";
 const A = "#8b5cf6";
 
 export default function ReachApp() {
-  const [lang, setLang] = useState("ko");
+  const [lang, setLang] = useState(() => typeof window !== "undefined" && (window._questLang === "en" || window.localStorage?.getItem("lang") === "en") ? "en" : "ko");
   const E = lang === "en";
   const [tab, setTab] = useState(0);
   const [si, setSi] = useState(0);

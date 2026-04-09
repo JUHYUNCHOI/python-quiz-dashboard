@@ -58,18 +58,23 @@ export interface AlgoProblem {
 export interface Stage {
   num: number
   title: string
+  titleEn?: string  // 영문 스테이지 제목 (선택적)
   problemIds: string[]
-  desc?: string   // 스테이지 설명 (선택적)
+  desc?: string     // 스테이지 설명 (선택적)
+  descEn?: string   // 영문 스테이지 설명 (선택적)
 }
 
 // ─── 토픽 ────────────────────────────────────────────────────
 export interface AlgoTopic {
   id: string
   title: string
+  titleEn?: string        // 영문 토픽 제목 (선택적)
   icon: string
   category: string
+  categoryEn?: string     // 영문 카테고리 (선택적)
   order: number
   description: string
+  descriptionEn?: string  // 영문 설명 (선택적)
   track: Track      // 'python' | 'cpp' | 'both'
   stages: Stage[]
   problems: AlgoProblem[]

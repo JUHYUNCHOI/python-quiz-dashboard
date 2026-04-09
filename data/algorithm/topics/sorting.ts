@@ -7,33 +7,42 @@ export const sortingTopic: AlgoTopic = {
     category: '탐색 (Silver)',
     order: 7,
     description: '버블/선택/삽입 정렬부터 병합/퀵 정렬까지, 정렬의 모든 것',
+    titleEn: 'Sorting',
+    categoryEn: 'Search (Silver)',
+    descriptionEn: 'Everything about sorting, from bubble/selection/insertion to merge/quick sort',
     track: 'both',
     stages: [
         {
             num: 1,
             title: '커트라인',
+            titleEn: 'Cutline',
             problemIds: [
                 'boj-25305'
             ],
-            desc: '정렬 후 인덱싱'
+            desc: '정렬 후 인덱싱',
+            descEn: 'Indexing after sorting'
         },
         {
             num: 2,
             title: '기본 정렬',
+            titleEn: 'Basic Sorting',
             problemIds: [
                 'boj-2750',
                 'boj-11650',
                 'boj-10814'
             ],
-            desc: '정렬 구현과 커스텀 정렬 (Bronze~Silver)'
+            desc: '정렬 구현과 커스텀 정렬 (Bronze~Silver)',
+            descEn: 'Sorting implementation and custom comparators (Bronze~Silver)'
         },
         {
             num: 3,
             title: '정렬 응용',
+            titleEn: 'Applied Sorting',
             problemIds: [
                 'lc-56'
             ],
-            desc: '정렬 기반 문제 풀이 (Medium)'
+            desc: '정렬 기반 문제 풀이 (Medium)',
+            descEn: 'Problem solving based on sorting (Medium)'
         }
     ],
     problems: [

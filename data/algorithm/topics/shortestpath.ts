@@ -7,33 +7,42 @@ export const shortestPathTopic: AlgoTopic = {
     category: '심화 (Gold~Platinum)',
     order: 19,
     description: '가중치 그래프에서 최소 비용 경로를 찾는 알고리즘',
+    titleEn: 'Shortest Path',
+    categoryEn: 'Advanced Algorithms (Gold~Platinum)',
+    descriptionEn: 'Algorithms for finding minimum-cost paths in weighted graphs',
     track: 'cpp',
     stages: [
         {
             num: 1,
             title: 'BFS 최단거리',
+            titleEn: 'BFS Shortest Distance',
             problemIds: [
                 'boj-18352'
             ],
-            desc: '가중치 없는 그래프에서 BFS로 최단 거리를 구합니다 (Silver II)'
+            desc: '가중치 없는 그래프에서 BFS로 최단 거리를 구합니다 (Silver II)',
+            descEn: 'Finding shortest distance with BFS in unweighted graphs (Silver II)'
         },
         {
             num: 2,
             title: '다익스트라',
+            titleEn: 'Dijkstra',
             problemIds: [
                 'boj-1753',
                 'boj-1916',
                 'lc-743'
             ],
-            desc: '다익스트라 기본 구현과 응용 (Gold IV~V ~ Medium)'
+            desc: '다익스트라 기본 구현과 응용 (Gold IV~V ~ Medium)',
+            descEn: 'Dijkstra basic implementation and applications (Gold IV~V ~ Medium)'
         },
         {
             num: 3,
             title: '플로이드-워셜',
+            titleEn: 'Floyd-Warshall',
             problemIds: [
                 'boj-11404'
             ],
-            desc: '모든 쌍 최단 경로 (Gold IV)'
+            desc: '모든 쌍 최단 경로 (Gold IV)',
+            descEn: 'All-pairs shortest path (Gold IV)'
         }
     ],
     problems: [

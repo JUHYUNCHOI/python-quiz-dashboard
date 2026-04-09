@@ -7,34 +7,43 @@ export const prefixSumTopic: AlgoTopic = {
     category: '탐색 (Silver)',
     order: 10,
     description: '구간의 합을 한 번에 구하는 기법',
+    titleEn: 'Prefix Sum',
+    categoryEn: 'Search (Silver)',
+    descriptionEn: 'A technique to compute range sums in constant time',
     track: 'both',
     stages: [
         {
             num: 1,
             title: '1차원 입문',
+            titleEn: '1D Introduction',
             problemIds: [
                 'boj-11659',
                 'boj-2559'
             ],
-            desc: '기본 누적합 (Silver III)'
+            desc: '기본 누적합 (Silver III)',
+            descEn: 'Basic prefix sum (Silver III)'
         },
         {
             num: 2,
             title: '응용 + 2차원',
+            titleEn: 'Applied + 2D',
             problemIds: [
                 'boj-16139',
                 'boj-11660',
                 'boj-25682'
             ],
-            desc: '누적합 활용, 2차원 누적합 (Silver I ~ Gold V)'
+            desc: '누적합 활용, 2차원 누적합 (Silver I ~ Gold V)',
+            descEn: 'Prefix sum applications, 2D prefix sum (Silver I ~ Gold V)'
         },
         {
             num: 3,
             title: '심화',
+            titleEn: 'Advanced',
             problemIds: [
                 'boj-10986'
             ],
-            desc: '나머지 연산 응용 (Gold III)'
+            desc: '나머지 연산 응용 (Gold III)',
+            descEn: 'Modular arithmetic applications (Gold III)'
         }
     ],
     problems: [

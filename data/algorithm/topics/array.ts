@@ -7,33 +7,42 @@ export const arrayTopic: AlgoTopic = {
     category: '기초 (Bronze~Silver)',
     order: 2,
     description: '배열을 활용한 투 포인터, 슬라이딩 윈도우, 구간 처리 기법',
+    titleEn: 'Arrays',
+    categoryEn: 'Basics (Bronze~Silver)',
+    descriptionEn: 'Two pointers, sliding window, and range processing with arrays',
     track: 'both',
     stages: [
         {
             num: 1,
             title: '최솟값/최댓값',
+            titleEn: 'Min/Max',
             problemIds: [
                 'boj-10818'
             ],
-            desc: '배열 순회 입문'
+            desc: '배열 순회 입문',
+            descEn: 'Introduction to array traversal'
         },
         {
             num: 2,
             title: '배열 기본',
+            titleEn: 'Array Basics',
             problemIds: [
                 'lc-1',
                 'lc-121'
             ],
-            desc: '한 번 순회, 투 포인터 기본 (Easy~Silver)'
+            desc: '한 번 순회, 투 포인터 기본 (Easy~Silver)',
+            descEn: 'Single pass, basic two pointers (Easy~Silver)'
         },
         {
             num: 3,
             title: '배열 심화',
+            titleEn: 'Array Advanced',
             problemIds: [
                 'boj-2003',
                 'lc-15'
             ],
-            desc: '투 포인터 심화, 전처리 (Medium~Gold)'
+            desc: '투 포인터 심화, 전처리 (Medium~Gold)',
+            descEn: 'Advanced two pointers, preprocessing (Medium~Gold)'
         }
     ],
     problems: [

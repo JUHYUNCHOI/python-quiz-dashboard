@@ -6,7 +6,7 @@ import { makeMixMilkCh1, makeMixMilkCh2, makeMixMilkCh3 } from "./chapters";
 const A = "#d97706";
 
 export default function MixMilkApp() {
-  const [lang, setLang] = useState("ko");
+  const [lang, setLang] = useState(() => typeof window !== "undefined" && (window._questLang === "en" || window.localStorage?.getItem("lang") === "en") ? "en" : "ko");
   const E = lang === "en";
   const [tab, setTab] = useState(0);
   const [si, setSi] = useState(0);

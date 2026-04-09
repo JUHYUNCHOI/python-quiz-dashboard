@@ -7,25 +7,32 @@ export const trieTopic: AlgoTopic = {
     category: '심화 (Gold~Platinum)',
     order: 18,
     description: '문자열을 효율적으로 저장하고 검색하는 트리 자료구조',
+    titleEn: 'Trie',
+    categoryEn: 'Advanced Algorithms (Gold~Platinum)',
+    descriptionEn: 'A tree data structure for efficient string storage and retrieval',
     track: 'cpp',
     stages: [
         {
             num: 1,
             title: '접두사와 문자열 집합',
+            titleEn: 'Prefix & String Set',
             problemIds: [
                 'lc-14',
                 'boj-14425'
             ],
-            desc: '공통 접두사, 문자열 집합 확인 (Easy~Silver)'
+            desc: '공통 접두사, 문자열 집합 확인 (Easy~Silver)',
+            descEn: 'Common prefix, string set lookup (Easy~Silver)'
         },
         {
             num: 2,
             title: '트라이 구현과 응용',
+            titleEn: 'Trie Implementation & Applications',
             problemIds: [
                 'lc-208',
                 'boj-5052'
             ],
-            desc: '트라이 직접 구현, 접두사 관계 판별 (Medium~Gold)'
+            desc: '트라이 직접 구현, 접두사 관계 판별 (Medium~Gold)',
+            descEn: 'Implement trie from scratch, detect prefix relationships (Medium~Gold)'
         }
     ],
     problems: [

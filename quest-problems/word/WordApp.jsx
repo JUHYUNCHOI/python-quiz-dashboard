@@ -7,7 +7,7 @@ import { makeWordCh1, makeWordCh2, makeWordCh3 } from "./chapters";
 const A = "#3b82f6";
 
 export default function WordApp() {
-  const [lang, setLang] = useState("ko");
+  const [lang, setLang] = useState(() => typeof window !== "undefined" && (window._questLang === "en" || window.localStorage?.getItem("lang") === "en") ? "en" : "ko");
   const E = lang === "en";
   const [tab, setTab] = useState(0);
   const [si, setSi] = useState(0);

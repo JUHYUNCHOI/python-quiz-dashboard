@@ -6,7 +6,7 @@ import { makeMooin3Ch1, makeMooin3Ch2 } from "./chapters";
 const A = "#7c5cfc";
 
 export default function Mooin3App() {
-  const [lang, setLang] = useState("ko");
+  const [lang, setLang] = useState(() => typeof window !== "undefined" && (window._questLang === "en" || window.localStorage?.getItem("lang") === "en") ? "en" : "ko");
   const E = lang === "en";
   const [tab, setTab] = useState(0);
   const [si, setSi] = useState(0);

@@ -7,33 +7,42 @@ export const hashTableTopic: AlgoTopic = {
     category: '기초 (Bronze~Silver)',
     order: 4,
     description: '이름표를 붙여서 한 번에 찾기! 딕셔너리와 집합 활용',
+    titleEn: 'Hash Tables',
+    categoryEn: 'Basics (Bronze~Silver)',
+    descriptionEn: 'Instant lookup with labels — using dictionaries and sets',
     track: 'both',
     stages: [
         {
             num: 1,
             title: '숫자 카드',
+            titleEn: 'Number Cards',
             problemIds: [
                 'boj-10815'
             ],
-            desc: '해시 기반 O(1) 탐색'
+            desc: '해시 기반 O(1) 탐색',
+            descEn: 'Hash-based O(1) lookup'
         },
         {
             num: 2,
             title: '해시맵 기본',
+            titleEn: 'HashMap Basics',
             problemIds: [
                 'lc-217',
                 'boj-7785'
             ],
-            desc: '빈도수, 존재 확인, 집합 (Easy~Silver)'
+            desc: '빈도수, 존재 확인, 집합 (Easy~Silver)',
+            descEn: 'Frequency counting, existence checks, sets (Easy~Silver)'
         },
         {
             num: 3,
             title: '해시맵 응용',
+            titleEn: 'HashMap Applications',
             problemIds: [
                 'lc-3',
                 'lc-560'
             ],
-            desc: '슬라이딩 윈도우, 연속 부분 배열 (Medium~Gold)'
+            desc: '슬라이딩 윈도우, 연속 부분 배열 (Medium~Gold)',
+            descEn: 'Sliding window, contiguous subarray problems (Medium~Gold)'
         }
     ],
     problems: [

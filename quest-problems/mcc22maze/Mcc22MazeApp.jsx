@@ -6,7 +6,7 @@ import { makeMcc22MazeCh1, makeMcc22MazeCh2 } from "./chapters";
 const A = "#dc2626";
 
 export default function Mcc22MazeApp() {
-  const [lang, setLang] = useState("ko");
+  const [lang, setLang] = useState(() => typeof window !== "undefined" && (window._questLang === "en" || window.localStorage?.getItem("lang") === "en") ? "en" : "ko");
   const E = lang === "en";
   const [tab, setTab] = useState(0);
   const [si, setSi] = useState(0);

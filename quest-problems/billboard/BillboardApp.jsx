@@ -6,7 +6,7 @@ import { makeBillboardCh1, makeBillboardCh2, makeBillboardCh3 } from "./chapters
 const A = "#d97706";
 
 export default function BillboardApp() {
-  const [lang, setLang] = useState("ko");
+  const [lang, setLang] = useState(() => typeof window !== "undefined" && (window._questLang === "en" || window.localStorage?.getItem("lang") === "en") ? "en" : "ko");
   const E = lang === "en";
   const [tab, setTab] = useState(0);
   const [si, setSi] = useState(0);

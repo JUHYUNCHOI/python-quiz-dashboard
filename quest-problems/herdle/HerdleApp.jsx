@@ -6,7 +6,7 @@ import { makeHerdleCh1, makeHerdleCh2 } from "./chapters";
 const A = "#059669";
 
 export default function HerdleApp() {
-  const [lang, setLang] = useState("ko");
+  const [lang, setLang] = useState(() => typeof window !== "undefined" && (window._questLang === "en" || window.localStorage?.getItem("lang") === "en") ? "en" : "ko");
   const E = lang === "en";
   const [tab, setTab] = useState(0);
   const [si, setSi] = useState(0);

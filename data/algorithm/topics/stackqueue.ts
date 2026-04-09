@@ -7,33 +7,42 @@ export const stackQueueTopic: AlgoTopic = {
     category: '기초 (Bronze~Silver)',
     order: 3,
     description: 'LIFO 스택과 FIFO 큐의 원리, 괄호 검증, 덱 활용',
+    titleEn: 'Stack & Queue',
+    categoryEn: 'Basics (Bronze~Silver)',
+    descriptionEn: 'LIFO stack and FIFO queue principles, bracket validation, deque usage',
     track: 'both',
     stages: [
         {
             num: 1,
             title: '스택 구현하기',
+            titleEn: 'Implementing a Stack',
             problemIds: [
                 'boj-10828'
             ],
-            desc: '스택의 기본 명령어를 직접 구현해보기 (Silver IV)'
+            desc: '스택의 기본 명령어를 직접 구현해보기 (Silver IV)',
+            descEn: 'Implement basic stack commands yourself (Silver IV)'
         },
         {
             num: 2,
             title: '기본 스택·큐 다루기',
+            titleEn: 'Basic Stack & Queue',
             problemIds: [
                 'boj-10773',
                 'lc-20'
             ],
-            desc: '스택과 큐의 기본 연산과 괄호 검증 (Silver~Easy)'
+            desc: '스택과 큐의 기본 연산과 괄호 검증 (Silver~Easy)',
+            descEn: 'Basic stack/queue operations and bracket validation (Silver~Easy)'
         },
         {
             num: 3,
             title: '스택·큐 응용',
+            titleEn: 'Applied Stack & Queue',
             problemIds: [
                 'boj-2164',
                 'lc-155'
             ],
-            desc: '덱 활용과 단조 스택 (Silver~Medium)'
+            desc: '덱 활용과 단조 스택 (Silver~Medium)',
+            descEn: 'Deque usage and monotonic stack (Silver~Medium)'
         }
     ],
     problems: [

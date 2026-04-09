@@ -7,11 +7,15 @@ export const graphTopic: AlgoTopic = {
     category: '탐색 (Silver)',
     order: 9,
     description: '정점과 간선으로 이루어진 그래프를 DFS/BFS로 탐색하는 기법',
+    titleEn: 'Graphs & Traversal',
+    categoryEn: 'Search (Silver)',
+    descriptionEn: 'Traversing graphs of vertices and edges with DFS and BFS',
     track: 'cpp',
     stages: [
         {
             num: 1,
             title: 'DFS/BFS 기본',
+            titleEn: 'DFS/BFS Basics',
             problemIds: [
                 'boj-2606',
                 'boj-24479',
@@ -20,30 +24,36 @@ export const graphTopic: AlgoTopic = {
                 'boj-24445',
                 'boj-1260'
             ],
-            desc: 'DFS와 BFS의 기본 구현을 연습합니다 (Silver II~III)'
+            desc: 'DFS와 BFS의 기본 구현을 연습합니다 (Silver II~III)',
+            descEn: 'Practicing basic DFS and BFS implementations (Silver II~III)'
         },
         {
             num: 2,
             title: '그리드 탐색과 Flood Fill',
+            titleEn: 'Grid Search & Flood Fill',
             problemIds: [
                 'boj-1012',
                 'boj-2667'
             ],
-            desc: '격자에서 연결 요소를 탐색합니다 (Silver I~II)'
+            desc: '격자에서 연결 요소를 탐색합니다 (Silver I~II)',
+            descEn: 'Finding connected components in a grid (Silver I~II)'
         },
         {
             num: 3,
             title: 'BFS 최단 거리',
+            titleEn: 'BFS Shortest Path',
             problemIds: [
                 'boj-2178',
                 'boj-1697',
                 'boj-7562'
             ],
-            desc: 'BFS로 최단 거리를 구합니다 (Silver I)'
+            desc: 'BFS로 최단 거리를 구합니다 (Silver I)',
+            descEn: 'Finding shortest distances with BFS (Silver I)'
         },
         {
             num: 4,
             title: '심화 BFS',
+            titleEn: 'Advanced BFS',
             problemIds: [
                 'boj-7576',
                 'boj-7569',
@@ -51,7 +61,8 @@ export const graphTopic: AlgoTopic = {
                 'boj-1707',
                 'boj-2206'
             ],
-            desc: '다중 시작점, 상태 확장 BFS (Gold III~V)'
+            desc: '다중 시작점, 상태 확장 BFS (Gold III~V)',
+            descEn: 'Multi-source BFS, state-space expansion (Gold III~V)'
         }
     ],
     problems: [
