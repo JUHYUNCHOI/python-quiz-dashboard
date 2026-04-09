@@ -473,6 +473,10 @@ function ParentReportPage() {
             <p className="text-sm opacity-70 mt-0.5">
               {new Date().toLocaleDateString(lang === "en" ? "en-US" : "ko-KR", { year: "numeric", month: "long", day: "numeric" })} {t("기준", "as of")}
             </p>
+            {/* 한 줄 서술 요약 */}
+            <p className="text-sm font-medium opacity-90 mt-2 leading-relaxed bg-white/15 rounded-xl px-3 py-2">
+              {getSummary()}
+            </p>
           </div>
           <button onClick={handleShare} className="flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/20 hover:bg-white/30 transition-colors text-sm font-medium">
             {copied ? <><Copy className="w-4 h-4" /> {t("복사됨", "Copied")}</> : <><Share2 className="w-4 h-4" /> {t("공유", "Share")}</>}

@@ -1,12 +1,22 @@
 "use client"
 
 import { useState } from "react"
-import { X, BookOpen, Trophy, Flame, ChevronDown, ExternalLink, Check, AlertTriangle } from "lucide-react"
+import { X, BookOpen, Trophy, Flame, ChevronDown, ExternalLink, Check, AlertTriangle, Dumbbell } from "lucide-react"
 import { StudentProgress } from "@/components/teacher/student-progress"
 import { StudentQuizReport } from "@/components/teacher/student-quiz-report"
 import { cn } from "@/lib/utils"
 import { getLessonName } from "@/lib/curriculum-data"
 import type { QuizSession } from "@/lib/supabase/types"
+
+// ─── 연습문제 클러스터 요약 타입 ─────────────────────────────
+interface ClusterSummary {
+  clusterId: string
+  clusterTitle: string
+  clusterEmoji: string
+  totalProblems: number
+  solvedProblems: number
+  stuckProblems: { problemId: string; problemTitle: string; attempts: number }[]
+}
 
 // ─── 로컬 인터페이스 ──────────────────────────────────────────
 interface LessonProgressRow {
@@ -209,6 +219,7 @@ interface Props {
   student: StudentRow | null
   detailedSessions: QuizSession[]
   homeworkLessonIds?: Set<string>
+  practiceData?: ClusterSummary[]
   onClose: () => void
   onGenerateParentLink: (student: StudentRow) => void
   parentLinkCopied: string | null
@@ -221,6 +232,7 @@ export function StudentDetailPanel({
   student,
   detailedSessions,
   homeworkLessonIds,
+  practiceData,
   onClose,
   onGenerateParentLink,
   parentLinkCopied,
@@ -520,6 +532,84 @@ export function StudentDetailPanel({
                 <StudentQuizReport
                   quizSessions={detailedSessions.length > 0 ? detailedSessions : student.quizSessions}
                 />
+              </div>
+            </CollapsibleSection>
+
+            {/* Section 4: 연습문제 진도 */}
+            <CollapsibleSection title={lang === "en" ? "Practice Problems" : "연습문제"} emoji="🏋️">
+              <div className="pt-2">
+                {!practiceData ? (
+                  <p className="text-xs text-gray-400 text-center py-3 animate-pulse">
+                    {lang === "en" ? "Loading…" : "불러오는 중…"}
+                  </p>
+                ) : practiceData.length === 0 ? (
+                  <p className="text-xs text-gray-400 text-center py-3">
+                    {lang === "en" ? "No practice activity yet" : "아직 연습문제 활동 없음"}
+                  </p>
+                ) : (
+                  <div className="space-y-2">
+                    {/* 막힌 문제가 있는 클러스터를 먼저 정렬 */}
+                    {[...practiceData]
+                      .sort((a, b) => b.stuckProblems.length - a.stuckProblems.length)
+                      .map(cluster => {
+                        const pct = Math.round((cluster.solvedProblems / cluster.totalProblems) * 100)
+                        const isComplete = cluster.solvedProblems === cluster.totalProblems
+                        return (
+                          <div
+                            key={cluster.clusterId}
+                            className={cn(
+                              "rounded-xl border p-3",
+                              cluster.stuckProblems.length > 0
+                                ? "border-amber-200 bg-amber-50"
+                                : isComplete
+                                  ? "border-green-200 bg-green-50"
+                                  : "border-gray-100 bg-white"
+                            )}
+                          >
+                            {/* 클러스터 헤더 */}
+                            <div className="flex items-center justify-between mb-1.5">
+                              <span className="text-xs font-bold text-gray-800">
+                                {cluster.clusterEmoji} {cluster.clusterTitle}
+                              </span>
+                              <span className={cn(
+                                "text-[11px] font-bold",
+                                isComplete ? "text-green-600" :
+                                cluster.stuckProblems.length > 0 ? "text-amber-600" : "text-gray-500"
+                              )}>
+                                {cluster.solvedProblems}/{cluster.totalProblems}
+                                {isComplete && " ✅"}
+                              </span>
+                            </div>
+                            {/* 진도 바 */}
+                            <div className="w-full bg-gray-200 rounded-full h-1.5 mb-2">
+                              <div
+                                className={cn(
+                                  "h-1.5 rounded-full transition-all",
+                                  isComplete ? "bg-green-400" :
+                                  cluster.stuckProblems.length > 0 ? "bg-amber-400" : "bg-blue-400"
+                                )}
+                                style={{ width: `${pct}%` }}
+                              />
+                            </div>
+                            {/* 막힌 문제 목록 */}
+                            {cluster.stuckProblems.length > 0 && (
+                              <div className="space-y-1 mt-1">
+                                {cluster.stuckProblems.map(p => (
+                                  <div key={p.problemId} className="flex items-center gap-2 rounded-lg bg-white border border-amber-200 px-2 py-1.5">
+                                    <AlertTriangle className="w-3 h-3 text-amber-500 flex-shrink-0" />
+                                    <span className="text-[11px] text-gray-700 truncate flex-1">{p.problemTitle}</span>
+                                    <span className="text-[10px] font-bold text-amber-500 flex-shrink-0 whitespace-nowrap">
+                                      {lang === "en" ? `${p.attempts} tries` : `${p.attempts}회 시도`}
+                                    </span>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        )
+                      })}
+                  </div>
+                )}
               </div>
             </CollapsibleSection>
 

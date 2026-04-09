@@ -1,25 +1,16 @@
 "use client"
 
-import { useState } from "react"
 import { useAuth } from "@/contexts/auth-context"
 import { useLanguage } from "@/contexts/language-context"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 import { OverviewCards } from "@/components/analytics/overview-cards"
-import { DailyActivityTimeline } from "@/components/analytics/daily-activity-timeline"
-import { WeeklySummary } from "@/components/analytics/weekly-summary"
-import { EngagementRedFlags } from "@/components/analytics/engagement-red-flags"
-import { HonestLearningIndicators } from "@/components/analytics/honest-learning-indicators"
-import { AchievementsMilestones } from "@/components/analytics/achievements-milestones"
-import { AnalyticsSettings } from "@/components/analytics/analytics-settings"
-import { Settings } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { BarChart2 } from "lucide-react"
+import Link from "next/link"
 
 export default function AnalyticsPage() {
-  const [showSettings, setShowSettings] = useState(false)
-  const { profile, isAuthenticated, isLoading } = useAuth()
+  const { isAuthenticated, isLoading } = useAuth()
   const { t } = useLanguage()
-  const displayName = profile?.display_name || t("학습자", "Learner")
 
   if (isLoading) {
     return (
@@ -48,53 +39,29 @@ export default function AnalyticsPage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <Header />
 
-      {/* 학습 페이지: max-w-[1300px] + 중앙 정렬 */}
       <main className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 pb-24 pt-6">
         {/* Page Header */}
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-slate-800">{t("학습 분석 대시보드", "Learning Analytics")}</h1>
-            <p className="mt-2 text-slate-600">{t(`${displayName}님의 학습 패턴과 성장을 확인하세요`, `${displayName}'s learning patterns and progress`)}</p>
-          </div>
-          <Button onClick={() => setShowSettings(!showSettings)} variant="outline" size="lg" className="gap-2">
-            <Settings className="h-5 w-5" />
-            {t("설정", "Settings")}
-          </Button>
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-slate-800">{t("학습 통계", "Learning Stats")}</h1>
+          <p className="mt-2 text-slate-600">{t("나의 학습 현황을 한눈에", "Your learning overview at a glance")}</p>
         </div>
 
-        {/* Settings Panel */}
-        {showSettings && (
-          <div className="mb-8">
-            <AnalyticsSettings onClose={() => setShowSettings(false)} />
-          </div>
-        )}
-
-        {/* Overview Cards */}
+        {/* Overview Cards — real data */}
         <OverviewCards />
 
-        {/* Daily Activity Timeline */}
-        <div className="mt-8">
-          <DailyActivityTimeline />
-        </div>
-
-        {/* Weekly Summary */}
-        <div className="mt-8">
-          <WeeklySummary />
-        </div>
-
-        {/* Engagement Red Flags */}
-        <div className="mt-8">
-          <EngagementRedFlags />
-        </div>
-
-        {/* Honest Learning Indicators */}
-        <div className="mt-8">
-          <HonestLearningIndicators />
-        </div>
-
-        {/* Achievements & Milestones */}
-        <div className="mt-8">
-          <AchievementsMilestones />
+        {/* Progress page shortcut */}
+        <div className="mt-6">
+          <Link
+            href="/progress"
+            className="flex items-center gap-3 w-full bg-white rounded-2xl border border-blue-100 shadow-sm p-4 hover:bg-blue-50 transition-colors"
+          >
+            <BarChart2 className="h-6 w-6 text-blue-500 flex-shrink-0" />
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-bold text-slate-800">{t("상세 진도 보기", "View Detailed Progress")}</p>
+              <p className="text-xs text-slate-500 mt-0.5">{t("레슨 진도, 정확도 차트, 약점 분석", "Lesson progress, accuracy chart, weak areas")}</p>
+            </div>
+            <span className="text-slate-400">→</span>
+          </Link>
         </div>
       </main>
 

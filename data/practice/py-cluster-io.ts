@@ -331,5 +331,243 @@ for i in range(1, n + 1):
       },
       language: "python",
     },
+    {
+      id: "pyio-c01",
+      cluster: "py-io",
+      unlockAfter: "10",
+      difficulty: "어려움",
+      title: "영수증 출력",
+      description: `첫 줄에 상품 수 N이 주어지고, 이어서 N줄에 걸쳐 "상품명 가격"이 주어집니다.
+다음 형식으로 영수증을 출력하세요:
+- "====================" (= 20개)
+- 각 상품 줄: 이름 왼쪽 정렬 10칸, 가격 오른쪽 정렬 6칸
+- "--------------------" (- 20개)
+- 합계 줄: "Total" 왼쪽 정렬 10칸, 합계 오른쪽 정렬 6칸
+- "====================" (= 20개)`,
+      constraints: "1 ≤ N ≤ 10, 상품명 길이 ≤ 10, 1 ≤ 가격 ≤ 9999",
+      initialCode: `n = int(input())
+items = []
+for _ in range(n):
+    parts = input().split()
+    name, price = parts[0], int(parts[1])
+    items.append((name, price))
+
+# 영수증 형식으로 출력하세요
+# f"{name:<10}{price:>6}" — :<N은 왼쪽 정렬, :>N은 오른쪽 정렬
+`,
+      testCases: [
+        { stdin: "3\napple 1200\nmilk 800\ncoffee 2500", expectedOutput: "====================\napple       1200\nmilk         800\ncoffee      2500\n--------------------\nTotal       4500\n====================", label: "3개 상품" },
+        { stdin: "1\npen 300", expectedOutput: "====================\npen          300\n--------------------\nTotal        300\n====================", label: "1개 상품" },
+        { stdin: "2\nbook 3000\nnote 500", expectedOutput: "====================\nbook        3000\nnote         500\n--------------------\nTotal       3500\n====================", label: "2개 상품" },
+      ],
+      hints: [
+        "f'{name:<10}' — 이름을 10칸 왼쪽 정렬합니다.",
+        "f'{price:>6}' — 가격을 6칸 오른쪽 정렬합니다.",
+        "합계: total = sum(p for _, p in items)",
+        "'=' * 20 으로 구분선을 만드세요.",
+      ],
+      solutionCode: `n = int(input())
+items = []
+for _ in range(n):
+    parts = input().split()
+    name, price = parts[0], int(parts[1])
+    items.append((name, price))
+
+total = sum(p for _, p in items)
+print("=" * 20)
+for name, price in items:
+    print(f"{name:<10}{price:>6}")
+print("-" * 20)
+print(f"{'Total':<10}{total:>6}")
+print("=" * 20)`,
+      solutionExplanation: "f-string의 :<N은 왼쪽 정렬, :>N은 오른쪽 정렬입니다. '=' * 20은 = 기호를 20번 반복합니다. 합산 후 동일한 형식으로 Total을 출력합니다.",
+      en: {
+        title: "Print a Receipt",
+        description: `Given N on the first line, followed by N lines of "item price", print a receipt in this format:\n- "====================" (20 equals)\n- Each item: name left-aligned (10 chars), price right-aligned (6 chars)\n- "--------------------" (20 dashes)\n- Total line: "Total" left-aligned (10 chars), sum right-aligned (6 chars)\n- "====================" (20 equals)`,
+        constraints: "1 ≤ N ≤ 10, item name length ≤ 10, 1 ≤ price ≤ 9999",
+        hints: [
+          "f'{name:<10}' pads the name to 10 chars with left-alignment.",
+          "f'{price:>6}' pads the price to 6 chars with right-alignment.",
+          "Compute total = sum(p for _, p in items).",
+          "Use '=' * 20 to generate the divider line.",
+        ],
+        solutionExplanation: "In f-strings, :<N left-aligns and :>N right-aligns. '=' * 20 repeats the = character 20 times. After summing, print Total in the same format.",
+      },
+      language: "python",
+    },
+    {
+      id: "pyio-c02",
+      cluster: "py-io",
+      unlockAfter: "10",
+      difficulty: "어려움",
+      title: "숫자 통계 보고서",
+      description: `첫 줄에 정수 N이 주어지고, 둘째 줄에 N개의 정수가 공백으로 구분되어 주어집니다.
+다음 형식으로 통계를 출력하세요:
+Count: N
+Sum: 합계
+Min: 최솟값
+Max: 최댓값
+Avg: 평균 (소수점 2자리)`,
+      constraints: "1 ≤ N ≤ 1000, -10000 ≤ 각 정수 ≤ 10000",
+      initialCode: `n = int(input())
+nums = list(map(int, input().split()))
+
+# 다음 형식으로 출력하세요:
+# Count: N
+# Sum: 합계
+# Min: 최솟값
+# Max: 최댓값
+# Avg: 평균 (:.2f)
+`,
+      testCases: [
+        { stdin: "5\n10 20 30 40 50", expectedOutput: "Count: 5\nSum: 150\nMin: 10\nMax: 50\nAvg: 30.00", label: "기본" },
+        { stdin: "3\n100 200 300", expectedOutput: "Count: 3\nSum: 600\nMin: 100\nMax: 300\nAvg: 200.00", label: "큰 수" },
+        { stdin: "1\n42", expectedOutput: "Count: 1\nSum: 42\nMin: 42\nMax: 42\nAvg: 42.00", label: "N=1" },
+        { stdin: "4\n7 3 9 1", expectedOutput: "Count: 4\nSum: 20\nMin: 1\nMax: 9\nAvg: 5.00", label: "섞인 값" },
+      ],
+      hints: [
+        "min(), max(), sum() 내장 함수를 사용하세요.",
+        "평균: total / n 을 계산하고 f'{avg:.2f}'로 소수점 2자리까지 출력하세요.",
+      ],
+      solutionCode: `n = int(input())
+nums = list(map(int, input().split()))
+total = sum(nums)
+print(f"Count: {n}")
+print(f"Sum: {total}")
+print(f"Min: {min(nums)}")
+print(f"Max: {max(nums)}")
+print(f"Avg: {total/n:.2f}")`,
+      solutionExplanation: "min(), max(), sum() 내장 함수로 통계를 구합니다. f-string의 :.2f로 평균을 소수점 2자리까지 포맷합니다.",
+      en: {
+        title: "Number Statistics Report",
+        description: `Given N on the first line and N integers on the second line (space-separated), print statistics in this format:\nCount: N\nSum: total\nMin: minimum\nMax: maximum\nAvg: average (2 decimal places)`,
+        constraints: "1 ≤ N ≤ 1000, -10000 ≤ each integer ≤ 10000",
+        hints: [
+          "Use the built-in functions min(), max(), and sum().",
+          "Compute average as total / n and format with f'{avg:.2f}'.",
+        ],
+        solutionExplanation: "Use min(), max(), and sum() built-ins for statistics. Use :.2f in an f-string to format the average to 2 decimal places.",
+      },
+      language: "python",
+    },
+    {
+      id: "pyio-c03",
+      cluster: "py-io",
+      unlockAfter: "10",
+      difficulty: "어려움",
+      title: "온도 변환표",
+      description: `정수 세 개 start, end, step이 공백으로 주어집니다.
+섭씨 start부터 end까지 step 간격으로 온도 변환표를 출력하세요.
+
+변환 공식:
+- 화씨: F = C × 9/5 + 32
+- 켈빈: K = C + 273.15
+
+헤더 줄: "C     F       K"
+각 데이터 줄: 섭씨 왼쪽 정렬 6칸, 화씨 왼쪽 정렬 8칸(소수점 1자리), 켈빈 소수점 2자리`,
+      constraints: "-100 ≤ start ≤ end ≤ 100, 1 ≤ step ≤ 50",
+      initialCode: `start, end, step = map(int, input().split())
+
+# 헤더 출력 (이미 완성됨)
+print(f"{'C':<6}{'F':<8}K")
+
+# start부터 end까지 step 간격으로 반복
+# while c <= end: 구조를 사용하세요
+`,
+      testCases: [
+        { stdin: "0 40 20", expectedOutput: "C     F       K\n0     32.0    273.15\n20    68.0    293.15\n40    104.0   313.15", label: "기본" },
+        { stdin: "100 100 10", expectedOutput: "C     F       K\n100   212.0   373.15", label: "단일 행" },
+        { stdin: "-10 10 10", expectedOutput: "C     F       K\n-10   14.0    263.15\n0     32.0    273.15\n10    50.0    283.15", label: "음수 포함" },
+        { stdin: "37 37 1", expectedOutput: "C     F       K\n37    98.6    310.15", label: "체온" },
+      ],
+      hints: [
+        "화씨: f = c * 9/5 + 32, 켈빈: k = c + 273.15",
+        "각 행: print(f\"{c:<6}{f:<8.1f}{k:.2f}\")",
+        "while c <= end: 로 반복하고 마지막에 c += step 을 추가하세요.",
+      ],
+      solutionCode: `start, end, step = map(int, input().split())
+print(f"{'C':<6}{'F':<8}K")
+c = start
+while c <= end:
+    f = c * 9/5 + 32
+    k = c + 273.15
+    print(f"{c:<6}{f:<8.1f}{k:.2f}")
+    c += step`,
+      solutionExplanation: "헤더와 동일한 너비로 데이터를 정렬합니다. f:<8.1f는 소수점 1자리 실수를 8칸 왼쪽 정렬합니다. while 루프로 step씩 증가하며 end까지 반복합니다.",
+      en: {
+        title: "Temperature Conversion Table",
+        description: `Given three integers start, end, and step, print a temperature conversion table from start to end (inclusive) in increments of step.\n\nFormulas:\n- Fahrenheit: F = C × 9/5 + 32\n- Kelvin: K = C + 273.15\n\nHeader line: "C     F       K"\nEach data line: Celsius left-aligned (6 chars), Fahrenheit left-aligned (8 chars, 1 decimal place), Kelvin (2 decimal places)`,
+        constraints: "-100 ≤ start ≤ end ≤ 100, 1 ≤ step ≤ 50",
+        hints: [
+          "Fahrenheit: f = c * 9/5 + 32, Kelvin: k = c + 273.15",
+          "Each row: print(f\"{c:<6}{f:<8.1f}{k:.2f}\")",
+          "Use while c <= end: and add c += step at the end of the loop body.",
+        ],
+        solutionExplanation: "Data is aligned using the same column widths as the header. f:<8.1f formats a float to 1 decimal place in 8 chars (left-aligned). The while loop increments by step until end is reached.",
+      },
+      language: "python",
+    },
+    {
+      id: "pyio-c04",
+      cluster: "py-io",
+      unlockAfter: "10",
+      difficulty: "어려움",
+      title: "쇼핑 카트 합계",
+      description: `첫 줄에 상품 수 N이 주어지고, 이어서 N줄에 걸쳐 "상품명 수량 단가"가 주어집니다.
+각 상품의 소계(수량 × 단가)와 전체 합계를 다음 형식으로 출력하세요.
+
+형식:
+- 각 상품 줄: 이름 왼쪽 정렬 8칸, "x수량" 왼쪽 정렬 5칸, 소계 오른쪽 정렬 6칸
+- "-------------------" (- 19개)
+- 합계 줄: "Total" 왼쪽 정렬 13칸, 합계 오른쪽 정렬 6칸`,
+      constraints: "1 ≤ N ≤ 10, 상품명 길이 ≤ 8, 1 ≤ 수량 ≤ 99, 1 ≤ 단가 ≤ 9999",
+      initialCode: `n = int(input())
+items = []
+for _ in range(n):
+    parts = input().split()
+    name, qty, price = parts[0], int(parts[1]), int(parts[2])
+    items.append((name, qty, price))
+
+# 쇼핑 카트 표를 출력하세요
+# 소계 = qty * price
+# f"{name:<8}{'x'+str(qty):<5}{subtotal:>6}"
+`,
+      testCases: [
+        { stdin: "3\napple 2 500\nbanana 3 200\ncoffee 1 3000", expectedOutput: "apple   x2     1000\nbanana  x3      600\ncoffee  x1     3000\n-------------------\nTotal          4600", label: "3개" },
+        { stdin: "2\npen 5 200\neraser 10 50", expectedOutput: "pen     x5     1000\neraser  x10     500\n-------------------\nTotal          1500", label: "수량 두 자리" },
+        { stdin: "1\nlaptop 1 9999", expectedOutput: "laptop  x1     9999\n-------------------\nTotal          9999", label: "1개" },
+      ],
+      hints: [
+        "소계 = qty * price 로 각 상품 금액을 계산하세요.",
+        "f\"{name:<8}{'x'+str(qty):<5}{subtotal:>6}\" 형식으로 각 줄을 출력하세요.",
+        "합계 줄: f\"{'Total':<13}{total:>6}\"",
+      ],
+      solutionCode: `n = int(input())
+items = []
+for _ in range(n):
+    parts = input().split()
+    name, qty, price = parts[0], int(parts[1]), int(parts[2])
+    items.append((name, qty, price))
+
+total = sum(q * p for _, q, p in items)
+for name, qty, price in items:
+    subtotal = qty * price
+    print(f"{name:<8}{'x'+str(qty):<5}{subtotal:>6}")
+print("-" * 19)
+print(f"{'Total':<13}{total:>6}")`,
+      solutionExplanation: "소계 = 수량 × 단가를 계산합니다. f-string의 :<N/:>N으로 각 열의 너비를 맞춥니다. 'x'+str(qty)로 'x2', 'x10' 형태의 수량 문자열을 만든 뒤 5칸으로 정렬합니다.",
+      en: {
+        title: "Shopping Cart Total",
+        description: `Given N on the first line, followed by N lines of "item qty price", compute the subtotal (qty × price) for each item and the grand total. Print in this format:\n- Each item line: name left-aligned (8 chars), "x{qty}" left-aligned (5 chars), subtotal right-aligned (6 chars)\n- "-------------------" (19 dashes)\n- Total line: "Total" left-aligned (13 chars), grand total right-aligned (6 chars)`,
+        constraints: "1 ≤ N ≤ 10, item name length ≤ 8, 1 ≤ qty ≤ 99, 1 ≤ price ≤ 9999",
+        hints: [
+          "Compute subtotal = qty * price for each item.",
+          "Use f\"{name:<8}{'x'+str(qty):<5}{subtotal:>6}\" for each item line.",
+          "Total line: f\"{'Total':<13}{total:>6}\"",
+        ],
+        solutionExplanation: "Compute subtotal = qty × price. Use f-string alignment :<N and :>N to fix each column width. 'x'+str(qty) builds strings like 'x2' or 'x10', then :<5 pads to 5 chars.",
+      },
+      language: "python",
+    },
   ],
 }

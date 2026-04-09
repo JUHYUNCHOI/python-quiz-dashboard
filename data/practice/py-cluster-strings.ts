@@ -560,5 +560,193 @@ print(total)`,
       },
       language: "python",
     },
+    {
+      id: "pystr-c01",
+      cluster: "py-strings",
+      unlockAfter: "18",
+      difficulty: "어려움",
+      title: "비밀번호 강도 검사",
+      description: `비밀번호 문자열이 한 줄로 주어집니다.
+다음 4가지 조건을 몇 개 만족하는지 세어 강도를 출력하세요.
+
+조건:
+1. 길이가 8 이상
+2. 영대문자(A-Z) 포함
+3. 숫자(0-9) 포함
+4. 특수문자(@, #, $, ! 중 하나) 포함
+
+- 4개 모두: "Strong"
+- 3개: "Medium"
+- 2개 이하: "Weak"`,
+      constraints: "1 ≤ 비밀번호 길이 ≤ 50, 영문자/숫자/특수문자로 구성",
+      initialCode: `p = input()
+score = 0
+
+# 조건 1: 길이 8 이상
+# 조건 2: 대문자 포함 — any(c.isupper() for c in p)
+# 조건 3: 숫자 포함 — any(c.isdigit() for c in p)
+# 조건 4: 특수문자(@#$!) 포함
+
+# score에 따라 Strong / Medium / Weak 출력
+`,
+      testCases: [
+        { stdin: "Hello@123", expectedOutput: "Strong", label: "모두 충족" },
+        { stdin: "Hello@1", expectedOutput: "Medium", label: "길이 미달" },
+        { stdin: "hello123", expectedOutput: "Weak", label: "대문자·특수문자 없음" },
+        { stdin: "Pass#1", expectedOutput: "Medium", label: "길이 미달" },
+      ],
+      hints: [
+        "any(c.isupper() for c in p) — 대문자 포함 여부를 확인합니다.",
+        "any(c in '@#$!' for c in p) — 특수문자 포함 여부를 확인합니다.",
+        "조건마다 if 로 score += 1 하고, 마지막에 score 값에 따라 출력하세요.",
+      ],
+      solutionCode: `p = input()
+score = 0
+if len(p) >= 8:
+    score += 1
+if any(c.isupper() for c in p):
+    score += 1
+if any(c.isdigit() for c in p):
+    score += 1
+if any(c in '@#$!' for c in p):
+    score += 1
+if score == 4:
+    print("Strong")
+elif score == 3:
+    print("Medium")
+else:
+    print("Weak")`,
+      solutionExplanation: "any()는 시퀀스 중 하나라도 True이면 True를 반환합니다. 4가지 조건을 각각 검사해 score를 누적하고, 마지막에 score에 따라 강도를 출력합니다.",
+      en: {
+        title: "Password Strength Checker",
+        description: `Given a password string, count how many of the following 4 conditions it satisfies and print its strength.\n\nConditions:\n1. Length ≥ 8\n2. Contains an uppercase letter (A–Z)\n3. Contains a digit (0–9)\n4. Contains a special character (@, #, $, or !)\n\n- All 4: "Strong"\n- Exactly 3: "Medium"\n- 2 or fewer: "Weak"`,
+        constraints: "1 ≤ password length ≤ 50, consists of letters, digits, and special characters",
+        hints: [
+          "any(c.isupper() for c in p) — checks if any character is uppercase.",
+          "any(c in '@#$!' for c in p) — checks if any character is a special character.",
+          "Use if to increment score for each condition, then print based on the final score.",
+        ],
+        solutionExplanation: "any() returns True if at least one element in the iterable is True. Check all 4 conditions independently, accumulate the score, then print the strength based on the final score.",
+      },
+      language: "python",
+    },
+    {
+      id: "pystr-c02",
+      cluster: "py-strings",
+      unlockAfter: "18",
+      difficulty: "어려움",
+      title: "카이사르 암호",
+      description: `첫 줄에 평문 텍스트, 둘째 줄에 이동 칸 수 N(0~25)이 주어집니다.
+각 영문자를 알파벳 순서에서 N칸 앞으로 이동하여 암호화하세요.
+- 소문자는 소문자로, 대문자는 대문자로 유지합니다.
+- z → a (또는 Z → A)로 순환합니다.
+- 영문자가 아닌 문자(공백, 숫자 등)는 그대로 출력합니다.`,
+      constraints: "1 ≤ 텍스트 길이 ≤ 1000, 0 ≤ N ≤ 25",
+      initialCode: `text = input()
+n = int(input())
+result = []
+
+for c in text:
+    if c.isalpha():
+        # 대소문자에 따라 base(기준 문자) 설정
+        base = ord('A') if c.isupper() else ord('a')
+        # (현재 위치 + N) % 26 으로 새 위치 계산
+        # 여기에 코드를 작성하세요
+    else:
+        result.append(c)
+
+print(''.join(result))
+`,
+      testCases: [
+        { stdin: "Hello World\n3", expectedOutput: "Khoor Zruog", label: "기본" },
+        { stdin: "abc\n1", expectedOutput: "bcd", label: "소문자 이동" },
+        { stdin: "xyz\n3", expectedOutput: "abc", label: "순환 (z→a)" },
+        { stdin: "Python3!\n13", expectedOutput: "Clguba3!", label: "ROT13" },
+      ],
+      hints: [
+        "ord(c)로 문자의 아스키 코드를 얻습니다. chr(code)로 다시 문자로 변환합니다.",
+        "새 코드: (ord(c) - base + n) % 26 + base",
+        "대문자면 base = ord('A') = 65, 소문자면 base = ord('a') = 97",
+      ],
+      solutionCode: `text = input()
+n = int(input())
+result = []
+for c in text:
+    if c.isalpha():
+        base = ord('A') if c.isupper() else ord('a')
+        shifted = (ord(c) - base + n) % 26 + base
+        result.append(chr(shifted))
+    else:
+        result.append(c)
+print(''.join(result))`,
+      solutionExplanation: "각 문자를 base(65 또는 97)에서의 상대적 위치로 변환하고 N을 더한 뒤 26으로 나머지를 취해 순환을 처리합니다. chr()로 다시 문자로 변환합니다.",
+      en: {
+        title: "Caesar Cipher",
+        description: `Given a text string on the first line and a shift N (0–25) on the second line, encrypt the text by shifting each letter N positions forward in the alphabet.\n- Lowercase stays lowercase, uppercase stays uppercase.\n- Wraps around: z → a, Z → A.\n- Non-letter characters (spaces, digits, etc.) are unchanged.`,
+        constraints: "1 ≤ text length ≤ 1000, 0 ≤ N ≤ 25",
+        hints: [
+          "Use ord(c) to get the ASCII code and chr(code) to convert back to a character.",
+          "New code: (ord(c) - base + n) % 26 + base",
+          "For uppercase use base = ord('A') = 65; for lowercase use base = ord('a') = 97.",
+        ],
+        solutionExplanation: "Convert each character to its position relative to base (65 or 97), add N, take mod 26 to handle wrap-around, then convert back with chr().",
+      },
+      language: "python",
+    },
+    {
+      id: "pystr-c03",
+      cluster: "py-strings",
+      unlockAfter: "18",
+      difficulty: "어려움",
+      title: "문자열 템플릿 치환",
+      description: `첫 줄에 템플릿 문자열이 주어지고, 둘째 줄에 치환 수 N이 주어집니다.
+이어서 N줄에 걸쳐 "키 값" 형식으로 치환 규칙이 주어집니다.
+
+템플릿에서 {키} 형식의 모든 부분을 해당 값으로 치환하여 출력하세요.
+같은 키가 여러 번 등장하면 모두 치환합니다.`,
+      constraints: "1 ≤ N ≤ 10, 템플릿 길이 ≤ 200, 키는 영문자로만 구성",
+      initialCode: `template = input()
+n = int(input())
+
+for _ in range(n):
+    parts = input().split(' ', 1)  # 첫 번째 공백으로만 분리
+    key, value = parts[0], parts[1]
+    # template에서 {key}를 value로 치환하세요
+    # str.replace() 를 사용하세요
+
+print(template)
+`,
+      testCases: [
+        { stdin: "Hello {name}! You are {age} years old.\n2\nname Alice\nage 25", expectedOutput: "Hello Alice! You are 25 years old.", label: "기본" },
+        { stdin: "{greeting}, {name}!\n2\ngreeting Hi\nname Bob", expectedOutput: "Hi, Bob!", label: "문장 시작" },
+        { stdin: "I love {food}.\n1\nfood pizza", expectedOutput: "I love pizza.", label: "단일 치환" },
+        { stdin: "{x} + {x} = {result}\n2\nx 5\nresult 10", expectedOutput: "5 + 5 = 10", label: "중복 키" },
+      ],
+      hints: [
+        "input().split(' ', 1) 은 첫 번째 공백 기준으로만 나눕니다. (값에 공백이 있을 때 유용)",
+        "template = template.replace('{' + key + '}', value) 로 치환합니다.",
+        "replace()는 모든 일치하는 부분을 한 번에 교체합니다.",
+      ],
+      solutionCode: `template = input()
+n = int(input())
+for _ in range(n):
+    parts = input().split(' ', 1)
+    key, value = parts[0], parts[1]
+    template = template.replace('{' + key + '}', value)
+print(template)`,
+      solutionExplanation: "split(' ', 1)은 첫 번째 공백에서만 분리해 값에 공백이 있어도 처리합니다. replace('{key}', value)는 해당 패턴의 모든 등장을 한 번에 치환합니다.",
+      en: {
+        title: "String Template Substitution",
+        description: `Given a template string on the first line and N substitution rules (each as "key value"), replace every occurrence of {key} in the template with the corresponding value.\nIf the same key appears multiple times, all occurrences are replaced.`,
+        constraints: "1 ≤ N ≤ 10, template length ≤ 200, keys consist of English letters only",
+        hints: [
+          "input().split(' ', 1) splits only on the first space — useful when values may contain spaces.",
+          "Use template = template.replace('{' + key + '}', value) to substitute.",
+          "replace() replaces all matching occurrences in one call.",
+        ],
+        solutionExplanation: "split(' ', 1) splits at the first space only, so values with spaces are handled correctly. replace('{key}', value) substitutes all occurrences of the pattern at once.",
+      },
+      language: "python",
+    },
   ],
 }
