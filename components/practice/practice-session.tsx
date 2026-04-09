@@ -51,6 +51,17 @@ function tryLoadProgress(clusterId: string, allProblems: PracticeProblem[]): { s
 }
 
 // ── 문제 설명 렌더러 ──────────────────────────────────────────────
+// 인라인 마크다운: **bold**, `code` 파싱
+function renderInline(text: string): React.ReactNode[] {
+  return text.split(/(\*\*[^*\n]+\*\*|`[^`\n]+`)/g).map((seg, j) => {
+    if (seg.startsWith("**") && seg.endsWith("**"))
+      return <strong key={j} className="font-semibold text-gray-900">{seg.slice(2, -2)}</strong>
+    if (seg.startsWith("`") && seg.endsWith("`"))
+      return <code key={j} className="bg-gray-100 text-indigo-600 rounded px-1 py-0.5 font-mono text-[13px]">{seg.slice(1, -1)}</code>
+    return <span key={j}>{seg}</span>
+  })
+}
+
 function DescriptionBlock({ text }: { text: string }) {
   const parts = text.split(/(```[\s\S]*?```)/g)
   return (
@@ -59,18 +70,15 @@ function DescriptionBlock({ text }: { text: string }) {
         if (part.startsWith("```")) {
           const code = part.replace(/^```[^\n]*\n?/, "").replace(/```$/, "").trim()
           return (
-            <pre key={i} className="rounded-lg bg-gray-900 px-4 py-3 font-mono text-sm text-[#cdd6f4] overflow-x-auto">
+            <pre key={i} className="rounded-lg bg-gray-900 px-4 py-3 font-mono text-sm text-[#cdd6f4] overflow-x-auto whitespace-pre">
               {code}
             </pre>
           )
         }
-        const inline = part.split(/(`[^`]+`)/g).map((seg, j) =>
-          seg.startsWith("`")
-            ? <code key={j} className="bg-gray-100 text-indigo-600 rounded px-1 py-0.5 font-mono text-[13px]">{seg.slice(1, -1)}</code>
-            : <span key={j}>{seg}</span>
-        )
         return (
-          <p key={i} className="text-gray-700 text-sm leading-relaxed whitespace-pre-wrap">{inline}</p>
+          <p key={i} className="text-gray-700 text-sm leading-relaxed whitespace-pre-wrap">
+            {renderInline(part)}
+          </p>
         )
       })}
     </div>
