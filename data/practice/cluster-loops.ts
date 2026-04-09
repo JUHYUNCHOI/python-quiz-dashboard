@@ -61,6 +61,192 @@ int main() {
         solutionExplanation: "Accumulation pattern: initialize sum=0, then add each number from 1 to n. You can also use the formula n*(n+1)/2.",
       },
     },
+    // ── while + break ────────────────────────────────────────────────
+    {
+      id: "loop-W01",
+      cluster: "loops",
+      unlockAfter: "cpp-7",
+      difficulty: "쉬움",
+      title: "0 전까지 합산 (while + break)",
+      description: `정수를 한 줄에 하나씩 입력받습니다. **0이 입력되면 즉시 종료**하고, 그 전까지 입력받은 수의 합계를 출력하세요.
+
+**예시**
+- 입력: \`3 5 2 0\` (한 줄에 하나씩) → 출력: \`10\`
+- 입력: \`0\` → 출력: \`0\`
+
+**힌트:** \`while (true) { ... if (n == 0) break; ... }\` 패턴을 사용하세요.`,
+      constraints: "입력 수는 최대 100개, 각 수의 절댓값 ≤ 1000",
+      initialCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int n, sum = 0;
+    while (true) {
+        cin >> n;
+        // 0이면 종료
+        // 아니면 sum에 더하기
+    }
+    cout << sum << endl;
+    return 0;
+}`,
+      testCases: [
+        { stdin: "3\n5\n2\n0", expectedOutput: "10", label: "기본" },
+        { stdin: "10\n0", expectedOutput: "10", label: "값 하나" },
+        { stdin: "0", expectedOutput: "0", label: "바로 0" },
+        { stdin: "1\n2\n3\n4\n5\n0", expectedOutput: "15", label: "5개" },
+        { stdin: "-3\n7\n0", expectedOutput: "4", label: "음수 포함" },
+      ],
+      hints: [
+        "while (true) 는 무한 루프입니다. break로만 빠져나올 수 있어요.",
+        "cin >> n 으로 읽은 후 if (n == 0) break; 를 먼저 확인하세요.",
+      ],
+      solutionCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int n, sum = 0;
+    while (true) {
+        cin >> n;
+        if (n == 0) break;
+        sum += n;
+    }
+    cout << sum << endl;
+    return 0;
+}`,
+      solutionExplanation: "while (true)로 무한 루프를 만들고 break로 탈출합니다. for 루프와 달리 while은 반복 횟수를 미리 알 수 없을 때 적합합니다.",
+      en: {
+        title: "Sum Until Zero (while + break)",
+        description: `Integers are given one per line. When **0 is entered, stop immediately** and print the sum of all numbers before it.\n\n**Examples**\n- Input: \`3 5 2 0\` (one per line) → Output: \`10\`\n- Input: \`0\` → Output: \`0\`\n\n**Hint:** Use the pattern \`while (true) { ... if (n == 0) break; ... }\``,
+        constraints: "At most 100 numbers, absolute value of each ≤ 1000",
+        hints: [
+          "while (true) is an infinite loop — break is the only way out.",
+          "After reading cin >> n, check if (n == 0) break; before adding to sum.",
+        ],
+        solutionExplanation: "while (true) creates an infinite loop and break exits it. Unlike for loops, while is ideal when the number of iterations isn't known in advance.",
+      },
+    },
+    // ── do-while ─────────────────────────────────────────────────────
+    {
+      id: "loop-DW01",
+      cluster: "loops",
+      unlockAfter: "cpp-7",
+      difficulty: "쉬움",
+      title: "절반씩 줄이기 (do-while)",
+      description: `양의 정수 N이 주어질 때, **do-while 루프를 사용해** N을 계속 2로 나누며 그 결과를 출력하세요. 결과가 0이 되면 멈춥니다.
+
+**예시**
+- 입력: \`16\` → 출력: \`8  4  2  1\` (한 줄에 하나씩)
+- 입력: \`7\` → 출력: \`3  1\`
+
+**do-while 특성:** 조건을 나중에 검사하므로 **무조건 한 번은 실행**됩니다.`,
+      constraints: "1 ≤ N ≤ 1000",
+      initialCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    do {
+        n /= 2;
+        cout << n << "\\n";
+    } while (/* 조건을 채우세요 */);
+    return 0;
+}`,
+      testCases: [
+        { stdin: "16", expectedOutput: "8\n4\n2\n1", label: "16" },
+        { stdin: "7", expectedOutput: "3\n1", label: "7" },
+        { stdin: "2", expectedOutput: "1", label: "2" },
+        { stdin: "100", expectedOutput: "50\n25\n12\n6\n3\n1", label: "100" },
+      ],
+      hints: [
+        "do { n /= 2; ... } while (n > 0); 로 n이 0보다 크면 계속 실행합니다.",
+        "do-while은 루프 본문을 먼저 실행하고 조건을 나중에 검사합니다.",
+      ],
+      solutionCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    do {
+        n /= 2;
+        cout << n << "\\n";
+    } while (n > 0);
+    return 0;
+}`,
+      solutionExplanation: "do-while은 { } 안의 코드를 먼저 실행한 뒤 while 조건을 검사합니다. n /= 2로 절반씩 줄이고, n이 0이 되면 루프가 끝납니다.",
+      en: {
+        title: "Halve Repeatedly (do-while)",
+        description: `Given a positive integer N, use a **do-while loop** to repeatedly divide N by 2 and print each result. Stop when the result becomes 0.\n\n**Examples**\n- Input: \`16\` → Output: \`8  4  2  1\` (one per line)\n- Input: \`7\` → Output: \`3  1\`\n\n**do-while characteristic:** The condition is checked after the body, so it **always executes at least once**.`,
+        constraints: "1 ≤ N ≤ 1000",
+        hints: [
+          "do { n /= 2; ... } while (n > 0); continues as long as n is greater than 0.",
+          "do-while executes the loop body first, then checks the condition.",
+        ],
+        solutionExplanation: "do-while executes the code in { } first, then checks the while condition. n /= 2 halves n each time, and the loop ends when n reaches 0.",
+      },
+    },
+    // ── continue ──────────────────────────────────────────────────────
+    {
+      id: "loop-C01",
+      cluster: "loops",
+      unlockAfter: "cpp-7",
+      difficulty: "쉬움",
+      title: "3의 배수 건너뛰기 (continue)",
+      description: `1부터 N까지 정수 중 **3의 배수를 제외하고** 나머지를 한 줄에 하나씩 출력하세요. **continue 문을 사용하세요.**
+
+**예시**
+- 입력: \`10\` → 출력: \`1 2 4 5 7 8 10\` (한 줄에 하나씩)
+- 입력: \`6\` → 출력: \`1 2 4 5\`
+
+**continue 특성:** 현재 반복을 즉시 건너뛰고 다음 반복으로 이동합니다.`,
+      constraints: "1 ≤ N ≤ 100",
+      initialCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        if (i % 3 == 0) continue;  // 3의 배수면 건너뛰기
+        // 나머지 출력
+    }
+    return 0;
+}`,
+      testCases: [
+        { stdin: "10", expectedOutput: "1\n2\n4\n5\n7\n8\n10", label: "N=10" },
+        { stdin: "6", expectedOutput: "1\n2\n4\n5", label: "N=6" },
+        { stdin: "3", expectedOutput: "1\n2", label: "N=3" },
+        { stdin: "1", expectedOutput: "1", label: "N=1" },
+      ],
+      hints: [
+        "if (i % 3 == 0) continue; 를 루프 맨 위에 두면 3의 배수일 때 출력을 건너뜁니다.",
+        "continue는 현재 반복의 나머지 코드를 건너뛰고 바로 다음 i++로 이동합니다.",
+      ],
+      solutionCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        if (i % 3 == 0) continue;
+        cout << i << "\\n";
+    }
+    return 0;
+}`,
+      solutionExplanation: "continue는 현재 반복의 나머지 코드를 건너뛰고 다음 반복으로 이동합니다. if 조건으로 건너뛸 대상을 먼저 걸러내는 것이 가독성에 좋습니다.",
+      en: {
+        title: "Skip Multiples of 3 (continue)",
+        description: `Print all integers from 1 to N **except multiples of 3**, one per line. **Use the continue statement.**\n\n**Examples**\n- Input: \`10\` → Output: \`1 2 4 5 7 8 10\` (one per line)\n- Input: \`6\` → Output: \`1 2 4 5\`\n\n**continue characteristic:** Immediately skips the rest of the current iteration and moves to the next one.`,
+        constraints: "1 ≤ N ≤ 100",
+        hints: [
+          "Put if (i % 3 == 0) continue; at the top of the loop to skip multiples of 3.",
+          "continue skips the remaining code in the current iteration and jumps to the next i++.",
+        ],
+        solutionExplanation: "continue skips the rest of the current iteration and moves to the next. Filtering out the 'skip' condition at the top improves readability.",
+      },
+    },
     {
       id: "loop-002",
       cluster: "loops",
