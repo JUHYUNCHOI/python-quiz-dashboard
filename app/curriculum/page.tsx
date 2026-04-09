@@ -1517,7 +1517,8 @@ export default function CurriculumPage() {
                                           const step3Done = !cluster || isClusterSet1Done(cluster)
                                           const step3FullyDone = !cluster || cluster.problems.every(p => practiceSolvedSet.has(p.id))
                                           // 지금 해야 할 단계: 1=수업, 2=복습, 3=도전, 0=전부완료
-                                          const cur = !step1Done ? 1 : !step2Done ? 2 : !step3Done ? 3 : 0
+                                          // 복습(2)과 도전(3)은 수업(1) 완료 후 독립적으로 접근 가능
+                                          const cur = !step1Done ? 1 : (!step2Done && !step3Done) ? 2 : 0
                                           const activeBtn = "w-full px-3 py-1.5 rounded-lg border-2 border-black font-bold text-sm text-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-colors"
                                           const doneText = "text-xs text-gray-400"
                                           const lockedText = "text-xs text-gray-300"
@@ -1574,7 +1575,7 @@ export default function CurriculumPage() {
                                                         {t("다시풀기", "Redo")}
                                                       </Link>
                                                     </div>
-                                                  ) : cur === 2 ? (
+                                                  ) : step1Done ? (
                                                     <Link href={getReviewPath(lesson.id)} className={`${activeBtn} bg-orange-400 hover:bg-orange-500 text-white`}>
                                                       📝 {t("복습하기", "Review")}
                                                     </Link>
@@ -1598,7 +1599,7 @@ export default function CurriculumPage() {
                                                         </Link>
                                                       )}
                                                     </div>
-                                                  ) : cur === 3 ? (
+                                                  ) : step1Done ? (
                                                     <Link href={`/practice?cluster=${cluster.id}&from=curriculum&session=1`} className={`${activeBtn} bg-green-500 hover:bg-green-600 text-white flex items-center justify-center gap-1.5`}>
                                                       <span>{cluster.emoji}</span>
                                                       <span>{t("도전", "Challenge")} {cluster.problems.filter(p => practiceSolvedSet.has(p.id)).length}/{cluster.problems.length}</span>
