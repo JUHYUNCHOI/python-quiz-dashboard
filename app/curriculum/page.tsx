@@ -462,7 +462,7 @@ export default function CurriculumPage() {
           const cluster = ALL_CLUSTERS.find(c => String(c.unlockAfter) === String(lessonId))
           if (!cluster) return false
           if (!completedLessons.has(cluster.unlockAfter)) return false
-          return !cluster.problems.every(p => practiceSolvedSet.has(p.id))
+          return !isClusterSet1Done(cluster)
         })
         if (hasPendingDojeon) active.add(part.id)
       }
@@ -613,6 +613,14 @@ export default function CurriculumPage() {
   const completedCount = allLessons.filter((lesson) => completedLessons.has(lesson.id)).length
   const progress = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0
 
+  // SET1 완료 판단 헬퍼: 첫 7문제 풀면 "도전 완료" 처리
+  // 나머지 문제는 선택적 추가 연습 (더 연습하기 링크로 접근 가능)
+  const SET1_SIZE = 7
+  const isClusterSet1Done = (cluster: typeof ALL_CLUSTERS[number]) => {
+    const solved = cluster.problems.filter(p => practiceSolvedSet.has(p.id)).length
+    return solved >= Math.min(SET1_SIZE, cluster.problems.length)
+  }
+
   // 레슨 ID → 연습 클러스터 맵 (레슨 카드 배지용)
   const lessonToClusters = new Map<string, typeof ALL_CLUSTERS[number][]>()
   for (const cluster of ALL_CLUSTERS) {
@@ -628,7 +636,7 @@ export default function CurriculumPage() {
     if (isCpp && cluster.id.startsWith("py-")) return false
     if (!isCpp && !isPseudo && !cluster.id.startsWith("py-")) return false
     if (!effectiveCompleted.has(cluster.unlockAfter)) return false
-    return !cluster.problems.every(p => practiceSolvedSet.has(p.id))
+    return !isClusterSet1Done(cluster)
   })
 
   // 학생: 순서대로만 열림 (완료한 곳 + 바로 다음 1개). 선생님: 전부 열림
@@ -1286,7 +1294,7 @@ export default function CurriculumPage() {
                 // 도전 (해금된 경우만 카운트)
                 if (lCluster && lClusterUnlocked) {
                   partTotalSteps += 1
-                  if (lCluster.problems.every(p => practiceSolvedSet.has(p.id))) partDoneSteps += 1
+                  if (isClusterSet1Done(lCluster)) partDoneSteps += 1
                 }
               }
               const partProgress = partTotalSteps > 0 ? Math.round((partDoneSteps / partTotalSteps) * 100) : 0
@@ -1296,7 +1304,7 @@ export default function CurriculumPage() {
                 const cluster = lessonToClusters.get(String(lesson.id))?.[0]
                 if (!cluster) return false
                 if (!effectiveCompleted.has(cluster.unlockAfter)) return false
-                return !cluster.problems.every(p => practiceSolvedSet.has(p.id))
+                return !isClusterSet1Done(cluster)
               }).length : 0
 
               return (
@@ -1506,7 +1514,8 @@ export default function CurriculumPage() {
                                           const hasReview = !isPseudo && !!lesson.hasQuiz
                                           const step1Done = isCompleted
                                           const step2Done = !hasReview || isQuizDone
-                                          const step3Done = !cluster || cluster.problems.every(p => practiceSolvedSet.has(p.id))
+                                          const step3Done = !cluster || isClusterSet1Done(cluster)
+                                          const step3FullyDone = !cluster || cluster.problems.every(p => practiceSolvedSet.has(p.id))
                                           // 지금 해야 할 단계: 1=수업, 2=복습, 3=도전, 0=전부완료
                                           const cur = !step1Done ? 1 : !step2Done ? 2 : !step3Done ? 3 : 0
                                           const activeBtn = "w-full px-3 py-1.5 rounded-lg border-2 border-black font-bold text-sm text-center shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-colors"
@@ -1580,7 +1589,15 @@ export default function CurriculumPage() {
                                                 <div className="flex items-center gap-2">
                                                   <span className="text-[10px] font-black text-gray-300 w-3 shrink-0">3</span>
                                                   {step3Done ? (
-                                                    <span className={doneText}>✅ {t("도전완료", "Done")}</span>
+                                                    <div className="flex items-center gap-1.5 flex-wrap">
+                                                      <span className={doneText}>✅ {t("도전완료", "Done")}</span>
+                                                      {!step3FullyDone && (
+                                                        <Link href={`/practice?cluster=${cluster.id}&from=curriculum`}
+                                                          className="text-[10px] text-gray-300 hover:text-green-500 underline underline-offset-2 decoration-dotted transition-colors">
+                                                          {t("더 연습하기", "More practice")}
+                                                        </Link>
+                                                      )}
+                                                    </div>
                                                   ) : cur === 3 ? (
                                                     <Link href={`/practice?cluster=${cluster.id}&from=curriculum&session=1`} className={`${activeBtn} bg-green-500 hover:bg-green-600 text-white flex items-center justify-center gap-1.5`}>
                                                       <span>{cluster.emoji}</span>
