@@ -45,6 +45,13 @@ print("큐 개념: 1이 먼저 나가야 해!")`,
           answer: 1,
           feedback: "FIFO! First In, First Out! 먼저 넣은 1이 먼저 나와요!"
         },
+        en: {
+          predict: {
+            question: "Which comes out first from the queue [1, 2, 3]?",
+            options: ["3 (last inserted)", "1 (first inserted)", "2 (middle)", "Random"],
+            feedback: "FIFO! First In, First Out! The first inserted value 1 comes out first!"
+          }
+        },
         result: "스택 pop: 3\n큐 개념: 1이 먼저 나가야 해!"
       }
     },
@@ -155,6 +162,18 @@ print(list(q))`,
           ],
           answer: 0,
           feedback: "deque는 양쪽 끝에서 O(1)으로 추가/삭제! 리스트 pop(0)은 O(n)이에요."
+        },
+        en: {
+          predict: {
+            question: "Why is deque's popleft() faster?",
+            options: [
+              "No need to shift remaining elements",
+              "Python has special optimization for it",
+              "Uses less memory than a list",
+              "Because it's sorted"
+            ],
+            feedback: "deque adds/removes from both ends in O(1)! List's pop(0) is O(n)."
+          }
         },
         result: "[2, 3, 4, 5]"
       }
@@ -295,6 +314,13 @@ print("4 추가 후:", list(queue))`,
           options: ["에러 발생", "가장 오래된 1이 자동 삭제", "4가 무시됨", "[1, 2, 3, 4]"],
           answer: 1,
           feedback: "maxlen을 넘기면 가장 오래된 항목이 자동으로 빠져요!"
+        },
+        en: {
+          predict: {
+            question: "What happens when you add a 4th item to a queue with maxlen=3?",
+            options: ["Error occurs", "The oldest item (1) is automatically removed", "4 is ignored", "[1, 2, 3, 4]"],
+            feedback: "When maxlen is exceeded, the oldest item is automatically dropped!"
+          }
         },
         result: "꽉 찬 큐: [1, 2, 3]\n4 추가 후: [2, 3, 4]"
       }

@@ -38,6 +38,13 @@ export const lesson38: LessonData = {
           answer: 1,
           feedback: "\\n 없으면 줄바꿈 없이 이어서! ABC"
         },
+        en: {
+          predict: {
+            question: "What is the content of a.txt?",
+            options: ["A\\nB\\nC", "ABC", "A B C", "CBA"],
+            feedback: "No \\n means no line break — they concatenate! ABC"
+          }
+        },
         result: "ABC"
       }
     },
@@ -196,6 +203,13 @@ export const lesson38: LessonData = {
           answer: 2,
           feedback: "'w'는 매번 덮어쓰기! 두 번째 'Y'만 남아요!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["XY", "X", "Y", "Error"],
+            feedback: "'w' mode overwrites every time! Only the second 'Y' remains!"
+          }
+        },
         result: "Y"
       }
     },
@@ -281,6 +295,13 @@ export const lesson38: LessonData = {
           options: ["A C", "B C", "A B C", "에러"],
           answer: 1,
           feedback: "파일 없음 → except → 'B' → 프로그램 계속 → 'C'"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["A C", "B C", "A B C", "Error"],
+            feedback: "File not found → except → 'B' → program continues → 'C'"
+          }
         },
         result: "B\nC"
       }

@@ -36,6 +36,13 @@ export const lessonCpp23: LessonData = {
             options: ["1 9", "9 1", "5 2"],
             answer: 1,
             feedback: "greater<int>()는 내림차순! 가장 큰 9가 앞, 가장 작은 1이 뒤!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["1 9", "9 1", "5 2"],
+              feedback: "greater<int>() sorts in descending order! The largest value 9 comes first, smallest 1 comes last!"
+            }
           }
         }
       },
@@ -92,6 +99,13 @@ export const lessonCpp23: LessonData = {
             options: ["2", "3", "5"],
             answer: 1,
             feedback: "5가 인덱스 2,3,4에 3개 있어요! hi - lo = 3!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["2", "3", "5"],
+              feedback: "5 appears at indices 2, 3, 4 — that's 3 occurrences! hi - lo = 3!"
+            }
           }
         }
       },
@@ -121,6 +135,13 @@ export const lessonCpp23: LessonData = {
             options: ["철수: 85", "영희: 92", "민수: 78"],
             answer: 1,
             feedback: "내림차순(>)이니까 가장 높은 점수 92점인 영희가 맨 앞!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["Cheolsu: 85", "Younghee: 92", "Minsu: 78"],
+              feedback: "Descending order (>) puts the highest score 92 (Younghee) at the front!"
+            }
           }
         }
       },

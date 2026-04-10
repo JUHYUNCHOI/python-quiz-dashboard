@@ -58,6 +58,13 @@ except:
           answer: 2,
           feedback: "0으로 나누면 에러! except가 잡아요!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["10", "0", "에러!", "Program stops"],
+            feedback: "Dividing by 0 causes an error! except catches it!"
+          }
+        },
         result: "에러!"
       }
     },
@@ -75,6 +82,13 @@ except:
           options: ["5.0", "에러!", "10 / 2", "아무것도 없음"],
           answer: 0,
           feedback: "에러가 안 나면 try만 실행돼요!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["5.0", "에러!", "10 / 2", "Nothing"],
+            feedback: "If no error occurs, only the try block runs!"
+          }
         },
         result: "5.0"
       }
@@ -271,6 +285,13 @@ except ZeroDivisionError:
           answer: 0,
           feedback: "'abc'는 숫자 변환 실패 → ValueError → 'A'"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["A", "B", "Both A and B", "Error"],
+            feedback: "'abc' fails number conversion → ValueError → 'A'"
+          }
+        },
         result: "A"
       }
     },
@@ -290,6 +311,13 @@ except ZeroDivisionError:
           options: ["A", "B", "10", "에러"],
           answer: 1,
           feedback: "int('0')은 성공! 10/0은 ZeroDivisionError → 'B'"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["A", "B", "10", "Error"],
+            feedback: "int('0') succeeds! 10/0 causes ZeroDivisionError → 'B'"
+          }
         },
         result: "B"
       }
@@ -415,6 +443,13 @@ except ZeroDivisionError:
           options: ["다시!", "다시! → (종료)", "에러", "다시! → 다시!"],
           answer: 1,
           feedback: "'abc' → except → '다시!' 출력 → '5' → break로 종료!"
+        },
+        en: {
+          predict: {
+            question: "Input 'abc' then '5' — what happens?",
+            options: ["다시!", "다시! → (exits)", "Error", "다시! → 다시!"],
+            feedback: "'abc' → except → prints '다시!' → '5' → break exits the loop!"
+          }
         },
         result: "다시!"
       }

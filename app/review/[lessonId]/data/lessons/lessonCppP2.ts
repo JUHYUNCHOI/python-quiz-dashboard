@@ -36,6 +36,13 @@ export const lessonCppP2: LessonData = {
             options: ["전사 100", "전사 HP: 100", "hero HP: 100"],
             answer: 1,
             feedback: "hero.name은 \"전사\", hero.hp는 100이에요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["전사 100", "전사 HP: 100", "hero HP: 100"],
+              feedback: "hero.name is \"전사\" and hero.hp is 100!"
+            }
           }
         }
       },
@@ -88,6 +95,17 @@ export const lessonCppP2: LessonData = {
             ],
             answer: 1,
             feedback: "& (참조)를 쓰면 복사본이 아닌 원본을 직접 수정해요! HP가 진짜로 깎여요."
+          },
+          en: {
+            predict: {
+              question: "Why use & in the parameter?",
+              options: [
+                "To make it faster",
+                "To modify the original value",
+                "To prevent errors"
+              ],
+              feedback: "Using & (reference) lets you modify the original directly instead of a copy! The HP actually decreases."
+            }
           }
         }
       },

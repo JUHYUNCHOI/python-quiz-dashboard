@@ -67,6 +67,13 @@ export const lessonCpp14: LessonData = {
             options: ["3", "7", "10", "에러"],
             answer: 2,
             feedback: "p.x = 3, p.y = 7이니까 3 + 7 = 10이에요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["3", "7", "10", "Error"],
+              feedback: "p.x = 3 and p.y = 7, so 3 + 7 = 10!"
+            }
           }
         }
       },
@@ -267,6 +274,13 @@ export const lessonCpp14: LessonData = {
             options: ["0", "1", "3", "에러"],
             answer: 2,
             feedback: "increment()를 3번 호출했으니 count는 0 → 1 → 2 → 3이에요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["0", "1", "3", "Error"],
+              feedback: "increment() is called 3 times so count goes 0 → 1 → 2 → 3!"
+            }
           }
         }
       },
@@ -435,6 +449,13 @@ export const lessonCpp14: LessonData = {
             options: ["9", "20", "45", "에러"],
             answer: 1,
             feedback: "width=4, height=5이니까 area() = 4 * 5 = 20이에요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["9", "20", "45", "Error"],
+              feedback: "width=4, height=5, so area() = 4 * 5 = 20!"
+            }
           }
         }
       },

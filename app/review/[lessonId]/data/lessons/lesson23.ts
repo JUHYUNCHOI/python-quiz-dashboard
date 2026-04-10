@@ -42,6 +42,13 @@ print(f"남은 접시: {접시들}")`,
           answer: 2,
           feedback: "LIFO! Last In, First Out! 마지막에 넣은 접시3이 먼저!"
         },
+        en: {
+          predict: {
+            question: "Which plate comes out first?",
+            options: ["접시1 (bottom)", "접시2 (middle)", "접시3 (top)", "Random"],
+            feedback: "LIFO! Last In, First Out! The last plate pushed (접시3) comes out first!"
+          }
+        },
         result: "꺼낸 접시: 접시3\n남은 접시: ['접시1', '접시2']"
       }
     },
@@ -140,6 +147,13 @@ print("스택 변화 없음:", stack)`,
           options: ["A", "B", "C", "에러"],
           answer: 2,
           feedback: "[-1]은 마지막 요소! pop과 달리 꺼내지 않아요."
+        },
+        en: {
+          predict: {
+            question: "What is the result of stack[-1]?",
+            options: ["A", "B", "C", "Error"],
+            feedback: "[-1] is the last element! Unlike pop, it doesn't remove it."
+          }
         },
         result: "맨 위: C\n스택 변화 없음: ['A', 'B', 'C']"
       }
@@ -278,6 +292,13 @@ print("뒤로가기:", history[-1])`,
           options: ["google.com", "youtube.com", "github.com", "에러"],
           answer: 1,
           feedback: "github.com을 pop하면 그 아래 youtube.com이 맨 위!"
+        },
+        en: {
+          predict: {
+            question: "Where does going back take you?",
+            options: ["google.com", "youtube.com", "github.com", "Error"],
+            feedback: "After popping github.com, youtube.com becomes the top!"
+          }
         },
         result: "현재: github.com\n뒤로가기: youtube.com"
       }

@@ -31,6 +31,18 @@ export const lesson18: LessonData = {
           answer: 1,
           feedback: "split()은 공백을 기준으로 문자열을 쪼개서 리스트로 만들어요!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: [
+              "나는 파이썬을 좋아해",
+              "[\"나는\", \"파이썬을\", \"좋아해\"]",
+              "[\"나\", \"는\", \" \", \"파\", \"이\", \"썬\"]",
+              "Error"
+            ],
+            feedback: "split() splits the string by spaces and returns a list!"
+          }
+        },
         result: "['나는', '파이썬을', '좋아해']"
       }
     },
@@ -54,6 +66,13 @@ export const lesson18: LessonData = {
           answer: 1,
           feedback: "split(\"-\")로 쪼개면 [\"2025\", \"01\", \"15\"], 인덱스 1은 \"01\"!"
         },
+        en: {
+          predict: {
+            question: "What is the value of parts[1]?",
+            options: ["2025", "01", "15", "-"],
+            feedback: "split(\"-\") gives [\"2025\", \"01\", \"15\"], so index 1 is \"01\"!"
+          }
+        },
         result: "['2025', '01', '15']"
       }
     },
@@ -67,6 +86,13 @@ export const lesson18: LessonData = {
           options: ["1", "2", "3", "18"],
           answer: 2,
           feedback: "공백으로 쪼개면 3개의 단어!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["1", "2", "3", "18"],
+            feedback: "Splitting by spaces gives 3 words!"
+          }
         },
         result: "3"
       }
@@ -165,6 +191,18 @@ export const lesson18: LessonData = {
           answer: 2,
           feedback: "\" \"(공백)을 사이사이에 넣어서 합쳐요!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: [
+              "[\"나는\", \"파이썬을\", \"좋아해\"]",
+              "나는파이썬을좋아해",
+              "나는 파이썬을 좋아해",
+              "Error"
+            ],
+            feedback: "\" \" (space) is inserted between each element when joining!"
+          }
+        },
         result: "나는 파이썬을 좋아해"
       }
     },
@@ -187,6 +225,13 @@ export const lesson18: LessonData = {
           options: ["P y t h o n", "Python", "[\"P\", \"y\", \"t\", \"h\", \"o\", \"n\"]", "에러"],
           answer: 1,
           feedback: "빈 문자열 \"\"로 합치면 글자가 바로 붙어요!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["P y t h o n", "Python", "[\"P\", \"y\", \"t\", \"h\", \"o\", \"n\"]", "Error"],
+            feedback: "Joining with an empty string \"\" puts the letters right next to each other!"
+          }
         },
         result: "Python"
       }
@@ -300,6 +345,13 @@ export const lesson18: LessonData = {
           answer: 1,
           feedback: "\"/\"로 쪼개고 \"-\"로 합치면 구분자가 바뀌어요!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["2025/01/15", "2025-01-15", "2025 01 15", "Error"],
+            feedback: "Split by \"/\" then join with \"-\" to swap the delimiter!"
+          }
+        },
         result: "2025-01-15"
       }
     },
@@ -327,6 +379,18 @@ export const lesson18: LessonData = {
           ],
           answer: 2,
           feedback: "단어 단위로 쪼개고 뒤집은 후 다시 합치면 단어 순서가 바뀌어요!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: [
+              "파이썬 정말 재밌다",
+              "다밌재 말정 썬이파",
+              "재밌다 정말 파이썬",
+              "Error"
+            ],
+            feedback: "Split into words, reverse the list, then join again — the word order is reversed!"
+          }
         },
         result: "재밌다 정말 파이썬"
       }

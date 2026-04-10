@@ -37,6 +37,13 @@ export const lessonCpp6: LessonData = {
             options: ["성인", "미성년", "에러"],
             answer: 1,
             feedback: "15 >= 18은 거짓이라서 else 블록이 실행돼요!"
+          },
+          en: {
+            predict: {
+              question: "What is printed when age is 15?",
+              options: ["Adult", "Minor", "Error"],
+              feedback: "15 >= 18 is false, so the else block runs!"
+            }
           }
         }
       },
@@ -208,6 +215,13 @@ export const lessonCpp6: LessonData = {
             options: ["A", "B", "C", "F"],
             answer: 1,
             feedback: "85 >= 90은 거짓, 85 >= 80은 참! 그래서 B가 출력돼요!"
+          },
+          en: {
+            predict: {
+              question: "What is printed when x is 85?",
+              options: ["A", "B", "C", "F"],
+              feedback: "85 >= 90 is false, 85 >= 80 is true! So B is printed!"
+            }
           }
         }
       },

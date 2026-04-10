@@ -40,6 +40,13 @@ export const lessonCpp4: LessonData = {
             options: ["키보드 → 변수 (오른쪽으로)", "변수 → 화면 (왼쪽으로)", "상관없다"],
             answer: 0,
             feedback: ">>는 키보드에서 변수 쪽으로! cout << 와 반대 방향이에요."
+          },
+          en: {
+            predict: {
+              question: "Which direction does >> point in cin >> age;?",
+              options: ["Keyboard → variable (rightward)", "Variable → screen (leftward)", "Doesn't matter"],
+              feedback: ">> flows from keyboard to variable! The opposite direction of cout <<."
+            }
           }
         }
       },
@@ -104,6 +111,13 @@ export const lessonCpp4: LessonData = {
             options: ['"안녕, Kim Juhyun!"', '"안녕, Kim!"', "에러가 난다"],
             answer: 1,
             feedback: "cin >>은 공백(스페이스)에서 멈춰요! Kim만 저장되고 Juhyun은 버려져요."
+          },
+          en: {
+            predict: {
+              question: 'What happens when you enter "Kim Juhyun"?',
+              options: ['"Hello, Kim Juhyun!"', '"Hello, Kim!"', "Error"],
+              feedback: "cin >> stops at spaces! Only Kim is stored and Juhyun is discarded."
+            }
           }
         }
       },
@@ -296,6 +310,13 @@ export const lessonCpp4: LessonData = {
             options: ["a=10, b=20", "a=1020, b는 비어있음", "에러"],
             answer: 0,
             feedback: "공백으로 구분돼서 a에 10, b에 20이 들어가요!"
+          },
+          en: {
+            predict: {
+              question: 'What happens when you enter "10 20" for cin >> a >> b;?',
+              options: ["a=10, b=20", "a=1020, b is empty", "Error"],
+              feedback: "Spaces act as separators — a gets 10 and b gets 20!"
+            }
           }
         }
       },
@@ -422,6 +443,13 @@ export const lessonCpp4: LessonData = {
             options: ["10.5가 저장됨", "10만 저장됨", "에러"],
             answer: 1,
             feedback: "int는 소수점을 버려요! 정확한 계산을 원하면 double을 쓰세요."
+          },
+          en: {
+            predict: {
+              question: "If a and b are int, what happens when you enter 10.5?",
+              options: ["10.5 is stored", "Only 10 is stored", "Error"],
+              feedback: "int discards the decimal! Use double for accurate calculations."
+            }
           }
         }
       },

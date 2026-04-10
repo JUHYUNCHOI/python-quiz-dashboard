@@ -54,6 +54,13 @@ export const lessonCpp10: LessonData = {
             options: ["50", "20", "15", "4"],
             answer: 0,
             feedback: "5 + 10 + 15 + 20 = 50! range-for로 모든 원소를 더했어요."
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["50", "20", "15", "4"],
+              feedback: "5 + 10 + 15 + 20 = 50! The range-for added all elements."
+            }
           }
         }
       },
@@ -263,6 +270,13 @@ export const lessonCpp10: LessonData = {
             options: ["13", "13.14", "에러", "1013.14"],
             answer: 1,
             feedback: "int 10 + double 3.14 = double 13.14! auto는 각각 int, double로 추론했어요."
+          },
+          en: {
+            predict: {
+              question: "What is the result of a + b?",
+              options: ["13", "13.14", "Error", "1013.14"],
+              feedback: "int 10 + double 3.14 = double 13.14! auto inferred each as int and double respectively."
+            }
           }
         }
       },
@@ -334,6 +348,13 @@ export const lessonCpp10: LessonData = {
             options: ["1 2 3", "2 4 6", "1 4 9", "에러"],
             answer: 1,
             feedback: "auto&로 원본을 수정해서 모든 값이 2배! {1,2,3} → {2,4,6}"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["1 2 3", "2 4 6", "1 4 9", "Error"],
+              feedback: "auto& modifies the originals, doubling all values! {1,2,3} → {2,4,6}"
+            }
           }
         }
       },
@@ -444,6 +465,13 @@ export const lessonCpp10: LessonData = {
             options: ["30", "10", "50", "20"],
             answer: 2,
             feedback: "30→30, 10<30 패스, 50>30 갱신, 20<50 패스 → 최댓값은 50!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["30", "10", "50", "20"],
+              feedback: "30→30, 10<30 skip, 50>30 update, 20<50 skip → max is 50!"
+            }
           }
         }
       },

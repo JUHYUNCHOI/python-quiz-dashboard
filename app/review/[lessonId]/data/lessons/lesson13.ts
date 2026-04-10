@@ -66,7 +66,14 @@ export const lesson13: LessonData = {
           answer: 2,
           feedback: "range(3)은 0, 1, 2 → 3번 반복!"
         },
-        result: "안녕!\n안녕!\n안녕!"
+        result: "안녕!\n안녕!\n안녕!",
+        en: {
+          predict: {
+            question: "How many times will it print?",
+            options: ["1 time", "2 times", "3 times", "4 times"],
+            feedback: "range(3) gives 0, 1, 2 → repeats 3 times!"
+          }
+        }
       }
     },
     {
@@ -80,7 +87,14 @@ export const lesson13: LessonData = {
           answer: 0,
           feedback: "range(1, 4)는 1부터 3까지!"
         },
-        result: "1\n2\n3"
+        result: "1\n2\n3",
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["1 2 3", "1 2 3 4", "0 1 2 3", "0 1 2"],
+            feedback: "range(1, 4) goes from 1 to 3!"
+          }
+        }
       }
     },
     {
@@ -249,7 +263,14 @@ export const lesson13: LessonData = {
           answer: 1,
           feedback: "1+2+3+...+100 = 5050!"
         },
-        result: "5050"
+        result: "5050",
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["100", "5050", "5000", "10000"],
+            feedback: "1+2+3+...+100 = 5050!"
+          }
+        }
       }
     },
     // ===== 직접 써보기: for + 리스트 =====

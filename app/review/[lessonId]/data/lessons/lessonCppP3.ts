@@ -40,6 +40,13 @@ export const lessonCppP3: LessonData = {
             options: ["1 2 5 8 9", "9 8 5 2 1", "5 2 8 1 9"],
             answer: 1,
             feedback: "greater<int>()를 넣으면 내림차순! 큰 수부터 정렬돼요."
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["1 2 5 8 9", "9 8 5 2 1", "5 2 8 1 9"],
+              feedback: "Using greater<int>() sorts in descending order — largest values come first!"
+            }
           }
         }
       },
@@ -248,6 +255,17 @@ export const lessonCppP3: LessonData = {
             ],
             answer: 1,
             feedback: "정렬해서 큰 순서대로 K개를 출력하면 돼요!"
+          },
+          en: {
+            predict: {
+              question: "Which algorithm is needed to solve this problem?",
+              options: [
+                "Count with map",
+                "Sort in descending order and print top K",
+                "Use a stack"
+              ],
+              feedback: "Sort the scores in descending order and print the first K values!"
+            }
           }
         }
       },

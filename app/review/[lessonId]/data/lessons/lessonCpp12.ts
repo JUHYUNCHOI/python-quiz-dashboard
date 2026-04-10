@@ -37,6 +37,13 @@ export const lessonCpp12: LessonData = {
             options: ["5", "100", "에러"],
             answer: 1,
             feedback: "b는 a의 별명이니까, b = 100은 곧 a = 100이에요!"
+          },
+          en: {
+            predict: {
+              question: "What is the value of a?",
+              options: ["5", "100", "Error"],
+              feedback: "b is an alias for a, so b = 100 is the same as a = 100!"
+            }
           }
         }
       },
@@ -106,6 +113,13 @@ export const lessonCpp12: LessonData = {
             options: ["14", "7", "0"],
             answer: 1,
             feedback: "Call by Value라서 복사본만 바뀌고, 원본 x는 그대로 7이에요!"
+          },
+          en: {
+            predict: {
+              question: "What is the output of x?",
+              options: ["14", "7", "0"],
+              feedback: "Call by Value means only the copy changes; the original x stays at 7!"
+            }
           }
         }
       },
@@ -121,6 +135,13 @@ export const lessonCpp12: LessonData = {
             options: ["3 1", "1 3", "에러"],
             answer: 1,
             feedback: "mySwap이 참조로 받아서 배열 원소가 직접 바뀌어요! 3과 1이 교환!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["3 1", "1 3", "Error"],
+              feedback: "mySwap takes references, so the array elements are directly swapped! 3 and 1 exchange places!"
+            }
           }
         }
       },

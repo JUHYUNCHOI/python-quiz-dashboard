@@ -35,7 +35,14 @@ export const lesson17: LessonData = {
           answer: 2,
           feedback: "90 + 85 + 100 = 275!"
         },
-        result: "275"
+        result: "275",
+        en: {
+          predict: {
+            question: "What is the result of total?",
+            options: ["90", "175", "275", "100"],
+            feedback: "90 + 85 + 100 = 275!"
+          }
+        }
       }
     },
     {
@@ -49,7 +56,14 @@ export const lesson17: LessonData = {
           answer: 1,
           feedback: "짝수만 출력! 2, 4, 6이 나와요."
         },
-        result: "2\n4\n6"
+        result: "2\n4\n6",
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["1 3 5", "2 4 6", "1 2 3 4 5 6", "Error"],
+            feedback: "Only even numbers are printed! 2, 4, 6."
+          }
+        }
       }
     },
     {
@@ -168,7 +182,14 @@ export const lesson17: LessonData = {
           answer: 1,
           feedback: "enumerate(리스트, 1)은 1부터 번호를 매겨요!"
         },
-        result: "1번: 사과\n2번: 바나나\n3번: 포도"
+        result: "1번: 사과\n2번: 바나나\n3번: 포도",
+        en: {
+          predict: {
+            question: "What is the first output?",
+            options: ["0번: 사과", "1번: 사과", "1번: 바나나", "Error"],
+            feedback: "enumerate(list, 1) starts numbering from 1!"
+          }
+        }
       }
     },
     {
@@ -271,7 +292,14 @@ export const lesson17: LessonData = {
           answer: 1,
           feedback: "각 n에 2를 곱한 새 리스트가 만들어져요!"
         },
-        result: "[2, 4, 6, 8, 10]"
+        result: "[2, 4, 6, 8, 10]",
+        en: {
+          predict: {
+            question: "What's the result?",
+            options: ["[1, 2, 3, 4, 5]", "[2, 4, 6, 8, 10]", "Error", "[1, 4, 9, 16, 25]"],
+            feedback: "A new list is created by multiplying each n by 2!"
+          }
+        }
       }
     },
     {
@@ -285,7 +313,14 @@ export const lesson17: LessonData = {
           answer: 1,
           feedback: "if 조건에 맞는 것만 새 리스트에 들어가요!"
         },
-        result: "[2, 4, 6]"
+        result: "[2, 4, 6]",
+        en: {
+          predict: {
+            question: "What's the result?",
+            options: ["[1, 3, 5]", "[2, 4, 6]", "[1, 2, 3, 4, 5, 6]", "Error"],
+            feedback: "Only elements that match the if condition are included in the new list!"
+          }
+        }
       }
     },
     {

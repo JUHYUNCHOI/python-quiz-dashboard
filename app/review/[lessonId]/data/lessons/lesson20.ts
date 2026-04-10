@@ -35,6 +35,13 @@ export const lesson20: LessonData = {
           answer: 0,
           feedback: "키를 넣으면 해당하는 값이 나와요!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["민수\\n15", "이름\\n나이", "{'이름': '민수'}\\n{'나이': 15}"],
+            feedback: "Providing the key retrieves the corresponding value!"
+          }
+        },
         result: "민수\n15"
       }
     },
@@ -155,6 +162,13 @@ export const lesson20: LessonData = {
           options: ["15", "16", "[15, 16]", "에러"],
           answer: 1,
           feedback: "있는 키에 값을 넣으면 덮어쓰기!"
+        },
+        en: {
+          predict: {
+            question: "What will the value of age become?",
+            options: ["15", "16", "[15, 16]", "Error"],
+            feedback: "Assigning to an existing key overwrites the old value!"
+          }
         },
         result: "{'이름': '민수', '나이': 16}"
       }
@@ -295,6 +309,13 @@ export const lesson20: LessonData = {
           answer: 1,
           feedback: "values()는 값만 꺼내요!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["국어\\n영어\\n수학", "90\\n85\\n95", "국어: 90\\n영어: 85\\n수학: 95"],
+            feedback: "values() retrieves only the values!"
+          }
+        },
         result: "90\n85\n95"
       }
     },
@@ -433,6 +454,13 @@ export const lesson20: LessonData = {
           options: ["True\\nTrue", "True\\nFalse", "90\\nFalse"],
           answer: 1,
           feedback: "'국어'는 있으니 True, '과학'은 없으니 False!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["True\\nTrue", "True\\nFalse", "90\\nFalse"],
+            feedback: "'국어' exists so True, '과학' doesn't exist so False!"
+          }
         },
         result: "True\nFalse"
       }

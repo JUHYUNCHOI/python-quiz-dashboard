@@ -54,6 +54,13 @@ export const lessonCpp16: LessonData = {
             options: ["에러 발생", "0\\n2", "0\\n1"],
             answer: 1,
             feedback: "없는 키를 []로 접근하면 기본값(int는 0)이 자동 생성돼요! 그래서 size가 2!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["Error", "0\\n2", "0\\n1"],
+              feedback: "Accessing a missing key with [] auto-creates it with the default value (0 for int)! So the size becomes 2!"
+            }
           }
         }
       },
@@ -436,6 +443,13 @@ export const lessonCpp16: LessonData = {
             options: ["1", "2", "3"],
             answer: 2,
             feedback: "apple이 3번 나오니까 freq[\"apple\"]은 3!"
+          },
+          en: {
+            predict: {
+              question: "What is the frequency of \"apple\"?",
+              options: ["1", "2", "3"],
+              feedback: "\"apple\" appears 3 times, so freq[\"apple\"] is 3!"
+            }
           }
         }
       },

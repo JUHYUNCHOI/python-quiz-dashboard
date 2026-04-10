@@ -37,6 +37,13 @@ export const lessonCpp17: LessonData = {
             options: ["찾음!", "못 찾음!", "에러"],
             answer: 1,
             feedback: "99는 벡터에 없으니까 find()는 end()를 리턴해요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["Found!", "Not found!", "Error"],
+              feedback: "99 is not in the vector, so find() returns end()!"
+            }
           }
         }
       },
@@ -97,6 +104,13 @@ export const lessonCpp17: LessonData = {
             options: ["6", "100", "106"],
             answer: 2,
             feedback: "초기값 100에서 시작! 100 + 1 + 2 + 3 = 106!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["6", "100", "106"],
+              feedback: "Starting from the initial value 100: 100 + 1 + 2 + 3 = 106!"
+            }
           }
         }
       },
@@ -112,6 +126,13 @@ export const lessonCpp17: LessonData = {
             options: ["합계: 33, 7의 개수: 2", "합계: 33, 7의 개수: 1", "합계: 26, 7의 개수: 2"],
             answer: 0,
             feedback: "3+7+1+9+4+7+2 = 33, 7은 2번 나와요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["sum: 33, count of 7: 2", "sum: 33, count of 7: 1", "sum: 26, count of 7: 2"],
+              feedback: "3+7+1+9+4+7+2 = 33, and 7 appears 2 times!"
+            }
           }
         }
       },

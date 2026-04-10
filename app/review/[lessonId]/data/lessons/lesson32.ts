@@ -88,6 +88,13 @@ print('안녕, 민수!')`,
           answer: 1,
           feedback: "안녕()을 2번 호출했으니 2번 출력!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["Hi!", "Hi!\nHi!", "Nothing is printed"],
+            feedback: "안녕() is called twice, so it prints twice!"
+          }
+        },
         result: "Hi!\nHi!"
       }
     },
@@ -173,6 +180,13 @@ print('안녕, 민수!')`,
           answer: 1,
           feedback: "'민수'가 이름 자리에 들어가요!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["안녕, 이름!", "안녕, 민수!", "안녕, {이름}!"],
+            feedback: "'민수' goes into the name slot!"
+          }
+        },
         result: "안녕, 민수!"
       }
     },
@@ -215,6 +229,13 @@ print('안녕, 민수!')`,
           options: ["저는 영희, 14살!", "저는 이름, 나이살!", "에러"],
           answer: 0,
           feedback: "이름에 '영희', 나이에 14가 들어가요!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["저는 영희, 14살!", "저는 이름, 나이살!", "Error"],
+            feedback: "'영희' goes into the name slot, 14 goes into the age slot!"
+          }
         },
         result: "저는 영희, 14살!"
       }
@@ -279,6 +300,13 @@ print(결과)`,
           options: ["3 + 5", "8", "a + b"],
           answer: 1,
           feedback: "3 + 5 = 8이 return되어 결과에 저장!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["3 + 5", "8", "a + b"],
+            feedback: "3 + 5 = 8 is returned and stored in the variable!"
+          }
         },
         result: "8"
       }

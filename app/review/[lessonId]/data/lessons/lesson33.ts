@@ -50,6 +50,13 @@ def 주문(음료, 사이즈='중'):
           answer: 1,
           feedback: "메시지 안 줬으니 기본값 '안녕' 사용!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["철수, 안녕!", "안녕, 철수!", "Error", "메시지, 이름!"],
+            feedback: "No message given, so the default value '안녕' is used!"
+          }
+        },
         result: "안녕, 철수!"
       }
     },
@@ -178,6 +185,13 @@ print(합, 차)`,
           answer: 1,
           feedback: "10+3=13, 10-3=7! 공백으로 출력됨"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["13, 7", "13 7", "(13, 7)", "7 13"],
+            feedback: "10+3=13, 10-3=7! Printed with a space between them."
+          }
+        },
         result: "13 7"
       }
     },
@@ -300,6 +314,13 @@ greet(msg='반가워', name='민수')`,
           options: ["안녕, 민수!", "반가워, 민수!", "민수, 반가워!", "에러"],
           answer: 1,
           feedback: "이름표 붙였으니 순서 달라도 OK!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["안녕, 민수!", "반가워, 민수!", "민수, 반가워!", "Error"],
+            feedback: "Keyword arguments are labeled, so order doesn't matter!"
+          }
         },
         result: "반가워, 민수!"
       }

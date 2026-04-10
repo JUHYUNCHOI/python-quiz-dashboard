@@ -66,7 +66,14 @@ export const lesson14: LessonData = {
           answer: 2,
           feedback: "count가 1→2→3, 3번 반복 후 4가 되면 종료!"
         },
-        result: "1번째\n2번째\n3번째"
+        result: "1번째\n2번째\n3번째",
+        en: {
+          predict: {
+            question: "How many times will it print?",
+            options: ["1 time", "2 times", "3 times", "Infinite"],
+            feedback: "count goes 1→2→3, then becomes 4 and the loop ends after 3 repetitions!"
+          }
+        }
       }
     },
     {
@@ -154,7 +161,14 @@ export const lesson14: LessonData = {
           answer: 0,
           feedback: "i가 3이 되면 break로 탈출!"
         },
-        result: "0\n1\n2"
+        result: "0\n1\n2",
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["0 1 2", "0 1 2 3", "Infinite output", "Error"],
+            feedback: "When i becomes 3, break exits the loop!"
+          }
+        }
       }
     },
     {
@@ -168,7 +182,14 @@ export const lesson14: LessonData = {
           answer: 1,
           feedback: "i가 2일 때만 건너뛰고 나머지는 출력!"
         },
-        result: "0\n1\n3\n4"
+        result: "0\n1\n3\n4",
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["0 1 2 3 4", "0 1 3 4", "2", "0 1"],
+            feedback: "Only skips when i is 2, prints everything else!"
+          }
+        }
       }
     },
     {

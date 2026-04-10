@@ -40,6 +40,13 @@ export const lessonCppP1: LessonData = {
             options: ["0 ~ 50", "1 ~ 50", "1 ~ 51"],
             answer: 1,
             feedback: "rand() % 50은 0~49, 거기에 +1 하면 1~50이 돼요!"
+          },
+          en: {
+            predict: {
+              question: "What is the range of rand() % 50 + 1?",
+              options: ["0 ~ 50", "1 ~ 50", "1 ~ 51"],
+              feedback: "rand() % 50 gives 0~49, then +1 shifts it to 1~50!"
+            }
           }
         }
       },
@@ -228,6 +235,17 @@ export const lessonCppP1: LessonData = {
             ],
             answer: 1,
             feedback: "삼항 연산자! 조건 ? 참 : 거짓 — guess가 작으면 더 키우라고 UP!"
+          },
+          en: {
+            predict: {
+              question: "What does the ternary operator (guess < answer ? \"UP!\" : \"DOWN!\") do?",
+              options: [
+                "Always prints UP!",
+                "Prints UP! if guess is smaller, DOWN! if larger",
+                "Causes an error"
+              ],
+              feedback: "Ternary operator: condition ? true : false — if guess is too small, print UP! to go higher!"
+            }
           }
         }
       },

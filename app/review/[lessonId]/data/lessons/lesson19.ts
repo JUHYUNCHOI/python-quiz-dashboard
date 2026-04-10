@@ -35,6 +35,13 @@ export const lesson19: LessonData = {
           answer: 1,
           feedback: "tuple()로 리스트를 튜플로 변환!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["[1, 2, 3]", "(1, 2, 3)", "{1, 2, 3}"],
+            feedback: "tuple() converts a list into a tuple!"
+          }
+        },
         result: "(1, 2, 3)"
       }
     },
@@ -58,6 +65,13 @@ export const lesson19: LessonData = {
           options: ["사과\\n포도\\n3", "사과\\n바나나\\n3", "(사과)\\n(포도)\\n3"],
           answer: 0,
           feedback: "인덱싱은 리스트와 동일! [0]은 첫째, [-1]은 마지막!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["사과\\n포도\\n3", "사과\\n바나나\\n3", "(사과)\\n(포도)\\n3"],
+            feedback: "Indexing works the same as with lists! [0] is first, [-1] is last!"
+          }
         },
         result: "사과\n포도\n3"
       }
@@ -162,6 +176,13 @@ export const lesson19: LessonData = {
           answer: 1,
           feedback: "튜플의 각 값이 변수에 하나씩 들어가요!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["('민수', 15, '서울')", "민수\\n15\\n서울", "Error"],
+            feedback: "Each value of the tuple is assigned to a variable one by one!"
+          }
+        },
         result: "민수\n15\n서울"
       }
     },
@@ -193,6 +214,13 @@ export const lesson19: LessonData = {
           options: ["a=10, b=20", "a=20, b=10", "a=20, b=20", "에러"],
           answer: 1,
           feedback: "a, b = b, a는 튜플 언패킹을 이용한 값 교환!"
+        },
+        en: {
+          predict: {
+            question: "What are the values of a and b after the swap?",
+            options: ["a=10, b=20", "a=20, b=10", "a=20, b=20", "Error"],
+            feedback: "a, b = b, a swaps values using tuple unpacking!"
+          }
         },
         result: "교환 전: a=10, b=20\n교환 후: a=20, b=10"
       }
@@ -298,6 +326,13 @@ export const lesson19: LessonData = {
           options: ["(1, 2)", "보물", "시작", "에러"],
           answer: 1,
           feedback: "튜플은 불변이라 딕셔너리 키로 사용 가능!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["(1, 2)", "보물", "시작", "Error"],
+            feedback: "Tuples are immutable, so they can be used as dictionary keys!"
+          }
         },
         result: "보물"
       }

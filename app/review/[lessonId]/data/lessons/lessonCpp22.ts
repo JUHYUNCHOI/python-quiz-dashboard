@@ -66,6 +66,13 @@ export const lessonCpp22: LessonData = {
             options: ["동작한다 (public이라서)", "에러 (private이라서)", "에러 (width가 없어서)", "에러 (class라서)"],
             answer: 0,
             feedback: "width는 public: 아래에 있어서 외부에서 접근 가능해요!"
+          },
+          en: {
+            predict: {
+              question: "Does r.width = 5; work?",
+              options: ["Yes (it's public)", "Error (it's private)", "Error (width doesn't exist)", "Error (it's a class)"],
+              feedback: "width is declared under public:, so it is accessible from outside!"
+            }
           }
         }
       },
@@ -191,6 +198,13 @@ export const lessonCpp22: LessonData = {
             options: ["바둑이: 멍멍!", "3: 멍멍!", "name: 멍멍!", "에러"],
             answer: 0,
             feedback: "Dog d(\"바둑이\", 3)으로 name=\"바둑이\"가 저장됐고, bark()에서 this->name을 출력해요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["Baduki: Woof!", "3: Woof!", "name: Woof!", "Error"],
+              feedback: "Dog d(\"바둑이\", 3) stores name=\"바둑이\", and bark() prints this->name!"
+            }
           }
         }
       },
@@ -365,6 +379,13 @@ export const lessonCpp22: LessonData = {
             options: ["나비 소리냄\n나비: 야옹!", "나비: 야옹!\n나비 소리냄", "나비: 야옹!", "에러"],
             answer: 0,
             feedback: "c.speak()는 부모(Animal)의 메서드, c.purr()는 자식(Cat)의 메서드예요. 부모 것도 쓸 수 있어요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["나비 소리냄\n나비: 야옹!", "나비: 야옹!\n나비 소리냄", "나비: 야옹!", "Error"],
+              feedback: "c.speak() calls the parent (Animal) method; c.purr() calls the child (Cat) method. The parent's methods are accessible too!"
+            }
           }
         }
       },

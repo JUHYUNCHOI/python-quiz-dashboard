@@ -37,6 +37,13 @@ export const lessonCpp13: LessonData = {
             options: ["10", "99", "에러"],
             answer: 1,
             feedback: "*p = 99는 'p가 가리키는 곳에 99를 넣어'라는 뜻! 즉 a = 99!"
+          },
+          en: {
+            predict: {
+              question: "What is the value of a?",
+              options: ["10", "99", "Error"],
+              feedback: "*p = 99 means 'put 99 at the location p points to' — so a becomes 99!"
+            }
           }
         }
       },
@@ -194,6 +201,13 @@ export const lessonCpp13: LessonData = {
             options: ["5", "15", "25", "35"],
             answer: 2,
             feedback: "p + 2는 arr[2]를 가리키니까 25가 출력돼요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["5", "15", "25", "35"],
+              feedback: "p + 2 points to arr[2], so 25 is printed!"
+            }
           }
         }
       },
@@ -226,6 +240,13 @@ export const lessonCpp13: LessonData = {
             options: ["3 7", "7 3", "에러"],
             answer: 1,
             feedback: "포인터로 원본 주소를 받아서 *a, *b를 교환하니까 7 3이 돼요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["3 7", "7 3", "Error"],
+              feedback: "The function receives the original addresses and swaps *a and *b, so the result is 7 3!"
+            }
           }
         }
       },

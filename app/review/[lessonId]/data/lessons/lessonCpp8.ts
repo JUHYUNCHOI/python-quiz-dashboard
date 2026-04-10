@@ -37,6 +37,13 @@ export const lessonCpp8: LessonData = {
             options: ["4", "8", "16", "에러"],
             answer: 2,
             feedback: "4 * 4 = 16! square 함수는 x의 제곱을 반환해요!"
+          },
+          en: {
+            predict: {
+              question: "What is the result of square(4)?",
+              options: ["4", "8", "16", "Error"],
+              feedback: "4 * 4 = 16! The square function returns x squared!"
+            }
           }
         }
       },
@@ -218,6 +225,13 @@ export const lessonCpp8: LessonData = {
             options: ["Hello!\\nHello!", "Hello!\\nHello, 주현!", "에러 (같은 이름이라)"],
             answer: 1,
             feedback: "매개변수 개수가 다르니 오버로딩 OK! greet()는 첫 번째, greet(\"주현\")은 두 번째 함수가 호출돼요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["Hello!\\nHello!", "Hello!\\nHello, Juhyun!", "Error (same name)"],
+              feedback: "Different number of parameters means overloading is OK! greet() calls the first, greet(\"Juhyun\") calls the second function!"
+            }
           }
         }
       },

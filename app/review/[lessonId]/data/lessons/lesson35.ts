@@ -45,6 +45,13 @@ print(sum(점수) / len(점수))  # 평균!`,
           answer: 1,
           feedback: "100부터 시작해서 더함! 100+1+2+3 = 106"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["6", "106", "[100, 1, 2, 3]", "Error"],
+            feedback: "Starts summing from 100! 100+1+2+3 = 106"
+          }
+        },
         result: "106"
       }
     },
@@ -119,6 +126,13 @@ print(min('apple', 'banana', 'cat'))`,
           options: ["banana\napple", "cat\napple", "apple\ncat", "에러"],
           answer: 1,
           feedback: "알파벳 순! a < b < c 니까 max는 cat, min은 apple"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["banana\napple", "cat\napple", "apple\ncat", "Error"],
+            feedback: "Alphabetical order! a < b < c, so max is 'cat' and min is 'apple'"
+          }
         },
         result: "cat\napple"
       }
@@ -198,6 +212,13 @@ print(결과[0][0])`,
           answer: 2,
           feedback: "점수 오름차순 → 78점 민수가 맨 앞!"
         },
+        en: {
+          predict: {
+            question: "What is the name of the first student?",
+            options: ["철수", "영희", "민수", "78"],
+            feedback: "Ascending by score → 민수 (78 points) comes first!"
+          }
+        },
         result: "민수"
       }
     },
@@ -276,6 +297,13 @@ print(sum(결과))`,
           options: ["'102030'", "60", "[10, 20, 30]", "에러"],
           answer: 1,
           feedback: "문자→정수 변환 후 합계: 10+20+30=60"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["'102030'", "60", "[10, 20, 30]", "Error"],
+            feedback: "Convert strings to integers then sum: 10+20+30=60"
+          }
         },
         result: "60"
       }
@@ -373,6 +401,13 @@ print(결과)`,
           options: ["[5, 8, 3, 7]", "[12, 15]", "[5, 12, 8, 3, 15, 7]", "에러"],
           answer: 1,
           feedback: "10 이상인 것만! 12, 15가 통과!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["[5, 8, 3, 7]", "[12, 15]", "[5, 12, 8, 3, 15, 7]", "Error"],
+            feedback: "Only values >= 10 pass! 12 and 15 make it through!"
+          }
         },
         result: "[12, 15]"
       }

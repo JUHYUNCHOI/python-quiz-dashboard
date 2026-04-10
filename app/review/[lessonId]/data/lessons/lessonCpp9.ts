@@ -40,6 +40,13 @@ export const lessonCpp9: LessonData = {
             options: ["10\n30", "10\n20", "20\n30", "1\n3"],
             answer: 0,
             feedback: "arr[0]은 첫 번째 값 10, arr[2]는 세 번째 값 30이에요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["10\n30", "10\n20", "20\n30", "1\n3"],
+              feedback: "arr[0] is the first value 10, arr[2] is the third value 30!"
+            }
           }
         }
       },
@@ -250,6 +257,13 @@ export const lessonCpp9: LessonData = {
             options: ["3", "4", "40", "에러"],
             answer: 1,
             feedback: "처음 3개 + push_back 1개 = 총 4개! size()는 원소 개수를 돌려줘요."
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["3", "4", "40", "Error"],
+              feedback: "Initial 3 elements + 1 push_back = 4 total! size() returns the number of elements."
+            }
           }
         }
       },
@@ -380,6 +394,13 @@ export const lessonCpp9: LessonData = {
             options: ["3\n30", "2\n20", "2\n30", "에러"],
             answer: 1,
             feedback: "pop_back()으로 30이 제거! 남은 건 {10, 20} → size=2, v[1]=20!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["3\n30", "2\n20", "2\n30", "Error"],
+              feedback: "pop_back() removes 30! Remaining is {10, 20} → size=2, v[1]=20!"
+            }
           }
         }
       },
@@ -469,6 +490,13 @@ export const lessonCpp9: LessonData = {
             options: ["275", "90", "100", "3"],
             answer: 0,
             feedback: "90 + 85 + 100 = 275! for 루프로 모든 값을 더했어요."
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["275", "90", "100", "3"],
+              feedback: "90 + 85 + 100 = 275! The for loop added all values."
+            }
           }
         }
       },

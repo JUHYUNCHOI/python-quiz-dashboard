@@ -37,6 +37,13 @@ export const lessonCpp11: LessonData = {
             options: ["4", "5", "6", "7"],
             answer: 2,
             feedback: "H, i, 공백, C, +, + → 6글자! 공백도 한 글자로 세요."
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["4", "5", "6", "7"],
+              feedback: "H, i, space, C, +, + → 6 characters! The space counts as one character."
+            }
           }
         }
       },
@@ -80,6 +87,13 @@ export const lessonCpp11: LessonData = {
             options: ["0", "2", "4", "6"],
             answer: 1,
             feedback: "banana에서 'na'는 인덱스 2에서 처음 나타나요! (b=0, a=1, n=2)"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["0", "2", "4", "6"],
+              feedback: "In 'banana', 'na' first appears at index 2! (b=0, a=1, n=2)"
+            }
           }
         }
       },
@@ -217,6 +231,13 @@ export const lessonCpp11: LessonData = {
             options: ["cat wins!", "dog wins!", "에러", "둘 다 출력"],
             answer: 0,
             feedback: "c < d 이므로 \"cat\" < \"dog\"은 true! cat wins!가 출력돼요."
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["cat wins!", "dog wins!", "Error", "Both are printed"],
+              feedback: "Since c < d, \"cat\" < \"dog\" is true! cat wins! is printed."
+            }
           }
         }
       },
@@ -249,6 +270,13 @@ export const lessonCpp11: LessonData = {
             options: ["user@test.com", "user", "@test.com", "test.com"],
             answer: 1,
             feedback: "@의 위치는 4! substr(0, 4)는 처음부터 4글자 = \"user\"!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["user@test.com", "user", "@test.com", "test.com"],
+              feedback: "@ is at position 4! substr(0, 4) takes 4 characters from the start = \"user\"!"
+            }
           }
         }
       },

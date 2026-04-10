@@ -49,6 +49,13 @@ print(hero.hp)`,
           answer: 0,
           feedback: "hero.name은 '용사', hero.hp는 100!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["용사\\n100", "Character\\n100", "Error", "name\\nhp"],
+            feedback: "hero.name is '용사', hero.hp is 100!"
+          }
+        },
         result: "용사\n100"
       }
     },
@@ -115,6 +122,13 @@ print(hero.hp)`,
           answer: 1,
           feedback: "100 - 30 = 70! 속성 값을 직접 바꿀 수 있어요!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["100", "70", "30", "Error"],
+            feedback: "100 - 30 = 70! Attribute values can be changed directly!"
+          }
+        },
         result: "70"
       }
     },
@@ -137,6 +151,13 @@ print(a.hp, b.hp)`,
           options: ["80 80", "100 80", "80 60", "80 80"],
           answer: 0,
           feedback: "a와 b는 서로 다른 객체! a.hp만 줄어들어요!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["80 80", "100 80", "80 60", "80 80"],
+            feedback: "a and b are separate objects! Only a.hp decreases!"
+          }
         },
         result: "80 80"
       }
@@ -215,6 +236,13 @@ print(apple.name)`,
           answer: 0,
           feedback: "apple 객체의 name은 '사과'!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["사과", "바나나", "Fruit", "Error"],
+            feedback: "The name of the apple object is '사과'!"
+          }
+        },
         result: "사과"
       }
     },
@@ -236,6 +264,13 @@ print(f'{s1.name}: {s1.grade}학년')`,
           answer: 0,
           feedback: "name='영희', grade=2 순서대로 저장!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["영희: 2학년", "2: 영희학년", "Student: 2학년", "Error"],
+            feedback: "name='영희', grade=2 stored in order!"
+          }
+        },
         result: "영희: 2학년"
       }
     },
@@ -255,6 +290,13 @@ print(hero.name)`,
           options: ["용사", "name", "None", "에러 (AttributeError)"],
           answer: 3,
           feedback: "s.name을 안 했으니 hero에 name 속성이 없어요!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["용사", "name", "None", "Error (AttributeError)"],
+            feedback: "s.name was never set, so hero has no name attribute!"
+          }
         },
         isError: true,
         result: "AttributeError: 'Character' object has no attribute 'name'"

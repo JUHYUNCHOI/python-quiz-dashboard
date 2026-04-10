@@ -40,6 +40,13 @@ export const lessonCpp2: LessonData = {
             options: ['15\n15', '5 * 3\n5 * 3', '15\n5 * 3'],
             answer: 2,
             feedback: "따옴표 없는 5*3은 계산되어 15, 따옴표 있는 건 문자열이라 그대로!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ['15\n15', '5 * 3\n5 * 3', '15\n5 * 3'],
+              feedback: "5*3 without quotes is calculated as 15; with quotes it's a string and prints as-is!"
+            }
           }
         }
       },
@@ -483,6 +490,13 @@ export const lessonCpp2: LessonData = {
             options: ['점수: 95\n등급\\tA', '점수: 95\n등급\tA (탭으로 벌어짐)', '점수: 95\n등급    A'],
             answer: 1,
             feedback: "\\t는 탭 문자! 등급과 A 사이에 넓은 공백이 들어가요."
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ['Score: 95\nGrade\\tA', 'Score: 95\nGrade\tA (widened by tab)', 'Score: 95\nGrade    A'],
+              feedback: "\\t is a tab character! It inserts a wide space between Grade and A."
+            }
           }
         }
       },

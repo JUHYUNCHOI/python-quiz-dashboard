@@ -41,6 +41,13 @@ export const lessonCpp18: LessonData = {
             options: ["3", "2", "1"],
             answer: 2,
             feedback: "push(1,2,3) 후 pop 2번 → 3과 2가 빠지고 1만 남아요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["3", "2", "1"],
+              feedback: "After push(1,2,3) and two pops, 3 and 2 are removed — only 1 remains!"
+            }
           }
         }
       },
@@ -273,6 +280,13 @@ export const lessonCpp18: LessonData = {
             options: ["5 30", "5 20", "10 20"],
             answer: 1,
             feedback: "push_front(5) → {5,10,20,30}, pop_back() → {5,10,20}. front=5, back=20!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["5 30", "5 20", "10 20"],
+              feedback: "push_front(5) → {5,10,20,30}, pop_back() → {5,10,20}. front=5, back=20!"
+            }
           }
         }
       },
@@ -457,6 +471,13 @@ export const lessonCpp18: LessonData = {
             options: ["OK", "Error"],
             answer: 0,
             feedback: "((1+2)*(3+4))는 괄호가 올바르게 짝지어져 있어서 OK!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["OK", "Error"],
+              feedback: "((1+2)*(3+4)) has correctly matched parentheses, so the output is OK!"
+            }
           }
         }
       },

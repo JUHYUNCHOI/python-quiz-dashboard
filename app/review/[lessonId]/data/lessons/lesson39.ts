@@ -29,6 +29,13 @@ export const lesson39: LessonData = {
           answer: 2,
           feedback: "\\n 때문에 '용사'와 '85'가 다른 줄에!"
         },
+        en: {
+          predict: {
+            question: "What is the content of save.txt?",
+            options: ["용사85", "용사\\n85", "용사 (newline) 85", "Error"],
+            feedback: "Because of \\n, '용사' and '85' are on separate lines!"
+          }
+        },
         result: "용사\n85"
       }
     },
@@ -77,6 +84,13 @@ export const lesson39: LessonData = {
           options: ["불러오기 성공! 게임 시작!", "세이브 없음! 게임 시작!", "에러", "세이브 없음!"],
           answer: 1,
           feedback: "파일 없음 → except → '세이브 없음!' → 계속 → '게임 시작!'"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["불러오기 성공! 게임 시작!", "세이브 없음! 게임 시작!", "Error", "세이브 없음!"],
+            feedback: "File not found → except → '세이브 없음!' → continues → '게임 시작!'"
+          }
         },
         result: "세이브 없음!\n게임 시작!"
       }

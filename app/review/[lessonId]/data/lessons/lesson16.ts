@@ -35,7 +35,14 @@ export const lesson16: LessonData = {
           answer: 1,
           feedback: "리스트를 print하면 대괄호째 출력돼요!"
         },
-        result: "[90, 85, 100, 77]"
+        result: "[90, 85, 100, 77]",
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["90 85 100 77", "[90, 85, 100, 77]", "90", "Error"],
+            feedback: "Printing a list outputs it with square brackets!"
+          }
+        }
       }
     },
     {
@@ -58,7 +65,14 @@ export const lesson16: LessonData = {
           answer: 1,
           feedback: "빈 리스트의 길이는 0이에요!"
         },
-        result: "[]\n0"
+        result: "[]\n0",
+        en: {
+          predict: {
+            question: "What is the result of len(empty)?",
+            options: ["1", "0", "None", "Error"],
+            feedback: "The length of an empty list is 0!"
+          }
+        }
       }
     },
     {
@@ -169,7 +183,14 @@ export const lesson16: LessonData = {
           answer: 2,
           feedback: "-1은 마지막 요소! -2는 뒤에서 두 번째!"
         },
-        result: "포도"
+        result: "포도",
+        en: {
+          predict: {
+            question: "What is the result of fruits[-1]?",
+            options: ["사과", "바나나", "포도", "Error"],
+            feedback: "-1 is the last element! -2 is the second from the end!"
+          }
+        }
       }
     },
     {
@@ -287,7 +308,19 @@ export const lesson16: LessonData = {
           answer: 1,
           feedback: "append()는 항상 맨 뒤에 추가해요!"
         },
-        result: "['사과', '바나나', '포도']"
+        result: "['사과', '바나나', '포도']",
+        en: {
+          predict: {
+            question: "What's the result?",
+            options: [
+              "[\"포도\", \"사과\", \"바나나\"]",
+              "[\"사과\", \"바나나\", \"포도\"]",
+              "[\"사과\", \"포도\", \"바나나\"]",
+              "Error"
+            ],
+            feedback: "append() always adds to the end of the list!"
+          }
+        }
       }
     },
     {
@@ -310,7 +343,14 @@ export const lesson16: LessonData = {
           answer: 1,
           feedback: "리스트에 3개의 요소가 있으니까 3!"
         },
-        result: "3"
+        result: "3",
+        en: {
+          predict: {
+            question: "What is the result of len(fruits)?",
+            options: ["2", "3", "4", "Error"],
+            feedback: "There are 3 elements in the list, so the answer is 3!"
+          }
+        }
       }
     },
     {

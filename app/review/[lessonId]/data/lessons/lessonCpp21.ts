@@ -40,6 +40,13 @@ export const lessonCpp21: LessonData = {
             options: ["1\n6", "1\n3", "0\n6", "에러"],
             answer: 0,
             feedback: "grid[0][0]은 0행 0열 = 1, grid[1][2]는 1행 2열 = 6이에요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["1\n6", "1\n3", "0\n6", "Error"],
+              feedback: "grid[0][0] is row 0, col 0 = 1; grid[1][2] is row 1, col 2 = 6!"
+            }
           }
         }
       },
@@ -209,6 +216,13 @@ export const lessonCpp21: LessonData = {
             options: ["3\n4", "4\n3", "3\n3", "에러"],
             answer: 0,
             feedback: "grid.size() = 행의 수 = 3, grid[0].size() = 열의 수 = 4이에요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["3\n4", "4\n3", "3\n3", "Error"],
+              feedback: "grid.size() = number of rows = 3; grid[0].size() = number of columns = 4!"
+            }
           }
         }
       },
@@ -365,6 +379,13 @@ export const lessonCpp21: LessonData = {
             options: ["1 2 3\n4 5 6", "1 4\n2 5\n3 6", "1 2 3 4 5 6", "에러"],
             answer: 0,
             feedback: "바깥 루프가 행, 안쪽 루프가 열이에요. 행마다 endl로 줄바꿈해서 1 2 3 / 4 5 6 이 돼요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["1 2 3\n4 5 6", "1 4\n2 5\n3 6", "1 2 3 4 5 6", "Error"],
+              feedback: "The outer loop iterates over rows, the inner loop over columns. endl after each row gives 1 2 3 / 4 5 6!"
+            }
           }
         }
       },
@@ -397,6 +418,13 @@ export const lessonCpp21: LessonData = {
             options: ["3", "7", "8", "5"],
             answer: 2,
             feedback: "3, 7, 2, 8, 1, 5 중에서 가장 큰 값은 8이에요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["3", "7", "8", "5"],
+              feedback: "Among 3, 7, 2, 8, 1, 5 the largest value is 8!"
+            }
           }
         }
       },

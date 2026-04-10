@@ -36,6 +36,13 @@ export const lessonCpp3: LessonData = {
             options: ["3.14가 저장된다", "3만 저장된다 (소수점 버림)", "에러가 난다"],
             answer: 1,
             feedback: "int는 정수만! 3.14를 넣으면 소수점을 잘라서 3만 저장돼요!"
+          },
+          en: {
+            predict: {
+              question: "What happens if you store 3.14 in an int?",
+              options: ["3.14 is stored", "Only 3 is stored (decimal truncated)", "Error"],
+              feedback: "int is integers only! Storing 3.14 truncates the decimal, keeping only 3!"
+            }
           }
         }
       },
@@ -68,6 +75,13 @@ export const lessonCpp3: LessonData = {
             options: ["true", "1", "True"],
             answer: 1,
             feedback: "C++에서 true는 숫자 1, false는 0으로 출력돼요! 파이썬과 달라요."
+          },
+          en: {
+            predict: {
+              question: "What gets printed when you output true?",
+              options: ["true", "1", "True"],
+              feedback: "In C++, true prints as 1 and false as 0! Unlike Python."
+            }
           }
         }
       },
@@ -101,6 +115,13 @@ export const lessonCpp3: LessonData = {
             options: ["char는 작은따옴표를 쓰니까", "string이라서", "아무 따옴표나 써도 돼서"],
             answer: 0,
             feedback: "char는 글자 1개! 작은따옴표 'O'로 감싸요. 큰따옴표 \"O\"는 string이에요."
+          },
+          en: {
+            predict: {
+              question: "Why does blood type O use single quotes?",
+              options: ["Because char uses single quotes", "Because it's a string", "Either quote works"],
+              feedback: "char is a single character! Wrap it in single quotes like 'O'. Double quotes \"O\" would be a string."
+            }
           }
         }
       },

@@ -26,6 +26,13 @@ print(fruits[1:4])`,
           answer: 0,
           feedback: "인덱스 1부터 3까지! end(4)는 포함 안 돼요!"
         },
+        en: {
+          predict: {
+            question: "What's the result?",
+            options: ["['바나나', '포도', '딸기']", "['사과', '바나나', '포도', '딸기']", "['바나나', '포도', '딸기', '수박']", "['사과', '바나나', '포도']"],
+            feedback: "From index 1 to 3! end(4) is not included!"
+          }
+        },
         result: "['바나나', '포도', '딸기']",
         note: "[start:end] → start부터 end-1까지! end는 포함 안 됨!"
       }
@@ -42,6 +49,13 @@ print(nums[:3])`,
           answer: 0,
           feedback: "[:3]은 처음(인덱스 0)부터 인덱스 2까지!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["[10, 20, 30]", "[10, 20, 30, 40]", "[30, 40, 50]", "[20, 30, 40]"],
+            feedback: "[:3] means from the beginning (index 0) up to index 2!"
+          }
+        },
         result: "[10, 20, 30]"
       }
     },
@@ -56,6 +70,13 @@ print(nums[2:])`,
           options: ["[30, 40, 50]", "[10, 20, 30]", "[30, 40]", "[20, 30, 40, 50]"],
           answer: 0,
           feedback: "[2:]는 인덱스 2부터 끝까지!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["[30, 40, 50]", "[10, 20, 30]", "[30, 40]", "[20, 30, 40, 50]"],
+            feedback: "[2:] means from index 2 to the end!"
+          }
         },
         result: "[30, 40, 50]"
       }
@@ -144,6 +165,13 @@ print(nums[::2])`,
           answer: 0,
           feedback: "처음부터 2칸씩 건너뛰면서 가져와요!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["[0, 2, 4, 6, 8]", "[0, 1, 2]", "[2, 4, 6, 8]", "[1, 3, 5, 7, 9]"],
+            feedback: "Starting from the beginning, take every 2nd element!"
+          }
+        },
         result: "[0, 2, 4, 6, 8]"
       }
     },
@@ -158,6 +186,13 @@ print(nums[::-1])`,
           options: ["[5, 4, 3, 2, 1]", "[1, 2, 3, 4, 5]", "[5, 3, 1]", "에러"],
           answer: 0,
           feedback: "[::-1]은 리스트를 완전히 뒤집어요!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["[5, 4, 3, 2, 1]", "[1, 2, 3, 4, 5]", "[5, 3, 1]", "Error"],
+            feedback: "[::-1] completely reverses the list!"
+          }
         },
         result: "[5, 4, 3, 2, 1]",
         note: "[::-1]은 아주 자주 쓰이는 파이썬 트릭!"
@@ -265,6 +300,13 @@ print(msg[7:13])`,
           answer: 0,
           feedback: "인덱스 7부터 12까지 → 'Python'"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["Python", "Hello,", " Pytho", "Python!"],
+            feedback: "From index 7 to 12 → 'Python'"
+          }
+        },
         result: "Python"
       }
     },
@@ -290,6 +332,13 @@ print(ext)`,
           options: ["jpg", "photo", ".jpg", "oto"],
           answer: 0,
           feedback: "[-3:]은 뒤에서 3글자! 확장자를 쉽게 가져와요."
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["jpg", "photo", ".jpg", "oto"],
+            feedback: "[-3:] takes the last 3 characters! Great for getting file extensions."
+          }
         },
         result: "jpg"
       }

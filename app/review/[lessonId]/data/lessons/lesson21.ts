@@ -35,6 +35,13 @@ export const lesson21: LessonData = {
           answer: 1,
           feedback: "집합은 중복을 자동으로 제거해요!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["{1, 2, 3, 2, 1, 3, 4}", "{1, 2, 3, 4}", "[1, 2, 3, 4]"],
+            feedback: "Sets automatically remove duplicates!"
+          }
+        },
         result: "{1, 2, 3, 4}"
       }
     },
@@ -57,6 +64,13 @@ export const lesson21: LessonData = {
           options: ["5", "4", "3", "2"],
           answer: 2,
           feedback: "민수, 영희, 철수 = 3명! 중복이 사라졌어요!"
+        },
+        en: {
+          predict: {
+            question: "What is the length of unique?",
+            options: ["5", "4", "3", "2"],
+            feedback: "민수, 영희, 철수 = 3 unique names! Duplicates are removed!"
+          }
         },
         result: "{'민수', '영희', '철수'}\n중복 제거: 5개 -> 3개"
       }
@@ -161,6 +175,13 @@ export const lesson21: LessonData = {
           answer: 1,
           feedback: "a와 b에 둘 다 있는 3, 4만 남아요!"
         },
+        en: {
+          predict: {
+            question: "What is the intersection result?",
+            options: ["{1, 2, 3, 4, 5, 6}", "{3, 4}", "{1, 2}", "{5, 6}"],
+            feedback: "Only 3 and 4 are in both a and b!"
+          }
+        },
         result: "{3, 4}"
       }
     },
@@ -174,6 +195,13 @@ export const lesson21: LessonData = {
           options: ["{1, 2, 3, 3, 4, 5}", "{1, 2, 3, 4, 5}", "{3}", "{1, 2, 4, 5}"],
           answer: 1,
           feedback: "둘을 합치고 중복은 제거!"
+        },
+        en: {
+          predict: {
+            question: "What is the union result?",
+            options: ["{1, 2, 3, 3, 4, 5}", "{1, 2, 3, 4, 5}", "{3}", "{1, 2, 4, 5}"],
+            feedback: "Combine both sets and remove duplicates!"
+          }
         },
         result: "{1, 2, 3, 4, 5}"
       }
@@ -197,6 +225,13 @@ export const lesson21: LessonData = {
           options: ["True\\nTrue", "True\\nFalse", "False\\nFalse"],
           answer: 1,
           feedback: "'admin'은 있으니 True, 'hacker'는 없으니 False!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["True\\nTrue", "True\\nFalse", "False\\nFalse"],
+            feedback: "'admin' is in the set so True, 'hacker' is not so False!"
+          }
         },
         result: "True\nFalse"
       }

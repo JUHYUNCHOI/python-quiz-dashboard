@@ -36,6 +36,13 @@ export const lessonCpp20: LessonData = {
             options: ["네, 항상 써요", "아니요, 대회에서만 써요", "C++20부터 사라졌어요"],
             answer: 1,
             feedback: "bits/stdc++.h는 컴파일이 느려서 대회에서만 써요! 실제 프로젝트에서는 필요한 헤더만 포함해요."
+          },
+          en: {
+            predict: {
+              question: "Is bits/stdc++.h used in real projects too?",
+              options: ["Yes, always", "No, only in competitive programming", "It was removed in C++20"],
+              feedback: "bits/stdc++.h slows down compilation, so it's only for competitions! In real projects, include only the needed headers."
+            }
           }
         }
       },
@@ -216,6 +223,13 @@ export const lessonCpp20: LessonData = {
             options: ["9, 9", "9, 5", "9, 6"],
             answer: 0,
             feedback: "SQ(3) = 3*3 = 9, SQ(2+1) = (2+1)*(2+1) = 9! 괄호가 중요해요!"
+          },
+          en: {
+            predict: {
+              question: "What do the two couts print?",
+              options: ["9, 9", "9, 5", "9, 6"],
+              feedback: "SQ(3) = 3*3 = 9, SQ(2+1) = (2+1)*(2+1) = 9! Parentheses matter!"
+            }
           }
         }
       },
@@ -353,6 +367,17 @@ export const lessonCpp20: LessonData = {
             ],
             answer: 1,
             feedback: "USACO 문제는 problem.in에서 읽고 problem.out에 써야 해요!"
+          },
+          en: {
+            predict: {
+              question: "Why is freopen used in this template?",
+              options: [
+                "To speed things up",
+                "Because USACO requires file I/O",
+                "To enable cout"
+              ],
+              feedback: "USACO problems require reading from problem.in and writing to problem.out!"
+            }
           }
         }
       },

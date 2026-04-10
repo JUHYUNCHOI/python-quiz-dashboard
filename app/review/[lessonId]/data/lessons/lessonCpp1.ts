@@ -37,6 +37,13 @@ export const lessonCpp1: LessonData = {
             options: ["A B C", "ABC", "A, B, C"],
             answer: 1,
             feedback: "C++ std::cout은 자동 공백이 없어서 ABC가 출력돼요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output of this code?",
+              options: ["A B C", "ABC", "A, B, C"],
+              feedback: "std::cout has no automatic spaces, so ABC is printed!"
+            }
           }
         }
       },
@@ -190,6 +197,13 @@ export const lessonCpp1: LessonData = {
             options: ['30\n30', '10 + 20\n10 + 20', '30\n10 + 20'],
             answer: 2,
             feedback: "따옴표 없는 10+20은 계산되어 30, 따옴표 있는 건 문자열이라 그대로!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ['30\n30', '10 + 20\n10 + 20', '30\n10 + 20'],
+              feedback: "10+20 without quotes is calculated as 30; with quotes it's a string and prints as-is!"
+            }
           }
         }
       },

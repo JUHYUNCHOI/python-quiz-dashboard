@@ -57,6 +57,13 @@ print(y)`,
           answer: 2,
           feedback: "함수 안의 y(200)는 지역변수, 밖의 y(100)는 전역변수!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["200\n200", "100\n100", "200\n100", "100\n200"],
+            feedback: "y inside the function (200) is a local variable; y outside (100) is the global variable!"
+          }
+        },
         result: "200\n100"
       }
     },
@@ -162,6 +169,13 @@ print(double(7))`,
           options: ["7", "14", "72", "에러"],
           answer: 1,
           feedback: "x * 2니까 7 × 2 = 14"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["7", "14", "72", "Error"],
+            feedback: "x * 2 means 7 × 2 = 14"
+          }
         },
         result: "14"
       }
@@ -285,6 +299,13 @@ print(결과)`,
           options: ["['apple', 'hi', 'cat']", "['hi', 'cat', 'apple']", "['cat', 'hi', 'apple']", "에러"],
           answer: 1,
           feedback: "길이 순: hi(2) < cat(3) < apple(5)"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["['apple', 'hi', 'cat']", "['hi', 'cat', 'apple']", "['cat', 'hi', 'apple']", "Error"],
+            feedback: "Sorted by length: hi(2) < cat(3) < apple(5)"
+          }
         },
         result: "['hi', 'cat', 'apple']"
       }
@@ -439,6 +460,13 @@ print(두배후제곱(3))`,
           options: ["6", "9", "36", "18"],
           answer: 2,
           feedback: "3 × 2 = 6, 6² = 36"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["6", "9", "36", "18"],
+            feedback: "3 × 2 = 6, then 6² = 36"
+          }
         },
         result: "36"
       }

@@ -55,6 +55,13 @@ def 인사(이름):
           answer: 1,
           feedback: "2번 호출 → 2번 출력!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["안녕!", "안녕!\n안녕!", "Nothing", "Error"],
+            feedback: "Called twice → prints twice!"
+          }
+        },
         result: "안녕!\n안녕!"
       }
     },
@@ -76,6 +83,13 @@ print(결과)`,
           options: ["A, B, C 모두 출력", "A, B만 출력", "B만 출력", "에러"],
           answer: 1,
           feedback: "return 이후는 실행 안 돼요!"
+        },
+        en: {
+          predict: {
+            question: "Will C be printed?",
+            options: ["A, B, C all print", "Only A, B print", "Only B prints", "Error"],
+            feedback: "Nothing after return executes!"
+          }
         },
         result: "A\nB"
       }
@@ -155,6 +169,13 @@ print(거듭제곱(5, 3))`,
           answer: 2,
           feedback: "지수=3을 줬으니 5³ = 125"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["10", "25", "125", "Error"],
+            feedback: "The exponent 3 was given, so 5³ = 125"
+          }
+        },
         result: "125"
       }
     },
@@ -174,6 +195,13 @@ print(x, y)`,
           options: ["13, 7", "13 7", "(13, 7)", "에러"],
           answer: 1,
           feedback: "10+3=13, 10-3=7 각각 저장!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["13, 7", "13 7", "(13, 7)", "Error"],
+            feedback: "10+3=13, 10-3=7 stored separately!"
+          }
         },
         result: "13 7"
       }
@@ -283,6 +311,13 @@ print(x)`,
           answer: 2,
           feedback: "함수 안(10)과 밖(5)은 다른 변수!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["10\n10", "5\n5", "10\n5", "5\n10"],
+            feedback: "Inside the function (10) and outside (5) are different variables!"
+          }
+        },
         result: "10\n5"
       }
     },
@@ -389,6 +424,13 @@ print(제곱(5))`,
           answer: 2,
           feedback: "5² = 25"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["5", "10", "25", "Error"],
+            feedback: "5² = 25"
+          }
+        },
         result: "25"
       }
     },
@@ -406,6 +448,13 @@ print(결과[0][0])`,
           options: ["철수", "영희", "민수", "92"],
           answer: 1,
           feedback: "점수 내림차순 → 92점 영희가 1등!"
+        },
+        en: {
+          predict: {
+            question: "Who is in 1st place?",
+            options: ["철수", "영희", "민수", "92"],
+            feedback: "Descending by score → 영희 (92 points) is 1st!"
+          }
         },
         result: "영희"
       }
@@ -505,6 +554,13 @@ print(sorted(숫자))   # 정렬`,
           answer: 0,
           feedback: "1+2+3+4+5 = 15"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["15", "12345", "[1,2,3,4,5]", "Error"],
+            feedback: "1+2+3+4+5 = 15"
+          }
+        },
         result: "15"
       }
     },
@@ -522,6 +578,13 @@ print(sum(결과))`,
           options: ["'314'", "8", "[3,1,4]", "에러"],
           answer: 1,
           feedback: "문자→정수 변환 후 3+1+4=8"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["'314'", "8", "[3,1,4]", "Error"],
+            feedback: "Convert strings to integers then 3+1+4=8"
+          }
         },
         result: "8"
       }

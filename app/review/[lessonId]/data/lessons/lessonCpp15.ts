@@ -35,6 +35,13 @@ export const lessonCpp15: LessonData = {
             options: ["3, 7", "(3, 7)", "3 7"],
             answer: 0,
             feedback: ".first는 3, .second는 7! 쉼표와 공백은 문자열로 넣어준 거예요."
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["3, 7", "(3, 7)", "3 7"],
+              feedback: ".first is 3 and .second is 7! The comma and space are part of the string literal."
+            }
           }
         }
       },
@@ -195,6 +202,13 @@ export const lessonCpp15: LessonData = {
             options: ["A", "B", "에러"],
             answer: 0,
             feedback: "first는 둘 다 1로 같아요. second를 비교하면 10 > 5이므로 a > b → A!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["A", "B", "Error"],
+              feedback: "Both first values are 1 (equal). Comparing second: 10 > 5, so a > b → A!"
+            }
           }
         }
       },

@@ -26,6 +26,13 @@ export const lessonCpp5: LessonData = {
             options: ["3.333...", "3", "3.0"],
             answer: 1,
             feedback: "정수 / 정수 = 정수! 소수점이 잘려서 3이 나와요. 파이썬은 3.333이지만 C++은 달라요!"
+          },
+          en: {
+            predict: {
+              question: "What is the result of 10 / 3?",
+              options: ["3.333...", "3", "3.0"],
+              feedback: "integer / integer = integer! The decimal is truncated so the result is 3. Python gives 3.333 but C++ is different!"
+            }
           }
         }
       },
@@ -88,6 +95,13 @@ export const lessonCpp5: LessonData = {
             options: ["2", "1", "3"],
             answer: 1,
             feedback: "7 / 3 = 2 나머지 1! 나머지만 구하니까 1이에요."
+          },
+          en: {
+            predict: {
+              question: "What is the result of 7 % 3?",
+              options: ["2", "1", "3"],
+              feedback: "7 / 3 = 2 remainder 1! We only want the remainder, so the answer is 1."
+            }
           }
         }
       },
@@ -245,6 +259,13 @@ export const lessonCpp5: LessonData = {
             options: ["x가 5인지 비교", "x에 5를 대입 (버그!)", "에러"],
             answer: 1,
             feedback: "= 는 대입! if (x = 5)는 x에 5를 넣는 거예요. 비교하려면 == 를 써야 해요!"
+          },
+          en: {
+            predict: {
+              question: "What does if (x = 5) mean?",
+              options: ["Compares x to 5", "Assigns 5 to x (bug!)", "Error"],
+              feedback: "= is assignment! if (x = 5) puts 5 into x. Use == for comparison!"
+            }
           }
         }
       },
@@ -308,6 +329,13 @@ export const lessonCpp5: LessonData = {
             options: ["1 (true)", "0 (false)", "에러"],
             answer: 0,
             feedback: "85 >= 80 (true) && 85 <= 100 (true) → true && true = true (1)!"
+          },
+          en: {
+            predict: {
+              question: "What is the result when score is 85?",
+              options: ["1 (true)", "0 (false)", "Error"],
+              feedback: "85 >= 80 (true) && 85 <= 100 (true) → true && true = true (1)!"
+            }
           }
         }
       },
@@ -462,6 +490,13 @@ export const lessonCpp5: LessonData = {
             options: ["0 (false)", "1 (true)", "12"],
             answer: 1,
             feedback: "12 % 2 = 0, 그리고 0 == 0 은 true! 그래서 1이 출력돼요."
+          },
+          en: {
+            predict: {
+              question: "When num is 12, what does 'Even?' print?",
+              options: ["0 (false)", "1 (true)", "12"],
+              feedback: "12 % 2 = 0, and 0 == 0 is true! So 1 is printed."
+            }
           }
         }
       },

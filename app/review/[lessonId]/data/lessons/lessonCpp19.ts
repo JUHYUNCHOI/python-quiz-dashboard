@@ -54,6 +54,13 @@ export const lessonCpp19: LessonData = {
             options: ["100 200", "300", "100200"],
             answer: 1,
             feedback: "fin >> a >> b로 100, 200을 읽고, a + b = 300이 출력돼요!"
+          },
+          en: {
+            predict: {
+              question: "What does the last cout print?",
+              options: ["100 200", "300", "100200"],
+              feedback: "fin >> a >> b reads 100 and 200, then a + b = 300 is printed!"
+            }
           }
         }
       },
@@ -467,6 +474,13 @@ export const lessonCpp19: LessonData = {
             options: ["키보드", "paint.in 파일", "paint.out 파일"],
             answer: 1,
             feedback: "freopen(\"paint.in\", \"r\", stdin) 후 cin은 paint.in에서 읽어요!"
+          },
+          en: {
+            predict: {
+              question: "After freopen, where does cin read from?",
+              options: ["Keyboard", "paint.in file", "paint.out file"],
+              feedback: "After freopen(\"paint.in\", \"r\", stdin), cin reads from paint.in!"
+            }
           }
         }
       },

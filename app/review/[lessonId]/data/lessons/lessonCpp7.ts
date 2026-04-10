@@ -37,6 +37,13 @@ export const lessonCpp7: LessonData = {
             options: ["1 2 3", "3 2 1", "3 2 1 0", "0 1 2 3"],
             answer: 1,
             feedback: "i가 3에서 시작해서 1씩 줄어들어요! 3, 2, 1 출력 후 i가 0이 되면 조건 i >= 1이 거짓이라 멈춰요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["1 2 3", "3 2 1", "3 2 1 0", "0 1 2 3"],
+              feedback: "i starts at 3 and decrements by 1! After printing 3, 2, 1, i becomes 0 and i >= 1 is false, so it stops!"
+            }
           }
         }
       },
@@ -223,6 +230,13 @@ export const lessonCpp7: LessonData = {
             options: ["아무것도 안 나옴", "10", "10 11 12 ...(무한)"],
             answer: 1,
             feedback: "do-while은 먼저 한 번 실행해요! 10을 출력한 뒤 num=11이 되고, 11 < 10이 거짓이라 멈춰요."
+          },
+          en: {
+            predict: {
+              question: "When num is 10, what does this code output?",
+              options: ["No output", "10", "10 11 12 ...(infinite loop)"],
+              feedback: "do-while executes once first! It prints 10, then num becomes 11, and 11 < 10 is false so it stops."
+            }
           }
         }
       },
