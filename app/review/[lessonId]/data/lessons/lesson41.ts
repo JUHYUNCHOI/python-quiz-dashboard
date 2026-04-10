@@ -348,6 +348,116 @@ print(hero.name)`,
       }
     },
 
+    // ============================================
+    // Chapter 5: 클래스 손에 익히기
+    // ============================================
+    {
+      type: "chapter",
+      content: {
+        num: 5,
+        title: "클래스 손에 익히기",
+        desc: "class, __init__, self, 객체 생성 — 눈 감고도 쓸 수 있게!"
+      }
+    },
+
+    // Drill 1: __init__ 빈칸
+    {
+      type: "practice",
+      content: {
+        level: 1,
+        task: "Dog 클래스의 __init__을 완성하고 강아지 객체를 만들어요",
+        guide: "class ClassName: def __init__(s, ...): s.속성 = 값",
+        template: "class Dog:\n    def ___(s, name, age):\n        s.___ = name\n        s.age = age\n\ndog = Dog('뽀삐', 3)\nprint(dog.name)",
+        blanksAnswer: ["__init__", "name"],
+        answer: "class Dog:\n    def __init__(s, name, age):\n        s.name = name\n        s.age = age\n\ndog = Dog('뽀삐', 3)\nprint(dog.name)",
+        expect: "뽀삐",
+        en: {
+          task: "Complete the Dog class __init__ and create a dog object",
+          guide: "class ClassName: def __init__(s, ...): s.attr = value"
+        }
+      }
+    },
+
+    // Drill 2: 여러 속성 접근
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "두 개의 Car 객체를 만들고 각각의 이름과 연료를 출력해요",
+        guide: "Car(브랜드, 연료); obj.속성으로 접근",
+        template: "class Car:\n    def __init__(s, brand, fuel):\n        s.brand = brand\n        s.fuel = fuel\n\nc1 = Car('현대', '휘발유')\nc2 = Car('현대', '전기')\nprint(f'{c1.___}: {c1.___}')\nprint(f'{c2.___}: {c2.___}')",
+        blanksAnswer: ["brand", "fuel", "brand", "fuel"],
+        answer: "class Car:\n    def __init__(s, brand, fuel):\n        s.brand = brand\n        s.fuel = fuel\n\nc1 = Car('현대', '휘발유')\nc2 = Car('현대', '전기')\nprint(f'{c1.brand}: {c1.fuel}')\nprint(f'{c2.brand}: {c2.fuel}')",
+        expect: "현대: 휘발유\n현대: 전기",
+        en: {
+          task: "Create two Car objects and print each one's brand and fuel",
+          guide: "Car(brand, fuel); access with obj.attribute"
+        }
+      }
+    },
+
+    // Drill 3: 속성 수정
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "Player 객체를 만들고 hp를 30 줄인 뒤 현재 hp를 출력해요",
+        guide: "obj.속성 = 새 값으로 수정 가능",
+        template: "class Player:\n    def __init__(s, name, hp):\n        s.name = name\n        s.hp = hp\n\np = Player('영웅', 100)\np.___ = p.___ - ___\nprint(p.hp)",
+        blanksAnswer: ["hp", "hp", "30"],
+        answer: "class Player:\n    def __init__(s, name, hp):\n        s.name = name\n        s.hp = hp\n\np = Player('영웅', 100)\np.hp = p.hp - 30\nprint(p.hp)",
+        expect: "70",
+        en: {
+          task: "Create a Player object, reduce hp by 30, and print current hp",
+          guide: "obj.attribute = new value to modify"
+        }
+      }
+    },
+
+    // Drill 4: 처음부터 — Circle 클래스
+    {
+      type: "practice",
+      content: {
+        level: 3,
+        task: "처음부터 작성! 반지름(radius)을 속성으로 가지는 Circle 클래스를 만들고\n반지름 5인 원의 넓이(π×r²)를 출력해요 (π = 3.14)",
+        guide: "class Circle: __init__(s, r): s.r = r; c = Circle(5); print(3.14 * c.r ** 2)",
+        hint: "class Circle:\n    def __init__(s, radius):\n        s.radius = radius\n\nc = Circle(5)\nprint(3.14 * c.radius ** 2)",
+        template: null,
+        answer: "class Circle:\n    def __init__(s, radius):\n        s.radius = radius\n\nc = Circle(5)\nprint(3.14 * c.radius ** 2)",
+        alternateAnswers: [
+          "class Circle:\n    def __init__(s,r):\n        s.radius=r\nc=Circle(5)\nprint(3.14*c.radius**2)"
+        ],
+        expect: "78.5",
+        en: {
+          task: "Write from scratch! Create a Circle class with radius attribute\nPrint the area (π×r²) for a circle with radius 5 (π = 3.14)",
+          guide: "class Circle: __init__(s, r): s.r = r; c = Circle(5); print(3.14 * c.r ** 2)",
+          hint: "class Circle:\n    def __init__(s, radius):\n        s.radius = radius\n\nc = Circle(5)\nprint(3.14 * c.radius ** 2)"
+        }
+      }
+    },
+
+    // Drill 5: 처음부터 — 여러 객체 비교
+    {
+      type: "practice",
+      content: {
+        level: 3,
+        task: "처음부터 작성! Student 클래스(name, score)를 만들고\ns1(민수, 85), s2(영희, 92)를 생성해 더 높은 점수를 가진 학생 이름을 출력해요",
+        guide: "class Student; s1 = Student(...); if s1.score > s2.score: print(s1.name)",
+        hint: "class Student:\n    def __init__(s, name, score):\n        s.name = name\n        s.score = score\n\ns1 = Student('민수', 85)\ns2 = Student('영희', 92)\nif s1.score > s2.score:\n    print(s1.name)\nelse:\n    print(s2.name)",
+        template: null,
+        answer: "class Student:\n    def __init__(s, name, score):\n        s.name = name\n        s.score = score\n\ns1 = Student('민수', 85)\ns2 = Student('영희', 92)\nif s1.score > s2.score:\n    print(s1.name)\nelse:\n    print(s2.name)",
+        alternateAnswers: [
+          "class Student:\n    def __init__(s,n,sc):\n        s.name=n\n        s.score=sc\ns1=Student('민수',85)\ns2=Student('영희',92)\nprint(s1.name if s1.score>s2.score else s2.name)"
+        ],
+        expect: "영희",
+        en: {
+          task: "Write from scratch! Create Student class (name, score)\nCreate s1(Minsu, 85) and s2(Younghee, 92), print the name of the higher scorer",
+          guide: "class Student; s1 = Student(...); if s1.score > s2.score: print(s1.name)",
+          hint: "class Student:\n    def __init__(s, name, score):\n        s.name = name\n        s.score = score\n\ns1 = Student('민수', 85)\ns2 = Student('영희', 92)\nif s1.score > s2.score:\n    print(s1.name)\nelse:\n    print(s2.name)"
+        }
+      }
+    },
+
     { type: "done", content: {} }
   ]
 }

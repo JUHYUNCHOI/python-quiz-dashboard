@@ -388,6 +388,114 @@ export const lesson16: LessonData = {
       }
     },
 
+    // ==================== CHAPTER 4: 리스트 손에 익히기 ====================
+    {
+      type: "chapter",
+      content: {
+        num: 4,
+        title: "리스트 손에 익히기",
+        desc: "[], 인덱싱, append, remove, len — 자동으로 손이 나오게!"
+      }
+    },
+
+    // Drill 1: 리스트 만들기 + 인덱싱
+    {
+      type: "practice",
+      content: {
+        level: 1,
+        task: "숫자 리스트를 만들고 세 번째 요소를 출력해요",
+        guide: "인덱스는 0부터! 세 번째 = [2]",
+        template: "nums = [10, 20, 30, 40, 50]\nprint(nums[___])",
+        blanksAnswer: ["2"],
+        answer: "nums = [10, 20, 30, 40, 50]\nprint(nums[2])",
+        expect: "30",
+        en: {
+          task: "Create a number list and print the third element",
+          guide: "Index starts at 0! Third = [2]"
+        }
+      }
+    },
+
+    // Drill 2: append + len
+    {
+      type: "practice",
+      content: {
+        level: 1,
+        task: "리스트에 두 항목을 추가하고 길이를 출력해요",
+        guide: "append() 두 번, 마지막에 len()",
+        template: "items = ['펜', '공책']\nitems.___('지우개')\nitems.___('자')\nprint(___(items))",
+        blanksAnswer: ["append", "append", "len"],
+        answer: "items = ['펜', '공책']\nitems.append('지우개')\nitems.append('자')\nprint(len(items))",
+        expect: "4",
+        en: {
+          task: "Add two items to the list and print the length",
+          guide: "append() twice, then len() at the end"
+        }
+      }
+    },
+
+    // Drill 3: append + remove + 출력
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "'망고'를 추가하고 '바나나'를 제거한 뒤 리스트를 출력해요",
+        guide: "append() 후 remove()",
+        template: "fruits = ['사과', '바나나', '포도']\nfruits.___('망고')\nfruits.___('바나나')\nprint(fruits)",
+        blanksAnswer: ["append", "remove"],
+        answer: "fruits = ['사과', '바나나', '포도']\nfruits.append('망고')\nfruits.remove('바나나')\nprint(fruits)",
+        expect: "['사과', '포도', '망고']",
+        en: {
+          task: "Add 'mango' and remove 'banana', then print the list",
+          guide: "append() then remove()"
+        }
+      }
+    },
+
+    // Drill 4: 처음부터 — 리스트 만들고 조작
+    {
+      type: "practice",
+      content: {
+        level: 3,
+        task: "처음부터 작성! 빈 리스트를 만들고\n1부터 5까지 append로 채운 뒤 전체를 출력해요",
+        guide: "nums = []; for i in range(1, 6): nums.append(i); print(nums)",
+        hint: "nums = []\nfor i in range(1, 6):\n    nums.append(i)\nprint(nums)",
+        template: null,
+        answer: "nums = []\nfor i in range(1, 6):\n    nums.append(i)\nprint(nums)",
+        alternateAnswers: [
+          "nums=[]\nfor i in range(1,6):\n    nums.append(i)\nprint(nums)"
+        ],
+        expect: "[1, 2, 3, 4, 5]",
+        en: {
+          task: "Write from scratch! Create an empty list, fill it with 1 through 5 using append, then print it",
+          guide: "nums = []; for i in range(1, 6): nums.append(i); print(nums)",
+          hint: "nums = []\nfor i in range(1, 6):\n    nums.append(i)\nprint(nums)"
+        }
+      }
+    },
+
+    // Drill 5: 처음부터 — 최댓값 찾기
+    {
+      type: "practice",
+      content: {
+        level: 3,
+        task: "처음부터 작성! 리스트 [3, 7, 1, 9, 4]의 최댓값을 for문으로 직접 찾아 출력해요\n(max() 함수 사용 금지!)",
+        guide: "best = nums[0]; for x in nums: if x > best: best = x",
+        hint: "nums = [3, 7, 1, 9, 4]\nbest = nums[0]\nfor x in nums:\n    if x > best:\n        best = x\nprint(best)",
+        template: null,
+        answer: "nums = [3, 7, 1, 9, 4]\nbest = nums[0]\nfor x in nums:\n    if x > best:\n        best = x\nprint(best)",
+        alternateAnswers: [
+          "nums=[3,7,1,9,4]\nbest=nums[0]\nfor x in nums:\n    if x>best:best=x\nprint(best)"
+        ],
+        expect: "9",
+        en: {
+          task: "Write from scratch! Find the maximum value in [3, 7, 1, 9, 4] using a for loop\n(No max() function!)",
+          guide: "best = nums[0]; for x in nums: if x > best: best = x",
+          hint: "nums = [3, 7, 1, 9, 4]\nbest = nums[0]\nfor x in nums:\n    if x > best:\n        best = x\nprint(best)"
+        }
+      }
+    },
+
     // ==================== DONE ====================
     { type: "done", content: {} }
   ]

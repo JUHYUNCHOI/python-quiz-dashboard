@@ -301,6 +301,114 @@ export const lesson13: LessonData = {
       }
     },
 
+    // ==================== CHAPTER 5: for 손에 익히기 ====================
+    {
+      type: "chapter",
+      content: {
+        num: 5,
+        title: "for 손에 익히기",
+        desc: "range, 리스트 순회, 누적 — 눈 감고도 쓸 수 있게!"
+      }
+    },
+
+    // Drill 1: range 기본
+    {
+      type: "practice",
+      content: {
+        level: 1,
+        task: "1부터 5까지 출력하는 for문을 완성해요",
+        guide: "range(시작, 끝+1)",
+        template: "for i in range(___, ___):\n    print(i)",
+        blanksAnswer: ["1", "6"],
+        answer: "for i in range(1, 6):\n    print(i)",
+        expect: "1\n2\n3\n4\n5",
+        en: {
+          task: "Complete the for loop to print 1 through 5",
+          guide: "range(start, end+1)"
+        }
+      }
+    },
+
+    // Drill 2: 리스트 순회 + f-string
+    {
+      type: "practice",
+      content: {
+        level: 1,
+        task: "리스트를 순회하며 각 과일 앞에 '🍎'를 붙여 출력해요",
+        guide: "for item in list: print(f'🍎{item}')",
+        template: "fruits = ['사과', '바나나', '포도']\nfor ___ in fruits:\n    print(f'🍎{___}')",
+        blanksAnswer: ["fruit", "fruit"],
+        answer: "fruits = ['사과', '바나나', '포도']\nfor fruit in fruits:\n    print(f'🍎{fruit}')",
+        expect: "🍎사과\n🍎바나나\n🍎포도",
+        en: {
+          task: "Traverse the list and print each fruit with '🍎' prepended",
+          guide: "for item in list: print(f'🍎{item}')"
+        }
+      }
+    },
+
+    // Drill 3: 누적합
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "리스트 [10, 20, 30, 40]의 합계를 for문으로 구해 출력해요",
+        guide: "total = 0; for x in nums: total += x",
+        template: "nums = [10, 20, 30, 40]\ntotal = 0\nfor ___ in nums:\n    total ___ ___\nprint(total)",
+        blanksAnswer: ["x", "+=", "x"],
+        answer: "nums = [10, 20, 30, 40]\ntotal = 0\nfor x in nums:\n    total += x\nprint(total)",
+        expect: "100",
+        en: {
+          task: "Use a for loop to sum the list [10, 20, 30, 40] and print it",
+          guide: "total = 0; for x in nums: total += x"
+        }
+      }
+    },
+
+    // Drill 4: 처음부터 — 구구단 5단
+    {
+      type: "practice",
+      content: {
+        level: 3,
+        task: "처음부터 작성! 구구단 5단을 출력해요\n형식: '5 x 1 = 5'",
+        guide: "for i in range(1, 10): print(f'5 x {i} = {5*i}')",
+        hint: "for i in range(1, 10):\n    print(f'5 x {i} = {5*i}')",
+        template: null,
+        answer: "for i in range(1, 10):\n    print(f'5 x {i} = {5*i}')",
+        alternateAnswers: [
+          "for i in range(1,10):\n    print(f'5 x {i} = {5*i}')"
+        ],
+        expect: "5 x 1 = 5\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45",
+        en: {
+          task: "Write from scratch! Print the 5 times table\nFormat: '5 x 1 = 5'",
+          guide: "for i in range(1, 10): print(f'5 x {i} = {5*i}')",
+          hint: "for i in range(1, 10):\n    print(f'5 x {i} = {5*i}')"
+        }
+      }
+    },
+
+    // Drill 5: 처음부터 — 짝수 합계
+    {
+      type: "practice",
+      content: {
+        level: 3,
+        task: "처음부터 작성! 1~10 중 짝수의 합계를 구해 출력해요",
+        guide: "for + range + if x%2==0 + 누적합",
+        hint: "total = 0\nfor i in range(1, 11):\n    if i % 2 == 0:\n        total += i\nprint(total)",
+        template: null,
+        answer: "total = 0\nfor i in range(1, 11):\n    if i % 2 == 0:\n        total += i\nprint(total)",
+        alternateAnswers: [
+          "total=0\nfor i in range(2,11,2):\n    total+=i\nprint(total)"
+        ],
+        expect: "30",
+        en: {
+          task: "Write from scratch! Find the sum of even numbers from 1 to 10 and print it",
+          guide: "for + range + if x%2==0 + accumulate",
+          hint: "total = 0\nfor i in range(1, 11):\n    if i % 2 == 0:\n        total += i\nprint(total)"
+        }
+      }
+    },
+
     // ==================== DONE ====================
     { type: "done", content: {} }
   ]

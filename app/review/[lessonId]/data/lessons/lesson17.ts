@@ -362,6 +362,114 @@ export const lesson17: LessonData = {
       }
     },
 
+    // ==================== CHAPTER 4: 리스트+반복문 손에 익히기 ====================
+    {
+      type: "chapter",
+      content: {
+        num: 4,
+        title: "리스트+반복문 손에 익히기",
+        desc: "컴프리헨션, enumerate — 파이썬답게 쓰는 법 익히기!"
+      }
+    },
+
+    // Drill 1: 리스트 컴프리헨션 기본
+    {
+      type: "practice",
+      content: {
+        level: 1,
+        task: "리스트 [1, 2, 3, 4, 5]의 각 원소를 3배 한 새 리스트를 만들어 출력해요",
+        guide: "[x * 3 for x in nums]",
+        template: "nums = [1, 2, 3, 4, 5]\ntripled = [___ for x in nums]\nprint(tripled)",
+        blanksAnswer: ["x * 3"],
+        answer: "nums = [1, 2, 3, 4, 5]\ntripled = [x * 3 for x in nums]\nprint(tripled)",
+        expect: "[3, 6, 9, 12, 15]",
+        en: {
+          task: "Create a new list that triples each element of [1, 2, 3, 4, 5] and print it",
+          guide: "[x * 3 for x in nums]"
+        }
+      }
+    },
+
+    // Drill 2: 컴프리헨션 + 필터
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "1~10 중 3의 배수만 리스트 컴프리헨션으로 모아 출력해요",
+        guide: "[x for x in range(1, 11) if x % 3 == 0]",
+        template: "multiples = [x for x in range(1, 11) ___ x % ___ == 0]\nprint(multiples)",
+        blanksAnswer: ["if", "3"],
+        answer: "multiples = [x for x in range(1, 11) if x % 3 == 0]\nprint(multiples)",
+        expect: "[3, 6, 9]",
+        en: {
+          task: "Use list comprehension to collect multiples of 3 from 1 to 10 and print them",
+          guide: "[x for x in range(1, 11) if x % 3 == 0]"
+        }
+      }
+    },
+
+    // Drill 3: enumerate
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "enumerate로 1번부터 번호를 매겨 '1번: 철수' 형식으로 출력해요",
+        guide: "for i, name in enumerate(list, 1):",
+        template: "names = ['철수', '영희', '민수']\nfor ___, ___ in enumerate(names, ___):\n    print(f'{i}번: {name}')",
+        blanksAnswer: ["i", "name", "1"],
+        answer: "names = ['철수', '영희', '민수']\nfor i, name in enumerate(names, 1):\n    print(f'{i}번: {name}')",
+        expect: "1번: 철수\n2번: 영희\n3번: 민수",
+        en: {
+          task: "Use enumerate to print each name with a number starting from 1: '1번: 철수'",
+          guide: "for i, name in enumerate(list, 1):"
+        }
+      }
+    },
+
+    // Drill 4: 처음부터 — 점수 평균
+    {
+      type: "practice",
+      content: {
+        level: 3,
+        task: "처음부터 작성! 점수 리스트 [85, 92, 78, 95, 88]의 평균을 구해 출력해요\n(sum/len 사용 가능)",
+        guide: "total = sum(scores); avg = total / len(scores)",
+        hint: "scores = [85, 92, 78, 95, 88]\navg = sum(scores) / len(scores)\nprint(avg)",
+        template: null,
+        answer: "scores = [85, 92, 78, 95, 88]\navg = sum(scores) / len(scores)\nprint(avg)",
+        alternateAnswers: [
+          "scores=[85,92,78,95,88]\nprint(sum(scores)/len(scores))"
+        ],
+        expect: "87.6",
+        en: {
+          task: "Write from scratch! Calculate the average of [85, 92, 78, 95, 88] and print it\n(sum/len allowed)",
+          guide: "total = sum(scores); avg = total / len(scores)",
+          hint: "scores = [85, 92, 78, 95, 88]\navg = sum(scores) / len(scores)\nprint(avg)"
+        }
+      }
+    },
+
+    // Drill 5: 처음부터 — 짝수만 제곱
+    {
+      type: "practice",
+      content: {
+        level: 3,
+        task: "처음부터 작성! 1~10 중 짝수의 제곱값을 리스트 컴프리헨션으로 만들어 출력해요",
+        guide: "[x**2 for x in range(1, 11) if x % 2 == 0]",
+        hint: "result = [x**2 for x in range(1, 11) if x % 2 == 0]\nprint(result)",
+        template: null,
+        answer: "result = [x**2 for x in range(1, 11) if x % 2 == 0]\nprint(result)",
+        alternateAnswers: [
+          "result=[x**2 for x in range(1,11) if x%2==0]\nprint(result)"
+        ],
+        expect: "[4, 16, 36, 64, 100]",
+        en: {
+          task: "Write from scratch! Use list comprehension to create a list of squares of even numbers from 1 to 10",
+          guide: "[x**2 for x in range(1, 11) if x % 2 == 0]",
+          hint: "result = [x**2 for x in range(1, 11) if x % 2 == 0]\nprint(result)"
+        }
+      }
+    },
+
     // ==================== DONE ====================
     { type: "done", content: {} }
   ]
