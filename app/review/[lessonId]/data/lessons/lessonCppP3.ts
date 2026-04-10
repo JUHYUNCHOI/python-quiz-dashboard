@@ -33,16 +33,20 @@ export const lessonCppP3: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "내림차순으로 정렬하려면 세 번째 인자를 넣어요!",
-            "greater<int>()를 쓰면 큰 것부터!"
-          ],
+          lines: [],
           code: 'vector<int> v = {5, 2, 8, 1, 9};\nsort(v.begin(), v.end(), greater<int>());\nfor (int x : v) cout << x << " ";',
           predict: {
             question: "출력 결과는?",
             options: ["1 2 5 8 9", "9 8 5 2 1", "5 2 8 1 9"],
             answer: 1,
             feedback: "greater<int>()를 넣으면 내림차순! 큰 수부터 정렬돼요."
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["1 2 5 8 9", "9 8 5 2 1", "5 2 8 1 9"],
+              feedback: "Using greater<int>() sorts in descending order — largest values come first!"
+            }
           }
         }
       },
@@ -240,10 +244,7 @@ export const lessonCppP3: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "USACO Bronze 문제를 풀어봐요!",
-            "N마리 소의 점수가 주어지면, 상위 K마리를 출력하는 문제예요."
-          ],
+          lines: [],
           code: '// 입력:\n// 5 3     (N=5마리, 상위 K=3마리)\n// 80 95 70 90 85\n// 출력: 내림차순 상위 3개\n// 95 90 85',
           predict: {
             question: "이 문제를 풀려면 어떤 알고리즘이 필요할까요?",
@@ -254,6 +255,17 @@ export const lessonCppP3: LessonData = {
             ],
             answer: 1,
             feedback: "정렬해서 큰 순서대로 K개를 출력하면 돼요!"
+          },
+          en: {
+            predict: {
+              question: "Which algorithm is needed to solve this problem?",
+              options: [
+                "Count with map",
+                "Sort in descending order and print top K",
+                "Use a stack"
+              ],
+              feedback: "Sort the scores in descending order and print the first K values!"
+            }
           }
         }
       },

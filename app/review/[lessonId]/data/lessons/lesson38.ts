@@ -30,13 +30,20 @@ export const lesson38: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["🧠 파일 내용은?"],
+        lines: [],
         code: "with open('a.txt', 'w') as f:\n    f.write('A')\n    f.write('B')\n    f.write('C')",
         predict: {
           question: "a.txt 내용은?",
           options: ["A\\nB\\nC", "ABC", "A B C", "CBA"],
           answer: 1,
           feedback: "\\n 없으면 줄바꿈 없이 이어서! ABC"
+        },
+        en: {
+          predict: {
+            question: "What is the content of a.txt?",
+            options: ["A\\nB\\nC", "ABC", "A B C", "CBA"],
+            feedback: "No \\n means no line break — they concatenate! ABC"
+          }
         },
         result: "ABC"
       }
@@ -188,13 +195,20 @@ export const lesson38: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["🧠 'w'로 두 번 쓰면?"],
+        lines: [],
         code: "with open('a.txt', 'w') as f:\n    f.write('X')\n\nwith open('a.txt', 'w') as f:\n    f.write('Y')\n\nwith open('a.txt', 'r') as f:\n    print(f.read())",
         predict: {
           question: "출력 결과는?",
           options: ["XY", "X", "Y", "에러"],
           answer: 2,
           feedback: "'w'는 매번 덮어쓰기! 두 번째 'Y'만 남아요!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["XY", "X", "Y", "Error"],
+            feedback: "'w' mode overwrites every time! Only the second 'Y' remains!"
+          }
         },
         result: "Y"
       }
@@ -274,13 +288,20 @@ export const lesson38: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["🧠 파일이 없을 때?"],
+        lines: [],
         code: "try:\n    with open('없는파일.txt', 'r') as f:\n        print('A')\nexcept FileNotFoundError:\n    print('B')\nprint('C')",
         predict: {
           question: "출력 결과는?",
           options: ["A C", "B C", "A B C", "에러"],
           answer: 1,
           feedback: "파일 없음 → except → 'B' → 프로그램 계속 → 'C'"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["A C", "B C", "A B C", "Error"],
+            feedback: "File not found → except → 'B' → program continues → 'C'"
+          }
         },
         result: "B\nC"
       }

@@ -33,16 +33,20 @@ export const lessonCpp9: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "배열은 선언할 때 크기가 정해져요!",
-            "인덱스로 각 값에 접근할 수 있어요."
-          ],
+          lines: [],
           code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    int arr[3] = {10, 20, 30};\n    cout << arr[0] << endl;\n    cout << arr[2] << endl;\n    return 0;\n}',
           predict: {
             question: "출력 결과는?",
             options: ["10\n30", "10\n20", "20\n30", "1\n3"],
             answer: 0,
             feedback: "arr[0]은 첫 번째 값 10, arr[2]는 세 번째 값 30이에요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["10\n30", "10\n20", "20\n30", "1\n3"],
+              feedback: "arr[0] is the first value 10, arr[2] is the third value 30!"
+            }
           }
         }
       },
@@ -246,16 +250,20 @@ export const lessonCpp9: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "vector의 크기는 .size()로 알 수 있어요!",
-            "파이썬의 len()과 같아요."
-          ],
+          lines: [],
           code: '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> v = {10, 20, 30};\n    v.push_back(40);\n    cout << v.size() << endl;\n    return 0;\n}',
           predict: {
             question: "출력 결과는?",
             options: ["3", "4", "40", "에러"],
             answer: 1,
             feedback: "처음 3개 + push_back 1개 = 총 4개! size()는 원소 개수를 돌려줘요."
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["3", "4", "40", "Error"],
+              feedback: "Initial 3 elements + 1 push_back = 4 total! size() returns the number of elements."
+            }
           }
         }
       },
@@ -379,16 +387,20 @@ export const lessonCpp9: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "pop_back()은 맨 뒤 값을 제거해요!",
-            "파이썬 list.pop()과 비슷해요."
-          ],
+          lines: [],
           code: '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> v = {10, 20, 30};\n    v.pop_back();\n    cout << v.size() << endl;\n    cout << v[1] << endl;\n    return 0;\n}',
           predict: {
             question: "출력 결과는?",
             options: ["3\n30", "2\n20", "2\n30", "에러"],
             answer: 1,
             feedback: "pop_back()으로 30이 제거! 남은 건 {10, 20} → size=2, v[1]=20!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["3\n30", "2\n20", "2\n30", "Error"],
+              feedback: "pop_back() removes 30! Remaining is {10, 20} → size=2, v[1]=20!"
+            }
           }
         }
       },
@@ -471,16 +483,20 @@ export const lessonCpp9: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "for 루프로 vector의 모든 값을 더할 수 있어요!",
-            "파이썬 sum(list)와 비슷한 역할이에요."
-          ],
+          lines: [],
           code: 'vector<int> scores = {90, 85, 100};\nint total = 0;\nfor (int i = 0; i < scores.size(); i++) {\n    total += scores[i];\n}\ncout << total << endl;',
           predict: {
             question: "출력 결과는?",
             options: ["275", "90", "100", "3"],
             answer: 0,
             feedback: "90 + 85 + 100 = 275! for 루프로 모든 값을 더했어요."
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["275", "90", "100", "3"],
+              feedback: "90 + 85 + 100 = 275! The for loop added all values."
+            }
           }
         }
       },
@@ -533,6 +549,195 @@ export const lessonCpp9: LessonData = {
         content: {
           message: "점수 관리 프로그램 완성!",
           emoji: "🏆"
+        }
+      },
+
+      // ==================== CHAPTER 4: 벡터 손에 익히기 ====================
+      {
+        type: "chapter",
+        content: {
+          num: 4,
+          title: "벡터 손에 익히기",
+          desc: "같은 패턴을 반복해서 손이 기억하게 만들어요!"
+        }
+      },
+
+      // --- 초기화 3가지 방식 ---
+
+      // Drill 1: 빈 벡터 선언 → push_back 3번
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "빈 정수형 벡터를 선언하고, 10, 20, 30을 차례로 추가해요",
+          guide: "vector<int> v; 선언 후 push_back 3번",
+          template: "vector<int> v;\nv.___(10);\nv.___(20);\nv.___(30);",
+          blanksAnswer: ["push_back", "push_back", "push_back"],
+          answer: "vector<int> v;\nv.push_back(10);\nv.push_back(20);\nv.push_back(30);",
+          expect: "vector<int> v;\nv.push_back(10);\nv.push_back(20);\nv.push_back(30);",
+          en: {
+            task: "Declare an empty integer vector, then add 10, 20, 30 one by one",
+            guide: "Declare vector<int> v; then push_back 3 times"
+          }
+        }
+      },
+
+      // Drill 2: 초기값 목록으로 선언 (= {})
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "벡터를 선언하면서 바로 {5, 10, 15} 값을 넣어요",
+          guide: "vector<int> v = {값들};",
+          template: "vector<int> v = {___, ___, ___};",
+          blanksAnswer: ["5", "10", "15"],
+          answer: "vector<int> v = {5, 10, 15};",
+          expect: "vector<int> v = {5, 10, 15};",
+          en: {
+            task: "Declare a vector with initial values {5, 10, 15}",
+            guide: "vector<int> v = {values};"
+          }
+        }
+      },
+
+      // Drill 3: 크기 + 초기값으로 선언 (n, value)
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "크기 5, 초기값 0인 벡터를 선언해요 — vector<int> v(크기, 초기값) 패턴!",
+          guide: "vector<타입> v(개수, 초기값);",
+          template: "vector<int> v(___, ___);",
+          blanksAnswer: ["5", "0"],
+          answer: "vector<int> v(5, 0);",
+          expect: "vector<int> v(5, 0);",
+          en: {
+            task: "Declare a vector of size 5, initialized to 0 — vector<int> v(size, value) pattern!",
+            guide: "vector<type> v(count, initial_value);"
+          }
+        }
+      },
+
+      // Drill 4: 초기화 3가지 직접 쓰기 (template: null)
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "벡터 초기화 3가지를 직접 써봐요:\n① 빈 벡터 선언\n② {1, 2, 3}으로 선언\n③ 크기 4, 초기값 0으로 선언",
+          guide: "각각 다른 초기화 방식 — 손이 기억할 때까지!",
+          hint: "vector<int> a;\nvector<int> b = {1,2,3};\nvector<int> c(4, 0);",
+          template: null,
+          answer: "vector<int> a;\nvector<int> b = {1, 2, 3};\nvector<int> c(4, 0);",
+          alternateAnswers: [
+            "vector<int> a;\nvector<int> b = {1,2,3};\nvector<int> c(4, 0);"
+          ],
+          expect: "vector<int> a;\nvector<int> b = {1, 2, 3};\nvector<int> c(4, 0);",
+          en: {
+            task: "Write all 3 vector initialization styles:\n① empty vector\n② with {1, 2, 3}\n③ size 4, value 0",
+            guide: "Three different ways to initialize — until your hands remember!"
+          }
+        }
+      },
+
+      // --- push_back / pop_back / size ---
+
+      // Drill 5: push/pop/size 조합
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "벡터에 1, 2, 3을 추가하고 → 마지막 원소 제거 → 크기 출력",
+          guide: "push_back 3번 → pop_back → size()",
+          template: "vector<int> v;\nv.push_back(1);\nv.push_back(2);\nv.push_back(3);\nv.___();\ncout << v.___() << endl;",
+          blanksAnswer: ["pop_back", "size"],
+          answer: "vector<int> v;\nv.push_back(1);\nv.push_back(2);\nv.push_back(3);\nv.pop_back();\ncout << v.size() << endl;",
+          expect: "2",
+          en: {
+            task: "Add 1, 2, 3 to vector → remove last element → print size",
+            guide: "push_back 3 times → pop_back → size()"
+          }
+        }
+      },
+
+      // --- 반복문 패턴 ---
+
+      // Drill 6: index for문으로 출력
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "인덱스 for문으로 벡터의 모든 값을 공백으로 구분해 출력해요",
+          guide: "for (int i = 0; i < v.size(); i++) { cout << v[i] << \" \"; }",
+          template: "vector<int> v = {3, 1, 4, 1, 5};\nfor (int i = 0; i < v.___(); i++) {\n    cout << v[___] << \" \";\n}",
+          blanksAnswer: ["size", "i"],
+          answer: "vector<int> v = {3, 1, 4, 1, 5};\nfor (int i = 0; i < v.size(); i++) {\n    cout << v[i] << \" \";\n}",
+          expect: "3 1 4 1 5 ",
+          en: {
+            task: "Use an index for loop to print all vector values separated by spaces",
+            guide: "for (int i = 0; i < v.size(); i++) { cout << v[i] << \" \"; }"
+          }
+        }
+      },
+
+      // Drill 7: range-for로 합계
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "range-for로 벡터 원소 합계를 구해요 (auto 키워드 사용!)",
+          guide: "for (auto x : v) { sum += x; }",
+          template: "vector<int> v = {10, 20, 30, 40};\nint sum = 0;\nfor (___ x : v) {\n    sum ___ x;\n}\ncout << sum << endl;",
+          blanksAnswer: ["auto", "+= "],
+          alternateAnswers: [],
+          answer: "vector<int> v = {10, 20, 30, 40};\nint sum = 0;\nfor (auto x : v) {\n    sum += x;\n}\ncout << sum << endl;",
+          expect: "100",
+          en: {
+            task: "Use a range-for loop to sum the vector elements (use auto keyword!)",
+            guide: "for (auto x : v) { sum += x; }"
+          }
+        }
+      },
+
+      // Drill 8: 처음부터 직접 쓰기 — push_back + range-for
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "처음부터 작성! 빈 벡터 선언 → 2, 4, 6, 8 추가 → range-for로 전부 출력",
+          guide: "vector 선언 → push_back 4번 → for (auto x : v) cout",
+          template: null,
+          answer: "vector<int> v;\nv.push_back(2);\nv.push_back(4);\nv.push_back(6);\nv.push_back(8);\nfor (auto x : v) {\n    cout << x << \" \";\n}",
+          alternateAnswers: [
+            "vector<int> v;\nv.push_back(2);\nv.push_back(4);\nv.push_back(6);\nv.push_back(8);\nfor (auto x : v) cout << x << \" \";",
+            "vector<int> v = {2, 4, 6, 8};\nfor (auto x : v) {\n    cout << x << \" \";\n}",
+            "vector<int> v = {2, 4, 6, 8};\nfor (auto x : v) cout << x << \" \";"
+          ],
+          expect: "2 4 6 8 ",
+          en: {
+            task: "Write from scratch! Declare empty vector → add 2, 4, 6, 8 → print all with range-for",
+            guide: "declare vector → push_back 4 times → for (auto x : v) cout"
+          }
+        }
+      },
+
+      // Drill 9: cin 입력 → 벡터 저장 → 최댓값
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "처음부터 작성! 정수 4개를 cin으로 입력받아 벡터에 저장 → 최댓값 출력",
+          guide: "push_back으로 저장 → maxVal = v[0] → for auto 비교",
+          hint: "vector<int> v;\nfor(int i=0;i<4;i++){int x;cin>>x;v.push_back(x);}\nint m=v[0];\nfor(auto x:v)if(x>m)m=x;\ncout<<m;",
+          template: null,
+          answer: "vector<int> v;\nfor (int i = 0; i < 4; i++) {\n    int x;\n    cin >> x;\n    v.push_back(x);\n}\nint maxVal = v[0];\nfor (auto x : v) {\n    if (x > maxVal) maxVal = x;\n}\ncout << maxVal << endl;",
+          alternateAnswers: [
+            "vector<int> v;\nfor(int i=0;i<4;i++){int x;cin>>x;v.push_back(x);}\nint m=v[0];\nfor(auto x:v)if(x>m)m=x;\ncout<<m<<endl;"
+          ],
+          expect: "9",
+          en: {
+            task: "Write from scratch! Read 4 integers via cin → store in vector → print max value",
+            guide: "push_back to store → maxVal = v[0] → for auto compare"
+          }
         }
       },
 

@@ -17,7 +17,7 @@ export const lesson25: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["스택은 한쪽 끝, 큐는 앞뒤 한 방향...", "덱은 양쪽 끝에서 자유롭게!"],
+        lines: [],
         code: `# 덱 = Double-Ended Queue (양쪽 끝 큐)
 # 앞에서도 넣고 빼고, 뒤에서도 넣고 빼고!
 
@@ -36,7 +36,7 @@ print("양쪽 추가:", list(d))`,
     {
       type: "explain",
       content: {
-        lines: ["양쪽에서 빼기도 가능!"],
+        lines: [],
         code: `from collections import deque
 
 d = deque([10, 20, 30, 40])
@@ -52,6 +52,13 @@ print(f"남은 덱: {list(d)}")`,
           options: ["[10, 20]", "[20, 30]", "[10, 30]", "[20, 40]"],
           answer: 1,
           feedback: "40(오른쪽)과 10(왼쪽)이 빠지고 [20, 30]이 남아요!"
+        },
+        en: {
+          predict: {
+            question: "What remains after pop() from the right and popleft() from the left?",
+            options: ["[10, 20]", "[20, 30]", "[10, 30]", "[20, 40]"],
+            feedback: "40 (right) and 10 (left) are removed, leaving [20, 30]!"
+          }
         },
         result: "오른쪽에서 뺌: 40\n왼쪽에서 뺌: 10\n남은 덱: [20, 30]"
       }
@@ -122,7 +129,7 @@ print(f"남은 덱: {list(d)}")`,
     {
       type: "explain",
       content: {
-        lines: ["덱의 4가지 핵심 메서드!"],
+        lines: [],
         code: `from collections import deque
 
 d = deque([2, 3])
@@ -145,7 +152,7 @@ print("삭제 후:", list(d))`,
     {
       type: "explain",
       content: {
-        lines: ["rotate()로 회전시키기!", "양수면 오른쪽, 음수면 왼쪽으로 회전!"],
+        lines: [],
         code: `from collections import deque
 
 d = deque([1, 2, 3, 4, 5])
@@ -159,13 +166,20 @@ print("오른쪽 2칸:", list(d))`,
           answer: 0,
           feedback: "오른쪽으로 2칸! 뒤의 4, 5가 앞으로 와요!"
         },
+        en: {
+          predict: {
+            question: "What is the result of rotating [1,2,3,4,5] right by 2 steps?",
+            options: ["[4, 5, 1, 2, 3]", "[3, 4, 5, 1, 2]", "[1, 2, 3, 4, 5]", "[2, 3, 4, 5, 1]"],
+            feedback: "Rotate right by 2! Elements 4, 5 from the back move to the front!"
+          }
+        },
         result: "원래: [1, 2, 3, 4, 5]\n오른쪽 2칸: [4, 5, 1, 2, 3]"
       }
     },
     {
       type: "explain",
       content: {
-        lines: ["음수로 rotate하면 왼쪽으로!"],
+        lines: [],
         code: `from collections import deque
 
 d = deque([1, 2, 3, 4, 5])
@@ -176,6 +190,13 @@ print("왼쪽 1칸:", list(d))`,
           options: ["[2, 3, 4, 5, 1]", "[5, 1, 2, 3, 4]", "[1, 2, 3, 4, 5]", "[3, 4, 5, 1, 2]"],
           answer: 0,
           feedback: "왼쪽으로 1칸! 맨 앞의 1이 맨 뒤로 이동!"
+        },
+        en: {
+          predict: {
+            question: "What is the result of rotating [1,2,3,4,5] left by 1 step?",
+            options: ["[2, 3, 4, 5, 1]", "[5, 1, 2, 3, 4]", "[1, 2, 3, 4, 5]", "[3, 4, 5, 1, 2]"],
+            feedback: "Rotate left by 1! The first element 1 moves to the back!"
+          }
         },
         result: "왼쪽 1칸: [2, 3, 4, 5, 1]"
       }

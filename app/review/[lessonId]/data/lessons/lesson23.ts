@@ -17,7 +17,7 @@ export const lesson23: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["접시를 쌓는다고 생각해봐요!", "마지막에 올린 접시를 먼저 꺼내죠?"],
+        lines: [],
         code: `# 접시 쌓기
 접시들 = []
 접시들.append("접시1")  # 맨 아래
@@ -31,7 +31,7 @@ print(접시들)`,
     {
       type: "explain",
       content: {
-        lines: ["꺼낼 때는? 맨 위부터!"],
+        lines: [],
         code: `접시들 = ["접시1", "접시2", "접시3"]
 꺼낸접시 = 접시들.pop()
 print(f"꺼낸 접시: {꺼낸접시}")
@@ -41,6 +41,13 @@ print(f"남은 접시: {접시들}")`,
           options: ["접시1 (맨 아래)", "접시2 (중간)", "접시3 (맨 위)", "랜덤"],
           answer: 2,
           feedback: "LIFO! Last In, First Out! 마지막에 넣은 접시3이 먼저!"
+        },
+        en: {
+          predict: {
+            question: "Which plate comes out first?",
+            options: ["접시1 (bottom)", "접시2 (middle)", "접시3 (top)", "Random"],
+            feedback: "LIFO! Last In, First Out! The last plate pushed (접시3) comes out first!"
+          }
         },
         result: "꺼낸 접시: 접시3\n남은 접시: ['접시1', '접시2']"
       }
@@ -111,7 +118,7 @@ print(f"남은 접시: {접시들}")`,
     {
       type: "explain",
       content: {
-        lines: ["파이썬 리스트로 스택을 쉽게 만들 수 있어요!"],
+        lines: [],
         code: `stack = []
 
 # push (넣기)
@@ -131,7 +138,7 @@ print("남은 스택:", stack)`,
     {
       type: "explain",
       content: {
-        lines: ["스택의 맨 위를 확인만 하고 싶다면?", "[-1]로 peek(엿보기)!"],
+        lines: [],
         code: `stack = ["A", "B", "C"]
 print("맨 위:", stack[-1])
 print("스택 변화 없음:", stack)`,
@@ -140,6 +147,13 @@ print("스택 변화 없음:", stack)`,
           options: ["A", "B", "C", "에러"],
           answer: 2,
           feedback: "[-1]은 마지막 요소! pop과 달리 꺼내지 않아요."
+        },
+        en: {
+          predict: {
+            question: "What is the result of stack[-1]?",
+            options: ["A", "B", "C", "Error"],
+            feedback: "[-1] is the last element! Unlike pop, it doesn't remove it."
+          }
         },
         result: "맨 위: C\n스택 변화 없음: ['A', 'B', 'C']"
       }
@@ -240,7 +254,7 @@ print("스택 변화 없음:", stack)`,
     {
       type: "explain",
       content: {
-        lines: ["실전 1: 괄호 짝 맞추기!", "여는 괄호를 스택에 넣고, 닫는 괄호를 만나면 pop!"],
+        lines: [],
         code: `def check_brackets(text):
     stack = []
     for ch in text:
@@ -261,7 +275,7 @@ print(check_brackets("((1+2)"))`,
     {
       type: "explain",
       content: {
-        lines: ["실전 2: 브라우저 뒤로가기!", "방문한 페이지를 스택에 쌓아요"],
+        lines: [],
         code: `history = []
 
 # 페이지 방문
@@ -278,6 +292,13 @@ print("뒤로가기:", history[-1])`,
           options: ["google.com", "youtube.com", "github.com", "에러"],
           answer: 1,
           feedback: "github.com을 pop하면 그 아래 youtube.com이 맨 위!"
+        },
+        en: {
+          predict: {
+            question: "Where does going back take you?",
+            options: ["google.com", "youtube.com", "github.com", "Error"],
+            feedback: "After popping github.com, youtube.com becomes the top!"
+          }
         },
         result: "현재: github.com\n뒤로가기: youtube.com"
       }

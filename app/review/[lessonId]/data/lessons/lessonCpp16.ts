@@ -47,15 +47,20 @@ export const lessonCpp16: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "map에서 없는 키를 []로 접근하면 어떻게 될까요?"
-          ],
+          lines: [],
           code: 'map<string, int> m;\nm["apple"] = 3;\ncout << m["banana"] << endl;\ncout << m.size() << endl;',
           predict: {
             question: "출력 결과는?",
             options: ["에러 발생", "0\\n2", "0\\n1"],
             answer: 1,
             feedback: "없는 키를 []로 접근하면 기본값(int는 0)이 자동 생성돼요! 그래서 size가 2!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["Error", "0\\n2", "0\\n1"],
+              feedback: "Accessing a missing key with [] auto-creates it with the default value (0 for int)! So the size becomes 2!"
+            }
           }
         }
       },
@@ -264,9 +269,7 @@ export const lessonCpp16: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "set에 중복 값을 넣으면 어떻게 될까요?"
-          ],
+          lines: [],
           code: 'set<int> s;\ns.insert(5);\ns.insert(3);\ns.insert(5);\ns.insert(1);\ncout << s.size() << endl;',
           predict: {
             question: "출력 결과는?",
@@ -433,16 +436,20 @@ export const lessonCpp16: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "map으로 단어 빈도수를 셀 수 있어요!",
-            "[]로 접근하면 없는 키는 0으로 자동 생성되니까 바로 ++!"
-          ],
+          lines: [],
           code: 'map<string, int> freq;\nvector<string> words = {"apple", "banana", "apple", "cherry", "apple"};\nfor (auto w : words) {\n    freq[w]++;\n}\ncout << "apple: " << freq["apple"] << endl;',
           predict: {
             question: "apple의 빈도수는?",
             options: ["1", "2", "3"],
             answer: 2,
             feedback: "apple이 3번 나오니까 freq[\"apple\"]은 3!"
+          },
+          en: {
+            predict: {
+              question: "What is the frequency of \"apple\"?",
+              options: ["1", "2", "3"],
+              feedback: "\"apple\" appears 3 times, so freq[\"apple\"] is 3!"
+            }
           }
         }
       },
@@ -495,6 +502,112 @@ export const lessonCpp16: LessonData = {
         content: {
           message: "단어 빈도수 카운터 완성!",
           emoji: "🏆"
+        }
+      },
+
+      // ==================== CHAPTER 4: map & set 손에 익히기 ====================
+      {
+        type: "chapter",
+        content: {
+          num: 4,
+          title: "map & set 손에 익히기",
+          desc: "빈도수 세기, 중복 제거 — 실제 문제 풀 때 쓰는 패턴!"
+        }
+      },
+
+      // Drill 1: map 기본 (선언 + 삽입 + 접근)
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "map<string, int>을 선언하고 \"apple\"=3, \"banana\"=5를 넣고 \"apple\" 값을 출력해요",
+          guide: "map<string, int> m; m[\"apple\"] = 3;",
+          template: "map<string, ___> m;\nm[\"apple\"] = 3;\nm[\"banana\"] = 5;\ncout << m[___] << endl;",
+          blanksAnswer: ["int", "\"apple\""],
+          answer: "map<string, int> m;\nm[\"apple\"] = 3;\nm[\"banana\"] = 5;\ncout << m[\"apple\"] << endl;",
+          expect: "3",
+          en: {
+            task: "Declare map<string,int>, insert \"apple\"=3, \"banana\"=5, then print \"apple\" value",
+            guide: "map<string, int> m; m[\"apple\"] = 3;"
+          }
+        }
+      },
+
+      // Drill 2: 빈도수 카운트 (핵심 패턴!)
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "단어 배열에서 각 단어의 등장 횟수를 map으로 세어 \"apple\"의 빈도를 출력해요",
+          guide: "for (auto w : words) freq[w]++;",
+          template: "vector<string> words = {\"apple\",\"banana\",\"apple\",\"cherry\",\"apple\"};\nmap<string, int> freq;\nfor (___ w : words) {\n    ___[w]++;\n}\ncout << freq[\"apple\"] << endl;",
+          blanksAnswer: ["auto", "freq"],
+          answer: "vector<string> words = {\"apple\",\"banana\",\"apple\",\"cherry\",\"apple\"};\nmap<string, int> freq;\nfor (auto w : words) {\n    freq[w]++;\n}\ncout << freq[\"apple\"] << endl;",
+          expect: "3",
+          en: {
+            task: "Count word frequencies using a map and print how many times \"apple\" appears",
+            guide: "for (auto w : words) freq[w]++"
+          }
+        }
+      },
+
+      // Drill 3: set으로 중복 제거
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "중복이 있는 벡터에서 set으로 고유한 값의 개수를 구해 출력해요",
+          guide: "set<int> s(v.begin(), v.end()); s.size()",
+          template: "vector<int> v = {1,2,2,3,3,3,4};\nset<int> s(v.___, v.___);\ncout << s.size() << endl;",
+          blanksAnswer: ["begin()", "end()"],
+          answer: "vector<int> v = {1,2,2,3,3,3,4};\nset<int> s(v.begin(), v.end());\ncout << s.size() << endl;",
+          expect: "4",
+          en: {
+            task: "Use a set to count unique values in a vector with duplicates",
+            guide: "set<int> s(v.begin(), v.end()); s.size()"
+          }
+        }
+      },
+
+      // Drill 4: 처음부터 — 빈도수 + 최댓값
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "처음부터 작성! 정수 5개를 입력받아 가장 많이 등장한 숫자와 그 횟수를 출력해요\n(map으로 빈도 계산 → 최대 빈도 찾기)",
+          guide: "map<int,int> freq → for auto p : freq → find max",
+          hint: "map<int,int> freq;\nfor(int i=0;i<5;i++){int x;cin>>x;freq[x]++;}\nint maxVal=0,maxCnt=0;\nfor(auto p:freq)if(p.second>maxCnt){maxCnt=p.second;maxVal=p.first;}\ncout<<maxVal<<\" \"<<maxCnt<<endl;",
+          template: null,
+          answer: "map<int, int> freq;\nfor (int i = 0; i < 5; i++) {\n    int x;\n    cin >> x;\n    freq[x]++;\n}\nint maxVal = 0, maxCnt = 0;\nfor (auto p : freq) {\n    if (p.second > maxCnt) {\n        maxCnt = p.second;\n        maxVal = p.first;\n    }\n}\ncout << maxVal << \" \" << maxCnt << endl;",
+          alternateAnswers: [
+            "map<int,int> freq;\nfor(int i=0;i<5;i++){int x;cin>>x;freq[x]++;}\nint maxVal=0,maxCnt=0;\nfor(auto p:freq)if(p.second>maxCnt){maxCnt=p.second;maxVal=p.first;}\ncout<<maxVal<<\" \"<<maxCnt<<endl;"
+          ],
+          expect: "3 3",
+          en: {
+            task: "Write from scratch! Read 5 integers, print the most frequent number and its count\n(use map for frequency → find max frequency)",
+            guide: "map<int,int> freq → for auto p : freq → find max"
+          }
+        }
+      },
+
+      // Drill 5: 처음부터 — set으로 중복 없는 입력
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "처음부터 작성! 단어 5개를 입력받아 중복을 제거한 후\n알파벳 순서대로 한 줄씩 출력해요 (set이 자동 정렬!)",
+          guide: "set<string> s; cin → s.insert() → for auto w : s",
+          hint: "set<string> s;\nfor(int i=0;i<5;i++){string w;cin>>w;s.insert(w);}\nfor(auto w:s)cout<<w<<endl;",
+          template: null,
+          answer: "set<string> s;\nfor (int i = 0; i < 5; i++) {\n    string w;\n    cin >> w;\n    s.insert(w);\n}\nfor (auto w : s) {\n    cout << w << endl;\n}",
+          alternateAnswers: [
+            "set<string> s;\nfor(int i=0;i<5;i++){string w;cin>>w;s.insert(w);}\nfor(auto w:s)cout<<w<<endl;"
+          ],
+          expect: "apple\nbanana\ncherry",
+          en: {
+            task: "Write from scratch! Read 5 words, remove duplicates\nthen print in alphabetical order (set auto-sorts!)",
+            guide: "set<string> s; cin → s.insert() → for auto w : s"
+          }
         }
       },
 

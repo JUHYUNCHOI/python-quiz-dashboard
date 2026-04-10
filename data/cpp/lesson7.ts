@@ -344,7 +344,7 @@ int main() {
           id: "ch2-fb1",
           type: "fillblank" as const,
           title: "빈칸을 채워주세요",
-          content: "x를 3씩 줄이는 while문을 완성해봐요!",
+          content: "10부터 1까지, x를 3씩 줄이는 while문을 완성해봐요!",
           code: "int x = 10;\n___ (x ___ 0) {\n    cout << x << \" \";\n    x ___ 3;\n}",
           fillBlanks: [
             { id: 0, answer: "while", options: ["while", "for", "if", "do"] },
@@ -432,7 +432,7 @@ for (int i = 0; i < 5; i++) {
         {
           id: "ch2-fb-continue",
           type: "fillblank" as const,
-          title: "continue로 건너뛰기",
+          title: "홀수만 출력하기",
           content: "1~10 중 짝수만 건너뛰고 홀수만 출력하는 코드를 완성하세요.",
           code: "for (int i = 1; i <= 10; i++) {\n    if (i % 2 == 0) ___;\n    cout << i << \" \";\n}",
           fillBlanks: [

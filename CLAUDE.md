@@ -144,7 +144,7 @@ interface QuizQuestion {
 4. 관련 문제에 `animationKey` 추가
 
 ### 커리큘럼 구조 (app/curriculum/page.tsx)
-- Python: 52 레슨 (Part 1-9)
+- Python: 52 레슨 + 4 프로젝트 = 56 항목 (Part 1-9). 레슨 ID는 숫자 1~52, 프로젝트 ID는 p1~p4
 - C++: 23 레슨 + 프로젝트 3개 (Part 1-3)
 - Pseudocode/IGCSE: 별도 트랙
 - 순차 잠금 해제 (완료한 레슨 + 다음 1개)

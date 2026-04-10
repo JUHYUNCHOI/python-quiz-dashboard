@@ -13,45 +13,50 @@ export const lesson40: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["📝 문제 1"],
+        lines: [],
         code: `try:\n    print(10 / 2)\nexcept:\n    print('에러!')`,
         predict: { question: "출력 결과는?", options: ["5.0", "에러!", "5", "10 / 2"], answer: 0, feedback: "에러 안 남! 10/2 = 5.0 정상 출력" },
+        en: { predict: { question: "What's the output?", options: ["5.0", "에러!", "5", "10 / 2"], feedback: "No error! 10/2 = 5.0 prints normally." } },
         result: "5.0"
       }
     },
     {
       type: "explain",
       content: {
-        lines: ["📝 문제 2"],
+        lines: [],
         code: `try:\n    print(10 / 0)\nexcept:\n    print('에러!')`,
         predict: { question: "출력 결과는?", options: ["0", "10", "에러!", "프로그램 종료"], answer: 2, feedback: "0으로 나누기 → ZeroDivisionError → except!" },
+        en: { predict: { question: "What's the output?", options: ["0", "10", "에러!", "Program exits"], feedback: "Divide by zero → ZeroDivisionError → except!" } },
         result: "에러!"
       }
     },
     {
       type: "explain",
       content: {
-        lines: ["📝 문제 3"],
+        lines: [],
         code: `try:\n    x = int('abc')\nexcept:\n    print('A')\nfinally:\n    print('B')`,
         predict: { question: "출력 결과는?", options: ["A만", "B만", "A 다음 B", "에러"], answer: 2, feedback: "except → 'A' → finally는 항상 실행 → 'B'" },
+        en: { predict: { question: "What's the output?", options: ["Only A", "Only B", "A then B", "Error"], feedback: "except → 'A' → finally always runs → 'B'" } },
         result: "A\nB"
       }
     },
     {
       type: "explain",
       content: {
-        lines: ["📝 문제 4: 파일 쓰기 후 내용은?"],
+        lines: [],
         code: `with open('test.txt', 'w') as f:\n    f.write('Hello')`,
         predict: { question: "test.txt 내용은?", options: ["Hello", "hello", "HELLO", "빈 파일"], answer: 0, feedback: "write()는 정확히 입력한 대로 저장!" },
+        en: { predict: { question: "What is the content of test.txt?", options: ["Hello", "hello", "HELLO", "Empty file"], feedback: "write() saves exactly what you pass in!" } },
         result: "Hello"
       }
     },
     {
       type: "explain",
       content: {
-        lines: ["📝 문제 5: 'Hello' 있는 파일에 추가하면?"],
+        lines: [],
         code: `# test.txt에 'Hello'가 있을 때\nwith open('test.txt', 'a') as f:\n    f.write(' World')`,
         predict: { question: "test.txt 내용은?", options: [" World", "Hello World", "World Hello", "Hello\\n World"], answer: 1, feedback: "'a' 모드는 끝에 추가!" },
+        en: { predict: { question: "What is the content of test.txt?", options: [" World", "Hello World", "World Hello", "Hello\\n World"], feedback: "'a' mode appends to the end!" } },
         result: "Hello World"
       }
     },
@@ -95,27 +100,30 @@ export const lesson40: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["📝 문제 8"],
+        lines: [],
         code: `try:\n    x = int('10')\n    print(x + 5)\nexcept ValueError:\n    print('A')\nfinally:\n    print('C')`,
         predict: { question: "출력 결과는?", options: ["A C", "15 C", "15만", "A만"], answer: 1, feedback: "int('10')은 성공! → 15 → finally → C" },
+        en: { predict: { question: "What's the output?", options: ["A C", "15 C", "Only 15", "Only A"], feedback: "int('10') succeeds! → 15 → finally → C" } },
         result: "15\nC"
       }
     },
     {
       type: "explain",
       content: {
-        lines: ["📝 문제 9"],
+        lines: [],
         code: `try:\n    nums = [1, 2, 3]\n    print(nums[5])\nexcept IndexError:\n    print('A')\nexcept:\n    print('B')`,
         predict: { question: "출력 결과는?", options: ["A", "B", "A B", "에러"], answer: 0, feedback: "IndexError → 구체적인 except가 먼저!" },
+        en: { predict: { question: "What's the output?", options: ["A", "B", "A B", "Error"], feedback: "IndexError → the specific except runs first!" } },
         result: "A"
       }
     },
     {
       type: "explain",
       content: {
-        lines: ["📝 문제 10: 파일 내용은?"],
+        lines: [],
         code: `with open('test.txt', 'w') as f:\n    f.write('A\\nB\\nC')`,
         predict: { question: "test.txt는 몇 줄?", options: ["1줄", "3줄 (A, B, C)", "2줄", "빈 파일"], answer: 1, feedback: "\\n = 줄바꿈! 3줄" },
+        en: { predict: { question: "How many lines does test.txt have?", options: ["1 line", "3 lines (A, B, C)", "2 lines", "Empty file"], feedback: "\\n = line break! 3 lines" } },
         result: "A\nB\nC"
       }
     },
@@ -154,9 +162,10 @@ export const lesson40: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["📝 문제 13: 입력이 0일 때?"],
+        lines: [],
         code: `try:\n    x = int(input())  # 0\n    y = 10 / x\n    print(y)\nexcept ValueError:\n    print('A')\nexcept ZeroDivisionError:\n    print('B')`,
         predict: { question: "출력 결과는?", options: ["A", "B", "0", "에러"], answer: 1, feedback: "10/0 → ZeroDivisionError → 'B'" },
+        en: { predict: { question: "What's the output?", options: ["A", "B", "0", "Error"], feedback: "10/0 → ZeroDivisionError → 'B'" } },
         result: "B"
       }
     },

@@ -21,7 +21,7 @@ export const lesson33: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["☕ 카페 주문을 생각해봐요!"],
+        lines: [],
         code: `# 사이즈 안 말하면? → 기본 '중' 사이즈!
 # 사이즈 말하면? → 말한 사이즈!
 
@@ -39,7 +39,7 @@ def 주문(음료, 사이즈='중'):
     {
       type: "explain",
       content: {
-        lines: ["🧠 기본값 예측해보기!"],
+        lines: [],
         code: `def 인사(이름, 메시지='안녕'):
     print(f'{메시지}, {이름}!')
 
@@ -49,6 +49,13 @@ def 주문(음료, 사이즈='중'):
           options: ["철수, 안녕!", "안녕, 철수!", "에러 발생", "메시지, 이름!"],
           answer: 1,
           feedback: "메시지 안 줬으니 기본값 '안녕' 사용!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["철수, 안녕!", "안녕, 철수!", "Error", "메시지, 이름!"],
+            feedback: "No message given, so the default value '안녕' is used!"
+          }
         },
         result: "안녕, 철수!"
       }
@@ -149,7 +156,7 @@ def 주문(음료, 사이즈='중'):
     {
       type: "explain",
       content: {
-        lines: ["📦 택배 상자에서 물건 2개 꺼내기!"],
+        lines: [],
         code: `def 나누기(숫자, 나누는수):
     몫 = 숫자 // 나누는수
     나머지 = 숫자 % 나누는수
@@ -166,7 +173,7 @@ print(f'몫: {몫}, 나머지: {나머지}')`,
     {
       type: "explain",
       content: {
-        lines: ["🧠 합과 차 예측!"],
+        lines: [],
         code: `def 계산(a, b):
     return a + b, a - b
 
@@ -177,6 +184,13 @@ print(합, 차)`,
           options: ["13, 7", "13 7", "(13, 7)", "7 13"],
           answer: 1,
           feedback: "10+3=13, 10-3=7! 공백으로 출력됨"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["13, 7", "13 7", "(13, 7)", "7 13"],
+            feedback: "10+3=13, 10-3=7! Printed with a space between them."
+          }
         },
         result: "13 7"
       }
@@ -272,7 +286,7 @@ print(합, 차)`,
     {
       type: "explain",
       content: {
-        lines: ["🏷️ 이름표 붙이면 순서 상관없어요!"],
+        lines: [],
         code: `def 소개(이름, 나이, 학교):
     print(f'{이름}, {나이}살, {학교}')
 
@@ -290,7 +304,7 @@ print(합, 차)`,
     {
       type: "explain",
       content: {
-        lines: ["🧠 키워드 인자 예측!"],
+        lines: [],
         code: `def greet(name, msg='안녕'):
     print(f'{msg}, {name}!')
 
@@ -300,6 +314,13 @@ greet(msg='반가워', name='민수')`,
           options: ["안녕, 민수!", "반가워, 민수!", "민수, 반가워!", "에러"],
           answer: 1,
           feedback: "이름표 붙였으니 순서 달라도 OK!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["안녕, 민수!", "반가워, 민수!", "민수, 반가워!", "Error"],
+            feedback: "Keyword arguments are labeled, so order doesn't matter!"
+          }
         },
         result: "반가워, 민수!"
       }

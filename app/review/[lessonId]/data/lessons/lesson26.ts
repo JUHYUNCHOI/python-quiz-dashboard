@@ -168,7 +168,7 @@ print(f"전체: {scores}")`,
     {
       type: "explain",
       content: {
-        lines: ["출석 체크 (중복 방지) → 집합!"],
+        lines: [],
         code: `attendance = set()
 
 attendance.add("철수")
@@ -182,6 +182,13 @@ print(f"출석부: {attendance}")`,
           options: ["3명", "2명", "1명", "에러"],
           answer: 1,
           feedback: "set은 중복을 자동 제거! 철수는 한 번만 저장돼요."
+        },
+        en: {
+          predict: {
+            question: "How many people if 철수 is added twice?",
+            options: ["3 people", "2 people", "1 person", "Error"],
+            feedback: "set automatically removes duplicates! 철수 is stored only once."
+          }
         },
         result: "출석 인원: 2명\n출석부: {'철수', '영희'}"
       }

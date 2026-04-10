@@ -27,13 +27,20 @@ export const lesson20: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["키로 값을 꺼내는 2가지 방법!"],
+        lines: [],
         code: "student = {'이름': '민수', '나이': 15}\n\n# 방법 1: 대괄호\nprint(student['이름'])\n\n# 방법 2: get()\nprint(student.get('나이'))",
         predict: {
           question: "출력 결과는?",
           options: ["민수\\n15", "이름\\n나이", "{'이름': '민수'}\\n{'나이': 15}"],
           answer: 0,
           feedback: "키를 넣으면 해당하는 값이 나와요!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["민수\\n15", "이름\\n나이", "{'이름': '민수'}\\n{'나이': 15}"],
+            feedback: "Providing the key retrieves the corresponding value!"
+          }
         },
         result: "민수\n15"
       }
@@ -148,13 +155,20 @@ export const lesson20: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["기존 값 수정하기!"],
+        lines: [],
         code: "student = {'이름': '민수', '나이': 15}\nstudent['나이'] = 16\nprint(student)",
         predict: {
           question: "나이가 어떻게 될까?",
           options: ["15", "16", "[15, 16]", "에러"],
           answer: 1,
           feedback: "있는 키에 값을 넣으면 덮어쓰기!"
+        },
+        en: {
+          predict: {
+            question: "What will the value of age become?",
+            options: ["15", "16", "[15, 16]", "Error"],
+            feedback: "Assigning to an existing key overwrites the old value!"
+          }
         },
         result: "{'이름': '민수', '나이': 16}"
       }
@@ -287,13 +301,20 @@ export const lesson20: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["values()로 값만 순회!"],
+        lines: [],
         code: "scores = {'국어': 90, '영어': 85, '수학': 95}\nfor score in scores.values():\n    print(score)",
         predict: {
           question: "출력 결과는?",
           options: ["국어\\n영어\\n수학", "90\\n85\\n95", "국어: 90\\n영어: 85\\n수학: 95"],
           answer: 1,
           feedback: "values()는 값만 꺼내요!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["국어\\n영어\\n수학", "90\\n85\\n95", "국어: 90\\n영어: 85\\n수학: 95"],
+            feedback: "values() retrieves only the values!"
+          }
         },
         result: "90\n85\n95"
       }
@@ -426,13 +447,20 @@ export const lesson20: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["in 키워드로 키가 있는지 확인!"],
+        lines: [],
         code: "scores = {'국어': 90, '영어': 85}\n\nprint('국어' in scores)\nprint('과학' in scores)",
         predict: {
           question: "출력 결과는?",
           options: ["True\\nTrue", "True\\nFalse", "90\\nFalse"],
           answer: 1,
           feedback: "'국어'는 있으니 True, '과학'은 없으니 False!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["True\\nTrue", "True\\nFalse", "90\\nFalse"],
+            feedback: "'국어' exists so True, '과학' doesn't exist so False!"
+          }
         },
         result: "True\nFalse"
       }
@@ -532,6 +560,114 @@ export const lesson20: LessonData = {
         ],
         canDo: "딕셔너리로 실전 데이터를 관리할 수 있어!",
         emoji: "🏆"
+      }
+    },
+
+    // ==================== CHAPTER 5: 딕셔너리 손에 익히기 ====================
+    {
+      type: "chapter",
+      content: {
+        num: 5,
+        title: "딕셔너리 손에 익히기",
+        desc: "{키: 값}, get, items, sum — 자동으로 손이 나오게!"
+      }
+    },
+
+    // Drill 1: 딕셔너리 생성 + 접근
+    {
+      type: "practice",
+      content: {
+        level: 1,
+        task: "학생 정보 딕셔너리를 만들고 이름과 학년을 출력해요",
+        guide: "{'키': 값}; dict['키']",
+        template: "student = {'이름': '지민', '학년': 2, '점수': 90}\nprint(student[___])\nprint(student[___])",
+        blanksAnswer: ["'이름'", "'학년'"],
+        answer: "student = {'이름': '지민', '학년': 2, '점수': 90}\nprint(student['이름'])\nprint(student['학년'])",
+        expect: "지민\n2",
+        en: {
+          task: "Create a student info dictionary and print the name and grade",
+          guide: "{'key': value}; dict['key']"
+        }
+      }
+    },
+
+    // Drill 2: 추가 + 수정 + get
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "딕셔너리에 '학교' 추가, '점수' 수정(95로), 없는 키 'email'을 get으로 안전하게 접근해요",
+        guide: "dict['키'] = 값; dict.get('키', 기본값)",
+        template: "info = {'이름': '민수', '점수': 80}\ninfo[___] = '한강중학교'\ninfo['점수'] = ___\nprint(info.get(___, '없음'))",
+        blanksAnswer: ["'학교'", "95", "'email'"],
+        answer: "info = {'이름': '민수', '점수': 80}\ninfo['학교'] = '한강중학교'\ninfo['점수'] = 95\nprint(info.get('email', '없음'))",
+        expect: "없음",
+        en: {
+          task: "Add 'school', update 'score' to 95, and safely access missing key 'email' with get()",
+          guide: "dict['key'] = value; dict.get('key', default)"
+        }
+      }
+    },
+
+    // Drill 3: items() 순회
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "items()로 순회하며 '과목: 점수점' 형식으로 출력해요",
+        guide: "for k, v in dict.items():",
+        template: "scores = {'국어': 90, '영어': 85, '수학': 95}\nfor ___, ___ in scores.___():\n    print(f'{subject}: {score}점')",
+        blanksAnswer: ["subject", "score", "items"],
+        answer: "scores = {'국어': 90, '영어': 85, '수학': 95}\nfor subject, score in scores.items():\n    print(f'{subject}: {score}점')",
+        expect: "국어: 90점\n영어: 85점\n수학: 95점",
+        en: {
+          task: "Iterate with items() and print in 'subject: score점' format",
+          guide: "for k, v in dict.items():"
+        }
+      }
+    },
+
+    // Drill 4: 처음부터 — 빈도수 세기
+    {
+      type: "practice",
+      content: {
+        level: 3,
+        task: "처음부터 작성! 문자 리스트에서 각 문자의 등장 횟수를 딕셔너리로 만들어 출력해요",
+        guide: "for c in chars: cnt[c] = cnt.get(c, 0) + 1",
+        hint: "chars = ['a', 'b', 'a', 'c', 'b', 'a']\ncnt = {}\nfor c in chars:\n    cnt[c] = cnt.get(c, 0) + 1\nprint(cnt)",
+        template: null,
+        answer: "chars = ['a', 'b', 'a', 'c', 'b', 'a']\ncnt = {}\nfor c in chars:\n    cnt[c] = cnt.get(c, 0) + 1\nprint(cnt)",
+        alternateAnswers: [
+          "chars=['a','b','a','c','b','a']\ncnt={}\nfor c in chars:\n    cnt[c]=cnt.get(c,0)+1\nprint(cnt)"
+        ],
+        expect: "{'a': 3, 'b': 2, 'c': 1}",
+        en: {
+          task: "Write from scratch! Count how many times each character appears in a list and store in a dict",
+          guide: "for c in chars: cnt[c] = cnt.get(c, 0) + 1",
+          hint: "chars = ['a', 'b', 'a', 'c', 'b', 'a']\ncnt = {}\nfor c in chars:\n    cnt[c] = cnt.get(c, 0) + 1\nprint(cnt)"
+        }
+      }
+    },
+
+    // Drill 5: 처음부터 — 성적 분석
+    {
+      type: "practice",
+      content: {
+        level: 3,
+        task: "처음부터 작성! 과목-점수 딕셔너리에서 80점 이상인 과목만 출력하고\n전체 평균도 출력해요",
+        guide: "for k, v in dict.items(): if v >= 80; sum/len",
+        hint: "scores = {'국어': 90, '영어': 75, '수학': 85, '과학': 70}\nfor subject, score in scores.items():\n    if score >= 80:\n        print(subject)\navg = sum(scores.values()) / len(scores)\nprint(f'평균: {avg}')",
+        template: null,
+        answer: "scores = {'국어': 90, '영어': 75, '수학': 85, '과학': 70}\nfor subject, score in scores.items():\n    if score >= 80:\n        print(subject)\navg = sum(scores.values()) / len(scores)\nprint(f'평균: {avg}')",
+        alternateAnswers: [
+          "scores={'국어':90,'영어':75,'수학':85,'과학':70}\nfor s,v in scores.items():\n    if v>=80:print(s)\nprint(f'평균: {sum(scores.values())/len(scores)}')"
+        ],
+        expect: "국어\n수학\n평균: 80.0",
+        en: {
+          task: "Write from scratch! Print subjects with score >= 80, then print the overall average",
+          guide: "for k, v in dict.items(): if v >= 80; sum/len",
+          hint: "scores = {'국어': 90, '영어': 75, '수학': 85, '과학': 70}\nfor subject, score in scores.items():\n    if score >= 80:\n        print(subject)\navg = sum(scores.values()) / len(scores)\nprint(f'평균: {avg}')"
+        }
       }
     },
 

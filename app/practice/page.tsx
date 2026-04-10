@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, Suspense } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
@@ -518,13 +518,15 @@ function PracticeContent() {
     }
   }
 
-  // cluster가 URL에 있지만 session 없으면 → 자동으로 세션 모드 진입
-  if (cluster && !sessionMode && !problem) {
+  // cluster가 URL에 있지만 session 없으면 → 자동으로 세션 모드 진입 (useEffect로 이동 — render 중 router 호출 금지)
+  const needsSessionRedirect = !!(cluster && !sessionMode && !problem)
+  useEffect(() => {
+    if (!needsSessionRedirect) return
     const p = new URLSearchParams(searchParams.toString())
     p.set("session", "1")
     router.replace(`/practice?${p.toString()}`)
-    return null
-  }
+  }, [needsSessionRedirect, router]) // eslint-disable-line react-hooks/exhaustive-deps
+  if (needsSessionRedirect) return null
 
   // 세션 모드: 클러스터 내 문제를 연속으로 풀기
   if (sessionMode && cluster) {

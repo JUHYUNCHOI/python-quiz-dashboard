@@ -47,16 +47,20 @@ export const lessonCpp10: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "range-for는 배열에도 쓸 수 있어요!",
-            "vector뿐만 아니라 C 배열에서도 동작해요."
-          ],
+          lines: [],
           code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    int arr[4] = {5, 10, 15, 20};\n    int sum = 0;\n    for (int x : arr) {\n        sum += x;\n    }\n    cout << sum << endl;\n    return 0;\n}',
           predict: {
             question: "출력 결과는?",
             options: ["50", "20", "15", "4"],
             answer: 0,
             feedback: "5 + 10 + 15 + 20 = 50! range-for로 모든 원소를 더했어요."
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["50", "20", "15", "4"],
+              feedback: "5 + 10 + 15 + 20 = 50! The range-for added all elements."
+            }
           }
         }
       },
@@ -259,16 +263,20 @@ export const lessonCpp10: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "auto는 오른쪽 값을 보고 타입을 결정해요!",
-            "컴파일러가 타입을 추론하는 거예요."
-          ],
+          lines: [],
           code: 'auto a = 10;       // int\nauto b = 3.14;     // double\nauto c = "hello";  // const char*\ncout << a + b << endl;',
           predict: {
             question: "a + b 의 결과는?",
             options: ["13", "13.14", "에러", "1013.14"],
             answer: 1,
             feedback: "int 10 + double 3.14 = double 13.14! auto는 각각 int, double로 추론했어요."
+          },
+          en: {
+            predict: {
+              question: "What is the result of a + b?",
+              options: ["13", "13.14", "Error", "1013.14"],
+              feedback: "int 10 + double 3.14 = double 13.14! auto inferred each as int and double respectively."
+            }
           }
         }
       },
@@ -333,15 +341,20 @@ export const lessonCpp10: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "auto&로 벡터의 모든 값을 2배로 만들어봐요!"
-          ],
+          lines: [],
           code: '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> v = {1, 2, 3};\n    for (auto& x : v) {\n        x = x * 2;\n    }\n    for (auto x : v) {\n        cout << x << " ";\n    }\n    cout << endl;\n    return 0;\n}',
           predict: {
             question: "출력 결과는?",
             options: ["1 2 3", "2 4 6", "1 4 9", "에러"],
             answer: 1,
             feedback: "auto&로 원본을 수정해서 모든 값이 2배! {1,2,3} → {2,4,6}"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["1 2 3", "2 4 6", "1 4 9", "Error"],
+              feedback: "auto& modifies the originals, doubling all values! {1,2,3} → {2,4,6}"
+            }
           }
         }
       },
@@ -445,16 +458,20 @@ export const lessonCpp10: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "range-for로 최댓값을 구하는 방법이에요!",
-            "첫 번째 값을 max로 두고, 더 큰 값이 나오면 갱신해요."
-          ],
+          lines: [],
           code: '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> v = {30, 10, 50, 20};\n    int maxVal = v[0];\n    for (auto x : v) {\n        if (x > maxVal) {\n            maxVal = x;\n        }\n    }\n    cout << maxVal << endl;\n    return 0;\n}',
           predict: {
             question: "출력 결과는?",
             options: ["30", "10", "50", "20"],
             answer: 2,
             feedback: "30→30, 10<30 패스, 50>30 갱신, 20<50 패스 → 최댓값은 50!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["30", "10", "50", "20"],
+              feedback: "30→30, 10<30 skip, 50>30 update, 20<50 skip → max is 50!"
+            }
           }
         }
       },

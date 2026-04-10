@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback, useEffect } from "react"
+import { useState, useCallback, useEffect, useRef } from "react"
 import dynamic from "next/dynamic"
 import { Play, Loader2, RotateCcw, Check, X, Eye } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -96,6 +96,7 @@ interface CppRunnerProps {
   userId?: string
   // 완료 후 Run 버튼 숨기기
   isCompleted?: boolean
+  onReset?: () => void
 }
 
 const WANDBOX_API = "https://wandbox.org/api/compile.json"
@@ -134,6 +135,7 @@ export function CppRunner({
   stepTitle,
   userId,
   isCompleted = false,
+  onReset,
 }: CppRunnerProps) {
   // userId 포함 → 사용자별 독립 저장 (선생님 코드가 학생에게 보이는 문제 방지)
   const storageKey = stepId ? `cpp-runner-${userId ?? "anon"}-${lessonId ?? "x"}-${stepId}` : null
@@ -161,6 +163,10 @@ export function CppRunner({
   const [teacherGrade, setTeacherGrade] = useState<"pass" | "fail" | "auto" | null | undefined>(undefined) // undefined = 아직 로딩
   const [teacherComment, setTeacherComment] = useState<string | null>(null)
 
+  // isCompleted의 최신값을 fetch 콜백 클로저에서 참조하기 위한 ref
+  const isCompletedRef = useRef(isCompleted)
+  useEffect(() => { isCompletedRef.current = isCompleted }, [isCompleted])
+
   // 마운트 시 이전 제출 결과 확인 (submissionMode만)
   useEffect(() => {
     if (!submissionMode || !stepId) return
@@ -182,8 +188,8 @@ export function CppRunner({
         setTeacherGrade(grade)
         setTeacherComment(data.teacher_comment ?? null)
         // 선생님이 이미 확인했거나 자동 채점 완료된 경우 레슨 진도 동기화
-        // isCompleted이면 이미 진도에 반영됨 — 중복 onSuccess 방지
-        if ((grade === "pass" || grade === "auto") && !isCompleted) {
+        // ref로 최신 isCompleted 값 확인 — 클로저 캡처 타이밍 버그 방지
+        if ((grade === "pass" || grade === "auto") && !isCompletedRef.current) {
           onSuccess?.()
         }
       } else {
@@ -335,6 +341,7 @@ export function CppRunner({
     setError("")
     setIsCorrect(null)
     setHasRun(false)
+    onReset?.()
   }
 
   return (

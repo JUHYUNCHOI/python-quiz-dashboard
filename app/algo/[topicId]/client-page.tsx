@@ -1,13 +1,11 @@
 "use client"
 
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { ArrowLeft } from "lucide-react"
 import { AlgoViewer } from "@/components/algo/algo-viewer"
-import { LanguageToggle } from "@/components/language-toggle"
 import { useLanguage } from "@/contexts/language-context"
 import type { AlgoTopic } from "@/data/algo/topics"
-import { ALGO_TOPICS } from "@/data/algo/topics"
-import Link from "next/link"
 import { cn } from "@/lib/utils"
 
 interface AlgoTopicPageProps {
@@ -23,10 +21,8 @@ const WAVE_COLOR: Record<number, string> = {
 
 export function AlgoTopicPage({ topic }: AlgoTopicPageProps) {
   const router = useRouter()
-  const { t } = useLanguage()
-
-  // 같은 wave의 다른 토픽들
-  const sameWave = ALGO_TOPICS.filter(tp => tp.wave === topic.wave && tp.id !== topic.id)
+  const { lang, setLang } = useLanguage()
+  const [codeTrack, setCodeTrack] = useState<"cpp" | "python">("cpp")
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -35,15 +31,16 @@ export function AlgoTopicPage({ topic }: AlgoTopicPageProps) {
         <div className="max-w-[1400px] mx-auto px-4 py-2.5 flex items-center gap-3">
           <button
             onClick={() => router.push("/algo")}
-            className="rounded-full p-2 hover:bg-gray-100 transition-colors"
+            className="rounded-full p-2 hover:bg-gray-100 transition-colors shrink-0"
           >
             <ArrowLeft className="w-5 h-5 text-gray-600" />
           </button>
 
+          {/* 토픽 제목 */}
           <div className="flex items-center gap-2 flex-1 min-w-0">
-            <span className="text-lg">{topic.icon}</span>
+            <span className="text-lg shrink-0">{topic.icon}</span>
             <h1 className="font-bold text-gray-900 truncate">
-              {t(topic.titleEn, topic.title)}
+              {lang === "en" ? topic.titleEn : topic.title}
             </h1>
             <span className={cn(
               "text-[11px] font-bold px-2 py-0.5 rounded-full border shrink-0",
@@ -53,28 +50,47 @@ export function AlgoTopicPage({ topic }: AlgoTopicPageProps) {
             </span>
           </div>
 
-          <LanguageToggle className="shrink-0" />
-        </div>
-
-        {/* 같은 Wave 토픽 퀵 네비 */}
-        {sameWave.length > 0 && (
-          <div className="max-w-[1400px] mx-auto px-4 pb-2 flex items-center gap-1.5 overflow-x-auto">
-            {sameWave.map(tp => (
-              <Link
-                key={tp.id}
-                href={`/algo/${tp.id}`}
-                className="text-[11px] font-medium text-gray-500 hover:text-indigo-600 whitespace-nowrap px-2 py-0.5 rounded-lg hover:bg-indigo-50 transition-colors shrink-0"
-              >
-                {tp.icon} {t(tp.titleEn, tp.title)}
-              </Link>
-            ))}
+          {/* 언어 토글 (콘텐츠 언어: KO / EN) */}
+          <div className="flex items-center bg-gray-100 rounded-lg p-0.5 shrink-0">
+            <button
+              onClick={() => setLang("ko")}
+              className={cn(
+                "text-xs font-bold px-2.5 py-1 rounded-md transition-colors",
+                lang === "ko" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
+              )}
+            >한국어</button>
+            <button
+              onClick={() => setLang("en")}
+              className={cn(
+                "text-xs font-bold px-2.5 py-1 rounded-md transition-colors",
+                lang === "en" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
+              )}
+            >EN</button>
           </div>
-        )}
+
+          {/* 코드 언어 토글 (C++ / Python) */}
+          <div className="flex items-center bg-gray-100 rounded-lg p-0.5 shrink-0">
+            <button
+              onClick={() => setCodeTrack("cpp")}
+              className={cn(
+                "text-xs font-bold px-2.5 py-1 rounded-md transition-colors",
+                codeTrack === "cpp" ? "bg-white text-blue-700 shadow-sm" : "text-gray-500 hover:text-gray-700"
+              )}
+            >⚡ C++</button>
+            <button
+              onClick={() => setCodeTrack("python")}
+              className={cn(
+                "text-xs font-bold px-2.5 py-1 rounded-md transition-colors",
+                codeTrack === "python" ? "bg-white text-green-700 shadow-sm" : "text-gray-500 hover:text-gray-700"
+              )}
+            >🐍 Python</button>
+          </div>
+        </div>
       </div>
 
       {/* 알고리즘 랩 컨텐츠 */}
       <div className="max-w-[1400px] mx-auto">
-        <AlgoViewer topicId={topic.id} />
+        <AlgoViewer topicId={topic.id} codeTrack={codeTrack} />
       </div>
     </div>
   )

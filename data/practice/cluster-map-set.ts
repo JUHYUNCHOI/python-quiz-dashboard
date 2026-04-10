@@ -490,12 +490,24 @@ using namespace std;
 int main() {
     int n;
     cin >> n;
-    unordered_map<string, int> freq;  // unordered_map 사용
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+      scaffoldCode: `#include <iostream>
+#include <unordered_map>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    unordered_map<string, int> freq;
     vector<string> order;
     for (int i = 0; i < n; i++) {
         string w;
         cin >> w;
-        // freq에 단어 카운트, order에 첫 등장 순서 기록
+        // 여기에 코드를 작성하세요
     }
     for (const string& w : order) {
         cout << w << " " << freq[w] << "\\n";

@@ -34,15 +34,20 @@ export const lessonCpp18: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "stack에 1, 2, 3을 push하면 top은 항상 마지막 값!"
-          ],
+          lines: [],
           code: 'stack<int> s;\ns.push(1);\ns.push(2);\ns.push(3);\ns.pop();\ns.pop();\ncout << s.top() << endl;',
           predict: {
             question: "출력 결과는?",
             options: ["3", "2", "1"],
             answer: 2,
             feedback: "push(1,2,3) 후 pop 2번 → 3과 2가 빠지고 1만 남아요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["3", "2", "1"],
+              feedback: "After push(1,2,3) and two pops, 3 and 2 are removed — only 1 remains!"
+            }
           }
         }
       },
@@ -268,15 +273,20 @@ export const lessonCpp18: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "deque에서 앞뒤로 넣고 빼봐요!"
-          ],
+          lines: [],
           code: 'deque<int> dq = {10, 20, 30};\ndq.push_front(5);\ndq.pop_back();\ncout << dq.front() << " " << dq.back() << endl;',
           predict: {
             question: "출력 결과는?",
             options: ["5 30", "5 20", "10 20"],
             answer: 1,
             feedback: "push_front(5) → {5,10,20,30}, pop_back() → {5,10,20}. front=5, back=20!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["5 30", "5 20", "10 20"],
+              feedback: "push_front(5) → {5,10,20,30}, pop_back() → {5,10,20}. front=5, back=20!"
+            }
           }
         }
       },
@@ -454,16 +464,20 @@ export const lessonCpp18: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "괄호 검사는 stack의 대표적인 활용법이에요! 🔍",
-            "여는 괄호 → push, 닫는 괄호 → pop해서 짝을 맞춰요."
-          ],
+          lines: [],
           code: 'string expr = "((1+2)*(3+4))";\nstack<char> st;\nbool valid = true;\nfor (char c : expr) {\n    if (c == \'(\') st.push(c);\n    else if (c == \')\') {\n        if (st.empty()) { valid = false; break; }\n        st.pop();\n    }\n}\nif (!st.empty()) valid = false;\ncout << (valid ? "OK" : "Error") << endl;',
           predict: {
             question: "출력 결과는?",
             options: ["OK", "Error"],
             answer: 0,
             feedback: "((1+2)*(3+4))는 괄호가 올바르게 짝지어져 있어서 OK!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["OK", "Error"],
+              feedback: "((1+2)*(3+4)) has correctly matched parentheses, so the output is OK!"
+            }
           }
         }
       },

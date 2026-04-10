@@ -21,7 +21,7 @@ export const lesson36: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["🔧 함수 = 코드 재사용 기계!"],
+        lines: [],
         code: `# 함수 없이 3번 인사하면...
 print('안녕, 철수!')
 print('안녕, 영희!')
@@ -43,7 +43,7 @@ def 인사(이름):
     {
       type: "explain",
       content: {
-        lines: ["🧠 함수 호출 몇 번?"],
+        lines: [],
         code: `def 인사():
     print('안녕!')
 
@@ -55,6 +55,13 @@ def 인사(이름):
           answer: 1,
           feedback: "2번 호출 → 2번 출력!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["안녕!", "안녕!\n안녕!", "Nothing", "Error"],
+            feedback: "Called twice → prints twice!"
+          }
+        },
         result: "안녕!\n안녕!"
       }
     },
@@ -63,7 +70,7 @@ def 인사(이름):
     {
       type: "explain",
       content: {
-        lines: ["🧠 return 이후는?"],
+        lines: [],
         code: `def test():
     print('A')
     return 'B'
@@ -76,6 +83,13 @@ print(결과)`,
           options: ["A, B, C 모두 출력", "A, B만 출력", "B만 출력", "에러"],
           answer: 1,
           feedback: "return 이후는 실행 안 돼요!"
+        },
+        en: {
+          predict: {
+            question: "Will C be printed?",
+            options: ["A, B, C all print", "Only A, B print", "Only B prints", "Error"],
+            feedback: "Nothing after return executes!"
+          }
         },
         result: "A\nB"
       }
@@ -129,7 +143,7 @@ print(결과)`,
     {
       type: "explain",
       content: {
-        lines: ["☕ 카페 주문처럼! 안 말하면 기본값!"],
+        lines: [],
         code: `def 주문(음료, 사이즈='중'):
     print(f'{사이즈} {음료} 주문!')
 
@@ -144,7 +158,7 @@ print(결과)`,
     {
       type: "explain",
       content: {
-        lines: ["🧠 기본값 예측!"],
+        lines: [],
         code: `def 거듭제곱(n, 지수=2):
     return n ** 지수
 
@@ -155,6 +169,13 @@ print(거듭제곱(5, 3))`,
           answer: 2,
           feedback: "지수=3을 줬으니 5³ = 125"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["10", "25", "125", "Error"],
+            feedback: "The exponent 3 was given, so 5³ = 125"
+          }
+        },
         result: "125"
       }
     },
@@ -163,7 +184,7 @@ print(거듭제곱(5, 3))`,
     {
       type: "explain",
       content: {
-        lines: ["🧠 다중 반환 예측!"],
+        lines: [],
         code: `def calc(a, b):
     return a + b, a - b
 
@@ -174,6 +195,13 @@ print(x, y)`,
           options: ["13, 7", "13 7", "(13, 7)", "에러"],
           answer: 1,
           feedback: "10+3=13, 10-3=7 각각 저장!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["13, 7", "13 7", "(13, 7)", "Error"],
+            feedback: "10+3=13, 10-3=7 stored separately!"
+          }
         },
         result: "13 7"
       }
@@ -247,7 +275,7 @@ print(x, y)`,
     {
       type: "explain",
       content: {
-        lines: ["🏠 집에서 물건 찾기!"],
+        lines: [],
         code: `# 전역변수 = 거실 물건 (모두 사용)
 # 지역변수 = 내 방 물건 (나만 사용)
 
@@ -268,7 +296,7 @@ print(f'거실: {x}')`,
     {
       type: "explain",
       content: {
-        lines: ["🧠 지역 vs 전역!"],
+        lines: [],
         code: `x = 5
 
 def 함수():
@@ -282,6 +310,13 @@ print(x)`,
           options: ["10\n10", "5\n5", "10\n5", "5\n10"],
           answer: 2,
           feedback: "함수 안(10)과 밖(5)은 다른 변수!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["10\n10", "5\n5", "10\n5", "5\n10"],
+            feedback: "Inside the function (10) and outside (5) are different variables!"
+          }
         },
         result: "10\n5"
       }
@@ -360,7 +395,7 @@ print(x)`,
     {
       type: "explain",
       content: {
-        lines: ["⚡ 일반 함수 vs 람다 = 편지 vs 문자!"],
+        lines: [],
         code: `# 일반 함수 (편지)
 def 제곱(x):
     return x ** 2
@@ -380,7 +415,7 @@ print(제곱2(5))`,
     {
       type: "explain",
       content: {
-        lines: ["🧠 람다 예측!"],
+        lines: [],
         code: `제곱 = lambda x: x ** 2
 print(제곱(5))`,
         predict: {
@@ -388,6 +423,13 @@ print(제곱(5))`,
           options: ["5", "10", "25", "에러"],
           answer: 2,
           feedback: "5² = 25"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["5", "10", "25", "Error"],
+            feedback: "5² = 25"
+          }
         },
         result: "25"
       }
@@ -397,7 +439,7 @@ print(제곱(5))`,
     {
       type: "explain",
       content: {
-        lines: ["🧠 1등 찾기!"],
+        lines: [],
         code: `학생 = [('철수', 85), ('영희', 92), ('민수', 78)]
 결과 = sorted(학생, key=lambda x: x[1], reverse=True)
 print(결과[0][0])`,
@@ -406,6 +448,13 @@ print(결과[0][0])`,
           options: ["철수", "영희", "민수", "92"],
           answer: 1,
           feedback: "점수 내림차순 → 92점 영희가 1등!"
+        },
+        en: {
+          predict: {
+            question: "Who is in 1st place?",
+            options: ["철수", "영희", "민수", "92"],
+            feedback: "Descending by score → 영희 (92 points) is 1st!"
+          }
         },
         result: "영희"
       }
@@ -480,7 +529,7 @@ print(결과[0][0])`,
     {
       type: "explain",
       content: {
-        lines: ["📚 자주 쓰는 내장함수 5가지!"],
+        lines: [],
         code: `숫자 = [3, 1, 4, 1, 5]
 
 print(len(숫자))      # 개수: 5
@@ -497,13 +546,20 @@ print(sorted(숫자))   # 정렬`,
     {
       type: "explain",
       content: {
-        lines: ["🧠 sum() 예측!"],
+        lines: [],
         code: `print(sum([1, 2, 3, 4, 5]))`,
         predict: {
           question: "출력 결과는?",
           options: ["15", "12345", "[1,2,3,4,5]", "에러"],
           answer: 0,
           feedback: "1+2+3+4+5 = 15"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["15", "12345", "[1,2,3,4,5]", "Error"],
+            feedback: "1+2+3+4+5 = 15"
+          }
         },
         result: "15"
       }
@@ -513,7 +569,7 @@ print(sorted(숫자))   # 정렬`,
     {
       type: "explain",
       content: {
-        lines: ["🧠 map() 예측!"],
+        lines: [],
         code: `숫자 = ['3', '1', '4']
 결과 = list(map(int, 숫자))
 print(sum(결과))`,
@@ -522,6 +578,13 @@ print(sum(결과))`,
           options: ["'314'", "8", "[3,1,4]", "에러"],
           answer: 1,
           feedback: "문자→정수 변환 후 3+1+4=8"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["'314'", "8", "[3,1,4]", "Error"],
+            feedback: "Convert strings to integers then 3+1+4=8"
+          }
         },
         result: "8"
       }

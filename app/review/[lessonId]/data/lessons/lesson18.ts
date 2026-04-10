@@ -18,7 +18,7 @@ export const lesson18: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["문자열을 공백 기준으로 쪼갤 수 있어!"],
+        lines: [],
         code: "sentence = \"나는 파이썬을 좋아해\"\nwords = sentence.split()\nprint(words)",
         predict: {
           question: "결과는?",
@@ -31,13 +31,25 @@ export const lesson18: LessonData = {
           answer: 1,
           feedback: "split()은 공백을 기준으로 문자열을 쪼개서 리스트로 만들어요!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: [
+              "나는 파이썬을 좋아해",
+              "[\"나는\", \"파이썬을\", \"좋아해\"]",
+              "[\"나\", \"는\", \" \", \"파\", \"이\", \"썬\"]",
+              "Error"
+            ],
+            feedback: "split() splits the string by spaces and returns a list!"
+          }
+        },
         result: "['나는', '파이썬을', '좋아해']"
       }
     },
     {
       type: "explain",
       content: {
-        lines: ["구분자를 지정할 수도 있어!"],
+        lines: [],
         code: "data = \"사과,바나나,포도\"\nfruits = data.split(\",\")\nprint(fruits)",
         result: "['사과', '바나나', '포도']",
         note: "콤마(,)를 기준으로 쪼개졌어요!"
@@ -46,7 +58,7 @@ export const lesson18: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["다양한 구분자를 사용할 수 있어!"],
+        lines: [],
         code: "date = \"2025-01-15\"\nparts = date.split(\"-\")\nprint(parts)",
         predict: {
           question: "parts[1]의 값은?",
@@ -54,19 +66,33 @@ export const lesson18: LessonData = {
           answer: 1,
           feedback: "split(\"-\")로 쪼개면 [\"2025\", \"01\", \"15\"], 인덱스 1은 \"01\"!"
         },
+        en: {
+          predict: {
+            question: "What is the value of parts[1]?",
+            options: ["2025", "01", "15", "-"],
+            feedback: "split(\"-\") gives [\"2025\", \"01\", \"15\"], so index 1 is \"01\"!"
+          }
+        },
         result: "['2025', '01', '15']"
       }
     },
     {
       type: "explain",
       content: {
-        lines: ["split() 결과의 개수도 확인!"],
+        lines: [],
         code: "sentence = \"hello world python\"\nwords = sentence.split()\nprint(len(words))",
         predict: {
           question: "결과는?",
           options: ["1", "2", "3", "18"],
           answer: 2,
           feedback: "공백으로 쪼개면 3개의 단어!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["1", "2", "3", "18"],
+            feedback: "Splitting by spaces gives 3 words!"
+          }
         },
         result: "3"
       }
@@ -152,7 +178,7 @@ export const lesson18: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["join()은 리스트를 문자열로 합쳐요!", "구분자.join(리스트) 형태!"],
+        lines: [],
         code: "words = [\"나는\", \"파이썬을\", \"좋아해\"]\nsentence = \" \".join(words)\nprint(sentence)",
         predict: {
           question: "결과는?",
@@ -165,13 +191,25 @@ export const lesson18: LessonData = {
           answer: 2,
           feedback: "\" \"(공백)을 사이사이에 넣어서 합쳐요!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: [
+              "[\"나는\", \"파이썬을\", \"좋아해\"]",
+              "나는파이썬을좋아해",
+              "나는 파이썬을 좋아해",
+              "Error"
+            ],
+            feedback: "\" \" (space) is inserted between each element when joining!"
+          }
+        },
         result: "나는 파이썬을 좋아해"
       }
     },
     {
       type: "explain",
       content: {
-        lines: ["다양한 구분자로 합칠 수 있어!"],
+        lines: [],
         code: "fruits = [\"사과\", \"바나나\", \"포도\"]\nresult = \", \".join(fruits)\nprint(result)",
         result: "사과, 바나나, 포도",
         note: "\", \"(콤마+공백)으로 합쳐서 보기 좋게!"
@@ -180,13 +218,20 @@ export const lesson18: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["구분자 없이 합치기도 가능!"],
+        lines: [],
         code: "letters = [\"P\", \"y\", \"t\", \"h\", \"o\", \"n\"]\nword = \"\".join(letters)\nprint(word)",
         predict: {
           question: "결과는?",
           options: ["P y t h o n", "Python", "[\"P\", \"y\", \"t\", \"h\", \"o\", \"n\"]", "에러"],
           answer: 1,
           feedback: "빈 문자열 \"\"로 합치면 글자가 바로 붙어요!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["P y t h o n", "Python", "[\"P\", \"y\", \"t\", \"h\", \"o\", \"n\"]", "Error"],
+            feedback: "Joining with an empty string \"\" puts the letters right next to each other!"
+          }
         },
         result: "Python"
       }
@@ -292,7 +337,7 @@ export const lesson18: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["split + join = 구분자 바꾸기!"],
+        lines: [],
         code: "date = \"2025/01/15\"\nparts = date.split(\"/\")\nnew_date = \"-\".join(parts)\nprint(new_date)",
         predict: {
           question: "결과는?",
@@ -300,13 +345,20 @@ export const lesson18: LessonData = {
           answer: 1,
           feedback: "\"/\"로 쪼개고 \"-\"로 합치면 구분자가 바뀌어요!"
         },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["2025/01/15", "2025-01-15", "2025 01 15", "Error"],
+            feedback: "Split by \"/\" then join with \"-\" to swap the delimiter!"
+          }
+        },
         result: "2025-01-15"
       }
     },
     {
       type: "explain",
       content: {
-        lines: ["CSV 데이터 처리에 활용!"],
+        lines: [],
         code: "csv = \"이름,나이,도시\"\nheaders = csv.split(\",\")\nprint(headers)\nprint(f\"두 번째 항목: {headers[1]}\")",
         result: "['이름', '나이', '도시']\n두 번째 항목: 나이",
         note: "콤마로 구분된 데이터를 쉽게 처리!"
@@ -315,7 +367,7 @@ export const lesson18: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["단어 순서를 뒤집어보자!"],
+        lines: [],
         code: "sentence = \"파이썬 정말 재밌다\"\nwords = sentence.split()\nwords.reverse()\nresult = \" \".join(words)\nprint(result)",
         predict: {
           question: "결과는?",
@@ -327,6 +379,18 @@ export const lesson18: LessonData = {
           ],
           answer: 2,
           feedback: "단어 단위로 쪼개고 뒤집은 후 다시 합치면 단어 순서가 바뀌어요!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: [
+              "파이썬 정말 재밌다",
+              "다밌재 말정 썬이파",
+              "재밌다 정말 파이썬",
+              "Error"
+            ],
+            feedback: "Split into words, reverse the list, then join again — the word order is reversed!"
+          }
         },
         result: "재밌다 정말 파이썬"
       }

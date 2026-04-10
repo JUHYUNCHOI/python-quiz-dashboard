@@ -33,16 +33,20 @@ export const lessonCppP1: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "rand() % N 은 0부터 N-1까지의 숫자를 만들어요!",
-            "+1을 하면 1부터 N까지가 돼요."
-          ],
+          lines: [],
           code: 'int a = rand() % 10;       // 0 ~ 9\nint b = rand() % 10 + 1;   // 1 ~ 10\nint c = rand() % 6 + 1;    // 1 ~ 6 (주사위!)',
           predict: {
             question: "rand() % 50 + 1 의 범위는?",
             options: ["0 ~ 50", "1 ~ 50", "1 ~ 51"],
             answer: 1,
             feedback: "rand() % 50은 0~49, 거기에 +1 하면 1~50이 돼요!"
+          },
+          en: {
+            predict: {
+              question: "What is the range of rand() % 50 + 1?",
+              options: ["0 ~ 50", "1 ~ 50", "1 ~ 51"],
+              feedback: "rand() % 50 gives 0~49, then +1 shifts it to 1~50!"
+            }
           }
         }
       },
@@ -220,10 +224,7 @@ export const lessonCppP1: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "이제 숫자 맞추기 게임의 전체 구조를 봐요!",
-            "시도 횟수도 세면 더 재미있어요!"
-          ],
+          lines: [],
           code: 'int answer = rand() % 100 + 1;\nint guess, tries = 0;\n\nwhile (true) {\n    cin >> guess;\n    tries++;\n    if (guess == answer) {\n        cout << tries << "번 만에 정답!" << "\\n";\n        break;\n    }\n    cout << (guess < answer ? "UP!" : "DOWN!") << "\\n";\n}',
           predict: {
             question: "삼항 연산자 (guess < answer ? \"UP!\" : \"DOWN!\")은 뭘 하나요?",
@@ -234,6 +235,17 @@ export const lessonCppP1: LessonData = {
             ],
             answer: 1,
             feedback: "삼항 연산자! 조건 ? 참 : 거짓 — guess가 작으면 더 키우라고 UP!"
+          },
+          en: {
+            predict: {
+              question: "What does the ternary operator (guess < answer ? \"UP!\" : \"DOWN!\") do?",
+              options: [
+                "Always prints UP!",
+                "Prints UP! if guess is smaller, DOWN! if larger",
+                "Causes an error"
+              ],
+              feedback: "Ternary operator: condition ? true : false — if guess is too small, print UP! to go higher!"
+            }
           }
         }
       },

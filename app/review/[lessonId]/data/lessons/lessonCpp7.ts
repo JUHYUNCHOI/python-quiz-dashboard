@@ -19,11 +19,7 @@ export const lessonCpp7: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "파이썬에서 for i in range(5): 를 썼죠? 🔄",
-            "C++의 for문은 3가지를 괄호 안에 써요!",
-            "초기값; 조건; 증가 — 세미콜론(;)으로 구분!"
-          ],
+          lines: [],
           code: '// 파이썬\n// for i in range(5):\n//     print(i)\n\n// C++\n#include <iostream>\nusing namespace std;\n\nint main() {\n    for (int i = 0; i < 5; i++) {\n        cout << i << endl;\n    }\n    return 0;\n}',
           result: "0\n1\n2\n3\n4",
           note: "for (초기값; 조건; 증가) { 반복할 코드 }"
@@ -34,16 +30,20 @@ export const lessonCpp7: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "i++은 i = i + 1과 같아요!",
-            "i--는 i = i - 1! 줄어드는 반복도 가능해요."
-          ],
+          lines: [],
           code: 'for (int i = 3; i >= 1; i--) {\n    cout << i << " ";\n}\ncout << endl;',
           predict: {
             question: "출력 결과는?",
             options: ["1 2 3", "3 2 1", "3 2 1 0", "0 1 2 3"],
             answer: 1,
             feedback: "i가 3에서 시작해서 1씩 줄어들어요! 3, 2, 1 출력 후 i가 0이 되면 조건 i >= 1이 거짓이라 멈춰요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["1 2 3", "3 2 1", "3 2 1 0", "0 1 2 3"],
+              feedback: "i starts at 3 and decrements by 1! After printing 3, 2, 1, i becomes 0 and i >= 1 is false, so it stops!"
+            }
           }
         }
       },
@@ -212,11 +212,7 @@ export const lessonCpp7: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "while은 조건이 참인 동안 계속 반복해요! 🔁",
-            "파이썬의 while과 거의 같아요!",
-            "단, 조건을 괄호 ()로 감싸야 해요."
-          ],
+          lines: [],
           code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    int count = 0;\n    while (count < 3) {\n        cout << count << endl;\n        count++;\n    }\n    return 0;\n}',
           result: "0\n1\n2",
           note: "while (조건) { 코드 } — 조건이 거짓이 될 때까지 반복!"
@@ -227,17 +223,20 @@ export const lessonCpp7: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "do-while은 일단 한 번 실행하고 조건을 검사해요! 🎲",
-            "파이썬에는 없는 C++ 전용 문법!",
-            "주의: while 뒤에 세미콜론(;)이 필요해요!"
-          ],
+          lines: [],
           code: 'int num = 10;\ndo {\n    cout << num << endl;\n    num++;\n} while (num < 10);',
           predict: {
             question: "num이 10일 때, 이 코드의 출력은?",
             options: ["아무것도 안 나옴", "10", "10 11 12 ...(무한)"],
             answer: 1,
             feedback: "do-while은 먼저 한 번 실행해요! 10을 출력한 뒤 num=11이 되고, 11 < 10이 거짓이라 멈춰요."
+          },
+          en: {
+            predict: {
+              question: "When num is 10, what does this code output?",
+              options: ["No output", "10", "10 11 12 ...(infinite loop)"],
+              feedback: "do-while executes once first! It prints 10, then num becomes 11, and 11 < 10 is false so it stops."
+            }
           }
         }
       },
@@ -480,6 +479,130 @@ export const lessonCpp7: LessonData = {
         content: {
           message: "구구단 출력기 완성! 반복문 마스터!",
           emoji: "🏆"
+        }
+      },
+
+      // ==================== CHAPTER 4: 반복문 손에 익히기 ====================
+      {
+        type: "chapter",
+        content: {
+          num: 4,
+          title: "반복문 손에 익히기",
+          desc: "for / while 패턴을 손이 기억할 때까지 반복해요!"
+        }
+      },
+
+      // Drill 1: 기본 for 구조 (1~5 출력)
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "1부터 5까지 한 줄씩 출력하는 for문을 작성해요",
+          guide: "for (int i = 1; i <= 5; i++)",
+          template: "for (int i = ___; i <= ___; i++) {\n    cout << i << endl;\n}",
+          blanksAnswer: ["1", "5"],
+          answer: "for (int i = 1; i <= 5; i++) {\n    cout << i << endl;\n}",
+          expect: "1\n2\n3\n4\n5",
+          en: {
+            task: "Write a for loop that prints 1 to 5, one per line",
+            guide: "for (int i = 1; i <= 5; i++)"
+          }
+        }
+      },
+
+      // Drill 2: 짝수만 출력 (조건 + 반복)
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "1~10에서 짝수만 출력하는 for문을 작성해요",
+          guide: "i % 2 == 0 조건 사용",
+          template: "for (int i = 1; i <= 10; i++) {\n    if (i ___ 2 == ___) {\n        cout << i << \" \";\n    }\n}",
+          blanksAnswer: ["%", "0"],
+          answer: "for (int i = 1; i <= 10; i++) {\n    if (i % 2 == 0) {\n        cout << i << \" \";\n    }\n}",
+          expect: "2 4 6 8 10 ",
+          en: {
+            task: "Write a for loop that prints only even numbers from 1 to 10",
+            guide: "Use the i % 2 == 0 condition"
+          }
+        }
+      },
+
+      // Drill 3: while로 카운트다운
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "while문으로 5부터 1까지 카운트다운해요",
+          guide: "int i = 5; while (i >= 1) { ... i--; }",
+          template: "int i = 5;\nwhile (i ___ 1) {\n    cout << i << \" \";\n    ___;\n}",
+          blanksAnswer: [">=", "i--"],
+          answer: "int i = 5;\nwhile (i >= 1) {\n    cout << i << \" \";\n    i--;\n}",
+          expect: "5 4 3 2 1 ",
+          en: {
+            task: "Use a while loop to count down from 5 to 1",
+            guide: "int i = 5; while (i >= 1) { ... i--; }"
+          }
+        }
+      },
+
+      // Drill 4: 누적합 (중요 패턴!)
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "1부터 10까지의 합을 구해서 출력해요 (sum 변수 사용)",
+          guide: "int sum = 0; for(...) sum += i;",
+          template: "int sum = 0;\nfor (int i = 1; i <= 10; i++) {\n    sum ___ i;\n}\ncout << sum << endl;",
+          blanksAnswer: ["+="],
+          answer: "int sum = 0;\nfor (int i = 1; i <= 10; i++) {\n    sum += i;\n}\ncout << sum << endl;",
+          expect: "55",
+          en: {
+            task: "Calculate and print the sum from 1 to 10 (use a sum variable)",
+            guide: "int sum = 0; for(...) sum += i;"
+          }
+        }
+      },
+
+      // Drill 5: 중첩 for (직접 작성)
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "중첩 for문으로 2단과 3단 구구단을 출력해요\n(출력 형식: \"2 x 1 = 2\" 등)",
+          guide: "for i(2~3) 바깥, for j(1~9) 안쪽",
+          hint: "for (int i = 2; i <= 3; i++)\n  for (int j = 1; j <= 9; j++)\n    cout << i << \" x \" << j << \" = \" << i*j << endl;",
+          template: null,
+          answer: "for (int i = 2; i <= 3; i++) {\n    for (int j = 1; j <= 9; j++) {\n        cout << i << \" x \" << j << \" = \" << i * j << endl;\n    }\n}",
+          alternateAnswers: [
+            "for(int i=2;i<=3;i++){for(int j=1;j<=9;j++){cout<<i<<\" x \"<<j<<\" = \"<<i*j<<endl;}}"
+          ],
+          expect: "2 x 1 = 2\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n2 x 5 = 10\n2 x 6 = 12\n2 x 7 = 14\n2 x 8 = 16\n2 x 9 = 18\n3 x 1 = 3\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n3 x 5 = 15\n3 x 6 = 18\n3 x 7 = 21\n3 x 8 = 24\n3 x 9 = 27",
+          en: {
+            task: "Use nested for loops to print multiplication tables for 2 and 3\n(format: \"2 x 1 = 2\" etc.)",
+            guide: "outer for i(2~3), inner for j(1~9)"
+          }
+        }
+      },
+
+      // Drill 6: 처음부터 — n개 입력받아 합산
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "처음부터 작성! n을 입력받고 → n개의 정수를 입력받아 → 총합을 출력",
+          guide: "cin >> n → for i(0~n) cin >> x; sum += x → cout",
+          hint: "int n, sum=0;\ncin>>n;\nfor(int i=0;i<n;i++){int x;cin>>x;sum+=x;}\ncout<<sum<<endl;",
+          template: null,
+          answer: "int n, sum = 0;\ncin >> n;\nfor (int i = 0; i < n; i++) {\n    int x;\n    cin >> x;\n    sum += x;\n}\ncout << sum << endl;",
+          alternateAnswers: [
+            "int n;\ncin>>n;\nint sum=0;\nfor(int i=0;i<n;i++){int x;cin>>x;sum+=x;}\ncout<<sum<<endl;"
+          ],
+          expect: "15",
+          en: {
+            task: "Write from scratch! Read n → read n integers → print the total sum",
+            guide: "cin >> n → for i(0~n) cin >> x; sum += x → cout"
+          }
         }
       },
 

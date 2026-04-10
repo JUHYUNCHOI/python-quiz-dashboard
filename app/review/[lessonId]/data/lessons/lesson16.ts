@@ -27,7 +27,7 @@ export const lesson16: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["숫자 리스트도 만들 수 있어!"],
+        lines: [],
         code: "scores = [90, 85, 100, 77]\nprint(scores)",
         predict: {
           question: "출력 결과는?",
@@ -35,7 +35,14 @@ export const lesson16: LessonData = {
           answer: 1,
           feedback: "리스트를 print하면 대괄호째 출력돼요!"
         },
-        result: "[90, 85, 100, 77]"
+        result: "[90, 85, 100, 77]",
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["90 85 100 77", "[90, 85, 100, 77]", "90", "Error"],
+            feedback: "Printing a list outputs it with square brackets!"
+          }
+        }
       }
     },
     {
@@ -50,7 +57,7 @@ export const lesson16: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["빈 리스트도 만들 수 있어!"],
+        lines: [],
         code: "empty = []\nprint(empty)\nprint(len(empty))",
         predict: {
           question: "len(empty)의 결과는?",
@@ -58,7 +65,14 @@ export const lesson16: LessonData = {
           answer: 1,
           feedback: "빈 리스트의 길이는 0이에요!"
         },
-        result: "[]\n0"
+        result: "[]\n0",
+        en: {
+          predict: {
+            question: "What is the result of len(empty)?",
+            options: ["1", "0", "None", "Error"],
+            feedback: "The length of an empty list is 0!"
+          }
+        }
       }
     },
     {
@@ -161,7 +175,7 @@ export const lesson16: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["음수 인덱스로 뒤에서부터 접근!"],
+        lines: [],
         code: "fruits = [\"사과\", \"바나나\", \"포도\"]\nprint(fruits[-1])",
         predict: {
           question: "fruits[-1]의 결과는?",
@@ -169,7 +183,14 @@ export const lesson16: LessonData = {
           answer: 2,
           feedback: "-1은 마지막 요소! -2는 뒤에서 두 번째!"
         },
-        result: "포도"
+        result: "포도",
+        en: {
+          predict: {
+            question: "What is the result of fruits[-1]?",
+            options: ["사과", "바나나", "포도", "Error"],
+            feedback: "-1 is the last element! -2 is the second from the end!"
+          }
+        }
       }
     },
     {
@@ -274,7 +295,7 @@ export const lesson16: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["append()로 끝에 추가!"],
+        lines: [],
         code: "fruits = [\"사과\", \"바나나\"]\nfruits.append(\"포도\")\nprint(fruits)",
         predict: {
           question: "결과는?",
@@ -287,7 +308,19 @@ export const lesson16: LessonData = {
           answer: 1,
           feedback: "append()는 항상 맨 뒤에 추가해요!"
         },
-        result: "['사과', '바나나', '포도']"
+        result: "['사과', '바나나', '포도']",
+        en: {
+          predict: {
+            question: "What's the result?",
+            options: [
+              "[\"포도\", \"사과\", \"바나나\"]",
+              "[\"사과\", \"바나나\", \"포도\"]",
+              "[\"사과\", \"포도\", \"바나나\"]",
+              "Error"
+            ],
+            feedback: "append() always adds to the end of the list!"
+          }
+        }
       }
     },
     {
@@ -302,7 +335,7 @@ export const lesson16: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["len()으로 리스트 길이 확인!"],
+        lines: [],
         code: "fruits = [\"사과\", \"바나나\", \"포도\"]\nprint(len(fruits))",
         predict: {
           question: "len(fruits)의 결과는?",
@@ -310,7 +343,14 @@ export const lesson16: LessonData = {
           answer: 1,
           feedback: "리스트에 3개의 요소가 있으니까 3!"
         },
-        result: "3"
+        result: "3",
+        en: {
+          predict: {
+            question: "What is the result of len(fruits)?",
+            options: ["2", "3", "4", "Error"],
+            feedback: "There are 3 elements in the list, so the answer is 3!"
+          }
+        }
       }
     },
     {
@@ -385,6 +425,114 @@ export const lesson16: LessonData = {
         ],
         canDo: "리스트를 자유롭게 추가, 삭제, 수정할 수 있어!",
         emoji: "🛠️"
+      }
+    },
+
+    // ==================== CHAPTER 4: 리스트 손에 익히기 ====================
+    {
+      type: "chapter",
+      content: {
+        num: 4,
+        title: "리스트 손에 익히기",
+        desc: "[], 인덱싱, append, remove, len — 자동으로 손이 나오게!"
+      }
+    },
+
+    // Drill 1: 리스트 만들기 + 인덱싱
+    {
+      type: "practice",
+      content: {
+        level: 1,
+        task: "숫자 리스트를 만들고 세 번째 요소를 출력해요",
+        guide: "인덱스는 0부터! 세 번째 = [2]",
+        template: "nums = [10, 20, 30, 40, 50]\nprint(nums[___])",
+        blanksAnswer: ["2"],
+        answer: "nums = [10, 20, 30, 40, 50]\nprint(nums[2])",
+        expect: "30",
+        en: {
+          task: "Create a number list and print the third element",
+          guide: "Index starts at 0! Third = [2]"
+        }
+      }
+    },
+
+    // Drill 2: append + len
+    {
+      type: "practice",
+      content: {
+        level: 1,
+        task: "리스트에 두 항목을 추가하고 길이를 출력해요",
+        guide: "append() 두 번, 마지막에 len()",
+        template: "items = ['펜', '공책']\nitems.___('지우개')\nitems.___('자')\nprint(___(items))",
+        blanksAnswer: ["append", "append", "len"],
+        answer: "items = ['펜', '공책']\nitems.append('지우개')\nitems.append('자')\nprint(len(items))",
+        expect: "4",
+        en: {
+          task: "Add two items to the list and print the length",
+          guide: "append() twice, then len() at the end"
+        }
+      }
+    },
+
+    // Drill 3: append + remove + 출력
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "'망고'를 추가하고 '바나나'를 제거한 뒤 리스트를 출력해요",
+        guide: "append() 후 remove()",
+        template: "fruits = ['사과', '바나나', '포도']\nfruits.___('망고')\nfruits.___('바나나')\nprint(fruits)",
+        blanksAnswer: ["append", "remove"],
+        answer: "fruits = ['사과', '바나나', '포도']\nfruits.append('망고')\nfruits.remove('바나나')\nprint(fruits)",
+        expect: "['사과', '포도', '망고']",
+        en: {
+          task: "Add 'mango' and remove 'banana', then print the list",
+          guide: "append() then remove()"
+        }
+      }
+    },
+
+    // Drill 4: 처음부터 — 리스트 만들고 조작
+    {
+      type: "practice",
+      content: {
+        level: 3,
+        task: "처음부터 작성! 빈 리스트를 만들고\n1부터 5까지 append로 채운 뒤 전체를 출력해요",
+        guide: "nums = []; for i in range(1, 6): nums.append(i); print(nums)",
+        hint: "nums = []\nfor i in range(1, 6):\n    nums.append(i)\nprint(nums)",
+        template: null,
+        answer: "nums = []\nfor i in range(1, 6):\n    nums.append(i)\nprint(nums)",
+        alternateAnswers: [
+          "nums=[]\nfor i in range(1,6):\n    nums.append(i)\nprint(nums)"
+        ],
+        expect: "[1, 2, 3, 4, 5]",
+        en: {
+          task: "Write from scratch! Create an empty list, fill it with 1 through 5 using append, then print it",
+          guide: "nums = []; for i in range(1, 6): nums.append(i); print(nums)",
+          hint: "nums = []\nfor i in range(1, 6):\n    nums.append(i)\nprint(nums)"
+        }
+      }
+    },
+
+    // Drill 5: 처음부터 — 최댓값 찾기
+    {
+      type: "practice",
+      content: {
+        level: 3,
+        task: "처음부터 작성! 리스트 [3, 7, 1, 9, 4]의 최댓값을 for문으로 직접 찾아 출력해요\n(max() 함수 사용 금지!)",
+        guide: "best = nums[0]; for x in nums: if x > best: best = x",
+        hint: "nums = [3, 7, 1, 9, 4]\nbest = nums[0]\nfor x in nums:\n    if x > best:\n        best = x\nprint(best)",
+        template: null,
+        answer: "nums = [3, 7, 1, 9, 4]\nbest = nums[0]\nfor x in nums:\n    if x > best:\n        best = x\nprint(best)",
+        alternateAnswers: [
+          "nums=[3,7,1,9,4]\nbest=nums[0]\nfor x in nums:\n    if x>best:best=x\nprint(best)"
+        ],
+        expect: "9",
+        en: {
+          task: "Write from scratch! Find the maximum value in [3, 7, 1, 9, 4] using a for loop\n(No max() function!)",
+          guide: "best = nums[0]; for x in nums: if x > best: best = x",
+          hint: "nums = [3, 7, 1, 9, 4]\nbest = nums[0]\nfor x in nums:\n    if x > best:\n        best = x\nprint(best)"
+        }
       }
     },
 

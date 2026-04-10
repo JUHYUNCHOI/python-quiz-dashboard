@@ -1,15 +1,13 @@
 /* ===== Reset & Variables ===== */
-*, *::before, *::after {
-    margin: 0;
-    padding: 0;
+/* Coderin 통합 버전: 전역 충돌 방지를 위해 변수는 .algo-content 스코프로 제한 */
+
+/* .algo-content 내부 박스 리셋만 */
+.algo-content *, .algo-content *::before, .algo-content *::after {
     box-sizing: border-box;
 }
 
-html {
-    scroll-behavior: smooth;
-}
-
-:root {
+/* algo 변수는 .algo-content 스코프 안에서만 적용 */
+.algo-content {
     --bg: #f5f7fb;
     --bg2: #ffffff;
     --bg3: #e8ecf4;
@@ -40,15 +38,10 @@ html {
     --shadow-accent: 0 4px 20px rgba(108, 92, 231, 0.25);
     --transition-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
     --sidebar-w: 240px;
-}
-
-body {
+    /* 컨테이너 기본 스타일 */
     font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    background: var(--bg);
     color: var(--text);
     line-height: 1.75;
-    min-height: 100vh;
-    display: flex;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;

@@ -33,16 +33,20 @@ export const lessonCpp2: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "따옴표가 있으면 문자열 → 그대로 출력!",
-            "따옴표가 없으면 숫자/수식 → 계산 결과 출력!"
-          ],
+          lines: [],
           code: 'std::cout << 5 * 3 << std::endl;\nstd::cout << "5 * 3" << std::endl;',
           predict: {
             question: "출력 결과는?",
             options: ['15\n15', '5 * 3\n5 * 3', '15\n5 * 3'],
             answer: 2,
             feedback: "따옴표 없는 5*3은 계산되어 15, 따옴표 있는 건 문자열이라 그대로!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ['15\n15', '5 * 3\n5 * 3', '15\n5 * 3'],
+              feedback: "5*3 without quotes is calculated as 15; with quotes it's a string and prints as-is!"
+            }
           }
         }
       },
@@ -479,16 +483,20 @@ export const lessonCpp2: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "지금까지 배운 것을 모아서 코드를 읽어봐요!",
-            "using namespace std; 덕분에 cout, endl 바로 사용!"
-          ],
+          lines: [],
           code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "점수: " << 95 << endl;\n    cout << "등급\\tA" << endl;\n    return 0;\n}',
           predict: {
             question: "출력 결과는?",
             options: ['점수: 95\n등급\\tA', '점수: 95\n등급\tA (탭으로 벌어짐)', '점수: 95\n등급    A'],
             answer: 1,
             feedback: "\\t는 탭 문자! 등급과 A 사이에 넓은 공백이 들어가요."
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ['Score: 95\nGrade\\tA', 'Score: 95\nGrade\tA (widened by tab)', 'Score: 95\nGrade    A'],
+              feedback: "\\t is a tab character! It inserts a wide space between Grade and A."
+            }
           }
         }
       },
@@ -537,6 +545,95 @@ export const lessonCpp2: LessonData = {
         content: {
           message: "cout & namespace 마스터!",
           emoji: "🏆"
+        }
+      },
+
+      // ==================== CHAPTER 4: cout 손에 익히기 ====================
+      {
+        type: "chapter",
+        content: {
+          num: 4,
+          title: "cout 손에 익히기",
+          desc: "endl / \\n / \\t — 출력 포맷을 손이 기억할 때까지!"
+        }
+      },
+
+      // Drill 1: endl vs \n
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "A, B, C를 각각 다른 줄에 출력해요 (endl과 \\n 각각 사용)",
+          guide: "cout << \"A\" << endl; / cout << \"B\\n\";",
+          template: "cout << \"A\" << ___;\ncout << \"B\" << ___;\ncout << \"C\" << endl;",
+          blanksAnswer: ["endl", "\"\\n\""],
+          alternateAnswers: [],
+          answer: "cout << \"A\" << endl;\ncout << \"B\" << \"\\n\";\ncout << \"C\" << endl;",
+          expect: "A\nB\nC",
+          en: {
+            task: "Print A, B, C each on a new line (use endl and \\n)",
+            guide: "cout << \"A\" << endl; / cout << \"B\\n\";"
+          }
+        }
+      },
+
+      // Drill 2: 탭으로 표 형태 출력
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "이름과 점수를 탭(\\t)으로 구분해서 출력해요\nAlice\\t95\\nBob\\t87",
+          guide: "cout << \"Alice\" << \"\\t\" << 95 << endl;",
+          template: "cout << \"Alice\" << ___ << 95 << endl;\ncout << \"Bob\" << ___ << 87 << endl;",
+          blanksAnswer: ["\"\\t\"", "\"\\t\""],
+          answer: "cout << \"Alice\" << \"\\t\" << 95 << endl;\ncout << \"Bob\" << \"\\t\" << 87 << endl;",
+          expect: "Alice\t95\nBob\t87",
+          en: {
+            task: "Print name and score separated by tab (\\t)\nAlice\\t95, Bob\\t87",
+            guide: "cout << \"Alice\" << \"\\t\" << 95 << endl;"
+          }
+        }
+      },
+
+      // Drill 3: 여러 값 한 줄 출력 (<<  연속)
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "처음부터 작성! int x=5, y=3을 선언하고\n\"5 + 3 = 8\" 형식으로 한 줄에 cout 하나로 출력",
+          guide: "cout << x << \" + \" << y << \" = \" << x+y",
+          hint: "int x=5, y=3;\ncout << x << \" + \" << y << \" = \" << x+y << endl;",
+          template: null,
+          answer: "int x = 5, y = 3;\ncout << x << \" + \" << y << \" = \" << x + y << endl;",
+          alternateAnswers: [
+            "int x=5,y=3;\ncout<<x<<\" + \"<<y<<\" = \"<<x+y<<endl;"
+          ],
+          expect: "5 + 3 = 8",
+          en: {
+            task: "Write from scratch! Declare int x=5, y=3\nPrint \"5 + 3 = 8\" using a single cout statement",
+            guide: "cout << x << \" + \" << y << \" = \" << x+y"
+          }
+        }
+      },
+
+      // Drill 4: 처음부터 — 단위 변환 출력
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "처음부터 완전한 프로그램 작성!\ncm 값(int)을 입력받아 m 단위(double)로 변환해서 출력\n예: 입력 175 → 출력 1.75",
+          guide: "cin >> cm; double m = cm / 100.0; cout << m",
+          hint: "int cm;\ncin >> cm;\ndouble m = cm / 100.0;\ncout << m << endl;",
+          template: null,
+          answer: "#include <iostream>\nusing namespace std;\n\nint main() {\n    int cm;\n    cin >> cm;\n    double m = cm / 100.0;\n    cout << m << endl;\n    return 0;\n}",
+          alternateAnswers: [
+            "int cm;\ncin>>cm;\ndouble m=cm/100.0;\ncout<<m<<endl;"
+          ],
+          expect: "1.75",
+          en: {
+            task: "Write a complete program!\nRead a cm value (int), convert to meters (double), and print\nEx: input 175 → output 1.75",
+            guide: "cin >> cm; double m = cm / 100.0; cout << m"
+          }
         }
       },
 

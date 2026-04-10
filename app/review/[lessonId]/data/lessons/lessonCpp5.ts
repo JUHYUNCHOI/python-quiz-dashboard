@@ -19,17 +19,20 @@ export const lessonCpp5: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "C++의 산술 연산자는 파이썬과 거의 같아요! 🧮",
-            "+, -, *, / 는 똑같이 작동해요.",
-            "하지만 나누기(/)에서 큰 차이가 있어요!"
-          ],
+          lines: [],
           code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << 10 + 3 << endl;   // 13\n    cout << 10 - 3 << endl;   // 7\n    cout << 10 * 3 << endl;   // 30\n    cout << 10 / 3 << endl;   // ?\n    return 0;\n}',
           predict: {
             question: "10 / 3 의 결과는?",
             options: ["3.333...", "3", "3.0"],
             answer: 1,
             feedback: "정수 / 정수 = 정수! 소수점이 잘려서 3이 나와요. 파이썬은 3.333이지만 C++은 달라요!"
+          },
+          en: {
+            predict: {
+              question: "What is the result of 10 / 3?",
+              options: ["3.333...", "3", "3.0"],
+              feedback: "integer / integer = integer! The decimal is truncated so the result is 3. Python gives 3.333 but C++ is different!"
+            }
           }
         }
       },
@@ -84,11 +87,7 @@ export const lessonCpp5: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "% = 나머지 연산자 (mod) 🎯",
-            "나눗셈의 나머지만 구해요!",
-            "짝수/홀수 판별에 자주 써요."
-          ],
+          lines: [],
           code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << 10 % 3 << endl;  // 10 / 3 = 3 나머지 1\n    cout << 15 % 4 << endl;  // 15 / 4 = 3 나머지 3\n    cout << 8 % 2 << endl;   // 8 / 2 = 4 나머지 0\n    return 0;\n}',
           result: "1\n3\n0",
           predict: {
@@ -96,6 +95,13 @@ export const lessonCpp5: LessonData = {
             options: ["2", "1", "3"],
             answer: 1,
             feedback: "7 / 3 = 2 나머지 1! 나머지만 구하니까 1이에요."
+          },
+          en: {
+            predict: {
+              question: "What is the result of 7 % 3?",
+              options: ["2", "1", "3"],
+              feedback: "7 / 3 = 2 remainder 1! We only want the remainder, so the answer is 1."
+            }
           }
         }
       },
@@ -246,16 +252,20 @@ export const lessonCpp5: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "= 와 == 를 절대 헷갈리면 안 돼요! ⚠️",
-            "= 는 값 넣기(대입), == 는 같은지 비교!"
-          ],
+          lines: [],
           code: 'int x = 10;       // 대입: x에 10을 넣어요\ncout << (x == 10); // 비교: x가 10인지 확인',
           predict: {
             question: "if (x = 5) 는 어떤 의미?",
             options: ["x가 5인지 비교", "x에 5를 대입 (버그!)", "에러"],
             answer: 1,
             feedback: "= 는 대입! if (x = 5)는 x에 5를 넣는 거예요. 비교하려면 == 를 써야 해요!"
+          },
+          en: {
+            predict: {
+              question: "What does if (x = 5) mean?",
+              options: ["Compares x to 5", "Assigns 5 to x (bug!)", "Error"],
+              feedback: "= is assignment! if (x = 5) puts 5 into x. Use == for comparison!"
+            }
           }
         }
       },
@@ -312,16 +322,20 @@ export const lessonCpp5: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "점수가 80 이상 AND 100 이하인지 확인하려면?",
-            "두 조건을 && 로 연결해요!"
-          ],
+          lines: [],
           code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    int score = 85;\n    bool valid = (score >= 80) && (score <= 100);\n    cout << valid << endl;\n    return 0;\n}',
           predict: {
             question: "score가 85일 때 결과는?",
             options: ["1 (true)", "0 (false)", "에러"],
             answer: 0,
             feedback: "85 >= 80 (true) && 85 <= 100 (true) → true && true = true (1)!"
+          },
+          en: {
+            predict: {
+              question: "What is the result when score is 85?",
+              options: ["1 (true)", "0 (false)", "Error"],
+              feedback: "85 >= 80 (true) && 85 <= 100 (true) → true && true = true (1)!"
+            }
           }
         }
       },
@@ -468,11 +482,7 @@ export const lessonCpp5: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "나머지 연산자 %와 비교 연산자를 합치면!",
-            "짝수/홀수를 판별할 수 있어요.",
-            "n % 2 == 0 이면 짝수, 1이면 홀수!"
-          ],
+          lines: [],
           code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    int num = 7;\n    cout << num << " % 2 = " << num % 2 << endl;\n    cout << "짝수? " << (num % 2 == 0) << endl;\n    cout << "홀수? " << (num % 2 != 0) << endl;\n    return 0;\n}',
           result: "7 % 2 = 1\n짝수? 0\n홀수? 1",
           predict: {
@@ -480,6 +490,13 @@ export const lessonCpp5: LessonData = {
             options: ["0 (false)", "1 (true)", "12"],
             answer: 1,
             feedback: "12 % 2 = 0, 그리고 0 == 0 은 true! 그래서 1이 출력돼요."
+          },
+          en: {
+            predict: {
+              question: "When num is 12, what does 'Even?' print?",
+              options: ["0 (false)", "1 (true)", "12"],
+              feedback: "12 % 2 = 0, and 0 == 0 is true! So 1 is printed."
+            }
           }
         }
       },

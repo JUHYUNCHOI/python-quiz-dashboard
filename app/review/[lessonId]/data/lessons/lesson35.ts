@@ -21,7 +21,7 @@ export const lesson35: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["📏 len() = 몇 개? sum() = 다 더하면?"],
+        lines: [],
         code: `과자 = ['새우깡', '포카칩', '꼬깔콘']
 점수 = [80, 90, 70]
 
@@ -37,13 +37,20 @@ print(sum(점수) / len(점수))  # 평균!`,
     {
       type: "explain",
       content: {
-        lines: ["🧠 sum() 시작값 예측!"],
+        lines: [],
         code: `print(sum([1, 2, 3], 100))`,
         predict: {
           question: "출력 결과는?",
           options: ["6", "106", "[100, 1, 2, 3]", "에러"],
           answer: 1,
           feedback: "100부터 시작해서 더함! 100+1+2+3 = 106"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["6", "106", "[100, 1, 2, 3]", "Error"],
+            feedback: "Starts summing from 100! 100+1+2+3 = 106"
+          }
         },
         result: "106"
       }
@@ -96,7 +103,7 @@ print(sum(점수) / len(점수))  # 평균!`,
     {
       type: "explain",
       content: {
-        lines: ["🔝 가장 큰 거! 가장 작은 거!"],
+        lines: [],
         code: `점수 = [85, 92, 78, 95, 88]
 
 print(f'1등: {max(점수)}점')
@@ -111,7 +118,7 @@ print(f'점수 차이: {max(점수) - min(점수)}점')`,
     {
       type: "explain",
       content: {
-        lines: ["🧠 문자열도 가능?"],
+        lines: [],
         code: `print(max('apple', 'banana', 'cat'))
 print(min('apple', 'banana', 'cat'))`,
         predict: {
@@ -119,6 +126,13 @@ print(min('apple', 'banana', 'cat'))`,
           options: ["banana\napple", "cat\napple", "apple\ncat", "에러"],
           answer: 1,
           feedback: "알파벳 순! a < b < c 니까 max는 cat, min은 apple"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["banana\napple", "cat\napple", "apple\ncat", "Error"],
+            feedback: "Alphabetical order! a < b < c, so max is 'cat' and min is 'apple'"
+          }
         },
         result: "cat\napple"
       }
@@ -171,7 +185,7 @@ print(min('apple', 'banana', 'cat'))`,
     {
       type: "explain",
       content: {
-        lines: ["📊 줄 세우기! 키 순? 이름 순?"],
+        lines: [],
         code: `숫자 = [3, 1, 4, 1, 5, 9]
 
 # 작은 순 (오름차순)
@@ -188,7 +202,7 @@ print(sorted(숫자, reverse=True))`,
     {
       type: "explain",
       content: {
-        lines: ["🧠 점수로 줄 세우기!"],
+        lines: [],
         code: `학생 = [('철수', 85), ('영희', 92), ('민수', 78)]
 결과 = sorted(학생, key=lambda x: x[1])
 print(결과[0][0])`,
@@ -197,6 +211,13 @@ print(결과[0][0])`,
           options: ["철수", "영희", "민수", "78"],
           answer: 2,
           feedback: "점수 오름차순 → 78점 민수가 맨 앞!"
+        },
+        en: {
+          predict: {
+            question: "What is the name of the first student?",
+            options: ["철수", "영희", "민수", "78"],
+            feedback: "Ascending by score → 민수 (78 points) comes first!"
+          }
         },
         result: "민수"
       }
@@ -249,7 +270,7 @@ print(결과[0][0])`,
     {
       type: "explain",
       content: {
-        lines: ["🏭 공장처럼 한 번에 변환!"],
+        lines: [],
         code: `# 문자열 숫자를 진짜 숫자로!
 # '1', '2', '3' → 1, 2, 3
 
@@ -267,7 +288,7 @@ print(sum(숫자))`,
     {
       type: "explain",
       content: {
-        lines: ["🧠 map() 예측!"],
+        lines: [],
         code: `숫자 = ['10', '20', '30']
 결과 = list(map(int, 숫자))
 print(sum(결과))`,
@@ -276,6 +297,13 @@ print(sum(결과))`,
           options: ["'102030'", "60", "[10, 20, 30]", "에러"],
           answer: 1,
           feedback: "문자→정수 변환 후 합계: 10+20+30=60"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["'102030'", "60", "[10, 20, 30]", "Error"],
+            feedback: "Convert strings to integers then sum: 10+20+30=60"
+          }
         },
         result: "60"
       }
@@ -349,7 +377,7 @@ print(sum(결과))`,
     {
       type: "explain",
       content: {
-        lines: ["🔍 filter() = 조건에 맞는 것만 골라!"],
+        lines: [],
         code: `숫자 = [1, -2, 3, -4, 5]
 
 # 양수만 골라!
@@ -364,7 +392,7 @@ print(양수)`,
     {
       type: "explain",
       content: {
-        lines: ["🧠 filter() 예측!"],
+        lines: [],
         code: `숫자 = [5, 12, 8, 3, 15, 7]
 결과 = list(filter(lambda x: x >= 10, 숫자))
 print(결과)`,
@@ -373,6 +401,13 @@ print(결과)`,
           options: ["[5, 8, 3, 7]", "[12, 15]", "[5, 12, 8, 3, 15, 7]", "에러"],
           answer: 1,
           feedback: "10 이상인 것만! 12, 15가 통과!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["[5, 8, 3, 7]", "[12, 15]", "[5, 12, 8, 3, 15, 7]", "Error"],
+            feedback: "Only values >= 10 pass! 12 and 15 make it through!"
+          }
         },
         result: "[12, 15]"
       }

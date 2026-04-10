@@ -33,16 +33,20 @@ export const lessonCpp21: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "중괄호 {}로 초기화할 수 있어요!",
-            "바깥 {}는 전체 배열, 안쪽 {}는 각 행이에요."
-          ],
+          lines: [],
           code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    int grid[2][3] = {\n        {1, 2, 3},\n        {4, 5, 6}\n    };\n    cout << grid[0][0] << endl;\n    cout << grid[1][2] << endl;\n    return 0;\n}',
           predict: {
             question: "출력 결과는?",
             options: ["1\n6", "1\n3", "0\n6", "에러"],
             answer: 0,
             feedback: "grid[0][0]은 0행 0열 = 1, grid[1][2]는 1행 2열 = 6이에요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["1\n6", "1\n3", "0\n6", "Error"],
+              feedback: "grid[0][0] is row 0, col 0 = 1; grid[1][2] is row 1, col 2 = 6!"
+            }
           }
         }
       },
@@ -205,16 +209,20 @@ export const lessonCpp21: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "grid.size()는 행의 수, grid[0].size()는 열의 수를 줘요!",
-            "파이썬의 len(grid), len(grid[0])과 같아요."
-          ],
+          lines: [],
           code: '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<vector<int>> grid(3, vector<int>(4, 0));\n    cout << grid.size() << endl;\n    cout << grid[0].size() << endl;\n    return 0;\n}',
           predict: {
             question: "출력 결과는?",
             options: ["3\n4", "4\n3", "3\n3", "에러"],
             answer: 0,
             feedback: "grid.size() = 행의 수 = 3, grid[0].size() = 열의 수 = 4이에요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["3\n4", "4\n3", "3\n3", "Error"],
+              feedback: "grid.size() = number of rows = 3; grid[0].size() = number of columns = 4!"
+            }
           }
         }
       },
@@ -364,16 +372,20 @@ export const lessonCpp21: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "2D 배열 전체를 순회하려면 for 루프를 중첩해요! 🔁",
-            "바깥 루프는 행(i), 안쪽 루프는 열(j)을 돌아요."
-          ],
+          lines: [],
           code: '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<vector<int>> grid = {\n        {1, 2, 3},\n        {4, 5, 6}\n    };\n    for (int i = 0; i < grid.size(); i++) {\n        for (int j = 0; j < grid[0].size(); j++) {\n            cout << grid[i][j] << " ";\n        }\n        cout << endl;\n    }\n    return 0;\n}',
           predict: {
             question: "출력 결과는?",
             options: ["1 2 3\n4 5 6", "1 4\n2 5\n3 6", "1 2 3 4 5 6", "에러"],
             answer: 0,
             feedback: "바깥 루프가 행, 안쪽 루프가 열이에요. 행마다 endl로 줄바꿈해서 1 2 3 / 4 5 6 이 돼요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["1 2 3\n4 5 6", "1 4\n2 5\n3 6", "1 2 3 4 5 6", "Error"],
+              feedback: "The outer loop iterates over rows, the inner loop over columns. endl after each row gives 1 2 3 / 4 5 6!"
+            }
           }
         }
       },
@@ -399,16 +411,20 @@ export const lessonCpp21: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "중첩 for문으로 최대값도 찾을 수 있어요!",
-            "모든 칸을 돌면서 가장 큰 값을 추적해요."
-          ],
+          lines: [],
           code: 'vector<vector<int>> grid = {\n    {3, 7, 2},\n    {8, 1, 5}\n};\nint maxVal = grid[0][0];\nfor (int i = 0; i < grid.size(); i++) {\n    for (int j = 0; j < grid[0].size(); j++) {\n        if (grid[i][j] > maxVal) {\n            maxVal = grid[i][j];\n        }\n    }\n}\ncout << maxVal << endl;',
           predict: {
             question: "출력 결과는?",
             options: ["3", "7", "8", "5"],
             answer: 2,
             feedback: "3, 7, 2, 8, 1, 5 중에서 가장 큰 값은 8이에요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["3", "7", "8", "5"],
+              feedback: "Among 3, 7, 2, 8, 1, 5 the largest value is 8!"
+            }
           }
         }
       },
@@ -427,6 +443,67 @@ export const lessonCpp21: LessonData = {
           en: {
             task: "Fill grid[i][j] with the value i+j! (diagonal pattern)",
             guide: "grid[i][j] = i + j;"
+          }
+        }
+      },
+
+      // Lv.2: 2D 그리드 행별로 출력
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "2D 그리드를 행 단위로 출력해요! (각 행 끝에 줄바꿈)",
+          guide: "안쪽 루프에서 값 출력, 행이 끝나면 endl",
+          hint: "cout << grid[i][j] << \" \"; 후 안쪽 루프 끝나면 cout << endl;",
+          template: 'vector<vector<int>> grid = {{1,2,3},{4,5,6},{7,8,9}};\nfor (int i = 0; i < grid.size(); i++) {\n    for (int j = 0; j < grid[0].size(); j++) {\n        cout << grid[i][j] << " ";\n    }\n    cout << ___;\n}',
+          blanksAnswer: ["endl"],
+          answer: 'vector<vector<int>> grid = {{1,2,3},{4,5,6},{7,8,9}};\nfor (int i = 0; i < grid.size(); i++) {\n    for (int j = 0; j < grid[0].size(); j++) {\n        cout << grid[i][j] << " ";\n    }\n    cout << endl;\n}',
+          expect: "1 2 3 \n4 5 6 \n7 8 9 ",
+          en: {
+            task: "Print a 2D grid row by row! (newline after each row)",
+            guide: "Print each value in the inner loop, then endl after the row ends",
+            hint: "After cout << grid[i][j], use cout << endl after the inner loop"
+          }
+        }
+      },
+
+      // Lv.2: 2D 배열에서 최댓값 찾기
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "2D vector에서 최댓값을 찾아서 출력해요!",
+          guide: "maxVal을 grid[0][0]으로 초기화 후 모든 원소와 비교",
+          hint: "if (grid[i][j] > maxVal) maxVal = grid[i][j];",
+          template: 'vector<vector<int>> grid = {{3,7,2},{8,1,5}};\nint maxVal = grid[0][0];\nfor (int i = 0; i < grid.size(); i++) {\n    for (int j = 0; j < grid[0].size(); j++) {\n        if (grid[i][j] > ___) {\n            maxVal = grid[i][j];\n        }\n    }\n}\ncout << maxVal << endl;',
+          blanksAnswer: ["maxVal"],
+          answer: 'vector<vector<int>> grid = {{3,7,2},{8,1,5}};\nint maxVal = grid[0][0];\nfor (int i = 0; i < grid.size(); i++) {\n    for (int j = 0; j < grid[0].size(); j++) {\n        if (grid[i][j] > maxVal) {\n            maxVal = grid[i][j];\n        }\n    }\n}\ncout << maxVal << endl;',
+          expect: "8",
+          en: {
+            task: "Find and print the maximum value in a 2D vector!",
+            guide: "Initialize maxVal to grid[0][0], then compare with every element",
+            hint: "if (grid[i][j] > maxVal) maxVal = grid[i][j];"
+          }
+        }
+      },
+
+      // Lv.3: 특정 값 개수 세기
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "2D 그리드에서 5보다 큰 원소가 몇 개인지 세어서 출력해요!",
+          guide: "count 변수 선언 → 조건 충족 시 count++",
+          hint: "if (grid[i][j] > 5) count++;",
+          template: 'vector<vector<int>> grid = {{1,6,3},{9,2,7},{4,8,5}};\nint count = 0;\nfor (int i = 0; i < grid.size(); i++) {\n    for (int j = 0; j < grid[0].size(); j++) {\n        if (grid[i][j] ___) count++;\n    }\n}\ncout << count << endl;',
+          blanksAnswer: ["> 5"],
+          alternateAnswers: [">5"],
+          answer: 'vector<vector<int>> grid = {{1,6,3},{9,2,7},{4,8,5}};\nint count = 0;\nfor (int i = 0; i < grid.size(); i++) {\n    for (int j = 0; j < grid[0].size(); j++) {\n        if (grid[i][j] > 5) count++;\n    }\n}\ncout << count << endl;',
+          expect: "4",
+          en: {
+            task: "Count how many elements in the 2D grid are greater than 5!",
+            guide: "Declare a count variable → increment when condition is met",
+            hint: "if (grid[i][j] > 5) count++;"
           }
         }
       },

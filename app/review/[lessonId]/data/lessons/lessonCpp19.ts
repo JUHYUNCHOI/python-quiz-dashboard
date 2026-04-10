@@ -47,16 +47,20 @@ export const lessonCpp19: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "ofstream은 cout처럼 << 연산자로 씁니다!",
-            "ifstream은 cin처럼 >> 연산자로 읽어요!"
-          ],
+          lines: [],
           code: 'ofstream fout("data.txt");\nfout << 100 << " " << 200 << endl;\nfout.close();\n\nifstream fin("data.txt");\nint a, b;\nfin >> a >> b;\ncout << a + b << endl;',
           predict: {
             question: "마지막 cout의 출력은?",
             options: ["100 200", "300", "100200"],
             answer: 1,
             feedback: "fin >> a >> b로 100, 200을 읽고, a + b = 300이 출력돼요!"
+          },
+          en: {
+            predict: {
+              question: "What does the last cout print?",
+              options: ["100 200", "300", "100200"],
+              feedback: "fin >> a >> b reads 100 and 200, then a + b = 300 is printed!"
+            }
           }
         }
       },
@@ -463,16 +467,20 @@ export const lessonCpp19: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "USACO 문제는 보통 이런 구조예요!",
-            "freopen으로 파일을 열고, cin/cout으로 입출력해요."
-          ],
+          lines: [],
           code: '#include <iostream>\n#include <cstdio>\nusing namespace std;\n\nint main() {\n    freopen("paint.in", "r", stdin);\n    freopen("paint.out", "w", stdout);\n\n    int a, b, c, d;\n    cin >> a >> b >> c >> d;\n    // 문제 풀이...\n    cout << answer << "\\n";\n    return 0;\n}',
           predict: {
             question: "freopen 후 cin은 어디서 읽나요?",
             options: ["키보드", "paint.in 파일", "paint.out 파일"],
             answer: 1,
             feedback: "freopen(\"paint.in\", \"r\", stdin) 후 cin은 paint.in에서 읽어요!"
+          },
+          en: {
+            predict: {
+              question: "After freopen, where does cin read from?",
+              options: ["Keyboard", "paint.in file", "paint.out file"],
+              feedback: "After freopen(\"paint.in\", \"r\", stdin), cin reads from paint.in!"
+            }
           }
         }
       },

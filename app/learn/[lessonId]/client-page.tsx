@@ -193,7 +193,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             }
           }
         } else {
-          const autoCompleteTypes = ["explain", "interactive", "animation", "tryit"]
+          const autoCompleteTypes = ["explain", "interactive", "animation"]
           if (lesson) {
             for (let ci = 0; ci < lesson.chapters.length; ci++) {
               const steps = lesson.chapters[ci].steps
@@ -248,7 +248,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
               }
             }
           } else {
-            const autoCompleteTypes = ["explain", "interactive", "animation", "tryit"]
+            const autoCompleteTypes = ["explain", "interactive", "animation"]
             if (lesson) {
               for (let ci = 0; ci < lesson.chapters.length; ci++) {
                 const steps = lesson.chapters[ci].steps
@@ -319,8 +319,11 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     const trackIds = trackParts.flatMap(p => p.lessonIds)
     const idx = trackIds.indexOf(idNormalized)
     if (idx <= 0) return false // 첫 수업 또는 알 수 없는 ID → 열림
-    // 직전 1개만 확인 (커리큘럼 페이지 잠금 기준과 동일)
-    return !completed.has(trackIds[idx - 1])
+    // 체크포인트(cpp-ck*)는 건너뛰고 직전 일반 레슨이 완료됐는지 확인
+    let prevIdx = idx - 1
+    while (prevIdx >= 0 && String(trackIds[prevIdx]).includes("-ck")) prevIdx--
+    if (prevIdx < 0) return false
+    return !completed.has(trackIds[prevIdx])
   })()
 
   // ── 훅은 반드시 early return 앞에 선언해야 함 (Rules of Hooks) ──
@@ -363,7 +366,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const handleSuccess = useCallback(() => {
     if (!step?.id || completedSteps.has(step.id)) return
     setCompletedSteps(prev => new Set([...prev, step.id]))
-    if (isIGCSE || effectiveTeacher) {
+    if (isIGCSE || effectiveTeacher || isAlreadyDone) {
       play("codeSuccess")
     } else {
       setScore(prev => prev + 10)
@@ -373,7 +376,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       play("codeSuccess")
       setTimeout(() => setShowConfetti(false), 2000)
     }
-  }, [completedSteps, step?.id, play, isIGCSE, effectiveTeacher, t])
+  }, [completedSteps, step?.id, play, isIGCSE, effectiveTeacher, isAlreadyDone, t])
 
   const closeSuccessOverlay = useCallback(() => { setShowSuccess(false) }, [])
 
@@ -544,7 +547,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       play("correct")
       if (!completedSteps.has(step.id)) {
         setCompletedSteps(prev => new Set([...prev, step.id]))
-        if (!isIGCSE && !effectiveTeacher) {
+        if (!isIGCSE && !effectiveTeacher && !isAlreadyDone) {
           setScore(prev => prev + 10)
           setShowConfetti(true)
           setSuccessMessage(t("정답! 🎉", "Correct! 🎉"))
@@ -576,7 +579,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
       play("correct")
       if (!completedSteps.has(step.id)) {
         setCompletedSteps(prev => new Set([...prev, step.id]))
-        if (!isIGCSE && !effectiveTeacher) {
+        if (!isIGCSE && !effectiveTeacher && !isAlreadyDone) {
           setScore(prev => prev + 10)
           setShowConfetti(true)
           setSuccessMessage(t("정답! 🎉", "Correct! 🎉"))
@@ -635,7 +638,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             <h1 className="text-3xl font-bold text-gray-900 mb-2">{t("레슨 완료!", "Lesson Complete!")}</h1>
             <p className="text-lg text-gray-600 mb-2">{lesson.title}</p>
             <p className="text-gray-500 mb-6">{t("모든 챕터를 끝냈어요!", "All chapters finished!")}</p>
-            {!isIGCSE && (
+            {!isIGCSE && !isAlreadyDone && (
               <>
                 <div className="bg-amber-50 rounded-2xl p-4 mb-4">
                   <p className="text-amber-800 font-bold text-lg">{t(`총 ${totalPoints}점 획득!`, `${totalPoints} points earned!`)}</p>
@@ -671,7 +674,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                         className="w-full py-3.5 bg-green-500 hover:bg-green-600 active:scale-95 text-white rounded-xl font-bold text-base transition-all flex items-center justify-center gap-2"
                       >
                         <span className="text-xl">{unlockedCluster.emoji}</span>
-                        <span>{unlockedCluster.title} {t("연습하기", "Practice")} 💪</span>
+                        <span>{lang === "en" ? (unlockedCluster.en?.title ?? unlockedCluster.title) : unlockedCluster.title} {t("연습하기", "Practice")} 💪</span>
                       </button>
                       <p className="text-xs text-gray-400 text-center">{unlockedCluster.problems.length}{t("문제 · 방금 해금됐어요!", " problems · just unlocked!")}</p>
                       {/* 보조: 다음 레슨 */}
@@ -793,7 +796,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
             </div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">{t(`챕터 ${currentChapter + 1} 완료!`, `Chapter ${currentChapter + 1} Complete!`)}</h1>
             <p className="text-lg text-gray-600 mb-6">{chapter.emoji} {chapter.title}</p>
-            {!isIGCSE && (
+            {!isIGCSE && !isAlreadyDone && (
               <div className="bg-amber-50 rounded-2xl p-4 mb-6">
                 <p className="text-amber-800 font-bold text-lg">{t(`${chapterPoints}점 획득!`, `${chapterPoints} points earned!`)}</p>
               </div>

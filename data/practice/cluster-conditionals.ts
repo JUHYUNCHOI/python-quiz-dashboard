@@ -1091,8 +1091,18 @@ using namespace std;
 int main() {
     int n;
     cin >> n;
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+      scaffoldCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
     // 삼항 연산자만 사용해서 result에 결과를 저장하세요
-    string result = (n > 0) ? "positive" : /* 여기를 채우세요 */;
+    string result = (n > 0) ? "positive" : /* 나머지를 채우세요 */;
     cout << result << endl;
     return 0;
 }`,

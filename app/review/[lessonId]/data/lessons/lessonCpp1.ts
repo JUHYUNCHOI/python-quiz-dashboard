@@ -19,209 +19,7 @@ export const lessonCpp1: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "C++ Hello World를 다시 봐볼까요? 👀",
-            "파이썬은 print() 한 줄이면 끝이지만,",
-            "C++은 이 틀이 꼭 필요해요!"
-          ],
-          code: '#include <iostream>\n\nint main() {\n    std::cout << "Hello!" << std::endl;\n    return 0;\n}',
-          result: "Hello!",
-          note: "#include → int main() → std::cout → return 0"
-        }
-      },
-
-      // ===== Lv.1: 구조 빈칸 채우기 =====
-      {
-        type: "practice",
-        content: {
-          level: 1,
-          task: "입출력 헤더를 불러와요!",
-          guide: "std::cout을 쓰려면 어떤 헤더가 필요할까요?",
-          template: "#include <___>",
-          answer: "iostream",
-          expect: "#include <iostream>",
-          en: {
-            task: "Include the I/O header!",
-            guide: "Which header is needed to use std::cout?"
-          }
-        }
-      },
-      {
-        type: "practice",
-        content: {
-          level: 1,
-          task: "프로그램 시작 함수를 써봐요!",
-          guide: "C++은 어떤 함수에서 시작할까요?",
-          template: "int ___() {",
-          answer: "main",
-          expect: "int main() {",
-          en: {
-            task: "Write the program entry function!",
-            guide: "Which function does a C++ program start from?"
-          }
-        }
-      },
-
-      // 컴파일 퀴즈
-      {
-        type: "quiz",
-        content: {
-          question: "C++이 파이썬과 다른 가장 큰 차이는?",
-          options: [
-            "print 대신 std::cout을 쓴다",
-            "실행 전에 컴파일(번역)이 필요하다",
-            "세미콜론을 써야 한다"
-          ],
-          answer: 1,
-          explanation: "파이썬은 바로 실행(통역)하지만, C++은 먼저 컴파일(번역)한 다음 실행해요! 그래서 더 빨라요!",
-          en: {
-            question: "What is the biggest difference between C++ and Python?",
-            options: [
-              "Uses std::cout instead of print",
-              "Requires compilation (translation) before running",
-              "Requires semicolons"
-            ],
-            explanation: "Python runs directly (interpreted), but C++ must be compiled (translated) first, then run! That's why it's faster!"
-          }
-        }
-      },
-
-      // main() 퀴즈
-      {
-        type: "quiz",
-        content: {
-          question: "C++ 프로그램이 실행될 때 가장 먼저 호출되는 함수는?",
-          options: ["start()", "run()", "main()", "begin()"],
-          answer: 2,
-          explanation: "C++ 프로그램은 반드시 main() 함수에서 시작해요!",
-          en: {
-            question: "Which function is called first when a C++ program runs?",
-            options: ["start()", "run()", "main()", "begin()"],
-            explanation: "Every C++ program must start from the main() function!"
-          }
-        }
-      },
-
-      // 에러 퀴즈
-      {
-        type: "errorQuiz",
-        content: {
-          question: "이 코드는 왜 에러일까요?",
-          code: 'int main() {\n    std::cout << "Hello!" << std::endl;\n    return 0;\n}',
-          options: [
-            "main 함수가 없어서",
-            "#include <iostream>이 빠져서",
-            "return 0이 잘못돼서"
-          ],
-          answer: 1,
-          explanation: "std::cout을 쓰려면 #include <iostream>이 꼭 필요해요!",
-          en: {
-            question: "Why does this code cause an error?",
-            options: [
-              "Because main function is missing",
-              "Because #include <iostream> is missing",
-              "Because return 0 is wrong"
-            ],
-            explanation: "#include <iostream> is required to use std::cout!"
-          }
-        }
-      },
-
-      // ===== Lv.1: cout 출력 빈칸 =====
-      {
-        type: "practice",
-        content: {
-          level: 1,
-          task: "Hello를 화면에 출력해요!",
-          guide: 'std::cout << "___" << std::endl; 형태!',
-          template: { before: 'std::cout << "', after: '" << std::endl;' },
-          answer: "Hello",
-          expect: 'std::cout << "Hello" << std::endl;',
-          en: {
-            task: "Print Hello on the screen!",
-            guide: 'Use the form std::cout << "___" << std::endl;'
-          }
-        }
-      },
-
-      // ===== Lv.2: << 연산자 연습 =====
-      {
-        type: "practice",
-        content: {
-          level: 2,
-          task: "std::cout으로 Hi!를 출력해요!",
-          guide: "<< 연산자로 보내야 해요!",
-          template: 'std::cout ___ "Hi!" ___ std::endl;',
-          answer: "<<",
-          blanksAnswer: ["<<", "<<"],
-          expect: 'std::cout << "Hi!" << std::endl;',
-          en: {
-            task: "Print Hi! using std::cout!",
-            guide: "You need to use the << operator!"
-          }
-        }
-      },
-
-      // 보상
-      {
-        type: "reward",
-        content: {
-          message: "기본 구조 완벽!",
-          emoji: "🎉"
-        }
-      },
-
-      // 챕터 1 요약
-      {
-        type: "summary",
-        content: {
-          num: 1,
-          title: "기본 구조",
-          learned: [
-            "C++은 컴파일(번역) 후 실행 — 그래서 빠름!",
-            "#include <iostream> — 입출력 헤더",
-            "int main() — 프로그램 시작점",
-            'std::cout << "Hello" << std::endl; — 화면에 출력',
-            "return 0; — 정상 종료 신호"
-          ],
-          canDo: "C++ 프로그램의 기본 틀과 std::cout 출력을 쓸 수 있어요!",
-          emoji: "🏗️"
-        }
-      },
-
-      // ==================== CHAPTER 2: cout 출력 ====================
-      {
-        type: "chapter",
-        content: {
-          num: 2,
-          title: "cout 출력",
-          desc: "화면에 출력하는 법을 복습해요!"
-        }
-      },
-
-      // 인터리빙: 챕터1 복습
-      {
-        type: "interleaving",
-        content: {
-          message: "잠깐! 앞에서 배운 거 기억나요?",
-          task: "입출력 헤더 이름은?",
-          template: "#include <___>",
-          answer: "iostream",
-          expect: "#include <iostream>",
-          en: {
-            message: "Wait! Do you remember what we learned earlier?",
-            task: "What is the name of the I/O header?"
-          }
-        }
-      },
-
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "std::cout << 로 화면에 출력해요!",
-            "<< 는 '보내다'라는 뜻이에요 📤"
-          ],
+          lines: [],
           code: 'std::cout << "Hello" << std::endl;',
           result: "Hello",
           note: "std::endl = 줄바꿈 (파이썬 print의 자동 줄바꿈과 같아요!)"
@@ -232,16 +30,20 @@ export const lessonCpp1: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "std::cout은 자동 공백이 없어요!",
-            "문자열이 그대로 이어붙여져요"
-          ],
+          lines: [],
           code: 'std::cout << "A" << "B" << "C" << std::endl;',
           predict: {
             question: "이 코드의 출력은?",
             options: ["A B C", "ABC", "A, B, C"],
             answer: 1,
             feedback: "C++ std::cout은 자동 공백이 없어서 ABC가 출력돼요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output of this code?",
+              options: ["A B C", "ABC", "A, B, C"],
+              feedback: "std::cout has no automatic spaces, so ABC is printed!"
+            }
           }
         }
       },
@@ -388,16 +190,20 @@ export const lessonCpp1: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "따옴표가 있으면 문자열, 없으면 숫자!",
-            "숫자는 계산되고, 문자열은 그대로 출력돼요"
-          ],
+          lines: [],
           code: 'std::cout << 10 + 20 << std::endl;\nstd::cout << "10 + 20" << std::endl;',
           predict: {
             question: "출력 결과는?",
             options: ['30\n30', '10 + 20\n10 + 20', '30\n10 + 20'],
             answer: 2,
             feedback: "따옴표 없는 10+20은 계산되어 30, 따옴표 있는 건 문자열이라 그대로!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ['30\n30', '10 + 20\n10 + 20', '30\n10 + 20'],
+              feedback: "10+20 without quotes is calculated as 30; with quotes it's a string and prints as-is!"
+            }
           }
         }
       },
@@ -446,6 +252,94 @@ export const lessonCpp1: LessonData = {
         content: {
           message: "C++ 마스터!",
           emoji: "🏆"
+        }
+      },
+
+      // ==================== CHAPTER 4: C++ 기본 구조 손에 익히기 ====================
+      {
+        type: "chapter",
+        content: {
+          num: 4,
+          title: "기본 구조 손에 익히기",
+          desc: "#include → main() → return 0 — 눈 감고도 쓸 수 있게!"
+        }
+      },
+
+      // Drill 1: 헤더 + namespace + main 완성
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "빈칸을 채워 \"Hello, C++!\"을 출력하는 완전한 프로그램을 완성해요",
+          guide: "#include <iostream> → using namespace std; → int main()",
+          template: "#include <___>\n___ namespace std;\n\nint ___() {\n    cout << \"Hello, C++!\" << endl;\n    return 0;\n}",
+          blanksAnswer: ["iostream", "using", "main"],
+          answer: "#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << \"Hello, C++!\" << endl;\n    return 0;\n}",
+          expect: "Hello, C++!",
+          en: {
+            task: "Fill in the blanks to complete a program that prints \"Hello, C++!\"",
+            guide: "#include <iostream> → using namespace std; → int main()"
+          }
+        }
+      },
+
+      // Drill 2: 변수 선언 + 출력
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "정수 x=10, 실수 y=3.14를 선언하고 둘 다 출력해요",
+          guide: "int x = 10; double y = 3.14;",
+          template: "___ x = 10;\n___ y = 3.14;\ncout << x << endl;\ncout << y << endl;",
+          blanksAnswer: ["int", "double"],
+          answer: "int x = 10;\ndouble y = 3.14;\ncout << x << endl;\ncout << y << endl;",
+          expect: "10\n3.14",
+          en: {
+            task: "Declare int x=10, double y=3.14, then print both",
+            guide: "int x = 10; double y = 3.14;"
+          }
+        }
+      },
+
+      // Drill 3: 처음부터 — 기본 프로그램 작성
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "처음부터 작성! 완전한 C++ 프로그램:\n정수 a=7, b=3을 선언하고 a+b, a-b, a*b를 각각 출력",
+          guide: "#include → main → 변수 선언 → cout 3번",
+          hint: "#include <iostream>\nusing namespace std;\nint main() {\n    int a=7, b=3;\n    cout<<a+b<<endl;\n    cout<<a-b<<endl;\n    cout<<a*b<<endl;\n    return 0;\n}",
+          template: null,
+          answer: "#include <iostream>\nusing namespace std;\n\nint main() {\n    int a = 7, b = 3;\n    cout << a + b << endl;\n    cout << a - b << endl;\n    cout << a * b << endl;\n    return 0;\n}",
+          alternateAnswers: [
+            "#include<iostream>\nusing namespace std;\nint main(){int a=7,b=3;cout<<a+b<<endl;cout<<a-b<<endl;cout<<a*b<<endl;return 0;}"
+          ],
+          expect: "10\n4\n21",
+          en: {
+            task: "Write from scratch! Complete C++ program:\nDeclare int a=7, b=3, then print a+b, a-b, a*b",
+            guide: "#include → main → declare variables → 3 cout statements"
+          }
+        }
+      },
+
+      // Drill 4: 처음부터 — cout + endl + 타입
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "처음부터 작성! 완전한 프로그램:\n이름(문자열), 나이(정수), 키(실수)를 변수에 저장하고 각각 출력",
+          guide: "string name; int age; double height; cout 3번",
+          hint: "string name = \"Alice\";\nint age = 18;\ndouble height = 165.5;\ncout << name << endl;\ncout << age << endl;\ncout << height << endl;",
+          template: null,
+          answer: "#include <iostream>\n#include <string>\nusing namespace std;\n\nint main() {\n    string name = \"Alice\";\n    int age = 18;\n    double height = 165.5;\n    cout << name << endl;\n    cout << age << endl;\n    cout << height << endl;\n    return 0;\n}",
+          alternateAnswers: [
+            "#include <iostream>\nusing namespace std;\nint main() {\n    string name = \"Alice\";\n    int age = 18;\n    double height = 165.5;\n    cout << name << endl;\n    cout << age << endl;\n    cout << height << endl;\n    return 0;\n}"
+          ],
+          expect: "Alice\n18\n165.5",
+          en: {
+            task: "Write from scratch! Complete program:\nStore a name (string), age (int), height (double), then print each",
+            guide: "string name; int age; double height; 3 cout statements"
+          }
         }
       },
 

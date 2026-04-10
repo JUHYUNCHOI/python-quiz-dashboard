@@ -60,16 +60,20 @@ export const lessonCpp14: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "점(.)으로 멤버에 접근해요!",
-            "파이썬의 object.attribute와 같은 방식이에요."
-          ],
+          lines: [],
           code: 'struct Point {\n    int x;\n    int y;\n};\n\nPoint p;\np.x = 3;\np.y = 7;\ncout << p.x + p.y << endl;',
           predict: {
             question: "출력 결과는?",
             options: ["3", "7", "10", "에러"],
             answer: 2,
             feedback: "p.x = 3, p.y = 7이니까 3 + 7 = 10이에요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["3", "7", "10", "Error"],
+              feedback: "p.x = 3 and p.y = 7, so 3 + 7 = 10!"
+            }
           }
         }
       },
@@ -263,16 +267,20 @@ export const lessonCpp14: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "클래스 안의 함수를 메서드라고 해요! 🛠️",
-            "파이썬의 def와 같아요."
-          ],
+          lines: [],
           code: 'class Counter {\npublic:\n    int count = 0;\n\n    void increment() {\n        count++;\n    }\n};\n\nCounter c;\nc.increment();\nc.increment();\nc.increment();\ncout << c.count << endl;',
           predict: {
             question: "출력 결과는?",
             options: ["0", "1", "3", "에러"],
             answer: 2,
             feedback: "increment()를 3번 호출했으니 count는 0 → 1 → 2 → 3이에요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["0", "1", "3", "Error"],
+              feedback: "increment() is called 3 times so count goes 0 → 1 → 2 → 3!"
+            }
           }
         }
       },
@@ -434,16 +442,20 @@ export const lessonCpp14: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "Rectangle 클래스를 만들 거예요! 📐",
-            "가로(width), 세로(height), 넓이 계산 메서드!"
-          ],
+          lines: [],
           code: 'class Rectangle {\npublic:\n    int width;\n    int height;\n\n    Rectangle(int w, int h) {\n        width = w;\n        height = h;\n    }\n\n    int area() {\n        return width * height;\n    }\n};\n\nRectangle r(4, 5);\ncout << r.area() << endl;',
           predict: {
             question: "출력 결과는?",
             options: ["9", "20", "45", "에러"],
             answer: 1,
             feedback: "width=4, height=5이니까 area() = 4 * 5 = 20이에요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["9", "20", "45", "Error"],
+              feedback: "width=4, height=5, so area() = 4 * 5 = 20!"
+            }
           }
         }
       },

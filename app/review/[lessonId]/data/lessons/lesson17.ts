@@ -27,7 +27,7 @@ export const lesson17: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["숫자 리스트도 순회 가능!"],
+        lines: [],
         code: "scores = [90, 85, 100]\ntotal = 0\nfor score in scores:\n    total += score\nprint(total)",
         predict: {
           question: "total의 결과는?",
@@ -35,13 +35,20 @@ export const lesson17: LessonData = {
           answer: 2,
           feedback: "90 + 85 + 100 = 275!"
         },
-        result: "275"
+        result: "275",
+        en: {
+          predict: {
+            question: "What is the result of total?",
+            options: ["90", "175", "275", "100"],
+            feedback: "90 + 85 + 100 = 275!"
+          }
+        }
       }
     },
     {
       type: "explain",
       content: {
-        lines: ["for문 안에서 조건문도 사용!"],
+        lines: [],
         code: "numbers = [1, 2, 3, 4, 5, 6]\nfor num in numbers:\n    if num % 2 == 0:\n        print(num)",
         predict: {
           question: "출력 결과는?",
@@ -49,7 +56,14 @@ export const lesson17: LessonData = {
           answer: 1,
           feedback: "짝수만 출력! 2, 4, 6이 나와요."
         },
-        result: "2\n4\n6"
+        result: "2\n4\n6",
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["1 3 5", "2 4 6", "1 2 3 4 5 6", "Error"],
+            feedback: "Only even numbers are printed! 2, 4, 6."
+          }
+        }
       }
     },
     {
@@ -160,7 +174,7 @@ export const lesson17: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["시작 번호를 바꿀 수도 있어!"],
+        lines: [],
         code: "fruits = [\"사과\", \"바나나\", \"포도\"]\nfor i, fruit in enumerate(fruits, 1):\n    print(f\"{i}번: {fruit}\")",
         predict: {
           question: "첫 번째 출력은?",
@@ -168,7 +182,14 @@ export const lesson17: LessonData = {
           answer: 1,
           feedback: "enumerate(리스트, 1)은 1부터 번호를 매겨요!"
         },
-        result: "1번: 사과\n2번: 바나나\n3번: 포도"
+        result: "1번: 사과\n2번: 바나나\n3번: 포도",
+        en: {
+          predict: {
+            question: "What is the first output?",
+            options: ["0번: 사과", "1번: 사과", "1번: 바나나", "Error"],
+            feedback: "enumerate(list, 1) starts numbering from 1!"
+          }
+        }
       }
     },
     {
@@ -263,7 +284,7 @@ export const lesson17: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["리스트 컴프리헨션으로 한 줄에!"],
+        lines: [],
         code: "numbers = [1, 2, 3, 4, 5]\ndoubled = [n * 2 for n in numbers]\nprint(doubled)",
         predict: {
           question: "결과는?",
@@ -271,13 +292,20 @@ export const lesson17: LessonData = {
           answer: 1,
           feedback: "각 n에 2를 곱한 새 리스트가 만들어져요!"
         },
-        result: "[2, 4, 6, 8, 10]"
+        result: "[2, 4, 6, 8, 10]",
+        en: {
+          predict: {
+            question: "What's the result?",
+            options: ["[1, 2, 3, 4, 5]", "[2, 4, 6, 8, 10]", "Error", "[1, 4, 9, 16, 25]"],
+            feedback: "A new list is created by multiplying each n by 2!"
+          }
+        }
       }
     },
     {
       type: "explain",
       content: {
-        lines: ["조건을 붙일 수도 있어!"],
+        lines: [],
         code: "numbers = [1, 2, 3, 4, 5, 6]\nevens = [n for n in numbers if n % 2 == 0]\nprint(evens)",
         predict: {
           question: "결과는?",
@@ -285,7 +313,14 @@ export const lesson17: LessonData = {
           answer: 1,
           feedback: "if 조건에 맞는 것만 새 리스트에 들어가요!"
         },
-        result: "[2, 4, 6]"
+        result: "[2, 4, 6]",
+        en: {
+          predict: {
+            question: "What's the result?",
+            options: ["[1, 3, 5]", "[2, 4, 6]", "[1, 2, 3, 4, 5, 6]", "Error"],
+            feedback: "Only elements that match the if condition are included in the new list!"
+          }
+        }
       }
     },
     {
@@ -359,6 +394,114 @@ export const lesson17: LessonData = {
         ],
         canDo: "리스트 컴프리헨션으로 깔끔하게 새 리스트를 만들 수 있어!",
         emoji: "✨"
+      }
+    },
+
+    // ==================== CHAPTER 4: 리스트+반복문 손에 익히기 ====================
+    {
+      type: "chapter",
+      content: {
+        num: 4,
+        title: "리스트+반복문 손에 익히기",
+        desc: "컴프리헨션, enumerate — 파이썬답게 쓰는 법 익히기!"
+      }
+    },
+
+    // Drill 1: 리스트 컴프리헨션 기본
+    {
+      type: "practice",
+      content: {
+        level: 1,
+        task: "리스트 [1, 2, 3, 4, 5]의 각 원소를 3배 한 새 리스트를 만들어 출력해요",
+        guide: "[x * 3 for x in nums]",
+        template: "nums = [1, 2, 3, 4, 5]\ntripled = [___ for x in nums]\nprint(tripled)",
+        blanksAnswer: ["x * 3"],
+        answer: "nums = [1, 2, 3, 4, 5]\ntripled = [x * 3 for x in nums]\nprint(tripled)",
+        expect: "[3, 6, 9, 12, 15]",
+        en: {
+          task: "Create a new list that triples each element of [1, 2, 3, 4, 5] and print it",
+          guide: "[x * 3 for x in nums]"
+        }
+      }
+    },
+
+    // Drill 2: 컴프리헨션 + 필터
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "1~10 중 3의 배수만 리스트 컴프리헨션으로 모아 출력해요",
+        guide: "[x for x in range(1, 11) if x % 3 == 0]",
+        template: "multiples = [x for x in range(1, 11) ___ x % ___ == 0]\nprint(multiples)",
+        blanksAnswer: ["if", "3"],
+        answer: "multiples = [x for x in range(1, 11) if x % 3 == 0]\nprint(multiples)",
+        expect: "[3, 6, 9]",
+        en: {
+          task: "Use list comprehension to collect multiples of 3 from 1 to 10 and print them",
+          guide: "[x for x in range(1, 11) if x % 3 == 0]"
+        }
+      }
+    },
+
+    // Drill 3: enumerate
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "enumerate로 1번부터 번호를 매겨 '1번: 철수' 형식으로 출력해요",
+        guide: "for i, name in enumerate(list, 1):",
+        template: "names = ['철수', '영희', '민수']\nfor ___, ___ in enumerate(names, ___):\n    print(f'{i}번: {name}')",
+        blanksAnswer: ["i", "name", "1"],
+        answer: "names = ['철수', '영희', '민수']\nfor i, name in enumerate(names, 1):\n    print(f'{i}번: {name}')",
+        expect: "1번: 철수\n2번: 영희\n3번: 민수",
+        en: {
+          task: "Use enumerate to print each name with a number starting from 1: '1번: 철수'",
+          guide: "for i, name in enumerate(list, 1):"
+        }
+      }
+    },
+
+    // Drill 4: 처음부터 — 점수 평균
+    {
+      type: "practice",
+      content: {
+        level: 3,
+        task: "처음부터 작성! 점수 리스트 [85, 92, 78, 95, 88]의 평균을 구해 출력해요\n(sum/len 사용 가능)",
+        guide: "total = sum(scores); avg = total / len(scores)",
+        hint: "scores = [85, 92, 78, 95, 88]\navg = sum(scores) / len(scores)\nprint(avg)",
+        template: null,
+        answer: "scores = [85, 92, 78, 95, 88]\navg = sum(scores) / len(scores)\nprint(avg)",
+        alternateAnswers: [
+          "scores=[85,92,78,95,88]\nprint(sum(scores)/len(scores))"
+        ],
+        expect: "87.6",
+        en: {
+          task: "Write from scratch! Calculate the average of [85, 92, 78, 95, 88] and print it\n(sum/len allowed)",
+          guide: "total = sum(scores); avg = total / len(scores)",
+          hint: "scores = [85, 92, 78, 95, 88]\navg = sum(scores) / len(scores)\nprint(avg)"
+        }
+      }
+    },
+
+    // Drill 5: 처음부터 — 짝수만 제곱
+    {
+      type: "practice",
+      content: {
+        level: 3,
+        task: "처음부터 작성! 1~10 중 짝수의 제곱값을 리스트 컴프리헨션으로 만들어 출력해요",
+        guide: "[x**2 for x in range(1, 11) if x % 2 == 0]",
+        hint: "result = [x**2 for x in range(1, 11) if x % 2 == 0]\nprint(result)",
+        template: null,
+        answer: "result = [x**2 for x in range(1, 11) if x % 2 == 0]\nprint(result)",
+        alternateAnswers: [
+          "result=[x**2 for x in range(1,11) if x%2==0]\nprint(result)"
+        ],
+        expect: "[4, 16, 36, 64, 100]",
+        en: {
+          task: "Write from scratch! Use list comprehension to create a list of squares of even numbers from 1 to 10",
+          guide: "[x**2 for x in range(1, 11) if x % 2 == 0]",
+          hint: "result = [x**2 for x in range(1, 11) if x % 2 == 0]\nprint(result)"
+        }
       }
     },
 

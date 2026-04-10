@@ -58,7 +58,7 @@ export const lesson14: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["while문 구조!"],
+        lines: [],
         code: "count = 1\nwhile count <= 3:\n    print(f'{count}번째')\n    count += 1",
         predict: {
           question: "몇 번 출력될까?",
@@ -66,7 +66,14 @@ export const lesson14: LessonData = {
           answer: 2,
           feedback: "count가 1→2→3, 3번 반복 후 4가 되면 종료!"
         },
-        result: "1번째\n2번째\n3번째"
+        result: "1번째\n2번째\n3번째",
+        en: {
+          predict: {
+            question: "How many times will it print?",
+            options: ["1 time", "2 times", "3 times", "Infinite"],
+            feedback: "count goes 1→2→3, then becomes 4 and the loop ends after 3 repetitions!"
+          }
+        }
       }
     },
     {
@@ -146,7 +153,7 @@ export const lesson14: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["break = 반복 즉시 탈출!"],
+        lines: [],
         code: "i = 0\nwhile True:\n    if i >= 3:\n        break\n    print(i)\n    i += 1",
         predict: {
           question: "출력 결과는?",
@@ -154,13 +161,20 @@ export const lesson14: LessonData = {
           answer: 0,
           feedback: "i가 3이 되면 break로 탈출!"
         },
-        result: "0\n1\n2"
+        result: "0\n1\n2",
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["0 1 2", "0 1 2 3", "Infinite output", "Error"],
+            feedback: "When i becomes 3, break exits the loop!"
+          }
+        }
       }
     },
     {
       type: "explain",
       content: {
-        lines: ["continue = 이번만 건너뛰기!"],
+        lines: [],
         code: "for i in range(5):\n    if i == 2:\n        continue\n    print(i)",
         predict: {
           question: "출력 결과는?",
@@ -168,7 +182,14 @@ export const lesson14: LessonData = {
           answer: 1,
           feedback: "i가 2일 때만 건너뛰고 나머지는 출력!"
         },
-        result: "0\n1\n3\n4"
+        result: "0\n1\n3\n4",
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["0 1 2 3 4", "0 1 3 4", "2", "0 1"],
+            feedback: "Only skips when i is 2, prints everything else!"
+          }
+        }
       }
     },
     {
@@ -277,6 +298,114 @@ export const lesson14: LessonData = {
         ],
         canDo: "while문으로 간단한 게임을 만들 수 있어!",
         emoji: "🎯"
+      }
+    },
+
+    // ==================== CHAPTER 5: while 손에 익히기 ====================
+    {
+      type: "chapter",
+      content: {
+        num: 5,
+        title: "while 손에 익히기",
+        desc: "while 조건, break, 카운트다운 — 손이 기억할 때까지!"
+      }
+    },
+
+    // Drill 1: while 기본 조건
+    {
+      type: "practice",
+      content: {
+        level: 1,
+        task: "n이 5 미만인 동안 출력하는 while문을 완성해요",
+        guide: "while 조건: + 변수 증가",
+        template: "n = 0\nwhile n ___ 5:\n    print(n)\n    n ___ 1",
+        blanksAnswer: ["<", "+="],
+        answer: "n = 0\nwhile n < 5:\n    print(n)\n    n += 1",
+        expect: "0\n1\n2\n3\n4",
+        en: {
+          task: "Complete the while loop that prints while n is less than 5",
+          guide: "while condition: + increment variable"
+        }
+      }
+    },
+
+    // Drill 2: while + break
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "0부터 시작해서 i가 3이 되면 break로 탈출하는 while True 루프를 완성해요",
+        guide: "while True: + if 조건: break",
+        template: "i = 0\nwhile ___:\n    if i == 3:\n        ___\n    print(i)\n    i += 1",
+        blanksAnswer: ["True", "break"],
+        answer: "i = 0\nwhile True:\n    if i == 3:\n        break\n    print(i)\n    i += 1",
+        expect: "0\n1\n2",
+        en: {
+          task: "Complete a while True loop that breaks when i equals 3",
+          guide: "while True: + if condition: break"
+        }
+      }
+    },
+
+    // Drill 3: 홀수만 출력
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "1~10 중 홀수만 while문으로 출력해요 (continue 사용)",
+        guide: "짝수면 continue, 홀수면 print",
+        template: "i = 1\nwhile i <= 10:\n    if i % 2 == ___:\n        i += 1\n        ___\n    print(i)\n    i += 1",
+        blanksAnswer: ["0", "continue"],
+        answer: "i = 1\nwhile i <= 10:\n    if i % 2 == 0:\n        i += 1\n        continue\n    print(i)\n    i += 1",
+        expect: "1\n3\n5\n7\n9",
+        en: {
+          task: "Print only odd numbers from 1 to 10 using while and continue",
+          guide: "continue for even, print for odd"
+        }
+      }
+    },
+
+    // Drill 4: 처음부터 — 합계가 100 넘을 때까지
+    {
+      type: "practice",
+      content: {
+        level: 3,
+        task: "처음부터 작성! 1부터 더해나가다가 합계가 100을 초과하는 순간 멈추고\n그때의 합계와 마지막으로 더한 숫자를 출력해요",
+        guide: "while total <= 100: total += i; i += 1",
+        hint: "total = 0\ni = 1\nwhile total <= 100:\n    total += i\n    i += 1\nprint(total)\nprint(i - 1)",
+        template: null,
+        answer: "total = 0\ni = 1\nwhile total <= 100:\n    total += i\n    i += 1\nprint(total)\nprint(i - 1)",
+        alternateAnswers: [
+          "total=0\ni=1\nwhile total<=100:\n    total+=i\n    i+=1\nprint(total)\nprint(i-1)"
+        ],
+        expect: "105\n14",
+        en: {
+          task: "Write from scratch! Keep adding numbers starting from 1 until the total exceeds 100\nPrint the total and the last number added",
+          guide: "while total <= 100: total += i; i += 1",
+          hint: "total = 0\ni = 1\nwhile total <= 100:\n    total += i\n    i += 1\nprint(total)\nprint(i - 1)"
+        }
+      }
+    },
+
+    // Drill 5: 처음부터 — 카운트다운 + 발사
+    {
+      type: "practice",
+      content: {
+        level: 3,
+        task: "처음부터 작성! 10에서 1까지 카운트다운하고 마지막에 '발사!'를 출력해요",
+        guide: "n = 10; while n >= 1: print(n); n -= 1; print('발사!')",
+        hint: "n = 10\nwhile n >= 1:\n    print(n)\n    n -= 1\nprint('발사!')",
+        template: null,
+        answer: "n = 10\nwhile n >= 1:\n    print(n)\n    n -= 1\nprint('발사!')",
+        alternateAnswers: [
+          "n=10\nwhile n>=1:\n    print(n)\n    n-=1\nprint('발사!')"
+        ],
+        expect: "10\n9\n8\n7\n6\n5\n4\n3\n2\n1\n발사!",
+        en: {
+          task: "Write from scratch! Count down from 10 to 1, then print '발사!'",
+          guide: "n = 10; while n >= 1: print(n); n -= 1; print('발사!')",
+          hint: "n = 10\nwhile n >= 1:\n    print(n)\n    n -= 1\nprint('발사!')"
+        }
       }
     },
 

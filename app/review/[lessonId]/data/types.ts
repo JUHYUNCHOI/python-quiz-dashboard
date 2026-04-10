@@ -22,6 +22,16 @@ export interface ExplainContent {
     answer: number;
     feedback?: string;  // 틀렸을 때 설명
   };
+  // optional English translations
+  en?: {
+    lines?: string[];
+    note?: string;
+    predict?: {
+      question?: string;
+      options?: string[];
+      feedback?: string;
+    };
+  };
 }
 
 export interface PracticeContent {
@@ -39,6 +49,10 @@ export interface PracticeContent {
     task?: string;
     guide?: string;
     hint?: string;
+    template?: string;
+    answer?: string;
+    alternateAnswers?: string[];
+    blanksAnswer?: string[];
   };
 }
 
@@ -85,6 +99,10 @@ export interface InterleavingContent {
     task?: string;
     guide?: string;
     hint?: string;
+    template?: string;
+    answer?: string;
+    alternateAnswers?: string[];
+    blanksAnswer?: string[];
   };
 }
 

@@ -4,7 +4,8 @@ export { stringTopic } from './string'
 export { arrayTopic } from './array'
 export { stackQueueTopic } from './stackqueue'
 export { hashTableTopic } from './hashtable'
-export { linkedListTopic } from './linkedlist'
+// linkedlist removed — not in USACO Bronze; topic removed from ALGO_TOPICS
+// export { linkedListTopic } from './linkedlist'
 export { prefixSumTopic } from './prefixsum'
 export { recursionTopic } from './recursion'
 export { sortingTopic } from './sorting'
@@ -26,7 +27,6 @@ import { stringTopic } from './string'
 import { arrayTopic } from './array'
 import { stackQueueTopic } from './stackqueue'
 import { hashTableTopic } from './hashtable'
-import { linkedListTopic } from './linkedlist'
 import { prefixSumTopic } from './prefixsum'
 import { recursionTopic } from './recursion'
 import { sortingTopic } from './sorting'
@@ -49,7 +49,6 @@ export const ALL_TOPICS: AlgoTopic[] = [
   arrayTopic,
   stackQueueTopic,
   hashTableTopic,
-  linkedListTopic,
   prefixSumTopic,
   recursionTopic,
   sortingTopic,

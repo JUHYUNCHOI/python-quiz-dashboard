@@ -1,8 +1,46 @@
 "use client"
 
-import React from "react"
+import React, { useState } from "react"
+import { createPortal } from "react-dom"
 import { CodeBlock } from "@/components/ui/code-block"
 import { useLanguage } from "@/contexts/language-context"
+
+// ── 클릭 시 확대되는 이미지 컴포넌트 ──
+function ZoomableImage({ src, alt }: { src: string; alt: string }) {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <>
+      <div
+        className="my-4 flex justify-center cursor-zoom-in"
+        onClick={() => setOpen(true)}
+        title="클릭하면 크게 볼 수 있어요"
+      >
+        <img src={src} alt={alt}
+          className="w-full rounded-xl border border-gray-200 shadow-sm"
+          style={{ maxWidth: '520px' }} />
+      </div>
+
+      {open && typeof window !== "undefined" && createPortal(
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+          onClick={() => setOpen(false)}
+        >
+          <div className="relative max-w-2xl w-full bg-white rounded-2xl shadow-2xl p-6" onClick={e => e.stopPropagation()}>
+            <button
+              onClick={() => setOpen(false)}
+              className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 text-lg font-bold"
+            >×</button>
+            <img src={src} alt={alt}
+              className="w-full rounded-xl"
+              style={{ maxHeight: '80vh', objectFit: 'contain' }} />
+          </div>
+        </div>,
+        document.body
+      )}
+    </>
+  )
+}
 
 // ============================================
 // 인라인 컬러 태그 맵: {pink:텍스트} → 핑크색
@@ -293,17 +331,8 @@ export function renderContent(content: string) {
     if (imgMatch) {
       const alt = imgMatch[1]
       const src = imgMatch[2]
-      const isSvg = src.endsWith('.svg')
       elements.push(
-        <div key={key++} className="my-4 flex justify-center">
-          {isSvg ? (
-            <object data={src} type="image/svg+xml" aria-label={alt}
-              className="max-w-full rounded-xl border border-gray-200 shadow-sm"
-              style={{ maxHeight: '400px', width: '100%' }} />
-          ) : (
-            <img src={src} alt={alt} className="max-w-full rounded-xl border border-gray-200 shadow-sm" style={{ maxHeight: '360px' }} />
-          )}
-        </div>
+        <ZoomableImage key={key++} src={src} alt={alt} />
       )
       i++
       continue

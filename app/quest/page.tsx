@@ -265,7 +265,7 @@ export default function QuestPage() {
   // ── Lock screen ──────────────────────────────
   if (loaded && !isUnlocked) {
     return (
-      <div className="min-h-screen bg-yellow-50">
+      <div className="min-h-screen bg-gray-50">
         <Header />
         <main className="max-w-lg mx-auto px-4 pt-8 pb-24">
           <div className="border-2 border-black rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white p-8 text-center mt-8">
@@ -334,7 +334,7 @@ export default function QuestPage() {
 
   // ── Main page ────────────────────────────────
   return (
-    <div className="min-h-screen bg-yellow-50">
+    <div className="min-h-screen bg-gray-50">
       <Header />
       <main className="max-w-3xl mx-auto px-4 pt-6 pb-28">
 
@@ -399,22 +399,23 @@ export default function QuestPage() {
 
                 {/* Contest-grouped problem list */}
                 {isExpanded && (
-                  <div className="border-t-2 border-black divide-y divide-gray-100">
+                  <div className="border-t-2 border-black">
                     {groups.map(({ contest, items }) => {
                       const groupSolved = items.filter(p => solvedSet.has(p.id)).length
+                      const allDone = groupSolved === items.length && items.length > 0
                       return (
-                        <div key={contest}>
+                        <div key={contest} className="border-b-2 border-black last:border-b-0">
                           {/* Contest header row */}
-                          <div className="flex items-center justify-between px-4 py-2 bg-gray-50">
-                            <span className="text-xs font-black text-gray-600 uppercase tracking-wider">
+                          <div className={`flex items-center justify-between px-4 py-2.5 ${allDone ? "bg-green-50 border-l-4 border-green-500" : "bg-amber-50 border-l-4 border-amber-400"}`}>
+                            <span className={`text-sm font-black uppercase tracking-wide ${allDone ? "text-green-800" : "text-amber-900"}`}>
                               {section.icon} {contest}
                             </span>
-                            <span className="text-xs font-bold text-gray-400">
+                            <span className={`text-xs font-bold px-2.5 py-1 rounded-full border ${allDone ? "bg-green-100 text-green-700 border-green-300" : groupSolved > 0 ? "bg-amber-100 text-amber-700 border-amber-300" : "bg-gray-100 text-gray-500 border-gray-200"}`}>
                               {groupSolved}/{items.length}
                             </span>
                           </div>
                           {/* Problems */}
-                          <div className="flex flex-col">
+                          <div className="flex flex-col divide-y divide-gray-100">
                             {items.map((problem, idx) => {
                               const isSolved = solvedSet.has(problem.id)
                               // Extract problem number from sub: "Bronze #2" → "#2", "P3" → "P3"
@@ -427,29 +428,29 @@ export default function QuestPage() {
                                   key={problem.id}
                                   href={`/quest/${problem.id}`}
                                   className={[
-                                    "flex items-center gap-3 px-4 py-3 transition-all group",
+                                    "flex items-center gap-3 px-5 py-3.5 transition-all group",
                                     isSolved
                                       ? "bg-green-50 hover:bg-green-100"
                                       : "bg-white hover:bg-amber-50",
-                                    "border-b border-gray-100 last:border-b-0",
                                   ].join(" ")}
                                 >
                                   {/* Problem number badge */}
-                                  <span className={`flex-shrink-0 text-xs font-black px-2 py-0.5 rounded-full ${badgeColor}`}>
+                                  <span className={`flex-shrink-0 text-xs font-black w-8 text-center px-1.5 py-0.5 rounded-full ${badgeColor}`}>
                                     {numLabel}
                                   </span>
                                   {/* Emoji */}
-                                  <span className="text-xl flex-shrink-0">{problem.emoji}</span>
+                                  <span className="text-xl flex-shrink-0 w-8 text-center">{problem.emoji}</span>
                                   {/* Title + sub */}
                                   <div className="flex-1 min-w-0">
                                     <p className={`font-bold text-sm truncate ${isSolved ? "text-green-700" : "text-gray-900 group-hover:text-amber-700"}`}>
                                       {problem.title}
                                     </p>
-                                    <p className="text-xs text-gray-400 font-medium">{problem.sub}</p>
                                   </div>
                                   {/* Done indicator / arrow */}
                                   <span className="flex-shrink-0 text-base">
-                                    {isSolved ? "✅" : <span className="text-gray-300 group-hover:text-amber-400 transition-colors">→</span>}
+                                    {isSolved
+                                      ? <span className="text-green-500 font-bold">✓</span>
+                                      : <span className="text-gray-300 group-hover:text-amber-400 transition-colors text-lg">→</span>}
                                   </span>
                                 </Link>
                               )

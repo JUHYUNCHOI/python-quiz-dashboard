@@ -17,7 +17,7 @@ export const lesson24: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["편의점 줄 서기를 생각해봐요!", "먼저 줄 선 사람이 먼저 계산하죠?"],
+        lines: [],
         code: `# 편의점 줄 서기
 줄 = ["철수", "영희", "민수"]
 # 철수가 먼저 왔으니 철수부터 계산!
@@ -30,7 +30,7 @@ print("먼저 온 사람:", 줄[0])`,
     {
       type: "explain",
       content: {
-        lines: ["스택 vs 큐 비교!"],
+        lines: [],
         code: `# 스택 (LIFO): 마지막에 넣은 게 먼저
 # 접시 쌓기 → 위에서부터 꺼냄
 stack = [1, 2, 3]
@@ -44,6 +44,13 @@ print("큐 개념: 1이 먼저 나가야 해!")`,
           options: ["3 (마지막에 넣은 것)", "1 (먼저 넣은 것)", "2 (중간)", "랜덤"],
           answer: 1,
           feedback: "FIFO! First In, First Out! 먼저 넣은 1이 먼저 나와요!"
+        },
+        en: {
+          predict: {
+            question: "Which comes out first from the queue [1, 2, 3]?",
+            options: ["3 (last inserted)", "1 (first inserted)", "2 (middle)", "Random"],
+            feedback: "FIFO! First In, First Out! The first inserted value 1 comes out first!"
+          }
         },
         result: "스택 pop: 3\n큐 개념: 1이 먼저 나가야 해!"
       }
@@ -114,7 +121,7 @@ print("큐 개념: 1이 먼저 나가야 해!")`,
     {
       type: "explain",
       content: {
-        lines: ["리스트의 pop(0)은 느려요!", "deque를 쓰면 빠르게 큐를 만들 수 있어요!"],
+        lines: [],
         code: `from collections import deque
 
 queue = deque()
@@ -136,7 +143,7 @@ print("남은 줄:", list(queue))`,
     {
       type: "explain",
       content: {
-        lines: ["왜 리스트 대신 deque를 쓸까?"],
+        lines: [],
         code: `# 리스트: pop(0)하면 나머지를 다 앞으로 이동 → 느림!
 # [1, 2, 3, 4, 5] → pop(0) → [2, 3, 4, 5] (4개 이동)
 
@@ -155,6 +162,18 @@ print(list(q))`,
           ],
           answer: 0,
           feedback: "deque는 양쪽 끝에서 O(1)으로 추가/삭제! 리스트 pop(0)은 O(n)이에요."
+        },
+        en: {
+          predict: {
+            question: "Why is deque's popleft() faster?",
+            options: [
+              "No need to shift remaining elements",
+              "Python has special optimization for it",
+              "Uses less memory than a list",
+              "Because it's sorted"
+            ],
+            feedback: "deque adds/removes from both ends in O(1)! List's pop(0) is O(n)."
+          }
         },
         result: "[2, 3, 4, 5]"
       }
@@ -254,7 +273,7 @@ print(list(q))`,
     {
       type: "explain",
       content: {
-        lines: ["프린터 대기열 시뮬레이션!", "먼저 보낸 문서가 먼저 인쇄돼요"],
+        lines: [],
         code: `from collections import deque
 
 printer = deque()
@@ -278,7 +297,7 @@ print("모든 인쇄 완료!")`,
     {
       type: "explain",
       content: {
-        lines: ["큐의 크기를 제한할 수도 있어요!"],
+        lines: [],
         code: `from collections import deque
 
 # 최대 3개까지만!
@@ -295,6 +314,13 @@ print("4 추가 후:", list(queue))`,
           options: ["에러 발생", "가장 오래된 1이 자동 삭제", "4가 무시됨", "[1, 2, 3, 4]"],
           answer: 1,
           feedback: "maxlen을 넘기면 가장 오래된 항목이 자동으로 빠져요!"
+        },
+        en: {
+          predict: {
+            question: "What happens when you add a 4th item to a queue with maxlen=3?",
+            options: ["Error occurs", "The oldest item (1) is automatically removed", "4 is ignored", "[1, 2, 3, 4]"],
+            feedback: "When maxlen is exceeded, the oldest item is automatically dropped!"
+          }
         },
         result: "꽉 찬 큐: [1, 2, 3]\n4 추가 후: [2, 3, 4]"
       }

@@ -76,7 +76,7 @@ print('안녕, 민수!')`,
     {
       type: "explain",
       content: {
-        lines: ["📞 함수는 호출해야 실행돼요!"],
+        lines: [],
         code: `def 안녕():
     print('Hi!')
 
@@ -87,6 +87,13 @@ print('안녕, 민수!')`,
           options: ["Hi!", "Hi!\nHi!", "아무것도 출력 안 됨"],
           answer: 1,
           feedback: "안녕()을 2번 호출했으니 2번 출력!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["Hi!", "Hi!\nHi!", "Nothing is printed"],
+            feedback: "안녕() is called twice, so it prints twice!"
+          }
         },
         result: "Hi!\nHi!"
       }
@@ -162,7 +169,7 @@ print('안녕, 민수!')`,
     {
       type: "explain",
       content: {
-        lines: ["📦 매개변수 = 함수에 전달하는 재료!"],
+        lines: [],
         code: `def 인사(이름):
     print(f'안녕, {이름}!')
 
@@ -172,6 +179,13 @@ print('안녕, 민수!')`,
           options: ["안녕, 이름!", "안녕, 민수!", "안녕, {이름}!"],
           answer: 1,
           feedback: "'민수'가 이름 자리에 들어가요!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["안녕, 이름!", "안녕, 민수!", "안녕, {이름}!"],
+            feedback: "'민수' goes into the name slot!"
+          }
         },
         result: "안녕, 민수!"
       }
@@ -205,7 +219,7 @@ print('안녕, 민수!')`,
     {
       type: "explain",
       content: {
-        lines: ["📦📦 매개변수 여러 개도 가능!"],
+        lines: [],
         code: `def 소개(이름, 나이):
     print(f'저는 {이름}, {나이}살!')
 
@@ -215,6 +229,13 @@ print('안녕, 민수!')`,
           options: ["저는 영희, 14살!", "저는 이름, 나이살!", "에러"],
           answer: 0,
           feedback: "이름에 '영희', 나이에 14가 들어가요!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["저는 영희, 14살!", "저는 이름, 나이살!", "Error"],
+            feedback: "'영희' goes into the name slot, 14 goes into the age slot!"
+          }
         },
         result: "저는 영희, 14살!"
       }
@@ -268,7 +289,7 @@ print('안녕, 민수!')`,
     {
       type: "explain",
       content: {
-        lines: ["🎁 return = 결과를 돌려줘!"],
+        lines: [],
         code: `def 더하기(a, b):
     return a + b
 
@@ -279,6 +300,13 @@ print(결과)`,
           options: ["3 + 5", "8", "a + b"],
           answer: 1,
           feedback: "3 + 5 = 8이 return되어 결과에 저장!"
+        },
+        en: {
+          predict: {
+            question: "What's the output?",
+            options: ["3 + 5", "8", "a + b"],
+            feedback: "3 + 5 = 8 is returned and stored in the variable!"
+          }
         },
         result: "8"
       }
@@ -555,6 +583,116 @@ print('안녕!')`,
       }
     },
     
+    // ============================================
+    // Chapter 7: 함수 손에 익히기
+    // ============================================
+    {
+      type: "chapter",
+      content: {
+        num: 7,
+        title: "함수 손에 익히기",
+        desc: "def, 매개변수, return — 눈 감고도 쓸 수 있게!"
+      }
+    },
+
+    // Drill 1: 함수 선언 구조
+    {
+      type: "practice",
+      content: {
+        level: 1,
+        task: "이름을 받아 '안녕, [이름]!'을 출력하는 greet(name) 함수를 완성해요",
+        guide: "def 함수이름(매개변수): + 들여쓰기 + print",
+        template: "___ greet(name):\n    print(f'안녕, {___}!')\n\ngreet('민수')",
+        blanksAnswer: ["def", "name"],
+        answer: "def greet(name):\n    print(f'안녕, {name}!')\n\ngreet('민수')",
+        expect: "안녕, 민수!",
+        en: {
+          task: "Complete a greet(name) function that prints '안녕, [name]!'",
+          guide: "def funcname(param): + indent + print"
+        }
+      }
+    },
+
+    // Drill 2: return 값
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "두 수를 받아 더 큰 수를 반환하는 bigger(a, b) 함수를 완성해요",
+        guide: "if a > b: return a else: return b",
+        template: "def bigger(a, b):\n    if a > b:\n        ___ a\n    ___:\n        return b\n\nprint(bigger(7, 3))",
+        blanksAnswer: ["return", "else"],
+        answer: "def bigger(a, b):\n    if a > b:\n        return a\n    else:\n        return b\n\nprint(bigger(7, 3))",
+        expect: "7",
+        en: {
+          task: "Complete the bigger(a, b) function that returns the larger of two numbers",
+          guide: "if a > b: return a else: return b"
+        }
+      }
+    },
+
+    // Drill 3: 함수 + 반복문 조합
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "리스트의 합계를 반환하는 my_sum(nums) 함수를 완성해요",
+        guide: "total = 0; for x in nums: total += x; return total",
+        template: "def my_sum(nums):\n    total = ___\n    for x in nums:\n        total ___ x\n    return ___\n\nprint(my_sum([1, 2, 3, 4, 5]))",
+        blanksAnswer: ["0", "+=", "total"],
+        answer: "def my_sum(nums):\n    total = 0\n    for x in nums:\n        total += x\n    return total\n\nprint(my_sum([1, 2, 3, 4, 5]))",
+        expect: "15",
+        en: {
+          task: "Complete the my_sum(nums) function that returns the sum of a list",
+          guide: "total = 0; for x in nums: total += x; return total"
+        }
+      }
+    },
+
+    // Drill 4: 처음부터 — is_even 함수
+    {
+      type: "practice",
+      content: {
+        level: 3,
+        task: "처음부터 작성! 정수를 받아 짝수면 True, 홀수면 False를 반환하는 is_even(n) 함수를 만들고\nis_even(4)와 is_even(7) 결과를 출력해요",
+        guide: "def is_even(n): return n % 2 == 0",
+        hint: "def is_even(n):\n    return n % 2 == 0\n\nprint(is_even(4))\nprint(is_even(7))",
+        template: null,
+        answer: "def is_even(n):\n    return n % 2 == 0\n\nprint(is_even(4))\nprint(is_even(7))",
+        alternateAnswers: [
+          "def is_even(n):\n    if n%2==0:\n        return True\n    return False\n\nprint(is_even(4))\nprint(is_even(7))"
+        ],
+        expect: "True\nFalse",
+        en: {
+          task: "Write from scratch! Create is_even(n) that returns True for even, False for odd\nPrint results for is_even(4) and is_even(7)",
+          guide: "def is_even(n): return n % 2 == 0",
+          hint: "def is_even(n):\n    return n % 2 == 0\n\nprint(is_even(4))\nprint(is_even(7))"
+        }
+      }
+    },
+
+    // Drill 5: 처음부터 — 계산기
+    {
+      type: "practice",
+      content: {
+        level: 3,
+        task: "처음부터 작성! add(a,b), multiply(a,b) 함수를 만들고\nadd(3, 5)와 multiply(4, 6) 결과를 출력해요",
+        guide: "def add(a,b): return a+b; def multiply(a,b): return a*b",
+        hint: "def add(a, b):\n    return a + b\n\ndef multiply(a, b):\n    return a * b\n\nprint(add(3, 5))\nprint(multiply(4, 6))",
+        template: null,
+        answer: "def add(a, b):\n    return a + b\n\ndef multiply(a, b):\n    return a * b\n\nprint(add(3, 5))\nprint(multiply(4, 6))",
+        alternateAnswers: [
+          "def add(a,b):return a+b\ndef multiply(a,b):return a*b\nprint(add(3,5))\nprint(multiply(4,6))"
+        ],
+        expect: "8\n24",
+        en: {
+          task: "Write from scratch! Create add(a,b) and multiply(a,b) functions\nPrint results of add(3, 5) and multiply(4, 6)",
+          guide: "def add(a,b): return a+b; def multiply(a,b): return a*b",
+          hint: "def add(a, b):\n    return a + b\n\ndef multiply(a, b):\n    return a * b\n\nprint(add(3, 5))\nprint(multiply(4, 6))"
+        }
+      }
+    },
+
     // 완료
     {
       type: "done",
