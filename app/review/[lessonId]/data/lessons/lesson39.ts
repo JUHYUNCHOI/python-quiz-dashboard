@@ -12,31 +12,7 @@ export const lesson39: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["🎮 이런 걸 만들 거야!"],
-        code: `# === RPG 게임 ===\n# 1. 새 게임\n# 2. 이어하기 (불러오기)\n# 3. 저장하기\n# 4. 몬스터 잡기\n# 5. 상태 보기\n# 6. 종료\n\n# save.txt 파일 형식:\n# 용사       ← 이름\n# 85        ← HP\n# 25        ← 공격력\n# 3         ← 레벨\n# 45        ← 경험치`,
-        result: "파일로 게임 데이터를 저장/불러오기!",
-        note: "try-except + with open 조합!"
-      }
-    },
-    {
-      type: "explain",
-      content: {
-        lines: ["📦 캐릭터 데이터 구조"],
-        code: `import random\n\n캐릭터 = {\n    '이름': '',\n    'HP': 100,\n    '공격력': 25,\n    '레벨': 1,\n    '경험치': 0\n}`,
-        result: "딕셔너리 = 여러 데이터를 하나로!",
-        note: "이 데이터를 파일에 저장할 거야!"
-      }
-    },
-
-    // Chapter 2: 저장
-    {
-      type: "chapter",
-      content: { num: 2, title: "저장 기능", desc: "캐릭터 데이터를 파일에 저장!" }
-    },
-    {
-      type: "explain",
-      content: {
-        lines: ["💾 저장 = 파일에 쓰기!"],
+        lines: [],
         code: `def 저장하기():\n    with open('save.txt', 'w') as 파일:\n        파일.write(캐릭터['이름'] + '\\n')\n        파일.write(str(캐릭터['HP']) + '\\n')\n        파일.write(str(캐릭터['공격력']) + '\\n')\n    print('저장 완료!')`,
         result: "숫자는 str()로 변환해서 저장!",
         note: "'w' 모드 + \\n으로 줄바꿈!"
@@ -45,7 +21,7 @@ export const lesson39: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["🧠 저장 후 파일 내용은?"],
+        lines: [],
         code: `캐릭터 = {'이름': '용사', 'HP': 85}\n\nwith open('save.txt', 'w') as f:\n    f.write(캐릭터['이름'] + '\\n')\n    f.write(str(캐릭터['HP']))`,
         predict: {
           question: "save.txt 내용은?",
@@ -85,7 +61,7 @@ export const lesson39: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["📂 불러오기 = 파일 읽기 + 에러 처리!"],
+        lines: [],
         code: `def 불러오기():\n    try:\n        with open('save.txt', 'r') as 파일:\n            줄들 = 파일.readlines()\n            캐릭터['이름'] = 줄들[0].strip()\n            캐릭터['HP'] = int(줄들[1].strip())\n        print(f'{캐릭터["이름"]}님, 다시 오셨군요!')\n    except FileNotFoundError:\n        print('세이브 파일이 없어요!')`,
         result: "try-except로 파일 없음 처리!",
         note: "strip()은 줄바꿈(\\n) 제거!"
@@ -94,7 +70,7 @@ export const lesson39: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["🧠 세이브 파일이 없을 때?"],
+        lines: [],
         code: `try:\n    with open('없는파일.txt', 'r') as f:\n        print('불러오기 성공!')\nexcept FileNotFoundError:\n    print('세이브 없음!')\nprint('게임 시작!')`,
         predict: {
           question: "출력 결과는?",

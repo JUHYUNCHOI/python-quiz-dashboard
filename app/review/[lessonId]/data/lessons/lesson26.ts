@@ -168,7 +168,7 @@ print(f"전체: {scores}")`,
     {
       type: "explain",
       content: {
-        lines: ["출석 체크 (중복 방지) → 집합!"],
+        lines: [],
         code: `attendance = set()
 
 attendance.add("철수")

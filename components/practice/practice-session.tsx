@@ -361,6 +361,7 @@ export function PracticeSession({
 
   const startSet = useCallback((setNum: number, problems?: PracticeProblem[]) => {
     const p = problems ?? getSetProblems(cluster.problems, setNum)
+    setCurrentSet(setNum)
     setRoundProblems(p)
     setIndex(0)
     setPassedInRound(new Set())

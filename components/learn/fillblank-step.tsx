@@ -47,6 +47,21 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
   const [lastFilledId, setLastFilledId] = useState<number | null>(null) // 방금 채운 빈칸 flash용
   const optionsRef = useRef<HTMLDivElement>(null)
 
+  // localStorage에서 진행 중인 답변 복원 (마운트 시)
+  useEffect(() => {
+    if (isCompleted) return
+    try {
+      const saved = localStorage.getItem(`fillblank-progress-${step.id}`)
+      if (saved) {
+        const parsed = JSON.parse(saved) as Record<number, string>
+        setFilledValues(parsed)
+        // 다음 빈 빈칸으로 커서 이동
+        const nextEmpty = blanks.findIndex(b => !(b.id in parsed))
+        setCurrentBlankIndex(nextEmpty === -1 ? 0 : nextEmpty)
+      }
+    } catch { /* ignore */ }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
   // step이 바뀌면 상태 초기화
   useEffect(() => {
     setFilledValues({})
@@ -55,6 +70,7 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
     setIsCorrect(false)
     setWrongBlankIds(new Set())
     setShowAckButton(false)
+    localStorage.removeItem(`fillblank-progress-${step.id}`)
   }, [step.id]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // 이미 완료된 스텝으로 돌아왔을 때 정답 자동 표시
@@ -84,6 +100,7 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
     const blankId = blanks[currentBlankIndex].id
     const newFilled = { ...filledValues, [blankId]: value }
     setFilledValues(newFilled)
+    try { localStorage.setItem(`fillblank-progress-${step.id}`, JSON.stringify(newFilled)) } catch { /* ignore */ }
 
     // 방금 채운 빈칸 flash 애니메이션
     setLastFilledId(blankId)
@@ -113,6 +130,7 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
     })
     setWrongBlankIds(wrong)
     setIsSubmitted(true)
+    try { localStorage.removeItem(`fillblank-progress-${step.id}`) } catch { /* ignore */ }
 
     if (wrong.size === 0) {
       setIsCorrect(true)
@@ -130,6 +148,7 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
     setIsCorrect(false)
     setWrongBlankIds(new Set())
     setShowAckButton(false)
+    try { localStorage.removeItem(`fillblank-progress-${step.id}`) } catch { /* ignore */ }
   }
 
   const handleAcknowledge = () => {

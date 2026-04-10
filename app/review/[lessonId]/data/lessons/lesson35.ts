@@ -21,7 +21,7 @@ export const lesson35: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["📏 len() = 몇 개? sum() = 다 더하면?"],
+        lines: [],
         code: `과자 = ['새우깡', '포카칩', '꼬깔콘']
 점수 = [80, 90, 70]
 
@@ -37,7 +37,7 @@ print(sum(점수) / len(점수))  # 평균!`,
     {
       type: "explain",
       content: {
-        lines: ["🧠 sum() 시작값 예측!"],
+        lines: [],
         code: `print(sum([1, 2, 3], 100))`,
         predict: {
           question: "출력 결과는?",
@@ -96,7 +96,7 @@ print(sum(점수) / len(점수))  # 평균!`,
     {
       type: "explain",
       content: {
-        lines: ["🔝 가장 큰 거! 가장 작은 거!"],
+        lines: [],
         code: `점수 = [85, 92, 78, 95, 88]
 
 print(f'1등: {max(점수)}점')
@@ -111,7 +111,7 @@ print(f'점수 차이: {max(점수) - min(점수)}점')`,
     {
       type: "explain",
       content: {
-        lines: ["🧠 문자열도 가능?"],
+        lines: [],
         code: `print(max('apple', 'banana', 'cat'))
 print(min('apple', 'banana', 'cat'))`,
         predict: {
@@ -171,7 +171,7 @@ print(min('apple', 'banana', 'cat'))`,
     {
       type: "explain",
       content: {
-        lines: ["📊 줄 세우기! 키 순? 이름 순?"],
+        lines: [],
         code: `숫자 = [3, 1, 4, 1, 5, 9]
 
 # 작은 순 (오름차순)
@@ -188,7 +188,7 @@ print(sorted(숫자, reverse=True))`,
     {
       type: "explain",
       content: {
-        lines: ["🧠 점수로 줄 세우기!"],
+        lines: [],
         code: `학생 = [('철수', 85), ('영희', 92), ('민수', 78)]
 결과 = sorted(학생, key=lambda x: x[1])
 print(결과[0][0])`,
@@ -249,7 +249,7 @@ print(결과[0][0])`,
     {
       type: "explain",
       content: {
-        lines: ["🏭 공장처럼 한 번에 변환!"],
+        lines: [],
         code: `# 문자열 숫자를 진짜 숫자로!
 # '1', '2', '3' → 1, 2, 3
 
@@ -267,7 +267,7 @@ print(sum(숫자))`,
     {
       type: "explain",
       content: {
-        lines: ["🧠 map() 예측!"],
+        lines: [],
         code: `숫자 = ['10', '20', '30']
 결과 = list(map(int, 숫자))
 print(sum(결과))`,
@@ -349,7 +349,7 @@ print(sum(결과))`,
     {
       type: "explain",
       content: {
-        lines: ["🔍 filter() = 조건에 맞는 것만 골라!"],
+        lines: [],
         code: `숫자 = [1, -2, 3, -4, 5]
 
 # 양수만 골라!
@@ -364,7 +364,7 @@ print(양수)`,
     {
       type: "explain",
       content: {
-        lines: ["🧠 filter() 예측!"],
+        lines: [],
         code: `숫자 = [5, 12, 8, 3, 15, 7]
 결과 = list(filter(lambda x: x >= 10, 숫자))
 print(결과)`,

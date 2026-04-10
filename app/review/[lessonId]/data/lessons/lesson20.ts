@@ -27,7 +27,7 @@ export const lesson20: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["키로 값을 꺼내는 2가지 방법!"],
+        lines: [],
         code: "student = {'이름': '민수', '나이': 15}\n\n# 방법 1: 대괄호\nprint(student['이름'])\n\n# 방법 2: get()\nprint(student.get('나이'))",
         predict: {
           question: "출력 결과는?",
@@ -148,7 +148,7 @@ export const lesson20: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["기존 값 수정하기!"],
+        lines: [],
         code: "student = {'이름': '민수', '나이': 15}\nstudent['나이'] = 16\nprint(student)",
         predict: {
           question: "나이가 어떻게 될까?",
@@ -287,7 +287,7 @@ export const lesson20: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["values()로 값만 순회!"],
+        lines: [],
         code: "scores = {'국어': 90, '영어': 85, '수학': 95}\nfor score in scores.values():\n    print(score)",
         predict: {
           question: "출력 결과는?",
@@ -426,7 +426,7 @@ export const lesson20: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["in 키워드로 키가 있는지 확인!"],
+        lines: [],
         code: "scores = {'국어': 90, '영어': 85}\n\nprint('국어' in scores)\nprint('과학' in scores)",
         predict: {
           question: "출력 결과는?",

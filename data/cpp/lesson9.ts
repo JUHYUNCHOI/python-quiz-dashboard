@@ -252,17 +252,20 @@ for i in range(5):
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ 배열로 평균 구하기!",
-          content: `시험 점수 5개를 배열에 저장하고 합계와 평균을 계산해봐요!
+          content: `점수 5개를 입력받아 합계와 평균을 출력하세요.
 
-{!teal} 사용할 점수: **90, 85, 78, 92, 88**
-
-평균은 소수점까지 정확하게 출력해야 해요.`,
+입력: 정수 5개 (한 줄에 하나씩)
+출력: 합계, 평균 (소수점 포함)`,
           code: `#include <iostream>
 using namespace std;
 
 int main() {
-    int scores[5] = {90, 85, 78, 92, 88};
+    int scores[5];
     int sum = 0;
+
+    for (int i = 0; i < 5; i++) {
+        cin >> scores[i];
+    }
 
     for (int i = 0; i < 5; i++) {
         sum += scores[i];
@@ -273,6 +276,27 @@ int main() {
 
     return 0;
 }`,
+          initialCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int scores[5];
+    int sum = 0;
+
+    for (int i = 0; i < 5; i++) {
+        cin >> ___;
+    }
+
+    for (int i = 0; i < 5; i++) {
+        sum += ___;
+    }
+
+    cout << "합계: " << sum << endl;
+    cout << "평균: " << ___ << endl;
+
+    return 0;
+}`,
+          stdin: `90\n85\n78\n92\n88`,
           expectedOutput: `합계: 433
 평균: 86.6`
         },
@@ -330,23 +354,12 @@ int main() {
         },
         {
           id: "ch1-q2",
-          type: "quiz",
+          type: "fillblank" as const,
           title: "배열에 cin 입력받기!",
-          content: `3개짜리 배열에 cin으로 값을 받으려면 빈칸에 뭐가 들어가야 할까요?
-
-\`\`\`cpp
-int arr[3];
-for (int i = 0; i < 3; i++) {
-    _____ >> arr[i];
-}
-\`\`\``,
-          reviewHint: `키보드 입력을 받는 C++ 문법:
-- **출력**: \`cout << 값\`
-- **입력**: \`cin >> 변수\`
-
-"cin" = "character input"의 줄임말이에요.`,
-          options: ["cout", "cin", "input", "scanf"],
-          answer: 1,
+          code: "int arr[3];\nfor (int i = 0; i < 3; i++) {\n    ___ >> arr[i];\n}",
+          fillBlanks: [
+            { id: 0, answer: "cin", options: ["cout", "cin", "input", "scanf"] }
+          ],
           explanation: "cin으로 값을 입력받아 arr[i]에 저장해요! cout은 출력, cin은 입력이에요."
         }
       ]

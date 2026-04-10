@@ -19,10 +19,7 @@ export const lessonCpp20: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "대회에서 가장 먼저 치는 코드가 있어요!",
-            "이걸 '템플릿(template)'이라고 해요. 매번 복사해서 써요!"
-          ],
+          lines: [],
           code: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    // 여기서부터 풀이 시작!\n\n    return 0;\n}',
           note: "bits/stdc++.h = 모든 헤더를 한 번에 포함! (대회 전용)"
         }
@@ -32,10 +29,7 @@ export const lessonCpp20: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "bits/stdc++.h는 iostream, vector, algorithm 등을 전부 포함해요!",
-            "대회에서만 쓰고, 실제 프로젝트에서는 안 써요."
-          ],
+          lines: [],
           code: '#include <bits/stdc++.h>  // 이것 하나면 끝!\n// 아래 전부 필요 없음:\n// #include <iostream>\n// #include <vector>\n// #include <algorithm>\n// #include <map>',
           predict: {
             question: "bits/stdc++.h를 실제 프로젝트에서도 쓸까요?",
@@ -205,66 +199,7 @@ export const lessonCpp20: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "대회에서 long long을 자주 쓰는데, 너무 길어요!",
-            "typedef나 using으로 줄여서 쓸 수 있어요."
-          ],
-          code: '// 방법 1: typedef\ntypedef long long ll;\ntypedef vector<int> vi;\ntypedef pair<int,int> pii;\n\n// 방법 2: using (더 현대적)\nusing ll = long long;\nusing vi = vector<int>;\nusing pii = pair<int,int>;',
-          note: "ll, vi, pii는 대회에서 아주 자주 쓰는 줄임말이에요!"
-        }
-      },
-
-      // 퀴즈: typedef
-      {
-        type: "quiz",
-        content: {
-          question: "typedef long long ll; 이후에 ll n; 은 무슨 뜻일까요?",
-          options: [
-            "long n; 과 같다",
-            "long long n; 과 같다",
-            "int n; 과 같다",
-            "에러가 난다"
-          ],
-          answer: 1,
-          explanation: "typedef long long ll; 은 ll을 long long의 별명으로 만들어요! ll n = long long n;",
-          en: {
-            question: "After typedef long long ll;, what does ll n; mean?",
-            options: [
-              "Same as long n;",
-              "Same as long long n;",
-              "Same as int n;",
-              "Causes an error"
-            ],
-            explanation: "typedef long long ll; creates ll as an alias for long long! ll n = long long n"
-          }
-        }
-      },
-
-      // Lv.1: typedef 빈칸
-      {
-        type: "practice",
-        content: {
-          level: 1,
-          task: "long long을 ll로 줄여봐요!",
-          guide: "typedef 원래타입 별명; 형태!",
-          template: "typedef long long ___;",
-          answer: "ll",
-          expect: "typedef long long ll;",
-          en: {
-            task: "Shorten long long to ll!",
-            guide: "Use the form typedef original_type alias!"
-          }
-        }
-      },
-
-      // 매크로 설명
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "#define으로 자주 쓰는 코드를 매크로로 만들어요!",
-            "FOR문, MIN/MAX 등을 줄여서 쓸 수 있어요."
-          ],
+          lines: [],
           code: '#define FOR(i, n) for(int i = 0; i < (n); i++)\n#define pb push_back\n#define all(v) (v).begin(), (v).end()\n\nint main() {\n    vector<int> v;\n    FOR(i, 5) v.pb(i);  // 0,1,2,3,4 추가\n    sort(all(v));        // 전체 정렬\n}',
           note: "#define은 코드를 치환해요! pb → push_back으로 바뀜"
         }
@@ -274,10 +209,7 @@ export const lessonCpp20: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "#define은 단순 텍스트 치환이에요!",
-            "컴파일 전에 바뀌어요."
-          ],
+          lines: [],
           code: '#define SQ(x) ((x)*(x))\n\ncout << SQ(3) << "\\n";\ncout << SQ(2+1) << "\\n";',
           predict: {
             question: "두 cout의 출력은?",
@@ -410,10 +342,7 @@ export const lessonCpp20: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "이제 USACO Bronze 문제를 풀 때 쓸 완전한 템플릿을 만들어요!",
-            "이 템플릿만 외우면 바로 문제 풀이에 집중할 수 있어요!"
-          ],
+          lines: [],
           code: '#include <bits/stdc++.h>\nusing namespace std;\n\ntypedef long long ll;\ntypedef vector<int> vi;\n#define pb push_back\n#define all(v) (v).begin(), (v).end()\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(NULL);\n    freopen("problem.in", "r", stdin);\n    freopen("problem.out", "w", stdout);\n\n    // 풀이 시작\n\n    return 0;\n}',
           predict: {
             question: "이 템플릿에서 freopen은 왜 쓰나요?",

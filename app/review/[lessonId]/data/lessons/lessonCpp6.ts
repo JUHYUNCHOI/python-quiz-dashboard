@@ -19,11 +19,7 @@ export const lessonCpp6: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "파이썬에서 if문을 썼던 거 기억나요? 🤔",
-            "C++도 비슷하지만, 콜론(:) 대신 중괄호 {}를 써요!",
-            "그리고 조건은 반드시 괄호 () 안에 넣어요!"
-          ],
+          lines: [],
           code: '// 파이썬\n// if score >= 90:\n//     print("A")\n\n// C++\n#include <iostream>\nusing namespace std;\n\nint main() {\n    int score = 95;\n    if (score >= 90) {\n        cout << "A" << endl;\n    }\n    return 0;\n}',
           result: "A",
           note: "파이썬: 콜론 + 들여쓰기 → C++: 괄호() + 중괄호{}"
@@ -34,10 +30,7 @@ export const lessonCpp6: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "if 조건이 거짓이면 else가 실행돼요!",
-            "파이썬과 똑같은 개념이에요 😊"
-          ],
+          lines: [],
           code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    int age = 15;\n    if (age >= 18) {\n        cout << "성인" << endl;\n    } else {\n        cout << "미성년" << endl;\n    }\n    return 0;\n}',
           predict: {
             question: "age가 15일 때 출력은?",
@@ -208,25 +201,7 @@ export const lessonCpp6: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "조건이 3개 이상이면 else if를 써요! 🔀",
-            "파이썬의 elif와 같은 역할이에요!",
-            "C++에서는 else if 두 단어로 써요."
-          ],
-          code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    int score = 75;\n    if (score >= 90) {\n        cout << "A" << endl;\n    } else if (score >= 80) {\n        cout << "B" << endl;\n    } else if (score >= 70) {\n        cout << "C" << endl;\n    } else {\n        cout << "F" << endl;\n    }\n    return 0;\n}',
-          result: "C",
-          note: "파이썬 elif → C++ else if (두 단어!)"
-        }
-      },
-
-      // 예측 퀴즈
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "else if는 위에서부터 순서대로 검사해요!",
-            "처음 참인 곳에서 멈추고, 나머지는 건너뛰어요."
-          ],
+          lines: [],
           code: 'int x = 85;\nif (x >= 90) {\n    cout << "A" << endl;\n} else if (x >= 80) {\n    cout << "B" << endl;\n} else if (x >= 70) {\n    cout << "C" << endl;\n} else {\n    cout << "F" << endl;\n}',
           predict: {
             question: "x가 85일 때 출력은?",
@@ -456,6 +431,96 @@ export const lessonCpp6: LessonData = {
         content: {
           message: "성적 등급 판별기 완성! 조건문 마스터!",
           emoji: "🏆"
+        }
+      },
+
+      // ==================== CHAPTER 4: 조건문 손에 익히기 ====================
+      {
+        type: "chapter",
+        content: {
+          num: 4,
+          title: "조건문 손에 익히기",
+          desc: "if / else if / else 패턴을 손이 기억할 때까지!"
+        }
+      },
+
+      // Drill 1: 양수/음수/0 판별
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "정수 n이 양수면 \"positive\", 음수면 \"negative\", 0이면 \"zero\" 출력",
+          guide: "if / else if / else 3단계",
+          template: "int n = -5;\nif (n ___ 0) {\n    cout << \"positive\" << endl;\n} else if (n ___ 0) {\n    cout << \"negative\" << endl;\n} else {\n    cout << \"zero\" << endl;\n}",
+          blanksAnswer: ["> ", "< "],
+          alternateAnswers: [],
+          answer: "int n = -5;\nif (n > 0) {\n    cout << \"positive\" << endl;\n} else if (n < 0) {\n    cout << \"negative\" << endl;\n} else {\n    cout << \"zero\" << endl;\n}",
+          expect: "negative",
+          en: {
+            task: "Print \"positive\", \"negative\", or \"zero\" based on integer n",
+            guide: "Use if / else if / else with 3 branches"
+          }
+        }
+      },
+
+      // Drill 2: 범위 조건 (and 연산자)
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "score가 90 이상이면 A, 80 이상이면 B, 70 이상이면 C, 그 외 F 출력",
+          guide: "if (score >= 90) ... else if (score >= 80) ...",
+          template: "int score = 85;\nif (score >= 90) cout << \"A\";\nelse if (score ___ 80) cout << \"B\";\nelse if (score ___ 70) cout << \"C\";\nelse cout << \"F\";",
+          blanksAnswer: [">= ", ">= "],
+          alternateAnswers: [],
+          answer: "int score = 85;\nif (score >= 90) cout << \"A\";\nelse if (score >= 80) cout << \"B\";\nelse if (score >= 70) cout << \"C\";\nelse cout << \"F\";",
+          expect: "B",
+          en: {
+            task: "Print A (90+), B (80+), C (70+), or F for the given score",
+            guide: "if (score >= 90) ... else if (score >= 80) ..."
+          }
+        }
+      },
+
+      // Drill 3: 처음부터 — 홀짝 + 범위
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "처음부터 작성! n을 입력받아 짝수면 \"even\", 홀수면 \"odd\" 출력하고\n추가로 n이 10보다 크면 \"big\", 아니면 \"small\"도 출력해요",
+          guide: "cin → if (n%2==0) → if (n>10)",
+          hint: "cin >> n;\nif (n % 2 == 0) cout << \"even\";\nelse cout << \"odd\";\nif (n > 10) cout << \" big\";\nelse cout << \" small\";",
+          template: null,
+          answer: "int n;\ncin >> n;\nif (n % 2 == 0) cout << \"even\";\nelse cout << \"odd\";\ncout << endl;\nif (n > 10) cout << \"big\";\nelse cout << \"small\";\ncout << endl;",
+          alternateAnswers: [
+            "int n;\ncin>>n;\nif(n%2==0)cout<<\"even\";else cout<<\"odd\";\ncout<<endl;\nif(n>10)cout<<\"big\";else cout<<\"small\";\ncout<<endl;"
+          ],
+          expect: "even\nbig",
+          en: {
+            task: "Write from scratch! Read n → print \"even\" or \"odd\", then print \"big\" or \"small\" based on whether n > 10",
+            guide: "cin → if (n%2==0) → if (n>10)"
+          }
+        }
+      },
+
+      // Drill 4: 처음부터 — 삼항연산자
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "처음부터 작성! a, b 두 수를 입력받아 큰 수를 출력해요 (삼항연산자 사용!)",
+          guide: "result = (a > b) ? a : b;",
+          hint: "int a, b;\ncin >> a >> b;\ncout << (a > b ? a : b) << endl;",
+          template: null,
+          answer: "int a, b;\ncin >> a >> b;\nint result = (a > b) ? a : b;\ncout << result << endl;",
+          alternateAnswers: [
+            "int a,b;\ncin>>a>>b;\ncout<<(a>b?a:b)<<endl;"
+          ],
+          expect: "7",
+          en: {
+            task: "Write from scratch! Read two numbers a, b and print the larger one (use ternary operator!)",
+            guide: "result = (a > b) ? a : b;"
+          }
         }
       },
 

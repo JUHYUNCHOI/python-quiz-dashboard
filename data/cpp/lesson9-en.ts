@@ -219,15 +219,20 @@ for i in range(5):
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ Calculate Average with Arrays!",
-          content: `Store 5 scores in an array, then use a for loop to calculate the total and average!
+          content: `Read 5 scores from input, then calculate and print the total and average.
 
-Hint: Average = \`total / count\`. Use \`(double)sum / 5\` to see decimals!`,
+Input: 5 integers, one per line
+Output: Total and average (with decimal)`,
           code: `#include <iostream>
 using namespace std;
 
 int main() {
-    int scores[5] = {90, 85, 78, 92, 88};
+    int scores[5];
     int sum = 0;
+
+    for (int i = 0; i < 5; i++) {
+        cin >> scores[i];
+    }
 
     for (int i = 0; i < 5; i++) {
         sum += scores[i];
@@ -238,6 +243,27 @@ int main() {
 
     return 0;
 }`,
+          initialCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int scores[5];
+    int sum = 0;
+
+    for (int i = 0; i < 5; i++) {
+        cin >> ___;
+    }
+
+    for (int i = 0; i < 5; i++) {
+        sum += ___;
+    }
+
+    cout << "Total: " << sum << endl;
+    cout << "Average: " << ___ << endl;
+
+    return 0;
+}`,
+          stdin: `90\n85\n78\n92\n88`,
           expectedOutput: `Total: 433
 Average: 86.6`
         },
@@ -245,14 +271,21 @@ Average: 86.6`
           id: "ch1-practice2",
           type: "practice" as const,
           title: "✋ Find the Maximum in an Array!",
-          content: `Find and print the maximum value in an array of 5 scores.`,
+          content: `Read 5 scores from input and print the highest one.
+
+Input: 5 integers, one per line
+Output: The highest score`,
           code: `#include <iostream>
 using namespace std;
 
 int main() {
-    int scores[5] = {85, 92, 78, 96, 88};
-    int maxScore = scores[0];
+    int scores[5];
 
+    for (int i = 0; i < 5; i++) {
+        cin >> scores[i];
+    }
+
+    int maxScore = scores[0];
     for (int i = 1; i < 5; i++) {
         if (scores[i] > maxScore) {
             maxScore = scores[i];
@@ -262,6 +295,27 @@ int main() {
     cout << "Highest score: " << maxScore << endl;
     return 0;
 }`,
+          initialCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int scores[5];
+
+    for (int i = 0; i < 5; i++) {
+        cin >> ___;
+    }
+
+    int maxScore = scores[0];
+    for (int i = 1; i < 5; i++) {
+        if (___) {
+            maxScore = ___;
+        }
+    }
+
+    cout << "Highest score: " << maxScore << endl;
+    return 0;
+}`,
+          stdin: `85\n92\n78\n96\n88`,
           expectedOutput: `Highest score: 96`
         },
         {
@@ -280,18 +334,12 @@ int main() {
         },
         {
           id: "ch1-q2",
-          type: "quiz",
+          type: "fillblank" as const,
           title: "Reading into an array with cin!",
-          content: `What goes in the blank to fill an array using cin?
-
-\`\`\`cpp
-int arr[3];
-for (int i = 0; i < 3; i++) {
-    _____ >> arr[i];
-}
-\`\`\``,
-          options: ["cout", "cin", "input", "scanf"],
-          answer: 1,
+          code: "int arr[3];\nfor (int i = 0; i < 3; i++) {\n    ___ >> arr[i];\n}",
+          fillBlanks: [
+            { id: 0, answer: "cin", options: ["cout", "cin", "input", "scanf"] }
+          ],
           explanation: "cin reads user input into arr[i]! cout is for output, cin is for input."
         }
       ]
@@ -581,8 +629,8 @@ int main() {
 
     return 0;
 }`,
+          stdin: `5\n3\n8\n2\n0`,
           expectedOutput: `Enter numbers (0 to stop):
-5 3 8 2 0
 You entered: 5 3 8 2
 Total: 4 numbers`
         },

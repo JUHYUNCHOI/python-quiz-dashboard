@@ -118,6 +118,19 @@ int main() {
         title: "Sum Until Zero (while + break)",
         description: `Integers are given one per line. When **0 is entered, stop immediately** and print the sum of all numbers before it.\n\n**Examples**\n- Input: \`3 5 2 0\` (one per line) → Output: \`10\`\n- Input: \`0\` → Output: \`0\`\n\n**Hint:** Use the pattern \`while (true) { ... if (n == 0) break; ... }\``,
         constraints: "At most 100 numbers, absolute value of each ≤ 1000",
+        initialCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int n, sum = 0;
+    while (true) {
+        cin >> n;
+        // if 0, stop
+        // otherwise add to sum
+    }
+    cout << sum << endl;
+    return 0;
+}`,
         hints: [
           "while (true) is an infinite loop — break is the only way out.",
           "After reading cin >> n, check if (n == 0) break; before adding to sum.",
@@ -147,9 +160,8 @@ int main() {
     int n;
     cin >> n;
     do {
-        n /= 2;
-        cout << n << "\\n";
-    } while (/* 조건을 채우세요 */);
+        // 여기에 코드를 작성하세요
+    } while (/* 조건 */);
     return 0;
 }`,
       testCases: [
@@ -159,8 +171,8 @@ int main() {
         { stdin: "100", expectedOutput: "50\n25\n12\n6\n3\n1", label: "100" },
       ],
       hints: [
-        "do { n /= 2; ... } while (n > 0); 로 n이 0보다 크면 계속 실행합니다.",
-        "do-while은 루프 본문을 먼저 실행하고 조건을 나중에 검사합니다.",
+        "루프 안에서 n을 2로 나누고, 그 결과를 출력하세요.",
+        "while 조건: n이 아직 양수인 동안 계속 반복해야 합니다.",
       ],
       solutionCode: `#include <iostream>
 using namespace std;
@@ -179,9 +191,20 @@ int main() {
         title: "Halve Repeatedly (do-while)",
         description: `Given a positive integer N, use a **do-while loop** to repeatedly divide N by 2 and print each result. Stop when the result becomes 0.\n\n**Examples**\n- Input: \`16\` → Output: \`8  4  2  1\` (one per line)\n- Input: \`7\` → Output: \`3  1\`\n\n**do-while characteristic:** The condition is checked after the body, so it **always executes at least once**.`,
         constraints: "2 ≤ N ≤ 1000",
+        initialCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    do {
+        // write your code here
+    } while (/* condition */);
+    return 0;
+}`,
         hints: [
-          "do { n /= 2; ... } while (n > 0); continues as long as n is greater than 0.",
-          "do-while executes the loop body first, then checks the condition.",
+          "Inside the loop, divide n by 2 and print the result.",
+          "While condition: keep looping as long as n is still positive.",
         ],
         solutionExplanation: "do-while executes the code in { } first, then checks the while condition. n /= 2 halves n each time, and the loop ends when n reaches 0.",
       },

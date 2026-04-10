@@ -30,6 +30,8 @@ int main() {
 }`
 }
 
+const BLANK_TEMPLATE = `#include <iostream>\nusing namespace std;\n\nint main() {\n    \n    return 0;\n}`
+
 export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId, userId, isCompleted = false }: PracticeStepProps) {
   const [done, setDone] = useState(false)
   const [failCount, setFailCount] = useState(0)
@@ -38,6 +40,8 @@ export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId,
   const [copiedSkeleton, setCopiedSkeleton] = useState(false)
   const [copiedFull, setCopiedFull] = useState(false)
   const [mounted, setMounted] = useState(false)
+  // 시작 코드 주입 여부 — 처음에는 빈 에디터, 버튼 클릭 시 skeleton으로 교체
+  const [starterInjected, setStarterInjected] = useState(false)
 
   useEffect(() => { setMounted(true) }, [])
 
@@ -48,6 +52,7 @@ export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId,
     setShowSkeleton(false)
     setCopiedSkeleton(false)
     setCopiedFull(false)
+    setStarterInjected(false)
   }, [step.id])
 
   useEffect(() => {
@@ -55,9 +60,13 @@ export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId,
   }, [isCompleted, step.id])
 
   const isEn = lang === "en"
-  const skeleton = step.starterCode ?? step.initialCode ?? (step.code ? extractSkeleton(step.code) : "")
+  const skeleton = step.starterCode ?? step.initialCode ?? ""
+  // starterCode가 있고 blank template과 다를 때만 "시작 코드 보기" 버튼 표시
+  const hasStarter = !!skeleton && skeleton.trim().length > 0
   const hasExpected = !!step.expectedOutput
   const hintLevel = Math.min(failCount, 3)
+  // 에디터에 실제로 들어가는 코드: 시작 코드 주입 전에는 blank
+  const editorCode = starterInjected ? skeleton : BLANK_TEMPLATE
 
   const handleCopySkeleton = async () => {
     await navigator.clipboard.writeText(skeleton)
@@ -125,10 +134,21 @@ export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId,
           <div className="space-y-2">{renderContent(step.content)}</div>
         )}
 
+        {/* 시작 코드 버튼 — starterCode가 있고 아직 주입 안 된 경우, 실패 힌트 없을 때만 표시 */}
+        {!done && hasStarter && !starterInjected && failCount === 0 && (
+          <button
+            onClick={() => setStarterInjected(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold border border-teal-300 bg-teal-50 text-teal-700 hover:bg-teal-100 transition-colors"
+          >
+            <span>💡</span>
+            <span>{isEn ? "Show starter code" : "시작 코드 보기"}</span>
+          </button>
+        )}
+
         {/* 에디터 */}
         <CppRunner
-          key={step.id + (skeleton ?? "")}
-          initialCode={skeleton || `#include <iostream>\nusing namespace std;\n\nint main() {\n    \n    return 0;\n}`}
+          key={step.id + (starterInjected ? "-starter" : "-blank")}
+          initialCode={editorCode}
           expectedOutput={step.expectedOutput}
           stdin={step.stdin}
           onSuccess={handleRunSuccess}
@@ -140,6 +160,7 @@ export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId,
           stepTitle={step.title}
           userId={userId}
           isCompleted={done}
+          onReset={() => setDone(false)}
         />
 
         {/* expectedOutput 없는 경우 — 자유 완료 */}

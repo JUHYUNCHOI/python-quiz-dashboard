@@ -15,16 +15,66 @@ import type {
 } from "./data/types"
 
 // ─────────────────────────────────────────────────────────────
+// Auto-translate common Korean review strings → English fallback
+// (used when en.predict translations are not provided in data files)
+// ─────────────────────────────────────────────────────────────
+function autoTranslateQuestion(q: string | undefined): string {
+  if (!q) return "What's the output?"
+  const map: Record<string, string> = {
+    "결과는?": "What's the output?",
+    "출력 결과는?": "What's the output?",
+    "결과가 뭘까?": "What's the output?",
+    "출력은?": "What's the output?",
+    "실행 결과는?": "What's the output?",
+    "어떤 결과가 나올까?": "What's the output?",
+    "이 코드의 결과는?": "What's the output?",
+  }
+  return map[q] ?? q
+}
+
+function autoTranslateOption(opt: string): string {
+  const map: Record<string, string> = {
+    "에러": "Error",
+    "오류": "Error",
+    "에러 발생": "Error",
+    "컴파일 에러": "Compile Error",
+    "런타임 에러": "Runtime Error",
+    "참": "True",
+    "거짓": "False",
+    "없음": "None",
+    "무한 루프": "Infinite loop",
+    "아무것도 출력 안 됨": "No output",
+    "아무것도 출력되지 않음": "No output",
+  }
+  return map[opt] ?? opt
+}
+
+// ─────────────────────────────────────────────────────────────
 // Helper: normalize blank answers for comparison
 // ─────────────────────────────────────────────────────────────
 function normalize(s: string) {
   return s.replace(/\s+/g, "").toLowerCase()
 }
 
-function isAnswerCorrect(input: string, content: PracticeContent | InterleavingContent): boolean {
+function isAnswerCorrect(input: string, content: PracticeContent | InterleavingContent, isEn = false): boolean {
   const n = normalize(input)
+  // blanksAnswer가 있으면 쉼표 결합 형태로도 체크 (multi-blank)
+  if (content.blanksAnswer && content.blanksAnswer.length > 1) {
+    const joined = normalize(content.blanksAnswer.join(", "))
+    if (joined === n) return true
+  }
   if (normalize(content.answer) === n) return true
   if (content.alternateAnswers?.some(a => normalize(a) === n)) return true
+  // EN 모드: en.answer / en.alternateAnswers / en.blanksAnswer도 체크
+  if (isEn && content.en) {
+    const en = content.en as { answer?: string; alternateAnswers?: string[]; blanksAnswer?: string[] }
+    if (en.blanksAnswer && en.blanksAnswer.length > 1) {
+      const joined = normalize(en.blanksAnswer.join(", "))
+      if (joined === n) return true
+    }
+    if (en.answer && normalize(en.answer) === n) return true
+    if (en.alternateAnswers?.some(a => normalize(a) === n)) return true
+  }
   return false
 }
 
@@ -98,12 +148,12 @@ function McqStep({
                 {LABELS[i]}
               </span>
               <span className={cn(
-                "flex-1 text-sm",
+                "flex-1 text-sm whitespace-pre-line",
                 !answered ? "text-gray-800" :
                 isCorrect ? "text-emerald-700 font-semibold" :
                 isSelected ? "text-red-700" : "text-gray-500"
               )}>
-                {opt}
+                {opt.replace(/\\n/g, "\n")}
               </span>
               {answered && isCorrect && <Check className="w-4 h-4 text-emerald-500 shrink-0" />}
               {answered && isSelected && !isCorrect && <X className="w-4 h-4 text-red-400 shrink-0" />}
@@ -139,7 +189,11 @@ function renderTemplatePart(text: string, lang: "python" | "cpp"): React.ReactNo
   const lines = text.split('\n')
   const result: React.ReactNode[] = []
   lines.forEach((line, i) => {
-    result.push(...inlineFn(line))
+    result.push(
+      <Fragment key={`rtp-${i}`}>
+        {inlineFn(line)}
+      </Fragment>
+    )
     if (i < lines.length - 1) result.push('\n')
   })
   return result
@@ -150,31 +204,60 @@ function PracticeStep({
   onCorrect,
   onWrong,
   language = "cpp",
+  storageKey,
 }: {
   content: PracticeContent | InterleavingContent
   onCorrect: () => void
   onWrong: () => void
   language?: "python" | "cpp"
+  storageKey?: string
 }) {
   const { t, lang: curLang } = useLanguage()
   const isEn = curLang === "en"
 
   const isFullCode = content.template === null
-  const template = typeof content.template === "string" ? content.template : ""
+  // EN 템플릿 우선 사용 (없으면 KO fallback)
+  const enContent = content.en as { template?: string; answer?: string; alternateAnswers?: string[] } | undefined
+  const rawTemplate = (!isFullCode && isEn && enContent?.template)
+    ? enContent.template
+    : content.template
+  const template = typeof rawTemplate === "string" ? rawTemplate : ""
   // 빈칸 개수 카운트
   const blankCount = isFullCode ? 0 : (template.match(/___/g) || []).length
   const isMultiBlank = blankCount > 1
 
-  // 빈칸 개수에 따라 inputs 배열 or 단일 string 관리
-  const [inputs, setInputs] = useState<string[]>(() => Array(Math.max(blankCount, 1)).fill(""))
+  // 빈칸 개수에 따라 inputs 배열 or 단일 string 관리 (localStorage 복원)
+  const [inputs, setInputs] = useState<string[]>(() => {
+    if (storageKey) {
+      try {
+        const saved = localStorage.getItem(`review-input-${storageKey}`)
+        if (saved) {
+          const parsed = JSON.parse(saved)
+          if (Array.isArray(parsed)) return parsed
+        }
+      } catch {}
+    }
+    return Array(Math.max(blankCount, 1)).fill("")
+  })
   const [result, setResult] = useState<"idle" | "correct" | "wrong">("idle")
   const [showHint, setShowHint] = useState(false)
   const firstInputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null)
 
   useEffect(() => { firstInputRef.current?.focus() }, [])
 
-  // answer: "1, <=" 형태를 개별 블랭크로 분리
-  const expectedParts = content.answer.split(",").map(s => s.trim())
+  // inputs 변경 시 localStorage에 저장 (제출 전에만)
+  useEffect(() => {
+    if (!storageKey || result !== "idle") return
+    try {
+      localStorage.setItem(`review-input-${storageKey}`, JSON.stringify(inputs))
+    } catch {}
+  }, [inputs, storageKey, result])
+
+  const clearStorage = () => {
+    if (storageKey) {
+      try { localStorage.removeItem(`review-input-${storageKey}`) } catch {}
+    }
+  }
 
   const check = () => {
     const combined = isMultiBlank
@@ -182,7 +265,8 @@ function PracticeStep({
       : inputs[0]
     if (!combined.trim()) return
 
-    if (isAnswerCorrect(combined, content)) {
+    clearStorage()
+    if (isAnswerCorrect(combined, content, isEn)) {
       setResult("correct")
       onCorrect()
     } else {
@@ -192,6 +276,7 @@ function PracticeStep({
   }
 
   const retry = () => {
+    clearStorage()
     setInputs(Array(Math.max(blankCount, 1)).fill(""))
     setResult("idle")
     setShowHint(false)
@@ -344,11 +429,22 @@ function PredictStep({
   onWrong: () => void
   language?: "python" | "cpp"
 }) {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
+  const isEn = lang === "en"
   const [selected, setSelected] = useState<number | null>(null)
   const [showCode, setShowCode] = useState(false)
   const answered = selected !== null
   const isRight = selected === content.predict.answer
+
+  // EN overrides (with auto-translate fallback for common Korean strings)
+  const lines = (isEn && content.en?.lines) ? content.en.lines : content.lines
+  const predictQuestion = isEn
+    ? (content.en?.predict?.question ?? autoTranslateQuestion(content.predict.question))
+    : content.predict.question
+  const predictOptions = isEn
+    ? (content.en?.predict?.options ?? content.predict.options.map(autoTranslateOption))
+    : content.predict.options
+  const predictFeedback = (isEn && content.en?.predict?.feedback) ? content.en.predict.feedback : content.predict.feedback
 
   const select = (i: number) => {
     if (answered) return
@@ -362,9 +458,9 @@ function PredictStep({
   return (
     <div className="flex flex-col gap-3">
       {/* Explanation lines */}
-      {content.lines.length > 0 && (
+      {lines.length > 0 && (
         <div className="rounded-xl bg-blue-50 border border-blue-100 px-4 py-3">
-          {content.lines.map((line, i) => <p key={i} className="text-sm text-blue-800">{line}</p>)}
+          {lines.map((line, i) => <p key={i} className="text-sm text-blue-800">{line}</p>)}
         </div>
       )}
 
@@ -379,11 +475,11 @@ function PredictStep({
 
       {/* Prediction question */}
       <p className="font-semibold text-gray-800">
-        {content.predict.question ?? t("결과가 뭘까?", "What will the output be?")}
+        {predictQuestion ?? t("결과가 뭘까?", "What will the output be?")}
       </p>
 
       <div className="flex flex-col gap-2">
-        {content.predict.options.map((opt, i) => {
+        {predictOptions.map((opt, i) => {
           const isSelected = selected === i
           const isCorrect = i === content.predict.answer
           return (
@@ -426,8 +522,8 @@ function PredictStep({
           <p className={cn("font-bold mb-1", isRight ? "text-emerald-700" : "text-red-600")}>
             {isRight ? t("✅ 맞았어요!", "✅ Correct!") : t("❌ 틀렸어요!", "❌ Wrong!")}
           </p>
-          {content.predict.feedback && (
-            <p className="text-gray-600">{content.predict.feedback}</p>
+          {predictFeedback && (
+            <p className="text-gray-600">{predictFeedback}</p>
           )}
           {content.result && (
             <p className="mt-1 text-xs text-gray-500">
@@ -448,9 +544,10 @@ export interface ReviewStepRendererProps {
   onCorrect: () => void
   onWrong: () => void
   language?: "python" | "cpp"
+  stepKey?: string
 }
 
-export function ReviewStepRenderer({ step, onCorrect, onWrong, language = "cpp" }: ReviewStepRendererProps) {
+export function ReviewStepRenderer({ step, onCorrect, onWrong, language = "cpp", stepKey }: ReviewStepRendererProps) {
   switch (step.type) {
     case "quiz":
       return <McqStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} language={language} />
@@ -459,10 +556,10 @@ export function ReviewStepRenderer({ step, onCorrect, onWrong, language = "cpp" 
       return <McqStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} language={language} />
 
     case "practice":
-      return <PracticeStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} language={language} />
+      return <PracticeStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} language={language} storageKey={stepKey} />
 
     case "interleaving":
-      return <PracticeStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} language={language} />
+      return <PracticeStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} language={language} storageKey={stepKey} />
 
     case "explain":
       if (step.content.predict) {

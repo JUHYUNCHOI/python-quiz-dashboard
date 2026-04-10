@@ -34,9 +34,7 @@ export const lessonCpp18: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "stack에 1, 2, 3을 push하면 top은 항상 마지막 값!"
-          ],
+          lines: [],
           code: 'stack<int> s;\ns.push(1);\ns.push(2);\ns.push(3);\ns.pop();\ns.pop();\ncout << s.top() << endl;',
           predict: {
             question: "출력 결과는?",
@@ -268,9 +266,7 @@ export const lessonCpp18: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "deque에서 앞뒤로 넣고 빼봐요!"
-          ],
+          lines: [],
           code: 'deque<int> dq = {10, 20, 30};\ndq.push_front(5);\ndq.pop_back();\ncout << dq.front() << " " << dq.back() << endl;',
           predict: {
             question: "출력 결과는?",
@@ -454,10 +450,7 @@ export const lessonCpp18: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "괄호 검사는 stack의 대표적인 활용법이에요! 🔍",
-            "여는 괄호 → push, 닫는 괄호 → pop해서 짝을 맞춰요."
-          ],
+          lines: [],
           code: 'string expr = "((1+2)*(3+4))";\nstack<char> st;\nbool valid = true;\nfor (char c : expr) {\n    if (c == \'(\') st.push(c);\n    else if (c == \')\') {\n        if (st.empty()) { valid = false; break; }\n        st.pop();\n    }\n}\nif (!st.empty()) valid = false;\ncout << (valid ? "OK" : "Error") << endl;',
           predict: {
             question: "출력 결과는?",

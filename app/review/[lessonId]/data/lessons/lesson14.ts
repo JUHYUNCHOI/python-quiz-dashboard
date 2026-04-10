@@ -58,7 +58,7 @@ export const lesson14: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["while문 구조!"],
+        lines: [],
         code: "count = 1\nwhile count <= 3:\n    print(f'{count}번째')\n    count += 1",
         predict: {
           question: "몇 번 출력될까?",
@@ -146,7 +146,7 @@ export const lesson14: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["break = 반복 즉시 탈출!"],
+        lines: [],
         code: "i = 0\nwhile True:\n    if i >= 3:\n        break\n    print(i)\n    i += 1",
         predict: {
           question: "출력 결과는?",
@@ -160,7 +160,7 @@ export const lesson14: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["continue = 이번만 건너뛰기!"],
+        lines: [],
         code: "for i in range(5):\n    if i == 2:\n        continue\n    print(i)",
         predict: {
           question: "출력 결과는?",

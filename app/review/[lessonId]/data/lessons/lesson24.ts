@@ -17,7 +17,7 @@ export const lesson24: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["편의점 줄 서기를 생각해봐요!", "먼저 줄 선 사람이 먼저 계산하죠?"],
+        lines: [],
         code: `# 편의점 줄 서기
 줄 = ["철수", "영희", "민수"]
 # 철수가 먼저 왔으니 철수부터 계산!
@@ -30,7 +30,7 @@ print("먼저 온 사람:", 줄[0])`,
     {
       type: "explain",
       content: {
-        lines: ["스택 vs 큐 비교!"],
+        lines: [],
         code: `# 스택 (LIFO): 마지막에 넣은 게 먼저
 # 접시 쌓기 → 위에서부터 꺼냄
 stack = [1, 2, 3]
@@ -114,7 +114,7 @@ print("큐 개념: 1이 먼저 나가야 해!")`,
     {
       type: "explain",
       content: {
-        lines: ["리스트의 pop(0)은 느려요!", "deque를 쓰면 빠르게 큐를 만들 수 있어요!"],
+        lines: [],
         code: `from collections import deque
 
 queue = deque()
@@ -136,7 +136,7 @@ print("남은 줄:", list(queue))`,
     {
       type: "explain",
       content: {
-        lines: ["왜 리스트 대신 deque를 쓸까?"],
+        lines: [],
         code: `# 리스트: pop(0)하면 나머지를 다 앞으로 이동 → 느림!
 # [1, 2, 3, 4, 5] → pop(0) → [2, 3, 4, 5] (4개 이동)
 
@@ -254,7 +254,7 @@ print(list(q))`,
     {
       type: "explain",
       content: {
-        lines: ["프린터 대기열 시뮬레이션!", "먼저 보낸 문서가 먼저 인쇄돼요"],
+        lines: [],
         code: `from collections import deque
 
 printer = deque()
@@ -278,7 +278,7 @@ print("모든 인쇄 완료!")`,
     {
       type: "explain",
       content: {
-        lines: ["큐의 크기를 제한할 수도 있어요!"],
+        lines: [],
         code: `from collections import deque
 
 # 최대 3개까지만!

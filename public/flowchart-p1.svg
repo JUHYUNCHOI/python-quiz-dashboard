@@ -1,0 +1,106 @@
+<svg viewBox="0 0 580 840" xmlns="http://www.w3.org/2000/svg" style="font-family: 'Segoe UI', Arial, sans-serif">
+  <defs>
+    <marker id="ah" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+    </marker>
+    <marker id="ahb" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#818cf8"/>
+    </marker>
+  </defs>
+
+  <!-- ══ START ══ -->
+  <ellipse cx="220" cy="36" rx="64" ry="24" fill="#10b981"/>
+  <text x="220" y="41" text-anchor="middle" fill="white" font-size="15" font-weight="700">Start</text>
+
+  <line x1="220" y1="60" x2="220" y2="84" stroke="#64748b" stroke-width="2" marker-end="url(#ah)"/>
+
+  <!-- ══ rand() BOX ══ -->
+  <rect x="82" y="90" width="260" height="50" rx="10" fill="#6366f1"/>
+  <text x="212" y="112" text-anchor="middle" fill="white" font-size="13" font-weight="600">rand() picks answer</text>
+  <text x="212" y="130" text-anchor="middle" fill="#c7d2fe" font-size="11">(1 ~ 100)</text>
+  <!-- NEW badge -->
+  <rect x="350" y="98" width="54" height="24" rx="12" fill="#ef4444"/>
+  <text x="377" y="114" text-anchor="middle" fill="white" font-size="11" font-weight="700">NEW</text>
+
+  <line x1="220" y1="140" x2="220" y2="164" stroke="#64748b" stroke-width="2" marker-end="url(#ah)"/>
+
+  <!-- ══ PRINT GAME START ══ -->
+  <rect x="82" y="170" width="276" height="42" rx="10" fill="#6366f1"/>
+  <text x="220" y="196" text-anchor="middle" fill="white" font-size="13">Print "Game Start" message</text>
+
+  <line x1="220" y1="212" x2="220" y2="244" stroke="#64748b" stroke-width="2" marker-end="url(#ah)"/>
+
+  <!-- ══ WHILE LOOP CONTAINER ══ -->
+  <rect x="32" y="250" width="508" height="404" rx="16" fill="#eef2ff" stroke="#818cf8" stroke-width="2" stroke-dasharray="10,5"/>
+  <text x="48" y="271" fill="#6366f1" font-size="12" font-weight="700">while loop</text>
+
+  <!-- ── Get input + tries++ ── -->
+  <rect x="96" y="278" width="248" height="46" rx="8" fill="#818cf8"/>
+  <text x="220" y="297" text-anchor="middle" fill="white" font-size="13">Get input (cin)</text>
+  <text x="220" y="315" text-anchor="middle" fill="#e0e7ff" font-size="11">tries++</text>
+
+  <line x1="220" y1="324" x2="220" y2="350" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah)"/>
+
+  <!-- ── Diamond 1: input < answer? ── -->
+  <polygon points="220,350 312,380 220,410 128,380" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+  <text x="220" y="377" text-anchor="middle" fill="#78350f" font-size="12" font-weight="600">input &lt; answer?</text>
+
+  <!-- YES right -->
+  <line x1="312" y1="380" x2="368" y2="380" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah)"/>
+  <text x="337" y="373" text-anchor="middle" fill="#10b981" font-size="10" font-weight="700">YES</text>
+  <!-- Go higher! box -->
+  <rect x="370" y="362" width="122" height="36" rx="8" fill="#d1fae5" stroke="#10b981" stroke-width="1.5"/>
+  <text x="431" y="384" text-anchor="middle" fill="#065f46" font-size="13" font-weight="600">Go higher!</text>
+
+  <!-- NO down -->
+  <line x1="220" y1="410" x2="220" y2="434" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah)"/>
+  <text x="233" y="426" fill="#ef4444" font-size="10" font-weight="700">NO</text>
+
+  <!-- ── Diamond 2: input > answer? ── -->
+  <polygon points="220,434 312,464 220,494 128,464" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+  <text x="220" y="461" text-anchor="middle" fill="#78350f" font-size="12" font-weight="600">input &gt; answer?</text>
+
+  <!-- YES right -->
+  <line x1="312" y1="464" x2="368" y2="464" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah)"/>
+  <text x="337" y="457" text-anchor="middle" fill="#10b981" font-size="10" font-weight="700">YES</text>
+  <!-- Go lower! box -->
+  <rect x="370" y="446" width="122" height="36" rx="8" fill="#d1fae5" stroke="#10b981" stroke-width="1.5"/>
+  <text x="431" y="468" text-anchor="middle" fill="#065f46" font-size="13" font-weight="600">Go lower!</text>
+
+  <!-- NO down -->
+  <line x1="220" y1="494" x2="220" y2="518" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah)"/>
+  <text x="233" y="510" fill="#ef4444" font-size="10" font-weight="700">NO</text>
+
+  <!-- ── Diamond 3: input == answer? ── -->
+  <polygon points="220,518 312,548 220,578 128,548" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+  <text x="220" y="545" text-anchor="middle" fill="#78350f" font-size="12" font-weight="600">input == answer?</text>
+
+  <!-- YES down -->
+  <line x1="220" y1="578" x2="220" y2="602" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah)"/>
+  <text x="233" y="594" fill="#10b981" font-size="10" font-weight="700">YES</text>
+
+  <!-- break box -->
+  <rect x="158" y="604" width="124" height="36" rx="8" fill="#f43f5e"/>
+  <text x="220" y="626" text-anchor="middle" fill="white" font-size="14" font-weight="700">break</text>
+
+  <!-- ── LOOP BACK ARROWS ── -->
+  <line x1="492" y1="380" x2="514" y2="380" stroke="#818cf8" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <line x1="492" y1="464" x2="514" y2="464" stroke="#818cf8" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <line x1="514" y1="464" x2="514" y2="290" stroke="#818cf8" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <line x1="514" y1="290" x2="344" y2="290" stroke="#818cf8" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#ahb)"/>
+  <text x="521" y="378" fill="#818cf8" font-size="10" font-weight="600" transform="rotate(90,521,378)">loop back</text>
+
+  <!-- ══ EXIT WHILE LOOP ══ -->
+  <line x1="220" y1="640" x2="220" y2="666" stroke="#64748b" stroke-width="2" marker-end="url(#ah)"/>
+
+  <!-- ══ PRINT CORRECT ══ -->
+  <rect x="52" y="672" width="336" height="46" rx="10" fill="#6366f1"/>
+  <text x="220" y="692" text-anchor="middle" fill="white" font-size="13">Print "Correct!</text>
+  <text x="220" y="710" text-anchor="middle" fill="#c7d2fe" font-size="12">You got it in N tries!"</text>
+
+  <line x1="220" y1="718" x2="220" y2="746" stroke="#64748b" stroke-width="2" marker-end="url(#ah)"/>
+
+  <!-- ══ END ══ -->
+  <ellipse cx="220" cy="772" rx="64" ry="24" fill="#10b981"/>
+  <text x="220" y="777" text-anchor="middle" fill="white" font-size="15" font-weight="700">End</text>
+</svg>

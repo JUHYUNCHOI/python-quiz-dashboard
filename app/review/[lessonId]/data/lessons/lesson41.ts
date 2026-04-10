@@ -20,76 +20,7 @@ export const lesson41: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["캐릭터 3명을 변수로 만들면...", "변수가 너무 많아! 😩"],
-        code: `# 변수로 캐릭터 만들기
-char1_name = '용사'
-char1_hp = 100
-char1_atk = 20
-
-char2_name = '마법사'
-char2_hp = 80
-char2_atk = 30
-
-# 10명이면 변수가 30개!`,
-        isPreview: true,
-        note: "클래스를 쓰면 한 줄로 캐릭터 하나!"
-      }
-    },
-
-    {
-      type: "explain",
-      content: {
-        lines: ["클래스를 쓰면 이렇게 간단해요!"],
-        code: `hero = Character('용사', 100, 20)
-mage = Character('마법사', 80, 30)
-archer = Character('궁수', 90, 25)`,
-        note: "클래스 = 붕어빵 틀, 객체 = 붕어빵!"
-      }
-    },
-
-    {
-      type: "quiz",
-      content: {
-        question: "클래스와 객체의 관계를 붕어빵에 비유하면?",
-        options: [
-          "클래스 = 붕어빵, 객체 = 틀",
-          "클래스 = 붕어빵 틀, 객체 = 붕어빵",
-          "클래스 = 가게, 객체 = 손님",
-          "클래스 = 속재료, 객체 = 붕어빵"
-        ],
-        answer: 1,
-        explanation: "클래스(틀)로 객체(붕어빵)를 찍어내요! 틀 하나로 여러 개를 만들 수 있어요!",
-        en: {
-          question: "Using a fish-shaped bread analogy, how is the class-object relationship?",
-          options: [
-            "class = bread, object = mold",
-            "class = bread mold, object = bread",
-            "class = shop, object = customer",
-            "class = filling, object = bread"
-          ],
-          explanation: "You use the class (mold) to create objects (bread)! One mold can make many!"
-        }
-      }
-    },
-
-    { type: "reward", content: { emoji: "🍩", message: "붕어빵 틀 개념 이해 완료!" } },
-
-    // ============================================
-    // Chapter 2: 클래스 만들기
-    // ============================================
-    {
-      type: "chapter",
-      content: {
-        num: 2,
-        title: "클래스 만들기",
-        desc: "class, __init__, s(self)!"
-      }
-    },
-
-    {
-      type: "explain",
-      content: {
-        lines: ["가장 간단한 클래스부터!"],
+        lines: [],
         code: `class Character:
     pass  # 아무 기능 없음
 
@@ -103,7 +34,7 @@ print(type(hero))`,
     {
       type: "explain",
       content: {
-        lines: ["빈 붕어빵은 재미없지?", "__init__으로 속을 채우자!"],
+        lines: [],
         code: `class Character:
     def __init__(s, name, hp):
         s.name = name
@@ -150,77 +81,7 @@ print(hero.hp)`,
     {
       type: "explain",
       content: {
-        lines: ["s(self)가 뭘까? 🤔", "s = 지금 만들어지고 있는 이 객체!"],
-        code: `class Character:
-    def __init__(s, name):
-        s.name = name  # s = 자기 자신
-
-hero = Character('용사')
-# hero.name == '용사'
-# s와 hero는 같은 객체!`,
-        note: "보통 self라고 쓰지만 여기서는 s를 써요!"
-      }
-    },
-
-    // 빈칸 연습: 클래스 기본 구조
-    {
-      type: "practice",
-      content: {
-        level: 1,
-        task: "___ 자리를 채우세요!",
-        guide: "클래스 정의 기본 구조",
-        hint: "클래스를 정의하는 키워드!",
-        template: "___ Dog:\n    def __init__(s, name):\n        s.name = name\n\ndog = Dog('멍멍이')\nprint(dog.name)",
-        blanksAnswer: ["class"],
-        answer: "class Dog:\n    def __init__(s, name):\n        s.name = name\n\ndog = Dog('멍멍이')\nprint(dog.name)",
-        en: {
-          task: "Fill in the blank!",
-          guide: "Basic class definition structure",
-          hint: "The keyword used to define a class!"
-        },
-        alternateAnswers: [],
-        expect: "멍멍이"
-      }
-    },
-
-    {
-      type: "practice",
-      content: {
-        level: 1,
-        task: "___ 자리를 채우세요!",
-        guide: "초기화 함수 이름은?",
-        hint: "두 개의 밑줄로 감싸는 특별한 함수!",
-        template: "class Cat:\n    def ___(s, name):\n        s.name = name\n\ncat = Cat('냥이')\nprint(cat.name)",
-        blanksAnswer: ["__init__"],
-        answer: "class Cat:\n    def __init__(s, name):\n        s.name = name\n\ncat = Cat('냥이')\nprint(cat.name)",
-        en: {
-          task: "Fill in the blank!",
-          guide: "What is the name of the initialization function?",
-          hint: "A special function wrapped with two underscores on each side!"
-        },
-        alternateAnswers: [],
-        expect: "냥이"
-      }
-    },
-
-    { type: "reward", content: { emoji: "🔨", message: "클래스 기본 구조 마스터!" } },
-
-    // ============================================
-    // Chapter 3: 여러 객체 만들기
-    // ============================================
-    {
-      type: "chapter",
-      content: {
-        num: 3,
-        title: "여러 객체 만들기",
-        desc: "클래스의 진짜 힘!"
-      }
-    },
-
-    {
-      type: "explain",
-      content: {
-        lines: ["같은 클래스로 여러 객체를 만들어요!"],
+        lines: [],
         code: `class Character:
     def __init__(s, name, hp, atk):
         s.name = name
@@ -239,7 +100,7 @@ print(f'{mage.name}: HP {mage.hp}')`,
     {
       type: "explain",
       content: {
-        lines: ["객체의 속성은 바꿀 수 있어요!"],
+        lines: [],
         code: `class Character:
     def __init__(s, name, hp):
         s.name = name
@@ -261,7 +122,7 @@ print(hero.hp)`,
     {
       type: "explain",
       content: {
-        lines: ["그럼 이건 어떨까?", "a의 hp를 바꾸면 b도 바뀔까?"],
+        lines: [],
         code: `class Character:
     def __init__(s, name, hp):
         s.name = name
@@ -340,7 +201,7 @@ print(a.hp, b.hp)`,
     {
       type: "explain",
       content: {
-        lines: ["📝 문제 1: 결과를 맞춰보세요!"],
+        lines: [],
         code: `class Fruit:
     def __init__(s, name):
         s.name = name
@@ -361,7 +222,7 @@ print(apple.name)`,
     {
       type: "explain",
       content: {
-        lines: ["📝 문제 2: __init__의 매개변수 순서!"],
+        lines: [],
         code: `class Student:
     def __init__(s, name, grade):
         s.name = name
@@ -382,7 +243,7 @@ print(f'{s1.name}: {s1.grade}학년')`,
     {
       type: "explain",
       content: {
-        lines: ["📝 문제 3: s를 빼먹으면?"],
+        lines: [],
         code: `class Character:
     def __init__(s, name):
         name = name  # s.name이 아님!

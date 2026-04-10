@@ -18,7 +18,7 @@ export const lesson18: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["문자열을 공백 기준으로 쪼갤 수 있어!"],
+        lines: [],
         code: "sentence = \"나는 파이썬을 좋아해\"\nwords = sentence.split()\nprint(words)",
         predict: {
           question: "결과는?",
@@ -37,7 +37,7 @@ export const lesson18: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["구분자를 지정할 수도 있어!"],
+        lines: [],
         code: "data = \"사과,바나나,포도\"\nfruits = data.split(\",\")\nprint(fruits)",
         result: "['사과', '바나나', '포도']",
         note: "콤마(,)를 기준으로 쪼개졌어요!"
@@ -46,7 +46,7 @@ export const lesson18: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["다양한 구분자를 사용할 수 있어!"],
+        lines: [],
         code: "date = \"2025-01-15\"\nparts = date.split(\"-\")\nprint(parts)",
         predict: {
           question: "parts[1]의 값은?",
@@ -60,7 +60,7 @@ export const lesson18: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["split() 결과의 개수도 확인!"],
+        lines: [],
         code: "sentence = \"hello world python\"\nwords = sentence.split()\nprint(len(words))",
         predict: {
           question: "결과는?",
@@ -152,7 +152,7 @@ export const lesson18: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["join()은 리스트를 문자열로 합쳐요!", "구분자.join(리스트) 형태!"],
+        lines: [],
         code: "words = [\"나는\", \"파이썬을\", \"좋아해\"]\nsentence = \" \".join(words)\nprint(sentence)",
         predict: {
           question: "결과는?",
@@ -171,7 +171,7 @@ export const lesson18: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["다양한 구분자로 합칠 수 있어!"],
+        lines: [],
         code: "fruits = [\"사과\", \"바나나\", \"포도\"]\nresult = \", \".join(fruits)\nprint(result)",
         result: "사과, 바나나, 포도",
         note: "\", \"(콤마+공백)으로 합쳐서 보기 좋게!"
@@ -180,7 +180,7 @@ export const lesson18: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["구분자 없이 합치기도 가능!"],
+        lines: [],
         code: "letters = [\"P\", \"y\", \"t\", \"h\", \"o\", \"n\"]\nword = \"\".join(letters)\nprint(word)",
         predict: {
           question: "결과는?",
@@ -292,7 +292,7 @@ export const lesson18: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["split + join = 구분자 바꾸기!"],
+        lines: [],
         code: "date = \"2025/01/15\"\nparts = date.split(\"/\")\nnew_date = \"-\".join(parts)\nprint(new_date)",
         predict: {
           question: "결과는?",
@@ -306,7 +306,7 @@ export const lesson18: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["CSV 데이터 처리에 활용!"],
+        lines: [],
         code: "csv = \"이름,나이,도시\"\nheaders = csv.split(\",\")\nprint(headers)\nprint(f\"두 번째 항목: {headers[1]}\")",
         result: "['이름', '나이', '도시']\n두 번째 항목: 나이",
         note: "콤마로 구분된 데이터를 쉽게 처리!"
@@ -315,7 +315,7 @@ export const lesson18: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["단어 순서를 뒤집어보자!"],
+        lines: [],
         code: "sentence = \"파이썬 정말 재밌다\"\nwords = sentence.split()\nwords.reverse()\nresult = \" \".join(words)\nprint(result)",
         predict: {
           question: "결과는?",

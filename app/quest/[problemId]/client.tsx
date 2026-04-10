@@ -8,6 +8,10 @@ import { ChevronLeft, ChevronRight, CheckCircle, Loader2 } from "lucide-react"
 import { ALL_PROBLEMS, PROBLEM_MAP, PROBLEM_INDEX, type ProblemMeta } from "./data"
 import { PROBLEM_LOADERS } from "./loaders"
 import { useLanguage } from "@/contexts/language-context"
+import { useAuth } from "@/contexts/auth-context"
+import { ALL_TOPICS } from "@/data/algorithm/topics"
+
+const ALGO_UNLOCK_THRESHOLD = 8
 
 const STORAGE_KEY = "quest-solved"
 
@@ -91,7 +95,29 @@ declare global { interface Window { _questLang?: string } }
 export default function QuestProblemClient({ problemId }: { problemId: string }) {
   const router = useRouter()
   const { lang, t } = useLanguage()
+  const { profile } = useAuth()
   const meta = PROBLEM_MAP.get(problemId)
+
+  // ── 잠금 체크: 알고 토픽 8개 미만이면 /quest로 리다이렉트 ──
+  const [lockChecked, setLockChecked] = useState(false)
+  useEffect(() => {
+    const isTeacher = profile?.role === "teacher"
+    if (isTeacher) { setLockChecked(true); return }
+    try {
+      const algoCompleted = JSON.parse(localStorage.getItem("algo-completed") || "[]") as string[]
+      const algoCompletedSet = new Set(algoCompleted)
+      const topicsDone = ALL_TOPICS.filter(topic =>
+        topic.problems.some((p: { id: string }) => algoCompletedSet.has(p.id))
+      ).length
+      if (topicsDone < ALGO_UNLOCK_THRESHOLD) {
+        router.replace("/quest")
+        return
+      }
+    } catch { /* ignore */ }
+    setLockChecked(true)
+  }, [profile, router])
+
+  if (!lockChecked) return null
 
   // Sync synchronously so lazy-loaded App components initialize with correct lang
   if (typeof window !== "undefined") {

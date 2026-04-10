@@ -47,10 +47,7 @@ export const lessonCpp19: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "ofstream은 cout처럼 << 연산자로 씁니다!",
-            "ifstream은 cin처럼 >> 연산자로 읽어요!"
-          ],
+          lines: [],
           code: 'ofstream fout("data.txt");\nfout << 100 << " " << 200 << endl;\nfout.close();\n\nifstream fin("data.txt");\nint a, b;\nfin >> a >> b;\ncout << a + b << endl;',
           predict: {
             question: "마지막 cout의 출력은?",
@@ -463,10 +460,7 @@ export const lessonCpp19: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "USACO 문제는 보통 이런 구조예요!",
-            "freopen으로 파일을 열고, cin/cout으로 입출력해요."
-          ],
+          lines: [],
           code: '#include <iostream>\n#include <cstdio>\nusing namespace std;\n\nint main() {\n    freopen("paint.in", "r", stdin);\n    freopen("paint.out", "w", stdout);\n\n    int a, b, c, d;\n    cin >> a >> b >> c >> d;\n    // 문제 풀이...\n    cout << answer << "\\n";\n    return 0;\n}',
           predict: {
             question: "freopen 후 cin은 어디서 읽나요?",

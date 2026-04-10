@@ -27,7 +27,7 @@ export const lesson17: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["숫자 리스트도 순회 가능!"],
+        lines: [],
         code: "scores = [90, 85, 100]\ntotal = 0\nfor score in scores:\n    total += score\nprint(total)",
         predict: {
           question: "total의 결과는?",
@@ -41,7 +41,7 @@ export const lesson17: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["for문 안에서 조건문도 사용!"],
+        lines: [],
         code: "numbers = [1, 2, 3, 4, 5, 6]\nfor num in numbers:\n    if num % 2 == 0:\n        print(num)",
         predict: {
           question: "출력 결과는?",
@@ -160,7 +160,7 @@ export const lesson17: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["시작 번호를 바꿀 수도 있어!"],
+        lines: [],
         code: "fruits = [\"사과\", \"바나나\", \"포도\"]\nfor i, fruit in enumerate(fruits, 1):\n    print(f\"{i}번: {fruit}\")",
         predict: {
           question: "첫 번째 출력은?",
@@ -263,7 +263,7 @@ export const lesson17: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["리스트 컴프리헨션으로 한 줄에!"],
+        lines: [],
         code: "numbers = [1, 2, 3, 4, 5]\ndoubled = [n * 2 for n in numbers]\nprint(doubled)",
         predict: {
           question: "결과는?",
@@ -277,7 +277,7 @@ export const lesson17: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["조건을 붙일 수도 있어!"],
+        lines: [],
         code: "numbers = [1, 2, 3, 4, 5, 6]\nevens = [n for n in numbers if n % 2 == 0]\nprint(evens)",
         predict: {
           question: "결과는?",

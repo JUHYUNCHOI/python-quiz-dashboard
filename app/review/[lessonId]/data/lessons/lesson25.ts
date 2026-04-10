@@ -17,7 +17,7 @@ export const lesson25: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["스택은 한쪽 끝, 큐는 앞뒤 한 방향...", "덱은 양쪽 끝에서 자유롭게!"],
+        lines: [],
         code: `# 덱 = Double-Ended Queue (양쪽 끝 큐)
 # 앞에서도 넣고 빼고, 뒤에서도 넣고 빼고!
 
@@ -36,7 +36,7 @@ print("양쪽 추가:", list(d))`,
     {
       type: "explain",
       content: {
-        lines: ["양쪽에서 빼기도 가능!"],
+        lines: [],
         code: `from collections import deque
 
 d = deque([10, 20, 30, 40])
@@ -122,7 +122,7 @@ print(f"남은 덱: {list(d)}")`,
     {
       type: "explain",
       content: {
-        lines: ["덱의 4가지 핵심 메서드!"],
+        lines: [],
         code: `from collections import deque
 
 d = deque([2, 3])
@@ -145,7 +145,7 @@ print("삭제 후:", list(d))`,
     {
       type: "explain",
       content: {
-        lines: ["rotate()로 회전시키기!", "양수면 오른쪽, 음수면 왼쪽으로 회전!"],
+        lines: [],
         code: `from collections import deque
 
 d = deque([1, 2, 3, 4, 5])
@@ -165,7 +165,7 @@ print("오른쪽 2칸:", list(d))`,
     {
       type: "explain",
       content: {
-        lines: ["음수로 rotate하면 왼쪽으로!"],
+        lines: [],
         code: `from collections import deque
 
 d = deque([1, 2, 3, 4, 5])

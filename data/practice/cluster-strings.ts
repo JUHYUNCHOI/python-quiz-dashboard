@@ -342,8 +342,23 @@ int main() {
     getline(cin, s);
     getline(cin, a);
     getline(cin, b);
-    // find()로 위치를 찾고 replace()로 교체하세요
-    // 모든 등장 위치를 바꿔야 합니다
+    // 여기에 코드를 작성하세요
+    cout << s << "\\n";
+    return 0;
+}`,
+      scaffoldCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    string s, a, b;
+    getline(cin, s);
+    getline(cin, a);
+    getline(cin, b);
+    size_t pos = 0;
+    while ((pos = s.find(a, pos)) != string::npos) {
+        // 여기에 코드를 작성하세요
+    }
     cout << s << "\\n";
     return 0;
 }`,

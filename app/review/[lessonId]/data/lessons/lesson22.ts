@@ -17,7 +17,7 @@ export const lesson22: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["리스트에서 여러 개를 한 번에 꺼내고 싶다면?", "슬라이싱을 쓰면 돼요!"],
+        lines: [],
         code: `fruits = ["사과", "바나나", "포도", "딸기", "수박"]
 print(fruits[1:4])`,
         predict: {
@@ -33,7 +33,7 @@ print(fruits[1:4])`,
     {
       type: "explain",
       content: {
-        lines: ["start를 생략하면 처음부터!"],
+        lines: [],
         code: `nums = [10, 20, 30, 40, 50]
 print(nums[:3])`,
         predict: {
@@ -48,7 +48,7 @@ print(nums[:3])`,
     {
       type: "explain",
       content: {
-        lines: ["end를 생략하면 끝까지!"],
+        lines: [],
         code: `nums = [10, 20, 30, 40, 50]
 print(nums[2:])`,
         predict: {
@@ -135,7 +135,7 @@ print(nums[2:])`,
     {
       type: "explain",
       content: {
-        lines: ["[::step]으로 건너뛰기!", "step은 몇 칸씩 이동할지 정해요"],
+        lines: [],
         code: `nums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 print(nums[::2])`,
         predict: {
@@ -150,7 +150,7 @@ print(nums[::2])`,
     {
       type: "explain",
       content: {
-        lines: ["step을 -1로 하면? 뒤집기!"],
+        lines: [],
         code: `nums = [1, 2, 3, 4, 5]
 print(nums[::-1])`,
         predict: {
@@ -256,7 +256,7 @@ print(nums[::-1])`,
     {
       type: "explain",
       content: {
-        lines: ["문자열도 슬라이싱 가능!"],
+        lines: [],
         code: `msg = "Hello, Python!"
 print(msg[7:13])`,
         predict: {
@@ -271,7 +271,7 @@ print(msg[7:13])`,
     {
       type: "explain",
       content: {
-        lines: ["문자열 뒤집기도 [::-1]!"],
+        lines: [],
         code: `word = "파이썬"
 print(word[::-1])`,
         result: "썬이파",
@@ -281,7 +281,7 @@ print(word[::-1])`,
     {
       type: "explain",
       content: {
-        lines: ["실전 활용: 파일 확장자 추출하기!"],
+        lines: [],
         code: `filename = "photo.jpg"
 ext = filename[-3:]
 print(ext)`,

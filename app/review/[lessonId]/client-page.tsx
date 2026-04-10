@@ -60,16 +60,18 @@ function getNearbyExplains(lesson: LessonData, beforeIndex: number): string[][] 
 }
 
 // 스텝 문제 미리보기 텍스트
-function getStepPreview(step: StepContent): string {
+function getStepPreview(step: StepContent, isEn: boolean = false): string {
   switch (step.type) {
     case "quiz":
     case "errorQuiz":
-      return step.content.question
+      return (isEn && step.content.en?.question) ? step.content.en.question : step.content.question
     case "practice":
     case "interleaving":
-      return step.content.task
+      return (isEn && step.content.en?.task) ? step.content.en.task : step.content.task
     case "explain":
-      return step.content.predict?.question ?? "예측 퀴즈"
+      return (isEn && step.content.en?.predict?.question)
+        ? step.content.en.predict.question
+        : (step.content.predict?.question ?? (isEn ? "Predict Quiz" : "예측 퀴즈"))
     default:
       return ""
   }
@@ -82,7 +84,8 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   const resolvedParams = use(params)
   const lessonId = resolvedParams.lessonId
   const router = useRouter()
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
+  const isEn = lang === "en"
   const { user, profile, isLoading: authLoading } = useAuth()
   const isTeacher = profile?.role === "teacher"
 
@@ -293,7 +296,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                 {wrongSteps.map((idx, i) => {
                   const r = reviewSteps[idx]
                   if (!r) return null
-                  const preview = getStepPreview(r.step)
+                  const preview = getStepPreview(r.step, isEn)
                   return (
                     <p key={i} className="text-sm text-orange-600 truncate">
                       {i + 1}. {r.chapterTitle ? `[${r.chapterTitle}] ` : ""}{preview}
@@ -475,6 +478,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
               onCorrect={handleCorrect}
               onWrong={handleWrong}
               language={lesson.language ?? "cpp"}
+              stepKey={`${lessonId}-${currentReview.originalIndex}`}
             />
           )}
 
@@ -483,6 +487,10 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
             <div className="mt-3 flex justify-end">
               <button
                 onClick={() => {
+                  // 저장된 입력 초기화
+                  if (currentReview) {
+                    try { localStorage.removeItem(`review-input-${lessonId}-${currentReview.originalIndex}`) } catch {}
+                  }
                   setCompletedSteps(prev => { const next = new Set(prev); next.delete(currentIndex); return next })
                   setWrongSteps(prev => prev.filter(i => i !== currentIndex))
                   setResetCount(prev => prev + 1)

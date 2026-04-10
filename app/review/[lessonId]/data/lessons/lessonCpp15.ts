@@ -19,24 +19,7 @@ export const lessonCpp15: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "pair는 두 값을 하나로 묶는 자료형이에요! 🎒",
-            "파이썬의 tuple(2개짜리)과 비슷해요!",
-            ".first와 .second로 각각 꺼낼 수 있어요."
-          ],
-          code: '#include <iostream>\n#include <utility>\nusing namespace std;\n\nint main() {\n    pair<string, int> student("철수", 95);\n    cout << student.first << ": " << student.second << endl;\n    return 0;\n}',
-          result: "철수: 95",
-          note: "pair<타입1, 타입2> — 두 값의 타입을 지정해요!"
-        }
-      },
-
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "make_pair()로 더 간편하게 pair를 만들 수 있어요! ⚡",
-            "중괄호 초기화도 OK!"
-          ],
+          lines: [],
           code: 'pair<string, int> p1 = {"영희", 88};     // 중괄호 초기화\nauto p2 = make_pair("민수", 92);          // make_pair 사용',
           note: "make_pair는 타입을 안 써도 알아서 추론!"
         }
@@ -45,9 +28,7 @@ export const lessonCpp15: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "pair의 .first와 .second를 써봐요!"
-          ],
+          lines: [],
           code: 'pair<int, int> pos(3, 7);\ncout << pos.first << ", " << pos.second << endl;',
           predict: {
             question: "출력 결과는?",
@@ -198,11 +179,7 @@ export const lessonCpp15: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "pair끼리 <, > 로 비교할 수 있어요! 🔍",
-            "먼저 first를 비교하고, 같으면 second를 비교해요.",
-            "그래서 vector<pair>를 sort()하면 first 기준으로 자동 정렬!"
-          ],
+          lines: [],
           code: 'vector<pair<int,string>> v = {\n    {3, "C"}, {1, "A"}, {2, "B"}, {1, "D"}\n};\nsort(v.begin(), v.end());\n// 결과: {1,"A"}, {1,"D"}, {2,"B"}, {3,"C"}',
           note: "first가 같으면 second 기준으로 정렬!"
         }
@@ -211,9 +188,7 @@ export const lessonCpp15: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "pair 비교 연산자를 직접 확인해봐요!"
-          ],
+          lines: [],
           code: 'pair<int,int> a = {1, 10};\npair<int,int> b = {1, 5};\nif (a > b) cout << "A";\nelse cout << "B";',
           predict: {
             question: "출력 결과는?",

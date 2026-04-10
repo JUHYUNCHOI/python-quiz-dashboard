@@ -47,7 +47,7 @@ except:
     {
       type: "explain",
       content: {
-        lines: ["그럼 이 코드는 어떻게 될까?", "0으로 나누면... 🤔"],
+        lines: [],
         code: `try:
     print(10 / 0)
 except:
@@ -65,7 +65,7 @@ except:
     {
       type: "explain",
       content: {
-        lines: ["그럼 에러가 안 나는 경우는?", "10 나누기 2는 문제없잖아!"],
+        lines: [],
         code: `try:
     print(10 / 2)
 except:
@@ -257,7 +257,7 @@ except ZeroDivisionError:
     {
       type: "explain",
       content: {
-        lines: ["여기서 'abc'를 입력하면?", "어떤 except가 실행될까?"],
+        lines: [],
         code: `try:
     x = int(input())  # 'abc' 입력
     print(10 / x)
@@ -277,7 +277,7 @@ except ZeroDivisionError:
     {
       type: "explain",
       content: {
-        lines: ["이번엔 '0'을 입력하면?", "int('0')은 성공하는데... 그 다음은?"],
+        lines: [],
         code: `try:
     x = int(input())  # '0' 입력
     print(10 / x)
@@ -403,7 +403,7 @@ except ZeroDivisionError:
     {
       type: "explain",
       content: {
-        lines: ["잘하고 있어요! 하나만 더 확인 👀", "이 코드에서 'abc' 입력하면?"],
+        lines: [],
         code: `while True:
     try:
         x = int(input())

@@ -27,7 +27,7 @@ export const lesson16: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["숫자 리스트도 만들 수 있어!"],
+        lines: [],
         code: "scores = [90, 85, 100, 77]\nprint(scores)",
         predict: {
           question: "출력 결과는?",
@@ -50,7 +50,7 @@ export const lesson16: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["빈 리스트도 만들 수 있어!"],
+        lines: [],
         code: "empty = []\nprint(empty)\nprint(len(empty))",
         predict: {
           question: "len(empty)의 결과는?",
@@ -161,7 +161,7 @@ export const lesson16: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["음수 인덱스로 뒤에서부터 접근!"],
+        lines: [],
         code: "fruits = [\"사과\", \"바나나\", \"포도\"]\nprint(fruits[-1])",
         predict: {
           question: "fruits[-1]의 결과는?",
@@ -274,7 +274,7 @@ export const lesson16: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["append()로 끝에 추가!"],
+        lines: [],
         code: "fruits = [\"사과\", \"바나나\"]\nfruits.append(\"포도\")\nprint(fruits)",
         predict: {
           question: "결과는?",
@@ -302,7 +302,7 @@ export const lesson16: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["len()으로 리스트 길이 확인!"],
+        lines: [],
         code: "fruits = [\"사과\", \"바나나\", \"포도\"]\nprint(len(fruits))",
         predict: {
           question: "len(fruits)의 결과는?",

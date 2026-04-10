@@ -231,6 +231,9 @@ export default function QuizPage() {
 
   const question = quiz.question
 
+  // settings 없음 → useEffect에서 redirect 중. 아무것도 렌더하지 않음 (무한 로딩 방지)
+  if (hasSettings.current === false) return null
+
   if (isLoadingQuestions) {
     return (
       <RequireAuth>

@@ -58,7 +58,7 @@ export const lesson13: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["for + range() = 정해진 횟수 반복!"],
+        lines: [],
         code: 'for i in range(3):\n    print("안녕!")',
         predict: {
           question: "몇 번 출력될까?",
@@ -72,7 +72,7 @@ export const lesson13: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["range(시작, 끝)도 가능!"],
+        lines: [],
         code: "for i in range(1, 4):\n    print(i)",
         predict: {
           question: "출력 결과는?",
@@ -241,7 +241,7 @@ export const lesson13: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["1부터 100까지 합 구하기!"],
+        lines: [],
         code: "total = 0\nfor i in range(1, 101):\n    total += i\nprint(total)",
         predict: {
           question: "결과는?",

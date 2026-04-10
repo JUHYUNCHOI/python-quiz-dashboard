@@ -21,7 +21,7 @@ export const lesson34: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["🏠 집에서 물건 찾기!"],
+        lines: [],
         code: `# 전역변수 = 거실에 있는 물건 (모두 사용 가능)
 # 지역변수 = 내 방에 있는 물건 (나만 사용)
 
@@ -42,7 +42,7 @@ print(f'거실: {x}')`,
     {
       type: "explain",
       content: {
-        lines: ["🧠 어떤 값이 출력될까요?"],
+        lines: [],
         code: `y = 100
 
 def test():
@@ -134,7 +134,7 @@ print(y)`,
     {
       type: "explain",
       content: {
-        lines: ["⚡ 일반 함수 vs 람다 = 편지 vs 문자!"],
+        lines: [],
         code: `# 일반 함수 = 편지 (길게 쓰기)
 def 제곱(x):
     return x ** 2
@@ -154,7 +154,7 @@ print(제곱2(5))`,
     {
       type: "explain",
       content: {
-        lines: ["🧠 람다 함수 예측!"],
+        lines: [],
         code: `double = lambda x: x * 2
 print(double(7))`,
         predict: {
@@ -259,7 +259,7 @@ print(double(7))`,
     {
       type: "explain",
       content: {
-        lines: ["📊 줄 세우기! 기준을 정해요"],
+        lines: [],
         code: `# 학생들을 점수 순으로 줄 세우기!
 학생 = [('철수', 85), ('영희', 92), ('민수', 78)]
 
@@ -276,7 +276,7 @@ print(정렬)`,
     {
       type: "explain",
       content: {
-        lines: ["🧠 단어 정렬 예측!"],
+        lines: [],
         code: `단어 = ['apple', 'hi', 'cat']
 결과 = sorted(단어, key=lambda x: len(x))
 print(결과)`,
@@ -402,7 +402,7 @@ print(결과)`,
     {
       type: "explain",
       content: {
-        lines: ["🔗 함수는 다른 함수를 부를 수 있어요!"],
+        lines: [],
         code: `def 더하기(a, b):
     return a + b
 
@@ -425,7 +425,7 @@ print(f'합: {합계}, 곱: {곱셈}')`,
     {
       type: "explain",
       content: {
-        lines: ["🧠 함수 조합 예측!"],
+        lines: [],
         code: `def 제곱(x):
     return x ** 2
 

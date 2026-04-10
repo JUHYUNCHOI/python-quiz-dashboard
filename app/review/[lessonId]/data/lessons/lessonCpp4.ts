@@ -32,10 +32,7 @@ export const lessonCpp4: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "cin >> 으로 정수를 입력받아봐요! 🔢",
-            "변수를 먼저 선언하고, cin >> 변수 형태로 입력!"
-          ],
+          lines: [],
           code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    int age;\n    cout << "나이를 입력하세요: ";\n    cin >> age;\n    cout << "당신의 나이: " << age << endl;\n    return 0;\n}',
           result: "나이를 입력하세요: 14\n당신의 나이: 14",
           predict: {
@@ -99,10 +96,7 @@ export const lessonCpp4: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "cin >> 으로 문자열도 입력받을 수 있어요!",
-            "하지만 주의! cin >>은 공백에서 멈춰요 ⚠️"
-          ],
+          lines: [],
           code: '#include <iostream>\n#include <string>\nusing namespace std;\n\nint main() {\n    string name;\n    cout << "이름: ";\n    cin >> name;\n    cout << "안녕, " << name << "!" << endl;\n    return 0;\n}',
           result: "이름: 주현\n안녕, 주현!",
           predict: {
@@ -294,10 +288,7 @@ export const lessonCpp4: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "cin >> 을 여러 번 써서 여러 값을 한 번에 입력받을 수 있어요!",
-            "스페이스나 엔터로 값을 구분해요."
-          ],
+          lines: [],
           code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    int a, b;\n    cout << "두 숫자: ";\n    cin >> a >> b;\n    cout << "합: " << a + b << endl;\n    return 0;\n}',
           result: "두 숫자: 10 20\n합: 30",
           predict: {
@@ -423,10 +414,7 @@ export const lessonCpp4: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "두 숫자를 입력받아서 덧셈하는 프로그램이에요!",
-            "cin >> 으로 두 값을 받고, 결과를 출력해요."
-          ],
+          lines: [],
           code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    double a, b;\n    cout << "첫 번째 숫자: ";\n    cin >> a;\n    cout << "두 번째 숫자: ";\n    cin >> b;\n    cout << a << " + " << b << " = " << a + b << endl;\n    return 0;\n}',
           result: "첫 번째 숫자: 10.5\n두 번째 숫자: 3.2\n10.5 + 3.2 = 13.7",
           predict: {
@@ -482,6 +470,95 @@ export const lessonCpp4: LessonData = {
         content: {
           message: "계산기 완성! cin 마스터!",
           emoji: "🏆"
+        }
+      },
+
+      // ==================== CHAPTER 4: cin 손에 익히기 ====================
+      {
+        type: "chapter",
+        content: {
+          num: 4,
+          title: "cin 손에 익히기",
+          desc: "입력 → 처리 → 출력 패턴을 손이 기억할 때까지!"
+        }
+      },
+
+      // Drill 1: 두 수 입력 → 연산
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "정수 두 개를 입력받아 합, 차, 곱을 각각 한 줄씩 출력해요",
+          guide: "int a, b; cin >> a >> b;",
+          template: "int a, b;\n___ >> a >> b;\ncout << a + b << endl;\ncout << a - b << endl;\ncout << a ___ b << endl;",
+          blanksAnswer: ["cin", "*"],
+          answer: "int a, b;\ncin >> a >> b;\ncout << a + b << endl;\ncout << a - b << endl;\ncout << a * b << endl;",
+          expect: "12\n2\n35",
+          en: {
+            task: "Read two integers and print their sum, difference, and product on separate lines",
+            guide: "int a, b; cin >> a >> b;"
+          }
+        }
+      },
+
+      // Drill 2: n개 입력 → 처리
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "정수 n을 입력받고 → n개의 수를 입력받아 → 최솟값을 출력해요",
+          guide: "minVal = 첫 번째 수, for loop으로 비교",
+          template: "int n;\ncin >> n;\nint minVal, x;\ncin >> minVal;\nfor (int i = 1; i < n; i++) {\n    ___ >> x;\n    if (x ___ minVal) minVal = x;\n}\ncout << minVal << endl;",
+          blanksAnswer: ["cin", "< "],
+          alternateAnswers: [],
+          answer: "int n;\ncin >> n;\nint minVal, x;\ncin >> minVal;\nfor (int i = 1; i < n; i++) {\n    cin >> x;\n    if (x < minVal) minVal = x;\n}\ncout << minVal << endl;",
+          expect: "2",
+          en: {
+            task: "Read n, then read n numbers, then print the minimum value",
+            guide: "minVal = first number, compare in for loop"
+          }
+        }
+      },
+
+      // Drill 3: 처음부터 — 이름 + 나이 입력 출력
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "처음부터 작성! 이름(string)과 나이(int)를 입력받아 \"이름 is N years old.\" 형식으로 출력",
+          guide: "string name; int age; cin >> name >> age;",
+          hint: "string name;\nint age;\ncin >> name >> age;\ncout << name << \" is \" << age << \" years old.\" << endl;",
+          template: null,
+          answer: "string name;\nint age;\ncin >> name >> age;\ncout << name << \" is \" << age << \" years old.\" << endl;",
+          alternateAnswers: [
+            "string name;int age;cin>>name>>age;cout<<name<<\" is \"<<age<<\" years old.\"<<endl;"
+          ],
+          expect: "Alice is 20 years old.",
+          en: {
+            task: "Write from scratch! Read a name (string) and age (int), print \"name is N years old.\"",
+            guide: "string name; int age; cin >> name >> age;"
+          }
+        }
+      },
+
+      // Drill 4: 처음부터 — 성적 합산
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "처음부터 작성! 3개의 점수를 입력받아 합계와 평균(소수점 포함)을 출력해요",
+          guide: "int a,b,c; cin>>a>>b>>c; cout << sum << (double)sum/3",
+          hint: "int a, b, c;\ncin >> a >> b >> c;\nint sum = a + b + c;\ncout << sum << endl;\ncout << (double)sum / 3 << endl;",
+          template: null,
+          answer: "int a, b, c;\ncin >> a >> b >> c;\nint sum = a + b + c;\ncout << sum << endl;\ncout << (double)sum / 3 << endl;",
+          alternateAnswers: [
+            "int a,b,c;\ncin>>a>>b>>c;\nint sum=a+b+c;\ncout<<sum<<endl<<(double)sum/3<<endl;"
+          ],
+          expect: "270\n90",
+          en: {
+            task: "Write from scratch! Read 3 scores, print the total and average (with decimal)",
+            guide: "int a,b,c; cin>>a>>b>>c; cout << sum << (double)sum/3"
+          }
         }
       },
 

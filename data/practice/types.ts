@@ -14,6 +14,8 @@ export interface ProblemI18n {
   explanation?: string  // MCQ problems use explanation instead of solutionExplanation
   options?: string[]    // MCQ option texts in English
   codeSnippet?: string  // English version of code snippet (replaces Korean string literals)
+  initialCode?: string  // English version of starter code (use when Korean comments are in initialCode)
+  scaffoldCode?: string // English version of scaffold (more structured code, shown after failures)
 }
 
 /** Optional English translation fields for a cluster */
@@ -40,6 +42,7 @@ export interface PracticeProblem {
 
   // code 전용 필드
   initialCode?: string
+  scaffoldCode?: string                   // 실패 반복 시 공개되는 더 구조화된 스켈레톤
   testCases?: PracticeTestCase[]
   hints?: string[]                        // 순서대로 공개
   solutionCode?: string
@@ -83,6 +86,8 @@ export function localizeProblem(p: PracticeProblem, lang: string): PracticeProbl
     explanation: p.en.explanation ?? p.explanation,
     options: p.en.options ?? p.options,
     codeSnippet: p.en.codeSnippet ?? p.codeSnippet,
+    initialCode: p.en.initialCode ?? p.initialCode,
+    scaffoldCode: p.en.scaffoldCode ?? p.scaffoldCode,
   }
 }
 

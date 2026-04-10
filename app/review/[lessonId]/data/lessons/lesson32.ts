@@ -76,7 +76,7 @@ print('안녕, 민수!')`,
     {
       type: "explain",
       content: {
-        lines: ["📞 함수는 호출해야 실행돼요!"],
+        lines: [],
         code: `def 안녕():
     print('Hi!')
 
@@ -162,7 +162,7 @@ print('안녕, 민수!')`,
     {
       type: "explain",
       content: {
-        lines: ["📦 매개변수 = 함수에 전달하는 재료!"],
+        lines: [],
         code: `def 인사(이름):
     print(f'안녕, {이름}!')
 
@@ -205,7 +205,7 @@ print('안녕, 민수!')`,
     {
       type: "explain",
       content: {
-        lines: ["📦📦 매개변수 여러 개도 가능!"],
+        lines: [],
         code: `def 소개(이름, 나이):
     print(f'저는 {이름}, {나이}살!')
 
@@ -268,7 +268,7 @@ print('안녕, 민수!')`,
     {
       type: "explain",
       content: {
-        lines: ["🎁 return = 결과를 돌려줘!"],
+        lines: [],
         code: `def 더하기(a, b):
     return a + b
 

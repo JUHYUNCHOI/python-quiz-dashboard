@@ -23,9 +23,7 @@ export const cppLessonP1Data: LessonData = {
           id: "ch1-exp1",
           type: "explain",
           title: "🎮 프로젝트 소개",
-          content: `**숫자 맞추기 게임**을 C++로 만들어봐요!
-
-컴퓨터가 1~100 사이의 숫자를 하나 정하면, 우리가 맞추는 게임이에요.
+          content: `이번 프로젝트에서 만들 게임이에요.
 
 **완성된 게임 실행 예시:**
 \`\`\`
@@ -33,25 +31,81 @@ export const cppLessonP1Data: LessonData = {
 1~100 사이의 숫자를 맞춰보세요!
 
 입력: 50
-⬆️ 더 큰 숫자예요!
+더 큰 숫자예요!
 
 입력: 75
-⬇️ 더 작은 숫자예요!
+더 작은 숫자예요!
 
 입력: 63
-🎉 정답! 3번 만에 맞췄어요!
+정답! 3번 만에 맞췄어요!
 \`\`\`
 
-파이썬으로 이미 만들어본 적 있다면, C++로 다시 만들어보는 거예요!
+컴퓨터가 1~100 사이 숫자를 몰래 정해두고, 사용자가 맞추면 끝나는 게임이에요.
 
-**사용할 것들:**
-- \`while\` — 반복해서 입력받기
-- \`if/else\` — 크고 작은지 비교
-- \`cin/cout\` — 입력과 출력
-- \`rand()\` — 랜덤 숫자 만들기
-- 함수 — 코드를 깔끔하게 정리
+이걸 직접 만들어볼 거예요. 어떻게 만들지 같이 생각해봐요.`
+        },
+        {
+          id: "ch1-think1",
+          type: "quiz",
+          title: "🤔 게임이 어떻게 동작하는 걸까?",
+          content: `위 실행 예시를 다시 보면서 생각해봐요.
 
-💡 Part 1에서 배운 모든 것을 한 프로그램에 모아볼 거예요!`
+이 게임에서 **제일 먼저** 일어나는 일은 뭔가요?`,
+          options: [
+            "사용자가 숫자를 입력한다",
+            "\"더 크다 / 작다\" 메시지가 나온다",
+            "컴퓨터가 정답 숫자를 몰래 정해 둔다",
+            "시도 횟수를 센다"
+          ],
+          answer: 2,
+          explanation: "맞아요! 사용자는 모르지만, 게임이 시작되자마자 컴퓨터가 먼저 1~100 중 하나를 정해요. 그 숫자를 향해 사용자가 추측하는 거예요."
+        },
+        {
+          id: "ch1-think2",
+          type: "quiz",
+          title: "🤔 맞출 때까지 계속 묻는 건 어떻게?",
+          content: `실행 예시를 보면 사용자가 틀려도 게임이 끝나지 않아요.
+맞출 때까지 계속 입력을 받죠.
+
+이걸 코드로 구현할 때 필요한 건?`,
+          options: [
+            "if/else",
+            "while 루프",
+            "cout",
+            "배열"
+          ],
+          answer: 1,
+          explanation: "while 루프를 쓰면 맞출 때까지 계속 반복할 수 있어요. 정답을 맞추면 break로 루프를 탈출하면 돼요."
+        },
+        {
+          id: "ch1-think3",
+          type: "quiz",
+          title: "🤔 새로 배워야 할 건 뭘까?",
+          content: `이 게임에 필요한 것들을 체크해봐요:
+
+- 맞출 때까지 반복 → **while** ✓ 배웠음
+- 크다/작다 비교 → **if/else** ✓ 배웠음
+- 입력/출력 → **cin/cout** ✓ 배웠음
+
+그럼 **아직 배우지 않은** 것은?`,
+          options: [
+            "while 루프",
+            "if / else 비교",
+            "cin으로 입력 받기",
+            "rand() — 컴퓨터가 랜덤 숫자를 정하는 방법"
+          ],
+          answer: 3,
+          explanation: "rand()만 새로 배우면 돼요! 나머지는 이미 다 알고 있어요. 이번 챕터에서 rand() 하나만 익히면 게임을 완성할 수 있어요."
+        },
+        {
+          id: "ch1-flow1",
+          type: "explain",
+          title: "🗺️ 정리: 게임의 흐름",
+          content: `지금까지 생각한 것들을 순서로 정리하면 이렇게 돼요.
+
+![숫자 맞추기 게임 순서도](/flowchart-p1-ko.svg)
+
+rand()만 배우면 이 흐름을 전부 코드로 쓸 수 있어요.`
         },
         {
           id: "ch1-exp2",
@@ -102,22 +156,8 @@ int main() {
 }`,
           options: ["0~9 사이의 숫자", "1~10 사이의 숫자", "1~100 사이의 숫자", "항상 10"],
           answer: 1,
-          explanation: "rand() % 10은 0~9를 만들고, +1을 하면 1~10이 돼요! rand() % N + 1 = 1~N 범위의 랜덤 숫자예요."
+          explanation: "rand() % 10은 0~9를 만들고, +1을 하면 1~10이 돼요. rand() % N + 1 = 1~N 범위예요. 그럼 1~100을 만들려면 rand() % 100 + 1 이겠죠? 다음 챕터에서 직접 써볼게요!"
         },
-        {
-          id: "ch1-quiz1",
-          type: "quiz",
-          title: "게임에 필요한 것들",
-          content: `숫자 맞추기 게임에 **필요하지 않은** 것은?`,
-          options: [
-            "while 루프 (반복해서 입력받기)",
-            "if/else (크고 작은지 비교)",
-            "배열 (숫자 여러 개 저장)",
-            "rand() (랜덤 숫자 생성)"
-          ],
-          answer: 2,
-          explanation: "배열은 필요 없어요! 숫자 맞추기 게임은 while 루프, if/else 비교, rand() 랜덤 숫자만 있으면 충분해요."
-        }
       ]
     },
     // ============================================
@@ -173,26 +213,26 @@ int main() {
     int answer = rand() % 100 + 1;
     cout << "정답: " << answer << endl;  // 테스트용
     return 0;
+}`,
+          initialCode: `#include <iostream>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+int main() {
+    srand(time(0));
+    int answer = rand() % 100 + 1;
+    cout << "정답: " << answer << endl;  // 테스트용
+    return 0;
 }`
         },
         {
           id: "ch2-exp2",
           type: "explain",
           title: "🔄 Step 2: 반복 입력 + 비교",
-          content: `이제 핵심 로직을 만들어요!
+          content: `순서도를 코드로 옮겨볼게요. 파이썬이랑 거의 같아요!
 
-**while 루프**로 사용자가 맞출 때까지 계속 입력받아요.
-
-\`\`\`
-while (true) → 무한 반복!
-  ├── 입력 받기 (cin >> guess)
-  ├── 시도 횟수 +1
-  ├── if (guess < answer) → "더 큰 숫자예요!"
-  ├── else if (guess > answer) → "더 작은 숫자예요!"
-  └── else → "정답!" → break로 탈출!
-\`\`\`
-
-**파이썬이었다면:**
+**파이썬:**
 \`\`\`python
 while True:
     guess = int(input("입력: "))
@@ -202,13 +242,29 @@ while True:
     elif guess > answer:
         print("더 작은 숫자예요!")
     else:
-        print(f"정답! {tries}번 만에 맞췄어요!")
+        print(f"정답! {tries}번!")
         break
 \`\`\`
 
-C++도 거의 같은 구조예요! \`while(True)\` 대신 \`while(true)\`, \`elif\` 대신 \`else if\`!
+**C++:**
+\`\`\`cpp
+while (true) {
+    cin >> guess;
+    tries++;
+    if (guess < answer) {
+        cout << "더 큰 숫자예요!" << endl;
+    } else if (guess > answer) {
+        cout << "더 작은 숫자예요!" << endl;
+    } else {
+        cout << "정답! " << tries << "번!" << endl;
+        break;
+    }
+}
+\`\`\`
 
-💡 \`break\`는 파이썬과 C++ 모두 같아요. 루프를 즉시 탈출해요!`
+바뀐 것: \`while True\` → \`while (true)\`, \`elif\` → \`else if\`, \`print\` → \`cout\`
+
+나머지는 똑같아요!`
         },
         {
           id: "ch2-prac2",
@@ -239,11 +295,41 @@ int main() {
         tries++;
 
         if (guess < answer) {
-            cout << "⬆️ 더 큰 숫자예요!" << endl;
+            cout << "더 큰 숫자예요!" << endl;
         } else if (guess > answer) {
-            cout << "⬇️ 더 작은 숫자예요!" << endl;
+            cout << "더 작은 숫자예요!" << endl;
         } else {
-            cout << "🎉 정답! " << tries << "번 만에 맞췄어요!" << endl;
+            cout << "정답! " << tries << "번 만에 맞췄어요!" << endl;
+            break;
+        }
+    }
+    return 0;
+}`,
+          initialCode: `#include <iostream>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+int main() {
+    srand(time(0));
+    int answer = rand() % 100 + 1;
+    int guess;
+    int tries = 0;
+
+    cout << "=== 숫자 맞추기 게임 ===" << endl;
+    cout << "1~100 사이의 숫자를 맞춰보세요!" << endl;
+
+    while (true) {
+        cout << "입력: ";
+        cin >> guess;
+        tries++;
+
+        if (guess < answer) {
+            cout << "더 큰 숫자예요!" << endl;
+        } else if (guess > answer) {
+            cout << "더 작은 숫자예요!" << endl;
+        } else {
+            cout << "정답! " << tries << "번 만에 맞췄어요!" << endl;
             break;
         }
     }
@@ -360,11 +446,11 @@ void playGame() {
         tries++;
 
         if (guess < answer) {
-            cout << "⬆️ 더 큰 숫자예요!" << endl;
+            cout << "더 큰 숫자예요!" << endl;
         } else if (guess > answer) {
-            cout << "⬇️ 더 작은 숫자예요!" << endl;
+            cout << "더 작은 숫자예요!" << endl;
         } else {
-            cout << "🎉 정답! " << tries << "번 만에 맞췄어요!" << endl;
+            cout << "정답! " << tries << "번 만에 맞췄어요!" << endl;
             break;
         }
     }
@@ -380,7 +466,53 @@ int main() {
         cin >> playAgain;
     } while (playAgain == 'y' || playAgain == 'Y');
 
-    cout << "게임을 종료합니다! 👋" << endl;
+    cout << "게임을 종료합니다!" << endl;
+    return 0;
+}`,
+          initialCode: `#include <iostream>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+int getRandomNumber(int min, int max) {
+    return rand() % (max - min + 1) + min;
+}
+
+void playGame() {
+    int answer = getRandomNumber(1, 100);
+    int guess;
+    int tries = 0;
+
+    cout << "\\n=== 숫자 맞추기 게임 ===" << endl;
+    cout << "1~100 사이의 숫자를 맞춰보세요!" << endl;
+
+    while (true) {
+        cout << "\\n입력: ";
+        cin >> guess;
+        tries++;
+
+        if (guess < answer) {
+            cout << "더 큰 숫자예요!" << endl;
+        } else if (guess > answer) {
+            cout << "더 작은 숫자예요!" << endl;
+        } else {
+            cout << "정답! " << tries << "번 만에 맞췄어요!" << endl;
+            break;
+        }
+    }
+}
+
+int main() {
+    srand(time(0));
+
+    char playAgain;
+    do {
+        playGame();
+        cout << "\\n다시 하시겠어요? (y/n): ";
+        cin >> playAgain;
+    } while (playAgain == 'y' || playAgain == 'Y');
+
+    cout << "게임을 종료합니다!" << endl;
     return 0;
 }`,
           stdin: `50\n25\n75\n60\n55\n52\n48\n45\n42\n40\n38\n35\n32\n30\n28\n26\n24\n22\n20\n18\n16\n14\n12\n10\n8\n6\n4\n2\n1\n3\n5\n7\n9\n11\n13\n15\n17\n19\n21\n23\n27\n29\n31\n33\n34\n36\n37\n39\n41\n43\nn`

@@ -59,10 +59,7 @@ export const lessonCpp22: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "public: 아래에 있는 멤버는 외부에서 접근 가능해요.",
-            "private: 아래에 있는 멤버는 클래스 안에서만 접근 가능해요."
-          ],
+          lines: [],
           code: 'class Rectangle {\npublic:\n    int width;\n    int height;\n\nprivate:\n    int secret;\n};\n\nRectangle r;\nr.width = 5;   // OK\nr.height = 3;  // OK\n// r.secret = 1; // 에러! private이에요',
           predict: {
             question: "r.width = 5; 는 동작할까요?",
@@ -187,10 +184,7 @@ export const lessonCpp22: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "this-> 를 써서 멤버 변수와 매개변수를 구분할 수 있어요!",
-            "파이썬의 self.name = name과 같아요."
-          ],
+          lines: [],
           code: '#include <iostream>\nusing namespace std;\n\nclass Dog {\npublic:\n    string name;\n    int age;\n\n    Dog(string name, int age) {\n        this->name = name;  // this->name = 멤버변수\n        this->age = age;    // this->age  = 멤버변수\n    }\n\n    void bark() {\n        cout << this->name << ": 멍멍!" << endl;\n    }\n};\n\nint main() {\n    Dog d("바둑이", 3);\n    d.bark();\n    return 0;\n}',
           predict: {
             question: "출력 결과는?",
@@ -364,10 +358,7 @@ export const lessonCpp22: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "자식 클래스는 부모의 public 멤버를 모두 쓸 수 있어요!",
-            "자식만의 멤버도 추가할 수 있어요."
-          ],
+          lines: [],
           code: '#include <iostream>\nusing namespace std;\n\nclass Animal {\npublic:\n    string name;\n    Animal(string n) : name(n) {}\n    void speak() {\n        cout << name << " 소리냄" << endl;\n    }\n};\n\nclass Cat : public Animal {\npublic:\n    Cat(string n) : Animal(n) {}\n    void purr() {\n        cout << name << ": 야옹!" << endl;\n    }\n};\n\nint main() {\n    Cat c("나비");\n    c.speak();\n    c.purr();\n    return 0;\n}',
           predict: {
             question: "출력 결과는?",

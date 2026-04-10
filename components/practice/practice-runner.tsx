@@ -5,6 +5,7 @@ import dynamic from "next/dynamic"
 import { Play, Loader2, RotateCcw, ChevronDown, Check, X, Lightbulb, Eye } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { PracticeProblem } from "@/data/practice/types"
+import { localizeProblem } from "@/data/practice/types"
 import { useLanguage } from "@/contexts/language-context"
 
 const SimpleEditor = dynamic(() => import("react-simple-code-editor"), { ssr: false })
@@ -94,15 +95,109 @@ interface PracticeRunnerProps {
 function localizeInitialCode(code: string, isEn: boolean): string {
   if (!isEn) return code
   return code
+    // ── Generic placeholders ──────────────────────────────────────────
     .replace(/\/\/ 여기에 코드를 작성하세요/g, "// Write your code here")
     .replace(/# 여기에 코드를 작성하세요/g, "# Write your code here")
     .replace(/\/\/ 여기에 코드 작성/g, "// Write your code here")
     .replace(/# 여기에 코드 작성/g, "# Write your code here")
+    .replace(/\/\/ 여기에 출력 코드를 작성하세요/g, "// Write output code here")
+    .replace(/\/\* 여기를 채우세요 \*\//g, "/* fill in */")
+    .replace(/\/\* 조건을 채우세요 \*\//g, "/* fill in condition */")
+    .replace(/\/\* 조건 \*\//g, "/* condition */")
+    // ── Loops ────────────────────────────────────────────────────────
+    .replace(/\/\/ 0이면 종료/g, "// if 0, stop")
+    .replace(/\/\/ 아니면 sum에 더하기/g, "// otherwise add to sum")
+    .replace(/\/\/ 나머지 출력/g, "// print the rest")
+    .replace(/\/\/ while과 cin을 함께 사용해보세요/g, "// try using while with cin")
+    // ── Arrays ───────────────────────────────────────────────────────
+    .replace(/\/\/ push_back 사용/g, "// use push_back")
+    .replace(/\/\/ pop_back 사용 \(비어있지 않을 때만\)/g, "// use pop_back (only if not empty)")
+    // ── Conditionals ─────────────────────────────────────────────────
+    .replace(/\/\/ 각 case를 채우세요/g, "// fill in each case")
+    .replace(/\/\/ sort\(\) 사용 금지: if-else와 swap으로만 해결하세요/g, "// no sort(): use only if-else and swap")
+    .replace(/\/\/ 삼항 연산자를 사용하세요: 조건 \? 값1 : 값2/g, "// use ternary: condition ? value1 : value2")
+    .replace(/\/\/ 삼항 연산자만 사용해서 result에 결과를 저장하세요/g, "// store result using only the ternary operator")
+    .replace(/\/\/ 나머지를 채우세요/g, "// fill in the rest")
+    .replace(/\/\/ 나머지 계절을 채우세요/g, "// fill in remaining seasons")
+    .replace(/\/\/ 각 연산자 case를 작성하세요/g, "// write each operator case")
+    // ── Functions ────────────────────────────────────────────────────
+    .replace(/\/\/ myMax, myMin 함수를 여기에 작성하세요/g, "// write myMax and myMin functions here")
+    .replace(/\/\/ myMax, myMin을 호출해 출력하세요/g, "// call myMax and myMin to print")
+    .replace(/\/\/ myAbs 함수를 여기에 작성하세요/g, "// write myAbs function here")
+    .replace(/\/\/ myAbs를 호출해 sum에 더하세요/g, "// call myAbs and add to sum")
+    .replace(/\/\/ isEven 함수를 여기에 작성하세요/g, "// write isEven function here")
+    .replace(/\/\/ isEven을 호출해 "even" 또는 "odd"를 출력하세요/g, '// call isEven to print "even" or "odd"')
+    .replace(/\/\/ square 함수를 여기에 작성하세요/g, "// write square function here")
+    .replace(/\/\/ square를 호출해 sum과 maxSq를 갱신하세요/g, "// call square to update sum and maxSq")
+    .replace(/\/\/ isPrime 함수를 여기에 작성하세요/g, "// write isPrime function here")
+    .replace(/\/\/ 1, 소수, 합성수를 구분해 출력하세요/g, "// classify and print: 1, prime, or composite")
+    .replace(/\/\/ factorial 재귀 함수를 여기에 작성하세요/g, "// write factorial recursive function here")
+    .replace(/\/\/ 오버로딩: area 함수를 두 가지 버전으로 작성하세요/g, "// overloading: write two versions of area function")
+    .replace(/\/\/ 원: r \* r \* 3/g, "// circle: r * r * 3")
+    .replace(/\/\/ 직사각형: w \* h/g, "// rectangle: w * h")
+    .replace(/\/\/ fib 재귀 함수를 여기에 작성하세요/g, "// write fib recursive function here")
+    .replace(/\/\/ gcd, lcm 함수를 여기에 작성하세요/g, "// write gcd and lcm functions here")
+    .replace(/\/\/ countVowels, reverseStr 함수를 여기에 작성하세요/g, "// write countVowels and reverseStr functions here")
+    .replace(/\/\/ sumTo \(재귀\), sumToIter \(반복문\) 함수를 여기에 작성하세요/g, "// write sumTo (recursive) and sumToIter (iterative) here")
+    .replace(/\/\/ minOfThree 함수를 여기에 작성하세요/g, "// write minOfThree function here")
+    .replace(/\/\/ printRepeat 함수를 여기에 작성하세요/g, "// write printRepeat function here")
+    .replace(/\/\/ countMultiples 함수를 여기에 작성하세요/g, "// write countMultiples function here")
+    .replace(/\/\/ power 재귀 함수를 여기에 작성하세요/g, "// write power recursive function here")
+    .replace(/\/\/ 2부터 n까지 isPrime을 호출해 소수의 합을 구하세요/g, "// call isPrime for 2..n and sum the primes")
+    // ── I/O ──────────────────────────────────────────────────────────
+    .replace(/\/\/ cin으로 a, b를 입력받으세요/g, "// read a and b with cin")
+    .replace(/\/\/ cin으로 a, b, c를 입력받으세요/g, "// read a, b, c with cin")
+    .replace(/\/\/ cin으로 name, age를 입력받으세요/g, "// read name and age with cin")
+    .replace(/\/\/ cin으로 w, h를 입력받으세요/g, "// read w and h with cin")
+    .replace(/\/\/ cin으로 seconds를 입력받으세요/g, "// read seconds with cin")
+    .replace(/\/\/ cin으로 n을 입력받은 뒤, getline으로 문장을 읽어보세요/g, "// read n with cin, then read a line with getline")
+    .replace(/\/\/ cin으로 c를 입력받으세요/g, "// read c with cin")
+    .replace(/\/\/ cin으로 price, paid를 입력받으세요/g, "// read price and paid with cin")
+    .replace(/\/\/ cin으로 weight, height를 입력받으세요/g, "// read weight and height with cin")
+    // ── Map / Set ────────────────────────────────────────────────────
+    .replace(/\/\/ freq에 단어 카운트, order에 첫 등장 순서 기록/g, "// count word frequency in freq, record first-seen order in order")
+    // ── Refs / Pointers ──────────────────────────────────────────────
+    .replace(/\/\/ void swap\(int& a, int& b\) 함수를 여기에 작성하세요/g, "// write void swap(int& a, int& b) here")
+    .replace(/\/\/ void doubleValue\(int& n\) 함수를 여기에 작성하세요/g, "// write void doubleValue(int& n) here")
+    .replace(/\/\/ -1 반환/g, "// return -1")
+    .replace(/\/\/ 아니면 \*p × 2 반환/g, "// otherwise return *p × 2")
+    .replace(/\/\/ 1\. 최솟값을 구하세요/g, "// 1. find the minimum value")
+    .replace(/\/\/ 2\. 포인터\(int\* p\)를 이용해 최솟값과 같은 원소를 0으로 바꾸세요/g, "// 2. use pointer (int* p) to zero out elements equal to min")
+    .replace(/\/\/ 3\. 결과를 출력하세요/g, "// 3. print the result")
+    .replace(/\/\/ void minmax\(vector<int>& v, int& mn, int& mx\) 함수를 여기에 작성하세요/g, "// write void minmax(vector<int>& v, int& mn, int& mx) here")
+    .replace(/\/\/ 포인터로 arr을 순회하며 짝수만 sum에 더하세요/g, "// traverse arr with a pointer, add only even numbers to sum")
+    .replace(/\/\/ \(int\* p = arr; p < arr \+ n; p\+\+\) 형태로 작성하세요/g, "// use form: (int* p = arr; p < arr + n; p++)")
+    .replace(/\/\/ int countChar\(const string& s, char c\) 함수를 여기에 작성하세요/g, "// write int countChar(const string& s, char c) here")
+    .replace(/\/\/ void addToAll\(vector<int>& v, int x\) 함수를 여기에 작성하세요/g, "// write void addToAll(vector<int>& v, int x) here")
+    .replace(/\/\/ next\[\] 배열을 역순 연결로 초기화하세요/g, "// initialize next[] with reverse links")
+    .replace(/\/\/ next\[n-1\] = -1 \(끝\)/g, "// next[n-1] = -1 (end)")
+    .replace(/\/\/ next\[i\] = i\+1 \.\.\. 하지만 순회는 n-1부터 시작하니/g, "// next[i] = i+1 ... but traversal starts at n-1")
+    .replace(/\/\/ 역순이 되려면: next\[i\] = i-1, 시작은 n-1, 끝은 0 \(next\[0\] = -1\)/g, "// to reverse: next[i] = i-1, start n-1, end 0 (next[0]=-1)")
+    .replace(/\/\/ 인덱스 n-1 부터 next\[cur\] != -1 인 동안 순회해 출력하세요/g, "// traverse from index n-1 while next[cur] != -1, print each")
+    .replace(/\/\/ int\* findFirst\(int\* arr, int n, int target\) 함수를 여기에 작성하세요/g, "// write int* findFirst(int* arr, int n, int target) here")
+    .replace(/\/\/ 찾으면 해당 원소의 포인터 반환, 없으면 nullptr 반환/g, "// return pointer to element if found, nullptr otherwise")
+    .replace(/\/\/ void removeDuplicates\(vector<int>& v\) 함수를 여기에 작성하세요/g, "// write void removeDuplicates(vector<int>& v) here")
+    .replace(/\/\/ sort 후 unique \+ erase 패턴 또는 직접 구현/g, "// use sort + unique + erase, or implement manually")
+    // ── Stack / Queue / Deque ─────────────────────────────────────────
+    .replace(/\/\/ push_front 사용/g, "// use push_front")
+    .replace(/\/\/ pop_front 사용, 비어있으면 -1/g, "// use pop_front, output -1 if empty")
+    .replace(/\/\/ 덱 내용 출력/g, "// print deque contents")
+    .replace(/\/\/ 최대힙: 중앙값 이하의 수들/g, "// max-heap: numbers ≤ median")
+    .replace(/\/\/ 최소힙: 중앙값 초과의 수들/g, "// min-heap: numbers > median")
+    // ── Strings ──────────────────────────────────────────────────────
+    .replace(/\/\/ find\(\)로 위치를 찾고 replace\(\)로 교체하세요/g, "// use find() to locate, replace() to substitute")
+    .replace(/\/\/ 모든 등장 위치를 바꿔야 합니다/g, "// replace all occurrences")
+    .replace(/\/\/ result로 출력 결정/g, "// decide output based on result")
+    // ── Structs ───────────────────────────────────────────────────────
+    .replace(/\/\/ 거리 제곱을 반환하세요/g, "// return squared distance")
+    .replace(/\/\/ 합을 반환하세요/g, "// return the sum")
+    .replace(/\/\/ 곱을 반환하세요/g, "// return the product")
 }
 
-export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
+export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunnerProps) {
   const { t, lang: locale } = useLanguage()
   const isEn = locale === "en"
+  const problem = localizeProblem(rawProblem, locale)
   const lang = problem.language ?? "cpp"
   const storageKey = `practice-code-${problem.id}`
 
@@ -117,6 +212,8 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
   const [allPassed, setAllPassed] = useState(false)
   const [hintsShown, setHintsShown] = useState(0)
   const [showSolution, setShowSolution] = useState(false)
+  const [failCount, setFailCount] = useState(0)
+  const [scaffoldShown, setScaffoldShown] = useState(false)
 
   const runTests = useCallback(async () => {
     if (isLoading) return
@@ -163,12 +260,21 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
       const passed = newResults.every(r => r.passed)
       setAllPassed(passed)
       if (passed) {
-        const starred = hintsShown === 0 && !showSolution
+        const starred = hintsShown === 0 && !showSolution && !scaffoldShown
         onSuccess?.(starred)
+      } else {
+        setFailCount(c => c + 1)
       }
     }
     setIsLoading(false)
   }, [code, problem, isLoading, onSuccess, storageKey, hintsShown, showSolution, t])
+
+  const showScaffold = () => {
+    const scaffold = localizeInitialCode(problem.scaffoldCode ?? "", isEn)
+    setCode(scaffold)
+    setScaffoldShown(true)
+    try { localStorage.setItem(storageKey, scaffold) } catch {}
+  }
 
   const reset = () => {
     setCode(localizeInitialCode(problem.initialCode ?? "", isEn))
@@ -177,6 +283,8 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
     setAllPassed(false)
     setHintsShown(0)
     setShowSolution(false)
+    setFailCount(0)
+    setScaffoldShown(false)
     try { localStorage.removeItem(storageKey) } catch {}
   }
 
@@ -276,6 +384,22 @@ export function PracticeRunner({ problem, onSuccess }: PracticeRunnerProps) {
               )}
             </div>
           )}
+        </div>
+      )}
+
+      {/* 코드 구조 힌트 — 2회 이상 실패 + scaffoldCode 있을 때 */}
+      {!scaffoldShown && failCount >= 2 && problem.scaffoldCode && (
+        <button
+          onClick={showScaffold}
+          className="flex items-center gap-2 text-sm text-blue-400 hover:text-blue-600 transition-colors py-1"
+        >
+          <Lightbulb className="w-4 h-4" />
+          {t("💡 코드 구조 보기 (힌트)", "💡 Show code structure (hint)")}
+        </button>
+      )}
+      {scaffoldShown && (
+        <div className="rounded-xl bg-blue-50 border border-blue-200 px-3 py-2 text-xs text-blue-600">
+          {t("코드 구조 힌트가 적용됐어요. 완료해도 ⭐는 획득할 수 없어요.", "Code structure hint applied. Solving now won't earn ⭐.")}
         </div>
       )}
 

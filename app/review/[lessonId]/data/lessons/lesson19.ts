@@ -18,7 +18,7 @@ export const lesson19: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["튜플은 소괄호 ()로 만들어요!"],
+        lines: [],
         code: "colors = ('빨강', '파랑', '초록')\nprint(colors)\nprint(type(colors))",
         result: "('빨강', '파랑', '초록')\n<class 'tuple'>",
         note: "리스트와 비슷하지만 () 소괄호를 써요!"
@@ -27,7 +27,7 @@ export const lesson19: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["tuple() 함수로도 만들 수 있어요!"],
+        lines: [],
         code: "nums = tuple([1, 2, 3])\nprint(nums)",
         predict: {
           question: "결과는?",
@@ -41,7 +41,7 @@ export const lesson19: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["튜플은 수정이 불가능해요! (immutable)"],
+        lines: [],
         code: "colors = ('빨강', '파랑', '초록')\ncolors[0] = '노랑'",
         result: "TypeError: 'tuple' object does not support item assignment",
         isError: true,
@@ -51,7 +51,7 @@ export const lesson19: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["인덱싱과 길이는 리스트와 똑같아요!"],
+        lines: [],
         code: "fruits = ('사과', '바나나', '포도')\nprint(fruits[0])\nprint(fruits[-1])\nprint(len(fruits))",
         predict: {
           question: "출력 결과는?",
@@ -154,7 +154,7 @@ export const lesson19: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["튜플 언패킹 = 한 번에 여러 변수에 넣기!"],
+        lines: [],
         code: "name, age, city = ('민수', 15, '서울')\nprint(name)\nprint(age)\nprint(city)",
         predict: {
           question: "출력 결과는?",
@@ -168,7 +168,7 @@ export const lesson19: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["함수에서 여러 값을 돌려줄 때 튜플!"],
+        lines: [],
         code: "def min_max(numbers):\n    return min(numbers), max(numbers)\n\nresult = min_max([3, 1, 7, 2])\nprint(result)\nprint(type(result))",
         result: "(1, 7)\n<class 'tuple'>",
         note: "콤마로 구분하면 자동으로 튜플이 돼요!"
@@ -186,7 +186,7 @@ export const lesson19: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["파이썬의 마법! 두 변수 값 교환!"],
+        lines: [],
         code: "a = 10\nb = 20\nprint(f'교환 전: a={a}, b={b}')\n\na, b = b, a\nprint(f'교환 후: a={a}, b={b}')",
         predict: {
           question: "교환 후 a와 b의 값은?",
@@ -282,7 +282,7 @@ export const lesson19: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["리스트 = 변경 가능 / 튜플 = 변경 불가!"],
+        lines: [],
         code: "# 리스트: 수정 가능\nfruits = ['사과', '바나나']\nfruits.append('포도')\nprint(fruits)\n\n# 튜플: 수정 불가\ncolors = ('빨강', '파랑')\n# colors.append('초록')  # 에러!",
         result: "['사과', '바나나', '포도']",
         note: "바뀌어야 하면 리스트, 바뀌면 안 되면 튜플!"
@@ -291,7 +291,7 @@ export const lesson19: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["튜플은 딕셔너리의 키로 쓸 수 있어요!"],
+        lines: [],
         code: "# 좌표를 키로 사용!\nmap_data = {}\nmap_data[(0, 0)] = '시작'\nmap_data[(1, 2)] = '보물'\nprint(map_data[(1, 2)])",
         predict: {
           question: "출력 결과는?",

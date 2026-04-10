@@ -169,6 +169,7 @@ int main() {
     }
     return 0;
 }`,
+          stdin: `5 3\nBessie 12\nElsie 20\nDaisy 15\nGertie 20\nButtercup 8`,
           expectedOutput: `Elsie
 Gertie
 Daisy`
@@ -319,6 +320,7 @@ int main() {
     }
     return 0;
 }`,
+          stdin: `8\n3 1 4 1 5 9 2 6`,
           expectedOutput: `7
 1 2
 2 1
@@ -479,6 +481,7 @@ int main() {
     }
     return 0;
 }`,
+          stdin: `((())`,
           expectedOutput: `NO
 1`
         },

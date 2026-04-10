@@ -203,34 +203,27 @@ using namespace std;
 
 int main() {
     string name, quote;
-    cout << "Name: ";
     getline(cin, name);
-    cout << "Quote: ";
     getline(cin, quote);
     cout << name << "'s quote: " << quote << endl;
     return 0;
 }`,
-          expectedOutput: "Name: Hong Gildong\nQuote: Hello!\nHong Gildong's quote: Hello!"
+          stdin: `Hong Gildong\nHello!`,
+          expectedOutput: `Hong Gildong's quote: Hello!`
         },
         {
           id: "ch1-practice",
           type: "practice" as const,
-          title: "✋ Read Numbers from File and Print Sum!",
-          content: `This program reads N numbers and prints their sum.
+          title: "✋ Read N Numbers and Print Sum",
+          content: `Read N numbers and print their sum.
 
-Use freopen for file I/O and calculate the sum of all numbers!
-
-Input example (input.txt):
-3
-10 20 30
-
-Output: 60`,
+In real USACO submissions you'd add \`freopen("input.txt", "r", stdin);\` — but here we just use cin directly to test it!`,
           code: `#include <iostream>
 using namespace std;
 
 int main() {
-    freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
+    // In USACO: freopen("input.txt", "r", stdin);
+    // In USACO: freopen("output.txt", "w", stdout);
 
     int n;
     cin >> n;
@@ -246,6 +239,7 @@ int main() {
 
     return 0;
 }`,
+          stdin: `3\n10 20 30`,
           expectedOutput: "60"
         },
         {
@@ -440,31 +434,19 @@ Memorize this template and you'll save valuable time in USACO contests!
         {
           id: "ch2-practice",
           type: "practice" as const,
-          title: "✋ USACO-Style Problem!",
-          content: `Let's solve a problem USACO-style!
+          title: "✋ Fast I/O + Double Output!",
+          content: `Read N numbers and print each one doubled.
 
-Read N numbers from a file, double each one, and output the results.
-
-Input (solve.in):
-4
-3 7 1 5
-
-Output (solve.out):
-6
-14
-2
-10
-
-Use both Fast I/O and freopen!`,
+Apply Fast I/O! In real USACO submissions you'd add freopen lines — but here we test with cin directly.`,
           code: `#include <iostream>
 using namespace std;
 
 int main() {
     ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+    cin.tie(nullptr);
 
-    freopen("solve.in", "r", stdin);
-    freopen("solve.out", "w", stdout);
+    // In USACO: freopen("solve.in", "r", stdin);
+    // In USACO: freopen("solve.out", "w", stdout);
 
     int n;
     cin >> n;
@@ -477,6 +459,7 @@ int main() {
 
     return 0;
 }`,
+          stdin: `4\n3 7 1 5`,
           expectedOutput: `6
 14
 2

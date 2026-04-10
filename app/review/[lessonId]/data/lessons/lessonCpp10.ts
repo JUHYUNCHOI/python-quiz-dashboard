@@ -47,10 +47,7 @@ export const lessonCpp10: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "range-for는 배열에도 쓸 수 있어요!",
-            "vector뿐만 아니라 C 배열에서도 동작해요."
-          ],
+          lines: [],
           code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    int arr[4] = {5, 10, 15, 20};\n    int sum = 0;\n    for (int x : arr) {\n        sum += x;\n    }\n    cout << sum << endl;\n    return 0;\n}',
           predict: {
             question: "출력 결과는?",
@@ -259,10 +256,7 @@ export const lessonCpp10: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "auto는 오른쪽 값을 보고 타입을 결정해요!",
-            "컴파일러가 타입을 추론하는 거예요."
-          ],
+          lines: [],
           code: 'auto a = 10;       // int\nauto b = 3.14;     // double\nauto c = "hello";  // const char*\ncout << a + b << endl;',
           predict: {
             question: "a + b 의 결과는?",
@@ -333,9 +327,7 @@ export const lessonCpp10: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "auto&로 벡터의 모든 값을 2배로 만들어봐요!"
-          ],
+          lines: [],
           code: '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> v = {1, 2, 3};\n    for (auto& x : v) {\n        x = x * 2;\n    }\n    for (auto x : v) {\n        cout << x << " ";\n    }\n    cout << endl;\n    return 0;\n}',
           predict: {
             question: "출력 결과는?",
@@ -445,10 +437,7 @@ export const lessonCpp10: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "range-for로 최댓값을 구하는 방법이에요!",
-            "첫 번째 값을 max로 두고, 더 큰 값이 나오면 갱신해요."
-          ],
+          lines: [],
           code: '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> v = {30, 10, 50, 20};\n    int maxVal = v[0];\n    for (auto x : v) {\n        if (x > maxVal) {\n            maxVal = x;\n        }\n    }\n    cout << maxVal << endl;\n    return 0;\n}',
           predict: {
             question: "출력 결과는?",

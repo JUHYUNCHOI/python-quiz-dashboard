@@ -30,7 +30,7 @@ export const lesson38: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["🧠 파일 내용은?"],
+        lines: [],
         code: "with open('a.txt', 'w') as f:\n    f.write('A')\n    f.write('B')\n    f.write('C')",
         predict: {
           question: "a.txt 내용은?",
@@ -188,7 +188,7 @@ export const lesson38: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["🧠 'w'로 두 번 쓰면?"],
+        lines: [],
         code: "with open('a.txt', 'w') as f:\n    f.write('X')\n\nwith open('a.txt', 'w') as f:\n    f.write('Y')\n\nwith open('a.txt', 'r') as f:\n    print(f.read())",
         predict: {
           question: "출력 결과는?",
@@ -274,7 +274,7 @@ export const lesson38: LessonData = {
     {
       type: "explain",
       content: {
-        lines: ["🧠 파일이 없을 때?"],
+        lines: [],
         code: "try:\n    with open('없는파일.txt', 'r') as f:\n        print('A')\nexcept FileNotFoundError:\n    print('B')\nprint('C')",
         predict: {
           question: "출력 결과는?",

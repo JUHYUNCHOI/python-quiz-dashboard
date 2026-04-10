@@ -19,26 +19,7 @@ export const lessonCpp8: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "파이썬에서 def로 함수를 만들었죠? 🛠️",
-            "C++에서는 def 대신 반환 타입을 써요!",
-            "int, double, string 같은 타입을 함수 앞에 적어요."
-          ],
-          code: '// 파이썬\n// def add(a, b):\n//     return a + b\n\n// C++\n#include <iostream>\nusing namespace std;\n\nint add(int a, int b) {\n    return a + b;\n}\n\nint main() {\n    cout << add(3, 5) << endl;\n    return 0;\n}',
-          result: "8",
-          note: "파이썬: def 함수명(매개변수): → C++: 반환타입 함수명(타입 매개변수) {}"
-        }
-      },
-
-      // void 설명
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "값을 돌려주지 않는 함수는 void를 써요! 🕳️",
-            "파이썬에서 return이 없는 함수와 같아요.",
-            "void = '아무것도 반환 안 함'이라는 뜻!"
-          ],
+          lines: [],
           code: '#include <iostream>\nusing namespace std;\n\nvoid sayHello() {\n    cout << "안녕하세요!" << endl;\n}\n\nint main() {\n    sayHello();\n    return 0;\n}',
           result: "안녕하세요!",
           note: "void = 반환값 없음! return 생략 가능!"
@@ -49,10 +30,7 @@ export const lessonCpp8: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "함수는 main() 위에 정의해야 해요!",
-            "아래에 정의하면 컴파일러가 못 찾아요."
-          ],
+          lines: [],
           code: '#include <iostream>\nusing namespace std;\n\nint square(int x) {\n    return x * x;\n}\n\nint main() {\n    cout << square(4) << endl;\n    return 0;\n}',
           predict: {
             question: "square(4)의 결과는?",
@@ -156,7 +134,7 @@ export const lessonCpp8: LessonData = {
           task: "매개변수에 타입을 넣어 함수를 완성해요!",
           guide: "C++은 매개변수에 타입을 꼭 써야 해요!",
           template: "int add(___ a, ___ b) {\n    return a + b;\n}",
-          answer: "int",
+          answer: "int, int",
           blanksAnswer: ["int", "int"],
           expect: "int add(int a, int b) {\n    return a + b;\n}",
           en: {
@@ -222,11 +200,7 @@ export const lessonCpp8: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "C++에서는 같은 이름의 함수를 여러 개 만들 수 있어요! 🎭",
-            "매개변수의 타입이나 개수가 다르면 OK!",
-            "이걸 함수 오버로딩이라고 해요. 파이썬에는 없는 기능!"
-          ],
+          lines: [],
           code: '#include <iostream>\nusing namespace std;\n\nint add(int a, int b) {\n    return a + b;\n}\n\ndouble add(double a, double b) {\n    return a + b;\n}\n\nint main() {\n    cout << add(3, 5) << endl;\n    cout << add(1.5, 2.3) << endl;\n    return 0;\n}',
           result: "8\n3.8",
           note: "같은 이름 add인데 매개변수 타입이 다르면 OK!"
@@ -237,10 +211,7 @@ export const lessonCpp8: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "매개변수 개수가 달라도 오버로딩이 돼요!",
-            "컴파일러가 알아서 맞는 함수를 골라줘요."
-          ],
+          lines: [],
           code: 'void greet() {\n    cout << "Hello!" << endl;\n}\n\nvoid greet(string name) {\n    cout << "Hello, " << name << "!" << endl;\n}\n\n// main에서:\ngreet();\ngreet("주현");',
           predict: {
             question: "출력 결과는?",
@@ -392,18 +363,26 @@ export const lessonCpp8: LessonData = {
 
       // 인터리빙: 챕터2 복습
       {
-        type: "interleaving",
+        type: "quiz",
         content: {
-          message: "잠깐! 함수 오버로딩 기억나요?",
-          task: "오버로딩이 가능하려면 뭐가 달라야 하나요? (타입이나 ___)",
-          template: "// 오버로딩: 매개변수의 타입이나 ___가 달라야 함",
-          answer: "개수",
-          alternateAnswers: ["갯수", "수"],
-          expect: "// 오버로딩: 매개변수의 타입이나 개수가 달라야 함",
+          question: "오버로딩된 함수를 컴파일러가 구분하는 기준은?",
+          options: [
+            "반환 타입이 다를 때",
+            "매개변수 이름이 다를 때",
+            "매개변수의 타입 또는 개수가 다를 때",
+            "함수 내부 코드가 다를 때"
+          ],
+          answer: 2,
+          explanation: "컴파일러는 매개변수의 타입 또는 개수로만 오버로딩된 함수를 구분해요! 반환 타입이나 매개변수 이름만 다른 건 오버로딩으로 인정 안 됩니다.",
           en: {
-            message: "Wait! Do you remember function overloading?",
-            task: "What must differ for overloading to work? (type or ___)",
-            guide: "// Overloading: parameter type or ___ must differ"
+            question: "How does the compiler distinguish overloaded functions?",
+            options: [
+              "Different return types",
+              "Different parameter names",
+              "Different parameter types or count",
+              "Different code inside the function"
+            ],
+            explanation: "The compiler distinguishes overloaded functions only by parameter type or count! Differing only in return type or parameter names is not valid overloading."
           }
         }
       },
@@ -473,6 +452,112 @@ export const lessonCpp8: LessonData = {
         content: {
           message: "미니 수학 라이브러리 완성! 함수 마스터!",
           emoji: "🏆"
+        }
+      },
+
+      // ==================== CHAPTER 4: 함수 손에 익히기 ====================
+      {
+        type: "chapter",
+        content: {
+          num: 4,
+          title: "함수 손에 익히기",
+          desc: "선언 → 구현 → 호출 패턴을 손이 기억할 때까지!"
+        }
+      },
+
+      // Drill 1: 반환값 없는 함수 (void)
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "이름을 받아서 \"Hello, 이름!\"을 출력하는 void 함수를 완성해요",
+          guide: "void greet(string name) { cout << ... }",
+          template: "___ greet(string name) {\n    cout << \"Hello, \" << name << \"!\" << endl;\n}",
+          blanksAnswer: ["void"],
+          answer: "void greet(string name) {\n    cout << \"Hello, \" << name << \"!\" << endl;\n}",
+          expect: "void greet(string name) {\n    cout << \"Hello, \" << name << \"!\" << endl;\n}",
+          en: {
+            task: "Complete the void function that takes a name and prints \"Hello, name!\"",
+            guide: "void greet(string name) { cout << ... }"
+          }
+        }
+      },
+
+      // Drill 2: 반환값 있는 함수 + 호출
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "두 정수의 곱을 반환하는 함수를 만들고, 3 × 4 결과를 출력해요",
+          guide: "int multiply(int a, int b) { return a * b; }",
+          template: "___ multiply(int a, int b) {\n    return a ___ b;\n}\n// 호출:\ncout << multiply(3, 4) << endl;",
+          blanksAnswer: ["int", "*"],
+          answer: "int multiply(int a, int b) {\n    return a * b;\n}\ncout << multiply(3, 4) << endl;",
+          expect: "12",
+          en: {
+            task: "Create a function that returns the product of two integers, then print 3 × 4",
+            guide: "int multiply(int a, int b) { return a * b; }"
+          }
+        }
+      },
+
+      // Drill 3: 함수 선언 → 구현 → 호출 전체 흐름
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "정수 n을 받아 1부터 n까지 합을 반환하는 함수를 완성하고 sumTo(10) 출력",
+          guide: "int sumTo(int n) { int s=0; for(...) s+=i; return s; }",
+          template: "int sumTo(int n) {\n    int s = 0;\n    for (int i = 1; i <= n; ___) {\n        s ___ i;\n    }\n    return ___;\n}\ncout << sumTo(10) << endl;",
+          blanksAnswer: ["i++", "+=", "s"],
+          answer: "int sumTo(int n) {\n    int s = 0;\n    for (int i = 1; i <= n; i++) {\n        s += i;\n    }\n    return s;\n}\ncout << sumTo(10) << endl;",
+          expect: "55",
+          en: {
+            task: "Complete the function that returns the sum from 1 to n, then print sumTo(10)",
+            guide: "int sumTo(int n) { int s=0; for(...) s+=i; return s; }"
+          }
+        }
+      },
+
+      // Drill 4: 처음부터 — isEven 함수
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "처음부터 작성! 정수가 짝수면 true, 홀수면 false를 반환하는 isEven 함수를 만들고\nisEven(4), isEven(7)의 결과를 출력해요",
+          guide: "bool isEven(int n) { return n % 2 == 0; }",
+          hint: "bool isEven(int n) {\n    return n % 2 == 0;\n}\ncout << isEven(4) << endl;\ncout << isEven(7) << endl;",
+          template: null,
+          answer: "bool isEven(int n) {\n    return n % 2 == 0;\n}\ncout << isEven(4) << endl;\ncout << isEven(7) << endl;",
+          alternateAnswers: [
+            "bool isEven(int n){return n%2==0;}\ncout<<isEven(4)<<endl;\ncout<<isEven(7)<<endl;"
+          ],
+          expect: "1\n0",
+          en: {
+            task: "Write from scratch! Create an isEven function that returns true for even, false for odd\nThen print results for isEven(4) and isEven(7)",
+            guide: "bool isEven(int n) { return n % 2 == 0; }"
+          }
+        }
+      },
+
+      // Drill 5: 처음부터 — max 함수
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "처음부터 작성! 두 정수 중 큰 값을 반환하는 myMax 함수를 만들고\nmyMax(5, 9)와 myMax(12, 3) 결과를 출력해요",
+          guide: "int myMax(int a, int b) { if (a > b) return a; return b; }",
+          hint: "int myMax(int a, int b) {\n    if (a > b) return a;\n    return b;\n}",
+          template: null,
+          answer: "int myMax(int a, int b) {\n    if (a > b) return a;\n    return b;\n}\ncout << myMax(5, 9) << endl;\ncout << myMax(12, 3) << endl;",
+          alternateAnswers: [
+            "int myMax(int a,int b){return a>b?a:b;}\ncout<<myMax(5,9)<<endl;\ncout<<myMax(12,3)<<endl;"
+          ],
+          expect: "9\n12",
+          en: {
+            task: "Write from scratch! Create a myMax function that returns the larger of two integers\nThen print myMax(5, 9) and myMax(12, 3)",
+            guide: "int myMax(int a, int b) { if (a > b) return a; return b; }"
+          }
         }
       },
 

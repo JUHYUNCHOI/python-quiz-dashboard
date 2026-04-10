@@ -19,11 +19,7 @@ export const lessonCpp5: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "C++의 산술 연산자는 파이썬과 거의 같아요! 🧮",
-            "+, -, *, / 는 똑같이 작동해요.",
-            "하지만 나누기(/)에서 큰 차이가 있어요!"
-          ],
+          lines: [],
           code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << 10 + 3 << endl;   // 13\n    cout << 10 - 3 << endl;   // 7\n    cout << 10 * 3 << endl;   // 30\n    cout << 10 / 3 << endl;   // ?\n    return 0;\n}',
           predict: {
             question: "10 / 3 의 결과는?",
@@ -84,11 +80,7 @@ export const lessonCpp5: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "% = 나머지 연산자 (mod) 🎯",
-            "나눗셈의 나머지만 구해요!",
-            "짝수/홀수 판별에 자주 써요."
-          ],
+          lines: [],
           code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << 10 % 3 << endl;  // 10 / 3 = 3 나머지 1\n    cout << 15 % 4 << endl;  // 15 / 4 = 3 나머지 3\n    cout << 8 % 2 << endl;   // 8 / 2 = 4 나머지 0\n    return 0;\n}',
           result: "1\n3\n0",
           predict: {
@@ -246,10 +238,7 @@ export const lessonCpp5: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "= 와 == 를 절대 헷갈리면 안 돼요! ⚠️",
-            "= 는 값 넣기(대입), == 는 같은지 비교!"
-          ],
+          lines: [],
           code: 'int x = 10;       // 대입: x에 10을 넣어요\ncout << (x == 10); // 비교: x가 10인지 확인',
           predict: {
             question: "if (x = 5) 는 어떤 의미?",
@@ -312,10 +301,7 @@ export const lessonCpp5: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "점수가 80 이상 AND 100 이하인지 확인하려면?",
-            "두 조건을 && 로 연결해요!"
-          ],
+          lines: [],
           code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    int score = 85;\n    bool valid = (score >= 80) && (score <= 100);\n    cout << valid << endl;\n    return 0;\n}',
           predict: {
             question: "score가 85일 때 결과는?",
@@ -468,11 +454,7 @@ export const lessonCpp5: LessonData = {
       {
         type: "explain",
         content: {
-          lines: [
-            "나머지 연산자 %와 비교 연산자를 합치면!",
-            "짝수/홀수를 판별할 수 있어요.",
-            "n % 2 == 0 이면 짝수, 1이면 홀수!"
-          ],
+          lines: [],
           code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    int num = 7;\n    cout << num << " % 2 = " << num % 2 << endl;\n    cout << "짝수? " << (num % 2 == 0) << endl;\n    cout << "홀수? " << (num % 2 != 0) << endl;\n    return 0;\n}',
           result: "7 % 2 = 1\n짝수? 0\n홀수? 1",
           predict: {
