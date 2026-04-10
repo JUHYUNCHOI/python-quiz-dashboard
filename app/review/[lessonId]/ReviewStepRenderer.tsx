@@ -20,7 +20,9 @@ import type {
 // ─────────────────────────────────────────────────────────────
 function autoTranslateQuestion(q: string | undefined): string {
   if (!q) return "What's the output?"
-  const map: Record<string, string> = {
+
+  // ── Exact matches ──────────────────────────────────────────
+  const exact: Record<string, string> = {
     "결과는?": "What's the output?",
     "출력 결과는?": "What's the output?",
     "결과가 뭘까?": "What's the output?",
@@ -28,23 +30,134 @@ function autoTranslateQuestion(q: string | undefined): string {
     "실행 결과는?": "What's the output?",
     "어떤 결과가 나올까?": "What's the output?",
     "이 코드의 결과는?": "What's the output?",
+    "이 코드의 출력은?": "What's the output?",
+    "몇 번 출력될까?": "How many times will it print?",
+    "첫 번째 출력은?": "What's the first output?",
+    "두 cout의 출력은?": "What are both couts' outputs?",
+    "마지막 cout의 출력은?": "What's the last cout's output?",
+    "true를 출력하면 뭐가 나올까?": "What gets printed when you print true?",
+    "int에 3.14를 넣으면 어떻게 될까?": "What happens if you put 3.14 into an int?",
+    "혈액형 O는 왜 따옴표가 작은따옴표일까?": "Why does blood type O use single quotes?",
+    "cin >> age; 에서 >>의 방향은?": "In cin >> age;, which direction does >> point?",
+    "10 / 3 의 결과는?": "What's the result of 10 / 3?",
+    "7 % 3 의 결과는?": "What's the result of 7 % 3?",
+    "a + b 의 결과는?": "What's the result of a + b?",
+    "C가 출력될까요?": "Will C be printed?",
+    "if (x = 5) 는 어떤 의미?": "What does if (x = 5) mean?",
+    "매개변수에 &를 쓰는 이유는?": "Why use & in function parameters?",
+    "철수를 2번 add하면 몇 명?": "If you add Cheolsu twice, how many people?",
+    "어떤 접시가 먼저 나올까?": "Which plate comes out first?",
+    "뒤로가기하면 어디로?": "Where does the back button go?",
+    "큰 수부터 나오는 이유는?": "Why do larger numbers come out first?",
+    "deque의 popleft()가 빠른 이유는?": "Why is deque's popleft() fast?",
+    "큐에서 [1, 2, 3] 중 먼저 나오는 건?": "In a queue with [1, 2, 3], which comes out first?",
+    "교집합의 결과는?": "What's the intersection result?",
+    "합집합의 결과는?": "What's the union result?",
+    "rand() % 50 + 1 의 범위는?": "What's the range of rand() % 50 + 1?",
+    "bits/stdc++.h를 실제 프로젝트에서도 쓸까요?": "Is bits/stdc++.h used in real projects?",
+    "이 문제를 풀려면 어떤 알고리즘이 필요할까요?": "What algorithm is needed to solve this problem?",
+    "이 템플릿에서 freopen은 왜 쓰나요?": "Why is freopen used in this template?",
+    "freopen 후 cin은 어디서 읽나요?": "After freopen, where does cin read from?",
+    "1등은?": "Who is 1st place?",
+    "맨 앞 학생 이름은?": "What's the name of the first student?",
+    "교환 후 a와 b의 값은?": "What are the values of a and b after the swap?",
+    "r.width = 5; 는 동작할까요?": "Does r.width = 5; work?",
   }
-  return map[q] ?? q
+  if (exact[q]) return exact[q]
+
+  // ── Regex patterns ─────────────────────────────────────────
+  // "[X]의 결과는?" → "What's the result of [X]?"
+  let m = q.match(/^(.+)의 결과는\?$/)
+  if (m) return `What's the result of ${m[1]}?`
+
+  // "[X]의 값은?" → "What's the value of [X]?"
+  m = q.match(/^(.+)의 값은\?$/)
+  if (m) return `What's the value of ${m[1]}?`
+
+  // "[X]의 출력은?" → "What's the output of [X]?"
+  m = q.match(/^(.+)의 출력은\?$/)
+  if (m) return `What's the output of ${m[1]}?`
+
+  // "[X]의 길이는?" → "What's the length of [X]?"
+  m = q.match(/^(.+)의 길이는\?$/)
+  if (m) return `What's the length of ${m[1]}?`
+
+  // "[X]일 때 출력은?" / "[X]일 때 결과는?"
+  m = q.match(/^(.+)일 때 출력은\?$/)
+  if (m) return `What's the output when ${m[1]}?`
+  m = q.match(/^(.+)일 때 결과는\?$/)
+  if (m) return `What's the result when ${m[1]}?`
+  m = q.match(/^(.+)일 때 이 코드의 출력은\?$/)
+  if (m) return `What's the output when ${m[1]}?`
+
+  // "[X] 입력하면?" → "If [X] is entered?"
+  m = q.match(/^(.+) 입력하면\?$/)
+  if (m) return `What if ${m[1]} is entered?`
+  m = q.match(/^(.+) 입력 → (.+) 입력하면\?$/)
+  if (m) return `After entering ${m[1]}, then entering ${m[2]}?`
+
+  // "[X]를 오른쪽/왼쪽 N칸 rotate하면?"
+  m = q.match(/^(.+)를 오른쪽 (.+) rotate하면\?$/)
+  if (m) return `What happens when ${m[1]} is rotated right by ${m[2]}?`
+  m = q.match(/^(.+)를 왼쪽 (.+) rotate하면\?$/)
+  if (m) return `What happens when ${m[1]} is rotated left by ${m[2]}?`
+
+  // "[X] 내용은?"
+  m = q.match(/^(.+) 내용은\?$/)
+  if (m) return `What's the content of ${m[1]}?`
+
+  // "[X]는 몇 줄?"
+  m = q.match(/^(.+)는 몇 줄\?$/)
+  if (m) return `How many lines does ${m[1]} have?`
+
+  // "[X]의 빈도수는?"
+  m = q.match(/^(.+)의 빈도수는\?$/)
+  if (m) return `What is the frequency of ${m[1]}?`
+
+  // "[X]가 [Y]라면 [Z]하면?"
+  m = q.match(/^(.+)가 (.+)라면 (.+)\?$/)
+  if (m) return `If ${m[1]} is ${m[2]}, what happens when ${m[3]}?`
+
+  return q
 }
 
 function autoTranslateOption(opt: string): string {
   const map: Record<string, string> = {
+    // Errors
     "에러": "Error",
     "오류": "Error",
     "에러 발생": "Error",
     "컴파일 에러": "Compile Error",
     "런타임 에러": "Runtime Error",
+    // Boolean / null
     "참": "True",
     "거짓": "False",
     "없음": "None",
+    // Loop states
     "무한 루프": "Infinite loop",
+    "무한 반복": "Infinite loop",
+    // Output states
     "아무것도 출력 안 됨": "No output",
     "아무것도 출력되지 않음": "No output",
+    "출력 없음": "No output",
+    // Yes/No
+    "예": "Yes",
+    "아니오": "No",
+    "동작함": "Works",
+    "동작 안 함": "Doesn't work",
+    // Common answers
+    "가능": "Possible",
+    "불가능": "Not possible",
+    "빠름": "Fast",
+    "느림": "Slow",
+    "같다": "Same",
+    "다르다": "Different",
+    "증가": "Increases",
+    "감소": "Decreases",
+    "파일에서 읽음": "Reads from file",
+    "키보드에서 읽음": "Reads from keyboard",
+    "쓰지 않음": "Not used",
+    "자주 씀": "Often used",
   }
   return map[opt] ?? opt
 }
