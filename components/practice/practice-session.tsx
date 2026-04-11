@@ -275,7 +275,7 @@ export function PracticeSession({
       const sessions: DbSession[] = json.sessions ?? []
       setDbSessions(sessions)
 
-      const completed = sessions.filter(s => s.completed_at && !s.teacher_assigned)
+      const completed = sessions.filter(s => s.completed_at && !s.teacher_assigned && (s.problems_passed ?? 0) > 0)
       const pendingTeacher = sessions.find(s => s.teacher_assigned && !s.completed_at)
 
       let expectedSet: number
@@ -440,7 +440,7 @@ export function PracticeSession({
 
   // ── 인트로 ────────────────────────────────────────────────────────
   if (phase === "intro") {
-    const completedSets = dbSessions.filter(s => s.completed_at && !s.teacher_assigned)
+    const completedSets = dbSessions.filter(s => s.completed_at && !s.teacher_assigned && (s.problems_passed ?? 0) > 0)
     const isTeacherRound = !!teacherAssignedId
     const setProblems = getSetProblems(cluster.problems, currentSet)
     const hasMoreSets = setProblems.length > 0
@@ -701,7 +701,7 @@ export function PracticeSession({
             ← {t("이전", "Prev")}
           </button>
         )}
-        {(canAdvance || !isMcq) && (
+        {canAdvance ? (
           <button
             onClick={handleNext}
             disabled={isSaving}
@@ -710,6 +710,16 @@ export function PracticeSession({
             {index + 1 >= roundProblems.length
               ? (isSaving ? t("저장 중...", "Saving...") : t("🏁 결과 보기", "🏁 See results"))
               : t("다음 문제 →", "Next →")}
+          </button>
+        ) : !isMcq && (
+          <button
+            onClick={handleNext}
+            disabled={isSaving}
+            className="flex-1 py-3.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-500 font-bold text-sm transition-colors disabled:opacity-50"
+          >
+            {index + 1 >= roundProblems.length
+              ? (isSaving ? t("저장 중...", "Saving...") : t("건너뛰기 →", "Skip →"))
+              : t("건너뛰기 →", "Skip →")}
           </button>
         )}
       </div>
