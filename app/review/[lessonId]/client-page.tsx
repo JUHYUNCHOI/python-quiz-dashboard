@@ -112,7 +112,10 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   }
   const saved = loadSaved()
 
-  const [currentIndex, setCurrentIndex] = useState<number>(saved?.currentIndex ?? 0)
+  const savedIndex = saved?.currentIndex ?? 0
+  const [currentIndex, setCurrentIndex] = useState<number>(
+    reviewSteps.length > 0 ? Math.min(savedIndex, reviewSteps.length - 1) : 0
+  )
   const [score, setScore] = useState<number>(saved?.score ?? 0)
   const [totalAttempted, setTotalAttempted] = useState<number>(saved?.totalAttempted ?? 0)
   const [correctCount, setCorrectCount] = useState<number>(saved?.correctCount ?? 0)
