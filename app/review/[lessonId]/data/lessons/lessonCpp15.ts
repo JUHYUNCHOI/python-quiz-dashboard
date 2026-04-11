@@ -269,6 +269,198 @@ export const lessonCpp15: LessonData = {
         }
       },
 
+      // ==================== CHAPTER 3: tuple & 심화 ====================
+      {
+        type: "chapter",
+        content: {
+          num: 3,
+          title: "tuple & 심화 연습",
+          desc: "tuple, get<>(), pair 정렬을 완전히 익혀요!"
+        }
+      },
+
+      // quiz: tuple이란?
+      {
+        type: "quiz",
+        content: {
+          question: "tuple<int, string, double> t(1, \"hello\", 3.14); 에서 두 번째 값을 꺼내는 방법은?",
+          options: ["t.second", "t[1]", "get<1>(t)", "t.at(1)"],
+          answer: 2,
+          explanation: "tuple은 get<인덱스>(튜플)로 접근해요! 인덱스는 0부터 시작해요.",
+          en: {
+            question: "How do you access the second value in tuple<int, string, double> t(1, \"hello\", 3.14);?",
+            options: ["t.second", "t[1]", "get<1>(t)", "t.at(1)"],
+            explanation: "Use get<index>(tuple) to access tuple elements! Index starts at 0."
+          }
+        }
+      },
+
+      // practice: tuple 사용
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "tuple에서 첫 번째 값을 꺼내요!",
+          guide: "get<0>(t) 형태!",
+          template: 'tuple<string, int, double> t = {"홍길동", 20, 4.5};\ncout << ___<0>(t) << endl;',
+          answer: "get",
+          expect: 'tuple<string, int, double> t = {"홍길동", 20, 4.5};\ncout << get<0>(t) << endl;',
+          en: {
+            task: "Get the first value from a tuple!",
+            guide: "Use the form get<0>(t)!"
+          }
+        }
+      },
+
+      // errorQuiz: get<> 인덱스 범위 초과
+      {
+        type: "errorQuiz",
+        content: {
+          question: "이 코드에서 에러가 발생하는 이유는?",
+          code: 'tuple<int, string> t(42, "hi");\ncout << get<2>(t) << endl;',
+          options: [
+            "tuple은 2개만 있는데 get<2>는 세 번째(존재 안 함)를 접근",
+            "get 대신 .first를 써야 함",
+            "tuple 대신 pair를 써야 함"
+          ],
+          answer: 0,
+          explanation: "get<2>는 세 번째 원소! 이 tuple은 2개(인덱스 0, 1)만 있어요. get<1>(t)이 마지막!",
+          en: {
+            question: "Why does this code cause an error?",
+            options: [
+              "tuple has only 2 elements, but get<2> tries to access the third (which doesn't exist)",
+              "Should use .first instead of get",
+              "Should use pair instead of tuple"
+            ],
+            explanation: "get<2> accesses the third element! This tuple only has 2 elements (index 0 and 1). get<1>(t) is the last valid access!"
+          }
+        }
+      },
+
+      // quiz: make_tuple
+      {
+        type: "quiz",
+        content: {
+          question: "auto t = make_tuple(1, \"apple\", 3.14); 에서 get<2>(t) 의 값은?",
+          options: ["1", "\"apple\"", "3.14", "에러"],
+          answer: 2,
+          explanation: "make_tuple(1, \"apple\", 3.14)의 인덱스 2는 세 번째 값 3.14예요!",
+          en: {
+            question: "What is get<2>(t) for auto t = make_tuple(1, \"apple\", 3.14);?",
+            options: ["1", "\"apple\"", "3.14", "error"],
+            explanation: "Index 2 of make_tuple(1, \"apple\", 3.14) is the third value: 3.14!"
+          }
+        }
+      },
+
+      // practice: pair 정렬 — vector<pair> sort
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "vector<pair<int,string>>를 오름차순으로 정렬해요!",
+          guide: "sort(v.begin(), v.end()) — pair는 first 기준 자동 정렬!",
+          template: 'vector<pair<int, string>> v = {{3,"C"},{1,"A"},{2,"B"}};\n___(v.begin(), v.end());\ncout << v[0].second << endl;',
+          answer: "sort",
+          expect: 'vector<pair<int, string>> v = {{3,"C"},{1,"A"},{2,"B"}};\nsort(v.begin(), v.end());\ncout << v[0].second << endl;',
+          en: {
+            task: "Sort a vector<pair<int,string>> in ascending order!",
+            guide: "sort(v.begin(), v.end()) — pairs are automatically sorted by first!"
+          }
+        }
+      },
+
+      // interleaving: cpp-9 vector push_back 복습
+      {
+        type: "interleaving",
+        content: {
+          message: "잠깐! 벡터에 원소 추가 기억나요?",
+          task: "vector에 pair {5, \"hello\"}를 추가하는 코드를 완성해요!",
+          template: 'vector<pair<int, string>> v;\nv.___({5, "hello"});',
+          answer: "push_back",
+          expect: 'vector<pair<int, string>> v;\nv.push_back({5, "hello"});',
+          en: {
+            message: "Quick! Remember how to add elements to a vector?",
+            task: "Complete the code to add pair {5, \"hello\"} to a vector!"
+          }
+        }
+      },
+
+      // practice: pair 비교 직접 작성
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "두 pair 중 더 큰 것의 first 값을 출력해요!",
+          guide: "pair는 < > 비교 연산자 지원 — first 먼저, 같으면 second 비교!",
+          template: "pair<int,int> a = {3, 10};\npair<int,int> b = {3, 5};\nif (a ___ b) {\n    cout << a.first << endl;\n} else {\n    cout << b.first << endl;\n}",
+          answer: ">",
+          expect: "pair<int,int> a = {3, 10};\npair<int,int> b = {3, 5};\nif (a > b) {\n    cout << a.first << endl;\n} else {\n    cout << b.first << endl;\n}",
+          en: {
+            task: "Print the first value of the larger pair among two pairs!",
+            guide: "pair supports < > comparison operators — compares first first, then second if equal!"
+          }
+        }
+      },
+
+      // errorQuiz: pair .first/.second vs get<>
+      {
+        type: "errorQuiz",
+        content: {
+          question: "pair에서 값을 꺼내는 코드 중 틀린 것은?",
+          code: 'pair<int, string> p = {42, "hello"};\ncout << get<0>(p) << endl;',
+          options: [
+            "get<0>() 는 tuple에서 사용하고, pair는 .first를 써야 함",
+            "pair는 초기화할 수 없음",
+            "아무 문제 없음 — get<0>()은 pair에서도 사용 가능"
+          ],
+          answer: 2,
+          explanation: "사실 get<0>(p)는 pair에서도 동작해요! 하지만 관례상 pair는 .first/.second를 쓰는 게 더 명확하고 읽기 쉬워요.",
+          en: {
+            question: "Which statement about this code that reads a value from a pair is wrong?",
+            options: [
+              "get<0>() is for tuples; pairs should use .first",
+              "pair cannot be initialized",
+              "No problem — get<0>() works on pairs too"
+            ],
+            explanation: "Actually, get<0>(p) works on pair too! But by convention, .first/.second is clearer and more readable for pairs."
+          }
+        }
+      },
+
+      // practice: 처음부터 작성 — 최고점 학생 찾기
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "처음부터 작성! pair 벡터에서 점수(second)가 가장 높은 학생 이름(first)을 출력해요\n입력: {{\"Alice\",85},{\"Bob\",92},{\"Carol\",78}}",
+          guide: "벡터 순회하며 최대 점수 추적 — pair<string,int> best",
+          template: null,
+          answer: 'vector<pair<string,int>> v = {{"Alice",85},{"Bob",92},{"Carol",78}};\npair<string,int> best = v[0];\nfor (auto p : v) {\n    if (p.second > best.second) {\n        best = p;\n    }\n}\ncout << best.first << endl;',
+          expect: "Bob",
+          en: {
+            task: "Write from scratch! Find and print the name (first) of the student with the highest score (second) from a pair vector\nInput: {{\"Alice\",85},{\"Bob\",92},{\"Carol\",78}}",
+            guide: "Iterate through the vector tracking the maximum score — pair<string,int> best"
+          }
+        }
+      },
+
+      // interleaving: cpp-14 struct 복습 (pair vs struct)
+      {
+        type: "interleaving",
+        content: {
+          message: "잠깐! struct와 pair의 차이를 기억해요?",
+          task: "struct Student에서 멤버 name에 접근하는 방법을 완성해요!",
+          template: "Student s;\ns.___ = \"홍길동\";",
+          answer: "name",
+          expect: "Student s;\ns.name = \"홍길동\";",
+          en: {
+            message: "Quick! Remember the difference between struct and pair?",
+            task: "Complete the code to access the name member in struct Student!"
+          }
+        }
+      },
+
       {
         type: "done",
         content: {}

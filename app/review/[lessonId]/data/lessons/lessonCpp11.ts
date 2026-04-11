@@ -332,6 +332,232 @@ export const lessonCpp11: LessonData = {
         }
       },
 
+      // ==================== CHAPTER 3: 더 익히기 ====================
+      {
+        type: "chapter",
+        content: {
+          num: 3,
+          title: "문자열 메서드 더 익히기",
+          desc: "substr, replace, find를 손에 익혀요!"
+        }
+      },
+
+      // quiz: substr 반환값
+      {
+        type: "quiz",
+        content: {
+          question: "string s = \"Hello World\"; 에서 s.substr(6, 5)의 결과는?",
+          options: ["Hello", "World", "World!", "ello "],
+          answer: 1,
+          explanation: "substr(시작위치, 길이)! 인덱스 6부터 5글자 = \"World\"!",
+          en: {
+            question: "What is the result of s.substr(6, 5) where string s = \"Hello World\";?",
+            options: ["Hello", "World", "World!", "ello "],
+            explanation: "substr(startPos, length)! 5 characters from index 6 = \"World\"!"
+          }
+        }
+      },
+
+      // quiz: find 반환값 타입
+      {
+        type: "quiz",
+        content: {
+          question: "s.find(\"abc\")에서 \"abc\"가 없을 때 반환되는 값은?",
+          options: ["-1", "0", "string::npos", "null"],
+          answer: 2,
+          explanation: "찾지 못하면 string::npos를 반환해요! -1처럼 보이는 아주 큰 숫자예요.",
+          en: {
+            question: "What does s.find(\"abc\") return when \"abc\" is not found?",
+            options: ["-1", "0", "string::npos", "null"],
+            explanation: "When not found, find() returns string::npos! It looks like -1 but is actually a very large number."
+          }
+        }
+      },
+
+      // practice: substr로 부분 문자열 추출
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "\"programming\"에서 앞 4글자 \"prog\"를 추출해요!",
+          guide: "substr(시작, 길이) 형태!",
+          template: 'string s = "programming";\nstring part = s.___(0, 4);\ncout << part << endl;',
+          answer: "substr",
+          expect: 'string s = "programming";\nstring part = s.substr(0, 4);\ncout << part << endl;',
+          en: {
+            task: "Extract the first 4 characters \"prog\" from \"programming\"!",
+            guide: "Use substr(start, length)!"
+          }
+        }
+      },
+
+      // practice: replace
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "\"Hello World\"의 인덱스 6부터 5글자를 \"C++\"로 바꿔요!",
+          guide: "replace(시작위치, 길이, 새문자열) 형태!",
+          template: 'string s = "Hello World";\ns.___(6, 5, "C++");\ncout << s << endl;',
+          answer: "replace",
+          expect: 'string s = "Hello World";\ns.replace(6, 5, "C++");\ncout << s << endl;',
+          en: {
+            task: "Replace 5 characters starting at index 6 in \"Hello World\" with \"C++\"!",
+            guide: "Use replace(startPos, length, newString)!"
+          }
+        }
+      },
+
+      // errorQuiz: substr off-by-one
+      {
+        type: "errorQuiz",
+        content: {
+          question: "\"Hello\"에서 \"ello\"를 추출하려는 코드의 문제는?",
+          code: 'string s = "Hello";\ncout << s.substr(0, 4) << endl;',
+          options: [
+            "인덱스 0이 아니라 1부터 시작해야 함",
+            "길이를 4가 아닌 5로 해야 함",
+            "substr 대신 find를 써야 함"
+          ],
+          answer: 0,
+          explanation: "\"ello\"는 인덱스 1부터! substr(1, 4)여야 해요. substr(0, 4)는 \"Hell\"이 돼요.",
+          en: {
+            question: "What is wrong with this code that tries to extract \"ello\" from \"Hello\"?",
+            options: [
+              "Should start at index 1, not 0",
+              "Length should be 5, not 4",
+              "Should use find instead of substr"
+            ],
+            explanation: "\"ello\" starts at index 1! It should be substr(1, 4). substr(0, 4) gives \"Hell\"."
+          }
+        }
+      },
+
+      // practice: find + substr 조합
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "find와 substr을 조합해서 \"apple.txt\"에서 확장자 \".txt\"를 추출해요!",
+          guide: "find(\".\")로 위치 찾고, substr(위치)로 끝까지 추출!",
+          template: 'string file = "apple.txt";\nint pos = file.___(".");\nstring ext = file.___(pos);\ncout << ext << endl;',
+          answer: "find",
+          blanksAnswer: ["find", "substr"],
+          expect: 'string file = "apple.txt";\nint pos = file.find(".");\nstring ext = file.substr(pos);\ncout << ext << endl;',
+          en: {
+            task: "Combine find and substr to extract the extension \".txt\" from \"apple.txt\"!",
+            guide: "Use find(\".\") to get the position, then substr(pos) to extract to the end!"
+          }
+        }
+      },
+
+      // interleaving: cpp-10 (range-for) 복습
+      {
+        type: "interleaving",
+        content: {
+          message: "잠깐! range-for 기억나요?",
+          task: "벡터의 모든 원소를 range-for로 출력해요!",
+          template: "for (___ x : v) {\n    cout << x << \" \";\n}",
+          answer: "auto",
+          expect: "for (auto x : v) {\n    cout << x << \" \";\n}",
+          en: {
+            message: "Quick! Remember range-for?",
+            task: "Print all elements of a vector using range-for!"
+          }
+        }
+      },
+
+      // practice: 문자열 포함 여부 check
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "\"hello world\"에 \"world\"가 있는지 확인하는 코드를 완성해요!",
+          guide: "find가 npos가 아니면 찾은 것!",
+          template: 'string s = "hello world";\nif (s.find("world") != string::___) {\n    cout << "찾았어요!" << endl;\n}',
+          answer: "npos",
+          expect: 'string s = "hello world";\nif (s.find("world") != string::npos) {\n    cout << "찾았어요!" << endl;\n}',
+          en: {
+            task: "Complete the code to check if \"hello world\" contains \"world\"!",
+            guide: "If find returns something other than npos, it was found!"
+          }
+        }
+      },
+
+      // errorQuiz: replace 매개변수 순서
+      {
+        type: "errorQuiz",
+        content: {
+          question: "replace를 잘못 쓴 코드는?",
+          code: 'string s = "Hello World";\ns.replace("World", 6, "C++");',
+          options: [
+            "replace의 첫 번째 인자는 위치(숫자)여야 함",
+            "replace 대신 find를 써야 함",
+            "문자열 리터럴은 쓸 수 없음"
+          ],
+          answer: 0,
+          explanation: "replace(위치, 길이, 새문자열) 순서예요! 첫 인자는 반드시 int 위치여야 해요. s.replace(6, 5, \"C++\")이 올바른 형태!",
+          en: {
+            question: "Which code uses replace incorrectly?",
+            options: [
+              "The first argument of replace must be a position (number)",
+              "Should use find instead of replace",
+              "Cannot use string literals"
+            ],
+            explanation: "The order is replace(position, length, newString)! The first argument must be an int position. s.replace(6, 5, \"C++\") is correct."
+          }
+        }
+      },
+
+      // interleaving: cpp-9 (vector) 복습
+      {
+        type: "interleaving",
+        content: {
+          message: "잠깐! 벡터 기억나요?",
+          task: "벡터에 값 42를 추가하는 코드를 완성해요!",
+          template: "vector<int> v;\nv.___(42);",
+          answer: "push_back",
+          expect: "vector<int> v;\nv.push_back(42);",
+          en: {
+            message: "Quick! Remember vectors?",
+            task: "Complete the code to add the value 42 to a vector!"
+          }
+        }
+      },
+
+      // practice: 처음부터 작성 — 이메일 아이디 추출
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "처음부터 작성! 이메일 \"student@school.com\"에서 @ 앞 아이디와 @ 뒤 도메인을 각 줄에 출력해요",
+          guide: "find(\"@\")로 위치 찾고, substr(0, pos)와 substr(pos+1)로 분리!",
+          template: null,
+          answer: 'string email = "student@school.com";\nint pos = email.find("@");\ncout << email.substr(0, pos) << endl;\ncout << email.substr(pos + 1) << endl;',
+          expect: "student\nschool.com",
+          en: {
+            task: "Write from scratch! Extract the username before @ and domain after @ from \"student@school.com\", printing each on a separate line",
+            guide: "Use find(\"@\") to get position, then substr(0, pos) and substr(pos+1) to split!"
+          }
+        }
+      },
+
+      // quiz: length vs size
+      {
+        type: "quiz",
+        content: {
+          question: "string에서 문자열 길이를 구하는 올바른 방법은?",
+          options: ["s.len()", "s.length() 또는 s.size()", "len(s)", "s.count()"],
+          answer: 1,
+          explanation: "C++ string은 .length()와 .size() 둘 다 쓸 수 있어요! 파이썬의 len()과 달리 메서드로 호출해요.",
+          en: {
+            question: "What is the correct way to get the length of a string?",
+            options: ["s.len()", "s.length() or s.size()", "len(s)", "s.count()"],
+            explanation: "C++ string supports both .length() and .size()! Unlike Python's len(), they are called as methods."
+          }
+        }
+      },
+
       // done
       {
         type: "done",

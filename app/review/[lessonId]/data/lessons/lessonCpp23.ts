@@ -193,6 +193,259 @@ export const lessonCpp23: LessonData = {
         }
       },
 
+      // ==================== CHAPTER 2: 커스텀 정렬 심화 ====================
+      {
+        type: "chapter",
+        content: {
+          num: 2,
+          title: "커스텀 정렬 심화",
+          desc: "람다 comparator, 다중 조건 정렬, 정렬 안정성을 익혀요!"
+        }
+      },
+
+      // quiz: comparator 조건
+      {
+        type: "quiz",
+        content: {
+          question: "sort의 커스텀 comparator에서 return a < b; 는 어떤 정렬인가요?",
+          options: [
+            "내림차순 (큰 것부터)",
+            "오름차순 (작은 것부터)",
+            "무작위 순서",
+            "컴파일 에러"
+          ],
+          answer: 1,
+          explanation: "comparator에서 a < b이면 a가 앞에 와요 → 오름차순! b < a이면 내림차순이에요.",
+          en: {
+            question: "In a custom comparator for sort, what order does return a < b; produce?",
+            options: [
+              "Descending (largest first)",
+              "Ascending (smallest first)",
+              "Random order",
+              "Compile error"
+            ],
+            explanation: "If a < b in the comparator, a comes first → ascending order! b < a would be descending."
+          }
+        }
+      },
+
+      // errorQuiz: >= 대신 > 을 써야 함
+      {
+        type: "errorQuiz",
+        content: {
+          question: "이 comparator의 문제점은?",
+          code: 'sort(v.begin(), v.end(),\n    [](int a, int b) { return a >= b; });',
+          options: [
+            ">= 대신 > 를 써야 해요 (같을 때 true 반환하면 안 됨)",
+            "람다 대신 함수 포인터를 써야 해요",
+            "sort에서 람다를 사용할 수 없어요"
+          ],
+          answer: 0,
+          explanation: "comparator는 a == b 일 때 false를 반환해야 해요! >= 는 같을 때도 true → 정렬 동작 undefined behavior!",
+          en: {
+            question: "What is wrong with this comparator?",
+            options: [
+              "Should use > instead of >= (must not return true when equal)",
+              "Should use a function pointer instead of a lambda",
+              "Cannot use a lambda with sort"
+            ],
+            explanation: "A comparator must return false when a == b! >= returns true even when equal → undefined behavior in sorting!"
+          }
+        }
+      },
+
+      // practice: 내림차순 정렬
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "벡터를 내림차순으로 정렬해요!",
+          guide: "greater<int>() 또는 람다 [](int a, int b){ return a > b; }",
+          template: "vector<int> v = {3, 1, 4, 1, 5, 9, 2};\nsort(v.begin(), v.end(), ___<int>());\ncout << v[0] << endl;",
+          answer: "greater",
+          expect: "vector<int> v = {3, 1, 4, 1, 5, 9, 2};\nsort(v.begin(), v.end(), greater<int>());\ncout << v[0] << endl;",
+          en: {
+            task: "Sort a vector in descending order!",
+            guide: "Use greater<int>() or lambda [](int a, int b){ return a > b; }"
+          }
+        }
+      },
+
+      // practice: 람다로 커스텀 정렬
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "pair 벡터를 second(점수) 기준 오름차순으로 정렬해요!",
+          guide: "람다에서 a.second < b.second — second 기준 오름차순!",
+          template: 'vector<pair<string, int>> v = {{"A",85},{"B",70},{"C",92}};\nsort(v.begin(), v.end(),\n    [](auto a, auto b){ return a.___ < b.___; });',
+          answer: "second",
+          blanksAnswer: ["second", "second"],
+          expect: 'vector<pair<string, int>> v = {{"A",85},{"B",70},{"C",92}};\nsort(v.begin(), v.end(),\n    [](auto a, auto b){ return a.second < b.second; });',
+          en: {
+            task: "Sort a pair vector in ascending order by second (score)!",
+            guide: "In the lambda, use a.second < b.second — ascending by second!"
+          }
+        }
+      },
+
+      // predict: 정렬 결과 예측
+      {
+        type: "explain",
+        content: {
+          lines: [],
+          code: 'vector<string> words = {"banana", "apple", "cherry", "date"};\nsort(words.begin(), words.end());\ncout << words[0] << " " << words[3] << endl;',
+          predict: {
+            question: "출력 결과는?",
+            options: ["banana cherry", "apple date", "date apple", "cherry banana"],
+            answer: 1,
+            feedback: "문자열은 사전순 정렬! a<b<c<d 순서로 apple이 첫 번째, date가 마지막!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["banana cherry", "apple date", "date apple", "cherry banana"],
+              feedback: "Strings are sorted lexicographically! a<b<c<d order puts apple first and date last!"
+            }
+          }
+        }
+      },
+
+      // quiz: stable_sort
+      {
+        type: "quiz",
+        content: {
+          question: "stable_sort와 sort의 차이점은?",
+          options: [
+            "stable_sort는 내림차순만 지원한다",
+            "stable_sort는 동일한 값의 원래 순서를 보존한다",
+            "stable_sort는 <numeric> 헤더가 필요하다",
+            "stable_sort는 포인터 배열에서만 사용 가능하다"
+          ],
+          answer: 1,
+          explanation: "stable_sort는 같은 값이 있을 때 원래 순서를 유지해요! 이름-점수 묶음에서 점수 같으면 이름 순서 보존 시 유용!",
+          en: {
+            question: "What is the difference between stable_sort and sort?",
+            options: [
+              "stable_sort only supports descending order",
+              "stable_sort preserves the original order of equal elements",
+              "stable_sort requires the <numeric> header",
+              "stable_sort can only be used on pointer arrays"
+            ],
+            explanation: "stable_sort preserves the original order of equal elements! Useful when you want to keep the name order when scores are equal."
+          }
+        }
+      },
+
+      // interleaving: cpp-15 pair 복습
+      {
+        type: "interleaving",
+        content: {
+          message: "잠깐! pair 정렬 기억나요?",
+          task: "pair 벡터에서 .first 기준으로 자동 정렬하는 코드를 완성해요!",
+          template: 'vector<pair<int, string>> v = {{3,"C"},{1,"A"},{2,"B"}};\n___(v.begin(), v.end());\ncout << v[0].second << endl;',
+          answer: "sort",
+          expect: 'vector<pair<int, string>> v = {{3,"C"},{1,"A"},{2,"B"}};\nsort(v.begin(), v.end());\ncout << v[0].second << endl;',
+          en: {
+            message: "Quick! Remember sorting pairs?",
+            task: "Complete the code to auto-sort a pair vector by .first!"
+          }
+        }
+      },
+
+      // practice: 다중 조건 정렬
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "점수 내림차순, 동점이면 이름 오름차순으로 정렬해요!",
+          guide: "점수 같으면(a.second == b.second) 이름 비교, 다르면 점수 내림차순!",
+          template: 'vector<pair<string,int>> v = {{"Bob",90},{"Alice",90},{"Carol",85}};\nsort(v.begin(), v.end(), [](auto a, auto b) {\n    if (a.second != b.second) return a.second ___ b.second;\n    return a.first ___ b.first;\n});\ncout << v[0].first << endl;',
+          answer: ">",
+          blanksAnswer: [">", "<"],
+          expect: 'vector<pair<string,int>> v = {{"Bob",90},{"Alice",90},{"Carol",85}};\nsort(v.begin(), v.end(), [](auto a, auto b) {\n    if (a.second != b.second) return a.second > b.second;\n    return a.first < b.first;\n});\ncout << v[0].first << endl;',
+          en: {
+            task: "Sort by score descending, then by name ascending if scores are equal!",
+            guide: "If scores are equal (a.second == b.second), compare names; otherwise sort by score descending!"
+          }
+        }
+      },
+
+      // errorQuiz: sort 범위 지정 실수
+      {
+        type: "errorQuiz",
+        content: {
+          question: "이 sort 코드의 문제점은?",
+          code: 'vector<int> v = {3, 1, 4, 1, 5};\nsort(v.begin(), v.end() + 1);',
+          options: [
+            "v.end() + 1은 범위 밖 — 반드시 v.end()만 써야 함",
+            "sort는 +1 없이 end()를 쓰면 안 됨",
+            "v.begin() 대신 v.start()를 써야 함"
+          ],
+          answer: 0,
+          explanation: "v.end()는 마지막 원소의 다음 위치예요! +1을 하면 범위 밖 → 미정의 동작(undefined behavior)!",
+          en: {
+            question: "What is wrong with this sort code?",
+            options: [
+              "v.end() + 1 goes out of bounds — must use v.end() only",
+              "sort requires using end() with +1",
+              "Should use v.start() instead of v.begin()"
+            ],
+            explanation: "v.end() points one past the last element! Adding +1 goes out of bounds → undefined behavior!"
+          }
+        }
+      },
+
+      // practice: 처음부터 작성 — 문자열 길이순 정렬
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "처음부터 작성! 문자열 벡터를 길이 오름차순으로 정렬하고 첫 번째 단어를 출력해요\n입력: {\"banana\", \"hi\", \"apple\", \"ok\"}",
+          guide: "람다에서 a.length() < b.length() 로 길이 비교!",
+          template: null,
+          answer: 'vector<string> v = {"banana", "hi", "apple", "ok"};\nsort(v.begin(), v.end(),\n    [](string a, string b) { return a.length() < b.length(); });\ncout << v[0] << endl;',
+          expect: "hi",
+          en: {
+            task: "Write from scratch! Sort a string vector by length ascending and print the first word\nInput: {\"banana\", \"hi\", \"apple\", \"ok\"}",
+            guide: "In the lambda, compare with a.length() < b.length()!"
+          }
+        }
+      },
+
+      // interleaving: cpp-9 벡터 접근
+      {
+        type: "interleaving",
+        content: {
+          message: "잠깐! 벡터의 마지막 원소에 접근하는 방법?",
+          task: "정렬된 벡터의 마지막(가장 큰) 원소를 출력해요!",
+          template: "vector<int> v = {1, 3, 5, 7, 9};\ncout << v[v.___() - 1] << endl;",
+          answer: "size",
+          expect: "vector<int> v = {1, 3, 5, 7, 9};\ncout << v[v.size() - 1] << endl;",
+          en: {
+            message: "Quick! How do you access the last element of a vector?",
+            task: "Print the last (largest) element of a sorted vector!"
+          }
+        }
+      },
+
+      // practice: lower_bound 사용
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "정렬된 벡터에서 lower_bound로 값 5의 위치를 찾아요!",
+          guide: "lower_bound는 정렬된 배열에서만! 반환값에 *를 붙여 값 확인!",
+          template: "vector<int> v = {1, 3, 5, 7, 9};\nauto it = ___(v.begin(), v.end(), 5);\ncout << *it << endl;",
+          answer: "lower_bound",
+          expect: "vector<int> v = {1, 3, 5, 7, 9};\nauto it = lower_bound(v.begin(), v.end(), 5);\ncout << *it << endl;",
+          en: {
+            task: "Use lower_bound to find the position of value 5 in a sorted vector!",
+            guide: "lower_bound only works on sorted arrays! Use * on the return value to get the actual value!"
+          }
+        }
+      },
+
       {
         type: "done",
         content: {}
