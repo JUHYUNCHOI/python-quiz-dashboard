@@ -668,16 +668,16 @@ export function PracticeSession({
                     <p className="text-[11px] font-bold text-gray-400 mb-2 uppercase tracking-wide">
                       {t("예시 입출력", "Sample I/O")}
                     </p>
-                    <div className="flex flex-col gap-1.5">
+                    <div className="flex flex-col gap-2">
                       {current.testCases.slice(0, 2).map((tc, i) => (
-                        <div key={i} className="flex gap-3 font-mono text-xs bg-gray-50 rounded-lg px-3 py-2">
-                          <div className="flex-1 min-w-0">
-                            <span className="text-gray-400">{t("입력", "Input")}: </span>
-                            <span className="text-gray-700 whitespace-pre-wrap break-all">{tc.stdin || t("(없음)", "(none)")}</span>
+                        <div key={i} className="flex gap-2 font-mono text-xs">
+                          <div className="flex-1 min-w-0 bg-gray-50 rounded-lg px-3 py-2">
+                            <div className="text-gray-400 mb-1">{t("입력", "Input")}</div>
+                            <div className="text-gray-700 whitespace-pre-wrap break-all">{tc.stdin || t("(없음)", "(none)")}</div>
                           </div>
-                          <div className="flex-1 min-w-0">
-                            <span className="text-gray-400">{t("출력", "Output")}: </span>
-                            <span className="text-emerald-600 font-semibold whitespace-pre-wrap break-all">{tc.expectedOutput}</span>
+                          <div className="flex-1 min-w-0 bg-gray-50 rounded-lg px-3 py-2">
+                            <div className="text-gray-400 mb-1">{t("출력", "Output")}</div>
+                            <div className="text-emerald-600 font-semibold whitespace-pre-wrap break-all">{tc.expectedOutput}</div>
                           </div>
                         </div>
                       ))}
