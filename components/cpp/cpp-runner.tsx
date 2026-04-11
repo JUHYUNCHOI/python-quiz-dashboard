@@ -299,13 +299,14 @@ export function CppRunner({
             const autoGrade = outputMatches ? "auto" as const : null
             saveCodeSilently(code, autoGrade)
           }
-          // 출력이 맞으면 항상 onSuccess 호출 (handleSuccess 내부에서 중복 방지)
           if (outputMatches) {
             setIsCorrect(true)
-            onSuccess?.()
           } else if (expectedOutput) {
             setIsCorrect(false)
           }
+          // submissionMode에서는 출력 일치 여부와 관계없이 제출하면 다음으로 진행 가능
+          // (선생님이 나중에 리뷰하므로 제출 자체가 완료)
+          onSuccess?.()
         } else if (!submissionMode) {
           if (expectedOutput) {
             const isMatch = normalize(runStdout) === normalize(expectedOutput)
