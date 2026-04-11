@@ -532,6 +532,79 @@ export const lessonCpp19: LessonData = {
         }
       },
 
+      // 예측 퀴즈: ifstream 읽기
+      {
+        type: "explain",
+        content: {
+          lines: [],
+          code: 'ifstream fin("input.txt");\nint n;\nfin >> n;\ncout << n * 2 << endl;',
+          predict: {
+            question: "input.txt에 5가 들어있을 때 출력은?",
+            options: ["5", "10", "52"],
+            answer: 1,
+            feedback: "fin >> n으로 5를 읽고, n * 2 = 10이 출력돼요!"
+          },
+          en: {
+            predict: {
+              question: "If input.txt contains 5, what is the output?",
+              options: ["5", "10", "52"],
+              feedback: "fin >> n reads 5, then n * 2 = 10 is printed!"
+            }
+          }
+        }
+      },
+
+      // 에러 퀴즈: 파일 열기 확인
+      {
+        type: "errorQuiz",
+        content: {
+          question: "이 코드의 문제점은?",
+          code: 'ifstream fin("data.txt");\ncout << fin.get() << endl;',
+          options: [
+            "파일이 없어도 에러 없이 실행된다",
+            "fin.is_open()으로 확인 안 해서 문제가 생길 수 있다",
+            "get()은 ifstream에 못 써서"
+          ],
+          answer: 1,
+          explanation: "파일을 열기 전에 fin.is_open()으로 파일이 제대로 열렸는지 확인해야 해요!",
+          en: {
+            question: "What is wrong with this code?",
+            options: [
+              "It runs without error even if the file doesn't exist",
+              "Not checking fin.is_open() can cause issues",
+              "get() cannot be used with ifstream"
+            ],
+            explanation: "Always check fin.is_open() to verify the file was opened successfully before reading!"
+          }
+        }
+      },
+
+      // 퀴즈: ofstream
+      {
+        type: "quiz",
+        content: {
+          question: "ofstream이 하는 일은?",
+          options: [
+            "파일에서 읽어온다",
+            "파일에 쓴다",
+            "파일을 삭제한다",
+            "파일 크기를 반환한다"
+          ],
+          answer: 1,
+          explanation: "ofstream = output file stream! 파일에 데이터를 쓸 때 사용해요.",
+          en: {
+            question: "What does ofstream do?",
+            options: [
+              "Reads from a file",
+              "Writes to a file",
+              "Deletes a file",
+              "Returns the file size"
+            ],
+            explanation: "ofstream = output file stream! It is used to write data to a file."
+          }
+        }
+      },
+
       // done
       {
         type: "done",
