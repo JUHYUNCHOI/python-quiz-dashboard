@@ -646,14 +646,16 @@ using namespace std;
 
 int main() {
     string s, from, to;
-    cin >> s >> from >> to;
+    getline(cin, s);
+    getline(cin, from);
+    getline(cin, to);
     // 여기에 코드를 작성하세요
     return 0;
 }`,
       testCases: [
-        { stdin: "hello world hello", expectedOutput: "hi world hi", label: "기본" },
-        { stdin: "aabbaa aa", expectedOutput: "bb", label: "to가 빈 문자열" },
-        { stdin: "abcabc bc BC", expectedOutput: "aBCaBC", label: "치환 후 새 패턴 없음" },
+        { stdin: "hello world hello\nhello\nhi", expectedOutput: "hi world hi", label: "기본" },
+        { stdin: "aabbaa\naa\n\n", expectedOutput: "bb", label: "to가 빈 문자열" },
+        { stdin: "abcabc\nbc\nBC", expectedOutput: "aBCaBC", label: "치환 후 새 패턴 없음" },
       ],
       hints: [
         "s.find(from)으로 위치를 찾고, s.replace(pos, from.length(), to)로 교체하세요.",
@@ -665,7 +667,9 @@ using namespace std;
 
 int main() {
     string s, from, to;
-    cin >> s >> from >> to;
+    getline(cin, s);
+    getline(cin, from);
+    getline(cin, to);
     size_t pos = 0;
     while ((pos = s.find(from, pos)) != string::npos) {
         s.replace(pos, from.length(), to);

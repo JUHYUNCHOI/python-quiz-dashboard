@@ -183,7 +183,7 @@ int main() {
     do {
         n /= 2;
         cout << n << "\\n";
-    } while (n > 0);
+    } while (n > 1);
     return 0;
 }`,
       solutionExplanation: "do-while은 { } 안의 코드를 먼저 실행한 뒤 while 조건을 검사합니다. n /= 2로 절반씩 줄이고, n이 0이 되면 루프가 끝납니다.",

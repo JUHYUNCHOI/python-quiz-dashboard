@@ -541,9 +541,9 @@ int main() {
     return 0;
 }`,
       testCases: [
-        { stdin: "3 3\n1 2 3\n4 5 6\n7 8 9", expectedOutput: "6 10 8\n16 20 16\n12 22 14", label: "기본" },
+        { stdin: "3 3\n1 2 3\n4 5 6\n7 8 9", expectedOutput: "6 9 8\n13 20 17\n12 21 14", label: "기본" },
         { stdin: "1 1\n5", expectedOutput: "0", label: "1×1" },
-        { stdin: "2 2\n1 2\n3 4", expectedOutput: "5 4\n3 6", label: "2×2" },
+        { stdin: "2 2\n1 2\n3 4", expectedOutput: "5 5\n5 5", label: "2×2" },
       ],
       hints: [
         "방향 배열 int dx[] = {-1,1,0,0}; int dy[] = {0,0,-1,1};를 활용하세요.",
@@ -617,7 +617,7 @@ int main() {
         { stdin: "3 3\n1 2 1\n2 5 2\n1 2 1", expectedOutput: "1", label: "중앙 최댓값" },
         { stdin: "3 3\n5 1 5\n1 1 1\n5 1 5", expectedOutput: "4", label: "모서리 4개" },
         { stdin: "2 2\n4 3\n2 1", expectedOutput: "1", label: "2×2" },
-        { stdin: "3 4\n9 2 3 8\n1 7 6 4\n5 3 10 2", expectedOutput: "3", label: "3×4" },
+        { stdin: "3 4\n9 2 3 8\n1 7 6 4\n5 3 10 2", expectedOutput: "5", label: "3×4" },
       ],
       hints: [
         "각 셀에서 4방향 이웃을 확인합니다. 이웃이 격자 밖이면 무시합니다.",
@@ -690,7 +690,7 @@ int main() {
 }`,
       testCases: [
         { stdin: "3 3\n1 2 3\n4 0 6\n7 8 9", expectedOutput: "1 0 3\n0 0 0\n7 0 9", label: "기본" },
-        { stdin: "2 3\n0 2 3\n4 5 0", expectedOutput: "0 0 0\n0 5 0", label: "두 개의 0" },
+        { stdin: "2 3\n0 2 3\n4 5 0", expectedOutput: "0 0 0\n0 0 0", label: "두 개의 0" },
         { stdin: "2 2\n1 2\n3 4", expectedOutput: "1 2\n3 4", label: "0 없음" },
       ],
       hints: [

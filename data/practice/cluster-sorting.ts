@@ -782,7 +782,7 @@ int main() {
     return 0;
 }`,
       testCases: [
-        { stdin: "6\n1 4\n3 5\n0 6\n5 7\n3 8\n5 9", expectedOutput: "3", label: "기본" },
+        { stdin: "6\n1 4\n3 5\n0 6\n5 7\n3 8\n5 9", expectedOutput: "2", label: "기본" },
         { stdin: "3\n1 2\n2 3\n3 4", expectedOutput: "3", label: "연속 회의" },
         { stdin: "2\n1 10\n2 5", expectedOutput: "1", label: "포함 관계" },
       ],
@@ -850,7 +850,7 @@ int main() {
 }`,
       testCases: [
         { stdin: "5\n4 2 2 3 5", expectedOutput: "4", label: "기본" },
-        { stdin: "4\n1 9 3 10", expectedOutput: "1", label: "연속 없음" },
+        { stdin: "4\n1 9 3 10", expectedOutput: "2", label: "9-10 연속" },
         { stdin: "6\n1 2 3 10 11 12", expectedOutput: "3", label: "두 구간" },
         { stdin: "5\n5 5 5 5 5", expectedOutput: "1", label: "전부 같음" },
         { stdin: "1\n7", expectedOutput: "1", label: "원소 1개" },
@@ -916,7 +916,7 @@ int main() {
     return 0;
 }`,
       testCases: [
-        { stdin: "4\n3 30 34 5", expectedOutput: "5343330", label: "기본" },
+        { stdin: "4\n3 30 34 5", expectedOutput: "534330", label: "기본" },
         { stdin: "2\n10 2", expectedOutput: "210", label: "두 수" },
         { stdin: "3\n0 0 0", expectedOutput: "0", label: "전부 0" },
         { stdin: "3\n1 2 3", expectedOutput: "321", label: "단순" },

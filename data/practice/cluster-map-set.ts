@@ -639,7 +639,7 @@ int main() {
     return 0;
 }`,
       testCases: [
-        { stdin: "5 7\n1 3 4 6 3", expectedOutput: "2", label: "기본" },
+        { stdin: "5 7\n1 3 4 6 3", expectedOutput: "3", label: "기본" },
         { stdin: "4 10\n5 5 5 5", expectedOutput: "6", label: "중복 원소" },
         { stdin: "3 100\n1 2 3", expectedOutput: "0", label: "쌍 없음" },
       ],

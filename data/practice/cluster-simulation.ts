@@ -203,10 +203,10 @@ int main() {
     return 0;
 }`,
       testCases: [
-        { stdin: "800 1000", expectedOutput: "4", label: "200원 거스름돈 (100×2)" },
-        { stdin: "350 500", expectedOutput: "3", label: "150원 (100+50)" },
+        { stdin: "800 1000", expectedOutput: "2", label: "200원 거스름돈 (100×2)" },
+        { stdin: "350 500", expectedOutput: "2", label: "150원 (100+50)" },
         { stdin: "100 100", expectedOutput: "0", label: "거스름돈 없음" },
-        { stdin: "60 1000", expectedOutput: "6", label: "940원" },
+        { stdin: "60 1000", expectedOutput: "9", label: "940원" },
       ],
       hints: [
         "거스름돈 = m - p를 큰 동전부터 나눕니다.",
@@ -267,7 +267,7 @@ int main() {
 }`,
       testCases: [
         { stdin: "5 1\n5 1 4 2 3", expectedOutput: "1 4 2 3 5", label: "1분" },
-        { stdin: "5 3\n5 4 3 2 1", expectedOutput: "2 3 4 5 1", label: "3분" },
+        { stdin: "5 3\n5 4 3 2 1", expectedOutput: "2 1 3 4 5", label: "3분" },
         { stdin: "4 0\n3 1 4 2", expectedOutput: "3 1 4 2", label: "0분" },
       ],
       hints: [
@@ -332,7 +332,7 @@ int main() {
       testCases: [
         { stdin: "5 2\n1 3\n2 4", expectedOutput: "3", label: "기본" },
         { stdin: "3 1\n1 3", expectedOutput: "0", label: "전체 뒤집기" },
-        { stdin: "5 3\n1 5\n2 4\n1 5", expectedOutput: "3", label: "여러 번" },
+        { stdin: "5 3\n1 5\n2 4\n1 5", expectedOutput: "2", label: "여러 번" },
       ],
       hints: [
         "각 조작마다 l~r 인덱스의 카드를 1^=1(토글)합니다.",
@@ -458,7 +458,7 @@ int main() {
     return 0;
 }`,
       testCases: [
-        { stdin: "3\n5 1 3", expectedOutput: "8", label: "기본 (4+4+2=10? 아니면 |5-1|+|1-1|+|3-1|=4+0+2=6?)" },
+        { stdin: "3\n5 1 3", expectedOutput: "10", label: "기본 (|5-1|+|1-5|+|3-1|=4+4+2=10)" },
         { stdin: "1\n10", expectedOutput: "9", label: "1→10" },
         { stdin: "3\n1 1 1", expectedOutput: "0", label: "같은 층 반복" },
       ],
@@ -652,7 +652,7 @@ int main() {
     return 0;
 }`,
       testCases: [
-        { stdin: "3\n10 5 20\n3\n1 3\n2 7\n3 10", expectedOutput: "OUT OF STOCK\n7 0 10", label: "기본" },
+        { stdin: "3\n10 5 20\n3\n1 3\n2 7\n3 10", expectedOutput: "OUT OF STOCK\n7 5 10", label: "기본" },
         { stdin: "2\n100 50\n2\n1 50\n2 50", expectedOutput: "50 0", label: "정확히 소진" },
         { stdin: "1\n0\n1\n1 1", expectedOutput: "OUT OF STOCK\n0", label: "재고 0" },
       ],
@@ -723,7 +723,7 @@ int main() {
       testCases: [
         { stdin: "3 5 0", expectedOutput: "3", label: "빨간불 시작" },
         { stdin: "3 5 3", expectedOutput: "0", label: "초록불 시작" },
-        { stdin: "3 5 7", expectedOutput: "1", label: "다음 빨간불" },
+        { stdin: "3 5 7", expectedOutput: "0", label: "초록불 (마지막 green)" },
         { stdin: "4 6 4", expectedOutput: "0", label: "초록불 시작" },
       ],
       hints: [
@@ -785,8 +785,8 @@ int main() {
 }`,
       testCases: [
         { stdin: "10 3 3\n2 5 8", expectedOutput: "1\n2\n3", label: "기본 (3km, 6km, 9km)" },
-        { stdin: "10 5 2\n3 7", expectedOutput: "1\n2", label: "5km마다" },
-        { stdin: "6 2 2\n1 5", expectedOutput: "1\n2\n2", label: "3번 물 마심" },
+        { stdin: "10 5 2\n3 7", expectedOutput: "1", label: "5km마다" },
+        { stdin: "6 2 2\n1 5", expectedOutput: "1\n2", label: "2번 물 마심 (pos<6이므로 2,4만)" },
       ],
       hints: [
         "물 마시는 지점: s, 2s, 3s, ... (L 미만인 것만)",
@@ -920,7 +920,7 @@ int main() {
     return 0;
 }`,
       testCases: [
-        { stdin: "3 5\n3 2\n4 3\n6 1", expectedOutput: "GREEN\nRED\nRED", label: "기본" },
+        { stdin: "3 5\n3 2\n4 3\n6 1", expectedOutput: "RED\nGREEN\nRED", label: "기본" },
         { stdin: "2 0\n3 2\n5 4", expectedOutput: "RED\nRED", label: "T=0" },
         { stdin: "1 3\n3 3", expectedOutput: "GREEN", label: "딱 초록 시작" },
         { stdin: "1 6\n3 3", expectedOutput: "RED", label: "한 사이클 후 빨강" },

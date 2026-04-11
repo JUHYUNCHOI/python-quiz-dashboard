@@ -234,8 +234,8 @@ int main() {
     return 0;
 }`,
       testCases: [
-        { stdin: "4 2\n1 2 3 4", expectedOutput: "3", label: "기본" },
-        { stdin: "6 4\n1 1 9 1 1 1", expectedOutput: "2", label: "높은 우선순위 존재" },
+        { stdin: "4 2\n1 2 3 4", expectedOutput: "2", label: "기본" },
+        { stdin: "6 4\n1 1 9 1 1 1", expectedOutput: "5", label: "높은 우선순위 존재" },
         { stdin: "3 1\n3 3 3", expectedOutput: "0", label: "동일 우선순위" },
       ],
       hints: [
@@ -339,7 +339,7 @@ int main() {
     return 0;
 }`,
       testCases: [
-        { stdin: "5\nPB 1\nPF 2\nPB 3\nPOP\nPB 4", expectedOutput: "1 3 4", label: "혼합" },
+        { stdin: "5\nPB 1\nPF 2\nPB 3\nPOP\nPB 4", expectedOutput: "2\n1 3 4", label: "혼합" },
         { stdin: "3\nPF 5\nPF 3\nPF 1", expectedOutput: "1 3 5", label: "앞만" },
         { stdin: "2\nPOP\nPB 7", expectedOutput: "-1\n7", label: "빈 deque pop" },
       ],
@@ -605,7 +605,7 @@ int main() {
     return 0;
 }`,
       testCases: [
-        { stdin: "4\n2 5\n1 3\n3 8\n2 4", expectedOutput: "3", label: "기본" },
+        { stdin: "4\n2 5\n1 3\n3 8\n2 4", expectedOutput: "4", label: "기본" },
         { stdin: "3\n5 5\n3 3\n2 2", expectedOutput: "1", label: "타이트한 마감" },
         { stdin: "3\n1 10\n2 10\n3 10", expectedOutput: "3", label: "여유 있는 마감" },
       ],

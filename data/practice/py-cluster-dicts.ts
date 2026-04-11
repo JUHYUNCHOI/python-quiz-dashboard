@@ -315,7 +315,7 @@ words = [input() for _ in range(n)]
       testCases: [
         { stdin: "4\neat\ntea\ntan\nate", expectedOutput: "eat tea ate\ntan", label: "두 그룹" },
         { stdin: "3\nabc\nbca\ndef", expectedOutput: "abc bca\ndef", label: "2+1 그룹" },
-        { stdin: "2\nhello\nworld", expectedOutput: "hello\nworld", label: "아나그램 없음" },
+        { stdin: "2\nhello\nworld", expectedOutput: "world\nhello", label: "아나그램 없음" },
         { stdin: "1\ncat", expectedOutput: "cat", label: "단어 하나" },
       ],
       hints: [
@@ -552,7 +552,7 @@ nums = list(map(int, input().split()))
 # 윈도우가 이동할 때 딕셔너리를 업데이트하세요
 `,
       testCases: [
-        { stdin: "6 3\n1 2 1 2 3 2", expectedOutput: "1\n2\n2\n2", label: "기본" },
+        { stdin: "6 3\n1 2 1 2 3 2", expectedOutput: "1\n2\n1\n2", label: "기본" },
         { stdin: "5 2\n1 1 2 2 3", expectedOutput: "1\n1\n2\n2", label: "K=2" },
         { stdin: "4 4\n3 1 3 2", expectedOutput: "3", label: "K=N" },
         { stdin: "3 1\n5 3 5", expectedOutput: "5\n3\n5", label: "K=1" },

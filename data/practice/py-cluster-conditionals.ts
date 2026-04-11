@@ -480,8 +480,8 @@ weight = int(input())
       testCases: [
         { stdin: "170\n55", expectedOutput: "정상", label: "정상" },
         { stdin: "160\n40", expectedOutput: "저체중", label: "저체중" },
-        { stdin: "175\n90", expectedOutput: "비만", label: "비만" },
-        { stdin: "180\n80", expectedOutput: "과체중", label: "과체중" },
+        { stdin: "175\n90", expectedOutput: "과체중", label: "과체중" },
+        { stdin: "180\n80", expectedOutput: "정상", label: "정상" },
       ],
       hints: [
         "키를 cm에서 m로 변환하세요: height = height_cm / 100",

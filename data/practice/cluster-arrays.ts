@@ -111,7 +111,7 @@ int main() {
         { stdin: "7\n3 5 -1 2 -1 -1 4", expectedOutput: "4", label: "기본" },
         { stdin: "3\n1 2 3", expectedOutput: "1 2 3", label: "모두 추가" },
         { stdin: "4\n-1 5 -1 -1", expectedOutput: "", label: "빈 벡터" },
-        { stdin: "5\n10 20 -1 30 -1", expectedOutput: "10 30", label: "교차" },
+        { stdin: "5\n10 20 -1 30 -1", expectedOutput: "10", label: "교차" },
       ],
       hints: [
         "v.push_back(x)는 벡터 끝에 x를 추가합니다.",
@@ -345,7 +345,7 @@ int main() {
     return 0;
 }`,
       testCases: [
-        { stdin: "5 7\n1 3 4 6 3", expectedOutput: "2", label: "기본 (1+6, 4+3)" },
+        { stdin: "5 7\n1 3 4 6 3", expectedOutput: "3", label: "기본 (1+6, 3+4, 4+3)" },
         { stdin: "4 10\n5 5 5 5", expectedOutput: "6", label: "중복 원소" },
         { stdin: "3 100\n1 2 3", expectedOutput: "0", label: "없는 경우" },
       ],

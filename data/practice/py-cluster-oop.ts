@@ -338,14 +338,12 @@ for _ in range(n):
 
     def pop(self):
         if self.is_empty():
-            print("비어있음")
-            return None
+            return "비어있음"
         return self.data.pop()
 
     def peek(self):
         if self.is_empty():
-            print("비어있음")
-            return None
+            return "비어있음"
         return self.data[-1]
 
     def is_empty(self):
@@ -455,14 +453,12 @@ class Queue:
 
     def dequeue(self):
         if self.is_empty():
-            print("비어있음")
-            return None
+            return "비어있음"
         return self.data.popleft()
 
     def front(self):
         if self.is_empty():
-            print("비어있음")
-            return None
+            return "비어있음"
         return self.data[0]
 
     def is_empty(self):
@@ -1038,7 +1034,7 @@ c2 = Character(name2, int(hp2), int(atk2))
         },
         {
           stdin: "Warrior 5 2\nDragon 20 10",
-          expectedOutput: "Warrior이(가) Dragon을(를) 공격! (Dragon HP: 10)\nDragon이(가) Warrior을(를) 공격! (Warrior HP: -5)\nWarrior 패배!",
+          expectedOutput: "Warrior이(가) Dragon을(를) 공격! (Dragon HP: 18)\nDragon이(가) Warrior을(를) 공격! (Warrior HP: -5)\nWarrior 패배!",
           label: "Dragon 승리"
         },
       ],

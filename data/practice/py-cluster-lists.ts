@@ -726,7 +726,7 @@ nums = list(map(int, input().split()))
       testCases: [
         { stdin: "4\n4 3 2 1", expectedOutput: "6", label: "역순 (최악)" },
         { stdin: "3\n1 2 3", expectedOutput: "0", label: "이미 정렬됨" },
-        { stdin: "5\n5 1 4 2 8", expectedOutput: "5", label: "일반 케이스" },
+        { stdin: "5\n5 1 4 2 8", expectedOutput: "4", label: "일반 케이스" },
         { stdin: "1\n7", expectedOutput: "0", label: "N=1" },
       ],
       hints: [
