@@ -4,6 +4,7 @@ import type { Metadata, Viewport } from "next"
 import { Analytics } from "@vercel/analytics/next"
 import { AuthProvider } from "@/contexts/auth-context"
 import { LanguageProvider } from "@/contexts/language-context"
+import { GlobalEditorProvider } from "@/components/teacher/global-editor-provider"
 import "./globals.css"
 
 export const viewport: Viewport = {
@@ -46,7 +47,9 @@ export default function RootLayout({
       <body className="font-sans antialiased notranslate" suppressHydrationWarning>
         <AuthProvider>
           <LanguageProvider>
-            {children}
+            <GlobalEditorProvider>
+              {children}
+            </GlobalEditorProvider>
           </LanguageProvider>
         </AuthProvider>
         <Analytics />
