@@ -18,22 +18,28 @@ export const lesson9EnData: LessonData = {
           id: "intro",
           type: "explain",
           title: "🔄 Why Do We Need Type Conversion?",
-          content: `In the next lesson, we'll learn about \`input()\`, a function that receives user input.
-But the value you get from input is always a **string**!
+          content: `Every value in Python has a **type**.
 
 \`\`\`python
-age = input("Age: ")  # "15" (a string!)
-print(age + 1)        # ❌ Error!
+"123"   # string — + concatenates
+123     # integer — + adds
 \`\`\`
 
-To do calculations, you need to **convert it to a number**!
+What if you want to do math with the string \`"123"\`?
 
 \`\`\`python
-age = int(input("Age: "))  # 15 (an integer!)
-print(age + 1)              # ✅ 16
+x = "123"
+print(x + 1)   # ❌ Error! Can't add a number to a string
 \`\`\`
 
-💡 We'll learn about \`input()\` in detail next lesson! For now, just understand **why type conversion is needed**!`
+You need a **type conversion function** to change it:
+
+| Function | Converts to | Example |
+|----------|-------------|---------|
+| \`int()\` | Integer | \`int("123")\` → 123 |
+| \`float()\` | Float | \`float("3.14")\` → 3.14 |
+| \`str()\` | String | \`str(42)\` → "42" |
+| \`bool()\` | True/False | \`bool(0)\` → False |`
         },
         {
           id: "int-explain",
