@@ -462,22 +462,34 @@ function PracticeStep({
 
       {/* 전체 코드 작성 (template=null) */}
       {result === "idle" && isFullCode && (
-        <div className="flex gap-2">
-          <textarea
-            ref={firstInputRef as React.RefObject<HTMLTextAreaElement>}
-            value={inputs[0]}
-            onChange={e => setInputs([e.target.value])}
-            placeholder={t("코드를 작성하세요...", "Write your code...")}
-            rows={3}
-            className="flex-1 rounded-xl border border-gray-200 px-3 py-2 font-mono text-sm focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200 resize-none"
-          />
-          <button
-            onClick={check}
-            disabled={!inputs[0].trim()}
-            className="px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm disabled:opacity-40 transition-colors shrink-0 self-end"
-          >
-            {t("확인", "Check")}
-          </button>
+        <div className="flex flex-col gap-2">
+          {/* context 코드 블록 — 어떤 상황에서 쓰는지 보여줌 */}
+          {(isEn ? (content as any).en?.context : undefined) || (content as any).context ? (
+            <div className="rounded-xl bg-[#1a1b2e] px-4 py-3 font-mono text-sm text-[#6b7280] overflow-x-auto leading-7 whitespace-pre-wrap border border-dashed border-gray-600">
+              <span className="text-[10px] font-sans text-gray-500 block mb-1">{t("주어진 코드", "Given code")}</span>
+              {renderTemplatePart(
+                (isEn ? (content as any).en?.context : undefined) || (content as any).context,
+                language
+              )}
+            </div>
+          ) : null}
+          <div className="flex gap-2">
+            <textarea
+              ref={firstInputRef as React.RefObject<HTMLTextAreaElement>}
+              value={inputs[0]}
+              onChange={e => setInputs([e.target.value])}
+              placeholder={t("코드를 작성하세요...", "Write your code...")}
+              rows={3}
+              className="flex-1 rounded-xl border border-gray-200 px-3 py-2 font-mono text-sm focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200 resize-none"
+            />
+            <button
+              onClick={check}
+              disabled={!inputs[0].trim()}
+              className="px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm disabled:opacity-40 transition-colors shrink-0 self-end"
+            >
+              {t("확인", "Check")}
+            </button>
+          </div>
         </div>
       )}
 

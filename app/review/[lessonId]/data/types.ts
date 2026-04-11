@@ -39,6 +39,7 @@ export interface PracticeContent {
   task: string;
   guide?: string;
   hint?: string;
+  context?: string;        // template=null일 때 위에 보여줄 읽기 전용 코드 컨텍스트
   template: string | { before: string; after: string } | null;
   answer: string;
   alternateAnswers?: string[];
@@ -49,6 +50,7 @@ export interface PracticeContent {
     task?: string;
     guide?: string;
     hint?: string;
+    context?: string;
     template?: string;
     answer?: string;
     alternateAnswers?: string[];
