@@ -18,13 +18,20 @@ export const lesson4EnData: LessonData = {
           id: "intro",
           type: "explain",
           title: "Arithmetic Operators",
-          content: `Operators used for numerical calculations.
+          content: `**Operators** are symbols used to perform calculations on numbers.
+
+| Operator | Meaning | Example |
+|----------|---------|---------|
+| \`+\` | Addition | \`10 + 3\` → 13 |
+| \`-\` | Subtraction | \`10 - 3\` → 7 |
+| \`*\` | Multiplication | \`10 * 3\` → 30 |
+| \`/\` | Division | \`10 / 3\` → 3.333... |
 
 \`\`\`python
-print(10 + 3)   # Addition → 13
-print(10 - 3)   # Subtraction → 7
-print(10 * 3)   # Multiplication → 30
-print(10 / 3)   # Division → 3.333...
+print(10 + 3)   # 13
+print(10 - 3)   # 7
+print(10 * 3)   # 30
+print(10 / 3)   # 3.3333333333333335
 \`\`\``
         },
         {
