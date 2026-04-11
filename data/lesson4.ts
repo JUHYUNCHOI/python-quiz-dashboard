@@ -17,8 +17,8 @@ export const lesson4Data: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "🧮 파이썬 계산기!",
-          content: `파이썬은 강력한 계산기예요!
+          title: "산술 연산자",
+          content: `숫자를 계산할 때 쓰는 연산자입니다.
 
 \`\`\`python
 print(10 + 3)   # 더하기 → 13

@@ -17,8 +17,8 @@ export const lesson4EnData: LessonData = {
         {
           id: "intro",
           type: "explain",
-          title: "🧮 Python Calculator!",
-          content: `Python is a powerful calculator!
+          title: "Arithmetic Operators",
+          content: `Operators used for numerical calculations.
 
 \`\`\`python
 print(10 + 3)   # Addition → 13
