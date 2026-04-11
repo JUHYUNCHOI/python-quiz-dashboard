@@ -429,6 +429,268 @@ export const lessonCpp20: LessonData = {
         }
       },
 
+      // ==================== CHAPTER 4: 비트 연산 & 심화 ====================
+      {
+        type: "chapter",
+        content: {
+          num: 4,
+          title: "비트 연산 & 심화",
+          desc: "비트 연산과 auto, typedef를 추가로 연습해요!"
+        }
+      },
+
+      // quiz: what does ios::sync_with_stdio(false) do?
+      {
+        type: "quiz",
+        content: {
+          question: "ios::sync_with_stdio(false)를 호출하면 어떻게 되나요?",
+          options: [
+            "C의 printf/scanf와 C++ cin/cout의 동기화를 끊어서 입출력이 빨라진다",
+            "모든 cout 출력이 즉시 화면에 표시된다",
+            "cin으로 입력을 받을 수 없게 된다",
+            "컴파일 속도가 빨라진다"
+          ],
+          answer: 0,
+          explanation: "기본적으로 C의 stdio와 C++의 iostream은 동기화되어 있어요. sync_with_stdio(false)로 이 연결을 끊으면 cin/cout이 훨씬 빨라져요! 단, 이후에 printf/scanf와 섞어 쓰면 안 돼요.",
+          en: {
+            question: "What does ios::sync_with_stdio(false) do?",
+            options: [
+              "It unlinks C stdio and C++ iostream synchronization, making I/O faster",
+              "It makes all cout output appear on screen immediately",
+              "It disables cin input",
+              "It speeds up compilation"
+            ],
+            explanation: "By default C stdio and C++ iostream are synchronized. Calling sync_with_stdio(false) breaks this link, making cin/cout much faster! However, you must not mix printf/scanf after this."
+          }
+        }
+      },
+
+      // quiz: what is cin.tie(NULL) for?
+      {
+        type: "quiz",
+        content: {
+          question: "cin.tie(NULL)의 역할은?",
+          options: [
+            "cin 입력을 NULL로 초기화한다",
+            "cin과 cout의 연결을 끊어 불필요한 flush를 막아준다",
+            "cin으로 NULL 값을 받을 수 있게 해준다",
+            "입력 버퍼를 비워준다"
+          ],
+          answer: 1,
+          explanation: "기본적으로 cin은 cout과 묶여(tie) 있어서 cin 사용 전 cout을 자동 flush해요. cin.tie(NULL)로 이 연결을 끊으면 불필요한 flush가 없어져 속도가 빨라져요!",
+          en: {
+            question: "What is cin.tie(NULL) for?",
+            options: [
+              "It initializes cin input to NULL",
+              "It unties cin from cout, preventing unnecessary flushes",
+              "It allows cin to receive NULL values",
+              "It clears the input buffer"
+            ],
+            explanation: "By default cin is tied to cout, causing automatic cout flush before each cin. cin.tie(NULL) unties them, removing unnecessary flushes and improving speed!"
+          }
+        }
+      },
+
+      // quiz: what does #include <bits/stdc++.h> include?
+      {
+        type: "quiz",
+        content: {
+          question: "#include <bits/stdc++.h>는 무엇을 포함하나요?",
+          options: [
+            "iostream과 vector만 포함한다",
+            "표준 라이브러리의 거의 모든 헤더를 한 번에 포함한다",
+            "C 표준 라이브러리만 포함한다",
+            "사용자 정의 헤더를 자동으로 찾아서 포함한다"
+          ],
+          answer: 1,
+          explanation: "bits/stdc++.h는 GCC에서 제공하는 비공식 헤더로, iostream/vector/algorithm/map/set 등 거의 모든 표준 헤더를 한 번에 포함해요! 컴파일이 느려지므로 대회에서만 써요.",
+          en: {
+            question: "What does #include <bits/stdc++.h> include?",
+            options: [
+              "Only iostream and vector",
+              "Almost all standard library headers at once",
+              "Only the C standard library",
+              "User-defined headers found automatically"
+            ],
+            explanation: "bits/stdc++.h is an unofficial GCC header that includes nearly all standard headers (iostream, vector, algorithm, map, set, etc.) at once! It slows compilation, so use only in competitive programming."
+          }
+        }
+      },
+
+      // practice: fill in fast I/O lines
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "Fast I/O를 활성화하는 두 줄을 완성해요! (첫 번째 빈칸)",
+          guide: "C/C++ 동기화를 끊는 함수 이름은? (sync_with_stdio)",
+          template: "ios::___(false);\ncin.tie(NULL);",
+          answer: "sync_with_stdio",
+          expect: "ios::sync_with_stdio(false);\ncin.tie(NULL);",
+          en: {
+            task: "Complete the two lines that enable Fast I/O! (first blank)",
+            guide: "What function breaks C/C++ synchronization? (sync_with_stdio)"
+          }
+        }
+      },
+
+      // practice: fill in typedef long long ___
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "long long을 ll로 줄이는 typedef를 완성해요!",
+          guide: "typedef 원래타입 별명; 형태예요!",
+          template: "typedef long long ___;",
+          answer: "ll",
+          expect: "typedef long long ll;",
+          en: {
+            task: "Complete the typedef that shortens long long to ll!",
+            guide: "The form is: typedef original_type alias;"
+          }
+        }
+      },
+
+      // practice: fill in bit AND operator n ___ 1
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "비트 AND 연산으로 n이 홀수인지 확인해요!",
+          guide: "비트 AND 연산자는 & 예요. n의 최하위 비트가 1이면 홀수!",
+          template: "if (n ___ 1) {\n    cout << \"홀수\\n\";\n}",
+          answer: "&",
+          expect: "if (n & 1) {\n    cout << \"홀수\\n\";\n}",
+          en: {
+            task: "Use bitwise AND to check if n is odd!",
+            guide: "The bitwise AND operator is &. If n's lowest bit is 1, it's odd!"
+          }
+        }
+      },
+
+      // errorQuiz: using endl instead of "\n" (performance issue)
+      {
+        type: "errorQuiz",
+        content: {
+          question: "이 대회 코드에서 TLE(시간 초과)가 나는 이유는?",
+          code: '#include <bits/stdc++.h>\nusing namespace std;\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(NULL);\n    int n;\n    cin >> n;\n    for (int i = 1; i <= n; i++) {\n        cout << i * i << endl;\n    }\n}',
+          options: [
+            "endl이 매 반복마다 버퍼를 flush해서 느려요 — \"\\n\"으로 바꿔야 해요",
+            "ios::sync_with_stdio(false)와 endl을 같이 쓰면 에러가 나요",
+            "i * i 연산이 너무 느려서 long long을 써야 해요"
+          ],
+          answer: 0,
+          explanation: "Fast I/O를 설정해도 endl을 쓰면 매번 flush가 발생해서 느려져요! \"\\n\"으로 바꾸면 flush 없이 줄바꿈만 돼요. 대회에서 endl은 쓰지 마세요.",
+          en: {
+            question: "Why does this competition code get TLE (Time Limit Exceeded)?",
+            options: [
+              "endl flushes the buffer on every iteration, making it slow — use \"\\n\" instead",
+              "Using ios::sync_with_stdio(false) together with endl causes an error",
+              "The i * i calculation is too slow and requires long long"
+            ],
+            explanation: "Even with Fast I/O set up, endl causes a flush every iteration! Using \"\\n\" does only a newline without flushing. Never use endl in competitive programming."
+          }
+        }
+      },
+
+      // predict: bit shift 1 << 3
+      {
+        type: "explain",
+        content: {
+          lines: [],
+          code: '#include <iostream>\nusing namespace std;\nint main() {\n    cout << (1 << 3) << "\\n";\n    return 0;\n}',
+          predict: {
+            question: "1 << 3의 출력 결과는?",
+            options: ["8", "3", "6", "4"],
+            answer: 0,
+            feedback: "1 << 3은 1을 왼쪽으로 3비트 시프트해요. 이진수 0001 → 1000 = 십진수 8이에요! 1 << n은 2의 n승이에요."
+          },
+          en: {
+            predict: {
+              question: "What is the output of 1 << 3?",
+              options: ["8", "3", "6", "4"],
+              feedback: "1 << 3 shifts 1 left by 3 bits. Binary 0001 → 1000 = decimal 8! 1 << n equals 2 to the power of n."
+            }
+          }
+        }
+      },
+
+      // predict: n & (n-1) meaning
+      {
+        type: "explain",
+        content: {
+          lines: [
+            "n & (n-1)은 n의 최하위 1비트를 지우는 연산이에요! 🔢",
+            "n이 2의 거듭제곱이면 n & (n-1) == 0이 됩니다."
+          ],
+          code: '#include <iostream>\nusing namespace std;\nint main() {\n    int n = 8;  // 8 = 1000 (2진수)\n    cout << (n & (n-1)) << "\\n";  // 1000 & 0111 = 0000\n    return 0;\n}',
+          predict: {
+            question: "n=8일 때 n & (n-1)의 출력은?",
+            options: ["0", "7", "8", "1"],
+            answer: 0,
+            feedback: "8은 이진수 1000, 7은 이진수 0111이에요. 1000 & 0111 = 0000 = 0! n이 2의 거듭제곱이면 n & (n-1)은 항상 0이에요."
+          },
+          en: {
+            predict: {
+              question: "When n=8, what is the output of n & (n-1)?",
+              options: ["0", "7", "8", "1"],
+              feedback: "8 is binary 1000, and 7 is binary 0111. 1000 & 0111 = 0000 = 0! When n is a power of 2, n & (n-1) is always 0."
+            }
+          }
+        }
+      },
+
+      // interleaving: from cpp-19 (file I/O) — fill in ifstream
+      {
+        type: "interleaving",
+        content: {
+          message: "잠깐! cpp-19 파일 입출력 기억나요?",
+          task: "input.txt 파일을 읽기 위한 스트림을 선언해요!",
+          template: "___ fin(\"input.txt\");",
+          answer: "ifstream",
+          expect: "ifstream fin(\"input.txt\");",
+          en: {
+            message: "Quick check! Do you remember file I/O from cpp-19?",
+            task: "Declare a stream to read from input.txt!"
+          }
+        }
+      },
+
+      // quiz: what is `auto` used for in modern C++?
+      {
+        type: "quiz",
+        content: {
+          question: "현대 C++에서 auto 키워드는 주로 무엇에 사용되나요?",
+          options: [
+            "자동 메모리 해제",
+            "컴파일러가 변수 타입을 초기값으로 자동 추론하게 함",
+            "자동으로 헤더를 포함",
+            "반복문을 자동으로 최적화"
+          ],
+          answer: 1,
+          explanation: "auto는 컴파일러에게 '타입을 알아서 추론해!'라고 하는 키워드예요. auto x = 3.14;면 x는 double이 되고, for(auto v : vec)에서 v는 vec 원소 타입이 돼요!",
+          en: {
+            question: "What is the auto keyword primarily used for in modern C++?",
+            options: [
+              "Automatic memory deallocation",
+              "Letting the compiler automatically infer the variable type from the initializer",
+              "Automatically including headers",
+              "Automatically optimizing loops"
+            ],
+            explanation: "auto tells the compiler 'infer the type for me!' auto x = 3.14 makes x a double, and in for(auto v : vec), v takes the element type of vec!"
+          }
+        }
+      },
+
+      // 보상
+      {
+        type: "reward",
+        content: {
+          message: "비트 연산 & 심화 완료!",
+          emoji: "💡"
+        }
+      },
+
       // done
       {
         type: "done",

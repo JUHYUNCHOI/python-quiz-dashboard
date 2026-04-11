@@ -501,6 +501,195 @@ export const lessonCpp22: LessonData = {
         }
       },
 
+      // ==================== CHAPTER 4: 심화 연습 ====================
+      {
+        type: "chapter",
+        content: {
+          num: 4,
+          title: "심화 연습",
+          desc: "클래스 개념을 다양한 문제로 확인해요!"
+        }
+      },
+
+      // predict: Dog 클래스 age 출력
+      {
+        type: "explain",
+        content: {
+          lines: [],
+          code: '#include <iostream>\nusing namespace std;\n\nclass Dog {\npublic:\n    int age = 3;\n};\n\nint main() {\n    Dog d;\n    cout << d.age << "\\n";\n    return 0;\n}',
+          predict: {
+            question: "출력 결과는?",
+            options: ["3", "0", "에러 (age가 private)", "에러 (초기화 불가)"],
+            answer: 0,
+            feedback: "age는 public이고 기본값 3으로 초기화돼 있어요. Dog d;로 객체를 만들면 d.age는 3이에요!"
+          },
+          en: {
+            predict: {
+              question: "What is the output?",
+              options: ["3", "0", "Error (age is private)", "Error (cannot initialize inline)"],
+              feedback: "age is public and initialized to 3 by default. When Dog d; creates the object, d.age is 3!"
+            }
+          }
+        }
+      },
+
+      // predict: 생성자 파라미터
+      {
+        type: "explain",
+        content: {
+          lines: [],
+          code: '#include <iostream>\nusing namespace std;\n\nclass Person {\npublic:\n    string name;\n    int age;\n\n    Person(string n, int a) {\n        name = n;\n        age = a;\n    }\n};\n\nint main() {\n    Person p("민준", 15);\n    cout << p.name << " " << p.age << "\\n";\n    return 0;\n}',
+          predict: {
+            question: "출력 결과는?",
+            options: ["민준 15", "n a", "민준 0", "에러"],
+            answer: 0,
+            feedback: "Person(\"민준\", 15)으로 n=\"민준\", a=15가 넘어가고, 생성자에서 name=n, age=a로 저장돼요!"
+          },
+          en: {
+            predict: {
+              question: "What is the output?",
+              options: ["민준 15", "n a", "민준 0", "Error"],
+              feedback: "Person(\"민준\", 15) passes n=\"민준\" and a=15, which are stored as name and age in the constructor!"
+            }
+          }
+        }
+      },
+
+      // practice: fill in constructor name ___(string n)
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "Animal 클래스의 생성자 이름을 채워요!",
+          guide: "생성자 이름은 항상 클래스 이름과 동일해야 해요!",
+          template: "class Animal {\npublic:\n    string name;\n    ___(string n) {\n        name = n;\n    }\n};",
+          answer: "Animal",
+          expect: "class Animal {\npublic:\n    string name;\n    Animal(string n) {\n        name = n;\n    }\n};",
+          en: {
+            task: "Fill in the constructor name for the Animal class!",
+            guide: "The constructor name must always match the class name!"
+          }
+        }
+      },
+
+      // practice: fill in this->name = ___
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "this->name에 매개변수 n을 대입해요!",
+          guide: "this->멤버변수 = 매개변수; 형태로 써요!",
+          template: "class Robot {\npublic:\n    string name;\n    Robot(string n) {\n        this->name = ___;\n    }\n};",
+          answer: "n",
+          expect: "class Robot {\npublic:\n    string name;\n    Robot(string n) {\n        this->name = n;\n    }\n};",
+          en: {
+            task: "Assign parameter n to this->name!",
+            guide: "Use the form: this->memberVariable = parameter;"
+          }
+        }
+      },
+
+      // quiz: what does `this` refer to?
+      {
+        type: "quiz",
+        content: {
+          question: "C++ 클래스에서 `this`는 무엇을 가리키나요?",
+          options: [
+            "클래스 자체를 가리킨다",
+            "현재 객체의 포인터를 가리킨다",
+            "부모 클래스를 가리킨다",
+            "생성자 함수를 가리킨다"
+          ],
+          answer: 1,
+          explanation: "this는 현재 객체 자신의 주소(포인터)예요! this->name은 '현재 이 객체의 name 멤버변수'를 뜻해요. 매개변수와 멤버변수 이름이 같을 때 구분하는 데 씁니다.",
+          en: {
+            question: "What does `this` refer to inside a C++ class?",
+            options: [
+              "The class itself",
+              "A pointer to the current object",
+              "The parent class",
+              "The constructor function"
+            ],
+            explanation: "this is the address (pointer) of the current object! this->name means 'the name member of this object'. It's used to distinguish member variables from parameters with the same name."
+          }
+        }
+      },
+
+      // errorQuiz: missing semicolon after class declaration
+      {
+        type: "errorQuiz",
+        content: {
+          question: "이 코드는 왜 컴파일 에러일까요?",
+          code: 'class Car {\npublic:\n    string model;\n    int speed;\n}\n\nCar c;',
+          options: [
+            "클래스 닫는 중괄호 뒤에 세미콜론(;)이 없어서",
+            "public: 키워드가 잘못됐서",
+            "Car 변수를 클래스 밖에서 선언할 수 없어서"
+          ],
+          answer: 0,
+          explanation: "C++에서 클래스(struct도 마찬가지) 선언은 닫는 } 뒤에 반드시 ;를 붙여야 해요! class Car { ... }; 처럼요.",
+          en: {
+            question: "Why does this code cause a compilation error?",
+            options: [
+              "There is no semicolon (;) after the closing brace of the class",
+              "The public: keyword is incorrect",
+              "A Car variable cannot be declared outside the class"
+            ],
+            explanation: "In C++, class (and struct) declarations must have a semicolon after the closing }! Like class Car { ... };"
+          }
+        }
+      },
+
+      // errorQuiz: accessing private member from outside (new variant)
+      {
+        type: "errorQuiz",
+        content: {
+          question: "이 코드에서 에러가 나는 줄은?",
+          code: 'class Wallet {\nprivate:\n    int money = 5000;\npublic:\n    int getBalance() { return money; }\n};\n\nWallet w;\ncout << w.getBalance() << "\\n";  // A\ncout << w.money << "\\n";           // B',
+          options: [
+            "A줄 — getBalance()를 외부에서 호출할 수 없어서",
+            "B줄 — money가 private이라 외부에서 직접 접근 불가",
+            "둘 다 에러 없음"
+          ],
+          answer: 1,
+          explanation: "getBalance()는 public이라 외부 호출 OK! 하지만 money는 private이라 w.money로 직접 접근하면 에러예요. private 멤버는 getter를 통해서만 접근해야 해요.",
+          en: {
+            question: "Which line causes an error in this code?",
+            options: [
+              "Line A — getBalance() cannot be called from outside",
+              "Line B — money is private and cannot be accessed directly from outside",
+              "Neither line has an error"
+            ],
+            explanation: "getBalance() is public so external calls are fine! But money is private, so w.money is an error. Private members must be accessed through getters."
+          }
+        }
+      },
+
+      // interleaving: from cpp-14 (struct) — fill in dot notation
+      {
+        type: "interleaving",
+        content: {
+          message: "잠깐! cpp-14 struct 기억나요?",
+          task: "struct Point에서 멤버 x를 읽는 코드를 완성해요! (점 표기법)",
+          template: "struct Point { int x; int y; };\nPoint p;\np.x = 10;\ncout << p___x << \"\\n\";",
+          answer: ".",
+          expect: "struct Point { int x; int y; };\nPoint p;\np.x = 10;\ncout << p.x << \"\\n\";",
+          en: {
+            message: "Quick check! Do you remember structs from cpp-14?",
+            task: "Complete the code that reads member x from a struct Point using dot notation!"
+          }
+        }
+      },
+
+      // 보상
+      {
+        type: "reward",
+        content: {
+          message: "클래스 심화 연습 완료!",
+          emoji: "⭐"
+        }
+      },
+
       // done
       {
         type: "done",
