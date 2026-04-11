@@ -14,6 +14,7 @@ export { functionsCluster } from "./cluster-functions"
 export { refsPtrsCluster } from "./cluster-refs-ptrs"
 export { structsCluster } from "./cluster-structs"
 export { stackQueueCluster } from "./cluster-stackqueue"
+export { constructsCluster } from "./cluster-constructs"
 // Python clusters
 export { pyBasicsCluster } from "./py-cluster-basics"
 export { pyOutputCluster } from "./py-cluster-output"
@@ -42,6 +43,7 @@ import { functionsCluster } from "./cluster-functions"
 import { refsPtrsCluster } from "./cluster-refs-ptrs"
 import { structsCluster } from "./cluster-structs"
 import { stackQueueCluster } from "./cluster-stackqueue"
+import { constructsCluster } from "./cluster-constructs"
 import { pyBasicsCluster } from "./py-cluster-basics"
 import { pyOutputCluster } from "./py-cluster-output"
 import { pyTypeConvCluster } from "./py-cluster-typeconv"
@@ -72,6 +74,7 @@ export const ALL_CLUSTERS: PracticeCluster[] = [
   refsPtrsCluster,
   structsCluster,
   stackQueueCluster,
+  constructsCluster,
   // Python clusters (early — lessons 1–12)
   pyBasicsCluster,
   pyOutputCluster,

@@ -70,24 +70,48 @@ export interface PracticeCluster {
 // ── Localization helpers ──────────────────────────────────────────────────────
 
 /**
+ * Auto-translate common Korean code comments into English.
+ * Applied to initialCode / scaffoldCode when no explicit en.initialCode exists.
+ */
+function translateCodeComments(code: string | undefined): string | undefined {
+  if (!code) return code
+  return code
+    // Generic "write your code here"
+    .replace(/\/\/ 여기에 코드를 작성하세요/g, "// Write your code here")
+    .replace(/# 여기에 코드를 작성하세요/g, "# Write your code here")
+    .replace(/\/\/ 여기에 출력 코드를 작성하세요/g, "// Write your output code here")
+    // Function-specific placeholders  (e.g. "// square 함수를 여기에 작성하세요")
+    .replace(/\/\/ (.+?) 함수를 여기에 작성하세요/g, "// Write the $1 function here")
+    // switch case placeholder
+    .replace(/\/\/ 각 연산자 case를 작성하세요/g, "// Write each operator case here")
+    // Python bubble sort placeholder
+    .replace(/# 여기에 코드를 작성하세요 \(버블 정렬 직접 구현\)/g, "# Write your code here (implement bubble sort manually)")
+    // Python battle loop placeholder
+    .replace(/# 여기에 전투 루프를 작성하세요/g, "# Write the battle loop here")
+}
+
+/**
  * Returns a localized copy of a problem.
  * English fields (en.*) override Korean fields when lang === "en".
  * Falls back gracefully to Korean if English is not available.
+ * Korean comments in initialCode/scaffoldCode are auto-translated even without en.initialCode.
  */
 export function localizeProblem(p: PracticeProblem, lang: string): PracticeProblem {
-  if (lang !== "en" || !p.en) return p
+  if (lang !== "en") return p
+  const en = p.en ?? {}
   return {
     ...p,
-    title: p.en.title ?? p.title,
-    description: p.en.description ?? p.description,
-    constraints: p.en.constraints ?? p.constraints,
-    hints: p.en.hints ?? p.hints,
-    solutionExplanation: p.en.solutionExplanation ?? p.solutionExplanation,
-    explanation: p.en.explanation ?? p.explanation,
-    options: p.en.options ?? p.options,
-    codeSnippet: p.en.codeSnippet ?? p.codeSnippet,
-    initialCode: p.en.initialCode ?? p.initialCode,
-    scaffoldCode: p.en.scaffoldCode ?? p.scaffoldCode,
+    title: en.title ?? p.title,
+    description: en.description ?? p.description,
+    constraints: en.constraints ?? p.constraints,
+    hints: en.hints ?? p.hints,
+    solutionExplanation: en.solutionExplanation ?? p.solutionExplanation,
+    explanation: en.explanation ?? p.explanation,
+    options: en.options ?? p.options,
+    codeSnippet: en.codeSnippet ?? p.codeSnippet,
+    // Auto-translate Korean comments if no explicit English version provided
+    initialCode: en.initialCode ?? translateCodeComments(p.initialCode),
+    scaffoldCode: en.scaffoldCode ?? translateCodeComments(p.scaffoldCode),
   }
 }
 
