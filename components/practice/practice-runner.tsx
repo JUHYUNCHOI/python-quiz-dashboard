@@ -345,19 +345,20 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
                 </span>
               </div>
               {!r.passed && (
-                <div className="mt-2 grid grid-cols-2 gap-2 text-xs font-mono">
-                  <div>
-                    <span className="text-gray-400">{t("입력: ", "Input: ")}</span>
-                    <span className="text-gray-600">{(problem.testCases ?? [])[i]?.stdin}</span>
+                <div className="mt-2 flex flex-col gap-1.5 text-xs font-mono">
+                  <div className="bg-gray-50 rounded-lg px-3 py-2">
+                    <div className="text-gray-400 mb-1">{t("입력", "Input")}</div>
+                    <div className="text-gray-600 whitespace-pre-wrap">{(problem.testCases ?? [])[i]?.stdin || t("(없음)", "(none)")}</div>
                   </div>
-                  <div />
-                  <div>
-                    <span className="text-gray-400">{t("예상: ", "Expected: ")}</span>
-                    <span className="text-emerald-600 font-semibold">{r.expected}</span>
-                  </div>
-                  <div>
-                    <span className="text-gray-400">{t("실제: ", "Actual: ")}</span>
-                    <span className="text-red-600">{r.output || t("(출력 없음)", "(no output)")}</span>
+                  <div className="flex gap-2">
+                    <div className="flex-1 bg-emerald-50 rounded-lg px-3 py-2">
+                      <div className="text-gray-400 mb-1">{t("예상", "Expected")}</div>
+                      <div className="text-emerald-600 font-semibold whitespace-pre-wrap">{r.expected}</div>
+                    </div>
+                    <div className="flex-1 bg-red-50 rounded-lg px-3 py-2">
+                      <div className="text-gray-400 mb-1">{t("실제", "Actual")}</div>
+                      <div className="text-red-600 whitespace-pre-wrap">{r.output || t("(출력 없음)", "(no output)")}</div>
+                    </div>
                   </div>
                 </div>
               )}
