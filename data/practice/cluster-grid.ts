@@ -345,7 +345,7 @@ int main() {
       testCases: [
         { stdin: "3 3\n1 2 3\n4 5 6\n7 8 9", expectedOutput: "40", label: "기본 (5 제외)" },
         { stdin: "2 2\n1 2\n3 4", expectedOutput: "10", label: "전부 테두리" },
-        { stdin: "3 4\n1 2 3 4\n5 6 7 8\n9 10 11 12", expectedOutput: "60", label: "3×4" },
+        { stdin: "3 4\n1 2 3 4\n5 6 7 8\n9 10 11 12", expectedOutput: "65", label: "3×4" },
       ],
       hints: [
         "테두리 조건: i==0 또는 i==n-1 또는 j==0 또는 j==m-1",
