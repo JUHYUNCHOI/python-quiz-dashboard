@@ -691,6 +691,123 @@ export const lessonCpp20: LessonData = {
         }
       },
 
+      // quiz: typedef long long ll
+      {
+        type: "quiz",
+        content: {
+          question: "`typedef long long ll;`을 쓰면 ll은 무엇을 의미하나요?",
+          options: [
+            "long",
+            "long long",
+            "long double",
+            "long long long"
+          ],
+          answer: 1,
+          explanation: "typedef는 타입 별명을 만들어요. `ll`은 이제 `long long`의 줄임말이에요.",
+          en: {
+            question: "After writing `typedef long long ll;`, what does `ll` mean?",
+            options: [
+              "long",
+              "long long",
+              "long double",
+              "long long long"
+            ],
+            explanation: "typedef creates an alias. `ll` is now shorthand for `long long`."
+          }
+        }
+      },
+
+      // practice Lv.2: fast I/O setup fill-in
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "빠른 입출력 설정 2줄을 완성해요!",
+          guide: "sync_with_stdio(false)와 cin.tie(NULL)을 써요!",
+          template: "ios::sync_with_stdio(___);\ncin.tie(__);",
+          answer: "false",
+          blanksAnswer: ["false", "NULL"],
+          expect: "ios::sync_with_stdio(false);\ncin.tie(NULL);",
+          en: {
+            task: "Complete the 2-line fast I/O setup!",
+            guide: "Use sync_with_stdio(false) and cin.tie(NULL)!"
+          }
+        }
+      },
+
+      // errorQuiz: endl in competitive programming
+      {
+        type: "errorQuiz",
+        content: {
+          question: "이 코드에서 TLE(시간 초과)가 날 수 있는 이유는?",
+          code: 'for (int i = 0; i < 100000; i++) {\n    cout << i << endl;\n}',
+          options: [
+            "for문이 너무 많이 돌아서",
+            "endl이 매번 버퍼를 flush해서 느려서",
+            "cout이 느려서"
+          ],
+          answer: 1,
+          explanation: "`endl`은 `'\\n'`과 달리 출력 버퍼를 강제로 flush해요. 반복문 안에서는 `'\\n'`을 써야 빨라요.",
+          en: {
+            question: "Why might this code get TLE (Time Limit Exceeded)?",
+            options: [
+              "The for loop iterates too many times",
+              "endl flushes the buffer every iteration, making it slow",
+              "cout is slow"
+            ],
+            explanation: "`endl` forcibly flushes the output buffer, unlike `'\\n'`. Use `'\\n'` inside loops to go faster."
+          }
+        }
+      },
+
+      // predict: bit AND operation
+      {
+        type: "explain",
+        content: {
+          lines: [],
+          code: 'int n = 6;\ncout << (n & 1) << endl;',
+          predict: {
+            question: "출력 결과는? (6은 이진수로 110)",
+            options: ["0", "1", "6", "에러"],
+            answer: 0,
+            feedback: "6은 이진수 110이에요. &1은 마지막 비트 확인 → 110 & 001 = 000 = 0 (짝수!)"
+          },
+          en: {
+            predict: {
+              question: "What is the output? (6 is 110 in binary)",
+              options: ["0", "1", "6", "error"],
+              feedback: "6 is binary 110. &1 checks the last bit → 110 & 001 = 000 = 0 (even number!)"
+            }
+          }
+        }
+      },
+
+      // quiz: what does #include <bits/stdc++.h> do?
+      {
+        type: "quiz",
+        content: {
+          question: "`#include <bits/stdc++.h>`를 쓰면?",
+          options: [
+            "비트 연산만 포함된다",
+            "모든 표준 헤더가 한 번에 포함된다",
+            "C 라이브러리만 포함된다",
+            "컴파일이 더 빨라진다"
+          ],
+          answer: 1,
+          explanation: "대회용 헤더로, iostream/vector/algorithm 등 모든 표준 라이브러리를 한 번에 포함해요. 컴파일은 느려지지만 코드가 짧아져요.",
+          en: {
+            question: "What happens when you write `#include <bits/stdc++.h>`?",
+            options: [
+              "Only bitwise operations are included",
+              "All standard headers are included at once",
+              "Only the C library is included",
+              "Compilation becomes faster"
+            ],
+            explanation: "It's a competition header that includes all standard libraries (iostream, vector, algorithm, etc.) at once. Compilation slows down, but the code gets shorter."
+          }
+        }
+      },
+
       // done
       {
         type: "done",
