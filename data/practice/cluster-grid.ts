@@ -197,7 +197,7 @@ int main() {
       title: "두 대각선 합",
       description: `N×N 정방 격자가 주어질 때, 주대각선과 반대각선의 합에서 중복 원소를 한 번만 세어 출력하세요.
 (N이 홀수일 때 중심 원소 grid[N/2][N/2]는 한 번만 셉니다)`,
-      constraints: "1 ≤ N ≤ 100 (홀수), 0 ≤ 각 원소 ≤ 100",
+      constraints: "1 ≤ N ≤ 100 (홀수), -100 ≤ 각 원소 ≤ 100",
       initialCode: `#include <iostream>
 #include <vector>
 using namespace std;
@@ -215,7 +215,7 @@ int main() {
       testCases: [
         { stdin: "3\n1 2 3\n4 5 6\n7 8 9", expectedOutput: "25", label: "기본 (1+5+9+3+7=25)" },
         { stdin: "1\n5", expectedOutput: "5", label: "1×1" },
-        { stdin: "3\n11 2 4\n4 5 6\n10 8 -12", expectedOutput: "1", label: "음수 포함" },
+        { stdin: "3\n11 2 4\n4 5 6\n10 8 -12", expectedOutput: "18", label: "음수 포함" },
       ],
       hints: [
         "주대각선: grid[i][i], 반대각선: grid[i][n-1-i]",
@@ -246,7 +246,7 @@ int main() {
         title: "Both Diagonals Sum",
         description: `Given an N×N square grid, output the sum of both diagonals, counting overlapping elements only once.
 (When N is odd, the center element grid[N/2][N/2] is counted only once.)`,
-        constraints: "1 ≤ N ≤ 100 (odd), 0 ≤ each element ≤ 100",
+        constraints: "1 ≤ N ≤ 100 (odd), -100 ≤ each element ≤ 100",
         hints: [
           "Main diagonal: grid[i][i], anti-diagonal: grid[i][n-1-i].",
           "After adding both diagonals, subtract grid[n/2][n/2] once since it was counted twice.",
