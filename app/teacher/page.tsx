@@ -122,19 +122,30 @@ export default function TeacherDashboardPage() {
       if (!studentClassMap.has(m.student_id)) studentClassMap.set(m.student_id, m.class_id)
     }
 
-    // 학생별 퀴즈 세션 (최대 5개)
+    // 학생별 퀴즈 최근 completed_at
+    const quizLatestMap = new Map<string, string>()
     const quizMap = new Map<string, { correct_answers: number; total_questions: number }[]>()
     for (const qs of quizSessions || []) {
       if (!quizMap.has(qs.user_id)) quizMap.set(qs.user_id, [])
       const arr = quizMap.get(qs.user_id)!
       if (arr.length < 5) arr.push(qs)
+      // 가장 최근 퀴즈 날짜 추적
+      if (qs.completed_at) {
+        const prev = quizLatestMap.get(qs.user_id)
+        if (!prev || qs.completed_at > prev) quizLatestMap.set(qs.user_id, qs.completed_at)
+      }
     }
 
-    // 학생별 복습 진도
+    // 학생별 복습 최근 updated_at
+    const progressLatestMap = new Map<string, string>()
     const progressMap = new Map<string, { lesson_id: string; score: number }[]>()
     for (const p of lessonProgress || []) {
       if (!progressMap.has(p.user_id)) progressMap.set(p.user_id, [])
       progressMap.get(p.user_id)!.push({ lesson_id: p.lesson_id, score: p.score })
+      if (p.updated_at) {
+        const prev = progressLatestMap.get(p.user_id)
+        if (!prev || p.updated_at > prev) progressLatestMap.set(p.user_id, p.updated_at)
+      }
     }
 
     const result: StudentRisk[] = []
@@ -142,7 +153,15 @@ export default function TeacherDashboardPage() {
       const name = profileMap.get(sid) || "학생"
       const classId = studentClassMap.get(sid) || ""
       const className = classMap.get(classId) || ""
-      const lastActive = gamMap.get(sid) || "-"
+      // gamification, 퀴즈, 복습 중 가장 최근 활동을 lastActive로 사용
+      const candidates = [
+        gamMap.get(sid) || "-",
+        quizLatestMap.get(sid) || "-",
+        progressLatestMap.get(sid) || "-",
+      ].filter(d => d !== "-")
+      const lastActive = candidates.length > 0
+        ? candidates.reduce((a, b) => a > b ? a : b)
+        : "-"
       const days = daysSinceStr(lastActive)
       const sessions = quizMap.get(sid) || []
       const avgAcc = sessions.length >= 2
