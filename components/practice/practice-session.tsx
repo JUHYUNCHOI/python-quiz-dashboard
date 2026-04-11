@@ -673,11 +673,11 @@ export function PracticeSession({
                         <div key={i} className="flex gap-3 font-mono text-xs bg-gray-50 rounded-lg px-3 py-2">
                           <div className="flex-1 min-w-0">
                             <span className="text-gray-400">{t("입력", "Input")}: </span>
-                            <span className="text-gray-700 break-all">{tc.stdin || t("(없음)", "(none)")}</span>
+                            <span className="text-gray-700 whitespace-pre-wrap break-all">{tc.stdin || t("(없음)", "(none)")}</span>
                           </div>
                           <div className="flex-1 min-w-0">
                             <span className="text-gray-400">{t("출력", "Output")}: </span>
-                            <span className="text-emerald-600 font-semibold break-all">{tc.expectedOutput}</span>
+                            <span className="text-emerald-600 font-semibold whitespace-pre-wrap break-all">{tc.expectedOutput}</span>
                           </div>
                         </div>
                       ))}
