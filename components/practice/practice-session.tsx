@@ -673,7 +673,18 @@ export function PracticeSession({
                         <div key={i} className="flex gap-2 font-mono text-xs">
                           <div className="flex-1 min-w-0 bg-gray-50 rounded-lg px-3 py-2">
                             <div className="text-gray-400 mb-1">{t("입력", "Input")}</div>
-                            <div className="text-gray-700 whitespace-pre-wrap break-all">{tc.stdin || t("(없음)", "(none)")}</div>
+                            {tc.stdin ? (() => {
+                              const lines = tc.stdin.split("\n")
+                              return (
+                                <div className="break-all">
+                                  {/* 첫 줄(N, N M 등 크기 정보)은 흐리게 표시 */}
+                                  <span className="text-gray-400">{lines[0]}</span>
+                                  {lines.length > 1 && (
+                                    <span className="text-gray-700 whitespace-pre-wrap">{"\n" + lines.slice(1).join("\n")}</span>
+                                  )}
+                                </div>
+                              )
+                            })() : <span className="text-gray-400">{t("(없음)", "(none)")}</span>}
                           </div>
                           <div className="flex-1 min-w-0 bg-gray-50 rounded-lg px-3 py-2">
                             <div className="text-gray-400 mb-1">{t("출력", "Output")}</div>
