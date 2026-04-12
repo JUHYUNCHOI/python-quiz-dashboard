@@ -20,7 +20,7 @@ export const lessonCpp6: LessonData = {
         type: "explain",
         content: {
           lines: [],
-          code: '// 파이썬\n// if score >= 90:\n//     print("A")\n\n// C++\n#include <iostream>\nusing namespace std;\n\nint main() {\n    int score = 95;\n    if (score >= 90) {\n        cout << "A" << endl;\n    }\n    return 0;\n}',
+          code: '// Python\n// if score >= 90:\n//     print("A")\n\n// C++\n#include <iostream>\nusing namespace std;\n\nint main() {\n    int score = 95;\n    if (score >= 90) {\n        cout << "A" << endl;\n    }\n    return 0;\n}',
           result: "A",
           note: "파이썬: 콜론 + 들여쓰기 → C++: 괄호() + 중괄호{}"
         }
@@ -31,7 +31,7 @@ export const lessonCpp6: LessonData = {
         type: "explain",
         content: {
           lines: [],
-          code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    int age = 15;\n    if (age >= 18) {\n        cout << "성인" << endl;\n    } else {\n        cout << "미성년" << endl;\n    }\n    return 0;\n}',
+          code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    int age = 15;\n    if (age >= 18) {\n        cout << "adult" << endl;\n    } else {\n        cout << "minor" << endl;\n    }\n    return 0;\n}',
           predict: {
             question: "age가 15일 때 출력은?",
             options: ["성인", "미성년", "에러"],
@@ -253,8 +253,8 @@ export const lessonCpp6: LessonData = {
             "case 값: 으로 각 경우를 적고, break;로 멈춰요!",
             "파이썬에는 switch가 없었죠? C++의 특별한 문법이에요!"
           ],
-          code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    int day = 3;\n    switch (day) {\n        case 1:\n            cout << "월요일" << endl;\n            break;\n        case 2:\n            cout << "화요일" << endl;\n            break;\n        case 3:\n            cout << "수요일" << endl;\n            break;\n        default:\n            cout << "기타" << endl;\n    }\n    return 0;\n}',
-          result: "수요일",
+          code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    int day = 3;\n    switch (day) {\n        case 1:\n            cout << "Monday" << endl;\n            break;\n        case 2:\n            cout << "Tuesday" << endl;\n            break;\n        case 3:\n            cout << "Wednesday" << endl;\n            break;\n        default:\n            cout << "other" << endl;\n    }\n    return 0;\n}',
+          result: "Wednesday",
           note: "switch + case + break! break를 빼먹으면 아래 case도 실행돼요!"
         }
       },
@@ -290,7 +290,7 @@ export const lessonCpp6: LessonData = {
         type: "errorQuiz",
         content: {
           question: "이 코드의 문제점은?",
-          code: 'int choice = 1;\nswitch (choice) {\n    case 1:\n        cout << "하나" << endl;\n    case 2:\n        cout << "둘" << endl;\n        break;\n}',
+          code: 'int choice = 1;\nswitch (choice) {\n    case 1:\n        cout << "one" << endl;\n    case 2:\n        cout << "two" << endl;\n        break;\n}',
           options: [
             "case 1에 break;가 없어서 '하나'와 '둘' 모두 출력됨",
             "switch에 default가 없어서 에러",
@@ -389,7 +389,7 @@ export const lessonCpp6: LessonData = {
             "90점 이상 → A, 80점 이상 → B, 70점 이상 → C,",
             "60점 이상 → D, 나머지 → F"
           ],
-          code: '// 완성된 모습\n// 입력: 85\n// 출력: 등급: B',
+          code: '// finished result\n// input: 85\n// output: grade: B',
           note: "else if를 사용해서 만들어요!"
         }
       },
@@ -574,7 +574,7 @@ export const lessonCpp6: LessonData = {
         type: "explain",
         content: {
           lines: ["이 코드의 출력은?"],
-          code: 'int score = 75;\nbool passed = score >= 60;\nbool perfect = score == 100;\n\nif (passed && !perfect) {\n    cout << "합격, 하지만 만점은 아님" << endl;\n} else if (!passed) {\n    cout << "불합격" << endl;\n} else {\n    cout << "만점!" << endl;\n}',
+          code: 'int score = 75;\nbool passed = score >= 60;\nbool perfect = score == 100;\n\nif (passed && !perfect) {\n    cout << "passed, but not perfect" << endl;\n} else if (!passed) {\n    cout << "failed" << endl;\n} else {\n    cout << "perfect!" << endl;\n}',
           predict: {
             options: ["합격, 하지만 만점은 아님", "불합격", "만점!", "에러"],
             answer: 0,

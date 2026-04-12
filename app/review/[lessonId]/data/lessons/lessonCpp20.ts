@@ -20,7 +20,7 @@ export const lessonCpp20: LessonData = {
         type: "explain",
         content: {
           lines: [],
-          code: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    // 여기서부터 풀이 시작!\n\n    return 0;\n}',
+          code: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    // start solving here!\n\n    return 0;\n}',
           note: "bits/stdc++.h = 모든 헤더를 한 번에 포함! (대회 전용)"
         }
       },
@@ -30,7 +30,7 @@ export const lessonCpp20: LessonData = {
         type: "explain",
         content: {
           lines: [],
-          code: '#include <bits/stdc++.h>  // 이것 하나면 끝!\n// 아래 전부 필요 없음:\n// #include <iostream>\n// #include <vector>\n// #include <algorithm>\n// #include <map>',
+          code: '#include <bits/stdc++.h>  // this one is enough!\n// no need for any of these:\n// #include <iostream>\n// #include <vector>\n// #include <algorithm>\n// #include <map>',
           predict: {
             question: "bits/stdc++.h를 실제 프로젝트에서도 쓸까요?",
             options: ["네, 항상 써요", "아니요, 대회에서만 써요", "C++20부터 사라졌어요"],
@@ -207,7 +207,7 @@ export const lessonCpp20: LessonData = {
         type: "explain",
         content: {
           lines: [],
-          code: '#define FOR(i, n) for(int i = 0; i < (n); i++)\n#define pb push_back\n#define all(v) (v).begin(), (v).end()\n\nint main() {\n    vector<int> v;\n    FOR(i, 5) v.pb(i);  // 0,1,2,3,4 추가\n    sort(all(v));        // 전체 정렬\n}',
+          code: '#define FOR(i, n) for(int i = 0; i < (n); i++)\n#define pb push_back\n#define all(v) (v).begin(), (v).end()\n\nint main() {\n    vector<int> v;\n    FOR(i, 5) v.pb(i);  // add 0,1,2,3,4\n    sort(all(v));        // sort all\n}',
           note: "#define은 코드를 치환해요! pb → push_back으로 바뀜"
         }
       },
@@ -256,7 +256,7 @@ export const lessonCpp20: LessonData = {
         type: "errorQuiz",
         content: {
           question: "이 매크로의 문제점은?",
-          code: '#define SQ(x) x*x\n\ncout << SQ(2+1) << "\\n";\n// 기대: 9, 실제: ?',
+          code: '#define SQ(x) x*x\n\ncout << SQ(2+1) << "\\n";\n// expected: 9, actual: ?',
           options: [
             "2+1*2+1 = 5가 돼서 괄호가 필요해요",
             "SQ는 예약어라 매크로 이름으로 못 써요",
@@ -357,7 +357,7 @@ export const lessonCpp20: LessonData = {
         type: "explain",
         content: {
           lines: [],
-          code: '#include <bits/stdc++.h>\nusing namespace std;\n\ntypedef long long ll;\ntypedef vector<int> vi;\n#define pb push_back\n#define all(v) (v).begin(), (v).end()\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(NULL);\n    freopen("problem.in", "r", stdin);\n    freopen("problem.out", "w", stdout);\n\n    // 풀이 시작\n\n    return 0;\n}',
+          code: '#include <bits/stdc++.h>\nusing namespace std;\n\ntypedef long long ll;\ntypedef vector<int> vi;\n#define pb push_back\n#define all(v) (v).begin(), (v).end()\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(NULL);\n    freopen("problem.in", "r", stdin);\n    freopen("problem.out", "w", stdout);\n\n    // start solving\n\n    return 0;\n}',
           predict: {
             question: "이 템플릿에서 freopen은 왜 쓰나요?",
             options: [
@@ -623,7 +623,7 @@ export const lessonCpp20: LessonData = {
             "n & (n-1)은 n의 최하위 1비트를 지우는 연산이에요! 🔢",
             "n이 2의 거듭제곱이면 n & (n-1) == 0이 됩니다."
           ],
-          code: '#include <iostream>\nusing namespace std;\nint main() {\n    int n = 8;  // 8 = 1000 (2진수)\n    cout << (n & (n-1)) << "\\n";  // 1000 & 0111 = 0000\n    return 0;\n}',
+          code: '#include <iostream>\nusing namespace std;\nint main() {\n    int n = 8;  // 8 = 1000 (binary)\n    cout << (n & (n-1)) << "\\n";  // 1000 & 0111 = 0000\n    return 0;\n}',
           predict: {
             question: "n=8일 때 n & (n-1)의 출력은?",
             options: ["0", "7", "8", "1"],

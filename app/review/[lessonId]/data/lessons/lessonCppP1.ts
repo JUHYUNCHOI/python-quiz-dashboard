@@ -23,8 +23,8 @@ export const lessonCppP1: LessonData = {
             "숫자 맞추기 게임의 핵심은 랜덤 숫자 생성이에요!",
             "rand()와 srand()를 써서 매번 다른 숫자를 만들어요."
           ],
-          code: '#include <iostream>\n#include <cstdlib>\n#include <ctime>\nusing namespace std;\n\nint main() {\n    srand(time(0));           // 시드 설정\n    int answer = rand() % 100 + 1;  // 1~100\n    cout << "1~100 숫자를 맞춰보세요!" << "\\n";\n    return 0;\n}',
-          result: "1~100 숫자를 맞춰보세요!",
+          code: '#include <iostream>\n#include <cstdlib>\n#include <ctime>\nusing namespace std;\n\nint main() {\n    srand(time(0));           // set seed\n    int answer = rand() % 100 + 1;  // 1~100\n    cout << "Guess a number from 1 to 100!" << "\\n";\n    return 0;\n}',
+          result: "Guess a number from 1 to 100!",
           note: "srand(time(0))으로 매번 다른 시드! rand() % 100 + 1 = 1~100 범위"
         }
       },
@@ -34,7 +34,7 @@ export const lessonCppP1: LessonData = {
         type: "explain",
         content: {
           lines: [],
-          code: 'int a = rand() % 10;       // 0 ~ 9\nint b = rand() % 10 + 1;   // 1 ~ 10\nint c = rand() % 6 + 1;    // 1 ~ 6 (주사위!)',
+          code: 'int a = rand() % 10;       // 0 ~ 9\nint b = rand() % 10 + 1;   // 1 ~ 10\nint c = rand() % 6 + 1;    // 1 ~ 6 (dice!)',
           predict: {
             question: "rand() % 50 + 1 의 범위는?",
             options: ["0 ~ 50", "1 ~ 50", "1 ~ 51"],
@@ -103,7 +103,7 @@ export const lessonCppP1: LessonData = {
             "사용자가 맞출 때까지 반복해야 해요!",
             "while 루프로 계속 추측을 받아요."
           ],
-          code: 'int guess;\nwhile (true) {\n    cout << "추측: ";\n    cin >> guess;\n    if (guess == answer) {\n        cout << "정답!" << "\\n";\n        break;\n    } else if (guess < answer) {\n        cout << "더 크게!" << "\\n";\n    } else {\n        cout << "더 작게!" << "\\n";\n    }\n}',
+          code: 'int guess;\nwhile (true) {\n    cout << "guess: ";\n    cin >> guess;\n    if (guess == answer) {\n        cout << "correct!" << "\\n";\n        break;\n    } else if (guess < answer) {\n        cout << "go higher!" << "\\n";\n    } else {\n        cout << "go lower!" << "\\n";\n    }\n}',
           note: "while(true) + break 패턴! 맞추면 break로 탈출!"
         }
       },
@@ -130,7 +130,7 @@ export const lessonCppP1: LessonData = {
         type: "errorQuiz",
         content: {
           question: "이 코드의 문제점은?",
-          code: 'int answer = rand() % 100 + 1;\n// srand()를 안 씀!',
+          code: 'int answer = rand() % 100 + 1;\n// srand() not called!',
           options: [
             "srand()가 없어서 매번 같은 숫자가 나와요",
             "rand()는 C++에서 못 써요",
@@ -225,7 +225,7 @@ export const lessonCppP1: LessonData = {
         type: "explain",
         content: {
           lines: [],
-          code: 'int answer = rand() % 100 + 1;\nint guess, tries = 0;\n\nwhile (true) {\n    cin >> guess;\n    tries++;\n    if (guess == answer) {\n        cout << tries << "번 만에 정답!" << "\\n";\n        break;\n    }\n    cout << (guess < answer ? "UP!" : "DOWN!") << "\\n";\n}',
+          code: 'int answer = rand() % 100 + 1;\nint guess, tries = 0;\n\nwhile (true) {\n    cin >> guess;\n    tries++;\n    if (guess == answer) {\n        cout << tries << " tries to get it right!" << "\\n";\n        break;\n    }\n    cout << (guess < answer ? "UP!" : "DOWN!") << "\\n";\n}',
           predict: {
             question: "삼항 연산자 (guess < answer ? \"UP!\" : \"DOWN!\")은 뭘 하나요?",
             options: [
@@ -553,7 +553,7 @@ export const lessonCppP1: LessonData = {
         type: "errorQuiz",
         content: {
           question: "이 코드의 문제점은?",
-          code: 'string name;\ncin >> name;\nif (name > 10) {\n    cout << "큰 숫자!" << "\\n";\n}',
+          code: 'string name;\ncin >> name;\nif (name > 10) {\n    cout << "big number!" << "\\n";\n}',
           options: [
             "string을 숫자 10과 비교하면 타입 오류예요",
             "cin으로 string을 받을 수 없어요",

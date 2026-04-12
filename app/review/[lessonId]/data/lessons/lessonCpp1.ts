@@ -492,7 +492,7 @@ export const lessonCpp1: LessonData = {
         type: "errorQuiz",
         content: {
           question: "이 코드의 문제는?",
-          code: '#include <iostream>\nusing namespace std;\nint main() {\n    cout << "안녕"\n    return 0;\n}',
+          code: '#include <iostream>\nusing namespace std;\nint main() {\n    cout << "hello"\n    return 0;\n}',
           options: [
             "세미콜론(;)이 없어",
             "#include가 없어",

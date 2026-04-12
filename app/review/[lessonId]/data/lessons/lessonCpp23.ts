@@ -83,7 +83,7 @@ export const lessonCpp23: LessonData = {
         type: "explain",
         content: {
           lines: [],
-          code: 'vector<int> v = {1, 3, 5, 7, 9};\nauto it = lower_bound(v.begin(), v.end(), 5);\ncout << *it << endl;         // 5\ncout << (it - v.begin());    // 인덱스: 2',
+          code: 'vector<int> v = {1, 3, 5, 7, 9};\nauto it = lower_bound(v.begin(), v.end(), 5);\ncout << *it << endl;         // 5\ncout << (it - v.begin());    // index: 2',
           result: "5\n2",
           note: "반드시 정렬된 배열에서만 사용! * 로 값 꺼내기!"
         }
@@ -93,7 +93,7 @@ export const lessonCpp23: LessonData = {
         type: "explain",
         content: {
           lines: [],
-          code: 'vector<int> v = {1, 3, 5, 5, 5, 7};\nauto lo = lower_bound(v.begin(), v.end(), 5);\nauto hi = upper_bound(v.begin(), v.end(), 5);\ncout << (hi - lo);  // 5의 개수: 3',
+          code: 'vector<int> v = {1, 3, 5, 5, 5, 7};\nauto lo = lower_bound(v.begin(), v.end(), 5);\nauto hi = upper_bound(v.begin(), v.end(), 5);\ncout << (hi - lo);  // count of 5: 3',
           predict: {
             question: "출력 결과는?",
             options: ["2", "3", "5"],
@@ -129,7 +129,7 @@ export const lessonCpp23: LessonData = {
         type: "explain",
         content: {
           lines: [],
-          code: 'vector<pair<string, int>> students = {\n    {"철수", 85}, {"영희", 92}, {"민수", 78}\n};\nsort(students.begin(), students.end(),\n    [](auto a, auto b) { return a.second > b.second; });\ncout << students[0].first << ": " << students[0].second << endl;',
+          code: 'vector<pair<string, int>> students = {\n    {"alice", 85}, {"bob", 92}, {"charlie", 78}\n};\nsort(students.begin(), students.end(),\n    [](auto a, auto b) { return a.second > b.second; });\ncout << students[0].first << ": " << students[0].second << endl;',
           predict: {
             question: "출력 결과는?",
             options: ["철수: 85", "영희: 92", "민수: 78"],

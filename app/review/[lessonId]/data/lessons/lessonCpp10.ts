@@ -23,7 +23,7 @@ export const lessonCpp10: LessonData = {
             "C++에도 파이썬의 for x in list 같은 문법이 있어요! 🎯",
             "for (타입 변수 : 컨테이너) 형태예요."
           ],
-          code: '// 파이썬:  for x in [1, 2, 3]:\n//              print(x)\n// C++:\nvector<int> v = {1, 2, 3};\nfor (int x : v) {\n    cout << x << endl;\n}',
+          code: '// Python:  for x in [1, 2, 3]:\n//              print(x)\n// C++:\nvector<int> v = {1, 2, 3};\nfor (int x : v) {\n    cout << x << endl;\n}',
           result: "1\n2\n3",
           note: "for (int x : v) = \"v의 각 원소를 x에 넣어서 반복!\""
         }
@@ -37,7 +37,7 @@ export const lessonCpp10: LessonData = {
             "기존 for 루프와 range-for를 비교해봐요!",
             "range-for가 훨씬 깔끔하죠?"
           ],
-          code: 'vector<int> v = {10, 20, 30};\n\n// 기존 for:\nfor (int i = 0; i < v.size(); i++) {\n    cout << v[i] << " ";\n}\n\n// range-for (같은 결과!):\nfor (int x : v) {\n    cout << x << " ";\n}',
+          code: 'vector<int> v = {10, 20, 30};\n\n// classic for:\nfor (int i = 0; i < v.size(); i++) {\n    cout << v[i] << " ";\n}\n\n// range-for (same result!):\nfor (int x : v) {\n    cout << x << " ";\n}',
           result: "10 20 30",
           note: "인덱스가 필요 없으면 range-for가 더 좋아요!"
         }
@@ -254,7 +254,7 @@ export const lessonCpp10: LessonData = {
             "auto를 쓰면 컴파일러가 타입을 알아서 추론해요! 🤖",
             "파이썬처럼 타입을 직접 안 써도 돼요."
           ],
-          code: 'auto x = 42;          // int로 추론\nauto pi = 3.14;       // double로 추론\nauto name = "hello"s; // string으로 추론\n\n// range-for에서도 쓸 수 있어요!\nvector<int> v = {1, 2, 3};\nfor (auto x : v) {\n    cout << x << endl;\n}',
+          code: 'auto x = 42;          // inferred as int\nauto pi = 3.14;       // inferred as double\nauto name = "hello"s; // inferred as string\n\n// also works in range-for!\nvector<int> v = {1, 2, 3};\nfor (auto x : v) {\n    cout << x << endl;\n}',
           note: "auto = \"타입은 컴파일러한테 맡길게!\"  (파이썬의 기본 동작과 비슷!)"
         }
       },
@@ -289,7 +289,7 @@ export const lessonCpp10: LessonData = {
             "auto&를 쓰면 원본을 직접 수정할 수 있어요! ✏️",
             "& 없이 auto만 쓰면 복사본이라 원본이 안 바뀌어요."
           ],
-          code: 'vector<int> v = {1, 2, 3};\n\n// auto (복사) — 원본 안 바뀜\nfor (auto x : v) {\n    x = x * 2;  // 복사본만 바뀜!\n}\n// v = {1, 2, 3} 그대로\n\n// auto& (참조) — 원본 바뀜!\nfor (auto& x : v) {\n    x = x * 2;  // 원본이 바뀜!\n}\n// v = {2, 4, 6}',
+          code: 'vector<int> v = {1, 2, 3};\n\n// auto (copy) — original unchanged\nfor (auto x : v) {\n    x = x * 2;  // only copy changes!\n}\n// v = {1, 2, 3} unchanged\n\n// auto& (reference) — original changes!\nfor (auto& x : v) {\n    x = x * 2;  // original changes!\n}\n// v = {2, 4, 6}',
           note: "auto = 복사 (읽기용) / auto& = 참조 (수정용)"
         }
       },
@@ -381,7 +381,7 @@ export const lessonCpp10: LessonData = {
         type: "errorQuiz",
         content: {
           question: "이 코드의 문제점은?",
-          code: 'vector<int> v = {1, 2, 3};\nfor (auto x : v) {\n    x = x * 10;\n}\ncout << v[0] << endl;  // 기대: 10',
+          code: 'vector<int> v = {1, 2, 3};\nfor (auto x : v) {\n    x = x * 10;\n}\ncout << v[0] << endl;  // expected: 10',
           options: [
             "auto는 복사라서 원본 v가 안 바뀌어요 (v[0]은 여전히 1)",
             "auto 대신 int를 써야 해요",

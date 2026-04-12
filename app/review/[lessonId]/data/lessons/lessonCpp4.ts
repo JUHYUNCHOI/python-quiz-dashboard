@@ -24,7 +24,7 @@ export const lessonCpp4: LessonData = {
             "C++에서는 cin >> 로 입력받아요!",
             "cout << 는 내보내기, cin >> 는 받아오기!"
           ],
-          code: '// 파이썬\nname = input("이름: ")\n\n// C++\nstring name;\ncout << "이름: ";\ncin >> name;',
+          code: '// Python\nname = input("name: ")\n\n// C++\nstring name;\ncout << "name: ";\ncin >> name;',
           note: "cin >> 는 키보드에서 값을 변수에 넣어요!"
         }
       },
@@ -104,8 +104,8 @@ export const lessonCpp4: LessonData = {
         type: "explain",
         content: {
           lines: [],
-          code: '#include <iostream>\n#include <string>\nusing namespace std;\n\nint main() {\n    string name;\n    cout << "이름: ";\n    cin >> name;\n    cout << "안녕, " << name << "!" << endl;\n    return 0;\n}',
-          result: "이름: 주현\n안녕, 주현!",
+          code: '#include <iostream>\n#include <string>\nusing namespace std;\n\nint main() {\n    string name;\n    cout << "name: ";\n    cin >> name;\n    cout << "hello, " << name << "!" << endl;\n    return 0;\n}',
+          result: "name: alice\nhello, alice!",
           predict: {
             question: '"Kim Juhyun"을 입력하면?',
             options: ['"안녕, Kim Juhyun!"', '"안녕, Kim!"', "에러가 난다"],

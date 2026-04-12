@@ -24,8 +24,8 @@ export const lessonCpp14: LessonData = {
             "파이썬에서는 딕셔너리나 클래스를 쓰지만,",
             "C++에서는 struct로 묶을 수 있어요!"
           ],
-          code: '#include <iostream>\nusing namespace std;\n\nstruct Student {\n    string name;\n    int age;\n    int score;\n};\n\nint main() {\n    Student s;\n    s.name = "Alice";\n    s.age = 14;\n    s.score = 95;\n\n    cout << s.name << " " << s.age << "세" << endl;\n    return 0;\n}',
-          result: 'Alice 14세',
+          code: '#include <iostream>\nusing namespace std;\n\nstruct Student {\n    string name;\n    int age;\n    int score;\n};\n\nint main() {\n    Student s;\n    s.name = "Alice";\n    s.age = 14;\n    s.score = 95;\n\n    cout << s.name << " " << s.age << " years" << endl;\n    return 0;\n}',
+          result: 'Alice 14 years',
           note: "struct = 변수 묶음! 점(.)으로 멤버에 접근해요."
         }
       },
@@ -273,7 +273,7 @@ export const lessonCpp14: LessonData = {
         type: "explain",
         content: {
           lines: [],
-          code: 'struct Point {\n    int x;\n    int y;\n};\n\nPoint a = {5, 10};\nPoint b = a;   // 복사!\ncout << b.x << endl;',
+          code: 'struct Point {\n    int x;\n    int y;\n};\n\nPoint a = {5, 10};\nPoint b = a;   // copy!\ncout << b.x << endl;',
           predict: {
             question: "출력 결과는?",
             options: ["0", "5", "10", "에러"],

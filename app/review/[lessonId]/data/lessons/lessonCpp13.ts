@@ -88,7 +88,7 @@ export const lessonCpp13: LessonData = {
         type: "errorQuiz",
         content: {
           question: "이 코드는 왜 에러일까요?",
-          code: 'int x = 10;\nint* ptr;\n*ptr = 20;  // 위험!',
+          code: 'int x = 10;\nint* ptr;\n*ptr = 20;  // danger!',
           options: [
             "ptr을 선언하지 않아서",
             "ptr이 아무것도 가리키지 않는데 값을 넣어서",

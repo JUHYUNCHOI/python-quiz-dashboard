@@ -24,7 +24,7 @@ export const lessonCpp16: LessonData = {
             "파이썬의 dict와 거의 똑같아요!",
             "키로 값을 빠르게 찾을 수 있어요."
           ],
-          code: '#include <iostream>\n#include <map>\nusing namespace std;\n\nint main() {\n    map<string, int> scores;\n    scores["철수"] = 95;\n    scores["영희"] = 88;\n    cout << scores["철수"] << endl;\n    return 0;\n}',
+          code: '#include <iostream>\n#include <map>\nusing namespace std;\n\nint main() {\n    map<string, int> scores;\n    scores["alice"] = 95;\n    scores["bob"] = 88;\n    cout << scores["alice"] << endl;\n    return 0;\n}',
           result: "95",
           note: "map<키타입, 값타입> — 파이썬 dict처럼 []로 접근!"
         }
@@ -38,7 +38,7 @@ export const lessonCpp16: LessonData = {
             "map에 값을 넣는 방법이 2가지 있어요!",
             "[] 연산자와 insert() 함수!"
           ],
-          code: 'map<string, int> m;\nm["apple"] = 3;                            // 방법 1: []\nm.insert(make_pair("banana", 5));          // 방법 2: insert\nm.insert({"cherry", 7});                   // 방법 3: insert (간단)',
+          code: 'map<string, int> m;\nm["apple"] = 3;                            // method 1: []\nm.insert(make_pair("banana", 5));          // method 2: insert\nm.insert({"cherry", 7});                   // method 3: insert (concise)',
           note: "[]는 이미 있으면 덮어쓰고, insert는 이미 있으면 무시!"
         }
       },
@@ -109,8 +109,8 @@ export const lessonCpp16: LessonData = {
             "find()로 키가 있는지 확인할 수 있어요! 🔍",
             "못 찾으면 end()를 리턴해요."
           ],
-          code: 'map<string, int> m = {{"apple", 3}, {"banana", 5}};\n\nif (m.find("apple") != m.end()) {\n    cout << "찾았다! " << m["apple"] << endl;\n} else {\n    cout << "없다!" << endl;\n}',
-          result: "찾았다! 3",
+          code: 'map<string, int> m = {{"apple", 3}, {"banana", 5}};\n\nif (m.find("apple") != m.end()) {\n    cout << "found! " << m["apple"] << endl;\n} else {\n    cout << "not found!" << endl;\n}',
+          result: "found! 3",
           note: "find(키) != end() → 키가 있다! / find(키) == end() → 키가 없다!"
         }
       },
@@ -146,7 +146,7 @@ export const lessonCpp16: LessonData = {
         type: "errorQuiz",
         content: {
           question: "이 코드의 문제는 뭘까요?",
-          code: 'map<string, int> m;\ncout << m["hello"] << endl;\n// 의도: hello 키가 없으면 에러 발생',
+          code: 'map<string, int> m;\ncout << m["hello"] << endl;\n// intent: error if "hello" key is missing',
           options: [
             "에러가 나지 않고 0이 출력된다 (키가 자동 생성됨!)",
             "컴파일 에러가 난다",
@@ -245,7 +245,7 @@ export const lessonCpp16: LessonData = {
             "파이썬의 set과 똑같은 개념!",
             "자동으로 정렬돼요 (오름차순)."
           ],
-          code: '#include <set>\nusing namespace std;\n\nset<int> s;\ns.insert(3);\ns.insert(1);\ns.insert(3);  // 중복! 무시됨\ns.insert(2);\n// s = {1, 2, 3} — 중복 제거 + 자동 정렬!',
+          code: '#include <set>\nusing namespace std;\n\nset<int> s;\ns.insert(3);\ns.insert(1);\ns.insert(3);  // duplicate! ignored\ns.insert(2);\n// s = {1, 2, 3} — duplicates removed + auto sorted!',
           result: "1 2 3",
           note: "set<타입> — 중복 없는 정렬된 집합!"
         }
@@ -259,7 +259,7 @@ export const lessonCpp16: LessonData = {
             "count()로 존재 여부, erase()로 삭제!",
             "set에서 count()는 0 또는 1만 리턴해요."
           ],
-          code: 'set<int> s = {1, 2, 3, 4, 5};\ncout << s.count(3) << endl;  // 1 (있음)\ncout << s.count(9) << endl;  // 0 (없음)\ns.erase(3);\ncout << s.count(3) << endl;  // 0 (삭제됨)',
+          code: 'set<int> s = {1, 2, 3, 4, 5};\ncout << s.count(3) << endl;  // 1 (found)\ncout << s.count(9) << endl;  // 0 (not found)\ns.erase(3);\ncout << s.count(3) << endl;  // 0 (deleted)',
           result: "1\n0\n0",
           note: "count(값) → 있으면 1, 없으면 0"
         }
@@ -306,7 +306,7 @@ export const lessonCpp16: LessonData = {
             "정렬이 필요 없으면 unordered가 더 빨라요!",
             "해시 테이블 기반 — 평균 O(1)!"
           ],
-          code: '#include <unordered_map>\n#include <unordered_set>\nusing namespace std;\n\nunordered_map<string, int> um;  // 정렬 안 됨, 더 빠름!\nunordered_set<int> us;          // 정렬 안 됨, 더 빠름!',
+          code: '#include <unordered_map>\n#include <unordered_set>\nusing namespace std;\n\nunordered_map<string, int> um;  // not sorted, faster!\nunordered_set<int> us;          // not sorted, faster!',
           note: "정렬 필요 → map/set, 속도 중요 → unordered!"
         }
       },
@@ -342,7 +342,7 @@ export const lessonCpp16: LessonData = {
         type: "errorQuiz",
         content: {
           question: "이 코드의 문제는 뭘까요?",
-          code: '#include <set>\nusing namespace std;\n\nset<int> s = {3, 1, 4, 1, 5};\ncout << s.size() << endl;\n// 기대: 5개',
+          code: '#include <set>\nusing namespace std;\n\nset<int> s = {3, 1, 4, 1, 5};\ncout << s.size() << endl;\n// expected: 5 elements',
           options: [
             "set은 중복을 무시하니까 size가 4",
             "초기화 문법이 틀렸다",

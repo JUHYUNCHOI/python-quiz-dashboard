@@ -242,7 +242,7 @@ export const lessonCpp5: LessonData = {
             "비교 연산자는 두 값을 비교해서 true/false를 돌려줘요! ⚖️",
             "파이썬과 거의 같아요!"
           ],
-          code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << (10 == 10) << endl;  // 같다 → 1\n    cout << (10 != 5) << endl;   // 다르다 → 1\n    cout << (10 > 5) << endl;    // 크다 → 1\n    cout << (10 < 5) << endl;    // 작다 → 0\n    cout << (10 >= 10) << endl;  // 크거나 같다 → 1\n    cout << (10 <= 9) << endl;   // 작거나 같다 → 0\n    return 0;\n}',
+          code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << (10 == 10) << endl;  // equal → 1\n    cout << (10 != 5) << endl;   // not equal → 1\n    cout << (10 > 5) << endl;    // greater → 1\n    cout << (10 < 5) << endl;    // less → 0\n    cout << (10 >= 10) << endl;  // greater or equal → 1\n    cout << (10 <= 9) << endl;   // less or equal → 0\n    return 0;\n}',
           result: "1\n1\n1\n0\n1\n0",
           note: "C++은 true=1, false=0으로 출력돼요!"
         }
@@ -312,7 +312,7 @@ export const lessonCpp5: LessonData = {
             "|| = 또는 (OR) — 하나만 true여도 true",
             "! = 아니다 (NOT) — true↔false 뒤집기"
           ],
-          code: '// 파이썬: and, or, not\n// C++:    &&,  ||,  !\n\ncout << (true && true) << endl;   // 1 (둘 다 참)\ncout << (true && false) << endl;  // 0 (하나가 거짓)\ncout << (true || false) << endl;  // 1 (하나가 참)\ncout << (!true) << endl;          // 0 (참의 반대)',
+          code: '// Python: and, or, not\n// C++:    &&,  ||,  !\n\ncout << (true && true) << endl;   // 1 (both true)\ncout << (true && false) << endl;  // 0 (one is false)\ncout << (true || false) << endl;  // 1 (one is true)\ncout << (!true) << endl;          // 0 (opposite of true)',
           result: "1\n0\n1\n0",
           note: "파이썬: and/or/not → C++: &&/||/!"
         }

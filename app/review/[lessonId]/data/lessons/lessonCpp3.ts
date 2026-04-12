@@ -20,7 +20,7 @@ export const lessonCpp3: LessonData = {
         type: "explain",
         content: {
           lines: [],
-          code: '// 파이썬\nx = 10\nname = "주현"\n\n// C++\nint x = 10;\nstring name = "주현";',
+          code: '// Python\nx = 10\nname = "alice"\n\n// C++\nint x = 10;\nstring name = "alice";',
           note: "C++은 변수 앞에 타입 이름을 꼭 써요!"
         }
       },
@@ -29,8 +29,8 @@ export const lessonCpp3: LessonData = {
         type: "explain",
         content: {
           lines: [],
-          code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    int age = 14;\n    int score = 100;\n    cout << "나이: " << age << endl;\n    cout << "점수: " << score << endl;\n    return 0;\n}',
-          result: "나이: 14\n점수: 100",
+          code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    int age = 14;\n    int score = 100;\n    cout << "age: " << age << endl;\n    cout << "score: " << score << endl;\n    return 0;\n}',
+          result: "age: 14\nscore: 100",
           predict: {
             question: "int에 3.14를 넣으면 어떻게 될까?",
             options: ["3.14가 저장된다", "3만 저장된다 (소수점 버림)", "에러가 난다"],
@@ -108,8 +108,8 @@ export const lessonCpp3: LessonData = {
         type: "explain",
         content: {
           lines: [],
-          code: '#include <iostream>\n#include <string>\nusing namespace std;\n\nint main() {\n    string name = "주현";\n    int age = 14;\n    double height = 165.5;\n    char bloodType = \'O\';\n    bool isStudent = true;\n\n    cout << "이름: " << name << endl;\n    cout << "나이: " << age << endl;\n    cout << "키: " << height << endl;\n    cout << "혈액형: " << bloodType << endl;\n    cout << "학생: " << isStudent << endl;\n    return 0;\n}',
-          result: "이름: 주현\n나이: 14\n키: 165.5\n혈액형: O\n학생: 1",
+          code: '#include <iostream>\n#include <string>\nusing namespace std;\n\nint main() {\n    string name = "alice";\n    int age = 14;\n    double height = 165.5;\n    char bloodType = \'O\';\n    bool isStudent = true;\n\n    cout << "name: " << name << endl;\n    cout << "age: " << age << endl;\n    cout << "height: " << height << endl;\n    cout << "blood type: " << bloodType << endl;\n    cout << "student: " << isStudent << endl;\n    return 0;\n}',
+          result: "name: alice\nage: 14\nheight: 165.5\nblood type: O\nstudent: 1",
           predict: {
             question: "혈액형 O는 왜 따옴표가 작은따옴표일까?",
             options: ["char는 작은따옴표를 쓰니까", "string이라서", "아무 따옴표나 써도 돼서"],
