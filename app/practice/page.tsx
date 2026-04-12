@@ -47,12 +47,14 @@ function ClusterList({
   starredSet,
   lang,
   onLangChange,
+  isTeacher = false,
 }: {
   onSelect: (cluster: PracticeCluster) => void
   solvedSet: Set<string>
   starredSet: Set<string>
   lang: Lang
   onLangChange: (lang: Lang) => void
+  isTeacher?: boolean
 }) {
   const { t, lang: locale } = useLanguage()
   const clusters = lang === "cpp" ? CPP_CLUSTERS : PYTHON_CLUSTERS
@@ -65,7 +67,7 @@ function ClusterList({
 
   // 현재 언어에서 다음으로 시작할 클러스터 (해금됐지만 아직 안 풀었거나 진행 중인 첫 번째)
   const nextCluster = clusters.find(c => {
-    if (!isClusterUnlocked(c)) return false
+    if (!isTeacher && !isClusterUnlocked(c)) return false
     const solved = c.problems.filter(p => solvedSet.has(p.id)).length
     return solved < c.problems.length
   })
@@ -143,7 +145,7 @@ function ClusterList({
       </div>
 
       {clusters.map(cluster => {
-        const unlocked = isClusterUnlocked(cluster)
+        const unlocked = isTeacher || isClusterUnlocked(cluster)
         const total = cluster.problems.length
         const solved = cluster.problems.filter(p => solvedSet.has(p.id)).length
         const starred = cluster.problems.filter(p => starredSet.has(p.id)).length
@@ -577,6 +579,7 @@ function PracticeContent() {
             starredSet={starredSet}
             lang={lang}
             onLangChange={handleLangChange}
+            isTeacher={isTeacher}
           />
       }
     </main>

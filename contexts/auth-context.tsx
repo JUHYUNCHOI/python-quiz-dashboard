@@ -121,6 +121,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (currentUser) {
           await fetchProfile(currentUser.id)
 
+          // 선생님 대시보드 "마지막 접속일" 정확도를 위해 오늘 날짜 핑 (fire-and-forget)
+          if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
+            const today = new Date().toISOString().slice(0, 10)
+            supabase.from("gamification_data")
+              .upsert({ user_id: currentUser.id, last_active_date: today }, { onConflict: "user_id" })
+              .then(() => {})
+          }
+
           // 로그인 시 양방향 동기화 (순차 실행: 업로드 완료 후 복원)
           if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
             const lastUserId = localStorage.getItem("last-user-id")
