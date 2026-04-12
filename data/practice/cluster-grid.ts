@@ -201,7 +201,7 @@ int main() {
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n; j++)
             cin >> grid[i][j];
-    // 여기에 코드를 작성하세요
+    // Write your code here
     return 0;
 }`,
       testCases: [
@@ -229,7 +229,7 @@ int main() {
         sum += grid[i][i];
         sum += grid[i][n - 1 - i];
     }
-    sum -= grid[n / 2][n / 2]; // 중심 원소 중복 제거
+    sum -= grid[n / 2][n / 2]; // subtract center element counted twice
     cout << sum << "\n";
     return 0;
 }`,
@@ -266,7 +266,7 @@ int main() {
     for (int i = 0; i < n; i++)
         for (int j = 0; j < m; j++)
             cin >> grid[i][j];
-    // 여기에 코드를 작성하세요
+    // Write your code here
     return 0;
 }`,
       testCases: [
@@ -331,7 +331,7 @@ int main() {
     for (int i = 0; i < n; i++)
         for (int j = 0; j < m; j++)
             cin >> grid[i][j];
-    // 여기에 코드를 작성하세요
+    // Write your code here
     return 0;
 }`,
       testCases: [
@@ -393,7 +393,7 @@ int main() {
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n; j++)
             cin >> grid[i][j];
-    // 여기에 코드를 작성하세요
+    // Write your code here
     return 0;
 }`,
       testCases: [
@@ -458,7 +458,7 @@ using namespace std;
 int main() {
     int n, m, k;
     cin >> n >> m >> k;
-    // 2D 벡터를 선언하고 입력받아보세요
+    // Declare a 2D vector and read input
 
     return 0;
 }`,
@@ -527,7 +527,7 @@ int main() {
     for (int i = 0; i < n; i++)
         for (int j = 0; j < m; j++)
             cin >> grid[i][j];
-    // 여기에 코드를 작성하세요
+    // Write your code here
     return 0;
 }`,
       testCases: [
@@ -600,7 +600,7 @@ int main() {
     for (int i = 0; i < n; i++)
         for (int j = 0; j < m; j++)
             cin >> g[i][j];
-    // 여기에 코드를 작성하세요
+    // Write your code here
     return 0;
 }`,
       testCases: [
@@ -675,7 +675,7 @@ int main() {
     for (int i = 0; i < n; i++)
         for (int j = 0; j < m; j++)
             cin >> grid[i][j];
-    // 여기에 코드를 작성하세요
+    // Write your code here
     return 0;
 }`,
       testCases: [
@@ -745,7 +745,7 @@ int main() {
     for (int i = 0; i < n; i++)
         for (int j = 0; j < m; j++)
             cin >> grid[i][j];
-    // 여기에 코드를 작성하세요
+    // Write your code here
     return 0;
 }`,
       testCases: [
@@ -818,7 +818,7 @@ int main() {
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n; j++)
             cin >> g[i][j];
-    // 여기에 코드를 작성하세요
+    // Write your code here
     return 0;
 }`,
       testCases: [
@@ -893,7 +893,7 @@ int main() {
     for (int i = 0; i < n; i++)
         for (int j = 0; j < m; j++)
             cin >> grid[i][j];
-    // 여기에 코드를 작성하세요
+    // Write your code here
     return 0;
 }`,
       testCases: [
@@ -956,7 +956,7 @@ int main() {
     for (int i = 0; i < n; i++)
         for (int j = 0; j < m; j++)
             cin >> grid[i][j];
-    // 여기에 코드를 작성하세요
+    // Write your code here
     return 0;
 }`,
       testCases: [
@@ -980,16 +980,16 @@ int main() {
         for (int j = 0; j < m; j++)
             cin >> grid[i][j];
     vector<int> border;
-    // 추출: 상 / 우 / 하 / 좌
+    // Extract border: top / right / bottom / left
     for (int j = 0; j < m; j++) border.push_back(grid[0][j]);
     for (int i = 1; i < n; i++) border.push_back(grid[i][m-1]);
     for (int j = m-2; j >= 0; j--) border.push_back(grid[n-1][j]);
     for (int i = n-2; i >= 1; i--) border.push_back(grid[i][0]);
-    // 시계 방향 한 칸 회전: 마지막 원소를 앞으로
+    // Rotate clockwise by 1: move last element to front
     int last = border.back();
     border.pop_back();
     border.insert(border.begin(), last);
-    // 다시 채우기
+    // Write back to grid
     int idx = 0;
     for (int j = 0; j < m; j++) grid[0][j] = border[idx++];
     for (int i = 1; i < n; i++) grid[i][m-1] = border[idx++];
