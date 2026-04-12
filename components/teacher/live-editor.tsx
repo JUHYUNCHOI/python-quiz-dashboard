@@ -174,8 +174,8 @@ export function TeacherLiveEditor({ defaultLang = "cpp", onClose }: TeacherLiveE
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             code,
-            compiler: "gcc-head",
-            "compiler-option-raw": "-std=c++17\n-O2",
+            compiler: "gcc-13-3",
+            "compiler-option-raw": "-std=c++17",
             ...(stdin.trim() ? { stdin } : {}),
           }),
         })
