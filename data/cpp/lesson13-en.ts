@@ -215,6 +215,34 @@ int main() {
           content: `Use pointers to write a swap function that exchanges two values!
 
 Compare the pointer and reference versions to feel the difference.`,
+          starterCode: `#include <iostream>
+using namespace std;
+
+// Pointer version: dereference with * to swap values
+void swapPtr(int* a, int* b) {
+    int temp = *a;
+    // complete this
+
+}
+
+// Reference version: access variables directly by name
+void swapRef(int& a, int& b) {
+    int temp = a;
+    // complete this
+
+}
+
+int main() {
+    int x = 10, y = 20;
+
+    swapPtr(&x, &y);
+    cout << "Pointer swap: " << x << " " << y << endl;
+
+    swapRef(x, y);
+    cout << "Reference swap: " << x << " " << y << endl;
+
+    return 0;
+}`,
           code: `#include <iostream>
 using namespace std;
 

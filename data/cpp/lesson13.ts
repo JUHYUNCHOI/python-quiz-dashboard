@@ -214,6 +214,34 @@ int main() {
           content: `포인터를 이용해서 두 값을 교환하는 swap 함수를 만들어봐요!
 
 포인터 버전과 참조 버전을 비교해서 차이를 느껴봐요.`,
+          starterCode: `#include <iostream>
+using namespace std;
+
+// 포인터 버전: *로 역참조해서 값을 교환
+void swapPtr(int* a, int* b) {
+    int temp = *a;
+    // 여기를 완성하세요
+
+}
+
+// 참조 버전: 변수 이름으로 바로 접근
+void swapRef(int& a, int& b) {
+    int temp = a;
+    // 여기를 완성하세요
+
+}
+
+int main() {
+    int x = 10, y = 20;
+
+    swapPtr(&x, &y);  // 주소를 넘겨야 함
+    cout << "포인터 swap: " << x << " " << y << endl;
+
+    swapRef(x, y);    // 그냥 변수를 넘김
+    cout << "참조 swap: " << x << " " << y << endl;
+
+    return 0;
+}`,
           code: `#include <iostream>
 using namespace std;
 

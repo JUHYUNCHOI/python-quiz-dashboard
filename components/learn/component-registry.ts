@@ -437,6 +437,7 @@ const registry: Record<string, ComponentEntry> = {
   // C++ 레슨 13: 참조 vs 포인터 비교 시뮬
   pointerRefVisualizer: {
     load: () => import("@/components/animations/pointer-ref-visualizer"),
+    props: (_step: any, lang: string) => ({ lang }),
   },
 
   // C++ 레슨: 배열 부분 초기화 기본값 시각화
