@@ -109,6 +109,9 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   const [editingStep, setEditingStep] = useState<LessonStep | null>(null)
   const [showLiveEditor, setShowLiveEditor] = useState(false)
 
+  // 네비게이션 중복 실행 방지 (더블클릭 / 두 버튼 동시 클릭)
+  const isNavigatingRef = useRef(false)
+
   // 레슨 오버라이드 로드
   useEffect(() => {
     fetch(`/api/admin/lesson-step?lessonId=${lessonId}`)
@@ -470,7 +473,9 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
   }
 
   const goNext = () => {
-    if (!canGoNext()) return
+    if (!canGoNext() || isNavigatingRef.current) return
+    isNavigatingRef.current = true
+    setTimeout(() => { isNavigatingRef.current = false }, 400)
     setShowSuccess(false)
     setShowConfetti(false)
     // explain/interactive/practice 등 읽기 스텝만 자동 완료 처리
@@ -606,6 +611,9 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
 
   const acknowledgeQuiz = () => {
     // 오답 확인 후 다음 스텝으로
+    if (isNavigatingRef.current) return
+    isNavigatingRef.current = true
+    setTimeout(() => { isNavigatingRef.current = false }, 400)
     if (!completedSteps.has(step.id)) {
       setCompletedSteps(prev => new Set([...prev, step.id]))
     }

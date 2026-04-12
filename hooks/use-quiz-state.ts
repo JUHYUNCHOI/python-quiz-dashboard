@@ -124,6 +124,7 @@ export function useQuizState(questions: QuizQuestion[]) {
 
   // 말해보카 스타일: 오답 재출제 큐 + 등급
   const retryQueueRef = useRef<Map<number, number>>(new Map())
+  const isNavigatingRef = useRef(false)
   const [currentGrade, setCurrentGrade] = useState<"perfect" | "great" | "good" | "fail" | null>(null)
   const questionAttemptRef = useRef<Map<number, number>>(new Map())  // questionId → 시도 횟수
   const [retryInsertedQuestions, setRetryInsertedQuestions] = useState<QuizQuestion[]>([])
@@ -561,6 +562,10 @@ export function useQuizState(questions: QuizQuestion[]) {
   }, [])
 
   const handleExplanationClose = useCallback(() => {
+    if (isNavigatingRef.current) return
+    isNavigatingRef.current = true
+    setTimeout(() => { isNavigatingRef.current = false }, 400)
+
     setShowExplanation(false)
 
     // 재출제 문제에서 설명 닫으면 currentQuestion 안 올림
