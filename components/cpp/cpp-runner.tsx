@@ -160,6 +160,7 @@ export function CppRunner({
   const [hasRun, setHasRun] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [submittedThisSession, setSubmittedThisSession] = useState(false) // 이번 세션에서 직접 제출했는지
   const [teacherGrade, setTeacherGrade] = useState<"pass" | "fail" | "auto" | null | undefined>(undefined) // undefined = 아직 로딩
   const [teacherComment, setTeacherComment] = useState<string | null>(null)
 
@@ -238,6 +239,7 @@ export function CppRunner({
         })
       if (!error) {
         setIsSubmitted(true)
+        setSubmittedThisSession(true)
         setTeacherGrade(autoGrade ?? null)
       }
     } catch {
@@ -500,7 +502,7 @@ export function CppRunner({
           {isEn ? "Saving..." : "저장 중..."}
         </p>
       )}
-      {submissionMode && isSubmitted && !isSubmitting && (
+      {submissionMode && isSubmitted && !isSubmitting && (submittedThisSession || teacherGrade != null) && (
         <div className={cn(
           "rounded-xl px-4 py-3 text-sm font-bold text-center",
           teacherGrade === "pass" || teacherGrade === "auto"
