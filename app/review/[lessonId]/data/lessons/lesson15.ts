@@ -21,7 +21,7 @@ export const lesson15: LessonData = {
       type: "explain",
       content: {
         lines: ["파이썬 자료구조, 괄호로 구분해!"],
-        code: "fruits = ['사과', '바나나', '딸기']   # 리스트 []\npoint  = (3, 5)                      # 튜플 ()\nstudent = {'이름': '철수', '나이': 13} # 딕셔너리 {키:값}\nprimes  = {2, 3, 5, 7}               # 집합 {값}",
+        code: "fruits = ['apple', 'banana', 'strawberry']   # list []\npoint  = (3, 5)                            # tuple ()\nstudent = {'name': 'alice', 'age': 13}     # dict {key:value}\nprimes  = {2, 3, 5, 7}                    # set {value}",
         note: "[ ] 리스트 / ( ) 튜플 / { } 딕셔너리 or 집합"
       }
     },
@@ -105,7 +105,7 @@ export const lesson15: LessonData = {
       type: "explain",
       content: {
         lines: ["각 자료구조마다 특성이 달라!"],
-        code: "리스트  [  ] : 순서O  수정O  중복O\n튜플    (  ) : 순서O  수정X  중복O\n딕셔너리{ : } : 순서O  수정O  키중복X\n집합    {  } : 순서X  수정O  중복X",
+        code: "list    [  ] : ordered  mutable    duplicates allowed\ntuple   (  ) : ordered  immutable  duplicates allowed\ndict    { : } : ordered  mutable    no dup keys\nset     {  } : unordered mutable   no duplicates",
         note: "튜플은 한 번 만들면 못 바꿔! (읽기 전용)"
       }
     },
@@ -157,7 +157,7 @@ export const lesson15: LessonData = {
       type: "explain",
       content: {
         lines: ["자료구조마다 값을 꺼내는 방법이 달라!"],
-        code: "fruits = ['사과', '바나나', '딸기']\nprint(fruits[0])    # 사과 (인덱스로 접근)\n\npoint = (10, 20)\nprint(point[1])     # 20 (인덱스로 접근)\n\nstudent = {'name': '철수', 'age': 13}\nprint(student['name'])  # 철수 (키로 접근)",
+        code: "fruits = ['apple', 'banana', 'strawberry']\nprint(fruits[0])    # apple (access by index)\n\npoint = (10, 20)\nprint(point[1])     # 20 (access by index)\n\nstudent = {'name': 'alice', 'age': 13}\nprint(student['name'])  # alice (access by key)",
         note: "리스트/튜플은 [인덱스], 딕셔너리는 [키]!"
       }
     },
@@ -167,7 +167,7 @@ export const lesson15: LessonData = {
       type: "explain",
       content: {
         lines: ["인덱스는 0부터 시작해!"],
-        code: "colors = ['빨강', '초록', '파랑']\nprint(colors[1])",
+        code: "colors = ['red', 'green', 'blue']\nprint(colors[1])",
         predict: {
           question: "출력 결과는?",
           options: ["빨강", "초록", "파랑"],
@@ -191,7 +191,7 @@ export const lesson15: LessonData = {
       type: "explain",
       content: {
         lines: ["딕셔너리는 키로 값을 꺼내!"],
-        code: "person = {'name': '영희', 'age': 15}\nprint(person['age'])",
+        code: "person = {'name': 'bob', 'age': 15}\nprint(person['age'])",
         predict: {
           question: "출력 결과는?",
           options: ["영희", "15", "age"],
@@ -315,7 +315,7 @@ export const lesson15: LessonData = {
       type: "errorQuiz",
       content: {
         question: "이 코드에서 에러가 나는 이유는?",
-        code: "colors = ('빨강', '초록', '파랑')\ncolors[0] = '노랑'",
+        code: "colors = ('red', 'green', 'blue')\ncolors[0] = 'yellow'",
         options: [
           "튜플은 수정할 수 없어 (immutable)",
           "인덱스 0 은 존재하지 않아서",
@@ -340,7 +340,7 @@ export const lesson15: LessonData = {
       type: "errorQuiz",
       content: {
         question: "리스트를 만들려고 했는데 왜 딕셔너리가 만들어질까?",
-        code: "data = {'철수', '영희', '민수'}\nprint(type(data))",
+        code: "data = {'alice', 'bob', 'charlie'}\nprint(type(data))",
         options: [
           "{ } 는 집합(set)이나 딕셔너리야 — 리스트는 [ ] 를 써야 해",
           "'철수' 에 따옴표가 있어서",

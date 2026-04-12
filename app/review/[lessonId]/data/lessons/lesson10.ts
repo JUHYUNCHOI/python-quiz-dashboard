@@ -22,8 +22,8 @@ export const lesson10: LessonData = {
         lines: [
           "🎯 오늘 만들 것!"
         ],
-        code: "name = input('이름을 입력하세요: ')\nage = int(input('나이를 입력하세요: '))\nprint(f'안녕하세요, {name}! {age}살이군요!')",
-        result: "이름을 입력하세요: 민준\n나이를 입력하세요: 15\n안녕하세요, 민준! 15살이군요!",
+        code: "name = input('Enter your name: ')\nage = int(input('Enter your age: '))\nprint(f'Hello, {name}! You are {age} years old!')",
+        result: "Enter your name: Alice\nEnter your age: 15\nHello, Alice! You are 15 years old!",
         isPreview: true,
         note: "사용자가 직접 입력하는 프로그램!"
       }
@@ -70,7 +70,7 @@ export const lesson10: LessonData = {
         lines: [
           "input() 은 항상 문자열(str)을 반환해!"
         ],
-        code: "name = input('이름: ')   # 사용자 입력 받기\nprint(f'안녕, {name}!')",
+        code: "name = input('Name: ')   # get user input\nprint(f'Hello, {name}!')",
         note: "input()의 반환값은 무조건 str!"
       }
     },
@@ -82,7 +82,7 @@ export const lesson10: LessonData = {
         lines: [
           "input() 안에 안내 메시지를 넣어!"
         ],
-        code: "# 안내 메시지 O\ncity = input('사는 곳: ')     # '서울' 입력 시\nprint(city)                  # 서울\n\n# 안내 메시지 X\nfood = input()               # 그냥 기다림",
+        code: "# with prompt\ncity = input('City: ')        # enter 'Seoul'\nprint(city)                   # Seoul\n\n# without prompt\nfood = input()                # just waits",
         note: "안내 메시지를 넣으면 사용자가 뭘 입력할지 알아!"
       }
     },
@@ -161,7 +161,7 @@ export const lesson10: LessonData = {
         lines: [
           "⚠️ 숫자 입력은 반드시 변환해야 해!"
         ],
-        code: "# 잘못된 방법 (문자열 + 숫자 = 에러!)\nnum = input('숫자: ')   # '10' 입력\nresult = num + 5        # TypeError!\n\n# 올바른 방법\nnum = int(input('숫자: '))  # '10' → 10\nresult = num + 5            # 15 ✓",
+        code: "# wrong way (string + number = error!)\nnum = input('number: ')   # enter '10'\nresult = num + 5          # TypeError!\n\n# correct way\nnum = int(input('number: '))  # '10' → 10\nresult = num + 5              # 15 ✓",
         isError: true,
         note: "input()은 항상 str → 계산하려면 int() 변환 필수!"
       }
@@ -172,7 +172,7 @@ export const lesson10: LessonData = {
       type: "errorQuiz",
       content: {
         question: "아래 코드의 문제점은?",
-        code: "score = input('점수: ')  # '90' 입력\nprint(score + 10)",
+        code: "score = input('score: ')  # enter '90'\nprint(score + 10)",
         options: [
           "입력을 받을 수 없어",
           "TypeError: str + int 불가",
@@ -297,7 +297,7 @@ export const lesson10: LessonData = {
         lines: [
           "🙋 자기소개 프로그램!"
         ],
-        code: "=== 자기소개 ===\n이름을 입력하세요: 지수\n나이를 입력하세요: 16\n안녕하세요! 저는 지수이고, 16살입니다.",
+        code: "=== Introduction ===\nEnter your name: Alice\nEnter your age: 16\nHello! My name is Alice and I am 16 years old.",
         isPreview: true,
         note: "input() 으로 하나씩 만들어보자!"
       }
@@ -356,7 +356,7 @@ export const lesson10: LessonData = {
       type: "explain",
       content: {
         lines: ["이 코드의 출력을 예측해봐! (사용자가 '10' 입력)"],
-        code: "x = input('숫자: ')  # 사용자가 '10' 입력\nprint(type(x))",
+        code: "x = input('number: ')  # user enters '10'\nprint(type(x))",
         predict: {
           options: ["<class 'int'>", "<class 'str'>", "<class 'float'>", "Error"],
           answer: 1,
@@ -377,7 +377,7 @@ export const lesson10: LessonData = {
       type: "explain",
       content: {
         lines: ["이 코드의 결과를 예측해봐! (사용자가 '5' 입력)"],
-        code: "n = input('숫자: ')  # '5' 입력\nresult = n + 3\nprint(result)",
+        code: "n = input('number: ')  # enter '5'\nresult = n + 3\nprint(result)",
         predict: {
           options: ["8", "53", "TypeError 발생", "'5'3"],
           answer: 2,
@@ -398,7 +398,7 @@ export const lesson10: LessonData = {
       type: "explain",
       content: {
         lines: ["이번엔 int()로 변환했어. (사용자가 '7' 입력)"],
-        code: "n = int(input('숫자: '))  # '7' 입력 → int 7\nresult = n + 3\nprint(result)",
+        code: "n = int(input('number: '))  # enter '7' → int 7\nresult = n + 3\nprint(result)",
         predict: {
           options: ["73", "10", "TypeError 발생", "'7'3"],
           answer: 1,
@@ -419,7 +419,7 @@ export const lesson10: LessonData = {
       type: "explain",
       content: {
         lines: ["이 코드의 출력을 예측해봐! (사용자가 '5' 입력)"],
-        code: "n = input('숫자: ')  # '5' 입력 (str!)\nprint(n * 2)",
+        code: "n = input('number: ')  # enter '5' (str!)\nprint(n * 2)",
         predict: {
           options: ["10", "55", "TypeError 발생", "5"],
           answer: 1,
@@ -440,7 +440,7 @@ export const lesson10: LessonData = {
       type: "explain",
       content: {
         lines: ["두 입력의 출력을 예측해봐! (각각 '3', '4' 입력)"],
-        code: "a = input('첫째: ')  # '3'\nb = input('둘째: ')  # '4'\nprint(a + b)",
+        code: "a = input('first: ')  # '3'\nb = input('second: ')  # '4'\nprint(a + b)",
         predict: {
           options: ["7", "34", "TypeError 발생", "3 4"],
           answer: 1,
@@ -461,7 +461,7 @@ export const lesson10: LessonData = {
       type: "explain",
       content: {
         lines: ["소수 입력! (사용자가 '3.14' 입력)"],
-        code: "pi = float(input('원주율: '))  # '3.14' 입력\nprint(pi * 2)",
+        code: "pi = float(input('pi: '))  # enter '3.14'\nprint(pi * 2)",
         predict: {
           options: ["6.28", "3.143.14", "TypeError 발생", "6"],
           answer: 0,
@@ -492,7 +492,7 @@ export const lesson10: LessonData = {
       type: "errorQuiz",
       content: {
         question: "아래 코드의 문제는?",
-        code: "n = input('숫자: ')  # 사용자가 5를 입력\nprint(n * 2)",
+        code: "n = input('number: ')  # user enters 5\nprint(n * 2)",
         options: [
           "n이 str이라 '55'가 출력돼 (곱이 아니라 반복!)",
           "n이 int가 아니라 에러 발생",
@@ -517,7 +517,7 @@ export const lesson10: LessonData = {
       type: "errorQuiz",
       content: {
         question: "두 수의 합을 구하려는 코드야. 문제는?",
-        code: "a = input('첫 번째 수: ')  # '20' 입력\nb = input('두 번째 수: ')  # '30' 입력\nprint('합계:', a + b)",
+        code: "a = input('first number: ')  # enter '20'\nb = input('second number: ')  # enter '30'\nprint('total:', a + b)",
         options: [
           "input() 사용법이 잘못됨",
           "a + b 가 '2030'이 출력됨 (str 이어붙이기!)",

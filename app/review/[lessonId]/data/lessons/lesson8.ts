@@ -22,8 +22,8 @@ export const lesson8: LessonData = {
         lines: [
           "🎯 오늘 만들 것!"
         ],
-        code: "name = '지민'\nscore = 95\nprint(f'{name}의 점수: {score}점')",
-        result: "지민의 점수: 95점",
+        code: "name = 'Alice'\nscore = 95\nprint(f'{name}\\'s score: {score} points')",
+        result: "Alice's score: 95 points",
         isPreview: true,
         note: "변수를 문자열 안에 바로 넣을 수 있어!"
       }
@@ -70,7 +70,7 @@ export const lesson8: LessonData = {
         lines: [
           "f-string: 문자열 앞에 f를 붙여!"
         ],
-        code: "name = '지민'\nprint(f'안녕, {name}!')   # 안녕, 지민!\nprint(f'이름: {name}')   # 이름: 지민",
+        code: "name = 'Alice'\nprint(f'Hello, {name}!')   # Hello, Alice!\nprint(f'Name: {name}')   # Name: Alice",
         note: "f'' 안에서 {변수} 로 값을 넣어!"
       }
     },
@@ -475,7 +475,7 @@ export const lesson8: LessonData = {
         lines: [
           "📋 성적표 만들기!"
         ],
-        code: "=== 성적표 ===\n이름: 김민준\n점수: 92.67점\n등급: A",
+        code: "=== Report Card ===\nName: Alice\nScore: 92.67 points\nGrade: A",
         isPreview: true,
         note: "f-string으로 하나씩 만들어보자!"
       }
@@ -580,7 +580,7 @@ export const lesson8: LessonData = {
       type: "explain",
       content: {
         lines: ["코드 결과를 예측해봐!"],
-        code: "lang = 'python'\nprint(f'언어: {lang.upper()}')",
+        code: "lang = 'python'\nprint(f'language: {lang.upper()}')",
         predict: {
           options: ["언어: python", "언어: PYTHON", "언어: {lang.upper()}", "에러"],
           answer: 1,
@@ -622,7 +622,7 @@ export const lesson8: LessonData = {
       type: "errorQuiz",
       content: {
         question: "이 코드의 문제는?",
-        code: "score = 90\nprint('{score}점 받았어!')",
+        code: "score = 90\nprint('{score} points!')",
         options: [
           "문자열 앞에 f가 없어서 {score}가 변수 값이 아닌 글자 그대로 출력돼",
           "변수 이름 score가 잘못됨",
@@ -647,7 +647,7 @@ export const lesson8: LessonData = {
       type: "errorQuiz",
       content: {
         question: "원하는 출력이 '합계: 15'인데 다르게 나와. 문제는?",
-        code: "a = 10\nb = 5\nprint(f'합계: a + b')",
+        code: "a = 10\nb = 5\nprint(f'total: a + b')",
         options: [
           "a + b를 {}로 감싸야 해 — f'합계: {a + b}'",
           "변수 a, b는 print 안에서 쓸 수 없어",

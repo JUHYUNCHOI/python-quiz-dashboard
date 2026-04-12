@@ -18,16 +18,16 @@ export const lesson26: LessonData = {
       type: "explain",
       content: {
         lines: ["지금까지 배운 자료구조를 한눈에!"],
-        code: `# 1. 리스트 (list) - 순서 있고, 수정 가능
-fruits = ["사과", "바나나", "포도"]
+        code: `# 1. list - ordered, mutable
+fruits = ["apple", "banana", "grape"]
 
-# 2. 튜플 (tuple) - 순서 있고, 수정 불가
+# 2. tuple - ordered, immutable
 point = (3, 4)
 
-# 3. 딕셔너리 (dict) - 키:값 쌍
-student = {"이름": "철수", "나이": 15}
+# 3. dict - key:value pairs
+student = {"name": "alice", "age": 15}
 
-# 4. 집합 (set) - 중복 없음, 순서 없음
+# 4. set - no duplicates, unordered
 unique = {1, 2, 3, 3, 2}
 print(unique)`,
         result: "{1, 2, 3}",
@@ -195,18 +195,18 @@ print(f"출석부: {attendance}")`,
       type: "explain",
       content: {
         lines: ["실행 취소(Undo) → 스택!"],
-        code: `# 실행 취소는 가장 최근 작업부터!
+        code: `# undo starts from the most recent action!
 undo_stack = []
 
-undo_stack.append("글자 입력: A")
-undo_stack.append("글자 입력: B")
-undo_stack.append("글자 삭제")
+undo_stack.append("type: A")
+undo_stack.append("type: B")
+undo_stack.append("delete char")
 
-# Ctrl+Z 누르면?
+# press Ctrl+Z?
 last_action = undo_stack.pop()
-print(f"취소: {last_action}")
-print(f"남은 기록: {undo_stack}")`,
-        result: "취소: 글자 삭제\n남은 기록: ['글자 입력: A', '글자 입력: B']",
+print(f"undo: {last_action}")
+print(f"remaining: {undo_stack}")`,
+        result: "undo: delete char\nremaining: ['type: A', 'type: B']",
         note: "가장 최근 작업을 취소 → LIFO → 스택!"
       }
     },
@@ -437,11 +437,11 @@ print(queue.popleft())`,
       type: "explain",
       content: {
         lines: ["결과를 예측해봐!"],
-        code: `scores = {"철수": 90, "영희": 85}
-scores["민수"] = 95
-scores["철수"] = 100
+        code: `scores = {"alice": 90, "bob": 85}
+scores["charlie"] = 95
+scores["alice"] = 100
 print(len(scores))
-print(scores["철수"])`,
+print(scores["alice"])`,
         predict: {
           options: ["3, 90", "4, 100", "3, 100", "2, 100"],
           answer: 2,
@@ -487,8 +487,8 @@ print(len(a), len(b), len(c))`,
       type: "errorQuiz",
       content: {
         question: "이 코드의 문제점은?",
-        code: `student = {"이름": "철수", "나이": 15}
-print(student["성적"])`,
+        code: `student = {"name": "alice", "age": 15}
+print(student["score"])`,
         options: [
           "존재하지 않는 키 접근 → KeyError 발생",
           "딕셔너리 문법 오류",
@@ -624,7 +624,7 @@ print(student["성적"])`,
       type: "explain",
       content: {
         lines: ["이 상황에 가장 적합한 자료구조는?"],
-        code: "# 사용자 ID로 이름을 빠르게 찾아야 해!\n# 예: id=101 → '김민준', id=205 → '이서연'\ndata = ???",
+        code: "# need to quickly find a name by user ID!\n# e.g.: id=101 → 'alice', id=205 → 'bob'\ndata = ???",
         predict: {
           options: ["list", "dict", "set", "tuple"],
           answer: 1,

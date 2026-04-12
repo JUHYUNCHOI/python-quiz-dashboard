@@ -22,9 +22,9 @@ export const lesson32: LessonData = {
       type: "explain",
       content: {
         lines: ["🤔 함수 없이 3명에게 인사하면..."],
-        code: `print('안녕, 철수!')
-print('안녕, 영희!')
-print('안녕, 민수!')`,
+        code: `print('Hello, Alice!')
+print('Hello, Bob!')
+print('Hello, Charlie!')`,
         note: "같은 코드 반복! 메시지 바꾸려면 3줄 다 수정해야 해요 😵"
       }
     },
@@ -33,13 +33,13 @@ print('안녕, 민수!')`,
       type: "explain",
       content: {
         lines: ["✨ 함수를 쓰면!"],
-        code: `def 인사(이름):
-    print(f'안녕, {이름}!')
+        code: `def greet(name):
+    print(f'Hello, {name}!')
 
-인사('철수')
-인사('영희')
-인사('민수')`,
-        result: "안녕, 철수!\n안녕, 영희!\n안녕, 민수!",
+greet('Alice')
+greet('Bob')
+greet('Charlie')`,
+        result: "Hello, Alice!\nHello, Bob!\nHello, Charlie!",
         note: "한 번 만들면 계속 재사용! 수정도 한 곳만!"
       }
     },
@@ -77,11 +77,11 @@ print('안녕, 민수!')`,
       type: "explain",
       content: {
         lines: [],
-        code: `def 안녕():
+        code: `def hello():
     print('Hi!')
 
-안녕()
-안녕()`,
+hello()
+hello()`,
         predict: {
           question: "출력 결과는?",
           options: ["Hi!", "Hi!\nHi!", "아무것도 출력 안 됨"],
@@ -170,24 +170,24 @@ print('안녕, 민수!')`,
       type: "explain",
       content: {
         lines: [],
-        code: `def 인사(이름):
-    print(f'안녕, {이름}!')
+        code: `def greet(name):
+    print(f'Hello, {name}!')
 
-인사('민수')`,
+greet('Alice')`,
         predict: {
           question: "결과는?",
-          options: ["안녕, 이름!", "안녕, 민수!", "안녕, {이름}!"],
+          options: ["Hello, name!", "Hello, Alice!", "Hello, {name}!"],
           answer: 1,
-          feedback: "'민수'가 이름 자리에 들어가요!"
+          feedback: "'Alice' goes into the name slot!"
         },
         en: {
           predict: {
             question: "What's the output?",
-            options: ["안녕, 이름!", "안녕, 민수!", "안녕, {이름}!"],
-            feedback: "'민수' goes into the name slot!"
+            options: ["Hello, name!", "Hello, Alice!", "Hello, {name}!"],
+            feedback: "'Alice' goes into the name slot!"
           }
         },
-        result: "안녕, 민수!"
+        result: "Hello, Alice!"
       }
     },
     
@@ -220,24 +220,24 @@ print('안녕, 민수!')`,
       type: "explain",
       content: {
         lines: [],
-        code: `def 소개(이름, 나이):
-    print(f'저는 {이름}, {나이}살!')
+        code: `def introduce(name, age):
+    print(f'I am {name}, {age}!')
 
-소개('영희', 14)`,
+introduce('Bob', 14)`,
         predict: {
           question: "결과는?",
-          options: ["저는 영희, 14살!", "저는 이름, 나이살!", "에러"],
+          options: ["I am Bob, 14!", "I am name, age!", "Error"],
           answer: 0,
-          feedback: "이름에 '영희', 나이에 14가 들어가요!"
+          feedback: "'Bob' goes into name, 14 goes into age!"
         },
         en: {
           predict: {
             question: "What's the output?",
-            options: ["저는 영희, 14살!", "저는 이름, 나이살!", "Error"],
-            feedback: "'영희' goes into the name slot, 14 goes into the age slot!"
+            options: ["I am Bob, 14!", "I am name, age!", "Error"],
+            feedback: "'Bob' goes into the name slot, 14 goes into the age slot!"
           }
         },
-        result: "저는 영희, 14살!"
+        result: "I am Bob, 14!"
       }
     },
     
@@ -290,11 +290,11 @@ print('안녕, 민수!')`,
       type: "explain",
       content: {
         lines: [],
-        code: `def 더하기(a, b):
+        code: `def add(a, b):
     return a + b
 
-결과 = 더하기(3, 5)
-print(결과)`,
+result = add(3, 5)
+print(result)`,
         predict: {
           question: "결과는?",
           options: ["3 + 5", "8", "a + b"],
@@ -494,8 +494,8 @@ print(subtract(10, 4)) # 6`,
       type: "errorQuiz",
       content: {
         question: "이 코드의 문제점은?",
-        code: `def 인사()
-    print('안녕!')`,
+        code: `def greet()
+    print('Hello!')`,
         options: [
           "print 오타",
           ": (콜론) 빠짐",
@@ -512,8 +512,8 @@ print(subtract(10, 4)) # 6`,
       type: "errorQuiz",
       content: {
         question: "이 코드의 문제점은?",
-        code: `def 인사():
-print('안녕!')`,
+        code: `def greet():
+print('Hello!')`,
         options: [
           "콜론 빠짐",
           "괄호 오류",
@@ -530,8 +530,8 @@ print('안녕!')`,
       type: "errorQuiz",
       content: {
         question: "이 코드의 문제점은?",
-        code: `def 인사:
-    print('안녕!')`,
+        code: `def greet:
+    print('Hello!')`,
         options: [
           "() 괄호 빠짐",
           "콜론 빠짐",
@@ -548,10 +548,10 @@ print('안녕!')`,
       type: "errorQuiz",
       content: {
         question: "이 코드를 실행하면?",
-        code: `def 인사():
-    print('안녕!')
+        code: `def greet():
+    print('Hello!')
 
-# 호출 안 함`,
+# not called`,
         options: [
           "안녕! 출력",
           "아무것도 안 됨",

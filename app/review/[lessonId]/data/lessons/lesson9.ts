@@ -22,8 +22,8 @@ export const lesson9: LessonData = {
         lines: [
           "🎯 오늘 만들 것!"
         ],
-        code: "text = '100'\nnum = int(text)        # '100' → 100\nresult = num + 50\nprint(f'결과: {result}')",
-        result: "결과: 150",
+        code: "text = '100'\nnum = int(text)        # '100' → 100\nresult = num + 50\nprint(f'result: {result}')",
+        result: "result: 150",
         isPreview: true,
         note: "문자열 숫자를 진짜 숫자로 바꿀 수 있어!"
       }
@@ -70,7 +70,7 @@ export const lesson9: LessonData = {
         lines: [
           "int() 로 정수로 변환해!"
         ],
-        code: "int('123')   # → 123  (문자열 → 정수)\nint(3.7)     # → 3   (소수점 버림!)\nint(3.2)     # → 3   (반올림 아님!)",
+        code: "int('123')   # → 123  (string → int)\nint(3.7)     # → 3   (truncates decimal!)\nint(3.2)     # → 3   (not rounded!)",
         note: "int(3.7) = 3 (반올림이 아니라 소수점 버림!)"
       }
     },
@@ -189,7 +189,7 @@ export const lesson9: LessonData = {
         lines: [
           "float() 로 소수로 변환해!"
         ],
-        code: "float('3.14')  # → 3.14 (문자열 → 소수)\nfloat(5)       # → 5.0  (정수 → 소수)",
+        code: "float('3.14')  # → 3.14 (string → float)\nfloat(5)       # → 5.0  (int → float)",
         note: "float()는 소수점이 있는 숫자로 바꿔줘!"
       }
     },
@@ -233,7 +233,7 @@ export const lesson9: LessonData = {
         lines: [
           "str() 로 문자열로 변환해!"
         ],
-        code: "str(123)    # → '123' (정수 → 문자열)\nstr(3.14)   # → '3.14' (소수 → 문자열)\nstr(True)   # → 'True'",
+        code: "str(123)    # → '123' (int → string)\nstr(3.14)   # → '3.14' (float → string)\nstr(True)   # → 'True'",
         note: "str()은 무엇이든 문자열로 바꿔줘!"
       }
     },
@@ -313,7 +313,7 @@ export const lesson9: LessonData = {
         lines: [
           "이것들은 False야!"
         ],
-        code: "bool(0)     # → False (0은 False)\nbool('')    # → False (빈 문자열)\nbool(None)  # → False",
+        code: "bool(0)     # → False (0 is False)\nbool('')    # → False (empty string)\nbool(None)  # → False",
         note: "0, 빈 문자열, None → False!"
       }
     },
@@ -325,7 +325,7 @@ export const lesson9: LessonData = {
         lines: [
           "이것들은 True야!"
         ],
-        code: "bool(1)       # → True\nbool(-5)      # → True  (0이 아닌 숫자)\nbool('hello') # → True  (내용 있는 문자열)",
+        code: "bool(1)       # → True\nbool(-5)      # → True  (non-zero number)\nbool('hello') # → True  (non-empty string)",
         note: "0이 아닌 숫자, 내용 있는 문자열 → True!"
       }
     },
@@ -450,7 +450,7 @@ export const lesson9: LessonData = {
         lines: [
           "🧮 점수 계산기!"
         ],
-        code: "=== 점수 계산기 ===\n국어: 85\n수학: 92\n평균: 88.5점\n합격 여부: True",
+        code: "=== Score Calculator ===\nKorean: 85\nMath: 92\nAverage: 88.5 points\nPassed: True",
         isPreview: true,
         note: "타입 변환으로 하나씩 만들어보자!"
       }
@@ -555,7 +555,7 @@ export const lesson9: LessonData = {
       type: "explain",
       content: {
         lines: ["코드 결과를 예측해봐!"],
-        code: "year = 2025\nprint('올해는 ' + str(year) + '년')",
+        code: "year = 2025\nprint('This year is ' + str(year))",
         predict: {
           options: ["올해는 year년", "올해는 2025년", "에러", "올해는 '2025'년"],
           answer: 1,
@@ -597,7 +597,7 @@ export const lesson9: LessonData = {
       type: "errorQuiz",
       content: {
         question: "이 코드의 문제는?",
-        code: "score = 95\nprint('점수: ' + score)",
+        code: "score = 95\nprint('score: ' + score)",
         options: [
           "문자열과 정수는 +로 이어붙일 수 없어 — str(score)로 변환해야 해",
           "변수 score가 선언되지 않음",

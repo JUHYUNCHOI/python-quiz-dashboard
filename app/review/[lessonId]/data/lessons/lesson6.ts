@@ -22,7 +22,7 @@ export const lesson6: LessonData = {
           lines: [
             "🛠️ 오늘 만들 것!"
           ],
-          code: "원본: '  Hello, World!  '\n대문자: 'HELLO, WORLD!'\n소문자: 'hello, world!'\n공백제거: 'Hello, World!'\n치환: 'Hello, Python!'",
+          code: "original: '  Hello, World!  '\nuppercase: 'HELLO, WORLD!'\nlowercase: 'hello, world!'\ntrimmed: 'Hello, World!'\nreplaced: 'Hello, Python!'",
           isPreview: true,
           note: "메서드로 문자열을 자유자재로!"
         }
@@ -34,7 +34,7 @@ export const lesson6: LessonData = {
           lines: [
             "메서드란? 문자열이 가진 기능들!"
           ],
-          code: "text.upper()         → 대문자\ntext.lower()         → 소문자\ntext.strip()         → 공백 제거\ntext.replace('a','b')→ 치환",
+          code: "text.upper()         → uppercase\ntext.lower()         → lowercase\ntext.strip()         → remove spaces\ntext.replace('a','b')→ replace",
           isPreview: true,
           note: "text.메서드() 형태로 사용!"
         }
@@ -192,7 +192,7 @@ export const lesson6: LessonData = {
           lines: [
             "strip() = 앞뒤 공백 제거!"
           ],
-          code: "text = '  Hello  '\nprint(text.strip())  → 'Hello'\n\n'  파이썬  '.strip()  → '파이썬'",
+          code: "text = '  Hello  '\nprint(text.strip())  → 'Hello'\n\n'  Python  '.strip()  → 'Python'",
           note: "앞뒤 공백만 제거! 중간 공백은 그대로."
         }
       },
@@ -303,7 +303,7 @@ export const lesson6: LessonData = {
           lines: [
             "len() = 문자열 길이!"
           ],
-          code: "len('Hello')      → 5\nlen('Python')     → 6\nlen('안녕하세요')  → 5\nlen('')          → 0",
+          code: "len('Hello')      → 5\nlen('Python')     → 6\nlen('Hi there')   → 8\nlen('')          → 0",
           note: "공백도 글자 수에 포함돼!"
         }
       },
@@ -347,7 +347,7 @@ export const lesson6: LessonData = {
           lines: [
             "find() = 위치 찾기!"
           ],
-          code: "text = 'Hello'\ntext.find('e')   → 1  (인덱스 1)\ntext.find('l')   → 2  (처음 나오는 위치)\ntext.find('z')   → -1 (없으면 -1)",
+          code: "text = 'Hello'\ntext.find('e')   → 1  (index 1)\ntext.find('l')   → 2  (first occurrence)\ntext.find('z')   → -1 (not found = -1)",
           note: "위치는 0부터 시작! 없으면 -1 반환."
         }
       },
@@ -487,7 +487,7 @@ export const lesson6: LessonData = {
           lines: [
             "🛠️ 문자열 정리 도구!"
           ],
-          code: "원본: '  Hello, World!  '\n길이: 19\n대문자: 'HELLO, WORLD!'\n치환: 'Hello, Python!'",
+          code: "original: '  Hello, World!  '\nlength: 19\nuppercase: 'HELLO, WORLD!'\nreplaced: 'Hello, Python!'",
           isPreview: true,
           note: "한 줄씩 만들어보자!"
         }
@@ -634,7 +634,7 @@ export const lesson6: LessonData = {
         type: "errorQuiz",
         content: {
           question: "이 코드의 문제는?",
-          code: "email = 'User@Gmail.com'\nif email.endswith('.com'):\n    print('유효한 이메일')",
+          code: "email = 'User@Gmail.com'\nif email.endswith('.com'):\n    print('valid email')",
           options: [
             "문제없음 — '.com'으로 끝나면 '유효한 이메일'이 출력돼",
             "endswith는 대문자에 안 써",
@@ -659,7 +659,7 @@ export const lesson6: LessonData = {
         type: "errorQuiz",
         content: {
           question: "원하는 결과가 '안녕 파이썬'인데 출력이 다르게 나와. 문제는?",
-          code: "msg = '안녕 세상'\nprint(msg.replace('파이썬', '세상'))",
+          code: "msg = 'Hello world'\nprint(msg.replace('Python', 'world'))",
           options: [
             "replace('찾을것', '바꿀것') 인데 순서가 반대야 — '세상'을 '파이썬'으로 바꿔야 해",
             "replace는 한국어에 안 써",

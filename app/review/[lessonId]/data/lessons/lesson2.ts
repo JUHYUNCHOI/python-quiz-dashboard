@@ -37,7 +37,7 @@ export const lesson2: LessonData = {
             "왜 이런 일이?",
             "오늘 데이터 타입을 배우면 알 수 있어!"
           ],
-          code: "숫자 vs 글자 = 완전히 다름!",
+          code: "numbers vs strings = completely different!",
           isPreview: true
         }
       },
@@ -76,7 +76,7 @@ export const lesson2: LessonData = {
             "따옴표 있으면 글자!",
             "따옴표 없으면 숫자!"
           ],
-          code: "'100' → 글자 (계산 안됨)\n 100  → 숫자 (계산 됨)",
+          code: "'100' → string (cannot calculate)\n 100  → number (can calculate)",
           note: "이게 가장 중요해!"
         }
       },
@@ -158,7 +158,7 @@ export const lesson2: LessonData = {
             "방 정리할 때 어떻게 해?",
             "장난감은 장난감 상자에!"
           ],
-          code: "장난감 → 장난감 상자\n책 → 책꽂이\n옷 → 옷장",
+          code: "toys → toy box\nbooks → bookshelf\nclothes → closet",
           isPreview: true,
           note: "컴퓨터도 데이터를 종류별로 구분해!"
         }
@@ -282,7 +282,7 @@ export const lesson2: LessonData = {
             "③ 문자열 (str)",
             "글자들의 모음"
           ],
-          code: "'아이유', '치킨', '123'",
+          code: "'IU', 'chicken', '123'",
           result: "따옴표로 감싸면 전부 글자!",
           note: "str = string = 실"
         }
@@ -329,7 +329,7 @@ export const lesson2: LessonData = {
             "⚠️ 중요!",
             "'19000'과 19000은 다르다!"
           ],
-          code: "'19000' → 문자열 (글자)\n 19000  → 정수 (숫자)",
+          code: "'19000' → string (text)\n 19000  → integer (number)",
           note: "따옴표만 있어도 글자가 돼!"
         }
       },
@@ -543,7 +543,7 @@ export const lesson2: LessonData = {
           lines: [
             "문자열은?"
           ],
-          code: "type('아이유')",
+          code: "type('IU')",
           result: "<class 'str'>",
           note: "'아이유'는 str(문자열)이야!"
         }
@@ -634,7 +634,7 @@ export const lesson2: LessonData = {
           lines: [
             "실수 1: 따옴표 빼먹기"
           ],
-          code: "아이유",
+          code: "IU",
           result: "❌ NameError!",
           isError: true,
           note: "글자는 반드시 따옴표! '아이유'"
@@ -674,7 +674,7 @@ export const lesson2: LessonData = {
         type: "errorQuiz",
         content: {
           question: "에러 나는 코드는?",
-          code: "a. print('Hello')\nb. print(아이유)\nc. print(True)",
+          code: "a. print('Hello')\nb. print(IU)\nc. print(True)",
           options: [
             "a만 에러",
             "b만 에러",
@@ -744,7 +744,7 @@ export const lesson2: LessonData = {
           lines: [
             "📇 내 정보 카드 만들기!"
           ],
-          code: "=== 내 정보 ===\n이름: 홍길동\n나이: 15\n키: 165.5\n학생: True",
+          code: "=== My Info ===\nName: Alice\nAge: 15\nHeight: 165.5\nStudent: True",
           isPreview: true,
           note: "한 줄씩 만들어보자!"
         }

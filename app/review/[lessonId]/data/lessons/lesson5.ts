@@ -22,7 +22,7 @@ export const lesson5: LessonData = {
           lines: [
             "🏷️ 오늘 만들 것!"
           ],
-          code: "=== 나의 이름표 ===\n이름: 김코딩\n학교: 코딩중학교 1학년\n응원: 화이팅! 화이팅! 화이팅! ",
+          code: "=== My Name Tag ===\nName: Alice\nSchool: Coding Middle School Grade 1\nCheer: Go! Go! Go! ",
           isPreview: true,
           note: "문자열 연산으로 뚝딱 만들어보자!"
         }
@@ -82,7 +82,7 @@ export const lesson5: LessonData = {
           lines: [
             "문자열 + 문자열 = 이어붙이기!"
           ],
-          code: "'Hello' + 'World'  → 'HelloWorld'\n'김' + '코딩'       → '김코딩'\n'안녕' + '하세요'   → '안녕하세요'",
+          code: "'Hello' + 'World'  → 'HelloWorld'\n'Py' + 'thon'      → 'Python'\n'Good' + 'bye'     → 'Goodbye'",
           note: "공백도 직접 넣어야 해! ' ' + '이름' 처럼"
         }
       },
@@ -128,7 +128,7 @@ export const lesson5: LessonData = {
           lines: [
             "공백도 문자열이야!"
           ],
-          code: "'Hello' + ' ' + 'World' → 'Hello World'\n'코딩' + ' ' + '최고!'  → '코딩 최고!'",
+          code: "'Hello' + ' ' + 'World' → 'Hello World'\n'Code' + ' ' + 'rocks!'  → 'Code rocks!'",
           note: "공백을 넣으려면 ' ' 를 더해줘야 해!"
         }
       },
@@ -157,7 +157,7 @@ export const lesson5: LessonData = {
           lines: [
             "변수에 저장된 문자열도 이어붙일 수 있어!"
           ],
-          code: "first = '김'\nlast = '코딩'\nprint(first + last)  → 김코딩",
+          code: "first = 'Alice'\nlast = 'Smith'\nprint(first + last)  → AliceSmith",
           note: "변수끼리도 + 로 연결!"
         }
       },
@@ -184,7 +184,7 @@ export const lesson5: LessonData = {
         type: "explain",
         content: {
           lines: ["결과가 뭘까? 직접 맞춰봐!"],
-          code: "print('코딩' + '짱')",
+          code: "print('Code' + 'rocks')",
           predict: {
             question: "출력 결과는?",
             options: ["코딩짱", "코딩 짱", "에러"],
@@ -208,7 +208,7 @@ export const lesson5: LessonData = {
         type: "explain",
         content: {
           lines: ["변수 두 개를 이어붙이면?"],
-          code: "a = '파이'\nb = '썬'\nprint(a + b)",
+          code: "a = 'Py'\nb = 'thon'\nprint(a + b)",
           predict: {
             question: "출력 결과는?",
             options: ["파이썬", "a + b", "파이 썬"],
@@ -284,7 +284,7 @@ export const lesson5: LessonData = {
           lines: [
             "문자열 * 숫자 = 반복!"
           ],
-          code: "'ha' * 3     → 'hahaha'\n'=-' * 5     → '=-=-=-=-'\n'화이팅! ' * 2 → '화이팅! 화이팅! '",
+          code: "'ha' * 3     → 'hahaha'\n'=-' * 5     → '=-=-=-=-'\n'Go! ' * 2   → 'Go! Go! '",
           note: "문자열을 숫자만큼 반복해줘!"
         }
       },
@@ -458,7 +458,7 @@ export const lesson5: LessonData = {
           lines: [
             "⚠️ 문자열 + 숫자는 에러!"
           ],
-          code: "'나이: ' + 16       → TypeError!\n'점수: ' + 95.5    → TypeError!",
+          code: "'age: ' + 16       → TypeError!\n'score: ' + 95.5    → TypeError!",
           isError: true,
           note: "문자열과 숫자는 + 로 바로 합칠 수 없어!"
         }
@@ -469,7 +469,7 @@ export const lesson5: LessonData = {
         type: "errorQuiz",
         content: {
           question: "이 코드를 실행하면 어떻게 될까?",
-          code: "age = 16\nprint('나이: ' + age)",
+          code: "age = 16\nprint('age: ' + age)",
           options: [
             "나이: 16 출력",
             "TypeError! 문자열 + 정수 불가",
@@ -496,7 +496,7 @@ export const lesson5: LessonData = {
           lines: [
             "str()로 숫자를 문자열로 변환!"
           ],
-          code: "str(16)     → '16'   (문자열로 변환)\nstr(95.5)   → '95.5'\n\n'나이: ' + str(16)  → '나이: 16' ✅",
+          code: "str(16)     → '16'   (convert to string)\nstr(95.5)   → '95.5'\n\n'age: ' + str(16)  → 'age: 16' ✅",
           note: "str()로 감싸면 문자열로 바꿔줘!"
         }
       },
@@ -506,7 +506,7 @@ export const lesson5: LessonData = {
         type: "explain",
         content: {
           lines: ["이 코드는 어떻게 될까?"],
-          code: "year = 2025\nprint('올해는 ' + year + '년!')",
+          code: "year = 2025\nprint('This year is ' + year + '!')",
           predict: {
             question: "실행하면?",
             options: ["올해는 2025년!", "TypeError 에러", "올해는 year년!"],
@@ -530,7 +530,7 @@ export const lesson5: LessonData = {
         type: "errorQuiz",
         content: {
           question: "이 코드에서 문제가 있는 부분은?",
-          code: "price = 5000\nprint('가격: ' + price + '원')",
+          code: "price = 5000\nprint('price: ' + price + ' won')",
           options: [
             "price 를 str(price) 로 바꿔야 해",
             "'가격: ' 앞에 print 가 없어서",
@@ -691,7 +691,7 @@ export const lesson5: LessonData = {
           lines: [
             "🏷️ 나의 이름표 만들기!"
           ],
-          code: "=== 나의 이름표 ===\n이름: 김코딩\n학교: 코딩중학교 1학년\n응원: 화이팅! 화이팅! 화이팅! ",
+          code: "=== My Name Tag ===\nName: Alice\nSchool: Coding Middle School Grade 1\nCheer: Go! Go! Go! ",
           isPreview: true,
           note: "한 줄씩 만들어보자!"
         }

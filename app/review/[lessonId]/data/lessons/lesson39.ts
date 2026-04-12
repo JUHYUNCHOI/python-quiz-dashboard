@@ -13,7 +13,7 @@ export const lesson39: LessonData = {
       type: "explain",
       content: {
         lines: [],
-        code: `def 저장하기():\n    with open('save.txt', 'w') as 파일:\n        파일.write(캐릭터['이름'] + '\\n')\n        파일.write(str(캐릭터['HP']) + '\\n')\n        파일.write(str(캐릭터['공격력']) + '\\n')\n    print('저장 완료!')`,
+        code: `def save_game():\n    with open('save.txt', 'w') as file:\n        file.write(character['name'] + '\\n')\n        file.write(str(character['HP']) + '\\n')\n        file.write(str(character['attack']) + '\\n')\n    print('saved!')`,
         result: "숫자는 str()로 변환해서 저장!",
         note: "'w' 모드 + \\n으로 줄바꿈!"
       }
@@ -22,7 +22,7 @@ export const lesson39: LessonData = {
       type: "explain",
       content: {
         lines: [],
-        code: `캐릭터 = {'이름': '용사', 'HP': 85}\n\nwith open('save.txt', 'w') as f:\n    f.write(캐릭터['이름'] + '\\n')\n    f.write(str(캐릭터['HP']))`,
+        code: `character = {'name': 'warrior', 'HP': 85}\n\nwith open('save.txt', 'w') as f:\n    f.write(character['name'] + '\\n')\n    f.write(str(character['HP']))`,
         predict: {
           question: "save.txt 내용은?",
           options: ["용사85", "용사\\n85", "용사 (줄바꿈) 85", "에러"],
@@ -36,7 +36,7 @@ export const lesson39: LessonData = {
             feedback: "Because of \\n, '용사' and '85' are on separate lines!"
           }
         },
-        result: "용사\n85"
+        result: "warrior\n85"
       }
     },
     {
@@ -68,7 +68,7 @@ export const lesson39: LessonData = {
       type: "explain",
       content: {
         lines: [],
-        code: `def 불러오기():\n    try:\n        with open('save.txt', 'r') as 파일:\n            줄들 = 파일.readlines()\n            캐릭터['이름'] = 줄들[0].strip()\n            캐릭터['HP'] = int(줄들[1].strip())\n        print(f'{캐릭터["이름"]}님, 다시 오셨군요!')\n    except FileNotFoundError:\n        print('세이브 파일이 없어요!')`,
+        code: `def load_game():\n    try:\n        with open('save.txt', 'r') as file:\n            lines = file.readlines()\n            character['name'] = lines[0].strip()\n            character['HP'] = int(lines[1].strip())\n        print(f'Welcome back, {character["name"]}!')\n    except FileNotFoundError:\n        print('No save file found!')`,
         result: "try-except로 파일 없음 처리!",
         note: "strip()은 줄바꿈(\\n) 제거!"
       }
@@ -77,7 +77,7 @@ export const lesson39: LessonData = {
       type: "explain",
       content: {
         lines: [],
-        code: `try:\n    with open('없는파일.txt', 'r') as f:\n        print('불러오기 성공!')\nexcept FileNotFoundError:\n    print('세이브 없음!')\nprint('게임 시작!')`,
+        code: `try:\n    with open('missing.txt', 'r') as f:\n        print('load success!')\nexcept FileNotFoundError:\n    print('no save!')\nprint('game start!')`,
         predict: {
           question: "출력 결과는?",
           options: ["불러오기 성공! 게임 시작!", "세이브 없음! 게임 시작!", "에러", "세이브 없음!"],
@@ -124,7 +124,7 @@ export const lesson39: LessonData = {
       type: "explain",
       content: {
         lines: ["🎮 메인 메뉴 구조"],
-        code: `while True:\n    print('\\n=== RPG 게임 ===')\n    print('1. 새 게임  2. 이어하기')\n    print('3. 저장  4. 종료')\n    try:\n        선택 = int(input('선택: '))\n        if 선택 == 4:\n            break\n    except ValueError:\n        print('숫자를 입력하세요!')`,
+        code: `while True:\n    print('\\n=== RPG Game ===')\n    print('1. New Game  2. Continue')\n    print('3. Save  4. Quit')\n    try:\n        choice = int(input('choose: '))\n        if choice == 4:\n            break\n    except ValueError:\n        print('enter a number!')`,
         result: "while True + try-except = 안전한 메뉴!",
         note: "숫자 아닌 입력도 에러 안 남!"
       }
@@ -221,7 +221,7 @@ export const lesson39: LessonData = {
       type: "errorQuiz",
       content: {
         question: "이 저장 코드의 문제점은?",
-        code: `with open('save.txt', 'r') as f:\n    f.write('데이터')`,
+        code: `with open('save.txt', 'r') as f:\n    f.write('data')`,
         options: ["'r' 모드에서 write 불가", "파일명 오류", "close() 필요", "문제 없음"],
         answer: 0,
         explanation: "'r'는 읽기 전용! 저장하려면 'w' 모드!"
@@ -241,7 +241,7 @@ export const lesson39: LessonData = {
       type: "errorQuiz",
       content: {
         question: "이 코드에 빠진 게 있어요!",
-        code: `with open('save.txt', 'r') as f:\n    data = f.read()\n    print(data)\n# 파일이 없으면?`,
+        code: `with open('save.txt', 'r') as f:\n    data = f.read()\n    print(data)\n# what if the file doesn't exist?`,
         options: ["문제 없음", "close() 필요", "try-except 필요 (FileNotFoundError)", "write 필요"],
         answer: 2,
         explanation: "파일이 없을 수도 있으니 try-except FileNotFoundError!"
@@ -310,7 +310,7 @@ print(hp)`,
       type: "explain",
       content: {
         lines: ["결과를 예측해봐!"],
-        code: `lines = ['용사\\n', '85\\n', '검사\\n']
+        code: `lines = ['warrior\\n', '85\\n', 'knight\\n']
 names = [l.strip() for l in lines]
 print(names[1])`,
         predict: {
@@ -334,13 +334,13 @@ print(names[1])`,
       type: "explain",
       content: {
         lines: ["결과를 예측해봐!"],
-        code: `data = {'이름': '용사', 'HP': 100}
+        code: `data = {'name': 'warrior', 'HP': 100}
 
 with open('save.txt', 'w') as f:
     for k, v in data.items():
         f.write(f'{k}:{v}\\n')
 
-print('저장 완료!')`,
+print('saved!')`,
         predict: {
           question: "출력 결과는?",
           options: ["이름:용사 HP:100", "저장 완료!", "에러", "{'이름': '용사', 'HP': 100}"],

@@ -22,7 +22,7 @@ export const lesson7: LessonData = {
           lines: [
             "🖨️ 오늘 만들 것!"
           ],
-          code: "2024-03-15\nA B C D E\n로딩중... 완료!",
+          code: "2024-03-15\nA B C D E\nloading... done!",
           isPreview: true,
           note: "sep와 end를 배우면 이렇게 만들 수 있어!"
         }
@@ -34,7 +34,7 @@ export const lesson7: LessonData = {
           lines: [
             "print()에는 옵션이 있어!"
           ],
-          code: "print('A', 'B', 'C')           → A B C\nprint('A', 'B', sep='-')      → A-B-C\nprint('Hello', end=' ')        → Hello (줄바꿈 없음)",
+          code: "print('A', 'B', 'C')           → A B C\nprint('A', 'B', sep='-')      → A-B-C\nprint('Hello', end=' ')        → Hello (no newline)",
           isPreview: true,
           note: "sep = 구분자, end = 끝 문자!"
         }
@@ -167,7 +167,7 @@ export const lesson7: LessonData = {
         type: "explain",
         content: {
           lines: ["코드 결과를 예측해봐!"],
-          code: "print('월', '화', '목', sep='|')",
+          code: "print('Mon', 'Tue', 'Thu', sep='|')",
           predict: {
             options: ["월 화 목", "월|화|목", "월화목"],
             answer: 1,
@@ -209,7 +209,7 @@ export const lesson7: LessonData = {
         type: "errorQuiz",
         content: {
           question: "이 코드의 문제는?",
-          code: "print('사과', '바나나', '딸기', Sep=', ')",
+          code: "print('apple', 'banana', 'strawberry', Sep=', ')",
           options: [
             "Sep가 아니라 sep (소문자여야 해)",
             "문자열이 잘못됐어",
@@ -317,7 +317,7 @@ export const lesson7: LessonData = {
           lines: [
             "end= 로 줄바꿈 대신 다른 걸!"
           ],
-          code: "print('Hello', end=' ')\nprint('World')\n→ Hello World (한 줄!)\n\nprint('로딩', end='...')\nprint('완료!')\n→ 로딩...완료!",
+          code: "print('Hello', end=' ')\nprint('World')\n→ Hello World (one line!)\n\nprint('loading', end='...')\nprint('done!')\n→ loading...done!",
           note: "end=' ' 는 공백으로 끝냄. 줄바꿈 없음!"
         }
       },
@@ -373,7 +373,7 @@ export const lesson7: LessonData = {
         type: "explain",
         content: {
           lines: ["코드 결과를 예측해봐!"],
-          code: "print('안녕', end='~')\nprint('반가워')",
+          code: "print('Hello', end='~')\nprint('World')",
           predict: {
             options: ["안녕\n반가워", "안녕~반가워", "안녕 반가워"],
             answer: 1,
@@ -415,7 +415,7 @@ export const lesson7: LessonData = {
         type: "errorQuiz",
         content: {
           question: "이 코드의 문제는?",
-          code: "print('로딩중', End='...')\nprint('완료!')",
+          code: "print('loading', End='...')\nprint('done!')",
           options: [
             "End가 아니라 end (소문자여야 해)",
             "문자열에 '...'을 쓸 수 없어",
@@ -656,7 +656,7 @@ export const lesson7: LessonData = {
           lines: [
             "🖨️ 출력 형식 도구 만들기!"
           ],
-          code: "2024-03-15\nA B C D E\n로딩중... 완료!",
+          code: "2024-03-15\nA B C D E\nloading... done!",
           isPreview: true,
           note: "한 줄씩 만들어보자!"
         }

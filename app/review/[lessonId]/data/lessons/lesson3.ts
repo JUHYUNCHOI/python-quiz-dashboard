@@ -35,7 +35,7 @@ export const lesson3: LessonData = {
           lines: [
             "치킨 가격이 20000원으로 올랐어! 😱"
           ],
-          code: "(20000 + 2000) * 3  # 다시 계산...\n(20000 + 2000) * 4  # 또 다시...",
+          code: "(20000 + 2000) * 3  # recalculate...\n(20000 + 2000) * 4  # again...",
           isError: true,
           note: "가격 하나 바뀌었는데 전부 고쳐야 해!"
         }
@@ -47,7 +47,7 @@ export const lesson3: LessonData = {
           lines: [
             "변수를 쓰면?"
           ],
-          code: "chicken = 20000  # 여기만 바꾸면 끝!",
+          code: "chicken = 20000  # change only here!",
           result: "한 곳만 바꾸면 전부 바뀌어!",
           note: "이게 변수의 힘이야 💪"
         }
@@ -381,7 +381,7 @@ export const lesson3: LessonData = {
           lines: [
             "변수 이름 규칙 ✅"
           ],
-          code: "chicken = 19000      # 영어 OK\nchicken1 = 19000     # 숫자 끝에 OK\nchicken_price = 19000 # 언더바 OK",
+          code: "chicken = 19000      # English OK\nchicken1 = 19000     # digit at end OK\nchicken_price = 19000 # underscore OK",
           note: "영어, 숫자(끝에), 언더바(_) 사용 가능!"
         }
       },
@@ -392,7 +392,7 @@ export const lesson3: LessonData = {
           lines: [
             "이건 안 돼요! ❌"
           ],
-          code: "1chicken = 19000     # 숫자로 시작 X\nchicken-price = 19000 # 하이픈 X\nchicken price = 19000 # 공백 X",
+          code: "1chicken = 19000     # starts with digit X\nchicken-price = 19000 # hyphen X\nchicken price = 19000 # space X",
           isError: true,
           note: "숫자로 시작, 하이픈, 공백은 불가!"
         }
@@ -429,7 +429,7 @@ export const lesson3: LessonData = {
           lines: [
             "대소문자도 구분해!"
           ],
-          code: "Chicken = 19000\nchicken  # 에러!",
+          code: "Chicken = 19000\nchicken  # error!",
           result: "NameError!",
           isError: true,
           note: "Chicken과 chicken은 다른 변수야!"
@@ -441,7 +441,7 @@ export const lesson3: LessonData = {
         type: "errorQuiz",
         content: {
           question: "에러 나는 코드는?",
-          code: "a. my_name = '홍길동'\nb. myName = '홍길동'\nc. my name = '홍길동'",
+          code: "a. my_name = 'Alice'\nb. myName = 'Alice'\nc. my name = 'Alice'",
           options: [
             "a만 에러",
             "b만 에러",
@@ -494,7 +494,7 @@ export const lesson3: LessonData = {
           lines: [
             "실수 1: 만들기 전에 사용"
           ],
-          code: "print(pizza)  # 에러!\npizza = 18000",
+          code: "print(pizza)  # error!\npizza = 18000",
           result: "NameError!",
           isError: true,
           note: "변수는 먼저 만들고 사용해야 해!"
@@ -508,7 +508,7 @@ export const lesson3: LessonData = {
           lines: [
             "실수 2: 문자열 따옴표 빼먹기"
           ],
-          code: "name = 홍길동  # 에러!\nname = '홍길동'  # OK!",
+          code: "name = Alice  # error!\nname = 'Alice'  # OK!",
           isError: true,
           note: "글자는 따옴표로 감싸야 해!"
         }
@@ -588,7 +588,7 @@ export const lesson3: LessonData = {
           lines: [
             "💰 용돈 계산기 만들기!"
           ],
-          code: "=== 용돈 계산기 ===\n처음 용돈: 50000\n치킨 사고 남은 돈: 31000\n콜라 사고 남은 돈: 29000",
+          code: "=== Allowance Calculator ===\nStarting money: 50000\nAfter chicken: 31000\nAfter cola: 29000",
           isPreview: true,
           note: "한 줄씩 만들어보자!"
         }
@@ -724,7 +724,7 @@ export const lesson3: LessonData = {
         type: "explain",
         content: {
           lines: ["이 코드의 결과는?"],
-          code: "Name = '홍길동'\nname = '김철수'\nprint(Name)",
+          code: "Name = 'Alice'\nname = 'Bob'\nprint(Name)",
           predict: {
             options: ["홍길동", "김철수", "에러", "홍길동\n김철수"],
             answer: 0,
@@ -770,7 +770,7 @@ export const lesson3: LessonData = {
         type: "errorQuiz",
         content: {
           question: "변수 이름 오류가 있는 코드는?",
-          code: "a. user_name = '홍길동'\nb. 1st_place = '1등'\nc. myScore = 100",
+          code: "a. user_name = 'Alice'\nb. 1st_place = '1st'\nc. myScore = 100",
           options: [
             "a만 에러",
             "b만 에러",
