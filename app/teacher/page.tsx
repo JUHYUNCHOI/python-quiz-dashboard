@@ -105,11 +105,10 @@ export default function TeacherDashboardPage() {
         .order("completed_at", { ascending: false })
         .limit(studentIds.length * 6),   // 위험 감지에는 최근 5개면 충분
       supabase.from("lesson_progress")
-        .select("user_id, lesson_id, score, updated_at")
+        .select("user_id, lesson_id, progress_type, score, updated_at")
         .in("user_id", studentIds)
-        .eq("progress_type", "review")
         .eq("completed", true)
-        .limit(studentIds.length * 60),  // 반 평균 30레슨 × 2배 버퍼
+        .limit(studentIds.length * 120),  // learn + review 모두 포함
     ])
 
     const profileMap = new Map((profiles || []).map(p => [p.id, p.display_name || "학생"]))
@@ -136,15 +135,20 @@ export default function TeacherDashboardPage() {
       }
     }
 
-    // 학생별 복습 최근 updated_at
+    // 학생별 최근 활동 updated_at (learn + review 모두)
+    // progressMap은 취약점 감지용으로 review만 사용
     const progressLatestMap = new Map<string, string>()
     const progressMap = new Map<string, { lesson_id: string; score: number }[]>()
     for (const p of lessonProgress || []) {
-      if (!progressMap.has(p.user_id)) progressMap.set(p.user_id, [])
-      progressMap.get(p.user_id)!.push({ lesson_id: p.lesson_id, score: p.score })
+      // lastActive: learn/review 모두 반영
       if (p.updated_at) {
         const prev = progressLatestMap.get(p.user_id)
         if (!prev || p.updated_at > prev) progressLatestMap.set(p.user_id, p.updated_at)
+      }
+      // 취약점 감지: review만
+      if (p.progress_type === "review") {
+        if (!progressMap.has(p.user_id)) progressMap.set(p.user_id, [])
+        progressMap.get(p.user_id)!.push({ lesson_id: p.lesson_id, score: p.score })
       }
     }
 

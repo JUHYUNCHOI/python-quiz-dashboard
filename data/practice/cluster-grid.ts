@@ -23,11 +23,8 @@ using namespace std;
 int main() {
     int n, m;
     cin >> n >> m;
-    vector<vector<int>> grid(n, vector<int>(m));
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < m; j++)
-            cin >> grid[i][j];
-    // 여기에 코드를 작성하세요
+    // 2D 벡터 선언하고 입력받기
+
     return 0;
 }`,
       testCases: [
@@ -36,8 +33,9 @@ int main() {
         { stdin: "2 3\n1 2 3\n4 5 6", expectedOutput: "21", label: "2×3" },
       ],
       hints: [
-        "이중 for 루프로 모든 grid[i][j]를 더하세요.",
-        "sum 변수를 0으로 초기화하고, 각 셀 값을 누적합니다.",
+        "vector<vector<int>> grid(n, vector<int>(m)); 로 2D 벡터를 선언하세요.",
+        "이중 for 루프로 cin >> grid[i][j] 입력을 받으세요.",
+        "sum 변수를 0으로 초기화하고, 모든 grid[i][j]를 더하세요.",
       ],
       solutionCode: `#include <iostream>
 #include <vector>
@@ -84,11 +82,8 @@ using namespace std;
 int main() {
     int n, m;
     cin >> n >> m;
-    vector<vector<int>> grid(n, vector<int>(m));
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < m; j++)
-            cin >> grid[i][j];
-    // 여기에 코드를 작성하세요
+    // 2D 벡터 선언하고 입력받기
+
     return 0;
 }`,
       testCases: [
@@ -145,11 +140,8 @@ using namespace std;
 int main() {
     int n;
     cin >> n;
-    vector<vector<int>> grid(n, vector<int>(n));
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++)
-            cin >> grid[i][j];
-    // 여기에 코드를 작성하세요
+    // 2D 벡터 선언하고 입력받기
+
     return 0;
 }`,
       testCases: [
@@ -466,11 +458,8 @@ using namespace std;
 int main() {
     int n, m, k;
     cin >> n >> m >> k;
-    vector<vector<int>> grid(n, vector<int>(m));
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < m; j++)
-            cin >> grid[i][j];
-    // 여기에 코드를 작성하세요
+    // 2D 벡터를 선언하고 입력받아보세요
+
     return 0;
 }`,
       testCases: [
@@ -479,8 +468,9 @@ int main() {
         { stdin: "1 3 0\n0 1 0", expectedOutput: "(1, 1)\n(1, 3)", label: "0 찾기" },
       ],
       hints: [
-        "이중 for 루프로 grid[i][j] == k인 위치를 찾습니다.",
-        "0-based 인덱스에 1을 더해 1-based로 출력하세요.",
+        "vector<vector<int>> grid(n, vector<int>(m)); 로 2D 벡터를 선언하세요.",
+        "이중 for 루프로 cin >> grid[i][j] 입력을 받으세요.",
+        "grid[i][j] == k인 위치를 찾아 (i+1, j+1)로 출력하세요.",
       ],
       solutionCode: `#include <iostream>
 #include <vector>

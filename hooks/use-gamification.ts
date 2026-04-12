@@ -209,7 +209,19 @@ export function useGamification() {
           throw new Error(error.message)
         }
 
-        if (data) applySupabaseData(data as Record<string, unknown>)
+        if (data) {
+          applySupabaseData(data as Record<string, unknown>)
+          // 로그인 자체를 오늘 활동으로 기록 (선생님 대시보드용)
+          // 로컬 state(스트릭 계산)에는 영향 없이 Supabase에만 기록
+          const today = new Date().toISOString().slice(0, 10)
+          const dbLastActive = String(data.last_active_date ?? "")
+          if (dbLastActive < today) {
+            supabase.from("gamification_data").upsert(
+              { user_id: user.id, last_active_date: today },
+              { onConflict: "user_id" }
+            ).then(() => {}) // fire-and-forget
+          }
+        }
       } catch {
         if (cancelled) return
         if (attempt < 2) {
