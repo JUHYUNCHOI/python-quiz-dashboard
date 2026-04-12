@@ -224,33 +224,42 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
       localStorage.setItem(storageKey, code)
     } catch {}
 
-    const newResults: TestResult[] = []
-    let compileError = ""
+    const testCases = problem.testCases ?? []
 
-    for (const tc of problem.testCases ?? []) {
-      try {
+    // 모든 테스트 케이스를 병렬로 실행 (순차 → 동시 실행으로 속도 개선)
+    const responses = await Promise.all(
+      testCases.map(tc => {
         const body = lang === "python"
           ? { compiler: "cpython-3.12.2", code, stdin: tc.stdin }
           : { compiler: "gcc-13-3", code, stdin: tc.stdin, "compiler-option-raw": "-std=c++17" }
-        const res = await fetch(WANDBOX_API, {
+        return fetch(WANDBOX_API, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
         })
-        const data = await res.json()
-        if (data.status === "1") {
-          compileError = lang === "python"
-            ? (data.program_error || data.compiler_error || t("런타임 오류", "Runtime Error"))
-            : (data.compiler_error || t("컴파일 오류", "Compile Error"))
-          break
-        }
-        const actual = (data.program_output || "").trim()
-        const expected = tc.expectedOutput.trim()
-        newResults.push({ passed: actual === expected, output: actual, expected })
-      } catch {
+          .then(r => r.json())
+          .catch(() => null)
+      })
+    )
+
+    let compileError = ""
+    const newResults: TestResult[] = []
+
+    for (let i = 0; i < testCases.length; i++) {
+      const data = responses[i]
+      if (!data) {
         compileError = t("네트워크 오류. 잠시 후 다시 시도해주세요.", "Network error. Please try again.")
         break
       }
+      if (data.status === "1") {
+        compileError = lang === "python"
+          ? (data.program_error || data.compiler_error || t("런타임 오류", "Runtime Error"))
+          : (data.compiler_error || t("컴파일 오류", "Compile Error"))
+        break
+      }
+      const actual = (data.program_output || "").trim()
+      const expected = testCases[i].expectedOutput.trim()
+      newResults.push({ passed: actual === expected, output: actual, expected })
     }
 
     if (compileError) {
