@@ -262,7 +262,7 @@ export function CppRunner({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           code,
-          compiler: "gcc-13-3",
+          compiler: "gcc-13.2.0",
           "compiler-option-raw": "-std=c++17",
           ...(stdin ? { stdin } : {}),
         })
