@@ -211,8 +211,7 @@ export const lesson16: LessonData = {
         guide: "인덱스는 0부터 시작!",
         hint: "두 번째 = 인덱스 1",
         template: "animals = [\"강아지\", \"고양이\", \"토끼\"]\nprint(animals[___])",
-        blanksAnswer: ["1"],
-        answer: "animals = [\"강아지\", \"고양이\", \"토끼\"]\nprint(animals[1])",
+        answer: "1",
         expect: "고양이",
         en: {
           task: "Print the second element of the list",
@@ -229,8 +228,7 @@ export const lesson16: LessonData = {
         guide: "뒤에서 첫 번째 = -1",
         hint: "[-1] 사용!",
         template: "numbers = [10, 20, 30, 40, 50]\nprint(numbers[___])",
-        blanksAnswer: ["-1"],
-        answer: "numbers = [10, 20, 30, 40, 50]\nprint(numbers[-1])",
+        answer: "-1",
         expect: "50",
         en: {
           task: "Print the last element of the list using a negative index",
@@ -446,8 +444,7 @@ export const lesson16: LessonData = {
         task: "숫자 리스트를 만들고 세 번째 요소를 출력해요",
         guide: "인덱스는 0부터! 세 번째 = [2]",
         template: "nums = [10, 20, 30, 40, 50]\nprint(nums[___])",
-        blanksAnswer: ["2"],
-        answer: "nums = [10, 20, 30, 40, 50]\nprint(nums[2])",
+        answer: "2",
         expect: "30",
         en: {
           task: "Create a number list and print the third element",

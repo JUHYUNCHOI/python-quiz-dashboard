@@ -409,6 +409,150 @@ export const lesson14: LessonData = {
       }
     },
 
+    // ==================== CHAPTER 6: 예측 & 오류 찾기 ====================
+    {
+      type: "chapter",
+      content: {
+        num: 6,
+        title: "예측 & 오류 찾기",
+        desc: "결과를 예측하고 버그를 잡아라!"
+      }
+    },
+
+    // 예측 퀴즈 1: 기본 while 출력
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: "x = 1\nwhile x <= 3:\n    print(x)\n    x += 1",
+        predict: {
+          options: ["1 2 3", "1\n2\n3", "0 1 2 3", "무한루프"],
+          answer: 1,
+          feedback: "x가 1,2,3일 때 출력하고 x=4가 되면 조건 False → 멈춰! 1, 2, 3이 각 줄에 출력돼."
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["1 2 3", "1\n2\n3", "0 1 2 3", "infinite loop"],
+            feedback: "Prints when x is 1,2,3 and stops when x=4 makes condition False! 1, 2, 3 each on their own line."
+          }
+        }
+      }
+    },
+
+    // 예측 퀴즈 2: break로 조기 종료
+    {
+      type: "explain",
+      content: {
+        lines: ["이 코드의 출력은?"],
+        code: "i = 0\nwhile i < 10:\n    if i == 4:\n        break\n    print(i)\n    i += 1",
+        predict: {
+          options: ["0 1 2 3", "0 1 2 3 4", "0 1 2 3\n(4 미포함)", "0~9 전부"],
+          answer: 2,
+          feedback: "i가 4가 되는 순간 break → 루프 탈출! i=4일 때 print가 실행되기 전에 break가 걸려서 4는 출력 안 돼."
+        },
+        en: {
+          lines: ["What's the output of this code?"],
+          predict: {
+            options: ["0 1 2 3", "0 1 2 3 4", "0 1 2 3 (4 not included)", "All 0~9"],
+            feedback: "When i becomes 4, break exits the loop! break happens before print when i=4, so 4 is not printed."
+          }
+        }
+      }
+    },
+
+    // 예측 퀴즈 3: continue 건너뛰기
+    {
+      type: "explain",
+      content: {
+        lines: ["몇 줄이 출력될까?"],
+        code: "i = 0\nwhile i < 5:\n    i += 1\n    if i % 2 == 0:\n        continue\n    print(i)",
+        predict: {
+          options: ["5줄 (1 2 3 4 5)", "3줄 (1 3 5)", "2줄 (2 4)", "무한루프"],
+          answer: 1,
+          feedback: "짝수(2, 4)일 때 continue로 건너뛰고, 홀수(1, 3, 5)만 출력돼! 총 3줄."
+        },
+        en: {
+          lines: ["How many lines will be printed?"],
+          predict: {
+            options: ["5 lines (1 2 3 4 5)", "3 lines (1 3 5)", "2 lines (2 4)", "Infinite loop"],
+            feedback: "continue skips even numbers (2, 4), so only odd numbers (1, 3, 5) are printed! 3 lines total."
+          }
+        }
+      }
+    },
+
+    // 예측 퀴즈 4: 누적 합산
+    {
+      type: "explain",
+      content: {
+        lines: ["total의 최종 값은?"],
+        code: "total = 0\ni = 1\nwhile i <= 4:\n    total += i\n    i += 1\nprint(total)",
+        predict: {
+          options: ["4", "10", "16", "무한루프"],
+          answer: 1,
+          feedback: "1+2+3+4 = 10! while 루프가 i=1,2,3,4에 걸쳐 total에 더해서 10이 돼."
+        },
+        en: {
+          lines: ["What's the final value of total?"],
+          predict: {
+            options: ["4", "10", "16", "Infinite loop"],
+            feedback: "1+2+3+4 = 10! The while loop adds i to total for i=1,2,3,4 giving 10."
+          }
+        }
+      }
+    },
+
+    // 오류 찾기 1: 증가 없는 무한루프
+    {
+      type: "errorQuiz",
+      content: {
+        question: "이 코드의 문제점은?",
+        code: "count = 0\nwhile count < 5:\n    print(count)",
+        options: [
+          "count가 증가하지 않아서 무한 루프!",
+          "while 조건이 잘못됐어",
+          "print 문법 오류"
+        ],
+        answer: 0,
+        explanation: "count += 1이 없어서 count가 영원히 0이야 → 무한 루프! 반드시 루프 내에서 조건 변수를 변경해야 해.",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "count never increases so it's an infinite loop!",
+            "while condition is wrong",
+            "print syntax error"
+          ],
+          explanation: "Without count += 1, count stays 0 forever → infinite loop! Must change the condition variable inside the loop."
+        }
+      }
+    },
+
+    // 오류 찾기 2: 조건이 처음부터 False
+    {
+      type: "errorQuiz",
+      content: {
+        question: "이 코드가 아무것도 출력하지 않는 이유는?",
+        code: "n = 10\nwhile n < 5:\n    print(n)\n    n += 1",
+        options: [
+          "print 괄호가 없어서",
+          "처음부터 n < 5가 False라서 루프가 한 번도 실행 안 됨",
+          "n += 1이 없어서"
+        ],
+        answer: 1,
+        explanation: "n = 10인데 while n < 5: 는 처음부터 10 < 5 = False! 조건이 거짓이면 while 블록은 한 번도 실행되지 않아.",
+        en: {
+          question: "Why does this code print nothing?",
+          options: [
+            "Missing parentheses in print",
+            "n < 5 is False from the start so the loop never runs",
+            "n += 1 is missing"
+          ],
+          explanation: "n = 10 but while n < 5: means 10 < 5 = False right away! If the condition is false, the while block never executes."
+        }
+      }
+    },
+
     // ==================== DONE ====================
     { type: "done", content: {} }
   ]

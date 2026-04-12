@@ -166,8 +166,7 @@ export const lesson18: LessonData = {
         message: "🔄 리스트 기초 복습! (레슨 16)",
         task: "리스트에서 마지막 요소 출력하기",
         template: "fruits = [\"사과\", \"바나나\", \"포도\"]\nprint(fruits[___])",
-        blanksAnswer: ["-1"],
-        answer: "fruits = [\"사과\", \"바나나\", \"포도\"]\nprint(fruits[-1])",
+        answer: "-1",
         expect: "포도",
         en: {
           message: "🔄 List basics review! (Lesson 16)",
@@ -271,8 +270,8 @@ export const lesson18: LessonData = {
         guide: "구분자를 \" / \"로!",
         hint: "\" / \".join(fruits)",
         template: "fruits = [\"사과\", \"바나나\", \"포도\"]\nresult = ___.join(fruits)\nprint(result)",
-        blanksAnswer: ["\" / \""],
-        answer: "fruits = [\"사과\", \"바나나\", \"포도\"]\nresult = \" / \".join(fruits)\nprint(result)",
+        answer: "\" / \"",
+        alternateAnswers: ["' / '"],
         expect: "사과 / 바나나 / 포도",
         en: {
           task: "Join the fruit list with \" / \"",
@@ -325,8 +324,7 @@ export const lesson18: LessonData = {
         message: "🔄 리스트 컴프리헨션 복습!",
         task: "1~4의 제곱 리스트 만들기",
         template: "squares = [___ for n in range(1, 5)]\nprint(squares)",
-        blanksAnswer: ["n ** 2"],
-        answer: "squares = [n ** 2 for n in range(1, 5)]\nprint(squares)",
+        answer: "n ** 2",
         expect: "[1, 4, 9, 16]",
         en: {
           message: "🔄 List comprehension review!",

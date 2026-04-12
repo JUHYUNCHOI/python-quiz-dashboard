@@ -288,6 +288,293 @@ export const lessonCppP1: LessonData = {
         }
       },
 
+      // ==================== CHAPTER 3: 함수와 타입 심화 ====================
+      {
+        type: "chapter",
+        content: {
+          num: 3,
+          title: "함수와 타입 심화 복습",
+          desc: "함수 선언, 매개변수, 반환값을 복습해요!"
+        }
+      },
+
+      // 인터리빙: cpp-7 while/break 패턴 복습
+      {
+        type: "interleaving",
+        content: {
+          message: "잠깐! while + break 패턴 기억나요?",
+          task: "사용자 입력이 0이면 루프를 탈출하는 코드를 완성해요!",
+          template: "while (___) {\n    cin >> n;\n    if (n == 0) ___;\n    cout << n << \"\\n\";\n}",
+          answer: "true",
+          blanksAnswer: ["true", "break"],
+          expect: "while (true) {\n    cin >> n;\n    if (n == 0) break;\n    cout << n << \"\\n\";\n}",
+          en: {
+            message: "Quick check! Remember the while + break pattern?",
+            task: "Complete the code that exits the loop when the user inputs 0!"
+          }
+        }
+      },
+
+      // predict 1: 함수 반환값
+      {
+        type: "explain",
+        content: {
+          lines: ["이 C++ 코드의 출력은?"],
+          code: 'int square(int n) {\n    return n * n;\n}\n\nint main() {\n    cout << square(4) << "\\n";\n    cout << square(3) << "\\n";\n    return 0;\n}',
+          predict: {
+            options: ["16\n9", "4\n3", "8\n6", "에러"],
+            answer: 0,
+            feedback: "square(4) = 4*4 = 16, square(3) = 3*3 = 9. 함수는 n*n을 반환해요!"
+          },
+          en: {
+            lines: ["What does this C++ code output?"],
+            predict: {
+              options: ["16\n9", "4\n3", "8\n6", "Error"],
+              feedback: "square(4) = 4*4 = 16, square(3) = 3*3 = 9. The function returns n*n!"
+            }
+          }
+        }
+      },
+
+      // predict 2: 변수 타입과 정수 나눗셈
+      {
+        type: "explain",
+        content: {
+          lines: ["이 C++ 코드의 출력은?"],
+          code: 'int a = 7;\nint b = 2;\ncout << a / b << "\\n";\ncout << (double)a / b << "\\n";',
+          predict: {
+            options: ["3\n3.5", "3.5\n3.5", "3\n3", "에러"],
+            answer: 0,
+            feedback: "int / int = 정수 나눗셈! 7/2 = 3. (double) 캐스팅 후엔 3.5가 돼요."
+          },
+          en: {
+            lines: ["What does this C++ code output?"],
+            predict: {
+              options: ["3\n3.5", "3.5\n3.5", "3\n3", "Error"],
+              feedback: "int / int = integer division! 7/2 = 3. After (double) cast it becomes 3.5."
+            }
+          }
+        }
+      },
+
+      // predict 3: else if 체인
+      {
+        type: "explain",
+        content: {
+          lines: ["이 C++ 코드의 출력은?"],
+          code: 'int score = 75;\nif (score >= 90) {\n    cout << "A" << "\\n";\n} else if (score >= 80) {\n    cout << "B" << "\\n";\n} else if (score >= 70) {\n    cout << "C" << "\\n";\n} else {\n    cout << "F" << "\\n";\n}',
+          predict: {
+            options: ["A", "B", "C", "F"],
+            answer: 2,
+            feedback: "75 >= 90 → false, 75 >= 80 → false, 75 >= 70 → true! 세 번째 블록이 실행돼요."
+          },
+          en: {
+            lines: ["What does this C++ code output?"],
+            predict: {
+              options: ["A", "B", "C", "F"],
+              feedback: "75 >= 90 → false, 75 >= 80 → false, 75 >= 70 → true! The third block runs."
+            }
+          }
+        }
+      },
+
+      // predict 4: for 루프 누적
+      {
+        type: "explain",
+        content: {
+          lines: ["이 C++ 코드의 출력은?"],
+          code: 'int sum = 0;\nfor (int i = 1; i <= 5; i++) {\n    sum += i;\n}\ncout << sum << "\\n";',
+          predict: {
+            options: ["10", "15", "5", "25"],
+            answer: 1,
+            feedback: "1+2+3+4+5 = 15! for 루프가 i=1부터 5까지 sum에 더해요."
+          },
+          en: {
+            lines: ["What does this C++ code output?"],
+            predict: {
+              options: ["10", "15", "5", "25"],
+              feedback: "1+2+3+4+5 = 15! The for loop adds i to sum from i=1 to 5."
+            }
+          }
+        }
+      },
+
+      // quiz 1: 함수 선언
+      {
+        type: "quiz",
+        content: {
+          question: "C++에서 정수를 받아 정수를 반환하는 함수 선언의 올바른 형태는?",
+          options: [
+            "function int add(int a, int b)",
+            "int add(int a, int b)",
+            "def add(a, b):",
+            "add(int a, int b) -> int"
+          ],
+          answer: 1,
+          explanation: "C++ 함수 선언: 반환타입 함수명(매개변수목록) — 파이썬의 def와 다르게 반환 타입을 앞에 써요!",
+          en: {
+            question: "What is the correct form of a function declaration that takes and returns an integer in C++?",
+            options: [
+              "function int add(int a, int b)",
+              "int add(int a, int b)",
+              "def add(a, b):",
+              "add(int a, int b) -> int"
+            ],
+            explanation: "C++ function declaration: returnType functionName(params) — unlike Python's def, the return type goes first!"
+          }
+        }
+      },
+
+      // quiz 2: cout 출력
+      {
+        type: "quiz",
+        content: {
+          question: "C++에서 줄바꿈 없이 'Hello World'를 출력하는 코드는?",
+          options: [
+            'cout << "Hello" << " " << "World" << endl;',
+            'cout << "Hello" << " " << "World";',
+            'print("Hello World")',
+            'cout("Hello World")'
+          ],
+          answer: 1,
+          explanation: "endl을 빼면 줄바꿈이 없어요! endl 또는 \"\\n\"을 쓰면 줄이 바뀌어요.",
+          en: {
+            question: "Which code outputs 'Hello World' in C++ without a newline?",
+            options: [
+              'cout << "Hello" << " " << "World" << endl;',
+              'cout << "Hello" << " " << "World";',
+              'print("Hello World")',
+              'cout("Hello World")'
+            ],
+            explanation: "Without endl there is no newline! Use endl or \"\\n\" to break the line."
+          }
+        }
+      },
+
+      // quiz 3: 증감 연산자
+      {
+        type: "quiz",
+        content: {
+          question: "int x = 5; x++; 실행 후 x의 값은?",
+          options: ["4", "5", "6", "10"],
+          answer: 2,
+          explanation: "x++는 x에 1을 더해요! 후위 증가 연산자. x = 5 + 1 = 6이 돼요.",
+          en: {
+            question: "After int x = 5; x++;, what is the value of x?",
+            options: ["4", "5", "6", "10"],
+            explanation: "x++ adds 1 to x! Post-increment operator. x = 5 + 1 = 6."
+          }
+        }
+      },
+
+      // practice 1: 함수 작성
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "두 정수를 더해 반환하는 함수를 완성해요!",
+          guide: "반환 타입 int, 함수명 add, 매개변수 int a, int b!",
+          template: "___ add(___ a, ___ b) {\n    return a + b;\n}",
+          answer: "int",
+          blanksAnswer: ["int", "int", "int"],
+          expect: "int add(int a, int b) {\n    return a + b;\n}",
+          en: {
+            task: "Complete the function that adds two integers and returns the result!",
+            guide: "Return type int, function name add, parameters int a and int b!"
+          }
+        }
+      },
+
+      // practice 2: for 루프 카운터
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "1부터 N까지 합을 구하는 for 루프를 완성해요!",
+          guide: "i는 1부터 시작, i <= n 조건, i++ 증가!",
+          template: "int sum = 0;\nfor (int i = ___; i ___ n; i++) {\n    sum += i;\n}",
+          answer: "1",
+          blanksAnswer: ["1", "<="],
+          expect: "int sum = 0;\nfor (int i = 1; i <= n; i++) {\n    sum += i;\n}",
+          en: {
+            task: "Complete the for loop that sums from 1 to N!",
+            guide: "i starts at 1, condition i <= n, increment i++!"
+          }
+        }
+      },
+
+      // practice 3: 조건 분기 완성
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "tries가 10 이하면 '계속', 초과면 '실패'를 출력하는 코드를 완성해요!",
+          guide: "if/else 구조로 tries <= 10 조건!",
+          template: "if (tries ___ 10) {\n    cout << \"계속\" << \"\\n\";\n} ___ {\n    cout << \"실패\" << \"\\n\";\n}",
+          answer: "<=",
+          blanksAnswer: ["<=", "else"],
+          expect: "if (tries <= 10) {\n    cout << \"계속\" << \"\\n\";\n} else {\n    cout << \"실패\" << \"\\n\";\n}",
+          en: {
+            task: "Complete the code that prints '계속' if tries is 10 or less, '실패' otherwise!",
+            guide: "Use if/else structure with the condition tries <= 10!"
+          }
+        }
+      },
+
+      // errorQuiz 2: 함수 반환 타입 누락
+      {
+        type: "errorQuiz",
+        content: {
+          question: "이 코드의 문제점은?",
+          code: 'add(int a, int b) {\n    return a + b;\n}',
+          options: [
+            "반환 타입 int가 빠졌어요",
+            "매개변수 이름이 잘못됐어요",
+            "return 문을 쓰면 안 돼요",
+            "문제없어요"
+          ],
+          answer: 0,
+          explanation: "C++에서 함수 앞에 반환 타입을 반드시 써야 해요! int add(int a, int b)처럼 int를 앞에!",
+          en: {
+            question: "What is wrong with this code?",
+            options: [
+              "The return type int is missing",
+              "The parameter names are wrong",
+              "You shouldn't use a return statement",
+              "Nothing is wrong"
+            ],
+            explanation: "In C++ you must always specify the return type before the function name! Like int add(int a, int b)."
+          }
+        }
+      },
+
+      // errorQuiz 3: cin 타입 불일치
+      {
+        type: "errorQuiz",
+        content: {
+          question: "이 코드의 문제점은?",
+          code: 'string name;\ncin >> name;\nif (name > 10) {\n    cout << "큰 숫자!" << "\\n";\n}',
+          options: [
+            "string을 숫자 10과 비교하면 타입 오류예요",
+            "cin으로 string을 받을 수 없어요",
+            "if 조건식에 문자열을 쓰면 안 돼요",
+            "문제없어요"
+          ],
+          answer: 0,
+          explanation: "string을 정수 10과 > 비교하면 의도한 대로 동작하지 않아요. 숫자를 비교하려면 int로 받아야 해요!",
+          en: {
+            question: "What is wrong with this code?",
+            options: [
+              "Comparing a string to the integer 10 with > causes a type mismatch",
+              "You cannot read a string with cin",
+              "You cannot use a string in an if condition",
+              "Nothing is wrong"
+            ],
+            explanation: "Comparing a string with integer 10 using > doesn't work as intended. Use int to compare numbers!"
+          }
+        }
+      },
+
       // 보상
       {
         type: "reward",

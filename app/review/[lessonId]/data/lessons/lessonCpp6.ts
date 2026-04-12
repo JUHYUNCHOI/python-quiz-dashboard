@@ -538,6 +538,97 @@ export const lessonCpp6: LessonData = {
         }
       },
 
+      // ==================== CHAPTER 5: 조건문 예측 & 심화 연습 ====================
+      {
+        type: "chapter",
+        content: {
+          num: 5,
+          title: "조건문 예측 & 심화 연습",
+          desc: "코드를 읽고 결과를 예측하고, 더 복잡한 조건도 써봐요!"
+        }
+      },
+
+      // Predict 1: 중첩 if
+      {
+        type: "explain",
+        content: {
+          lines: ["이 코드의 출력은?"],
+          code: 'int x = 10;\nif (x > 5) {\n    if (x > 8) {\n        cout << "big" << endl;\n    } else {\n        cout << "medium" << endl;\n    }\n} else {\n    cout << "small" << endl;\n}',
+          predict: {
+            options: ["small", "medium", "big", "에러"],
+            answer: 2,
+            feedback: "x=10은 먼저 x>5(참)를 통과하고, 안쪽에서 x>8(참)도 참이라서 \"big\"이 출력돼요! 중첩 if는 바깥 조건부터 순서대로 확인해요."
+          },
+          en: {
+            lines: ["What does this code output?"],
+            predict: {
+              options: ["small", "medium", "big", "Error"],
+              feedback: "x=10 passes x>5 (true) first, then x>8 (true) inside, so \"big\" is printed! Nested if checks conditions from outer to inner."
+            }
+          }
+        }
+      },
+
+      // Predict 2: 논리 연산자 &&
+      {
+        type: "explain",
+        content: {
+          lines: ["이 코드의 출력은?"],
+          code: 'int score = 75;\nbool passed = score >= 60;\nbool perfect = score == 100;\n\nif (passed && !perfect) {\n    cout << "합격, 하지만 만점은 아님" << endl;\n} else if (!passed) {\n    cout << "불합격" << endl;\n} else {\n    cout << "만점!" << endl;\n}',
+          predict: {
+            options: ["합격, 하지만 만점은 아님", "불합격", "만점!", "에러"],
+            answer: 0,
+            feedback: "passed=true (75>=60), perfect=false (75!=100). passed && !perfect = true && true = true! 첫 번째 조건이 실행돼요."
+          },
+          en: {
+            lines: ["What does this code output?"],
+            predict: {
+              options: ["Passed, but not perfect", "Failed", "Perfect score!", "Error"],
+              feedback: "passed=true (75>=60), perfect=false (75!=100). passed && !perfect = true && true = true! The first branch runs."
+            }
+          }
+        }
+      },
+
+      // Practice (new) 1: switch로 요일 출력
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "switch문을 완성해요! day가 1이면 \"Mon\", 2이면 \"Tue\", 그 외는 \"Other\" 출력",
+          guide: "switch (day) { case 1: ... break; case 2: ... break; default: ... }",
+          template: 'int day = 2;\nswitch (___) {\n    case 1:\n        cout << "Mon" << endl;\n        break;\n    case 2:\n        cout << "Tue" << endl;\n        break;\n    ___:\n        cout << "Other" << endl;\n}',
+          blanksAnswer: ["day", "default"],
+          answer: 'int day = 2;\nswitch (day) {\n    case 1:\n        cout << "Mon" << endl;\n        break;\n    case 2:\n        cout << "Tue" << endl;\n        break;\n    default:\n        cout << "Other" << endl;\n}',
+          expect: "Tue",
+          en: {
+            task: "Complete the switch statement! Print \"Mon\" for day==1, \"Tue\" for day==2, \"Other\" for anything else",
+            guide: "switch (day) { case 1: ... break; case 2: ... break; default: ... }"
+          }
+        }
+      },
+
+      // Practice (new) 2: 처음부터 — 세 수 중 최댓값
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "처음부터 작성! a, b, c 세 정수를 입력받아 가장 큰 수를 출력해요\n(if/else if/else 사용)",
+          guide: "if (a >= b && a >= c) ... else if (b >= c) ... else ...",
+          hint: "int a, b, c;\ncin >> a >> b >> c;\nif (a >= b && a >= c) cout << a << endl;\nelse if (b >= c) cout << b << endl;\nelse cout << c << endl;",
+          template: null,
+          answer: "int a, b, c;\ncin >> a >> b >> c;\nif (a >= b && a >= c) cout << a << endl;\nelse if (b >= c) cout << b << endl;\nelse cout << c << endl;",
+          alternateAnswers: [
+            "int a,b,c;\ncin>>a>>b>>c;\nif(a>=b&&a>=c)cout<<a<<endl;\nelse if(b>=c)cout<<b<<endl;\nelse cout<<c<<endl;"
+          ],
+          expect: "9",
+          en: {
+            task: "Write from scratch! Read three integers a, b, c and print the largest\n(use if/else if/else)",
+            guide: "if (a >= b && a >= c) ... else if (b >= c) ... else ..."
+          }
+        }
+      },
+
       // done
       {
         type: "done",

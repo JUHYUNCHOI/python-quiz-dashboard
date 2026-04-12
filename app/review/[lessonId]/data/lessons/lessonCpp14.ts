@@ -324,7 +324,7 @@ export const lessonCpp14: LessonData = {
           guide: "struct 이름 { 멤버들; }; 형태로 처음부터!",
           context: "// 아래에 Point struct를 선언하세요\n// 그러면 main()에서 Point p = {3, 7}; 처럼 쓸 수 있어요",
           template: null,
-          answer: null,
+          answer: "struct Point {\n    int x;\n    int y;\n};",
           expect: "struct Point {\n    int x;\n    int y;\n};",
           en: {
             task: "Declare a Point struct with int x and int y!",

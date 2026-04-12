@@ -812,6 +812,82 @@ export const lesson2: LessonData = {
         }
       },
 
+      // 예측 퀴즈 1: type() 결과
+      {
+        type: "explain",
+        content: {
+          lines: ["결과를 예측해봐!"],
+          code: "x = 3.14\nprint(type(x))",
+          predict: {
+            options: ["<class 'int'>", "<class 'float'>", "<class 'str'>", "<class 'bool'>"],
+            answer: 1,
+            feedback: "3.14는 소수점이 있으니까 실수(float)야! type(3.14)는 <class 'float'>을 출력해."
+          },
+          en: {
+            lines: ["Predict the output!"],
+            predict: {
+              options: ["<class 'int'>", "<class 'float'>", "<class 'str'>", "<class 'bool'>"],
+              feedback: "3.14 has a decimal point so it's a float! type(3.14) prints <class 'float'>."
+            }
+          }
+        }
+      },
+
+      // 예측 퀴즈 2: 불리언 표현식 결과
+      {
+        type: "explain",
+        content: {
+          lines: ["이 코드의 출력은?"],
+          code: "a = 10\nb = 3\nprint(a > b)\nprint(type(a > b))",
+          predict: {
+            options: ["True\n<class 'int'>", "True\n<class 'bool'>", "False\n<class 'bool'>", "에러"],
+            answer: 1,
+            feedback: "10 > 3은 True(참)이고, 비교식의 결과는 항상 bool 타입이야!"
+          },
+          en: {
+            lines: ["What does this code output?"],
+            predict: {
+              options: ["True\n<class 'int'>", "True\n<class 'bool'>", "False\n<class 'bool'>", "Error"],
+              feedback: "10 > 3 is True, and the result of a comparison is always bool type!"
+            }
+          }
+        }
+      },
+
+      // 연습 1: int와 float 차이 확인
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "type(7)과 type(7.0)을 각각 출력해봐",
+          guide: "정수와 실수 타입이 다르다는 것을 확인!",
+          template: null,
+          answer: "print(type(7))\nprint(type(7.0))",
+          expect: "<class 'int'>\n<class 'float'>",
+          en: {
+            task: "Print type(7) and type(7.0) separately",
+            guide: "Confirm that int and float are different types!"
+          }
+        }
+      },
+
+      // 연습 2: 불리언 타입 확인
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "이렇게 나오게 해봐 ↓\n<class 'bool'>\n<class 'bool'>",
+          guide: "True와 False 각각의 타입을 출력해봐",
+          template: null,
+          answer: "print(type(True))\nprint(type(False))",
+          expect: "<class 'bool'>\n<class 'bool'>",
+          en: {
+            task: "Make it print like this ↓\n<class 'bool'>\n<class 'bool'>",
+            guide: "Print the type of True and False separately"
+          }
+        }
+      },
+
       // 최종 요약
       {
         type: "summary",

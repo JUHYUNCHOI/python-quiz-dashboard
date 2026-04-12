@@ -82,8 +82,7 @@ export const lesson19: LessonData = {
         message: "리스트 복습! 리스트와 비교해봐요!",
         task: "리스트 [10, 20, 30]에서 두 번째 값을 출력하세요",
         template: "nums = [10, 20, 30]\nprint(nums[___])",
-        blanksAnswer: ["1"],
-        answer: "nums = [10, 20, 30]\nprint(nums[1])",
+        answer: "1",
         expect: "20",
         en: {
           message: "List review! Compare with tuples!",
@@ -267,8 +266,7 @@ export const lesson19: LessonData = {
         message: "리스트 복습! 리스트에서 최댓값 찾기",
         task: "리스트 [4, 9, 2, 7]에서 max()로 최댓값을 출력하세요",
         template: "nums = [4, 9, 2, 7]\nprint(___)",
-        blanksAnswer: ["max(nums)"],
-        answer: "nums = [4, 9, 2, 7]\nprint(max(nums))",
+        answer: "max(nums)",
         expect: "9",
         en: {
           message: "List review! Find the maximum value",

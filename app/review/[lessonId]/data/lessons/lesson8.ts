@@ -531,6 +531,174 @@ export const lesson8: LessonData = {
       }
     },
 
+    // ==================== 추가 예측 & 심화 ====================
+
+    // predict 1: 중괄호 없이 변수명 그대로
+    {
+      type: "explain",
+      content: {
+        lines: ["코드 결과를 예측해봐!"],
+        code: "name = 'Alice'\nprint(f'Hello, name!')",
+        predict: {
+          options: ["Hello, Alice!", "Hello, name!", "에러", "Hello, {name}!"],
+          answer: 1,
+          feedback: "{}로 감싸지 않으면 'name'이 변수가 아닌 글자 그대로 출력돼! f'Hello, {name}!'이어야 해."
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["Hello, Alice!", "Hello, name!", "Error", "Hello, {name}!"],
+            feedback: "Without {}, 'name' is treated as literal text, not a variable! Should be f'Hello, {name}!'"
+          }
+        }
+      }
+    },
+
+    // predict 2: 소수점 반올림
+    {
+      type: "explain",
+      content: {
+        lines: ["코드 결과를 예측해봐!"],
+        code: "val = 2.555\nprint(f'{val:.2f}')",
+        predict: {
+          options: ["2.55", "2.56", "2.5", "에러"],
+          answer: 1,
+          feedback: ":.2f는 소수점 2자리로 반올림해! 2.555에서 세 번째 자리가 5이므로 → 2.56"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["2.55", "2.56", "2.5", "Error"],
+            feedback: ":.2f rounds to 2 decimal places! The 3rd decimal of 2.555 is 5, so → 2.56"
+          }
+        }
+      }
+    },
+
+    // predict 3: f-string 안에서 메서드
+    {
+      type: "explain",
+      content: {
+        lines: ["코드 결과를 예측해봐!"],
+        code: "lang = 'python'\nprint(f'언어: {lang.upper()}')",
+        predict: {
+          options: ["언어: python", "언어: PYTHON", "언어: {lang.upper()}", "에러"],
+          answer: 1,
+          feedback: "{}안에서 .upper() 메서드가 실행돼! 'python'.upper() = 'PYTHON' → '언어: PYTHON'"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["언어: python", "언어: PYTHON", "언어: {lang.upper()}", "Error"],
+            feedback: ".upper() runs inside {}! 'python'.upper() = 'PYTHON' → '언어: PYTHON'"
+          }
+        }
+      }
+    },
+
+    // predict 4: 0 채우기와 길이
+    {
+      type: "explain",
+      content: {
+        lines: ["코드 결과를 예측해봐!"],
+        code: "num = 3\nprint(f'{num:05d}')",
+        predict: {
+          options: ["3", "00003", "3000", "에러"],
+          answer: 1,
+          feedback: ":05d는 5자리! 빈 자리를 0으로 채워. 3은 한 자리이므로 앞에 0이 4개 → '00003'"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["3", "00003", "3000", "Error"],
+            feedback: ":05d means 5 digits! Fill empty spots with 0. 3 is 1 digit, so 4 zeros in front → '00003'"
+          }
+        }
+      }
+    },
+
+    // errorQuiz 1: f 없이 사용
+    {
+      type: "errorQuiz",
+      content: {
+        question: "이 코드의 문제는?",
+        code: "score = 90\nprint('{score}점 받았어!')",
+        options: [
+          "문자열 앞에 f가 없어서 {score}가 변수 값이 아닌 글자 그대로 출력돼",
+          "변수 이름 score가 잘못됨",
+          "print() 사용법 오류"
+        ],
+        answer: 0,
+        explanation: "f-string을 쓰려면 따옴표 앞에 f를 붙여야 해! f'{score}점 받았어!'처럼.",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "Missing f before the string — {score} prints as literal text, not the variable's value",
+            "Variable name score is wrong",
+            "print() usage error"
+          ],
+          explanation: "You need f before the quotes to use f-string! Should be f'{score}점 받았어!'"
+        }
+      }
+    },
+
+    // errorQuiz 2: 계산식 자리 혼동
+    {
+      type: "errorQuiz",
+      content: {
+        question: "원하는 출력이 '합계: 15'인데 다르게 나와. 문제는?",
+        code: "a = 10\nb = 5\nprint(f'합계: a + b')",
+        options: [
+          "a + b를 {}로 감싸야 해 — f'합계: {a + b}'",
+          "변수 a, b는 print 안에서 쓸 수 없어",
+          "더하기 연산은 f-string에서 안 돼"
+        ],
+        answer: 0,
+        explanation: "f-string에서 변수나 식은 반드시 {}로 감싸야 해! f'합계: {a + b}'처럼 써야 15가 출력돼.",
+        en: {
+          question: "The desired output is '합계: 15' but it prints differently. What's wrong?",
+          options: [
+            "a + b must be wrapped in {} — f'합계: {a + b}'",
+            "Variables a, b can't be used inside print",
+            "Addition doesn't work in f-strings"
+          ],
+          explanation: "In f-strings, variables and expressions must be inside {}! Write f'합계: {a + b}' to get 15."
+        }
+      }
+    },
+
+    // practice 1: 여러 변수 + 소수점 조합
+    {
+      type: "practice",
+      content: {
+        task: "이렇게 나오게 해봐 ↓\n민수의 평균: 88.50점",
+        guide: "name = '민수', avg = 88.5 변수를 만들고 f-string으로 출력해봐 (소수점 2자리)",
+        template: "name = '민수'\navg = 88.5\nprint(___)",
+        answer: "f'{name}의 평균: {avg:.2f}점'",
+        expect: "민수의 평균: 88.50점",
+        en: {
+          task: "Make it print like this ↓\n민수의 평균: 88.50점",
+          guide: "Create name = '민수', avg = 88.5 and print with f-string (2 decimal places)"
+        }
+      }
+    },
+
+    // practice 2: 0 채우기 + 메서드 혼합
+    {
+      type: "practice",
+      content: {
+        task: "이렇게 나오게 해봐 ↓\n[007] JAMES",
+        guide: "num = 7, agent = 'james' 로 변수 만들고\n번호는 3자리 0 채우기, 이름은 대문자로!",
+        template: "num = 7\nagent = 'james'\nprint(___)",
+        answer: "f'[{num:03d}] {agent.upper()}'",
+        expect: "[007] JAMES",
+        en: {
+          task: "Make it print like this ↓\n[007] JAMES",
+          guide: "Create num = 7, agent = 'james'. Format number as 3-digit zero-padded, name as uppercase!"
+        }
+      }
+    },
+
     // 최종 요약
     {
       type: "summary",

@@ -117,8 +117,7 @@ print(f"남은 덱: {list(d)}")`,
         message: "🔄 큐 복습!",
         task: "큐에 'a', 'b'를 넣고 popleft로 먼저 들어간 걸 출력하세요",
         template: "from collections import deque\nq = deque()\nq.append('a')\nq.append('b')\nprint(q.___())",
-        blanksAnswer: ["popleft"],
-        answer: "from collections import deque\nq = deque()\nq.append('a')\nq.append('b')\nprint(q.popleft())",
+        answer: "popleft",
         expect: "a",
         en: {
           message: "🔄 Queue review!",
@@ -209,8 +208,7 @@ print("왼쪽 1칸:", list(d))`,
         guide: "appendleft()를 사용!",
         hint: "d.appendleft(값)으로 왼쪽에 추가!",
         template: "from collections import deque\n\nd = deque([1, 2, 3])\nd.___(0)\nprint(list(d))",
-        blanksAnswer: ["appendleft"],
-        answer: "from collections import deque\n\nd = deque([1, 2, 3])\nd.appendleft(0)\nprint(list(d))",
+        answer: "appendleft",
         expect: "[0, 1, 2, 3]",
         en: {
           task: "Add 0 to the left side of the deque",
@@ -282,8 +280,7 @@ print("왼쪽 1칸:", list(d))`,
         message: "🔄 rotate 복습!",
         task: "덱을 왼쪽으로 2칸 회전시키세요",
         template: "from collections import deque\nd = deque([1, 2, 3, 4, 5])\nd.rotate(___)\nprint(list(d))",
-        blanksAnswer: ["-2"],
-        answer: "from collections import deque\nd = deque([1, 2, 3, 4, 5])\nd.rotate(-2)\nprint(list(d))",
+        answer: "-2",
         expect: "[3, 4, 5, 1, 2]",
         en: {
           message: "🔄 rotate review!",
@@ -363,8 +360,7 @@ print("deque 하나면 다 됩니다!")`,
         guide: "append와 pop 사용!",
         hint: "스택 = append + pop (LIFO)",
         template: "from collections import deque\n\nstack = deque()\nstack.append('a')\nstack.append('b')\nstack.append('c')\nprint(stack.___())",
-        blanksAnswer: ["pop"],
-        answer: "from collections import deque\n\nstack = deque()\nstack.append('a')\nstack.append('b')\nstack.append('c')\nprint(stack.pop())",
+        answer: "pop",
         expect: "c",
         en: {
           task: "Use deque as a stack to push 'a', 'b', 'c' and then pop",
@@ -388,7 +384,173 @@ print(list(d))`,
           "list() 변환이 불가능"
         ],
         answer: 1,
-        explanation: "rotate()의 기본값은 1이에요! 인자 없이 호출하면 오른쪽으로 1칸 회전합니다."
+        explanation: "rotate()의 기본값은 1이에요! 인자 없이 호출하면 오른쪽으로 1칸 회전합니다.",
+        en: {
+          question: "What is the problem with this code?",
+          options: [
+            "rotate() without an argument raises an error",
+            "No problem (default rotates right by 1)",
+            "deque has no rotate method",
+            "list() conversion is impossible"
+          ],
+          explanation: "rotate() defaults to 1! Calling it without arguments rotates right by 1 step."
+        }
+      }
+    },
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: `from collections import deque
+
+d = deque([1, 2, 3])
+d.appendleft(0)
+d.appendleft(-1)
+print(list(d))`,
+        predict: {
+          options: ["[1, 2, 3, 0, -1]", "[-1, 0, 1, 2, 3]", "[0, -1, 1, 2, 3]", "[1, 2, 3]"],
+          answer: 1,
+          feedback: "appendleft는 왼쪽에 추가! 0 추가 → [0,1,2,3], -1 추가 → [-1,0,1,2,3]"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["[1, 2, 3, 0, -1]", "[-1, 0, 1, 2, 3]", "[0, -1, 1, 2, 3]", "[1, 2, 3]"],
+            feedback: "appendleft adds to the left! After 0: [0,1,2,3], after -1: [-1,0,1,2,3]"
+          }
+        }
+      }
+    },
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: `from collections import deque
+
+d = deque([10, 20, 30, 40, 50])
+d.rotate(-3)
+print(list(d))`,
+        predict: {
+          options: ["[30, 40, 50, 10, 20]", "[10, 20, 30, 40, 50]", "[40, 50, 10, 20, 30]", "[50, 10, 20, 30, 40]"],
+          answer: 2,
+          feedback: "왼쪽으로 3칸 회전! 앞의 10, 20, 30이 뒤로 이동 → [40, 50, 10, 20, 30]!"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["[30, 40, 50, 10, 20]", "[10, 20, 30, 40, 50]", "[40, 50, 10, 20, 30]", "[50, 10, 20, 30, 40]"],
+            feedback: "Rotate left by 3! 10, 20, 30 move to the back → [40, 50, 10, 20, 30]"
+          }
+        }
+      }
+    },
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: `from collections import deque
+
+d = deque([5, 6, 7])
+d.pop()
+d.popleft()
+d.appendleft(4)
+print(list(d))`,
+        predict: {
+          options: ["[4, 6]", "[4, 5]", "[6, 4]", "[5, 6]"],
+          answer: 0,
+          feedback: "pop() → 7 제거 → [5,6], popleft() → 5 제거 → [6], appendleft(4) → [4, 6]!"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["[4, 6]", "[4, 5]", "[6, 4]", "[5, 6]"],
+            feedback: "pop() removes 7 → [5,6], popleft() removes 5 → [6], appendleft(4) → [4, 6]!"
+          }
+        }
+      }
+    },
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: `from collections import deque
+
+d = deque(range(5))
+d.rotate(1)
+d.rotate(1)
+print(list(d))`,
+        predict: {
+          options: ["[3, 4, 0, 1, 2]", "[2, 3, 4, 0, 1]", "[0, 1, 2, 3, 4]", "[4, 0, 1, 2, 3]"],
+          answer: 0,
+          feedback: "range(5) → [0,1,2,3,4], rotate(1) → [4,0,1,2,3], rotate(1) 다시 → [3,4,0,1,2]!"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["[3, 4, 0, 1, 2]", "[2, 3, 4, 0, 1]", "[0, 1, 2, 3, 4]", "[4, 0, 1, 2, 3]"],
+            feedback: "range(5) → [0,1,2,3,4], rotate(1) → [4,0,1,2,3], rotate(1) again → [3,4,0,1,2]!"
+          }
+        }
+      }
+    },
+    {
+      type: "errorQuiz",
+      content: {
+        question: "이 코드의 문제점은?",
+        code: `from collections import deque
+
+d = deque()
+d.popleft()`,
+        options: [
+          "빈 deque에서 popleft()하면 IndexError 발생",
+          "deque는 먼저 리스트로 만들어야 함",
+          "popleft 대신 pop(0)을 써야 함",
+          "문제없음"
+        ],
+        answer: 0,
+        explanation: "빈 deque에서 popleft()나 pop()을 호출하면 IndexError가 발생해요! 항상 비어있는지 확인 후 사용하세요.",
+        en: {
+          question: "What is the problem with this code?",
+          options: [
+            "popleft() on an empty deque raises IndexError",
+            "deque must be created from a list first",
+            "Should use pop(0) instead of popleft",
+            "No problem"
+          ],
+          explanation: "Calling popleft() or pop() on an empty deque raises IndexError! Always check if it's empty first."
+        }
+      }
+    },
+    {
+      type: "quiz",
+      content: {
+        question: "deque에서 중간 요소(인덱스로 접근)의 시간 복잡도는?",
+        options: ["O(1) - 리스트처럼 빠름", "O(n) - 리스트보다 느림", "O(log n) - 이진 탐색", "O(n²) - 매우 느림"],
+        answer: 1,
+        explanation: "deque는 양쪽 끝은 O(1)이지만, 중간 인덱스 접근은 O(n)으로 리스트보다 느려요!",
+        en: {
+          question: "What is the time complexity of accessing a middle element in deque?",
+          options: ["O(1) - fast like a list", "O(n) - slower than a list", "O(log n) - binary search", "O(n²) - very slow"],
+          explanation: "deque is O(1) at both ends, but middle index access is O(n) — slower than a list!"
+        }
+      }
+    },
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "deque를 이용해 '회전 큐'를 구현하세요: [1,2,3,4,5]를 왼쪽으로 2칸 회전 후 출력",
+        guide: "rotate(-2)를 사용!",
+        hint: "음수 인자는 왼쪽 회전!",
+        template: "from collections import deque\n\nd = deque([1, 2, 3, 4, 5])\nd.___(___)\nprint(list(d))",
+        blanksAnswer: ["rotate", "-2"],
+        answer: "from collections import deque\n\nd = deque([1, 2, 3, 4, 5])\nd.rotate(-2)\nprint(list(d))",
+        expect: "[3, 4, 5, 1, 2]",
+        en: {
+          task: "Use deque to implement a 'rotating queue': rotate [1,2,3,4,5] left by 2 steps and print",
+          guide: "Use rotate(-2)!",
+          hint: "Negative argument rotates left!"
+        }
       }
     },
     {

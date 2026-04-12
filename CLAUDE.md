@@ -26,6 +26,59 @@
 
 ---
 
+## ⚠️ 복습 레슨 파일 작성 규칙 — practice/interleaving answer 필드
+
+`app/review/[lessonId]/data/lessons/` 파일에서 practice/interleaving 스텝 작성 시 **반드시** 다음 규칙을 지켜야 한다.
+
+### isAnswerCorrect() 동작 방식
+```
+// 학생이 빈칸에 입력한 텍스트 vs content.answer 비교
+normalize(content.answer) === normalize(student_input)
+// blanksAnswer는 length > 1 일 때만 join하여 비교 (단일 항목은 사용 안 됨!)
+```
+
+### ✅ 올바른 패턴
+
+**단일 빈칸 (template에 ___ 1개):**
+```typescript
+template: "for (int i = 1; i <= 10; i++) {\n    sum ___ i;\n}",
+answer: "+=",           // ← 빈칸에 들어갈 텍스트만!
+expect: "55",           // ← 정답 후 보여줄 출력/코드 (비교에 사용 안 됨)
+```
+
+**복수 빈칸 (template에 ___ 2개 이상):**
+```typescript
+template: "for (int i = ___; i <= ___; i++)",
+blanksAnswer: ["1", "5"],                    // ← 각 빈칸 값
+answer: "for (int i = 1; i <= 5; i++)",     // ← 전체 코드 (blanksAnswer join으로 비교됨)
+expect: "1\n2\n3\n4\n5",
+```
+
+**전체 코드 작성 (template: null):**
+```typescript
+template: null,
+answer: "int n, sum = 0;\ncin >> n;\nfor...",  // ← 전체 코드 (직접 비교)
+alternateAnswers: ["int n;\ncin>>n;..."],
+expect: "15",
+```
+
+### ❌ 절대 하면 안 되는 패턴 (54개 버그의 원인)
+```typescript
+// 단일 빈칸인데 answer가 전체 코드 → 학생이 올바른 답 입력해도 오답 처리됨!
+template: "sum ___ i;",
+blanksAnswer: ["+="],    // 단일 항목 → 비교에 사용 안 됨
+answer: "int sum = 0;\nfor (int i = 1; i <= 10; i++) {\n    sum += i;\n}\ncout << sum << endl;",  // ← 버그!
+```
+
+### 검증 명령어
+```bash
+npm run check-review   # 버그 있으면 즉시 감지
+```
+
+복습 레슨 파일 수정/추가 후 반드시 실행할 것.
+
+---
+
 ## ⚠️ Supabase DB 알려진 문제 & 해결법
 
 ### lesson_progress variant null vs "" 충돌

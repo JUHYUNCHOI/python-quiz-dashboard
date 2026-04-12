@@ -554,8 +554,8 @@ export const lessonCpp7: LessonData = {
           task: "1부터 10까지의 합을 구해서 출력해요 (sum 변수 사용)",
           guide: "int sum = 0; for(...) sum += i;",
           template: "int sum = 0;\nfor (int i = 1; i <= 10; i++) {\n    sum ___ i;\n}\ncout << sum << endl;",
-          blanksAnswer: ["+="],
-          answer: "int sum = 0;\nfor (int i = 1; i <= 10; i++) {\n    sum += i;\n}\ncout << sum << endl;",
+          answer: "+=",
+          alternateAnswers: ["+="],
           expect: "55",
           en: {
             task: "Calculate and print the sum from 1 to 10 (use a sum variable)",

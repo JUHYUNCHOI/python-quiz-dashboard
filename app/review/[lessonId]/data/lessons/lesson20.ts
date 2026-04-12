@@ -60,8 +60,7 @@ export const lesson20: LessonData = {
         message: "리스트 복습! 인덱스로 접근하기",
         task: "리스트 ['a', 'b', 'c']에서 마지막 요소를 출력하세요",
         template: "letters = ['a', 'b', 'c']\nprint(letters[___])",
-        blanksAnswer: ["-1"],
-        answer: "letters = ['a', 'b', 'c']\nprint(letters[-1])",
+        answer: "-1",
         expect: "c",
         en: {
           message: "List review! Access by index",
@@ -77,8 +76,7 @@ export const lesson20: LessonData = {
         guide: "{'키': 값} 형태로!",
         hint: "prices = {'사과': 1000, '바나나': 500}",
         template: "prices = {'사과': 1000, '바나나': 500}\nprint(prices[___])",
-        blanksAnswer: ["'사과'"],
-        answer: "prices = {'사과': 1000, '바나나': 500}\nprint(prices['사과'])",
+        answer: "'사과'",
         expect: "1000",
         en: {
           task: "Create a fruit price dictionary and print the price of 'apple'",
@@ -188,8 +186,7 @@ export const lesson20: LessonData = {
         message: "튜플 복습! 튜플은 수정이 되나요?",
         task: "튜플 (1, 2, 3)의 길이를 출력하세요 (수정은 안 되지만 len()은 돼요!)",
         template: "t = (1, 2, 3)\nprint(___(t))",
-        blanksAnswer: ["len"],
-        answer: "t = (1, 2, 3)\nprint(len(t))",
+        answer: "len",
         expect: "3",
         en: {
           message: "Tuple review! Can tuples be modified?",
@@ -351,8 +348,7 @@ export const lesson20: LessonData = {
         guide: "values()를 for문에 넣어요!",
         hint: "for v in ages.values(): print(v)",
         template: "ages = {'민수': 15, '영희': 14, '철수': 16}\nfor age in ages.___():\n    print(age)",
-        blanksAnswer: ["values"],
-        answer: "ages = {'민수': 15, '영희': 14, '철수': 16}\nfor age in ages.values():\n    print(age)",
+        answer: "values",
         expect: "15\n14\n16",
         en: {
           task: "Iterate over all values in the dictionary and print them",
@@ -489,8 +485,7 @@ export const lesson20: LessonData = {
         message: "리스트 복습! sum()으로 합계 구하기",
         task: "리스트 [10, 20, 30]의 합계를 출력하세요",
         template: "nums = [10, 20, 30]\nprint(___)",
-        blanksAnswer: ["sum(nums)"],
-        answer: "nums = [10, 20, 30]\nprint(sum(nums))",
+        answer: "sum(nums)",
         expect: "60",
         en: {
           message: "List review! Sum with sum()",

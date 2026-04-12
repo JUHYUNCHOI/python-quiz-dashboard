@@ -58,8 +58,7 @@ export const lesson38: LessonData = {
         guide: "파일에 쓰려면 어떤 모드?",
         hint: "write의 첫 글자!",
         template: "with open('player.txt', '___') as f:\n    f.write('홍길동\\n')\n    f.write('100')\nprint('저장 완료!')",
-        blanksAnswer: ["w"],
-        answer: "with open('player.txt', 'w') as f:\n    f.write('홍길동\\n')\n    f.write('100')\nprint('저장 완료!')",
+        answer: "w",
         en: {
           task: "Fill in the blank with the right letter!",
           guide: "What mode do you use to write to a file?",

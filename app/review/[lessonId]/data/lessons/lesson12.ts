@@ -524,6 +524,263 @@ export const lesson12: LessonData = {
       }
     },
 
+    // ==================== CHAPTER 7: 결과 예측 ====================
+    {
+      type: "chapter",
+      content: {
+        num: 7,
+        title: "결과 예측 훈련",
+        desc: "코드를 보고 출력값을 맞혀봐!"
+      }
+    },
+
+    // predict 1: and — 둘 다 True
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: "age = 20\nif age >= 18 and age < 65:\n    print('성인')\nelse:\n    print('아님')",
+        predict: {
+          options: ["성인", "아님", "에러"],
+          answer: 0,
+          feedback: "20 >= 18 (True) and 20 < 65 (True) → 둘 다 True이면 and 결과도 True! '성인' 출력"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["성인", "아님", "Error"],
+            feedback: "20 >= 18 (True) and 20 < 65 (True) → both True means and is True! prints '성인'"
+          }
+        }
+      }
+    },
+
+    // predict 2: and — 하나가 False
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: "score = 55\npassed = True\n\nif score >= 60 and passed:\n    print('합격')\nelse:\n    print('불합격')",
+        predict: {
+          options: ["합격", "불합격", "에러"],
+          answer: 1,
+          feedback: "score >= 60은 55 >= 60이므로 False! and는 하나라도 False면 전체 False → '불합격' 출력"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["합격", "불합격", "Error"],
+            feedback: "score >= 60 is 55 >= 60 which is False! and is False if even one is False → prints '불합격'"
+          }
+        }
+      }
+    },
+
+    // predict 3: or — 하나만 True
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: "is_member = False\nhas_coupon = True\n\nif is_member or has_coupon:\n    print('할인 적용!')\nelse:\n    print('정가 결제')",
+        predict: {
+          options: ["할인 적용!", "정가 결제", "에러"],
+          answer: 0,
+          feedback: "is_member는 False지만 has_coupon이 True! or는 하나만 True여도 True → '할인 적용!' 출력"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["할인 적용!", "정가 결제", "Error"],
+            feedback: "is_member is False but has_coupon is True! or is True if even one is True → prints '할인 적용!'"
+          }
+        }
+      }
+    },
+
+    // predict 4: or — 둘 다 False
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: "sunny = False\nwarm = False\n\nif sunny or warm:\n    print('밖에 나가자')\nelse:\n    print('집에 있자')",
+        predict: {
+          options: ["밖에 나가자", "집에 있자", "에러"],
+          answer: 1,
+          feedback: "sunny도 False, warm도 False! or는 둘 다 False일 때만 False → '집에 있자' 출력"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["밖에 나가자", "집에 있자", "Error"],
+            feedback: "sunny is False and warm is False! or is False only when both are False → prints '집에 있자'"
+          }
+        }
+      }
+    },
+
+    // predict 5: not — 불리언 반전
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: "game_over = True\n\nif not game_over:\n    print('게임 계속!')\nelse:\n    print('게임 종료')",
+        predict: {
+          options: ["게임 계속!", "게임 종료", "에러"],
+          answer: 1,
+          feedback: "game_over가 True이므로 not True = False! if 조건이 False → else 블록 실행 → '게임 종료' 출력"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["게임 계속!", "게임 종료", "Error"],
+            feedback: "game_over is True so not True = False! if condition is False → else block runs → prints '게임 종료'"
+          }
+        }
+      }
+    },
+
+    // predict 6: and + or 복합
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐! (조금 어려워 😎)"],
+        code: "vip = False\npoints = 500\n\nif vip or points >= 300:\n    print('특별 혜택!')\nelse:\n    print('일반 회원')",
+        predict: {
+          options: ["특별 혜택!", "일반 회원", "에러"],
+          answer: 0,
+          feedback: "vip는 False지만 points >= 300은 500 >= 300이므로 True! False or True = True → '특별 혜택!' 출력"
+        },
+        en: {
+          lines: ["Predict the output! (a bit tricky 😎)"],
+          predict: {
+            options: ["특별 혜택!", "일반 회원", "Error"],
+            feedback: "vip is False but points >= 300 is 500 >= 300 which is True! False or True = True → prints '특별 혜택!'"
+          }
+        }
+      }
+    },
+
+    // ==================== CHAPTER 8: 오류 찾기 ====================
+    {
+      type: "chapter",
+      content: {
+        num: 8,
+        title: "오류 찾기",
+        desc: "and/or/not 흔한 실수를 잡아봐!"
+      }
+    },
+
+    // errorQuiz 1: and에서 변수 생략
+    {
+      type: "errorQuiz",
+      content: {
+        question: "이 코드의 문제점은?",
+        code: "x = 5\nif x > 0 and < 10:\n    print('범위 안')",
+        options: [
+          "x > 0 and x < 10 으로 써야 해",
+          "and 대신 or를 써야 해",
+          "print 들여쓰기 문제"
+        ],
+        answer: 0,
+        explanation: "Python에서는 각 조건에 변수를 명시해야 해! and 뒤에도 x를 써서 x > 0 and x < 10 처럼 작성해야 돼.",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "Must write x > 0 and x < 10",
+            "Should use or instead of and",
+            "Print indentation problem"
+          ],
+          explanation: "In Python, each condition must include the variable! After and, you must also write x: x > 0 and x < 10."
+        }
+      }
+    },
+
+    // errorQuiz 2: not의 위치 실수
+    {
+      type: "errorQuiz",
+      content: {
+        question: "의도: 로그인 안 했거나 관리자가 아니면 '접근 거부'. 코드의 문제점은?",
+        code: "logged_in = True\nis_admin = False\n\nif not logged_in or is_admin:\n    print('접근 거부')",
+        options: [
+          "not (logged_in or is_admin) 으로 묶어야 의도대로 돼",
+          "or 대신 and를 써야 해",
+          "변수 이름이 너무 길어서 에러"
+        ],
+        answer: 0,
+        explanation: "not logged_in or is_admin 은 (not logged_in) or is_admin 로 계산돼. 의도대로 하려면 not (logged_in or is_admin) 으로 괄호로 묶어야 해!",
+        en: {
+          question: "Intent: deny access if not logged in OR not admin. What's wrong?",
+          options: [
+            "Should wrap as not (logged_in or is_admin) to match intent",
+            "Should use and instead of or",
+            "Variable names are too long"
+          ],
+          explanation: "not logged_in or is_admin evaluates as (not logged_in) or is_admin. To match intent, wrap: not (logged_in or is_admin)!"
+        }
+      }
+    },
+
+    // ==================== CHAPTER 9: 추가 연습 ====================
+    {
+      type: "chapter",
+      content: {
+        num: 9,
+        title: "추가 연습",
+        desc: "논리 연산자 완전 정복!"
+      }
+    },
+
+    // practice 6: 범위 확인 (1~100)
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "n = 75 로 변수 만들고,\n1 이상 100 이하면 '유효한 점수' 출력해봐\n(and로 두 조건 연결!)",
+        guide: "if n >= 1 and n <= 100:",
+        template: null,
+        answer: "n = 75\nif n >= 1 and n <= 100:\n    print('유효한 점수')\nelse:\n    print('범위 초과')",
+        expect: "유효한 점수",
+        en: {
+          task: "Create variable n = 75,\nif 1 or above and 100 or below print '유효한 점수'\n(connect two conditions with and!)",
+          guide: "if n >= 1 and n <= 100:"
+        }
+      }
+    },
+
+    // practice 7: not equal + or 조합
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "answer = 'yes' 로 변수 만들고,\n'yes' 또는 'y' 이면 '확인됐어요!' 출력해봐",
+        guide: "if answer == 'yes' or answer == 'y':",
+        template: null,
+        answer: "answer = 'yes'\nif answer == 'yes' or answer == 'y':\n    print('확인됐어요!')\nelse:\n    print('취소됐어요')",
+        expect: "확인됐어요!",
+        en: {
+          task: "Create variable answer = 'yes',\nif 'yes' or 'y' print '확인됐어요!'",
+          guide: "if answer == 'yes' or answer == 'y':"
+        }
+      }
+    },
+
+    // practice 8: not 활용
+    {
+      type: "practice",
+      content: {
+        level: 3,
+        task: "name = '' 로 빈 문자열 변수 만들고,\nname이 비어있지 않으면 (not으로 확인) '안녕, {name}!' 출력해봐\n비어있으면 '이름을 입력해주세요' 출력",
+        guide: "if not name: 는 이름이 비어있을 때 True야!",
+        template: null,
+        answer: "name = ''\nif not name:\n    print('이름을 입력해주세요')\nelse:\n    print(f'안녕, {name}!')",
+        expect: "이름을 입력해주세요",
+        en: {
+          task: "Create variable name = '' (empty string),\nif name is NOT empty (check with not) print '안녕, {name}!'\nif empty print '이름을 입력해주세요'",
+          guide: "if not name: is True when name is empty!"
+        }
+      }
+    },
+
     // 최종 요약
     {
       type: "summary",

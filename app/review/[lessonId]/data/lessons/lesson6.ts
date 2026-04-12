@@ -543,6 +543,174 @@ export const lesson6: LessonData = {
         }
       },
 
+      // ==================== 추가 예측 & 심화 ====================
+
+      // predict 1: strip() 체이닝
+      {
+        type: "explain",
+        content: {
+          lines: ["코드 결과를 예측해봐!"],
+          code: "text = '  Python  '\nprint(text.strip().lower())",
+          predict: {
+            options: ["  Python  ", "python", "PYTHON", "에러"],
+            answer: 1,
+            feedback: "strip()으로 공백 제거 후 lower()로 소문자 변환! '  Python  ' → 'Python' → 'python'"
+          },
+          en: {
+            lines: ["Predict the output!"],
+            predict: {
+              options: ["  Python  ", "python", "PYTHON", "Error"],
+              feedback: "strip() removes spaces, then lower() converts to lowercase! '  Python  ' → 'Python' → 'python'"
+            }
+          }
+        }
+      },
+
+      // predict 2: replace() 여러 번
+      {
+        type: "explain",
+        content: {
+          lines: ["코드 결과를 예측해봐!"],
+          code: "s = 'aabbcc'\nprint(s.replace('b', 'X'))",
+          predict: {
+            options: ["aaXXcc", "aaXcc", "XXbbcc", "에러"],
+            answer: 0,
+            feedback: "replace()는 해당 문자 모두를 바꿔! 'b'가 2개이므로 둘 다 'X'로 → 'aaXXcc'"
+          },
+          en: {
+            lines: ["Predict the output!"],
+            predict: {
+              options: ["aaXXcc", "aaXcc", "XXbbcc", "Error"],
+              feedback: "replace() changes ALL occurrences! Both 'b's become 'X' → 'aaXXcc'"
+            }
+          }
+        }
+      },
+
+      // predict 3: find() 없는 문자
+      {
+        type: "explain",
+        content: {
+          lines: ["코드 결과를 예측해봐!"],
+          code: "word = 'Hello'\nprint(word.find('z'))",
+          predict: {
+            options: ["0", "5", "-1", "에러"],
+            answer: 2,
+            feedback: "find()는 찾는 문자가 없으면 -1을 반환해! 'z'는 'Hello'에 없으므로 -1"
+          },
+          en: {
+            lines: ["Predict the output!"],
+            predict: {
+              options: ["0", "5", "-1", "Error"],
+              feedback: "find() returns -1 when the character is not found! 'z' is not in 'Hello' → -1"
+            }
+          }
+        }
+      },
+
+      // predict 4: count()
+      {
+        type: "explain",
+        content: {
+          lines: ["코드 결과를 예측해봐!"],
+          code: "sentence = 'banana'\nprint(sentence.count('a'))",
+          predict: {
+            options: ["1", "2", "3", "에러"],
+            answer: 2,
+            feedback: "'banana'에서 'a'는 b-A-n-A-n-A 위치에 3번 나와! count()는 등장 횟수를 세줘."
+          },
+          en: {
+            lines: ["Predict the output!"],
+            predict: {
+              options: ["1", "2", "3", "Error"],
+              feedback: "'a' appears 3 times in 'banana' — b-A-n-A-n-A! count() counts occurrences."
+            }
+          }
+        }
+      },
+
+      // errorQuiz 1: startswith() 대소문자
+      {
+        type: "errorQuiz",
+        content: {
+          question: "이 코드의 문제는?",
+          code: "email = 'User@Gmail.com'\nif email.endswith('.com'):\n    print('유효한 이메일')",
+          options: [
+            "문제없음 — '.com'으로 끝나면 '유효한 이메일'이 출력돼",
+            "endswith는 대문자에 안 써",
+            "if문에 콜론이 없어서 에러"
+          ],
+          answer: 0,
+          explanation: "이 코드는 정상 동작해! endswith('.com')은 문자열 끝이 '.com'이면 True를 반환해. 'User@Gmail.com'은 '.com'으로 끝나므로 출력돼.",
+          en: {
+            question: "What's wrong with this code?",
+            options: [
+              "Nothing wrong — if it ends with '.com', '유효한 이메일' is printed",
+              "endswith doesn't work with uppercase",
+              "Missing colon after if — error"
+            ],
+            explanation: "This code works correctly! endswith('.com') returns True if the string ends with '.com'. 'User@Gmail.com' ends with '.com' so it prints."
+          }
+        }
+      },
+
+      // errorQuiz 2: replace() 순서 착각
+      {
+        type: "errorQuiz",
+        content: {
+          question: "원하는 결과가 '안녕 파이썬'인데 출력이 다르게 나와. 문제는?",
+          code: "msg = '안녕 세상'\nprint(msg.replace('파이썬', '세상'))",
+          options: [
+            "replace('찾을것', '바꿀것') 인데 순서가 반대야 — '세상'을 '파이썬'으로 바꿔야 해",
+            "replace는 한국어에 안 써",
+            "msg 변수가 없어서 에러"
+          ],
+          answer: 0,
+          explanation: "replace(찾을것, 바꿀것) 순서야! '세상'을 '파이썬'으로 바꾸려면 replace('세상', '파이썬')이어야 해.",
+          en: {
+            question: "The desired output is '안녕 파이썬' but something else prints. What's wrong?",
+            options: [
+              "replace(find, replace) order is reversed — need to replace '세상' with '파이썬'",
+              "replace doesn't work with Korean",
+              "Variable msg is missing — error"
+            ],
+            explanation: "The order is replace(find_this, replace_with)! To change '세상' to '파이썬', use replace('세상', '파이썬')."
+          }
+        }
+      },
+
+      // practice 1: count() + find() 조합
+      {
+        type: "practice",
+        content: {
+          task: "이렇게 나오게 해봐 ↓\n4\n1",
+          guide: "'mississippi'에서 's'가 몇 번 나오는지 count()로 세고,\n'i'의 첫 위치를 find()로 구해봐",
+          template: "word = 'mississippi'\nprint(___)\nprint(___)",
+          answer: "word = 'mississippi'\nprint(word.count('s'))\nprint(word.find('i'))",
+          expect: "4\n1",
+          en: {
+            task: "Make it print like this ↓\n4\n1",
+            guide: "Count how many 's' in 'mississippi' with count(), then find first 'i' with find()"
+          }
+        }
+      },
+
+      // practice 2: startswith + endswith
+      {
+        type: "practice",
+        content: {
+          task: "이렇게 나오게 해봐 ↓\nTrue\nTrue",
+          guide: "'Hello, World!'가 'Hello'로 시작하는지, '!'로 끝나는지 각각 출력해봐",
+          template: "text = 'Hello, World!'\nprint(___)\nprint(___)",
+          answer: "text = 'Hello, World!'\nprint(text.startswith('Hello'))\nprint(text.endswith('!'))",
+          expect: "True\nTrue",
+          en: {
+            task: "Make it print like this ↓\nTrue\nTrue",
+            guide: "Check if 'Hello, World!' starts with 'Hello' and ends with '!'"
+          }
+        }
+      },
+
       // 최종 요약
       {
         type: "summary",

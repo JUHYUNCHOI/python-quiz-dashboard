@@ -487,8 +487,7 @@ export const lessonCpp8: LessonData = {
           task: "이름을 받아서 \"Hello, 이름!\"을 출력하는 void 함수를 완성해요",
           guide: "void greet(string name) { cout << ... }",
           template: "___ greet(string name) {\n    cout << \"Hello, \" << name << \"!\" << endl;\n}",
-          blanksAnswer: ["void"],
-          answer: "void greet(string name) {\n    cout << \"Hello, \" << name << \"!\" << endl;\n}",
+          answer: "void",
           expect: "void greet(string name) {\n    cout << \"Hello, \" << name << \"!\" << endl;\n}",
           en: {
             task: "Complete the void function that takes a name and prints \"Hello, name!\"",

@@ -81,8 +81,7 @@ export const lesson21: LessonData = {
         message: "딕셔너리 복습! 키로 값 접근하기",
         task: "딕셔너리에서 '이름' 키의 값을 출력하세요",
         template: "info = {'이름': '민수', '나이': 15}\nprint(info[___])",
-        blanksAnswer: ["'이름'"],
-        answer: "info = {'이름': '민수', '나이': 15}\nprint(info['이름'])",
+        answer: "'이름'",
         expect: "민수",
         en: {
           message: "Dictionary review! Access value by key",
@@ -98,8 +97,7 @@ export const lesson21: LessonData = {
         guide: "set()에 리스트를 넣으면 중복 제거!",
         hint: "unique = set([1, 2, 2, 3, 3, 3])",
         template: "nums = [1, 2, 2, 3, 3, 3]\nunique = ___(nums)\nprint(unique)",
-        blanksAnswer: ["set"],
-        answer: "nums = [1, 2, 2, 3, 3, 3]\nunique = set(nums)\nprint(unique)",
+        answer: "set",
         expect: "{1, 2, 3}",
         en: {
           task: "Remove duplicates from list [1, 2, 2, 3, 3, 3] using set() and print",
@@ -260,8 +258,7 @@ export const lesson21: LessonData = {
         message: "딕셔너리 복습! in으로 키 확인하기",
         task: "'사과'가 딕셔너리에 있는지 확인하고 출력하세요",
         template: "prices = {'사과': 1000, '바나나': 500}\nprint('사과' ___ prices)",
-        blanksAnswer: ["in"],
-        answer: "prices = {'사과': 1000, '바나나': 500}\nprint('사과' in prices)",
+        answer: "in",
         expect: "True",
         en: {
           message: "Dictionary review! Check key existence with in",
@@ -295,8 +292,7 @@ export const lesson21: LessonData = {
         guide: "& 연산자로 교집합!",
         hint: "class_a & class_b",
         template: "class_a = {'민수', '영희', '철수'}\nclass_b = {'영희', '지민', '철수'}\nboth = class_a ___ class_b\nprint(f'공통 학생: {both}')",
-        blanksAnswer: ["&"],
-        answer: "class_a = {'민수', '영희', '철수'}\nclass_b = {'영희', '지민', '철수'}\nboth = class_a & class_b\nprint(f'공통 학생: {both}')",
+        answer: "&",
         expect: "공통 학생: {'영희', '철수'}",
         en: {
           task: "Find students that appear in both class sets (intersection)",
@@ -313,8 +309,7 @@ export const lesson21: LessonData = {
         guide: "set()으로 중복 제거 후 sorted()!",
         hint: "sorted(set(nums))",
         template: "nums = [3, 1, 2, 3, 1, 2]\nresult = sorted(___(nums))\nprint(result)",
-        blanksAnswer: ["set"],
-        answer: "nums = [3, 1, 2, 3, 1, 2]\nresult = sorted(set(nums))\nprint(result)",
+        answer: "set",
         expect: "[1, 2, 3]",
         en: {
           task: "Remove duplicates from the list and print as a sorted list",
@@ -367,6 +362,93 @@ export const lesson21: LessonData = {
         ],
         canDo: "집합을 활용해서 중복 제거와 데이터 비교를 할 수 있어!",
         emoji: "🏆"
+      }
+    },
+
+    // ==================== 추가 predict + quiz + practice ====================
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: "s = {1, 2, 2, 3, 3, 3}\nprint(len(s))",
+        predict: {
+          question: "출력 결과는?",
+          options: ["6", "3", "4", "에러"],
+          answer: 1,
+          feedback: "집합은 중복을 자동 제거! {1, 2, 2, 3, 3, 3} → {1, 2, 3} → len = 3"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            question: "What's the output?",
+            options: ["6", "3", "4", "Error"],
+            feedback: "Sets remove duplicates! {1, 2, 2, 3, 3, 3} → {1, 2, 3} → len = 3"
+          }
+        },
+        result: "3"
+      }
+    },
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: "a = {1, 2, 3}\na.discard(5)\nprint(len(a))",
+        predict: {
+          question: "출력 결과는?",
+          options: ["에러 발생", "2", "3", "4"],
+          answer: 2,
+          feedback: "discard()는 없는 원소도 에러 없이 무시! 집합 크기 그대로 3!"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            question: "What's the output?",
+            options: ["Error", "2", "3", "4"],
+            feedback: "discard() silently ignores missing elements! Set size stays at 3!"
+          }
+        },
+        result: "3"
+      }
+    },
+    {
+      type: "quiz",
+      content: {
+        question: "다음 중 집합(set)의 특징이 아닌 것은?",
+        options: [
+          "중복 원소를 허용하지 않는다",
+          "순서가 보장된다",
+          "in으로 빠르게 멤버십 확인이 가능하다",
+          "교집합, 합집합, 차집합 연산이 가능하다"
+        ],
+        answer: 1,
+        explanation: "집합은 순서가 없어요! 인덱스로 접근 불가. 리스트와 다르게 출력 순서가 달라질 수 있어요.",
+        en: {
+          question: "Which of the following is NOT a characteristic of sets?",
+          options: [
+            "Does not allow duplicate elements",
+            "Order is guaranteed",
+            "Fast membership test with in",
+            "Supports intersection, union, difference operations"
+          ],
+          explanation: "Sets are unordered! No index access. Unlike lists, the output order can vary."
+        }
+      }
+    },
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "두 집합의 차집합(a에만 있고 b에 없는 것)을 구하고 출력하세요",
+        guide: "- 연산자로 차집합!",
+        hint: "a - b",
+        template: "a = {1, 2, 3, 4, 5}\nb = {3, 4, 5, 6, 7}\nonly_a = a ___ b\nprint(only_a)",
+        answer: "-",
+        expect: "{1, 2}",
+        en: {
+          task: "Find the difference (elements in a but not in b) and print",
+          guide: "Use the - operator for difference!",
+          hint: "a - b"
+        }
       }
     },
 

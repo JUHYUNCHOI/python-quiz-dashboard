@@ -131,6 +131,90 @@ export const lesson11: LessonData = {
       }
     },
 
+    // errorQuiz: 콜론 누락
+    {
+      type: "errorQuiz",
+      content: {
+        question: "이 코드의 문제점은?",
+        code: "score = 80\nif score >= 90\n    print('A')",
+        options: [
+          "콜론(:)이 없어",
+          "들여쓰기 문제",
+          "score 변수 오류"
+        ],
+        answer: 0,
+        explanation: "if 조건 뒤에 반드시 콜론(:)이 있어야 해! if score >= 90: 처럼 써야 해.",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "Missing colon (:)",
+            "Indentation problem",
+            "score variable error"
+          ],
+          explanation: "Must have colon (:) after the if condition! Write it as: if score >= 90:"
+        }
+      }
+    },
+
+    // predict: 조건이 False일 때 (아무것도 안 출력)
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: "x = 3\nif x > 10:\n    print('크다')",
+        predict: {
+          options: ["크다", "아무것도 없음", "3", "False"],
+          answer: 1,
+          feedback: "x=3은 10보다 크지 않아서 조건이 False! if 블록이 실행되지 않으니 아무것도 출력 안 돼."
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["크다", "Nothing prints", "3", "False"],
+            feedback: "x=3 is not greater than 10, so the condition is False! The if block doesn't run, so nothing prints."
+          }
+        }
+      }
+    },
+
+    // predict: 별도 if 두 개 (둘 다 True 가능)
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: "x = 15\nif x > 10:\n    print('10보다 크다')\nif x > 5:\n    print('5보다 크다')",
+        predict: {
+          options: ["10보다 크다", "5보다 크다", "10보다 크다\n5보다 크다", "아무것도 없음"],
+          answer: 2,
+          feedback: "if 문이 두 개야! 각각 독립적으로 확인해. x=15는 10도 크고 5도 크니까 둘 다 출력돼."
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["10보다 크다", "5보다 크다", "10보다 크다\n5보다 크다", "Nothing"],
+            feedback: "There are two separate if statements! Each checks independently. x=15 satisfies both, so both print."
+          }
+        }
+      }
+    },
+
+    // practice: 변수 조건 출력
+    {
+      type: "practice",
+      content: {
+        level: 1,
+        task: "point = 0 으로 변수 만들고,\npoint == 0 이면 '시작 전이에요' 출력해봐",
+        guide: "if point == 0:\n    print(...)",
+        template: null,
+        answer: "point = 0\nif point == 0:\n    print('시작 전이에요')",
+        expect: "시작 전이에요",
+        en: {
+          task: "Create variable point = 0,\nif point == 0 print '시작 전이에요'",
+          guide: "if point == 0:\n    print(...)"
+        }
+      }
+    },
+
     // 퀴즈
     {
       type: "quiz",
@@ -226,6 +310,81 @@ export const lesson11: LessonData = {
       }
     },
 
+    // predict: if-else 특정 값
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: "num = 0\nif num > 0:\n    print('양수')\nelse:\n    print('양수 아님')",
+        predict: {
+          options: ["양수", "양수 아님", "0", "아무것도 없음"],
+          answer: 1,
+          feedback: "num=0은 0보다 크지 않아서 False! 그래서 else 블록의 '양수 아님'이 출력돼."
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["양수", "양수 아님", "0", "Nothing"],
+            feedback: "num=0 is not greater than 0, so False! The else block '양수 아님' runs."
+          }
+        }
+      }
+    },
+
+    // predict: 중첩 if
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: "age = 20\nhas_ticket = True\nif age >= 18:\n    if has_ticket:\n        print('입장 가능')\n    else:\n        print('티켓 없음')\nelse:\n    print('미성년자')",
+        predict: {
+          options: ["입장 가능", "티켓 없음", "미성년자", "아무것도 없음"],
+          answer: 0,
+          feedback: "age=20 ≥ 18이라 첫 번째 if 통과! has_ticket=True이라 두 번째 if도 통과 → '입장 가능'."
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["입장 가능", "티켓 없음", "미성년자", "Nothing"],
+            feedback: "age=20 ≥ 18 passes the first if! has_ticket=True passes the second if → '입장 가능'."
+          }
+        }
+      }
+    },
+
+    // interleaving: 변수와 연산자 복습
+    {
+      type: "interleaving",
+      content: {
+        message: "잠깐! 변수 대입 기억나?",
+        task: "x = 10 으로 변수 만들고, x * 2 출력해봐",
+        template: { before: "x = 10\nprint(", after: ")" },
+        answer: "x * 2",
+        expect: "20",
+        en: {
+          message: "Wait! Remember variable assignment?",
+          task: "Create variable x = 10 and print x * 2"
+        }
+      }
+    },
+
+    // practice: if-else 음수/양수
+    {
+      type: "practice",
+      content: {
+        level: 1,
+        task: "n = -5 로 변수 만들고,\n0 이상이면 '양수 또는 0', 아니면 '음수' 출력해봐",
+        guide: "if n >= 0:\n    print(...)\nelse:\n    print(...)",
+        template: null,
+        answer: "n = -5\nif n >= 0:\n    print('양수 또는 0')\nelse:\n    print('음수')",
+        expect: "음수",
+        en: {
+          task: "Create variable n = -5,\nif 0 or above print '양수 또는 0', otherwise print '음수'",
+          guide: "if n >= 0:\n    print(...)\nelse:\n    print(...)"
+        }
+      }
+    },
+
     // 퀴즈
     {
       type: "quiz",
@@ -289,6 +448,73 @@ export const lesson11: LessonData = {
       }
     },
 
+    // predict: elif 체인 — 어느 블록이 실행?
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: "score = 85\nif score >= 90:\n    print('A')\nelif score >= 80:\n    print('B')\nelif score >= 70:\n    print('C')\nelse:\n    print('D')",
+        predict: {
+          options: ["A", "B", "C", "D"],
+          answer: 1,
+          feedback: "score=85는 90 미만이라 첫 if 패스, 80 이상이라 elif score>=80 에서 True! 'B'가 출력되고 나머지는 건너뜀."
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["A", "B", "C", "D"],
+            feedback: "score=85 is less than 90 so the first if fails, but 85 >= 80 so the first elif is True! 'B' prints and the rest are skipped."
+          }
+        }
+      }
+    },
+
+    // predict: elif vs 별도 if 차이
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: "score = 95\nif score >= 60:\n    print('C이상')\nif score >= 90:\n    print('A이상')",
+        predict: {
+          options: ["C이상", "A이상", "C이상\nA이상", "아무것도 없음"],
+          answer: 2,
+          feedback: "if 문이 두 개라서 각각 독립 확인! score=95는 60 이상이고 90 이상이니까 둘 다 True → 둘 다 출력!"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["C이상", "A이상", "C이상\nA이상", "Nothing"],
+            feedback: "Two separate if statements check independently! score=95 is both ≥60 and ≥90, so both are True → both print!"
+          }
+        }
+      }
+    },
+
+    // errorQuiz: elif 대신 else if 사용
+    {
+      type: "errorQuiz",
+      content: {
+        question: "이 코드의 문제점은?",
+        code: "grade = 85\nif grade >= 90:\n    print('A')\nelse if grade >= 80:\n    print('B')",
+        options: [
+          "else if 는 Python에서 사용 안 해. elif 써야 해",
+          "들여쓰기가 잘못됐어",
+          "grade 변수 선언이 잘못됐어"
+        ],
+        answer: 0,
+        explanation: "Python에서는 'else if' 대신 반드시 'elif'를 써야 해! C/Java 습관 주의.",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "'else if' is not used in Python. Use 'elif'",
+            "The indentation is wrong",
+            "grade variable declaration is wrong"
+          ],
+          explanation: "Python uses 'elif', not 'else if'! Be careful if you're used to C/Java."
+        }
+      }
+    },
+
     // ===== Lv.2: elif =====
     {
       type: "practice",
@@ -302,6 +528,23 @@ export const lesson11: LessonData = {
         en: {
           task: "Create variable temp = 10,\nif 30+ print '더워', if 20+ print '따뜻해',\nif 10+ print '선선해', otherwise print '추워'",
           guide: "if temp >= 30:\nelif temp >= 20:\nelif temp >= 10:\nelse:"
+        }
+      }
+    },
+
+    // practice: elif로 학년 분류
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "grade_year = 2 로 변수 만들고,\n1이면 '1학년', 2이면 '2학년', 3이면 '3학년', 아니면 '해당없음' 출력해봐",
+        guide: "if grade_year == 1:\nelif grade_year == 2:\nelif grade_year == 3:\nelse:",
+        template: null,
+        answer: "grade_year = 2\nif grade_year == 1:\n    print('1학년')\nelif grade_year == 2:\n    print('2학년')\nelif grade_year == 3:\n    print('3학년')\nelse:\n    print('해당없음')",
+        expect: "2학년",
+        en: {
+          task: "Create variable grade_year = 2,\nif 1 print '1학년', if 2 print '2학년', if 3 print '3학년', otherwise print '해당없음'",
+          guide: "if grade_year == 1:\nelif grade_year == 2:\nelif grade_year == 3:\nelse:"
         }
       }
     },

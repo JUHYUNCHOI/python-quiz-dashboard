@@ -80,8 +80,7 @@ export const lesson40: LessonData = {
       content: {
         level: 1, task: "___ 자리를 채우세요!", guide: "에러를 잡으려면?", hint: "except!",
         template: "try:\n    x = int(input())\n___ ValueError:\n    print('숫자를 입력하세요!')",
-        blanksAnswer: ["except"],
-        answer: "try:\n    x = int(input())\nexcept ValueError:\n    print('숫자를 입력하세요!')",
+        answer: "except",
         alternateAnswers: [], expect: "",
         en: {
           task: "Fill in the blanks!",

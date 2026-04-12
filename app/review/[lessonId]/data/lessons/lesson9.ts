@@ -506,6 +506,174 @@ export const lesson9: LessonData = {
       }
     },
 
+    // ==================== 추가 예측 & 심화 ====================
+
+    // predict 1: int() 소수점 버림
+    {
+      type: "explain",
+      content: {
+        lines: ["코드 결과를 예측해봐!"],
+        code: "print(int(9.99))",
+        predict: {
+          options: ["10 (반올림)", "9 (소수점 버림)", "9.99 (변화 없음)", "에러"],
+          answer: 1,
+          feedback: "int()는 반올림이 아니라 소수점을 버려! 9.99 → 9"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["10 (rounded)", "9 (decimal truncated)", "9.99 (no change)", "Error"],
+            feedback: "int() truncates, not rounds! 9.99 → 9"
+          }
+        }
+      }
+    },
+
+    // predict 2: bool() 음수
+    {
+      type: "explain",
+      content: {
+        lines: ["코드 결과를 예측해봐!"],
+        code: "print(bool(-99))",
+        predict: {
+          options: ["True", "False", "-99", "에러"],
+          answer: 0,
+          feedback: "0이 아닌 모든 숫자는 True야! 음수도 마찬가지. bool(-99) → True"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["True", "False", "-99", "Error"],
+            feedback: "Any non-zero number is True! Negative numbers too. bool(-99) → True"
+          }
+        }
+      }
+    },
+
+    // predict 3: str() + 이어붙이기
+    {
+      type: "explain",
+      content: {
+        lines: ["코드 결과를 예측해봐!"],
+        code: "year = 2025\nprint('올해는 ' + str(year) + '년')",
+        predict: {
+          options: ["올해는 year년", "올해는 2025년", "에러", "올해는 '2025'년"],
+          answer: 1,
+          feedback: "str(2025)는 '2025'(문자열)로 바꿔줘! 그래서 이어붙이기가 가능하고 '올해는 2025년'이 출력돼."
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["올해는 year년", "올해는 2025년", "Error", "올해는 '2025'년"],
+            feedback: "str(2025) converts to '2025' (string)! So concatenation works and '올해는 2025년' is printed."
+          }
+        }
+      }
+    },
+
+    // predict 4: 타입 연산 오류 예측
+    {
+      type: "explain",
+      content: {
+        lines: ["코드 결과를 예측해봐!"],
+        code: "a = '10'\nb = 5\nprint(int(a) + b)",
+        predict: {
+          options: ["105 (문자열 이어붙기)", "15 (정수 덧셈)", "에러", "'10'5"],
+          answer: 1,
+          feedback: "int(a)로 '10' → 10으로 변환한 뒤 b(5)와 더해! 10 + 5 = 15"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["105 (string concat)", "15 (integer addition)", "Error", "'10'5"],
+            feedback: "int(a) converts '10' → 10, then adds b(5)! 10 + 5 = 15"
+          }
+        }
+      }
+    },
+
+    // errorQuiz 1: str + int 직접 이어붙이기
+    {
+      type: "errorQuiz",
+      content: {
+        question: "이 코드의 문제는?",
+        code: "score = 95\nprint('점수: ' + score)",
+        options: [
+          "문자열과 정수는 +로 이어붙일 수 없어 — str(score)로 변환해야 해",
+          "변수 score가 선언되지 않음",
+          "print()에 +를 쓸 수 없음"
+        ],
+        answer: 0,
+        explanation: "Python에서 문자열 + 정수는 TypeError! str(score)로 변환하거나 f-string을 써야 해: '점수: ' + str(score) 또는 f'점수: {score}'",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "Can't concatenate string and int with + — must convert with str(score)",
+            "Variable score is not declared",
+            "Can't use + inside print()"
+          ],
+          explanation: "String + integer causes TypeError in Python! Use str(score) or f-string: '점수: ' + str(score) or f'점수: {score}'"
+        }
+      }
+    },
+
+    // errorQuiz 2: float() 숫자형 문자열 착각
+    {
+      type: "errorQuiz",
+      content: {
+        question: "이 코드는 어떻게 될까?",
+        code: "text = '3.14abc'\nprint(float(text))",
+        options: [
+          "3.14가 출력돼 (숫자 부분만 변환)",
+          "ValueError 에러! 숫자가 아닌 문자가 섞여 있어",
+          "0.0이 출력돼"
+        ],
+        answer: 1,
+        explanation: "float()은 순수한 숫자 문자열만 변환할 수 있어! '3.14abc'처럼 문자가 섞이면 ValueError 발생.",
+        en: {
+          question: "What happens with this code?",
+          options: [
+            "Prints 3.14 (converts number part only)",
+            "ValueError! Mixed with non-numeric characters",
+            "Prints 0.0"
+          ],
+          explanation: "float() can only convert pure numeric strings! '3.14abc' has letters mixed in → ValueError."
+        }
+      }
+    },
+
+    // practice 1: int() + float() 혼합 계산
+    {
+      type: "practice",
+      content: {
+        task: "이렇게 나오게 해봐 ↓\n합계: 108.5",
+        guide: "a = '100', b = '8.5' 변수 만들고\nint(a) + float(b) 결과를 f-string으로 출력해봐",
+        template: "a = '100'\nb = '8.5'\nprint(___)",
+        answer: "f'합계: {int(a) + float(b)}'",
+        expect: "합계: 108.5",
+        en: {
+          task: "Make it print like this ↓\n합계: 108.5",
+          guide: "Create a = '100', b = '8.5' and print int(a) + float(b) with f-string"
+        }
+      }
+    },
+
+    // practice 2: bool() 여러 값 비교
+    {
+      type: "practice",
+      content: {
+        task: "이렇게 나오게 해봐 ↓\nFalse\nTrue\nFalse",
+        guide: "bool(0), bool(42), bool('') 를 차례로 출력해봐",
+        template: "print(___)\nprint(___)\nprint(___)",
+        answer: "print(bool(0))\nprint(bool(42))\nprint(bool(''))",
+        expect: "False\nTrue\nFalse",
+        en: {
+          task: "Make it print like this ↓\nFalse\nTrue\nFalse",
+          guide: "Print bool(0), bool(42), bool('') in order"
+        }
+      }
+    },
+
     // 최종 요약
     {
       type: "summary",

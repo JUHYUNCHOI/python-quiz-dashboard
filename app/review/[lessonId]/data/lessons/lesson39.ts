@@ -47,8 +47,7 @@ export const lesson39: LessonData = {
         guide: "파일에 저장하려면 어떤 모드?",
         hint: "write의 첫 글자! 'w'",
         template: "def 저장하기():\n    with open('save.txt', '___') as f:\n        f.write('용사\\n')\n        f.write('100')\n    print('저장 완료!')\n\n저장하기()",
-        blanksAnswer: ["w"],
-        answer: "def 저장하기():\n    with open('save.txt', 'w') as f:\n        f.write('용사\\n')\n        f.write('100')\n    print('저장 완료!')\n\n저장하기()",
+        answer: "w",
         en: {
           task: "Fill in the blank with the right word!",
           guide: "What mode do you use to save to a file?",
@@ -246,6 +245,219 @@ export const lesson39: LessonData = {
         options: ["문제 없음", "close() 필요", "try-except 필요 (FileNotFoundError)", "write 필요"],
         answer: 2,
         explanation: "파일이 없을 수도 있으니 try-except FileNotFoundError!"
+      }
+    },
+
+    // 추가 스텝: predict + errorQuiz + practice + interleaving
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: `try:
+    x = int('abc')
+    print('변환 성공')
+except ValueError:
+    print('변환 실패')
+print('계속')`,
+        predict: {
+          question: "출력 결과는?",
+          options: ["변환 성공 계속", "변환 실패 계속", "변환 실패", "에러"],
+          answer: 1,
+          feedback: "'abc'는 정수로 변환 불가 → ValueError → except 실행 → 그 다음 계속!"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            question: "What's the output?",
+            options: ["변환 성공 계속", "변환 실패 계속", "변환 실패", "Error"],
+            feedback: "'abc' can't be converted to int → ValueError → except runs → then continues!"
+          }
+        },
+        result: "변환 실패\n계속"
+      }
+    },
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: `def read_hp(filename):
+    try:
+        with open(filename, 'r') as f:
+            return int(f.readline().strip())
+    except FileNotFoundError:
+        return 100
+
+hp = read_hp('없는파일.txt')
+print(hp)`,
+        predict: {
+          question: "출력 결과는?",
+          options: ["에러 발생", "0", "100", "None"],
+          answer: 2,
+          feedback: "파일 없음 → FileNotFoundError → except에서 100 반환!"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            question: "What's the output?",
+            options: ["Error", "0", "100", "None"],
+            feedback: "File not found → FileNotFoundError → except returns 100!"
+          }
+        },
+        result: "100"
+      }
+    },
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: `lines = ['용사\\n', '85\\n', '검사\\n']
+names = [l.strip() for l in lines]
+print(names[1])`,
+        predict: {
+          question: "출력 결과는?",
+          options: ["85\\n", "'85'", "85", "에러"],
+          answer: 2,
+          feedback: "strip()이 \\n을 제거! '85\\n'.strip() → '85' → 출력하면 85"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            question: "What's the output?",
+            options: ["85\\n", "'85'", "85", "Error"],
+            feedback: "strip() removes \\n! '85\\n'.strip() → '85' → prints as 85"
+          }
+        },
+        result: "85"
+      }
+    },
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: `data = {'이름': '용사', 'HP': 100}
+
+with open('save.txt', 'w') as f:
+    for k, v in data.items():
+        f.write(f'{k}:{v}\\n')
+
+print('저장 완료!')`,
+        predict: {
+          question: "출력 결과는?",
+          options: ["이름:용사 HP:100", "저장 완료!", "에러", "{'이름': '용사', 'HP': 100}"],
+          answer: 1,
+          feedback: "파일 쓰기는 화면 출력이 없어요! 마지막 print만 출력됨!"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            question: "What's the output?",
+            options: ["이름:용사 HP:100", "저장 완료!", "Error", "{'이름': '용사', 'HP': 100}"],
+            feedback: "Writing to file doesn't print to screen! Only the last print shows!"
+          }
+        },
+        result: "저장 완료!"
+      }
+    },
+    {
+      type: "errorQuiz",
+      content: {
+        question: "이 코드의 문제점은?",
+        code: `try:
+    hp = int(input('HP: '))
+except:
+    print('에러!')
+print(hp)`,
+        options: [
+          "문제 없음",
+          "except에서 hp가 정의 안 됐는데 print(hp) 사용",
+          "try 문법 오류",
+          "int() 사용 불가"
+        ],
+        answer: 1,
+        explanation: "except 실행 시 hp가 정의되지 않아 print(hp)에서 NameError 발생! except에서도 hp에 기본값을 줘야 해요.",
+        en: {
+          question: "What's the problem with this code?",
+          options: [
+            "No problem",
+            "hp is not defined in except, but print(hp) uses it",
+            "Syntax error in try",
+            "int() cannot be used"
+          ],
+          explanation: "If except runs, hp is undefined, causing NameError at print(hp)! Give hp a default in except too."
+        }
+      }
+    },
+    {
+      type: "errorQuiz",
+      content: {
+        question: "이 불러오기 코드의 문제점은?",
+        code: `with open('save.txt', 'w') as f:
+    lines = f.readlines()
+    name = lines[0].strip()
+print(name)`,
+        options: [
+          "close() 누락",
+          "'w' 모드에서 readlines() 불가",
+          "strip() 사용 오류",
+          "문제 없음"
+        ],
+        answer: 1,
+        explanation: "'w'는 쓰기 전용! 파일을 읽으려면 'r' 모드를 써야 해요."
+      }
+    },
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "___ 자리를 채워서 파일에서 이름과 HP를 읽어 딕셔너리로 반환하는 함수를 완성하세요!",
+        guide: "'r' 모드 + readlines() + strip() + int()!",
+        hint: "줄1 = 이름, 줄2 = HP(int 변환 필요)",
+        template: "def 불러오기():\n    try:\n        with open('save.txt', '___') as f:\n            줄들 = f.readlines()\n            return {'이름': 줄들[0].strip(), 'HP': ___(줄들[1].strip())}\n    except FileNotFoundError:\n        return {'이름': '신규', 'HP': 100}\n\nresult = 불러오기()\nprint(result['이름'])",
+        blanksAnswer: ["r", "int"],
+        answer: "def 불러오기():\n    try:\n        with open('save.txt', 'r') as f:\n            줄들 = f.readlines()\n            return {'이름': 줄들[0].strip(), 'HP': int(줄들[1].strip())}\n    except FileNotFoundError:\n        return {'이름': '신규', 'HP': 100}\n\nresult = 불러오기()\nprint(result['이름'])",
+        en: {
+          task: "Fill in the blanks to complete a function that reads name and HP from file into a dictionary!",
+          guide: "'r' mode + readlines() + strip() + int()!",
+          hint: "Line 1 = name, Line 2 = HP (needs int conversion)"
+        },
+        alternateAnswers: [],
+        expect: "신규"
+      }
+    },
+    {
+      type: "practice",
+      content: {
+        level: 2.5,
+        task: "___ 자리를 채워서 점수를 파일에 저장하고 다시 읽는 함수를 완성하세요!",
+        guide: "저장: 'w' + str() / 읽기: 'r' + int()!",
+        hint: "숫자 저장 시 str() 변환, 읽을 때 int() 변환",
+        template: "def save_score(score):\n    with open('score.txt', '___') as f:\n        f.write(___(score))\n    print('저장!')\n\ndef load_score():\n    with open('score.txt', 'r') as f:\n        return ___(f.read())\n\nsave_score(95)\nprint(load_score() + 5)",
+        blanksAnswer: ["w", "str", "int"],
+        answer: "def save_score(score):\n    with open('score.txt', 'w') as f:\n        f.write(str(score))\n    print('저장!')\n\ndef load_score():\n    with open('score.txt', 'r') as f:\n        return int(f.read())\n\nsave_score(95)\nprint(load_score() + 5)",
+        en: {
+          task: "Fill in the blanks to complete save and load score functions!",
+          guide: "Save: 'w' + str() / Load: 'r' + int()!",
+          hint: "Convert to str() when saving, convert to int() when loading"
+        },
+        alternateAnswers: [],
+        expect: "저장!\n100"
+      }
+    },
+    {
+      type: "interleaving",
+      content: {
+        message: "함수 복습! 기본값이 있는 함수 기억나요?",
+        task: "___ 자리를 채워서 기본 이름이 '용사'인 캐릭터 생성 함수를 완성하세요!",
+        hint: "기본값 있는 매개변수는 뒤에! def create(hp, name='용사')",
+        template: "def create(hp, name=___):  \n    return {'이름': name, 'HP': hp}\n\np = create(100)\nprint(p['이름'])",
+        answer: "'용사'",
+        en: {
+          message: "Function review! Remember parameters with default values?",
+          task: "Fill in the blank to complete a character creation function with default name '용사'!",
+          hint: "Parameter with default value goes last! def create(hp, name='용사')"
+        },
+        alternateAnswers: [],
+        expect: "용사"
       }
     },
 

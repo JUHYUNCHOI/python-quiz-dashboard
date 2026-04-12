@@ -162,6 +162,91 @@ export const lesson7: LessonData = {
         }
       },
 
+      // predict: sep 기본값
+      {
+        type: "explain",
+        content: {
+          lines: ["코드 결과를 예측해봐!"],
+          code: "print('월', '화', '목', sep='|')",
+          predict: {
+            options: ["월 화 목", "월|화|목", "월화목"],
+            answer: 1,
+            feedback: "sep='|'이라서 각 값 사이에 '|'가 들어가! 월|화|목"
+          },
+          en: {
+            lines: ["Predict the output!"],
+            predict: {
+              options: ["월 화 목", "월|화|목", "월화목"],
+              feedback: "sep='|' puts '|' between each value! 월|화|목"
+            }
+          }
+        }
+      },
+
+      // predict: sep='' 결과
+      {
+        type: "explain",
+        content: {
+          lines: ["이건 어떤 결과가 나올까?"],
+          code: "print('P', 'y', 't', 'h', 'o', 'n', sep='')",
+          predict: {
+            options: ["P y t h o n", "Python", "P-y-t-h-o-n"],
+            answer: 1,
+            feedback: "sep=''이면 구분자가 없어서 다 붙어버려! Python"
+          },
+          en: {
+            lines: ["What's the output here?"],
+            predict: {
+              options: ["P y t h o n", "Python", "P-y-t-h-o-n"],
+              feedback: "sep='' means no separator, so everything is joined! Python"
+            }
+          }
+        }
+      },
+
+      // errorQuiz: sep 관련 오류
+      {
+        type: "errorQuiz",
+        content: {
+          question: "이 코드의 문제는?",
+          code: "print('사과', '바나나', '딸기', Sep=', ')",
+          options: [
+            "Sep가 아니라 sep (소문자여야 해)",
+            "문자열이 잘못됐어",
+            "인자를 3개까지밖에 못 써"
+          ],
+          answer: 0,
+          explanation: "파이썬 키워드 인자는 대소문자를 구분해! Sep가 아니라 sep(소문자)를 써야 해.",
+          en: {
+            question: "What's wrong with this code?",
+            options: [
+              "It should be sep (lowercase), not Sep",
+              "The strings are wrong",
+              "Can't use more than 3 arguments"
+            ],
+            explanation: "Python keyword arguments are case-sensitive! Use sep (lowercase), not Sep."
+          }
+        }
+      },
+
+      // practice: sep 응용
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "10, 20, 30, 40 을 '+' 로 구분해서 출력해봐",
+          guide: "sep='+' 사용!",
+          template: { before: "print(", after: ")" },
+          answer: "10, 20, 30, 40, sep='+'",
+          alternateAnswers: ["10,20,30,40,sep='+'"],
+          expect: "10+20+30+40",
+          en: {
+            task: "Print 10, 20, 30, 40 separated by '+'",
+            guide: "Use sep='+'!"
+          }
+        }
+      },
+
       // 퀴즈
       {
         type: "quiz",
@@ -283,6 +368,114 @@ export const lesson7: LessonData = {
         }
       },
 
+      // predict: end 옵션 결과
+      {
+        type: "explain",
+        content: {
+          lines: ["코드 결과를 예측해봐!"],
+          code: "print('안녕', end='~')\nprint('반가워')",
+          predict: {
+            options: ["안녕\n반가워", "안녕~반가워", "안녕 반가워"],
+            answer: 1,
+            feedback: "end='~'라서 줄바꿈 대신 '~'가 붙고 바로 다음 print가 이어져! 안녕~반가워"
+          },
+          en: {
+            lines: ["Predict the output!"],
+            predict: {
+              options: ["안녕\n반가워", "안녕~반가워", "안녕 반가워"],
+              feedback: "end='~' replaces the newline with '~', then the next print continues! 안녕~반가워"
+            }
+          }
+        }
+      },
+
+      // predict: end='' 결과
+      {
+        type: "explain",
+        content: {
+          lines: ["이건 어떤 결과가 나올까?"],
+          code: "print('Hello', end='')\nprint('World')",
+          predict: {
+            options: ["Hello\nWorld", "Hello World", "HelloWorld"],
+            answer: 2,
+            feedback: "end=''이면 아무것도 없이 바로 붙어! HelloWorld"
+          },
+          en: {
+            lines: ["What's the output here?"],
+            predict: {
+              options: ["Hello\nWorld", "Hello World", "HelloWorld"],
+              feedback: "end='' means nothing is added, they join immediately! HelloWorld"
+            }
+          }
+        }
+      },
+
+      // errorQuiz: end 관련 오류
+      {
+        type: "errorQuiz",
+        content: {
+          question: "이 코드의 문제는?",
+          code: "print('로딩중', End='...')\nprint('완료!')",
+          options: [
+            "End가 아니라 end (소문자여야 해)",
+            "문자열에 '...'을 쓸 수 없어",
+            "print()는 두 번 쓸 수 없어"
+          ],
+          answer: 0,
+          explanation: "파이썬 키워드 인자는 소문자야! End 대신 end를 써야 해.",
+          en: {
+            question: "What's wrong with this code?",
+            options: [
+              "It should be end (lowercase), not End",
+              "Can't use '...' in a string",
+              "Can't use print() twice"
+            ],
+            explanation: "Python keyword arguments are lowercase! Use end, not End."
+          }
+        }
+      },
+
+      // practice: end 응용
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "print() 두 번을 써서 '로딩...' 다음 '완료!' 가 한 줄에 나오게 해봐",
+          guide: "첫 번째 print에 end='...' 사용",
+          template: null,
+          answer: "print('로딩', end='...')\nprint('완료!')",
+          expect: "로딩...완료!",
+          en: {
+            task: "Use print() twice so '로딩' and '완료!' appear on one line joined by '...'",
+            guide: "Use end='...' in the first print"
+          }
+        }
+      },
+
+      // 퀴즈: end 추가
+      {
+        type: "quiz",
+        content: {
+          question: "다음 중 두 print()가 결과를 같은 줄에 출력하게 하는 코드는?",
+          options: [
+            "print('A')\nprint('B')",
+            "print('A', end='')\nprint('B')",
+            "print('A', sep='')\nprint('B')"
+          ],
+          answer: 1,
+          explanation: "end=''를 쓰면 줄바꿈 없이 다음 print가 바로 이어져! sep는 같은 print() 내의 값들 사이 구분자야.",
+          en: {
+            question: "Which code makes two print() calls output on the same line?",
+            options: [
+              "print('A')\\nprint('B')",
+              "print('A', end='')\\nprint('B')",
+              "print('A', sep='')\\nprint('B')"
+            ],
+            explanation: "end='' removes the newline so the next print continues on the same line! sep is for separating values within the same print()."
+          }
+        }
+      },
+
       // 퀴즈
       {
         type: "quiz",
@@ -358,6 +551,83 @@ export const lesson7: LessonData = {
           ],
           code: "print('A', 'B', 'C', sep='-', end='!')\n→ A-B-C!\n\nprint(1, 2, 3, sep='+', end='=?')\n→ 1+2+3=?",
           note: "sep= 와 end= 를 쉼표로 구분해서 함께 사용!"
+        }
+      },
+
+      // predict: sep + end 조합 결과
+      {
+        type: "explain",
+        content: {
+          lines: ["sep 와 end 를 같이 쓰면 어떻게 될까?"],
+          code: "print('A', 'B', 'C', sep='-', end='!')",
+          predict: {
+            options: ["A B C!", "A-B-C!", "A-B-C\n"],
+            answer: 1,
+            feedback: "sep='-'로 값들이 '-'로 구분되고, end='!'로 줄바꿈 대신 '!'가 붙어! A-B-C!"
+          },
+          en: {
+            lines: ["What happens when sep and end are used together?"],
+            predict: {
+              options: ["A B C!", "A-B-C!", "A-B-C\n"],
+              feedback: "sep='-' separates values with '-', and end='!' replaces the newline with '!'! A-B-C!"
+            }
+          }
+        }
+      },
+
+      // predict: sep + end 심화
+      {
+        type: "explain",
+        content: {
+          lines: ["이 결과를 예측해봐!"],
+          code: "print(1, 2, 3, sep='+', end='=?')",
+          predict: {
+            options: ["1 2 3=?", "1+2+3=?", "123=?"],
+            answer: 1,
+            feedback: "sep='+'로 '+' 구분, end='=?'로 끝에 '=?'가 붙어! 1+2+3=?"
+          },
+          en: {
+            lines: ["Predict this result!"],
+            predict: {
+              options: ["1 2 3=?", "1+2+3=?", "123=?"],
+              feedback: "sep='+' puts '+' between values, end='=?' appends '=?' at the end! 1+2+3=?"
+            }
+          }
+        }
+      },
+
+      // practice: sep + end 새 조합
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "'이름', '나이', '학년' 을 ':' 로 구분하고 줄바꿈 없이 '|' 로 끝내서 출력해봐",
+          guide: "sep=':' 와 end='|' 같이 사용!",
+          template: { before: "print(", after: ")" },
+          answer: "'이름', '나이', '학년', sep=':', end='|'",
+          alternateAnswers: ["'이름','나이','학년',sep=':',end='|'"],
+          expect: "이름:나이:학년|",
+          en: {
+            task: "Print '이름', '나이', '학년' separated by ':' and ending with '|'",
+            guide: "Use both sep=':' and end='|'!"
+          }
+        }
+      },
+
+      // practice: sep + end 자유 작성
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "3줄의 print()를 써서 'A-B-C D-E-F G-H-I' 를 한 줄에 출력해봐",
+          guide: "첫 두 print엔 sep='-', end=' ' 을 쓰고, 마지막엔 sep='-'만!",
+          template: null,
+          answer: "print('A', 'B', 'C', sep='-', end=' ')\nprint('D', 'E', 'F', sep='-', end=' ')\nprint('G', 'H', 'I', sep='-')",
+          expect: "A-B-C D-E-F G-H-I",
+          en: {
+            task: "Write 3 print() calls to output 'A-B-C D-E-F G-H-I' on one line",
+            guide: "First two prints use sep='-', end=' ', last one uses only sep='-'!"
+          }
         }
       },
 

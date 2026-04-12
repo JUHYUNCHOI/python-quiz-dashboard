@@ -92,8 +92,7 @@ print("7가지 자료구조 완료!")`,
         guide: "set()으로 변환 후 다시 list()!",
         hint: "list(set(리스트))로 중복 제거!",
         template: "nums = [1, 2, 2, 3, 3, 3]\nresult = list(___(nums))\nprint(sorted(result))",
-        blanksAnswer: ["set"],
-        answer: "nums = [1, 2, 2, 3, 3, 3]\nresult = list(set(nums))\nprint(sorted(result))",
+        answer: "set",
         expect: "[1, 2, 3]",
         en: {
           task: "Remove duplicates from the list (using set)",
@@ -136,8 +135,7 @@ print("7가지 자료구조 완료!")`,
         message: "🔄 덱 복습!",
         task: "deque에 왼쪽으로 0을 추가하세요",
         template: "from collections import deque\nd = deque([1, 2, 3])\nd.___(0)\nprint(list(d))",
-        blanksAnswer: ["appendleft"],
-        answer: "from collections import deque\nd = deque([1, 2, 3])\nd.appendleft(0)\nprint(list(d))",
+        answer: "appendleft",
         expect: "[0, 1, 2, 3]",
         en: {
           message: "🔄 Deque review!",
@@ -308,8 +306,7 @@ print(f"남은 기록: {undo_stack}")`,
         message: "🔄 슬라이싱 복습!",
         task: "리스트를 뒤집어서 출력하세요",
         template: "nums = [1, 2, 3, 4, 5]\nprint(nums[::___])",
-        blanksAnswer: ["-1"],
-        answer: "nums = [1, 2, 3, 4, 5]\nprint(nums[::-1])",
+        answer: "-1",
         expect: "[5, 4, 3, 2, 1]",
         en: {
           message: "🔄 Slicing review!",
@@ -372,7 +369,176 @@ point[0] = 5`,
           "문제없음"
         ],
         answer: 0,
-        explanation: "튜플은 불변(immutable)! 값을 바꾸려고 하면 TypeError가 발생해요."
+        explanation: "튜플은 불변(immutable)! 값을 바꾸려고 하면 TypeError가 발생해요.",
+        en: {
+          question: "What is the problem with this code?",
+          options: [
+            "Tuples are immutable! TypeError occurs",
+            "Index is wrong",
+            "Should use : instead of = in tuple",
+            "No problem"
+          ],
+          explanation: "Tuples are immutable! Trying to change a value raises TypeError."
+        }
+      }
+    },
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: `data = {1, 2, 3, 2, 1}
+data.add(4)
+data.add(2)
+print(len(data))`,
+        predict: {
+          options: ["7", "5", "4", "6"],
+          answer: 2,
+          feedback: "set은 중복 제거! {1,2,3} + add(4) = {1,2,3,4}, add(2)는 이미 있어서 무시 → len = 4!"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["7", "5", "4", "6"],
+            feedback: "set removes duplicates! {1,2,3} + add(4) = {1,2,3,4}, add(2) is ignored → len = 4!"
+          }
+        }
+      }
+    },
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: `from collections import deque
+
+stack = []
+queue = deque()
+
+for x in [10, 20, 30]:
+    stack.append(x)
+    queue.append(x)
+
+print(stack.pop())
+print(queue.popleft())`,
+        predict: {
+          options: ["30, 10", "10, 30", "30, 30", "10, 10"],
+          answer: 0,
+          feedback: "스택은 LIFO → pop()은 30, 큐는 FIFO → popleft()는 10!"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["30, 10", "10, 30", "30, 30", "10, 10"],
+            feedback: "Stack is LIFO → pop() returns 30, Queue is FIFO → popleft() returns 10!"
+          }
+        }
+      }
+    },
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: `scores = {"철수": 90, "영희": 85}
+scores["민수"] = 95
+scores["철수"] = 100
+print(len(scores))
+print(scores["철수"])`,
+        predict: {
+          options: ["3, 90", "4, 100", "3, 100", "2, 100"],
+          answer: 2,
+          feedback: "딕셔너리에 민수 추가(3명), 철수 점수 업데이트(100). len=3, scores['철수']=100!"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["3, 90", "4, 100", "3, 100", "2, 100"],
+            feedback: "Adding 민수 gives 3 entries, updating 철수 to 100. len=3, scores['철수']=100!"
+          }
+        }
+      }
+    },
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: `a = [1, 2, 3]
+b = (1, 2, 3)
+c = {1, 2, 3}
+
+a.append(4)
+# b.append(4)  # 에러!
+c.add(4)
+
+print(len(a), len(b), len(c))`,
+        predict: {
+          options: ["4, 4, 4", "4, 3, 4", "3, 3, 3", "4, 3, 3"],
+          answer: 1,
+          feedback: "리스트는 append 가능(4), 튜플은 불변(3), set은 add 가능(4) → 4, 3, 4!"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["4, 4, 4", "4, 3, 4", "3, 3, 3", "4, 3, 3"],
+            feedback: "list supports append(4), tuple is immutable(3), set supports add(4) → 4, 3, 4!"
+          }
+        }
+      }
+    },
+    {
+      type: "errorQuiz",
+      content: {
+        question: "이 코드의 문제점은?",
+        code: `student = {"이름": "철수", "나이": 15}
+print(student["성적"])`,
+        options: [
+          "존재하지 않는 키 접근 → KeyError 발생",
+          "딕셔너리 문법 오류",
+          "print 방식이 잘못됨",
+          "문제없음"
+        ],
+        answer: 0,
+        explanation: "딕셔너리에 없는 키에 접근하면 KeyError! student.get('성적', 0) 처럼 get()을 쓰면 안전해요.",
+        en: {
+          question: "What is the problem with this code?",
+          options: [
+            "Accessing a non-existent key raises KeyError",
+            "Dictionary syntax error",
+            "print is used incorrectly",
+            "No problem"
+          ],
+          explanation: "Accessing a missing key raises KeyError! Use student.get('성적', 0) with get() for safety."
+        }
+      }
+    },
+    {
+      type: "quiz",
+      content: {
+        question: "방문한 URL 목록을 유지하며 중복 방문 여부를 O(1)로 확인하려면?",
+        options: ["리스트 (list)", "튜플 (tuple)", "집합 (set)", "스택 (stack)"],
+        answer: 2,
+        explanation: "중복 방지 + O(1) 검색 → set! 'url in visited_set'은 O(1)이에요.",
+        en: {
+          question: "To track visited URLs and check for duplicates in O(1) time, use:",
+          options: ["List (list)", "Tuple (tuple)", "Set (set)", "Stack (stack)"],
+          explanation: "No duplicates + O(1) lookup → set! 'url in visited_set' is O(1)."
+        }
+      }
+    },
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "딕셔너리에서 존재하지 않는 키에 안전하게 접근하는 코드를 작성하세요",
+        guide: "get() 메서드를 사용하면 KeyError 방지!",
+        hint: "dict.get(키, 기본값)으로 안전하게!",
+        template: "info = {'name': '철수'}\nage = info.___(___,  0)\nprint(age)",
+        blanksAnswer: ["get", "'age'"],
+        answer: "info = {'name': '철수'}\nage = info.get('age', 0)\nprint(age)",
+        expect: "0",
+        en: {
+          task: "Write code to safely access a non-existent key in a dictionary",
+          guide: "Use the get() method to avoid KeyError!",
+          hint: "Use dict.get(key, default) for safety!"
+        }
       }
     },
     {
@@ -450,6 +616,53 @@ point[0] = 5`,
         ],
         canDo: "상황에 맞는 최적의 자료구조를 선택할 수 있어!",
         emoji: "🎓"
+      }
+    },
+
+    // predict: 적절한 자료구조 선택
+    {
+      type: "explain",
+      content: {
+        lines: ["이 상황에 가장 적합한 자료구조는?"],
+        code: "# 사용자 ID로 이름을 빠르게 찾아야 해!\n# 예: id=101 → '김민준', id=205 → '이서연'\ndata = ???",
+        predict: {
+          options: ["list", "dict", "set", "tuple"],
+          answer: 1,
+          feedback: "키(id)로 빠르게 값(이름)을 찾아야 하면 dict! dict는 키 기반 O(1) 검색이야."
+        },
+        en: {
+          lines: ["Which data structure is best for this?"],
+          predict: {
+            options: ["list", "dict", "set", "tuple"],
+            feedback: "When you need to quickly find a value by key, use dict! dict has O(1) key-based lookup."
+          }
+        }
+      }
+    },
+
+    // quiz: 중복 제거 상황
+    {
+      type: "quiz",
+      content: {
+        question: "리스트에서 중복 제거가 필요할 때 가장 간단한 방법은?",
+        options: [
+          "for 루프로 직접 제거",
+          "set()으로 변환 후 다시 list()",
+          "dict를 사용",
+          "tuple로 변환"
+        ],
+        answer: 1,
+        explanation: "set()은 중복을 자동으로 제거해! list(set(items))로 간단하게 중복 제거 가능.",
+        en: {
+          question: "What's the simplest way to remove duplicates from a list?",
+          options: [
+            "Remove manually with a for loop",
+            "Convert to set() then back to list()",
+            "Use dict",
+            "Convert to tuple"
+          ],
+          explanation: "set() automatically removes duplicates! list(set(items)) is the simple way."
+        }
       }
     },
 

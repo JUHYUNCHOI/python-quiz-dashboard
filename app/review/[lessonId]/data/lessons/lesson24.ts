@@ -109,8 +109,7 @@ print("큐 개념: 1이 먼저 나가야 해!")`,
         message: "🔄 스택 복습!",
         task: "스택에 10, 20을 넣고 pop한 결과를 출력하세요",
         template: "stack = []\nstack.append(10)\nstack.___(20)\nprint(stack.pop())",
-        blanksAnswer: ["append"],
-        answer: "stack = []\nstack.append(10)\nstack.append(20)\nprint(stack.pop())",
+        answer: "append",
         expect: "20",
         en: {
           message: "🔄 Stack review!",
@@ -261,8 +260,7 @@ print(list(q))`,
         message: "🔄 deque 기본 복습!",
         task: "deque에 10, 20, 30을 넣고 popleft 결과를 출력하세요",
         template: "from collections import deque\nq = deque()\nq.append(10)\nq.append(20)\nq.append(30)\nprint(q.___())",
-        blanksAnswer: ["popleft"],
-        answer: "from collections import deque\nq = deque()\nq.append(10)\nq.append(20)\nq.append(30)\nprint(q.popleft())",
+        answer: "popleft",
         expect: "10",
         en: {
           message: "🔄 deque basics review!",
@@ -357,7 +355,184 @@ print(q.popleft())`,
           "문제없음"
         ],
         answer: 0,
-        explanation: "빈 deque에서 popleft()하면 IndexError! 비어있는지 먼저 확인하세요."
+        explanation: "빈 deque에서 popleft()하면 IndexError! 비어있는지 먼저 확인하세요.",
+        en: {
+          question: "What is the problem with this code?",
+          options: [
+            "popleft() on an empty deque raises an error!",
+            "Import is wrong",
+            "deque() requires a list argument",
+            "No problem"
+          ],
+          explanation: "popleft() on an empty deque raises IndexError! Check if it's empty first."
+        }
+      }
+    },
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: `from collections import deque
+
+q = deque()
+q.append("A")
+q.append("B")
+q.append("C")
+print(q.popleft())
+print(q.popleft())`,
+        predict: {
+          options: ["C, B", "A, B", "A, C", "C, C"],
+          answer: 1,
+          feedback: "FIFO! 먼저 들어간 A, B 순서로 나와요!"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["C, B", "A, B", "A, C", "C, C"],
+            feedback: "FIFO! A and B come out in the order they were added!"
+          }
+        }
+      }
+    },
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: `from collections import deque
+
+q = deque([1, 2, 3])
+q.append(4)
+q.popleft()
+print(list(q))`,
+        predict: {
+          options: ["[1, 2, 3, 4]", "[2, 3, 4]", "[1, 2, 4]", "[1, 2, 3]"],
+          answer: 1,
+          feedback: "append(4) → [1,2,3,4], popleft() → 1 제거 → [2, 3, 4]!"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["[1, 2, 3, 4]", "[2, 3, 4]", "[1, 2, 4]", "[1, 2, 3]"],
+            feedback: "append(4) → [1,2,3,4], popleft() removes 1 → [2, 3, 4]!"
+          }
+        }
+      }
+    },
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: `from collections import deque
+
+q = deque(maxlen=2)
+q.append(10)
+q.append(20)
+q.append(30)
+print(list(q))`,
+        predict: {
+          options: ["[10, 20, 30]", "[10, 20]", "[20, 30]", "에러"],
+          answer: 2,
+          feedback: "maxlen=2인데 30을 넣으면 가장 오래된 10이 자동 제거! [20, 30]"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["[10, 20, 30]", "[10, 20]", "[20, 30]", "Error"],
+            feedback: "maxlen=2, so adding 30 automatically removes the oldest 10! [20, 30]"
+          }
+        }
+      }
+    },
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: `from collections import deque
+
+tasks = deque(["task1", "task2", "task3"])
+while tasks:
+    current = tasks.popleft()
+    print(f"처리: {current}")`,
+        predict: {
+          options: [
+            "처리: task3, task2, task1",
+            "처리: task1, task2, task3",
+            "처리: task2, task1, task3",
+            "에러"
+          ],
+          answer: 1,
+          feedback: "FIFO! popleft()는 앞에서 꺼내므로 task1 → task2 → task3 순서!"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: [
+              "처리: task3, task2, task1",
+              "처리: task1, task2, task3",
+              "처리: task2, task1, task3",
+              "Error"
+            ],
+            feedback: "FIFO! popleft() removes from the front, so task1 → task2 → task3!"
+          }
+        }
+      }
+    },
+    {
+      type: "errorQuiz",
+      content: {
+        question: "리스트로 큐를 구현할 때의 문제점은?",
+        code: `queue = [1, 2, 3, 4, 5]
+front = queue.pop(0)
+print(front)`,
+        options: [
+          "pop(0)은 작동하지만 O(n)으로 느려서 deque를 써야 해",
+          "리스트에는 pop(0)이 없음",
+          "pop(0)은 맨 뒤 요소를 꺼냄",
+          "문제없음, deque와 성능 동일"
+        ],
+        answer: 0,
+        explanation: "리스트 pop(0)은 나머지 요소를 모두 앞으로 당겨야 해서 O(n)이에요. 큐는 deque를 쓰세요!",
+        en: {
+          question: "What is the problem with using a list as a queue?",
+          options: [
+            "pop(0) works but is O(n) — use deque instead",
+            "Lists don't have pop(0)",
+            "pop(0) removes the last element",
+            "No problem, same performance as deque"
+          ],
+          explanation: "list.pop(0) must shift all remaining elements forward, making it O(n). Use deque for queues!"
+        }
+      }
+    },
+    {
+      type: "quiz",
+      content: {
+        question: "큐에 1, 2, 3, 4를 순서대로 enqueue하고 dequeue를 2번 하면 남는 것은?",
+        options: ["[1, 2]", "[3, 4]", "[1, 4]", "[2, 3]"],
+        answer: 1,
+        explanation: "FIFO! 1, 2가 먼저 나가고 3, 4가 남아요.",
+        en: {
+          question: "After enqueuing 1, 2, 3, 4 and dequeuing twice, what remains?",
+          options: ["[1, 2]", "[3, 4]", "[1, 4]", "[2, 3]"],
+          explanation: "FIFO! 1 and 2 exit first, leaving 3 and 4."
+        }
+      }
+    },
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "deque로 숫자 1~5를 넣고 앞에서부터 차례로 제곱값을 출력하세요",
+        guide: "popleft()로 꺼내면서 **2 계산!",
+        hint: "while 큐가 찰 때까지 popleft하면서 print!",
+        template: null,
+        answer: "from collections import deque\n\nq = deque()\nfor i in range(1, 6):\n    q.append(i)\nwhile q:\n    n = q.popleft()\n    print(n ** 2)",
+        expect: "1\n4\n9\n16\n25",
+        en: {
+          task: "Add numbers 1~5 to a deque and print the square of each from the front",
+          guide: "Pop with popleft() and compute **2!",
+          hint: "Use while and popleft, printing n**2 each time!"
+        }
       }
     },
     {

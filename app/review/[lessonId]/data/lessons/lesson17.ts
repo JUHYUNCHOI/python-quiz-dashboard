@@ -153,8 +153,7 @@ export const lesson17: LessonData = {
         message: "🔄 리스트 인덱싱 복습! (레슨 16)",
         task: "리스트의 첫 번째 요소 출력하기",
         template: "colors = [\"빨강\", \"파랑\", \"초록\"]\nprint(colors[___])",
-        blanksAnswer: ["0"],
-        answer: "colors = [\"빨강\", \"파랑\", \"초록\"]\nprint(colors[0])",
+        answer: "0",
         expect: "빨강",
         en: {
           message: "🔄 List indexing review! (Lesson 16)",
@@ -340,8 +339,7 @@ export const lesson17: LessonData = {
         guide: "[표현식 for 변수 in 범위] 형태!",
         hint: "n ** 2 또는 n * n 사용!",
         template: "squares = [___ for n in range(1, 6)]\nprint(squares)",
-        blanksAnswer: ["n ** 2"],
-        answer: "squares = [n ** 2 for n in range(1, 6)]\nprint(squares)",
+        answer: "n ** 2",
         expect: "[1, 4, 9, 16, 25]",
         en: {
           task: "Create a list of squares from 1 to 5 using list comprehension",
@@ -415,8 +413,7 @@ export const lesson17: LessonData = {
         task: "리스트 [1, 2, 3, 4, 5]의 각 원소를 3배 한 새 리스트를 만들어 출력해요",
         guide: "[x * 3 for x in nums]",
         template: "nums = [1, 2, 3, 4, 5]\ntripled = [___ for x in nums]\nprint(tripled)",
-        blanksAnswer: ["x * 3"],
-        answer: "nums = [1, 2, 3, 4, 5]\ntripled = [x * 3 for x in nums]\nprint(tripled)",
+        answer: "x * 3",
         expect: "[3, 6, 9, 12, 15]",
         en: {
           task: "Create a new list that triples each element of [1, 2, 3, 4, 5] and print it",

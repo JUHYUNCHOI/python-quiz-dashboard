@@ -106,8 +106,7 @@ print(f"남은 접시: {접시들}")`,
         message: "🔄 슬라이싱 복습!",
         task: "리스트의 마지막 2개 요소만 가져오세요",
         template: "data = [10, 20, 30, 40, 50]\nprint(data[___:])",
-        blanksAnswer: ["-2"],
-        answer: "data = [10, 20, 30, 40, 50]\nprint(data[-2:])",
+        answer: "-2",
         expect: "[40, 50]",
         en: {
           message: "🔄 Slicing review!",
@@ -242,8 +241,7 @@ print("스택 변화 없음:", stack)`,
         message: "🔄 스택 기본 복습!",
         task: "스택에 'x', 'y'를 넣고 맨 위 값을 peek(확인만)하세요",
         template: "stack = []\nstack.append('x')\nstack.append('y')\nprint(stack[___])",
-        blanksAnswer: ["-1"],
-        answer: "stack = []\nstack.append('x')\nstack.append('y')\nprint(stack[-1])",
+        answer: "-1",
         expect: "y",
         en: {
           message: "🔄 Stack basics review!",
@@ -336,7 +334,168 @@ print(stack.pop())`,
           "문제없음"
         ],
         answer: 0,
-        explanation: "빈 리스트에서 pop()하면 IndexError! 항상 비어있는지 확인 후 pop하세요."
+        explanation: "빈 리스트에서 pop()하면 IndexError! 항상 비어있는지 확인 후 pop하세요.",
+        en: {
+          question: "What is the problem with this code?",
+          options: [
+            "Popping from an empty stack raises an error!",
+            "append must be called first",
+            "print syntax error",
+            "No problem"
+          ],
+          explanation: "pop() on an empty list raises IndexError! Always check if the stack is empty before popping."
+        }
+      }
+    },
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: `stack = []
+for i in range(1, 5):
+    stack.append(i)
+print(stack.pop())
+print(stack.pop())`,
+        predict: {
+          options: ["1, 2", "4, 3", "4, 4", "1, 1"],
+          answer: 1,
+          feedback: "LIFO! 4를 넣은 게 마지막이니까 pop하면 4 → 3 순서로 나와요!"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["1, 2", "4, 3", "4, 4", "1, 1"],
+            feedback: "LIFO! 4 was pushed last, so pop returns 4, then 3!"
+          }
+        }
+      }
+    },
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: `stack = ["hello", "world", "python"]
+top = stack[-1]
+stack.pop()
+print(top)
+print(len(stack))`,
+        predict: {
+          options: ["python, 3", "python, 2", "hello, 2", "world, 2"],
+          answer: 1,
+          feedback: "[-1]로 peak(엿보기)를 하고 pop()으로 제거! python이 출력되고 스택에 2개 남아요."
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["python, 3", "python, 2", "hello, 2", "world, 2"],
+            feedback: "Peek with [-1] then pop()! python is printed and 2 items remain in the stack."
+          }
+        }
+      }
+    },
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: `stack = []
+stack.append(10)
+stack.append(20)
+stack.pop()
+stack.append(30)
+print(stack)`,
+        predict: {
+          options: ["[10, 20, 30]", "[10, 30]", "[20, 30]", "[30]"],
+          answer: 1,
+          feedback: "append(10) → append(20) → pop() 20 제거 → append(30) → [10, 30]!"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["[10, 20, 30]", "[10, 30]", "[20, 30]", "[30]"],
+            feedback: "append(10) → append(20) → pop() removes 20 → append(30) → [10, 30]!"
+          }
+        }
+      }
+    },
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: `stack = [1, 2, 3]
+result = []
+while stack:
+    result.append(stack.pop())
+print(result)`,
+        predict: {
+          options: ["[1, 2, 3]", "[3, 2, 1]", "[2, 1, 3]", "[3, 3, 3]"],
+          answer: 1,
+          feedback: "스택에서 pop하면 3 → 2 → 1 순서로 나와서 result에 쌓이면 [3, 2, 1]!"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            options: ["[1, 2, 3]", "[3, 2, 1]", "[2, 1, 3]", "[3, 3, 3]"],
+            feedback: "Popping from the stack gives 3 → 2 → 1, so result becomes [3, 2, 1]!"
+          }
+        }
+      }
+    },
+    {
+      type: "errorQuiz",
+      content: {
+        question: "스택에서 peek(맨 위 확인)를 올바르게 구현한 것은?",
+        code: `stack = [1, 2, 3]
+top = stack.pop()
+print(top)`,
+        options: [
+          "pop()은 제거까지 해서 잘못됨 — stack[-1]을 써야 해",
+          "완벽한 peek 구현",
+          "top 변수 이름이 잘못됨",
+          "stack에 값이 없어서 에러"
+        ],
+        answer: 0,
+        explanation: "peek은 꺼내지 않고 '엿보기'만 해야 해요! pop()은 삭제까지 하므로 stack[-1]을 사용하세요.",
+        en: {
+          question: "What is wrong with this peek (view top) implementation?",
+          options: [
+            "pop() removes the element — should use stack[-1] instead",
+            "Perfect peek implementation",
+            "Variable name top is wrong",
+            "Error because stack is empty"
+          ],
+          explanation: "Peek should only look without removing! pop() deletes the element, so use stack[-1] instead."
+        }
+      }
+    },
+    {
+      type: "quiz",
+      content: {
+        question: "스택에 'A', 'B', 'C'를 순서대로 push하면 pop()의 결과는?",
+        options: ["A", "B", "C", "에러"],
+        answer: 2,
+        explanation: "LIFO! 마지막에 push된 'C'가 pop()에서 먼저 나와요.",
+        en: {
+          question: "After pushing 'A', 'B', 'C' onto a stack, what does pop() return?",
+          options: ["A", "B", "C", "Error"],
+          explanation: "LIFO! The last pushed 'C' comes out first with pop()."
+        }
+      }
+    },
+    {
+      type: "practice",
+      content: {
+        level: 2,
+        task: "스택을 이용해 숫자 리스트 [1, 2, 3, 4, 5]를 역순으로 출력하세요",
+        guide: "push 후 pop 반복!",
+        hint: "for로 append, while로 pop하면서 print!",
+        template: null,
+        answer: "stack = []\nfor n in [1, 2, 3, 4, 5]:\n    stack.append(n)\nwhile stack:\n    print(stack.pop())",
+        expect: "5\n4\n3\n2\n1",
+        en: {
+          task: "Use a stack to print the list [1, 2, 3, 4, 5] in reverse order",
+          guide: "Push then pop repeatedly!",
+          hint: "Use for to append, then while to pop and print!"
+        }
       }
     },
     {

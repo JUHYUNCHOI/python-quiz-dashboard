@@ -215,8 +215,8 @@ export const lessonCpp12: LessonData = {
           task: "참조 변수 ref를 x에 연결하고, ref를 통해 x를 20으로 바꿔서 x를 출력해요",
           guide: "int& ref = x; ref = 20;",
           template: "int x = 10;\nint___ ref = x;\nref = 20;\ncout << x << endl;",
-          blanksAnswer: ["&"],
-          answer: "int x = 10;\nint& ref = x;\nref = 20;\ncout << x << endl;",
+          answer: "&",
+          alternateAnswers: ["&"],
           expect: "20",
           en: {
             task: "Bind reference ref to x, change x to 20 through ref, then print x",

@@ -46,8 +46,7 @@ export const lesson13: LessonData = {
         message: "🔄 조건문 복습!",
         task: "x가 10보다 크면 '크다' 출력",
         template: "x = 15\n___ x > 10:\n    print('크다')",
-        blanksAnswer: ["if"],
-        answer: "x = 15\nif x > 10:\n    print('크다')",
+        answer: "if",
         expect: "크다",
         en: {
           message: "🔄 Conditional review!",
@@ -106,8 +105,8 @@ export const lesson13: LessonData = {
         hint: "range(1, 6)을 사용해봐!",
         template: "for i in range(___,___):\n    print(i)",
         blanksAnswer: ["1", "6"],
-        answer: "for i in range(1, 10, 2):\n    print(i)",
-        expect: "1\n3\n5\n7\n9",
+        answer: "for i in range(1, 6):\n    print(i)",
+        expect: "1\n2\n3\n4\n5",
         en: {
           task: "Print numbers from 1 to 5",
           guide: "Remember range(start, end+1)!",
@@ -139,8 +138,9 @@ export const lesson13: LessonData = {
         guide: "range의 3번째 인자로 2씩 건너뛰어봐!",
         hint: "range(1, 10, 2)를 써봐!",
         template: null,
-        answer: "for i in range(1, 6):\n    print(i)",
-        expect: "1\n2\n3\n4\n5",
+        answer: "for i in range(1, 10, 2):\n    print(i)",
+        alternateAnswers: ["for i in range(1,10,2):\n    print(i)"],
+        expect: "1\n3\n5\n7\n9",
         en: {
           task: "Make it print like this ↓\n1\n3\n5\n7\n9\n\nHint: Use range(start, end, step)!",
           guide: "Skip by 2 using the 3rd argument of range!",
@@ -297,8 +297,7 @@ export const lesson13: LessonData = {
         guide: "f-string으로 3 * i = 결과 형태!",
         hint: "range(1, 10)과 3*i를 사용!",
         template: "for i in range(1, 10):\n    print(f'3 * {i} = {___}')",
-        blanksAnswer: ["3*i"],
-        answer: "for i in range(1, 10):\n    print(f'3 * {i} = {3*i}')",
+        answer: "3*i",
         expect: "3 * 1 = 3\n3 * 2 = 6\n3 * 3 = 9\n3 * 4 = 12\n3 * 5 = 15\n3 * 6 = 18\n3 * 7 = 21\n3 * 8 = 24\n3 * 9 = 27",
         en: {
           task: "Print the 3 times table",

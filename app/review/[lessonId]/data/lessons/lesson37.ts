@@ -103,8 +103,7 @@ except:
         guide: "에러가 날 수 있는 코드 앞에 뭘 써야 할까?",
         hint: "'시도하다'를 영어로! t로 시작해요",
         template: "___:\n    x = int('abc')\n    print(x)\nexcept:\n    print('변환 실패!')",
-        blanksAnswer: ["try"],
-        answer: "try:\n    x = int('abc')\n    print(x)\nexcept:\n    print('변환 실패!')",
+        answer: "try",
         en: {
           task: "Fill in the blank with the right word!",
           guide: "What do you write before code that might cause an error?",

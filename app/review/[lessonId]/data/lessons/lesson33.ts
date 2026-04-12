@@ -516,7 +516,106 @@ print(합, 차)`,
         desc: "오늘 배운 걸 정리해요!"
       }
     },
-    
+
+    // 추가 predict 1: 기본값 + 다중 반환 종합
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: `def info(name, age=10):
+    return name, age
+
+a, b = info('철수')
+print(a, b)`,
+        predict: {
+          question: "출력 결과는?",
+          options: ["철수 10", "('철수', 10)", "철수, 10", "에러"],
+          answer: 0,
+          feedback: "age 생략 → 기본값 10! 두 값을 받아서 공백으로 출력!"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            question: "What's the output?",
+            options: ["철수 10", "('철수', 10)", "철수, 10", "Error"],
+            feedback: "age omitted → default 10! Two values received and printed with a space!"
+          }
+        },
+        result: "철수 10"
+      }
+    },
+
+    // 추가 predict 2: 키워드 인자 + 기본값
+    {
+      type: "explain",
+      content: {
+        lines: ["결과를 예측해봐!"],
+        code: `def price(item, count=1, discount=0):
+    return (count - discount) * 100
+
+print(price('사과', discount=2, count=5))`,
+        predict: {
+          question: "출력 결과는?",
+          options: ["500", "300", "200", "에러"],
+          answer: 1,
+          feedback: "키워드 인자로 순서 달라도 OK! (5 - 2) * 100 = 300!"
+        },
+        en: {
+          lines: ["Predict the output!"],
+          predict: {
+            question: "What's the output?",
+            options: ["500", "300", "200", "Error"],
+            feedback: "Keyword args work in any order! (5 - 2) * 100 = 300!"
+          }
+        },
+        result: "300"
+      }
+    },
+
+    // 추가 practice 1: 기본값 + 다중 반환 종합
+    {
+      type: "practice",
+      content: {
+        level: 2.5,
+        task: "이름과 학년(기본=1)을 받아 학번(이름+학년)을 반환하는 make_id 함수를 만드세요!",
+        guide: "return name + str(grade) 처럼!",
+        hint: "def make_id(name, grade=1): return name + str(grade)",
+        template: null,
+        answer: "def make_id(name, grade=1):\n    return name + str(grade)\n\nprint(make_id('김민수'))\nprint(make_id('이영희', 3))",
+        en: {
+          task: "Create a make_id function that takes name and grade (default=1) and returns a student ID!",
+          guide: "Like return name + str(grade)!",
+          hint: "def make_id(name, grade=1): return name + str(grade)"
+        },
+        alternateAnswers: [
+          "def make_id(name, grade=1):\n    return name + str(grade)\nprint(make_id('김민수'))\nprint(make_id('이영희', 3))"
+        ],
+        expect: "김민수1\n이영희3"
+      }
+    },
+
+    // 추가 practice 2: 범위와 합계 반환
+    {
+      type: "practice",
+      content: {
+        level: 3,
+        task: "리스트를 받아 (최댓값 - 최솟값)의 범위와 합계를 모두 반환하는 analyze 함수를 만드세요!",
+        guide: "범위 = max - min, 합계 = sum!",
+        hint: "return max(data) - min(data), sum(data)",
+        template: null,
+        answer: "def analyze(data):\n    return max(data) - min(data), sum(data)\n\n범위, 합계 = analyze([4, 7, 2, 9, 1])\nprint(f'범위:{범위}, 합계:{합계}')",
+        en: {
+          task: "Create an analyze function that returns both range (max-min) and sum of a list!",
+          guide: "Range = max - min, Total = sum!",
+          hint: "return max(data) - min(data), sum(data)"
+        },
+        alternateAnswers: [
+          "def analyze(data):\n    return max(data) - min(data), sum(data)\n범위, 합계 = analyze([4, 7, 2, 9, 1])\nprint(f'범위:{범위}, 합계:{합계}')"
+        ],
+        expect: "범위:8, 합계:23"
+      }
+    },
+
     // 요약
     {
       type: "summary",

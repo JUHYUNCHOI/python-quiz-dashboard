@@ -15,6 +15,7 @@
     "validate-lessons": "npx tsx scripts/validate-lessons.ts",
     "validate-questions": "node --import ./node_modules/jiti/lib/jiti-register.mjs scripts/validate-questions.ts",
     "validate-answers": "node --import ./node_modules/jiti/lib/jiti-register.mjs scripts/validate-answers.ts",
+    "check-review": "node scripts/check-review-answers.mjs",
     "build:mobile": "next build && npx cap sync",
     "cap:open:ios": "npx cap open ios",
     "cap:open:android": "npx cap open android"

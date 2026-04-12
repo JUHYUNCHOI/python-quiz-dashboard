@@ -656,6 +656,178 @@ export const lesson3: LessonData = {
         }
       },
 
+      // 예측 퀴즈 1: 변수 재할당
+      {
+        type: "explain",
+        content: {
+          lines: ["결과를 예측해봐!"],
+          code: "x = 10\nx = 20\nprint(x)",
+          predict: {
+            options: ["10", "20", "10\n20", "에러"],
+            answer: 1,
+            feedback: "변수는 나중에 할당한 값으로 덮어써져! x = 20이 마지막이니까 20이 출력돼."
+          },
+          en: {
+            lines: ["Predict the output!"],
+            predict: {
+              options: ["10", "20", "10\n20", "Error"],
+              feedback: "Variables get overwritten with the latest assignment! x = 20 is last so 20 is printed."
+            }
+          }
+        }
+      },
+
+      // 예측 퀴즈 2: 변수 스왑
+      {
+        type: "explain",
+        content: {
+          lines: ["출력 결과는?"],
+          code: "a = 5\nb = 3\na, b = b, a\nprint(a)\nprint(b)",
+          predict: {
+            options: ["5\n3", "3\n5", "에러", "3\n3"],
+            answer: 1,
+            feedback: "a, b = b, a 는 a와 b를 동시에 맞바꿔! 결과: a=3, b=5."
+          },
+          en: {
+            lines: ["What's the output?"],
+            predict: {
+              options: ["5\n3", "3\n5", "Error", "3\n3"],
+              feedback: "a, b = b, a swaps both at the same time! Result: a=3, b=5."
+            }
+          }
+        }
+      },
+
+      // 예측 퀴즈 3: 변수 계산 순서
+      {
+        type: "explain",
+        content: {
+          lines: ["최종 값을 예측해봐!"],
+          code: "score = 0\nscore = score + 10\nscore = score + 20\nprint(score)",
+          predict: {
+            options: ["0", "10", "20", "30"],
+            answer: 3,
+            feedback: "0 → 10 → 30 순서로 업데이트! score + 10 = 10, 그다음 10 + 20 = 30."
+          },
+          en: {
+            lines: ["Predict the final value!"],
+            predict: {
+              options: ["0", "10", "20", "30"],
+              feedback: "Updates in order: 0 → 10 → 30! score + 10 = 10, then 10 + 20 = 30."
+            }
+          }
+        }
+      },
+
+      // 예측 퀴즈 4: 변수 이름 대소문자
+      {
+        type: "explain",
+        content: {
+          lines: ["이 코드의 결과는?"],
+          code: "Name = '홍길동'\nname = '김철수'\nprint(Name)",
+          predict: {
+            options: ["홍길동", "김철수", "에러", "홍길동\n김철수"],
+            answer: 0,
+            feedback: "Name과 name은 대소문자가 달라서 완전히 다른 변수야! Name을 출력하면 '홍길동'이 나와."
+          },
+          en: {
+            lines: ["What's the result of this code?"],
+            predict: {
+              options: ["홍길동", "김철수", "Error", "홍길동\n김철수"],
+              feedback: "Name and name are completely different variables because of capitalization! Printing Name gives '홍길동'."
+            }
+          }
+        }
+      },
+
+      // 에러 퀴즈 1: 정의되지 않은 변수 사용
+      {
+        type: "errorQuiz",
+        content: {
+          question: "이 코드의 문제점은?",
+          code: "print(total)\ntotal = 100",
+          options: [
+            "total을 만들기 전에 사용해서 NameError!",
+            "total에 따옴표가 없어서 에러",
+            "print 문법이 틀려서 에러"
+          ],
+          answer: 0,
+          explanation: "변수는 먼저 만들고(대입) 나중에 사용해야 해! total = 100을 print 위로 올려야 돼.",
+          en: {
+            question: "What's wrong with this code?",
+            options: [
+              "Used total before creating it — NameError!",
+              "total is missing quotes",
+              "print syntax error"
+            ],
+            explanation: "Variables must be created before they are used! Move total = 100 above the print."
+          }
+        }
+      },
+
+      // 에러 퀴즈 2: 잘못된 변수 이름
+      {
+        type: "errorQuiz",
+        content: {
+          question: "변수 이름 오류가 있는 코드는?",
+          code: "a. user_name = '홍길동'\nb. 1st_place = '1등'\nc. myScore = 100",
+          options: [
+            "a만 에러",
+            "b만 에러",
+            "c만 에러"
+          ],
+          answer: 1,
+          explanation: "1st_place는 숫자(1)로 시작해서 에러! first_place 또는 place_1으로 고쳐야 해.",
+          en: {
+            question: "Which code has an invalid variable name?",
+            options: [
+              "Only a has error",
+              "Only b has error",
+              "Only c has error"
+            ],
+            explanation: "1st_place starts with a digit so it causes an error! Use first_place or place_1 instead."
+          }
+        }
+      },
+
+      // 연습 1: 변수 스왑
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "a = 1, b = 2 를 만들고 두 값을 바꿔서 출력해봐\n(a=2, b=1 이 되도록)",
+          guide: "a, b = b, a 패턴을 써봐!",
+          template: null,
+          answer: "a = 1\nb = 2\na, b = b, a\nprint(a)\nprint(b)",
+          alternateAnswers: ["a = 1\nb = 2\ntemp = a\na = b\nb = temp\nprint(a)\nprint(b)"],
+          expect: "2\n1",
+          en: {
+            task: "Create a = 1, b = 2 then swap them and print\n(so a=2, b=1)",
+            guide: "Use the a, b = b, a pattern!"
+          }
+        }
+      },
+
+      // 연습 2: 누적 계산
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "이렇게 나오게 해봐 ↓\n100\n150\n200",
+          guide: "money = 100 으로 시작해서 50씩 늘려가며 출력!",
+          template: null,
+          answer: "money = 100\nprint(money)\nmoney = money + 50\nprint(money)\nmoney = money + 50\nprint(money)",
+          alternateAnswers: [
+            "money = 100\nprint(money)\nmoney += 50\nprint(money)\nmoney += 50\nprint(money)"
+          ],
+          expect: "100\n150\n200",
+          en: {
+            task: "Make it print like this ↓\n100\n150\n200",
+            guide: "Start with money = 100 and increase by 50 each time, printing each value!"
+          }
+        }
+      },
+
       // 최종 요약
       {
         type: "summary",

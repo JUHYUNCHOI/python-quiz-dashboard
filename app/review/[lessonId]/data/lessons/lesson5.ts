@@ -179,6 +179,54 @@ export const lesson5: LessonData = {
         }
       },
 
+      // predict: + 연산자 결과 예측
+      {
+        type: "explain",
+        content: {
+          lines: ["결과가 뭘까? 직접 맞춰봐!"],
+          code: "print('코딩' + '짱')",
+          predict: {
+            question: "출력 결과는?",
+            options: ["코딩짱", "코딩 짱", "에러"],
+            answer: 0,
+            feedback: "+ 는 그냥 이어붙이기야. 공백 없이 '코딩짱' 이 나와!"
+          },
+          result: "코딩짱",
+          en: {
+            lines: ["What's the result? Try to guess!"],
+            predict: {
+              question: "What is the output?",
+              options: ["코딩짱", "코딩 짱 (with space)", "Error"],
+              feedback: "+ just concatenates. No space — outputs '코딩짱'!"
+            }
+          }
+        }
+      },
+
+      // predict: 변수 이어붙이기
+      {
+        type: "explain",
+        content: {
+          lines: ["변수 두 개를 이어붙이면?"],
+          code: "a = '파이'\nb = '썬'\nprint(a + b)",
+          predict: {
+            question: "출력 결과는?",
+            options: ["파이썬", "a + b", "파이 썬"],
+            answer: 0,
+            feedback: "변수 a와 b에 각각 '파이', '썬' 이 저장돼 있어서 이어붙이면 '파이썬'!"
+          },
+          result: "파이썬",
+          en: {
+            lines: ["What happens when you concatenate two variables?"],
+            predict: {
+              question: "What is the output?",
+              options: ["파이썬", "a + b", "파이 썬"],
+              feedback: "a holds '파이' and b holds '썬', so a + b = '파이썬'!"
+            }
+          }
+        }
+      },
+
       // 퀴즈
       {
         type: "quiz",
@@ -304,6 +352,55 @@ export const lesson5: LessonData = {
         }
       },
 
+      // predict: * 연산자 결과 예측
+      {
+        type: "explain",
+        content: {
+          lines: ["반복 결과를 맞춰봐!"],
+          code: "print('-' * 5)",
+          predict: {
+            question: "출력 결과는?",
+            options: ["-----", "- * 5", "-5"],
+            answer: 0,
+            feedback: "'-' 를 5번 반복하니까 '-----' 가 출력돼!"
+          },
+          result: "-----",
+          en: {
+            lines: ["Guess the repetition result!"],
+            predict: {
+              question: "What is the output?",
+              options: ["-----", "- * 5", "-5"],
+              feedback: "'-' repeated 5 times gives '-----'!"
+            }
+          }
+        }
+      },
+
+      // errorQuiz: * 연산자 오용
+      {
+        type: "errorQuiz",
+        content: {
+          question: "이 코드는 왜 에러가 날까?",
+          code: "print('hi' * '3')",
+          options: [
+            "문자열 * 문자열 불가 — 숫자를 써야 해",
+            "'hi' 가 짧아서",
+            "print() 안에 * 를 못 씀"
+          ],
+          answer: 0,
+          explanation: "* 반복 연산자는 문자열 * 정수 여야 해. '3' 은 문자열이라 에러! print('hi' * 3) 이라고 써야 해.",
+          en: {
+            question: "Why does this code cause an error?",
+            options: [
+              "Can't do string * string — need an integer",
+              "'hi' is too short",
+              "Can't use * inside print()"
+            ],
+            explanation: "The * repetition operator requires string * integer. '3' is a string, so it errors! Use print('hi' * 3)."
+          }
+        }
+      },
+
       // 퀴즈
       {
         type: "quiz",
@@ -404,6 +501,55 @@ export const lesson5: LessonData = {
         }
       },
 
+      // predict: str() 없이 쓰면?
+      {
+        type: "explain",
+        content: {
+          lines: ["이 코드는 어떻게 될까?"],
+          code: "year = 2025\nprint('올해는 ' + year + '년!')",
+          predict: {
+            question: "실행하면?",
+            options: ["올해는 2025년!", "TypeError 에러", "올해는 year년!"],
+            answer: 1,
+            feedback: "year 는 숫자(정수)라서 문자열과 + 로 합칠 수 없어. str(year) 로 변환해야 해!"
+          },
+          isError: true,
+          en: {
+            lines: ["What happens with this code?"],
+            predict: {
+              question: "What happens when you run it?",
+              options: ["올해는 2025년!", "TypeError", "올해는 year년!"],
+              feedback: "year is an integer — you can't concatenate it with a string using +. Use str(year)!"
+            }
+          }
+        }
+      },
+
+      // errorQuiz: str() 필요
+      {
+        type: "errorQuiz",
+        content: {
+          question: "이 코드에서 문제가 있는 부분은?",
+          code: "price = 5000\nprint('가격: ' + price + '원')",
+          options: [
+            "price 를 str(price) 로 바꿔야 해",
+            "'가격: ' 앞에 print 가 없어서",
+            "'원' 뒤에 \\n 이 필요해서"
+          ],
+          answer: 0,
+          explanation: "price 는 정수(int)야. 문자열 + 정수는 에러! str(price) 로 감싸면 '가격: 5000원' 이 출력돼.",
+          en: {
+            question: "What is the problem in this code?",
+            options: [
+              "price needs to be str(price)",
+              "Missing print before '가격: '",
+              "Missing \\n after '원'"
+            ],
+            explanation: "price is an integer. String + int causes an error! Wrap it as str(price) to output '가격: 5000원'."
+          }
+        }
+      },
+
       // ===== Lv.2: str() 활용 =====
       {
         type: "practice",
@@ -499,6 +645,41 @@ export const lesson5: LessonData = {
           en: {
             message: "Remember str() conversion?",
             task: "Print '나이: ' + str(14)"
+          }
+        }
+      },
+
+      // ===== Lv.2: + 와 * 조합 =====
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "'★' * 5 + ' 완료! ' + '★' * 5 를 출력해봐",
+          guide: "* 로 반복하고 + 로 이어붙이기!",
+          template: { before: "print(", after: ")" },
+          answer: "'★' * 5 + ' 완료! ' + '★' * 5",
+          alternateAnswers: ["'★'*5+' 완료! '+'★'*5"],
+          expect: "★★★★★ 완료! ★★★★★",
+          en: {
+            task: "Print '★' * 5 + ' 완료! ' + '★' * 5",
+            guide: "Use * to repeat and + to join!"
+          }
+        }
+      },
+
+      // ===== Lv.3: 전체 조합 =====
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "grade = 3 으로 저장하고, '저는 ' + str(grade) + '학년이에요!' 를 출력해봐",
+          guide: "변수를 str()로 변환해서 이어붙이기!",
+          template: null,
+          answer: "grade = 3\nprint('저는 ' + str(grade) + '학년이에요!')",
+          expect: "저는 3학년이에요!",
+          en: {
+            task: "Store grade = 3 and print '저는 ' + str(grade) + '학년이에요!'",
+            guide: "Convert the variable with str() and concatenate!"
           }
         }
       },
