@@ -17,6 +17,7 @@ interface StepRendererProps {
   isCompleted: boolean
   lessonId?: string
   userId?: string
+  isTeacher?: boolean
   // tryit/mission
   hintLevel: number
   onHintLevelChange: (level: number) => void
@@ -35,7 +36,7 @@ interface StepRendererProps {
 }
 
 export function StepRenderer({
-  step, lang, isCompleted, lessonId, userId,
+  step, lang, isCompleted, lessonId, userId, isTeacher,
   hintLevel, onHintLevelChange, onSuccess, onUnlock,
   selectedAnswer, showExplanation, quizAttempts, onQuizAnswer, onQuizAcknowledge,
   onStepComplete, onStepAcknowledge, showNextOnCorrect
@@ -101,7 +102,7 @@ export function StepRenderer({
       return <AnimationStep step={step} />
 
     case "practice":
-      return <PracticeStep step={step} lang={lang} onSuccess={onSuccess} onUnlock={onUnlock} lessonId={lessonId} userId={userId} isCompleted={isCompleted} />
+      return <PracticeStep step={step} lang={lang} onSuccess={onSuccess} onUnlock={onUnlock} lessonId={lessonId} userId={userId} isCompleted={isCompleted} isTeacher={isTeacher} />
 
     case "coding":
       return (

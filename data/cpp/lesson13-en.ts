@@ -212,67 +212,40 @@ int main() {
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ Build a swap function with pointers!",
-          content: `Use pointers to write a swap function that exchanges two values!
+          content: `Write a \`swap\` function using pointers that swaps two integers.
 
-Compare the pointer and reference versions to feel the difference.`,
+Start with \`int temp = *a;\` — then fill in the rest.`,
           starterCode: `#include <iostream>
 using namespace std;
 
-// Pointer version: dereference with * to swap values
-void swapPtr(int* a, int* b) {
+void swap(int* a, int* b) {
     int temp = *a;
-    // complete this
-
-}
-
-// Reference version: access variables directly by name
-void swapRef(int& a, int& b) {
-    int temp = a;
-    // complete this
+    // fill in the rest
 
 }
 
 int main() {
     int x = 10, y = 20;
-
-    swapPtr(&x, &y);
-    cout << "Pointer swap: " << x << " " << y << endl;
-
-    swapRef(x, y);
-    cout << "Reference swap: " << x << " " << y << endl;
-
+    swap(&x, &y);
+    cout << x << " " << y << endl;
     return 0;
 }`,
           code: `#include <iostream>
 using namespace std;
 
-// Pointer version
-void swapPtr(int* a, int* b) {
+void swap(int* a, int* b) {
     int temp = *a;
     *a = *b;
     *b = temp;
 }
 
-// Reference version (simpler!)
-void swapRef(int& a, int& b) {
-    int temp = a;
-    a = b;
-    b = temp;
-}
-
 int main() {
     int x = 10, y = 20;
-
-    swapPtr(&x, &y);
-    cout << "Pointer swap: " << x << " " << y << endl;
-
-    swapRef(x, y);
-    cout << "Reference swap: " << x << " " << y << endl;
-
+    swap(&x, &y);
+    cout << x << " " << y << endl;
     return 0;
 }`,
-          expectedOutput: `Pointer swap: 20 10
-Reference swap: 10 20`
+          expectedOutput: `20 10`
         },
         {
           id: "ch2-q1",

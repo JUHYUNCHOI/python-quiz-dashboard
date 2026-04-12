@@ -211,67 +211,40 @@ int main() {
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ 포인터로 swap 함수 만들기!",
-          content: `포인터를 이용해서 두 값을 교환하는 swap 함수를 만들어봐요!
+          content: `포인터를 이용해서 두 정수를 교환하는 \`swap\` 함수를 만들어봐요.
 
-포인터 버전과 참조 버전을 비교해서 차이를 느껴봐요.`,
+\`int temp = *a;\` 로 시작했으니 나머지를 채워보세요.`,
           starterCode: `#include <iostream>
 using namespace std;
 
-// 포인터 버전: *로 역참조해서 값을 교환
-void swapPtr(int* a, int* b) {
+void swap(int* a, int* b) {
     int temp = *a;
-    // 여기를 완성하세요
-
-}
-
-// 참조 버전: 변수 이름으로 바로 접근
-void swapRef(int& a, int& b) {
-    int temp = a;
-    // 여기를 완성하세요
+    // 나머지를 완성하세요
 
 }
 
 int main() {
     int x = 10, y = 20;
-
-    swapPtr(&x, &y);  // 주소를 넘겨야 함
-    cout << "포인터 swap: " << x << " " << y << endl;
-
-    swapRef(x, y);    // 그냥 변수를 넘김
-    cout << "참조 swap: " << x << " " << y << endl;
-
+    swap(&x, &y);
+    cout << x << " " << y << endl;
     return 0;
 }`,
           code: `#include <iostream>
 using namespace std;
 
-// 포인터 버전
-void swapPtr(int* a, int* b) {
+void swap(int* a, int* b) {
     int temp = *a;
     *a = *b;
     *b = temp;
 }
 
-// 참조 버전 (더 간단!)
-void swapRef(int& a, int& b) {
-    int temp = a;
-    a = b;
-    b = temp;
-}
-
 int main() {
     int x = 10, y = 20;
-
-    swapPtr(&x, &y);  // 주소를 넘겨야 함
-    cout << "포인터 swap: " << x << " " << y << endl;
-
-    swapRef(x, y);    // 그냥 변수를 넘김
-    cout << "참조 swap: " << x << " " << y << endl;
-
+    swap(&x, &y);
+    cout << x << " " << y << endl;
     return 0;
 }`,
-          expectedOutput: `포인터 swap: 20 10
-참조 swap: 10 20`
+          expectedOutput: `20 10`
         },
         {
           id: "ch2-q1",

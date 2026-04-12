@@ -997,6 +997,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
               isCompleted={effectiveTeacher ? false : isCurrentStepCompleted}
               lessonId={lessonId}
               userId={user?.id}
+              isTeacher={effectiveTeacher}
               hintLevel={hintLevel}
               onHintLevelChange={setHintLevel}
               onSuccess={handleSuccess}

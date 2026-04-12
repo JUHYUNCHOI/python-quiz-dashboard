@@ -18,6 +18,7 @@ interface PracticeStepProps {
   lessonId?: string
   userId?: string
   isCompleted?: boolean
+  isTeacher?: boolean
 }
 
 function extractSkeleton(_code: string): string {
@@ -32,7 +33,7 @@ int main() {
 
 const BLANK_TEMPLATE = `#include <iostream>\nusing namespace std;\n\nint main() {\n    \n    return 0;\n}`
 
-export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId, userId, isCompleted = false }: PracticeStepProps) {
+export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId, userId, isCompleted = false, isTeacher = false }: PracticeStepProps) {
   const [done, setDone] = useState(false)
   const [failCount, setFailCount] = useState(0)
   const [hintOpen, setHintOpen] = useState(false)
@@ -172,6 +173,16 @@ export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId,
           >
             {isEn ? "✅ Done!" : "✅ 다했어요!"}
           </motion.button>
+        )}
+
+        {/* 선생님 bypass — expectedOutput이 있어도 즉시 완료 처리 가능 */}
+        {!done && isTeacher && hasExpected && (
+          <button
+            onClick={() => { setDone(true); onSuccess?.() }}
+            className="w-full py-2 rounded-xl text-sm font-semibold text-orange-700 bg-orange-50 border border-orange-200 hover:bg-orange-100 transition-colors"
+          >
+            {isEn ? "⚡ Teacher: Mark Complete & Continue" : "⚡ 선생님: 완료 처리하고 넘어가기"}
+          </button>
         )}
 
         {/* 완료 상태 */}
