@@ -242,9 +242,29 @@ int main() {
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ 함수를 직접 만들어보세요!",
-          content: `두 정수를 받아서 합을 반환하는 함수를 만들어봐요!
+          content: `두 정수를 받아서 합을 반환하는 \`add\` 함수를 완성해봐요!
 
-함수를 main() 위에 정의하고, main()에서 호출하는 구조예요.`,
+\`main()\` 위에 함수 본체를 채우면 돼요.`,
+          starterCode: `#include <iostream>
+using namespace std;
+
+int add(int a, int b) {
+    // 여기에 코드를 작성하세요
+}
+
+int main() {
+    int x, y;
+    cout << "첫 번째 숫자: ";
+    cin >> x;
+    cout << x << "\n";
+    cout << "두 번째 숫자: ";
+    cin >> y;
+    cout << y << "\n";
+
+    cout << x << " + " << y << " = " << add(x, y) << endl;
+
+    return 0;
+}`,
           code: `#include <iostream>
 using namespace std;
 
@@ -445,7 +465,7 @@ main() 위에 50개 함수를 전부 쓰면... main()이 어디 있는지도 못
           type: "fillblank" as const,
           title: "프로토타입을 완성해봐요!",
           content: "multiply 함수의 프로토타입을 적어서 에러를 없애봐요! (세미콜론 잊지 마세요!)",
-          code: "___ multiply(___ a, ___ b)___\n\nint main() {\n    cout << multiply(4, 5);\n    return 0;\n}\n\nint multiply(int a, int b) {\n    return a * b;\n}",
+          code: "___ multiply(___ a, ___ b)___\n\nint main() {\n    cout << multiply(4, 5);\n    return 0;\n}",
           fillBlanks: [
             { id: 0, answer: "int", options: ["int", "void", "def", "func"] },
             { id: 1, answer: "int", options: ["int", "var", "num", "any"] },
@@ -856,6 +876,7 @@ double area(double w, double h) {
 }
 
 // 함수 오버로딩: 삼각형 (세 변의 길이 3개 — 헤론 공식)
+// 힌트: s = (a+b+c)/2.0, 넓이 = sqrt(s*(s-a)*(s-b)*(s-c))
 double area(double a, double b, double c) {
 
 }

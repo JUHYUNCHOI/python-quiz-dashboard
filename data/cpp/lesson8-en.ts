@@ -242,9 +242,27 @@ int main() {
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ Create Your Own Function!",
-          content: `Let's make a function that takes two integers and returns their sum!
+          content: `Complete the \`add\` function that takes two integers and returns their sum!
 
-Define the function above main(), then call it from main().`,
+Fill in the function body above \`main()\`.`,
+          starterCode: `#include <iostream>
+using namespace std;
+
+int add(int a, int b) {
+    // Write your code here
+}
+
+int main() {
+    int x, y;
+    cout << "First number: ";
+    cin >> x;
+    cout << "Second number: ";
+    cin >> y;
+
+    cout << x << " + " << y << " = " << add(x, y) << endl;
+
+    return 0;
+}`,
           code: `#include <iostream>
 using namespace std;
 
@@ -449,7 +467,7 @@ When multiple people write functions in different files, prototypes in .h files 
           type: "fillblank" as const,
           title: "Write the prototype!",
           content: "Add a prototype for multiply to fix the error! (Don't forget the semicolon!)",
-          code: "___ multiply(___ a, ___ b)___\n\nint main() {\n    cout << multiply(4, 5);\n    return 0;\n}\n\nint multiply(int a, int b) {\n    return a * b;\n}",
+          code: "___ multiply(___ a, ___ b)___\n\nint main() {\n    cout << multiply(4, 5);\n    return 0;\n}",
           fillBlanks: [
             { id: 0, answer: "int", options: ["int", "void", "def", "func"] },
             { id: 1, answer: "int", options: ["int", "var", "num", "any"] },
@@ -874,6 +892,7 @@ double area(double w, double h) {
 }
 
 // Overload 3: triangle (3 sides — Heron's formula)
+// Hint: s = (a+b+c)/2.0, area = sqrt(s*(s-a)*(s-b)*(s-c))
 double area(double a, double b, double c) {
 
 }
