@@ -524,10 +524,10 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
             </button>
             <button
               onClick={goNext}
-              disabled={!isCurrentStepCompleted && !effectiveTeacher}
+              disabled={!isCurrentStepCompleted && !isTeacher}
               className={cn(
                 "flex items-center justify-center gap-1 rounded-xl font-bold transition-colors px-4 py-2.5 md:px-6 md:py-3",
-                (isCurrentStepCompleted || effectiveTeacher)
+                (isCurrentStepCompleted || isTeacher)
                   ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg"
                   : "bg-gray-200 text-gray-400 cursor-not-allowed"
               )}

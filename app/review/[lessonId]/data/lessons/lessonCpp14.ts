@@ -101,13 +101,13 @@ export const lessonCpp14: LessonData = {
         content: {
           level: 1,
           task: "학생의 이름에 접근해요!",
-          guide: "점(.)으로 멤버에 접근해요!",
+          guide: "struct Student { string name; int age; int score; }; — 점(.)으로 멤버에 접근해요!",
           template: 'Student s;\ns___name = "Alice";',
           answer: ".",
           expect: 'Student s;\ns.name = "Alice";',
           en: {
             task: "Access the student's name!",
-            guide: "Use dot notation (.) to access members!"
+            guide: "struct Student { string name; int age; int score; }; — use dot notation (.) to access members!"
           }
         }
       },
@@ -197,13 +197,13 @@ export const lessonCpp14: LessonData = {
         content: {
           level: 1,
           task: "Rect의 너비에 접근해요!",
-          guide: "점(.)으로 멤버에 접근해요!",
+          guide: "struct Rect { int w; int h; }; — 점(.)으로 멤버에 접근해요!",
           template: "Rect r;\ncout << r___w << endl;",
           answer: ".",
           expect: "Rect r;\ncout << r.w << endl;",
           en: {
             task: "Access the width of Rect!",
-            guide: "Use dot notation (.) to access members!"
+            guide: "struct Rect { int w; int h; }; — use dot notation (.) to access members!"
           }
         }
       },
@@ -257,35 +257,69 @@ export const lessonCpp14: LessonData = {
         content: {
           level: 2,
           task: "Point 구조체를 만들고 x에 7을 대입해요!",
-          guide: "점(.)으로 멤버에 접근해서 대입해요!",
+          guide: "struct Point { int x; int y; }; — 점(.)으로 멤버에 접근해서 대입해요!",
           template: "Point p;\np.___ = 7;",
           answer: "x",
           expect: "Point p;\np.x = 7;",
           en: {
             task: "Create a Point and assign 7 to x!",
-            guide: "Use dot notation (.) to assign to a member!"
+            guide: "struct Point { int x; int y; }; — use dot notation (.) to assign to a member!"
           }
         }
       },
 
-      // 예측: struct 복사
+      // cin으로 struct 멤버에 입력받기
       {
         type: "explain",
         content: {
-          lines: [],
-          code: 'struct Point {\n    int x;\n    int y;\n};\n\nPoint a = {5, 10};\nPoint b = a;   // copy!\ncout << b.x << endl;',
-          predict: {
-            question: "출력 결과는?",
-            options: ["0", "5", "10", "에러"],
-            answer: 1,
-            feedback: "b = a로 복사하면 b.x도 5가 돼요! struct는 통째로 복사돼요."
-          },
+          lines: [
+            "cin으로 struct 멤버에 직접 입력받을 수 있어요! 📥",
+            "점(.)으로 멤버에 접근하면 cin과 cout 모두 쓸 수 있어요."
+          ],
+          code: 'struct Point {\n    int x;\n    int y;\n};\n\nint main() {\n    Point p;\n    cin >> p.x >> p.y;\n    cout << p.x + p.y << endl;\n    return 0;\n}',
+          result: "// 입력: 3 7  →  출력: 10",
+          note: "cin >> p.x >> p.y; 로 struct 멤버에 값을 입력받아요!",
           en: {
-            predict: {
-              question: "What's the output?",
-              options: ["0", "5", "10", "Error"],
-              feedback: "b = a copies all members, so b.x is also 5! Structs are copied as a whole."
-            }
+            lines: [
+              "You can read input directly into struct members with cin! 📥",
+              "Use dot notation (.) — it works with both cin and cout."
+            ]
+          }
+        }
+      },
+
+      // ===== Lv.2: cin으로 struct 입력 =====
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "Point의 x와 y를 cin으로 입력받아요!",
+          guide: "struct Point { int x; int y; }; — cin >> 으로 각 멤버에 입력받아요!",
+          template: "Point p;\ncin >> p.___ >> p.___;",
+          answer: "x",
+          blanksAnswer: ["x", "y"],
+          expect: "Point p;\ncin >> p.x >> p.y;",
+          en: {
+            task: "Read x and y into a Point using cin!",
+            guide: "struct Point { int x; int y; }; — use cin >> to read into each member!"
+          }
+        }
+      },
+
+      // ===== Lv.2: Student cin 입력 =====
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "Student의 age와 score를 cin으로 입력받아요!",
+          guide: "struct Student { string name; int age; int score; }; — cin >> 으로 멤버에 입력받아요!",
+          template: "Student s;\ncin >> s.___ >> s.___;",
+          answer: "age",
+          blanksAnswer: ["age", "score"],
+          expect: "Student s;\ncin >> s.age >> s.score;",
+          en: {
+            task: "Read age and score into a Student using cin!",
+            guide: "struct Student { string name; int age; int score; }; — use cin >> to read into each member!"
           }
         }
       },
@@ -315,21 +349,20 @@ export const lessonCpp14: LessonData = {
         }
       },
 
-      // Lv.3: struct 전체 작성
+      // Lv.2: struct 전체 빈칸 채우기
       {
         type: "practice",
         content: {
-          level: 3,
+          level: 2,
           task: "int x와 int y를 가진 Point 구조체를 선언해요!",
-          guide: "struct 이름 { 멤버들; }; 형태로 처음부터!",
-          context: "// 아래에 Point struct를 선언하세요\n// 그러면 main()에서 Point p = {3, 7}; 처럼 쓸 수 있어요",
-          template: null,
-          answer: "struct Point {\n    int x;\n    int y;\n};",
+          guide: "struct 이름 { 타입 멤버명; }; 형태로 빈칸을 채워요!",
+          template: "___ Point {\n    ___ x;\n    ___ y;\n};",
+          answer: "struct",
+          blanksAnswer: ["struct", "int", "int"],
           expect: "struct Point {\n    int x;\n    int y;\n};",
           en: {
             task: "Declare a Point struct with int x and int y!",
-            guide: "Write it from scratch: struct Name { members; };",
-            context: "// Declare the Point struct below\n// Then in main() you can write: Point p = {3, 7};"
+            guide: "Fill in the blanks: struct Name { type member; };"
           }
         }
       },
@@ -371,7 +404,7 @@ export const lessonCpp14: LessonData = {
             "struct 이름 { 멤버들; }; (세미콜론 필수!)",
             "점(.)으로 멤버 접근: s.name, s.age",
             "중괄호 초기화: Point p = {10, 20};",
-            "struct는 통째로 복사 가능: Point b = a;"
+            "cin >> p.x >> p.y; 로 멤버에 입력받기"
           ],
           canDo: "struct를 선언하고 멤버에 접근할 수 있어요!",
           emoji: "📦"
@@ -402,127 +435,6 @@ export const lessonCpp14: LessonData = {
           code: '#include <iostream>\n#include <string>\nusing namespace std;\n\nstruct Student {\n    string name;\n    int score;\n};\n\nint main() {\n    Student s = {"Alice", 95};\n    cout << s.name << ": " << s.score << endl;\n    return 0;\n}',
           result: "Alice: 95",
           note: "string 멤버가 있으면 #include <string>도 필요해요!"
-        }
-      },
-
-      // 빈칸: include 채우기
-      {
-        type: "practice",
-        content: {
-          level: 1,
-          task: "cout을 쓰려면 어떤 헤더가 필요할까요?",
-          guide: "#include <___> 형태!",
-          template: "#include <___>\nusing namespace std;",
-          answer: "iostream",
-          expect: "#include <iostream>\nusing namespace std;",
-          en: {
-            task: "Which header do you need to use cout?",
-            guide: "Use the form: #include <___>"
-          }
-        }
-      },
-
-      // 빈칸: string 헤더
-      {
-        type: "practice",
-        content: {
-          level: 1,
-          task: "string 타입을 쓰려면 어떤 헤더가 필요할까요?",
-          guide: "string 전용 헤더가 따로 있어요!",
-          template: "#include <iostream>\n#include <___>\nusing namespace std;",
-          answer: "string",
-          expect: "#include <iostream>\n#include <string>\nusing namespace std;",
-          en: {
-            task: "Which header do you need to use the string type?",
-            guide: "There's a dedicated header for string!"
-          }
-        }
-      },
-
-      // 빈칸: namespace
-      {
-        type: "practice",
-        content: {
-          level: 1,
-          task: "std:: 없이 cout을 쓰려면?",
-          guide: "using ___ std; 한 줄이면 돼요!",
-          template: "#include <iostream>\nusing ___ std;",
-          answer: "namespace",
-          expect: "#include <iostream>\nusing namespace std;",
-          en: {
-            task: "How do you use cout without typing std:: every time?",
-            guide: "One line: using ___ std;"
-          }
-        }
-      },
-
-      // quiz: 어떤 헤더?
-      {
-        type: "quiz",
-        content: {
-          question: "vector<int>를 쓰려면 어떤 헤더가 필요한가요?",
-          options: [
-            "#include <iostream>",
-            "#include <string>",
-            "#include <vector>",
-            "#include <array>"
-          ],
-          answer: 2,
-          explanation: "vector는 #include <vector> 헤더가 필요해요! iostream은 입출력, string은 문자열 전용이에요.",
-          en: {
-            question: "Which header do you need to use vector<int>?",
-            options: [
-              "#include <iostream>",
-              "#include <string>",
-              "#include <vector>",
-              "#include <array>"
-            ],
-            explanation: "vector needs #include <vector>! iostream is for I/O, string is for strings."
-          }
-        }
-      },
-
-      // 프로젝트: 전체 코드 작성
-      {
-        type: "project",
-        content: {
-          step: 1,
-          total: 2,
-          task: "헤더와 struct Point 선언을 써봐요!",
-          target: "#include <iostream>\nusing namespace std;\n\nstruct Point {\n    int x;\n    int y;\n};",
-          hint: "#include <iostream> → using namespace std; → struct Point { int x; int y; };",
-          done: [],
-          answer: "#include <iostream>\nusing namespace std;\n\nstruct Point {\n    int x;\n    int y;\n};"
-        }
-      },
-
-      {
-        type: "project",
-        content: {
-          step: 2,
-          total: 2,
-          task: "main() 안에서 Point를 만들고 x+y를 출력해봐요!",
-          target: "int main() {\n    Point p = {3, 7};\n    cout << p.x + p.y << endl;\n    return 0;\n}",
-          hint: "Point p = {3, 7}; 로 초기화 → cout << p.x + p.y",
-          done: ["#include <iostream>\nusing namespace std;\n\nstruct Point {\n    int x;\n    int y;\n};"],
-          answer: "int main() {\n    Point p = {3, 7};\n    cout << p.x + p.y << endl;\n    return 0;\n}"
-        }
-      },
-
-      // 인터리빙: string 헤더 복습 (다른 상황)
-      {
-        type: "interleaving",
-        content: {
-          message: "잠깐! struct에 string 멤버가 있으면?",
-          task: "string 타입 멤버가 있을 때 필요한 헤더 두 개를 채워요!",
-          template: "#include <___>\n#include <___>\nusing namespace std;",
-          answer: "iostream",
-          blanksAnswer: ["iostream", "string"],
-          expect: "#include <iostream>\n#include <string>\nusing namespace std;",
-          en: {
-            message: "Quick! What if a struct has a string member?",
-            task: "Fill in the two headers needed when using string type!"
-          }
         }
       },
 

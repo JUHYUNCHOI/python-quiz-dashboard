@@ -15,6 +15,11 @@ export { refsPtrsCluster } from "./cluster-refs-ptrs"
 export { structsCluster } from "./cluster-structs"
 export { stackQueueCluster } from "./cluster-stackqueue"
 export { constructsCluster } from "./cluster-constructs"
+export { bankBruteforceCluster } from "./bank-bruteforce"
+export { bankSortingCluster } from "./bank-sorting"
+export { bankSimulationCluster } from "./bank-simulation"
+export { bankStringsCluster } from "./bank-strings"
+export { bankGridCluster } from "./bank-grid"
 // Python clusters
 export { pyBasicsCluster } from "./py-cluster-basics"
 export { pyOutputCluster } from "./py-cluster-output"
@@ -44,6 +49,11 @@ import { refsPtrsCluster } from "./cluster-refs-ptrs"
 import { structsCluster } from "./cluster-structs"
 import { stackQueueCluster } from "./cluster-stackqueue"
 import { constructsCluster } from "./cluster-constructs"
+import { bankBruteforceCluster } from "./bank-bruteforce"
+import { bankSortingCluster } from "./bank-sorting"
+import { bankSimulationCluster } from "./bank-simulation"
+import { bankStringsCluster } from "./bank-strings"
+import { bankGridCluster } from "./bank-grid"
 import { pyBasicsCluster } from "./py-cluster-basics"
 import { pyOutputCluster } from "./py-cluster-output"
 import { pyTypeConvCluster } from "./py-cluster-typeconv"
@@ -57,6 +67,15 @@ import { pyDictsCluster } from "./py-cluster-dicts"
 import { pyFunctionsCluster } from "./py-cluster-functions"
 import { pyOopCluster } from "./py-cluster-oop"
 import type { PracticeCluster } from "./types"
+
+/** 코딩 뱅크 클러스터 — cpp-p3 완료 후 해금, 자유 선택 방식 */
+export const BANK_CLUSTERS: PracticeCluster[] = [
+  bankBruteforceCluster,
+  bankSortingCluster,
+  bankSimulationCluster,
+  bankStringsCluster,
+  bankGridCluster,
+]
 
 export const ALL_CLUSTERS: PracticeCluster[] = [
   // C++ clusters

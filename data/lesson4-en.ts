@@ -39,7 +39,7 @@ print(10 / 3)   # 3.3333333333333335
           type: "tryit",
           title: "🖥️ Try It!",
           task: "Calculate and print 19000 * 3!",
-          initialCode: "# 19000 * 3을 계산하세요\nprint(___)",
+          initialCode: "# Calculate 19000 * 3\nprint(___)",
           expectedOutput: "57000",
           hint: "Use the * symbol for multiplication",
           hint2: "print(19000 * 3)"
@@ -62,7 +62,7 @@ print(2 ** 3)   # Exponent → 8
           type: "tryit",
           title: "🖥️ Try It!",
           task: "Print the remainder of 17 divided by 5!",
-          initialCode: "# 나머지 연산자 %를 사용하세요\nprint(17 ___ 5)",
+          initialCode: "# Use the % operator for remainder\nprint(17 ___ 5)",
           expectedOutput: "2",
           hint: "Use the % symbol for remainder",
           hint2: "print(17 % 5)"
@@ -215,8 +215,8 @@ score += 10         # Short way (same meaning!)
           type: "mission",
           title: "🏆 Final Mission!",
           task: "Complete the price calculator! (unit price 15000 won, 3 items, 10% discount)",
-          initialCode: "price = 15000\ncount = 3\n# 합계를 계산하세요\ntotal = ___\n# 10% 할인 계산\ndiscount = ___\n# 최종 가격\nfinal = ___\n\nprint(f'단가: {price}원')\nprint(f'수량: {count}개')\nprint(f'합계: {total}원')\nprint(f'할인: {discount}원')\nprint(f'최종: {final}원')",
-          expectedOutput: "단가: 15000원\n수량: 3개\n합계: 45000원\n할인: 4500.0원\n최종: 40500.0원",
+          initialCode: "price = 15000\ncount = 3\n# Calculate the total\ntotal = ___\n# 10% discount\ndiscount = ___\n# Final price\nfinal = ___\n\nprint(f'Unit price: {price}')\nprint(f'Quantity: {count}')\nprint(f'Subtotal: {total}')\nprint(f'Discount: {discount}')\nprint(f'Final: {final}')",
+          expectedOutput: "Unit price: 15000\nQuantity: 3\nSubtotal: 45000\nDiscount: 4500.0\nFinal: 40500.0",
           hint: "total = price * count, discount = total * 0.1",
           hint2: "final = total - discount"
         },

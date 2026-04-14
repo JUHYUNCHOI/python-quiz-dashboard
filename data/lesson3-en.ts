@@ -21,7 +21,7 @@ export const lesson3EnData: LessonData = {
           content: `Imagine you're making a game!
 
 \`\`\`
-Player name: 용사
+Player name: Hero
 Health: 100
 Attack: 25
 Gold: 5000
@@ -37,12 +37,12 @@ We store it in **variables**! 📦`
           content: `A **variable** is a box that holds data!
 
 \`\`\`python
-name = '용사'
+name = 'Hero'
 hp = 100
 gold = 5000
 \`\`\`
 
-- Put '용사' into the box called \`name\`
+- Put 'Hero' into the box called \`name\`
 - Put 100 into the box called \`hp\`
 - Put 5000 into the box called \`gold\`!`
         },
@@ -111,7 +111,7 @@ When you use the variable name, the value inside comes out!`
 hp = 100
 print(hp)  # 100
 
-hp = 80    # 데미지를 받았다!
+hp = 80    # took damage!
 print(hp)  # 80
 \`\`\`
 
@@ -149,7 +149,7 @@ When you assign a new value to the same variable, it gets overwritten!`
           title: "📋 Variable Naming Rules",
           content: `### ✅ Valid Names
 \`\`\`python
-name = '홍길동'
+name = 'Alice'
 player_hp = 100
 score2 = 50
 \`\`\`
@@ -157,8 +157,8 @@ score2 = 50
 ### ❌ Invalid Names
 \`\`\`python
 2score = 50    # Starts with a number ❌
-my-name = '홍'  # Hyphen (-) ❌
-my name = '홍'  # Space ❌
+my-name = 'Lee'  # Hyphen (-) ❌
+my name = 'Lee'  # Space ❌
 \`\`\``
         },
         {
@@ -177,11 +177,11 @@ my name = '홍'  # Space ❌
           content: `**f-strings** make it easy to put variables inside strings!
 
 \`\`\`python
-name = '용사'
+name = 'Hero'
 hp = 100
 
-print(f'이름: {name}, 체력: {hp}')
-# Result: 이름: 용사, 체력: 100
+print(f'Name: {name}, HP: {hp}')
+# Result: Name: Hero, HP: 100
 \`\`\`
 
 Use the format \`f'...{variable}...'\` and the variable is automatically inserted!
@@ -193,11 +193,11 @@ For now, just remember \`f'...{variable}...'\` and you're good!`
           id: "try4",
           type: "tryit",
           title: "🖥️ Try It Yourself!",
-          task: "Print using f-string with name='홍길동' and age=15!",
-          initialCode: "name = '홍길동'\nage = 15\n# f-string으로 이름과 나이를 출력하세요\nprint(f'이름: {___}, 나이: {___}')",
-          expectedOutput: "이름: 홍길동, 나이: 15",
+          task: "Print using f-string with name='Alice' and age=15!",
+          initialCode: "name = 'Alice'\nage = 15\n# Use f-string to print name and age\nprint(f'Name: {___}, Age: {___}')",
+          expectedOutput: "Name: Alice, Age: 15",
           hint: "Put the variable names inside the curly braces!",
-          hint2: "print(f'이름: {name}, 나이: {age}')"
+          hint2: "print(f'Name: {name}, Age: {age}')"
         }
       ]
     },
@@ -210,9 +210,9 @@ For now, just remember \`f'...{variable}...'\` and you're good!`
           id: "mission1",
           type: "mission",
           title: "🏆 Final Mission!",
-          task: "Complete the self-introduction! (Name: 홍길동, Age: 15, Hobby: 게임)",
-          initialCode: "name = '홍길동'\nage = ___\nhobby = '게임'\n\nprint(f'=== 자기소개 ===')\nprint(f'이름: {name}')\nprint(f'나이: {___}살')\nprint(f'취미: {hobby}')\nprint(f'{name}의 {age}살 생일을 축하해!')",
-          expectedOutput: "=== 자기소개 ===\n이름: 홍길동\n나이: 15살\n취미: 게임\n홍길동의 15살 생일을 축하해!",
+          task: "Complete the self-introduction! (Name: Alice, Age: 15, Hobby: gaming)",
+          initialCode: "name = 'Alice'\nage = ___\nhobby = 'gaming'\n\nprint(f'=== About Me ===')\nprint(f'Name: {name}')\nprint(f'Age: {___}')\nprint(f'Hobby: {hobby}')\nprint(f\"Happy {age}th birthday, {name}!\")",
+          expectedOutput: "=== About Me ===\nName: Alice\nAge: 15\nHobby: gaming\nHappy 15th birthday, Alice!",
           hint: "Store 15 in age and use the variable in the f-string!",
           hint2: "age = 15 / {age}"
         },

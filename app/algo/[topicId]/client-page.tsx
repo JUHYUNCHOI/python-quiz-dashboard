@@ -2,10 +2,12 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, Trophy, ExternalLink } from "lucide-react"
 import { AlgoViewer } from "@/components/algo/algo-viewer"
 import { useLanguage } from "@/contexts/language-context"
 import type { AlgoTopic } from "@/data/algo/topics"
+import { getAlgoContestLinks, codeQuestUrl } from "@/data/algo/contest-links"
+import type { ContestProblem } from "@/data/algo/contest-links"
 import { cn } from "@/lib/utils"
 
 interface AlgoTopicPageProps {
@@ -91,6 +93,68 @@ export function AlgoTopicPage({ topic }: AlgoTopicPageProps) {
       {/* 알고리즘 랩 컨텐츠 */}
       <div className="max-w-[1400px] mx-auto">
         <AlgoViewer topicId={topic.id} codeTrack={codeTrack} />
+      </div>
+
+      {/* 실전 대회 문제 섹션 */}
+      <AlgoContestSection topicId={topic.id} lang={lang} />
+    </div>
+  )
+}
+
+// ── 실전 대회 문제 추천 ────────────────────────────────────────────
+const DIFF_LABEL: Record<ContestProblem["difficulty"], { ko: string; en: string }> = {
+  easy:   { ko: "쉬움",  en: "Easy" },
+  medium: { ko: "보통",  en: "Medium" },
+}
+const DIFF_COLOR: Record<ContestProblem["difficulty"], string> = {
+  easy:   "text-emerald-700 bg-emerald-100",
+  medium: "text-amber-700 bg-amber-100",
+}
+
+function AlgoContestSection({ topicId, lang }: { topicId: string; lang: string }) {
+  const links = getAlgoContestLinks(topicId)
+  if (!links) return null
+
+  return (
+    <div className="max-w-[1400px] mx-auto px-4 pb-12 mt-2">
+      <div className="border-t border-gray-200 pt-8">
+        {/* 섹션 헤더 */}
+        <div className="flex items-center gap-2 mb-2">
+          <Trophy className="w-4 h-4 text-amber-500 shrink-0" />
+          <span className="text-sm font-bold text-gray-700">
+            {lang === "en" ? "Try Competition Problems" : "실전 대회 문제 도전"}
+          </span>
+          <div className="flex-1 h-px bg-amber-100" />
+        </div>
+        <p className="text-xs text-gray-400 mb-4">
+          {lang === "en"
+            ? "Apply what you learned to real USACO / MCC competition problems on CodeQuest."
+            : "방금 배운 개념으로 USACO / MCC 실전 문제에 도전해보세요."}
+        </p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          {links.problems.map(p => (
+            <a
+              key={p.id}
+              href={codeQuestUrl(p.id)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-2xl border border-amber-200 bg-amber-50 hover:bg-amber-100 hover:border-amber-300 transition-all p-3 flex items-start justify-between gap-3"
+            >
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 flex-wrap mb-0.5">
+                  <span className="font-semibold text-sm text-gray-900">{p.title}</span>
+                  <span className={cn("text-xs px-1.5 py-0.5 rounded-full font-medium", DIFF_COLOR[p.difficulty])}>
+                    {lang === "en" ? DIFF_LABEL[p.difficulty].en : DIFF_LABEL[p.difficulty].ko}
+                  </span>
+                  <span className="text-xs text-gray-400">{p.source}</span>
+                </div>
+                <p className="text-xs text-gray-500">{p.why}</p>
+              </div>
+              <ExternalLink className="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5" />
+            </a>
+          ))}
+        </div>
       </div>
     </div>
   )

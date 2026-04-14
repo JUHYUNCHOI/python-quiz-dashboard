@@ -105,6 +105,7 @@ function RoundResult({
   total,
   wrongNums,
   teacherAssigned,
+  nextLessonHref,
   onRetryWrong,
   onDone,
 }: {
@@ -113,6 +114,7 @@ function RoundResult({
   total: number
   wrongNums: number[]
   teacherAssigned: boolean
+  nextLessonHref?: string
   onRetryWrong: () => void
   onDone: () => void
 }) {
@@ -167,12 +169,30 @@ function RoundResult({
         </div>
       )}
 
-      {isGood && (
-        <div className="bg-emerald-50 border border-emerald-200 rounded-2xl px-5 py-3 w-full">
-          <p className="text-emerald-700 text-sm font-medium">
-            {setNum === 1
-              ? t("🌟 세트 1 완료!", "🌟 Set 1 complete!")
-              : t(`세트 ${setNum} 완료! 계속 잘 하고 있어요.`, `Set ${setNum} complete! Keep it up.`)}
+      {/* SET 1 완료 후 다음 행동 가이드 */}
+      {setNum === 1 && isGood && (
+        <div className={cn(
+          "rounded-2xl px-5 py-3 w-full text-left space-y-1",
+          nextLessonHref
+            ? "bg-indigo-50 border border-indigo-200"
+            : "bg-emerald-50 border border-emerald-200"
+        )}>
+          <p className={cn("text-sm font-bold", nextLessonHref ? "text-indigo-800" : "text-emerald-800")}>
+            🌟 {t("세트 1 완료!", "Set 1 complete!")}
+          </p>
+          <p className={cn("text-xs", nextLessonHref ? "text-indigo-600" : "text-emerald-600")}>
+            {nextLessonHref
+              ? t("기본 연습은 충분해요. 다음 레슨으로 가도 좋아요!", "Good enough! You can move on to the next lesson.")
+              : t("더 풀고 싶으면 세트 2로 계속하세요.", "Feel free to continue with Set 2 for more practice.")}
+          </p>
+        </div>
+      )}
+
+      {setNum === 1 && !isGood && (
+        <div className="bg-amber-50 border border-amber-200 rounded-2xl px-5 py-3 w-full text-left">
+          <p className="text-amber-800 text-sm font-bold">💡 {t("조금 더 연습하면 좋을 것 같아요", "A bit more practice would help")}</p>
+          <p className="text-amber-600 text-xs mt-0.5">
+            {t("틀린 문제 복습하거나 세트 2를 풀어보세요.", "Review the ones you missed, or try Set 2.")}
           </p>
         </div>
       )}
@@ -186,16 +206,33 @@ function RoundResult({
             {t(`틀린 ${wrongNums.length}문제 다시 풀기 →`, `Retry ${wrongNums.length} wrong →`)}
           </button>
         )}
+
+        {/* 다음 레슨 버튼 — SET 1 + 점수 좋음 + 레슨에서 온 경우 */}
+        {setNum === 1 && isGood && nextLessonHref && (
+          <a
+            href={nextLessonHref}
+            className="w-full py-3.5 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm transition-colors text-center block"
+          >
+            {t("다음 레슨으로 →", "Next Lesson →")}
+          </a>
+        )}
+
         <button
           onClick={onDone}
           className={cn(
             "w-full py-3.5 rounded-2xl font-bold text-sm transition-colors",
-            isGood
-              ? "bg-indigo-500 hover:bg-indigo-600 text-white"
-              : "bg-gray-100 hover:bg-gray-200 text-gray-600"
+            setNum === 1 && isGood && nextLessonHref
+              ? "bg-gray-100 hover:bg-gray-200 text-gray-500"
+              : isGood
+                ? "bg-indigo-500 hover:bg-indigo-600 text-white"
+                : "bg-gray-100 hover:bg-gray-200 text-gray-600"
           )}
         >
-          {isGood ? t("완료!", "Done!") : t("오늘은 여기까지", "That's enough for now")}
+          {setNum === 1 && isGood && nextLessonHref
+            ? t("더 연습하기", "Keep practicing")
+            : isGood
+              ? t("완료!", "Done!")
+              : t("오늘은 여기까지", "That's enough for now")}
         </button>
         {isGood && wrongNums.length > 0 && (
           <button
@@ -219,6 +256,8 @@ interface PracticeSessionProps {
   solvedSet: Set<string>
   userId?: string
   isTeacher?: boolean
+  /** 레슨 완료 직후 진입한 경우 — SET 1 완료 시 "다음 레슨으로" 버튼 표시 */
+  nextLessonHref?: string
 }
 
 type Phase = "loading" | "intro" | "solving" | "round_complete" | "done"
@@ -231,6 +270,7 @@ export function PracticeSession({
   solvedSet,
   userId,
   isTeacher = false,
+  nextLessonHref,
 }: PracticeSessionProps) {
   const { t, lang } = useLanguage()
   const [phase, setPhase] = useState<Phase>("loading")
@@ -571,6 +611,7 @@ export function PracticeSession({
           total={roundProblems.length}
           wrongNums={wrongNums}
           teacherAssigned={!!teacherAssignedId}
+          nextLessonHref={nextLessonHref}
           onRetryWrong={handleRetryWrong}
           onDone={handleOptOut}
         />
@@ -582,6 +623,7 @@ export function PracticeSession({
   if (!current) return null
 
   return (
+    <>
     <div className="max-w-xl mx-auto px-4 pt-4 pb-24">
       {/* 헤더 */}
       <div className="flex items-center gap-3 mb-4">
@@ -702,12 +744,17 @@ export function PracticeSession({
         )
       }
 
-      {/* 하단 네비게이션 */}
-      <div className="mt-5 flex gap-2">
+      {/* 하단 네비게이션 여백 */}
+      <div className="h-20" />
+    </div>
+
+    {/* 고정 하단 네비게이션 — BottomNav(~64px) 위에 표시 */}
+    <div className="fixed bottom-16 left-0 right-0 z-40 bg-white/95 backdrop-blur-sm border-t border-gray-200 shadow-lg">
+      <div className="max-w-xl mx-auto px-4 py-3 flex gap-2">
         {index > 0 && (
           <button
             onClick={handlePrev}
-            className="px-4 py-3.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold text-sm transition-colors shrink-0"
+            className="px-4 py-3 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold text-sm transition-colors shrink-0"
           >
             ← {t("이전", "Prev")}
           </button>
@@ -716,7 +763,7 @@ export function PracticeSession({
           <button
             onClick={handleNext}
             disabled={isSaving}
-            className="flex-1 py-3.5 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm transition-colors disabled:opacity-50"
+            className="flex-1 py-3 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm transition-colors disabled:opacity-50"
           >
             {index + 1 >= roundProblems.length
               ? (isSaving ? t("저장 중...", "Saving...") : t("🏁 결과 보기", "🏁 See results"))
@@ -726,7 +773,7 @@ export function PracticeSession({
           <button
             onClick={handleNext}
             disabled={isSaving}
-            className="flex-1 py-3.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-500 font-bold text-sm transition-colors disabled:opacity-50"
+            className="flex-1 py-3 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-500 font-bold text-sm transition-colors disabled:opacity-50"
           >
             {index + 1 >= roundProblems.length
               ? (isSaving ? t("저장 중...", "Saving...") : t("건너뛰기 →", "Skip →"))
@@ -735,5 +782,6 @@ export function PracticeSession({
         )}
       </div>
     </div>
+    </>
   )
 }

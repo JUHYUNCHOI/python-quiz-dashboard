@@ -167,11 +167,11 @@ Third line
           content: `Use **commas (,)** to print multiple values on one line!
 
 \`\`\`python
-print('이름:', '홍길동')
-# Result: 이름: 홍길동
+print('Name:', 'Alice')
+# Result: Name: Alice
 
-print('나이:', 15, '살')
-# Result: 나이: 15 살
+print('Age:', 15, 'years old')
+# Result: Age: 15 years old
 \`\`\`
 
 Commas automatically add a **space** between values!`
@@ -180,11 +180,11 @@ Commas automatically add a **space** between values!`
           id: "try6",
           type: "tryit",
           title: "🖥️ Try It Yourself!",
-          task: "Use a comma to print '결과:' and 100!",
-          initialCode: "# Use a comma to print '결과:' and 100\nprint('결과:', ___)",
-          expectedOutput: "결과: 100",
+          task: "Use a comma to print 'Result:' and 100!",
+          initialCode: "# Use a comma to print 'Result:' and 100\nprint('Result:', ___)",
+          expectedOutput: "Result: 100",
           hint: "Connect text and numbers with a comma!",
-          hint2: "print('결과:', 100)"
+          hint2: "print('Result:', 100)"
         }
       ]
     },

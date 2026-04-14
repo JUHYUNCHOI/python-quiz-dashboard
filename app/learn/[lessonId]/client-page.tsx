@@ -17,7 +17,7 @@ import { saveStepAnswer } from "@/lib/save-step-answer"
 import { useGamification } from "@/hooks/use-gamification"
 import { logActivity } from "@/lib/activity-log"
 import { trackStepVisit } from "@/lib/track-step-visit"
-import { getCompletedLessons, pythonParts, cppParts, pseudoParts } from "@/lib/curriculum-data"
+import { getCompletedLessons, pythonParts, cppParts, pseudoParts, getNextLessonId } from "@/lib/curriculum-data"
 import { useAuth } from "@/contexts/auth-context"
 import { analyzeLessonComplete, analyzeStreak } from "@/lib/feedback-analyzer"
 import { LessonFeedbackCard } from "@/components/feedback/lesson-feedback-card"
@@ -35,17 +35,6 @@ import { ALL_CLUSTERS } from "@/data/practice"
 import { TeacherLiveEditor } from "@/components/teacher/live-editor"
 
 // ── 다음 레슨 ID 계산 ──────────────────────────────────────────────────
-function getNextLessonId(currentId: string): string | null {
-  const allParts = [
-    ...pythonParts,
-    ...cppParts,
-    ...pseudoParts,
-  ]
-  const allIds = allParts.flatMap(p => p.lessonIds.map(String))
-  const idx = allIds.indexOf(String(currentId))
-  if (idx === -1 || idx >= allIds.length - 1) return null
-  return allIds[idx + 1]
-}
 
 export default function PracticePage({ params }: { params: Promise<{ lessonId: string }> }) {
   const resolvedParams = use(params)
@@ -684,7 +673,11 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                         <span className="text-xl">{unlockedCluster.emoji}</span>
                         <span>{lang === "en" ? (unlockedCluster.en?.title ?? unlockedCluster.title) : unlockedCluster.title} {t("연습하기", "Practice")} 💪</span>
                       </button>
-                      <p className="text-xs text-gray-400 text-center">{unlockedCluster.problems.length}{t("문제 · 방금 해금됐어요!", " problems · just unlocked!")}</p>
+                      <p className="text-xs text-gray-400 text-center">
+                        {t("처음 7문제만 풀어도 충분해요", "Just the first 7 problems is enough")}
+                        {" · "}
+                        {t(`총 ${unlockedCluster.problems.length}문제`, `${unlockedCluster.problems.length} total`)}
+                      </p>
                       {/* 보조: 다음 레슨 */}
                       {nextId && (
                         <button
@@ -739,7 +732,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                       <p className="text-base font-black text-purple-800">🏆 {t("C++ 커리큘럼 완주!", "C++ Curriculum Complete!")}</p>
                       <p className="text-sm text-purple-700">{t("이제 알고리즘 훈련으로! 정렬·탐색·DP로 USACO Bronze를 목표로 해봐요.", "Time for algorithm training! Aim for USACO Bronze with sorting, search & DP.")}</p>
                       <button
-                        onClick={() => router.push("/algorithm")}
+                        onClick={() => router.push("/algo")}
                         className="w-full py-2.5 bg-purple-600 hover:bg-purple-500 text-white rounded-xl font-bold text-sm transition-all"
                       >
                         🧠 {t("알고리즘 훈련 시작하기 →", "Start Algorithm Training →")}

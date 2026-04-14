@@ -8,12 +8,14 @@ import { RequireAuth } from "@/components/require-auth"
 import { PracticeRunner } from "@/components/practice/practice-runner"
 import { McqRunner } from "@/components/practice/mcq-runner"
 import { PracticeSession } from "@/components/practice/practice-session"
-import { ALL_CLUSTERS } from "@/data/practice"
+import { ALL_CLUSTERS, BANK_CLUSTERS } from "@/data/practice"
+import { getNextLessonId, getLessonName } from "@/lib/curriculum-data"
 import type { PracticeCluster, PracticeProblem } from "@/data/practice/types"
 import { localizeCluster, localizeProblem } from "@/data/practice/types"
+import { getContestLinks, codeQuestUrl, type ContestProblem } from "@/data/practice/contest-links"
 import { usePracticeProgress } from "@/hooks/use-practice-progress"
 import { useAuth } from "@/contexts/auth-context"
-import { ArrowLeft, Lock, CheckCircle2, Star, FileText, Code2, HelpCircle } from "lucide-react"
+import { ArrowLeft, Lock, CheckCircle2, Star, FileText, Code2, HelpCircle, ExternalLink, Trophy } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
 
@@ -23,8 +25,9 @@ function getClusterLang(cluster: PracticeCluster): Lang {
   return String(cluster.unlockAfter).startsWith("cpp") ? "cpp" : "python"
 }
 
-const CPP_CLUSTERS = ALL_CLUSTERS.filter(c => getClusterLang(c) === "cpp")
-const PYTHON_CLUSTERS = ALL_CLUSTERS.filter(c => getClusterLang(c) === "python")
+const BANK_CLUSTER_IDS = new Set(BANK_CLUSTERS.map(c => c.id))
+const CPP_CLUSTERS = ALL_CLUSTERS.filter(c => getClusterLang(c) === "cpp" && !BANK_CLUSTER_IDS.has(c.id))
+const PYTHON_CLUSTERS = ALL_CLUSTERS.filter(c => getClusterLang(c) === "python" && !BANK_CLUSTER_IDS.has(c.id))
 
 const DIFFICULTY_COLOR: Record<string, string> = {
   "쉬움": "text-emerald-700 bg-emerald-100",
@@ -38,6 +41,13 @@ function isClusterUnlocked(cluster: PracticeCluster): boolean {
     const completed = JSON.parse(localStorage.getItem("completedLessons") || "[]") as string[]
     return completed.includes(cluster.unlockAfter)
   } catch { return false }
+}
+
+// SET 1 기준(7문제) 이상 풀었으면 "충분히 완료"
+const SET1_SIZE = 7
+function isClusterDone(cluster: PracticeCluster, solvedSet: Set<string>): boolean {
+  const solved = cluster.problems.filter(p => solvedSet.has(p.id)).length
+  return solved >= Math.min(SET1_SIZE, cluster.problems.length)
 }
 
 // ── 클러스터 목록 ──────────────────────────────────────────────────
@@ -57,142 +67,275 @@ function ClusterList({
   isTeacher?: boolean
 }) {
   const { t, lang: locale } = useLanguage()
+  const [showCompleted, setShowCompleted] = useState(false)
   const clusters = lang === "cpp" ? CPP_CLUSTERS : PYTHON_CLUSTERS
 
   // 전체 풀린 문제 수 (알고리즘 해금 목표)
   const GOAL = 40
   const totalSolved = ALL_CLUSTERS.reduce((acc, c) => acc + c.problems.filter(p => solvedSet.has(p.id)).length, 0)
-  const goalPct = Math.min(100, Math.round((totalSolved / GOAL) * 100))
   const goalReached = totalSolved >= GOAL
 
-  // 현재 언어에서 다음으로 시작할 클러스터 (해금됐지만 아직 안 풀었거나 진행 중인 첫 번째)
-  const nextCluster = clusters.find(c => {
-    if (!isTeacher && !isClusterUnlocked(c)) return false
-    const solved = c.problems.filter(p => solvedSet.has(p.id)).length
-    return solved < c.problems.length
-  })
+  // 해금됐지만 아직 덜 한 클러스터
+  const activeClusters = clusters.filter(c =>
+    (isTeacher || isClusterUnlocked(c)) && !isClusterDone(c, solvedSet)
+  )
+  // 충분히 완료한 클러스터
+  const doneClusters = clusters.filter(c => isClusterDone(c, solvedSet))
+  // 아직 잠긴 클러스터 (다음 예고용 — 1개만)
+  const nextLockedCluster = !isTeacher
+    ? clusters.find(c => !isClusterUnlocked(c) && !isClusterDone(c, solvedSet))
+    : null
+
+  // 코딩 뱅크 — cpp-p3 완료 후에만 표시
+  const bankUnlocked = isTeacher || (typeof window !== "undefined" && (() => {
+    try {
+      const completed = JSON.parse(localStorage.getItem("completedLessons") || "[]") as string[]
+      return completed.includes("cpp-p3")
+    } catch { return false }
+  })())
+
+  const nextCluster = activeClusters[0]
+  const otherActive = activeClusters.slice(1)
+  const [showAllActive, setShowAllActive] = useState(false)
+  const visibleOtherActive = showAllActive ? otherActive : otherActive.slice(0, 2)
+
+  const renderSmallCard = (cluster: PracticeCluster, accent = false) => {
+    const solved = cluster.problems.filter(p => solvedSet.has(p.id)).length
+    const locCluster = localizeCluster(cluster, locale)
+    return (
+      <button
+        key={cluster.id}
+        onClick={() => onSelect(cluster)}
+        className={cn(
+          "w-full rounded-2xl border p-3 text-left transition-all flex items-center gap-3",
+          accent
+            ? "bg-white border-amber-200 hover:border-amber-400 shadow-sm"
+            : "bg-white border-gray-200 hover:border-indigo-300 shadow-sm"
+        )}
+      >
+        <span className="text-xl shrink-0">{cluster.emoji}</span>
+        <div className="flex-1 min-w-0">
+          <p className="font-semibold text-sm text-gray-900 truncate">{locCluster.title}</p>
+          {solved > 0 && (
+            <p className="text-xs text-gray-400">{solved}{t("문제 완료", " done")}</p>
+          )}
+        </div>
+        <span className="text-gray-300 text-sm shrink-0">→</span>
+      </button>
+    )
+  }
 
   return (
     <div className="flex flex-col gap-4 pb-24">
-      <div className="mb-1">
-        <h1 className="text-2xl font-bold text-gray-900">{t("코딩 연습", "Practice")}</h1>
-        <p className="text-sm text-gray-400 mt-0.5">{t("문제를 풀면 알고리즘 학습이 열려요", "Solve problems to unlock algorithm study")}</p>
-      </div>
 
-      {/* 지금 바로 시작 카드 (nextCluster가 있으면 항상 표시) */}
-      {!goalReached && nextCluster ? (
-        <button
-          onClick={() => onSelect(nextCluster)}
-          className="w-full rounded-2xl bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] transition-all text-left p-4 shadow-md"
-        >
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs font-bold text-indigo-200 uppercase tracking-wide mb-1">
-                {t("👉 지금 여기서 시작하세요", "👉 Start here")}
-              </p>
-              <p className="text-lg font-black text-white">
-                {nextCluster.emoji} {localizeCluster(nextCluster, locale).title}
-              </p>
-              <p className="text-sm text-indigo-200 mt-0.5">
-                {localizeCluster(nextCluster, locale).description}
-              </p>
-            </div>
-            <span className="text-white text-2xl ml-3">→</span>
-          </div>
-          {/* 진행 바 */}
-          <div className="mt-3 flex items-center gap-3">
-            <div className="flex-1 h-1.5 rounded-full bg-indigo-400/40 overflow-hidden">
-              <div
-                className="h-full bg-white rounded-full transition-all"
-                style={{ width: `${Math.min(100, Math.round((totalSolved / GOAL) * 100))}%` }}
-              />
-            </div>
-            <span className="text-xs font-bold text-indigo-200 whitespace-nowrap">
-              {totalSolved}/{GOAL} {t("문제", "problems")}
-            </span>
-          </div>
-        </button>
-      ) : goalReached ? (
-        <div className="rounded-2xl bg-purple-50 border border-purple-200 p-4 flex items-center gap-3">
-          <span className="text-3xl">🎉</span>
-          <div>
-            <p className="font-black text-purple-800">{t("알고리즘 해금!", "Algorithms Unlocked!")}</p>
-            <p className="text-sm text-purple-500">{t("충분히 연습했어요. 알고리즘 탭에서 계속하세요!", "Great work! Head to the Algorithms tab.")}</p>
-          </div>
-        </div>
-      ) : null}
+      {/* 헤더 */}
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900">{t("코딩 연습", "Practice")}</h1>
+        <p className="text-sm text-gray-400 mt-0.5">
+          {t("문제를 풀면 알고리즘 학습이 열려요", "Solve problems to unlock algorithm study")}
+        </p>
+      </div>
 
       {/* 언어 탭 */}
       <div className="flex bg-gray-100 rounded-xl p-1">
-        <button
-          onClick={() => onLangChange("cpp")}
-          className={cn(
-            "flex-1 py-2 rounded-lg text-sm font-semibold transition-all",
-            lang === "cpp" ? "bg-white text-gray-900 shadow-sm" : "text-gray-400 hover:text-gray-600"
-          )}
-        >
-          C++
-        </button>
-        <button
-          onClick={() => onLangChange("python")}
-          className={cn(
-            "flex-1 py-2 rounded-lg text-sm font-semibold transition-all",
-            lang === "python" ? "bg-white text-gray-900 shadow-sm" : "text-gray-400 hover:text-gray-600"
-          )}
-        >
-          Python
-        </button>
-      </div>
-
-      {clusters.map(cluster => {
-        const unlocked = isTeacher || isClusterUnlocked(cluster)
-        const total = cluster.problems.length
-        const solved = cluster.problems.filter(p => solvedSet.has(p.id)).length
-        const starred = cluster.problems.filter(p => starredSet.has(p.id)).length
-        const locCluster = localizeCluster(cluster, locale)
-        return (
+        {(["cpp", "python"] as Lang[]).map(l => (
           <button
-            key={cluster.id}
-            onClick={() => unlocked && onSelect(cluster)}
+            key={l}
+            onClick={() => onLangChange(l)}
             className={cn(
-              "rounded-2xl border p-4 text-left transition-all",
-              unlocked
-                ? "bg-white border-gray-200 hover:border-indigo-300 hover:shadow-md shadow-sm"
-                : "bg-gray-50 border-gray-100 opacity-60 cursor-not-allowed"
+              "flex-1 py-2 rounded-lg text-sm font-semibold transition-all",
+              lang === l ? "bg-white text-gray-900 shadow-sm" : "text-gray-400 hover:text-gray-600"
             )}
           >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">{cluster.emoji}</span>
-                <div>
-                  <p className="font-semibold text-gray-900">{locCluster.title}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">{locCluster.description}</p>
-                </div>
-              </div>
-              {unlocked
-                ? (
-                  <div className="flex items-center gap-2 text-xs text-gray-400">
-                    {starred > 0 && (
-                      <span className="flex items-center gap-0.5 text-amber-500">
-                        <Star className="w-3 h-3 fill-amber-400" />{starred}
-                      </span>
-                    )}
-                    <span>{solved}/{total}</span>
-                  </div>
-                )
-                : <Lock className="w-4 h-4 text-gray-300" />}
+            {l === "cpp" ? "C++" : "Python"}
+          </button>
+        ))}
+      </div>
+
+      {/* 알고리즘 해금 진행 바 */}
+      {!goalReached && (
+        <div className="rounded-2xl bg-purple-50 border border-purple-100 px-4 py-3">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-xs font-bold text-purple-700">
+              🧠 {t("알고리즘 학습 준비", "Algorithm Unlock")}
+            </span>
+            <span className="text-xs font-semibold text-purple-500">
+              {totalSolved} / {GOAL}
+            </span>
+          </div>
+          <div className="h-2 bg-purple-100 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-purple-500 rounded-full transition-all duration-500"
+              style={{ width: `${Math.min(100, (totalSolved / GOAL) * 100)}%` }}
+            />
+          </div>
+          <p className="text-xs text-purple-400 mt-1.5">
+            {GOAL - totalSolved > 0
+              ? t(`${GOAL - totalSolved}문제 더 풀면 알고리즘 학습이 열려요`, `${GOAL - totalSolved} more to unlock algorithm study`)
+              : t("거의 다 왔어요!", "Almost there!")}
+          </p>
+        </div>
+      )}
+
+      {/* 알고리즘 해금 달성 */}
+      {goalReached && (
+        <div className="rounded-2xl bg-purple-600 p-5 flex flex-col gap-3 shadow-md">
+          <div className="flex items-center gap-3">
+            <span className="text-3xl">🎉</span>
+            <div>
+              <p className="font-black text-white">{t("알고리즘 해금!", "Algorithms Unlocked!")}</p>
+              <p className="text-sm text-purple-200">{t("충분히 연습했어요. 이제 알고리즘으로 넘어가세요!", "Great work! Time to level up to algorithms.")}</p>
             </div>
-            {unlocked && solved > 0 && (
-              <div className="mt-3 h-1.5 rounded-full bg-gray-100 overflow-hidden">
-                <div
-                  className="h-full bg-emerald-500 rounded-full transition-all"
-                  style={{ width: `${(solved / total) * 100}%` }}
-                />
+          </div>
+          <a
+            href="/algo"
+            className="w-full rounded-xl bg-white text-purple-700 font-bold text-sm py-3 text-center hover:bg-purple-50 transition-colors"
+          >
+            {t("알고리즘 학습 시작하기 →", "Start Algorithm Study →")}
+          </a>
+        </div>
+      )}
+
+      {/* 지금 할 것 — 메인 카드 */}
+      {!goalReached && nextCluster && (() => {
+        const locCluster = localizeCluster(nextCluster, locale)
+        const solved = nextCluster.problems.filter(p => solvedSet.has(p.id)).length
+        const inProgress = solved > 0
+        return (
+          <button
+            onClick={() => onSelect(nextCluster)}
+            className="w-full rounded-2xl bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] transition-all text-left p-5 shadow-md"
+          >
+            <p className="text-xs font-bold text-indigo-300 uppercase tracking-wide mb-2">
+              {inProgress ? t("👈 계속하기", "👈 Continue") : t("👉 지금 여기서 시작하세요", "👉 Start here")}
+            </p>
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-xl font-black text-white">
+                  {nextCluster.emoji} {locCluster.title}
+                </p>
+                <p className="text-sm text-indigo-200 mt-1">{locCluster.description}</p>
               </div>
-            )}
+              <span className="text-white text-2xl shrink-0">→</span>
+            </div>
+            {/* 세트 정보 */}
+            <div className="mt-3 flex items-center gap-2">
+              <span className="text-xs bg-white/20 text-white rounded-full px-2.5 py-1 font-semibold">
+                {inProgress
+                  ? t(`${solved}문제 완료`, `${solved} done`)
+                  : t(`세트 1 · ${Math.min(SET1_SIZE, nextCluster.problems.length)}문제`, `Set 1 · ${Math.min(SET1_SIZE, nextCluster.problems.length)} problems`)}
+              </span>
+              {!inProgress && (
+                <span className="text-xs text-white/50">
+                  {t("총 ", "total ")} {nextCluster.problems.length}{t("문제", " problems")}
+                </span>
+              )}
+            </div>
           </button>
         )
-      })}
+      })()}
+
+      {/* 해금된 나머지 — 최대 2개, 더 보기 */}
+      {otherActive.length > 0 && (
+        <div className="flex flex-col gap-2">
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide px-1">
+            {t("해금된 클러스터", "Also unlocked")}
+          </p>
+          {visibleOtherActive.map(c => renderSmallCard(c))}
+          {otherActive.length > 2 && (
+            <button
+              onClick={() => setShowAllActive(v => !v)}
+              className="text-xs text-indigo-500 font-semibold py-1 text-center hover:text-indigo-700 transition-colors"
+            >
+              {showAllActive
+                ? t("접기 ▲", "Show less ▲")
+                : t(`+ ${otherActive.length - 2}개 더 보기`, `+ ${otherActive.length - 2} more`)}
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* 다음 예고 — 잠긴 클러스터 1개만 희미하게 */}
+      {nextLockedCluster && (() => {
+        const locNext = localizeCluster(nextLockedCluster, locale)
+        const lessonName = getLessonName(String(nextLockedCluster.unlockAfter))
+        return (
+          <div className="flex items-center gap-3 px-1 opacity-40">
+            <Lock className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+            <span className="text-base">{nextLockedCluster.emoji}</span>
+            <div className="min-w-0">
+              <span className="text-sm text-gray-500 font-medium">{locNext.title}</span>
+              <span className="text-xs text-gray-400 ml-2">{lessonName} {t("완료 후", "after")}</span>
+            </div>
+          </div>
+        )
+      })()}
+
+      {/* 완료한 클러스터 — 기본 접힘 */}
+      {doneClusters.length > 0 && (
+        <div>
+          <button
+            onClick={() => setShowCompleted(v => !v)}
+            className="w-full flex items-center gap-2 px-1 py-2 text-left"
+          >
+            <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+            <span className="text-sm font-semibold text-gray-400">
+              {t(`완료 ${doneClusters.length}개`, `${doneClusters.length} completed`)}
+            </span>
+            <div className="flex-1 h-px bg-gray-100" />
+            <span className="text-xs text-gray-300">{showCompleted ? "▲" : "▼"}</span>
+          </button>
+          {showCompleted && (
+            <div className="flex flex-col gap-2 mt-1">
+              {doneClusters.map(cluster => {
+                const solved = cluster.problems.filter(p => solvedSet.has(p.id)).length
+                const total = cluster.problems.length
+                const starred = cluster.problems.filter(p => starredSet.has(p.id)).length
+                const locCluster = localizeCluster(cluster, locale)
+                return (
+                  <button
+                    key={cluster.id}
+                    onClick={() => onSelect(cluster)}
+                    className="w-full rounded-2xl border border-emerald-100 bg-emerald-50 hover:bg-emerald-100 p-3 text-left flex items-center gap-3 transition-all"
+                  >
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <span className="text-lg shrink-0">{cluster.emoji}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-sm text-gray-800 truncate">{locCluster.title}</p>
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-gray-400 shrink-0">
+                      {starred > 0 && (
+                        <span className="flex items-center gap-0.5 text-amber-500">
+                          <Star className="w-3 h-3 fill-amber-400" />{starred}
+                        </span>
+                      )}
+                      <span>{solved}/{total}</span>
+                    </div>
+                  </button>
+                )
+              })}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* 코딩 뱅크 — cpp-p3 완료 후에만 표시 */}
+      {lang === "cpp" && bankUnlocked && (
+        <>
+          <div className="flex items-center gap-2 mt-2">
+            <Trophy className="w-4 h-4 text-amber-500" />
+            <span className="text-sm font-bold text-gray-700">{t("코딩 뱅크", "Coding Bank")}</span>
+            <div className="flex-1 h-px bg-amber-200" />
+          </div>
+          <div className="rounded-xl bg-amber-50 border border-amber-100 px-3 py-2 text-xs text-amber-700">
+            {t(
+              "배운 STL로 실전형 복합 문제 · 풀고 나면 USACO/MCC 문제 추천",
+              "Multi-tool problems with your STL · Contest problem recommendations after each cluster"
+            )}
+          </div>
+          {BANK_CLUSTERS.map(c => renderSmallCard(c, true))}
+        </>
+      )}
     </div>
   )
 }
@@ -313,6 +456,86 @@ function ProblemList({
           </>
         )
       })()}
+
+      {/* 코딩 뱅크 클러스터일 때 실전 문제 추천 */}
+      {BANK_CLUSTERS.some(b => b.id === cluster.id) && (
+        <ContestProblemsSection
+          clusterId={cluster.id}
+          solvedCount={solvedCount}
+          totalCount={cluster.problems.length}
+        />
+      )}
+    </div>
+  )
+}
+
+// ── 실전 대회 문제 추천 섹션 ───────────────────────────────────────
+function ContestProblemsSection({
+  clusterId,
+  solvedCount,
+  totalCount,
+}: {
+  clusterId: string
+  solvedCount: number
+  totalCount: number
+}) {
+  const { t } = useLanguage()
+  const links = getContestLinks(clusterId)
+  if (!links) return null
+
+  // Show after solving at least 30% of the cluster
+  const THRESHOLD = Math.max(1, Math.floor(totalCount * 0.3))
+  if (solvedCount < THRESHOLD) return null
+
+  const DIFF_LABEL: Record<ContestProblem["difficulty"], string> = {
+    easy: t("쉬움", "Easy"),
+    medium: t("보통", "Medium"),
+  }
+  const DIFF_COLOR: Record<ContestProblem["difficulty"], string> = {
+    easy: "text-emerald-700 bg-emerald-100",
+    medium: "text-amber-700 bg-amber-100",
+  }
+
+  return (
+    <div className="mt-6">
+      {/* 섹션 헤더 */}
+      <div className="flex items-center gap-2 mb-3">
+        <Trophy className="w-4 h-4 text-amber-500" />
+        <span className="text-sm font-bold text-gray-700">
+          {t("실전 대회 문제 도전", "Try Competition Problems")}
+        </span>
+        <div className="flex-1 h-px bg-amber-100" />
+      </div>
+      <p className="text-xs text-gray-400 mb-3">
+        {t(
+          "이 클러스터를 충분히 연습했어요! 배운 스킬로 도전해볼 수 있는 USACO/MCC 문제예요.",
+          "Great practice! Here are USACO/MCC problems you can tackle with what you've learned."
+        )}
+      </p>
+
+      <div className="flex flex-col gap-2">
+        {links.problems.map(p => (
+          <a
+            key={p.id}
+            href={codeQuestUrl(p.id)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-2xl border border-amber-200 bg-amber-50 hover:bg-amber-100 hover:border-amber-300 transition-all p-3 text-left flex items-start justify-between gap-3"
+          >
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="font-semibold text-sm text-gray-900">{p.title}</span>
+                <span className={cn("text-xs px-1.5 py-0.5 rounded-full font-medium", DIFF_COLOR[p.difficulty])}>
+                  {DIFF_LABEL[p.difficulty]}
+                </span>
+                <span className="text-xs text-gray-400">{p.source}</span>
+              </div>
+              <p className="text-xs text-gray-500 mt-0.5">{p.why}</p>
+            </div>
+            <ExternalLink className="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5" />
+          </a>
+        ))}
+      </div>
     </div>
   )
 }
@@ -508,7 +731,7 @@ function PracticeContent() {
     router.push(`/practice?${p.toString()}`)
   }
 
-  const cluster = ALL_CLUSTERS.find(c => c.id === clusterId)
+  const cluster = ALL_CLUSTERS.find(c => c.id === clusterId) ?? BANK_CLUSTERS.find(c => c.id === clusterId)
   const problem = cluster?.problems.find(p => p.id === problemId)
   const sessionMode = searchParams.get("session") === "1"
 
@@ -532,6 +755,10 @@ function PracticeContent() {
 
   // 세션 모드: 클러스터 내 문제를 연속으로 풀기
   if (sessionMode && cluster) {
+    // 이 클러스터 다음 레슨 링크 — 어디서 진입했든 항상 계산
+    const nextLessonId = getNextLessonId(cluster.unlockAfter)
+    const nextLessonHref = nextLessonId ? `/learn/${nextLessonId}` : undefined
+
     return (
       <PracticeSession
         cluster={cluster}
@@ -541,6 +768,7 @@ function PracticeContent() {
         onMarkStarred={markStarred}
         userId={user?.id}
         isTeacher={isTeacher}
+        nextLessonHref={nextLessonHref}
       />
     )
   }

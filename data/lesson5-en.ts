@@ -21,9 +21,9 @@ export const lesson5EnData: LessonData = {
           content: `Think only numbers can be added? Strings can be added too!
 
 \`\`\`python
-first = "안녕"
-second = "하세요"
-print(first + second)  # 안녕하세요
+first = "Hello"
+second = " there"
+print(first + second)  # Hello there
 \`\`\`
 
 String + String = **Concatenation!**`
@@ -35,17 +35,17 @@ String + String = **Concatenation!**`
           content: `Use the **+** operator to join strings together!
 
 \`\`\`python
-name = "철수"
-greeting = "안녕, " + name + "!"
-print(greeting)  # 안녕, 철수!
+name = "Tom"
+greeting = "Hey, " + name + "!"
+print(greeting)  # Hey, Tom!
 \`\`\`
 
 You can join multiple strings:
 \`\`\`python
-a = "파"
-b = "이"
-c = "썬"
-print(a + b + c)  # 파이썬
+a = "Py"
+b = "th"
+c = "on"
+print(a + b + c)  # Python
 \`\`\``
         },
         {
@@ -53,10 +53,10 @@ print(a + b + c)  # 파이썬
           type: "tryit",
           title: "🖥️ Try It Yourself!",
           task: "Connect the name and greeting, then print the result!",
-          initialCode: "name = \"민수\"\n# + 로 문자열을 연결하세요\ngreeting = \"반가워, \" + ___ + \"!\"\nprint(greeting)",
-          expectedOutput: "반가워, 민수!",
+          initialCode: "name = \"Mike\"\n# Use + to connect strings\ngreeting = \"Hey, \" + ___ + \"!\"\nprint(greeting)",
+          expectedOutput: "Hey, Mike!",
           hint: "Use the + operator to connect strings",
-          hint2: "\"반가워, \" + name + \"!\""
+          hint2: "\"Hey, \" + name + \"!\""
         },
         {
           id: "quiz1",
@@ -81,15 +81,15 @@ print(a + b + c)  # 파이썬
           content: `When you multiply a string by a number, it **repeats**!
 
 \`\`\`python
-print("하" * 3)      # 하하하
+print("Ha" * 3)      # HaHaHa
 print("=" * 10)      # ==========
-print("안녕! " * 2)  # 안녕! 안녕!
+print("Hi! " * 2)    # Hi! Hi!
 \`\`\`
 
 **Usage example:**
 \`\`\`python
 print("=" * 20)
-print("  메뉴판  ")
+print("  Menu  ")
 print("=" * 20)
 \`\`\``
         },
@@ -98,7 +98,7 @@ print("=" * 20)
           type: "tryit",
           title: "🖥️ Try It Yourself!",
           task: "Print 10 asterisks (*)!",
-          initialCode: "# 문자열 * 숫자로 반복!\nprint(\"*\" * ___)",
+          initialCode: "# Repeat a string with *!\nprint(\"*\" * ___)",
           expectedOutput: "**********",
           hint: "String * number = repeat!",
           hint2: "\"*\" * 10"
@@ -137,13 +137,13 @@ print("=" * 20)
 
 \`\`\`python
 age = 15
-print("나이: " + age)  # ❌ 에러!
+print("Age: " + age)  # ❌ Error!
 \`\`\`
 
 **Solution: Convert with str()!**
 \`\`\`python
 age = 15
-print("나이: " + str(age))  # ✅ 나이: 15
+print("Age: " + str(age))  # ✅ Age: 15
 \`\`\`
 
 💡 Using f-strings avoids this problem! But it's still good to know **how to concatenate with +**.`
@@ -153,8 +153,8 @@ print("나이: " + str(age))  # ✅ 나이: 15
           type: "tryit",
           title: "🖥️ Try It Yourself!",
           task: "Connect the score with a string and print it!",
-          initialCode: "score = 100\n# str()로 숫자를 문자열로 바꿔서 연결하세요\nprint(\"점수: \" + ___(score) + \"점\")",
-          expectedOutput: "점수: 100점",
+          initialCode: "score = 100\n# Use str() to convert number to string and connect\nprint(\"Score: \" + ___(score) + \" pts\")",
+          expectedOutput: "Score: 100 pts",
           hint: "Use str() to convert numbers to strings!",
           hint2: "str(score)"
         },
@@ -162,9 +162,9 @@ print("나이: " + str(age))  # ✅ 나이: 15
           id: "mission1",
           type: "mission",
           title: "🎯 Mission!",
-          task: "Connect the name and age to print '철수는 15살입니다'!",
-          initialCode: "name = \"철수\"\nage = 15\n# str()로 숫자를 문자열로 변환해서 연결!\nprint(name + \"는 \" + ___(age) + \"살입니다\")",
-          expectedOutput: "철수는 15살입니다",
+          task: "Connect the name and age to print 'Tom is 15 years old'!",
+          initialCode: "name = \"Tom\"\nage = 15\n# Use str() to convert number and connect!\nprint(name + \" is \" + ___(age) + \" years old\")",
+          expectedOutput: "Tom is 15 years old",
           hint: "Use str() to convert numbers to strings!",
           hint2: "str(age)"
         }
@@ -193,7 +193,7 @@ print("나이: " + str(age))  # ✅ 나이: 15
 
 **Joining with numbers** - str() needed
 \`\`\`python
-"점수: " + str(100)  # 점수: 100
+"Score: " + str(100)  # Score: 100
 \`\`\``
         },
         {
@@ -201,8 +201,8 @@ print("나이: " + str(age))  # ✅ 나이: 15
           type: "mission",
           title: "🏆 Final Mission!",
           task: "Create a nice-looking menu board!",
-          initialCode: "print(\"=\" * ___)\nprint(\"    🍗 치킨집    \")\nprint(\"=\" * ___)\nprint(\"후라이드: \" + str(___) + \"원\")\nprint(\"양념: \" + str(___) + \"원\")",
-          expectedOutput: "====================\n    🍗 치킨집    \n====================\n후라이드: 18000원\n양념: 19000원",
+          initialCode: "print(\"=\" * ___)\nprint(\"    🍗 Chicken Shop    \")\nprint(\"=\" * ___)\nprint(\"Fried: \" + str(___) + \" won\")\nprint(\"Spicy: \" + str(___) + \" won\")",
+          expectedOutput: "====================\n    🍗 Chicken Shop    \n====================\nFried: 18000 won\nSpicy: 19000 won",
           hint: "Use * for 20 divider characters, str() to convert prices!",
           hint2: "20 / 18000 / 19000"
         },

@@ -157,6 +157,15 @@ export function getPartProgress(parts: PartMeta[], completed: Set<number | strin
   })
 }
 
+/** 다음 레슨 ID 반환 (없으면 null) */
+export function getNextLessonId(currentId: string | number): string | null {
+  const allIds = [...pythonParts, ...cppParts, ...pseudoParts]
+    .flatMap(p => p.lessonIds.map(String))
+  const idx = allIds.indexOf(String(currentId))
+  if (idx === -1 || idx >= allIds.length - 1) return null
+  return allIds[idx + 1]
+}
+
 /** 전체 완료율 */
 export function getOverallProgress(parts: PartMeta[], completed: Set<number | string>): { completedCount: number; totalCount: number; progress: number } {
   const allIds = parts.flatMap(p => p.lessonIds)
