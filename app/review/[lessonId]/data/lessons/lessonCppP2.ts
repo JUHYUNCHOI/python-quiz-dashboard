@@ -486,14 +486,14 @@ export const lessonCppP2: LessonData = {
         content: {
           level: 3,
           task: '처음부터 작성! 이름(string)과 레벨(int)을 가진 Player 클래스를 만들고, 두 Player 객체를 vector에 담아 range-for로 이름과 레벨을 출력해요',
-          guide: "class Player { ... }; → vector<Player> → range-for",
-          hint: '#include <iostream>\n#include <string>\n#include <vector>\nusing namespace std;\nclass Player {\npublic:\n    string name;\n    int level;\n    Player(string n, int l) : name(n), level(l) {}\n};\nint main() {\n    vector<Player> party;\n    party.push_back(Player("Alice", 5));\n    party.push_back(Player("Bob", 3));\n    for (auto p : party) {\n        cout << p.name << " " << p.level << "\\n";\n    }\n    return 0;\n}',
+          guide: "Player 클래스를 먼저 정의하고, 그 타입으로 vector를 만든 뒤 range-for로 순회하는 세 단계로 접근해!",
+          hint: "클래스에 생성자를 만들고, push_back으로 Player 객체를 벡터에 넣은 뒤 range-for에서 각 멤버에 점(.)으로 접근해봐!",
           template: null,
           answer: '#include <iostream>\n#include <string>\n#include <vector>\nusing namespace std;\nclass Player {\npublic:\n    string name;\n    int level;\n    Player(string n, int l) : name(n), level(l) {}\n};\nint main() {\n    vector<Player> party;\n    party.push_back(Player("Alice", 5));\n    party.push_back(Player("Bob", 3));\n    for (auto p : party) {\n        cout << p.name << " " << p.level << "\\n";\n    }\n    return 0;\n}',
           expect: "Alice 5\nBob 3",
           en: {
             task: 'Write from scratch! Create a Player class with name (string) and level (int), put two Player objects in a vector, and print name and level using range-for',
-            guide: "class Player { ... }; → vector<Player> → range-for"
+            guide: "Approach it in three steps: define the Player class, create a vector of that type, then iterate with range-for!"
           }
         }
       },

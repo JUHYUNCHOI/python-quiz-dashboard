@@ -571,7 +571,7 @@ export const lessonCpp7: LessonData = {
           level: 3,
           task: "중첩 for문으로 2단과 3단 구구단을 출력해요\n(출력 형식: \"2 x 1 = 2\" 등)",
           guide: "for i(2~3) 바깥, for j(1~9) 안쪽",
-          hint: "for (int i = 2; i <= 3; i++)\n  for (int j = 1; j <= 9; j++)\n    cout << i << \" x \" << j << \" = \" << i*j << endl;",
+          hint: "바깥 for는 단 번호(2~3), 안쪽 for는 곱할 수(1~9)로 돌아가요",
           template: null,
           answer: "for (int i = 2; i <= 3; i++) {\n    for (int j = 1; j <= 9; j++) {\n        cout << i << \" x \" << j << \" = \" << i * j << endl;\n    }\n}",
           alternateAnswers: [
@@ -592,7 +592,7 @@ export const lessonCpp7: LessonData = {
           level: 3,
           task: "처음부터 작성! n을 입력받고 → n개의 정수를 입력받아 → 총합을 출력",
           guide: "cin >> n → for i(0~n) cin >> x; sum += x → cout",
-          hint: "int n, sum=0;\ncin>>n;\nfor(int i=0;i<n;i++){int x;cin>>x;sum+=x;}\ncout<<sum<<endl;",
+          hint: "반복문 안에서 매번 x를 입력받아 sum에 더해요. sum은 0으로 시작!",
           template: null,
           answer: "int n, sum = 0;\ncin >> n;\nfor (int i = 0; i < n; i++) {\n    int x;\n    cin >> x;\n    sum += x;\n}\ncout << sum << endl;",
           alternateAnswers: [

@@ -411,13 +411,13 @@ export const lesson17: LessonData = {
       content: {
         level: 1,
         task: "리스트 [1, 2, 3, 4, 5]의 각 원소를 3배 한 새 리스트를 만들어 출력해요",
-        guide: "[x * 3 for x in nums]",
+        guide: "빈칸에 x를 이용한 계산식을 넣어봐!",
         template: "nums = [1, 2, 3, 4, 5]\ntripled = [___ for x in nums]\nprint(tripled)",
         answer: "x * 3",
         expect: "[3, 6, 9, 12, 15]",
         en: {
           task: "Create a new list that triples each element of [1, 2, 3, 4, 5] and print it",
-          guide: "[x * 3 for x in nums]"
+          guide: "Put a calculation expression using x in the blank!"
         }
       }
     },
@@ -428,14 +428,14 @@ export const lesson17: LessonData = {
       content: {
         level: 2,
         task: "1~10 중 3의 배수만 리스트 컴프리헨션으로 모아 출력해요",
-        guide: "[x for x in range(1, 11) if x % 3 == 0]",
+        guide: "컴프리헨션 뒤에 if 조건을 붙이면 조건에 맞는 것만 포함돼!",
         template: "multiples = [x for x in range(1, 11) ___ x % ___ == 0]\nprint(multiples)",
         blanksAnswer: ["if", "3"],
         answer: "multiples = [x for x in range(1, 11) if x % 3 == 0]\nprint(multiples)",
         expect: "[3, 6, 9]",
         en: {
           task: "Use list comprehension to collect multiples of 3 from 1 to 10 and print them",
-          guide: "[x for x in range(1, 11) if x % 3 == 0]"
+          guide: "Add an if condition after the comprehension to include only matching elements!"
         }
       }
     },
@@ -446,14 +446,14 @@ export const lesson17: LessonData = {
       content: {
         level: 2,
         task: "enumerate로 1번부터 번호를 매겨 '1번: 철수' 형식으로 출력해요",
-        guide: "for i, name in enumerate(list, 1):",
+        guide: "enumerate(리스트, 시작번호)를 for문에 쓰면 인덱스와 값을 동시에 받을 수 있어!",
         template: "names = ['철수', '영희', '민수']\nfor ___, ___ in enumerate(names, ___):\n    print(f'{i}번: {name}')",
         blanksAnswer: ["i", "name", "1"],
         answer: "names = ['철수', '영희', '민수']\nfor i, name in enumerate(names, 1):\n    print(f'{i}번: {name}')",
         expect: "1번: 철수\n2번: 영희\n3번: 민수",
         en: {
           task: "Use enumerate to print each name with a number starting from 1: '1번: 철수'",
-          guide: "for i, name in enumerate(list, 1):"
+          guide: "enumerate(list, start) in a for loop gives you both the index and the value at once!"
         }
       }
     },
@@ -464,8 +464,8 @@ export const lesson17: LessonData = {
       content: {
         level: 3,
         task: "처음부터 작성! 점수 리스트 [85, 92, 78, 95, 88]의 평균을 구해 출력해요\n(sum/len 사용 가능)",
-        guide: "total = sum(scores); avg = total / len(scores)",
-        hint: "scores = [85, 92, 78, 95, 88]\navg = sum(scores) / len(scores)\nprint(avg)",
+        guide: "sum()으로 전체 합계를 구하고 len()으로 개수를 나누면 평균이 돼!",
+        hint: "리스트의 합계를 구하고 개수로 나눠봐! sum()과 len()을 활용해!",
         template: null,
         answer: "scores = [85, 92, 78, 95, 88]\navg = sum(scores) / len(scores)\nprint(avg)",
         alternateAnswers: [
@@ -474,8 +474,8 @@ export const lesson17: LessonData = {
         expect: "87.6",
         en: {
           task: "Write from scratch! Calculate the average of [85, 92, 78, 95, 88] and print it\n(sum/len allowed)",
-          guide: "total = sum(scores); avg = total / len(scores)",
-          hint: "scores = [85, 92, 78, 95, 88]\navg = sum(scores) / len(scores)\nprint(avg)"
+          guide: "Use sum() to get the total and divide by len() to get the average!",
+          hint: "Find the total of the list and divide by the count! Use sum() and len()!"
         }
       }
     },
@@ -486,8 +486,8 @@ export const lesson17: LessonData = {
       content: {
         level: 3,
         task: "처음부터 작성! 1~10 중 짝수의 제곱값을 리스트 컴프리헨션으로 만들어 출력해요",
-        guide: "[x**2 for x in range(1, 11) if x % 2 == 0]",
-        hint: "result = [x**2 for x in range(1, 11) if x % 2 == 0]\nprint(result)",
+        guide: "리스트 컴프리헨션에서 if로 짝수만 필터링하고, 그 값의 제곱을 구해봐!",
+        hint: "범위를 만들고 짝수 조건 필터와 제곱 계산을 컴프리헨션에 같이 넣어봐!",
         template: null,
         answer: "result = [x**2 for x in range(1, 11) if x % 2 == 0]\nprint(result)",
         alternateAnswers: [
@@ -496,8 +496,8 @@ export const lesson17: LessonData = {
         expect: "[4, 16, 36, 64, 100]",
         en: {
           task: "Write from scratch! Use list comprehension to create a list of squares of even numbers from 1 to 10",
-          guide: "[x**2 for x in range(1, 11) if x % 2 == 0]",
-          hint: "result = [x**2 for x in range(1, 11) if x % 2 == 0]\nprint(result)"
+          guide: "In list comprehension, filter for even numbers with if and calculate the square of each!",
+          hint: "Create a range, then combine the even number filter and squaring expression in a single comprehension!"
         }
       }
     },

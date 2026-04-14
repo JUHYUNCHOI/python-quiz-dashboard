@@ -93,13 +93,13 @@ def 주문(음료, 사이즈='중'):
       content: {
         level: 1.5,
         task: "기본 할인율 10%를 적용하는 discount 함수를 완성하세요!",
-        guide: "def discount(price, rate=10): 으로 시작!",
+        guide: "기본값이 있는 매개변수는 뒤에 배치해! 할인율에 기본값 10을 설정해봐",
         hint: "할인된 가격 = price * (100 - rate) / 100",
         template: null,
         answer: "def discount(price, rate=10):\n    return price * (100 - rate) / 100\n\nprint(discount(10000))\nprint(discount(10000, 20))",
         en: {
           task: "Complete the discount function with a default discount rate of 10%!",
-          guide: "Start with def discount(price, rate=10):!",
+          guide: "Parameters with default values go last! Set a default value of 10 for the rate parameter.",
           hint: "Discounted price = price * (100 - rate) / 100"
         },
         alternateAnswers: [
@@ -115,13 +115,13 @@ def 주문(음료, 사이즈='중'):
       content: {
         level: 2,
         task: "거듭제곱(기본 지수=2)을 반환하는 power 함수를 만드세요!",
-        guide: "def power(n, exp=2): 으로 시작! ** 연산자 사용",
+        guide: "지수 매개변수에 기본값 2를 설정하면 인자 없이 호출하면 제곱이 돼!",
         hint: "n ** exp 가 n의 exp 거듭제곱이에요!",
         template: null,
         answer: "def power(n, exp=2):\n    return n ** exp\n\nprint(power(3))\nprint(power(2, 10))",
         en: {
           task: "Create a power function that returns exponentiation (default exponent=2)!",
-          guide: "Start with def power(n, exp=2):! Use the ** operator",
+          guide: "Setting default value 2 on the exponent parameter means calling without an argument gives you the square!",
           hint: "n ** exp is n to the power of exp!"
         },
         alternateAnswers: [
@@ -202,14 +202,14 @@ print(합, 차)`,
       content: {
         level: 2,
         task: "리스트의 최대값과 최소값을 반환하는 최대최소 함수를 만드세요!",
-        guide: "max()는 최대값, min()은 최소값!",
-        hint: "return max(숫자들), min(숫자들)",
+        guide: "max()는 최대값, min()은 최소값! 두 값을 쉼표로 구분해서 한 번에 return해봐!",
+        hint: "return 뒤에 두 값을 쉼표로 나열하면 두 값을 동시에 반환할 수 있어!",
         template: null,
         answer: "def 최대최소(숫자들):\n    return max(숫자들), min(숫자들)\n\n최대, 최소 = 최대최소([3, 7, 1, 9, 4])\nprint(f'최대: {최대}, 최소: {최소}')",
         en: {
           task: "Create a function that returns both the maximum and minimum values of a list!",
-          guide: "max() for maximum, min() for minimum!",
-          hint: "return max(numbers), min(numbers)"
+          guide: "max() for maximum, min() for minimum! Separate the two values with a comma and return them at once!",
+          hint: "Listing two values after return with a comma lets you return both at the same time!"
         },
         alternateAnswers: [
           "def 최대최소(숫자들):\n    return max(숫자들), min(숫자들)\n최대, 최소 = 최대최소([3, 7, 1, 9, 4])\nprint(f'최대: {최대}, 최소: {최소}')"
@@ -332,14 +332,14 @@ greet(msg='반가워', name='민수')`,
       content: {
         level: 2,
         task: "배달(메뉴, 수량, 주소) 함수를 키워드 인자로 호출하세요!",
-        guide: "순서를 바꿔서 호출해보세요!",
-        hint: "배달(주소='학교', 메뉴='치킨', 수량=1) 처럼!",
+        guide: "키워드 인자는 매개변수 이름=값 형태로 전달하면 순서를 바꿔도 돼!",
+        hint: "각 인자 앞에 매개변수 이름을 쓰고 =로 연결하면 순서가 달라도 OK!",
         template: null,
         answer: "def 배달(메뉴, 수량, 주소):\n    print(f'{메뉴} {수량}개를 {주소}로!')\n\n배달(주소='학교', 메뉴='치킨', 수량=1)",
         en: {
           task: "Call the 배달(메뉴, 수량, 주소) function using keyword arguments!",
-          guide: "Try calling with a different order!",
-          hint: "Like 배달(주소='학교', 메뉴='치킨', 수량=1)!"
+          guide: "Keyword arguments use the format paramName=value, so you can pass them in any order!",
+          hint: "Write the parameter name followed by = before each argument, and the order doesn't matter!"
         },
         alternateAnswers: [
           "def 배달(메뉴, 수량, 주소):\n    print(f'{메뉴} {수량}개를 {주소}로!')\n배달(주소='학교', 메뉴='치킨', 수량=1)",
@@ -467,14 +467,14 @@ print(합, 차)`,
       content: {
         level: 3,
         task: "사칙연산 결과 4개를 한 번에 반환하는 calc 함수를 만드세요!",
-        guide: "return 합, 차, 곱, 몫",
-        hint: "a+b, a-b, a*b, a//b 를 쉼표로!",
+        guide: "네 가지 사칙연산 결과를 쉼표로 구분해서 한 번에 return하면 돼!",
+        hint: "더하기, 빼기, 곱하기, 정수 나누기를 각각 계산해서 쉼표로 나열해봐!",
         template: null,
         answer: "def calc(a, b):\n    return a + b, a - b, a * b, a // b\n\n합, 차, 곱, 몫 = calc(10, 3)\nprint(f'합:{합} 차:{차} 곱:{곱} 몫:{몫}')",
         en: {
           task: "Create a calc function that returns all 4 arithmetic results at once!",
-          guide: "return sum, difference, product, quotient",
-          hint: "a+b, a-b, a*b, a//b separated by commas!"
+          guide: "Separate the four arithmetic results with commas and return them all at once!",
+          hint: "Calculate addition, subtraction, multiplication, and integer division separately and list them with commas!"
         },
         alternateAnswers: [
           "def calc(a, b):\n    return a + b, a - b, a * b, a // b\n합, 차, 곱, 몫 = calc(10, 3)\nprint(f'합:{합} 차:{차} 곱:{곱} 몫:{몫}')"
@@ -489,14 +489,14 @@ print(합, 차)`,
       content: {
         level: 3,
         task: "안전한 나누기 함수: 0으로 나누면 '나눌 수 없어요!' 반환!",
-        guide: "if b == 0: 으로 체크!",
-        hint: "if b == 0:\n    return '나눌 수 없어요!'\nreturn a / b",
+        guide: "나누기 전에 나누는 수가 0인지 먼저 체크하고, 0이면 문자열을 반환해봐!",
+        hint: "조건이 참일 때 바로 return으로 메시지를 반환하고, 조건이 아닐 때는 정상적으로 나눠봐!",
         template: null,
         answer: "def safe_divide(a, b):\n    if b == 0:\n        return '나눌 수 없어요!'\n    return a / b\n\nprint(safe_divide(10, 2))\nprint(safe_divide(10, 0))",
         en: {
           task: "Safe division function: return '나눌 수 없어요!' when dividing by 0!",
-          guide: "Check with if b == 0:!",
-          hint: "if b == 0:\n    return '나눌 수 없어요!'\nreturn a / b"
+          guide: "Check whether the divisor is 0 before dividing, and return a string message if it is!",
+          hint: "When the condition is true, immediately return the message with return, and when it's not, proceed with normal division!"
         },
         alternateAnswers: [
           "def safe_divide(a, b):\n    if b == 0:\n        return '나눌 수 없어요!'\n    return a / b\nprint(safe_divide(10, 2))\nprint(safe_divide(10, 0))"
@@ -578,14 +578,14 @@ print(price('사과', discount=2, count=5))`,
       content: {
         level: 2.5,
         task: "이름과 학년(기본=1)을 받아 학번(이름+학년)을 반환하는 make_id 함수를 만드세요!",
-        guide: "return name + str(grade) 처럼!",
-        hint: "def make_id(name, grade=1): return name + str(grade)",
+        guide: "이름과 학년을 합쳐서 학번을 만들어! 숫자는 문자열로 변환해야 합칠 수 있어",
+        hint: "숫자를 문자열로 변환하는 내장 함수를 써서 이름 뒤에 학년을 붙여봐!",
         template: null,
         answer: "def make_id(name, grade=1):\n    return name + str(grade)\n\nprint(make_id('김민수'))\nprint(make_id('이영희', 3))",
         en: {
           task: "Create a make_id function that takes name and grade (default=1) and returns a student ID!",
-          guide: "Like return name + str(grade)!",
-          hint: "def make_id(name, grade=1): return name + str(grade)"
+          guide: "Combine the name and grade to make an ID! You need to convert the number to a string before joining.",
+          hint: "Use the built-in function to convert a number to a string and attach the grade to the end of the name!"
         },
         alternateAnswers: [
           "def make_id(name, grade=1):\n    return name + str(grade)\nprint(make_id('김민수'))\nprint(make_id('이영희', 3))"
@@ -600,14 +600,14 @@ print(price('사과', discount=2, count=5))`,
       content: {
         level: 3,
         task: "리스트를 받아 (최댓값 - 최솟값)의 범위와 합계를 모두 반환하는 analyze 함수를 만드세요!",
-        guide: "범위 = max - min, 합계 = sum!",
-        hint: "return max(data) - min(data), sum(data)",
+        guide: "범위는 최대값 빼기 최소값이고, 합계는 sum()으로 구해! 두 값을 한 번에 반환해봐",
+        hint: "max()와 min() 차이가 범위고, sum()이 합계야! 쉼표로 두 값을 return해봐",
         template: null,
         answer: "def analyze(data):\n    return max(data) - min(data), sum(data)\n\n범위, 합계 = analyze([4, 7, 2, 9, 1])\nprint(f'범위:{범위}, 합계:{합계}')",
         en: {
           task: "Create an analyze function that returns both range (max-min) and sum of a list!",
-          guide: "Range = max - min, Total = sum!",
-          hint: "return max(data) - min(data), sum(data)"
+          guide: "Range is max minus min, and sum() gets the total! Return both values at once.",
+          hint: "The difference between max() and min() is the range, and sum() gives the total! Return both with a comma."
         },
         alternateAnswers: [
           "def analyze(data):\n    return max(data) - min(data), sum(data)\n범위, 합계 = analyze([4, 7, 2, 9, 1])\nprint(f'범위:{범위}, 합계:{합계}')"

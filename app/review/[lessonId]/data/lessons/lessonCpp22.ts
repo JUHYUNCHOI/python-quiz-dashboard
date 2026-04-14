@@ -232,13 +232,13 @@ export const lessonCpp22: LessonData = {
         content: {
           level: 2,
           task: "this->를 써서 멤버 변수를 초기화해요!",
-          guide: "this->멤버변수 = 매개변수;",
+          guide: "매개변수와 멤버 변수 이름이 같을 때 현재 객체를 가리키는 키워드로 멤버를 구분해!",
           template: "class Box {\npublic:\n    int size;\n    Box(int size) {\n        ___->size = size;\n    }\n};",
           answer: "this",
           expect: "class Box {\npublic:\n    int size;\n    Box(int size) {\n        this->size = size;\n    }\n};",
           en: {
             task: "Use this-> to initialize a member variable!",
-            guide: "this->memberVariable = parameter;"
+            guide: "When the parameter and member variable share the same name, use the keyword that points to the current object to distinguish the member!"
           }
         }
       },
@@ -289,13 +289,13 @@ export const lessonCpp22: LessonData = {
         content: {
           level: 2,
           task: "hp를 반환하는 getter를 완성해요!",
-          guide: "반환 타입은 int, return this->hp;",
+          guide: "getter 함수는 private 멤버 변수와 같은 타입을 반환해! hp는 어떤 타입이지?",
           template: "class Character {\nprivate:\n    int hp;\npublic:\n    Character(int h) { hp = h; }\n    ___ getHp() {\n        return hp;\n    }\n};",
           answer: "int",
           expect: "class Character {\nprivate:\n    int hp;\npublic:\n    Character(int h) { hp = h; }\n    int getHp() {\n        return hp;\n    }\n};",
           en: {
             task: "Complete the getter that returns hp!",
-            guide: "Return type is int, return this->hp;"
+            guide: "A getter function returns the same type as the private member variable! What type is hp?"
           }
         }
       },
@@ -396,13 +396,13 @@ export const lessonCpp22: LessonData = {
         content: {
           level: 1,
           task: "Mage 클래스가 Character를 상속받게 해요!",
-          guide: "class 자식 : public 부모 { }",
+          guide: "상속을 선언할 때는 클래스 이름 뒤에 콜론(:)과 접근 지정자, 부모 클래스 이름을 써!",
           template: "class Mage ___ Character {\npublic:\n    int mp;\n};",
           answer: ": public",
           expect: "class Mage : public Character {\npublic:\n    int mp;\n};",
           en: {
             task: "Make the Mage class inherit from Character!",
-            guide: "class Child : public Parent { }"
+            guide: "To declare inheritance, write a colon (:), an access specifier, and the parent class name after the child class name!"
           }
         }
       },
@@ -413,13 +413,13 @@ export const lessonCpp22: LessonData = {
         content: {
           level: 2,
           task: "Mage 생성자에서 부모 생성자를 호출해요!",
-          guide: "자식생성자(params) : 부모생성자(params) { }",
+          guide: "자식 생성자에서 콜론(:) 뒤에 부모 클래스 이름으로 부모 생성자를 호출해 초기화해!",
           template: "class Mage : public Character {\npublic:\n    int mp;\n    Mage(string n, int h, int m) : ___(n, h) {\n        mp = m;\n    }\n};",
           answer: "Character",
           expect: "class Mage : public Character {\npublic:\n    int mp;\n    Mage(string n, int h, int m) : Character(n, h) {\n        mp = m;\n    }\n};",
           en: {
             task: "Call the parent constructor from the Mage constructor!",
-            guide: "ChildConstructor(params) : ParentConstructor(params) { }"
+            guide: "Call the parent constructor by writing the parent class name after the colon (:) in the child constructor!"
           }
         }
       },

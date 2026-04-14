@@ -207,14 +207,14 @@ export const lessonCpp3: LessonData = {
         content: {
           level: 2,
           task: "const로 PI=3.14를 선언하고, auto로 result = PI * 2.0을 선언해 출력해요",
-          guide: "const double PI = 3.14; auto result = PI * 2.0;",
+          guide: "const로 상수를 선언하고, auto로 타입을 자동 추론해요",
           template: "___ double PI = 3.14;\n___ result = PI * 2.0;\ncout << result << endl;",
           blanksAnswer: ["const", "auto"],
           answer: "const double PI = 3.14;\nauto result = PI * 2.0;\ncout << result << endl;",
           expect: "6.28",
           en: {
             task: "Declare PI=3.14 as const, declare result = PI * 2.0 with auto, then print",
-            guide: "const double PI = 3.14; auto result = PI * 2.0;"
+            guide: "Use const to declare a constant, and auto to automatically infer the type"
           }
         }
       },
@@ -242,8 +242,8 @@ export const lessonCpp3: LessonData = {
         content: {
           level: 3,
           task: "처음부터 작성! 섭씨(double)를 입력받아 화씨로 변환해 출력\n공식: F = C * 9.0/5.0 + 32",
-          guide: "double c; cin >> c; double f = c * 9.0/5.0 + 32;",
-          hint: "double c;\ncin >> c;\ndouble f = c * 9.0 / 5.0 + 32;\ncout << f << endl;",
+          guide: "double 입력 → 공식 계산 → cout 출력",
+          hint: "double 변수에 cin으로 입력받고, F = C * 9.0/5.0 + 32 공식을 적용해요",
           template: null,
           answer: "double c;\ncin >> c;\ndouble f = c * 9.0 / 5.0 + 32;\ncout << f << endl;",
           alternateAnswers: [
@@ -252,7 +252,7 @@ export const lessonCpp3: LessonData = {
           expect: "212",
           en: {
             task: "Write from scratch! Read Celsius (double), convert to Fahrenheit, print\nFormula: F = C * 9.0/5.0 + 32",
-            guide: "double c; cin >> c; double f = c * 9.0/5.0 + 32;"
+            guide: "double input → apply the formula → cout output"
           }
         }
       },
@@ -264,7 +264,7 @@ export const lessonCpp3: LessonData = {
           level: 3,
           task: "처음부터 작성! 이름, 나이, 점수, 합격여부를 각각 적절한 타입으로 선언하고\n\"Alice | 18 | 92.5 | pass\" 형식으로 출력 (합격 기준: 점수 >= 60)",
           guide: "string / int / double / bool — 타입 선언 4가지 연습",
-          hint: "string name=\"Alice\"; int age=18; double score=92.5;\nbool passed = score >= 60;\ncout<<name<<\" | \"<<age<<\" | \"<<score<<\" | \"<<(passed?\"pass\":\"fail\")<<endl;",
+          hint: "합격여부는 bool로 선언하고, 출력 시 삼항연산자로 \"pass\" / \"fail\" 중 하나를 골라요",
           template: null,
           answer: "string name = \"Alice\";\nint age = 18;\ndouble score = 92.5;\nbool passed = score >= 60;\ncout << name << \" | \" << age << \" | \" << score << \" | \" << (passed ? \"pass\" : \"fail\") << endl;",
           alternateAnswers: [

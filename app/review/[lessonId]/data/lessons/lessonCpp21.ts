@@ -233,14 +233,14 @@ export const lessonCpp21: LessonData = {
         content: {
           level: 1,
           task: "2행 3열짜리 2D vector를 0으로 초기화해요!",
-          guide: "vector<vector<int>> 이름(행, vector<int>(열, 0));",
+          guide: "2D vector는 vector 안에 vector를 넣는 형태야! 첫 번째 빈칸에 행 수, 두 번째에 열 수를 넣어!",
           template: "vector<vector<int>> grid(___, vector<int>(___, 0));",
           answer: "2",
           blanksAnswer: ["2", "3"],
           expect: "vector<vector<int>> grid(2, vector<int>(3, 0));",
           en: {
             task: "Initialize a 2-row 3-column 2D vector with all zeros!",
-            guide: "vector<vector<int>> name(rows, vector<int>(cols, 0));"
+            guide: "A 2D vector is a vector of vectors! Put the number of rows in the first blank, and the number of columns in the second!"
           }
         }
       },
@@ -396,13 +396,13 @@ export const lessonCpp21: LessonData = {
         content: {
           level: 2,
           task: "중첩 for문으로 grid 모든 값의 합을 구해요!",
-          guide: "total += grid[i][j]; 패턴!",
+          guide: "누적 합계를 구할 때 사용하는 복합 대입 연산자를 빈칸에 넣어봐!",
           template: 'int total = 0;\nfor (int i = 0; i < grid.size(); i++) {\n    for (int j = 0; j < grid[0].size(); j++) {\n        total ___ grid[i][j];\n    }\n}',
           answer: "+=",
           expect: 'int total = 0;\nfor (int i = 0; i < grid.size(); i++) {\n    for (int j = 0; j < grid[0].size(); j++) {\n        total += grid[i][j];\n    }\n}',
           en: {
             task: "Use nested for loops to sum all values in grid!",
-            guide: "Use the pattern total += grid[i][j]!"
+            guide: "Put the compound assignment operator used for accumulating a sum into the blank!"
           }
         }
       },
@@ -435,14 +435,14 @@ export const lessonCpp21: LessonData = {
         content: {
           level: 2,
           task: "grid[i][j]에 i+j 값을 넣어요! (대각선 패턴)",
-          guide: "grid[i][j] = i + j;",
+          guide: "격자의 각 칸에 행 인덱스와 열 인덱스를 조합한 값을 넣어봐!",
           template: 'vector<vector<int>> grid(3, vector<int>(3, 0));\nfor (int i = 0; i < 3; i++) {\n    for (int j = 0; j < 3; j++) {\n        grid[i][j] = ___;\n    }\n}',
           answer: "i + j",
           alternateAnswers: ["i+j"],
           expect: 'vector<vector<int>> grid(3, vector<int>(3, 0));\nfor (int i = 0; i < 3; i++) {\n    for (int j = 0; j < 3; j++) {\n        grid[i][j] = i + j;\n    }\n}',
           en: {
             task: "Fill grid[i][j] with the value i+j! (diagonal pattern)",
-            guide: "grid[i][j] = i + j;"
+            guide: "Put a combination of the row index and column index into each cell of the grid!"
           }
         }
       },
@@ -454,7 +454,7 @@ export const lessonCpp21: LessonData = {
           level: 2,
           task: "2D 그리드를 행 단위로 출력해요! (각 행 끝에 줄바꿈)",
           guide: "안쪽 루프에서 값 출력, 행이 끝나면 endl",
-          hint: "cout << grid[i][j] << \" \"; 후 안쪽 루프 끝나면 cout << endl;",
+          hint: "안쪽 for 루프가 끝난 자리(바깥 for 안)에서 줄바꿈을 출력하면 돼!",
           template: 'vector<vector<int>> grid = {{1,2,3},{4,5,6},{7,8,9}};\nfor (int i = 0; i < grid.size(); i++) {\n    for (int j = 0; j < grid[0].size(); j++) {\n        cout << grid[i][j] << " ";\n    }\n    cout << ___;\n}',
           blanksAnswer: ["endl"],
           answer: 'vector<vector<int>> grid = {{1,2,3},{4,5,6},{7,8,9}};\nfor (int i = 0; i < grid.size(); i++) {\n    for (int j = 0; j < grid[0].size(); j++) {\n        cout << grid[i][j] << " ";\n    }\n    cout << endl;\n}',
@@ -462,7 +462,7 @@ export const lessonCpp21: LessonData = {
           en: {
             task: "Print a 2D grid row by row! (newline after each row)",
             guide: "Print each value in the inner loop, then endl after the row ends",
-            hint: "After cout << grid[i][j], use cout << endl after the inner loop"
+            hint: "Output a newline in the spot right after the inner for loop ends (still inside the outer for)!"
           }
         }
       },
@@ -474,7 +474,7 @@ export const lessonCpp21: LessonData = {
           level: 2,
           task: "2D vector에서 최댓값을 찾아서 출력해요!",
           guide: "maxVal을 grid[0][0]으로 초기화 후 모든 원소와 비교",
-          hint: "if (grid[i][j] > maxVal) maxVal = grid[i][j];",
+          hint: "현재까지의 최댓값을 저장하는 변수 이름이 빈칸에 들어가야 해!",
           template: 'vector<vector<int>> grid = {{3,7,2},{8,1,5}};\nint maxVal = grid[0][0];\nfor (int i = 0; i < grid.size(); i++) {\n    for (int j = 0; j < grid[0].size(); j++) {\n        if (grid[i][j] > ___) {\n            maxVal = grid[i][j];\n        }\n    }\n}\ncout << maxVal << endl;',
           blanksAnswer: ["maxVal"],
           answer: 'vector<vector<int>> grid = {{3,7,2},{8,1,5}};\nint maxVal = grid[0][0];\nfor (int i = 0; i < grid.size(); i++) {\n    for (int j = 0; j < grid[0].size(); j++) {\n        if (grid[i][j] > maxVal) {\n            maxVal = grid[i][j];\n        }\n    }\n}\ncout << maxVal << endl;',
@@ -482,7 +482,7 @@ export const lessonCpp21: LessonData = {
           en: {
             task: "Find and print the maximum value in a 2D vector!",
             guide: "Initialize maxVal to grid[0][0], then compare with every element",
-            hint: "if (grid[i][j] > maxVal) maxVal = grid[i][j];"
+            hint: "The variable name that stores the current maximum goes in the blank!"
           }
         }
       },
@@ -494,7 +494,7 @@ export const lessonCpp21: LessonData = {
           level: 3,
           task: "2D 그리드에서 5보다 큰 원소가 몇 개인지 세어서 출력해요!",
           guide: "count 변수 선언 → 조건 충족 시 count++",
-          hint: "if (grid[i][j] > 5) count++;",
+          hint: "비교 연산자와 숫자를 합쳐서 '5보다 크다'는 조건을 완성해봐!",
           template: 'vector<vector<int>> grid = {{1,6,3},{9,2,7},{4,8,5}};\nint count = 0;\nfor (int i = 0; i < grid.size(); i++) {\n    for (int j = 0; j < grid[0].size(); j++) {\n        if (grid[i][j] ___) count++;\n    }\n}\ncout << count << endl;',
           blanksAnswer: ["> 5"],
           alternateAnswers: [">5"],
@@ -503,7 +503,7 @@ export const lessonCpp21: LessonData = {
           en: {
             task: "Count how many elements in the 2D grid are greater than 5!",
             guide: "Declare a count variable → increment when condition is met",
-            hint: "if (grid[i][j] > 5) count++;"
+            hint: "Combine a comparison operator and a number to complete the 'greater than 5' condition!"
           }
         }
       },

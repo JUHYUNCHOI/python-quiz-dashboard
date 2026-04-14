@@ -62,14 +62,14 @@ print(sum(점수) / len(점수))  # 평균!`,
       content: {
         level: 1,
         task: "점수 리스트의 평균을 구하세요",
-        guide: "sum() / len() 사용!",
-        hint: "합계를 개수로 나누면 평균!",
+        guide: "전체 합 ÷ 개수 = 평균이에요",
+        hint: "전체 합을 구하는 함수와 개수를 구하는 함수를 나누면 평균!",
         template: null,
         answer: "점수 = [80, 90, 70, 85, 95]\n\n평균 = sum(점수) / len(점수)\nprint(f'평균: {평균}')",
         en: {
           task: "Find the average of the score list",
-          guide: "Use sum() / len()!",
-          hint: "Average = total divided by count!"
+          guide: "Total sum ÷ count = average",
+          hint: "Divide the function that gets total sum by the function that gets count!"
         },
         alternateAnswers: [
           "점수 = [80, 90, 70, 85, 95]\n평균 = sum(점수) / len(점수)\nprint(f'평균: {평균}')"
@@ -493,14 +493,14 @@ for name, score in zip(이름, 점수):
       content: {
         level: 2,
         task: "zip으로 두 리스트를 딕셔너리로 만드세요",
-        guide: "dict(zip(키들, 값들))",
-        hint: "zip을 dict()로 감싸면 딕셔너리!",
+        guide: "두 리스트를 묶은 다음 딕셔너리로 변환해요",
+        hint: "zip()으로 묶고, dict()로 감싸면 딕셔너리가 돼요!",
         template: null,
         answer: "과목 = ['국어', '영어', '수학']\n점수 = [90, 85, 95]\n\n성적표 = dict(zip(과목, 점수))\nprint(성적표)",
         en: {
           task: "Use zip to combine two lists into a dictionary",
-          guide: "dict(zip(keys, values))",
-          hint: "Wrap zip with dict() to get a dictionary!"
+          guide: "Combine two lists, then convert to a dictionary",
+          hint: "Pair them with zip(), then wrap with dict() to get a dictionary!"
         },
         alternateAnswers: [
           "과목 = ['국어', '영어', '수학']\n점수 = [90, 85, 95]\n성적표 = dict(zip(과목, 점수))\nprint(성적표)"

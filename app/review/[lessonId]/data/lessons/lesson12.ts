@@ -94,13 +94,13 @@ export const lesson12: LessonData = {
       content: {
         level: 2,
         task: "temp = 22, rain = False 로 변수 만들고,\n온도가 15~28이고 비가 안 오면 '소풍 가자!' 출력해봐",
-        guide: "if temp >= 15 and temp <= 28 and not rain:",
+        guide: "and로 두 조건을 연결하고, 비가 안 오는 조건은 not으로 반전해!",
         template: null,
         answer: "temp = 22\nrain = False\nif temp >= 15 and temp <= 28 and not rain:\n    print('소풍 가자!')\nelse:\n    print('집에 있자')",
         expect: "소풍 가자!",
         en: {
           task: "Create variables temp = 22, rain = False,\nif temperature is 15~28 and it's not raining print '소풍 가자!'",
-          guide: "if temp >= 15 and temp <= 28 and not rain:"
+          guide: "Connect two conditions with and, and use not to reverse the rain condition!"
         }
       }
     },
@@ -186,13 +186,13 @@ export const lesson12: LessonData = {
       content: {
         level: 2,
         task: "day = '토요일' 로 변수 만들고,\n'토요일' 또는 '일요일' 이면 '주말이다!' 출력해봐",
-        guide: "if day == '토요일' or day == '일요일':",
+        guide: "or로 두 가지 값 중 하나인지 확인해!",
         template: null,
         answer: "day = '토요일'\nif day == '토요일' or day == '일요일':\n    print('주말이다!')\nelse:\n    print('평일이다')",
         expect: "주말이다!",
         en: {
           task: "Create variable day = '토요일',\nif '토요일' or '일요일' print '주말이다!'",
-          guide: "if day == '토요일' or day == '일요일':"
+          guide: "Use or to check if the value matches one of two options!"
         }
       }
     },
@@ -278,13 +278,13 @@ export const lesson12: LessonData = {
       content: {
         level: 2,
         task: "logged_in = False 로 변수 만들고,\n로그인이 안 됐으면 '로그인이 필요합니다' 출력해봐",
-        guide: "if not logged_in:",
+        guide: "not으로 True/False를 반전해서 '안 됐으면' 이라는 조건을 표현해!",
         template: null,
         answer: "logged_in = False\nif not logged_in:\n    print('로그인이 필요합니다')",
         expect: "로그인이 필요합니다",
         en: {
           task: "Create variable logged_in = False,\nif not logged in print '로그인이 필요합니다'",
-          guide: "if not logged_in:"
+          guide: "Use not to flip True/False and express the 'is not' condition!"
         }
       }
     },
@@ -371,13 +371,13 @@ export const lesson12: LessonData = {
       content: {
         level: 3,
         task: "n = 7 로 변수 만들고,\n1 이상 10 미만이면 '범위 안' 출력해봐\n(Python 연결 비교 방식으로!)",
-        guide: "if 1 <= n < 10:",
+        guide: "Python에서는 수학처럼 범위를 한 번에 표현할 수 있어!",
         template: null,
         answer: "n = 7\nif 1 <= n < 10:\n    print('범위 안')",
         expect: "범위 안",
         en: {
           task: "Create variable n = 7,\nif 1 or above and less than 10 print '범위 안'\n(Using Python chained comparison!)",
-          guide: "if 1 <= n < 10:"
+          guide: "In Python you can express a range in one go, just like in math!"
         }
       }
     },
@@ -736,13 +736,13 @@ export const lesson12: LessonData = {
       content: {
         level: 2,
         task: "n = 75 로 변수 만들고,\n1 이상 100 이하면 '유효한 점수' 출력해봐\n(and로 두 조건 연결!)",
-        guide: "if n >= 1 and n <= 100:",
+        guide: "and로 최솟값 이상인지, 최댓값 이하인지 두 조건을 연결해!",
         template: null,
         answer: "n = 75\nif n >= 1 and n <= 100:\n    print('유효한 점수')\nelse:\n    print('범위 초과')",
         expect: "유효한 점수",
         en: {
           task: "Create variable n = 75,\nif 1 or above and 100 or below print '유효한 점수'\n(connect two conditions with and!)",
-          guide: "if n >= 1 and n <= 100:"
+          guide: "Use and to connect: must be at least the minimum AND at most the maximum!"
         }
       }
     },
@@ -753,13 +753,13 @@ export const lesson12: LessonData = {
       content: {
         level: 2,
         task: "answer = 'yes' 로 변수 만들고,\n'yes' 또는 'y' 이면 '확인됐어요!' 출력해봐",
-        guide: "if answer == 'yes' or answer == 'y':",
+        guide: "or로 두 문자열 중 하나와 일치하는지 확인해!",
         template: null,
         answer: "answer = 'yes'\nif answer == 'yes' or answer == 'y':\n    print('확인됐어요!')\nelse:\n    print('취소됐어요')",
         expect: "확인됐어요!",
         en: {
           task: "Create variable answer = 'yes',\nif 'yes' or 'y' print '확인됐어요!'",
-          guide: "if answer == 'yes' or answer == 'y':"
+          guide: "Use or to check if a string matches one of two possible values!"
         }
       }
     },

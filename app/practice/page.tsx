@@ -58,6 +58,7 @@ function ClusterList({
   lang,
   onLangChange,
   isTeacher = false,
+  onBack,
 }: {
   onSelect: (cluster: PracticeCluster) => void
   solvedSet: Set<string>
@@ -65,6 +66,7 @@ function ClusterList({
   lang: Lang
   onLangChange: (lang: Lang) => void
   isTeacher?: boolean
+  onBack?: () => void
 }) {
   const { t, lang: locale } = useLanguage()
   const [showCompleted, setShowCompleted] = useState(false)
@@ -129,11 +131,19 @@ function ClusterList({
     <div className="flex flex-col gap-4 pb-24">
 
       {/* 헤더 */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">{t("코딩 연습", "Practice")}</h1>
-        <p className="text-sm text-gray-400 mt-0.5">
-          {t("문제를 풀면 알고리즘 학습이 열려요", "Solve problems to unlock algorithm study")}
-        </p>
+      <div className="flex items-center gap-3">
+        <button
+          onClick={onBack}
+          className="p-2 rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors shrink-0"
+        >
+          <ArrowLeft className="w-4 h-4 text-gray-600" />
+        </button>
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">{t("코딩 연습", "Practice")}</h1>
+          <p className="text-sm text-gray-400 mt-0.5">
+            {t("문제를 풀면 알고리즘 학습이 열려요", "Solve problems to unlock algorithm study")}
+          </p>
+        </div>
       </div>
 
       {/* 언어 탭 */}
@@ -163,15 +173,24 @@ function ClusterList({
               {totalSolved} / {GOAL}
             </span>
           </div>
-          <div className="h-2 bg-purple-100 rounded-full overflow-hidden">
+          <div className="relative h-3 bg-purple-100 rounded-full overflow-hidden">
+            {/* 채워진 부분 */}
             <div
-              className="h-full bg-purple-500 rounded-full transition-all duration-500"
+              className="absolute left-0 top-0 h-full bg-purple-500 rounded-full transition-all duration-500"
               style={{ width: `${Math.min(100, (totalSolved / GOAL) * 100)}%` }}
             />
+            {/* 남은 부분 — pulse */}
+            <div
+              className="absolute top-0 h-full bg-purple-200 rounded-r-full animate-pulse"
+              style={{
+                left: `${Math.min(100, (totalSolved / GOAL) * 100)}%`,
+                right: 0,
+              }}
+            />
           </div>
-          <p className="text-xs text-purple-400 mt-1.5">
+          <p className="text-xs text-purple-500 font-semibold mt-1.5">
             {GOAL - totalSolved > 0
-              ? t(`${GOAL - totalSolved}문제 더 풀면 알고리즘 학습이 열려요`, `${GOAL - totalSolved} more to unlock algorithm study`)
+              ? t(`${GOAL - totalSolved}문제 더 풀면 알고리즘 학습이 열려요 →`, `${GOAL - totalSolved} more problems to unlock algorithms →`)
               : t("거의 다 왔어요!", "Almost there!")}
           </p>
         </div>
@@ -216,7 +235,7 @@ function ClusterList({
                 </p>
                 <p className="text-sm text-indigo-200 mt-1">{locCluster.description}</p>
               </div>
-              <span className="text-white text-2xl shrink-0">→</span>
+              <span className="text-white text-2xl shrink-0 animate-bounce">→</span>
             </div>
             {/* 세트 정보 */}
             <div className="mt-3 flex items-center gap-2">
@@ -808,6 +827,13 @@ function PracticeContent() {
             lang={lang}
             onLangChange={handleLangChange}
             isTeacher={isTeacher}
+            onBack={() => {
+              if (fromParam === "lesson" || fromParam === "curriculum") {
+                router.back()
+              } else {
+                router.push("/curriculum")
+              }
+            }}
           />
       }
     </main>

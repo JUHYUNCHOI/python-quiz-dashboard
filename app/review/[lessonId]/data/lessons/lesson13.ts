@@ -136,7 +136,7 @@ export const lesson13: LessonData = {
         level: 3,
         task: "이렇게 나오게 해봐 ↓\n1\n3\n5\n7\n9\n\n힌트: range(시작, 끝, 간격) 써봐!",
         guide: "range의 3번째 인자로 2씩 건너뛰어봐!",
-        hint: "range(1, 10, 2)를 써봐!",
+        hint: "range의 세 번째 숫자가 몇씩 건너뛸지를 결정해!",
         template: null,
         answer: "for i in range(1, 10, 2):\n    print(i)",
         alternateAnswers: ["for i in range(1,10,2):\n    print(i)"],
@@ -144,7 +144,7 @@ export const lesson13: LessonData = {
         en: {
           task: "Make it print like this ↓\n1\n3\n5\n7\n9\n\nHint: Use range(start, end, step)!",
           guide: "Skip by 2 using the 3rd argument of range!",
-          hint: "Use range(1, 10, 2)!"
+          hint: "The third number in range decides how many steps to skip each time!"
         }
       }
     },
@@ -186,8 +186,8 @@ export const lesson13: LessonData = {
       content: {
         level: 1,
         task: "리스트의 각 이름에 '님' 붙여서 출력",
-        guide: "f-string으로 합쳐보자!",
-        hint: "f'{name}님' 형태로!",
+        guide: "f-string으로 변수와 텍스트를 합쳐서 출력해봐!",
+        hint: "f-string 안에 변수를 중괄호로 감싸고 '님'을 뒤에 붙여봐!",
         template: "names = ['지민', '유진', '민수']\nfor ___ in names:\n    print(f'{___}님')",
         blanksAnswer: ["name", "name"],
         answer: "names = ['지민', '유진', '민수']\nfor name in names:\n    print(f'{name}님')",
@@ -195,7 +195,7 @@ export const lesson13: LessonData = {
         en: {
           task: "Print each name from the list with '님' appended",
           guide: "Combine with f-string!",
-          hint: "Use the form f'{name}님'!"
+          hint: "Wrap the variable in curly braces inside f-string and add '님' after!"
         }
       }
     },
@@ -355,14 +355,14 @@ export const lesson13: LessonData = {
       content: {
         level: 1,
         task: "리스트를 순회하며 각 과일 앞에 '🍎'를 붙여 출력해요",
-        guide: "for item in list: print(f'🍎{item}')",
+        guide: "for문으로 리스트를 순회하며 f-string으로 이모지와 항목을 합쳐서 출력해!",
         template: "fruits = ['사과', '바나나', '포도']\nfor ___ in fruits:\n    print(f'🍎{___}')",
         blanksAnswer: ["fruit", "fruit"],
         answer: "fruits = ['사과', '바나나', '포도']\nfor fruit in fruits:\n    print(f'🍎{fruit}')",
         expect: "🍎사과\n🍎바나나\n🍎포도",
         en: {
           task: "Traverse the list and print each fruit with '🍎' prepended",
-          guide: "for item in list: print(f'🍎{item}')"
+          guide: "Loop through the list with for and use f-string to combine the emoji and each item!"
         }
       }
     },
@@ -373,14 +373,14 @@ export const lesson13: LessonData = {
       content: {
         level: 2,
         task: "리스트 [10, 20, 30, 40]의 합계를 for문으로 구해 출력해요",
-        guide: "total = 0; for x in nums: total += x",
+        guide: "먼저 합계 변수를 0으로 초기화하고, 반복할 때마다 현재 값을 더해나가!",
         template: "nums = [10, 20, 30, 40]\ntotal = 0\nfor ___ in nums:\n    total ___ ___\nprint(total)",
         blanksAnswer: ["x", "+=", "x"],
         answer: "nums = [10, 20, 30, 40]\ntotal = 0\nfor x in nums:\n    total += x\nprint(total)",
         expect: "100",
         en: {
           task: "Use a for loop to sum the list [10, 20, 30, 40] and print it",
-          guide: "total = 0; for x in nums: total += x"
+          guide: "Start with a total variable at 0, then add each value to it as you loop!"
         }
       }
     },
@@ -391,8 +391,8 @@ export const lesson13: LessonData = {
       content: {
         level: 3,
         task: "처음부터 작성! 구구단 5단을 출력해요\n형식: '5 x 1 = 5'",
-        guide: "for i in range(1, 10): print(f'5 x {i} = {5*i}')",
-        hint: "for i in range(1, 10):\n    print(f'5 x {i} = {5*i}')",
+        guide: "for문으로 1부터 9까지 반복하면서 f-string으로 출력 형식을 맞춰봐!",
+        hint: "range로 1~9를 반복하고, f-string 안에 i와 5*i를 넣어봐!",
         template: null,
         answer: "for i in range(1, 10):\n    print(f'5 x {i} = {5*i}')",
         alternateAnswers: [
@@ -401,8 +401,8 @@ export const lesson13: LessonData = {
         expect: "5 x 1 = 5\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45",
         en: {
           task: "Write from scratch! Print the 5 times table\nFormat: '5 x 1 = 5'",
-          guide: "for i in range(1, 10): print(f'5 x {i} = {5*i}')",
-          hint: "for i in range(1, 10):\n    print(f'5 x {i} = {5*i}')"
+          guide: "Use a for loop to iterate 1 through 9 and use f-string to format the output!",
+          hint: "Use range for 1~9 and put i and 5*i inside the f-string!"
         }
       }
     },
@@ -413,8 +413,8 @@ export const lesson13: LessonData = {
       content: {
         level: 3,
         task: "처음부터 작성! 1~10 중 짝수의 합계를 구해 출력해요",
-        guide: "for + range + if x%2==0 + 누적합",
-        hint: "total = 0\nfor i in range(1, 11):\n    if i % 2 == 0:\n        total += i\nprint(total)",
+        guide: "for문으로 1~10을 반복하면서 짝수인지 확인하고, 짝수만 합계에 더해!",
+        hint: "합계 변수를 먼저 만들고, 반복할 때마다 나머지가 0인 숫자만 더해봐!",
         template: null,
         answer: "total = 0\nfor i in range(1, 11):\n    if i % 2 == 0:\n        total += i\nprint(total)",
         alternateAnswers: [
@@ -423,8 +423,8 @@ export const lesson13: LessonData = {
         expect: "30",
         en: {
           task: "Write from scratch! Find the sum of even numbers from 1 to 10 and print it",
-          guide: "for + range + if x%2==0 + accumulate",
-          hint: "total = 0\nfor i in range(1, 11):\n    if i % 2 == 0:\n        total += i\nprint(total)"
+          guide: "Loop from 1 to 10 with for, check if each number is even, and add only the even ones to the total!",
+          hint: "Create a total variable first, then add only the numbers whose remainder is 0 when divided by 2!"
         }
       }
     },

@@ -1064,9 +1064,9 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                     isLastStepOfLastChapter ? (
                       <><span className="text-sm md:text-base">🎉</span><span className="text-sm md:text-base">{t("레슨 완료!", "Finish!")}</span></>
                     ) : isLastStepOfChapter ? (
-                      <><ChevronRight className="w-4 h-4 md:w-5 md:h-5" /><span className="text-sm md:text-base">{t("챕터 완료", "End Chapter")}</span></>
+                      <><ChevronRight className="w-4 h-4 md:w-5 md:h-5 animate-bounce" /><span className="text-sm md:text-base">{t("챕터 완료", "End Chapter")}</span></>
                     ) : (
-                      <><ChevronRight className="w-4 h-4 md:w-5 md:h-5" /><span className="text-sm md:text-base">{t("다음", "Next")}</span></>
+                      <><ChevronRight className="w-4 h-4 md:w-5 md:h-5 animate-bounce" /><span className="text-sm md:text-base">{t("다음", "Next")}</span></>
                     )
                   ) : (
                     <><Lock className="w-4 h-4 md:w-5 md:h-5" /><span className="text-xs md:text-sm">{t("완료 필요", "Complete first")}</span></>

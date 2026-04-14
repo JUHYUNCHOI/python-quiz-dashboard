@@ -93,13 +93,15 @@ export const lesson10: LessonData = {
       content: {
         level: 1,
         task: "input()으로 좋아하는 음식을 입력받아\n'좋아하는 음식: 피자' 형식으로 출력해봐\n(입력: 피자)",
-        guide: "food = input('좋아하는 음식: ')\nprint(f'좋아하는 음식: {food}')",
+        guide: "input()으로 입력받고, f-string으로 출력해요",
+        hint: "input()으로 변수에 저장하고, f-string으로 출력해봐요",
         template: null,
         answer: "food = input('좋아하는 음식: ')\nprint(f'좋아하는 음식: {food}')",
         expect: "좋아하는 음식: 피자",
         en: {
           task: "Use input() to get a favorite food\nPrint it in '좋아하는 음식: 피자' format\n(input: 피자)",
-          guide: "food = input('좋아하는 음식: ')\nprint(f'좋아하는 음식: {food}')"
+          guide: "Receive input with input(), then print using f-string",
+          hint: "Store input in a variable, then print with f-string"
         }
       }
     },
@@ -198,13 +200,15 @@ export const lesson10: LessonData = {
       content: {
         level: 2,
         task: "나이를 int로 입력받아\n10년 후 나이를 출력해봐\n(입력: 15 → 출력: 25)",
-        guide: "age = int(input('나이: '))",
+        guide: "input()은 항상 str을 반환하니까 숫자 계산 전에 int()로 변환해야 해요",
+        hint: "int(input(...))로 감싸서 정수로 입력받아요",
         template: null,
         answer: "age = int(input('나이: '))\nprint(age + 10)",
         expect: "25",
         en: {
           task: "Get age as int input\nPrint the age 10 years later\n(input: 15 → output: 25)",
-          guide: "age = int(input('나이: '))"
+          guide: "input() always returns str, so wrap with int() before calculating",
+          hint: "Wrap with int(input(...)) to receive as integer"
         }
       }
     },
@@ -213,13 +217,15 @@ export const lesson10: LessonData = {
       content: {
         level: 2,
         task: "두 수를 각각 입력받아 합을 출력해봐\n(입력: 30, 70 → 출력: 100)",
-        guide: "a = int(input(...))\nb = int(input(...))",
+        guide: "각각 int()로 변환해서 입력받아야 더할 수 있어요",
+        hint: "두 번 입력받을 때 각각 int()로 감싸봐요",
         template: null,
         answer: "a = int(input('첫 번째 수: '))\nb = int(input('두 번째 수: '))\nprint(a + b)",
         expect: "100",
         en: {
           task: "Get two numbers as input and print their sum\n(input: 30, 70 → output: 100)",
-          guide: "a = int(input(...))\nb = int(input(...))"
+          guide: "Wrap each input with int() so you can add them",
+          hint: "Wrap each of the two inputs separately with int()"
         }
       }
     },
@@ -543,13 +549,15 @@ export const lesson10: LessonData = {
       content: {
         level: 2,
         task: "상품 가격을 소수로 입력받아\n10% 할인된 가격을 출력해봐\n(입력: 50.0 → 출력: 45.0)",
-        guide: "price = float(input('가격: '))\nprint(price * 0.9)",
+        guide: "소수로 입력받을 땐 float()로 변환해요",
+        hint: "float(input(...))으로 입력받고, 0.9를 곱하면 10% 할인이에요",
         template: null,
         answer: "price = float(input('가격: '))\nprint(price * 0.9)",
         expect: "45.0",
         en: {
           task: "Get a product price as float\nPrint the price after 10% discount\n(input: 50.0 → output: 45.0)",
-          guide: "price = float(input('가격: '))\nprint(price * 0.9)"
+          guide: "Use float() to receive decimal input",
+          hint: "Receive with float(input(...)) and multiply by 0.9 for 10% discount"
         }
       }
     },
@@ -560,13 +568,15 @@ export const lesson10: LessonData = {
       content: {
         level: 2,
         task: "성(last name)과 이름(first name)을 각각 입력받아\n이어붙여서 출력해봐\n(입력: '김', '민준' → 출력: 김민준)",
-        guide: "last = input('성: ')\nfirst = input('이름: ')\nprint(last + first)",
+        guide: "input()은 str을 반환하니까 문자열 이어붙이기가 바로 돼요",
+        hint: "각각 input()으로 받아서 + 로 이어붙여봐요",
         template: null,
         answer: "last = input('성: ')\nfirst = input('이름: ')\nprint(last + first)",
         expect: "김민준",
         en: {
           task: "Get last name and first name separately\nPrint them concatenated\n(input: '김', '민준' → output: 김민준)",
-          guide: "last = input('성: ')\nfirst = input('이름: ')\nprint(last + first)"
+          guide: "input() returns str, so string concatenation works directly",
+          hint: "Receive each with input() then join them with +"
         }
       }
     },
@@ -577,13 +587,15 @@ export const lesson10: LessonData = {
       content: {
         level: 3,
         task: "키를 cm 단위로 정수로 입력받아\nm 단위 소수로 변환해서 출력해봐\n(입력: 170 → 출력: 1.7)",
-        guide: "height_cm = int(input('키(cm): '))\nprint(height_cm / 100)",
+        guide: "int()로 입력받고, 100으로 나누면 m 단위로 변환돼요",
+        hint: "int(input(...))으로 정수로 받고, 100으로 나눠봐요",
         template: null,
         answer: "height_cm = int(input('키(cm): '))\nprint(height_cm / 100)",
         expect: "1.7",
         en: {
           task: "Get height in cm as integer\nConvert and print in meters\n(input: 170 → output: 1.7)",
-          guide: "height_cm = int(input('키(cm): '))\nprint(height_cm / 100)"
+          guide: "Receive with int(), then divide by 100 to convert to meters",
+          hint: "Receive as int(input(...)) then divide by 100"
         }
       }
     },
@@ -594,13 +606,15 @@ export const lesson10: LessonData = {
       content: {
         level: 3,
         task: "세 과목 점수를 각각 int로 입력받아\n평균을 출력해봐\n(입력: 80, 90, 100 → 출력: 90.0)",
-        guide: "a = int(input('국어: '))\nb = int(input('영어: '))\nc = int(input('수학: '))\nprint((a + b + c) / 3)",
+        guide: "세 번 int()로 입력받고, 합을 3으로 나눠요",
+        hint: "세 변수를 각각 int(input(...))으로 받고 합 ÷ 3을 계산해봐요",
         template: null,
         answer: "a = int(input('국어: '))\nb = int(input('영어: '))\nc = int(input('수학: '))\nprint((a + b + c) / 3)",
         expect: "90.0",
         en: {
           task: "Get three subject scores as int input\nPrint the average\n(input: 80, 90, 100 → output: 90.0)",
-          guide: "a = int(input('국어: '))\nb = int(input('영어: '))\nc = int(input('수학: '))\nprint((a + b + c) / 3)"
+          guide: "Receive three times with int(), then divide the sum by 3",
+          hint: "Receive three variables with int(input(...)) each and calculate sum ÷ 3"
         }
       }
     },

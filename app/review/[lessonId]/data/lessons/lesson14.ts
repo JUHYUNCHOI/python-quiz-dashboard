@@ -115,14 +115,14 @@ export const lesson14: LessonData = {
         level: 3,
         task: "이렇게 나오게 해봐 ↓\n0\n1\n2",
         guide: "while문 전체를 직접 써봐! (i = 0부터 시작)",
-        hint: "i = 0\nwhile i < 3:\n    print(i)\n    i += 1",
+        hint: "변수를 0으로 초기화하고, 3보다 작은 동안 반복하면서 변수를 1씩 늘려봐!",
         template: null,
         answer: "i = 0\nwhile i < 3:\n    print(i)\n    i += 1",
         expect: "0\n1\n2",
         en: {
           task: "Make it print like this ↓\n0\n1\n2",
           guide: "Write the entire while loop yourself! (start with i = 0)",
-          hint: "i = 0\nwhile i < 3:\n    print(i)\n    i += 1"
+          hint: "Initialize a variable to 0, repeat while it's less than 3, and increase it by 1 each time!"
         }
       }
     },
@@ -371,8 +371,8 @@ export const lesson14: LessonData = {
       content: {
         level: 3,
         task: "처음부터 작성! 1부터 더해나가다가 합계가 100을 초과하는 순간 멈추고\n그때의 합계와 마지막으로 더한 숫자를 출력해요",
-        guide: "while total <= 100: total += i; i += 1",
-        hint: "total = 0\ni = 1\nwhile total <= 100:\n    total += i\n    i += 1\nprint(total)\nprint(i - 1)",
+        guide: "합계가 100 이하인 동안 계속 더하다가 초과하는 순간 멈추는 while 조건을 생각해봐!",
+        hint: "합계와 숫자 두 변수를 만들어서, 합계가 100을 넘을 때까지 숫자를 순서대로 더해봐!",
         template: null,
         answer: "total = 0\ni = 1\nwhile total <= 100:\n    total += i\n    i += 1\nprint(total)\nprint(i - 1)",
         alternateAnswers: [
@@ -381,8 +381,8 @@ export const lesson14: LessonData = {
         expect: "105\n14",
         en: {
           task: "Write from scratch! Keep adding numbers starting from 1 until the total exceeds 100\nPrint the total and the last number added",
-          guide: "while total <= 100: total += i; i += 1",
-          hint: "total = 0\ni = 1\nwhile total <= 100:\n    total += i\n    i += 1\nprint(total)\nprint(i - 1)"
+          guide: "Think about a while condition that keeps running while the total is 100 or under, then stops!",
+          hint: "Create two variables for total and counter, then keep adding numbers in order until the total exceeds 100!"
         }
       }
     },
@@ -393,8 +393,8 @@ export const lesson14: LessonData = {
       content: {
         level: 3,
         task: "처음부터 작성! 10에서 1까지 카운트다운하고 마지막에 '발사!'를 출력해요",
-        guide: "n = 10; while n >= 1: print(n); n -= 1; print('발사!')",
-        hint: "n = 10\nwhile n >= 1:\n    print(n)\n    n -= 1\nprint('발사!')",
+        guide: "while문으로 n이 1 이상인 동안 반복하고, 매번 1씩 줄여봐! '발사!'는 반복문 밖에서 출력해",
+        hint: "n을 10으로 시작해서 조건 안에서 출력하고 1씩 줄이다가, 반복이 끝나면 '발사!'를 출력해!",
         template: null,
         answer: "n = 10\nwhile n >= 1:\n    print(n)\n    n -= 1\nprint('발사!')",
         alternateAnswers: [
@@ -403,8 +403,8 @@ export const lesson14: LessonData = {
         expect: "10\n9\n8\n7\n6\n5\n4\n3\n2\n1\n발사!",
         en: {
           task: "Write from scratch! Count down from 10 to 1, then print '발사!'",
-          guide: "n = 10; while n >= 1: print(n); n -= 1; print('발사!')",
-          hint: "n = 10\nwhile n >= 1:\n    print(n)\n    n -= 1\nprint('발사!')"
+          guide: "Use while to loop while n is 1 or above, decreasing by 1 each time! Print '발사!' outside the loop",
+          hint: "Start n at 10, print and decrease inside the loop, then print '발사!' after the loop ends!"
         }
       }
     },

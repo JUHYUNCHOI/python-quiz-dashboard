@@ -503,7 +503,7 @@ export const lessonCpp6: LessonData = {
           level: 3,
           task: "처음부터 작성! n을 입력받아 짝수면 \"even\", 홀수면 \"odd\" 출력하고\n추가로 n이 10보다 크면 \"big\", 아니면 \"small\"도 출력해요",
           guide: "cin → if (n%2==0) → if (n>10)",
-          hint: "cin >> n;\nif (n % 2 == 0) cout << \"even\";\nelse cout << \"odd\";\nif (n > 10) cout << \" big\";\nelse cout << \" small\";",
+          hint: "두 개의 if-else를 따로 써요: 하나는 짝홀 판별, 하나는 크기 판별",
           template: null,
           answer: "int n;\ncin >> n;\nif (n % 2 == 0) cout << \"even\";\nelse cout << \"odd\";\ncout << endl;\nif (n > 10) cout << \"big\";\nelse cout << \"small\";\ncout << endl;",
           alternateAnswers: [
@@ -524,7 +524,7 @@ export const lessonCpp6: LessonData = {
           level: 3,
           task: "처음부터 작성! a, b 두 수를 입력받아 큰 수를 출력해요 (삼항연산자 사용!)",
           guide: "result = (a > b) ? a : b;",
-          hint: "int a, b;\ncin >> a >> b;\ncout << (a > b ? a : b) << endl;",
+          hint: "삼항연산자: 조건 ? 참일때값 : 거짓일때값",
           template: null,
           answer: "int a, b;\ncin >> a >> b;\nint result = (a > b) ? a : b;\ncout << result << endl;",
           alternateAnswers: [

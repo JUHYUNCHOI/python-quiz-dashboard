@@ -81,14 +81,14 @@ export const lesson9: LessonData = {
       content: {
         task: "이렇게 나오게 해봐 ↓\n200",
         guide: "int()로 변환해서 출력!",
-        hint: "print(int('200'))",
+        hint: "문자열 '200'을 int()로 감싸서 출력해봐요",
         template: null,
         answer: "print(int('200'))",
         expect: "200",
         en: {
           task: "Make it print like this ↓\n200",
           guide: "Convert with int() and print!",
-          hint: "print(int('200'))"
+          hint: "Wrap the string '200' with int() and print it"
         }
       }
     },
@@ -200,14 +200,14 @@ export const lesson9: LessonData = {
       content: {
         task: "이렇게 나오게 해봐 ↓\n3.14",
         guide: "float()로 변환해서 출력!",
-        hint: "print(float('3.14'))",
+        hint: "문자열 '3.14'를 float()로 감싸서 출력해봐요",
         template: null,
         answer: "print(float('3.14'))",
         expect: "3.14",
         en: {
           task: "Make it print like this ↓\n3.14",
           guide: "Convert with float() and print!",
-          hint: "print(float('3.14'))"
+          hint: "Wrap the string '3.14' with float() and print it"
         }
       }
     },
@@ -244,14 +244,14 @@ export const lesson9: LessonData = {
       content: {
         task: "이렇게 나오게 해봐 ↓\n2025",
         guide: "str()로 숫자를 문자열로!",
-        hint: "print(str(2025))",
+        hint: "숫자 2025를 str()로 감싸서 출력해봐요",
         template: null,
         answer: "print(str(2025))",
         expect: "2025",
         en: {
           task: "Make it print like this ↓\n2025",
           guide: "Convert number to string with str()!",
-          hint: "print(str(2025))"
+          hint: "Wrap the number 2025 with str() and print it"
         }
       }
     },
@@ -336,14 +336,14 @@ export const lesson9: LessonData = {
       content: {
         task: "이렇게 나오게 해봐 ↓\nFalse",
         guide: "0은 False야!",
-        hint: "print(bool(0))",
+        hint: "0을 bool()로 감싸서 출력해봐요",
         template: null,
         answer: "print(bool(0))",
         expect: "False",
         en: {
           task: "Make it print like this ↓\nFalse",
           guide: "0 is False!",
-          hint: "print(bool(0))"
+          hint: "Wrap 0 with bool() and print it"
         }
       }
     },

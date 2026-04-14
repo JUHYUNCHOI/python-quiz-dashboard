@@ -554,8 +554,8 @@ export const lessonCpp4: LessonData = {
         content: {
           level: 2,
           task: "처음부터 작성! 이름(string)과 나이(int)를 입력받아 \"이름 is N years old.\" 형식으로 출력",
-          guide: "string name; int age; cin >> name >> age;",
-          hint: "string name;\nint age;\ncin >> name >> age;\ncout << name << \" is \" << age << \" years old.\" << endl;",
+          guide: "string과 int 변수를 선언하고, cin으로 두 값을 한 번에 입력받아요",
+          hint: "cin >> 변수1 >> 변수2 형태로 두 값을 연속 입력받을 수 있어요",
           template: null,
           answer: "string name;\nint age;\ncin >> name >> age;\ncout << name << \" is \" << age << \" years old.\" << endl;",
           alternateAnswers: [
@@ -564,7 +564,7 @@ export const lessonCpp4: LessonData = {
           expect: "Alice is 20 years old.",
           en: {
             task: "Write from scratch! Read a name (string) and age (int), print \"name is N years old.\"",
-            guide: "string name; int age; cin >> name >> age;"
+            guide: "Declare string and int variables, then use cin to read both at once"
           }
         }
       },
@@ -575,8 +575,8 @@ export const lessonCpp4: LessonData = {
         content: {
           level: 3,
           task: "처음부터 작성! 3개의 점수를 입력받아 합계와 평균(소수점 포함)을 출력해요",
-          guide: "int a,b,c; cin>>a>>b>>c; cout << sum << (double)sum/3",
-          hint: "int a, b, c;\ncin >> a >> b >> c;\nint sum = a + b + c;\ncout << sum << endl;\ncout << (double)sum / 3 << endl;",
+          guide: "세 변수를 한 번에 입력받고, 합계를 구한 뒤 소수점 평균을 출력해요",
+          hint: "평균을 소수점으로 출력하려면 (double) 형변환이 필요해요",
           template: null,
           answer: "int a, b, c;\ncin >> a >> b >> c;\nint sum = a + b + c;\ncout << sum << endl;\ncout << (double)sum / 3 << endl;",
           alternateAnswers: [
@@ -585,7 +585,7 @@ export const lessonCpp4: LessonData = {
           expect: "270\n90",
           en: {
             task: "Write from scratch! Read 3 scores, print the total and average (with decimal)",
-            guide: "int a,b,c; cin>>a>>b>>c; cout << sum << (double)sum/3"
+            guide: "Read three values at once, compute the sum, then print the decimal average"
           }
         }
       },

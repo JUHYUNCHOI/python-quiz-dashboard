@@ -105,7 +105,7 @@ hello()`,
       content: {
         level: 1,
         task: "'파이썬 재밌다!'를 출력하는 fun() 함수를 만들고 호출하세요",
-        guide: "def fun(): 만들고, fun()으로 호출!",
+        guide: "def로 함수를 정의하고, 함수 이름 뒤에 ()를 붙여서 호출해!",
         hint: "def 함수이름(): 으로 시작하고, 안에 print()를 써요!",
         template: null,
         answer: "def fun():\n    print('파이썬 재밌다!')\n\nfun()",
@@ -344,13 +344,13 @@ print(result)`,
       content: {
         level: 2,
         task: "두 수의 차이를 반환하는 subtract(a, b) 함수를 만드세요",
-        guide: "return a - b를 사용!",
+        guide: "def로 함수를 선언하고, return 키워드로 계산 결과를 반환해!",
         hint: "return 키워드로 a에서 b를 뺀 결과를 돌려줘요!",
         template: null,
         answer: "def subtract(a, b):\n    return a - b\n\nprint(subtract(10, 3))",
         en: {
           task: "Create a subtract(a, b) function that returns the difference of two numbers",
-          guide: "Use return a - b!",
+          guide: "Declare the function with def and use the return keyword to return the result!",
           hint: "Use the return keyword to give back the result of a minus b!"
         },
         alternateAnswers: [
@@ -428,13 +428,13 @@ print(subtract(10, 4)) # 6`,
       content: {
         level: 2,
         task: "두 수를 곱해서 반환하는 multiply(a, b) 함수를 만드세요",
-        guide: "return a * b",
+        guide: "def로 함수를 선언하고, 두 매개변수를 곱해서 return으로 반환해!",
         hint: "두 수를 곱하는 연산자는 *예요!",
         template: null,
         answer: "def multiply(a, b):\n    return a * b\n\nprint(multiply(3, 4))",
         en: {
           task: "Create a multiply(a, b) function that returns the product of two numbers",
-          guide: "return a * b",
+          guide: "Declare the function with def, multiply the two parameters, and return the result!",
           hint: "The operator for multiplying two numbers is *!"
         },
         alternateAnswers: [
@@ -451,13 +451,13 @@ print(subtract(10, 4)) # 6`,
       content: {
         level: 2,
         task: "두 수를 나눠서 반환하는 divide(a, b) 함수를 만드세요",
-        guide: "return a / b",
+        guide: "def로 함수를 선언하고, 두 매개변수를 나눠서 return으로 반환해!",
         hint: "두 수를 나누는 연산자는 /예요!",
         template: null,
         answer: "def divide(a, b):\n    return a / b\n\nprint(divide(10, 2))",
         en: {
           task: "Create a divide(a, b) function that returns the division of two numbers",
-          guide: "return a / b",
+          guide: "Declare the function with def, divide the two parameters, and return the result!",
           hint: "The operator for dividing two numbers is /!"
         },
         alternateAnswers: [
@@ -619,14 +619,14 @@ print('Hello!')`,
       content: {
         level: 2,
         task: "두 수를 받아 더 큰 수를 반환하는 bigger(a, b) 함수를 완성해요",
-        guide: "if a > b: return a else: return b",
+        guide: "조건에 맞을 때 return으로 바로 값을 반환하고, else일 때는 다른 값을 반환해!",
         template: "def bigger(a, b):\n    if a > b:\n        ___ a\n    ___:\n        return b\n\nprint(bigger(7, 3))",
         blanksAnswer: ["return", "else"],
         answer: "def bigger(a, b):\n    if a > b:\n        return a\n    else:\n        return b\n\nprint(bigger(7, 3))",
         expect: "7",
         en: {
           task: "Complete the bigger(a, b) function that returns the larger of two numbers",
-          guide: "if a > b: return a else: return b"
+          guide: "Return the value directly with return when the condition is met, and return a different value in the else case!"
         }
       }
     },
@@ -637,14 +637,14 @@ print('Hello!')`,
       content: {
         level: 2,
         task: "리스트의 합계를 반환하는 my_sum(nums) 함수를 완성해요",
-        guide: "total = 0; for x in nums: total += x; return total",
+        guide: "합계 변수를 0으로 초기화하고, 반복문으로 각 요소를 더한 뒤 return으로 반환해!",
         template: "def my_sum(nums):\n    total = ___\n    for x in nums:\n        total ___ x\n    return ___\n\nprint(my_sum([1, 2, 3, 4, 5]))",
         blanksAnswer: ["0", "+=", "total"],
         answer: "def my_sum(nums):\n    total = 0\n    for x in nums:\n        total += x\n    return total\n\nprint(my_sum([1, 2, 3, 4, 5]))",
         expect: "15",
         en: {
           task: "Complete the my_sum(nums) function that returns the sum of a list",
-          guide: "total = 0; for x in nums: total += x; return total"
+          guide: "Initialize a total variable to 0, add each element with a loop, then return the total!"
         }
       }
     },
@@ -655,8 +655,8 @@ print('Hello!')`,
       content: {
         level: 3,
         task: "처음부터 작성! 정수를 받아 짝수면 True, 홀수면 False를 반환하는 is_even(n) 함수를 만들고\nis_even(4)와 is_even(7) 결과를 출력해요",
-        guide: "def is_even(n): return n % 2 == 0",
-        hint: "def is_even(n):\n    return n % 2 == 0\n\nprint(is_even(4))\nprint(is_even(7))",
+        guide: "def로 함수를 만들고, 2로 나눈 나머지가 0이면 짝수야! return으로 True/False를 반환해!",
+        hint: "% 연산자로 2로 나눈 나머지를 구하고, == 0과 비교한 결과를 return으로 반환해봐!",
         template: null,
         answer: "def is_even(n):\n    return n % 2 == 0\n\nprint(is_even(4))\nprint(is_even(7))",
         alternateAnswers: [
@@ -665,8 +665,8 @@ print('Hello!')`,
         expect: "True\nFalse",
         en: {
           task: "Write from scratch! Create is_even(n) that returns True for even, False for odd\nPrint results for is_even(4) and is_even(7)",
-          guide: "def is_even(n): return n % 2 == 0",
-          hint: "def is_even(n):\n    return n % 2 == 0\n\nprint(is_even(4))\nprint(is_even(7))"
+          guide: "Create a function with def and check if the remainder when divided by 2 is 0 — that means it's even! Return True or False.",
+          hint: "Use the % operator to get the remainder when divided by 2, and return the result of comparing it to 0!"
         }
       }
     },
@@ -677,8 +677,8 @@ print('Hello!')`,
       content: {
         level: 3,
         task: "처음부터 작성! add(a,b), multiply(a,b) 함수를 만들고\nadd(3, 5)와 multiply(4, 6) 결과를 출력해요",
-        guide: "def add(a,b): return a+b; def multiply(a,b): return a*b",
-        hint: "def add(a, b):\n    return a + b\n\ndef multiply(a, b):\n    return a * b\n\nprint(add(3, 5))\nprint(multiply(4, 6))",
+        guide: "def로 두 함수를 각각 정의하고, 각각 return으로 계산 결과를 반환한 뒤 호출해봐!",
+        hint: "함수를 하나씩 만들어봐 — 첫 번째는 두 값을 더하는 함수, 두 번째는 두 값을 곱하는 함수야!",
         template: null,
         answer: "def add(a, b):\n    return a + b\n\ndef multiply(a, b):\n    return a * b\n\nprint(add(3, 5))\nprint(multiply(4, 6))",
         alternateAnswers: [
@@ -687,8 +687,8 @@ print('Hello!')`,
         expect: "8\n24",
         en: {
           task: "Write from scratch! Create add(a,b) and multiply(a,b) functions\nPrint results of add(3, 5) and multiply(4, 6)",
-          guide: "def add(a,b): return a+b; def multiply(a,b): return a*b",
-          hint: "def add(a, b):\n    return a + b\n\ndef multiply(a, b):\n    return a * b\n\nprint(add(3, 5))\nprint(multiply(4, 6))"
+          guide: "Define two functions separately with def, each returning the calculation result, then call them!",
+          hint: "Build each function one at a time — the first adds two values, the second multiplies two values!"
         }
       }
     },

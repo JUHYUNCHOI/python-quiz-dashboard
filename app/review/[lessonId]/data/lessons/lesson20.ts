@@ -199,16 +199,16 @@ export const lesson20: LessonData = {
       content: {
         level: 1.5,
         task: "딕셔너리에 '학교': '중학교'를 추가하고 출력하세요",
-        guide: "dict['새 키'] = 값 형태!",
-        hint: "info['학교'] = '중학교'",
+        guide: "대괄호로 키를 지정하고 = 로 값을 넣으면 새 항목이 추가돼!",
+        hint: "추가할 키와 값을 각 빈칸에 넣어봐!",
         template: "info = {'이름': '영희'}\ninfo[___] = ___\nprint(info)",
         blanksAnswer: ["'학교'", "'중학교'"],
         answer: "info = {'이름': '영희'}\ninfo['학교'] = '중학교'\nprint(info)",
         expect: "{'이름': '영희', '학교': '중학교'}",
         en: {
           task: "Add 'school': 'middle school' to the dictionary and print",
-          guide: "Use dict['new key'] = value format!",
-          hint: "info['school'] = 'middle school'"
+          guide: "Use square brackets to specify the key and = to assign the value to add a new item!",
+          hint: "Put the key to add and the value in each blank!"
         }
       }
     },
@@ -362,16 +362,16 @@ export const lesson20: LessonData = {
       content: {
         level: 2,
         task: "items()로 '이름: 나이살' 형태로 출력하세요",
-        guide: "for name, age in dict.items():",
-        hint: "f'{name}: {age}살' 형태!",
+        guide: "items()는 키와 값을 쌍으로 주므로 for문에서 두 변수로 받을 수 있어!",
+        hint: "f-string으로 키와 값을 '이름: 나이살' 형태로 출력해봐!",
         template: "ages = {'민수': 15, '영희': 14}\nfor ___, ___ in ages.items():\n    print(f'{name}: {age}살')",
         blanksAnswer: ["name", "age"],
         answer: "ages = {'민수': 15, '영희': 14}\nfor name, age in ages.items():\n    print(f'{name}: {age}살')",
         expect: "민수: 15살\n영희: 14살",
         en: {
           task: "Print in 'name: age years old' format using items()",
-          guide: "for name, age in dict.items():",
-          hint: "f'{name}: {age} years old' format!"
+          guide: "items() returns key-value pairs so you can receive them in two variables in a for loop!",
+          hint: "Use f-string to print key and value in 'name: age years old' format!"
         }
       }
     },
@@ -498,16 +498,16 @@ export const lesson20: LessonData = {
       content: {
         level: 2.5,
         task: "딕셔너리에 '과학' 키가 있는지 확인하고, 없으면 90점으로 추가한 뒤 출력하세요",
-        guide: "if '키' not in dict: 으로 확인!",
-        hint: "if '과학' not in scores: scores['과학'] = 90",
+        guide: "in 연산자로 딕셔너리에 키가 있는지 없는지 확인할 수 있어!",
+        hint: "빈칸 두 개가 합쳐서 '없으면' 이라는 조건을 만들어야 해!",
         template: "scores = {'국어': 80, '영어': 90}\nif '과학' ___ ___ scores:\n    scores['과학'] = 90\nprint(scores)",
         blanksAnswer: ["not", "in"],
         answer: "scores = {'국어': 80, '영어': 90}\nif '과학' not in scores:\n    scores['과학'] = 90\nprint(scores)",
         expect: "{'국어': 80, '영어': 90, '과학': 90}",
         en: {
           task: "Check if 'science' key exists; if not, add it with 90 points and print",
-          guide: "Check with: if 'key' not in dict:",
-          hint: "if 'science' not in scores: scores['science'] = 90"
+          guide: "Use the in operator to check if a key exists or not in a dictionary!",
+          hint: "The two blanks together form the 'does not exist' condition!"
         }
       }
     },
@@ -574,14 +574,14 @@ export const lesson20: LessonData = {
       content: {
         level: 1,
         task: "학생 정보 딕셔너리를 만들고 이름과 학년을 출력해요",
-        guide: "{'키': 값}; dict['키']",
+        guide: "대괄호 안에 접근할 키 이름을 문자열로 넣으면 해당 값을 가져올 수 있어!",
         template: "student = {'이름': '지민', '학년': 2, '점수': 90}\nprint(student[___])\nprint(student[___])",
         blanksAnswer: ["'이름'", "'학년'"],
         answer: "student = {'이름': '지민', '학년': 2, '점수': 90}\nprint(student['이름'])\nprint(student['학년'])",
         expect: "지민\n2",
         en: {
           task: "Create a student info dictionary and print the name and grade",
-          guide: "{'key': value}; dict['key']"
+          guide: "Put the key name as a string in square brackets to access the corresponding value!"
         }
       }
     },
@@ -592,14 +592,14 @@ export const lesson20: LessonData = {
       content: {
         level: 2,
         task: "딕셔너리에 '학교' 추가, '점수' 수정(95로), 없는 키 'email'을 get으로 안전하게 접근해요",
-        guide: "dict['키'] = 값; dict.get('키', 기본값)",
+        guide: "키에 값을 대입하면 추가 또는 수정이 되고, get()은 키가 없을 때 기본값을 반환해!",
         template: "info = {'이름': '민수', '점수': 80}\ninfo[___] = '한강중학교'\ninfo['점수'] = ___\nprint(info.get(___, '없음'))",
         blanksAnswer: ["'학교'", "95", "'email'"],
         answer: "info = {'이름': '민수', '점수': 80}\ninfo['학교'] = '한강중학교'\ninfo['점수'] = 95\nprint(info.get('email', '없음'))",
         expect: "없음",
         en: {
           task: "Add 'school', update 'score' to 95, and safely access missing key 'email' with get()",
-          guide: "dict['key'] = value; dict.get('key', default)"
+          guide: "Assigning to a key adds or updates it; get() returns a default value when the key is missing!"
         }
       }
     },
@@ -610,14 +610,14 @@ export const lesson20: LessonData = {
       content: {
         level: 2,
         task: "items()로 순회하며 '과목: 점수점' 형식으로 출력해요",
-        guide: "for k, v in dict.items():",
+        guide: "items()는 키-값 쌍을 반환해서 for문에서 두 변수로 받을 수 있어!",
         template: "scores = {'국어': 90, '영어': 85, '수학': 95}\nfor ___, ___ in scores.___():\n    print(f'{subject}: {score}점')",
         blanksAnswer: ["subject", "score", "items"],
         answer: "scores = {'국어': 90, '영어': 85, '수학': 95}\nfor subject, score in scores.items():\n    print(f'{subject}: {score}점')",
         expect: "국어: 90점\n영어: 85점\n수학: 95점",
         en: {
           task: "Iterate with items() and print in 'subject: score점' format",
-          guide: "for k, v in dict.items():"
+          guide: "items() returns key-value pairs that you can receive in two variables in a for loop!"
         }
       }
     },
@@ -628,8 +628,8 @@ export const lesson20: LessonData = {
       content: {
         level: 3,
         task: "처음부터 작성! 문자 리스트에서 각 문자의 등장 횟수를 딕셔너리로 만들어 출력해요",
-        guide: "for c in chars: cnt[c] = cnt.get(c, 0) + 1",
-        hint: "chars = ['a', 'b', 'a', 'c', 'b', 'a']\ncnt = {}\nfor c in chars:\n    cnt[c] = cnt.get(c, 0) + 1\nprint(cnt)",
+        guide: "빈 딕셔너리로 시작해서 각 문자마다 카운트를 1 늘려! get()으로 키가 없을 때 기본값을 쓸 수 있어",
+        hint: "빈 딕셔너리를 만들고, 문자를 키로 현재 개수를 가져온 뒤 1을 더해서 다시 저장해봐!",
         template: null,
         answer: "chars = ['a', 'b', 'a', 'c', 'b', 'a']\ncnt = {}\nfor c in chars:\n    cnt[c] = cnt.get(c, 0) + 1\nprint(cnt)",
         alternateAnswers: [
@@ -638,8 +638,8 @@ export const lesson20: LessonData = {
         expect: "{'a': 3, 'b': 2, 'c': 1}",
         en: {
           task: "Write from scratch! Count how many times each character appears in a list and store in a dict",
-          guide: "for c in chars: cnt[c] = cnt.get(c, 0) + 1",
-          hint: "chars = ['a', 'b', 'a', 'c', 'b', 'a']\ncnt = {}\nfor c in chars:\n    cnt[c] = cnt.get(c, 0) + 1\nprint(cnt)"
+          guide: "Start with an empty dictionary and increment the count for each character! Use get() to handle missing keys with a default value",
+          hint: "Create an empty dictionary, then for each character get the current count and add 1 back!"
         }
       }
     },
@@ -650,8 +650,8 @@ export const lesson20: LessonData = {
       content: {
         level: 3,
         task: "처음부터 작성! 과목-점수 딕셔너리에서 80점 이상인 과목만 출력하고\n전체 평균도 출력해요",
-        guide: "for k, v in dict.items(): if v >= 80; sum/len",
-        hint: "scores = {'국어': 90, '영어': 75, '수학': 85, '과학': 70}\nfor subject, score in scores.items():\n    if score >= 80:\n        print(subject)\navg = sum(scores.values()) / len(scores)\nprint(f'평균: {avg}')",
+        guide: "items()로 키-값 쌍을 순회하며 조건을 확인하고, 평균은 sum()/len()으로 계산해!",
+        hint: "딕셔너리를 items()로 순회하면서 점수가 기준 이상인 과목을 출력하고, 마지막에 평균을 계산해봐!",
         template: null,
         answer: "scores = {'국어': 90, '영어': 75, '수학': 85, '과학': 70}\nfor subject, score in scores.items():\n    if score >= 80:\n        print(subject)\navg = sum(scores.values()) / len(scores)\nprint(f'평균: {avg}')",
         alternateAnswers: [
@@ -660,8 +660,8 @@ export const lesson20: LessonData = {
         expect: "국어\n수학\n평균: 80.0",
         en: {
           task: "Write from scratch! Print subjects with score >= 80, then print the overall average",
-          guide: "for k, v in dict.items(): if v >= 80; sum/len",
-          hint: "scores = {'국어': 90, '영어': 75, '수학': 85, '과학': 70}\nfor subject, score in scores.items():\n    if score >= 80:\n        print(subject)\navg = sum(scores.values()) / len(scores)\nprint(f'평균: {avg}')"
+          guide: "Iterate key-value pairs with items(), check the condition, and calculate the average with sum()/len()!",
+          hint: "Iterate the dictionary with items() and print subjects above the threshold, then calculate the average at the end!"
         }
       }
     },

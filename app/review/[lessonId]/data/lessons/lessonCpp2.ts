@@ -564,7 +564,7 @@ export const lessonCpp2: LessonData = {
         content: {
           level: 1,
           task: "A, B, C를 각각 다른 줄에 출력해요 (endl과 \\n 각각 사용)",
-          guide: "cout << \"A\" << endl; / cout << \"B\\n\";",
+          guide: "줄바꿈 방법: endl 또는 \\\"\\\\n\\\"",
           template: "cout << \"A\" << ___;\ncout << \"B\" << ___;\ncout << \"C\" << endl;",
           blanksAnswer: ["endl", "\"\\n\""],
           alternateAnswers: [],
@@ -572,7 +572,7 @@ export const lessonCpp2: LessonData = {
           expect: "A\nB\nC",
           en: {
             task: "Print A, B, C each on a new line (use endl and \\n)",
-            guide: "cout << \"A\" << endl; / cout << \"B\\n\";"
+            guide: "Two ways to add a newline: endl or \"\\n\""
           }
         }
       },
@@ -583,14 +583,14 @@ export const lessonCpp2: LessonData = {
         content: {
           level: 2,
           task: "이름과 점수를 탭(\\t)으로 구분해서 출력해요\nAlice\\t95\\nBob\\t87",
-          guide: "cout << \"Alice\" << \"\\t\" << 95 << endl;",
+          guide: "탭 문자 \\t를 << 로 연결해서 이름과 숫자 사이에 넣어요!",
           template: "cout << \"Alice\" << ___ << 95 << endl;\ncout << \"Bob\" << ___ << 87 << endl;",
           blanksAnswer: ["\"\\t\"", "\"\\t\""],
           answer: "cout << \"Alice\" << \"\\t\" << 95 << endl;\ncout << \"Bob\" << \"\\t\" << 87 << endl;",
           expect: "Alice\t95\nBob\t87",
           en: {
             task: "Print name and score separated by tab (\\t)\nAlice\\t95, Bob\\t87",
-            guide: "cout << \"Alice\" << \"\\t\" << 95 << endl;"
+            guide: "Insert the tab character \\t between the name and number using <<"
           }
         }
       },
@@ -601,8 +601,8 @@ export const lessonCpp2: LessonData = {
         content: {
           level: 2,
           task: "처음부터 작성! int x=5, y=3을 선언하고\n\"5 + 3 = 8\" 형식으로 한 줄에 cout 하나로 출력",
-          guide: "cout << x << \" + \" << y << \" = \" << x+y",
-          hint: "int x=5, y=3;\ncout << x << \" + \" << y << \" = \" << x+y << endl;",
+          guide: "변수와 문자열, 수식을 << 로 이어붙여요",
+          hint: "변수 사이에 \" + \" 같은 문자열을 끼워서 << 로 이어붙이면 돼요",
           template: null,
           answer: "int x = 5, y = 3;\ncout << x << \" + \" << y << \" = \" << x + y << endl;",
           alternateAnswers: [
@@ -611,7 +611,7 @@ export const lessonCpp2: LessonData = {
           expect: "5 + 3 = 8",
           en: {
             task: "Write from scratch! Declare int x=5, y=3\nPrint \"5 + 3 = 8\" using a single cout statement",
-            guide: "cout << x << \" + \" << y << \" = \" << x+y"
+            guide: "Chain variables, strings, and expressions together with <<"
           }
         }
       },
@@ -622,8 +622,8 @@ export const lessonCpp2: LessonData = {
         content: {
           level: 3,
           task: "처음부터 완전한 프로그램 작성!\ncm 값(int)을 입력받아 m 단위(double)로 변환해서 출력\n예: 입력 175 → 출력 1.75",
-          guide: "cin >> cm; double m = cm / 100.0; cout << m",
-          hint: "int cm;\ncin >> cm;\ndouble m = cm / 100.0;\ncout << m << endl;",
+          guide: "int 입력 → double 나눗셈으로 변환 → cout 출력",
+          hint: "100cm = 1m이에요. 정수 나눗셈이 아니라 소수점 나눗셈이 필요해요",
           template: null,
           answer: "#include <iostream>\nusing namespace std;\n\nint main() {\n    int cm;\n    cin >> cm;\n    double m = cm / 100.0;\n    cout << m << endl;\n    return 0;\n}",
           alternateAnswers: [
@@ -632,7 +632,7 @@ export const lessonCpp2: LessonData = {
           expect: "1.75",
           en: {
             task: "Write a complete program!\nRead a cm value (int), convert to meters (double), and print\nEx: input 175 → output 1.75",
-            guide: "cin >> cm; double m = cm / 100.0; cout << m"
+            guide: "int input → convert with decimal division → cout output"
           }
         }
       },

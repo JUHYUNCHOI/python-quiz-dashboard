@@ -118,15 +118,13 @@ export const lesson3: LessonData = {
         type: "practice",
         content: {
           task: "이렇게 나오게 해봐 ↓\n19000",
-          guide: "chicken = 19000 만들고 출력!",
-          hint: "chicken = 19000\nprint(chicken)",
+          guide: "변수에 숫자를 저장하고 print로 출력!",
           template: null,
           answer: "chicken = 19000\nprint(chicken)",
           expect: "19000",
           en: {
             task: "Make it print like this ↓\n19000",
-            guide: "Create chicken = 19000 and print it!",
-            hint: "chicken = 19000\nprint(chicken)"
+            guide: "Store a number in a variable and print it!"
           }
         }
       },
@@ -134,13 +132,13 @@ export const lesson3: LessonData = {
         type: "practice",
         content: {
           task: "이렇게 나오게 해봐 ↓\n2000",
-          guide: "cola = 2000 만들고 출력!",
+          guide: "변수에 숫자를 저장하고 print로 출력!",
           template: null,
           answer: "cola = 2000\nprint(cola)",
           expect: "2000",
           en: {
             task: "Make it print like this ↓\n2000",
-            guide: "Create cola = 2000 and print it!"
+            guide: "Store a number in a variable and print it!"
           }
         }
       },
@@ -148,14 +146,14 @@ export const lesson3: LessonData = {
         type: "practice",
         content: {
           task: "이렇게 나오게 해봐 ↓\n홍길동",
-          guide: "name = '홍길동' — 문자열은 따옴표!",
+          guide: "문자열 변수를 만들고 출력해! 문자열은 따옴표로 감싸야 해",
           template: null,
           answer: "name = '홍길동'\nprint(name)",
           alternateAnswers: ["name = \"홍길동\"\nprint(name)"],
           expect: "홍길동",
           en: {
             task: "Make it print like this ↓\n홍길동",
-            guide: "name = '홍길동' — strings need quotes!"
+            guide: "Create a string variable and print it! Strings need quotes!"
           }
         }
       },

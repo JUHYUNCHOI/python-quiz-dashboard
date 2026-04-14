@@ -477,14 +477,12 @@ export const lesson4: LessonData = {
         content: {
           task: "이렇게 나오게 해봐 ↓\nFalse",
           guide: "True and False 계산!",
-          hint: "print(True and False)",
           template: null,
           answer: "print(True and False)",
           expect: "False",
           en: {
             task: "Make it print like this ↓\nFalse",
-            guide: "Calculate True and False!",
-            hint: "print(True and False)"
+            guide: "Calculate True and False!"
           }
         }
       },
@@ -535,14 +533,14 @@ export const lesson4: LessonData = {
         type: "practice",
         content: {
           task: "이렇게 나오게 해봐 ↓\nFalse",
-          guide: "level = 5, gold = 500 / 입장 조건: level >= 10 and gold >= 1000",
+          guide: "두 변수를 만들고 and로 두 조건을 동시에 확인해!",
           template: null,
           answer: "level = 5\ngold = 500\nprint(level >= 10 and gold >= 1000)",
           alternateAnswers: ["level = 5\ngold = 500\nprint((level >= 10) and (gold >= 1000))"],
           expect: "False",
           en: {
             task: "Make it print like this ↓\nFalse",
-            guide: "level = 5, gold = 500 / Entry condition: level >= 10 and gold >= 1000"
+            guide: "Create two variables and check both conditions simultaneously using and!"
           }
         }
       },

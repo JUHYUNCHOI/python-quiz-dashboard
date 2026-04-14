@@ -389,8 +389,6 @@ function PracticeStep({
   }
 
   const retry = () => {
-    clearStorage()
-    setInputs(Array(Math.max(blankCount, 1)).fill(""))
     setResult("idle")
     setShowHint(false)
     setTimeout(() => firstInputRef.current?.focus(), 50)
@@ -463,33 +461,42 @@ function PracticeStep({
       {/* 전체 코드 작성 (template=null) */}
       {result === "idle" && isFullCode && (
         <div className="flex flex-col gap-2">
-          {/* context 코드 블록 — 어떤 상황에서 쓰는지 보여줌 */}
-          {(isEn ? (content as any).en?.context : undefined) || (content as any).context ? (
-            <div className="rounded-xl bg-[#1a1b2e] px-4 py-3 font-mono text-sm text-[#6b7280] overflow-x-auto leading-7 whitespace-pre-wrap border border-dashed border-gray-600">
-              <span className="text-[10px] font-sans text-gray-500 block mb-1">{t("주어진 코드", "Given code")}</span>
-              {renderTemplatePart(
-                (isEn ? (content as any).en?.context : undefined) || (content as any).context,
-                language
-              )}
+          {/* 하나의 코드 에디터 창 — context(읽기전용) + 입력 */}
+          <div className="rounded-xl overflow-hidden border border-gray-700">
+            {/* 타이틀바 */}
+            <div className="bg-[#1e1e2e] px-3 py-1.5 flex items-center gap-1.5 border-b border-gray-700">
+              <span className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
+              <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
+              <span className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
+              <span className="text-[10px] text-gray-500 ml-1 font-mono">solution.cpp</span>
             </div>
-          ) : null}
-          <div className="flex gap-2">
+            {/* context — 읽기 전용 */}
+            {((isEn ? (content as any).en?.context : undefined) || (content as any).context) && (
+              <div className="bg-[#1a1b2e] px-4 pt-3 pb-1 font-mono text-sm text-[#6b7280] leading-7 whitespace-pre-wrap border-b border-gray-700/50">
+                {renderTemplatePart(
+                  (isEn ? (content as any).en?.context : undefined) || (content as any).context,
+                  language
+                )}
+              </div>
+            )}
+            {/* 입력 */}
             <textarea
               ref={firstInputRef as React.RefObject<HTMLTextAreaElement>}
               value={inputs[0]}
               onChange={e => setInputs([e.target.value])}
-              placeholder={t("코드를 작성하세요...", "Write your code...")}
+              placeholder={t("// 여기에 코드를 작성하세요...", "// Write your code here...")}
               rows={3}
-              className="flex-1 rounded-xl border border-gray-200 px-3 py-2 font-mono text-sm focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200 resize-none"
+              className="w-full bg-[#1a1b2e] text-[#a9b1d6] px-4 py-3 font-mono text-sm focus:outline-none resize-none placeholder:text-gray-600"
+              spellCheck={false}
             />
-            <button
-              onClick={check}
-              disabled={!inputs[0].trim()}
-              className="px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm disabled:opacity-40 transition-colors shrink-0 self-end"
-            >
-              {t("확인", "Check")}
-            </button>
           </div>
+          <button
+            onClick={check}
+            disabled={!inputs[0].trim()}
+            className="self-end px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm disabled:opacity-40 transition-colors"
+          >
+            {t("확인", "Check")}
+          </button>
         </div>
       )}
 

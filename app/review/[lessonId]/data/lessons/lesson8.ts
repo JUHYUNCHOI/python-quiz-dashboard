@@ -81,13 +81,15 @@ export const lesson8: LessonData = {
       content: {
         level: 1,
         task: "city = '서울' 로 변수 만들고,\nf-string으로 '나는 서울에 살아' 출력해봐",
-        guide: "f'나는 {city}에 살아'",
+        guide: "f-string은 따옴표 앞에 f를 붙이고, 변수를 {} 안에 넣어요",
+        hint: "변수를 중괄호 {} 안에 넣어요",
         template: null,
         answer: "city = '서울'\nprint(f'나는 {city}에 살아')",
         expect: "나는 서울에 살아",
         en: {
           task: "Create city = '서울' and print '나는 서울에 살아' using f-string",
-          guide: "f'나는 {city}에 살아'"
+          guide: "Put f before the quote, and put the variable inside {}",
+          hint: "Put the variable inside curly braces {}"
         }
       }
     },
@@ -96,13 +98,15 @@ export const lesson8: LessonData = {
       content: {
         level: 1,
         task: "age = 15 로 변수 만들고,\nf-string으로 '내 나이는 15살이야' 출력해봐",
-        guide: "f'내 나이는 {age}살이야'",
+        guide: "f-string은 따옴표 앞에 f를 붙이고, 변수를 {} 안에 넣어요",
+        hint: "변수를 중괄호 {} 안에 넣어요",
         template: null,
         answer: "age = 15\nprint(f'내 나이는 {age}살이야')",
         expect: "내 나이는 15살이야",
         en: {
           task: "Create age = 15 and print '내 나이는 15살이야' using f-string",
-          guide: "f'내 나이는 {age}살이야'"
+          guide: "Put f before the quote, and put the variable inside {}",
+          hint: "Put the variable inside curly braces {}"
         }
       }
     },
@@ -176,13 +180,15 @@ export const lesson8: LessonData = {
       content: {
         level: 2,
         task: "price = 1000, count = 3 으로 변수 만들고,\nf-string으로 '총 가격: 3000원' 출력해봐",
-        guide: "f'총 가격: {price * count}원'",
+        guide: "{ } 안에서 계산식도 넣을 수 있어요",
+        hint: "{ } 안에 두 변수를 곱하는 식을 넣어봐요",
         template: null,
         answer: "price = 1000\ncount = 3\nprint(f'총 가격: {price * count}원')",
         expect: "총 가격: 3000원",
         en: {
           task: "Create price = 1000, count = 3 and print '총 가격: 3000원' using f-string",
-          guide: "f'총 가격: {price * count}원'"
+          guide: "You can put expressions inside {}",
+          hint: "Put the multiplication expression of two variables inside {}"
         }
       }
     },
@@ -268,13 +274,15 @@ export const lesson8: LessonData = {
       content: {
         level: 2,
         task: "avg = 87.6789 로 변수 만들고,\nf-string으로 소수점 2자리만 출력해봐 (87.68)",
-        guide: "f'{avg:.2f}'",
+        guide: "{ } 안에서 :.2f 포맷을 쓰면 소수점 자리수를 지정할 수 있어요",
+        hint: "변수 뒤에 콜론(:)을 붙이고 소수점 자리 지정 포맷을 써봐요",
         template: null,
         answer: "avg = 87.6789\nprint(f'{avg:.2f}')",
         expect: "87.68",
         en: {
           task: "Create avg = 87.6789 and print it with 2 decimal places using f-string (87.68)",
-          guide: "f'{avg:.2f}'"
+          guide: "Use :.2f format inside {} to specify decimal places",
+          hint: "Add a colon (:) after the variable and write the decimal format"
         }
       }
     },
@@ -283,13 +291,15 @@ export const lesson8: LessonData = {
       content: {
         level: 2,
         task: "price = 1234.5 로 변수 만들고,\n'가격: 1234.50원' 형식으로 출력해봐",
-        guide: "f'가격: {price:.2f}원'",
+        guide: "소수점 포맷으로 자릿수를 맞춰봐요",
+        hint: "변수 뒤에 :.2f를 붙이면 소수점 2자리로 맞춰줘요",
         template: null,
         answer: "price = 1234.5\nprint(f'가격: {price:.2f}원')",
         expect: "가격: 1234.50원",
         en: {
           task: "Create price = 1234.5 and print it in '가격: 1234.50원' format",
-          guide: "f'가격: {price:.2f}원'"
+          guide: "Use decimal format to align decimal places",
+          hint: "Add :.2f after the variable to fix 2 decimal places"
         }
       }
     },
@@ -362,13 +372,15 @@ export const lesson8: LessonData = {
       content: {
         level: 2,
         task: "num = 42 로 변수 만들고,\n'042' 처럼 3자리로 0 채워서 출력해봐",
-        guide: "f'{num:03d}'",
+        guide: "자리 수를 지정하면 빈 자리를 0으로 채울 수 있어요",
+        hint: "변수 뒤에 :03d 처럼 콜론, 0, 자리수, d를 붙여봐요",
         template: null,
         answer: "num = 42\nprint(f'{num:03d}')",
         expect: "042",
         en: {
           task: "Create num = 42 and print it zero-padded to 3 digits like '042'",
-          guide: "f'{num:03d}'"
+          guide: "You can fill empty spots with 0 by specifying digit count",
+          hint: "After the variable, write :03d — colon, 0, digit count, d"
         }
       }
     },
@@ -391,13 +403,15 @@ export const lesson8: LessonData = {
       content: {
         level: 2,
         task: "lang = 'python' 으로 변수 만들고,\nf-string으로 'PYTHON' (대문자) 출력해봐",
-        guide: "f'{lang.upper()}'",
+        guide: "{ } 안에서 문자열 메서드를 바로 호출할 수 있어요",
+        hint: "{ } 안에서 변수에 .upper()를 붙여봐요",
         template: null,
         answer: "lang = 'python'\nprint(f'{lang.upper()}')",
         expect: "PYTHON",
         en: {
           task: "Create lang = 'python' and print 'PYTHON' (uppercase) using f-string",
-          guide: "f'{lang.upper()}'"
+          guide: "You can call string methods directly inside {}",
+          hint: "Add .upper() to the variable inside {}"
         }
       }
     },
@@ -672,13 +686,15 @@ export const lesson8: LessonData = {
       type: "practice",
       content: {
         task: "이렇게 나오게 해봐 ↓\n민수의 평균: 88.50점",
-        guide: "name = '민수', avg = 88.5 변수를 만들고 f-string으로 출력해봐 (소수점 2자리)",
+        guide: "변수 삽입과 소수점 포맷을 함께 사용해봐요",
+        hint: "변수 이름과 소수점 포맷(:.2f)을 같은 f-string 안에 넣어봐요",
         template: "name = '민수'\navg = 88.5\nprint(___)",
         answer: "f'{name}의 평균: {avg:.2f}점'",
         expect: "민수의 평균: 88.50점",
         en: {
           task: "Make it print like this ↓\n민수의 평균: 88.50점",
-          guide: "Create name = '민수', avg = 88.5 and print with f-string (2 decimal places)"
+          guide: "Use variable insertion and decimal format together",
+          hint: "Put both the variable name and decimal format (:.2f) in the same f-string"
         }
       }
     },
@@ -688,13 +704,15 @@ export const lesson8: LessonData = {
       type: "practice",
       content: {
         task: "이렇게 나오게 해봐 ↓\n[007] JAMES",
-        guide: "num = 7, agent = 'james' 로 변수 만들고\n번호는 3자리 0 채우기, 이름은 대문자로!",
+        guide: "0 채우기 포맷과 메서드 호출을 함께 사용해봐요",
+        hint: "번호는 3자리 0 채우기 포맷, 이름은 대문자 메서드를 써봐요",
         template: "num = 7\nagent = 'james'\nprint(___)",
         answer: "f'[{num:03d}] {agent.upper()}'",
         expect: "[007] JAMES",
         en: {
           task: "Make it print like this ↓\n[007] JAMES",
-          guide: "Create num = 7, agent = 'james'. Format number as 3-digit zero-padded, name as uppercase!"
+          guide: "Combine zero-padding format and method call together",
+          hint: "Use zero-padding format for the number, and uppercase method for the name"
         }
       }
     },

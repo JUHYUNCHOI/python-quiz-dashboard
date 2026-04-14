@@ -96,7 +96,7 @@ export const lesson19: LessonData = {
         level: 1,
         task: "튜플 ('월', '화', '수')를 만들고 첫 번째 요소를 출력하세요",
         guide: "소괄호로 만들고 [0]으로 접근!",
-        hint: "days = ('월', '화', '수') 후 print(days[0])",
+        hint: "튜플 안에 요소를 쉼표로 구분해서 넣고, 첫 번째 요소는 인덱스 0으로 접근해!",
         template: "days = (___)\nprint(days[___])",
         blanksAnswer: ["'월', '화', '수'", "0"],
         answer: "days = ('월', '화', '수')\nprint(days[0])",
@@ -104,7 +104,7 @@ export const lesson19: LessonData = {
         en: {
           task: "Create a tuple ('Mon', 'Tue', 'Wed') and print the first element",
           guide: "Use parentheses and access with [0]!",
-          hint: "days = ('Mon', 'Tue', 'Wed') then print(days[0])"
+          hint: "Separate elements with commas inside the tuple, and access the first element with index 0!"
         }
       }
     },
@@ -230,7 +230,7 @@ export const lesson19: LessonData = {
         level: 1.5,
         task: "튜플 ('파이썬', 2024)를 언패킹해서 name과 year에 넣고 출력하세요",
         guide: "name, year = 튜플 형태로!",
-        hint: "name, year = ('파이썬', 2024) 후 print!",
+        hint: "언패킹할 때 왼쪽에 받을 변수 이름을 순서대로 쓰면 돼!",
         template: "___, ___ = ('파이썬', 2024)\nprint(f'{name} {year}')",
         blanksAnswer: ["name", "year"],
         answer: "name, year = ('파이썬', 2024)\nprint(f'{name} {year}')",
@@ -238,7 +238,7 @@ export const lesson19: LessonData = {
         en: {
           task: "Unpack the tuple ('Python', 2024) into name and year, then print",
           guide: "Use name, year = tuple format!",
-          hint: "name, year = ('Python', 2024) then print!"
+          hint: "When unpacking, write the variable names in order on the left side!"
         }
       }
     },
@@ -248,7 +248,7 @@ export const lesson19: LessonData = {
         level: 2,
         task: "x=5, y=10의 값을 교환하고 출력하세요",
         guide: "a, b = b, a 패턴!",
-        hint: "x, y = y, x 한 줄이면 끝!",
+        hint: "x에는 y 값이, y에는 x 값이 들어가도록 순서를 생각해봐!",
         template: "x = 5\ny = 10\nx, y = ___, ___\nprint(f'x={x}, y={y}')",
         blanksAnswer: ["y", "x"],
         answer: "x = 5\ny = 10\nx, y = y, x\nprint(f'x={x}, y={y}')",
@@ -256,7 +256,7 @@ export const lesson19: LessonData = {
         en: {
           task: "Swap the values x=5, y=10 and print",
           guide: "Use the a, b = b, a pattern!",
-          hint: "Just one line: x, y = y, x!"
+          hint: "Think about the order — x should get y's value and y should get x's value!"
         }
       }
     },

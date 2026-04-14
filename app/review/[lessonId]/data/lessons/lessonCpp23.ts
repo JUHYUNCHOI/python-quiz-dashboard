@@ -260,13 +260,13 @@ export const lessonCpp23: LessonData = {
         content: {
           level: 2,
           task: "벡터를 내림차순으로 정렬해요!",
-          guide: "greater<int>() 또는 람다 [](int a, int b){ return a > b; }",
+          guide: "내림차순 정렬을 위해 sort의 세 번째 인자로 '더 큰' 비교자를 넣어봐!",
           template: "vector<int> v = {3, 1, 4, 1, 5, 9, 2};\nsort(v.begin(), v.end(), ___<int>());\ncout << v[0] << endl;",
           answer: "greater",
           expect: "vector<int> v = {3, 1, 4, 1, 5, 9, 2};\nsort(v.begin(), v.end(), greater<int>());\ncout << v[0] << endl;",
           en: {
             task: "Sort a vector in descending order!",
-            guide: "Use greater<int>() or lambda [](int a, int b){ return a > b; }"
+            guide: "Pass a comparator meaning 'greater than' as the third argument to sort for descending order!"
           }
         }
       },
@@ -277,14 +277,14 @@ export const lessonCpp23: LessonData = {
         content: {
           level: 2,
           task: "pair 벡터를 second(점수) 기준 오름차순으로 정렬해요!",
-          guide: "람다에서 a.second < b.second — second 기준 오름차순!",
+          guide: "pair의 두 번째 값으로 정렬하려면 람다에서 어떤 멤버를 비교해야 할까?",
           template: 'vector<pair<string, int>> v = {{"A",85},{"B",70},{"C",92}};\nsort(v.begin(), v.end(),\n    [](auto a, auto b){ return a.___ < b.___; });',
           answer: "second",
           blanksAnswer: ["second", "second"],
           expect: 'vector<pair<string, int>> v = {{"A",85},{"B",70},{"C",92}};\nsort(v.begin(), v.end(),\n    [](auto a, auto b){ return a.second < b.second; });',
           en: {
             task: "Sort a pair vector in ascending order by second (score)!",
-            guide: "In the lambda, use a.second < b.second — ascending by second!"
+            guide: "To sort by the second value of a pair, which member should the lambda compare?"
           }
         }
       },
@@ -359,14 +359,14 @@ export const lessonCpp23: LessonData = {
         content: {
           level: 3,
           task: "점수 내림차순, 동점이면 이름 오름차순으로 정렬해요!",
-          guide: "점수 같으면(a.second == b.second) 이름 비교, 다르면 점수 내림차순!",
+          guide: "점수가 다르면 높은 점수가 앞에, 점수가 같으면 이름 알파벳 순서가 앞에 오도록 비교 방향을 결정해!",
           template: 'vector<pair<string,int>> v = {{"Bob",90},{"Alice",90},{"Carol",85}};\nsort(v.begin(), v.end(), [](auto a, auto b) {\n    if (a.second != b.second) return a.second ___ b.second;\n    return a.first ___ b.first;\n});\ncout << v[0].first << endl;',
           answer: ">",
           blanksAnswer: [">", "<"],
           expect: 'vector<pair<string,int>> v = {{"Bob",90},{"Alice",90},{"Carol",85}};\nsort(v.begin(), v.end(), [](auto a, auto b) {\n    if (a.second != b.second) return a.second > b.second;\n    return a.first < b.first;\n});\ncout << v[0].first << endl;',
           en: {
             task: "Sort by score descending, then by name ascending if scores are equal!",
-            guide: "If scores are equal (a.second == b.second), compare names; otherwise sort by score descending!"
+            guide: "When scores differ, higher scores come first; when scores tie, earlier alphabetical names come first — decide the comparison direction!"
           }
         }
       },
@@ -402,13 +402,13 @@ export const lessonCpp23: LessonData = {
         content: {
           level: 3,
           task: "처음부터 작성! 문자열 벡터를 길이 오름차순으로 정렬하고 첫 번째 단어를 출력해요\n입력: {\"banana\", \"hi\", \"apple\", \"ok\"}",
-          guide: "람다에서 a.length() < b.length() 로 길이 비교!",
+          guide: "sort의 람다 comparator에서 문자열의 길이를 반환하는 멤버 함수를 이용해 비교해봐!",
           template: null,
           answer: 'vector<string> v = {"banana", "hi", "apple", "ok"};\nsort(v.begin(), v.end(),\n    [](string a, string b) { return a.length() < b.length(); });\ncout << v[0] << endl;',
           expect: "hi",
           en: {
             task: "Write from scratch! Sort a string vector by length ascending and print the first word\nInput: {\"banana\", \"hi\", \"apple\", \"ok\"}",
-            guide: "In the lambda, compare with a.length() < b.length()!"
+            guide: "In the lambda comparator for sort, use the member function that returns the string's length to compare!"
           }
         }
       },

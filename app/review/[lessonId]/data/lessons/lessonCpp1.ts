@@ -72,13 +72,13 @@ export const lessonCpp1: LessonData = {
         content: {
           level: 2,
           task: '"Hello, C++!"를 출력해요!',
-          guide: 'std::cout << "___" << std::endl; 형태로!',
+          guide: '출력할 텍스트를 큰따옴표로 감싸요!',
           template: { before: 'std::cout << "', after: '" << std::endl;' },
           answer: "Hello, C++!",
           expect: 'std::cout << "Hello, C++!" << std::endl;',
           en: {
             task: 'Print "Hello, C++!"!',
-            guide: 'Use the form std::cout << "___" << std::endl;'
+            guide: 'Wrap the text you want to print in double quotes!'
           }
         }
       },
@@ -228,7 +228,7 @@ export const lessonCpp1: LessonData = {
           total: 3,
           task: "이름을 출력하는 std::cout 문을 써봐요!",
           target: 'std::cout << "이름: 주현" << std::endl;',
-          hint: 'std::cout << "이름: 주현" << std::endl;',
+          hint: 'std::cout << "레이블: 값" 형태로 출력해요',
           done: ["#include <iostream>\nint main() {"],
           answer: 'std::cout << "이름: 주현" << std::endl;'
         }
@@ -240,7 +240,7 @@ export const lessonCpp1: LessonData = {
           total: 3,
           task: "나이도 출력해봐요!",
           target: 'std::cout << "나이: 14" << std::endl;',
-          hint: 'std::cout << "나이: 14" << std::endl;',
+          hint: '이름을 출력할 때처럼 "레이블: 값" 형태로 써봐요',
           done: ["#include <iostream>\nint main() {", 'std::cout << "이름: 주현" << std::endl;'],
           answer: 'std::cout << "나이: 14" << std::endl;'
         }
@@ -289,14 +289,14 @@ export const lessonCpp1: LessonData = {
         content: {
           level: 1,
           task: "정수 x=10, 실수 y=3.14를 선언하고 둘 다 출력해요",
-          guide: "int x = 10; double y = 3.14;",
+          guide: "정수는 int, 실수는 double 타입이에요!",
           template: "___ x = 10;\n___ y = 3.14;\ncout << x << endl;\ncout << y << endl;",
           blanksAnswer: ["int", "double"],
           answer: "int x = 10;\ndouble y = 3.14;\ncout << x << endl;\ncout << y << endl;",
           expect: "10\n3.14",
           en: {
             task: "Declare int x=10, double y=3.14, then print both",
-            guide: "int x = 10; double y = 3.14;"
+            guide: "Integers use int, decimals use double!"
           }
         }
       },
@@ -308,7 +308,7 @@ export const lessonCpp1: LessonData = {
           level: 2,
           task: "처음부터 작성! 완전한 C++ 프로그램:\n정수 a=7, b=3을 선언하고 a+b, a-b, a*b를 각각 출력",
           guide: "#include → main → 변수 선언 → cout 3번",
-          hint: "#include <iostream>\nusing namespace std;\nint main() {\n    int a=7, b=3;\n    cout<<a+b<<endl;\n    cout<<a-b<<endl;\n    cout<<a*b<<endl;\n    return 0;\n}",
+          hint: "int 변수 2개를 선언한 뒤, cout으로 덧셈, 뺄셈, 곱셈 결과를 각각 출력해요",
           template: null,
           answer: "#include <iostream>\nusing namespace std;\n\nint main() {\n    int a = 7, b = 3;\n    cout << a + b << endl;\n    cout << a - b << endl;\n    cout << a * b << endl;\n    return 0;\n}",
           alternateAnswers: [
@@ -329,7 +329,7 @@ export const lessonCpp1: LessonData = {
           level: 3,
           task: "처음부터 작성! 완전한 프로그램:\n이름(문자열), 나이(정수), 키(실수)를 변수에 저장하고 각각 출력",
           guide: "string name; int age; double height; cout 3번",
-          hint: "string name = \"Alice\";\nint age = 18;\ndouble height = 165.5;\ncout << name << endl;\ncout << age << endl;\ncout << height << endl;",
+          hint: "string, int, double 타입으로 변수 3개를 선언하고, 각 변수를 cout으로 출력해요",
           template: null,
           answer: "#include <iostream>\n#include <string>\nusing namespace std;\n\nint main() {\n    string name = \"Alice\";\n    int age = 18;\n    double height = 165.5;\n    cout << name << endl;\n    cout << age << endl;\n    cout << height << endl;\n    return 0;\n}",
           alternateAnswers: [
@@ -555,7 +555,7 @@ export const lessonCpp1: LessonData = {
           level: 3,
           task: '처음부터 작성! "My name is" 와 본인 이름을 각각 다른 줄에 출력하는 완전한 C++ 프로그램을 써봐요',
           guide: "#include → using namespace std → int main() → cout 두 번 → return 0",
-          hint: '#include <iostream>\nusing namespace std;\nint main() {\n    cout << "My name is" << endl;\n    cout << "Alice" << endl;\n    return 0;\n}',
+          hint: "두 개의 cout 문을 써서 각각 다른 줄에 출력하면 돼요",
           template: null,
           answer: '#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "My name is" << endl;\n    cout << "Alice" << endl;\n    return 0;\n}',
           alternateAnswers: [

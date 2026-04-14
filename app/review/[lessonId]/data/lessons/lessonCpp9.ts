@@ -467,6 +467,7 @@ export const lessonCpp9: LessonData = {
           message: "잠깐! vector에 값 추가하는 법 기억나요?",
           task: "벡터 v에 50을 추가하는 코드를 써봐요!",
           template: null,
+          context: "vector<int> v = {10, 20, 30};",
           answer: "v.push_back(50);",
           alternateAnswers: [
             "v.push_back(50)"
@@ -474,7 +475,8 @@ export const lessonCpp9: LessonData = {
           expect: "v.push_back(50);",
           en: {
             message: "Quick! Remember how to add a value to a vector?",
-            task: "Write the code to add 50 to vector v!"
+            task: "Write the code to add 50 to vector v!",
+            context: "vector<int> v = {10, 20, 30};"
           }
         }
       },
@@ -587,15 +589,14 @@ export const lessonCpp9: LessonData = {
         type: "practice",
         content: {
           level: 1,
-          task: "벡터를 선언하면서 바로 {5, 10, 15} 값을 넣어요",
-          guide: "vector<int> v = {값들};",
-          template: "vector<int> v = {___, ___, ___};",
-          blanksAnswer: ["5", "10", "15"],
-          answer: "vector<int> v = {5, 10, 15};",
+          task: "벡터를 선언하면서 5, 10, 15를 바로 초기화해요",
+          hint: "중괄호 {} 안에 값을 쉼표로 구분해요",
+          template: "vector<int> v = ___;",
+          answer: "{5, 10, 15}",
           expect: "vector<int> v = {5, 10, 15};",
           en: {
-            task: "Declare a vector with initial values {5, 10, 15}",
-            guide: "vector<int> v = {values};"
+            task: "Declare a vector and initialize it with 5, 10, 15",
+            hint: "Put values inside curly braces {}, separated by commas"
           }
         }
       },
@@ -605,15 +606,15 @@ export const lessonCpp9: LessonData = {
         type: "practice",
         content: {
           level: 2,
-          task: "크기 5, 초기값 0인 벡터를 선언해요 — vector<int> v(크기, 초기값) 패턴!",
-          guide: "vector<타입> v(개수, 초기값);",
+          task: "크기 5, 초기값 0인 정수 벡터를 선언해요",
+          hint: "소괄호 안에 (크기, 초기값) 순서로 넣어요",
           template: "vector<int> v(___, ___);",
           blanksAnswer: ["5", "0"],
           answer: "vector<int> v(5, 0);",
           expect: "vector<int> v(5, 0);",
           en: {
-            task: "Declare a vector of size 5, initialized to 0 — vector<int> v(size, value) pattern!",
-            guide: "vector<type> v(count, initial_value);"
+            task: "Declare a vector of 5 integers, all initialized to 0",
+            hint: "Put (size, initial_value) inside parentheses"
           }
         }
       },
@@ -623,9 +624,8 @@ export const lessonCpp9: LessonData = {
         type: "practice",
         content: {
           level: 2,
-          task: "벡터 초기화 3가지를 직접 써봐요:\n① 빈 벡터 선언\n② {1, 2, 3}으로 선언\n③ 크기 4, 초기값 0으로 선언",
-          guide: "각각 다른 초기화 방식 — 손이 기억할 때까지!",
-          hint: "vector<int> a;\nvector<int> b = {1,2,3};\nvector<int> c(4, 0);",
+          task: "vector<int> 변수를 3줄로 선언해요:\n① a: 빈 벡터\n② b: 1, 2, 3으로 초기화\n③ c: 크기 4, 전부 0",
+          hint: "① 그냥 선언 ② = {값, 값, 값} ③ (크기, 초기값)",
           template: null,
           answer: "vector<int> a;\nvector<int> b = {1, 2, 3};\nvector<int> c(4, 0);",
           alternateAnswers: [
@@ -633,8 +633,8 @@ export const lessonCpp9: LessonData = {
           ],
           expect: "vector<int> a;\nvector<int> b = {1, 2, 3};\nvector<int> c(4, 0);",
           en: {
-            task: "Write all 3 vector initialization styles:\n① empty vector\n② with {1, 2, 3}\n③ size 4, value 0",
-            guide: "Three different ways to initialize — until your hands remember!"
+            task: "Write 3 vector declarations on separate lines:\n① a: empty vector\n② b: initialized with 1, 2, 3\n③ c: size 4, all zeros",
+            hint: "① just declare ② = {val, val, val} ③ (size, initial_value)"
           }
         }
       },
@@ -647,7 +647,7 @@ export const lessonCpp9: LessonData = {
         content: {
           level: 2,
           task: "벡터에 1, 2, 3을 추가하고 → 마지막 원소 제거 → 크기 출력",
-          guide: "push_back 3번 → pop_back → size()",
+          hint: "마지막 원소 제거 메서드 + 원소 개수 반환 메서드",
           template: "vector<int> v;\nv.push_back(1);\nv.push_back(2);\nv.push_back(3);\nv.___();\ncout << v.___() << endl;",
           blanksAnswer: ["pop_back", "size"],
           answer: "vector<int> v;\nv.push_back(1);\nv.push_back(2);\nv.push_back(3);\nv.pop_back();\ncout << v.size() << endl;",
@@ -667,14 +667,14 @@ export const lessonCpp9: LessonData = {
         content: {
           level: 2,
           task: "인덱스 for문으로 벡터의 모든 값을 공백으로 구분해 출력해요",
-          guide: "for (int i = 0; i < v.size(); i++) { cout << v[i] << \" \"; }",
+          guide: "반복 횟수는 v.___(), 원소 접근은 v[인덱스 변수]",
           template: "vector<int> v = {3, 1, 4, 1, 5};\nfor (int i = 0; i < v.___(); i++) {\n    cout << v[___] << \" \";\n}",
           blanksAnswer: ["size", "i"],
           answer: "vector<int> v = {3, 1, 4, 1, 5};\nfor (int i = 0; i < v.size(); i++) {\n    cout << v[i] << \" \";\n}",
           expect: "3 1 4 1 5 ",
           en: {
             task: "Use an index for loop to print all vector values separated by spaces",
-            guide: "for (int i = 0; i < v.size(); i++) { cout << v[i] << \" \"; }"
+            guide: "Loop count comes from v.___(), elements accessed with v[index]"
           }
         }
       },
@@ -685,7 +685,7 @@ export const lessonCpp9: LessonData = {
         content: {
           level: 2,
           task: "range-for로 벡터 원소 합계를 구해요 (auto 키워드 사용!)",
-          guide: "for (auto x : v) { sum += x; }",
+          guide: "타입 자동 추론 키워드는? 누적 더하기 연산자는?",
           template: "vector<int> v = {10, 20, 30, 40};\nint sum = 0;\nfor (___ x : v) {\n    sum ___ x;\n}\ncout << sum << endl;",
           blanksAnswer: ["auto", "+= "],
           alternateAnswers: [],
@@ -693,7 +693,7 @@ export const lessonCpp9: LessonData = {
           expect: "100",
           en: {
             task: "Use a range-for loop to sum the vector elements (use auto keyword!)",
-            guide: "for (auto x : v) { sum += x; }"
+            guide: "What keyword auto-deduces types? What operator accumulates values?"
           }
         }
       },

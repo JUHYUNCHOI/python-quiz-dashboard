@@ -93,14 +93,14 @@ export const lesson6: LessonData = {
         content: {
           task: "이렇게 나오게 해봐 ↓\nHELLO WORLD",
           guide: ".upper() 사용!",
-          hint: "print('hello world'.upper())",
+          hint: "문자열에 .upper()를 붙이면 모두 대문자로 바뀌어!",
           template: null,
           answer: "print('hello world'.upper())",
           expect: "HELLO WORLD",
           en: {
             task: "Make it print like this ↓\nHELLO WORLD",
             guide: "Use .upper()!",
-            hint: "print('hello world'.upper())"
+            hint: "Attach .upper() to a string to convert it all to uppercase!"
           }
         }
       },
@@ -123,14 +123,14 @@ export const lesson6: LessonData = {
         content: {
           task: "이렇게 나오게 해봐 ↓\nhello world",
           guide: ".lower() 사용!",
-          hint: "print('HELLO WORLD'.lower())",
+          hint: "문자열에 .lower()를 붙이면 모두 소문자로 바뀌어!",
           template: null,
           answer: "print('HELLO WORLD'.lower())",
           expect: "hello world",
           en: {
             task: "Make it print like this ↓\nhello world",
             guide: "Use .lower()!",
-            hint: "print('HELLO WORLD'.lower())"
+            hint: "Attach .lower() to a string to convert it all to lowercase!"
           }
         }
       },
@@ -203,14 +203,14 @@ export const lesson6: LessonData = {
         content: {
           task: "이렇게 나오게 해봐 ↓\n코딩",
           guide: ".strip() 사용!",
-          hint: "print('  코딩  '.strip())",
+          hint: "공백이 있는 문자열에 .strip()을 붙이면 앞뒤 공백이 제거돼!",
           template: null,
           answer: "print('  코딩  '.strip())",
           expect: "코딩",
           en: {
             task: "Make it print like this ↓\n코딩",
             guide: "Use .strip()!",
-            hint: "print('  코딩  '.strip())"
+            hint: "Attach .strip() to a string with spaces to remove the leading and trailing spaces!"
           }
         }
       },
@@ -232,15 +232,15 @@ export const lesson6: LessonData = {
         type: "practice",
         content: {
           task: "이렇게 나오게 해봐 ↓\n나는 강아지",
-          guide: ".replace('고양이', '강아지') 사용!",
-          hint: "print('나는 고양이'.replace('고양이', '강아지'))",
+          guide: ".replace(찾을것, 바꿀것) 형태로 치환해!",
+          hint: "원하는 단어를 찾아서 다른 단어로 바꾸는 메서드야!",
           template: null,
           answer: "print('나는 고양이'.replace('고양이', '강아지'))",
           expect: "나는 강아지",
           en: {
             task: "Make it print like this ↓\n나는 강아지",
-            guide: "Use .replace('고양이', '강아지')!",
-            hint: "print('나는 고양이'.replace('고양이', '강아지'))"
+            guide: "Use .replace(find, replace_with) to substitute text!",
+            hint: "This method finds a word and replaces it with another word!"
           }
         }
       },
@@ -313,15 +313,15 @@ export const lesson6: LessonData = {
         type: "practice",
         content: {
           task: "이렇게 나오게 해봐 ↓\n6",
-          guide: "len('Python') 출력!",
-          hint: "print(len('Python'))",
+          guide: "len()으로 문자열 길이를 구해!",
+          hint: "len() 함수에 문자열을 넣으면 글자 수를 알려줘!",
           template: null,
           answer: "print(len('Python'))",
           expect: "6",
           en: {
             task: "Make it print like this ↓\n6",
-            guide: "Print len('Python')!",
-            hint: "print(len('Python'))"
+            guide: "Use len() to get the string length!",
+            hint: "Put a string inside len() and it tells you the character count!"
           }
         }
       },
@@ -358,14 +358,14 @@ export const lesson6: LessonData = {
         content: {
           task: "이렇게 나오게 해봐 ↓\n1",
           guide: "'Python'에서 'y' 위치 찾기!",
-          hint: "print('Python'.find('y'))",
+          hint: ".find()에 찾을 글자를 넣으면 위치(인덱스)를 알려줘!",
           template: null,
           answer: "print('Python'.find('y'))",
           expect: "1",
           en: {
             task: "Make it print like this ↓\n1",
             guide: "Find position of 'y' in 'Python'!",
-            hint: "print('Python'.find('y'))"
+            hint: "Put the character you want to find inside .find() and it returns the index!"
           }
         }
       },
@@ -468,14 +468,14 @@ export const lesson6: LessonData = {
         content: {
           task: "이렇게 나오게 해봐 ↓\nPYTHON",
           guide: ".strip().upper() 체이닝!",
-          hint: "print('  python  '.strip().upper())",
+          hint: "메서드를 이어서 붙이면 첫 번째 결과에 두 번째 메서드가 적용돼!",
           template: null,
           answer: "print('  python  '.strip().upper())",
           expect: "PYTHON",
           en: {
             task: "Make it print like this ↓\nPYTHON",
             guide: "Chain .strip().upper()!",
-            hint: "print('  python  '.strip().upper())"
+            hint: "Chain methods together — the second method is applied to the result of the first!"
           }
         }
       },

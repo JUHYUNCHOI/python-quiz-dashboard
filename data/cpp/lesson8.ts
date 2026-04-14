@@ -556,13 +556,8 @@ int main() {
 
 **① math_utils.h** — 프로토타입 (선언만!)
 \`\`\`cpp
-#ifndef MATH_UTILS_H
-#define MATH_UTILS_H
-
 int add(int a, int b);       // 선언만!
 int multiply(int a, int b);  // 선언만!
-
-#endif
 \`\`\`
 
 **② math_utils.cpp** — 함수 본체 (실제 코드!)
@@ -840,8 +835,9 @@ int add(int x, int y) { return x + y; }  // ❌ 에러! 타입이 같잖아
           title: "✋ 함수를 다양하게 만들어보세요!",
           content: `기본값 매개변수와 함수 오버로딩을 모두 써보는 프로그램이에요!
 
-void 함수와 반환값 있는 함수의 차이도 직접 느껴보세요.`,
+같은 이름 \`area\`로 정사각형, 직사각형, 삼각형 넓이를 계산해봐요. 매개변수 개수만으로 구분돼요!`,
           starterCode: `#include <iostream>
+#include <cmath>
 using namespace std;
 
 // 기본값 매개변수: greet(이름, 메시지="안녕하세요")
@@ -849,13 +845,18 @@ void greet(string name, string msg = "안녕하세요") {
 
 }
 
-// 함수 오버로딩: 정수용 add
-int add(int a, int b) {
+// 함수 오버로딩: 정사각형 (변의 길이 1개)
+double area(double side) {
 
 }
 
-// 함수 오버로딩: 실수용 add
-double add(double a, double b) {
+// 함수 오버로딩: 직사각형 (가로, 세로 2개)
+double area(double w, double h) {
+
+}
+
+// 함수 오버로딩: 삼각형 (세 변의 길이 3개 — 헤론 공식)
+double area(double a, double b, double c) {
 
 }
 
@@ -863,39 +864,51 @@ int main() {
     greet("주현");
     greet("민지", "반가워요");
 
-    cout << "정수: " << add(3, 5) << endl;
-    cout << "실수: " << add(1.5, 2.7) << endl;
+    cout << "정사각형: " << area(5.0) << endl;
+    cout << "직사각형: " << area(3.0, 4.0) << endl;
+    cout << "삼각형: "   << area(3.0, 4.0, 5.0) << endl;
 
     return 0;
 }`,
           code: `#include <iostream>
+#include <cmath>
 using namespace std;
 
 void greet(string name, string msg = "안녕하세요") {
     cout << msg << ", " << name << "!" << endl;
 }
 
-int add(int a, int b) {
-    return a + b;
+// double 1개 → 정사각형
+double area(double side) {
+    return side * side;
 }
 
-double add(double a, double b) {
-    return a + b;
+// double 2개 → 직사각형
+double area(double w, double h) {
+    return w * h;
+}
+
+// double 3개 → 삼각형 (헤론 공식)
+double area(double a, double b, double c) {
+    double s = (a + b + c) / 2.0;
+    return sqrt(s * (s-a) * (s-b) * (s-c));
 }
 
 int main() {
     greet("주현");
     greet("민지", "반가워요");
 
-    cout << "정수: " << add(3, 5) << endl;
-    cout << "실수: " << add(1.5, 2.7) << endl;
+    cout << "정사각형: " << area(5.0) << endl;
+    cout << "직사각형: " << area(3.0, 4.0) << endl;
+    cout << "삼각형: "   << area(3.0, 4.0, 5.0) << endl;
 
     return 0;
 }`,
           expectedOutput: `안녕하세요, 주현!
 반가워요, 민지!
-정수: 8
-실수: 4.2`
+정사각형: 25
+직사각형: 12
+삼각형: 6`
         }
       ]
     },

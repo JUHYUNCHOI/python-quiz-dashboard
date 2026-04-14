@@ -81,7 +81,7 @@ export const lesson16: LessonData = {
         level: 1,
         task: "좋아하는 색깔 3개를 리스트로 만들기",
         guide: "대괄호와 따옴표를 사용해요!",
-        hint: "colors = [\"빨강\", \"파랑\", \"초록\"]",
+        hint: "문자열 요소는 따옴표로 감싸야 해! 세 칸에 각각 색깔 이름을 넣어봐",
         template: "colors = [___, ___, ___]\nprint(colors)",
         blanksAnswer: ["\"빨강\"", "\"파랑\"", "\"초록\""],
         answer: "colors = [\"빨강\", \"파랑\", \"초록\"]\nprint(colors)",
@@ -89,7 +89,7 @@ export const lesson16: LessonData = {
         en: {
           task: "Create a list of 3 favorite colors",
           guide: "Use square brackets and quotes!",
-          hint: "colors = [\"red\", \"blue\", \"green\"]"
+          hint: "String elements need quotes! Put a color name in each blank"
         }
       }
     },
@@ -495,8 +495,8 @@ export const lesson16: LessonData = {
       content: {
         level: 3,
         task: "처음부터 작성! 빈 리스트를 만들고\n1부터 5까지 append로 채운 뒤 전체를 출력해요",
-        guide: "nums = []; for i in range(1, 6): nums.append(i); print(nums)",
-        hint: "nums = []\nfor i in range(1, 6):\n    nums.append(i)\nprint(nums)",
+        guide: "빈 리스트를 만들고 for문으로 1~5를 반복하면서 append로 하나씩 추가해봐!",
+        hint: "먼저 [] 로 빈 리스트를 만들고, range를 써서 숫자를 하나씩 append 해봐!",
         template: null,
         answer: "nums = []\nfor i in range(1, 6):\n    nums.append(i)\nprint(nums)",
         alternateAnswers: [
@@ -505,8 +505,8 @@ export const lesson16: LessonData = {
         expect: "[1, 2, 3, 4, 5]",
         en: {
           task: "Write from scratch! Create an empty list, fill it with 1 through 5 using append, then print it",
-          guide: "nums = []; for i in range(1, 6): nums.append(i); print(nums)",
-          hint: "nums = []\nfor i in range(1, 6):\n    nums.append(i)\nprint(nums)"
+          guide: "Create an empty list, then use a for loop to iterate 1~5 and append each number!",
+          hint: "First create an empty list with [], then use range to add numbers one by one with append!"
         }
       }
     },
@@ -517,8 +517,8 @@ export const lesson16: LessonData = {
       content: {
         level: 3,
         task: "처음부터 작성! 리스트 [3, 7, 1, 9, 4]의 최댓값을 for문으로 직접 찾아 출력해요\n(max() 함수 사용 금지!)",
-        guide: "best = nums[0]; for x in nums: if x > best: best = x",
-        hint: "nums = [3, 7, 1, 9, 4]\nbest = nums[0]\nfor x in nums:\n    if x > best:\n        best = x\nprint(best)",
+        guide: "첫 번째 요소를 현재 최댓값으로 시작하고, 반복하면서 더 큰 값이 나오면 업데이트해!",
+        hint: "현재까지의 최댓값을 저장할 변수를 만들고, 각 요소와 비교해서 더 크면 업데이트해봐!",
         template: null,
         answer: "nums = [3, 7, 1, 9, 4]\nbest = nums[0]\nfor x in nums:\n    if x > best:\n        best = x\nprint(best)",
         alternateAnswers: [
@@ -527,8 +527,8 @@ export const lesson16: LessonData = {
         expect: "9",
         en: {
           task: "Write from scratch! Find the maximum value in [3, 7, 1, 9, 4] using a for loop\n(No max() function!)",
-          guide: "best = nums[0]; for x in nums: if x > best: best = x",
-          hint: "nums = [3, 7, 1, 9, 4]\nbest = nums[0]\nfor x in nums:\n    if x > best:\n        best = x\nprint(best)"
+          guide: "Start with the first element as the current max, then update it whenever you find a larger value!",
+          hint: "Create a variable to store the current maximum, compare each element to it, and update if larger!"
         }
       }
     },

@@ -57,13 +57,13 @@ export const lessonCpp5: LessonData = {
         content: {
           level: 1,
           task: "a + b의 결과를 출력해요!",
-          guide: "cout << a + b;",
+          guide: "덧셈 연산자는 +!",
           template: "int a = 15, b = 7;\ncout << a ___ b << endl;",
           answer: "+",
           expect: "int a = 15, b = 7;\ncout << a + b << endl;",
           en: {
             task: "Print the result of a + b!",
-            guide: "cout << a + b;"
+            guide: "The addition operator is +!"
           }
         }
       },

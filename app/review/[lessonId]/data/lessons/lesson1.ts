@@ -80,14 +80,12 @@ export const lesson1: LessonData = {
         type: "practice",
         content: {
           task: "이렇게 나오게 해봐 ↓\nHello",
-          hint: "print('Hello')",
           template: null,
           answer: "print('Hello')",
           alternateAnswers: ["print(\"Hello\")"],
           expect: "Hello",
           en: {
-            task: "Make it print like this ↓\nHello",
-            hint: "print('Hello')"
+            task: "Make it print like this ↓\nHello"
           }
         }
       },
@@ -95,14 +93,12 @@ export const lesson1: LessonData = {
         type: "practice",
         content: {
           task: "이렇게 나오게 해봐 ↓\n안녕하세요",
-          hint: "print('안녕하세요')",
           template: null,
           answer: "print('안녕하세요')",
           alternateAnswers: ["print(\"안녕하세요\")"],
           expect: "안녕하세요",
           en: {
-            task: "Make it print like this ↓\n안녕하세요",
-            hint: "print('안녕하세요')"
+            task: "Make it print like this ↓\n안녕하세요"
           }
         }
       },
@@ -303,13 +299,11 @@ export const lesson1: LessonData = {
         content: {
           level: 3,
           task: "9999를 화면에 띄워봐",
-          hint: "print(9999)",
           template: null,
           answer: "print(9999)",
           expect: "9999",
           en: {
-            task: "Display 9999 on the screen",
-            hint: "print(9999)"
+            task: "Display 9999 on the screen"
           }
         }
       },
@@ -421,13 +415,11 @@ export const lesson1: LessonData = {
         content: {
           level: 3,
           task: "50 + 50 계산해서 출력해봐",
-          hint: "print(50 + 50)",
           template: null,
           answer: "print(50 + 50)",
           expect: "100",
           en: {
-            task: "Calculate 50 + 50 and print it",
-            hint: "print(50 + 50)"
+            task: "Calculate 50 + 50 and print it"
           }
         }
       },
@@ -573,14 +565,14 @@ export const lesson1: LessonData = {
         content: {
           level: 2,
           task: "레벨: 5 출력해봐",
-          guide: "'레벨:', 5 ← 쉼표로 연결!",
+          guide: "글자 부분과 숫자 부분을 쉼표로 연결해!",
           template: { before: "print(", after: ")" },
           answer: "'레벨:', 5",
           alternateAnswers: ["\"레벨:\", 5"],
           expect: "레벨: 5",
           en: {
             task: "Print: Level: 5",
-            guide: "'Level:', 5 ← connect with comma!"
+            guide: "Connect the text and number parts with a comma!"
           }
         }
       },
@@ -618,13 +610,13 @@ export const lesson1: LessonData = {
         content: {
           level: 2,
           task: "치킨 19000 원 출력해봐",
-          guide: "'치킨', 19000, '원'",
+          guide: "글자, 숫자, 글자 3개를 쉼표로 연결해!",
           template: { before: "print(", after: ")" },
           answer: "'치킨', 19000, '원'",
           expect: "치킨 19000 원",
           en: {
             task: "Print: 치킨 19000 원",
-            guide: "'치킨', 19000, '원'"
+            guide: "Connect 3 items (text, number, text) with commas!"
           }
         }
       },
@@ -648,13 +640,11 @@ export const lesson1: LessonData = {
         content: {
           level: 3,
           task: "피자 25000 원 출력해봐",
-          hint: "print('피자', 25000, '원')",
           template: null,
           answer: "print('피자', 25000, '원')",
           expect: "피자 25000 원",
           en: {
-            task: "Print: 피자 25000 원",
-            hint: "print('피자', 25000, '원')"
+            task: "Print: 피자 25000 원"
           }
         }
       },
@@ -855,14 +845,14 @@ export const lesson1: LessonData = {
         content: {
           level: 2,
           task: "점수: 100 출력해봐 (80 + 20 계산으로)",
-          guide: "print('점수:', 80 + 20)",
+          guide: "글자와 계산식을 쉼표로 연결해!",
           template: { before: "print(", after: ")" },
           answer: "'점수:', 80 + 20",
           alternateAnswers: ["'점수:', 80+20", "\"점수:\", 80 + 20", "\"점수:\", 80+20"],
           expect: "점수: 100",
           en: {
             task: "Print: Score: 100 (using 80 + 20 calculation)",
-            guide: "print('점수:', 80 + 20)"
+            guide: "Connect a text label with a calculation using a comma!"
           }
         }
       },
@@ -886,13 +876,13 @@ export const lesson1: LessonData = {
         content: {
           level: 3,
           task: "아래처럼 출력해봐\n위\n\n아래",
-          hint: "print('위') → print() → print('아래')",
+          hint: "print() 3번 써야 해 — 가운데 줄은 빈 줄이야!",
           template: null,
           answer: "print('위')\nprint()\nprint('아래')",
           expect: "위\n\n아래",
           en: {
             task: "Make it print like this\n위\n\n아래",
-            hint: "print('위') → print() → print('아래')"
+            hint: "You need 3 print() calls — the middle one creates a blank line!"
           }
         }
       },
@@ -921,7 +911,7 @@ export const lesson1: LessonData = {
         content: {
           level: 4,
           task: "아래처럼 출력해봐\n치킨: 18000 원\n콜라: 2000 원\n합계: 20000 원",
-          guide: "마지막 줄은 계산식으로! print('합계:', 18000 + 2000, '원')",
+          guide: "마지막 합계 줄은 두 숫자를 더한 계산식으로!",
           template: null,
           answer: "print('치킨:', 18000, '원')\nprint('콜라:', 2000, '원')\nprint('합계:', 18000 + 2000, '원')",
           alternateAnswers: [
@@ -930,7 +920,7 @@ export const lesson1: LessonData = {
           expect: "치킨: 18000 원\n콜라: 2000 원\n합계: 20000 원",
           en: {
             task: "Make it print like this\n치킨: 18000 원\n콜라: 2000 원\n합계: 20000 원",
-            guide: "Use a calculation for the last line! print('합계:', 18000 + 2000, '원')"
+            guide: "For the last total line, use a calculation that adds the two numbers!"
           }
         }
       },
@@ -941,7 +931,7 @@ export const lesson1: LessonData = {
         content: {
           level: 4,
           task: "구구단 5단 첫 3줄을 출력해봐\n5 * 1 = 5\n5 * 2 = 10\n5 * 3 = 15",
-          guide: "print('5 * 1 =', 5*1) 형태!",
+          guide: "각 줄마다 print() 한 번! '5 * 1 =' 같은 글자와 계산 결과를 쉼표로 연결해",
           template: null,
           answer: "print('5 * 1 =', 5*1)\nprint('5 * 2 =', 5*2)\nprint('5 * 3 =', 5*3)",
           alternateAnswers: [
@@ -951,7 +941,7 @@ export const lesson1: LessonData = {
           expect: "5 * 1 = 5\n5 * 2 = 10\n5 * 3 = 15",
           en: {
             task: "Print the first 3 lines of the 5 times table\n5 * 1 = 5\n5 * 2 = 10\n5 * 3 = 15",
-            guide: "Use print('5 * 1 =', 5*1) format!"
+            guide: "One print() per line! Connect the label text and the calculation result with a comma"
           }
         }
       },

@@ -230,13 +230,13 @@ export const lessonCpp17: LessonData = {
         content: {
           level: 2,
           task: "벡터에서 짝수의 개수를 세요!",
-          guide: "count_if와 람다 [](int x){ return x % 2 == 0; } 사용!",
+          guide: "count_if는 두 번째 인자로 조건 함수(람다)를 받아서 조건을 만족하는 원소의 수를 세!",
           template: "vector<int> v = {1,2,3,4,5,6};\nint evens = ___(v.begin(), v.end(),\n    [](int x){ return x % 2 == 0; });\ncout << evens << endl;",
           answer: "count_if",
           expect: "vector<int> v = {1,2,3,4,5,6};\nint evens = count_if(v.begin(), v.end(),\n    [](int x){ return x % 2 == 0; });\ncout << evens << endl;",
           en: {
             task: "Count the number of even numbers in a vector!",
-            guide: "Use count_if with lambda [](int x){ return x % 2 == 0; }!"
+            guide: "count_if takes a condition function (lambda) as its third argument and counts elements that satisfy it!"
           }
         }
       },
@@ -273,13 +273,13 @@ export const lessonCpp17: LessonData = {
         content: {
           level: 2,
           task: "벡터 원소의 합계를 accumulate로 구해요!",
-          guide: "accumulate(begin, end, 0) — <numeric> 헤더 필요!",
+          guide: "범위와 초기값을 인자로 받아서 모든 원소를 합산하는 STL 함수야. <numeric> 헤더 필요!",
           template: "vector<int> v = {10, 20, 30, 40};\nint sum = ___(v.begin(), v.end(), 0);\ncout << sum << endl;",
           answer: "accumulate",
           expect: "vector<int> v = {10, 20, 30, 40};\nint sum = accumulate(v.begin(), v.end(), 0);\ncout << sum << endl;",
           en: {
             task: "Calculate the sum of vector elements using accumulate!",
-            guide: "accumulate(begin, end, 0) — requires <numeric> header!"
+            guide: "This STL function takes a range and an initial value to sum all elements. Requires the <numeric> header!"
           }
         }
       },
@@ -370,13 +370,13 @@ export const lessonCpp17: LessonData = {
         content: {
           level: 2,
           task: "벡터에서 5 이상인 원소의 개수를 count_if로 세요!",
-          guide: "count_if + 람다 [](int x){ return x >= 5; }",
+          guide: "count_if의 람다에서 비교 연산자 빈칸을 채워봐! '이상'이면 어떤 연산자를 쓸까?",
           template: "vector<int> v = {3, 7, 1, 9, 4, 6, 2};\nint cnt = count_if(v.begin(), v.end(),\n    [](int x){ return x ___ 5; });\ncout << cnt << endl;",
           answer: ">=",
           expect: "vector<int> v = {3, 7, 1, 9, 4, 6, 2};\nint cnt = count_if(v.begin(), v.end(),\n    [](int x){ return x >= 5; });\ncout << cnt << endl;",
           en: {
             task: "Count elements that are 5 or greater in a vector using count_if!",
-            guide: "count_if + lambda [](int x){ return x >= 5; }"
+            guide: "Fill in the comparison operator in the lambda! What operator means 'greater than or equal to'?"
           }
         }
       },
@@ -412,13 +412,13 @@ export const lessonCpp17: LessonData = {
         content: {
           level: 3,
           task: "처음부터 작성! 벡터 {4, 7, 2, 9, 1, 5}의 합계, 최댓값, 최솟값을 각 줄에 출력해요",
-          guide: "accumulate(합계), *max_element(최대), *min_element(최소)",
+          guide: "합계는 accumulate, 최대/최소는 max_element/min_element로 구해! 이터레이터를 역참조하는 것 잊지 마!",
           template: null,
           answer: "vector<int> v = {4, 7, 2, 9, 1, 5};\nint sum = accumulate(v.begin(), v.end(), 0);\ncout << sum << endl;\ncout << *max_element(v.begin(), v.end()) << endl;\ncout << *min_element(v.begin(), v.end()) << endl;",
           expect: "28\n9\n1",
           en: {
             task: "Write from scratch! Print the sum, max, and min of vector {4, 7, 2, 9, 1, 5}, each on a separate line",
-            guide: "accumulate(sum), *max_element(max), *min_element(min)"
+            guide: "Use accumulate for sum, and max_element/min_element for max/min! Don't forget to dereference the iterator!"
           }
         }
       },

@@ -82,13 +82,13 @@ export const lesson11: LessonData = {
       content: {
         level: 1,
         task: "age = 18 로 변수 만들고,\nage >= 18 이면 '성인입니다' 출력해봐",
-        guide: "if age >= 18:\n    print(...)",
+        guide: "변수를 만들고 if 조건 뒤에 콜론(:), 실행할 코드는 들여쓰기!",
         template: null,
         answer: "age = 18\nif age >= 18:\n    print('성인입니다')",
         expect: "성인입니다",
         en: {
           task: "Create variable age = 18,\nif age >= 18 print '성인입니다'",
-          guide: "if age >= 18:\n    print(...)"
+          guide: "Create the variable, then write if condition: with a colon, and indent the code!"
         }
       }
     },
@@ -204,13 +204,13 @@ export const lesson11: LessonData = {
       content: {
         level: 1,
         task: "point = 0 으로 변수 만들고,\npoint == 0 이면 '시작 전이에요' 출력해봐",
-        guide: "if point == 0:\n    print(...)",
+        guide: "변수를 만들고 같은지 비교할 때는 == 를 사용해!",
         template: null,
         answer: "point = 0\nif point == 0:\n    print('시작 전이에요')",
         expect: "시작 전이에요",
         en: {
           task: "Create variable point = 0,\nif point == 0 print '시작 전이에요'",
-          guide: "if point == 0:\n    print(...)"
+          guide: "Create the variable and use == to check equality!"
         }
       }
     },
@@ -284,13 +284,13 @@ export const lesson11: LessonData = {
       content: {
         level: 1,
         task: "score = 75 로 변수 만들고,\n60 이상이면 '합격', 아니면 '불합격' 출력해봐",
-        guide: "if score >= 60:\n    print('합격')\nelse:\n    print('불합격')",
+        guide: "if로 조건을 확인하고, else로 조건이 아닐 때를 처리해!",
         template: null,
         answer: "score = 75\nif score >= 60:\n    print('합격')\nelse:\n    print('불합격')",
         expect: "합격",
         en: {
           task: "Create variable score = 75,\nif 60 or above print '합격', otherwise print '불합격'",
-          guide: "if score >= 60:\n    print('합격')\nelse:\n    print('불합격')"
+          guide: "Use if to check the condition, and else to handle when it's not true!"
         }
       }
     },
@@ -299,13 +299,13 @@ export const lesson11: LessonData = {
       content: {
         level: 1,
         task: "num = 7 로 변수 만들고,\n짝수면 '짝수', 홀수면 '홀수' 출력해봐",
-        guide: "if num % 2 == 0:",
+        guide: "나머지 연산자 % 로 짝수인지 확인할 수 있어!",
         template: null,
         answer: "num = 7\nif num % 2 == 0:\n    print('짝수')\nelse:\n    print('홀수')",
         expect: "홀수",
         en: {
           task: "Create variable num = 7,\nif even print '짝수', if odd print '홀수'",
-          guide: "if num % 2 == 0:"
+          guide: "Use the remainder operator % to check if a number is even!"
         }
       }
     },
@@ -374,13 +374,13 @@ export const lesson11: LessonData = {
       content: {
         level: 1,
         task: "n = -5 로 변수 만들고,\n0 이상이면 '양수 또는 0', 아니면 '음수' 출력해봐",
-        guide: "if n >= 0:\n    print(...)\nelse:\n    print(...)",
+        guide: "if-else 구조로 두 가지 경우를 나눠봐!",
         template: null,
         answer: "n = -5\nif n >= 0:\n    print('양수 또는 0')\nelse:\n    print('음수')",
         expect: "음수",
         en: {
           task: "Create variable n = -5,\nif 0 or above print '양수 또는 0', otherwise print '음수'",
-          guide: "if n >= 0:\n    print(...)\nelse:\n    print(...)"
+          guide: "Use if-else structure to handle two separate cases!"
         }
       }
     },
@@ -521,13 +521,13 @@ export const lesson11: LessonData = {
       content: {
         level: 2,
         task: "temp = 10 으로 변수 만들고,\n30 이상이면 '더워', 20 이상이면 '따뜻해',\n10 이상이면 '선선해', 아니면 '추워' 출력해봐",
-        guide: "if temp >= 30:\nelif temp >= 20:\nelif temp >= 10:\nelse:",
+        guide: "if-elif-elif-else 구조로 4가지 경우를 순서대로 처리해!",
         template: null,
         answer: "temp = 10\nif temp >= 30:\n    print('더워')\nelif temp >= 20:\n    print('따뜻해')\nelif temp >= 10:\n    print('선선해')\nelse:\n    print('추워')",
         expect: "선선해",
         en: {
           task: "Create variable temp = 10,\nif 30+ print '더워', if 20+ print '따뜻해',\nif 10+ print '선선해', otherwise print '추워'",
-          guide: "if temp >= 30:\nelif temp >= 20:\nelif temp >= 10:\nelse:"
+          guide: "Use if-elif-elif-else structure to handle 4 cases in order!"
         }
       }
     },
@@ -538,13 +538,13 @@ export const lesson11: LessonData = {
       content: {
         level: 2,
         task: "grade_year = 2 로 변수 만들고,\n1이면 '1학년', 2이면 '2학년', 3이면 '3학년', 아니면 '해당없음' 출력해봐",
-        guide: "if grade_year == 1:\nelif grade_year == 2:\nelif grade_year == 3:\nelse:",
+        guide: "== 로 정확히 일치하는지 확인하고 elif로 여러 경우를 처리해!",
         template: null,
         answer: "grade_year = 2\nif grade_year == 1:\n    print('1학년')\nelif grade_year == 2:\n    print('2학년')\nelif grade_year == 3:\n    print('3학년')\nelse:\n    print('해당없음')",
         expect: "2학년",
         en: {
           task: "Create variable grade_year = 2,\nif 1 print '1학년', if 2 print '2학년', if 3 print '3학년', otherwise print '해당없음'",
-          guide: "if grade_year == 1:\nelif grade_year == 2:\nelif grade_year == 3:\nelse:"
+          guide: "Use == to check exact matches and elif to handle multiple cases!"
         }
       }
     },

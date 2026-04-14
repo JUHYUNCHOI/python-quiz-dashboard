@@ -853,8 +853,43 @@ int add(int x, int y) { return x + y; }  // ❌ Error! Same types
           title: "✋ Try Different Function Styles!",
           content: `This program uses default parameters and function overloading together!
 
-Notice the difference between void functions and functions with return values.`,
+Use the same name \`area\` for square, rectangle, and triangle — distinguished purely by parameter count!`,
+          starterCode: `#include <iostream>
+#include <cmath>
+using namespace std;
+
+// Default parameters
+void greet(string name, string msg = "Hello") {
+
+}
+
+// Overload 1: square (1 side)
+double area(double side) {
+
+}
+
+// Overload 2: rectangle (width, height)
+double area(double w, double h) {
+
+}
+
+// Overload 3: triangle (3 sides — Heron's formula)
+double area(double a, double b, double c) {
+
+}
+
+int main() {
+    greet("Emma");
+    greet("Jake", "Hey");
+
+    cout << "Square: "    << area(5.0) << endl;
+    cout << "Rectangle: " << area(3.0, 4.0) << endl;
+    cout << "Triangle: "  << area(3.0, 4.0, 5.0) << endl;
+
+    return 0;
+}`,
           code: `#include <iostream>
+#include <cmath>
 using namespace std;
 
 // Default parameters
@@ -862,28 +897,37 @@ void greet(string name, string msg = "Hello") {
     cout << msg << ", " << name << "!" << endl;
 }
 
-// Function overloading
-int add(int a, int b) {
-    return a + b;
+// 1 param → square
+double area(double side) {
+    return side * side;
 }
 
-double add(double a, double b) {
-    return a + b;
+// 2 params → rectangle
+double area(double w, double h) {
+    return w * h;
+}
+
+// 3 params → triangle (Heron's formula)
+double area(double a, double b, double c) {
+    double s = (a + b + c) / 2.0;
+    return sqrt(s * (s-a) * (s-b) * (s-c));
 }
 
 int main() {
     greet("Emma");
     greet("Jake", "Hey");
 
-    cout << "Integers: " << add(3, 5) << endl;
-    cout << "Doubles: " << add(1.5, 2.7) << endl;
+    cout << "Square: "    << area(5.0) << endl;
+    cout << "Rectangle: " << area(3.0, 4.0) << endl;
+    cout << "Triangle: "  << area(3.0, 4.0, 5.0) << endl;
 
     return 0;
 }`,
           expectedOutput: `Hello, Emma!
 Hey, Jake!
-Integers: 8
-Doubles: 4.2`
+Square: 25
+Rectangle: 12
+Triangle: 6`
         }
       ]
     },

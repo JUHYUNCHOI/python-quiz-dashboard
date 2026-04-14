@@ -560,7 +560,7 @@ export const lessonCpp8: LessonData = {
           level: 3,
           task: "처음부터 작성! 두 정수 중 큰 값을 반환하는 myMax 함수를 만들고\nmyMax(5, 9)와 myMax(12, 3) 결과를 출력해요",
           guide: "int myMax(int a, int b) { if (a > b) return a; return b; }",
-          hint: "int myMax(int a, int b) {\n    if (a > b) return a;\n    return b;\n}",
+          hint: "a와 b를 비교해서 더 큰 쪽을 return하면 돼요",
           template: null,
           answer: "int myMax(int a, int b) {\n    if (a > b) return a;\n    return b;\n}\ncout << myMax(5, 9) << endl;\ncout << myMax(12, 3) << endl;",
           alternateAnswers: [

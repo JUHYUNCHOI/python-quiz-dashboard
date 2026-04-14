@@ -95,14 +95,14 @@ export const lesson21: LessonData = {
         level: 1,
         task: "리스트 [1, 2, 2, 3, 3, 3]을 set()으로 중복 제거 후 출력하세요",
         guide: "set()에 리스트를 넣으면 중복 제거!",
-        hint: "unique = set([1, 2, 2, 3, 3, 3])",
+        hint: "리스트를 집합으로 변환하는 내장 함수 이름을 빈칸에 넣어봐!",
         template: "nums = [1, 2, 2, 3, 3, 3]\nunique = ___(nums)\nprint(unique)",
         answer: "set",
         expect: "{1, 2, 3}",
         en: {
           task: "Remove duplicates from list [1, 2, 2, 3, 3, 3] using set() and print",
           guide: "Putting a list in set() removes duplicates!",
-          hint: "unique = set([1, 2, 2, 3, 3, 3])"
+          hint: "Put the name of the built-in function that converts a list to a set in the blank!"
         }
       }
     },
@@ -307,14 +307,14 @@ export const lesson21: LessonData = {
         level: 2.5,
         task: "리스트의 중복을 제거하고 정렬된 리스트로 출력하세요",
         guide: "set()으로 중복 제거 후 sorted()!",
-        hint: "sorted(set(nums))",
+        hint: "sorted() 안쪽에 중복 제거 함수를 넣어봐!",
         template: "nums = [3, 1, 2, 3, 1, 2]\nresult = sorted(___(nums))\nprint(result)",
         answer: "set",
         expect: "[1, 2, 3]",
         en: {
           task: "Remove duplicates from the list and print as a sorted list",
           guide: "Remove duplicates with set(), then use sorted()!",
-          hint: "sorted(set(nums))"
+          hint: "Put the duplicate-removal function inside sorted()!"
         }
       }
     },
