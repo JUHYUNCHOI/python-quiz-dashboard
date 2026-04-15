@@ -940,7 +940,7 @@ export default function CurriculumPage() {
                 <span className="flex items-center gap-1 text-xs font-bold text-blue-600">⚡ {cppLessonsDone}/23</span>
                 <ChevronRight className="w-3 h-3 text-gray-300 flex-shrink-0" />
                 {practiceUnlocked
-                  ? <Link href="/practice" className="flex items-center gap-1 text-xs font-bold text-green-600">💪 {practiceProblemsDone}/40</Link>
+                  ? <span className="flex items-center gap-1 text-xs font-bold text-green-600">💪 {practiceProblemsDone}/40</span>
                   : <span className="flex items-center gap-1 text-xs text-gray-300">💪 <Lock className="w-3 h-3" /></span>}
                 <ChevronRight className="w-3 h-3 text-gray-300 flex-shrink-0" />
                 {algoUnlocked
@@ -959,7 +959,7 @@ export default function CurriculumPage() {
                 <span className="flex items-center gap-1 text-xs font-bold text-orange-600">📚 {pythonLessonsDone}/{pythonLessonsTotal}</span>
                 <ChevronRight className="w-3 h-3 text-gray-300 flex-shrink-0" />
                 {pyPracticeUnlocked
-                  ? <Link href="/practice" className="flex items-center gap-1 text-xs font-bold text-green-600">💪 {pyPracticeDone}/{pyPracticeGoal}</Link>
+                  ? <span className="flex items-center gap-1 text-xs font-bold text-green-600">💪 {pyPracticeDone}/{pyPracticeGoal}</span>
                   : <span className="flex items-center gap-1 text-xs text-gray-300">💪 <Lock className="w-3 h-3" /></span>}
                 <ChevronRight className="w-3 h-3 text-gray-300 flex-shrink-0" />
                 {pyAlgoUnlocked
@@ -1020,9 +1020,9 @@ export default function CurriculumPage() {
                         <div className="h-full bg-green-500 rounded-full transition-all duration-500" style={{ width: `${Math.min(100, Math.round((practiceProblemsDone / 40) * 100))}%` }} />
                       </div>
                       <p className="text-xs font-bold text-green-700">{practiceProblemsDone}/{t("40문제", "40 problems")} {t("완료", "done")}</p>
-                      <Link href="/practice" className="mt-1 text-xs text-center bg-green-500 text-white rounded-lg py-1.5 font-bold hover:bg-green-600 transition-colors">
-                        {practiceProblemsDone >= 40 ? `✅ ${t("알고리즘 해금!", "Algorithms Unlocked!")}` : t("연습하기 →", "Practice →")}
-                      </Link>
+                      <span className="mt-1 text-xs text-center rounded-lg py-1.5 font-bold text-green-700">
+                        {practiceProblemsDone >= 40 ? `✅ ${t("알고리즘 해금!", "Algorithms Unlocked!")}` : t("레슨에서 Try Challenge로 도전!", "Try Challenge in each lesson!")}
+                      </span>
                       {completedLessons.has("cpp-p3") && (
                         <Link href="/coding-bank" className="text-xs text-center border border-teal-400 text-teal-600 rounded-lg py-1.5 font-bold hover:bg-teal-50 transition-colors">
                           🏦 {t("코딩 뱅크 →", "Coding Bank →")}
@@ -1143,9 +1143,9 @@ export default function CurriculumPage() {
                         <div className="h-full bg-green-500 rounded-full transition-all duration-500" style={{ width: `${Math.min(100, Math.round((pyPracticeDone / pyPracticeGoal) * 100))}%` }} />
                       </div>
                       <p className="text-xs font-bold text-green-700">{pyPracticeDone}/{t(`${pyPracticeGoal}문제`, `${pyPracticeGoal} problems`)} {t("완료", "done")}</p>
-                      <Link href="/practice" className="mt-1 text-xs text-center bg-green-500 text-white rounded-lg py-1.5 font-bold hover:bg-green-600 transition-colors">
-                        {pyPracticeDone >= pyPracticeGoal ? `✅ ${t("알고리즘 해금!", "Algorithms Unlocked!")}` : t("연습하기 →", "Practice →")}
-                      </Link>
+                      <span className="mt-1 text-xs text-center rounded-lg py-1.5 font-bold text-green-700">
+                        {pyPracticeDone >= pyPracticeGoal ? `✅ ${t("알고리즘 해금!", "Algorithms Unlocked!")}` : t("레슨에서 Try Challenge로 도전!", "Try Challenge in each lesson!")}
+                      </span>
                     </>
                   ) : (
                     <>

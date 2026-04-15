@@ -754,11 +754,19 @@ function PracticeContent() {
   const problem = cluster?.problems.find(p => p.id === problemId)
   const sessionMode = searchParams.get("session") === "1"
 
+  // cluster 없이 직접 /practice 접근하면 커리큘럼으로
+  useEffect(() => {
+    if (!clusterId) {
+      router.replace("/curriculum")
+    }
+  }, [clusterId, router])
+  if (!clusterId) return null
+
   const handleClusterBack = () => {
     if (fromParam === "lesson" || fromParam === "curriculum") {
       router.back()
     } else {
-      setParam("cluster", null)
+      router.push("/curriculum")
     }
   }
 
