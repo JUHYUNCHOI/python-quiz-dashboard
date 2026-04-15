@@ -234,10 +234,7 @@ cout << m["Jake"];  // Direct access! 87
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ Count Word Frequencies!",
-          content: `Count how many times each word appears in the given word array!
-
-Use a map to count each word, then iterate and print.
-Since map auto-sorts, the output will be in alphabetical order!`,
+          content: `Use a map to count how many times each word appears in the array, and print the results!`,
           code: `#include <iostream>
 #include <map>
 #include <string>
@@ -264,18 +261,15 @@ using namespace std;
 
 int main() {
     string words[] = {"apple", "banana", "apple", "cherry", "banana", "apple"};
-
     map<string, int> freq;
-    for (auto& w : words) {
-        freq[w]++;
-    }
 
-    for (auto& [word, count] : freq) {
-        cout << word << ": " << count << endl;
-    }
+    // Step 1: Loop through words and count each word in freq
+
+    // Step 2: Iterate over freq and print "word: count"
 
     return 0;
 }`,
+          hint: "Use for(auto& w : words) { freq[w]++; } to count. Then for(auto& [word, count] : freq) { ... } to print. map auto-sorts, so no extra sort needed!",
           expectedOutput: `apple: 3
 banana: 2
 cherry: 1`
@@ -444,9 +438,7 @@ But if you need sorted order, you must use the sorted version.`
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ Remove Duplicates & Sort!",
-          content: `Remove duplicates from the given number array and print them in sorted order!
-
-Using a set, you can remove duplicates and sort in one step!`,
+          content: `Use a set to remove duplicates from the number array and print them in sorted order!`,
           code: `#include <iostream>
 #include <set>
 using namespace std;
@@ -473,20 +465,15 @@ using namespace std;
 
 int main() {
     int arr[] = {4, 2, 7, 2, 9, 4, 1, 7, 3};
-
     set<int> s;
-    for (auto x : arr) {
-        s.insert(x);
-    }
 
-    cout << "Count: " << s.size() << endl;
-    for (auto x : s) {
-        cout << x << " ";
-    }
-    cout << endl;
+    // Insert all elements of arr into s
+
+    // Print s.size() then print all elements
 
     return 0;
 }`,
+          hint: "Use for(auto x : arr) { s.insert(x); } to insert. set auto-removes duplicates and auto-sorts! Use s.size() for count and range-for to print",
           expectedOutput: `Count: 6
 1 2 3 4 7 9`
         },

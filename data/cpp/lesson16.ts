@@ -235,7 +235,7 @@ cout << m["Bob"];  // 바로 접근! 87
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ 단어 빈도수 세기!",
-          content: `주어진 단어 배열에서 각 단어가 몇 번 나오는지 세고, 알파벳 순서로 출력하는 코드를 실행해봐요!`,
+          content: `map을 활용해서 단어 배열에서 각 단어가 몇 번 나오는지 세고, 알파벳 순서로 출력하는 코드를 작성해봐요!`,
           code: `#include <iostream>
 #include <map>
 #include <string>
@@ -262,18 +262,15 @@ using namespace std;
 
 int main() {
     string words[] = {"apple", "banana", "apple", "cherry", "banana", "apple"};
-
     map<string, int> freq;
-    for (auto& w : words) {
-        freq[w]++;
-    }
 
-    for (auto& [word, count] : freq) {
-        cout << word << ": " << count << endl;
-    }
+    // 단계 1: words 배열을 순회하며 freq에 빈도수를 세세요
+
+    // 단계 2: freq를 순회하며 "단어: 개수" 형식으로 출력하세요
 
     return 0;
 }`,
+          hint: "for(auto& w : words) { freq[w]++; }로 세고, for(auto& [word, count] : freq) { ... }로 출력해요. map은 자동 정렬이라 따로 sort 안 해도 돼요!",
           expectedOutput: `apple: 3
 banana: 2
 cherry: 1`
@@ -442,7 +439,7 @@ s.insert(4);
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ 중복 제거 후 정렬 출력!",
-          content: `주어진 숫자 배열에서 중복을 제거하고 정렬된 순서로 출력하는 코드를 실행해봐요!`,
+          content: `set을 활용해서 숫자 배열에서 중복을 제거하고 정렬된 순서로 출력하는 코드를 작성해봐요!`,
           code: `#include <iostream>
 #include <set>
 using namespace std;
@@ -469,20 +466,15 @@ using namespace std;
 
 int main() {
     int arr[] = {4, 2, 7, 2, 9, 4, 1, 7, 3};
-
     set<int> s;
-    for (auto x : arr) {
-        s.insert(x);
-    }
 
-    cout << "Count: " << s.size() << endl;
-    for (auto x : s) {
-        cout << x << " ";
-    }
-    cout << endl;
+    // arr의 원소를 모두 s에 insert하세요
+
+    // s.size()로 개수를 출력하고, range-for로 원소를 출력하세요
 
     return 0;
 }`,
+          hint: "for(auto x : arr) { s.insert(x); }로 배열을 set에 넣어요. set은 중복 제거 + 자동 정렬! s.size()로 크기, range-for로 출력해요",
           expectedOutput: `Count: 6
 1 2 3 4 7 9 `
         },

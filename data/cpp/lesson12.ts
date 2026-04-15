@@ -116,9 +116,9 @@ const string& ref = longText;
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ 참조로 값 바꾸기 실험!",
-          content: `참조 변수를 만들어서 원래 변수의 값을 바꿔보세요!
+          content: `int& 를 사용해서 참조 변수를 만들고, 참조를 통해 원래 변수의 값을 바꿔보세요!
 
-ref를 통해 값을 바꾸면, 원래 변수 x도 함께 바뀌는 걸 확인할 수 있어요.`,
+ref를 바꾸면 x도 함께 바뀌는 걸 직접 확인해봐요.`,
           code: `#include <iostream>
 using namespace std;
 
@@ -142,19 +142,20 @@ using namespace std;
 
 int main() {
     int x = 100;
-    int& ref = x;
+
+    // 1. int& 를 사용해서 x의 참조 변수 ref를 선언하세요
 
     cout << "x = " << x << endl;
-    cout << "ref = " << ref << endl;
+    // 2. ref도 출력하세요
 
-    ref = 500;
+    // 3. ref = 500 으로 값을 바꾸세요
 
     cout << "ref = 500 후:" << endl;
-    cout << "x = " << x << endl;
-    cout << "ref = " << ref << endl;
+    // 4. x와 ref를 다시 출력하세요
 
     return 0;
 }`,
+          hint: "int& ref = x; 처럼 & 를 붙이면 참조가 돼요. ref를 바꾸면 x도 함께 바뀌는 게 참조의 핵심이에요",
           expectedOutput: `x = 100
 ref = 100
 ref = 500 후:
@@ -322,10 +323,10 @@ for (int& x : v)  // x는 원본의 참조(reference) → v가 바뀜!
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ swap 함수 + 벡터 2배 함수!",
-          content: `참조를 활용하는 두 가지 함수가 어떻게 동작하는지 실행해봐요!
+          content: `참조(&)를 활용해서 두 가지 함수를 직접 구현해봐요!
 
-- 두 정수를 서로 교환하는 함수
-- 벡터의 모든 원소를 2배로 만드는 함수
+- **mySwap**: 두 정수를 서로 교환하는 함수
+- **doubleAll**: 벡터의 모든 원소를 2배로 만드는 함수
 
 **시작 값:**
 - \`int a = 10, b = 20;\`
@@ -390,6 +391,7 @@ int main() {
 
     return 0;
 }`,
+          hint: "mySwap: int temp = a; a = b; b = temp; 패턴이에요. doubleAll: for(int& x : v) { x *= 2; } — int& 없이 int x 로 받으면 원본이 안 바뀌어요!",
           expectedOutput: `swap: 20 10
 double: 2 4 6 8 10 `
         },

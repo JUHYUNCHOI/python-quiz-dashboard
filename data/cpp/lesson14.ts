@@ -268,10 +268,10 @@ int main() {
     };
 
     // 여기에 합계를 구하는 코드를 써보세요
-    // 힌트: total 변수를 만들고 students[i].score를 누적해요
 
     return 0;
 }`,
+          hint: "int total = 0을 선언하고, for(int i = 0; i < 3; i++) 안에서 total += students[i].score를 반복해요",
           expectedOutput: `합계: 254`
         },
         {
@@ -344,10 +344,10 @@ int main() {
     };
 
     // 여기에 최댓값을 구하는 코드를 써보세요
-    // 힌트: maxScore = students[0].score로 시작해서 비교해요
 
     return 0;
 }`,
+          hint: "int maxScore = students[0].score로 초기값을 잡고, i는 1부터 반복해요. students[i].score > maxScore이면 maxScore = students[i].score로 교체해요",
           expectedOutput: `최고: 95`
         },
         {
@@ -412,10 +412,10 @@ int main() {
     };
 
     // 여기에 80점 이상인 학생 수를 세는 코드를 써보세요
-    // 힌트: count 변수 + if 조건문 + count++
 
     return 0;
 }`,
+          hint: "int count = 0을 선언하고, for문에서 students[i].score >= 80이면 count++해요. 주의: > 80은 81 이상이라 틀려요!",
           expectedOutput: `80점 이상: 2명`
         },
         {
@@ -468,10 +468,10 @@ int main() {
     };
 
     // 여기에 1등 학생 이름과 점수를 출력하는 코드를 써보세요
-    // 힌트: maxIdx = 0으로 시작해서, 더 높은 점수가 나오면 maxIdx를 갱신해요
 
     return 0;
 }`,
+          hint: "int maxIdx = 0으로 시작하고, i = 1부터 반복해요. students[i].score > students[maxIdx].score이면 maxIdx = i로 갱신해요. 마지막에 students[maxIdx].name과 score를 출력해요",
           expectedOutput: `1등: 김철수 (95점)`
         },
         {

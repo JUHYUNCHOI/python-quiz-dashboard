@@ -239,9 +239,7 @@ cout << cnt;  // 3 (8, 4, 2)
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ Complete Vector Analysis!",
-          content: `Find the max, min, sum, and search for a specific value in a vector!
-
-Use min_element, max_element, accumulate, and find all together.`,
+          content: `Use STL functions to analyze a vector — find min, max, sum, and locate a specific value!`,
           code: `#include <iostream>
 #include <vector>
 #include <algorithm>
@@ -275,21 +273,15 @@ using namespace std;
 int main() {
     vector<int> v = {3, 7, 1, 9, 4, 6};
 
-    int minVal = *min_element(v.begin(), v.end());
-    int maxVal = *max_element(v.begin(), v.end());
-    int total = accumulate(v.begin(), v.end(), 0);
+    // Use min_element, max_element, accumulate to find min, max, sum and print them
+    // Print: "Min: 1", "Max: 9", "Sum: 30"
 
-    cout << "Min: " << minVal << endl;
-    cout << "Max: " << maxVal << endl;
-    cout << "Sum: " << total << endl;
-
-    auto it = find(v.begin(), v.end(), 9);
-    if (it != v.end()) {
-        cout << "Found 9 at index " << it - v.begin() << endl;
-    }
+    // Use find() to locate 9 and print its index
+    // Print: "Found 9 at index 3"
 
     return 0;
 }`,
+          hint: "Use *min_element(v.begin(), v.end()) — the * dereferences the iterator. accumulate is in <numeric>. find() returns an iterator, and it - v.begin() gives the index",
           expectedOutput: `Min: 1
 Max: 9
 Sum: 30
@@ -521,9 +513,7 @@ coords.erase(unique(coords.begin(), coords.end()), coords.end());
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ Sort + lower_bound to Find a Value!",
-          content: `Sort an unsorted vector and use lower_bound to find a specific value's position!
-
-Sort with sort(), then find the value with lower_bound() and print the index.`,
+          content: `Use sort() and lower_bound() to sort a vector and find the position of 30!`,
           code: `#include <iostream>
 #include <vector>
 #include <algorithm>
@@ -557,23 +547,16 @@ using namespace std;
 int main() {
     vector<int> v = {50, 20, 40, 10, 30};
 
-    sort(v.begin(), v.end());
-
-    cout << "Sorted: ";
-    for (int x : v) cout << x << " ";
-    cout << endl;
+    // Sort v and print it
+    // Print: "Sorted: 10 20 30 40 50 "
 
     int target = 30;
-    auto it = lower_bound(v.begin(), v.end(), target);
-
-    if (it != v.end() && *it == target) {
-        cout << target << " found at index " << it - v.begin() << endl;
-    } else {
-        cout << target << " not found" << endl;
-    }
+    // Use lower_bound() to find target's position and print it
+    // Print: "30 found at index 2"
 
     return 0;
 }`,
+          hint: "sort(v.begin(), v.end()) sorts in place. lower_bound(v.begin(), v.end(), target) returns an iterator — check *it == target to confirm the value exists, then it - v.begin() is the index",
           expectedOutput: `Sorted: 10 20 30 40 50
 30 found at index 2`
         },

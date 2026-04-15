@@ -268,10 +268,10 @@ int main() {
     };
 
     // Write your code to find and print the total score here
-    // Hint: create a total variable and accumulate students[i].score
 
     return 0;
 }`,
+          hint: "Declare int total = 0, then in a for loop add total += students[i].score for each student",
           expectedOutput: `Total: 254`
         },
         {
@@ -344,10 +344,10 @@ int main() {
     };
 
     // Write your code to find and print the highest score here
-    // Hint: start with maxScore = students[0].score and compare
 
     return 0;
 }`,
+          hint: "int maxScore = students[0].score as the initial value, then loop from i = 1. If students[i].score > maxScore, replace maxScore",
           expectedOutput: `Top: 95`
         },
         {
@@ -412,10 +412,10 @@ int main() {
     };
 
     // Write your code to count and print students with score >= 80 here
-    // Hint: count variable + if condition + count++
 
     return 0;
 }`,
+          hint: "Declare int count = 0, then in a for loop: if students[i].score >= 80, do count++. Note: > 80 means 81+, not 80!",
           expectedOutput: `80+: 2 students`
         },
         {
@@ -472,10 +472,10 @@ int main() {
     };
 
     // Write your code to find and print the top student's name and score here
-    // Hint: start with maxIdx = 0, update maxIdx when a higher score is found
 
     return 0;
 }`,
+          hint: "Start with int maxIdx = 0, loop from i = 1. If students[i].score > students[maxIdx].score, set maxIdx = i. Then print students[maxIdx].name and students[maxIdx].score",
           expectedOutput: `#1: Emma (95)`
         },
         {

@@ -115,9 +115,9 @@ const string& ref = longText;
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ Experiment with References!",
-          content: `Create a reference variable and use it to change the original value!
+          content: `Use int& to create a reference variable, then change the original value through it!
 
-When you modify through ref, the original variable x changes too — see for yourself!`,
+Modifying ref changes x too — verify it yourself!`,
           code: `#include <iostream>
 using namespace std;
 
@@ -141,19 +141,20 @@ using namespace std;
 
 int main() {
     int x = 100;
-    int& ref = x;
+
+    // 1. Declare a reference variable ref that refers to x using int&
 
     cout << "x = " << x << endl;
-    cout << "ref = " << ref << endl;
+    // 2. Print ref too
 
-    ref = 500;
+    // 3. Set ref = 500
 
     cout << "After ref = 500:" << endl;
-    cout << "x = " << x << endl;
-    cout << "ref = " << ref << endl;
+    // 4. Print x and ref again
 
     return 0;
 }`,
+          hint: "int& ref = x; declares ref as a reference to x. After ref = 500, both ref and x become 500 — that's the key behavior of references",
           expectedOutput: `x = 100
 ref = 100
 After ref = 500:
@@ -332,18 +333,14 @@ for (int& x : v)  // x is a reference → v changes!
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ swap Function + Double Vector!",
-          content: `Practice two functions that use references!
+          content: `Implement two functions using references (&)!
 
-1. A swap function to exchange two values
-2. A function that doubles every element in a vector
+- **mySwap**: exchanges two integers
+- **doubleAll**: doubles every element in a vector
 
 **Starting values:**
 - \`int a = 10, b = 20;\`
-- \`vector<int> nums = {1, 2, 3, 4, 5};\`
-
-When a vector is passed by reference, the original vector gets modified!
-
-\`vector<int>&\` means 'a reference to an integer vector.' Because of the &, the function can directly modify the original vector!`,
+- \`vector<int> nums = {1, 2, 3, 4, 5};\``,
           code: `#include <iostream>
 #include <vector>
 using namespace std;
@@ -381,12 +378,10 @@ using namespace std;
 
 void mySwap(int& a, int& b) {
     // Write the swap code here
-    // Hint: use a temporary variable temp
 }
 
 void doubleAll(vector<int>& v) {
     // Write code to double every element in the vector
-    // Hint: use range-for with int& x to modify the original
 }
 
 int main() {
@@ -404,6 +399,7 @@ int main() {
 
     return 0;
 }`,
+          hint: "mySwap: use int temp = a; a = b; b = temp; doubleAll: for(int& x : v) { x *= 2; } — without int& (just int x), the original won't change!",
           expectedOutput: `swap: 20 10
 double: 2 4 6 8 10 `
         },

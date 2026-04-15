@@ -213,9 +213,7 @@ q[0]              # front
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ Bracket matching with a stack!",
-          content: `Check if the parentheses in "(())" are valid using a stack!
-
-Push '(' when you see it, pop when you see ')'. If the stack is empty at the end, the brackets are valid!`,
+          content: `Use a stack to write code that checks if the brackets in "(())" are valid!`,
           code: `#include <iostream>
 #include <stack>
 #include <string>
@@ -256,17 +254,9 @@ int main() {
     stack<char> s;
     bool valid = true;
 
-    for (char c : str) {
-        if (c == '(') {
-            s.push(c);
-        } else if (c == ')') {
-            if (s.empty()) {
-                valid = false;
-                break;
-            }
-            s.pop();
-        }
-    }
+    // Loop through str one character at a time
+    // - If '(': push to s
+    // - If ')': if s is empty, set valid = false and break; otherwise pop
 
     if (valid && s.empty()) {
         cout << "Valid" << endl;
@@ -276,6 +266,7 @@ int main() {
 
     return 0;
 }`,
+          hint: "Use for(char c : str) to iterate. If c == '(', do s.push(c). If c == ')', check s.empty() first — if empty it's invalid, otherwise s.pop()",
           expectedOutput: "Valid"
         },
         {
@@ -475,9 +466,7 @@ deque:          [1, 2, 3] → both ends available!
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ Print top 3 values with priority_queue!",
-          content: `Push 5 numbers into a priority_queue and print the 3 largest in order!
-
-Since priority_queue automatically puts the largest on top, just repeat top() and pop().`,
+          content: `Write code to extract and print the 3 largest values from a priority_queue!`,
           code: `#include <iostream>
 #include <queue>
 using namespace std;
@@ -511,15 +500,13 @@ int main() {
     pq.push(30);
     pq.push(20);
 
-    // Print top 3 values
-    for (int i = 0; i < 3; i++) {
-        cout << pq.top() << " ";
-        pq.pop();
-    }
+    // Loop 3 times: print pq.top() then pq.pop()
+
     cout << endl;
 
     return 0;
 }`,
+          hint: "Use for(int i = 0; i < 3; i++) — inside, cout << pq.top() << \" \" to print, then pq.pop() to remove it. top() alone doesn't remove the element!",
           expectedOutput: "50 40 30 "
         },
         {

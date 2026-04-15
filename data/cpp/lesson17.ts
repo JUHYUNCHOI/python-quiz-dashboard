@@ -206,7 +206,7 @@ swap(a, b);
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ 벡터 종합 분석!",
-          content: `벡터에서 최대값, 최소값, 합계를 구하고, 특정 값이 있는지 찾아보는 코드를 실행해봐요!`,
+          content: `STL 함수들을 활용해서 벡터의 최솟값, 최댓값, 합계를 구하고 특정 값의 위치를 찾는 코드를 작성해봐요!`,
           code: `#include <iostream>
 #include <vector>
 #include <algorithm>
@@ -240,21 +240,15 @@ using namespace std;
 int main() {
     vector<int> v = {3, 7, 1, 9, 4, 6};
 
-    int minVal = *min_element(v.begin(), v.end());
-    int maxVal = *max_element(v.begin(), v.end());
-    int total = accumulate(v.begin(), v.end(), 0);
+    // min_element, max_element, accumulate로 최솟값, 최댓값, 합계를 구해서 출력하세요
+    // 출력: "Min: 1", "Max: 9", "Sum: 30"
 
-    cout << "Min: " << minVal << endl;
-    cout << "Max: " << maxVal << endl;
-    cout << "Sum: " << total << endl;
-
-    auto it = find(v.begin(), v.end(), 9);
-    if (it != v.end()) {
-        cout << "Found 9 at index " << it - v.begin() << endl;
-    }
+    // find()로 9의 위치(인덱스)를 찾아서 출력하세요
+    // 출력: "Found 9 at index 3"
 
     return 0;
 }`,
+          hint: "*min_element(v.begin(), v.end())처럼 앞에 *를 붙여서 역참조해요. accumulate는 <numeric> 헤더에 있어요. find()는 iterator를 반환하고 it - v.begin()이 인덱스예요",
           expectedOutput: `Min: 1
 Max: 9
 Sum: 30
@@ -523,7 +517,7 @@ coords.erase(unique(coords.begin(), coords.end()), coords.end());
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ 정렬 + lower_bound로 값 찾기!",
-          content: `정렬되지 않은 벡터를 정렬하고, 특정 값의 위치를 찾는 코드를 실행해봐요!`,
+          content: `sort()와 lower_bound()를 활용해서 벡터를 정렬하고 30의 위치를 찾는 코드를 작성해봐요!`,
           code: `#include <iostream>
 #include <vector>
 #include <algorithm>
@@ -557,23 +551,16 @@ using namespace std;
 int main() {
     vector<int> v = {50, 20, 40, 10, 30};
 
-    sort(v.begin(), v.end());
-
-    cout << "Sorted: ";
-    for (int x : v) cout << x << " ";
-    cout << endl;
+    // sort()로 v를 정렬하고 출력하세요
+    // 출력: "Sorted: 10 20 30 40 50 "
 
     int target = 30;
-    auto it = lower_bound(v.begin(), v.end(), target);
-
-    if (it != v.end() && *it == target) {
-        cout << target << " found at index " << it - v.begin() << endl;
-    } else {
-        cout << target << " not found" << endl;
-    }
+    // lower_bound()로 30의 위치를 찾아서 출력하세요
+    // 출력: "30 found at index 2"
 
     return 0;
 }`,
+          hint: "sort(v.begin(), v.end())로 정렬 후, lower_bound(v.begin(), v.end(), target)은 iterator를 반환해요. *it == target으로 실제 값인지 확인하고, it - v.begin()이 인덱스예요",
           expectedOutput: `Sorted: 10 20 30 40 50
 30 found at index 2`
         },

@@ -213,7 +213,7 @@ q[0]              # front
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ stack으로 괄호 매칭 체크!",
-          content: `문자열 "(())"의 괄호가 올바르게 짝지어졌는지 stack을 활용해서 확인하는 코드를 실행해봐요!`,
+          content: `stack을 활용해서 "(())" 문자열의 괄호가 올바르게 짝지어졌는지 확인하는 코드를 작성해봐요!`,
           code: `#include <iostream>
 #include <stack>
 #include <string>
@@ -254,17 +254,9 @@ int main() {
     stack<char> s;
     bool valid = true;
 
-    for (char c : str) {
-        if (c == '(') {
-            s.push(c);
-        } else if (c == ')') {
-            if (s.empty()) {
-                valid = false;
-                break;
-            }
-            s.pop();
-        }
-    }
+    // str을 한 글자씩 순회하세요
+    // - '(' 이면 s에 push
+    // - ')' 이면 s가 비어있으면 valid = false + break, 아니면 pop
 
     if (valid && s.empty()) {
         cout << "Valid" << endl;
@@ -274,6 +266,7 @@ int main() {
 
     return 0;
 }`,
+          hint: "for(char c : str)로 순회해요. '('이면 s.push(c), ')'이면 s.empty()를 먼저 체크하고 비어있으면 invalid, 아니면 s.pop()해요",
           expectedOutput: "Valid"
         },
         {
@@ -473,7 +466,7 @@ deque:          [1, 2, 3] → 앞/뒤 모두 가능!
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ priority_queue로 가장 큰 3개 값 출력!",
-          content: `5개의 숫자를 priority_queue에 넣고, 가장 큰 3개를 순서대로 출력하는 코드를 실행해봐요!`,
+          content: `priority_queue에서 가장 큰 3개 값을 순서대로 꺼내서 출력하는 코드를 작성해봐요!`,
           code: `#include <iostream>
 #include <queue>
 using namespace std;
@@ -507,15 +500,13 @@ int main() {
     pq.push(30);
     pq.push(20);
 
-    // 가장 큰 3개 출력
-    for (int i = 0; i < 3; i++) {
-        cout << pq.top() << " ";
-        pq.pop();
-    }
+    // for문으로 3번 반복해서 pq.top()을 출력하고 pq.pop()으로 제거하세요
+
     cout << endl;
 
     return 0;
 }`,
+          hint: "for(int i = 0; i < 3; i++) 안에서 pq.top()으로 최댓값을 읽고, pq.pop()으로 제거해요. top()만 하면 안 줄고, pop()이 있어야 다음 값이 나와요",
           expectedOutput: "50 40 30 "
         },
         {

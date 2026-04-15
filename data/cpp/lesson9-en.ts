@@ -315,6 +315,7 @@ int main() {
     cout << "Highest score: " << maxScore << endl;
     return 0;
 }`,
+          hint: "Start with int maxScore = scores[0]; then loop from i = 1. If scores[i] > maxScore, update maxScore = scores[i]",
           stdin: `85\n92\n78\n96\n88`,
           expectedOutput: `Highest score: 96`
         },
@@ -640,7 +641,6 @@ int main() {
     cout << "Enter numbers (0 to stop): " << endl;
 
     // Store numbers until 0 is entered
-    // Hint: while(true) + break, nums.push_back()
 
     cout << "You entered: ";
     // Print nums here
@@ -650,6 +650,7 @@ int main() {
 
     return 0;
 }`,
+          hint: "while(true) { cin >> input; if(input == 0) break; nums.push_back(input); } to collect. Then for(int i = 0; i < nums.size(); i++) { cout << nums[i] << \" \"; } to print",
           stdin: `5\n3\n8\n2\n0`,
           expectedOutput: `Enter numbers (0 to stop):
 You entered: 5 3 8 2

@@ -149,10 +149,10 @@ int main() {
     // 2. "CRITICAL"을 find()로 검색하고, 없으면 "CRITICAL 없음: 정상 범위"를 출력하세요
 
     // 3. substr(0, 10)으로 날짜를 추출해서 출력하세요
-    //    출력 형식: "날짜: YYYY-MM-DD"
 
     return 0;
 }`,
+          hint: "size_t pos = log.find(\"ERROR\")로 위치를 찾고, pos != string::npos로 존재 확인해요. substr(pos + 6)은 ERROR(5글자) + 공백(1) 이후 문자열이에요",
           expectedOutput: `오류 발견! 위치: 11
 오류 메시지: server connection failed
 CRITICAL 없음: 정상 범위
@@ -338,19 +338,17 @@ int main() {
     string name = "Alice";
     int age = 15;
 
-    // 이름 전체를 출력하세요: "Name: Alice"
+    // "Name: Alice" 출력
 
-    // 이름의 글자 수를 출력하세요: "Length: 5"
-    // 힌트: name.length()
+    // "Length: 5" 출력 (name.length() 사용)
 
-    // 이름의 첫 글자를 출력하세요: "First letter: A"
-    // 힌트: name[0]
+    // "First letter: A" 출력 (name[0] 사용)
 
-    // "Alice is 15 years old" 형식으로 출력하세요
-    // 힌트: to_string(age)로 숫자를 문자열로 변환해서 합쳐요
+    // "Alice is 15 years old" 출력
 
     return 0;
 }`,
+          hint: "name.length()는 글자 수, name[0]는 첫 글자예요. 마지막 문장은 name + \" is \" + to_string(age) + \" years old\" 처럼 to_string()으로 숫자를 문자열로 변환해서 + 로 이어붙여요",
           expectedOutput: `Name: Alice
 Length: 5
 First letter: A
