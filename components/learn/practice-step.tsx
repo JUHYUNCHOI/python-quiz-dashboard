@@ -127,7 +127,6 @@ export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId,
               </button>
             )}
           </div>
-          <h1 className="text-xl md:text-3xl font-bold text-gray-900">{step.title}</h1>
         </div>
 
         {/* 과제 설명 */}

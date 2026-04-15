@@ -29,7 +29,6 @@ export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onS
           </span>
           {isCompleted && <span className="px-2 py-0.5 rounded text-xs bg-green-100 text-green-700 font-medium">{t("✅ 완료!", "✅ Done!")}</span>}
         </div>
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{step.title}</h1>
         {/* 빈칸 모드가 아닐 때만 외부 힌트 UI 표시 (BlankCodeRunner는 자체 힌트 시스템 사용) */}
         {!hasBlanks && !isCompleted && (
           <div className="space-y-2">

@@ -40,7 +40,7 @@ export function AnimationStep({ step }: AnimationStepProps) {
       <div className="flex items-center gap-2">
         <span className="px-3 py-1 rounded-full text-sm font-bold bg-cyan-100 text-cyan-700">{t("🎬 애니메이션", "🎬 Animation")}</span>
       </div>
-      <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{step.question || step.title}</h1>
+      {step.question && <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{step.question}</h1>}
       {step.instruction && <p className="text-gray-600 text-lg">{step.instruction}</p>}
       {step.description && <p className="text-gray-600 text-lg">{step.description}</p>}
       {step.content && <div className="space-y-3">{renderContent(step.content)}</div>}

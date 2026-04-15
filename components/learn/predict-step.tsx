@@ -84,7 +84,6 @@ export function PredictStep({ step, isCompleted, selectedAnswer, showExplanation
             <span className="px-2 py-0.5 rounded text-xs bg-green-100 text-green-700 font-medium">{t("✅ 정답!", "✅ Correct!")}</span>
           )}
         </div>
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{step.title}</h1>
       </div>
 
       {/* 코드 블록 */}

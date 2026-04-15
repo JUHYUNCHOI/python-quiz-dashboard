@@ -243,7 +243,6 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
             <span className="px-2 py-0.5 rounded text-xs bg-green-100 text-green-700 font-medium">{t("✅ 완료", "✅ Done")}</span>
           )}
         </div>
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{step.title}</h1>
         {step.content && (
           <div className="text-base text-gray-600 leading-relaxed space-y-2">{renderContent(step.content)}</div>
         )}

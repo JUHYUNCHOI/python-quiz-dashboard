@@ -57,7 +57,6 @@ export function ExplainStep({ step }: ExplainStepProps) {
           <BookOpen className="w-4 h-4 inline mr-1" />{t("설명", "Explain")}
         </span>
       </div>
-      <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{step.title}</h1>
 
       {/* 본문 설명 먼저 → 이해한 뒤 애니메이션으로 확인 (자연스러운 이야기 흐름) */}
       {step.content && <div className="space-y-3">{renderContent(step.content)}</div>}
