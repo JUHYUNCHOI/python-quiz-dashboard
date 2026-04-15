@@ -63,9 +63,9 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
           <span className="px-3 py-1 rounded-full text-sm font-bold bg-amber-100 text-amber-700"><HelpCircle className="w-4 h-4 inline mr-1" />{t("퀴즈", "Quiz")}</span>
           {isCompleted && <span className="px-2 py-0.5 rounded text-xs bg-green-100 text-green-700 font-medium">{t("✅ 정답!", "✅ Correct!")}</span>}
         </div>
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-          {step.title === "정리 퀴즈" ? t("마무리 체크! 🎯", "Wrap-up Check! 🎯") : step.title}
-        </h1>
+        {step.title === "정리 퀴즈" && (
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{t("마무리 체크! 🎯", "Wrap-up Check! 🎯")}</h1>
+        )}
         {step.content && <div className="text-base md:text-lg text-gray-800">{renderContent(step.content)}</div>}
       </div>
       {step.code && (
