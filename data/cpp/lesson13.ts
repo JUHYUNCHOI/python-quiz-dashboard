@@ -244,6 +244,7 @@ int main() {
     cout << x << " " << y << endl;
     return 0;
 }`,
+          hint: "void swap(int* a, int* b) { int temp = *a; *a = *b; *b = temp; } — *로 역참조해서 값을 바꿔요. temp에 *a 저장 → *a에 *b 대입 → *b에 temp 대입!",
           expectedOutput: `20 10`
         },
         {

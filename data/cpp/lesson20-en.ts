@@ -243,6 +243,7 @@ int main() {
 
     return 0;
 }`,
+          hint: "typedef vector<int> vi; creates a type alias, #define pb push_back creates a macro. v.pb(x) is v.push_back(x), sort(all(v)) is sort(v.begin(), v.end())!",
           expectedOutput: `Min: 10
 Max: 50
 Size: 5`
@@ -526,6 +527,7 @@ int main() {
 
     return 0;
 }`,
+          hint: "#include <bits/stdc++.h> includes all headers. typedef vector<int> vi, #define all(v) v.begin(), v.end(). After sort(all(v)), v[0] is the min and v[n-1] is the max!",
           expectedOutput: `Min: 8
 Max: 93
 Diff: 85`

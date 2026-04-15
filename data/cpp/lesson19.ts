@@ -208,6 +208,7 @@ int main() {
     cout << name << "의 한마디: " << quote << endl;
     return 0;
 }`,
+          hint: "string name; getline(cin, name); 으로 공백 포함 한 줄을 읽어요. cin >> 없이 바로 getline을 쓰면 cin.ignore() 필요 없어요!",
           stdin: `홍 길동
 안녕하세요!`,
           expectedOutput: `홍 길동의 한마디: 안녕하세요!`
@@ -241,6 +242,7 @@ int main() {
 
     return 0;
 }`,
+          hint: "cin >> n으로 개수 읽기 → for (int i = 0; i < n; i++) { int x; cin >> x; sum += x; } → cout << sum. 실제 USACO에서는 cin >> 앞에 freopen 두 줄을 추가해요!",
           stdin: `3
 10 20 30`,
           expectedOutput: "60"
@@ -467,6 +469,7 @@ int main() {
 
     return 0;
 }`,
+          hint: "main() 첫 줄에 ios_base::sync_with_stdio(false); cin.tie(nullptr); 두 줄을 넣어요. 출력은 endl 대신 '\\n'을 써야 빨라요!",
           stdin: `4
 3 7 1 5`,
           expectedOutput: `6

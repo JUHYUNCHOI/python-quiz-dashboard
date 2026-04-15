@@ -243,6 +243,7 @@ int main() {
 
     return 0;
 }`,
+          hint: "typedef vector<int> vi; 로 타입 별명, #define pb push_back 으로 매크로를 만들어요. v.pb(x)는 v.push_back(x), sort(all(v))는 sort(v.begin(), v.end())와 같아요!",
           expectedOutput: `Min: 10
 Max: 50
 Size: 5`
@@ -526,6 +527,7 @@ int main() {
 
     return 0;
 }`,
+          hint: "#include <bits/stdc++.h>로 모든 헤더 포함, typedef vector<int> vi, #define all(v) v.begin(), v.end() 설정. sort(all(v)) 후 v[0]이 최솟값, v[n-1]이 최댓값이에요!",
           expectedOutput: `Min: 8
 Max: 93
 Diff: 85`

@@ -264,6 +264,20 @@ for (pair<string, int>& s : students) {  // auto& 대신 직접 타입 명시
           content: `이름과 점수를 pair로 묶어서 vector에 저장하고 출력해봐요!
 
 make_pair()나 중괄호 초기화를 사용해서 pair를 만들고, .first와 .second로 접근해봐요.`,
+          starterCode: `#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> students;
+
+    // push_back으로 {"Kim", 95}, {"Lee", 88}, make_pair("Park", 92) 추가
+
+    // range-for로 s.first와 s.second 출력
+
+    return 0;
+}`,
           code: `#include <iostream>
 #include <string>
 #include <vector>
@@ -282,6 +296,7 @@ int main() {
 
     return 0;
 }`,
+          hint: "students.push_back({\"Kim\", 95}); 또는 make_pair(\"Kim\", 95)로 추가해요. 출력은 for (auto& s : students) { cout << s.first << \": \" << s.second << endl; }",
           expectedOutput: `Kim: 95
 Lee: 88
 Park: 92`

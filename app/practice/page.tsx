@@ -88,14 +88,6 @@ function ClusterList({
     ? clusters.find(c => !isClusterUnlocked(c) && !isClusterDone(c, solvedSet))
     : null
 
-  // 코딩 뱅크 — cpp-p3 완료 후에만 표시
-  const bankUnlocked = isTeacher || (typeof window !== "undefined" && (() => {
-    try {
-      const completed = JSON.parse(localStorage.getItem("completedLessons") || "[]") as string[]
-      return completed.includes("cpp-p3")
-    } catch { return false }
-  })())
-
   const nextCluster = activeClusters[0]
   const otherActive = activeClusters.slice(1)
   const [showAllActive, setShowAllActive] = useState(false)
@@ -338,23 +330,6 @@ function ClusterList({
         </div>
       )}
 
-      {/* 코딩 뱅크 — cpp-p3 완료 후에만 표시 */}
-      {lang === "cpp" && bankUnlocked && (
-        <>
-          <div className="flex items-center gap-2 mt-2">
-            <Trophy className="w-4 h-4 text-amber-500" />
-            <span className="text-sm font-bold text-gray-700">{t("코딩 뱅크", "Coding Bank")}</span>
-            <div className="flex-1 h-px bg-amber-200" />
-          </div>
-          <div className="rounded-xl bg-amber-50 border border-amber-100 px-3 py-2 text-xs text-amber-700">
-            {t(
-              "배운 STL로 실전형 복합 문제 · 풀고 나면 USACO/MCC 문제 추천",
-              "Multi-tool problems with your STL · Contest problem recommendations after each cluster"
-            )}
-          </div>
-          {BANK_CLUSTERS.map(c => renderSmallCard(c, true))}
-        </>
-      )}
     </div>
   )
 }
@@ -750,7 +725,7 @@ function PracticeContent() {
     router.push(`/practice?${p.toString()}`)
   }
 
-  const cluster = ALL_CLUSTERS.find(c => c.id === clusterId) ?? BANK_CLUSTERS.find(c => c.id === clusterId)
+  const cluster = ALL_CLUSTERS.find(c => c.id === clusterId)
   const problem = cluster?.problems.find(p => p.id === problemId)
   const sessionMode = searchParams.get("session") === "1"
 

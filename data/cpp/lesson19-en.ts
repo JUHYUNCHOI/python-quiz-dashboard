@@ -208,6 +208,7 @@ int main() {
     cout << name << "'s quote: " << quote << endl;
     return 0;
 }`,
+          hint: "string name; getline(cin, name); reads a full line including spaces. Since there's no cin >> before getline, no cin.ignore() is needed here!",
           stdin: `Hong Gildong\nHello!`,
           expectedOutput: `Hong Gildong's quote: Hello!`
         },
@@ -239,6 +240,7 @@ int main() {
 
     return 0;
 }`,
+          hint: "Read count with cin >> n, then loop: for (int i = 0; i < n; i++) { int x; cin >> x; sum += x; } then cout << sum. In real USACO, add two freopen lines before cin!",
           stdin: `3\n10 20 30`,
           expectedOutput: "60"
         },
@@ -459,6 +461,7 @@ int main() {
 
     return 0;
 }`,
+          hint: "Put ios_base::sync_with_stdio(false); cin.tie(nullptr); at the top of main(). Use '\\n' instead of endl for fast output!",
           stdin: `4\n3 7 1 5`,
           expectedOutput: `6
 14

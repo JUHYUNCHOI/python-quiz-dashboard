@@ -266,6 +266,20 @@ for (pair<string, int>& s : students) {  // verbose!
           content: `Store names and scores as pairs in a vector, then print them out!
 
 Use make_pair() or brace initialization to create pairs, and access them with .first and .second.`,
+          starterCode: `#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> students;
+
+    // Add {"Kim", 95}, {"Lee", 88}, make_pair("Park", 92) using push_back
+
+    // Use range-for to print s.first and s.second
+
+    return 0;
+}`,
           code: `#include <iostream>
 #include <string>
 #include <vector>
@@ -284,6 +298,7 @@ int main() {
 
     return 0;
 }`,
+          hint: "Use students.push_back({\"Kim\", 95}); or make_pair(\"Kim\", 95) to add pairs. To print: for (auto& s : students) { cout << s.first << \": \" << s.second << endl; }",
           expectedOutput: `Kim: 95
 Lee: 88
 Park: 92`

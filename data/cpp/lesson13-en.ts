@@ -245,6 +245,7 @@ int main() {
     cout << x << " " << y << endl;
     return 0;
 }`,
+          hint: "void swap(int* a, int* b) { int temp = *a; *a = *b; *b = temp; } — use * to dereference and swap values. Store *a in temp → assign *b to *a → assign temp to *b!",
           expectedOutput: `20 10`
         },
         {
