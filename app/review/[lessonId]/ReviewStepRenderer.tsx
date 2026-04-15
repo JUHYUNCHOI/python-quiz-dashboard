@@ -198,16 +198,19 @@ function McqStep({
   content,
   onCorrect,
   onWrong,
+  onNext,
   language = "cpp",
 }: {
   content: QuizContent | ErrorQuizContent
   onCorrect: () => void
   onWrong: () => void
+  onNext?: () => void
   language?: "python" | "cpp"
 }) {
   const { t, lang } = useLanguage()
   const E = lang === "en"
   const [selected, setSelected] = useState<number | null>(null)
+  const [showNext, setShowNext] = useState(false)
   const answered = selected !== null
   const isRight = selected === content.answer
 
@@ -219,8 +222,14 @@ function McqStep({
   const select = (i: number) => {
     if (answered) return
     setSelected(i)
-    if (i === content.answer) onCorrect()
-    else onWrong()
+    const correct = i === content.answer
+    if (correct) {
+      onCorrect()
+      setTimeout(() => setShowNext(true), 400)
+    } else {
+      onWrong()
+      setTimeout(() => setShowNext(true), 1500)
+    }
   }
 
   const LABELS = ["①", "②", "③", "④", "⑤"]
@@ -283,6 +292,19 @@ function McqStep({
             {isRight ? t("✅ 정답!", "✅ Correct!") : t("❌ 오답!", "❌ Wrong!")}
           </p>
           <p className="text-gray-600 leading-relaxed">{explanation}</p>
+          {showNext && onNext && (
+            <button
+              onClick={onNext}
+              className={cn(
+                "mt-3 w-full py-3 rounded-xl text-base font-bold text-white transition-all flex items-center justify-center gap-2",
+                isRight
+                  ? "bg-gradient-to-r from-emerald-400 to-green-500 hover:from-emerald-500 hover:to-green-600 shadow-md"
+                  : "bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md"
+              )}
+            >
+              {t("다음 →", "Next →")}
+            </button>
+          )}
         </div>
       )}
     </div>
@@ -316,12 +338,14 @@ function PracticeStep({
   content,
   onCorrect,
   onWrong,
+  onNext,
   language = "cpp",
   storageKey,
 }: {
   content: PracticeContent | InterleavingContent
   onCorrect: () => void
   onWrong: () => void
+  onNext?: () => void
   language?: "python" | "cpp"
   storageKey?: string
 }) {
@@ -353,6 +377,7 @@ function PracticeStep({
     return Array(Math.max(blankCount, 1)).fill("")
   })
   const [result, setResult] = useState<"idle" | "correct" | "wrong">("idle")
+  const [showNextBtn, setShowNextBtn] = useState(false)
   const [showHint, setShowHint] = useState(false)
   const firstInputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null)
 
@@ -382,9 +407,11 @@ function PracticeStep({
     if (isAnswerCorrect(combined, content, isEn)) {
       setResult("correct")
       onCorrect()
+      setTimeout(() => setShowNextBtn(true), 400)
     } else {
       setResult("wrong")
       onWrong()
+      setTimeout(() => setShowNextBtn(true), 1200)
     }
   }
 
@@ -517,6 +544,14 @@ function PracticeStep({
           {content.expect && (
             <pre className="mt-1 font-mono text-xs text-emerald-800 whitespace-pre-wrap">{content.expect}</pre>
           )}
+          {showNextBtn && onNext && (
+            <button
+              onClick={onNext}
+              className="mt-3 w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-emerald-400 to-green-500 hover:from-emerald-500 hover:to-green-600 shadow-md transition-all flex items-center justify-center gap-2"
+            >
+              {t("다음 →", "Next →")}
+            </button>
+          )}
         </div>
       )}
 
@@ -528,6 +563,14 @@ function PracticeStep({
               <RotateCcw className="w-3 h-3" /> {t("다시", "Retry")}
             </button>
           </div>
+          {showNextBtn && onNext && (
+            <button
+              onClick={onNext}
+              className="w-full py-3 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md transition-all flex items-center justify-center gap-2"
+            >
+              {t("그냥 넘어가기 →", "Skip & continue →")}
+            </button>
+          )}
         </div>
       )}
 
@@ -554,16 +597,19 @@ function PredictStep({
   content,
   onCorrect,
   onWrong,
+  onNext,
   language = "cpp",
 }: {
   content: ExplainContent & { predict: NonNullable<ExplainContent["predict"]> }
   onCorrect: () => void
   onWrong: () => void
+  onNext?: () => void
   language?: "python" | "cpp"
 }) {
   const { t, lang } = useLanguage()
   const isEn = lang === "en"
   const [selected, setSelected] = useState<number | null>(null)
+  const [showNext, setShowNext] = useState(false)
   const [showCode, setShowCode] = useState(false)
   const answered = selected !== null
   const isRight = selected === content.predict.answer
@@ -581,8 +627,14 @@ function PredictStep({
   const select = (i: number) => {
     if (answered) return
     setSelected(i)
-    if (i === content.predict.answer) onCorrect()
-    else onWrong()
+    const correct = i === content.predict.answer
+    if (correct) {
+      onCorrect()
+      setTimeout(() => setShowNext(true), 400)
+    } else {
+      onWrong()
+      setTimeout(() => setShowNext(true), 1500)
+    }
   }
 
   const LABELS = ["①", "②", "③", "④"]
@@ -662,6 +714,19 @@ function PredictStep({
               {t("실제 결과:", "Actual output:")} <code className="font-mono bg-white px-1 rounded">{content.result}</code>
             </p>
           )}
+          {showNext && onNext && (
+            <button
+              onClick={onNext}
+              className={cn(
+                "mt-3 w-full py-3 rounded-xl text-base font-bold text-white transition-all flex items-center justify-center gap-2",
+                isRight
+                  ? "bg-gradient-to-r from-emerald-400 to-green-500 hover:from-emerald-500 hover:to-green-600 shadow-md"
+                  : "bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md"
+              )}
+            >
+              {t("다음 →", "Next →")}
+            </button>
+          )}
         </div>
       )}
     </div>
@@ -675,23 +740,24 @@ export interface ReviewStepRendererProps {
   step: StepContent
   onCorrect: () => void
   onWrong: () => void
+  onNext?: () => void
   language?: "python" | "cpp"
   stepKey?: string
 }
 
-export function ReviewStepRenderer({ step, onCorrect, onWrong, language = "cpp", stepKey }: ReviewStepRendererProps) {
+export function ReviewStepRenderer({ step, onCorrect, onWrong, onNext, language = "cpp", stepKey }: ReviewStepRendererProps) {
   switch (step.type) {
     case "quiz":
-      return <McqStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} language={language} />
+      return <McqStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} onNext={onNext} language={language} />
 
     case "errorQuiz":
-      return <McqStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} language={language} />
+      return <McqStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} onNext={onNext} language={language} />
 
     case "practice":
-      return <PracticeStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} language={language} storageKey={stepKey} />
+      return <PracticeStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} onNext={onNext} language={language} storageKey={stepKey} />
 
     case "interleaving":
-      return <PracticeStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} language={language} storageKey={stepKey} />
+      return <PracticeStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} onNext={onNext} language={language} storageKey={stepKey} />
 
     case "explain":
       if (step.content.predict) {
@@ -700,6 +766,7 @@ export function ReviewStepRenderer({ step, onCorrect, onWrong, language = "cpp",
             content={step.content as ExplainContent & { predict: NonNullable<ExplainContent["predict"]> }}
             onCorrect={onCorrect}
             onWrong={onWrong}
+            onNext={onNext}
             language={language}
           />
         )
