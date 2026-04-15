@@ -247,7 +247,7 @@ int main() {
     for (int i = 0; i < 3; i++) {
         total += students[i].score;
     }
-    cout << "Total: " << total << endl;
+    cout << total << endl;
 
     return 0;
 }`,
@@ -272,7 +272,7 @@ int main() {
     return 0;
 }`,
           hint: "Declare int total = 0, then in a for loop add total += students[i].score for each student",
-          expectedOutput: `Total: 254`
+          expectedOutput: `254`
         },
         {
           id: "ch2-loop-patterns2",
@@ -323,7 +323,7 @@ int main() {
             maxScore = students[i].score;
         }
     }
-    cout << "Top: " << maxScore << endl;
+    cout << maxScore << endl;
 
     return 0;
 }`,
@@ -348,7 +348,7 @@ int main() {
     return 0;
 }`,
           hint: "int maxScore = students[0].score as the initial value, then loop from i = 1. If students[i].score > maxScore, replace maxScore",
-          expectedOutput: `Top: 95`
+          expectedOutput: `95`
         },
         {
           id: "ch2-loop-patterns3",
@@ -391,7 +391,7 @@ int main() {
     for (int i = 0; i < 3; i++) {
         if (students[i].score >= 80) count++;
     }
-    cout << "80+: " << count << " students" << endl;
+    cout << count << endl;
 
     return 0;
 }`,
@@ -416,7 +416,7 @@ int main() {
     return 0;
 }`,
           hint: "Declare int count = 0, then in a for loop: if students[i].score >= 80, do count++. Note: > 80 means 81+, not 80!",
-          expectedOutput: `80+: 2 students`
+          expectedOutput: `2`
         },
         {
           id: "ch2-practice",
@@ -451,7 +451,7 @@ int main() {
             maxIdx = i;
         }
     }
-    cout << "#1: " << students[maxIdx].name << " (" << students[maxIdx].score << ")" << endl;
+    cout << students[maxIdx].name << " (" << students[maxIdx].score << ")" << endl;
 
     return 0;
 }`,
@@ -476,7 +476,7 @@ int main() {
     return 0;
 }`,
           hint: "Start with int maxIdx = 0, loop from i = 1. If students[i].score > students[maxIdx].score, set maxIdx = i. Then print students[maxIdx].name and students[maxIdx].score",
-          expectedOutput: `#1: Emma (95)`
+          expectedOutput: `Emma (95)`
         },
         {
           id: "ch2-ref",

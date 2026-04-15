@@ -238,8 +238,8 @@ int main() {
         sum += scores[i];
     }
 
-    cout << "Total: " << sum << endl;
-    cout << "Average: " << (double)sum / 5 << endl;
+    cout << sum << endl;
+    cout << (double)sum / 5 << endl;
 
     return 0;
 }`,
@@ -258,14 +258,14 @@ int main() {
         sum += ___;
     }
 
-    cout << "Total: " << sum << endl;
-    cout << "Average: " << ___ << endl;
+    cout << sum << endl;
+    cout << ___ << endl;
 
     return 0;
 }`,
           stdin: `90\n85\n78\n92\n88`,
-          expectedOutput: `Total: 433
-Average: 86.6`
+          expectedOutput: `433
+86.6`
         },
         {
           id: "ch1-practice2",
@@ -292,7 +292,7 @@ int main() {
         }
     }
 
-    cout << "Highest score: " << maxScore << endl;
+    cout << maxScore << endl;
     return 0;
 }`,
           initialCode: `#include <iostream>
@@ -312,12 +312,12 @@ int main() {
         }
     }
 
-    cout << "Highest score: " << maxScore << endl;
+    cout << maxScore << endl;
     return 0;
 }`,
           hint: "Start with int maxScore = scores[0]; then loop from i = 1. If scores[i] > maxScore, update maxScore = scores[i]",
           stdin: `85\n92\n78\n96\n88`,
-          expectedOutput: `Highest score: 96`
+          expectedOutput: `96`
         },
         {
           id: "ch1-q1",

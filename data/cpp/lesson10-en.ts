@@ -205,8 +205,8 @@ int main() {
 
     // Use range-for to accumulate sum
 
-    cout << "Sum: " << sum << endl;
-    cout << "Average: " << (double)sum / scores.size() << endl;
+    cout << sum << endl;
+    cout << (double)sum / scores.size() << endl;
     return 0;
 }`,
           code: `#include <iostream>
@@ -221,14 +221,14 @@ int main() {
         sum += s;
     }
 
-    cout << "Sum: " << sum << endl;
-    cout << "Average: " << (double)sum / scores.size() << endl;
+    cout << sum << endl;
+    cout << (double)sum / scores.size() << endl;
 
     return 0;
 }`,
           hint: "for (int s : scores) { sum += s; } — range-for gives you each element one by one. No index needed!",
-          expectedOutput: `Sum: 433
-Average: 86.6`
+          expectedOutput: `433
+86.6`
         },
         {
           id: "ch1-q1",
@@ -444,7 +444,6 @@ int main() {
     // Double every element using auto&
 
     // Print the result
-    cout << "Doubled: ";
 
     cout << endl;
     return 0;
@@ -462,7 +461,6 @@ int main() {
     }
 
     // Print using const reference
-    cout << "Doubled: ";
     for (const auto& n : nums) {
         cout << n << " ";
     }
@@ -471,7 +469,7 @@ int main() {
     return 0;
 }`,
           hint: "for (auto& n : nums) { n *= 2; } — without &, you get a copy and the original won't change! Then for (const auto& n : nums) to print",
-          expectedOutput: `Doubled: 6 14 4 16 10`
+          expectedOutput: `6 14 4 16 10`
         },
         {
           id: "ch2-q1",

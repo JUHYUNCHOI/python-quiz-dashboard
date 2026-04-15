@@ -271,8 +271,8 @@ int main() {
         sum += scores[i];
     }
 
-    cout << "합계: " << sum << endl;
-    cout << "평균: " << (double)sum / 5 << endl;
+    cout << sum << endl;
+    cout << (double)sum / 5 << endl;
 
     return 0;
 }`,
@@ -291,14 +291,14 @@ int main() {
         sum += ___;
     }
 
-    cout << "합계: " << sum << endl;
-    cout << "평균: " << ___ << endl;
+    cout << sum << endl;
+    cout << ___ << endl;
 
     return 0;
 }`,
           stdin: `90\n85\n78\n92\n88`,
-          expectedOutput: `합계: 433
-평균: 86.6`
+          expectedOutput: `433
+86.6`
         },
         {
           id: "ch1-practice2",
@@ -322,7 +322,7 @@ int main() {
         }
     }
 
-    cout << "최고 점수: " << maxScore << endl;
+    cout << maxScore << endl;
     return 0;
 }`,
           starterCode: `#include <iostream>
@@ -345,7 +345,7 @@ int main() {
 78
 96
 88`,
-          expectedOutput: `최고 점수: 96`
+          expectedOutput: `96`
         },
         {
           id: "ch1-q1",

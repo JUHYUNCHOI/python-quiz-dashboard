@@ -237,16 +237,16 @@ int main() {
 
     sort(all(v));
 
-    cout << "Min: " << v[0] << endl;
-    cout << "Max: " << v[v.size()-1] << endl;
-    cout << "Size: " << v.size() << endl;
+    cout << v[0] << endl;
+    cout << v[v.size()-1] << endl;
+    cout << v.size() << endl;
 
     return 0;
 }`,
           hint: "typedef vector<int> vi; 로 타입 별명, #define pb push_back 으로 매크로를 만들어요. v.pb(x)는 v.push_back(x), sort(all(v))는 sort(v.begin(), v.end())와 같아요!",
-          expectedOutput: `Min: 10
-Max: 50
-Size: 5`
+          expectedOutput: `10
+50
+5`
         },
         {
           id: "ch1-q1",
@@ -521,16 +521,16 @@ int main() {
     int minVal = v[0];
     int maxVal = v[n-1];
 
-    cout << "Min: " << minVal << endl;
-    cout << "Max: " << maxVal << endl;
-    cout << "Diff: " << maxVal - minVal << endl;
+    cout << minVal << endl;
+    cout << maxVal << endl;
+    cout << maxVal - minVal << endl;
 
     return 0;
 }`,
           hint: "#include <bits/stdc++.h>로 모든 헤더 포함, typedef vector<int> vi, #define all(v) v.begin(), v.end() 설정. sort(all(v)) 후 v[0]이 최솟값, v[n-1]이 최댓값이에요!",
-          expectedOutput: `Min: 8
-Max: 93
-Diff: 85`
+          expectedOutput: `8
+93
+85`
         },
         {
           id: "ch2-q1",

@@ -231,7 +231,7 @@ int main() {
     int sum = 0;
     // range-for로 sum에 누적하세요
 
-    cout << "합계: " << sum << endl;
+    cout << sum << endl;
     return 0;
 }`,
           code: `#include <iostream>
@@ -252,13 +252,13 @@ int main() {
         sum += x;
     }
 
-    cout << "합계: " << sum << endl;
+    cout << sum << endl;
 
     return 0;
 }`,
           hint: "for (const int& x : nums) { sum += x; } — const int& 는 복사 없이 읽기만 해요. x에 값을 담아서 sum += x 로 누적!",
           stdin: `6\n4 8 15 16 23 42`,
-          expectedOutput: `합계: 108`
+          expectedOutput: `108`
         },
         {
           id: "ch1-q1",
@@ -456,7 +456,6 @@ int main() {
     // auto& 로 원소를 2배로 바꾸세요
 
     // auto 로 결과를 출력하세요
-    cout << "2배 결과: ";
 
     cout << endl;
     return 0;
@@ -480,7 +479,6 @@ int main() {
     }
 
     // 결과 출력
-    cout << "2배 결과: ";
     for (auto x : nums) {
         cout << x << " ";
     }
@@ -490,7 +488,7 @@ int main() {
 }`,
           hint: "수정할 땐 for (auto& x : nums) { x *= 2; } — & 없이 auto x 로 받으면 복사본이라 원본이 안 바뀌어요! 출력할 땐 for (auto x : nums)으로",
           stdin: `5\n3 7 2 9 5`,
-          expectedOutput: `2배 결과: 6 14 4 18 10 `
+          expectedOutput: `6 14 4 18 10 `
         },
         {
           id: "ch2-q1",

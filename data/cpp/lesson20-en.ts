@@ -237,16 +237,16 @@ int main() {
 
     sort(all(v));
 
-    cout << "Min: " << v[0] << endl;
-    cout << "Max: " << v[v.size()-1] << endl;
-    cout << "Size: " << v.size() << endl;
+    cout << v[0] << endl;
+    cout << v[v.size()-1] << endl;
+    cout << v.size() << endl;
 
     return 0;
 }`,
           hint: "typedef vector<int> vi; creates a type alias, #define pb push_back creates a macro. v.pb(x) is v.push_back(x), sort(all(v)) is sort(v.begin(), v.end())!",
-          expectedOutput: `Min: 10
-Max: 50
-Size: 5`
+          expectedOutput: `10
+50
+5`
         },
         {
           id: "ch1-q1",
@@ -521,16 +521,16 @@ int main() {
     int minVal = v[0];
     int maxVal = v[n-1];
 
-    cout << "Min: " << minVal << endl;
-    cout << "Max: " << maxVal << endl;
-    cout << "Diff: " << maxVal - minVal << endl;
+    cout << minVal << endl;
+    cout << maxVal << endl;
+    cout << maxVal - minVal << endl;
 
     return 0;
 }`,
           hint: "#include <bits/stdc++.h> includes all headers. typedef vector<int> vi, #define all(v) v.begin(), v.end(). After sort(all(v)), v[0] is the min and v[n-1] is the max!",
-          expectedOutput: `Min: 8
-Max: 93
-Diff: 85`
+          expectedOutput: `8
+93
+85`
         },
         {
           id: "ch2-q1",

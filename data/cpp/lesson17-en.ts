@@ -253,13 +253,13 @@ int main() {
     int maxVal = *max_element(v.begin(), v.end());
     int total = accumulate(v.begin(), v.end(), 0);
 
-    cout << "Min: " << minVal << endl;
-    cout << "Max: " << maxVal << endl;
-    cout << "Sum: " << total << endl;
+    cout << minVal << endl;
+    cout << maxVal << endl;
+    cout << total << endl;
 
     auto it = find(v.begin(), v.end(), 9);
     if (it != v.end()) {
-        cout << "Found 9 at index " << it - v.begin() << endl;
+        cout << it - v.begin() << endl;
     }
 
     return 0;
@@ -274,18 +274,18 @@ int main() {
     vector<int> v = {3, 7, 1, 9, 4, 6};
 
     // Use min_element, max_element, accumulate to find min, max, sum and print them
-    // Print: "Min: 1", "Max: 9", "Sum: 30"
+    // Print: 1, 9, 30
 
     // Use find() to locate 9 and print its index
-    // Print: "Found 9 at index 3"
+    // Print: 3
 
     return 0;
 }`,
           hint: "Use *min_element(v.begin(), v.end()) — the * dereferences the iterator. accumulate is in <numeric>. find() returns an iterator, and it - v.begin() gives the index",
-          expectedOutput: `Min: 1
-Max: 9
-Sum: 30
-Found 9 at index 3`
+          expectedOutput: `1
+9
+30
+3`
         },
         {
           id: "ch1-q1",
@@ -524,7 +524,6 @@ int main() {
 
     sort(v.begin(), v.end());
 
-    cout << "Sorted: ";
     for (int x : v) cout << x << " ";
     cout << endl;
 
@@ -548,7 +547,7 @@ int main() {
     vector<int> v = {50, 20, 40, 10, 30};
 
     // Sort v and print it
-    // Print: "Sorted: 10 20 30 40 50 "
+    // Print: "10 20 30 40 50 "
 
     int target = 30;
     // Use lower_bound() to find target's position and print it
@@ -557,7 +556,7 @@ int main() {
     return 0;
 }`,
           hint: "sort(v.begin(), v.end()) sorts in place. lower_bound(v.begin(), v.end(), target) returns an iterator — check *it == target to confirm the value exists, then it - v.begin() is the index",
-          expectedOutput: `Sorted: 10 20 30 40 50
+          expectedOutput: `10 20 30 40 50
 30 found at index 2`
         },
         {

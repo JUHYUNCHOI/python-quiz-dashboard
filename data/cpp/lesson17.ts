@@ -220,13 +220,13 @@ int main() {
     int maxVal = *max_element(v.begin(), v.end());
     int total = accumulate(v.begin(), v.end(), 0);
 
-    cout << "Min: " << minVal << endl;
-    cout << "Max: " << maxVal << endl;
-    cout << "Sum: " << total << endl;
+    cout << minVal << endl;
+    cout << maxVal << endl;
+    cout << total << endl;
 
     auto it = find(v.begin(), v.end(), 9);
     if (it != v.end()) {
-        cout << "Found 9 at index " << it - v.begin() << endl;
+        cout << it - v.begin() << endl;
     }
 
     return 0;
@@ -241,18 +241,18 @@ int main() {
     vector<int> v = {3, 7, 1, 9, 4, 6};
 
     // min_element, max_element, accumulate로 최솟값, 최댓값, 합계를 구해서 출력하세요
-    // 출력: "Min: 1", "Max: 9", "Sum: 30"
+    // 출력: 1, 9, 30
 
     // find()로 9의 위치(인덱스)를 찾아서 출력하세요
-    // 출력: "Found 9 at index 3"
+    // 출력: 3
 
     return 0;
 }`,
           hint: "*min_element(v.begin(), v.end())처럼 앞에 *를 붙여서 역참조해요. accumulate는 <numeric> 헤더에 있어요. find()는 iterator를 반환하고 it - v.begin()이 인덱스예요",
-          expectedOutput: `Min: 1
-Max: 9
-Sum: 30
-Found 9 at index 3`
+          expectedOutput: `1
+9
+30
+3`
         },
         {
           id: "ch1-lambda",
@@ -528,7 +528,6 @@ int main() {
 
     sort(v.begin(), v.end());
 
-    cout << "Sorted: ";
     for (int x : v) cout << x << " ";
     cout << endl;
 
@@ -552,7 +551,7 @@ int main() {
     vector<int> v = {50, 20, 40, 10, 30};
 
     // sort()로 v를 정렬하고 출력하세요
-    // 출력: "Sorted: 10 20 30 40 50 "
+    // 출력: "10 20 30 40 50 "
 
     int target = 30;
     // lower_bound()로 30의 위치를 찾아서 출력하세요
@@ -561,7 +560,7 @@ int main() {
     return 0;
 }`,
           hint: "sort(v.begin(), v.end())로 정렬 후, lower_bound(v.begin(), v.end(), target)은 iterator를 반환해요. *it == target으로 실제 값인지 확인하고, it - v.begin()이 인덱스예요",
-          expectedOutput: `Sorted: 10 20 30 40 50
+          expectedOutput: `10 20 30 40 50
 30 found at index 2`
         },
         {

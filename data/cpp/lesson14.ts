@@ -247,7 +247,7 @@ int main() {
     for (int i = 0; i < 3; i++) {
         total += students[i].score;
     }
-    cout << "합계: " << total << endl;
+    cout << total << endl;
 
     return 0;
 }`,
@@ -272,7 +272,7 @@ int main() {
     return 0;
 }`,
           hint: "int total = 0을 선언하고, for(int i = 0; i < 3; i++) 안에서 total += students[i].score를 반복해요",
-          expectedOutput: `합계: 254`
+          expectedOutput: `254`
         },
         {
           id: "ch2-loop-patterns2",
@@ -323,7 +323,7 @@ int main() {
             maxScore = students[i].score;
         }
     }
-    cout << "최고: " << maxScore << endl;
+    cout << maxScore << endl;
 
     return 0;
 }`,
@@ -348,7 +348,7 @@ int main() {
     return 0;
 }`,
           hint: "int maxScore = students[0].score로 초기값을 잡고, i는 1부터 반복해요. students[i].score > maxScore이면 maxScore = students[i].score로 교체해요",
-          expectedOutput: `최고: 95`
+          expectedOutput: `95`
         },
         {
           id: "ch2-loop-patterns3",
@@ -391,7 +391,7 @@ int main() {
     for (int i = 0; i < 3; i++) {
         if (students[i].score >= 80) count++;
     }
-    cout << "80점 이상: " << count << "명" << endl;
+    cout << count << endl;
 
     return 0;
 }`,
@@ -416,7 +416,7 @@ int main() {
     return 0;
 }`,
           hint: "int count = 0을 선언하고, for문에서 students[i].score >= 80이면 count++해요. 주의: > 80은 81 이상이라 틀려요!",
-          expectedOutput: `80점 이상: 2명`
+          expectedOutput: `2`
         },
         {
           id: "ch2-practice",
@@ -447,7 +447,7 @@ int main() {
             maxIdx = i;
         }
     }
-    cout << "1등: " << students[maxIdx].name << " (" << students[maxIdx].score << "점)" << endl;
+    cout << students[maxIdx].name << " (" << students[maxIdx].score << ")" << endl;
 
     return 0;
 }`,
@@ -472,7 +472,7 @@ int main() {
     return 0;
 }`,
           hint: "int maxIdx = 0으로 시작하고, i = 1부터 반복해요. students[i].score > students[maxIdx].score이면 maxIdx = i로 갱신해요. 마지막에 students[maxIdx].name과 score를 출력해요",
-          expectedOutput: `1등: 김철수 (95점)`
+          expectedOutput: `김철수 (95)`
         },
         {
           id: "ch2-ref",
