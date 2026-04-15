@@ -194,9 +194,21 @@ That's why real C++ code uses these patterns:
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ Sum with Range-for!",
-          content: `Calculate the sum of a vector using range-for instead of an index-based loop!
+          content: `Calculate the sum and average of a vector using range-for!`,
+          starterCode: `#include <iostream>
+#include <vector>
+using namespace std;
 
-So much cleaner than \`for (int i = 0; i < v.size(); i++)\`, right?`,
+int main() {
+    vector<int> scores = {90, 85, 78, 92, 88};
+    int sum = 0;
+
+    // Use range-for to accumulate sum
+
+    cout << "Sum: " << sum << endl;
+    cout << "Average: " << (double)sum / scores.size() << endl;
+    return 0;
+}`,
           code: `#include <iostream>
 #include <vector>
 using namespace std;
@@ -214,6 +226,7 @@ int main() {
 
     return 0;
 }`,
+          hint: "for (int s : scores) { sum += s; } — range-for gives you each element one by one. No index needed!",
           expectedOutput: `Sum: 433
 Average: 86.6`
         },
@@ -420,9 +433,22 @@ Start by **practicing with explicit types**, then let auto come naturally as you
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ auto + Range-for Power Combo!",
-          content: `Use auto with range-for to double every element, then print the result!
+          content: `Use auto with range-for to double every element, then print the result!`,
+          starterCode: `#include <iostream>
+#include <vector>
+using namespace std;
 
-This is the modern C++ way to process vectors.`,
+int main() {
+    vector<int> nums = {3, 7, 2, 8, 5};
+
+    // Double every element using auto&
+
+    // Print the result
+    cout << "Doubled: ";
+
+    cout << endl;
+    return 0;
+}`,
           code: `#include <iostream>
 #include <vector>
 using namespace std;
@@ -444,6 +470,7 @@ int main() {
 
     return 0;
 }`,
+          hint: "for (auto& n : nums) { n *= 2; } — without &, you get a copy and the original won't change! Then for (const auto& n : nums) to print",
           expectedOutput: `Doubled: 6 14 4 16 10`
         },
         {

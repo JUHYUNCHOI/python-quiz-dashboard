@@ -216,24 +216,21 @@ int main() {
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ Diagonal Sum!",
-          content: `**Goal:** Print the sum of **main diagonal** elements in a 3×3 array.
+          content: `Print the sum of **main diagonal** elements in a 3×3 array (where row index = column index).`,
+          starterCode: `#include <iostream>
+using namespace std;
+int main() {
+    int arr[3][3] = {
+        {1, 2, 3},
+        {4, 5, 6},
+        {7, 8, 9}
+    };
+    int sum = 0;
+    // Loop and accumulate the diagonal elements
 
-The main diagonal has **row index = column index**:
-- (0,0), (1,1), (2,2)
-
-**Given array:**
-\`\`\`
-int arr[3][3] = {
-    {1, 2, 3},
-    {4, 5, 6},
-    {7, 8, 9}
-};
-\`\`\`
-
-**Steps:**
-1. Loop i from 0 to 2
-2. \`arr[i][i]\` is the diagonal element
-3. Add and print the sum`,
+    cout << sum;
+    return 0;
+}`,
           code: `#include <iostream>
 using namespace std;
 int main() {
@@ -243,11 +240,13 @@ int main() {
         {7, 8, 9}
     };
     int sum = 0;
-    // Write your code here
-
+    for (int i = 0; i < 3; i++) {
+        sum += arr[i][i];
+    }
     cout << sum;
     return 0;
 }`,
+          hint: "for (int i = 0; i < 3; i++) { sum += arr[i][i]; } — when row index equals column index, that's the diagonal!",
           expectedOutput: "15",
         },
         {
@@ -381,35 +380,36 @@ for (int i = 0; i < rows; i++) {
           id: "ch3-practice",
           type: "practice" as const,
           title: "✋ Read and Print a Grid!",
-          content: `**Goal:** Read a 2×3 grid and print it back.
+          content: `Read a 2×3 grid and print it back row by row.`,
+          starterCode: `#include <iostream>
+#include <vector>
+using namespace std;
+int main() {
+    vector<vector<int>> grid(2, vector<int>(3, 0));
+    // Read input with nested for loops
 
-**Sample Input:**
-\`\`\`
-1 2 3
-4 5 6
-\`\`\`
+    // Print output (add "\\n" after each row)
 
-**Output:**
-\`\`\`
-1 2 3
-4 5 6
-\`\`\`
-
-**Steps:**
-1. Declare \`vector<vector<int>> grid(2, vector<int>(3, 0));\`
-2. Use nested for loops with \`cin >> grid[i][j]\`
-3. Print with nested for loops (add \`cout << "\\n"\` after each row)`,
+    return 0;
+}`,
           code: `#include <iostream>
 #include <vector>
 using namespace std;
 int main() {
     vector<vector<int>> grid(2, vector<int>(3, 0));
-    // Read input
-
-    // Print output
-
+    for (int i = 0; i < 2; i++)
+        for (int j = 0; j < 3; j++)
+            cin >> grid[i][j];
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 3; j++) {
+            cout << grid[i][j];
+            if (j < 2) cout << " ";
+        }
+        cout << "\n";
+    }
     return 0;
 }`,
+          hint: "for (int i = 0; i < 2; i++) for (int j = 0; j < 3; j++) cin >> grid[i][j]; — same structure for output. Add cout << \"\\n\" after the inner loop ends!",
           expectedOutput: "1 2 3\n4 5 6",
           stdin: "1 2 3\n4 5 6",
         },

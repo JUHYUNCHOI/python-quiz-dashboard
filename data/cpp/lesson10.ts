@@ -215,6 +215,25 @@ for (const int& x : v) {
           type: "practice" as const,
           title: "✋ Range-for로 합 구하기!",
           content: `숫자 개수를 입력받고, 그 숫자들을 입력받아 합계를 구해보세요!`,
+          starterCode: `#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+
+    vector<int> nums(n);
+    for (int i = 0; i < n; i++) {
+        cin >> nums[i];
+    }
+
+    int sum = 0;
+    // range-for로 sum에 누적하세요
+
+    cout << "합계: " << sum << endl;
+    return 0;
+}`,
           code: `#include <iostream>
 #include <vector>
 using namespace std;
@@ -237,6 +256,7 @@ int main() {
 
     return 0;
 }`,
+          hint: "for (const int& x : nums) { sum += x; } — const int& 는 복사 없이 읽기만 해요. x에 값을 담아서 sum += x 로 누적!",
           stdin: `6\n4 8 15 16 23 42`,
           expectedOutput: `합계: 108`
         },
@@ -420,6 +440,27 @@ auto x = 5 / 2;   // 2.5가 아니라 2! (int / int = int)
           type: "practice" as const,
           title: "✋ auto + range-for로 벡터 처리!",
           content: `숫자 개수와 숫자들을 입력받아, 모든 원소를 2배로 바꾼 뒤 출력해보세요.`,
+          starterCode: `#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+
+    vector<int> nums(n);
+    for (int i = 0; i < n; i++) {
+        cin >> nums[i];
+    }
+
+    // auto& 로 원소를 2배로 바꾸세요
+
+    // auto 로 결과를 출력하세요
+    cout << "2배 결과: ";
+
+    cout << endl;
+    return 0;
+}`,
           code: `#include <iostream>
 #include <vector>
 using namespace std;
@@ -447,6 +488,7 @@ int main() {
 
     return 0;
 }`,
+          hint: "수정할 땐 for (auto& x : nums) { x *= 2; } — & 없이 auto x 로 받으면 복사본이라 원본이 안 바뀌어요! 출력할 땐 for (auto x : nums)으로",
           stdin: `5\n3 7 2 9 5`,
           expectedOutput: `2배 결과: 6 14 4 18 10 `
         },

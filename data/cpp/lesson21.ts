@@ -238,6 +238,20 @@ int arr[3][3] = {
     {7, 8, 9}
 };
 \`\`\``,
+          starterCode: `#include <iostream>
+using namespace std;
+int main() {
+    int arr[3][3] = {
+        {1, 2, 3},
+        {4, 5, 6},
+        {7, 8, 9}
+    };
+    int sum = 0;
+    // for문으로 대각선 원소를 sum에 누적하세요
+
+    cout << sum;
+    return 0;
+}`,
           code: `#include <iostream>
 using namespace std;
 int main() {
@@ -247,11 +261,13 @@ int main() {
         {7, 8, 9}
     };
     int sum = 0;
-    // 여기에 코드를 작성하세요
-
+    for (int i = 0; i < 3; i++) {
+        sum += arr[i][i];
+    }
     cout << sum;
     return 0;
 }`,
+          hint: "for (int i = 0; i < 3; i++) { sum += arr[i][i]; } — 행 번호와 열 번호가 같으면 대각선이에요!",
           expectedOutput: "15",
         },
         {
@@ -401,17 +417,35 @@ for (int i = 0; i < rows; i++) {
 1 2 3
 4 5 6
 \`\`\``,
+          starterCode: `#include <iostream>
+#include <vector>
+using namespace std;
+int main() {
+    vector<vector<int>> grid(2, vector<int>(3, 0));
+    // 이중 for문으로 입력받기
+
+    // 이중 for문으로 출력하기 (각 행 끝에 \\n 추가)
+
+    return 0;
+}`,
           code: `#include <iostream>
 #include <vector>
 using namespace std;
 int main() {
     vector<vector<int>> grid(2, vector<int>(3, 0));
-    // 입력받기
-
-    // 출력하기
-
+    for (int i = 0; i < 2; i++)
+        for (int j = 0; j < 3; j++)
+            cin >> grid[i][j];
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 3; j++) {
+            cout << grid[i][j];
+            if (j < 2) cout << " ";
+        }
+        cout << "\n";
+    }
     return 0;
 }`,
+          hint: "for (int i = 0; i < 2; i++) for (int j = 0; j < 3; j++) cin >> grid[i][j]; — 출력도 같은 구조예요. 안쪽 for문 끝나고 cout << \"\\n\" 한 번 더!",
           expectedOutput: "1 2 3\n4 5 6",
           stdin: "1 2 3\n4 5 6",
         },
