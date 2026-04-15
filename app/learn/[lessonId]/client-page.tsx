@@ -430,6 +430,11 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
 
   const finishChapter = () => {
     if (currentChapter < lesson.chapters.length - 1) {
+      // 이미 완료한 레슨 재방문 시 챕터 완료 모달 없이 바로 다음 챕터로
+      if (isAlreadyDone || effectiveTeacher) {
+        goToNextChapter()
+        return
+      }
       if (!isIGCSE) setShowConfetti(true)
       setShowChapterComplete(true)
       play("chapterComplete")
