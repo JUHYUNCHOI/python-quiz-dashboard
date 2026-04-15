@@ -480,18 +480,23 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
               step={currentReview.step}
               onCorrect={handleCorrect}
               onWrong={handleWrong}
-              onNext={goNext}
+              onNext={isCurrentStepCompleted ? undefined : goNext}
               language={lesson.language ?? "cpp"}
               stepKey={`${lessonId}-${currentReview.originalIndex}`}
             />
           )}
 
-          {/* 완료된 문제 — 다시 풀기 */}
+          {/* 완료된 문제 — 다음 버튼 + 다시 풀기 */}
           {isCurrentStepCompleted && (
-            <div className="mt-3 flex justify-end">
+            <div className="mt-4 flex flex-col gap-2">
+              <button
+                onClick={goNext}
+                className="w-full py-3.5 rounded-xl text-base font-bold text-white bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 shadow-md transition-all flex items-center justify-center gap-2"
+              >
+                {currentIndex === reviewSteps.length - 1 ? t("결과 보기 →", "See Results →") : t("다음 →", "Next →")}
+              </button>
               <button
                 onClick={() => {
-                  // 저장된 입력 초기화
                   if (currentReview) {
                     try { localStorage.removeItem(`review-input-${lessonId}-${currentReview.originalIndex}`) } catch {}
                   }
@@ -499,7 +504,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                   setWrongSteps(prev => prev.filter(i => i !== currentIndex))
                   setResetCount(prev => prev + 1)
                 }}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                className="flex items-center justify-center gap-1.5 py-2 text-xs font-bold text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 {t("이 문제 다시 풀기", "Redo this question")}
