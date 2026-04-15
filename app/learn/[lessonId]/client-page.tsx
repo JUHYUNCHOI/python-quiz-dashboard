@@ -667,7 +667,7 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                     <div className="space-y-2">
                       {/* 주 CTA: 연습 문제 */}
                       <button
-                        onClick={() => { localStorage.removeItem(progressKey); router.push(`/practice?cluster=${unlockedCluster.id}&from=lesson`) }}
+                        onClick={() => { localStorage.removeItem(progressKey); router.push(`/practice?cluster=${unlockedCluster.id}&from=lesson&session=1`) }}
                         className="w-full py-3.5 bg-green-500 hover:bg-green-600 active:scale-95 text-white rounded-xl font-bold text-base transition-all flex items-center justify-center gap-2"
                       >
                         <span className="text-xl">{unlockedCluster.emoji}</span>

@@ -815,35 +815,27 @@ function PracticeContent() {
 
   return (
     <main className="max-w-2xl mx-auto px-4 pt-6">
-      {problem && cluster
-        ? <ProblemDetail
-            problem={problem}
-            onBack={() => setParam("problem", null)}
-            onMarkSolved={markSolved}
-            onMarkStarred={markStarred}
-          />
-        : <ClusterList
-            onSelect={c => {
-              // 클러스터 클릭 → 바로 세션 모드 진입
-              const p = new URLSearchParams(searchParams.toString())
-              p.set("cluster", c.id)
-              p.set("session", "1")
-              router.push(`/practice?${p.toString()}`)
-            }}
-            solvedSet={solvedSet}
-            starredSet={starredSet}
-            lang={lang}
-            onLangChange={handleLangChange}
-            isTeacher={isTeacher}
-            onBack={() => {
-              if (fromParam === "lesson" || fromParam === "curriculum") {
-                router.back()
-              } else {
-                router.push("/curriculum")
-              }
-            }}
-          />
-      }
+      <ClusterList
+        onSelect={c => {
+          // 클러스터 클릭 → 바로 세션 모드 진입
+          const p = new URLSearchParams(searchParams.toString())
+          p.set("cluster", c.id)
+          p.set("session", "1")
+          router.push(`/practice?${p.toString()}`)
+        }}
+        solvedSet={solvedSet}
+        starredSet={starredSet}
+        lang={lang}
+        onLangChange={handleLangChange}
+        isTeacher={isTeacher}
+        onBack={() => {
+          if (fromParam === "lesson" || fromParam === "curriculum") {
+            router.back()
+          } else {
+            router.push("/curriculum")
+          }
+        }}
+      />
     </main>
   )
 }
