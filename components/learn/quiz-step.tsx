@@ -66,7 +66,7 @@ export function QuizStep({ step, isCompleted, selectedAnswer, showExplanation, q
         {step.title === "정리 퀴즈" && (
           <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{t("마무리 체크! 🎯", "Wrap-up Check! 🎯")}</h1>
         )}
-        {step.content && <div className="text-base md:text-lg text-gray-800">{renderContent(step.content)}</div>}
+        {step.content && <div className="text-xl md:text-2xl font-semibold text-gray-900">{renderContent(step.content)}</div>}
       </div>
       {step.code && (
         <div>

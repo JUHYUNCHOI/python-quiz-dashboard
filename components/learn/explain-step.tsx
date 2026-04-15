@@ -59,7 +59,7 @@ export function ExplainStep({ step }: ExplainStepProps) {
       </div>
 
       {/* 본문 설명 먼저 → 이해한 뒤 애니메이션으로 확인 (자연스러운 이야기 흐름) */}
-      {step.content && <div className="space-y-3">{renderContent(step.content)}</div>}
+      {step.content && <div className="text-lg md:text-xl space-y-3">{renderContent(step.content)}</div>}
 
       {AnimComp && (
         <div className="rounded-xl overflow-hidden">

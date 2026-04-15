@@ -96,12 +96,12 @@ export function PredictStep({ step, isCompleted, selectedAnswer, showExplanation
       {/* 프롬프트 */}
       {step.content ? (
         step.content.includes('```') ? (
-          <div className="text-base md:text-lg text-gray-800">{renderContent(step.content)}</div>
+          <div className="text-lg md:text-xl text-gray-800">{renderContent(step.content)}</div>
         ) : (
-          <p className="text-base md:text-lg font-semibold text-gray-700 text-center">{step.content}</p>
+          <p className="text-lg md:text-xl font-semibold text-gray-900 text-center">{step.content}</p>
         )
       ) : (
-        <p className="text-base md:text-lg font-semibold text-gray-700 text-center">
+        <p className="text-lg md:text-xl font-semibold text-gray-900 text-center">
           {t("이 코드를 실행하면 어떤 결과가 나올까요?", "What will be the output of this code?")}
         </p>
       )}

@@ -244,7 +244,7 @@ export function FillBlankStep({ step, isCompleted, onComplete, onAcknowledge, is
           )}
         </div>
         {step.content && (
-          <div className="text-base text-gray-600 leading-relaxed space-y-2">{renderContent(step.content)}</div>
+          <div className="text-lg md:text-xl text-gray-800 leading-relaxed space-y-2">{renderContent(step.content)}</div>
         )}
       </div>
 

@@ -131,7 +131,7 @@ export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId,
 
         {/* 과제 설명 */}
         {step.content && (
-          <div className="space-y-2">{renderContent(step.content)}</div>
+          <div className="text-lg md:text-xl text-gray-800 space-y-2">{renderContent(step.content)}</div>
         )}
 
         {/* 시작 코드 버튼 — starterCode가 있고 아직 주입 안 된 경우, 실패 힌트 없을 때만 표시 */}
