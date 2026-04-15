@@ -693,6 +693,7 @@ int main() {
     cout << acc.getBalance() << "원";
     return 0;
 }`,
+          hint: `private에 string owner; double balance; 선언. 생성자는 BankAccount(string name, double initial) { owner = name; balance = initial; }. deposit은 if(amount > 0) balance += amount; withdraw는 if(amount > 0 && amount <= balance) balance -= amount;`,
           expectedOutput: `1300원`
         },
       ]

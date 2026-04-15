@@ -697,6 +697,7 @@ int main() {
     cout << acc.getBalance();
     return 0;
 }`,
+          hint: `Declare private: string owner; double balance; Constructor: BankAccount(string name, double initial) { owner = name; balance = initial; }. deposit: if(amount > 0) balance += amount; withdraw: if(amount > 0 && amount <= balance) balance -= amount;`,
           expectedOutput: `1300`
         },
       ]
