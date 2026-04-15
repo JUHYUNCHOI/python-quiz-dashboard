@@ -375,22 +375,21 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
               const isCurrent = idx === currentIndex
               const isCompleted = completedSteps.has(idx)
               const isWrong = wrongSteps.includes(idx)
-              const isClickable = effectiveTeacher || isCompleted || isCurrent
+              const isClickable = true  // 복습은 자유 탐색 — 어떤 문제든 바로 이동 가능
               const typeLabel = rs.step.type === "quiz" ? "객관식" : rs.step.type === "practice" ? "빈칸" : rs.step.type === "interleaving" ? "복습" : rs.step.type === "errorQuiz" ? "오류찾기" : rs.step.type
               return (
                 <div key={idx} className="relative group h-full flex-1 min-w-[3px]">
                   <button
-                    disabled={!isClickable}
-                    onClick={() => { if (isClickable && !isCurrent) goToStep(idx) }}
+                    onClick={() => { if (!isCurrent) goToStep(idx) }}
                     className={cn(
-                      "w-full h-full transition-all duration-300",
+                      "w-full h-full transition-all duration-300 cursor-pointer",
                       isCurrent
                         ? "bg-indigo-500 scale-y-125"
                         : isWrong
-                          ? "bg-red-400 hover:bg-red-300 cursor-pointer"
-                          : (effectiveTeacher || isCompleted)
-                            ? "bg-emerald-400 hover:bg-emerald-300 cursor-pointer"
-                            : "bg-gray-200 cursor-default",
+                          ? "bg-red-400 hover:bg-red-300"
+                          : isCompleted
+                            ? "bg-emerald-400 hover:bg-emerald-300"
+                            : "bg-gray-200 hover:bg-gray-300",
                       idx === 0 && "rounded-l-full",
                       idx === reviewSteps.length - 1 && "rounded-r-full",
                     )}
@@ -530,13 +529,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
             </button>
             <button
               onClick={goNext}
-              disabled={!isCurrentStepCompleted && !isTeacher}
-              className={cn(
-                "flex items-center justify-center gap-1 rounded-xl font-bold transition-colors px-4 py-2.5 md:px-6 md:py-3",
-                (isCurrentStepCompleted || isTeacher)
-                  ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg"
-                  : "bg-gray-200 text-gray-400 cursor-not-allowed"
-              )}
+              className="flex items-center justify-center gap-1 rounded-xl font-bold transition-colors px-4 py-2.5 md:px-6 md:py-3 bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg"
             >
               <span className="text-sm md:text-base">
                 {currentIndex === reviewSteps.length - 1 ? t("결과 보기", "See Results") : t("다음", "Next")}
