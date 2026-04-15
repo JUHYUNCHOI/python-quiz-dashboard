@@ -136,6 +136,24 @@ int main() {
 
     return 0;
 }`,
+          starterCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int x = 100;
+    int& ref = x;
+
+    cout << "x = " << x << endl;
+    cout << "ref = " << ref << endl;
+
+    ref = 500;
+
+    cout << "After ref = 500:" << endl;
+    cout << "x = " << x << endl;
+    cout << "ref = " << ref << endl;
+
+    return 0;
+}`,
           expectedOutput: `x = 100
 ref = 100
 After ref = 500:
@@ -340,6 +358,35 @@ void doubleAll(vector<int>& v) {
     for (int& x : v) {
         x = x * 2;
     }
+}
+
+int main() {
+    int a = 10, b = 20;
+    mySwap(a, b);
+    cout << "swap: " << a << " " << b << endl;
+
+    vector<int> nums = {1, 2, 3, 4, 5};
+    doubleAll(nums);
+    cout << "double: ";
+    for (int x : nums) {
+        cout << x << " ";
+    }
+    cout << endl;
+
+    return 0;
+}`,
+          starterCode: `#include <iostream>
+#include <vector>
+using namespace std;
+
+void mySwap(int& a, int& b) {
+    // Write the swap code here
+    // Hint: use a temporary variable temp
+}
+
+void doubleAll(vector<int>& v) {
+    // Write code to double every element in the vector
+    // Hint: use range-for with int& x to modify the original
 }
 
 int main() {

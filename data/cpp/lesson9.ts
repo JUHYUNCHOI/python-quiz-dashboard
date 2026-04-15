@@ -325,6 +325,21 @@ int main() {
     cout << "최고 점수: " << maxScore << endl;
     return 0;
 }`,
+          starterCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int scores[5];
+
+    for (int i = 0; i < 5; i++) {
+        cin >> scores[i];
+    }
+
+    // 여기에 최댓값을 구하는 코드를 써보세요
+    // 힌트: maxScore = scores[0]으로 시작해서 순서대로 비교해요
+
+    return 0;
+}`,
           stdin: `85
 92
 78
@@ -723,6 +738,25 @@ int main() {
     for (int i = 0; i < nums.size(); i++) {
         cout << nums[i] << " ";
     }
+    cout << endl;
+    cout << "총 " << nums.size() << "개" << endl;
+
+    return 0;
+}`,
+          starterCode: `#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    vector<int> nums;
+    int input;
+
+    // 0이 입력될 때까지 nums에 저장하세요
+    // 힌트: while(true) + break, nums.push_back() 활용
+
+    cout << "입력한 숫자: ";
+    // 여기에 nums를 출력하는 코드를 써보세요
+
     cout << endl;
     cout << "총 " << nums.size() << "개" << endl;
 

@@ -137,6 +137,24 @@ int main() {
 
     return 0;
 }`,
+          starterCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int x = 100;
+    int& ref = x;
+
+    cout << "x = " << x << endl;
+    cout << "ref = " << ref << endl;
+
+    ref = 500;
+
+    cout << "ref = 500 후:" << endl;
+    cout << "x = " << x << endl;
+    cout << "ref = " << ref << endl;
+
+    return 0;
+}`,
           expectedOutput: `x = 100
 ref = 100
 ref = 500 후:
@@ -326,6 +344,35 @@ void doubleAll(vector<int>& v) {
     for (int& x : v) {
         x = x * 2;
     }
+}
+
+int main() {
+    int a = 10, b = 20;
+    mySwap(a, b);
+    cout << "swap: " << a << " " << b << endl;
+
+    vector<int> nums = {1, 2, 3, 4, 5};
+    doubleAll(nums);
+    cout << "double: ";
+    for (int x : nums) {
+        cout << x << " ";
+    }
+    cout << endl;
+
+    return 0;
+}`,
+          starterCode: `#include <iostream>
+#include <vector>
+using namespace std;
+
+void mySwap(int& a, int& b) {
+    // 여기에 swap 코드를 써보세요
+    // 힌트: 임시 변수 temp를 이용해요
+}
+
+void doubleAll(vector<int>& v) {
+    // 여기에 벡터의 모든 원소를 2배로 만드는 코드를 써보세요
+    // 힌트: range-for에서 int& x로 받으면 원본이 바뀌어요
 }
 
 int main() {

@@ -244,6 +244,36 @@ int main() {
 
     return 0;
 }`,
+          starterCode: `#include <iostream>
+#include <stack>
+#include <string>
+using namespace std;
+
+int main() {
+    string str = "(())";
+    stack<char> s;
+    bool valid = true;
+
+    for (char c : str) {
+        if (c == '(') {
+            s.push(c);
+        } else if (c == ')') {
+            if (s.empty()) {
+                valid = false;
+                break;
+            }
+            s.pop();
+        }
+    }
+
+    if (valid && s.empty()) {
+        cout << "Valid" << endl;
+    } else {
+        cout << "Invalid" << endl;
+    }
+
+    return 0;
+}`,
           expectedOutput: "Valid"
         },
         {
@@ -445,6 +475,27 @@ deque:          [1, 2, 3] → 앞/뒤 모두 가능!
           title: "✋ priority_queue로 가장 큰 3개 값 출력!",
           content: `5개의 숫자를 priority_queue에 넣고, 가장 큰 3개를 순서대로 출력하는 코드를 실행해봐요!`,
           code: `#include <iostream>
+#include <queue>
+using namespace std;
+
+int main() {
+    priority_queue<int> pq;
+    pq.push(40);
+    pq.push(10);
+    pq.push(50);
+    pq.push(30);
+    pq.push(20);
+
+    // 가장 큰 3개 출력
+    for (int i = 0; i < 3; i++) {
+        cout << pq.top() << " ";
+        pq.pop();
+    }
+    cout << endl;
+
+    return 0;
+}`,
+          starterCode: `#include <iostream>
 #include <queue>
 using namespace std;
 

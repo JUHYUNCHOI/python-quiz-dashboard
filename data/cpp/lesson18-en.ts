@@ -246,6 +246,36 @@ int main() {
 
     return 0;
 }`,
+          starterCode: `#include <iostream>
+#include <stack>
+#include <string>
+using namespace std;
+
+int main() {
+    string str = "(())";
+    stack<char> s;
+    bool valid = true;
+
+    for (char c : str) {
+        if (c == '(') {
+            s.push(c);
+        } else if (c == ')') {
+            if (s.empty()) {
+                valid = false;
+                break;
+            }
+            s.pop();
+        }
+    }
+
+    if (valid && s.empty()) {
+        cout << "Valid" << endl;
+    } else {
+        cout << "Invalid" << endl;
+    }
+
+    return 0;
+}`,
           expectedOutput: "Valid"
         },
         {
@@ -449,6 +479,27 @@ deque:          [1, 2, 3] → both ends available!
 
 Since priority_queue automatically puts the largest on top, just repeat top() and pop().`,
           code: `#include <iostream>
+#include <queue>
+using namespace std;
+
+int main() {
+    priority_queue<int> pq;
+    pq.push(40);
+    pq.push(10);
+    pq.push(50);
+    pq.push(30);
+    pq.push(20);
+
+    // Print top 3 values
+    for (int i = 0; i < 3; i++) {
+        cout << pq.top() << " ";
+        pq.pop();
+    }
+    cout << endl;
+
+    return 0;
+}`,
+          starterCode: `#include <iostream>
 #include <queue>
 using namespace std;
 

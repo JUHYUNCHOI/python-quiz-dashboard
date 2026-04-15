@@ -257,6 +257,25 @@ int main() {
 
     return 0;
 }`,
+          starterCode: `#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+
+int main() {
+    string words[] = {"apple", "banana", "apple", "cherry", "banana", "apple"};
+
+    map<string, int> freq;
+    for (auto& w : words) {
+        freq[w]++;
+    }
+
+    for (auto& [word, count] : freq) {
+        cout << word << ": " << count << endl;
+    }
+
+    return 0;
+}`,
           expectedOutput: `apple: 3
 banana: 2
 cherry: 1`
@@ -429,6 +448,26 @@ But if you need sorted order, you must use the sorted version.`
 
 Using a set, you can remove duplicates and sort in one step!`,
           code: `#include <iostream>
+#include <set>
+using namespace std;
+
+int main() {
+    int arr[] = {4, 2, 7, 2, 9, 4, 1, 7, 3};
+
+    set<int> s;
+    for (auto x : arr) {
+        s.insert(x);
+    }
+
+    cout << "Count: " << s.size() << endl;
+    for (auto x : s) {
+        cout << x << " ";
+    }
+    cout << endl;
+
+    return 0;
+}`,
+          starterCode: `#include <iostream>
 #include <set>
 using namespace std;
 

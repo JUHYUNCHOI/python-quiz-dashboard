@@ -266,6 +266,30 @@ int main() {
 
     return 0;
 }`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <numeric>
+using namespace std;
+
+int main() {
+    vector<int> v = {3, 7, 1, 9, 4, 6};
+
+    int minVal = *min_element(v.begin(), v.end());
+    int maxVal = *max_element(v.begin(), v.end());
+    int total = accumulate(v.begin(), v.end(), 0);
+
+    cout << "Min: " << minVal << endl;
+    cout << "Max: " << maxVal << endl;
+    cout << "Sum: " << total << endl;
+
+    auto it = find(v.begin(), v.end(), 9);
+    if (it != v.end()) {
+        cout << "Found 9 at index " << it - v.begin() << endl;
+    }
+
+    return 0;
+}`,
           expectedOutput: `Min: 1
 Max: 9
 Sum: 30
@@ -501,6 +525,31 @@ coords.erase(unique(coords.begin(), coords.end()), coords.end());
 
 Sort with sort(), then find the value with lower_bound() and print the index.`,
           code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    vector<int> v = {50, 20, 40, 10, 30};
+
+    sort(v.begin(), v.end());
+
+    cout << "Sorted: ";
+    for (int x : v) cout << x << " ";
+    cout << endl;
+
+    int target = 30;
+    auto it = lower_bound(v.begin(), v.end(), target);
+
+    if (it != v.end() && *it == target) {
+        cout << target << " found at index " << it - v.begin() << endl;
+    } else {
+        cout << target << " not found" << endl;
+    }
+
+    return 0;
+}`,
+          starterCode: `#include <iostream>
 #include <vector>
 #include <algorithm>
 using namespace std;

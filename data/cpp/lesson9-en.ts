@@ -629,6 +629,27 @@ int main() {
 
     return 0;
 }`,
+          starterCode: `#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    vector<int> nums;
+    int input;
+
+    cout << "Enter numbers (0 to stop): " << endl;
+
+    // Store numbers until 0 is entered
+    // Hint: while(true) + break, nums.push_back()
+
+    cout << "You entered: ";
+    // Print nums here
+
+    cout << endl;
+    cout << "Total: " << nums.size() << " numbers" << endl;
+
+    return 0;
+}`,
           stdin: `5\n3\n8\n2\n0`,
           expectedOutput: `Enter numbers (0 to stop):
 You entered: 5 3 8 2

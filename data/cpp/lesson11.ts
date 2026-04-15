@@ -136,6 +136,23 @@ int main() {
 
     return 0;
 }`,
+          starterCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    string log = "2024-01-15 ERROR server connection failed";
+
+    // 1. "ERROR" 위치를 find()로 찾고, substr()로 ERROR 이후 메시지를 출력하세요
+    //    출력 형식: "오류 발견! 위치: XX" + "오류 메시지: ..."
+
+    // 2. "CRITICAL"을 find()로 검색하고, 없으면 "CRITICAL 없음: 정상 범위"를 출력하세요
+
+    // 3. substr(0, 10)으로 날짜를 추출해서 출력하세요
+    //    출력 형식: "날짜: YYYY-MM-DD"
+
+    return 0;
+}`,
           expectedOutput: `오류 발견! 위치: 11
 오류 메시지: server connection failed
 CRITICAL 없음: 정상 범위
@@ -310,6 +327,27 @@ int main() {
 
     string info = name + " is " + to_string(age) + " years old";
     cout << info << endl;
+
+    return 0;
+}`,
+          starterCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    string name = "Alice";
+    int age = 15;
+
+    // 이름 전체를 출력하세요: "Name: Alice"
+
+    // 이름의 글자 수를 출력하세요: "Length: 5"
+    // 힌트: name.length()
+
+    // 이름의 첫 글자를 출력하세요: "First letter: A"
+    // 힌트: name[0]
+
+    // "Alice is 15 years old" 형식으로 출력하세요
+    // 힌트: to_string(age)로 숫자를 문자열로 변환해서 합쳐요
 
     return 0;
 }`,

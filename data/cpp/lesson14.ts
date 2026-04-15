@@ -243,7 +243,32 @@ int main() {
         {"박민준", 72},
     };
 
+    int total = 0;
+    for (int i = 0; i < 3; i++) {
+        total += students[i].score;
+    }
+    cout << "합계: " << total << endl;
+
+    return 0;
+}`,
+          starterCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+int main() {
+    Student students[3] = {
+        {"김철수", 95},
+        {"이영희", 87},
+        {"박민준", 72},
+    };
+
     // 여기에 합계를 구하는 코드를 써보세요
+    // 힌트: total 변수를 만들고 students[i].score를 누적해요
 
     return 0;
 }`,
@@ -292,7 +317,34 @@ int main() {
         {"박민준", 72},
     };
 
+    int maxScore = students[0].score;
+    for (int i = 1; i < 3; i++) {
+        if (students[i].score > maxScore) {
+            maxScore = students[i].score;
+        }
+    }
+    cout << "최고: " << maxScore << endl;
+
+    return 0;
+}`,
+          starterCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+int main() {
+    Student students[3] = {
+        {"김철수", 95},
+        {"이영희", 87},
+        {"박민준", 72},
+    };
+
     // 여기에 최댓값을 구하는 코드를 써보세요
+    // 힌트: maxScore = students[0].score로 시작해서 비교해요
 
     return 0;
 }`,
@@ -335,7 +387,32 @@ int main() {
         {"박민준", 72},
     };
 
+    int count = 0;
+    for (int i = 0; i < 3; i++) {
+        if (students[i].score >= 80) count++;
+    }
+    cout << "80점 이상: " << count << "명" << endl;
+
+    return 0;
+}`,
+          starterCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+int main() {
+    Student students[3] = {
+        {"김철수", 95},
+        {"이영희", 87},
+        {"박민준", 72},
+    };
+
     // 여기에 80점 이상인 학생 수를 세는 코드를 써보세요
+    // 힌트: count 변수 + if 조건문 + count++
 
     return 0;
 }`,
@@ -364,7 +441,34 @@ int main() {
         {"박민준", 72},
     };
 
+    int maxIdx = 0;
+    for (int i = 1; i < 3; i++) {
+        if (students[i].score > students[maxIdx].score) {
+            maxIdx = i;
+        }
+    }
+    cout << "1등: " << students[maxIdx].name << " (" << students[maxIdx].score << "점)" << endl;
+
+    return 0;
+}`,
+          starterCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+int main() {
+    Student students[3] = {
+        {"김철수", 95},
+        {"이영희", 87},
+        {"박민준", 72},
+    };
+
     // 여기에 1등 학생 이름과 점수를 출력하는 코드를 써보세요
+    // 힌트: maxIdx = 0으로 시작해서, 더 높은 점수가 나오면 maxIdx를 갱신해요
 
     return 0;
 }`,

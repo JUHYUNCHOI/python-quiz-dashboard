@@ -173,6 +173,24 @@ int main() {
 
     return 0;
 }`,
+          starterCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    string log = "2024-01-15 ERROR server connection failed";
+
+    // 1. Use find("ERROR") to get position, then substr(pos + 6) for the message
+    //    Print: "Error found! Position: XX" and "Error message: ..."
+
+    // 2. Use find("CRITICAL") and check if it equals string::npos
+    //    Print: "CRITICAL not found: within normal range"
+
+    // 3. Use substr(0, 10) to extract the date
+    //    Print: "Date: YYYY-MM-DD"
+
+    return 0;
+}`,
           expectedOutput: `Error found! Position: 11
 Error message: server connection failed
 CRITICAL not found: within normal range
@@ -346,6 +364,27 @@ int main() {
 
     string info = name + " is " + to_string(age) + " years old";
     cout << info << endl;
+
+    return 0;
+}`,
+          starterCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    string name = "Alice";
+    int age = 15;
+
+    // Print the full name: "Name: Alice"
+
+    // Print the length: "Length: 5"
+    // Hint: name.length()
+
+    // Print the first letter: "First letter: A"
+    // Hint: name[0]
+
+    // Print: "Alice is 15 years old"
+    // Hint: to_string(age) converts a number to a string for concatenation
 
     return 0;
 }`,

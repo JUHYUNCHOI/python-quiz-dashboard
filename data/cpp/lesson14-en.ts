@@ -243,7 +243,32 @@ int main() {
         {"Mia", 72},
     };
 
+    int total = 0;
+    for (int i = 0; i < 3; i++) {
+        total += students[i].score;
+    }
+    cout << "Total: " << total << endl;
+
+    return 0;
+}`,
+          starterCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+int main() {
+    Student students[3] = {
+        {"Emma", 95},
+        {"Jake",   87},
+        {"Mia", 72},
+    };
+
     // Write your code to find and print the total score here
+    // Hint: create a total variable and accumulate students[i].score
 
     return 0;
 }`,
@@ -292,7 +317,34 @@ int main() {
         {"Mia", 72},
     };
 
+    int maxScore = students[0].score;
+    for (int i = 1; i < 3; i++) {
+        if (students[i].score > maxScore) {
+            maxScore = students[i].score;
+        }
+    }
+    cout << "Top: " << maxScore << endl;
+
+    return 0;
+}`,
+          starterCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+int main() {
+    Student students[3] = {
+        {"Emma", 95},
+        {"Jake",   87},
+        {"Mia", 72},
+    };
+
     // Write your code to find and print the highest score here
+    // Hint: start with maxScore = students[0].score and compare
 
     return 0;
 }`,
@@ -335,7 +387,32 @@ int main() {
         {"Mia", 72},
     };
 
+    int count = 0;
+    for (int i = 0; i < 3; i++) {
+        if (students[i].score >= 80) count++;
+    }
+    cout << "80+: " << count << " students" << endl;
+
+    return 0;
+}`,
+          starterCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+int main() {
+    Student students[3] = {
+        {"Emma", 95},
+        {"Jake",   87},
+        {"Mia", 72},
+    };
+
     // Write your code to count and print students with score >= 80 here
+    // Hint: count variable + if condition + count++
 
     return 0;
 }`,
@@ -368,7 +445,34 @@ int main() {
         {"Mia", 72},
     };
 
+    int maxIdx = 0;
+    for (int i = 1; i < 3; i++) {
+        if (students[i].score > students[maxIdx].score) {
+            maxIdx = i;
+        }
+    }
+    cout << "#1: " << students[maxIdx].name << " (" << students[maxIdx].score << ")" << endl;
+
+    return 0;
+}`,
+          starterCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+int main() {
+    Student students[3] = {
+        {"Emma", 95},
+        {"Jake",   87},
+        {"Mia", 72},
+    };
+
     // Write your code to find and print the top student's name and score here
+    // Hint: start with maxIdx = 0, update maxIdx when a higher score is found
 
     return 0;
 }`,
