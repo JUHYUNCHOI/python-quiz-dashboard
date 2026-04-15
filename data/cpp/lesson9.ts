@@ -734,12 +734,11 @@ int main() {
         nums.push_back(input);
     }
 
-    cout << "입력한 숫자: ";
     for (int i = 0; i < nums.size(); i++) {
         cout << nums[i] << " ";
     }
     cout << endl;
-    cout << "총 " << nums.size() << "개" << endl;
+    cout << nums.size() << endl;
 
     return 0;
 }`,
@@ -753,11 +752,10 @@ int main() {
 
     // 0이 입력될 때까지 nums에 저장하세요
 
-    cout << "입력한 숫자: ";
-    // nums를 출력하세요
-
+    // 숫자들을 공백으로 출력하세요
     cout << endl;
-    cout << "총 " << nums.size() << "개" << endl;
+    // 개수를 출력하세요
+    cout << nums.size() << endl;
 
     return 0;
 }`,
@@ -767,8 +765,8 @@ int main() {
 8
 2
 0`,
-          expectedOutput: `입력한 숫자: 5 3 8 2
-총 4개`
+          expectedOutput: `5 3 8 2
+4`
         },
         {
           id: "ch2-q1",

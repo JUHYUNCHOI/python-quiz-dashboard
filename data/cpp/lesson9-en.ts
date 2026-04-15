@@ -613,20 +613,17 @@ int main() {
     vector<int> nums;
     int input;
 
-    cout << "Enter numbers (0 to stop): " << endl;
-
     while (true) {
         cin >> input;
         if (input == 0) break;
         nums.push_back(input);
     }
 
-    cout << "You entered: ";
     for (int i = 0; i < nums.size(); i++) {
         cout << nums[i] << " ";
     }
     cout << endl;
-    cout << "Total: " << nums.size() << " numbers" << endl;
+    cout << nums.size() << endl;
 
     return 0;
 }`,
@@ -638,23 +635,19 @@ int main() {
     vector<int> nums;
     int input;
 
-    cout << "Enter numbers (0 to stop): " << endl;
-
     // Store numbers until 0 is entered
 
-    cout << "You entered: ";
-    // Print nums here
-
+    // Print all numbers (space-separated)
     cout << endl;
-    cout << "Total: " << nums.size() << " numbers" << endl;
+    // Print the count
+    cout << nums.size() << endl;
 
     return 0;
 }`,
           hint: "while(true) { cin >> input; if(input == 0) break; nums.push_back(input); } to collect. Then for(int i = 0; i < nums.size(); i++) { cout << nums[i] << \" \"; } to print",
           stdin: `5\n3\n8\n2\n0`,
-          expectedOutput: `Enter numbers (0 to stop):
-You entered: 5 3 8 2
-Total: 4 numbers`
+          expectedOutput: `5 3 8 2
+4`
         },
         {
           id: "ch2-q1",
