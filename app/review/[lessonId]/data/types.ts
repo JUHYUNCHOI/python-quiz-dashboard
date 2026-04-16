@@ -6,6 +6,7 @@ export interface ChapterContent {
   num: number;
   title: string;
   desc: string;
+  en?: { title?: string; desc?: string };
 }
 
 export interface ExplainContent {
@@ -159,6 +160,7 @@ export type StepContent =
 export interface LessonData {
   id: string;
   title: string;
+  titleEn?: string;
   description: string;
   language?: "python" | "cpp";
   steps: StepContent[];

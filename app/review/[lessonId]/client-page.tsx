@@ -22,17 +22,20 @@ interface ReviewStep {
   step: StepContent
   originalIndex: number   // lesson.steps 내 원래 인덱스
   chapterTitle?: string   // 직전 chapter 스텝의 제목
+  chapterTitleEn?: string // 영어 제목
 }
 
 // 복습용 스텝 추출 (quiz, errorQuiz, practice, interleaving, explain+predict)
 function extractReviewSteps(lesson: LessonData): ReviewStep[] {
   const result: ReviewStep[] = []
   let currentChapterTitle: string | undefined
+  let currentChapterTitleEn: string | undefined
 
   for (let i = 0; i < lesson.steps.length; i++) {
     const step = lesson.steps[i]
     if (step.type === "chapter") {
       currentChapterTitle = step.content.title
+      currentChapterTitleEn = step.content.en?.title
     } else if (
       step.type === "quiz" ||
       step.type === "errorQuiz" ||
@@ -40,7 +43,7 @@ function extractReviewSteps(lesson: LessonData): ReviewStep[] {
       step.type === "interleaving" ||
       (step.type === "explain" && step.content.predict)
     ) {
-      result.push({ step, originalIndex: i, chapterTitle: currentChapterTitle })
+      result.push({ step, originalIndex: i, chapterTitle: currentChapterTitle, chapterTitleEn: currentChapterTitleEn })
     }
   }
   return result
@@ -124,6 +127,9 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   const [wrongSteps, setWrongSteps] = useState<number[]>(saved?.wrongSteps ?? [])
   const [showResults, setShowResults] = useState(false)
   const [showLesson, setShowLesson] = useState(false)
+  // 각 스텝의 답 보존 (인덱스 → 답 데이터)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [stepAnswers, setStepAnswers] = useState<Record<number, any>>(saved?.stepAnswers ?? {})
   // 리셋 카운터 — StepRenderer key 변경용
   const [resetCount, setResetCount] = useState(0)
 
@@ -135,7 +141,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
       localStorage.setItem(storageKey, JSON.stringify({
         currentIndex, score, totalAttempted, correctCount,
         completedSteps: Array.from(completedSteps),
-        wrongSteps,
+        wrongSteps, stepAnswers,
       }))
     } catch {}
   }, [currentIndex, score, totalAttempted, correctCount, completedSteps, wrongSteps, storageKey])
@@ -260,7 +266,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
               <X className="h-5 w-5 text-gray-600" />
             </button>
             <h1 className="text-lg font-bold text-gray-900 flex-1">
-              {lesson.title} — {t("복습 결과", "Review Results")}
+              {isEn && lesson.titleEn ? lesson.titleEn : lesson.title} — {t("복습 결과", "Review Results")}
             </h1>
           </div>
         </div>
@@ -302,7 +308,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                   const preview = getStepPreview(r.step, isEn)
                   return (
                     <p key={i} className="text-sm text-orange-600 truncate">
-                      {i + 1}. {r.chapterTitle ? `[${r.chapterTitle}] ` : ""}{preview}
+                      {i + 1}. {r.chapterTitle ? `[${isEn && r.chapterTitleEn ? r.chapterTitleEn : r.chapterTitle}] ` : ""}{preview}
                     </p>
                   )
                 })}
@@ -398,7 +404,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                   <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:flex flex-col items-center pointer-events-none z-50">
                     <div className="bg-gray-800 text-white text-[11px] rounded-lg px-2.5 py-1.5 whitespace-nowrap shadow-lg">
                       <p className="font-semibold">{idx + 1}번 · {typeLabel}</p>
-                      {rs.chapterTitle && <p className="text-gray-300 mt-0.5">{rs.chapterTitle}</p>}
+                      {rs.chapterTitle && <p className="text-gray-300 mt-0.5">{isEn && rs.chapterTitleEn ? rs.chapterTitleEn : rs.chapterTitle}</p>}
                     </div>
                     <div className="w-2 h-2 bg-gray-800 rotate-45 -mt-1" />
                   </div>
@@ -417,11 +423,11 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
 
         {/* 레슨명 + 챕터명 */}
         <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 pb-2 flex items-center gap-1.5">
-          <span className="text-xs font-semibold text-orange-500">{lesson.title}</span>
+          <span className="text-xs font-semibold text-orange-500">{lang === "en" && lesson.titleEn ? lesson.titleEn : lesson.title}</span>
           {currentReview?.chapterTitle && (
             <>
               <span className="text-xs text-gray-300">›</span>
-              <span className="text-xs text-gray-400">{currentReview.chapterTitle}</span>
+              <span className="text-xs text-gray-400">{lang === "en" && currentReview.chapterTitleEn ? currentReview.chapterTitleEn : currentReview.chapterTitle}</span>
             </>
           )}
         </div>
@@ -431,46 +437,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
       <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6 pb-40">
         <div className="bg-white rounded-2xl p-6 md:p-10 shadow-sm">
 
-          {/* 수업 내용 힌트 */}
-          {currentReview && (
-            <div className="mb-5">
-              <button
-                onClick={() => setShowLesson(!showLesson)}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-50 hover:bg-orange-100 rounded-lg border border-orange-200 text-orange-600 font-bold text-xs transition-colors"
-              >
-                <BookOpen className="w-3.5 h-3.5" />
-                {showLesson
-                  ? t("수업 내용 닫기 ▲", "Hide lesson ▲")
-                  : t("📖 잘 모르겠으면 수업 내용 보기", "📖 View lesson hint")}
-              </button>
-              {showLesson && (
-                <div className="mt-2 p-3 bg-amber-50 rounded-xl border border-amber-200 max-h-52 overflow-y-auto">
-                  {nearbyExplains.length > 0 ? (
-                    <>
-                      {nearbyExplains.map((lines, i) => (
-                        <div key={i} className={cn("text-xs text-amber-800 leading-relaxed", i > 0 && "mt-2 pt-2 border-t border-amber-100")}>
-                          {lines.map((line, j) => <p key={j}>{line}</p>)}
-                        </div>
-                      ))}
-                      <button
-                        onClick={() => router.push(`/learn/${lessonId}`)}
-                        className="mt-2 text-amber-600 font-bold text-xs hover:underline"
-                      >
-                        {t("전체 수업 보기 →", "View full lesson →")}
-                      </button>
-                    </>
-                  ) : (
-                    <button
-                      onClick={() => router.push(`/learn/${lessonId}`)}
-                      className="text-amber-600 font-bold text-xs hover:underline"
-                    >
-                      {t("수업 페이지에서 보기 →", "View in lesson →")}
-                    </button>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
+          {/* 수업 내용 참고 — 스텝 렌더러 아래 힌트 영역에서 2단계로 접근 */}
 
           {/* 복습 스텝 렌더러 */}
           {currentReview && (
@@ -479,26 +446,24 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
               step={currentReview.step}
               onCorrect={handleCorrect}
               onWrong={handleWrong}
-              onNext={isCurrentStepCompleted ? undefined : goNext}
               language={lesson.language ?? "cpp"}
               stepKey={`${lessonId}-${currentReview.originalIndex}`}
+              savedAnswer={stepAnswers[currentIndex] ?? undefined}
+              onSaveAnswer={(data) => setStepAnswers(prev => ({ ...prev, [currentIndex]: data }))}
+              lessonExplains={nearbyExplains}
+              lessonLink={`/learn/${lessonId}`}
             />
           )}
 
-          {/* 완료된 문제 — 다음 버튼 + 다시 풀기 */}
+          {/* 완료된 문제 — 다시 풀기 버튼만 (Next는 하단 네비 바 사용) */}
           {isCurrentStepCompleted && (
-            <div className="mt-4 flex flex-col gap-2">
-              <button
-                onClick={goNext}
-                className="w-full py-3.5 rounded-xl text-base font-bold text-white bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 shadow-md transition-all flex items-center justify-center gap-2"
-              >
-                {currentIndex === reviewSteps.length - 1 ? t("결과 보기 →", "See Results →") : t("다음 →", "Next →")}
-              </button>
+            <div className="mt-4">
               <button
                 onClick={() => {
                   if (currentReview) {
                     try { localStorage.removeItem(`review-input-${lessonId}-${currentReview.originalIndex}`) } catch {}
                   }
+                  setStepAnswers(prev => { const next = { ...prev }; delete next[currentIndex]; return next })
                   setCompletedSteps(prev => { const next = new Set(prev); next.delete(currentIndex); return next })
                   setWrongSteps(prev => prev.filter(i => i !== currentIndex))
                   setResetCount(prev => prev + 1)

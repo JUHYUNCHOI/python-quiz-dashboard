@@ -3,6 +3,7 @@ import { LessonData } from '../types';
 export const lessonCpp9: LessonData = {
     id: "cpp-9",
     title: "배열 & 벡터",
+    titleEn: "Array & Vector",
     description: "배열과 vector 복습!",
     language: "cpp",
     steps: [
@@ -12,7 +13,8 @@ export const lessonCpp9: LessonData = {
         content: {
           num: 1,
           title: "C-style 배열",
-          desc: "고정 크기 배열을 익혀요!"
+          desc: "고정 크기 배열을 익혀요!",
+          en: { title: "C-style Array", desc: "Practice fixed-size arrays!" }
         }
       },
 
@@ -68,20 +70,20 @@ export const lessonCpp9: LessonData = {
         }
       },
 
-      // Lv.1: 배열 초기화
+      // Lv.1: 배열 초기화 — 중괄호까지 직접 작성
       {
         type: "practice",
         content: {
           level: 1,
           task: "배열에 1, 2, 3을 넣어요!",
-          guide: "중괄호 {} 안에 값을 넣어요!",
-          template: "int arr[3] = {___};",
-          answer: "1, 2, 3",
-          alternateAnswers: ["1,2,3"],
+          guide: "{값, 값, 값} 형태로 써요!",
+          template: "int arr[3] = ___;",
+          answer: "{1, 2, 3}",
+          alternateAnswers: ["{1,2,3}"],
           expect: "int arr[3] = {1, 2, 3};",
           en: {
             task: "Initialize the array with 1, 2, 3!",
-            guide: "Put the values inside curly braces {}!"
+            guide: "Use the form: {val, val, val}"
           }
         }
       },
@@ -133,6 +135,28 @@ export const lessonCpp9: LessonData = {
               "cout usage is incorrect"
             ],
             explanation: "An array of size 3 only has indices 0, 1, 2! arr[3] is out of bounds and may produce garbage values."
+          }
+        }
+      },
+
+      // 부분 초기화 예측
+      {
+        type: "explain",
+        content: {
+          lines: [],
+          code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    int arr[3] = {1};\n    cout << arr[0] << " " << arr[1] << " " << arr[2] << endl;\n    return 0;\n}',
+          predict: {
+            question: "출력 결과는?",
+            options: ["1 1 1", "1 0 0", "1 쓰레기값 쓰레기값", "에러"],
+            answer: 1,
+            feedback: "일부만 초기화하면 나머지는 자동으로 0! {1} → {1, 0, 0}"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["1 1 1", "1 0 0", "1 garbage garbage", "Error"],
+              feedback: "Partial initialization fills the rest with 0! {1} → {1, 0, 0}"
+            }
           }
         }
       },
@@ -213,7 +237,8 @@ export const lessonCpp9: LessonData = {
         content: {
           num: 2,
           title: "vector",
-          desc: "크기가 자유로운 vector를 배워요!"
+          desc: "크기가 자유로운 vector를 배워요!",
+          en: { title: "vector", desc: "Learn the resizable vector!" }
         }
       },
 
@@ -456,7 +481,8 @@ export const lessonCpp9: LessonData = {
         content: {
           num: 3,
           title: "프로젝트: 점수 관리",
-          desc: "vector로 점수를 관리하는 프로그램을 만들어요!"
+          desc: "vector로 점수를 관리하는 프로그램을 만들어요!",
+          en: { title: "Project: Score Manager", desc: "Build a score manager with vector!" }
         }
       },
 
@@ -560,7 +586,8 @@ export const lessonCpp9: LessonData = {
         content: {
           num: 4,
           title: "벡터 손에 익히기",
-          desc: "같은 패턴을 반복해서 손이 기억하게 만들어요!"
+          desc: "같은 패턴을 반복해서 손이 기억하게 만들어요!",
+          en: { title: "Vector Drills", desc: "Repeat patterns until they stick!" }
         }
       },
 
@@ -601,7 +628,29 @@ export const lessonCpp9: LessonData = {
         }
       },
 
-      // Drill 3: 크기 + 초기값으로 선언 (n, value)
+      // vector(n, val) 초기화 예측
+      {
+        type: "explain",
+        content: {
+          lines: [],
+          code: '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> v(3, 0);\n    cout << v[1] << endl;\n    return 0;\n}',
+          predict: {
+            question: "v[1]의 값은?",
+            options: ["3", "1", "0", "에러"],
+            answer: 2,
+            feedback: "vector<int> v(3, 0)은 크기 3, 모든 값 0! v = {0, 0, 0}이니까 v[1] = 0"
+          },
+          en: {
+            predict: {
+              question: "What's the value of v[1]?",
+              options: ["3", "1", "0", "Error"],
+              feedback: "vector<int> v(3, 0) = size 3, all values 0! v = {0, 0, 0}, so v[1] = 0"
+            }
+          }
+        }
+      },
+
+      // Drill 3: 크기 + 초기값으로 선언 (n, value) — 빈칸
       {
         type: "practice",
         content: {
@@ -615,6 +664,24 @@ export const lessonCpp9: LessonData = {
           en: {
             task: "Declare a vector of 5 integers, all initialized to 0",
             hint: "Put (size, initial_value) inside parentheses"
+          }
+        }
+      },
+
+      // Drill 3b: 크기 + 초기값 — 괄호까지 전부 직접 작성
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "크기 4, 초기값 7인 정수 벡터를 선언해요!\n변수명은 v 로 하세요.",
+          hint: "vector<타입> 이름(크기, 초기값);",
+          template: null,
+          answer: "vector<int> v(4, 7);",
+          alternateAnswers: ["vector<int> v(4,7);"],
+          expect: "vector<int> v(4, 7);",
+          en: {
+            task: "Declare a vector of 4 integers, all initialized to 7!\nUse variable name: v",
+            hint: "vector<type> name(size, value);"
           }
         }
       },
@@ -654,6 +721,7 @@ export const lessonCpp9: LessonData = {
           expect: "2",
           en: {
             task: "Add 1, 2, 3 to vector → remove last element → print size",
+            hint: "Method to remove last element + method to return element count",
             guide: "push_back 3 times → pop_back → size()"
           }
         }
@@ -720,6 +788,63 @@ export const lessonCpp9: LessonData = {
         }
       },
 
+      // cin 입력 → 배열 저장 예측
+      {
+        type: "explain",
+        content: {
+          lines: [],
+          code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    int arr[3];\n    for (int i = 0; i < 3; i++) {\n        cin >> arr[i];\n    }\n    cout << arr[1] << endl;\n    return 0;\n}',
+          predict: {
+            question: "입력이 10 20 30이면 출력은?",
+            options: ["10", "20", "30", "에러"],
+            answer: 1,
+            feedback: "arr[0]=10, arr[1]=20, arr[2]=30 → arr[1]은 20!"
+          },
+          en: {
+            predict: {
+              question: "If input is 10 20 30, what's the output?",
+              options: ["10", "20", "30", "Error"],
+              feedback: "arr[0]=10, arr[1]=20, arr[2]=30 → arr[1] is 20!"
+            }
+          }
+        }
+      },
+
+      // Drill 9a: cin → 배열에 저장 (빈칸)
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "for 루프로 배열에 5개의 정수를 입력받아요!",
+          guide: "cin >> arr[인덱스 변수]",
+          template: "int arr[5];\nfor (int i = 0; i < 5; i++) {\n    cin >> arr[___];\n}",
+          answer: "i",
+          expect: "int arr[5];\nfor (int i = 0; i < 5; i++) {\n    cin >> arr[i];\n}",
+          en: {
+            task: "Use a for loop to read 5 integers into the array!",
+            guide: "cin >> arr[index variable]"
+          }
+        }
+      },
+
+      // Drill 9b: cin → 벡터에 push_back (빈칸)
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "3개의 정수를 입력받아 벡터에 추가해요!",
+          guide: "임시 변수에 cin → push_back으로 벡터에 추가",
+          template: "vector<int> v;\nfor (int i = 0; i < 3; i++) {\n    int x;\n    cin >> ___;\n    v.___(x);\n}",
+          blanksAnswer: ["x", "push_back"],
+          answer: "vector<int> v;\nfor (int i = 0; i < 3; i++) {\n    int x;\n    cin >> x;\n    v.push_back(x);\n}",
+          expect: "vector<int> v;\nfor (int i = 0; i < 3; i++) {\n    int x;\n    cin >> x;\n    v.push_back(x);\n}",
+          en: {
+            task: "Read 3 integers and add them to the vector!",
+            guide: "cin into temp variable → push_back to vector"
+          }
+        }
+      },
+
       // Drill 9: cin 입력 → 벡터 저장 → 최댓값
       {
         type: "practice",
@@ -736,7 +861,8 @@ export const lessonCpp9: LessonData = {
           expect: "9",
           en: {
             task: "Write from scratch! Read 4 integers via cin → store in vector → print max value",
-            guide: "push_back to store → maxVal = v[0] → for auto compare"
+            guide: "push_back to store → maxVal = v[0] → for auto compare",
+            hint: "vector<int> v;\nfor(int i=0;i<4;i++){int x;cin>>x;v.push_back(x);}\nint m=v[0];\nfor(auto x:v)if(x>m)m=x;\ncout<<m;"
           }
         }
       },
