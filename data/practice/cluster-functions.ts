@@ -328,13 +328,13 @@ int main() {
       cluster: "functions",
       unlockAfter: "cpp-8",
       difficulty: "보통",
-      title: "팩토리얼 (재귀)",
-      description: `N!을 재귀 함수로 구현하세요. T개의 테스트케이스에 대해 N!을 출력하세요.`,
+      title: "팩토리얼 함수",
+      description: `N!을 계산하는 함수 factorial을 작성하세요. T개의 테스트케이스에 대해 N!을 출력하세요.\n\n팩토리얼: N! = 1 × 2 × 3 × ... × N (단, 0! = 1)`,
       constraints: "1 ≤ T ≤ 10, 0 ≤ N ≤ 12",
       initialCode: `#include <iostream>
 using namespace std;
 
-// factorial 재귀 함수를 여기에 작성하세요
+// factorial 함수를 여기에 작성하세요
 
 int main() {
     int t;
@@ -351,15 +351,18 @@ int main() {
         { stdin: "2\n12\n7", expectedOutput: "479001600\n5040", label: "큰 값" },
       ],
       hints: [
-        "기저 조건: n == 0이면 1을 반환합니다.",
-        "재귀 호출: return n * factorial(n-1);",
+        "0! = 1이므로 result를 1로 시작하세요.",
+        "for 루프로 1부터 n까지 곱해 나가면 됩니다: result *= i;",
       ],
       solutionCode: `#include <iostream>
 using namespace std;
 
-int factorial(int n) {
-    if (n == 0) return 1;
-    return n * factorial(n - 1);
+long long factorial(int n) {
+    long long result = 1;
+    for (int i = 1; i <= n; i++) {
+        result *= i;
+    }
+    return result;
 }
 
 int main() {
@@ -372,16 +375,16 @@ int main() {
     }
     return 0;
 }`,
-      solutionExplanation: "재귀의 두 요소: 기저 조건(0! = 1)과 재귀 호출(n * (n-1)!). 재귀는 '현재 문제를 더 작은 같은 문제로 표현'하는 것입니다.",
+      solutionExplanation: "result를 1로 시작해서 1부터 n까지 차례로 곱합니다. 0!은 루프가 실행되지 않아 자연스럽게 1이 됩니다. 큰 값을 위해 long long을 사용합니다.",
       en: {
-        title: "Factorial (Recursive)",
-        description: `Implement N! using a recursive function. For T test cases, output N!.`,
+        title: "Factorial Function",
+        description: `Write a function factorial to compute N!. For T test cases, output N!.\n\nFactorial: N! = 1 × 2 × 3 × ... × N (where 0! = 1)`,
         constraints: "1 ≤ T ≤ 10, 0 ≤ N ≤ 12",
         hints: [
-          "Base case: if n == 0, return 1.",
-          "Recursive call: return n * factorial(n-1);",
+          "Start result at 1 since 0! = 1.",
+          "Use a for loop to multiply from 1 to n: result *= i;",
         ],
-        solutionExplanation: "Two elements of recursion: base case (0! = 1) and recursive call (n * (n-1)!). Recursion expresses the current problem in terms of a smaller instance of the same problem.",
+        solutionExplanation: "Start result at 1, then multiply 1 through n. For 0!, the loop doesn't execute, so the result is naturally 1. Use long long to handle large values.",
       },
     },
     // ── 함수 오버로딩 ─────────────────────────────────────────────
@@ -477,13 +480,13 @@ int main() {
       cluster: "functions",
       unlockAfter: "cpp-8",
       difficulty: "보통",
-      title: "피보나치 (재귀)",
-      description: `N번째 피보나치 수를 재귀 함수로 구현하세요. (fib(0) = 0, fib(1) = 1, fib(n) = fib(n-1) + fib(n-2))\nT개의 테스트케이스에 대해 fib(N)을 출력하세요.`,
+      title: "피보나치 함수",
+      description: `N번째 피보나치 수를 반복문으로 구현하세요.\nfib(0) = 0, fib(1) = 1, fib(n) = fib(n-1) + fib(n-2)\n\nT개의 테스트케이스에 대해 fib(N)을 출력하세요.`,
       constraints: "1 ≤ T ≤ 10, 0 ≤ N ≤ 15",
       initialCode: `#include <iostream>
 using namespace std;
 
-// fib 재귀 함수를 여기에 작성하세요
+// fib 함수를 여기에 작성하세요
 
 int main() {
     int t;
@@ -500,16 +503,21 @@ int main() {
         { stdin: "3\n2\n3\n4", expectedOutput: "1\n2\n3", label: "소수 인덱스" },
       ],
       hints: [
-        "기저 조건: n == 0이면 0, n == 1이면 1을 반환합니다.",
-        "return fib(n-1) + fib(n-2);",
+        "두 변수 a=0, b=1로 시작해서 n번 반복합니다.",
+        "매 반복마다: int next = a + b; a = b; b = next;",
       ],
       solutionCode: `#include <iostream>
 using namespace std;
 
 int fib(int n) {
     if (n == 0) return 0;
-    if (n == 1) return 1;
-    return fib(n - 1) + fib(n - 2);
+    int a = 0, b = 1;
+    for (int i = 2; i <= n; i++) {
+        int next = a + b;
+        a = b;
+        b = next;
+    }
+    return b;
 }
 
 int main() {
@@ -522,16 +530,16 @@ int main() {
     }
     return 0;
 }`,
-      solutionExplanation: "피보나치는 두 개의 기저 조건이 필요합니다. N이 커지면 중복 계산으로 느려지지만, N ≤ 15에서는 충분히 빠릅니다.",
+      solutionExplanation: "두 변수 a, b로 이전 두 피보나치 수를 추적합니다. 매 반복마다 다음 값을 구하고 a, b를 한 칸씩 밀어줍니다. n=0은 별도 처리합니다.",
       en: {
-        title: "Fibonacci (Recursive)",
-        description: `Implement the N-th Fibonacci number using a recursive function. (fib(0) = 0, fib(1) = 1, fib(n) = fib(n-1) + fib(n-2))\nFor T test cases, output fib(N).`,
+        title: "Fibonacci Function",
+        description: `Compute the N-th Fibonacci number using a loop.\nfib(0) = 0, fib(1) = 1, fib(n) = fib(n-1) + fib(n-2)\n\nFor T test cases, output fib(N).`,
         constraints: "1 ≤ T ≤ 10, 0 ≤ N ≤ 15",
         hints: [
-          "Base cases: n == 0 returns 0, n == 1 returns 1.",
-          "return fib(n-1) + fib(n-2);",
+          "Start with two variables a=0, b=1 and loop n times.",
+          "Each iteration: int next = a + b; a = b; b = next;",
         ],
-        solutionExplanation: "Fibonacci requires two base cases. For large N it becomes slow due to redundant calls, but N ≤ 15 is fast enough for a naive recursive solution.",
+        solutionExplanation: "Track the previous two Fibonacci numbers with a and b. Each iteration computes the next value and shifts a, b forward. Handle n=0 as a special case.",
       },
     },
     {
@@ -540,7 +548,7 @@ int main() {
       unlockAfter: "cpp-8",
       difficulty: "어려움",
       title: "GCD/LCM 함수",
-      description: `두 양의 정수 A, B의 최대공약수(GCD)와 최소공배수(LCM)를 반환하는 함수를 작성하세요. T개의 테스트케이스에 대해 GCD와 LCM을 한 줄에 출력하세요.\n\nGCD는 유클리드 알고리즘으로 구현: gcd(a, b) = gcd(b, a%b), 기저조건 gcd(a, 0) = a\nLCM = a * b / GCD(a, b)`,
+      description: `두 양의 정수 A, B의 최대공약수(GCD)와 최소공배수(LCM)를 반환하는 함수를 작성하세요. T개의 테스트케이스에 대해 GCD와 LCM을 한 줄에 출력하세요.\n\nGCD는 유클리드 알고리즘으로 구현: b가 0이 될 때까지 a, b를 교체 (a=b, b=a%b)\nLCM = a * b / GCD(a, b)`,
       constraints: "1 ≤ T ≤ 10, 1 ≤ A, B ≤ 10000",
       initialCode: `#include <iostream>
 using namespace std;
@@ -562,14 +570,19 @@ int main() {
         { stdin: "2\n6 6\n9 6", expectedOutput: "6 6\n3 18", label: "같은 수 / 배수" },
       ],
       hints: [
-        "int gcd(int a, int b) { return b == 0 ? a : gcd(b, a % b); }",
+        "while (b != 0) { int temp = b; b = a % b; a = temp; } — 반복이 끝나면 a가 GCD",
         "lcm = a / gcd(a, b) * b (오버플로우 방지를 위해 나누기 먼저)",
       ],
       solutionCode: `#include <iostream>
 using namespace std;
 
 int gcd(int a, int b) {
-    return b == 0 ? a : gcd(b, a % b);
+    while (b != 0) {
+        int temp = b;
+        b = a % b;
+        a = temp;
+    }
+    return a;
 }
 
 int lcm(int a, int b) {
@@ -586,16 +599,16 @@ int main() {
     }
     return 0;
 }`,
-      solutionExplanation: "유클리드 알고리즘: gcd(a, b) = gcd(b, a%b). b가 0이 될 때까지 반복합니다. LCM은 a*b/gcd로 구하되, 오버플로우를 막기 위해 a/gcd를 먼저 계산합니다.",
+      solutionExplanation: "유클리드 알고리즘: b가 0이 될 때까지 a=b, b=a%b를 반복합니다. 루프가 끝나면 a가 GCD입니다. LCM은 a*b/gcd로 구하되, 오버플로우를 막기 위해 a/gcd를 먼저 계산합니다.",
       en: {
         title: "GCD/LCM Functions",
-        description: `Write functions to compute the GCD and LCM of two positive integers A and B. For T test cases, output GCD and LCM on one line.\n\nGCD via Euclidean algorithm: gcd(a, b) = gcd(b, a%b), base case gcd(a, 0) = a\nLCM = a * b / GCD(a, b)`,
+        description: `Write functions to compute the GCD and LCM of two positive integers A and B. For T test cases, output GCD and LCM on one line.\n\nGCD via Euclidean algorithm: swap a, b until b becomes 0 (a=b, b=a%b)\nLCM = a * b / GCD(a, b)`,
         constraints: "1 ≤ T ≤ 10, 1 ≤ A, B ≤ 10000",
         hints: [
-          "int gcd(int a, int b) { return b == 0 ? a : gcd(b, a % b); }",
+          "while (b != 0) { int temp = b; b = a % b; a = temp; } — when the loop ends, a is the GCD",
           "lcm = a / gcd(a, b) * b (divide first to prevent overflow)",
         ],
-        solutionExplanation: "Euclidean algorithm: gcd(a, b) = gcd(b, a%b), stopping when b reaches 0. For LCM, compute a/gcd first to prevent integer overflow before multiplying by b.",
+        solutionExplanation: "Euclidean algorithm: swap a=b, b=a%b until b reaches 0 — then a is the GCD. For LCM, compute a/gcd first to prevent integer overflow before multiplying by b.",
       },
     },
     {
@@ -675,65 +688,65 @@ int main() {
       id: "fn-010",
       cluster: "functions",
       unlockAfter: "cpp-8",
-      difficulty: "어려움",
-      title: "재귀 합계 (1+2+...+N)",
-      description: `1+2+...+N을 재귀로 구하는 함수 sumTo와 반복문으로 구하는 함수 sumToIter를 모두 구현하세요. N이 주어질 때 두 결과가 같은지 확인하고, 재귀 결과를 출력하세요.\n\n결과가 같으면 결과 그대로, 다르면 "ERROR"를 출력하세요.`,
-      constraints: "1 ≤ N ≤ 100",
+      difficulty: "보통",
+      title: "구간 합 함수",
+      description: `정수 A, B가 주어질 때, A부터 B까지의 합을 계산하는 함수 sumRange(int a, int b)를 작성하세요.\n\nT개의 테스트케이스에 대해 결과를 출력하세요.`,
+      constraints: "1 ≤ T ≤ 10, -100 ≤ A ≤ B ≤ 100",
       initialCode: `#include <iostream>
 using namespace std;
 
-// sumTo (재귀), sumToIter (반복문) 함수를 여기에 작성하세요
+// sumRange 함수를 여기에 작성하세요
 
 int main() {
-    int n;
-    cin >> n;
-    int r = sumTo(n), it = sumToIter(n);
-    if (r == it) cout << r << "\\n";
-    else cout << "ERROR\\n";
+    int t;
+    cin >> t;
+    while (t--) {
+        int a, b;
+        cin >> a >> b;
+        cout << sumRange(a, b) << "\\n";
+    }
     return 0;
 }`,
       testCases: [
-        { stdin: "5", expectedOutput: "15", label: "N=5" },
-        { stdin: "10", expectedOutput: "55", label: "N=10" },
-        { stdin: "1", expectedOutput: "1", label: "N=1" },
-        { stdin: "100", expectedOutput: "5050", label: "N=100" },
+        { stdin: "3\n1 5\n1 10\n1 100", expectedOutput: "15\n55\n5050", label: "기본" },
+        { stdin: "2\n-3 3\n0 0", expectedOutput: "0\n0", label: "음수/영" },
+        { stdin: "1\n50 50", expectedOutput: "50", label: "같은 값" },
       ],
       hints: [
-        "sumTo(n) = n + sumTo(n-1), 기저조건: sumTo(0) = 0",
-        "sumToIter: for 루프로 1부터 n까지 더합니다.",
+        "for 루프로 a부터 b까지 더합니다: for (int i = a; i <= b; i++)",
+        "sum을 0으로 초기화한 뒤 반복문 안에서 sum += i;",
       ],
       solutionCode: `#include <iostream>
 using namespace std;
 
-int sumTo(int n) {
-    if (n == 0) return 0;
-    return n + sumTo(n - 1);
-}
-
-int sumToIter(int n) {
+int sumRange(int a, int b) {
     int sum = 0;
-    for (int i = 1; i <= n; i++) sum += i;
+    for (int i = a; i <= b; i++) {
+        sum += i;
+    }
     return sum;
 }
 
 int main() {
-    int n;
-    cin >> n;
-    int r = sumTo(n), it = sumToIter(n);
-    if (r == it) cout << r << "\\n";
-    else cout << "ERROR\\n";
+    int t;
+    cin >> t;
+    while (t--) {
+        int a, b;
+        cin >> a >> b;
+        cout << sumRange(a, b) << "\\n";
+    }
     return 0;
 }`,
-      solutionExplanation: "재귀와 반복문은 많은 경우 교환 가능합니다. 재귀는 '더 작은 문제로 쪼개기', 반복은 '쌓아가기'로 표현 방식이 다릅니다. 두 결과를 비교해 정확성을 검증합니다.",
+      solutionExplanation: "for 루프로 a부터 b까지 순회하며 합산합니다. a == b이면 루프가 1번만 실행되고, 음수 범위도 자연스럽게 처리됩니다.",
       en: {
-        title: "Recursive Sum (1+2+...+N)",
-        description: `Implement both a recursive function sumTo and an iterative function sumToIter to compute 1+2+...+N. For a given N, verify both produce the same result and output it.\n\nIf they match, output the result; otherwise output "ERROR".`,
-        constraints: "1 ≤ N ≤ 100",
+        title: "Range Sum Function",
+        description: `Given integers A and B, write a function sumRange(int a, int b) that computes the sum from A to B.\n\nFor T test cases, output the result.`,
+        constraints: "1 ≤ T ≤ 10, -100 ≤ A ≤ B ≤ 100",
         hints: [
-          "sumTo(n) = n + sumTo(n-1), base case: sumTo(0) = 0",
-          "sumToIter: use a for loop to add 1 through n.",
+          "Use a for loop from a to b: for (int i = a; i <= b; i++)",
+          "Initialize sum to 0, then sum += i inside the loop;",
         ],
-        solutionExplanation: "Recursion and iteration are often interchangeable. Recursion 'decomposes' the problem; iteration 'builds up' the answer. Comparing both results validates correctness.",
+        solutionExplanation: "Loop from a to b, accumulating the sum. When a == b, the loop runs once. Negative ranges are handled naturally.",
       },
     },
     {
@@ -917,18 +930,17 @@ Given two integers n and limit, output the result.`,
       cluster: "functions",
       unlockAfter: "cpp-8",
       difficulty: "보통",
-      title: "거듭제곱 함수 (재귀)",
-      description: `base의 exp 거듭제곱을 재귀로 계산하는 함수 power(int base, int exp)를 작성하세요.
+      title: "거듭제곱 함수",
+      description: `base의 exp 거듭제곱을 반복문으로 계산하는 함수 power(int base, int exp)를 작성하세요.
 
-- 기저 조건: exp == 0이면 1을 반환
-- 재귀 호출: base * power(base, exp - 1)
+예: power(2, 10) = 1024, power(3, 5) = 243, power(5, 0) = 1
 
 두 정수 base와 exp가 주어질 때 결과를 출력하세요.`,
       constraints: "0 ≤ base ≤ 10, 0 ≤ exp ≤ 10",
       initialCode: `#include <iostream>
 using namespace std;
 
-// power 재귀 함수를 여기에 작성하세요
+// power 함수를 여기에 작성하세요
 
 int main() {
     int base, exp;
@@ -942,15 +954,18 @@ int main() {
         { stdin: "5 0", expectedOutput: "1", label: "0승은 항상 1" },
       ],
       hints: [
-        "기저 조건: if (exp == 0) return 1;",
-        "재귀 호출: return base * power(base, exp - 1);",
+        "result를 1로 시작하고, exp번 반복하며 base를 곱하세요.",
+        "for (int i = 0; i < exp; i++) result *= base;",
       ],
       solutionCode: `#include <iostream>
 using namespace std;
 
 long long power(int base, int exp) {
-    if (exp == 0) return 1;
-    return base * power(base, exp - 1);
+    long long result = 1;
+    for (int i = 0; i < exp; i++) {
+        result *= base;
+    }
+    return result;
 }
 
 int main() {
@@ -959,21 +974,20 @@ int main() {
     cout << power(base, exp) << "\\n";
     return 0;
 }`,
-      solutionExplanation: "재귀의 핵심: 'base^exp = base × base^(exp-1)'이라는 수학적 정의를 그대로 코드로 표현합니다. exp가 0에 도달하면 1을 반환해 재귀를 종료합니다. long long을 사용해 큰 값의 오버플로우를 방지합니다.",
+      solutionExplanation: "result를 1로 시작해서 exp번 base를 곱합니다. exp=0이면 루프가 실행되지 않아 자연스럽게 1이 됩니다. long long을 사용해 큰 값의 오버플로우를 방지합니다.",
       en: {
-        title: "Power Function (Recursive)",
-        description: `Write a recursive function power(int base, int exp) to compute base raised to exp.
+        title: "Power Function",
+        description: `Write a function power(int base, int exp) to compute base raised to exp using a loop.
 
-- Base case: if exp == 0, return 1
-- Recursive call: base * power(base, exp - 1)
+Example: power(2, 10) = 1024, power(3, 5) = 243, power(5, 0) = 1
 
 Given base and exp, output the result.`,
         constraints: "0 ≤ base ≤ 10, 0 ≤ exp ≤ 10",
         hints: [
-          "Base case: if (exp == 0) return 1;",
-          "Recursive call: return base * power(base, exp - 1);",
+          "Start result at 1, then multiply by base exp times.",
+          "for (int i = 0; i < exp; i++) result *= base;",
         ],
-        solutionExplanation: "The key idea: 'base^exp = base × base^(exp-1)' translates the mathematical definition directly into code. When exp reaches 0, return 1 to end the recursion. Use long long to avoid overflow for large values.",
+        solutionExplanation: "Start result at 1 and multiply base exp times. When exp=0, the loop doesn't run, naturally returning 1. Use long long to avoid overflow for large values.",
       },
     },
     {
