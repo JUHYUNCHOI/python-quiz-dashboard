@@ -564,7 +564,8 @@ export const lessonCpp4: LessonData = {
           expect: "Alice is 20 years old.",
           en: {
             task: "Write from scratch! Read a name (string) and age (int), print \"name is N years old.\"",
-            guide: "Declare string and int variables, then use cin to read both at once"
+            guide: "Declare string and int variables, then use cin to read both at once",
+            hint: "You can read two values in a row with cin >> var1 >> var2"
           }
         }
       },
@@ -585,7 +586,8 @@ export const lessonCpp4: LessonData = {
           expect: "270\n90",
           en: {
             task: "Write from scratch! Read 3 scores, print the total and average (with decimal)",
-            guide: "Read three values at once, compute the sum, then print the decimal average"
+            guide: "Read three values at once, compute the sum, then print the decimal average",
+            hint: "To print the average as a decimal, you need a (double) cast"
           }
         }
       },

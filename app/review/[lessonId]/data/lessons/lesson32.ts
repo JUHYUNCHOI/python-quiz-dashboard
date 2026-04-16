@@ -503,10 +503,20 @@ print(subtract(10, 4)) # 6`,
           "문제없음"
         ],
         answer: 1,
-        explanation: "def 인사(): 처럼 콜론(:)을 꼭 붙여야 해요!"
+        explanation: "def 인사(): 처럼 콜론(:)을 꼭 붙여야 해요!",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "Typo in print",
+            "Missing : (colon)",
+            "Indentation error",
+            "No problem"
+          ],
+          explanation: "You must add a colon (:) after the parentheses, like def greet():!"
+        }
       }
     },
-    
+
     // 에러 퀴즈 2: 들여쓰기 안 함
     {
       type: "errorQuiz",
@@ -521,10 +531,20 @@ print('Hello!')`,
           "문제없음"
         ],
         answer: 2,
-        explanation: "함수 안의 코드는 들여쓰기(스페이스 4칸)가 필수!"
+        explanation: "함수 안의 코드는 들여쓰기(스페이스 4칸)가 필수!",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "Missing colon",
+            "Parentheses error",
+            "No indentation",
+            "No problem"
+          ],
+          explanation: "Code inside a function must be indented (4 spaces)!"
+        }
       }
     },
-    
+
     // 에러 퀴즈 3: 괄호 빠짐
     {
       type: "errorQuiz",
@@ -539,10 +559,20 @@ print('Hello!')`,
           "문제없음"
         ],
         answer: 0,
-        explanation: "함수 이름 뒤에 ()가 필수! def 인사():로 써야 해요!"
+        explanation: "함수 이름 뒤에 ()가 필수! def 인사():로 써야 해요!",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "Missing () parentheses",
+            "Missing colon",
+            "Indentation error",
+            "No problem"
+          ],
+          explanation: "Parentheses () are required after the function name! It should be def greet():!"
+        }
       }
     },
-    
+
     // 에러 퀴즈 4: 호출 안 함
     {
       type: "errorQuiz",
@@ -559,7 +589,17 @@ print('Hello!')`,
           "안녕! 2번 출력"
         ],
         answer: 1,
-        explanation: "함수를 만들기만 하고 호출 안 하면 아무것도 안 돼요! 인사()를 써야 해요!"
+        explanation: "함수를 만들기만 하고 호출 안 하면 아무것도 안 돼요! 인사()를 써야 해요!",
+        en: {
+          question: "What happens when you run this code?",
+          options: [
+            "Prints Hello!",
+            "Nothing happens",
+            "Error occurs",
+            "Prints Hello! twice"
+          ],
+          explanation: "If you only define a function but never call it, nothing happens! You need to write greet()!"
+        }
       }
     },
     

@@ -420,7 +420,17 @@ export const lesson38: LessonData = {
           "문제 없음"
         ],
         answer: 0,
-        explanation: "with문 끝에 콜론(:)이 필요해요!"
+        explanation: "with문 끝에 콜론(:)이 필요해요!",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "Missing : after the with statement",
+            "write error",
+            "Filename error",
+            "No problem"
+          ],
+          explanation: "A colon (:) is needed at the end of the with statement!"
+        }
       }
     },
     {
@@ -435,7 +445,17 @@ export const lesson38: LessonData = {
           "문제 없음"
         ],
         answer: 1,
-        explanation: "'r'는 읽기 전용! 쓰려면 'w'나 'a' 모드 필요!"
+        explanation: "'r'는 읽기 전용! 쓰려면 'w'나 'a' 모드 필요!",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "Filename error",
+            "Can't write in 'r' mode",
+            "close() is needed",
+            "No problem"
+          ],
+          explanation: "'r' is read-only! You need 'w' or 'a' mode to write!"
+        }
       }
     },
     {
@@ -450,7 +470,17 @@ export const lesson38: LessonData = {
           "문제 없음"
         ],
         answer: 2,
-        explanation: "with문 쓰면 자동 close()! with문 권장!"
+        explanation: "with문 쓰면 자동 close()! with문 권장!",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "open error",
+            "write error",
+            "Possible data loss because close() is not called",
+            "No problem"
+          ],
+          explanation: "Using the with statement auto-closes the file! Always prefer with!"
+        }
       }
     },
     {
@@ -465,7 +495,17 @@ export const lesson38: LessonData = {
           "BA"
         ],
         answer: 1,
-        explanation: "'w' 모드는 덮어쓰기! 두 번째 'B'만 남아요!"
+        explanation: "'w' 모드는 덮어쓰기! 두 번째 'B'만 남아요!",
+        en: {
+          question: "What does this code output?",
+          options: [
+            "A",
+            "B",
+            "AB",
+            "BA"
+          ],
+          explanation: "'w' mode overwrites! Only the second 'B' remains!"
+        }
       }
     },
     

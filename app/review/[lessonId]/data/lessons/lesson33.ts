@@ -385,10 +385,20 @@ greet(msg='반가워', name='민수')`,
           "문제 없음"
         ],
         answer: 1,
-        explanation: "기본값 있는 건 뒤로! def greet(name, msg='안녕'):이 맞아요!"
+        explanation: "기본값 있는 건 뒤로! def greet(name, msg='안녕'):이 맞아요!",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "The function name is wrong",
+            "A parameter with a default value is placed before one without",
+            "print syntax error",
+            "No problem"
+          ],
+          explanation: "Parameters with default values must come last! def greet(name, msg='안녕'): is correct!"
+        }
       }
     },
-    
+
     // 에러 퀴즈 2: return 값 저장 안 함
     {
       type: "errorQuiz",
@@ -406,10 +416,20 @@ print(결과)`,
           "print 오류"
         ],
         answer: 2,
-        explanation: "결과 = add(3, 5) 처럼 저장해야 써요!"
+        explanation: "결과 = add(3, 5) 처럼 저장해야 써요!",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "Function definition error",
+            "return error",
+            "Return value not saved to a variable",
+            "print error"
+          ],
+          explanation: "You need to save the return value like 결과 = add(3, 5) before using it!"
+        }
       }
     },
-    
+
     // 에러 퀴즈 3: 여러 값 받기 실수
     {
       type: "errorQuiz",
@@ -427,10 +447,20 @@ print(합, 차)`,
           "문제 없음"
         ],
         answer: 1,
-        explanation: "합, 차 = calc(10, 3) 으로 각각 받아야 해요!"
+        explanation: "합, 차 = calc(10, 3) 으로 각각 받아야 해요!",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "return error",
+            "Received as one variable but used two separate variables",
+            "Function definition error",
+            "No problem"
+          ],
+          explanation: "You need to unpack into two variables: 합, 차 = calc(10, 3)!"
+        }
       }
     },
-    
+
     // 에러 퀴즈 4: 기본값 문법 오류
     {
       type: "errorQuiz",
@@ -445,7 +475,17 @@ print(합, 차)`,
           "->중"
         ],
         answer: 2,
-        explanation: "기본값은 = 뒤에 써요! 사이즈='중'"
+        explanation: "기본값은 = 뒤에 써요! 사이즈='중'",
+        en: {
+          question: "What is the correct syntax for setting a default value?",
+          options: [
+            ":'중'",
+            "=='중'",
+            "='중'",
+            "->중"
+          ],
+          explanation: "Default values use = followed by the value! 사이즈='중'"
+        }
       }
     },
     

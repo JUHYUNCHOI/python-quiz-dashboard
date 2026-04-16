@@ -259,7 +259,16 @@ export const lesson1: LessonData = {
             "print를 잘못 썼다"
           ],
           answer: 1,
-          explanation: "'100'은 글자야! 글자끼리 +하면 '10050'이 돼. 계산하려면 따옴표 빼!"
+          explanation: "'100'은 글자야! 글자끼리 +하면 '10050'이 돼. 계산하려면 따옴표 빼!",
+          en: {
+            question: "I want to calculate 100 + 50. What's the problem?",
+            options: [
+              "There's no problem",
+              "'100' is text, so it can't be calculated",
+              "print is written incorrectly"
+            ],
+            explanation: "'100' is text! Adding text together gives '10050'. Remove the quotes to do math!"
+          }
         }
       },
 

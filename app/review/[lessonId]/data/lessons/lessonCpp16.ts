@@ -276,6 +276,13 @@ export const lessonCpp16: LessonData = {
             options: ["4", "3", "2"],
             answer: 1,
             feedback: "중복된 5는 무시! {1, 3, 5} 3개만 들어가요!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["4", "3", "2"],
+              feedback: "The duplicate 5 is ignored! Only {1, 3, 5} — 3 elements!"
+            }
           }
         }
       },
@@ -585,7 +592,8 @@ export const lessonCpp16: LessonData = {
           expect: "3 3",
           en: {
             task: "Write from scratch! Read 5 integers, print the most frequent number and its count\n(use map for frequency → find max frequency)",
-            guide: "Use a map to count each number's occurrences, then loop through all map entries to find the highest count!"
+            guide: "Use a map to count each number's occurrences, then loop through all map entries to find the highest count!",
+            hint: "Fill the map first, then in a second for loop, track the entry where p.second (count) is the largest!"
           }
         }
       },
@@ -606,7 +614,8 @@ export const lessonCpp16: LessonData = {
           expect: "apple\nbanana\ncherry",
           en: {
             task: "Write from scratch! Read 5 words, remove duplicates\nthen print in alphabetical order (set auto-sorts!)",
-            guide: "Inserting words into a set automatically removes duplicates, and iterating gives them in alphabetical order!"
+            guide: "Inserting words into a set automatically removes duplicates, and iterating gives them in alphabetical order!",
+            hint: "Insert each input word into the set with insert(), then iterate with range-for to print them!"
           }
         }
       },

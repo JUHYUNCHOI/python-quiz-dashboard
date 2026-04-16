@@ -512,7 +512,8 @@ export const lessonCpp6: LessonData = {
           expect: "even\nbig",
           en: {
             task: "Write from scratch! Read n → print \"even\" or \"odd\", then print \"big\" or \"small\" based on whether n > 10",
-            guide: "cin → if (n%2==0) → if (n>10)"
+            guide: "cin → if (n%2==0) → if (n>10)",
+            hint: "Write two separate if-else blocks: one for even/odd, one for big/small"
           }
         }
       },
@@ -533,7 +534,8 @@ export const lessonCpp6: LessonData = {
           expect: "7",
           en: {
             task: "Write from scratch! Read two numbers a, b and print the larger one (use ternary operator!)",
-            guide: "result = (a > b) ? a : b;"
+            guide: "result = (a > b) ? a : b;",
+            hint: "Ternary operator: condition ? value_if_true : value_if_false"
           }
         }
       },
@@ -624,7 +626,8 @@ export const lessonCpp6: LessonData = {
           expect: "9",
           en: {
             task: "Write from scratch! Read three integers a, b, c and print the largest\n(use if/else if/else)",
-            guide: "if (a >= b && a >= c) ... else if (b >= c) ... else ..."
+            guide: "if (a >= b && a >= c) ... else if (b >= c) ... else ...",
+            hint: "int a, b, c;\ncin >> a >> b >> c;\nif (a >= b && a >= c) cout << a << endl;\nelse if (b >= c) cout << b << endl;\nelse cout << c << endl;"
           }
         }
       },

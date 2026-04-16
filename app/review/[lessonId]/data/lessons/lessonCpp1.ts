@@ -317,7 +317,8 @@ export const lessonCpp1: LessonData = {
           expect: "10\n4\n21",
           en: {
             task: "Write from scratch! Complete C++ program:\nDeclare int a=7, b=3, then print a+b, a-b, a*b",
-            guide: "#include → main → declare variables → 3 cout statements"
+            guide: "#include → main → declare variables → 3 cout statements",
+            hint: "Declare two int variables, then use cout to print the addition, subtraction, and multiplication results"
           }
         }
       },
@@ -338,7 +339,8 @@ export const lessonCpp1: LessonData = {
           expect: "Alice\n18\n165.5",
           en: {
             task: "Write from scratch! Complete program:\nStore a name (string), age (int), height (double), then print each",
-            guide: "string name; int age; double height; 3 cout statements"
+            guide: "string name; int age; double height; 3 cout statements",
+            hint: "Declare 3 variables with types string, int, and double, then print each one with cout"
           }
         }
       },
@@ -564,7 +566,8 @@ export const lessonCpp1: LessonData = {
           expect: "My name is\nAlice",
           en: {
             task: 'Write from scratch! A complete C++ program that prints "My name is" and your name on separate lines',
-            guide: "#include → using namespace std → int main() → two cout statements → return 0"
+            guide: "#include → using namespace std → int main() → two cout statements → return 0",
+            hint: "Use two cout statements to print each on a separate line"
           }
         }
       },

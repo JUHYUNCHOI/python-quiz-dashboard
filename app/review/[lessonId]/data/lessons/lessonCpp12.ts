@@ -277,7 +277,8 @@ export const lessonCpp12: LessonData = {
           expect: "2 4 6 8 10 ",
           en: {
             task: "Write from scratch! Create doubleAll that takes a vector by reference and doubles every value\nApply to {1,2,3,4,5} and print results separated by spaces",
-            guide: "void doubleAll(vector<int>& v) → v[i] *= 2"
+            guide: "void doubleAll(vector<int>& v) → v[i] *= 2",
+            hint: "void doubleAll(vector<int>& v) {\n    for (auto& x : v) x *= 2;\n}\nvector<int> v = {1,2,3,4,5};\ndoubleAll(v);\nfor (auto x : v) cout << x << \" \";"
           }
         }
       },

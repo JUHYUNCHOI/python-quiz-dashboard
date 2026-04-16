@@ -528,7 +528,17 @@ print(두배후제곱(3))`,
           "문제 없음"
         ],
         answer: 1,
-        explanation: "람다에선 return 안 써요! lambda x: x * 2 가 맞아요!"
+        explanation: "람다에선 return 안 써요! lambda x: x * 2 가 맞아요!",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "Wrong variable name",
+            "Using return keyword in a lambda",
+            "Multiplication error",
+            "No problem"
+          ],
+          explanation: "You can't use return in a lambda! lambda x: x * 2 is correct!"
+        }
       }
     },
     
@@ -546,7 +556,17 @@ print(두배후제곱(3))`,
           "리스트 오류"
         ],
         answer: 2,
-        explanation: "key=lambda x: x[1]로 써야 해요! x는 어디서 왔어요?"
+        explanation: "key=lambda x: x[1]로 써야 해요! x는 어디서 왔어요?",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "x is not defined",
+            "sorted syntax error",
+            "key needs a lambda function",
+            "List error"
+          ],
+          explanation: "You need to write key=lambda x: x[1]! Where did x come from?"
+        }
       }
     },
     
@@ -568,7 +588,17 @@ print(비밀)`,
           "문제 없음"
         ],
         answer: 2,
-        explanation: "비밀은 함수 안의 지역변수! 밖에선 못 써요 🤫"
+        explanation: "비밀은 함수 안의 지역변수! 밖에선 못 써요 🤫",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "Function definition error",
+            "print error",
+            "Using a local variable outside the function",
+            "No problem"
+          ],
+          explanation: "The variable is local to the function! You can't use it outside."
+        }
       }
     },
     
@@ -587,7 +617,17 @@ print(비밀)`,
           "문제 없음"
         ],
         answer: 1,
-        explanation: "람다는 한 줄만! 여러 줄이 필요하면 def를 써요!"
+        explanation: "람다는 한 줄만! 여러 줄이 필요하면 def를 써요!",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "Wrong variable name",
+            "Lambda can only be one line",
+            "return is in the wrong place",
+            "No problem"
+          ],
+          explanation: "Lambda must be a single line! If you need multiple lines, use def!"
+        }
       }
     },
     

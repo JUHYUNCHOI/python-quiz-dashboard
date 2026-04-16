@@ -224,7 +224,12 @@ export const lesson39: LessonData = {
         code: `with open('save.txt', 'r') as f:\n    f.write('data')`,
         options: ["'r' 모드에서 write 불가", "파일명 오류", "close() 필요", "문제 없음"],
         answer: 0,
-        explanation: "'r'는 읽기 전용! 저장하려면 'w' 모드!"
+        explanation: "'r'는 읽기 전용! 저장하려면 'w' 모드!",
+        en: {
+          question: "What's the problem with this save code?",
+          options: ["Can't write in 'r' mode", "Wrong filename", "close() needed", "No problem"],
+          explanation: "'r' is read-only! Use 'w' mode to save!"
+        }
       }
     },
     {
@@ -234,7 +239,12 @@ export const lesson39: LessonData = {
         code: `with open('save.txt', 'r') as f:\n    HP = f.readline()\n    print(HP + 10)`,
         options: ["문제 없음", "readline()은 문자열! int() 변환 필요", "파일이 안 열림", "print 오류"],
         answer: 1,
-        explanation: "파일에서 읽은 건 항상 문자열! int()로 변환해야 계산 가능!"
+        explanation: "파일에서 읽은 건 항상 문자열! int()로 변환해야 계산 가능!",
+        en: {
+          question: "What's the problem with this load code?",
+          options: ["No problem", "readline() returns a string! Need int() conversion", "File won't open", "print error"],
+          explanation: "Data read from a file is always a string! You need int() to do math with it!"
+        }
       }
     },
     {
@@ -244,7 +254,12 @@ export const lesson39: LessonData = {
         code: `with open('save.txt', 'r') as f:\n    data = f.read()\n    print(data)\n# what if the file doesn't exist?`,
         options: ["문제 없음", "close() 필요", "try-except 필요 (FileNotFoundError)", "write 필요"],
         answer: 2,
-        explanation: "파일이 없을 수도 있으니 try-except FileNotFoundError!"
+        explanation: "파일이 없을 수도 있으니 try-except FileNotFoundError!",
+        en: {
+          question: "Something is missing in this code!",
+          options: ["No problem", "close() needed", "Need try-except (FileNotFoundError)", "write needed"],
+          explanation: "The file might not exist, so you need try-except FileNotFoundError!"
+        }
       }
     },
 
@@ -402,7 +417,17 @@ print(name)`,
           "문제 없음"
         ],
         answer: 1,
-        explanation: "'w'는 쓰기 전용! 파일을 읽으려면 'r' 모드를 써야 해요."
+        explanation: "'w'는 쓰기 전용! 파일을 읽으려면 'r' 모드를 써야 해요.",
+        en: {
+          question: "What's the problem with this load code?",
+          options: [
+            "Missing close()",
+            "Can't use readlines() in 'w' mode",
+            "strip() usage error",
+            "No problem"
+          ],
+          explanation: "'w' is write-only! You need 'r' mode to read a file."
+        }
       }
     },
     {

@@ -580,7 +580,8 @@ export const lessonCpp7: LessonData = {
           expect: "2 x 1 = 2\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n2 x 5 = 10\n2 x 6 = 12\n2 x 7 = 14\n2 x 8 = 16\n2 x 9 = 18\n3 x 1 = 3\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n3 x 5 = 15\n3 x 6 = 18\n3 x 7 = 21\n3 x 8 = 24\n3 x 9 = 27",
           en: {
             task: "Use nested for loops to print multiplication tables for 2 and 3\n(format: \"2 x 1 = 2\" etc.)",
-            guide: "outer for i(2~3), inner for j(1~9)"
+            guide: "outer for i(2~3), inner for j(1~9)",
+            hint: "The outer for loop iterates over the table number (2~3), and the inner for loop iterates over the multiplier (1~9)"
           }
         }
       },
@@ -601,7 +602,8 @@ export const lessonCpp7: LessonData = {
           expect: "15",
           en: {
             task: "Write from scratch! Read n → read n integers → print the total sum",
-            guide: "cin >> n → for i(0~n) cin >> x; sum += x → cout"
+            guide: "cin >> n → for i(0~n) cin >> x; sum += x → cout",
+            hint: "Inside the loop, read x each time and add it to sum. Start sum at 0!"
           }
         }
       },

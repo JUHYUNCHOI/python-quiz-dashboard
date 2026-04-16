@@ -548,7 +548,8 @@ export const lessonCpp8: LessonData = {
           expect: "1\n0",
           en: {
             task: "Write from scratch! Create an isEven function that returns true for even, false for odd\nThen print results for isEven(4) and isEven(7)",
-            guide: "bool isEven(int n) { return n % 2 == 0; }"
+            guide: "bool isEven(int n) { return n % 2 == 0; }",
+            hint: "bool isEven(int n) {\n    return n % 2 == 0;\n}\ncout << isEven(4) << endl;\ncout << isEven(7) << endl;"
           }
         }
       },
@@ -569,7 +570,8 @@ export const lessonCpp8: LessonData = {
           expect: "9\n12",
           en: {
             task: "Write from scratch! Create a myMax function that returns the larger of two integers\nThen print myMax(5, 9) and myMax(12, 3)",
-            guide: "int myMax(int a, int b) { if (a > b) return a; return b; }"
+            guide: "int myMax(int a, int b) { if (a > b) return a; return b; }",
+            hint: "Compare a and b, then return whichever is larger"
           }
         }
       },

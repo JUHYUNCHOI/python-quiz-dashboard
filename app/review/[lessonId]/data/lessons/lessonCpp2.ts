@@ -611,7 +611,8 @@ export const lessonCpp2: LessonData = {
           expect: "5 + 3 = 8",
           en: {
             task: "Write from scratch! Declare int x=5, y=3\nPrint \"5 + 3 = 8\" using a single cout statement",
-            guide: "Chain variables, strings, and expressions together with <<"
+            guide: "Chain variables, strings, and expressions together with <<",
+            hint: "Insert strings like \" + \" between variables and chain them with <<"
           }
         }
       },
@@ -632,7 +633,8 @@ export const lessonCpp2: LessonData = {
           expect: "1.75",
           en: {
             task: "Write a complete program!\nRead a cm value (int), convert to meters (double), and print\nEx: input 175 → output 1.75",
-            guide: "int input → convert with decimal division → cout output"
+            guide: "int input → convert with decimal division → cout output",
+            hint: "100cm = 1m. You need decimal division, not integer division"
           }
         }
       },

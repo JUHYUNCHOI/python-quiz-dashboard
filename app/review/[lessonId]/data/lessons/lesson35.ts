@@ -544,7 +544,17 @@ print(결과[0])`,
           "문제 없음"
         ],
         answer: 1,
-        explanation: "map()은 map 객체 반환! list()로 감싸야 인덱싱 가능!"
+        explanation: "map()은 map 객체 반환! list()로 감싸야 인덱싱 가능!",
+        en: {
+          question: "What's the problem with this code?",
+          options: [
+            "map syntax error",
+            "map object cannot be indexed",
+            "Integer conversion error",
+            "No problem"
+          ],
+          explanation: "map() returns a map object! You need to wrap it with list() to use indexing!"
+        }
       }
     },
     
@@ -563,7 +573,17 @@ print(결과)`,
           "문제 없음"
         ],
         answer: 1,
-        explanation: "sort()는 원본을 바꾸고 None 반환! sorted()는 새 리스트 반환!"
+        explanation: "sort()는 원본을 바꾸고 None 반환! sorted()는 새 리스트 반환!",
+        en: {
+          question: "What's the problem with this code?",
+          options: [
+            "sort() syntax error",
+            "sort() returns None",
+            "List error",
+            "No problem"
+          ],
+          explanation: "sort() modifies the original list and returns None! Use sorted() to get a new sorted list!"
+        }
       }
     },
     
@@ -581,7 +601,17 @@ print(sum(리스트) / len(리스트))`,
           "문제 없음"
         ],
         answer: 2,
-        explanation: "빈 리스트의 len()은 0! 0으로 나누면 에러! 💥"
+        explanation: "빈 리스트의 len()은 0! 0으로 나누면 에러! 💥",
+        en: {
+          question: "What's the problem with this code?",
+          options: [
+            "sum() error",
+            "len() error",
+            "Division by zero error",
+            "No problem"
+          ],
+          explanation: "len() of an empty list is 0! Dividing by 0 causes an error!"
+        }
       }
     },
     
@@ -599,7 +629,17 @@ print(결과[0])`,
           "문제 없음"
         ],
         answer: 1,
-        explanation: "filter()도 map()처럼 filter 객체 반환! list()로 감싸야 해요!"
+        explanation: "filter()도 map()처럼 filter 객체 반환! list()로 감싸야 해요!",
+        en: {
+          question: "What's the problem with this code?",
+          options: [
+            "lambda syntax error",
+            "filter object cannot be indexed",
+            "Condition expression error",
+            "No problem"
+          ],
+          explanation: "filter() returns a filter object just like map()! You need to wrap it with list()!"
+        }
       }
     },
     

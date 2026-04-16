@@ -252,7 +252,8 @@ export const lessonCpp3: LessonData = {
           expect: "212",
           en: {
             task: "Write from scratch! Read Celsius (double), convert to Fahrenheit, print\nFormula: F = C * 9.0/5.0 + 32",
-            guide: "double input → apply the formula → cout output"
+            guide: "double input → apply the formula → cout output",
+            hint: "Read into a double variable with cin, then apply F = C * 9.0/5.0 + 32"
           }
         }
       },
@@ -273,7 +274,8 @@ export const lessonCpp3: LessonData = {
           expect: "Alice | 18 | 92.5 | pass",
           en: {
             task: "Write from scratch! Declare name, age, score, passed with proper types\nPrint in format \"Alice | 18 | 92.5 | pass\" (pass if score >= 60)",
-            guide: "string / int / double / bool — practice all 4 type declarations"
+            guide: "string / int / double / bool — practice all 4 type declarations",
+            hint: "Declare passed as bool, then use a ternary operator to print \"pass\" or \"fail\""
           }
         }
       },
@@ -473,7 +475,8 @@ export const lessonCpp3: LessonData = {
           expect: "Tom | 20 | 1",
           en: {
             task: "Write from scratch! Declare name (string), age (int), isAdult (bool, true if age >= 18)\nand print in format \"Tom | 20 | 1\"",
-            guide: "Practice string / int / bool type declarations together"
+            guide: "Practice string / int / bool type declarations together",
+            hint: "string name = \"Tom\";\nint age = 20;\nbool isAdult = age >= 18;\ncout << name << \" | \" << age << \" | \" << isAdult << endl;"
           }
         }
       },

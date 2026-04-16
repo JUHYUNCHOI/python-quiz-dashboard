@@ -388,7 +388,17 @@ print(msg[1,3])`,
           "문제없음"
         ],
         answer: 0,
-        explanation: "슬라이싱은 msg[1:3]처럼 콜론(:)을 사용해야 해요! 콤마는 튜플을 만들어요."
+        explanation: "슬라이싱은 msg[1:3]처럼 콜론(:)을 사용해야 해요! 콤마는 튜플을 만들어요.",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "Slicing uses a colon (:), not a comma (,)",
+            "Index is out of range",
+            "Strings cannot be sliced",
+            "No problem"
+          ],
+          explanation: "Slicing should use a colon like msg[1:3]! A comma creates a tuple instead."
+        }
       }
     },
     {

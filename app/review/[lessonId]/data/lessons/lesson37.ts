@@ -573,7 +573,17 @@ except:
           "문제 없음"
         ],
         answer: 0,
-        explanation: "try: 처럼 콜론(:)이 필요해요!"
+        explanation: "try: 처럼 콜론(:)이 필요해요!",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "Missing : after try",
+            "except error",
+            "print error",
+            "No problem"
+          ],
+          explanation: "You need a colon (:) after try, like try:!"
+        }
       }
     },
     {
@@ -591,7 +601,17 @@ except ValueError
           "문제 없음"
         ],
         answer: 1,
-        explanation: "except ValueError: 처럼 콜론(:)이 필요해요!"
+        explanation: "except ValueError: 처럼 콜론(:)이 필요해요!",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "try error",
+            "Missing : after except",
+            "print error",
+            "No problem"
+          ],
+          explanation: "You need a colon (:) after except ValueError, like except ValueError:!"
+        }
       }
     },
     {
@@ -609,7 +629,17 @@ except:
           "문제 없음"
         ],
         answer: 0,
-        explanation: "try: 안의 코드는 들여쓰기 필요!"
+        explanation: "try: 안의 코드는 들여쓰기 필요!",
+        en: {
+          question: "What's wrong with this code?",
+          options: [
+            "Missing indentation",
+            "except error",
+            "print error",
+            "No problem"
+          ],
+          explanation: "Code inside try: needs to be indented!"
+        }
       }
     },
     {
@@ -629,7 +659,17 @@ except:
           "A B"
         ],
         answer: 1,
-        explanation: "'A' 출력 → 에러 발생 → 'B' 건너뜀 → 'C' 출력"
+        explanation: "'A' 출력 → 에러 발생 → 'B' 건너뜀 → 'C' 출력",
+        en: {
+          question: "What does this code output?",
+          options: [
+            "A B C",
+            "A C",
+            "C",
+            "A B"
+          ],
+          explanation: "Prints 'A' → error occurs → skips 'B' → prints 'C'"
+        }
       }
     },
     

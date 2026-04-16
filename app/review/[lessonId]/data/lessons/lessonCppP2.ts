@@ -493,7 +493,8 @@ export const lessonCppP2: LessonData = {
           expect: "Alice 5\nBob 3",
           en: {
             task: 'Write from scratch! Create a Player class with name (string) and level (int), put two Player objects in a vector, and print name and level using range-for',
-            guide: "Approach it in three steps: define the Player class, create a vector of that type, then iterate with range-for!"
+            guide: "Approach it in three steps: define the Player class, create a vector of that type, then iterate with range-for!",
+            hint: "Create a constructor in the class, use push_back to add Player objects to the vector, then access each member with the dot (.) operator in range-for!"
           }
         }
       },
