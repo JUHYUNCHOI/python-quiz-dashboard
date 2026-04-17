@@ -23,13 +23,10 @@ export const structsCluster: PracticeCluster = {
       initialCode: `#include <iostream>
 #include <string>
 #include <vector>
-#include <iomanip>
+#include <cstdio>
 using namespace std;
 
-struct Student {
-    string name;
-    int score;
-};
+// struct Student를 선언하세요 (name, score)
 
 int main() {
     int n;
@@ -41,21 +38,21 @@ int main() {
       testCases: [
         {
           stdin: "3\nalice 90\nbob 80\ncarol 70",
-          expectedOutput: "alice 90\nbob 80\ncarol 70\n평균: 80.00",
+          expectedOutput: "alice 90\nbob 80\ncarol 70\nAverage: 80.00",
         },
         {
           stdin: "2\nzara 100\nleo 50",
-          expectedOutput: "zara 100\nleo 50\n평균: 75.00",
+          expectedOutput: "zara 100\nleo 50\nAverage: 75.00",
         },
       ],
       hints: [
         "struct Student { string name; int score; }; 로 구조체를 선언하세요.",
-        "printf(\"%.2f\", avg) 또는 cout << fixed << setprecision(2) << avg 로 소수점 2자리 출력",
+        "printf(\"%.2f\", avg) 로 소수점 2자리 출력",
       ],
       solutionCode: `#include <iostream>
 #include <string>
 #include <vector>
-#include <iomanip>
+#include <cstdio>
 using namespace std;
 
 struct Student {
@@ -73,8 +70,8 @@ int main() {
         total += students[i].score;
     }
     for (auto& s : students)
-        cout << s.name << " " << s.score << "\n";
-    cout << "평균: " << fixed << setprecision(2) << (double)total / n << "\n";
+        cout << s.name << " " << s.score << "\\n";
+    printf("Average: %.2f\\n", (double)total / n);
     return 0;
 }`,
       solutionExplanation:
@@ -85,7 +82,7 @@ int main() {
         constraints: "1 ≤ N ≤ 20, 0 ≤ score ≤ 100, names are up to 20 English characters",
         hints: [
           "Declare the struct as: struct Student { string name; int score; };",
-          "Use printf(\"%.2f\", avg) or cout << fixed << setprecision(2) << avg to print two decimal places.",
+          "Use printf(\"%.2f\", avg) to print two decimal places.",
         ],
         solutionExplanation: "Use a struct to bundle name and score as a single unit. Manage multiple students with vector<Student> and print with a range-based for loop.",
       },
@@ -103,9 +100,7 @@ int main() {
 #include <vector>
 using namespace std;
 
-struct Point {
-    int x, y;
-};
+// struct Point를 선언하세요 (x, y)
 
 int dist2(const Point& p) {
     // 거리 제곱을 반환하세요
@@ -121,15 +116,15 @@ int main() {
       testCases: [
         {
           stdin: "3\n3 4\n1 1\n5 0",
-          expectedOutput: "25\n2\n25\n가장 가까운 점: 2",
+          expectedOutput: "25\n2\n25\nClosest: 2",
         },
         {
           stdin: "2\n0 5\n3 3",
-          expectedOutput: "25\n18\n가장 가까운 점: 2",
+          expectedOutput: "25\n18\nClosest: 2",
         },
         {
           stdin: "1\n0 0",
-          expectedOutput: "0\n가장 가까운 점: 1",
+          expectedOutput: "0\nClosest: 1",
         },
       ],
       hints: [
@@ -158,7 +153,7 @@ int main() {
         cout << dist2(pts[i]) << "\n";
         if (dist2(pts[i]) < dist2(pts[minIdx])) minIdx = i;
     }
-    cout << "가장 가까운 점: " << minIdx + 1 << "\n";
+    cout << "Closest: " << minIdx + 1 << "\n";
     return 0;
 }`,
       solutionExplanation:
@@ -190,10 +185,7 @@ int main() {
 #include <vector>
 using namespace std;
 
-struct Product {
-    string name;
-    int price, stock;
-};
+// struct를 선언하세요
 
 int main() {
     int n;
@@ -205,11 +197,11 @@ int main() {
       testCases: [
         {
           stdin: "4\napple 300 10\nbanana 150 0\norange 200 5\ngrape 500 0",
-          expectedOutput: "품절 상품: 2\n총 재고 가치: 4000",
+          expectedOutput: "Out of stock: 2\nTotal value: 4000",
         },
         {
           stdin: "2\npencil 100 50\npen 200 30",
-          expectedOutput: "품절 상품: 0\n총 재고 가치: 11000",
+          expectedOutput: "Out of stock: 0\nTotal value: 11000",
         },
       ],
       hints: [
@@ -238,8 +230,8 @@ int main() {
         if (p.stock == 0) outOfStock++;
         totalValue += (long long)p.price * p.stock;
     }
-    cout << "품절 상품: " << outOfStock << "\n";
-    cout << "총 재고 가치: " << totalValue << "\n";
+    cout << "Out of stock: " << outOfStock << "\n";
+    cout << "Total value: " << totalValue << "\n";
     return 0;
 }`,
       solutionExplanation:
@@ -270,11 +262,7 @@ int main() {
 #include <algorithm>
 using namespace std;
 
-struct Student {
-    string name;
-    int kor, eng;
-    int total() const { return kor + eng; }
-};
+// struct를 선언하세요
 
 int main() {
     int n;
@@ -352,13 +340,10 @@ int main() {
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <iomanip>
+#include <cstdio>
 using namespace std;
 
-struct Student {
-    string name;
-    int score;
-};
+// struct를 선언하세요
 
 int main() {
     int n, k;
@@ -379,13 +364,13 @@ int main() {
       ],
       hints: [
         "정렬 후 앞 K개만 처리합니다.",
-        "cout << fixed << setprecision(2) << 평균",
+        "printf(\"%.2f\\n\", avg) 로 소수점 2자리 출력",
       ],
       solutionCode: `#include <iostream>
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <iomanip>
+#include <cstdio>
 using namespace std;
 
 struct Student {
@@ -404,8 +389,8 @@ int main() {
     });
     double sum = 0;
     for (int i = 0; i < k; i++) sum += students[i].score;
-    cout << fixed << setprecision(2) << sum / k << "\n";
-    for (int i = 0; i < k; i++) cout << students[i].name << "\n";
+    printf("%.2f\\n", sum / k);
+    for (int i = 0; i < k; i++) cout << students[i].name << "\\n";
     return 0;
 }`,
       solutionExplanation:
@@ -416,7 +401,7 @@ int main() {
         constraints: "1 ≤ K ≤ N ≤ 100, 0 ≤ score ≤ 100, names are lowercase English up to 20 characters",
         hints: [
           "Sort first, then only process the first K entries.",
-          "cout << fixed << setprecision(2) << average",
+          "Use printf(\"%.2f\\n\", avg) to print two decimal places.",
         ],
         solutionExplanation: "After sorting, access only the first K elements. Since the sort key is score descending then name ascending, the top K students are already at the front.",
       },
@@ -441,10 +426,7 @@ int main() {
 #include <algorithm>
 using namespace std;
 
-struct Employee {
-    string name, dept;
-    int salary;
-};
+// struct를 선언하세요
 
 int main() {
     int n;
@@ -456,11 +438,11 @@ int main() {
       testCases: [
         {
           stdin: "4\nalice dev 5000\nbob hr 3000\ncarol dev 7000\ndave hr 4000\n2\ndev\nhr",
-          expectedOutput: "평균 이상: 2\n최고 급여: carol\ndev: 2\nhr: 2",
+          expectedOutput: "Above avg: 2\nTop salary: carol\ndev: 2\nhr: 2",
         },
         {
           stdin: "3\nzara eng 8000\nalex eng 8000\nmike mkt 5000\n2\neng\nmkt",
-          expectedOutput: "평균 이상: 2\n최고 급여: alex\neng: 2\nmkt: 1",
+          expectedOutput: "Above avg: 2\nTop salary: alex\neng: 2\nmkt: 1",
         },
       ],
       hints: [
@@ -494,8 +476,8 @@ int main() {
         if (a.salary != b.salary) return a.salary > b.salary;
         return a.name < b.name;
     });
-    cout << "평균 이상: " << aboveAvg << "\n";
-    cout << "최고 급여: " << emps[0].name << "\n";
+    cout << "Above avg: " << aboveAvg << "\n";
+    cout << "Top salary: " << emps[0].name << "\n";
     int d;
     cin >> d;
     vector<string> depts(d);
@@ -535,11 +517,7 @@ int main() {
 #include <algorithm>
 using namespace std;
 
-struct Book {
-    string title;
-    string author;
-    int year;
-};
+// struct Book을 선언하세요 (title, author, year)
 
 int main() {
     int n;
@@ -615,10 +593,7 @@ int main() {
       initialCode: `#include <iostream>
 using namespace std;
 
-struct Rect {
-    int w, h;
-    int area() { return w * h; }
-};
+// struct Rect를 선언하세요 (w, h, area() 멤버 함수)
 
 int main() {
     Rect r1, r2;
@@ -691,9 +666,7 @@ int main() {
       initialCode: `#include <iostream>
 using namespace std;
 
-struct Time {
-    int h, m, s;
-};
+// struct를 선언하세요
 
 int main() {
     Time t1, t2;
@@ -771,10 +744,7 @@ int main() {
 #include <algorithm>
 using namespace std;
 
-struct Runner {
-    string name;
-    int time;
-};
+// struct를 선언하세요
 
 int main() {
     int n;
@@ -849,13 +819,10 @@ int main() {
       initialCode: `#include <iostream>
 #include <string>
 #include <vector>
-#include <iomanip>
+#include <cstdio>
 using namespace std;
 
-struct Student {
-    string name;
-    vector<int> scores;
-};
+// struct를 선언하세요
 
 int main() {
     int n, m;
@@ -880,12 +847,12 @@ int main() {
       ],
       hints: [
         "각 학생의 점수 합계를 M으로 나누어 개인 평균을 구하고, 가장 높은 학생을 찾습니다.",
-        "전체 평균 = 모든 점수 합 / (N * M). cout << fixed << setprecision(1) 로 소수점 1자리 출력.",
+        "전체 평균 = 모든 점수 합 / (N * M). printf(\"%.1f\\n\", avg) 로 소수점 1자리 출력.",
       ],
       solutionCode: `#include <iostream>
 #include <string>
 #include <vector>
-#include <iomanip>
+#include <cstdio>
 using namespace std;
 
 struct Student {
@@ -918,7 +885,7 @@ int main() {
         }
     }
     cout << students[bestIdx].name << "\\n";
-    cout << fixed << setprecision(1) << (double)totalAll / (n * m) << "\\n";
+    printf("%.1f\\n", (double)totalAll / (n * m));
     return 0;
 }`,
       solutionExplanation:
@@ -929,7 +896,7 @@ int main() {
         constraints: "1 ≤ N ≤ 20, 1 ≤ M ≤ 10, 0 ≤ score ≤ 100, names are lowercase English up to 20 characters",
         hints: [
           "Compute each student's average (sum of scores / M) and find the one with the highest average.",
-          "Overall average = total of all scores / (N * M). Use cout << fixed << setprecision(1).",
+          "Overall average = total of all scores / (N * M). Use printf(\"%.1f\\n\", avg).",
         ],
         solutionExplanation: "Store multiple scores per student using vector<int> inside the struct. Compute each student's average to find the best, and divide the grand total by N*M for the overall average.",
       },
@@ -944,12 +911,10 @@ int main() {
 출력 형식: "실수부+허수부i" (예: "4.0+6.0i"). 허수부가 음수이면 "실수부-|허수부|i" 형식으로 출력하세요.`,
       constraints: "-100 ≤ 실수부, 허수부 ≤ 100",
       initialCode: `#include <iostream>
-#include <iomanip>
+#include <cstdio>
 using namespace std;
 
-struct Complex {
-    double real, imag;
-};
+// struct Complex를 선언하세요
 
 Complex add(Complex a, Complex b) {
     // 합을 반환하세요
@@ -988,10 +953,10 @@ int main() {
       ],
       hints: [
         "복소수 곱: (a+bi)(c+di) = (ac-bd) + (ad+bc)i",
-        "허수부가 음수이면 부호를 별도로 처리해 출력합니다. cout << fixed << setprecision(1) 사용.",
+        "허수부가 음수이면 부호를 별도로 처리해 출력합니다. printf(\"%.1f\", val) 사용.",
       ],
       solutionCode: `#include <iostream>
-#include <iomanip>
+#include <cstdio>
 using namespace std;
 
 struct Complex {
@@ -1008,11 +973,10 @@ Complex multiply(Complex a, Complex b) {
 }
 
 void print(Complex c) {
-    cout << fixed << setprecision(1);
     if (c.imag >= 0)
-        cout << c.real << "+" << c.imag << "i\\n";
+        printf("%.1f+%.1fi\\n", c.real, c.imag);
     else
-        cout << c.real << c.imag << "i\\n";
+        printf("%.1f%.1fi\\n", c.real, c.imag);
 }
 
 int main() {
@@ -1031,7 +995,7 @@ int main() {
         constraints: "-100 ≤ real, imag ≤ 100",
         hints: [
           "Complex multiplication: (a+bi)(c+di) = (ac-bd) + (ad+bc)i",
-          "Handle the sign of the imaginary part separately. Use cout << fixed << setprecision(1).",
+          "Handle the sign of the imaginary part separately. Use printf(\"%.1f\", val).",
         ],
         solutionExplanation: "Complex addition adds real and imaginary parts separately. Multiplication uses the formula (ac-bd)+(ad+bc)i. When the imaginary part is negative, cout already prints the '-' sign, so only branch on the condition.",
       },
