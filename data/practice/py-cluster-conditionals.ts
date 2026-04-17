@@ -335,12 +335,23 @@ a, b, c = map(int, input().split())
         { stdin: "2 3 4", expectedOutput: "둔각삼각형", label: "둔각" },
       ],
       hints: [
-        "먼저 sorted()로 세 변을 정렬해 가장 긴 변(c)을 구하세요.",
+        "if/elif로 가장 긴 변을 찾아 c에 할당하고, 나머지 두 변을 a, b로 두세요.",
         "삼각형 성립 조건: a + b > c",
         "직각: c² == a² + b², 둔각: c² > a² + b², 예각: c² < a² + b²",
       ],
       solutionCode: `a, b, c = map(int, input().split())
-a, b, c = sorted([a, b, c])
+# 가장 긴 변을 c로, 나머지를 a, b로 재배치
+if a >= b and a >= c:
+    long_side = a
+    s1, s2 = b, c
+elif b >= a and b >= c:
+    long_side = b
+    s1, s2 = a, c
+else:
+    long_side = c
+    s1, s2 = a, b
+a, b, c = s1, s2, long_side
+
 if a + b <= c:
     print("삼각형아님")
 elif c ** 2 == a ** 2 + b ** 2:
@@ -349,17 +360,17 @@ elif c ** 2 > a ** 2 + b ** 2:
     print("둔각삼각형")
 else:
     print("예각삼각형")`,
-      solutionExplanation: "sorted()로 정렬하면 c가 가장 큰 변이 됩니다. 먼저 삼각형 성립 여부를 확인(a+b > c)한 뒤, 피타고라스 정리로 삼각형 종류를 판별합니다.",
+      solutionExplanation: "if/elif로 가장 긴 변을 c에 두고, 삼각형 성립 여부 확인(a+b > c) 후 피타고라스 정리로 종류를 판별합니다.",
       en: {
         title: "Triangle Classification",
         description: `Given three side lengths a, b, c, print the type of triangle.\n\n- Not a triangle: longest side ≥ sum of the other two\n- Right triangle: longest side² = sum of squares of the other two\n- Obtuse triangle: longest side² > sum of squares of the other two\n- Acute triangle: longest side² < sum of squares of the other two`,
         constraints: "1 ≤ a, b, c ≤ 1000 (integers)",
         hints: [
-          "Sort the three sides with sorted() so that c is the longest.",
+          "Use if/elif to find the longest side (assign to c) and assign the other two to a and b.",
           "Check if a triangle is valid first: a + b > c",
           "Right: c² == a² + b², Obtuse: c² > a² + b², Acute: c² < a² + b²",
         ],
-        solutionExplanation: "After sorting, c is the longest side. First verify the triangle inequality (a+b > c), then use the Pythagorean theorem to classify the triangle type.",
+        solutionExplanation: "Use if/elif to assign the longest side to c, then check the triangle inequality (a+b > c) and use the Pythagorean theorem to classify the triangle type.",
       },
       language: "python",
     },

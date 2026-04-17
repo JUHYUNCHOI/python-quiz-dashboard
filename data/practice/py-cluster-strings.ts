@@ -278,7 +278,7 @@ words = sentence.split()
       ],
       hints: [
         "딕셔너리로 각 단어의 빈도를 셉니다.",
-        "max(freq, key=lambda w: (freq[w], -ord(w[0])))는 복잡합니다. 대신 max(freq, key=lambda w: (freq[w], [-ord(c) for c in w])) 보다 sorted 사용이 명확합니다.",
+        "sorted()로 키를 알파벳 순 정렬한 뒤, 최대 빈도를 가진 첫 번째 단어를 찾으면 됩니다.",
         "freq 딕셔너리 생성 후 sorted(freq.keys())로 알파벳 정렬, 그 중 max 빈도를 찾으면 동수 시 알파벳 앞 단어가 선택됩니다.",
       ],
       solutionCode: `sentence = input()
@@ -300,7 +300,7 @@ All words are lowercase.`,
         constraints: "1 ≤ number of words ≤ 1000",
         hints: [
           "Use a dictionary to count the frequency of each word.",
-          "After building the frequency dict, iterate over sorted keys and update the best word only when the frequency is strictly higher — ties preserve the alphabetically earlier word.",
+          "Sort keys alphabetically with sorted(), then scan to find the one with the max frequency.",
           "Create the freq dict, then use sorted(freq.keys()) and find the max-frequency entry.",
         ],
         solutionExplanation: "Iterating over alphabetically sorted keys and only updating when frequency is strictly higher ensures that ties keep the alphabetically earlier word.",

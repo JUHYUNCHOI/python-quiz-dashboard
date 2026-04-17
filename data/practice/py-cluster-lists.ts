@@ -308,28 +308,26 @@ nums = list(map(int, input().split()))
         { stdin: "5\n1 3 1 3 2", expectedOutput: "1 3 2", label: "교차 중복" },
       ],
       hints: [
-        "seen = set()을 만들고, 아직 seen에 없는 숫자만 결과에 추가하세요.",
-        "for x in nums: if x not in seen: seen.add(x); result.append(x)",
+        "빈 리스트 result를 만들고, 아직 result에 없는 숫자만 추가하세요.",
+        "for x in nums: if x not in result: result.append(x)",
       ],
       solutionCode: `n = int(input())
 nums = list(map(int, input().split()))
-seen = set()
 result = []
 for x in nums:
-    if x not in seen:
-        seen.add(x)
+    if x not in result:
         result.append(x)
 print(*result)`,
-      solutionExplanation: "set으로 방문 여부를 O(1)에 확인하면서 순서를 유지한 채 중복을 제거합니다.",
+      solutionExplanation: "결과 리스트를 순회하며 아직 추가되지 않은 숫자만 넣으면, 원래 순서를 유지한 채 중복이 제거됩니다.",
       en: {
         title: "Remove Duplicates",
         description: `Given N on the first line and N integers on the second line (space-separated), remove duplicates while preserving the original order and print the result separated by spaces.`,
         constraints: "1 ≤ N ≤ 1000, 0 ≤ each number ≤ 1000",
         hints: [
-          "Create seen = set() and only add numbers not yet in seen to the result.",
-          "for x in nums: if x not in seen: seen.add(x); result.append(x)",
+          "Create an empty result list and only append numbers that aren't already in it.",
+          "for x in nums: if x not in result: result.append(x)",
         ],
-        solutionExplanation: "Using a set to check membership in O(1), duplicates are removed while preserving order.",
+        solutionExplanation: "By checking membership in the result list before appending, duplicates are removed while preserving the original order.",
       },
       language: "python",
     },
@@ -540,27 +538,31 @@ b = list(map(int, input().split()))
         { stdin: "2\n7 8\n2\n8 7", expectedOutput: "7 8", label: "순서 다름" },
       ],
       hints: [
-        "set(a) & set(b) 집합 연산으로 교집합을 구하세요.",
-        "sorted(set(a) & set(b))로 정렬 후 출력하면 됩니다.",
+        "a를 순회하면서 b에도 있고 아직 common에 없는 경우에만 추가하세요.",
+        "sorted(common)으로 오름차순 정렬한 뒤 출력하면 됩니다.",
       ],
       solutionCode: `n = int(input())
 a = list(map(int, input().split()))
 m = int(input())
 b = list(map(int, input().split()))
-common = sorted(set(a) & set(b))
-if common:
-    print(*common)`,
-      solutionExplanation: "set() 변환 후 & 연산으로 교집합을 구하면 O(N+M)으로 효율적입니다.",
+common = []
+for x in a:
+    if x in b and x not in common:
+        common.append(x)
+result = sorted(common)
+if result:
+    print(*result)`,
+      solutionExplanation: "a의 각 원소가 b에 있고 아직 common에 없는 경우에만 추가해 중복 없는 공통 원소 리스트를 만든 뒤, sorted()로 정렬해 출력합니다.",
       en: {
         title: "List Intersection",
         description: `Given two lists (N integers and M integers on separate lines), print the numbers that appear in both lists — no duplicates, in ascending order separated by spaces.
 If there are no common elements, print nothing.`,
         constraints: "1 ≤ N, M ≤ 1000",
         hints: [
-          "Use set(a) & set(b) for the intersection.",
-          "sorted(set(a) & set(b)) gives the sorted result.",
+          "Iterate over a and only append an element to common if it is also in b and not already in common.",
+          "Sort common with sorted() before printing.",
         ],
-        solutionExplanation: "Converting to sets and using & finds the intersection in O(N+M) efficiently.",
+        solutionExplanation: "Iterate over a, collecting elements that are in b and not yet in common, then sort the result with sorted() and print it.",
       },
       language: "python",
     },

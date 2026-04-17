@@ -138,6 +138,29 @@ print(numbers)  # [2, 4, 6]
           expectedOutput: "[80, 90, 100]",
           hint: "Access by index and add 10!",
           hint2: "scores[i] = scores[i] + 10"
+        },
+        {
+          id: "ch2-sorted",
+          type: "explain",
+          title: "📊 Sorting — sorted()",
+          content: `Use \`sorted()\` to sort a list.
+
+\`\`\`python
+nums = [5, 2, 8, 1, 9, 3]
+print(sorted(nums))  # [1, 2, 3, 5, 8, 9]  ← ascending
+
+print(sorted(nums, reverse=True))  # [9, 8, 5, 3, 2, 1]  ← descending
+\`\`\`
+
+💡 \`sorted()\` **returns a new list**. The original is unchanged.
+
+\`\`\`python
+words = ["banana", "apple", "cherry"]
+print(sorted(words))  # ['apple', 'banana', 'cherry']  ← alphabetical
+print(words)          # ['banana', 'apple', 'cherry']  ← unchanged
+\`\`\`
+
+💡 **Advanced sorting** (sorting by a specific key — e.g., sorting a dict by value) is covered in lesson 35 (Built-in Functions).`
         }
       ]
     },

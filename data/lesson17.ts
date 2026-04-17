@@ -138,6 +138,29 @@ print(numbers)  # [2, 4, 6]
           expectedOutput: "[80, 90, 100]",
           hint: "인덱스로 접근해서 10을 더해요!",
           hint2: "scores[i] = scores[i] + 10"
+        },
+        {
+          id: "ch2-sorted",
+          type: "explain",
+          title: "📊 정렬하기 — sorted()",
+          content: `리스트를 정렬할 때는 \`sorted()\` 함수를 씁니다.
+
+\`\`\`python
+nums = [5, 2, 8, 1, 9, 3]
+print(sorted(nums))  # [1, 2, 3, 5, 8, 9]  ← 오름차순
+
+print(sorted(nums, reverse=True))  # [9, 8, 5, 3, 2, 1]  ← 내림차순
+\`\`\`
+
+💡 \`sorted()\` 는 **새 리스트를 반환**합니다. 원본은 바뀌지 않아요.
+
+\`\`\`python
+words = ["banana", "apple", "cherry"]
+print(sorted(words))  # ['apple', 'banana', 'cherry']  ← 사전순
+print(words)          # ['banana', 'apple', 'cherry']  ← 원본 그대로
+\`\`\`
+
+💡 **고급 정렬** (특정 기준으로 정렬하기 — 예: 딕셔너리를 값 기준으로 정렬)은 lesson 35 내장함수 편에서 배워요.`
         }
       ]
     },

@@ -166,28 +166,30 @@ nums = list(map(int, input().split()))
         { stdin: "5\n1 2 3 4 5", expectedOutput: "1", label: "모두 빈도 1, 가장 작은 수" },
       ],
       hints: [
-        "딕셔너리로 빈도를 집계한 후, 빈도 내림차순→값 오름차순 기준으로 정렬하세요.",
-        "sorted(freq.items(), key=lambda x: (-x[1], x[0]))[0][0]",
+        "딕셔너리로 빈도를 집계한 후, (-빈도, 값) 튜플 리스트를 만들어 정렬하세요.",
+        "sorted([(-v, k) for k, v in freq.items()])[0][1]  # 튜플은 앞 요소부터 자동 비교됨",
       ],
       solutionCode: `n = int(input())
 nums = list(map(int, input().split()))
 freq = {}
 for x in nums:
     freq[x] = freq.get(x, 0) + 1
-# 빈도 내림차순, 같으면 값 오름차순
-best = sorted(freq.items(), key=lambda x: (-x[1], x[0]))[0][0]
+# (-빈도, 값) 튜플로 만들어 오름차순 정렬
+# → 빈도가 높을수록(-빈도가 작을수록) 앞, 동수면 값이 작을수록 앞
+pairs = sorted([(-v, k) for k, v in freq.items()])
+best = pairs[0][1]
 print(best)`,
-      solutionExplanation: "정렬 키를 (-빈도, 값)으로 설정하면 빈도가 높을수록, 동수면 값이 작을수록 앞에 옵니다.",
+      solutionExplanation: "(-빈도, 값) 튜플을 만들어 오름차순 정렬하면, 빈도가 높을수록(-빈도가 작음) 앞에 오고, 동수면 값이 작은 것이 앞에 옵니다. 튜플은 앞 요소부터 차례로 비교하므로 이 방식으로 복합 정렬이 가능합니다.",
       en: {
         title: "Mode (Most Frequent Value)",
         description: `Given N integers, find the most frequently occurring number (mode).
 If multiple numbers share the highest frequency, output the smallest one.`,
         constraints: "1 ≤ N ≤ 1000, 0 ≤ each number ≤ 10000",
         hints: [
-          "Build a frequency dictionary, then sort by frequency descending and value ascending.",
-          "sorted(freq.items(), key=lambda x: (-x[1], x[0]))[0][0]",
+          "Build a frequency dictionary, then build a list of (-count, value) tuples and sort it.",
+          "sorted([(-v, k) for k, v in freq.items()])[0][1]  # tuples compare element-by-element",
         ],
-        solutionExplanation: "Using sort key (-frequency, value) places the highest frequency first, and breaks ties by choosing the smallest value.",
+        solutionExplanation: "Build (-count, value) tuples and sort ascending. The highest count comes first (because -count is smallest), and ties break on the smaller value. Tuples compare element-by-element, so this gives a compound sort without a key function.",
       },
       language: "python",
     },
@@ -367,28 +369,30 @@ words = [input() for _ in range(n)]
         { stdin: "3 1\ncat\ncat\ndog", expectedOutput: "cat", label: "상위 1개" },
       ],
       hints: [
-        "빈도 딕셔너리 생성 후 sorted(freq.items(), key=lambda x: (-x[1], x[0]))로 정렬합니다.",
-        "정렬된 결과에서 [:k]로 상위 K개를 선택합니다.",
+        "빈도 딕셔너리를 만든 뒤, (-빈도, 단어) 튜플 리스트를 sorted()로 정렬하세요.",
+        "정렬된 리스트에서 앞 K개를 [:k]로 잘라 단어만 출력합니다.",
       ],
       solutionCode: `n, k = map(int, input().split())
 words = [input() for _ in range(n)]
 freq = {}
 for w in words:
     freq[w] = freq.get(w, 0) + 1
-ranked = sorted(freq.items(), key=lambda x: (-x[1], x[0]))
-for word, _ in ranked[:k]:
+# (-빈도, 단어) 튜플 리스트를 오름차순 정렬
+# → 빈도 높을수록 앞, 동수면 알파벳 빠른 단어가 앞
+ranked = sorted([(-v, w) for w, v in freq.items()])
+for neg_count, word in ranked[:k]:
     print(word)`,
-      solutionExplanation: "정렬 키 (-빈도, 단어)로 빈도 내림차순, 동수면 알파벳 오름차순을 동시에 처리합니다.",
+      solutionExplanation: "(-빈도, 단어) 튜플로 묶어 오름차순 정렬하면 빈도 내림차순 + 알파벳 오름차순이 한 번에 처리됩니다.",
       en: {
         title: "Top K Frequent Words",
         description: `Given N words and an integer K, print the K most frequent words, one per line.
 If words share the same frequency, output them in alphabetical order.`,
         constraints: "1 ≤ K ≤ N ≤ 10000",
         hints: [
-          "Build a frequency dictionary, then sort with sorted(freq.items(), key=lambda x: (-x[1], x[0])).",
+          "Build a frequency dictionary, then build a list of (-count, word) tuples and sort it.",
           "Slice the sorted result with [:k] to get the top K words.",
         ],
-        solutionExplanation: "Sort key (-frequency, word) handles frequency descending and alphabetical tie-breaking simultaneously.",
+        solutionExplanation: "Pack each entry as (-count, word) and sort ascending. This handles frequency-descending and alphabetical tie-breaking in one sort — no key function needed.",
       },
       language: "python",
     },
@@ -560,7 +564,7 @@ nums = list(map(int, input().split()))
       hints: [
         "첫 K개 원소로 freq 딕셔너리를 초기화하세요.",
         "윈도우가 이동할 때 왼쪽 원소의 빈도를 1 감소(0이 되면 삭제), 새 오른쪽 원소를 1 증가시킵니다.",
-        "최빈값을 구할 때 sorted(freq.items(), key=lambda x: (-x[1], x[0]))[0][0] 또는 별도 함수를 사용합니다.",
+        "최빈값은 (-빈도, 값) 튜플 리스트를 sorted()한 뒤 첫 원소의 값([0][1])을 사용합니다.",
       ],
       solutionCode: `n, k = map(int, input().split())
 nums = list(map(int, input().split()))
@@ -571,7 +575,10 @@ for x in nums[:k]:
     freq[x] += 1
 
 def get_mode(freq):
-    return sorted(freq.items(), key=lambda x: (-x[1], x[0]))[0][0]
+    # (-빈도, 값) 튜플을 만들어 오름차순 정렬
+    # → 빈도 높은 값이 앞, 동수면 값이 작은 쪽이 앞
+    pairs = sorted([(-v, key) for key, v in freq.items()])
+    return pairs[0][1]
 
 print(get_mode(freq))
 for i in range(k, n):
@@ -583,7 +590,7 @@ for i in range(k, n):
     if freq[old] == 0:
         del freq[old]
     print(get_mode(freq))`,
-      solutionExplanation: "딕셔너리를 유지하며 윈도우를 슬라이딩합니다. 매 이동마다 하나씩 추가·제거하고 최빈값을 정렬로 구합니다.",
+      solutionExplanation: "딕셔너리를 유지하며 윈도우를 슬라이딩합니다. 매 이동마다 하나씩 추가·제거하고, 최빈값은 (-빈도, 값) 튜플을 정렬해 맨 앞 튜플의 값을 꺼냅니다.",
       en: {
         title: "Sliding Window Mode",
         description: `Given N integers and window size K, slide a window of size K from left to right
@@ -593,9 +600,9 @@ Print N-K+1 values total. Break ties by choosing the smaller number.`,
         hints: [
           "Initialize the freq dictionary with the first K elements.",
           "When the window slides, decrease the frequency of the outgoing element (delete if 0) and increase the frequency of the incoming element.",
-          "Use sorted(freq.items(), key=lambda x: (-x[1], x[0]))[0][0] to find the mode.",
+          "Find the mode by sorting (-count, value) tuples and taking [0][1].",
         ],
-        solutionExplanation: "Maintain a frequency dictionary as the window slides — add one element and remove one per step, then find the mode by sorting.",
+        solutionExplanation: "Maintain a frequency dictionary as the window slides — add one element and remove one per step. Find the mode by building (-count, value) tuples and sorting: the first tuple holds the answer.",
       },
       language: "python",
     },
