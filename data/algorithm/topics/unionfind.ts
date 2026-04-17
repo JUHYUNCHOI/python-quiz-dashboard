@@ -92,7 +92,7 @@ YES</pre></div>
             templates: {
                 python: `import sys
 input = sys.stdin.readline
-sys.setrecursionlimit(200000)
+sys.setrecursionlimit(1000001)
 
 def find(x):
     if parent[x] != x:
@@ -164,7 +164,7 @@ int main() {
                     templates: {
                         python: `import sys
 input = sys.stdin.readline
-sys.setrecursionlimit(200000)
+sys.setrecursionlimit(1000001)
 
 def find(x):
     if parent[x] != x:
@@ -234,7 +234,7 @@ int main() {
                                 desc: '경로 압축 find + 랭크 기반 union으로 거의 O(1) 연산을 보장합니다.',
                                 code: `import sys
 input = sys.stdin.readline
-sys.setrecursionlimit(200000)
+sys.setrecursionlimit(1000001)
 
 def find(x):
     if parent[x] != x:

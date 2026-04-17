@@ -129,23 +129,16 @@ for x in queries:
 #include <algorithm>
 using namespace std;
 int N, M, A[100001];
-bool bsearch(int target) {
-    int lo = 0, hi = N - 1;
-    while (lo <= hi) {
-        int mid = (lo + hi) / 2;
-        if (A[mid] == target) return true;
-        else if (A[mid] < target) lo = mid + 1;
-        else hi = mid - 1;
-    }
-    return false;
-}
 int main() {
     ios::sync_with_stdio(false); cin.tie(nullptr);
     cin >> N;
     for (int i = 0; i < N; i++) cin >> A[i];
     sort(A, A + N);
     cin >> M;
-    for (int i = 0; i < M; i++) { int x; cin >> x; cout << (bsearch(x) ? 1 : 0) << "\\n"; }
+    for (int i = 0; i < M; i++) {
+        int x; cin >> x;
+        cout << (binary_search(A, A + N, x) ? 1 : 0) << "\\n";
+    }
     return 0;
 }`
             },
@@ -175,23 +168,16 @@ for x in queries:
 #include <algorithm>
 using namespace std;
 int N, M, A[100001];
-bool bsearch(int target) {
-    int lo = 0, hi = N - 1;
-    while (lo <= hi) {
-        int mid = (lo + hi) / 2;
-        if (A[mid] == target) return true;
-        else if (A[mid] < target) lo = mid + 1;
-        else hi = mid - 1;
-    }
-    return false;
-}
 int main() {
     ios::sync_with_stdio(false); cin.tie(nullptr);
     cin >> N;
     for (int i = 0; i < N; i++) cin >> A[i];
     sort(A, A + N);
     cin >> M;
-    for (int i = 0; i < M; i++) { int x; cin >> x; cout << (bsearch(x) ? 1 : 0) << "\\n"; }
+    for (int i = 0; i < M; i++) {
+        int x; cin >> x;
+        cout << (binary_search(A, A + N, x) ? 1 : 0) << "\\n";
+    }
     return 0;
 }`
                     },
