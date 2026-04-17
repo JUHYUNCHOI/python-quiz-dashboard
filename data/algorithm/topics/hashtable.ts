@@ -668,41 +668,39 @@ int main() {
                     timeComplexity: 'O(n log n)',
                     spaceComplexity: 'O(n)',
                     templates: {
-                        python: `class Solution:
-    def subarraySum(self, nums, k):
-        # {누적합: 등장 횟수} 기록
-        # {0: 1} → 시작 전(합=0)이 1번 있음
-        prefix_count = {0: 1}
-        prefix_sum = 0  # 처음~현재까지의 누적합
-        count = 0       # 합이 k인 부분 배열 개수
-        for num in nums:
-            prefix_sum += num  # 누적합 갱신
-            # 핵심: prefix_sum - k가 이전에 나왔다면
-            # → 그 지점 ~ 현재 구간의 합 = k!
-            if (prefix_sum - k) in prefix_count:
-                count += prefix_count[prefix_sum - k]
-            # 현재 누적합 기록 → 뒤의 원소가 이 값을 찾음
-            if prefix_sum in prefix_count:
-                prefix_count[prefix_sum] += 1
-            else:
-                prefix_count[prefix_sum] = 1
-        return count`,
-                        cpp: `class Solution {
-public:
-    int subarraySum(vector<int>& nums, int k) {
-        // {누적합: 등장 횟수} - 합=0인 시작점 1개
-        unordered_map<int, int> pc;
-        pc[0] = 1;
-        int sum = 0, cnt = 0; // 누적합, 결과 카운트
-        for (int n : nums) {
-            sum += n; // 누적합 갱신
-            // sum - k가 이전에 나왔다면 → 구간 합 = k
-            if (pc.count(sum - k)) cnt += pc[sum - k];
-            pc[sum]++; // 현재 누적합 기록
-        }
-        return cnt;
+                        python: `import sys
+input = sys.stdin.readline
+
+n = int(input())
+company = set()
+
+for _ in range(n):
+    name, action = input().split()
+    if action == 'enter':
+        company.add(name)
+    else:
+        company.discard(name)
+
+for name in sorted(company, reverse=True):
+    print(name)`,
+                        cpp: `#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+#include <set>
+using namespace std;
+
+int main() {
+    int n; scanf("%d", &n);
+    set<string, greater<string>> company;
+    while (n--) {
+        char name[20], action[10];
+        scanf("%s %s", name, action);
+        if (action[0] == 'e') company.insert(name);
+        else company.erase(name);
     }
-};`
+    for (auto& s : company) printf("%s\\n", s.c_str());
+}`
                     },
                     codeSteps: {
                         python: [
@@ -959,39 +957,30 @@ public:
                     timeComplexity: 'O(n)',
                     spaceComplexity: 'O(min(m,n))',
                     templates: {
-                        python: `import sys
-input = sys.stdin.readline
-
-n = int(input())
-company = set()
-
-for _ in range(n):
-    name, action = input().split()
-    if action == 'enter':
-        company.add(name)
-    else:
-        company.discard(name)
-
-for name in sorted(company, reverse=True):
-    print(name)`,
-                        cpp: `#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <string>
-#include <set>
-using namespace std;
-
-int main() {
-    int n; scanf("%d", &n);
-    set<string, greater<string>> company;
-    while (n--) {
-        char name[20], action[10];
-        scanf("%s %s", name, action);
-        if (action[0] == 'e') company.insert(name);
-        else company.erase(name);
+                        python: `class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        seen = {}
+        start = max_len = 0
+        for i, c in enumerate(s):
+            if c in seen and seen[c] >= start:
+                start = seen[c] + 1
+            seen[c] = i
+            max_len = max(max_len, i - start + 1)
+        return max_len`,
+                        cpp: `class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        unordered_map<char, int> seen;
+        int start = 0, maxLen = 0;
+        for (int i = 0; i < s.size(); i++) {
+            if (seen.count(s[i]) && seen[s[i]] >= start)
+                start = seen[s[i]] + 1;
+            seen[s[i]] = i;
+            maxLen = max(maxLen, i - start + 1);
+        }
+        return maxLen;
     }
-    for (auto& s : company) printf("%s\\n", s.c_str());
-}`
+};`
                     },
                     codeSteps: {
                         python: [
@@ -1344,27 +1333,38 @@ public:
                     spaceComplexity: 'O(n)',
                     templates: {
                         python: `class Solution:
-    def lengthOfLongestSubstring(self, s: str) -> int:
-        seen = {}
-        start = max_len = 0
-        for i, c in enumerate(s):
-            if c in seen and seen[c] >= start:
-                start = seen[c] + 1
-            seen[c] = i
-            max_len = max(max_len, i - start + 1)
-        return max_len`,
+    def subarraySum(self, nums, k):
+        # {누적합: 등장 횟수} 기록
+        # {0: 1} → 시작 전(합=0)이 1번 있음
+        prefix_count = {0: 1}
+        prefix_sum = 0  # 처음~현재까지의 누적합
+        count = 0       # 합이 k인 부분 배열 개수
+        for num in nums:
+            prefix_sum += num  # 누적합 갱신
+            # 핵심: prefix_sum - k가 이전에 나왔다면
+            # → 그 지점 ~ 현재 구간의 합 = k!
+            if (prefix_sum - k) in prefix_count:
+                count += prefix_count[prefix_sum - k]
+            # 현재 누적합 기록 → 뒤의 원소가 이 값을 찾음
+            if prefix_sum in prefix_count:
+                prefix_count[prefix_sum] += 1
+            else:
+                prefix_count[prefix_sum] = 1
+        return count`,
                         cpp: `class Solution {
 public:
-    int lengthOfLongestSubstring(string s) {
-        unordered_map<char, int> seen;
-        int start = 0, maxLen = 0;
-        for (int i = 0; i < s.size(); i++) {
-            if (seen.count(s[i]) && seen[s[i]] >= start)
-                start = seen[s[i]] + 1;
-            seen[s[i]] = i;
-            maxLen = max(maxLen, i - start + 1);
+    int subarraySum(vector<int>& nums, int k) {
+        // {누적합: 등장 횟수} - 합=0인 시작점 1개
+        unordered_map<int, int> pc;
+        pc[0] = 1;
+        int sum = 0, cnt = 0; // 누적합, 결과 카운트
+        for (int n : nums) {
+            sum += n; // 누적합 갱신
+            // sum - k가 이전에 나왔다면 → 구간 합 = k
+            if (pc.count(sum - k)) cnt += pc[sum - k];
+            pc[sum]++; // 현재 누적합 기록
         }
-        return maxLen;
+        return cnt;
     }
 };`
                     },

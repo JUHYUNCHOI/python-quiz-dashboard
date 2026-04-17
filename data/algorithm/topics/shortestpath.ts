@@ -787,60 +787,75 @@ int main() {
                     timeComplexity: 'O((N+M) log N)',
                     spaceComplexity: 'O(N+M)',
                     templates: {
-                        python: `class Solution:
-    def networkDelayTime(self, times, n, k):
-        import heapq
-        INF = float('inf')
-        graph = [[] for _ in range(n + 1)]
-        for u, v, w in times:
-            graph[u].append((v, w))
+                        python: `import sys
+import heapq
+input = sys.stdin.readline
+INF = float('inf')
 
-        dist = [INF] * (n + 1)
-        dist[k] = 0
-        heap = [(0, k)]
+N = int(input())
+M = int(input())
+graph = [[] for _ in range(N + 1)]
+for _ in range(M):
+    u, v, w = map(int, input().split())
+    graph[u].append((v, w))
 
-        while heap:
-            d, v = heapq.heappop(heap)
-            if d > dist[v]:
-                continue
-            for u, w in graph[v]:
-                nd = d + w
-                if nd < dist[u]:
-                    dist[u] = nd
-                    heapq.heappush(heap, (nd, u))
+S, E = map(int, input().split())
 
-        ans = max(dist[1:n+1])
-        return ans if ans != INF else -1`,
-                        cpp: `class Solution {
-public:
-    int networkDelayTime(vector<vector<int>>& times, int n, int k) {
-        const int INF = 1e9;
-        vector<vector<pair<int,int>>> graph(n + 1);
-        for (auto& t : times) {
-            graph[t[0]].push_back({t[1], t[2]});
-        }
+dist = [INF] * (N + 1)
+dist[S] = 0
+heap = [(0, S)]
 
-        vector<int> dist(n + 1, INF);
-        dist[k] = 0;
-        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<>> pq;
-        pq.push({0, k});
+while heap:
+    d, v = heapq.heappop(heap)
+    if d > dist[v]:
+        continue
+    for u, w in graph[v]:
+        nd = d + w
+        if nd < dist[u]:
+            dist[u] = nd
+            heapq.heappush(heap, (nd, u))
 
-        while (!pq.empty()) {
-            auto [d, v] = pq.top(); pq.pop();
-            if (d > dist[v]) continue;
-            for (auto [u, w] : graph[v]) {
-                int nd = d + w;
-                if (nd < dist[u]) {
-                    dist[u] = nd;
-                    pq.push({nd, u});
-                }
+print(dist[E])`,
+                        cpp: `#include <iostream>
+#include <vector>
+#include <queue>
+#include <algorithm>
+using namespace std;
+typedef pair<int,int> pii;
+const int INF = 1e9;
+
+int main() {
+    int N, M;
+    scanf("%d %d", &N, &M);
+    vector<vector<pii>> graph(N + 1);
+    for (int i = 0; i < M; i++) {
+        int u, v, w;
+        scanf("%d %d %d", &u, &v, &w);
+        graph[u].push_back({v, w});
+    }
+    int S, E;
+    scanf("%d %d", &S, &E);
+
+    vector<int> dist(N + 1, INF);
+    dist[S] = 0;
+    priority_queue<pii, vector<pii>, greater<pii>> pq;
+    pq.push({0, S});
+
+    while (!pq.empty()) {
+        auto [d, v] = pq.top(); pq.pop();
+        if (d > dist[v]) continue;
+        for (auto [u, w] : graph[v]) {
+            int nd = d + w;
+            if (nd < dist[u]) {
+                dist[u] = nd;
+                pq.push({nd, u});
             }
         }
-
-        int ans = *max_element(dist.begin() + 1, dist.end());
-        return ans == INF ? -1 : ans;
     }
-};`
+
+    printf("%d\\n", dist[E]);
+    return 0;
+}`
                     },
                     codeSteps: {
                         python: [
@@ -1060,59 +1075,60 @@ public:
                     timeComplexity: 'O((V+E) log V)',
                     spaceComplexity: 'O(V+E)',
                     templates: {
-                        python: `import sys
-input = sys.stdin.readline
-INF = float('inf')
+                        python: `class Solution:
+    def networkDelayTime(self, times, n, k):
+        import heapq
+        INF = float('inf')
+        graph = [[] for _ in range(n + 1)]
+        for u, v, w in times:
+            graph[u].append((v, w))
 
-n = int(input())
-m = int(input())
-dp = [[INF] * (n + 1) for _ in range(n + 1)]
-for i in range(1, n + 1):
-    dp[i][i] = 0
+        dist = [INF] * (n + 1)
+        dist[k] = 0
+        heap = [(0, k)]
 
-for _ in range(m):
-    a, b, c = map(int, input().split())
-    dp[a][b] = min(dp[a][b], c)
+        while heap:
+            d, v = heapq.heappop(heap)
+            if d > dist[v]:
+                continue
+            for u, w in graph[v]:
+                nd = d + w
+                if nd < dist[u]:
+                    dist[u] = nd
+                    heapq.heappush(heap, (nd, u))
 
-for k in range(1, n + 1):
-    for i in range(1, n + 1):
-        for j in range(1, n + 1):
-            dp[i][j] = min(dp[i][j], dp[i][k] + dp[k][j])
-
-for i in range(1, n + 1):
-    print(' '.join(str(x) if x != INF else '0' for x in dp[i][1:n+1]))`,
-                        cpp: `#include <iostream>
-#include <vector>
-#include <queue>
-#include <algorithm>
-using namespace std;
-const int INF = 1e9;
-
-int main() {
-    int n, m;
-    scanf("%d %d", &n, &m);
-    vector<vector<int>> dp(n + 1, vector<int>(n + 1, INF));
-    for (int i = 1; i <= n; i++) dp[i][i] = 0;
-
-    for (int i = 0; i < m; i++) {
-        int a, b, c;
-        scanf("%d %d %d", &a, &b, &c);
-        dp[a][b] = min(dp[a][b], c);
-    }
-
-    for (int k = 1; k <= n; k++)
-        for (int i = 1; i <= n; i++)
-            for (int j = 1; j <= n; j++)
-                dp[i][j] = min(dp[i][j], dp[i][k] + dp[k][j]);
-
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= n; j++) {
-            printf("%d ", dp[i][j] == INF ? 0 : dp[i][j]);
+        ans = max(dist[1:n+1])
+        return ans if ans != INF else -1`,
+                        cpp: `class Solution {
+public:
+    int networkDelayTime(vector<vector<int>>& times, int n, int k) {
+        const int INF = 1e9;
+        vector<vector<pair<int,int>>> graph(n + 1);
+        for (auto& t : times) {
+            graph[t[0]].push_back({t[1], t[2]});
         }
-        printf("\\n");
+
+        vector<int> dist(n + 1, INF);
+        dist[k] = 0;
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<>> pq;
+        pq.push({0, k});
+
+        while (!pq.empty()) {
+            auto [d, v] = pq.top(); pq.pop();
+            if (d > dist[v]) continue;
+            for (auto [u, w] : graph[v]) {
+                int nd = d + w;
+                if (nd < dist[u]) {
+                    dist[u] = nd;
+                    pq.push({nd, u});
+                }
+            }
+        }
+
+        int ans = *max_element(dist.begin() + 1, dist.end());
+        return ans == INF ? -1 : ans;
     }
-    return 0;
-}`
+};`
                     },
                     codeSteps: {
                         python: [
@@ -1323,72 +1339,56 @@ int main() {
                     spaceComplexity: 'O(N²)',
                     templates: {
                         python: `import sys
-import heapq
 input = sys.stdin.readline
 INF = float('inf')
 
-N = int(input())
-M = int(input())
-graph = [[] for _ in range(N + 1)]
-for _ in range(M):
-    u, v, w = map(int, input().split())
-    graph[u].append((v, w))
+n = int(input())
+m = int(input())
+dp = [[INF] * (n + 1) for _ in range(n + 1)]
+for i in range(1, n + 1):
+    dp[i][i] = 0
 
-S, E = map(int, input().split())
+for _ in range(m):
+    a, b, c = map(int, input().split())
+    dp[a][b] = min(dp[a][b], c)
 
-dist = [INF] * (N + 1)
-dist[S] = 0
-heap = [(0, S)]
+for k in range(1, n + 1):
+    for i in range(1, n + 1):
+        for j in range(1, n + 1):
+            dp[i][j] = min(dp[i][j], dp[i][k] + dp[k][j])
 
-while heap:
-    d, v = heapq.heappop(heap)
-    if d > dist[v]:
-        continue
-    for u, w in graph[v]:
-        nd = d + w
-        if nd < dist[u]:
-            dist[u] = nd
-            heapq.heappush(heap, (nd, u))
-
-print(dist[E])`,
+for i in range(1, n + 1):
+    print(' '.join(str(x) if x != INF else '0' for x in dp[i][1:n+1]))`,
                         cpp: `#include <iostream>
 #include <vector>
 #include <queue>
 #include <algorithm>
 using namespace std;
-typedef pair<int,int> pii;
 const int INF = 1e9;
 
 int main() {
-    int N, M;
-    scanf("%d %d", &N, &M);
-    vector<vector<pii>> graph(N + 1);
-    for (int i = 0; i < M; i++) {
-        int u, v, w;
-        scanf("%d %d %d", &u, &v, &w);
-        graph[u].push_back({v, w});
+    int n, m;
+    scanf("%d %d", &n, &m);
+    vector<vector<int>> dp(n + 1, vector<int>(n + 1, INF));
+    for (int i = 1; i <= n; i++) dp[i][i] = 0;
+
+    for (int i = 0; i < m; i++) {
+        int a, b, c;
+        scanf("%d %d %d", &a, &b, &c);
+        dp[a][b] = min(dp[a][b], c);
     }
-    int S, E;
-    scanf("%d %d", &S, &E);
 
-    vector<int> dist(N + 1, INF);
-    dist[S] = 0;
-    priority_queue<pii, vector<pii>, greater<pii>> pq;
-    pq.push({0, S});
+    for (int k = 1; k <= n; k++)
+        for (int i = 1; i <= n; i++)
+            for (int j = 1; j <= n; j++)
+                dp[i][j] = min(dp[i][j], dp[i][k] + dp[k][j]);
 
-    while (!pq.empty()) {
-        auto [d, v] = pq.top(); pq.pop();
-        if (d > dist[v]) continue;
-        for (auto [u, w] : graph[v]) {
-            int nd = d + w;
-            if (nd < dist[u]) {
-                dist[u] = nd;
-                pq.push({nd, u});
-            }
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= n; j++) {
+            printf("%d ", dp[i][j] == INF ? 0 : dp[i][j]);
         }
+        printf("\\n");
     }
-
-    printf("%d\\n", dist[E]);
     return 0;
 }`
                     },

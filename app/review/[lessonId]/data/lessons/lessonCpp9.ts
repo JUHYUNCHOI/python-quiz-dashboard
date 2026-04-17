@@ -850,7 +850,7 @@ export const lessonCpp9: LessonData = {
         type: "practice",
         content: {
           level: 3,
-          task: "처음부터 작성! 정수 4개를 cin으로 입력받아 벡터에 저장 → 최댓값 출력",
+          task: "처음부터 작성! 정수 4개를 cin으로 입력받아 벡터에 저장 → 최댓값 출력\n\n예시) 입력: 3 7 2 9 → 출력: 9",
           guide: "push_back으로 저장 → maxVal = v[0] → for auto 비교",
           hint: "vector<int> v;\nfor(int i=0;i<4;i++){int x;cin>>x;v.push_back(x);}\nint m=v[0];\nfor(auto x:v)if(x>m)m=x;\ncout<<m;",
           template: null,
@@ -860,7 +860,7 @@ export const lessonCpp9: LessonData = {
           ],
           expect: "9",
           en: {
-            task: "Write from scratch! Read 4 integers via cin → store in vector → print max value",
+            task: "Write from scratch! Read 4 integers via cin → store in vector → print max value\n\nExample) Input: 3 7 2 9 → Output: 9",
             guide: "push_back to store → maxVal = v[0] → for auto compare",
             hint: "vector<int> v;\nfor(int i=0;i<4;i++){int x;cin>>x;v.push_back(x);}\nint m=v[0];\nfor(auto x:v)if(x>m)m=x;\ncout<<m;"
           }

@@ -90,7 +90,7 @@ scores["Jake"] = 87;
           id: "ch1-missing-key",
           type: "explain",
           title: "⚠️ What happens when you access a missing key with []?",
-          content: `C++ map behaves very differently from Python when you access a **missing key with \`[]\`**!
+          content: `C++ map behaves very differently from Python when you access a missing key with \`[]\`!
 
 **Python — missing key → immediate error**
 \`\`\`python
@@ -475,7 +475,7 @@ int main() {
 }`,
           hint: "Use for(auto x : arr) { s.insert(x); } to insert. set auto-removes duplicates and auto-sorts! Use s.size() for count and range-for to print",
           expectedOutput: `Count: 6
-1 2 3 4 7 9`
+1 2 3 4 7 9 `
         },
         {
           id: "ch2-q1",

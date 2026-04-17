@@ -600,9 +600,9 @@ int main() {
     return 0;
 }`,
       testCases: [
-        { stdin: "()[]{}", expectedOutput: "YES" },
-        { stdin: "([)]", expectedOutput: "NO" },
-        { stdin: "{[]}", expectedOutput: "YES" },
+        { stdin: "()[]{}", expectedOutput: "YES", label: "기본" },
+        { stdin: "([)]", expectedOutput: "NO", label: "교차 괄호" },
+        { stdin: "{[]}", expectedOutput: "YES", label: "중첩 괄호" },
       ],
       hints: [
         "여는 괄호 '(', '[', '{'를 만나면 스택에 넣습니다.",
@@ -1097,7 +1097,7 @@ int main() {
       id: "bank-str-017",
       cluster: "bank-str",
       unlockAfter: "cpp-p3",
-      difficulty: "어려움",
+      difficulty: "보통",
       title: "암호 해독",
       description:
         "26개의 소문자를 다른 소문자로 치환하는 치환표가 주어집니다. 치환표의 i번째 문자가 알파벳의 i번째 소문자('a'부터 시작)가 변환될 결과입니다. 이 치환표를 사용해 문자열을 암호화하여 출력하세요. 공백은 그대로 출력합니다.",

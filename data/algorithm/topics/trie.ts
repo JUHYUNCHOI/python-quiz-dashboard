@@ -110,97 +110,30 @@ public:
                     timeComplexity: 'O(S) (S = 전체 문자 수)',
                     spaceComplexity: 'O(1)',
                     templates: {
-                        python: `import sys
-input = sys.stdin.readline
-
-class TrieNode:
-    def __init__(self):
-        self.children = {}
-        self.is_end = False
-
-class Trie:
-    def __init__(self):
-        self.root = TrieNode()
-
-    def insert(self, word):
-        """삽입하면서 접두사 관계 확인. 문제 있으면 False 반환"""
-        node = self.root
-        prefix_found = False
-        for ch in word:
-            if node.is_end:
-                prefix_found = True
-            if ch not in node.children:
-                node.children[ch] = TrieNode()
-            node = node.children[ch]
-        node.is_end = True
-        if len(node.children) > 0:
-            prefix_found = True
-        return not prefix_found
-
-t = int(input())
-for _ in range(t):
-    n = int(input())
-    trie = Trie()
-    numbers = [input().strip() for _ in range(n)]
-    consistent = True
-    for num in numbers:
-        if not trie.insert(num):
-            consistent = False
-    print("YES" if consistent else "NO")`,
-                        cpp: `#include <cstdio>
-#include <cstring>
-#include <string>
-#include <vector>
-using namespace std;
-
-struct TrieNode {
-    TrieNode* children[10] = {};
-    bool is_end = false;
-};
-
-bool insert(TrieNode* root, const string& s) {
-    TrieNode* node = root;
-    bool ok = true;
-    for (char ch : s) {
-        int idx = ch - '0';
-        if (node->is_end) ok = false;
-        if (!node->children[idx])
-            node->children[idx] = new TrieNode();
-        node = node->children[idx];
-    }
-    node->is_end = true;
-    for (int i = 0; i < 10; i++)
-        if (node->children[i]) ok = false;
-    return ok;
-}
-
-void deleteTrie(TrieNode* node) {
-    for (int i = 0; i < 10; i++)
-        if (node->children[i]) deleteTrie(node->children[i]);
-    delete node;
-}
-
-int main() {
-    int t;
-    scanf("%d", &t);
-    while (t--) {
-        int n;
-        scanf("%d", &n);
-        TrieNode* root = new TrieNode();
-        vector<string> nums(n);
-        bool ok = true;
-        for (int i = 0; i < n; i++) {
-            char buf[11];
-            scanf("%s", buf);
-            nums[i] = buf;
+                        python: `class Solution:
+    def longestCommonPrefix(self, strs: list[str]) -> str:
+        if not strs:
+            return ""
+        for i in range(len(strs[0])):
+            ch = strs[0][i]
+            for s in strs[1:]:
+                if i >= len(s) or s[i] != ch:
+                    return strs[0][:i]
+        return strs[0]`,
+                        cpp: `class Solution {
+public:
+    string longestCommonPrefix(vector<string>& strs) {
+        if (strs.empty()) return "";
+        string prefix = strs[0];
+        for (int i = 1; i < strs.size(); i++) {
+            while (strs[i].find(prefix) != 0) {
+                prefix = prefix.substr(0, prefix.size() - 1);
+                if (prefix.empty()) return "";
+            }
         }
-        for (auto& s : nums) {
-            if (!insert(root, s)) ok = false;
-        }
-        puts(ok ? "YES" : "NO");
-        deleteTrie(root);
+        return prefix;
     }
-}`
+};`
                     },
                     codeSteps: {
                         python: [
@@ -660,28 +593,73 @@ public:
                     timeComplexity: 'O(L) per operation',
                     spaceComplexity: 'O(총 문자 수)',
                     templates: {
-                        python: `class Solution:
-    def longestCommonPrefix(self, strs: list[str]) -> str:
-        if not strs:
-            return ""
-        for i in range(len(strs[0])):
-            ch = strs[0][i]
-            for s in strs[1:]:
-                if i >= len(s) or s[i] != ch:
-                    return strs[0][:i]
-        return strs[0]`,
-                        cpp: `class Solution {
+                        python: `class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.is_end = False
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+
+    def insert(self, word: str) -> None:
+        node = self.root
+        for ch in word:
+            if ch not in node.children:
+                node.children[ch] = TrieNode()
+            node = node.children[ch]
+        node.is_end = True
+
+    def search(self, word: str) -> bool:
+        node = self.root
+        for ch in word:
+            if ch not in node.children:
+                return False
+            node = node.children[ch]
+        return node.is_end
+
+    def startsWith(self, prefix: str) -> bool:
+        node = self.root
+        for ch in prefix:
+            if ch not in node.children:
+                return False
+            node = node.children[ch]
+        return True`,
+                        cpp: `class Trie {
+    struct Node {
+        unordered_map<char, Node*> children;
+        bool is_end = false;
+    };
+    Node* root;
 public:
-    string longestCommonPrefix(vector<string>& strs) {
-        if (strs.empty()) return "";
-        string prefix = strs[0];
-        for (int i = 1; i < strs.size(); i++) {
-            while (strs[i].find(prefix) != 0) {
-                prefix = prefix.substr(0, prefix.size() - 1);
-                if (prefix.empty()) return "";
-            }
+    Trie() { root = new Node(); }
+
+    void insert(string word) {
+        Node* node = root;
+        for (char ch : word) {
+            if (!node->children.count(ch))
+                node->children[ch] = new Node();
+            node = node->children[ch];
         }
-        return prefix;
+        node->is_end = true;
+    }
+
+    bool search(string word) {
+        Node* node = root;
+        for (char ch : word) {
+            if (!node->children.count(ch)) return false;
+            node = node->children[ch];
+        }
+        return node->is_end;
+    }
+
+    bool startsWith(string prefix) {
+        Node* node = root;
+        for (char ch : prefix) {
+            if (!node->children.count(ch)) return false;
+            node = node->children[ch];
+        }
+        return true;
     }
 };`
                     },
@@ -951,7 +929,10 @@ int main() {
                     timeComplexity: 'O(N × L)',
                     spaceComplexity: 'O(N × L)',
                     templates: {
-                        python: `class TrieNode:
+                        python: `import sys
+input = sys.stdin.readline
+
+class TrieNode:
     def __init__(self):
         self.children = {}
         self.is_end = False
@@ -960,66 +941,85 @@ class Trie:
     def __init__(self):
         self.root = TrieNode()
 
-    def insert(self, word: str) -> None:
+    def insert(self, word):
+        """삽입하면서 접두사 관계 확인. 문제 있으면 False 반환"""
         node = self.root
+        prefix_found = False
         for ch in word:
+            if node.is_end:
+                prefix_found = True
             if ch not in node.children:
                 node.children[ch] = TrieNode()
             node = node.children[ch]
         node.is_end = True
+        if len(node.children) > 0:
+            prefix_found = True
+        return not prefix_found
 
-    def search(self, word: str) -> bool:
-        node = self.root
-        for ch in word:
-            if ch not in node.children:
-                return False
-            node = node.children[ch]
-        return node.is_end
+t = int(input())
+for _ in range(t):
+    n = int(input())
+    trie = Trie()
+    numbers = [input().strip() for _ in range(n)]
+    consistent = True
+    for num in numbers:
+        if not trie.insert(num):
+            consistent = False
+    print("YES" if consistent else "NO")`,
+                        cpp: `#include <cstdio>
+#include <cstring>
+#include <string>
+#include <vector>
+using namespace std;
 
-    def startsWith(self, prefix: str) -> bool:
-        node = self.root
-        for ch in prefix:
-            if ch not in node.children:
-                return False
-            node = node.children[ch]
-        return True`,
-                        cpp: `class Trie {
-    struct Node {
-        unordered_map<char, Node*> children;
-        bool is_end = false;
-    };
-    Node* root;
-public:
-    Trie() { root = new Node(); }
+struct TrieNode {
+    TrieNode* children[10] = {};
+    bool is_end = false;
+};
 
-    void insert(string word) {
-        Node* node = root;
-        for (char ch : word) {
-            if (!node->children.count(ch))
-                node->children[ch] = new Node();
-            node = node->children[ch];
-        }
-        node->is_end = true;
+bool insert(TrieNode* root, const string& s) {
+    TrieNode* node = root;
+    bool ok = true;
+    for (char ch : s) {
+        int idx = ch - '0';
+        if (node->is_end) ok = false;
+        if (!node->children[idx])
+            node->children[idx] = new TrieNode();
+        node = node->children[idx];
     }
+    node->is_end = true;
+    for (int i = 0; i < 10; i++)
+        if (node->children[i]) ok = false;
+    return ok;
+}
 
-    bool search(string word) {
-        Node* node = root;
-        for (char ch : word) {
-            if (!node->children.count(ch)) return false;
-            node = node->children[ch];
-        }
-        return node->is_end;
-    }
+void deleteTrie(TrieNode* node) {
+    for (int i = 0; i < 10; i++)
+        if (node->children[i]) deleteTrie(node->children[i]);
+    delete node;
+}
 
-    bool startsWith(string prefix) {
-        Node* node = root;
-        for (char ch : prefix) {
-            if (!node->children.count(ch)) return false;
-            node = node->children[ch];
+int main() {
+    int t;
+    scanf("%d", &t);
+    while (t--) {
+        int n;
+        scanf("%d", &n);
+        TrieNode* root = new TrieNode();
+        vector<string> nums(n);
+        bool ok = true;
+        for (int i = 0; i < n; i++) {
+            char buf[11];
+            scanf("%s", buf);
+            nums[i] = buf;
         }
-        return true;
+        for (auto& s : nums) {
+            if (!insert(root, s)) ok = false;
+        }
+        puts(ok ? "YES" : "NO");
+        deleteTrie(root);
     }
-};`
+}`
                     },
                     codeSteps: {
                         python: [

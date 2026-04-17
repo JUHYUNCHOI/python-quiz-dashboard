@@ -499,7 +499,7 @@ Each request is a destination floor number.`,
       id: "sim-009",
       cluster: "simulation",
       unlockAfter: "cpp-p2",
-      difficulty: "어려움",
+      difficulty: "쉬움",
       title: "숫자 폭탄 게임",
       description: `N개의 숫자 중 K의 배수가 나올 때마다 그 숫자를 제거합니다.
 숫자는 1부터 N까지 순서대로 말하며, K의 배수는 제거됩니다.
@@ -705,7 +705,7 @@ After all orders, print the remaining stock.`,
       id: "sim-012",
       cluster: "simulation",
       unlockAfter: "cpp-p2",
-      difficulty: "어려움",
+      difficulty: "보통",
       title: "신호등 타이밍",
       description: `신호등이 빨간불 R초, 초록불 G초로 반복됩니다. T초 시점에 도착했을 때 기다려야 하는 시간을 출력하세요.
 (초록불이면 0, 빨간불이면 남은 빨간불 시간)
@@ -762,7 +762,7 @@ The light starts red at T=0.`,
       id: "sim-013",
       cluster: "simulation",
       unlockAfter: "cpp-p2",
-      difficulty: "어려움",
+      difficulty: "보통",
       title: "마라톤 물 보급",
       description: `마라톤 코스 길이가 L km입니다. 선수가 매 S km마다 물을 마십니다.
 물 보급소는 M개 있으며 위치가 주어집니다. 선수가 물을 마시러 갈 때 가장 가까운 보급소를 이용합니다.

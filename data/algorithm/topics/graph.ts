@@ -1585,6 +1585,8 @@ print(*bfs_result)`,
 #include <vector>
 #include <queue>
 #include <algorithm>
+
+#include <cstring>
 using namespace std;
 
 int N, M, V;
@@ -1685,6 +1687,8 @@ print(*bfs_result)`,
 #include <vector>
 #include <queue>
 #include <algorithm>
+
+#include <cstring>
 using namespace std;
 
 int N, M, V;
@@ -2848,6 +2852,7 @@ while queue:
 #include <vector>
 #include <queue>
 #include <algorithm>
+#include <cstring>
 using namespace std;
 
 int dist[100001];
@@ -2902,6 +2907,7 @@ while queue:
 #include <vector>
 #include <queue>
 #include <algorithm>
+#include <cstring>
 using namespace std;
 
 int dist[100001];
@@ -3743,6 +3749,7 @@ print(ans)`,
 #include <vector>
 #include <queue>
 #include <algorithm>
+#include <cstring>
 using namespace std;
 
 int grid[100][100][100], dist_arr[100][100][100];
@@ -3841,6 +3848,7 @@ print(ans)`,
 #include <vector>
 #include <queue>
 #include <algorithm>
+#include <cstring>
 using namespace std;
 
 int grid[100][100][100], dist_arr[100][100][100];
@@ -4082,6 +4090,8 @@ while queue:
 #include <vector>
 #include <queue>
 #include <algorithm>
+
+#include <cstring>
 using namespace std;
 
 int main() {
@@ -4153,6 +4163,8 @@ while queue:
 #include <vector>
 #include <queue>
 #include <algorithm>
+
+#include <cstring>
 using namespace std;
 
 int main() {
@@ -4696,6 +4708,8 @@ print(-1)`,
 #include <vector>
 #include <queue>
 #include <algorithm>
+
+#include <cstring>
 using namespace std;
 
 int N, M;
@@ -4782,6 +4796,8 @@ print(-1)`,
 #include <vector>
 #include <queue>
 #include <algorithm>
+
+#include <cstring>
 using namespace std;
 
 int N, M;

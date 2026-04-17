@@ -29,7 +29,7 @@ int main() {
 }`,
       testCases: [
         { stdin: "5 9\n2 7 4 5 4", expectedOutput: "2", label: "기본 케이스" },
-        { stdin: "3 6\n1 2 3", expectedOutput: "1", label: "단순 케이스" },
+        { stdin: "3 6\n1 2 3", expectedOutput: "0", label: "단순 케이스" },
         { stdin: "4 10\n3 7 2 8", expectedOutput: "1", label: "중간 케이스" },
       ],
       hints: [
@@ -323,7 +323,7 @@ int main() {
       testCases: [
         { stdin: "1 100", expectedOutput: "18", label: "1~100" },
         { stdin: "10 99", expectedOutput: "9", label: "두 자리" },
-        { stdin: "100 200", expectedOutput: "1", label: "세 자리" },
+        { stdin: "100 200", expectedOutput: "10", label: "세 자리" },
       ],
       hints: [
         "각 수를 문자열로 변환하여 팰린드롬인지 확인합니다.",
@@ -566,7 +566,7 @@ int main() {
 }`,
       testCases: [
         { stdin: "3 5\n2 6\n2 10\n3 12", expectedOutput: "22", label: "기본 케이스" },
-        { stdin: "2 3\n2 3\n3 4", expectedOutput: "3", label: "하나만 선택" },
+        { stdin: "2 3\n2 3\n3 4", expectedOutput: "4", label: "하나만 선택" },
         { stdin: "4 7\n1 1\n3 4\n4 5\n5 7", expectedOutput: "9", label: "최적 조합" },
       ],
       hints: [
@@ -628,7 +628,7 @@ int main() {
       testCases: [
         { stdin: "100 10", expectedOutput: "9", label: "자릿수 합 10" },
         { stdin: "50 5", expectedOutput: "6", label: "자릿수 합 5" },
-        { stdin: "30 3", expectedOutput: "3", label: "자릿수 합 3" },
+        { stdin: "30 3", expectedOutput: "4", label: "자릿수 합 3" },
       ],
       hints: [
         "1부터 N까지 각 수에 대해 자릿수 합을 구합니다.",
@@ -991,7 +991,7 @@ int main() {
       id: "bank-bf-017",
       cluster: "bank-bf",
       unlockAfter: "cpp-p3",
-      difficulty: "어려움",
+      difficulty: "쉬움",
       title: "숫자 재배치 최댓값",
       description: "N자리 수가 주어질 때, 각 자리 숫자를 재배치하여 만들 수 있는 가장 큰 수를 출력하세요. (앞자리에 0이 오면 안 됩니다. 입력은 항상 0만으로 이루어지지 않습니다.)",
       constraints: "1 ≤ 자리수 ≤ 12",
@@ -1132,6 +1132,7 @@ int main() {
         "next_permutation()을 사용하면 편리합니다.",
       ],
       solutionCode: `#include <iostream>
+#include <vector>
 #include <algorithm>
 #include <climits>
 using namespace std;

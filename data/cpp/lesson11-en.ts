@@ -72,6 +72,7 @@ string s = "Hi";
         {
           id: "ch1-methods",
           type: "explain",
+          component: "stringMethodVisualizer",
           title: "🔍 substr, find, replace!",
           content: `Python has slicing, find, and replace. C++ has equivalent methods!
 

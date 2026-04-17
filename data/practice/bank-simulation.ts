@@ -151,7 +151,7 @@ int main() {
       title: "박테리아 성장",
       description:
         "박테리아 N마리가 있습니다. 매 시간마다 각 박테리아는 2마리로 분열합니다. T시간 후 박테리아 수를 출력하세요.",
-      constraints: "1 ≤ N ≤ 1000, 1 ≤ T ≤ 60",
+      constraints: "1 ≤ N ≤ 1000, 1 ≤ T ≤ 50",
       initialCode: `#include <iostream>
 using namespace std;
 
@@ -185,7 +185,7 @@ int main() {
     return 0;
 }`,
       solutionExplanation:
-        "매 시간마다 박테리아 수가 2배가 되므로 T시간 후에는 N × 2^T마리가 됩니다. T가 최대 60이고 N이 최대 1000이므로 결과는 long long 범위(약 9.2 × 10^18)를 초과하지 않습니다.",
+        "매 시간마다 박테리아 수가 2배가 되므로 T시간 후에는 N × 2^T마리가 됩니다. T가 최대 50이고 N이 최대 1000이므로 결과는 long long 범위(약 9.2 × 10^18)를 초과하지 않습니다.",
       en: {
         title: "Bacteria Growth",
         description:
@@ -196,7 +196,7 @@ int main() {
           "Use long long because T can be up to 60.",
         ],
         solutionExplanation:
-          "Each hour the count doubles, so after T hours there are N × 2^T bacteria. Since T ≤ 60 and N ≤ 1000, the result fits in a long long.",
+          "Each hour the count doubles, so after T hours there are N × 2^T bacteria. Since T ≤ 50 and N ≤ 1000, the result fits in a long long.",
       },
     },
     {
@@ -206,7 +206,7 @@ int main() {
       difficulty: "쉬움",
       title: "행진 시뮬레이션",
       description:
-        "N명이 일렬로 서서 행진합니다. 맨 앞 사람은 초당 1미터씩 앞으로 이동하며, D미터 지점에 도달하면 멈춥니다. 초기 위치는 0입니다. T초 후 맨 앞 사람의 위치를 출력하세요.",
+        "맨 앞 사람이 초당 1미터씩 앞으로 이동하며, D미터 지점에 도달하면 멈춥니다. 초기 위치는 0입니다. T초 후 위치를 출력하세요.",
       constraints: "1 ≤ D ≤ 10000, 1 ≤ T ≤ 10000",
       initialCode: `#include <iostream>
 using namespace std;
@@ -450,9 +450,9 @@ int main() {
           label: "같은 책 중복 대출",
         },
         {
-          stdin: "2 2\n10 0\n20 1\nRETURN 10\nSTATUS 10",
+          stdin: "2 2\n10 1\n20 1\nRETURN 10\nSTATUS 10",
           expectedOutput: "NOT_OUT\nAVAILABLE",
-          label: "반납 오류",
+          label: "반납 오류 — 대출중 아닌 책 반납",
         },
       ],
       hints: [
@@ -698,7 +698,7 @@ int main() {
       testCases: [
         {
           stdin: "3 3\n100 200 300\n1 2 50\n2 3 300\n3 1 100",
-          expectedOutput: "OK\nFAIL\nOK\n150\n150\n200",
+          expectedOutput: "OK\nFAIL\nOK\n150\n250\n200",
           label: "기본 케이스",
         },
         {
@@ -1161,7 +1161,7 @@ int main() {
       id: "bank-sim-016",
       cluster: "bank-sim",
       unlockAfter: "cpp-p3",
-      difficulty: "어려움",
+      difficulty: "쉬움",
       title: "엘리베이터 이동 거리",
       description:
         "엘리베이터가 0층에서 시작합니다. N개의 요청이 순서대로 들어오며, 각 요청 층으로 이동합니다. 이전 위치에서 요청 층까지의 이동 거리의 합을 출력하세요.",
@@ -1520,7 +1520,7 @@ int main() {
           label: "사과/전환 없음",
         },
         {
-          stdin: "4\n0\n1\n3 L",
+          stdin: "4\n0\n1\n3 R",
           expectedOutput: "7",
           label: "방향 전환",
         },
@@ -1571,12 +1571,6 @@ int main() {
     int t = 0;
     while (true) {
         t++;
-        // apply turn if any
-        if (turns.count(t)) {
-            char d = turns[t];
-            if (d == 'L') dir = (dir + 3) % 4;
-            else dir = (dir + 1) % 4;
-        }
         // move head
         int nr = snake.front().first + dr[dir];
         int nc = snake.front().second + dc[dir];
@@ -1594,12 +1588,18 @@ int main() {
             body.erase(snake.back());
             snake.pop_back();
         }
+        // apply turn after move (takes effect from next second)
+        if (turns.count(t)) {
+            char d = turns[t];
+            if (d == 'L') dir = (dir + 3) % 4;
+            else dir = (dir + 1) % 4;
+        }
     }
     cout << t << "\\n";
     return 0;
 }`,
       solutionExplanation:
-        "뱀의 몸을 deque로 관리합니다. 매초 머리 이동 전에 방향 전환을 적용합니다. 새 머리 위치가 벽이나 자기 몸이면 종료합니다. 사과가 있으면 꼬리를 제거하지 않고, 없으면 deque 뒤에서 pop하여 꼬리를 제거합니다. 몸 위치를 set으로 추적해 충돌을 O(log N)에 확인합니다.",
+        "뱀의 몸을 deque로 관리합니다. 매초 이동 후에 방향 전환을 적용합니다(다음 초부터 새 방향). 새 머리 위치가 벽이나 자기 몸이면 종료합니다. 사과가 있으면 꼬리를 제거하지 않고, 없으면 deque 뒤에서 pop하여 꼬리를 제거합니다. 몸 위치를 set으로 추적해 충돌을 O(log N)에 확인합니다.",
       en: {
         title: "Snake Game",
         description:
@@ -1607,10 +1607,10 @@ int main() {
         hints: [
           "Manage the snake's body as a deque<pair<int,int>>. Add the new head to the front and pop the tail from the back.",
           "Store apple positions in a set. If the new head lands on an apple, skip the tail removal.",
-          "Store direction-change commands in a map keyed by time. Apply the turn at the start of each second before moving.",
+          "Store direction-change commands in a map keyed by time. Apply the turn after moving at that second, so it takes effect from the next second.",
         ],
         solutionExplanation:
-          "The snake body is a deque; each second apply any scheduled turn, compute the new head, check for wall/self collision, then push the new head and either eat an apple (no tail removal) or pop the tail. A set of body positions enables O(log N) collision checks.",
+          "The snake body is a deque; each second compute the new head, check for wall/self collision, push the new head and either eat an apple (no tail removal) or pop the tail, then apply any scheduled turn (takes effect from the next second). A set of body positions enables O(log N) collision checks.",
       },
     },
   ],

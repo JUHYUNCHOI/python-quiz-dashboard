@@ -245,6 +245,104 @@ export const lessonCpp21: LessonData = {
         }
       },
 
+      // 초기값 0 생략 가능 — predict
+      {
+        type: "explain",
+        content: {
+          lines: [
+            "vector<int>의 기본값은 0이에요! 그래서 초기값을 생략할 수 있어요.",
+          ],
+          code: '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<vector<int>> a(2, vector<int>(3, 0)); // 명시적\n    vector<vector<int>> b(2, vector<int>(3));    // 0 생략\n    cout << (a[0][0] == b[0][0]) << endl;\n    cout << b[1][2] << endl;\n    return 0;\n}',
+          predict: {
+            question: "출력 결과는?",
+            options: ["1\n0", "0\n0", "에러", "1\n쓰레기값"],
+            answer: 0,
+            feedback: "두 방법 모두 0으로 초기화돼요! a==b이므로 1(true), b[1][2]도 0이에요."
+          },
+          en: {
+            lines: [
+              "The default value for vector<int> is 0! So you can omit the initial value.",
+            ],
+            predict: {
+              question: "What's the output?",
+              options: ["1\n0", "0\n0", "Error", "1\ngarbage value"],
+              feedback: "Both methods initialize to 0! a==b so 1 (true), and b[1][2] is also 0."
+            }
+          }
+        }
+      },
+
+      // 초기화 리스트 방식 — predict
+      {
+        type: "explain",
+        content: {
+          lines: [
+            "값을 직접 지정할 때는 중괄호 초기화 리스트를 써요!",
+          ],
+          code: '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<vector<int>> grid = {\n        {10, 20},\n        {30, 40},\n        {50, 60}\n    };\n    cout << grid.size() << endl;\n    cout << grid[2][1] << endl;\n    return 0;\n}',
+          predict: {
+            question: "출력 결과는?",
+            options: ["3\n60", "2\n40", "3\n50", "에러"],
+            answer: 0,
+            feedback: "3개의 행이 있고, grid[2][1]은 세 번째 행({50,60})의 두 번째 값 = 60이에요!"
+          },
+          en: {
+            lines: [
+              "When you want to specify values directly, use a braced initializer list!",
+            ],
+            predict: {
+              question: "What's the output?",
+              options: ["3\n60", "2\n40", "3\n50", "Error"],
+              feedback: "There are 3 rows, and grid[2][1] is the second value of the third row ({50,60}) = 60!"
+            }
+          }
+        }
+      },
+
+      // Lv.2: push_back으로 행 추가
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "빈 2D vector에 push_back으로 행을 추가해요!\n\n첫 번째 행: {1, 2, 3}\n두 번째 행: {4, 5, 6}",
+          guide: "vector의 push_back에 {}를 넣어 행 추가!",
+          hint: "grid.push_back({값, 값, 값}); 형태예요!",
+          template: 'vector<vector<int>> grid;\ngrid.push_back({1, 2, ___});\ngrid.push_back({4, ___, 6});',
+          answer: "3",
+          blanksAnswer: ["3", "5"],
+          expect: 'vector<vector<int>> grid;\ngrid.push_back({1, 2, 3});\ngrid.push_back({4, 5, 6});',
+          en: {
+            task: "Add rows to an empty 2D vector using push_back!\n\nFirst row: {1, 2, 3}\nSecond row: {4, 5, 6}",
+            guide: "Use push_back with {} to add a row!",
+            hint: "Use the form: grid.push_back({val, val, val});"
+          }
+        }
+      },
+
+      // Lv.3: 2D vector 전체 직접 작성
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "4행 5열짜리 2D vector를 직접 선언해요!\n변수명은 grid 로 하세요.",
+          guide: "vector<vector<int>> 이름(행, vector<int>(열));",
+          hint: "vector<vector<int>> grid(4, vector<int>(5));",
+          template: null,
+          answer: "vector<vector<int>> grid(4, vector<int>(5));",
+          alternateAnswers: [
+            "vector<vector<int>> grid(4, vector<int>(5, 0));",
+            "vector<vector<int>> grid(4,vector<int>(5));",
+            "vector<vector<int>> grid(4,vector<int>(5,0));"
+          ],
+          expect: "vector<vector<int>> grid(4, vector<int>(5));",
+          en: {
+            task: "Declare a 4-row 5-column 2D vector from scratch!\nUse variable name: grid",
+            guide: "vector<vector<int>> name(rows, vector<int>(cols));",
+            hint: "vector<vector<int>> grid(4, vector<int>(5));"
+          }
+        }
+      },
+
       // Lv.2: size 사용
       {
         type: "practice",

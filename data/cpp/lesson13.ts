@@ -21,6 +21,7 @@ export const cppLesson13Data: LessonData = {
         {
           id: "ch1-intro",
           type: "explain",
+          component: "cppPointerBuilder",
           title: "📍 포인터(Pointer) — 주소를 저장하는 변수!",
           content: `이전 레슨에서 배운 참조(reference):
 \`\`\`cpp

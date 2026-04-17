@@ -456,7 +456,7 @@ lower_bound  upper_bound
 
 ---
 
-**Why do we need \`- v.begin()\`?**
+**Why do we need** \`- v.begin()\`**?**
 
 \`lower_bound\` returns \`it\` — not an index number, but a
 **memory address (an arrow pointing to a position).**

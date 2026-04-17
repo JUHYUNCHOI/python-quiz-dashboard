@@ -295,7 +295,7 @@ int main() {
     cout << maxScore << endl;
     return 0;
 }`,
-          initialCode: `#include <iostream>
+          starterCode: `#include <iostream>
 using namespace std;
 
 int main() {

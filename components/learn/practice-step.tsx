@@ -21,16 +21,6 @@ interface PracticeStepProps {
   isTeacher?: boolean
 }
 
-function extractSkeleton(_code: string): string {
-  return `#include <iostream>
-using namespace std;
-
-int main() {
-
-    return 0;
-}`
-}
-
 const BLANK_TEMPLATE = `#include <iostream>\nusing namespace std;\n\nint main() {\n    \n    return 0;\n}`
 
 export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId, userId, isCompleted = false, isTeacher = false }: PracticeStepProps) {
@@ -43,6 +33,9 @@ export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId,
   const [mounted, setMounted] = useState(false)
   // 시작 코드 주입 여부 — 처음에는 빈 에디터, 버튼 클릭 시 skeleton으로 교체
   const [starterInjected, setStarterInjected] = useState(false)
+  const [starterKey, setStarterKey] = useState(0)
+  // localStorage에 이미 코드가 있으면 버튼 숨기기 (이전 방문에서 작성한 코드)
+  const [hasSavedCode, setHasSavedCode] = useState(false)
 
   useEffect(() => { setMounted(true) }, [])
 
@@ -54,7 +47,19 @@ export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId,
     setCopiedSkeleton(false)
     setCopiedFull(false)
     setStarterInjected(false)
-  }, [step.id])
+    // localStorage에 이미 저장된 코드가 있는지 확인
+    if (step.id && typeof window !== "undefined") {
+      try {
+        const storageKey = `cpp-runner-${userId ?? "anon"}-${lessonId ?? "x"}-${step.id}`
+        const saved = localStorage.getItem(storageKey)
+        setHasSavedCode(!!saved && saved.trim().length > 0 && !saved.trim().startsWith("// 👉"))
+      } catch {
+        setHasSavedCode(false)
+      }
+    } else {
+      setHasSavedCode(false)
+    }
+  }, [step.id, userId, lessonId])
 
   useEffect(() => {
     if (isCompleted) setDone(true)
@@ -62,12 +67,10 @@ export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId,
 
   const isEn = lang === "en"
   const skeleton = step.starterCode ?? step.initialCode ?? ""
-  // starterCode가 있고 blank template과 다를 때만 "시작 코드 보기" 버튼 표시
-  const hasStarter = !!skeleton && skeleton.trim().length > 0
+  // starterCode가 있고 blank template과 실제로 다를 때만 "틀 채워서 풀기" 버튼 표시
+  const hasStarter = !!skeleton && skeleton.trim().length > 0 && skeleton.trim() !== BLANK_TEMPLATE.trim()
   const hasExpected = !!step.expectedOutput
   const hintLevel = Math.min(failCount, 3)
-  // 에디터에 실제로 들어가는 코드: 시작 코드 주입 전에는 blank
-  const editorCode = starterInjected ? skeleton : BLANK_TEMPLATE
 
   const handleCopySkeleton = async () => {
     await navigator.clipboard.writeText(skeleton)
@@ -134,21 +137,26 @@ export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId,
           <div className="text-lg md:text-xl text-gray-800 space-y-2">{renderContent(step.content)}</div>
         )}
 
-        {/* 시작 코드 버튼 — starterCode가 있고 아직 주입 안 된 경우, 실패 힌트 없을 때만 표시 */}
-        {!done && hasStarter && !starterInjected && failCount === 0 && (
+        {/* 시작 코드 버튼 — starterCode가 있고, 아직 주입 안 되고, localStorage에 이전 코드도 없을 때만 표시 */}
+        {!done && hasStarter && !starterInjected && !hasSavedCode && failCount === 0 && (
           <button
-            onClick={() => setStarterInjected(true)}
+            onClick={() => {
+              setStarterInjected(true)
+              setStarterKey(k => k + 1)
+            }}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold border border-teal-300 bg-teal-50 text-teal-700 hover:bg-teal-100 transition-colors"
           >
-            <span>💡</span>
-            <span>{isEn ? "Show starter code" : "시작 코드 보기"}</span>
+            <span>📝</span>
+            <span>{isEn ? "Fill in the template" : "틀 채워서 풀기"}</span>
           </button>
         )}
 
         {/* 에디터 */}
         <CppRunner
-          key={step.id + (starterInjected ? "-starter" : "-blank")}
-          initialCode={editorCode}
+          key={step.id}
+          initialCode={BLANK_TEMPLATE}
+          forceCode={starterInjected ? skeleton : undefined}
+          forceCodeVersion={starterKey}
           expectedOutput={step.expectedOutput}
           stdin={step.stdin}
           onSuccess={handleRunSuccess}
@@ -258,7 +266,7 @@ export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId,
                         onClick={() => setShowSkeleton(!showSkeleton)}
                         className="w-full flex items-center justify-between px-3 py-2.5 bg-orange-100 rounded-xl text-sm text-orange-800 font-bold mb-2"
                       >
-                        <span>{isEn ? "Show starter code" : "시작 코드 보기"}</span>
+                        <span>{isEn ? "Show code template" : "코드 틀 보기"}</span>
                         <ChevronRight className={cn("w-4 h-4 transition-transform", showSkeleton && "rotate-90")} />
                       </button>
                       {showSkeleton && (

@@ -213,6 +213,7 @@ This is called **type safety**. Bugs are caught at build time, not while the pro
 using namespace std;
 
 class Car {
+public:
     string color;
     double speed;
     void forward() { speed += 10; }

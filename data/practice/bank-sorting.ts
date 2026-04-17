@@ -640,7 +640,7 @@ int main() {
     return 0;
 }`,
       testCases: [
-        { stdin: "5\n80 90 70 90 60", expectedOutput: "2 1 3 1 4" },
+        { stdin: "5\n80 90 70 90 60", expectedOutput: "3 1 4 1 5" },
         { stdin: "3\n50 50 50", expectedOutput: "1 1 1" },
         { stdin: "4\n100 80 60 40", expectedOutput: "1 2 3 4" },
       ],

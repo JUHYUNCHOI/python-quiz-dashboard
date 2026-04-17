@@ -581,9 +581,13 @@ int main() {
       cluster: "sorting",
       unlockAfter: "cpp-23",
       difficulty: "어려움",
-      title: "다중 기준 정렬",
-      description: `N명의 학생 (이름, 점수)이 주어질 때, 점수 내림차순으로 정렬하되 점수가 같으면 이름 오름차순으로 정렬하여 출력하세요.`,
-      constraints: "1 ≤ N ≤ 1000, 0 ≤ 점수 ≤ 100, 이름은 영문 소문자 최대 20자",
+      title: "구조체 3중 기준 정렬",
+      description: `N명의 학생 정보 (이름, 반 번호, 점수)가 주어질 때, 다음 기준으로 정렬하여 출력하세요.
+1. 반 번호 오름차순
+2. 같은 반이면 점수 내림차순
+3. 점수도 같으면 이름 오름차순
+출력 형식: "이름 반번호 점수" (한 줄에 하나)`,
+      constraints: "1 ≤ N ≤ 1000, 1 ≤ 반 번호 ≤ 100, 0 ≤ 점수 ≤ 100, 이름은 영문 소문자 최대 20자",
       initialCode: `#include <iostream>
 #include <string>
 #include <vector>
@@ -593,19 +597,17 @@ using namespace std;
 int main() {
     int n;
     cin >> n;
-    vector<pair<string, int>> students(n);
-    for (int i = 0; i < n; i++) cin >> students[i].first >> students[i].second;
-    // 여기에 코드를 작성하세요
+    // 여기에 코드를 작성하세요 (struct를 사용하면 편리합니다)
     return 0;
 }`,
       testCases: [
-        { stdin: "4\nalice 90\nbob 85\ncarol 90\ndave 75", expectedOutput: "alice 90\ncarol 90\nbob 85\ndave 75", label: "기본" },
-        { stdin: "3\nzara 100\nalex 100\nmike 99", expectedOutput: "alex 100\nzara 100\nmike 99", label: "동점 처리" },
-        { stdin: "1\nsolo 50", expectedOutput: "solo 50", label: "1명" },
+        { stdin: "5\nalice 1 90\nbob 2 85\ncarol 1 80\ndave 2 85\neve 1 90", expectedOutput: "alice 1 90\neve 1 90\ncarol 1 80\nbob 2 85\ndave 2 85", label: "기본" },
+        { stdin: "3\nzara 1 70\nalex 1 70\nmike 1 80", expectedOutput: "mike 1 80\nalex 1 70\nzara 1 70", label: "같은 반" },
+        { stdin: "4\ndave 3 95\ncarol 1 88\nbob 2 88\nalice 1 95", expectedOutput: "alice 1 95\ncarol 1 88\nbob 2 88\ndave 3 95", label: "3개 반" },
       ],
       hints: [
-        "sort의 세 번째 인자로 람다를 사용하세요: sort(v.begin(), v.end(), [](...){})",
-        "점수가 다르면 점수 내림차순(b.second > a.second), 같으면 이름 오름차순(a.first < b.first).",
+        "pair는 2개 값만 담을 수 있습니다. struct를 만들어 name, cls, score를 저장하세요.",
+        "comparator에서 if (a.cls != b.cls) return a.cls < b.cls; 다음 점수, 다음 이름 순으로 비교합니다.",
       ],
       solutionCode: `#include <iostream>
 #include <string>
@@ -613,36 +615,46 @@ int main() {
 #include <algorithm>
 using namespace std;
 
+struct Student {
+    string name;
+    int cls, score;
+};
+
 int main() {
     int n;
     cin >> n;
-    vector<pair<string, int>> students(n);
-    for (int i = 0; i < n; i++) cin >> students[i].first >> students[i].second;
-    sort(students.begin(), students.end(), [](const pair<string,int>& a, const pair<string,int>& b) {
-        if (a.second != b.second) return a.second > b.second;
-        return a.first < b.first;
+    vector<Student> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i].name >> v[i].cls >> v[i].score;
+    sort(v.begin(), v.end(), [](const Student& a, const Student& b) {
+        if (a.cls != b.cls) return a.cls < b.cls;
+        if (a.score != b.score) return a.score > b.score;
+        return a.name < b.name;
     });
-    for (auto& [name, score] : students)
-        cout << name << " " << score << "\\n";
+    for (auto& s : v)
+        cout << s.name << " " << s.cls << " " << s.score << "\\n";
     return 0;
 }`,
-      solutionExplanation: "커스텀 comparator: 점수가 다르면 점수 기준(내림차순), 같으면 이름 기준(오름차순)으로 비교합니다. USACO Bronze 정렬 문제의 전형적인 패턴입니다.",
+      solutionExplanation: "pair로는 3개 필드를 담을 수 없으므로 struct를 사용합니다. comparator에서 첫 번째 기준(반 오름차순)이 다르면 즉시 리턴, 같으면 두 번째 기준(점수 내림차순), 그것도 같으면 세 번째 기준(이름 오름차순)으로 비교합니다.",
       en: {
-        title: "Multi-Key Sort",
-        description: `Given N students with (name, score), sort by score descending; break ties by name ascending.`,
-        constraints: "1 ≤ N ≤ 1000, 0 ≤ score ≤ 100, names are lowercase English up to 20 characters",
+        title: "Struct Three-Key Sort",
+        description: `Given N students with (name, class_number, score), sort by:
+1. Class number ascending
+2. Within the same class, score descending
+3. On ties, name ascending
+Output format: "name class_number score" (one per line)`,
+        constraints: "1 ≤ N ≤ 1000, 1 ≤ class_number ≤ 100, 0 ≤ score ≤ 100, names are lowercase English up to 20 characters",
         hints: [
-          "Use a lambda as the third argument to sort: `sort(v.begin(), v.end(), [](...){})` .",
-          "If scores differ, sort descending by score (`a.second > b.second`); otherwise sort ascending by name (`a.first < b.first`).",
+          "A pair can only hold 2 values. Create a struct with name, cls, and score fields.",
+          "In the comparator, check `a.cls != b.cls` first, then score, then name.",
         ],
-        solutionExplanation: "Custom comparator: when scores differ sort by score (descending), when equal sort by name (ascending). This is the classic pattern for USACO Bronze ranking problems.",
+        solutionExplanation: "Since a pair cannot hold 3 fields, we define a struct. The comparator checks the first key (class ascending) — if different, return immediately. Otherwise check score (descending), then name (ascending). This cascading pattern extends to any number of sort keys.",
       },
     },
     {
       id: "sort-011",
       cluster: "sorting",
       unlockAfter: "cpp-23",
-      difficulty: "어려움",
+      difficulty: "보통",
       title: "정렬 후 중앙값",
       description: `N개의 정수가 주어질 때, 정렬 후 중앙값을 출력하세요.
 N이 홀수이면 가운데 값, 짝수이면 가운데 두 값 중 작은 값을 출력합니다.`,
@@ -700,7 +712,7 @@ int main() {
       id: "sort-012",
       cluster: "sorting",
       unlockAfter: "cpp-23",
-      difficulty: "어려움",
+      difficulty: "보통",
       title: "원래 인덱스 유지하며 정렬",
       description: `N개의 정수가 주어질 때, 오름차순 정렬했을 때 각 원소가 원래 몇 번째(1-based) 위치에 있었는지 출력하세요.
 (값이 같은 원소가 있으면 원래 인덱스가 작은 것이 먼저 오도록 정렬)`,

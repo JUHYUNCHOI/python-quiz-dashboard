@@ -1062,59 +1062,36 @@ int main() {
                         python: `import sys
 input = sys.stdin.readline
 
-N, B = map(int, input().split())
+N, M = map(int, input().split())
 A = [list(map(int, input().split())) for _ in range(N)]
-MOD = 1000
+M2, K = map(int, input().split())
+B = [list(map(int, input().split())) for _ in range(M)]
 
-def mat_mul(X, Y):
-    n = len(X)
-    C = [[0]*n for _ in range(n)]
-    for i in range(n):
-        for j in range(n):
-            for k in range(n):
-                C[i][j] = (C[i][j] + X[i][k]*Y[k][j]) % MOD
-    return C
+C = [[0] * K for _ in range(N)]
+for i in range(N):
+    for j in range(K):
+        for k in range(M):
+            C[i][j] += A[i][k] * B[k][j]
 
-def mat_pow(M, b):
-    if b == 1:
-        return [[M[i][j] % MOD for j in range(N)] for i in range(N)]
-    half = mat_pow(M, b // 2)
-    result = mat_mul(half, half)
-    if b % 2 == 1:
-        result = mat_mul(result, M)
-    return result
-
-result = mat_pow(A, B)
-for row in result:
+for row in C:
     print(' '.join(map(str, row)))`,
                         cpp: `#include <iostream>
-#include <vector>
 using namespace std;
-typedef long long ll;
-typedef vector<vector<ll>> Matrix;
-int N; ll B;
-const int MOD = 1000;
-Matrix mat_mul(const Matrix& X, const Matrix& Y) {
-    Matrix C(N, vector<ll>(N, 0));
-    for (int i = 0; i < N; i++)
-        for (int j = 0; j < N; j++)
-            for (int k = 0; k < N; k++)
-                C[i][j] = (C[i][j] + X[i][k]*Y[k][j]) % MOD;
-    return C;
-}
-Matrix mat_pow(Matrix M, ll b) {
-    if (b == 1) { for (int i=0;i<N;i++) for (int j=0;j<N;j++) M[i][j]%=MOD; return M; }
-    Matrix half = mat_pow(M, b/2);
-    Matrix result = mat_mul(half, half);
-    if (b%2==1) result = mat_mul(result, M);
-    return result;
-}
 int main() {
-    cin >> N >> B;
-    Matrix A(N, vector<ll>(N));
-    for (int i=0;i<N;i++) for (int j=0;j<N;j++) cin >> A[i][j];
-    Matrix result = mat_pow(A, B);
-    for (int i=0;i<N;i++) { for (int j=0;j<N;j++) cout << result[i][j] << (j<N-1?" ":""); cout << "\\n"; }
+    int N, M, M2, K;
+    cin >> N >> M;
+    int A[100][100], B[100][100], C[100][100] = {};
+    for (int i = 0; i < N; i++) for (int j = 0; j < M; j++) cin >> A[i][j];
+    cin >> M2 >> K;
+    for (int i = 0; i < M; i++) for (int j = 0; j < K; j++) cin >> B[i][j];
+    for (int i = 0; i < N; i++)
+        for (int j = 0; j < K; j++)
+            for (int k = 0; k < M; k++)
+                C[i][j] += A[i][k] * B[k][j];
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < K; j++) cout << C[i][j] << (j < K-1 ? " " : "");
+        cout << "\\n";
+    }
     return 0;
 }`
                     },
@@ -1309,55 +1286,59 @@ int main() {
                         python: `import sys
 input = sys.stdin.readline
 
-MOD = 1_000_000_007
-n = int(input())
+N, B = map(int, input().split())
+A = [list(map(int, input().split())) for _ in range(N)]
+MOD = 1000
 
 def mat_mul(X, Y):
-    return [
-        [(X[0][0]*Y[0][0] + X[0][1]*Y[1][0]) % MOD,
-         (X[0][0]*Y[0][1] + X[0][1]*Y[1][1]) % MOD],
-        [(X[1][0]*Y[0][0] + X[1][1]*Y[1][0]) % MOD,
-         (X[1][0]*Y[0][1] + X[1][1]*Y[1][1]) % MOD]
-    ]
+    n = len(X)
+    C = [[0]*n for _ in range(n)]
+    for i in range(n):
+        for j in range(n):
+            for k in range(n):
+                C[i][j] = (C[i][j] + X[i][k]*Y[k][j]) % MOD
+    return C
 
 def mat_pow(M, b):
     if b == 1:
-        return [[M[i][j] % MOD for j in range(2)] for i in range(2)]
+        return [[M[i][j] % MOD for j in range(N)] for i in range(N)]
     half = mat_pow(M, b // 2)
     result = mat_mul(half, half)
     if b % 2 == 1:
         result = mat_mul(result, M)
     return result
 
-if n <= 1:
-    print(n)
-else:
-    base = [[1, 1], [1, 0]]
-    result = mat_pow(base, n)
-    print(result[0][1])`,
+result = mat_pow(A, B)
+for row in result:
+    print(' '.join(map(str, row)))`,
                         cpp: `#include <iostream>
+#include <vector>
 using namespace std;
 typedef long long ll;
-const ll MOD = 1000000007;
-typedef ll Matrix[2][2];
-void mat_mul(Matrix A, Matrix B, Matrix C) {
-    ll temp[2][2] = {};
-    for (int i=0;i<2;i++) for (int j=0;j<2;j++) for (int k=0;k<2;k++)
-        temp[i][j] = (temp[i][j] + A[i][k]*B[k][j]) % MOD;
-    for (int i=0;i<2;i++) for (int j=0;j<2;j++) C[i][j]=temp[i][j];
+typedef vector<vector<ll>> Matrix;
+int N; ll B;
+const int MOD = 1000;
+Matrix mat_mul(const Matrix& X, const Matrix& Y) {
+    Matrix C(N, vector<ll>(N, 0));
+    for (int i = 0; i < N; i++)
+        for (int j = 0; j < N; j++)
+            for (int k = 0; k < N; k++)
+                C[i][j] = (C[i][j] + X[i][k]*Y[k][j]) % MOD;
+    return C;
 }
-void mat_pow(Matrix M, ll b, Matrix result) {
-    if (b==1) { for(int i=0;i<2;i++) for(int j=0;j<2;j++) result[i][j]=M[i][j]%MOD; return; }
-    Matrix half; mat_pow(M,b/2,half);
-    mat_mul(half,half,result);
-    if (b%2==1) { Matrix tmp; for(int i=0;i<2;i++) for(int j=0;j<2;j++) tmp[i][j]=result[i][j]; mat_mul(tmp,M,result); }
+Matrix mat_pow(Matrix M, ll b) {
+    if (b == 1) { for (int i=0;i<N;i++) for (int j=0;j<N;j++) M[i][j]%=MOD; return M; }
+    Matrix half = mat_pow(M, b/2);
+    Matrix result = mat_mul(half, half);
+    if (b%2==1) result = mat_mul(result, M);
+    return result;
 }
 int main() {
-    ll n; cin >> n;
-    if (n<=1) { cout << n; return 0; }
-    Matrix base = {{1,1},{1,0}}, result;
-    mat_pow(base,n,result);
-    cout << result[0][1] << endl;
+    cin >> N >> B;
+    Matrix A(N, vector<ll>(N));
+    for (int i=0;i<N;i++) for (int j=0;j<N;j++) cin >> A[i][j];
+    Matrix result = mat_pow(A, B);
+    for (int i=0;i<N;i++) { for (int j=0;j<N;j++) cout << result[i][j] << (j<N-1?" ":""); cout << "\\n"; }
     return 0;
 }`
                     },
@@ -1568,45 +1549,54 @@ int main() {
 input = sys.stdin.readline
 
 MOD = 1_000_000_007
-N, K = map(int, input().split())
+n = int(input())
 
-fac = [1] * (N + 1)
-for i in range(1, N + 1):
-    fac[i] = fac[i - 1] * i % MOD
+def mat_mul(X, Y):
+    return [
+        [(X[0][0]*Y[0][0] + X[0][1]*Y[1][0]) % MOD,
+         (X[0][0]*Y[0][1] + X[0][1]*Y[1][1]) % MOD],
+        [(X[1][0]*Y[0][0] + X[1][1]*Y[1][0]) % MOD,
+         (X[1][0]*Y[0][1] + X[1][1]*Y[1][1]) % MOD]
+    ]
 
-def power(a, b, mod):
-    if b == 0: return 1
-    if b == 1: return a % mod
-    half = power(a, b // 2, mod)
-    result = half * half % mod
-    if b % 2 == 1: result = result * a % mod
+def mat_pow(M, b):
+    if b == 1:
+        return [[M[i][j] % MOD for j in range(2)] for i in range(2)]
+    half = mat_pow(M, b // 2)
+    result = mat_mul(half, half)
+    if b % 2 == 1:
+        result = mat_mul(result, M)
     return result
 
-ans = fac[N]
-ans = ans * power(fac[K], MOD - 2, MOD) % MOD
-ans = ans * power(fac[N - K], MOD - 2, MOD) % MOD
-print(ans)`,
+if n <= 1:
+    print(n)
+else:
+    base = [[1, 1], [1, 0]]
+    result = mat_pow(base, n)
+    print(result[0][1])`,
                         cpp: `#include <iostream>
 using namespace std;
 typedef long long ll;
 const ll MOD = 1000000007;
-ll fac[4000001];
-ll power(ll a, ll b, ll mod) {
-    if (b == 0) return 1;
-    if (b == 1) return a % mod;
-    ll half = power(a, b / 2, mod);
-    ll result = half * half % mod;
-    if (b % 2 == 1) result = result * a % mod;
-    return result;
+typedef ll Matrix[2][2];
+void mat_mul(Matrix A, Matrix B, Matrix C) {
+    ll temp[2][2] = {};
+    for (int i=0;i<2;i++) for (int j=0;j<2;j++) for (int k=0;k<2;k++)
+        temp[i][j] = (temp[i][j] + A[i][k]*B[k][j]) % MOD;
+    for (int i=0;i<2;i++) for (int j=0;j<2;j++) C[i][j]=temp[i][j];
+}
+void mat_pow(Matrix M, ll b, Matrix result) {
+    if (b==1) { for(int i=0;i<2;i++) for(int j=0;j<2;j++) result[i][j]=M[i][j]%MOD; return; }
+    Matrix half; mat_pow(M,b/2,half);
+    mat_mul(half,half,result);
+    if (b%2==1) { Matrix tmp; for(int i=0;i<2;i++) for(int j=0;j<2;j++) tmp[i][j]=result[i][j]; mat_mul(tmp,M,result); }
 }
 int main() {
-    int N, K; cin >> N >> K;
-    fac[0] = 1;
-    for (int i = 1; i <= N; i++) fac[i] = fac[i-1] * i % MOD;
-    ll ans = fac[N];
-    ans = ans * power(fac[K], MOD - 2, MOD) % MOD;
-    ans = ans * power(fac[N - K], MOD - 2, MOD) % MOD;
-    cout << ans << endl;
+    ll n; cin >> n;
+    if (n<=1) { cout << n; return 0; }
+    Matrix base = {{1,1},{1,0}}, result;
+    mat_pow(base,n,result);
+    cout << result[0][1] << endl;
     return 0;
 }`
                     },
@@ -1807,36 +1797,46 @@ int main() {
                         python: `import sys
 input = sys.stdin.readline
 
-N, M = map(int, input().split())
-A = [list(map(int, input().split())) for _ in range(N)]
-M2, K = map(int, input().split())
-B = [list(map(int, input().split())) for _ in range(M)]
+MOD = 1_000_000_007
+N, K = map(int, input().split())
 
-C = [[0] * K for _ in range(N)]
-for i in range(N):
-    for j in range(K):
-        for k in range(M):
-            C[i][j] += A[i][k] * B[k][j]
+fac = [1] * (N + 1)
+for i in range(1, N + 1):
+    fac[i] = fac[i - 1] * i % MOD
 
-for row in C:
-    print(' '.join(map(str, row)))`,
+def power(a, b, mod):
+    if b == 0: return 1
+    if b == 1: return a % mod
+    half = power(a, b // 2, mod)
+    result = half * half % mod
+    if b % 2 == 1: result = result * a % mod
+    return result
+
+ans = fac[N]
+ans = ans * power(fac[K], MOD - 2, MOD) % MOD
+ans = ans * power(fac[N - K], MOD - 2, MOD) % MOD
+print(ans)`,
                         cpp: `#include <iostream>
 using namespace std;
+typedef long long ll;
+const ll MOD = 1000000007;
+ll fac[4000001];
+ll power(ll a, ll b, ll mod) {
+    if (b == 0) return 1;
+    if (b == 1) return a % mod;
+    ll half = power(a, b / 2, mod);
+    ll result = half * half % mod;
+    if (b % 2 == 1) result = result * a % mod;
+    return result;
+}
 int main() {
-    int N, M, M2, K;
-    cin >> N >> M;
-    int A[100][100], B[100][100], C[100][100] = {};
-    for (int i = 0; i < N; i++) for (int j = 0; j < M; j++) cin >> A[i][j];
-    cin >> M2 >> K;
-    for (int i = 0; i < M; i++) for (int j = 0; j < K; j++) cin >> B[i][j];
-    for (int i = 0; i < N; i++)
-        for (int j = 0; j < K; j++)
-            for (int k = 0; k < M; k++)
-                C[i][j] += A[i][k] * B[k][j];
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < K; j++) cout << C[i][j] << (j < K-1 ? " " : "");
-        cout << "\\n";
-    }
+    int N, K; cin >> N >> K;
+    fac[0] = 1;
+    for (int i = 1; i <= N; i++) fac[i] = fac[i-1] * i % MOD;
+    ll ans = fac[N];
+    ans = ans * power(fac[K], MOD - 2, MOD) % MOD;
+    ans = ans * power(fac[N - K], MOD - 2, MOD) % MOD;
+    cout << ans << endl;
     return 0;
 }`
                     },

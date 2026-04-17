@@ -175,7 +175,7 @@ int total = accumulate(v.begin(), v.end(), 0);
 cout << total;  // 15
 \`\`\`
 
-⚠️ \`accumulate()\` is in **\`<numeric>\`**, NOT \`<algorithm>\`! Watch your headers.
+⚠️ \`accumulate()\` is in \`<numeric>\`, NOT \`<algorithm>\`! Watch your headers.
 
 **Other useful functions:**
 
@@ -206,7 +206,7 @@ Let's compare with Python:
           id: "ch1-lambda",
           type: "explain",
           title: "🔍 find_if & count_if — Search by Condition!",
-          content: `\`find()\` searches for an exact value, but what if you want to search by a **condition**? That's where **\`find_if()\`** and **\`count_if()\`** come in!
+          content: `\`find()\` searches for an exact value, but what if you want to search by a **condition**? That's where \`find_if()\` and \`count_if()\` come in!
 
 \`\`\`cpp
 #include <algorithm>
@@ -556,7 +556,7 @@ int main() {
     return 0;
 }`,
           hint: "sort(v.begin(), v.end()) sorts in place. lower_bound(v.begin(), v.end(), target) returns an iterator — check *it == target to confirm the value exists, then it - v.begin() is the index",
-          expectedOutput: `10 20 30 40 50
+          expectedOutput: `10 20 30 40 50 
 30 found at index 2`
         },
         {

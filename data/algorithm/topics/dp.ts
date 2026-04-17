@@ -151,20 +151,28 @@ int main() {
                         python: `import sys
 input = sys.stdin.readline
 
+def fib(n):
+    if n == 1 or n == 2:
+        return 1
+    return fib(n-1) + fib(n-2)
+
 n = int(input())
 
-# 여기에 풀이를 작성하세요
-# 재귀 호출의 기본 연산 횟수와 DP의 기본 연산 횟수를 구하세요
-`,
+print(fib(n), n - 2)`,
                         cpp: `#include <iostream>
 using namespace std;
 
-// 여기에 풀이를 작성하세요
+// 재귀 fib: 호출 횟수 자체가 기본 연산 수
+long long fib(int n) {
+    if (n == 1 || n == 2) return 1;
+    return fib(n-1) + fib(n-2);
+}
 
 int main() {
     int n;
     cin >> n;
-    
+
+    cout << fib(n) << " " << n - 2 << endl;
     return 0;
 }`
                     },
@@ -323,28 +331,44 @@ int main() {
                         python: `import sys
 input = sys.stdin.readline
 
-# 값을 저장할 3차원 배열 또는 딕셔너리
-# dp = [[[0]*21 for _ in range(21)] for _ in range(21)]
+dp = {}
 
 def w(a, b, c):
-    # 여기에 저장하며 풀기를 적용한 함수를 작성하세요
-    pass
+    if a <= 0 or b <= 0 or c <= 0:
+        return 1
+    if a > 20 or b > 20 or c > 20:
+        return w(20, 20, 20)
+    if (a, b, c) in dp:
+        return dp[(a, b, c)]
+    if a < b < c:
+        dp[(a,b,c)] = w(a,b,c-1) + w(a,b-1,c-1) - w(a,b-1,c)
+    else:
+        dp[(a,b,c)] = w(a-1,b,c) + w(a-1,b-1,c) + w(a-1,b,c-1) - w(a-1,b-1,c-1)
+    return dp[(a,b,c)]
 
 while True:
     a, b, c = map(int, input().split())
     if a == -1 and b == -1 and c == -1:
         break
-    print(f"w({a}, {b}, {c}) = {w(a, b, c)}")
-`,
+    print(f"w({a}, {b}, {c}) = {w(a, b, c)}")`,
                         cpp: `#include <iostream>
 using namespace std;
 
+// 0~20 범위만 저장하면 되므로 21^3 크기
 int dp[21][21][21];
 bool visited[21][21][21];
 
 int w(int a, int b, int c) {
-    // 여기에 저장하며 풀기를 적용한 함수를 작성하세요
-    return 0;
+    if (a <= 0 || b <= 0 || c <= 0) return 1;
+    if (a > 20 || b > 20 || c > 20) return w(20, 20, 20);
+    // 이미 계산했으면 바로 리턴
+    if (visited[a][b][c]) return dp[a][b][c];
+    visited[a][b][c] = true;
+    if (a < b && b < c)
+        dp[a][b][c] = w(a,b,c-1) + w(a,b-1,c-1) - w(a,b-1,c);
+    else
+        dp[a][b][c] = w(a-1,b,c) + w(a-1,b-1,c) + w(a-1,b,c-1) - w(a-1,b-1,c-1);
+    return dp[a][b][c];
 }
 
 int main() {
@@ -520,21 +544,36 @@ int main() {
 input = sys.stdin.readline
 
 n = int(input())
+dp = [0] * (n + 1)
 
-# dp[i] = i를 1로 만드는 최소 연산 횟수
-# 여기에 풀이를 작성하세요
-`,
+for i in range(2, n + 1):
+    dp[i] = dp[i-1] + 1
+    if i % 2 == 0:
+        dp[i] = min(dp[i], dp[i//2] + 1)
+    if i % 3 == 0:
+        dp[i] = min(dp[i], dp[i//3] + 1)
+
+print(dp[n])`,
                         cpp: `#include <iostream>
 #include <algorithm>
 using namespace std;
 
+// N 최대 10^6 → 전역 배열로 선언
 int dp[1000001];
 
 int main() {
     int n;
     cin >> n;
-    // 여기에 풀이를 작성하세요
-    
+
+    for (int i = 2; i <= n; i++) {
+        dp[i] = dp[i-1] + 1;          // 1을 빼는 연산
+        if (i % 2 == 0)
+            dp[i] = min(dp[i], dp[i/2] + 1);  // 2로 나누기
+        if (i % 3 == 0)
+            dp[i] = min(dp[i], dp[i/3] + 1);  // 3으로 나누기
+    }
+
+    cout << dp[n] << endl;
     return 0;
 }`
                     },
@@ -680,17 +719,34 @@ input = sys.stdin.readline
 
 n = int(input())
 
-# dp[i] = 길이 i인 2진 수열의 개수
-# 여기에 풀이를 작성하세요
-`,
+if n == 1:
+    print(1)
+else:
+    a, b = 1, 2
+    for i in range(3, n + 1):
+        a, b = b, (a + b) % 15746
+
+    print(b)`,
                         cpp: `#include <iostream>
 using namespace std;
 
 int main() {
     int n;
     cin >> n;
-    // 여기에 풀이를 작성하세요
-    
+
+    if (n == 1) {
+        cout << 1 << endl;
+        return 0;
+    }
+    // 변수 2개로 피보나치 계산 (공간 O(1))
+    int a = 1, b = 2;
+    for (int i = 3; i <= n; i++) {
+        int t = (a + b) % 15746;
+        a = b;
+        b = t;
+    }
+
+    cout << b << endl;
     return 0;
 }`
                     },
@@ -844,10 +900,15 @@ input = sys.stdin.readline
 
 n = int(input())
 scores = [0] + [int(input()) for _ in range(n)]
+dp = [0] * (n + 1)
 
-# dp[i] = i번째 계단을 밟았을 때 최대 점수
-# 여기에 풀이를 작성하세요
-`,
+dp[1] = scores[1]
+if n >= 2: dp[2] = scores[1] + scores[2]
+if n >= 3: dp[3] = max(scores[1], scores[2]) + scores[3]
+for i in range(4, n + 1):
+    dp[i] = max(dp[i-2] + scores[i], dp[i-3] + scores[i-1] + scores[i])
+
+print(dp[n])`,
                         cpp: `#include <iostream>
 #include <algorithm>
 using namespace std;
@@ -858,8 +919,17 @@ int main() {
     int n;
     cin >> n;
     for (int i = 1; i <= n; i++) cin >> score[i];
-    // 여기에 풀이를 작성하세요
-    
+
+    dp[1] = score[1];
+    if (n >= 2) dp[2] = score[1] + score[2];
+    if (n >= 3) dp[3] = max(score[1], score[2]) + score[3];
+    for (int i = 4; i <= n; i++) {
+        // 2칸 점프 vs 1칸+1칸(i-2는 건너뜀)
+        dp[i] = max(dp[i-2] + score[i],
+                    dp[i-3] + score[i-1] + score[i]);
+    }
+
+    cout << dp[n] << endl;
     return 0;
 }`
                     },
@@ -1019,10 +1089,14 @@ input = sys.stdin.readline
 
 n = int(input())
 wine = [0] + [int(input()) for _ in range(n)]
+dp = [0] * (n + 1)
 
-# dp[i] = i번째 잔까지 고려했을 때 최대 양
-# 여기에 풀이를 작성하세요
-`,
+dp[1] = wine[1]
+if n >= 2: dp[2] = wine[1] + wine[2]
+for i in range(3, n + 1):
+    dp[i] = max(dp[i-1], dp[i-2] + wine[i], dp[i-3] + wine[i-1] + wine[i])
+
+print(dp[n])`,
                         cpp: `#include <iostream>
 #include <algorithm>
 using namespace std;
@@ -1033,8 +1107,17 @@ int main() {
     int n;
     cin >> n;
     for (int i = 1; i <= n; i++) cin >> wine[i];
-    // 여기에 풀이를 작성하세요
-    
+
+    dp[1] = wine[1];
+    if (n >= 2) dp[2] = wine[1] + wine[2];
+    for (int i = 3; i <= n; i++) {
+        // 3가지: 안 마시기 / 1잔만 / 연속 2잔
+        dp[i] = max({dp[i-1],
+                     dp[i-2] + wine[i],
+                     dp[i-3] + wine[i-1] + wine[i]});
+    }
+
+    cout << dp[n] << endl;
     return 0;
 }`
                     },
@@ -1186,9 +1269,13 @@ input = sys.stdin.readline
 n = int(input())
 a = list(map(int, input().split()))
 
-# dp[i] = i번째를 마지막으로 하는 최대 연속합
-# 여기에 풀이를 작성하세요
-`,
+cur = a[0]
+ans = a[0]
+for i in range(1, n):
+    cur = max(cur + a[i], a[i])
+    ans = max(ans, cur)
+
+print(ans)`,
                         cpp: `#include <iostream>
 #include <algorithm>
 using namespace std;
@@ -1196,8 +1283,17 @@ using namespace std;
 int main() {
     int n;
     cin >> n;
-    // 여기에 풀이를 작성하세요
-    
+    int a[100001];
+    for (int i = 0; i < n; i++) cin >> a[i];
+
+    // 이어붙이기 vs 새시작 중 최대를 선택
+    int cur = a[0], ans = a[0];
+    for (int i = 1; i < n; i++) {
+        cur = max(cur + a[i], a[i]);
+        ans = max(ans, cur);
+    }
+
+    cout << ans << endl;
     return 0;
 }`
                     },
@@ -1350,21 +1446,41 @@ input = sys.stdin.readline
 
 n = int(input())
 MOD = 1_000_000_000
+dp = [[0]*10 for _ in range(n+1)]
+for j in range(1, 10):
+    dp[1][j] = 1
 
-# dp[i][j] = 길이 i, 마지막 자릿수 j인 계단 수의 개수
-# 여기에 풀이를 작성하세요
-`,
+for i in range(2, n+1):
+    dp[i][0] = dp[i-1][1]
+    dp[i][9] = dp[i-1][8]
+    for j in range(1, 9):
+        dp[i][j] = (dp[i-1][j-1] + dp[i-1][j+1]) % MOD
+
+print(sum(dp[n]) % MOD)`,
                         cpp: `#include <iostream>
 using namespace std;
 
 const int MOD = 1000000000;
+// long long: 합산 시 int 범위 초과 방지
 long long dp[101][10];
 
 int main() {
     int n;
     cin >> n;
-    // 여기에 풀이를 작성하세요
-    
+    // 0으로 시작하는 수는 계단 수가 아님
+    for (int j = 1; j <= 9; j++) dp[1][j] = 1;
+
+    for (int i = 2; i <= n; i++) {
+        dp[i][0] = dp[i-1][1];           // 0 뒤에는 1만 가능
+        dp[i][9] = dp[i-1][8];           // 9 뒤에는 8만 가능
+        for (int j = 1; j <= 8; j++)
+            dp[i][j] = (dp[i-1][j-1] + dp[i-1][j+1]) % MOD;
+    }
+
+    long long ans = 0;
+    for (int j = 0; j <= 9; j++)
+        ans = (ans + dp[n][j]) % MOD;
+    cout << ans << endl;
     return 0;
 }`
                     },
@@ -1527,9 +1643,16 @@ input = sys.stdin.readline
 n = int(input())
 cost = [list(map(int, input().split())) for _ in range(n)]
 
-# dp[i][c] = i번째 집을 색 c로 칠했을 때 최소 비용
-# 여기에 풀이를 작성하세요
-`,
+dp = list(cost[0])
+for i in range(1, n):
+    ndp = [
+        min(dp[1], dp[2]) + cost[i][0],
+        min(dp[0], dp[2]) + cost[i][1],
+        min(dp[0], dp[1]) + cost[i][2]
+    ]
+    dp = ndp
+
+print(min(dp))`,
                         cpp: `#include <iostream>
 #include <algorithm>
 using namespace std;
@@ -1541,8 +1664,17 @@ int main() {
     cin >> n;
     for (int i = 0; i < n; i++)
         cin >> cost[i][0] >> cost[i][1] >> cost[i][2];
-    // 여기에 풀이를 작성하세요
-    
+
+    // 첫 번째 집 초기화
+    for (int c = 0; c < 3; c++) dp[0][c] = cost[0][c];
+    for (int i = 1; i < n; i++) {
+        // 이웃한 집은 다른 색이어야 하므로 나머지 2색의 min 선택
+        dp[i][0] = min(dp[i-1][1], dp[i-1][2]) + cost[i][0];
+        dp[i][1] = min(dp[i-1][0], dp[i-1][2]) + cost[i][1];
+        dp[i][2] = min(dp[i-1][0], dp[i-1][1]) + cost[i][2];
+    }
+
+    cout << min({dp[n-1][0], dp[n-1][1], dp[n-1][2]}) << endl;
     return 0;
 }`
                     },
@@ -1705,9 +1837,11 @@ input = sys.stdin.readline
 n = int(input())
 tri = [list(map(int, input().split())) for _ in range(n)]
 
-# dp[i][j] = i행 j열까지의 최대 합
-# 여기에 풀이를 작성하세요
-`,
+for i in range(n-2, -1, -1):
+    for j in range(i+1):
+        tri[i][j] += max(tri[i+1][j], tri[i+1][j+1])
+
+print(tri[0][0])`,
                         cpp: `#include <iostream>
 #include <algorithm>
 using namespace std;
@@ -1720,8 +1854,13 @@ int main() {
     for (int i = 0; i < n; i++)
         for (int j = 0; j <= i; j++)
             cin >> tri[i][j];
-    // 여기에 풀이를 작성하세요
-    
+
+    // 맨 아래 행부터 올라가며 max 누적
+    for (int i = n-2; i >= 0; i--)
+        for (int j = 0; j <= i; j++)
+            tri[i][j] += max(tri[i+1][j], tri[i+1][j+1]);
+
+    cout << tri[0][0] << endl;
     return 0;
 }`
                     },
@@ -1872,9 +2011,13 @@ input = sys.stdin.readline
 n = int(input())
 a = list(map(int, input().split()))
 
-# dp[i] = a[i]를 마지막으로 하는 가장 긴 증가 수열의 길이
-# 여기에 풀이를 작성하세요
-`,
+dp = [1] * n
+for i in range(1, n):
+    for j in range(i):
+        if a[j] < a[i]:
+            dp[i] = max(dp[i], dp[j] + 1)
+
+print(max(dp))`,
                         cpp: `#include <iostream>
 #include <algorithm>
 using namespace std;
@@ -1885,8 +2028,16 @@ int main() {
     int n;
     cin >> n;
     for (int i = 0; i < n; i++) cin >> a[i];
-    // 여기에 풀이를 작성하세요
-    
+
+    // dp[i] = a[i]를 마지막으로 하는 LIS 길이
+    for (int i = 0; i < n; i++) {
+        dp[i] = 1;  // 자기 자신만 포함
+        for (int j = 0; j < i; j++)
+            if (a[j] < a[i])
+                dp[i] = max(dp[i], dp[j] + 1);
+    }
+
+    cout << *max_element(dp, dp + n) << endl;
     return 0;
 }`
                     },
@@ -2039,10 +2190,17 @@ input = sys.stdin.readline
 
 n = int(input())
 a = list(map(int, input().split()))
+lis = [1] * n
+for i in range(1, n):
+    for j in range(i):
+        if a[j] < a[i]: lis[i] = max(lis[i], lis[j]+1)
 
-# lis[i] = 왼→우 증가 수열, lds[i] = 우→좌 증가 수열
-# 여기에 풀이를 작성하세요
-`,
+lds = [1] * n
+for i in range(n-2, -1, -1):
+    for j in range(n-1, i, -1):
+        if a[j] < a[i]: lds[i] = max(lds[i], lds[j]+1)
+
+print(max(lis[i] + lds[i] - 1 for i in range(n)))`,
                         cpp: `#include <iostream>
 #include <algorithm>
 using namespace std;
@@ -2053,8 +2211,25 @@ int main() {
     int n;
     cin >> n;
     for (int i = 0; i < n; i++) cin >> a[i];
-    // 여기에 풀이를 작성하세요
-    
+    // 정방향 LIS
+    for (int i = 0; i < n; i++) {
+        lis[i] = 1;
+        for (int j = 0; j < i; j++)
+            if (a[j] < a[i]) lis[i] = max(lis[i], lis[j] + 1);
+    }
+
+    // 역방향 LIS = 감소 수열 길이
+    for (int i = n-1; i >= 0; i--) {
+        lds[i] = 1;
+        for (int j = n-1; j > i; j--)
+            if (a[j] < a[i]) lds[i] = max(lds[i], lds[j] + 1);
+    }
+
+    // 꼭짓점 i 기준 lis[i]+lds[i]-1의 최대
+    int ans = 0;
+    for (int i = 0; i < n; i++)
+        ans = max(ans, lis[i] + lds[i] - 1);
+    cout << ans << endl;
     return 0;
 }`
                     },
@@ -2230,10 +2405,15 @@ input = sys.stdin.readline
 
 n = int(input())
 wires = [list(map(int, input().split())) for _ in range(n)]
+wires.sort()
 
-# A 기준 정렬 후 B에서 가장 긴 증가 수열 찾기
-# 여기에 풀이를 작성하세요
-`,
+b = [w[1] for w in wires]
+dp = [1] * n
+for i in range(1, n):
+    for j in range(i):
+        if b[j] < b[i]: dp[i] = max(dp[i], dp[j]+1)
+
+print(n - max(dp))`,
                         cpp: `#include <iostream>
 #include <algorithm>
 using namespace std;
@@ -2246,9 +2426,19 @@ int main() {
     cin >> n;
     for (int i = 0; i < n; i++)
         cin >> wires[i].first >> wires[i].second;
+    // pair는 first 기준 자동 정렬
     sort(wires, wires + n);
-    // 여기에 풀이를 작성하세요
-    
+
+    // A 정렬 후 B(second)에서 LIS 구하기
+    for (int i = 0; i < n; i++) {
+        dp[i] = 1;
+        for (int j = 0; j < i; j++)
+            if (wires[j].second < wires[i].second)
+                dp[i] = max(dp[i], dp[j] + 1);
+    }
+
+    // 제거할 전깃줄 = 전체 - 교차 안 하는 최대(LIS)
+    cout << n - *max_element(dp, dp + n) << endl;
     return 0;
 }`
                     },
@@ -2406,12 +2596,17 @@ input = sys.stdin.readline
 a = input().strip()
 b = input().strip()
 
-# dp[i][j] = a[:i]와 b[:j]의 가장 긴 공통 수열 길이
-# 여기에 풀이를 작성하세요
-`,
+dp = [[0]*(len(b)+1) for _ in range(len(a)+1)]
+for i in range(1, len(a)+1):
+    for j in range(1, len(b)+1):
+        if a[i-1] == b[j-1]:
+            dp[i][j] = dp[i-1][j-1] + 1
+        else:
+            dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+
+print(dp[len(a)][len(b)])`,
                         cpp: `#include <iostream>
 #include <algorithm>
-#include <cstring>
 using namespace std;
 
 int dp[1001][1001];
@@ -2419,8 +2614,19 @@ int dp[1001][1001];
 int main() {
     string a, b;
     cin >> a >> b;
-    // 여기에 풀이를 작성하세요
-    
+    int m = a.size(), n = b.size();
+
+    // 같으면 대각선+1, 다르면 왼쪽/위쪽 max
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            if (a[i-1] == b[j-1])
+                dp[i][j] = dp[i-1][j-1] + 1;
+            else
+                dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
+        }
+    }
+
+    cout << dp[m][n] << endl;
     return 0;
 }`
                     },
@@ -2580,9 +2786,12 @@ input = sys.stdin.readline
 n, k = map(int, input().split())
 items = [list(map(int, input().split())) for _ in range(n)]
 
-# dp[i][w] = i번째까지 고려, 용량 w일 때 최대 가치
-# 여기에 풀이를 작성하세요
-`,
+dp = [0] * (k + 1)
+for w, v in items:
+    for j in range(k, w - 1, -1):
+        dp[j] = max(dp[j], dp[j-w] + v)
+
+print(dp[k])`,
                         cpp: `#include <iostream>
 #include <algorithm>
 using namespace std;
@@ -2592,8 +2801,16 @@ int dp[100001];
 int main() {
     int n, k;
     cin >> n >> k;
-    // 여기에 풀이를 작성하세요
-    
+
+    for (int i = 0; i < n; i++) {
+        int w, v;
+        cin >> w >> v;
+        // 역순으로 순회해야 같은 물건 중복 사용 방지
+        for (int j = k; j >= w; j--)
+            dp[j] = max(dp[j], dp[j-w] + v);
+    }
+
+    cout << dp[k] << endl;
     return 0;
 }`
                     },

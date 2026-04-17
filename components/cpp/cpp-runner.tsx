@@ -97,6 +97,9 @@ interface CppRunnerProps {
   // 완료 후 Run 버튼 숨기기
   isCompleted?: boolean
   onReset?: () => void
+  // 부모가 에디터 코드를 직접 주입할 때 사용 (key 변경 없이 코드 교체)
+  forceCode?: string
+  forceCodeVersion?: number
 }
 
 const WANDBOX_API = "https://wandbox.org/api/compile.json"
@@ -136,6 +139,8 @@ export function CppRunner({
   userId,
   isCompleted = false,
   onReset,
+  forceCode,
+  forceCodeVersion,
 }: CppRunnerProps) {
   // userId 포함 → 사용자별 독립 저장 (선생님 코드가 학생에게 보이는 문제 방지)
   const storageKey = stepId ? `cpp-runner-${userId ?? "anon"}-${lessonId ?? "x"}-${stepId}` : null
@@ -163,6 +168,19 @@ export function CppRunner({
   const [submittedThisSession, setSubmittedThisSession] = useState(false) // 이번 세션에서 직접 제출했는지
   const [teacherGrade, setTeacherGrade] = useState<"pass" | "fail" | "auto" | null | undefined>(undefined) // undefined = 아직 로딩
   const [teacherComment, setTeacherComment] = useState<string | null>(null)
+
+  // 부모가 forceCode + forceCodeVersion으로 에디터 코드를 직접 교체
+  const prevForceVersion = useRef(forceCodeVersion)
+  useEffect(() => {
+    if (forceCode !== undefined && forceCodeVersion !== undefined && forceCodeVersion !== prevForceVersion.current) {
+      prevForceVersion.current = forceCodeVersion
+      setCode(forceCode)
+      // localStorage도 업데이트해서 새로고침해도 주입된 코드 유지
+      if (storageKey) {
+        try { localStorage.setItem(storageKey, forceCode) } catch {}
+      }
+    }
+  }, [forceCode, forceCodeVersion, storageKey])
 
   // isCompleted의 최신값을 fetch 콜백 클로저에서 참조하기 위한 ref
   const isCompletedRef = useRef(isCompleted)

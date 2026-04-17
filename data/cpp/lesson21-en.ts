@@ -149,8 +149,8 @@ int main() {
           component: "gridLoopVisualizer",
           content: `Watch how i and j move step by step in a nested for loop.
 
-- **Outer loop \`i\`** → row changes (top to bottom)
-- **Inner loop \`j\`** → column changes within the same row (left to right)
+- **Outer loop** \`i\` → row changes (top to bottom)
+- **Inner loop** \`j\` → column changes within the same row (left to right)
 - While i is 0, j goes 0→1→2 all the way, then i moves to 1`,
         },
         {

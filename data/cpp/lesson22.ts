@@ -212,6 +212,7 @@ C++ class는 없는 멤버에 접근하면 **컴파일 자체가 안 돼요**.
 using namespace std;
 
 class Car {
+public:
     string color;
     double speed;
     void forward() { speed += 10; }

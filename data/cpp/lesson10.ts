@@ -491,6 +491,53 @@ int main() {
           expectedOutput: `6 14 4 18 10 `
         },
         {
+          id: "ch2-2d-rangefor",
+          type: "explain",
+          title: "📦 2D vector에도 range-for를 쓸 수 있을까?",
+          content: `이전에 2D vector를 이중 for문으로 순회했었죠? range-for로도 가능해요!
+
+\`\`\`cpp
+vector<vector<int>> grid(3, vector<int>(4, 0));
+
+// 인덱스 방식 (지금까지 배운 것)
+for (int i = 0; i < 3; i++)
+    for (int j = 0; j < 4; j++)
+        cin >> grid[i][j];
+
+// range-for 방식
+for (auto& row : grid)       // row = 각 행 (vector<int>&)
+    for (auto& val : row)    // val = 각 원소 (int&)
+        cin >> val;
+\`\`\`
+
+출력도 마찬가지예요:
+\`\`\`cpp
+for (const auto& row : grid) {
+    for (const auto& val : row)
+        cout << val << " ";
+    cout << "\\n";
+}
+\`\`\`
+
+### 그런데 — 인덱스 방식이 더 많이 쓰여요!
+
+왜냐면 2D 문제 대부분이 **위치(i, j)를 알아야** 하기 때문이에요:
+
+| 패턴 | 위치 필요? | range-for 가능? |
+|---|---|---|
+| 대각선 \`grid[i][i]\` | ✅ | ❌ |
+| 인접 셀 \`grid[i+1][j]\` | ✅ | ❌ |
+| 테두리 \`i==0\` | ✅ | ❌ |
+| 단순 입력 \`cin >> val\` | ❌ | ✅ |
+| 전체 합/개수 | ❌ | ✅ |
+
+range-for는 **위치가 필요 없는 경우**(입력, 전체 합, 전부 출력 등)에만 쓸 수 있어요.
+
+USACO나 대회 문제에서는 위치가 필요한 경우가 훨씬 많아서, **인덱스 기반 이중 for문이 2D의 주력**이에요.
+
+> 💡 결론: 2D에서 range-for는 "이것도 된다" 정도로 알아두고, 기본은 인덱스 방식이에요!`,
+        },
+        {
           id: "ch2-q1",
           type: "quiz",
           title: "auto 이해!",

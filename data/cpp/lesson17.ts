@@ -175,7 +175,7 @@ int total = accumulate(v.begin(), v.end(), 0);
 cout << total;  // 15
 \`\`\`
 
-⚠️ \`accumulate()\`는 \`<algorithm>\`이 아니라 **\`<numeric>\`**에 있어요! 헤더를 잘 확인해요.
+⚠️ \`accumulate()\`는 \`<algorithm>\`이 아니라 \`<numeric>\`에 있어요! 헤더를 잘 확인해요.
 
 **다른 유용한 함수들:**
 
@@ -201,6 +201,43 @@ swap(a, b);
 | \`a, b = b, a\` | \`swap(a, b)\` |
 
 💡 세 번째 인자(초기값)에 \`0\`을 넣으면 정수 합, \`0.0\`을 넣으면 실수 합이 돼요!`
+        },
+        {
+          id: "ch1-lambda",
+          type: "explain",
+          title: "🔍 find_if & count_if — 조건으로 검색!",
+          content: `\`find()\`는 정확한 값을 찾지만, 조건으로 검색하고 싶을 때는 \`find_if()\`와 \`count_if()\`를 사용해요!
+
+\`\`\`cpp
+#include <algorithm>
+#include <vector>
+using namespace std;
+
+vector<int> v = {3, 7, 1, 8, 4, 9, 2};
+
+// 조건: 5보다 큰 첫 번째 원소 찾기
+auto it = find_if(v.begin(), v.end(), [](int x) {
+    return x > 5;
+});
+if (it != v.end()) cout << *it;  // 7
+
+// 조건: 짝수 개수 세기
+int cnt = count_if(v.begin(), v.end(), [](int x) {
+    return x % 2 == 0;
+});
+cout << cnt;  // 3 (8, 4, 2)
+\`\`\`
+
+**람다 표현식 (Lambda Expression)** — C++11+
+
+\`[](매개변수) { return 조건식; }\` 형태의 **이름 없는 함수**예요!
+
+| 파이썬 🐍 | C++ ⚡ |
+|---|---|
+| \`filter(lambda x: x > 5, lst)\` | \`find_if(..., [](int x){ return x > 5; })\` |
+| \`len([x for x in lst if x % 2 == 0])\` | \`count_if(..., [](int x){ return x % 2 == 0; })\` |
+
+람다는 \`sort()\`를 비롯한 STL 알고리즘 어디서든 조건 함수를 넘길 수 있어요.`,
         },
         {
           id: "ch1-practice",
@@ -253,43 +290,6 @@ int main() {
 9
 30
 3`
-        },
-        {
-          id: "ch1-lambda",
-          type: "explain",
-          title: "🔍 find_if & count_if — 조건으로 검색!",
-          content: `\`find()\`는 정확한 값을 찾지만, 조건으로 검색하고 싶을 때는 **\`find_if()\`**와 **\`count_if()\`**를 사용해요!
-
-\`\`\`cpp
-#include <algorithm>
-#include <vector>
-using namespace std;
-
-vector<int> v = {3, 7, 1, 8, 4, 9, 2};
-
-// 조건: 5보다 큰 첫 번째 원소 찾기
-auto it = find_if(v.begin(), v.end(), [](int x) {
-    return x > 5;
-});
-if (it != v.end()) cout << *it;  // 7
-
-// 조건: 짝수 개수 세기
-int cnt = count_if(v.begin(), v.end(), [](int x) {
-    return x % 2 == 0;
-});
-cout << cnt;  // 3 (8, 4, 2)
-\`\`\`
-
-**람다 표현식 (Lambda Expression)** — C++11+
-
-\`[](매개변수) { return 조건식; }\` 형태의 **이름 없는 함수**예요!
-
-| 파이썬 🐍 | C++ ⚡ |
-|---|---|
-| \`filter(lambda x: x > 5, lst)\` | \`find_if(..., [](int x){ return x > 5; })\` |
-| \`len([x for x in lst if x % 2 == 0])\` | \`count_if(..., [](int x){ return x % 2 == 0; })\` |
-
-람다는 \`sort()\`를 비롯한 STL 알고리즘 어디서든 조건 함수를 넘길 수 있어요.`,
         },
         {
           id: "ch1-q1",
@@ -560,7 +560,7 @@ int main() {
     return 0;
 }`,
           hint: "sort(v.begin(), v.end())로 정렬 후, lower_bound(v.begin(), v.end(), target)은 iterator를 반환해요. *it == target으로 실제 값인지 확인하고, it - v.begin()이 인덱스예요",
-          expectedOutput: `10 20 30 40 50
+          expectedOutput: `10 20 30 40 50 
 30 found at index 2`
         },
         {

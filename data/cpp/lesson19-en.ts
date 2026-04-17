@@ -369,7 +369,7 @@ In Python, \`print()\` handles newlines automatically:
 print(i)  # Auto newline, no extra setup needed
 \`\`\`
 
-💡 In contests, **always use \`'\\n'\`**! Only use \`endl\` occasionally for debugging.`
+💡 In contests, always use \`'\\n'\`! Only use \`endl\` occasionally for debugging.`
         },
         {
           id: "ch2-pred1",

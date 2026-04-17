@@ -812,68 +812,51 @@ int main() {
                         python: `import sys
 input = sys.stdin.readline
 
-N, M, K = map(int, input().split())
-board = [input().strip() for _ in range(N)]
+N, M = map(int, input().split())
 
-# (i+j)가 짝수인 칸에 B가 와야 하는 패턴 기준
-diff = [[0] * (M + 1) for _ in range(N + 1)]
-for i in range(N):
-    for j in range(M):
-        expected = 'B' if (i + j) % 2 == 0 else 'W'
-        diff[i + 1][j + 1] = 1 if board[i][j] != expected else 0
-
-# 2차원 누적합
-prefix = [[0] * (M + 1) for _ in range(N + 1)]
+# 2차원 누적합 만들기
+prefix = [[0] * (N + 1) for _ in range(N + 1)]
 for i in range(1, N + 1):
-    for j in range(1, M + 1):
-        prefix[i][j] = (diff[i][j]
-                        + prefix[i-1][j]
-                        + prefix[i][j-1]
-                        - prefix[i-1][j-1])
+    row = list(map(int, input().split()))
+    for j in range(1, N + 1):
+        prefix[i][j] = (row[j - 1]
+                        + prefix[i - 1][j]
+                        + prefix[i][j - 1]
+                        - prefix[i - 1][j - 1])
 
-ans = float('inf')
-for i in range(1, N - K + 2):
-    for j in range(1, M - K + 2):
-        cost1 = (prefix[i+K-1][j+K-1]
-                - prefix[i-1][j+K-1]
-                - prefix[i+K-1][j-1]
-                + prefix[i-1][j-1])
-        cost2 = K * K - cost1
-        ans = min(ans, cost1, cost2)
-
-print(ans)`,
+# 각 질문에 답하기
+for _ in range(M):
+    x1, y1, x2, y2 = map(int, input().split())
+    ans = (prefix[x2][y2]
+          - prefix[x1 - 1][y2]
+          - prefix[x2][y1 - 1]
+          + prefix[x1 - 1][y1 - 1])
+    print(ans)`,
                         cpp: `#include <iostream>
-#include <algorithm>
 using namespace std;
 
-int prefix[2001][2001];
+int prefix[1025][1025];
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    int N, M, K;
-    cin >> N >> M >> K;
+    int N, M;
+    cin >> N >> M;
 
     for (int i = 1; i <= N; i++) {
-        string row;
-        cin >> row;
-        for (int j = 1; j <= M; j++) {
-            char expected = ((i + j) % 2 == 0) ? 'B' : 'W';
-            int diff = (row[j - 1] != expected) ? 1 : 0;
-            prefix[i][j] = diff + prefix[i-1][j] + prefix[i][j-1] - prefix[i-1][j-1];
+        for (int j = 1; j <= N; j++) {
+            int x;
+            cin >> x;
+            prefix[i][j] = x + prefix[i-1][j] + prefix[i][j-1] - prefix[i-1][j-1];
         }
     }
 
-    int ans = N * M;
-    for (int i = 1; i <= N - K + 1; i++) {
-        for (int j = 1; j <= M - K + 1; j++) {
-            int cost1 = prefix[i+K-1][j+K-1] - prefix[i-1][j+K-1] - prefix[i+K-1][j-1] + prefix[i-1][j-1];
-            int cost2 = K * K - cost1;
-            ans = min({ans, cost1, cost2});
-        }
+    while (M--) {
+        int x1, y1, x2, y2;
+        cin >> x1 >> y1 >> x2 >> y2;
+        cout << prefix[x2][y2] - prefix[x1-1][y2] - prefix[x2][y1-1] + prefix[x1-1][y1-1] << '\\n';
     }
-    cout << ans << endl;
     return 0;
 }`
                     },
@@ -1093,48 +1076,66 @@ int main() {
                         python: `import sys
 input = sys.stdin.readline
 
-N, M = map(int, input().split())
-arr = list(map(int, input().split()))
+N, M, K = map(int, input().split())
+board = [input().strip() for _ in range(N)]
 
-# 나머지별 개수 세기
-cnt = [0] * M
-prefix_mod = 0
-cnt[0] = 1  # prefix[0] = 0의 나머지는 0
+# (i+j)가 짝수인 칸에 B가 와야 하는 패턴 기준
+diff = [[0] * (M + 1) for _ in range(N + 1)]
+for i in range(N):
+    for j in range(M):
+        expected = 'B' if (i + j) % 2 == 0 else 'W'
+        diff[i + 1][j + 1] = 1 if board[i][j] != expected else 0
 
-for x in arr:
-    prefix_mod = (prefix_mod + x) % M
-    cnt[prefix_mod] += 1
+# 2차원 누적합
+prefix = [[0] * (M + 1) for _ in range(N + 1)]
+for i in range(1, N + 1):
+    for j in range(1, M + 1):
+        prefix[i][j] = (diff[i][j]
+                        + prefix[i-1][j]
+                        + prefix[i][j-1]
+                        - prefix[i-1][j-1])
 
-# 나머지가 같은 쌍의 수 = nC2
-ans = 0
-for c in cnt:
-    ans += c * (c - 1) // 2
+ans = float('inf')
+for i in range(1, N - K + 2):
+    for j in range(1, M - K + 2):
+        cost1 = (prefix[i+K-1][j+K-1]
+                - prefix[i-1][j+K-1]
+                - prefix[i+K-1][j-1]
+                + prefix[i-1][j-1])
+        cost2 = K * K - cost1
+        ans = min(ans, cost1, cost2)
 
 print(ans)`,
                         cpp: `#include <iostream>
+#include <algorithm>
 using namespace std;
+
+int prefix[2001][2001];
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    int N, M;
-    cin >> N >> M;
+    int N, M, K;
+    cin >> N >> M >> K;
 
-    long long cnt[1001] = {0};
-    cnt[0] = 1;
-    long long prefix_mod = 0;
-
-    for (int i = 0; i < N; i++) {
-        long long x;
-        cin >> x;
-        prefix_mod = (prefix_mod + x) % M;
-        cnt[prefix_mod]++;
+    for (int i = 1; i <= N; i++) {
+        string row;
+        cin >> row;
+        for (int j = 1; j <= M; j++) {
+            char expected = ((i + j) % 2 == 0) ? 'B' : 'W';
+            int diff = (row[j - 1] != expected) ? 1 : 0;
+            prefix[i][j] = diff + prefix[i-1][j] + prefix[i][j-1] - prefix[i-1][j-1];
+        }
     }
 
-    long long ans = 0;
-    for (int r = 0; r < M; r++) {
-        ans += cnt[r] * (cnt[r] - 1) / 2;
+    int ans = N * M;
+    for (int i = 1; i <= N - K + 1; i++) {
+        for (int j = 1; j <= M - K + 1; j++) {
+            int cost1 = prefix[i+K-1][j+K-1] - prefix[i-1][j+K-1] - prefix[i+K-1][j-1] + prefix[i-1][j-1];
+            int cost2 = K * K - cost1;
+            ans = min({ans, cost1, cost2});
+        }
     }
     cout << ans << endl;
     return 0;
@@ -1341,29 +1342,25 @@ int main() {
 input = sys.stdin.readline
 
 N, M = map(int, input().split())
+arr = list(map(int, input().split()))
 
-# 2차원 누적합 만들기
-prefix = [[0] * (N + 1) for _ in range(N + 1)]
-for i in range(1, N + 1):
-    row = list(map(int, input().split()))
-    for j in range(1, N + 1):
-        prefix[i][j] = (row[j - 1]
-                        + prefix[i - 1][j]
-                        + prefix[i][j - 1]
-                        - prefix[i - 1][j - 1])
+# 나머지별 개수 세기
+cnt = [0] * M
+prefix_mod = 0
+cnt[0] = 1  # prefix[0] = 0의 나머지는 0
 
-# 각 질문에 답하기
-for _ in range(M):
-    x1, y1, x2, y2 = map(int, input().split())
-    ans = (prefix[x2][y2]
-          - prefix[x1 - 1][y2]
-          - prefix[x2][y1 - 1]
-          + prefix[x1 - 1][y1 - 1])
-    print(ans)`,
+for x in arr:
+    prefix_mod = (prefix_mod + x) % M
+    cnt[prefix_mod] += 1
+
+# 나머지가 같은 쌍의 수 = nC2
+ans = 0
+for c in cnt:
+    ans += c * (c - 1) // 2
+
+print(ans)`,
                         cpp: `#include <iostream>
 using namespace std;
-
-int prefix[1025][1025];
 
 int main() {
     ios::sync_with_stdio(false);
@@ -1372,19 +1369,22 @@ int main() {
     int N, M;
     cin >> N >> M;
 
-    for (int i = 1; i <= N; i++) {
-        for (int j = 1; j <= N; j++) {
-            int x;
-            cin >> x;
-            prefix[i][j] = x + prefix[i-1][j] + prefix[i][j-1] - prefix[i-1][j-1];
-        }
+    long long cnt[1001] = {0};
+    cnt[0] = 1;
+    long long prefix_mod = 0;
+
+    for (int i = 0; i < N; i++) {
+        long long x;
+        cin >> x;
+        prefix_mod = (prefix_mod + x) % M;
+        cnt[prefix_mod]++;
     }
 
-    while (M--) {
-        int x1, y1, x2, y2;
-        cin >> x1 >> y1 >> x2 >> y2;
-        cout << prefix[x2][y2] - prefix[x1-1][y2] - prefix[x2][y1-1] + prefix[x1-1][y1-1] << '\\n';
+    long long ans = 0;
+    for (int r = 0; r < M; r++) {
+        ans += cnt[r] * (cnt[r] - 1) / 2;
     }
+    cout << ans << endl;
     return 0;
 }`
                     },

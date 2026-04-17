@@ -94,23 +94,33 @@ function renderInlineMarkdown(text: string, keyPrefix: string = ""): React.React
   })
 }
 
-// `code` + **bold** 처리 (컬러 태그 내부에서도 재사용)
+// **bold** 먼저 분리 → bold 내부와 외부 모두에서 `code` 처리
 function renderBasicInline(text: string, keyPrefix: string = ""): React.ReactNode[] {
-  const parts = text.split(/(`[^`]+`)/g)
-  return parts.flatMap((part, j): React.ReactNode[] => {
-    if (part.startsWith('`') && part.endsWith('`')) {
+  // **bold** can contain `code` inside, so process bold first
+  const boldParts = text.split(/(\*\*(?:[^*]|\*(?!\*))+\*\*)/g)
+  return boldParts.flatMap((part, j): React.ReactNode[] => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      const inner = part.slice(2, -2)
+      // bold 내부의 `code` 처리
+      const codeParts = inner.split(/(`[^`]+`)/g)
       return [
-        <code key={`${keyPrefix}${j}`} className="bg-indigo-100 px-1.5 py-0.5 rounded-md font-mono text-indigo-700 text-sm font-semibold">
-          {part.slice(1, -1)}
-        </code>
+        <strong key={`${keyPrefix}${j}`} className="font-bold text-indigo-600">
+          {codeParts.map((cp, k) => {
+            if (cp.startsWith('`') && cp.endsWith('`')) {
+              return <code key={`${keyPrefix}${j}-${k}`} className="bg-indigo-100 px-1.5 py-0.5 rounded-md font-mono text-indigo-700 text-sm font-semibold">{cp.slice(1, -1)}</code>
+            }
+            return cp
+          })}
+        </strong>
       ]
     }
-    const boldParts = part.split(/(\*\*[^*]+\*\*)/g)
-    return boldParts.map((bp, k) => {
-      if (bp.startsWith('**') && bp.endsWith('**')) {
-        return <strong key={`${keyPrefix}${j}-${k}`} className="font-bold text-indigo-600">{bp.slice(2, -2)}</strong>
+    // bold 밖의 `code` 처리
+    const codeParts = part.split(/(`[^`]+`)/g)
+    return codeParts.map((cp, k) => {
+      if (cp.startsWith('`') && cp.endsWith('`')) {
+        return <code key={`${keyPrefix}${j}-${k}`} className="bg-indigo-100 px-1.5 py-0.5 rounded-md font-mono text-indigo-700 text-sm font-semibold">{cp.slice(1, -1)}</code>
       }
-      return bp
+      return cp
     })
   })
 }

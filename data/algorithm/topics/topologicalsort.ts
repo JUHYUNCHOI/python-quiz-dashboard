@@ -56,7 +56,7 @@ export const topologicalSortTopic: AlgoTopic = {
             },
             descriptionHTML: `
                 <h3>문제</h3>
-                <p>올해 Z대학 , , 학번인 학생들은 새로운 커리큘럼을 맞아 , 총 N개의 과목을 수강해야 한다. 각 과목을 수강하기 위해 반드시 먼저 이수해야 하는 선수과목이 있을 수 있다.</p>
+                <p>올해 Z대학 학생들은 새로운 커리큘럼을 맞아 총 N개의 과목을 수강해야 한다. 각 과목을 수강하기 위해 반드시 먼저 이수해야 하는 선수과목이 있을 수 있다.</p>
                 <p>한 학기에 들을 수 있는 과목 수에는 제한이 없다. 모든 과목은 매 학기 개설된다.</p>
                 <p>각 과목을 가장 빠르게 이수할 수 있는 학기를 구하라.</p>
                 <h4>입력</h4>
@@ -68,7 +68,7 @@ export const topologicalSortTopic: AlgoTopic = {
                     <div><strong>입력</strong><pre>3 2
 2 3
 1 2</pre></div>
-                    <div><strong>출력</strong><pre>1 1 2</pre></div>
+                    <div><strong>출력</strong><pre>1 2 3</pre></div>
                 </div></div>
                 <div class="problem-example"><h4>예제 2</h4><div class="example-grid">
                     <div><strong>입력</strong><pre>6 4

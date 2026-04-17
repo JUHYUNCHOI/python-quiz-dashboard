@@ -406,7 +406,7 @@ Format: \`name best_score\``,
       id: "ms-007",
       cluster: "map-set",
       unlockAfter: "cpp-16",
-      difficulty: "어려움",
+      difficulty: "보통",
       title: "두 번 이상 등장한 원소",
       description: `N개의 정수가 주어질 때, 두 번 이상 등장한 정수를 오름차순으로 한 줄에 출력하세요.
 없으면 \`NONE\`을 출력하세요.`,
@@ -758,7 +758,7 @@ int main() {
       id: "ms-011",
       cluster: "map-set",
       unlockAfter: "cpp-16",
-      difficulty: "어려움",
+      difficulty: "보통",
       title: "전화번호부 검색",
       description: `N개의 (이름, 전화번호) 쌍을 저장하고, Q개의 이름 쿼리에 대해 전화번호를 출력하세요.
 없는 이름이면 \`NOT FOUND\`를 출력하세요.`,

@@ -95,6 +95,37 @@ export const stringTopic: AlgoTopic = {
                     <li>알파벳 소문자로만 이루어져 있음</li>
                 </ul>
             `,
+            templates: {
+                python: `s = input()
+result = [-1] * 26
+
+for i in range(len(s)):
+    idx = ord(s[i]) - ord('a')
+    if result[idx] == -1:
+        result[idx] = i
+
+print(' '.join(map(str, result)))`,
+                cpp: `#include <iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    string s;
+    cin >> s;
+    int result[26];
+    fill(result, result + 26, -1);
+
+    for (int i = 0; i < (int)s.size(); i++) {
+        int idx = s[i] - 'a';
+        if (result[idx] == -1)
+            result[idx] = i;
+    }
+
+    for (int i = 0; i < 26; i++)
+        cout << result[i] << (i < 25 ? " " : "\\n");
+}`
+            },
             hints: [
                 {
                     title: '문제를 쉽게 이해해보자',
@@ -384,7 +415,7 @@ if count.count(max_count) > 1:
 else:
     print(chr(count.index(max_count) + ord('A')))`,
                 cpp: `#include <iostream>
-#include <unordered_map>
+#include <algorithm>
 using namespace std;
 
 int main() {

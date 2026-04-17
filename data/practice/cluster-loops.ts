@@ -1307,7 +1307,7 @@ int main() {
       },
     },
     {
-      id: "io-007",
+      id: "loop-026",
       cluster: "loops",
       unlockAfter: "cpp-7",
       difficulty: "보통",
@@ -1367,7 +1367,7 @@ int main() {
       },
     },
     {
-      id: "io-008",
+      id: "loop-027",
       cluster: "loops",
       unlockAfter: "cpp-7",
       difficulty: "보통",

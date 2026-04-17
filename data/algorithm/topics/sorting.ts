@@ -340,7 +340,7 @@ int main() {
         {
             id: 'boj-2750',
             title: 'BOJ 2750 - 수 정렬하기',
-            difficulty: 'silver',
+            difficulty: 'bronze',
             link: 'https://www.acmicpc.net/problem/2750',
             simIntro: '선택 정렬로 배열을 정렬하는 과정을 관찰하세요. 매번 최솟값을 찾아 교환합니다.',
             sim: {
@@ -845,33 +845,41 @@ int main() {
                     timeComplexity: 'O(N log N)',
                     spaceComplexity: 'O(N)',
                     templates: {
-                        python: `class Solution:
-    def merge(self, intervals):
-        intervals.sort(key=lambda x: x[0])  # 시작점 기준 정렬
-        merged = [intervals[0]]
+                        python: `import sys
+input = sys.stdin.readline
 
-        for start, end in intervals[1:]:
-            if start <= merged[-1][1]:  # 겹침!
-                merged[-1][1] = max(merged[-1][1], end)
-            else:
-                merged.append([start, end])
+N = int(input())
+members = []
+for _ in range(N):
+    line = input().split()
+    members.append((int(line[0]), line[1]))
 
-        return merged`,
-                        cpp: `class Solution {
-public:
-    vector<vector<int>> merge(vector<vector<int>>& intervals) {
-        sort(intervals.begin(), intervals.end());
-        vector<vector<int>> merged = {intervals[0]};
+# Python sort는 안정 정렬 → 나이만 기준으로 정렬해도 입력 순서 유지
+members.sort(key=lambda x: x[0])
 
-        for (int i = 1; i < intervals.size(); i++) {
-            if (intervals[i][0] <= merged.back()[1])
-                merged.back()[1] = max(merged.back()[1], intervals[i][1]);
-            else
-                merged.push_back(intervals[i]);
-        }
-        return merged;
-    }
-};`
+for age, name in members:
+    print(age, name)`,
+                        cpp: `#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <utility>
+using namespace std;
+
+int main() {
+    int N;
+    scanf("%d", &N);
+    vector<pair<int, string>> v(N);
+    for (int i = 0; i < N; i++)
+        cin >> v[i].first >> v[i].second;
+
+    // stable_sort: 같은 나이면 입력 순서 유지
+    stable_sort(v.begin(), v.end(), [](auto& a, auto& b) {
+        return a.first < b.first;
+    });
+
+    for (auto& [age, name] : v)
+        printf("%d %s\\n", age, name.c_str());
+}`
                     },
                     codeSteps: {
                         python: [
@@ -1061,41 +1069,33 @@ public:
                     timeComplexity: 'O(n log n)',
                     spaceComplexity: 'O(n)',
                     templates: {
-                        python: `import sys
-input = sys.stdin.readline
+                        python: `class Solution:
+    def merge(self, intervals):
+        intervals.sort(key=lambda x: x[0])  # 시작점 기준 정렬
+        merged = [intervals[0]]
 
-N = int(input())
-members = []
-for _ in range(N):
-    line = input().split()
-    members.append((int(line[0]), line[1]))
+        for start, end in intervals[1:]:
+            if start <= merged[-1][1]:  # 겹침!
+                merged[-1][1] = max(merged[-1][1], end)
+            else:
+                merged.append([start, end])
 
-# Python sort는 안정 정렬 → 나이만 기준으로 정렬해도 입력 순서 유지
-members.sort(key=lambda x: x[0])
+        return merged`,
+                        cpp: `class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        sort(intervals.begin(), intervals.end());
+        vector<vector<int>> merged = {intervals[0]};
 
-for age, name in members:
-    print(age, name)`,
-                        cpp: `#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <utility>
-using namespace std;
-
-int main() {
-    int N;
-    scanf("%d", &N);
-    vector<pair<int, string>> v(N);
-    for (int i = 0; i < N; i++)
-        cin >> v[i].first >> v[i].second;
-
-    // stable_sort: 같은 나이면 입력 순서 유지
-    stable_sort(v.begin(), v.end(), [](auto& a, auto& b) {
-        return a.first < b.first;
-    });
-
-    for (auto& [age, name] : v)
-        printf("%d %s\\n", age, name.c_str());
-}`
+        for (int i = 1; i < intervals.size(); i++) {
+            if (intervals[i][0] <= merged.back()[1])
+                merged.back()[1] = max(merged.back()[1], intervals[i][1]);
+            else
+                merged.push_back(intervals[i]);
+        }
+        return merged;
+    }
+};`
                     },
                     codeSteps: {
                         python: [

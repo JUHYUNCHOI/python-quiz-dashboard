@@ -90,7 +90,7 @@ scores["Bob"] = 87;
           id: "ch1-missing-key",
           type: "explain",
           title: "⚠️ 없는 키를 [] 로 접근하면?",
-          content: `C++ map에서 **없는 키를 \`[]\`로 접근하면** 파이썬과 다르게 동작해요!
+          content: `C++ map에서 없는 키를 \`[]\`로 접근하면 파이썬과 다르게 동작해요!
 
 **파이썬은 없는 키 접근 → 에러**
 \`\`\`python
