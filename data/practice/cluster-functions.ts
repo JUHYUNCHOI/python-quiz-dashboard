@@ -649,11 +649,13 @@ int main() {
 #include <algorithm>
 using namespace std;
 
-int countVowels(const string& s) {
+int countVowels(string s) {
     int count = 0;
-    for (char c : s)
+    for (int i = 0; i < (int)s.size(); i++) {
+        char c = s[i];
         if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u')
             count++;
+    }
     return count;
 }
 
@@ -672,7 +674,7 @@ int main() {
     }
     return 0;
 }`,
-      solutionExplanation: "각 기능을 함수로 분리하면 코드가 읽기 쉬워집니다. countVowels는 const 참조로 받아 복사 비용을 아끼고, reverseStr는 값으로 받아 내부에서 수정합니다.",
+      solutionExplanation: "각 기능을 함수로 분리하면 코드가 읽기 쉬워집니다. 두 함수 모두 문자열을 값으로 받아 원본을 건드리지 않고 새 결과를 반환합니다.",
       en: {
         title: "String Processing Functions",
         description: `Decompose string processing into functions:\n- countVowels(s): return the count of vowels (a,e,i,o,u) in s\n- reverseStr(s): return the reversed string\n\nFor N strings, output "vowel_count reversed_string" on each line.`,
@@ -681,7 +683,7 @@ int main() {
           "countVowels: loop over each character and check if it is a vowel.",
           "reverseStr: string result = s; reverse(result.begin(), result.end()); return result;",
         ],
-        solutionExplanation: "Separating each feature into a function improves readability. countVowels takes a const reference to avoid copying; reverseStr takes a value so it can be modified internally.",
+        solutionExplanation: "Separating each feature into a function improves readability. Both functions take the string by value and return a fresh result without modifying the caller's string.",
       },
     },
     {

@@ -547,6 +547,37 @@ v.clear();
 💡 **find, sort** 같은 검색/정렬 기능은 \`#include <algorithm>\` 헤더에서 제공해요. 나중에 배울게요!`
         },
         {
+          id: "ch2-sort",
+          type: "explain",
+          title: "📊 기본 정렬 — sort()",
+          content: `**sort()** 는 vector(또는 배열)을 오름차순으로 정렬하는 함수예요. \`<algorithm>\` 헤더가 필요해요.
+
+\`\`\`cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>  // sort 에 필요
+using namespace std;
+
+int main() {
+    vector<int> v = {5, 2, 8, 1, 9, 3};
+    sort(v.begin(), v.end());  // 오름차순 정렬
+    for (int x : v) cout << x << " ";  // 1 2 3 5 8 9
+}
+\`\`\`
+
+**사용법**:
+- \`sort(v.begin(), v.end())\` — vector 전체를 오름차순 정렬
+- \`sort(arr, arr + n)\` — 배열 (0번부터 n-1번까지) 오름차순 정렬
+
+💡 문자열 vector도 같은 방식 (사전 순 오름차순):
+\`\`\`cpp
+vector<string> names = {"bob", "alice", "carol"};
+sort(names.begin(), names.end());  // alice, bob, carol
+\`\`\`
+
+💡 **내림차순** 이나 **구조체 정렬** 같은 심화 기법은 cpp-23 (sort 마스터) 에서 배워요.`
+        },
+        {
           id: "ch2-pred1",
           type: "predict" as const,
           title: "vector 조작!",

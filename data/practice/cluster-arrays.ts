@@ -192,7 +192,7 @@ int main() {
     vector<int> v(n);
     for (int i = 0; i < n; i++) cin >> v[i];
     int sum = 0;
-    for (int x : v) sum += x;
+    for (int i = 0; i < n; i++) sum += v[i];
     cout << sum << "\n";
     cout << sum / n << "\n";
     return 0;
@@ -305,7 +305,8 @@ int main() {
     vector<int> v(n);
     for (int i = 0; i < n; i++) cin >> v[i];
     int first = -1001, second = -1001;
-    for (int x : v) {
+    for (int i = 0; i < n; i++) {
+        int x = v[i];
         if (x > first) { second = first; first = x; }
         else if (x > second) second = x;
     }
@@ -475,12 +476,12 @@ int main() {
     vector<int> v(n);
     for (int i = 0; i < n; i++) cin >> v[i];
     int cnt = 0;
-    for (int x : v)
-        if (x == k) cnt++;
+    for (int i = 0; i < n; i++)
+        if (v[i] == k) cnt++;
     cout << cnt << endl;
     return 0;
 }`,
-      solutionExplanation: "range-for로 순회하며 k와 같은 원소를 셉니다.",
+      solutionExplanation: "인덱스 기반 for문으로 순회하며 k와 같은 원소를 셉니다.",
       en: {
         title: "Count Occurrences",
         description: `Given N integers and a target value K, print how many times K appears in the array.`,
@@ -584,7 +585,8 @@ int main() {
     vector<int> v(n);
     for (int i = 0; i < n; i++) cin >> v[i];
     int pos = 0, neg = 0;
-    for (int x : v) {
+    for (int i = 0; i < n; i++) {
+        int x = v[i];
         if (x > 0) pos++;
         else if (x < 0) neg++;
     }
@@ -640,8 +642,8 @@ int main() {
     vector<int> v(n);
     for (int i = 0; i < n; i++) cin >> v[i];
     bool found = false;
-    for (int x : v)
-        if (x == k) { found = true; break; }
+    for (int i = 0; i < n; i++)
+        if (v[i] == k) { found = true; break; }
     cout << (found ? "YES" : "NO") << endl;
     return 0;
 }`,
@@ -892,8 +894,7 @@ int main() {
       unlockAfter: "cpp-9",
       difficulty: "보통",
       title: "K번째로 작은 수",
-      description: `N개의 정수와 K가 주어질 때, K번째로 작은 수를 출력하세요. (중복 포함, 1-indexed)
-※ 이 시점에서 sort() 사용 가능: sort(v.begin(), v.end())`,
+      description: `N개의 정수와 K가 주어질 때, K번째로 작은 수를 출력하세요. (중복 포함, 1-indexed)`,
       constraints: "1 ≤ K ≤ N ≤ 100, -1000 ≤ 각 원소 ≤ 1000",
       initialCode: `#include <iostream>
 #include <vector>
@@ -934,7 +935,7 @@ int main() {
       solutionExplanation: "정렬 후 인덱스 k-1을 출력합니다. 정렬 후 인덱싱은 USACO Bronze에서 매우 자주 사용되는 패턴입니다.",
       en: {
         title: "K-th Smallest",
-        description: `Given N integers and K, print the K-th smallest element (1-indexed, duplicates included).\n※ You may use sort() at this point: sort(v.begin(), v.end())`,
+        description: `Given N integers and K, print the K-th smallest element (1-indexed, duplicates included).`,
         constraints: "1 ≤ K ≤ N ≤ 100, -1000 ≤ each element ≤ 1000",
         hints: [
           "Sort the array, then output the element at index k-1.",

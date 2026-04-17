@@ -667,66 +667,83 @@ int main() {
       cluster: "constructs",
       unlockAfter: "cpp-15",
       difficulty: "어려움",
-      title: "vector<pair<int,int>> 정렬 — second 기준",
-      description: `N개의 (이름 번호, 점수) 쌍을 입력받아, **점수(second) 내림차순**으로 정렬한 뒤 출력하세요. 점수가 같으면 번호(first) 오름차순.
+      title: "vector<pair<int,int>> — 최고 점수 찾기",
+      description: `N개의 (번호, 점수) 쌍과 기준 점수 T를 입력받아 다음 두 가지를 출력하세요.
 
-\`sort\`의 커스텀 비교자를 직접 작성하세요.`,
-      constraints: "1 ≤ N ≤ 100, 1 ≤ 번호 ≤ 1000, 0 ≤ 점수 ≤ 100",
+1행: **최고 점수를 받은 사람의 번호와 점수** (동점이 있으면 번호가 가장 작은 사람)
+2행: **점수가 T 이상인 사람의 수**
+
+선형 탐색으로 해결하세요.`,
+      constraints: "1 ≤ N ≤ 100, 1 ≤ 번호 ≤ 1000, 0 ≤ 점수, T ≤ 100",
       initialCode: `#include <iostream>
 #include <vector>
-#include <algorithm>
 using namespace std;
 
 int main() {
-    int n; cin >> n;
+    int n, t;
+    cin >> n >> t;
     vector<pair<int,int>> v(n);
     for (int i = 0; i < n; i++)
         cin >> v[i].first >> v[i].second;
-    // sort: 점수 내림차순, 동점이면 번호 오름차순
 
-    for (auto& p : v)
-        cout << p.first << ' ' << p.second << '\n';
+    // 최고 점수를 받은 사람 찾기 (동점이면 번호가 작은 사람)
+
+    // T 이상 점수 받은 사람 수 세기
+
+
     return 0;
 }`,
       testCases: [
-        { stdin: "4\n1 80\n2 95\n3 80\n4 70", expectedOutput: "2 95\n1 80\n3 80\n4 70", label: "기본 (동점 포함)" },
-        { stdin: "1\n5 50", expectedOutput: "5 50", label: "원소 1개" },
-        { stdin: "3\n3 100\n1 100\n2 100", expectedOutput: "1 100\n2 100\n3 100", label: "전부 동점" },
+        { stdin: "4 80\n1 80\n2 95\n3 80\n4 70", expectedOutput: "2 95\n3", label: "기본" },
+        { stdin: "1 50\n5 50", expectedOutput: "5 50\n1", label: "원소 1개" },
+        { stdin: "3 100\n3 100\n1 100\n2 100", expectedOutput: "1 100\n3", label: "전부 동점" },
       ],
       hints: [
-        "sort의 세 번째 인자로 람다를 넘기세요: `sort(v.begin(), v.end(), [](auto& a, auto& b) { ... });`",
-        "점수가 다르면 `a.second > b.second` (내림차순), 같으면 `a.first < b.first` (오름차순)",
+        "최고 점수와 해당 번호를 담을 `pair<int,int> best = v[0];` 로 초기화.",
+        "루프에서 `v[i].second > best.second` 이거나, 같으면 `v[i].first < best.first` 일 때 갱신.",
+        "카운트용 변수 `cnt = 0;` 을 두고 `v[i].second >= t` 면 `cnt++`.",
       ],
       solutionCode: `#include <iostream>
 #include <vector>
-#include <algorithm>
 using namespace std;
 
 int main() {
-    int n; cin >> n;
+    int n, t;
+    cin >> n >> t;
     vector<pair<int,int>> v(n);
     for (int i = 0; i < n; i++)
         cin >> v[i].first >> v[i].second;
-    sort(v.begin(), v.end(), [](auto& a, auto& b) {
-        if (a.second != b.second) return a.second > b.second;
-        return a.first < b.first;
-    });
-    for (auto& p : v)
-        cout << p.first << ' ' << p.second << '\n';
+
+    pair<int,int> best = v[0];
+    int cnt = 0;
+    if (v[0].second >= t) cnt = 1;
+    for (int i = 1; i < n; i++) {
+        if (v[i].second > best.second ||
+            (v[i].second == best.second && v[i].first < best.first)) {
+            best = v[i];
+        }
+        if (v[i].second >= t) cnt++;
+    }
+    cout << best.first << ' ' << best.second << '\n';
+    cout << cnt << '\n';
     return 0;
 }`,
-      solutionExplanation: "커스텀 comparator는 `true`를 반환하면 a가 b보다 앞에 옵니다. 다중 기준 정렬은 첫 번째 기준이 같을 때 두 번째 기준으로 이어가는 패턴으로 작성합니다.",
+      solutionExplanation: "선형 탐색 한 번으로 최댓값 갱신과 카운트를 동시에 처리합니다. 동점 처리는 `(같은 점수일 때 번호가 더 작으면 갱신)` 조건을 or로 묶어 넣습니다.",
       en: {
-        title: "vector<pair<int,int>>: Sort by second",
-        description: `Read N (id, score) pairs, sort by **score descending** (ties broken by id ascending), then print.
+        title: "vector<pair<int,int>>: Find top scorer",
+        description: `Read N (id, score) pairs and a threshold T. Print:
 
-Write the custom comparator for \`sort\` yourself.`,
-        constraints: "1 ≤ N ≤ 100, 1 ≤ id ≤ 1000, 0 ≤ score ≤ 100",
+Line 1: **id and score of the top scorer** (on tie, smallest id wins)
+Line 2: **number of people scoring at least T**
+
+Solve with a linear scan.`,
+        constraints: "1 ≤ N ≤ 100, 1 ≤ id ≤ 1000, 0 ≤ score, T ≤ 100",
         hints: [
-          "Pass a lambda as the third argument: `sort(v.begin(), v.end(), [](auto& a, auto& b) { ... });`",
-          "If scores differ: `a.second > b.second` (descending); otherwise: `a.first < b.first` (ascending)",
+          "Initialize `pair<int,int> best = v[0];` to hold the best so far.",
+          "Update when `v[i].second > best.second` OR tie with smaller id.",
+          "Keep a counter `cnt` and increment when `v[i].second >= t`.",
         ],
-        solutionExplanation: "The comparator returns `true` when a should come before b. For multi-key sorting, fall through to the next criterion only when the primary key is equal.",
+        solutionExplanation: "One linear pass handles both the max tracking and the count. The tie-break is written as a compound OR condition — update when the score is strictly higher, or equal score with a smaller id.",
       },
     },
 
@@ -816,8 +833,12 @@ int main() {
       cluster: "constructs",
       unlockAfter: "cpp-15",
       difficulty: "어려움",
-      title: "vector<tuple<int,int,int>> — 다중 정렬",
-      description: `N개의 학생 정보 (학번, 수학점수, 영어점수)를 **수학 내림차순 → 영어 내림차순 → 학번 오름차순** 으로 정렬해 출력하세요.
+      title: "vector<tuple<int,int,int>> — 최우수 학생과 평균",
+      description: `N명의 학생 정보 (학번, 수학점수, 영어점수) 를 입력받아 다음을 구하세요.
+
+1행: **두 과목 합계가 가장 높은 학생의 (학번 수학 영어)**. 합계가 같으면 수학 점수가 더 높은 학생, 그래도 같으면 학번이 작은 학생.
+2행: **수학 평균** (소수점 없이 버림, 즉 \`합 / N\`)
+3행: **수학과 영어 모두 80점 이상인 학생 수**
 
 tuple 선언: \`vector<tuple<int,int,int>> students;\`
 값 접근: \`get<0>(t)\`, \`get<1>(t)\`, \`get<2>(t)\``,
@@ -825,7 +846,6 @@ tuple 선언: \`vector<tuple<int,int,int>> students;\`
       initialCode: `#include <iostream>
 #include <vector>
 #include <tuple>
-#include <algorithm>
 using namespace std;
 
 int main() {
@@ -836,28 +856,32 @@ int main() {
         cin >> id >> math >> eng;
         students.push_back({id, math, eng});
     }
-    // 수학 내림차순 → 영어 내림차순 → 학번 오름차순 정렬
+    // 1) 합계 최고 학생 찾기 (타이브레이크: 수학 높은 사람, 그래도 같으면 학번 작은 사람)
 
-    for (auto& s : students)
-        cout << get<0>(s) << ' ' << get<1>(s) << ' ' << get<2>(s) << '\n';
+    // 2) 수학 평균 (정수 나눗셈)
+
+    // 3) 수학·영어 모두 80 이상인 학생 수
+
+
     return 0;
 }`,
       testCases: [
         {
           stdin: "4\n1 80 90\n2 80 95\n3 95 80\n4 80 90",
-          expectedOutput: "3 95 80\n2 80 95\n1 80 90\n4 80 90",
+          expectedOutput: "3 95 80\n83\n4",
           label: "기본 (동점 다수)"
         },
-        { stdin: "1\n5 70 80", expectedOutput: "5 70 80", label: "1명" },
+        { stdin: "1\n5 70 80", expectedOutput: "5 70 80\n70\n0", label: "1명" },
+        { stdin: "3\n10 100 100\n20 90 90\n30 85 85", expectedOutput: "10 100 100\n91\n3", label: "전원 80+" },
       ],
       hints: [
-        "`sort(students.begin(), students.end(), [](auto& a, auto& b) { ... });`",
-        "`get<1>(a) != get<1>(b)` → 수학 비교, `get<2>(a) != get<2>(b)` → 영어 비교, 나머지 → 학번",
+        "합계를 계산해 비교하세요: `int sumA = get<1>(a) + get<2>(a);`",
+        "최고 학생은 `best` tuple을 두고 루프에서 조건 갱신: 합계가 크거나, 같으면 수학이 높거나, 그래도 같으면 학번이 작을 때.",
+        "수학 평균은 `mathSum / n` (int 나눗셈). 80+ 카운트는 `get<1>(s) >= 80 && get<2>(s) >= 80` 일 때 증가.",
       ],
       solutionCode: `#include <iostream>
 #include <vector>
 #include <tuple>
-#include <algorithm>
 using namespace std;
 
 int main() {
@@ -868,28 +892,51 @@ int main() {
         cin >> id >> math >> eng;
         students.push_back({id, math, eng});
     }
-    sort(students.begin(), students.end(), [](auto& a, auto& b) {
-        if (get<1>(a) != get<1>(b)) return get<1>(a) > get<1>(b); // 수학 내림차순
-        if (get<2>(a) != get<2>(b)) return get<2>(a) > get<2>(b); // 영어 내림차순
-        return get<0>(a) < get<0>(b);                               // 학번 오름차순
-    });
-    for (auto& s : students)
-        cout << get<0>(s) << ' ' << get<1>(s) << ' ' << get<2>(s) << '\n';
+
+    auto best = students[0];
+    int mathSum = get<1>(students[0]);
+    int both80 = (get<1>(students[0]) >= 80 && get<2>(students[0]) >= 80) ? 1 : 0;
+
+    for (int i = 1; i < n; i++) {
+        int sumA = get<1>(best) + get<2>(best);
+        int sumB = get<1>(students[i]) + get<2>(students[i]);
+        if (sumB > sumA) {
+            best = students[i];
+        } else if (sumB == sumA) {
+            if (get<1>(students[i]) > get<1>(best)) {
+                best = students[i];
+            } else if (get<1>(students[i]) == get<1>(best) &&
+                       get<0>(students[i]) < get<0>(best)) {
+                best = students[i];
+            }
+        }
+        mathSum += get<1>(students[i]);
+        if (get<1>(students[i]) >= 80 && get<2>(students[i]) >= 80) both80++;
+    }
+
+    cout << get<0>(best) << ' ' << get<1>(best) << ' ' << get<2>(best) << '\n';
+    cout << mathSum / n << '\n';
+    cout << both80 << '\n';
     return 0;
 }`,
-      solutionExplanation: "tuple은 `get<N>(t)`로 N번째 원소에 접근합니다 (0-based). 다중 기준 정렬은 if-chain 패턴으로 작성하며, 앞 기준이 같을 때만 다음 기준으로 이어갑니다.",
+      solutionExplanation: "tuple은 `get<N>(t)`로 N번째 원소에 접근합니다 (0-based). 한 번의 선형 탐색으로 최고 학생, 평균, 조건 카운트를 동시에 계산합니다. 타이브레이크가 여러 단계라면 if/else if 체인으로 읽히기 쉽게 작성합니다.",
       en: {
-        title: "vector<tuple<int,int,int>>: Multi-key sort",
-        description: `Read N student records (id, math, english). Sort by **math desc → english desc → id asc** and print.
+        title: "vector<tuple<int,int,int>>: Top student & stats",
+        description: `Read N student records (id, math, english). Compute:
+
+Line 1: **id math english of the student with the highest total**. On tie, the student with the higher math; if still tied, the smaller id.
+Line 2: **math average**, integer division (\`sum / N\`)
+Line 3: **count of students with both math ≥ 80 and english ≥ 80**
 
 Declare: \`vector<tuple<int,int,int>> students;\`
 Access: \`get<0>(t)\`, \`get<1>(t)\`, \`get<2>(t)\``,
         constraints: "1 ≤ N ≤ 100, 1 ≤ id ≤ 1000, 0 ≤ each score ≤ 100",
         hints: [
-          "`sort(students.begin(), students.end(), [](auto& a, auto& b) { ... });`",
-          "Check `get<1>` first (math), then `get<2>` (english), finally `get<0>` (id) as tiebreaker.",
+          "Compute a sum `int sumA = get<1>(a) + get<2>(a);` before comparing.",
+          "Keep a running `best` and update when sum is higher, or equal with higher math, or all equal with smaller id.",
+          "Math average: `mathSum / n` (integer division). For the 80+ count, test both subject scores.",
         ],
-        solutionExplanation: "Tuple elements are accessed with `get<N>(t)` (0-based). Multi-key sorting uses an if-chain: only fall to the next criterion when the current one is equal.",
+        solutionExplanation: "Tuple elements are accessed with `get<N>(t)` (0-based). A single linear pass handles the best tracking, the math sum, and the count. When tie-breaking has several levels, an if/else if chain reads more clearly than a compound condition.",
       },
     },
 

@@ -456,6 +456,37 @@ v.clear();           // Remove all → {}
 💡 \`v.at(i)\` is the same as \`v[i]\` but throws an error if out of bounds! Much safer.`
         },
         {
+          id: "ch2-sort",
+          type: "explain",
+          title: "📊 Basic Sort — sort()",
+          content: `**sort()** sorts a vector (or array) in ascending order. It requires the \`<algorithm>\` header.
+
+\`\`\`cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>  // required for sort
+using namespace std;
+
+int main() {
+    vector<int> v = {5, 2, 8, 1, 9, 3};
+    sort(v.begin(), v.end());  // ascending sort
+    for (int x : v) cout << x << " ";  // 1 2 3 5 8 9
+}
+\`\`\`
+
+**Usage**:
+- \`sort(v.begin(), v.end())\` — sort the whole vector in ascending order
+- \`sort(arr, arr + n)\` — sort array elements (indices 0 to n-1) ascending
+
+💡 String vectors work the same (lexicographic ascending):
+\`\`\`cpp
+vector<string> names = {"bob", "alice", "carol"};
+sort(names.begin(), names.end());  // alice, bob, carol
+\`\`\`
+
+💡 **Descending order** and **sorting structs** are covered in cpp-23 (Sort Master).`
+        },
+        {
           id: "ch2-pred1",
           type: "predict" as const,
           title: "Vector operations!",

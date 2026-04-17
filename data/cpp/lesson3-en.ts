@@ -97,6 +97,27 @@ Each type uses a **different amount of memory**. Check out the animation below t
 💡 Python's True/False is uppercase, C++'s true/false is **lowercase**!`
         },
         {
+          id: "ch1-longlong",
+          type: "explain",
+          title: "🔢 Bigger than int — long long",
+          content: `**int's limit**: An \`int\` can hold values up to about ±2.1 billion (±2.1 × 10^9). Anything larger overflows.
+
+\`\`\`cpp
+int n = 10000000000;  // ❌ exceeds int range — garbage value
+\`\`\`
+
+**long long**: A larger integer type that holds up to about ±9.2 × 10^18.
+
+\`\`\`cpp
+long long big = 10000000000;   // ✅ 10 billion, fine
+long long fact = 1;
+for (int i = 1; i <= 20; i++) fact *= i;  // 20! ≈ 2.4 × 10^18
+cout << fact << endl;
+\`\`\`
+
+💡 **When to use**: factorials, big products, large cumulative sums. Default to \`int\`; switch to \`long long\` when overflow is a concern.`
+        },
+        {
           id: "ch1-pred1",
           type: "predict" as const,
           title: "What happens here?",
@@ -290,6 +311,34 @@ cout << (char)n << endl;  // B   (int → char: ASCII code → character)
 \`\`\`
 
 💡 Same as Python's \`ord('A')\` = 65 and \`chr(66)\` = 'B'!`,
+        },
+        {
+          id: "ch2-precision",
+          type: "explain",
+          title: "🎯 Fixed Decimal Places — setprecision",
+          content: `Printing a \`double\` defaults to 6 significant digits:
+
+\`\`\`cpp
+cout << 3.14159265 << endl;  // 3.14159
+\`\`\`
+
+To **fix the output to N decimal places**, use the \`<iomanip>\` header with \`fixed << setprecision(N)\`:
+
+\`\`\`cpp
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+int main() {
+    double pi = 3.14159265;
+    cout << fixed << setprecision(2) << pi << endl;  // 3.14
+    cout << fixed << setprecision(4) << pi << endl;  // 3.1416
+}
+\`\`\`
+
+💡 **fixed**: fixes the number of digits after the decimal point (no scientific notation)
+💡 **setprecision(N)**: shows N digits after the decimal point
+💡 Once set, it applies to all subsequent output.`
         },
         {
           id: "ch2-casting-q1",
