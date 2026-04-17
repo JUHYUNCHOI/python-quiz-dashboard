@@ -18,12 +18,11 @@ export const structsCluster: PracticeCluster = {
       difficulty: "쉬움",
       title: "학생 성적 평균",
       description: `N명의 학생 (이름, 점수)이 주어질 때, 각 학생의 점수와 평균을 출력하세요.
-마지막 줄에 전체 평균을 소수점 둘째 자리까지 출력하세요.`,
+마지막 줄에 전체 평균을 정수로 출력하세요. (정수 나눗셈)`,
       constraints: "1 ≤ N ≤ 20, 0 ≤ 점수 ≤ 100, 이름은 영문 최대 20자",
       initialCode: `#include <iostream>
 #include <string>
 #include <vector>
-#include <cstdio>
 using namespace std;
 
 // struct Student를 선언하세요 (name, score)
@@ -38,21 +37,20 @@ int main() {
       testCases: [
         {
           stdin: "3\nalice 90\nbob 80\ncarol 70",
-          expectedOutput: "alice 90\nbob 80\ncarol 70\nAverage: 80.00",
+          expectedOutput: "alice 90\nbob 80\ncarol 70\nAverage: 80",
         },
         {
           stdin: "2\nzara 100\nleo 50",
-          expectedOutput: "zara 100\nleo 50\nAverage: 75.00",
+          expectedOutput: "zara 100\nleo 50\nAverage: 75",
         },
       ],
       hints: [
         "struct Student { string name; int score; }; 로 구조체를 선언하세요.",
-        "printf(\"%.2f\", avg) 로 소수점 2자리 출력",
+        "total / n 으로 정수 평균 계산 (정수 나눗셈)",
       ],
       solutionCode: `#include <iostream>
 #include <string>
 #include <vector>
-#include <cstdio>
 using namespace std;
 
 struct Student {
@@ -71,20 +69,20 @@ int main() {
     }
     for (auto& s : students)
         cout << s.name << " " << s.score << "\\n";
-    printf("Average: %.2f\\n", (double)total / n);
+    cout << "Average: " << total / n << "\\n";
     return 0;
 }`,
       solutionExplanation:
-        "struct로 이름과 점수를 하나의 단위로 묶습니다. vector<Student>로 여러 학생을 관리하고, 범위 기반 for문으로 출력합니다.",
+        "struct로 이름과 점수를 하나의 단위로 묶습니다. vector<Student>로 여러 학생을 관리하고, 평균은 정수 나눗셈 total / n 으로 계산합니다.",
       en: {
         title: "Student Score Average",
-        description: `Given N students (name, score), print each student's name and score, then print the overall average to two decimal places on the last line.`,
+        description: `Given N students (name, score), print each student's name and score, then print the overall average as an integer (integer division) on the last line.`,
         constraints: "1 ≤ N ≤ 20, 0 ≤ score ≤ 100, names are up to 20 English characters",
         hints: [
           "Declare the struct as: struct Student { string name; int score; };",
-          "Use printf(\"%.2f\", avg) to print two decimal places.",
+          "Integer division: total / n gives the integer average.",
         ],
-        solutionExplanation: "Use a struct to bundle name and score as a single unit. Manage multiple students with vector<Student> and print with a range-based for loop.",
+        solutionExplanation: "Use a struct to bundle name and score as a single unit. Manage multiple students with vector<Student>. The average is computed with integer division total / n.",
       },
     },
     {
@@ -92,9 +90,9 @@ int main() {
       cluster: "structs",
       unlockAfter: "cpp-14",
       difficulty: "쉬움",
-      title: "좌표 거리 계산",
-      description: `N개의 점 (x, y)이 주어질 때, 각 점에서 원점(0,0)까지의 거리의 제곱을 출력하세요. (소수점 계산 불필요)
-그리고 원점에서 가장 가까운 점의 번호(1-based)를 출력하세요.`,
+      title: "좌표 합계 최대값",
+      description: `N개의 점 (x, y)이 주어질 때, 각 점의 x+y 값을 한 줄씩 출력하세요.
+마지막 줄에 x+y 가 가장 큰 점의 번호(1-based)를 출력하세요.`,
       constraints: "1 ≤ N ≤ 100, -1000 ≤ x, y ≤ 1000",
       initialCode: `#include <iostream>
 #include <vector>
@@ -102,8 +100,8 @@ using namespace std;
 
 // struct Point를 선언하세요 (x, y)
 
-int dist2(const Point& p) {
-    // 거리 제곱을 반환하세요
+int sumXY(const Point& p) {
+    // p.x + p.y 를 반환하세요
 }
 
 int main() {
@@ -116,20 +114,20 @@ int main() {
       testCases: [
         {
           stdin: "3\n3 4\n1 1\n5 0",
-          expectedOutput: "25\n2\n25\nClosest: 2",
+          expectedOutput: "7\n2\n5\nMax: 1",
         },
         {
           stdin: "2\n0 5\n3 3",
-          expectedOutput: "25\n18\nClosest: 2",
+          expectedOutput: "5\n6\nMax: 2",
         },
         {
-          stdin: "1\n0 0",
-          expectedOutput: "0\nClosest: 1",
+          stdin: "1\n-5 10",
+          expectedOutput: "5\nMax: 1",
         },
       ],
       hints: [
         "struct Point { int x, y; };",
-        "거리 제곱: p.x*p.x + p.y*p.y",
+        "함수에서 p.x + p.y 를 반환하고, main에서 최대값을 가진 점의 번호를 찾습니다.",
       ],
       solutionCode: `#include <iostream>
 #include <vector>
@@ -139,8 +137,8 @@ struct Point {
     int x, y;
 };
 
-int dist2(const Point& p) {
-    return p.x * p.x + p.y * p.y;
+int sumXY(const Point& p) {
+    return p.x + p.y;
 }
 
 int main() {
@@ -148,25 +146,25 @@ int main() {
     cin >> n;
     vector<Point> pts(n);
     for (int i = 0; i < n; i++) cin >> pts[i].x >> pts[i].y;
-    int minIdx = 0;
+    int maxIdx = 0;
     for (int i = 0; i < n; i++) {
-        cout << dist2(pts[i]) << "\n";
-        if (dist2(pts[i]) < dist2(pts[minIdx])) minIdx = i;
+        cout << sumXY(pts[i]) << "\n";
+        if (sumXY(pts[i]) > sumXY(pts[maxIdx])) maxIdx = i;
     }
-    cout << "Closest: " << minIdx + 1 << "\n";
+    cout << "Max: " << maxIdx + 1 << "\n";
     return 0;
 }`,
       solutionExplanation:
-        "struct + 함수 조합: dist2 함수가 Point를 받아 거리 제곱을 반환합니다. struct를 const 참조로 전달해 복사를 방지합니다.",
+        "struct + 함수 조합: sumXY 함수가 Point를 받아 x+y를 반환합니다. struct를 const 참조로 전달해 복사를 방지합니다.",
       en: {
-        title: "Coordinate Distance",
-        description: `Given N points (x, y), print the squared distance from each point to the origin (0, 0) (no floating-point needed). Then print the 1-based index of the point closest to the origin.`,
+        title: "Max Coordinate Sum",
+        description: `Given N points (x, y), print x+y for each point on its own line. On the last line, print the 1-based index of the point with the largest x+y.`,
         constraints: "1 ≤ N ≤ 100, -1000 ≤ x, y ≤ 1000",
         hints: [
           "struct Point { int x, y; };",
-          "Squared distance: p.x*p.x + p.y*p.y",
+          "Return p.x + p.y from the function, then find the point with the maximum sum in main.",
         ],
-        solutionExplanation: "Combining a struct with a function: dist2 receives a Point and returns its squared distance. Pass the struct by const reference to avoid copying.",
+        solutionExplanation: "Combining a struct with a function: sumXY receives a Point and returns x+y. Pass the struct by const reference to avoid copying.",
       },
     },
     {
@@ -179,7 +177,7 @@ int main() {
 1. 재고가 0인 상품의 수
 2. 전체 재고 가치 합계 (가격 × 재고)를 출력하세요.`,
       constraints:
-        "1 ≤ N ≤ 100, 1 ≤ 가격 ≤ 100000, 0 ≤ 재고 ≤ 1000, 상품 이름 영문 소문자 최대 20자",
+        "1 ≤ N ≤ 50, 1 ≤ 가격 ≤ 1000, 0 ≤ 재고 ≤ 100, 상품 이름 영문 소문자 최대 20자",
       initialCode: `#include <iostream>
 #include <string>
 #include <vector>
@@ -225,26 +223,26 @@ int main() {
     for (auto& p : products)
         cin >> p.name >> p.price >> p.stock;
     int outOfStock = 0;
-    long long totalValue = 0;
+    int totalValue = 0;
     for (auto& p : products) {
         if (p.stock == 0) outOfStock++;
-        totalValue += (long long)p.price * p.stock;
+        totalValue += p.price * p.stock;
     }
     cout << "Out of stock: " << outOfStock << "\n";
     cout << "Total value: " << totalValue << "\n";
     return 0;
 }`,
       solutionExplanation:
-        "struct로 상품 속성을 묶어 vector<Product>로 관리합니다. 가격×재고 합이 int 범위를 초과할 수 있으므로 long long을 사용합니다.",
+        "struct로 상품 속성을 묶어 vector<Product>로 관리합니다. 품절 상품 수와 총 재고 가치를 한 번의 순회로 계산합니다.",
       en: {
         title: "Inventory Management",
         description: `Given N products (name, price, stock), print: 1) the number of out-of-stock products (stock == 0), 2) the total inventory value (price × stock summed over all products).`,
-        constraints: "1 ≤ N ≤ 100, 1 ≤ price ≤ 100000, 0 ≤ stock ≤ 1000, product names are lowercase English up to 20 characters",
+        constraints: "1 ≤ N ≤ 50, 1 ≤ price ≤ 1000, 0 ≤ stock ≤ 100, product names are lowercase English up to 20 characters",
         hints: [
           "struct Product { string name; int price, stock; };",
           "Inventory value: accumulate p.price * p.stock for each product.",
         ],
-        solutionExplanation: "Bundle product attributes in a struct and manage them with vector<Product>. Use long long for the total value since price × stock can exceed the int range.",
+        solutionExplanation: "Bundle product attributes in a struct and manage them with vector<Product>. Count out-of-stock items and total value in a single pass.",
       },
     },
     {
@@ -252,14 +250,14 @@ int main() {
       cluster: "structs",
       unlockAfter: "cpp-14",
       difficulty: "보통",
-      title: "학생 정보 정렬",
-      description: `N명의 학생 (이름, 국어 점수, 영어 점수)이 주어질 때, 총점 내림차순으로 정렬하여 출력하세요. 총점이 같으면 이름 오름차순으로 정렬합니다.`,
+      title: "최고 득점 학생",
+      description: `N명의 학생 (이름, 국어 점수, 영어 점수)이 주어질 때, 각 학생의 "이름 총점"을 한 줄씩 출력하세요.
+마지막 줄에 총점이 가장 높은 학생의 이름을 출력하세요. 동점이면 이름 오름차순으로 먼저 나오는 학생을 선택합니다.`,
       constraints:
         "1 ≤ N ≤ 100, 0 ≤ 점수 ≤ 100, 이름은 영문 소문자 최대 20자",
       initialCode: `#include <iostream>
 #include <string>
 #include <vector>
-#include <algorithm>
 using namespace std;
 
 // struct를 선언하세요
@@ -267,64 +265,68 @@ using namespace std;
 int main() {
     int n;
     cin >> n;
-    vector<Student> students(n);
     // 여기에 코드를 작성하세요
     return 0;
 }`,
       testCases: [
         {
           stdin: "3\nalice 90 80\nbob 70 100\ncarol 85 85",
-          expectedOutput: "alice 170\nbob 170\ncarol 170",
+          expectedOutput: "alice 170\nbob 170\ncarol 170\nBest: alice",
         },
         {
           stdin: "3\nzack 50 50\nalex 90 90\nmike 80 70",
-          expectedOutput: "alex 180\nmike 150\nzack 100",
+          expectedOutput: "zack 100\nalex 180\nmike 150\nBest: alex",
         },
         {
           stdin: "2\nbob 60 40\nalex 40 60",
-          expectedOutput: "alex 100\nbob 100",
+          expectedOutput: "bob 100\nalex 100\nBest: alex",
         },
       ],
       hints: [
-        "struct Student { string name; int kor, eng; };",
-        "total = kor + eng. sort 람다: 총점이 다르면 내림차순, 같으면 이름 오름차순",
+        "struct Student { string name; int kor, eng; int total() { return kor + eng; } };",
+        "총점이 같으면 이름이 알파벳 순으로 앞선 학생이 이긴다 — a.name < b.name 으로 비교",
       ],
       solutionCode: `#include <iostream>
 #include <string>
 #include <vector>
-#include <algorithm>
 using namespace std;
 
 struct Student {
     string name;
     int kor, eng;
-    int total() const { return kor + eng; }
+    int total() { return kor + eng; }
 };
 
 int main() {
     int n;
     cin >> n;
     vector<Student> students(n);
-    for (auto& s : students) cin >> s.name >> s.kor >> s.eng;
-    sort(students.begin(), students.end(), [](const Student& a, const Student& b) {
-        if (a.total() != b.total()) return a.total() > b.total();
-        return a.name < b.name;
-    });
-    for (auto& s : students)
-        cout << s.name << " " << s.total() << "\n";
+    for (int i = 0; i < n; i++)
+        cin >> students[i].name >> students[i].kor >> students[i].eng;
+    int bestIdx = 0;
+    for (int i = 0; i < n; i++) {
+        cout << students[i].name << " " << students[i].total() << "\n";
+        if (students[i].total() > students[bestIdx].total()) {
+            bestIdx = i;
+        } else if (students[i].total() == students[bestIdx].total() &&
+                   students[i].name < students[bestIdx].name) {
+            bestIdx = i;
+        }
+    }
+    cout << "Best: " << students[bestIdx].name << "\n";
     return 0;
 }`,
       solutionExplanation:
-        "struct 내 멤버 함수 total()으로 총점을 계산합니다. 람다 comparator로 다중 기준 정렬을 구현합니다.",
+        "struct 멤버 함수 total()로 총점을 계산합니다. 선형 탐색으로 최고점 학생을 찾고, 동점이면 이름 사전순으로 앞선 학생을 선택합니다 (a.name < b.name 문자열 비교).",
       en: {
-        title: "Student Info Sort",
-        description: `Given N students (name, Korean score, English score), sort them by total score (descending). If two students have the same total, sort by name (ascending). Print each student's name and total score.`,
+        title: "Best Student",
+        description: `Given N students (name, Korean score, English score), print each student's "name total" on its own line. On the last line, print the name of the student with the highest total. For ties, choose the one with the alphabetically smaller name.`,
         constraints: "1 ≤ N ≤ 100, 0 ≤ score ≤ 100, names are lowercase English up to 20 characters",
         hints: [
-          "struct Student { string name; int kor, eng; };",
-          "total = kor + eng. Sort lambda: descending by total, then ascending by name if totals are equal.",
+          "struct Student { string name; int kor, eng; int total() { return kor + eng; } };",
+          "For ties on total, pick the one with smaller name — compare using a.name < b.name.",
         ],
-        solutionExplanation: "Use a member function total() inside the struct to compute the sum. Implement multi-key sorting with a lambda comparator.",
+        solutionExplanation: "Compute the total with a struct member function total(). Use linear search to find the best student, breaking ties by string comparison a.name < b.name.",
       },
     },
     {
@@ -332,45 +334,46 @@ int main() {
       cluster: "structs",
       unlockAfter: "cpp-14",
       difficulty: "어려움",
-      title: "점수 상위 K명",
-      description: `N명의 학생 (이름, 점수)이 주어질 때, 점수 상위 K명의 평균을 소수점 둘째 자리까지 출력하고, 상위 K명의 이름을 순서대로 출력하세요. (점수 내림차순, 동점이면 이름 오름차순)`,
+      title: "점수 구간 통계",
+      description: `N명의 학생 (이름, 점수)이 주어질 때, 등급별 인원을 출력하세요. 등급: A (90점 이상), B (80~89), C (70~79), D (60~69), F (60 미만).
+마지막 줄에 가장 높은 등급에 있는 학생 중 입력 순서상 첫 번째 학생의 이름을 출력하세요 (Top: 이름).`,
       constraints:
-        "1 ≤ K ≤ N ≤ 100, 0 ≤ 점수 ≤ 100, 이름은 영문 소문자 최대 20자",
+        "1 ≤ N ≤ 100, 0 ≤ 점수 ≤ 100, 이름은 영문 소문자 최대 20자",
       initialCode: `#include <iostream>
 #include <string>
 #include <vector>
-#include <algorithm>
-#include <cstdio>
 using namespace std;
 
 // struct를 선언하세요
 
 int main() {
-    int n, k;
-    cin >> n >> k;
-    vector<Student> students(n);
+    int n;
+    cin >> n;
     // 여기에 코드를 작성하세요
     return 0;
 }`,
       testCases: [
         {
-          stdin: "5 3\nalice 90\nbob 85\ncarol 90\ndave 70\neve 80",
-          expectedOutput: "88.33\nalice\ncarol\nbob",
+          stdin: "5\nalice 90\nbob 85\ncarol 95\ndave 70\neve 80",
+          expectedOutput: "A: 2\nB: 2\nC: 1\nD: 0\nF: 0\nTop: alice",
         },
         {
-          stdin: "3 2\nzara 100\nalex 100\nmike 90",
-          expectedOutput: "100.00\nalex\nzara",
+          stdin: "3\nzara 65\nalex 55\nmike 72",
+          expectedOutput: "A: 0\nB: 0\nC: 1\nD: 1\nF: 1\nTop: mike",
+        },
+        {
+          stdin: "2\nonly 50\nother 45",
+          expectedOutput: "A: 0\nB: 0\nC: 0\nD: 0\nF: 2\nTop: only",
         },
       ],
       hints: [
-        "정렬 후 앞 K개만 처리합니다.",
-        "printf(\"%.2f\\n\", avg) 로 소수점 2자리 출력",
+        "struct Student { string name; int score; };",
+        "A/B/C/D/F 카운터 5개를 0으로 초기화 후 if/else if로 구간 판정",
+        "Top 학생: A부터 F까지 순서대로 확인하며 첫 번째 매칭 학생 찾기",
       ],
       solutionCode: `#include <iostream>
 #include <string>
 #include <vector>
-#include <algorithm>
-#include <cstdio>
 using namespace std;
 
 struct Student {
@@ -379,31 +382,50 @@ struct Student {
 };
 
 int main() {
-    int n, k;
-    cin >> n >> k;
+    int n;
+    cin >> n;
     vector<Student> students(n);
-    for (auto& s : students) cin >> s.name >> s.score;
-    sort(students.begin(), students.end(), [](const Student& a, const Student& b) {
-        if (a.score != b.score) return a.score > b.score;
-        return a.name < b.name;
-    });
-    double sum = 0;
-    for (int i = 0; i < k; i++) sum += students[i].score;
-    printf("%.2f\\n", sum / k);
-    for (int i = 0; i < k; i++) cout << students[i].name << "\\n";
+    int cntA = 0, cntB = 0, cntC = 0, cntD = 0, cntF = 0;
+    for (int i = 0; i < n; i++) {
+        cin >> students[i].name >> students[i].score;
+        int s = students[i].score;
+        if (s >= 90) cntA++;
+        else if (s >= 80) cntB++;
+        else if (s >= 70) cntC++;
+        else if (s >= 60) cntD++;
+        else cntF++;
+    }
+    cout << "A: " << cntA << "\n";
+    cout << "B: " << cntB << "\n";
+    cout << "C: " << cntC << "\n";
+    cout << "D: " << cntD << "\n";
+    cout << "F: " << cntF << "\n";
+    int topMin;
+    if (cntA > 0) topMin = 90;
+    else if (cntB > 0) topMin = 80;
+    else if (cntC > 0) topMin = 70;
+    else if (cntD > 0) topMin = 60;
+    else topMin = 0;
+    for (int i = 0; i < n; i++) {
+        if (students[i].score >= topMin) {
+            cout << "Top: " << students[i].name << "\n";
+            break;
+        }
+    }
     return 0;
 }`,
       solutionExplanation:
-        "정렬 후 앞 K개만 접근하면 됩니다. 정렬 기준이 점수 내림차순+이름 오름차순이므로, 상위 K명이 앞에 정렬됩니다.",
+        "등급별 카운터 5개를 if/else if로 분기하여 카운팅합니다. 최고 등급을 찾은 뒤, 입력 순서대로 순회하며 해당 등급에 속하는 첫 학생을 출력합니다.",
       en: {
-        title: "Top K Students",
-        description: `Given N students (name, score), print the average score of the top K students to two decimal places, then print their names in order. Sort by score descending; break ties by name ascending.`,
-        constraints: "1 ≤ K ≤ N ≤ 100, 0 ≤ score ≤ 100, names are lowercase English up to 20 characters",
+        title: "Grade Distribution",
+        description: `Given N students (name, score), print the count per grade. Grades: A (90+), B (80-89), C (70-79), D (60-69), F (below 60). On the last line, print the name of the first student (in input order) in the highest non-empty grade, prefixed with "Top: ".`,
+        constraints: "1 ≤ N ≤ 100, 0 ≤ score ≤ 100, names are lowercase English up to 20 characters",
         hints: [
-          "Sort first, then only process the first K entries.",
-          "Use printf(\"%.2f\\n\", avg) to print two decimal places.",
+          "struct Student { string name; int score; };",
+          "Initialize 5 counters to 0 and use if/else if to bucket each score.",
+          "Top student: check A down to F, then scan input order for the first student in that bucket.",
         ],
-        solutionExplanation: "After sorting, access only the first K elements. Since the sort key is score descending then name ascending, the top K students are already at the front.",
+        solutionExplanation: "Bucket each score into one of five counters with if/else if. Find the highest non-empty bucket, then scan in input order for the first student matching it.",
       },
     },
     {
@@ -419,11 +441,10 @@ int main() {
 
 입력 마지막에 부서 종류 수 D와 D개의 부서 이름이 주어집니다.`,
       constraints:
-        "1 ≤ N ≤ 100, 1 ≤ D ≤ 10, 1 ≤ 급여 ≤ 10000000, 이름/부서는 영문 소문자 최대 20자",
+        "1 ≤ N ≤ 100, 1 ≤ D ≤ 10, 1 ≤ 급여 ≤ 100000, 이름/부서는 영문 소문자 최대 20자",
       initialCode: `#include <iostream>
 #include <string>
 #include <vector>
-#include <algorithm>
 using namespace std;
 
 // struct를 선언하세요
@@ -431,7 +452,6 @@ using namespace std;
 int main() {
     int n;
     cin >> n;
-    vector<Employee> emps(n);
     // 여기에 코드를 작성하세요
     return 0;
 }`,
@@ -447,12 +467,12 @@ int main() {
       ],
       hints: [
         "struct Employee { string name, dept; int salary; };",
-        "부서별 카운트는 map을 쓰지 말고, 주어진 D개 부서 이름에 대해 순회하며 카운트하세요.",
+        "평균 이상 카운트 + 최고 급여자는 선형 탐색으로 찾습니다 (동점이면 이름 오름차순)",
+        "부서 이름은 선택 정렬 (이중 for + swap)로 직접 정렬",
       ],
       solutionCode: `#include <iostream>
 #include <string>
 #include <vector>
-#include <algorithm>
 using namespace std;
 
 struct Employee {
@@ -464,43 +484,54 @@ int main() {
     int n;
     cin >> n;
     vector<Employee> emps(n);
-    long long total = 0;
-    for (auto& e : emps) {
-        cin >> e.name >> e.dept >> e.salary;
-        total += e.salary;
+    int total = 0;
+    for (int i = 0; i < n; i++) {
+        cin >> emps[i].name >> emps[i].dept >> emps[i].salary;
+        total += emps[i].salary;
     }
-    double avg = (double)total / n;
+    int avg = total / n;
     int aboveAvg = 0;
-    for (auto& e : emps) if (e.salary >= avg) aboveAvg++;
-    sort(emps.begin(), emps.end(), [](const Employee& a, const Employee& b) {
-        if (a.salary != b.salary) return a.salary > b.salary;
-        return a.name < b.name;
-    });
+    for (int i = 0; i < n; i++) if (emps[i].salary >= avg) aboveAvg++;
+    int topIdx = 0;
+    for (int i = 0; i < n; i++) {
+        if (emps[i].salary > emps[topIdx].salary) topIdx = i;
+        else if (emps[i].salary == emps[topIdx].salary && emps[i].name < emps[topIdx].name) topIdx = i;
+    }
     cout << "Above avg: " << aboveAvg << "\n";
-    cout << "Top salary: " << emps[0].name << "\n";
+    cout << "Top salary: " << emps[topIdx].name << "\n";
     int d;
     cin >> d;
     vector<string> depts(d);
-    for (auto& dep : depts) cin >> dep;
-    sort(depts.begin(), depts.end());
-    for (auto& dep : depts) {
+    for (int i = 0; i < d; i++) cin >> depts[i];
+    // 부서 이름 오름차순 정렬을 선택 정렬로 수동 구현
+    for (int i = 0; i < d; i++) {
+        for (int j = i + 1; j < d; j++) {
+            if (depts[j] < depts[i]) {
+                string tmp = depts[i];
+                depts[i] = depts[j];
+                depts[j] = tmp;
+            }
+        }
+    }
+    for (int i = 0; i < d; i++) {
         int cnt = 0;
-        for (auto& e : emps) if (e.dept == dep) cnt++;
-        cout << dep << ": " << cnt << "\n";
+        for (int j = 0; j < n; j++) if (emps[j].dept == depts[i]) cnt++;
+        cout << depts[i] << ": " << cnt << "\n";
     }
     return 0;
 }`,
       solutionExplanation:
-        "평균 이상 카운트, 최고 급여자 (정렬 후 첫 번째), 부서별 카운트를 단계별로 처리합니다. map을 쓰지 않고 이중 루프로 부서별 카운트를 구현합니다.",
+        "평균 이상 카운트와 최고 급여자를 선형 탐색으로 구합니다. 부서 이름 정렬은 sort 대신 선택 정렬을 수동 구현해 sort/람다를 피합니다.",
       en: {
         title: "Employee Salary Statistics",
         description: `Given N employees (name, department, salary), print: 1) the number of employees earning at or above average, 2) the name of the highest-paid employee (ties broken by name ascending), 3) the employee count per department in alphabetical order. The number of departments D and their names are given at the end of the input.`,
-        constraints: "1 ≤ N ≤ 100, 1 ≤ D ≤ 10, 1 ≤ salary ≤ 10000000, names/departments are lowercase English up to 20 characters",
+        constraints: "1 ≤ N ≤ 100, 1 ≤ D ≤ 10, 1 ≤ salary ≤ 100000, names/departments are lowercase English up to 20 characters",
         hints: [
           "struct Employee { string name, dept; int salary; };",
-          "For department counts, don't use a map — iterate over the D given department names and count with a nested loop.",
+          "Count above-average employees and find the top earner with linear search (tie: smaller name wins).",
+          "Sort department names manually with selection sort (nested for + swap).",
         ],
-        solutionExplanation: "Handle each part in sequence: count above-average earners, find the top earner (first after sorting), then count per department using a nested loop instead of a map.",
+        solutionExplanation: "Count above-average earners and find the top earner with linear search. Implement selection sort manually for department names to avoid sort/lambda.",
       },
     },
     {
@@ -508,13 +539,12 @@ int main() {
       cluster: "structs",
       unlockAfter: "cpp-14",
       difficulty: "쉬움",
-      title: "도서 정보 출력",
-      description: `N개의 도서 (제목, 저자, 출판연도)가 주어질 때, 제목 오름차순으로 정렬하여 출력하세요.`,
+      title: "가장 오래된 책",
+      description: `N개의 도서 (제목, 저자, 출판연도)가 주어질 때, 출판연도가 가장 작은 책의 "제목 저자 연도"를 출력하세요. 동점이면 입력 순서상 먼저 나온 책을 선택합니다.`,
       constraints: "1 ≤ N ≤ 50, 제목/저자는 영문 소문자 최대 20자, 1900 ≤ 출판연도 ≤ 2100",
       initialCode: `#include <iostream>
 #include <string>
 #include <vector>
-#include <algorithm>
 using namespace std;
 
 // struct Book을 선언하세요 (title, author, year)
@@ -522,18 +552,17 @@ using namespace std;
 int main() {
     int n;
     cin >> n;
-    vector<Book> books(n);
     // 여기에 코드를 작성하세요
     return 0;
 }`,
       testCases: [
         {
           stdin: "2\nPython Alice 2020\nCpp Bob 2019",
-          expectedOutput: "Cpp Bob 2019\nPython Alice 2020",
+          expectedOutput: "Cpp Bob 2019",
         },
         {
           stdin: "3\nZebra Carol 2018\nApple Dave 2021\nMango Eve 2015",
-          expectedOutput: "Apple Dave 2021\nMango Eve 2015\nZebra Carol 2018",
+          expectedOutput: "Mango Eve 2015",
         },
         {
           stdin: "1\nOnlyBook Author 2000",
@@ -541,13 +570,12 @@ int main() {
         },
       ],
       hints: [
-        "struct Book { string title; string author; int year; }; 로 구조체를 선언하세요.",
-        "sort의 람다에서 a.title < b.title 로 제목 오름차순 정렬합니다.",
+        "struct Book { string title; string author; int year; };",
+        "선형 탐색으로 year가 가장 작은 책의 인덱스를 찾습니다.",
       ],
       solutionCode: `#include <iostream>
 #include <string>
 #include <vector>
-#include <algorithm>
 using namespace std;
 
 struct Book {
@@ -560,26 +588,26 @@ int main() {
     int n;
     cin >> n;
     vector<Book> books(n);
-    for (auto& b : books)
-        cin >> b.title >> b.author >> b.year;
-    sort(books.begin(), books.end(), [](const Book& a, const Book& b) {
-        return a.title < b.title;
-    });
-    for (auto& b : books)
-        cout << b.title << " " << b.author << " " << b.year << "\\n";
+    for (int i = 0; i < n; i++)
+        cin >> books[i].title >> books[i].author >> books[i].year;
+    int oldestIdx = 0;
+    for (int i = 1; i < n; i++) {
+        if (books[i].year < books[oldestIdx].year) oldestIdx = i;
+    }
+    cout << books[oldestIdx].title << " " << books[oldestIdx].author << " " << books[oldestIdx].year << "\\n";
     return 0;
 }`,
       solutionExplanation:
-        "struct로 도서 속성을 묶고 vector<Book>으로 관리합니다. sort 람다에서 title 기준으로 오름차순 정렬합니다.",
+        "선형 탐색으로 가장 작은 year 값을 가진 책을 찾습니다. `<` 비교이므로 동점인 경우 먼저 발견된(입력 순서상 앞선) 책이 유지됩니다.",
       en: {
-        title: "Book Info Print",
-        description: `Given N books (title, author, publication year), sort them by title in ascending order and print each book's information.`,
+        title: "Oldest Book",
+        description: `Given N books (title, author, publication year), print "title author year" for the book with the smallest year. For ties, choose the one that appears first in the input.`,
         constraints: "1 ≤ N ≤ 50, title/author are lowercase English up to 20 characters, 1900 ≤ year ≤ 2100",
         hints: [
-          "Declare the struct as: struct Book { string title; string author; int year; };",
-          "In the sort lambda, use a.title < b.title for ascending title order.",
+          "struct Book { string title; string author; int year; };",
+          "Linear-scan to find the index with the smallest year.",
         ],
-        solutionExplanation: "Bundle book attributes in a struct and manage them with vector<Book>. Sort using a lambda that compares by title.",
+        solutionExplanation: "Linear-scan for the book with the smallest year. Because we use strict `<`, ties are broken by input order (first one wins).",
       },
     },
     {
@@ -735,46 +763,43 @@ int main() {
       cluster: "structs",
       unlockAfter: "cpp-14",
       difficulty: "보통",
-      title: "경주 순위",
-      description: `N명의 주자 (이름, 기록(초))가 주어질 때, 기록 오름차순으로 순위를 출력하세요. 출력 형식: "이름 순위"`,
-      constraints: "1 ≤ N ≤ 50, 1 ≤ 기록 ≤ 10000, 이름은 영문 소문자 최대 20자",
+      title: "가장 빠른 주자",
+      description: `첫 줄에 주자 수 N과 기준 시간 T가 주어집니다. 다음 N줄에 (이름, 기록(초))가 주어질 때, 가장 빠른 주자의 "이름 기록"과 기준 시간 T 이하로 완주한 주자의 수를 출력하세요. 가장 빠른 기록이 동점이면 입력 순서상 먼저 나온 주자를 선택합니다.`,
+      constraints: "1 ≤ N ≤ 50, 1 ≤ 기록, T ≤ 10000, 이름은 영문 소문자 최대 20자",
       initialCode: `#include <iostream>
 #include <string>
 #include <vector>
-#include <algorithm>
 using namespace std;
 
 // struct를 선언하세요
 
 int main() {
-    int n;
-    cin >> n;
-    vector<Runner> runners(n);
+    int n, t;
+    cin >> n >> t;
     // 여기에 코드를 작성하세요
     return 0;
 }`,
       testCases: [
         {
-          stdin: "3\nalice 52\nbob 48\ncharlie 55",
-          expectedOutput: "bob 1\nalice 2\ncharlie 3",
+          stdin: "3 55\nalice 52\nbob 48\ncharlie 55",
+          expectedOutput: "bob 48\nUnder T: 3",
         },
         {
-          stdin: "4\nzara 100\nalex 80\nmike 90\nlisa 70",
-          expectedOutput: "lisa 1\nalex 2\nmike 3\nzara 4",
+          stdin: "4 85\nzara 100\nalex 80\nmike 90\nlisa 70",
+          expectedOutput: "lisa 70\nUnder T: 2",
         },
         {
-          stdin: "1\nsolo 42",
-          expectedOutput: "solo 1",
+          stdin: "1 50\nsolo 42",
+          expectedOutput: "solo 42\nUnder T: 1",
         },
       ],
       hints: [
-        "struct Runner { string name; int time; }; 로 구조체를 선언합니다.",
-        "time 오름차순으로 정렬 후 인덱스+1이 순위가 됩니다.",
+        "struct Runner { string name; int time; };",
+        "최솟값 탐색으로 가장 빠른 주자를 찾고, 루프에서 time ≤ t 조건으로 카운트합니다.",
       ],
       solutionCode: `#include <iostream>
 #include <string>
 #include <vector>
-#include <algorithm>
 using namespace std;
 
 struct Runner {
@@ -783,28 +808,31 @@ struct Runner {
 };
 
 int main() {
-    int n;
-    cin >> n;
+    int n, t;
+    cin >> n >> t;
     vector<Runner> runners(n);
-    for (auto& r : runners) cin >> r.name >> r.time;
-    sort(runners.begin(), runners.end(), [](const Runner& a, const Runner& b) {
-        return a.time < b.time;
-    });
-    for (int i = 0; i < n; i++)
-        cout << runners[i].name << " " << i + 1 << "\\n";
+    for (int i = 0; i < n; i++) cin >> runners[i].name >> runners[i].time;
+    int fastestIdx = 0;
+    int underT = 0;
+    for (int i = 0; i < n; i++) {
+        if (runners[i].time < runners[fastestIdx].time) fastestIdx = i;
+        if (runners[i].time <= t) underT++;
+    }
+    cout << runners[fastestIdx].name << " " << runners[fastestIdx].time << "\\n";
+    cout << "Under T: " << underT << "\\n";
     return 0;
 }`,
       solutionExplanation:
-        "기록(time) 오름차순으로 정렬하면 앞에서부터 1등, 2등, ... 순서가 됩니다. 정렬 후 인덱스+1을 순위로 출력합니다.",
+        "한 번의 순회로 최솟값 탐색 (가장 빠른 주자)과 조건 카운트(T 이하 주자 수)를 동시에 처리합니다.",
       en: {
-        title: "Race Rankings",
-        description: `Given N runners (name, time in seconds), print their rankings sorted by time ascending. Output format: "name rank"`,
-        constraints: "1 ≤ N ≤ 50, 1 ≤ time ≤ 10000, names are lowercase English up to 20 characters",
+        title: "Fastest Runner",
+        description: `The first line gives N runners and a time limit T. The next N lines give (name, time in seconds). Print "name time" for the fastest runner, then print the count of runners who finished in T seconds or fewer. Tie on fastest goes to the one appearing first in the input.`,
+        constraints: "1 ≤ N ≤ 50, 1 ≤ time, T ≤ 10000, names are lowercase English up to 20 characters",
         hints: [
           "struct Runner { string name; int time; };",
-          "Sorting by time ascending makes rank = index + 1 after sorting.",
+          "Find the min-time runner with linear search, and count time ≤ t in the same loop.",
         ],
-        solutionExplanation: "Sorting by time ascending puts rank 1 at index 0, rank 2 at index 1, etc. Output the rank as index + 1 after sorting.",
+        solutionExplanation: "Single-pass: find the fastest runner with a min-search and count runners with time ≤ t simultaneously.",
       },
     },
     {
@@ -813,13 +841,12 @@ int main() {
       unlockAfter: "cpp-14",
       difficulty: "어려움",
       title: "학생 성적 통계 II",
-      description: `N명의 학생과 각 M개의 점수가 주어질 때, 평균이 가장 높은 학생의 이름과 전체 평균을 소수점 첫째 자리까지 출력하세요.
+      description: `N명의 학생과 각 M개의 점수가 주어질 때, 평균이 가장 높은 학생의 이름과 전체 평균을 정수로 출력하세요.
 전체 평균은 모든 학생의 모든 점수의 평균입니다.`,
       constraints: "1 ≤ N ≤ 20, 1 ≤ M ≤ 10, 0 ≤ 점수 ≤ 100, 이름은 영문 소문자 최대 20자",
       initialCode: `#include <iostream>
 #include <string>
 #include <vector>
-#include <cstdio>
 using namespace std;
 
 // struct를 선언하세요
@@ -834,25 +861,24 @@ int main() {
       testCases: [
         {
           stdin: "2 3\nalice 80 90 70\nbob 95 85 90",
-          expectedOutput: "bob\n85.0",
+          expectedOutput: "bob\n85",
         },
         {
           stdin: "3 2\nzara 100 100\nalex 80 60\nmike 90 70",
-          expectedOutput: "zara\n83.3",
+          expectedOutput: "zara\n83",
         },
         {
           stdin: "1 4\nonly 60 70 80 90",
-          expectedOutput: "only\n75.0",
+          expectedOutput: "only\n75",
         },
       ],
       hints: [
-        "각 학생의 점수 합계를 M으로 나누어 개인 평균을 구하고, 가장 높은 학생을 찾습니다.",
-        "전체 평균 = 모든 점수 합 / (N * M). printf(\"%.1f\\n\", avg) 로 소수점 1자리 출력.",
+        "각 학생의 점수 합계를 비교해 가장 높은 학생을 찾습니다 (합계 비교는 평균 비교와 동일).",
+        "전체 평균 = 모든 점수 합 / (N * M) 정수 나눗셈",
       ],
       solutionCode: `#include <iostream>
 #include <string>
 #include <vector>
-#include <cstdio>
 using namespace std;
 
 struct Student {
@@ -864,41 +890,41 @@ int main() {
     int n, m;
     cin >> n >> m;
     vector<Student> students(n);
-    long long totalAll = 0;
+    int totalAll = 0;
     for (auto& s : students) {
         cin >> s.name;
-        s.scores.resize(m);
-        for (int& sc : s.scores) {
+        for (int j = 0; j < m; j++) {
+            int sc;
             cin >> sc;
+            s.scores.push_back(sc);
             totalAll += sc;
         }
     }
     int bestIdx = 0;
-    double bestAvg = 0;
+    int bestSum = -1;
     for (int i = 0; i < n; i++) {
-        long long sum = 0;
+        int sum = 0;
         for (int sc : students[i].scores) sum += sc;
-        double avg = (double)sum / m;
-        if (avg > bestAvg) {
-            bestAvg = avg;
+        if (sum > bestSum) {
+            bestSum = sum;
             bestIdx = i;
         }
     }
     cout << students[bestIdx].name << "\\n";
-    printf("%.1f\\n", (double)totalAll / (n * m));
+    cout << totalAll / (n * m) << "\\n";
     return 0;
 }`,
       solutionExplanation:
-        "struct 내 vector<int>로 여러 점수를 저장합니다. 각 학생의 평균을 계산해 최고 평균 학생을 찾고, 전체 평균은 누적 합을 N*M으로 나눕니다.",
+        "struct 내 vector<int>로 여러 점수를 저장합니다. 각 학생의 점수 합계를 비교해 최고 합계 학생을 찾고 (합계 비교는 평균 비교와 동일), 전체 평균은 정수 나눗셈으로 계산합니다.",
       en: {
         title: "Student Score Statistics II",
-        description: `Given N students each with M scores, print the name of the student with the highest average, then print the overall average (average of all scores from all students) to one decimal place.`,
+        description: `Given N students each with M scores, print the name of the student with the highest average, then print the overall average (average of all scores from all students) as an integer (integer division).`,
         constraints: "1 ≤ N ≤ 20, 1 ≤ M ≤ 10, 0 ≤ score ≤ 100, names are lowercase English up to 20 characters",
         hints: [
-          "Compute each student's average (sum of scores / M) and find the one with the highest average.",
-          "Overall average = total of all scores / (N * M). Use printf(\"%.1f\\n\", avg).",
+          "Compare each student's score sum to find the best (comparing sums is equivalent to comparing averages since all have M scores).",
+          "Overall average = total of all scores / (N * M) using integer division.",
         ],
-        solutionExplanation: "Store multiple scores per student using vector<int> inside the struct. Compute each student's average to find the best, and divide the grand total by N*M for the overall average.",
+        solutionExplanation: "Store multiple scores per student using vector<int> inside the struct. Compare score sums to find the best student (equivalent to comparing averages), and compute the overall average using integer division.",
       },
     },
     {
@@ -908,13 +934,12 @@ int main() {
       difficulty: "어려움",
       title: "복소수 계산",
       description: `두 복소수 (실수부, 허수부)가 주어질 때, 합과 곱을 출력하세요.
-출력 형식: "실수부+허수부i" (예: "4.0+6.0i"). 허수부가 음수이면 "실수부-|허수부|i" 형식으로 출력하세요.`,
-      constraints: "-100 ≤ 실수부, 허수부 ≤ 100",
+출력 형식: "실수부+허수부i" (예: "4+6i"). 허수부가 음수이면 "실수부-|허수부|i" 형식으로 출력하세요.`,
+      constraints: "정수, -100 ≤ 실수부, 허수부 ≤ 100",
       initialCode: `#include <iostream>
-#include <cstdio>
 using namespace std;
 
-// struct Complex를 선언하세요
+// struct Complex를 선언하세요 (정수 real, imag)
 
 Complex add(Complex a, Complex b) {
     // 합을 반환하세요
@@ -940,43 +965,47 @@ int main() {
       testCases: [
         {
           stdin: "1 2\n3 4",
-          expectedOutput: "4.0+6.0i\n-5.0+10.0i",
+          expectedOutput: "4+6i\n-5+10i",
         },
         {
           stdin: "2 -3\n1 4",
-          expectedOutput: "3.0+1.0i\n14.0+5.0i",
+          expectedOutput: "3+1i\n14+5i",
         },
         {
           stdin: "0 0\n5 -2",
-          expectedOutput: "5.0-2.0i\n0.0+0.0i",
+          expectedOutput: "5-2i\n0+0i",
         },
       ],
       hints: [
         "복소수 곱: (a+bi)(c+di) = (ac-bd) + (ad+bc)i",
-        "허수부가 음수이면 부호를 별도로 처리해 출력합니다. printf(\"%.1f\", val) 사용.",
+        "허수부가 음수이면 부호를 별도로 처리해 출력합니다 (cout이 자동으로 '-' 출력).",
       ],
       solutionCode: `#include <iostream>
-#include <cstdio>
 using namespace std;
 
 struct Complex {
-    double real, imag;
+    int real, imag;
 };
 
 Complex add(Complex a, Complex b) {
-    return {a.real + b.real, a.imag + b.imag};
+    Complex c;
+    c.real = a.real + b.real;
+    c.imag = a.imag + b.imag;
+    return c;
 }
 
 Complex multiply(Complex a, Complex b) {
-    return {a.real * b.real - a.imag * b.imag,
-            a.real * b.imag + a.imag * b.real};
+    Complex c;
+    c.real = a.real * b.real - a.imag * b.imag;
+    c.imag = a.real * b.imag + a.imag * b.real;
+    return c;
 }
 
 void print(Complex c) {
     if (c.imag >= 0)
-        printf("%.1f+%.1fi\\n", c.real, c.imag);
+        cout << c.real << "+" << c.imag << "i\\n";
     else
-        printf("%.1f%.1fi\\n", c.real, c.imag);
+        cout << c.real << c.imag << "i\\n";
 }
 
 int main() {
@@ -991,11 +1020,11 @@ int main() {
         "복소수 덧셈은 실수/허수 각각 더합니다. 곱셈은 (ac-bd)+(ad+bc)i 공식을 사용합니다. 허수부가 음수면 cout이 자동으로 '-' 부호를 출력하므로 조건 분기만 처리합니다.",
       en: {
         title: "Complex Number Arithmetic",
-        description: `Given two complex numbers (real part, imaginary part), print their sum and product.\nOutput format: "real+imagi" (e.g. "4.0+6.0i"). If the imaginary part is negative, use "real-|imag|i".`,
-        constraints: "-100 ≤ real, imag ≤ 100",
+        description: `Given two complex numbers (real part, imaginary part), print their sum and product.\nOutput format: "real+imagi" (e.g. "4+6i"). If the imaginary part is negative, use "real-|imag|i".`,
+        constraints: "integers, -100 ≤ real, imag ≤ 100",
         hints: [
           "Complex multiplication: (a+bi)(c+di) = (ac-bd) + (ad+bc)i",
-          "Handle the sign of the imaginary part separately. Use printf(\"%.1f\", val).",
+          "Handle the sign of the imaginary part separately (cout auto-prints '-').",
         ],
         solutionExplanation: "Complex addition adds real and imaginary parts separately. Multiplication uses the formula (ac-bd)+(ad+bc)i. When the imaginary part is negative, cout already prints the '-' sign, so only branch on the condition.",
       },
