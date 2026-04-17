@@ -76,7 +76,7 @@ describe("Lesson Data Validation", () => {
       for (const step of chapter.steps) {
         expect(step.id).toBeTruthy()
         expect(step.title).toBeTruthy()
-        expect(["explain", "tryit", "mission", "quiz", "interactive", "coding", "fillblank", "predict", "practice"]).toContain(step.type)
+        expect(["explain", "tryit", "mission", "quiz", "interactive", "coding", "fillblank", "predict", "practice", "animation"]).toContain(step.type)
       }
     }
   })
