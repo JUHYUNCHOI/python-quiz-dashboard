@@ -163,21 +163,23 @@ print(10 < 5)   # False
           id: "try3",
           type: "tryit",
           title: "🖥️ Try it yourself!",
-          task: "Print the result of 10 > 5!",
-          initialCode: "print(___ > ___)",
+          task: "10 > 5 → 10 is greater than 5, so the result is True!\nFill in the blank with 5.",
+          initialCode: "print(10 > ___)",
           expectedOutput: "True",
           hint: "The result of a comparison is True or False!",
-          hint2: "print(10 > 5)"
+          hint2: "5",
+          choices: ["5", "10", "15", "0"]
         },
         {
           id: "try4",
           type: "tryit",
           title: "🖥️ Try False too!",
-          task: "Print the result of 3 > 7!",
-          initialCode: "print(___ > ___)",
+          task: "3 > 7 → 3 is less than 7, so the result is False!\nFill in the blank with 7.",
+          initialCode: "print(3 > ___)",
           expectedOutput: "False",
           hint: "3 is less than 7, right?",
-          hint2: "print(3 > 7)"
+          hint2: "7",
+          choices: ["7", "3", "1", "10"]
         }
       ]
     },
@@ -207,11 +209,12 @@ print(10 < 5)   # False
           id: "mission1",
           type: "mission",
           title: "🏆 Final Mission!",
-          task: "Each line prints a value AND its type. Fill in type(___) with the matching value from the same line!",
+          task: "Each line: put the value on the left inside type() too!\nEx) print(42, type( 42 )) → 42 <class 'int'>",
           initialCode: "print(42, type(___))\nprint(3.14, type(___))\nprint('Hello', type(___))\nprint(True, type(___))",
           expectedOutput: "42 <class 'int'>\n3.14 <class 'float'>\nHello <class 'str'>\nTrue <class 'bool'>",
-          hint: "Line 1: print(42, type(42)) — put 42 inside type() too!",
-          hint2: "print(42, type(42))\nprint(3.14, type(3.14))\nprint('Hello', type('Hello'))\nprint(True, type(True))"
+          hint: "Blank 1 → 42, Blank 2 → 3.14, Blank 3 → 'Hello', Blank 4 → True",
+          hint2: "42",
+          choices: ["42", "3.14", "'Hello'", "True"]
         },
         {
           id: "complete",

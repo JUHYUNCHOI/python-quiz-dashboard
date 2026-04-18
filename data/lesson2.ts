@@ -142,21 +142,23 @@ print(10 < 5)   # False
           id: "try3",
           type: "tryit",
           title: "🖥️ 직접 해보기!",
-          task: "10 > 5의 결과를 출력하세요!",
-          initialCode: "print(___ > ___)",
+          task: "10 > 5 → 10이 5보다 크니까 True!\n빈칸에 5를 넣어보세요.",
+          initialCode: "print(10 > ___)",
           expectedOutput: "True",
           hint: "비교 결과는 True 또는 False!",
-          hint2: "print(10 > 5)"
+          hint2: "5",
+          choices: ["5", "10", "15", "0"]
         },
         {
           id: "try4",
           type: "tryit",
           title: "🖥️ False도 해봐요!",
-          task: "3 > 7의 결과를 출력하세요!",
-          initialCode: "print(___ > ___)",
+          task: "3 > 7 → 3이 7보다 작으니까 False!\n빈칸에 7을 넣어보세요.",
+          initialCode: "print(3 > ___)",
           expectedOutput: "False",
           hint: "3은 7보다 작죠?",
-          hint2: "print(3 > 7)"
+          hint2: "7",
+          choices: ["7", "3", "1", "10"]
         }
       ]
     },
@@ -186,11 +188,12 @@ print(10 < 5)   # False
           id: "mission1",
           type: "mission",
           title: "🏆 최종 미션!",
-          task: "여러 타입의 데이터와 type()을 출력하세요!",
+          task: "각 줄에서 type() 안에 바로 앞의 값을 그대로 넣으세요!\n예) print(42, type( 42 )) → 42 <class 'int'>",
           initialCode: "print(42, type(___))\nprint(3.14, type(___))\nprint('Hello', type(___))\nprint(True, type(___))",
           expectedOutput: "42 <class 'int'>\n3.14 <class 'float'>\nHello <class 'str'>\nTrue <class 'bool'>",
-          hint: "type() 안에 앞의 값과 같은 값을 넣으세요!",
-          hint2: "type(42), type(3.14), type('Hello'), type(True)"
+          hint: "첫 번째 빈칸에는 42, 두 번째에는 3.14 ...",
+          hint2: "42",
+          choices: ["42", "3.14", "'Hello'", "True"]
         },
         {
           id: "complete",
