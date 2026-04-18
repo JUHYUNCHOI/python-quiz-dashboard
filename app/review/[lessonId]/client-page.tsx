@@ -499,9 +499,28 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
             />
           )}
 
-          {/* 완료된 문제 — 다시 풀기 버튼만 (Next는 하단 네비 바 사용) */}
+          {/* 완료된 문제 — 다시 풀기 / 초기화 */}
           {isCurrentStepCompleted && (
-            <div className="mt-4">
+            <div className="mt-4 flex items-center gap-1">
+              {/* 다시 풀기: 이전 답 유지한 채 편집 가능 상태로 돌아감 */}
+              <button
+                onClick={() => {
+                  setStepAnswers(prev => {
+                    const existing = prev[currentIndex]
+                    // inputs는 보존, result만 제거해서 idle 상태로
+                    if (existing?.inputs) return { ...prev, [currentIndex]: { inputs: existing.inputs } }
+                    return prev
+                  })
+                  setCompletedSteps(prev => { const next = new Set(prev); next.delete(currentIndex); return next })
+                  setWrongSteps(prev => prev.filter(i => i !== currentIndex))
+                  setResetCount(prev => prev + 1)
+                }}
+                className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                {t("다시 풀기", "Redo")}
+              </button>
+              {/* 초기화: 답을 완전히 지우고 처음부터 */}
               <button
                 onClick={() => {
                   if (currentReview) {
@@ -512,10 +531,10 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                   setWrongSteps(prev => prev.filter(i => i !== currentIndex))
                   setResetCount(prev => prev + 1)
                 }}
-                className="flex items-center justify-center gap-1.5 py-2 text-xs font-bold text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                className="flex items-center gap-1.5 px-3 py-2 text-xs text-gray-300 hover:text-red-400 hover:bg-red-50 rounded-lg transition-colors"
               >
-                <RotateCcw className="w-3.5 h-3.5" />
-                {t("이 문제 다시 풀기", "Redo this question")}
+                <X className="w-3 h-3" />
+                {t("초기화", "Reset")}
               </button>
             </div>
           )}
