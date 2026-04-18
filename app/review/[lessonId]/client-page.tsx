@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, use, useCallback } from "react"
+import { useState, useEffect, use, useCallback, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { ChevronRight, ChevronLeft, X, BookOpen, RotateCcw } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -8,6 +8,8 @@ import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
 import { useSoundEffect } from "@/hooks/use-sound-effect"
 import { markQuizComplete } from "@/lib/mark-lesson-complete"
+import { saveReviewProgressToSupabase, loadReviewProgressFromSupabase } from "@/lib/review-progress-sync"
+import type { ReviewProgressData } from "@/lib/review-progress-sync"
 import { saveStepAnswer } from "@/lib/save-step-answer"
 import { ReviewStepRenderer } from "./ReviewStepRenderer"
 import { lessonsData } from "./data/lessons"
@@ -133,18 +135,60 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   // 리셋 카운터 — StepRenderer key 변경용
   const [resetCount, setResetCount] = useState(0)
 
+  // Supabase 저장 디바운스 타이머 (2초)
+  const supabaseSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  // Supabase 복원을 딱 한 번만 실행하기 위한 플래그
+  const hasHydratedRef = useRef(false)
+
   const isCurrentStepCompleted = completedSteps.has(currentIndex)
 
-  // 진도 저장
+  // 진도 저장 (localStorage 즉시 + Supabase 2초 디바운스)
   useEffect(() => {
+    const progressData: ReviewProgressData = {
+      currentIndex, score, totalAttempted, correctCount,
+      completedSteps: Array.from(completedSteps),
+      wrongSteps,
+      updatedAt: Date.now(),
+    }
+    // localStorage: 즉시 저장 (stepAnswers 포함)
     try {
-      localStorage.setItem(storageKey, JSON.stringify({
-        currentIndex, score, totalAttempted, correctCount,
-        completedSteps: Array.from(completedSteps),
-        wrongSteps, stepAnswers,
-      }))
+      localStorage.setItem(storageKey, JSON.stringify({ ...progressData, stepAnswers }))
     } catch {}
+    // Supabase: 디바운스 저장 (선생님 모드 제외)
+    if (user && !effectiveTeacher) {
+      if (supabaseSaveTimer.current) clearTimeout(supabaseSaveTimer.current)
+      supabaseSaveTimer.current = setTimeout(() => {
+        saveReviewProgressToSupabase(lessonId, progressData)
+      }, 2000)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex, score, totalAttempted, correctCount, completedSteps, wrongSteps, storageKey])
+
+  // Supabase에서 복습 진도 복원 (디바이스 간 동기화 — 마운트 후 딱 한 번)
+  useEffect(() => {
+    if (!user || effectiveTeacher || hasHydratedRef.current) return
+    hasHydratedRef.current = true
+
+    loadReviewProgressFromSupabase(lessonId).then(remote => {
+      if (!remote) return
+      const localUpdatedAt = (saved as { updatedAt?: number } | null)?.updatedAt ?? 0
+      if ((remote.updatedAt ?? 0) > localUpdatedAt) {
+        // Supabase 데이터가 더 최신 → 상태 복원
+        const safeIndex = reviewSteps.length > 0
+          ? Math.min(remote.currentIndex ?? 0, reviewSteps.length - 1)
+          : 0
+        setCurrentIndex(safeIndex)
+        setScore(remote.score ?? 0)
+        setTotalAttempted(remote.totalAttempted ?? 0)
+        setCorrectCount(remote.correctCount ?? 0)
+        setCompletedSteps(new Set(remote.completedSteps ?? []))
+        setWrongSteps(remote.wrongSteps ?? [])
+        // localStorage도 최신으로 업데이트
+        try { localStorage.setItem(storageKey, JSON.stringify(remote)) } catch {}
+      }
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id, lessonId])
 
   const currentReview = reviewSteps[currentIndex]
 
