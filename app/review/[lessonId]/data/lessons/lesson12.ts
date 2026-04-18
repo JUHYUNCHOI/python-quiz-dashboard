@@ -82,7 +82,7 @@ export const lesson12: LessonData = {
         lines: [
           "and 실전 예시!"
         ],
-        code: "age = 16\nmoney = 10000\n\nif age >= 13 and money >= 8000:\n    print('movie OK!')\nelse:\n    print('conditions not met')",
+        code: "age = 16\nmoney = 10000\n\nif age >= 13 and money >= 8000:\n    print('영화 관람 가능!')\nelse:\n    print('조건 미충족')",
         result: "영화 관람 가능!",
         note: "나이도 맞고, 돈도 있어야 관람 가능!"
       }
@@ -174,7 +174,7 @@ export const lesson12: LessonData = {
         lines: [
           "or 실전 예시!"
         ],
-        code: "has_card = False\nhas_cash = True\n\nif has_card or has_cash:\n    print('payment OK!')\nelse:\n    print('no payment method')",
+        code: "has_card = False\nhas_cash = True\n\nif has_card or has_cash:\n    print('결제 가능!')\nelse:\n    print('결제 수단 없음')",
         result: "결제 가능!",
         note: "카드 OR 현금, 하나만 있어도 결제 가능!"
       }
@@ -266,7 +266,7 @@ export const lesson12: LessonData = {
         lines: [
           "not 실전 예시!"
         ],
-        code: "is_raining = False\n\nif not is_raining:\n    print('let\\'s go for a walk!')\nelse:\n    print('stay home')",
+        code: "is_raining = False\n\nif not is_raining:\n    print('산책 가자!')\nelse:\n    print('집에 있자')",
         result: "산책 가자!",
         note: "비가 안 오면(not is_raining) 산책!"
       }
@@ -346,7 +346,7 @@ export const lesson12: LessonData = {
         lines: [
           "and, or, not 을 함께 써!"
         ],
-        code: "age = 16\nscore = 85\n\n# if age 13~19 and score >= 80, scholarship!\nif age >= 13 and age < 19 and score >= 80:\n    print('scholarship eligible!')",
+        code: "age = 16\nscore = 85\n\n# 나이 13~19이고 점수 >= 80이면 장학금!\nif age >= 13 and age < 19 and score >= 80:\n    print('장학금 대상!')",
         result: "장학금 대상!",
         note: "조건을 and로 여러 개 연결해!"
       }
@@ -359,7 +359,7 @@ export const lesson12: LessonData = {
         lines: [
           "Python 특성: 연결 비교가 가능해!"
         ],
-        code: "x = 5\n\n# Python style (concise!)\nif 1 < x < 10:\n    print('in range')\n\n# other language style\nif x > 1 and x < 10:\n    print('in range')",
+        code: "x = 5\n\n# Python 방식 (간결!)\nif 1 < x < 10:\n    print('범위 안')\n\n# 다른 언어 방식\nif x > 1 and x < 10:\n    print('범위 안')",
         result: "범위 안\n범위 안",
         note: "1 < x < 10 처럼 수학처럼 쓸 수 있어! Python만의 특성!"
       }
@@ -539,7 +539,7 @@ export const lesson12: LessonData = {
       type: "explain",
       content: {
         lines: ["결과를 예측해봐!"],
-        code: "age = 20\nif age >= 18 and age < 65:\n    print('adult')\nelse:\n    print('no')",
+        code: "age = 20\nif age >= 18 and age < 65:\n    print('성인')\nelse:\n    print('아님')",
         predict: {
           options: ["성인", "아님", "에러"],
           answer: 0,
@@ -560,7 +560,7 @@ export const lesson12: LessonData = {
       type: "explain",
       content: {
         lines: ["결과를 예측해봐!"],
-        code: "score = 55\npassed = True\n\nif score >= 60 and passed:\n    print('pass')\nelse:\n    print('fail')",
+        code: "score = 55\npassed = True\n\nif score >= 60 and passed:\n    print('합격')\nelse:\n    print('불합격')",
         predict: {
           options: ["합격", "불합격", "에러"],
           answer: 1,
@@ -581,7 +581,7 @@ export const lesson12: LessonData = {
       type: "explain",
       content: {
         lines: ["결과를 예측해봐!"],
-        code: "is_member = False\nhas_coupon = True\n\nif is_member or has_coupon:\n    print('discount applied!')\nelse:\n    print('full price')",
+        code: "is_member = False\nhas_coupon = True\n\nif is_member or has_coupon:\n    print('할인 적용!')\nelse:\n    print('정가 결제')",
         predict: {
           options: ["할인 적용!", "정가 결제", "에러"],
           answer: 0,
@@ -602,7 +602,7 @@ export const lesson12: LessonData = {
       type: "explain",
       content: {
         lines: ["결과를 예측해봐!"],
-        code: "sunny = False\nwarm = False\n\nif sunny or warm:\n    print('let\\'s go outside')\nelse:\n    print('stay home')",
+        code: "sunny = False\nwarm = False\n\nif sunny or warm:\n    print('밖에 나가자')\nelse:\n    print('집에 있자')",
         predict: {
           options: ["밖에 나가자", "집에 있자", "에러"],
           answer: 1,
@@ -623,7 +623,7 @@ export const lesson12: LessonData = {
       type: "explain",
       content: {
         lines: ["결과를 예측해봐!"],
-        code: "game_over = True\n\nif not game_over:\n    print('game continues!')\nelse:\n    print('game over')",
+        code: "game_over = True\n\nif not game_over:\n    print('게임 계속!')\nelse:\n    print('게임 종료')",
         predict: {
           options: ["게임 계속!", "게임 종료", "에러"],
           answer: 1,
@@ -644,7 +644,7 @@ export const lesson12: LessonData = {
       type: "explain",
       content: {
         lines: ["결과를 예측해봐! (조금 어려워 😎)"],
-        code: "vip = False\npoints = 500\n\nif vip or points >= 300:\n    print('special benefit!')\nelse:\n    print('regular member')",
+        code: "vip = False\npoints = 500\n\nif vip or points >= 300:\n    print('특별 혜택!')\nelse:\n    print('일반 회원')",
         predict: {
           options: ["특별 혜택!", "일반 회원", "에러"],
           answer: 0,

@@ -594,7 +594,7 @@ export const lesson8: LessonData = {
       type: "explain",
       content: {
         lines: ["코드 결과를 예측해봐!"],
-        code: "lang = 'python'\nprint(f'language: {lang.upper()}')",
+        code: "lang = 'python'\nprint(f'언어: {lang.upper()}')",
         predict: {
           options: ["언어: python", "언어: PYTHON", "언어: {lang.upper()}", "에러"],
           answer: 1,
@@ -661,7 +661,7 @@ export const lesson8: LessonData = {
       type: "errorQuiz",
       content: {
         question: "원하는 출력이 '합계: 15'인데 다르게 나와. 문제는?",
-        code: "a = 10\nb = 5\nprint(f'total: a + b')",
+        code: "a = 10\nb = 5\nprint(f'합계: a + b')",
         options: [
           "a + b를 {}로 감싸야 해 — f'합계: {a + b}'",
           "변수 a, b는 print 안에서 쓸 수 없어",

@@ -184,7 +184,7 @@ export const lesson5: LessonData = {
         type: "explain",
         content: {
           lines: ["결과가 뭘까? 직접 맞춰봐!"],
-          code: "print('Code' + 'rocks')",
+          code: "print('코딩' + '짱')",
           predict: {
             question: "출력 결과는?",
             options: ["코딩짱", "코딩 짱", "에러"],
@@ -208,7 +208,7 @@ export const lesson5: LessonData = {
         type: "explain",
         content: {
           lines: ["변수 두 개를 이어붙이면?"],
-          code: "a = 'Py'\nb = 'thon'\nprint(a + b)",
+          code: "a = '파이'\nb = '썬'\nprint(a + b)",
           predict: {
             question: "출력 결과는?",
             options: ["파이썬", "a + b", "파이 썬"],

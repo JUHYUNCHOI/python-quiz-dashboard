@@ -634,7 +634,7 @@ export const lesson6: LessonData = {
         type: "errorQuiz",
         content: {
           question: "이 코드의 문제는?",
-          code: "email = 'User@Gmail.com'\nif email.endswith('.com'):\n    print('valid email')",
+          code: "email = 'User@Gmail.com'\nif email.endswith('.com'):\n    print('유효한 이메일')",
           options: [
             "문제없음 — '.com'으로 끝나면 '유효한 이메일'이 출력돼",
             "endswith는 대문자에 안 써",
@@ -659,7 +659,7 @@ export const lesson6: LessonData = {
         type: "errorQuiz",
         content: {
           question: "원하는 결과가 '안녕 파이썬'인데 출력이 다르게 나와. 문제는?",
-          code: "msg = 'Hello world'\nprint(msg.replace('Python', 'world'))",
+          code: "msg = '안녕 세상'\nprint(msg.replace('Python', 'world'))",
           options: [
             "replace('찾을것', '바꿀것') 인데 순서가 반대야 — '세상'을 '파이썬'으로 바꿔야 해",
             "replace는 한국어에 안 써",

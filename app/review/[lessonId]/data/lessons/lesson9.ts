@@ -555,7 +555,7 @@ export const lesson9: LessonData = {
       type: "explain",
       content: {
         lines: ["코드 결과를 예측해봐!"],
-        code: "year = 2025\nprint('This year is ' + str(year))",
+        code: "year = 2025\nprint('올해는 ' + str(year) + '년')",
         predict: {
           options: ["올해는 year년", "올해는 2025년", "에러", "올해는 '2025'년"],
           answer: 1,

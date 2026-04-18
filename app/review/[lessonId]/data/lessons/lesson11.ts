@@ -70,7 +70,7 @@ export const lesson11: LessonData = {
         lines: [
           "if 뒤에 조건, 콜론(:) 필수!"
         ],
-        code: "score = 90\nif score >= 90:\n    print('pass!')   # indentation required!",
+        code: "score = 90\nif score >= 90:\n    print('합격!')   # indentation required!",
         result: "합격!",
         note: "if 조건: 뒤에 콜론(:), 실행할 코드는 들여쓰기 4칸!"
       }
@@ -161,7 +161,7 @@ export const lesson11: LessonData = {
       type: "explain",
       content: {
         lines: ["결과를 예측해봐!"],
-        code: "x = 3\nif x > 10:\n    print('large')",
+        code: "x = 3\nif x > 10:\n    print('크다')",
         predict: {
           options: ["크다", "아무것도 없음", "3", "False"],
           answer: 1,
@@ -182,7 +182,7 @@ export const lesson11: LessonData = {
       type: "explain",
       content: {
         lines: ["결과를 예측해봐!"],
-        code: "x = 15\nif x > 10:\n    print('greater than 10')\nif x > 5:\n    print('greater than 5')",
+        code: "x = 15\nif x > 10:\n    print('10보다 크다')\nif x > 5:\n    print('5보다 크다')",
         predict: {
           options: ["10보다 크다", "5보다 크다", "10보다 크다\n5보다 크다", "아무것도 없음"],
           answer: 2,
@@ -272,7 +272,7 @@ export const lesson11: LessonData = {
         lines: [
           "else: 조건이 False일 때 실행!"
         ],
-        code: "age = 15\nif age >= 18:\n    print('adult')\nelse:\n    print('minor')",
+        code: "age = 15\nif age >= 18:\n    print('성인')\nelse:\n    print('미성년자')",
         result: "미성년자",
         note: "if 조건이 False면 else 블록 실행!"
       }
@@ -315,7 +315,7 @@ export const lesson11: LessonData = {
       type: "explain",
       content: {
         lines: ["결과를 예측해봐!"],
-        code: "num = 0\nif num > 0:\n    print('positive')\nelse:\n    print('not positive')",
+        code: "num = 0\nif num > 0:\n    print('양수')\nelse:\n    print('양수 아님')",
         predict: {
           options: ["양수", "양수 아님", "0", "아무것도 없음"],
           answer: 1,
@@ -336,7 +336,7 @@ export const lesson11: LessonData = {
       type: "explain",
       content: {
         lines: ["결과를 예측해봐!"],
-        code: "age = 20\nhas_ticket = True\nif age >= 18:\n    if has_ticket:\n        print('entry allowed')\n    else:\n        print('no ticket')\nelse:\n    print('minor')",
+        code: "age = 20\nhas_ticket = True\nif age >= 18:\n    if has_ticket:\n        print('입장 가능')\n    else:\n        print('티켓 없음')\nelse:\n    print('미성년자')",
         predict: {
           options: ["입장 가능", "티켓 없음", "미성년자", "아무것도 없음"],
           answer: 0,
@@ -442,7 +442,7 @@ export const lesson11: LessonData = {
         lines: [
           "elif 로 조건을 여러 개 추가해!"
         ],
-        code: "speed = 75\nif speed >= 100:\n    print('🚨 speeding')\nelif speed >= 80:\n    print('⚠️ caution')\nelif speed >= 60:\n    print('✅ normal')\nelse:\n    print('🐢 too slow')",
+        code: "speed = 75\nif speed >= 100:\n    print('🚨 과속')\nelif speed >= 80:\n    print('⚠️ 주의')\nelif speed >= 60:\n    print('✅ 정상')\nelse:\n    print('🐢 너무 느림')",
         result: "✅ 정상",
         note: "elif = else if! 위에서부터 순서대로 확인해"
       }

@@ -167,7 +167,7 @@ export const lesson15: LessonData = {
       type: "explain",
       content: {
         lines: ["인덱스는 0부터 시작해!"],
-        code: "colors = ['red', 'green', 'blue']\nprint(colors[1])",
+        code: "colors = ['빨강', '초록', '파랑']\nprint(colors[1])",
         predict: {
           question: "출력 결과는?",
           options: ["빨강", "초록", "파랑"],

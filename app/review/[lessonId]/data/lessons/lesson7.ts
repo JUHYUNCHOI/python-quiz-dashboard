@@ -167,7 +167,7 @@ export const lesson7: LessonData = {
         type: "explain",
         content: {
           lines: ["코드 결과를 예측해봐!"],
-          code: "print('Mon', 'Tue', 'Thu', sep='|')",
+          code: "print('월', '화', '목', sep='|')",
           predict: {
             options: ["월 화 목", "월|화|목", "월화목"],
             answer: 1,
@@ -373,7 +373,7 @@ export const lesson7: LessonData = {
         type: "explain",
         content: {
           lines: ["코드 결과를 예측해봐!"],
-          code: "print('Hello', end='~')\nprint('World')",
+          code: "print('안녕', end='~')\nprint('반가워')",
           predict: {
             options: ["안녕\n반가워", "안녕~반가워", "안녕 반가워"],
             answer: 1,
