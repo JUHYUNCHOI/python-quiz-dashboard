@@ -770,13 +770,13 @@ export const lesson3: LessonData = {
         type: "interleaving",
         content: {
           message: "변수 출력 기억나?",
-          task: "money 값을 출력해봐",
+          task: "money에 50000 넣고 출력해봐",
           template: null,
-          answer: "print(money)",
+          answer: "money = 50000\nprint(money)",
           expect: "50000",
           en: {
             message: "Remember printing variables?",
-            task: "Print the value of money"
+            task: "Store 50000 in money and print it"
           }
         }
       },
@@ -926,15 +926,15 @@ export const lesson3: LessonData = {
           lines: ["이 코드의 결과는?"],
           code: "Name = 'Alice'\nname = 'Bob'\nprint(Name)",
           predict: {
-            options: ["홍길동", "김철수", "에러", "홍길동\n김철수"],
+            options: ["Alice", "Bob", "에러", "Alice\nBob"],
             answer: 0,
-            feedback: "Name과 name은 대소문자가 달라서 완전히 다른 변수야! Name을 출력하면 '홍길동'이 나와."
+            feedback: "Name과 name은 대소문자가 달라서 완전히 다른 변수야! Name을 출력하면 'Alice'가 나와."
           },
           en: {
             lines: ["What's the result of this code?"],
             predict: {
-              options: ["홍길동", "김철수", "Error", "홍길동\n김철수"],
-              feedback: "Name and name are completely different variables because of capitalization! Printing Name gives '홍길동'."
+              options: ["Alice", "Bob", "Error", "Alice\nBob"],
+              feedback: "Name and name are completely different variables because of capitalization! Printing Name gives 'Alice'."
             }
           }
         }
