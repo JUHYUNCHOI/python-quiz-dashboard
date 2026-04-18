@@ -5,249 +5,151 @@ export const lesson2: LessonData = {
     title: "데이터 타입",
     description: "숫자와 글자는 다르다!",
     steps: [
-      // ==================== CHAPTER 1: 문제 상황 ====================
+
+      // ==================== CHAPTER 1: 타입 구분 ====================
       {
         type: "chapter",
-        content: {
-          num: 1,
-          title: "이상한 계산",
-          desc: "왜 150이 아니라 10050이야?!"
-        }
-      },
-
-      // 동기 부여 - 문제 상황
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "게임 만들다가 생긴 일... 🎮",
-            "점수 100 + 보너스 50 = ?"
-          ],
-          code: "'100' + '50'",
-          result: "'10050'",
-          isError: true,
-          note: "150이 아니라 10050?!"
-        }
+        content: { num: 1, title: "타입 구분", desc: "int? float? str? bool?" }
       },
 
       {
-        type: "explain",
+        type: "quiz",
         content: {
-          lines: [
-            "왜 이런 일이?",
-            "오늘 데이터 타입을 배우면 알 수 있어!"
-          ],
-          code: "numbers vs strings = completely different!",
-          isPreview: true
-        }
-      },
-
-      // ==================== CHAPTER 2: 숫자 vs 글자 ====================
-      {
-        type: "chapter",
-        content: {
-          num: 2,
-          title: "숫자 vs 글자",
-          desc: "따옴표 하나로 완전 달라져!"
-        }
-      },
-
-      // Lesson 1 복습
-      {
-        type: "interleaving",
-        content: {
-          message: "잠깐! 지난 시간 기억나?",
-          task: "Hello 출력해봐",
-          template: null,
-          answer: "print('Hello')",
-          expect: "Hello",
+          question: "3.14의 타입은?",
+          options: ["int", "float", "str", "bool"],
+          answer: 1,
+          explanation: "소수점이 있으면 float! 3은 int지만 3.14는 float야.",
           en: {
-            message: "Wait! Do you remember last time?",
-            task: "Print Hello"
+            question: "What type is 3.14?",
+            options: ["int", "float", "str", "bool"],
+            explanation: "Decimal point → float! 3 is int but 3.14 is float."
           }
         }
       },
 
-      // 핵심 설명
       {
-        type: "explain",
+        type: "quiz",
         content: {
-          lines: [
-            "따옴표 있으면 글자!",
-            "따옴표 없으면 숫자!"
-          ],
-          code: "'100' → string (cannot calculate)\n 100  → number (can calculate)",
-          note: "이게 가장 중요해!"
-        }
-      },
-
-      // 직접 비교
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "직접 비교해보자"
-          ],
-          code: "100 + 50",
-          result: "150",
-          note: "숫자끼리 + = 계산!"
+          question: "다음 중 int(정수)인 것은?",
+          options: ["3.14", "'15'", "True", "-5"],
+          answer: 3,
+          explanation: "-5는 소수점도 없고 따옴표도 없으니까 int야! 3.14는 float, '15'는 str, True는 bool.",
+          en: {
+            question: "Which one is an int?",
+            options: ["3.14", "'15'", "True", "-5"],
+            explanation: "-5 has no decimal and no quotes so it's int! 3.14 is float, '15' is str, True is bool."
+          }
         }
       },
 
       {
-        type: "explain",
+        type: "quiz",
         content: {
-          lines: [
-            "따옴표 붙이면?"
-          ],
-          code: "'100' + '50'",
-          result: "'10050'",
-          note: "글자끼리 + = 이어붙이기!"
+          question: "'100'의 타입은?",
+          options: ["int", "float", "str", "bool"],
+          answer: 2,
+          explanation: "따옴표가 있으면 무조건 str! 숫자처럼 보여도 '100'은 문자열이야.",
+          en: {
+            question: "What type is '100'?",
+            options: ["int", "float", "str", "bool"],
+            explanation: "Quotes always make it str! Even if it looks like a number, '100' is a string."
+          }
         }
       },
 
-      // 에러 퀴즈
+      {
+        type: "quiz",
+        content: {
+          question: "다음 중 str(문자열)이 아닌 것은?",
+          options: ["'안녕'", "'3.14'", "100", "'True'"],
+          answer: 2,
+          explanation: "100은 따옴표가 없으니까 int야! 나머지는 전부 따옴표가 있어서 str이야.",
+          en: {
+            question: "Which one is NOT a string (str)?",
+            options: ["'안녕'", "'3.14'", "100", "'True'"],
+            explanation: "100 has no quotes so it's int! The rest all have quotes, so they're all str."
+          }
+        }
+      },
+
+      {
+        type: "quiz",
+        content: {
+          question: "15와 15.0 중 float는?",
+          options: ["15", "15.0", "둘 다 float", "둘 다 int"],
+          answer: 1,
+          explanation: "15는 int, 15.0은 float야! 값은 같아 보여도 .0이 붙으면 float!",
+          en: {
+            question: "Which is float: 15 or 15.0?",
+            options: ["15", "15.0", "Both float", "Both int"],
+            explanation: "15 is int, 15.0 is float! They look the same but .0 makes it a float!"
+          }
+        }
+      },
+
+      {
+        type: "quiz",
+        content: {
+          question: "다음 중 bool(불리언)인 것은?",
+          options: ["'True'", "1", "true", "True"],
+          answer: 3,
+          explanation: "True(대문자 T)만 bool이야! 'True'는 str, 1은 int, true는 에러야.",
+          en: {
+            question: "Which one is a bool?",
+            options: ["'True'", "1", "true", "True"],
+            explanation: "Only True (capital T) is bool! 'True' is str, 1 is int, true causes an error."
+          }
+        }
+      },
+
+      {
+        type: "interleaving",
+        content: {
+          message: "잠깐! 레슨 1 기억나?",
+          task: "Hello를 출력해봐",
+          template: null,
+          answer: "print('Hello')",
+          expect: "Hello",
+          en: { message: "Quick! Remember lesson 1?", task: "Print Hello" }
+        }
+      },
+
+      {
+        type: "reward",
+        content: { message: "타입 구분 완벽해!", emoji: "🎯" }
+      },
+
+      // ==================== CHAPTER 2: 따옴표의 힘 ====================
+      {
+        type: "chapter",
+        content: { num: 2, title: "따옴표의 힘", desc: "따옴표 하나로 완전히 달라진다!" }
+      },
+
+      {
+        type: "explain",
+        content: {
+          lines: ["핵심 remind 💡"],
+          code: "'100' → str (글자)\n 100  → int (숫자)",
+          note: "따옴표 유무가 타입을 결정해!",
+          en: {
+            lines: ["Key reminder 💡"],
+            note: "The presence of quotes determines the type!"
+          }
+        }
+      },
+
       {
         type: "errorQuiz",
         content: {
           question: "'10' + '20' + '30' 결과는?",
           code: "print('10' + '20' + '30')",
-          options: [
-            "60",
-            "102030",
-            "에러"
-          ],
+          options: ["60", "102030", "에러"],
           answer: 1,
-          explanation: "따옴표 있으면 글자! 글자끼리 +하면 이어붙어서 102030이 출력돼. (print는 따옴표를 안 보여줘!)",
+          explanation: "따옴표 있으면 글자야! 글자끼리 + 는 이어붙이기 → 102030",
           en: {
             question: "What is the result of '10' + '20' + '30'?",
-            options: [
-              "60",
-              "102030",
-              "Error"
-            ],
-            explanation: "With quotes they're strings! Adding strings concatenates them, so 102030 is printed. (print doesn't show the quotes!)"
-          }
-        }
-      },
-
-      // 보상
-      {
-        type: "reward",
-        content: {
-          message: "좋아! 이제 타입 4가지를 배워보자",
-          emoji: "🎯"
-        }
-      },
-
-      // ==================== CHAPTER 3: 4가지 타입 ====================
-      {
-        type: "chapter",
-        content: {
-          num: 3,
-          title: "4가지 타입",
-          desc: "정수, 실수, 문자열, 불리언"
-        }
-      },
-
-      // 비유
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "방 정리할 때 어떻게 해?",
-            "장난감은 장난감 상자에!"
-          ],
-          code: "toys → toy box\nbooks → bookshelf\nclothes → closet",
-          isPreview: true,
-          note: "컴퓨터도 데이터를 종류별로 구분해!"
-        }
-      },
-
-      // 1. 정수 (int)
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "① 정수 (int)",
-            "소수점 없는 숫자"
-          ],
-          code: "15, 19000, -5, 0",
-          result: "나이, 가격, 점수...",
-          note: "int = integer = 정수"
-        }
-      },
-
-      {
-        type: "quiz",
-        content: {
-          question: "다음 중 정수(int)인 것은?",
-          options: ["3.14", "True", "'15'", "-5"],
-          answer: 3,
-          explanation: "-5는 소수점도 없고 따옴표도 없으니까 int(정수)야! 3.14는 float, True는 bool, '15'는 str이야.",
-          en: {
-            question: "Which one is an integer (int)?",
-            options: ["3.14", "True", "'15'", "-5"],
-            explanation: "-5 has no decimal point and no quotes, so it's an int! 3.14 is float, True is bool, '15' is str."
-          }
-        }
-      },
-
-      {
-        type: "quiz",
-        content: {
-          question: "다음 중 정수(int)가 아닌 것은?",
-          options: ["0", "-100", "1000", "3.0"],
-          answer: 3,
-          explanation: "3.0은 .0이 붙어서 float(실수)야! 소수점이 있으면 무조건 float!",
-          en: {
-            question: "Which one is NOT an integer (int)?",
-            options: ["0", "-100", "1000", "3.0"],
-            explanation: "3.0 has a decimal point so it's a float! Any decimal point makes it a float!"
-          }
-        }
-      },
-
-      // 2. 실수 (float)
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "② 실수 (float)",
-            "소수점 있는 숫자"
-          ],
-          code: "3.14, 165.5, 0.5",
-          result: "키, 몸무게, 원주율...",
-          note: "float = 떠다니는 소수점"
-        }
-      },
-
-      {
-        type: "quiz",
-        content: {
-          question: "3.0은 어떤 타입일까?",
-          options: ["int (정수)", "float (실수)", "str (문자열)", "bool"],
-          answer: 1,
-          explanation: ".0이 붙으면 float야! 3은 int지만 3.0은 float — 소수점이 있으면 무조건 float!",
-          en: {
-            question: "What type is 3.0?",
-            options: ["int (integer)", "float", "str (string)", "bool"],
-            explanation: "3 is int but 3.0 is float — any decimal point makes it a float!"
-          }
-        }
-      },
-
-      {
-        type: "quiz",
-        content: {
-          question: "'3'은 어떤 타입일까?",
-          options: ["int (정수)", "float (실수)", "str (문자열)", "bool"],
-          answer: 2,
-          explanation: "따옴표가 있으면 무조건 str(문자열)이야! 숫자처럼 보여도 '3'은 글자야.",
-          en: {
-            question: "What type is '3'?",
-            options: ["int (integer)", "float", "str (string)", "bool"],
-            explanation: "Anything in quotes is a str! Even though it looks like a number, '3' is text."
+            options: ["60", "102030", "Error"],
+            explanation: "With quotes they're strings! String + = concatenation → 102030"
           }
         }
       },
@@ -255,121 +157,21 @@ export const lesson2: LessonData = {
       {
         type: "explain",
         content: {
-          lines: ["타입이 다르면 결과도 달라져!"],
+          lines: ["결과를 예측해봐!"],
           code: "print('3' + '3')\nprint(3 + 3)",
-          result: "33\n6",
-          note: "문자열 + 문자열 = 이어붙이기 / 숫자 + 숫자 = 덧셈",
           predict: {
             question: "print('3' + '3') 의 결과는?",
-            options: ["6", "33", "'6'", "에러"],
+            options: ["6", "33", "'33'", "에러"],
             answer: 1,
-            feedback: "'3'은 문자열이라 + 가 덧셈이 아니라 이어붙이기야! '3' + '3' = '33'이 출력돼."
+            feedback: "'3'은 str이라 + 가 이어붙이기야! '3' + '3' = 33이 출력돼. (print는 따옴표 안 보여줘)"
           },
           en: {
-            lines: ["Different types, different results!"],
-            note: "str + str = concatenation / int + int = addition",
+            lines: ["Predict the result!"],
             predict: {
               question: "What is the result of print('3' + '3')?",
-              options: ["6", "33", "'6'", "Error"],
-              feedback: "'3' is a string, so + means concatenation, not addition! '3' + '3' = '33'."
+              options: ["6", "33", "'33'", "Error"],
+              feedback: "'3' is str so + means concatenation! '3' + '3' prints 33. (print doesn't show quotes)"
             }
-          }
-        }
-      },
-
-      // int vs float
-      {
-        type: "quiz",
-        content: {
-          question: "15와 15.0은 같을까?",
-          options: [
-            "완전히 같다",
-            "값은 같지만 타입이 다르다",
-            "완전히 다르다"
-          ],
-          answer: 1,
-          explanation: "15는 정수(int), 15.0은 실수(float)! 값은 같지만 타입이 달라!",
-          en: {
-            question: "Are 15 and 15.0 the same?",
-            options: [
-              "Completely the same",
-              "Same value but different types",
-              "Completely different"
-            ],
-            explanation: "15 is int, 15.0 is float! Same value but different types!"
-          }
-        }
-      },
-
-      // 3. 문자열 (str)
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "③ 문자열 (str)",
-            "글자들의 모음"
-          ],
-          code: "'IU', 'chicken', '123'",
-          result: "따옴표로 감싸면 전부 글자!",
-          note: "str = string = 실"
-        }
-      },
-
-      // 인터리빙
-      {
-        type: "interleaving",
-        content: {
-          message: "문자열 출력 기억나지?",
-          task: "파이썬 출력해봐",
-          template: null,
-          answer: "print('파이썬')",
-          expect: "파이썬",
-          en: {
-            message: "Remember how to print strings?",
-            task: "Print 파이썬"
-          }
-        }
-      },
-
-      {
-        type: "quiz",
-        content: {
-          question: "다음 중 str(문자열)인 것은?",
-          options: ["100", "True", "3.14", "'100'"],
-          answer: 3,
-          explanation: "'100'은 따옴표가 있으니까 str이야! 숫자처럼 보여도 따옴표가 있으면 무조건 문자열!",
-          en: {
-            question: "Which one is a string (str)?",
-            options: ["100", "True", "3.14", "'100'"],
-            explanation: "'100' has quotes so it's a str! Even if it looks like a number, quotes always make it a string!"
-          }
-        }
-      },
-
-      // 숫자 vs 문자열 숫자
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "⚠️ 중요!",
-            "'19000'과 19000은 다르다!"
-          ],
-          code: "'19000' → string (text)\n 19000  → integer (number)",
-          note: "따옴표만 있어도 글자가 돼!"
-        }
-      },
-
-      {
-        type: "explain",
-        content: {
-          lines: ["그럼 글자 + 숫자를 더하면?"],
-          code: "'19000' + 1000",
-          result: "❌ TypeError!",
-          isError: true,
-          note: "타입이 다른 것끼리는 바로 더할 수 없어!",
-          en: {
-            lines: ["What if you add a string and a number?"],
-            note: "You can't add values of different types directly!"
           }
         }
       },
@@ -379,76 +181,52 @@ export const lesson2: LessonData = {
         content: {
           question: "'19000' + 1000 하면?",
           code: "print('19000' + 1000)",
-          options: [
-            "20000",
-            "'190001000'",
-            "에러! (글자 + 숫자는 안 됨)"
-          ],
+          options: ["20000", "'190001000'", "에러! (글자 + 숫자 안 됨)"],
           answer: 2,
-          explanation: "글자랑 숫자는 직접 더할 수 없어! 둘 다 같은 타입이어야 해!",
+          explanation: "타입이 다르면 더할 수 없어! str + int = TypeError! 같은 타입끼리만 가능해.",
           en: {
             question: "What happens with '19000' + 1000?",
-            options: [
-              "20000",
-              "'190001000'",
-              "Error! (string + number not allowed)"
-            ],
-            explanation: "You can't add strings and numbers directly! Both need to be the same type!"
+            options: ["20000", "'190001000'", "Error! (str + int not allowed)"],
+            explanation: "Different types can't be added! str + int = TypeError! Only same types work."
           }
         }
       },
 
-      // 4. 불리언 (bool)
       {
-        type: "explain",
+        type: "interleaving",
         content: {
-          lines: [
-            "④ 불리언 (bool)",
-            "참(True) 또는 거짓(False)"
-          ],
-          code: "True, False",
-          result: "딱 두 가지만!",
-          note: "대문자로 시작해야 해!"
+          message: "잠깐 레슨 1 복습!",
+          task: "파이썬을 출력해봐",
+          template: null,
+          answer: "print('파이썬')",
+          expect: "파이썬",
+          en: { message: "Quick lesson 1 review!", task: "Print 파이썬" }
         }
       },
 
       {
-        type: "explain",
-        content: {
-          lines: [
-            "비교하면 불리언이 나와!"
-          ],
-          code: "100 > 50",
-          result: "True",
-          note: "100이 50보다 큰가? → 참!"
-        }
+        type: "reward",
+        content: { message: "따옴표의 힘 이해 완료!", emoji: "💪" }
+      },
+
+      // ==================== CHAPTER 3: True와 False ====================
+      {
+        type: "chapter",
+        content: { num: 3, title: "True와 False", desc: "bool 타입 마스터하기!" }
       },
 
       {
-        type: "explain",
+        type: "errorQuiz",
         content: {
-          lines: [
-            "반대로 하면?"
-          ],
-          code: "3 > 7",
-          result: "False",
-          note: "3이 7보다 큰가? → 거짓!"
-        }
-      },
-
-      // 불리언 연습
-      {
-        type: "practice",
-        content: {
-          level: 1,
-          task: "True를 출력해봐",
-          guide: "대문자 T로 시작!",
-          template: { before: "print(", after: ")" },
-          answer: "True",
-          expect: "True",
+          question: "에러가 나는 것은?",
+          code: "a. True\nb. false\nc. False",
+          options: ["a만 에러", "b만 에러", "c만 에러"],
+          answer: 1,
+          explanation: "false는 에러! bool은 반드시 대문자로 시작 → True, False",
           en: {
-            task: "Print True",
-            guide: "Starts with capital T!"
+            question: "Which one causes an error?",
+            options: ["Only a", "Only b", "Only c"],
+            explanation: "false causes an error! Booleans must start with capital → True, False"
           }
         }
       },
@@ -457,13 +235,78 @@ export const lesson2: LessonData = {
         type: "practice",
         content: {
           level: 1,
-          task: "10 > 5 를 출력해봐",
+          task: "10 > 5를 출력해봐 (결과: True)",
           template: { before: "print(", after: ")" },
           answer: "10 > 5",
           alternateAnswers: ["10>5"],
           expect: "True",
+          en: { task: "Print 10 > 5 (result: True)" }
+        }
+      },
+
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "3 > 7을 출력해봐 (결과: False)",
+          template: { before: "print(", after: ")" },
+          answer: "3 > 7",
+          alternateAnswers: ["3>7"],
+          expect: "False",
+          en: { task: "Print 3 > 7 (result: False)" }
+        }
+      },
+
+      {
+        type: "quiz",
+        content: {
+          question: "print(10 == 10) 의 결과는?",
+          options: ["True", "False", "10", "에러"],
+          answer: 0,
+          explanation: "10 == 10은 '10이 10과 같은가?' → 참이니까 True!",
           en: {
-            task: "Print 10 > 5"
+            question: "What is the result of print(10 == 10)?",
+            options: ["True", "False", "10", "Error"],
+            explanation: "10 == 10 means 'is 10 equal to 10?' → True!"
+          }
+        }
+      },
+
+      {
+        type: "quiz",
+        content: {
+          question: "type(False)는?",
+          options: ["<class 'str'>", "<class 'int'>", "<class 'bool'>", "에러"],
+          answer: 2,
+          explanation: "True와 False는 bool 타입이야!",
+          en: {
+            question: "What is type(False)?",
+            options: ["<class 'str'>", "<class 'int'>", "<class 'bool'>", "Error"],
+            explanation: "True and False are both bool type!"
+          }
+        }
+      },
+
+      {
+        type: "reward",
+        content: { message: "bool 마스터!", emoji: "✅" }
+      },
+
+      // ==================== CHAPTER 4: type() 확인 ====================
+      {
+        type: "chapter",
+        content: { num: 4, title: "type() 확인", desc: "타입 탐정이 되어보자!" }
+      },
+
+      {
+        type: "explain",
+        content: {
+          lines: ["type() 사용법"],
+          code: "print(type(값))  →  <class '타입명'>",
+          note: "어떤 값의 타입이든 확인할 수 있어!",
+          en: {
+            lines: ["Using type()"],
+            note: "You can check the type of any value!"
           }
         }
       },
@@ -472,325 +315,89 @@ export const lesson2: LessonData = {
         type: "practice",
         content: {
           level: 1,
-          task: "1 > 100 을 출력해봐",
-          template: { before: "print(", after: ")" },
-          answer: "1 > 100",
-          alternateAnswers: ["1>100"],
-          expect: "False",
+          task: "3.14의 타입을 출력해봐",
+          template: { before: "print(type(", after: "))" },
+          answer: "3.14",
+          expect: "<class 'float'>",
+          en: { task: "Print the type of 3.14" }
+        }
+      },
+
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "'파이썬'의 타입을 출력해봐",
+          template: { before: "print(type(", after: "))" },
+          answer: "'파이썬'",
+          alternateAnswers: ["\"파이썬\""],
+          expect: "<class 'str'>",
+          en: { task: "Print the type of 'Python'" }
+        }
+      },
+
+      {
+        type: "quiz",
+        content: {
+          question: "type('100')과 type(100) — 같을까?",
+          options: ["같다 (둘 다 int)", "같다 (둘 다 str)", "다르다 (str vs int)", "에러"],
+          answer: 2,
+          explanation: "'100'은 str, 100은 int야! 따옴표 유무로 타입이 달라져.",
           en: {
-            task: "Print 1 > 100"
+            question: "Are type('100') and type(100) the same?",
+            options: ["Same (both int)", "Same (both str)", "Different (str vs int)", "Error"],
+            explanation: "'100' is str, 100 is int! Quotes change the type."
           }
         }
       },
 
-      // 에러 퀴즈 - true vs True
       {
-        type: "errorQuiz",
+        type: "explain",
         content: {
-          question: "에러 나는 건?",
-          code: "a. True\nb. true\nc. False",
-          options: [
-            "a만 에러",
-            "b만 에러",
-            "c만 에러"
-          ],
-          answer: 1,
-          explanation: "true는 에러! 대문자 T로 True라고 써야 해!",
+          lines: ["결과를 예측해봐!"],
+          code: "x = 3.14\nprint(type(x))",
+          predict: {
+            options: ["<class 'int'>", "<class 'float'>", "<class 'str'>", "<class 'bool'>"],
+            answer: 1,
+            feedback: "3.14를 x에 저장했어. x의 타입은 3.14의 타입인 float야!"
+          },
           en: {
-            question: "Which one causes an error?",
-            options: [
-              "Only a is error",
-              "Only b is error",
-              "Only c is error"
-            ],
-            explanation: "true causes an error! You must write True with capital T!"
+            lines: ["Predict the result!"],
+            predict: {
+              options: ["<class 'int'>", "<class 'float'>", "<class 'str'>", "<class 'bool'>"],
+              feedback: "3.14 is stored in x. The type of x is the same as 3.14, which is float!"
+            }
           }
         }
       },
 
-      // 4가지 타입 요약
       {
-        type: "summary",
+        type: "practice",
         content: {
-          num: 3,
-          title: "4가지 타입",
-          learned: [
-            "int: 정수 (15, 19000)",
-            "float: 실수 (3.14, 165.5)",
-            "str: 문자열 ('글자')",
-            "bool: 불리언 (True, False)"
-          ],
-          canDo: "데이터 타입 4가지를 구분할 수 있어!",
-          emoji: "📦"
-        }
-      },
-
-      // ==================== CHAPTER 4: type() 함수 ====================
-      {
-        type: "chapter",
-        content: {
-          num: 4,
-          title: "type() 함수",
-          desc: "타입을 확인하는 방법!"
-        }
-      },
-
-      // 인터리빙
-      {
-        type: "interleaving",
-        content: {
-          message: "100 출력 기억나?",
-          task: "숫자 100을 출력해봐",
+          level: 2,
+          task: "이렇게 출력되도록 해봐 ↓\n<class 'int'>\n<class 'float'>",
+          guide: "type(7)과 type(7.0)을 각각 출력해봐",
           template: null,
-          answer: "print(100)",
-          expect: "100",
+          answer: "print(type(7))\nprint(type(7.0))",
+          expect: "<class 'int'>\n<class 'float'>",
           en: {
-            message: "Remember printing 100?",
-            task: "Print the number 100"
+            task: "Make it print like this ↓\n<class 'int'>\n<class 'float'>",
+            guide: "Print type(7) and type(7.0) separately"
           }
         }
       },
 
-      // type() 소개
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "type() = 타입 확인!",
-            "뭔 타입인지 모르겠으면 물어봐"
-          ],
-          code: "type(15)",
-          result: "<class 'int'>",
-          note: "15는 int(정수)야!"
-        }
-      },
-
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "다른 것도 확인해보자"
-          ],
-          code: "type(3.14)",
-          result: "<class 'float'>",
-          note: "3.14는 float(실수)야!"
-        }
-      },
-
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "문자열은?"
-          ],
-          code: "type('IU')",
-          result: "<class 'str'>",
-          note: "'아이유'는 str(문자열)이야!"
-        }
-      },
-
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "불리언은?"
-          ],
-          code: "type(True)",
-          result: "<class 'bool'>",
-          note: "True는 bool(불리언)이야!"
-        }
-      },
-
-      // type() 퀴즈
-      {
-        type: "quiz",
-        content: {
-          question: "type('100')의 결과는?",
-          options: [
-            "<class 'int'>",
-            "<class 'str'>",
-            "<class 'float'>"
-          ],
-          answer: 1,
-          explanation: "'100'은 따옴표가 있으니까 문자열(str)이야!",
-          en: {
-            question: "What is the result of type('100')?",
-            options: [
-              "<class 'int'>",
-              "<class 'str'>",
-              "<class 'float'>"
-            ],
-            explanation: "'100' has quotes so it's a string (str)!"
-          }
-        }
-      },
-
-      {
-        type: "quiz",
-        content: {
-          question: "type(100)의 결과는?",
-          options: [
-            "<class 'int'>",
-            "<class 'str'>",
-            "<class 'float'>"
-          ],
-          answer: 0,
-          explanation: "100은 따옴표가 없으니까 정수(int)야!",
-          en: {
-            question: "What is the result of type(100)?",
-            options: [
-              "<class 'int'>",
-              "<class 'str'>",
-              "<class 'float'>"
-            ],
-            explanation: "100 has no quotes so it's an integer (int)!"
-          }
-        }
-      },
-
-      // 보상
       {
         type: "reward",
-        content: {
-          message: "잘했어! 이제 자주 하는 실수를 알아보자",
-          emoji: "💪"
-        }
+        content: { message: "타입 탐정 완성!", emoji: "🔍" }
       },
 
-      // ==================== CHAPTER 5: 자주 하는 실수 ====================
+      // ==================== CHAPTER 5: 내 정보 카드 ====================
       {
         type: "chapter",
-        content: {
-          num: 5,
-          title: "자주 하는 실수",
-          desc: "이것만 조심하면 OK!"
-        }
+        content: { num: 5, title: "내 정보 카드", desc: "4가지 타입으로 만들어보자!" }
       },
 
-      // 실수 1: 따옴표
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "실수 1: 따옴표 빼먹기"
-          ],
-          code: "IU",
-          result: "❌ NameError!",
-          isError: true,
-          note: "글자는 반드시 따옴표! '아이유'"
-        }
-      },
-
-      // 실수 2: true vs True
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "실수 2: 소문자 true"
-          ],
-          code: "true",
-          result: "❌ NameError!",
-          isError: true,
-          note: "대문자로! True, False"
-        }
-      },
-
-      // 실수 3: 숫자 문자열
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "실수 3: '숫자'로 계산하기"
-          ],
-          code: "'100' + '50'",
-          result: "'10050' (계산 아님!)",
-          isError: true,
-          note: "계산하려면 따옴표 빼! 100 + 50"
-        }
-      },
-
-      // 에러 찾기 퀴즈
-      {
-        type: "errorQuiz",
-        content: {
-          question: "에러 나는 코드는?",
-          code: "a. print('Hello')\nb. print(IU)\nc. print(True)",
-          options: [
-            "a만 에러",
-            "b만 에러",
-            "c만 에러"
-          ],
-          answer: 1,
-          explanation: "아이유에 따옴표가 없어서 에러! print('아이유')로 해야 해!",
-          en: {
-            question: "Which code causes an error?",
-            options: [
-              "Only a causes error",
-              "Only b causes error",
-              "Only c causes error"
-            ],
-            explanation: "아이유 has no quotes so it causes an error! It should be print('아이유')!"
-          }
-        }
-      },
-
-      // 자주 하는 실수 요약
-      {
-        type: "summary",
-        content: {
-          num: 5,
-          title: "자주 하는 실수",
-          learned: [
-            "글자는 반드시 따옴표!",
-            "True/False는 대문자!",
-            "'숫자'는 계산 안 됨!"
-          ],
-          canDo: "에러 없이 코드를 쓸 수 있어!",
-          emoji: "🛡️"
-        }
-      },
-
-      // ==================== CHAPTER 6: 미니 프로젝트 ====================
-      {
-        type: "chapter",
-        content: {
-          num: 6,
-          title: "내 정보 카드",
-          desc: "배운 걸 활용해서 만들어보자!"
-        }
-      },
-
-      // 인터리빙
-      {
-        type: "interleaving",
-        content: {
-          message: "여러 개 출력 기억나?",
-          task: "이름: 홍길동 출력해봐",
-          template: null,
-          answer: "print('이름:', '홍길동')",
-          alternateAnswers: ["print('이름: 홍길동')", "print(\"이름:\", \"홍길동\")"],
-          expect: "이름: 홍길동",
-          en: {
-            message: "Remember printing multiple values?",
-            task: "Print: 이름: 홍길동"
-          }
-        }
-      },
-
-      // 프로젝트 소개
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "📇 내 정보 카드 만들기!"
-          ],
-          code: "=== My Info ===\nName: Alice\nAge: 15\nHeight: 165.5\nStudent: True",
-          isPreview: true,
-          note: "한 줄씩 만들어보자!"
-        }
-      },
-
-      // 프로젝트
       {
         type: "project",
         content: {
@@ -808,7 +415,7 @@ export const lesson2: LessonData = {
         content: {
           step: 2,
           total: 5,
-          task: "이름 (문자열)",
+          task: "이름 출력 (str)",
           target: "이름: 홍길동",
           hint: "print('이름:', '홍길동')",
           done: ["=== 내 정보 ==="],
@@ -820,7 +427,7 @@ export const lesson2: LessonData = {
         content: {
           step: 3,
           total: 5,
-          task: "나이 (정수)",
+          task: "나이 출력 (int)",
           target: "나이: 15",
           hint: "print('나이:', 15)",
           done: ["=== 내 정보 ===", "이름: 홍길동"],
@@ -832,7 +439,7 @@ export const lesson2: LessonData = {
         content: {
           step: 4,
           total: 5,
-          task: "키 (실수)",
+          task: "키 출력 (float)",
           target: "키: 165.5",
           hint: "print('키:', 165.5)",
           done: ["=== 내 정보 ===", "이름: 홍길동", "나이: 15"],
@@ -844,7 +451,7 @@ export const lesson2: LessonData = {
         content: {
           step: 5,
           total: 5,
-          task: "학생 (불리언)",
+          task: "학생 여부 출력 (bool)",
           target: "학생: True",
           hint: "print('학생:', True)",
           done: ["=== 내 정보 ===", "이름: 홍길동", "나이: 15", "키: 165.5"],
@@ -852,100 +459,22 @@ export const lesson2: LessonData = {
         }
       },
 
-      // 예측 퀴즈 1: type() 결과
-      {
-        type: "explain",
-        content: {
-          lines: ["결과를 예측해봐!"],
-          code: "x = 3.14\nprint(type(x))",
-          predict: {
-            options: ["<class 'int'>", "<class 'float'>", "<class 'str'>", "<class 'bool'>"],
-            answer: 1,
-            feedback: "3.14는 소수점이 있으니까 실수(float)야! type(3.14)는 <class 'float'>을 출력해."
-          },
-          en: {
-            lines: ["Predict the output!"],
-            predict: {
-              options: ["<class 'int'>", "<class 'float'>", "<class 'str'>", "<class 'bool'>"],
-              feedback: "3.14 has a decimal point so it's a float! type(3.14) prints <class 'float'>."
-            }
-          }
-        }
-      },
-
-      // 예측 퀴즈 2: 불리언 표현식 결과
-      {
-        type: "explain",
-        content: {
-          lines: ["이 코드의 출력은?"],
-          code: "a = 10\nb = 3\nprint(a > b)\nprint(type(a > b))",
-          predict: {
-            options: ["True\n<class 'int'>", "True\n<class 'bool'>", "False\n<class 'bool'>", "에러"],
-            answer: 1,
-            feedback: "10 > 3은 True(참)이고, 비교식의 결과는 항상 bool 타입이야!"
-          },
-          en: {
-            lines: ["What does this code output?"],
-            predict: {
-              options: ["True\n<class 'int'>", "True\n<class 'bool'>", "False\n<class 'bool'>", "Error"],
-              feedback: "10 > 3 is True, and the result of a comparison is always bool type!"
-            }
-          }
-        }
-      },
-
-      // 연습 1: int와 float 차이 확인
-      {
-        type: "practice",
-        content: {
-          level: 2,
-          task: "type(7)과 type(7.0)을 각각 출력해봐",
-          guide: "정수와 실수 타입이 다르다는 것을 확인!",
-          template: null,
-          answer: "print(type(7))\nprint(type(7.0))",
-          expect: "<class 'int'>\n<class 'float'>",
-          en: {
-            task: "Print type(7) and type(7.0) separately",
-            guide: "Confirm that int and float are different types!"
-          }
-        }
-      },
-
-      // 연습 2: 불리언 타입 확인
-      {
-        type: "practice",
-        content: {
-          level: 2,
-          task: "이렇게 나오게 해봐 ↓\n<class 'bool'>\n<class 'bool'>",
-          guide: "True와 False 각각의 타입을 출력해봐",
-          template: null,
-          answer: "print(type(True))\nprint(type(False))",
-          expect: "<class 'bool'>\n<class 'bool'>",
-          en: {
-            task: "Make it print like this ↓\n<class 'bool'>\n<class 'bool'>",
-            guide: "Print the type of True and False separately"
-          }
-        }
-      },
-
-      // 최종 요약
       {
         type: "summary",
         content: {
-          num: 6,
+          num: 5,
           title: "데이터 타입 마스터",
           learned: [
-            "int: 정수 (따옴표 X)",
-            "float: 실수 (소수점)",
-            "str: 문자열 (따옴표 O)",
-            "bool: True/False"
+            "int: 정수 (-5, 0, 100)",
+            "float: 실수 (3.14, 15.0)",
+            "str: 문자열 ('글자', '100')",
+            "bool: True / False"
           ],
-          canDo: "데이터 타입을 구분하고 올바르게 사용할 수 있어!",
+          canDo: "타입을 구분하고 type()으로 확인할 수 있어!",
           emoji: "🏆"
         }
       },
 
-      // 완료
       {
         type: "done",
         content: {}
