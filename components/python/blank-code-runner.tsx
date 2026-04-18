@@ -33,6 +33,8 @@ interface BlankCodeRunnerProps {
   storageKey?: string
   /** 이미 완료한 스텝 여부 — 저장된 코드 없으면 정답으로 자동 채움 */
   isStepDone?: boolean
+  /** 보기 선택지 — 제공 시 버튼 클릭으로 빈칸 채움 */
+  choices?: string[]
 }
 
 // Pyodide 싱글톤
@@ -117,7 +119,8 @@ export function BlankCodeRunner({
   onSuccess,
   minHeight = "140px",
   storageKey,
-  isStepDone = false
+  isStepDone = false,
+  choices = [],
 }: BlankCodeRunnerProps) {
   const blanks = parseBlanks(initialCode)
   const answers = hint2 ? parseAnswers(hint2) : []
@@ -519,8 +522,52 @@ export function BlankCodeRunner({
         </div>
       )}
 
+      {/* 보기 선택 버튼 */}
+      {choices.length > 0 && (
+        <div className="flex flex-col gap-2">
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
+            {t("보기", "Choose")}
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {choices.map((choice, idx) => {
+              const isSelected = filledValues[focusedBlank]?.trim() === choice.trim()
+              return (
+                <button
+                  key={idx}
+                  onClick={() => {
+                    setFilledValues(prev => ({ ...prev, [focusedBlank]: choice }))
+                    setIsCorrect(null)
+                    setOutput("")
+                    setError("")
+                    // 다음 빈칸으로 포커스 이동 (있으면)
+                    const nextId = focusedBlank + 1
+                    if (nextId < blanks.length) {
+                      setFocusedBlank(nextId)
+                      setTimeout(() => inputRefs.current[nextId]?.focus(), 0)
+                    }
+                  }}
+                  className={cn(
+                    "px-4 py-2 rounded-xl border-2 font-mono text-sm font-semibold transition-all",
+                    isSelected
+                      ? "border-amber-400 bg-amber-100 text-amber-900 shadow-sm scale-105"
+                      : "border-gray-200 bg-white text-gray-700 hover:border-amber-300 hover:bg-amber-50 hover:text-amber-800"
+                  )}
+                >
+                  {choice}
+                </button>
+              )
+            })}
+          </div>
+          {blanks.length > 1 && (
+            <p className="text-xs text-gray-400">
+              {t(`빈칸 ${focusedBlank + 1}번 선택 중`, `Filling blank ${focusedBlank + 1}`)}
+            </p>
+          )}
+        </div>
+      )}
+
       {/* 빈칸 미완료 힌트 */}
-      {!allFilled && (
+      {!allFilled && choices.length === 0 && (
         <p className="text-center text-xs text-amber-500 font-medium animate-pulse">
           {t("👆 위 빈칸을 채우면 실행 버튼이 활성화돼요!", "👆 Fill in the blanks to enable the run button!")}
         </p>

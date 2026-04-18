@@ -108,7 +108,8 @@ Just wrap any value with \`type()\` and Python tells you exactly what type it is
           initialCode: "print(type(___))",
           expectedOutput: "<class 'int'>",
           hint: "Put a value inside type()",
-          hint2: "print(type(100))"
+          hint2: "100",
+          choices: ["100", "3.14", "'Python'", "True"]
         },
         {
           id: "try2",
@@ -118,7 +119,8 @@ Just wrap any value with \`type()\` and Python tells you exactly what type it is
           initialCode: "print(type(___))",
           expectedOutput: "<class 'str'>",
           hint: "Strings are str!",
-          hint2: "print(type('Python'))"
+          hint2: "'Python'",
+          choices: ["100", "3.14", "'Python'", "True"]
         },
         {
           id: "quiz2",

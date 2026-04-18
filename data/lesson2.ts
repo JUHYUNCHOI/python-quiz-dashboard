@@ -87,7 +87,8 @@ print(type(True))     # <class 'bool'>
           initialCode: "print(type(___))",
           expectedOutput: "<class 'int'>",
           hint: "type() 안에 값을 넣어요",
-          hint2: "print(type(100))"
+          hint2: "100",
+          choices: ["100", "3.14", "'파이썬'", "True"]
         },
         {
           id: "try2",
@@ -97,7 +98,8 @@ print(type(True))     # <class 'bool'>
           initialCode: "print(type(___))",
           expectedOutput: "<class 'str'>",
           hint: "문자열은 str!",
-          hint2: "print(type('파이썬'))"
+          hint2: "'파이썬'",
+          choices: ["100", "3.14", "'파이썬'", "True"]
         },
         {
           id: "quiz2",

@@ -65,6 +65,7 @@ export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onS
             task={step.task}
             hint={step.hint}
             hint2={step.hint2}
+            choices={step.choices}
             onSuccess={onSuccess}
             minHeight={step.type === "mission" ? "160px" : "140px"}
             isStepDone={isCompleted}
