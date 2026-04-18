@@ -166,7 +166,11 @@ function autoTranslateOption(opt: string): string {
 // Helper: normalize blank answers for comparison
 // ─────────────────────────────────────────────────────────────
 function normalize(s: string) {
-  return s.replace(/\s+/g, "").toLowerCase()
+  return s
+    .replace(/[\u2018\u2019]/g, "'")   // iOS 곡선 홑따옴표 → 직선 '
+    .replace(/[\u201C\u201D]/g, '"')   // iOS 곡선 겹따옴표 → 직선 "
+    .replace(/\s+/g, "")
+    .toLowerCase()
 }
 
 // C++은 std:: 프리픽스가 있어도 없어도 같은 코드 → 비교 시 제거
