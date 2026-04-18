@@ -167,8 +167,11 @@ export function TextInput({ question, hint, answer, E, onSolve }: TextInputProps
   const [wrong, setWrong] = useState(false)
   const [correct, setCorrect] = useState(false)
 
+  const normalizeInput = (s: string) =>
+    s.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"').trim().toLowerCase()
+
   const submit = () => {
-    if (val.trim().toLowerCase() === answer.toLowerCase()) {
+    if (normalizeInput(val) === normalizeInput(answer)) {
       setCorrect(true); setWrong(false); onSolve?.()
     } else {
       setWrong(true)

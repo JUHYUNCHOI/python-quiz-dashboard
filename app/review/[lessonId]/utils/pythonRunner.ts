@@ -392,7 +392,7 @@ function executeFunction(
 // print 실행
 // ============================================================
 function executePrint(
-  argsStr: string, 
+  argsStr: string,
   variables: Map<string, Variable>,
   functions: Map<string, FunctionDef>
 ): RunResult {
@@ -400,29 +400,59 @@ function executePrint(
   if (!argsStr) {
     return { result: "" } // 빈 print()는 빈 줄
   }
-  
-  // f-string 체크
+
+  // f-string 체크 (단일 인자 전용)
   if (argsStr.startsWith("f'") || argsStr.startsWith('f"')) {
     return executeFString(argsStr, variables)
   }
-  
+
+  // ── 다중 인자 처리: print('a', b, 3) ─────────────────────────
+  // 따옴표·괄호 밖 쉼표가 있으면 다중 인자
+  if (hasOuterComma(argsStr)) {
+    const tokens = parseArguments(argsStr)
+    const parts: string[] = []
+    for (const tok of tokens) {
+      // type=none → 변수 참조일 수 있음
+      if (tok.type === 'none') {
+        const varName = String(tok.value).trim()
+        if (variables.has(varName)) {
+          const v = variables.get(varName)!
+          parts.push(v.value === null ? "None" : String(v.value))
+        } else {
+          // 표현식 시도
+          const ev = evaluateExpression(varName, variables)
+          if (!ev.error) {
+            parts.push(ev.value === null ? "None" : String(ev.value))
+          } else {
+            return { result: "", error: `'${varName}'를 찾을 수 없어!` }
+          }
+        }
+      } else {
+        parts.push(tok.value === null ? "None" : String(tok.value))
+      }
+    }
+    return { result: parts.join(" ") }
+  }
+
+  // ── 단일 인자 ─────────────────────────────────────────────────
+
   // 일반 문자열
   const strMatch = argsStr.match(/^(['"])([\s\S]*)\1$/)
   if (strMatch) {
     return { result: strMatch[2] }
   }
-  
+
   // 함수 호출이 print 안에 있는 경우: print(함수())
   const callMatch = argsStr.match(/^([a-zA-Z가-힣_][a-zA-Z가-힣0-9_]*)\s*\((.*)\)$/)
   if (callMatch) {
     const funcName = callMatch[1]
     const innerArgs = callMatch[2]
-    
+
     const func = functions.get(funcName)
     if (func) {
       const callResult = executeFunction(func, innerArgs, variables, functions)
       if (callResult.error) return { result: "", error: callResult.error }
-      
+
       // 함수 내부 print 출력 + return 값
       const outputs: string[] = []
       if (callResult.output) outputs.push(...callResult.output)
@@ -432,26 +462,39 @@ function executePrint(
       return { result: outputs.join('\n') }
     }
   }
-  
+
   // 변수
   if (variables.has(argsStr)) {
     const v = variables.get(argsStr)!
     if (v.value === null) return { result: "None" }
     return { result: String(v.value) }
   }
-  
+
   // 숫자나 계산식
   const evalResult = evaluateExpression(argsStr, variables)
   if (!evalResult.error) {
     return { result: String(evalResult.value) }
   }
-  
+
   // 따옴표 없는 문자열
   if (/^[a-zA-Z가-힣]/.test(argsStr)) {
     return { result: "", error: `'${argsStr}'에 따옴표를 붙여봐! '${argsStr}'` }
   }
-  
+
   return { result: "", error: "print() 안을 확인해봐!" }
+}
+
+/** 따옴표·괄호 밖에 쉼표가 있는지 확인 */
+function hasOuterComma(s: string): boolean {
+  let inQuote = false, quoteChar = '', depth = 0
+  for (const ch of s) {
+    if ((ch === "'" || ch === '"') && !inQuote) { inQuote = true; quoteChar = ch }
+    else if (ch === quoteChar && inQuote) { inQuote = false; quoteChar = '' }
+    else if (ch === '(' && !inQuote) depth++
+    else if (ch === ')' && !inQuote) depth--
+    else if (ch === ',' && !inQuote && depth === 0) return true
+  }
+  return false
 }
 
 // ============================================================

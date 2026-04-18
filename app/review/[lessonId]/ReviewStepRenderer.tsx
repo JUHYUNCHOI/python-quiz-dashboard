@@ -424,25 +424,45 @@ function PracticeStep({
       const expectedOut = String(content.expect).trim()
 
       // Python: 자체 runner로 실행 후 출력 비교
+      // (runner가 제한적이므로 텍스트 비교를 안전망으로 사용)
       if (language === "python") {
         const runResult = runPythonCode(combined)
-        if (runResult.error) {
-          // 구문/런타임 에러 → 에러 메시지 표시
-          setActualOutput(`오류: ${runResult.error}`)
+        if (!runResult.error) {
+          const actualOut = (runResult.result ?? "").trim()
+          if (actualOut === expectedOut) {
+            // 출력이 일치 → 정답
+            setActualOutput(actualOut)
+            clearStorage()
+            setResult("correct")
+            onSaveAnswer?.({ inputs: [...inputs], result: "correct" })
+            onCorrect()
+            return
+          }
+          // 출력 불일치 → 텍스트 비교로 한 번 더 확인 (runner 한계 보완)
+          if (isAnswerCorrect(combined, content, isEn, language)) {
+            clearStorage()
+            setResult("correct")
+            onSaveAnswer?.({ inputs: [...inputs], result: "correct" })
+            onCorrect()
+            return
+          }
+          // 둘 다 실패 → 오답, 실제 출력 보여줌
+          setActualOutput(actualOut)
           clearStorage()
           setResult("wrong")
           onSaveAnswer?.({ inputs: [...inputs], result: "wrong" })
           onWrong()
           return
         }
-        const actualOut = (runResult.result ?? "").trim()
-        setActualOutput(actualOut)
-        clearStorage()
-        if (actualOut === expectedOut) {
+        // runner 에러 → 텍스트 비교로 대체
+        if (isAnswerCorrect(combined, content, isEn, language)) {
+          clearStorage()
           setResult("correct")
           onSaveAnswer?.({ inputs: [...inputs], result: "correct" })
           onCorrect()
         } else {
+          setActualOutput(`오류: ${runResult.error}`)
+          clearStorage()
           setResult("wrong")
           onSaveAnswer?.({ inputs: [...inputs], result: "wrong" })
           onWrong()
