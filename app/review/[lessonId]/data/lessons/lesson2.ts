@@ -226,12 +226,12 @@ export const lesson2: LessonData = {
         type: "practice",
         content: {
           level: 1,
-          task: "키 165.5를 출력해봐",
-          template: { before: "print(", after: ")" },
+          task: "165.5의 데이터 타입을 확인해봐",
+          template: { before: "print(type(", after: "))" },
           answer: "165.5",
-          expect: "165.5",
+          expect: "<class 'float'>",
           en: {
-            task: "Print the height 165.5"
+            task: "Check the data type of 165.5"
           }
         }
       },
@@ -240,12 +240,12 @@ export const lesson2: LessonData = {
         type: "practice",
         content: {
           level: 1,
-          task: "원주율 3.14를 출력해봐",
-          template: { before: "print(", after: ")" },
+          task: "3.14의 데이터 타입을 확인해봐",
+          template: { before: "print(type(", after: "))" },
           answer: "3.14",
-          expect: "3.14",
+          expect: "<class 'float'>",
           en: {
-            task: "Print pi 3.14"
+            task: "Check the data type of 3.14"
           }
         }
       },
