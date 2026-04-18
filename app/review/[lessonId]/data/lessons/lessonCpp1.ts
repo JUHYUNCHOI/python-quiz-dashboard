@@ -118,9 +118,30 @@ export const lessonCpp1: LessonData = {
           template: null,
           answer: 'std::cout << "Good morning!" << std::endl;',
           alternateAnswers: [
+            // 세미콜론 없음
             'std::cout << "Good morning!" << std::endl',
+            // 공백 없음
             'std::cout<<"Good morning!"<<std::endl;',
-            'std::cout << "Good morning!" << "\\n";'
+            'std::cout<<"Good morning!"<<std::endl',
+            // \n 사용
+            'std::cout << "Good morning!" << "\\n";',
+            'std::cout << "Good morning!" << "\\n"',
+            'std::cout << "Good morning!\\n";',
+            'std::cout<<"Good morning!\\n";',
+            // cout (std:: 없이)
+            'cout << "Good morning!" << endl;',
+            'cout << "Good morning!" << endl',
+            'cout<<"Good morning!"<<endl;',
+            'cout << "Good morning!" << std::endl;',
+            'cout << "Good morning!" << std::endl',
+            // std::cout + endl (std:: 없이)
+            'std::cout << "Good morning!" << endl;',
+            'std::cout << "Good morning!" << endl',
+            'std::cout<<"Good morning!"<<endl;',
+            // \n 변형
+            'cout << "Good morning!" << "\\n";',
+            'cout << "Good morning!\\n";',
+            'cout<<"Good morning!\\n";',
           ],
           expect: "Good morning!",
           en: {

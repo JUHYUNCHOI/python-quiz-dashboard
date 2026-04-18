@@ -169,24 +169,39 @@ function normalize(s: string) {
   return s.replace(/\s+/g, "").toLowerCase()
 }
 
-function isAnswerCorrect(input: string, content: PracticeContent | InterleavingContent, isEn = false): boolean {
+// C++은 std:: 프리픽스가 있어도 없어도 같은 코드 → 비교 시 제거
+function normalizeCpp(s: string) {
+  return normalize(s).replace(/std::/g, "")
+}
+
+function isAnswerCorrect(
+  input: string,
+  content: PracticeContent | InterleavingContent,
+  isEn = false,
+  lang?: "python" | "cpp"
+): boolean {
   const n = normalize(input)
+  // C++이면 std:: 제거한 버전으로도 비교
+  const compare = (a: string) => {
+    if (normalize(a) === n) return true
+    if (lang === "cpp" && normalizeCpp(a) === normalizeCpp(input)) return true
+    return false
+  }
+
   // blanksAnswer가 있으면 쉼표 결합 형태로도 체크 (multi-blank)
   if (content.blanksAnswer && content.blanksAnswer.length > 1) {
-    const joined = normalize(content.blanksAnswer.join(", "))
-    if (joined === n) return true
+    if (compare(content.blanksAnswer.join(", "))) return true
   }
-  if (normalize(content.answer) === n) return true
-  if (content.alternateAnswers?.some(a => normalize(a) === n)) return true
+  if (compare(content.answer)) return true
+  if (content.alternateAnswers?.some(a => compare(a))) return true
   // EN 모드: en.answer / en.alternateAnswers / en.blanksAnswer도 체크
   if (isEn && content.en) {
     const en = content.en as { answer?: string; alternateAnswers?: string[]; blanksAnswer?: string[] }
     if (en.blanksAnswer && en.blanksAnswer.length > 1) {
-      const joined = normalize(en.blanksAnswer.join(", "))
-      if (joined === n) return true
+      if (compare(en.blanksAnswer.join(", "))) return true
     }
-    if (en.answer && normalize(en.answer) === n) return true
-    if (en.alternateAnswers?.some(a => normalize(a) === n)) return true
+    if (en.answer && compare(en.answer)) return true
+    if (en.alternateAnswers?.some(a => compare(a))) return true
   }
   return false
 }
@@ -398,7 +413,7 @@ function PracticeStep({
     if (!combined.trim()) return
 
     clearStorage()
-    if (isAnswerCorrect(combined, content, isEn)) {
+    if (isAnswerCorrect(combined, content, isEn, language)) {
       setResult("correct")
       onSaveAnswer?.({ inputs: [...inputs], result: "correct" })
       onCorrect()
