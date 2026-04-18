@@ -13,9 +13,10 @@ interface TryItStepProps {
   hintLevel: number
   onHintLevelChange: (level: number) => void
   onSuccess: () => void
+  lessonId?: string
 }
 
-export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onSuccess }: TryItStepProps) {
+export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onSuccess, lessonId }: TryItStepProps) {
   const hasBlanks = !!(step.initialCode && step.initialCode.includes('___'))
   const { t } = useLanguage()
 
@@ -59,7 +60,7 @@ export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onS
         {hasBlanks ? (
           <BlankCodeRunner
             key={step.id}
-            storageKey={step.id}
+            storageKey={lessonId ? `${lessonId}-${step.id}` : step.id}
             initialCode={step.initialCode || ""}
             expectedOutput={step.expectedOutput}
             task={step.task}
@@ -73,7 +74,7 @@ export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onS
         ) : (
           <PythonRunner
             key={step.id}
-            storageKey={step.id}
+            storageKey={lessonId ? `${lessonId}-${step.id}` : step.id}
             initialCode={step.initialCode || ""}
             expectedOutput={step.expectedOutput}
             task={step.task}

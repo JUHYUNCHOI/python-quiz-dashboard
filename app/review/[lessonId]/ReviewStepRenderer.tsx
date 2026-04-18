@@ -576,8 +576,8 @@ function PracticeStep({
       )}
       <p className="font-semibold text-gray-800 whitespace-pre-line">{task}</p>
 
-      {/* 인라인 빈칸 코드 블록 */}
-      {typeof content.template === "string" && (
+      {/* 인라인 빈칸 코드 블록 — { before, after } 객체도 string으로 정규화됐으므로 rawTemplate 기준으로 체크 */}
+      {!isFullCode && blankCount > 0 && (
         <div className="rounded-xl bg-[#1a1b2e] px-4 py-3 font-mono text-sm text-[#cdd6f4] overflow-x-auto leading-7 whitespace-pre-wrap">
           {templateParts.map((part, i) => (
             <Fragment key={i}>
