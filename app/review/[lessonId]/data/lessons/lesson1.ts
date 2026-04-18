@@ -279,8 +279,8 @@ export const lesson1: LessonData = {
           level: 1,
           task: "123을 화면에 띄워봐",
           guide: "숫자는 따옴표 없이!",
-          template: { before: "print(", after: ")" },
-          answer: "123",
+          template: null,
+          answer: "print(123)",
           expect: "123",
           en: {
             task: "Display 123 on the screen",
@@ -293,8 +293,8 @@ export const lesson1: LessonData = {
         content: {
           level: 1,
           task: "2024를 화면에 띄워봐",
-          template: { before: "print(", after: ")" },
-          answer: "2024",
+          template: null,
+          answer: "print(2024)",
           expect: "2024",
           en: {
             task: "Display 2024 on the screen"
@@ -346,9 +346,9 @@ export const lesson1: LessonData = {
         content: {
           level: 1,
           task: "5 + 3 계산해서 출력해봐",
-          template: { before: "print(", after: ")" },
-          answer: "5 + 3",
-          alternateAnswers: ["5+3"],
+          template: null,
+          answer: "print(5 + 3)",
+          alternateAnswers: ["print(5+3)"],
           expect: "8",
           en: {
             task: "Calculate 5 + 3 and print it"
@@ -360,9 +360,9 @@ export const lesson1: LessonData = {
         content: {
           level: 1,
           task: "100 - 30 계산해서 출력해봐",
-          template: { before: "print(", after: ")" },
-          answer: "100 - 30",
-          alternateAnswers: ["100-30"],
+          template: null,
+          answer: "print(100 - 30)",
+          alternateAnswers: ["print(100-30)"],
           expect: "70",
           en: {
             task: "Calculate 100 - 30 and print it"
@@ -375,9 +375,9 @@ export const lesson1: LessonData = {
           level: 1,
           task: "7 * 8 계산해서 출력해봐",
           guide: "* 는 곱하기!",
-          template: { before: "print(", after: ")" },
-          answer: "7 * 8",
-          alternateAnswers: ["7*8"],
+          template: null,
+          answer: "print(7 * 8)",
+          alternateAnswers: ["print(7*8)"],
           expect: "56",
           en: {
             task: "Calculate 7 * 8 and print it",
@@ -391,9 +391,9 @@ export const lesson1: LessonData = {
           level: 1,
           task: "20 / 4 계산해서 출력해봐",
           guide: "/ 는 나누기!",
-          template: { before: "print(", after: ")" },
-          answer: "20 / 4",
-          alternateAnswers: ["20/4"],
+          template: null,
+          answer: "print(20 / 4)",
+          alternateAnswers: ["print(20/4)"],
           expect: "5",
           en: {
             task: "Calculate 20 / 4 and print it",
@@ -544,13 +544,12 @@ export const lesson1: LessonData = {
         content: {
           level: 1,
           task: "나이: 15 출력해봐",
-          guide: "숫자만 채워!",
-          template: { before: "print('나이:', ", after: ")" },
-          answer: "15",
+          template: null,
+          answer: "print('나이:', 15)",
+          alternateAnswers: ["print(\"나이:\", 15)"],
           expect: "나이: 15",
           en: {
-            task: "Print: Age: 15",
-            guide: "Fill in the number only!"
+            task: "Print: Age: 15"
           }
         }
       },
@@ -559,8 +558,9 @@ export const lesson1: LessonData = {
         content: {
           level: 1,
           task: "점수: 100 출력해봐",
-          template: { before: "print('점수:', ", after: ")" },
-          answer: "100",
+          template: null,
+          answer: "print('점수:', 100)",
+          alternateAnswers: ["print(\"점수:\", 100)"],
           expect: "점수: 100",
           en: {
             task: "Print: Score: 100"
@@ -575,9 +575,9 @@ export const lesson1: LessonData = {
           level: 2,
           task: "레벨: 5 출력해봐",
           guide: "글자 부분과 숫자 부분을 쉼표로 연결해!",
-          template: { before: "print(", after: ")" },
-          answer: "'레벨:', 5",
-          alternateAnswers: ["\"레벨:\", 5"],
+          template: null,
+          answer: "print('레벨:', 5)",
+          alternateAnswers: ["print(\"레벨:\", 5)"],
           expect: "레벨: 5",
           en: {
             task: "Print: Level: 5",
@@ -590,9 +590,9 @@ export const lesson1: LessonData = {
         content: {
           level: 2,
           task: "코인: 999 출력해봐",
-          template: { before: "print(", after: ")" },
-          answer: "'코인:', 999",
-          alternateAnswers: ["\"코인:\", 999"],
+          template: null,
+          answer: "print('코인:', 999)",
+          alternateAnswers: ["print(\"코인:\", 999)"],
           expect: "코인: 999",
           en: {
             task: "Print: Coins: 999"
@@ -620,8 +620,8 @@ export const lesson1: LessonData = {
           level: 2,
           task: "치킨 19000 원 출력해봐",
           guide: "글자, 숫자, 글자 3개를 쉼표로 연결해!",
-          template: { before: "print(", after: ")" },
-          answer: "'치킨', 19000, '원'",
+          template: null,
+          answer: "print('치킨', 19000, '원')",
           expect: "치킨 19000 원",
           en: {
             task: "Print: 치킨 19000 원",
@@ -634,8 +634,8 @@ export const lesson1: LessonData = {
         content: {
           level: 2,
           task: "콜라 2000 원 출력해봐",
-          template: { before: "print(", after: ")" },
-          answer: "'콜라', 2000, '원'",
+          template: null,
+          answer: "print('콜라', 2000, '원')",
           expect: "콜라 2000 원",
           en: {
             task: "Print: 콜라 2000 원"
@@ -807,9 +807,9 @@ export const lesson1: LessonData = {
           level: 1,
           task: "30이 출력되게 해봐 (더하기 계산으로)",
           guide: "따옴표 없이 10 + 20",
-          template: { before: "print(", after: ")" },
-          answer: "10 + 20",
-          alternateAnswers: ["10+20", "20 + 10", "20+10", "30"],
+          template: null,
+          answer: "print(10 + 20)",
+          alternateAnswers: ["print(10+20)", "print(20 + 10)", "print(20+10)", "print(30)"],
           expect: "30",
           en: {
             task: "Make 30 print out (using addition)",
@@ -823,9 +823,9 @@ export const lesson1: LessonData = {
           level: 1,
           task: "10 + 20 이라는 글자가 출력되게 해봐",
           guide: "따옴표로 감싸야 글자!",
-          template: { before: "print(", after: ")" },
-          answer: "'10 + 20'",
-          alternateAnswers: ["\"10 + 20\""],
+          template: null,
+          answer: "print('10 + 20')",
+          alternateAnswers: ["print(\"10 + 20\")"],
           expect: "10 + 20",
           en: {
             task: "Make the text '10 + 20' print out",
@@ -839,9 +839,9 @@ export const lesson1: LessonData = {
           level: 1,
           task: "12가 출력되게 해봐 (곱하기 계산으로)",
           guide: "* 는 곱하기!",
-          template: { before: "print(", after: ")" },
-          answer: "3 * 4",
-          alternateAnswers: ["3*4", "4 * 3", "4*3", "2 * 6", "2*6", "12"],
+          template: null,
+          answer: "print(3 * 4)",
+          alternateAnswers: ["print(3*4)", "print(4 * 3)", "print(4*3)", "print(2 * 6)", "print(2*6)", "print(12)"],
           expect: "12",
           en: {
             task: "Make 12 print out (using multiplication)",
@@ -855,9 +855,9 @@ export const lesson1: LessonData = {
           level: 2,
           task: "점수: 100 출력해봐 (80 + 20 계산으로)",
           guide: "글자와 계산식을 쉼표로 연결해!",
-          template: { before: "print(", after: ")" },
-          answer: "'점수:', 80 + 20",
-          alternateAnswers: ["'점수:', 80+20", "\"점수:\", 80 + 20", "\"점수:\", 80+20"],
+          template: null,
+          answer: "print('점수:', 80 + 20)",
+          alternateAnswers: ["print('점수:', 80+20)", "print(\"점수:\", 80 + 20)", "print(\"점수:\", 80+20)"],
           expect: "점수: 100",
           en: {
             task: "Print: Score: 100 (using 80 + 20 calculation)",
