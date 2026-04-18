@@ -179,31 +179,31 @@ export const lesson2: LessonData = {
       },
 
       {
-        type: "practice",
+        type: "quiz",
         content: {
-          level: 1,
-          task: "나이 15를 출력해봐",
-          guide: "숫자는 따옴표 없이!",
-          template: { before: "print(", after: ")" },
-          answer: "15",
-          expect: "15",
+          question: "다음 중 정수(int)인 것은?",
+          options: ["3.14", "True", "'15'", "-5"],
+          answer: 3,
+          explanation: "-5는 소수점도 없고 따옴표도 없으니까 int(정수)야! 3.14는 float, True는 bool, '15'는 str이야.",
           en: {
-            task: "Print the age 15",
-            guide: "Numbers don't need quotes!"
+            question: "Which one is an integer (int)?",
+            options: ["3.14", "True", "'15'", "-5"],
+            explanation: "-5 has no decimal point and no quotes, so it's an int! 3.14 is float, True is bool, '15' is str."
           }
         }
       },
 
       {
-        type: "practice",
+        type: "quiz",
         content: {
-          level: 1,
-          task: "치킨 가격 19000을 출력해봐",
-          template: { before: "print(", after: ")" },
-          answer: "19000",
-          expect: "19000",
+          question: "다음 중 정수(int)가 아닌 것은?",
+          options: ["0", "-100", "1000", "3.0"],
+          answer: 3,
+          explanation: "3.0은 .0이 붙어서 float(실수)야! 소수점이 있으면 무조건 float!",
           en: {
-            task: "Print the chicken price 19000"
+            question: "Which one is NOT an integer (int)?",
+            options: ["0", "-100", "1000", "3.0"],
+            explanation: "3.0 has a decimal point so it's a float! Any decimal point makes it a float!"
           }
         }
       },
@@ -332,18 +332,16 @@ export const lesson2: LessonData = {
       },
 
       {
-        type: "practice",
+        type: "quiz",
         content: {
-          level: 2,
-          task: "내 이름을 출력해봐 (아무 이름 OK)",
-          guide: "글자는 따옴표로!",
-          template: { before: "print(", after: ")" },
-          answer: "'이름'",
-          alternateAnswers: ["\"이름\"", "'홍길동'", "\"홍길동\""],
-          expect: "이름",
+          question: "다음 중 str(문자열)인 것은?",
+          options: ["100", "True", "3.14", "'100'"],
+          answer: 3,
+          explanation: "'100'은 따옴표가 있으니까 str이야! 숫자처럼 보여도 따옴표가 있으면 무조건 문자열!",
           en: {
-            task: "Print your name (any name is OK)",
-            guide: "Strings need quotes!"
+            question: "Which one is a string (str)?",
+            options: ["100", "True", "3.14", "'100'"],
+            explanation: "'100' has quotes so it's a str! Even if it looks like a number, quotes always make it a string!"
           }
         }
       },
