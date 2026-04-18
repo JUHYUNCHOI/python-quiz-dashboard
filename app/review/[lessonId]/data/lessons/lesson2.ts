@@ -223,29 +223,31 @@ export const lesson2: LessonData = {
       },
 
       {
-        type: "practice",
+        type: "quiz",
         content: {
-          level: 1,
-          task: "165.5의 데이터 타입을 확인해봐",
-          template: { before: "print(type(", after: "))" },
-          answer: "165.5",
-          expect: "<class 'float'>",
+          question: "165.5는 어떤 타입일까?",
+          options: ["int (정수)", "float (실수)", "str (문자열)", "bool"],
+          answer: 1,
+          explanation: "소수점이 있으면 float! 165.5, 3.14, 0.1 모두 float야.",
           en: {
-            task: "Check the data type of 165.5"
+            question: "What type is 165.5?",
+            options: ["int (integer)", "float", "str (string)", "bool"],
+            explanation: "Numbers with a decimal point are floats! 165.5, 3.14, 0.1 are all floats."
           }
         }
       },
 
       {
-        type: "practice",
+        type: "quiz",
         content: {
-          level: 1,
-          task: "3.14의 데이터 타입을 확인해봐",
-          template: { before: "print(type(", after: "))" },
-          answer: "3.14",
-          expect: "<class 'float'>",
+          question: "'3'은 어떤 타입일까?",
+          options: ["int (정수)", "float (실수)", "str (문자열)", "bool"],
+          answer: 2,
+          explanation: "따옴표가 있으면 무조건 str(문자열)이야! 숫자처럼 보여도 '3'은 글자야.",
           en: {
-            task: "Check the data type of 3.14"
+            question: "What type is '3'?",
+            options: ["int (integer)", "float", "str (string)", "bool"],
+            explanation: "Anything in quotes is a str! Even though it looks like a number, '3' is text."
           }
         }
       },
