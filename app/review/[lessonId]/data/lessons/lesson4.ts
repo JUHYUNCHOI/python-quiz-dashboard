@@ -434,6 +434,21 @@ export const lesson4: LessonData = {
         }
       },
 
+      {
+        type: "quiz",
+        content: {
+          question: "False and True 의 결과는?",
+          options: ["True", "False", "에러"],
+          answer: 1,
+          explanation: "and는 둘 다 True여야 True! 하나라도 False면 False야.",
+          en: {
+            question: "What is the result of False and True?",
+            options: ["True", "False", "Error"],
+            explanation: "and requires both to be True! If either is False, the result is False."
+          }
+        }
+      },
+
       // or
       {
         type: "explain",
@@ -446,6 +461,21 @@ export const lesson4: LessonData = {
         }
       },
 
+      {
+        type: "quiz",
+        content: {
+          question: "False or True 의 결과는?",
+          options: ["True", "False", "에러"],
+          answer: 0,
+          explanation: "or는 하나만 True면 True! False or True → True야.",
+          en: {
+            question: "What is the result of False or True?",
+            options: ["True", "False", "Error"],
+            explanation: "or needs just one True! False or True → True."
+          }
+        }
+      },
+
       // not
       {
         type: "explain",
@@ -455,6 +485,21 @@ export const lesson4: LessonData = {
           ],
           code: "not True  → False\nnot False → True",
           note: "not은 반대로!"
+        }
+      },
+
+      {
+        type: "quiz",
+        content: {
+          question: "not False 의 결과는?",
+          options: ["True", "False", "에러"],
+          answer: 0,
+          explanation: "not은 반대로 뒤집어! not False → True야.",
+          en: {
+            question: "What is the result of not False?",
+            options: ["True", "False", "Error"],
+            explanation: "not flips the value! not False → True."
+          }
         }
       },
 
@@ -640,11 +685,73 @@ export const lesson4: LessonData = {
         }
       },
 
-      // ==================== CHAPTER 6: 프로젝트 ====================
+      // ==================== CHAPTER 6: 복합 대입 연산자 ====================
       {
         type: "chapter",
         content: {
           num: 6,
+          title: "복합 대입 연산자",
+          desc: "+=, -=, *=, /="
+        }
+      },
+
+      {
+        type: "explain",
+        content: {
+          lines: ["변수 업데이트를 더 짧게!"],
+          code: "score = score + 10  →  score += 10\nhp = hp - 20       →  hp -= 20\natk = atk * 2      →  atk *= 2",
+          note: "+= -= *= /= 전부 같은 방식이야!",
+          en: {
+            lines: ["Shorter way to update variables!"],
+            note: "+= -= *= /= all work the same way!"
+          }
+        }
+      },
+
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "hp = 100, hp -= 20 후 출력해봐",
+          template: null,
+          answer: "hp = 100\nhp -= 20\nprint(hp)",
+          expect: "80",
+          en: { task: "Set hp = 100, subtract 20 with -=, then print" }
+        }
+      },
+
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "score = 80, score += 15 후 출력해봐",
+          template: null,
+          answer: "score = 80\nscore += 15\nprint(score)",
+          expect: "95",
+          en: { task: "Set score = 80, add 15 with +=, then print" }
+        }
+      },
+
+      {
+        type: "quiz",
+        content: {
+          question: "score = 10 후 score += 5 하면 score는?",
+          options: ["5", "10", "15", "에러"],
+          answer: 2,
+          explanation: "score += 5 는 score = score + 5 와 같아! 10 + 5 = 15",
+          en: {
+            question: "After score = 10 and score += 5, what is score?",
+            options: ["5", "10", "15", "Error"],
+            explanation: "score += 5 is the same as score = score + 5! 10 + 5 = 15"
+          }
+        }
+      },
+
+      // ==================== CHAPTER 7: 프로젝트 ====================
+      {
+        type: "chapter",
+        content: {
+          num: 7,
           title: "RPG 데미지 계산기",
           desc: "배운 걸 모두 활용!"
         }
@@ -745,7 +852,7 @@ export const lesson4: LessonData = {
       {
         type: "summary",
         content: {
-          num: 6,
+          num: 7,
           title: "연산자 마스터",
           learned: [
             "산술: + - * / // % **",
