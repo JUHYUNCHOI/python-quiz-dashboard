@@ -124,10 +124,12 @@ export function TypeAlongPractice({
   const [phase, setPhase] = useState<"typing" | "running" | "complete">("typing")
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-  // 코드 정규화 (공백, 줄바꿈 차이 무시)
+  // 코드 정규화 (공백, 줄바꿈 차이 무시 + iOS 곡선 따옴표 → 직선 변환)
   const normalizeCode = (code: string) => {
     if (!code) return ''
     return code
+      .replace(/[\u2018\u2019]/g, "'")   // iOS 곡선 홑따옴표 → '
+      .replace(/[\u201C\u201D]/g, '"')   // iOS 곡선 겹따옴표 → "
       .split('\n')
       .map(line => line.trimEnd())
       .join('\n')

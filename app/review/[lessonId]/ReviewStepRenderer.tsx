@@ -13,6 +13,7 @@ import type {
   ErrorQuizContent,
   ExplainContent,
 } from "./data/types"
+import { runPythonCode } from "./utils/pythonRunner"
 
 // ─────────────────────────────────────────────────────────────
 // Auto-translate common Korean review strings → English fallback
@@ -391,6 +392,8 @@ function PracticeStep({
     return Array(Math.max(blankCount, 1)).fill("")
   })
   const [result, setResult] = useState<"idle" | "correct" | "wrong">(savedAnswer?.result ?? "idle")
+  const [isRunning, setIsRunning] = useState(false)
+  const [actualOutput, setActualOutput] = useState<string | null>(null)
   const [showHint, setShowHint] = useState(false)
   const firstInputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null)
 
@@ -410,12 +413,103 @@ function PracticeStep({
     }
   }
 
-  const check = () => {
+  const check = async () => {
     const combined = isMultiBlank
       ? inputs.map(s => s.trim()).join(", ")
       : inputs[0]
-    if (!combined.trim()) return
+    if (!combined.trim() || isRunning) return
 
+    // ── 출력 기반 채점: template=null + expect 있을 때 ──────────────
+    if (isFullCode && content.expect) {
+      const expectedOut = String(content.expect).trim()
+
+      // Python: 자체 runner로 실행 후 출력 비교
+      if (language === "python") {
+        const runResult = runPythonCode(combined)
+        if (runResult.error) {
+          // 구문/런타임 에러 → 에러 메시지 표시
+          setActualOutput(`오류: ${runResult.error}`)
+          clearStorage()
+          setResult("wrong")
+          onSaveAnswer?.({ inputs: [...inputs], result: "wrong" })
+          onWrong()
+          return
+        }
+        const actualOut = (runResult.result ?? "").trim()
+        setActualOutput(actualOut)
+        clearStorage()
+        if (actualOut === expectedOut) {
+          setResult("correct")
+          onSaveAnswer?.({ inputs: [...inputs], result: "correct" })
+          onCorrect()
+        } else {
+          setResult("wrong")
+          onSaveAnswer?.({ inputs: [...inputs], result: "wrong" })
+          onWrong()
+        }
+        return
+      }
+
+      // C++: Wandbox API로 컴파일 & 실행
+      if (language === "cpp") {
+        setIsRunning(true)
+        try {
+          const res = await fetch("https://wandbox.org/api/compile.json", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              code: combined,
+              compiler: "gcc-13.2.0",
+              "compiler-option-raw": "-std=c++17",
+            }),
+          })
+          const data = await res.json()
+          const compileErr: string = data.compiler_error || ""
+          const actualOut: string = (data.program_output || "").trim()
+
+          if (compileErr && !actualOut) {
+            // 컴파일 에러 → 첫 error: 줄만 표시
+            const firstErr =
+              compileErr.split("\n").find((l: string) => l.includes("error:")) ||
+              compileErr.split("\n")[0]
+            setActualOutput(`컴파일 에러: ${firstErr}`)
+            clearStorage()
+            setResult("wrong")
+            onSaveAnswer?.({ inputs: [...inputs], result: "wrong" })
+            onWrong()
+          } else if (actualOut === expectedOut) {
+            setActualOutput(actualOut)
+            clearStorage()
+            setResult("correct")
+            onSaveAnswer?.({ inputs: [...inputs], result: "correct" })
+            onCorrect()
+          } else {
+            setActualOutput(actualOut)
+            clearStorage()
+            setResult("wrong")
+            onSaveAnswer?.({ inputs: [...inputs], result: "wrong" })
+            onWrong()
+          }
+        } catch {
+          // 네트워크 에러 → 텍스트 비교로 대체
+          clearStorage()
+          if (isAnswerCorrect(combined, content, isEn, language)) {
+            setResult("correct")
+            onSaveAnswer?.({ inputs: [...inputs], result: "correct" })
+            onCorrect()
+          } else {
+            setResult("wrong")
+            onSaveAnswer?.({ inputs: [...inputs], result: "wrong" })
+            onWrong()
+          }
+        } finally {
+          setIsRunning(false)
+        }
+        return
+      }
+    }
+
+    // ── 텍스트 비교: 빈칸 채우기 또는 expect 없는 경우 ─────────────
     clearStorage()
     if (isAnswerCorrect(combined, content, isEn, language)) {
       setResult("correct")
@@ -430,6 +524,7 @@ function PracticeStep({
 
   const retry = () => {
     setResult("idle")
+    setActualOutput(null)
     setShowHint(false)
     setTimeout(() => firstInputRef.current?.focus(), 50)
   }
@@ -531,10 +626,12 @@ function PracticeStep({
           </div>
           <button
             onClick={check}
-            disabled={!inputs[0].trim()}
+            disabled={!inputs[0].trim() || isRunning}
             className="self-end px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm disabled:opacity-40 transition-colors"
           >
-            {t("확인", "Check")}
+            {isRunning
+              ? <span className="flex items-center gap-1.5">{t("실행 중", "Running")}<span className="animate-pulse">...</span></span>
+              : t("확인", "Check")}
           </button>
         </div>
       )}
@@ -560,8 +657,21 @@ function PracticeStep({
       )}
 
       {result === "wrong" && (
-        <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3">
+        <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 flex flex-col gap-1.5">
           <p className="text-red-600 font-bold text-sm">❌ {t("오답!", "Wrong!")}</p>
+          {actualOutput !== null && (
+            <div className="mt-0.5">
+              <p className="text-xs text-red-500 font-semibold mb-0.5">{t("내 코드 출력:", "Your output:")}</p>
+              <pre className="font-mono text-xs text-red-700 bg-red-100 rounded px-2 py-1.5 whitespace-pre-wrap">
+                {actualOutput || t("(출력 없음)", "(no output)")}
+              </pre>
+              {content.expect && !actualOutput.startsWith("컴파일 에러") && !actualOutput.startsWith("오류") && (
+                <p className="text-xs text-red-400 mt-1">
+                  {t("예상 출력:", "Expected:")} <code className="font-mono bg-red-100 px-1 rounded">{String(content.expect)}</code>
+                </p>
+              )}
+            </div>
+          )}
         </div>
       )}
 
