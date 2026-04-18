@@ -225,14 +225,14 @@ export const lesson2: LessonData = {
       {
         type: "quiz",
         content: {
-          question: "165.5는 어떤 타입일까?",
+          question: "3.0은 어떤 타입일까?",
           options: ["int (정수)", "float (실수)", "str (문자열)", "bool"],
           answer: 1,
-          explanation: "소수점이 있으면 float! 165.5, 3.14, 0.1 모두 float야.",
+          explanation: ".0이 붙으면 float야! 3은 int지만 3.0은 float — 소수점이 있으면 무조건 float!",
           en: {
-            question: "What type is 165.5?",
+            question: "What type is 3.0?",
             options: ["int (integer)", "float", "str (string)", "bool"],
-            explanation: "Numbers with a decimal point are floats! 165.5, 3.14, 0.1 are all floats."
+            explanation: "3 is int but 3.0 is float — any decimal point makes it a float!"
           }
         }
       },
@@ -248,6 +248,31 @@ export const lesson2: LessonData = {
             question: "What type is '3'?",
             options: ["int (integer)", "float", "str (string)", "bool"],
             explanation: "Anything in quotes is a str! Even though it looks like a number, '3' is text."
+          }
+        }
+      },
+
+      {
+        type: "explain",
+        content: {
+          lines: ["타입이 다르면 결과도 달라져!"],
+          code: "print('3' + '3')\nprint(3 + 3)",
+          result: "33\n6",
+          note: "문자열 + 문자열 = 이어붙이기 / 숫자 + 숫자 = 덧셈",
+          predict: {
+            question: "print('3' + '3') 의 결과는?",
+            options: ["6", "33", "'6'", "에러"],
+            answer: 1,
+            feedback: "'3'은 문자열이라 + 가 덧셈이 아니라 이어붙이기야! '3' + '3' = '33'이 출력돼."
+          },
+          en: {
+            lines: ["Different types, different results!"],
+            note: "str + str = concatenation / int + int = addition",
+            predict: {
+              question: "What is the result of print('3' + '3')?",
+              options: ["6", "33", "'6'", "Error"],
+              feedback: "'3' is a string, so + means concatenation, not addition! '3' + '3' = '33'."
+            }
           }
         }
       },
