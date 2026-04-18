@@ -360,6 +360,21 @@ export const lesson2: LessonData = {
       },
 
       {
+        type: "explain",
+        content: {
+          lines: ["그럼 글자 + 숫자를 더하면?"],
+          code: "'19000' + 1000",
+          result: "❌ TypeError!",
+          isError: true,
+          note: "타입이 다른 것끼리는 바로 더할 수 없어!",
+          en: {
+            lines: ["What if you add a string and a number?"],
+            note: "You can't add values of different types directly!"
+          }
+        }
+      },
+
+      {
         type: "errorQuiz",
         content: {
           question: "'19000' + 1000 하면?",
