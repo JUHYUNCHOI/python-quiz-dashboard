@@ -368,78 +368,100 @@ export function BlankCodeRunner({
           )
         }
 
-        // input 필드
+        // input 필드 (choices 없을 때) 또는 디스플레이 박스 (choices 있을 때)
         const currentBlankId = blankIdx
         const value = filledValues[currentBlankId] || ''
         const answerLength = answers[currentBlankId]?.length || 6
 
-        parts.push(
-          <input
-            key={`blank-${lineIdx}-${currentBlankId}`}
-            ref={el => { inputRefs.current[currentBlankId] = el }}
-            type="text"
-            value={value}
-            onChange={(e) => {
-              const newVal = e.target.value
-              setFilledValues(prev => ({ ...prev, [currentBlankId]: newVal }))
-              setIsCorrect(null)
-              setOutput("")
-              setError("")
-              // 중복 함수 호출 감지: 템플릿에 이미 func( 가 있는데 input에도 func( 를 입력한 경우
-              // 예: print(___) → 학생이 print('Hello') 입력 → print(print('Hello')) 가 됨
-              const lines2 = initialCode.split('\n')
-              let bIdx = 0
-              let warning = ""
-              for (const ln of lines2) {
-                const re2 = /___/g; let m2
-                while ((m2 = re2.exec(ln)) !== null) {
-                  if (bIdx === currentBlankId) {
-                    const before = ln.slice(0, m2.index)
-                    const funcMatch = before.match(/(\w+)\s*\($/)
-                    if (funcMatch && newVal.trim().startsWith(funcMatch[1] + "(")) {
-                      warning = `💡 "${funcMatch[1]}(" 는 이미 있어요! 괄호 안에 들어갈 값만 입력하세요.`
+        if (choices.length > 0) {
+          // 보기 선택 모드: 클릭 가능한 디스플레이 박스
+          parts.push(
+            <span
+              key={`blank-${lineIdx}-${currentBlankId}`}
+              onClick={() => setFocusedBlank(currentBlankId)}
+              className={cn(
+                "inline-block font-mono text-center rounded-md border-2 mx-0.5 px-2 py-0 transition-all cursor-pointer select-none",
+                "text-[13px] md:text-[15px] leading-[1.8]",
+                focusedBlank === currentBlankId
+                  ? "border-amber-400 bg-amber-900/30 text-amber-300 ring-1 ring-amber-400/50"
+                  : value
+                    ? "border-indigo-400 bg-indigo-900/30 text-indigo-300"
+                    : "border-gray-500 bg-gray-800 text-gray-500"
+              )}
+              style={{ minWidth: `${Math.max(answerLength, value.length, 3) + 2}ch` }}
+            >
+              {value || '?'}
+            </span>
+          )
+        } else {
+          parts.push(
+            <input
+              key={`blank-${lineIdx}-${currentBlankId}`}
+              ref={el => { inputRefs.current[currentBlankId] = el }}
+              type="text"
+              value={value}
+              onChange={(e) => {
+                const newVal = e.target.value
+                setFilledValues(prev => ({ ...prev, [currentBlankId]: newVal }))
+                setIsCorrect(null)
+                setOutput("")
+                setError("")
+                // 중복 함수 호출 감지: 템플릿에 이미 func( 가 있는데 input에도 func( 를 입력한 경우
+                // 예: print(___) → 학생이 print('Hello') 입력 → print(print('Hello')) 가 됨
+                const lines2 = initialCode.split('\n')
+                let bIdx = 0
+                let warning = ""
+                for (const ln of lines2) {
+                  const re2 = /___/g; let m2
+                  while ((m2 = re2.exec(ln)) !== null) {
+                    if (bIdx === currentBlankId) {
+                      const before = ln.slice(0, m2.index)
+                      const funcMatch = before.match(/(\w+)\s*\($/)
+                      if (funcMatch && newVal.trim().startsWith(funcMatch[1] + "(")) {
+                        warning = `💡 "${funcMatch[1]}(" 는 이미 있어요! 괄호 안에 들어갈 값만 입력하세요.`
+                      }
                     }
+                    bIdx++
                   }
-                  bIdx++
                 }
-              }
-              setNestedWarning(prev => ({ ...prev, [currentBlankId]: warning }))
-            }}
-            onFocus={() => setFocusedBlank(currentBlankId)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault()
-                // 다음 빈칸으로 이동하거나, 마지막이면 실행
-                const nextId = currentBlankId + 1
-                if (nextId < blanks.length) {
-                  inputRefs.current[nextId]?.focus()
-                } else if (allFilled) {
-                  runCode()
+                setNestedWarning(prev => ({ ...prev, [currentBlankId]: warning }))
+              }}
+              onFocus={() => setFocusedBlank(currentBlankId)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault()
+                  // 다음 빈칸으로 이동하거나, 마지막이면 실행
+                  const nextId = currentBlankId + 1
+                  if (nextId < blanks.length) {
+                    inputRefs.current[nextId]?.focus()
+                  } else if (allFilled) {
+                    runCode()
+                  }
                 }
-              }
-              if (e.key === "Tab") {
-                e.preventDefault()
-                const nextId = e.shiftKey ? currentBlankId - 1 : currentBlankId + 1
-                if (nextId >= 0 && nextId < blanks.length) {
-                  inputRefs.current[nextId]?.focus()
+                if (e.key === "Tab") {
+                  e.preventDefault()
+                  const nextId = e.shiftKey ? currentBlankId - 1 : currentBlankId + 1
+                  if (nextId >= 0 && nextId < blanks.length) {
+                    inputRefs.current[nextId]?.focus()
+                  }
                 }
-              }
-            }}
-            placeholder="___"
-            className={cn(
-              "inline-block font-mono text-center rounded-md border-2 mx-0.5 px-1 py-0 transition-all",
-              "text-[13px] md:text-[15px] leading-[1.8] bg-gray-800 outline-none",
-              focusedBlank === currentBlankId
-                ? "border-amber-400 text-amber-300 ring-1 ring-amber-400/50"
-                : value
-                  ? "border-indigo-400 text-indigo-300"
-                  : "border-gray-500 text-gray-400"
-            )}
-            style={{ width: `${Math.max(answerLength, value.length, 3) + 2}ch` }}
-            spellCheck={false}
-            autoComplete="off"
-          />
-        )
+              }}
+              placeholder="___"
+              className={cn(
+                "inline-block font-mono text-center rounded-md border-2 mx-0.5 px-1 py-0 transition-all",
+                "text-[13px] md:text-[15px] leading-[1.8] bg-gray-800 outline-none",
+                focusedBlank === currentBlankId
+                  ? "border-amber-400 text-amber-300 ring-1 ring-amber-400/50"
+                  : value
+                    ? "border-indigo-400 text-indigo-300"
+                    : "border-gray-500 text-gray-400"
+              )}
+              style={{ width: `${Math.max(answerLength, value.length, 3) + 2}ch` }}
+              spellCheck={false}
+              autoComplete="off"
+            />
+          )
+        }
 
         blankIdx++
         lastIndex = match.index + 3
