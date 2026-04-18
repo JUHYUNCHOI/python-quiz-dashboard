@@ -345,9 +345,13 @@ function PracticeStep({
   const isFullCode = content.template === null
   // EN 템플릿 우선 사용 (없으면 KO fallback)
   const enContent = content.en as { template?: string; answer?: string; alternateAnswers?: string[] } | undefined
-  const rawTemplate = (!isFullCode && isEn && enContent?.template)
+  const rawTemplateBase = (!isFullCode && isEn && enContent?.template)
     ? enContent.template
     : content.template
+  // { before, after } 객체 형식을 인라인 빈칸 문자열로 정규화
+  const rawTemplate = (typeof rawTemplateBase === "object" && rawTemplateBase !== null && "before" in rawTemplateBase)
+    ? `${(rawTemplateBase as { before: string; after: string }).before}___${(rawTemplateBase as { before: string; after: string }).after}`
+    : rawTemplateBase
   const template = typeof rawTemplate === "string" ? rawTemplate : ""
   // 빈칸 개수 카운트
   const blankCount = isFullCode ? 0 : (template.match(/___/g) || []).length
@@ -484,7 +488,7 @@ function PracticeStep({
               <span className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
               <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
               <span className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
-              <span className="text-[10px] text-gray-500 ml-1 font-mono">solution.cpp</span>
+              <span className="text-[10px] text-gray-500 ml-1 font-mono">{language === "python" ? "solution.py" : "solution.cpp"}</span>
             </div>
             {/* context — 읽기 전용 */}
             {((isEn ? (content as any).en?.context : undefined) || (content as any).context) && (

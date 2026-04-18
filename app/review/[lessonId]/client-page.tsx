@@ -446,7 +446,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
               step={currentReview.step}
               onCorrect={handleCorrect}
               onWrong={handleWrong}
-              language={lesson.language ?? "cpp"}
+              language={lesson.language ?? (/^\d+$/.test(lessonId) ? "python" : "cpp")}
               stepKey={`${lessonId}-${currentReview.originalIndex}`}
               savedAnswer={stepAnswers[currentIndex] ?? undefined}
               onSaveAnswer={(data) => setStepAnswers(prev => ({ ...prev, [currentIndex]: data }))}
