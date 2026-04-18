@@ -651,6 +651,11 @@ export const lesson1: LessonData = {
           task: "피자 25000 원 출력해봐",
           template: null,
           answer: "print('피자', 25000, '원')",
+          alternateAnswers: [
+            "print(\"피자\", 25000, \"원\")",
+            "print('피자 25000 원')",
+            "print(\"피자 25000 원\")",
+          ],
           expect: "피자 25000 원",
           en: {
             task: "Print: 피자 25000 원"
@@ -664,6 +669,11 @@ export const lesson1: LessonData = {
           task: "햄버거 8000 원 출력해봐",
           template: null,
           answer: "print('햄버거', 8000, '원')",
+          alternateAnswers: [
+            "print(\"햄버거\", 8000, \"원\")",
+            "print('햄버거 8000 원')",
+            "print(\"햄버거 8000 원\")",
+          ],
           expect: "햄버거 8000 원",
           en: {
             task: "Print: 햄버거 8000 원"

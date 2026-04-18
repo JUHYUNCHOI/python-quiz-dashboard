@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils"
 import type { PracticeProblem, PracticeCluster } from "@/data/practice/types"
 import { localizeProblem, localizeCluster } from "@/data/practice/types"
 import { useLanguage } from "@/contexts/language-context"
+import { savePracticeSessionToSupabase, loadPracticeSessionFromSupabase } from "@/lib/practice-session-sync"
 
 // ── 고정 세트 크기 ────────────────────────────────────────────────
 const SET1_SIZE = 7
@@ -284,6 +285,9 @@ export function PracticeSession({
   const [isSaving, setIsSaving] = useState(false)
   const [isRetryMode, setIsRetryMode] = useState(false)
 
+  // Supabase 저장 디바운스 타이머 (2초)
+  const supabaseSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
   const loadSessions = useCallback(async () => {
     // 선생님은 항상 인트로(세트 선택)로 이동
     if (isTeacher) {
@@ -329,7 +333,7 @@ export function PracticeSession({
         setCurrentSet(expectedSet)
       }
 
-      // localStorage에 해당 세트의 진행 상황이 있으면 복원
+      // 1) localStorage에 해당 세트의 진행 상황이 있으면 복원
       const saved = tryLoadProgress(cluster.id, cluster.problems)
       if (saved && saved.setNum === expectedSet) {
         setRoundProblems(saved.problems)
@@ -340,6 +344,24 @@ export function PracticeSession({
         setPhase("solving")
         return
       }
+
+      // 2) localStorage 없으면 Supabase에서 복원 (디바이스 간 동기화)
+      const remote = await loadPracticeSessionFromSupabase(cluster.id)
+      if (remote && remote.setNum === expectedSet) {
+        const problems = remote.problemIds
+          .map(id => cluster.problems.find(p => p.id === id))
+          .filter(Boolean) as PracticeProblem[]
+        if (problems.length > 0) {
+          const safeIndex = Math.min(remote.index ?? 0, problems.length - 1)
+          setRoundProblems(problems)
+          setIndex(safeIndex)
+          setPassedInRound(new Set(remote.passedIds ?? []))
+          setIsRetryMode(remote.isRetry ?? false)
+          setCanAdvance((remote.passedIds ?? []).includes(problems[safeIndex]?.id ?? ""))
+          setPhase("solving")
+          return
+        }
+      }
     } catch {
       setCurrentSet(1)
     }
@@ -348,22 +370,32 @@ export function PracticeSession({
 
   useEffect(() => { loadSessions() }, [loadSessions])
 
-  // ── 풀이 진행 상황 자동 저장 ──────────────────────────────────────
+  // ── 풀이 진행 상황 자동 저장 (localStorage 즉시 + Supabase 2초 디바운스) ──
   const prevPhase = useRef<string>("")
   useEffect(() => {
     if (phase === "solving" && roundProblems.length > 0) {
+      const progressData = {
+        setNum: currentSet,
+        index,
+        passedIds: [...passedInRound],
+        isRetry: isRetryMode,
+        problemIds: roundProblems.map(p => p.id),
+        updatedAt: Date.now(),
+      }
+      // localStorage: 즉시 저장
       try {
-        localStorage.setItem(progressKey(cluster.id), JSON.stringify({
-          setNum: currentSet,
-          index,
-          passedIds: [...passedInRound],
-          isRetry: isRetryMode,
-          problemIds: roundProblems.map(p => p.id),
-        }))
+        localStorage.setItem(progressKey(cluster.id), JSON.stringify(progressData))
       } catch {}
+      // Supabase: 디바운스 저장 (선생님 모드 제외, 로그인 필요)
+      if (userId && !isTeacher) {
+        if (supabaseSaveTimer.current) clearTimeout(supabaseSaveTimer.current)
+        supabaseSaveTimer.current = setTimeout(() => {
+          savePracticeSessionToSupabase(cluster.id, progressData)
+        }, 2000)
+      }
     }
     prevPhase.current = phase
-  }, [phase, currentSet, index, passedInRound, isRetryMode, roundProblems, cluster.id])
+  }, [phase, currentSet, index, passedInRound, isRetryMode, roundProblems, cluster.id, userId, isTeacher])
 
   const saveSession = useCallback(async (
     setNum: number,
