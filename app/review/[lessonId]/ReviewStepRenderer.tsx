@@ -593,12 +593,12 @@ function PracticeStep({
                       setInputs(prev => { const next = [...prev]; next[i] = val; return next })
                     }}
                     onKeyDown={e => { if (e.key === "Enter" && i === blankCount - 1) check() }}
-                    className="inline-block bg-[#2a2b3e] border-b-2 border-indigo-400 text-indigo-200 font-mono text-sm px-1 mx-0.5 focus:outline-none focus:border-indigo-300 focus:bg-[#32345a] rounded-sm transition-colors align-baseline"
+                    className="inline-block bg-[#2a2b3e] border-2 border-indigo-400 text-indigo-200 font-mono text-sm px-1.5 py-0.5 mx-0.5 focus:outline-none focus:border-indigo-300 focus:bg-[#32345a] rounded transition-colors align-baseline"
                     style={{ width: `${Math.max((inputs[i] ?? "").length + 2, 7)}ch`, minWidth: "7ch" }}
                   />
                 ) : (
                   <span className={cn(
-                    "inline-block border-b-2 px-1 mx-0.5 font-mono text-sm rounded-sm align-baseline",
+                    "inline-block border-2 px-1.5 py-0.5 mx-0.5 font-mono text-sm rounded align-baseline",
                     result === "correct"
                       ? "border-emerald-400 text-emerald-300 bg-emerald-900/30"
                       : "border-red-400 text-red-300 bg-red-900/30"
