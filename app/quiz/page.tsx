@@ -1,12 +1,13 @@
 "use client"
 
-import { useEffect, useCallback, useState, useRef } from "react"
+import { useEffect, useCallback, useState, useRef, Fragment } from "react"
 import { useRouter } from "next/navigation"
 import { RequireAuth } from "@/components/require-auth"
 import { X, Clock, ChevronLeft, ChevronRight, Check, AlertCircle, Coffee, Flag, Pencil } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { CodeDisplay } from "@/components/code-display"
+import { highlightCpp, highlightPython } from "@/components/ui/code-block"
 import { CelebrationScreen } from "@/components/celebration-screen"
 import { ExplanationPanel } from "@/components/explanation-panel"
 import { QuestionEditor } from "@/components/admin/question-editor"
@@ -55,6 +56,7 @@ export default function QuizPage() {
   }, [router])
 
   // 코스에 맞는 문제 배열 — API에서 로드 후 스마트 세션 생성
+  const [quizLanguage, setQuizLanguage] = useState<"cpp" | "python">("cpp")
   const [shuffled, setShuffled] = useState<QuizQuestion[]>([])
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(true)
 
@@ -69,6 +71,7 @@ export default function QuizPage() {
     try { parsed = JSON.parse(raw) } catch { router.replace("/quiz/setup"); return }
 
     const language = parsed.course === "cpp" ? "cpp" : "python"
+    setQuizLanguage(language)
     const count = parsed.questionCount || 20
 
     fetch(`/api/questions?language=${language}&lang=${lang}`)
@@ -657,18 +660,40 @@ export default function QuizPage() {
                           {showWrong && <X className="h-4 w-4 md:h-5 md:w-5 text-white" />}
                         </div>
 
-                        <span
-                          className={cn(
-                            "flex-1 font-mono text-sm md:text-base lg:text-lg font-medium transition-colors",
-                            !quiz.showResult && "text-gray-700",
-                            showCorrect && "text-green-700",
-                            showWrong && "text-red-700",
-                          )}
-                        >
-                          {option.replace(/^"|"$/g, '').split(/\\n|\n/).map((line, i, arr) => (
-                            <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
-                          ))}
-                        </span>
+                        {/* 옵션 렌더링: 다중 줄이면 코드 블록, 단일 줄이면 텍스트 */}
+                        {(() => {
+                          // 이스케이프된 따옴표 정리 + 앞뒤 따옴표 제거
+                          const cleaned = option.replace(/\\"/g, '"').replace(/^"|"$/g, '')
+                          const lines = cleaned.split(/\\n|\n/)
+                          const isCodeBlock = lines.length > 1
+                          const highlight = quizLanguage === "cpp" ? highlightCpp : highlightPython
+
+                          if (isCodeBlock) {
+                            return (
+                              <div className="flex-1 rounded-lg bg-[#1a1b2e] px-4 py-3 font-mono text-xs md:text-sm leading-6 overflow-x-auto whitespace-pre text-left">
+                                {lines.map((line, i) => (
+                                  <Fragment key={i}>
+                                    {highlight(line, true)}
+                                    {i < lines.length - 1 && '\n'}
+                                  </Fragment>
+                                ))}
+                              </div>
+                            )
+                          }
+
+                          return (
+                            <span
+                              className={cn(
+                                "flex-1 font-mono text-sm md:text-base lg:text-lg font-medium transition-colors",
+                                !quiz.showResult && "text-gray-700",
+                                showCorrect && "text-green-700",
+                                showWrong && "text-red-700",
+                              )}
+                            >
+                              {cleaned}
+                            </span>
+                          )
+                        })()}
                       </div>
                     </button>
                   )
