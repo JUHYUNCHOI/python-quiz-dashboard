@@ -114,19 +114,19 @@ export const lesson2: LessonData = {
           code: "print('10' + '20' + '30')",
           options: [
             "60",
-            "'102030'",
+            "102030",
             "에러"
           ],
           answer: 1,
-          explanation: "따옴표 있으면 글자! 글자끼리 +하면 이어붙여서 '102030'이 돼!",
+          explanation: "따옴표 있으면 글자! 글자끼리 +하면 이어붙어서 102030이 출력돼. (print는 따옴표를 안 보여줘!)",
           en: {
             question: "What is the result of '10' + '20' + '30'?",
             options: [
               "60",
-              "'102030'",
+              "102030",
               "Error"
             ],
-            explanation: "With quotes they're strings! Adding strings concatenates them, so you get '102030'!"
+            explanation: "With quotes they're strings! Adding strings concatenates them, so 102030 is printed. (print doesn't show the quotes!)"
           }
         }
       },
