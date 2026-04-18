@@ -147,7 +147,7 @@ print(10 < 5)   # False
           expectedOutput: "True",
           hint: "비교 결과는 True 또는 False!",
           hint2: "5",
-          choices: ["5", "10", "15", "0"]
+          choices: ["5", "10", "20", "15"]
         },
         {
           id: "try4",
@@ -158,7 +158,7 @@ print(10 < 5)   # False
           expectedOutput: "False",
           hint: "3은 7보다 작죠?",
           hint2: "7",
-          choices: ["7", "3", "1", "10"]
+          choices: ["7", "2", "1", "0"]
         }
       ]
     },
