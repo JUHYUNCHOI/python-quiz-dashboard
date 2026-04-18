@@ -362,11 +362,213 @@ export const lesson3: LessonData = {
         }
       },
 
-      // ==================== CHAPTER 4: 변수 이름 규칙 ====================
+      // ==================== CHAPTER 4: 텍스트와 변수 함께 출력 ====================
       {
         type: "chapter",
         content: {
           num: 4,
+          title: "변수와 텍스트 출력",
+          desc: "레이블도 같이 출력해보자!"
+        }
+      },
+
+      // 쉼표 방법 설명
+      {
+        type: "explain",
+        content: {
+          lines: ["변수만 출력하면 뭔지 모를 때?"],
+          code: "print(name)\nprint(score)",
+          result: "홍길동\n95",
+          note: "이게 이름인지 점수인지 모르잖아!"
+        }
+      },
+      {
+        type: "explain",
+        content: {
+          lines: ["쉼표(,)로 레이블을 달아줘!"],
+          code: "name = '홍길동'\nscore = 95\nprint('이름:', name)\nprint('점수:', score, '점')",
+          result: "이름: 홍길동\n점수: 95 점",
+          note: "쉼표로 구분하면 자동으로 공백이 들어가!"
+        }
+      },
+
+      // practice 1: 빈칸 채우기 (변수 이름 3개)
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "빈칸에 알맞은 변수를 넣어봐",
+          template: "name = '홍길동'\nage = 15\nscore = 95\nprint('이름:', ___)\nprint('나이:', ___)\nprint('점수:', ___)",
+          blanksAnswer: ["name", "age", "score"],
+          answer: "name, age, score",
+          expect: "이름: 홍길동\n나이: 15\n점수: 95",
+          en: {
+            task: "Fill in the blanks with the correct variable names"
+          }
+        }
+      },
+
+      // practice 2: 직접 쓰기 (쉼표 방법)
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "이렇게 나오게 해봐 ↓\n이름: 홍길동\n나이: 15",
+          guide: "name, age 변수를 만들고 쉼표로 레이블과 함께 출력해!",
+          template: null,
+          answer: "name = '홍길동'\nage = 15\nprint('이름:', name)\nprint('나이:', age)",
+          alternateAnswers: [
+            "name = \"홍길동\"\nage = 15\nprint('이름:', name)\nprint('나이:', age)",
+            "name = '홍길동'\nage = 15\nprint(\"이름:\", name)\nprint(\"나이:\", age)"
+          ],
+          expect: "이름: 홍길동\n나이: 15",
+          en: {
+            task: "Make it print like this ↓\n이름: 홍길동\n나이: 15",
+            guide: "Create name and age variables and print them with comma labels!"
+          }
+        }
+      },
+
+      // 보상
+      {
+        type: "reward",
+        content: {
+          message: "쉼표 출력 마스터!",
+          emoji: "🏷️"
+        }
+      },
+
+      // 문자열 + 연결 설명
+      {
+        type: "explain",
+        content: {
+          lines: ["문자열끼리 + 로 이어붙이기!"],
+          code: "name = '홍길동'\nprint('안녕, ' + name + '!')",
+          result: "안녕, 홍길동!",
+          note: "+ 는 문자열끼리만! 숫자는 바로 못 붙여 ⚠️"
+        }
+      },
+
+      // practice 3: + 빈칸
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "'Hello, 홍길동!'이 나오게 빈칸을 채워봐",
+          template: "name = '홍길동'\nprint('Hello, ' + ___ + '!')",
+          answer: "name",
+          expect: "Hello, 홍길동!",
+          en: {
+            task: "Fill in the blank to print 'Hello, 홍길동!'"
+          }
+        }
+      },
+
+      // practice 4: + 연결 더 복잡하게
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "'내 이름은 홍길동이야!'가 나오게 빈칸을 채워봐",
+          template: "name = '홍길동'\nprint(___ + name + '이야!')",
+          answer: "'내 이름은 '",
+          alternateAnswers: ["\"내 이름은 \""],
+          expect: "내 이름은 홍길동이야!",
+          en: {
+            task: "Fill in the blank to print '내 이름은 홍길동이야!'"
+          }
+        }
+      },
+
+      // f-string 설명
+      {
+        type: "explain",
+        content: {
+          lines: ["쉼표, + 방식보다 훨씬 편한 방법이 있어!"],
+          code: "name = '홍길동'\nage = 15\nprint(f'이름: {name}, 나이: {age}세')",
+          result: "이름: 홍길동, 나이: 15세",
+          note: "f'' 안에서 {변수}를 쓰면 값이 자동으로 들어가!"
+        }
+      },
+
+      // practice 5: f-string 2-blank
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "f-string 빈칸을 채워봐",
+          template: "name = '홍길동'\nscore = 95\nprint(f'플레이어: {___}, 점수: {___}점')",
+          blanksAnswer: ["name", "score"],
+          answer: "name, score",
+          expect: "플레이어: 홍길동, 점수: 95점",
+          en: {
+            task: "Fill in the f-string blanks"
+          }
+        }
+      },
+
+      // practice 6: f-string 직접 쓰기
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "이렇게 나오게 해봐 ↓\n안녕! 나는 홍길동, 15살이야!",
+          guide: "f-string으로 name과 age를 같이 출력해봐",
+          template: null,
+          answer: "name = '홍길동'\nage = 15\nprint(f'안녕! 나는 {name}, {age}살이야!')",
+          alternateAnswers: [
+            "name = \"홍길동\"\nage = 15\nprint(f'안녕! 나는 {name}, {age}살이야!')"
+          ],
+          expect: "안녕! 나는 홍길동, 15살이야!",
+          en: {
+            task: "Make it print like this ↓\n안녕! 나는 홍길동, 15살이야!",
+            guide: "Use an f-string to print name and age together"
+          }
+        }
+      },
+
+      // predict: f-string 결과 예측
+      {
+        type: "explain",
+        content: {
+          lines: ["f-string 결과를 예측해봐!"],
+          code: "game = '파이썬'\nlv = 3\nprint(f'{game} 레벨 {lv} 달성!')",
+          predict: {
+            options: ["파이썬 레벨 3 달성!", "{game} 레벨 {lv} 달성!", "game 레벨 lv 달성!", "에러"],
+            answer: 0,
+            feedback: "f-string에서 {} 안의 변수는 실제 값으로 바뀌어! game='파이썬', lv=3 이니까 '파이썬 레벨 3 달성!'이야."
+          },
+          en: {
+            lines: ["Predict the f-string output!"],
+            predict: {
+              options: ["파이썬 레벨 3 달성!", "{game} 레벨 {lv} 달성!", "game 레벨 lv 달성!", "Error"],
+              feedback: "Variables inside {} in f-strings get replaced with their actual values! game='파이썬', lv=3 so the answer is '파이썬 레벨 3 달성!'."
+            }
+          }
+        }
+      },
+
+      // 요약
+      {
+        type: "summary",
+        content: {
+          num: 4,
+          title: "변수와 텍스트 출력",
+          learned: [
+            "쉼표(,)로 레이블 + 변수 출력",
+            "'+' 로 문자열 연결 (문자열끼리만!)",
+            "f-string: f'{변수}'로 깔끔하게"
+          ],
+          canDo: "변수 값을 원하는 형식으로 출력할 수 있어!",
+          emoji: "🖨️"
+        }
+      },
+
+      // ==================== CHAPTER 5: 변수 이름 규칙 ====================
+      {
+        type: "chapter",
+        content: {
+          num: 5,
           title: "변수 이름 규칙",
           desc: "이름 짓는 법!"
         }
@@ -463,7 +665,7 @@ export const lesson3: LessonData = {
       {
         type: "summary",
         content: {
-          num: 4,
+          num: 5,
           title: "이름 규칙",
           learned: [
             "영어, 숫자(끝에), 언더바 OK",
@@ -475,11 +677,11 @@ export const lesson3: LessonData = {
         }
       },
 
-      // ==================== CHAPTER 5: 자주 하는 실수 ====================
+      // ==================== CHAPTER 6: 자주 하는 실수 ====================
       {
         type: "chapter",
         content: {
-          num: 5,
+          num: 6,
           title: "자주 하는 실수",
           desc: "이것만 조심!"
         }
@@ -541,7 +743,7 @@ export const lesson3: LessonData = {
       {
         type: "summary",
         content: {
-          num: 5,
+          num: 6,
           title: "실수 피하기",
           learned: [
             "변수는 먼저 만들고 사용",
@@ -553,11 +755,11 @@ export const lesson3: LessonData = {
         }
       },
 
-      // ==================== CHAPTER 6: 프로젝트 ====================
+      // ==================== CHAPTER 7: 프로젝트 ====================
       {
         type: "chapter",
         content: {
-          num: 6,
+          num: 7,
           title: "용돈 계산기",
           desc: "변수로 용돈 관리!"
         }
@@ -830,7 +1032,7 @@ export const lesson3: LessonData = {
       {
         type: "summary",
         content: {
-          num: 6,
+          num: 7,
           title: "변수 마스터",
           learned: [
             "변수 = 이름표 붙은 상자",
