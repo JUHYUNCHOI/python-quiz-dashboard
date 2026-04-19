@@ -248,15 +248,15 @@ export const lesson3: LessonData = {
       {
         type: "practice",
         content: {
-          task: "이렇게 나오게 해봐 ↓\n홍길동",
-          guide: "문자열 변수를 만들고 출력해! 문자열은 따옴표로 감싸야 해",
-          template: null,
-          answer: "name = '홍길동'\nprint(name)",
-          alternateAnswers: ["name = \"홍길동\"\nprint(name)"],
+          task: "name 변수에 '홍길동'을 저장해봐",
+          guide: "문자열은 따옴표로 감싸야 해!",
+          template: "name = ___\nprint(name)",
+          answer: "'홍길동'",
+          alternateAnswers: ["\"홍길동\""],
           expect: "홍길동",
           en: {
-            task: "Make it print like this ↓\n홍길동",
-            guide: "Create a string variable and print it! Strings need quotes!"
+            task: "Store '홍길동' in the name variable",
+            guide: "Strings need to be wrapped in quotes!"
           }
         }
       },
@@ -343,7 +343,7 @@ export const lesson3: LessonData = {
           level: 1,
           task: "chicken + cola 출력해봐",
           guide: "변수끼리 더하기!",
-          template: { before: "print(", after: ")" },
+          template: "chicken = 19000\ncola = 2000\nprint(___)",
           answer: "chicken + cola",
           alternateAnswers: ["chicken+cola"],
           expect: "21000",
@@ -357,23 +357,9 @@ export const lesson3: LessonData = {
         type: "practice",
         content: {
           level: 1,
-          task: "chicken - cola 출력해봐",
-          template: { before: "print(", after: ")" },
-          answer: "chicken - cola",
-          alternateAnswers: ["chicken-cola"],
-          expect: "17000",
-          en: {
-            task: "Print chicken - cola"
-          }
-        }
-      },
-      {
-        type: "practice",
-        content: {
-          level: 1,
           task: "chicken * 3 출력해봐",
           guide: "변수 × 숫자도 OK!",
-          template: { before: "print(", after: ")" },
+          template: "chicken = 19000\nprint(___)",
           answer: "chicken * 3",
           alternateAnswers: ["chicken*3"],
           expect: "57000",
@@ -503,18 +489,15 @@ export const lesson3: LessonData = {
         type: "practice",
         content: {
           level: 1,
-          task: "이렇게 나오게 해봐 ↓\n이름: 홍길동\n나이: 15",
-          guide: "name, age 변수를 만들고 쉼표로 레이블과 함께 출력해!",
-          template: null,
+          task: "빈칸을 채워서 변수를 만들어봐 ↓\n이름: 홍길동\n나이: 15",
+          guide: "첫 번째 칸에 홍길동(문자열), 두 번째 칸에 15(숫자)를 넣어봐!",
+          template: "name = ___\nage = ___\nprint('이름:', name)\nprint('나이:', age)",
+          blanksAnswer: ["'홍길동'", "15"],
           answer: "name = '홍길동'\nage = 15\nprint('이름:', name)\nprint('나이:', age)",
-          alternateAnswers: [
-            "name = \"홍길동\"\nage = 15\nprint('이름:', name)\nprint('나이:', age)",
-            "name = '홍길동'\nage = 15\nprint(\"이름:\", name)\nprint(\"나이:\", age)"
-          ],
           expect: "이름: 홍길동\n나이: 15",
           en: {
-            task: "Make it print like this ↓\n이름: 홍길동\n나이: 15",
-            guide: "Create name and age variables and print them with comma labels!"
+            task: "Fill in the blanks to create variables ↓\n이름: 홍길동\n나이: 15",
+            guide: "First blank: '홍길동' (string), second blank: 15 (number)!"
           }
         }
       },
