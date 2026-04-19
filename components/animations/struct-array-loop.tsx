@@ -23,11 +23,12 @@ interface StructArrayLoopProps {
 // for 문 실행 흐름을 정확히 추적하는 세분화된 단계
 type Phase =
   | { type: "idle" }
-  | { type: "init" }              // ① int i = 0  깜빡
-  | { type: "check" }            // ② i < N  조건 확인 (통과)
-  | { type: "field"; fi: number } // ③ students[i].field 접근 + 카드 값 깜빡
-  | { type: "increment" }        // ④ i++  깜빡
-  | { type: "check_fail" }       // ⑤ i < N  조건 실패 → 종료
+  | { type: "init" }               // ① int i = 0  깜빡
+  | { type: "check" }              // ② i < N  조건 확인 (통과) + 카드 ping
+  | { type: "array_access" }       // ③ students[i] 접근 (카드 포커스)
+  | { type: "field"; fi: number }  // ④ .fieldName 접근 + 카드 값 깜빡
+  | { type: "increment" }          // ⑤ i++  깜빡
+  | { type: "check_fail" }         // ⑥ i < N  조건 실패 → 종료
   | { type: "done" }
 
 export function StructArrayLoop({
@@ -58,6 +59,8 @@ export function StructArrayLoop({
     } else if (phase.type === "init") {
       setPhase({ type: "check" })
     } else if (phase.type === "check") {
+      setPhase({ type: "array_access" })
+    } else if (phase.type === "array_access") {
       setPhase({ type: "field", fi: 0 })
     } else if (phase.type === "field") {
       if (phase.fi < fields.length - 1) {
@@ -89,28 +92,29 @@ export function StructArrayLoop({
   }
 
   // ── 편의 플래그 ──
-  const isIdle       = phase.type === "idle"
-  const isInit       = phase.type === "init"
-  const isCheck      = phase.type === "check"
-  const isField      = phase.type === "field"
-  const isIncrement  = phase.type === "increment"
-  const isCheckFail  = phase.type === "check_fail"
-  const isDone       = phase.type === "done"
-  const activeField  = phase.type === "field" ? phase.fi : -1
+  const isIdle         = phase.type === "idle"
+  const isInit         = phase.type === "init"
+  const isCheck        = phase.type === "check"
+  const isArrayAccess  = phase.type === "array_access"
+  const isField        = phase.type === "field"
+  const isIncrement    = phase.type === "increment"
+  const isCheckFail    = phase.type === "check_fail"
+  const isDone         = phase.type === "done"
+  const activeField    = phase.type === "field" ? phase.fi : -1
 
   // check_fail/done 에서는 i = total (배열 범위 초과)
-  const iValue = isCheckFail || isDone ? total : currentIdx
   const currentItem = isCheckFail || isDone ? null : items[currentIdx]
 
   // ── 상태 설명 텍스트 ──
   const statusText = (() => {
-    if (isIdle)       return isEn ? "Not started" : "시작 전"
-    if (isInit)       return isEn ? `① i = 0  init` : `① i = 0 초기화`
-    if (isCheck)      return isEn ? `② ${currentIdx} < ${total}  ✓` : `② ${currentIdx} < ${total}  ✓ 참!`
-    if (isField)      return `③ ${arrayName}[${currentIdx}].${fields[activeField]}`
-    if (isIncrement)  return isEn ? `④ i++ → i = ${currentIdx + 1}` : `④ i++ → i = ${currentIdx + 1}`
-    if (isCheckFail)  return isEn ? `② ${total} < ${total}  ✗ End` : `② ${total} < ${total}  ✗ 거짓!`
-    if (isDone)       return isEn ? "Done ✓" : "완료 ✓"
+    if (isIdle)        return isEn ? "Not started" : "시작 전"
+    if (isInit)        return isEn ? `① i = 0  init` : `① i = 0 초기화`
+    if (isCheck)       return isEn ? `② ${currentIdx} < ${total}  ✓` : `② ${currentIdx} < ${total}  ✓ 참!`
+    if (isArrayAccess) return `③ ${arrayName}[${currentIdx}]`
+    if (isField)       return `④ .${fields[activeField]}`
+    if (isIncrement)   return isEn ? `⑤ i++ → i = ${currentIdx + 1}` : `⑤ i++ → i = ${currentIdx + 1}`
+    if (isCheckFail)   return isEn ? `② ${total} < ${total}  ✗ End` : `② ${total} < ${total}  ✗ 거짓!`
+    if (isDone)        return isEn ? "Done ✓" : "완료 ✓"
     return ""
   })()
 
@@ -136,7 +140,7 @@ export function StructArrayLoop({
           {items.map((item, i) => {
             const isActiveCard = !isIdle && !isCheckFail && !isDone && i === currentIdx
             const isCardPulse  = isActiveCard && (isInit || isCheck)
-            const isCardBlue   = isActiveCard && (isField || isIncrement)
+            const isCardBlue   = isActiveCard && (isArrayAccess || isField || isIncrement)
             const isPast       = !isActiveCard && (isDone || isCheckFail || i < outputs.length)
 
             return (
@@ -244,23 +248,33 @@ export function StructArrayLoop({
           <span className="text-green-400">cout</span>
           <span className="text-slate-400"> &lt;&lt; </span>
           {fields.map((field, fi) => (
-            <span key={field} className="flex items-center gap-1">
+            <span key={field} className="flex items-center gap-0">
+              {/* students[i] 부분 — array_access 단계에서 깜빡 */}
               <span className={cn(
-                "px-1 rounded transition-all duration-200",
-                isField && activeField === fi
-                  ? "bg-yellow-500/35 text-yellow-100 animate-pulse font-bold"
+                "px-1 rounded-l transition-all duration-200",
+                isArrayAccess
+                  ? "bg-blue-500/35 text-blue-100 animate-pulse font-bold"
                   : "text-slate-300"
               )}>
                 {arrayName}[<span className={cn(
                   "font-bold",
                   isIdle || isCheckFail || isDone ? "text-slate-400" : "text-blue-300"
-                )}>{isIdle || isCheckFail || isDone ? "i" : currentIdx}</span>].{field}
+                )}>{isIdle || isCheckFail || isDone ? "i" : currentIdx}</span>]
+              </span>
+              {/* .field 부분 — field 단계에서 깜빡 */}
+              <span className={cn(
+                "px-1 rounded-r transition-all duration-200",
+                isField && activeField === fi
+                  ? "bg-yellow-500/35 text-yellow-100 animate-pulse font-bold"
+                  : "text-slate-300"
+              )}>
+                .{field}
               </span>
               {fi < fields.length - 1 && (
                 <>
-                  <span className="text-slate-400">&lt;&lt;</span>
+                  <span className="text-slate-400 mx-1">&lt;&lt;</span>
                   <span className="text-green-300">{`": "`}</span>
-                  <span className="text-slate-400">&lt;&lt;</span>
+                  <span className="text-slate-400 mx-1">&lt;&lt;</span>
                 </>
               )}
             </span>
@@ -272,7 +286,14 @@ export function StructArrayLoop({
 
         <div className="text-slate-400">&#125;</div>
 
-        {/* 현재 접근 중인 값 표시 */}
+        {/* 접근 중인 값 표시 */}
+        {isArrayAccess && currentItem && (
+          <div className="mt-2 pt-2 border-t border-slate-700/60 text-xs flex items-center gap-2">
+            <span className="text-slate-500">→</span>
+            <span className="text-blue-300 font-mono">{arrayName}[{currentIdx}]</span>
+            <span className="text-slate-500">= index {currentIdx} 의 {structName} 객체</span>
+          </div>
+        )}
         {isField && currentItem && (
           <div className="mt-2 pt-2 border-t border-slate-700/60 text-xs flex items-center gap-2">
             <span className="text-slate-500">→</span>
