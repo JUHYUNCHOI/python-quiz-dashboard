@@ -576,6 +576,20 @@ function PracticeStep({
       )}
       <p className="font-semibold text-gray-800 whitespace-pre-line">{task}</p>
 
+      {/* 목표 출력 — expect 값을 터미널 스타일로 강조 표시 */}
+      {"expect" in content && content.expect && result === "idle" && (
+        <div className="rounded-xl overflow-hidden border border-emerald-800/40">
+          <div className="bg-[#0d1117] px-3 py-1.5 flex items-center gap-1.5 border-b border-emerald-900/30">
+            <span className="text-[10px] text-emerald-600 font-mono font-bold">
+              {isEn ? "expected output" : "이렇게 출력되어야 해 ↓"}
+            </span>
+          </div>
+          <div className="bg-[#0d1f17] px-4 py-2.5 font-mono text-sm text-emerald-300 whitespace-pre-wrap leading-6">
+            {String(content.expect)}
+          </div>
+        </div>
+      )}
+
       {/* 인라인 빈칸 코드 블록 — { before, after } 객체도 string으로 정규화됐으므로 rawTemplate 기준으로 체크 */}
       {!isFullCode && blankCount > 0 && (
         <div className="rounded-xl bg-[#1a1b2e] px-4 py-3 font-mono text-sm text-[#cdd6f4] overflow-x-auto leading-7 whitespace-pre-wrap">
