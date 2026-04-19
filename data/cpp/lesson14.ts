@@ -500,60 +500,6 @@ int main() {
           expectedOutput: `김철수 (95)`
         },
         {
-          id: "ch2-cin-explain",
-          type: "explain",
-          title: "실전 패턴: cin으로 struct 배열 채우기",
-          content: `배열 선언을 배웠으니, 이제 **값을 직접 쓰는 대신 cin으로 입력받는** 패턴을 알아봐요.
-
-입력 형식 (예시):
-\`\`\`
-3
-김철수 95
-이영희 87
-박민준 72
-\`\`\`
-
-코드:
-\`\`\`cpp
-int n;
-cin >> n;                   // ① 몇 명인지 입력받기
-
-Student students[100];      // ② 충분히 큰 배열 (최대 100명)
-
-for (int i = 0; i < n; i++) {
-    cin >> students[i].name >> students[i].score;  // ③ 한 명씩 채우기
-}
-\`\`\`
-
-| 단계 | 역할 |
-|---|---|
-| \`cin >> n\` | 몇 명인지 먼저 받음 |
-| \`Student students[100]\` | 최대 100명 공간 확보 |
-| \`cin >> students[i].name\` | i번째 학생 이름 채우기 |
-| \`cin >> students[i].score\` | i번째 학생 점수 채우기 |
-
-⚠️ **배열의 한계**: 크기를 **미리** 정해야 해요. n이 100을 넘으면 공간이 부족해져요!
-이럴 때 **vector**를 쓰면 n에 딱 맞게 늘어나요 →`,
-        },
-        {
-          id: "ch2-cin-fill",
-          type: "fillblank" as const,
-          title: "cin으로 struct 배열 채우기",
-          content: "n명의 학생 이름과 점수를 cin으로 입력받아 배열을 채워요.",
-          code: `int n;
-cin >> n;
-Student students[100];
-for (int i = 0; ___ < n; i++) {
-    cin >> students[___].name >> students[___].score;
-}`,
-          fillBlanks: [
-            { id: 0, answer: "i", options: ["i", "0", "n", "100"] },
-            { id: 1, answer: "i", options: ["i", "0", "n", "name"] },
-            { id: 2, answer: "i", options: ["i", "0", "n", "score"] },
-          ],
-          explanation: "for 조건에 `i < n`, 배열 접근에 `students[i]`를 쓰면 i가 0→1→...→n-1로 증가하면서 n명을 순서대로 채워요.",
-        },
-        {
           id: "ch2-vec-explain",
           type: "explain",
           title: "vector<Student> — N명을 동적으로 관리!",
