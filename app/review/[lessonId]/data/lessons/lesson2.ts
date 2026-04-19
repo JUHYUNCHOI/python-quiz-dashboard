@@ -351,16 +351,15 @@ export const lesson2: LessonData = {
         type: "practice",
         content: {
           level: 2,
-          task: "정수와 실수의 타입을 각각 출력해봐",
-          guide: "각 빈칸에 정수 하나, 실수 하나를 넣어봐!",
+          task: "7과 7.0의 타입을 각각 출력해봐",
+          guide: "첫 번째 칸에 7, 두 번째 칸에 7.0 을 넣어봐!",
           template: "print(type(___))\nprint(type(___))",
           blanksAnswer: ["7", "7.0"],
           answer: "print(type(7))\nprint(type(7.0))",
-          alternateAnswers: ["print(type(1))\nprint(type(1.0))", "print(type(0))\nprint(type(0.0))"],
           expect: "<class 'int'>\n<class 'float'>",
           en: {
-            task: "Print the type of an integer and a float",
-            guide: "Put one integer and one float in the blanks!"
+            task: "Print the types of 7 and 7.0",
+            guide: "First blank: 7  /  Second blank: 7.0"
           }
         }
       },
