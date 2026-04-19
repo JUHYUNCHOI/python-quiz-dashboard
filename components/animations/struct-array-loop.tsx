@@ -19,11 +19,19 @@ interface StructArrayLoopProps {
   lang?: string
 }
 
-// phase: "idle" | "checking" | 0 | 1 | ... (필드 인덱스) | "done"
-type Phase = "idle" | "checking" | number | "done"
+// ── Phase 정의 ──
+// for 문 실행 흐름을 정확히 추적하는 세분화된 단계
+type Phase =
+  | { type: "idle" }
+  | { type: "init" }              // ① int i = 0  깜빡
+  | { type: "check" }            // ② i < N  조건 확인 (통과)
+  | { type: "field"; fi: number } // ③ students[i].field 접근 + 카드 값 깜빡
+  | { type: "increment" }        // ④ i++  깜빡
+  | { type: "check_fail" }       // ⑤ i < N  조건 실패 → 종료
+  | { type: "done" }
 
 export function StructArrayLoop({
-  title = "struct 배열 + for문 시각화",
+  title,
   structName = "Student",
   arrayName = "students",
   fields = ["name", "score"],
@@ -37,191 +45,222 @@ export function StructArrayLoop({
   lang = "ko",
 }: StructArrayLoopProps) {
   const isEn = lang === "en"
-  const t = {
-    title: isEn ? "struct Array + for Loop" : "struct 배열 + for문 시각화",
-    notStarted: isEn ? "Not started" : "시작 전",
-    enterI: (i: number) => isEn ? `Enter i = ${i}` : `i = ${i} 진입`,
-    done: isEn ? "Done ✓" : "완료 ✓",
-    output: isEn ? "Output:" : "출력:",
-    hint: isEn ? "Press Next Step to begin" : "다음 단계를 눌러보세요",
-    loopEnd: (n: number) => isEn
-      ? `— Loop ends (i = ${n}, i < ${n} fails)`
-      : `— 반복 종료 (i = ${n}, i < ${n} 불만족)`,
-    nextStep: isEn ? "Next Step" : "다음 단계",
-    restart: isEn ? "Restart" : "다시 시작",
-  }
-  const [currentIdx, setCurrentIdx] = useState(-1)
-  const [outputs, setOutputs] = useState<string[]>([])
-  const [phase, setPhase] = useState<Phase>("idle")
   const total = items.length
 
-  // 클릭할 때만 한 단계씩 전진 — 자동 진행 없음
+  const [currentIdx, setCurrentIdx] = useState(0)
+  const [outputs, setOutputs] = useState<string[]>([])
+  const [phase, setPhase] = useState<Phase>({ type: "idle" })
+
   const stepForward = useCallback(() => {
-    if (phase === "done") return
-
-    if (phase === "idle") {
+    if (phase.type === "idle") {
       setCurrentIdx(0)
-      setPhase("checking")
-      return
-    }
-
-    if (phase === "checking") {
-      // 첫 번째 필드 접근 시작
-      setPhase(0)
-      return
-    }
-
-    if (typeof phase === "number") {
-      const nextField = phase + 1
-      if (nextField < fields.length) {
-        // 같은 아이템의 다음 필드
-        setPhase(nextField)
+      setPhase({ type: "init" })
+    } else if (phase.type === "init") {
+      setPhase({ type: "check" })
+    } else if (phase.type === "check") {
+      setPhase({ type: "field", fi: 0 })
+    } else if (phase.type === "field") {
+      if (phase.fi < fields.length - 1) {
+        setPhase({ type: "field", fi: phase.fi + 1 })
       } else {
-        // 이 아이템의 모든 필드 접근 완료 → 출력 추가
+        // 마지막 필드 → 출력 추가 후 i++ 단계
         setOutputs(prev => [...prev, outputTemplate(items[currentIdx], currentIdx)])
-        const nextIdx = currentIdx + 1
-        if (nextIdx < total) {
-          setCurrentIdx(nextIdx)
-          setPhase("checking")
-        } else {
-          setPhase("done")
-        }
+        setPhase({ type: "increment" })
       }
+    } else if (phase.type === "increment") {
+      const nextIdx = currentIdx + 1
+      if (nextIdx < total) {
+        setCurrentIdx(nextIdx)
+        setPhase({ type: "check" })
+      } else {
+        // i = total: 조건 실패
+        setCurrentIdx(total) // i = N 을 표현
+        setPhase({ type: "check_fail" })
+      }
+    } else if (phase.type === "check_fail") {
+      setPhase({ type: "done" })
     }
-  }, [phase, currentIdx, total, items, fields, outputTemplate])
+  }, [phase, currentIdx, total, fields, items, outputTemplate])
 
-  const reset = () => { setCurrentIdx(-1); setOutputs([]); setPhase("idle") }
+  const reset = () => {
+    setCurrentIdx(0)
+    setOutputs([])
+    setPhase({ type: "idle" })
+  }
 
-  const isDone = phase === "done"
-  const isChecking = phase === "checking"
-  const activeField = typeof phase === "number" ? phase : -1
-  const currentItem = currentIdx >= 0 ? items[currentIdx] : null
+  // ── 편의 플래그 ──
+  const isIdle       = phase.type === "idle"
+  const isInit       = phase.type === "init"
+  const isCheck      = phase.type === "check"
+  const isField      = phase.type === "field"
+  const isIncrement  = phase.type === "increment"
+  const isCheckFail  = phase.type === "check_fail"
+  const isDone       = phase.type === "done"
+  const activeField  = phase.type === "field" ? phase.fi : -1
 
-  // 단계 설명 텍스트
+  // check_fail/done 에서는 i = total (배열 범위 초과)
+  const iValue = isCheckFail || isDone ? total : currentIdx
+  const currentItem = isCheckFail || isDone ? null : items[currentIdx]
+
+  // ── 상태 설명 텍스트 ──
   const statusText = (() => {
-    if (phase === "idle") return t.notStarted
-    if (phase === "done") return t.done
-    if (phase === "checking") return t.enterI(currentIdx)
-    if (typeof phase === "number") return `[${currentIdx}].${fields[phase]}`
+    if (isIdle)       return isEn ? "Not started" : "시작 전"
+    if (isInit)       return isEn ? `① i = 0  init` : `① i = 0 초기화`
+    if (isCheck)      return isEn ? `② ${currentIdx} < ${total}  ✓` : `② ${currentIdx} < ${total}  ✓ 참!`
+    if (isField)      return `③ ${arrayName}[${currentIdx}].${fields[activeField]}`
+    if (isIncrement)  return isEn ? `④ i++ → i = ${currentIdx + 1}` : `④ i++ → i = ${currentIdx + 1}`
+    if (isCheckFail)  return isEn ? `② ${total} < ${total}  ✗ End` : `② ${total} < ${total}  ✗ 거짓!`
+    if (isDone)       return isEn ? "Done ✓" : "완료 ✓"
     return ""
   })()
 
   return (
-    <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-4 sm:p-6 text-white overflow-hidden">
-      {/* 헤더 */}
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm sm:text-base font-medium text-slate-300">{title ?? t.title}</h3>
-        <div className="flex items-center gap-2 text-xs text-slate-500">
-          <span className="px-2 py-1 bg-slate-700 rounded-lg font-mono">{statusText}</span>
-        </div>
+    <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-4 sm:p-5 text-white overflow-hidden">
+
+      {/* ── 헤더 ── */}
+      <div className="flex items-center justify-between mb-5">
+        <h3 className="text-sm font-medium text-slate-300">
+          {title ?? (isEn ? "struct Array + for Loop" : "struct 배열 + for문 시각화")}
+        </h3>
+        <span className="text-xs font-mono px-2 py-1 rounded-lg bg-slate-700/80 text-slate-300 border border-slate-600/50">
+          {statusText}
+        </span>
       </div>
 
-      {/* struct 배열 카드들 */}
-      <div className="mb-4">
+      {/* ── 배열 카드 ── */}
+      <div className="mb-5">
         <div className="text-xs text-slate-500 mb-2 font-mono">
           {structName} {arrayName}[{total}] = &#123;...&#125;
         </div>
         <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${total}, 1fr)` }}>
           {items.map((item, i) => {
-            const isActive = currentIdx === i && phase !== "idle"
-            const isPast = i < currentIdx || (i === currentIdx && isDone)
+            const isActiveCard = !isIdle && !isCheckFail && !isDone && i === currentIdx
+            const isCardPulse  = isActiveCard && (isInit || isCheck)
+            const isCardBlue   = isActiveCard && (isField || isIncrement)
+            const isPast       = !isActiveCard && (isDone || isCheckFail || i < outputs.length)
+
             return (
-              <div
-                key={i}
-                className={cn(
-                  "rounded-xl border-2 p-3 transition-all duration-300",
-                  isActive && isChecking
-                    ? "border-yellow-400 bg-yellow-500/20 scale-105"
-                    : isActive && typeof phase === "number"
-                    ? "border-blue-400 bg-blue-500/15 scale-105"
-                    : isPast
-                    ? "border-slate-600 bg-slate-700/40 opacity-60"
-                    : "border-slate-700 bg-slate-800/60"
+              <div key={i} className="relative">
+                {/* Ping ring: 카드가 새로 선택될 때 (init/check) */}
+                {isCardPulse && (
+                  <div className="absolute inset-0 rounded-xl border-2 border-yellow-400/50 animate-ping pointer-events-none" />
                 )}
-              >
-                {/* 인덱스 뱃지 */}
+
                 <div className={cn(
-                  "text-xs font-mono font-bold mb-2 w-6 h-6 rounded-md flex items-center justify-center",
-                  isActive ? "bg-blue-500 text-white" : "bg-slate-700 text-slate-400"
+                  "rounded-xl border-2 p-3 transition-all duration-300 relative",
+                  isCardPulse  ? "border-yellow-400 bg-yellow-500/12 scale-[1.03]" :
+                  isCardBlue   ? "border-blue-400  bg-blue-500/12  scale-[1.03]" :
+                  isPast       ? "border-slate-700 bg-slate-800/30 opacity-40" :
+                                 "border-slate-700 bg-slate-800/60"
                 )}>
-                  {i}
+                  {/* 인덱스 배지 */}
+                  <div className={cn(
+                    "text-xs font-mono font-bold mb-2.5 w-6 h-6 rounded-md flex items-center justify-center",
+                    isActiveCard ? "bg-blue-500 text-white" : "bg-slate-700 text-slate-400"
+                  )}>
+                    {i}
+                  </div>
+
+                  {/* 필드 */}
+                  {fields.map((field, fi) => {
+                    const isFieldHighlight = isActiveCard && isField && activeField === fi
+                    return (
+                      <div key={field} className="flex flex-col mb-1.5">
+                        <span className={cn(
+                          "text-[11px] font-mono transition-colors duration-200",
+                          isFieldHighlight ? "text-yellow-300 font-bold" : "text-slate-500"
+                        )}>
+                          {fieldLabels[fi] ?? field}
+                        </span>
+                        <span className={cn(
+                          "font-mono text-sm font-semibold transition-all duration-200",
+                          isFieldHighlight
+                            ? "text-yellow-100 bg-yellow-500/25 rounded px-1 animate-pulse"
+                            : "text-slate-200"
+                        )}>
+                          {typeof item[field] === "string" ? `"${item[field]}"` : item[field]}
+                        </span>
+                      </div>
+                    )
+                  })}
                 </div>
-                {/* 필드들 */}
-                {fields.map((field, fi) => {
-                  const isFieldActive = isActive && activeField === fi
-                  return (
-                    <div key={field} className="flex flex-col mb-1">
-                      <span className={cn(
-                        "text-xs transition-colors duration-200",
-                        isFieldActive ? "text-yellow-300 font-bold" : "text-slate-500"
-                      )}>
-                        {fieldLabels[fi] ?? field}
-                      </span>
-                      <span className={cn(
-                        "font-mono text-sm font-semibold transition-all duration-200",
-                        isFieldActive
-                          ? "text-yellow-200 bg-yellow-500/20 rounded px-1"
-                          : "text-slate-200"
-                      )}>
-                        {typeof item[field] === "string" ? `"${item[field]}"` : item[field]}
-                      </span>
-                    </div>
-                  )
-                })}
               </div>
             )
           })}
         </div>
       </div>
 
-      {/* for loop 코드 */}
-      <div className="bg-slate-800/50 rounded-xl p-3 font-mono text-sm mb-4">
+      {/* ── for 루프 코드 ── */}
+      <div className="bg-slate-800/50 rounded-xl p-3 font-mono text-sm mb-4 border border-slate-700/40">
+
         {/* for 헤더 */}
-        <div className="flex flex-wrap items-center gap-1 mb-1">
+        <div className="flex flex-wrap items-center gap-x-0.5 gap-y-0.5 mb-1 leading-7">
           <span className="text-blue-400">for</span>
-          <span className="text-slate-400">(</span>
-          <span className="text-orange-300">int</span>
-          <span className="text-white"> i = </span>
-          <span className="text-yellow-300">0</span>
-          <span className="text-slate-400">;</span>
+          <span className="text-slate-400">&nbsp;(</span>
+
+          {/* int i = 0 */}
           <span className={cn(
-            "transition-all duration-200 px-1 rounded",
-            isChecking ? "bg-yellow-500/30 text-yellow-200" : "text-white"
+            "px-1 rounded transition-all duration-200",
+            isInit ? "bg-yellow-500/30 text-yellow-200 animate-pulse" : "text-slate-200"
           )}>
-            {" "}i &lt; <span className="text-yellow-300">{total}</span>
+            <span className="text-orange-300">int</span>
+            <span className="text-white"> i </span>
+            <span className="text-slate-400">=</span>
+            <span className="text-yellow-300"> 0</span>
           </span>
-          <span className="text-slate-400">;</span>
-          <span className="text-white"> i++</span>
-          <span className="text-slate-400">)</span>
-          <span className="text-slate-400">&#123;</span>
+          <span className="text-slate-400">;&nbsp;</span>
+
+          {/* i < N */}
+          <span className={cn(
+            "px-1 rounded transition-all duration-200",
+            isCheck || isField
+              ? "bg-green-500/20 text-green-300"
+              : isCheckFail
+              ? "bg-red-500/25 text-red-300 animate-pulse"
+              : "text-white"
+          )}>
+            i &lt;&nbsp;
+            <span className={cn(
+              "font-bold",
+              isCheck || isField ? "text-green-300" :
+              isCheckFail ? "text-red-300" : "text-yellow-300"
+            )}>{total}</span>
+          </span>
+          <span className="text-slate-400">;&nbsp;</span>
+
+          {/* i++ */}
+          <span className={cn(
+            "px-1 rounded transition-all duration-200",
+            isIncrement ? "bg-amber-500/30 text-amber-200 animate-pulse" : "text-white"
+          )}>
+            i++
+          </span>
+
+          <span className="text-slate-400">&nbsp;) &#123;</span>
         </div>
 
-        {/* cout 줄 — 각 필드 접근 부분을 개별 하이라이트 */}
-        <div className="ml-4 flex flex-wrap items-center gap-1 mb-1">
+        {/* cout 줄 */}
+        <div className="ml-4 flex flex-wrap items-center gap-x-1 gap-y-0.5 mb-1 leading-7">
           <span className="text-green-400">cout</span>
           <span className="text-slate-400"> &lt;&lt; </span>
           {fields.map((field, fi) => (
             <span key={field} className="flex items-center gap-1">
               <span className={cn(
                 "px-1 rounded transition-all duration-200",
-                activeField === fi
-                  ? "bg-yellow-500/40 text-yellow-200 font-bold"
+                isField && activeField === fi
+                  ? "bg-yellow-500/35 text-yellow-100 animate-pulse font-bold"
                   : "text-slate-300"
               )}>
-                {arrayName}[
-                <span className={cn(
+                {arrayName}[<span className={cn(
                   "font-bold",
-                  currentIdx >= 0 ? "text-blue-300" : "text-slate-400"
-                )}>
-                  {currentIdx >= 0 ? currentIdx : "i"}
-                </span>
-                ].{field}
+                  isIdle || isCheckFail || isDone ? "text-slate-400" : "text-blue-300"
+                )}>{isIdle || isCheckFail || isDone ? "i" : currentIdx}</span>].{field}
               </span>
               {fi < fields.length - 1 && (
                 <>
-                  <span className="text-slate-400"> &lt;&lt; </span>
-                  <span className="text-green-300">": "</span>
-                  <span className="text-slate-400"> &lt;&lt; </span>
+                  <span className="text-slate-400">&lt;&lt;</span>
+                  <span className="text-green-300">{`": "`}</span>
+                  <span className="text-slate-400">&lt;&lt;</span>
                 </>
               )}
             </span>
@@ -230,63 +269,86 @@ export function StructArrayLoop({
           <span className="text-purple-300">endl</span>
           <span className="text-slate-400">;</span>
         </div>
+
         <div className="text-slate-400">&#125;</div>
 
-        {/* 현재 접근 중인 필드 값 */}
-        {currentItem && activeField >= 0 && (
-          <div className="mt-2 pt-2 border-t border-slate-700 text-xs flex items-center gap-2">
+        {/* 현재 접근 중인 값 표시 */}
+        {isField && currentItem && (
+          <div className="mt-2 pt-2 border-t border-slate-700/60 text-xs flex items-center gap-2">
             <span className="text-slate-500">→</span>
             <span className="text-yellow-300 font-mono">
               {arrayName}[{currentIdx}].{fields[activeField]}
             </span>
             <span className="text-slate-500">=</span>
-            <span className="text-yellow-200 font-mono font-bold bg-yellow-500/20 px-2 py-0.5 rounded">
+            <span className="text-yellow-100 font-mono font-bold bg-yellow-500/20 px-2 py-0.5 rounded">
               {typeof currentItem[fields[activeField]] === "string"
                 ? `"${currentItem[fields[activeField]]}"`
                 : currentItem[fields[activeField]]}
             </span>
           </div>
         )}
+
+        {/* 조건 실패 메시지 */}
+        {isCheckFail && (
+          <div className="mt-2 pt-2 border-t border-slate-700/60 text-xs text-red-400 flex items-center gap-2">
+            <span>→</span>
+            <span className="font-mono">{total} &lt; {total}</span>
+            <span>= false</span>
+            <span className="text-red-300 font-bold">
+              {isEn ? "→ Loop ends!" : "→ 반복 종료!"}
+            </span>
+          </div>
+        )}
       </div>
 
-      {/* 출력 패널 */}
-      <div className="bg-slate-950/60 rounded-xl p-3 mb-4 min-h-[60px]">
-        <div className="text-xs text-slate-500 mb-1">{t.output}</div>
+      {/* ── 출력 패널 ── */}
+      <div className="bg-slate-950/60 rounded-xl p-3 mb-4 min-h-[56px]">
+        <div className="text-xs text-slate-500 mb-1">{isEn ? "Output:" : "출력:"}</div>
         {outputs.length === 0 ? (
-          <div className="text-slate-600 text-sm italic">{t.hint}</div>
+          <div className="text-slate-600 text-sm italic">
+            {isEn ? "Press Next Step to begin" : "다음 단계를 눌러보세요"}
+          </div>
         ) : (
           outputs.map((line, i) => (
             <div
               key={i}
               className={cn(
                 "font-mono text-sm",
-                i === outputs.length - 1 ? "text-green-300" : "text-slate-400"
+                i === outputs.length - 1 && !isDone ? "text-green-300" : "text-slate-400"
               )}
             >
               {line}
             </div>
           ))
         )}
-        {isDone && (
-          <div className="text-xs text-slate-500 mt-1">{t.loopEnd(total)}</div>
+        {(isDone || isCheckFail) && (
+          <div className="text-xs text-slate-500 mt-1 font-mono">
+            {isEn
+              ? `// i = ${total}: ${total} < ${total} is false → loop ends`
+              : `// i = ${total}: ${total} < ${total} 실패 → 반복 종료`}
+          </div>
         )}
       </div>
 
-      {/* 컨트롤 버튼 */}
+      {/* ── 컨트롤 ── */}
       <div className="flex items-center gap-2">
         <button
           onClick={isDone ? reset : stepForward}
           className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-sm font-medium transition-colors"
         >
           <SkipForward className="w-4 h-4" />
-          {isDone ? t.restart : t.nextStep}
+          {isDone
+            ? (isEn ? "Restart" : "다시 시작")
+            : (isEn ? "Next Step" : "다음 단계")}
         </button>
-        <button
-          onClick={reset}
-          className="flex items-center gap-2 px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm transition-colors"
-        >
-          <RotateCcw className="w-4 h-4" />
-        </button>
+        {!isIdle && (
+          <button
+            onClick={reset}
+            className="flex items-center gap-2 px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm transition-colors"
+          >
+            <RotateCcw className="w-4 h-4" />
+          </button>
+        )}
       </div>
     </div>
   )
