@@ -453,7 +453,7 @@ export const lesson2: LessonData = {
       // ==================== CHAPTER 6: 내 정보 카드 ====================
       {
         type: "chapter",
-        content: { num: 5, title: "내 정보 카드", desc: "4가지 타입으로 만들어보자!" }
+        content: { num: 6, title: "내 정보 카드", desc: "4가지 타입으로 만들어보자!" }
       },
 
       {
