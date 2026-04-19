@@ -163,6 +163,95 @@ print(10 < 5)   # False
       ]
     },
     {
+      id: "ch_errors",
+      title: "이건 에러야!",
+      emoji: "⚠️",
+      steps: [
+        {
+          id: "phone-explain",
+          type: "explain",
+          title: "⚠️ 전화번호를 그냥 쓰면?",
+          content: `전화번호를 따옴표 없이 쓰면 파이썬은 **빼기**로 읽어요!
+
+\`\`\`python
+010-1234-5678   # ❌ SyntaxError! (0 빼기 1234 빼기 5678)
+\`\`\`
+
+따옴표로 감싸야 문자열로 저장돼요:
+
+\`\`\`python
+'010-1234-5678'  # ✅ str
+\`\`\`
+
+⚠️ **하이픈(-)이 들어간 건 모두 따옴표 필수!**
+전화번호, 날짜(2024-01-01), 코드 등은 항상 따옴표로 감싸야 해요.`
+        },
+        {
+          id: "str-num-explain",
+          type: "explain",
+          title: "⚠️ '3.2'는 float이 아니에요!",
+          content: `따옴표가 있으면 숫자처럼 보여도 **문자열(str)**이에요!
+
+\`\`\`python
+3.2     # float ✅ (실수)
+'3.2'   # str  ❌ (float 아님!)
+
+100     # int  ✅ (정수)
+'100'   # str  ❌ (int 아님!)
+\`\`\`
+
+따옴표 유무가 타입을 결정해요!`
+        },
+        {
+          id: "str-int-explain",
+          type: "explain",
+          title: "⚠️ 문자열 + 숫자는 에러!",
+          content: `**다른 타입끼리 더하면 TypeError가 나요!**
+
+\`\`\`python
+'나이: ' + 15      # ❌ TypeError!
+'3.2' + 1.0        # ❌ TypeError!
+\`\`\`
+
+같은 타입끼리만 가능해요:
+\`\`\`python
+'나이: ' + '15'    # ✅ '나이: 15'
+3.2 + 1.0          # ✅ 4.2
+\`\`\`
+
+숫자를 문자열과 합치고 싶으면 나중에 배울 **f-string**을 쓰면 돼요!`
+        },
+        {
+          id: "quiz-error1",
+          type: "quiz",
+          title: "❓ 퀴즈!",
+          content: "전화번호 010-1234-5678을 저장하려면?",
+          options: [
+            "phone = 010-1234-5678",
+            "phone = '010-1234-5678'",
+            "phone = 010.1234.5678",
+            "phone = [010, 1234, 5678]"
+          ],
+          answer: 1,
+          explanation: "하이픈(-)은 파이썬에서 빼기예요! 따옴표로 감싸야 문자열로 저장돼요."
+        },
+        {
+          id: "quiz-error2",
+          type: "quiz",
+          title: "❓ 퀴즈!",
+          content: "print('점수: ' + 95) 의 결과는?",
+          options: [
+            "점수: 95",
+            "'점수: 95'",
+            "TypeError (에러!)",
+            "점수95"
+          ],
+          answer: 2,
+          explanation: "str + int는 TypeError! 나중에 배울 f-string을 쓰면 f'점수: {95}' 이렇게 쓸 수 있어요."
+        }
+      ]
+    },
+    {
       id: "ch4",
       title: "최종 미션",
       emoji: "🏆",

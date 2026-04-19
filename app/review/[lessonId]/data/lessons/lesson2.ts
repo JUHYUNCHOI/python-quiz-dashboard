@@ -306,7 +306,7 @@ export const lesson2: LessonData = {
           task: "'파이썬'의 타입을 출력해봐",
           template: { before: "print(type(", after: "))" },
           answer: "'파이썬'",
-          alternateAnswers: ["\"파이썬\""],
+          alternateAnswers: ["\"파이썬\"", "'Python'", "\"Python\""],
           expect: "<class 'str'>",
           en: { task: "Print the type of 'Python'" }
         }
@@ -351,14 +351,16 @@ export const lesson2: LessonData = {
         type: "practice",
         content: {
           level: 2,
-          task: "이렇게 출력되도록 해봐 ↓\n<class 'int'>\n<class 'float'>",
-          guide: "type(7)과 type(7.0)을 각각 출력해봐",
-          template: null,
+          task: "정수와 실수의 타입을 각각 출력해봐",
+          guide: "각 빈칸에 정수 하나, 실수 하나를 넣어봐!",
+          template: "print(type(___))\nprint(type(___))",
+          blanksAnswer: ["7", "7.0"],
           answer: "print(type(7))\nprint(type(7.0))",
+          alternateAnswers: ["print(type(1))\nprint(type(1.0))", "print(type(0))\nprint(type(0.0))"],
           expect: "<class 'int'>\n<class 'float'>",
           en: {
-            task: "Make it print like this ↓\n<class 'int'>\n<class 'float'>",
-            guide: "Print type(7) and type(7.0) separately"
+            task: "Print the type of an integer and a float",
+            guide: "Put one integer and one float in the blanks!"
           }
         }
       },
@@ -368,7 +370,88 @@ export const lesson2: LessonData = {
         content: { message: "타입 탐정 완성!", emoji: "🔍" }
       },
 
-      // ==================== CHAPTER 5: 내 정보 카드 ====================
+      // ==================== CHAPTER 5: 이건 에러야! ====================
+      {
+        type: "chapter",
+        content: { num: 5, title: "이건 에러야!", desc: "헷갈리는 케이스 완전 정복!", en: { title: "Watch Out for Errors!", desc: "Master the tricky cases!" } }
+      },
+
+      {
+        type: "quiz",
+        content: {
+          question: "전화번호 010-1234-5678을 저장하려면?",
+          options: [
+            "phone = 010-1234-5678",
+            "phone = '010-1234-5678'",
+            "phone = 010.1234.5678"
+          ],
+          answer: 1,
+          explanation: "하이픈(-)은 파이썬에서 빼기야! 010-1234-5678은 010 빼기 1234 빼기 5678로 읽혀서 에러가 나. 따옴표로 감싸야 문자열로 저장돼!",
+          en: {
+            question: "How do you store the phone number 555-867-5309?",
+            options: [
+              "phone = 555-867-5309",
+              "phone = '555-867-5309'",
+              "phone = 555.867.5309"
+            ],
+            explanation: "Hyphens (-) mean subtraction in Python! 555-867-5309 would be read as math and cause an error. Wrap it in quotes to store as a string!"
+          }
+        }
+      },
+
+      {
+        type: "errorQuiz",
+        content: {
+          question: "에러가 나는 코드는?",
+          code: "a. date = '2024-01-01'\nb. phone = 010-1234-5678\nc. code = 'ABC-001'",
+          options: ["a만 에러", "b만 에러", "c만 에러"],
+          answer: 1,
+          explanation: "b만 에러! 010-1234-5678은 파이썬이 빼기로 읽어. a와 c는 따옴표로 감쌌으니까 str로 잘 저장돼.",
+          en: {
+            question: "Which code causes an error?",
+            options: ["Only a", "Only b", "Only c"],
+            explanation: "Only b causes an error! Python reads 010-1234-5678 as subtraction. a and c are wrapped in quotes so they're stored as str."
+          }
+        }
+      },
+
+      {
+        type: "quiz",
+        content: {
+          question: "'3.2'의 타입은?",
+          options: ["float (실수)", "int (정수)", "str (문자열)"],
+          answer: 2,
+          explanation: "따옴표가 있으면 숫자처럼 보여도 str이야! 3.2는 float이지만 '3.2'는 str이야.",
+          en: {
+            question: "What is the type of '3.2'?",
+            options: ["float", "int", "str (string)"],
+            explanation: "Quotes make it a str even if it looks like a number! 3.2 is float but '3.2' is str."
+          }
+        }
+      },
+
+      {
+        type: "errorQuiz",
+        content: {
+          question: "print('점수: ' + 95) 의 결과는?",
+          code: "print('점수: ' + 95)",
+          options: ["점수: 95", "점수95", "TypeError (에러!)"],
+          answer: 2,
+          explanation: "str + int는 TypeError! 문자열과 숫자는 다른 타입이라 더할 수 없어. 나중에 f-string을 배우면 f'점수: {95}' 이렇게 쓸 수 있어!",
+          en: {
+            question: "What is the result of print('Score: ' + 95)?",
+            options: ["Score: 95", "Score95", "TypeError (Error!)"],
+            explanation: "str + int causes a TypeError! Different types can't be combined. You'll soon learn f-strings: f'Score: {95}'!"
+          }
+        }
+      },
+
+      {
+        type: "reward",
+        content: { message: "에러 패턴 완전 정복!", emoji: "🛡️" }
+      },
+
+      // ==================== CHAPTER 6: 내 정보 카드 ====================
       {
         type: "chapter",
         content: { num: 5, title: "내 정보 카드", desc: "4가지 타입으로 만들어보자!" }
@@ -438,7 +521,7 @@ export const lesson2: LessonData = {
       {
         type: "summary",
         content: {
-          num: 5,
+          num: 6,
           title: "데이터 타입 마스터",
           learned: [
             "int: 정수 (-5, 0, 100)",

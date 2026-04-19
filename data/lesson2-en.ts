@@ -184,6 +184,95 @@ print(10 < 5)   # False
       ]
     },
     {
+      id: "ch_errors",
+      title: "Watch Out for Errors!",
+      emoji: "⚠️",
+      steps: [
+        {
+          id: "phone-explain",
+          type: "explain",
+          title: "⚠️ What happens with phone numbers?",
+          content: `If you write a phone number without quotes, Python reads the hyphens as **subtraction**!
+
+\`\`\`python
+555-867-5309   # ❌ SyntaxError! (555 minus 867 minus 5309)
+\`\`\`
+
+Wrap it in quotes to store it as a string:
+
+\`\`\`python
+'555-867-5309'  # ✅ str
+\`\`\`
+
+⚠️ **Anything with hyphens (-) needs quotes!**
+Phone numbers, dates (2024-01-01), codes — always wrap them in quotes.`
+        },
+        {
+          id: "str-num-explain",
+          type: "explain",
+          title: "⚠️ '3.2' is NOT a float!",
+          content: `If it has quotes, it's a **string (str)** — even if it looks like a number!
+
+\`\`\`python
+3.2     # float ✅ (actual number)
+'3.2'   # str  ❌ (NOT a float!)
+
+100     # int  ✅ (actual number)
+'100'   # str  ❌ (NOT an int!)
+\`\`\`
+
+Quotes always determine the type!`
+        },
+        {
+          id: "str-int-explain",
+          type: "explain",
+          title: "⚠️ String + Number = Error!",
+          content: `**Mixing different types causes a TypeError!**
+
+\`\`\`python
+'Score: ' + 95     # ❌ TypeError!
+'3.2' + 1.0        # ❌ TypeError!
+\`\`\`
+
+Only the same types can be combined:
+\`\`\`python
+'Score: ' + '95'   # ✅ 'Score: 95'
+3.2 + 1.0          # ✅ 4.2
+\`\`\`
+
+To combine a string with a number, use **f-strings** — you'll learn that soon!`
+        },
+        {
+          id: "quiz-error1",
+          type: "quiz",
+          title: "❓ Quiz!",
+          content: "How do you store the phone number 555-867-5309?",
+          options: [
+            "phone = 555-867-5309",
+            "phone = '555-867-5309'",
+            "phone = 555.867.5309",
+            "phone = [555, 867, 5309]"
+          ],
+          answer: 1,
+          explanation: "Hyphens (-) mean subtraction in Python! Wrap it in quotes to store it as a string."
+        },
+        {
+          id: "quiz-error2",
+          type: "quiz",
+          title: "❓ Quiz!",
+          content: "What is the result of print('Score: ' + 95)?",
+          options: [
+            "Score: 95",
+            "'Score: 95'",
+            "TypeError (Error!)",
+            "Score95"
+          ],
+          answer: 2,
+          explanation: "str + int causes a TypeError! You'll soon learn f-strings: f'Score: {95}'."
+        }
+      ]
+    },
+    {
       id: "ch4",
       title: "Final Mission",
       emoji: "🏆",
