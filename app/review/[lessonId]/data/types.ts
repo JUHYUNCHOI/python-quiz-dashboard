@@ -136,6 +136,26 @@ export interface ProjectContent {
 
 export interface DoneContent {}
 
+// 단계적 코딩: 한 카드에서 서브스텝이 쌓이는 코딩 연습
+export interface CodingSubStep {
+  task: string;
+  guide?: string;
+  hint?: string;
+  answer: string;
+  alternateAnswers?: string[];
+  en?: {
+    task?: string;
+    guide?: string;
+    hint?: string;
+    answer?: string;
+    alternateAnswers?: string[];
+  };
+}
+
+export interface CodingContent {
+  subSteps: CodingSubStep[];
+}
+
 // 인터랙티브 애니메이션 컴포넌트
 export interface InteractiveContent {
   component: "dataStructures" | "functionBuilder"; // 추후 다른 애니메이션 추가 가능
@@ -155,7 +175,7 @@ export type StepContent =
   | { type: "project"; content: ProjectContent }
   | { type: "done"; content: DoneContent }
   | { type: "interactive"; content: InteractiveContent }
-  | { type: "coding"; content: any };
+  | { type: "coding"; content: CodingContent };
 
 export interface LessonData {
   id: string;

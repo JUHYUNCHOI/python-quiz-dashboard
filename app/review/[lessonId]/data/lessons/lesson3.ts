@@ -344,7 +344,7 @@ export const lesson3: LessonData = {
           guide: "변수끼리 더하기!",
           template: "chicken = 19000\ncola = 2000\nprint(___)",
           answer: "chicken + cola",
-          alternateAnswers: ["chicken+cola"],
+          alternateAnswers: ["chicken+cola", "19000+2000", "2000+19000"],
           expect: "21000",
           en: {
             task: "Print chicken + cola",
@@ -360,7 +360,7 @@ export const lesson3: LessonData = {
           guide: "변수 × 숫자도 OK!",
           template: "chicken = 19000\nprint(___)",
           answer: "chicken * 3",
-          alternateAnswers: ["chicken*3"],
+          alternateAnswers: ["chicken*3", "19000*3"],
           expect: "57000",
           en: {
             task: "Print chicken * 3",
@@ -485,19 +485,50 @@ export const lesson3: LessonData = {
       },
 
       {
-        type: "practice",
+        type: "coding",
         content: {
-          level: 1,
-          task: "빈칸을 채워서 변수를 만들어봐 ↓\n이름: 홍길동\n나이: 15",
-          guide: "첫 번째 칸에 홍길동(문자열), 두 번째 칸에 15(숫자)를 넣어봐!",
-          template: "name = ___\nage = ___\nprint('이름:', name)\nprint('나이:', age)",
-          blanksAnswer: ["'홍길동'", "15"],
-          answer: "name = '홍길동'\nage = 15\nprint('이름:', name)\nprint('나이:', age)",
-          expect: "이름: 홍길동\n나이: 15",
-          en: {
-            task: "Fill in the blanks to create variables ↓\n이름: 홍길동\n나이: 15",
-            guide: "First blank: '홍길동' (string), second blank: 15 (number)!"
-          }
+          subSteps: [
+            {
+              task: "홍길동을 변수 name에 저장해봐",
+              guide: "변수이름 = 값 형태로! 문자열은 따옴표로 감싸야 해",
+              hint: "name = '홍길동'",
+              answer: "name = '홍길동'",
+              alternateAnswers: ['name = "홍길동"', "name='홍길동'", 'name="홍길동"'],
+              en: {
+                task: "Store '홍길동' in the variable name",
+                guide: "variable = value. Strings need quotes!",
+                hint: "name = '홍길동'",
+              }
+            },
+            {
+              task: "나이 15를 변수 age에 저장해봐",
+              guide: "숫자는 따옴표 없이 그냥 써!",
+              hint: "age = 15",
+              answer: "age = 15",
+              alternateAnswers: ["age=15"],
+              en: {
+                task: "Store 15 in the variable age",
+                guide: "Numbers don't need quotes!",
+                hint: "age = 15",
+              }
+            },
+            {
+              task: "변수를 이용해서 이름과 나이를 출력해봐",
+              guide: "print('이름:', name) 처럼 레이블과 변수를 같이 써봐!",
+              hint: "print('이름:', name)\nprint('나이:', age)",
+              answer: "print('이름:', name)\nprint('나이:', age)",
+              alternateAnswers: [
+                'print("이름:", name)\nprint("나이:", age)',
+                "print('나이:', age)\nprint('이름:', name)",
+                'print("나이:", age)\nprint("이름:", name)',
+              ],
+              en: {
+                task: "Print the name and age using variables",
+                guide: "Try: print('이름:', name)",
+                hint: "print('이름:', name)\nprint('나이:', age)",
+              }
+            }
+          ]
         }
       },
 
@@ -577,15 +608,14 @@ export const lesson3: LessonData = {
         type: "practice",
         content: {
           level: 2,
-          task: "빈칸을 채워서 출력해봐",
-          guide: "name에는 문자열, age에는 숫자를 넣어!",
-          template: "name = ___\nage = ___\nprint(f'안녕! 나는 {name}, {age}살이야!')",
-          blanksAnswer: ["'홍길동'", "15"],
-          answer: "name = '홍길동'\nage = 15\nprint(f'안녕! 나는 {name}, {age}살이야!')",
+          task: "age에 15를 넣어서 f-string을 완성해봐",
+          guide: "name엔 이미 '홍길동'이 들어있어. age 칸만 채우면 돼!",
+          template: "name = '홍길동'\nage = ___\nprint(f'안녕! 나는 {name}, {age}살이야!')",
+          answer: "15",
           expect: "안녕! 나는 홍길동, 15살이야!",
           en: {
-            task: "Fill in the blanks",
-            guide: "name gets a string, age gets a number!"
+            task: "Fill in age to complete the f-string",
+            guide: "name already has '홍길동'. Just fill in the age blank!"
           }
         }
       },
@@ -940,6 +970,7 @@ export const lesson3: LessonData = {
           guide: "final 칸에 price - discount 를 넣어봐!",
           template: "price = 10000\ndiscount = 3000\nfinal = ___\nprint(final)",
           answer: "price - discount",
+          alternateAnswers: ["price-discount", "10000-3000"],
           expect: "7000",
           en: {
             task: "Variables price = 10000, discount = 3000 are set.\nStore the final price in the blank and print it",

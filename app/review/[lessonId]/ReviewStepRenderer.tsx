@@ -32,6 +32,7 @@ import type {
   InterleavingContent,
   ErrorQuizContent,
   ExplainContent,
+  CodingContent,
 } from "./data/types"
 import { runPythonCode } from "./utils/pythonRunner"
 
@@ -895,6 +896,168 @@ function PredictStep({
 }
 
 // ─────────────────────────────────────────────────────────────
+// CodingStep — 한 카드에서 서브스텝이 순차적으로 쌓이는 코딩 연습
+// ─────────────────────────────────────────────────────────────
+function CodingStep({
+  content,
+  onCorrect,
+  language = "python",
+  savedAnswer,
+  onSaveAnswer,
+}: {
+  content: CodingContent
+  onCorrect: () => void
+  language?: "python" | "cpp"
+  savedAnswer?: SavedAnswerData
+  onSaveAnswer?: (data: SavedAnswerData) => void
+}) {
+  const { t, lang } = useLanguage()
+  const isEn = lang === "en"
+
+  // savedAnswer에서 진행 상태 복원: inputs = 완료된 코드 줄들
+  const initCompleted: string[] = savedAnswer?.inputs ?? []
+  const initIdx = Math.min(initCompleted.length, content.subSteps.length)
+
+  const [currentIdx, setCurrentIdx] = useState(initIdx)
+  const [completedLines, setCompletedLines] = useState<string[]>(initCompleted)
+  const [input, setInput] = useState("")
+  const [result, setResult] = useState<"idle" | "wrong">("idle")
+  const [showHint, setShowHint] = useState(false)
+  const inputRef = useRef<HTMLTextAreaElement>(null)
+
+  const currentSubStep = content.subSteps[currentIdx]
+  const isAllDone = currentIdx >= content.subSteps.length
+
+  useEffect(() => {
+    if (!isAllDone) inputRef.current?.focus()
+  }, [currentIdx, isAllDone])
+
+  const check = () => {
+    if (!input.trim() || !currentSubStep) return
+    // 서브스텝별 텍스트 비교 (출력 기반 아님 — 우회 방지)
+    const substepContent: PracticeContent = {
+      task: currentSubStep.task,
+      template: null,
+      answer: isEn ? (currentSubStep.en?.answer ?? currentSubStep.answer) : currentSubStep.answer,
+      alternateAnswers: isEn
+        ? (currentSubStep.en?.alternateAnswers ?? currentSubStep.alternateAnswers)
+        : currentSubStep.alternateAnswers,
+      expect: "",
+    }
+    if (isAnswerCorrect(input, substepContent, isEn, language)) {
+      const newCompleted = [...completedLines, input.trim()]
+      setCompletedLines(newCompleted)
+      setResult("idle")
+      setInput("")
+      setShowHint(false)
+      const nextIdx = currentIdx + 1
+      setCurrentIdx(nextIdx)
+      if (nextIdx >= content.subSteps.length) {
+        onSaveAnswer?.({ inputs: newCompleted, result: "correct" })
+        onCorrect()
+      } else {
+        onSaveAnswer?.({ inputs: newCompleted, result: "in-progress" })
+      }
+    } else {
+      setResult("wrong")
+    }
+  }
+
+  return (
+    <div className="flex flex-col gap-5">
+      {/* 완료된 서브스텝들 */}
+      {completedLines.map((line, i) => (
+        <div key={i} className="flex flex-col gap-1.5">
+          <p className="text-xs font-bold text-emerald-400 uppercase tracking-wide">
+            ✅ {isEn ? (content.subSteps[i].en?.task ?? content.subSteps[i].task) : content.subSteps[i].task}
+          </p>
+          <div className="rounded-lg bg-[#1a1b2e] border border-emerald-800/40 px-4 py-2.5 font-mono text-sm text-[#6b7280] whitespace-pre-wrap">
+            {language === "python" ? renderTemplatePart(line, "python") : renderTemplatePart(line, "cpp")}
+          </div>
+        </div>
+      ))}
+
+      {/* 현재 서브스텝 */}
+      {!isAllDone && currentSubStep && (
+        <div className="flex flex-col gap-3">
+          {/* 과제 */}
+          <p className="font-bold text-gray-100 text-base leading-snug">
+            {isEn ? (currentSubStep.en?.task ?? currentSubStep.task) : currentSubStep.task}
+          </p>
+          {/* 가이드 */}
+          {(isEn ? (currentSubStep.en?.guide ?? currentSubStep.guide) : currentSubStep.guide) && (
+            <p className="text-sm text-indigo-300">
+              💡 {isEn ? (currentSubStep.en?.guide ?? currentSubStep.guide) : currentSubStep.guide}
+            </p>
+          )}
+
+          {/* 코드 에디터 (이전 코드 + 입력창) */}
+          <div className="rounded-xl overflow-hidden border border-gray-700">
+            <div className="bg-[#1e1e2e] px-3 py-1.5 flex items-center gap-1.5 border-b border-gray-700">
+              <span className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
+              <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
+              <span className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
+              <span className="text-[10px] text-gray-500 ml-1 font-mono">
+                {language === "python" ? "solution.py" : "solution.cpp"}
+              </span>
+            </div>
+            {/* 이전 완료 줄 — 읽기 전용 */}
+            {completedLines.length > 0 && (
+              <div className="bg-[#1a1b2e] px-4 pt-3 pb-1 font-mono text-sm text-[#6b7280] leading-7 whitespace-pre-wrap border-b border-gray-700/50">
+                {completedLines.map((line, i) => (
+                  <div key={i}>{renderTemplatePart(line, language)}</div>
+                ))}
+              </div>
+            )}
+            {/* 입력창 */}
+            <textarea
+              ref={inputRef}
+              value={input}
+              onChange={e => { setInput(e.target.value); setResult("idle") }}
+              onKeyDown={e => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); check() } }}
+              placeholder={t("// 여기에 코드를 작성하세요...", "// Write your code here...")}
+              rows={Math.max(2, currentSubStep.answer.split("\n").length + 1)}
+              className="w-full bg-[#1a1b2e] text-[#a9b1d6] px-4 py-3 font-mono text-sm focus:outline-none resize-none placeholder:text-gray-600"
+              spellCheck={false}
+            />
+          </div>
+
+          {/* 오답 피드백 */}
+          {result === "wrong" && (
+            <p className="text-sm text-red-400 flex items-center gap-1.5">
+              <X className="w-4 h-4 shrink-0" /> {t("다시 확인해봐!", "Try again!")}
+            </p>
+          )}
+
+          {/* 힌트 */}
+          {showHint && (
+            <div className="rounded-lg bg-amber-900/30 border border-amber-700/40 px-3 py-2 font-mono text-sm text-amber-300 whitespace-pre-wrap">
+              {isEn ? (currentSubStep.en?.hint ?? currentSubStep.hint) : currentSubStep.hint}
+            </div>
+          )}
+
+          <div className="flex items-center justify-between">
+            {currentSubStep.hint && !showHint
+              ? <button onClick={() => setShowHint(true)} className="text-amber-400 text-sm flex items-center gap-1.5">
+                  <Lightbulb className="w-3.5 h-3.5" />{t("힌트 보기", "Show hint")}
+                </button>
+              : <span />
+            }
+            <button
+              onClick={check}
+              disabled={!input.trim()}
+              className="px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm disabled:opacity-40 transition-colors"
+            >
+              {t("확인", "Check")}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────
 // Main ReviewStepRenderer
 // ─────────────────────────────────────────────────────────────
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -925,6 +1088,9 @@ export function ReviewStepRenderer({ step, onCorrect, onWrong, language = "cpp",
 
     case "interleaving":
       return <PracticeStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} language={language} storageKey={stepKey} savedAnswer={savedAnswer} onSaveAnswer={onSaveAnswer} lessonExplains={lessonExplains} lessonLink={lessonLink} />
+
+    case "coding":
+      return <CodingStep content={step.content as CodingContent} onCorrect={onCorrect} language={language} savedAnswer={savedAnswer} onSaveAnswer={onSaveAnswer} />
 
     case "explain":
       if (step.content.predict) {
