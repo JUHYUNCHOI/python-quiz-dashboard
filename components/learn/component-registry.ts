@@ -250,6 +250,13 @@ const registry: Record<string, ComponentEntry> = {
     load: () => import("@/components/animations/syntax-builder"),
     exportName: "CppArrayBuilder",
   },
+  // Python 레슨 3: 변수 업데이트 시각화 (x = x + 2)
+  variableUpdateVisualizer: {
+    load: () => import("@/components/animations/variable-update-visualizer"),
+    exportName: "VariableUpdateVisualizer",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+
   // pair vs 두 vector 비교 시각화 (cpp-15 lesson)
   pairVsTwoVectors: {
     load: () => import("@/components/animations/pair-vs-vectors"),

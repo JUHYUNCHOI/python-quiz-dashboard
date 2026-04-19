@@ -169,6 +169,13 @@ When you assign a new value to the same variable, it gets overwritten!`
           hint2: "score = 0\nscore = 100\nprint(score)"
         },
         {
+          id: "x-update-visual",
+          type: "interactive",
+          title: "🎬 See x = x + 2 in Action",
+          description: "Click through the tabs to see exactly how x changes — or doesn't!",
+          component: "variableUpdateVisualizer",
+        },
+        {
           id: "quiz2",
           type: "quiz",
           title: "❓ Quiz!",

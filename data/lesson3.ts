@@ -169,6 +169,13 @@ print(hp)  # 80
           hint2: "score = 0\nscore = 100\nprint(score)"
         },
         {
+          id: "x-update-visual",
+          type: "interactive",
+          title: "🎬 x = x + 2 애니메이션으로 이해하기",
+          description: "탭을 눌러서 x 값이 어떻게 바뀌는지(혹은 안 바뀌는지!) 확인해봐요.",
+          component: "variableUpdateVisualizer",
+        },
+        {
           id: "quiz2",
           type: "quiz",
           title: "❓ 퀴즈!",
