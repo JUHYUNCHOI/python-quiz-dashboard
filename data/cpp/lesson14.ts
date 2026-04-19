@@ -475,6 +475,143 @@ int main() {
           expectedOutput: `김철수 (95)`
         },
         {
+          id: "ch2-vec-explain",
+          type: "explain",
+          title: "vector<Student> — N명을 동적으로 관리!",
+          content: `배열 \`Student arr[3]\`은 크기를 미리 정해야 해요.
+N명을 입력받아야 한다면? **vector**와 함께 써요!
+
+\`\`\`cpp
+#include <vector>  // 추가 필요!
+
+int n;
+cin >> n;
+vector<Student> students(n);  // n칸짜리 Student 벡터
+
+for (int i = 0; i < n; i++) {
+    cin >> students[i].name >> students[i].score;
+}
+\`\`\`
+
+또는 push_back으로 하나씩 추가할 수도 있어요:
+
+\`\`\`cpp
+vector<Student> students;
+for (int i = 0; i < n; i++) {
+    Student s;
+    cin >> s.name >> s.score;
+    students.push_back(s);
+}
+\`\`\`
+
+| 방식 | 언제 사용? |
+|---|---|
+| \`Student arr[100]\` | N 최대값을 미리 알 때 (USACO 스타일) |
+| \`vector<Student>(n)\` | N을 입력받을 때 (가장 유연) |
+
+> 💡 **USACO 패턴:** 대부분 N을 입력받으니까 **vector<구조체>** 가 훨씬 자주 나와요!`,
+        },
+        {
+          id: "ch2-vec-pred",
+          type: "predict" as const,
+          title: "vector<Student> 출력 결과 예측!",
+          code: `#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+int main() {
+    vector<Student> students = {
+        {"Alice", 90},
+        {"Bob", 80},
+    };
+    for (auto& s : students) {
+        cout << s.name << " " << s.score << "\\n";
+    }
+    return 0;
+}`,
+          options: ["Alice 90\nBob 80", "Alice\nBob", "90\n80", "에러"],
+          answer: 0,
+          explanation: "`auto& s`로 vector 안의 각 Student를 참조해요. `s.name`과 `s.score`로 멤버에 접근해서 출력해요!"
+        },
+        {
+          id: "ch2-vec-fill",
+          type: "fillblank" as const,
+          title: "vector<Student> 선언 빈칸 채우기",
+          content: `N명의 학생을 입력받을 때 vector 선언은 어떻게 할까요?`,
+          code: `int n;
+cin >> n;
+vector<___> students(n);  // n칸짜리 Student 벡터
+
+for (int i = 0; i < n; i++) {
+    cin >> students[i].name >> students[i].score;
+}`,
+          fillBlanks: [
+            { id: 0, answer: "Student", options: ["Student", "int", "string", "n"] }
+          ],
+          explanation: "`vector<Student>(n)`으로 n칸짜리 Student 벡터를 만들어요. 이후 `students[i].name`, `students[i].score`로 각 멤버에 접근해서 입력받아요!",
+        },
+        {
+          id: "ch2-vec-practice",
+          type: "practice" as const,
+          title: "✋ N명 점수 합계 구하기",
+          content: `N명의 이름과 점수를 입력받아, 각 학생을 출력한 뒤 마지막 줄에 평균(정수 나눗셈)을 출력해봐요.`,
+          code: `#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+int main() {
+    int n;
+    cin >> n;
+    vector<Student> students(n);
+    int total = 0;
+    for (int i = 0; i < n; i++) {
+        cin >> students[i].name >> students[i].score;
+        total += students[i].score;
+    }
+    for (auto& s : students) {
+        cout << s.name << " " << s.score << "\\n";
+    }
+    cout << "Average: " << total / n << "\\n";
+    return 0;
+}`,
+          starterCode: `#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+int main() {
+    int n;
+    cin >> n;
+    vector<Student> students(n);
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+          hint: "for문으로 students[i].name과 students[i].score를 cin으로 입력받고, total에 score를 더해요. 출력은 auto& s로 순회해요.",
+          testCases: [
+            {
+              input: "3\nalice 90\nbob 80\ncarol 70",
+              expectedOutput: "alice 90\nbob 80\ncarol 70\nAverage: 80",
+            },
+          ],
+        },
+        {
           id: "ch2-ref",
           type: "explain",
           title: "함수에 struct 넘기기",
@@ -567,7 +704,8 @@ struct 이름 {
 | 정의 | \`struct 이름 { 멤버들 };\` |
 | 생성 | \`Student s = {"김철수", 95};\` |
 | 접근 | \`s.name\`, \`s.score\` |
-| 배열 | \`Student arr[3] = {...};\` |
+| 고정 배열 | \`Student arr[3] = {...};\` |
+| 동적 벡터 | \`vector<Student> v(n);\` — N 입력받을 때 |
 | 함수 전달 | 참조(\`Student& s\`)로 넘기면 효율적 |
 
 🚀 **다음 레슨:** class — 멤버변수·멤버함수 묶기, private/public 접근 제어, 생성자, 캡슐화(OOP)!`
