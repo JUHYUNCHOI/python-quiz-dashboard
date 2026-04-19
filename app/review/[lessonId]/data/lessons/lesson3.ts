@@ -578,17 +578,15 @@ export const lesson3: LessonData = {
         type: "practice",
         content: {
           level: 2,
-          task: "이렇게 나오게 해봐 ↓\n안녕! 나는 홍길동, 15살이야!",
-          guide: "f-string으로 name과 age를 같이 출력해봐",
-          template: null,
+          task: "빈칸을 채워서 출력해봐",
+          guide: "name에는 문자열, age에는 숫자를 넣어!",
+          template: "name = ___\nage = ___\nprint(f'안녕! 나는 {name}, {age}살이야!')",
+          blanksAnswer: ["'홍길동'", "15"],
           answer: "name = '홍길동'\nage = 15\nprint(f'안녕! 나는 {name}, {age}살이야!')",
-          alternateAnswers: [
-            "name = \"홍길동\"\nage = 15\nprint(f'안녕! 나는 {name}, {age}살이야!')"
-          ],
           expect: "안녕! 나는 홍길동, 15살이야!",
           en: {
-            task: "Make it print like this ↓\n안녕! 나는 홍길동, 15살이야!",
-            guide: "Use an f-string to print name and age together"
+            task: "Fill in the blanks",
+            guide: "name gets a string, age gets a number!"
           }
         }
       },

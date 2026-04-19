@@ -576,8 +576,9 @@ function PracticeStep({
       )}
       <p className="font-semibold text-gray-800 whitespace-pre-line">{task}</p>
 
-      {/* 목표 출력 — expect 값을 강조 표시 */}
-      {"expect" in content && content.expect && result === "idle" && (
+      {/* 목표 출력 — expect 값을 강조 표시 (task에 이미 출력이 포함된 경우 중복 방지) */}
+      {"expect" in content && content.expect && result === "idle" &&
+       !task?.includes("↓") && !task?.includes(String(content.expect)) && (
         <div className="rounded-xl overflow-hidden border-2 border-emerald-400 shadow-sm">
           <div className="bg-emerald-500 px-3 py-1.5 flex items-center gap-1.5">
             <span className="text-[11px] text-white font-bold tracking-wide">
