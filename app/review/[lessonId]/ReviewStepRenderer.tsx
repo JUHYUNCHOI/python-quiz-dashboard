@@ -1,6 +1,26 @@
 "use client"
 
 import { useState, useEffect, useRef, Fragment } from "react"
+
+// 한글/CJK 문자는 영문자보다 2배 넓으므로 ch 단위 계산 시 2로 카운트
+function getChWidth(str: string): number {
+  let width = 0
+  for (const ch of str) {
+    const code = ch.codePointAt(0) ?? 0
+    if (
+      (code >= 0xAC00 && code <= 0xD7AF) || // 한글 음절
+      (code >= 0x1100 && code <= 0x11FF) || // 한글 자모
+      (code >= 0x4E00 && code <= 0x9FFF) || // CJK 한자
+      (code >= 0x3040 && code <= 0x30FF) || // 히라가나/카타카나
+      (code >= 0xFF00 && code <= 0xFFEF)    // 전각 문자
+    ) {
+      width += 2
+    } else {
+      width += 1
+    }
+  }
+  return width
+}
 import { Check, X, Lightbulb, RotateCcw } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
@@ -609,7 +629,7 @@ function PracticeStep({
                     }}
                     onKeyDown={e => { if (e.key === "Enter" && i === blankCount - 1) check() }}
                     className="inline-block bg-[#2a2b3e] border-2 border-indigo-400 text-indigo-200 font-mono text-sm px-1.5 py-0.5 mx-0.5 focus:outline-none focus:border-indigo-300 focus:bg-[#32345a] rounded transition-colors align-baseline"
-                    style={{ width: `${Math.max((inputs[i] ?? "").length + 2, 7)}ch`, minWidth: "7ch" }}
+                    style={{ width: `${Math.max(getChWidth(inputs[i] ?? "") + 2, 7)}ch`, minWidth: "7ch" }}
                   />
                 ) : (
                   <span className={cn(
