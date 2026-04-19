@@ -154,9 +154,66 @@ vector<Student> students(n); // 입력받은 크기
 이제 struct를 배열과 vector에 넣는 방법을 배워봐요!`,
         },
         {
+          id: "ch2-cin-explain",
+          type: "explain",
+          title: "실전 패턴: cin으로 struct 배열 채우기",
+          content: `알고리즘 문제에서는 struct 배열을 **cin으로 직접 입력받아요**. 하드코딩 대신 이 패턴이 표준이에요!
+
+입력 형식 (예시):
+\`\`\`
+3
+김철수 95
+이영희 87
+박민준 72
+\`\`\`
+
+코드:
+\`\`\`cpp
+int n;
+cin >> n;               // ① 학생 수 입력
+Student students[n];   // ② n명짜리 배열 선언
+
+for (int i = 0; i < n; i++) {
+    cin >> students[i].name >> students[i].score;  // ③ 한 명씩 채우기
+}
+\`\`\`
+
+| 단계 | 역할 |
+|---|---|
+| \`cin >> n\` | 몇 명인지 먼저 받음 |
+| \`Student students[n]\` | n명을 담을 공간 확보 |
+| \`cin >> students[i].name\` | i번째 학생의 이름 채우기 |
+| \`cin >> students[i].score\` | i번째 학생의 점수 채우기 |
+
+**vector를 쓰면 더 안전해요** (크기 제한 없음):
+\`\`\`cpp
+vector<Student> students(n);   // 크기 n짜리 vector
+for (int i = 0; i < n; i++) {
+    cin >> students[i].name >> students[i].score;
+}
+\`\`\`
+vector는 이 레슨 후반부에서 자세히 다뤄요!`,
+        },
+        {
+          id: "ch2-cin-fill",
+          type: "fillblank" as const,
+          title: "cin으로 struct 배열 채우기",
+          content: "3명의 학생 이름과 점수를 cin으로 입력받아 배열을 채워요.",
+          code: `int n = 3;
+Student students[n];
+for (int i = 0; i < n; i++) {
+    cin >> students[___].name >> students[___].score;
+}`,
+          fillBlanks: [
+            { id: 0, answer: "i", options: ["i", "0", "n", "score"] },
+            { id: 1, answer: "i", options: ["i", "0", "n", "name"] },
+          ],
+          explanation: "`students[i]`로 i번째 Student 객체에 접근한 뒤, `.name`과 `.score`에 각각 cin으로 값을 채워요. i가 0→1→2로 늘어나면서 세 명이 차례로 채워져요.",
+        },
+        {
           id: "ch2-array-builder",
           type: "interactive",
-          title: "🔨 struct 배열 만들기",
+          title: "🔨 struct 배열 선언 문법 익히기",
           description: "Student 배열을 한 단계씩 직접 조립해봐요.",
           component: "cppStructArrayBuilder",
         },
