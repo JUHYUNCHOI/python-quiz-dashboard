@@ -442,6 +442,13 @@ setter에서는 잘못된 값을 거부할 수 있다는 게 포인트예요.
       emoji: "🔧",
       steps: [
         {
+          id: "ch3-constructor-anim",
+          type: "interactive",
+          title: "🎬 생성자 있을 때 vs 없을 때",
+          description: "탭을 눌러서 생성자의 역할을 확인해봐요.",
+          component: "constructorVisualizer",
+        },
+        {
           id: "ch3-constructor",
           type: "explain",
           title: "🔧 생성자 — 객체가 태어날 때 자동 호출!",
@@ -629,9 +636,19 @@ public:
           title: "✋ BankAccount class 만들기!",
           content: `통장 클래스를 직접 완성해봐요!
 
-\`main()\`에서 이미 사용하는 코드를 보고, 클래스를 완성하세요.
-- 입금은 금액이 0보다 클 때만 처리
-- 출금은 금액이 0보다 크고 잔액 이하일 때만 처리`,
+아래 \`main()\`은 이미 작성되어 있어요. 이 흐름이 동작하도록 클래스를 완성하세요:
+
+| main() 호출 | 잔액 변화 |
+|---|---|
+| \`BankAccount acc("김철수", 1000)\` | 1000원으로 시작 |
+| \`acc.deposit(500)\` | +500 → 1500원 |
+| \`acc.withdraw(200)\` | -200 → **1300원** |
+| \`acc.withdraw(9999)\` | 잔액 부족 → 무시 |
+| \`acc.getBalance()\` | **1300** 출력 |
+
+구현 조건:
+- 입금: 금액이 0보다 클 때만 처리
+- 출금: 금액이 0보다 크고 잔액 이하일 때만 처리`,
           starterCode: `#include <iostream>
 #include <string>
 using namespace std;

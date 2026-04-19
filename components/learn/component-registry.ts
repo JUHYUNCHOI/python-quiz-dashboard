@@ -408,6 +408,13 @@ const registry: Record<string, ComponentEntry> = {
     props: (_step: any, lang: string) => ({ lang }),
   },
 
+  // C++ 레슨 22: 생성자 있을 때 vs 없을 때 비교 시각화
+  constructorVisualizer: {
+    load: () => import("@/components/animations/constructor-visualizer"),
+    exportName: "ConstructorVisualizer",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+
   // C++ 레슨: auto 타입 추론 시각화
   autoTypeVisualizer: {
     load: () => import("@/components/animations/auto-type-visualizer"),
