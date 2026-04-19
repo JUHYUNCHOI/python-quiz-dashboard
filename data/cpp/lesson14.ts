@@ -594,7 +594,23 @@ for (int i = 0; i < n; i++) {
           id: "ch2-vec-practice",
           type: "practice" as const,
           title: "✋ N명 점수 합계 구하기",
-          content: `N명의 이름과 점수를 입력받아, 각 학생을 출력한 뒤 마지막 줄에 평균(정수 나눗셈)을 출력해봐요.`,
+          content: `N명의 이름과 점수를 입력받아, 각 학생을 출력한 뒤 마지막 줄에 평균(정수 나눗셈)을 출력해봐요.
+
+**입력 예시**
+\`\`\`
+3
+alice 90
+bob 80
+carol 70
+\`\`\`
+
+**출력 예시**
+\`\`\`
+alice 90
+bob 80
+carol 70
+Average: 80
+\`\`\``,
           code: `#include <iostream>
 #include <string>
 #include <vector>
