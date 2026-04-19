@@ -33,6 +33,8 @@ interface SyntaxStep {
   code: string
   /** 이 단계에서 새로 추가된 부분을 하이라이트할 범위 (단일 또는 복수) */
   highlight: { start: number; end: number } | { start: number; end: number }[]
+  /** "이것에서 왔어요" 참조 범위 — 밝게 + 깜빡임. highlight와 별개로 동작 */
+  blinkHighlight?: { start: number; end: number } | { start: number; end: number }[]
   /** 이 단계 설명 */
   label: { ko: string; en: string }
   /** 설명 아이콘 */
@@ -501,15 +503,55 @@ const CPP_STRUCT: SyntaxBuilderPreset = {
       label: { ko: "저장하고 싶은 것 ③: 점수(소수) — double score; 멤버는 원하는 만큼!", en: "What to store ③: score (decimal) — double score; add as many as you need!" },
       icon: "📝",
     },
+    // ── 변수 생성: 단계별 ───────────────────────────────────────
     {
-      code: "struct Student {\n    string name;\n    int age;\n    double score;\n};\n\nStudent s = {\"Kim\", 15, 95.5};",
-      highlight: { start: 68, end: 97 },
-      label: { ko: "Student 타입으로 변수를 만들어요! 중괄호로 순서대로 초기화.", en: "Create a variable of type Student! Initialize with braces in order." },
-      icon: "🎯",
+      // struct def = 67 chars (0-66), \n\n = 67-68, "Student" starts at 69
+      code: "struct Student {\n    string name;\n    int age;\n    double score;\n};\n\nStudent",
+      highlight:      { start: 69, end: 76 },   // 새로 나타난 "Student" 타입
+      blinkHighlight: { start: 0,  end: 67 },   // 위의 struct 전체 깜빡깜빡
+      label: { ko: "Student — 방금 만든 struct 이름이 새로운 타입이 됐어요!", en: "Student — the struct we just defined is now a new type!" },
+      icon: "🏷️",
     },
     {
+      code: "struct Student {\n    string name;\n    int age;\n    double score;\n};\n\nStudent s",
+      highlight: { start: 77, end: 78 },  // "s"
+      label: { ko: "변수 이름 s — Student 타입의 변수예요", en: "Variable name s — a variable of type Student" },
+      icon: "📦",
+    },
+    {
+      code: "struct Student {\n    string name;\n    int age;\n    double score;\n};\n\nStudent s = {",
+      highlight: { start: 78, end: 82 },  // " = {"
+      label: { ko: "= { — 중괄호 안에 멤버 순서대로 값을 넣어요. }; 로 닫아요", en: "= { — fill values in declaration order. Close with };" },
+      icon: "📋",
+    },
+    {
+      // "Kim" starts at 82 (after '{' at 81)
+      code: "struct Student {\n    string name;\n    int age;\n    double score;\n};\n\nStudent s = {\"Kim\",",
+      highlight:      { start: 82, end: 88 },  // '"Kim",'
+      blinkHighlight: { start: 17, end: 33 },  // "    string name;" 깜빡
+      label: { ko: "name = \"Kim\" ← string이니까 따옴표 필수!", en: "name = \"Kim\" ← string type needs quotes!" },
+      icon: "📝",
+    },
+    {
+      // ' 15,' starts at 88
+      code: "struct Student {\n    string name;\n    int age;\n    double score;\n};\n\nStudent s = {\"Kim\", 15,",
+      highlight:      { start: 88, end: 92 },  // ' 15,'
+      blinkHighlight: { start: 34, end: 46 },  // "    int age;" 깜빡
+      label: { ko: "age = 15 ← int이니까 따옴표 없이!", en: "age = 15 ← int type, no quotes!" },
+      icon: "📝",
+    },
+    {
+      // ' 95.5};' starts at 92
+      code: "struct Student {\n    string name;\n    int age;\n    double score;\n};\n\nStudent s = {\"Kim\", 15, 95.5};",
+      highlight:      { start: 92, end: 99 },  // ' 95.5};'
+      blinkHighlight: { start: 47, end: 64 },  // "    double score;" 깜빡
+      label: { ko: "score = 95.5 ← 순서 중요! 선언 순서와 같아야 해요", en: "score = 95.5 ← order matters! Must match declaration order" },
+      icon: "📝",
+    },
+    {
+      // \n at 99, cout lines at 100-149
       code: "struct Student {\n    string name;\n    int age;\n    double score;\n};\n\nStudent s = {\"Kim\", 15, 95.5};\ncout << s.name;   // Kim\ncout << s.score;  // 95.5",
-      highlight: { start: 98, end: 147 },
+      highlight: { start: 99, end: 150 },
       label: { ko: "점(.) 연산자로 멤버에 접근! s.name, s.age, s.score", en: "Dot(.) operator to access members! s.name, s.age, s.score" },
       icon: "✨",
     },
@@ -1539,13 +1581,23 @@ export function SyntaxBuilder({ preset = "cpp-if", lang = "ko", onSuccess }: Syn
   // 하이라이트 범위를 배열로 정규화
   const highlights = useMemo(() => {
     const raw = Array.isArray(step.highlight) ? step.highlight : [step.highlight]
-    // end가 코드 길이를 초과하면 clamp, start가 잘못되면 보정
     const codeLen = step.code.length
     return raw.map(h => ({
       start: Math.max(0, Math.min(h.start, codeLen)),
       end: Math.min(h.end, codeLen),
     }))
   }, [step.highlight, step.code])
+
+  // blinkHighlight — "참조" 범위: 밝게 + 깜빡임 (highlight와 독립)
+  const blinkHighlights = useMemo(() => {
+    if (!step.blinkHighlight) return []
+    const raw = Array.isArray(step.blinkHighlight) ? step.blinkHighlight : [step.blinkHighlight]
+    const codeLen = step.code.length
+    return raw.map(h => ({
+      start: Math.max(0, Math.min(h.start, codeLen)),
+      end: Math.min(h.end, codeLen),
+    }))
+  }, [step.blinkHighlight, step.code])
 
   // 구문 하이라이팅 색상 계산 (코드가 바뀔 때만 재계산)
   const charColors = useMemo(() => getCppCharColors(step.code), [step.code])
@@ -1577,18 +1629,23 @@ export function SyntaxBuilder({ preset = "cpp-if", lang = "ko", onSuccess }: Syn
         >
           <pre className="text-gray-300 whitespace-pre-wrap">
             {step.code.split("").map((char, i) => {
-              const isHighlighted = highlights.some(h => i >= h.start && i < h.end)
-              const blinkClass = step.blink && isHighlighted ? " syntax-blink" : ""
-              const baseColor = charColors[i] || "text-gray-300"
-              const hlColor = isHighlighted ? brightenColor(baseColor) : baseColor
+              const isHighlighted   = highlights.some(h => i >= h.start && i < h.end)
+              const isBlinkRef      = blinkHighlights.some(h => i >= h.start && i < h.end)
+              const isAnyActive     = isHighlighted || isBlinkRef
+              const blinkClass      = (step.blink && isHighlighted) || isBlinkRef ? " syntax-blink" : ""
+              const baseColor       = charColors[i] || "text-gray-300"
+              const hlColor         = isAnyActive ? brightenColor(baseColor) : baseColor
               return (
                 <span
                   key={i}
-                  className={`${hlColor} ${isHighlighted ? "font-bold" : "opacity-50"} transition-all duration-300${blinkClass}`}
-                  style={isHighlighted ? {
-                    textShadow: `0 0 6px currentColor`,
-                    borderBottom: "2px solid rgba(250, 204, 21, 0.6)",
-                  } : undefined}
+                  className={`${hlColor} ${isAnyActive ? "font-bold" : "opacity-50"} transition-all duration-300${blinkClass}`}
+                  style={
+                    isHighlighted
+                      ? { textShadow: "0 0 6px currentColor", borderBottom: "2px solid rgba(250, 204, 21, 0.6)" }
+                      : isBlinkRef
+                      ? { textShadow: "0 0 5px currentColor" }
+                      : undefined
+                  }
                 >
                   {char}
                 </span>
