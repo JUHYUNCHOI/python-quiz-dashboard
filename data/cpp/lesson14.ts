@@ -610,6 +610,13 @@ for (int i = 0; i < n; i++) {
 선언 방법만 달라요!`,
         },
         {
+          id: "ch2-vec-cin-anim",
+          type: "interactive",
+          title: "🎬 cin이 토큰을 읽어서 채우는 과정",
+          description: "stdin의 각 값이 어떻게 vector 안의 struct 필드로 들어가는지 한 단계씩 확인해봐요.",
+          component: "cinFillVisualizer",
+        },
+        {
           id: "ch2-vec-cin-fill",
           type: "fillblank" as const,
           title: "cin으로 vector<Student> 채우기",

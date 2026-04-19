@@ -412,6 +412,13 @@ const registry: Record<string, ComponentEntry> = {
     props: (_step: any, lang: string) => ({ lang }),
   },
 
+  // C++ 레슨 14: cin으로 struct 배열/vector 채우기 시각화
+  cinFillVisualizer: {
+    load: () => import("@/components/animations/cin-fill-visualizer"),
+    exportName: "CinFillVisualizer",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+
   // C++ 레슨 22: 생성자 있을 때 vs 없을 때 비교 시각화
   constructorVisualizer: {
     load: () => import("@/components/animations/constructor-visualizer"),
