@@ -821,22 +821,22 @@ export const lesson3: LessonData = {
         }
       },
 
-      // 예측 퀴즈 2: 변수 스왑
+      // 예측 퀴즈 2: y = x 는 값을 복사한다
       {
         type: "explain",
         content: {
           lines: ["출력 결과는?"],
-          code: "a = 5\nb = 3\na, b = b, a\nprint(a)\nprint(b)",
+          code: "x = 10\ny = x\nx = 99\nprint(y)",
           predict: {
-            options: ["5\n3", "3\n5", "에러", "3\n3"],
-            answer: 1,
-            feedback: "a, b = b, a 는 a와 b를 동시에 맞바꿔! 결과: a=3, b=5."
+            options: ["10", "99", "에러", "0"],
+            answer: 0,
+            feedback: "y = x 할 때 x의 값(10)을 y에 복사해! 이후 x를 99로 바꿔도 y는 그대로 10이야."
           },
           en: {
             lines: ["What's the output?"],
             predict: {
-              options: ["5\n3", "3\n5", "Error", "3\n3"],
-              feedback: "a, b = b, a swaps both at the same time! Result: a=3, b=5."
+              options: ["10", "99", "Error", "0"],
+              feedback: "y = x copies the value of x (10) into y! Changing x to 99 later doesn't affect y."
             }
           }
         }
@@ -934,20 +934,22 @@ export const lesson3: LessonData = {
         }
       },
 
-      // 연습 1: 변수 스왑
+      // 연습 1: 변수로 계산 후 새 변수에 저장
       {
         type: "practice",
         content: {
           level: 2,
-          task: "a = 1, b = 2 를 만들고 두 값을 바꿔서 출력해봐\n(a=2, b=1 이 되도록)",
-          guide: "a, b = b, a 패턴을 써봐!",
+          task: "price = 10000, discount = 3000 으로 변수를 만들고\n최종 금액을 final 변수에 저장해서 출력해봐",
+          guide: "final = price - discount 로 계산해서 저장해!",
           template: null,
-          answer: "a = 1\nb = 2\na, b = b, a\nprint(a)\nprint(b)",
-          alternateAnswers: ["a = 1\nb = 2\ntemp = a\na = b\nb = temp\nprint(a)\nprint(b)"],
-          expect: "2\n1",
+          answer: "price = 10000\ndiscount = 3000\nfinal = price - discount\nprint(final)",
+          alternateAnswers: [
+            "price = 10000\ndiscount = 3000\nfinal = price-discount\nprint(final)",
+          ],
+          expect: "7000",
           en: {
-            task: "Create a = 1, b = 2 then swap them and print\n(so a=2, b=1)",
-            guide: "Use the a, b = b, a pattern!"
+            task: "Create variables price = 10000, discount = 3000\nthen store the final price in a variable called final and print it",
+            guide: "Calculate: final = price - discount"
           }
         }
       },
