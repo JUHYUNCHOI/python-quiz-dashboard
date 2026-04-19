@@ -576,15 +576,15 @@ function PracticeStep({
       )}
       <p className="font-semibold text-gray-800 whitespace-pre-line">{task}</p>
 
-      {/* 목표 출력 — expect 값을 터미널 스타일로 강조 표시 */}
+      {/* 목표 출력 — expect 값을 강조 표시 */}
       {"expect" in content && content.expect && result === "idle" && (
-        <div className="rounded-xl overflow-hidden border border-emerald-800/40">
-          <div className="bg-[#0d1117] px-3 py-1.5 flex items-center gap-1.5 border-b border-emerald-900/30">
-            <span className="text-[10px] text-emerald-600 font-mono font-bold">
-              {isEn ? "expected output" : "이렇게 출력되어야 해 ↓"}
+        <div className="rounded-xl overflow-hidden border-2 border-emerald-400 shadow-sm">
+          <div className="bg-emerald-500 px-3 py-1.5 flex items-center gap-1.5">
+            <span className="text-[11px] text-white font-bold tracking-wide">
+              {isEn ? "▶ Expected output" : "▶ 이렇게 출력되어야 해!"}
             </span>
           </div>
-          <div className="bg-[#0d1f17] px-4 py-2.5 font-mono text-sm text-emerald-300 whitespace-pre-wrap leading-6">
+          <div className="bg-gray-900 px-4 py-3 font-mono text-base font-bold text-white whitespace-pre-wrap leading-7">
             {String(content.expect)}
           </div>
         </div>
