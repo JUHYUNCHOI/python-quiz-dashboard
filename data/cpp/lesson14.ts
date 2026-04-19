@@ -129,6 +129,31 @@ int main() {
       emoji: "🔧",
       steps: [
         {
+          id: "ch2-array-intro",
+          type: "explain",
+          title: "struct는 혼자보다 여럿이 더 강력해요!",
+          content: `지금까지 학생 **한 명**의 정보를 struct에 담았어요. 그런데 실제 문제에서는...
+
+| 상황 | 필요한 것 |
+|---|---|
+| 학생 N명의 성적 관리 | Student N개 |
+| 좌표 M개 처리 | Point M개 |
+| 간선 K개 저장 | Edge K개 |
+
+실전에서는 **struct 변수 하나**보다 **struct 배열/vector**가 훨씬 자주 나와요!
+
+\`\`\`cpp
+// 이렇게 쓰는 경우는 드물어요
+Student s;
+
+// USACO/알고리즘에선 이게 기본!
+Student students[100];       // 고정 크기
+vector<Student> students(n); // 입력받은 크기
+\`\`\`
+
+이제 struct를 배열과 vector에 넣는 방법을 배워봐요!`,
+        },
+        {
           id: "ch2-array-builder",
           type: "interactive",
           title: "🔨 struct 배열 만들기",

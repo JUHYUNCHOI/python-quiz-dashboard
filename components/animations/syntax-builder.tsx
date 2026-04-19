@@ -1628,6 +1628,44 @@ const PRESETS: Record<string, SyntaxBuilderPreset> = {
 
 // ========== 컴포넌트 ==========
 
+// ── 타이핑되는 주석 설명 ────────────────────────────────────────
+function TypewriterComment({ text, icon, stepKey }: { text: string; icon?: string; stepKey: number }) {
+  const [displayed, setDisplayed] = useState("")
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const startRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    setDisplayed("")
+    if (timerRef.current) clearInterval(timerRef.current)
+    if (startRef.current) clearTimeout(startRef.current)
+
+    startRef.current = setTimeout(() => {
+      let i = 0
+      timerRef.current = setInterval(() => {
+        i++
+        setDisplayed(text.slice(0, i))
+        if (i >= text.length && timerRef.current) clearInterval(timerRef.current)
+      }, 22)
+    }, 280)
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current)
+      if (startRef.current) clearTimeout(startRef.current)
+    }
+  }, [stepKey, text])
+
+  const isDone = displayed.length >= text.length
+
+  return (
+    <div className="px-5 pb-5 font-mono text-xs flex items-center gap-1.5 text-emerald-400/80">
+      <span className="opacity-50 select-none">{"//"}</span>
+      {icon && <span className="text-sm leading-none">{icon}</span>}
+      <span>{displayed}</span>
+      {!isDone && <span className="inline-block w-px h-3.5 bg-emerald-400/80 animate-pulse ml-px" />}
+    </div>
+  )
+}
+
 interface SyntaxBuilderProps {
   preset?: string
   lang?: "ko" | "en"
@@ -1690,39 +1728,46 @@ export function SyntaxBuilder({ preset = "cpp-if", lang = "ko", onSuccess }: Syn
   }, [data.steps])
 
   return (
-    <div className="space-y-3">
-      {/* 제목 + 단계 */}
-      <div className="flex items-center justify-between">
-        <h3 className="text-base font-bold text-gray-800">
-          {lang === "ko" ? data.title.ko : data.title.en}
-        </h3>
-        <span className="text-xs font-medium text-gray-400">
+    <div className="rounded-2xl overflow-hidden border border-slate-200 shadow-sm bg-white">
+      {/* ── 헤더: Mac dots + 제목 + 단계 ── */}
+      <div className="flex items-center justify-between px-4 py-2.5 bg-slate-100 border-b border-slate-200">
+        <div className="flex items-center gap-2">
+          <div className="flex gap-1.5">
+            <div className="w-3 h-3 rounded-full bg-red-400/80" />
+            <div className="w-3 h-3 rounded-full bg-yellow-400/80" />
+            <div className="w-3 h-3 rounded-full bg-green-400/80" />
+          </div>
+          <span className="text-slate-500 text-xs font-mono ml-1">
+            {lang === "ko" ? data.title.ko : data.title.en}
+          </span>
+        </div>
+        <span className="text-xs font-medium text-slate-400">
           {Math.min(currentStep + 1, data.steps.length)}/{data.steps.length}
         </span>
       </div>
 
-      {/* 코드(왼쪽) + 화살표·설명(오른쪽) 가로 분할 */}
-      <div className="rounded-xl overflow-hidden flex">
-        {/* ── 코드 영역 ── */}
+      {/* ── 코드 영역 ── */}
+      <div className="bg-slate-900 overflow-x-auto">
+        {/* 코드 */}
         <div
-          className="relative bg-gray-900 px-4 py-4 font-mono text-sm leading-relaxed overflow-x-auto flex-1 min-w-0"
+          className="px-5 pt-5 pb-2 font-mono text-sm leading-relaxed min-w-0"
           style={{ minHeight: `${finalCodeLines * 1.6 + 2}rem` }}
         >
-          <pre className="text-gray-300 whitespace-pre-wrap">
+          <pre className="text-slate-300 whitespace-pre-wrap">
             {step.code.split("").map((char, i) => {
-              const isHighlighted   = highlights.some(h => i >= h.start && i < h.end)
-              const isBlinkRef      = blinkHighlights.some(h => i >= h.start && i < h.end)
-              const isAnyActive     = isHighlighted || isBlinkRef
-              const blinkClass      = (step.blink && isHighlighted) || isBlinkRef ? " syntax-blink" : ""
-              const baseColor       = charColors[i] || "text-gray-300"
-              const hlColor         = isAnyActive ? brightenColor(baseColor) : baseColor
+              const isHighlighted = highlights.some(h => i >= h.start && i < h.end)
+              const isBlinkRef    = blinkHighlights.some(h => i >= h.start && i < h.end)
+              const isAnyActive   = isHighlighted || isBlinkRef
+              const blinkClass    = (step.blink && isHighlighted) || isBlinkRef ? " syntax-blink" : ""
+              const baseColor     = charColors[i] || "text-slate-300"
+              const hlColor       = isAnyActive ? brightenColor(baseColor) : baseColor
               return (
                 <span
                   key={i}
-                  className={`${hlColor} ${isAnyActive ? "font-bold" : "opacity-50"} transition-all duration-300${blinkClass}`}
+                  className={`${hlColor} ${isAnyActive ? "font-bold" : "opacity-40"} transition-all duration-300${blinkClass}`}
                   style={
                     isHighlighted
-                      ? { textShadow: "0 0 6px currentColor", borderBottom: "2px solid rgba(250, 204, 21, 0.6)" }
+                      ? { textShadow: "0 0 6px currentColor", borderBottom: "2px solid rgba(250, 204, 21, 0.7)" }
                       : isBlinkRef
                       ? { textShadow: "0 0 5px currentColor" }
                       : undefined
@@ -1736,80 +1781,53 @@ export function SyntaxBuilder({ preset = "cpp-if", lang = "ko", onSuccess }: Syn
           </pre>
         </div>
 
-        {/* ── 화살표 + 설명 (오른쪽 패널) ── */}
-        <div
+        {/* 타이핑되는 주석 설명 */}
+        <TypewriterComment
           key={currentStep}
-          className="bg-gray-800 border-l border-gray-700 w-40 flex-shrink-0 flex flex-col justify-center px-3 py-4 gap-2"
-        >
-          {/* 화살표 + 아이콘 */}
-          <div className="flex items-center gap-1">
-            <span className="text-yellow-400 font-bold text-base leading-none">◀</span>
-            <span className="text-xl leading-none">{step.icon || "💡"}</span>
-          </div>
-          {/* 설명 텍스트 */}
-          <p className="text-xs font-medium text-gray-100 leading-relaxed">
-            {lang === "ko" ? step.label.ko : step.label.en}
-          </p>
-        </div>
+          text={lang === "ko" ? step.label.ko : step.label.en}
+          icon={step.icon}
+          stepKey={currentStep}
+        />
       </div>
 
-      {/* 진행 바 + 컨트롤 */}
-      <div className="flex items-center gap-3">
+      {/* ── 진행 바 + 컨트롤 ── */}
+      <div className="flex items-center gap-3 px-4 py-3 bg-slate-50 border-t border-slate-200">
         <button
-          onClick={() => {
-            setIsAutoPlaying(false)
-            setCurrentStep(Math.max(0, currentStep - 1))
-          }}
+          onClick={() => { setIsAutoPlaying(false); setCurrentStep(Math.max(0, currentStep - 1)) }}
           disabled={currentStep <= 0}
-          className="px-3 py-1.5 text-xs font-medium rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 disabled:opacity-30 transition-colors flex-shrink-0"
+          className="px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-200 text-slate-600 hover:bg-slate-300 disabled:opacity-30 transition-colors flex-shrink-0"
         >
           ←
         </button>
 
-        {/* 진행 바 */}
-        <div className="flex gap-2 flex-1">
+        <div className="flex gap-1.5 flex-1">
           {data.steps.map((_, i) => (
             <button
               key={i}
-              onClick={() => {
-                setIsAutoPlaying(false)
-                setCurrentStep(i)
-              }}
-              className={`h-2 flex-1 rounded-full transition-all duration-300 cursor-pointer hover:opacity-80 ${
-                i <= currentStep ? "bg-blue-500" : "bg-gray-300"
+              onClick={() => { setIsAutoPlaying(false); setCurrentStep(i) }}
+              className={`h-1.5 flex-1 rounded-full transition-all duration-300 cursor-pointer hover:opacity-80 ${
+                i <= currentStep ? "bg-indigo-500" : "bg-slate-300"
               }`}
             />
           ))}
         </div>
 
         {isComplete ? (
-          <span className="text-sm font-bold text-green-600 flex-shrink-0">🎉</span>
+          <button
+            onClick={() => { setCurrentStep(0); setIsAutoPlaying(false) }}
+            className="px-3 py-1.5 text-xs font-bold rounded-lg bg-indigo-100 text-indigo-600 hover:bg-indigo-200 transition-colors flex-shrink-0"
+          >
+            🔄 {lang === "ko" ? "다시" : "Again"}
+          </button>
         ) : (
           <button
-            onClick={() => {
-              setIsAutoPlaying(false)
-              setCurrentStep(Math.min(data.steps.length, currentStep + 1))
-            }}
-            disabled={isComplete}
-            className="px-4 py-1.5 text-xs font-bold rounded-lg bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-30 transition-colors shadow-sm flex-shrink-0"
+            onClick={() => { setIsAutoPlaying(false); setCurrentStep(Math.min(data.steps.length, currentStep + 1)) }}
+            className="px-4 py-1.5 text-xs font-bold rounded-lg bg-indigo-500 text-white hover:bg-indigo-600 transition-colors shadow-sm flex-shrink-0"
           >
             {lang === "ko" ? "다음 →" : "Next →"}
           </button>
         )}
       </div>
-
-      {/* 다시 보기 */}
-      {isComplete && (
-        <button
-          onClick={() => {
-            setCurrentStep(0)
-            setIsAutoPlaying(false)
-          }}
-          className="w-full py-2 text-sm font-medium rounded-xl bg-gradient-to-r from-blue-400 to-blue-500 text-white hover:from-blue-500 hover:to-blue-600 transition-all"
-        >
-          🔄 {lang === "ko" ? "처음부터 다시 보기" : "Watch again from start"}
-        </button>
-      )}
       <div ref={bottomRef} />
     </div>
   )
