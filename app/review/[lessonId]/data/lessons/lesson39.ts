@@ -22,7 +22,7 @@ export const lesson39: LessonData = {
       type: "explain",
       content: {
         lines: [],
-        code: `character = {'name': 'warrior', 'HP': 85}\n\nwith open('save.txt', 'w') as f:\n    f.write(character['name'] + '\\n')\n    f.write(str(character['HP']))`,
+        code: `character = {'name': '용사', 'HP': 85}\n\nwith open('save.txt', 'w') as f:\n    f.write(character['name'] + '\\n')\n    f.write(str(character['HP']))`,
         predict: {
           question: "save.txt 내용은?",
           options: ["용사85", "용사\\n85", "용사 (줄바꿈) 85", "에러"],
@@ -36,7 +36,7 @@ export const lesson39: LessonData = {
             feedback: "Because of \\n, '용사' and '85' are on separate lines!"
           }
         },
-        result: "warrior\n85"
+        result: "용사\n85"
       }
     },
     {
@@ -77,7 +77,7 @@ export const lesson39: LessonData = {
       type: "explain",
       content: {
         lines: [],
-        code: `try:\n    with open('missing.txt', 'r') as f:\n        print('load success!')\nexcept FileNotFoundError:\n    print('no save!')\nprint('game start!')`,
+        code: `try:\n    with open('missing.txt', 'r') as f:\n        print('불러오기 성공!')\nexcept FileNotFoundError:\n    print('세이브 없음!')\nprint('게임 시작!')`,
         predict: {
           question: "출력 결과는?",
           options: ["불러오기 성공! 게임 시작!", "세이브 없음! 게임 시작!", "에러", "세이브 없음!"],
@@ -355,7 +355,7 @@ with open('save.txt', 'w') as f:
     for k, v in data.items():
         f.write(f'{k}:{v}\\n')
 
-print('saved!')`,
+print('저장 완료!')`,
         predict: {
           question: "출력 결과는?",
           options: ["이름:용사 HP:100", "저장 완료!", "에러", "{'이름': '용사', 'HP': 100}"],

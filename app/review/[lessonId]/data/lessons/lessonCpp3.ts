@@ -340,14 +340,14 @@ export const lessonCpp3: LessonData = {
           code: 'auto x = 10;\nauto y = 3.5;\nauto z = "hello";\ncout << x + 1 << endl;\ncout << y + 0.5 << endl;',
           predict: {
             options: ["11\n4.0", "11\n4", "에러", "10\n3.5"],
-            answer: 0,
-            feedback: "auto는 오른쪽 값으로 타입을 자동 추론해요! x는 int(10→11), y는 double(3.5+0.5=4.0)이에요."
+            answer: 1,
+            feedback: "auto는 오른쪽 값으로 타입을 자동 추론해요! x는 int(10→11), y는 double(4.0)이에요. 단, cout은 소수점 뒤 0을 제거하므로 4.0도 4로 출력돼요!"
           },
           en: {
             lines: ["What does this code output?"],
             predict: {
               options: ["11\n4.0", "11\n4", "Error", "10\n3.5"],
-              feedback: "auto deduces the type from the right-hand value! x is int (10+1=11), y is double (3.5+0.5=4.0)."
+              feedback: "auto deduces the type from the right-hand value! x is int (10+1=11), y is double (3.5+0.5=4.0). But cout trims trailing zeros, so 4.0 prints as 4!"
             }
           }
         }

@@ -103,18 +103,6 @@ export const lesson2: LessonData = {
       },
 
       {
-        type: "interleaving",
-        content: {
-          message: "잠깐! 레슨 1 기억나?",
-          task: "Hello를 출력해봐",
-          template: null,
-          answer: "print('Hello')",
-          expect: "Hello",
-          en: { message: "Quick! Remember lesson 1?", task: "Print Hello" }
-        }
-      },
-
-      {
         type: "reward",
         content: { message: "타입 구분 완벽해!", emoji: "🎯" }
       },
@@ -189,18 +177,6 @@ export const lesson2: LessonData = {
             options: ["20000", "'190001000'", "Error! (str + int not allowed)"],
             explanation: "Different types can't be added! str + int = TypeError! Only same types work."
           }
-        }
-      },
-
-      {
-        type: "interleaving",
-        content: {
-          message: "잠깐 레슨 1 복습!",
-          task: "파이썬을 출력해봐",
-          template: null,
-          answer: "print('파이썬')",
-          expect: "파이썬",
-          en: { message: "Quick lesson 1 review!", task: "Print 파이썬" }
         }
       },
 

@@ -555,7 +555,7 @@ export const lessonCpp21: LessonData = {
           hint: "안쪽 for 루프가 끝난 자리(바깥 for 안)에서 줄바꿈을 출력하면 돼!",
           template: 'vector<vector<int>> grid = {{1,2,3},{4,5,6},{7,8,9}};\nfor (int i = 0; i < grid.size(); i++) {\n    for (int j = 0; j < grid[0].size(); j++) {\n        cout << grid[i][j] << " ";\n    }\n    cout << ___;\n}',
           blanksAnswer: ["endl"],
-          answer: 'vector<vector<int>> grid = {{1,2,3},{4,5,6},{7,8,9}};\nfor (int i = 0; i < grid.size(); i++) {\n    for (int j = 0; j < grid[0].size(); j++) {\n        cout << grid[i][j] << " ";\n    }\n    cout << endl;\n}',
+          answer: "endl",
           expect: "1 2 3 \n4 5 6 \n7 8 9 ",
           en: {
             task: "Print a 2D grid row by row! (newline after each row)",
@@ -575,7 +575,7 @@ export const lessonCpp21: LessonData = {
           hint: "현재까지의 최댓값을 저장하는 변수 이름이 빈칸에 들어가야 해!",
           template: 'vector<vector<int>> grid = {{3,7,2},{8,1,5}};\nint maxVal = grid[0][0];\nfor (int i = 0; i < grid.size(); i++) {\n    for (int j = 0; j < grid[0].size(); j++) {\n        if (grid[i][j] > ___) {\n            maxVal = grid[i][j];\n        }\n    }\n}\ncout << maxVal << endl;',
           blanksAnswer: ["maxVal"],
-          answer: 'vector<vector<int>> grid = {{3,7,2},{8,1,5}};\nint maxVal = grid[0][0];\nfor (int i = 0; i < grid.size(); i++) {\n    for (int j = 0; j < grid[0].size(); j++) {\n        if (grid[i][j] > maxVal) {\n            maxVal = grid[i][j];\n        }\n    }\n}\ncout << maxVal << endl;',
+          answer: "maxVal",
           expect: "8",
           en: {
             task: "Find and print the maximum value in a 2D vector!",
@@ -596,7 +596,7 @@ export const lessonCpp21: LessonData = {
           template: 'vector<vector<int>> grid = {{1,6,3},{9,2,7},{4,8,5}};\nint count = 0;\nfor (int i = 0; i < grid.size(); i++) {\n    for (int j = 0; j < grid[0].size(); j++) {\n        if (grid[i][j] ___) count++;\n    }\n}\ncout << count << endl;',
           blanksAnswer: ["> 5"],
           alternateAnswers: [">5"],
-          answer: 'vector<vector<int>> grid = {{1,6,3},{9,2,7},{4,8,5}};\nint count = 0;\nfor (int i = 0; i < grid.size(); i++) {\n    for (int j = 0; j < grid[0].size(); j++) {\n        if (grid[i][j] > 5) count++;\n    }\n}\ncout << count << endl;',
+          answer: "> 5",
           expect: "4",
           en: {
             task: "Count how many elements in the 2D grid are greater than 5!",

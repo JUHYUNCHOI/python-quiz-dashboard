@@ -192,7 +192,7 @@ export const lessonCpp22: LessonData = {
         type: "explain",
         content: {
           lines: [],
-          code: '#include <iostream>\nusing namespace std;\n\nclass Dog {\npublic:\n    string name;\n    int age;\n\n    Dog(string name, int age) {\n        this->name = name;  // this->name = member variable\n        this->age = age;    // this->age  = member variable\n    }\n\n    void bark() {\n        cout << this->name << ": woof!" << endl;\n    }\n};\n\nint main() {\n    Dog d("buddy", 3);\n    d.bark();\n    return 0;\n}',
+          code: '#include <iostream>\nusing namespace std;\n\nclass Dog {\npublic:\n    string name;\n    int age;\n\n    Dog(string name, int age) {\n        this->name = name;  // this->name = member variable\n        this->age = age;    // this->age  = member variable\n    }\n\n    void bark() {\n        cout << this->name << ": 멍멍!" << endl;\n    }\n};\n\nint main() {\n    Dog d("바둑이", 3);\n    d.bark();\n    return 0;\n}',
           predict: {
             question: "출력 결과는?",
             options: ["바둑이: 멍멍!", "3: 멍멍!", "name: 멍멍!", "에러"],
@@ -202,7 +202,7 @@ export const lessonCpp22: LessonData = {
           en: {
             predict: {
               question: "What's the output?",
-              options: ["Baduki: Woof!", "3: Woof!", "name: Woof!", "Error"],
+              options: ["바둑이: 멍멍!", "3: 멍멍!", "name: 멍멍!", "에러"],
               feedback: "Dog d(\"바둑이\", 3) stores name=\"바둑이\", and bark() prints this->name!"
             }
           }
@@ -373,7 +373,7 @@ export const lessonCpp22: LessonData = {
         type: "explain",
         content: {
           lines: [],
-          code: '#include <iostream>\nusing namespace std;\n\nclass Animal {\npublic:\n    string name;\n    Animal(string n) : name(n) {}\n    void speak() {\n        cout << name << " makes a sound" << endl;\n    }\n};\n\nclass Cat : public Animal {\npublic:\n    Cat(string n) : Animal(n) {}\n    void purr() {\n        cout << name << ": meow!" << endl;\n    }\n};\n\nint main() {\n    Cat c("kitty");\n    c.speak();\n    c.purr();\n    return 0;\n}',
+          code: '#include <iostream>\nusing namespace std;\n\nclass Animal {\npublic:\n    string name;\n    Animal(string n) : name(n) {}\n    void speak() {\n        cout << name << " 소리냄" << endl;\n    }\n};\n\nclass Cat : public Animal {\npublic:\n    Cat(string n) : Animal(n) {}\n    void purr() {\n        cout << name << ": 야옹!" << endl;\n    }\n};\n\nint main() {\n    Cat c("나비");\n    c.speak();\n    c.purr();\n    return 0;\n}',
           predict: {
             question: "출력 결과는?",
             options: ["나비 소리냄\n나비: 야옹!", "나비: 야옹!\n나비 소리냄", "나비: 야옹!", "에러"],
@@ -538,7 +538,7 @@ export const lessonCpp22: LessonData = {
         type: "explain",
         content: {
           lines: [],
-          code: '#include <iostream>\nusing namespace std;\n\nclass Person {\npublic:\n    string name;\n    int age;\n\n    Person(string n, int a) {\n        name = n;\n        age = a;\n    }\n};\n\nint main() {\n    Person p("charlie", 15);\n    cout << p.name << " " << p.age << "\\n";\n    return 0;\n}',
+          code: '#include <iostream>\nusing namespace std;\n\nclass Person {\npublic:\n    string name;\n    int age;\n\n    Person(string n, int a) {\n        name = n;\n        age = a;\n    }\n};\n\nint main() {\n    Person p("민준", 15);\n    cout << p.name << " " << p.age << "\\n";\n    return 0;\n}',
           predict: {
             question: "출력 결과는?",
             options: ["민준 15", "n a", "민준 0", "에러"],

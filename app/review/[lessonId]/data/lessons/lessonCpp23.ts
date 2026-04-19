@@ -129,7 +129,7 @@ export const lessonCpp23: LessonData = {
         type: "explain",
         content: {
           lines: [],
-          code: 'vector<pair<string, int>> students = {\n    {"alice", 85}, {"bob", 92}, {"charlie", 78}\n};\nsort(students.begin(), students.end(),\n    [](auto a, auto b) { return a.second > b.second; });\ncout << students[0].first << ": " << students[0].second << endl;',
+          code: 'vector<pair<string, int>> students = {\n    {"철수", 85}, {"영희", 92}, {"민수", 78}\n};\nsort(students.begin(), students.end(),\n    [](auto a, auto b) { return a.second > b.second; });\ncout << students[0].first << ": " << students[0].second << endl;',
           predict: {
             question: "출력 결과는?",
             options: ["철수: 85", "영희: 92", "민수: 78"],
@@ -139,8 +139,8 @@ export const lessonCpp23: LessonData = {
           en: {
             predict: {
               question: "What's the output?",
-              options: ["Cheolsu: 85", "Younghee: 92", "Minsu: 78"],
-              feedback: "Descending order (>) puts the highest score 92 (Younghee) at the front!"
+              options: ["철수: 85", "영희: 92", "민수: 78"],
+              feedback: "Descending order (>) puts the highest score 92 (영희) at the front!"
             }
           }
         }

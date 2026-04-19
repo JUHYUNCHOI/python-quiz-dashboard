@@ -30,7 +30,7 @@ export const lessonCppP2: LessonData = {
         type: "explain",
         content: {
           lines: [],
-          code: 'Character hero;\nhero.name = "warrior";\nhero.hp = 100;\nhero.atk = 25;\nhero.level = 1;\n\ncout << hero.name << " HP: " << hero.hp << "\\n";',
+          code: 'Character hero;\nhero.name = "전사";\nhero.hp = 100;\nhero.atk = 25;\nhero.level = 1;\n\ncout << hero.name << " HP: " << hero.hp << "\\n";',
           predict: {
             question: "출력 결과는?",
             options: ["전사 100", "전사 HP: 100", "hero HP: 100"],
@@ -375,7 +375,7 @@ export const lessonCppP2: LessonData = {
         type: "explain",
         content: {
           lines: ["클래스 코드의 출력은?"],
-          code: '#include <iostream>\n#include <string>\nusing namespace std;\n\nclass Hero {\nprivate:\n    string name;\n    int hp;\npublic:\n    Hero(string n, int h) : name(n), hp(h) {}\n    string getName() { return name; }\n    int getHp() { return hp; }\n};\n\nint main() {\n    Hero h("knight", 150);\n    cout << h.getName() << " " << h.getHp() << endl;\n    return 0;\n}',
+          code: '#include <iostream>\n#include <string>\nusing namespace std;\n\nclass Hero {\nprivate:\n    string name;\n    int hp;\npublic:\n    Hero(string n, int h) : name(n), hp(h) {}\n    string getName() { return name; }\n    int getHp() { return hp; }\n};\n\nint main() {\n    Hero h("기사", 150);\n    cout << h.getName() << " " << h.getHp() << endl;\n    return 0;\n}',
           predict: {
             options: ["기사 150", "n 150", "Hero 150"],
             answer: 0,

@@ -349,7 +349,7 @@ print(ext)`,
         hint: "end를 5로!",
         template: "text = \"프로그래밍은 재밌다!\"\nprint(text[:___])",
         answer: "5",
-        expect: "프로그래밍은",
+        expect: "프로그래밍",
         en: {
           task: "Print only the first 5 characters of the string",
           guide: "Use [:5]!",

@@ -15,7 +15,6 @@ export const lesson3: LessonData = {
         }
       },
 
-      // 문제 상황
       {
         type: "explain",
         content: {
@@ -53,7 +52,6 @@ export const lesson3: LessonData = {
         }
       },
 
-      // 보상
       {
         type: "reward",
         content: {
@@ -62,33 +60,141 @@ export const lesson3: LessonData = {
         }
       },
 
-      // ==================== CHAPTER 2: 변수 기초 ====================
+      // ==================== CHAPTER 2: 변수 이름 규칙 ====================
       {
         type: "chapter",
         content: {
           num: 2,
+          title: "변수 이름 규칙",
+          desc: "이름 짓는 법부터!"
+        }
+      },
+
+      {
+        type: "explain",
+        content: {
+          lines: [
+            "변수 이름 규칙 ✅"
+          ],
+          code: "chicken = 19000      # English OK\nchicken1 = 19000     # digit at end OK\nchicken_price = 19000 # underscore OK",
+          note: "영어, 숫자(끝에), 언더바(_) 사용 가능!"
+        }
+      },
+
+      {
+        type: "explain",
+        content: {
+          lines: [
+            "이건 안 돼요! ❌"
+          ],
+          code: "1chicken = 19000     # starts with digit X\nchicken-price = 19000 # hyphen X\nchicken price = 19000 # space X",
+          isError: true,
+          note: "숫자로 시작, 하이픈, 공백은 불가!"
+        }
+      },
+
+      {
+        type: "quiz",
+        content: {
+          question: "사용할 수 없는 변수 이름은?",
+          options: [
+            "chicken_price",
+            "2nd_menu",
+            "myChicken"
+          ],
+          answer: 1,
+          explanation: "2nd_menu는 숫자로 시작해서 안 돼! second_menu로 바꿔야 해!",
+          en: {
+            question: "Which variable name is NOT allowed?",
+            options: [
+              "chicken_price",
+              "2nd_menu",
+              "myChicken"
+            ],
+            explanation: "2nd_menu starts with a number which is not allowed! Change it to second_menu!"
+          }
+        }
+      },
+
+      {
+        type: "explain",
+        content: {
+          lines: [
+            "대소문자도 구분해!"
+          ],
+          code: "Chicken = 19000\nchicken  # error!",
+          result: "NameError!",
+          isError: true,
+          note: "Chicken과 chicken은 다른 변수야!"
+        }
+      },
+
+      {
+        type: "errorQuiz",
+        content: {
+          question: "에러 나는 코드는?",
+          code: "a. my_name = 'Alice'\nb. myName = 'Alice'\nc. my name = 'Alice'",
+          options: [
+            "a만 에러",
+            "b만 에러",
+            "c만 에러"
+          ],
+          answer: 2,
+          explanation: "my name은 공백이 있어서 에러! my_name이나 myName으로 써야 해!",
+          en: {
+            question: "Which code causes an error?",
+            options: [
+              "Only a causes error",
+              "Only b causes error",
+              "Only c causes error"
+            ],
+            explanation: "my name has a space so it causes an error! Use my_name or myName instead!"
+          }
+        }
+      },
+
+      {
+        type: "summary",
+        content: {
+          num: 2,
+          title: "이름 규칙",
+          learned: [
+            "영어, 숫자(끝에), 언더바 OK",
+            "숫자 시작, 하이픈, 공백 X",
+            "대소문자 구분!"
+          ],
+          canDo: "올바른 변수 이름을 지을 수 있어!",
+          emoji: "📝"
+        }
+      },
+
+      // ==================== CHAPTER 3: 변수 기초 ====================
+      {
+        type: "chapter",
+        content: {
+          num: 3,
           title: "변수 기초",
           desc: "이름표 붙은 상자!"
         }
       },
 
-      // 복습
+      // 복습: 이름 규칙 적용
       {
         type: "interleaving",
         content: {
-          message: "잠깐! 지난 시간 복습",
-          task: "100을 출력해봐",
+          message: "방금 배운 이름 규칙 적용해봐!",
+          task: "user_score에 95를 저장하고 출력해봐",
           template: null,
-          answer: "print(100)",
-          expect: "100",
+          answer: "user_score = 95\nprint(user_score)",
+          alternateAnswers: ["user_score=95\nprint(user_score)"],
+          expect: "95",
           en: {
-            message: "Wait! Let's review last time",
-            task: "Print 100"
+            message: "Apply the naming rules you just learned!",
+            task: "Store 95 in user_score and print it"
           }
         }
       },
 
-      // 변수 개념
       {
         type: "explain",
         content: {
@@ -113,35 +219,32 @@ export const lesson3: LessonData = {
         }
       },
 
-      // ===== 변수 만들고 출력하기 =====
       {
         type: "practice",
         content: {
-          task: "이렇게 나오게 해봐 ↓\n19000",
-          guide: "변수에 숫자를 저장하고 print로 출력!",
-          template: null,
-          answer: "chicken = 19000\nprint(chicken)",
+          task: "chicken 변수에 19000을 저장해봐",
+          template: "chicken = ___\nprint(chicken)",
+          answer: "19000",
           expect: "19000",
           en: {
-            task: "Make it print like this ↓\n19000",
-            guide: "Store a number in a variable and print it!"
+            task: "Store 19000 in the chicken variable"
           }
         }
       },
+
       {
         type: "practice",
         content: {
-          task: "이렇게 나오게 해봐 ↓\n2000",
-          guide: "변수에 숫자를 저장하고 print로 출력!",
-          template: null,
-          answer: "cola = 2000\nprint(cola)",
-          expect: "2000",
+          task: "price가 처음엔 10000이었는데 8000으로 바뀌었어. 빈칸을 채워봐",
+          template: "price = 10000\nprice = ___\nprint(price)",
+          answer: "8000",
+          expect: "8000",
           en: {
-            task: "Make it print like this ↓\n2000",
-            guide: "Store a number in a variable and print it!"
+            task: "price was 10000 but changed to 8000. Fill in the blank"
           }
         }
       },
+
       {
         type: "practice",
         content: {
@@ -158,7 +261,6 @@ export const lesson3: LessonData = {
         }
       },
 
-      // 퀴즈
       {
         type: "quiz",
         content: {
@@ -182,11 +284,10 @@ export const lesson3: LessonData = {
         }
       },
 
-      // 요약
       {
         type: "summary",
         content: {
-          num: 2,
+          num: 3,
           title: "변수 기초",
           learned: [
             "변수 = 이름표 붙은 상자",
@@ -198,17 +299,16 @@ export const lesson3: LessonData = {
         }
       },
 
-      // ==================== CHAPTER 3: 변수로 계산 ====================
+      // ==================== CHAPTER 4: 변수로 계산 ====================
       {
         type: "chapter",
         content: {
-          num: 3,
+          num: 4,
           title: "변수로 계산",
           desc: "변수끼리 더하고 빼고!"
         }
       },
 
-      // 복습
       {
         type: "interleaving",
         content: {
@@ -225,7 +325,6 @@ export const lesson3: LessonData = {
         }
       },
 
-      // 변수 계산
       {
         type: "explain",
         content: {
@@ -238,7 +337,6 @@ export const lesson3: LessonData = {
         }
       },
 
-      // ===== Lv.1: 계산 빈칸 =====
       {
         type: "practice",
         content: {
@@ -286,7 +384,6 @@ export const lesson3: LessonData = {
         }
       },
 
-      // 보상
       {
         type: "reward",
         content: {
@@ -295,7 +392,6 @@ export const lesson3: LessonData = {
         }
       },
 
-      // 결과를 변수에 저장
       {
         type: "explain",
         content: {
@@ -308,7 +404,6 @@ export const lesson3: LessonData = {
         }
       },
 
-      // 값 업데이트
       {
         type: "explain",
         content: {
@@ -321,7 +416,6 @@ export const lesson3: LessonData = {
         }
       },
 
-      // 에러 퀴즈
       {
         type: "errorQuiz",
         content: {
@@ -346,11 +440,10 @@ export const lesson3: LessonData = {
         }
       },
 
-      // 요약
       {
         type: "summary",
         content: {
-          num: 3,
+          num: 4,
           title: "변수로 계산",
           learned: [
             "변수끼리 계산 가능",
@@ -362,17 +455,16 @@ export const lesson3: LessonData = {
         }
       },
 
-      // ==================== CHAPTER 4: 텍스트와 변수 함께 출력 ====================
+      // ==================== CHAPTER 5: 텍스트와 변수 함께 출력 ====================
       {
         type: "chapter",
         content: {
-          num: 4,
+          num: 5,
           title: "변수와 텍스트 출력",
           desc: "레이블도 같이 출력해보자!"
         }
       },
 
-      // 쉼표 방법 설명
       {
         type: "explain",
         content: {
@@ -392,7 +484,6 @@ export const lesson3: LessonData = {
         }
       },
 
-      // practice 1: 빈칸 채우기 (변수 이름 3개)
       {
         type: "practice",
         content: {
@@ -408,7 +499,6 @@ export const lesson3: LessonData = {
         }
       },
 
-      // practice 2: 직접 쓰기 (쉼표 방법)
       {
         type: "practice",
         content: {
@@ -429,7 +519,6 @@ export const lesson3: LessonData = {
         }
       },
 
-      // 보상
       {
         type: "reward",
         content: {
@@ -438,7 +527,6 @@ export const lesson3: LessonData = {
         }
       },
 
-      // 문자열 + 연결 설명
       {
         type: "explain",
         content: {
@@ -449,7 +537,6 @@ export const lesson3: LessonData = {
         }
       },
 
-      // practice 3: + 빈칸
       {
         type: "practice",
         content: {
@@ -464,7 +551,6 @@ export const lesson3: LessonData = {
         }
       },
 
-      // practice 4: + 연결 더 복잡하게
       {
         type: "practice",
         content: {
@@ -480,7 +566,6 @@ export const lesson3: LessonData = {
         }
       },
 
-      // f-string 설명
       {
         type: "explain",
         content: {
@@ -491,7 +576,6 @@ export const lesson3: LessonData = {
         }
       },
 
-      // practice 5: f-string 2-blank
       {
         type: "practice",
         content: {
@@ -507,7 +591,6 @@ export const lesson3: LessonData = {
         }
       },
 
-      // practice 6: f-string 직접 쓰기
       {
         type: "practice",
         content: {
@@ -527,7 +610,6 @@ export const lesson3: LessonData = {
         }
       },
 
-      // predict: f-string 결과 예측
       {
         type: "explain",
         content: {
@@ -548,11 +630,10 @@ export const lesson3: LessonData = {
         }
       },
 
-      // 요약
       {
         type: "summary",
         content: {
-          num: 4,
+          num: 5,
           title: "변수와 텍스트 출력",
           learned: [
             "쉼표(,)로 레이블 + 변수 출력",
@@ -561,119 +642,6 @@ export const lesson3: LessonData = {
           ],
           canDo: "변수 값을 원하는 형식으로 출력할 수 있어!",
           emoji: "🖨️"
-        }
-      },
-
-      // ==================== CHAPTER 5: 변수 이름 규칙 ====================
-      {
-        type: "chapter",
-        content: {
-          num: 5,
-          title: "변수 이름 규칙",
-          desc: "이름 짓는 법!"
-        }
-      },
-
-      // 규칙 설명
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "변수 이름 규칙 ✅"
-          ],
-          code: "chicken = 19000      # English OK\nchicken1 = 19000     # digit at end OK\nchicken_price = 19000 # underscore OK",
-          note: "영어, 숫자(끝에), 언더바(_) 사용 가능!"
-        }
-      },
-
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "이건 안 돼요! ❌"
-          ],
-          code: "1chicken = 19000     # starts with digit X\nchicken-price = 19000 # hyphen X\nchicken price = 19000 # space X",
-          isError: true,
-          note: "숫자로 시작, 하이픈, 공백은 불가!"
-        }
-      },
-
-      // 퀴즈
-      {
-        type: "quiz",
-        content: {
-          question: "사용할 수 없는 변수 이름은?",
-          options: [
-            "chicken_price",
-            "2nd_menu",
-            "myChicken"
-          ],
-          answer: 1,
-          explanation: "2nd_menu는 숫자로 시작해서 안 돼! second_menu로 바꿔야 해!",
-          en: {
-            question: "Which variable name is NOT allowed?",
-            options: [
-              "chicken_price",
-              "2nd_menu",
-              "myChicken"
-            ],
-            explanation: "2nd_menu starts with a number which is not allowed! Change it to second_menu!"
-          }
-        }
-      },
-
-      // 대소문자 구분
-      {
-        type: "explain",
-        content: {
-          lines: [
-            "대소문자도 구분해!"
-          ],
-          code: "Chicken = 19000\nchicken  # error!",
-          result: "NameError!",
-          isError: true,
-          note: "Chicken과 chicken은 다른 변수야!"
-        }
-      },
-
-      // 에러 퀴즈
-      {
-        type: "errorQuiz",
-        content: {
-          question: "에러 나는 코드는?",
-          code: "a. my_name = 'Alice'\nb. myName = 'Alice'\nc. my name = 'Alice'",
-          options: [
-            "a만 에러",
-            "b만 에러",
-            "c만 에러"
-          ],
-          answer: 2,
-          explanation: "my name은 공백이 있어서 에러! my_name이나 myName으로 써야 해!",
-          en: {
-            question: "Which code causes an error?",
-            options: [
-              "Only a causes error",
-              "Only b causes error",
-              "Only c causes error"
-            ],
-            explanation: "my name has a space so it causes an error! Use my_name or myName instead!"
-          }
-        }
-      },
-
-      // 요약
-      {
-        type: "summary",
-        content: {
-          num: 5,
-          title: "이름 규칙",
-          learned: [
-            "영어, 숫자(끝에), 언더바 OK",
-            "숫자 시작, 하이픈, 공백 X",
-            "대소문자 구분!"
-          ],
-          canDo: "올바른 변수 이름을 지을 수 있어!",
-          emoji: "📝"
         }
       },
 
@@ -687,7 +655,6 @@ export const lesson3: LessonData = {
         }
       },
 
-      // 실수 1: 만들기 전 사용
       {
         type: "explain",
         content: {
@@ -701,7 +668,6 @@ export const lesson3: LessonData = {
         }
       },
 
-      // 실수 2: 따옴표 빼먹기
       {
         type: "explain",
         content: {
@@ -714,7 +680,6 @@ export const lesson3: LessonData = {
         }
       },
 
-      // 에러 퀴즈
       {
         type: "errorQuiz",
         content: {
@@ -739,7 +704,6 @@ export const lesson3: LessonData = {
         }
       },
 
-      // 요약
       {
         type: "summary",
         content: {
@@ -765,23 +729,21 @@ export const lesson3: LessonData = {
         }
       },
 
-      // 복습
       {
         type: "interleaving",
         content: {
-          message: "변수 출력 기억나?",
-          task: "money에 50000 넣고 출력해봐",
-          template: null,
-          answer: "money = 50000\nprint(money)",
-          expect: "50000",
+          message: "변수 계산 기억나?",
+          task: "money = 50000에서 치킨값 19000을 빼봐",
+          template: "money = 50000\nmoney = money - ___\nprint(money)",
+          answer: "19000",
+          expect: "31000",
           en: {
-            message: "Remember printing variables?",
-            task: "Store 50000 in money and print it"
+            message: "Remember variable calculations?",
+            task: "Subtract chicken price 19000 from money = 50000"
           }
         }
       },
 
-      // 프로젝트 소개
       {
         type: "explain",
         content: {
@@ -794,7 +756,6 @@ export const lesson3: LessonData = {
         }
       },
 
-      // 프로젝트
       {
         type: "project",
         content: {
@@ -940,7 +901,7 @@ export const lesson3: LessonData = {
         }
       },
 
-      // 에러 퀴즈 1: 정의되지 않은 변수 사용
+      // 에러 퀴즈 1
       {
         type: "errorQuiz",
         content: {
@@ -965,7 +926,7 @@ export const lesson3: LessonData = {
         }
       },
 
-      // 에러 퀴즈 2: 잘못된 변수 이름
+      // 에러 퀴즈 2
       {
         type: "errorQuiz",
         content: {
@@ -1045,7 +1006,6 @@ export const lesson3: LessonData = {
         }
       },
 
-      // 완료
       {
         type: "done",
         content: {}

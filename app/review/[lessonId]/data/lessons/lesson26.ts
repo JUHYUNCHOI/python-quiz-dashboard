@@ -445,13 +445,13 @@ print(scores["alice"])`,
         predict: {
           options: ["3, 90", "4, 100", "3, 100", "2, 100"],
           answer: 2,
-          feedback: "딕셔너리에 민수 추가(3명), 철수 점수 업데이트(100). len=3, scores['철수']=100!"
+          feedback: "charlie 추가로 3개, alice 점수 업데이트(100). len=3, scores['alice']=100!"
         },
         en: {
           lines: ["Predict the output!"],
           predict: {
             options: ["3, 90", "4, 100", "3, 100", "2, 100"],
-            feedback: "Adding 민수 gives 3 entries, updating 철수 to 100. len=3, scores['철수']=100!"
+            feedback: "Adding charlie gives 3 entries, updating alice to 100. len=3, scores['alice']=100!"
           }
         }
       }

@@ -724,7 +724,7 @@ export const lessonCpp20: LessonData = {
           level: 2,
           task: "빠른 입출력 설정 2줄을 완성해요!",
           guide: "sync_with_stdio(false)와 cin.tie(NULL)을 써요!",
-          template: "ios::sync_with_stdio(___);\ncin.tie(__);",
+          template: "ios::sync_with_stdio(___);\ncin.tie(___);",
           answer: "false",
           blanksAnswer: ["false", "NULL"],
           expect: "ios::sync_with_stdio(false);\ncin.tie(NULL);",

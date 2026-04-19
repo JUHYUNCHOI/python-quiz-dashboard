@@ -474,7 +474,7 @@ export const lesson11: LessonData = {
       type: "explain",
       content: {
         lines: ["결과를 예측해봐!"],
-        code: "score = 95\nif score >= 60:\n    print('C or above')\nif score >= 90:\n    print('A or above')",
+        code: "score = 95\nif score >= 60:\n    print('C이상')\nif score >= 90:\n    print('A이상')",
         predict: {
           options: ["C이상", "A이상", "C이상\nA이상", "아무것도 없음"],
           answer: 2,
