@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { cn } from "@/lib/utils"
 
 // ──────────────────────────────────────────────────────────────
 // ConstructorVisualizer
@@ -12,141 +13,147 @@ interface Props {
   lang?: "ko" | "en"
 }
 
-const TABS = [
-  { id: 0, ko: "① 생성자 없음",   en: "① No Constructor" },
-  { id: 1, ko: "② 생성자 있음",   en: "② With Constructor" },
-  { id: 2, ko: "③ 메서드 호출",   en: "③ Method Calls" },
-]
-
-// ── 공통 스타일 ──────────────────────────────────────────────
-const BOX = "rounded-xl border-2 p-4 font-mono text-sm"
-const LABEL = "text-[11px] font-bold uppercase tracking-widest mb-2"
-
-// ── 오브젝트 박스 컴포넌트 ───────────────────────────────────
-function ObjectBox({
-  title,
-  rows,
-  borderColor = "border-indigo-500",
-  titleColor = "text-indigo-300",
+// ── 멤버 필드 하나 ───────────────────────────────────────────
+function Field({
+  name,
+  value,
+  state = "normal",
+  delay = 0,
 }: {
-  title: string
-  rows: { field: string; value: string; color?: string; shake?: boolean }[]
+  name: string
+  value: string
+  state?: "normal" | "garbage" | "active" | "done"
+  delay?: number
+}) {
+  const valueStyle = {
+    garbage: "bg-red-500/20 text-red-300 border border-red-500/30",
+    active:  "bg-amber-500/20 text-amber-200 border border-amber-400/40",
+    done:    "bg-emerald-500/20 text-emerald-200 border border-emerald-400/40",
+    normal:  "bg-slate-600/40 text-slate-200 border border-slate-500/30",
+  }[state]
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -6 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay }}
+      className="flex items-center justify-between gap-3"
+    >
+      <span className="text-slate-400 text-xs font-mono">{name}</span>
+      <span className={cn("px-2 py-0.5 rounded-md text-xs font-mono font-semibold", valueStyle)}>
+        {value}
+      </span>
+    </motion.div>
+  )
+}
+
+// ── 오브젝트 박스 ────────────────────────────────────────────
+function ObjectBox({
+  label,
+  fields,
+  borderColor = "border-slate-600",
+}: {
+  label: string
+  fields: { name: string; value: string; state?: "normal" | "garbage" | "active" | "done" }[]
   borderColor?: string
-  titleColor?: string
 }) {
   return (
-    <div className={`${BOX} ${borderColor} bg-[#1a1b2e] w-56`}>
-      <div className={`${LABEL} ${titleColor}`}>{title}</div>
+    <div className={cn("rounded-xl border-2 p-3 bg-slate-800/60 min-w-[160px]", borderColor)}>
+      <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2.5">{label}</div>
       <div className="flex flex-col gap-1.5">
-        {rows.map((r, i) => (
-          <motion.div
-            key={r.field}
-            initial={{ opacity: 0, x: -8 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: i * 0.12 }}
-            className="flex items-center justify-between gap-2"
-          >
-            <span className="text-[#7aa2f7]">{r.field}</span>
-            <span className={`px-2 py-0.5 rounded text-xs font-bold ${r.color ?? "bg-gray-700 text-gray-300"}`}>
-              {r.value}
-            </span>
-          </motion.div>
+        {fields.map((f, i) => (
+          <Field key={f.name} name={f.name} value={f.value} state={f.state} delay={i * 0.1} />
         ))}
       </div>
     </div>
   )
 }
 
-// ── 코드 라인 컴포넌트 ───────────────────────────────────────
-function CodeLine({ code, highlight = false }: { code: string; highlight?: boolean }) {
-  return (
-    <div className={`font-mono text-sm px-3 py-1 rounded ${highlight ? "bg-indigo-900/50 text-indigo-200" : "text-gray-400"}`}>
-      {code}
-    </div>
-  )
-}
-
-// ── 화살표 ───────────────────────────────────────────────────
-function Arrow({ label }: { label: string }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, scaleX: 0 }}
-      animate={{ opacity: 1, scaleX: 1 }}
-      className="flex flex-col items-center gap-0.5"
-    >
-      <div className="text-[11px] text-amber-400 font-bold">{label}</div>
-      <div className="text-amber-400 text-lg">→</div>
-    </motion.div>
-  )
-}
-
-// ── 탭 0: 생성자 없음 ────────────────────────────────────────
+// ── 탭 ① 생성자 없음 ─────────────────────────────────────────
 function TabNoConstructor({ lang }: { lang: string }) {
-  const t = (ko: string, en: string) => lang === "en" ? en : ko
+  const isEn = lang === "en"
   return (
-    <div className="flex flex-col gap-5">
-      {/* 코드 */}
-      <div className="bg-[#1a1b2e] rounded-xl p-4 flex flex-col gap-1">
-        <CodeLine code="BankAccount acc;  // 생성자 없음" highlight />
-        <CodeLine code="// 멤버 변수를 초기화한 적 없음" />
+    <div className="flex flex-col gap-4">
+      <div className="bg-slate-800/60 rounded-xl p-3 font-mono text-sm text-slate-300 border border-slate-700">
+        <span className="text-slate-500">// </span>
+        <span className="text-sky-300">BankAccount</span>
+        <span className="text-slate-200"> acc</span>
+        <span className="text-slate-400">;</span>
+        <span className="text-slate-500 ml-3">
+          {isEn ? "// no constructor" : "// 생성자 없음"}
+        </span>
       </div>
 
-      {/* 결과 박스 */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-start gap-4 flex-wrap">
         <ObjectBox
-          title="acc"
-          borderColor="border-red-500"
-          titleColor="text-red-400"
-          rows={[
-            { field: "owner",   value: "???",         color: "bg-red-900/60 text-red-300" },
-            { field: "balance", value: "-398475.23", color: "bg-red-900/60 text-red-300" },
+          label="acc"
+          borderColor="border-red-500/60"
+          fields={[
+            { name: "owner",   value: "???",          state: "garbage" },
+            { name: "balance", value: "-398475.23",   state: "garbage" },
           ]}
         />
-        <div className="flex flex-col gap-1 text-sm">
-          <span className="text-red-400 font-bold">😱 {t("쓰레기 값!", "Garbage values!")}</span>
-          <span className="text-gray-400 text-xs">
-            {t("초기화 없이 만든 객체의\n멤버 변수는 예측 불가", "Members have undefined\nbehavior without init")}
+        <div className="flex flex-col gap-1.5 justify-center">
+          <span className="text-red-400 font-bold text-sm">
+            😱 {isEn ? "Garbage values!" : "쓰레기 값!"}
+          </span>
+          <span className="text-slate-500 text-xs leading-relaxed">
+            {isEn
+              ? "Members have\nundefined behavior"
+              : "초기화 안 하면\n예측 불가한 값 등장"}
           </span>
         </div>
       </div>
 
-      <div className="rounded-lg bg-red-900/20 border border-red-700/40 px-3 py-2 text-sm text-red-300">
-        ⚠️ {t(
-          "생성자가 없으면 멤버 변수 초기값이 보장되지 않아요. 실제로 실행해보면 이상한 값이 나올 수 있어요!",
-          "Without a constructor, member variable initial values are not guaranteed — you'll get random/garbage values!"
-        )}
+      <div className="rounded-lg bg-red-500/10 border border-red-500/25 px-3 py-2 text-xs text-red-300 leading-relaxed">
+        ⚠️ {isEn
+          ? "Without a constructor, member variables get random/garbage values at runtime!"
+          : "생성자가 없으면 멤버 변수 초기값이 보장되지 않아요. 실행할 때마다 이상한 값이 나올 수 있어요!"}
       </div>
     </div>
   )
 }
 
-// ── 탭 1: 생성자 있음 ────────────────────────────────────────
+// ── 탭 ② 생성자 있음 ─────────────────────────────────────────
 function TabWithConstructor({ lang }: { lang: string }) {
-  const t = (ko: string, en: string) => lang === "en" ? en : ko
+  const isEn = lang === "en"
   const [step, setStep] = useState(0)
 
+  const steps = [
+    isEn ? "Before" : "생성 전",
+    isEn ? "Calling..." : "호출 중",
+    isEn ? "Done!" : "완료!",
+  ]
+
   return (
-    <div className="flex flex-col gap-5">
-      {/* 코드 */}
-      <div className="bg-[#1a1b2e] rounded-xl p-4 flex flex-col gap-1">
-        <CodeLine code={`BankAccount acc("김철수", 1000);`} highlight />
-        <CodeLine code={`//              ↑이름       ↑초기잔액`} />
-        <CodeLine code="// 생성자 자동 호출!" />
+    <div className="flex flex-col gap-4">
+      <div className="bg-slate-800/60 rounded-xl p-3 font-mono text-sm border border-slate-700">
+        <div className="text-slate-200">
+          <span className="text-sky-300">BankAccount</span>
+          <span className="text-slate-200"> acc</span>
+          <span className="text-slate-400">(</span>
+          <span className="text-amber-300">"김철수"</span>
+          <span className="text-slate-400">, </span>
+          <span className="text-green-300">1000</span>
+          <span className="text-slate-400">);</span>
+        </div>
+        <div className="text-slate-500 text-xs mt-1">
+          {isEn ? "// constructor called automatically!" : "// 생성자 자동 호출!"}
+        </div>
       </div>
 
       {/* 스텝 버튼 */}
-      <div className="flex gap-2">
-        {[
-          t("객체 생성 전", "Before creation"),
-          t("생성자 호출 중", "Constructor runs"),
-          t("초기화 완료!", "Initialized!"),
-        ].map((label, i) => (
+      <div className="flex gap-1.5">
+        {steps.map((label, i) => (
           <button
             key={i}
             onClick={() => setStep(i)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${
-              step === i ? "bg-indigo-500 text-white" : "bg-gray-700 text-gray-300 hover:bg-gray-600"
-            }`}
+            className={cn(
+              "flex-1 px-2 py-1.5 rounded-lg text-xs font-bold transition-all",
+              step === i
+                ? "bg-indigo-500 text-white shadow shadow-indigo-500/30"
+                : "bg-slate-700 text-slate-400 hover:bg-slate-600"
+            )}
           >
             {label}
           </button>
@@ -156,62 +163,74 @@ function TabWithConstructor({ lang }: { lang: string }) {
       {/* 시각화 */}
       <AnimatePresence mode="wait">
         {step === 0 && (
-          <motion.div key="s0" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <motion.div key="s0"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="flex flex-col gap-2"
+          >
             <ObjectBox
-              title="acc"
-              borderColor="border-gray-600"
-              titleColor="text-gray-400"
-              rows={[
-                { field: "owner",   value: "...", color: "bg-gray-700 text-gray-500" },
-                { field: "balance", value: "...", color: "bg-gray-700 text-gray-500" },
+              label="acc"
+              borderColor="border-slate-600"
+              fields={[
+                { name: "owner",   value: "...", state: "normal" },
+                { name: "balance", value: "...", state: "normal" },
               ]}
             />
-            <p className="text-xs text-gray-500 mt-2">{t("아직 아무것도 없어요", "Nothing yet")}</p>
+            <p className="text-xs text-slate-500">
+              {isEn ? "Not initialized yet" : "아직 아무것도 없어요"}
+            </p>
           </motion.div>
         )}
 
         {step === 1 && (
-          <motion.div key="s1" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="flex items-center gap-4 flex-wrap">
-            {/* 인자 */}
-            <div className="flex flex-col gap-2">
-              <div className="bg-amber-900/30 border border-amber-600/40 rounded-lg px-3 py-2 text-sm">
-                <div className="text-[10px] text-amber-400 font-bold mb-1">{t("인자 (Arguments)", "Arguments")}</div>
-                <div className="font-mono text-amber-200">name = "김철수"</div>
-                <div className="font-mono text-amber-200">initial = 1000</div>
+          <motion.div key="s1"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="flex items-center gap-3 flex-wrap"
+          >
+            <div className="bg-amber-500/10 border border-amber-400/30 rounded-xl px-3 py-2.5">
+              <div className="text-[10px] text-amber-400 font-bold uppercase tracking-wider mb-1.5">
+                {isEn ? "Arguments" : "인자"}
+              </div>
+              <div className="font-mono text-sm text-amber-200 leading-relaxed">
+                name = "김철수"<br />
+                initial = 1000
               </div>
             </div>
-            <Arrow label={t("대입", "assigns")} />
-            {/* 객체 */}
+
+            <div className="flex flex-col items-center gap-0.5">
+              <span className="text-[10px] text-amber-400 font-bold">
+                {isEn ? "assigns" : "대입"}
+              </span>
+              <span className="text-amber-400 text-lg">→</span>
+            </div>
+
             <ObjectBox
-              title="acc"
-              borderColor="border-amber-500"
-              titleColor="text-amber-300"
-              rows={[
-                { field: "owner",   value: "김철수", color: "bg-amber-900/50 text-amber-200" },
-                { field: "balance", value: "1000",  color: "bg-amber-900/50 text-amber-200" },
+              label="acc"
+              borderColor="border-amber-400/60"
+              fields={[
+                { name: "owner",   value: '"김철수"', state: "active" },
+                { name: "balance", value: "1000",     state: "active" },
               ]}
             />
           </motion.div>
         )}
 
         {step === 2 && (
-          <motion.div key="s2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="flex flex-col gap-3">
+          <motion.div key="s2"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="flex flex-col gap-3"
+          >
             <ObjectBox
-              title="acc"
-              borderColor="border-emerald-500"
-              titleColor="text-emerald-300"
-              rows={[
-                { field: "owner",   value: "\"김철수\"", color: "bg-emerald-900/50 text-emerald-200" },
-                { field: "balance", value: "1000.0",   color: "bg-emerald-900/50 text-emerald-200" },
+              label="acc"
+              borderColor="border-emerald-400/60"
+              fields={[
+                { name: "owner",   value: '"김철수"', state: "done" },
+                { name: "balance", value: "1000.0",   state: "done" },
               ]}
             />
-            <div className="rounded-lg bg-emerald-900/20 border border-emerald-700/40 px-3 py-2 text-sm text-emerald-300">
-              ✅ {t(
-                "생성자가 자동으로 모든 멤버를 초기화했어요!",
-                "The constructor automatically initialized all members!"
-              )}
+            <div className="rounded-lg bg-emerald-500/10 border border-emerald-500/25 px-3 py-2 text-xs text-emerald-300">
+              ✅ {isEn
+                ? "Constructor automatically initialized all members!"
+                : "생성자가 자동으로 모든 멤버를 초기화했어요!"}
             </div>
           </motion.div>
         )}
@@ -220,63 +239,89 @@ function TabWithConstructor({ lang }: { lang: string }) {
   )
 }
 
-// ── 탭 2: 메서드 호출 ────────────────────────────────────────
+// ── 탭 ③ 메서드 호출 ─────────────────────────────────────────
 function TabMethodCalls({ lang }: { lang: string }) {
-  const t = (ko: string, en: string) => lang === "en" ? en : ko
+  const isEn = lang === "en"
 
   const steps = [
-    { code: 'BankAccount acc("김철수", 1000)', balance: 1000, note: t("초기화", "Init"), color: "text-indigo-300" },
-    { code: "acc.deposit(500)",                balance: 1500, note: t("+500 입금", "+500 deposit"), color: "text-emerald-300" },
-    { code: "acc.withdraw(200)",               balance: 1300, note: t("-200 출금", "-200 withdraw"), color: "text-orange-300" },
-    { code: "acc.withdraw(9999)",              balance: 1300, note: t("잔액 부족 → 무시!", "Insufficient → ignored!"), color: "text-red-300" },
-    { code: "acc.getBalance()",                balance: 1300, note: t("출력: 1300", "Output: 1300"), color: "text-yellow-300" },
+    {
+      code: 'BankAccount acc("김철수", 1000)',
+      balance: 1000,
+      note: isEn ? "Init" : "초기화",
+      noteColor: "text-indigo-300",
+      balanceState: "done" as const,
+    },
+    {
+      code: "acc.deposit(500)",
+      balance: 1500,
+      note: isEn ? "+500 deposit" : "+500 입금",
+      noteColor: "text-emerald-300",
+      balanceState: "done" as const,
+    },
+    {
+      code: "acc.withdraw(200)",
+      balance: 1300,
+      note: isEn ? "-200 withdraw" : "-200 출금",
+      noteColor: "text-orange-300",
+      balanceState: "done" as const,
+    },
+    {
+      code: "acc.withdraw(9999)",
+      balance: 1300,
+      note: isEn ? "Insufficient → ignored!" : "잔액 부족 → 무시!",
+      noteColor: "text-red-300",
+      balanceState: "garbage" as const,
+    },
+    {
+      code: "acc.getBalance()",
+      balance: 1300,
+      note: isEn ? "Output: 1300" : "출력: 1300",
+      noteColor: "text-yellow-300",
+      balanceState: "done" as const,
+    },
   ]
 
   const [current, setCurrent] = useState(0)
   const s = steps[current]
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-3">
       {/* 진행 바 */}
       <div className="flex gap-1">
-        {steps.map((step, i) => (
+        {steps.map((_, i) => (
           <button
             key={i}
             onClick={() => setCurrent(i)}
-            className={`flex-1 h-1.5 rounded-full transition-colors ${
-              i <= current ? "bg-indigo-500" : "bg-gray-700"
-            }`}
+            className={cn(
+              "flex-1 h-1.5 rounded-full transition-all",
+              i <= current ? "bg-indigo-400" : "bg-slate-700"
+            )}
           />
         ))}
       </div>
 
       {/* 현재 코드 */}
-      <div className="bg-[#1a1b2e] rounded-xl p-3">
-        <CodeLine code={s.code} highlight />
+      <div className="bg-slate-800/60 rounded-xl p-3 font-mono text-sm border border-slate-700">
+        <span className="text-slate-400">{current + 1}. </span>
+        <span className="text-slate-200">{s.code}</span>
+        <span className="text-slate-400">;</span>
       </div>
 
       {/* 객체 상태 */}
       <div className="flex items-center gap-4">
         <ObjectBox
-          title="acc"
-          borderColor="border-indigo-500"
-          titleColor="text-indigo-300"
-          rows={[
-            { field: "owner",   value: "\"김철수\"", color: "bg-indigo-900/50 text-indigo-200" },
-            {
-              field: "balance",
-              value: s.balance.toString(),
-              color: s.balance === 1300 && current === 3
-                ? "bg-red-900/40 text-red-200"   // 무시됨
-                : "bg-indigo-900/50 text-indigo-200",
-            },
+          label="acc"
+          borderColor="border-indigo-400/50"
+          fields={[
+            { name: "owner",   value: '"김철수"', state: "normal" },
+            { name: "balance", value: String(s.balance), state: s.balanceState },
           ]}
         />
         <motion.div
           key={current}
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`text-sm font-bold ${s.color}`}
+          className={cn("text-sm font-bold", s.noteColor)}
         >
           {s.note}
         </motion.div>
@@ -287,16 +332,16 @@ function TabMethodCalls({ lang }: { lang: string }) {
         <button
           onClick={() => setCurrent(Math.max(0, current - 1))}
           disabled={current === 0}
-          className="px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-700 text-gray-300 hover:bg-gray-600 disabled:opacity-30"
+          className="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-700 text-slate-300 hover:bg-slate-600 disabled:opacity-30 transition-colors"
         >
-          ← {t("이전", "Prev")}
+          ← {isEn ? "Prev" : "이전"}
         </button>
         <button
           onClick={() => setCurrent(Math.min(steps.length - 1, current + 1))}
           disabled={current === steps.length - 1}
-          className="px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-500 text-white hover:bg-indigo-600 disabled:opacity-30"
+          className="px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-500 text-white hover:bg-indigo-600 disabled:opacity-30 transition-colors"
         >
-          {t("다음", "Next")} →
+          {isEn ? "Next" : "다음"} →
         </button>
       </div>
     </div>
@@ -308,39 +353,60 @@ export function ConstructorVisualizer({ lang }: Props) {
   const [tab, setTab] = useState(0)
   const l = lang === "en" ? "en" : "ko"
 
+  const tabs = [
+    { ko: "① 생성자 없음",   en: "① No Constructor" },
+    { ko: "② 생성자 있음",   en: "② With Constructor" },
+    { ko: "③ 메서드 호출",   en: "③ Method Calls" },
+  ]
+
   return (
-    <div className="flex flex-col gap-4 w-full">
-      {/* 탭 버튼 */}
-      <div className="flex gap-2 flex-wrap">
-        {TABS.map(t => (
-          <button
-            key={t.id}
-            onClick={() => setTab(t.id)}
-            className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${
-              tab === t.id
-                ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/20"
-                : "bg-gray-800 text-gray-400 hover:bg-gray-700"
-            }`}
-          >
-            {l === "en" ? t.en : t.ko}
-          </button>
-        ))}
+    <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl overflow-hidden border border-slate-700/60 shadow-lg">
+      {/* Mac-style 헤더 */}
+      <div className="flex items-center justify-between px-4 py-3 bg-slate-800/60 border-b border-slate-700/60">
+        <div className="flex items-center gap-2">
+          <div className="flex gap-1.5">
+            <div className="w-3 h-3 rounded-full bg-red-500/70" />
+            <div className="w-3 h-3 rounded-full bg-yellow-500/70" />
+            <div className="w-3 h-3 rounded-full bg-green-500/70" />
+          </div>
+          <span className="text-slate-400 text-xs font-mono ml-2">BankAccount.cpp</span>
+        </div>
       </div>
 
-      {/* 탭 콘텐츠 */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={tab}
-          initial={{ opacity: 0, y: 6 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -6 }}
-          transition={{ duration: 0.18 }}
-        >
-          {tab === 0 && <TabNoConstructor lang={l} />}
-          {tab === 1 && <TabWithConstructor lang={l} />}
-          {tab === 2 && <TabMethodCalls lang={l} />}
-        </motion.div>
-      </AnimatePresence>
+      <div className="p-4 flex flex-col gap-4">
+        {/* 탭 버튼 */}
+        <div className="flex gap-1.5 flex-wrap">
+          {tabs.map((t, i) => (
+            <button
+              key={i}
+              onClick={() => setTab(i)}
+              className={cn(
+                "px-3 py-1.5 rounded-lg text-xs font-bold transition-all",
+                tab === i
+                  ? "bg-indigo-500 text-white shadow shadow-indigo-500/30"
+                  : "bg-slate-700 text-slate-400 hover:bg-slate-600"
+              )}
+            >
+              {l === "en" ? t.en : t.ko}
+            </button>
+          ))}
+        </div>
+
+        {/* 탭 콘텐츠 */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={tab}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.15 }}
+          >
+            {tab === 0 && <TabNoConstructor lang={l} />}
+            {tab === 1 && <TabWithConstructor lang={l} />}
+            {tab === 2 && <TabMethodCalls lang={l} />}
+          </motion.div>
+        </AnimatePresence>
+      </div>
     </div>
   )
 }
