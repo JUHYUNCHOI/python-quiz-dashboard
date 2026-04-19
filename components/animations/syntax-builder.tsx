@@ -1568,18 +1568,18 @@ export function SyntaxBuilder({ preset = "cpp-if", lang = "ko", onSuccess }: Syn
         </span>
       </div>
 
-      {/* 코드 + 설명을 하나의 블록으로 */}
-      <div className="rounded-xl overflow-hidden">
-        {/* 코드 영역 */}
-        <div className="relative bg-gray-900 p-4 font-mono text-base leading-relaxed overflow-x-auto"
-          style={{ minHeight: `${finalCodeLines * 1.65 + 2}rem` }}>
+      {/* 코드(왼쪽) + 화살표·설명(오른쪽) 가로 분할 */}
+      <div className="rounded-xl overflow-hidden flex">
+        {/* ── 코드 영역 ── */}
+        <div
+          className="relative bg-gray-900 px-4 py-4 font-mono text-sm leading-relaxed overflow-x-auto flex-1 min-w-0"
+          style={{ minHeight: `${finalCodeLines * 1.6 + 2}rem` }}
+        >
           <pre className="text-gray-300 whitespace-pre-wrap">
             {step.code.split("").map((char, i) => {
               const isHighlighted = highlights.some(h => i >= h.start && i < h.end)
               const blinkClass = step.blink && isHighlighted ? " syntax-blink" : ""
-              // 하이라이트 영역: 구문 색상 유지 + 밝게 + 밑줄
               const baseColor = charColors[i] || "text-gray-300"
-              // 하이라이트된 글자: 구문 색상의 밝은 버전 사용
               const hlColor = isHighlighted ? brightenColor(baseColor) : baseColor
               return (
                 <span
@@ -1598,13 +1598,18 @@ export function SyntaxBuilder({ preset = "cpp-if", lang = "ko", onSuccess }: Syn
           </pre>
         </div>
 
-        {/* 설명 — 코드 바로 아래, 같은 블록 느낌 */}
+        {/* ── 화살표 + 설명 (오른쪽 패널) ── */}
         <div
-          className="bg-gray-800 border-t border-gray-700 px-4 py-3 flex items-start gap-3 transition-all duration-300"
           key={currentStep}
+          className="bg-gray-800 border-l border-gray-700 w-40 flex-shrink-0 flex flex-col justify-center px-3 py-4 gap-2"
         >
-          <span className="text-2xl flex-shrink-0 mt-0.5">{step.icon || "💡"}</span>
-          <p className="text-sm font-medium text-gray-100 leading-relaxed">
+          {/* 화살표 + 아이콘 */}
+          <div className="flex items-center gap-1">
+            <span className="text-yellow-400 font-bold text-base leading-none">◀</span>
+            <span className="text-xl leading-none">{step.icon || "💡"}</span>
+          </div>
+          {/* 설명 텍스트 */}
+          <p className="text-xs font-medium text-gray-100 leading-relaxed">
             {lang === "ko" ? step.label.ko : step.label.en}
           </p>
         </div>
