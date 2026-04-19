@@ -575,45 +575,10 @@ vector<Student> students(n);  // n칸짜리 Student 벡터 — 크기가 딱 맞
 > 💡 **USACO 패턴:** 대부분 N을 입력받으니까 **vector<구조체>** 가 훨씬 자주 나와요!`,
         },
         {
-          id: "ch2-vec-cin-explain",
-          type: "explain",
-          title: "cin으로 vector<Student> 채우기",
-          content: `vector도 배열과 **똑같은 패턴**으로 cin을 쓸 수 있어요!
-
-\`\`\`cpp
-int n;
-cin >> n;
-vector<Student> students(n);      // n명짜리 vector
-
-for (int i = 0; i < n; i++) {
-    cin >> students[i].name >> students[i].score;
-}
-\`\`\`
-
-배열 버전과 나란히 비교해봐요:
-
-\`\`\`cpp
-// ▶ 배열 버전 (고정 크기)
-Student arr[100];
-for (int i = 0; i < n; i++) {
-    cin >> arr[i].name >> arr[i].score;        // ← 이 줄이
-}
-
-// ▶ vector 버전 (딱 맞는 크기)
-vector<Student> students(n);
-for (int i = 0; i < n; i++) {
-    cin >> students[i].name >> students[i].score;  // ← 완전히 같아요!
-}
-\`\`\`
-
-**핵심:** cin으로 채우는 for문 코드는 배열이든 vector든 **완전히 동일**해요.
-선언 방법만 달라요!`,
-        },
-        {
           id: "ch2-vec-cin-anim",
           type: "interactive",
-          title: "🎬 cin이 토큰을 읽어서 채우는 과정",
-          description: "stdin의 각 값이 어떻게 vector 안의 struct 필드로 들어가는지 한 단계씩 확인해봐요.",
+          title: "🎬 cin이 vector<Student>를 채우는 과정",
+          description: "입력 형식과 코드를 확인한 뒤, 시작하기를 눌러 cin이 토큰을 하나씩 읽어가는 과정을 직접 따라가봐요.",
           component: "cinFillVisualizer",
         },
         {

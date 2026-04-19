@@ -123,8 +123,81 @@ export function CinFillVisualizer({
 
       <div className="p-4 flex flex-col gap-4">
 
-        {/* ── 메인: stdin + 카드 ── */}
-        <div className="flex gap-3">
+        {/* ── IDLE: 설명 화면 (시작 전) ── */}
+        {isIdle && (
+          <div className="flex flex-col gap-3">
+            <div className="flex gap-3">
+              {/* 입력 형식 */}
+              <div className="flex-1 bg-slate-950/70 rounded-xl p-3">
+                <div className="text-[11px] text-slate-500 mb-2 font-mono uppercase tracking-wider">
+                  {isEn ? "Input format (stdin)" : "입력 형식 (stdin)"}
+                </div>
+                <div className="font-mono text-sm text-slate-300 leading-relaxed">
+                  <div className="text-yellow-300">{n}</div>
+                  {items.map((item, i) => (
+                    <div key={i} className="text-slate-300">
+                      {fields.map(f => String(item[f])).join(" ")}
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-2 text-[11px] text-slate-600 leading-relaxed">
+                  {isEn
+                    ? `↑ Line 1: n (count)\nLines 2~: one ${structName} per line`
+                    : `↑ 첫 줄: n (개수)\n이후: 한 줄에 ${structName} 하나씩`}
+                </div>
+              </div>
+
+              {/* 코드 */}
+              <div className="flex-[2] bg-slate-800/50 rounded-xl p-3 border border-slate-700/40 font-mono text-sm">
+                <div className="text-[11px] text-slate-500 mb-2 uppercase tracking-wider">code</div>
+                <div>
+                  <span className="text-orange-300">int</span>
+                  <span className="text-white"> n</span>
+                  <span className="text-slate-400">;</span>
+                </div>
+                <div>
+                  <span className="text-sky-300">cin</span>
+                  <span className="text-slate-400"> &gt;&gt; </span>
+                  <span className="text-white">n</span>
+                  <span className="text-slate-400">;</span>
+                </div>
+                <div className="mt-1">
+                  <span className="text-sky-300">vector</span>
+                  <span className="text-slate-400">&lt;</span>
+                  <span className="text-orange-300">{structName}</span>
+                  <span className="text-slate-400">&gt; </span>
+                  <span className="text-white">{arrayName}</span>
+                  <span className="text-slate-400">(n);</span>
+                </div>
+                <div className="mt-1">
+                  <span className="text-blue-400">for</span>
+                  <span className="text-slate-400"> (int i = 0; i &lt; n; i++) {"{"}</span>
+                </div>
+                {fields.map((field) => (
+                  <div key={field} className="ml-4">
+                    <span className="text-sky-300">cin</span>
+                    <span className="text-slate-400"> &gt;&gt; </span>
+                    <span className="text-slate-300">{arrayName}[i].{field}</span>
+                    <span className="text-slate-400">;</span>
+                  </div>
+                ))}
+                <div className="text-slate-400">{"}"}</div>
+              </div>
+            </div>
+
+            {/* 시작 버튼 */}
+            <button
+              onClick={next}
+              className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 rounded-xl text-sm font-bold text-white transition-colors flex items-center justify-center gap-2"
+            >
+              <SkipForward className="w-4 h-4" />
+              {isEn ? "▶ Start — watch cin fill step by step" : "▶ 시작하기 — cin이 채우는 과정 보기"}
+            </button>
+          </div>
+        )}
+
+        {/* ── RUNNING: stdin + 카드 + 코드 + 컨트롤 ── */}
+        {!isIdle && <><div className="flex gap-3">
 
           {/* stdin 패널 */}
           <div className="bg-slate-950/70 rounded-xl p-3 flex-shrink-0 min-w-[110px]">
@@ -314,15 +387,14 @@ export function CinFillVisualizer({
               ? (isEn ? "Restart" : "다시 시작")
               : (isEn ? "Next Step" : "다음 단계")}
           </button>
-          {!isIdle && (
-            <button
-              onClick={reset}
-              className="flex items-center gap-2 px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm transition-colors"
-            >
-              <RotateCcw className="w-4 h-4" />
-            </button>
-          )}
+          <button
+            onClick={reset}
+            className="flex items-center gap-2 px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm transition-colors"
+          >
+            <RotateCcw className="w-4 h-4" />
+          </button>
         </div>
+        </>}
 
       </div>
     </div>
