@@ -184,9 +184,8 @@ export const lesson3: LessonData = {
         content: {
           message: "방금 배운 이름 규칙 적용해봐!",
           task: "user_score에 95를 저장하고 출력해봐",
-          template: null,
-          answer: "user_score = 95\nprint(user_score)",
-          alternateAnswers: ["user_score=95\nprint(user_score)"],
+          template: "user_score = ___\nprint(user_score)",
+          answer: "95",
           expect: "95",
           en: {
             message: "Apply the naming rules you just learned!",
@@ -938,16 +937,13 @@ export const lesson3: LessonData = {
         content: {
           level: 2,
           task: "price = 10000, discount = 3000 으로 변수를 만들고\n최종 금액을 final 변수에 저장해서 출력해봐",
-          guide: "final = price - discount 로 계산해서 저장해!",
-          template: null,
-          answer: "price = 10000\ndiscount = 3000\nfinal = price - discount\nprint(final)",
-          alternateAnswers: [
-            "price = 10000\ndiscount = 3000\nfinal = price-discount\nprint(final)",
-          ],
+          guide: "final 칸에 price - discount 를 넣어봐!",
+          template: "price = 10000\ndiscount = 3000\nfinal = ___\nprint(final)",
+          answer: "price - discount",
           expect: "7000",
           en: {
-            task: "Create variables price = 10000, discount = 3000\nthen store the final price in a variable called final and print it",
-            guide: "Calculate: final = price - discount"
+            task: "Variables price = 10000, discount = 3000 are set.\nStore the final price in the blank and print it",
+            guide: "Put price - discount in the blank!"
           }
         }
       },
@@ -957,17 +953,15 @@ export const lesson3: LessonData = {
         type: "practice",
         content: {
           level: 2,
-          task: "이렇게 나오게 해봐 ↓\n100\n150\n200",
-          guide: "money = 100 으로 시작해서 50씩 늘려가며 출력!",
-          template: null,
+          task: "money를 100에서 50씩 두 번 늘려가며 출력해봐",
+          guide: "money = money + ___ 패턴으로 업데이트해!",
+          template: "money = 100\nprint(money)\nmoney = money + ___\nprint(money)\nmoney = money + ___\nprint(money)",
+          blanksAnswer: ["50", "50"],
           answer: "money = 100\nprint(money)\nmoney = money + 50\nprint(money)\nmoney = money + 50\nprint(money)",
-          alternateAnswers: [
-            "money = 100\nprint(money)\nmoney += 50\nprint(money)\nmoney += 50\nprint(money)"
-          ],
           expect: "100\n150\n200",
           en: {
-            task: "Make it print like this ↓\n100\n150\n200",
-            guide: "Start with money = 100 and increase by 50 each time, printing each value!"
+            task: "Increase money by 50 twice, printing each time",
+            guide: "Use the money = money + ___ pattern!"
           }
         }
       },
