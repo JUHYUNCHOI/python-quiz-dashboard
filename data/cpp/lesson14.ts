@@ -557,38 +557,75 @@ for (int i = 0; ___ < n; i++) {
           id: "ch2-vec-explain",
           type: "explain",
           title: "vector<Student> — N명을 동적으로 관리!",
-          content: `배열 \`Student arr[3]\`은 크기를 미리 정해야 해요.
-N명을 입력받아야 한다면? **vector**와 함께 써요!
+          content: `배열 \`Student arr[100]\`은 크기를 **미리** 정해야 해요.
+N명을 입력받아야 한다면? **vector<Student>**와 함께 써요!
 
 \`\`\`cpp
-#include <vector>  // 추가 필요!
+#include <vector>
 
+vector<Student> students(n);  // n칸짜리 Student 벡터 — 크기가 딱 맞아요!
+\`\`\`
+
+| | \`Student arr[100]\` | \`vector<Student> students(n)\` |
+|---|---|---|
+| 크기 | 고정 (100명까지) | n에 딱 맞게 |
+| 접근 | \`arr[i].name\` | \`students[i].name\` (동일!) |
+| 실전 | 최댓값 알 때 | 입력받을 때 (더 자주 씀) |
+
+> 💡 **USACO 패턴:** 대부분 N을 입력받으니까 **vector<구조체>** 가 훨씬 자주 나와요!`,
+        },
+        {
+          id: "ch2-vec-cin-explain",
+          type: "explain",
+          title: "cin으로 vector<Student> 채우기",
+          content: `vector도 배열과 **똑같은 패턴**으로 cin을 쓸 수 있어요!
+
+\`\`\`cpp
 int n;
 cin >> n;
-vector<Student> students(n);  // n칸짜리 Student 벡터
+vector<Student> students(n);      // n명짜리 vector
 
 for (int i = 0; i < n; i++) {
     cin >> students[i].name >> students[i].score;
 }
 \`\`\`
 
-또는 push_back으로 하나씩 추가할 수도 있어요:
+배열 버전과 나란히 비교해봐요:
 
 \`\`\`cpp
-vector<Student> students;
+// ▶ 배열 버전 (고정 크기)
+Student arr[100];
 for (int i = 0; i < n; i++) {
-    Student s;
-    cin >> s.name >> s.score;
-    students.push_back(s);
+    cin >> arr[i].name >> arr[i].score;        // ← 이 줄이
+}
+
+// ▶ vector 버전 (딱 맞는 크기)
+vector<Student> students(n);
+for (int i = 0; i < n; i++) {
+    cin >> students[i].name >> students[i].score;  // ← 완전히 같아요!
 }
 \`\`\`
 
-| 방식 | 언제 사용? |
-|---|---|
-| \`Student arr[100]\` | N 최대값을 미리 알 때 (USACO 스타일) |
-| \`vector<Student>(n)\` | N을 입력받을 때 (가장 유연) |
-
-> 💡 **USACO 패턴:** 대부분 N을 입력받으니까 **vector<구조체>** 가 훨씬 자주 나와요!`,
+**핵심:** cin으로 채우는 for문 코드는 배열이든 vector든 **완전히 동일**해요.
+선언 방법만 달라요!`,
+        },
+        {
+          id: "ch2-vec-cin-fill",
+          type: "fillblank" as const,
+          title: "cin으로 vector<Student> 채우기",
+          content: "n명의 학생 데이터를 cin으로 입력받아 vector를 채워요.",
+          code: `int n;
+cin >> n;
+vector<___> students(n);
+for (int i = 0; i < n; i++) {
+    cin >> students[___].name >> students[___].score;
+}`,
+          fillBlanks: [
+            { id: 0, answer: "Student", options: ["Student", "int", "string", "n"] },
+            { id: 1, answer: "i", options: ["i", "0", "n", "name"] },
+            { id: 2, answer: "i", options: ["i", "0", "n", "score"] },
+          ],
+          explanation: "`vector<Student> students(n)`으로 n칸짜리 vector를 만들어요. 이후 for문에서 `students[i].name`, `students[i].score`로 접근하는 건 배열과 완전히 동일해요!",
         },
         {
           id: "ch2-vec-pred",
