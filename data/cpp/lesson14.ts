@@ -611,6 +611,167 @@ int main() {
             },
           ],
         },
+        // ── struct 안에 vector 필드 ──────────────────────────────
+        {
+          id: "ch2-vec-field-explain",
+          type: "explain",
+          title: "struct 안에 vector 넣기",
+          content: `지금까지는 멤버 변수가 \`int\`, \`string\` 같은 단순 타입이었어요.
+알고리즘 문제에서는 **struct 안에 vector를 필드로 가지는 패턴**이 정말 자주 나와요.
+
+### 예시 1 — 학생별 여러 점수
+
+\`\`\`cpp
+struct Student {
+    string name;
+    vector<int> scores;  // 과목 수가 달라도 OK!
+};
+
+Student s;
+s.name = "김철수";
+s.scores.push_back(90);  // 국어
+s.scores.push_back(85);  // 영어
+s.scores.push_back(92);  // 수학
+\`\`\`
+
+고정 배열 \`int scores[3]\`이면 과목 수가 바뀔 때마다 코드를 고쳐야 해요.
+\`vector<int> scores\`면 \`push_back\`으로 얼마든지 추가할 수 있어요.
+
+---
+
+### 예시 2 — 그래프 인접 리스트 (USACO 핵심!)
+
+\`\`\`cpp
+struct Node {
+    int val;
+    vector<int> adj;  // 연결된 이웃 노드 번호들
+};
+
+// N개 노드
+int n;
+cin >> n;
+vector<Node> graph(n);
+
+// 간선 추가
+int u, v;
+cin >> u >> v;
+graph[u].adj.push_back(v);
+graph[v].adj.push_back(u);
+\`\`\`
+
+USACO Bronze 그래프 문제에서 거의 항상 이 패턴이 나와요.
+노드마다 연결된 이웃 수가 다르기 때문에 vector를 써야 해요.`,
+        },
+        {
+          id: "ch2-vec-field-pred",
+          type: "predict" as const,
+          title: "struct 안 vector — 출력 결과는?",
+          code: `#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+struct Student {
+    string name;
+    vector<int> scores;
+};
+
+int main() {
+    Student s;
+    s.name = "Alice";
+    s.scores.push_back(90);
+    s.scores.push_back(80);
+    s.scores.push_back(70);
+    int sum = 0;
+    for (int sc : s.scores) sum += sc;
+    cout << s.name << " " << sum / (int)s.scores.size() << endl;
+    return 0;
+}`,
+          options: ["Alice 80", "Alice 240", "Alice 3", "에러"],
+          answer: 0,
+          explanation: "`s.scores`에 90, 80, 70이 들어있어요. sum = 240, size = 3, 240/3 = 80. 출력: `Alice 80`!",
+        },
+        {
+          id: "ch2-vec-field-practice",
+          type: "practice" as const,
+          title: "✋ 학생별 점수 목록 입력받기",
+          content: `N명의 학생을 입력받아요. 각 학생은 이름과 점수 개수(K), K개의 점수를 입력받아요.
+각 학생의 이름과 평균(정수 나눗셈)을 출력해봐요.
+
+입력 형식:
+\`\`\`
+3
+Alice 3 90 80 70
+Bob 2 100 60
+Carol 4 50 60 70 80
+\`\`\`
+출력:
+\`\`\`
+Alice 80
+Bob 80
+Carol 65
+\`\`\``,
+          code: `#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+struct Student {
+    string name;
+    vector<int> scores;
+};
+
+int main() {
+    int n;
+    cin >> n;
+    vector<Student> students(n);
+    for (int i = 0; i < n; i++) {
+        int k;
+        cin >> students[i].name >> k;
+        students[i].scores.resize(k);
+        for (int j = 0; j < k; j++) {
+            cin >> students[i].scores[j];
+        }
+    }
+    for (auto& s : students) {
+        int sum = 0;
+        for (int sc : s.scores) sum += sc;
+        cout << s.name << " " << sum / (int)s.scores.size() << "\\n";
+    }
+    return 0;
+}`,
+          starterCode: `#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+struct Student {
+    string name;
+    vector<int> scores;  // struct 안의 vector!
+};
+
+int main() {
+    int n;
+    cin >> n;
+    vector<Student> students(n);
+    for (int i = 0; i < n; i++) {
+        int k;
+        cin >> students[i].name >> k;
+        // k개의 점수를 scores에 push_back으로 넣어봐요
+        // 여기에 코드를 작성하세요
+    }
+    // 각 학생의 이름과 평균을 출력해봐요
+    // 여기에 코드를 작성하세요
+    return 0;
+}`,
+          hint: "scores가 비어있으니 push_back으로 k번 추가해요. 평균은 sum을 scores.size()로 나눠요. size()는 unsigned라 (int)로 캐스팅!",
+          testCases: [
+            {
+              input: "3\nAlice 3 90 80 70\nBob 2 100 60\nCarol 4 50 60 70 80",
+              expectedOutput: "Alice 80\nBob 80\nCarol 65",
+            },
+          ],
+        },
         {
           id: "ch2-ref",
           type: "explain",
@@ -706,6 +867,8 @@ struct 이름 {
 | 접근 | \`s.name\`, \`s.score\` |
 | 고정 배열 | \`Student arr[3] = {...};\` |
 | 동적 벡터 | \`vector<Student> v(n);\` — N 입력받을 때 |
+| vector 필드 | \`struct { vector<int> scores; };\` — 가변 개수 데이터 |
+| 그래프 패턴 | \`struct { vector<int> adj; };\` — 인접 리스트 |
 | 함수 전달 | 참조(\`Student& s\`)로 넘기면 효율적 |
 
 🚀 **다음 레슨:** class — 멤버변수·멤버함수 묶기, private/public 접근 제어, 생성자, 캡슐화(OOP)!`
