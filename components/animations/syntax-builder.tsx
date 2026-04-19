@@ -549,10 +549,19 @@ const CPP_STRUCT: SyntaxBuilderPreset = {
       icon: "📝",
     },
     {
-      // \n at 99, cout lines at 100-149
+      // s.name: s=108, .=109, name=110-113  →  blink "Student s" (69-78) + "string name;" (17-33)
+      code: "struct Student {\n    string name;\n    int age;\n    double score;\n};\n\nStudent s = {\"Kim\", 15, 95.5};\ncout << s.name;   // Kim",
+      highlight:      { start: 108, end: 114 },                                   // s.name 밑줄
+      blinkHighlight: [{ start: 69, end: 78 }, { start: 17, end: 33 }],           // "Student s" + "string name;" 깜빡
+      label: { ko: "s → 위에서 만든 변수 s, .name → struct의 name 멤버!", en: "s → variable s above, .name → the name member from the struct!" },
+      icon: "✨",
+    },
+    {
+      // s.score: s=133, .=134, score=135-139  →  blink "Student s" (69-78) + "double score;" (47-64)
       code: "struct Student {\n    string name;\n    int age;\n    double score;\n};\n\nStudent s = {\"Kim\", 15, 95.5};\ncout << s.name;   // Kim\ncout << s.score;  // 95.5",
-      highlight: { start: 99, end: 150 },
-      label: { ko: "점(.) 연산자로 멤버에 접근! s.name, s.age, s.score", en: "Dot(.) operator to access members! s.name, s.age, s.score" },
+      highlight:      { start: 133, end: 140 },                                   // s.score 밑줄
+      blinkHighlight: [{ start: 69, end: 78 }, { start: 47, end: 64 }],           // "Student s" + "double score;" 깜빡
+      label: { ko: "s → 같은 변수 s, .score → struct의 score 멤버!", en: "s → same variable s, .score → the score member from the struct!" },
       icon: "✨",
     },
   ],
