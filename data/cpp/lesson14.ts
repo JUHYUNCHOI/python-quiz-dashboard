@@ -129,28 +129,28 @@ int main() {
       emoji: "🔧",
       steps: [
         {
+          id: "ch2-array-builder",
+          type: "interactive",
+          title: "🔨 struct 배열 만들기",
+          description: "Student 배열을 한 단계씩 직접 조립해봐요.",
+          component: "cppStructArrayBuilder",
+        },
+        {
           id: "ch2-array",
           type: "explain",
-          title: "struct 배열로 여러 데이터 관리",
+          title: "배열 완성! 이제 for문으로 접근해봐요",
           component: "cppStructArrayLoop",
-          content: `struct의 진짜 힘은 **배열과 함께** 쓸 때예요!
+          content: `배열이 만들어졌어요. 이제 **for문**으로 한 명씩 순서대로 접근해봐요!
 
 \`\`\`cpp
-struct Student {
-    string name;
-    int score;
-};
-
-Student students[3] = {
-    {"김철수", 95},
-    {"이영희", 87},
-    {"박민준", 72},
-};
-
 for (int i = 0; i < 3; i++) {
     cout << students[i].name << ": " << students[i].score << endl;
 }
 \`\`\`
+
+- \`students[i]\` → i번째 Student 객체
+- \`students[i].name\` → 그 학생의 이름 멤버
+- \`students[i].score\` → 그 학생의 점수 멤버
 
 출력:
 \`\`\`
@@ -159,7 +159,7 @@ for (int i = 0; i < 3; i++) {
 박민준: 72
 \`\`\`
 
-USACO에서 좌표, 간선 정보 등을 struct 배열로 많이 관리해요!`,
+USACO에서 좌표, 간선 정보 등을 struct 배열 + for문으로 많이 다뤄요!`,
         },
         {
           id: "ch2-pred1",

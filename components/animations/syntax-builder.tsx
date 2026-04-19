@@ -1511,6 +1511,77 @@ const CPP_CONSTRUCTOR: SyntaxBuilderPreset = {
   ],
 }
 
+// ── struct 배열 만들기 ──────────────────────────────────────────────────────
+// struct def = 53 chars (0-52):
+//   "struct Student {\n    string name;\n    int score;\n};\n\n"
+//   string name; = 17-32, int score; = 34-47
+// Array part starts at 53:
+//   Student(53-59)  students(61-68)  [3](69-71)  = {(72-75)
+//   element 0: {…김철수…95}, = 81-92  (77-93 with indent+\n)
+//   element 1: {…이영희…87}, = 98-109 (94-110 with indent+\n)
+//   element 2: {…박민준…72}, = 115-126 (111-127 with indent+\n)
+//   }; = 128-129
+const CPP_STRUCT_ARRAY: SyntaxBuilderPreset = {
+  title: { ko: "struct 배열 만들기", en: "Creating a struct Array" },
+  steps: [
+    {
+      code: "struct Student {\n    string name;\n    int score;\n};\n\nStudent",
+      highlight:      { start: 53, end: 60 },   // "Student" 타입
+      blinkHighlight: { start: 0,  end: 51 },   // struct 정의 전체 깜빡
+      label: { ko: "Student — 바로 위 struct 이름이 새로운 타입이에요!", en: "Student — the struct name above becomes a new type!" },
+      icon: "🏷️",
+    },
+    {
+      code: "struct Student {\n    string name;\n    int score;\n};\n\nStudent students",
+      highlight: { start: 60, end: 69 },  // " students"
+      label: { ko: "변수 이름 students — 여러 명이니까 복수형!", en: "Variable name students — plural because it holds many!" },
+      icon: "📦",
+    },
+    {
+      code: "struct Student {\n    string name;\n    int score;\n};\n\nStudent students[3]",
+      highlight: { start: 69, end: 72 },  // "[3]"
+      label: { ko: "[3] — Student를 3개 담는 배열! 숫자 바꾸면 크기 변경 가능", en: "[3] — array that holds 3 Students! Change the number for different size" },
+      icon: "📊",
+    },
+    {
+      code: "struct Student {\n    string name;\n    int score;\n};\n\nStudent students[3] = {",
+      highlight: { start: 72, end: 76 },  // " = {"
+      label: { ko: "= { — 각 칸에 Student를 {}로 하나씩 채워요", en: "= { — fill each slot with one Student using {}" },
+      icon: "📋",
+    },
+    {
+      // indent(77-80) + {"김철수", 95}, = 81-92
+      code: "struct Student {\n    string name;\n    int score;\n};\n\nStudent students[3] = {\n    {\"김철수\", 95},",
+      highlight:      { start: 77, end: 93 },                         // 첫 번째 원소
+      blinkHighlight: [{ start: 17, end: 34 }, { start: 34, end: 49 }], // name + score 멤버 깜빡
+      label: { ko: "students[0] → {\"김철수\", 95} — name 자리에 이름, score 자리에 점수!", en: "students[0] → {\"김철수\", 95} — name slot then score slot!" },
+      icon: "📝",
+    },
+    {
+      // indent(94-97) + {"이영희", 87}, = 98-109
+      code: "struct Student {\n    string name;\n    int score;\n};\n\nStudent students[3] = {\n    {\"김철수\", 95},\n    {\"이영희\", 87},",
+      highlight:      { start: 94, end: 111 },                         // 두 번째 원소
+      blinkHighlight: [{ start: 17, end: 34 }, { start: 34, end: 49 }],
+      label: { ko: "students[1] → {\"이영희\", 87} — 같은 형식으로 두 번째 학생!", en: "students[1] → {\"이영희\", 87} — second student, same format!" },
+      icon: "📝",
+    },
+    {
+      // indent(111-114) + {"박민준", 72}, = 115-126
+      code: "struct Student {\n    string name;\n    int score;\n};\n\nStudent students[3] = {\n    {\"김철수\", 95},\n    {\"이영희\", 87},\n    {\"박민준\", 72},",
+      highlight:      { start: 111, end: 128 },                        // 세 번째 원소
+      blinkHighlight: [{ start: 17, end: 34 }, { start: 34, end: 49 }],
+      label: { ko: "students[2] → {\"박민준\", 72} — 세 번째! 배열 꽉 찼어요 (크기 [3])", en: "students[2] → {\"박민준\", 72} — third and last! Array is full ([3])" },
+      icon: "📝",
+    },
+    {
+      code: "struct Student {\n    string name;\n    int score;\n};\n\nStudent students[3] = {\n    {\"김철수\", 95},\n    {\"이영희\", 87},\n    {\"박민준\", 72},\n};",
+      highlight: { start: 128, end: 131 },  // "};"
+      label: { ko: "}; — 배열 완성! students[0]·[1]·[2]에 Student가 하나씩 들어갔어요", en: "}; — Array complete! Each slot students[0]·[1]·[2] holds one Student" },
+      icon: "✅",
+    },
+  ],
+}
+
 // 프리셋 매핑
 const PRESETS: Record<string, SyntaxBuilderPreset> = {
   "cpp-if": CPP_IF,
@@ -1541,6 +1612,7 @@ const PRESETS: Record<string, SyntaxBuilderPreset> = {
   "cpp-public-private": CPP_PUBLIC_PRIVATE,
   "cpp-brace-trap": CPP_BRACE_TRAP,
   "cpp-constructor": CPP_CONSTRUCTOR,
+  "cpp-struct-array": CPP_STRUCT_ARRAY,
   "py-if": PY_IF,
   "py-for": PY_FOR,
   "py-while": PY_WHILE,
@@ -1779,6 +1851,9 @@ export function CppPointerBuilder(props: Omit<SyntaxBuilderProps, "preset">) {
 }
 export function CppStructBuilder(props: Omit<SyntaxBuilderProps, "preset">) {
   return <SyntaxBuilder {...props} preset="cpp-struct" />
+}
+export function CppStructArrayBuilder(props: Omit<SyntaxBuilderProps, "preset">) {
+  return <SyntaxBuilder {...props} preset="cpp-struct-array" />
 }
 export function CppClassBuilder(props: Omit<SyntaxBuilderProps, "preset">) {
   return <SyntaxBuilder {...props} preset="cpp-class" />

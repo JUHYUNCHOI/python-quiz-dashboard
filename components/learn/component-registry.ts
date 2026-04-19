@@ -285,6 +285,10 @@ const registry: Record<string, ComponentEntry> = {
     load: () => import("@/components/animations/syntax-builder"),
     exportName: "CppStructBuilder",
   },
+  cppStructArrayBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppStructArrayBuilder",
+  },
   cppClassBuilder: {
     load: () => import("@/components/animations/syntax-builder"),
     exportName: "CppClassBuilder",
