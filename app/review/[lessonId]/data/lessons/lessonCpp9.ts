@@ -673,35 +673,17 @@ export const lessonCpp9: LessonData = {
         type: "practice",
         content: {
           level: 2,
-          task: "크기 4, 초기값 7인 정수 벡터를 선언해요!\n변수명은 v 로 하세요.",
+          task: "정수 4개를 모두 7로 초기화한 벡터 v를 선언해요.",
           hint: "vector<타입> 이름(크기, 초기값);",
           template: null,
+          context: "// 이미 준비됨: #include <vector>, int main()\n// 아래에 선언 한 줄만 작성하세요",
           answer: "vector<int> v(4, 7);",
           alternateAnswers: ["vector<int> v(4,7);"],
           expect: "vector<int> v(4, 7);",
           en: {
-            task: "Declare a vector of 4 integers, all initialized to 7!\nUse variable name: v",
-            hint: "vector<type> name(size, value);"
-          }
-        }
-      },
-
-      // Drill 4: 초기화 3가지 직접 쓰기 (template: null)
-      {
-        type: "practice",
-        content: {
-          level: 2,
-          task: "vector<int> 변수를 3줄로 선언해요:\n① a: 빈 벡터\n② b: 1, 2, 3으로 초기화\n③ c: 크기 4, 전부 0",
-          hint: "① 그냥 선언 ② = {값, 값, 값} ③ (크기, 초기값)",
-          template: null,
-          answer: "vector<int> a;\nvector<int> b = {1, 2, 3};\nvector<int> c(4, 0);",
-          alternateAnswers: [
-            "vector<int> a;\nvector<int> b = {1,2,3};\nvector<int> c(4, 0);"
-          ],
-          expect: "vector<int> a;\nvector<int> b = {1, 2, 3};\nvector<int> c(4, 0);",
-          en: {
-            task: "Write 3 vector declarations on separate lines:\n① a: empty vector\n② b: initialized with 1, 2, 3\n③ c: size 4, all zeros",
-            hint: "① just declare ② = {val, val, val} ③ (size, initial_value)"
+            task: "Declare a vector v of 4 integers, all set to 7.",
+            hint: "vector<type> name(size, value);",
+            context: "// Already set up: #include <vector>, int main()\n// Write just the declaration line below"
           }
         }
       },
@@ -845,6 +827,23 @@ export const lessonCpp9: LessonData = {
         }
       },
 
+      // Drill 9c: 미리 크기 정한 vector에 cin — v[i] 직접 접근 (빈칸)
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "크기가 이미 정해진 vector에 3개의 정수를 입력받아 채워요!",
+          hint: "미리 크기를 정한 vector는 push_back이 아니라 v[i]로 자리에 직접 덮어써요",
+          template: "vector<int> v(3, 0);  // 크기 3, 이미 값 있음\nfor (int i = 0; i < 3; i++) {\n    cin >> v[___];\n}",
+          answer: "i",
+          expect: "vector<int> v(3, 0);\nfor (int i = 0; i < 3; i++) {\n    cin >> v[i];\n}",
+          en: {
+            task: "Fill an already-sized vector with 3 integers from cin!",
+            hint: "Pre-sized vectors use v[i] (not push_back) to overwrite in place"
+          }
+        }
+      },
+
       // Drill 9: cin 입력 → 벡터 저장 → 최댓값
       {
         type: "practice",
@@ -863,6 +862,210 @@ export const lessonCpp9: LessonData = {
             task: "Write from scratch! Read 4 integers via cin → store in vector → print max value\n\nExample) Input: 3 7 2 9 → Output: 9",
             guide: "push_back to store → maxVal = v[0] → for auto compare",
             hint: "vector<int> v;\nfor(int i=0;i<4;i++){int x;cin>>x;v.push_back(x);}\nint m=v[0];\nfor(auto x:v)if(x>m)m=x;\ncout<<m;"
+          }
+        }
+      },
+
+      // ===== sort 드릴 =====
+
+      // Drill 10: sort 결과 예측
+      {
+        type: "explain",
+        content: {
+          lines: [],
+          code: '#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    vector<int> v = {4, 1, 3, 2};\n    sort(v.begin(), v.end());\n    for (auto x : v) cout << x << " ";\n    return 0;\n}',
+          predict: {
+            question: "출력 결과는?",
+            options: ["4 1 3 2 ", "1 2 3 4 ", "4 3 2 1 ", "에러"],
+            answer: 1,
+            feedback: "sort(v.begin(), v.end())은 오름차순 정렬! {4,1,3,2} → {1,2,3,4}"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["4 1 3 2 ", "1 2 3 4 ", "4 3 2 1 ", "Error"],
+              feedback: "sort(v.begin(), v.end()) sorts ascending! {4,1,3,2} → {1,2,3,4}"
+            }
+          }
+        }
+      },
+
+      // Drill 11: sort 빈칸 (begin/end)
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "벡터 전체를 오름차순으로 정렬해요!",
+          guide: "sort는 (시작 위치, 끝 표지판) 쌍을 받아요. 벡터는 v.begin()과 v.end()",
+          template: "vector<int> v = {5, 2, 8, 1, 9};\nsort(v.___(), v.___());",
+          blanksAnswer: ["begin", "end"],
+          answer: "vector<int> v = {5, 2, 8, 1, 9};\nsort(v.begin(), v.end());",
+          expect: "vector<int> v = {5, 2, 8, 1, 9};\nsort(v.begin(), v.end());",
+          en: {
+            task: "Sort the entire vector in ascending order!",
+            guide: "sort takes (start, end) pair. For vector: v.begin() and v.end()"
+          }
+        }
+      },
+
+      // Drill 12: 선언 → sort → 출력 통합
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "처음부터 작성! 벡터 {7, 3, 5, 1, 9}를 오름차순 정렬 후 공백으로 구분해 출력해요",
+          guide: "#include <algorithm>이 필요해요! vector 선언 → sort → range-for로 출력",
+          template: null,
+          answer: "vector<int> v = {7, 3, 5, 1, 9};\nsort(v.begin(), v.end());\nfor (auto x : v) cout << x << \" \";",
+          alternateAnswers: [
+            "vector<int> v = {7, 3, 5, 1, 9};\nsort(v.begin(), v.end());\nfor (auto x : v) {\n    cout << x << \" \";\n}",
+            "vector<int> v={7,3,5,1,9};\nsort(v.begin(),v.end());\nfor(auto x:v)cout<<x<<\" \";"
+          ],
+          expect: "1 3 5 7 9 ",
+          en: {
+            task: "Write from scratch! Sort {7, 3, 5, 1, 9} ascending and print space-separated",
+            guide: "Need #include <algorithm>! Declare vector → sort → range-for"
+          }
+        }
+      },
+
+      // ===== insert / erase 드릴 =====
+
+      // Drill 13: insert 빈칸 (위치 + 값)
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "v = {10, 20, 30} 에서 1번 자리에 99를 삽입해 {10, 99, 20, 30}으로 만들어요!",
+          guide: "v.insert(위치, 값) — 위치는 v.begin() + 인덱스 (iterator)",
+          template: "vector<int> v = {10, 20, 30};\nv.insert(v.begin() + ___, ___);",
+          blanksAnswer: ["1", "99"],
+          answer: "vector<int> v = {10, 20, 30};\nv.insert(v.begin() + 1, 99);",
+          expect: "vector<int> v = {10, 20, 30};\nv.insert(v.begin() + 1, 99);",
+          en: {
+            task: "From v = {10, 20, 30}, insert 99 at position 1 → {10, 99, 20, 30}",
+            guide: "v.insert(position, value) — position is v.begin() + index (iterator)"
+          }
+        }
+      },
+
+      // Drill 14: erase 빈칸 (위치)
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "v = {10, 20, 30, 40} 에서 2번 자리(값 30)를 삭제해 {10, 20, 40}으로 만들어요!",
+          guide: "v.erase(위치) — 위치는 v.begin() + 인덱스",
+          template: "vector<int> v = {10, 20, 30, 40};\nv.erase(v.begin() + ___);",
+          answer: "2",
+          expect: "vector<int> v = {10, 20, 30, 40};\nv.erase(v.begin() + 2);",
+          en: {
+            task: "From v = {10, 20, 30, 40}, erase position 2 (value 30) → {10, 20, 40}",
+            guide: "v.erase(position) — position is v.begin() + index"
+          }
+        }
+      },
+
+      // Drill 15: insert 결과 예측
+      {
+        type: "explain",
+        content: {
+          lines: [],
+          code: '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> v = {1, 2, 3};\n    v.insert(v.begin(), 0);\n    for (auto x : v) cout << x << " ";\n    return 0;\n}',
+          predict: {
+            question: "출력 결과는?",
+            options: ["1 2 3 ", "0 1 2 3 ", "1 0 2 3 ", "에러"],
+            answer: 1,
+            feedback: "v.begin()은 첫 자리(0번). 여기에 0을 삽입하면 원래 원소들이 한 칸씩 밀려 {0, 1, 2, 3}"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["1 2 3 ", "0 1 2 3 ", "1 0 2 3 ", "Error"],
+              feedback: "v.begin() is position 0. Inserting 0 there shifts others → {0, 1, 2, 3}"
+            }
+          }
+        }
+      },
+
+      // ===== front / back 드릴 =====
+
+      // Drill 16: front + back fillblank
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "벡터의 첫 원소와 마지막 원소를 줄바꿈으로 출력해요!",
+          guide: "첫 원소: front(), 마지막 원소: back()",
+          template: "vector<int> v = {10, 20, 30, 40};\ncout << v.___() << endl;\ncout << v.___() << endl;",
+          blanksAnswer: ["front", "back"],
+          answer: "vector<int> v = {10, 20, 30, 40};\ncout << v.front() << endl;\ncout << v.back() << endl;",
+          expect: "10\n40\n",
+          en: {
+            task: "Print first and last element of the vector (one per line)",
+            guide: "First: front(), Last: back()"
+          }
+        }
+      },
+
+      // Drill 17: front + back 통합 (template:null)
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "처음부터 작성! 벡터 {5, 10, 15, 20, 25}를 선언하고 (첫 원소 + 마지막 원소) 합을 출력해요",
+          guide: "v.front() + v.back() 을 그대로 더해서 출력",
+          template: null,
+          answer: "vector<int> v = {5, 10, 15, 20, 25};\ncout << v.front() + v.back() << endl;",
+          alternateAnswers: [
+            "vector<int> v={5,10,15,20,25};\ncout<<v.front()+v.back()<<endl;",
+            "vector<int> v = {5, 10, 15, 20, 25};\ncout << v.front() + v.back();"
+          ],
+          expect: "30",
+          en: {
+            task: "Write from scratch! Declare {5, 10, 15, 20, 25} and print (first + last)",
+            guide: "v.front() + v.back()"
+          }
+        }
+      },
+
+      // ===== empty / clear 드릴 =====
+
+      // Drill 18: empty 빈칸 (if 분기)
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "벡터가 비었으면 \"빈 벡터\"를 출력해요!",
+          guide: "벡터가 비어있는지 확인하는 메서드는? → empty()",
+          template: "vector<int> v;\nif (v.___()) {\n    cout << \"빈 벡터\" << endl;\n}",
+          answer: "empty",
+          expect: "빈 벡터\n",
+          en: {
+            task: "If the vector is empty, print \"empty vector\"!",
+            guide: "Method to check emptiness? → empty()"
+          }
+        }
+      },
+
+      // Drill 19: clear 후 size 예측
+      {
+        type: "explain",
+        content: {
+          lines: [],
+          code: '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> v = {1, 2, 3, 4, 5};\n    v.clear();\n    cout << v.size() << endl;\n    cout << (v.empty() ? "YES" : "NO") << endl;\n    return 0;\n}',
+          predict: {
+            question: "출력 결과는?",
+            options: ["5\nNO", "0\nYES", "5\nYES", "0\nNO"],
+            answer: 1,
+            feedback: "clear()는 모든 원소를 제거해요. size()=0, empty()=true → \"0\" 과 \"YES\""
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["5\nNO", "0\nYES", "5\nYES", "0\nNO"],
+              feedback: "clear() removes all elements. size()=0, empty()=true → \"0\" and \"YES\""
+            }
           }
         }
       },

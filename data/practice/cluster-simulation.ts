@@ -36,6 +36,7 @@ int main() {
       hints: [
         "튕길 때마다 h = h / 2.0을 N번 반복합니다.",
         "for 루프 N번 반복 후 h를 출력하세요.",
+        "소수점 두 자리 고정 출력: cout << fixed << setprecision(2) << h; (<iomanip> 필요)",
       ],
       solutionCode: `#include <iostream>
 #include <iomanip>

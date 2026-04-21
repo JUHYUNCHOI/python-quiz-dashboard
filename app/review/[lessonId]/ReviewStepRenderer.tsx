@@ -594,10 +594,17 @@ function PracticeStep({
       {"level" in content && content.level !== undefined && (
         <span className="text-xs font-bold text-indigo-400">Lv.{content.level}</span>
       )}
-      <p className="font-semibold text-gray-800 whitespace-pre-line">{task}</p>
+      <p className="text-gray-800 whitespace-pre-line leading-relaxed">
+        {(task || "").split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
+          part.startsWith("**") && part.endsWith("**")
+            ? <strong key={i} className="font-semibold text-gray-900">{part.slice(2, -2)}</strong>
+            : <span key={i}>{part}</span>
+        )}
+      </p>
 
-      {/* 목표 출력 — expect 값을 강조 표시 (task에 이미 출력이 포함된 경우 중복 방지) */}
-      {"expect" in content && content.expect && result === "idle" &&
+      {/* 목표 출력 — 빈칸 연습이거나 expect가 정답과 같으면 숨김 (정답 노출 방지) */}
+      {isFullCode && "expect" in content && content.expect && result === "idle" &&
+       "answer" in content && String(content.expect).trim() !== String(content.answer ?? "").trim() &&
        !task?.includes("↓") && !task?.includes(String(content.expect)) && (
         <div className="rounded-xl overflow-hidden border-2 border-emerald-400 shadow-sm">
           <div className="bg-emerald-500 px-3 py-1.5 flex items-center gap-1.5">
@@ -860,8 +867,9 @@ function PredictStep({
                 {LABELS[i]}
               </span>
               <span className={cn(
+                "whitespace-pre-wrap font-mono",
                 isCorrect && answered ? "text-emerald-700 font-semibold" :
-                isSelected && answered ? "text-red-700" : "text-gray-800"
+                isSelected && answered ? "text-red-700 font-normal" : "text-gray-800 font-normal"
               )}>
                 {opt}
               </span>

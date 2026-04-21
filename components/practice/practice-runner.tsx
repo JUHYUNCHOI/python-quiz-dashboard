@@ -226,20 +226,35 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
 
     const testCases = problem.testCases ?? []
 
-    // 모든 테스트 케이스를 병렬로 실행 (순차 → 동시 실행으로 속도 개선)
-    const responses = await Promise.all(
-      testCases.map(tc => {
-        const body = lang === "python"
-          ? { compiler: "cpython-3.12.2", code, stdin: tc.stdin }
-          : { compiler: "gcc-13.2.0", code, stdin: tc.stdin, "compiler-option-raw": "-std=c++17" }
-        return fetch(WANDBOX_API, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        })
-          .then(r => r.json())
-          .catch(() => null)
+    // Wandbox 호출: 1회 시도. 응답이 비정상(null 또는 status 0인데 출력 없음)이면 한 번 더 재시도
+    const callWandbox = async (stdin: string) => {
+      const body = lang === "python"
+        ? { compiler: "cpython-3.12.2", code, stdin }
+        : { compiler: "gcc-13.2.0", code, stdin, "compiler-option-raw": "-std=c++17" }
+      return fetch(WANDBOX_API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
       })
+        .then(r => r.json())
+        .catch(() => null)
+    }
+
+    const runWithRetry = async (stdin: string) => {
+      let data = await callWandbox(stdin)
+      // 에러가 아닌데 프로그램 출력이 없으면 rate limit으로 빈 응답일 가능성 — 1회 재시도
+      const looksEmpty = !data || (data.status !== "1" && !(data.program_output ?? "").trim())
+      if (looksEmpty) {
+        await new Promise(r => setTimeout(r, 400))
+        const retried = await callWandbox(stdin)
+        if (retried) data = retried
+      }
+      return data
+    }
+
+    // 모든 테스트 케이스를 병렬로 실행 (빈 응답은 내부에서 자동 재시도)
+    const responses = await Promise.all(
+      testCases.map(tc => runWithRetry(tc.stdin))
     )
 
     let compileError = ""

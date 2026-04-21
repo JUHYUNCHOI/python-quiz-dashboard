@@ -21,7 +21,7 @@ export const cppLesson9EnData: LessonData = {
         {
           id: "ch1-intro",
           type: "explain",
-          title: "📚 Python list vs C++ Array",
+          title: "📚 Why do we need arrays?",
           content: `In Python, you used **lists** to store multiple values, right?
 
 \`\`\`python
@@ -29,20 +29,25 @@ scores = [90, 85, 78, 92, 88]
 print(scores[0])  # 90
 \`\`\`
 
-Why do we need arrays? Imagine storing scores for 30 students. Would you create 30 separate variables? \`score1, score2, score3...\` 😱
+Why do we need something like this? Imagine storing scores for 30 students. Would you create 30 separate variables? \`score1, score2, score3...\` 😱
 
-An array is like a **row of drawers** that holds the same kind of data **all in one place**.
-
-In C++, we use **arrays**!
+That's exactly what arrays are for — **a row of drawers that holds the same kind of data in one place**. In C++ we call this an **array**.
 
 \`\`\`cpp
 int scores[5] = {90, 85, 78, 92, 88};
 cout << scores[0];  // 90
 \`\`\`
 
-💡 An array is like **reserving seats ahead of time**. Just like you can't add more seats later, you can't change an array's size once it's created.
+It looks similar to a Python list, but there are some **key differences**. We'll cover them on the next page.`,
+          component: "cppArrayBuilder",
+        },
+        {
+          id: "ch1-intro-diff",
+          type: "explain",
+          title: "🐍 vs ⚡ How is it different from a Python list?",
+          content: `A C++ array is like **reserving seats ahead of time**. Just as you can't add more seats later, you can't change an array's size once it's created.
 
-Big differences:
+Quick comparison:
 
 | Python 🐍 | C++ ⚡ |
 |---|---|
@@ -51,8 +56,9 @@ Big differences:
 | Can mix types | **Same type only!** |
 | \`scores.append(100)\` | ❌ Can't add! |
 
-💡 A C++ array = **fixed-size boxes of the same type**!`,
-          component: "cppArrayBuilder",
+💡 A C++ array = **fixed-size boxes of the same type**!
+
+Looking for a flexible data structure like a Python list? C++ has one too — it's called **vector**, and you'll learn it later in this lesson. But understanding arrays first makes vectors much easier.`,
         },
         {
           id: "ch1-fb1",
@@ -397,13 +403,36 @@ A header is how you load extra features in C++. To use vector, you need the <vec
         {
           id: "ch2-init",
           type: "explain",
-          title: "🔧 Creating a vector with a fixed size and default value",
-          content: `Beyond declaring with values, you can create a vector with a **fixed size and starting value**:
+          title: "🔧 Creating a vector with size (and value)",
+          content: `Besides declaring with explicit values, you can create a vector by specifying a **size** (and optionally an initial value).
+
+### ① Size + initial value
 
 \`\`\`cpp
 vector<int> v(5, 0);    // 5 zeros: {0, 0, 0, 0, 0}
 vector<int> v(3, 10);   // 3 tens: {10, 10, 10}
 \`\`\`
+
+### ② Size only (no initial value)
+
+\`\`\`cpp
+vector<int> v(5);       // {0, 0, 0, 0, 0}  — int auto-initialized to 0
+vector<string> s(3);    // {"", "", ""}      — string defaults to empty
+vector<double> d(4);    // {0.0, 0.0, 0.0, 0.0}
+\`\`\`
+
+When you omit the initial value, elements are **auto-initialized to the type's default**. So **no garbage values**.
+
+### ⚠️ This is different from raw arrays
+
+\`\`\`cpp
+int arr[5];             // Garbage values! (not initialized)
+vector<int> v(5);       // {0, 0, 0, 0, 0} ✅
+\`\`\`
+
+Raw arrays (\`int arr[5]\`) leave garbage unless you explicitly initialize, but **vector fills in defaults for you**. That's a nice safety feature.
+
+---
 
 Same idea as Python:
 
@@ -412,9 +441,10 @@ v = [0] * 5   # Python
 \`\`\`
 \`\`\`cpp
 vector<int> v(5, 0);  // C++, same idea!
+vector<int> v(5);     // Same result (int default = 0)
 \`\`\`
 
-💡 When algorithm problems say "initialize n elements to 0," this is the go-to pattern!`,
+@key: When algorithm problems say "initialize n elements to 0," just \`vector<int> v(n);\` — one line and done!`,
         },
         {
           id: "ch2-fb-init",
@@ -429,37 +459,220 @@ vector<int> v(5, 0);  // C++, same idea!
           explanation: "vector<int> v(4, -1) creates a vector with 4 elements all set to -1! v = {-1, -1, -1, -1}"
         },
         {
-          id: "ch2-methods",
+          id: "ch2-methods-add",
           type: "explain",
-          title: "🛠️ Key vector Methods",
-          content: `Here are the most common vector methods!
+          title: "🛠️ vector — Add / remove at the end",
+          content: `Let's walk through vector's main methods one by one. All examples use \`vector<int> v = {10, 20, 30};\`.
+
+## ① push_back(value) — Add to the end
 
 \`\`\`cpp
-vector<int> v = {10, 20, 30};
-
-v.push_back(40);     // Add to end → {10, 20, 30, 40}
-v.pop_back();        // Remove last → {10, 20, 30}
-cout << v.size();    // Size: 3
-cout << v[0];        // First: 10
-cout << v.at(1);     // Second: 20 (with bounds check!)
-v.clear();           // Remove all → {}
+v.push_back(40);
+// Python: v.append(40)
+// v = {10, 20, 30, 40}
 \`\`\`
 
-| Python 🐍 | C++ vector ⚡ |
-|---|---|
-| \`v.append(x)\` | \`v.push_back(x)\` |
-| \`v.pop()\` | \`v.pop_back()\` |
-| \`len(v)\` | \`v.size()\` |
-| \`v[i]\` | \`v[i]\` or \`v.at(i)\` |
-| \`v.clear()\` | \`v.clear()\` |
+## ② pop_back() — Remove the last element
 
-💡 \`v.at(i)\` is the same as \`v[i]\` but throws an error if out of bounds! Much safer.`
+\`\`\`cpp
+v.pop_back();
+// Python: v.pop()
+// v = {10, 20, 30}
+\`\`\`
+
+Adding and removing at the end is by far the most common operation, which is why Python's \`append\`/\`pop\` map cleanly onto these.
+
+**Next page**: inserting and erasing in the **middle** — \`insert\`/\`erase\`.`
+        },
+        {
+          id: "ch2-methods-middle",
+          type: "explain",
+          title: "➕ vector — Insert / erase in the middle",
+          content: `You can also modify the **middle** of a vector. The position is given as an **iterator** (we'll explain this soon).
+
+\`\`\`cpp
+// v = {10, 20, 30}
+v.insert(v.begin() + 1, 99);  // Insert 99 at position 1 → {10, 99, 20, 30}
+v.erase(v.begin() + 2);       // Erase position 2 → {10, 99, 30}
+// Python: v.insert(1, 99) / del v[2]
+\`\`\`
+
+💡 For now, just read \`v.begin() + 1\` as **"position 1"**. Why it's written this way comes up in the \`begin()/end()\` page later.
+
+🐍 **Different from Python** — Python lets you write \`v.insert(1, 99)\` with a plain **index number**. But **C++ vector doesn't allow that.** You must pass an **iterator (position)** like \`v.begin() + 1\`.
+
+\`\`\`cpp
+v.insert(1, 99);             // ❌ compile error
+v.insert(v.begin() + 1, 99); // ✅ correct form
+\`\`\`
+
+{expand:🤔 But what's v.begin()? Why so complicated?}
+C++ has many containers besides vector — \`list\` (linked list — not Python's list!), \`set\` (unique elements), \`map\` (key-value dictionary), and more. Among these, \`list\`/\`set\`/\`map\` have **no concept of numeric index at all.** "The third element" isn't meaningful — you can't just pull it out.
+
+So C++ designed a **common "position notation" that works across every container** — that's the iterator. Learn \`insert\` once, and you can use it on **vector/list/set/map** all the same.
+
+In other words, it's not "inconvenient because you can't use indices" — the real reason is **"one shared language for every container."** (More on positions in the next \`begin()/end()\` page.)
+{/expand}
+
+⚠️ Inserting or erasing in the middle forces **every element after it to shift by one**, which is O(n). Fine occasionally, but a performance trap inside loops.`
+        },
+        {
+          id: "ch2-fb-insert",
+          type: "fillblank" as const,
+          title: "Fill in the insert call",
+          content: "Currently \`v = {10, 20, 30}\`.\n\nTo insert \`99\` at **position 1** so v becomes \`{10, 99, 20, 30}\`, how should you write it?",
+          code: "v.insert(v.begin() + ___, ___);",
+          fillBlanks: [
+            { id: 0, answer: "1", options: ["1", "0", "2", "3"] },
+            { id: 1, answer: "99", options: ["99", "20", "10", "1"] }
+          ],
+          explanation: "v.insert(v.begin() + 1, 99) inserts 99 at position 1. The 20 that was there (and everything after) shifts one position back. Result: {10, 99, 20, 30}"
+        },
+        {
+          id: "ch2-methods-access",
+          type: "explain",
+          title: "🔍 vector — Element access / size",
+          content: `Next up: **size and element access**. (Still using \`v = {10, 20, 30}\`.)
+
+## ④ size() — Element count
+
+\`\`\`cpp
+cout << v.size();   // 3
+// Python: len(v)
+\`\`\`
+
+## ⑤ v[i] vs v.at(i) — Accessing elements
+
+\`\`\`cpp
+cout << v[0];      // 10  ← fast, no bounds check
+cout << v.at(0);   // 10  ← with bounds check (safer)
+\`\`\`
+
+What happens out of bounds?
+
+\`\`\`cpp
+// v = {10, 20, 30}  (size 3)
+
+cout << v[10];      // ❌ No error — prints a garbage value! (like -827361)
+cout << v.at(10);   // ✅ Throws an "out_of_range" exception
+\`\`\`
+
+@key: Python raises IndexError, but C++'s \`v[i]\` returns garbage silently. Use \`v.at(i)\` to get Python-like bounds checking.
+
+## ⑥ front() / back() — First / last element
+
+\`\`\`cpp
+cout << v.front();  // 10
+cout << v.back();   // 30
+// Python: v[0] / v[-1]
+\`\`\`
+
+💡 You don't have to use these. \`v[0]\` and \`v[v.size()-1]\` work the same. \`front()/back()\` is nice when you want to emphasize "first/last" for readability.`
+        },
+        {
+          id: "ch2-methods-state",
+          type: "explain",
+          title: "🧹 vector — Check state / clear",
+          content: `Finally, **state check and clearing** methods.
+
+## ⑦ empty() — Check if empty
+
+\`\`\`cpp
+if (v.empty()) cout << "Empty!";
+// Python: if not v:
+\`\`\`
+
+## ⑧ clear() — Remove everything
+
+\`\`\`cpp
+v.clear();
+// v = {}  (empty vector)
+// Python: v.clear()  ← same!
+\`\`\`
+
+💡 Search and sort functions like **find** and **sort** live in the \`#include <algorithm>\` header. Coming up right after!`
+        },
+        {
+          id: "ch2-begin-end",
+          type: "explain",
+          title: "🧭 begin() / end() — Positions, not values",
+          content: `You saw \`v.begin()\` in \`insert(v.begin() + 1, ...)\`, and you're about to see \`sort(v.begin(), v.end())\` — let's tackle both together.
+
+![begin and end point to positions, not values](/images/cpp/vector-begin-end.svg)
+
+- \`v.begin()\` → **position of the first element** (the \`v[0]\` slot)
+- \`v.end()\` → **position just past the last element** (no element there!)
+
+Why does \`end()\` point to "one past the last"? It's a convention. Writing ranges as **[begin, end)** makes **element count = v.end() - v.begin()** come out clean, and an empty vector naturally has \`v.begin() == v.end()\`.
+
+@key: Pair them up and you get "the full range of the vector." That's why \`sort(v.begin(), v.end())\` means "sort the whole vector."`
+        },
+        {
+          id: "ch2-begin-end-arith",
+          type: "explain",
+          title: "➕ Arithmetic on positions",
+          content: `So how do you point to a **"middle slot"**?
+
+Positions support **± like indices**:
+
+\`\`\`cpp
+v.begin()        // first element
+v.begin() + 2    // 3rd element (0-indexed, 2 steps forward)
+v.end() - 1      // last element
+v.end()          // end marker
+\`\`\`
+
+So \`insert(v.begin() + 1, 99)\` means **"insert 99 at position 1"**.
+
+💡 Quick rule: \`begin() + i\` = "slot i".`
+        },
+        {
+          id: "ch2-array-arith",
+          type: "explain",
+          title: "📍 Why arr / arr+n works for arrays",
+          content: `Arrays are an older, more **bare-bones** style than vector. There's no friendly \`v.begin()\` method. Instead, **the array name itself means "the position of the first element."**
+
+![The array name is the first-element position, arr+n is n slots later](/images/cpp/array-arr-n.svg)
+
+- \`arr\` → position of the first element (plays the role of \`v.begin()\`)
+- \`arr + 5\` → five slots later = **end marker** (role of \`v.end()\`)
+
+{expand:🤔 How does this actually work? (It's about addresses)}
+Arrays live in memory as **contiguous slots**. Say \`int arr[5]\` starts at address 1000:
+
+\`\`\`
+arr     →  address 1000  → 10
+arr + 1 →  address 1004  → 20    (int is 4 bytes, so +4)
+arr + 2 →  address 1008  → 30
+arr + 3 →  address 1012  → 40
+arr + 4 →  address 1016  → 50
+arr + 5 →  address 1020  → (past the last, no element)
+\`\`\`
+
+- Using \`arr\` in an expression auto-converts to **"address of the first element"**.
+- \`arr + 1\` is **not** \`1001\` — it's \`1000 + sizeof(int)\`. C++ scales the offset by the element's size for you.
+- So \`arr + 5\` gives "the address five slots later" = the \`end()\` role.
+
+For now, just **feel it as an address-based trick**. Real pointer arithmetic is covered properly in **cpp-13 (Pointer Basics)**.
+{/expand}
+
+So these two calls are **"the same thing written differently":**
+
+\`\`\`cpp
+vector<int> v = {5, 2, 8};
+sort(v.begin(), v.end());     // vector style
+
+int arr[3] = {5, 2, 8};
+sort(arr, arr + 3);           // array style — same (start, end) pair
+\`\`\`
+
+@key: STL functions always take a **(start, end marker)** pair. Use \`v.begin()/v.end()\` for vectors and \`arr/arr+n\` for arrays.`
         },
         {
           id: "ch2-sort",
           type: "explain",
           title: "📊 Basic Sort — sort()",
-          content: `**sort()** sorts a vector (or array) in ascending order. It requires the \`<algorithm>\` header.
+          content: `**sort()** is the sorting function from \`<algorithm>\`. It takes the **[start, end)** range pair you just learned.
 
 \`\`\`cpp
 #include <iostream>
@@ -475,8 +688,9 @@ int main() {
 \`\`\`
 
 **Usage**:
-- \`sort(v.begin(), v.end())\` — sort the whole vector in ascending order
-- \`sort(arr, arr + n)\` — sort array elements (indices 0 to n-1) ascending
+- \`sort(v.begin(), v.end())\` — whole vector ascending
+- \`sort(arr, arr + n)\` — array (indices 0 to n-1) ascending
+- \`sort(v.begin() + 2, v.end())\` — from index 2 to the end
 
 💡 String vectors work the same (lexicographic ascending):
 \`\`\`cpp
@@ -484,7 +698,26 @@ vector<string> names = {"bob", "alice", "carol"};
 sort(names.begin(), names.end());  // alice, bob, carol
 \`\`\`
 
-💡 **Descending order** and **sorting structs** are covered in cpp-23 (Sort Master).`
+💡 **Descending order**, **sorting structs**, and the internals of sorting algorithms are covered in **cpp-23 (Sort Master)**. Here you just need "how to use it."`
+        },
+        {
+          id: "ch2-pred-sort",
+          type: "predict" as const,
+          title: "Predict the sort result!",
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    vector<int> v = {5, 2, 8, 1, 9};
+    sort(v.begin(), v.end());
+    for (int x : v) cout << x << " ";
+    return 0;
+}`,
+          options: ["1 2 5 8 9 ", "5 2 8 1 9 ", "9 8 5 2 1 ", "Error"],
+          answer: 0,
+          explanation: "sort(v.begin(), v.end()) sorts ascending. {5,2,8,1,9} → {1,2,5,8,9}. Each element is printed with a trailing space, so you get '1 2 5 8 9 '."
         },
         {
           id: "ch2-pred1",
@@ -546,26 +779,57 @@ cout << sum;  // 100
         {
           id: "ch2-compare",
           type: "explain",
-          title: "📊 Array vs Vector Comparison",
-          content: `When should you use which?
+          title: "📊 Array vs vector — Basic rule",
+          content: `When should you use which? Here's a side-by-side.
 
 | | Array | vector |
 |---|---|---|
-| Size | **Fixed** | **Flexible** |
-| Declaration | \`int arr[5]\` | \`vector<int> v\` |
-| Add | ❌ Can't | \`push_back()\` |
-| Remove | ❌ Can't | \`pop_back()\` |
-| Get size | Track manually | \`.size()\` |
-| Safety | No bounds check | \`.at()\` checks |
+| Size | Fixed at declaration | Flexible |
+| Declaration | \`int arr[5];\` | \`vector<int> v;\` |
+| Add | ❌ Not possible | \`v.push_back(x)\` |
+| Remove | ❌ Not possible | \`v.pop_back()\` |
+| Size check | Track manually | \`.size()\` |
+| Safety | No bounds check | \`.at()\` available |
 | Header | None | \`#include <vector>\` |
-| 💡 Recommended | When size is fixed | Most of the time! |
 
-**Bottom line:**
-- Fixed size → **array** (faster)
-- Variable size → **vector** (more convenient)
-- Not sure? → **Use vector!** 😄
+**Basic rule:**
+- Size might change → **vector**
+- Not sure? → **vector** (way more convenient and safer)
 
-💡 In real-world code, **almost always use vector**. Arrays are just good to understand!`
+"Then is there any reason to use a plain array?" — Yes, two of them. **Next page.**`
+        },
+        {
+          id: "ch2-array-when",
+          type: "explain",
+          title: "🤔 So when do you use a plain array?",
+          content: `Two cases come up often.
+
+**① When the size is truly fixed from the start**
+
+For example, a week always has 7 days. A die has 6 faces. A year has 12 months. These don't grow or shrink.
+
+\`\`\`cpp
+int daysInMonth[12];   // ✅ natural (months 1-12)
+int diceCount[6];      // ✅ count of each die face
+\`\`\`
+
+For these **never-changing counts**, an array is shorter and cleaner than a vector. (2D arrays, which you'll meet in cpp-21, shine in fixed-size grid cases like an 8×8 chess board.)
+
+**② Competitive programming (CP), where speed and brevity matter**
+
+USACO/Codeforces-style problems often look like this:
+
+\`\`\`cpp
+int arr[1000001];   // pre-allocate up to 1M slots globally
+\`\`\`
+
+- Shorter to type
+- Global arrays are auto-initialized to 0
+- Size won't change, so no need for \`push_back\`
+
+The actual speed difference is usually small, but CP code tends to favor **short, familiar patterns** as a convention.
+
+💡 Summary: **Regular programs → vector.** **Fixed size or CP code → array.** Being able to read both serves you well in real projects *and* problem solving.`
         },
         {
           id: "ch2-fb2",
@@ -582,14 +846,14 @@ cout << sum;  // 100
         {
           id: "ch2-cin",
           type: "explain",
-          title: "⌨️ Reading Input into a vector with cin",
-          content: `With vector, you don't need to pre-declare the size — just **push_back as you receive input**!
+          title: "⌨️ Reading cin into an empty vector",
+          content: `With a vector, you don't need to pre-declare the size — just **push_back as input comes in**!
 
 **Method 1: Read the count first**
 
 \`\`\`cpp
 int n;
-cin >> n;
+cin >> n;  // how many to read
 
 vector<int> nums;
 for (int i = 0; i < n; i++) {
@@ -599,7 +863,7 @@ for (int i = 0; i < n; i++) {
 }
 \`\`\`
 
-**Method 2: Stop when a specific value (e.g., 0) is entered**
+**Method 2: Stop when a sentinel value (e.g., 0) is entered**
 
 \`\`\`cpp
 vector<int> nums;
@@ -607,16 +871,43 @@ int x;
 while (cin >> x && x != 0) {
     nums.push_back(x);
 }
-// Stops when 0 is entered
+// Stops on 0
 \`\`\`
 
-| | Array | vector |
-|---|---|---|
-| Input method | \`cin >> arr[i]\` | \`cin >> x; v.push_back(x)\` |
-| Pre-declare size | **Required** | Not needed |
-| Flexibility | Low | High |
+Both examples start with \`vector<int> nums;\` (an empty vector) and fill it in.
 
-💡 Vectors don't need a pre-declared size — just push_back as you go!`,
+But what if the vector was **created with a preset size**? Can we still use push_back then? Let's see on the **next page**.`,
+        },
+        {
+          id: "ch2-cin-sized",
+          type: "explain",
+          title: "⚠️ cin into a pre-sized vector?",
+          content: `When you create a vector like **\`vector<int> v(n);\`** or **\`vector<int> v(5, 0);\`**, it **already has elements inside.** Calling push_back on top of that **appends** more elements and grows the size.
+
+\`\`\`cpp
+vector<int> v(5, 0);   // {0, 0, 0, 0, 0}  size 5
+v.push_back(7);        // {0, 0, 0, 0, 0, 7}  size 6 — probably not what you wanted! ❌
+\`\`\`
+
+If you pre-sized the vector, use **\`cin >> v[i]\`** to overwrite each slot:
+
+\`\`\`cpp
+int n;
+cin >> n;
+vector<int> v(n);                    // size n, all zeros
+for (int i = 0; i < n; i++) {
+    cin >> v[i];                     // ← not push_back, direct assignment!
+}
+\`\`\`
+
+**Summary:**
+
+| Vector declaration | Input pattern |
+|---|---|
+| \`vector<int> v;\` (empty) | \`v.push_back(x)\` |
+| \`vector<int> v(n);\` (pre-sized) | \`cin >> v[i]\` |
+
+@key: Empty vector → push_back. Pre-sized vector → index access \`v[i]\`. Mixing the two messes up the size!`,
         },
         {
           id: "ch2-fb-cin",
