@@ -27,6 +27,8 @@ export interface ExplainContent {
   en?: {
     lines?: string[];
     note?: string;
+    code?: string;
+    result?: string;
     predict?: {
       question?: string;
       options?: string[];
@@ -40,7 +42,9 @@ export interface PracticeContent {
   task: string;
   guide?: string;
   hint?: string;
-  context?: string;        // template=null일 때 위에 보여줄 읽기 전용 코드 컨텍스트
+  context?: string;        // 위에 보여줄 읽기 전용 코드 컨텍스트 (빈칸 문제에서도 사용 가능)
+  sampleInput?: string;    // 전체 코드 작성 시 보여줄 예시 입력 (별도 블록으로 렌더)
+  starterCode?: string;    // 전체 코드 작성 시 에디터 초기값 (예: int main() {} 스켈레톤)
   template: string | { before: string; after: string } | null;
   answer: string;
   alternateAnswers?: string[];
@@ -52,6 +56,8 @@ export interface PracticeContent {
     guide?: string;
     hint?: string;
     context?: string;
+    sampleInput?: string;
+    starterCode?: string;
     template?: string;
     answer?: string;
     alternateAnswers?: string[];
@@ -81,6 +87,7 @@ export interface ErrorQuizContent {
   // optional English translations
   en?: {
     question?: string;
+    code?: string;
     options?: string[];
     explanation?: string;
   };
@@ -91,7 +98,7 @@ export interface InterleavingContent {
   task: string;
   guide?: string;
   hint?: string;
-  context?: string;        // template=null일 때 위에 보여줄 읽기 전용 코드 컨텍스트
+  context?: string;        // 위에 보여줄 읽기 전용 코드 컨텍스트 (빈칸 문제에서도 사용 가능)
   template: string | { before: string; after: string } | null;
   answer: string;
   alternateAnswers?: string[];

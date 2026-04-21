@@ -18,6 +18,7 @@ export interface ReviewProgressData {
   correctCount: number
   completedSteps: number[]
   wrongSteps: number[]
+  scoredSteps?: number[]
   updatedAt: number   // Date.now() — 디바이스 간 최신 판별용
 }
 

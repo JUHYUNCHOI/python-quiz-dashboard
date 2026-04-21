@@ -9,6 +9,15 @@
 - Supabase (인증, DB)
 - `output: export` (정적 빌드) — 동적 라우트 불가, query params 사용
 
+## 🔮 향후 구조 변경 — 메모리 참고
+
+**"Supabase로 콘텐츠 이전 / 어드민 페이지 만들기" 이야기가 나오면** 먼저 메모리 문서 확인:
+`~/.claude/projects/-Users-juhyunchoi-Coding-python-quiz-dashboard/memory/project_supabase_migration.md`
+
+요약: 현재 레슨 콘텐츠는 TS 파일에 저장 → 클라이언트 번들로 노출됨 → 콘텐츠 유출 위험.
+**결정(2026-04-21): 지금은 편집 우선, 수정 빈도 월 1회 이하로 줄어들면 Supabase로 이전 + 어드민 페이지 구축.**
+편집 중에도 JSON 직렬화 가능 구조, 필드 이름 일관성, 문자열 ID, en 블록 방식 유지해서 나중에 마이그레이션 쉽게.
+
 ## ⚠️ 레슨 파일 수정 규칙 — 반드시 준수
 
 **레슨 콘텐츠 파일은 선생님이 직접 작성/디버깅한 내용이 들어있다. Write(전체 덮어쓰기)를 사용하면 해당 내용이 영구 손실된다.**
@@ -18,6 +27,14 @@
 - `data/lesson*.ts`, `data/lesson*-en.ts` — **Edit만 사용, Write 금지**
 - `data/cpp/lesson*-en.ts` — **Edit만 사용, Write 금지**
 - 예외: 새 파일 생성(기존 파일 없음)은 Write 가능
+
+### ✅ 선생님 검토 완료된 복습 파일 (수정 시 더욱 조심)
+
+아래 파일들은 선생님이 복습 흐름/난이도/한영 동기화를 직접 검토 완료했어요.
+구조(스텝 순서, interleaving 위치, context/starterCode 구성 등)를 건드리는 건 절대 조심.
+사소한 수정도 파일 상단 주석(`✅ 선생님 검토 완료`)을 먼저 확인하고 진행.
+
+- `app/review/[lessonId]/data/lessons/lessonCpp14.ts` — cpp-14 struct 복습 (검토일: 2026-04-21)
 
 ### 왜 중요한가
 - 과거에 lesson15.ts에서 sort 챕터를 lesson23으로 이동할 때 Write로 통째로 덮어써서 pair 비교/애니메이션 스텝 등 선생님이 작성한 콘텐츠가 손실됨

@@ -503,22 +503,47 @@ int main() {
           id: "ch2-vec-explain",
           type: "explain",
           title: "vector<Student> — N명을 동적으로 관리!",
-          content: `배열 \`Student arr[100]\`은 크기를 **미리** 정해야 해요.
-N명을 입력받아야 한다면? **vector<Student>**와 함께 써요!
+          content: `배열 \`Student arr[100]\`은 크기를 **컴파일할 때** 미리 정해야 해요.
+학생이 1명이든 1000명이든 100칸을 미리 만들어 둬요 → 메모리 낭비!
+
+하지만 USACO/대회 문제는 보통 \`N\`을 **입력값으로** 받아요.
+"N명을 입력받아 처리하라" → N이 얼마일지 모르니 배열로는 어려워요.
+
+## 💡 해결: vector<Student>
 
 \`\`\`cpp
 #include <vector>
 
-vector<Student> students(n);  // n칸짜리 Student 벡터 — 크기가 딱 맞아요!
+int n;
+cin >> n;                       // ① 먼저 N을 입력받고
+vector<Student> students(n);    // ② 그 크기만큼 벡터 생성!
 \`\`\`
+
+**실행 시점에** 크기를 결정할 수 있어요. n이 5면 5칸, 100000이면 100000칸 — 딱 필요한 만큼만 메모리를 써요.
+
+## 🔍 배열 vs vector 비교
 
 | | \`Student arr[100]\` | \`vector<Student> students(n)\` |
 |---|---|---|
-| 크기 | 고정 (100명까지) | n에 딱 맞게 |
-| 접근 | \`arr[i].name\` | \`students[i].name\` (동일!) |
-| 실전 | 최댓값 알 때 | 입력받을 때 (더 자주 씀) |
+| 크기 결정 | 코드 짤 때 (고정) | 실행할 때 (동적) |
+| 메모리 | 항상 100칸 | 필요한 만큼만 |
+| 접근 | \`arr[i].name\` | \`students[i].name\` **(동일!)** |
+| 실전 | 크기 미리 알 때 | 입력받을 때 (훨씬 자주 씀) |
 
-> 💡 **USACO 패턴:** 대부분 N을 입력받으니까 **vector<구조체>** 가 훨씬 자주 나와요!`,
+## ✨ 핵심 포인트
+
+**접근 방법은 배열과 완전히 똑같아요!** struct 배열에서 쓰던 \`students[i].name\`, \`students[i].score\`, for문 순회 전부 그대로 통해요. 달라지는 건 **"선언 한 줄"뿐**이에요.
+
+\`\`\`cpp
+// 배열이든 vector든 이건 똑같이 동작:
+for (int i = 0; i < n; i++) {
+    cout << students[i].name << " " << students[i].score << endl;
+}
+\`\`\`
+
+> 💡 **USACO 패턴:** N이 입력으로 주어지는 문제가 대부분 → **vector<구조체>**가 훨씬 자주 나와요!
+>
+> ⚠️ **주의:** \`vector<int> students(n)\`처럼 타입을 잘못 쓰면 \`.name\`, \`.score\` 못 써요. **vector<Student>**여야 멤버 접근 가능!`,
         },
         {
           id: "ch2-vec-cin-anim",

@@ -129,6 +129,38 @@ int main() {
       emoji: "🔧",
       steps: [
         {
+          id: "ch2-array-intro",
+          type: "explain",
+          title: "Structs get even stronger in groups!",
+          content: `So far we put **one student's** info in a struct. But in real problems...
+
+| Situation | What you need |
+|---|---|
+| Manage grades for N students | N Students |
+| Process M coordinates | M Points |
+| Store K edges | K Edges |
+
+In practice, a **struct array/vector** shows up far more than a single struct variable!
+
+\`\`\`cpp
+// This is rare:
+Student s;
+
+// This is the norm in USACO/algorithms:
+Student students[100];       // fixed size
+vector<Student> students(n); // size from input
+\`\`\`
+
+Next, let's learn how to put structs into arrays and vectors!`,
+        },
+        {
+          id: "ch2-array-builder",
+          type: "interactive",
+          title: "🔨 Build a struct array declaration",
+          description: "Assemble a Student array step by step.",
+          component: "cppStructArrayBuilder",
+        },
+        {
           id: "ch2-array",
           type: "explain",
           title: "Struct Arrays for Managing Multiple Records",
@@ -477,6 +509,354 @@ int main() {
 }`,
           hint: "Start with int maxIdx = 0, loop from i = 1. If students[i].score > students[maxIdx].score, set maxIdx = i. Then print students[maxIdx].name and students[maxIdx].score",
           expectedOutput: `Emma (95)`
+        },
+        {
+          id: "ch2-vec-explain",
+          type: "explain",
+          title: "vector<Student> — Manage N entries dynamically!",
+          content: `Arrays like \`Student arr[100]\` fix their size **at compile time**.
+Whether you have 1 student or 1000, you reserve 100 slots → wasted memory!
+
+But USACO/competitive problems usually give \`N\` as **input**.
+"Read N students and process them" → you don't know N upfront, so plain arrays struggle.
+
+## 💡 Solution: vector<Student>
+
+\`\`\`cpp
+#include <vector>
+
+int n;
+cin >> n;                       // ① read N first
+vector<Student> students(n);    // ② create a vector of that size!
+\`\`\`
+
+You decide the size **at runtime**. If n is 5, you get 5 slots; if 100000, you get 100000 — exactly what you need, nothing wasted.
+
+## 🔍 Array vs vector
+
+| | \`Student arr[100]\` | \`vector<Student> students(n)\` |
+|---|---|---|
+| Size decided | When writing code (fixed) | At runtime (dynamic) |
+| Memory | Always 100 slots | Only what's needed |
+| Access | \`arr[i].name\` | \`students[i].name\` **(same!)** |
+| When used | Size known upfront | Size from input (far more common) |
+
+## ✨ Key takeaway
+
+**Access works exactly like an array!** Everything you used with a struct array — \`students[i].name\`, \`students[i].score\`, for-loops — works unchanged. The only thing that differs is **the declaration line**.
+
+\`\`\`cpp
+// Works the same whether students is an array or a vector:
+for (int i = 0; i < n; i++) {
+    cout << students[i].name << " " << students[i].score << endl;
+}
+\`\`\`
+
+> 💡 **USACO pattern:** N almost always comes from input → **vector<struct>** dominates.
+>
+> ⚠️ **Watch out:** \`vector<int> students(n)\` has no \`.name\` or \`.score\` — must be **vector<Student>** for member access!`,
+        },
+        {
+          id: "ch2-vec-cin-anim",
+          type: "interactive",
+          title: "🎬 How cin fills a vector<Student>",
+          description: "Review the input format and code, then hit Start to watch cin consume tokens one by one.",
+          component: "cinFillVisualizer",
+        },
+        {
+          id: "ch2-vec-cin-fill",
+          type: "fillblank" as const,
+          title: "Fill vector<Student> with cin",
+          content: "Read n students' data with cin and fill the vector.",
+          code: `int n;
+cin >> n;
+vector<___> students(n);
+for (int i = 0; i < n; i++) {
+    cin >> students[___].name >> students[___].score;
+}`,
+          fillBlanks: [
+            { id: 0, answer: "Student", options: ["Student", "int", "string", "n"] },
+            { id: 1, answer: "i", options: ["i", "0", "n", "name"] },
+            { id: 2, answer: "i", options: ["i", "0", "n", "score"] },
+          ],
+          explanation: "`vector<Student> students(n)` creates an n-slot vector. Inside the loop, `students[i].name` and `students[i].score` work exactly like with a plain array!",
+        },
+        {
+          id: "ch2-vec-pred",
+          type: "predict" as const,
+          title: "Predict the vector<Student> output!",
+          code: `#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+int main() {
+    vector<Student> students = {
+        {"Alice", 90},
+        {"Bob", 80},
+    };
+    for (auto& s : students) {
+        cout << s.name << " " << s.score << "\\n";
+    }
+    return 0;
+}`,
+          options: ["Alice 90\nBob 80", "Alice\nBob", "90\n80", "Error"],
+          answer: 0,
+          explanation: "`auto& s` references each Student in the vector. We print `s.name` and `s.score` for each one!"
+        },
+        {
+          id: "ch2-vec-fill",
+          type: "fillblank" as const,
+          title: "Fill in the vector<Student> declaration",
+          content: `When reading N students, how do you declare the vector?`,
+          code: `int n;
+cin >> n;
+vector<___> students(n);  // n-slot Student vector
+
+for (int i = 0; i < n; i++) {
+    cin >> students[i].name >> students[i].score;
+}`,
+          fillBlanks: [
+            { id: 0, answer: "Student", options: ["Student", "int", "string", "n"] }
+          ],
+          explanation: "`vector<Student>(n)` creates a vector of n Students. Then `students[i].name` / `students[i].score` read each member from cin.",
+        },
+        {
+          id: "ch2-vec-practice",
+          type: "practice" as const,
+          title: "✋ Sum of N scores",
+          content: `Read N students' names and scores, print each student, then the average (integer division) on the last line.
+
+**Sample input**
+\`\`\`
+3
+alice 90
+bob 80
+carol 70
+\`\`\`
+
+**Sample output**
+\`\`\`
+alice 90
+bob 80
+carol 70
+Average: 80
+\`\`\``,
+          code: `#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+int main() {
+    int n;
+    cin >> n;
+    vector<Student> students(n);
+    int total = 0;
+    for (int i = 0; i < n; i++) {
+        cin >> students[i].name >> students[i].score;
+        total += students[i].score;
+    }
+    for (auto& s : students) {
+        cout << s.name << " " << s.score << "\\n";
+    }
+    cout << "Average: " << total / n << "\\n";
+    return 0;
+}`,
+          starterCode: `#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+struct Student {
+    string name;
+    int score;
+};
+
+int main() {
+    int n;
+    cin >> n;
+    vector<Student> students(n);
+    // Write your code here
+    return 0;
+}`,
+          hint: "In a for loop, read students[i].name and students[i].score with cin and add the score to total. For printing, iterate with auto& s.",
+          testCases: [
+            {
+              input: "3\nalice 90\nbob 80\ncarol 70",
+              expectedOutput: "alice 90\nbob 80\ncarol 70\nAverage: 80",
+            },
+          ],
+        },
+        // ── vector as a field inside a struct ─────────────────────
+        {
+          id: "ch2-vec-field-explain",
+          type: "explain",
+          title: "Putting a vector inside a struct",
+          content: `So far the struct members were simple types like \`int\` or \`string\`.
+In algorithm problems, **a struct with a vector field** is an extremely common pattern.
+
+### Example 1 — Multiple scores per student
+
+\`\`\`cpp
+struct Student {
+    string name;
+    vector<int> scores;  // subject count can vary, no problem!
+};
+
+Student s;
+s.name = "Alice";
+s.scores.push_back(90);  // Korean
+s.scores.push_back(85);  // English
+s.scores.push_back(92);  // Math
+\`\`\`
+
+A fixed array \`int scores[3]\` forces you to change code whenever the subject count changes.
+With \`vector<int> scores\`, you can \`push_back\` as many as you want.
+
+---
+
+### Example 2 — Graph adjacency list (USACO core!)
+
+\`\`\`cpp
+struct Node {
+    int val;
+    vector<int> adj;  // indexes of connected neighbors
+};
+
+// N nodes
+int n;
+cin >> n;
+vector<Node> graph(n);
+
+// Add an edge
+int u, v;
+cin >> u >> v;
+graph[u].adj.push_back(v);
+graph[v].adj.push_back(u);
+\`\`\`
+
+This pattern shows up in almost every USACO Bronze graph problem.
+Because each node has a different number of neighbors, a vector is the natural fit.`,
+        },
+        {
+          id: "ch2-vec-field-pred",
+          type: "predict" as const,
+          title: "vector inside a struct — what's the output?",
+          code: `#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+struct Student {
+    string name;
+    vector<int> scores;
+};
+
+int main() {
+    Student s;
+    s.name = "Alice";
+    s.scores.push_back(90);
+    s.scores.push_back(80);
+    s.scores.push_back(70);
+    int sum = 0;
+    for (int sc : s.scores) sum += sc;
+    cout << s.name << " " << sum / (int)s.scores.size() << endl;
+    return 0;
+}`,
+          options: ["Alice 80", "Alice 240", "Alice 3", "Error"],
+          answer: 0,
+          explanation: "`s.scores` holds 90, 80, 70. sum = 240, size = 3, 240/3 = 80. Output: `Alice 80`!",
+        },
+        {
+          id: "ch2-vec-field-practice",
+          type: "practice" as const,
+          title: "✋ Read a list of scores per student",
+          content: `Read N students. Each student has a name, a count K, and K scores.
+Print each student's name and average (integer division).
+
+Input format:
+\`\`\`
+3
+Alice 3 90 80 70
+Bob 2 100 60
+Carol 4 50 60 70 80
+\`\`\`
+Output:
+\`\`\`
+Alice 80
+Bob 80
+Carol 65
+\`\`\``,
+          code: `#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+struct Student {
+    string name;
+    vector<int> scores;
+};
+
+int main() {
+    int n;
+    cin >> n;
+    vector<Student> students(n);
+    for (int i = 0; i < n; i++) {
+        int k;
+        cin >> students[i].name >> k;
+        students[i].scores.resize(k);
+        for (int j = 0; j < k; j++) {
+            cin >> students[i].scores[j];
+        }
+    }
+    for (auto& s : students) {
+        int sum = 0;
+        for (int sc : s.scores) sum += sc;
+        cout << s.name << " " << sum / (int)s.scores.size() << "\\n";
+    }
+    return 0;
+}`,
+          starterCode: `#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+struct Student {
+    string name;
+    vector<int> scores;  // a vector inside the struct!
+};
+
+int main() {
+    int n;
+    cin >> n;
+    vector<Student> students(n);
+    for (int i = 0; i < n; i++) {
+        int k;
+        cin >> students[i].name >> k;
+        // Add k scores to scores via push_back
+        // Write your code here
+    }
+    // Print each student's name and average
+    // Write your code here
+    return 0;
+}`,
+          hint: "scores is empty, so push_back k times. Average is sum divided by scores.size(). Note: size() is unsigned — cast to (int)!",
+          testCases: [
+            {
+              input: "3\nAlice 3 90 80 70\nBob 2 100 60\nCarol 4 50 60 70 80",
+              expectedOutput: "Alice 80\nBob 80\nCarol 65",
+            },
+          ],
         },
         {
           id: "ch2-ref",

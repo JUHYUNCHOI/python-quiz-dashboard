@@ -52,13 +52,16 @@ function extractReviewSteps(lesson: LessonData): ReviewStep[] {
 }
 
 // 힌트용: 직전에 나오는 explain 스텝들의 핵심 내용
-function getNearbyExplains(lesson: LessonData, beforeIndex: number): string[][] {
+function getNearbyExplains(lesson: LessonData, beforeIndex: number, isEn = false): string[][] {
   const hints: string[][] = []
   for (let i = beforeIndex - 1; i >= 0 && hints.length < 2; i--) {
     const s = lesson.steps[i]
     if (s.type === "chapter") break
     if (s.type === "explain" && s.content.lines?.length > 0) {
-      hints.unshift(s.content.lines)
+      const lines = (isEn && (s.content.en as any)?.lines?.length)
+        ? (s.content.en as any).lines as string[]
+        : s.content.lines
+      hints.unshift(lines)
     }
   }
   return hints
@@ -127,6 +130,11 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   const [sessionAttempts, setSessionAttempts] = useState(0)
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set(saved?.completedSteps ?? []))
   const [wrongSteps, setWrongSteps] = useState<number[]>(saved?.wrongSteps ?? [])
+  // 점수/통계에 이미 반영된 스텝 — Redo로 다시 풀어도 중복 카운트 방지
+  // 기존 유저(scoredSteps 없음) → completedSteps를 기본값으로 써서 이미 푼 문제 재채점 방지
+  const [scoredSteps, setScoredSteps] = useState<Set<number>>(
+    new Set(saved?.scoredSteps ?? saved?.completedSteps ?? [])
+  )
   const [showResults, setShowResults] = useState(false)
   const [showLesson, setShowLesson] = useState(false)
   // 각 스텝의 답 보존 (인덱스 → 답 데이터)
@@ -139,6 +147,8 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   const supabaseSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   // Supabase 복원을 딱 한 번만 실행하기 위한 플래그
   const hasHydratedRef = useRef(false)
+  // 현재 스텝의 자동 채점 함수 참조 (Next 누를 때 호출)
+  const autoCheckRef = useRef<(() => boolean) | null>(null)
 
   const isCurrentStepCompleted = completedSteps.has(currentIndex)
 
@@ -148,6 +158,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
       currentIndex, score, totalAttempted, correctCount,
       completedSteps: Array.from(completedSteps),
       wrongSteps,
+      scoredSteps: Array.from(scoredSteps),
       updatedAt: Date.now(),
     }
     // localStorage: 즉시 저장 (stepAnswers 포함)
@@ -162,7 +173,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
       }, 2000)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentIndex, score, totalAttempted, correctCount, completedSteps, wrongSteps, storageKey])
+  }, [currentIndex, score, totalAttempted, correctCount, completedSteps, wrongSteps, scoredSteps, storageKey])
 
   // Supabase에서 복습 진도 복원 (디바이스 간 동기화 — 마운트 후 딱 한 번)
   useEffect(() => {
@@ -183,6 +194,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
         setCorrectCount(remote.correctCount ?? 0)
         setCompletedSteps(new Set(remote.completedSteps ?? []))
         setWrongSteps(remote.wrongSteps ?? [])
+        setScoredSteps(new Set(remote.scoredSteps ?? remote.completedSteps ?? []))
         // localStorage도 최신으로 업데이트
         try { localStorage.setItem(storageKey, JSON.stringify(remote)) } catch {}
       }
@@ -198,13 +210,18 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   const handleCorrect = useCallback(() => {
     if (completedSteps.has(currentIndex)) return
     play("correct")
-    setCorrectCount(prev => prev + 1)
-    setTotalAttempted(prev => prev + 1)
-    setSessionAttempts(prev => prev + 1)
-    setScore(prev => prev + 10)
+    // 이미 점수 반영된 스텝(Redo로 재도전)은 점수/통계 증가 없이 UI만 업데이트
+    const alreadyScored = scoredSteps.has(currentIndex)
+    if (!alreadyScored) {
+      setCorrectCount(prev => prev + 1)
+      setTotalAttempted(prev => prev + 1)
+      setSessionAttempts(prev => prev + 1)
+      setScore(prev => prev + 10)
+      setScoredSteps(prev => new Set([...prev, currentIndex]))
+    }
     setCompletedSteps(prev => new Set([...prev, currentIndex]))
 
-    if (!effectiveTeacher && currentReview) {
+    if (!effectiveTeacher && currentReview && !alreadyScored) {
       saveStepAnswer({
         lessonId,
         progressType: "review",
@@ -215,17 +232,21 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
         correctAnswer: {},
       })
     }
-  }, [currentIndex, completedSteps, play, effectiveTeacher, currentReview, lessonId])
+  }, [currentIndex, completedSteps, scoredSteps, play, effectiveTeacher, currentReview, lessonId])
 
   const handleWrong = useCallback(() => {
     if (completedSteps.has(currentIndex)) return
     play("wrong")
-    setTotalAttempted(prev => prev + 1)
-    setSessionAttempts(prev => prev + 1)
-    setWrongSteps(prev => [...prev, currentIndex])
+    const alreadyScored = scoredSteps.has(currentIndex)
+    if (!alreadyScored) {
+      setTotalAttempted(prev => prev + 1)
+      setSessionAttempts(prev => prev + 1)
+      setWrongSteps(prev => [...prev, currentIndex])
+      setScoredSteps(prev => new Set([...prev, currentIndex]))
+    }
     setCompletedSteps(prev => new Set([...prev, currentIndex]))
 
-    if (!effectiveTeacher && currentReview) {
+    if (!effectiveTeacher && currentReview && !alreadyScored) {
       saveStepAnswer({
         lessonId,
         progressType: "review",
@@ -236,7 +257,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
         correctAnswer: {},
       })
     }
-  }, [currentIndex, completedSteps, play, effectiveTeacher, currentReview, lessonId])
+  }, [currentIndex, completedSteps, scoredSteps, play, effectiveTeacher, currentReview, lessonId])
 
   // ──────────────────────────────────────────────
   // 스텝 이동
@@ -249,6 +270,10 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
 
   const goPrev = () => { if (currentIndex > 0) goToStep(currentIndex - 1) }
   const goNext = () => {
+    // Check 버튼 없는 스텝에서 입력만 하고 Next 누른 경우 자동 채점
+    if (!completedSteps.has(currentIndex)) {
+      autoCheckRef.current?.()
+    }
     if (currentIndex < reviewSteps.length - 1) {
       goToStep(currentIndex + 1)
     } else {
@@ -379,6 +404,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
                   setSessionAttempts(0)
                   setCompletedSteps(new Set())
                   setWrongSteps([])
+                  setScoredSteps(new Set())
                   setResetCount(prev => prev + 1)
                   try { localStorage.removeItem(storageKey) } catch {}
                 }}
@@ -404,7 +430,7 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
   // 메인 복습 화면
   // ──────────────────────────────────────────────
   const nearbyExplains = currentReview
-    ? getNearbyExplains(lesson, currentReview.originalIndex)
+    ? getNearbyExplains(lesson, currentReview.originalIndex, lang === "en")
     : []
 
   return (
@@ -496,48 +522,58 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
               onSaveAnswer={(data) => setStepAnswers(prev => ({ ...prev, [currentIndex]: data }))}
               lessonExplains={nearbyExplains}
               lessonLink={`/learn/${lessonId}`}
+              autoCheckRef={autoCheckRef}
             />
           )}
 
-          {/* 완료된 문제 — 다시 풀기 / 초기화 */}
-          {isCurrentStepCompleted && (
-            <div className="mt-4 flex items-center gap-1">
-              {/* 다시 풀기: 이전 답 유지한 채 편집 가능 상태로 돌아감 */}
-              <button
-                onClick={() => {
-                  setStepAnswers(prev => {
-                    const existing = prev[currentIndex]
-                    // inputs는 보존, result만 제거해서 idle 상태로
-                    if (existing?.inputs) return { ...prev, [currentIndex]: { inputs: existing.inputs } }
-                    return prev
-                  })
-                  setCompletedSteps(prev => { const next = new Set(prev); next.delete(currentIndex); return next })
-                  setWrongSteps(prev => prev.filter(i => i !== currentIndex))
-                  setResetCount(prev => prev + 1)
-                }}
-                className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-                {t("다시 풀기", "Redo")}
-              </button>
-              {/* 초기화: 답을 완전히 지우고 처음부터 */}
-              <button
-                onClick={() => {
-                  if (currentReview) {
-                    try { localStorage.removeItem(`review-input-${lessonId}-${currentReview.originalIndex}`) } catch {}
-                  }
-                  setStepAnswers(prev => { const next = { ...prev }; delete next[currentIndex]; return next })
-                  setCompletedSteps(prev => { const next = new Set(prev); next.delete(currentIndex); return next })
-                  setWrongSteps(prev => prev.filter(i => i !== currentIndex))
-                  setResetCount(prev => prev + 1)
-                }}
-                className="flex items-center gap-1.5 px-3 py-2 text-xs text-gray-300 hover:text-red-400 hover:bg-red-50 rounded-lg transition-colors"
-              >
-                <X className="w-3 h-3" />
-                {t("초기화", "Reset")}
-              </button>
-            </div>
-          )}
+          {/* 완료된 문제 — 다시 풀기 (빈칸형만 초기화도 표시) */}
+          {isCurrentStepCompleted && (() => {
+            const stepType = currentReview?.step.type
+            const hasInputs = stepType === "practice" || stepType === "interleaving"
+            return (
+              <div className="mt-4 flex items-center gap-1">
+                {/* 다시 풀기: 이전 답 유지한 채 편집 가능 상태로 돌아감 (MCQ/Predict는 선택 해제) */}
+                <button
+                  onClick={() => {
+                    setStepAnswers(prev => {
+                      const existing = prev[currentIndex]
+                      // 빈칸 채우기: inputs 보존, result만 제거 → idle 상태로
+                      if (existing?.inputs) return { ...prev, [currentIndex]: { inputs: existing.inputs } }
+                      // MCQ/Predict(숫자 선택): 선택 해제해서 다시 고를 수 있게
+                      const next = { ...prev }
+                      delete next[currentIndex]
+                      return next
+                    })
+                    setCompletedSteps(prev => { const next = new Set(prev); next.delete(currentIndex); return next })
+                    setWrongSteps(prev => prev.filter(i => i !== currentIndex))
+                    setResetCount(prev => prev + 1)
+                  }}
+                  className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  {t("다시 풀기", "Redo")}
+                </button>
+                {/* 초기화: 빈칸 입력까지 완전히 지우고 처음부터 (빈칸형 전용) */}
+                {hasInputs && (
+                  <button
+                    onClick={() => {
+                      if (currentReview) {
+                        try { localStorage.removeItem(`review-input-${lessonId}-${currentReview.originalIndex}`) } catch {}
+                      }
+                      setStepAnswers(prev => { const next = { ...prev }; delete next[currentIndex]; return next })
+                      setCompletedSteps(prev => { const next = new Set(prev); next.delete(currentIndex); return next })
+                      setWrongSteps(prev => prev.filter(i => i !== currentIndex))
+                      setResetCount(prev => prev + 1)
+                    }}
+                    className="flex items-center gap-1.5 px-3 py-2 text-xs text-gray-300 hover:text-red-400 hover:bg-red-50 rounded-lg transition-colors"
+                  >
+                    <X className="w-3 h-3" />
+                    {t("초기화", "Reset")}
+                  </button>
+                )}
+              </div>
+            )
+          })()}
         </div>
       </div>
 

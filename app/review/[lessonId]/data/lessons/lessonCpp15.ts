@@ -69,12 +69,14 @@ export const lessonCpp15: LessonData = {
           level: 1,
           task: "pair에서 첫 번째 값을 꺼내요!",
           guide: ".first 또는 .second를 써요!",
+          context: 'pair<string, int> student("철수", 95);',
           template: "cout << student.___ << endl;",
           answer: "first",
           expect: "cout << student.first << endl;",
           en: {
             task: "Get the first value from the pair!",
-            guide: "Use .first or .second!"
+            guide: "Use .first or .second!",
+            context: 'pair<string, int> student("Emma", 95);'
           }
         }
       },

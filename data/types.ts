@@ -44,6 +44,8 @@ export interface LessonStep {
   starterCode?: string
   testCases?: TestCase[]
   hints?: string[]
+  // explain 좌우 2단 레이아웃 (데스크탑만, 모바일은 세로 스택)
+  layout?: { left: string; right: string }
 }
 
 export interface Chapter {

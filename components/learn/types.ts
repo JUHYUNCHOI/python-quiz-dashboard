@@ -23,6 +23,12 @@ export interface LessonStep {
   question?: string
   instruction?: string
   animationType?: string
+  // explain 스텝 전용: 좌우 2단 레이아웃 (데스크탑에서만, 모바일은 세로 스택)
+  // 있으면 content 대신 우선 렌더. 왼쪽은 설명, 오른쪽은 주로 코드블록.
+  layout?: {
+    left: string
+    right: string
+  }
   [key: string]: any
 }
 

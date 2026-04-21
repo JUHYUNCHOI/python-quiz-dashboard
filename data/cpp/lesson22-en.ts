@@ -39,9 +39,9 @@ So just ask two things:
 Bundling these two together into a definition — that's exactly what a **class** is.`,
         },
         {
-          id: "ch1-build",
+          id: "ch1-build-skeleton",
           type: "explain",
-          title: "🚗 Let's build a Car class",
+          title: "🧱 What does a class look like?",
           content: `A class looks like this:
 
 \`\`\`
@@ -53,44 +53,39 @@ class Name {
 \`\`\`
 
 Start with the \`class\` keyword, write the name, then wrap everything in curly braces.
-**Member variables** go at the top, **member functions** go below.
-
----
-
-Now let's think about a car.
+**Member variables** go at the top, **member functions** go below.`,
+        },
+        {
+          id: "ch1-build-design",
+          type: "explain",
+          title: "🚗 Let's design a Car class",
+          content: `Before writing code, let's decide what a Car needs.
 
 For **things to remember** — to move it needs a **speed**, and let's add a **color** so we can tell cars apart.
 
 For **things to do** — a function to go forward, and one to check the current state sounds like a good start.
 
-This is just one way to think about it. As you build, you might find you need more — or that some things aren't necessary after all.
+This is just one way to think about it. As you build, you might find you need more — or that some things aren't necessary after all.`,
+        },
+        {
+          id: "ch1-build-code",
+          type: "explain",
+          title: "✍️ Write the Car class",
+          layout: {
+            left: `Top — **member variables** (things to remember):
+- \`double speed;\` — decimals allowed
+- \`string color;\` — text
 
-Let's write it out.
+Below — **member functions** (things to do):
+- \`forward()\` — increase speed
+- \`info()\` — print current state
 
-First, the **member variables** — things to remember:
+> 🐍 **Coming from Python?**
+> Python needs \`self.speed\`;
+> C++ just uses \`speed\` directly.
 
-\`\`\`cpp
-class Car {
-    double speed;   // speed → double so decimals work too
-    string color;   // color → string for text
-\`\`\`
-
-Then below, the **member functions** — things to do:
-
-\`\`\`cpp
-    void forward() {
-        speed += 10;   // going forward means speed increases, right?
-    }
-    void info() {      // I'll set this up to print the car's info
-        cout << color << " car, speed: " << speed << endl;
-    }
-};
-\`\`\`
-
-> 🐍 **Coming from Python?** In Python you'd write \`self.speed\`, but in C++ you just write \`speed\` directly.
-
-{collapse:View full code}
-\`\`\`cpp
+No car exists yet — we've only written the blueprint.`,
+            right: `\`\`\`cpp
 class Car {
     double speed;
     string color;
@@ -99,17 +94,17 @@ class Car {
         speed += 10;
     }
     void info() {
-        cout << color << " car, speed: " << speed << endl;
+        cout << color << " car, speed: "
+             << speed << endl;
     }
 };
-\`\`\`
-
-No car exists yet.`,
+\`\`\``
+          },
         },
         {
-          id: "ch1-object",
+          id: "ch1-object-concept",
           type: "explain",
-          title: "🎮 So how do you actually create a car?",
+          title: "🎮 class is the blueprint, object is the real thing!",
           content: `We just wrote a Car class — so does a car exist now?
 
 No. A class is a **blueprint**. One more step is needed to actually create a car.
@@ -121,9 +116,13 @@ Think of an RPG game — seeing the "Flame Sword" description in a shop doesn't 
 | Item **description** | Flame Sword info | **class** |
 | The item you actually **own** | Sword in your inventory | **object** |
 
-What you create from a class is called an **object** or **instance**.
-
-\`\`\`cpp
+What you create from a class is called an **object** or **instance**.`,
+        },
+        {
+          id: "ch1-object-code",
+          type: "explain",
+          title: "🚗 Create and use an object",
+          content: `\`\`\`cpp
 int main() {
     Car myCar;            // ← an actual car (object) is created here!
     myCar.color = "red";
@@ -166,43 +165,6 @@ int main() {
 }
 // With 10 cars? 20 variables — and you'd lose track of which belongs to which
 \`\`\``,
-        },
-        {
-          id: "ch1-dict",
-          type: "explain",
-          title: "🆚 How does class compare to Python dict?",
-          content: `In Python, you might bundle data with a dict:
-
-\`\`\`python
-car = {"color": "red", "speed": 0}
-car["color"] = "blue"  # OK
-\`\`\`
-
-In C++ with a class:
-
-\`\`\`cpp
-Car myCar;
-myCar.color = "blue";  // OK
-\`\`\`
-
-They look similar — but there's a **critical difference**.
-
-What happens when you make a typo?
-
-\`\`\`python
-car["colur"] = "blue"  # No error... silently creates a new key 😱
-\`\`\`
-
-\`\`\`cpp
-myCar.colur = "blue";  // Compile error! Caught immediately ✅
-\`\`\`
-
-Python dict silently adds a new key if you mistype — the bug hides until runtime.
-C++ class **won't even compile** if you access a member that doesn't exist.
-
-This is called **type safety**. Bugs are caught at build time, not while the program is running.
-
-💡 The bigger your program gets, the more valuable type safety becomes!`
         },
         {
           id: "ch1-pred1",
@@ -443,24 +405,138 @@ But there's still one question — do we have to call a setter every single time
       emoji: "🔧",
       steps: [
         {
+          id: "ch3-constructor-anim",
+          type: "interactive",
+          title: "🎬 With vs without a constructor",
+          description: "Click through the tabs to see what a constructor does.",
+          component: "constructorVisualizer",
+        },
+        {
+          id: "ch3-garbage-p1",
+          type: "predict" as const,
+          title: "🔍 What happens with a local int?",
+          code: `int main() {
+    int a;        // not initialized
+    cout << a;
+    return 0;
+}`,
+          options: ["Prints 0", "Prints 5", "Unpredictable value (garbage)", "Compile error"],
+          answer: 2,
+          explanation: "A **local variable** inside a function gets whatever random bytes were already in memory — a garbage value. Different every run. C++ skips auto-initialization for speed."
+        },
+        {
+          id: "ch3-garbage-p2",
+          type: "predict" as const,
+          title: "🔍 What about a global int?",
+          code: `int a;   // global variable (outside main)
+
+int main() {
+    cout << a;
+    return 0;
+}`,
+          options: ["Prints 0", "Garbage", "Compile error", "Runtime error"],
+          answer: 0,
+          explanation: "**Global** and **static** variables are automatically zero-initialized. Only locals carry garbage. \`static int a;\` is also 0!"
+        },
+        {
+          id: "ch3-garbage-p3",
+          type: "predict" as const,
+          title: "🔍 `int a{};` — what do curly braces do?",
+          code: `int main() {
+    int a{};      // brace initialization!
+    cout << a;
+    return 0;
+}`,
+          options: ["Prints 0", "Garbage", "Error (no initial value given)", "Prints 1"],
+          answer: 0,
+          explanation: "Empty braces `{}` trigger **value-initialization** — int is guaranteed to be 0. People usually write `int a = 0;` but `int a{};` also guarantees 0."
+        },
+        {
+          id: "ch3-garbage-p4",
+          type: "predict" as const,
+          title: "🔍 What about an int member inside a class?",
+          code: `class Box {
+public:
+    int count;   // not initialized
+};
+
+int main() {
+    Box b;
+    cout << b.count;
+    return 0;
+}`,
+          options: ["Prints 0", "Garbage", "Compile error", "Prints \"\""],
+          answer: 1,
+          explanation: "Without a constructor, **fundamental-type members** (int, double, char, bool) behave like locals — garbage. This is exactly why we need constructors!"
+        },
+        {
+          id: "ch3-garbage-p5",
+          type: "predict" as const,
+          title: "🔍 What about string and vector members?",
+          code: `class Box {
+public:
+    string label;        // not initialized
+    vector<int> items;   // not initialized
+};
+
+int main() {
+    Box b;
+    cout << b.label.length() << " "
+         << b.items.size();
+    return 0;
+}`,
+          options: ["Two garbage values", "0 0", "Error", "\"\" 0"],
+          answer: 1,
+          explanation: "**Class types** (string, vector, map, etc.) have their own default constructor, so they auto-initialize. string becomes empty (\`\"\"\`, length 0), vector becomes empty (size 0). No garbage!"
+        },
+        {
+          id: "ch3-garbage-summary",
+          type: "explain",
+          title: "📋 Garbage values — cheat sheet",
+          layout: {
+            left: `**Fundamental types** (int, double, char, bool, pointers)
+
+| Location | Initial value |
+|---|---|
+| Inside a function (local) | 🎲 garbage |
+| Outside a function (global / static) | ✅ 0 |
+| Class member (no constructor) | 🎲 garbage |
+| \`int a{};\` (braces) | ✅ 0 |
+
+**Class types** (string, vector, map, ...)
+→ have their own default constructor, always start **empty** (no garbage worries)
+
+**Takeaway:** A class with fundamental-type members **must have a constructor**. That's exactly the next step.`,
+            right: `\`\`\`cpp
+// Initial-value cheat sheet at a glance
+
+int a;              // 🎲 garbage
+int b{};            // ✅ 0
+int c = 0;          // ✅ 0
+static int d;       // ✅ 0 (static)
+
+string s;           // ✅ ""
+vector<int> v;      // ✅ []
+
+class Box {
+    int count;      // 🎲 garbage
+    string name;    // ✅ ""
+};
+
+Box b;
+// b.count  → garbage
+// b.name   → ""
+\`\`\``
+          },
+        },
+        {
           id: "ch3-constructor",
           type: "explain",
           title: "🔧 Constructor — Called automatically when an object is created!",
           component: "cppConstructorBuilder",
-          content: `You've followed along great so far — but wait, something's a bit off, right?
+          content: `A person already has a name and gender the moment they're born. Shouldn't an object also be set up from the moment it comes into existence?
 
-When we create a Car object, there's no speed and no color at first. We have to call setters one by one to fill them in.
-
-Think about it — when a person is born, they already have a name and a gender. Shouldn't an object also be set up from the very moment it comes into existence?
-
-And there is a way. A function that's **called automatically the moment an object is created** — that's called a **constructor**.
-
-Without a constructor, member variables start with **garbage values**:
-
-\`\`\`cpp
-BankAccount acc;
-// acc.balance might be -398475.23 or some random value! 😱
-\`\`\`
+That's what a **constructor** is — a function that's **called automatically the moment an object is created**. Initialize members inside the constructor, and no more garbage value worries.
 
 Let's build a constructor step by step:`,
         },
@@ -837,6 +913,7 @@ Let's review everything from Part 2 (Lessons 9, 21, 10–14, 22)!
 - **getter** / **setter** — public interface to read/write private members with validation
 - **Constructor** — called automatically on object creation, same name as class, no return type
 - **Encapsulation** — keep data private, access only through public functions (OOP principle)
+- **Type safety bonus:** misspelled member names cause a compile error — bugs caught at build time, not at runtime (unlike Python dicts)
 
 ---
 

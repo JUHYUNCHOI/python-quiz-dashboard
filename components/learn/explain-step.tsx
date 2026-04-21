@@ -59,7 +59,14 @@ export function ExplainStep({ step }: ExplainStepProps) {
       </div>
 
       {/* 본문 설명 먼저 → 이해한 뒤 애니메이션으로 확인 (자연스러운 이야기 흐름) */}
-      {step.content && <div className="text-lg md:text-xl space-y-3">{renderContent(step.content)}</div>}
+      {step.layout ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 items-start">
+          <div className="text-lg md:text-xl space-y-3">{renderContent(step.layout.left)}</div>
+          <div className="text-lg md:text-xl space-y-3 md:sticky md:top-4">{renderContent(step.layout.right)}</div>
+        </div>
+      ) : (
+        step.content && <div className="text-lg md:text-xl space-y-3">{renderContent(step.content)}</div>
+      )}
 
       {AnimComp && (
         <div className="rounded-xl overflow-hidden">
