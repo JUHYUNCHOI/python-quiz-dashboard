@@ -510,6 +510,36 @@ const CPP_STRUCT: SyntaxBuilderPreset = {
   ],
 }
 
+const CPP_CLASS_BASIC: SyntaxBuilderPreset = {
+  title: { ko: "C++ class 뼈대 만들기", en: "Building a C++ class skeleton" },
+  steps: [
+    {
+      code: "class",
+      highlight: { start: 0, end: 5 },
+      label: { ko: "① class 키워드로 시작해요", en: "① Start with the class keyword" },
+      icon: "🔤",
+    },
+    {
+      code: "class Car",
+      highlight: { start: 6, end: 9 },
+      label: { ko: "② 이름을 붙여요. 관례상 **대문자**로 시작! (Car, Dog, Student...)", en: "② Give it a name. By convention, **start with a capital letter!** (Car, Dog, Student...)" },
+      icon: "🔠",
+    },
+    {
+      code: "class Car {\n\n}",
+      highlight: { start: 10, end: 14 },
+      label: { ko: "③ 중괄호 { } 로 감싸요. 안쪽에 멤버들이 들어가요", en: "③ Wrap in braces { }. Members go inside" },
+      icon: "📦",
+    },
+    {
+      code: "class Car {\n\n};",
+      highlight: { start: 14, end: 15 },
+      label: { ko: "④ ⚠️ 마지막에 세미콜론(;)! 빠뜨리면 컴파일 에러!", en: "④ ⚠️ Semicolon(;) at the end! Forget it → compile error!" },
+      icon: "⚠️",
+    },
+  ],
+}
+
 const CPP_CLASS: SyntaxBuilderPreset = {
   title: { ko: "C++ 클래스 만들기", en: "Building a C++ class" },
   steps: [
@@ -1466,6 +1496,7 @@ const PRESETS: Record<string, SyntaxBuilderPreset> = {
   "cpp-pointer": CPP_POINTER,
   "cpp-struct": CPP_STRUCT,
   "cpp-class": CPP_CLASS,
+  "cpp-class-basic": CPP_CLASS_BASIC,
   "cpp-variable": CPP_VARIABLE,
   "cpp-cout": CPP_COUT,
   "cpp-cin": CPP_CIN,
@@ -1705,6 +1736,9 @@ export function CppStructBuilder(props: Omit<SyntaxBuilderProps, "preset">) {
 }
 export function CppClassBuilder(props: Omit<SyntaxBuilderProps, "preset">) {
   return <SyntaxBuilder {...props} preset="cpp-class" />
+}
+export function CppClassBasicBuilder(props: Omit<SyntaxBuilderProps, "preset">) {
+  return <SyntaxBuilder {...props} preset="cpp-class-basic" />
 }
 export function PyWhileBuilder(props: Omit<SyntaxBuilderProps, "preset">) {
   return <SyntaxBuilder {...props} preset="py-while" />

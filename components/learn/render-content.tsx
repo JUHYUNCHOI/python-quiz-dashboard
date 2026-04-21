@@ -161,21 +161,55 @@ function renderChatInline(text: string, keyPrefix: string = ""): React.ReactNode
 // ============================================
 function CollapsibleCode({ label, code, language }: { label: string; code: string; language: string }) {
   const [open, setOpen] = React.useState(false)
+
+  React.useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false) }
+    window.addEventListener("keydown", onKey)
+    const prev = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    return () => {
+      window.removeEventListener("keydown", onKey)
+      document.body.style.overflow = prev
+    }
+  }, [open])
+
   return (
     <div className="my-3">
       <button
-        onClick={() => setOpen(v => !v)}
+        onClick={() => setOpen(true)}
         className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-700 text-sm font-medium hover:bg-indigo-100 transition-colors"
       >
-        <svg className={`w-3.5 h-3.5 transition-transform ${open ? "rotate-90" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
         </svg>
         {label}
       </button>
       {open && (
-        <div className="mt-2 relative group">
-          <CodeBlock code={code} language={language} />
-          <CopyButton code={code} />
+        <div className="fixed inset-0 z-50 flex">
+          <div
+            className="flex-1 bg-black/40 animate-fade-in"
+            onClick={() => setOpen(false)}
+            aria-label="닫기"
+          />
+          <div className="w-full max-w-4xl h-full bg-white shadow-2xl flex flex-col animate-slide-in-right">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+              <span className="font-semibold text-gray-800 text-sm">{label}</span>
+              <button
+                onClick={() => setOpen(false)}
+                className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-600"
+                aria-label="닫기"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="flex-1 overflow-auto p-4 relative group">
+              <CodeBlock code={code} language={language} />
+              <CopyButton code={code} />
+            </div>
+          </div>
         </div>
       )}
     </div>
@@ -460,6 +494,31 @@ export function renderContent(content: string) {
         </p>
       )
       i++
+      continue
+    }
+
+    // ── 인용/콜아웃 (`> ` 로 시작하는 연속된 줄) ──
+    if (line.startsWith('> ') || line === '>') {
+      const quoteLines: string[] = []
+      while (i < lines.length && (lines[i].startsWith('> ') || lines[i] === '>')) {
+        quoteLines.push(lines[i] === '>' ? '' : lines[i].slice(2))
+        i++
+      }
+      elements.push(
+        <div
+          key={key++}
+          className="my-3 border-l-4 border-indigo-300 bg-indigo-50/60 rounded-r-lg px-3 py-2 md:px-4 md:py-2.5"
+        >
+          {quoteLines.map((ql, qi) => (
+            <p
+              key={`q-${key}-${qi}`}
+              className="text-xs md:text-sm text-indigo-900/80 leading-relaxed"
+            >
+              {ql ? renderInlineMarkdown(ql) : '\u00A0'}
+            </p>
+          ))}
+        </div>
+      )
       continue
     }
 
