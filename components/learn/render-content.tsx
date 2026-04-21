@@ -161,21 +161,118 @@ function renderChatInline(text: string, keyPrefix: string = ""): React.ReactNode
 // ============================================
 function CollapsibleCode({ label, code, language }: { label: string; code: string; language: string }) {
   const [open, setOpen] = React.useState(false)
+
+  React.useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false) }
+    window.addEventListener("keydown", onKey)
+    const prev = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    return () => {
+      window.removeEventListener("keydown", onKey)
+      document.body.style.overflow = prev
+    }
+  }, [open])
+
   return (
     <div className="my-3">
       <button
-        onClick={() => setOpen(v => !v)}
+        onClick={() => setOpen(true)}
         className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-700 text-sm font-medium hover:bg-indigo-100 transition-colors"
       >
-        <svg className={`w-3.5 h-3.5 transition-transform ${open ? "rotate-90" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
         </svg>
         {label}
       </button>
       {open && (
-        <div className="mt-2 relative group">
-          <CodeBlock code={code} language={language} />
-          <CopyButton code={code} />
+        <div className="fixed inset-0 z-50 flex">
+          <div
+            className="flex-1 bg-black/40 animate-fade-in"
+            onClick={() => setOpen(false)}
+            aria-label="닫기"
+          />
+          <div className="w-full max-w-4xl h-full bg-white shadow-2xl flex flex-col animate-slide-in-right">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+              <span className="font-semibold text-gray-800 text-sm">{label}</span>
+              <button
+                onClick={() => setOpen(false)}
+                className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-600"
+                aria-label="닫기"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="flex-1 overflow-auto p-4 relative group">
+              <CodeBlock code={code} language={language} />
+              <CopyButton code={code} />
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ============================================
+// 접을 수 있는 일반 콘텐츠 (오른쪽 슬라이드 패널)
+// ============================================
+function CollapsibleContent({ label, children }: { label: string; children: React.ReactNode }) {
+  const [open, setOpen] = React.useState(false)
+
+  React.useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false) }
+    window.addEventListener("keydown", onKey)
+    const prev = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    return () => {
+      window.removeEventListener("keydown", onKey)
+      document.body.style.overflow = prev
+    }
+  }, [open])
+
+  return (
+    <div className="my-3">
+      <button
+        onClick={() => setOpen(true)}
+        className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-700 text-sm font-medium hover:bg-indigo-100 transition-colors"
+      >
+        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+        {label}
+      </button>
+      {open && (
+        <div className="fixed inset-0 z-50 flex">
+          <div
+            className="flex-1 bg-black/40 animate-fade-in"
+            onClick={() => setOpen(false)}
+            aria-label="닫기"
+          />
+          <div className="w-full max-w-3xl h-full bg-white shadow-2xl flex flex-col animate-slide-in-right">
+            {/* Header */}
+            <div className="flex items-center justify-between px-8 py-5 border-b border-gray-100 bg-gradient-to-b from-indigo-50/60 to-white">
+              <h2 className="font-bold text-gray-900 text-lg md:text-xl leading-tight">{label}</h2>
+              <button
+                onClick={() => setOpen(false)}
+                className="flex-shrink-0 p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-gray-700 transition-colors"
+                aria-label="닫기"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            {/* Content — centered narrow column for readability */}
+            <div className="flex-1 overflow-auto bg-white">
+              <article className="mx-auto max-w-[640px] px-8 py-10 text-[17px] md:text-lg leading-[1.9] text-gray-800 [&>*+*]:mt-5">
+                {children}
+              </article>
+            </div>
+          </div>
         </div>
       )}
     </div>
@@ -235,6 +332,45 @@ export function renderContent(content: string) {
 
   while (i < lines.length) {
     const line = lines[i]
+
+    // ── ASCII 다이어그램: {diagram} ... {/diagram} (문법 하이라이트 없는 pre 박스) ──
+    if (line.trim() === '{diagram}') {
+      i++
+      const diagLines: string[] = []
+      while (i < lines.length && lines[i].trim() !== '{/diagram}') {
+        diagLines.push(lines[i])
+        i++
+      }
+      i++ // skip {/diagram}
+      elements.push(
+        <pre
+          key={key++}
+          className="my-3 bg-gray-50 border border-gray-200 rounded-lg px-5 py-4 overflow-x-auto text-sm md:text-[15px] leading-relaxed text-gray-800 font-mono whitespace-pre"
+        >
+          {diagLines.join('\n')}
+        </pre>
+      )
+      continue
+    }
+
+    // ── 접기 일반 콘텐츠: {expand:버튼텍스트} ... {/expand} ──
+    const expandMatch = line.match(/^\{expand:(.+)\}$/)
+    if (expandMatch) {
+      const label = expandMatch[1]
+      i++
+      const innerLines: string[] = []
+      while (i < lines.length && !/^\{\/expand\}\s*$/.test(lines[i])) {
+        innerLines.push(lines[i])
+        i++
+      }
+      i++ // skip {/expand}
+      elements.push(
+        <CollapsibleContent key={key++} label={label}>
+          {renderContent(innerLines.join('\n'))}
+        </CollapsibleContent>
+      )
+      continue
+    }
 
     // ── 접기 코드블록: {collapse:버튼텍스트} 다음 줄에 ```코드 ──
     const collapseMatch = line.match(/^\{collapse:(.+)\}$/)
@@ -460,6 +596,31 @@ export function renderContent(content: string) {
         </p>
       )
       i++
+      continue
+    }
+
+    // ── 인용/콜아웃 (`> ` 로 시작하는 연속된 줄) ──
+    if (line.startsWith('> ') || line === '>') {
+      const quoteLines: string[] = []
+      while (i < lines.length && (lines[i].startsWith('> ') || lines[i] === '>')) {
+        quoteLines.push(lines[i] === '>' ? '' : lines[i].slice(2))
+        i++
+      }
+      elements.push(
+        <div
+          key={key++}
+          className="my-3 border-l-4 border-indigo-300 bg-indigo-50/60 rounded-r-lg px-3 py-2 md:px-4 md:py-2.5"
+        >
+          {quoteLines.map((ql, qi) => (
+            <p
+              key={`q-${key}-${qi}`}
+              className="text-xs md:text-sm text-indigo-900/80 leading-relaxed"
+            >
+              {ql ? renderInlineMarkdown(ql) : '\u00A0'}
+            </p>
+          ))}
+        </div>
+      )
       continue
     }
 

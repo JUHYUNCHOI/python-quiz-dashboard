@@ -39,53 +39,78 @@ export const cppLesson22Data: LessonData = {
 이렇게 두 가지를 묶어 정의하는 것 — 그게 바로 **class**예요.`,
         },
         {
-          id: "ch1-build-skeleton",
+          id: "ch1-build",
           type: "explain",
-          title: "🧱 class는 어떻게 생겼을까?",
-          content: `class는 이렇게 생겼어요:
+          title: "🚗 class는 이렇게 생겼어요",
+          component: "cppClassBasicBuilder",
+          content: `앞에서 **"멤버를 묶어 정의하는 게 class"** 라고 했죠.
 
-\`\`\`
-class 이름 {
-    기억해야 할 것들...  // 멤버변수
+그럼 그 **"묶는 뼈대"** 자체는 어떻게 생겼을까요? 멤버를 넣기 전에, 바깥 껍데기부터 **한 단계씩 쌓아가며** 볼게요.
 
-    해야 할 것들...      // 멤버함수
-};
-\`\`\`
+아래 시뮬레이터의 **"다음"** 버튼을 눌러 직접 조립해봐요 👇
 
-\`class\` 키워드로 시작하고, 이름을 쓰고, 중괄호로 묶어요.
-위쪽에 **멤버변수**, 아래쪽에 **멤버함수**를 써요.`,
+1. \`class\` **키워드**로 시작
+2. **이름** — 관례상 **대문자**로 시작 (Car, Dog, Student...)
+3. \`{ }\` **중괄호**로 감싸기 — 안쪽에 멤버가 들어가요
+4. 마지막에 \`;\` **세미콜론** — C++만의 규칙, 빠뜨리면 에러!
+
+이게 class의 뼈대예요. 안쪽에 들어가는 **멤버**는 뭘 쓸지 다음 페이지에서 봐요.`,
         },
         {
-          id: "ch1-build-design",
+          id: "ch1-build-plan",
           type: "explain",
-          title: "🚗 자동차 class를 설계해봐요",
-          content: `코드 쓰기 전에, 자동차엔 뭐가 필요한지부터 생각해봐요.
+          title: "🧠 안에 뭘 넣을지 정해볼까요?",
+          content: `이제 뼈대 안쪽에 들어갈 **멤버**를 정해볼 차례예요. 자동차로 생각해볼게요.
 
-**기억해야 할 것**부터 — 달리려면 **속도**는 있어야겠죠. 어떤 차인지 알게 **색깔**도 넣어볼게요.
+일단 **기억해야 할 것**부터 — 달리려면 **속도**는 있어야겠죠. 어떤 차인지 알게 **색깔**도 넣어볼게요.
 
 **해야 할 것**은 — 앞으로 달리는 기능, 그리고 지금 상태를 확인하는 기능 정도로 시작해봐요.
 
-물론 이건 제가 생각한 것 중 하나예요. 만들다 보면 더 필요한 게 생길 수도 있고, 필요 없는 게 빠질 수도 있어요.`,
+물론 이건 제가 생각한 것 중 하나예요. 만들다 보면 더 필요한 게 생길 수도 있고, 필요 없는 게 빠질 수도 있어요.
+
+다음 페이지에서 코드로 써볼게요.`,
         },
         {
-          id: "ch1-build-code",
+          id: "ch1-build-members",
           type: "explain",
-          title: "✍️ Car class 코드로 써봐요",
-          layout: {
-            left: `위쪽엔 **멤버변수** — 기억해야 할 것들:
-- \`double speed;\` — 소수점 가능
-- \`string color;\` — 텍스트
+          title: "💾 멤버변수부터 써볼게요",
+          content: `먼저 **멤버변수** — 기억해야 할 것들이에요:
 
-아래엔 **멤버함수** — 해야 할 것들:
-- \`forward()\` — 앞으로 가면 속도 증가
-- \`info()\` — 현재 상태 출력
+\`\`\`cpp
+class Car {
+    double speed;   // 속도 → 소수점도 가능하게 double로
+    string color;   // 색깔 → 텍스트니까 string으로
+};
+\`\`\`
 
-> 🐍 **Python에서 오셨나요?**
-> Python은 \`self.speed\`가 필요한데,
-> C++은 그냥 \`speed\`로 바로 써요.
+속도는 소수점이 필요할 수 있으니 \`double\`, 색깔은 텍스트니까 \`string\`으로 선언했어요.
 
-아직 자동차가 생긴 건 아니에요 — 설계도만 그려둔 거예요.`,
-            right: `\`\`\`cpp
+기억해야 할 건 챙겼으니, 이제 **할 수 있는 것** — 멤버함수를 붙여볼게요.`,
+        },
+        {
+          id: "ch1-build-methods",
+          type: "explain",
+          title: "⚙️ 멤버함수 추가하기",
+          content: `이제 **멤버함수** — 해야 할 것들을 \`};\` **앞에** 넣어볼게요:
+
+\`\`\`cpp
+class Car {
+    double speed;
+    string color;
+
+    void forward() {
+        speed += 10;   // 앞으로 가면 속도가 커지겠죠?
+    }
+    void info() {      // 저는 임의로 정보를 출력하게 만들게요
+        cout << color << " 자동차, 속도: " << speed << endl;
+    }
+};
+\`\`\`
+
+> 🐍 **Python에서 오셨나요?** Python에서는 \`self.speed\`처럼 \`self\`가 필요했는데, C++에서는 그냥 \`speed\`로 바로 써요.
+
+{collapse:전체 코드 보기}
+\`\`\`cpp
 class Car {
     double speed;
     string color;
@@ -94,35 +119,137 @@ class Car {
         speed += 10;
     }
     void info() {
-        cout << color << " 자동차, 속도: "
-             << speed << endl;
+        cout << color << " 자동차, 속도: " << speed << endl;
     }
 };
-\`\`\``
-          },
+\`\`\`
+
+자, Car class 완성! 🎉`,
         },
         {
-          id: "ch1-object-concept",
+          id: "ch1-build-practice",
+          type: "practice" as const,
+          title: "✋ Car 설계도 그려보기",
+          content: `Car class를 만들어서 **멤버변수 선언**, **함수 선언**까지 해봐요.
+
+아직 설계도 단계니까 \`main()\`은 비워둬도 괜찮아요.`,
+          starterCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+// Car class를 완성하세요
+class Car {
+    // 1. 멤버변수 speed(double), color(string) 선언
+
+
+    // 2. forward(): speed를 10 증가
+    void forward() {
+
+    }
+
+    void info() {
+        cout << color << " 자동차, 속도: " << speed << endl;
+    }
+
+// 3. class를 닫을 때 ;을 잊지 마세요
+
+
+int main() {
+    // 아직 객체 만드는 법을 안 배웠으니 main()은 비워둘게요.
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+class Car {
+    double speed;
+    string color;
+
+    void forward() {
+        speed += 10;
+    }
+
+    void info() {
+        cout << color << " 자동차, 속도: " << speed << endl;
+    }
+};
+
+int main() {
+    return 0;
+}`,
+          hint: `class 안 맨 위에 double speed; string color; 선언. forward() 본문에는 speed += 10; 한 줄. class 닫기는 }; (중괄호 + 세미콜론).`,
+          expectedOutput: ``
+        },
+        {
+          id: "ch1-build-blueprint",
           type: "explain",
-          title: "🎮 class는 설계도, 실제는 객체!",
-          content: `방금 Car class를 만들었는데, 그럼 자동차가 생겼을까요?
+          title: "📐 근데 자동차가 생긴 건 아니에요",
+          content: `방금 직접 Car class를 써봤는데, 감이 좀 오나요? 👀
 
-아니에요. class는 **설계도**예요. 실제 자동차를 만들려면 한 단계가 더 필요해요.
+근데 잠깐 — 이렇게 class를 만들었다고 해서 실제로 자동차가 생긴 걸까요?
 
-RPG 게임으로 생각해보면 — 상점에서 "불꽃 검" 설명을 읽어봤다고 검이 내 것이 되는 건 아니잖아요. **실제로 구매하거나 획득해야** 인벤토리에 생겨요.
+아니에요. 🎮 게임으로 생각해봐요.
+
+게임 안에 "불꽃 검은 공격력 +50, 내구도 100" 이렇게 **스펙이 정해져 있다고 해서** 그 검이 내 인벤토리에 있는 건 아니잖아요.
+
+돈으로 사거나, 퀘스트로 획득해야 비로소 **내 아이템**이 돼요.
+
+class도 똑같아요. class는 **"이런 스펙의 자동차가 있다"** 라고 적어둔 **설계도**예요. 실제 자동차는 아직 없어요.
+
+![class는 설계도, 객체는 실체](/images/cpp/class-blueprint.svg)
+
+그럼 설계도로 만들어낸 **실제 자동차**는 뭐라고 부를까요?`,
+        },
+        {
+          id: "ch1-object",
+          type: "explain",
+          title: "🎮 객체(object)가 뭐예요?",
+          content: `설계도로 만들어낸 **실체** — 이걸 **객체(object)** 또는 **인스턴스(instance)** 라고 해요.
+
+게임에서 "불꽃 검 설명서"를 보고 상점에서 구매하면, 내 인벤토리에 **실제 아이템**이 생기죠. 바로 그 아이템이 객체예요.
 
 | | 게임 | 프로그래밍 |
 |---|---|---|
 | 아이템 **설명서** | 불꽃 검 정보 | **class** |
 | 실제로 **얻은** 아이템 | 내 인벤토리의 검 | **객체 (object)** |
 
-이렇게 class로 만든 실체를 **객체(object)** 또는 **인스턴스(instance)** 라고 해요.`,
+→ **class**는 설계도, **객체**는 그 설계도로 만들어낸 실체.
+
+이제 이름을 알았으니, 진짜 만드는 방법을 봐요.`,
         },
         {
-          id: "ch1-object-code",
+          id: "ch1-object-create",
           type: "explain",
-          title: "🚗 객체를 만들어서 써봐요",
-          content: `\`\`\`cpp
+          title: "🛠️ 그럼 객체는 어떻게 만들까요?",
+          content: `생각보다 간단해요. **변수 만들듯이** 쓰면 돼요.
+
+\`\`\`
+클래스이름  변수이름;
+\`\`\`
+
+평소에 \`int age;\`, \`string name;\` 이렇게 썼던 것과 똑같은 모양이에요. 타입 자리에 내가 만든 class 이름을 쓰는 것뿐이에요.
+
+\`\`\`cpp
+Car myCar;   // Car 타입의 myCar 객체가 생겨요
+\`\`\`
+
+이 한 줄로 **진짜 자동차 한 대**가 만들어진 거예요. 🚗`,
+        },
+        {
+          id: "ch1-object-access",
+          type: "explain",
+          title: "🔗 멤버에 접근하는 법",
+          content: `객체를 만들었으니 이제 멤버변수와 멤버함수를 **써봐야겠죠.**
+
+\`.\`(점)을 찍어서 접근해요:
+
+- \`myCar.color\` → 멤버변수 읽기/쓰기
+- \`myCar.forward()\` → 멤버함수 호출
+
+이제 전체 흐름을 봐요:
+
+\`\`\`cpp
 int main() {
     Car myCar;             // ← 실제 자동차(객체)가 생겨요!
     myCar.color = "빨간색";
@@ -131,9 +258,15 @@ int main() {
     myCar.forward();
     myCar.info();          // 빨간색 자동차, 속도: 20
 }
-\`\`\`
+\`\`\``,
+        },
+        {
+          id: "ch1-object-multi",
+          type: "explain",
+          title: "🍩 설계도 하나로 여러 대",
+          content: `class의 진짜 힘은 여기서 나와요. **설계도 하나로 자동차를 여러 대** 만들 수 있어요.
 
-설계도 하나로 자동차를 여러 대 만들 수도 있어요:
+![설계도 하나로 여러 객체](/images/cpp/class-multi.svg)
 
 \`\`\`cpp
 int main() {
@@ -164,6 +297,81 @@ int main() {
 }
 // 자동차가 10대면? 변수 20개에, 어떤 변수가 어떤 차의 것인지도 헷갈려요
 \`\`\``,
+        },
+        {
+          id: "ch1-object-practice",
+          type: "practice" as const,
+          title: "✋ 객체 만들고 써보기",
+          content: `**Car class는 이미 작성돼 있어요.** 건드리지 말고 그대로 두세요.
+
+할 일은 \`main()\` 안 채우기뿐이에요:
+
+1. \`myCar\` 객체 만들기
+2. \`color\`를 "파란색", \`speed\`를 0으로 설정
+3. \`forward()\` 두 번 호출
+4. \`info()\` 호출
+
+이렇게 하면 아래 출력이 나와야 해요 👇`,
+          starterCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+class Car {
+public:
+    double speed;
+    string color;
+
+    void forward() {
+        speed += 10;
+    }
+    void info() {
+        cout << color << " 자동차, 속도: " << speed << endl;
+    }
+};
+
+int main() {
+    // 1. Car 객체 myCar 만들기
+
+
+    // 2. color를 "파란색", speed를 0으로 설정
+
+
+    // 3. forward()를 두 번 호출
+
+
+    // 4. info() 호출
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+class Car {
+public:
+    double speed;
+    string color;
+
+    void forward() {
+        speed += 10;
+    }
+    void info() {
+        cout << color << " 자동차, 속도: " << speed << endl;
+    }
+};
+
+int main() {
+    Car myCar;
+    myCar.color = "파란색";
+    myCar.speed = 0;
+    myCar.forward();
+    myCar.forward();
+    myCar.info();
+    return 0;
+}`,
+          hint: `객체 만들기: Car myCar; — 멤버 설정: myCar.color = "파란색"; myCar.speed = 0; — 함수 호출: myCar.forward(); 두 번, myCar.info();`,
+          expectedOutput: `파란색 자동차, 속도: 20`
         },
         {
           id: "ch1-pred1",
@@ -346,17 +554,23 @@ int main() {
         {
           id: "ch2-getter-setter",
           type: "explain",
-          title: "그럼 class 안의 값들은 어떻게 가져오고 바꿀까요?",
-          content: `위에서 통장 잔액을 private으로 막았잖아요. 그럼 잔액을 아예 못 보는 건가요? 그건 아니에요 — **창구**를 통해서 쓰는 거예요.
+          title: "🚪 그럼 막힌 값은 어떻게 쓰나요?",
+          content: `방금 퀴즈에서 봤듯이 \`private\` 멤버는 밖에서 직접 건드리면 컴파일 에러예요. 그럼 잔액을 **아예 못 보는** 걸까요?
 
-이렇게 생각하면 더 쉬워요. 내 방에 있는 물건을 남이 마음대로 가져가면 싫잖아요. 그래서 **문을 잠가요** (\`private\`).
+아니에요 — **창구**를 통해서 쓰는 거예요.
+
+내 방에 있는 물건을 남이 마음대로 가져가면 싫잖아요. 그래서 문을 잠가요 (\`private\`).
 
 근데 친구가 필요하면? **노크하고 부탁하면** 꺼내줄게요 → 이게 **getter**예요.
 뭔가 넣고 싶으면? **나한테 말하면** 확인하고 넣어줄게요 → 이게 **setter**예요.
 
-class도 똑같아요. 멤버변수는 private으로 해야 한다고 했는데, 그럼 \`speed\`를 알고 싶거나 바꾸고 싶을 때는 어떻게 할까요?
-
-멤버변수에 접근할 수 있는 함수를 **public에 넣어두면** 돼요.
+class도 똑같아요. 읽기/쓰기 함수를 \`public\`에 넣어서 통제된 창구를 만들어요.`,
+        },
+        {
+          id: "ch2-getter-setter-code",
+          type: "explain",
+          title: "📋 getter / setter 써보기",
+          content: `Car class에 getter/setter를 달아볼게요:
 
 \`\`\`cpp {6-8,10-15}
 class Car {
@@ -377,6 +591,16 @@ public:
 };
 \`\`\`
 
+값을 **읽는** 함수가 **getter**, 값을 **설정하는** 함수가 **setter**예요.
+
+setter 안에서 \`if\`로 **잘못된 값을 거부**할 수 있다는 게 포인트. 외부에서 막 바꿀 때와 다르게, 이제 class가 값을 **지킬 수 있어요.**`,
+        },
+        {
+          id: "ch2-encapsulation",
+          type: "explain",
+          title: "🔒 캡슐화 — 이게 전부예요",
+          content: `실제로 써보면 이렇게 돼요:
+
 \`\`\`cpp
 int main() {
     Car myCar;
@@ -386,12 +610,11 @@ int main() {
 }
 \`\`\`
 
-값을 **읽는** 함수를 **getter**, 값을 **설정하는** 함수를 **setter**라고 해요.
-setter에서는 잘못된 값을 거부할 수 있다는 게 포인트예요.
+\`setSpeed(-999)\`를 호출해도 내부에서 \`if\`가 막아줘서 speed가 0 그대로예요.
 
-@핵심: private으로 막고, getter/setter로 통제된 창구를 만드는 것 — 이게 **캡슐화(encapsulation)**예요.
+@핵심: \`private\`으로 막고, getter/setter로 통제된 창구를 만드는 것 — 이게 **캡슐화(encapsulation)** 예요.
 
-그런데 한 가지 남은 문제가 있어요. 객체를 만들자마자 매번 setter로 초기값을 설정해줘야 할까요? 더 좋은 방법이 없을까요?`,
+그런데 매번 \`setColor\`, \`setSpeed\`를 직접 불러서 초기화하는 건 좀 번거롭지 않나요? 객체를 만들 때 **한 번에** 값을 정하는 방법이 있어요. 다음 챕터에서 볼게요.`,
         },
       ]
     },
@@ -404,138 +627,22 @@ setter에서는 잘못된 값을 거부할 수 있다는 게 포인트예요.
       emoji: "🔧",
       steps: [
         {
-          id: "ch3-constructor-anim",
-          type: "interactive",
-          title: "🎬 생성자 있을 때 vs 없을 때",
-          description: "탭을 눌러서 생성자의 역할을 확인해봐요.",
-          component: "constructorVisualizer",
-        },
-        {
-          id: "ch3-garbage-p1",
-          type: "predict" as const,
-          title: "🔍 지역변수 int는 어떻게 될까?",
-          code: `int main() {
-    int a;        // 초기화 안 함
-    cout << a;
-    return 0;
-}`,
-          options: ["0이 출력됨", "5가 출력됨", "예측 불가한 값 (쓰레기값)", "컴파일 에러"],
-          answer: 2,
-          explanation: "함수 **안**의 지역변수는 초기화 안 하면 메모리에 남아있던 쓰레기 값이 그대로 들어가요. 실행마다 다를 수 있어요. C++은 속도 때문에 자동 초기화를 안 해요."
-        },
-        {
-          id: "ch3-garbage-p2",
-          type: "predict" as const,
-          title: "🔍 전역 int는?",
-          code: `int a;   // 전역 변수 (함수 밖)
-
-int main() {
-    cout << a;
-    return 0;
-}`,
-          options: ["0이 출력됨", "쓰레기값", "컴파일 에러", "런타임 에러"],
-          answer: 0,
-          explanation: "**전역 변수**와 **static 변수**는 자동으로 0으로 초기화돼요. 지역변수만 쓰레기 값이에요. \`static int a;\` 도 마찬가지로 0!"
-        },
-        {
-          id: "ch3-garbage-p3",
-          type: "predict" as const,
-          title: "🔍 `int a{};` — 중괄호 붙이면?",
-          code: `int main() {
-    int a{};      // 중괄호 초기화!
-    cout << a;
-    return 0;
-}`,
-          options: ["0이 출력됨", "쓰레기값", "에러 (초기값 안 줬으니까)", "1이 출력됨"],
-          answer: 0,
-          explanation: "빈 중괄호 `{}`를 붙이면 **value-initialization** — int는 0으로 보장돼요. 실무에선 `int a = 0;` 많이 쓰지만 `int a{};`도 0을 보장하는 방법이에요."
-        },
-        {
-          id: "ch3-garbage-p4",
-          type: "predict" as const,
-          title: "🔍 클래스 멤버 int는?",
-          code: `class Box {
-public:
-    int count;   // 초기화 안 함
-};
-
-int main() {
-    Box b;
-    cout << b.count;
-    return 0;
-}`,
-          options: ["0이 출력됨", "쓰레기값", "컴파일 에러", "\"\" 출력"],
-          answer: 1,
-          explanation: "생성자 없이 만든 객체의 **기본 타입 멤버**(int, double, char, bool)는 지역변수와 똑같이 쓰레기 값이에요. 이래서 생성자가 필요한 거예요!"
-        },
-        {
-          id: "ch3-garbage-p5",
-          type: "predict" as const,
-          title: "🔍 클래스 멤버 string과 vector는?",
-          code: `class Box {
-public:
-    string label;        // 초기화 안 함
-    vector<int> items;   // 초기화 안 함
-};
-
-int main() {
-    Box b;
-    cout << b.label.length() << " "
-         << b.items.size();
-    return 0;
-}`,
-          options: ["쓰레기값 두 개", "0 0", "에러", "\"\" 0"],
-          answer: 1,
-          explanation: "**클래스 타입**(string, vector, map 등)은 자체 기본 생성자가 있어서 자동으로 초기화돼요. string은 빈 문자열(\`\"\"\`, length 0), vector는 빈 벡터(size 0). 쓰레기값 아니에요!"
-        },
-        {
-          id: "ch3-garbage-summary",
-          type: "explain",
-          title: "📋 쓰레기 값 정리",
-          layout: {
-            left: `**기본 타입** (int, double, char, bool, 포인터)
-
-| 위치 | 초기값 |
-|---|---|
-| 함수 안 (지역) | 🎲 쓰레기값 |
-| 함수 밖 (전역/static) | ✅ 0 |
-| 클래스 멤버 (생성자 없음) | 🎲 쓰레기값 |
-| \`int a{};\` 중괄호 | ✅ 0 |
-
-**클래스 타입** (string, vector, map, ...)
-→ 자체 기본 생성자가 있어서 항상 **빈 값**으로 시작 (쓰레기 값 걱정 없음)
-
-**교훈:** 기본 타입 멤버가 있는 클래스는 **생성자 필수**. 그게 다음 스텝 주제예요.`,
-            right: `\`\`\`cpp
-// 한눈에 보는 초기값 차트
-
-int a;              // 🎲 쓰레기
-int b{};            // ✅ 0
-int c = 0;          // ✅ 0
-static int d;       // ✅ 0 (static)
-
-string s;           // ✅ ""
-vector<int> v;      // ✅ []
-
-class Box {
-    int count;      // 🎲 쓰레기
-    string name;    // ✅ ""
-};
-
-Box b;
-// b.count  → 쓰레기
-// b.name   → ""
-\`\`\``
-          },
-        },
-        {
           id: "ch3-constructor",
           type: "explain",
           title: "🔧 생성자 — 객체가 태어날 때 자동 호출!",
           component: "cppConstructorBuilder",
-          content: `사람이 태어나는 순간 이름이 있고 성별이 있듯, 객체도 생기는 순간 처음부터 세팅이 되어 있어야 자연스럽죠.
+          content: `앞 챕터에서 말한 **"객체 만들 때 한 번에 값 정하는 방법"** — 그게 바로 **생성자(constructor)** 예요.
 
-그래서 있는 게 **생성자(constructor)** — **객체가 만들어지는 순간 자동으로 호출되는 함수**예요. 생성자에서 멤버 변수를 초기화하면 쓰레기 값 걱정 없어요.
+사람도 태어나는 순간 이름이 있고 성별이 있잖아요. 객체도 생기는 순간 처음부터 세팅되어 있어야 자연스럽죠.
+
+**객체가 만들어지는 순간 자동으로 호출되는 함수** — 이게 생성자예요.
+
+생성자가 없으면 멤버 변수들이 **쓰레기 값**으로 시작해요:
+
+\`\`\`cpp
+BankAccount acc;
+// acc.balance가 -398475.23 같은 이상한 값일 수 있어요! 😱
+\`\`\`
 
 생성자를 하나씩 조립해봐요:`,
         },
@@ -705,19 +812,9 @@ public:
           title: "✋ BankAccount class 만들기!",
           content: `통장 클래스를 직접 완성해봐요!
 
-아래 \`main()\`은 이미 작성되어 있어요. 이 흐름이 동작하도록 클래스를 완성하세요:
-
-| main() 호출 | 잔액 변화 |
-|---|---|
-| \`BankAccount acc("김철수", 1000)\` | 1000원으로 시작 |
-| \`acc.deposit(500)\` | +500 → 1500원 |
-| \`acc.withdraw(200)\` | -200 → **1300원** |
-| \`acc.withdraw(9999)\` | 잔액 부족 → 무시 |
-| \`acc.getBalance()\` | **1300** 출력 |
-
-구현 조건:
-- 입금: 금액이 0보다 클 때만 처리
-- 출금: 금액이 0보다 크고 잔액 이하일 때만 처리`,
+\`main()\`에서 이미 사용하는 코드를 보고, 클래스를 완성하세요.
+- 입금은 금액이 0보다 클 때만 처리
+- 출금은 금액이 0보다 크고 잔액 이하일 때만 처리`,
           starterCode: `#include <iostream>
 #include <string>
 using namespace std;
@@ -919,7 +1016,6 @@ Part 2 (레슨 9, 21, 10~14, 22)에서 배운 모든 것을 정리해봐요!
 - **getter** / **setter** — private 멤버를 읽고 쓰는 공개 창구 + 유효성 검사
 - **생성자** — 객체 생성 시 자동 호출, 클래스 이름과 동일, 리턴 타입 없음
 - **캡슐화(encapsulation)** — private으로 막고 공개 함수로만 접근하는 OOP 원칙
-- **타입 안전성 보너스:** 멤버 이름에 오타 나면 컴파일 에러 — 실행 전에 버그가 잡힘 (파이썬 dict는 조용히 새 키로 들어감)
 
 ---
 

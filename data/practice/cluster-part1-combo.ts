@@ -353,9 +353,12 @@ Example for N=4:
       title: "점수 통계",
       description: `N명의 점수(0~100)가 주어질 때, 다음을 출력하세요.
 
-- 첫 번째 줄: 평균 (소수점 첫째 자리, 반올림 아님)
+- 첫 번째 줄: 평균 (소수점 **첫째 자리**까지)
 - 두 번째 줄: 최고점
-- 세 번째 줄: 평균 이상인 학생 수`,
+- 세 번째 줄: 평균 이상인 학생 수
+
+💡 **소수점 자리수 고정 출력 방법** — \`<iomanip>\` 헤더를 포함하고,
+\`cout << fixed << setprecision(1) << avg;\` 처럼 \`fixed\`와 \`setprecision(N)\`을 함께 씁니다. \`N\`이 소수점 아래 자릿수예요.`,
       constraints: "1 ≤ N ≤ 100, 0 ≤ 점수 ≤ 100",
       initialCode: `#include <iostream>
 #include <iomanip>
@@ -405,9 +408,12 @@ int main() {
         title: "Score Statistics",
         description: `Given the scores (0–100) of N students, print the following:
 
-- First line: average (to one decimal place, no rounding)
+- First line: average (to **one decimal place**)
 - Second line: highest score
-- Third line: number of students at or above the average`,
+- Third line: number of students at or above the average
+
+💡 **How to fix decimal places** — include \`<iomanip>\` and use
+\`cout << fixed << setprecision(1) << avg;\`. Here \`N\` inside \`setprecision(N)\` is the number of digits after the decimal point.`,
         constraints: "1 ≤ N ≤ 100, 0 ≤ score ≤ 100",
         hints: [
           "Without an array you would need two passes over the input, which is tricky. Store the scores in `int scores[100]`.",

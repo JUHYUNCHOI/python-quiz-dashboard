@@ -603,6 +603,7 @@ int main() {
         "이름과 점수를 각각 string과 int로 읽으세요: cin >> name >> score",
         "합계를 누적하고, 최고점과 해당 학생 이름을 별도 변수로 추적하세요.",
         "동점 처리: 현재 점수가 최고점보다 strictly 클 때만 갱신하면 첫 번째 학생이 유지됩니다.",
+        "평균은 소수점 첫째 자리까지: cout << fixed << setprecision(1) << avg; (<iomanip> 이미 포함)",
       ],
       solutionCode: `#include <iostream>
 #include <string>
