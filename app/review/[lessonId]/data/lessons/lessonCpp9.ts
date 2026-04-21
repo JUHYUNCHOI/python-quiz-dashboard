@@ -729,43 +729,45 @@ export const lessonCpp9: LessonData = {
         }
       },
 
-      // Drill 7: range-for로 합계
+      // Drill 7: index for로 합계
       {
         type: "practice",
         content: {
           level: 2,
-          task: "range-for로 벡터 원소 합계를 구해요 (auto 키워드 사용!)",
-          guide: "타입 자동 추론 키워드는? 누적 더하기 연산자는?",
-          template: "vector<int> v = {10, 20, 30, 40};\nint sum = 0;\nfor (___ x : v) {\n    sum ___ x;\n}\ncout << sum << endl;",
-          blanksAnswer: ["auto", "+= "],
+          task: "인덱스 for문으로 벡터 원소 합계를 구해요",
+          guide: "반복 횟수는 v.size(), 원소 접근은 v[i], 누적은 sum += v[i]",
+          template: "vector<int> v = {10, 20, 30, 40};\nint sum = 0;\nfor (int i = 0; i < v.___(); i++) {\n    sum ___ v[i];\n}\ncout << sum << endl;",
+          blanksAnswer: ["size", "+= "],
           alternateAnswers: [],
-          answer: "vector<int> v = {10, 20, 30, 40};\nint sum = 0;\nfor (auto x : v) {\n    sum += x;\n}\ncout << sum << endl;",
+          answer: "vector<int> v = {10, 20, 30, 40};\nint sum = 0;\nfor (int i = 0; i < v.size(); i++) {\n    sum += v[i];\n}\ncout << sum << endl;",
           expect: "100",
           en: {
-            task: "Use a range-for loop to sum the vector elements (use auto keyword!)",
-            guide: "What keyword auto-deduces types? What operator accumulates values?"
+            task: "Use an index for loop to sum the vector elements",
+            guide: "Loop count uses v.size(), access with v[i], accumulate with sum += v[i]"
           }
         }
       },
 
-      // Drill 8: 처음부터 직접 쓰기 — push_back + range-for
+      // Drill 8: 처음부터 직접 쓰기 — push_back + index for
       {
         type: "practice",
         content: {
           level: 3,
-          task: "처음부터 작성! 빈 벡터 선언 → 2, 4, 6, 8 추가 → range-for로 전부 출력",
-          guide: "vector 선언 → push_back 4번 → for (auto x : v) cout",
+          task: "3단계로 작성하세요:\n① 빈 벡터 v 를 선언\n② 2, 4, 6, 8을 push_back으로 추가\n③ 인덱스 for문으로 모든 값을 공백으로 구분해 출력",
+          guide: "vector 선언 → push_back 4번 → for (int i = 0; i < v.size(); i++) { cout << v[i] << \" \"; }",
           template: null,
-          answer: "vector<int> v;\nv.push_back(2);\nv.push_back(4);\nv.push_back(6);\nv.push_back(8);\nfor (auto x : v) {\n    cout << x << \" \";\n}",
+          context: "// 이미 준비됨: #include <iostream>, #include <vector>, int main()\n// 아래에 코드를 작성하세요",
+          answer: "vector<int> v;\nv.push_back(2);\nv.push_back(4);\nv.push_back(6);\nv.push_back(8);\nfor (int i = 0; i < v.size(); i++) {\n    cout << v[i] << \" \";\n}",
           alternateAnswers: [
-            "vector<int> v;\nv.push_back(2);\nv.push_back(4);\nv.push_back(6);\nv.push_back(8);\nfor (auto x : v) cout << x << \" \";",
-            "vector<int> v = {2, 4, 6, 8};\nfor (auto x : v) {\n    cout << x << \" \";\n}",
-            "vector<int> v = {2, 4, 6, 8};\nfor (auto x : v) cout << x << \" \";"
+            "vector<int> v;\nv.push_back(2);\nv.push_back(4);\nv.push_back(6);\nv.push_back(8);\nfor (int i = 0; i < v.size(); i++) cout << v[i] << \" \";",
+            "vector<int> v = {2, 4, 6, 8};\nfor (int i = 0; i < v.size(); i++) {\n    cout << v[i] << \" \";\n}",
+            "vector<int> v = {2, 4, 6, 8};\nfor (int i = 0; i < v.size(); i++) cout << v[i] << \" \";"
           ],
           expect: "2 4 6 8 ",
           en: {
-            task: "Write from scratch! Declare empty vector → add 2, 4, 6, 8 → print all with range-for",
-            guide: "declare vector → push_back 4 times → for (auto x : v) cout"
+            task: "Declare an empty vector, add 2, 4, 6, 8, then use an index for loop to print every value separated by spaces.",
+            guide: "declare vector → push_back 4 times → for (int i = 0; i < v.size(); i++) { cout << v[i] << \" \"; }",
+            context: "// Already set up: #include <iostream>, #include <vector>, int main()\n// Write your code below"
           }
         }
       },
