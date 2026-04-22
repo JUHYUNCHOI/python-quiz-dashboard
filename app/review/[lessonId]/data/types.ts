@@ -43,8 +43,11 @@ export interface PracticeContent {
   guide?: string;
   hint?: string;
   context?: string;        // 위에 보여줄 읽기 전용 코드 컨텍스트 (빈칸 문제에서도 사용 가능)
+  contextHeader?: string;  // template:null 연습에서 가장 위 (예: #include 기본들)
+  contextAfter?: string;   // template:null 연습에서 학생 입력 아래 (예: return 0; })
   sampleInput?: string;    // 전체 코드 작성 시 보여줄 예시 입력 (별도 블록으로 렌더)
   starterCode?: string;    // 전체 코드 작성 시 에디터 초기값 (예: int main() {} 스켈레톤)
+  stdin?: string;          // 전체 코드 실행 시 표준 입력으로 전달
   template: string | { before: string; after: string } | null;
   answer: string;
   alternateAnswers?: string[];
@@ -56,6 +59,8 @@ export interface PracticeContent {
     guide?: string;
     hint?: string;
     context?: string;
+    contextHeader?: string;
+    contextAfter?: string;
     sampleInput?: string;
     starterCode?: string;
     template?: string;
@@ -99,6 +104,9 @@ export interface InterleavingContent {
   guide?: string;
   hint?: string;
   context?: string;        // 위에 보여줄 읽기 전용 코드 컨텍스트 (빈칸 문제에서도 사용 가능)
+  contextHeader?: string;  // template:null 연습에서 가장 위
+  contextAfter?: string;   // template:null 연습에서 학생 입력 아래
+  stdin?: string;          // 전체 코드 실행 시 표준 입력으로 전달
   template: string | { before: string; after: string } | null;
   answer: string;
   alternateAnswers?: string[];
@@ -111,6 +119,8 @@ export interface InterleavingContent {
     guide?: string;
     hint?: string;
     context?: string;
+    contextHeader?: string;
+    contextAfter?: string;
     template?: string;
     answer?: string;
     alternateAnswers?: string[];

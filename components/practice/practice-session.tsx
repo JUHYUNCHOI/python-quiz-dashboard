@@ -805,11 +805,11 @@ export function PracticeSession({
           <button
             onClick={handleNext}
             disabled={isSaving}
-            className="flex-1 py-3 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-500 font-bold text-sm transition-colors disabled:opacity-50"
+            className="flex-1 py-3 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-700 border-2 border-amber-300 hover:border-amber-400 font-bold text-sm transition-colors disabled:opacity-50"
           >
             {index + 1 >= roundProblems.length
-              ? (isSaving ? t("저장 중...", "Saving...") : t("건너뛰기 →", "Skip →"))
-              : t("건너뛰기 →", "Skip →")}
+              ? (isSaving ? t("저장 중...", "Saving...") : t("⏭ 건너뛰고 결과 보기", "⏭ Skip to results"))
+              : t("⏭ 건너뛰기 →", "⏭ Skip →")}
           </button>
         )}
       </div>

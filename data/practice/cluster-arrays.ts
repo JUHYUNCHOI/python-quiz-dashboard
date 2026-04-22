@@ -24,11 +24,10 @@ export const arraysCluster: PracticeCluster = {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    // 여기에 코드를 작성하세요
+    // 1) int n 을 cin 으로 입력받기
+    // 2) 크기 n 의 벡터 v 선언
+    // 3) n 개의 원소를 cin 으로 v 에 읽기
+    // 4) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [
@@ -166,11 +165,10 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    // 여기에 코드를 작성하세요
+    // 1) int n 을 cin 으로 입력받기
+    // 2) 크기 n 의 벡터 v 선언
+    // 3) n 개의 원소를 cin 으로 v 에 읽기
+    // 4) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [
@@ -222,11 +220,10 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    // 여기에 코드를 작성하세요
+    // 1) int n 을 cin 으로 입력받기
+    // 2) 크기 n 의 벡터 v 선언
+    // 3) n 개의 원소를 cin 으로 v 에 읽기
+    // 4) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [
@@ -279,11 +276,10 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    // 여기에 코드를 작성하세요
+    // 1) int n 을 cin 으로 입력받기
+    // 2) 크기 n 의 벡터 v 선언
+    // 3) n 개의 원소를 cin 으로 v 에 읽기
+    // 4) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [
@@ -395,11 +391,10 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    // 여기에 코드를 작성하세요
+    // 1) int n 을 cin 으로 입력받기
+    // 2) 크기 n 의 벡터 v 선언
+    // 3) n 개의 원소를 cin 으로 v 에 읽기
+    // 4) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [
@@ -505,11 +500,10 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    // 여기에 코드를 작성하세요
+    // 1) int n 을 cin 으로 입력받기
+    // 2) 크기 n 의 벡터 v 선언
+    // 3) n 개의 원소를 cin 으로 v 에 읽기
+    // 4) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [
@@ -560,11 +554,10 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    // 여기에 코드를 작성하세요
+    // 1) int n 을 cin 으로 입력받기
+    // 2) 크기 n 의 벡터 v 선언
+    // 3) n 개의 원소를 cin 으로 v 에 읽기
+    // 4) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [
@@ -673,11 +666,10 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    // 여기에 코드를 작성하세요
+    // 1) int n 을 cin 으로 입력받기
+    // 2) 크기 n 의 벡터 v 선언
+    // 3) n 개의 원소를 cin 으로 v 에 읽기
+    // 4) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [
@@ -734,11 +726,10 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    // 여기에 코드를 작성하세요
+    // 1) int n 을 cin 으로 입력받기
+    // 2) 크기 n 의 벡터 v 선언
+    // 3) n 개의 원소를 cin 으로 v 에 읽기
+    // 4) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [
@@ -847,11 +838,10 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    // 여기에 코드를 작성하세요
+    // 1) int n 을 cin 으로 입력받기
+    // 2) 크기 n 의 벡터 v 선언
+    // 3) n 개의 원소를 cin 으로 v 에 읽기
+    // 4) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [
@@ -959,11 +949,10 @@ P[i] = A[0] + A[1] + ... + A[i]`,
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    // 여기에 코드를 작성하세요
+    // 1) int n 을 cin 으로 입력받기
+    // 2) 크기 n 의 벡터 v 선언
+    // 3) n 개의 원소를 cin 으로 v 에 읽기
+    // 4) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [
@@ -1018,11 +1007,10 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    // 여기에 코드를 작성하세요
+    // 1) int n 을 cin 으로 입력받기
+    // 2) 크기 n 의 벡터 v 선언
+    // 3) n 개의 원소를 cin 으로 v 에 읽기
+    // 4) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [
@@ -1077,11 +1065,10 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    // 여기에 코드를 작성하세요
+    // 1) int n 을 cin 으로 입력받기
+    // 2) 크기 n 의 벡터 v 선언
+    // 3) n 개의 원소를 cin 으로 v 에 읽기
+    // 4) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [
@@ -1135,12 +1122,9 @@ int main() {
 using namespace std;
 
 int main() {
-    int n, m;
-    cin >> n >> m;
-    vector<int> a(n), b(m);
-    for (int i = 0; i < n; i++) cin >> a[i];
-    for (int i = 0; i < m; i++) cin >> b[i];
-    // 여기에 코드를 작성하세요
+    // 1) n (필요시 m) 을 cin 으로 입력받기
+    // 2) 크기가 맞는 벡터 선언 후 원소를 cin 으로 읽기
+    // 3) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [
