@@ -91,24 +91,24 @@ export const lessonCpp21: LessonData = {
       {
         type: "quiz",
         content: {
-          question: "int grid[3][4]; 에서 grid[2][3]은 몇 번째 행, 몇 번째 열인가요?",
+          question: "int grid[3][4]; 에서 grid[2][3]은 **행 인덱스**와 **열 인덱스**가 각각 얼마일까요?",
           options: [
-            "3번째 행, 4번째 열",
-            "3번째 행, 3번째 열",
-            "2번째 행, 3번째 열 (0-based: 마지막 행, 마지막 열)",
-            "4번째 행, 3번째 열"
+            "행 인덱스 3, 열 인덱스 4",
+            "행 인덱스 3, 열 인덱스 3",
+            "행 인덱스 2, 열 인덱스 3 (마지막 행, 마지막 열)",
+            "행 인덱스 4, 열 인덱스 3"
           ],
           answer: 2,
-          explanation: "인덱스는 0부터 시작해요! grid[2][3]은 0-based로 3번째 행, 4번째 열이지만, 표현상으로는 마지막 행(2)의 마지막 열(3)이에요. grid[3][4]처럼 범위를 넘으면 안 돼요!",
+          explanation: "C++ 인덱스는 0부터 시작해요. 그래서 grid[2][3]의 행 인덱스는 2, 열 인덱스는 3이에요. grid[3][4]는 사이즈는 3×4이지만 유효한 인덱스는 0~2 행 / 0~3 열 — 범위를 넘으면 위험!",
           en: {
-            question: "In int grid[3][4];, which row and column is grid[2][3]?",
+            question: "In int grid[3][4];, what are the **row index** and **column index** of grid[2][3]?",
             options: [
-              "3rd row, 4th column",
-              "3rd row, 3rd column",
-              "2nd row, 3rd column (0-based: last row, last column)",
-              "4th row, 3rd column"
+              "row index 3, column index 4",
+              "row index 3, column index 3",
+              "row index 2, column index 3 (last row, last column)",
+              "row index 4, column index 3"
             ],
-            explanation: "Indices start from 0! grid[2][3] is 0-based 3rd row, 4th column — the last row (2) and last column (3). Never go out of bounds like grid[3][4]!"
+            explanation: "C++ indices start at 0. So grid[2][3] has row index 2 and column index 3. The array size is 3×4, but valid indices are 0–2 for rows / 0–3 for columns — going out of range is dangerous!"
           }
         }
       },
@@ -180,14 +180,18 @@ export const lessonCpp21: LessonData = {
         type: "interleaving",
         content: {
           message: "잠깐! 2D 배열 기억나요?",
-          task: "2행 3열짜리 2D 배열을 선언해요!",
-          template: "int grid[___][___];",
-          answer: "2",
-          blanksAnswer: ["2", "3"],
+          task: "2행 3열짜리 정수 2D 배열 grid 를 한 줄로 선언하세요.",
+          hint: "int 이름[행][열];",
+          template: null,
+          context: "// 이미 준비됨: int main()\n// 아래에 선언 한 줄만 작성",
+          answer: "int grid[2][3];",
+          alternateAnswers: ["int grid[2][3] ;"],
           expect: "int grid[2][3];",
           en: {
             message: "Quick check! Do you remember 2D arrays?",
-            task: "Declare a 2-row 3-column 2D array!"
+            task: "Declare a 2-row 3-column integer 2D array named grid on one line.",
+            hint: "int name[rows][cols];",
+            context: "// Already set up: int main()\n// Write just the declaration line below"
           }
         }
       },
@@ -232,15 +236,17 @@ export const lessonCpp21: LessonData = {
         type: "practice",
         content: {
           level: 1,
-          task: "2행 3열짜리 2D vector를 0으로 초기화해요!",
-          guide: "2D vector는 vector 안에 vector를 넣는 형태야! 첫 번째 빈칸에 행 수, 두 번째에 열 수를 넣어!",
-          template: "vector<vector<int>> grid(___, vector<int>(___, 0));",
-          answer: "2",
-          blanksAnswer: ["2", "3"],
+          task: "2행 3열짜리 정수 2D vector grid 를 전부 0으로 초기화해 선언하세요.",
+          hint: "vector<vector<int>> 이름(행, vector<int>(열, 초기값));",
+          template: null,
+          context: "// 이미 준비됨: #include <vector>, int main()\n// 아래에 선언 한 줄만 작성",
+          answer: "vector<vector<int>> grid(2, vector<int>(3, 0));",
+          alternateAnswers: ["vector<vector<int>> grid(2,vector<int>(3,0));"],
           expect: "vector<vector<int>> grid(2, vector<int>(3, 0));",
           en: {
-            task: "Initialize a 2-row 3-column 2D vector with all zeros!",
-            guide: "A 2D vector is a vector of vectors! Put the number of rows in the first blank, and the number of columns in the second!"
+            task: "Declare a 2-row 3-column integer 2D vector named grid, all initialized to 0.",
+            hint: "vector<vector<int>> name(rows, vector<int>(cols, initial_value));",
+            context: "// Already set up: #include <vector>, int main()\n// Write just the declaration line below"
           }
         }
       },

@@ -270,9 +270,13 @@ export default function ReviewPage({ params }: { params: Promise<{ lessonId: str
 
   const goPrev = () => { if (currentIndex > 0) goToStep(currentIndex - 1) }
   const goNext = () => {
-    // Check 버튼 없는 스텝에서 입력만 하고 Next 누른 경우 자동 채점
+    // 코드 작성 스텝은 확인 버튼 없이 '다음'으로 자동 채점
     if (!completedSteps.has(currentIndex)) {
-      autoCheckRef.current?.()
+      const triggered = autoCheckRef.current?.()
+      if (triggered) {
+        // 채점을 막 실행했음 — 결과를 학생이 볼 수 있도록 한 페이지 머무름
+        return
+      }
     }
     if (currentIndex < reviewSteps.length - 1) {
       goToStep(currentIndex + 1)

@@ -395,7 +395,7 @@ export const lessonCpp9: LessonData = {
             "cout 사용법이 틀렸어요"
           ],
           answer: 0,
-          explanation: "빈 벡터에는 아무 값도 없어요! v[0]은 범위 밖이라 엉뚱한 값이 나오거나 크래시할 수 있어요.",
+          explanation: "⚠️ 헷갈리기 쉬운 부분! vector<int> v; 는 **빈 벡터**(크기 0, 원소 0개)예요. 그래서 v[0]은 존재하지 않는 자리를 읽는 거라 위험해요.\n\n크기를 지정한 vector<int> v(5); 와 다릅니다! 그건 원소 5개가 모두 0으로 자동 초기화돼서 v[0] 접근이 안전해요.",
           en: {
             question: "What is wrong with this code?",
             options: [
@@ -403,7 +403,7 @@ export const lessonCpp9: LessonData = {
               "The vector declaration is wrong",
               "cout usage is incorrect"
             ],
-            explanation: "An empty vector has no elements! v[0] is out of bounds and may return garbage or cause a crash."
+            explanation: "⚠️ Easy to confuse! vector<int> v; creates an **empty vector** (size 0, no elements). v[0] reads a slot that doesn't exist — dangerous.\n\nDifferent from vector<int> v(5); — that creates 5 elements, all auto-initialized to 0, so v[0] is safe!"
           }
         }
       },
@@ -756,7 +756,8 @@ export const lessonCpp9: LessonData = {
           task: "3단계로 작성하세요:\n① 빈 벡터 v 를 선언\n② 2, 4, 6, 8을 push_back으로 추가\n③ 인덱스 for문으로 모든 값을 공백으로 구분해 출력",
           guide: "vector 선언 → push_back 4번 → for (int i = 0; i < v.size(); i++) { cout << v[i] << \" \"; }",
           template: null,
-          context: "// 이미 준비됨: #include <iostream>, #include <vector>, int main()\n// 아래에 코드를 작성하세요",
+          context: "#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {",
+          contextAfter: "    return 0;\n}",
           answer: "vector<int> v;\nv.push_back(2);\nv.push_back(4);\nv.push_back(6);\nv.push_back(8);\nfor (int i = 0; i < v.size(); i++) {\n    cout << v[i] << \" \";\n}",
           alternateAnswers: [
             "vector<int> v;\nv.push_back(2);\nv.push_back(4);\nv.push_back(6);\nv.push_back(8);\nfor (int i = 0; i < v.size(); i++) cout << v[i] << \" \";",
@@ -767,7 +768,8 @@ export const lessonCpp9: LessonData = {
           en: {
             task: "Declare an empty vector, add 2, 4, 6, 8, then use an index for loop to print every value separated by spaces.",
             guide: "declare vector → push_back 4 times → for (int i = 0; i < v.size(); i++) { cout << v[i] << \" \"; }",
-            context: "// Already set up: #include <iostream>, #include <vector>, int main()\n// Write your code below"
+            context: "#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {",
+            contextAfter: "    return 0;\n}"
           }
         }
       },
@@ -851,19 +853,25 @@ export const lessonCpp9: LessonData = {
         type: "practice",
         content: {
           level: 3,
-          task: "처음부터 작성! 정수 4개를 cin으로 입력받아 벡터에 저장 → 최댓값 출력\n\n예시) 입력: 3 7 2 9 → 출력: 9",
-          guide: "push_back으로 저장 → maxVal = v[0] → for auto 비교",
-          hint: "vector<int> v;\nfor(int i=0;i<4;i++){int x;cin>>x;v.push_back(x);}\nint m=v[0];\nfor(auto x:v)if(x>m)m=x;\ncout<<m;",
+          task: "정수 4개를 cin으로 입력받아 벡터에 저장한 뒤 최댓값을 출력하세요.\n\n예시) 입력: 3 7 2 9 → 출력: 9",
+          guide: "push_back으로 저장 → maxVal = v[0] → for문으로 v[i] 비교",
+          hint: "vector<int> v;\nfor (int i = 0; i < 4; i++) { int x; cin >> x; v.push_back(x); }\nint m = v[0];\nfor (int i = 0; i < v.size(); i++) if (v[i] > m) m = v[i];\ncout << m;",
           template: null,
-          answer: "vector<int> v;\nfor (int i = 0; i < 4; i++) {\n    int x;\n    cin >> x;\n    v.push_back(x);\n}\nint maxVal = v[0];\nfor (auto x : v) {\n    if (x > maxVal) maxVal = x;\n}\ncout << maxVal << endl;",
+          context: "#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {",
+          contextAfter: "    return 0;\n}",
+          stdin: "3 7 2 9",
+          answer: "vector<int> v;\nfor (int i = 0; i < 4; i++) {\n    int x;\n    cin >> x;\n    v.push_back(x);\n}\nint maxVal = v[0];\nfor (int i = 1; i < v.size(); i++) {\n    if (v[i] > maxVal) maxVal = v[i];\n}\ncout << maxVal << endl;",
           alternateAnswers: [
-            "vector<int> v;\nfor(int i=0;i<4;i++){int x;cin>>x;v.push_back(x);}\nint m=v[0];\nfor(auto x:v)if(x>m)m=x;\ncout<<m<<endl;"
+            "vector<int> v;\nfor(int i=0;i<4;i++){int x;cin>>x;v.push_back(x);}\nint m=v[0];\nfor(int i=1;i<v.size();i++)if(v[i]>m)m=v[i];\ncout<<m<<endl;",
+            "vector<int> v;\nfor (int i = 0; i < 4; i++) {\n    int x;\n    cin >> x;\n    v.push_back(x);\n}\nint maxVal = v[0];\nfor (int i = 0; i < v.size(); i++) {\n    if (v[i] > maxVal) maxVal = v[i];\n}\ncout << maxVal << endl;"
           ],
           expect: "9",
           en: {
-            task: "Write from scratch! Read 4 integers via cin → store in vector → print max value\n\nExample) Input: 3 7 2 9 → Output: 9",
-            guide: "push_back to store → maxVal = v[0] → for auto compare",
-            hint: "vector<int> v;\nfor(int i=0;i<4;i++){int x;cin>>x;v.push_back(x);}\nint m=v[0];\nfor(auto x:v)if(x>m)m=x;\ncout<<m;"
+            task: "Read 4 integers via cin, store them in a vector, and print the max value.\n\nExample) Input: 3 7 2 9 → Output: 9",
+            guide: "push_back to store → maxVal = v[0] → use for loop to compare v[i]",
+            hint: "vector<int> v;\nfor (int i = 0; i < 4; i++) { int x; cin >> x; v.push_back(x); }\nint m = v[0];\nfor (int i = 0; i < v.size(); i++) if (v[i] > m) m = v[i];\ncout << m;",
+            context: "#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {",
+            contextAfter: "    return 0;\n}"
           }
         }
       },
@@ -875,7 +883,7 @@ export const lessonCpp9: LessonData = {
         type: "explain",
         content: {
           lines: [],
-          code: '#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    vector<int> v = {4, 1, 3, 2};\n    sort(v.begin(), v.end());\n    for (auto x : v) cout << x << " ";\n    return 0;\n}',
+          code: '#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    vector<int> v = {4, 1, 3, 2};\n    sort(v.begin(), v.end());\n    for (int i = 0; i < v.size(); i++) cout << v[i] << " ";\n    return 0;\n}',
           predict: {
             question: "출력 결과는?",
             options: ["4 1 3 2 ", "1 2 3 4 ", "4 3 2 1 ", "에러"],
@@ -915,18 +923,24 @@ export const lessonCpp9: LessonData = {
         type: "practice",
         content: {
           level: 3,
-          task: "처음부터 작성! 벡터 {7, 3, 5, 1, 9}를 오름차순 정렬 후 공백으로 구분해 출력해요",
-          guide: "#include <algorithm>이 필요해요! vector 선언 → sort → range-for로 출력",
+          task: "벡터 {7, 3, 5, 1, 9}를 오름차순 정렬 후 공백으로 구분해 출력하세요.\n\n💡 sort() 를 쓰려면 추가 헤더가 필요해요 — 어느 헤더인지 기억나요?",
+          guide: "sort 는 <algorithm> 헤더에 있어요. vector 선언 → sort(v.begin(), v.end()) → 인덱스 for문으로 v[i] 출력",
           template: null,
-          answer: "vector<int> v = {7, 3, 5, 1, 9};\nsort(v.begin(), v.end());\nfor (auto x : v) cout << x << \" \";",
+          contextHeader: "#include <iostream>\n#include <vector>",
+          context: "using namespace std;\n\nint main() {",
+          contextAfter: "    return 0;\n}",
+          answer: "#include <algorithm>\nvector<int> v = {7, 3, 5, 1, 9};\nsort(v.begin(), v.end());\nfor (int i = 0; i < v.size(); i++) cout << v[i] << \" \";",
           alternateAnswers: [
-            "vector<int> v = {7, 3, 5, 1, 9};\nsort(v.begin(), v.end());\nfor (auto x : v) {\n    cout << x << \" \";\n}",
-            "vector<int> v={7,3,5,1,9};\nsort(v.begin(),v.end());\nfor(auto x:v)cout<<x<<\" \";"
+            "#include <algorithm>\nvector<int> v = {7, 3, 5, 1, 9};\nsort(v.begin(), v.end());\nfor (int i = 0; i < v.size(); i++) {\n    cout << v[i] << \" \";\n}",
+            "#include <algorithm>\nvector<int> v={7,3,5,1,9};\nsort(v.begin(),v.end());\nfor(int i=0;i<v.size();i++)cout<<v[i]<<\" \";"
           ],
           expect: "1 3 5 7 9 ",
           en: {
-            task: "Write from scratch! Sort {7, 3, 5, 1, 9} ascending and print space-separated",
-            guide: "Need #include <algorithm>! Declare vector → sort → range-for"
+            task: "Sort {7, 3, 5, 1, 9} ascending and print space-separated.\n\n💡 sort() needs an extra header — do you remember which one?",
+            guide: "sort is in the <algorithm> header. Declare vector → sort(v.begin(), v.end()) → index for loop printing v[i]",
+            contextHeader: "#include <iostream>\n#include <vector>",
+            context: "using namespace std;\n\nint main() {",
+            contextAfter: "    return 0;\n}"
           }
         }
       },
@@ -973,7 +987,7 @@ export const lessonCpp9: LessonData = {
         type: "explain",
         content: {
           lines: [],
-          code: '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> v = {1, 2, 3};\n    v.insert(v.begin(), 0);\n    for (auto x : v) cout << x << " ";\n    return 0;\n}',
+          code: '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> v = {1, 2, 3};\n    v.insert(v.begin(), 0);\n    for (int i = 0; i < v.size(); i++) cout << v[i] << " ";\n    return 0;\n}',
           predict: {
             question: "출력 결과는?",
             options: ["1 2 3 ", "0 1 2 3 ", "1 0 2 3 ", "에러"],
@@ -1015,9 +1029,12 @@ export const lessonCpp9: LessonData = {
         type: "practice",
         content: {
           level: 2,
-          task: "처음부터 작성! 벡터 {5, 10, 15, 20, 25}를 선언하고 (첫 원소 + 마지막 원소) 합을 출력해요",
+          task: "벡터 {5, 10, 15, 20, 25}를 선언하고 (첫 원소 + 마지막 원소) 합을 출력하세요.",
           guide: "v.front() + v.back() 을 그대로 더해서 출력",
           template: null,
+          contextHeader: "#include <iostream>\n#include <vector>",
+          context: "using namespace std;\n\nint main() {",
+          contextAfter: "    return 0;\n}",
           answer: "vector<int> v = {5, 10, 15, 20, 25};\ncout << v.front() + v.back() << endl;",
           alternateAnswers: [
             "vector<int> v={5,10,15,20,25};\ncout<<v.front()+v.back()<<endl;",
@@ -1025,8 +1042,11 @@ export const lessonCpp9: LessonData = {
           ],
           expect: "30",
           en: {
-            task: "Write from scratch! Declare {5, 10, 15, 20, 25} and print (first + last)",
-            guide: "v.front() + v.back()"
+            task: "Declare {5, 10, 15, 20, 25} and print (first + last).",
+            guide: "v.front() + v.back()",
+            contextHeader: "#include <iostream>\n#include <vector>",
+            context: "using namespace std;\n\nint main() {",
+            contextAfter: "    return 0;\n}"
           }
         }
       },
