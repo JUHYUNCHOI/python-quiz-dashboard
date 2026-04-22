@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useRef } from "react"
 import dynamic from "next/dynamic"
 import { X, Play, Loader2, RotateCcw, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { callPiston } from "@/lib/piston"
 
 const SimpleEditor = dynamic(() => import("react-simple-code-editor"), { ssr: false })
 
@@ -109,10 +110,6 @@ async function getPyodide() {
   return pyodideLoading
 }
 
-// ── Piston (self-hosted code execution) ────────────────────────────────────
-const PISTON_URL = process.env.NEXT_PUBLIC_PISTON_URL || ""
-const PISTON_KEY = process.env.NEXT_PUBLIC_PISTON_KEY || ""
-const PISTON_CPP_VERSION = "10.2.0"
 
 // ── Default snippets ──────────────────────────────────────────────────────────
 const DEFAULT_CPP = `#include <iostream>
@@ -171,36 +168,15 @@ export function TeacherLiveEditor({ defaultLang = "cpp", onClose }: TeacherLiveE
 
     try {
       if (lang === "cpp") {
-        const res = await fetch(PISTON_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...(PISTON_KEY ? { Authorization: `Bearer ${PISTON_KEY}` } : {}),
-          },
-          body: JSON.stringify({
-            language: "c++",
-            version: PISTON_CPP_VERSION,
-            files: [{ name: "main.cpp", content: code }],
-            ...(stdin.trim() ? { stdin } : {}),
-          }),
-        })
-        if (!res.ok) throw new Error("Piston API 오류")
-        const data = await res.json()
-        const compileErr = data.compile && data.compile.code !== 0
-          ? (data.compile.stderr || data.compile.output || "")
-          : ""
-        if (compileErr) {
-          const firstErr = compileErr.split("\n").find((l: string) => l.includes("error:"))
-          setError("❌ " + (firstErr?.split("error:")[1]?.trim() || compileErr.split("\n")[0]))
+        const result = await callPiston("cpp", code, stdin.trim() || undefined)
+        if (result.networkError) throw new Error("Piston API 오류")
+        if (result.compileError) {
+          const firstErr = result.compileError.split("\n").find(l => l.includes("error:"))
+          setError("❌ " + (firstErr?.split("error:")[1]?.trim() || result.compileError.split("\n")[0]))
+        } else if (result.runtimeError) {
+          setError("❌ 런타임 오류: " + result.runtimeError.split("\n")[0])
         } else {
-          const run = data.run || {}
-          const stdout = run.stdout || ""
-          const stderr = run.stderr || ""
-          if (run.code !== 0 && stderr) {
-            setError("❌ 런타임 오류: " + stderr.split("\n")[0])
-          } else {
-            setOutput(stdout || "(출력 없음)")
-          }
+          setOutput(result.output || "(출력 없음)")
         }
       } else {
         // Python: Pyodide

@@ -4,7 +4,7 @@
 
 168-144-96-207.sslip.io {
 	# ── CORS: coderin.vercel.app + Vercel 프리뷰 + 로컬 개발만 허용 ──
-	@cors_ok header_regexp Origin "^https://coderin[a-z0-9-]*\.vercel\.app$|^http://localhost:3000$"
+	@cors_ok header_regexp Origin "^https://coderin[a-z0-9-]*\.vercel\.app$|^http://localhost(:[0-9]+)?$"
 
 	# ── OPTIONS preflight ──
 	@options method OPTIONS

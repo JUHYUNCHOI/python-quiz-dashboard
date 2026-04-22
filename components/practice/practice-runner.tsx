@@ -4,6 +4,7 @@ import { useState, useCallback } from "react"
 import dynamic from "next/dynamic"
 import { Play, Loader2, RotateCcw, ChevronDown, Check, X, Lightbulb, Eye } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { callPistonWithRetry } from "@/lib/piston"
 import type { PracticeProblem } from "@/data/practice/types"
 import { localizeProblem } from "@/data/practice/types"
 import { useLanguage } from "@/contexts/language-context"
@@ -81,21 +82,6 @@ function highlightCode(code: string, language: "cpp" | "python" = "cpp"): string
     { re: CPP_KEYWORDS, cls: "keyword" },
     { re: CPP_NUMBER, cls: "number" },
   ])
-}
-
-const PISTON_URL = process.env.NEXT_PUBLIC_PISTON_URL || ""
-const PISTON_KEY = process.env.NEXT_PUBLIC_PISTON_KEY || ""
-const PISTON_LANG_VERSION: Record<string, { language: string; version: string }> = {
-  cpp: { language: "c++", version: "10.2.0" },
-  python: { language: "python", version: "3.12.0" },
-}
-
-type NormalizedResult = {
-  ok: boolean
-  output: string
-  compileError?: string
-  runtimeError?: string
-  networkError?: boolean
 }
 
 type TestResult = { passed: boolean; output: string; expected: string }
@@ -221,6 +207,8 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
   })
   const [results, setResults] = useState<TestResult[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [testsCompleted, setTestsCompleted] = useState(0)
+  const [testsTotal, setTestsTotal] = useState(0)
   const [error, setError] = useState("")
   const [allPassed, setAllPassed] = useState(false)
   const [hintsShown, setHintsShown] = useState(0)
@@ -232,6 +220,8 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
     if (isLoading) return
     setIsLoading(true)
     setError("")
+    setTestsCompleted(0)
+    setTestsTotal((problem.testCases ?? []).length)
     setResults([])
     try {
       localStorage.setItem(storageKey, code)
@@ -239,53 +229,15 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
 
     const testCases = problem.testCases ?? []
 
-    // Piston 호출: 네트워크 에러만 1회 재시도
-    const callPiston = async (stdin: string): Promise<NormalizedResult> => {
-      const langConf = PISTON_LANG_VERSION[lang] ?? PISTON_LANG_VERSION.cpp
-      try {
-        const res = await fetch(PISTON_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...(PISTON_KEY ? { Authorization: `Bearer ${PISTON_KEY}` } : {}),
-          },
-          body: JSON.stringify({
-            language: langConf.language,
-            version: langConf.version,
-            files: [{ name: lang === "python" ? "main.py" : "main.cpp", content: code }],
-            stdin,
-          }),
-        })
-        if (!res.ok) return { ok: false, output: "", networkError: true }
-        const data = await res.json()
-        if (data.compile && data.compile.code !== 0) {
-          const stderr = (data.compile.stderr || data.compile.output || "").trim()
-          return { ok: false, output: "", compileError: stderr }
-        }
-        const run = data.run || {}
-        const stdout = (run.stdout || "").trim()
-        const stderr = (run.stderr || "").trim()
-        if (run.code !== 0 && stderr) {
-          return { ok: false, output: stdout, runtimeError: stderr }
-        }
-        return { ok: true, output: stdout }
-      } catch {
-        return { ok: false, output: "", networkError: true }
-      }
-    }
-
-    const runWithRetry = async (stdin: string): Promise<NormalizedResult> => {
-      let result = await callPiston(stdin)
-      if (result.networkError) {
-        await new Promise(r => setTimeout(r, 400))
-        result = await callPiston(stdin)
-      }
-      return result
-    }
-
-    // 모든 테스트 케이스를 병렬로 실행
+    // 모든 테스트 케이스를 병렬로 실행. 각 테스트 완료 시 진행률 업데이트.
+    // 네트워크 에러 시 lib/piston 의 callPistonWithRetry 가 자동 1회 재시도.
     const responses = await Promise.all(
-      testCases.map(tc => runWithRetry(tc.stdin))
+      testCases.map(tc =>
+        callPistonWithRetry(lang, code, tc.stdin).then(r => {
+          setTestsCompleted(c => c + 1)
+          return r
+        })
+      )
     )
 
     let compileError = ""
@@ -374,7 +326,18 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
         )}
       >
         {isLoading
-          ? <><Loader2 className="w-4 h-4 animate-spin" /> {t("테스트 실행 중...", "Running...")}</>
+          ? (() => {
+              const pct = testsTotal > 0 ? Math.round((testsCompleted / testsTotal) * 100) : 0
+              return (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  {t(
+                    `실행 중... ${testsCompleted}/${testsTotal} (${pct}%)`,
+                    `Running... ${testsCompleted}/${testsTotal} (${pct}%)`
+                  )}
+                </>
+              )
+            })()
           : <><Play className="w-4 h-4" /> {t("테스트 실행", "Run Tests")}</>}
       </button>
 

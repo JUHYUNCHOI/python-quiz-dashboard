@@ -34,62 +34,7 @@ import type {
   ExplainContent,
 } from "./data/types"
 import { runPythonCode } from "./utils/pythonRunner"
-
-// ─────────────────────────────────────────────────────────────
-// Piston (self-hosted code execution) — replaces Wandbox
-// ─────────────────────────────────────────────────────────────
-const PISTON_URL = process.env.NEXT_PUBLIC_PISTON_URL || ""
-const PISTON_KEY = process.env.NEXT_PUBLIC_PISTON_KEY || ""
-const PISTON_LANG_VERSION: Record<string, { language: string; version: string }> = {
-  cpp: { language: "c++", version: "10.2.0" },
-  python: { language: "python", version: "3.12.0" },
-}
-
-type PistonResult = {
-  ok: boolean
-  output: string
-  compileError?: string
-  runtimeError?: string
-  networkError?: boolean
-}
-
-async function callPiston(lang: "cpp" | "python", code: string, stdin?: string): Promise<PistonResult> {
-  const langConf = PISTON_LANG_VERSION[lang] ?? PISTON_LANG_VERSION.cpp
-  try {
-    const ctl = new AbortController()
-    const timeoutId = setTimeout(() => ctl.abort(), 15000)
-    const res = await fetch(PISTON_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(PISTON_KEY ? { Authorization: `Bearer ${PISTON_KEY}` } : {}),
-      },
-      body: JSON.stringify({
-        language: langConf.language,
-        version: langConf.version,
-        files: [{ name: lang === "python" ? "main.py" : "main.cpp", content: code }],
-        ...(stdin ? { stdin } : {}),
-      }),
-      signal: ctl.signal,
-    })
-    clearTimeout(timeoutId)
-    if (!res.ok) return { ok: false, output: "", networkError: true }
-    const data = await res.json()
-    if (data.compile && data.compile.code !== 0) {
-      const stderr = (data.compile.stderr || data.compile.output || "").trim()
-      return { ok: false, output: "", compileError: stderr }
-    }
-    const run = data.run || {}
-    const stdout = (run.stdout || "").trim()
-    const stderr = (run.stderr || "").trim()
-    if (run.code !== 0 && stderr) {
-      return { ok: false, output: stdout, runtimeError: stderr }
-    }
-    return { ok: true, output: stdout }
-  } catch {
-    return { ok: false, output: "", networkError: true }
-  }
-}
+import { callPiston } from "@/lib/piston"
 
 // ─────────────────────────────────────────────────────────────
 // Auto-translate common Korean review strings → English fallback
@@ -424,6 +369,7 @@ function PracticeStep({
   onSaveAnswer,
   lessonExplains,
   lessonLink,
+  autoCheckRef,
 }: {
   content: PracticeContent | InterleavingContent
   onCorrect: () => void
@@ -434,6 +380,7 @@ function PracticeStep({
   onSaveAnswer?: (data: SavedAnswerData) => void
   lessonExplains?: string[][]
   lessonLink?: string
+  autoCheckRef?: React.MutableRefObject<(() => boolean) | null>
 }) {
   const { t, lang: curLang } = useLanguage()
   const isEn = curLang === "en"
@@ -633,6 +580,26 @@ function PracticeStep({
     setShowHint(false)
     setTimeout(() => firstInputRef.current?.focus(), 50)
   }
+
+  // "다음" 버튼이 누르기 전 자동으로 제출을 트리거할 수 있게 ref에 함수 노출.
+  // - 아직 채점 안 되고(idle) 입력이 있으면 → check() 실행 후 true (부모는 이동 보류)
+  // - 이미 결과가 나왔거나 입력이 비면 → false (부모는 그대로 이동)
+  useEffect(() => {
+    if (!autoCheckRef) return
+    autoCheckRef.current = () => {
+      if (result !== "idle") return false
+      const combined = isMultiBlank
+        ? inputs.map(s => s.trim()).join(", ")
+        : (inputs[0] ?? "")
+      if (!combined.trim()) return false
+      void check()
+      return true
+    }
+    return () => {
+      if (autoCheckRef) autoCheckRef.current = null
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoCheckRef, result, inputs, isMultiBlank])
 
   // EN 필드 우선 (없으면 KO fallback)
   const task = (isEn && content.en?.task) ? content.en.task : content.task
@@ -983,9 +950,15 @@ export interface ReviewStepRendererProps {
   onSaveAnswer?: (data: SavedAnswerData) => void
   lessonExplains?: string[][]  // 근처 explain 내용 (수업 참고용)
   lessonLink?: string          // /learn/xxx 링크
+  /**
+   * "다음" 버튼이 practice 스텝에서 자동으로 검사를 돌리기 위한 ref.
+   * PracticeStep 이 마운트되면 ref.current 에 "제출 전 자동 채점" 함수를 설정.
+   * 부모는 goNext 시 ref.current?.() 호출. 반환 true 면 제출 트리거됨 (이동 보류).
+   */
+  autoCheckRef?: React.MutableRefObject<(() => boolean) | null>
 }
 
-export function ReviewStepRenderer({ step, onCorrect, onWrong, language = "cpp", stepKey, savedAnswer, onSaveAnswer, lessonExplains, lessonLink }: ReviewStepRendererProps) {
+export function ReviewStepRenderer({ step, onCorrect, onWrong, language = "cpp", stepKey, savedAnswer, onSaveAnswer, lessonExplains, lessonLink, autoCheckRef }: ReviewStepRendererProps) {
   switch (step.type) {
     case "quiz":
       return <McqStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} language={language} savedAnswer={savedAnswer} onSaveAnswer={onSaveAnswer} />
@@ -994,10 +967,10 @@ export function ReviewStepRenderer({ step, onCorrect, onWrong, language = "cpp",
       return <McqStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} language={language} savedAnswer={savedAnswer} onSaveAnswer={onSaveAnswer} />
 
     case "practice":
-      return <PracticeStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} language={language} storageKey={stepKey} savedAnswer={savedAnswer} onSaveAnswer={onSaveAnswer} lessonExplains={lessonExplains} lessonLink={lessonLink} />
+      return <PracticeStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} language={language} storageKey={stepKey} savedAnswer={savedAnswer} onSaveAnswer={onSaveAnswer} lessonExplains={lessonExplains} lessonLink={lessonLink} autoCheckRef={autoCheckRef} />
 
     case "interleaving":
-      return <PracticeStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} language={language} storageKey={stepKey} savedAnswer={savedAnswer} onSaveAnswer={onSaveAnswer} lessonExplains={lessonExplains} lessonLink={lessonLink} />
+      return <PracticeStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} language={language} storageKey={stepKey} savedAnswer={savedAnswer} onSaveAnswer={onSaveAnswer} lessonExplains={lessonExplains} lessonLink={lessonLink} autoCheckRef={autoCheckRef} />
 
     case "explain":
       if (step.content.predict) {

@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useRef } from "react"
 import dynamic from "next/dynamic"
 import { Play, Loader2, RotateCcw, Check, X, Eye } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { callPiston } from "@/lib/piston"
 import { CodeBlock } from "@/components/ui/code-block"
 import { createClient } from "@/lib/supabase/client"
 const SimpleEditor = dynamic(() => import("react-simple-code-editor"), { ssr: false })
@@ -102,10 +103,6 @@ interface CppRunnerProps {
   forceCodeVersion?: number
 }
 
-// Piston (self-hosted code execution)
-const PISTON_URL = process.env.NEXT_PUBLIC_PISTON_URL || ""
-const PISTON_KEY = process.env.NEXT_PUBLIC_PISTON_KEY || ""
-const PISTON_CPP_VERSION = "10.2.0"
 
 function normalize(s: string) {
   return s.trim().replace(/\s+/g, " ").toLowerCase()
@@ -278,41 +275,22 @@ export function CppRunner({
     setIsCorrect(null)
 
     try {
-      const res = await fetch(PISTON_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(PISTON_KEY ? { Authorization: `Bearer ${PISTON_KEY}` } : {}),
-        },
-        body: JSON.stringify({
-          language: "c++",
-          version: PISTON_CPP_VERSION,
-          files: [{ name: "main.cpp", content: code }],
-          ...(stdin ? { stdin } : {}),
-        })
-      })
+      const result = await callPiston("cpp", code, stdin)
 
-      if (!res.ok) throw new Error("API error")
-      const data = await res.json()
+      if (result.networkError) throw new Error("API error")
 
-      const compileStderr = data.compile && data.compile.code !== 0
-        ? (data.compile.stderr || data.compile.output || "")
-        : ""
-      const run = data.run || {}
-      const runStdout = (run.stdout || "").trimEnd()
-      const runStderr = run.stderr || ""
-      const runCode = run.code
+      const runStdout = result.output.trimEnd()
 
-      if (compileStderr) {
-        setError(friendlyError(compileStderr))
+      if (result.compileError) {
+        setError(friendlyError(result.compileError))
         if (!submissionMode) {
           const next = failCount + 1
           setFailCount(next)
           if (next >= 3) setShowAnswer(true)
           onError?.()
         }
-      } else if (runStderr && runCode !== 0) {
-        setError("❌ 런타임 오류: " + runStderr.split("\n")[0])
+      } else if (result.runtimeError) {
+        setError("❌ 런타임 오류: " + result.runtimeError.split("\n")[0])
         if (!submissionMode) {
           const next = failCount + 1
           setFailCount(next)
