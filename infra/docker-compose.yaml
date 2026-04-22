@@ -1,0 +1,23 @@
+services:
+  api:
+    image: ghcr.io/engineer-man/piston@sha256:2f66b7456189c4d713aa986d98eccd0b6ee16d26c7ec5f21b30e942756fd127a
+    container_name: piston_api
+    restart: always
+    privileged: true
+    ports:
+      - 2000:2000
+    volumes:
+      - ./data/piston/packages:/piston/packages
+    tmpfs:
+      - /tmp:exec,size=64m
+    mem_limit: 700m
+    cpus: 0.8
+    pids_limit: 512
+    environment:
+      - PISTON_COMPILE_TIMEOUT=15000
+      - PISTON_RUN_TIMEOUT=5000
+      - PISTON_COMPILE_MEMORY_LIMIT=256000000
+      - PISTON_RUN_MEMORY_LIMIT=128000000
+      - PISTON_OUTPUT_MAX_SIZE=65536
+      - PISTON_MAX_PROCESS_COUNT=64
+      - PISTON_MAX_OPEN_FILES=2048

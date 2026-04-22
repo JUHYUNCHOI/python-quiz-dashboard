@@ -83,7 +83,20 @@ function highlightCode(code: string, language: "cpp" | "python" = "cpp"): string
   ])
 }
 
-const WANDBOX_API = "https://wandbox.org/api/compile.json"
+const PISTON_URL = process.env.NEXT_PUBLIC_PISTON_URL || ""
+const PISTON_KEY = process.env.NEXT_PUBLIC_PISTON_KEY || ""
+const PISTON_LANG_VERSION: Record<string, { language: string; version: string }> = {
+  cpp: { language: "c++", version: "10.2.0" },
+  python: { language: "python", version: "3.12.0" },
+}
+
+type NormalizedResult = {
+  ok: boolean
+  output: string
+  compileError?: string
+  runtimeError?: string
+  networkError?: boolean
+}
 
 type TestResult = { passed: boolean; output: string; expected: string }
 
@@ -226,33 +239,51 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
 
     const testCases = problem.testCases ?? []
 
-    // Wandbox 호출: 1회 시도. 응답이 비정상(null 또는 status 0인데 출력 없음)이면 한 번 더 재시도
-    const callWandbox = async (stdin: string) => {
-      const body = lang === "python"
-        ? { compiler: "cpython-3.12.2", code, stdin }
-        : { compiler: "gcc-13.2.0", code, stdin, "compiler-option-raw": "-std=c++17" }
-      return fetch(WANDBOX_API, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      })
-        .then(r => r.json())
-        .catch(() => null)
-    }
-
-    const runWithRetry = async (stdin: string) => {
-      let data = await callWandbox(stdin)
-      // 에러가 아닌데 프로그램 출력이 없으면 rate limit으로 빈 응답일 가능성 — 1회 재시도
-      const looksEmpty = !data || (data.status !== "1" && !(data.program_output ?? "").trim())
-      if (looksEmpty) {
-        await new Promise(r => setTimeout(r, 400))
-        const retried = await callWandbox(stdin)
-        if (retried) data = retried
+    // Piston 호출: 네트워크 에러만 1회 재시도
+    const callPiston = async (stdin: string): Promise<NormalizedResult> => {
+      const langConf = PISTON_LANG_VERSION[lang] ?? PISTON_LANG_VERSION.cpp
+      try {
+        const res = await fetch(PISTON_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(PISTON_KEY ? { Authorization: `Bearer ${PISTON_KEY}` } : {}),
+          },
+          body: JSON.stringify({
+            language: langConf.language,
+            version: langConf.version,
+            files: [{ name: lang === "python" ? "main.py" : "main.cpp", content: code }],
+            stdin,
+          }),
+        })
+        if (!res.ok) return { ok: false, output: "", networkError: true }
+        const data = await res.json()
+        if (data.compile && data.compile.code !== 0) {
+          const stderr = (data.compile.stderr || data.compile.output || "").trim()
+          return { ok: false, output: "", compileError: stderr }
+        }
+        const run = data.run || {}
+        const stdout = (run.stdout || "").trim()
+        const stderr = (run.stderr || "").trim()
+        if (run.code !== 0 && stderr) {
+          return { ok: false, output: stdout, runtimeError: stderr }
+        }
+        return { ok: true, output: stdout }
+      } catch {
+        return { ok: false, output: "", networkError: true }
       }
-      return data
     }
 
-    // 모든 테스트 케이스를 병렬로 실행 (빈 응답은 내부에서 자동 재시도)
+    const runWithRetry = async (stdin: string): Promise<NormalizedResult> => {
+      let result = await callPiston(stdin)
+      if (result.networkError) {
+        await new Promise(r => setTimeout(r, 400))
+        result = await callPiston(stdin)
+      }
+      return result
+    }
+
+    // 모든 테스트 케이스를 병렬로 실행
     const responses = await Promise.all(
       testCases.map(tc => runWithRetry(tc.stdin))
     )
@@ -261,18 +292,20 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
     const newResults: TestResult[] = []
 
     for (let i = 0; i < testCases.length; i++) {
-      const data = responses[i]
-      if (!data) {
+      const result = responses[i]
+      if (result.networkError) {
         compileError = t("네트워크 오류. 잠시 후 다시 시도해주세요.", "Network error. Please try again.")
         break
       }
-      if (data.status === "1") {
-        compileError = lang === "python"
-          ? (data.program_error || data.compiler_error || t("런타임 오류", "Runtime Error"))
-          : (data.compiler_error || t("컴파일 오류", "Compile Error"))
+      if (result.compileError) {
+        compileError = result.compileError || t("컴파일 오류", "Compile Error")
         break
       }
-      const actual = (data.program_output || "").trim()
+      if (result.runtimeError) {
+        compileError = result.runtimeError || t("런타임 오류", "Runtime Error")
+        break
+      }
+      const actual = result.output
       const expected = testCases[i].expectedOutput.trim()
       newResults.push({ passed: actual === expected, output: actual, expected })
     }

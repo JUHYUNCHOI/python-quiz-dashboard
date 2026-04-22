@@ -102,7 +102,10 @@ interface CppRunnerProps {
   forceCodeVersion?: number
 }
 
-const WANDBOX_API = "https://wandbox.org/api/compile.json"
+// Piston (self-hosted code execution)
+const PISTON_URL = process.env.NEXT_PUBLIC_PISTON_URL || ""
+const PISTON_KEY = process.env.NEXT_PUBLIC_PISTON_KEY || ""
+const PISTON_CPP_VERSION = "10.2.0"
 
 function normalize(s: string) {
   return s.trim().replace(/\s+/g, " ").toLowerCase()
@@ -275,13 +278,16 @@ export function CppRunner({
     setIsCorrect(null)
 
     try {
-      const res = await fetch(WANDBOX_API, {
+      const res = await fetch(PISTON_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(PISTON_KEY ? { Authorization: `Bearer ${PISTON_KEY}` } : {}),
+        },
         body: JSON.stringify({
-          code,
-          compiler: "gcc-13.2.0",
-          "compiler-option-raw": "-std=c++17",
+          language: "c++",
+          version: PISTON_CPP_VERSION,
+          files: [{ name: "main.cpp", content: code }],
           ...(stdin ? { stdin } : {}),
         })
       })
@@ -289,9 +295,13 @@ export function CppRunner({
       if (!res.ok) throw new Error("API error")
       const data = await res.json()
 
-      const compileStderr = data.compiler_error || ""
-      const runStdout = (data.program_output || "").trimEnd()
-      const runStderr = data.program_error || ""
+      const compileStderr = data.compile && data.compile.code !== 0
+        ? (data.compile.stderr || data.compile.output || "")
+        : ""
+      const run = data.run || {}
+      const runStdout = (run.stdout || "").trimEnd()
+      const runStderr = run.stderr || ""
+      const runCode = run.code
 
       if (compileStderr) {
         setError(friendlyError(compileStderr))
@@ -301,7 +311,7 @@ export function CppRunner({
           if (next >= 3) setShowAnswer(true)
           onError?.()
         }
-      } else if (runStderr && data.status !== "0") {
+      } else if (runStderr && runCode !== 0) {
         setError("❌ 런타임 오류: " + runStderr.split("\n")[0])
         if (!submissionMode) {
           const next = failCount + 1

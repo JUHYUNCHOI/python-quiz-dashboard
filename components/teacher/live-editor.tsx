@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 
 const SimpleEditor = dynamic(() => import("react-simple-code-editor"), { ssr: false })
 
-// ── C++ syntax highlight (Wandbox API) ───────────────────────────────────────
+// ── C++ syntax highlight ─────────────────────────────────────────────────────
 const CPP_KEYWORDS = /\b(auto|bool|break|case|catch|char|class|const|continue|default|delete|do|double|else|enum|explicit|extern|false|float|for|friend|goto|if|inline|int|long|mutable|namespace|new|nullptr|operator|private|protected|public|return|short|signed|sizeof|static|struct|switch|template|this|throw|true|try|typedef|typename|union|unsigned|using|virtual|void|volatile|wchar_t|while|string|vector|map|set|pair|cout|cin|endl|std|deque|stack|queue|sort|auto)\b/g
 const CPP_PREPROCESSOR = /^(#\s*(?:include|define|undef|if|ifdef|ifndef|elif|else|endif|pragma)\b.*)/gm
 const CPP_STRING = /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/g
@@ -109,8 +109,10 @@ async function getPyodide() {
   return pyodideLoading
 }
 
-// ── Wandbox ──────────────────────────────────────────────────────────────────
-const WANDBOX_API = "https://wandbox.org/api/compile.json"
+// ── Piston (self-hosted code execution) ────────────────────────────────────
+const PISTON_URL = process.env.NEXT_PUBLIC_PISTON_URL || ""
+const PISTON_KEY = process.env.NEXT_PUBLIC_PISTON_KEY || ""
+const PISTON_CPP_VERSION = "10.2.0"
 
 // ── Default snippets ──────────────────────────────────────────────────────────
 const DEFAULT_CPP = `#include <iostream>
@@ -169,23 +171,36 @@ export function TeacherLiveEditor({ defaultLang = "cpp", onClose }: TeacherLiveE
 
     try {
       if (lang === "cpp") {
-        const res = await fetch(WANDBOX_API, {
+        const res = await fetch(PISTON_URL, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            ...(PISTON_KEY ? { Authorization: `Bearer ${PISTON_KEY}` } : {}),
+          },
           body: JSON.stringify({
-            code,
-            compiler: "gcc-13.2.0",
-            "compiler-option-raw": "-std=c++17",
+            language: "c++",
+            version: PISTON_CPP_VERSION,
+            files: [{ name: "main.cpp", content: code }],
             ...(stdin.trim() ? { stdin } : {}),
           }),
         })
-        if (!res.ok) throw new Error("Wandbox API 오류")
+        if (!res.ok) throw new Error("Piston API 오류")
         const data = await res.json()
-        if (data.compiler_error) {
-          const firstErr = data.compiler_error.split("\n").find((l: string) => l.includes("error:"))
-          setError("❌ " + (firstErr?.split("error:")[1]?.trim() || data.compiler_error.split("\n")[0]))
+        const compileErr = data.compile && data.compile.code !== 0
+          ? (data.compile.stderr || data.compile.output || "")
+          : ""
+        if (compileErr) {
+          const firstErr = compileErr.split("\n").find((l: string) => l.includes("error:"))
+          setError("❌ " + (firstErr?.split("error:")[1]?.trim() || compileErr.split("\n")[0]))
         } else {
-          setOutput(data.program_output || data.output || "(출력 없음)")
+          const run = data.run || {}
+          const stdout = run.stdout || ""
+          const stderr = run.stderr || ""
+          if (run.code !== 0 && stderr) {
+            setError("❌ 런타임 오류: " + stderr.split("\n")[0])
+          } else {
+            setOutput(stdout || "(출력 없음)")
+          }
         }
       } else {
         // Python: Pyodide

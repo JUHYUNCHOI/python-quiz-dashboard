@@ -36,6 +36,62 @@ import type {
 import { runPythonCode } from "./utils/pythonRunner"
 
 // ─────────────────────────────────────────────────────────────
+// Piston (self-hosted code execution) — replaces Wandbox
+// ─────────────────────────────────────────────────────────────
+const PISTON_URL = process.env.NEXT_PUBLIC_PISTON_URL || ""
+const PISTON_KEY = process.env.NEXT_PUBLIC_PISTON_KEY || ""
+const PISTON_LANG_VERSION: Record<string, { language: string; version: string }> = {
+  cpp: { language: "c++", version: "10.2.0" },
+  python: { language: "python", version: "3.12.0" },
+}
+
+type PistonResult = {
+  ok: boolean
+  output: string
+  compileError?: string
+  runtimeError?: string
+  networkError?: boolean
+}
+
+async function callPiston(lang: "cpp" | "python", code: string, stdin?: string): Promise<PistonResult> {
+  const langConf = PISTON_LANG_VERSION[lang] ?? PISTON_LANG_VERSION.cpp
+  try {
+    const ctl = new AbortController()
+    const timeoutId = setTimeout(() => ctl.abort(), 15000)
+    const res = await fetch(PISTON_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(PISTON_KEY ? { Authorization: `Bearer ${PISTON_KEY}` } : {}),
+      },
+      body: JSON.stringify({
+        language: langConf.language,
+        version: langConf.version,
+        files: [{ name: lang === "python" ? "main.py" : "main.cpp", content: code }],
+        ...(stdin ? { stdin } : {}),
+      }),
+      signal: ctl.signal,
+    })
+    clearTimeout(timeoutId)
+    if (!res.ok) return { ok: false, output: "", networkError: true }
+    const data = await res.json()
+    if (data.compile && data.compile.code !== 0) {
+      const stderr = (data.compile.stderr || data.compile.output || "").trim()
+      return { ok: false, output: "", compileError: stderr }
+    }
+    const run = data.run || {}
+    const stdout = (run.stdout || "").trim()
+    const stderr = (run.stderr || "").trim()
+    if (run.code !== 0 && stderr) {
+      return { ok: false, output: stdout, runtimeError: stderr }
+    }
+    return { ok: true, output: stdout }
+  } catch {
+    return { ok: false, output: "", networkError: true }
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
 // Auto-translate common Korean review strings → English fallback
 // (used when en.predict translations are not provided in data files)
 // ─────────────────────────────────────────────────────────────
@@ -490,48 +546,57 @@ function PracticeStep({
         return
       }
 
-      // C++: Wandbox API로 컴파일 & 실행
+      // C++: Piston API로 컴파일 & 실행
       if (language === "cpp") {
         setIsRunning(true)
         try {
-          const res = await fetch("https://wandbox.org/api/compile.json", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              code: combined,
-              compiler: "gcc-13.2.0",
-              "compiler-option-raw": "-std=c++17",
-            }),
-          })
-          const data = await res.json()
-          const compileErr: string = data.compiler_error || ""
-          const actualOut: string = (data.program_output || "").trim()
+          const stdinVal = (content as { stdin?: string }).stdin
 
-          if (compileErr && !actualOut) {
-            // 컴파일 에러 → 첫 error: 줄만 표시
+          // 네트워크 오류 시 1회 재시도
+          let pistonRes = await callPiston("cpp", combined, stdinVal)
+          if (pistonRes.networkError) {
+            pistonRes = await callPiston("cpp", combined, stdinVal)
+          }
+
+          if (pistonRes.compileError) {
             const firstErr =
-              compileErr.split("\n").find((l: string) => l.includes("error:")) ||
-              compileErr.split("\n")[0]
+              pistonRes.compileError.split("\n").find((l: string) => l.includes("error:")) ||
+              pistonRes.compileError.split("\n")[0]
             setActualOutput(`컴파일 에러: ${firstErr}`)
             clearStorage()
             setResult("wrong")
             onSaveAnswer?.({ inputs: [...inputs], result: "wrong" })
             onWrong()
-          } else if (actualOut === expectedOut) {
-            setActualOutput(actualOut)
+          } else if (pistonRes.networkError) {
+            // 네트워크 에러 → 텍스트 비교로 대체
             clearStorage()
-            setResult("correct")
-            onSaveAnswer?.({ inputs: [...inputs], result: "correct" })
-            onCorrect()
+            if (isAnswerCorrect(combined, content, isEn, language)) {
+              setResult("correct")
+              onSaveAnswer?.({ inputs: [...inputs], result: "correct" })
+              onCorrect()
+            } else {
+              setResult("wrong")
+              onSaveAnswer?.({ inputs: [...inputs], result: "wrong" })
+              onWrong()
+            }
           } else {
-            setActualOutput(actualOut)
-            clearStorage()
-            setResult("wrong")
-            onSaveAnswer?.({ inputs: [...inputs], result: "wrong" })
-            onWrong()
+            const actualOut = pistonRes.output
+            if (actualOut === expectedOut) {
+              setActualOutput(actualOut)
+              clearStorage()
+              setResult("correct")
+              onSaveAnswer?.({ inputs: [...inputs], result: "correct" })
+              onCorrect()
+            } else {
+              setActualOutput(actualOut || (pistonRes.runtimeError ? `런타임 에러: ${pistonRes.runtimeError.split("\n")[0]}` : ""))
+              clearStorage()
+              setResult("wrong")
+              onSaveAnswer?.({ inputs: [...inputs], result: "wrong" })
+              onWrong()
+            }
           }
         } catch {
-          // 네트워크 에러 → 텍스트 비교로 대체
+          // 예외 → 텍스트 비교로 대체
           clearStorage()
           if (isAnswerCorrect(combined, content, isEn, language)) {
             setResult("correct")
