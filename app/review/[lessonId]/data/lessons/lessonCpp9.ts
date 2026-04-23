@@ -766,7 +766,7 @@ export const lessonCpp9: LessonData = {
           ],
           expect: "2 4 6 8 ",
           en: {
-            task: "Declare an empty vector, add 2, 4, 6, 8, then use an index for loop to print every value separated by spaces.",
+            task: "Write it in 3 steps:\n① Declare an empty vector v\n② push_back 2, 4, 6, 8\n③ Use an index for loop to print every value separated by spaces",
             guide: "declare vector → push_back 4 times → for (int i = 0; i < v.size(); i++) { cout << v[i] << \" \"; }",
             context: "#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {",
             contextAfter: "    return 0;\n}"
