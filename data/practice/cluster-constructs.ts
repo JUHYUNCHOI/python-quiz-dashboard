@@ -68,7 +68,7 @@ int main() {
         if (i) cout << ' ';
         cout << v[i];
     }
-    cout << '\n';
+    cout << '\\n';
     return 0;
 }`,
       solutionExplanation: "`vector<int> v(n)`은 크기가 n인 int 벡터를 0으로 초기화합니다. 인덱스 접근은 배열과 동일합니다.",
@@ -152,7 +152,7 @@ int main() {
         if (i) cout << ' ';
         cout << v[i];
     }
-    cout << '\n';
+    cout << '\\n';
     return 0;
 }`,
       solutionExplanation: "`vector<int> v(n, 0)`의 두 번째 인자가 초기값입니다. `vector<int> v(n, -1)`이면 전부 -1로 채웁니다.",
@@ -223,7 +223,7 @@ int main() {
     int a, b;
     cin >> a >> b;
     pair<int,int> p = {a, b};
-    cout << p.first * p.second << '\n';
+    cout << p.first * p.second << '\\n';
     return 0;
 }`,
       solutionExplanation: "`pair<int,int> p = {a, b}`는 p.first = a, p.second = b로 초기화합니다. C++11부터는 중괄호 초기화가 가능합니다.",
@@ -300,7 +300,7 @@ int main() {
         pts.push_back({x, y});
     }
     for (auto& p : pts)
-        cout << p.first << ' ' << p.second << '\n';
+        cout << p.first << ' ' << p.second << '\\n';
     return 0;
 }`,
       solutionExplanation: "`push_back({x, y})`로 pair를 직접 생성해 추가합니다. range-for에서 `auto&`를 쓰면 복사 없이 접근합니다.",
@@ -387,7 +387,7 @@ int main() {
             if (j) cout << ' ';
             cout << grid[i][j];
         }
-        cout << '\n';
+        cout << '\\n';
     }
     return 0;
 }`,
@@ -472,7 +472,7 @@ int main() {
             if (j) cout << ' ';
             cout << grid[i][j];
         }
-        cout << '\n';
+        cout << '\\n';
     }
     return 0;
 }`,
@@ -527,9 +527,9 @@ int main() {
         // x가 양수면 {x, i} push_back
 
     }
-    cout << result.size() << '\n';
+    cout << result.size() << '\\n';
     for (auto& p : result)
-        cout << p.first << ' ' << p.second << '\n';
+        cout << p.first << ' ' << p.second << '\\n';
     return 0;
 }`,
       testCases: [
@@ -553,9 +553,9 @@ int main() {
         int x; cin >> x;
         if (x > 0) result.push_back({x, i});
     }
-    cout << result.size() << '\n';
+    cout << result.size() << '\\n';
     for (auto& p : result)
-        cout << p.first << ' ' << p.second << '\n';
+        cout << p.first << ' ' << p.second << '\\n';
     return 0;
 }`,
       solutionExplanation: "조건이 참일 때만 push_back하면 필터링된 컨테이너를 만들 수 있습니다. (값, 인덱스) 쌍을 저장하면 정렬 후에도 원래 위치를 알 수 있어서 유용합니다.",
@@ -594,7 +594,7 @@ int main() {
     vector<int> v(n);
     for (int i = 0; i < n; i++) cin >> v[i];
     auto result = minmax_pair(v);
-    cout << result.first << ' ' << result.second << '\n';
+    cout << result.first << ' ' << result.second << '\\n';
     return 0;
 }`,
       testCases: [
@@ -625,7 +625,7 @@ int main() {
     vector<int> v(n);
     for (int i = 0; i < n; i++) cin >> v[i];
     auto result = minmax_pair(v);
-    cout << result.first << ' ' << result.second << '\n';
+    cout << result.first << ' ' << result.second << '\\n';
     return 0;
 }`,
       solutionExplanation: "함수가 `pair<int,int>`를 반환하면 `{mn, mx}` 중괄호 초기화로 편하게 반환할 수 있습니다. 호출 측에서 `auto`로 받으면 타입을 명시하지 않아도 됩니다.",
@@ -648,7 +648,7 @@ int main() {
     vector<int> v(n);
     for (int i = 0; i < n; i++) cin >> v[i];
     auto result = minmax_pair(v);
-    cout << result.first << ' ' << result.second << '\n';
+    cout << result.first << ' ' << result.second << '\\n';
     return 0;
 }`,
         hints: [
@@ -724,8 +724,8 @@ int main() {
         }
         if (v[i].second >= t) cnt++;
     }
-    cout << best.first << ' ' << best.second << '\n';
-    cout << cnt << '\n';
+    cout << best.first << ' ' << best.second << '\\n';
+    cout << cnt << '\\n';
     return 0;
 }`,
       solutionExplanation: "선형 탐색 한 번으로 최댓값 갱신과 카운트를 동시에 처리합니다. 동점 처리는 `(같은 점수일 때 번호가 더 작으면 갱신)` 조건을 or로 묶어 넣습니다.",
@@ -795,7 +795,7 @@ int main() {
             if (j) cout << ' ';
             cout << grid[i][j];
         }
-        cout << '\n';
+        cout << '\\n';
     }
     return 0;
 }`,
@@ -914,9 +914,9 @@ int main() {
         if (get<1>(students[i]) >= 80 && get<2>(students[i]) >= 80) both80++;
     }
 
-    cout << get<0>(best) << ' ' << get<1>(best) << ' ' << get<2>(best) << '\n';
-    cout << mathSum / n << '\n';
-    cout << both80 << '\n';
+    cout << get<0>(best) << ' ' << get<1>(best) << ' ' << get<2>(best) << '\\n';
+    cout << mathSum / n << '\\n';
+    cout << both80 << '\\n';
     return 0;
 }`,
       solutionExplanation: "tuple은 `get<N>(t)`로 N번째 원소에 접근합니다 (0-based). 한 번의 선형 탐색으로 최고 학생, 평균, 조건 카운트를 동시에 계산합니다. 타이브레이크가 여러 단계라면 if/else if 체인으로 읽히기 쉽게 작성합니다.",

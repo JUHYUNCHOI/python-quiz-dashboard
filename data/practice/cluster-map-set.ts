@@ -314,7 +314,7 @@ int main() {
         if (a.count(x)) common.insert(x);
     }
     if (common.empty()) {
-        cout << "NONE\n";
+        cout << "NONE\\n";
     } else {
         bool first = true;
         for (int v : common) {
@@ -451,7 +451,7 @@ int main() {
             found = true;
         }
     }
-    cout << (found ? "\\n" : "NONE\n");
+    cout << (found ? "\\n" : "NONE\\n");
     return 0;
 }`,
       solutionExplanation: "map을 순회하며 빈도가 2 이상인 키만 출력합니다. found 플래그로 NONE 처리와 공백 구분을 제어합니다.",
@@ -804,7 +804,7 @@ int main() {
         cin >> name;
         auto it = phonebook.find(name);
         if (it == phonebook.end())
-            cout << "NOT FOUND\n";
+            cout << "NOT FOUND\\n";
         else
             cout << it->second << "\\n";
     }
@@ -867,8 +867,8 @@ int main() {
         else bucket[s / 10]++;
     }
     for (int i = 0; i < 10; i++)
-        cout << i * 10 << "-" << i * 10 + 9 << ": " << bucket[i] << "명\n";
-    cout << "100: " << bucket[10] << "명\n";
+        cout << i * 10 << "-" << i * 10 + 9 << ": " << bucket[i] << "명\\n";
+    cout << "100: " << bucket[10] << "명\\n";
     return 0;
 }`,
       solutionExplanation: "int bucket[11] = {}로 0으로 초기화한 배열을 사용합니다. 점수/10이 구간 인덱스가 됩니다. 100점은 별도로 처리해 bucket[10]에 저장합니다.",

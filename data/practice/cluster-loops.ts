@@ -412,7 +412,7 @@ int main() {
     for (int i = 1; i <= n; i++) {
         for (int j = 1; j <= i; j++)
             cout << '*';
-        cout << '\n';
+        cout << '\\n';
     }
     return 0;
 }`,
@@ -889,7 +889,7 @@ int main() {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++)
             cout << '*';
-        cout << '\n';
+        cout << '\\n';
     }
     return 0;
 }`,
@@ -938,7 +938,7 @@ int main() {
     int n;
     cin >> n;
     for (int i = 1; i <= n; i++)
-        if (n % i == 0) cout << i << '\n';
+        if (n % i == 0) cout << i << '\\n';
     return 0;
 }`,
       solutionExplanation: "1부터 n까지 순회하며 n을 나누어 떨어지게 하는 수를 출력합니다. O(N)이지만 N≤1000이므로 충분합니다.",

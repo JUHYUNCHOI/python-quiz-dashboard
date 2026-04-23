@@ -487,10 +487,10 @@ int main() {
     for (int i = 0; i < n; i++)
         for (int j = 0; j < m; j++)
             if (grid[i][j] == k) {
-                cout << "(" << i + 1 << ", " << j + 1 << ")\n";
+                cout << "(" << i + 1 << ", " << j + 1 << ")\\n";
                 found = true;
             }
-    if (!found) cout << "NOT FOUND\n";
+    if (!found) cout << "NOT FOUND\\n";
     return 0;
 }`,
       solutionExplanation: "이중 루프를 행 우선으로 순회하면 자동으로 행 오름차순, 열 오름차순이 됩니다. 0-based 인덱스에 1을 더해 1-based로 변환합니다.",

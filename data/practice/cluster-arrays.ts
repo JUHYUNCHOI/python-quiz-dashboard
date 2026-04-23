@@ -248,7 +248,7 @@ int main() {
         if (i < n - 1) cout << ' ';
         cout << v[i];
     }
-    cout << '\n';
+    cout << '\\n';
     return 0;
 }`,
       solutionExplanation: "i를 n-1부터 0까지 감소시킵니다. 첫 출력 전에는 공백을 출력하지 않도록 조건을 추가합니다.",
@@ -527,7 +527,7 @@ int main() {
         if (i > 0) cout << ' ';
         cout << v[i] * 2;
     }
-    cout << '\n';
+    cout << '\\n';
     return 0;
 }`,
       solutionExplanation: "첫 원소 전에만 공백을 출력하지 않으면 됩니다. i > 0 조건으로 제어합니다.",
@@ -698,7 +698,7 @@ int main() {
         if (i > 0) cout << ' ';
         cout << v[i];
     }
-    cout << '\n';
+    cout << '\\n';
     return 0;
 }`,
       solutionExplanation: "마지막 원소를 저장한 뒤 뒤에서 앞으로 한 칸씩 복사합니다. 마지막에 v[0]에 저장한 값을 넣습니다.",
@@ -811,7 +811,7 @@ int main() {
         if (i > 0) cout << ' ';
         cout << a[i] + b[i];
     }
-    cout << '\n';
+    cout << '\\n';
     return 0;
 }`,
       solutionExplanation: "별도 벡터 없이 출력 시 a[i]+b[i]를 계산합니다.",
@@ -979,7 +979,7 @@ int main() {
         if (i > 0) cout << ' ';
         cout << sum;
     }
-    cout << '\n';
+    cout << '\\n';
     return 0;
 }`,
       solutionExplanation: "누적 합을 sum 변수로 관리하며 출력합니다. 구간 합 쿼리의 기초가 되는 핵심 패턴입니다.",
@@ -1156,7 +1156,7 @@ int main() {
         cout << val;
         first = false;
     }
-    cout << '\n';
+    cout << '\\n';
     return 0;
 }`,
       solutionExplanation: "두 포인터 패턴으로 두 배열을 동시에 순회합니다. 병합 정렬(Merge Sort)의 핵심 단계입니다.",

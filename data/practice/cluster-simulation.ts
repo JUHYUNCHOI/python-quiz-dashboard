@@ -678,7 +678,7 @@ int main() {
         if (stock[item] >= qty)
             stock[item] -= qty;
         else
-            cout << "OUT OF STOCK\n";
+            cout << "OUT OF STOCK\\n";
     }
     for (int i = 1; i <= n; i++) {
         if (i > 1) cout << ' ';
