@@ -151,10 +151,10 @@ export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId,
           </button>
         )}
 
-        {/* 에디터 */}
+        {/* 에디터 — starterCode 가 있으면 그걸 기본값으로 (입력 아닌 주어진 코드/데이터 포함 위함) */}
         <CppRunner
           key={step.id}
-          initialCode={BLANK_TEMPLATE}
+          initialCode={hasStarter ? skeleton : BLANK_TEMPLATE}
           forceCode={starterInjected ? skeleton : undefined}
           forceCodeVersion={starterKey}
           expectedOutput={step.expectedOutput}

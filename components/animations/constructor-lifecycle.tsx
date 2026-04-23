@@ -6,7 +6,8 @@ import { cn } from "@/lib/utils"
 
 // ──────────────────────────────────────────────────────────────
 // ConstructorLifecycle
-// 바디 대입 vs 이니셜라이저 리스트 — 멤버가 언제 값을 갖는지 나란히 단계별 비교
+// 생성자 없음 / 있음 토글 → 있음 모드에서 "만들고 넣기" vs "만들면서 넣기"
+// 단계별 비교. 멤버가 언제 값을 갖는지 시각화.
 // ──────────────────────────────────────────────────────────────
 
 interface Props {
@@ -14,6 +15,7 @@ interface Props {
 }
 
 type FieldState = "empty" | "garbage" | "active" | "done"
+type Mode = "none" | "with"
 
 function Field({
   name,
@@ -31,10 +33,7 @@ function Field({
     done: "bg-emerald-500/20 text-emerald-200 border-emerald-400/40",
   }
   return (
-    <motion.div
-      layout
-      className="flex items-center justify-between gap-3 py-0.5"
-    >
+    <motion.div layout className="flex items-center justify-between gap-3 py-0.5">
       <span className="text-slate-400 text-xs font-mono">{name}</span>
       <motion.span
         key={`${name}-${state}-${value}`}
@@ -53,6 +52,7 @@ function Field({
 
 function Column({
   title,
+  subtitle,
   stepCountLabel,
   code,
   caption,
@@ -60,16 +60,18 @@ function Column({
   highlight,
 }: {
   title: string
+  subtitle: string
   stepCountLabel: string
   code: string
   caption: string
   fields: Array<{ name: string; value: string; state: FieldState }>
-  highlight: "neutral" | "active" | "done"
+  highlight: "neutral" | "active" | "done" | "danger"
 }) {
   const borderByHighlight = {
     neutral: "border-slate-700",
     active: "border-amber-400/60 shadow-lg shadow-amber-500/10",
     done: "border-emerald-400/60 shadow-lg shadow-emerald-500/10",
+    danger: "border-red-500/60 shadow-lg shadow-red-500/10",
   }[highlight]
 
   return (
@@ -77,9 +79,12 @@ function Column({
       "flex flex-col gap-3 rounded-2xl border bg-slate-900/60 p-4 transition-colors",
       borderByHighlight,
     )}>
-      <div className="flex items-center justify-between">
-        <div className="text-sm font-bold text-slate-100">{title}</div>
-        <span className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <div className="text-sm font-bold text-slate-100">{title}</div>
+          <div className="text-[11px] text-slate-400 mt-0.5">{subtitle}</div>
+        </div>
+        <span className="text-[10px] font-semibold uppercase tracking-wide text-slate-400 shrink-0">
           {stepCountLabel}
         </span>
       </div>
@@ -111,17 +116,53 @@ function Column({
 
 export function ConstructorLifecycle({ lang = "ko" }: Props) {
   const isEn = lang === "en"
+  const [mode, setMode] = useState<Mode>("with")
   const [step, setStep] = useState(0)
 
-  // Step 0: 호출 직전
-  // Step 1: 멤버 "태어남"
-  // Step 2: 값 최종 확정
-  const stepLabels = isEn
-    ? ["Call", "Birth", "Final"]
-    : ["호출", "탄생", "완료"]
+  const stepLabels = isEn ? ["Call", "Birth", "Final"] : ["호출", "탄생", "완료"]
 
-  // Body assignment: step 0 = 호출만, step 1 = 빈값으로 생성, step 2 = 대입 완료
-  const bodyByStep = [
+  // ─────────────────────────────────────────────────────────────
+  // "없음" 모드 — 생성자 없을 때
+  // ─────────────────────────────────────────────────────────────
+  const noneByStep = [
+    {
+      fields: [
+        { name: "owner", value: "—", state: "empty" as FieldState },
+        { name: "balance", value: "—", state: "empty" as FieldState },
+      ],
+      caption: isEn
+        ? "No constructor exists. About to create the object."
+        : "생성자가 없는 상태. 객체 만들기 직전.",
+      highlight: "neutral" as const,
+    },
+    {
+      fields: [
+        { name: "owner", value: '""', state: "garbage" as FieldState },
+        { name: "balance", value: "??? garbage", state: "garbage" as FieldState },
+      ],
+      caption: isEn
+        ? "Members are born with empty/garbage values because there's no constructor to set them."
+        : "생성자가 없어서 멤버들이 빈값/쓰레기값으로 태어나요. 아무도 값을 넣어주지 않아요.",
+      highlight: "danger" as const,
+    },
+    {
+      fields: [
+        { name: "owner", value: '""', state: "garbage" as FieldState },
+        { name: "balance", value: "??? garbage", state: "garbage" as FieldState },
+      ],
+      caption: isEn
+        ? "Stuck this way forever. Using this object would behave unpredictably — dangerous."
+        : "영원히 이 상태. 이런 객체를 사용하면 예측 불가 — 위험해요.",
+      highlight: "danger" as const,
+    },
+  ]
+
+  // ─────────────────────────────────────────────────────────────
+  // "있음" 모드 — 생성자 있을 때 (두 방식 비교)
+  // ─────────────────────────────────────────────────────────────
+
+  // 만들고 넣기 (= 로 대입): 2단계
+  const afterByStep = [
     {
       fields: [
         { name: "owner", value: "—", state: "empty" as FieldState },
@@ -138,8 +179,8 @@ export function ConstructorLifecycle({ lang = "ko" }: Props) {
         { name: "balance", value: "??? garbage", state: "garbage" as FieldState },
       ],
       caption: isEn
-        ? "Step 1: Members are default-constructed first. owner = \"\", balance = garbage."
-        : "1단계: 멤버들이 먼저 기본값으로 태어나요. owner = \"\", balance = 쓰레기값.",
+        ? "Step 1: members are born first — with empty/garbage values."
+        : "1단계: 멤버들이 먼저 빈값/쓰레기값으로 태어나요.",
       highlight: "active" as const,
     },
     {
@@ -148,14 +189,14 @@ export function ConstructorLifecycle({ lang = "ko" }: Props) {
         { name: "balance", value: "1000", state: "done" as FieldState },
       ],
       caption: isEn
-        ? "Step 2: Body runs assignments. Members are OVERWRITTEN with the desired values. 2 things happened."
-        : "2단계: 바디에서 대입을 실행해요. 멤버들을 원하는 값으로 덮어써요. 일이 2번 일어났어요.",
+        ? "Step 2: body runs, values are written in. Two things happened."
+        : "2단계: 바디가 실행되면서 값이 들어가요. 일이 2번 일어났어요.",
       highlight: "done" as const,
     },
   ]
 
-  // Initializer list: step 0 = 호출만, step 1 = 처음부터 원하는 값으로, step 2 = 같음 (done)
-  const listByStep = [
+  // 만들면서 넣기 (: 이니셜라이저 리스트): 1단계
+  const whileByStep = [
     {
       fields: [
         { name: "owner", value: "—", state: "empty" as FieldState },
@@ -172,7 +213,7 @@ export function ConstructorLifecycle({ lang = "ko" }: Props) {
         { name: "balance", value: "1000", state: "done" as FieldState },
       ],
       caption: isEn
-        ? "Step 1: Members are born DIRECTLY with the desired values. Done in 1 step."
+        ? "Step 1: members are born with the final values directly. Done in 1 step."
         : "1단계: 멤버들이 처음부터 원하는 값으로 태어나요. 한 번에 끝.",
       highlight: "done" as const,
     },
@@ -182,33 +223,54 @@ export function ConstructorLifecycle({ lang = "ko" }: Props) {
         { name: "balance", value: "1000", state: "done" as FieldState },
       ],
       caption: isEn
-        ? "(No step 2 needed — members already have correct values.)"
+        ? "(No step 2 needed — members already hold the correct values.)"
         : "(2단계 없음 — 멤버가 이미 올바른 값을 가지고 있어요.)",
       highlight: "done" as const,
     },
   ]
 
-  const bodyCode = `BankAccount(name, initial) {
-    owner = name;
+  const noneCode = `// 생성자 없음
+class BankAccount {
+    string owner;
+    double balance;
+};
+
+BankAccount acc;  // ← 그냥 만듦`
+
+  const afterCode = `BankAccount(name, initial) {
+    owner = name;     // 만든 다음 값 넣기
     balance = initial;
 }`
 
-  const listCode = `BankAccount(name, initial)
+  const whileCode = `BankAccount(name, initial)
     : owner(name), balance(initial) {}`
 
-  const summary = isEn ? (
+  const summaryWith = isEn ? (
     <>
-      <span className="text-amber-300 font-semibold">Body assignment</span> does 2 things
-      (default-construct → overwrite). <span className="text-emerald-300 font-semibold">Initializer list</span> does
-      1 thing (construct with the final value). That's why <code className="text-emerald-300">const</code> and
-      reference members — which can't be "overwritten later" — <em>require</em> the list.
+      <span className="text-amber-300 font-semibold">Fill after creating</span> does 2 things
+      (born empty → write values). <span className="text-emerald-300 font-semibold">Fill while creating</span> does
+      1 thing (born with values). That's why <code className="text-emerald-300">const</code> and reference
+      members — which can't be "overwritten later" — only work with the second way.
     </>
   ) : (
     <>
-      <span className="text-amber-300 font-semibold">바디 대입</span>은 2번 일해요
-      (기본생성 → 덮어쓰기). <span className="text-emerald-300 font-semibold">이니셜라이저 리스트</span>는
-      1번이면 끝 (처음부터 최종값으로 생성). 그래서 "나중에 덮어쓰기"가 불가능한
-      <code className="text-emerald-300"> const</code>와 reference 멤버는 리스트가 필수예요.
+      <span className="text-amber-300 font-semibold">만들고 넣기</span> 는 일이 2번 일어나요
+      (빈 상태로 태어남 → 값 덮어쓰기). <span className="text-emerald-300 font-semibold">만들면서 넣기</span> 는
+      한 번이면 끝 (태어날 때 이미 값이 있음). 그래서 "나중에 바꿀 수 없는"{" "}
+      <code className="text-emerald-300">const</code> 와 reference 멤버는 두 번째 방식만 가능해요.
+    </>
+  )
+
+  const summaryNone = isEn ? (
+    <>
+      Without a constructor, members are born with garbage. Nothing ever sets them. Using the object is
+      dangerous — you need a <span className="text-emerald-300 font-semibold">constructor</span> to give
+      the members proper initial values.
+    </>
+  ) : (
+    <>
+      생성자가 없으면 멤버는 쓰레기값으로 태어나서 아무도 값을 넣어주지 않아요. 사용하면 위험 —{" "}
+      <span className="text-emerald-300 font-semibold">생성자</span> 로 멤버에게 값을 줘야 해요.
     </>
   )
 
@@ -217,13 +279,31 @@ export function ConstructorLifecycle({ lang = "ko" }: Props) {
       {/* 헤더 */}
       <div className="mb-4">
         <h3 className="text-base font-bold text-slate-100">
-          {isEn ? "Constructor Lifecycle — side by side" : "생성자 생애주기 — 두 방식 비교"}
+          {isEn ? "Constructor Lifecycle" : "생성자 생애주기 — 멤버에 값이 언제 들어가나?"}
         </h3>
-        <p className="text-xs text-slate-400 mt-1">
-          {isEn
-            ? "BankAccount acc(\"kim\", 1000); — watch when members get their values."
-            : "BankAccount acc(\"kim\", 1000); — 멤버가 언제 값을 갖는지 지켜봐요."}
-        </p>
+      </div>
+
+      {/* 모드 탭 — 생성자 없음 / 있음 */}
+      <div className="flex gap-1.5 mb-4 rounded-xl bg-slate-800/60 p-1">
+        {(["none", "with"] as Mode[]).map(m => {
+          const label = m === "none"
+            ? (isEn ? "No constructor" : "생성자 없음")
+            : (isEn ? "With constructor" : "생성자 있음")
+          return (
+            <button
+              key={m}
+              onClick={() => { setMode(m); setStep(0) }}
+              className={cn(
+                "flex-1 px-3 py-2 rounded-lg text-sm font-semibold transition-all",
+                mode === m
+                  ? "bg-slate-950 text-white shadow"
+                  : "text-slate-400 hover:text-slate-200"
+              )}
+            >
+              {label}
+            </button>
+          )
+        })}
       </div>
 
       {/* 스텝 버튼 */}
@@ -244,29 +324,59 @@ export function ConstructorLifecycle({ lang = "ko" }: Props) {
         ))}
       </div>
 
-      {/* 2열 비교 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <Column
-          title={isEn ? "Method 1: Body assignment" : "방법 1: 바디 대입"}
-          stepCountLabel={isEn ? "2 steps" : "2단계"}
-          code={bodyCode}
-          fields={bodyByStep[step].fields}
-          caption={bodyByStep[step].caption}
-          highlight={bodyByStep[step].highlight}
-        />
-        <Column
-          title={isEn ? "Method 2: Initializer list" : "방법 2: 이니셜라이저 리스트"}
-          stepCountLabel={isEn ? "1 step" : "1단계"}
-          code={listCode}
-          fields={listByStep[step].fields}
-          caption={listByStep[step].caption}
-          highlight={listByStep[step].highlight}
-        />
-      </div>
+      {/* 컨텐츠 */}
+      <AnimatePresence mode="wait">
+        {mode === "none" ? (
+          <motion.div
+            key="none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="grid grid-cols-1 gap-3"
+          >
+            <Column
+              title={isEn ? "No constructor" : "생성자 없음"}
+              subtitle={isEn ? "members stay as garbage forever" : "멤버가 쓰레기값으로 영원히"}
+              stepCountLabel={isEn ? "danger" : "위험"}
+              code={noneCode}
+              fields={noneByStep[step].fields}
+              caption={noneByStep[step].caption}
+              highlight={noneByStep[step].highlight}
+            />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="with"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="grid grid-cols-1 md:grid-cols-2 gap-3"
+          >
+            <Column
+              title={isEn ? "Fill after creating" : "만들고 넣기"}
+              subtitle={isEn ? "= assignment in body" : "= 로 대입 (바디 안)"}
+              stepCountLabel={isEn ? "2 steps" : "2단계"}
+              code={afterCode}
+              fields={afterByStep[step].fields}
+              caption={afterByStep[step].caption}
+              highlight={afterByStep[step].highlight}
+            />
+            <Column
+              title={isEn ? "Fill while creating" : "만들면서 넣기"}
+              subtitle={isEn ? ": initializer list" : ": 이니셜라이저 리스트"}
+              stepCountLabel={isEn ? "1 step" : "1단계"}
+              code={whileCode}
+              fields={whileByStep[step].fields}
+              caption={whileByStep[step].caption}
+              highlight={whileByStep[step].highlight}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* 요약 */}
       <div className="mt-4 rounded-xl bg-slate-800/60 border border-slate-700 px-4 py-3 text-xs text-slate-300 leading-relaxed">
-        💡 {summary}
+        💡 {mode === "none" ? summaryNone : summaryWith}
       </div>
 
       {/* 이전/다음 */}
