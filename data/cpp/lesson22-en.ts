@@ -573,47 +573,52 @@ BankAccount acc("Emma", 1000);  // Constructor called automatically!
           id: "ch3-initlist",
           type: "explain",
           title: "💡 Constructor — Two Ways to Write It",
-          content: `There are **two ways** to write a constructor.
+          content: `There are **two ways** to put values into members via a constructor.
 
-**Method 1: Assignment in the body (what we've been doing)**
+**Method 1: Fill after creating** (what we've been doing)
 \`\`\`cpp
 BankAccount(string name, double initial) {
-    owner = name;      // "assign" to member variables
+    owner = name;      // put values in with = inside { }
     balance = initial;
 }
 \`\`\`
+👉 The object is **made first**, then values are put in with \`=\` inside \`{ }\`.
 
-**Method 2: Initializer list (new way)**
+**Method 2: Fill while creating** (new way)
 \`\`\`cpp
 BankAccount(string name, double initial)
     : owner(name), balance(initial) {}
 \`\`\`
+👉 After the colon \`:\`, write \`member(value)\` pairs separated by \`,\`. Values are **put in at the same time the object is made**. Leave \`{ }\` empty.
 
-After the colon (\`:\`), write \`member(value)\` pairs separated by \`,\`. Leave the braces empty.
+> 📖 Formally, Method 1 is called **"body assignment"** and Method 2 is called the **"initializer list"**. When you see these terms in books or online, just remember "ah, those two ways".
 
 ---
 
-At first glance **the result looks identical.** Both end up with \`owner\` and \`balance\` set to the given values.
+**The result looks identical** — both end up with \`owner\` and \`balance\` holding the values.
 
-🤔 **But C++ "recommends" the initializer list.** Why? It's not just a style preference — **the internal behavior is different.** The next page shows what actually happens under the hood.`
+🤔 **But C++ recommends "fill while creating".** Why? It's not just a style preference — the **internal behavior is different**. The next page shows it in a simulator.`
         },
         {
           id: "ch3-initlist-lifecycle",
           type: "explain",
           title: "🔬 Under the Hood — When Do Members Get Their Values?",
           component: "constructorLifecycle",
-          content: `Click through **1 → 2 → 3** in the simulator below to compare.
+          content: `Use the **top tabs** (No constructor / With constructor) and the **1 → 2 → 3** step buttons in the simulator below to compare.
 
-- **Body assignment**: members are born **empty / with garbage** (step 1), then the body **overwrites** them (step 2) → **2 things** happen.
-- **Initializer list**: members are born **directly with the final values** → **1 thing** happens.
+- **No constructor**: members are born as garbage and stay that way **forever** (dangerous!)
+- **Fill after creating** (body assignment): members are born **empty / with garbage** (step 1), then the body **overwrites** them (step 2) → **2 things** happen.
+- **Fill while creating** (initializer list): members are born **directly with the final values** → **1 thing** happens.
 
 For simple types (\`int\`, \`double\`) the speed difference is tiny. The **real difference** is that some members **cannot be "overwritten later" at all** — we meet those (\`const\`, \`reference\`) on the next page.`
         },
         {
           id: "ch3-initlist-const-ref",
           type: "explain",
-          title: "⚠️ const and reference — Why the List is Required",
-          content: `**const members** and **reference members** can **only** be initialized with an initializer list. Body assignment produces a compile error.
+          title: "⚠️ const and reference — Only \"Fill While Creating\" Works",
+          content: `**const members** and **reference members** can only use **"Fill while creating"** (the initializer list). **"Fill after creating"** (body assignment) produces a compile error.
+
+The reason is simple: **const and reference can't be changed once they're made**. So "make first, fill later" is impossible — the value must be set at the moment of creation.
 
 ---
 
@@ -669,20 +674,20 @@ Observer(int& t) : target(t) {}   // ✅ born pointing at t
 
 **Summary**
 
-| Member kind | Body assignment | Initializer list |
+| Member kind | Fill after creating (body) | Fill while creating (list) |
 |---|---|---|
 | Regular (int, string, etc.) | ✅ works | ✅ works |
 | \`const\` | ❌ **error** | ✅ **required** |
 | \`reference (&)\` | ❌ **error** | ✅ **required** |
 | Other class object (no default constructor) | ❌ error | ✅ required |
 
-→ If your class has const, reference, or a "no-default-constructor" object member, **the list is your only option**.`
+→ If your class has const, reference, or a "no-default-constructor" object member, **"fill while creating" is your only option**.`
         },
         {
           id: "ch3-initlist-realworld",
           type: "explain",
           title: "🌍 Which One Is Used More in Real Code?",
-          content: `**Answer: the initializer list.** Real-world C++ projects and open-source libraries overwhelmingly use it.
+          content: `**Answer: "fill while creating"** (the initializer list). Real-world C++ projects and open-source libraries overwhelmingly use it.
 
 ---
 
@@ -697,24 +702,24 @@ Observer(int& t) : target(t) {}   // ✅ born pointing at t
 
 ---
 
-**So why did this lesson teach body assignment first?**
+**So why did this lesson teach "fill after creating" first?**
 
 It's easier to read and visually similar to Python's \`__init__\`, so it's **intuitive when you're first learning**. Nail the concept first, then switch the syntax.
 
-Now that you've got the concept, **make the initializer list your default going forward**. Real-world code and open source become much easier to read.
+Now that you've got the concept, **make "fill while creating" your default going forward**. Real-world code and open source become much easier to read.
 
 ---
 
 **Side-by-side**
 
 \`\`\`cpp
-// The style we learned
+// The style we learned first (fill after creating)
 BankAccount(string name, double initial) {
     owner = name;
     balance = initial;
 }
 
-// The style you'll see more often in practice
+// The style you'll see more often in practice (fill while creating)
 BankAccount(string name, double initial)
     : owner(name), balance(initial) {}
 \`\`\`
@@ -725,7 +730,7 @@ Both are correct. Same result. But the second is the standard in team code revie
 
 **💡 Summary**
 
-| | Body assignment | Initializer list |
+| | Fill after creating (body) | Fill while creating (list) |
 |---|---|---|
 | Readability (for beginners) | Easy | Compact once familiar |
 | const & reference support | ❌ impossible | ✅ supported |
@@ -733,7 +738,7 @@ Both are correct. Same result. But the second is the standard in team code revie
 | Real-world preference | △ occasional | ⭐ most code |
 | Recommended after this lesson | — | ✅ default |
 
-Next time you see \`Player(string n, int h) : name(n), health(h) {}\`, you'll immediately recognize it as **"ah, initializer list"**.`
+Next time you see \`Player(string n, int h) : name(n), health(h) {}\`, you'll immediately recognize it as **"ah, filling while creating — the initializer list"**.`
         },
         {
           id: "ch3-pred1",
