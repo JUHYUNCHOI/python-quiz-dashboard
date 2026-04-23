@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useRef } from "react"
 import dynamic from "next/dynamic"
 import { Play, Loader2, RotateCcw, Check, X, Eye } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { callPiston } from "@/lib/piston"
 import { CodeBlock } from "@/components/ui/code-block"
 import { createClient } from "@/lib/supabase/client"
 const SimpleEditor = dynamic(() => import("react-simple-code-editor"), { ssr: false })
@@ -102,7 +103,6 @@ interface CppRunnerProps {
   forceCodeVersion?: number
 }
 
-const WANDBOX_API = "https://wandbox.org/api/compile.json"
 
 function normalize(s: string) {
   return s.trim().replace(/\s+/g, " ").toLowerCase()
@@ -275,34 +275,22 @@ export function CppRunner({
     setIsCorrect(null)
 
     try {
-      const res = await fetch(WANDBOX_API, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          code,
-          compiler: "gcc-13.2.0",
-          "compiler-option-raw": "-std=c++17",
-          ...(stdin ? { stdin } : {}),
-        })
-      })
+      const result = await callPiston("cpp", code, stdin)
 
-      if (!res.ok) throw new Error("API error")
-      const data = await res.json()
+      if (result.networkError) throw new Error("API error")
 
-      const compileStderr = data.compiler_error || ""
-      const runStdout = (data.program_output || "").trimEnd()
-      const runStderr = data.program_error || ""
+      const runStdout = result.output.trimEnd()
 
-      if (compileStderr) {
-        setError(friendlyError(compileStderr))
+      if (result.compileError) {
+        setError(friendlyError(result.compileError))
         if (!submissionMode) {
           const next = failCount + 1
           setFailCount(next)
           if (next >= 3) setShowAnswer(true)
           onError?.()
         }
-      } else if (runStderr && data.status !== "0") {
-        setError("❌ 런타임 오류: " + runStderr.split("\n")[0])
+      } else if (result.runtimeError) {
+        setError("❌ 런타임 오류: " + result.runtimeError.split("\n")[0])
         if (!submissionMode) {
           const next = failCount + 1
           setFailCount(next)

@@ -4,10 +4,11 @@ import { useState, useCallback, useEffect, useRef } from "react"
 import dynamic from "next/dynamic"
 import { X, Play, Loader2, RotateCcw, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { callPiston } from "@/lib/piston"
 
 const SimpleEditor = dynamic(() => import("react-simple-code-editor"), { ssr: false })
 
-// ── C++ syntax highlight (Wandbox API) ───────────────────────────────────────
+// ── C++ syntax highlight ─────────────────────────────────────────────────────
 const CPP_KEYWORDS = /\b(auto|bool|break|case|catch|char|class|const|continue|default|delete|do|double|else|enum|explicit|extern|false|float|for|friend|goto|if|inline|int|long|mutable|namespace|new|nullptr|operator|private|protected|public|return|short|signed|sizeof|static|struct|switch|template|this|throw|true|try|typedef|typename|union|unsigned|using|virtual|void|volatile|wchar_t|while|string|vector|map|set|pair|cout|cin|endl|std|deque|stack|queue|sort|auto)\b/g
 const CPP_PREPROCESSOR = /^(#\s*(?:include|define|undef|if|ifdef|ifndef|elif|else|endif|pragma)\b.*)/gm
 const CPP_STRING = /"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/g
@@ -109,8 +110,6 @@ async function getPyodide() {
   return pyodideLoading
 }
 
-// ── Wandbox ──────────────────────────────────────────────────────────────────
-const WANDBOX_API = "https://wandbox.org/api/compile.json"
 
 // ── Default snippets ──────────────────────────────────────────────────────────
 const DEFAULT_CPP = `#include <iostream>
@@ -169,23 +168,15 @@ export function TeacherLiveEditor({ defaultLang = "cpp", onClose }: TeacherLiveE
 
     try {
       if (lang === "cpp") {
-        const res = await fetch(WANDBOX_API, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            code,
-            compiler: "gcc-13.2.0",
-            "compiler-option-raw": "-std=c++17",
-            ...(stdin.trim() ? { stdin } : {}),
-          }),
-        })
-        if (!res.ok) throw new Error("Wandbox API 오류")
-        const data = await res.json()
-        if (data.compiler_error) {
-          const firstErr = data.compiler_error.split("\n").find((l: string) => l.includes("error:"))
-          setError("❌ " + (firstErr?.split("error:")[1]?.trim() || data.compiler_error.split("\n")[0]))
+        const result = await callPiston("cpp", code, stdin.trim() || undefined)
+        if (result.networkError) throw new Error("Piston API 오류")
+        if (result.compileError) {
+          const firstErr = result.compileError.split("\n").find(l => l.includes("error:"))
+          setError("❌ " + (firstErr?.split("error:")[1]?.trim() || result.compileError.split("\n")[0]))
+        } else if (result.runtimeError) {
+          setError("❌ 런타임 오류: " + result.runtimeError.split("\n")[0])
         } else {
-          setOutput(data.program_output || data.output || "(출력 없음)")
+          setOutput(result.output || "(출력 없음)")
         }
       } else {
         // Python: Pyodide

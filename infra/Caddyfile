@@ -1,0 +1,38 @@
+{
+	order rate_limit before reverse_proxy
+}
+
+168-144-96-207.sslip.io {
+	# ── CORS: coderin.vercel.app + Vercel 프리뷰 + 로컬 개발만 허용 ──
+	@cors_ok header_regexp Origin "^https://coderin[a-z0-9-]*\.vercel\.app$|^http://localhost(:[0-9]+)?$"
+
+	# ── OPTIONS preflight ──
+	@options method OPTIONS
+	handle @options {
+		header @cors_ok Access-Control-Allow-Origin {http.request.header.Origin}
+		header @cors_ok Access-Control-Allow-Headers "Content-Type, Authorization"
+		header @cors_ok Access-Control-Allow-Methods "GET, POST, OPTIONS"
+		header @cors_ok Vary Origin
+		respond 204
+	}
+
+	# ── 인증된 요청만 Piston으로 전달 + IP당 rate limit ──
+	# ⚠️ 아래 "REPLACE_WITH_BEARER_KEY" 는 드롭릿 복구 시 실제 키로 교체 필요
+	# 키 재생성: openssl rand -hex 32
+	# 그 후 Vercel 환경변수 NEXT_PUBLIC_PISTON_KEY 와 로컬 .env.local 도 동일하게 교체
+	@auth header Authorization "Bearer REPLACE_WITH_BEARER_KEY"
+	handle @auth {
+		rate_limit {
+			zone by_ip {
+				key {http.request.remote.host}
+				events 60
+				window 1m
+			}
+		}
+		header @cors_ok Access-Control-Allow-Origin {http.request.header.Origin}
+		header @cors_ok Vary Origin
+		reverse_proxy localhost:2000
+	}
+
+	respond "Unauthorized" 401
+}

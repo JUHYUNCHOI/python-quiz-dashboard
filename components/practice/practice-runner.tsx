@@ -4,6 +4,7 @@ import { useState, useCallback } from "react"
 import dynamic from "next/dynamic"
 import { Play, Loader2, RotateCcw, ChevronDown, Check, X, Lightbulb, Eye } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { callPistonWithRetry } from "@/lib/piston"
 import type { PracticeProblem } from "@/data/practice/types"
 import { localizeProblem } from "@/data/practice/types"
 import { useLanguage } from "@/contexts/language-context"
@@ -82,8 +83,6 @@ function highlightCode(code: string, language: "cpp" | "python" = "cpp"): string
     { re: CPP_NUMBER, cls: "number" },
   ])
 }
-
-const WANDBOX_API = "https://wandbox.org/api/compile.json"
 
 type TestResult = { passed: boolean; output: string; expected: string }
 
@@ -208,6 +207,8 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
   })
   const [results, setResults] = useState<TestResult[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [testsCompleted, setTestsCompleted] = useState(0)
+  const [testsTotal, setTestsTotal] = useState(0)
   const [error, setError] = useState("")
   const [allPassed, setAllPassed] = useState(false)
   const [hintsShown, setHintsShown] = useState(0)
@@ -219,6 +220,8 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
     if (isLoading) return
     setIsLoading(true)
     setError("")
+    setTestsCompleted(0)
+    setTestsTotal((problem.testCases ?? []).length)
     setResults([])
     try {
       localStorage.setItem(storageKey, code)
@@ -226,53 +229,35 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
 
     const testCases = problem.testCases ?? []
 
-    // Wandbox 호출: 1회 시도. 응답이 비정상(null 또는 status 0인데 출력 없음)이면 한 번 더 재시도
-    const callWandbox = async (stdin: string) => {
-      const body = lang === "python"
-        ? { compiler: "cpython-3.12.2", code, stdin }
-        : { compiler: "gcc-13.2.0", code, stdin, "compiler-option-raw": "-std=c++17" }
-      return fetch(WANDBOX_API, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      })
-        .then(r => r.json())
-        .catch(() => null)
-    }
-
-    const runWithRetry = async (stdin: string) => {
-      let data = await callWandbox(stdin)
-      // 에러가 아닌데 프로그램 출력이 없으면 rate limit으로 빈 응답일 가능성 — 1회 재시도
-      const looksEmpty = !data || (data.status !== "1" && !(data.program_output ?? "").trim())
-      if (looksEmpty) {
-        await new Promise(r => setTimeout(r, 400))
-        const retried = await callWandbox(stdin)
-        if (retried) data = retried
-      }
-      return data
-    }
-
-    // 모든 테스트 케이스를 병렬로 실행 (빈 응답은 내부에서 자동 재시도)
+    // 모든 테스트 케이스를 병렬로 실행. 각 테스트 완료 시 진행률 업데이트.
+    // 네트워크 에러 시 lib/piston 의 callPistonWithRetry 가 자동 1회 재시도.
     const responses = await Promise.all(
-      testCases.map(tc => runWithRetry(tc.stdin))
+      testCases.map(tc =>
+        callPistonWithRetry(lang, code, tc.stdin).then(r => {
+          setTestsCompleted(c => c + 1)
+          return r
+        })
+      )
     )
 
     let compileError = ""
     const newResults: TestResult[] = []
 
     for (let i = 0; i < testCases.length; i++) {
-      const data = responses[i]
-      if (!data) {
+      const result = responses[i]
+      if (result.networkError) {
         compileError = t("네트워크 오류. 잠시 후 다시 시도해주세요.", "Network error. Please try again.")
         break
       }
-      if (data.status === "1") {
-        compileError = lang === "python"
-          ? (data.program_error || data.compiler_error || t("런타임 오류", "Runtime Error"))
-          : (data.compiler_error || t("컴파일 오류", "Compile Error"))
+      if (result.compileError) {
+        compileError = result.compileError || t("컴파일 오류", "Compile Error")
         break
       }
-      const actual = (data.program_output || "").trim()
+      if (result.runtimeError) {
+        compileError = result.runtimeError || t("런타임 오류", "Runtime Error")
+        break
+      }
+      const actual = result.output
       const expected = testCases[i].expectedOutput.trim()
       newResults.push({ passed: actual === expected, output: actual, expected })
     }
@@ -341,7 +326,18 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
         )}
       >
         {isLoading
-          ? <><Loader2 className="w-4 h-4 animate-spin" /> {t("테스트 실행 중...", "Running...")}</>
+          ? (() => {
+              const pct = testsTotal > 0 ? Math.round((testsCompleted / testsTotal) * 100) : 0
+              return (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  {t(
+                    `실행 중... ${testsCompleted}/${testsTotal} (${pct}%)`,
+                    `Running... ${testsCompleted}/${testsTotal} (${pct}%)`
+                  )}
+                </>
+              )
+            })()
           : <><Play className="w-4 h-4" /> {t("테스트 실행", "Run Tests")}</>}
       </button>
 

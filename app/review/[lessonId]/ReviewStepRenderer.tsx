@@ -23,11 +23,6 @@ function getChWidth(str: string): number {
 }
 import { Check, X, Lightbulb, RotateCcw } from "lucide-react"
 import { cn } from "@/lib/utils"
-import dynamic from "next/dynamic"
-const CodeEditor = dynamic(
-  () => import("@uiw/react-textarea-code-editor").then(m => m.default),
-  { ssr: false, loading: () => <div className="min-h-[120px] bg-[#242538]" /> }
-)
 import { useLanguage } from "@/contexts/language-context"
 import { highlightCpp, highlightCppInline, highlightPython, highlightPythonInline } from "@/components/ui/code-block"
 import type {
@@ -37,9 +32,9 @@ import type {
   InterleavingContent,
   ErrorQuizContent,
   ExplainContent,
-  CodingContent,
 } from "./data/types"
 import { runPythonCode } from "./utils/pythonRunner"
+import { callPiston } from "@/lib/piston"
 
 // ─────────────────────────────────────────────────────────────
 // Auto-translate common Korean review strings → English fallback
@@ -261,16 +256,6 @@ function McqStep({
   const answered = selected !== null
   const isRight = selected === content.answer
 
-  // 저장된 답이 있는데 부모 상태와 어긋난 경우 mount 시 동기화
-  // (예: 이전 버전에서 Redo로 completedSteps만 지워진 상태)
-  useEffect(() => {
-    if (savedAnswer !== null && savedAnswer !== undefined) {
-      if (savedAnswer === content.answer) onCorrect()
-      else onWrong()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   // EN 필드 우선 사용 (없으면 Korean fallback)
   const question = (E && content.en?.question) ? content.en.question : content.question
   const options = (E && content.en?.options?.length) ? content.en.options : content.options
@@ -287,26 +272,14 @@ function McqStep({
 
   const LABELS = ["①", "②", "③", "④", "⑤"]
 
-  const mcqCode = (() => {
-    if (!("code" in content) || !content.code) return undefined
-    const enCode = (E && (content.en as { code?: string } | undefined)?.code) || undefined
-    return enCode ?? content.code
-  })()
-
   return (
     <div className="flex flex-col gap-3">
-      <p className="text-gray-800 text-base leading-relaxed whitespace-pre-line">
-        {(question || "").split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
-          part.startsWith("**") && part.endsWith("**")
-            ? <strong key={i} className="font-semibold text-gray-900">{part.slice(2, -2)}</strong>
-            : <span key={i}>{part}</span>
-        )}
-      </p>
-      {mcqCode && (
+      <p className="font-semibold text-gray-800 text-base leading-relaxed">{question}</p>
+      {"code" in content && content.code && (
         <div className="rounded-xl bg-[#1a1b2e] px-4 py-3 font-mono text-sm overflow-x-auto leading-6 whitespace-pre-wrap">
           {language === "cpp"
-            ? highlightCpp(mcqCode, true)
-            : highlightPython(mcqCode, true)}
+            ? highlightCpp(content.code, true)
+            : highlightPython(content.code, true)}
         </div>
       )}
       <div className="flex flex-col gap-2">
@@ -427,95 +400,27 @@ function PracticeStep({
   const blankCount = isFullCode ? 0 : (template.match(/___/g) || []).length
   const isMultiBlank = blankCount > 1
 
-  // contextHeader 있으면 include 슬롯(inputs[1]) 도 필요
-  const hasContextHeader = !!(((content as any).en?.contextHeader) || (content as any).contextHeader)
-
   // 빈칸 개수에 따라 inputs 배열 or 단일 string 관리 (savedAnswer 또는 localStorage 복원)
   const [inputs, setInputs] = useState<string[]>(() => {
-    const ensureIncludeSlot = (arr: string[]) =>
-      (hasContextHeader && arr.length < 2) ? [...arr, ""] : arr
-    if (savedAnswer?.inputs) return ensureIncludeSlot(savedAnswer.inputs)
+    if (savedAnswer?.inputs) return savedAnswer.inputs
     if (storageKey) {
       try {
         const saved = localStorage.getItem(`review-input-${storageKey}`)
         if (saved) {
           const parsed = JSON.parse(saved)
-          if (Array.isArray(parsed)) return ensureIncludeSlot(parsed)
+          if (Array.isArray(parsed)) return parsed
         }
       } catch {}
     }
-    // 전체 코드(template:null) + starterCode 있으면 스켈레톤으로 시작
-    const enStarter = (content.en as { starterCode?: string } | undefined)?.starterCode
-    const starter = (content.template === null)
-      ? ((curLang === "en" && enStarter) ? enStarter : (content as { starterCode?: string }).starterCode)
-      : undefined
-    if (starter) return ensureIncludeSlot([starter])
-    return ensureIncludeSlot(Array(Math.max(blankCount, 1)).fill(""))
+    return Array(Math.max(blankCount, 1)).fill("")
   })
   const [result, setResult] = useState<"idle" | "correct" | "wrong">(savedAnswer?.result ?? "idle")
   const [isRunning, setIsRunning] = useState(false)
   const [actualOutput, setActualOutput] = useState<string | null>(null)
   const [showHint, setShowHint] = useState(false)
-  // include 영역: 기본 숨김. 이미 쓴 내용이 있으면 자동으로 펼침.
-  const [showIncludesInput, setShowIncludesInput] = useState<boolean>(() => {
-    if (savedAnswer?.inputs?.[1]?.trim()) return true
-    if (storageKey) {
-      try {
-        const saved = localStorage.getItem(`review-input-${storageKey}`)
-        if (saved) {
-          const parsed = JSON.parse(saved)
-          if (Array.isArray(parsed) && parsed[1]?.trim()) return true
-        }
-      } catch {}
-    }
-    return false
-  })
   const firstInputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null)
-  // fill-in-blank 빈칸별 ref (Enter로 다음 빈칸 이동)
-  const blankRefs = useRef<(HTMLInputElement | null)[]>([])
-  // CodeEditor(template:null) 의 내부 textarea 에 자동 포커스를 주기 위한 래퍼 ref
-  const codeEditorWrapperRef = useRef<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    firstInputRef.current?.focus()
-    // CodeEditor 내부 textarea 를 찾아 포커스
-    const ta = codeEditorWrapperRef.current?.querySelector("textarea")
-    if (ta) {
-      ta.focus()
-      // 커서를 끝으로 이동 (초기값이 있을 경우)
-      const len = (ta as HTMLTextAreaElement).value.length
-      ;(ta as HTMLTextAreaElement).setSelectionRange(len, len)
-    }
-  }, [])
-
-  // 자동 괄호 닫기 — VS Code 스타일 ({ → {}, ( → (), [ → [], " → "")
-  const makeAutoClose = (slot: number) => (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    const pairs: Record<string, string> = { "{": "}", "(": ")", "[": "]", '"': '"' }
-    const close = pairs[e.key]
-    if (!close) return
-    const target = e.currentTarget
-    const start = target.selectionStart
-    const end = target.selectionEnd
-    const val = target.value
-    if (e.key === '"' && val[start] === '"') return
-    e.preventDefault()
-    const newVal = val.slice(0, start) + e.key + close + val.slice(end)
-    setInputs(prev => {
-      const next = [...prev]
-      next[slot] = newVal
-      return next
-    })
-    requestAnimationFrame(() => {
-      target.selectionStart = target.selectionEnd = start + 1
-    })
-  }
-
-  // savedAnswer에 result가 있으면 부모 상태 동기화 (레거시 Redo 상태 복구)
-  useEffect(() => {
-    if (savedAnswer?.result === "correct") onCorrect()
-    else if (savedAnswer?.result === "wrong") onWrong()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  useEffect(() => { firstInputRef.current?.focus() }, [])
 
   // inputs 변경 시 localStorage에 저장 (제출 전에만)
   useEffect(() => {
@@ -537,12 +442,8 @@ function PracticeStep({
       : inputs[0]
     if (!combined.trim() || isRunning) return
 
-    // expect가 정답과 같으면 "코드 자체"를 검증하는 케이스 → 실행 없이 텍스트 비교
-    const answerStr = "answer" in content ? String(content.answer ?? "").trim() : ""
-    const expectEqualsAnswer = content.expect && String(content.expect).trim() === answerStr
-
-    // ── 출력 기반 채점: template=null + expect 있고, expect가 답이 아닌 "프로그램 출력"일 때 ──
-    if (isFullCode && content.expect && !expectEqualsAnswer) {
+    // ── 출력 기반 채점: template=null + expect 있을 때 ──────────────
+    if (isFullCode && content.expect) {
       const expectedOut = String(content.expect).trim()
 
       // Python: 자체 runner로 실행 후 출력 비교
@@ -592,92 +493,63 @@ function PracticeStep({
         return
       }
 
-      // C++: Wandbox API로 컴파일 & 실행
+      // C++: Piston API로 컴파일 & 실행
       if (language === "cpp") {
         setIsRunning(true)
         try {
-          // context 와 contextAfter 가 있으면 학생 코드 앞뒤로 붙여 전체 프로그램으로 컴파일
-          const ctxHeader = ((isEn ? (content as any).en?.contextHeader : undefined) || (content as any).contextHeader || "") as string
-          const ctxBefore = ((isEn ? (content as any).en?.context : undefined) || (content as any).context || "") as string
-          const ctxAfter = ((isEn ? (content as any).en?.contextAfter : undefined) || (content as any).contextAfter || "") as string
-
-          // 학생 코드에서 #include 줄을 추출해 파일 최상단으로 이동 (main 안의 #include는 C++에서 invalid이므로)
-          // 추가로, includes 전용 슬롯(inputs[1])에 쓴 내용도 합쳐서 최상단에 배치
-          let studentIncludes = (inputs[1] ?? "").trim()
-          let studentBody = combined
-          if (ctxBefore || ctxHeader) {
-            const lines = combined.split("\n")
-            const includeLines: string[] = []
-            const bodyLines: string[] = []
-            for (const line of lines) {
-              if (/^\s*#\s*include\s*[<"]/.test(line)) {
-                includeLines.push(line.trim())
-              } else {
-                bodyLines.push(line)
-              }
-            }
-            // includes 전용 슬롯 + body에서 추출한 것 병합
-            studentIncludes = [studentIncludes, ...includeLines].filter(Boolean).join("\n")
-            studentBody = bodyLines.join("\n")
-          }
-          const topPart = [ctxHeader, studentIncludes].filter(Boolean).join("\n")
-          const fullCode = (ctxBefore || ctxHeader)
-            ? `${topPart ? topPart + "\n" : ""}${ctxBefore}\n${studentBody}\n${ctxAfter}`
-            : combined
           const stdinVal = (content as { stdin?: string }).stdin
-          const ctl = new AbortController()
-          const timeoutId = setTimeout(() => ctl.abort(), 15000)
-          const res = await fetch("https://wandbox.org/api/compile.json", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              code: fullCode,
-              compiler: "gcc-13.2.0",
-              "compiler-option-raw": "-std=c++17",
-              ...(stdinVal ? { stdin: stdinVal } : {}),
-            }),
-            signal: ctl.signal,
-          }).catch(err => {
-            clearTimeout(timeoutId)
-            throw err
-          })
-          clearTimeout(timeoutId)
-          const data = await res.json()
-          const compileErr: string = data.compiler_error || ""
-          const actualOut: string = (data.program_output || "").trim()
 
-          if (compileErr && !actualOut) {
-            // 컴파일 에러 → 첫 error: 줄만 표시
+          // 네트워크 오류 시 1회 재시도
+          let pistonRes = await callPiston("cpp", combined, stdinVal)
+          if (pistonRes.networkError) {
+            pistonRes = await callPiston("cpp", combined, stdinVal)
+          }
+
+          if (pistonRes.compileError) {
             const firstErr =
-              compileErr.split("\n").find((l: string) => l.includes("error:")) ||
-              compileErr.split("\n")[0]
+              pistonRes.compileError.split("\n").find((l: string) => l.includes("error:")) ||
+              pistonRes.compileError.split("\n")[0]
             setActualOutput(`컴파일 에러: ${firstErr}`)
             clearStorage()
             setResult("wrong")
             onSaveAnswer?.({ inputs: [...inputs], result: "wrong" })
             onWrong()
-          } else if (actualOut === expectedOut) {
-            setActualOutput(actualOut)
+          } else if (pistonRes.networkError) {
+            // 네트워크 에러 → 텍스트 비교로 대체
             clearStorage()
-            setResult("correct")
-            onSaveAnswer?.({ inputs: [...inputs], result: "correct" })
-            onCorrect()
+            if (isAnswerCorrect(combined, content, isEn, language)) {
+              setResult("correct")
+              onSaveAnswer?.({ inputs: [...inputs], result: "correct" })
+              onCorrect()
+            } else {
+              setResult("wrong")
+              onSaveAnswer?.({ inputs: [...inputs], result: "wrong" })
+              onWrong()
+            }
           } else {
-            setActualOutput(actualOut)
-            clearStorage()
-            setResult("wrong")
-            onSaveAnswer?.({ inputs: [...inputs], result: "wrong" })
-            onWrong()
+            const actualOut = pistonRes.output
+            if (actualOut === expectedOut) {
+              setActualOutput(actualOut)
+              clearStorage()
+              setResult("correct")
+              onSaveAnswer?.({ inputs: [...inputs], result: "correct" })
+              onCorrect()
+            } else {
+              setActualOutput(actualOut || (pistonRes.runtimeError ? `런타임 에러: ${pistonRes.runtimeError.split("\n")[0]}` : ""))
+              clearStorage()
+              setResult("wrong")
+              onSaveAnswer?.({ inputs: [...inputs], result: "wrong" })
+              onWrong()
+            }
           }
         } catch {
-          // 네트워크 에러 → 텍스트 비교로 대체
+          // 예외 → 텍스트 비교로 대체
           clearStorage()
           if (isAnswerCorrect(combined, content, isEn, language)) {
             setResult("correct")
             onSaveAnswer?.({ inputs: [...inputs], result: "correct" })
             onCorrect()
           } else {
-            setActualOutput(t("네트워크 오류로 실행할 수 없어요. 잠시 후 다시 시도해주세요.", "Can't run due to network error. Please try again."))
             setResult("wrong")
             onSaveAnswer?.({ inputs: [...inputs], result: "wrong" })
             onWrong()
@@ -709,20 +581,25 @@ function PracticeStep({
     setTimeout(() => firstInputRef.current?.focus(), 50)
   }
 
-  // Next 버튼에서 자동 채점 호출용 — 입력이 있고 아직 채점 안 된 상태면 check 실행
+  // "다음" 버튼이 누르기 전 자동으로 제출을 트리거할 수 있게 ref에 함수 노출.
+  // - 아직 채점 안 되고(idle) 입력이 있으면 → check() 실행 후 true (부모는 이동 보류)
+  // - 이미 결과가 나왔거나 입력이 비면 → false (부모는 그대로 이동)
   useEffect(() => {
     if (!autoCheckRef) return
     autoCheckRef.current = () => {
       if (result !== "idle") return false
-      const hasInput = isFullCode
-        ? !!inputs[0]?.trim()
-        : inputs.slice(0, blankCount).every(v => v?.trim())
-      if (!hasInput) return false
-      check()
+      const combined = isMultiBlank
+        ? inputs.map(s => s.trim()).join(", ")
+        : (inputs[0] ?? "")
+      if (!combined.trim()) return false
+      void check()
       return true
     }
-    return () => { if (autoCheckRef) autoCheckRef.current = null }
-  }, [autoCheckRef, result, inputs, isFullCode, blankCount])
+    return () => {
+      if (autoCheckRef) autoCheckRef.current = null
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoCheckRef, result, inputs, isMultiBlank])
 
   // EN 필드 우선 (없으면 KO fallback)
   const task = (isEn && content.en?.task) ? content.en.task : content.task
@@ -757,53 +634,19 @@ function PracticeStep({
         )}
       </p>
 
-      {/* Sample Input / Expected Output — 데스크탑 좌우, 모바일 세로 스택 */}
-      {isFullCode && result === "idle" && (() => {
-        const enSample = (content.en as { sampleInput?: string } | undefined)?.sampleInput
-        const sample = (isEn && enSample) ? enSample : (content as { sampleInput?: string }).sampleInput
-        const answerStr = "answer" in content ? String(content.answer ?? "").trim() : ""
-        const expectStr = "expect" in content ? String(content.expect ?? "").trim() : ""
-        const showExpect = "expect" in content && content.expect &&
-          !task?.includes("↓") && !task?.includes(expectStr) &&
-          expectStr !== answerStr  // expect가 정답과 같으면 노출 방지
-        if (!sample && !showExpect) return null
-        return (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-            {sample && (
-              <div className="rounded-xl overflow-hidden border border-gray-200 bg-gray-50 flex flex-col">
-                <div className="px-4 py-1.5 border-b border-gray-200 bg-white">
-                  <span className="text-[10px] text-gray-500 font-semibold uppercase tracking-wider">
-                    {isEn ? "Sample input" : "예시 입력"}
-                  </span>
-                </div>
-                <div className="px-4 py-2.5 font-mono text-sm text-sky-700 whitespace-pre-wrap leading-6 flex-1">
-                  {sample}
-                </div>
-              </div>
-            )}
-            {showExpect && (
-              <div className="rounded-xl overflow-hidden border border-gray-200 bg-gray-50 flex flex-col">
-                <div className="px-4 py-1.5 border-b border-gray-200 bg-white">
-                  <span className="text-[10px] text-gray-500 font-semibold uppercase tracking-wider">
-                    {isEn ? "Expected output" : "예상 출력"}
-                  </span>
-                </div>
-                <div className="px-4 py-2.5 font-mono text-sm text-emerald-700 whitespace-pre-wrap leading-6 flex-1">
-                  {String(content.expect)}
-                </div>
-              </div>
-            )}
+      {/* 목표 출력 — 빈칸 연습이거나 expect가 정답과 같으면 숨김 (정답 노출 방지) */}
+      {isFullCode && "expect" in content && content.expect && result === "idle" &&
+       "answer" in content && String(content.expect).trim() !== String(content.answer ?? "").trim() &&
+       !task?.includes("↓") && !task?.includes(String(content.expect)) && (
+        <div className="rounded-xl overflow-hidden border-2 border-emerald-400 shadow-sm">
+          <div className="bg-emerald-500 px-3 py-1.5 flex items-center gap-1.5">
+            <span className="text-[11px] text-white font-bold tracking-wide">
+              {isEn ? "▶ Expected output" : "▶ 이렇게 출력되어야 해!"}
+            </span>
           </div>
-        )
-      })()}
-
-      {/* 빈칸 문제의 읽기 전용 문맥 코드 (struct/배열 선언 등) */}
-      {!isFullCode && blankCount > 0 && ((isEn ? (content as any).en?.context : undefined) || (content as any).context) && (
-        <div className="rounded-xl bg-[#1a1b2e] px-4 py-3 font-mono text-sm text-[#6b7280] overflow-x-auto leading-7 whitespace-pre-wrap border-b border-gray-700/40 -mb-1">
-          {renderTemplatePart(
-            (isEn ? (content as any).en?.context : undefined) || (content as any).context,
-            language
-          )}
+          <div className="bg-gray-900 px-4 py-3 font-mono text-base font-bold text-white whitespace-pre-wrap leading-7">
+            {String(content.expect)}
+          </div>
         </div>
       )}
 
@@ -816,35 +659,16 @@ function PracticeStep({
               {i < templateParts.length - 1 && (
                 result === "idle" ? (
                   <input
-                    ref={el => {
-                      blankRefs.current[i] = el
-                      if (i === 0) (firstInputRef as React.MutableRefObject<HTMLInputElement | null>).current = el
-                    }}
+                    ref={i === 0 ? firstInputRef as React.RefObject<HTMLInputElement> : undefined}
                     type="text"
                     value={inputs[i] ?? ""}
                     onChange={e => {
                       const val = e.target.value
                       setInputs(prev => { const next = [...prev]; next[i] = val; return next })
                     }}
-                    onKeyDown={e => {
-                      if (e.key === "Enter") {
-                        e.preventDefault()
-                        if (i < blankCount - 1) {
-                          blankRefs.current[i + 1]?.focus()
-                        } else {
-                          check()
-                        }
-                      }
-                    }}
-                    className="inline-block bg-[#2a2b3e] border-2 border-indigo-400 text-indigo-200 font-mono text-sm px-1 py-0.5 mx-0.5 focus:outline-none focus:border-indigo-300 focus:bg-[#32345a] rounded transition-colors align-baseline"
-                    style={(() => {
-                      const expectedLen = (content as { blanksAnswer?: string[] }).blanksAnswer?.[i]?.length
-                        ?? ((content as { answer?: string }).answer as string | undefined)?.length
-                        ?? 0
-                      const typed = getChWidth(inputs[i] ?? "")
-                      const hint = Math.max(expectedLen, typed) + 1
-                      return { width: `${Math.max(hint, 3)}ch`, minWidth: "3ch" }
-                    })()}
+                    onKeyDown={e => { if (e.key === "Enter" && i === blankCount - 1) check() }}
+                    className="inline-block bg-[#2a2b3e] border-2 border-indigo-400 text-indigo-200 font-mono text-sm px-1.5 py-0.5 mx-0.5 focus:outline-none focus:border-indigo-300 focus:bg-[#32345a] rounded transition-colors align-baseline"
+                    style={{ width: `${Math.max(getChWidth(inputs[i] ?? "") + 2, 7)}ch`, minWidth: "7ch" }}
                   />
                 ) : (
                   <span className={cn(
@@ -874,125 +698,47 @@ function PracticeStep({
               <span className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
               <span className="text-[10px] text-gray-500 ml-1 font-mono">{language === "python" ? "solution.py" : "solution.cpp"}</span>
             </div>
-            {/* contextHeader — 최상단 (예: #include 기본들) */}
-            {((isEn ? (content as any).en?.contextHeader : undefined) || (content as any).contextHeader) && (
-              <div className="bg-[#1a1b2e] px-4 pt-3 pb-1 font-mono text-sm text-[#6b7280] leading-7 whitespace-pre-wrap">
-                {renderTemplatePart(
-                  (isEn ? (content as any).en?.contextHeader : undefined) || (content as any).contextHeader,
-                  language
-                )}
-              </div>
-            )}
-            {/* includes 추가 영역: 기본 접혀있음. 얇은 인라인 버튼 / 펼친 뒤엔 좌측 인디고 bar */}
-            {((isEn ? (content as any).en?.contextHeader : undefined) || (content as any).contextHeader) && (
-              !showIncludesInput ? (
-                <div className="bg-[#1a1b2e] px-4 py-1.5">
-                  <button
-                    onClick={() => setShowIncludesInput(true)}
-                    className="inline-flex items-center gap-1.5 text-[13px] text-indigo-300 hover:text-indigo-200 font-mono transition-colors"
-                  >
-                    <span className="text-base leading-none text-indigo-400">＋</span>
-                    <span className="underline decoration-dotted underline-offset-4">
-                      {t("#include 추가", "Add #include")}
-                    </span>
-                  </button>
-                </div>
-              ) : (
-                <div className="bg-[#1a1b2e] relative group">
-                  {/* 좌측 인디고 bar — 편집 영역 표시 (IDE gutter 스타일) */}
-                  <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-indigo-400" aria-hidden />
-                  {/* 닫기 버튼: 우측 상단 고정, 작고 조용함 */}
-                  <button
-                    onClick={() => {
-                      setShowIncludesInput(false)
-                      setInputs(prev => { const next = [...prev]; next[1] = ""; return next })
-                    }}
-                    className="absolute top-1 right-2 p-1 rounded text-gray-500 hover:text-gray-200 hover:bg-gray-700/50 transition-colors opacity-60 hover:opacity-100"
-                    title={t("include 영역 닫기", "Close include area")}
-                    aria-label={t("닫기", "Close")}
-                  >
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                  <CodeEditor
-                    value={inputs[1] ?? ""}
-                    language="cpp"
-                    placeholder={t("#include <algorithm>", "#include <algorithm>")}
-                    onChange={(e) => setInputs(prev => {
-                      const next = [...prev]; next[1] = e.target.value; return next
-                    })}
-                    onKeyDown={makeAutoClose(1)}
-                    padding={12}
-                    data-color-mode="dark"
-                    style={{
-                      backgroundColor: "transparent",
-                      fontSize: 14,
-                      fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-                      minHeight: 36,
-                    }}
-                  />
-                </div>
-              )
-            )}
-            {/* context 앞부분 — 읽기 전용 (예: int main() { ) */}
+            {/* context — 읽기 전용 */}
             {((isEn ? (content as any).en?.context : undefined) || (content as any).context) && (
-              <div className="bg-[#1a1b2e] px-4 pt-2 pb-1 font-mono text-sm text-[#6b7280] leading-7 whitespace-pre-wrap">
+              <div className="bg-[#1a1b2e] px-4 pt-3 pb-1 font-mono text-sm text-[#6b7280] leading-7 whitespace-pre-wrap border-b border-gray-700/50">
                 {renderTemplatePart(
                   (isEn ? (content as any).en?.context : undefined) || (content as any).context,
                   language
                 )}
               </div>
             )}
-            {/* 학생 main 본문 입력 영역 — 좌측 인디고 bar + subtle highlight */}
-            <div className="bg-[#1e1f33] relative" ref={codeEditorWrapperRef}>
-              {/* 좌측 인디고 bar — 편집 가능 구간 표시 */}
-              <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-indigo-400" aria-hidden />
-              <CodeEditor
-                value={inputs[0] ?? ""}
-                language={language === "python" ? "python" : "cpp"}
-                placeholder={t("// 코드를 작성하세요...", "// Write your code...")}
-                onChange={(e) => setInputs(prev => {
-                  const next = [...prev]; next[0] = e.target.value; return next
-                })}
-                onKeyDown={makeAutoClose(0)}
-                padding={16}
-                data-color-mode="dark"
-                style={{
-                  backgroundColor: "transparent",
-                  fontSize: 14,
-                  fontFamily:
-                    'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-                  minHeight: 120,
-                }}
-              />
-            </div>
-            {/* context 뒷부분 — 읽기 전용 (예: return 0; }) */}
-            {((isEn ? (content as any).en?.contextAfter : undefined) || (content as any).contextAfter) && (
-              <div className="bg-[#1a1b2e] px-4 pt-1 pb-3 font-mono text-sm text-[#6b7280] leading-7 whitespace-pre-wrap">
-                {renderTemplatePart(
-                  (isEn ? (content as any).en?.contextAfter : undefined) || (content as any).contextAfter,
-                  language
-                )}
-              </div>
-            )}
+            {/* 입력 */}
+            <textarea
+              ref={firstInputRef as React.RefObject<HTMLTextAreaElement>}
+              value={inputs[0]}
+              onChange={e => setInputs([e.target.value])}
+              placeholder={t("// 여기에 코드를 작성하세요...", "// Write your code here...")}
+              rows={3}
+              className="w-full bg-[#1a1b2e] text-[#a9b1d6] px-4 py-3 font-mono text-sm focus:outline-none resize-none placeholder:text-gray-600"
+              spellCheck={false}
+            />
           </div>
-          {isRunning && (
-            <span className="self-end text-xs text-indigo-500 flex items-center gap-1.5">
-              {t("실행 중", "Running")}<span className="animate-pulse">...</span>
-            </span>
-          )}
-          {!isRunning && (
-            <p className="text-[11px] text-gray-400 self-end">
-              {t("다 썼으면 '다음' 을 눌러 확인해요", "Press 'Next' to check when done")}
-            </p>
-          )}
+          <button
+            onClick={check}
+            disabled={!inputs[0].trim() || isRunning}
+            className="self-end px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm disabled:opacity-40 transition-colors"
+          >
+            {isRunning
+              ? <span className="flex items-center gap-1.5">{t("실행 중", "Running")}<span className="animate-pulse">...</span></span>
+              : t("확인", "Check")}
+          </button>
         </div>
       )}
 
-      {/* 인라인 빈칸: 버튼 없이 Enter로 확인 — 마지막 빈칸에 안내 텍스트만 표시 */}
+      {/* 인라인 빈칸용 확인 버튼 */}
       {result === "idle" && !isFullCode && (
-        <p className="text-[11px] text-gray-400 self-end">
-          {t("Enter로 확인", "Press Enter to check")}
-        </p>
+        <button
+          onClick={check}
+          disabled={inputs.some((v, i) => i < blankCount && !v.trim())}
+          className="self-end px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm disabled:opacity-40 transition-colors"
+        >
+          {t("확인", "Check")}
+        </button>
       )}
 
       {result === "correct" && (
@@ -1082,22 +828,11 @@ function PredictStep({
   const isEn = lang === "en"
   const [selected, setSelected] = useState<number | null>(savedAnswer ?? null)
   const [showCode, setShowCode] = useState(false)
-
-  // 저장된 답과 부모 상태 동기화 (레거시 Redo 상태 복구)
-  useEffect(() => {
-    if (savedAnswer !== null && savedAnswer !== undefined) {
-      if (savedAnswer === content.predict.answer) onCorrect()
-      else onWrong()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
   const answered = selected !== null
   const isRight = selected === content.predict.answer
 
   // EN overrides (with auto-translate fallback for common Korean strings)
   const lines = (isEn && content.en?.lines) ? content.en.lines : content.lines
-  const code = (isEn && content.en?.code) ? content.en.code : content.code
-  const explainResult = (isEn && content.en?.result) ? content.en.result : content.result
   const predictQuestion = isEn
     ? (content.en?.predict?.question ?? autoTranslateQuestion(content.predict.question))
     : content.predict.question
@@ -1127,11 +862,11 @@ function PredictStep({
       )}
 
       {/* Code */}
-      {code && (
+      {content.code && (
         <div className="rounded-xl bg-[#1a1b2e] px-4 py-3 font-mono text-sm overflow-x-auto leading-6 whitespace-pre-wrap">
           {language === "cpp"
-            ? highlightCpp(code, true)
-            : highlightPython(code, true)}
+            ? highlightCpp(content.code, true)
+            : highlightPython(content.code, true)}
         </div>
       )}
 
@@ -1164,11 +899,11 @@ function PredictStep({
                 {LABELS[i]}
               </span>
               <span className={cn(
-                "whitespace-pre-line",
+                "whitespace-pre-wrap font-mono",
                 isCorrect && answered ? "text-emerald-700 font-semibold" :
-                isSelected && answered ? "text-red-700" : "text-gray-800"
+                isSelected && answered ? "text-red-700 font-normal" : "text-gray-800 font-normal"
               )}>
-                {opt.replace(/\\n/g, "\n")}
+                {opt}
               </span>
               {answered && isCorrect && <Check className="w-4 h-4 text-emerald-500 ml-auto shrink-0" />}
               {answered && isSelected && !isCorrect && <X className="w-4 h-4 text-red-400 ml-auto shrink-0" />}
@@ -1188,173 +923,11 @@ function PredictStep({
           {predictFeedback && (
             <p className="text-gray-600">{predictFeedback}</p>
           )}
-          {explainResult && (
+          {content.result && (
             <p className="mt-1 text-xs text-gray-500">
-              {t("실제 결과:", "Actual output:")} <code className="font-mono bg-white px-1 rounded">{explainResult}</code>
+              {t("실제 결과:", "Actual output:")} <code className="font-mono bg-white px-1 rounded">{content.result}</code>
             </p>
           )}
-        </div>
-      )}
-    </div>
-  )
-}
-
-// ─────────────────────────────────────────────────────────────
-// CodingStep — 한 카드에서 서브스텝이 순차적으로 쌓이는 코딩 연습
-// ─────────────────────────────────────────────────────────────
-function CodingStep({
-  content,
-  onCorrect,
-  language = "python",
-  savedAnswer,
-  onSaveAnswer,
-}: {
-  content: CodingContent
-  onCorrect: () => void
-  language?: "python" | "cpp"
-  savedAnswer?: SavedAnswerData
-  onSaveAnswer?: (data: SavedAnswerData) => void
-}) {
-  const { t, lang } = useLanguage()
-  const isEn = lang === "en"
-
-  // savedAnswer에서 진행 상태 복원: inputs = 완료된 코드 줄들
-  const initCompleted: string[] = savedAnswer?.inputs ?? []
-  const initIdx = Math.min(initCompleted.length, content.subSteps.length)
-
-  const [currentIdx, setCurrentIdx] = useState(initIdx)
-  const [completedLines, setCompletedLines] = useState<string[]>(initCompleted)
-  const [input, setInput] = useState("")
-  const [result, setResult] = useState<"idle" | "wrong">("idle")
-  const [showHint, setShowHint] = useState(false)
-  const inputRef = useRef<HTMLTextAreaElement>(null)
-
-  const currentSubStep = content.subSteps[currentIdx]
-  const isAllDone = currentIdx >= content.subSteps.length
-
-  useEffect(() => {
-    if (!isAllDone) inputRef.current?.focus()
-  }, [currentIdx, isAllDone])
-
-  const check = () => {
-    if (!input.trim() || !currentSubStep) return
-    // 서브스텝별 텍스트 비교 (출력 기반 아님 — 우회 방지)
-    const substepContent: PracticeContent = {
-      task: currentSubStep.task,
-      template: null,
-      answer: isEn ? (currentSubStep.en?.answer ?? currentSubStep.answer) : currentSubStep.answer,
-      alternateAnswers: isEn
-        ? (currentSubStep.en?.alternateAnswers ?? currentSubStep.alternateAnswers)
-        : currentSubStep.alternateAnswers,
-      expect: "",
-    }
-    if (isAnswerCorrect(input, substepContent, isEn, language)) {
-      const newCompleted = [...completedLines, input.trim()]
-      setCompletedLines(newCompleted)
-      setResult("idle")
-      setInput("")
-      setShowHint(false)
-      const nextIdx = currentIdx + 1
-      setCurrentIdx(nextIdx)
-      if (nextIdx >= content.subSteps.length) {
-        onSaveAnswer?.({ inputs: newCompleted, result: "correct" })
-        onCorrect()
-      } else {
-        onSaveAnswer?.({ inputs: newCompleted, result: "in-progress" })
-      }
-    } else {
-      setResult("wrong")
-    }
-  }
-
-  return (
-    <div className="flex flex-col gap-5">
-      {/* 완료된 서브스텝들 */}
-      {completedLines.map((line, i) => (
-        <div key={i} className="flex flex-col gap-1.5">
-          <p className="text-xs font-bold text-emerald-400 uppercase tracking-wide">
-            ✅ {isEn ? (content.subSteps[i].en?.task ?? content.subSteps[i].task) : content.subSteps[i].task}
-          </p>
-          <div className="rounded-lg bg-[#1a1b2e] border border-emerald-800/40 px-4 py-2.5 font-mono text-sm text-[#6b7280] whitespace-pre-wrap">
-            {language === "python" ? renderTemplatePart(line, "python") : renderTemplatePart(line, "cpp")}
-          </div>
-        </div>
-      ))}
-
-      {/* 현재 서브스텝 */}
-      {!isAllDone && currentSubStep && (
-        <div className="flex flex-col gap-3">
-          {/* 과제 */}
-          <p className="font-bold text-gray-100 text-base leading-snug">
-            {isEn ? (currentSubStep.en?.task ?? currentSubStep.task) : currentSubStep.task}
-          </p>
-          {/* 가이드 */}
-          {(isEn ? (currentSubStep.en?.guide ?? currentSubStep.guide) : currentSubStep.guide) && (
-            <p className="text-sm text-indigo-300">
-              💡 {isEn ? (currentSubStep.en?.guide ?? currentSubStep.guide) : currentSubStep.guide}
-            </p>
-          )}
-
-          {/* 코드 에디터 (이전 코드 + 입력창) */}
-          <div className="rounded-xl overflow-hidden border border-gray-700">
-            <div className="bg-[#1e1e2e] px-3 py-1.5 flex items-center gap-1.5 border-b border-gray-700">
-              <span className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
-              <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
-              <span className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
-              <span className="text-[10px] text-gray-500 ml-1 font-mono">
-                {language === "python" ? "solution.py" : "solution.cpp"}
-              </span>
-            </div>
-            {/* 이전 완료 줄 — 읽기 전용 */}
-            {completedLines.length > 0 && (
-              <div className="bg-[#1a1b2e] px-4 pt-3 pb-1 font-mono text-sm text-[#6b7280] leading-7 whitespace-pre-wrap border-b border-gray-700/50">
-                {completedLines.map((line, i) => (
-                  <div key={i}>{renderTemplatePart(line, language)}</div>
-                ))}
-              </div>
-            )}
-            {/* 입력창 */}
-            <textarea
-              ref={inputRef}
-              value={input}
-              onChange={e => { setInput(e.target.value); setResult("idle") }}
-              onKeyDown={e => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); check() } }}
-              placeholder={t("// 여기에 코드를 작성하세요...", "// Write your code here...")}
-              rows={Math.max(2, currentSubStep.answer.split("\n").length + 1)}
-              className="w-full bg-[#1a1b2e] text-[#a9b1d6] px-4 py-3 font-mono text-sm focus:outline-none resize-none placeholder:text-gray-600"
-              spellCheck={false}
-            />
-          </div>
-
-          {/* 오답 피드백 */}
-          {result === "wrong" && (
-            <p className="text-sm text-red-400 flex items-center gap-1.5">
-              <X className="w-4 h-4 shrink-0" /> {t("다시 확인해봐!", "Try again!")}
-            </p>
-          )}
-
-          {/* 힌트 */}
-          {showHint && (
-            <div className="rounded-lg bg-amber-900/30 border border-amber-700/40 px-3 py-2 font-mono text-sm text-amber-300 whitespace-pre-wrap">
-              {isEn ? (currentSubStep.en?.hint ?? currentSubStep.hint) : currentSubStep.hint}
-            </div>
-          )}
-
-          <div className="flex items-center justify-between">
-            {currentSubStep.hint && !showHint
-              ? <button onClick={() => setShowHint(true)} className="text-amber-400 text-sm flex items-center gap-1.5">
-                  <Lightbulb className="w-3.5 h-3.5" />{t("힌트 보기", "Show hint")}
-                </button>
-              : <span />
-            }
-            <button
-              onClick={check}
-              disabled={!input.trim()}
-              className="px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-sm disabled:opacity-40 transition-colors"
-            >
-              {t("확인", "Check")}
-            </button>
-          </div>
         </div>
       )}
     </div>
@@ -1377,6 +950,11 @@ export interface ReviewStepRendererProps {
   onSaveAnswer?: (data: SavedAnswerData) => void
   lessonExplains?: string[][]  // 근처 explain 내용 (수업 참고용)
   lessonLink?: string          // /learn/xxx 링크
+  /**
+   * "다음" 버튼이 practice 스텝에서 자동으로 검사를 돌리기 위한 ref.
+   * PracticeStep 이 마운트되면 ref.current 에 "제출 전 자동 채점" 함수를 설정.
+   * 부모는 goNext 시 ref.current?.() 호출. 반환 true 면 제출 트리거됨 (이동 보류).
+   */
   autoCheckRef?: React.MutableRefObject<(() => boolean) | null>
 }
 
@@ -1393,9 +971,6 @@ export function ReviewStepRenderer({ step, onCorrect, onWrong, language = "cpp",
 
     case "interleaving":
       return <PracticeStep content={step.content} onCorrect={onCorrect} onWrong={onWrong} language={language} storageKey={stepKey} savedAnswer={savedAnswer} onSaveAnswer={onSaveAnswer} lessonExplains={lessonExplains} lessonLink={lessonLink} autoCheckRef={autoCheckRef} />
-
-    case "coding":
-      return <CodingStep content={step.content as CodingContent} onCorrect={onCorrect} language={language} savedAnswer={savedAnswer} onSaveAnswer={onSaveAnswer} />
 
     case "explain":
       if (step.content.predict) {
