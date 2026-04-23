@@ -572,48 +572,197 @@ BankAccount acc("Emma", 1000);  // Constructor called automatically!
         {
           id: "ch3-initlist",
           type: "explain",
-          title: "💡 Initializer List — The C++ Recommended Way",
-          content: `There are two ways to write a constructor.
+          title: "💡 Constructor — Two Ways to Write It",
+          content: `There are **two ways** to write a constructor.
 
 **Method 1: Assignment in the body (what we've been doing)**
 \`\`\`cpp
 BankAccount(string name, double initial) {
-    owner = name;      // "assigning" to member variables
+    owner = name;      // "assign" to member variables
     balance = initial;
 }
 \`\`\`
 
-**Method 2: Initializer list (C++ recommended)**
+**Method 2: Initializer list (new way)**
 \`\`\`cpp
 BankAccount(string name, double initial)
     : owner(name), balance(initial) {}
 \`\`\`
 
-After the colon (:), write \`member(value)\` pairs, then leave the braces empty.
+After the colon (\`:\`), write \`member(value)\` pairs separated by \`,\`. Leave the braces empty.
 
 ---
 
-**Why is it recommended?** In practice, the difference is minor — but \`const\` and \`reference\` members can *only* be initialized with an initializer list:
+At first glance **the result looks identical.** Both end up with \`owner\` and \`balance\` set to the given values.
+
+🤔 **But C++ "recommends" the initializer list.** Why? It's not just a style preference — **the internal behavior is different.** The next page shows what actually happens under the hood.`
+        },
+        {
+          id: "ch3-initlist-lifecycle",
+          type: "explain",
+          title: "🔬 Under the Hood — When Do Members Get Their Values?",
+          content: `To see the difference, trace **when** each member variable gets its value.
+
+---
+
+**Method 1: Body assignment — 2 steps**
 
 \`\`\`cpp
-class Foo {
-    const int id;    // const can't be assigned → list required
-    int& ref;        // reference also requires list
+BankAccount(string name, double initial) {
+    owner = name;
+    balance = initial;
+}
+\`\`\`
+
+What actually happens:
+
+1. First, \`owner\` is born as an **empty string** and \`balance\` is born with **garbage value** (default construction).
+2. Then inside the body \`{ ... }\`, \`owner = name;\` and \`balance = initial;\` **overwrite** those values (assignment).
+
+→ **Two things happen:** (1) default-construct, then (2) overwrite.
+
+---
+
+**Method 2: Initializer list — 1 step**
+
+\`\`\`cpp
+BankAccount(string name, double initial)
+    : owner(name), balance(initial) {}
+\`\`\`
+
+Here \`owner\` is born **directly with the value \`name\`**. No "make default first, overwrite later".
+
+→ **One thing:** (1) construct with the desired value from the start.
+
+---
+
+For simple types like \`int\` and \`double\` the speed difference is unnoticeable. The **real difference** is that some members **cannot be "overwritten later" at all.** The next page meets those members.`
+        },
+        {
+          id: "ch3-initlist-const-ref",
+          type: "explain",
+          title: "⚠️ const and reference — Why the List is Required",
+          content: `**const members** and **reference members** can **only** be initialized with an initializer list. Body assignment produces a compile error.
+
+---
+
+**① const members**
+
+\`const int id;\` means "once this value is set, it can never change."
+
+\`\`\`cpp
+class Player {
+    const int id;   // fixed once it's set
 public:
-    Foo(int i, int& r) : id(i), ref(r) {}   // ✅
+    Player(int i) {
+        id = i;     // ❌ ERROR! can't assign to const
+    }
 };
 \`\`\`
 
----
+By the time we enter the body, \`id\` has **already been default-constructed**. After that, \`id = i\` would be a "value change" — which const forbids → **compile error**.
 
-Both styles appear in real code. **In this lesson we use assignment** for readability, but you'll see the initializer list more often in real-world C++ code.
+The list works because it sets the value **at birth** — not a change, an initialization:
 
 \`\`\`cpp
-// Don't be surprised when you see this — it's just a constructor!
-Player(string n, int hp) : name(n), health(hp) {}
+Player(int i) : id(i) {}   // ✅ born with i
 \`\`\`
 
-💡 **Summary**: Assignment = easier to read, initializer list = C++ preferred / required for const & references`
+---
+
+**② reference members**
+
+\`int& ref;\` is a **nickname** for another variable. A reference **must** be bound to something **at the moment it's declared**.
+
+\`\`\`cpp
+class Observer {
+    int& target;    // pointing at what?
+public:
+    Observer(int& t) {
+        target = t;   // ❌ ERROR! target has no binding yet
+    }
+};
+\`\`\`
+
+References can't even "exist" without a target, so the compiler stops you before you reach the body.
+
+Also: for a reference, \`target = t\` means "assign t's value into the variable target already points to" — not "make target point to a different variable". A reference's target **can never be rebound** once set.
+
+The list fixes it:
+
+\`\`\`cpp
+Observer(int& t) : target(t) {}   // ✅ born pointing at t
+\`\`\`
+
+---
+
+**Summary**
+
+| Member kind | Body assignment | Initializer list |
+|---|---|---|
+| Regular (int, string, etc.) | ✅ works | ✅ works |
+| \`const\` | ❌ **error** | ✅ **required** |
+| \`reference (&)\` | ❌ **error** | ✅ **required** |
+| Other class object (no default constructor) | ❌ error | ✅ required |
+
+→ If your class has const, reference, or a "no-default-constructor" object member, **the list is your only option**.`
+        },
+        {
+          id: "ch3-initlist-realworld",
+          type: "explain",
+          title: "🌍 Which One Is Used More in Real Code?",
+          content: `**Answer: the initializer list.** Real-world C++ projects and open-source libraries overwhelmingly use it.
+
+---
+
+**Why?**
+
+1. **Consistency** — handles regular members, const, references, object members with **one syntax**
+2. **Correctness** — values are set "at birth", no "default-first, overwrite-later" pitfalls
+3. **Recommended by authoritative style guides**:
+   - Google C++ Style Guide
+   - C++ Core Guidelines (co-authored by Bjarne Stroustrup — the creator of C++)
+4. **Small efficiency gain** — for heavy types like \`string\`, you avoid "create empty → overwrite" (2 operations) in favor of "create with the value" (1 operation)
+
+---
+
+**So why did this lesson teach body assignment first?**
+
+It's easier to read and visually similar to Python's \`__init__\`, so it's **intuitive when you're first learning**. Nail the concept first, then switch the syntax.
+
+Now that you've got the concept, **make the initializer list your default going forward**. Real-world code and open source become much easier to read.
+
+---
+
+**Side-by-side**
+
+\`\`\`cpp
+// The style we learned
+BankAccount(string name, double initial) {
+    owner = name;
+    balance = initial;
+}
+
+// The style you'll see more often in practice
+BankAccount(string name, double initial)
+    : owner(name), balance(initial) {}
+\`\`\`
+
+Both are correct. Same result. But the second is the standard in team code reviews and open-source contributions.
+
+---
+
+**💡 Summary**
+
+| | Body assignment | Initializer list |
+|---|---|---|
+| Readability (for beginners) | Easy | Compact once familiar |
+| const & reference support | ❌ impossible | ✅ supported |
+| Efficiency | Slightly slower | One-shot |
+| Real-world preference | △ occasional | ⭐ most code |
+| Recommended after this lesson | — | ✅ default |
+
+Next time you see \`Player(string n, int h) : name(n), health(h) {}\`, you'll immediately recognize it as **"ah, initializer list"**.`
         },
         {
           id: "ch3-pred1",
