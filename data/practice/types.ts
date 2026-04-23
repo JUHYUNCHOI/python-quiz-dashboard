@@ -90,6 +90,12 @@ function translateCodeComments(code: string | undefined): string | undefined {
     .replace(/\/\/ cin으로 (.+?)를 입력받으세요/g, "// TODO: Read $1 with cin")
     .replace(/\/\/ cin으로 (.+?)을 입력받으세요/g, "// TODO: Read $1 with cin")
 
+    // ── Array & vector numbered setup (N, vector<T> v(N), read N elements) ────
+    .replace(/\/\/ 1\) int n 을 cin 으로 입력받기/g, "// 1) Read int n with cin")
+    .replace(/\/\/ 2\) 크기 n 의 벡터 v 선언/g, "// 2) Declare vector v of size n")
+    .replace(/\/\/ 3\) n 개의 원소를 cin 으로 v 에 읽기/g, "// 3) Read n elements into v with cin")
+    .replace(/\/\/ 4\) 아래에 문제 해결 코드 작성/g, "// 4) Write your solution below")
+
     // ── return values (specific Korean math terms first) ────────────
     .replace(/\/\/ 합을 반환하세요/g, "// TODO: Return the sum")
     .replace(/\/\/ 곱을 반환하세요/g, "// TODO: Return the product")
