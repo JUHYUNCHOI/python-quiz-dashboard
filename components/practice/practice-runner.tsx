@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect, useRef } from "react"
 import dynamic from "next/dynamic"
 import { Play, Loader2, RotateCcw, ChevronDown, Check, X, Lightbulb, Eye } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -215,6 +215,19 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
   const [showSolution, setShowSolution] = useState(false)
   const [failCount, setFailCount] = useState(0)
   const [scaffoldShown, setScaffoldShown] = useState(false)
+
+  // 코드가 바뀔 때마다 localStorage에 자동저장 (debounce 400ms).
+  // 브라우저 새로고침이나 예기치 않은 리로드에도 학생 작업 보존.
+  const autoSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => {
+    if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current)
+    autoSaveTimerRef.current = setTimeout(() => {
+      try { localStorage.setItem(storageKey, code) } catch {}
+    }, 400)
+    return () => {
+      if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current)
+    }
+  }, [code, storageKey])
 
   const runTests = useCallback(async () => {
     if (isLoading) return
