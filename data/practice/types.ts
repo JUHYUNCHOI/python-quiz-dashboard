@@ -107,6 +107,25 @@ function translateCodeComments(code: string | undefined): string | undefined {
     .replace(/\/\/ 3\) n 번 반복하며 x 입력: 양수면 push_back, 음수면 pop_back \(비어있지 않을 때만\)/g, "// 3) Repeat n times reading x: positive → push_back, negative → pop_back (only if not empty)")
     .replace(/\/\/ 4\) v 의 원소를 공백으로 구분해 출력/g, "// 4) Print v's elements separated by spaces")
 
+    // ── Grid 2D vector patterns ──────────────────────────────────────────
+    .replace(/\/\/ 1\) int n, m 을 cin 으로 입력받기/g, "// 1) Read int n, m with cin")
+    .replace(/\/\/ 1\) int n, m, k 를 cin 으로 입력받기/g, "// 1) Read int n, m, k with cin")
+    .replace(/\/\/ 2\) n×m 크기의 2D 벡터 grid 선언하고 모든 원소 읽기/g, "// 2) Declare a 2D vector grid of size n×m and read all elements")
+
+    // ── Vector with custom var name (scores, nums, arr, …) ──────────────
+    .replace(/\/\/ 2\) 크기 n 의 정수 벡터 (\w+) 선언하고 n 개의 원소 읽기/g, "// 2) Declare int vector $1 of size n and read n elements")
+    .replace(/\/\/ 2\) 크기 n 의 실수 벡터 (\w+) 선언하고 n 개의 원소 읽기/g, "// 2) Declare double vector $1 of size n and read n elements")
+    .replace(/\/\/ 2\) 크기 n 의 문자열 벡터 (\w+) 선언하고 n 개의 원소 읽기/g, "// 2) Declare string vector $1 of size n and read n elements")
+    .replace(/\/\/ 2\) 크기 n 의 문자열 벡터 v 선언하고 n 개의 문자열 읽기/g, "// 2) Declare string vector v of size n and read n strings")
+
+    // ── Set patterns ───────────────────────────────────────────────────
+    .replace(/\/\/ 2\) set<int> (\w+) 선언하고 n 개의 정수를 insert/g, "// 2) Declare set<int> $1 and insert n integers")
+    .replace(/\/\/ 2\) set<string> (\w+) 선언하고 n 개의 문자열를 insert/g, "// 2) Declare set<string> $1 and insert n strings")
+
+    // ── getline patterns ──────────────────────────────────────────────
+    .replace(/\/\/ 1\) getline 으로 세 줄 입력받기: s, from, to/g, "// 1) Read three lines with getline: s, from, to")
+    .replace(/\/\/ 2\) 아래에 문제 해결 코드 작성/g, "// 2) Write your solution below")
+
     // ── return values (specific Korean math terms first) ────────────
     .replace(/\/\/ 합을 반환하세요/g, "// TODO: Return the sum")
     .replace(/\/\/ 곱을 반환하세요/g, "// TODO: Return the product")
