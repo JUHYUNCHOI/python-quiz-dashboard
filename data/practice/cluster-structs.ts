@@ -330,6 +330,104 @@ int main() {
       },
     },
     {
+      id: "struct-013",
+      cluster: "structs",
+      unlockAfter: "cpp-14",
+      difficulty: "보통",
+      title: "동아리 회원 관리",
+      description: `N개의 동아리가 있습니다. 각 동아리는 이름과 여러 명의 회원을 가집니다.
+각 동아리별로 "이름: 회원수" 형식으로 출력하세요.
+마지막 줄에 회원이 가장 많은 동아리의 이름을 "Largest: 이름" 형식으로 출력하세요. 동점이면 입력 순서상 먼저 나온 동아리를 선택합니다.
+
+💡 힌트: 동아리 하나를 struct로 만들어보세요. 한 동아리는 "이름"과 "회원 목록"을 갖고 있으니, struct 안에 vector<string>을 넣을 수 있어요.`,
+      constraints:
+        "1 ≤ N ≤ 20, 각 동아리 회원 수 1 ≤ k ≤ 30, 동아리 이름과 회원 이름은 영문 소문자 최대 20자",
+      initialCode: `#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+// TODO: struct Club을 선언하세요 (name, members — 회원 이름 목록)
+
+int main() {
+    int n;
+    cin >> n;
+    // TODO: 여기에 코드를 작성하세요
+    return 0;
+}`,
+      testCases: [
+        {
+          stdin: "3\nprogramming 4 alice bob carol dave\nmusic 2 eve frank\ndance 3 grace henry ivy",
+          expectedOutput: "programming: 4\nmusic: 2\ndance: 3\nLargest: programming",
+        },
+        {
+          stdin: "2\nfootball 11 a b c d e f g h i j k\nchess 3 x y z",
+          expectedOutput: "football: 11\nchess: 3\nLargest: football",
+        },
+        {
+          stdin: "3\nalpha 2 p q\nbeta 3 x y z\ngamma 3 i j k",
+          expectedOutput: "alpha: 2\nbeta: 3\ngamma: 3\nLargest: beta",
+        },
+      ],
+      hints: [
+        "struct Club { string name; vector<string> members; }; — struct 안에 vector를 넣을 수 있어요",
+        "동아리 N개 → vector<Club> clubs(n); 로 관리. 각 동아리는 clubs[i].members.push_back(...) 으로 회원 추가",
+        "가장 큰 동아리 찾기: 순회하며 .members.size() 가 더 큰 것을 만나면 인덱스 갱신. 동점은 먼저 나온 것 유지",
+      ],
+      solutionCode: `#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+struct Club {
+    string name;
+    vector<string> members;
+};
+
+int main() {
+    int n;
+    cin >> n;
+    vector<Club> clubs(n);
+    for (int i = 0; i < n; i++) {
+        int k;
+        cin >> clubs[i].name >> k;
+        for (int j = 0; j < k; j++) {
+            string member;
+            cin >> member;
+            clubs[i].members.push_back(member);
+        }
+    }
+    for (int i = 0; i < n; i++) {
+        cout << clubs[i].name << ": " << clubs[i].members.size() << "\n";
+    }
+    int largestIdx = 0;
+    for (int i = 1; i < n; i++) {
+        if (clubs[i].members.size() > clubs[largestIdx].members.size()) {
+            largestIdx = i;
+        }
+    }
+    cout << "Largest: " << clubs[largestIdx].name << "\n";
+    return 0;
+}`,
+      solutionExplanation:
+        "struct에 vector<string>을 멤버로 넣어 한 동아리가 \"이름\"과 \"회원 목록\"을 같이 들고 있게 합니다. vector<Club>로 N개를 관리하고, 각 동아리마다 이름+k+회원들을 읽어 members에 push_back 합니다. 가장 큰 동아리는 선형 탐색으로 찾고, 동점은 먼저 나온 것을 유지합니다.",
+      en: {
+        title: "Club Roster",
+        description: `There are N clubs. Each club has a name and a list of members.
+For each club, print "name: memberCount" on its own line.
+On the last line, print the name of the club with the most members, prefixed with "Largest: ". For ties, choose the club that appeared first in the input.
+
+💡 Hint: Model a single club as a struct. Since one club has a "name" and a "list of members", you can put a vector<string> inside the struct.`,
+        constraints: "1 ≤ N ≤ 20, each club has 1 ≤ k ≤ 30 members, club and member names are lowercase English up to 20 characters",
+        hints: [
+          "struct Club { string name; vector<string> members; }; — a struct can contain a vector.",
+          "For N clubs, use vector<Club> clubs(n); then clubs[i].members.push_back(...) to add each member.",
+          "Find the largest club with a linear scan comparing .members.size(). Keep the earlier one on a tie.",
+        ],
+        solutionExplanation: "Model one club as a struct holding both a name and a vector<string> of members. Use vector<Club> to manage N clubs, reading name+k+members for each and pushing members into the inner vector. Find the largest club with a linear scan, keeping the earliest one on ties.",
+      },
+    },
+    {
       id: "struct-005",
       cluster: "structs",
       unlockAfter: "cpp-14",
