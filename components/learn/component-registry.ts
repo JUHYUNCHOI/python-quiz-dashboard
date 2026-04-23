@@ -430,6 +430,13 @@ const registry: Record<string, ComponentEntry> = {
     props: (_step: any, lang: string) => ({ lang }),
   },
 
+  // C++ 레슨 22: 바디 대입 vs 이니셜라이저 리스트 생애주기 비교 (2단계 vs 1단계)
+  constructorLifecycle: {
+    load: () => import("@/components/animations/constructor-lifecycle"),
+    exportName: "ConstructorLifecycle",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+
   // C++ 레슨: auto 타입 추론 시각화
   autoTypeVisualizer: {
     load: () => import("@/components/animations/auto-type-visualizer"),

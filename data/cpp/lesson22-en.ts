@@ -601,42 +601,13 @@ At first glance **the result looks identical.** Both end up with \`owner\` and \
           id: "ch3-initlist-lifecycle",
           type: "explain",
           title: "🔬 Under the Hood — When Do Members Get Their Values?",
-          content: `To see the difference, trace **when** each member variable gets its value.
+          component: "constructorLifecycle",
+          content: `Click through **1 → 2 → 3** in the simulator below to compare.
 
----
+- **Body assignment**: members are born **empty / with garbage** (step 1), then the body **overwrites** them (step 2) → **2 things** happen.
+- **Initializer list**: members are born **directly with the final values** → **1 thing** happens.
 
-**Method 1: Body assignment — 2 steps**
-
-\`\`\`cpp
-BankAccount(string name, double initial) {
-    owner = name;
-    balance = initial;
-}
-\`\`\`
-
-What actually happens:
-
-1. First, \`owner\` is born as an **empty string** and \`balance\` is born with **garbage value** (default construction).
-2. Then inside the body \`{ ... }\`, \`owner = name;\` and \`balance = initial;\` **overwrite** those values (assignment).
-
-→ **Two things happen:** (1) default-construct, then (2) overwrite.
-
----
-
-**Method 2: Initializer list — 1 step**
-
-\`\`\`cpp
-BankAccount(string name, double initial)
-    : owner(name), balance(initial) {}
-\`\`\`
-
-Here \`owner\` is born **directly with the value \`name\`**. No "make default first, overwrite later".
-
-→ **One thing:** (1) construct with the desired value from the start.
-
----
-
-For simple types like \`int\` and \`double\` the speed difference is unnoticeable. The **real difference** is that some members **cannot be "overwritten later" at all.** The next page meets those members.`
+For simple types (\`int\`, \`double\`) the speed difference is tiny. The **real difference** is that some members **cannot be "overwritten later" at all** — we meet those (\`const\`, \`reference\`) on the next page.`
         },
         {
           id: "ch3-initlist-const-ref",
