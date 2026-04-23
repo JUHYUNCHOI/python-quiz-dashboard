@@ -52,7 +52,7 @@ int main() {
     for (int i = 0; i < n; i++)
         for (int j = 0; j < m; j++)
             sum += grid[i][j];
-    cout << sum << "\n";
+    cout << sum << "\\n";
     return 0;
 }`,
       solutionExplanation: "이중 for 루프로 격자의 모든 원소를 순회하며 합계를 구합니다. 격자 크기가 N×M이므로 총 N*M번의 덧셈이 수행됩니다.",
@@ -109,7 +109,7 @@ int main() {
     for (int i = 0; i < n; i++) {
         int rowSum = 0;
         for (int j = 0; j < m; j++) rowSum += grid[i][j];
-        cout << rowSum << "\n";
+        cout << rowSum << "\\n";
     }
     return 0;
 }`,
@@ -166,7 +166,7 @@ int main() {
             cin >> grid[i][j];
     int sum = 0;
     for (int i = 0; i < n; i++) sum += grid[i][i];
-    cout << sum << "\n";
+    cout << sum << "\\n";
     return 0;
 }`,
       solutionExplanation: "주대각선 원소는 grid[0][0], grid[1][1], ..., grid[n-1][n-1]입니다. 행과 열 인덱스가 같으므로 단일 루프로 처리합니다.",
@@ -230,7 +230,7 @@ int main() {
         sum += grid[i][n - 1 - i];
     }
     sum -= grid[n / 2][n / 2]; // subtract center element counted twice
-    cout << sum << "\n";
+    cout << sum << "\\n";
     return 0;
 }`,
       solutionExplanation: "두 대각선을 각각 더하면 중심 원소가 두 번 포함됩니다. N이 홀수일 때 중심 인덱스는 n/2이므로 한 번 빼서 보정합니다.",
@@ -297,7 +297,7 @@ int main() {
         if (j > 0) cout << ' ';
         cout << maxVal;
     }
-    cout << "\n";
+    cout << "\\n";
     return 0;
 }`,
       solutionExplanation: "열 기준 순회: 바깥 루프를 열(j), 안쪽 루프를 행(i)으로 설정합니다. INT_MIN으로 초기화하면 음수 원소도 올바르게 처리됩니다.",
@@ -359,7 +359,7 @@ int main() {
         for (int j = 0; j < m; j++)
             if (i == 0 || i == n - 1 || j == 0 || j == m - 1)
                 sum += grid[i][j];
-    cout << sum << "\n";
+    cout << sum << "\\n";
     return 0;
 }`,
       solutionExplanation: "테두리는 첫 행, 마지막 행, 첫 열, 마지막 열입니다. 네 조건 중 하나라도 만족하면 테두리 원소입니다.",
@@ -425,7 +425,7 @@ int main() {
             if (j > 0) cout << ' ';
             cout << result[i][j];
         }
-        cout << "\n";
+        cout << "\\n";
     }
     return 0;
 }`,
@@ -563,7 +563,7 @@ int main() {
             if (j > 0) cout << ' ';
             cout << sum;
         }
-        cout << "\n";
+        cout << "\\n";
     }
     return 0;
 }`,
@@ -710,7 +710,7 @@ int main() {
             if (j > 0) cout << ' ';
             cout << grid[i][j];
         }
-        cout << "\n";
+        cout << "\\n";
     }
     return 0;
 }`,
@@ -784,7 +784,7 @@ int main() {
             left++;
         }
     }
-    cout << "\n";
+    cout << "\\n";
     return 0;
 }`,
       solutionExplanation: "경계값(top/bottom/left/right) 4개를 관리하며 한 레이어씩 나선형으로 탐색합니다. 각 방향 순회 후 해당 경계를 한 칸 좁힙니다.",
@@ -921,7 +921,7 @@ int main() {
             if (i > 0) cout << ' ';
             cout << grid[i][j];
         }
-        cout << "\n";
+        cout << "\\n";
     }
     return 0;
 }`,
@@ -1000,7 +1000,7 @@ int main() {
             if (j > 0) cout << ' ';
             cout << grid[i][j];
         }
-        cout << "\n";
+        cout << "\\n";
     }
     return 0;
 }`,

@@ -47,7 +47,7 @@ int main() {
     int n;
     cin >> h >> n;
     for (int i = 0; i < n; i++) h /= 2.0;
-    cout << fixed << setprecision(2) << h << "\n";
+    cout << fixed << setprecision(2) << h << "\\n";
     return 0;
 }`,
       solutionExplanation: "매번 높이를 절반으로 줄이는 반복입니다. 2.0으로 나눠 실수 나눗셈을 유지합니다. fixed + setprecision(2)로 소수점 두 자리를 출력합니다.",
@@ -107,7 +107,7 @@ int main() {
         else if (c == 'U') y++;
         else if (c == 'D') y--;
     }
-    cout << x << " " << y << "\n";
+    cout << x << " " << y << "\\n";
     return 0;
 }`,
       solutionExplanation: "각 문자를 순회하며 x, y를 갱신합니다. 시뮬레이션 문제에서 상태(여기서는 좌표)를 변수로 관리하는 기본 패턴입니다.",
@@ -166,7 +166,7 @@ int main() {
         if (pos >= h) break;
         pos -= d;
     }
-    cout << days << "\n";
+    cout << days << "\\n";
     return 0;
 }`,
       solutionExplanation: "매 반복마다 1일이 지납니다. 낮에 올라간 후 탈출 여부를 확인합니다. 탈출했으면 loop 종료, 아니면 밤에 다시 내려갑니다.",
@@ -226,7 +226,7 @@ int main() {
         count += change / coin;
         change %= coin;
     }
-    cout << count << "\n";
+    cout << count << "\\n";
     return 0;
 }`,
       solutionExplanation: "탐욕 알고리즘: 큰 동전부터 최대한 사용합니다. change / coin이 해당 동전 개수, change %= coin이 남은 금액입니다.",
@@ -291,7 +291,7 @@ int main() {
         if (i > 0) cout << ' ';
         cout << v[i];
     }
-    cout << "\n";
+    cout << "\\n";
     return 0;
 }`,
       solutionExplanation: "버블 정렬의 T번 패스를 수행합니다. T가 충분히 크면 완전히 정렬됩니다. 각 패스에서 가장 큰 미정렬 원소가 제자리를 찾아갑니다.",
@@ -354,7 +354,7 @@ int main() {
     }
     int cnt = 0;
     for (int i = 1; i <= n; i++) if (cards[i]) cnt++;
-    cout << cnt << "\n";
+    cout << cnt << "\\n";
     return 0;
 }`,
       solutionExplanation: "XOR 연산 ^= 1로 0↔1을 토글합니다. 각 조작을 그대로 시뮬레이션한 후 최종 앞면 카드를 셉니다.",
@@ -417,7 +417,7 @@ int main() {
         cin >> event;
         if (event == "A") scoreA++;
         else if (event == "B") scoreB++;
-        else cout << scoreA << " " << scoreB << "\n";
+        else cout << scoreA << " " << scoreB << "\\n";
     }
     return 0;
 }`,
@@ -480,7 +480,7 @@ int main() {
         total += abs(dest - current);
         current = dest;
     }
-    cout << total << "\n";
+    cout << total << "\\n";
     return 0;
 }`,
       solutionExplanation: "현재 층에서 목적 층까지의 절댓값 차이가 이동 층수입니다. 매 요청 후 current를 갱신해 다음 이동의 시작점으로 사용합니다.",
@@ -538,7 +538,7 @@ int main() {
             first = false;
         }
     }
-    cout << "\n";
+    cout << "\\n";
     return 0;
 }`,
       solutionExplanation: "1부터 N까지 순회하며 K의 배수인 경우만 출력합니다. first 플래그로 첫 원소 앞 공백을 방지합니다.",
@@ -610,7 +610,7 @@ int main() {
         }
         if (!moved) break;
     }
-    cout << count << "\n";
+    cout << count << "\\n";
     return 0;
 }`,
       solutionExplanation: "현재 방향부터 4방향을 시도합니다. 이동 가능한 방향을 찾으면 이동, 못 찾으면 종료합니다. 방향 배열과 (dir+1)%4 패턴이 핵심입니다.",
@@ -684,7 +684,7 @@ int main() {
         if (i > 1) cout << ' ';
         cout << stock[i];
     }
-    cout << "\n";
+    cout << "\\n";
     return 0;
 }`,
       solutionExplanation: "상태 배열(stock)을 관리하며 각 이벤트에 따라 갱신합니다. 조건 확인 → 상태 변경의 패턴이 시뮬레이션의 핵심입니다.",
@@ -739,9 +739,9 @@ int main() {
     cin >> r >> g >> t;
     int pos = t % (r + g);
     if (pos < r)
-        cout << r - pos << "\n";
+        cout << r - pos << "\\n";
     else
-        cout << 0 << "\n";
+        cout << 0 << "\\n";
     return 0;
 }`,
       solutionExplanation: "t % (r+g)로 현재 사이클에서의 위치를 구합니다. 0~r-1은 빨간불, r~r+g-1은 초록불입니다. 빨간불이면 남은 시간 r-pos를 출력합니다.",
@@ -813,7 +813,7 @@ int main() {
                 best = i;
             }
         }
-        cout << best + 1 << "\n";
+        cout << best + 1 << "\\n";
     }
     return 0;
 }`,
@@ -880,7 +880,7 @@ int main() {
         if ((int)submitted.size() == m) allDone++;
         if (submitted.empty()) noneDone++;
     }
-    cout << allDone << " " << noneDone << "\n";
+    cout << allDone << " " << noneDone << "\\n";
     return 0;
 }`,
       solutionExplanation: "set에 중복 없이 과제를 저장하면 실제 제출한 고유 과제 수를 알 수 있습니다. size() == m이면 전체 제출, empty()면 아무것도 안 제출입니다.",

@@ -53,7 +53,7 @@ int main() {
         freq[word]++;
     }
     for (auto& [w, cnt] : freq)
-        cout << w << " " << cnt << "\n";
+        cout << w << " " << cnt << "\\n";
     return 0;
 }`,
       solutionExplanation: "map은 키를 자동으로 정렬하므로 별도 정렬 없이 알파벳 순으로 출력됩니다. freq[word]++는 존재하지 않는 키에 접근 시 0으로 초기화 후 증가합니다.",
@@ -115,7 +115,7 @@ int main() {
         cout << v;
         first = false;
     }
-    cout << "\n";
+    cout << "\\n";
     return 0;
 }`,
       solutionExplanation: "set은 중복 없이 정렬된 상태로 원소를 관리합니다. insert()로 추가하면 자동으로 중복을 제거합니다.",
@@ -181,7 +181,7 @@ int main() {
     cin >> q;
     while (q--) {
         int x; cin >> x;
-        cout << (s.count(x) ? "YES" : "NO") << "\n";
+        cout << (s.count(x) ? "YES" : "NO") << "\\n";
     }
     return 0;
 }`,
@@ -244,7 +244,7 @@ int main() {
             ans = num;
         }
     }
-    cout << ans << "\n";
+    cout << ans << "\\n";
     return 0;
 }`,
       solutionExplanation: "map은 키를 오름차순으로 순회하므로, 빈도가 같을 때 자동으로 더 작은 숫자가 먼저 처리됩니다. 엄격한 > 비교로 앞서 저장된 값을 유지합니다.",
@@ -322,7 +322,7 @@ int main() {
             cout << v;
             first = false;
         }
-        cout << "\n";
+        cout << "\\n";
     }
     return 0;
 }`,
@@ -385,7 +385,7 @@ int main() {
             best[name] = score;
     }
     for (auto& [nm, sc] : best)
-        cout << nm << " " << sc << "\n";
+        cout << nm << " " << sc << "\\n";
     return 0;
 }`,
       solutionExplanation: "처음 등장하는 이름이거나 기존 점수보다 높을 때 업데이트합니다. map의 자동 정렬 특성 덕분에 출력 시 별도 정렬이 불필요합니다.",
@@ -451,7 +451,7 @@ int main() {
             found = true;
         }
     }
-    cout << (found ? "\n" : "NONE\n");
+    cout << (found ? "\\n" : "NONE\n");
     return 0;
 }`,
       solutionExplanation: "map을 순회하며 빈도가 2 이상인 키만 출력합니다. found 플래그로 NONE 처리와 공백 구분을 제어합니다.",
@@ -604,7 +604,7 @@ int main() {
         sort(key.begin(), key.end());
         groups[key]++;
     }
-    cout << groups.size() << "\n";
+    cout << groups.size() << "\\n";
     return 0;
 }`,
       solutionExplanation: "단어를 정렬하면 애너그램이 동일한 문자열이 됩니다. 이를 map의 키로 사용해 그룹을 자동으로 분류하고, map의 크기가 고유 그룹 수입니다.",
@@ -663,7 +663,7 @@ int main() {
             count += seen[need];
         seen[x]++;
     }
-    cout << count << "\n";
+    cout << count << "\\n";
     return 0;
 }`,
       solutionExplanation: "왼쪽에서 오른쪽으로 순회하면서, 현재 값의 보완값(k-x)이 이미 등장했는지 확인합니다. seen[need]는 그 값이 현재까지 등장한 횟수이므로, 이만큼의 쌍이 생깁니다.",
@@ -732,10 +732,10 @@ int main() {
         median = scores[n / 2];
     else
         median = (scores[n / 2 - 1] + scores[n / 2]) / 2.0;
-    cout << scores[n - 1] << "\n";
-    cout << scores[0] << "\n";
-    cout << fixed << setprecision(2) << (double)sum / n << "\n";
-    cout << fixed << setprecision(2) << median << "\n";
+    cout << scores[n - 1] << "\\n";
+    cout << scores[0] << "\\n";
+    cout << fixed << setprecision(2) << (double)sum / n << "\\n";
+    cout << fixed << setprecision(2) << median << "\\n";
     return 0;
 }`,
       solutionExplanation: "sort 후 최댓값/최솟값은 인덱스로 직접 접근합니다. 중앙값은 N 홀수/짝수 경우를 나눠 처리합니다. 짝수 평균은 2.0으로 나눠 실수 나눗셈을 보장합니다.",
@@ -806,7 +806,7 @@ int main() {
         if (it == phonebook.end())
             cout << "NOT FOUND\n";
         else
-            cout << it->second << "\n";
+            cout << it->second << "\\n";
     }
     return 0;
 }`,

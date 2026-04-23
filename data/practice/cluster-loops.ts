@@ -303,7 +303,7 @@ int main() {
     int n, m;
     cin >> n >> m;
     for (int i = n; i <= m; i += n)
-        cout << i << "\n";
+        cout << i << "\\n";
     return 0;
 }`,
       solutionExplanation: "i를 n으로 초기화하고 n씩 증가시키면 n의 배수만 순서대로 얻을 수 있습니다.",
@@ -516,7 +516,7 @@ int main() {
     int n;
     cin >> n;
     for (int i = 1; i <= 9; i++)
-        cout << n << " x " << i << " = " << n * i << "\n";
+        cout << n << " x " << i << " = " << n * i << "\\n";
     return 0;
 }`,
       solutionExplanation: "for 루프 하나로 i=1~9를 순회하며 형식에 맞춰 출력합니다.",
@@ -1351,7 +1351,7 @@ int main() {
             maxPos = i;
         }
     }
-    cout << maxVal << "\n" << maxPos << "\n";
+    cout << maxVal << "\\n" << maxPos << "\\n";
     return 0;
 }`,
       solutionExplanation: "첫 번째 원소로 초기화 후 2번째부터 비교합니다. 엄격하게 큰 경우(>)만 갱신하므로 같은 값이 있어도 처음 위치를 유지합니다.",
@@ -1399,7 +1399,7 @@ using namespace std;
 int main() {
     int x, sum = 0;
     while (cin >> x) sum += x;
-    cout << sum << "\n";
+    cout << sum << "\\n";
     return 0;
 }`,
       solutionExplanation: "while (cin >> x)는 입력에 성공하면 true, EOF나 오류면 false를 반환합니다. 이 패턴으로 개수를 모르는 입력을 처리할 수 있습니다.",

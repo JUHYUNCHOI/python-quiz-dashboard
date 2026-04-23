@@ -148,10 +148,10 @@ int main() {
     for (int i = 0; i < n; i++) cin >> pts[i].x >> pts[i].y;
     int maxIdx = 0;
     for (int i = 0; i < n; i++) {
-        cout << sumXY(pts[i]) << "\n";
+        cout << sumXY(pts[i]) << "\\n";
         if (sumXY(pts[i]) > sumXY(pts[maxIdx])) maxIdx = i;
     }
-    cout << "Max: " << maxIdx + 1 << "\n";
+    cout << "Max: " << maxIdx + 1 << "\\n";
     return 0;
 }`,
       solutionExplanation:
@@ -228,8 +228,8 @@ int main() {
         if (p.stock == 0) outOfStock++;
         totalValue += p.price * p.stock;
     }
-    cout << "Out of stock: " << outOfStock << "\n";
-    cout << "Total value: " << totalValue << "\n";
+    cout << "Out of stock: " << outOfStock << "\\n";
+    cout << "Total value: " << totalValue << "\\n";
     return 0;
 }`,
       solutionExplanation:
@@ -305,7 +305,7 @@ int main() {
         cin >> students[i].name >> students[i].kor >> students[i].eng;
     int bestIdx = 0;
     for (int i = 0; i < n; i++) {
-        cout << students[i].name << " " << students[i].total() << "\n";
+        cout << students[i].name << " " << students[i].total() << "\\n";
         if (students[i].total() > students[bestIdx].total()) {
             bestIdx = i;
         } else if (students[i].total() == students[bestIdx].total() &&
@@ -313,7 +313,7 @@ int main() {
             bestIdx = i;
         }
     }
-    cout << "Best: " << students[bestIdx].name << "\n";
+    cout << "Best: " << students[bestIdx].name << "\\n";
     return 0;
 }`,
       solutionExplanation:
@@ -327,6 +327,95 @@ int main() {
           "For ties on total, pick the one with smaller name — compare using a.name < b.name.",
         ],
         solutionExplanation: "Compute the total with a struct member function total(). Use linear search to find the best student, breaking ties by string comparison a.name < b.name.",
+      },
+    },
+    {
+      id: "struct-014",
+      cluster: "structs",
+      unlockAfter: "cpp-14",
+      difficulty: "쉬움",
+      title: "짝수/홀수 분류",
+      description: `N개의 정수가 주어집니다. 짝수는 짝수끼리, 홀수는 홀수끼리 모아서 개수를 출력하세요.
+
+Even: {짝수 개수}
+Odd: {홀수 개수}
+
+💡 힌트: struct 안에 vector<int> 를 넣어서 "이 버킷의 이름"과 "여기 속한 숫자들"을 같이 담아보세요.`,
+      constraints: "1 ≤ N ≤ 100, -1000 ≤ 값 ≤ 1000",
+      initialCode: `#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+// TODO: struct Bucket 을 선언하세요 (label, nums — 이 버킷에 속한 숫자들)
+
+int main() {
+    int n;
+    cin >> n;
+    // TODO: 여기에 코드를 작성하세요
+    return 0;
+}`,
+      testCases: [
+        {
+          stdin: "5\n1 2 3 4 5",
+          expectedOutput: "Even: 2\nOdd: 3",
+        },
+        {
+          stdin: "4\n2 4 6 8",
+          expectedOutput: "Even: 4\nOdd: 0",
+        },
+        {
+          stdin: "6\n-1 -2 0 7 10 15",
+          expectedOutput: "Even: 3\nOdd: 3",
+        },
+      ],
+      hints: [
+        "struct Bucket { string label; vector<int> nums; }; — struct 안에 vector 가 들어갈 수 있어요",
+        "Even, Odd 두 버킷을 만들고, 각 숫자를 x % 2 로 분기해 해당 버킷의 nums 에 push_back",
+        "출력은 buckets[i].label << \": \" << buckets[i].nums.size() 형식",
+      ],
+      solutionCode: `#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+struct Bucket {
+    string label;
+    vector<int> nums;
+};
+
+int main() {
+    int n;
+    cin >> n;
+    vector<Bucket> buckets = {{"Even", {}}, {"Odd", {}}};
+    for (int i = 0; i < n; i++) {
+        int x;
+        cin >> x;
+        if (x % 2 == 0) buckets[0].nums.push_back(x);
+        else buckets[1].nums.push_back(x);
+    }
+    for (int i = 0; i < 2; i++) {
+        cout << buckets[i].label << ": " << buckets[i].nums.size() << "\\n";
+    }
+    return 0;
+}`,
+      solutionExplanation:
+        "struct Bucket 에 라벨(\"Even\"/\"Odd\")과 vector<int> 를 같이 담아 한 단위로 다룹니다. 입력을 % 2 결과에 따라 해당 버킷에 push_back 하고, 끝나면 각 버킷의 라벨과 size() 를 출력합니다. (음수 x 에 대해서도 x%2==0 이면 짝수 — -2, 0 등 포함)",
+      en: {
+        title: "Even/Odd Buckets",
+        description: `Given N integers, group them by parity and print each bucket's count.
+
+Even: {count of even numbers}
+Odd: {count of odd numbers}
+
+💡 Hint: Put a vector<int> inside a struct to bundle "the bucket's name" and "the numbers in this bucket" together.`,
+        constraints: "1 ≤ N ≤ 100, -1000 ≤ value ≤ 1000",
+        hints: [
+          "struct Bucket { string label; vector<int> nums; }; — a struct can contain a vector.",
+          "Make two buckets (Even, Odd). For each number, use x % 2 to decide which bucket, then push_back.",
+          "Print as: buckets[i].label << \": \" << buckets[i].nums.size()",
+        ],
+        solutionExplanation: "Bundle the label (\"Even\"/\"Odd\") and a vector<int> into a Bucket struct, treated as one unit. Push each input into the right bucket based on x%2, then print each bucket's label and size(). (Negative x with x%2==0 still counts as even — e.g. -2, 0.)",
       },
     },
     {
@@ -398,7 +487,7 @@ int main() {
         }
     }
     for (int i = 0; i < n; i++) {
-        cout << clubs[i].name << ": " << clubs[i].members.size() << "\n";
+        cout << clubs[i].name << ": " << clubs[i].members.size() << "\\n";
     }
     int largestIdx = 0;
     for (int i = 1; i < n; i++) {
@@ -406,7 +495,7 @@ int main() {
             largestIdx = i;
         }
     }
-    cout << "Largest: " << clubs[largestIdx].name << "\n";
+    cout << "Largest: " << clubs[largestIdx].name << "\\n";
     return 0;
 }`,
       solutionExplanation:
@@ -425,6 +514,105 @@ On the last line, print the name of the club with the most members, prefixed wit
           "Find the largest club with a linear scan comparing .members.size(). Keep the earlier one on a tie.",
         ],
         solutionExplanation: "Model one club as a struct holding both a name and a vector<string> of members. Use vector<Club> to manage N clubs, reading name+k+members for each and pushing members into the inner vector. Find the largest club with a linear scan, keeping the earliest one on ties.",
+      },
+    },
+    {
+      id: "struct-015",
+      cluster: "structs",
+      unlockAfter: "cpp-14",
+      difficulty: "보통",
+      title: "합격/불합격 분리",
+      description: `N명의 학생 (이름, 점수)이 주어집니다. 60점 이상이면 합격(Pass), 미만이면 불합격(Fail) 입니다.
+각 그룹의 인원 수를 출력하고, 마지막 줄에 "입력 순서상 첫 번째 합격자" 의 이름을 출력하세요. 합격자가 없으면 "First pass: none" 을 출력하세요.
+
+Pass: {합격자 수}
+Fail: {불합격자 수}
+First pass: {첫 합격자 이름 또는 none}
+
+💡 힌트: struct 안에 vector<string> 을 넣어 각 그룹별로 "이름들" 을 저장하세요. 첫 합격자는 Pass 그룹의 students[0] (있다면).`,
+      constraints: "1 ≤ N ≤ 100, 0 ≤ 점수 ≤ 100, 이름은 영문 소문자 최대 20자",
+      initialCode: `#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+// TODO: struct Result 를 선언하세요 (label, students — 이 그룹에 속한 학생 이름들)
+
+int main() {
+    int n;
+    cin >> n;
+    // TODO: 여기에 코드를 작성하세요
+    return 0;
+}`,
+      testCases: [
+        {
+          stdin: "4\nalice 85\nbob 50\ncarol 72\ndave 40",
+          expectedOutput: "Pass: 2\nFail: 2\nFirst pass: alice",
+        },
+        {
+          stdin: "3\nzara 30\nalex 20\nmike 45",
+          expectedOutput: "Pass: 0\nFail: 3\nFirst pass: none",
+        },
+        {
+          stdin: "5\nann 60\nbob 59\ncoe 99\nddd 100\neve 0",
+          expectedOutput: "Pass: 3\nFail: 2\nFirst pass: ann",
+        },
+      ],
+      hints: [
+        "struct Result { string label; vector<string> students; }; — 한 그룹 = 라벨 + 학생 이름 목록",
+        "Pass, Fail 두 그룹. 점수 >= 60 이면 Pass 에, 아니면 Fail 에 push_back",
+        "First pass: Pass 그룹의 students 가 비어있지 않으면 students[0], 비어있으면 \"none\"",
+      ],
+      solutionCode: `#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+struct Result {
+    string label;
+    vector<string> students;
+};
+
+int main() {
+    int n;
+    cin >> n;
+    vector<Result> results = {{"Pass", {}}, {"Fail", {}}};
+    for (int i = 0; i < n; i++) {
+        string name;
+        int score;
+        cin >> name >> score;
+        if (score >= 60) results[0].students.push_back(name);
+        else results[1].students.push_back(name);
+    }
+    for (int i = 0; i < 2; i++) {
+        cout << results[i].label << ": " << results[i].students.size() << "\\n";
+    }
+    if (!results[0].students.empty()) {
+        cout << "First pass: " << results[0].students[0] << "\\n";
+    } else {
+        cout << "First pass: none" << "\\n";
+    }
+    return 0;
+}`,
+      solutionExplanation:
+        "struct Result 에 라벨(\"Pass\"/\"Fail\")과 vector<string> 학생 이름 목록을 같이 담습니다. 점수 >= 60 기준으로 해당 그룹에 push_back (입력 순서대로) 하면, Pass 그룹의 students[0] 가 자연스럽게 \"입력 순서상 첫 합격자\" 가 됩니다. Pass 그룹이 비어있으면 \"none\" 출력.",
+      en: {
+        title: "Pass/Fail Split",
+        description: `Given N students (name, score), print the count in each group. Pass means score ≥ 60, Fail means score < 60.
+On the last line, print the name of the first student in input order who passed, prefixed with "First pass: ". If nobody passed, print "First pass: none".
+
+Pass: {number who passed}
+Fail: {number who failed}
+First pass: {first passer's name or none}
+
+💡 Hint: Put vector<string> inside a struct so each group can hold its own list of names. The first passer is just students[0] of the Pass group (if it's not empty).`,
+        constraints: "1 ≤ N ≤ 100, 0 ≤ score ≤ 100, names are lowercase English up to 20 characters",
+        hints: [
+          "struct Result { string label; vector<string> students; }; — one group = label + list of names.",
+          "Two groups: Pass and Fail. If score ≥ 60 push_back into Pass, otherwise Fail.",
+          "First pass: if the Pass group's students is non-empty use students[0]; otherwise print \"none\".",
+        ],
+        solutionExplanation: "Bundle the label (\"Pass\"/\"Fail\") and vector<string> of student names in a Result struct. Push each student into the matching group (score ≥ 60 or not) in input order, so the Pass group's students[0] is naturally the first passer. If Pass is empty, print \"none\".",
       },
     },
     {
@@ -493,11 +681,11 @@ int main() {
         else if (s >= 60) cntD++;
         else cntF++;
     }
-    cout << "A: " << cntA << "\n";
-    cout << "B: " << cntB << "\n";
-    cout << "C: " << cntC << "\n";
-    cout << "D: " << cntD << "\n";
-    cout << "F: " << cntF << "\n";
+    cout << "A: " << cntA << "\\n";
+    cout << "B: " << cntB << "\\n";
+    cout << "C: " << cntC << "\\n";
+    cout << "D: " << cntD << "\\n";
+    cout << "F: " << cntF << "\\n";
     int topMin;
     if (cntA > 0) topMin = 90;
     else if (cntB > 0) topMin = 80;
@@ -506,7 +694,7 @@ int main() {
     else topMin = 0;
     for (int i = 0; i < n; i++) {
         if (students[i].score >= topMin) {
-            cout << "Top: " << students[i].name << "\n";
+            cout << "Top: " << students[i].name << "\\n";
             break;
         }
     }
@@ -595,8 +783,8 @@ int main() {
         if (emps[i].salary > emps[topIdx].salary) topIdx = i;
         else if (emps[i].salary == emps[topIdx].salary && emps[i].name < emps[topIdx].name) topIdx = i;
     }
-    cout << "Above avg: " << aboveAvg << "\n";
-    cout << "Top salary: " << emps[topIdx].name << "\n";
+    cout << "Above avg: " << aboveAvg << "\\n";
+    cout << "Top salary: " << emps[topIdx].name << "\\n";
     int d;
     cin >> d;
     vector<string> depts(d);
@@ -614,7 +802,7 @@ int main() {
     for (int i = 0; i < d; i++) {
         int cnt = 0;
         for (int j = 0; j < n; j++) if (emps[j].dept == depts[i]) cnt++;
-        cout << depts[i] << ": " << cnt << "\n";
+        cout << depts[i] << ": " << cnt << "\\n";
     }
     return 0;
 }`,

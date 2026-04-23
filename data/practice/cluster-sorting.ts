@@ -52,7 +52,7 @@ int main() {
         if (i > 0) cout << ' ';
         cout << v[i];
     }
-    cout << "\n";
+    cout << "\\n";
     return 0;
 }`,
       solutionExplanation: "sort(v.begin(), v.end())는 O(N log N)으로 오름차순 정렬합니다. 비교 함수를 생략하면 기본값(less<int>)이 사용됩니다.",
@@ -111,7 +111,7 @@ int main() {
         if (i > 0) cout << ' ';
         cout << v[i];
     }
-    cout << "\n";
+    cout << "\\n";
     return 0;
 }`,
       solutionExplanation: "greater<int>()는 a > b가 true일 때 a를 앞에 놓으므로 내림차순이 됩니다. 람다로 작성하면 [](int a, int b){ return a > b; }와 동일합니다.",
@@ -176,7 +176,7 @@ int main() {
         if (i > 0) cout << ' ';
         cout << v[i];
     }
-    cout << "\n";
+    cout << "\\n";
     return 0;
 }`,
       solutionExplanation: "람다의 반환값은 'a가 b보다 앞에 와야 하면 true'입니다. 절댓값이 다르면 절댓값으로 비교하고, 같으면 원래 값으로 비교해 음수를 앞에 놓습니다.",
@@ -242,7 +242,7 @@ int main() {
         if (i > 0) cout << ' ';
         cout << v[i];
     }
-    cout << "\n";
+    cout << "\\n";
     return 0;
 }`,
       solutionExplanation: "다중 조건 정렬은 첫 번째 조건이 다를 때와 같을 때를 분기합니다. string의 < 연산자는 사전순 비교를 수행합니다.",
@@ -305,7 +305,7 @@ int main() {
         return a.first < b.first;
     });
     for (auto& [name, score] : v)
-        cout << name << " " << score << "\n";
+        cout << name << " " << score << "\\n";
     return 0;
 }`,
       solutionExplanation: "a.second > b.second는 점수가 높은 것을 앞에 놓습니다. 점수가 같으면 이름 알파벳 순(a.first < b.first)으로 결정합니다.",
@@ -362,7 +362,7 @@ int main() {
     vector<int> v(n);
     for (int i = 0; i < n; i++) cin >> v[i];
     sort(v.begin(), v.end());
-    cout << v[k - 1] << "\n";
+    cout << v[k - 1] << "\\n";
     return 0;
 }`,
       solutionExplanation: "정렬 후 v[K-1]이 K번째로 작은 수입니다. nth_element()로 O(N) 시간에 구할 수도 있지만, sort + 인덱스가 더 직관적입니다.",
@@ -421,12 +421,12 @@ int main() {
     for (int i = 0; i < n; i++) cin >> v[i];
     sort(v.begin(), v.end());
     v.erase(unique(v.begin(), v.end()), v.end());
-    cout << v.size() << "\n";
+    cout << v.size() << "\\n";
     for (int i = 0; i < (int)v.size(); i++) {
         if (i > 0) cout << ' ';
         cout << v[i];
     }
-    cout << "\n";
+    cout << "\\n";
     return 0;
 }`,
       solutionExplanation: "sort → unique → erase 패턴은 벡터에서 중복을 제거하는 관용적 방법입니다. unique()는 정렬된 상태에서만 정확히 동작합니다.",
@@ -491,7 +491,7 @@ int main() {
         return a.second < b.second;
     });
     for (auto& [name, age] : v)
-        cout << name << " " << age << "\n";
+        cout << name << " " << age << "\\n";
     return 0;
 }`,
       solutionExplanation: "stable_sort()는 sort()와 동일하지만, 비교값이 같은 원소들의 원래 순서를 보장합니다. O(N log² N) 또는 O(N log N)으로 동작합니다.",
@@ -555,9 +555,9 @@ int main() {
         else
             merged.push_back({l, r});
     }
-    cout << merged.size() << "\n";
+    cout << merged.size() << "\\n";
     for (auto [l, r] : merged)
-        cout << l << " " << r << "\n";
+        cout << l << " " << r << "\\n";
     return 0;
 }`,
       solutionExplanation: "l 기준 정렬 후 선형 순회합니다. 현재 구간의 시작이 마지막 병합 구간 끝 이하면 겹치므로 끝을 확장합니다. 그렇지 않으면 새 구간으로 추가합니다.",
@@ -688,7 +688,7 @@ int main() {
     vector<int> v(n);
     for (int i = 0; i < n; i++) cin >> v[i];
     sort(v.begin(), v.end());
-    cout << v[(n - 1) / 2] << "\n";
+    cout << v[(n - 1) / 2] << "\\n";
     return 0;
 }`,
       solutionExplanation: "sort() 후 인덱스 (n-1)/2가 중앙값입니다. 홀수면 정확히 중간, 짝수면 가운데 두 값 중 작은 쪽이 선택됩니다. 정렬 후 인덱싱은 USACO Bronze 단골 패턴입니다.",
@@ -751,7 +751,7 @@ int main() {
         if (i > 0) cout << ' ';
         cout << v[i].second;
     }
-    cout << "\n";
+    cout << "\\n";
     return 0;
 }`,
       solutionExplanation: "pair<값, 원래인덱스>로 묶어서 정렬합니다. pair의 기본 비교는 first 우선, 같으면 second 비교이므로 값이 같을 때 원래 인덱스가 작은 것이 앞에 옵니다. USACO에서 정렬 후 원래 위치를 추적할 때 쓰는 핵심 패턴입니다.",
@@ -818,7 +818,7 @@ int main() {
             end = e;
         }
     }
-    cout << count << "\n";
+    cout << count << "\\n";
     return 0;
 }`,
       solutionExplanation: "활동 선택 문제의 그리디 해법: 끝 시간이 빠른 회의를 먼저 선택하면 최대 회의 수가 보장됩니다. 끝 시간이 같으면 시작 시간이 빠른 것을 우선합니다.",
@@ -951,7 +951,7 @@ int main() {
     for (auto& s : v) result += s;
     // 앞의 0 제거 (전부 0인 경우 "0" 출력)
     size_t start = result.find_first_not_of('0');
-    cout << (start == string::npos ? "0" : result.substr(start)) << "\n";
+    cout << (start == string::npos ? "0" : result.substr(start)) << "\\n";
     return 0;
 }`,
       solutionExplanation: "comparator a+b > b+a는 이어 붙였을 때 더 큰 문자열을 만드는 순서를 정합니다. 예: '3'+'30'='330' vs '30'+'3'='303', 330>303이므로 '3'이 앞에 옵니다.",

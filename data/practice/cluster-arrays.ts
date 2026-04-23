@@ -191,8 +191,8 @@ int main() {
     for (int i = 0; i < n; i++) cin >> v[i];
     int sum = 0;
     for (int i = 0; i < n; i++) sum += v[i];
-    cout << sum << "\n";
-    cout << sum / n << "\n";
+    cout << sum << "\\n";
+    cout << sum / n << "\\n";
     return 0;
 }`,
       solutionExplanation: "합계를 구한 후 sum / n으로 평균을 계산합니다. int끼리의 나눗셈은 소수점 이하가 자동으로 버려집니다.",
