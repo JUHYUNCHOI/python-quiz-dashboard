@@ -77,50 +77,50 @@ function translateCodeComments(code: string | undefined): string | undefined {
   if (!code) return code
   return code
     // ── struct declarations ──────────────────────────────────────────
-    .replace(/\/\/ struct (\S+)를 선언하세요 \(([^)]+)\)/g, "// Declare struct $1 ($2)")
-    .replace(/\/\/ struct (\S+)를 선언하세요/g, "// Declare struct $1")
-    .replace(/\/\/ struct를 선언하세요/g, "// Declare the struct")
+    .replace(/\/\/ struct (\S+)를 선언하세요 \(([^)]+)\)/g, "// TODO: Declare struct $1 ($2)")
+    .replace(/\/\/ struct (\S+)를 선언하세요/g, "// TODO: Declare struct $1")
+    .replace(/\/\/ struct를 선언하세요/g, "// TODO: Declare the struct")
 
     // ── function declarations ────────────────────────────────────────
-    .replace(/\/\/ (.+?) 함수를 여기에 작성하세요/g, "// Write the $1 function here")
-    .replace(/\/\/ (.+?) 함수를 작성하세요/g, "// Write the $1 function")
-    .replace(/\/\/ 오버로딩: (.+?)를 두 가지 버전으로 작성하세요/g, "// Overloading: Write two versions of the $1 function")
+    .replace(/\/\/ (.+?) 함수를 여기에 작성하세요/g, "// TODO: Write the $1 function here")
+    .replace(/\/\/ (.+?) 함수를 작성하세요/g, "// TODO: Write the $1 function")
+    .replace(/\/\/ 오버로딩: (.+?)를 두 가지 버전으로 작성하세요/g, "// TODO (overloading): Write two versions of the $1 function")
 
     // ── cin input ────────────────────────────────────────────────────
-    .replace(/\/\/ cin으로 (.+?)를 입력받으세요/g, "// Read $1 with cin")
-    .replace(/\/\/ cin으로 (.+?)을 입력받으세요/g, "// Read $1 with cin")
+    .replace(/\/\/ cin으로 (.+?)를 입력받으세요/g, "// TODO: Read $1 with cin")
+    .replace(/\/\/ cin으로 (.+?)을 입력받으세요/g, "// TODO: Read $1 with cin")
 
     // ── return values (specific Korean math terms first) ────────────
-    .replace(/\/\/ 합을 반환하세요/g, "// Return the sum")
-    .replace(/\/\/ 곱을 반환하세요/g, "// Return the product")
-    .replace(/\/\/ 차를 반환하세요/g, "// Return the difference")
-    .replace(/\/\/ 몫을 반환하세요/g, "// Return the quotient")
-    .replace(/\/\/ 나머지를 반환하세요/g, "// Return the remainder")
-    .replace(/\/\/ 최솟값을 반환하세요/g, "// Return the minimum")
-    .replace(/\/\/ 최댓값을 반환하세요/g, "// Return the maximum")
-    .replace(/\/\/ 결과를 반환하세요/g, "// Return the result")
+    .replace(/\/\/ 합을 반환하세요/g, "// TODO: Return the sum")
+    .replace(/\/\/ 곱을 반환하세요/g, "// TODO: Return the product")
+    .replace(/\/\/ 차를 반환하세요/g, "// TODO: Return the difference")
+    .replace(/\/\/ 몫을 반환하세요/g, "// TODO: Return the quotient")
+    .replace(/\/\/ 나머지를 반환하세요/g, "// TODO: Return the remainder")
+    .replace(/\/\/ 최솟값을 반환하세요/g, "// TODO: Return the minimum")
+    .replace(/\/\/ 최댓값을 반환하세요/g, "// TODO: Return the maximum")
+    .replace(/\/\/ 결과를 반환하세요/g, "// TODO: Return the result")
     // ── return values (generic — code expressions stay as-is) ────────
-    .replace(/\/\/ (.+?) 를 반환하세요/g, "// Return $1")
-    .replace(/\/\/ (.+?)를 반환하세요/g, "// Return $1")
-    .replace(/\/\/ (.+?)을 반환하세요/g, "// Return $1")
+    .replace(/\/\/ (.+?) 를 반환하세요/g, "// TODO: Return $1")
+    .replace(/\/\/ (.+?)를 반환하세요/g, "// TODO: Return $1")
+    .replace(/\/\/ (.+?)을 반환하세요/g, "// TODO: Return $1")
 
     // ── "write your code here" variants ─────────────────────────────
-    .replace(/\/\/ 여기에 코드를 작성하세요 \(struct를 사용하면 편리합니다\)/g, "// Write your code here (using a struct is convenient)")
-    .replace(/\/\/ 여기에 코드를 작성하세요/g, "// Write your code here")
-    .replace(/\/\/ 여기에 출력 코드를 작성하세요/g, "// Write your output code here")
-    .replace(/# 여기에 코드를 작성하세요 \(버블 정렬 직접 구현\)/g, "# Write your code here (implement bubble sort manually)")
-    .replace(/# 여기에 코드를 작성하세요/g, "# Write your code here")
-    .replace(/# 여기에 전투 루프를 작성하세요/g, "# Write the battle loop here")
+    .replace(/\/\/ 여기에 코드를 작성하세요 \(struct를 사용하면 편리합니다\)/g, "// TODO: Write your code here (using a struct is convenient)")
+    .replace(/\/\/ 여기에 코드를 작성하세요/g, "// TODO: Write your code here")
+    .replace(/\/\/ 여기에 출력 코드를 작성하세요/g, "// TODO: Write your output code here")
+    .replace(/# 여기에 코드를 작성하세요 \(버블 정렬 직접 구현\)/g, "# TODO: Write your code here (implement bubble sort manually)")
+    .replace(/# 여기에 코드를 작성하세요/g, "# TODO: Write your code here")
+    .replace(/# 여기에 전투 루프를 작성하세요/g, "# TODO: Write the battle loop here")
 
     // ── switch/case placeholders ─────────────────────────────────────
-    .replace(/\/\/ 각 연산자 case를 작성하세요/g, "// Write each operator case here")
-    .replace(/\/\/ 각 case를 채우세요/g, "// Fill in each case")
-    .replace(/\/\/ 나머지 계절을 채우세요/g, "// Fill in the remaining seasons")
-    .replace(/\/\/ 나머지 (출력|를 채우세요|를 작성하세요)/g, "// Fill in the rest")
+    .replace(/\/\/ 각 연산자 case를 작성하세요/g, "// TODO: Write each operator case here")
+    .replace(/\/\/ 각 case를 채우세요/g, "// TODO: Fill in each case")
+    .replace(/\/\/ 나머지 계절을 채우세요/g, "// TODO: Fill in the remaining seasons")
+    .replace(/\/\/ 나머지 (출력|를 채우세요|를 작성하세요)/g, "// TODO: Fill in the rest")
 
     // ── Python __setattr__ / count patterns ─────────────────────────
-    .replace(/# __init__에서는 object\.__setattr__을 사용하세요/g, "# Use object.__setattr__ in __init__")
-    .replace(/# count를 (\S+) 증가시키고 반환하세요/g, "# Increment count by $1 and return")
+    .replace(/# __init__에서는 object\.__setattr__을 사용하세요/g, "# TODO: Use object.__setattr__ in __init__")
+    .replace(/# count를 (\S+) 증가시키고 반환하세요/g, "# TODO: Increment count by $1 and return")
 }
 
 /**
