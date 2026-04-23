@@ -87,23 +87,10 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<int> v;
-    for (int i = 0; i < n; i++) {
-        int x;
-        cin >> x;
-        if (x > 0) {
-            // push_back 사용
-        } else {
-            // pop_back 사용 (비어있지 않을 때만)
-        }
-    }
-    for (int i = 0; i < (int)v.size(); i++) {
-        if (i) cout << " ";
-        cout << v[i];
-    }
-    cout << "\\n";
+    // 1) int n 을 cin 으로 입력받기
+    // 2) vector<int> v 선언 (빈 벡터)
+    // 3) n 번 반복하며 x 입력: 양수면 push_back, 음수면 pop_back (비어있지 않을 때만)
+    // 4) v 의 원소를 공백으로 구분해 출력
     return 0;
 }`,
       testCases: [
@@ -334,11 +321,9 @@ int main() {
 using namespace std;
 
 int main() {
-    int n, t;
-    cin >> n >> t;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    // 여기에 코드를 작성하세요
+    // 1) int n, t 를 cin 으로 입력받기
+    // 2) 크기 n 의 벡터 v 선언하고 n 개의 원소 읽기
+    // 3) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [
@@ -446,11 +431,9 @@ int main() {
 using namespace std;
 
 int main() {
-    int n, k;
-    cin >> n >> k;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    // 여기에 코드를 작성하세요
+    // 1) int n, k 를 cin 으로 입력받기
+    // 2) 크기 n 의 벡터 v 선언하고 n 개의 원소 읽기
+    // 3) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [
@@ -610,11 +593,9 @@ int main() {
 using namespace std;
 
 int main() {
-    int n, k;
-    cin >> n >> k;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    // 여기에 코드를 작성하세요
+    // 1) int n, k 를 cin 으로 입력받기
+    // 2) 크기 n 의 벡터 v 선언하고 n 개의 원소 읽기
+    // 3) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [
@@ -781,12 +762,9 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<int> a(n), b(n);
-    for (int i = 0; i < n; i++) cin >> a[i];
-    for (int i = 0; i < n; i++) cin >> b[i];
-    // 여기에 코드를 작성하세요
+    // 1) int n 을 cin 으로 입력받기
+    // 2) 크기 n 의 벡터 a, b 선언하고 각각 n 개의 원소 읽기 (a 먼저, b 다음)
+    // 3) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [
@@ -892,11 +870,9 @@ int main() {
 using namespace std;
 
 int main() {
-    int n, k;
-    cin >> n >> k;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    // 여기에 코드를 작성하세요
+    // 1) int n, k 를 cin 으로 입력받기
+    // 2) 크기 n 의 벡터 v 선언하고 n 개의 원소 읽기
+    // 3) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [
@@ -1184,11 +1160,9 @@ int main() {
 using namespace std;
 
 int main() {
-    int n, k;
-    cin >> n >> k;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    // 여기에 코드를 작성하세요
+    // 1) int n, k 를 cin 으로 입력받기
+    // 2) 크기 n 의 벡터 v 선언하고 n 개의 원소 읽기
+    // 3) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [
