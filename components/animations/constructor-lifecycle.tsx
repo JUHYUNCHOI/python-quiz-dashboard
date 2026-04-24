@@ -150,7 +150,19 @@ export function ConstructorLifecycle({ lang = "ko" }: Props) {
   const [mode, setMode] = useState<Mode>("after")
   const [step, setStep] = useState(0)
 
-  const stepLabels = isEn ? ["Call", "Birth", "Final"] : ["호출", "탄생", "완료"]
+  // 탭별로 "각 단계에서 실제로 뭐가 일어나는지" 를 라벨에 담아서 명확하게
+  const stepLabelsByMode: Record<Mode, string[]> = isEn
+    ? {
+        none: ["Create object", "Members born w/ garbage", "Stuck forever"],
+        after: ["Call constructor", "Members born empty", "Body writes values"],
+        while: ["Call constructor", "Born with values", "(no step 2)"],
+      }
+    : {
+        none: ["객체 만들기", "멤버 탄생 (쓰레기값)", "영원히 이 상태"],
+        after: ["생성자 호출", "멤버 탄생 (빈값)", "바디에서 값 덮어씀"],
+        while: ["생성자 호출", "원하는 값으로 바로 탄생", "(2단계 없음)"],
+      }
+  const stepLabels = stepLabelsByMode[mode]
 
   // ─────────────────────────────────────────────────────────────
   // "없음" 모드 — 생성자 없을 때
@@ -260,20 +272,20 @@ export function ConstructorLifecycle({ lang = "ko" }: Props) {
     },
   ]
 
-  const noneCode = `// 생성자 없음
-class BankAccount {
+  const noneCode = `class BankAccount {
     string owner;
     double balance;
+    // 생성자 없음
 };
 
-BankAccount acc;  // ← 그냥 만듦`
+BankAccount acc;  // 생성자 없이 그냥 만듦`
 
-  const afterCode = `BankAccount(name, initial) {
-    owner = name;     // 만든 다음 값 넣기
+  const afterCode = `BankAccount(string name, double initial) {
+    owner = name;       // 만든 다음 값 넣기
     balance = initial;
 }`
 
-  const whileCode = `BankAccount(name, initial)
+  const whileCode = `BankAccount(string name, double initial)
     : owner(name), balance(initial) {}`
 
   const summaryWith = isEn ? (
