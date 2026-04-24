@@ -120,7 +120,7 @@ function Column({
         </span>
       </div>
 
-      <div className="rounded-lg bg-slate-800/70 border border-slate-700 px-3 py-2 text-[12px] leading-relaxed font-mono overflow-x-auto">
+      <div className="rounded-lg bg-slate-800/70 border border-slate-700 px-3 py-2 text-[12px] leading-relaxed font-mono overflow-x-auto whitespace-pre">
         {highlightCpp(code, true)}
       </div>
 
