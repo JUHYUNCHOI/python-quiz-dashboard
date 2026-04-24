@@ -1700,11 +1700,11 @@ function TypewriterComment({ text, icon, stepKey }: { text: string; icon?: strin
   const isDone = displayed.length >= text.length
 
   return (
-    <div className="px-5 pb-5 font-mono text-xs flex items-center gap-1.5 text-emerald-400/80">
-      <span className="opacity-50 select-none">{"//"}</span>
-      {icon && <span className="text-sm leading-none">{icon}</span>}
+    <div className="px-5 pb-5 font-mono text-sm md:text-base flex items-center gap-2 text-white font-medium">
+      <span className="opacity-60 select-none">{"//"}</span>
+      {icon && <span className="text-base md:text-lg leading-none">{icon}</span>}
       <span>{displayed}</span>
-      {!isDone && <span className="inline-block w-px h-3.5 bg-emerald-400/80 animate-pulse ml-px" />}
+      {!isDone && <span className="inline-block w-px h-4 bg-white/80 animate-pulse ml-px" />}
     </div>
   )
 }
