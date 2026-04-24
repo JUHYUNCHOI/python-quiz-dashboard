@@ -109,6 +109,8 @@ class Car {
 
 No. A class is a **blueprint**. One more step is needed to actually create a car.
 
+![class = blueprint, object = real thing](/images/cpp/class-blueprint.svg)
+
 Think of an RPG game — seeing the "Flame Sword" description in a shop doesn't make it yours. You have to **actually buy it or pick it up** for it to appear in your inventory.
 
 | | Game | Programming |
