@@ -7,7 +7,7 @@ import { highlightCpp } from "@/components/ui/code-block"
 
 // ──────────────────────────────────────────────────────────────
 // ConstructorLifecycle
-// 3-way 탭: 생성자 없음 / 만들고 넣기 / 만들면서 넣기
+// 3-way 탭: 생성자 없음 / Python 스타일 (바디 대입) / C++ 표준 (이니셜라이저 리스트)
 // 한 번에 하나만 표시 (집중도). 각 방식에서 멤버가 언제 값을 갖는지 시각화.
 // ──────────────────────────────────────────────────────────────
 
@@ -290,17 +290,17 @@ BankAccount acc;  // 생성자 없이 그냥 만듦`
 
   const summaryWith = isEn ? (
     <>
-      <span className="text-amber-300 font-semibold">Fill after creating</span> does 2 things
-      (born empty → write values). <span className="text-emerald-300 font-semibold">Fill while creating</span> does
-      1 thing (born with values). That's why <code className="text-emerald-300">const</code> and reference
-      members — which can't be "overwritten later" — only work with the second way.
+      <span className="text-amber-300 font-semibold">Python-style</span> (body assignment) does 2 things
+      (born empty → write values). <span className="text-emerald-300 font-semibold">C++ standard</span> (initializer list)
+      does 1 thing (born with values). That's why <code className="text-emerald-300">const</code> and reference
+      members — which can't be "overwritten later" — only work with the C++ standard way.
     </>
   ) : (
     <>
-      <span className="text-amber-300 font-semibold">만들고 넣기</span> 는 일이 2번 일어나요
-      (빈 상태로 태어남 → 값 덮어쓰기). <span className="text-emerald-300 font-semibold">만들면서 넣기</span> 는
-      한 번이면 끝 (태어날 때 이미 값이 있음). 그래서 "나중에 바꿀 수 없는"{" "}
-      <code className="text-emerald-300">const</code> 와 reference 멤버는 두 번째 방식만 가능해요.
+      <span className="text-amber-300 font-semibold">Python 스타일</span> (바디 대입) 은 일이 2번 일어나요
+      (빈 상태로 태어남 → 값 덮어쓰기). <span className="text-emerald-300 font-semibold">C++ 표준</span> (이니셜라이저
+      리스트) 은 한 번이면 끝 (태어날 때 이미 값이 있음). 그래서 "나중에 바꿀 수 없는"{" "}
+      <code className="text-emerald-300">const</code> 와 reference 멤버는 C++ 표준 방식만 가능해요.
     </>
   )
 
@@ -329,8 +329,8 @@ BankAccount acc;  // 생성자 없이 그냥 만듦`
             const label = m === "none"
               ? (isEn ? "No constructor" : "생성자 없음")
               : m === "after"
-                ? (isEn ? "Fill after" : "만들고 넣기")
-                : (isEn ? "Fill while" : "만들면서 넣기")
+                ? (isEn ? "Python-style" : "Python 스타일")
+                : (isEn ? "C++ standard ⭐" : "C++ 표준 ⭐")
             return (
               <button
                 key={m}
@@ -395,8 +395,8 @@ BankAccount acc;  // 생성자 없이 그냥 만듦`
             exit={{ opacity: 0 }}
           >
             <Column
-              title={isEn ? "Fill after creating" : "만들고 넣기"}
-              subtitle={isEn ? "= assignment in body (2 steps)" : "= 로 대입 — 객체 먼저 만들고 { } 안에서 값 넣기 (2단계)"}
+              title={isEn ? "Python-style (body assignment)" : "Python 스타일 — 바디 대입"}
+              subtitle={isEn ? "= assignment in body · 2 steps (familiar to Python learners)" : "= 로 { } 안에서 값 대입 · 2단계 (Python 의 self.x = y 와 비슷)"}
               stepCountLabel={isEn ? "2 steps" : "2단계"}
               code={afterCode}
               fields={afterByStep[step].fields}
@@ -413,8 +413,8 @@ BankAccount acc;  // 생성자 없이 그냥 만듦`
             exit={{ opacity: 0 }}
           >
             <Column
-              title={isEn ? "Fill while creating" : "만들면서 넣기"}
-              subtitle={isEn ? ": initializer list (1 step)" : ": 이니셜라이저 리스트 — 만들면서 값이 함께 들어감 (1단계)"}
+              title={isEn ? "C++ standard (initializer list) ⭐" : "C++ 표준 — 이니셜라이저 리스트 ⭐"}
+              subtitle={isEn ? ": member(value) list · 1 step (the style real C++ code uses)" : ": 뒤에 멤버(값) 형식 · 1단계 (실무 C++ 이 주로 쓰는 방식)"}
               stepCountLabel={isEn ? "1 step" : "1단계"}
               code={whileCode}
               fields={whileByStep[step].fields}
