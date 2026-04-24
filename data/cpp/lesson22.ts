@@ -402,24 +402,140 @@ int main() {
       emoji: "🔧",
       steps: [
         {
+          id: "ch3-constructor-anim",
+          type: "interactive",
+          title: "🎬 생성자 있을 때 vs 없을 때",
+          description: "탭을 넘기면서 생성자가 뭘 하는지 봐요.",
+          component: "constructorVisualizer",
+        },
+        {
+          id: "ch3-garbage-p1",
+          type: "predict" as const,
+          title: "🔍 함수 안의 int 는 어떤 값?",
+          code: `int main() {
+    int a;        // 초기화 안 함
+    cout << a;
+    return 0;
+}`,
+          options: ["0 이 출력", "5 가 출력", "예측 불가 값 (쓰레기값)", "컴파일 에러"],
+          answer: 2,
+          explanation: "함수 안의 **지역 변수** 는 메모리에 남아있던 랜덤 바이트를 그대로 가져요 — 쓰레기값. 매번 실행할 때마다 다름. C++ 은 속도를 위해 자동 초기화를 생략해요."
+        },
+        {
+          id: "ch3-garbage-p2",
+          type: "predict" as const,
+          title: "🔍 전역 int 는?",
+          code: `int a;   // 전역 변수 (main 바깥)
+
+int main() {
+    cout << a;
+    return 0;
+}`,
+          options: ["0 출력", "쓰레기값", "컴파일 에러", "런타임 에러"],
+          answer: 0,
+          explanation: "**전역** 과 **static** 변수는 자동으로 0 으로 초기화돼요. 쓰레기값 문제는 지역 변수만. \`static int a;\` 도 0 이에요!"
+        },
+        {
+          id: "ch3-garbage-p3",
+          type: "predict" as const,
+          title: "🔍 `int a{};` — 중괄호는 뭐?",
+          code: `int main() {
+    int a{};      // 중괄호 초기화!
+    cout << a;
+    return 0;
+}`,
+          options: ["0 출력", "쓰레기값", "에러 (초기값 안 줌)", "1 출력"],
+          answer: 0,
+          explanation: "빈 중괄호 `{}` 는 **값 초기화 (value-initialization)** 를 발동 — int 는 무조건 0. 보통 `int a = 0;` 으로 쓰지만 `int a{};` 도 0 보장."
+        },
+        {
+          id: "ch3-garbage-p4",
+          type: "predict" as const,
+          title: "🔍 class 멤버 int 는?",
+          code: `class Box {
+public:
+    int count;   // 초기화 안 함
+};
+
+int main() {
+    Box b;
+    cout << b.count;
+    return 0;
+}`,
+          options: ["0 출력", "쓰레기값", "컴파일 에러", "\"\" 출력"],
+          answer: 1,
+          explanation: "생성자 없으면 **기본 타입 멤버** (int, double, char, bool) 는 지역 변수처럼 — 쓰레기값. 이게 바로 우리가 생성자가 필요한 이유예요!"
+        },
+        {
+          id: "ch3-garbage-p5",
+          type: "predict" as const,
+          title: "🔍 string / vector 멤버는?",
+          code: `class Box {
+public:
+    string label;        // 초기화 안 함
+    vector<int> items;   // 초기화 안 함
+};
+
+int main() {
+    Box b;
+    cout << b.label.length() << " "
+         << b.items.size();
+    return 0;
+}`,
+          options: ["쓰레기값 두 개", "0 0", "에러", "\"\" 0"],
+          answer: 1,
+          explanation: "**클래스 타입** (string, vector, map 등) 은 자체 기본 생성자가 있어서 자동 초기화돼요. string 은 빈 문자열 (`\"\"`, 길이 0), vector 는 빈 벡터 (size 0). 쓰레기값 없음!"
+        },
+        {
+          id: "ch3-garbage-summary",
+          type: "explain",
+          title: "📋 쓰레기값 — 정리표",
+          layout: {
+            left: `**기본 타입** (int, double, char, bool, 포인터)
+
+| 어디에 있나 | 초기값 |
+|---|---|
+| 함수 안 (지역) | 🎲 쓰레기값 |
+| 함수 밖 (전역 / static) | ✅ 0 |
+| class 멤버 (생성자 없음) | 🎲 쓰레기값 |
+| \`int a{};\` (중괄호) | ✅ 0 |
+
+**클래스 타입** (string, vector, map, ...)
+→ 자체 기본 생성자 있어서 **항상 비어있게** 시작 (쓰레기값 걱정 없음)
+
+**결론:** 기본 타입 멤버가 있는 class 는 **생성자가 반드시 필요해요**. 그게 바로 다음 단계.`,
+            right: `\`\`\`cpp
+// 초기값 한눈에 보는 치트시트
+
+int a;              // 🎲 쓰레기값
+int b{};            // ✅ 0
+int c = 0;          // ✅ 0
+static int d;       // ✅ 0 (static)
+
+string s;           // ✅ ""
+vector<int> v;      // ✅ []
+
+class Box {
+    int count;      // 🎲 쓰레기값
+    string name;    // ✅ ""
+};
+
+Box b;
+// b.count  → 쓰레기값
+// b.name   → ""
+\`\`\``
+          },
+        },
+        {
           id: "ch3-constructor",
           type: "explain",
           title: "🔧 생성자 — 객체가 태어날 때 자동 호출!",
           component: "cppConstructorBuilder",
-          content: `앞 챕터에서 말한 **"객체 만들 때 한 번에 값 정하는 방법"** — 그게 바로 **생성자(constructor)** 예요.
+          content: `사람은 태어나는 순간 이미 이름이랑 성별이 있잖아요. 객체도 태어나는 순간부터 세팅돼 있어야 하지 않을까요?
 
-사람도 태어나는 순간 이름이 있고 성별이 있잖아요. 객체도 생기는 순간 처음부터 세팅되어 있어야 자연스럽죠.
+그게 바로 **생성자** — **객체가 만들어지는 순간 자동으로 호출되는 함수**. 생성자 안에서 멤버를 초기화하면 쓰레기값 걱정 끝.
 
-**객체가 만들어지는 순간 자동으로 호출되는 함수** — 이게 생성자예요.
-
-생성자가 없으면 멤버 변수들이 **쓰레기 값**으로 시작해요:
-
-\`\`\`cpp
-BankAccount acc;
-// acc.balance가 -398475.23 같은 이상한 값일 수 있어요! 😱
-\`\`\`
-
-생성자를 하나씩 조립해봐요:`,
+생성자를 한 단계씩 조립해봐요:`,
         },
         {
           id: "ch3-constructor-usage",
@@ -435,20 +551,20 @@ public:
     BankAccount(string name, double initial) {  // 생성자!
         owner = name;
         if (initial >= 0) balance = initial;
-        else              balance = 0;   // 음수 입금 차단
+        else              balance = 0;   // 음수 입금은 막기
     }
 };
 
-BankAccount acc("김철수", 1000);  // 생성자 자동 호출!
+BankAccount acc("Emma", 1000);  // 생성자 자동 호출!
 \`\`\`
 
-**Python과 비교:**
+**Python 과 비교:**
 
-| | Python 🐍 | C++ ⚡ |
+|  | Python 🐍 | C++ ⚡ |
 |---|---|---|
 | 생성자 이름 | \`__init__\` | **클래스 이름과 동일** |
-| 첫 번째 매개변수 | \`self\` 필수 | 없음 |
-| 리턴 타입 | 없음 | **없음 (void도 아님!)** |`,
+| 첫 매개변수 | \`self\` 필수 | 없음 |
+| 리턴 타입 | 없음 | **없음 (void 도 아님!)** |`,
         },
         {
           id: "ch3-pred1",
@@ -468,24 +584,24 @@ public:
         balance = initial;
     }
     void info() {
-        cout << owner << ": " << balance << "원";
+        cout << owner << ": $" << balance;
     }
 };
 
 int main() {
-    BankAccount acc("김철수", 5000);
+    BankAccount acc("Emma", 5000);
     acc.info();
     return 0;
 }`,
-          options: ["김철수: 5000원", "에러", "0원", "김철수"],
+          options: ["Emma: $5000", "에러", "$0", "Emma"],
           answer: 0,
-          explanation: "BankAccount acc(\"김철수\", 5000)에서 생성자가 자동 호출돼요! owner = \"김철수\", balance = 5000으로 초기화되고 info()가 출력해요."
+          explanation: "BankAccount acc(\"Emma\", 5000) 에서 생성자가 자동 호출! owner = \"Emma\", balance = 5000 으로 초기화되고 info() 가 출력해요."
         },
         {
           id: "ch3-fb1",
           type: "fillblank" as const,
           title: "생성자 완성하기!",
-          content: "생성자 안에서 멤버 변수(왼쪽)에 매개변수(오른쪽) 값을 저장해요.",
+          content: "생성자 안에서 매개변수 값(오른쪽) 을 멤버 변수(왼쪽) 에 저장해요.",
           code: `class Timer {
 private:
     int seconds;
@@ -499,13 +615,10 @@ public:
             { id: 0, answer: "seconds", options: ["seconds", "s", "Timer", "int"] },
             { id: 1, answer: "s", options: ["s", "seconds", "0", "get()"] }
           ],
-          explanation: "`seconds = s` — 왼쪽은 멤버 변수(seconds), 오른쪽은 매개변수(s)예요. '멤버에 전달받은 값을 저장한다'고 기억하면 돼요!"
+          explanation: "`seconds = s` — 왼쪽은 멤버 변수(seconds), 오른쪽은 매개변수(s). '받은 값을 멤버에 저장해' 라는 뜻이에요!"
         },
       ]
     },
-    // ============================================
-    // Chapter 4: getter/setter + 종합 실습
-    // ============================================
     {
       id: "ch4",
       title: "getter/setter + 실습",
