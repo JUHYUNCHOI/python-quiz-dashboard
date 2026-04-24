@@ -15,102 +15,77 @@ export const cppLesson22Data: LessonData = {
     // ============================================
     {
       id: "ch1",
-      title: "class 기초",
+      title: "Class 기본",
       emoji: "🐕",
       steps: [
         {
           id: "ch1-intro",
           type: "explain",
-          title: "🚗 class란?",
-          content: `\`int\`로 정수, \`string\`으로 문자열을 만들 수 있어요.
-그럼 **자동차**는? C++에는 자동차 타입이 없어요. **직접 만들어야 해요.**
+          title: "🚗 class 란?",
+          content: `\`int\` 로 정수, \`string\` 으로 문자열을 만들 수 있어요.
+그럼 **자동차**는? C++ 에는 자동차 타입이 없어요. **직접 만들어야 해요.**
 
-그런데 자동차를 만든다고 생각하면 "타이어, 엔진, 연료량, 색깔, 속도, 문 개수..." 끝이 없어요.
-친구한테 김밥 재료 물어봤더니 밥, 단무지, 소고기, 계란은 다 얘기하면서 **김**을 빠뜨린 것처럼 — 이것저것 다 생각하다 보면 정작 핵심을 놓쳐요.
+근데 자동차에 뭐가 들어가는지 생각해보면 — 바퀴, 엔진, 연료, 색깔, 속도, 문... 끝이 없어요.
+친구한테 김밥 재료 말해보라고 하면 밥, 오이, 단무지, 햄... 하다가 정작 **김** 을 빠뜨리는 것처럼요. 다 떠올리려 하면 제일 중요한 걸 놓쳐요.
 
-그래서 딱 두 가지만 물어봐요:
+그럼 딱 두 가지만 물어봐요:
 
-**🧠 무엇을 기억해야 할까?**
-→ C++에서는 **멤버변수(member variable)**
+**🧠 뭘 기억해야 해?**
+→ C++ 에선: **멤버 변수**
 
-**⚙️ 무엇을 할 수 있어야 할까?**
-→ C++에서는 **멤버함수(member function)**
+**⚙️ 뭘 할 줄 알아야 해?**
+→ C++ 에선: **멤버 함수**
 
-이렇게 두 가지를 묶어 정의하는 것 — 그게 바로 **class**예요.`,
+이 둘을 한 정의로 묶는 것 — 이게 바로 **class** 예요.`,
         },
         {
-          id: "ch1-build",
+          id: "ch1-build-skeleton",
           type: "explain",
-          title: "🚗 class는 이렇게 생겼어요",
-          component: "cppClassBasicBuilder",
-          content: `앞에서 **"멤버를 묶어 정의하는 게 class"** 라고 했죠.
+          title: "🧱 class 는 이렇게 생겼어요",
+          content: `class 는 이렇게 생겼어요:
 
-그럼 그 **"묶는 뼈대"** 자체는 어떻게 생겼을까요? 멤버를 넣기 전에, 바깥 껍데기부터 **한 단계씩 쌓아가며** 볼게요.
+\`\`\`
+class 이름 {
+    기억할 것들...   // 멤버 변수
 
-아래 시뮬레이터의 **"다음"** 버튼을 눌러 직접 조립해봐요 👇
-
-1. \`class\` **키워드**로 시작
-2. **이름** — 관례상 **대문자**로 시작 (Car, Dog, Student...)
-3. \`{ }\` **중괄호**로 감싸기 — 안쪽에 멤버가 들어가요
-4. 마지막에 \`;\` **세미콜론** — C++만의 규칙, 빠뜨리면 에러!
-
-이게 class의 뼈대예요. 안쪽에 들어가는 **멤버**는 뭘 쓸지 다음 페이지에서 봐요.`,
-        },
-        {
-          id: "ch1-build-plan",
-          type: "explain",
-          title: "🧠 안에 뭘 넣을지 정해볼까요?",
-          content: `이제 뼈대 안쪽에 들어갈 **멤버**를 정해볼 차례예요. 자동차로 생각해볼게요.
-
-일단 **기억해야 할 것**부터 — 달리려면 **속도**는 있어야겠죠. 어떤 차인지 알게 **색깔**도 넣어볼게요.
-
-**해야 할 것**은 — 앞으로 달리는 기능, 그리고 지금 상태를 확인하는 기능 정도로 시작해봐요.
-
-물론 이건 제가 생각한 것 중 하나예요. 만들다 보면 더 필요한 게 생길 수도 있고, 필요 없는 게 빠질 수도 있어요.
-
-다음 페이지에서 코드로 써볼게요.`,
-        },
-        {
-          id: "ch1-build-members",
-          type: "explain",
-          title: "💾 멤버변수부터 써볼게요",
-          content: `먼저 **멤버변수** — 기억해야 할 것들이에요:
-
-\`\`\`cpp
-class Car {
-    double speed;   // 속도 → 소수점도 가능하게 double로
-    string color;   // 색깔 → 텍스트니까 string으로
+    할 줄 아는 것들... // 멤버 함수
 };
 \`\`\`
 
-속도는 소수점이 필요할 수 있으니 \`double\`, 색깔은 텍스트니까 \`string\`으로 선언했어요.
-
-기억해야 할 건 챙겼으니, 이제 **할 수 있는 것** — 멤버함수를 붙여볼게요.`,
+\`class\` 키워드로 시작하고, 이름 쓰고, 중괄호로 감싸요.
+**멤버 변수** 는 위에, **멤버 함수** 는 아래에.`,
         },
         {
-          id: "ch1-build-methods",
+          id: "ch1-build-design",
           type: "explain",
-          title: "⚙️ 멤버함수 추가하기",
-          content: `이제 **멤버함수** — 해야 할 것들을 \`};\` **앞에** 넣어볼게요:
+          title: "🚗 Car class 설계하기",
+          content: `코드 짜기 전에, Car 에 뭐가 필요한지 정해봐요.
 
-\`\`\`cpp
-class Car {
-    double speed;
-    string color;
+**기억할 것** 으로는 — 움직이려면 **속도** 가 필요하고, 자동차끼리 구분하려면 **색깔** 도 있어야겠죠.
 
-    void forward() {
-        speed += 10;   // 앞으로 가면 속도가 커지겠죠?
-    }
-    void info() {      // 저는 임의로 정보를 출력하게 만들게요
-        cout << color << " 자동차, 속도: " << speed << endl;
-    }
-};
-\`\`\`
+**할 줄 아는 것** 으로는 — 앞으로 가는 함수, 그리고 지금 상태 확인하는 함수 정도면 시작하기 괜찮겠어요.
 
-> 🐍 **Python에서 오셨나요?** Python에서는 \`self.speed\`처럼 \`self\`가 필요했는데, C++에서는 그냥 \`speed\`로 바로 써요.
+이건 하나의 생각 방식일 뿐이에요. 만들다 보면 더 필요한 게 생길 수도 있고, 몇 개는 안 쓸 수도 있어요.`,
+        },
+        {
+          id: "ch1-build-code",
+          type: "explain",
+          title: "✍️ Car class 써보기",
+          layout: {
+            left: `위쪽 — **멤버 변수** (기억할 것):
+- \`double speed;\` — 소수점 가능
+- \`string color;\` — 텍스트
 
-{collapse:전체 코드 보기}
-\`\`\`cpp
+아래 — **멤버 함수** (할 줄 아는 것):
+- \`forward()\` — 속도 증가
+- \`info()\` — 지금 상태 출력
+
+> 🐍 **Python 에서 온 친구라면?**
+> Python 은 \`self.speed\` 써야 하지만
+> C++ 은 그냥 \`speed\` 로 바로 써요.
+
+아직 자동차가 만들어진 건 아니에요 — 설계도만 그린 거예요.`,
+            right: `\`\`\`cpp
 class Car {
     double speed;
     string color;
@@ -119,259 +94,77 @@ class Car {
         speed += 10;
     }
     void info() {
-        cout << color << " 자동차, 속도: " << speed << endl;
+        cout << color << " car, speed: "
+             << speed << endl;
     }
 };
-\`\`\`
-
-자, Car class 완성! 🎉`,
+\`\`\``
+          },
         },
         {
-          id: "ch1-build-practice",
-          type: "practice" as const,
-          title: "✋ Car 설계도 그려보기",
-          content: `Car class를 만들어서 **멤버변수 선언**, **함수 선언**까지 해봐요.
-
-아직 설계도 단계니까 \`main()\`은 비워둬도 괜찮아요.`,
-          starterCode: `#include <iostream>
-#include <string>
-using namespace std;
-
-// Car class를 완성하세요
-class Car {
-    // 1. 멤버변수 speed(double), color(string) 선언
-
-
-    // 2. forward(): speed를 10 증가
-    void forward() {
-
-    }
-
-    void info() {
-        cout << color << " 자동차, 속도: " << speed << endl;
-    }
-
-// 3. class를 닫을 때 ;을 잊지 마세요
-
-
-int main() {
-    // 아직 객체 만드는 법을 안 배웠으니 main()은 비워둘게요.
-    return 0;
-}`,
-          code: `#include <iostream>
-#include <string>
-using namespace std;
-
-class Car {
-    double speed;
-    string color;
-
-    void forward() {
-        speed += 10;
-    }
-
-    void info() {
-        cout << color << " 자동차, 속도: " << speed << endl;
-    }
-};
-
-int main() {
-    return 0;
-}`,
-          hint: `class 안 맨 위에 double speed; string color; 선언. forward() 본문에는 speed += 10; 한 줄. class 닫기는 }; (중괄호 + 세미콜론).`,
-          expectedOutput: ``
-        },
-        {
-          id: "ch1-build-blueprint",
+          id: "ch1-object-concept",
           type: "explain",
-          title: "📐 근데 자동차가 생긴 건 아니에요",
-          content: `방금 직접 Car class를 써봤는데, 감이 좀 오나요? 👀
+          title: "🎮 class 는 설계도, object 는 진짜!",
+          content: `방금 Car class 를 만들었으니까 — 자동차가 있는 걸까요?
 
-근데 잠깐 — 이렇게 class를 만들었다고 해서 실제로 자동차가 생긴 걸까요?
+아니요. class 는 **설계도** 예요. 실제 자동차를 만들려면 한 단계 더 필요해요.
 
-아니에요. 🎮 게임으로 생각해봐요.
+RPG 게임 생각해봐요 — 상점에서 "불꽃검" **설명** 본다고 내 것이 되진 않아요. **실제로 사거나 줍거나** 해야 인벤토리에 나타나죠.
 
-게임 안에 "불꽃 검은 공격력 +50, 내구도 100" 이렇게 **스펙이 정해져 있다고 해서** 그 검이 내 인벤토리에 있는 건 아니잖아요.
-
-돈으로 사거나, 퀘스트로 획득해야 비로소 **내 아이템**이 돼요.
-
-class도 똑같아요. class는 **"이런 스펙의 자동차가 있다"** 라고 적어둔 **설계도**예요. 실제 자동차는 아직 없어요.
-
-![class는 설계도, 객체는 실체](/images/cpp/class-blueprint.svg)
-
-그럼 설계도로 만들어낸 **실제 자동차**는 뭐라고 부를까요?`,
-        },
-        {
-          id: "ch1-object",
-          type: "explain",
-          title: "🎮 객체(object)가 뭐예요?",
-          content: `설계도로 만들어낸 **실체** — 이걸 **객체(object)** 또는 **인스턴스(instance)** 라고 해요.
-
-게임에서 "불꽃 검 설명서"를 보고 상점에서 구매하면, 내 인벤토리에 **실제 아이템**이 생기죠. 바로 그 아이템이 객체예요.
-
-| | 게임 | 프로그래밍 |
+|  | 게임 | 프로그래밍 |
 |---|---|---|
-| 아이템 **설명서** | 불꽃 검 정보 | **class** |
-| 실제로 **얻은** 아이템 | 내 인벤토리의 검 | **객체 (object)** |
+| 아이템 **설명** | 불꽃검 정보 | **class** |
+| **실제로 가진** 아이템 | 인벤토리의 검 | **object** |
 
-→ **class**는 설계도, **객체**는 그 설계도로 만들어낸 실체.
-
-이제 이름을 알았으니, 진짜 만드는 방법을 봐요.`,
+class 에서 만들어낸 걸 **객체 (object)** 또는 **인스턴스 (instance)** 라고 해요.`,
         },
         {
-          id: "ch1-object-create",
+          id: "ch1-object-code",
           type: "explain",
-          title: "🛠️ 그럼 객체는 어떻게 만들까요?",
-          content: `생각보다 간단해요. **변수 만들듯이** 쓰면 돼요.
-
-\`\`\`
-클래스이름  변수이름;
-\`\`\`
-
-평소에 \`int age;\`, \`string name;\` 이렇게 썼던 것과 똑같은 모양이에요. 타입 자리에 내가 만든 class 이름을 쓰는 것뿐이에요.
-
-\`\`\`cpp
-Car myCar;   // Car 타입의 myCar 객체가 생겨요
-\`\`\`
-
-이 한 줄로 **진짜 자동차 한 대**가 만들어진 거예요. 🚗`,
-        },
-        {
-          id: "ch1-object-access",
-          type: "explain",
-          title: "🔗 멤버에 접근하는 법",
-          content: `객체를 만들었으니 이제 멤버변수와 멤버함수를 **써봐야겠죠.**
-
-\`.\`(점)을 찍어서 접근해요:
-
-- \`myCar.color\` → 멤버변수 읽기/쓰기
-- \`myCar.forward()\` → 멤버함수 호출
-
-이제 전체 흐름을 봐요:
-
-\`\`\`cpp
+          title: "🚗 객체 만들고 써보기",
+          content: `\`\`\`cpp
 int main() {
-    Car myCar;             // ← 실제 자동차(객체)가 생겨요!
-    myCar.color = "빨간색";
+    Car myCar;            // ← 여기서 실제 자동차 (객체) 가 만들어져요!
+    myCar.color = "red";
     myCar.speed = 0;
     myCar.forward();
     myCar.forward();
-    myCar.info();          // 빨간색 자동차, 속도: 20
-}
-\`\`\``,
-        },
-        {
-          id: "ch1-object-multi",
-          type: "explain",
-          title: "🍩 설계도 하나로 여러 대",
-          content: `class의 진짜 힘은 여기서 나와요. **설계도 하나로 자동차를 여러 대** 만들 수 있어요.
-
-![설계도 하나로 여러 객체](/images/cpp/class-multi.svg)
-
-\`\`\`cpp
-int main() {
-    Car car1;  car1.color = "빨간색";   // 객체 1
-    Car car2;  car2.color = "파란색";   // 객체 2
+    myCar.info();         // red car, speed: 20
 }
 \`\`\`
 
-> 🍩 붕어빵틀 하나로 붕어빵을 여러 개 찍듯, class 하나로 객체를 여러 개 만들 수 있어요.
+설계도 하나로 여러 대 가능:
 
-이렇게 **class를 설계하고 객체를 만들어 쓰는 방식** — 이걸 **객체지향 프로그래밍(OOP)** 이라고 해요.
-
-{collapse:📦 번외 — class가 없었다면?}
 \`\`\`cpp
-// class 없이 자동차 2대를 표현하려면...
+int main() {
+    Car car1;  car1.color = "red";    // 객체 1
+    Car car2;  car2.color = "blue";   // 객체 2
+}
+\`\`\`
+
+> 🍪 **쿠키 틀 = class, 쿠키 = object**
+> 틀 하나로 쿠키 여러 개 — class 하나로 객체 여러 개.
+
+**class 를 설계하고 거기서 객체를 만들어내는 것** — 이런 프로그래밍 방식을 **객체 지향 프로그래밍 (OOP)** 이라고 해요.
+
+{collapse:📦 보너스 — class 가 없다면?}
+\`\`\`cpp
+// class 없이 자동차 두 대 만들면...
 int main() {
     double car1Speed = 0;
-    string car1Color = "빨간색";
+    string car1Color = "red";
     double car2Speed = 0;
-    string car2Color = "파란색";
+    string car2Color = "blue";
 
     car1Speed += 10;
     car2Speed += 10;
 
-    // 코드가 길어지면... car2Color가 뭐였더라? 두 번째 자동차 색깔이었나?
-    cout << car1Color << " 자동차, 속도: " << car1Speed << endl;
-    cout << car2Color << " 자동차, 속도: " << car2Speed << endl;
+    // 코드 늘어나면... 어? car2Color 는 누구 건지 헷갈림
+    cout << car1Color << " car, speed: " << car1Speed << endl;
+    cout << car2Color << " car, speed: " << car2Speed << endl;
 }
-// 자동차가 10대면? 변수 20개에, 어떤 변수가 어떤 차의 것인지도 헷갈려요
+// 10 대 되면? 변수 20 개 — 어느 게 누구 건지 놓침
 \`\`\``,
-        },
-        {
-          id: "ch1-object-practice",
-          type: "practice" as const,
-          title: "✋ 객체 만들고 써보기",
-          content: `**Car class는 이미 작성돼 있어요.** 건드리지 말고 그대로 두세요.
-
-할 일은 \`main()\` 안 채우기뿐이에요:
-
-1. \`myCar\` 객체 만들기
-2. \`color\`를 "파란색", \`speed\`를 0으로 설정
-3. \`forward()\` 두 번 호출
-4. \`info()\` 호출
-
-이렇게 하면 아래 출력이 나와야 해요 👇`,
-          starterCode: `#include <iostream>
-#include <string>
-using namespace std;
-
-class Car {
-public:
-    double speed;
-    string color;
-
-    void forward() {
-        speed += 10;
-    }
-    void info() {
-        cout << color << " 자동차, 속도: " << speed << endl;
-    }
-};
-
-int main() {
-    // 1. Car 객체 myCar 만들기
-
-
-    // 2. color를 "파란색", speed를 0으로 설정
-
-
-    // 3. forward()를 두 번 호출
-
-
-    // 4. info() 호출
-
-
-    return 0;
-}`,
-          code: `#include <iostream>
-#include <string>
-using namespace std;
-
-class Car {
-public:
-    double speed;
-    string color;
-
-    void forward() {
-        speed += 10;
-    }
-    void info() {
-        cout << color << " 자동차, 속도: " << speed << endl;
-    }
-};
-
-int main() {
-    Car myCar;
-    myCar.color = "파란색";
-    myCar.speed = 0;
-    myCar.forward();
-    myCar.forward();
-    myCar.info();
-    return 0;
-}`,
-          hint: `객체 만들기: Car myCar; — 멤버 설정: myCar.color = "파란색"; myCar.speed = 0; — 함수 호출: myCar.forward(); 두 번, myCar.info();`,
-          expectedOutput: `파란색 자동차, 속도: 20`
         },
         {
           id: "ch1-pred1",
@@ -393,52 +186,49 @@ public:
 
 int main() {
     Car c;
-    c.color = "파란색";
+    c.color = "blue";
     c.speed = 0;
     c.forward();
     c.forward();
     c.info();
     return 0;
 }`,
-          options: ["파란색 20", "파란색 0", "파란색 10", "에러"],
+          options: ["blue 20", "blue 0", "blue 10", "에러"],
           answer: 0,
-          explanation: "forward()를 두 번 호출해서 speed가 0→10→20이 돼요. info()는 color와 speed를 출력해요. 메서드 안에서 color, speed에 self 없이 바로 접근해요!"
+          explanation: "forward() 가 두 번 호출되니까 speed 가 0→10→20. info() 가 color 와 speed 출력. 메서드 안에서 color, speed 를 바로 써요 — self 필요 없음!"
         },
         {
           id: "ch1-fb1",
           type: "fillblank" as const,
-          title: "멤버함수 완성하기!",
-          content: "메서드 안에서는 `self` 없이 멤버변수에 바로 접근해요.",
+          title: "멤버 함수 완성하기!",
+          content: "메서드 안에서 멤버 변수에 바로 접근 — `self` 필요 없음!",
           code: `class Car {
     double speed;
     void forward() {
-        ___ += 10;   // 속도를 10 올려요
+        ___ += 10;   // speed 를 10 증가
     }
 };`,
           fillBlanks: [
             { id: 0, answer: "speed", options: ["speed", "self.speed", "Car.speed", "this.speed"] }
           ],
-          explanation: "C++에서는 Python의 self.speed와 달리 speed만 써요! 메서드 안에서는 같은 클래스의 멤버변수에 바로 접근할 수 있어요."
+          explanation: "C++ 에선 Python 의 self.speed 와 달리 그냥 speed 써요! 메서드 안에서 클래스의 자기 멤버 변수에 바로 접근 가능."
         },
         {
           id: "ch1-q1",
           type: "quiz",
-          title: "class 기본 개념!",
-          content: "class에 대한 설명으로 **맞는** 것은?",
+          title: "class 가 뭐예요?",
+          content: "class 에 대한 설명으로 **맞는** 것은?",
           options: [
-            "class는 변수(데이터)만 가질 수 있다",
-            "class 안의 함수는 같은 class의 멤버에 접근할 수 없다",
-            "class는 데이터와 함수를 함께 묶어 나만의 타입을 만든다",
-            "class로 만든 변수는 점(.)으로 접근할 수 없다"
+            "class 는 변수(데이터) 만 담을 수 있고, 함수는 못 담는다",
+            "class 안의 메서드는 자기 멤버에 접근할 수 없다",
+            "class 는 데이터와 함수를 한 번에 묶어 내 타입을 만든다",
+            "class 로 만든 변수는 점(.) 표기법을 못 쓴다"
           ],
           answer: 2,
-          explanation: "class는 데이터(변수)와 함수(메서드)를 함께 묶어 나만의 타입을 만드는 것이에요! Dog d; d.bark(); 처럼 점(.)으로 접근해요."
+          explanation: "class 는 데이터(변수) 와 함수(메서드) 를 묶어서 내 타입을 만들어요! Dog d; d.bark(); 처럼 점 표기법으로 접근해요."
         },
       ]
     },
-    // ============================================
-    // Chapter 2: private — 왜 데이터를 숨길까?
-    // ============================================
     {
       id: "ch2",
       title: "private — 데이터 보호",
