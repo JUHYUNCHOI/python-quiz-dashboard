@@ -594,6 +594,18 @@ const CPP_CLASS_BASIC: SyntaxBuilderPreset = {
       label: { ko: "④ ⚠️ 마지막에 세미콜론(;)! 빠뜨리면 컴파일 에러!", en: "④ ⚠️ Semicolon(;) at the end! Forget it → compile error!" },
       icon: "⚠️",
     },
+    {
+      code: "class Car {\n    double speed;\n};",
+      highlight: { start: 12, end: 29 },
+      label: { ko: "⑤ 중괄호 안 **위쪽**에 **멤버 변수** (예: `double speed;`)", en: "⑤ **Member variables** go at the **top** inside the braces (e.g., `double speed;`)" },
+      icon: "💾",
+    },
+    {
+      code: "class Car {\n    double speed;\n\n    void forward() {\n        speed += 10;\n    }\n};",
+      highlight: { start: 30, end: 77 },
+      label: { ko: "⑥ **아래쪽**에 **멤버 함수** (예: `void forward() { ... }`)", en: "⑥ **Member functions** go **below** (e.g., `void forward() { ... }`)" },
+      icon: "⚙️",
+    },
   ],
 }
 
