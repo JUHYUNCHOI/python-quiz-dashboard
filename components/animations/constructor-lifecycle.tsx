@@ -77,6 +77,8 @@ function Field({
   )
 }
 
+type Actor = "cpp" | "code" | "none"
+
 function Column({
   title,
   subtitle,
@@ -85,6 +87,9 @@ function Column({
   caption,
   fields,
   highlight,
+  actor,
+  operations,
+  lang,
 }: {
   title: string
   subtitle: string
@@ -93,7 +98,21 @@ function Column({
   caption: string
   fields: Array<{ name: string; value: string; state: FieldState }>
   highlight: "neutral" | "active" | "done" | "danger"
+  actor: Actor
+  operations: string[]
+  lang: "ko" | "en"
 }) {
+  const isEn = lang === "en"
+  const actorLabel = actor === "cpp"
+    ? (isEn ? "🤖 C++ is doing (hidden):" : "🤖 C++ 가 하는 일 (숨어서):")
+    : actor === "code"
+      ? (isEn ? "✏️ Your code is doing:" : "✏️ 너의 코드가 하는 일:")
+      : null
+  const actorBg = actor === "cpp"
+    ? "bg-violet-500/10 border-violet-400/40"
+    : actor === "code"
+      ? "bg-sky-500/10 border-sky-400/40"
+      : "bg-slate-800/30 border-slate-700/60"
   const boxByHighlight = {
     neutral: "border-slate-700 bg-slate-900/60",
     active: "border-amber-400/60 bg-slate-900/60 shadow-lg shadow-amber-500/10",
@@ -129,6 +148,30 @@ function Column({
           <Field key={f.name} {...f} />
         ))}
       </div>
+
+      {/* 누가 뭘 하고 있는지 — 핵심 메커니즘 표시 */}
+      {operations.length > 0 && (
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={`${actor}-${operations.join()}`}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            className={cn("rounded-lg border px-3 py-2", actorBg)}
+          >
+            {actorLabel && (
+              <div className="text-[10px] font-bold text-slate-200 mb-1.5 uppercase tracking-wide">
+                {actorLabel}
+              </div>
+            )}
+            <div className="font-mono text-[11px] leading-snug text-slate-100 space-y-0.5">
+              {operations.map((op, i) => (
+                <div key={i}>→ {op}</div>
+              ))}
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      )}
 
       <AnimatePresence mode="wait">
         <motion.p
@@ -177,6 +220,8 @@ export function ConstructorLifecycle({ lang = "ko" }: Props) {
         ? "No constructor exists. About to create the object."
         : "생성자가 없는 상태. 객체 만들기 직전.",
       highlight: "neutral" as const,
+      actor: "none" as Actor,
+      operations: [],
     },
     {
       fields: [
@@ -187,6 +232,16 @@ export function ConstructorLifecycle({ lang = "ko" }: Props) {
         ? "Members are born with empty/garbage values because there's no constructor to set them."
         : "생성자가 없어서 멤버들이 빈값/쓰레기값으로 태어나요. 아무도 값을 넣어주지 않아요.",
       highlight: "danger" as const,
+      actor: "cpp" as Actor,
+      operations: isEn
+        ? [
+            "string owner{}            // default construct → \"\"",
+            "double balance            // uninitialized → garbage",
+          ]
+        : [
+            "string owner{}            // 기본 생성자 → 빈 \"\"",
+            "double balance            // 초기화 안 됨 → 쓰레기값",
+          ],
     },
     {
       fields: [
@@ -197,6 +252,10 @@ export function ConstructorLifecycle({ lang = "ko" }: Props) {
         ? "Stuck this way forever. Using this object would behave unpredictably — dangerous."
         : "영원히 이 상태. 이런 객체를 사용하면 예측 불가 — 위험해요.",
       highlight: "danger" as const,
+      actor: "none" as Actor,
+      operations: isEn
+        ? ["(no body to run — nobody fixes the garbage)"]
+        : ["(실행할 바디 없음 — 아무도 쓰레기값을 고치지 않음)"],
     },
   ]
 
@@ -212,9 +271,11 @@ export function ConstructorLifecycle({ lang = "ko" }: Props) {
         { name: "balance", value: "—", state: "empty" as FieldState },
       ],
       caption: isEn
-        ? "About to enter the constructor body."
-        : "생성자 바디에 진입하기 직전.",
+        ? "BankAccount acc(\"kim\", 1000); called. About to run the constructor."
+        : "BankAccount acc(\"kim\", 1000); 호출됨. 생성자 실행 직전.",
       highlight: "neutral" as const,
+      actor: "none" as Actor,
+      operations: [],
     },
     {
       fields: [
@@ -222,9 +283,19 @@ export function ConstructorLifecycle({ lang = "ko" }: Props) {
         { name: "balance", value: "??? garbage", state: "garbage" as FieldState },
       ],
       caption: isEn
-        ? "Step 1: members are born first — with empty/garbage values."
-        : "1단계: 멤버들이 먼저 빈값/쓰레기값으로 태어나요.",
+        ? "BEFORE the body even starts, C++ silently default-constructs every member. This hidden step always happens for body-assignment style."
+        : "바디 실행 직전에 C++ 가 **숨어서** 모든 멤버를 기본값으로 먼저 만들어요. 바디 대입 방식에는 이 숨은 단계가 항상 있어요.",
       highlight: "active" as const,
+      actor: "cpp" as Actor,
+      operations: isEn
+        ? [
+            "string owner{}            // default construct → \"\"",
+            "double balance            // uninitialized → garbage",
+          ]
+        : [
+            "string owner{}            // 기본 생성자 실행 → 빈 \"\"",
+            "double balance            // 초기화 안 됨 → 쓰레기값",
+          ],
     },
     {
       fields: [
@@ -232,9 +303,19 @@ export function ConstructorLifecycle({ lang = "ko" }: Props) {
         { name: "balance", value: "1000", state: "done" as FieldState },
       ],
       caption: isEn
-        ? "Step 2: body runs, values are written in. Two things happened."
-        : "2단계: 바디가 실행되면서 값이 들어가요. 일이 2번 일어났어요.",
+        ? "NOW the body runs. Your = statements overwrite the members. Total: 2 operations per member (construct + assign)."
+        : "이제 바디가 실행돼요. 네가 쓴 = 문장이 멤버를 덮어써요. 멤버당 2번 작업 (생성 + 대입).",
       highlight: "done" as const,
+      actor: "code" as Actor,
+      operations: isEn
+        ? [
+            "owner = name;             // \"\" → \"kim\"   (overwrite)",
+            "balance = initial;        // garbage → 1000 (overwrite)",
+          ]
+        : [
+            "owner = name;             // \"\" → \"kim\"   (덮어쓰기)",
+            "balance = initial;        // 쓰레기값 → 1000 (덮어쓰기)",
+          ],
     },
   ]
 
@@ -246,9 +327,11 @@ export function ConstructorLifecycle({ lang = "ko" }: Props) {
         { name: "balance", value: "—", state: "empty" as FieldState },
       ],
       caption: isEn
-        ? "About to construct with the initializer list."
-        : "이니셜라이저 리스트로 생성 직전.",
+        ? "BankAccount acc(\"kim\", 1000); called. The initializer list tells C++ exactly what values to build with."
+        : "BankAccount acc(\"kim\", 1000); 호출됨. 이니셜라이저 리스트가 \"이 값으로 만들어라\" 고 C++ 에게 알려줘요.",
       highlight: "neutral" as const,
+      actor: "none" as Actor,
+      operations: [],
     },
     {
       fields: [
@@ -256,9 +339,19 @@ export function ConstructorLifecycle({ lang = "ko" }: Props) {
         { name: "balance", value: "1000", state: "done" as FieldState },
       ],
       caption: isEn
-        ? "Step 1: members are born with the final values directly. Done in 1 step."
-        : "1단계: 멤버들이 처음부터 원하는 값으로 태어나요. 한 번에 끝.",
+        ? "C++ constructs members DIRECTLY with the values you gave. No default-construct step. 1 operation per member."
+        : "C++ 가 네가 준 값으로 멤버를 **바로** 만들어요. 기본값 단계가 없어요. 멤버당 1번 작업.",
       highlight: "done" as const,
+      actor: "cpp" as Actor,
+      operations: isEn
+        ? [
+            "string owner{name}        // construct with \"kim\"",
+            "double balance{initial}   // construct with 1000",
+          ]
+        : [
+            "string owner{name}        // \"kim\" 으로 바로 생성",
+            "double balance{initial}   // 1000 으로 바로 생성",
+          ],
     },
     {
       fields: [
@@ -266,9 +359,13 @@ export function ConstructorLifecycle({ lang = "ko" }: Props) {
         { name: "balance", value: "1000", state: "done" as FieldState },
       ],
       caption: isEn
-        ? "(No step 2 needed — members already hold the correct values.)"
-        : "(2단계 없음 — 멤버가 이미 올바른 값을 가지고 있어요.)",
+        ? "Body {} is empty — nothing to run. Members already correct."
+        : "바디 {} 비어있음 — 실행할 게 없어요. 멤버는 이미 올바른 값.",
       highlight: "done" as const,
+      actor: "none" as Actor,
+      operations: isEn
+        ? ["(empty body — nothing to do)"]
+        : ["(빈 바디 — 할 일 없음)"],
     },
   ]
 
@@ -384,6 +481,9 @@ BankAccount acc;  // 생성자 없이 그냥 만듦`
               fields={noneByStep[step].fields}
               caption={noneByStep[step].caption}
               highlight={noneByStep[step].highlight}
+              actor={noneByStep[step].actor}
+              operations={noneByStep[step].operations}
+              lang={lang}
             />
           </motion.div>
         )}
@@ -402,6 +502,9 @@ BankAccount acc;  // 생성자 없이 그냥 만듦`
               fields={afterByStep[step].fields}
               caption={afterByStep[step].caption}
               highlight={afterByStep[step].highlight}
+              actor={afterByStep[step].actor}
+              operations={afterByStep[step].operations}
+              lang={lang}
             />
           </motion.div>
         )}
@@ -420,6 +523,9 @@ BankAccount acc;  // 생성자 없이 그냥 만듦`
               fields={whileByStep[step].fields}
               caption={whileByStep[step].caption}
               highlight={whileByStep[step].highlight}
+              actor={whileByStep[step].actor}
+              operations={whileByStep[step].operations}
+              lang={lang}
             />
           </motion.div>
         )}
