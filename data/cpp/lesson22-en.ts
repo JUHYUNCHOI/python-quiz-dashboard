@@ -137,6 +137,8 @@ int main() {
 
 One blueprint, multiple cars:
 
+![One blueprint, many objects](/images/cpp/class-multi.svg)
+
 \`\`\`cpp
 int main() {
     Car car1;  car1.color = "red";    // object 1
@@ -167,6 +169,79 @@ int main() {
 }
 // With 10 cars? 20 variables — and you'd lose track of which belongs to which
 \`\`\``,
+        },
+        {
+          id: "ch1-object-practice",
+          type: "practice" as const,
+          title: "✋ Create and use an object",
+          content: `**The Car class is already written.** Don't touch it — leave it as is.
+
+Your job is to fill in \`main()\`:
+
+1. Create a \`myCar\` object
+2. Set \`color\` to "blue", \`speed\` to 0
+3. Call \`forward()\` twice
+4. Call \`info()\``,
+          starterCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+class Car {
+public:
+    double speed;
+    string color;
+
+    void forward() {
+        speed += 10;
+    }
+    void info() {
+        cout << color << " car, speed: " << speed << endl;
+    }
+};
+
+int main() {
+    // 1. Create Car object myCar
+
+
+    // 2. Set color to "blue", speed to 0
+
+
+    // 3. Call forward() twice
+
+
+    // 4. Call info()
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+class Car {
+public:
+    double speed;
+    string color;
+
+    void forward() {
+        speed += 10;
+    }
+    void info() {
+        cout << color << " car, speed: " << speed << endl;
+    }
+};
+
+int main() {
+    Car myCar;
+    myCar.color = "blue";
+    myCar.speed = 0;
+    myCar.forward();
+    myCar.forward();
+    myCar.info();
+    return 0;
+}`,
+          hint: `Create object: Car myCar; — Set members: myCar.color = "blue"; myCar.speed = 0; — Call functions: myCar.forward(); twice, then myCar.info();`,
+          expectedOutput: `blue car, speed: 20`
         },
         {
           id: "ch1-pred1",

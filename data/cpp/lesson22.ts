@@ -133,6 +133,8 @@ int main() {
 
 설계도 하나로 여러 대 가능:
 
+![설계도 하나로 여러 객체](/images/cpp/class-multi.svg)
+
 \`\`\`cpp
 int main() {
     Car car1;  car1.color = "red";    // 객체 1
@@ -163,6 +165,79 @@ int main() {
 }
 // 10 대 되면? 변수 20 개 — 어느 게 누구 건지 놓침
 \`\`\``,
+        },
+        {
+          id: "ch1-object-practice",
+          type: "practice" as const,
+          title: "✋ 객체 만들고 써보기",
+          content: `**Car class 는 이미 써있어요.** 건드리지 말고 그대로 두세요.
+
+할 일은 \`main()\` 안 채우기뿐이에요:
+
+1. \`myCar\` 객체 만들기
+2. \`color\` 를 "파란색", \`speed\` 를 0 으로 설정
+3. \`forward()\` 두 번 호출
+4. \`info()\` 호출`,
+          starterCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+class Car {
+public:
+    double speed;
+    string color;
+
+    void forward() {
+        speed += 10;
+    }
+    void info() {
+        cout << color << " 자동차, 속도: " << speed << endl;
+    }
+};
+
+int main() {
+    // 1. Car 객체 myCar 만들기
+
+
+    // 2. color 를 "파란색", speed 를 0 으로 설정
+
+
+    // 3. forward() 를 두 번 호출
+
+
+    // 4. info() 호출
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+class Car {
+public:
+    double speed;
+    string color;
+
+    void forward() {
+        speed += 10;
+    }
+    void info() {
+        cout << color << " 자동차, 속도: " << speed << endl;
+    }
+};
+
+int main() {
+    Car myCar;
+    myCar.color = "파란색";
+    myCar.speed = 0;
+    myCar.forward();
+    myCar.forward();
+    myCar.info();
+    return 0;
+}`,
+          hint: `객체 만들기: Car myCar; — 멤버 설정: myCar.color = "파란색"; myCar.speed = 0; — 함수 호출: myCar.forward(); 두 번, myCar.info();`,
+          expectedOutput: `파란색 자동차, 속도: 20`
         },
         {
           id: "ch1-pred1",
