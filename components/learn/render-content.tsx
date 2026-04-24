@@ -18,7 +18,7 @@ function ZoomableImage({ src, alt }: { src: string; alt: string }) {
       >
         <img src={src} alt={alt}
           className="w-full rounded-xl border border-gray-200 shadow-sm"
-          style={{ maxWidth: '520px' }} />
+          style={{ maxWidth: '760px' }} />
       </div>
 
       {open && typeof window !== "undefined" && createPortal(
