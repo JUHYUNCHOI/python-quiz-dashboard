@@ -654,9 +654,12 @@ public:
           title: "✋ BankAccount class 만들기!",
           content: `통장 클래스를 직접 완성해봐요!
 
-\`main()\`에서 이미 사용하는 코드를 보고, 클래스를 완성하세요.
-- 입금은 금액이 0보다 클 때만 처리
-- 출금은 금액이 0보다 크고 잔액 이하일 때만 처리`,
+**단계:**
+1. \`private\` 에 \`owner\`(string), \`balance\`(double) 선언
+2. 생성자: \`BankAccount(string name, double initial)\` — 초기화
+3. \`getBalance()\` — balance 반환
+4. \`deposit(double amount)\` — amount > 0 일 때만 balance 에 더하기
+5. \`withdraw(double amount)\` — amount > 0 이고 amount ≤ balance 일 때만 빼기`,
           starterCode: `#include <iostream>
 #include <string>
 using namespace std;
