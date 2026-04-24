@@ -613,6 +613,50 @@ const CPP_CLASS_BASIC: SyntaxBuilderPreset = {
   ],
 }
 
+const CPP_OBJECT_CREATE_CTOR: SyntaxBuilderPreset = {
+  title: { ko: "생성자로 객체 만들기", en: "Creating object via constructor" },
+  hideHeader: true,
+  hideControls: true,
+  tapToAdvance: true,
+  steps: [
+    {
+      code: "",
+      highlight: { start: 0, end: 0 },
+      label: { ko: "탭해서 시작 →", en: "Tap to start →" },
+    },
+    {
+      code: "BankAccount",
+      highlight: { start: 0, end: 11 },
+      label: { ko: "① 타입 이름 (어떤 class?)", en: "① Type name (which class?)" },
+    },
+    {
+      code: "BankAccount acc",
+      highlight: { start: 12, end: 15 },
+      label: { ko: "② 변수 이름 (뭐라고 부를래?)", en: "② Variable name (what to call it?)" },
+    },
+    {
+      code: "BankAccount acc(",
+      highlight: { start: 15, end: 16 },
+      label: { ko: "③ 괄호 ( 열기 — 생성자에 보낼 값들이 여기 들어가요", en: "③ Open ( — constructor arguments go inside" },
+    },
+    {
+      code: 'BankAccount acc("Emma"',
+      highlight: { start: 16, end: 22 },
+      label: { ko: "④ 첫 번째 인자 — 생성자의 name 에 전달", en: "④ First arg — passed to constructor's name" },
+    },
+    {
+      code: 'BankAccount acc("Emma", 1000',
+      highlight: { start: 24, end: 28 },
+      label: { ko: "⑤ 두 번째 인자 — 생성자의 initial 에 전달", en: "⑤ Second arg — passed to constructor's initial" },
+    },
+    {
+      code: 'BankAccount acc("Emma", 1000);',
+      highlight: { start: 28, end: 30 },
+      label: { ko: "⑥ ) 닫고 세미콜론 — 생성자 자동 호출!", en: "⑥ Close ) and semicolon — constructor fires!" },
+    },
+  ],
+}
+
 const CPP_MEMBER_ACCESS: SyntaxBuilderPreset = {
   title: { ko: "멤버 접근 — 점 (.)", en: "Member access — dot (.)" },
   hideHeader: true,
@@ -1611,10 +1655,22 @@ const CPP_CONSTRUCTOR: SyntaxBuilderPreset = {
       icon: "📥",
     },
     {
-      code: "BankAccount(string name, double initial) {\n    owner = name;\n    balance = initial;\n}",
-      highlight: { start: 40, end: 85 },
-      label: { ko: "받은 값을 멤버변수에 저장! 객체가 태어나는 순간 초기화 완료!", en: "Store received values into member variables! Initialized the moment the object is created!" },
+      code: "BankAccount(string name, double initial) {\n\n}",
+      highlight: { start: 40, end: 46 },
+      label: { ko: "중괄호 { } 안에 실제로 할 일을 써요", en: "Put the real work inside { }" },
       icon: "📦",
+    },
+    {
+      code: "BankAccount(string name, double initial) {\n    owner = name;\n}",
+      highlight: { start: 43, end: 60 },
+      label: { ko: "받은 name 값을 멤버 변수 owner 에 저장", en: "Store the received name into member owner" },
+      icon: "📥",
+    },
+    {
+      code: "BankAccount(string name, double initial) {\n    owner = name;\n    balance = initial;\n}",
+      highlight: { start: 61, end: 83 },
+      label: { ko: "받은 initial 값을 멤버 변수 balance 에 저장", en: "Store the received initial into member balance" },
+      icon: "📥",
     },
     {
       code: "BankAccount(string name, double initial) {\n    owner = name;\n    balance = initial;\n}\n\nBankAccount acc(\"김철수\", 1000);",
@@ -1711,6 +1767,7 @@ const PRESETS: Record<string, SyntaxBuilderPreset> = {
   "cpp-class-basic": CPP_CLASS_BASIC,
   "cpp-object-create": CPP_OBJECT_CREATE,
   "cpp-member-access": CPP_MEMBER_ACCESS,
+  "cpp-object-create-ctor": CPP_OBJECT_CREATE_CTOR,
   "cpp-variable": CPP_VARIABLE,
   "cpp-cout": CPP_COUT,
   "cpp-cin": CPP_CIN,
@@ -2031,6 +2088,9 @@ export function CppObjectCreateBuilder(props: Omit<SyntaxBuilderProps, "preset">
 }
 export function CppMemberAccessBuilder(props: Omit<SyntaxBuilderProps, "preset">) {
   return <SyntaxBuilder {...props} preset="cpp-member-access" />
+}
+export function CppObjectCreateCtorBuilder(props: Omit<SyntaxBuilderProps, "preset">) {
+  return <SyntaxBuilder {...props} preset="cpp-object-create-ctor" />
 }
 export function PyWhileBuilder(props: Omit<SyntaxBuilderProps, "preset">) {
   return <SyntaxBuilder {...props} preset="py-while" />

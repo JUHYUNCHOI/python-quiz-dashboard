@@ -530,6 +530,114 @@ int main() {
 
 근데 하나 궁금한 게 남아요 — 객체 만들 때마다 초기값 세팅하려고 setter 를 **매번 불러야** 할까요? 더 나은 방법이 있을까요?`,
         },
+        {
+          id: "ch2-gs-pred",
+          type: "predict" as const,
+          title: "🔍 setter 가 잘못된 값을 막으면?",
+          code: `#include <iostream>
+using namespace std;
+
+class Car {
+private:
+    double speed = 0;
+public:
+    double getSpeed() { return speed; }
+    void setSpeed(double s) {
+        if (s >= 0) speed = s;
+    }
+};
+
+int main() {
+    Car c;
+    c.setSpeed(-999);
+    c.setSpeed(60);
+    c.setSpeed(-5);
+    cout << c.getSpeed();
+    return 0;
+}`,
+          options: ["-5", "60", "0", "컴파일 에러"],
+          answer: 1,
+          explanation: "setSpeed(-999) 와 setSpeed(-5) 는 \`s >= 0\` 조건을 통과 못해서 무시됨. 60 만 통과 → speed 는 60. getSpeed() 가 60 출력."
+        },
+        {
+          id: "ch2-gs-fb",
+          type: "fillblank" as const,
+          title: "getter / setter 완성하기!",
+          content: "getter 는 값을 **돌려주고**, setter 는 조건 확인 후 **설정** 해요.",
+          code: `class Student {
+private:
+    int score;
+public:
+    int getScore() { ___ score; }                       // 값 돌려주기
+
+    void setScore(int s) {
+        if (s >= 0 && s <= 100) ___ = s;                // 0~100 일 때만 설정
+    }
+};`,
+          fillBlanks: [
+            { id: 0, answer: "return", options: ["return", "score", "get", "="] },
+            { id: 1, answer: "score", options: ["score", "s", "this", "setScore"] }
+          ],
+          explanation: "getter 는 `return` 으로 멤버 값을 돌려줘요. setter 는 조건을 통과하면 `멤버 = 매개변수` 로 설정. 여기서 score 가 멤버, s 가 매개변수."
+        },
+        {
+          id: "ch2-practice",
+          type: "practice" as const,
+          title: "✋ getter/setter 직접 써보기",
+          hideStarterButton: true,
+          content: `\`Person\` class 에 getter/setter 를 직접 만들어봐요!
+
+**단계:**
+
+1. \`getAge()\` — \`age\` 반환
+2. \`setAge(int a)\` — \`a >= 0\` 일 때만 설정 (음수 거부)`,
+          starterCode: `#include <iostream>
+using namespace std;
+
+class Person {
+private:
+    int age = 0;
+
+public:
+    // 1. getAge() — age 반환
+
+
+    // 2. setAge(int a) — a >= 0 일 때만 설정
+
+};
+
+int main() {
+    Person p;
+    p.setAge(-5);    // 음수 → 무시됨
+    p.setAge(15);
+    cout << p.getAge();  // 15
+    return 0;
+}`,
+          code: `#include <iostream>
+using namespace std;
+
+class Person {
+private:
+    int age = 0;
+
+public:
+    int getAge() { return age; }
+
+    void setAge(int a) {
+        if (a >= 0) age = a;
+    }
+};
+
+int main() {
+    Person p;
+    p.setAge(-5);
+    p.setAge(15);
+    cout << p.getAge();
+    return 0;
+}`,
+          hint: `int getAge() { return age; } — void setAge(int a) { if (a >= 0) age = a; }`,
+          expectedOutput: `15`
+        },
       ]
     },
     // ============================================
@@ -541,56 +649,17 @@ int main() {
       emoji: "🔧",
       steps: [
         {
-          id: "ch3-constructor-anim",
-          type: "interactive",
-          title: "🎬 생성자 있을 때 vs 없을 때",
-          description: "탭을 넘기면서 생성자가 뭘 하는지 봐요.",
-          component: "constructorVisualizer",
-        },
-        {
-          id: "ch3-garbage-p1",
-          type: "predict" as const,
-          title: "🔍 함수 안의 int 는 어떤 값?",
-          code: `int main() {
-    int a;        // 초기화 안 함
-    cout << a;
-    return 0;
-}`,
-          options: ["0 이 출력", "5 가 출력", "예측 불가 값 (쓰레기값)", "컴파일 에러"],
-          answer: 2,
-          explanation: "함수 안의 **지역 변수** 는 메모리에 남아있던 랜덤 바이트를 그대로 가져요 — 쓰레기값. 매번 실행할 때마다 다름. C++ 은 속도를 위해 자동 초기화를 생략해요."
-        },
-        {
-          id: "ch3-garbage-p2",
-          type: "predict" as const,
-          title: "🔍 전역 int 는?",
-          code: `int a;   // 전역 변수 (main 바깥)
+          id: "ch3-motivation-intro",
+          type: "explain",
+          title: "🤔 근데 setter 안 부르면 어떻게 될까?",
+          content: `방금 \`setAge()\` 로 초기값을 세팅했죠. 근데 **깜빡하고 아무 setter 도 안 부르면** 그 멤버는 어떤 값을 가질까요?
 
-int main() {
-    cout << a;
-    return 0;
-}`,
-          options: ["0 출력", "쓰레기값", "컴파일 에러", "런타임 에러"],
-          answer: 0,
-          explanation: "**전역** 과 **static** 변수는 자동으로 0 으로 초기화돼요. 쓰레기값 문제는 지역 변수만. \`static int a;\` 도 0 이에요!"
-        },
-        {
-          id: "ch3-garbage-p3",
-          type: "predict" as const,
-          title: "🔍 `int a{};` — 중괄호는 뭐?",
-          code: `int main() {
-    int a{};      // 중괄호 초기화!
-    cout << a;
-    return 0;
-}`,
-          options: ["0 출력", "쓰레기값", "에러 (초기값 안 줌)", "1 출력"],
-          answer: 0,
-          explanation: "빈 중괄호 `{}` 는 **값 초기화 (value-initialization)** 를 발동 — int 는 무조건 0. 보통 `int a = 0;` 으로 쓰지만 `int a{};` 도 0 보장."
+0? 아니면 다른 값? 다음 문제 풀면서 감 잡아봐요.`,
         },
         {
           id: "ch3-garbage-p4",
           type: "predict" as const,
-          title: "🔍 class 멤버 int 는?",
+          title: "🔍 초기화 안 한 class 멤버 int 는?",
           code: `class Box {
 public:
     int count;   // 초기화 안 함
@@ -601,9 +670,9 @@ int main() {
     cout << b.count;
     return 0;
 }`,
-          options: ["0 출력", "쓰레기값", "컴파일 에러", "\"\" 출력"],
+          options: ["0 출력", "예측 불가 값 (쓰레기값)", "컴파일 에러", "\"\" 출력"],
           answer: 1,
-          explanation: "생성자 없으면 **기본 타입 멤버** (int, double, char, bool) 는 지역 변수처럼 — 쓰레기값. 이게 바로 우리가 생성자가 필요한 이유예요!"
+          explanation: "**기본 타입 멤버** (int, double, char, bool) 는 초기화 안 하면 **쓰레기값** — 메모리에 남아있던 랜덤 바이트. 이게 바로 우리가 생성자가 필요한 이유예요!"
         },
         {
           id: "ch3-garbage-p5",
@@ -630,38 +699,32 @@ int main() {
           type: "explain",
           title: "📋 쓰레기값 — 정리표",
           layout: {
-            left: `**기본 타입** (int, double, char, bool, 포인터)
+            left: `**class 멤버 초기값 정리**
 
-| 어디에 있나 | 초기값 |
+| 멤버 타입 | 초기화 안 하면 |
 |---|---|
-| 함수 안 (지역) | 🎲 쓰레기값 |
-| 함수 밖 (전역 / static) | ✅ 0 |
-| class 멤버 (생성자 없음) | 🎲 쓰레기값 |
-| \`int a{};\` (중괄호) | ✅ 0 |
+| \`int\`, \`double\`, \`char\`, \`bool\` | 🎲 쓰레기값 |
+| 기본 타입 배열 \`int arr[5]\` | 🎲 원소마다 쓰레기값 |
+| \`string\`, \`vector\`, \`map\` 등 | ✅ 비어있음 ("", [], {}) |
+| \`string\` 배열 \`string arr[5]\` | ✅ 원소마다 "" |
 
-**클래스 타입** (string, vector, map, ...)
-→ 자체 기본 생성자 있어서 **항상 비어있게** 시작 (쓰레기값 걱정 없음)
+\`string\` / \`vector\` 같은 타입은 **알아서 비어있는 상태로** 시작해요 (걱정 X). 하지만 \`int\`, \`double\` 같은 **기본 타입** 은 초기화 안 하면 **아무 쓰레기값** 을 가져요.
 
-**결론:** 기본 타입 멤버가 있는 class 는 **생성자가 반드시 필요해요**. 그게 바로 다음 단계.`,
+**그래서** — 멤버를 자동으로 챙겨줄 장치가 필요해요. 바로 다음 페이지, **생성자** 등장!`,
             right: `\`\`\`cpp
-// 초기값 한눈에 보는 치트시트
-
-int a;              // 🎲 쓰레기값
-int b{};            // ✅ 0
-int c = 0;          // ✅ 0
-static int d;       // ✅ 0 (static)
-
-string s;           // ✅ ""
-vector<int> v;      // ✅ []
-
 class Box {
-    int count;      // 🎲 쓰레기값
-    string name;    // ✅ ""
+    int count;          // 🎲 쓰레기값
+    int scores[5];      // 🎲 5 개 다 쓰레기값
+    string name;        // ✅ ""
+    string tags[3];     // ✅ 3 개 다 ""
+    vector<int> v;      // ✅ []
 };
 
 Box b;
-// b.count  → 쓰레기값
-// b.name   → ""
+// b.count     → 쓰레기값!
+// b.scores[0] → 쓰레기값!
+// b.name      → ""
+// b.tags[0]   → ""
 \`\`\``
           },
         },
@@ -680,14 +743,16 @@ Box b;
           id: "ch3-constructor-usage",
           type: "explain",
           title: "생성자가 있는 클래스 전체 보기",
-          content: `\`\`\`cpp {6-11,14}
+          content: `방금 조립한 생성자를 class 안에 **끼워넣으면** 이렇게 생겼어요. 생성자는 항상 \`public:\` 아래에 들어가요 — 외부에서 객체를 만들 때 호출돼야 하니까요.
+
+\`\`\`cpp {6-11,14}
 class BankAccount {
 private:
     string owner;
     double balance;
 
 public:
-    BankAccount(string name, double initial) {  // 생성자!
+    BankAccount(string name, double initial) {  // ← 생성자 자리
         owner = name;
         if (initial >= 0) balance = initial;
         else              balance = 0;   // 음수 입금은 막기
@@ -697,6 +762,8 @@ public:
 BankAccount acc("Emma", 1000);  // 생성자 자동 호출!
 \`\`\`
 
+맨 아래 \`BankAccount acc("Emma", 1000);\` 한 줄이면 끝 — \`acc\` 객체가 만들어지는 순간 위의 생성자가 자동으로 호출돼서 \`owner = "Emma"\`, \`balance = 1000\` 으로 세팅돼요. setter 매번 안 불러도 되죠.
+
 **Python 과 비교:**
 
 |  | Python 🐍 | C++ ⚡ |
@@ -704,6 +771,22 @@ BankAccount acc("Emma", 1000);  // 생성자 자동 호출!
 | 생성자 이름 | \`__init__\` | **클래스 이름과 동일** |
 | 첫 매개변수 | \`self\` 필수 | 없음 |
 | 리턴 타입 | 없음 | **없음 (void 도 아님!)** |`,
+        },
+        {
+          id: "ch3-object-create-ctor",
+          type: "explain",
+          title: "🛠️ 생성자 있는 객체 만드는 법 — 자세히",
+          component: "cppObjectCreateCtorBuilder",
+          content: `앞에서 \`Car myCar;\` 이렇게 객체를 만들었죠. 근데 생성자가 있으면 **값을 넘겨줘야** 해요.
+
+\`=\` 없이 **괄호 \`( )\`** 안에 인자를 써요 — 그 값들이 곧바로 생성자에게 전달돼요.`,
+          contentAfter: `**🐍 Python 과 비교:**
+
+| | Python | C++ |
+|---|---|---|
+| 객체 만들기 | \`acc = BankAccount("Emma", 1000)\` (\`=\` O) | \`BankAccount acc("Emma", 1000);\` (\`=\` X) |
+
+C++ 은 **괄호 \`( )\`** 로 인자 넘기는 게 가장 흔한 스타일 — 생성자를 직접 부르는 느낌이에요.`,
         },
         {
           id: "ch3-pred1",
