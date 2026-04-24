@@ -63,7 +63,7 @@ export const cppLesson22Data: LessonData = {
 | ⚙️ **할 줄 아는 것** | \`forward()\` | 앞으로 가기 |
 | | \`info()\` | 지금 상태 확인 |
 
-> 💡 하나의 예시일 뿐이에요. 만들다 보면 더 필요한 게 생기기도 하고, 몇 개는 안 쓸 수도 있어요.`,
+@핵심: 하나의 예시일 뿐! 만들다 보면 더 필요한 게 생기기도, 몇 개는 안 쓸 수도 있어요.`,
         },
         {
           id: "ch1-build-code",
@@ -80,9 +80,7 @@ export const cppLesson22Data: LessonData = {
 
 > 🐍 **Python 에서 온 친구라면?**
 > Python 은 \`self.speed\` 써야 하지만
-> C++ 은 그냥 \`speed\` 로 바로 써요.
-
-아직 자동차가 만들어진 건 아니에요 — 설계도만 그린 거예요.`,
+> C++ 은 그냥 \`speed\` 로 바로 써요.`,
             right: `\`\`\`cpp
 class Car {
     double speed;

@@ -595,15 +595,15 @@ const CPP_CLASS_BASIC: SyntaxBuilderPreset = {
       icon: "⚠️",
     },
     {
-      code: "class Car {\n    double speed;\n};",
-      highlight: { start: 12, end: 29 },
-      label: { ko: "⑤ 중괄호 안 위쪽에 멤버 변수 (예: double speed;)", en: "⑤ Member variables go at the top inside the braces (e.g., double speed;)" },
+      code: "class Car {\n    // 멤버 변수\n};",
+      highlight: { start: 12, end: 24 },
+      label: { ko: "⑤ 중괄호 안 위쪽에 멤버 변수가 들어가요", en: "⑤ Member variables go at the top inside the braces" },
       icon: "💾",
     },
     {
-      code: "class Car {\n    double speed;\n\n    void forward() {\n        speed += 10;\n    }\n};",
-      highlight: { start: 30, end: 77 },
-      label: { ko: "⑥ 아래쪽에 멤버 함수 (예: void forward() { ... })", en: "⑥ Member functions go below (e.g., void forward() { ... })" },
+      code: "class Car {\n    // 멤버 변수\n\n    // 멤버 함수\n};",
+      highlight: { start: 25, end: 38 },
+      label: { ko: "⑥ 그 아래 멤버 함수가 들어가요", en: "⑥ Member functions go below" },
       icon: "⚙️",
     },
   ],
@@ -1736,7 +1736,8 @@ export function SyntaxBuilder({ preset = "cpp-if", lang = "ko", onSuccess }: Syn
   }, [currentStep, isAutoPlaying, data.steps.length, onSuccess])
 
   const step = data.steps[Math.min(currentStep, data.steps.length - 1)]
-  const isComplete = currentStep >= data.steps.length
+  // 마지막 스텝 도달 시점부터 완료 상태로 전환 (이제 "다음" 대신 "다시" 표시)
+  const isComplete = currentStep >= data.steps.length - 1
 
   // 내부 스텝 변경 시 스크롤 없음 — 이미 화면에 보이는 상태에서 내용만 변경
 
