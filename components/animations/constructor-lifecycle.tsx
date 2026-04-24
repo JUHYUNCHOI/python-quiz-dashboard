@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
 
@@ -17,6 +17,19 @@ interface Props {
 type FieldState = "empty" | "garbage" | "active" | "done"
 type Mode = "none" | "with"
 
+// 랜덤 쓰레기값 생성 (garbage 상태일 때 숫자 필드에 계속 바뀌는 값 표시)
+function useGarbageNumber(active: boolean, seed: number) {
+  const [n, setN] = useState(() => Math.floor(1e7 + Math.random() * 9e7))
+  useEffect(() => {
+    if (!active) return
+    const id = setInterval(() => {
+      setN(Math.floor(1e7 + Math.random() * 9e7))
+    }, 150)
+    return () => clearInterval(id)
+  }, [active, seed])
+  return n
+}
+
 function Field({
   name,
   value,
@@ -26,9 +39,13 @@ function Field({
   value: string
   state: FieldState
 }) {
+  const isGarbageNumber = state === "garbage" && value.includes("garbage")
+  const garbageN = useGarbageNumber(isGarbageNumber, 0)
+  const display = isGarbageNumber ? `${garbageN} ⚠` : value
+
   const styles: Record<FieldState, string> = {
     empty: "bg-slate-700/60 text-slate-400 border-slate-600/40",
-    garbage: "bg-red-500/20 text-red-300 border-red-500/40",
+    garbage: "bg-red-500/30 text-red-100 border-red-500/60",
     active: "bg-amber-500/20 text-amber-200 border-amber-400/40",
     done: "bg-emerald-500/20 text-emerald-200 border-emerald-400/40",
   }
@@ -36,15 +53,24 @@ function Field({
     <motion.div layout className="flex items-center justify-between gap-3 py-0.5">
       <span className="text-slate-400 text-xs font-mono">{name}</span>
       <motion.span
-        key={`${name}-${state}-${value}`}
+        key={`${name}-${state}`}
         initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
+        animate={
+          state === "garbage"
+            ? { opacity: 1, scale: 1, x: [0, -1.5, 1.5, -1, 1, 0] }
+            : { opacity: 1, scale: 1 }
+        }
+        transition={
+          state === "garbage"
+            ? { x: { repeat: Infinity, repeatType: "loop", duration: 0.5, ease: "easeInOut" } }
+            : {}
+        }
         className={cn(
           "px-2 py-0.5 rounded-md text-xs font-mono font-semibold border",
           styles[state],
         )}
       >
-        {value}
+        {display}
       </motion.span>
     </motion.div>
   )
@@ -67,25 +93,29 @@ function Column({
   fields: Array<{ name: string; value: string; state: FieldState }>
   highlight: "neutral" | "active" | "done" | "danger"
 }) {
-  const borderByHighlight = {
-    neutral: "border-slate-700",
-    active: "border-amber-400/60 shadow-lg shadow-amber-500/10",
-    done: "border-emerald-400/60 shadow-lg shadow-emerald-500/10",
-    danger: "border-red-500/60 shadow-lg shadow-red-500/10",
+  const boxByHighlight = {
+    neutral: "border-slate-700 bg-slate-900/60",
+    active: "border-amber-400/60 bg-slate-900/60 shadow-lg shadow-amber-500/10",
+    done: "border-emerald-400/60 bg-slate-900/60 shadow-lg shadow-emerald-500/10",
+    danger: "border-red-500/70 bg-red-950/40 shadow-lg shadow-red-500/20",
   }[highlight]
+
+  const countLabelStyle = highlight === "danger"
+    ? "bg-red-500/25 text-red-200 border border-red-400/50 px-1.5 py-0.5 rounded font-bold"
+    : "text-slate-400"
 
   return (
     <div className={cn(
-      "flex flex-col gap-3 rounded-2xl border bg-slate-900/60 p-4 transition-colors",
-      borderByHighlight,
+      "flex flex-col gap-3 rounded-2xl border p-4 transition-colors",
+      boxByHighlight,
     )}>
       <div className="flex items-start justify-between gap-3">
         <div>
           <div className="text-sm font-bold text-slate-100">{title}</div>
           <div className="text-[11px] text-slate-400 mt-0.5">{subtitle}</div>
         </div>
-        <span className="text-[10px] font-semibold uppercase tracking-wide text-slate-400 shrink-0">
-          {stepCountLabel}
+        <span className={cn("text-[10px] font-semibold uppercase tracking-wide shrink-0", countLabelStyle)}>
+          {highlight === "danger" ? `⚠️ ${stepCountLabel}` : stepCountLabel}
         </span>
       </div>
 
@@ -276,34 +306,32 @@ BankAccount acc;  // ← 그냥 만듦`
 
   return (
     <div className="rounded-3xl border border-slate-700 bg-gradient-to-br from-slate-900 to-slate-950 p-5 shadow-xl">
-      {/* 헤더 */}
-      <div className="mb-4">
+      {/* 헤더 — 제목 + 모드 탭 인라인 */}
+      <div className="mb-3 flex items-center justify-between gap-3 flex-wrap">
         <h3 className="text-base font-bold text-slate-100">
           {isEn ? "Constructor Lifecycle" : "생성자 생애주기 — 멤버에 값이 언제 들어가나?"}
         </h3>
-      </div>
-
-      {/* 모드 탭 — 생성자 없음 / 있음 */}
-      <div className="flex gap-1.5 mb-4 rounded-xl bg-slate-800/60 p-1">
-        {(["none", "with"] as Mode[]).map(m => {
-          const label = m === "none"
-            ? (isEn ? "No constructor" : "생성자 없음")
-            : (isEn ? "With constructor" : "생성자 있음")
-          return (
-            <button
-              key={m}
-              onClick={() => { setMode(m); setStep(0) }}
-              className={cn(
-                "flex-1 px-3 py-2 rounded-lg text-sm font-semibold transition-all",
-                mode === m
-                  ? "bg-slate-950 text-white shadow"
-                  : "text-slate-400 hover:text-slate-200"
-              )}
-            >
-              {label}
-            </button>
-          )
-        })}
+        <div className="inline-flex gap-0.5 rounded-lg bg-slate-800/70 p-0.5 text-[11px]">
+          {(["none", "with"] as Mode[]).map(m => {
+            const label = m === "none"
+              ? (isEn ? "No constructor" : "생성자 없음")
+              : (isEn ? "With constructor" : "생성자 있음")
+            return (
+              <button
+                key={m}
+                onClick={() => { setMode(m); setStep(0) }}
+                className={cn(
+                  "px-2.5 py-1 rounded-md font-semibold transition-all",
+                  mode === m
+                    ? "bg-slate-950 text-white"
+                    : "text-slate-400 hover:text-slate-200"
+                )}
+              >
+                {label}
+              </button>
+            )
+          })}
+        </div>
       </div>
 
       {/* 스텝 버튼 */}
