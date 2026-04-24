@@ -80,6 +80,24 @@ export function ExplainStep({ step }: ExplainStepProps) {
         </div>
       )}
 
+      {/* 컴포넌트 이후에 이어지는 설명 (선택적) */}
+      {step.contentAfter && (
+        step.layoutAfter ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 items-start">
+            <div className="text-lg md:text-xl space-y-3">{renderContent(step.layoutAfter.left)}</div>
+            <div className="text-lg md:text-xl space-y-3 md:sticky md:top-4">{renderContent(step.layoutAfter.right)}</div>
+          </div>
+        ) : (
+          <div className="text-lg md:text-xl space-y-3">{renderContent(step.contentAfter)}</div>
+        )
+      )}
+      {!step.contentAfter && step.layoutAfter && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 items-start">
+          <div className="text-lg md:text-xl space-y-3">{renderContent(step.layoutAfter.left)}</div>
+          <div className="text-lg md:text-xl space-y-3 md:sticky md:top-4">{renderContent(step.layoutAfter.right)}</div>
+        </div>
+      )}
+
       {/* 답 보기 접이식 영역 */}
       {step.reveal && (
         <div className="mt-4">

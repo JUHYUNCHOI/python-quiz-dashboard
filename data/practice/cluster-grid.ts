@@ -260,13 +260,9 @@ int main() {
 using namespace std;
 
 int main() {
-    int n, m;
-    cin >> n >> m;
-    vector<vector<int>> grid(n, vector<int>(m));
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < m; j++)
-            cin >> grid[i][j];
-    // Write your code here
+    // 1) int n, m 을 cin 으로 입력받기
+    // 2) n×m 크기의 2D 벡터 grid 선언하고 모든 원소 읽기
+    // 3) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [
@@ -325,13 +321,9 @@ int main() {
 using namespace std;
 
 int main() {
-    int n, m;
-    cin >> n >> m;
-    vector<vector<int>> grid(n, vector<int>(m));
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < m; j++)
-            cin >> grid[i][j];
-    // Write your code here
+    // 1) int n, m 을 cin 으로 입력받기
+    // 2) n×m 크기의 2D 벡터 grid 선언하고 모든 원소 읽기
+    // 3) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [
@@ -521,13 +513,9 @@ If K is not found, output \`NOT FOUND\`.`,
 using namespace std;
 
 int main() {
-    int n, m;
-    cin >> n >> m;
-    vector<vector<int>> grid(n, vector<int>(m));
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < m; j++)
-            cin >> grid[i][j];
-    // Write your code here
+    // 1) int n, m 을 cin 으로 입력받기
+    // 2) n×m 크기의 2D 벡터 grid 선언하고 모든 원소 읽기
+    // 3) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [
@@ -669,13 +657,9 @@ Edge cells have no out-of-grid neighbors, so they only need to be greater than t
 using namespace std;
 
 int main() {
-    int n, m;
-    cin >> n >> m;
-    vector<vector<int>> grid(n, vector<int>(m));
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < m; j++)
-            cin >> grid[i][j];
-    // Write your code here
+    // 1) int n, m 을 cin 으로 입력받기
+    // 2) n×m 크기의 2D 벡터 grid 선언하고 모든 원소 읽기
+    // 3) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [
@@ -739,13 +723,9 @@ int main() {
 using namespace std;
 
 int main() {
-    int n, m;
-    cin >> n >> m;
-    vector<vector<int>> grid(n, vector<int>(m));
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < m; j++)
-            cin >> grid[i][j];
-    // Write your code here
+    // 1) int n, m 을 cin 으로 입력받기
+    // 2) n×m 크기의 2D 벡터 grid 선언하고 모든 원소 읽기
+    // 3) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [
@@ -887,13 +867,9 @@ int main() {
 using namespace std;
 
 int main() {
-    int n, m;
-    cin >> n >> m;
-    vector<vector<int>> grid(n, vector<int>(m));
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < m; j++)
-            cin >> grid[i][j];
-    // Write your code here
+    // 1) int n, m 을 cin 으로 입력받기
+    // 2) n×m 크기의 2D 벡터 grid 선언하고 모든 원소 읽기
+    // 3) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [
@@ -950,13 +926,9 @@ int main() {
 using namespace std;
 
 int main() {
-    int n, m;
-    cin >> n >> m;
-    vector<vector<int>> grid(n, vector<int>(m));
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < m; j++)
-            cin >> grid[i][j];
-    // Write your code here
+    // 1) int n, m 을 cin 으로 입력받기
+    // 2) n×m 크기의 2D 벡터 grid 선언하고 모든 원소 읽기
+    // 3) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [

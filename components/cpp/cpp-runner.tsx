@@ -302,19 +302,22 @@ export function CppRunner({
         setHasRun(true)
         if (submissionMode) {
           const outputMatches = !expectedOutput || normalize(runStdout) === normalize(expectedOutput)
-          // 아직 제출 안 됐거나 fail 상태면 새로 저장
+          // 아직 제출 안 됐거나 fail 상태면 새로 저장 (선생님 리뷰용으로 null 로도 저장됨)
           if (!isSubmitted || teacherGrade === "fail") {
             const autoGrade = outputMatches ? "auto" as const : null
             saveCodeSilently(code, autoGrade)
           }
           if (outputMatches) {
             setIsCorrect(true)
+            // 출력 일치한 경우에만 스텝 완료로 처리
+            onSuccess?.()
           } else if (expectedOutput) {
             setIsCorrect(false)
+            // 일치 안 하면 "선생님 리뷰 대기" 상태로 저장은 되지만, 완료 마킹은 안 함
+          } else {
+            // expectedOutput 없는 자유 구현 스텝 — 실행만 하면 제출로 간주
+            onSuccess?.()
           }
-          // submissionMode에서는 출력 일치 여부와 관계없이 제출하면 다음으로 진행 가능
-          // (선생님이 나중에 리뷰하므로 제출 자체가 완료)
-          onSuccess?.()
         } else if (!submissionMode) {
           if (expectedOutput) {
             const isMatch = normalize(runStdout) === normalize(expectedOutput)

@@ -645,11 +645,8 @@ Print \`YES\` if it is a palindrome, \`NO\` otherwise.`,
 using namespace std;
 
 int main() {
-    string s, from, to;
-    getline(cin, s);
-    getline(cin, from);
-    getline(cin, to);
-    // 여기에 코드를 작성하세요
+    // 1) getline 으로 세 줄 입력받기: s, from, to
+    // 2) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [

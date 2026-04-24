@@ -207,11 +207,9 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<string> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    // 여기에 코드를 작성하세요
+    // 1) int n 을 cin 으로 입력받기
+    // 2) 크기 n 의 문자열 벡터 v 선언하고 n 개의 문자열 읽기
+    // 3) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [
@@ -334,11 +332,9 @@ int main() {
 using namespace std;
 
 int main() {
-    int n, k;
-    cin >> n >> k;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    // 여기에 코드를 작성하세요
+    // 1) int n, k 를 cin 으로 입력받기
+    // 2) 크기 n 의 벡터 v 선언하고 n 개의 원소 읽기
+    // 3) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [

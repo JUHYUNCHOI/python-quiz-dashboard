@@ -102,12 +102,69 @@ class Car {
           },
         },
         {
+          id: "ch1-build-practice",
+          type: "practice" as const,
+          title: "✋ Write a class yourself",
+          hideStarterButton: true,
+          content: `Now try writing a \`Dog\` class yourself!
+
+**Steps:**
+
+1. Declare \`class Dog\` (don't forget the semicolon)
+2. Under \`public:\`, add member variables \`name\` (string), \`age\` (int)
+3. Under \`public:\`, add a member function \`bark()\` — print \`"Woof!"\``,
+          starterCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+// 1. Declare class Dog
+// 2. public: name (string), age (int)
+// 3. public: bark() — print "Woof!"
+
+
+int main() {
+    Dog d;
+    d.name = "Choco";
+    d.age = 3;
+    d.bark();
+    cout << d.name << ", " << d.age << " years old";
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+class Dog {
+public:
+    string name;
+    int age;
+
+    void bark() {
+        cout << "Woof!" << endl;
+    }
+};
+
+int main() {
+    Dog d;
+    d.name = "Choco";
+    d.age = 3;
+    d.bark();
+    cout << d.name << ", " << d.age << " years old";
+    return 0;
+}`,
+          hint: `class Dog { public: string name; int age; void bark() { cout << "Woof!" << endl; } };  — semicolon at the end of class!`,
+          expectedOutput: `Woof!
+Choco, 3 years old`
+        },
+        {
           id: "ch1-object-concept",
           type: "explain",
           title: "🎮 class is the blueprint, object is the real thing!",
           content: `We just wrote a Car class — so does a car exist now?
 
 No. A class is a **blueprint**. One more step is needed to actually create a car.
+
+![class = blueprint, object = real thing](/images/cpp/class-blueprint.svg)
 
 Think of an RPG game — seeing the "Flame Sword" description in a shop doesn't make it yours. You have to **actually buy it or pick it up** for it to appear in your inventory.
 
@@ -119,52 +176,124 @@ Think of an RPG game — seeing the "Flame Sword" description in a shop doesn't 
 What you create from a class is called an **object** or **instance**.`,
         },
         {
+          id: "ch1-object-make",
+          type: "explain",
+          title: "🛠️ Let's create an object",
+          component: "cppObjectCreateBuilder",
+          content: `So how do we actually make an **object**? It's not hard — remember \`int x;\`? **Type name** then **variable name**. Same for objects:`,
+          contentAfter: `**One blueprint can make many cars:**
+
+\`\`\`cpp
+Car car1;    // object 1
+Car car2;    // object 2
+Car car3;    // object 3
+\`\`\`
+
+![One blueprint, many objects|width=480](/images/cpp/class-multi.svg)`,
+        },
+        {
           id: "ch1-object-code",
           type: "explain",
-          title: "🚗 Create and use an object",
-          content: `\`\`\`cpp
+          title: "🔗 Use members with the dot (.)",
+          content: `Now that you have an object, it's time to use it. To change \`myCar\`'s \`color\` or call \`forward()\`?
+
+**All you need is the dot \`.\`**
+
+{collapse:📐 Reference — here's what class Car looks like}
+\`\`\`cpp
+class Car {
+    string color;
+    double speed;
+
+    void forward();
+    void info();
+};
+\`\`\`
+
+\`\`\`cpp
+Car myCar;
+
+myCar.color = "red";    // set a member variable
+cout << myCar.speed;    // read a member variable
+myCar.forward();        // call a member function (don't forget the parens)
+\`\`\`
+
+This style of programming — **drawing a blueprint and stamping out living copies** — is called **Object-Oriented Programming (OOP)**.
+
+Think of an RPG — once you design a Warrior **blueprint**, you can stamp out Arthur, Jade, Ian... as many as you want, each fighting on their own. \`class Car\` is exactly the same.`,
+        },
+        {
+          id: "ch1-object-practice",
+          type: "practice" as const,
+          title: "✋ Create and drive a Car",
+          content: `Create a \`Car\` object and make it move!
+
+**Steps:**
+
+1. Create a \`myCar\` object
+2. Set \`color\` to "blue", \`speed\` to 0
+3. Call \`forward()\` twice
+4. Call \`info()\``,
+          starterCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+class Car {
+public:
+    double speed;
+    string color;
+
+    void forward() {
+        speed += 10;
+    }
+    void info() {
+        cout << color << " car, speed: " << speed << endl;
+    }
+};
+
 int main() {
-    Car myCar;            // ← an actual car (object) is created here!
-    myCar.color = "red";
+    // 1. Create Car object myCar
+
+
+    // 2. Set color to "blue", speed to 0
+
+
+    // 3. Call forward() twice
+
+
+    // 4. Call info()
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+class Car {
+public:
+    double speed;
+    string color;
+
+    void forward() {
+        speed += 10;
+    }
+    void info() {
+        cout << color << " car, speed: " << speed << endl;
+    }
+};
+
+int main() {
+    Car myCar;
+    myCar.color = "blue";
     myCar.speed = 0;
     myCar.forward();
     myCar.forward();
-    myCar.info();         // red car, speed: 20
-}
-\`\`\`
-
-One blueprint, multiple cars:
-
-\`\`\`cpp
-int main() {
-    Car car1;  car1.color = "red";    // object 1
-    Car car2;  car2.color = "blue";   // object 2
-}
-\`\`\`
-
-> 🍪 **Cookie cutter = class, cookie = object**
-> One cutter makes many cookies — one class creates many objects.
-
-**Designing classes and creating objects from them** — this way of programming is called **Object-Oriented Programming (OOP)**.
-
-{collapse:📦 Bonus — what if there were no classes?}
-\`\`\`cpp
-// Without a class, two cars would look like this...
-int main() {
-    double car1Speed = 0;
-    string car1Color = "red";
-    double car2Speed = 0;
-    string car2Color = "blue";
-
-    car1Speed += 10;
-    car2Speed += 10;
-
-    // As code grows... wait, which car was car2Color for again?
-    cout << car1Color << " car, speed: " << car1Speed << endl;
-    cout << car2Color << " car, speed: " << car2Speed << endl;
-}
-// With 10 cars? 20 variables — and you'd lose track of which belongs to which
-\`\`\``,
+    myCar.info();
+    return 0;
+}`,
+          hint: `Create object: Car myCar; — Set members: myCar.color = "blue"; myCar.speed = 0; — Call functions: myCar.forward(); twice, then myCar.info();`,
+          expectedOutput: `blue car, speed: 20`
         },
         {
           id: "ch1-pred1",
@@ -347,52 +476,174 @@ int main() {
         {
           id: "ch2-getter-setter",
           type: "explain",
-          title: "So how do we get or change values inside the class?",
+          title: "So how do we get or change blocked values?",
           content: `We just blocked the bank balance with \`private\`. But that doesn't mean nobody can ever see it — you use a **teller window**.
 
 Here's another way to think about it. Imagine your stuff is in your room. You don't want people just walking in and grabbing things, right? So you **lock the door** (\`private\`).
 
 But if a friend needs something? They **knock and ask** — you hand it to them → that's a **getter**.
-Want to put something in? They **ask you** — you check if it's okay, then let it in → that's a **setter**.
+Want to put something in? They **ask you** — you take it from them → that's a **setter**.
 
-A class works the same way. We said member variables should be private — but what if we need to read or change \`speed\`?
+A class works the same way. Member variables stay private — and to read or change \`speed\`, you go **through a public member function**.
 
-You access them **through a public member function**.
-
-\`\`\`cpp {6-8,10-15}
+\`\`\`cpp {6-8}
 class Car {
 private:
     double speed;
     string color;
 
 public:
-    double getSpeed() { return speed; }   // read speed
-    string getColor() { return color; }   // read color
+    double getSpeed() { return speed; }        // read
+    void   setSpeed(double s) { speed = s; }   // write
+};
+\`\`\`
 
+Functions that **read** a value are called **getters**, and functions that **set** a value are called **setters**. Prefixing names with \`get\` / \`set\` is just a convention.`,
+        },
+        {
+          id: "ch2-encapsulation",
+          type: "explain",
+          title: "But why go through functions at all?",
+          content: `Wouldn't it be easier to just make things public? Well — going through a setter lets you **block invalid values.**
+
+\`\`\`cpp {7,10}
+class Car {
+private:
+    double speed;
+    string color;
+
+public:
     void setSpeed(double s) {
         if (s >= 0) speed = s;   // reject negative speed
     }
     void setColor(string c) {
         if (c != "") color = c;  // reject empty color
     }
+    double getSpeed() { return speed; }
 };
 \`\`\`
 
 \`\`\`cpp
 int main() {
     Car myCar;
-    myCar.setColor("red");
-    myCar.setSpeed(-999);    // negative → ignored
-    cout << myCar.getSpeed(); // 0 (unchanged)
+    myCar.setSpeed(-999);       // negative → ignored
+    cout << myCar.getSpeed();   // 0 (unchanged)
 }
 \`\`\`
 
-Functions that **read** a value are called **getters**, and functions that **set** a value are called **setters**.
-The key point: a setter can **reject invalid values**.
+**Block** with \`private\`, then build a **controlled gateway** with getters/setters — that's exactly what **encapsulation** is.
 
-@Key: Block with private, then create a controlled gateway with getters/setters — that's **encapsulation**.
+@Key: Hide internal data; only let the outside talk through functions. That way, even if the internal implementation changes later, the outside code can stay the same.
 
-But there's still one question — do we have to call a setter every single time we create an object just to set initial values? Is there a better way?`,
+But one question remains — do we really need to call a setter **every single time** we create an object, just to set initial values? There's got to be a better way...`,
+        },
+        {
+          id: "ch2-gs-pred",
+          type: "predict" as const,
+          title: "🔍 What if the setter blocks bad values?",
+          code: `#include <iostream>
+using namespace std;
+
+class Car {
+private:
+    double speed = 0;
+public:
+    double getSpeed() { return speed; }
+    void setSpeed(double s) {
+        if (s >= 0) speed = s;
+    }
+};
+
+int main() {
+    Car c;
+    c.setSpeed(-999);
+    c.setSpeed(60);
+    c.setSpeed(-5);
+    cout << c.getSpeed();
+    return 0;
+}`,
+          options: ["-5", "60", "0", "Compile error"],
+          answer: 1,
+          explanation: "setSpeed(-999) and setSpeed(-5) fail the \`s >= 0\` check and are ignored. Only 60 passes → speed becomes 60. getSpeed() prints 60."
+        },
+        {
+          id: "ch2-gs-fb",
+          type: "fillblank" as const,
+          title: "Complete the getter / setter!",
+          content: "A getter **returns** a value; a setter checks a condition then **sets** it.",
+          code: `class Student {
+private:
+    int score;
+public:
+    int getScore() { ___ score; }                       // return the value
+
+    void setScore(int s) {
+        if (s >= 0 && s <= 100) ___ = s;                // only set if 0~100
+    }
+};`,
+          fillBlanks: [
+            { id: 0, answer: "return", options: ["return", "score", "get", "="] },
+            { id: 1, answer: "score", options: ["score", "s", "this", "setScore"] }
+          ],
+          explanation: "A getter uses `return` to hand back the member's value. A setter assigns `member = parameter` when the condition passes. Here `score` is the member, `s` is the parameter."
+        },
+        {
+          id: "ch2-practice",
+          type: "practice" as const,
+          title: "✋ Write your own getter/setter",
+          hideStarterButton: true,
+          content: `Add a getter and setter to the \`Person\` class yourself!
+
+**Steps:**
+
+1. \`getAge()\` — return \`age\`
+2. \`setAge(int a)\` — only set if \`a >= 0\` (reject negatives)`,
+          starterCode: `#include <iostream>
+using namespace std;
+
+class Person {
+private:
+    int age = 0;
+
+public:
+    // 1. getAge() — return age
+
+
+    // 2. setAge(int a) — only set if a >= 0
+
+};
+
+int main() {
+    Person p;
+    p.setAge(-5);    // negative → ignored
+    p.setAge(15);
+    cout << p.getAge();  // 15
+    return 0;
+}`,
+          code: `#include <iostream>
+using namespace std;
+
+class Person {
+private:
+    int age = 0;
+
+public:
+    int getAge() { return age; }
+
+    void setAge(int a) {
+        if (a >= 0) age = a;
+    }
+};
+
+int main() {
+    Person p;
+    p.setAge(-5);
+    p.setAge(15);
+    cout << p.getAge();
+    return 0;
+}`,
+          hint: `int getAge() { return age; } — void setAge(int a) { if (a >= 0) age = a; }`,
+          expectedOutput: `15`
         },
       ]
     },
@@ -405,56 +656,17 @@ But there's still one question — do we have to call a setter every single time
       emoji: "🔧",
       steps: [
         {
-          id: "ch3-constructor-anim",
-          type: "interactive",
-          title: "🎬 With vs without a constructor",
-          description: "Click through the tabs to see what a constructor does.",
-          component: "constructorVisualizer",
-        },
-        {
-          id: "ch3-garbage-p1",
-          type: "predict" as const,
-          title: "🔍 What happens with a local int?",
-          code: `int main() {
-    int a;        // not initialized
-    cout << a;
-    return 0;
-}`,
-          options: ["Prints 0", "Prints 5", "Unpredictable value (garbage)", "Compile error"],
-          answer: 2,
-          explanation: "A **local variable** inside a function gets whatever random bytes were already in memory — a garbage value. Different every run. C++ skips auto-initialization for speed."
-        },
-        {
-          id: "ch3-garbage-p2",
-          type: "predict" as const,
-          title: "🔍 What about a global int?",
-          code: `int a;   // global variable (outside main)
+          id: "ch3-motivation-intro",
+          type: "explain",
+          title: "🤔 What if we don't call any setter?",
+          content: `A moment ago, you used \`setAge()\` to set initial values. But **what if you forget and don't call any setter?** What value does that member hold?
 
-int main() {
-    cout << a;
-    return 0;
-}`,
-          options: ["Prints 0", "Garbage", "Compile error", "Runtime error"],
-          answer: 0,
-          explanation: "**Global** and **static** variables are automatically zero-initialized. Only locals carry garbage. \`static int a;\` is also 0!"
-        },
-        {
-          id: "ch3-garbage-p3",
-          type: "predict" as const,
-          title: "🔍 `int a{};` — what do curly braces do?",
-          code: `int main() {
-    int a{};      // brace initialization!
-    cout << a;
-    return 0;
-}`,
-          options: ["Prints 0", "Garbage", "Error (no initial value given)", "Prints 1"],
-          answer: 0,
-          explanation: "Empty braces `{}` trigger **value-initialization** — int is guaranteed to be 0. People usually write `int a = 0;` but `int a{};` also guarantees 0."
+0? Or something else? Try the next couple of questions to get a feel.`,
         },
         {
           id: "ch3-garbage-p4",
           type: "predict" as const,
-          title: "🔍 What about an int member inside a class?",
+          title: "🔍 What's an uninitialized class-member int?",
           code: `class Box {
 public:
     int count;   // not initialized
@@ -492,40 +704,34 @@ int main() {
         {
           id: "ch3-garbage-summary",
           type: "explain",
-          title: "📋 Garbage values — cheat sheet",
+          title: "📋 Class member initial values — summary",
           layout: {
-            left: `**Fundamental types** (int, double, char, bool, pointers)
+            left: `**Class member initial values**
 
-| Location | Initial value |
+| Member type | If not initialized |
 |---|---|
-| Inside a function (local) | 🎲 garbage |
-| Outside a function (global / static) | ✅ 0 |
-| Class member (no constructor) | 🎲 garbage |
-| \`int a{};\` (braces) | ✅ 0 |
+| \`int\`, \`double\`, \`char\`, \`bool\` | 🎲 garbage |
+| Fundamental-type array \`int arr[5]\` | 🎲 garbage per element |
+| \`string\`, \`vector\`, \`map\`, ... | ✅ empty ("", [], {}) |
+| \`string\` array \`string arr[5]\` | ✅ "" per element |
 
-**Class types** (string, vector, map, ...)
-→ have their own default constructor, always start **empty** (no garbage worries)
+Types like \`string\` / \`vector\` **start empty on their own** (no worries). But **fundamental types** like \`int\`, \`double\` hold **random garbage** if you don't initialize them.
 
-**Takeaway:** A class with fundamental-type members **must have a constructor**. That's exactly the next step.`,
+**So** — we need a device that takes care of members automatically. Next page: **the constructor** enters!`,
             right: `\`\`\`cpp
-// Initial-value cheat sheet at a glance
-
-int a;              // 🎲 garbage
-int b{};            // ✅ 0
-int c = 0;          // ✅ 0
-static int d;       // ✅ 0 (static)
-
-string s;           // ✅ ""
-vector<int> v;      // ✅ []
-
 class Box {
-    int count;      // 🎲 garbage
-    string name;    // ✅ ""
+    int count;          // 🎲 garbage
+    int scores[5];      // 🎲 all 5 garbage
+    string name;        // ✅ ""
+    string tags[3];     // ✅ all 3 ""
+    vector<int> v;      // ✅ []
 };
 
 Box b;
-// b.count  → garbage
-// b.name   → ""
+// b.count     → garbage!
+// b.scores[0] → garbage!
+// b.name      → ""
+// b.tags[0]   → ""
 \`\`\``
           },
         },
@@ -544,22 +750,26 @@ Let's build a constructor step by step:`,
           id: "ch3-constructor-usage",
           type: "explain",
           title: "The full class with a constructor",
-          content: `\`\`\`cpp {6-11,14}
+          content: `Now let's **slot** the constructor you just built into the class. A constructor always goes under \`public:\` — it has to be callable from outside when creating an object.
+
+\`\`\`cpp {6-11,14}
 class BankAccount {
 private:
     string owner;
     double balance;
 
 public:
-    BankAccount(string name, double initial) {  // Constructor!
+    BankAccount(string name, double initial) {  // ← constructor goes here
         owner = name;
         if (initial >= 0) balance = initial;
-        else              balance = 0;   // Block negative deposits
+        else              balance = 0;   // block negative deposits
     }
 };
 
-BankAccount acc("Emma", 1000);  // Constructor called automatically!
+BankAccount acc("Emma", 1000);  // constructor called automatically!
 \`\`\`
+
+That last line \`BankAccount acc("Emma", 1000);\` is all it takes — the moment \`acc\` is created, the constructor above fires and sets \`owner = "Emma"\`, \`balance = 1000\`. No more calling a setter every time.
 
 **Compared to Python:**
 
@@ -570,170 +780,20 @@ BankAccount acc("Emma", 1000);  // Constructor called automatically!
 | Return type | None | **None (not even void!)** |`,
         },
         {
-          id: "ch3-initlist",
+          id: "ch3-object-create-ctor",
           type: "explain",
-          title: "💡 Constructor — Two Ways to Write It",
-          content: `There are **two ways** to write a constructor.
+          title: "🛠️ Creating an object with a constructor — in detail",
+          component: "cppObjectCreateCtorBuilder",
+          content: `Earlier we made objects like \`Car myCar;\`. But when there's a constructor, you need to **pass in values.**
 
-**Method 1: Assignment in the body (what we've been doing)**
-\`\`\`cpp
-BankAccount(string name, double initial) {
-    owner = name;      // "assign" to member variables
-    balance = initial;
-}
-\`\`\`
+No \`=\` — just write the arguments inside **parentheses \`( )\`** — those values go straight to the constructor.`,
+          contentAfter: `**🐍 Compared to Python:**
 
-**Method 2: Initializer list (new way)**
-\`\`\`cpp
-BankAccount(string name, double initial)
-    : owner(name), balance(initial) {}
-\`\`\`
-
-After the colon (\`:\`), write \`member(value)\` pairs separated by \`,\`. Leave the braces empty.
-
----
-
-At first glance **the result looks identical.** Both end up with \`owner\` and \`balance\` set to the given values.
-
-🤔 **But C++ "recommends" the initializer list.** Why? It's not just a style preference — **the internal behavior is different.** The next page shows what actually happens under the hood.`
-        },
-        {
-          id: "ch3-initlist-lifecycle",
-          type: "explain",
-          title: "🔬 Under the Hood — When Do Members Get Their Values?",
-          component: "constructorLifecycle",
-          content: `Click through **1 → 2 → 3** in the simulator below to compare.
-
-- **Body assignment**: members are born **empty / with garbage** (step 1), then the body **overwrites** them (step 2) → **2 things** happen.
-- **Initializer list**: members are born **directly with the final values** → **1 thing** happens.
-
-For simple types (\`int\`, \`double\`) the speed difference is tiny. The **real difference** is that some members **cannot be "overwritten later" at all** — we meet those (\`const\`, \`reference\`) on the next page.`
-        },
-        {
-          id: "ch3-initlist-const-ref",
-          type: "explain",
-          title: "⚠️ const and reference — Why the List is Required",
-          content: `**const members** and **reference members** can **only** be initialized with an initializer list. Body assignment produces a compile error.
-
----
-
-**① const members**
-
-\`const int id;\` means "once this value is set, it can never change."
-
-\`\`\`cpp
-class Player {
-    const int id;   // fixed once it's set
-public:
-    Player(int i) {
-        id = i;     // ❌ ERROR! can't assign to const
-    }
-};
-\`\`\`
-
-By the time we enter the body, \`id\` has **already been default-constructed**. After that, \`id = i\` would be a "value change" — which const forbids → **compile error**.
-
-The list works because it sets the value **at birth** — not a change, an initialization:
-
-\`\`\`cpp
-Player(int i) : id(i) {}   // ✅ born with i
-\`\`\`
-
----
-
-**② reference members**
-
-\`int& ref;\` is a **nickname** for another variable. A reference **must** be bound to something **at the moment it's declared**.
-
-\`\`\`cpp
-class Observer {
-    int& target;    // pointing at what?
-public:
-    Observer(int& t) {
-        target = t;   // ❌ ERROR! target has no binding yet
-    }
-};
-\`\`\`
-
-References can't even "exist" without a target, so the compiler stops you before you reach the body.
-
-Also: for a reference, \`target = t\` means "assign t's value into the variable target already points to" — not "make target point to a different variable". A reference's target **can never be rebound** once set.
-
-The list fixes it:
-
-\`\`\`cpp
-Observer(int& t) : target(t) {}   // ✅ born pointing at t
-\`\`\`
-
----
-
-**Summary**
-
-| Member kind | Body assignment | Initializer list |
+| | Python | C++ |
 |---|---|---|
-| Regular (int, string, etc.) | ✅ works | ✅ works |
-| \`const\` | ❌ **error** | ✅ **required** |
-| \`reference (&)\` | ❌ **error** | ✅ **required** |
-| Other class object (no default constructor) | ❌ error | ✅ required |
+| Create object | \`acc = BankAccount("Emma", 1000)\` (with \`=\`) | \`BankAccount acc("Emma", 1000);\` (no \`=\`) |
 
-→ If your class has const, reference, or a "no-default-constructor" object member, **the list is your only option**.`
-        },
-        {
-          id: "ch3-initlist-realworld",
-          type: "explain",
-          title: "🌍 Which One Is Used More in Real Code?",
-          content: `**Answer: the initializer list.** Real-world C++ projects and open-source libraries overwhelmingly use it.
-
----
-
-**Why?**
-
-1. **Consistency** — handles regular members, const, references, object members with **one syntax**
-2. **Correctness** — values are set "at birth", no "default-first, overwrite-later" pitfalls
-3. **Recommended by authoritative style guides**:
-   - Google C++ Style Guide
-   - C++ Core Guidelines (co-authored by Bjarne Stroustrup — the creator of C++)
-4. **Small efficiency gain** — for heavy types like \`string\`, you avoid "create empty → overwrite" (2 operations) in favor of "create with the value" (1 operation)
-
----
-
-**So why did this lesson teach body assignment first?**
-
-It's easier to read and visually similar to Python's \`__init__\`, so it's **intuitive when you're first learning**. Nail the concept first, then switch the syntax.
-
-Now that you've got the concept, **make the initializer list your default going forward**. Real-world code and open source become much easier to read.
-
----
-
-**Side-by-side**
-
-\`\`\`cpp
-// The style we learned
-BankAccount(string name, double initial) {
-    owner = name;
-    balance = initial;
-}
-
-// The style you'll see more often in practice
-BankAccount(string name, double initial)
-    : owner(name), balance(initial) {}
-\`\`\`
-
-Both are correct. Same result. But the second is the standard in team code reviews and open-source contributions.
-
----
-
-**💡 Summary**
-
-| | Body assignment | Initializer list |
-|---|---|---|
-| Readability (for beginners) | Easy | Compact once familiar |
-| const & reference support | ❌ impossible | ✅ supported |
-| Efficiency | Slightly slower | One-shot |
-| Real-world preference | △ occasional | ⭐ most code |
-| Recommended after this lesson | — | ✅ default |
-
-Next time you see \`Player(string n, int h) : name(n), health(h) {}\`, you'll immediately recognize it as **"ah, initializer list"**.`
+In C++, passing arguments through **parentheses \`( )\`** is the most common style — it feels like calling the constructor directly.`,
         },
         {
           id: "ch3-pred1",

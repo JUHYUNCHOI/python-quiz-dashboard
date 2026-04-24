@@ -46,6 +46,10 @@ interface SyntaxStep {
 interface SyntaxBuilderPreset {
   title: { ko: string; en: string }
   steps: SyntaxStep[]
+  hideHeader?: boolean
+  hideControls?: boolean
+  tapToAdvance?: boolean
+  sidebar?: { title: { ko: string; en: string }; code: string }
 }
 
 // ========== 프리셋 정의 ==========
@@ -579,20 +583,144 @@ const CPP_CLASS_BASIC: SyntaxBuilderPreset = {
     {
       code: "class Car",
       highlight: { start: 6, end: 9 },
-      label: { ko: "② 이름을 붙여요. 관례상 **대문자**로 시작! (Car, Dog, Student...)", en: "② Give it a name. By convention, **start with a capital letter!** (Car, Dog, Student...)" },
+      label: { ko: "② 이름 붙이기. 관례상 대문자로 시작! (Car, Dog, Student...)", en: "② Give it a name. By convention, start with a capital letter! (Car, Dog, Student...)" },
       icon: "🔠",
     },
     {
       code: "class Car {\n\n}",
       highlight: { start: 10, end: 14 },
-      label: { ko: "③ 중괄호 { } 로 감싸요. 안쪽에 멤버들이 들어가요", en: "③ Wrap in braces { }. Members go inside" },
+      label: { ko: "③ 중괄호 { } 로 감싸기. 안쪽에 멤버들이 들어가요", en: "③ Wrap in braces { }. Members go inside" },
       icon: "📦",
     },
     {
       code: "class Car {\n\n};",
       highlight: { start: 14, end: 15 },
-      label: { ko: "④ ⚠️ 마지막에 세미콜론(;)! 빠뜨리면 컴파일 에러!", en: "④ ⚠️ Semicolon(;) at the end! Forget it → compile error!" },
+      label: { ko: "④ 마지막에 세미콜론(;)! 빠뜨리면 컴파일 에러", en: "④ Semicolon(;) at the end! Forget it → compile error" },
       icon: "⚠️",
+    },
+    {
+      code: "class Car {\n    // 멤버 변수\n};",
+      highlight: { start: 12, end: 24 },
+      label: { ko: "⑤ 중괄호 안 위쪽에 멤버 변수가 들어가요", en: "⑤ Member variables go at the top inside the braces" },
+      icon: "💾",
+    },
+    {
+      code: "class Car {\n    // 멤버 변수\n\n    // 멤버 함수\n};",
+      highlight: { start: 25, end: 38 },
+      label: { ko: "⑥ 그 아래 멤버 함수가 들어가요", en: "⑥ Member functions go below" },
+      icon: "⚙️",
+    },
+  ],
+}
+
+const CPP_OBJECT_CREATE_CTOR: SyntaxBuilderPreset = {
+  title: { ko: "생성자로 객체 만들기", en: "Creating object via constructor" },
+  hideHeader: true,
+  hideControls: true,
+  tapToAdvance: true,
+  steps: [
+    {
+      code: "",
+      highlight: { start: 0, end: 0 },
+      label: { ko: "탭해서 시작 →", en: "Tap to start →" },
+    },
+    {
+      code: "BankAccount",
+      highlight: { start: 0, end: 11 },
+      label: { ko: "① 타입 이름 (어떤 class?)", en: "① Type name (which class?)" },
+    },
+    {
+      code: "BankAccount acc",
+      highlight: { start: 12, end: 15 },
+      label: { ko: "② 변수 이름 (뭐라고 부를래?)", en: "② Variable name (what to call it?)" },
+    },
+    {
+      code: "BankAccount acc(",
+      highlight: { start: 15, end: 16 },
+      label: { ko: "③ 괄호 ( 열기 — 생성자에 보낼 값들이 여기 들어가요", en: "③ Open ( — constructor arguments go inside" },
+    },
+    {
+      code: 'BankAccount acc("Emma"',
+      highlight: { start: 16, end: 22 },
+      label: { ko: "④ 첫 번째 인자 — 생성자의 name 에 전달", en: "④ First arg — passed to constructor's name" },
+    },
+    {
+      code: 'BankAccount acc("Emma", 1000',
+      highlight: { start: 24, end: 28 },
+      label: { ko: "⑤ 두 번째 인자 — 생성자의 initial 에 전달", en: "⑤ Second arg — passed to constructor's initial" },
+    },
+    {
+      code: 'BankAccount acc("Emma", 1000);',
+      highlight: { start: 28, end: 30 },
+      label: { ko: "⑥ ) 닫고 세미콜론 — 생성자 자동 호출!", en: "⑥ Close ) and semicolon — constructor fires!" },
+    },
+  ],
+}
+
+const CPP_MEMBER_ACCESS: SyntaxBuilderPreset = {
+  title: { ko: "멤버 접근 — 점 (.)", en: "Member access — dot (.)" },
+  hideHeader: true,
+  hideControls: true,
+  tapToAdvance: true,
+  sidebar: {
+    title: { ko: "class Car 안에 있는 것", en: "Inside class Car" },
+    code: `class Car {
+    string color;
+    double speed;
+
+    void forward();
+    void info();
+};`,
+  },
+  steps: [
+    {
+      code: "Car myCar;\n",
+      highlight: { start: 0, end: 10 },
+      label: { ko: "객체 준비됨. 탭해서 써봐요 →", en: "Object ready. Tap to use it →" },
+    },
+    {
+      code: `Car myCar;\nmyCar.color = "red";`,
+      highlight: { start: 16, end: 21 },
+      label: { ko: "① 멤버 변수에 값 넣기 — \`.\` + 이름", en: "① Set a member — `.` + name" },
+    },
+    {
+      code: `Car myCar;\nmyCar.color = "red";\ncout << myCar.speed;`,
+      highlight: { start: 44, end: 49 },
+      label: { ko: "② 멤버 변수 값 읽기", en: "② Read a member value" },
+    },
+    {
+      code: `Car myCar;\nmyCar.color = "red";\ncout << myCar.speed;\nmyCar.forward();`,
+      highlight: { start: 57, end: 66 },
+      label: { ko: "③ 멤버 함수 호출 — 괄호 \`()\` 꼭!", en: "③ Call a member function — don't forget \`()\`" },
+    },
+  ],
+}
+
+const CPP_OBJECT_CREATE: SyntaxBuilderPreset = {
+  title: { ko: "객체 하나 만들기", en: "Creating one object" },
+  hideHeader: true,
+  hideControls: true,
+  tapToAdvance: true,
+  steps: [
+    {
+      code: "",
+      highlight: { start: 0, end: 0 },
+      label: { ko: "탭해서 시작 →", en: "Tap to start →" },
+    },
+    {
+      code: "Car",
+      highlight: { start: 0, end: 3 },
+      label: { ko: "① 타입 이름 (어떤 설계도?)", en: "① Type name (which blueprint?)" },
+    },
+    {
+      code: "Car myCar",
+      highlight: { start: 4, end: 9 },
+      label: { ko: "② 변수 이름 (뭐라고 부를래?)", en: "② Variable name (what to call it?)" },
+    },
+    {
+      code: "Car myCar;",
+      highlight: { start: 9, end: 10 },
+      label: { ko: "③ 세미콜론 — 객체 탄생", en: "③ Semicolon — object born" },
     },
   ],
 }
@@ -1527,10 +1655,22 @@ const CPP_CONSTRUCTOR: SyntaxBuilderPreset = {
       icon: "📥",
     },
     {
-      code: "BankAccount(string name, double initial) {\n    owner = name;\n    balance = initial;\n}",
-      highlight: { start: 40, end: 85 },
-      label: { ko: "받은 값을 멤버변수에 저장! 객체가 태어나는 순간 초기화 완료!", en: "Store received values into member variables! Initialized the moment the object is created!" },
+      code: "BankAccount(string name, double initial) {\n\n}",
+      highlight: { start: 40, end: 46 },
+      label: { ko: "중괄호 { } 안에 실제로 할 일을 써요", en: "Put the real work inside { }" },
       icon: "📦",
+    },
+    {
+      code: "BankAccount(string name, double initial) {\n    owner = name;\n}",
+      highlight: { start: 43, end: 60 },
+      label: { ko: "받은 name 값을 멤버 변수 owner 에 저장", en: "Store the received name into member owner" },
+      icon: "📥",
+    },
+    {
+      code: "BankAccount(string name, double initial) {\n    owner = name;\n    balance = initial;\n}",
+      highlight: { start: 61, end: 83 },
+      label: { ko: "받은 initial 값을 멤버 변수 balance 에 저장", en: "Store the received initial into member balance" },
+      icon: "📥",
     },
     {
       code: "BankAccount(string name, double initial) {\n    owner = name;\n    balance = initial;\n}\n\nBankAccount acc(\"김철수\", 1000);",
@@ -1625,6 +1765,9 @@ const PRESETS: Record<string, SyntaxBuilderPreset> = {
   "cpp-struct": CPP_STRUCT,
   "cpp-class": CPP_CLASS,
   "cpp-class-basic": CPP_CLASS_BASIC,
+  "cpp-object-create": CPP_OBJECT_CREATE,
+  "cpp-member-access": CPP_MEMBER_ACCESS,
+  "cpp-object-create-ctor": CPP_OBJECT_CREATE_CTOR,
   "cpp-variable": CPP_VARIABLE,
   "cpp-cout": CPP_COUT,
   "cpp-cin": CPP_CIN,
@@ -1660,7 +1803,7 @@ const PRESETS: Record<string, SyntaxBuilderPreset> = {
 // ========== 컴포넌트 ==========
 
 // ── 타이핑되는 주석 설명 ────────────────────────────────────────
-function TypewriterComment({ text, icon, stepKey }: { text: string; icon?: string; stepKey: number }) {
+function TypewriterComment({ text, icon, stepKey, compact }: { text: string; icon?: string; stepKey: number; compact?: boolean }) {
   const [displayed, setDisplayed] = useState("")
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const startRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -1688,11 +1831,11 @@ function TypewriterComment({ text, icon, stepKey }: { text: string; icon?: strin
   const isDone = displayed.length >= text.length
 
   return (
-    <div className="px-5 pb-5 font-mono text-xs flex items-center gap-1.5 text-emerald-400/80">
-      <span className="opacity-50 select-none">{"//"}</span>
-      {icon && <span className="text-sm leading-none">{icon}</span>}
+    <div className={`${compact ? "px-6 pt-10 pb-6 text-sm" : "px-5 pb-5 text-sm md:text-base"} font-mono flex items-center gap-2 ${compact ? "text-slate-400" : "text-white font-medium"}`}>
+      <span className="opacity-60 select-none">{"//"}</span>
+      {icon && <span className="text-base md:text-lg leading-none">{icon}</span>}
       <span>{displayed}</span>
-      {!isDone && <span className="inline-block w-px h-3.5 bg-emerald-400/80 animate-pulse ml-px" />}
+      {!isDone && <span className="inline-block w-px h-4 bg-white/80 animate-pulse ml-px" />}
     </div>
   )
 }
@@ -1724,7 +1867,8 @@ export function SyntaxBuilder({ preset = "cpp-if", lang = "ko", onSuccess }: Syn
   }, [currentStep, isAutoPlaying, data.steps.length, onSuccess])
 
   const step = data.steps[Math.min(currentStep, data.steps.length - 1)]
-  const isComplete = currentStep >= data.steps.length
+  // 마지막 스텝 도달 시점부터 완료 상태로 전환 (이제 "다음" 대신 "다시" 표시)
+  const isComplete = currentStep >= data.steps.length - 1
 
   // 내부 스텝 변경 시 스크롤 없음 — 이미 화면에 보이는 상태에서 내용만 변경
 
@@ -1759,29 +1903,46 @@ export function SyntaxBuilder({ preset = "cpp-if", lang = "ko", onSuccess }: Syn
   }, [data.steps])
 
   return (
+    <div className={data.sidebar ? "grid grid-cols-1 md:grid-cols-[1fr_280px] gap-4 items-start" : ""}>
     <div className="rounded-2xl overflow-hidden border border-slate-200 shadow-sm bg-white">
       {/* ── 헤더: Mac dots + 제목 + 단계 ── */}
-      <div className="flex items-center justify-between px-4 py-2.5 bg-slate-100 border-b border-slate-200">
-        <div className="flex items-center gap-2">
-          <div className="flex gap-1.5">
-            <div className="w-3 h-3 rounded-full bg-red-400/80" />
-            <div className="w-3 h-3 rounded-full bg-yellow-400/80" />
-            <div className="w-3 h-3 rounded-full bg-green-400/80" />
+      {!data.hideHeader && (
+        <div className="flex items-center justify-between px-4 py-2.5 bg-slate-100 border-b border-slate-200">
+          <div className="flex items-center gap-2">
+            <div className="flex gap-1.5">
+              <div className="w-3 h-3 rounded-full bg-red-400/80" />
+              <div className="w-3 h-3 rounded-full bg-yellow-400/80" />
+              <div className="w-3 h-3 rounded-full bg-green-400/80" />
+            </div>
+            <span className="text-slate-500 text-xs font-mono ml-1">
+              {lang === "ko" ? data.title.ko : data.title.en}
+            </span>
           </div>
-          <span className="text-slate-500 text-xs font-mono ml-1">
-            {lang === "ko" ? data.title.ko : data.title.en}
+          <span className="text-xs font-medium text-slate-400">
+            {Math.min(currentStep + 1, data.steps.length)}/{data.steps.length}
           </span>
         </div>
-        <span className="text-xs font-medium text-slate-400">
-          {Math.min(currentStep + 1, data.steps.length)}/{data.steps.length}
-        </span>
-      </div>
+      )}
 
       {/* ── 코드 영역 ── */}
-      <div className="bg-slate-900 overflow-x-auto">
+      <div
+        className={`bg-slate-900 overflow-x-auto ${data.tapToAdvance ? "cursor-pointer select-none relative" : ""}`}
+        onClick={data.tapToAdvance ? () => {
+          setIsAutoPlaying(false)
+          if (currentStep < data.steps.length - 1) setCurrentStep(currentStep + 1)
+          else setCurrentStep(0)
+        } : undefined}
+      >
+        {data.tapToAdvance && (
+          <div className="absolute top-2 right-3 text-[10px] font-medium text-slate-500 pointer-events-none">
+            {currentStep < data.steps.length - 1
+              ? (lang === "ko" ? "탭 →" : "Tap →")
+              : (lang === "ko" ? "🔄 다시" : "🔄 Again")}
+          </div>
+        )}
         {/* 코드 */}
         <div
-          className="px-5 pt-5 pb-2 font-mono text-sm leading-relaxed min-w-0"
+          className={`${data.tapToAdvance ? "px-6 pt-6 pb-2 font-mono text-base md:text-lg" : "px-5 pt-5 pb-2 font-mono text-sm"} leading-relaxed min-w-0`}
           style={{ minHeight: `${finalCodeLines * 1.6 + 2}rem` }}
         >
           <pre className="text-slate-300 whitespace-pre-wrap">
@@ -1818,10 +1979,12 @@ export function SyntaxBuilder({ preset = "cpp-if", lang = "ko", onSuccess }: Syn
           text={lang === "ko" ? step.label.ko : step.label.en}
           icon={step.icon}
           stepKey={currentStep}
+          compact={data.tapToAdvance}
         />
       </div>
 
       {/* ── 진행 바 + 컨트롤 ── */}
+      {!data.hideControls && (
       <div className="flex items-center gap-3 px-4 py-3 bg-slate-50 border-t border-slate-200">
         <button
           onClick={() => { setIsAutoPlaying(false); setCurrentStep(Math.max(0, currentStep - 1)) }}
@@ -1859,7 +2022,17 @@ export function SyntaxBuilder({ preset = "cpp-if", lang = "ko", onSuccess }: Syn
           </button>
         )}
       </div>
+      )}
       <div ref={bottomRef} />
+    </div>
+    {data.sidebar && (
+      <div className="rounded-2xl overflow-hidden border border-slate-200 shadow-sm bg-white md:sticky md:top-4">
+        <div className="px-4 py-2.5 bg-indigo-50 border-b border-indigo-100 text-xs font-bold text-indigo-700">
+          📐 {lang === "ko" ? data.sidebar.title.ko : data.sidebar.title.en}
+        </div>
+        <pre className="bg-slate-900 text-slate-300 text-xs md:text-sm font-mono p-4 overflow-x-auto whitespace-pre">{data.sidebar.code}</pre>
+      </div>
+    )}
     </div>
   )
 }
@@ -1909,6 +2082,15 @@ export function CppClassBuilder(props: Omit<SyntaxBuilderProps, "preset">) {
 }
 export function CppClassBasicBuilder(props: Omit<SyntaxBuilderProps, "preset">) {
   return <SyntaxBuilder {...props} preset="cpp-class-basic" />
+}
+export function CppObjectCreateBuilder(props: Omit<SyntaxBuilderProps, "preset">) {
+  return <SyntaxBuilder {...props} preset="cpp-object-create" />
+}
+export function CppMemberAccessBuilder(props: Omit<SyntaxBuilderProps, "preset">) {
+  return <SyntaxBuilder {...props} preset="cpp-member-access" />
+}
+export function CppObjectCreateCtorBuilder(props: Omit<SyntaxBuilderProps, "preset">) {
+  return <SyntaxBuilder {...props} preset="cpp-object-create-ctor" />
 }
 export function PyWhileBuilder(props: Omit<SyntaxBuilderProps, "preset">) {
   return <SyntaxBuilder {...props} preset="py-while" />

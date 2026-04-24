@@ -297,6 +297,18 @@ const registry: Record<string, ComponentEntry> = {
     load: () => import("@/components/animations/syntax-builder"),
     exportName: "CppClassBasicBuilder",
   },
+  cppObjectCreateBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppObjectCreateBuilder",
+  },
+  cppMemberAccessBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppMemberAccessBuilder",
+  },
+  cppObjectCreateCtorBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppObjectCreateCtorBuilder",
+  },
   pyWhileBuilder: {
     load: () => import("@/components/animations/syntax-builder"),
     exportName: "PyWhileBuilder",
@@ -427,13 +439,6 @@ const registry: Record<string, ComponentEntry> = {
   constructorVisualizer: {
     load: () => import("@/components/animations/constructor-visualizer"),
     exportName: "ConstructorVisualizer",
-    props: (_step: any, lang: string) => ({ lang }),
-  },
-
-  // C++ 레슨 22: 바디 대입 vs 이니셜라이저 리스트 생애주기 비교 (2단계 vs 1단계)
-  constructorLifecycle: {
-    load: () => import("@/components/animations/constructor-lifecycle"),
-    exportName: "ConstructorLifecycle",
     props: (_step: any, lang: string) => ({ lang }),
   },
 

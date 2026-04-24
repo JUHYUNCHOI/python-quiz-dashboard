@@ -46,6 +46,11 @@ export interface LessonStep {
   hints?: string[]
   // explain 좌우 2단 레이아웃 (데스크탑만, 모바일은 세로 스택)
   layout?: { left: string; right: string }
+  // 컴포넌트 이후에 이어지는 설명 (선택적)
+  contentAfter?: string
+  layoutAfter?: { left: string; right: string }
+  // practice: "틀 채워서 풀기" 버튼 숨기기 (starter 코드가 이미 노출되어 있을 때)
+  hideStarterButton?: boolean
 }
 
 export interface Chapter {

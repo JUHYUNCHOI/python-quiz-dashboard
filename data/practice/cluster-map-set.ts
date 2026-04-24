@@ -697,11 +697,9 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<int> scores(n);
-    for (int i = 0; i < n; i++) cin >> scores[i];
-    // 여기에 코드를 작성하세요
+    // 1) int n 을 cin 으로 입력받기
+    // 2) 크기 n 의 정수 벡터 scores 선언하고 n 개의 원소 읽기
+    // 3) 아래에 문제 해결 코드 작성
     return 0;
 }`,
       testCases: [

@@ -609,8 +609,10 @@ export default function CurriculumPage() {
   }
 
   const allLessons = curriculumData.flatMap((part) => part.lessons)
-  const totalCount = allLessons.length
-  const completedCount = allLessons.filter((lesson) => completedLessons.has(lesson.id)).length
+  // 프로젝트는 선택이라 진행률 계산에서 제외 (필수 레슨 기준 100%)
+  const requiredLessons = allLessons.filter((l) => !l.isProject)
+  const totalCount = requiredLessons.length
+  const completedCount = requiredLessons.filter((lesson) => completedLessons.has(lesson.id)).length
   const progress = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0
 
   // SET1 완료 판단 헬퍼: 첫 7문제 풀면 "도전 완료" 처리
@@ -640,6 +642,7 @@ export default function CurriculumPage() {
   })
 
   // 학생: 순서대로만 열림 (완료한 곳 + 바로 다음 1개). 선생님: 전부 열림
+  // 프로젝트(isProject) 는 선택 사항 — 완료 안 해도 다음 레슨 잠그지 않음
   const unlockedLessons = new Set<number | string>()
   if (isTeacher || isPseudo) {
     // 선생님이거나 IGCSE 트랙이면 전부 열림
@@ -647,6 +650,7 @@ export default function CurriculumPage() {
   } else {
     for (const lesson of allLessons) {
       unlockedLessons.add(lesson.id)
+      if (lesson.isProject) continue // 프로젝트는 선택 — 잠금 판정에서 건너뜀
       if (!completedLessons.has(lesson.id)) break // 첫 미완료까지만
     }
   }
@@ -1435,9 +1439,14 @@ export default function CurriculumPage() {
                                           </span>
                                         )}
                                         {lesson.isProject && (
-                                          <span className="px-1.5 py-0.5 bg-purple-100 text-purple-600 rounded text-xs font-bold">
-                                            {t("프로젝트", "Project")}
-                                          </span>
+                                          <>
+                                            <span className="px-1.5 py-0.5 bg-purple-100 text-purple-600 rounded text-xs font-bold">
+                                              {t("프로젝트", "Project")}
+                                            </span>
+                                            <span className="px-1.5 py-0.5 bg-slate-100 text-slate-500 rounded text-xs font-bold">
+                                              {t("선택", "Optional")}
+                                            </span>
+                                          </>
                                         )}
                                       </>
                                     )}
