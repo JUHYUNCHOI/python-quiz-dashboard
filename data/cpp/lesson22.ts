@@ -344,23 +344,17 @@ int main() {
         {
           id: "ch2-getter-setter",
           type: "explain",
-          title: "🚪 그럼 막힌 값은 어떻게 쓰나요?",
-          content: `방금 퀴즈에서 봤듯이 \`private\` 멤버는 밖에서 직접 건드리면 컴파일 에러예요. 그럼 잔액을 **아예 못 보는** 걸까요?
+          title: "그럼 막힌 값은 어떻게 읽고 바꿔요?",
+          content: `방금 \`private\` 으로 잔액을 막았어요. 근데 그게 "아무도 못 본다" 는 뜻은 아니에요 — **창구** 를 통해서 쓰는 거예요.
 
-아니에요 — **창구**를 통해서 쓰는 거예요.
+이렇게 생각해봐요. 내 방에 물건이 있어요. 아무나 막 들어와서 가져가면 싫잖아요? 그래서 **문을 잠가요** (\`private\`).
 
-내 방에 있는 물건을 남이 마음대로 가져가면 싫잖아요. 그래서 문을 잠가요 (\`private\`).
+근데 친구가 필요하면? **노크하고 부탁** → 내가 꺼내줌 → 이게 **getter**.
+뭔가 넣고 싶으면? **나한테 말함** → 내가 확인하고 받음 → 이게 **setter**.
 
-근데 친구가 필요하면? **노크하고 부탁하면** 꺼내줄게요 → 이게 **getter**예요.
-뭔가 넣고 싶으면? **나한테 말하면** 확인하고 넣어줄게요 → 이게 **setter**예요.
+class 도 똑같아요. 멤버 변수는 private 으로 막아둔다고 했죠 — 근데 \`speed\` 를 읽거나 바꿔야 하면요?
 
-class도 똑같아요. 읽기/쓰기 함수를 \`public\`에 넣어서 통제된 창구를 만들어요.`,
-        },
-        {
-          id: "ch2-getter-setter-code",
-          type: "explain",
-          title: "📋 getter / setter 써보기",
-          content: `Car class에 getter/setter를 달아볼게요:
+**public 멤버 함수를 통해서** 접근해요.
 
 \`\`\`cpp {6-8,10-15}
 class Car {
@@ -381,30 +375,21 @@ public:
 };
 \`\`\`
 
-값을 **읽는** 함수가 **getter**, 값을 **설정하는** 함수가 **setter**예요.
-
-setter 안에서 \`if\`로 **잘못된 값을 거부**할 수 있다는 게 포인트. 외부에서 막 바꿀 때와 다르게, 이제 class가 값을 **지킬 수 있어요.**`,
-        },
-        {
-          id: "ch2-encapsulation",
-          type: "explain",
-          title: "🔒 캡슐화 — 이게 전부예요",
-          content: `실제로 써보면 이렇게 돼요:
-
 \`\`\`cpp
 int main() {
     Car myCar;
-    myCar.setColor("빨간색");
-    myCar.setSpeed(-999);     // 음수라서 무시돼요
+    myCar.setColor("red");
+    myCar.setSpeed(-999);    // 음수 → 무시됨
     cout << myCar.getSpeed(); // 0 (바뀌지 않음)
 }
 \`\`\`
 
-\`setSpeed(-999)\`를 호출해도 내부에서 \`if\`가 막아줘서 speed가 0 그대로예요.
+값을 **읽는** 함수가 **getter**, 값을 **설정하는** 함수가 **setter** 예요.
+핵심 포인트: setter 에서 **잘못된 값을 거부** 할 수 있어요.
 
-@핵심: \`private\`으로 막고, getter/setter로 통제된 창구를 만드는 것 — 이게 **캡슐화(encapsulation)** 예요.
+@핵심: \`private\` 으로 막고, getter/setter 로 통제된 창구를 만드는 것 — 이게 **캡슐화 (encapsulation)** 예요.
 
-그런데 매번 \`setColor\`, \`setSpeed\`를 직접 불러서 초기화하는 건 좀 번거롭지 않나요? 객체를 만들 때 **한 번에** 값을 정하는 방법이 있어요. 다음 챕터에서 볼게요.`,
+근데 하나 궁금한 게 남아요 — 객체 만들 때마다 초기값 세팅하려고 setter 를 **매번 불러야** 할까요? 더 나은 방법이 있을까요?`,
         },
       ]
     },
