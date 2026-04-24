@@ -192,18 +192,18 @@ export const lessonCpp22: LessonData = {
         type: "explain",
         content: {
           lines: [],
-          code: '#include <iostream>\nusing namespace std;\n\nclass Dog {\npublic:\n    string name;\n    int age;\n\n    Dog(string name, int age) {\n        this->name = name;  // this->name = member variable\n        this->age = age;    // this->age  = member variable\n    }\n\n    void bark() {\n        cout << this->name << ": 멍멍!" << endl;\n    }\n};\n\nint main() {\n    Dog d("바둑이", 3);\n    d.bark();\n    return 0;\n}',
+          code: '#include <iostream>\nusing namespace std;\n\nclass Dog {\npublic:\n    string name;\n    int age;\n\n    Dog(string n, int a) {\n        name = n;   // 매개변수 n 을 멤버 name 에 저장\n        age = a;\n    }\n\n    void bark() {\n        cout << name << ": 멍멍!" << endl;\n    }\n};\n\nint main() {\n    Dog d("바둑이", 3);\n    d.bark();\n    return 0;\n}',
           predict: {
             question: "출력 결과는?",
-            options: ["바둑이: 멍멍!", "3: 멍멍!", "name: 멍멍!", "에러"],
+            options: ["바둑이: 멍멍!", "3: 멍멍!", "n: 멍멍!", "에러"],
             answer: 0,
-            feedback: "Dog d(\"바둑이\", 3)으로 name=\"바둑이\"가 저장됐고, bark()에서 this->name을 출력해요!"
+            feedback: "Dog d(\"바둑이\", 3) 으로 n=\"바둑이\" 가 넘어가고, 생성자에서 name = n 으로 저장. bark() 가 name 을 출력!"
           },
           en: {
             predict: {
               question: "What's the output?",
-              options: ["바둑이: 멍멍!", "3: 멍멍!", "name: 멍멍!", "에러"],
-              feedback: "Dog d(\"바둑이\", 3) stores name=\"바둑이\", and bark() prints this->name!"
+              options: ["바둑이: 멍멍!", "3: 멍멍!", "n: 멍멍!", "Error"],
+              feedback: "Dog d(\"바둑이\", 3) passes n=\"바둑이\"; the constructor saves name = n; bark() prints name!"
             }
           }
         }
@@ -226,19 +226,19 @@ export const lessonCpp22: LessonData = {
         }
       },
 
-      // Lv.2: this-> 빈칸
+      // Lv.2: 멤버 = 매개변수 대입
       {
         type: "practice",
         content: {
           level: 2,
-          task: "this->를 써서 멤버 변수를 초기화해요!",
-          guide: "매개변수와 멤버 변수 이름이 같을 때 현재 객체를 가리키는 키워드로 멤버를 구분해!",
-          template: "class Box {\npublic:\n    int size;\n    Box(int size) {\n        ___->size = size;\n    }\n};",
-          answer: "this",
-          expect: "class Box {\npublic:\n    int size;\n    Box(int size) {\n        this->size = size;\n    }\n};",
+          task: "생성자 안에서 매개변수 s 를 멤버 size 에 저장해요!",
+          guide: "멤버이름 = 매개변수; — 왼쪽이 멤버, 오른쪽이 매개변수에요!",
+          template: "class Box {\npublic:\n    int size;\n    Box(int s) {\n        ___ = s;\n    }\n};",
+          answer: "size",
+          expect: "class Box {\npublic:\n    int size;\n    Box(int s) {\n        size = s;\n    }\n};",
           en: {
-            task: "Use this-> to initialize a member variable!",
-            guide: "When the parameter and member variable share the same name, use the keyword that points to the current object to distinguish the member!"
+            task: "Inside the constructor, store parameter s into member size!",
+            guide: "Form: member = parameter; — left side is the member, right side is the parameter."
           }
         }
       },
@@ -318,7 +318,7 @@ export const lessonCpp22: LessonData = {
           learned: [
             "생성자 = 클래스 이름과 같은 함수, 반환 타입 없음",
             "객체 생성 시 자동 호출 (파이썬 __init__)",
-            "this->멤버 = 매개변수; — 멤버 변수 구분",
+            "생성자 안에서 `멤버 = 매개변수;` 로 값을 저장",
             "getter: 값을 읽는 함수 (int getName())",
             "setter: 값을 바꾸는 함수 (void setName(...))"
           ],
@@ -327,17 +327,17 @@ export const lessonCpp22: LessonData = {
         }
       },
 
-      // ==================== CHAPTER 3: 상속 ====================
+      // ==================== CHAPTER 3: 캡슐화와 유효성 검증 ====================
       {
         type: "chapter",
         content: {
           num: 3,
-          title: "상속 (Inheritance)",
-          desc: "부모 클래스를 물려받아 확장해요!"
+          title: "캡슐화와 유효성 검증",
+          desc: "setter 로 잘못된 값을 막아보자!"
         }
       },
 
-      // 인터리빙: 챕터2 복습
+      // 인터리빙: 챕터2 복습 (생성자)
       {
         type: "interleaving",
         content: {
@@ -353,142 +353,142 @@ export const lessonCpp22: LessonData = {
         }
       },
 
-      // 상속 설명
+      // setter 유효성 검증 설명
       {
         type: "explain",
         content: {
           lines: [
-            "상속(inheritance)은 부모 클래스의 멤버를 자식 클래스가 물려받는 것이에요! 👨‍👦",
-            "class 자식 : public 부모 { } 형태로 써요.",
-            "파이썬의 class Warrior(Character): 와 같아요!"
+            "setter 를 쓰면 좋은 점 — **잘못된 값을 막을 수 있어요!** 🛡️",
+            "public 으로 뚫어두면 음수 속도, 빈 색깔 뭐든 다 들어가요.",
+            "setter 안에서 if 로 검사하면 → 안전."
           ],
-          code: 'class Character {\npublic:\n    string name;\n    int hp;\n\n    Character(string n, int h) {\n        name = n;\n        hp = h;\n    }\n\n    void showStatus() {\n        cout << name << " HP:" << hp << endl;\n    }\n};\n\n// Warrior inherits Character!\nclass Warrior : public Character {\npublic:\n    int attackPower;\n\n    // call parent constructor: Character(n, h)\n    Warrior(string n, int h, int atk) : Character(n, h) {\n        attackPower = atk;\n    }\n\n    void attack() {\n        cout << name << " attacks! (damage: " << attackPower << ")" << endl;\n    }\n};\n\nWarrior w("alice", 100, 30);\nw.showStatus();  // can use parent methods!\nw.attack();',
-          result: "alice HP:100\nalice attacks! (damage: 30)",
-          note: "Warrior(n, h, atk) : Character(n, h) = 부모 생성자 호출 (파이썬의 super().__init__)"
+          code: 'class Car {\nprivate:\n    double speed = 0;\n\npublic:\n    double getSpeed() { return speed; }\n\n    void setSpeed(double s) {\n        if (s >= 0) speed = s;   // 음수는 거부!\n    }\n};\n\nCar c;\nc.setSpeed(-999);   // 무시됨\nc.setSpeed(60);     // OK\ncout << c.getSpeed();',
+          result: "60",
+          note: "setter 안의 if 로 조건 통과한 값만 저장 — 이게 캡슐화의 힘!"
         }
       },
 
-      // 상속 예측
+      // 유효성 검증 예측
       {
         type: "explain",
         content: {
           lines: [],
-          code: '#include <iostream>\nusing namespace std;\n\nclass Animal {\npublic:\n    string name;\n    Animal(string n) : name(n) {}\n    void speak() {\n        cout << name << " 소리냄" << endl;\n    }\n};\n\nclass Cat : public Animal {\npublic:\n    Cat(string n) : Animal(n) {}\n    void purr() {\n        cout << name << ": 야옹!" << endl;\n    }\n};\n\nint main() {\n    Cat c("나비");\n    c.speak();\n    c.purr();\n    return 0;\n}',
+          code: '#include <iostream>\nusing namespace std;\n\nclass Thermometer {\nprivate:\n    int temp = 20;\npublic:\n    int getTemp() { return temp; }\n    void setTemp(int t) {\n        if (t >= -50 && t <= 150) temp = t;\n    }\n};\n\nint main() {\n    Thermometer th;\n    th.setTemp(200);  // 150 초과 → 무시\n    th.setTemp(30);   // OK\n    th.setTemp(-100); // -50 미만 → 무시\n    cout << th.getTemp();\n    return 0;\n}',
           predict: {
             question: "출력 결과는?",
-            options: ["나비 소리냄\n나비: 야옹!", "나비: 야옹!\n나비 소리냄", "나비: 야옹!", "에러"],
+            options: ["30", "200", "-100", "20"],
             answer: 0,
-            feedback: "c.speak()는 부모(Animal)의 메서드, c.purr()는 자식(Cat)의 메서드예요. 부모 것도 쓸 수 있어요!"
+            feedback: "200 은 150 초과, -100 은 -50 미만이라 무시됨. 30 만 통과 → getTemp() 가 30 출력."
           },
           en: {
             predict: {
               question: "What's the output?",
-              options: ["나비 소리냄\n나비: 야옹!", "나비: 야옹!\n나비 소리냄", "나비: 야옹!", "Error"],
-              feedback: "c.speak() calls the parent (Animal) method; c.purr() calls the child (Cat) method. The parent's methods are accessible too!"
+              options: ["30", "200", "-100", "20"],
+              feedback: "200 exceeds 150 and -100 is below -50 — both rejected. Only 30 passes → getTemp() prints 30."
             }
           }
         }
       },
 
-      // Lv.1: 상속 선언 빈칸
+      // Lv.1: setter 유효성 조건 빈칸
       {
         type: "practice",
         content: {
           level: 1,
-          task: "Mage 클래스가 Character를 상속받게 해요!",
-          guide: "상속을 선언할 때는 클래스 이름 뒤에 콜론(:)과 접근 지정자, 부모 클래스 이름을 써!",
-          template: "class Mage ___ Character {\npublic:\n    int mp;\n};",
-          answer: ": public",
-          expect: "class Mage : public Character {\npublic:\n    int mp;\n};",
+          task: "setAge 가 음수를 거부하도록 조건을 채워요!",
+          guide: "a 가 0 이상일 때만 age 에 저장. 비교 연산자는?",
+          template: "void setAge(int a) {\n    if (a ___ 0) age = a;\n}",
+          answer: ">=",
+          expect: "void setAge(int a) {\n    if (a >= 0) age = a;\n}",
           en: {
-            task: "Make the Mage class inherit from Character!",
-            guide: "To declare inheritance, write a colon (:), an access specifier, and the parent class name after the child class name!"
+            task: "Fill in the condition so setAge rejects negatives!",
+            guide: "Only store if a is 0 or greater. Which comparison operator?"
           }
         }
       },
 
-      // Lv.2: 부모 생성자 호출
+      // Lv.2: setScore 범위 체크 빈칸
       {
         type: "practice",
         content: {
           level: 2,
-          task: "Mage 생성자에서 부모 생성자를 호출해요!",
-          guide: "자식 생성자에서 콜론(:) 뒤에 부모 클래스 이름으로 부모 생성자를 호출해 초기화해!",
-          template: "class Mage : public Character {\npublic:\n    int mp;\n    Mage(string n, int h, int m) : ___(n, h) {\n        mp = m;\n    }\n};",
-          answer: "Character",
-          expect: "class Mage : public Character {\npublic:\n    int mp;\n    Mage(string n, int h, int m) : Character(n, h) {\n        mp = m;\n    }\n};",
+          task: "setScore 가 0~100 범위만 허용하도록 조건을 채워요!",
+          guide: "s >= 0 그리고 s <= 100 — 두 조건을 && 로 연결해요.",
+          template: "void setScore(int s) {\n    if (___) score = s;\n}",
+          answer: "s >= 0 && s <= 100",
+          expect: "void setScore(int s) {\n    if (s >= 0 && s <= 100) score = s;\n}",
           en: {
-            task: "Call the parent constructor from the Mage constructor!",
-            guide: "Call the parent constructor by writing the parent class name after the colon (:) in the child constructor!"
+            task: "Fill in so setScore only accepts 0 to 100!",
+            guide: "s >= 0 AND s <= 100 — join two conditions with &&."
           }
         }
       },
 
-      // 퀴즈
+      // 퀴즈: 캡슐화 — private + getter/setter 를 쓰는 이유
       {
         type: "quiz",
         content: {
-          question: "C++에서 상속을 선언하는 올바른 방법은?",
+          question: "멤버 변수를 private 으로 감추고 getter/setter 로 접근하게 하는 가장 큰 이유는?",
           options: [
-            "class Child(Parent) { }",
-            "class Child extends Parent { }",
-            "class Child : public Parent { }",
-            "class Child inherits Parent { }"
+            "코드를 더 짧게 쓸 수 있어서",
+            "setter 안에서 잘못된 값을 막을 수 있어서 (유효성 검사)",
+            "메모리를 더 적게 써서",
+            "컴파일 속도가 빨라져서"
           ],
-          answer: 2,
-          explanation: "C++은 class Child : public Parent { } 형태로 써요! 파이썬은 class Child(Parent):, Java는 extends를 쓰지만 C++은 콜론(:)을 써요.",
+          answer: 1,
+          explanation: "바로 이게 캡슐화의 핵심! public 으로 뚫어두면 -999 같은 이상한 값도 막을 수 없어요. setter 안의 if 조건으로 **잘못된 값을 거부** 할 수 있는 게 가장 큰 이점이에요.",
           en: {
-            question: "What is the correct way to declare inheritance in C++?",
+            question: "Why hide member variables with private and expose them via getter/setter?",
             options: [
-              "class Child(Parent) { }",
-              "class Child extends Parent { }",
-              "class Child : public Parent { }",
-              "class Child inherits Parent { }"
+              "To write shorter code",
+              "So setters can block invalid values (validation)",
+              "To use less memory",
+              "To compile faster"
             ],
-            explanation: "C++ uses class Child : public Parent { }! Python uses class Child(Parent):, Java uses extends, but C++ uses a colon (:)."
+            explanation: "This is the whole point of encapsulation! With public, nothing stops a value like -999 from sneaking in. Rejecting bad values inside the setter's if check is the biggest benefit."
           }
         }
       },
 
-      // 종합 프로젝트 Step 1
+      // 종합 프로젝트 Step 1 — BankAccount 뼈대
       {
         type: "project",
         content: {
           step: 1,
           total: 3,
-          task: "Character 기본 클래스를 만들어요! (name, hp, 생성자, showStatus)",
-          target: "class Character {\npublic:\n    string name;\n    int hp;\n\n    Character(string n, int h) : name(n), hp(h) {}\n\n    void showStatus() {\n        cout << name << \" HP:\" << hp << endl;\n    }\n};",
-          hint: "name(n), hp(h) = 멤버 초기화 리스트 (this->name = n과 같아요)",
-          done: ["#include <iostream>\nusing namespace std;\n"],
-          answer: "class Character {\npublic:\n    string name;\n    int hp;\n\n    Character(string n, int h) : name(n), hp(h) {}\n\n    void showStatus() {\n        cout << name << \" HP:\" << hp << endl;\n    }\n};"
+          task: "BankAccount 뼈대를 만들어요! (private owner/balance + 생성자)",
+          target: "class BankAccount {\nprivate:\n    string owner;\n    double balance;\n\npublic:\n    BankAccount(string name, double initial) {\n        owner = name;\n        balance = initial;\n    }\n};",
+          hint: "private 에 string owner; double balance; — 그리고 public 생성자 BankAccount(string name, double initial) 안에서 owner = name; balance = initial;",
+          done: ["#include <iostream>\n#include <string>\nusing namespace std;\n"],
+          answer: "class BankAccount {\nprivate:\n    string owner;\n    double balance;\n\npublic:\n    BankAccount(string name, double initial) {\n        owner = name;\n        balance = initial;\n    }\n};"
         }
       },
 
-      // 종합 프로젝트 Step 2
+      // 종합 프로젝트 Step 2 — getBalance + deposit
       {
         type: "project",
         content: {
           step: 2,
           total: 3,
-          task: "Warrior 클래스를 Character에서 상속해요! (attackPower 추가, attack 메서드)",
-          target: "class Warrior : public Character {\npublic:\n    int attackPower;\n\n    Warrior(string n, int h, int atk) : Character(n, h) {\n        attackPower = atk;\n    }\n\n    void attack() {\n        cout << name << \" 공격! 데미지: \" << attackPower << endl;\n    }\n};",
-          hint: "Warrior(n, h, atk) : Character(n, h) { } 로 부모 생성자 호출!",
-          done: ["#include <iostream>\nusing namespace std;\n", "class Character {\npublic:\n    string name;\n    int hp;\n    Character(string n, int h) : name(n), hp(h) {}\n    void showStatus() { cout << name << \" HP:\" << hp << endl; }\n};"],
-          answer: "class Warrior : public Character {\npublic:\n    int attackPower;\n\n    Warrior(string n, int h, int atk) : Character(n, h) {\n        attackPower = atk;\n    }\n\n    void attack() {\n        cout << name << \" 공격! 데미지: \" << attackPower << endl;\n    }\n};"
+          task: "잔액 조회와 입금 기능을 추가해요! (getBalance + deposit, 음수 거부)",
+          target: "double getBalance() {\n    return balance;\n}\n\nvoid deposit(double amount) {\n    if (amount > 0) balance += amount;\n}",
+          hint: "getBalance() 는 return balance; 한 줄. deposit(double amount) 안에서 if (amount > 0) balance += amount;",
+          done: ["#include <iostream>\n#include <string>\nusing namespace std;", "// BankAccount 뼈대 완성 (private + 생성자)"],
+          answer: "double getBalance() {\n    return balance;\n}\n\nvoid deposit(double amount) {\n    if (amount > 0) balance += amount;\n}"
         }
       },
 
-      // 종합 프로젝트 Step 3
+      // 종합 프로젝트 Step 3 — withdraw + main 테스트
       {
         type: "project",
         content: {
           step: 3,
           total: 3,
-          task: "main에서 Warrior 객체를 만들고 showStatus와 attack을 호출해요!",
-          target: "int main() {\n    Warrior w(\"철수\", 100, 30);\n    w.showStatus();\n    w.attack();\n    return 0;\n}",
-          hint: "Warrior w(\"이름\", hp, attack); 로 생성 후 메서드 호출!",
-          done: ["#include <iostream>\nusing namespace std;\n", "// Character, Warrior 클래스 선언 완료"],
-          answer: "int main() {\n    Warrior w(\"철수\", 100, 30);\n    w.showStatus();\n    w.attack();\n    return 0;\n}"
+          task: "출금 기능(잔액 초과 거부)과 main 테스트를 완성해요!",
+          target: "void withdraw(double amount) {\n    if (amount > 0 && amount <= balance) balance -= amount;\n}\n\nint main() {\n    BankAccount acc(\"김철수\", 1000);\n    acc.deposit(500);\n    acc.withdraw(200);\n    acc.withdraw(9999);  // 잔액 초과 — 무시\n    cout << acc.getBalance();\n    return 0;\n}",
+          hint: "withdraw 는 if (amount > 0 && amount <= balance) balance -= amount; — main 에서는 BankAccount acc(\"김철수\", 1000); 로 객체 만들고 메서드 순서대로 호출.",
+          done: ["#include <iostream>\n#include <string>\nusing namespace std;", "// BankAccount 클래스 완성 (private + 생성자 + getBalance + deposit)"],
+          answer: "void withdraw(double amount) {\n    if (amount > 0 && amount <= balance) balance -= amount;\n}\n\nint main() {\n    BankAccount acc(\"김철수\", 1000);\n    acc.deposit(500);\n    acc.withdraw(200);\n    acc.withdraw(9999);\n    cout << acc.getBalance();\n    return 0;\n}"
         }
       },
 
@@ -496,8 +496,8 @@ export const lessonCpp22: LessonData = {
       {
         type: "reward",
         content: {
-          message: "클래스와 상속 완전 정복!",
-          emoji: "🏆"
+          message: "캡슐화와 유효성 검증 완성!",
+          emoji: "🛡️"
         }
       },
 
@@ -572,45 +572,45 @@ export const lessonCpp22: LessonData = {
         }
       },
 
-      // practice: fill in this->name = ___
+      // practice: 생성자 안에서 멤버에 매개변수 대입
       {
         type: "practice",
         content: {
           level: 2,
-          task: "this->name에 매개변수 n을 대입해요!",
-          guide: "this->멤버변수 = 매개변수; 형태로 써요!",
-          template: "class Robot {\npublic:\n    string name;\n    Robot(string n) {\n        this->name = ___;\n    }\n};",
-          answer: "n",
-          expect: "class Robot {\npublic:\n    string name;\n    Robot(string n) {\n        this->name = n;\n    }\n};",
+          task: "생성자 안에서 매개변수 n 을 멤버 name 에 저장해요!",
+          guide: "멤버이름 = 매개변수; 형태. 여기선 name = n;",
+          template: "class Robot {\npublic:\n    string name;\n    Robot(string n) {\n        ___ = n;\n    }\n};",
+          answer: "name",
+          expect: "class Robot {\npublic:\n    string name;\n    Robot(string n) {\n        name = n;\n    }\n};",
           en: {
-            task: "Assign parameter n to this->name!",
-            guide: "Use the form: this->memberVariable = parameter;"
+            task: "Inside the constructor, store parameter n into member name!",
+            guide: "Form: member = parameter; — here it's name = n;"
           }
         }
       },
 
-      // quiz: what does `this` refer to?
+      // quiz: private getter/setter 로 멤버에 접근하는 올바른 방식
       {
         type: "quiz",
         content: {
-          question: "C++ 클래스에서 `this`는 무엇을 가리키나요?",
+          question: "private 멤버 balance 를 외부에서 **읽는** 올바른 방법은?",
           options: [
-            "클래스 자체를 가리킨다",
-            "현재 객체의 포인터를 가리킨다",
-            "부모 클래스를 가리킨다",
-            "생성자 함수를 가리킨다"
+            "acc.balance",
+            "acc->balance",
+            "acc.getBalance()",
+            "balance(acc)"
           ],
-          answer: 1,
-          explanation: "this는 현재 객체 자신의 주소(포인터)예요! this->name은 '현재 이 객체의 name 멤버변수'를 뜻해요. 매개변수와 멤버변수 이름이 같을 때 구분하는 데 씁니다.",
+          answer: 2,
+          explanation: "balance 는 private 이라 acc.balance 직접 접근은 컴파일 에러. public getter 인 getBalance() 를 호출해서 값을 돌려받아요 — 이게 캡슐화의 정석!",
           en: {
-            question: "What does `this` refer to inside a C++ class?",
+            question: "What is the correct way to **read** the private member balance from outside?",
             options: [
-              "The class itself",
-              "A pointer to the current object",
-              "The parent class",
-              "The constructor function"
+              "acc.balance",
+              "acc->balance",
+              "acc.getBalance()",
+              "balance(acc)"
             ],
-            explanation: "this is the address (pointer) of the current object! this->name means 'the name member of this object'. It's used to distinguish member variables from parameters with the same name."
+            explanation: "balance is private, so acc.balance is a compile error. Call the public getter getBalance() to read the value — this is the standard encapsulation pattern."
           }
         }
       },
