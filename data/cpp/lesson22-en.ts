@@ -575,48 +575,84 @@ BankAccount acc("Emma", 1000);  // Constructor called automatically!
           title: "💡 Constructor — Two Ways to Write It",
           content: `There are **two ways** to put values into members via a constructor.
 
-**Method 1: Python-style — body assignment** (what we've been doing)
+### Method 1: Python-style — body assignment (familiar)
 \`\`\`cpp
 BankAccount(string name, double initial) {
     owner = name;      // put values in with = inside { }
     balance = initial;
 }
 \`\`\`
-👉 The object is **made first**, then values are put in with \`=\` inside \`{ }\`. This is almost identical to Python's \`self.x = y\`.
+👉 The object is **made first**, then values are put in with \`=\` inside \`{ }\`. Almost identical to Python's \`self.x = y\`.
 
-**Method 2: C++ standard — initializer list** ⭐ (real-world standard)
+- ✅ **Pros**: Students coming from Python read it instantly. Looks like a regular function.
+- ❌ **Cons**: Doesn't work for \`const\` / \`reference\` members — compile error. Slightly less efficient.
+
+### Method 2: C++ recommended — initializer list ⭐
 \`\`\`cpp
 BankAccount(string name, double initial)
     : owner(name), balance(initial) {}
 \`\`\`
 👉 After the colon \`:\`, write \`member(value)\` pairs separated by \`,\`. Values are **put in at the same time the object is made**. Leave \`{ }\` empty.
 
-> 📖 Why "C++ standard"? Real-world C++ projects, libraries, and style guides (Google, C++ Core Guidelines, etc.) mostly use this as the default. When you read open-source code, you'll almost always see this style.
+- ✅ **Pros**: Shorter and cleaner. Handles \`const\`/\`reference\`. Better efficiency. **Works in every situation**.
+- ❌ **Cons**: Unfamiliar syntax that doesn't exist in Python.
+
+> 📖 **Both styles are legal C++** (either will compile and run fine). C++ has two styles because **each has its own use case and strengths**.
 
 ---
 
-**The result looks identical** — both end up with \`owner\` and \`balance\` holding the values.
+### 📊 Which one is actually used more?
 
-🤔 **But why is Method 2 the C++ standard?** It's not just a style preference — the **internal behavior is different**. The next page shows it in a simulator.`
+| Where you'll see it | Method 1 (Python-style) | Method 2 (list) |
+|---|---|---|
+| Beginner tutorials / YouTube | 🟦🟦🟦 **often** | 🟦 sometimes |
+| Open source (LLVM, Chromium, Qt) | ⬜ almost never | 🟢🟢🟢 **almost always** |
+| Production codebases | 🟦 sometimes | 🟢🟢🟢 **mostly** |
+| Competitive programming experts | ⬜ almost never | 🟢🟢🟢 **almost always** |
+
+→ In **"real-world C++"**, method 2 wins overwhelmingly. Method 1 mainly lives in beginner materials.
+
+---
+
+🤔 **So why is method 2 used so much, despite its unfamiliar syntax?**
+→ **The internal behavior is different.** Method 1 has a hidden pitfall. Let's see it in the simulator on the next page.`
         },
         {
           id: "ch3-initlist-lifecycle",
           type: "explain",
           title: "🔬 Under the Hood — When Do Members Get Their Values?",
           component: "constructorLifecycle",
-          content: `Use the **top tabs** (No constructor / Python-style / C++ standard) and the step buttons in the simulator below to compare.
+          content: `Use the **top tabs** (No constructor / Python-style / C++ recommended) and the step buttons in the simulator below to compare.
 
-- **No constructor**: members are born as garbage and stay that way **forever** (dangerous!)
+### What happens in each tab
+
+- **No constructor**: members are born as garbage and stay that way **forever**. Dangerous!
 - **Python-style** (body assignment): members are born **empty / with garbage**, then the body **overwrites** them → **2 things** happen.
-- **C++ standard** (initializer list): members are born **directly with the final values** → **1 thing** happens.
+- **C++ recommended** (initializer list): members are born **directly with the final values** → **1 thing** happens.
 
-For simple types (\`int\`, \`double\`) the speed difference is tiny. The **real difference** is that some members **cannot be "overwritten later" at all** — we meet those (\`const\`, \`reference\`) on the next page.`
+---
+
+### 💡 Why is method 2 preferred in practice?
+
+Both end with the same values, but the **journey is different**:
+
+| Criterion | Python-style | C++ recommended |
+|---|---|---|
+| 🕐 How many operations | 2 (construct → overwrite) | **1** (construct with values) |
+| ⚠️ "Wrong values" window | Brief **garbage phase** between birth and overwrite | None — correct from the start |
+| 🔒 const / reference members | ❌ compile error | ✅ works |
+| ⚡ Heavy types (string) | Creates empty then discards → waste | One-shot |
+| 📘 Similar to Python | ⭕ reads easily | ❌ unfamiliar syntax |
+
+👉 **"Always correct"** is why C++ projects default to method 2. And the moment you have const or reference members, method 2 is the only option.
+
+→ Next page shows exactly why \`const\` and \`reference\` don't work with method 1.`
         },
         {
           id: "ch3-initlist-const-ref",
           type: "explain",
           title: "⚠️ const and reference — Only C++ Standard Way Works",
-          content: `**const members** and **reference members** can only use the **C++ standard way** (initializer list). The **Python-style** (body assignment) produces a compile error.
+          content: `**const members** and **reference members** can only use the **C++ recommended way** (initializer list). The **Python-style** (body assignment) produces a compile error.
 
 The reason is simple: **const and reference can't be changed once they're made**. So "make first, fill later" is impossible — the value must be set at the moment of creation.
 
@@ -674,20 +710,20 @@ Observer(int& t) : target(t) {}   // ✅ born pointing at t
 
 **Summary**
 
-| Member kind | Python-style (body) | C++ standard (list) |
+| Member kind | Python-style (body) | C++ recommended (list) |
 |---|---|---|
 | Regular (int, string, etc.) | ✅ works | ✅ works ⭐ |
 | \`const\` | ❌ **error** | ✅ **required** |
 | \`reference (&)\` | ❌ **error** | ✅ **required** |
 | Other class object (no default constructor) | ❌ error | ✅ required |
 
-→ If your class has const, reference, or a "no-default-constructor" object member, **the C++ standard way is your only option**.`
+→ If your class has const, reference, or a "no-default-constructor" object member, **the C++ recommended way is your only option**.`
         },
         {
           id: "ch3-initlist-realworld",
           type: "explain",
           title: "🌍 Which One Is Used More in Real Code?",
-          content: `**Answer: the C++ standard** (initializer list). Real-world C++ projects and open-source libraries overwhelmingly use it.
+          content: `**Answer: the C++ recommended** (initializer list). Real-world C++ projects and open-source libraries overwhelmingly use it.
 
 ---
 
@@ -706,7 +742,7 @@ Observer(int& t) : target(t) {}   // ✅ born pointing at t
 
 It's easier to read and visually similar to Python's \`__init__\`, so it's **intuitive when you're first learning**. Nail the concept first, then switch the syntax.
 
-Now that you've got the concept, **make the C++ standard (initializer list) your default going forward**. Real-world code and open source become much easier to read.
+Now that you've got the concept, **make the C++ recommended (initializer list) your default going forward**. Real-world code and open source become much easier to read.
 
 ---
 
@@ -719,7 +755,7 @@ BankAccount(string name, double initial) {
     balance = initial;
 }
 
-// The style you'll see more often in practice — C++ standard (initializer list) ⭐
+// The style you'll see more often in practice — C++ recommended (initializer list) ⭐
 BankAccount(string name, double initial)
     : owner(name), balance(initial) {}
 \`\`\`
@@ -730,7 +766,7 @@ Both are correct. Same result. But the second is the standard in team code revie
 
 **💡 Summary**
 
-| | Python-style (body) | C++ standard (list) |
+| | Python-style (body) | C++ recommended (list) |
 |---|---|---|
 | Readability (for beginners) | Easy (same as Python) | Compact once familiar |
 | const & reference support | ❌ impossible | ✅ supported |
@@ -738,7 +774,7 @@ Both are correct. Same result. But the second is the standard in team code revie
 | Real-world preference | △ occasional | ⭐ most code |
 | Recommended after this lesson | — | ✅ default |
 
-Next time you see \`Player(string n, int h) : name(n), health(h) {}\`, you'll immediately recognize it as **"ah, C++ standard — the initializer list"**.`
+Next time you see \`Player(string n, int h) : name(n), health(h) {}\`, you'll immediately recognize it as **"ah, C++ recommended — the initializer list"**.`
         },
         {
           id: "ch3-pred1",
