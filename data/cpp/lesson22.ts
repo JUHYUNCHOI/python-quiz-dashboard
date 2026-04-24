@@ -98,6 +98,61 @@ class Car {
           },
         },
         {
+          id: "ch1-build-practice",
+          type: "practice" as const,
+          title: "✋ 직접 class 써보기",
+          hideStarterButton: true,
+          content: `이번엔 \`Dog\` class 를 직접 써봐요!
+
+**단계:**
+
+1. \`class Dog\` 선언 (세미콜론 잊지 마세요)
+2. \`public:\` 아래에 멤버 변수 \`name\` (string), \`age\` (int)
+3. \`public:\` 아래에 멤버 함수 \`bark()\` — \`"멍멍!"\` 출력`,
+          starterCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+// 1. class Dog 선언
+// 2. public: name (string), age (int)
+// 3. public: bark() — "멍멍!" 출력
+
+
+int main() {
+    Dog d;
+    d.name = "초코";
+    d.age = 3;
+    d.bark();
+    cout << d.name << ", " << d.age << "살";
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+class Dog {
+public:
+    string name;
+    int age;
+
+    void bark() {
+        cout << "멍멍!" << endl;
+    }
+};
+
+int main() {
+    Dog d;
+    d.name = "초코";
+    d.age = 3;
+    d.bark();
+    cout << d.name << ", " << d.age << "살";
+    return 0;
+}`,
+          hint: `class Dog { public: string name; int age; void bark() { cout << "멍멍!" << endl; } };  — class 끝에 세미콜론!`,
+          expectedOutput: `멍멍!
+초코, 3살`
+        },
+        {
           id: "ch1-object-concept",
           type: "explain",
           title: "🎮 class 는 설계도, object 는 진짜!",
@@ -117,62 +172,59 @@ RPG 게임 생각해봐요 — 상점에서 "불꽃검" **설명** 본다고 내
 class 에서 만들어낸 걸 **객체 (object)** 또는 **인스턴스 (instance)** 라고 해요.`,
         },
         {
+          id: "ch1-object-make",
+          type: "explain",
+          title: "🛠️ 이제 객체를 만들어봐요",
+          component: "cppObjectCreateBuilder",
+          content: `그럼 그 **객체** 는 어떻게 만들까요? 어렵지 않아요 — \`int x;\` 이렇게 int 변수 만들던 거 기억해요? **타입 이름** 다음에 **변수 이름**. 객체도 똑같아요:`,
+          contentAfter: `**설계도 하나로 여러 대도 가능:**
+
+\`\`\`cpp
+Car car1;    // 객체 1
+Car car2;    // 객체 2
+Car car3;    // 객체 3
+\`\`\`
+
+![설계도 하나로 여러 객체|width=480](/images/cpp/class-multi.svg)`,
+        },
+        {
           id: "ch1-object-code",
           type: "explain",
-          title: "🚗 객체 만들고 써보기",
-          content: `\`\`\`cpp
-int main() {
-    Car myCar;            // ← 여기서 실제 자동차 (객체) 가 만들어져요!
-    myCar.color = "red";
-    myCar.speed = 0;
-    myCar.forward();
-    myCar.forward();
-    myCar.info();         // red car, speed: 20
-}
+          title: "🔗 점 (.) 으로 멤버 사용하기",
+          content: `객체를 손에 쥐었으니 이제 써야죠. \`myCar\` 의 \`color\` 를 바꾸거나 \`forward()\` 를 호출하려면?
+
+**점 \`.\` 하나만 있으면 돼요.**
+
+{collapse:📐 참고 — class Car 는 이렇게 생겼어요}
+\`\`\`cpp
+class Car {
+    string color;
+    double speed;
+
+    void forward();
+    void info();
+};
 \`\`\`
 
-설계도 하나로 여러 대 가능:
-
-![설계도 하나로 여러 객체](/images/cpp/class-multi.svg)
-
 \`\`\`cpp
-int main() {
-    Car car1;  car1.color = "red";    // 객체 1
-    Car car2;  car2.color = "blue";   // 객체 2
-}
+Car myCar;
+
+myCar.color = "red";    // 멤버 변수에 값 넣기
+cout << myCar.speed;    // 멤버 변수 값 읽기
+myCar.forward();        // 멤버 함수 호출 (괄호 잊지 마세요)
 \`\`\`
 
-> 🍪 **쿠키 틀 = class, 쿠키 = object**
-> 틀 하나로 쿠키 여러 개 — class 하나로 객체 여러 개.
+이렇게 **설계도를 그려서 살아있는 것처럼 찍어내는** 프로그래밍 방식을 **객체 지향 프로그래밍 (OOP)** 이라고 해요.
 
-**class 를 설계하고 거기서 객체를 만들어내는 것** — 이런 프로그래밍 방식을 **객체 지향 프로그래밍 (OOP)** 이라고 해요.
-
-{collapse:📦 보너스 — class 가 없다면?}
-\`\`\`cpp
-// class 없이 자동차 두 대 만들면...
-int main() {
-    double car1Speed = 0;
-    string car1Color = "red";
-    double car2Speed = 0;
-    string car2Color = "blue";
-
-    car1Speed += 10;
-    car2Speed += 10;
-
-    // 코드 늘어나면... 어? car2Color 는 누구 건지 헷갈림
-    cout << car1Color << " car, speed: " << car1Speed << endl;
-    cout << car2Color << " car, speed: " << car2Speed << endl;
-}
-// 10 대 되면? 변수 20 개 — 어느 게 누구 건지 놓침
-\`\`\``,
+RPG 게임 생각해봐요 — 전사 **설계도** 하나 만들어두면 아서, 제이드, 이안... 몇 명이든 찍어내서 각자 싸우잖아요. \`class Car\` 도 똑같아요.`,
         },
         {
           id: "ch1-object-practice",
           type: "practice" as const,
           title: "✋ 객체 만들고 써보기",
-          content: `**Car class 는 이미 써있어요.** 건드리지 말고 그대로 두세요.
+          content: `\`Car\` 객체를 만들어서 움직여봐요!
 
-할 일은 \`main()\` 안 채우기뿐이에요:
+**단계:**
 
 1. \`myCar\` 객체 만들기
 2. \`color\` 를 "파란색", \`speed\` 를 0 으로 설정
@@ -423,44 +475,58 @@ int main() {
 이렇게 생각해봐요. 내 방에 물건이 있어요. 아무나 막 들어와서 가져가면 싫잖아요? 그래서 **문을 잠가요** (\`private\`).
 
 근데 친구가 필요하면? **노크하고 부탁** → 내가 꺼내줌 → 이게 **getter**.
-뭔가 넣고 싶으면? **나한테 말함** → 내가 확인하고 받음 → 이게 **setter**.
+뭔가 넣고 싶으면? **나한테 말함** → 내가 받아줌 → 이게 **setter**.
 
-class 도 똑같아요. 멤버 변수는 private 으로 막아둔다고 했죠 — 근데 \`speed\` 를 읽거나 바꿔야 하면요?
+class 도 똑같아요. 멤버 변수는 private 으로 막아두고 — \`speed\` 를 읽거나 바꾸려면 **public 멤버 함수를 통해서** 접근해요.
 
-**public 멤버 함수를 통해서** 접근해요.
-
-\`\`\`cpp {6-8,10-15}
+\`\`\`cpp {6-8}
 class Car {
 private:
     double speed;
     string color;
 
 public:
-    double getSpeed() { return speed; }   // speed 읽기
-    string getColor() { return color; }   // color 읽기
+    double getSpeed() { return speed; }        // 읽기
+    void   setSpeed(double s) { speed = s; }   // 쓰기
+};
+\`\`\`
 
+값을 **읽는** 함수가 **getter**, 값을 **설정하는** 함수가 **setter** 예요. 이름 앞에 \`get\` / \`set\` 붙이는 건 관례.`,
+        },
+        {
+          id: "ch2-encapsulation",
+          type: "explain",
+          title: "근데 왜 굳이 함수를 거쳐요?",
+          content: `그냥 public 으로 뚫어두면 편하잖아요? 근데 setter 를 거치면 **잘못된 값을 막을 수 있어요.**
+
+\`\`\`cpp {7,10}
+class Car {
+private:
+    double speed;
+    string color;
+
+public:
     void setSpeed(double s) {
         if (s >= 0) speed = s;   // 음수 속도는 거부
     }
     void setColor(string c) {
         if (c != "") color = c;  // 빈 색깔은 거부
     }
+    double getSpeed() { return speed; }
 };
 \`\`\`
 
 \`\`\`cpp
 int main() {
     Car myCar;
-    myCar.setColor("red");
-    myCar.setSpeed(-999);    // 음수 → 무시됨
-    cout << myCar.getSpeed(); // 0 (바뀌지 않음)
+    myCar.setSpeed(-999);       // 음수 → 무시됨
+    cout << myCar.getSpeed();   // 0 (바뀌지 않음)
 }
 \`\`\`
 
-값을 **읽는** 함수가 **getter**, 값을 **설정하는** 함수가 **setter** 예요.
-핵심 포인트: setter 에서 **잘못된 값을 거부** 할 수 있어요.
+\`private\` 으로 **막고**, getter/setter 로 **통제된 창구** 를 만드는 것 — 이게 바로 **캡슐화 (encapsulation)** 예요.
 
-@핵심: \`private\` 으로 막고, getter/setter 로 통제된 창구를 만드는 것 — 이게 **캡슐화 (encapsulation)** 예요.
+@핵심: 내부 데이터는 숨기고, 외부와의 대화는 함수로만. 이러면 나중에 내부 구현이 바뀌어도 바깥 코드는 그대로 둬도 돼요.
 
 근데 하나 궁금한 게 남아요 — 객체 만들 때마다 초기값 세팅하려고 setter 를 **매번 불러야** 할까요? 더 나은 방법이 있을까요?`,
         },

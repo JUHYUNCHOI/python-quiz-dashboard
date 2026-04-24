@@ -52,7 +52,10 @@ export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId,
       try {
         const storageKey = `cpp-runner-${userId ?? "anon"}-${lessonId ?? "x"}-${step.id}`
         const saved = localStorage.getItem(storageKey)
-        setHasSavedCode(!!saved && saved.trim().length > 0 && !saved.trim().startsWith("// 👉"))
+        const savedTrimmed = saved?.trim() ?? ""
+        // 저장된 코드가 BLANK_TEMPLATE 와 동일하면 "작성 안 함" 으로 간주 → starter 버튼 노출
+        const isBlankTemplate = savedTrimmed === BLANK_TEMPLATE.trim()
+        setHasSavedCode(!!saved && savedTrimmed.length > 0 && !savedTrimmed.startsWith("// 👉") && !isBlankTemplate)
       } catch {
         setHasSavedCode(false)
       }
@@ -138,7 +141,7 @@ export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId,
         )}
 
         {/* 시작 코드 버튼 — starterCode가 있고, 아직 주입 안 되고, localStorage에 이전 코드도 없을 때만 표시 */}
-        {!done && hasStarter && !starterInjected && !hasSavedCode && failCount === 0 && (
+        {!step.hideStarterButton && !done && hasStarter && !starterInjected && !hasSavedCode && failCount === 0 && (
           <button
             onClick={() => {
               setStarterInjected(true)

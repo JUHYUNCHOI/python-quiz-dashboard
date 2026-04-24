@@ -6,7 +6,7 @@ import { CodeBlock } from "@/components/ui/code-block"
 import { useLanguage } from "@/contexts/language-context"
 
 // ── 클릭 시 확대되는 이미지 컴포넌트 ──
-function ZoomableImage({ src, alt }: { src: string; alt: string }) {
+function ZoomableImage({ src, alt, maxWidth }: { src: string; alt: string; maxWidth?: number }) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -18,22 +18,22 @@ function ZoomableImage({ src, alt }: { src: string; alt: string }) {
       >
         <img src={src} alt={alt}
           className="w-full rounded-xl border border-gray-200 shadow-sm"
-          style={{ maxWidth: '760px' }} />
+          style={{ maxWidth: `${maxWidth ?? 520}px` }} />
       </div>
 
       {open && typeof window !== "undefined" && createPortal(
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
           onClick={() => setOpen(false)}
         >
-          <div className="relative max-w-2xl w-full bg-white rounded-2xl shadow-2xl p-6" onClick={e => e.stopPropagation()}>
+          <div className="relative bg-white rounded-2xl shadow-2xl p-4 md:p-6" style={{ width: '92vw', maxWidth: '1400px' }} onClick={e => e.stopPropagation()}>
             <button
               onClick={() => setOpen(false)}
-              className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 text-lg font-bold"
+              className="absolute top-3 right-3 w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 text-xl font-bold z-10"
             >×</button>
             <img src={src} alt={alt}
               className="w-full rounded-xl"
-              style={{ maxHeight: '80vh', objectFit: 'contain' }} />
+              style={{ maxHeight: '88vh', objectFit: 'contain' }} />
           </div>
         </div>,
         document.body
@@ -472,13 +472,19 @@ export function renderContent(content: string) {
       continue
     }
 
-    // ── 이미지: ![alt](src) ──
+    // ── 이미지: ![alt](src) 또는 ![alt|width=400](src) ──
     const imgMatch = line.trim().match(/^!\[([^\]]*)\]\(([^)]+)\)$/)
     if (imgMatch) {
-      const alt = imgMatch[1]
+      let alt = imgMatch[1]
       const src = imgMatch[2]
+      let maxWidth: number | undefined
+      const widthMatch = alt.match(/^(.*)\|width=(\d+)$/)
+      if (widthMatch) {
+        alt = widthMatch[1]
+        maxWidth = parseInt(widthMatch[2], 10)
+      }
       elements.push(
-        <ZoomableImage key={key++} src={src} alt={alt} />
+        <ZoomableImage key={key++} src={src} alt={alt} maxWidth={maxWidth} />
       )
       i++
       continue

@@ -29,6 +29,12 @@ export interface LessonStep {
     left: string
     right: string
   }
+  // 컴포넌트 이후에 이어지는 설명 (선택적)
+  contentAfter?: string
+  layoutAfter?: {
+    left: string
+    right: string
+  }
   [key: string]: any
 }
 

@@ -297,6 +297,14 @@ const registry: Record<string, ComponentEntry> = {
     load: () => import("@/components/animations/syntax-builder"),
     exportName: "CppClassBasicBuilder",
   },
+  cppObjectCreateBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppObjectCreateBuilder",
+  },
+  cppMemberAccessBuilder: {
+    load: () => import("@/components/animations/syntax-builder"),
+    exportName: "CppMemberAccessBuilder",
+  },
   pyWhileBuilder: {
     load: () => import("@/components/animations/syntax-builder"),
     exportName: "PyWhileBuilder",
