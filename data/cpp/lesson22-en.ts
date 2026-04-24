@@ -602,31 +602,29 @@ After the colon \`:\`, write \`member(value)\` pairs. Leave \`{ }\` empty.
           type: "explain",
           title: "🔬 Under the Hood — When Do Members Get Their Values?",
           component: "constructorLifecycle",
-          content: `Use the **top tabs** (No constructor / Python-style / C++ recommended) and the step buttons in the simulator below to compare.
+          content: `Compare **two scenarios** in the simulator above.
 
-### What happens in each tab
+### Scenario 1: Normal members (int, string, etc.)
+**Both methods work.** Students see no visible difference. Either is fine.
 
-- **No constructor**: members are born as garbage and stay that way **forever**. Dangerous!
-- **Python-style** (body assignment): members are born **empty / with garbage**, then the body **overwrites** them → **2 things** happen.
-- **C++ recommended** (initializer list): members are born **directly with the final values** → **1 thing** happens.
+### Scenario 2: const member
+**Python-style produces a compile error.** Only the list works.
+
+\`const int id\` is "a value that can't be changed once set". Python-style **reassigns** the member in the body (\`id = i\`), but const forbids reassignment → error.
+
+The list "initializes at birth" — not a reassignment — so const is fine.
 
 ---
 
-### 💡 Why is method 2 preferred in practice?
+### 💡 Why does this matter?
 
-Both end with the same values, but the **journey is different**:
+The moment your class has even one const (or reference) member, **Python-style is no longer an option**.
 
-| Criterion | Python-style | C++ recommended |
-|---|---|---|
-| 🕐 How many operations | 2 (construct → overwrite) | **1** (construct with values) |
-| ⚠️ "Wrong values" window | Brief **garbage phase** between birth and overwrite | None — correct from the start |
-| 🔒 const / reference members | ❌ compile error | ✅ works |
-| ⚡ Heavy types (string) | Creates empty then discards → waste | One-shot |
-| 📘 Similar to Python | ⭕ reads easily | ❌ unfamiliar syntax |
+A student might think "this class has no const, so Python-style is fine". But in real code, const members get **added later**. Every time that happens, every constructor has to be rewritten in list form.
 
-👉 **"Always correct"** is why C++ projects default to method 2. And the moment you have const or reference members, method 2 is the only option.
+👉 So real-world C++ **starts with the list** from day one. No rewrites when const is added. No "which style?" debates for new teammates.
 
-→ Next page shows exactly why \`const\` and \`reference\` don't work with method 1.`
+→ The next page digs into the "why" for \`const\` and \`reference\` members.`
         },
         {
           id: "ch3-initlist-const-ref",
