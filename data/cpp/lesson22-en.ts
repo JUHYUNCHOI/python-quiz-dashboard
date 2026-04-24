@@ -575,47 +575,27 @@ BankAccount acc("Emma", 1000);  // Constructor called automatically!
           title: "💡 Constructor — Two Ways to Write It",
           content: `There are **two ways** to put values into members via a constructor.
 
-### Method 1: Python-style — body assignment (familiar)
+### Method 1: Python-style — body assignment
 \`\`\`cpp
 BankAccount(string name, double initial) {
-    owner = name;      // put values in with = inside { }
+    owner = name;
     balance = initial;
 }
 \`\`\`
-👉 The object is **made first**, then values are put in with \`=\` inside \`{ }\`. Almost identical to Python's \`self.x = y\`.
-
-- ✅ **Pros**: Students coming from Python read it instantly. Looks like a regular function.
-- ❌ **Cons**: Doesn't work for \`const\` / \`reference\` members — compile error. Slightly less efficient.
+Almost identical to Python's \`self.x = y\` — feels familiar.
 
 ### Method 2: C++ recommended — initializer list ⭐
 \`\`\`cpp
 BankAccount(string name, double initial)
     : owner(name), balance(initial) {}
 \`\`\`
-👉 After the colon \`:\`, write \`member(value)\` pairs separated by \`,\`. Values are **put in at the same time the object is made**. Leave \`{ }\` empty.
-
-- ✅ **Pros**: Shorter and cleaner. Handles \`const\`/\`reference\`. Better efficiency. **Works in every situation**.
-- ❌ **Cons**: Unfamiliar syntax that doesn't exist in Python.
-
-> 📖 **Both styles are legal C++** (either will compile and run fine). C++ has two styles because **each has its own use case and strengths**.
+After the colon \`:\`, write \`member(value)\` pairs. Leave \`{ }\` empty.
 
 ---
 
-### 📊 Which one is actually used more?
+> 📖 **Both are legal C++.** Either compiles and runs. But **real-world C++ almost always uses method 2.**
 
-| Where you'll see it | Method 1 (Python-style) | Method 2 (list) |
-|---|---|---|
-| Beginner tutorials / YouTube | 🟦🟦🟦 **often** | 🟦 sometimes |
-| Open source (LLVM, Chromium, Qt) | ⬜ almost never | 🟢🟢🟢 **almost always** |
-| Production codebases | 🟦 sometimes | 🟢🟢🟢 **mostly** |
-| Competitive programming experts | ⬜ almost never | 🟢🟢🟢 **almost always** |
-
-→ In **"real-world C++"**, method 2 wins overwhelmingly. Method 1 mainly lives in beginner materials.
-
----
-
-🤔 **So why is method 2 used so much, despite its unfamiliar syntax?**
-→ **The internal behavior is different.** Method 1 has a hidden pitfall. Let's see it in the simulator on the next page.`
+🤔 **Method 2's syntax is new to Python people — so why do professionals reach for it?** There's a reason. Let's see it in the simulator on the next page.`
         },
         {
           id: "ch3-initlist-lifecycle",
