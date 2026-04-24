@@ -3,11 +3,12 @@
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
+import { highlightCpp } from "@/components/ui/code-block"
 
 // ──────────────────────────────────────────────────────────────
 // ConstructorLifecycle
-// 생성자 없음 / 있음 토글 → 있음 모드에서 "만들고 넣기" vs "만들면서 넣기"
-// 단계별 비교. 멤버가 언제 값을 갖는지 시각화.
+// 3-way 탭: 생성자 없음 / 만들고 넣기 / 만들면서 넣기
+// 한 번에 하나만 표시 (집중도). 각 방식에서 멤버가 언제 값을 갖는지 시각화.
 // ──────────────────────────────────────────────────────────────
 
 interface Props {
@@ -15,7 +16,7 @@ interface Props {
 }
 
 type FieldState = "empty" | "garbage" | "active" | "done"
-type Mode = "none" | "with"
+type Mode = "none" | "after" | "while"
 
 // 랜덤 쓰레기값 생성 (garbage 상태일 때 숫자 필드에 계속 바뀌는 값 표시)
 function useGarbageNumber(active: boolean, seed: number) {
@@ -119,9 +120,9 @@ function Column({
         </span>
       </div>
 
-      <pre className="rounded-lg bg-slate-800/70 border border-slate-700 px-3 py-2 text-[11px] leading-relaxed text-slate-200 font-mono overflow-x-auto">
-{code}
-      </pre>
+      <div className="rounded-lg bg-slate-800/70 border border-slate-700 px-3 py-2 text-[12px] leading-relaxed font-mono overflow-x-auto">
+        {highlightCpp(code, true)}
+      </div>
 
       <div className="rounded-lg bg-slate-800/40 border border-slate-700/60 px-3 py-2.5 min-h-[84px]">
         {fields.map(f => (
@@ -146,7 +147,7 @@ function Column({
 
 export function ConstructorLifecycle({ lang = "ko" }: Props) {
   const isEn = lang === "en"
-  const [mode, setMode] = useState<Mode>("with")
+  const [mode, setMode] = useState<Mode>("after")
   const [step, setStep] = useState(0)
 
   const stepLabels = isEn ? ["Call", "Birth", "Final"] : ["호출", "탄생", "완료"]
@@ -312,16 +313,18 @@ BankAccount acc;  // ← 그냥 만듦`
           {isEn ? "Constructor Lifecycle" : "생성자 생애주기 — 멤버에 값이 언제 들어가나?"}
         </h3>
         <div className="inline-flex gap-0.5 rounded-lg bg-slate-800/70 p-0.5 text-[11px]">
-          {(["none", "with"] as Mode[]).map(m => {
+          {(["none", "after", "while"] as Mode[]).map(m => {
             const label = m === "none"
               ? (isEn ? "No constructor" : "생성자 없음")
-              : (isEn ? "With constructor" : "생성자 있음")
+              : m === "after"
+                ? (isEn ? "Fill after" : "만들고 넣기")
+                : (isEn ? "Fill while" : "만들면서 넣기")
             return (
               <button
                 key={m}
                 onClick={() => { setMode(m); setStep(0) }}
                 className={cn(
-                  "px-2.5 py-1 rounded-md font-semibold transition-all",
+                  "px-2.5 py-1 rounded-md font-semibold transition-all whitespace-nowrap",
                   mode === m
                     ? "bg-slate-950 text-white"
                     : "text-slate-400 hover:text-slate-200"
@@ -352,15 +355,14 @@ BankAccount acc;  // ← 그냥 만듦`
         ))}
       </div>
 
-      {/* 컨텐츠 */}
+      {/* 컨텐츠 — 선택된 방식 하나만 큰 화면에 표시 */}
       <AnimatePresence mode="wait">
-        {mode === "none" ? (
+        {mode === "none" && (
           <motion.div
             key="none"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="grid grid-cols-1 gap-3"
           >
             <Column
               title={isEn ? "No constructor" : "생성자 없음"}
@@ -372,26 +374,35 @@ BankAccount acc;  // ← 그냥 만듦`
               highlight={noneByStep[step].highlight}
             />
           </motion.div>
-        ) : (
+        )}
+        {mode === "after" && (
           <motion.div
-            key="with"
+            key="after"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-3"
           >
             <Column
               title={isEn ? "Fill after creating" : "만들고 넣기"}
-              subtitle={isEn ? "= assignment in body" : "= 로 대입 (바디 안)"}
+              subtitle={isEn ? "= assignment in body (2 steps)" : "= 로 대입 — 객체 먼저 만들고 { } 안에서 값 넣기 (2단계)"}
               stepCountLabel={isEn ? "2 steps" : "2단계"}
               code={afterCode}
               fields={afterByStep[step].fields}
               caption={afterByStep[step].caption}
               highlight={afterByStep[step].highlight}
             />
+          </motion.div>
+        )}
+        {mode === "while" && (
+          <motion.div
+            key="while"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
             <Column
               title={isEn ? "Fill while creating" : "만들면서 넣기"}
-              subtitle={isEn ? ": initializer list" : ": 이니셜라이저 리스트"}
+              subtitle={isEn ? ": initializer list (1 step)" : ": 이니셜라이저 리스트 — 만들면서 값이 함께 들어감 (1단계)"}
               stepCountLabel={isEn ? "1 step" : "1단계"}
               code={whileCode}
               fields={whileByStep[step].fields}
