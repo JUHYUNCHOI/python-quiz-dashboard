@@ -315,53 +315,49 @@ Think of auto as a "one-time binding contract." When you write \`auto x = 5;\`, 
           id: "ch2-combo",
           type: "explain",
           title: "🔥 auto + range-for combo!",
-          content: `Combining auto with range-for is super handy — this is the **modern C++ standard style**.
+          content: `Combining auto with range-for is super handy.
 
 \`\`\`cpp
 vector<int> nums = {1, 2, 3};
 
-// Explicit type
-for (int x : nums) cout << x << " ";
-
-// auto — compiler infers int automatically
-for (auto x : nums) cout << x << " ";
+for (int x : nums) ...    // explicit type
+for (auto x : nums) ...   // auto — compiler infers int
 \`\`\`
 
-### 🎯 So why use auto?
+### When auto shines
 
-**1. Long types become short**
-
-For \`vector<int>\` writing the type is fine. But what about the **2D vector** from cpp-21?
+**The longer the type, the bigger the win** — like the 2D vector from cpp-21:
 
 \`\`\`cpp
 vector<vector<int>> grid(3, vector<int>(4, 0));
 
-// Explicit — must spell out the inner type too
-for (vector<int> row : grid)
-    for (int val : row)
-        cout << val;
-
-// auto — clean
-for (auto row : grid)
-    for (auto val : row)
-        cout << val;
+for (vector<int> row : grid)   // must spell out inner type — long
+for (auto row : grid)           // auto — clean
 \`\`\`
 
-**2. Robust to type changes**
+If you later change the type (\`vector<int>\` → \`vector<long>\`), \`auto\` follows automatically — no code changes needed.
 
-Say you later change \`vector<int>\` to \`vector<long>\`. With explicit types, every \`int x\` becomes \`long x\`. With \`auto x\`, no edit needed — it follows automatically.
+---
+
+### ⚠️ But auto can't replace vector<int> itself
+
+The loop variable can be auto, but **declaring the vector is different**:
 
 \`\`\`cpp
-// Explicit type: must update inner type when outer changes
-for (int x : nums) ...      // ← becomes long when vector<long>
-
-// auto: stays the same
-for (auto x : nums) ...     // ← auto-follows to long
+vector<int> v = {1, 2, 3};   // ✅ v is vector<int>
+auto v = {1, 2, 3};          // ❌ trap! v is NOT a vector — it's 'initializer_list'
+                              //    push_back, size, etc. don't exist on it
 \`\`\`
 
-> 💡 Bottom line: short types (\`int\`, \`double\`) are clearer written explicitly. \`auto\` shines for long types (\`vector<vector<int>>\`) or types that may change.
+Why: \`{1, 2, 3}\` is a "brace-enclosed temporary list" (initializer_list). When you write \`vector<int>\`, the vector constructor takes those values and builds a vector. But \`auto\` deduces literally what's there — so it becomes initializer_list.
 
-Next page — \`auto / auto& / const auto&\` patterns + pitfalls.`
+**To get a vector with auto:**
+
+\`\`\`cpp
+auto v = vector<int>{1, 2, 3};   // works (but vector<int> v = {1,2,3} is shorter)
+\`\`\`
+
+> 💡 **Bottom line**: short types (\`int\`, \`double\`, \`vector<int>\`) are clearer written explicitly. \`auto\` shines for long types like \`vector<vector<int>>\`. Next page covers the full pitfalls.`
         },
         {
           id: "ch2-auto-tradeoff",
@@ -443,21 +439,7 @@ string greeting = "hello";
 
 Start with **explicit types**, then let auto come naturally.
 
-{collapse:📦 Bonus — deeper auto pitfalls}
-**\`auto v = {1, 2, 3}\` is NOT a vector**
-
-\`\`\`cpp
-auto v = {1, 2, 3};   // initializer_list<int>, a different type
-v.push_back(4);       // ❌ initializer_list has no push_back!
-
-// To get a vector:
-vector<int> v = {1, 2, 3};
-auto v = vector<int>{1, 2, 3};
-\`\`\`
-\`{1, 2, 3}\` is a "brace-enclosed temporary list" (initializer_list). The vector constructor accepts it, which is why \`vector<int> v = {1, 2, 3}\` works. But \`auto\` grabs the temporary list itself.
-
----
-
+{collapse:📦 Bonus — number literal differences}
 **Number literals — \`5\` vs \`5L\` vs \`5.0\`**
 
 \`\`\`cpp
