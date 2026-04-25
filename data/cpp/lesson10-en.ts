@@ -343,7 +343,56 @@ for (auto row : grid)
         cout << val;
 \`\`\`
 
-Next page — a tricky pitfall when using \`auto\` to make a vector.`
+Next page — how to use range-for with 2D vectors, and when not to.`
+        },
+        {
+          id: "ch2-2d-rangefor",
+          type: "explain",
+          title: "📦 Can we use range-for with 2D vectors?",
+          content: `Earlier you used nested for loops with indices to traverse 2D vectors. Range-for works too!
+
+\`\`\`cpp
+vector<vector<int>> grid(3, vector<int>(4, 0));
+
+// Index-based (what you've been doing)
+for (int i = 0; i < 3; i++)
+    for (int j = 0; j < 4; j++)
+        cin >> grid[i][j];
+
+// Range-for style
+for (auto& row : grid)       // row = each row (vector<int>&)
+    for (auto& val : row)    // val = each element (int&)
+        cin >> val;
+\`\`\`
+
+Output works the same way:
+\`\`\`cpp
+for (const auto& row : grid) {
+    for (const auto& val : row)
+        cout << val << " ";
+    cout << "\\n";
+}
+\`\`\`
+
+### But — index-based is used more often!
+
+Why? Because most 2D problems need the **position (i, j)**:
+
+| Pattern | Position needed? | Range-for OK? |
+|---|---|---|
+| Diagonal \`grid[i][i]\` | ✅ | ❌ |
+| Adjacent cell \`grid[i+1][j]\` | ✅ | ❌ |
+| Border check \`i==0\` | ✅ | ❌ |
+| Simple input \`cin >> val\` | ❌ | ✅ |
+| Total sum/count | ❌ | ✅ |
+
+Range-for only works when you **don't need the position** — input, total sums, printing everything, etc.
+
+In USACO and competitive programming, position matters in most problems, so **index-based nested loops are the go-to for 2D**.
+
+> 💡 Bottom line: range-for with 2D is a "nice to know" — index-based is the default!
+
+Next page — a tricky pitfall when using \`auto\` to make a vector.`,
         },
         {
           id: "ch2-vector-trap",
@@ -512,53 +561,6 @@ int main() {
 }`,
           hint: "When modifying: for (auto& x : nums) { x *= 2; } — without &, x is a copy so the original won't change. For printing: for (auto x : nums) cout << x << \" \";",
           expectedOutput: `6 14 4 18 10 `
-        },
-        {
-          id: "ch2-2d-rangefor",
-          type: "explain",
-          title: "📦 Can we use range-for with 2D vectors?",
-          content: `Earlier you used nested for loops with indices to traverse 2D vectors. Range-for works too!
-
-\`\`\`cpp
-vector<vector<int>> grid(3, vector<int>(4, 0));
-
-// Index-based (what you've been doing)
-for (int i = 0; i < 3; i++)
-    for (int j = 0; j < 4; j++)
-        cin >> grid[i][j];
-
-// Range-for style
-for (auto& row : grid)       // row = each row (vector<int>&)
-    for (auto& val : row)    // val = each element (int&)
-        cin >> val;
-\`\`\`
-
-Output works the same way:
-\`\`\`cpp
-for (const auto& row : grid) {
-    for (const auto& val : row)
-        cout << val << " ";
-    cout << "\\n";
-}
-\`\`\`
-
-### But — index-based is used more often!
-
-Why? Because most 2D problems need the **position (i, j)**:
-
-| Pattern | Position needed? | Range-for OK? |
-|---|---|---|
-| Diagonal \`grid[i][i]\` | ✅ | ❌ |
-| Adjacent cell \`grid[i+1][j]\` | ✅ | ❌ |
-| Border check \`i==0\` | ✅ | ❌ |
-| Simple input \`cin >> val\` | ❌ | ✅ |
-| Total sum/count | ❌ | ✅ |
-
-Range-for only works when you **don't need the position** — input, total sums, printing everything, etc.
-
-In USACO and competitive programming, position matters in most problems, so **index-based nested loops are the go-to for 2D**.
-
-> 💡 Bottom line: range-for with 2D is a "nice to know" — index-based is the default!`,
         },
         {
           id: "ch2-q1",
