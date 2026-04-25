@@ -104,7 +104,7 @@ cout << hero.level;  // 1
           id: "ch1-exp3",
           type: "explain",
           title: "🗡️ struct Item 설계 + string 심화",
-          content: `캐릭터가 아이템을 가질 수 있도록 **struct**로 아이템 타입을 만들어요. (레슨 15)
+          content: `캐릭터가 아이템을 가질 수 있도록 아이템 타입도 만들어요. **근데 이건 class 가 아니라 \`struct\` 로 만들 거예요.** 왜?
 
 \`\`\`cpp
 struct Item {
@@ -114,7 +114,20 @@ struct Item {
 };
 \`\`\`
 
-struct는 class보다 단순해요 — 데이터만 묶고 싶을 때 써요:
+**class vs struct — 언제 뭘 쓰지?**
+
+- **\`class Character\`** — hp 가 음수면 안 됨, 공격/방어 같은 **행동** 도 있음 → 데이터를 **보호하고 감싸야** 해서 class
+- **\`struct Item\`** — 그냥 이름이랑 수치 묶음. 자유롭게 읽고 쓰는 게 자연스러움 → **단순 데이터 뭉치** 라서 struct
+
+**규칙처럼 외우면**: 행동·검증이 있으면 \`class\`, 데이터만 묶으면 \`struct\`.
+
+\`\`\`cpp
+Item sword = {"철검", 5, 0};        // 중괄호로 한 번에!
+Item potion = {"체력 물약", 0, 30};
+
+cout << sword.name;      // 철검 — 바로 접근 OK (struct 는 기본 public)
+cout << sword.atkBonus;  // 5
+\`\`\`
 
 \`\`\`cpp
 Item sword = {"철검", 5, 0};
