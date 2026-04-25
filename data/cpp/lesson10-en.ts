@@ -376,21 +376,21 @@ for (const auto& row : grid) {
 
 ### But — index-based is used more often!
 
-Why? Because most 2D problems need the **position (i, j)**:
+Most 2D problems need the **position (i, j)**, and range-for gives you the value but not the position. So the natural choice differs by pattern:
 
-| Pattern | Position needed? | Range-for OK? |
+| Pattern | Position needed? | Natural choice |
 |---|---|---|
-| Diagonal \`grid[i][i]\` | ✅ | ❌ |
-| Adjacent cell \`grid[i+1][j]\` | ✅ | ❌ |
-| Border check \`i==0\` | ✅ | ❌ |
-| Simple input \`cin >> val\` | ❌ | ✅ |
-| Total sum/count | ❌ | ✅ |
+| Diagonal \`grid[i][i]\` | ✅ | indexed \`for\` |
+| Adjacent cell \`grid[i+1][j]\` | ✅ | indexed \`for\` |
+| Border check \`i==0\` | ✅ | indexed \`for\` |
+| Simple input \`cin >> val\` | ❌ | range-for |
+| Total sum/count | ❌ | range-for |
 
-Range-for only works when you **don't need the position** — input, total sums, printing everything, etc.
+> ℹ️ Even patterns needing position can use range-for if you track an external counter. It just feels awkward, so people don't.
 
 In USACO and competitive programming, position matters in most problems, so **index-based nested loops are the go-to for 2D**.
 
-> 💡 Bottom line: range-for with 2D is a "nice to know" — index-based is the default!
+> 💡 Bottom line: in 2D, use range-for for "input / total sum" type cases (no position needed), and index-based otherwise.
 
 Next page — a tricky pitfall when using \`auto\` to make a vector.`,
         },
