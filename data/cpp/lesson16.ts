@@ -21,50 +21,62 @@ export const cppLesson16Data: LessonData = {
         {
           id: "ch1-intro",
           type: "explain",
-          title: "📖 map — 키와 값을 짝지어 저장해요!",
-          content: `학교 성적 관리 시스템을 만든다고 생각해보세요. '홍길동'의 점수를 바로 찾고 싶어요. 벡터로 하면 처음부터 끝까지 하나씩 찾아야 해요. 1000명이면? 너무 느려요! **이름으로 바로 찾을 수 있는** 도구가 필요해요.
+          title: "📖 map — 이름으로 바로 찾기",
+          content: `1000 명 학생의 점수를 저장한다고 해봐요. 이전 레슨에서 배운 \`vector<pair<string,int>>\` 로 하면 이렇게 됩니다:
 
-파이썬에서 \`dict\`를 써본 적 있죠? C++에서는 \`map\`이 같은 역할을 해요!
+\`\`\`cpp
+vector<pair<string, int>> scores = {
+    {"Alice", 95}, {"Bob", 87}, ...  // 1000 개
+};
+
+// "Bob" 점수 찾기?
+for (auto& p : scores) {
+    if (p.first == "Bob") { ... }   // 처음부터 한 명씩 비교
+}
+\`\`\`
+
+\`Bob\` 이 끝에 있으면 1000 번 비교해야 해요. 100 만 명이면? 100 만 번. 너무 느려요.
+
+우리가 진짜 원하는 건 **"이름 → 점수" 표** 같은 것. 파이썬에선 그게 \`dict\` 였죠.
+
+\`\`\`python
+scores = {"Alice": 95, "Bob": 87, "Charlie": 92}
+print(scores["Bob"])   # 87 — 즉시!
+\`\`\`
+
+C++ 에선 그 역할을 **\`map\`** 이 해요.
 
 \`\`\`cpp
 #include <map>
-#include <string>
-using namespace std;
-
 map<string, int> scores;
 scores["Alice"] = 95;
 scores["Bob"] = 87;
 scores["Charlie"] = 92;
+
+cout << scores["Bob"];   // 87 — 즉시!
 \`\`\`
 
-파이썬과 비교해봐요:
+문법은 \`map<키타입, 값타입>\`. 사용법은 \`scores[키]\` 로 파이썬 dict 와 거의 똑같아요.
 
-**파이썬 🐍:**
-\`\`\`python
-scores = {}
-scores["Alice"] = 95
-scores["Bob"] = 87
-scores["Charlie"] = 92
-\`\`\`
+> 💡 한 줄: **map = "키로 바로 값을 찾는 빠른 표"**.
 
-거의 똑같죠? 하지만 중요한 차이가 있어요!
+### 파이썬 dict 와 한 가지 다른 점
 
 | 파이썬 dict 🐍 | C++ map ⚡ |
 |---|---|
 | \`scores = {}\` | \`map<string, int> scores;\` |
-| \`scores["key"] = val\` | \`scores["key"] = val;\` (같아요!) |
-| 삽입 순서 유지 | **키 기준으로 자동 정렬!** |
-| \`#include\` 불필요 | \`#include <map>\` 필요 |
-
-💡 C++ \`map\`은 키를 **자동으로 정렬**해요! 알파벳 순서로 저장돼요.
+| \`scores["key"] = val\` | \`scores["key"] = val;\` (같음!) |
+| **삽입 순서** 유지 | **키 기준 자동 정렬** |
 
 \`\`\`cpp
 map<string, int> scores;
 scores["Charlie"] = 92;
 scores["Alice"] = 95;
 scores["Bob"] = 87;
-// 저장 순서: Alice → Bob → Charlie (알파벳 순!)
-\`\`\``
+// 순회하면 Alice → Bob → Charlie (알파벳 순)
+\`\`\`
+
+C++ \`map\` 은 키를 **항상 정렬해서 저장**해요. 이건 trade-off 가 있는데 나중에 \`unordered_map\` 이랑 비교하면서 봐요.`
         },
         {
           id: "ch1-fb1",
