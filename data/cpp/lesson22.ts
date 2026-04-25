@@ -947,6 +947,42 @@ int main() {
           hint: `private에 string owner; double balance; 선언. 생성자는 BankAccount(string name, double initial) { owner = name; balance = initial; }. deposit은 if(amount > 0) balance += amount; withdraw는 if(amount > 0 && amount <= balance) balance -= amount;`,
           expectedOutput: `1300원`
         },
+        {
+          id: "ch4-struct-vs-class",
+          type: "explain",
+          title: "🤝 그런데 struct 랑 class, 뭐가 다르지?",
+          content: `여기까지 class 로 꽤 많은 걸 해봤어요 — 멤버 변수, 멤버 함수, 생성자, getter/setter, 캡슐화. 근데 문득 \`cpp-14\` 에서 배운 **struct** 가 생각나지 않아요? 둘이 진짜 뭐가 다르죠?
+
+**놀라운 사실** — \`struct\` 도 **멤버 함수** 를 가질 수 있어요. 문법이 거의 똑같아요.
+
+\`\`\`cpp
+struct Point {
+    int x, y;
+    void print() { cout << x << "," << y; }   // struct 에도 함수 OK!
+};
+\`\`\`
+
+**결정적인 차이 딱 하나** — 기본 접근 레벨:
+
+| | \`struct\` | \`class\` |
+|---|---|---|
+| 기본 접근 | **public** (어디서나 접근) | **private** (바깥에서 못 건드림) |
+
+\`\`\`cpp
+struct A { int x; };         // x 는 기본 public
+class  B { int x; };         // x 는 기본 private
+
+A a; a.x = 10;   // ✅ OK
+B b; b.x = 10;   // ❌ 컴파일 에러 — private!
+\`\`\`
+
+**관례 (언제 뭘 쓰나?)**
+
+- **\`struct\`** — 데이터만 **뭉쳐서** 다룰 때 (좌표, 학생 정보, 설정 값...). 외부에서 자유롭게 읽고 쓰는 게 자연스러움.
+- **\`class\`** — 데이터를 **보호하고** 함수로 감싸 쓸 때 (은행 계좌, 캐릭터, 자동차...). 캡슐화가 필요한 경우.
+
+@핵심: 기술적으로는 두 키워드가 거의 쌍둥이예요. 차이는 **기본값이 무엇이냐** 와 **어떤 의도로 쓰느냐** 뿐.`,
+        },
       ]
     },
     // ============================================
