@@ -1449,22 +1449,52 @@ const CPP_RANGE_FOR: SyntaxBuilderPreset = {
   title: { ko: "C++ 범위 기반 for 루프", en: "C++ Range-based for Loop" },
   steps: [
     {
-      code: "// 옛날 방식:\nfor (int i = 0; i < v.size(); i++)\n    cout << v[i];",
-      highlight: { start: 0, end: 55 },
-      label: { ko: "매번 이렇게 길게 써야 했어요... 더 짧은 방법이 있다면?", en: "Had to write this long code every time... What if there's a shorter way?" },
-      icon: "😩",
-    },
-    {
-      code: "for (int x : v)\n    cout << x;",
-      highlight: { start: 0, end: 15 },
-      label: { ko: "새로운 방법! v에서 하나씩 꺼내서 x에 넣어줘요", en: "New way! Takes each item from v and puts it in x" },
-      icon: "✨",
-    },
-    {
-      code: "for (int x : v)\n    cout << x;",
-      highlight: { start: 5, end: 9 },
-      label: { ko: "타입을 직접 써줘요. v의 원소 타입이 int니까 int x!",  en: "Write the type directly. Elements are int, so int x!" },
+      code: "vector<int> nums = {10, 20, 30};",
+      highlight: { start: 0, end: 32 },
+      label: { ko: "이런 vector 가 있다고 해봐요. 모든 원소를 출력하려면?", en: "Suppose we have this vector. How to print every element?" },
       icon: "📦",
+    },
+    {
+      code: "vector<int> nums = {10, 20, 30};\n\nfor ()",
+      highlight: { start: 34, end: 40 },
+      label: { ko: "① for 키워드 + 빈 괄호로 시작", en: "① Start with for + empty parens" },
+      icon: "🔁",
+    },
+    {
+      code: "vector<int> nums = {10, 20, 30};\n\nfor ( : )",
+      highlight: { start: 40, end: 41 },
+      label: { ko: "② 괄호 안에 콜론(:) 하나 — 새 문법의 핵심, '에서' 라는 의미", en: "② One colon (:) inside — the heart of this syntax, means 'from'" },
+      icon: "➗",
+    },
+    {
+      code: "vector<int> nums = {10, 20, 30};\n\nfor ( : nums)",
+      highlight: { start: 42, end: 46 },
+      label: { ko: "③ 콜론 오른쪽 — 어디서 꺼낼지 (nums 에서!)", en: "③ Right of colon — what to iterate over (from nums!)" },
+      icon: "📥",
+    },
+    {
+      code: "vector<int> nums = {10, 20, 30};\n\nfor (int : nums)",
+      highlight: { start: 39, end: 42 },
+      label: { ko: "④ 콜론 왼쪽 — 받아올 값의 타입. nums 의 원소가 int 니까 int", en: "④ Left of colon — type of element. nums holds ints, so int" },
+      icon: "🏷️",
+    },
+    {
+      code: "vector<int> nums = {10, 20, 30};\n\nfor (int x : nums)",
+      highlight: { start: 43, end: 44 },
+      label: { ko: "⑤ 변수 이름 x — 매 반복마다 nums 의 값이 여기 들어와요", en: "⑤ Variable name x — gets one value from nums each iteration" },
+      icon: "🔠",
+    },
+    {
+      code: "vector<int> nums = {10, 20, 30};\n\nfor (int x : nums)\n    cout << x;",
+      highlight: { start: 53, end: 67 },
+      label: { ko: "⑥ 본문에서 x 출력 — 그게 다예요! 인덱스 [i] 안 써도 됨", en: "⑥ Print x in the body — that's it! No need for index [i]" },
+      icon: "🖨️",
+    },
+    {
+      code: "vector<int> nums = {10, 20, 30};\n\nfor (int x : nums)\n    cout << x;\n\n// 1차: x ← 10  →  10 출력\n// 2차: x ← 20  →  20 출력\n// 3차: x ← 30  →  30 출력",
+      highlight: { start: 69, end: 142 },
+      label: { ko: "⑦ 동작 — x 가 nums 의 값을 차례로 받아서 출력", en: "⑦ How it runs — x receives each value from nums and prints" },
+      icon: "▶️",
     },
   ],
 }
