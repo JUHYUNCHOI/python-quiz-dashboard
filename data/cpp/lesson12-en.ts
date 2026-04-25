@@ -189,35 +189,11 @@ ref = 500`
           id: "ch2-intro",
           type: "explain",
           title: "📞 Passing Values to Functions (Call by Value)",
-          content: `In C++, when you pass a variable to a function, the value is **copied** by default! This is called **Call by Value**.
+          component: "callByValueVisualizer",
+          content: `In C++, when you pass a variable to a function, the value is **copied** by default! This is called **Call by Value**. Step through with the prev/next buttons to watch what happens:`,
+          contentAfter: `When you pass \`num\` to \`tryChange\`, a fresh **copy** is made — \`x\` inside the function is that copy. Changing \`x\` doesn't touch the original \`num\`.
 
-\`\`\`cpp
-void tryChange(int x) {
-    x = 99;   // Only changes the copy!
-}
-
-int main() {
-    int num = 10;
-    tryChange(num);
-    cout << num;   // Still 10! 😱
-}
-\`\`\`
-
-When you pass \`num\` to \`tryChange\`, a **copy** is made. Changing \`x\` inside the function doesn't touch the original \`num\`!
-
-Let's compare with Python:
-
-**Python 🐍:**
-\`\`\`python
-def try_change(x):
-    x = 99      # integers are immutable!
-
-num = 10
-try_change(num)
-print(num)      # 10 — unchanged in Python too!
-\`\`\`
-
-In Python, integers don't change either because they're immutable. But in C++, **every type** is copied by default!
+In C++, every type — \`int\`, \`double\`, \`string\`, structs — is copied by default. For big data this can be slow, which is why **references (&)** matter (next chapter!).
 
 | Scenario | C++ (default) | Python |
 |---|---|---|
@@ -225,7 +201,7 @@ In Python, integers don't change either because they're immutable. But in C++, *
 | Pass string | Copied (unchanged) | Object reference |
 | Pass list/vector | Copied! (unchanged) | Object reference (changes!) |
 
-💡 C++ copies by default! This is a major difference from Python.`
+💡 C++ copies by default — a major difference from Python.`
         },
         {
           id: "ch2-pred1",
