@@ -316,7 +316,7 @@ Think of auto as a "one-time binding contract." When you write \`auto x = 5;\`, 
           id: "ch2-combo",
           type: "explain",
           title: "🔥 auto + range-for combo!",
-          content: `range-for with auto is clean and handy.
+          content: `Using auto in the range-for variable is super handy.
 
 \`\`\`cpp
 vector<int> nums = {1, 2, 3};
@@ -325,55 +325,123 @@ for (int x : nums) ...    // explicit type
 for (auto x : nums) ...   // auto — compiler infers int
 \`\`\`
 
-**Bigger win when the type is longer** — cpp-21's 2D vector:
+### When auto really shines
+
+**The longer the type, the bigger the win** — like the 2D vector from cpp-21:
 
 \`\`\`cpp
-vector<vector<int>> grid;
-for (vector<int> row : grid)   // long
-for (auto row : grid)           // clean
+vector<vector<int>> grid(3, vector<int>(4, 0));
+
+// Explicit — must spell out inner type too
+for (vector<int> row : grid)
+    for (int val : row)
+        cout << val;
+
+// auto — clean
+for (auto row : grid)
+    for (auto val : row)
+        cout << val;
 \`\`\`
 
-> ⚠️ But while \`auto\` works in the loop variable, **\`auto v = {1, 2, 3}\` is NOT a vector — it's a different type.** Full pitfalls on the next page.`
+Next page — a tricky pitfall when using \`auto\` to make a vector.`
+        },
+        {
+          id: "ch2-vector-trap",
+          type: "explain",
+          title: "⚠️ auto can't replace vector<int> itself",
+          content: `\`auto\` works great as a loop variable. But **declaring a vector is different**:
+
+\`\`\`cpp
+vector<int> v = {1, 2, 3};   // ✅ v is vector<int>
+auto v = {1, 2, 3};          // ❌ trap! v is NOT a vector — it's 'initializer_list'
+                              //    push_back, size, etc. don't exist on it
+\`\`\`
+
+### Why?
+
+\`{1, 2, 3}\` is a "brace-enclosed temporary list" — a separate type called \`initializer_list\`.
+
+- \`vector<int> v = {1, 2, 3}\` works because the vector constructor takes those values and builds a vector.
+- \`auto v = {1, 2, 3}\` deduces literally what's there, so v becomes \`initializer_list\`.
+
+### Want auto + vector?
+
+\`\`\`cpp
+auto v = vector<int>{1, 2, 3};   // works (you wrote the type anyway)
+\`\`\`
+But you ended up writing \`vector<int>\` either way, so just \`vector<int> v = {1, 2, 3};\` is shorter.
+
+> 💡 **Bottom line**: short types (\`int\`, \`double\`, \`vector<int>\`) are clearer written explicitly. \`auto\` shines for long types like \`vector<vector<int>>\`.`
         },
         {
           id: "ch2-auto-tradeoff",
           type: "explain",
-          title: "⚖️ auto — Convenient, but Watch Out",
-          content: `Three patterns to remember:
+          title: "⚖️ Three patterns + Top 3 pitfalls",
+          content: `In range-for you have to choose which \`auto\` form. Three patterns:
 
-| Pattern | When |
+| Pattern | When to use |
 |---|---|
-| \`for (auto x : v)\` | Read-only, small values |
-| \`for (auto& x : v)\` | **Modifying** elements |
-| \`for (const auto& x : v)\` | Read + large data (efficient) |
+| \`for (auto x : v)\` | Read-only, small values (int etc.) |
+| \`for (auto& x : v)\` | When **modifying** elements |
+| \`for (const auto& x : v)\` | Read-only + large data (string etc.) |
 
-💡 Most devs default to \`const auto&\` — safe and no copy.
+💡 Most C++ devs default to \`const auto&\` — safe and no copy.
 
 ---
 
-### 😓 auto pitfalls
+### 😓 Top 3 common pitfalls
 
-**Top 3** common ones:
+**⭐ 1. Big-data copy trap** (the most common — easy to miss; makes code slow)
+\`\`\`cpp
+vector<int> big(10000);   // a big vector
 
-| ⭐ | Pitfall | Example |
-|---|---|---|
-| 1 | Copies big data | \`auto copy = big;\` → \`auto& ref = big;\` |
-| 2 | int division (\`5/2 = 2\`) | \`auto x = 5/2;\` → \`auto x = 5.0/2;\` |
-| 3 | No initializer = error | \`auto x;\` ❌ |
+auto copy = big;          // Copies all 10000 — slow + double memory!
+auto& ref = big;          // References the original — fast
+const auto& cref = big;   // Fast + a promise not to modify
+\`\`\`
 
-> 🔑 \`auto\` doesn't pick up references automatically. \`int& r = x; auto a = r;\` makes \`a\` an int (copy). For references use \`auto&\`.
+> 🔑 \`auto\` doesn't pick up references automatically. Even if \`int& r = x;\`, \`auto a = r;\` makes \`a\` an int (copy). For references use \`auto&\`.
 
-Occasional:
+**⭐ 2. Integer division trap** (often breaks averages)
+\`\`\`cpp
+auto x = 5 / 2;     // Not 2.5 — it's 2! (int / int = int)
+auto y = 5.0 / 2;   // 2.5 — one side as double works
+\`\`\`
+Cast with \`(double)\` or make one side a double when you need decimals.
 
-| Pitfall | One-liner |
-|---|---|
-| \`auto greeting = "hello"\` | NOT \`string\` — it's \`const char*\`. \`+=\` won't work |
-| \`auto v = {1, 2, 3}\` | NOT a vector — \`initializer_list\`. No push_back |
-| \`auto x = calculate()\` | Type is hidden — readability ↓ |
+**⭐ 3. No initializer → compile error**
+\`\`\`cpp
+auto x;          // ❌ error — auto needs an initial value to deduce
+auto x = 0;      // ✅ deduced as int
+\`\`\`
+
+Next page — occasional pitfalls + final summary.`,
+        },
+        {
+          id: "ch2-auto-pitfalls-more",
+          type: "explain",
+          title: "📓 Occasional pitfalls + summary",
+          content: `Less common but still worth knowing:
+
+**Type is hidden from view**
+\`\`\`cpp
+auto result = calculate();  // Is result int? double? string? Unknown!
+int result = calculate();   // Clearly int at a glance
+\`\`\`
+Someone reading your code (or future you) may not immediately know the type.
+
+**\`auto\` + string-literal trap**
+\`\`\`cpp
+auto greeting = "hello";   // greeting is NOT string — it's const char*!
+greeting += " world";      // ❌ compile error — const char* has no +=
+
+string greeting = "hello"; // To get a string, write it explicitly
+\`\`\`
+\`"hello"\` is actually a C-style string, so \`auto\` infers \`const char*\`. To get the C++ \`string\` class, you must write it.
 
 ---
 
-### 📏 Summary
+### 📏 Final summary — when to use auto
 
 | Situation | Recommendation |
 |---|---|
@@ -381,16 +449,20 @@ Occasional:
 | Long types (\`vector<vector<int>>\` etc.) | \`auto\` |
 | range-for reading | \`auto\` or explicit |
 | range-for modifying | \`auto&\` |
+| Reading large data (string etc.) | \`const auto&\` |
+| String literals | Write \`string\` explicitly |
+
+Start with **explicit types**, then let auto come naturally.
 
 {collapse:📦 Bonus — number literal differences}
 \`\`\`cpp
-auto a = 5;       // int (~2.1 billion)
-auto b = 5L;      // long
-auto c = 5LL;     // long long (large)
+auto a = 5;       // int (typically up to ~2.1 billion)
+auto b = 5L;      // long (typically 64-bit)
+auto c = 5LL;     // long long (guaranteed large)
 auto d = 5.0;     // double
-auto e = 5.0f;    // float
+auto e = 5.0f;    // float (single precision)
 \`\`\`
-For large numbers (USACO etc.), \`int\` overflows >2.1B. Use \`auto x = 5LL;\` explicitly.`,
+For competitive programming with large numbers, \`int\` overflows past ~2.1 billion. Use \`auto x = 5LL;\` explicitly.`,
         },
         {
           id: "ch2-pred1",
