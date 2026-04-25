@@ -373,7 +373,7 @@ export const lessonCpp22: LessonData = {
         type: "explain",
         content: {
           lines: [],
-          code: '#include <iostream>\nusing namespace std;\n\nclass Thermometer {\nprivate:\n    int temp = 20;\npublic:\n    int getTemp() { return temp; }\n    void setTemp(int t) {\n        if (t >= -50 && t <= 150) temp = t;\n    }\n};\n\nint main() {\n    Thermometer th;\n    th.setTemp(200);  // 150 초과 → 무시\n    th.setTemp(30);   // OK\n    th.setTemp(-100); // -50 미만 → 무시\n    cout << th.getTemp();\n    return 0;\n}',
+          code: '#include <iostream>\nusing namespace std;\n\nclass Thermometer {\nprivate:\n    int temp = 20;\npublic:\n    int getTemp() { return temp; }\n    void setTemp(int t) {\n        if (t >= -50 && t <= 150) temp = t;\n    }\n};\n\nint main() {\n    Thermometer th;\n    th.setTemp(200);\n    th.setTemp(30);\n    th.setTemp(-100);\n    cout << th.getTemp();\n    return 0;\n}',
           predict: {
             question: "출력 결과는?",
             options: ["30", "200", "-100", "20"],
@@ -416,6 +416,13 @@ export const lessonCpp22: LessonData = {
           guide: "s >= 0 그리고 s <= 100 — 두 조건을 && 로 연결해요.",
           template: "void setScore(int s) {\n    if (___) score = s;\n}",
           answer: "s >= 0 && s <= 100",
+          alternateAnswers: [
+            "0 <= s && s <= 100",
+            "s <= 100 && s >= 0",
+            "100 >= s && s >= 0",
+            "0 <= s && 100 >= s",
+            "s >= 0 and s <= 100"
+          ],
           expect: "void setScore(int s) {\n    if (s >= 0 && s <= 100) score = s;\n}",
           en: {
             task: "Fill in so setScore only accepts 0 to 100!",
