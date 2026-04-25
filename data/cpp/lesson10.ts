@@ -355,7 +355,7 @@ for (vector<int> row : grid)
 for (auto row : grid)
     for (auto val : row)
         cout << val;
-\`\`\``
+\`\`\`
 
 **2. 같은 타입 두 번 안 쓰기 (DRY)**
 

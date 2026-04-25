@@ -343,7 +343,7 @@ for (vector<int> row : grid)
 for (auto row : grid)
     for (auto val : row)
         cout << val;
-\`\`\``
+\`\`\`
 
 **2. Don't repeat the type (DRY)**
 
