@@ -126,7 +126,7 @@ export const lessonCpp10: LessonData = {
         }
       },
 
-      // 에러 퀴즈
+      // 에러 퀴즈 — 타입 불일치
       {
         type: "errorQuiz",
         content: {
@@ -147,6 +147,54 @@ export const lessonCpp10: LessonData = {
               "Should use semicolon (;) instead of colon (:)"
             ],
             explanation: "The elements of vector<int> are int, but receiving them as string causes a type mismatch! Use int x instead."
+          }
+        }
+      },
+
+      // 에러 퀴즈 — Python 'in' 오타 (Python 출신 학생 흔한 실수)
+      {
+        type: "errorQuiz",
+        content: {
+          question: "Python 으로 코딩하다가 C++ 로 옮겼더니 컴파일이 안 돼요. 어디가 문제일까요?",
+          code: 'vector<int> v = {1, 2, 3};\nfor (int x in v) {\n    cout << x;\n}',
+          options: [
+            "Python 의 'in' 대신 C++ 은 콜론(:) 을 써요 — for (int x : v)",
+            "int 는 range-for 에 못 써요",
+            "x 를 미리 선언해야 해요"
+          ],
+          answer: 0,
+          explanation: "Python 은 `for x in v:`, C++ 은 `for (int x : v) { ... }`. 두 언어 모두 'x 를 v 의 각 원소로' 라는 같은 의미지만 기호가 달라요. C++ 은 콜론!",
+          en: {
+            question: "Coming from Python, this code won't compile in C++. What's wrong?",
+            code: 'vector<int> v = {1, 2, 3};\nfor (int x in v) {\n    cout << x;\n}',
+            options: [
+              "C++ uses colon (:) instead of Python's 'in' — for (int x : v)",
+              "int can't be used in range-for",
+              "x needs to be declared first"
+            ],
+            explanation: "Python: `for x in v:`. C++: `for (int x : v) { ... }`. Same meaning ('x as each element of v'), different separator. C++ uses a colon!"
+          }
+        }
+      },
+
+      // predict — int 나눗셈 함정 (auto a = 10 / 4)
+      {
+        type: "explain",
+        content: {
+          lines: [],
+          code: 'auto a = 10 / 4;\nauto b = 10.0 / 4;\ncout << a << " " << b;',
+          predict: {
+            question: "출력 결과는?",
+            options: ["2 2.5", "2.5 2.5", "2 2", "에러"],
+            answer: 0,
+            feedback: "`a = 10 / 4` 는 **int / int = int** → 2 (소수점 버림). `b = 10.0 / 4` 는 double 이 섞여 있어서 → 2.5. auto 는 표현식 결과의 타입을 그대로 받아요. 함정 조심!"
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["2 2.5", "2.5 2.5", "2 2", "Error"],
+              feedback: "`a = 10 / 4` is **int / int = int** → 2 (decimal truncated). `b = 10.0 / 4` has a double, so → 2.5. auto inherits the expression's type. Watch for this trap!"
+            }
           }
         }
       },
@@ -514,6 +562,50 @@ export const lessonCpp10: LessonData = {
           en: {
             task: "🔥 Set all negative values in temps to 0, then print!",
             guide: "Modifying values inside if requires & on the loop variable. Without it, only the copy becomes 0."
+          }
+        }
+      },
+
+      // Lv.3: 처음부터 — string 벡터 인사 (타입 처리)
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "🔥 names 의 각 이름 앞에 \"Hi, \" 를 붙여 한 줄씩 출력하세요!",
+          guide: "string 벡터를 range-for 로 순회 — 타입은 string 또는 auto. 출력 끝마다 줄바꿈.",
+          template: null,
+          starterCode: '#include <iostream>\n#include <vector>\n#include <string>\nusing namespace std;\n\nint main() {\n    vector<string> names = {"Emma", "Jake", "Mia"};\n\n    // 👇 range-for 로 각 이름 앞에 "Hi, " 붙여 한 줄씩 출력\n    //    예: Hi, Emma  /  Hi, Jake  /  Hi, Mia\n\n\n    return 0;\n}',
+          answer: '#include <iostream>\n#include <vector>\n#include <string>\nusing namespace std;\n\nint main() {\n    vector<string> names = {"Emma", "Jake", "Mia"};\n\n    for (const auto& name : names) cout << "Hi, " << name << "\\n";\n\n    return 0;\n}',
+          alternateAnswers: [
+            '#include <iostream>\n#include <vector>\n#include <string>\nusing namespace std;\n\nint main() {\n    vector<string> names = {"Emma", "Jake", "Mia"};\n    for (string name : names) cout << "Hi, " << name << "\\n";\n    return 0;\n}',
+            '#include <iostream>\n#include <vector>\n#include <string>\nusing namespace std;\n\nint main() {\n    vector<string> names = {"Emma", "Jake", "Mia"};\n    for (auto name : names) cout << "Hi, " << name << "\\n";\n    return 0;\n}'
+          ],
+          expect: "Hi, Emma\nHi, Jake\nHi, Mia",
+          en: {
+            task: "🔥 Print each name in names prefixed with \"Hi, \", one per line!",
+            guide: "Iterate the string vector with range-for — type is string or auto. Newline after each."
+          }
+        }
+      },
+
+      // Lv.3: 처음부터 — 정확한 평균 (int 나눗셈 함정 적용)
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "🔥 scores 의 정확한 평균을 소수점까지 출력하세요! (예시: 81.6)",
+          guide: "함정 — int / int = int 라 86.4 가 아니라 86 만 나와요. 합계나 개수 중 하나를 double 로 만들어야 해요. (double)sum / scores.size() 같은 식)",
+          template: null,
+          starterCode: '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> scores = {85, 90, 70, 95, 68};\n\n    // 👇 1. range-for 로 합계 구하기\n\n\n    // 👇 2. 정확한 평균 출력 (정수 나눗셈 주의!)\n\n\n    return 0;\n}',
+          answer: '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> scores = {85, 90, 70, 95, 68};\n    int sum = 0;\n\n    for (auto x : scores) sum += x;\n\n    cout << (double)sum / scores.size();\n\n    return 0;\n}',
+          alternateAnswers: [
+            '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> scores = {85, 90, 70, 95, 68};\n    double sum = 0;\n    for (auto x : scores) sum += x;\n    cout << sum / scores.size();\n    return 0;\n}',
+            '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> scores = {85, 90, 70, 95, 68};\n    int sum = 0;\n    for (const auto& x : scores) sum += x;\n    cout << sum / (double)scores.size();\n    return 0;\n}'
+          ],
+          expect: "81.6",
+          en: {
+            task: "🔥 Print the exact average of scores, including decimal! (example: 81.6)",
+            guide: "Trap — int / int = int gives 81 instead of 81.6. Cast either sum or count to double, e.g. (double)sum / scores.size()"
           }
         }
       },
