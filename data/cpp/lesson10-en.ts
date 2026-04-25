@@ -327,7 +327,7 @@ for (auto x : nums) ...   // auto — compiler infers int
 
 ### When auto really shines
 
-**The longer the type, the bigger the win** — like the 2D vector from cpp-21:
+**The longer the type, the bigger the win** — like the 2D vector from the "2D Arrays & 2D Vector" lesson:
 
 \`\`\`cpp
 vector<vector<int>> grid(3, vector<int>(4, 0));

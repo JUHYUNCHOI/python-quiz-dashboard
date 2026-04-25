@@ -339,7 +339,7 @@ for (auto x : nums) ...   // auto — 컴파일러가 int 로 추론
 
 ### auto 가 빛나는 순간
 
-**타입이 길수록 효과 커요** — cpp-21 에서 본 2D vector 처럼:
+**타입이 길수록 효과 커요** — "2차원 배열 & 2D vector" 레슨에서 본 2D vector 처럼:
 
 \`\`\`cpp
 vector<vector<int>> grid(3, vector<int>(4, 0));
