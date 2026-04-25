@@ -339,7 +339,7 @@ for (auto x : nums) ...   // auto — 컴파일러가 int 로 추론
 
 ### auto 가 빛나는 순간
 
-**긴 타입일수록 효과 ↑** — cpp-21 의 2D vector 같은 경우:
+**타입이 길수록 효과 커요** — cpp-21 에서 본 2D vector 처럼:
 
 \`\`\`cpp
 vector<vector<int>> grid(3, vector<int>(4, 0));
@@ -347,8 +347,6 @@ vector<vector<int>> grid(3, vector<int>(4, 0));
 for (vector<int> row : grid)   // 안쪽 타입까지 다 써야 — 길어
 for (auto row : grid)           // auto — 깔끔
 \`\`\`
-
-타입을 나중에 바꿔도 (\`vector<int>\` → \`vector<long>\`) \`auto\` 는 자동으로 따라가서 코드 안 바꿔도 OK.
 
 ---
 

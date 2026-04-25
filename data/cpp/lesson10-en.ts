@@ -336,8 +336,6 @@ for (vector<int> row : grid)   // must spell out inner type — long
 for (auto row : grid)           // auto — clean
 \`\`\`
 
-If you later change the type (\`vector<int>\` → \`vector<long>\`), \`auto\` follows automatically — no code changes needed.
-
 ---
 
 ### ⚠️ But auto can't replace vector<int> itself
