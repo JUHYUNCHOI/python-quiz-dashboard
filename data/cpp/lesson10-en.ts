@@ -255,9 +255,7 @@ int main() {
           id: "ch2-intro",
           type: "explain",
           title: "🤖 auto: Type Deduction",
-          content: `> 💡 **One-line summary**: \`auto x = value;\` means **x has the same type as that value**. The compiler looks at the right side and decides.
-
-In Python, you never write types — the language figures them out:
+          content: `In Python, you never write types — the language figures them out:
 
 \`\`\`python
 x = 42        # int
@@ -272,6 +270,8 @@ auto x = 42;        // compiler knows it's int
 auto name = "Hi"s;  // compiler knows it's string
 auto pi = 3.14;     // compiler knows it's double
 \`\`\`
+
+> 💡 **Memorize this one line**: \`auto x = value;\` means **x has the same type as that value**. The compiler looks at the right side and decides.
 
 The compiler **deduces the type** from the value you assign. You don't have to spell it out!
 
