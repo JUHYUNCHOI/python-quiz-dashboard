@@ -21,60 +21,102 @@ export const cppLesson17Data: LessonData = {
         {
           id: "ch1-intro",
           type: "explain",
-          title: "🔍 STL 알고리즘 — C++의 강력한 내장 도구!",
-          content: `벡터에서 최솟값 찾기, 특정 값 검색하기... 매번 for문을 직접 짜면 귀찮고 실수하기 쉬워요. C++ STL에는 이런 작업을 **한 줄**로 해결하는 함수들이 있어요! 프로 개발자들이 가장 많이 쓰는 도구예요.
-
-**STL**은 **Standard Template Library**의 약자예요. C++에서 제공하는 강력한 내장 함수 모음이에요!
-
-이런 상황을 생각해봐요:
-- 배열에서 최댓값을 찾고 싶어요 → \`max_element()\`
-- 특정 값이 몇 개인지 세고 싶어요 → \`count()\`
-- 특정 값을 찾고 싶어요 → \`find()\`
-- 직접 for문을 쓸 수도 있지만, STL 알고리즘은 **한 줄**이면 돼요!
-
-파이썬에서 \`sorted()\`, \`min()\`, \`max()\`, \`sum()\` 같은 내장 함수를 썼던 것 기억나요? C++에도 비슷한 함수들이 있어요!
+          title: "🔍 직접 짜기 vs STL — 한 줄로 끝내기",
+          content: `벡터에 점수가 들어있어요. 최댓값을 구하려면 어떻게 짜죠?
 
 \`\`\`cpp
-#include <algorithm>  // sort, find, min, max 등
-#include <numeric>    // accumulate (합계) 등
+vector<int> scores = {72, 95, 68, 88, 100, 55};
 \`\`\`
 
-기본적인 알고리즘들을 살펴봐요:
+지금까지 배운 걸로 짜면 이렇게:
 
 \`\`\`cpp
-#include <algorithm>
-#include <vector>
-using namespace std;
-
-vector<int> v = {5, 2, 8, 1, 9, 3};
-
-// min, max — 두 값 중 작은/큰 값
-int a = min(3, 7);    // 3
-int b = max(3, 7);    // 7
-
-// min_element, max_element — 범위에서 최소/최대 찾기
-auto minIt = min_element(v.begin(), v.end()); // 최소값 위치
-auto maxIt = max_element(v.begin(), v.end()); // 최대값 위치
-cout << *minIt;  // 1  (역참조로 값 가져오기)
-cout << *maxIt;  // 9
-
-// count — 특정 값의 개수
-int cnt = count(v.begin(), v.end(), 3);  // 3이 몇 개? → 1
+int maxVal = scores[0];
+for (int i = 1; i < scores.size(); i++) {
+    if (scores[i] > maxVal) maxVal = scores[i];
+}
 \`\`\`
 
-파이썬과 비교해봐요:
+5 줄. 어렵진 않은데… 매번 이렇게 쓰면 귀찮죠. 그리고 합 구하기, 값 찾기, 평균 — 다 비슷한 패턴이라 매번 비슷한 코드를 새로 짜야 해요.
 
-| 파이썬 🐍 | C++ STL ⚡ |
+C++ 만든 사람들도 그렇게 생각했어요. **이렇게 자주 쓰는 작업은 미리 만들어두자.** 그게 **STL (Standard Template Library)** 이에요.
+
+같은 작업, STL 로 한 줄:
+
+\`\`\`cpp
+int maxVal = *max_element(scores.begin(), scores.end());
+\`\`\`
+
+5 줄짜리 for 가 한 줄로 줄어요. 다른 작업도 비슷:
+
+| 하고 싶은 것 | 직접 짜기 | STL |
+|---|---|---|
+| 최댓값 | for + if 비교 | \`*max_element(...)\` |
+| 합계 | for + 누적 | \`accumulate(...)\` |
+| 값 찾기 | for + 검색 | \`find(...)\` |
+| 개수 세기 | for + 카운터 | \`count(...)\` |
+
+파이썬에서 \`min()\`, \`max()\`, \`sum()\` 같은 내장 함수를 썼던 것 — C++ 의 STL 도 같은 발상이에요. "자주 쓰는 건 이미 만들어둠."
+
+\`\`\`cpp
+#include <algorithm>  // find, min, max, sort 등
+#include <numeric>    // accumulate 등 (별도 헤더 주의)
+\`\`\`
+
+> 💡 이번 챕터에선 자주 쓰는 STL 도구 5-6 개를 익히고, 챕터 2 에선 **더 빠른 검색법**(이진탐색)까지 봐요.
+
+근데 STL 쓰려면 살짝 낯선 게 하나 등장해요 — \`v.begin()\`, \`v.end()\` 라는 표현. 다음 페이지에서 그게 뭔지부터 짚을게요 👇`
+        },
+        {
+          id: "ch1-iterator",
+          type: "explain",
+          title: "📍 iterator — 벡터를 가리키는 커서",
+          component: "iteratorVisualizer",
+          content: `방금 봤던 코드:
+
+\`\`\`cpp
+*max_element(scores.begin(), scores.end());
+\`\`\`
+
+여기 \`scores.begin()\`, \`scores.end()\` 가 뭐냐면 — **iterator** 라는 거예요.
+
+> 🎯 한 줄: **iterator = 벡터 안의 한 자리를 가리키는 커서.**
+
+쉽게 비유하면 글 쓸 때 깜빡이는 그 커서 ` + '`|`' + `. 어떤 위치를 가리키고 있고, 한 칸씩 옮길 수 있어요.
+
+\`\`\`
+v = [10, 20, 30, 40, 50]
+     ↑                    ↑
+  v.begin()            v.end()  ← 마지막 다음 자리!
+\`\`\`
+
+- \`v.begin()\` → **첫 번째 원소** 를 가리킴
+- \`v.end()\` → **마지막 원소 다음** 자리. (마지막 자체가 아님 ⚠️)
+
+왜 마지막이 아니라 그 *다음* 일까요? **"여기까지" 라는 끝 신호**예요. \`[begin, end)\` — 시작은 포함, 끝은 제외. 파이썬 \`range(0, 5)\` 에서 5 가 안 들어가는 거랑 비슷해요.
+
+### iterator 로 뭘 할 수 있나요?
+
+\`\`\`cpp
+auto it = v.begin();   // 첫 칸을 가리키는 커서
+cout << *it;            // 10  ← * 로 값 꺼내기
+it++;                   // 다음 칸으로
+cout << *it;            // 20
+\`\`\`
+
+| 표현 | 의미 |
 |---|---|
-| \`min(3, 7)\` | \`min(3, 7)\` |
-| \`max(3, 7)\` | \`max(3, 7)\` |
-| \`min(lst)\` | \`*min_element(v.begin(), v.end())\` |
-| \`max(lst)\` | \`*max_element(v.begin(), v.end())\` |
-| \`lst.count(3)\` | \`count(v.begin(), v.end(), 3)\` |
+| \`v.begin()\` | 첫 자리 |
+| \`v.end()\` | 마지막 다음 자리 (끝 신호) |
+| \`*it\` | iterator 가 가리키는 값 |
+| \`it++\` | 다음 칸으로 이동 |
+| \`it - v.begin()\` | 인덱스 (몇 번째 자리?) |
 
-💡 C++의 STL 알고리즘은 대부분 \`(시작, 끝)\` 형태의 **범위(range)**를 인자로 받아요! \`v.begin()\`과 \`v.end()\`를 항상 넘겨줘야 해요.
+> 💡 포인터 레슨에서 배운 \`*\` 로 값 꺼내고 \`++\` 로 옮기던 그 감각 — iterator 도 똑같이 통해요. 사실 iterator 는 포인터의 친척이라고 생각해도 돼요.
 
-👇 위 함수들의 자세한 문법과 예제는 바로 아래 단계에서 하나씩 설명해요!`
+STL 함수들은 거의 다 \`(begin, end)\` 쌍을 받아서 그 범위에서 작업해요. **이 한 가지 패턴만 익히면** STL 사용법이 다 비슷해 보일 거예요.
+
+아래 시뮬에서 직접 커서를 옮겨보면서 \`*it\`, \`begin()\`, \`end()\` 가 어떻게 변하는지 확인해봐요 👇`
         },
         {
           id: "ch1-fb1",
@@ -91,7 +133,7 @@ int cnt = count(v.begin(), v.end(), 3);  // 3이 몇 개? → 1
           id: "ch1-find",
           type: "explain",
           title: "🔍 find() — 벡터에서 값 찾기!",
-          content: `\`find()\`는 벡터에서 특정 값을 **검색**하는 함수예요!
+          content: `방금 배운 iterator 가 본격적으로 등장할 차례예요. \`find()\` 는 벡터에서 특정 값이 어디 있는지 찾아주는 함수인데, **그 위치를 iterator 로 돌려줘요**.
 
 \`\`\`cpp
 #include <algorithm>
@@ -205,39 +247,56 @@ swap(a, b);
         {
           id: "ch1-lambda",
           type: "explain",
-          title: "🔍 find_if & count_if — 조건으로 검색!",
-          content: `\`find()\`는 정확한 값을 찾지만, 조건으로 검색하고 싶을 때는 \`find_if()\`와 \`count_if()\`를 사용해요!
+          title: "🤔 정확한 값 말고 *조건* 으로 찾고 싶다면?",
+          content: `지금까지 \`find(...)\` 로 **정확한 값** 을 찾았어요. 그런데 학생들 점수에서 이런 걸 찾고 싶다면?
+
+> "**70점 이상인 첫 번째 점수** 찾기"
+> "**짝수가 몇 개** 인지 세기"
+
+\`find()\` 로는 안 돼요. 정확한 값만 찾을 수 있으니까요. 이런 **조건** 으로 검색할 땐 \`find_if()\`, \`count_if()\` 를 써요. 이름 끝의 \`_if\` 가 "조건이 붙어있다" 는 뜻이에요.
+
+근데 한 가지 문제 — "70 이상" 이라는 **조건** 을 함수에 어떻게 넘기죠? 숫자 하나면 그냥 인자로 넘기면 되는데, 조건은 코드 한 덩어리잖아요.
+
+→ 그래서 등장하는 게 **lambda** 예요. **이름 없이 즉석에서 만드는 작은 함수.**
 
 \`\`\`cpp
-#include <algorithm>
-#include <vector>
-using namespace std;
-
-vector<int> v = {3, 7, 1, 8, 4, 9, 2};
-
-// 조건: 5보다 큰 첫 번째 원소 찾기
-auto it = find_if(v.begin(), v.end(), [](int x) {
-    return x > 5;
-});
-if (it != v.end()) cout << *it;  // 7
-
-// 조건: 짝수 개수 세기
-int cnt = count_if(v.begin(), v.end(), [](int x) {
-    return x % 2 == 0;
-});
-cout << cnt;  // 3 (8, 4, 2)
+[](int x) { return x >= 70; }
+//└┘ └────┘ └──────────────┘
+//  capture  parameter   body
 \`\`\`
 
-**람다 표현식 (Lambda Expression)** — C++11+
+\`[]\` 로 시작하면 lambda 라는 신호. \`(int x)\` 는 일반 함수처럼 매개변수, \`{ return ... }\` 는 본문. **이름이 없을 뿐 보통 함수랑 똑같아요.**
 
-\`[](매개변수) { return 조건식; }\` 형태의 **이름 없는 함수**예요!
+> 💡 파이썬의 \`lambda x: x >= 70\` 이랑 같은 발상이에요. 문법만 살짝 달라요.
 
-| 파이썬 🐍 | C++ ⚡ |
-|---|---|
-| \`filter(lambda x: x > 5, lst)\` | \`find_if(..., [](int x){ return x > 5; })\` |
-| \`len([x for x in lst if x % 2 == 0])\` | \`count_if(..., [](int x){ return x % 2 == 0; })\` |
+이제 find_if / count_if 에 lambda 를 넘겨봐요:
 
-람다는 \`sort()\`를 비롯한 STL 알고리즘 어디서든 조건 함수를 넘길 수 있어요.`,
+\`\`\`cpp
+vector<int> scores = {55, 72, 68, 88, 41, 95};
+
+// 70 이상인 첫 번째 점수 찾기
+auto it = find_if(scores.begin(), scores.end(), [](int x) {
+    return x >= 70;
+});
+if (it != scores.end()) cout << *it;  // 72
+
+// 짝수 개수 세기
+int evenCnt = count_if(scores.begin(), scores.end(), [](int x) {
+    return x % 2 == 0;
+});
+cout << evenCnt;  // 3 (72, 68, 88)
+\`\`\`
+
+| 함수 | 무슨 조건? | 반환 |
+|---|---|---|
+| \`find(begin, end, 값)\` | "이 값 있어?" (정확) | 첫 위치 iterator |
+| \`find_if(begin, end, lambda)\` | lambda 가 true 인 것 | 첫 위치 iterator |
+| \`count(begin, end, 값)\` | "이 값이 몇 개?" (정확) | 개수 |
+| \`count_if(begin, end, lambda)\` | lambda 가 true 인 것 몇 개? | 개수 |
+
+> 💡 \`_if\` 가 붙으면 **세 번째 인자가 값 대신 조건(lambda)** 이라고 기억하면 끝.
+
+람다는 정렬이나 다른 STL 알고리즘에서도 똑같이 쓰여요 (다음 챕터부터 자주 만나요).`,
         },
         {
           id: "ch1-practice",
@@ -318,17 +377,23 @@ int main() {
         {
           id: "ch2-intro",
           type: "explain",
-          title: "🎯 binary_search() — 초고속 탐색!",
-          content: `USACO 대회에서 10만 개의 데이터를 검색해야 한다고 생각해보세요. find()로 하나씩 찾으면 **시간 초과**! binary_search는 20번만에 찾아요.
+          title: "🎯 더 빠른 탐색이 필요할 때 — binary_search()",
+          content: `상상해봐요 — 학생 100만 명의 학번 명단에서 특정 학번 한 명을 찾아야 해요. \`find()\` 로 하면 어떻게 될까요?
 
-\`find()\`는 처음부터 끝까지 하나씩 확인해서 **O(n)**이에요. 만약 데이터가 **정렬되어 있다면**, 훨씬 빠르게 찾을 수 있어요!
+\`find()\` 는 **앞에서부터 한 명씩** 확인해요. 운이 나쁘면 100만 번 비교. 컴퓨터한테도 부담스러운 양이에요.
 
-- find()는 처음부터 끝까지 하나씩 봐요: O(n)
-- binary_search()는 반씩 줄여가요: O(log n)
-- **1백만 개**에서 찾을 때: find()는 ~100만 번, binary_search()는 ~20번!
-- ⚠️ 대신 **정렬이 먼저** 필요해요. 정렬 비용이 크니까, 여러 번 검색할 때만 이득이에요.
+근데 만약 학번이 **이미 정렬되어 있다면?** 사람도 그렇잖아요 — 사전에서 단어 찾을 때 "ㄱ"부터 한 페이지씩 안 넘기죠. 가운데 펴서 "내가 찾는 단어가 앞에 있나 뒤에 있나" 보고, 그 절반만 다시 가운데로… 이런 식으로 빨리 좁혀요.
 
-**이진탐색(Binary Search)**은 정렬된 데이터에서 **O(log n)**에 탐색해요!
+이게 바로 **이진탐색(binary search)**. 매번 **반씩** 잘라내서 좁히는 방법.
+
+| 방법 | 동작 | 1백만 개에서 |
+|---|---|---|
+| \`find()\` | 앞에서 한 칸씩 | 최대 100만 번 비교 |
+| \`binary_search()\` | 가운데 잘라서 반씩 | 최대 ~20 번 비교 |
+
+차이가 어마어마하죠? 단, **정렬되어 있어야** 가능해요. 정렬 안 된 데이터에선 "가운데 보면 앞쪽인지 뒤쪽인지" 자체를 알 수 없으니까요.
+
+> 💡 그래서 한 번 검색하고 끝낼 거면 정렬 비용이 더 클 수 있어요. **여러 번 검색** 할 때 이득이 커져요.
 
 \`\`\`cpp
 #include <algorithm>
@@ -395,48 +460,48 @@ C++이 훨씬 간단하죠?
         {
           id: "ch2-bounds",
           type: "explain",
-          title: "🎯 lower_bound() & upper_bound()!",
-          content: `\`binary_search()\`는 "있다/없다"만 알려줘요. **위치**가 필요하면 \`lower_bound()\`와 \`upper_bound()\`를 써요!
+          title: "🎯 lower_bound / upper_bound — 위치까지 알려줘요",
+          component: "lowerUpperBoundVisualizer",
+          content: `\`binary_search()\` 는 "있다/없다" 만 알려줘요. 그런데 실제로 풀고 싶은 문제는 보통 위치까지 필요해요. 예를 들어:
+
+> "70 점 **이상** 인 학생 몇 명?"
+> "특정 점수가 **몇 개** 있나?"
+> "이 값을 정렬 유지하면서 **어디 끼워넣어야** 하지?"
+
+이런 질문에 답해주는 게 \`lower_bound\` 와 \`upper_bound\`. 둘 다 이진탐색을 쓰니까 **빠르고**, 둘 다 **정렬된 데이터** 가 전제예요.
+
+### 두 함수의 차이는 *이상* vs *초과*
 
 \`\`\`cpp
 vector<int> v = {1, 3, 5, 5, 5, 7, 9};
-//                0  1  2  3  4  5  6  (인덱스)
-
-// lower_bound: target 이상인 첫 위치
-auto lb = lower_bound(v.begin(), v.end(), 5);
-cout << lb - v.begin();  // 2 (첫 번째 5의 위치)
-
-// upper_bound: target 초과인 첫 위치
-auto ub = upper_bound(v.begin(), v.end(), 5);
-cout << ub - v.begin();  // 5 (5 다음 원소의 위치)
-
-// 5의 개수 = upper_bound - lower_bound
-cout << ub - lb;  // 3 (5가 3개!)
 \`\`\`
 
-시각적으로 보면:
+- \`lower_bound(v.begin(), v.end(), 5)\` → **5 이상** 인 첫 위치 (≥ 5)
+- \`upper_bound(v.begin(), v.end(), 5)\` → **5 초과** 인 첫 위치 (> 5)
 
-\`\`\`
-v = {1, 3, 5, 5, 5, 7, 9}
-          ^        ^
-          lb       ub
-     lower_bound  upper_bound
-     (이상)       (초과)
-\`\`\`
+말로만 보면 헷갈리니까, 아래 시뮬에서 target 값을 바꿔보면서 두 화살표가 어떻게 움직이는지 직접 확인해봐요 👇
 
-파이썬의 bisect 모듈과 비교해봐요:
-
-| 파이썬 🐍 | C++ STL ⚡ |
-|---|---|
-| \`bisect.bisect_left(lst, 5)\` | \`lower_bound(v.begin(), v.end(), 5) - v.begin()\` |
-| \`bisect.bisect_right(lst, 5)\` | \`upper_bound(v.begin(), v.end(), 5) - v.begin()\` |
+### 코드로는 이렇게 써요
 
 \`\`\`cpp
-// 인덱스 구하기
-int idx = lower_bound(v.begin(), v.end(), 5) - v.begin();
+auto lb = lower_bound(v.begin(), v.end(), 5);
+auto ub = upper_bound(v.begin(), v.end(), 5);
+
+cout << lb - v.begin();   // 2  ← 인덱스 구하는 패턴
+cout << ub - v.begin();   // 5
+cout << ub - lb;          // 3  ← 5 가 몇 개인지
 \`\`\`
 
-💡 USACO Silver에서 \`lower_bound()\`는 정말 자주 쓰여요! 좌표 압축, 범위 쿼리 등에 필수예요!`
+(둘 다 iterator 를 돌려주니까 \`it - v.begin()\` 으로 인덱스를 뽑는 건 \`find()\` 때 본 그 패턴이에요.)
+
+### 어디 쓸까?
+
+- "**특정 값 개수**" → \`upper_bound - lower_bound\`
+- "**target 이상이 몇 개**" → \`v.end() - lower_bound\`
+- "**target 미만이 몇 개**" → \`lower_bound - v.begin()\`
+- "**target 정확히 있나**" → \`lb != v.end() && *lb == target\`
+
+> 💡 파이썬의 \`bisect.bisect_left\` / \`bisect.bisect_right\` 와 1:1 대응해요. 같은 도구가 이름만 다른 거예요.`
         },
         {
           id: "ch2-practice-bounds",
@@ -695,7 +760,7 @@ cout << accumulate(v.begin(), v.end(), 10);
 | \`upper_bound()\` | \`<algorithm>\` | iterator | **예** |
 | \`accumulate()\` | \`<numeric>\` | 값 | 아니오 |
 
-🚀 **다음 레슨에서는 stack, queue & deque를 배워볼 거예요!** 자료구조의 세계로 들어가요!`
+🚀 **다음 레슨 (cpp-18): stack & queue** — 데이터를 **쌓고 꺼내는** 두 가지 방식. 괄호 짝 맞추기, BFS 같은 데서 진가가 드러나요. STL 컨테이너 어드벤처 계속!`
         }
       ]
     }
