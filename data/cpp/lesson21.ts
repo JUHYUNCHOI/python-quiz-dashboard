@@ -306,7 +306,7 @@ int main() {
         {
           id: "ch3-intro",
           type: "explain",
-          title: "📦 2D vector — 크기가 자유로운 2D 배열",
+          title: "📦 2D vector — 선언과 접근",
           content: `C-style 2D 배열은 크기가 고정돼요. 입력에 따라 크기가 달라지면? **2D vector**를 써요!
 
 \`\`\`cpp
@@ -324,14 +324,21 @@ cout << grid[1][2];  // 5
 
 cout << grid.size();     // 행 수: 3
 cout << grid[0].size();  // 열 수: 4
-\`\`\`
+\`\`\``,
+        },
+        {
+          id: "ch3-intro-dynamic",
+          type: "explain",
+          title: "📐 동적 크기 + C-style 배열과 비교",
+          content: `2D vector 의 진짜 장점 — **크기가 입력에 따라 결정** 돼도 OK:
 
-**입력 크기가 정해질 때까지 기다렸다가 만들기:**
 \`\`\`cpp
 int rows, cols;
 cin >> rows >> cols;
 vector<vector<int>> grid(rows, vector<int>(cols, 0));
 \`\`\`
+
+C-style 2D 배열로는 이게 안 돼요 (크기를 컴파일 시점에 알아야 함).
 
 | | C-style 2D 배열 | 2D vector |
 |---|---|---|
@@ -363,10 +370,8 @@ int main() {
         {
           id: "ch3-cin",
           type: "explain",
-          title: "⌨️ 2D 배열을 cin으로 입력받기",
-          content: `지금까지 배열에 값을 직접 넣었는데, 실제 USACO 문제는 **입력으로** 값이 들어와요.
-
-이중 for문 + cin으로 격자를 입력받는 패턴이에요:
+          title: "⌨️ 격자를 cin으로 입력받기",
+          content: `지금까지 배열에 값을 직접 넣었는데, 실제 USACO 문제는 **입력으로** 값이 들어와요. 이중 for문 + cin 으로 격자를 채우는 패턴:
 
 \`\`\`cpp
 int rows = 2, cols = 3;
@@ -385,38 +390,38 @@ for (int i = 0; i < rows; i++) {
 4 5 6
 \`\`\`
 
-cin은 공백/줄바꿈을 자동으로 건너뛰어서 순서대로 \`grid[0][0]=1, grid[0][1]=2, ..., grid[1][2]=6\`이 채워져요.
+cin 은 공백/줄바꿈을 자동으로 건너뛰어서 순서대로 \`grid[0][0]=1, grid[0][1]=2, ..., grid[1][2]=6\` 이 채워져요.
 
-**출력도 같은 구조:**
+> 💡 USACO 문제의 70% 이상이 첫 줄에 N, M (행, 열 크기) 을 주고 다음 줄부터 격자를 입력해요. 이 패턴 외워두면 시작부터 절반은 먹고 들어가요!`,
+        },
+        {
+          id: "ch3-cout",
+          type: "explain",
+          title: "🖨️ 격자를 출력하기",
+          content: `출력도 입력과 똑같은 이중 for 구조예요:
+
 \`\`\`cpp
 for (int i = 0; i < rows; i++) {
     for (int j = 0; j < cols; j++) {
-        cout << grid[i][j];
-        if (j < cols - 1) cout << " ";  // 마지막 열 제외 공백
+        cout << grid[i][j] << " ";   // 값 + 공백
     }
-    cout << "\\n";  // 행 끝마다 줄바꿈
+    cout << "\\n";   // 한 행 끝났으니 줄바꿈
 }
 \`\`\`
 
-> 💡 USACO 문제의 70% 이상이 첫 줄에 N, M (행, 열 크기)을 주고 다음 줄부터 격자를 입력해요. 이 패턴을 외워두면 문제 절반은 시작부터 우위예요!`,
+| 위치 | 무엇? |
+|---|---|
+| 안쪽 \`for\` | 한 행의 칸들을 가로로 출력 |
+| 안쪽 \`for\` 안 \`" "\` | 칸 사이 공백 |
+| 안쪽 \`for\` 끝나고 \`"\\n"\` | 다음 행으로 넘어가는 줄바꿈 |
+
+💡 끝에 trailing 공백이 한 칸 남아도 대부분 채점기는 OK. 엄격한 곳에선 \`if (j < cols - 1)\` 로 마지막 열 공백만 빼주는 변형도 가능.`,
         },
         {
           id: "ch3-practice",
           type: "practice" as const,
           title: "✋ 격자 입력받기!",
-          content: `2×3 격자를 입력받아 그대로 출력하세요.
-
-**입력:**
-\`\`\`
-1 2 3
-4 5 6
-\`\`\`
-
-**출력:**
-\`\`\`
-1 2 3
-4 5 6
-\`\`\``,
+          content: `2×3 격자를 입력받아 **그대로 다시 출력** 하세요. (입력/출력 데이터는 아래 패널에)`,
           starterCode: `#include <iostream>
 #include <vector>
 using namespace std;

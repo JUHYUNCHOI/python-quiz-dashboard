@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 280" font-family="-apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <defs>
+    <filter id="ish" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0000001a"/>
+    </filter>
+  </defs>
+
+  <rect width="720" height="280" rx="16" fill="#fefce8"/>
+
+  <text x="360" y="40" text-anchor="middle" fill="#854d0e" font-size="20" font-weight="bold">🗡️ struct Item — 데이터만 묶는 단순한 타입</text>
+
+  <!-- sword card -->
+  <g transform="translate(80 70)" filter="url(#ish)">
+    <rect width="180" height="160" rx="12" fill="#fff" stroke="#facc15" stroke-width="2"/>
+    <text x="90" y="50" text-anchor="middle" font-size="40">⚔️</text>
+    <text x="90" y="90" text-anchor="middle" fill="#1e293b" font-size="15" font-weight="bold">철검</text>
+    <text x="90" y="115" text-anchor="middle" fill="#16a34a" font-size="12" font-weight="bold">ATK +5</text>
+    <text x="90" y="135" text-anchor="middle" fill="#94a3b8" font-size="11">HP +0</text>
+    <text x="90" y="152" text-anchor="middle" fill="#94a3b8" font-family="ui-monospace, monospace" font-size="10">{"철검", 5, 0}</text>
+  </g>
+
+  <!-- armor card -->
+  <g transform="translate(280 70)" filter="url(#ish)">
+    <rect width="180" height="160" rx="12" fill="#fff" stroke="#60a5fa" stroke-width="2"/>
+    <text x="90" y="50" text-anchor="middle" font-size="40">🛡️</text>
+    <text x="90" y="90" text-anchor="middle" fill="#1e293b" font-size="15" font-weight="bold">가죽 갑옷</text>
+    <text x="90" y="115" text-anchor="middle" fill="#94a3b8" font-size="11">ATK +0</text>
+    <text x="90" y="135" text-anchor="middle" fill="#dc2626" font-size="12" font-weight="bold">HP +20</text>
+    <text x="90" y="152" text-anchor="middle" fill="#94a3b8" font-family="ui-monospace, monospace" font-size="10">{"가죽 갑옷", 0, 20}</text>
+  </g>
+
+  <!-- potion card -->
+  <g transform="translate(480 70)" filter="url(#ish)">
+    <rect width="180" height="160" rx="12" fill="#fff" stroke="#f87171" stroke-width="2"/>
+    <text x="90" y="50" text-anchor="middle" font-size="40">🧪</text>
+    <text x="90" y="90" text-anchor="middle" fill="#1e293b" font-size="15" font-weight="bold">체력 물약</text>
+    <text x="90" y="115" text-anchor="middle" fill="#94a3b8" font-size="11">ATK +0</text>
+    <text x="90" y="135" text-anchor="middle" fill="#dc2626" font-size="12" font-weight="bold">HP +30</text>
+    <text x="90" y="152" text-anchor="middle" fill="#94a3b8" font-family="ui-monospace, monospace" font-size="10">{"체력 물약", 0, 30}</text>
+  </g>
+
+  <text x="360" y="260" text-anchor="middle" fill="#854d0e" font-size="13">struct = 이름·수치 묶음 → 자유롭게 읽고 쓰기 (기본 public)</text>
+</svg>
