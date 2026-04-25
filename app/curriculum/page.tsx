@@ -222,9 +222,9 @@ export default function CurriculumPage() {
       lessons: [
         { id: "cpp-9", title: t("9. 배열 & 벡터", "9. Arrays & Vectors"), description: "int arr[5], vector<int>, push_back", duration: t("25분", "25 min"), hasQuiz: true },
         { id: "cpp-21", title: t("10. 2차원 배열 & 2D vector", "10. 2D Arrays & 2D Vectors"), description: t("grid[행][열], vector<vector<int>>, 이중 for문", "grid[row][col], vector<vector<int>>, nested loops"), duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "cpp-10", title: t("11. Range-for & auto", "11. Range-for & auto"), description: t("for(auto x : vec), 타입 추론", "for(auto x : vec), type inference"), duration: t("20분", "20 min"), hasQuiz: true },
-        { id: "cpp-11", title: t("12. 문자열 심화", "12. Advanced Strings"), description: t("substr, find, replace, 비교", "substr, find, replace, comparison"), duration: t("20분", "20 min"), hasQuiz: true },
-        { id: "cpp-12", title: t("13. 참조와 함수", "13. References & Functions"), description: "int& ref, call by reference", duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-12", title: t("11. 참조와 함수", "11. References & Functions"), description: "int& ref, call by reference", duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-10", title: t("12. Range-for & auto", "12. Range-for & auto"), description: t("for(auto x : vec), 타입 추론", "for(auto x : vec), type inference"), duration: t("20분", "20 min"), hasQuiz: true },
+        { id: "cpp-11", title: t("13. 문자열 심화", "13. Advanced Strings"), description: t("substr, find, replace, 비교", "substr, find, replace, comparison"), duration: t("20분", "20 min"), hasQuiz: true },
         { id: "cpp-13", title: t("14. 포인터 기초", "14. Pointer Basics"), description: "int* ptr, &, *, nullptr", duration: t("25분", "25 min"), hasQuiz: true },
         { id: "cpp-14", title: t("15. 구조체 (struct)", "15. Structs"), description: t("struct, 멤버 변수, 점(.) 연산자", "struct, member variables, dot operator"), duration: t("25분", "25 min"), hasQuiz: true },
         { id: "cpp-22", title: t("16. 클래스 (class)", "16. Classes"), description: t("class, public/private, 생성자", "class, public/private, constructors"), duration: t("25분", "25 min"), hasQuiz: true },
