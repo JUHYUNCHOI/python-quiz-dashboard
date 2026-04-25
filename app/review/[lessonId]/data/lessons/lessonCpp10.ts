@@ -233,18 +233,19 @@ export const lessonCpp10: LessonData = {
         }
       },
 
-      // 인터리빙: 챕터1 복습
+      // 인터리빙: 챕터1 복습 (string 벡터 — Ch1 콜론과 다른 각도)
       {
         type: "interleaving",
         content: {
-          message: "잠깐! range-for 기억나요?",
-          task: "정수 벡터 v를 range-for로 순회하는 코드의 빈칸을 채워요!",
-          template: "for (int x ___ v) {",
-          answer: ":",
-          expect: "for (int x : v) {",
+          message: "잠깐! range-for 의 변수 타입 기억나요?",
+          task: "string 벡터 names 를 순회하는 range-for 의 변수 타입을 채워요!",
+          template: 'vector<string> names = {"Emma", "Jake"};\n\nfor (___ name : names) {\n    cout << name;\n}',
+          answer: "string",
+          alternateAnswers: ["auto", "string&", "auto&", "const string&", "const auto&"],
+          expect: 'for (string name : names) {\n    cout << name;\n}',
           en: {
-            message: "Quick! Remember range-for?",
-            task: "Fill in the blank for range-for that iterates over integer vector v!"
+            message: "Quick! Remember the variable type for range-for?",
+            task: "Fill in the type for the range-for iterating over the string vector names!"
           }
         }
       },
@@ -256,7 +257,7 @@ export const lessonCpp10: LessonData = {
             "auto를 쓰면 컴파일러가 타입을 알아서 추론해요! 🤖",
             "파이썬처럼 타입을 직접 안 써도 돼요."
           ],
-          code: 'auto x = 42;          // inferred as int\nauto pi = 3.14;       // inferred as double\nauto name = "hello"s; // inferred as string\n\n// also works in range-for!\nvector<int> v = {1, 2, 3};\nfor (auto x : v) {\n    cout << x << endl;\n}',
+          code: 'auto x = 42;                  // inferred as int\nauto pi = 3.14;               // inferred as double\nstring s = "hello";\nauto name = s;                // inferred as string\n\n// also works in range-for!\nvector<int> v = {1, 2, 3};\nfor (auto x : v) {\n    cout << x << endl;\n}',
           note: "auto = \"타입은 컴파일러한테 맡길게!\"  (파이썬의 기본 동작과 비슷!)"
         }
       },
@@ -296,19 +297,19 @@ export const lessonCpp10: LessonData = {
         }
       },
 
-      // Lv.1: auto 빈칸
+      // Lv.1: auto 빈칸 — 컨텍스트 추가
       {
         type: "practice",
         content: {
           level: 1,
-          task: "auto로 range-for를 써봐요!",
-          guide: "int 대신 auto를 써요!",
-          template: "for (___ x : v) {",
+          task: "타입을 직접 안 쓰고 컴파일러가 추론하게 하는 키워드로 빈칸을 채우세요!",
+          guide: "int / double / string 대신 쓸 수 있는 한 단어 — 'C++ 이 알아서 정해줘' 라는 의미",
+          template: "vector<double> data = {1.5, 2.7, 3.14};\n\nfor (___ x : data) {\n    cout << x << \" \";\n}",
           answer: "auto",
-          expect: "for (auto x : v) {",
+          expect: "for (auto x : data) {",
           en: {
-            task: "Write range-for using auto!",
-            guide: "Use auto instead of int!"
+            task: "Fill in the keyword that lets the compiler infer the type instead of writing it directly!",
+            guide: "One word that can replace int / double / string — meaning 'let C++ figure it out'"
           }
         }
       },
@@ -361,24 +362,25 @@ export const lessonCpp10: LessonData = {
         }
       },
 
-      // Lv.2: auto& 수정
+      // Lv.2: auto& 수정 — 컨텍스트 + int 도 정답
       {
         type: "practice",
         content: {
           level: 2,
-          task: "벡터의 모든 값에 10을 더하는 코드를 완성해요!",
-          guide: "원본을 수정하려면 & 가 필요해요!",
-          template: "for (___& x : v) {\n    x = x + 10;\n}",
-          answer: "auto",
-          expect: "for (auto& x : v) {\n    x = x + 10;\n}",
+          task: "벡터 v 의 모든 값에 10 을 더하는 코드를 완성하세요! (& 는 이미 적혀있음)",
+          guide: "왼쪽에 들어갈 건 타입. 정수 벡터니까 직접 쓸 수도 있고, 컴파일러에 맡길 수도 있어요.",
+          template: "vector<int> v = {1, 2, 3};\n\nfor (___& x : v) {\n    x = x + 10;\n}",
+          answer: "int",
+          alternateAnswers: ["auto"],
+          expect: "for (int& x : v) {\n    x = x + 10;\n}",
           en: {
-            task: "Complete the code to add 10 to every element in the vector!",
-            guide: "You need & to modify the original values!"
+            task: "Complete the code to add 10 to every element of v! (& is already provided)",
+            guide: "Left blank is the type. Either spell it out (it's an int vector) or let the compiler decide."
           }
         }
       },
 
-      // 에러 퀴즈
+      // 에러 퀴즈 — auto 복사 silent bug
       {
         type: "errorQuiz",
         content: {
@@ -399,6 +401,56 @@ export const lessonCpp10: LessonData = {
               "x = x * 10 syntax is wrong"
             ],
             explanation: "auto is a copy! To modify the original, use auto& x instead. Currently v[0] is still 1."
+          }
+        }
+      },
+
+      // 에러 퀴즈 — const ref 에 수정 시도 (반대 방향 흔한 실수)
+      {
+        type: "errorQuiz",
+        content: {
+          question: "이 코드는 왜 컴파일 에러일까요?",
+          code: 'vector<int> v = {1, 2, 3};\nfor (const auto& x : v) {\n    x = x * 2;   // ?\n}',
+          options: [
+            "const 는 '바꾸지 않는다' 약속 — x = ... 로 수정하면 컴파일 에러",
+            "& 와 const 를 같이 쓸 수 없어서",
+            "auto 는 const 를 못 받아서"
+          ],
+          answer: 0,
+          explanation: "`const auto&` 는 '읽기만 한다' 는 약속이에요. 그 안에서 x 를 바꾸려고 하면 컴파일러가 막아요. 수정하려면 `const` 를 빼고 `auto&` 만 써야 해요.",
+          en: {
+            question: "Why does this code fail to compile?",
+            options: [
+              "const means 'won't modify' — assigning to x is a compile error",
+              "& and const can't be used together",
+              "auto can't accept const"
+            ],
+            explanation: "`const auto&` is a promise to read only. Modifying x inside is blocked by the compiler. Drop the `const` to allow modification."
+          }
+        }
+      },
+
+      // 에러 퀴즈 — 큰 데이터를 복사로 받는 비효율 (const auto& 권장)
+      {
+        type: "errorQuiz",
+        content: {
+          question: "이 코드는 동작은 하는데, **효율** 측면에서 무슨 문제가 있을까요?",
+          code: 'vector<string> names = {"Alice", "Bob", "Charlie"};\n\nfor (auto name : names) {       // 읽기만 함\n    cout << name << endl;\n}',
+          options: [
+            "string 을 매번 통째로 복사해서 큰 데이터에선 느려요 — const auto& 로 해야 효율적",
+            "auto 가 string 을 추론 못 해서",
+            "for 루프 횟수가 잘못돼서"
+          ],
+          answer: 0,
+          explanation: "`auto name` 은 string 을 **복사** 해요. 짧은 단어면 괜찮지만 긴 string 이 많으면 느려져요. 읽기만 할 땐 `const auto& name` — 복사 없이 원본 가리키기만 해서 빠르고 안전해요.",
+          en: {
+            question: "This code works, but what's the **efficiency** problem?",
+            options: [
+              "Each string is copied — slow for large data. Use const auto& for efficiency",
+              "auto can't infer string",
+              "The loop count is wrong"
+            ],
+            explanation: "`auto name` **copies** each string. Fine for short ones but slow with many large strings. For read-only access use `const auto& name` — no copy, just refers to the original."
           }
         }
       },
