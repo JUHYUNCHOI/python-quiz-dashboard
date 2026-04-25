@@ -21,54 +21,48 @@ export const cppLesson23EnData: LessonData = {
         {
           id: "s23-ch0-intro",
           type: "explain",
-          title: "📊 sort() — The Basics of Sorting!",
-          content: `**Sorting** — arranging data in order — is a core algorithm concept. Let's start with C++'s **sort()** function!
+          title: "📊 sort() — sort it in one line",
+          content: `In the previous lesson we saw how pair's auto-comparison made "**a score sheet sorts itself with one line of \`sort\`**". This lesson is all about that \`sort\`.
 
-**sort() syntax:**
-\`\`\`
-sort( from_where, to_where );
-       ↑               ↑
-   v.begin()        v.end()
-  (first element)  (one past last)
-\`\`\`
-
-sort() needs to know the range — "from where to where to sort."
-For vectors, always use \`v.begin()\` and \`v.end()\`.
+\`sort\` collapses the work of writing your own quicksort/mergesort into **one line**. It's one of the most-used STL functions in C++.
 
 \`\`\`cpp
-#include <algorithm>  // header that contains sort()!
-#include <vector>
+#include <algorithm>
 using namespace std;
 
 vector<int> v = {5, 2, 8, 1, 9};
 sort(v.begin(), v.end());
-// v = {1, 2, 5, 8, 9}  (ascending, default)
+// v = {1, 2, 5, 8, 9}
 \`\`\`
 
-**Arrays can be sorted too:**
-\`\`\`cpp
-int arr[] = {5, 2, 8, 1, 9};
-sort(arr, arr + 5);  // sort arr[0] through arr[4]
-\`\`\`
+\`sort(begin, end)\` — STL's familiar \`(begin, end)\` pattern: "sort within this range."
 
-{collapse:💡 Why does arr + 5 work?}
-\`\`\`
-arr is actually the memory address of the first element.
-(called a pointer)
-
-arr     → address of arr[0] (start)
-arr + 1 → address of arr[1]
-arr + 5 → address of arr[5] (= one past end, marks finish)
-
-Same role as v.begin() / v.end() for vectors!
-\`\`\`
+> 💡 Looks like Python's \`v.sort()\` but with one important difference.
 
 | Python 🐍 | C++ ⚡ |
 |---|---|
 | \`v.sort()\` | \`sort(v.begin(), v.end())\` |
-| \`sorted(v)\` — returns new list | C++ always **modifies in-place** (no return value) |
+| \`sorted(v)\` — returns new list | (none) C++ always **modifies the original** |
 
-💡 sort() requires \`#include <algorithm>\`!`
+In C++, sort always **modifies in place**. Need a sorted copy? Copy the vector first, then sort the copy.
+
+### Same thing for arrays
+
+\`\`\`cpp
+int arr[] = {5, 2, 8, 1, 9};
+sort(arr, arr + 5);  // sort arr[0] ~ arr[4]
+\`\`\`
+
+{collapse:🤔 Why does \`arr + 5\` work?}
+\`\`\`
+arr is actually the memory address of the first element (a pointer).
+arr     → address of arr[0]
+arr + 5 → address of arr[5] (= one past last, marks "the end")
+
+Same role as v.begin() / v.end() for vectors.
+\`\`\`
+
+Next page — try sorting one yourself 👇`
         },
         {
           id: "s23-ch0-fb1",
@@ -153,20 +147,25 @@ sort() accepts a **third argument** for the comparison rule.
         {
           id: "s23-ch1-why",
           type: "explain",
-          title: "🔧 There Are Things greater<int>() Can't Do!",
-          content: `\`greater<int>()\` is handy for simple number/string descending sorts.
-
-But what if you want to **sort pairs by score**?
+          title: "🤔 A situation where \`greater<int>()\` falls short",
+          content: `On the previous page we used \`greater<int>()\` for descending sort. That works great with **plain numbers/strings**. But — what if the data is a student score list?
 
 \`\`\`cpp
-vector<pair<string, int>> v = {{"Kim", 85}, {"Lee", 92}, {"Park", 78}};
-
-// Want to sort by score (second) in descending order
-// greater<int>() can't do this! It compares the whole pair
+vector<pair<string, int>> students = {
+    {"Kim", 85}, {"Lee", 92}, {"Park", 78}
+};
 \`\`\`
 
-That's when you need a **lambda**.
-A lambda is a **"one-time function where you define the comparison rule yourself."**`
+We want to sort this **by score (second) descending**.
+
+\`sort(students.begin(), students.end())\` alone? Pair's auto-comparison sorts by \`first\` (name). Not what we want.
+
+\`greater<pair<string,int>>()\`? Compares the whole pair (name + score). Also not it.
+
+> 🎯 What we actually need: **a way to spell out the comparison ourselves.**
+> Something like, "for these two students, *I'll* tell sort which one comes first."
+
+The tool for this is a **lambda**. Next page covers the syntax 👇`
         },
         {
           id: "s23-ch1-syntax",
