@@ -388,9 +388,9 @@ Most 2D problems need the **position (i, j)**, and range-for gives you the value
 
 > ℹ️ Even patterns needing position can use range-for if you track an external counter. It just feels awkward, so people don't.
 
-In USACO and competitive programming, position matters in most problems, so **index-based nested loops are the go-to for 2D**.
+**In contests like USACO**, position matters in most problems, so **indexed nested loops are the standard**. (In general C++ code, range-for is also common when position isn't needed.)
 
-> 💡 Bottom line: in 2D, use range-for for "input / total sum" type cases (no position needed), and index-based otherwise.
+> 💡 Bottom line: in 2D, use range-for only when position isn't needed (input / total sum), and indexed otherwise.
 
 Next page — a tricky pitfall when using \`auto\` to make a vector.`,
         },
