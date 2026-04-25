@@ -85,7 +85,7 @@ cout << hero.hp;     // 100
 cout << hero.level;  // 1
 \`\`\`
 
-💡 As you learned in Lesson 16 — class is safer than a dict. Typos become compile errors instead of hidden bugs!`
+💡 Bundling 5 separate variables into a class is much safer — misspell a member name and the compiler catches it instantly!`
         },
         {
           id: "ch1-fb1",

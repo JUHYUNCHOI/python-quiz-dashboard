@@ -662,6 +662,29 @@ export const lessonCpp22: LessonData = {
         }
       },
 
+      // Lv.3: 처음부터 써보기 — HighScore 클래스
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "🔥 HighScore 클래스를 처음부터 직접 만들어요!",
+          guide: "private 멤버 int best (초기값 0). public 함수 두 개: void submit(int score) — score 가 best 보다 높을 때만 갱신. int getBest() — best 반환. main 은 그대로 두고 클래스 부분만 채우세요.",
+          starterCode: '#include <iostream>\nusing namespace std;\n\n// 여기에 HighScore 클래스 작성\n\n\nint main() {\n    HighScore h;\n    h.submit(50);\n    h.submit(30);\n    h.submit(80);\n    h.submit(75);\n    cout << h.getBest();\n    return 0;\n}',
+          template: null,
+          answer: '#include <iostream>\nusing namespace std;\n\nclass HighScore {\nprivate:\n    int best = 0;\npublic:\n    void submit(int score) {\n        if (score > best) best = score;\n    }\n    int getBest() {\n        return best;\n    }\n};\n\nint main() {\n    HighScore h;\n    h.submit(50);\n    h.submit(30);\n    h.submit(80);\n    h.submit(75);\n    cout << h.getBest();\n    return 0;\n}',
+          alternateAnswers: [
+            '#include <iostream>\nusing namespace std;\n\nclass HighScore {\nprivate:\n    int best = 0;\npublic:\n    void submit(int score) { if (score > best) best = score; }\n    int getBest() { return best; }\n};\n\nint main() {\n    HighScore h;\n    h.submit(50);\n    h.submit(30);\n    h.submit(80);\n    h.submit(75);\n    cout << h.getBest();\n    return 0;\n}',
+            '#include <iostream>\nusing namespace std;\n\nclass HighScore {\nprivate:\n    int best = 0;\npublic:\n    void submit(int score) {\n        if (best < score) best = score;\n    }\n    int getBest() {\n        return best;\n    }\n};\n\nint main() {\n    HighScore h;\n    h.submit(50);\n    h.submit(30);\n    h.submit(80);\n    h.submit(75);\n    cout << h.getBest();\n    return 0;\n}',
+            '#include <iostream>\nusing namespace std;\n\nclass HighScore {\n    int best = 0;\npublic:\n    void submit(int score) {\n        if (score > best) best = score;\n    }\n    int getBest() {\n        return best;\n    }\n};\n\nint main() {\n    HighScore h;\n    h.submit(50);\n    h.submit(30);\n    h.submit(80);\n    h.submit(75);\n    cout << h.getBest();\n    return 0;\n}'
+          ],
+          expect: "80",
+          en: {
+            task: "🔥 Build the HighScore class from scratch!",
+            guide: "Private member: int best (init 0). Two public functions: void submit(int score) — only update best if score > best. int getBest() — return best. Leave main alone, just fill in the class."
+          }
+        }
+      },
+
       // 보상
       {
         type: "reward",
