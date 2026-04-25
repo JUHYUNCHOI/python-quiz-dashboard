@@ -302,14 +302,15 @@ Think of auto as a "one-time binding contract." When you write \`auto x = 5;\`, 
         {
           id: "ch2-fb1",
           type: "fillblank" as const,
-          title: "Fill in the blanks",
-          content: "Let the compiler figure out the types!",
-          code: "___ x = 100;\n___ msg = \"Hello\"s;\ncout << x << \" \" << msg;",
+          title: "What type does auto deduce?",
+          content: "Fill in the type each variable is deduced to.",
+          code: "auto price = 9.99;     // → ___\nauto count = 5;        // → ___\nauto pass  = true;     // → ___",
           fillBlanks: [
-            { id: 0, answer: "auto", options: ["auto", "var", "let", "int"] },
-            { id: 1, answer: "auto", options: ["auto", "var", "let", "string"] }
+            { id: 0, answer: "double", options: ["double", "int", "float", "string"] },
+            { id: 1, answer: "int", options: ["int", "double", "long", "char"] },
+            { id: 2, answer: "bool", options: ["bool", "int", "string", "true"] }
           ],
-          explanation: "auto lets the compiler figure out the type! x becomes int, msg becomes string."
+          explanation: "9.99 has a decimal → double. 5 is a whole number → int. true is true/false → bool. auto looks at the right-hand value and takes its type."
         },
         {
           id: "ch2-combo",
