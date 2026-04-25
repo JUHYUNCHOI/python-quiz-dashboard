@@ -43,12 +43,15 @@ export function CallByValueVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
     <div className="w-full max-w-md mx-auto space-y-3 select-none">
       {/* 코드 */}
       <div className="bg-slate-900 rounded-2xl px-4 py-3 font-mono text-sm text-slate-100 leading-relaxed">
+        <div className="text-slate-500 text-xs mb-1">{isEn ? "// tryChange: tries to set x to 99" : "// tryChange: x 를 99 로 바꾸려는 함수"}</div>
         <div><span className="text-blue-400">void</span> <span className="text-yellow-300">tryChange</span>(<span className="text-emerald-400">int</span> x) {"{"}</div>
         <div className="pl-4">x = 99;</div>
         <div>{"}"}</div>
-        <div className="mt-2"><span className="text-emerald-400">int</span> num = 10;</div>
-        <div><span className="text-yellow-300">tryChange</span>(num);</div>
-        <div><span className="text-blue-400">cout</span> {"<<"} num;<span className="text-slate-500">  // ?</span></div>
+        <div className="mt-2"><span className="text-emerald-400">int</span> <span className="text-blue-400">main</span>() {"{"}</div>
+        <div className="pl-4"><span className="text-emerald-400">int</span> num = 10;</div>
+        <div className="pl-4"><span className="text-yellow-300">tryChange</span>(num);</div>
+        <div className="pl-4"><span className="text-blue-400">cout</span> {"<<"} num;<span className="text-slate-500">  // ?</span></div>
+        <div>{"}"}</div>
       </div>
 
       {/* 단계 라벨 */}
