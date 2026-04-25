@@ -329,17 +329,21 @@ for (auto x : nums) cout << x << " ";
 
 **1. Long types become short**
 
-For \`vector<int>\` it's fine to write the type. But for things like:
+For \`vector<int>\` writing the type is fine. But what about the **2D vector** from cpp-21?
 
 \`\`\`cpp
-vector<map<string, vector<int>>> data;
+vector<vector<int>> grid(3, vector<int>(4, 0));
 
-// Explicit — way too long
-for (map<string, vector<int>> entry : data) { ... }
+// Explicit — must spell out the inner type too
+for (vector<int> row : grid)
+    for (int val : row)
+        cout << val;
 
 // auto — clean
-for (auto entry : data) { ... }
-\`\`\`
+for (auto row : grid)
+    for (auto val : row)
+        cout << val;
+\`\`\``
 
 **2. Don't repeat the type (DRY)**
 

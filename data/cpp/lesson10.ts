@@ -341,17 +341,21 @@ for (auto x : nums) cout << x << " ";
 
 **1. 긴 타입을 짧게**
 
-\`vector<int>\` 처럼 짧으면 직접 써도 OK. 근데 이런 거라면?
+\`vector<int>\` 처럼 짧으면 직접 써도 OK. 근데 cpp-21 에서 봤던 **2D vector** 라면?
 
 \`\`\`cpp
-vector<map<string, vector<int>>> data;
+vector<vector<int>> grid(3, vector<int>(4, 0));
 
-// 직접 — 너무 김
-for (map<string, vector<int>> entry : data) { ... }
+// 직접 — 안쪽 타입까지 다 써야 함
+for (vector<int> row : grid)
+    for (int val : row)
+        cout << val;
 
 // auto — 깔끔
-for (auto entry : data) { ... }
-\`\`\`
+for (auto row : grid)
+    for (auto val : row)
+        cout << val;
+\`\`\``
 
 **2. 같은 타입 두 번 안 쓰기 (DRY)**
 
