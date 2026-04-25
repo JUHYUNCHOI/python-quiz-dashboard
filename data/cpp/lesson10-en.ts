@@ -325,7 +325,37 @@ for (int x : nums) cout << x << " ";
 for (auto x : nums) cout << x << " ";
 \`\`\`
 
-For \`vector<int>\` it's a one-line difference, but with messy types like \`vector<map<string, vector<int>>>\` \`auto\` really shines. Next page covers the three patterns: \`auto\` / \`auto&\` / \`const auto&\`.`
+### 🎯 So why use auto?
+
+**1. Long types become short**
+
+For \`vector<int>\` it's fine to write the type. But for things like:
+
+\`\`\`cpp
+vector<map<string, vector<int>>> data;
+
+// Explicit — way too long
+for (map<string, vector<int>> entry : data) { ... }
+
+// auto — clean
+for (auto entry : data) { ... }
+\`\`\`
+
+**2. Don't repeat the type (DRY)**
+
+\`\`\`cpp
+// vector<int> twice on both sides
+vector<int> v = vector<int>{1, 2, 3};
+
+// auto — once
+auto v = vector<int>{1, 2, 3};
+\`\`\`
+
+**3. Robust to type changes**
+
+If you later change \`vector<int>\` to \`vector<long>\`, \`auto\` follows automatically. Explicit types need updating everywhere.
+
+Next page — \`auto / auto& / const auto&\` patterns + pitfalls.`
         },
         {
           id: "ch2-auto-tradeoff",
@@ -345,19 +375,45 @@ For \`vector<int>\` it's a one-line difference, but with messy types like \`vect
 
 But should you **always** use auto? Not necessarily!
 
-### 😓 Caution with auto
+### 😓 auto pitfalls
 
-**Type is hidden from view**
+**1. No initializer → compile error**
+\`\`\`cpp
+auto x;          // ❌ error — auto needs an initial value to deduce the type
+auto x = 0;      // ✅ deduced as int
+\`\`\`
+
+**2. Type is hidden from view**
 \`\`\`cpp
 auto result = calculate();  // Is result int? double? string? Unknown!
 int result = calculate();   // Clearly int at a glance
 \`\`\`
-Someone reading your code (or future you) may not immediately know the type.
 
-**Unintended type can happen**
+**3. ⚠️ Integer division trap**
 \`\`\`cpp
-auto x = 5 / 2;   // Not 2.5 — it's 2! (int / int = int)
+auto x = 5 / 2;     // Not 2.5 — it's 2! (int / int = int)
+auto y = 5.0 / 2;   // 2.5 — one side as double works
 \`\`\`
+Bites you when computing averages. Cast with \`(double)\` or make one side a double.
+
+**4. Big-data copy trap**
+\`\`\`cpp
+vector<int> big(10000);   // a big vector
+
+auto copy = big;          // Copies all 10000 — slow + double memory!
+auto& ref = big;          // References the original — fast
+const auto& cref = big;   // Fast + a promise not to modify
+\`\`\`
+
+**5. \`auto\` + string-literal trap**
+\`\`\`cpp
+auto greeting = "hello";   // greeting is NOT string — it's const char*!
+greeting += " world";      // ❌ compile error — const char* has no +=
+
+// To get a string, write it explicitly:
+string greeting = "hello";
+\`\`\`
+\`"hello"\` is actually a C-style string (char array), so \`auto\` infers \`const char*\`. To get the C++ \`string\` class, you must write it.
 
 ---
 
@@ -368,8 +424,36 @@ auto x = 5 / 2;   // Not 2.5 — it's 2! (int / int = int)
 | Simple variables (\`int\`, \`double\`) | Write the type explicitly (more readable) |
 | range-for reading | **auto** or explicit type, either is fine |
 | range-for modifying | **auto&** |
+| Long / nested types | **auto** (readability up) |
+| String literals | Write \`string\` explicitly |
 
-Start by **practicing with explicit types**, then let auto come naturally as you get comfortable!`,
+Start with **explicit types**, then let auto come naturally.
+
+{collapse:📦 Bonus — deeper auto pitfalls}
+**\`auto v = {1, 2, 3}\` is NOT a vector**
+
+\`\`\`cpp
+auto v = {1, 2, 3};   // initializer_list<int>, a different type
+v.push_back(4);       // ❌ initializer_list has no push_back!
+
+// To get a vector:
+vector<int> v = {1, 2, 3};
+auto v = vector<int>{1, 2, 3};
+\`\`\`
+\`{1, 2, 3}\` is a "brace-enclosed temporary list" (initializer_list). The vector constructor accepts it, which is why \`vector<int> v = {1, 2, 3}\` works. But \`auto\` grabs the temporary list itself.
+
+---
+
+**Number literals — \`5\` vs \`5L\` vs \`5.0\`**
+
+\`\`\`cpp
+auto a = 5;       // int (typically up to ~2.1 billion)
+auto b = 5L;      // long (typically 64-bit)
+auto c = 5LL;     // long long (guaranteed large)
+auto d = 5.0;     // double
+auto e = 5.0f;    // float (single precision)
+\`\`\`
+For competitive programming with large numbers, \`int\` overflows past ~2.1 billion. Use \`auto x = 5LL;\` to be explicit. Usually you don't need to worry.`,
         },
         {
           id: "ch2-pred1",

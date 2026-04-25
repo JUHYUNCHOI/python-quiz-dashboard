@@ -337,7 +337,37 @@ for (int x : nums) cout << x << " ";
 for (auto x : nums) cout << x << " ";
 \`\`\`
 
-\`vector<int>\` 면 한 줄로 끝나지만, \`vector<map<string, vector<int>>>\` 같은 복잡한 타입이면 \`auto\` 의 진가가 드러나요. 다음 페이지에서 \`auto / auto& / const auto&\` 세 패턴 정리할게요.`
+### 🎯 그래서 auto 를 왜 쓰지?
+
+**1. 긴 타입을 짧게**
+
+\`vector<int>\` 처럼 짧으면 직접 써도 OK. 근데 이런 거라면?
+
+\`\`\`cpp
+vector<map<string, vector<int>>> data;
+
+// 직접 — 너무 김
+for (map<string, vector<int>> entry : data) { ... }
+
+// auto — 깔끔
+for (auto entry : data) { ... }
+\`\`\`
+
+**2. 같은 타입 두 번 안 쓰기 (DRY)**
+
+\`\`\`cpp
+// 양쪽에 vector<int> 두 번
+vector<int> v = vector<int>{1, 2, 3};
+
+// auto — 한 번만
+auto v = vector<int>{1, 2, 3};
+\`\`\`
+
+**3. 타입 변경에 강함**
+
+나중에 \`vector<int>\` 를 \`vector<long>\` 으로 바꿔도 \`auto\` 는 자동으로 따라가요. 직접 쓰면 곳곳에 \`int x\` 다 \`long x\` 로 바꿔야 함.
+
+다음 페이지 — \`auto / auto& / const auto&\` 세 패턴 + 함정.`
         },
         {
           id: "ch2-auto-tradeoff",
@@ -357,19 +387,45 @@ for (auto x : nums) cout << x << " ";
 
 그런데 auto를 **무조건** 쓰는 게 좋을까요? 꼭 그렇진 않아요!
 
-### 😓 auto를 쓸 때 주의할 점
+### 😓 auto 의 함정
 
-**타입이 눈에 안 보여요**
+**1. 초기값 없으면 컴파일 에러**
 \`\`\`cpp
-auto result = calculate();  // result가 int? double? string? 모름!
-int result = calculate();   // 한눈에 int라는 걸 알 수 있음
+auto x;          // ❌ 에러 — auto 는 초기값으로 타입을 추론하니까
+auto x = 0;      // ✅ int 로 결정
 \`\`\`
-코드를 처음 보는 사람(혹은 미래의 나)이 타입을 바로 알기 어려워요.
 
-**의도치 않은 타입이 될 수 있어요**
+**2. 타입이 눈에 안 보임**
 \`\`\`cpp
-auto x = 5 / 2;   // 2.5가 아니라 2! (int / int = int)
+auto result = calculate();  // result 가 int? double? string? 모름!
+int result = calculate();   // 한눈에 int 라는 걸 알 수 있음
 \`\`\`
+
+**3. ⚠️ int 나눗셈 함정**
+\`\`\`cpp
+auto x = 5 / 2;     // 2.5 가 아니라 2! (int / int = int)
+auto y = 5.0 / 2;   // 2.5 — 한쪽이 double 이면 OK
+\`\`\`
+평균 계산할 때 자주 깨져요. 소수점 필요하면 \`(double)\` 캐스팅하거나 한쪽을 \`double\` 로.
+
+**4. 큰 데이터 복사 함정**
+\`\`\`cpp
+vector<int> big(10000);   // 큰 벡터
+
+auto copy = big;          // 10000 개 통째로 복사 — 느리고 메모리 두 배!
+auto& ref = big;          // 원본 가리키기 — 빠름
+const auto& cref = big;   // 빠르고 + 수정 안 한다는 약속
+\`\`\`
+
+**5. \`auto\` + 문자열 리터럴 함정**
+\`\`\`cpp
+auto greeting = "hello";   // greeting 은 string 이 아니라 const char*!
+greeting += " world";      // ❌ 컴파일 에러 — const char* 는 += 안 됨
+
+// string 으로 받으려면 명시:
+string greeting = "hello";
+\`\`\`
+\`"hello"\` 는 사실 C 스타일 문자열 (char 배열) 이라 \`auto\` 가 그대로 \`const char*\` 로 추론해요. \`string\` 클래스가 되려면 명시해야 함.
 
 ---
 
@@ -380,8 +436,36 @@ auto x = 5 / 2;   // 2.5가 아니라 2! (int / int = int)
 | 간단한 변수 (\`int\`, \`double\`) | 직접 타입 쓰기 (가독성 좋음) |
 | range-for 읽기 | **auto** 또는 직접 타입, 둘 다 OK |
 | range-for 수정 | **auto&** |
+| 긴 타입 / 복잡한 타입 | **auto** (가독성 ↑) |
+| 문자열 리터럴 | \`string\` 직접 쓰기 |
 
-처음 배울 때는 **타입을 직접 쓰는 연습**을 먼저 하고, 익숙해지면 auto를 자연스럽게 써가는 게 좋아요!`,
+처음 배울 때는 **타입을 직접 쓰는 연습** 을 먼저, 익숙해지면 auto 를 자연스럽게.
+
+{collapse:📦 보너스 — auto 의 더 깊은 함정}
+**\`auto v = {1, 2, 3}\` 은 vector 가 아님**
+
+\`\`\`cpp
+auto v = {1, 2, 3};   // initializer_list<int> 라는 다른 타입
+v.push_back(4);       // ❌ initializer_list 는 push_back 없음!
+
+// vector 로 받으려면:
+vector<int> v = {1, 2, 3};
+auto v = vector<int>{1, 2, 3};
+\`\`\`
+\`{1, 2, 3}\` 자체는 "중괄호로 묶은 임시 값 묶음" (initializer_list). \`vector\` 생성자가 이걸 받아서 \`vector<int> v = {1, 2, 3}\` 이 동작해요. 근데 \`auto\` 가 받으면 그 임시 묶음 자체를 받아버림.
+
+---
+
+**숫자 리터럴 — \`5\` vs \`5L\` vs \`5.0\`**
+
+\`\`\`cpp
+auto a = 5;       // int (보통 ~21억까지)
+auto b = 5L;      // long (보통 64-bit)
+auto c = 5LL;     // long long (큰 수 보장)
+auto d = 5.0;     // double
+auto e = 5.0f;    // float (단정밀도)
+\`\`\`
+USACO 같은 데서 큰 수 다루면 \`int\` 가 overflow (~21억 넘으면 깨짐). 그럴 땐 \`auto x = 5LL;\` 로 명시. 평소엔 신경 안 써도 OK.`,
         },
         {
           id: "ch2-pred1",
