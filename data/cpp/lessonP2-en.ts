@@ -85,7 +85,7 @@ cout << hero.hp;     // 100
 cout << hero.level;  // 1
 \`\`\`
 
-💡 As you learned in Lesson 16 — class is safer than a dict. Typos become compile errors instead of hidden bugs!`
+💡 Bundling 5 separate variables into a class is much safer — misspell a member name and the compiler catches it instantly!`
         },
         {
           id: "ch1-fb1",
@@ -103,7 +103,7 @@ cout << hero.level;  // 1
           id: "ch1-exp3",
           type: "explain",
           title: "🗡️ Designing struct Item + string operations",
-          content: `Characters can hold items! Use **struct** for the Item type. (Lesson 15)
+          content: `Characters can hold items too. **But this time we'll use \`struct\` instead of class.** Why?
 
 \`\`\`cpp
 struct Item {
@@ -113,13 +113,18 @@ struct Item {
 };
 \`\`\`
 
-struct is simpler than class — use it when you just need to bundle data:
+**class vs struct — when to use which?**
+
+- **\`class Character\`** — hp shouldn't go negative, has **behaviors** like attack/defense → needs to **protect and wrap** its data → use class
+- **\`struct Item\`** — just a name + a few numbers. Free read/write feels right → **plain data bundle** → use struct
+
+**Rule of thumb**: if there's behavior or validation, use \`class\`. If it's just data, use \`struct\`.
 
 \`\`\`cpp
-Item sword = {"Iron Sword", 5, 0};
+Item sword = {"Iron Sword", 5, 0};        // brace initialization!
 Item potion = {"Health Potion", 0, 30};
 
-cout << sword.name;      // Iron Sword
+cout << sword.name;      // Iron Sword — direct access (struct defaults to public)
 cout << sword.atkBonus;  // 5
 \`\`\`
 

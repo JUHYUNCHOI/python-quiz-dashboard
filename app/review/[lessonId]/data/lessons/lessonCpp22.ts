@@ -373,7 +373,7 @@ export const lessonCpp22: LessonData = {
         type: "explain",
         content: {
           lines: [],
-          code: '#include <iostream>\nusing namespace std;\n\nclass Thermometer {\nprivate:\n    int temp = 20;\npublic:\n    int getTemp() { return temp; }\n    void setTemp(int t) {\n        if (t >= -50 && t <= 150) temp = t;\n    }\n};\n\nint main() {\n    Thermometer th;\n    th.setTemp(200);  // 150 초과 → 무시\n    th.setTemp(30);   // OK\n    th.setTemp(-100); // -50 미만 → 무시\n    cout << th.getTemp();\n    return 0;\n}',
+          code: '#include <iostream>\nusing namespace std;\n\nclass Thermometer {\nprivate:\n    int temp = 20;\npublic:\n    int getTemp() { return temp; }\n    void setTemp(int t) {\n        if (t >= -50 && t <= 150) temp = t;\n    }\n};\n\nint main() {\n    Thermometer th;\n    th.setTemp(200);\n    th.setTemp(30);\n    th.setTemp(-100);\n    cout << th.getTemp();\n    return 0;\n}',
           predict: {
             question: "출력 결과는?",
             options: ["30", "200", "-100", "20"],
@@ -416,6 +416,13 @@ export const lessonCpp22: LessonData = {
           guide: "s >= 0 그리고 s <= 100 — 두 조건을 && 로 연결해요.",
           template: "void setScore(int s) {\n    if (___) score = s;\n}",
           answer: "s >= 0 && s <= 100",
+          alternateAnswers: [
+            "0 <= s && s <= 100",
+            "s <= 100 && s >= 0",
+            "100 >= s && s >= 0",
+            "0 <= s && 100 >= s",
+            "s >= 0 and s <= 100"
+          ],
           expect: "void setScore(int s) {\n    if (s >= 0 && s <= 100) score = s;\n}",
           en: {
             task: "Fill in so setScore only accepts 0 to 100!",
@@ -589,32 +596,6 @@ export const lessonCpp22: LessonData = {
         }
       },
 
-      // quiz: private getter/setter 로 멤버에 접근하는 올바른 방식
-      {
-        type: "quiz",
-        content: {
-          question: "private 멤버 balance 를 외부에서 **읽는** 올바른 방법은?",
-          options: [
-            "acc.balance",
-            "acc->balance",
-            "acc.getBalance()",
-            "balance(acc)"
-          ],
-          answer: 2,
-          explanation: "balance 는 private 이라 acc.balance 직접 접근은 컴파일 에러. public getter 인 getBalance() 를 호출해서 값을 돌려받아요 — 이게 캡슐화의 정석!",
-          en: {
-            question: "What is the correct way to **read** the private member balance from outside?",
-            options: [
-              "acc.balance",
-              "acc->balance",
-              "acc.getBalance()",
-              "balance(acc)"
-            ],
-            explanation: "balance is private, so acc.balance is a compile error. Call the public getter getBalance() to read the value — this is the standard encapsulation pattern."
-          }
-        }
-      },
-
       // errorQuiz: missing semicolon after class declaration
       {
         type: "errorQuiz",
@@ -677,6 +658,29 @@ export const lessonCpp22: LessonData = {
           en: {
             message: "Quick check! Do you remember structs from cpp-14?",
             task: "Complete the code that reads member x from a struct Point using dot notation!"
+          }
+        }
+      },
+
+      // Lv.3: 처음부터 써보기 — HighScore 클래스
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "🔥 HighScore 클래스를 처음부터 직접 만들어요!",
+          guide: "private 멤버 int best (초기값 0). public 함수 두 개: void submit(int score) — score 가 best 보다 높을 때만 갱신. int getBest() — best 반환. main 은 그대로 두고 클래스 부분만 채우세요.",
+          starterCode: '#include <iostream>\nusing namespace std;\n\n// 여기에 HighScore 클래스 작성\n\n\nint main() {\n    HighScore h;\n    h.submit(50);\n    h.submit(30);\n    h.submit(80);\n    h.submit(75);\n    cout << h.getBest();\n    return 0;\n}',
+          template: null,
+          answer: '#include <iostream>\nusing namespace std;\n\nclass HighScore {\nprivate:\n    int best = 0;\npublic:\n    void submit(int score) {\n        if (score > best) best = score;\n    }\n    int getBest() {\n        return best;\n    }\n};\n\nint main() {\n    HighScore h;\n    h.submit(50);\n    h.submit(30);\n    h.submit(80);\n    h.submit(75);\n    cout << h.getBest();\n    return 0;\n}',
+          alternateAnswers: [
+            '#include <iostream>\nusing namespace std;\n\nclass HighScore {\nprivate:\n    int best = 0;\npublic:\n    void submit(int score) { if (score > best) best = score; }\n    int getBest() { return best; }\n};\n\nint main() {\n    HighScore h;\n    h.submit(50);\n    h.submit(30);\n    h.submit(80);\n    h.submit(75);\n    cout << h.getBest();\n    return 0;\n}',
+            '#include <iostream>\nusing namespace std;\n\nclass HighScore {\nprivate:\n    int best = 0;\npublic:\n    void submit(int score) {\n        if (best < score) best = score;\n    }\n    int getBest() {\n        return best;\n    }\n};\n\nint main() {\n    HighScore h;\n    h.submit(50);\n    h.submit(30);\n    h.submit(80);\n    h.submit(75);\n    cout << h.getBest();\n    return 0;\n}',
+            '#include <iostream>\nusing namespace std;\n\nclass HighScore {\n    int best = 0;\npublic:\n    void submit(int score) {\n        if (score > best) best = score;\n    }\n    int getBest() {\n        return best;\n    }\n};\n\nint main() {\n    HighScore h;\n    h.submit(50);\n    h.submit(30);\n    h.submit(80);\n    h.submit(75);\n    cout << h.getBest();\n    return 0;\n}'
+          ],
+          expect: "80",
+          en: {
+            task: "🔥 Build the HighScore class from scratch!",
+            guide: "Private member: int best (init 0). Two public functions: void submit(int score) — only update best if score > best. int getBest() — return best. Leave main alone, just fill in the class."
           }
         }
       },

@@ -86,7 +86,7 @@ cout << hero.hp;     // 100
 cout << hero.level;  // 1
 \`\`\`
 
-💡 레슨 16에서 배운 것처럼 class는 dict보다 안전해요 — 오타를 치면 컴파일 에러로 바로 잡아줘요!`
+💡 변수 5개를 따로 관리하는 것보다 class 로 묶는 게 훨씬 안전해요 — 멤버 이름을 잘못 치면 컴파일 에러로 바로 잡아주거든요!`
         },
         {
           id: "ch1-fb1",
@@ -104,7 +104,7 @@ cout << hero.level;  // 1
           id: "ch1-exp3",
           type: "explain",
           title: "🗡️ struct Item 설계 + string 심화",
-          content: `캐릭터가 아이템을 가질 수 있도록 **struct**로 아이템 타입을 만들어요. (레슨 15)
+          content: `캐릭터가 아이템을 가질 수 있도록 아이템 타입도 만들어요. **근데 이건 class 가 아니라 \`struct\` 로 만들 거예요.** 왜?
 
 \`\`\`cpp
 struct Item {
@@ -114,7 +114,20 @@ struct Item {
 };
 \`\`\`
 
-struct는 class보다 단순해요 — 데이터만 묶고 싶을 때 써요:
+**class vs struct — 언제 뭘 쓰지?**
+
+- **\`class Character\`** — hp 가 음수면 안 됨, 공격/방어 같은 **행동** 도 있음 → 데이터를 **보호하고 감싸야** 해서 class
+- **\`struct Item\`** — 그냥 이름이랑 수치 묶음. 자유롭게 읽고 쓰는 게 자연스러움 → **단순 데이터 뭉치** 라서 struct
+
+**규칙처럼 외우면**: 행동·검증이 있으면 \`class\`, 데이터만 묶으면 \`struct\`.
+
+\`\`\`cpp
+Item sword = {"철검", 5, 0};        // 중괄호로 한 번에!
+Item potion = {"체력 물약", 0, 30};
+
+cout << sword.name;      // 철검 — 바로 접근 OK (struct 는 기본 public)
+cout << sword.atkBonus;  // 5
+\`\`\`
 
 \`\`\`cpp
 Item sword = {"철검", 5, 0};
@@ -142,7 +155,11 @@ if (sword.name.find("검") != string::npos) {
 cout << sword.name.length();  // 2
 \`\`\`
 
-💡 \`string::npos\`는 "찾지 못했음"을 뜻해요. \`find()\`가 이 값을 반환하면 없는 거예요.`
+💡 \`string::npos\`는 "찾지 못했음"을 뜻해요. \`find()\`가 이 값을 반환하면 없는 거예요.
+
+---
+
+⏭️ Item 은 지금 만들어두고, **Ch2 Step 3** 에서 캐릭터에 장착시킬 거예요. 그 전 Step 1, 2 에선 Character 만 다뤄요 — 한 번에 하나씩!`
         },
         {
           id: "ch1-quiz1",
@@ -178,7 +195,14 @@ public:
           id: "ch2-exp1",
           type: "explain",
           title: "🔨 Step 1 — 캐릭터 출력 함수",
-          content: `캐릭터 정보를 출력하는 함수를 만들어요. (레슨 13 — 참조)
+          content: `📍 **진행 상황**
+✅ 준비된 것: \`Character\` class (Ch1)
+🎯 이번 Step: 캐릭터를 예쁘게 출력하는 \`printCharacter()\` 함수
+⏭️ 다음 Step: 여러 캐릭터를 \`vector\` 로 묶어 파티 만들기
+
+---
+
+캐릭터 정보를 출력하는 함수를 만들어요. (레슨 13 — 참조)
 
 \`\`\`cpp
 void printCharacter(const Character& c) {
@@ -199,7 +223,49 @@ void printCharacter(const Character& c) {
           id: "ch2-prac1",
           type: "practice" as const,
           title: "✋ Step 1 실습 — 캐릭터 만들고 출력!",
-          content: `Character 클래스를 정의하고, 두 캐릭터를 만들어 출력해봐요.`,
+          content: `\`Character\` class 와 \`printCharacter()\` 는 미리 써뒀어요. \`main()\` 안에서 두 캐릭터를 만들고 출력해봐요.`,
+          starterCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+// ── ✅ Ch1 에서 설계한 Character class ──────────
+class Character {
+public:
+    string name;
+    int hp;
+    int attack;
+    int defense;
+    int level;
+
+    Character(string n, int h, int a, int d) {
+        name = n;
+        hp = h;
+        attack = a;
+        defense = d;
+        level = 1;
+    }
+};
+
+// ── ✅ 위 explain 에서 본 출력 함수 ────────────
+void printCharacter(const Character& c) {
+    cout << c.name << " [HP:" << c.hp
+         << " ATK:" << c.attack
+         << " DEF:" << c.defense
+         << " LV:" << c.level << "]" << endl;
+}
+
+int main() {
+    // 👇 여기를 채우세요 — Step 1 의 진짜 할 일!
+
+    // 1. Character hero("용사", 100, 15, 10); 만들기
+
+    // 2. Character mage("마법사", 80, 20, 5); 만들기
+
+    // 3. printCharacter(hero); printCharacter(mage); 호출
+
+
+    return 0;
+}`,
           code: `#include <iostream>
 #include <string>
 using namespace std;
@@ -244,7 +310,14 @@ int main() {
           id: "ch2-exp2",
           type: "explain",
           title: "🔨 Step 2 — vector로 파티 관리",
-          content: `여러 캐릭터를 **vector**로 관리해요. (레슨 9)
+          content: `📍 **진행 상황**
+✅ 만든 것: \`Character\` class + \`printCharacter()\`
+🎯 이번 Step: \`vector<Character>\` 로 파티(여러 명) 관리, \`showParty()\` 추가
+⏭️ 다음 Step: Ch1 에서 만든 \`struct Item\` 등판! 캐릭터에 아이템 장착
+
+---
+
+여러 캐릭터를 **vector**로 관리해요. (레슨 9)
 
 \`\`\`cpp
 vector<Character> party;
@@ -273,7 +346,50 @@ void showParty(const vector<Character>& party) {
           id: "ch2-prac2",
           type: "practice" as const,
           title: "✋ Step 2 실습 — 파티 목록 출력!",
-          content: `vector로 파티를 만들고, 캐릭터를 추가한 뒤 목록을 출력해봐요.`,
+          content: `Step 1 에서 만든 \`Character\` + \`printCharacter\` 가 그대로 있어요. 이번엔 \`showParty()\` 와 \`main()\` 안의 파티 운영 부분을 채워봐요.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+// ── ✅ Step 1 에서 만든 것 ─────────────────────
+class Character {
+public:
+    string name;
+    int hp;
+    int attack;
+    int defense;
+    int level;
+
+    Character(string n, int h, int a, int d) {
+        name = n; hp = h; attack = a; defense = d; level = 1;
+    }
+};
+
+void printCharacter(const Character& c) {
+    cout << c.name << " [HP:" << c.hp
+         << " ATK:" << c.attack
+         << " DEF:" << c.defense
+         << " LV:" << c.level << "]" << endl;
+}
+
+// 👇 1. showParty 함수 작성 — vector 의 모든 캐릭터를 printCharacter 로 출력
+//     예시 출력 첫 줄: "=== 파티 현황 (2명) ==="
+
+
+int main() {
+    vector<Character> party;
+
+    // 👇 2. party 에 용사(100/15/10), 마법사(80/20/5) 추가
+
+    // 👇 3. showParty(party) 호출
+
+    // 👇 4. 궁수(90/18/8) 추가하고 "궁수가 합류했어요!" 출력
+
+    // 👇 5. showParty(party) 다시 호출
+
+    return 0;
+}`,
           code: `#include <iostream>
 #include <vector>
 #include <string>
@@ -369,7 +485,14 @@ int main() {
           id: "ch2-exp-item",
           type: "explain",
           title: "🗡️ Step 3 — 아이템 장착 시스템",
-          content: `Character 클래스에 **인벤토리**를 추가해요. (레슨 9 vector + 레슨 15 struct 조합)
+          content: `📍 **진행 상황**
+✅ 만든 것: \`Character\` + \`printCharacter\` + \`vector<Character>\` 파티
+🎯 이번 Step: **드디어 \`struct Item\` 등판!** 캐릭터 인벤토리 + \`equip()\` 함수
+⏭️ 다음 Step: 레벨업 + 전투 시스템
+
+---
+
+Character 클래스에 **인벤토리**를 추가해요. (레슨 9 vector + 레슨 15 struct 조합)
 
 \`\`\`cpp
 class Character {
@@ -416,7 +539,54 @@ void showInventory(const Character& c) {
           id: "ch2-prac-item",
           type: "practice" as const,
           title: "✋ Step 3 실습 — 아이템 만들고 장착!",
-          content: `struct Item을 만들고, 캐릭터에 장착해서 스탯이 오르는지 확인해봐요.`,
+          content: `드디어 Ch1 에서 설계한 \`struct Item\` 이 등장! Step 1, 2 의 코드는 그대로 두고, **인벤토리·equip·showInventory** 만 추가해요.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+// ── 👇 1. Ch1 에서 설계한 struct Item — 그대로 작성 ─────
+//     멤버: string name, int atkBonus, int hpBonus
+
+
+// ── ✅ Step 1, 2 에서 만든 Character (인벤토리 추가됨) ──
+class Character {
+public:
+    string name;
+    int hp, attack, defense, level;
+    vector<Item> inventory;   // 👈 새로 추가된 멤버 (Item 의 vector)
+
+    Character(string n, int h, int a, int d) {
+        name = n; hp = h; attack = a; defense = d; level = 1;
+    }
+};
+
+// ── 👇 2. equip 함수 작성 ──────────────────────
+//     매개변수: Character& c, Item item
+//     동작: c.attack += item.atkBonus, c.hp += item.hpBonus
+//           c.inventory.push_back(item)
+//           "{캐릭터이름}이(가) {아이템이름} 장착!" 출력
+
+
+// ── 👇 3. showInventory 함수 작성 ─────────────
+//     매개변수: const Character& c
+//     첫 줄 출력: "{이름}의 인벤토리 (N개):"
+//     각 아이템: "  {이름} (ATK+X HP+Y)"
+//     마지막 줄: "현재 스탯 — ATK:N HP:N"
+
+
+int main() {
+    Character hero("용사", 100, 15, 10);
+
+    Item sword = {"철검", 5, 0};
+    Item armor = {"가죽 갑옷", 0, 20};
+
+    equip(hero, sword);
+    equip(hero, armor);
+    showInventory(hero);
+
+    return 0;
+}`,
           code: `#include <iostream>
 #include <vector>
 #include <string>
@@ -482,7 +652,14 @@ int main() {
           id: "ch2-exp3",
           type: "explain",
           title: "🔨 Step 4 — 레벨업 함수 (참조로 수정)",
-          content: `전투에서 이기면 캐릭터가 강해져야 해요. **참조(&)**로 원본을 직접 수정해요. (레슨 13)
+          content: `📍 **진행 상황**
+✅ 만든 것: Character + printCharacter + 파티(vector) + Item + equip + 인벤토리
+🎯 이번 Step: \`levelUp()\` — 캐릭터 강해지는 함수 (참조로 원본 수정)
+⏭️ 다음: 전투 시스템 → 메뉴 루프로 다 합치기
+
+---
+
+전투에서 이기면 캐릭터가 강해져야 해요. **참조(&)**로 원본을 직접 수정해요. (레슨 13)
 
 \`\`\`cpp
 void levelUp(Character& c) {   // & → 원본을 수정해요!
@@ -508,7 +685,14 @@ void levelUp(Character c) {    // & 없음 → 복사본만 바뀜!
           id: "ch2-exp4",
           type: "explain",
           title: "🔨 Step 4 — 전투 시스템",
-          content: `이제 전투를 만들어요. 데미지 계산만 있는 간단한 구조예요.
+          content: `📍 **진행 상황**
+✅ 만든 것: 모든 위 + \`levelUp()\`
+🎯 이번 Step: \`battle()\` — 몬스터와 싸우기. 이기면 \`levelUp()\` 자동 호출
+⏭️ 다음: 메뉴 루프로 전체 RPG 완성!
+
+---
+
+이제 전투를 만들어요. 데미지 계산만 있는 간단한 구조예요.
 
 \`\`\`cpp
 void battle(Character& hero) {
@@ -547,9 +731,92 @@ void battle(Character& hero) {
           id: "ch2-prac3",
           type: "practice" as const,
           title: "✋ 완성 — 전체 RPG 프로그램!",
-          content: `struct, class, vector, range-for, 참조, string 심화가 모두 들어간 완성 프로그램이에요.
+          content: `Step 1~3 에서 만든 모든 코드 (Character + printCharacter + showParty + struct Item + equip + showInventory) 가 ✅ 로 표시돼 그대로 들어있어요. 이번엔 **levelUp + battle + 메뉴 루프** 만 추가해서 실제 플레이 가능한 프로그램으로 마무리!`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
 
-메뉴에서 1~5를 입력해서 실행해봐요!`,
+// ── ✅ Step 1~3 에서 만든 모든 것 ──────────────
+struct Item {
+    string name;
+    int atkBonus;
+    int hpBonus;
+};
+
+class Character {
+public:
+    string name;
+    int hp, attack, defense, level;
+    vector<Item> inventory;
+
+    Character(string n, int h, int a, int d) {
+        name = n; hp = h; attack = a; defense = d; level = 1;
+    }
+};
+
+void printCharacter(const Character& c) {
+    string lvInfo = "LV" + to_string(c.level);
+    cout << c.name << " [HP:" << c.hp
+         << " ATK:" << c.attack
+         << " DEF:" << c.defense
+         << " " << lvInfo << "]" << endl;
+}
+
+void showParty(const vector<Character>& party) {
+    cout << "=== 파티 현황 (" << party.size() << "명) ===" << endl;
+    for (const auto& c : party) printCharacter(c);
+}
+
+void equip(Character& c, Item item) {
+    c.attack += item.atkBonus;
+    c.hp += item.hpBonus;
+    c.inventory.push_back(item);
+    cout << c.name << "이(가) " << item.name << " 장착!" << endl;
+}
+
+void showInventory(const Character& c) {
+    if (c.inventory.empty()) {
+        cout << c.name << "의 인벤토리가 비어있어요." << endl;
+        return;
+    }
+    cout << c.name << "의 인벤토리:" << endl;
+    for (const auto& item : c.inventory) {
+        cout << "  " << item.name
+             << " (ATK+" << item.atkBonus
+             << " HP+" << item.hpBonus << ")" << endl;
+    }
+}
+
+// ── 👇 1. levelUp 함수 작성 (Character& c) ─────
+//     level++, hp += 10, attack += 3, defense += 2
+//     "{이름} 레벨 업! LV{레벨}" 출력
+
+
+// ── 👇 2. battle 함수 작성 (Character& hero) ───
+//     슬라임(HP 50, ATK 8, DEF 3) 과 한 턴 전투
+//     hero.attack - 3 데미지 (최소 1) → 슬라임 HP 깎임 → 0 이하면 승리
+//     이기면 levelUp(hero) 호출, 지면 hero.hp 깎이고 현재 HP 출력
+
+
+int main() {
+    vector<Character> party;
+    party.push_back(Character("용사", 100, 15, 10));
+    party.push_back(Character("마법사", 80, 20, 5));
+
+    Item sword = {"철검", 5, 0};
+    equip(party[0], sword);
+
+    // 👇 3. 메뉴 루프 (while true) — choice 입력받기
+    //   1: showParty(party)
+    //   2: battle(party[0])
+    //   3: battle(party[1])
+    //   4: showInventory(party[0])
+    //   5: "모험을 종료합니다!" 출력하고 break
+    //   그 외: "1~5 중에서 골라주세요!"
+
+    return 0;
+}`,
           code: `#include <iostream>
 #include <vector>
 #include <string>

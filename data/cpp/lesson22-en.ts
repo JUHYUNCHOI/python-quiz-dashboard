@@ -80,6 +80,8 @@ Below — **member functions** (things to do):
 - \`forward()\` — increase speed
 - \`info()\` — print current state
 
+> 🔑 The \`public:\` at the top means "these members below can be used from outside." Just leave it there for now — you'll learn exactly why it's needed in **Ch2**.
+
 > 🐍 **Coming from Python?**
 > Python needs \`self.speed\`;
 > C++ just uses \`speed\` directly.
@@ -87,6 +89,7 @@ Below — **member functions** (things to do):
 No car exists yet — we've only written the blueprint.`,
             right: `\`\`\`cpp
 class Car {
+public:
     double speed;
     string color;
 
@@ -202,6 +205,7 @@ Car car3;    // object 3
 {collapse:📐 Reference — here's what class Car looks like}
 \`\`\`cpp
 class Car {
+public:
     string color;
     double speed;
 
@@ -956,6 +960,42 @@ int main() {
 }`,
           hint: `Declare private: string owner; double balance; Constructor: BankAccount(string name, double initial) { owner = name; balance = initial; }. deposit: if(amount > 0) balance += amount; withdraw: if(amount > 0 && amount <= balance) balance -= amount;`,
           expectedOutput: `1300`
+        },
+        {
+          id: "ch4-struct-vs-class",
+          type: "explain",
+          title: "🤝 So what's actually different between struct and class?",
+          content: `You've done a lot with \`class\` by now — member variables, member functions, constructors, getters/setters, encapsulation. But remember **struct** from \`cpp-14\`? What actually separates these two?
+
+**Surprise** — \`struct\` can also have **member functions**. The syntax is nearly identical.
+
+\`\`\`cpp
+struct Point {
+    int x, y;
+    void print() { cout << x << "," << y; }   // functions work in struct too!
+};
+\`\`\`
+
+**Only one real difference** — the default access level:
+
+| | \`struct\` | \`class\` |
+|---|---|---|
+| Default access | **public** (accessible anywhere) | **private** (locked from outside) |
+
+\`\`\`cpp
+struct A { int x; };         // x is public by default
+class  B { int x; };         // x is private by default
+
+A a; a.x = 10;   // ✅ OK
+B b; b.x = 10;   // ❌ compile error — private!
+\`\`\`
+
+**Convention (when to use which?)**
+
+- **\`struct\`** — when you just want to **bundle data** (coordinates, student info, config values...). Free external access is the natural expectation.
+- **\`class\`** — when you want to **protect data** and expose it through functions (bank accounts, characters, cars...). For cases that need encapsulation.
+
+@Key: Technically the two keywords are almost twins. The only differences are **what their defaults are** and **what intent you're expressing**.`,
         },
       ]
     },

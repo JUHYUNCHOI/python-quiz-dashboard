@@ -676,14 +676,14 @@ export const lessonCpp9: LessonData = {
           task: "정수 4개를 모두 7로 초기화한 벡터 v를 선언해요.",
           hint: "vector<타입> 이름(크기, 초기값);",
           template: null,
-          context: "// 이미 준비됨: #include <vector>, int main()\n// 아래에 선언 한 줄만 작성하세요",
+          context: "#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    // 👇 여기에 한 줄 작성 (4 개 원소 모두 7 인 벡터 v 선언)",
           answer: "vector<int> v(4, 7);",
           alternateAnswers: ["vector<int> v(4,7);"],
           expect: "vector<int> v(4, 7);",
           en: {
             task: "Declare a vector v of 4 integers, all set to 7.",
             hint: "vector<type> name(size, value);",
-            context: "// Already set up: #include <vector>, int main()\n// Write just the declaration line below"
+            context: "#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    // 👇 write one line here (vector v with 4 ints, all 7)"
           }
         }
       },

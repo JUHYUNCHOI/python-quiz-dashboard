@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" font-family="-apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <defs>
+    <filter id="sh" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#0000001a"/>
+    </filter>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1e1b4b"/>
+      <stop offset="1" stop-color="#312e81"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="720" height="300" rx="20" fill="url(#bg)"/>
+
+  <!-- stars -->
+  <g fill="#fbbf24" opacity="0.7">
+    <circle cx="60" cy="40" r="2"/>
+    <circle cx="180" cy="60" r="1.5"/>
+    <circle cx="320" cy="30" r="2"/>
+    <circle cx="500" cy="50" r="1.5"/>
+    <circle cx="640" cy="35" r="2"/>
+    <circle cx="100" cy="90" r="1"/>
+    <circle cx="260" cy="80" r="1.5"/>
+    <circle cx="420" cy="100" r="1"/>
+    <circle cx="580" cy="80" r="2"/>
+  </g>
+
+  <!-- title -->
+  <text x="360" y="60" text-anchor="middle" fill="#fef3c7" font-size="28" font-weight="bold">⚔️ RPG 캐릭터 관리</text>
+  <text x="360" y="86" text-anchor="middle" fill="#a5b4fc" font-size="14">struct + class + vector + 참조 종합 프로젝트</text>
+
+  <!-- ground -->
+  <rect x="0" y="240" width="720" height="60" fill="#0f172a"/>
+  <line x1="0" y1="240" x2="720" y2="240" stroke="#3730a3" stroke-width="2"/>
+
+  <!-- hero (warrior) -->
+  <g transform="translate(160 165)" filter="url(#sh)">
+    <circle cx="0" cy="0" r="22" fill="#fbbf24"/>
+    <text x="0" y="6" text-anchor="middle" font-size="24">⚔️</text>
+    <rect x="-30" y="35" width="60" height="22" rx="6" fill="#fbbf24"/>
+    <text x="0" y="50" text-anchor="middle" fill="#1e1b4b" font-size="11" font-weight="bold">용사</text>
+    <text x="0" y="78" text-anchor="middle" fill="#fef3c7" font-size="10">HP 100 · ATK 15</text>
+  </g>
+
+  <!-- mage -->
+  <g transform="translate(360 165)" filter="url(#sh)">
+    <circle cx="0" cy="0" r="22" fill="#a78bfa"/>
+    <text x="0" y="6" text-anchor="middle" font-size="24">🔮</text>
+    <rect x="-30" y="35" width="60" height="22" rx="6" fill="#a78bfa"/>
+    <text x="0" y="50" text-anchor="middle" fill="#1e1b4b" font-size="11" font-weight="bold">마법사</text>
+    <text x="0" y="78" text-anchor="middle" fill="#fef3c7" font-size="10">HP 80 · ATK 20</text>
+  </g>
+
+  <!-- archer -->
+  <g transform="translate(560 165)" filter="url(#sh)">
+    <circle cx="0" cy="0" r="22" fill="#34d399"/>
+    <text x="0" y="6" text-anchor="middle" font-size="24">🏹</text>
+    <rect x="-30" y="35" width="60" height="22" rx="6" fill="#34d399"/>
+    <text x="0" y="50" text-anchor="middle" fill="#1e1b4b" font-size="11" font-weight="bold">궁수</text>
+    <text x="0" y="78" text-anchor="middle" fill="#fef3c7" font-size="10">HP 90 · ATK 18</text>
+  </g>
+
+  <!-- party label -->
+  <text x="360" y="280" text-anchor="middle" fill="#a5b4fc" font-size="13">vector&lt;Character&gt; party — 한 번에 관리</text>
+</svg>

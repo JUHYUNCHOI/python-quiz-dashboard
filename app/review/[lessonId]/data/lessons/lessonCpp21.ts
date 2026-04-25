@@ -183,7 +183,7 @@ export const lessonCpp21: LessonData = {
           task: "2행 3열짜리 정수 2D 배열 grid 를 한 줄로 선언하세요.",
           hint: "int 이름[행][열];",
           template: null,
-          context: "// 이미 준비됨: int main()\n// 아래에 선언 한 줄만 작성",
+          context: "#include <iostream>\nusing namespace std;\n\nint main() {\n    // 👇 여기에 한 줄 작성 (2 행 3 열 정수 2D 배열 grid 선언)",
           answer: "int grid[2][3];",
           alternateAnswers: ["int grid[2][3] ;"],
           expect: "int grid[2][3];",
@@ -191,7 +191,7 @@ export const lessonCpp21: LessonData = {
             message: "Quick check! Do you remember 2D arrays?",
             task: "Declare a 2-row 3-column integer 2D array named grid on one line.",
             hint: "int name[rows][cols];",
-            context: "// Already set up: int main()\n// Write just the declaration line below"
+            context: "#include <iostream>\nusing namespace std;\n\nint main() {\n    // 👇 write one line here (2-row 3-col integer 2D array named grid)"
           }
         }
       },
@@ -239,14 +239,14 @@ export const lessonCpp21: LessonData = {
           task: "2행 3열짜리 정수 2D vector grid 를 전부 0으로 초기화해 선언하세요.",
           hint: "vector<vector<int>> 이름(행, vector<int>(열, 초기값));",
           template: null,
-          context: "// 이미 준비됨: #include <vector>, int main()\n// 아래에 선언 한 줄만 작성",
+          context: "#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    // 👇 여기에 한 줄 작성 (2 행 3 열 정수 2D vector grid, 전부 0)",
           answer: "vector<vector<int>> grid(2, vector<int>(3, 0));",
           alternateAnswers: ["vector<vector<int>> grid(2,vector<int>(3,0));"],
           expect: "vector<vector<int>> grid(2, vector<int>(3, 0));",
           en: {
             task: "Declare a 2-row 3-column integer 2D vector named grid, all initialized to 0.",
             hint: "vector<vector<int>> name(rows, vector<int>(cols, initial_value));",
-            context: "// Already set up: #include <vector>, int main()\n// Write just the declaration line below"
+            context: "#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    // 👇 write one line here (2-row 3-col integer 2D vector grid, all zeros)"
           }
         }
       },

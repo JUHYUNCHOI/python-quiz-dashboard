@@ -70,14 +70,14 @@ export const lessonCpp10: LessonData = {
         type: "practice",
         content: {
           level: 1,
-          task: "range-for의 콜론을 채워요!",
-          guide: "for (타입 변수 : 컨테이너) 형태!",
+          task: "range-for 의 변수와 컨테이너를 가르는 기호를 채워요!",
+          guide: "변수 뒤, 컨테이너 앞에 들어가는 한 글자 — '에서' 라는 의미!",
           template: "for (int x ___ v) {",
           answer: ":",
           expect: "for (int x : v) {",
           en: {
-            task: "Fill in the colon for range-for!",
-            guide: "Use the form: for (type variable : container)"
+            task: "Fill in the symbol that separates the variable from the container in range-for!",
+            guide: "One character that goes between the variable and the container — means 'from'!"
           }
         }
       },
@@ -87,14 +87,15 @@ export const lessonCpp10: LessonData = {
         type: "practice",
         content: {
           level: 1,
-          task: "정수 벡터를 순회하는 range-for를 완성해요!",
-          guide: "벡터가 int이면 변수도 int!",
-          template: "for (___ x : nums) {",
+          task: "이 벡터를 순회하는 range-for 의 변수 타입을 채워요!",
+          guide: "nums 의 원소 타입이 뭔지 보고 그대로 — 또는 컴파일러에게 맡기는 키워드도 OK",
+          template: "vector<int> nums = {1, 2, 3};\n\nfor (___ x : nums) {",
           answer: "int",
+          alternateAnswers: ["auto", "int&", "auto&", "const int&", "const auto&"],
           expect: "for (int x : nums) {",
           en: {
-            task: "Complete the range-for loop to iterate over an integer vector!",
-            guide: "If the vector holds int, the variable type should also be int!"
+            task: "Fill in the type for this range-for!",
+            guide: "Look at what nums holds and match it — or use the keyword that lets the compiler decide"
           }
         }
       },
@@ -259,23 +260,23 @@ export const lessonCpp10: LessonData = {
         }
       },
 
-      // auto 타입 예측
+      // auto vs auto& — 복사인지 참조인지 구분
       {
         type: "explain",
         content: {
           lines: [],
-          code: 'auto a = 10;       // int\nauto b = 3.14;     // double\nauto c = "hello";  // const char*\ncout << a + b << endl;',
+          code: 'vector<int> v = {1, 2, 3};\n\nauto  a = v[0];   // & 없음\nauto& b = v[1];   // & 있음\n\na = 99;\nb = 99;\n\ncout << v[0] << " " << v[1];',
           predict: {
-            question: "a + b 의 결과는?",
-            options: ["13", "13.14", "에러", "1013.14"],
-            answer: 1,
-            feedback: "int 10 + double 3.14 = double 13.14! auto는 각각 int, double로 추론했어요."
+            question: "출력 결과는?",
+            options: ["99 99", "1 2", "1 99", "99 2"],
+            answer: 2,
+            feedback: "a 는 v[0] 의 **복사본** 이라 a=99 해도 v[0] 은 그대로 1. b 는 v[1] 의 **참조** 라 b=99 하면 v[1] 도 99 가 돼요. 핵심은 \\& 가 있냐 없냐!"
           },
           en: {
             predict: {
-              question: "What is the result of a + b?",
-              options: ["13", "13.14", "Error", "1013.14"],
-              feedback: "int 10 + double 3.14 = double 13.14! auto inferred each as int and double respectively."
+              question: "What's the output?",
+              options: ["99 99", "1 2", "1 99", "99 2"],
+              feedback: "a is a **copy** of v[0], so a=99 leaves v[0] as 1. b is a **reference** to v[1], so b=99 also changes v[1] to 99. Key: with or without \\&!"
             }
           }
         }

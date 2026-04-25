@@ -282,7 +282,7 @@ int main() {
         {
           id: "ch3-intro",
           type: "explain",
-          title: "📦 2D Vector — Dynamic 2D Array",
+          title: "📦 2D Vector — Declaration & Access",
           content: `C-style 2D arrays have a fixed size. When the size changes with input, use a **2D vector**!
 
 \`\`\`cpp
@@ -300,14 +300,21 @@ cout << grid[1][2];  // 5
 
 cout << grid.size();     // row count: 3
 cout << grid[0].size();  // col count: 4
-\`\`\`
+\`\`\``,
+        },
+        {
+          id: "ch3-intro-dynamic",
+          type: "explain",
+          title: "📐 Dynamic Size + C-style Array Comparison",
+          content: `The real strength of 2D vectors — **size can be decided at runtime** based on input:
 
-**Creating after reading input size:**
 \`\`\`cpp
 int rows, cols;
 cin >> rows >> cols;
 vector<vector<int>> grid(rows, vector<int>(cols, 0));
 \`\`\`
+
+You can't do this with a C-style 2D array (the size has to be known at compile time).
 
 | | C-style 2D Array | 2D Vector |
 |---|---|---|
@@ -339,10 +346,8 @@ int main() {
         {
           id: "ch3-cin",
           type: "explain",
-          title: "⌨️ Reading a 2D Array with cin",
-          content: `So far we've hardcoded values into arrays. In real USACO problems, **values come from input**.
-
-Here's the pattern for reading a grid with nested loops + cin:
+          title: "⌨️ Reading a Grid with cin",
+          content: `So far we've hardcoded values into arrays. In real USACO problems, **values come from input**. The pattern: nested for loops + cin to fill the grid:
 
 \`\`\`cpp
 int rows = 2, cols = 3;
@@ -363,18 +368,30 @@ for (int i = 0; i < rows; i++) {
 
 cin automatically skips spaces and newlines, filling slots in order: \`grid[0][0]=1, grid[0][1]=2, ..., grid[1][2]=6\`.
 
-**Printing follows the same structure:**
+> 💡 Over 70% of USACO problems give N, M (rows, cols) on the first line, then the grid. Memorize this pattern and you're already ahead!`,
+        },
+        {
+          id: "ch3-cout",
+          type: "explain",
+          title: "🖨️ Printing the Grid",
+          content: `Output uses the same nested for loop structure:
+
 \`\`\`cpp
 for (int i = 0; i < rows; i++) {
     for (int j = 0; j < cols; j++) {
-        cout << grid[i][j];
-        if (j < cols - 1) cout << " ";  // no space after last column
+        cout << grid[i][j] << " ";   // value + space
     }
-    cout << "\\n";  // newline after each row
+    cout << "\\n";   // newline after each row
 }
 \`\`\`
 
-> 💡 Over 70% of USACO problems give N, M (rows, cols) on the first line, then the grid. Memorize this pattern and you're already ahead!`,
+| Where | What? |
+|---|---|
+| Inner \`for\` | print one row's cells horizontally |
+| \`" "\` inside inner \`for\` | space between cells |
+| \`"\\n"\` after inner \`for\` | newline → next row |
+
+💡 A trailing space at the end of each row is fine for most judges. For strict ones, use \`if (j < cols - 1)\` to skip the last column's space.`,
         },
         {
           id: "ch3-practice",

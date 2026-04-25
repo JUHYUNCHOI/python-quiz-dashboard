@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" font-family="-apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">
+  <defs>
+    <filter id="invsh" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#0000001a"/>
+    </filter>
+  </defs>
+
+  <rect width="720" height="360" rx="16" fill="#f8fafc"/>
+
+  <text x="360" y="40" text-anchor="middle" fill="#1e293b" font-size="20" font-weight="bold">🎒 캐릭터 + 인벤토리 (vector&lt;Item&gt;)</text>
+
+  <!-- Character card on the left -->
+  <g transform="translate(40 70)" filter="url(#invsh)">
+    <rect width="240" height="240" rx="12" fill="#fef3c7" stroke="#fbbf24" stroke-width="2"/>
+    <circle cx="120" cy="55" r="32" fill="#fbbf24"/>
+    <text x="120" y="65" text-anchor="middle" font-size="36">⚔️</text>
+    <text x="120" y="115" text-anchor="middle" fill="#78350f" font-size="18" font-weight="bold">용사</text>
+
+    <!-- stats -->
+    <g transform="translate(20 130)">
+      <rect width="200" height="22" rx="4" fill="#fff" opacity="0.6"/>
+      <text x="10" y="16" fill="#dc2626" font-size="13" font-weight="bold">❤️ HP</text>
+      <text x="190" y="16" text-anchor="end" fill="#1e293b" font-family="ui-monospace, monospace" font-size="13" font-weight="bold">120</text>
+    </g>
+    <g transform="translate(20 156)">
+      <rect width="200" height="22" rx="4" fill="#fff" opacity="0.6"/>
+      <text x="10" y="16" fill="#ea580c" font-size="13" font-weight="bold">⚔️ ATK</text>
+      <text x="190" y="16" text-anchor="end" fill="#1e293b" font-family="ui-monospace, monospace" font-size="13" font-weight="bold">20</text>
+    </g>
+    <g transform="translate(20 182)">
+      <rect width="200" height="22" rx="4" fill="#fff" opacity="0.6"/>
+      <text x="10" y="16" fill="#0284c7" font-size="13" font-weight="bold">🛡️ DEF</text>
+      <text x="190" y="16" text-anchor="end" fill="#1e293b" font-family="ui-monospace, monospace" font-size="13" font-weight="bold">10</text>
+    </g>
+    <g transform="translate(20 208)">
+      <rect width="200" height="22" rx="4" fill="#fff" opacity="0.6"/>
+      <text x="10" y="16" fill="#7c3aed" font-size="13" font-weight="bold">⭐ LV</text>
+      <text x="190" y="16" text-anchor="end" fill="#1e293b" font-family="ui-monospace, monospace" font-size="13" font-weight="bold">1</text>
+    </g>
+  </g>
+
+  <!-- arrow -->
+  <g transform="translate(290 180)">
+    <path d="M 0 0 L 50 0 M 40 -8 L 50 0 L 40 8" stroke="#64748b" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <text x="25" y="-12" text-anchor="middle" fill="#64748b" font-size="11" font-weight="bold">equip()</text>
+  </g>
+
+  <!-- Inventory list on the right -->
+  <g transform="translate(360 70)" filter="url(#invsh)">
+    <rect width="320" height="240" rx="12" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>
+    <rect width="320" height="38" rx="12" fill="#1e293b"/>
+    <text x="160" y="24" text-anchor="middle" fill="#fef3c7" font-size="14" font-weight="bold">📦 인벤토리 (2개)</text>
+
+    <!-- item 1: sword -->
+    <g transform="translate(16 56)">
+      <rect width="288" height="56" rx="8" fill="#fefce8" stroke="#facc15"/>
+      <text x="20" y="34" font-size="22">⚔️</text>
+      <text x="55" y="25" fill="#1e293b" font-size="14" font-weight="bold">철검</text>
+      <text x="55" y="44" fill="#16a34a" font-size="12" font-weight="bold">ATK+5</text>
+      <text x="100" y="44" fill="#94a3b8" font-size="12">HP+0</text>
+    </g>
+
+    <!-- item 2: armor -->
+    <g transform="translate(16 124)">
+      <rect width="288" height="56" rx="8" fill="#eff6ff" stroke="#60a5fa"/>
+      <text x="20" y="34" font-size="22">🛡️</text>
+      <text x="55" y="25" fill="#1e293b" font-size="14" font-weight="bold">가죽 갑옷</text>
+      <text x="55" y="44" fill="#94a3b8" font-size="12">ATK+0</text>
+      <text x="100" y="44" fill="#dc2626" font-size="12" font-weight="bold">HP+20</text>
+    </g>
+
+    <text x="160" y="216" text-anchor="middle" fill="#94a3b8" font-family="ui-monospace, monospace" font-size="11">vector&lt;Item&gt; inventory;</text>
+  </g>
+
+  <text x="360" y="340" text-anchor="middle" fill="#475569" font-size="13">equip(hero, sword) — 스탯도 오르고 인벤토리에도 추가</text>
+</svg>
