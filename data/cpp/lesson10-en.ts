@@ -92,7 +92,9 @@ for (int x : arr) {     // Arrays work too!
           id: "ch1-ref",
           type: "explain",
           title: "🔗 Modifying Elements — The Secret of Copies",
-          content: `There's a hidden secret in \`for (int x : v)\` — no matter how much you modify x, **the original doesn't change**.
+          content: `> 📌 We'll briefly touch on \`&\` (references) here — you need a basic feel for them to use range-for properly. **The full reference syntax is taught in the "References and Functions" lesson.**
+
+There's a hidden secret in \`for (int x : v)\` — no matter how much you modify x, **the original doesn't change**.
 
 \`\`\`cpp
 vector<int> nums = {1, 2, 3};
