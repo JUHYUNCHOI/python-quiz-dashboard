@@ -70,14 +70,14 @@ export const lessonCpp10: LessonData = {
         type: "practice",
         content: {
           level: 1,
-          task: "range-for의 콜론을 채워요!",
-          guide: "for (타입 변수 : 컨테이너) 형태!",
+          task: "range-for 의 변수와 컨테이너를 가르는 기호를 채워요!",
+          guide: "변수 뒤, 컨테이너 앞에 들어가는 한 글자 — '에서' 라는 의미!",
           template: "for (int x ___ v) {",
           answer: ":",
           expect: "for (int x : v) {",
           en: {
-            task: "Fill in the colon for range-for!",
-            guide: "Use the form: for (type variable : container)"
+            task: "Fill in the symbol that separates the variable from the container in range-for!",
+            guide: "One character that goes between the variable and the container — means 'from'!"
           }
         }
       },
@@ -87,14 +87,15 @@ export const lessonCpp10: LessonData = {
         type: "practice",
         content: {
           level: 1,
-          task: "정수 벡터를 순회하는 range-for를 완성해요!",
-          guide: "벡터가 int이면 변수도 int!",
-          template: "for (___ x : nums) {",
+          task: "이 벡터를 순회하는 range-for 의 변수 타입을 채워요!",
+          guide: "nums 의 원소 타입이 뭔지 보고 그대로 — 또는 컴파일러에게 맡기는 키워드도 OK",
+          template: "vector<int> nums = {1, 2, 3};\n\nfor (___ x : nums) {",
           answer: "int",
+          alternateAnswers: ["auto"],
           expect: "for (int x : nums) {",
           en: {
-            task: "Complete the range-for loop to iterate over an integer vector!",
-            guide: "If the vector holds int, the variable type should also be int!"
+            task: "Fill in the type for this range-for!",
+            guide: "Look at what nums holds and match it — or use the keyword that lets the compiler decide"
           }
         }
       },
