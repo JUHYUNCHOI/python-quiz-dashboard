@@ -156,15 +156,16 @@ export const lessonCpp10: LessonData = {
         type: "practice",
         content: {
           level: 2,
-          task: "range-for로 벡터의 모든 값을 출력해요!",
-          guide: "for (int x : v) { cout << x; }",
-          template: 'for (___ x ___ v) {\n    cout << x << " ";\n}',
-          answer: "int",
+          task: "정수 벡터 v 의 모든 값을 출력하는 range-for 의 두 빈칸을 채우세요!",
+          guide: "왼쪽: 원소 타입 (또는 컴파일러에 맡기는 키워드). 오른쪽: '에서' 라는 의미의 한 글자.",
+          template: 'vector<int> v = {1, 2, 3};\n\nfor (___ x ___ v) {\n    cout << x << " ";\n}',
+          answer: "for (int x : v)",
           blanksAnswer: ["int", ":"],
+          alternateAnswers: ["auto, :", "int&, :", "auto&, :", "const int&, :", "const auto&, :"],
           expect: 'for (int x : v) {\n    cout << x << " ";\n}',
           en: {
-            task: "Print all values in the vector using range-for!",
-            guide: "for (int x : v) { cout << x; }"
+            task: "Fill in the two blanks of the range-for that prints all values in the int vector v!",
+            guide: "Left: element type (or the keyword that lets the compiler decide). Right: a one-character symbol meaning 'from'."
           }
         }
       },
