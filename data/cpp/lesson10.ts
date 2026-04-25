@@ -357,19 +357,19 @@ for (auto row : grid)
         cout << val;
 \`\`\`
 
-**2. 같은 타입 두 번 안 쓰기 (DRY)**
+**2. 타입 변경에 강함**
+
+\`vector<int>\` 를 나중에 \`vector<long>\` 으로 바꾼다고 해봐요. 직접 타입을 썼으면 \`int x\` 들을 다 \`long x\` 로 바꿔야 해요. \`auto x\` 면 그대로 둬도 알아서 따라가요.
 
 \`\`\`cpp
-// 양쪽에 vector<int> 두 번
-vector<int> v = vector<int>{1, 2, 3};
+// 직접 타입: vector 의 원소 타입이 바뀌면 안쪽도 바꿔야
+for (int x : nums) ...      // ← vector<long> 으로 바꾸면 long 으로 수정 필요
 
-// auto — 한 번만
-auto v = vector<int>{1, 2, 3};
+// auto: 그대로 둬도 OK
+for (auto x : nums) ...     // ← 자동으로 long 으로 따라감
 \`\`\`
 
-**3. 타입 변경에 강함**
-
-나중에 \`vector<int>\` 를 \`vector<long>\` 으로 바꿔도 \`auto\` 는 자동으로 따라가요. 직접 쓰면 곳곳에 \`int x\` 다 \`long x\` 로 바꿔야 함.
+> 💡 정리: \`int\`, \`double\` 처럼 짧은 타입은 직접 쓰는 게 깔끔하고, \`vector<vector<int>>\` 같이 길어지거나 자주 바뀔 가능성이 있는 곳에선 \`auto\` 가 빛나요.
 
 다음 페이지 — \`auto / auto& / const auto&\` 세 패턴 + 함정.`
         },

@@ -345,19 +345,19 @@ for (auto row : grid)
         cout << val;
 \`\`\`
 
-**2. Don't repeat the type (DRY)**
+**2. Robust to type changes**
+
+Say you later change \`vector<int>\` to \`vector<long>\`. With explicit types, every \`int x\` becomes \`long x\`. With \`auto x\`, no edit needed — it follows automatically.
 
 \`\`\`cpp
-// vector<int> twice on both sides
-vector<int> v = vector<int>{1, 2, 3};
+// Explicit type: must update inner type when outer changes
+for (int x : nums) ...      // ← becomes long when vector<long>
 
-// auto — once
-auto v = vector<int>{1, 2, 3};
+// auto: stays the same
+for (auto x : nums) ...     // ← auto-follows to long
 \`\`\`
 
-**3. Robust to type changes**
-
-If you later change \`vector<int>\` to \`vector<long>\`, \`auto\` follows automatically. Explicit types need updating everywhere.
+> 💡 Bottom line: short types (\`int\`, \`double\`) are clearer written explicitly. \`auto\` shines for long types (\`vector<vector<int>>\`) or types that may change.
 
 Next page — \`auto / auto& / const auto&\` patterns + pitfalls.`
         },
