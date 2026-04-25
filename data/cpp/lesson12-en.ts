@@ -189,35 +189,11 @@ ref = 500`
           id: "ch2-intro",
           type: "explain",
           title: "📞 Passing Values to Functions (Call by Value)",
-          content: `In C++, when you pass a variable to a function, the value is **copied** by default! This is called **Call by Value**.
+          component: "callByValueVisualizer",
+          content: `In C++, when you pass a variable to a function, the value is **copied** by default! This is called **Call by Value**. Step through with the prev/next buttons to watch what happens:`,
+          contentAfter: `When you pass \`num\` to \`tryChange\`, a fresh **copy** is made — \`x\` inside the function is that copy. Changing \`x\` doesn't touch the original \`num\`.
 
-\`\`\`cpp
-void tryChange(int x) {
-    x = 99;   // Only changes the copy!
-}
-
-int main() {
-    int num = 10;
-    tryChange(num);
-    cout << num;   // Still 10! 😱
-}
-\`\`\`
-
-When you pass \`num\` to \`tryChange\`, a **copy** is made. Changing \`x\` inside the function doesn't touch the original \`num\`!
-
-Let's compare with Python:
-
-**Python 🐍:**
-\`\`\`python
-def try_change(x):
-    x = 99      # integers are immutable!
-
-num = 10
-try_change(num)
-print(num)      # 10 — unchanged in Python too!
-\`\`\`
-
-In Python, integers don't change either because they're immutable. But in C++, **every type** is copied by default!
+In C++, every type — \`int\`, \`double\`, \`string\`, structs — is copied by default. For big data this can be slow, which is why **references (&)** matter (next chapter!).
 
 | Scenario | C++ (default) | Python |
 |---|---|---|
@@ -225,7 +201,7 @@ In Python, integers don't change either because they're immutable. But in C++, *
 | Pass string | Copied (unchanged) | Object reference |
 | Pass list/vector | Copied! (unchanged) | Object reference (changes!) |
 
-💡 C++ copies by default! This is a major difference from Python.`
+💡 C++ copies by default — a major difference from Python.`
         },
         {
           id: "ch2-pred1",
@@ -240,24 +216,12 @@ In Python, integers don't change either because they're immutable. But in C++, *
           id: "ch2-ref",
           type: "explain",
           title: "🔗 Call by Reference — Modify the Original!",
-          component: "cppCallByRefBuilder",
+          component: "callByRefVisualizer",
           content: `Want to actually change the original? Use a **reference (&)**!
 
-\`\`\`cpp
-void change(int& x) {   // Added &!
-    x = 99;   // Changes the original!
-}
+Step through the simulation below. With \`int& x\`, the parameter \`x\` becomes **another name (an alias) for \`num\`** — like one box with two name tags. Changing \`x\` changes \`num\` directly, because they ARE the same thing.`,
+          contentAfter: `A classic use case: the **swap function!**
 
-int main() {
-    int num = 10;
-    change(num);
-    cout << num;   // 99! ✅
-}
-\`\`\`
-
-With \`int& x\`, the parameter \`x\` becomes an **alias** for \`num\`. Changing \`x\` changes \`num\` directly!
-
-A classic use case: the **swap function!**
 \`\`\`cpp
 void swap(int& a, int& b) {
     int temp = a;
@@ -312,22 +276,18 @@ References (&) and pointers (*) serve a similar purpose but are different tools.
 \`\`\`cpp
 // No & → copy → original unchanged
 void addTen(vector<int> v) {
-    for (int& x : v) x += 10;  // only the copy changes
+    for (int i = 0; i < v.size(); i++) v[i] += 10;   // only the copy changes
 }
 
 // With & → reference → original changes
 void addTen(vector<int>& v) {
-    for (int& x : v) x += 10;  // the original changes!
+    for (int i = 0; i < v.size(); i++) v[i] += 10;   // the original changes!
 }
 \`\`\`
 
 \`vector<int>&\` means "a reference to a vector of ints." Just like \`int&\`, you just add \`&\` after the type.
 
-⚠️ **Remember:** Inside the range-for, you also need \`int&\` to modify elements!
-\`\`\`cpp
-for (int x : v)   // x is a copy → v unchanged
-for (int& x : v)  // x is a reference → v changes!
-\`\`\``,
+💡 Passing a big vector without \`&\` copies the whole thing — slow. For read-only access, \`const vector<int>&\` is the efficient choice.`,
         },
         {
           id: "ch2-practice",
@@ -352,8 +312,8 @@ void mySwap(int& a, int& b) {
 }
 
 void doubleAll(vector<int>& v) {
-    for (int& x : v) {
-        x = x * 2;
+    for (int i = 0; i < v.size(); i++) {
+        v[i] = v[i] * 2;
     }
 }
 
@@ -365,8 +325,8 @@ int main() {
     vector<int> nums = {1, 2, 3, 4, 5};
     doubleAll(nums);
     cout << "double: ";
-    for (int x : nums) {
-        cout << x << " ";
+    for (int i = 0; i < nums.size(); i++) {
+        cout << nums[i] << " ";
     }
     cout << endl;
 
@@ -382,6 +342,7 @@ void mySwap(int& a, int& b) {
 
 void doubleAll(vector<int>& v) {
     // Write code to double every element in the vector
+    // Hint: indexed for loop — for (int i = 0; i < v.size(); i++) { v[i] = ... }
 }
 
 int main() {
@@ -392,14 +353,14 @@ int main() {
     vector<int> nums = {1, 2, 3, 4, 5};
     doubleAll(nums);
     cout << "double: ";
-    for (int x : nums) {
-        cout << x << " ";
+    for (int i = 0; i < nums.size(); i++) {
+        cout << nums[i] << " ";
     }
     cout << endl;
 
     return 0;
 }`,
-          hint: "mySwap: use int temp = a; a = b; b = temp; doubleAll: for(int& x : v) { x *= 2; } — without int& (just int x), the original won't change!",
+          hint: "mySwap: int temp = a; a = b; b = temp; doubleAll: for(int i = 0; i < v.size(); i++) v[i] *= 2;",
           expectedOutput: `swap: 20 10
 double: 2 4 6 8 10 `
         },

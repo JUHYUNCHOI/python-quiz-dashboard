@@ -253,12 +253,6 @@ export function AutoTypeVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
               <strong> 컴파일 시점</strong>에 결정되기 때문에 속도는 똑같아요!</>
           }
         </p>
-        <div className="bg-indigo-50 rounded-xl px-4 py-3 text-xs text-indigo-700 font-medium">
-          {isEn
-            ? <>💡 In a range-based for loop, writing <code className="font-mono">auto x : v</code> infers the element type of v automatically. Especially useful when types are long!</>
-            : <>💡 range-based for에서 <code className="font-mono">auto x : v</code>라고 쓰면 v의 원소 타입을 알아서 추론해요. 타입이 길 때 특히 유용해요!</>
-          }
-        </div>
       </div>
     </div>
   )
