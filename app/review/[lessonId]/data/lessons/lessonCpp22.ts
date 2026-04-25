@@ -596,32 +596,6 @@ export const lessonCpp22: LessonData = {
         }
       },
 
-      // quiz: private getter/setter 로 멤버에 접근하는 올바른 방식
-      {
-        type: "quiz",
-        content: {
-          question: "private 멤버 balance 를 외부에서 **읽는** 올바른 방법은?",
-          options: [
-            "acc.balance",
-            "acc->balance",
-            "acc.getBalance()",
-            "balance(acc)"
-          ],
-          answer: 2,
-          explanation: "balance 는 private 이라 acc.balance 직접 접근은 컴파일 에러. public getter 인 getBalance() 를 호출해서 값을 돌려받아요 — 이게 캡슐화의 정석!",
-          en: {
-            question: "What is the correct way to **read** the private member balance from outside?",
-            options: [
-              "acc.balance",
-              "acc->balance",
-              "acc.getBalance()",
-              "balance(acc)"
-            ],
-            explanation: "balance is private, so acc.balance is a compile error. Call the public getter getBalance() to read the value — this is the standard encapsulation pattern."
-          }
-        }
-      },
-
       // errorQuiz: missing semicolon after class declaration
       {
         type: "errorQuiz",
