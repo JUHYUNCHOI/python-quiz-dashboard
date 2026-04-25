@@ -216,24 +216,12 @@ In C++, every type — \`int\`, \`double\`, \`string\`, structs — is copied by
           id: "ch2-ref",
           type: "explain",
           title: "🔗 Call by Reference — Modify the Original!",
-          component: "cppCallByRefBuilder",
+          component: "callByRefVisualizer",
           content: `Want to actually change the original? Use a **reference (&)**!
 
-\`\`\`cpp
-void change(int& x) {   // Added &!
-    x = 99;   // Changes the original!
-}
+Step through the simulation below. With \`int& x\`, the parameter \`x\` becomes **another name (an alias) for \`num\`** — like one box with two name tags. Changing \`x\` changes \`num\` directly, because they ARE the same thing.`,
+          contentAfter: `A classic use case: the **swap function!**
 
-int main() {
-    int num = 10;
-    change(num);
-    cout << num;   // 99! ✅
-}
-\`\`\`
-
-With \`int& x\`, the parameter \`x\` becomes an **alias** for \`num\`. Changing \`x\` changes \`num\` directly!
-
-A classic use case: the **swap function!**
 \`\`\`cpp
 void swap(int& a, int& b) {
     int temp = a;

@@ -477,6 +477,13 @@ const registry: Record<string, ComponentEntry> = {
     props: (_step: any, lang: string) => ({ lang }),
   },
 
+  // C++ 레슨: 함수 호출 시 참조 시각화 (Call by Reference)
+  callByRefVisualizer: {
+    load: () => import("@/components/animations/call-by-ref-visualizer"),
+    exportName: "CallByRefVisualizer",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+
   // C++ 레슨 11: string 메서드 인터랙티브 체험 (substr / find / replace)
   stringMethodVisualizer: {
     load: () => import("@/components/animations/string-method-visualizer"),
