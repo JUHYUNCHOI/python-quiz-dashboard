@@ -21,50 +21,50 @@ export const cppLesson19EnData: LessonData = {
         {
           id: "ch1-intro",
           type: "explain",
-          title: "📄 ifstream & ofstream — Reading and Writing Files!",
-          content: `In USACO contests, you submit answers as **files**, not to the console! And if the test data has 100,000 lines, you can't type it in manually every time, right? You need to learn how to read from files and write to files.
+          title: "📄 Reading from and writing to files",
+          content: `Up to now, input came from \`cin\`, output went to \`cout\` — both tied to the **console (keyboard/screen)**. But sometimes you want to read from and write to **files**.
 
-Sometimes your program needs to read from or write to files. In competitions like USACO, file I/O is essential!
+Two classic situations:
 
-In C++, you use the \`<fstream>\` header:
+> 📊 **Test data with 100,000 lines**: can't type it by hand. Read from a file.
+> 🏆 **USACO-style contests**: submit your answer to a file like \`output.txt\`, not the console.
+
+C++'s answer is the **\`<fstream>\`** header. Think of it as the file version of \`cin\`/\`cout\`:
 
 \`\`\`cpp
 #include <fstream>
 
-ifstream fin("input.txt");   // Read from a file
-ofstream fout("output.txt"); // Write to a file
+ifstream fin("input.txt");    // read from file (input file stream)
+ofstream fout("output.txt");  // write to file  (output file stream)
 
 int x;
-fin >> x;          // Read a number from the file
-fout << x * 2;     // Write the result to the file
+fin >> x;          // same >> as cin
+fout << x * 2;     // same << as cout
 
-fin.close();       // Close the files
+fin.close();
 fout.close();
 \`\`\`
 
-Let's compare with Python:
+> 💡 Key idea: \`>>\` and \`<<\` operators **stay the same**. Only the object changes from \`cin\`/\`cout\` to \`fin\`/\`fout\`. If you know cin/cout, there's almost nothing new to memorize.
 
-**Python 🐍:**
+### Compared to Python
+
 \`\`\`python
 fin = open("input.txt", "r")
 fout = open("output.txt", "w")
-
 x = int(fin.readline())
 fout.write(str(x * 2))
-
-fin.close()
-fout.close()
+fin.close(); fout.close()
 \`\`\`
 
 | Python 🐍 | C++ ⚡ |
 |---|---|
-| \`open("file", "r")\` | \`ifstream fin("file")\` |
-| \`open("file", "w")\` | \`ofstream fout("file")\` |
+| \`open(file, "r")\` | \`ifstream fin(file)\` |
+| \`open(file, "w")\` | \`ofstream fout(file)\` |
 | \`fin.readline()\` | \`fin >> x\` |
-| \`fout.write()\` | \`fout << x\` |
-| \`fin.close()\` | \`fin.close()\` |
+| \`fout.write(...)\` | \`fout << ...\` |
 
-💡 \`ifstream\` = **i**nput **f**ile **stream**, \`ofstream\` = **o**utput **f**ile **stream**! They use the same >> and << operators as cin/cout.`
+Just remember the names: **i**fstream = **i**nput, **o**fstream = **o**utput.`
         },
         {
           id: "ch1-fb1",
