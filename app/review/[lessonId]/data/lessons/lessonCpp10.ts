@@ -91,7 +91,7 @@ export const lessonCpp10: LessonData = {
           guide: "nums 의 원소 타입이 뭔지 보고 그대로 — 또는 컴파일러에게 맡기는 키워드도 OK",
           template: "vector<int> nums = {1, 2, 3};\n\nfor (___ x : nums) {",
           answer: "int",
-          alternateAnswers: ["auto"],
+          alternateAnswers: ["auto", "int&", "auto&", "const int&", "const auto&"],
           expect: "for (int x : nums) {",
           en: {
             task: "Fill in the type for this range-for!",
