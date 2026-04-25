@@ -21,10 +21,8 @@ export const cppLesson20Data: LessonData = {
         {
           id: "ch1-intro",
           type: "explain",
-          title: "🛠️ bits/stdc++.h — 모든 헤더를 한번에!",
-          content: `3시간짜리 대회에서 매 문제마다 \`#include <iostream>\`, \`#include <vector>\`, \`#include <algorithm>\`... 10줄씩 쓸 시간이 없어요! bits/stdc++.h 하나면 전부 해결!
-
-보통 C++에서는 필요한 헤더를 하나씩 include 해요:
+          title: "🛠️ bits/stdc++.h — 헤더 한 줄로 끝",
+          content: `대회 문제 풀 때마다 매번 이렇게 시작했어요:
 
 \`\`\`cpp
 #include <iostream>
@@ -32,48 +30,34 @@ export const cppLesson20Data: LessonData = {
 #include <algorithm>
 #include <string>
 #include <map>
-// 계속 추가해야 해요... 😩
+// 또 뭐 빠뜨린 거 없나... 😩
 \`\`\`
 
-CP(경쟁 프로그래밍)에서는 **한 줄로 모든 STL 헤더**를 포함할 수 있어요!
+3 시간짜리 대회에서 문제마다 10 줄씩 헤더 적는 건 시간 낭비. 그래서 대회용으로 자주 쓰이는 *치트키 같은* 헤더가 있어요:
 
 \`\`\`cpp
-#include <bits/stdc++.h>  // 모든 STL 헤더가 다 들어있어요!
+#include <bits/stdc++.h>   // 이 한 줄이면 STL 전부
 using namespace std;
 \`\`\`
 
-이 두 줄이면 \`vector\`, \`map\`, \`algorithm\`, \`string\` 등 **전부** 사용 가능해요!
+이 두 줄이면 \`vector\`, \`map\`, \`set\`, \`algorithm\`, \`string\` 등 STL 이 통째로 들어와요. 대회에선 이게 표준 시작 패턴.
 
-파이썬과 비교해봐요:
-
-**파이썬 🐍:**
-\`\`\`python
-# 파이썬은 필요할 때 import
-import sys
-from collections import defaultdict
-# 하지만 기본 자료형은 그냥 쓸 수 있어요
-\`\`\`
-
-**C++ (CP 스타일) ⚡:**
-\`\`\`cpp
-#include <bits/stdc++.h>  // 이 한 줄이면 끝!
-using namespace std;       // std:: 안 써도 됨!
-\`\`\`
-
-| 파이썬 🐍 | C++ CP 스타일 ⚡ |
+| 파이썬 🐍 | C++ 대회 스타일 ⚡ |
 |---|---|
-| \`import\`로 하나씩 | \`bits/stdc++.h\`로 전부! |
-| 기본 타입 바로 사용 | \`using namespace std;\`가 편리 |
-| 필요한 것만 import | 모든 STL 한번에 포함 |
+| \`import\` 로 하나씩 | \`bits/stdc++.h\` 로 전부 |
+| std 같은 namespace 신경 X | \`using namespace std;\` 한 줄 |
 
-⚠️ **주의!** \`bits/stdc++.h\`는 CP에서만 써요!
+### ⚠️ 단, 대회에서만 써요
 
-**bits/stdc++.h의 단점:**
-• 컴파일 시간이 **2~3배 느려요** (모든 헤더를 포함하니까)
-• 실제 프로젝트에서는 **절대 쓰면 안 돼요** (비표준)
-• 어떤 헤더가 필요한지 **모르게 돼요** (나쁜 습관)
+\`bits/stdc++.h\` 는 **C++ 표준이 아니에요.** GCC 컴파일러에만 있는 비표준 헤더예요. 그래서:
 
-대회에서만 시간 절약용으로 쓰세요!`
+| 단점 | 결과 |
+|---|---|
+| 표준이 아님 | Clang, MSVC 같은 다른 컴파일러에선 안 됨 → 회사 코드에 못 씀 |
+| 모든 헤더 포함 | 컴파일 **2~3 배 느려짐** |
+| 어떤 헤더가 진짜 필요한지 모르게 됨 | 디버깅 시 헤더 의존성 파악 어려움 |
+
+> 💡 **결론**: 대회 (속도 우선) 에선 OK, 실무/프로젝트 (이식성·유지보수 우선) 에선 절대 X. 대회용 / 학습용 / 빠른 실험용 도구라고 생각하세요.`
         },
         {
           id: "ch1-fb1",
