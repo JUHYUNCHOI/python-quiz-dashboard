@@ -312,22 +312,18 @@ References (&) and pointers (*) serve a similar purpose but are different tools.
 \`\`\`cpp
 // No & → copy → original unchanged
 void addTen(vector<int> v) {
-    for (int& x : v) x += 10;  // only the copy changes
+    for (int i = 0; i < v.size(); i++) v[i] += 10;   // only the copy changes
 }
 
 // With & → reference → original changes
 void addTen(vector<int>& v) {
-    for (int& x : v) x += 10;  // the original changes!
+    for (int i = 0; i < v.size(); i++) v[i] += 10;   // the original changes!
 }
 \`\`\`
 
 \`vector<int>&\` means "a reference to a vector of ints." Just like \`int&\`, you just add \`&\` after the type.
 
-⚠️ **Remember:** Inside the range-for, you also need \`int&\` to modify elements!
-\`\`\`cpp
-for (int x : v)   // x is a copy → v unchanged
-for (int& x : v)  // x is a reference → v changes!
-\`\`\``,
+💡 Passing a big vector without \`&\` copies the whole thing — slow. For read-only access, \`const vector<int>&\` is the efficient choice.`,
         },
         {
           id: "ch2-practice",
@@ -352,8 +348,8 @@ void mySwap(int& a, int& b) {
 }
 
 void doubleAll(vector<int>& v) {
-    for (int& x : v) {
-        x = x * 2;
+    for (int i = 0; i < v.size(); i++) {
+        v[i] = v[i] * 2;
     }
 }
 
@@ -365,8 +361,8 @@ int main() {
     vector<int> nums = {1, 2, 3, 4, 5};
     doubleAll(nums);
     cout << "double: ";
-    for (int x : nums) {
-        cout << x << " ";
+    for (int i = 0; i < nums.size(); i++) {
+        cout << nums[i] << " ";
     }
     cout << endl;
 
@@ -382,6 +378,7 @@ void mySwap(int& a, int& b) {
 
 void doubleAll(vector<int>& v) {
     // Write code to double every element in the vector
+    // Hint: indexed for loop — for (int i = 0; i < v.size(); i++) { v[i] = ... }
 }
 
 int main() {
@@ -392,14 +389,14 @@ int main() {
     vector<int> nums = {1, 2, 3, 4, 5};
     doubleAll(nums);
     cout << "double: ";
-    for (int x : nums) {
-        cout << x << " ";
+    for (int i = 0; i < nums.size(); i++) {
+        cout << nums[i] << " ";
     }
     cout << endl;
 
     return 0;
 }`,
-          hint: "mySwap: use int temp = a; a = b; b = temp; doubleAll: for(int& x : v) { x *= 2; } — without int& (just int x), the original won't change!",
+          hint: "mySwap: int temp = a; a = b; b = temp; doubleAll: for(int i = 0; i < v.size(); i++) v[i] *= 2;",
           expectedOutput: `swap: 20 10
 double: 2 4 6 8 10 `
         },

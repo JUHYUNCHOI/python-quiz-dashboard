@@ -303,22 +303,18 @@ int main() {
 \`\`\`cpp
 // & 없음 → 복사본 → 원본 안 바뀜
 void addTen(vector<int> v) {
-    for (int& x : v) x += 10;  // 복사본만 바뀜
+    for (int i = 0; i < v.size(); i++) v[i] += 10;   // 복사본만 바뀜
 }
 
 // & 있음 → 원본 → 원본이 바뀜
 void addTen(vector<int>& v) {
-    for (int& x : v) x += 10;  // 원본이 바뀜!
+    for (int i = 0; i < v.size(); i++) v[i] += 10;   // 원본이 바뀜!
 }
 \`\`\`
 
 \`vector<int>&\`는 "정수 벡터의 참조"예요. int를 참조로 받을 때 \`int&\`라고 쓰는 것처럼, vector도 타입 뒤에 \`&\`만 붙이면 돼요.
 
-⚠️ **주의:** range-for 안에서도 원본을 바꾸려면 \`int&\`로 받아야 해요!
-\`\`\`cpp
-for (int x : v)   // x는 복사본 → v 안 바뀜
-for (int& x : v)  // x는 원본의 참조(reference) → v가 바뀜!
-\`\`\``,
+💡 큰 vector 를 함수에 넘길 때 \`&\` 안 붙이면 통째로 복사돼서 느려져요. 읽기만 할 거면 \`const vector<int>&\` 로 받는 게 효율적.`,
         },
         {
           id: "ch2-practice",
@@ -343,8 +339,8 @@ void mySwap(int& a, int& b) {
 }
 
 void doubleAll(vector<int>& v) {
-    for (int& x : v) {
-        x = x * 2;
+    for (int i = 0; i < v.size(); i++) {
+        v[i] = v[i] * 2;
     }
 }
 
@@ -356,8 +352,8 @@ int main() {
     vector<int> nums = {1, 2, 3, 4, 5};
     doubleAll(nums);
     cout << "double: ";
-    for (int x : nums) {
-        cout << x << " ";
+    for (int i = 0; i < nums.size(); i++) {
+        cout << nums[i] << " ";
     }
     cout << endl;
 
@@ -374,7 +370,7 @@ void mySwap(int& a, int& b) {
 
 void doubleAll(vector<int>& v) {
     // 여기에 벡터의 모든 원소를 2배로 만드는 코드를 써보세요
-    // 힌트: range-for에서 int& x로 받으면 원본이 바뀌어요
+    // 힌트: 인덱스 for 문 — for (int i = 0; i < v.size(); i++) { v[i] = ... }
 }
 
 int main() {
@@ -385,8 +381,8 @@ int main() {
     vector<int> nums = {1, 2, 3, 4, 5};
     doubleAll(nums);
     cout << "double: ";
-    for (int x : nums) {
-        cout << x << " ";
+    for (int i = 0; i < nums.size(); i++) {
+        cout << nums[i] << " ";
     }
     cout << endl;
 
