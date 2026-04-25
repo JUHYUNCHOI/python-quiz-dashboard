@@ -92,7 +92,7 @@ for (int x : arr) {     // Arrays work too!
           id: "ch1-ref",
           type: "explain",
           title: "🔗 Modifying Elements — The Secret of Copies",
-          content: `> 📌 The \`&\` you learned in the previous lesson ("References & Functions") works exactly the same way in range-for. This page applies it.
+          content: `> 📌 The \`&\` you learned in the "References & Functions" lesson works exactly the same way in range-for. This page applies it.
 
 There's a hidden secret in \`for (int x : v)\` — no matter how much you modify x, **the original doesn't change**.
 
