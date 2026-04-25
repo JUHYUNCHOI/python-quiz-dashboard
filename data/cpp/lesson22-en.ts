@@ -80,6 +80,8 @@ Below — **member functions** (things to do):
 - \`forward()\` — increase speed
 - \`info()\` — print current state
 
+> 🔑 The \`public:\` at the top means "these members below can be used from outside." Just leave it there for now — you'll learn exactly why it's needed in **Ch2**.
+
 > 🐍 **Coming from Python?**
 > Python needs \`self.speed\`;
 > C++ just uses \`speed\` directly.
@@ -87,6 +89,7 @@ Below — **member functions** (things to do):
 No car exists yet — we've only written the blueprint.`,
             right: `\`\`\`cpp
 class Car {
+public:
     double speed;
     string color;
 
@@ -202,6 +205,7 @@ Car car3;    // object 3
 {collapse:📐 Reference — here's what class Car looks like}
 \`\`\`cpp
 class Car {
+public:
     string color;
     double speed;
 

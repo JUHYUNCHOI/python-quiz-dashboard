@@ -853,7 +853,7 @@ function PredictStep({
   const LABELS = ["①", "②", "③", "④"]
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-5">
       {/* Explanation lines */}
       {lines.length > 0 && (
         <div className="rounded-xl bg-blue-50 border border-blue-100 px-4 py-3">
@@ -871,11 +871,11 @@ function PredictStep({
       )}
 
       {/* Prediction question */}
-      <p className="font-semibold text-gray-800">
+      <p className="text-base font-bold text-gray-900 mt-1">
         {predictQuestion ?? t("결과가 뭘까?", "What will the output be?")}
       </p>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2.5">
         {predictOptions.map((opt, i) => {
           const isSelected = selected === i
           const isCorrect = i === content.predict.answer

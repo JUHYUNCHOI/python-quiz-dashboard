@@ -78,11 +78,14 @@ export const cppLesson22Data: LessonData = {
 - \`forward()\` — 속도 증가
 - \`info()\` — 지금 상태 출력
 
+> 🔑 맨 위 \`public:\` 은 "여기 아래 멤버는 외부에서 써도 OK" 라는 표시예요. 지금은 그냥 붙여두고, 왜 필요한지는 **Ch2** 에서 자세히 배울 거예요.
+
 > 🐍 **Python 에서 온 친구라면?**
 > Python 은 \`self.speed\` 써야 하지만
 > C++ 은 그냥 \`speed\` 로 바로 써요.`,
             right: `\`\`\`cpp
 class Car {
+public:
     double speed;
     string color;
 
@@ -198,6 +201,7 @@ Car car3;    // 객체 3
 {collapse:📐 참고 — class Car 는 이렇게 생겼어요}
 \`\`\`cpp
 class Car {
+public:
     string color;
     double speed;
 
