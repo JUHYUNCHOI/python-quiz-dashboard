@@ -194,19 +194,19 @@ That's why real C++ code uses these patterns:
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ Sum with Range-for!",
-          content: `Calculate the sum and average of a vector using range-for!`,
+          content: `Sum all elements of \`nums\` into \`sum\` and print it.`,
           starterCode: `#include <iostream>
 #include <vector>
 using namespace std;
 
 int main() {
-    vector<int> scores = {90, 85, 78, 92, 88};
+    vector<int> nums = {4, 8, 15, 16, 23, 42};
     int sum = 0;
 
-    // Use range-for to accumulate sum
+    // 👇 Use range-for to accumulate into sum
 
-    cout << sum << endl;
-    cout << (double)sum / scores.size() << endl;
+
+    cout << sum;
     return 0;
 }`,
           code: `#include <iostream>
@@ -214,21 +214,18 @@ int main() {
 using namespace std;
 
 int main() {
-    vector<int> scores = {90, 85, 78, 92, 88};
+    vector<int> nums = {4, 8, 15, 16, 23, 42};
     int sum = 0;
 
-    for (int s : scores) {
-        sum += s;
+    for (const int& x : nums) {
+        sum += x;
     }
 
-    cout << sum << endl;
-    cout << (double)sum / scores.size() << endl;
-
+    cout << sum;
     return 0;
 }`,
-          hint: "for (int s : scores) { sum += s; } — range-for gives you each element one by one. No index needed!",
-          expectedOutput: `433
-86.6`
+          hint: "for (const int& x : nums) { sum += x; } — const int& reads without copying. Take each value into x and accumulate sum += x!",
+          expectedOutput: `108`
         },
         {
           id: "ch1-q1",
@@ -315,66 +312,20 @@ Think of auto as a "one-time binding contract." When you write \`auto x = 5;\`, 
         {
           id: "ch2-combo",
           type: "explain",
-          title: "🎯 auto + Range-for: The Modern C++ Style!",
-          component: "cppAutoBuilder",
-          content: `Here's where auto really shines — combine it with range-for!
+          title: "🔥 auto + range-for combo!",
+          content: `Combining auto with range-for is super handy — this is the **modern C++ standard style**.
 
-**Without auto:**
 \`\`\`cpp
 vector<int> nums = {1, 2, 3};
-for (int x : nums) {
-    cout << x << " ";
-}
+
+// Explicit type
+for (int x : nums) cout << x << " ";
+
+// auto — compiler infers int automatically
+for (auto x : nums) cout << x << " ";
 \`\`\`
 
-**With auto:**
-\`\`\`cpp
-vector<int> nums = {1, 2, 3};
-for (auto x : nums) {
-    cout << x << " ";
-}
-\`\`\`
-
-Why is this awesome? Look at longer types:
-\`\`\`cpp
-vector<string> names = {"Emma", "Jake", "Charlie"};
-
-// Without auto — so much typing!
-for (string name : names) { ... }
-
-// With auto — clean and simple!
-for (auto name : names) { ... }
-\`\`\`
-
-Remember these three patterns:
-
-| Pattern | Meaning | When to use |
-|---|---|---|
-| \`for (auto x : vec)\` | Copy (read-only) | Just reading, small types |
-| \`for (auto& x : vec)\` | Reference (modifiable) | Need to modify |
-| \`for (const auto& x : vec)\` | Const reference (read-only + efficient) | Reading large objects |
-
-Here's an example with a string vector:
-\`\`\`cpp
-vector<string> names = {"Emma", "Jake", "Charlie"};
-
-// Explicit type: vector<string>, so... string? string&? Confusing!
-for (const string& name : names) {
-    cout << name << endl;
-}
-
-// auto: no need to think about it!
-for (const auto& name : names) {
-    cout << name << endl;
-}
-\`\`\`
-
-When should you use which?
-- \`auto x\` : Reading small values (int, double)
-- \`auto& x\` : When you need to **modify** elements
-- \`const auto& x\` : Reading large data (string) without copying
-
-💡 \`for (const auto& x : v)\` is the pattern C++ experts use the most!`
+For \`vector<int>\` it's a one-line difference, but with messy types like \`vector<map<string, vector<int>>>\` \`auto\` really shines. Next page covers the three patterns: \`auto\` / \`auto&\` / \`const auto&\`.`
         },
         {
           id: "ch2-auto-tradeoff",
@@ -433,19 +384,20 @@ Start by **practicing with explicit types**, then let auto come naturally as you
           id: "ch2-practice",
           type: "practice" as const,
           title: "✋ auto + Range-for Power Combo!",
-          content: `Use auto with range-for to double every element, then print the result!`,
+          content: `Double every element of \`nums\`, then print the result with " " between values.`,
           starterCode: `#include <iostream>
 #include <vector>
 using namespace std;
 
 int main() {
-    vector<int> nums = {3, 7, 2, 8, 5};
+    vector<int> nums = {3, 7, 2, 9, 5};
 
-    // Double every element using auto&
+    // 👇 Use auto& to double every element
 
-    // Print the result
 
-    cout << endl;
+    // 👇 Use auto to print results (each value followed by " ")
+
+
     return 0;
 }`,
           code: `#include <iostream>
@@ -453,23 +405,20 @@ int main() {
 using namespace std;
 
 int main() {
-    vector<int> nums = {3, 7, 2, 8, 5};
+    vector<int> nums = {3, 7, 2, 9, 5};
 
-    // Double every element using reference
-    for (auto& n : nums) {
-        n *= 2;
+    for (auto& x : nums) {
+        x = x * 2;
     }
 
-    // Print using const reference
-    for (const auto& n : nums) {
-        cout << n << " ";
+    for (auto x : nums) {
+        cout << x << " ";
     }
-    cout << endl;
 
     return 0;
 }`,
-          hint: "for (auto& n : nums) { n *= 2; } — without &, you get a copy and the original won't change! Then for (const auto& n : nums) to print",
-          expectedOutput: `6 14 4 16 10`
+          hint: "When modifying: for (auto& x : nums) { x *= 2; } — without &, x is a copy so the original won't change. For printing: for (auto x : nums) cout << x << \" \";",
+          expectedOutput: `6 14 4 18 10 `
         },
         {
           id: "ch2-2d-rangefor",
