@@ -21,81 +21,66 @@ export const cppLesson18EnData: LessonData = {
         {
           id: "ch1-intro",
           type: "explain",
-          title: "📦 stack — Last In, First Out (LIFO)!",
-          content: `A **stack** is like stacking plates — the **last one you put in comes out first**!
+          title: "📦 stack — last in, first out",
+          content: `Have you seen this kind of problem?
+
+> "Check if the brackets are properly matched." \`(())\` ✅, \`(()\` ❌
+
+How would you solve it? When an opening \`(\` appears, you remember it; when a closing \`)\` appears, you pair it with the **most recently remembered** \`(\`. "Most recent" is the key.
+
+Or — \`Ctrl+Z\` (Undo) in a text editor. You undo the most recent action first. Again, "most recent."
+
+Or — your browser's Back button. You return to the most recently visited page.
+
+The pattern in all of these: **last thing in comes out first.** That's the **stack** data structure.
 
 \`\`\`
 push 1 → [1]
 push 2 → [1, 2]
 push 3 → [1, 2, 3]
-pop    → [1, 2]      ← 3 comes out (the last one pushed!)
-top    → 2           ← check the top value
+pop    → [1, 2]      ← 3 comes out (the most recent)
+top    → 2           ← peek at the top
 \`\`\`
 
-In C++, use \`#include <stack>\`:
+Think of stacking plates — new ones go on top (push), and you remove from the top (pop). This rule has a name: **LIFO (Last In First Out)**.
+
+### How to use it in C++
 
 \`\`\`cpp
 #include <stack>
 using namespace std;
 
 stack<int> s;
-s.push(10);      // add to top
+s.push(10);
 s.push(20);
 s.push(30);
 
-cout << s.top();  // 30 (top value)
-s.pop();          // removes 30 (no return value!)
+cout << s.top();  // 30 (top)
+s.pop();          // removes 30 (returns nothing!)
 cout << s.top();  // 20
-
-cout << s.size();  // 2
-cout << s.empty(); // 0 (false)
 \`\`\`
 
-Let's compare with Python:
+| Function | Meaning |
+|---|---|
+| \`s.push(x)\` | Add on top |
+| \`s.top()\` | Peek at the top (doesn't remove) |
+| \`s.pop()\` | Remove the top (**no return value!** ⚠️) |
+| \`s.size()\` | Number of elements |
+| \`s.empty()\` | True if empty |
 
-**Python 🐍** — using a list as a stack:
-\`\`\`python
-s = []
-s.append(10)    # push
-s.append(20)
-s.pop()         # returns 20 + removes it
-s[-1]           # top (check last element)
-\`\`\`
+> ⚠️ \`pop()\` not returning a value is the difference from Python. To use the value, peek with \`top()\` first, then \`pop()\`.
+
+### Python uses lists as stacks
 
 | Python 🐍 | C++ stack ⚡ |
 |---|---|
 | \`s.append(x)\` | \`s.push(x)\` |
-| \`s.pop()\` → returns value | \`s.pop()\` → no return value! |
+| \`s.pop()\` → returns value | \`s.pop()\` → no return value |
 | \`s[-1]\` | \`s.top()\` |
-| \`len(s)\` | \`s.size()\` |
-| \`len(s) == 0\` | \`s.empty()\` |
 
-💡 C++'s \`pop()\` does **NOT return** a value! First check the value with \`top()\`, then remove it with \`pop()\`.
+### "vector's push_back/pop_back already does this — why stack?"
 
-**Stack function reference**
-
-| Function | Syntax | Description |
-|---|---|---|
-| push | \`s.push(x)\` | Add to top |
-| pop | \`s.pop()\` | Remove from top (no return value!) |
-| top | \`s.top()\` | Check top value (doesn't remove) |
-| size | \`s.size()\` | Number of elements |
-| empty | \`s.empty()\` | Returns true if empty |
-
-⚠️ \`pop()\` does not return the value! To use the value, check it with \`top()\` first, then call \`pop()\`:
-\`\`\`cpp
-int val = s.top();  // read the value
-s.pop();            // then remove it
-\`\`\`
-
-**Why use stack instead of vector?**
-You can use vector with push_back/pop_back to mimic a stack. So why use stack separately? To **make your intent clear**! Using stack is a promise that says 'this code only uses LIFO operations.' It also prevents accidentally accessing middle elements.
-
-**Where are stacks used?**
-• **Undo operations:** You undo the most recent action first!
-• **Bracket matching:** Push opening brackets, pop when you see a closing one
-• **Browser back button:** You go back to the most recently visited page
-• **DFS (Depth-First Search):** Used frequently in competitive programming`
+Fair question. vector can do it. But \`stack\` makes the **intent obvious**. Anyone reading the code instantly knows "this is LIFO only," and you can't accidentally do \`v[3]\` on a mid-element. **It's a promise about how this container will be used.**`
         },
         {
           id: "ch1-fb1",
