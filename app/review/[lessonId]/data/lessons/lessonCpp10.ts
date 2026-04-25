@@ -402,6 +402,69 @@ export const lessonCpp10: LessonData = {
         }
       },
 
+      // Lv.3: 처음부터 — 모든 원소 2배 만들기 (auto& 필수)
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "🔥 nums 의 모든 원소를 2배로 바꾸고 출력하세요!",
+          guide: "수정하려면 for-loop 변수에 & 가 있어야 원본이 바뀌어요. 출력 시 값 사이는 공백.",
+          template: null,
+          starterCode: '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> nums = {3, 7, 2, 9, 5};\n\n    // 👇 1. range-for 로 모든 원소를 2배로\n\n\n    // 👇 2. range-for 로 출력 (값 뒤에 " ")\n\n\n    return 0;\n}',
+          answer: '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> nums = {3, 7, 2, 9, 5};\n\n    for (auto& x : nums) x = x * 2;\n\n    for (auto x : nums) cout << x << " ";\n\n    return 0;\n}',
+          alternateAnswers: [
+            '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> nums = {3, 7, 2, 9, 5};\n    for (int& x : nums) x *= 2;\n    for (int x : nums) cout << x << " ";\n    return 0;\n}'
+          ],
+          expect: "6 14 4 18 10 ",
+          en: {
+            task: "🔥 Double every element of nums and print the result!",
+            guide: "To modify, the loop variable needs &. Print values separated by spaces."
+          }
+        }
+      },
+
+      // Lv.3: 처음부터 — 평균 이상만 출력 (sum + filter)
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "🔥 scores 에서 평균 이상인 점수만 출력하세요!",
+          guide: "1) 합계 → 평균 계산. 2) 평균 이상인 값만 range-for 로 출력. 정수 평균은 sum / size.",
+          template: null,
+          starterCode: '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> scores = {72, 85, 60, 90, 78};\n    int sum = 0;\n\n    // 👇 1. range-for 로 합계 구하기\n\n\n    int avg = sum / scores.size();\n\n    // 👇 2. range-for 로 avg 이상인 점수만 출력 (값 뒤에 " ")\n\n\n    return 0;\n}',
+          answer: '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> scores = {72, 85, 60, 90, 78};\n    int sum = 0;\n\n    for (auto x : scores) sum += x;\n\n    int avg = sum / scores.size();\n\n    for (auto x : scores) if (x >= avg) cout << x << " ";\n\n    return 0;\n}',
+          alternateAnswers: [
+            '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> scores = {72, 85, 60, 90, 78};\n    int sum = 0;\n    for (const auto& x : scores) sum += x;\n    int avg = sum / scores.size();\n    for (const auto& x : scores) if (x >= avg) cout << x << " ";\n    return 0;\n}'
+          ],
+          expect: "85 90 78 ",
+          en: {
+            task: "🔥 Print only scores at or above the average!",
+            guide: "1) Sum → average. 2) Print only values >= avg via range-for. Integer avg = sum / size."
+          }
+        }
+      },
+
+      // Lv.3: 처음부터 — 음수만 0 으로 (auto& 필수)
+      {
+        type: "practice",
+        content: {
+          level: 3,
+          task: "🔥 temps 의 음수 값을 모두 0 으로 바꾸고 출력하세요!",
+          guide: "if 안에서 원본 값을 바꿔야 하니 & 가 꼭 필요해요. 안 그러면 복사본만 0 이 되고 원본은 그대로.",
+          template: null,
+          starterCode: '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> temps = {15, -3, 22, -8, 0, 5};\n\n    // 👇 1. range-for 로 음수 값을 0 으로 바꾸기\n\n\n    // 👇 2. range-for 로 출력 (값 뒤에 " ")\n\n\n    return 0;\n}',
+          answer: '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> temps = {15, -3, 22, -8, 0, 5};\n\n    for (auto& x : temps) if (x < 0) x = 0;\n\n    for (auto x : temps) cout << x << " ";\n\n    return 0;\n}',
+          alternateAnswers: [
+            '#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    vector<int> temps = {15, -3, 22, -8, 0, 5};\n    for (int& x : temps) { if (x < 0) x = 0; }\n    for (int x : temps) cout << x << " ";\n    return 0;\n}'
+          ],
+          expect: "15 0 22 0 0 5 ",
+          en: {
+            task: "🔥 Set all negative values in temps to 0, then print!",
+            guide: "Modifying values inside if requires & on the loop variable. Without it, only the copy becomes 0."
+          }
+        }
+      },
+
       // 보상
       {
         type: "reward",
