@@ -255,7 +255,9 @@ int main() {
           id: "ch2-intro",
           type: "explain",
           title: "🤖 auto: Type Deduction",
-          content: `In Python, you never write types — the language figures them out:
+          content: `> 💡 **One-line summary**: \`auto x = value;\` means **x has the same type as that value**. The compiler looks at the right side and decides.
+
+In Python, you never write types — the language figures them out:
 
 \`\`\`python
 x = 42        # int
@@ -381,26 +383,9 @@ But should you **always** use auto? Not necessarily!
 
 ### 😓 auto pitfalls
 
-**1. No initializer → compile error**
-\`\`\`cpp
-auto x;          // ❌ error — auto needs an initial value to deduce the type
-auto x = 0;      // ✅ deduced as int
-\`\`\`
+The **Top 3** most common ones first:
 
-**2. Type is hidden from view**
-\`\`\`cpp
-auto result = calculate();  // Is result int? double? string? Unknown!
-int result = calculate();   // Clearly int at a glance
-\`\`\`
-
-**3. ⚠️ Integer division trap**
-\`\`\`cpp
-auto x = 5 / 2;     // Not 2.5 — it's 2! (int / int = int)
-auto y = 5.0 / 2;   // 2.5 — one side as double works
-\`\`\`
-Bites you when computing averages. Cast with \`(double)\` or make one side a double.
-
-**4. Big-data copy trap**
+**⭐ 1. Big-data copy trap** (the most common — easy to miss; makes code slow)
 \`\`\`cpp
 vector<int> big(10000);   // a big vector
 
@@ -409,15 +394,40 @@ auto& ref = big;          // References the original — fast
 const auto& cref = big;   // Fast + a promise not to modify
 \`\`\`
 
+> 🔑 **Note**: \`auto\` doesn't pick up references automatically. Even if \`int& r = x;\`, \`auto a = r;\` makes \`a\` an int (copy). To bind by reference you must write \`auto&\`.
+
+**⭐ 2. ⚠️ Integer division trap** (often breaks averages)
+\`\`\`cpp
+auto x = 5 / 2;     // Not 2.5 — it's 2! (int / int = int)
+auto y = 5.0 / 2;   // 2.5 — one side as double works
+\`\`\`
+Cast with \`(double)\` or make one side a double when you need decimals.
+
+**⭐ 3. No initializer → compile error**
+\`\`\`cpp
+auto x;          // ❌ error — auto needs an initial value to deduce the type
+auto x = 0;      // ✅ deduced as int
+\`\`\`
+
+---
+
+Occasional ones:
+
+**4. Type is hidden from view**
+\`\`\`cpp
+auto result = calculate();  // Is result int? double? string? Unknown!
+int result = calculate();   // Clearly int at a glance
+\`\`\`
+
 **5. \`auto\` + string-literal trap**
 \`\`\`cpp
 auto greeting = "hello";   // greeting is NOT string — it's const char*!
-greeting += " world";      // ❌ compile error — const char* has no +=
+greeting += " world";      // ❌ compile error
 
 // To get a string, write it explicitly:
 string greeting = "hello";
 \`\`\`
-\`"hello"\` is actually a C-style string (char array), so \`auto\` infers \`const char*\`. To get the C++ \`string\` class, you must write it.
+\`"hello"\` is a C-style string, so \`auto\` infers \`const char*\`. To get the C++ \`string\` class, you must write it.
 
 ---
 

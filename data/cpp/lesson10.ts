@@ -275,7 +275,9 @@ int main() {
           id: "ch2-intro",
           type: "explain",
           title: "🤖 auto — 타입 자동 추론!",
-          content: `C++은 항상 타입을 써야 해서 귀찮았죠? \`auto\`를 쓰면 **컴파일러가 타입을 알아서 추론**해요!
+          content: `> 💡 **한 줄 요약**: \`auto x = 값;\` 이라고 쓰면 **x 의 타입은 그 값의 타입과 똑같음**. 컴파일러가 오른쪽을 보고 정해줘요.
+
+C++은 항상 타입을 써야 해서 귀찮았죠? \`auto\`를 쓰면 **컴파일러가 타입을 알아서 추론**해요!
 
 \`\`\`cpp
 auto x = 10;        // int (정수니까)
@@ -393,26 +395,9 @@ for (auto x : nums) ...     // ← 자동으로 long 으로 따라감
 
 ### 😓 auto 의 함정
 
-**1. 초기값 없으면 컴파일 에러**
-\`\`\`cpp
-auto x;          // ❌ 에러 — auto 는 초기값으로 타입을 추론하니까
-auto x = 0;      // ✅ int 로 결정
-\`\`\`
+진짜 자주 만나는 거 **Top 3** 부터:
 
-**2. 타입이 눈에 안 보임**
-\`\`\`cpp
-auto result = calculate();  // result 가 int? double? string? 모름!
-int result = calculate();   // 한눈에 int 라는 걸 알 수 있음
-\`\`\`
-
-**3. ⚠️ int 나눗셈 함정**
-\`\`\`cpp
-auto x = 5 / 2;     // 2.5 가 아니라 2! (int / int = int)
-auto y = 5.0 / 2;   // 2.5 — 한쪽이 double 이면 OK
-\`\`\`
-평균 계산할 때 자주 깨져요. 소수점 필요하면 \`(double)\` 캐스팅하거나 한쪽을 \`double\` 로.
-
-**4. 큰 데이터 복사 함정**
+**⭐ 1. 큰 데이터 복사 함정** (가장 흔함 — 모르고 지나가면 코드가 느려짐)
 \`\`\`cpp
 vector<int> big(10000);   // 큰 벡터
 
@@ -421,15 +406,40 @@ auto& ref = big;          // 원본 가리키기 — 빠름
 const auto& cref = big;   // 빠르고 + 수정 안 한다는 약속
 \`\`\`
 
+> 🔑 **참고**: \`auto\` 는 reference 를 자동으로 안 받아요. \`int& r = x;\` 가 있어도 \`auto a = r;\` 면 a 는 int (복사). 참조로 받으려면 반드시 \`auto&\`.
+
+**⭐ 2. ⚠️ int 나눗셈 함정** (소수점 필요할 때 자주 깨짐)
+\`\`\`cpp
+auto x = 5 / 2;     // 2.5 가 아니라 2! (int / int = int)
+auto y = 5.0 / 2;   // 2.5 — 한쪽이 double 이면 OK
+\`\`\`
+평균 계산할 때 자주 깨져요. 소수점 필요하면 \`(double)\` 캐스팅하거나 한쪽을 \`double\` 로.
+
+**⭐ 3. 초기값 없으면 컴파일 에러**
+\`\`\`cpp
+auto x;          // ❌ 에러 — auto 는 초기값으로 타입을 추론하니까
+auto x = 0;      // ✅ int 로 결정
+\`\`\`
+
+---
+
+가끔 만나는 것:
+
+**4. 타입이 눈에 안 보임**
+\`\`\`cpp
+auto result = calculate();  // result 가 int? double? string? 모름!
+int result = calculate();   // 한눈에 int 라는 걸 알 수 있음
+\`\`\`
+
 **5. \`auto\` + 문자열 리터럴 함정**
 \`\`\`cpp
 auto greeting = "hello";   // greeting 은 string 이 아니라 const char*!
-greeting += " world";      // ❌ 컴파일 에러 — const char* 는 += 안 됨
+greeting += " world";      // ❌ 컴파일 에러
 
 // string 으로 받으려면 명시:
 string greeting = "hello";
 \`\`\`
-\`"hello"\` 는 사실 C 스타일 문자열 (char 배열) 이라 \`auto\` 가 그대로 \`const char*\` 로 추론해요. \`string\` 클래스가 되려면 명시해야 함.
+\`"hello"\` 는 C 스타일 문자열이라 \`auto\` 가 \`const char*\` 로 추론. \`string\` 클래스가 되려면 명시해야 함.
 
 ---
 

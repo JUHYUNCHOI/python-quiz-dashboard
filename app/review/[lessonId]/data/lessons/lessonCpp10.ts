@@ -332,6 +332,32 @@ export const lessonCpp10: LessonData = {
         }
       },
 
+      // 결정 연습: auto vs 직접 — 언제 쓸까?
+      {
+        type: "quiz",
+        content: {
+          question: "다음 중 **auto 가 가장 도움이 되는** 경우는?",
+          options: [
+            "int x = 5;",
+            "for (vector<int> row : grid) { ... }   // grid 는 vector<vector<int>>",
+            "int sum = 0;",
+            "bool done = false;"
+          ],
+          answer: 1,
+          explanation: "int / bool 같은 짧은 타입은 직접 쓰는 게 가장 명확해요. 반대로 `vector<int> row` 처럼 길어지면 `auto row` 가 훨씬 깔끔. 가이드: **짧은 타입은 직접, 긴 타입은 auto**.",
+          en: {
+            question: "Which case **benefits the most from auto**?",
+            options: [
+              "int x = 5;",
+              "for (vector<int> row : grid) { ... }   // grid is vector<vector<int>>",
+              "int sum = 0;",
+              "bool done = false;"
+            ],
+            explanation: "Short types like int / bool are clearest written explicitly. But `vector<int> row` is long — `auto row` is much cleaner. Rule of thumb: **short types explicit, long types use auto**."
+          }
+        }
+      },
+
       // auto& 참조 설명
       {
         type: "explain",
