@@ -123,7 +123,7 @@ sort()의 **세 번째 인자**로 "비교 기준"을 넣을 수 있어요.
           id: "s23-ch0-q1",
           type: "quiz",
           title: "sort 헤더!",
-          content: "sort()를 사용하려면 어떤 헤더를 include해야 하나요?",
+          content: "`sort()` 를 사용하려면 어떤 헤더를 include 해야 하나요? **공식 답 기준으로** 골라요.",
           options: [
             "#include <sort>",
             "#include <algorithm>",
@@ -131,7 +131,7 @@ sort()의 **세 번째 인자**로 "비교 기준"을 넣을 수 있어요.
             "#include <utility>"
           ],
           answer: 1,
-          explanation: "sort()는 <algorithm> 헤더에 들어있어요! <vector>는 vector용, <utility>는 pair용이에요."
+          explanation: "**공식 답: `<algorithm>`**. `sort()` 는 정확히 이 헤더에 정의돼 있어요.\n\n💡 pair 때 \"`<vector>` 등에 자동으로 따라온다\" 고 한 거랑 헷갈렸을 수 있는데, 둘은 달라요:\n• **pair 는 *타입***: map, set 같은 STL 컨테이너가 *내부적으로* pair 를 쓰니까 헤더에 자동으로 끌려와요.\n• **sort 는 *함수***: 다른 STL 헤더가 sort 를 안 쓰니까, 따라오지 않아요. `<vector>` 만 적고 `sort()` 호출하면 `'sort' was not declared` 에러 나요.\n\n**규칙: 함수는 그 함수가 있는 공식 헤더를 명시적으로 include.** 타입은 운 좋게 따라오는 경우가 있는 정도."
         }
       ]
     },

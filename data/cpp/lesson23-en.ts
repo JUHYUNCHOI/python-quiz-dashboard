@@ -123,7 +123,7 @@ sort() accepts a **third argument** for the comparison rule.
           id: "s23-ch0-q1",
           type: "quiz",
           title: "sort Header!",
-          content: "Which header do you need to include to use sort()?",
+          content: "Which header do you need to include to use `sort()`? Pick the **official answer**.",
           options: [
             "#include <sort>",
             "#include <algorithm>",
@@ -131,7 +131,7 @@ sort() accepts a **third argument** for the comparison rule.
             "#include <utility>"
           ],
           answer: 1,
-          explanation: "sort() lives in the <algorithm> header! <vector> is for vectors, <utility> is for pair."
+          explanation: "**Official answer: `<algorithm>`**. `sort()` lives exactly in this header.\n\n💡 You may be thinking back to the pair note (\"`<vector>` etc. pull pair in for free\") — that's a different case:\n• **pair is a *type***: STL containers like map / set use pair *internally*, so it gets pulled in transitively.\n• **sort is a *function***: other STL headers don't use sort internally, so it doesn't get pulled in. Including only `<vector>` and calling `sort()` gives `'sort' was not declared`.\n\n**Rule: for functions, explicitly include the official header.** Types just sometimes happen to come along for free."
         }
       ]
     },
