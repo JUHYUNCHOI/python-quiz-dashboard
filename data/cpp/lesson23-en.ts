@@ -487,7 +487,7 @@ Memory:  1000  1004  1008  1012  1016  1020
 Values:   10    20    30    40    50    ???
 
 v.begin() = 1000  (address where 10 lives)
-v.end()   = 1020  (address after 50, no value — never read this!)
+v.end()   = 1020  (address *after* 50, no value — never read this!)
 \`\`\`
 
 \`\`\`
@@ -497,9 +497,7 @@ v.end()   = 1020  (address after 50, no value — never read this!)
 (1000)                         (1020)
 \`\`\`
 
----
-
-**Why addresses instead of indices?**
+### Why does sort take begin/end instead of indices?
 
 C++ functions like sort() take **addresses (arrows)** for "from where to where."
 
@@ -508,9 +506,37 @@ sort(v.begin(), v.end());
 //    ↑ from this address  ↑ up to (not including) this address
 \`\`\`
 
----
+But why addresses specifically? There are two reasons — see the next page 👇`
+        },
+        {
+          id: "s23-ch2-iter-benefits",
+          type: "explain",
+          title: "📌 Why addresses? — two benefits (especially *unification*)",
+          content: `**① The same sort works on every container — iterator unification** ⭐
 
-**Subtracting two arrows gives you the distance (index)**
+This is the real key. Once sort takes begin/end, it works **regardless of container type**:
+
+\`\`\`cpp
+sort(v.begin(), v.end());     // vector
+sort(arr, arr + n);           // raw array
+sort(lst.begin(), lst.end()); // list, deque, etc.
+// All handled by ONE sort function!
+\`\`\`
+
+If sort were "a function that takes a vector," you'd need separate \`sortVector\`, \`sortArray\`, \`sortList\`. Instead, by **unifying through the iterator interface**, one sort handles them all.
+
+This design runs through the entire STL. find / count / accumulate — every algorithm uses the \`(begin, end)\` pattern for the same reason: **one function, every container**.
+
+**② No copy — fast regardless of size**
+
+If you passed the vector itself, it'd be copied wholesale. A million elements = enormous copy cost. Passing just two addresses sidesteps that entirely.
+
+\`\`\`cpp
+sort(v);                   // (hypothetical) full vector copy — slow
+sort(v.begin(), v.end());  // just 2 addresses — always fast ✅
+\`\`\`
+
+### Bonus: subtracting two arrows gives the *distance (index)*
 
 \`\`\`
    10    20    30    40    50
@@ -518,40 +544,16 @@ sort(v.begin(), v.end());
     ↑                ↑
  begin()             it  (points to 40, address 1012)
 
-it - v.begin() = (1012 - 1000) / 4 = 3  → index 3!
+it - v.begin()  = (1012 - 1000) / 4 = 3  → index 3
 \`\`\`
 
 \`\`\`cpp
-// Create an arrow pointing 3 spots from begin()
 auto it = v.begin() + 3;
-cout << *it;            // 40  (*it = value the arrow points to)
-cout << it - v.begin(); // 3   (convert to index)
+cout << *it;             // 40  (*it = value the arrow points to)
+cout << it - v.begin();  // 3   (convert to index)
 \`\`\`
 
-💡 **"Subtracting two arrows gives distance (index)" — this is exactly what lower_bound uses!**
-
----
-
-**Why pass addresses? Why not indices?**
-
-Passing addresses gives two advantages:
-
-**① No copying — fast regardless of size**
-\`\`\`cpp
-// If we passed the whole vector by copy?
-sort(v);  // 1 million elements = massive copy overhead!
-
-// Pass just 2 addresses (start/end)?
-sort(v.begin(), v.end());  // fast regardless of size ✅
-\`\`\`
-
-**② Same function works on any container**
-\`\`\`cpp
-sort(v.begin(), v.end());     // vector
-sort(arr, arr + n);           // array
-sort(lst.begin(), lst.end()); // list
-// All use the same sort() function!
-\`\`\``
+> 💡 **"Subtract two arrows = distance"** — this exact trick becomes idiomatic with \`lower_bound\` next.`
         },
         {
           id: "s23-ch2-lb",
