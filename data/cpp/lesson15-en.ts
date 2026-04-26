@@ -94,6 +94,63 @@ All three give the same result, so pick whichever you like. The first form (\`{a
 > 💡 For 3+ values you'll meet \`tuple\` soon. But by far the most common case is "exactly two paired things" — coordinates (x,y), name-score, index-distance — which is why pair shows up far more in real code.`,
         },
         {
+          id: "ch1-pair-mini",
+          type: "practice" as const,
+          title: "✋ Quick — find the most expensive cafe drink",
+          content: `**Scenario**: A cafe menu has 5 drinks stored as \`(name, price)\` pairs.
+
+\`\`\`
+Latte 5500 / Americano 4500 / Cappuccino 6000 / Espresso 4000 / Mocha 6500
+\`\`\`
+
+Print **the name and price of the most expensive drink** in \`Mocha: 6500\` format.
+
+> 💡 Pattern: take the first drink as the current best, range-for through the rest, update best whenever \`.second\` is larger. Print at the end.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> menu = {
+        {"Latte", 5500},
+        {"Americano", 4500},
+        {"Cappuccino", 6000},
+        {"Espresso", 4000},
+        {"Mocha", 6500}
+    };
+
+    // 👇 Find the most expensive drink — print as "Name: Price"
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> menu = {
+        {"Latte", 5500},
+        {"Americano", 4500},
+        {"Cappuccino", 6000},
+        {"Espresso", 4000},
+        {"Mocha", 6500}
+    };
+
+    pair<string, int> best = menu[0];
+    for (auto& d : menu) {
+        if (d.second > best.second) best = d;
+    }
+    cout << best.first << ": " << best.second;
+
+    return 0;
+}`,
+          hint: "pair<string, int> best = menu[0]; to seed. for (auto& d : menu) loop, if (d.second > best.second) best = d; to update. Then cout << best.first << \": \" << best.second;",
+          expectedOutput: `Mocha: 6500`
+        },
+        {
           id: "ch1-fb1",
           type: "fillblank" as const,
           title: "Fill in the blanks",
@@ -118,7 +175,7 @@ tuple<string, int, double> t = {"Kim", 15, 3.8};
 //                              name   age   gpa
 \`\`\`
 
-### Three ways to read values out
+### Two ways to read values out
 
 \`.first/.second\` no longer cuts it (3+ values). Pick one of these:
 
@@ -132,22 +189,29 @@ cout << get<2>(t);   // 3.8
 
 \`get<0>(t)\` — the **index goes inside \`<>\`, the tuple inside \`()\`**. Looks weird at first, but it just means \`t[0]\`. One catch: the number inside \`<>\` must be a **compile-time constant** — you can't put a variable \`i\` and write \`get<i>(t)\`.
 
-**② tie — assign to pre-declared variables (older style)**
+**② ⭐ Unpack all at once — structured bindings (C++17+)**
 
 \`\`\`cpp
-string name; int age; double gpa;
-tie(name, age, gpa) = t;   // assign to all three at once
+auto [name, age, gpa] = t;
 \`\`\`
 
-**③ ⭐ structured bindings — declare + assign in one line (C++17+, modern)**
+The name sounds fancy, but the idea is simple: **structured bindings** = "syntax that **binds** a structured bundle (tuple / pair / struct) to multiple **named** variables." In plain English:
 
-\`\`\`cpp
-auto [name, age, gpa] = t;   // cleanest
-\`\`\`
+- The single line \`auto [name, age, gpa] = t;\`
+- **declares three new variables** \`name\`, \`age\`, \`gpa\`
+- and **assigns** the tuple's 0 / 1 / 2 values to them respectively
 
-Reads almost like Python's \`name, age, gpa = t\`. **This single feature fixed most of tuple's readability problems.**
+Same idea as Python's \`name, age, gpa = t\`. Difference: C++ wraps the names in \`auto [ ]\`.
 
-> 💡 All three give the same result. \`tie\` is **not required**. Modern code defaults to \`auto [a, b, c] = ...\`. When you see \`tie\` in older code, just recognize it as method ②.
+> 💡 Where it's used:
+> - **pair / tuple**: \`auto [a, b] = p;\`
+> - **struct**: \`auto [x, y] = point;\` (public members work)
+> - **map iteration**: \`for (auto& [key, value] : myMap)\` ← extremely common (next lesson)
+> - **multi-value return**: \`auto [a, b] = getValues();\`
+
+**This single feature fixed most of tuple's readability problems.** It's the default in modern code.
+
+> 💡 You may run into the older \`tie(name, age, gpa) = t;\` in legacy code or older books — it does the same thing as ②. Recognize it and move on; you don't need to write it. **But the \`tie\` keyword itself shows up again next page in a different (and still current) role: comparison.**
 
 Next page — where tuple actually shows up, and how to choose between struct/pair/tuple 👇`,
         },
@@ -196,6 +260,103 @@ For grid traversal, "current position + extra info" gets tossed into a queue as 
 | Comparing struct members | **tuple + tie** |
 
 > 💡 One line: pair shows up most, struct is best for data you keep handling, and tuple covers quick bundles in between. They overlap a bit, but with practice the right choice becomes second nature.`,
+        },
+        {
+          id: "ch1-tuple-mini",
+          type: "practice" as const,
+          title: "✋ Quick — scholarship eligibility check",
+          content: `**Scenario**: \`getStudent()\` returns **(name, age, gpa)** in one go.
+
+Eligibility = **age ≥ 16 AND gpa ≥ 3.5**.
+
+If eligible, print \`Kim: eligible\`. Otherwise \`Kim: not eligible\`.
+
+\`\`\`
+getStudent() → ("Kim", 15, 3.8)   →  Kim: not eligible (age too low)
+\`\`\`
+
+> 💡 Receive with structured bindings (\`auto [name, age, gpa] = ...\`), then check the condition and print. **The real value of structured bindings: each piece gets a *name*, so the conditional reads naturally.**`,
+          starterCode: `#include <iostream>
+#include <tuple>
+#include <string>
+using namespace std;
+
+tuple<string, int, double> getStudent() {
+    return {"Kim", 15, 3.8};
+}
+
+int main() {
+    // 👇 Unpack with structured bindings.
+    //    If age >= 16 && gpa >= 3.5 → "name: eligible", else "name: not eligible"
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <tuple>
+#include <string>
+using namespace std;
+
+tuple<string, int, double> getStudent() {
+    return {"Kim", 15, 3.8};
+}
+
+int main() {
+    auto [name, age, gpa] = getStudent();
+    if (age >= 16 && gpa >= 3.5) cout << name << ": eligible";
+    else cout << name << ": not eligible";
+
+    return 0;
+}`,
+          hint: "auto [name, age, gpa] = getStudent(); — unpack. Then if (age >= 16 && gpa >= 3.5) cout << name << \": eligible\"; else cout << name << \": not eligible\";",
+          expectedOutput: `Kim: not eligible`
+        },
+        {
+          id: "ch1-tuple-mini2",
+          type: "practice" as const,
+          title: "✋ Quick — compare two students, print the higher GPA",
+          content: `**Scenario**: Two functions each return a student's (name, gpa). Print **the name of the student with the higher GPA**.
+
+\`\`\`
+studentA() → ("Kim", 3.8)
+studentB() → ("Lee", 3.5)
+Expected: Kim
+\`\`\`
+
+> 💡 Two \`auto [name, gpa] = func()\` calls, then compare gpa and print the matching name.`,
+          starterCode: `#include <iostream>
+#include <tuple>
+#include <string>
+using namespace std;
+
+tuple<string, double> studentA() { return {"Kim", 3.8}; }
+tuple<string, double> studentB() { return {"Lee", 3.5}; }
+
+int main() {
+    // 👇 Call both, unpack each, print whichever has the higher gpa
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <tuple>
+#include <string>
+using namespace std;
+
+tuple<string, double> studentA() { return {"Kim", 3.8}; }
+tuple<string, double> studentB() { return {"Lee", 3.5}; }
+
+int main() {
+    auto [nameA, gpaA] = studentA();
+    auto [nameB, gpaB] = studentB();
+
+    if (gpaA > gpaB) cout << nameA;
+    else cout << nameB;
+
+    return 0;
+}`,
+          hint: "auto [nameA, gpaA] = studentA(); auto [nameB, gpaB] = studentB(); — two of those. Then if (gpaA > gpaB) cout << nameA; else cout << nameB;",
+          expectedOutput: `Kim`
         },
         {
           id: "ch1-pred1",
@@ -332,13 +493,12 @@ Kim 95`
           id: "ch1-fb2",
           type: "fillblank" as const,
           title: "Access pair members!",
-          content: "Use .first and .second to get values from a pair!",
-          code: "pair<string, int> p = {\"Kim\", 95};\ncout << p.___ << \": \" << p.___ << endl;\n// Output: Kim: 95",
+          content: "**If the score is 90 or higher, print \"Pass\"**. Which member of the pair holds the score?",
+          code: "pair<string, int> p = {\"Kim\", 95};\nif (p.___ >= 90) {\n    cout << \"Pass\";\n}",
           fillBlanks: [
-            { id: 0, answer: "first", options: ["first", "second", "name", "0"] },
-            { id: 1, answer: "second", options: ["first", "second", "score", "1"] }
+            { id: 0, answer: "second", options: ["first", "second", "score", "1"] }
           ],
-          explanation: "The first value of a pair is accessed with .first, and the second with .second! Using p[0] or p[1] would be an error — pairs use .first/.second, not indexes."
+          explanation: "The second value (score) is accessed with .second. p[1] or p.score would be errors. The first is .first, the second is .second — pair doesn't give meaningful names to its two values."
         },
         {
           id: "ch1-pred2",

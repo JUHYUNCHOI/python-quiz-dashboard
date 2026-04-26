@@ -123,7 +123,7 @@ sort()의 **세 번째 인자**로 "비교 기준"을 넣을 수 있어요.
           id: "s23-ch0-q1",
           type: "quiz",
           title: "sort 헤더!",
-          content: "sort()를 사용하려면 어떤 헤더를 include해야 하나요?",
+          content: "`sort()` 를 사용하려면 어떤 헤더를 include 해야 하나요? **공식 답 기준으로** 골라요.",
           options: [
             "#include <sort>",
             "#include <algorithm>",
@@ -131,7 +131,7 @@ sort()의 **세 번째 인자**로 "비교 기준"을 넣을 수 있어요.
             "#include <utility>"
           ],
           answer: 1,
-          explanation: "sort()는 <algorithm> 헤더에 들어있어요! <vector>는 vector용, <utility>는 pair용이에요."
+          explanation: "**공식 답: `<algorithm>`**. `sort()` 는 정확히 이 헤더에 정의돼 있어요.\n\n💡 pair 때 \"`<vector>` 등에 자동으로 따라온다\" 고 한 거랑 헷갈렸을 수 있는데, 둘은 달라요:\n• **pair 는 *타입***: map, set 같은 STL 컨테이너가 *내부적으로* pair 를 쓰니까 헤더에 자동으로 끌려와요.\n• **sort 는 *함수***: 다른 STL 헤더가 sort 를 안 쓰니까, 따라오지 않아요. `<vector>` 만 적고 `sort()` 호출하면 `'sort' was not declared` 에러 나요.\n\n**규칙: 함수는 그 함수가 있는 공식 헤더를 명시적으로 include.** 타입은 운 좋게 따라오는 경우가 있는 정도."
         }
       ]
     },
@@ -237,6 +237,54 @@ sort(v.begin(), v.end(), [](int a, int b) {
             { id: 0, answer: ">", options: [">", "<", ">=", "!="] }
           ],
           explanation: "a > b가 true면 a가 앞으로 와요. 큰 수가 앞으로 오니까 내림차순이에요!"
+        },
+        {
+          id: "s23-ch1-abs-mini",
+          type: "practice" as const,
+          title: "✋ 잠깐 — 절댓값 기준 정렬",
+          content: `**상황**: 0 으로부터 가까운 순서로 점수 차이를 정렬하고 싶어요.
+
+\`\`\`
+입력: -3, 7, -1, 4, -5
+기대 출력 (절댓값 오름차순): -1 -3 4 -5 7
+\`\`\`
+
+\`abs(x)\` 가 절댓값. lambda 안에서 \`abs(a) < abs(b)\` 로 비교하면 끝.
+
+> 💡 lambda 의 비교식만 \`abs(a) < abs(b)\` 로 바꾸면 절댓값 정렬이에요. 입력 자체는 안 바꿔요.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cstdlib>  // abs
+using namespace std;
+
+int main() {
+    vector<int> v = {-3, 7, -1, 4, -5};
+
+    // 👇 lambda 로 abs 기준 오름차순 정렬
+
+
+    for (int x : v) cout << x << " ";
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cstdlib>
+using namespace std;
+
+int main() {
+    vector<int> v = {-3, 7, -1, 4, -5};
+
+    sort(v.begin(), v.end(), [](int a, int b) {
+        return abs(a) < abs(b);
+    });
+
+    for (int x : v) cout << x << " ";
+    return 0;
+}`,
+          hint: "sort(v.begin(), v.end(), [](int a, int b) { return abs(a) < abs(b); }); — 비교 기준만 abs 로 바꾸면 끝.",
+          expectedOutput: `-1 -3 4 -5 7 `
         },
         {
           id: "s23-ch1-pair",
@@ -427,9 +475,9 @@ Choi 72`
           id: "s23-ch2-iter",
           type: "explain",
           title: "📌 begin()과 end()가 뭐야?",
-          content: `sort()에서 계속 \`v.begin()\`, \`v.end()\`를 썼는데, 이게 정확히 뭔지 알아야 해요.
+          content: `sort() 에서 계속 \`v.begin()\`, \`v.end()\` 를 썼는데, 이게 정확히 뭔지 짚어볼 때예요.
 
-**begin()과 end()는 메모리 주소(위치를 가리키는 화살표)예요.**
+**begin() 과 end() 는 메모리 주소 (위치를 가리키는 화살표) 예요.**
 
 \`\`\`
 vector<int> v = {10, 20, 30, 40, 50};
@@ -437,8 +485,8 @@ vector<int> v = {10, 20, 30, 40, 50};
 메모리:  1000  1004  1008  1012  1016  1020
 값:       10    20    30    40    50    ???
 
-v.begin() = 1000  (10이 있는 주소)
-v.end()   = 1020  (50 다음 주소, 값 없음 — 절대 읽으면 안 됨!)
+v.begin() = 1000  (10 이 있는 주소)
+v.end()   = 1020  (50 *다음* 주소, 값 없음 — 절대 읽으면 안 됨!)
 \`\`\`
 
 \`\`\`
@@ -448,61 +496,63 @@ v.end()   = 1020  (50 다음 주소, 값 없음 — 절대 읽으면 안 됨!)
 (1000)                         (1020)
 \`\`\`
 
----
+### sort 가 인덱스 대신 begin/end 를 받는 이유
 
-**왜 인덱스 대신 begin/end를 쓰냐고요?**
-
-C++의 함수들(sort 등)이 "어디서 어디까지"를 **주소(화살표)** 로 받아요.
+C++ 의 함수들 (sort 등) 은 "어디서 어디까지" 를 **주소(화살표)** 로 받아요.
 
 \`\`\`cpp
 sort(v.begin(), v.end());
-//    ↑ 여기 주소부터  ↑ 여기 주소 직전까지 정렬
+//    ↑ 이 주소부터    ↑ 이 주소 직전까지 정렬
 \`\`\`
 
----
+왜 굳이 주소로 받을까요? 두 가지 이유가 있어요 — 다음 페이지에서 봐요 👇`
+        },
+        {
+          id: "s23-ch2-iter-benefits",
+          type: "explain",
+          title: "📌 왜 주소로? — 두 가지 이점 (특히 *통일성*)",
+          content: `**① 어떤 컨테이너에도 *같은* sort 가 통해요 — iterator 통일성** ⭐
 
-**화살표끼리 빼면 거리(인덱스)가 나와요**
+이게 진짜 핵심이에요. begin/end 만 받으면 sort 는 **컨테이너 종류와 무관** 하게 동작해요:
+
+\`\`\`cpp
+sort(v.begin(), v.end());     // vector
+sort(arr, arr + n);           // 배열 (raw array)
+sort(lst.begin(), lst.end()); // list 같은 다른 컨테이너
+// 전부 같은 sort 함수 한 개로 처리!
+\`\`\`
+
+만약 sort 가 "vector 를 받는 함수" 였다면 → \`sortVector\`, \`sortArray\`, \`sortList\` 따로 만들어야 했어요. 대신 **"iterator 라는 공통 인터페이스" 로 통일** 시켜서 sort 한 가지로 다 해결.
+
+이 사상이 STL 전체에 깔려있어요. find / count / accumulate 등 모든 STL 알고리즘이 \`(begin, end)\` 패턴을 쓰는 이유 — **하나의 함수로 모든 컨테이너 지원**.
+
+**② 복사 안 해서 빠름**
+
+벡터 자체를 함수에 넘기면 통째로 복사돼요. 100 만 개면 복사만 해도 어마어마한 시간 낭비. 주소 2 개만 넘기면 데이터 크기 상관없이 즉시.
+
+\`\`\`cpp
+sort(v);                   // (가상) 벡터 통째 복사 — 느림
+sort(v.begin(), v.end());  // 주소 2 개만 — 항상 빠름 ✅
+\`\`\`
+
+### 보너스: 두 화살표를 빼면 *거리(인덱스)* 가 나와요
 
 \`\`\`
    10    20    30    40    50
  1000  1004  1008  1012  1016
     ↑                ↑
- begin()             it  (40을 가리킴, 주소 1012)
+ begin()             it  (40 을 가리킴, 주소 1012)
 
-it - v.begin() = (1012 - 1000) / 4 = 3  → 인덱스 3!
+it - v.begin()  = (1012 - 1000) / 4 = 3  → 인덱스 3
 \`\`\`
 
 \`\`\`cpp
-// begin()에서 3칸 앞으로 간 화살표 만들기
 auto it = v.begin() + 3;
-cout << *it;           // 40  (*it = 화살표가 가리키는 값)
-cout << it - v.begin(); // 3  (인덱스로 변환)
+cout << *it;             // 40  (*it = 화살표가 가리키는 값)
+cout << it - v.begin();  // 3  (인덱스로 변환)
 \`\`\`
 
-💡 **"두 화살표를 빼면 거리(인덱스)가 나온다" — 이 개념이 lower_bound에서 바로 쓰여요!**
-
----
-
-**왜 주소(화살표)로 넘기는 거야? 인덱스로 하면 안 돼?**
-
-주소로 넘기면 두 가지 장점이 있어요:
-
-**① 복사를 안 해요 — 크기 상관없이 빠름**
-\`\`\`cpp
-// 만약 벡터 전체를 복사해서 넘기면?
-sort(v);  // 100만 개면 복사만 해도 엄청난 시간 낭비!
-
-// 시작/끝 주소 2개만 넘기면?
-sort(v.begin(), v.end());  // 크기 상관없이 항상 빠름 ✅
-\`\`\`
-
-**② 어떤 컨테이너에도 같은 함수를 쓸 수 있어요**
-\`\`\`cpp
-sort(v.begin(), v.end());     // vector
-sort(arr, arr + n);           // 배열
-sort(lst.begin(), lst.end()); // list
-// 같은 sort() 함수로 다 됨!
-\`\`\``
+> 💡 **"두 화살표를 빼면 거리"** — 이 트릭이 곧이어 \`lower_bound\` 에서 정석으로 쓰여요.`
         },
         {
           id: "s23-ch2-lb",

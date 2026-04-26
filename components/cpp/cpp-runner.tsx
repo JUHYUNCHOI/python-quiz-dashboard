@@ -20,7 +20,7 @@ function escapeHtml(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
 }
 
-function highlightCppCode(code: string): string {
+export function highlightCppCode(code: string): string {
   // We process the code with placeholders to avoid re-highlighting replaced regions
   const segments: Array<{ text: string; cls?: string }> = []
   let remaining = code

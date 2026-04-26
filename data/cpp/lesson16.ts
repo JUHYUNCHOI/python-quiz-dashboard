@@ -378,6 +378,50 @@ s.empty();         // 비어있으면 true
           explanation: "C++ set에 원소를 넣을 때는 insert()를 사용해요! 파이썬의 add()와 같은 역할이에요. push_back이나 append는 set에서 사용할 수 없어요."
         },
         {
+          id: "ch2-set-mini",
+          type: "practice" as const,
+          title: "✋ 잠깐 — 출석한 학생 수 (중복 제외)",
+          content: `**상황**: 오늘 수업에 들어온 학생 이름이 중복 포함 8 번 호명됐어요. 실제 **서로 다른 학생 수** 는?
+
+\`\`\`
+호명: Alice, Bob, Alice, Carol, Bob, Alice, David, Carol
+실제 서로 다른 학생: 4 명
+\`\`\`
+
+set 에 다 넣고 \`size()\` 를 출력하세요.
+
+> 💡 \`set\` 은 자동으로 중복 제거. 그냥 다 \`insert\` 하면 끝.`,
+          starterCode: `#include <iostream>
+#include <set>
+#include <string>
+using namespace std;
+
+int main() {
+    string names[] = {"Alice", "Bob", "Alice", "Carol", "Bob", "Alice", "David", "Carol"};
+
+    // 👇 set 에 다 insert 하고 set.size() 출력
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <set>
+#include <string>
+using namespace std;
+
+int main() {
+    string names[] = {"Alice", "Bob", "Alice", "Carol", "Bob", "Alice", "David", "Carol"};
+
+    set<string> attended;
+    for (auto& n : names) attended.insert(n);
+    cout << attended.size();
+
+    return 0;
+}`,
+          hint: "set<string> attended; for (auto& n : names) attended.insert(n); cout << attended.size(); — set 이 알아서 중복 제거.",
+          expectedOutput: `4`
+        },
+        {
           id: "ch2-unordered",
           type: "explain",
           title: "🎯 unordered_set — 정렬 없이 빠르게!",

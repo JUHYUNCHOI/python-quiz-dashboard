@@ -103,6 +103,52 @@ cout << s.top();  // 20
           explanation: "push(1), push(2), push(3)으로 [1,2,3]이 돼요. pop()으로 3 제거 → [1,2], 다시 pop()으로 2 제거 → [1]. top()은 1을 리턴해요!"
         },
         {
+          id: "ch1-stack-mini",
+          type: "practice" as const,
+          title: "✋ 잠깐 — stack 으로 거꾸로 출력",
+          content: `**상황**: 숫자 5 개를 받았는데, 나중에 입력된 것부터 거꾸로 출력하고 싶어요.
+
+\`\`\`
+입력: 1 2 3 4 5
+기대 출력: 5 4 3 2 1
+\`\`\`
+
+stack 의 LIFO 특성으로 한 번에 끝. 다 \`push\` 하고 빌 때까지 \`top\` + \`pop\`.
+
+> 💡 \`while (!s.empty()) { cout << s.top() << " "; s.pop(); }\` — 이 패턴이 핵심.`,
+          starterCode: `#include <iostream>
+#include <stack>
+using namespace std;
+
+int main() {
+    int nums[] = {1, 2, 3, 4, 5};
+    stack<int> s;
+
+    // 👇 nums 를 다 push 하고, 빌 때까지 top + pop 으로 출력 (공백 구분)
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <stack>
+using namespace std;
+
+int main() {
+    int nums[] = {1, 2, 3, 4, 5};
+    stack<int> s;
+
+    for (int n : nums) s.push(n);
+    while (!s.empty()) {
+        cout << s.top() << " ";
+        s.pop();
+    }
+
+    return 0;
+}`,
+          hint: "for (int n : nums) s.push(n); 으로 다 넣고, while (!s.empty()) { cout << s.top() << \" \"; s.pop(); } 로 거꾸로 빼내요.",
+          expectedOutput: `5 4 3 2 1 `
+        },
+        {
           id: "ch1-queue",
           type: "explain",
           title: "📦 queue — 선입선출(FIFO)!",

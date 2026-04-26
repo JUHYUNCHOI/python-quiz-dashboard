@@ -1,6 +1,11 @@
 "use client"
 
 import { useState, useEffect, useRef, Fragment } from "react"
+import dynamic from "next/dynamic"
+import { highlightCppCode } from "@/components/cpp/cpp-runner"
+
+// 동적 import — SSR 비활성화
+const SimpleEditor = dynamic(() => import("react-simple-code-editor"), { ssr: false })
 
 // 한글/CJK 문자는 영문자보다 2배 넓으므로 ch 단위 계산 시 2로 카운트
 function getChWidth(str: string): number {
@@ -35,6 +40,31 @@ import type {
 } from "./data/types"
 import { runPythonCode } from "./utils/pythonRunner"
 import { callPiston } from "@/lib/piston"
+
+// ─────────────────────────────────────────────────────────────
+// 학생이 처음부터 작성 (template=null) 한 C++ 코드를 Piston 으로
+// 보내기 전에 자동으로 헤더/main 으로 감쌈. 학생이 매번 #include
+// 와 int main() 을 안 적어도 되게.
+// ─────────────────────────────────────────────────────────────
+function wrapCppCode(code: string): string {
+  const trimmed = code.trim()
+  if (!trimmed) return code
+
+  const hasInclude = /#\s*include/.test(trimmed)
+  const hasMain = /\bint\s+main\s*\(/.test(trimmed)
+
+  // 이미 완성된 프로그램이면 그대로
+  if (hasMain && hasInclude) return code
+
+  // main 만 있고 include 없으면 include 만 추가
+  if (hasMain && !hasInclude) {
+    return `#include <bits/stdc++.h>\nusing namespace std;\n\n${code}`
+  }
+
+  // main 이 없으면 본문을 main 안으로 감쌈
+  const headerPart = hasInclude ? "" : "#include <bits/stdc++.h>\nusing namespace std;\n\n"
+  return `${headerPart}int main() {\n${code}\n    return 0;\n}\n`
+}
 
 // ─────────────────────────────────────────────────────────────
 // Auto-translate common Korean review strings → English fallback
@@ -499,10 +529,13 @@ function PracticeStep({
         try {
           const stdinVal = (content as { stdin?: string }).stdin
 
+          // 학생이 #include / int main() 안 써도 자동으로 감싸서 컴파일
+          const codeForPiston = isFullCode ? wrapCppCode(combined) : combined
+
           // 네트워크 오류 시 1회 재시도
-          let pistonRes = await callPiston("cpp", combined, stdinVal)
+          let pistonRes = await callPiston("cpp", codeForPiston, stdinVal)
           if (pistonRes.networkError) {
-            pistonRes = await callPiston("cpp", combined, stdinVal)
+            pistonRes = await callPiston("cpp", codeForPiston, stdinVal)
           }
 
           if (pistonRes.compileError) {
@@ -707,16 +740,108 @@ function PracticeStep({
                 )}
               </div>
             )}
-            {/* 입력 */}
-            <textarea
-              ref={firstInputRef as React.RefObject<HTMLTextAreaElement>}
-              value={inputs[0]}
-              onChange={e => setInputs([e.target.value])}
-              placeholder={t("// 여기에 코드를 작성하세요...", "// Write your code here...")}
-              rows={3}
-              className="w-full bg-[#1a1b2e] text-[#a9b1d6] px-4 py-3 font-mono text-sm focus:outline-none resize-none placeholder:text-gray-600"
-              spellCheck={false}
-            />
+            {/* 입력 — C++ 은 SimpleEditor (syntax 하이라이팅 + auto-indent + auto-bracket), Python 은 textarea */}
+            {language === "cpp" ? (
+              <div className="bg-[#1a1b2e] text-[#a9b1d6] font-mono text-sm min-h-[280px] cpp-editor-dark">
+                <SimpleEditor
+                  value={inputs[0]}
+                  onValueChange={(v: string) => setInputs([v])}
+                  highlight={highlightCppCode}
+                  padding={16}
+                  tabSize={4}
+                  insertSpaces={true}
+                  placeholder={t("// 여기에 코드를 작성하세요...", "// Write your code here...")}
+                  textareaClassName="focus:outline-none"
+                  onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement & HTMLDivElement>) => {
+                    const ta = e.currentTarget as unknown as HTMLTextAreaElement
+                    const val = ta.value
+                    const start = ta.selectionStart
+                    const end = ta.selectionEnd
+
+                    // Enter — 이전 줄 들여쓰기 유지 + { 다음이면 4칸 추가, } 앞이면 줄바꿈 + 닫기
+                    if (e.key === "Enter") {
+                      e.preventDefault()
+                      const lineStart = val.lastIndexOf("\n", start - 1) + 1
+                      const currentLine = val.slice(lineStart, start)
+                      const indent = currentLine.match(/^(\s*)/)?.[1] ?? ""
+                      const charBefore = val[start - 1]
+                      const charAfter = val[start]
+
+                      // {  와 } 사이 → 새 줄 + 추가 들여쓰기 + 빈 줄 + 원래 들여쓰기 닫는 줄
+                      if (charBefore === "{" && charAfter === "}") {
+                        const insertion = "\n" + indent + "    " + "\n" + indent
+                        const newVal = val.slice(0, start) + insertion + val.slice(start)
+                        const newCursor = start + 1 + indent.length + 4
+                        setInputs([newVal])
+                        requestAnimationFrame(() => { ta.selectionStart = ta.selectionEnd = newCursor })
+                        return
+                      }
+
+                      // 일반 — 이전 줄 들여쓰기 유지 + { 로 끝나면 4칸 추가
+                      const extra = currentLine.trimEnd().endsWith("{") ? "    " : ""
+                      const insertion = "\n" + indent + extra
+                      const newVal = val.slice(0, start) + insertion + val.slice(start)
+                      const newCursor = start + insertion.length
+                      setInputs([newVal])
+                      requestAnimationFrame(() => { ta.selectionStart = ta.selectionEnd = newCursor })
+                      return
+                    }
+
+                    // 자동 닫기 — { ( [ "
+                    const pairs: Record<string, string> = { "{": "}", "(": ")", "[": "]", "\"": "\"" }
+                    if (pairs[e.key] && start === end) {
+                      e.preventDefault()
+                      const closing = pairs[e.key]
+                      const newVal = val.slice(0, start) + e.key + closing + val.slice(start)
+                      setInputs([newVal])
+                      requestAnimationFrame(() => { ta.selectionStart = ta.selectionEnd = start + 1 })
+                      return
+                    }
+
+                    // 닫는 괄호 자동 건너뛰기 — } ) ] " 가 이미 있으면 입력 안 하고 커서만 이동
+                    const closers = new Set(["}", ")", "]", "\""])
+                    if (closers.has(e.key) && val[start] === e.key && start === end) {
+                      e.preventDefault()
+                      requestAnimationFrame(() => { ta.selectionStart = ta.selectionEnd = start + 1 })
+                      return
+                    }
+
+                    // Backspace — 빈 괄호 쌍 사이에서 같이 삭제
+                    if (e.key === "Backspace" && start === end && start > 0) {
+                      const prev = val[start - 1]
+                      const next = val[start]
+                      if (
+                        (prev === "{" && next === "}") ||
+                        (prev === "(" && next === ")") ||
+                        (prev === "[" && next === "]") ||
+                        (prev === "\"" && next === "\"")
+                      ) {
+                        e.preventDefault()
+                        const newVal = val.slice(0, start - 1) + val.slice(start + 1)
+                        setInputs([newVal])
+                        requestAnimationFrame(() => { ta.selectionStart = ta.selectionEnd = start - 1 })
+                        return
+                      }
+                    }
+                  }}
+                  style={{
+                    fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+                    fontSize: 14,
+                    minHeight: 280,
+                  }}
+                />
+              </div>
+            ) : (
+              <textarea
+                ref={firstInputRef as React.RefObject<HTMLTextAreaElement>}
+                value={inputs[0]}
+                onChange={e => setInputs([e.target.value])}
+                placeholder={t("// 여기에 코드를 작성하세요...", "// Write your code here...")}
+                rows={12}
+                className="w-full bg-[#1a1b2e] text-[#a9b1d6] px-4 py-3 font-mono text-sm focus:outline-none resize-y placeholder:text-gray-600 min-h-[280px]"
+                spellCheck={false}
+              />
+            )}
           </div>
           <button
             onClick={check}

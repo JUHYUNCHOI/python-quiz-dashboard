@@ -94,6 +94,63 @@ auto p3 = make_pair("Park", 77);             // auto 로 타입 생략
 > 💡 셋 이상 묶고 싶으면 곧 나올 \`tuple\`. 근데 실전에서 가장 많이 쓰는 건 pair 예요 — 좌표 (x,y), 이름-점수, 인덱스-거리 같은 "딱 두 개" 짝이 흔하니까요.`,
         },
         {
+          id: "ch1-pair-mini",
+          type: "practice" as const,
+          title: "✋ 잠깐 — 카페 메뉴에서 가장 비싼 음료 찾기",
+          content: `**상황**: 카페 메뉴 5 개가 \`(이름, 가격)\` pair 로 정리되어 있어요.
+
+\`\`\`
+라떼 5500 / 아메리카노 4500 / 카푸치노 6000 / 에스프레소 4000 / 모카 6500
+\`\`\`
+
+**가장 비싼 음료의 이름과 가격** 을 \`모카: 6500원\` 형식으로 출력하세요.
+
+> 💡 패턴: 첫 음료를 일단 "현재 최고" 로 잡고, range-for 로 돌면서 \`.second\` 가 더 큰 게 나오면 갱신. 끝에 출력.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> menu = {
+        {"라떼", 5500},
+        {"아메리카노", 4500},
+        {"카푸치노", 6000},
+        {"에스프레소", 4000},
+        {"모카", 6500}
+    };
+
+    // 👇 가장 비싼 음료 찾기 — "이름: 가격원" 형식 출력
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> menu = {
+        {"라떼", 5500},
+        {"아메리카노", 4500},
+        {"카푸치노", 6000},
+        {"에스프레소", 4000},
+        {"모카", 6500}
+    };
+
+    pair<string, int> best = menu[0];
+    for (auto& d : menu) {
+        if (d.second > best.second) best = d;
+    }
+    cout << best.first << ": " << best.second << "원";
+
+    return 0;
+}`,
+          hint: "pair<string, int> best = menu[0]; 로 첫 항목으로 시작. for (auto& d : menu) 로 돌면서 if (d.second > best.second) best = d; 로 갱신. 끝에 cout << best.first << \": \" << best.second << \"원\";",
+          expectedOutput: `모카: 6500원`
+        },
+        {
           id: "ch1-fb1",
           type: "fillblank" as const,
           title: "빈칸을 채워주세요",
@@ -118,9 +175,9 @@ tuple<string, int, double> t = {"Kim", 15, 3.8};
 //                              이름   나이  학점
 \`\`\`
 
-### 값 꺼내는 방법 세 가지
+### 값 꺼내는 방법 두 가지
 
-값 꺼낼 땐 \`.first/.second\` 같은 이름이 더 이상 안 통해요 (셋 이상이니까). 대신 다음 셋 중 골라 써요:
+값 꺼낼 땐 \`.first/.second\` 같은 이름이 더 이상 안 통해요 (셋 이상이니까). 대신 둘 중 골라 써요:
 
 **① 하나씩 꺼내기 — \`get<인덱스>(t)\`**
 
@@ -132,22 +189,29 @@ cout << get<2>(t);   // 3.8
 
 \`get<0>(t)\` 는 **\`<>\` 안에 인덱스, \`()\` 안에 tuple**. 처음 보면 이상하지만 의미는 \`t[0]\` 이랑 같아요. 한 가지 차이: \`<>\` 안의 숫자는 **컴파일 시점에 정해진 상수만** 가능. 변수 \`i\` 를 넣어 \`get<i>(t)\` 는 안 돼요.
 
-**② tie — 미리 만들어둔 변수에 한 번에 담기 (옛날 방식)**
+**② ⭐ 한 번에 풀어 담기 — structured bindings (C++17+)**
 
 \`\`\`cpp
-string name; int age; double gpa;
-tie(name, age, gpa) = t;   // 변수 3 개에 한 번에 대입
+auto [name, age, gpa] = t;
 \`\`\`
 
-**③ ⭐ structured bindings — 변수 만들기 + 담기를 한 줄에 (C++17+, 모던)**
+이름이 좀 어렵죠? **structured bindings** = "**구조** (structure) 가 있는 묶음 (tuple/pair 등) 을 여러 변수에 **묶어주는(bind)** 문법" 이라 그렇게 불러요. 풀어쓰면 정말 단순해요:
 
-\`\`\`cpp
-auto [name, age, gpa] = t;   // 가장 깔끔
-\`\`\`
+- \`auto [name, age, gpa] = t;\` 한 줄이
+- \`name\`, \`age\`, \`gpa\` **세 변수를 새로 만들고**
+- tuple 의 0 / 1 / 2 번째 값을 각각 **자동으로 담아줘요**
 
-파이썬의 \`name, age, gpa = t\` 랑 거의 똑같죠. **tuple 의 가독성 단점이 이 문법 덕에 많이 사라졌어요.**
+파이썬의 \`name, age, gpa = t\` 랑 발상이 같아요. 차이는 C++ 은 \`auto [ ]\` 로 감싼다는 것 정도.
 
-> 💡 셋 다 결과는 같아요. \`tie\` 가 *필수* 가 아니에요. 모던 코드에선 \`auto [a, b, c] = ...\` 가 기본. 옛날 코드에서 \`tie\` 를 보게 되면 "아 이건 ②번 방식이구나" 알아보면 돼요.
+> 💡 어디 써요?
+> - **pair / tuple**: \`auto [a, b] = p;\`
+> - **struct**: \`auto [x, y] = point;\` (멤버가 public 이면 OK)
+> - **map 순회**: \`for (auto& [key, value] : myMap)\` ← 이게 정말 자주 보여요 (다음 레슨)
+> - **함수 다중 리턴**: \`auto [a, b] = getValues();\`
+
+**tuple 의 가독성 단점이 이 문법 덕에 많이 사라졌어요.** 모던 코드에선 이게 기본.
+
+> 💡 옛날 책이나 오래된 코드에서 \`tie(name, age, gpa) = t;\` 를 만나면 "아 옛날 방식의 ②번이구나" 정도로 알아보고 넘기면 돼요. 직접 쓸 일은 없어요. 단, **\`tie\` 자체는 다음 페이지에서 다른 용도(비교 패턴)로 다시 만나요** — 거긴 지금도 정석이에요.
 
 다음 페이지에서 — tuple 이 진짜로 쓰이는 자리, 그리고 struct/pair 와의 선택 가이드 봐요 👇`,
         },
@@ -196,6 +260,103 @@ queue<tuple<int, int, int>> q;   // (x, y, distance)
 | struct 멤버 비교 | **tuple + tie** |
 
 > 💡 한 줄 정리: pair 가 가장 흔하고, 자주 다룰 데이터는 struct, 그 외 잠깐 쓰는 묶음에는 tuple. 셋이 역할이 살짝 겹쳐서 헷갈리기 쉬운데 — 코드 짜다 보면 자연스럽게 손에 익어요.`,
+        },
+        {
+          id: "ch1-tuple-mini",
+          type: "practice" as const,
+          title: "✋ 잠깐 — 장학금 자격 판정",
+          content: `**상황**: \`getStudent()\` 함수가 학생의 **(이름, 나이, 학점) 세 값** 을 한 번에 돌려줘요.
+
+장학금 자격 = **나이 ≥ 16 그리고 학점 ≥ 3.5**.
+
+자격이 되면 \`Kim: 자격 있음\`, 안 되면 \`Kim: 자격 없음\` 을 출력하세요.
+
+\`\`\`
+getStudent() → ("Kim", 15, 3.8)   →  Kim: 자격 없음 (나이 부족)
+\`\`\`
+
+> 💡 함수 결과를 structured bindings 으로 받고 (\`auto [name, age, gpa] = ...\`), 조건 판단 후 출력. **각 값에 *이름* 이 붙어서 코드가 읽기 쉬워지는 게 structured bindings 의 진짜 가치.**`,
+          starterCode: `#include <iostream>
+#include <tuple>
+#include <string>
+using namespace std;
+
+tuple<string, int, double> getStudent() {
+    return {"Kim", 15, 3.8};
+}
+
+int main() {
+    // 👇 함수 결과를 structured bindings 으로 받고
+    //    age >= 16 && gpa >= 3.5 면 "이름: 자격 있음", 아니면 "이름: 자격 없음" 출력
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <tuple>
+#include <string>
+using namespace std;
+
+tuple<string, int, double> getStudent() {
+    return {"Kim", 15, 3.8};
+}
+
+int main() {
+    auto [name, age, gpa] = getStudent();
+    if (age >= 16 && gpa >= 3.5) cout << name << ": 자격 있음";
+    else cout << name << ": 자격 없음";
+
+    return 0;
+}`,
+          hint: "auto [name, age, gpa] = getStudent(); — 한 줄로 풀고. if (age >= 16 && gpa >= 3.5) cout << name << \": 자격 있음\"; else cout << name << \": 자격 없음\";",
+          expectedOutput: `Kim: 자격 없음`
+        },
+        {
+          id: "ch1-tuple-mini2",
+          type: "practice" as const,
+          title: "✋ 잠깐 — 두 학생 비교, 학점 높은 쪽 출력",
+          content: `**상황**: 두 함수가 각각 학생 한 명의 (이름, 학점) 을 돌려줘요. **학점이 더 높은 학생의 이름** 을 출력하세요.
+
+\`\`\`
+studentA() → ("Kim", 3.8)
+studentB() → ("Lee", 3.5)
+기대 출력: Kim
+\`\`\`
+
+> 💡 두 번 \`auto [name, gpa] = func()\` 으로 받고, gpa 비교 후 이름 출력.`,
+          starterCode: `#include <iostream>
+#include <tuple>
+#include <string>
+using namespace std;
+
+tuple<string, double> studentA() { return {"Kim", 3.8}; }
+tuple<string, double> studentB() { return {"Lee", 3.5}; }
+
+int main() {
+    // 👇 두 함수 호출 + structured bindings + 학점 더 높은 사람 이름 출력
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <tuple>
+#include <string>
+using namespace std;
+
+tuple<string, double> studentA() { return {"Kim", 3.8}; }
+tuple<string, double> studentB() { return {"Lee", 3.5}; }
+
+int main() {
+    auto [nameA, gpaA] = studentA();
+    auto [nameB, gpaB] = studentB();
+
+    if (gpaA > gpaB) cout << nameA;
+    else cout << nameB;
+
+    return 0;
+}`,
+          hint: "auto [nameA, gpaA] = studentA(); auto [nameB, gpaB] = studentB(); 두 번. 그 다음 if (gpaA > gpaB) cout << nameA; else cout << nameB;",
+          expectedOutput: `Kim`
         },
         {
           id: "ch1-pred1",
@@ -332,13 +493,128 @@ Kim 95`
           id: "ch1-fb2",
           type: "fillblank" as const,
           title: "pair 멤버에 접근해봐요!",
-          content: "p.first와 p.second로 pair의 값을 꺼내봐요!",
-          code: "pair<string, int> p = {\"Kim\", 95};\ncout << p.___ << \": \" << p.___ << endl;\n// 출력: Kim: 95",
+          content: "**점수가 90점 이상이면 \"통과\" 출력**. pair 의 두 값 중 점수에 접근하려면?",
+          code: "pair<string, int> p = {\"Kim\", 95};\nif (p.___ >= 90) {\n    cout << \"통과\";\n}",
           fillBlanks: [
-            { id: 0, answer: "first", options: ["first", "second", "name", "0"] },
-            { id: 1, answer: "second", options: ["first", "second", "score", "1"] }
+            { id: 0, answer: "second", options: ["first", "second", "score", "1"] }
           ],
-          explanation: "pair의 첫 번째 값은 .first, 두 번째 값은 .second로 접근해요! p[0]이나 p[1]은 에러예요."
+          explanation: "pair 에서 두 번째 값(점수)은 .second 로 접근해요! p[1] 이나 p.score 는 에러예요. 첫 번째는 .first, 두 번째는 .second — pair 가 두 값에 의미 있는 이름을 안 줘서 그래요."
+        },
+        {
+          id: "ch1-pair-filter",
+          type: "practice" as const,
+          title: "✋ 본격 — 80점 이상 학생만 골라 출력",
+          content: `**상황**: 학생 5 명의 \`(이름, 점수)\` pair 가 있어요. **80 점 이상인 학생만** 한 줄에 한 명씩 \`이름 점수\` 형식으로 출력하세요.
+
+\`\`\`
+입력: Kim 72 / Lee 88 / Park 55 / Choi 95 / Han 81
+
+기대 출력:
+Lee 88
+Choi 95
+Han 81
+\`\`\`
+
+> 💡 패턴: range-for 로 돌면서 \`s.second >= 80\` 조건 체크 → 통과하면 \`s.first << " " << s.second\` 출력. **filter** 패턴이라고 불러요 — 데이터 다루는 기본기예요.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> students = {
+        {"Kim", 72},
+        {"Lee", 88},
+        {"Park", 55},
+        {"Choi", 95},
+        {"Han", 81}
+    };
+
+    // 👇 80 점 이상인 학생만 "이름 점수" 형식으로 한 줄에 하나씩 출력
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> students = {
+        {"Kim", 72},
+        {"Lee", 88},
+        {"Park", 55},
+        {"Choi", 95},
+        {"Han", 81}
+    };
+
+    for (auto& s : students) {
+        if (s.second >= 80) {
+            cout << s.first << " " << s.second << endl;
+        }
+    }
+
+    return 0;
+}`,
+          hint: "for (auto& s : students) 로 한 명씩 돌면서 if (s.second >= 80) 으로 점수 체크. 통과한 학생은 cout << s.first << \" \" << s.second << endl; 로 출력.",
+          expectedOutput: `Lee 88
+Choi 95
+Han 81`
+        },
+        {
+          id: "ch1-pair-count",
+          type: "practice" as const,
+          title: "✋ 본격 — 평균 점수 구하기",
+          content: `**상황**: 같은 학생 5 명의 \`(이름, 점수)\` pair 에서 **평균 점수** 를 출력하세요. (정수 나눗셈 OK)
+
+\`\`\`
+입력: Kim 72 / Lee 88 / Park 55 / Choi 95 / Han 81
+기대 출력: 78
+\`\`\`
+
+> 💡 패턴: 합계 변수 만들고, range-for 로 돌면서 \`s.second\` 누적, 마지막에 학생 수로 나눠서 출력. **누적합 (accumulate) 패턴** — 자료 다루는 기본기 두 번째.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> students = {
+        {"Kim", 72},
+        {"Lee", 88},
+        {"Park", 55},
+        {"Choi", 95},
+        {"Han", 81}
+    };
+
+    // 👇 평균 점수 출력 (총합 / 학생 수)
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> students = {
+        {"Kim", 72},
+        {"Lee", 88},
+        {"Park", 55},
+        {"Choi", 95},
+        {"Han", 81}
+    };
+
+    int total = 0;
+    for (auto& s : students) total += s.second;
+    cout << total / (int)students.size();
+
+    return 0;
+}`,
+          hint: "int total = 0; for (auto& s : students) total += s.second; 로 합계. 마지막에 cout << total / (int)students.size(); — 학생 수로 나눠 평균.",
+          expectedOutput: `78`
         },
         {
           id: "ch1-pred2",
