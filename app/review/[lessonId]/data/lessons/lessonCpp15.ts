@@ -436,30 +436,31 @@ export const lessonCpp15: LessonData = {
         type: "practice",
         content: {
           level: 3,
-          task: "처음부터 작성! pair 벡터에서 점수(second)가 가장 높은 학생 이름(first)을 출력해요\n입력: {{\"Alice\",85},{\"Bob\",92},{\"Carol\",78}}",
-          guide: "벡터 순회하며 최대 점수 추적 — pair<string,int> best",
+          task: "처음부터 작성! pair 벡터에서 **점수가 가장 높은 학생의 이름** 만 출력하세요. (정렬 X — 한 번 훑으면서 최댓값 추적하는 패턴이에요. 카페 메뉴에서 가장 비싼 음료 찾기랑 같은 패턴.)\n\n입력 데이터: {{\"Alice\",85},{\"Bob\",92},{\"Carol\",78}}\n기대 출력: Bob",
+          guide: "best = v[0] 으로 시작 → range-for 로 돌면서 p.second > best.second 면 갱신 → 끝에 best.first 출력",
           template: null,
           answer: 'vector<pair<string,int>> v = {{"Alice",85},{"Bob",92},{"Carol",78}};\npair<string,int> best = v[0];\nfor (auto p : v) {\n    if (p.second > best.second) {\n        best = p;\n    }\n}\ncout << best.first << endl;',
           expect: "Bob",
           en: {
-            task: "Write from scratch! Find and print the name (first) of the student with the highest score (second) from a pair vector\nInput: {{\"Alice\",85},{\"Bob\",92},{\"Carol\",78}}",
-            guide: "Iterate through the vector tracking the maximum score — pair<string,int> best"
+            task: "Write from scratch! Print **just the name of the student with the highest score**. (No sort needed — single-pass max tracking, same pattern as 'find the most expensive drink' from the lesson.)\n\nInput: {{\"Alice\",85},{\"Bob\",92},{\"Carol\",78}}\nExpected output: Bob",
+            guide: "Seed best = v[0], range-for the rest, update best when p.second > best.second, then print best.first"
           }
         }
       },
 
-      // interleaving: cpp-14 struct 복습 (pair vs struct)
+      // interleaving: cpp-14 struct 복습 (pair vs struct 진짜 비교)
       {
         type: "interleaving",
         content: {
-          message: "잠깐! struct와 pair의 차이를 기억해요?",
-          task: "struct Student에서 멤버 name에 접근하는 방법을 완성해요!",
-          template: "Student s;\ns.___ = \"홍길동\";",
+          message: "잠깐! struct와 pair의 진짜 차이 — 멤버 *이름*",
+          task: "같은 데이터를 두 방식으로 표현했어요. **struct 와 pair 양쪽 모두 'name' 에 해당하는 부분에 접근**해서 \"홍길동\" 으로 설정하세요.\n\n👉 차이가 보이죠? struct 는 .name 처럼 *의미가 보이는* 이름, pair 는 .first / .second 처럼 *순서로만* 접근.",
+          template: "// struct 방식 — 의미 있는 이름\nstruct Student { string name; int age; };\nStudent s;\ns.___ = \"홍길동\";\n\n// pair 방식 — 순서로만\npair<string, int> p;\np.___ = \"홍길동\";",
           answer: "name",
-          expect: "Student s;\ns.name = \"홍길동\";",
+          blanksAnswer: ["name", "first"],
+          expect: "// struct 방식 — 의미 있는 이름\nstruct Student { string name; int age; };\nStudent s;\ns.name = \"홍길동\";\n\n// pair 방식 — 순서로만\npair<string, int> p;\np.first = \"홍길동\";",
           en: {
-            message: "Quick! Remember the difference between struct and pair?",
-            task: "Complete the code to access the name member in struct Student!"
+            message: "Quick! The real difference between struct and pair — member *names*",
+            task: "Same data, two representations. **Set the 'name' equivalent to \"Hong\" in BOTH struct and pair.**\n\n👉 See the difference? struct uses meaningful names like .name; pair only uses .first / .second by position."
           }
         }
       },

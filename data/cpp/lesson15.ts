@@ -501,6 +501,122 @@ Kim 95`
           explanation: "pair 에서 두 번째 값(점수)은 .second 로 접근해요! p[1] 이나 p.score 는 에러예요. 첫 번째는 .first, 두 번째는 .second — pair 가 두 값에 의미 있는 이름을 안 줘서 그래요."
         },
         {
+          id: "ch1-pair-filter",
+          type: "practice" as const,
+          title: "✋ 본격 — 80점 이상 학생만 골라 출력",
+          content: `**상황**: 학생 5 명의 \`(이름, 점수)\` pair 가 있어요. **80 점 이상인 학생만** 한 줄에 한 명씩 \`이름 점수\` 형식으로 출력하세요.
+
+\`\`\`
+입력: Kim 72 / Lee 88 / Park 55 / Choi 95 / Han 81
+
+기대 출력:
+Lee 88
+Choi 95
+Han 81
+\`\`\`
+
+> 💡 패턴: range-for 로 돌면서 \`s.second >= 80\` 조건 체크 → 통과하면 \`s.first << " " << s.second\` 출력. **filter** 패턴이라고 불러요 — 데이터 다루는 기본기예요.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> students = {
+        {"Kim", 72},
+        {"Lee", 88},
+        {"Park", 55},
+        {"Choi", 95},
+        {"Han", 81}
+    };
+
+    // 👇 80 점 이상인 학생만 "이름 점수" 형식으로 한 줄에 하나씩 출력
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> students = {
+        {"Kim", 72},
+        {"Lee", 88},
+        {"Park", 55},
+        {"Choi", 95},
+        {"Han", 81}
+    };
+
+    for (auto& s : students) {
+        if (s.second >= 80) {
+            cout << s.first << " " << s.second << endl;
+        }
+    }
+
+    return 0;
+}`,
+          hint: "for (auto& s : students) 로 한 명씩 돌면서 if (s.second >= 80) 으로 점수 체크. 통과한 학생은 cout << s.first << \" \" << s.second << endl; 로 출력.",
+          expectedOutput: `Lee 88
+Choi 95
+Han 81`
+        },
+        {
+          id: "ch1-pair-count",
+          type: "practice" as const,
+          title: "✋ 본격 — 평균 점수 구하기",
+          content: `**상황**: 같은 학생 5 명의 \`(이름, 점수)\` pair 에서 **평균 점수** 를 출력하세요. (정수 나눗셈 OK)
+
+\`\`\`
+입력: Kim 72 / Lee 88 / Park 55 / Choi 95 / Han 81
+기대 출력: 78
+\`\`\`
+
+> 💡 패턴: 합계 변수 만들고, range-for 로 돌면서 \`s.second\` 누적, 마지막에 학생 수로 나눠서 출력. **누적합 (accumulate) 패턴** — 자료 다루는 기본기 두 번째.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> students = {
+        {"Kim", 72},
+        {"Lee", 88},
+        {"Park", 55},
+        {"Choi", 95},
+        {"Han", 81}
+    };
+
+    // 👇 평균 점수 출력 (총합 / 학생 수)
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> students = {
+        {"Kim", 72},
+        {"Lee", 88},
+        {"Park", 55},
+        {"Choi", 95},
+        {"Han", 81}
+    };
+
+    int total = 0;
+    for (auto& s : students) total += s.second;
+    cout << total / (int)students.size();
+
+    return 0;
+}`,
+          hint: "int total = 0; for (auto& s : students) total += s.second; 로 합계. 마지막에 cout << total / (int)students.size(); — 학생 수로 나눠 평균.",
+          expectedOutput: `78`
+        },
+        {
           id: "ch1-pred2",
           type: "predict" as const,
           title: "출력 결과 맞추기!",
