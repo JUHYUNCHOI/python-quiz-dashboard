@@ -311,9 +311,14 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
     const trackIds = trackParts.flatMap(p => p.lessonIds)
     const idx = trackIds.indexOf(idNormalized)
     if (idx <= 0) return false // 첫 수업 또는 알 수 없는 ID → 열림
-    // 체크포인트(cpp-ck*)는 건너뛰고 직전 일반 레슨이 완료됐는지 확인
+    // 체크포인트(cpp-ck*) + 프로젝트(cpp-p1/p2/p3 등)는 건너뛰고 직전 *일반 레슨* 이
+    // 완료됐는지 확인. 프로젝트는 isProject 로 마크된 선택사항이라 잠금 판정에서 빼야 함.
+    const isCheckpointOrProject = (id: string | number) => {
+      const s = String(id)
+      return /-ck/.test(s) || /-p\d+$/.test(s)
+    }
     let prevIdx = idx - 1
-    while (prevIdx >= 0 && String(trackIds[prevIdx]).includes("-ck")) prevIdx--
+    while (prevIdx >= 0 && isCheckpointOrProject(trackIds[prevIdx])) prevIdx--
     if (prevIdx < 0) return false
     return !completed.has(trackIds[prevIdx])
   })()
