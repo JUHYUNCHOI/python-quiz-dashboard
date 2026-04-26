@@ -199,6 +199,49 @@ if (it != v.end()) { /* 찾음 */ }
           explanation: "find()로 15를 찾으면 인덱스 2의 위치를 가리키는 iterator가 반환돼요. it - v.begin()은 2예요! (0부터 세니까: 5→0, 10→1, 15→2)"
         },
         {
+          id: "ch1-find-mini",
+          type: "practice" as const,
+          title: "✋ 잠깐 — 도서관에 이 책 있나?",
+          content: `**상황**: 도서관 책 목록에서 "1984" 가 있는지 확인하고 싶어요.
+
+\`find\` 로 검색해서 — **있으면 \`있어요\`, 없으면 \`없어요\`** 를 출력하세요.
+
+> 💡 \`it != v.end()\` 가 "찾았다" 의 신호. 한 줄짜리 if 면 끝나요.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<string> books = {"Harry Potter", "Hobbit", "1984", "Dune"};
+    string target = "1984";
+
+    // 👇 find 로 books 에 target 이 있는지 확인하고 결과 출력
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<string> books = {"Harry Potter", "Hobbit", "1984", "Dune"};
+    string target = "1984";
+
+    auto it = find(books.begin(), books.end(), target);
+    if (it != books.end()) cout << "있어요";
+    else cout << "없어요";
+
+    return 0;
+}`,
+          hint: "auto it = find(books.begin(), books.end(), target); 한 줄. 그 다음 if (it != books.end()) cout << \"있어요\"; else cout << \"없어요\";",
+          expectedOutput: `있어요`
+        },
+        {
           id: "ch1-accum",
           type: "explain",
           title: "🔍 accumulate() & 유틸리티!",
@@ -243,6 +286,47 @@ swap(a, b);
 | \`a, b = b, a\` | \`swap(a, b)\` |
 
 💡 세 번째 인자(초기값)에 \`0\`을 넣으면 정수 합, \`0.0\`을 넣으면 실수 합이 돼요!`
+        },
+        {
+          id: "ch1-accum-mini",
+          type: "practice" as const,
+          title: "✋ 잠깐 — 카페 주간 매출 합계",
+          content: `**상황**: 카페가 5 일간 받은 매출이에요.
+
+\`\`\`
+월 120 / 화 95 / 수 180 / 목 210 / 금 150
+\`\`\`
+
+이번 주 **총 매출** 을 출력하세요. \`accumulate\` 한 줄이면 끝이에요.
+
+> ⚠️ \`accumulate\` 는 \`<numeric>\` 헤더에 있어요!`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <numeric>
+using namespace std;
+
+int main() {
+    vector<int> sales = {120, 95, 180, 210, 150};
+
+    // 👇 accumulate 로 총 매출 출력
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <numeric>
+using namespace std;
+
+int main() {
+    vector<int> sales = {120, 95, 180, 210, 150};
+
+    cout << accumulate(sales.begin(), sales.end(), 0);
+
+    return 0;
+}`,
+          hint: "cout << accumulate(sales.begin(), sales.end(), 0); — 끝. 세 번째 인자 0 은 시작값.",
+          expectedOutput: `755`
         },
         {
           id: "ch1-lambda",
@@ -297,6 +381,51 @@ cout << evenCnt;  // 3 (72, 68, 88)
 > 💡 \`_if\` 가 붙으면 **세 번째 인자가 값 대신 조건(lambda)** 이라고 기억하면 끝.
 
 람다는 정렬이나 다른 STL 알고리즘에서도 똑같이 쓰여요 (다음 챕터부터 자주 만나요).`,
+        },
+        {
+          id: "ch1-lambda-mini",
+          type: "practice" as const,
+          title: "✋ 잠깐 — 합격생 (60점 이상) 몇 명?",
+          content: `**상황**: 학생 6 명의 점수가 있어요.
+
+\`\`\`
+점수: 72, 55, 88, 41, 90, 67
+합격 기준: 60 점 이상
+\`\`\`
+
+**합격생이 몇 명** 인지 출력하세요. \`count_if\` + lambda 로 한 줄.
+
+> 💡 \`count_if(begin, end, [](int x) { return ...; })\` — 조건이 true 인 원소 수를 반환.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    vector<int> scores = {72, 55, 88, 41, 90, 67};
+
+    // 👇 count_if + lambda 로 60 이상 학생 수 출력
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    vector<int> scores = {72, 55, 88, 41, 90, 67};
+
+    int passed = count_if(scores.begin(), scores.end(), [](int x) {
+        return x >= 60;
+    });
+    cout << passed;
+
+    return 0;
+}`,
+          hint: "count_if(scores.begin(), scores.end(), [](int x) { return x >= 60; }) — lambda 안에서 조건 'x >= 60' 만 적으면 끝. 결과를 int 변수에 받거나 바로 cout 으로 출력.",
+          expectedOutput: `4`
         },
         {
           id: "ch1-practice",
@@ -521,6 +650,52 @@ cout << ub - lb;          // 3  ← 5 가 몇 개인지
           options: ["1", "2", "3", "5"],
           answer: 1,
           explanation: "lower_bound는 25 '이상'인 첫 위치를 찾아요! v = {10, 20, 30, 40, 50}에서 25 이상인 첫 값은 30이고, 인덱스는 2예요. 그래서 it - v.begin()은 2가 출력돼요!"
+        },
+        {
+          id: "ch2-bounds-mini",
+          type: "practice" as const,
+          title: "✋ 잠깐 — 70~80 점 구간 학생 수",
+          content: `**상황**: 정렬된 학생 점수표에서 **70 점 이상 80 점 미만** 인 학생이 몇 명인지 알고 싶어요.
+
+\`\`\`
+점수: 45, 55, 67, 72, 75, 78, 85, 91, 98
+구간: [70, 80)  ← 70 포함, 80 제외
+\`\`\`
+
+\`upper_bound - lower_bound\` 패턴으로 한 줄에 셀 수 있어요.
+
+> 💡 \`lower_bound(v, 70)\` = 70 이상 첫 위치, \`lower_bound(v, 80)\` = 80 이상 첫 위치 (= 80 미만 끝).
+> 둘을 빼면 그 구간의 원소 수.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    vector<int> scores = {45, 55, 67, 72, 75, 78, 85, 91, 98};
+
+    // 👇 lower_bound 두 번 써서 [70, 80) 구간 원소 수 출력
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <iterator>
+using namespace std;
+
+int main() {
+    vector<int> scores = {45, 55, 67, 72, 75, 78, 85, 91, 98};
+
+    auto lo = lower_bound(scores.begin(), scores.end(), 70);
+    auto hi = lower_bound(scores.begin(), scores.end(), 80);
+    cout << hi - lo;
+
+    return 0;
+}`,
+          hint: "auto lo = lower_bound(scores.begin(), scores.end(), 70); auto hi = lower_bound(scores.begin(), scores.end(), 80); cout << hi - lo; — 두 iterator 의 차가 그 구간의 원소 수.",
+          expectedOutput: `3`
         },
         {
           id: "ch2-unique",

@@ -199,6 +199,49 @@ if (it != v.end()) { /* found */ }
           explanation: "find() locates 15, returning an iterator to index 2. it - v.begin() equals 2! (counting from 0: 5→0, 10→1, 15→2)"
         },
         {
+          id: "ch1-find-mini",
+          type: "practice" as const,
+          title: "✋ Quick — is this book in the library?",
+          content: `**Scenario**: You want to check if "1984" is in the library's book list.
+
+Use \`find\` and print **\`Found\` if it exists, \`Not found\` otherwise**.
+
+> 💡 \`it != v.end()\` is the "found it" signal. A one-line if is enough.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<string> books = {"Harry Potter", "Hobbit", "1984", "Dune"};
+    string target = "1984";
+
+    // 👇 Use find to check whether target is in books, print result
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<string> books = {"Harry Potter", "Hobbit", "1984", "Dune"};
+    string target = "1984";
+
+    auto it = find(books.begin(), books.end(), target);
+    if (it != books.end()) cout << "Found";
+    else cout << "Not found";
+
+    return 0;
+}`,
+          hint: "auto it = find(books.begin(), books.end(), target); then if (it != books.end()) cout << \"Found\"; else cout << \"Not found\";",
+          expectedOutput: `Found`
+        },
+        {
           id: "ch1-accum",
           type: "explain",
           title: "🔍 accumulate() & Utilities!",
@@ -243,6 +286,47 @@ Let's compare with Python:
 | \`a, b = b, a\` | \`swap(a, b)\` |
 
 💡 The third argument (initial value): use \`0\` for integer sum, \`0.0\` for floating-point sum!`
+        },
+        {
+          id: "ch1-accum-mini",
+          type: "practice" as const,
+          title: "✋ Quick — weekly cafe revenue",
+          content: `**Scenario**: A cafe's revenue for 5 days:
+
+\`\`\`
+Mon 120 / Tue 95 / Wed 180 / Thu 210 / Fri 150
+\`\`\`
+
+Print this **week's total revenue**. \`accumulate\` does it in one line.
+
+> ⚠️ \`accumulate\` lives in \`<numeric>\`!`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <numeric>
+using namespace std;
+
+int main() {
+    vector<int> sales = {120, 95, 180, 210, 150};
+
+    // 👇 Use accumulate to print the total
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <numeric>
+using namespace std;
+
+int main() {
+    vector<int> sales = {120, 95, 180, 210, 150};
+
+    cout << accumulate(sales.begin(), sales.end(), 0);
+
+    return 0;
+}`,
+          hint: "cout << accumulate(sales.begin(), sales.end(), 0); — done. The third argument 0 is the starting value.",
+          expectedOutput: `755`
         },
         {
           id: "ch1-lambda",
@@ -297,6 +381,51 @@ cout << evenCnt;  // 3 (72, 68, 88)
 > 💡 Rule of thumb: \`_if\` means **the third argument is a condition (lambda) instead of a value.** That's it.
 
 Lambdas show up the same way in sort and other STL algorithms — you'll see them again next chapter.`,
+        },
+        {
+          id: "ch1-lambda-mini",
+          type: "practice" as const,
+          title: "✋ Quick — how many students passed (60+)?",
+          content: `**Scenario**: 6 students with scores:
+
+\`\`\`
+Scores: 72, 55, 88, 41, 90, 67
+Passing threshold: 60+
+\`\`\`
+
+Print **how many students passed**. \`count_if\` + lambda, one line.
+
+> 💡 \`count_if(begin, end, [](int x) { return ...; })\` returns the number of elements where the condition is true.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    vector<int> scores = {72, 55, 88, 41, 90, 67};
+
+    // 👇 Use count_if + lambda to print number of students with score >= 60
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    vector<int> scores = {72, 55, 88, 41, 90, 67};
+
+    int passed = count_if(scores.begin(), scores.end(), [](int x) {
+        return x >= 60;
+    });
+    cout << passed;
+
+    return 0;
+}`,
+          hint: "count_if(scores.begin(), scores.end(), [](int x) { return x >= 60; }) — inside the lambda, just write the condition 'x >= 60'. Store the result or print directly.",
+          expectedOutput: `4`
         },
         {
           id: "ch1-practice",
@@ -521,6 +650,51 @@ cout << ub - lb;          // 3  ← how many 5s
           options: ["1", "2", "3", "5"],
           answer: 1,
           explanation: "lower_bound finds the first position >= 25. In v = {10, 20, 30, 40, 50}, the first value >= 25 is 30 at index 2. So it - v.begin() outputs 2!"
+        },
+        {
+          id: "ch2-bounds-mini",
+          type: "practice" as const,
+          title: "✋ Quick — how many students scored 70~80?",
+          content: `**Scenario**: From a sorted score list, how many students scored **at least 70 and below 80**?
+
+\`\`\`
+Scores: 45, 55, 67, 72, 75, 78, 85, 91, 98
+Range: [70, 80)  ← 70 included, 80 excluded
+\`\`\`
+
+The \`upper_bound - lower_bound\` pattern counts ranges in one line.
+
+> 💡 \`lower_bound(v, 70)\` = first position ≥ 70, \`lower_bound(v, 80)\` = first position ≥ 80 (= just past the < 80 range).
+> Subtract the two iterators to get the count.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    vector<int> scores = {45, 55, 67, 72, 75, 78, 85, 91, 98};
+
+    // 👇 Use lower_bound twice to print the count of [70, 80) range
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    vector<int> scores = {45, 55, 67, 72, 75, 78, 85, 91, 98};
+
+    auto lo = lower_bound(scores.begin(), scores.end(), 70);
+    auto hi = lower_bound(scores.begin(), scores.end(), 80);
+    cout << hi - lo;
+
+    return 0;
+}`,
+          hint: "auto lo = lower_bound(scores.begin(), scores.end(), 70); auto hi = lower_bound(scores.begin(), scores.end(), 80); cout << hi - lo; — the difference between the two iterators is the count.",
+          expectedOutput: `3`
         },
         {
           id: "ch2-unique",
