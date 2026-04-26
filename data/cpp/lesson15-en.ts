@@ -55,7 +55,13 @@ cout << p.first;   // "Kim"
 cout << p.second;  // 95
 \`\`\`
 
-> 💡 \`<utility>\` is the official header. But other STL headers like \`<vector>\`, \`<algorithm>\`, and \`<map>\` already pull \`pair\` in for you, so in practice you often don't need to include \`<utility>\` separately.
+> 💡 \`<utility>\` is the official header. That said, if you're already including \`<vector>\`, \`<algorithm>\`, or \`<map>\`, those usually pull \`pair\` in for you, so it works without adding \`<utility>\`.
+>
+> **In practice you pick one of two workflows:**
+> - **Safe mode**: write \`#include <utility>\` whenever you use pair. Works in any header setup, no surprises.
+> - **Lean mode**: skip it and rely on whichever STL header you're already including. If the compiler complains with \`'pair' was not declared\`, just add \`<utility>\` then.
+>
+> Both are fine. You don't have to memorize which header pulls in what — the compiler will tell you.
 
 The names \`.first\`, \`.second\` are a bit awkward, right? That's pair's tradeoff — it **doesn't tell you what each value semantically means**. If meaning matters, use a struct. If you're just bundling temporarily, use a pair.
 
