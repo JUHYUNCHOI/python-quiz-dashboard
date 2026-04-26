@@ -136,10 +136,23 @@ cout << get<2>(t);   // 3.8
 
 \`\`\`cpp
 auto [name, age, gpa] = t;
-// declare and assign in one line
 \`\`\`
 
-Reads almost like Python's \`name, age, gpa = t\`. **This single feature fixed most of tuple's readability problems.** This is the default in modern code.
+The name sounds fancy, but the idea is simple: **structured bindings** = "syntax that **binds** a structured bundle (tuple / pair / struct) to multiple **named** variables." In plain English:
+
+- The single line \`auto [name, age, gpa] = t;\`
+- **declares three new variables** \`name\`, \`age\`, \`gpa\`
+- and **assigns** the tuple's 0 / 1 / 2 values to them respectively
+
+Same idea as Python's \`name, age, gpa = t\`. Difference: C++ wraps the names in \`auto [ ]\`.
+
+> 💡 Where it's used:
+> - **pair / tuple**: \`auto [a, b] = p;\`
+> - **struct**: \`auto [x, y] = point;\` (public members work)
+> - **map iteration**: \`for (auto& [key, value] : myMap)\` ← extremely common (next lesson)
+> - **multi-value return**: \`auto [a, b] = getValues();\`
+
+**This single feature fixed most of tuple's readability problems.** It's the default in modern code.
 
 > 💡 You may run into the older \`tie(name, age, gpa) = t;\` in legacy code or older books — it does the same thing as ②. Recognize it and move on; you don't need to write it. **But the \`tie\` keyword itself shows up again next page in a different (and still current) role: comparison.**
 
