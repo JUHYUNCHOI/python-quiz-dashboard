@@ -240,6 +240,54 @@ sort(v.begin(), v.end(), [](int a, int b) {
           explanation: "If a > b returns true, a goes first. Bigger numbers first = descending order!"
         },
         {
+          id: "s23-ch1-abs-mini",
+          type: "practice" as const,
+          title: "✋ Quick — sort by absolute value",
+          content: `**Scenario**: Sort score deltas by closeness to 0.
+
+\`\`\`
+Input:  -3, 7, -1, 4, -5
+Expected (sorted by |x|): -1 -3 4 -5 7
+\`\`\`
+
+\`abs(x)\` gives absolute value. Inside the lambda, just compare \`abs(a) < abs(b)\`.
+
+> 💡 Only the comparison expression changes. Values themselves don't change.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cstdlib>  // abs
+using namespace std;
+
+int main() {
+    vector<int> v = {-3, 7, -1, 4, -5};
+
+    // 👇 sort by abs(x) ascending using a lambda
+
+
+    for (int x : v) cout << x << " ";
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cstdlib>
+using namespace std;
+
+int main() {
+    vector<int> v = {-3, 7, -1, 4, -5};
+
+    sort(v.begin(), v.end(), [](int a, int b) {
+        return abs(a) < abs(b);
+    });
+
+    for (int x : v) cout << x << " ";
+    return 0;
+}`,
+          hint: "sort(v.begin(), v.end(), [](int a, int b) { return abs(a) < abs(b); }); — only the comparison swaps to abs.",
+          expectedOutput: `-1 -3 4 -5 7 `
+        },
+        {
           id: "s23-ch1-pair",
           type: "explain",
           title: "🔧 Sort Pairs by Any Criterion!",

@@ -377,6 +377,50 @@ s.empty();         // true if empty
           explanation: "To add elements to a C++ set, use insert()! It's like Python's add(). push_back and append don't work with set."
         },
         {
+          id: "ch2-set-mini",
+          type: "practice" as const,
+          title: "✋ Quick — distinct students attended",
+          content: `**Scenario**: A name was called 8 times in class today (with duplicates). How many **distinct students** showed up?
+
+\`\`\`
+Calls: Alice, Bob, Alice, Carol, Bob, Alice, David, Carol
+Distinct: 4
+\`\`\`
+
+Insert them all into a set and print \`size()\`.
+
+> 💡 \`set\` deduplicates automatically. Just \`insert\` everything and done.`,
+          starterCode: `#include <iostream>
+#include <set>
+#include <string>
+using namespace std;
+
+int main() {
+    string names[] = {"Alice", "Bob", "Alice", "Carol", "Bob", "Alice", "David", "Carol"};
+
+    // 👇 Insert all into a set and print set.size()
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <set>
+#include <string>
+using namespace std;
+
+int main() {
+    string names[] = {"Alice", "Bob", "Alice", "Carol", "Bob", "Alice", "David", "Carol"};
+
+    set<string> attended;
+    for (auto& n : names) attended.insert(n);
+    cout << attended.size();
+
+    return 0;
+}`,
+          hint: "set<string> attended; for (auto& n : names) attended.insert(n); cout << attended.size(); — set deduplicates by itself.",
+          expectedOutput: `4`
+        },
+        {
           id: "ch2-unordered",
           type: "explain",
           title: "🎯 unordered_set — Fast Without Sorting!",

@@ -337,6 +337,39 @@ print(n & 1)   # 홀짝 체크
           explanation: "n & 1은 n의 마지막 비트를 확인해요! 홀수면 마지막 비트가 1이라서 결과가 1(true)이 돼요. 짝수면 0(false)이에요."
         },
         {
+          id: "ch2-bit-mini",
+          type: "practice" as const,
+          title: "✋ 잠깐 — 1 부터 10 까지 짝수만 출력",
+          content: `**상황**: 1 ~ 10 중 짝수만 골라서 출력. 비트 연산 \`& 1\` 로 홀짝 판별.
+
+\`\`\`
+기대 출력: 2 4 6 8 10
+\`\`\`
+
+> 💡 \`(i & 1) == 0\` 이면 짝수. (마지막 비트가 0).`,
+          starterCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    // 👇 1 ~ 10 중 (i & 1) == 0 인 i 만 출력 (공백 구분)
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+using namespace std;
+
+int main() {
+    for (int i = 1; i <= 10; i++) {
+        if ((i & 1) == 0) cout << i << " ";
+    }
+
+    return 0;
+}`,
+          hint: "for (int i = 1; i <= 10; i++) if ((i & 1) == 0) cout << i << \" \"; — i & 1 의 결과가 0 이면 짝수.",
+          expectedOutput: `2 4 6 8 10 `
+        },
+        {
           id: "ch2-pred1",
           type: "predict" as const,
           title: "비트 연산 결과!",

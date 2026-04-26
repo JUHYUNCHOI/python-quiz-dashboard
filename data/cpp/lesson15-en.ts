@@ -192,6 +192,44 @@ For grid traversal, "current position + extra info" gets tossed into a queue as 
 > 💡 One line: pair shows up most, struct is best for data you keep handling, and tuple covers quick bundles in between. They overlap a bit, but with practice the right choice becomes second nature.`,
         },
         {
+          id: "ch1-tuple-mini",
+          type: "practice" as const,
+          title: "✋ Quick — student profile in one bundle",
+          content: `**Scenario**: A function returns three pieces of student info (name, age, gpa) at once.
+
+Take the given \`tuple<string, int, double>\` and **unpack it with structured bindings, then print on one line**.
+
+> 💡 \`auto [name, age, gpa] = t;\` → declare variables and unpack in one go.`,
+          starterCode: `#include <iostream>
+#include <tuple>
+#include <string>
+using namespace std;
+
+int main() {
+    tuple<string, int, double> student = {"Kim", 15, 3.8};
+
+    // 👇 Unpack with structured bindings and print "Kim 15 3.8"
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <tuple>
+#include <string>
+using namespace std;
+
+int main() {
+    tuple<string, int, double> student = {"Kim", 15, 3.8};
+
+    auto [name, age, gpa] = student;
+    cout << name << " " << age << " " << gpa;
+
+    return 0;
+}`,
+          hint: "auto [name, age, gpa] = student; on one line, then cout << name << \" \" << age << \" \" << gpa;",
+          expectedOutput: `Kim 15 3.8`
+        },
+        {
           id: "ch1-pred1",
           type: "predict" as const,
           title: "Predict the pair & tuple output!",

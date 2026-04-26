@@ -192,6 +192,44 @@ queue<tuple<int, int, int>> q;   // (x, y, distance)
 > 💡 한 줄 정리: pair 가 가장 흔하고, 자주 다룰 데이터는 struct, 그 외 잠깐 쓰는 묶음에는 tuple. 셋이 역할이 살짝 겹쳐서 헷갈리기 쉬운데 — 코드 짜다 보면 자연스럽게 손에 익어요.`,
         },
         {
+          id: "ch1-tuple-mini",
+          type: "practice" as const,
+          title: "✋ 잠깐 — 학생 프로필 한 묶음",
+          content: `**상황**: 함수가 학생 정보 (이름, 나이, 학점) 셋을 한 번에 돌려줘요.
+
+이미 만들어진 \`tuple<string, int, double>\` 을 받아서 **structured bindings 로 풀고 한 줄로 출력**하세요.
+
+> 💡 \`auto [name, age, gpa] = t;\` → 변수 만들기 + 풀기 한 번에.`,
+          starterCode: `#include <iostream>
+#include <tuple>
+#include <string>
+using namespace std;
+
+int main() {
+    tuple<string, int, double> student = {"Kim", 15, 3.8};
+
+    // 👇 structured bindings 으로 풀고 "Kim 15 3.8" 형식 출력
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <tuple>
+#include <string>
+using namespace std;
+
+int main() {
+    tuple<string, int, double> student = {"Kim", 15, 3.8};
+
+    auto [name, age, gpa] = student;
+    cout << name << " " << age << " " << gpa;
+
+    return 0;
+}`,
+          hint: "auto [name, age, gpa] = student; 한 줄로 풀고, cout << name << \" \" << age << \" \" << gpa; 로 출력.",
+          expectedOutput: `Kim 15 3.8`
+        },
+        {
           id: "ch1-pred1",
           type: "predict" as const,
           title: "pair & tuple 출력 예측!",

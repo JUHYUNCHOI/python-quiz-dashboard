@@ -103,6 +103,52 @@ Fair question. vector can do it. But \`stack\` makes the **intent obvious**. Any
           explanation: "push(1), push(2), push(3) gives [1,2,3]. pop() removes 3 → [1,2], pop() again removes 2 → [1]. top() returns 1!"
         },
         {
+          id: "ch1-stack-mini",
+          type: "practice" as const,
+          title: "✋ Quick — print numbers in reverse with a stack",
+          content: `**Scenario**: You receive 5 numbers and want to print them in **reverse order** (last first).
+
+\`\`\`
+Input:  1 2 3 4 5
+Output: 5 4 3 2 1
+\`\`\`
+
+stack's LIFO does this in one shot — push them all, then loop \`top\` + \`pop\` until empty.
+
+> 💡 \`while (!s.empty()) { cout << s.top() << " "; s.pop(); }\` — this skeleton is the core.`,
+          starterCode: `#include <iostream>
+#include <stack>
+using namespace std;
+
+int main() {
+    int nums[] = {1, 2, 3, 4, 5};
+    stack<int> s;
+
+    // 👇 push all of nums, then top + pop until empty (space-separated)
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <stack>
+using namespace std;
+
+int main() {
+    int nums[] = {1, 2, 3, 4, 5};
+    stack<int> s;
+
+    for (int n : nums) s.push(n);
+    while (!s.empty()) {
+        cout << s.top() << " ";
+        s.pop();
+    }
+
+    return 0;
+}`,
+          hint: "for (int n : nums) s.push(n); pushes all. while (!s.empty()) { cout << s.top() << \" \"; s.pop(); } pops them out in reverse.",
+          expectedOutput: `5 4 3 2 1 `
+        },
+        {
           id: "ch1-queue",
           type: "explain",
           title: "📦 queue — First In, First Out (FIFO)!",

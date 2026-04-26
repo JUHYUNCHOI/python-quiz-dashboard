@@ -239,6 +239,54 @@ sort(v.begin(), v.end(), [](int a, int b) {
           explanation: "a > b가 true면 a가 앞으로 와요. 큰 수가 앞으로 오니까 내림차순이에요!"
         },
         {
+          id: "s23-ch1-abs-mini",
+          type: "practice" as const,
+          title: "✋ 잠깐 — 절댓값 기준 정렬",
+          content: `**상황**: 0 으로부터 가까운 순서로 점수 차이를 정렬하고 싶어요.
+
+\`\`\`
+입력: -3, 7, -1, 4, -5
+기대 출력 (절댓값 오름차순): -1 -3 4 -5 7
+\`\`\`
+
+\`abs(x)\` 가 절댓값. lambda 안에서 \`abs(a) < abs(b)\` 로 비교하면 끝.
+
+> 💡 lambda 의 비교식만 \`abs(a) < abs(b)\` 로 바꾸면 절댓값 정렬이에요. 입력 자체는 안 바꿔요.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cstdlib>  // abs
+using namespace std;
+
+int main() {
+    vector<int> v = {-3, 7, -1, 4, -5};
+
+    // 👇 lambda 로 abs 기준 오름차순 정렬
+
+
+    for (int x : v) cout << x << " ";
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cstdlib>
+using namespace std;
+
+int main() {
+    vector<int> v = {-3, 7, -1, 4, -5};
+
+    sort(v.begin(), v.end(), [](int a, int b) {
+        return abs(a) < abs(b);
+    });
+
+    for (int x : v) cout << x << " ";
+    return 0;
+}`,
+          hint: "sort(v.begin(), v.end(), [](int a, int b) { return abs(a) < abs(b); }); — 비교 기준만 abs 로 바꾸면 끝.",
+          expectedOutput: `-1 -3 4 -5 7 `
+        },
+        {
           id: "s23-ch1-pair",
           type: "explain",
           title: "🔧 pair를 원하는 기준으로 정렬!",

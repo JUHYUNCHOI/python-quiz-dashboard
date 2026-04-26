@@ -337,6 +337,39 @@ print(n & 1)   # odd/even check
           explanation: "n & 1 checks the last bit of n! If n is odd, the last bit is 1, so the result is 1 (true). If n is even, the result is 0 (false)."
         },
         {
+          id: "ch2-bit-mini",
+          type: "practice" as const,
+          title: "✋ Quick — print even numbers from 1 to 10",
+          content: `**Scenario**: Print only the even numbers from 1 to 10. Use \`& 1\` to test parity.
+
+\`\`\`
+Expected: 2 4 6 8 10
+\`\`\`
+
+> 💡 \`(i & 1) == 0\` means even (last bit is 0).`,
+          starterCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    // 👇 Print i in 1..10 if (i & 1) == 0 (space-separated)
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+using namespace std;
+
+int main() {
+    for (int i = 1; i <= 10; i++) {
+        if ((i & 1) == 0) cout << i << " ";
+    }
+
+    return 0;
+}`,
+          hint: "for (int i = 1; i <= 10; i++) if ((i & 1) == 0) cout << i << \" \"; — when i & 1 is 0, i is even.",
+          expectedOutput: `2 4 6 8 10 `
+        },
+        {
           id: "ch2-pred1",
           type: "predict" as const,
           title: "Bit operation results!",
