@@ -21,7 +21,7 @@ export const cppLesson15Data: LessonData = {
         {
           id: "ch1-intro",
           type: "explain",
-          title: "🔗 pair — 두 값을 하나로 묶기",
+          title: "🔗 pair — 왜 필요할까?",
           content: `학생들 점수표를 만든다고 해봐요. 이름이랑 점수, 둘이 **항상 같이** 다녀야 해요. 따로 변수에 두면?
 
 \`\`\`cpp
@@ -55,23 +55,33 @@ cout << p.first;   // "Kim"
 cout << p.second;  // 95
 \`\`\`
 
-> 💡 \`<utility>\` 가 공식 헤더예요. 다만 \`<vector>\`, \`<algorithm>\`, \`<map>\` 같은 STL 헤더를 이미 쓰고 있다면 \`pair\` 가 자동으로 따라와서 굳이 안 적어도 동작해요.
->
-> **실전 워크플로우는 두 가지 중 골라요:**
-> - **안전 모드**: pair 쓸 때마다 \`#include <utility>\` 적어두기. 어느 헤더 환경이든 무조건 동작.
-> - **간결 모드**: 일단 안 적고 다른 STL 헤더 (\`<vector>\` 등) 가 끌어오기를 기대. 컴파일러가 \`'pair' was not declared\` 같은 에러 내면 그때 \`<utility>\` 추가.
->
-> 둘 다 정답이에요. 어느 헤더가 무엇을 끌어오는지 외울 필요 없어요 — 컴파일러가 알려주니까요.
-
 \`.first\`, \`.second\` 라는 이름이 좀 어색하죠? **두 값 중 어느 게 의미상 뭔지 안 알려주는** 게 pair 의 한계이자 특징이에요. 의미가 중요하면 struct 를 쓰고, 잠깐 묶기만 하면 pair 를 써요.
+
+다음 페이지에서 헤더 안내 + 만드는 방법 + 파이썬 비교 봐요 👇`,
+        },
+        {
+          id: "ch1-creation",
+          type: "explain",
+          title: "🔗 pair 만드는 법 + 헤더",
+          content: `### 헤더 — 어디 들어있어요?
+
+공식 헤더는 \`<utility>\`. 다만 \`<vector>\`, \`<algorithm>\`, \`<map>\` 같은 STL 헤더를 이미 쓰고 있다면 \`pair\` 가 자동으로 따라와서 굳이 안 적어도 동작해요.
+
+**실전 워크플로우는 두 가지 중 골라요:**
+- **안전 모드**: pair 쓸 때마다 \`#include <utility>\` 적어두기. 어느 헤더 환경이든 무조건 동작.
+- **간결 모드**: 일단 안 적고 다른 STL 헤더 (\`<vector>\` 등) 가 끌어오기를 기대. 컴파일러가 \`'pair' was not declared\` 같은 에러 내면 그때 \`<utility>\` 추가.
+
+둘 다 정답이에요. 어느 헤더가 무엇을 끌어오는지 외울 필요 없어요 — 컴파일러가 알려주니까요.
 
 ### 만드는 방법 세 가지 (다 같은 결과)
 
 \`\`\`cpp
-pair<string, int> p1 = {"Kim", 95};        // 중괄호 — 가장 흔함
+pair<string, int> p1 = {"Kim", 95};          // 중괄호 — 가장 흔함
 pair<string, int> p2 = make_pair("Lee", 88); // make_pair 함수
-auto p3 = make_pair("Park", 77);            // auto 로 타입 생략
+auto p3 = make_pair("Park", 77);             // auto 로 타입 생략
 \`\`\`
+
+세 줄 다 같은 결과라서 본인이 편한 걸로 골라 쓰면 돼요. 가장 흔한 건 첫 번째 (\`{a, b}\`).
 
 ### 파이썬 튜플과 거의 같음
 
@@ -81,7 +91,7 @@ auto p3 = make_pair("Park", 77);            // auto 로 타입 생략
 | \`p[0]\`, \`p[1]\` | \`p.first\`, \`p.second\` |
 | 몇 개든 OK | **딱 2개만!** |
 
-> 💡 셋 이상 묶고 싶으면 다음 페이지의 \`tuple\`. 근데 실제로 가장 많이 쓰는 건 압도적으로 pair 예요 — 좌표 (x,y), 이름-점수, 인덱스-거리 같은 "딱 두 개" 짝이 흔하니까요.`
+> 💡 셋 이상 묶고 싶으면 곧 나올 \`tuple\`. 근데 실전에서 가장 많이 쓰는 건 pair 예요 — 좌표 (x,y), 이름-점수, 인덱스-거리 같은 "딱 두 개" 짝이 흔하니까요.`,
         },
         {
           id: "ch1-fb1",
@@ -98,8 +108,8 @@ auto p3 = make_pair("Park", 77);            // auto 로 타입 생략
         {
           id: "ch1-tuple",
           type: "explain",
-          title: "🔗 tuple — 3개 이상 묶을 때",
-          content: `pair 는 딱 2 개. 그럼 3 개를 묶고 싶으면? **tuple**.
+          title: "🔗 tuple — 3개 이상 묶기",
+          content: `pair 는 딱 2 개. 3 개 이상이면 **tuple**.
 
 \`\`\`cpp
 #include <tuple>
@@ -108,36 +118,84 @@ tuple<string, int, double> t = {"Kim", 15, 3.8};
 //                              이름   나이  학점
 \`\`\`
 
-값 꺼낼 땐 \`.first/.second\` 같은 이름이 더 이상 안 통해요 (셋 이상이니까). 대신 **인덱스로** 꺼내요:
+### 값 꺼내는 방법 세 가지
+
+값 꺼낼 땐 \`.first/.second\` 같은 이름이 더 이상 안 통해요 (셋 이상이니까). 대신 다음 셋 중 골라 써요:
+
+**① 하나씩 꺼내기 — \`get<인덱스>(t)\`**
 
 \`\`\`cpp
-cout << get<0>(t);  // "Kim"
-cout << get<1>(t);  // 15
-cout << get<2>(t);  // 3.8
+cout << get<0>(t);   // "Kim"
+cout << get<1>(t);   // 15
+cout << get<2>(t);   // 3.8
 \`\`\`
 
-\`get<0>(t)\` 는 **\`<>\` 안에 인덱스, \`()\` 안에 tuple** — 처음 보면 이상한 문법이지만 의미는 \`t[0]\` 이랑 같아요. 한 가지 차이: 그 안의 숫자는 **컴파일 시점에 정해진 상수만** 가능. 변수 \`i\` 를 넣어서 \`get<i>(t)\` 는 안 돼요.
+\`get<0>(t)\` 는 **\`<>\` 안에 인덱스, \`()\` 안에 tuple**. 처음 보면 이상하지만 의미는 \`t[0]\` 이랑 같아요. 한 가지 차이: \`<>\` 안의 숫자는 **컴파일 시점에 정해진 상수만** 가능. 변수 \`i\` 를 넣어 \`get<i>(t)\` 는 안 돼요.
 
-### 한 번에 꺼내기 — tie
+**② tie — 미리 만들어둔 변수에 한 번에 담기 (옛날 방식)**
 
 \`\`\`cpp
 string name; int age; double gpa;
-tie(name, age, gpa) = t;
-// 파이썬의 name, age, gpa = t 랑 같은 효과
+tie(name, age, gpa) = t;   // 변수 3 개에 한 번에 대입
 \`\`\`
 
-| 파이썬 🐍 | C++ tuple ⚡ |
+**③ ⭐ structured bindings — 변수 만들기 + 담기를 한 줄에 (C++17+, 모던)**
+
+\`\`\`cpp
+auto [name, age, gpa] = t;   // 가장 깔끔
+\`\`\`
+
+파이썬의 \`name, age, gpa = t\` 랑 거의 똑같죠. **tuple 의 가독성 단점이 이 문법 덕에 많이 사라졌어요.**
+
+> 💡 셋 다 결과는 같아요. \`tie\` 가 *필수* 가 아니에요. 모던 코드에선 \`auto [a, b, c] = ...\` 가 기본. 옛날 코드에서 \`tie\` 를 보게 되면 "아 이건 ②번 방식이구나" 알아보면 돼요.
+
+다음 페이지에서 — tuple 이 진짜로 쓰이는 자리, 그리고 struct/pair 와의 선택 가이드 봐요 👇`,
+        },
+        {
+          id: "ch1-tuple-usage",
+          type: "explain",
+          title: "🤔 tuple, 실전에서 얼마나 써요?",
+          content: `pair 만큼 자주는 아니에요. 하지만 **무시할 정도는 아니에요.** 자주 보는 패턴 세 가지:
+
+### 1. 함수에서 여러 값 리턴 + structured bindings (자주)
+
+\`\`\`cpp
+tuple<int, int, string> getStudent() { ... }
+
+auto [age, score, name] = getStudent();   // 모던 C++ 의 흔한 패턴
+\`\`\`
+
+여러 값을 한 번에 리턴할 때, 이름까지 짓기 귀찮으면 tuple 로 묶어 보내고 받는 쪽에서 \`auto [a,b,c] = ...\` 로 바로 풀어요.
+
+### 2. \`tie()\` 로 사전식 비교 (정석 패턴)
+
+\`\`\`cpp
+struct Point { int x, y; };
+bool operator<(const Point& a, const Point& b) {
+    return tie(a.x, a.y) < tie(b.x, b.y);   // ⭐ struct 멤버 비교의 정석
+}
+\`\`\`
+
+x 먼저 비교, 같으면 y 비교 — 이런 사전식 비교를 직접 \`if\` 로 쓰면 길어지는데, \`tie\` 로 묶어서 비교하면 한 줄. 1챕터의 pair 자동 비교 규칙을 그대로 이용하는 트릭이에요.
+
+### 3. 대회 코드의 BFS/DFS state
+
+\`\`\`cpp
+queue<tuple<int, int, int>> q;   // (x, y, distance)
+\`\`\`
+
+격자 탐색 같은 데서 "현재 위치 + 추가 정보" 한 묶음으로 큐에 넣을 때 자주 등장.
+
+### 그럼 struct vs tuple vs pair 는 언제?
+
+| 상황 | 추천 |
 |---|---|
-| \`t = ("Kim", 15, 3.8)\` | \`tuple<string,int,double> t = {...};\` |
-| \`t[0]\` | \`get<0>(t)\` |
-| \`name, age, gpa = t\` | \`tie(name, age, gpa) = t;\` |
+| 2 개 묶기 | **pair** |
+| **자주 다룰 데이터**, 의미 있는 이름 필요 | **struct** (\`.name\` 이 \`get<0>\` 보다 명확) |
+| 함수에서 잠깐 여러 값 리턴 | **tuple** (특히 structured bindings 와) |
+| struct 멤버 비교 | **tuple + tie** |
 
-### pair vs tuple — 언제 어떤 걸?
-
-- **2 개 묶기** → pair (압도적으로 흔함, 좌표/이름점수/인덱스거리)
-- **3 개 이상** → tuple 도 OK 지만, 의미 있는 이름이 필요하면 \`struct\` 가 가독성 ↑
-
-쉽게 말해: **잠깐 묶기만 할 거면 pair/tuple, 자주 다룰 데이터면 struct.**`
+> 💡 한 줄 정리: pair 가 가장 흔하고, 자주 다룰 데이터는 struct, 그 외 잠깐 쓰는 묶음에는 tuple. 셋이 역할이 살짝 겹쳐서 헷갈리기 쉬운데 — 코드 짜다 보면 자연스럽게 손에 익어요.`,
         },
         {
           id: "ch1-pred1",

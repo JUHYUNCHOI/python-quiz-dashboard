@@ -21,7 +21,7 @@ export const cppLesson15EnData: LessonData = {
         {
           id: "ch1-intro",
           type: "explain",
-          title: "🔗 pair — Bundle Two Values Together",
+          title: "🔗 pair — Why we need it",
           content: `Say you're building a class score sheet. Each student has a name and a score that **always travel together**. With separate variables?
 
 \`\`\`cpp
@@ -55,23 +55,33 @@ cout << p.first;   // "Kim"
 cout << p.second;  // 95
 \`\`\`
 
-> 💡 \`<utility>\` is the official header. That said, if you're already including \`<vector>\`, \`<algorithm>\`, or \`<map>\`, those usually pull \`pair\` in for you, so it works without adding \`<utility>\`.
->
-> **In practice you pick one of two workflows:**
-> - **Safe mode**: write \`#include <utility>\` whenever you use pair. Works in any header setup, no surprises.
-> - **Lean mode**: skip it and rely on whichever STL header you're already including. If the compiler complains with \`'pair' was not declared\`, just add \`<utility>\` then.
->
-> Both are fine. You don't have to memorize which header pulls in what — the compiler will tell you.
-
 The names \`.first\`, \`.second\` are a bit awkward, right? That's pair's tradeoff — it **doesn't tell you what each value semantically means**. If meaning matters, use a struct. If you're just bundling temporarily, use a pair.
+
+Next page — header info, ways to create a pair, and the Python comparison 👇`,
+        },
+        {
+          id: "ch1-creation",
+          type: "explain",
+          title: "🔗 Ways to create a pair + header notes",
+          content: `### Header — where does pair live?
+
+The official header is \`<utility>\`. That said, if you're already including \`<vector>\`, \`<algorithm>\`, or \`<map>\`, those usually pull \`pair\` in for you, so it works without adding \`<utility>\`.
+
+**In practice you pick one of two workflows:**
+- **Safe mode**: write \`#include <utility>\` whenever you use pair. Works in any header setup, no surprises.
+- **Lean mode**: skip it and rely on whichever STL header you're already including. If the compiler complains with \`'pair' was not declared\`, just add \`<utility>\` then.
+
+Both are fine. You don't have to memorize which header pulls in what — the compiler will tell you.
 
 ### Three ways to create one (same result)
 
 \`\`\`cpp
-pair<string, int> p1 = {"Kim", 95};        // braces — most common
+pair<string, int> p1 = {"Kim", 95};          // braces — most common
 pair<string, int> p2 = make_pair("Lee", 88); // make_pair function
-auto p3 = make_pair("Park", 77);            // auto skips the type
+auto p3 = make_pair("Park", 77);             // auto skips the type
 \`\`\`
+
+All three give the same result, so pick whichever you like. The first form (\`{a, b}\`) is the most common in modern code.
 
 ### Same idea as Python tuples
 
@@ -81,7 +91,7 @@ auto p3 = make_pair("Park", 77);            // auto skips the type
 | \`p[0]\`, \`p[1]\` | \`p.first\`, \`p.second\` |
 | Any number of items | **Exactly 2 only!** |
 
-> 💡 For 3+ values you'll meet \`tuple\` next page. But by far the most common case is "exactly two paired things" — coordinates (x,y), name-score, index-distance — which is why pair shows up far more in real code.`
+> 💡 For 3+ values you'll meet \`tuple\` soon. But by far the most common case is "exactly two paired things" — coordinates (x,y), name-score, index-distance — which is why pair shows up far more in real code.`,
         },
         {
           id: "ch1-fb1",
@@ -98,8 +108,8 @@ auto p3 = make_pair("Park", 77);            // auto skips the type
         {
           id: "ch1-tuple",
           type: "explain",
-          title: "🔗 tuple — When you need 3 or more",
-          content: `pair holds exactly 2. For 3? **tuple**.
+          title: "🔗 tuple — bundling 3 or more",
+          content: `pair holds exactly 2. For 3 or more, use **tuple**.
 
 \`\`\`cpp
 #include <tuple>
@@ -108,36 +118,84 @@ tuple<string, int, double> t = {"Kim", 15, 3.8};
 //                              name   age   gpa
 \`\`\`
 
-\`.first/.second\` no longer cuts it (3+ values). Instead, **access by index**:
+### Three ways to read values out
+
+\`.first/.second\` no longer cuts it (3+ values). Pick one of these:
+
+**① Read one at a time — \`get<index>(t)\`**
 
 \`\`\`cpp
-cout << get<0>(t);  // "Kim"
-cout << get<1>(t);  // 15
-cout << get<2>(t);  // 3.8
+cout << get<0>(t);   // "Kim"
+cout << get<1>(t);   // 15
+cout << get<2>(t);   // 3.8
 \`\`\`
 
 \`get<0>(t)\` — the **index goes inside \`<>\`, the tuple inside \`()\`**. Looks weird at first, but it just means \`t[0]\`. One catch: the number inside \`<>\` must be a **compile-time constant** — you can't put a variable \`i\` and write \`get<i>(t)\`.
 
-### Unpack all at once — tie
+**② tie — assign to pre-declared variables (older style)**
 
 \`\`\`cpp
 string name; int age; double gpa;
-tie(name, age, gpa) = t;
-// Same effect as Python's:  name, age, gpa = t
+tie(name, age, gpa) = t;   // assign to all three at once
 \`\`\`
 
-| Python 🐍 | C++ tuple ⚡ |
+**③ ⭐ structured bindings — declare + assign in one line (C++17+, modern)**
+
+\`\`\`cpp
+auto [name, age, gpa] = t;   // cleanest
+\`\`\`
+
+Reads almost like Python's \`name, age, gpa = t\`. **This single feature fixed most of tuple's readability problems.**
+
+> 💡 All three give the same result. \`tie\` is **not required**. Modern code defaults to \`auto [a, b, c] = ...\`. When you see \`tie\` in older code, just recognize it as method ②.
+
+Next page — where tuple actually shows up, and how to choose between struct/pair/tuple 👇`,
+        },
+        {
+          id: "ch1-tuple-usage",
+          type: "explain",
+          title: "🤔 How often is tuple used in practice?",
+          content: `Less often than pair. But **not negligibly.** Three patterns you'll see:
+
+### 1. Returning multiple values + structured bindings (common)
+
+\`\`\`cpp
+tuple<int, int, string> getStudent() { ... }
+
+auto [age, score, name] = getStudent();   // standard modern-C++ pattern
+\`\`\`
+
+When a function needs to return several values and you don't want to define a whole struct just for that, tuple-with-structured-bindings is the go-to.
+
+### 2. \`tie()\` for lexicographic comparison (idiomatic)
+
+\`\`\`cpp
+struct Point { int x, y; };
+bool operator<(const Point& a, const Point& b) {
+    return tie(a.x, a.y) < tie(b.x, b.y);   // ⭐ standard way to compare struct members
+}
+\`\`\`
+
+Compare x first, then y if tied — writing this with \`if\` gets long. \`tie\` packs them into a tuple and uses pair/tuple's auto-comparison rule from Chapter 1. Slick one-liner.
+
+### 3. State tuples in BFS/DFS contest code
+
+\`\`\`cpp
+queue<tuple<int, int, int>> q;   // (x, y, distance)
+\`\`\`
+
+For grid traversal, "current position + extra info" gets tossed into a queue as a tuple.
+
+### So when struct vs tuple vs pair?
+
+| Situation | Use |
 |---|---|
-| \`t = ("Kim", 15, 3.8)\` | \`tuple<string,int,double> t = {...};\` |
-| \`t[0]\` | \`get<0>(t)\` |
-| \`name, age, gpa = t\` | \`tie(name, age, gpa) = t;\` |
+| 2 values | **pair** |
+| **Data you'll work with often**, named fields matter | **struct** (\`.name\` beats \`get<0>\`) |
+| Just returning multiple values | **tuple** (especially with structured bindings) |
+| Comparing struct members | **tuple + tie** |
 
-### pair vs tuple — which when?
-
-- **2 values** → pair (overwhelmingly common — coordinates, name-score, index-distance)
-- **3+ values** → tuple works, but if you need meaningful names, \`struct\` reads better.
-
-Rule of thumb: **pair/tuple for quick bundling, struct for data you'll keep working with.**`
+> 💡 One line: pair shows up most, struct is best for data you keep handling, and tuple covers quick bundles in between. They overlap a bit, but with practice the right choice becomes second nature.`,
         },
         {
           id: "ch1-pred1",
