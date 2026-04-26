@@ -124,14 +124,15 @@ export const lessonCpp15: LessonData = {
         type: "practice",
         content: {
           level: 2,
-          task: "make_pair로 pair를 만들어요!",
-          guide: "make_pair(값1, 값2) 형태!",
-          template: 'auto p = ___("철수", 100);',
-          answer: "make_pair",
-          expect: 'auto p = make_pair("철수", 100);',
+          task: "캐릭터 철수의 HP 100 을 pair 로 묶고, HP 만 꺼내 출력하세요.",
+          guide: "auto + 함수 호출로 pair 만들기. 멤버 접근은 .first / .second.",
+          template: 'auto p = ___("철수", 100);\ncout << p.___;',
+          answer: 'auto p = make_pair("철수", 100);\ncout << p.second;',
+          blanksAnswer: ["make_pair", "second"],
+          expect: '100',
           en: {
-            task: "Create a pair using make_pair!",
-            guide: "Use the form: make_pair(value1, value2)"
+            task: "Bundle Cheolsu's HP 100 as a pair, then print just the HP.",
+            guide: "auto + function call to build a pair. Use .first / .second for members."
           }
         }
       },
