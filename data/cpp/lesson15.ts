@@ -96,37 +96,59 @@ auto p3 = make_pair("Park", 77);             // auto 로 타입 생략
         {
           id: "ch1-pair-mini",
           type: "practice" as const,
-          title: "✋ 잠깐 — 카페 메뉴 한 줄 출력",
-          content: `**상황**: 카페에서 음료 정보를 \`(이름, 가격)\` 한 묶음으로 다루고 있어요.
+          title: "✋ 잠깐 — 카페 메뉴에서 가장 비싼 음료 찾기",
+          content: `**상황**: 카페 메뉴 5 개가 \`(이름, 가격)\` pair 로 정리되어 있어요.
 
-이미 만들어진 pair 에서 \`.first\` (이름), \`.second\` (가격) 을 꺼내 **\`라떼: 5500원\`** 형식으로 출력하세요.
+\`\`\`
+라떼 5500 / 아메리카노 4500 / 카푸치노 6000 / 에스프레소 4000 / 모카 6500
+\`\`\`
 
-> 💡 \`p.first\`, \`p.second\` 만 알면 끝.`,
+**가장 비싼 음료의 이름과 가격** 을 \`모카: 6500원\` 형식으로 출력하세요.
+
+> 💡 패턴: 첫 음료를 일단 "현재 최고" 로 잡고, range-for 로 돌면서 \`.second\` 가 더 큰 게 나오면 갱신. 끝에 출력.`,
           starterCode: `#include <iostream>
+#include <vector>
 #include <string>
 using namespace std;
 
 int main() {
-    pair<string, int> drink = {"라떼", 5500};
+    vector<pair<string, int>> menu = {
+        {"라떼", 5500},
+        {"아메리카노", 4500},
+        {"카푸치노", 6000},
+        {"에스프레소", 4000},
+        {"모카", 6500}
+    };
 
-    // 👇 .first 와 .second 로 "라떼: 5500원" 출력
+    // 👇 가장 비싼 음료 찾기 — "이름: 가격원" 형식 출력
 
 
     return 0;
 }`,
           code: `#include <iostream>
+#include <vector>
 #include <string>
 using namespace std;
 
 int main() {
-    pair<string, int> drink = {"라떼", 5500};
+    vector<pair<string, int>> menu = {
+        {"라떼", 5500},
+        {"아메리카노", 4500},
+        {"카푸치노", 6000},
+        {"에스프레소", 4000},
+        {"모카", 6500}
+    };
 
-    cout << drink.first << ": " << drink.second << "원";
+    pair<string, int> best = menu[0];
+    for (auto& d : menu) {
+        if (d.second > best.second) best = d;
+    }
+    cout << best.first << ": " << best.second << "원";
 
     return 0;
 }`,
-          hint: "cout << drink.first << \": \" << drink.second << \"원\"; — .first 와 .second 사이에 \": \" 를 넣고, 끝에 \"원\".",
-          expectedOutput: `라떼: 5500원`
+          hint: "pair<string, int> best = menu[0]; 로 첫 항목으로 시작. for (auto& d : menu) 로 돌면서 if (d.second > best.second) best = d; 로 갱신. 끝에 cout << best.first << \": \" << best.second << \"원\";",
+          expectedOutput: `모카: 6500원`
         },
         {
           id: "ch1-fb1",
@@ -242,24 +264,30 @@ queue<tuple<int, int, int>> q;   // (x, y, distance)
         {
           id: "ch1-tuple-mini",
           type: "practice" as const,
-          title: "✋ 잠깐 — 함수가 돌려준 학생 정보 받기",
-          content: `**상황**: \`getStudent()\` 함수가 학생 정보 **세 가지 (이름, 나이, 학점) 를 한 번에** 돌려줘요. 보통 함수는 값 하나만 리턴하는데, tuple 덕에 셋을 묶어서 한 번에 줄 수 있어요.
+          title: "✋ 잠깐 — 장학금 자격 판정",
+          content: `**상황**: \`getStudent()\` 함수가 학생의 **(이름, 나이, 학점) 세 값** 을 한 번에 돌려줘요.
 
-함수를 호출해서 받고, **structured bindings 로 풀어 출력**하세요.
+장학금 자격 = **나이 ≥ 16 그리고 학점 ≥ 3.5**.
 
-> 💡 이게 바로 tuple 이 진짜 빛나는 자리예요 — 함수에서 여러 값 한꺼번에 리턴 → 받는 쪽이 \`auto [a, b, c] = func();\` 한 줄로 받기.`,
+자격이 되면 \`Kim: 자격 있음\`, 안 되면 \`Kim: 자격 없음\` 을 출력하세요.
+
+\`\`\`
+getStudent() → ("Kim", 15, 3.8)   →  Kim: 자격 없음 (나이 부족)
+\`\`\`
+
+> 💡 함수 결과를 structured bindings 으로 받고 (\`auto [name, age, gpa] = ...\`), 조건 판단 후 출력. **각 값에 *이름* 이 붙어서 코드가 읽기 쉬워지는 게 structured bindings 의 진짜 가치.**`,
           starterCode: `#include <iostream>
 #include <tuple>
 #include <string>
 using namespace std;
 
-// 학생 정보를 한 번에 돌려주는 함수 (이미 만들어져 있음)
 tuple<string, int, double> getStudent() {
     return {"Kim", 15, 3.8};
 }
 
 int main() {
-    // 👇 getStudent() 호출 + structured bindings 으로 받기 + "Kim 15 3.8" 형식 출력
+    // 👇 함수 결과를 structured bindings 으로 받고
+    //    age >= 16 && gpa >= 3.5 면 "이름: 자격 있음", 아니면 "이름: 자격 없음" 출력
 
 
     return 0;
@@ -275,12 +303,13 @@ tuple<string, int, double> getStudent() {
 
 int main() {
     auto [name, age, gpa] = getStudent();
-    cout << name << " " << age << " " << gpa;
+    if (age >= 16 && gpa >= 3.5) cout << name << ": 자격 있음";
+    else cout << name << ": 자격 없음";
 
     return 0;
 }`,
-          hint: "auto [name, age, gpa] = getStudent(); — 함수 호출하면서 한 줄에 변수 3개 만들기 + 값 받기. 그 다음 cout << name << \" \" << age << \" \" << gpa;",
-          expectedOutput: `Kim 15 3.8`
+          hint: "auto [name, age, gpa] = getStudent(); — 한 줄로 풀고. if (age >= 16 && gpa >= 3.5) cout << name << \": 자격 있음\"; else cout << name << \": 자격 없음\";",
+          expectedOutput: `Kim: 자격 없음`
         },
         {
           id: "ch1-tuple-mini2",

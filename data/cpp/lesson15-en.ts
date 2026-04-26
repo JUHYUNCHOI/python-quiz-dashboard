@@ -96,37 +96,59 @@ All three give the same result, so pick whichever you like. The first form (\`{a
         {
           id: "ch1-pair-mini",
           type: "practice" as const,
-          title: "✋ Quick — print a cafe menu line",
-          content: `**Scenario**: A cafe stores a drink as a \`(name, price)\` pair.
+          title: "✋ Quick — find the most expensive cafe drink",
+          content: `**Scenario**: A cafe menu has 5 drinks stored as \`(name, price)\` pairs.
 
-Use \`.first\` (name) and \`.second\` (price) to print **\`Latte: $5\`** style output.
+\`\`\`
+Latte 5500 / Americano 4500 / Cappuccino 6000 / Espresso 4000 / Mocha 6500
+\`\`\`
 
-> 💡 Just \`p.first\` and \`p.second\` are all you need.`,
+Print **the name and price of the most expensive drink** in \`Mocha: 6500\` format.
+
+> 💡 Pattern: take the first drink as the current best, range-for through the rest, update best whenever \`.second\` is larger. Print at the end.`,
           starterCode: `#include <iostream>
+#include <vector>
 #include <string>
 using namespace std;
 
 int main() {
-    pair<string, int> drink = {"Latte", 5};
+    vector<pair<string, int>> menu = {
+        {"Latte", 5500},
+        {"Americano", 4500},
+        {"Cappuccino", 6000},
+        {"Espresso", 4000},
+        {"Mocha", 6500}
+    };
 
-    // 👇 Use .first and .second to print "Latte: $5"
+    // 👇 Find the most expensive drink — print as "Name: Price"
 
 
     return 0;
 }`,
           code: `#include <iostream>
+#include <vector>
 #include <string>
 using namespace std;
 
 int main() {
-    pair<string, int> drink = {"Latte", 5};
+    vector<pair<string, int>> menu = {
+        {"Latte", 5500},
+        {"Americano", 4500},
+        {"Cappuccino", 6000},
+        {"Espresso", 4000},
+        {"Mocha", 6500}
+    };
 
-    cout << drink.first << ": $" << drink.second;
+    pair<string, int> best = menu[0];
+    for (auto& d : menu) {
+        if (d.second > best.second) best = d;
+    }
+    cout << best.first << ": " << best.second;
 
     return 0;
 }`,
-          hint: "cout << drink.first << \": $\" << drink.second; — separator \": $\" between name and price.",
-          expectedOutput: `Latte: $5`
+          hint: "pair<string, int> best = menu[0]; to seed. for (auto& d : menu) loop, if (d.second > best.second) best = d; to update. Then cout << best.first << \": \" << best.second;",
+          expectedOutput: `Mocha: 6500`
         },
         {
           id: "ch1-fb1",
@@ -242,24 +264,30 @@ For grid traversal, "current position + extra info" gets tossed into a queue as 
         {
           id: "ch1-tuple-mini",
           type: "practice" as const,
-          title: "✋ Quick — receive student info from a function",
-          content: `**Scenario**: A function \`getStudent()\` returns **three pieces (name, age, gpa) at once**. Normally a function returns one value; tuples let it bundle several.
+          title: "✋ Quick — scholarship eligibility check",
+          content: `**Scenario**: \`getStudent()\` returns **(name, age, gpa)** in one go.
 
-Call the function and **unpack the tuple with structured bindings**, then print.
+Eligibility = **age ≥ 16 AND gpa ≥ 3.5**.
 
-> 💡 This is where tuples really shine — multi-value return, received in one line: \`auto [a, b, c] = func();\`.`,
+If eligible, print \`Kim: eligible\`. Otherwise \`Kim: not eligible\`.
+
+\`\`\`
+getStudent() → ("Kim", 15, 3.8)   →  Kim: not eligible (age too low)
+\`\`\`
+
+> 💡 Receive with structured bindings (\`auto [name, age, gpa] = ...\`), then check the condition and print. **The real value of structured bindings: each piece gets a *name*, so the conditional reads naturally.**`,
           starterCode: `#include <iostream>
 #include <tuple>
 #include <string>
 using namespace std;
 
-// Function that returns student info as a tuple (already provided)
 tuple<string, int, double> getStudent() {
     return {"Kim", 15, 3.8};
 }
 
 int main() {
-    // 👇 Call getStudent(), unpack with structured bindings, print "Kim 15 3.8"
+    // 👇 Unpack with structured bindings.
+    //    If age >= 16 && gpa >= 3.5 → "name: eligible", else "name: not eligible"
 
 
     return 0;
@@ -275,12 +303,13 @@ tuple<string, int, double> getStudent() {
 
 int main() {
     auto [name, age, gpa] = getStudent();
-    cout << name << " " << age << " " << gpa;
+    if (age >= 16 && gpa >= 3.5) cout << name << ": eligible";
+    else cout << name << ": not eligible";
 
     return 0;
 }`,
-          hint: "auto [name, age, gpa] = getStudent(); — one line declares 3 variables and assigns from the function. Then cout << name << \" \" << age << \" \" << gpa;",
-          expectedOutput: `Kim 15 3.8`
+          hint: "auto [name, age, gpa] = getStudent(); — unpack. Then if (age >= 16 && gpa >= 3.5) cout << name << \": eligible\"; else cout << name << \": not eligible\";",
+          expectedOutput: `Kim: not eligible`
         },
         {
           id: "ch1-tuple-mini2",
