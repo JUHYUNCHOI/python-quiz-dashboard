@@ -484,6 +484,20 @@ const registry: Record<string, ComponentEntry> = {
     props: (_step: any, lang: string) => ({ lang }),
   },
 
+  // C++ 레슨 17: iterator 커서 시각화
+  iteratorVisualizer: {
+    load: () => import("@/components/animations/iterator-visualizer"),
+    exportName: "IteratorVisualizer",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+
+  // C++ 레슨 17: lower_bound / upper_bound 시각화 (이상 vs 초과)
+  lowerUpperBoundVisualizer: {
+    load: () => import("@/components/animations/lower-upper-bound-visualizer"),
+    exportName: "LowerUpperBoundVisualizer",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+
   // C++ 레슨 11: string 메서드 인터랙티브 체험 (substr / find / replace)
   stringMethodVisualizer: {
     load: () => import("@/components/animations/string-method-visualizer"),

@@ -21,50 +21,50 @@ export const cppLesson19Data: LessonData = {
         {
           id: "ch1-intro",
           type: "explain",
-          title: "📄 ifstream & ofstream — 파일 읽고 쓰기!",
-          content: `USACO 대회에서는 답을 콘솔이 아니라 **파일**로 제출해요! 그리고 테스트 데이터가 10만 줄이면 매번 직접 입력할 수 없잖아요? 파일에서 읽고 파일로 쓰는 법을 배워야 해요.
+          title: "📄 파일에서 읽고, 파일에 쓰기",
+          content: `지금까지는 입력은 \`cin\`, 출력은 \`cout\`. 둘 다 **콘솔(키보드/화면)** 이었어요. 그런데 가끔은 **파일**에서 읽고 파일에 쓰고 싶어요.
 
-프로그램에서 파일을 읽거나 쓰고 싶을 때가 있어요. USACO 같은 대회에서는 파일 입출력이 필수예요!
+대표적인 상황 두 가지:
 
-C++에서는 \`<fstream>\` 헤더를 사용해요:
+> 📊 **테스트 데이터 10만 줄**: 직접 입력 못 함. 파일로 받아야.
+> 🏆 **USACO 대회**: 답을 콘솔이 아닌 \`output.txt\` 같은 파일로 제출.
+
+C++ 의 답은 **\`<fstream>\`** 헤더에 있어요. \`cin\`/\`cout\` 의 파일 버전이라고 생각하면 돼요:
 
 \`\`\`cpp
 #include <fstream>
 
-ifstream fin("input.txt");   // 파일에서 읽기
-ofstream fout("output.txt"); // 파일에 쓰기
+ifstream fin("input.txt");    // 파일에서 읽기 (input file stream)
+ofstream fout("output.txt");  // 파일에 쓰기  (output file stream)
 
 int x;
-fin >> x;          // 파일에서 숫자 읽기
-fout << x * 2;     // 파일에 결과 쓰기
+fin >> x;          // cin 처럼 >> 로 읽기
+fout << x * 2;     // cout 처럼 << 로 쓰기
 
-fin.close();       // 파일 닫기
+fin.close();
 fout.close();
 \`\`\`
 
-파이썬과 비교해봐요:
+> 💡 핵심: \`>>\`, \`<<\` 연산자는 **그대로** 통해요. 객체만 \`fin\`/\`fout\` 으로 바뀐 거예요. cin/cout 사용법을 안다면 추가로 외울 게 거의 없어요.
 
-**파이썬 🐍:**
+### 파이썬과 비교
+
 \`\`\`python
 fin = open("input.txt", "r")
 fout = open("output.txt", "w")
-
 x = int(fin.readline())
 fout.write(str(x * 2))
-
-fin.close()
-fout.close()
+fin.close(); fout.close()
 \`\`\`
 
 | 파이썬 🐍 | C++ ⚡ |
 |---|---|
-| \`open("file", "r")\` | \`ifstream fin("file")\` |
-| \`open("file", "w")\` | \`ofstream fout("file")\` |
+| \`open(file, "r")\` | \`ifstream fin(file)\` |
+| \`open(file, "w")\` | \`ofstream fout(file)\` |
 | \`fin.readline()\` | \`fin >> x\` |
-| \`fout.write()\` | \`fout << x\` |
-| \`fin.close()\` | \`fin.close()\` |
+| \`fout.write(...)\` | \`fout << ...\` |
 
-💡 \`ifstream\` = **i**nput **f**ile **stream**, \`ofstream\` = **o**utput **f**ile **stream**이에요! cin/cout처럼 >> 와 << 연산자를 그대로 사용해요.`
+이름만 외우면 끝: **i**fstream = **i**nput, **o**fstream = **o**utput.`
         },
         {
           id: "ch1-fb1",

@@ -21,10 +21,8 @@ export const cppLesson20EnData: LessonData = {
         {
           id: "ch1-intro",
           type: "explain",
-          title: "🛠️ bits/stdc++.h — All Headers in One Line!",
-          content: `In a 3-hour contest, you don't have time to write \`#include <iostream>\`, \`#include <vector>\`, \`#include <algorithm>\`... 10 lines for every problem! One bits/stdc++.h solves everything!
-
-Normally in C++, you include headers one by one:
+          title: "🛠️ bits/stdc++.h — one line, all headers",
+          content: `Every contest problem started the same way:
 
 \`\`\`cpp
 #include <iostream>
@@ -32,48 +30,34 @@ Normally in C++, you include headers one by one:
 #include <algorithm>
 #include <string>
 #include <map>
-// Keeps growing... 😩
+// Did I forget any...? 😩
 \`\`\`
 
-In CP (Competitive Programming), you can include **all STL headers in one line**!
+In a 3-hour contest, writing 10 header lines per problem is wasted time. So contest folks use a *cheat-code* header:
 
 \`\`\`cpp
-#include <bits/stdc++.h>  // All STL headers included!
+#include <bits/stdc++.h>   // pulls in basically all of STL
 using namespace std;
 \`\`\`
 
-These two lines give you access to \`vector\`, \`map\`, \`algorithm\`, \`string\`, and **everything else**!
+Those two lines get you \`vector\`, \`map\`, \`set\`, \`algorithm\`, \`string\` — the lot. This is the standard contest opener.
 
-Let's compare with Python:
-
-**Python 🐍:**
-\`\`\`python
-# Python imports as needed
-import sys
-from collections import defaultdict
-# But basic types work without import
-\`\`\`
-
-**C++ (CP style) ⚡:**
-\`\`\`cpp
-#include <bits/stdc++.h>  // This one line does it all!
-using namespace std;       // No need for std:: prefix!
-\`\`\`
-
-| Python 🐍 | C++ CP style ⚡ |
+| Python 🐍 | C++ contest style ⚡ |
 |---|---|
-| \`import\` one by one | \`bits/stdc++.h\` for everything! |
-| Basic types just work | \`using namespace std;\` for convenience |
-| Import only what you need | Include all STL at once |
+| \`import\` one at a time | \`bits/stdc++.h\` for everything |
+| No namespace fuss | \`using namespace std;\` once |
 
-⚠️ **Warning!** \`bits/stdc++.h\` is only for CP!
+### ⚠️ Contests only — never in real code
 
-**Downsides of bits/stdc++.h:**
-• Compilation time is **2-3x slower** (it includes every header)
-• **Never use it** in real projects (it's non-standard)
-• You stop learning **which header you actually need** (bad habit)
+\`bits/stdc++.h\` is **not standard C++.** It only exists in GCC, not in Clang or MSVC. So:
 
-Only use it for saving time in contests!`
+| Downside | Consequence |
+|---|---|
+| Non-standard | Won't compile on Clang/MSVC → can't use in workplace code |
+| Includes everything | Compile becomes **2-3x slower** |
+| You stop learning header dependencies | Hard to debug header issues later |
+
+> 💡 **Bottom line**: contests (speed first) → fine. Production / real projects (portability, maintainability) → never. Treat it as a contest / learning / quick-experiment tool.`
         },
         {
           id: "ch1-fb1",
@@ -360,6 +344,74 @@ print(n & 1)   # odd/even check
           options: ["3 6 10", "8 3 0", "8 6 0", "3 3 0"],
           answer: 1,
           explanation: "1 << 3 shifts 1 left by 3 = 8 (2^3). 12 >> 2 shifts 12 right by 2 = 3 (12/4). 5 ^ 5 is XOR of a number with itself, which is always 0!"
+        },
+        {
+          id: "ch2-must-bitmask",
+          type: "practice" as const,
+          title: "🎯 Where bitmasks *truly shine* — enumerate all subsets",
+          content: `One pattern where bit operations show their real power: **subset enumeration**.
+
+**Problem**: For \`n = 3\` (three elements \`A, B, C\`), print all **8 subsets**. Include the empty set.
+
+\`\`\`
+Expected output (one subset per line):
+{ }
+{ A }
+{ B }
+{ A B }
+{ C }
+{ A C }
+{ B C }
+{ A B C }
+\`\`\`
+
+> 💡 With recursion you'd need backtracking ("include / don't include"). With a **bitmask**, it's a single loop: \`for (int mask = 0; mask < (1 << n); mask++)\`.
+>
+> **Trick**: if bit \`i\` of \`mask\` is 1, include element \`i\`. Check with \`mask & (1 << i)\`.
+>
+> For n = 3, \`1 << 3 = 8\`, so \`mask\` runs 0..7 and you get every subset for free.`,
+          starterCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int n = 3;
+    char names[] = {'A', 'B', 'C'};
+
+    // 👇 Loop mask from 0 to (1 << n) - 1:
+    //    For each mask, print elements whose bit is set.
+    //    Format: "{ A B }" (space-separated, with spaces inside braces)
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+using namespace std;
+
+int main() {
+    int n = 3;
+    char names[] = {'A', 'B', 'C'};
+
+    for (int mask = 0; mask < (1 << n); mask++) {
+        cout << "{ ";
+        for (int i = 0; i < n; i++) {
+            if (mask & (1 << i)) {
+                cout << names[i] << " ";
+            }
+        }
+        cout << "}" << endl;
+    }
+
+    return 0;
+}`,
+          hint: "Outer loop: for (int mask = 0; mask < (1 << n); mask++) — every subset. Inner: for (int i = 0; i < n; i++), check with if (mask & (1 << i)) to include element i. Watch output format: '{ ' + elements + '}', each element followed by one space.",
+          expectedOutput: `{ }
+{ A }
+{ B }
+{ A B }
+{ C }
+{ A C }
+{ B C }
+{ A B C }`
         },
         {
           id: "ch2-patterns",

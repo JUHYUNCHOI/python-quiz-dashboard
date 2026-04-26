@@ -21,54 +21,48 @@ export const cppLesson23Data: LessonData = {
         {
           id: "s23-ch0-intro",
           type: "explain",
-          title: "📊 sort() — 정렬의 기본!",
-          content: `데이터를 순서대로 나열하는 **정렬**은 알고리즘의 핵심이에요. C++의 **sort()** 함수로 시작해봐요!
+          title: "📊 sort() — 한 줄로 정렬",
+          content: `직전 레슨에서 pair 의 자동 비교 덕분에 "**\`sort\` 한 줄로 점수표가 정렬된다**" 는 걸 봤죠. 이번 레슨은 그 \`sort\` 가 주인공이에요.
 
-**sort() 문법:**
-\`\`\`
-sort( 어디서부터, 어디까지 );
-       ↑            ↑
-   v.begin()     v.end()
-  (첫 번째 요소)  (마지막 요소 다음)
-\`\`\`
-
-sort()는 "어디서부터 어디까지 정렬할지" 범위를 알아야 해요.
-vector에서는 항상 \`v.begin()\`, \`v.end()\`를 써요.
+\`sort\` 는 정렬 알고리즘 (퀵정렬/머지정렬 등) 을 직접 짜야 했던 작업을 **한 줄** 로 끝내줘요. C++ 에서 가장 많이 쓰이는 STL 함수 중 하나.
 
 \`\`\`cpp
-#include <algorithm>  // sort()가 들어있는 헤더!
-#include <vector>
+#include <algorithm>
 using namespace std;
 
 vector<int> v = {5, 2, 8, 1, 9};
 sort(v.begin(), v.end());
-// v = {1, 2, 5, 8, 9}  (오름차순, 기본값)
+// v = {1, 2, 5, 8, 9}
 \`\`\`
 
-**배열도 정렬할 수 있어요:**
-\`\`\`cpp
-int arr[] = {5, 2, 8, 1, 9};
-sort(arr, arr + 5);  // arr[0]~arr[4] 정렬
-\`\`\`
+\`sort(begin, end)\` — STL 의 그 익숙한 \`(begin, end)\` 패턴이에요. "이 범위 안에서 정렬해줘" 라는 뜻.
 
-{collapse:💡 arr + 5가 왜 되는 거야?}
-\`\`\`
-arr은 사실 배열의 첫 번째 요소가 저장된 메모리 주소예요.
-(포인터라고 해요)
-
-arr     → arr[0]의 주소 (시작)
-arr + 1 → arr[1]의 주소
-arr + 5 → arr[5]의 주소 (= 마지막 다음, 끝 표시)
-
-vector의 v.begin() / v.end()와 같은 역할이에요!
-\`\`\`
+> 💡 파이썬의 \`v.sort()\` 와 비슷한데, 한 가지 차이가 있어요.
 
 | 파이썬 🐍 | C++ ⚡ |
 |---|---|
 | \`v.sort()\` | \`sort(v.begin(), v.end())\` |
-| \`sorted(v)\` — 새 리스트 반환 | C++은 항상 **원본 수정** (반환값 없음) |
+| \`sorted(v)\` — 새 리스트 반환 | (없음) C++ 은 항상 **원본 자체를 수정** |
 
-💡 sort()는 \`#include <algorithm>\`이 필요해요!`
+C++ 에서 정렬은 항상 **원본을 직접 바꿔요.** "정렬된 새 벡터" 가 필요하면 미리 복사해두고 거기서 sort 해야 해요.
+
+### 배열에도 똑같이
+
+\`\`\`cpp
+int arr[] = {5, 2, 8, 1, 9};
+sort(arr, arr + 5);  // arr[0] ~ arr[4] 정렬
+\`\`\`
+
+{collapse:🤔 \`arr + 5\` 가 왜 되는 거지?}
+\`\`\`
+arr 은 사실 배열 첫 번째 요소의 메모리 주소예요 (포인터).
+arr     → arr[0] 주소
+arr + 5 → arr[5] 주소 (= 마지막 다음, 끝 표시)
+
+vector 의 v.begin()/v.end() 랑 같은 역할이에요.
+\`\`\`
+
+다음 페이지 — 직접 정렬해봐요 👇`
         },
         {
           id: "s23-ch0-fb1",
@@ -153,20 +147,25 @@ sort()의 **세 번째 인자**로 "비교 기준"을 넣을 수 있어요.
         {
           id: "s23-ch1-why",
           type: "explain",
-          title: "🔧 greater<int>()로 못하는 게 있어요!",
-          content: `\`greater<int>()\`는 단순한 숫자/문자열 내림차순에는 편리해요.
-
-하지만 **pair를 점수 기준으로 정렬**하려면 어떻게 해야 할까요?
+          title: "🤔 \`greater<int>()\` 로 안 되는 상황이 와요",
+          content: `직전 페이지에서 \`greater<int>()\` 로 내림차순 정렬을 했죠. 이건 **단순 숫자/문자열** 일 때 편해요. 그런데 — 학생 점수표 같은 거라면?
 
 \`\`\`cpp
-vector<pair<string, int>> v = {{"Kim", 85}, {"Lee", 92}, {"Park", 78}};
-
-// 점수(second) 기준 내림차순으로 정렬하고 싶어요
-// greater<int>()로는 불가능! pair 전체를 비교해버려요
+vector<pair<string, int>> students = {
+    {"Kim", 85}, {"Lee", 92}, {"Park", 78}
+};
 \`\`\`
 
-이럴 때 **람다(lambda)**가 필요해요.
-람다는 **"내가 직접 비교 기준을 정하는 일회용 함수"**예요.`
+이걸 **점수 (second) 기준 내림차순** 으로 정렬하고 싶어요.
+
+\`sort(students.begin(), students.end())\` 만 쓰면? pair 의 자동 비교 규칙대로 \`first\` (이름) 기준 정렬돼요. 우린 점수로 정렬하고 싶은데 말이죠.
+
+\`greater<pair<string,int>>()\` 를 쓰면? \`pair\` 전체 (이름 + 점수) 가 비교돼요. 역시 우리가 원하는 게 아님.
+
+> 🎯 우리한테 필요한 건: **"비교 기준을 직접 알려주는" 방법.**
+> "이 두 학생 중에 누가 앞에 와야 하는지, 내가 직접 정할게요" 라고 sort 한테 말할 수 있어야 해요.
+
+이럴 때 등장하는 게 **람다 (lambda)**. 다음 페이지에서 문법부터 봐요 👇`
         },
         {
           id: "s23-ch1-syntax",
@@ -297,6 +296,83 @@ int main() {
             { id: 1, answer: "second", options: ["second", "first", "score", "value"] }
           ],
           explanation: "pair에서 두 번째 값은 .second예요. a.second < b.second면 a가 앞 → 오름차순이에요!"
+        },
+        {
+          id: "s23-ch1-must-lambda",
+          type: "practice" as const,
+          title: "🎯 lambda 가 *진짜 필요한* 순간 — 다중 기준 정렬",
+          content: `이번 문제는 lambda 없이는 진짜 답이 없어요.
+
+**문제**: 학생 5 명의 (이름, 점수) 가 있어요.
+**점수 내림차순으로 정렬, 동점이면 이름 사전순(오름차순)으로 정렬**해서 출력하세요.
+
+\`\`\`
+입력:
+  Kim    88
+  Lee    95
+  Park   88
+  Choi   72
+  Han    95
+
+기대 출력 (점수↓, 같으면 이름↑):
+  Han 95
+  Lee 95
+  Kim 88
+  Park 88
+  Choi 72
+\`\`\`
+
+> 💡 \`sort()\` 만 쓰면 점수랑 이름 둘 다 오름차순으로 정렬돼요 (pair 자동 비교).
+> \`greater<>()\` 만 쓰면 둘 다 내림차순.
+> **"점수는 내림차순, 이름은 오름차순"** 같이 다른 방향이 섞이면 → **lambda 만이 답.**`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> students = {
+        {"Kim", 88}, {"Lee", 95}, {"Park", 88}, {"Choi", 72}, {"Han", 95}
+    };
+
+    // 👇 sort 의 세 번째 인자에 lambda 를 넘겨서:
+    //    1순위: 점수 (second) 내림차순
+    //    2순위: 점수 같으면 이름 (first) 오름차순
+
+
+    for (auto& s : students) {
+        cout << s.first << " " << s.second << endl;
+    }
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> students = {
+        {"Kim", 88}, {"Lee", 95}, {"Park", 88}, {"Choi", 72}, {"Han", 95}
+    };
+
+    sort(students.begin(), students.end(), [](auto a, auto b) {
+        if (a.second != b.second) return a.second > b.second;  // 점수 내림차순
+        return a.first < b.first;                                // 이름 오름차순
+    });
+
+    for (auto& s : students) {
+        cout << s.first << " " << s.second << endl;
+    }
+    return 0;
+}`,
+          hint: "lambda 안에 if-else 패턴: if (a.second != b.second) return a.second > b.second; (점수 내림차순) / 점수 같으면 return a.first < b.first; (이름 오름차순)",
+          expectedOutput: `Han 95
+Lee 95
+Kim 88
+Park 88
+Choi 72`
         }
       ]
     },

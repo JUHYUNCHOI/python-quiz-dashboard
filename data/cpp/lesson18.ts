@@ -21,81 +21,66 @@ export const cppLesson18Data: LessonData = {
         {
           id: "ch1-intro",
           type: "explain",
-          title: "📦 stack — 후입선출(LIFO)!",
-          content: `**stack**은 접시 쌓기처럼 **마지막에 넣은 것이 먼저 나오는** 자료구조예요!
+          title: "📦 stack — 마지막에 넣은 게 먼저 나옴",
+          content: `이런 문제 본 적 있죠:
+
+> "괄호가 올바르게 짝지어졌는지 확인하라" \`(())\` ✅, \`(()\` ❌
+
+이걸 어떻게 풀면 좋을까요? 여는 괄호 \`(\` 가 나오면 어딘가 기억해두고, 닫는 \`)\` 가 나오면 **가장 최근에 기억해둔** \`(\` 와 짝지어요. "가장 최근" 이 핵심이에요.
+
+또는 — 메모장에서 \`Ctrl+Z\` (실행 취소). 마지막에 한 행동부터 되돌리죠. 또 "가장 최근".
+
+또는 — 웹 브라우저 뒤로가기. 마지막 방문 페이지부터.
+
+이 모든 패턴에서 공통점: **마지막에 넣은 게 먼저 나옴.** 이걸 자료구조로 만든 게 **stack** 이에요.
 
 \`\`\`
 push 1 → [1]
 push 2 → [1, 2]
 push 3 → [1, 2, 3]
-pop    → [1, 2]      ← 3이 나옴 (마지막에 넣은 것!)
+pop    → [1, 2]      ← 3 이 나옴 (마지막에 넣은 것)
 top    → 2           ← 맨 위 값 확인
 \`\`\`
 
-C++에서는 \`#include <stack>\`으로 사용해요:
+접시 쌓기 떠올려요. 새 접시는 위에 올리고 (push), 꺼낼 때도 맨 위부터 (pop). 이 규칙을 **LIFO (Last In First Out)** 라고 불러요.
+
+### C++ 에서 쓰는 법
 
 \`\`\`cpp
 #include <stack>
 using namespace std;
 
 stack<int> s;
-s.push(10);      // 넣기
+s.push(10);
 s.push(20);
 s.push(30);
 
-cout << s.top();  // 30 (맨 위 값)
-s.pop();          // 30 제거 (리턴값 없음!)
+cout << s.top();  // 30 (맨 위)
+s.pop();          // 30 제거 (값 안 돌려줌!)
 cout << s.top();  // 20
-
-cout << s.size();  // 2
-cout << s.empty(); // 0 (false)
 \`\`\`
 
-파이썬과 비교해봐요:
+| 함수 | 의미 |
+|---|---|
+| \`s.push(x)\` | 맨 위에 추가 |
+| \`s.top()\` | 맨 위 값 확인 (제거 안 함) |
+| \`s.pop()\` | 맨 위 제거 (**리턴값 없음** ⚠️) |
+| \`s.size()\` | 원소 개수 |
+| \`s.empty()\` | 비어있으면 true |
 
-**파이썬 🐍** — 리스트를 stack처럼 사용:
-\`\`\`python
-s = []
-s.append(10)    # push
-s.append(20)
-s.pop()         # 20 리턴 + 제거
-s[-1]           # top (마지막 원소 확인)
-\`\`\`
+> ⚠️ \`pop()\` 이 값을 안 돌려준다는 게 파이썬과 다른 점. 값이 필요하면 \`top()\` 으로 먼저 보고, 그 다음 \`pop()\`.
+
+### 파이썬은 list 로 stack 흉내
 
 | 파이썬 🐍 | C++ stack ⚡ |
 |---|---|
 | \`s.append(x)\` | \`s.push(x)\` |
-| \`s.pop()\` → 값 리턴 | \`s.pop()\` → 리턴값 없음! |
+| \`s.pop()\` → 값 리턴 | \`s.pop()\` → 리턴값 없음 |
 | \`s[-1]\` | \`s.top()\` |
-| \`len(s)\` | \`s.size()\` |
-| \`len(s) == 0\` | \`s.empty()\` |
 
-💡 C++의 \`pop()\`은 값을 **리턴하지 않아요**! 값을 먼저 \`top()\`으로 확인한 후 \`pop()\`으로 제거해요.
+### "vector 의 push_back/pop_back 으로 다 되는데 왜 stack?"
 
-**stack 함수 정리**
-
-| 함수 | 문법 | 설명 |
-|---|---|---|
-| push | \`s.push(x)\` | 맨 위에 추가 |
-| pop | \`s.pop()\` | 맨 위 제거 (리턴값 없음!) |
-| top | \`s.top()\` | 맨 위 값 확인 (제거 안 함) |
-| size | \`s.size()\` | 원소 개수 |
-| empty | \`s.empty()\` | 비어있으면 true |
-
-⚠️ \`pop()\`은 값을 반환하지 않아요! 값을 쓰려면 \`top()\`으로 먼저 확인 후 \`pop()\`해야 해요:
-\`\`\`cpp
-int val = s.top();  // 값 읽기
-s.pop();            // 그 다음 제거
-\`\`\`
-
-**왜 vector 대신 stack을 쓸까요?**
-vector로도 push_back/pop_back으로 stack처럼 쓸 수 있어요. 그런데 왜 stack을 따로 쓸까요? **의도를 명확하게** 보여주기 위해서예요! stack을 쓰면 '이 코드는 LIFO로만 사용합니다'라는 약속이에요. 실수로 중간 값을 접근하는 것도 방지해줘요.
-
-**스택은 어디에 쓸까요?**
-• **실행 취소(Undo):** 마지막 작업부터 취소하잖아요!
-• **괄호 검사:** 여는 괄호를 스택에 넣고, 닫는 괄호가 나오면 꺼내요
-• **웹 브라우저 뒤로가기:** 마지막 방문 페이지부터 돌아가죠
-• **DFS(깊이 우선 탐색):** 알고리즘 대회에서 자주 쓰여요`
+좋은 질문이에요. 사실 vector 로도 다 돼요. 그런데 **stack 을 쓰면 의도가 분명**해져요. 코드를 읽는 사람이 "아, 이건 LIFO 로만 쓰는구나" 즉시 알 수 있고, 실수로 \`v[3]\` 같은 중간 접근도 막혀요. **"이렇게만 쓸 거다" 라는 약속**이에요.`
         },
         {
           id: "ch1-fb1",
@@ -199,6 +184,75 @@ q[0]              # front
           options: ["10", "20", "30", "에러"],
           answer: 1,
           explanation: "push(10), push(20), push(30)으로 [10,20,30]이 돼요. pop()은 맨 앞의 10을 제거해요 → [20,30]. front()는 20이에요!"
+        },
+        {
+          id: "ch1-must-queue",
+          type: "practice" as const,
+          title: "🎯 queue 가 *진짜 필요한* 순간 — 줄 서기 시뮬",
+          content: `queue 의 가장 자연스러운 용도는 "**먼저 도착한 사람부터 처리**" — 줄 서기 그 자체예요. BFS 같은 큰 알고리즘의 핵심도 이거.
+
+**문제**: 카페에 손님 5 명이 차례로 도착해요 (Alice, Bob, Carol, David, Eve). 바리스타가 한 명씩 처리하면서 "Now serving: 이름" 을 출력하세요. **도착 순서대로** 처리되어야 해요.
+
+\`\`\`
+도착 순서: Alice → Bob → Carol → David → Eve
+
+기대 출력:
+Now serving: Alice
+Now serving: Bob
+Now serving: Carol
+Now serving: David
+Now serving: Eve
+\`\`\`
+
+> 💡 stack 으로 하면 *마지막에 도착한* Eve 부터 처리됨 — 새치기! queue 가 정답이에요. 코드는 \`while (!q.empty())\` + \`q.front()\` + \`q.pop()\` 패턴.`,
+          starterCode: `#include <iostream>
+#include <queue>
+#include <string>
+using namespace std;
+
+int main() {
+    queue<string> line;
+
+    // 도착 순서대로 줄에 push
+    line.push("Alice");
+    line.push("Bob");
+    line.push("Carol");
+    line.push("David");
+    line.push("Eve");
+
+    // 👇 queue 가 빌 때까지: 맨 앞 손님 출력 + pop
+    //    출력 형식: "Now serving: Alice"
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <queue>
+#include <string>
+using namespace std;
+
+int main() {
+    queue<string> line;
+
+    line.push("Alice");
+    line.push("Bob");
+    line.push("Carol");
+    line.push("David");
+    line.push("Eve");
+
+    while (!line.empty()) {
+        cout << "Now serving: " << line.front() << endl;
+        line.pop();
+    }
+
+    return 0;
+}`,
+          hint: "패턴: while (!line.empty()) { cout << \"Now serving: \" << line.front() << endl; line.pop(); } — front() 로 맨 앞 보고 pop() 으로 제거. 이 패턴은 BFS 등 모든 queue 알고리즘의 기본 골격이에요.",
+          expectedOutput: `Now serving: Alice
+Now serving: Bob
+Now serving: Carol
+Now serving: David
+Now serving: Eve`
         },
         {
           id: "ch1-pred-parens",

@@ -21,60 +21,77 @@ export const cppLesson15EnData: LessonData = {
         {
           id: "ch1-intro",
           type: "explain",
-          title: "🔗 pair — Bundle Two Values Together!",
-          content: `Imagine you're announcing test results. 'Alice 95, Bob 87, Carol 92...' You need to keep names and scores **together** at all times. If you use separate variables, the names and scores get mixed up when you sort!
-
-If you use separate variables? \`string name1; int score1; string name2; int score2;\` 😰 Too messy!
-
-**pair is a simple tool that bundles two values together.**
-
-When you have **two values** that always go together — like a name and score, or x and y coordinates:
+          title: "🔗 pair — Why we need it",
+          content: `Say you're building a class score sheet. Each student has a name and a score that **always travel together**. With separate variables?
 
 \`\`\`cpp
-#include <utility>  // Header that contains pair
-// Or just include <algorithm> or <vector> — pair comes along automatically!
-
-pair<string, int> p;     // A pair bundling string and int
-p.first = "Kim";         // First value
-p.second = 95;           // Second value
+string name1; int score1;
+string name2; int score2;
+string name3; int score3;
+// ... 30 students = 60 variables 😱
 \`\`\`
 
-**There are several ways to create a pair:**
+Two vectors are better, but introduce another bug:
 
 \`\`\`cpp
-// Method 1: Brace initialization
-pair<string, int> p1 = {"Kim", 95};
-
-// Method 2: make_pair()
-pair<string, int> p2 = make_pair("Lee", 88);
-
-// Method 3: Use auto (type deduction!)
-auto p3 = make_pair("Park", 77);
+vector<string> names  = {"Kim", "Lee", "Park"};
+vector<int>    scores = {95, 88, 92};
+// Sort scores? names and scores get sorted independently —
+// "Kim → 88", "Lee → 95" mismatch nightmare!
 \`\`\`
 
-**Access values with .first and .second:**
+You need name and score **as one unit**. The \`struct\` from the previous lesson works, but defining a whole struct for "just two values" is overkill. That's where **pair** comes in.
+
+> 🎯 One line: **pair = "a tiny anonymous struct for two values".**
+
 \`\`\`cpp
-cout << p1.first << endl;   // Kim
-cout << p1.second << endl;  // 95
+#include <utility>   // pair lives here
+
+pair<string, int> p = {"Kim", 95};
+//   └────────────┘
+//   first type, second type
+
+cout << p.first;   // "Kim"
+cout << p.second;  // 95
 \`\`\`
 
-Let's compare with Python:
+The names \`.first\`, \`.second\` are a bit awkward, right? That's pair's tradeoff — it **doesn't tell you what each value semantically means**. If meaning matters, use a struct. If you're just bundling temporarily, use a pair.
 
-**Python 🐍:**
-\`\`\`python
-p = ("Kim", 95)     # Bundle two values with a tuple
-print(p[0])          # Kim (access by index)
-print(p[1])          # 95
+Next page — header info, ways to create a pair, and the Python comparison 👇`,
+        },
+        {
+          id: "ch1-creation",
+          type: "explain",
+          title: "🔗 Ways to create a pair + header notes",
+          content: `### Header — where does pair live?
+
+The official header is \`<utility>\`. That said, if you're already including \`<vector>\`, \`<algorithm>\`, or \`<map>\`, those usually pull \`pair\` in for you, so it works without adding \`<utility>\`.
+
+**In practice you pick one of two workflows:**
+- **Safe mode**: write \`#include <utility>\` whenever you use pair. Works in any header setup, no surprises.
+- **Lean mode**: skip it and rely on whichever STL header you're already including. If the compiler complains with \`'pair' was not declared\`, just add \`<utility>\` then.
+
+Both are fine. You don't have to memorize which header pulls in what — the compiler will tell you.
+
+### Three ways to create one (same result)
+
+\`\`\`cpp
+pair<string, int> p1 = {"Kim", 95};          // braces — most common
+pair<string, int> p2 = make_pair("Lee", 88); // make_pair function
+auto p3 = make_pair("Park", 77);             // auto skips the type
 \`\`\`
+
+All three give the same result, so pick whichever you like. The first form (\`{a, b}\`) is the most common in modern code.
+
+### Same idea as Python tuples
 
 | Python 🐍 | C++ pair ⚡ |
 |---|---|
 | \`p = ("Kim", 95)\` | \`pair<string,int> p = {"Kim", 95};\` |
 | \`p[0]\`, \`p[1]\` | \`p.first\`, \`p.second\` |
-| No types needed | Types required (or use auto) |
 | Any number of items | **Exactly 2 only!** |
 
-💡 A pair can hold exactly **2 values**! For 3 or more, you could use tuple — but **in practice, struct is used far more often.** tuple's syntax is tricky. pair shines when you need to bundle two values together for sorting!`
+> 💡 For 3+ values you'll meet \`tuple\` soon. But by far the most common case is "exactly two paired things" — coordinates (x,y), name-score, index-distance — which is why pair shows up far more in real code.`,
         },
         {
           id: "ch1-fb1",
@@ -91,55 +108,94 @@ print(p[1])          # 95
         {
           id: "ch1-tuple",
           type: "explain",
-          title: "🔗 tuple — Bundle 3 or More!",
-          content: `A pair can only hold 2 values. For **3 or more**, use a **tuple**!
+          title: "🔗 tuple — bundling 3 or more",
+          content: `pair holds exactly 2. For 3 or more, use **tuple**.
 
 \`\`\`cpp
-#include <tuple>  // tuple header
+#include <tuple>
 
-// Create a tuple
 tuple<string, int, double> t = {"Kim", 15, 3.8};
-
-// Access values: get<index>(tuple)
-cout << get<0>(t) << endl;  // Kim
-cout << get<1>(t) << endl;  // 15
-cout << get<2>(t) << endl;  // 3.8
+//                              name   age   gpa
 \`\`\`
 
-**You can also use make_tuple():**
+### Three ways to read values out
+
+\`.first/.second\` no longer cuts it (3+ values). Pick one of these:
+
+**① Read one at a time — \`get<index>(t)\`**
+
 \`\`\`cpp
-auto t2 = make_tuple("Lee", 16, 4.0);
+cout << get<0>(t);   // "Kim"
+cout << get<1>(t);   // 15
+cout << get<2>(t);   // 3.8
 \`\`\`
 
-**Use tie() to unpack all at once:**
+\`get<0>(t)\` — the **index goes inside \`<>\`, the tuple inside \`()\`**. Looks weird at first, but it just means \`t[0]\`. One catch: the number inside \`<>\` must be a **compile-time constant** — you can't put a variable \`i\` and write \`get<i>(t)\`.
+
+**② tie — assign to pre-declared variables (older style)**
+
 \`\`\`cpp
-string name;
-int age;
-double gpa;
-tie(name, age, gpa) = t;  // Assign to 3 variables at once!
-cout << name << " " << age << " " << gpa << endl;
-// Kim 15 3.8
+string name; int age; double gpa;
+tie(name, age, gpa) = t;   // assign to all three at once
 \`\`\`
 
-Let's compare with Python:
+**③ ⭐ structured bindings — declare + assign in one line (C++17+, modern)**
 
-**Python 🐍:**
-\`\`\`python
-t = ("Kim", 15, 3.8)
-print(t[0], t[1], t[2])
-
-# Unpacking
-name, age, gpa = t
+\`\`\`cpp
+auto [name, age, gpa] = t;   // cleanest
 \`\`\`
 
-| Python 🐍 | C++ tuple ⚡ |
+Reads almost like Python's \`name, age, gpa = t\`. **This single feature fixed most of tuple's readability problems.**
+
+> 💡 All three give the same result. \`tie\` is **not required**. Modern code defaults to \`auto [a, b, c] = ...\`. When you see \`tie\` in older code, just recognize it as method ②.
+
+Next page — where tuple actually shows up, and how to choose between struct/pair/tuple 👇`,
+        },
+        {
+          id: "ch1-tuple-usage",
+          type: "explain",
+          title: "🤔 How often is tuple used in practice?",
+          content: `Less often than pair. But **not negligibly.** Three patterns you'll see:
+
+### 1. Returning multiple values + structured bindings (common)
+
+\`\`\`cpp
+tuple<int, int, string> getStudent() { ... }
+
+auto [age, score, name] = getStudent();   // standard modern-C++ pattern
+\`\`\`
+
+When a function needs to return several values and you don't want to define a whole struct just for that, tuple-with-structured-bindings is the go-to.
+
+### 2. \`tie()\` for lexicographic comparison (idiomatic)
+
+\`\`\`cpp
+struct Point { int x, y; };
+bool operator<(const Point& a, const Point& b) {
+    return tie(a.x, a.y) < tie(b.x, b.y);   // ⭐ standard way to compare struct members
+}
+\`\`\`
+
+Compare x first, then y if tied — writing this with \`if\` gets long. \`tie\` packs them into a tuple and uses pair/tuple's auto-comparison rule from Chapter 1. Slick one-liner.
+
+### 3. State tuples in BFS/DFS contest code
+
+\`\`\`cpp
+queue<tuple<int, int, int>> q;   // (x, y, distance)
+\`\`\`
+
+For grid traversal, "current position + extra info" gets tossed into a queue as a tuple.
+
+### So when struct vs tuple vs pair?
+
+| Situation | Use |
 |---|---|
-| \`t = ("Kim", 15, 3.8)\` | \`tuple<string,int,double> t = {...};\` |
-| \`t[0]\` | \`get<0>(t)\` |
-| \`name, age, gpa = t\` | \`tie(name, age, gpa) = t;\` |
-| Index can be a variable | Index must be a **compile-time constant**! |
+| 2 values | **pair** |
+| **Data you'll work with often**, named fields matter | **struct** (\`.name\` beats \`get<0>\`) |
+| Just returning multiple values | **tuple** (especially with structured bindings) |
+| Comparing struct members | **tuple + tie** |
 
-💡 In practice, pair is used much more often! tuple is occasionally used for 3+ values, but most people prefer struct for that.`
+> 💡 One line: pair shows up most, struct is best for data you keep handling, and tuple covers quick bundles in between. They overlap a bit, but with practice the right choice becomes second nature.`,
         },
         {
           id: "ch1-pred1",
@@ -153,45 +209,42 @@ name, age, gpa = t
         {
           id: "ch1-compare",
           type: "explain",
-          title: "🔗 pair Comparison — Auto-Sortable!",
-          content: `Here's an amazing feature of pair — **comparison operators** (<, >, ==) work automatically!
-
-**Comparison rules:**
-1. **Compare first values first**
-2. If first values are equal, **compare second values**
+          title: "🔗 pair's real charm — auto-compare, auto-sort",
+          content: `If pair were just "a tool to bundle two values," it'd be no big deal. The real charm is this one thing: **pairs can be compared automatically.**
 
 \`\`\`cpp
 pair<int,int> a = {1, 5};
 pair<int,int> b = {1, 3};
-pair<int,int> c = {2, 1};
 
-// a vs b: first is same (1==1), compare second → 5 > 3 → a > b
-// a vs c: compare first → 1 < 2 → a < c
+a < b ?    // compiler: "first first. 1 == 1, equal. → check second: 5 > 3"
+           // result: a > b
 \`\`\`
 
-Thanks to this, **sorting a vector<pair> automatically sorts by first**!
+The rule is dictionary order:
+1. Compare **first** first
+2. If equal → compare **second**
+
+### So the real win — \`sort\` just works
+
+Sorting student scores:
 
 \`\`\`cpp
-vector<pair<int,string>> v = {
-    {3, "C"}, {1, "A"}, {2, "B"}, {1, "D"}
+vector<pair<int, string>> scores = {
+    {88, "Lee"}, {95, "Kim"}, {88, "Park"}, {72, "Choi"}
 };
-sort(v.begin(), v.end());
-// Result: {1,"A"}, {1,"D"}, {2,"B"}, {3,"C"}
-// Sorted by first; if first is equal, sorted by second!
+
+sort(scores.begin(), scores.end());
+// → {72, "Choi"}, {88, "Lee"}, {88, "Park"}, {95, "Kim"}
+//    Score ascending. Same score → name ascending.
 \`\`\`
 
-Let's compare with Python:
+**One line of \`sort\`. No comparator needed.** This is the decisive difference from "two separate vectors" — there, sorting one vector breaks the pairing with the other.
 
-**Python 🐍:**
-\`\`\`python
-v = [(3,"C"), (1,"A"), (2,"B"), (1,"D")]
-v.sort()  # Python tuples also sort by first element!
-# [(1,'A'), (1,'D'), (2,'B'), (3,'C')]
-\`\`\`
+> 💡 Same way Python tuples behave. \`(score, name)\` tuples in a list, then \`.sort()\` — score first, name as tiebreaker.
 
-Why pair's auto-comparison is useful: when you sort a \`vector<pair<int,string>>\`, it automatically sorts by the first value (score)!
+### This sets up the next lesson
 
-💡 It works the same way as Python tuples! First value first, then second value as tiebreaker.`
+Next lesson (cpp-23) goes deep on \`sort\`. There you'll learn how to handle "score **descending**, name ascending" and other custom orderings using **lambda**. Today's pair + auto-sort is the launching pad.`
         },
         {
           id: "ch1-question",
@@ -199,6 +252,81 @@ Why pair's auto-comparison is useful: when you sort a \`vector<pair<int,string>>
           title: "🙋 Question: Can't I just use two vectors?",
           component: "pairVsTwoVectors",
           content: "Press the sort button to see the difference between the two approaches!",
+        },
+        {
+          id: "ch1-must-pair",
+          type: "practice" as const,
+          title: "🎯 When pair is *truly necessary* — sorting a score sheet",
+          content: `You just saw it in the simulator — **two separate vectors break when sorted.** Now confirm it in code.
+
+**Problem**: You have 5 students with names and scores. **Sort by score (ascending) and print.**
+
+\`\`\`
+Input data:
+  Kim    95
+  Lee    72
+  Park   88
+  Choi   60
+  Han    81
+
+Expected output (sorted by score):
+  Choi 60
+  Lee 72
+  Han 81
+  Park 88
+  Kim 95
+\`\`\`
+
+> 💡 With two separate vectors (\`names\`, \`scores\`), sorting one breaks the pairing. **\`vector<pair<string, int>>\`** keeps them as one unit, and \`sort\` just works in one line.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    vector<pair<int, string>> students;
+    // (score, name) — putting score in .first so sort orders by score
+    students.push_back({95, "Kim"});
+    students.push_back({72, "Lee"});
+    students.push_back({88, "Park"});
+    students.push_back({60, "Choi"});
+    students.push_back({81, "Han"});
+
+    // 👇 sort one line (pair's first = score, auto-sorted)
+
+
+    // 👇 range-for to print as "name score"
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    vector<pair<int, string>> students;
+    students.push_back({95, "Kim"});
+    students.push_back({72, "Lee"});
+    students.push_back({88, "Park"});
+    students.push_back({60, "Choi"});
+    students.push_back({81, "Han"});
+
+    sort(students.begin(), students.end());
+
+    for (auto& s : students) {
+        cout << s.second << " " << s.first << endl;
+    }
+
+    return 0;
+}`,
+          hint: "pair's first = score, second = name. sort(students.begin(), students.end()) sorts by first (score). Print: for (auto& s : students) cout << s.second << \" \" << s.first;",
+          expectedOutput: `Choi 60
+Lee 72
+Han 81
+Park 88
+Kim 95`
         },
         {
           id: "ch1-fb2",

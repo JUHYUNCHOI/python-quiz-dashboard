@@ -21,50 +21,62 @@ export const cppLesson16EnData: LessonData = {
         {
           id: "ch1-intro",
           type: "explain",
-          title: "📖 map — Store Key-Value Pairs!",
-          content: `Imagine you're building a school grade management system. You want to look up 'Emma's' score instantly. With a vector, you'd have to search one by one from the beginning. With 1000 students? Way too slow! You need a tool that lets you **look up by name directly**.
+          title: "📖 map — Look up by name, instantly",
+          content: `Say you're storing scores for 1000 students. Using the \`vector<pair<string,int>>\` from the last lesson:
 
-You've used Python's \`dict\` before, right? In C++, \`map\` does the same job!
+\`\`\`cpp
+vector<pair<string, int>> scores = {
+    {"Alice", 95}, {"Bob", 87}, ...  // 1000 entries
+};
+
+// Find Bob's score?
+for (auto& p : scores) {
+    if (p.first == "Bob") { ... }   // compare one by one
+}
+\`\`\`
+
+If Bob is at the end, that's 1000 comparisons. A million students? A million comparisons. Way too slow.
+
+What we actually want is a **"name → score" lookup table**. In Python, that was \`dict\`:
+
+\`\`\`python
+scores = {"Alice": 95, "Bob": 87, "Charlie": 92}
+print(scores["Bob"])   # 87 — instant!
+\`\`\`
+
+In C++, that role goes to **\`map\`**.
 
 \`\`\`cpp
 #include <map>
-#include <string>
-using namespace std;
-
 map<string, int> scores;
-scores["Emma"] = 95;
-scores["Jake"] = 87;
+scores["Alice"] = 95;
+scores["Bob"] = 87;
 scores["Charlie"] = 92;
+
+cout << scores["Bob"];   // 87 — instant!
 \`\`\`
 
-Let's compare with Python:
+Syntax: \`map<key_type, value_type>\`. Usage with \`scores[key]\` is almost identical to Python's dict.
 
-**Python 🐍:**
-\`\`\`python
-scores = {}
-scores["Emma"] = 95
-scores["Jake"] = 87
-scores["Charlie"] = 92
-\`\`\`
+> 💡 One line: **map = "a fast lookup table that finds values by key."**
 
-Almost identical, right? But there's an important difference!
+### One difference from Python dict
 
 | Python dict 🐍 | C++ map ⚡ |
 |---|---|
 | \`scores = {}\` | \`map<string, int> scores;\` |
 | \`scores["key"] = val\` | \`scores["key"] = val;\` (same!) |
-| Maintains insertion order | **Auto-sorts by key!** |
-| No \`#include\` needed | \`#include <map>\` required |
-
-💡 C++ \`map\` **automatically sorts** by key! Stored in alphabetical order.
+| Preserves **insertion order** | **Auto-sorts by key** |
 
 \`\`\`cpp
 map<string, int> scores;
 scores["Charlie"] = 92;
-scores["Emma"] = 95;
-scores["Jake"] = 87;
-// Stored order: Emma → Jake → Charlie (alphabetical!)
-\`\`\``
+scores["Alice"] = 95;
+scores["Bob"] = 87;
+// Iteration: Alice → Bob → Charlie (alphabetical)
+\`\`\`
+
+C++ \`map\` **always keeps keys sorted**. There's a tradeoff to this — we'll compare with \`unordered_map\` later in this chapter.`
         },
         {
           id: "ch1-fb1",

@@ -21,10 +21,8 @@ export const cppLesson20Data: LessonData = {
         {
           id: "ch1-intro",
           type: "explain",
-          title: "🛠️ bits/stdc++.h — 모든 헤더를 한번에!",
-          content: `3시간짜리 대회에서 매 문제마다 \`#include <iostream>\`, \`#include <vector>\`, \`#include <algorithm>\`... 10줄씩 쓸 시간이 없어요! bits/stdc++.h 하나면 전부 해결!
-
-보통 C++에서는 필요한 헤더를 하나씩 include 해요:
+          title: "🛠️ bits/stdc++.h — 헤더 한 줄로 끝",
+          content: `대회 문제 풀 때마다 매번 이렇게 시작했어요:
 
 \`\`\`cpp
 #include <iostream>
@@ -32,48 +30,34 @@ export const cppLesson20Data: LessonData = {
 #include <algorithm>
 #include <string>
 #include <map>
-// 계속 추가해야 해요... 😩
+// 또 뭐 빠뜨린 거 없나... 😩
 \`\`\`
 
-CP(경쟁 프로그래밍)에서는 **한 줄로 모든 STL 헤더**를 포함할 수 있어요!
+3 시간짜리 대회에서 문제마다 10 줄씩 헤더 적는 건 시간 낭비. 그래서 대회용으로 자주 쓰이는 *치트키 같은* 헤더가 있어요:
 
 \`\`\`cpp
-#include <bits/stdc++.h>  // 모든 STL 헤더가 다 들어있어요!
+#include <bits/stdc++.h>   // 이 한 줄이면 STL 전부
 using namespace std;
 \`\`\`
 
-이 두 줄이면 \`vector\`, \`map\`, \`algorithm\`, \`string\` 등 **전부** 사용 가능해요!
+이 두 줄이면 \`vector\`, \`map\`, \`set\`, \`algorithm\`, \`string\` 등 STL 이 통째로 들어와요. 대회에선 이게 표준 시작 패턴.
 
-파이썬과 비교해봐요:
-
-**파이썬 🐍:**
-\`\`\`python
-# 파이썬은 필요할 때 import
-import sys
-from collections import defaultdict
-# 하지만 기본 자료형은 그냥 쓸 수 있어요
-\`\`\`
-
-**C++ (CP 스타일) ⚡:**
-\`\`\`cpp
-#include <bits/stdc++.h>  // 이 한 줄이면 끝!
-using namespace std;       // std:: 안 써도 됨!
-\`\`\`
-
-| 파이썬 🐍 | C++ CP 스타일 ⚡ |
+| 파이썬 🐍 | C++ 대회 스타일 ⚡ |
 |---|---|
-| \`import\`로 하나씩 | \`bits/stdc++.h\`로 전부! |
-| 기본 타입 바로 사용 | \`using namespace std;\`가 편리 |
-| 필요한 것만 import | 모든 STL 한번에 포함 |
+| \`import\` 로 하나씩 | \`bits/stdc++.h\` 로 전부 |
+| std 같은 namespace 신경 X | \`using namespace std;\` 한 줄 |
 
-⚠️ **주의!** \`bits/stdc++.h\`는 CP에서만 써요!
+### ⚠️ 단, 대회에서만 써요
 
-**bits/stdc++.h의 단점:**
-• 컴파일 시간이 **2~3배 느려요** (모든 헤더를 포함하니까)
-• 실제 프로젝트에서는 **절대 쓰면 안 돼요** (비표준)
-• 어떤 헤더가 필요한지 **모르게 돼요** (나쁜 습관)
+\`bits/stdc++.h\` 는 **C++ 표준이 아니에요.** GCC 컴파일러에만 있는 비표준 헤더예요. 그래서:
 
-대회에서만 시간 절약용으로 쓰세요!`
+| 단점 | 결과 |
+|---|---|
+| 표준이 아님 | Clang, MSVC 같은 다른 컴파일러에선 안 됨 → 회사 코드에 못 씀 |
+| 모든 헤더 포함 | 컴파일 **2~3 배 느려짐** |
+| 어떤 헤더가 진짜 필요한지 모르게 됨 | 디버깅 시 헤더 의존성 파악 어려움 |
+
+> 💡 **결론**: 대회 (속도 우선) 에선 OK, 실무/프로젝트 (이식성·유지보수 우선) 에선 절대 X. 대회용 / 학습용 / 빠른 실험용 도구라고 생각하세요.`
         },
         {
           id: "ch1-fb1",
@@ -360,6 +344,74 @@ print(n & 1)   # 홀짝 체크
           options: ["3 6 10", "8 3 0", "8 6 0", "3 3 0"],
           answer: 1,
           explanation: "1 << 3은 1을 왼쪽으로 3칸 = 8 (2^3)이에요. 12 >> 2는 12를 오른쪽으로 2칸 = 3 (12/4)이에요. 5 ^ 5는 같은 수의 XOR이라 항상 0이에요!"
+        },
+        {
+          id: "ch2-must-bitmask",
+          type: "practice" as const,
+          title: "🎯 비트마스크가 *진짜 빛나는* 순간 — 부분집합 모두 나열",
+          content: `비트 연산이 진짜 위력을 발휘하는 패턴: **부분집합(subset) 나열**.
+
+**문제**: \`n = 3\` 일 때 (원소 3 개 \`A, B, C\`), 가능한 부분집합 **8 가지** 를 모두 출력하세요. 빈 집합도 포함.
+
+\`\`\`
+기대 출력 (각 줄에 부분집합):
+{ }
+{ A }
+{ B }
+{ A B }
+{ C }
+{ A C }
+{ B C }
+{ A B C }
+\`\`\`
+
+> 💡 재귀로 풀면 "선택/안 선택" 백트래킹이 필요해서 코드가 길어요. **비트마스크** 면 \`for (int mask = 0; mask < (1 << n); mask++)\` 한 줄로 끝.
+>
+> **트릭**: \`mask\` 의 \`i\` 번째 비트가 1 이면 → \`i\` 번째 원소를 포함. \`mask & (1 << i)\` 로 확인.
+>
+> n = 3 이면 \`1 << 3 = 8\` → mask 가 0 부터 7 까지 돌면서 모든 부분집합을 자동 생성.`,
+          starterCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int n = 3;
+    char names[] = {'A', 'B', 'C'};
+
+    // 👇 mask 가 0 부터 (1 << n) - 1 까지 돌면서:
+    //    각 i 번째 비트가 1 인 원소를 포함하는 부분집합 출력.
+    //    출력 형식: "{ A B }" (원소 사이 공백, 양 끝에 공백)
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+using namespace std;
+
+int main() {
+    int n = 3;
+    char names[] = {'A', 'B', 'C'};
+
+    for (int mask = 0; mask < (1 << n); mask++) {
+        cout << "{ ";
+        for (int i = 0; i < n; i++) {
+            if (mask & (1 << i)) {
+                cout << names[i] << " ";
+            }
+        }
+        cout << "}" << endl;
+    }
+
+    return 0;
+}`,
+          hint: "외부 루프 for (int mask = 0; mask < (1 << n); mask++) — 모든 부분집합. 내부 for (int i = 0; i < n; i++) 에서 if (mask & (1 << i)) 로 i 번째 원소 포함 여부 체크. 출력 형식 주의: '{ ' + 원소들 + '}' (각 원소 뒤에 공백 한 칸).",
+          expectedOutput: `{ }
+{ A }
+{ B }
+{ A B }
+{ C }
+{ A C }
+{ B C }
+{ A B C }`
         },
         {
           id: "ch2-patterns",

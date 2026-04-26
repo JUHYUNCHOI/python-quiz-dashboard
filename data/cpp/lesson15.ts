@@ -21,58 +21,77 @@ export const cppLesson15Data: LessonData = {
         {
           id: "ch1-intro",
           type: "explain",
-          title: "🔗 pair — 두 값을 하나로 묶기!",
-          content: `시험 결과를 발표한다고 생각해보세요. '홍길동 95점, 김민수 87점, 이영희 92점...' 이름과 점수를 **항상 같이** 다뤄야 하잖아요? 변수를 따로 만들면 정렬할 때 이름과 점수가 따로 놀아요!
-
-변수를 2개 따로 만들면? \`string name1; int score1; string name2; int score2;\` 😰 너무 복잡하죠!
-
-**pair는 두 값을 하나로 묶는 간단한 도구**예요.
+          title: "🔗 pair — 왜 필요할까?",
+          content: `학생들 점수표를 만든다고 해봐요. 이름이랑 점수, 둘이 **항상 같이** 다녀야 해요. 따로 변수에 두면?
 
 \`\`\`cpp
-#include <utility>  // pair이 들어있는 헤더
-// 또는 <algorithm>이나 <vector>를 include하면 자동으로 들어와요!
-
-pair<string, int> p;     // string과 int를 묶은 pair
-p.first = "Kim";         // 첫 번째 값
-p.second = 95;           // 두 번째 값
+string name1; int score1;
+string name2; int score2;
+string name3; int score3;
+// ... 30 명이면? 60 개 변수 😱
 \`\`\`
 
-**pair를 만드는 방법은 여러 가지예요:**
+벡터로 분리하면 좀 낫지만 또 다른 문제가 있어요:
 
 \`\`\`cpp
-// 방법 1: 중괄호 초기화
-pair<string, int> p1 = {"Kim", 95};
-
-// 방법 2: make_pair()
-pair<string, int> p2 = make_pair("Lee", 88);
-
-// 방법 3: auto 사용 (타입 자동 추론!)
-auto p3 = make_pair("Park", 77);
+vector<string> names = {"Kim", "Lee", "Park"};
+vector<int> scores = {95, 88, 92};
+// 점수로 정렬하고 싶으면? names 와 scores 가 따로 정렬돼서
+// "Kim → 88", "Lee → 95" 같은 엇갈림 발생!
 \`\`\`
 
-**접근은 .first와 .second로 해요:**
+이름과 점수를 **하나의 단위**로 묶을 도구가 필요해요. 직전 레슨에서 배운 \`struct\` 도 답이지만, "두 값만 묶으면 끝" 이라면 struct 선언하는 것도 살짝 과해요. 이럴 때 등장하는 게 **pair**.
+
+> 🎯 한 줄: **pair = "이름 안 짓고 두 값 묶는 미니 struct".**
+
 \`\`\`cpp
-cout << p1.first << endl;   // Kim
-cout << p1.second << endl;  // 95
+#include <utility>   // pair 가 들어있는 헤더
+
+pair<string, int> p = {"Kim", 95};
+//   └────────────┘
+//   첫 번째 타입, 두 번째 타입
+
+cout << p.first;   // "Kim"
+cout << p.second;  // 95
 \`\`\`
 
-파이썬과 비교해봐요:
+\`.first\`, \`.second\` 라는 이름이 좀 어색하죠? **두 값 중 어느 게 의미상 뭔지 안 알려주는** 게 pair 의 한계이자 특징이에요. 의미가 중요하면 struct 를 쓰고, 잠깐 묶기만 하면 pair 를 써요.
 
-**파이썬 🐍:**
-\`\`\`python
-p = ("Kim", 95)     # tuple로 두 값 묶기
-print(p[0])          # Kim (인덱스로 접근)
-print(p[1])          # 95
+다음 페이지에서 헤더 안내 + 만드는 방법 + 파이썬 비교 봐요 👇`,
+        },
+        {
+          id: "ch1-creation",
+          type: "explain",
+          title: "🔗 pair 만드는 법 + 헤더",
+          content: `### 헤더 — 어디 들어있어요?
+
+공식 헤더는 \`<utility>\`. 다만 \`<vector>\`, \`<algorithm>\`, \`<map>\` 같은 STL 헤더를 이미 쓰고 있다면 \`pair\` 가 자동으로 따라와서 굳이 안 적어도 동작해요.
+
+**실전 워크플로우는 두 가지 중 골라요:**
+- **안전 모드**: pair 쓸 때마다 \`#include <utility>\` 적어두기. 어느 헤더 환경이든 무조건 동작.
+- **간결 모드**: 일단 안 적고 다른 STL 헤더 (\`<vector>\` 등) 가 끌어오기를 기대. 컴파일러가 \`'pair' was not declared\` 같은 에러 내면 그때 \`<utility>\` 추가.
+
+둘 다 정답이에요. 어느 헤더가 무엇을 끌어오는지 외울 필요 없어요 — 컴파일러가 알려주니까요.
+
+### 만드는 방법 세 가지 (다 같은 결과)
+
+\`\`\`cpp
+pair<string, int> p1 = {"Kim", 95};          // 중괄호 — 가장 흔함
+pair<string, int> p2 = make_pair("Lee", 88); // make_pair 함수
+auto p3 = make_pair("Park", 77);             // auto 로 타입 생략
 \`\`\`
+
+세 줄 다 같은 결과라서 본인이 편한 걸로 골라 쓰면 돼요. 가장 흔한 건 첫 번째 (\`{a, b}\`).
+
+### 파이썬 튜플과 거의 같음
 
 | 파이썬 🐍 | C++ pair ⚡ |
 |---|---|
 | \`p = ("Kim", 95)\` | \`pair<string,int> p = {"Kim", 95};\` |
 | \`p[0]\`, \`p[1]\` | \`p.first\`, \`p.second\` |
-| 타입 안 써도 됨 | 타입 명시 (또는 auto) |
 | 몇 개든 OK | **딱 2개만!** |
 
-💡 pair는 딱 **2개의 값**만 묶을 수 있어요! 3개 이상은 tuple을 쓸 수 있지만, 실전에서는 struct를 더 많이 써요.`
+> 💡 셋 이상 묶고 싶으면 곧 나올 \`tuple\`. 근데 실전에서 가장 많이 쓰는 건 pair 예요 — 좌표 (x,y), 이름-점수, 인덱스-거리 같은 "딱 두 개" 짝이 흔하니까요.`,
         },
         {
           id: "ch1-fb1",
@@ -89,55 +108,94 @@ print(p[1])          # 95
         {
           id: "ch1-tuple",
           type: "explain",
-          title: "🔗 tuple — 3개 이상 묶기!",
-          content: `pair는 2개까지만 묶을 수 있어요. **3개 이상**을 묶으려면 **tuple**을 써요!
+          title: "🔗 tuple — 3개 이상 묶기",
+          content: `pair 는 딱 2 개. 3 개 이상이면 **tuple**.
 
 \`\`\`cpp
-#include <tuple>  // tuple 헤더
+#include <tuple>
 
-// tuple 만들기
 tuple<string, int, double> t = {"Kim", 15, 3.8};
-
-// 값 꺼내기: get<인덱스>(tuple)
-cout << get<0>(t) << endl;  // Kim
-cout << get<1>(t) << endl;  // 15
-cout << get<2>(t) << endl;  // 3.8
+//                              이름   나이  학점
 \`\`\`
 
-**make_tuple()로도 만들 수 있어요:**
+### 값 꺼내는 방법 세 가지
+
+값 꺼낼 땐 \`.first/.second\` 같은 이름이 더 이상 안 통해요 (셋 이상이니까). 대신 다음 셋 중 골라 써요:
+
+**① 하나씩 꺼내기 — \`get<인덱스>(t)\`**
+
 \`\`\`cpp
-auto t2 = make_tuple("Lee", 16, 4.0);
+cout << get<0>(t);   // "Kim"
+cout << get<1>(t);   // 15
+cout << get<2>(t);   // 3.8
 \`\`\`
 
-**tie()로 한 번에 꺼내기:**
+\`get<0>(t)\` 는 **\`<>\` 안에 인덱스, \`()\` 안에 tuple**. 처음 보면 이상하지만 의미는 \`t[0]\` 이랑 같아요. 한 가지 차이: \`<>\` 안의 숫자는 **컴파일 시점에 정해진 상수만** 가능. 변수 \`i\` 를 넣어 \`get<i>(t)\` 는 안 돼요.
+
+**② tie — 미리 만들어둔 변수에 한 번에 담기 (옛날 방식)**
+
 \`\`\`cpp
-string name;
-int age;
-double gpa;
-tie(name, age, gpa) = t;  // 한 번에 변수 3개에 대입!
-cout << name << " " << age << " " << gpa << endl;
-// Kim 15 3.8
+string name; int age; double gpa;
+tie(name, age, gpa) = t;   // 변수 3 개에 한 번에 대입
 \`\`\`
 
-파이썬과 비교해봐요:
+**③ ⭐ structured bindings — 변수 만들기 + 담기를 한 줄에 (C++17+, 모던)**
 
-**파이썬 🐍:**
-\`\`\`python
-t = ("Kim", 15, 3.8)
-print(t[0], t[1], t[2])
-
-# 언패킹
-name, age, gpa = t
+\`\`\`cpp
+auto [name, age, gpa] = t;   // 가장 깔끔
 \`\`\`
 
-| 파이썬 🐍 | C++ tuple ⚡ |
+파이썬의 \`name, age, gpa = t\` 랑 거의 똑같죠. **tuple 의 가독성 단점이 이 문법 덕에 많이 사라졌어요.**
+
+> 💡 셋 다 결과는 같아요. \`tie\` 가 *필수* 가 아니에요. 모던 코드에선 \`auto [a, b, c] = ...\` 가 기본. 옛날 코드에서 \`tie\` 를 보게 되면 "아 이건 ②번 방식이구나" 알아보면 돼요.
+
+다음 페이지에서 — tuple 이 진짜로 쓰이는 자리, 그리고 struct/pair 와의 선택 가이드 봐요 👇`,
+        },
+        {
+          id: "ch1-tuple-usage",
+          type: "explain",
+          title: "🤔 tuple, 실전에서 얼마나 써요?",
+          content: `pair 만큼 자주는 아니에요. 하지만 **무시할 정도는 아니에요.** 자주 보는 패턴 세 가지:
+
+### 1. 함수에서 여러 값 리턴 + structured bindings (자주)
+
+\`\`\`cpp
+tuple<int, int, string> getStudent() { ... }
+
+auto [age, score, name] = getStudent();   // 모던 C++ 의 흔한 패턴
+\`\`\`
+
+여러 값을 한 번에 리턴할 때, 이름까지 짓기 귀찮으면 tuple 로 묶어 보내고 받는 쪽에서 \`auto [a,b,c] = ...\` 로 바로 풀어요.
+
+### 2. \`tie()\` 로 사전식 비교 (정석 패턴)
+
+\`\`\`cpp
+struct Point { int x, y; };
+bool operator<(const Point& a, const Point& b) {
+    return tie(a.x, a.y) < tie(b.x, b.y);   // ⭐ struct 멤버 비교의 정석
+}
+\`\`\`
+
+x 먼저 비교, 같으면 y 비교 — 이런 사전식 비교를 직접 \`if\` 로 쓰면 길어지는데, \`tie\` 로 묶어서 비교하면 한 줄. 1챕터의 pair 자동 비교 규칙을 그대로 이용하는 트릭이에요.
+
+### 3. 대회 코드의 BFS/DFS state
+
+\`\`\`cpp
+queue<tuple<int, int, int>> q;   // (x, y, distance)
+\`\`\`
+
+격자 탐색 같은 데서 "현재 위치 + 추가 정보" 한 묶음으로 큐에 넣을 때 자주 등장.
+
+### 그럼 struct vs tuple vs pair 는 언제?
+
+| 상황 | 추천 |
 |---|---|
-| \`t = ("Kim", 15, 3.8)\` | \`tuple<string,int,double> t = {...};\` |
-| \`t[0]\` | \`get<0>(t)\` |
-| \`name, age, gpa = t\` | \`tie(name, age, gpa) = t;\` |
-| 인덱스가 변수 가능 | 인덱스는 **컴파일 타임 상수**만! |
+| 2 개 묶기 | **pair** |
+| **자주 다룰 데이터**, 의미 있는 이름 필요 | **struct** (\`.name\` 이 \`get<0>\` 보다 명확) |
+| 함수에서 잠깐 여러 값 리턴 | **tuple** (특히 structured bindings 와) |
+| struct 멤버 비교 | **tuple + tie** |
 
-💡 실전에서는 pair를 훨씬 많이 써요! tuple은 3개 이상 묶어야 할 때 가끔 쓰고, 보통은 struct를 더 선호해요.`
+> 💡 한 줄 정리: pair 가 가장 흔하고, 자주 다룰 데이터는 struct, 그 외 잠깐 쓰는 묶음에는 tuple. 셋이 역할이 살짝 겹쳐서 헷갈리기 쉬운데 — 코드 짜다 보면 자연스럽게 손에 익어요.`,
         },
         {
           id: "ch1-pred1",
@@ -151,45 +209,42 @@ name, age, gpa = t
         {
           id: "ch1-compare",
           type: "explain",
-          title: "🔗 pair의 비교 — 자동으로 정렬 가능!",
-          content: `pair의 놀라운 기능! **비교 연산자**(<, >, ==)가 자동으로 작동해요!
-
-**비교 규칙:**
-1. **first를 먼저 비교**
-2. first가 같으면 **second로 비교**
+          title: "🔗 pair 의 진짜 매력 — 자동 비교, 자동 정렬",
+          content: `pair 가 그냥 "두 값 묶는 도구" 였으면 별 거 없어요. 진짜 매력은 다음 페이지의 이 한 가지: **pair 끼리 비교가 자동으로 된다**.
 
 \`\`\`cpp
 pair<int,int> a = {1, 5};
 pair<int,int> b = {1, 3};
-pair<int,int> c = {2, 1};
 
-// a vs b: first가 같으니(1==1) second 비교 → 5 > 3 → a > b
-// a vs c: first 비교 → 1 < 2 → a < c
+a < b ?    // 컴파일러: "first 먼저 볼게. 1 == 1, 같네. → second 비교: 5 > 3"
+           // 결과: a > b
 \`\`\`
 
-이 덕분에 **vector<pair>을 sort하면 자동으로 first 기준 정렬**이 돼요!
+규칙은 사전(辭典) 정렬이랑 같아요:
+1. **first 먼저** 비교
+2. first 가 같으면 → **second 비교**
+
+### 그래서 진짜 좋은 점 — \`sort\` 가 그냥 통해요
+
+학생 점수 정렬하는 시나리오:
 
 \`\`\`cpp
-vector<pair<int,string>> v = {
-    {3, "C"}, {1, "A"}, {2, "B"}, {1, "D"}
+vector<pair<int, string>> scores = {
+    {88, "Lee"}, {95, "Kim"}, {88, "Park"}, {72, "Choi"}
 };
-sort(v.begin(), v.end());
-// 결과: {1,"A"}, {1,"D"}, {2,"B"}, {3,"C"}
-// first로 정렬, first가 같으면 second로 정렬!
+
+sort(scores.begin(), scores.end());
+// → {72, "Choi"}, {88, "Lee"}, {88, "Park"}, {95, "Kim"}
+//    점수 오름차순. 같은 점수면 이름 오름차순.
 \`\`\`
 
-파이썬과 비교해봐요:
+**\`sort\` 한 줄로 끝.** 따로 비교 함수 안 짜도 돼요. 이게 \`vector<int>\` 두 개로 했을 때와 결정적으로 달라요 — 두 벡터로 점수 정렬 시 이름과 짝이 깨지죠.
 
-**파이썬 🐍:**
-\`\`\`python
-v = [(3,"C"), (1,"A"), (2,"B"), (1,"D")]
-v.sort()  # 파이썬 tuple도 첫 번째 요소 기준 정렬!
-# [(1,'A'), (1,'D'), (2,'B'), (3,'C')]
-\`\`\`
+> 💡 파이썬 튜플도 똑같은 방식이에요. \`(점수, 이름)\` 튜플 리스트를 \`.sort()\` 하면 점수 먼저, 같으면 이름.
 
-pair의 자동 비교가 유용한 이유: \`vector<pair<int,string>>\`을 sort()하면 자동으로 첫 번째 값(점수) 기준으로 정렬돼요!
+### 이게 다음 레슨의 도입이에요
 
-💡 파이썬 tuple과 같은 방식이에요! first 먼저, 그 다음 second 순서로 비교해요.`
+다음 레슨 (cpp-23) 에서 \`sort\` 를 본격적으로 다뤄요. 거기서 "근데 점수는 **내림차순**, 이름은 오름차순으로 동시에 하려면?" 같은 좀 더 복잡한 정렬을 lambda 와 함께 배워요. 오늘 본 pair + sort 자동 정렬이 그 출발점이에요.`
         },
         {
           id: "ch1-question",
@@ -197,6 +252,81 @@ pair의 자동 비교가 유용한 이유: \`vector<pair<int,string>>\`을 sort(
           title: "🙋 질문: vector<int> 2개로 하면 안 돼?",
           component: "pairVsTwoVectors",
           content: "정렬 버튼을 눌러서 두 방식의 차이를 확인해봐요!",
+        },
+        {
+          id: "ch1-must-pair",
+          type: "practice" as const,
+          title: "🎯 pair 가 *진짜 필요한* 순간 — 점수표 정렬",
+          content: `방금 시뮬에서 본 것 — **vector 두 개로는 정렬이 깨져요.** 직접 코드로 확인해봐요.
+
+**문제**: 학생 5 명의 이름과 점수가 있어요. **점수 오름차순으로 정렬해서 출력**하세요.
+
+\`\`\`
+입력 데이터:
+  Kim    95
+  Lee    72
+  Park   88
+  Choi   60
+  Han    81
+
+기대 출력 (점수 오름차순):
+  Choi 60
+  Lee 72
+  Han 81
+  Park 88
+  Kim 95
+\`\`\`
+
+> 💡 두 vector (\`names\`, \`scores\`) 따로 두면 한쪽만 정렬돼서 짝이 깨져요. **\`vector<pair<string, int>>\`** 로 묶어두면 \`sort\` 한 줄로 끝.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    vector<pair<int, string>> students;
+    // 점수, 이름 순으로 묶기 — 점수 오름차순 정렬을 위해 pair 의 first 에 점수
+    students.push_back({95, "Kim"});
+    students.push_back({72, "Lee"});
+    students.push_back({88, "Park"});
+    students.push_back({60, "Choi"});
+    students.push_back({81, "Han"});
+
+    // 👇 sort 한 줄로 정렬 (pair 의 first = 점수 기준 자동 정렬)
+
+
+    // 👇 range-for 로 "이름 점수" 형식 출력
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    vector<pair<int, string>> students;
+    students.push_back({95, "Kim"});
+    students.push_back({72, "Lee"});
+    students.push_back({88, "Park"});
+    students.push_back({60, "Choi"});
+    students.push_back({81, "Han"});
+
+    sort(students.begin(), students.end());
+
+    for (auto& s : students) {
+        cout << s.second << " " << s.first << endl;
+    }
+
+    return 0;
+}`,
+          hint: "pair 의 first 가 점수, second 가 이름이에요. sort(students.begin(), students.end()) 한 줄이면 first(점수) 기준 자동 정렬. 출력은 for (auto& s : students) cout << s.second << \" \" << s.first;",
+          expectedOutput: `Choi 60
+Lee 72
+Han 81
+Park 88
+Kim 95`
         },
         {
           id: "ch1-fb2",

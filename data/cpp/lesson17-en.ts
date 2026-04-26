@@ -21,60 +21,102 @@ export const cppLesson17EnData: LessonData = {
         {
           id: "ch1-intro",
           type: "explain",
-          title: "🔍 STL Algorithms — C++'s Powerful Built-in Tools!",
-          content: `Finding the minimum in a vector, searching for a specific value... Writing for loops every time is tedious and error-prone. C++ STL has functions that solve these tasks in **one line**! These are the tools professional developers use the most.
-
-**STL** stands for **Standard Template Library**. It's a collection of powerful built-in functions that come with C++!
-
-Think about these situations:
-- You want to find the maximum value in an array → \`max_element()\`
-- You want to count how many times a value appears → \`count()\`
-- You want to find a specific value → \`find()\`
-- You could write a for loop yourself, but STL algorithms do it in **one line**!
-
-Remember using \`sorted()\`, \`min()\`, \`max()\`, \`sum()\` in Python? C++ has similar functions!
+          title: "🔍 Hand-rolled vs STL — get it in one line",
+          content: `Say you have a vector of scores. How do you find the maximum?
 
 \`\`\`cpp
-#include <algorithm>  // sort, find, min, max, etc.
-#include <numeric>    // accumulate (sum), etc.
+vector<int> scores = {72, 95, 68, 88, 100, 55};
 \`\`\`
 
-Let's look at the basic algorithms:
+With what we've learned so far, you'd write something like:
 
 \`\`\`cpp
-#include <algorithm>
-#include <vector>
-using namespace std;
-
-vector<int> v = {5, 2, 8, 1, 9, 3};
-
-// min, max — smaller/larger of two values
-int a = min(3, 7);    // 3
-int b = max(3, 7);    // 7
-
-// min_element, max_element — find min/max in a range
-auto minIt = min_element(v.begin(), v.end()); // position of min
-auto maxIt = max_element(v.begin(), v.end()); // position of max
-cout << *minIt;  // 1  (dereference to get the value)
-cout << *maxIt;  // 9
-
-// count — count occurrences of a value
-int cnt = count(v.begin(), v.end(), 3);  // How many 3s? → 1
+int maxVal = scores[0];
+for (int i = 1; i < scores.size(); i++) {
+    if (scores[i] > maxVal) maxVal = scores[i];
+}
 \`\`\`
 
-Let's compare with Python:
+Five lines. Not hard, but writing this every time gets tedious. And summing values, finding values, computing averages — all follow the same pattern. You'd be writing nearly the same code over and over.
 
-| Python 🐍 | C++ STL ⚡ |
+The C++ designers thought the same thing. **Common operations like these should already be built in.** That's what **STL (Standard Template Library)** is.
+
+Same task, in one line with STL:
+
+\`\`\`cpp
+int maxVal = *max_element(scores.begin(), scores.end());
+\`\`\`
+
+That 5-line for loop becomes one line. Other operations look similar:
+
+| What you want | Hand-rolled | STL |
+|---|---|---|
+| Maximum | for + if compare | \`*max_element(...)\` |
+| Sum | for + accumulate | \`accumulate(...)\` |
+| Find a value | for + search | \`find(...)\` |
+| Count occurrences | for + counter | \`count(...)\` |
+
+Remember Python's built-ins like \`min()\`, \`max()\`, \`sum()\`? C++ STL is the same idea — "common stuff is already done for you."
+
+\`\`\`cpp
+#include <algorithm>  // find, min, max, sort, etc.
+#include <numeric>    // accumulate, etc. (separate header — careful!)
+\`\`\`
+
+> 💡 In this chapter we'll pick up 5–6 common STL tools, then in Chapter 2 we'll see a **faster search method** (binary search).
+
+But STL has one slightly unfamiliar thing — that \`v.begin()\`, \`v.end()\` notation. Next page, we'll explain what those actually are 👇`
+        },
+        {
+          id: "ch1-iterator",
+          type: "explain",
+          title: "📍 iterator — a cursor into the vector",
+          component: "iteratorVisualizer",
+          content: `Look back at the line we just saw:
+
+\`\`\`cpp
+*max_element(scores.begin(), scores.end());
+\`\`\`
+
+\`scores.begin()\` and \`scores.end()\` — these are **iterators**.
+
+> 🎯 One line: **iterator = a cursor pointing at one position inside a vector.**
+
+Think of the blinking text cursor ` + '`|`' + ` when you're typing. An iterator works the same way — it points at one spot, and you can move it one step at a time.
+
+\`\`\`
+v = [10, 20, 30, 40, 50]
+     ↑                    ↑
+  v.begin()            v.end()  ← past the last cell!
+\`\`\`
+
+- \`v.begin()\` → points at the **first element**
+- \`v.end()\` → points **past** the last element. (NOT at the last element ⚠️)
+
+Why past, not at? It's a **"this is where the range ends" marker**. The convention is \`[begin, end)\` — start included, end excluded. Same as Python's \`range(0, 5)\` not including 5.
+
+### What can you do with an iterator?
+
+\`\`\`cpp
+auto it = v.begin();   // cursor at the first cell
+cout << *it;            // 10  ← * to read the value
+it++;                   // move one step right
+cout << *it;            // 20
+\`\`\`
+
+| Expression | Meaning |
 |---|---|
-| \`min(3, 7)\` | \`min(3, 7)\` |
-| \`max(3, 7)\` | \`max(3, 7)\` |
-| \`min(lst)\` | \`*min_element(v.begin(), v.end())\` |
-| \`max(lst)\` | \`*max_element(v.begin(), v.end())\` |
-| \`lst.count(3)\` | \`count(v.begin(), v.end(), 3)\` |
+| \`v.begin()\` | First cell |
+| \`v.end()\` | Past-the-last-cell marker |
+| \`*it\` | The value at the cursor |
+| \`it++\` | Move one step right |
+| \`it - v.begin()\` | Index (which position?) |
 
-💡 Most C++ STL algorithms take a **range** in the form \`(begin, end)\`. You always pass \`v.begin()\` and \`v.end()\`!
+> 💡 Same feel as the pointer lesson — \`*\` to read the value, \`++\` to move. Iterators are basically pointers' close cousin.
 
-👇 The syntax and examples for each function above are explained step by step below!`
+Most STL functions take a \`(begin, end)\` pair and operate on that range. **Master this one pattern** and STL functions will all start to look familiar.
+
+Try moving the cursor below to see how \`*it\`, \`begin()\`, and \`end()\` change 👇`
         },
         {
           id: "ch1-fb1",
@@ -91,7 +133,7 @@ Let's compare with Python:
           id: "ch1-find",
           type: "explain",
           title: "🔍 find() — Search for a Value!",
-          content: `\`find()\` searches for a specific value in a vector!
+          content: `Time for the iterator we just learned to do real work. \`find()\` searches a vector for a specific value, and **returns its position as an iterator**.
 
 \`\`\`cpp
 #include <algorithm>
@@ -205,35 +247,56 @@ Let's compare with Python:
         {
           id: "ch1-lambda",
           type: "explain",
-          title: "🔍 find_if & count_if — Search by Condition!",
-          content: `\`find()\` searches for an exact value, but what if you want to search by a **condition**? That's where \`find_if()\` and \`count_if()\` come in!
+          title: "🤔 What about searching by *condition* instead of an exact value?",
+          content: `So far we've used \`find(...)\` for **exact matches**. But what if, in a list of student scores, you want to find:
+
+> "the **first score 70 or above**"
+> "**how many even** scores are there?"
+
+\`find()\` won't help — it only finds exact values. For **conditional** searches we use \`find_if()\` and \`count_if()\`. The \`_if\` suffix means "with a condition attached."
+
+But there's a snag — how do you pass a **condition** like "70 or above" to a function? A single number is easy, but a condition is a chunk of code.
+
+→ Enter **lambda**: an **unnamed function written on the spot.**
 
 \`\`\`cpp
-#include <algorithm>
-#include <vector>
-using namespace std;
-
-vector<int> v = {3, 7, 1, 8, 4, 9, 2};
-
-// Condition: find first element greater than 5
-auto it = find_if(v.begin(), v.end(), [](int x) {
-    return x > 5;
-});
-if (it != v.end()) cout << *it;  // 7
-
-// Condition: count even numbers
-int cnt = count_if(v.begin(), v.end(), [](int x) {
-    return x % 2 == 0;
-});
-cout << cnt;  // 3 (8, 4, 2)
+[](int x) { return x >= 70; }
+//└┘ └────┘ └──────────────┘
+//  capture  parameter   body
 \`\`\`
 
-**Lambda expressions** — \`[](parameter) { return condition; }\` — are **unnamed functions** you write right on the spot. They work anywhere an STL algorithm needs a condition function, including \`sort()\`!
+\`[]\` is the signal "this is a lambda." \`(int x)\` is just like a normal parameter list, and \`{ return ... }\` is the body. **It's a normal function — it just doesn't have a name.**
 
-| Python 🐍 | C++ ⚡ |
-|---|---|
-| \`filter(lambda x: x > 5, lst)\` | \`find_if(..., [](int x){ return x > 5; })\` |
-| \`len([x for x in lst if x % 2 == 0])\` | \`count_if(..., [](int x){ return x % 2 == 0; })\` |`,
+> 💡 Same idea as Python's \`lambda x: x >= 70\`. The syntax is just a bit different.
+
+Now plug a lambda into find_if / count_if:
+
+\`\`\`cpp
+vector<int> scores = {55, 72, 68, 88, 41, 95};
+
+// First score 70 or above
+auto it = find_if(scores.begin(), scores.end(), [](int x) {
+    return x >= 70;
+});
+if (it != scores.end()) cout << *it;  // 72
+
+// How many evens?
+int evenCnt = count_if(scores.begin(), scores.end(), [](int x) {
+    return x % 2 == 0;
+});
+cout << evenCnt;  // 3 (72, 68, 88)
+\`\`\`
+
+| Function | Condition | Returns |
+|---|---|---|
+| \`find(begin, end, value)\` | "is this value here?" (exact) | iterator to first |
+| \`find_if(begin, end, lambda)\` | where lambda is true | iterator to first |
+| \`count(begin, end, value)\` | "how many of this value?" (exact) | count |
+| \`count_if(begin, end, lambda)\` | how many where lambda is true? | count |
+
+> 💡 Rule of thumb: \`_if\` means **the third argument is a condition (lambda) instead of a value.** That's it.
+
+Lambdas show up the same way in sort and other STL algorithms — you'll see them again next chapter.`,
         },
         {
           id: "ch1-practice",
@@ -314,17 +377,23 @@ int main() {
         {
           id: "ch2-intro",
           type: "explain",
-          title: "🎯 binary_search() — Lightning-Fast Search!",
-          content: `Imagine you need to search through 100,000 data items in a USACO contest. Using find() one by one means **time limit exceeded**! Binary search finds it in just 20 steps.
+          title: "🎯 When you need faster search — binary_search()",
+          content: `Imagine searching for one student ID in a list of 1,000,000 students. With \`find()\`, what happens?
 
-\`find()\` checks elements one by one, making it **O(n)**. But if the data is **sorted**, we can search much faster!
+\`find()\` checks **one by one from the front**. Worst case: 1 million comparisons. Heavy work even for a computer.
 
-- find() checks one by one from start to end: O(n)
-- binary_search() cuts the range in half each time: O(log n)
-- Searching in **1 million** items: find() needs ~1 million checks, binary_search() needs ~20!
-- ⚠️ But you need to **sort first**. Since sorting has a cost, it only pays off when you search multiple times.
+But what if the IDs are **already sorted**? Think how you look up a word in a dictionary — you don't flip from "A" page by page. You open near the middle, decide "is my word before or after?", and only check that half. Then half again, and again. Fast.
 
-**Binary search** finds elements in sorted data in **O(log n)** time!
+That's **binary search**. Cut the range **in half** each time.
+
+| Method | How | On 1M items |
+|---|---|---|
+| \`find()\` | One step at a time from the front | up to 1M comparisons |
+| \`binary_search()\` | Cuts in half each round | only ~20 comparisons |
+
+Massive difference, right? Catch: data must be **sorted**. Without sorting, you can't say "is my target before or after the middle" in the first place.
+
+> 💡 Sorting itself costs time. So if you only search once, the sort cost may not be worth it. But if you'll search **many times**, the win adds up fast.
 
 \`\`\`cpp
 #include <algorithm>
@@ -391,48 +460,48 @@ C++ is much simpler, right?
         {
           id: "ch2-bounds",
           type: "explain",
-          title: "🎯 lower_bound() & upper_bound()!",
-          content: `\`binary_search()\` only tells you "yes or no." If you need the **position**, use \`lower_bound()\` and \`upper_bound()\`!
+          title: "🎯 lower_bound / upper_bound — they tell you the position",
+          component: "lowerUpperBoundVisualizer",
+          content: `\`binary_search()\` only tells you "is it here or not." But the questions you actually want to answer usually need positions:
+
+> "How many students scored **70 or above**?"
+> "How **many copies** of this value exist?"
+> "Where should I **insert this value** to keep the array sorted?"
+
+That's where \`lower_bound\` and \`upper_bound\` come in. Both use binary search (so **fast**), and both require **sorted data**.
+
+### The difference is *≥* vs *>*
 
 \`\`\`cpp
 vector<int> v = {1, 3, 5, 5, 5, 7, 9};
-//                0  1  2  3  4  5  6  (indices)
-
-// lower_bound: first position >= target
-auto lb = lower_bound(v.begin(), v.end(), 5);
-cout << lb - v.begin();  // 2 (position of first 5)
-
-// upper_bound: first position > target
-auto ub = upper_bound(v.begin(), v.end(), 5);
-cout << ub - v.begin();  // 5 (position after last 5)
-
-// Count of 5s = upper_bound - lower_bound
-cout << ub - lb;  // 3 (three 5s!)
 \`\`\`
 
-Visually:
+- \`lower_bound(v.begin(), v.end(), 5)\` → first position **at or above** 5 (≥ 5)
+- \`upper_bound(v.begin(), v.end(), 5)\` → first position **strictly above** 5 (> 5)
 
-\`\`\`
-v = {1, 3, 5, 5, 5, 7, 9}
-          ^        ^
-          lb       ub
-     lower_bound  upper_bound
-     (>= target)  (> target)
-\`\`\`
+Words alone are easy to mix up. Try the simulator below — change the target value and watch the two arrows move 👇
 
-Compare with Python's bisect module:
-
-| Python 🐍 | C++ STL ⚡ |
-|---|---|
-| \`bisect.bisect_left(lst, 5)\` | \`lower_bound(v.begin(), v.end(), 5) - v.begin()\` |
-| \`bisect.bisect_right(lst, 5)\` | \`upper_bound(v.begin(), v.end(), 5) - v.begin()\` |
+### In code
 
 \`\`\`cpp
-// Getting the index
-int idx = lower_bound(v.begin(), v.end(), 5) - v.begin();
+auto lb = lower_bound(v.begin(), v.end(), 5);
+auto ub = upper_bound(v.begin(), v.end(), 5);
+
+cout << lb - v.begin();   // 2  ← same index pattern as find()
+cout << ub - v.begin();   // 5
+cout << ub - lb;          // 3  ← how many 5s
 \`\`\`
 
-💡 \`lower_bound()\` is used constantly in USACO Silver! It's essential for coordinate compression, range queries, and more!`
+(Both return iterators, so the \`it - v.begin()\` trick from \`find()\` works the same way here.)
+
+### Common uses
+
+- "**how many of value X**" → \`upper_bound - lower_bound\`
+- "**how many ≥ X**" → \`v.end() - lower_bound\`
+- "**how many < X**" → \`lower_bound - v.begin()\`
+- "**is X actually there**" → \`lb != v.end() && *lb == X\`
+
+> 💡 These map 1:1 to Python's \`bisect.bisect_left\` and \`bisect.bisect_right\`. Same tools, different names.`
         },
         {
           id: "ch2-practice-bounds",
@@ -691,7 +760,7 @@ cout << accumulate(v.begin(), v.end(), 10);
 | \`upper_bound()\` | \`<algorithm>\` | iterator | **Yes** |
 | \`accumulate()\` | \`<numeric>\` | value | No |
 
-🚀 **Next lesson, we'll learn about stack, queue & deque!** Time to enter the world of data structures!`
+🚀 **Next lesson (cpp-18): stack & queue** — two ways of stacking and pulling out data. Bracket matching, BFS — these structures shine there. STL container adventure continues!`
         }
       ]
     }
