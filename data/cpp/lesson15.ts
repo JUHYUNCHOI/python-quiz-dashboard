@@ -493,13 +493,12 @@ Kim 95`
           id: "ch1-fb2",
           type: "fillblank" as const,
           title: "pair 멤버에 접근해봐요!",
-          content: "p.first와 p.second로 pair의 값을 꺼내봐요!",
-          code: "pair<string, int> p = {\"Kim\", 95};\ncout << p.___ << \": \" << p.___ << endl;\n// 출력: Kim: 95",
+          content: "**점수가 90점 이상이면 \"통과\" 출력**. pair 의 두 값 중 점수에 접근하려면?",
+          code: "pair<string, int> p = {\"Kim\", 95};\nif (p.___ >= 90) {\n    cout << \"통과\";\n}",
           fillBlanks: [
-            { id: 0, answer: "first", options: ["first", "second", "name", "0"] },
-            { id: 1, answer: "second", options: ["first", "second", "score", "1"] }
+            { id: 0, answer: "second", options: ["first", "second", "score", "1"] }
           ],
-          explanation: "pair의 첫 번째 값은 .first, 두 번째 값은 .second로 접근해요! p[0]이나 p[1]은 에러예요."
+          explanation: "pair 에서 두 번째 값(점수)은 .second 로 접근해요! p[1] 이나 p.score 는 에러예요. 첫 번째는 .first, 두 번째는 .second — pair 가 두 값에 의미 있는 이름을 안 줘서 그래요."
         },
         {
           id: "ch1-pred2",

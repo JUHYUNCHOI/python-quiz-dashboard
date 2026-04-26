@@ -493,13 +493,12 @@ Kim 95`
           id: "ch1-fb2",
           type: "fillblank" as const,
           title: "Access pair members!",
-          content: "Use .first and .second to get values from a pair!",
-          code: "pair<string, int> p = {\"Kim\", 95};\ncout << p.___ << \": \" << p.___ << endl;\n// Output: Kim: 95",
+          content: "**If the score is 90 or higher, print \"Pass\"**. Which member of the pair holds the score?",
+          code: "pair<string, int> p = {\"Kim\", 95};\nif (p.___ >= 90) {\n    cout << \"Pass\";\n}",
           fillBlanks: [
-            { id: 0, answer: "first", options: ["first", "second", "name", "0"] },
-            { id: 1, answer: "second", options: ["first", "second", "score", "1"] }
+            { id: 0, answer: "second", options: ["first", "second", "score", "1"] }
           ],
-          explanation: "The first value of a pair is accessed with .first, and the second with .second! Using p[0] or p[1] would be an error — pairs use .first/.second, not indexes."
+          explanation: "The second value (score) is accessed with .second. p[1] or p.score would be errors. The first is .first, the second is .second — pair doesn't give meaningful names to its two values."
         },
         {
           id: "ch1-pred2",
