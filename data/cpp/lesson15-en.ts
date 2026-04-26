@@ -320,7 +320,6 @@ int main() {
 \`\`\`
 studentA() → ("Kim", 3.8)
 studentB() → ("Lee", 3.5)
-Expected: Kim
 \`\`\`
 
 > 💡 Two \`auto [name, gpa] = func()\` calls, then compare gpa and print the matching name.`,
@@ -420,23 +419,9 @@ Next lesson (cpp-23) goes deep on \`sort\`. There you'll learn how to handle "sc
           title: "🎯 When pair is *truly necessary* — sorting a score sheet",
           content: `You just saw it in the simulator — **two separate vectors break when sorted.** Now confirm it in code.
 
-**Problem**: You have 5 students with names and scores. **Sort by score (ascending) and print.**
+**Problem**: You have 5 students with names and scores. **Sort by score (ascending) and print as \`Name Score\` lines.**
 
-\`\`\`
-Input data:
-  Kim    95
-  Lee    72
-  Park   88
-  Choi   60
-  Han    81
-
-Expected output (sorted by score):
-  Choi 60
-  Lee 72
-  Han 81
-  Park 88
-  Kim 95
-\`\`\`
+Input: Kim 95 / Lee 72 / Park 88 / Choi 60 / Han 81
 
 > 💡 With two separate vectors (\`names\`, \`scores\`), sorting one breaks the pairing. **\`vector<pair<string, int>>\`** keeps them as one unit, and \`sort\` just works in one line.`,
           starterCode: `#include <iostream>
@@ -499,6 +484,112 @@ Kim 95`
             { id: 0, answer: "second", options: ["first", "second", "score", "1"] }
           ],
           explanation: "The second value (score) is accessed with .second. p[1] or p.score would be errors. The first is .first, the second is .second — pair doesn't give meaningful names to its two values."
+        },
+        {
+          id: "ch1-pair-filter",
+          type: "practice" as const,
+          title: "✋ Real practice — print only students scoring 80+",
+          content: `**Scenario**: 5 students with \`(name, score)\` pairs. Print **only those scoring 80 or above**, one per line, as \`Name Score\`.
+
+Input: Kim 72 / Lee 88 / Park 55 / Choi 95 / Han 81
+
+> 💡 Pattern: range-for through students, check \`s.second >= 80\`, print \`s.first << " " << s.second\` if it passes. This is the **filter** pattern — fundamental data-handling skill.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> students = {
+        {"Kim", 72},
+        {"Lee", 88},
+        {"Park", 55},
+        {"Choi", 95},
+        {"Han", 81}
+    };
+
+    // 👇 Print only students with score >= 80, one "Name Score" per line
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> students = {
+        {"Kim", 72},
+        {"Lee", 88},
+        {"Park", 55},
+        {"Choi", 95},
+        {"Han", 81}
+    };
+
+    for (auto& s : students) {
+        if (s.second >= 80) {
+            cout << s.first << " " << s.second << endl;
+        }
+    }
+
+    return 0;
+}`,
+          hint: "for (auto& s : students) { if (s.second >= 80) cout << s.first << \" \" << s.second << endl; } — range-for + condition + print on match.",
+          expectedOutput: `Lee 88
+Choi 95
+Han 81`
+        },
+        {
+          id: "ch1-pair-count",
+          type: "practice" as const,
+          title: "✋ Real practice — average score",
+          content: `**Scenario**: Same 5 students with \`(name, score)\` pairs. Print the **average score**. (Integer division is fine.)
+
+Input: Kim 72 / Lee 88 / Park 55 / Choi 95 / Han 81
+
+> 💡 Pattern: keep a running total, range-for to accumulate \`s.second\`, then divide by the student count. **Accumulate / sum pattern** — second fundamental skill.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> students = {
+        {"Kim", 72},
+        {"Lee", 88},
+        {"Park", 55},
+        {"Choi", 95},
+        {"Han", 81}
+    };
+
+    // 👇 Print the average (sum / count)
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> students = {
+        {"Kim", 72},
+        {"Lee", 88},
+        {"Park", 55},
+        {"Choi", 95},
+        {"Han", 81}
+    };
+
+    int total = 0;
+    for (auto& s : students) total += s.second;
+    cout << total / (int)students.size();
+
+    return 0;
+}`,
+          hint: "int total = 0; for (auto& s : students) total += s.second; — accumulate. Then cout << total / (int)students.size(); — divide by count.",
+          expectedOutput: `78`
         },
         {
           id: "ch1-pred2",

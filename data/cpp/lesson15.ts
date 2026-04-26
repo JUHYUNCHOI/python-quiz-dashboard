@@ -320,7 +320,6 @@ int main() {
 \`\`\`
 studentA() → ("Kim", 3.8)
 studentB() → ("Lee", 3.5)
-기대 출력: Kim
 \`\`\`
 
 > 💡 두 번 \`auto [name, gpa] = func()\` 으로 받고, gpa 비교 후 이름 출력.`,
@@ -420,23 +419,9 @@ sort(scores.begin(), scores.end());
           title: "🎯 pair 가 *진짜 필요한* 순간 — 점수표 정렬",
           content: `방금 시뮬에서 본 것 — **vector 두 개로는 정렬이 깨져요.** 직접 코드로 확인해봐요.
 
-**문제**: 학생 5 명의 이름과 점수가 있어요. **점수 오름차순으로 정렬해서 출력**하세요.
+**문제**: 학생 5 명의 이름과 점수가 있어요. **점수 오름차순으로 정렬해서 \`이름 점수\` 형식으로 한 줄씩 출력**하세요.
 
-\`\`\`
-입력 데이터:
-  Kim    95
-  Lee    72
-  Park   88
-  Choi   60
-  Han    81
-
-기대 출력 (점수 오름차순):
-  Choi 60
-  Lee 72
-  Han 81
-  Park 88
-  Kim 95
-\`\`\`
+입력: Kim 95 / Lee 72 / Park 88 / Choi 60 / Han 81
 
 > 💡 두 vector (\`names\`, \`scores\`) 따로 두면 한쪽만 정렬돼서 짝이 깨져요. **\`vector<pair<string, int>>\`** 로 묶어두면 \`sort\` 한 줄로 끝.`,
           starterCode: `#include <iostream>
@@ -506,14 +491,7 @@ Kim 95`
           title: "✋ 본격 — 80점 이상 학생만 골라 출력",
           content: `**상황**: 학생 5 명의 \`(이름, 점수)\` pair 가 있어요. **80 점 이상인 학생만** 한 줄에 한 명씩 \`이름 점수\` 형식으로 출력하세요.
 
-\`\`\`
 입력: Kim 72 / Lee 88 / Park 55 / Choi 95 / Han 81
-
-기대 출력:
-Lee 88
-Choi 95
-Han 81
-\`\`\`
 
 > 💡 패턴: range-for 로 돌면서 \`s.second >= 80\` 조건 체크 → 통과하면 \`s.first << " " << s.second\` 출력. **filter** 패턴이라고 불러요 — 데이터 다루는 기본기예요.`,
           starterCode: `#include <iostream>
@@ -568,10 +546,7 @@ Han 81`
           title: "✋ 본격 — 평균 점수 구하기",
           content: `**상황**: 같은 학생 5 명의 \`(이름, 점수)\` pair 에서 **평균 점수** 를 출력하세요. (정수 나눗셈 OK)
 
-\`\`\`
 입력: Kim 72 / Lee 88 / Park 55 / Choi 95 / Han 81
-기대 출력: 78
-\`\`\`
 
 > 💡 패턴: 합계 변수 만들고, range-for 로 돌면서 \`s.second\` 누적, 마지막에 학생 수로 나눠서 출력. **누적합 (accumulate) 패턴** — 자료 다루는 기본기 두 번째.`,
           starterCode: `#include <iostream>
