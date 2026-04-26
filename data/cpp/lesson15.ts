@@ -96,6 +96,7 @@ auto p3 = make_pair("Park", 77);             // auto 로 타입 생략
         {
           id: "ch1-pair-unpack",
           type: "explain",
+          component: "structuredBindingsVisualizer",
           title: "🎁 pair 풀어 담기 — \`.first/.second\` vs structured bindings",
           content: `지금까지 pair 두 값을 \`.first\` / \`.second\` 로 꺼냈어요:
 
@@ -695,7 +696,7 @@ for (pair<string, int>& s : students) {  // auto& 대신 직접 타입 명시
           title: "✋ 이름+점수 pair 벡터 만들기!",
           content: `이름과 점수를 pair로 묶어서 vector에 저장하고 출력해봐요!
 
-make_pair()나 중괄호 초기화를 사용해서 pair를 만들고, .first와 .second로 접근해봐요.`,
+> 💡 pair 만들기 / 꺼내기는 본인 편한 스타일로 OK — 중괄호 \`{a, b}\` 든 \`make_pair\` 든, \`.first/.second\` 든 \`auto [name, score]\` 든 결과는 같아요.`,
           starterCode: `#include <iostream>
 #include <string>
 #include <vector>
@@ -704,9 +705,9 @@ using namespace std;
 int main() {
     vector<pair<string, int>> students;
 
-    // push_back으로 {"Kim", 95}, {"Lee", 88}, make_pair("Park", 92) 추가
+    // 👇 push_back 으로 (Kim, 95), (Lee, 88), (Park, 92) 추가
 
-    // range-for로 s.first와 s.second 출력
+    // 👇 range-for 로 한 줄에 한 명씩 "이름: 점수" 출력
 
     return 0;
 }`,
@@ -720,15 +721,15 @@ int main() {
 
     students.push_back({"Kim", 95});
     students.push_back({"Lee", 88});
-    students.push_back(make_pair("Park", 92));
+    students.push_back({"Park", 92});
 
-    for (auto& s : students) {
-        cout << s.first << ": " << s.second << endl;
+    for (auto& [name, score] : students) {
+        cout << name << ": " << score << endl;
     }
 
     return 0;
 }`,
-          hint: "students.push_back({\"Kim\", 95}); 또는 make_pair(\"Kim\", 95)로 추가해요. 출력은 for (auto& s : students) { cout << s.first << \": \" << s.second << endl; }",
+          hint: "추가: students.push_back({\"Kim\", 95}); — 중괄호 init 한 가지로 다 가능. 출력: for (auto& [name, score] : students) cout << name << \": \" << score << endl; — structured bindings 쓰면 깔끔.",
           expectedOutput: `Kim: 95
 Lee: 88
 Park: 92`

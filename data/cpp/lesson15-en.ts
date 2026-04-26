@@ -96,6 +96,7 @@ All three give the same result, so pick whichever you like. The first form (\`{a
         {
           id: "ch1-pair-unpack",
           type: "explain",
+          component: "structuredBindingsVisualizer",
           title: "🎁 Unpacking a pair — \`.first/.second\` vs structured bindings",
           content: `So far we've been pulling values out with \`.first\` and \`.second\`:
 
@@ -693,7 +694,7 @@ for (pair<string, int>& s : students) {  // verbose!
           title: "✋ Build a Name+Score pair Vector!",
           content: `Store names and scores as pairs in a vector, then print them out!
 
-Use make_pair() or brace initialization to create pairs, and access them with .first and .second.`,
+> 💡 Use whatever style feels best — brace \`{a, b}\` or \`make_pair\`, \`.first/.second\` or \`auto [name, score]\`. They all work.`,
           starterCode: `#include <iostream>
 #include <string>
 #include <vector>
@@ -702,9 +703,9 @@ using namespace std;
 int main() {
     vector<pair<string, int>> students;
 
-    // Add {"Kim", 95}, {"Lee", 88}, make_pair("Park", 92) using push_back
+    // 👇 push_back (Kim, 95), (Lee, 88), (Park, 92)
 
-    // Use range-for to print s.first and s.second
+    // 👇 range-for to print one "name: score" per line
 
     return 0;
 }`,
@@ -718,15 +719,15 @@ int main() {
 
     students.push_back({"Kim", 95});
     students.push_back({"Lee", 88});
-    students.push_back(make_pair("Park", 92));
+    students.push_back({"Park", 92});
 
-    for (auto& s : students) {
-        cout << s.first << ": " << s.second << endl;
+    for (auto& [name, score] : students) {
+        cout << name << ": " << score << endl;
     }
 
     return 0;
 }`,
-          hint: "Use students.push_back({\"Kim\", 95}); or make_pair(\"Kim\", 95) to add pairs. To print: for (auto& s : students) { cout << s.first << \": \" << s.second << endl; }",
+          hint: "Add: students.push_back({\"Kim\", 95}); — brace init handles all three. Print: for (auto& [name, score] : students) cout << name << \": \" << score << endl; — structured bindings reads cleaner.",
           expectedOutput: `Kim: 95
 Lee: 88
 Park: 92`
