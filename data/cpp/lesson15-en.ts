@@ -118,7 +118,7 @@ tuple<string, int, double> t = {"Kim", 15, 3.8};
 //                              name   age   gpa
 \`\`\`
 
-### Three ways to read values out
+### Two ways to read values out
 
 \`.first/.second\` no longer cuts it (3+ values). Pick one of these:
 
@@ -132,22 +132,16 @@ cout << get<2>(t);   // 3.8
 
 \`get<0>(t)\` — the **index goes inside \`<>\`, the tuple inside \`()\`**. Looks weird at first, but it just means \`t[0]\`. One catch: the number inside \`<>\` must be a **compile-time constant** — you can't put a variable \`i\` and write \`get<i>(t)\`.
 
-**② tie — assign to pre-declared variables (older style)**
+**② ⭐ Unpack all at once — structured bindings (C++17+)**
 
 \`\`\`cpp
-string name; int age; double gpa;
-tie(name, age, gpa) = t;   // assign to all three at once
+auto [name, age, gpa] = t;
+// declare and assign in one line
 \`\`\`
 
-**③ ⭐ structured bindings — declare + assign in one line (C++17+, modern)**
+Reads almost like Python's \`name, age, gpa = t\`. **This single feature fixed most of tuple's readability problems.** This is the default in modern code.
 
-\`\`\`cpp
-auto [name, age, gpa] = t;   // cleanest
-\`\`\`
-
-Reads almost like Python's \`name, age, gpa = t\`. **This single feature fixed most of tuple's readability problems.**
-
-> 💡 All three give the same result. \`tie\` is **not required**. Modern code defaults to \`auto [a, b, c] = ...\`. When you see \`tie\` in older code, just recognize it as method ②.
+> 💡 You may run into the older \`tie(name, age, gpa) = t;\` in legacy code or older books — it does the same thing as ②. Recognize it and move on; you don't need to write it. **But the \`tie\` keyword itself shows up again next page in a different (and still current) role: comparison.**
 
 Next page — where tuple actually shows up, and how to choose between struct/pair/tuple 👇`,
         },
