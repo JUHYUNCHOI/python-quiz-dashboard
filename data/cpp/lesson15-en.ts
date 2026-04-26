@@ -94,6 +94,41 @@ All three give the same result, so pick whichever you like. The first form (\`{a
 > 💡 For 3+ values you'll meet \`tuple\` soon. But by far the most common case is "exactly two paired things" — coordinates (x,y), name-score, index-distance — which is why pair shows up far more in real code.`,
         },
         {
+          id: "ch1-pair-mini",
+          type: "practice" as const,
+          title: "✋ Quick — print a cafe menu line",
+          content: `**Scenario**: A cafe stores a drink as a \`(name, price)\` pair.
+
+Use \`.first\` (name) and \`.second\` (price) to print **\`Latte: $5\`** style output.
+
+> 💡 Just \`p.first\` and \`p.second\` are all you need.`,
+          starterCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    pair<string, int> drink = {"Latte", 5};
+
+    // 👇 Use .first and .second to print "Latte: $5"
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    pair<string, int> drink = {"Latte", 5};
+
+    cout << drink.first << ": $" << drink.second;
+
+    return 0;
+}`,
+          hint: "cout << drink.first << \": $\" << drink.second; — separator \": $\" between name and price.",
+          expectedOutput: `Latte: $5`
+        },
+        {
           id: "ch1-fb1",
           type: "fillblank" as const,
           title: "Fill in the blanks",
@@ -207,21 +242,24 @@ For grid traversal, "current position + extra info" gets tossed into a queue as 
         {
           id: "ch1-tuple-mini",
           type: "practice" as const,
-          title: "✋ Quick — student profile in one bundle",
-          content: `**Scenario**: A function returns three pieces of student info (name, age, gpa) at once.
+          title: "✋ Quick — receive student info from a function",
+          content: `**Scenario**: A function \`getStudent()\` returns **three pieces (name, age, gpa) at once**. Normally a function returns one value; tuples let it bundle several.
 
-Take the given \`tuple<string, int, double>\` and **unpack it with structured bindings, then print on one line**.
+Call the function and **unpack the tuple with structured bindings**, then print.
 
-> 💡 \`auto [name, age, gpa] = t;\` → declare variables and unpack in one go.`,
+> 💡 This is where tuples really shine — multi-value return, received in one line: \`auto [a, b, c] = func();\`.`,
           starterCode: `#include <iostream>
 #include <tuple>
 #include <string>
 using namespace std;
 
-int main() {
-    tuple<string, int, double> student = {"Kim", 15, 3.8};
+// Function that returns student info as a tuple (already provided)
+tuple<string, int, double> getStudent() {
+    return {"Kim", 15, 3.8};
+}
 
-    // 👇 Unpack with structured bindings and print "Kim 15 3.8"
+int main() {
+    // 👇 Call getStudent(), unpack with structured bindings, print "Kim 15 3.8"
 
 
     return 0;
@@ -231,16 +269,65 @@ int main() {
 #include <string>
 using namespace std;
 
-int main() {
-    tuple<string, int, double> student = {"Kim", 15, 3.8};
+tuple<string, int, double> getStudent() {
+    return {"Kim", 15, 3.8};
+}
 
-    auto [name, age, gpa] = student;
+int main() {
+    auto [name, age, gpa] = getStudent();
     cout << name << " " << age << " " << gpa;
 
     return 0;
 }`,
-          hint: "auto [name, age, gpa] = student; on one line, then cout << name << \" \" << age << \" \" << gpa;",
+          hint: "auto [name, age, gpa] = getStudent(); — one line declares 3 variables and assigns from the function. Then cout << name << \" \" << age << \" \" << gpa;",
           expectedOutput: `Kim 15 3.8`
+        },
+        {
+          id: "ch1-tuple-mini2",
+          type: "practice" as const,
+          title: "✋ Quick — compare two students, print the higher GPA",
+          content: `**Scenario**: Two functions each return a student's (name, gpa). Print **the name of the student with the higher GPA**.
+
+\`\`\`
+studentA() → ("Kim", 3.8)
+studentB() → ("Lee", 3.5)
+Expected: Kim
+\`\`\`
+
+> 💡 Two \`auto [name, gpa] = func()\` calls, then compare gpa and print the matching name.`,
+          starterCode: `#include <iostream>
+#include <tuple>
+#include <string>
+using namespace std;
+
+tuple<string, double> studentA() { return {"Kim", 3.8}; }
+tuple<string, double> studentB() { return {"Lee", 3.5}; }
+
+int main() {
+    // 👇 Call both, unpack each, print whichever has the higher gpa
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <tuple>
+#include <string>
+using namespace std;
+
+tuple<string, double> studentA() { return {"Kim", 3.8}; }
+tuple<string, double> studentB() { return {"Lee", 3.5}; }
+
+int main() {
+    auto [nameA, gpaA] = studentA();
+    auto [nameB, gpaB] = studentB();
+
+    if (gpaA > gpaB) cout << nameA;
+    else cout << nameB;
+
+    return 0;
+}`,
+          hint: "auto [nameA, gpaA] = studentA(); auto [nameB, gpaB] = studentB(); — two of those. Then if (gpaA > gpaB) cout << nameA; else cout << nameB;",
+          expectedOutput: `Kim`
         },
         {
           id: "ch1-pred1",

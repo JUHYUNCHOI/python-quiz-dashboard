@@ -94,6 +94,41 @@ auto p3 = make_pair("Park", 77);             // auto 로 타입 생략
 > 💡 셋 이상 묶고 싶으면 곧 나올 \`tuple\`. 근데 실전에서 가장 많이 쓰는 건 pair 예요 — 좌표 (x,y), 이름-점수, 인덱스-거리 같은 "딱 두 개" 짝이 흔하니까요.`,
         },
         {
+          id: "ch1-pair-mini",
+          type: "practice" as const,
+          title: "✋ 잠깐 — 카페 메뉴 한 줄 출력",
+          content: `**상황**: 카페에서 음료 정보를 \`(이름, 가격)\` 한 묶음으로 다루고 있어요.
+
+이미 만들어진 pair 에서 \`.first\` (이름), \`.second\` (가격) 을 꺼내 **\`라떼: 5500원\`** 형식으로 출력하세요.
+
+> 💡 \`p.first\`, \`p.second\` 만 알면 끝.`,
+          starterCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    pair<string, int> drink = {"라떼", 5500};
+
+    // 👇 .first 와 .second 로 "라떼: 5500원" 출력
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    pair<string, int> drink = {"라떼", 5500};
+
+    cout << drink.first << ": " << drink.second << "원";
+
+    return 0;
+}`,
+          hint: "cout << drink.first << \": \" << drink.second << \"원\"; — .first 와 .second 사이에 \": \" 를 넣고, 끝에 \"원\".",
+          expectedOutput: `라떼: 5500원`
+        },
+        {
           id: "ch1-fb1",
           type: "fillblank" as const,
           title: "빈칸을 채워주세요",
@@ -207,21 +242,24 @@ queue<tuple<int, int, int>> q;   // (x, y, distance)
         {
           id: "ch1-tuple-mini",
           type: "practice" as const,
-          title: "✋ 잠깐 — 학생 프로필 한 묶음",
-          content: `**상황**: 함수가 학생 정보 (이름, 나이, 학점) 셋을 한 번에 돌려줘요.
+          title: "✋ 잠깐 — 함수가 돌려준 학생 정보 받기",
+          content: `**상황**: \`getStudent()\` 함수가 학생 정보 **세 가지 (이름, 나이, 학점) 를 한 번에** 돌려줘요. 보통 함수는 값 하나만 리턴하는데, tuple 덕에 셋을 묶어서 한 번에 줄 수 있어요.
 
-이미 만들어진 \`tuple<string, int, double>\` 을 받아서 **structured bindings 로 풀고 한 줄로 출력**하세요.
+함수를 호출해서 받고, **structured bindings 로 풀어 출력**하세요.
 
-> 💡 \`auto [name, age, gpa] = t;\` → 변수 만들기 + 풀기 한 번에.`,
+> 💡 이게 바로 tuple 이 진짜 빛나는 자리예요 — 함수에서 여러 값 한꺼번에 리턴 → 받는 쪽이 \`auto [a, b, c] = func();\` 한 줄로 받기.`,
           starterCode: `#include <iostream>
 #include <tuple>
 #include <string>
 using namespace std;
 
-int main() {
-    tuple<string, int, double> student = {"Kim", 15, 3.8};
+// 학생 정보를 한 번에 돌려주는 함수 (이미 만들어져 있음)
+tuple<string, int, double> getStudent() {
+    return {"Kim", 15, 3.8};
+}
 
-    // 👇 structured bindings 으로 풀고 "Kim 15 3.8" 형식 출력
+int main() {
+    // 👇 getStudent() 호출 + structured bindings 으로 받기 + "Kim 15 3.8" 형식 출력
 
 
     return 0;
@@ -231,16 +269,65 @@ int main() {
 #include <string>
 using namespace std;
 
-int main() {
-    tuple<string, int, double> student = {"Kim", 15, 3.8};
+tuple<string, int, double> getStudent() {
+    return {"Kim", 15, 3.8};
+}
 
-    auto [name, age, gpa] = student;
+int main() {
+    auto [name, age, gpa] = getStudent();
     cout << name << " " << age << " " << gpa;
 
     return 0;
 }`,
-          hint: "auto [name, age, gpa] = student; 한 줄로 풀고, cout << name << \" \" << age << \" \" << gpa; 로 출력.",
+          hint: "auto [name, age, gpa] = getStudent(); — 함수 호출하면서 한 줄에 변수 3개 만들기 + 값 받기. 그 다음 cout << name << \" \" << age << \" \" << gpa;",
           expectedOutput: `Kim 15 3.8`
+        },
+        {
+          id: "ch1-tuple-mini2",
+          type: "practice" as const,
+          title: "✋ 잠깐 — 두 학생 비교, 학점 높은 쪽 출력",
+          content: `**상황**: 두 함수가 각각 학생 한 명의 (이름, 학점) 을 돌려줘요. **학점이 더 높은 학생의 이름** 을 출력하세요.
+
+\`\`\`
+studentA() → ("Kim", 3.8)
+studentB() → ("Lee", 3.5)
+기대 출력: Kim
+\`\`\`
+
+> 💡 두 번 \`auto [name, gpa] = func()\` 으로 받고, gpa 비교 후 이름 출력.`,
+          starterCode: `#include <iostream>
+#include <tuple>
+#include <string>
+using namespace std;
+
+tuple<string, double> studentA() { return {"Kim", 3.8}; }
+tuple<string, double> studentB() { return {"Lee", 3.5}; }
+
+int main() {
+    // 👇 두 함수 호출 + structured bindings + 학점 더 높은 사람 이름 출력
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <tuple>
+#include <string>
+using namespace std;
+
+tuple<string, double> studentA() { return {"Kim", 3.8}; }
+tuple<string, double> studentB() { return {"Lee", 3.5}; }
+
+int main() {
+    auto [nameA, gpaA] = studentA();
+    auto [nameB, gpaB] = studentB();
+
+    if (gpaA > gpaB) cout << nameA;
+    else cout << nameB;
+
+    return 0;
+}`,
+          hint: "auto [nameA, gpaA] = studentA(); auto [nameB, gpaB] = studentB(); 두 번. 그 다음 if (gpaA > gpaB) cout << nameA; else cout << nameB;",
+          expectedOutput: `Kim`
         },
         {
           id: "ch1-pred1",
