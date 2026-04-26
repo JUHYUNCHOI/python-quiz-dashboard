@@ -254,6 +254,81 @@ Next lesson (cpp-23) goes deep on \`sort\`. There you'll learn how to handle "sc
           content: "Press the sort button to see the difference between the two approaches!",
         },
         {
+          id: "ch1-must-pair",
+          type: "practice" as const,
+          title: "🎯 When pair is *truly necessary* — sorting a score sheet",
+          content: `You just saw it in the simulator — **two separate vectors break when sorted.** Now confirm it in code.
+
+**Problem**: You have 5 students with names and scores. **Sort by score (ascending) and print.**
+
+\`\`\`
+Input data:
+  Kim    95
+  Lee    72
+  Park   88
+  Choi   60
+  Han    81
+
+Expected output (sorted by score):
+  Choi 60
+  Lee 72
+  Han 81
+  Park 88
+  Kim 95
+\`\`\`
+
+> 💡 With two separate vectors (\`names\`, \`scores\`), sorting one breaks the pairing. **\`vector<pair<string, int>>\`** keeps them as one unit, and \`sort\` just works in one line.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    vector<pair<int, string>> students;
+    // (score, name) — putting score in .first so sort orders by score
+    students.push_back({95, "Kim"});
+    students.push_back({72, "Lee"});
+    students.push_back({88, "Park"});
+    students.push_back({60, "Choi"});
+    students.push_back({81, "Han"});
+
+    // 👇 sort one line (pair's first = score, auto-sorted)
+
+
+    // 👇 range-for to print as "name score"
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    vector<pair<int, string>> students;
+    students.push_back({95, "Kim"});
+    students.push_back({72, "Lee"});
+    students.push_back({88, "Park"});
+    students.push_back({60, "Choi"});
+    students.push_back({81, "Han"});
+
+    sort(students.begin(), students.end());
+
+    for (auto& s : students) {
+        cout << s.second << " " << s.first << endl;
+    }
+
+    return 0;
+}`,
+          hint: "pair's first = score, second = name. sort(students.begin(), students.end()) sorts by first (score). Print: for (auto& s : students) cout << s.second << \" \" << s.first;",
+          expectedOutput: `Choi 60
+Lee 72
+Han 81
+Park 88
+Kim 95`
+        },
+        {
           id: "ch1-fb2",
           type: "fillblank" as const,
           title: "Access pair members!",

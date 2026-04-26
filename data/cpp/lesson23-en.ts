@@ -297,6 +297,83 @@ int main() {
             { id: 1, answer: "second", options: ["second", "first", "score", "value"] }
           ],
           explanation: "The second value in a pair is accessed with .second. a.second < b.second means a goes first → ascending order!"
+        },
+        {
+          id: "s23-ch1-must-lambda",
+          type: "practice" as const,
+          title: "🎯 When lambda is *truly necessary* — multi-key sorting",
+          content: `This problem genuinely cannot be solved without a lambda.
+
+**Problem**: 5 students with (name, score).
+**Sort by score descending, breaking ties by name ascending (alphabetical)**, then print.
+
+\`\`\`
+Input:
+  Kim    88
+  Lee    95
+  Park   88
+  Choi   72
+  Han    95
+
+Expected output (score↓, then name↑):
+  Han 95
+  Lee 95
+  Kim 88
+  Park 88
+  Choi 72
+\`\`\`
+
+> 💡 Plain \`sort()\` sorts both fields ascending (pair auto-compare).
+> \`greater<>()\` sorts both descending.
+> **"score descending, but name ascending"** — mixed directions like this can only be done with a **lambda**.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> students = {
+        {"Kim", 88}, {"Lee", 95}, {"Park", 88}, {"Choi", 72}, {"Han", 95}
+    };
+
+    // 👇 Pass a lambda as sort's 3rd argument:
+    //    Primary: score (second) descending
+    //    Tiebreaker: name (first) ascending
+
+
+    for (auto& s : students) {
+        cout << s.first << " " << s.second << endl;
+    }
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> students = {
+        {"Kim", 88}, {"Lee", 95}, {"Park", 88}, {"Choi", 72}, {"Han", 95}
+    };
+
+    sort(students.begin(), students.end(), [](auto a, auto b) {
+        if (a.second != b.second) return a.second > b.second;  // score descending
+        return a.first < b.first;                                // name ascending
+    });
+
+    for (auto& s : students) {
+        cout << s.first << " " << s.second << endl;
+    }
+    return 0;
+}`,
+          hint: "Inside the lambda, if-else pattern: if (a.second != b.second) return a.second > b.second; (score descending) / when scores tie: return a.first < b.first; (name ascending)",
+          expectedOutput: `Han 95
+Lee 95
+Kim 88
+Park 88
+Choi 72`
         }
       ]
     },

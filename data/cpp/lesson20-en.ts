@@ -346,6 +346,74 @@ print(n & 1)   # odd/even check
           explanation: "1 << 3 shifts 1 left by 3 = 8 (2^3). 12 >> 2 shifts 12 right by 2 = 3 (12/4). 5 ^ 5 is XOR of a number with itself, which is always 0!"
         },
         {
+          id: "ch2-must-bitmask",
+          type: "practice" as const,
+          title: "🎯 Where bitmasks *truly shine* — enumerate all subsets",
+          content: `One pattern where bit operations show their real power: **subset enumeration**.
+
+**Problem**: For \`n = 3\` (three elements \`A, B, C\`), print all **8 subsets**. Include the empty set.
+
+\`\`\`
+Expected output (one subset per line):
+{ }
+{ A }
+{ B }
+{ A B }
+{ C }
+{ A C }
+{ B C }
+{ A B C }
+\`\`\`
+
+> 💡 With recursion you'd need backtracking ("include / don't include"). With a **bitmask**, it's a single loop: \`for (int mask = 0; mask < (1 << n); mask++)\`.
+>
+> **Trick**: if bit \`i\` of \`mask\` is 1, include element \`i\`. Check with \`mask & (1 << i)\`.
+>
+> For n = 3, \`1 << 3 = 8\`, so \`mask\` runs 0..7 and you get every subset for free.`,
+          starterCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int n = 3;
+    char names[] = {'A', 'B', 'C'};
+
+    // 👇 Loop mask from 0 to (1 << n) - 1:
+    //    For each mask, print elements whose bit is set.
+    //    Format: "{ A B }" (space-separated, with spaces inside braces)
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+using namespace std;
+
+int main() {
+    int n = 3;
+    char names[] = {'A', 'B', 'C'};
+
+    for (int mask = 0; mask < (1 << n); mask++) {
+        cout << "{ ";
+        for (int i = 0; i < n; i++) {
+            if (mask & (1 << i)) {
+                cout << names[i] << " ";
+            }
+        }
+        cout << "}" << endl;
+    }
+
+    return 0;
+}`,
+          hint: "Outer loop: for (int mask = 0; mask < (1 << n); mask++) — every subset. Inner: for (int i = 0; i < n; i++), check with if (mask & (1 << i)) to include element i. Watch output format: '{ ' + elements + '}', each element followed by one space.",
+          expectedOutput: `{ }
+{ A }
+{ B }
+{ A B }
+{ C }
+{ A C }
+{ B C }
+{ A B C }`
+        },
+        {
           id: "ch2-patterns",
           type: "explain",
           title: "💡 Common CP Patterns!",

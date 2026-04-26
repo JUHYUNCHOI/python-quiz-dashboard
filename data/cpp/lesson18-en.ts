@@ -186,6 +186,75 @@ q[0]              # front
           explanation: "push(10), push(20), push(30) gives [10,20,30]. pop() removes the front element 10 → [20,30]. front() returns 20!"
         },
         {
+          id: "ch1-must-queue",
+          type: "practice" as const,
+          title: "🎯 When queue is *truly necessary* — line at the cafe",
+          content: `queue's most natural use: "**process whoever arrived first**" — basically a real-world line. The same pattern is the heart of BFS and many bigger algorithms.
+
+**Problem**: 5 customers arrive at a cafe in order (Alice, Bob, Carol, David, Eve). The barista processes them one at a time, printing "Now serving: name". Service must be **in arrival order**.
+
+\`\`\`
+Arrival: Alice → Bob → Carol → David → Eve
+
+Expected output:
+Now serving: Alice
+Now serving: Bob
+Now serving: Carol
+Now serving: David
+Now serving: Eve
+\`\`\`
+
+> 💡 With a stack, you'd serve Eve (the last to arrive) first — line-cutting! queue is the right tool. The pattern: \`while (!q.empty())\` + \`q.front()\` + \`q.pop()\`.`,
+          starterCode: `#include <iostream>
+#include <queue>
+#include <string>
+using namespace std;
+
+int main() {
+    queue<string> line;
+
+    // Push in arrival order
+    line.push("Alice");
+    line.push("Bob");
+    line.push("Carol");
+    line.push("David");
+    line.push("Eve");
+
+    // 👇 While the queue is not empty: print front + pop
+    //    Output format: "Now serving: Alice"
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <queue>
+#include <string>
+using namespace std;
+
+int main() {
+    queue<string> line;
+
+    line.push("Alice");
+    line.push("Bob");
+    line.push("Carol");
+    line.push("David");
+    line.push("Eve");
+
+    while (!line.empty()) {
+        cout << "Now serving: " << line.front() << endl;
+        line.pop();
+    }
+
+    return 0;
+}`,
+          hint: "Pattern: while (!line.empty()) { cout << \"Now serving: \" << line.front() << endl; line.pop(); } — front() peeks, pop() removes. This skeleton powers BFS and every queue-based algorithm.",
+          expectedOutput: `Now serving: Alice
+Now serving: Bob
+Now serving: Carol
+Now serving: David
+Now serving: Eve`
+        },
+        {
           id: "ch1-pred-parens",
           type: "predict" as const,
           title: "Unbalanced brackets prediction!",

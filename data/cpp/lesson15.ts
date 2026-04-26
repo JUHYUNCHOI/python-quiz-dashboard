@@ -254,6 +254,81 @@ sort(scores.begin(), scores.end());
           content: "정렬 버튼을 눌러서 두 방식의 차이를 확인해봐요!",
         },
         {
+          id: "ch1-must-pair",
+          type: "practice" as const,
+          title: "🎯 pair 가 *진짜 필요한* 순간 — 점수표 정렬",
+          content: `방금 시뮬에서 본 것 — **vector 두 개로는 정렬이 깨져요.** 직접 코드로 확인해봐요.
+
+**문제**: 학생 5 명의 이름과 점수가 있어요. **점수 오름차순으로 정렬해서 출력**하세요.
+
+\`\`\`
+입력 데이터:
+  Kim    95
+  Lee    72
+  Park   88
+  Choi   60
+  Han    81
+
+기대 출력 (점수 오름차순):
+  Choi 60
+  Lee 72
+  Han 81
+  Park 88
+  Kim 95
+\`\`\`
+
+> 💡 두 vector (\`names\`, \`scores\`) 따로 두면 한쪽만 정렬돼서 짝이 깨져요. **\`vector<pair<string, int>>\`** 로 묶어두면 \`sort\` 한 줄로 끝.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    vector<pair<int, string>> students;
+    // 점수, 이름 순으로 묶기 — 점수 오름차순 정렬을 위해 pair 의 first 에 점수
+    students.push_back({95, "Kim"});
+    students.push_back({72, "Lee"});
+    students.push_back({88, "Park"});
+    students.push_back({60, "Choi"});
+    students.push_back({81, "Han"});
+
+    // 👇 sort 한 줄로 정렬 (pair 의 first = 점수 기준 자동 정렬)
+
+
+    // 👇 range-for 로 "이름 점수" 형식 출력
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    vector<pair<int, string>> students;
+    students.push_back({95, "Kim"});
+    students.push_back({72, "Lee"});
+    students.push_back({88, "Park"});
+    students.push_back({60, "Choi"});
+    students.push_back({81, "Han"});
+
+    sort(students.begin(), students.end());
+
+    for (auto& s : students) {
+        cout << s.second << " " << s.first << endl;
+    }
+
+    return 0;
+}`,
+          hint: "pair 의 first 가 점수, second 가 이름이에요. sort(students.begin(), students.end()) 한 줄이면 first(점수) 기준 자동 정렬. 출력은 for (auto& s : students) cout << s.second << \" \" << s.first;",
+          expectedOutput: `Choi 60
+Lee 72
+Han 81
+Park 88
+Kim 95`
+        },
+        {
           id: "ch1-fb2",
           type: "fillblank" as const,
           title: "pair 멤버에 접근해봐요!",

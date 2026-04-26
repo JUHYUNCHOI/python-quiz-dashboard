@@ -296,6 +296,83 @@ int main() {
             { id: 1, answer: "second", options: ["second", "first", "score", "value"] }
           ],
           explanation: "pair에서 두 번째 값은 .second예요. a.second < b.second면 a가 앞 → 오름차순이에요!"
+        },
+        {
+          id: "s23-ch1-must-lambda",
+          type: "practice" as const,
+          title: "🎯 lambda 가 *진짜 필요한* 순간 — 다중 기준 정렬",
+          content: `이번 문제는 lambda 없이는 진짜 답이 없어요.
+
+**문제**: 학생 5 명의 (이름, 점수) 가 있어요.
+**점수 내림차순으로 정렬, 동점이면 이름 사전순(오름차순)으로 정렬**해서 출력하세요.
+
+\`\`\`
+입력:
+  Kim    88
+  Lee    95
+  Park   88
+  Choi   72
+  Han    95
+
+기대 출력 (점수↓, 같으면 이름↑):
+  Han 95
+  Lee 95
+  Kim 88
+  Park 88
+  Choi 72
+\`\`\`
+
+> 💡 \`sort()\` 만 쓰면 점수랑 이름 둘 다 오름차순으로 정렬돼요 (pair 자동 비교).
+> \`greater<>()\` 만 쓰면 둘 다 내림차순.
+> **"점수는 내림차순, 이름은 오름차순"** 같이 다른 방향이 섞이면 → **lambda 만이 답.**`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> students = {
+        {"Kim", 88}, {"Lee", 95}, {"Park", 88}, {"Choi", 72}, {"Han", 95}
+    };
+
+    // 👇 sort 의 세 번째 인자에 lambda 를 넘겨서:
+    //    1순위: 점수 (second) 내림차순
+    //    2순위: 점수 같으면 이름 (first) 오름차순
+
+
+    for (auto& s : students) {
+        cout << s.first << " " << s.second << endl;
+    }
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> students = {
+        {"Kim", 88}, {"Lee", 95}, {"Park", 88}, {"Choi", 72}, {"Han", 95}
+    };
+
+    sort(students.begin(), students.end(), [](auto a, auto b) {
+        if (a.second != b.second) return a.second > b.second;  // 점수 내림차순
+        return a.first < b.first;                                // 이름 오름차순
+    });
+
+    for (auto& s : students) {
+        cout << s.first << " " << s.second << endl;
+    }
+    return 0;
+}`,
+          hint: "lambda 안에 if-else 패턴: if (a.second != b.second) return a.second > b.second; (점수 내림차순) / 점수 같으면 return a.first < b.first; (이름 오름차순)",
+          expectedOutput: `Han 95
+Lee 95
+Kim 88
+Park 88
+Choi 72`
         }
       ]
     },

@@ -346,6 +346,74 @@ print(n & 1)   # 홀짝 체크
           explanation: "1 << 3은 1을 왼쪽으로 3칸 = 8 (2^3)이에요. 12 >> 2는 12를 오른쪽으로 2칸 = 3 (12/4)이에요. 5 ^ 5는 같은 수의 XOR이라 항상 0이에요!"
         },
         {
+          id: "ch2-must-bitmask",
+          type: "practice" as const,
+          title: "🎯 비트마스크가 *진짜 빛나는* 순간 — 부분집합 모두 나열",
+          content: `비트 연산이 진짜 위력을 발휘하는 패턴: **부분집합(subset) 나열**.
+
+**문제**: \`n = 3\` 일 때 (원소 3 개 \`A, B, C\`), 가능한 부분집합 **8 가지** 를 모두 출력하세요. 빈 집합도 포함.
+
+\`\`\`
+기대 출력 (각 줄에 부분집합):
+{ }
+{ A }
+{ B }
+{ A B }
+{ C }
+{ A C }
+{ B C }
+{ A B C }
+\`\`\`
+
+> 💡 재귀로 풀면 "선택/안 선택" 백트래킹이 필요해서 코드가 길어요. **비트마스크** 면 \`for (int mask = 0; mask < (1 << n); mask++)\` 한 줄로 끝.
+>
+> **트릭**: \`mask\` 의 \`i\` 번째 비트가 1 이면 → \`i\` 번째 원소를 포함. \`mask & (1 << i)\` 로 확인.
+>
+> n = 3 이면 \`1 << 3 = 8\` → mask 가 0 부터 7 까지 돌면서 모든 부분집합을 자동 생성.`,
+          starterCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    int n = 3;
+    char names[] = {'A', 'B', 'C'};
+
+    // 👇 mask 가 0 부터 (1 << n) - 1 까지 돌면서:
+    //    각 i 번째 비트가 1 인 원소를 포함하는 부분집합 출력.
+    //    출력 형식: "{ A B }" (원소 사이 공백, 양 끝에 공백)
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+using namespace std;
+
+int main() {
+    int n = 3;
+    char names[] = {'A', 'B', 'C'};
+
+    for (int mask = 0; mask < (1 << n); mask++) {
+        cout << "{ ";
+        for (int i = 0; i < n; i++) {
+            if (mask & (1 << i)) {
+                cout << names[i] << " ";
+            }
+        }
+        cout << "}" << endl;
+    }
+
+    return 0;
+}`,
+          hint: "외부 루프 for (int mask = 0; mask < (1 << n); mask++) — 모든 부분집합. 내부 for (int i = 0; i < n; i++) 에서 if (mask & (1 << i)) 로 i 번째 원소 포함 여부 체크. 출력 형식 주의: '{ ' + 원소들 + '}' (각 원소 뒤에 공백 한 칸).",
+          expectedOutput: `{ }
+{ A }
+{ B }
+{ A B }
+{ C }
+{ A C }
+{ B C }
+{ A B C }`
+        },
+        {
           id: "ch2-patterns",
           type: "explain",
           title: "💡 자주 쓰는 CP 패턴!",
