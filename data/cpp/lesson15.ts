@@ -45,6 +45,8 @@ vector<int> scores = {95, 88, 92};
 > 🎯 한 줄: **pair = "이름 안 짓고 두 값 묶는 미니 struct".**
 
 \`\`\`cpp
+#include <utility>   // pair 가 들어있는 헤더
+
 pair<string, int> p = {"Kim", 95};
 //   └────────────┘
 //   첫 번째 타입, 두 번째 타입
@@ -52,6 +54,8 @@ pair<string, int> p = {"Kim", 95};
 cout << p.first;   // "Kim"
 cout << p.second;  // 95
 \`\`\`
+
+> 💡 \`<utility>\` 가 공식 헤더예요. 단, \`<vector>\`, \`<algorithm>\`, \`<map>\` 같은 다른 STL 헤더를 include 하면 \`pair\` 도 자동으로 따라와요. 그래서 실전에선 \`<utility>\` 를 따로 안 적는 경우가 많아요.
 
 \`.first\`, \`.second\` 라는 이름이 좀 어색하죠? **두 값 중 어느 게 의미상 뭔지 안 알려주는** 게 pair 의 한계이자 특징이에요. 의미가 중요하면 struct 를 쓰고, 잠깐 묶기만 하면 pair 를 써요.
 

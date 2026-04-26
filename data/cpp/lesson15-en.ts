@@ -45,6 +45,8 @@ You need name and score **as one unit**. The \`struct\` from the previous lesson
 > 🎯 One line: **pair = "a tiny anonymous struct for two values".**
 
 \`\`\`cpp
+#include <utility>   // pair lives here
+
 pair<string, int> p = {"Kim", 95};
 //   └────────────┘
 //   first type, second type
@@ -52,6 +54,8 @@ pair<string, int> p = {"Kim", 95};
 cout << p.first;   // "Kim"
 cout << p.second;  // 95
 \`\`\`
+
+> 💡 \`<utility>\` is the official header. But other STL headers like \`<vector>\`, \`<algorithm>\`, and \`<map>\` already pull \`pair\` in for you, so in practice you often don't need to include \`<utility>\` separately.
 
 The names \`.first\`, \`.second\` are a bit awkward, right? That's pair's tradeoff — it **doesn't tell you what each value semantically means**. If meaning matters, use a struct. If you're just bundling temporarily, use a pair.
 
