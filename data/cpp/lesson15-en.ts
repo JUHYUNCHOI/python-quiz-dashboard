@@ -94,6 +94,55 @@ All three give the same result, so pick whichever you like. The first form (\`{a
 > 💡 For 3+ values you'll meet \`tuple\` soon. But by far the most common case is "exactly two paired things" — coordinates (x,y), name-score, index-distance — which is why pair shows up far more in real code.`,
         },
         {
+          id: "ch1-pair-unpack",
+          type: "explain",
+          title: "🎁 Unpacking a pair — \`.first/.second\` vs structured bindings",
+          content: `So far we've been pulling values out with \`.first\` and \`.second\`:
+
+\`\`\`cpp
+pair<string, int> p = {"Kim", 95};
+cout << p.first;    // "Kim"
+cout << p.second;   // 95
+\`\`\`
+
+When you'll use the values multiple times — or want *meaningful names* — **C++17 lets you unpack in one line**:
+
+\`\`\`cpp
+auto [name, score] = p;
+cout << name;    // "Kim"
+cout << score;   // 95
+\`\`\`
+
+That \`auto\` + \`[name, score]\` is called **structured bindings**. The name comes from "**bind**ing the parts of a *structured* bundle (pair / tuple / struct) to multiple variables." (Same syntax shows up again in the tuple chapter — practicing it here makes that transition smooth.)
+
+### Which to use?
+
+| Pattern | When |
+|---|---|
+| \`p.first\`, \`p.second\` | One or two accesses, simple |
+| \`auto [name, score] = p;\` | Many uses / want *meaningful names* ⭐ |
+| \`for (auto& [name, score] : v)\` | range-for over vector<pair> — extremely common! ⭐⭐ |
+
+### Preview — comparing vector<pair> iteration
+
+\`\`\`cpp
+vector<pair<string, int>> students = {{"Kim", 95}, {"Lee", 88}};
+
+// .first / .second style
+for (auto& s : students) {
+    cout << s.first << ": " << s.second << endl;
+}
+
+// structured bindings style ⭐
+for (auto& [name, score] : students) {
+    cout << name << ": " << score << endl;
+    //      ↑ no "wait, was that .first or .second?" moment
+}
+\`\`\`
+
+> 💡 The next pages mix both styles. Pick whichever reads better in context.`
+        },
+        {
           id: "ch1-pair-mini",
           type: "practice" as const,
           title: "✋ Quick — find the most expensive cafe drink",

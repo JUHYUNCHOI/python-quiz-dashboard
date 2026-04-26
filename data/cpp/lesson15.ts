@@ -94,6 +94,57 @@ auto p3 = make_pair("Park", 77);             // auto 로 타입 생략
 > 💡 셋 이상 묶고 싶으면 곧 나올 \`tuple\`. 근데 실전에서 가장 많이 쓰는 건 pair 예요 — 좌표 (x,y), 이름-점수, 인덱스-거리 같은 "딱 두 개" 짝이 흔하니까요.`,
         },
         {
+          id: "ch1-pair-unpack",
+          type: "explain",
+          title: "🎁 pair 풀어 담기 — \`.first/.second\` vs structured bindings",
+          content: `지금까지 pair 두 값을 \`.first\` / \`.second\` 로 꺼냈어요:
+
+\`\`\`cpp
+pair<string, int> p = {"Kim", 95};
+cout << p.first;    // "Kim"
+cout << p.second;   // 95
+\`\`\`
+
+여러 번 쓰거나 *의미 있는 이름* 으로 받고 싶을 때, **C++17 부터는 한 줄로 풀어 담을 수 있어요**:
+
+\`\`\`cpp
+auto [name, score] = p;
+cout << name;    // "Kim"
+cout << score;   // 95
+\`\`\`
+
+이게 \`auto\` 옆에 \`[name, score]\` — **structured bindings** 라고 불러요. "**구조** (structure) 가 있는 묶음 (pair / tuple / struct) 을 여러 변수에 **bind** 해주는 문법" — 이름의 어원이 그거예요.
+
+(어디서 들어본 것 같죠? 다음 챕터의 tuple 에서도 똑같이 등장해요. pair 에서 미리 손에 익혀두면 거기서 자연스럽게 이어져요.)
+
+### 어떤 걸 쓰지?
+
+| 패턴 | 언제 |
+|---|---|
+| \`p.first\`, \`p.second\` | 한두 번만 접근, 단순할 때 |
+| \`auto [name, score] = p;\` | 여러 번 사용 / *의미 있는 이름* 필요 ⭐ |
+| \`for (auto& [name, score] : v)\` | range-for 로 vector<pair> 순회 — 진짜 자주! ⭐⭐ |
+
+### 미리보기 — vector<pair> 순회 비교
+
+\`\`\`cpp
+vector<pair<string, int>> students = {{"Kim", 95}, {"Lee", 88}};
+
+// .first / .second 방식
+for (auto& s : students) {
+    cout << s.first << ": " << s.second << endl;
+}
+
+// structured bindings 방식 ⭐
+for (auto& [name, score] : students) {
+    cout << name << ": " << score << endl;
+    //      ↑ '.first 가 뭐였더라' 헤맬 일 없음
+}
+\`\`\`
+
+> 💡 다음 페이지부터 \`.first/.second\` 와 \`auto [name, score]\` 둘 다 자연스럽게 섞어 써요. 본인 편한 쪽 선택.`
+        },
+        {
           id: "ch1-pair-mini",
           type: "practice" as const,
           title: "✋ 잠깐 — 카페 메뉴에서 가장 비싼 음료 찾기",
