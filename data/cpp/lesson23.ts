@@ -6,9 +6,9 @@ import { LessonData } from '../types'
 
 export const cppLesson23Data: LessonData = {
   id: "cpp-23",
-  title: "sort 마스터",
+  title: "sort & 이진탐색",
   emoji: "📊",
-  description: "sort 기초 + 람다 + lower_bound — 정렬 완전정복!",
+  description: "sort 기초 + 람다 + lower_bound — 정렬과 이진탐색을 한 번에!",
   chapters: [
     // ============================================
     // Chapter 0: sort 기초
@@ -19,10 +19,60 @@ export const cppLesson23Data: LessonData = {
       emoji: "📊",
       steps: [
         {
+          id: "s23-ch0-toolbox",
+          type: "explain",
+          title: "🗂️ 데이터 묶는 도구 — 한눈에 정리",
+          content: `여기까지 배운 도구가 **4 개**: \`vector\`, \`pair\`, \`tuple\`, \`struct\`. 슬슬 헷갈리기 시작할 시점이에요. **한 번 정리하고 가요** — 이 표가 평생 갑니다.
+
+### 4 개 도구 비교
+
+| 도구 | 언제 쓰나 | 예시 | 꺼내기 |
+|---|---|---|---|
+| **vector** | **같은 타입** 여러 개 (개수 변동 OK) | 학생 30 명 점수 | \`v[i]\` |
+| **pair** | **다른 타입 2 개** 짝꿍 | 좌표 (x, y) / 이름·점수 | \`.first\` / \`.second\` |
+| **tuple** | **다른 타입 3+ 개**, 잠깐 | (이름, 나이, 학점) 한 함수에서 | \`get<0>(t)\` 또는 \`auto [...]\` |
+| **struct** | **다른 타입**, 자주 쓰는 의미 있는 데이터 | 게임 캐릭터 (이름·HP·MP) | \`.name\`, \`.hp\` |
+
+### 1 초 결정 트리
+
+\`\`\`
+한 변수에 여러 데이터 묶기?
+│
+├─ 같은 타입, 여러 개 → vector
+│
+└─ 다른 타입 묶음
+    ├─ 딱 2 개 → pair
+    └─ 3 개 이상
+        ├─ 잠깐만 (한 함수 안) → tuple
+        └─ 자주 다룸 + 이름 중요 → struct
+\`\`\`
+
+### 조합도 자주 보여요
+
+| 조합 | 의미 | 예시 |
+|---|---|---|
+| \`vector<pair<...>>\` | 짝꿍 **여러 개** | 학생 N 명의 (이름, 점수) — sort 단골 |
+| \`vector<struct ...>\` | 명단 데이터 | 게임 캐릭터 N 명 |
+| \`pair<int, string>\` | 한 짝꿍 | (점수, 이름) — sort 키로 점수 |
+
+### 1 초 룰 정리
+
+> **여러 명/개?** → **vector** 부터.
+> **2 개?** → **pair**.
+> **3+ 개 + 잠깐?** → **tuple**.
+> **자주 쓰고 이름 중요?** → **struct**.
+
+### 이번 sort 챕터에선?
+
+거의 다 \`vector<pair>\` 쓸 거예요 — N 명 학생 데이터 (vector) + 이름·점수 짝꿍 (pair). 위 표 보면서 "맞다, vector<pair>" 라고 자연스럽게 떠올리게 돼요.
+
+다음 페이지부터 — sort 가 어떻게 한 줄로 정렬하는지 봐요 👇`,
+        },
+        {
           id: "s23-ch0-intro",
           type: "explain",
           title: "📊 sort() — 한 줄로 정렬",
-          content: `직전 레슨에서 pair 의 자동 비교 덕분에 "**\`sort\` 한 줄로 점수표가 정렬된다**" 는 걸 봤죠. 이번 레슨은 그 \`sort\` 가 주인공이에요.
+          content: `직전 레슨에서 pair 의 자동 비교 덕분에 "\`sort\` **한 줄로 점수표가 정렬된다**" 는 걸 봤죠. 이번 레슨은 그 \`sort\` 가 주인공이에요.
 
 \`sort\` 는 정렬 알고리즘 (퀵정렬/머지정렬 등) 을 직접 짜야 했던 작업을 **한 줄** 로 끝내줘요. C++ 에서 가장 많이 쓰이는 STL 함수 중 하나.
 
@@ -77,6 +127,53 @@ vector 의 v.begin()/v.end() 랑 같은 역할이에요.
           explanation: "sort()에는 시작 위치와 끝 위치를 넣어요! vector는 v.begin()과 v.end()를 사용해요."
         },
         {
+          id: "s23-ch0-practice1",
+          type: "practice" as const,
+          title: "✋ 처음부터 — 정수 정렬 후 출력",
+          content: `**문제**: N 개의 정수가 주어질 때, 오름차순으로 정렬해서 한 줄에 공백 구분으로 출력하세요.
+
+\`\`\`
+입력: 5
+      4 2 7 1 5
+출력: 1 2 4 5 7
+\`\`\`
+
+> 💡 #include 부터 main 까지 직접 작성. 입력 → vector 에 담기 → sort → 출력.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    // 👇 N 개 정수를 vector 에 담고, sort 한 후, 공백 구분으로 출력
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    sort(v.begin(), v.end());
+    for (int i = 0; i < n; i++) {
+        if (i > 0) cout << " ";
+        cout << v[i];
+    }
+    return 0;
+}`,
+          hint: "vector<int> v(n); 으로 크기 n 벡터, for 로 입력, sort(v.begin(), v.end()), for 로 출력 (첫 원소 제외하고 공백 prefix).",
+          expectedOutput: `1 2 4 5 7`,
+          stdin: `5
+4 2 7 1 5`,
+        },
+        {
           id: "s23-ch0-pred1",
           type: "predict" as const,
           title: "sort 후 출력!",
@@ -120,6 +217,77 @@ sort()의 **세 번째 인자**로 "비교 기준"을 넣을 수 있어요.
           explanation: "내림차순은 greater<타입>()을 써요! 타입에 맞게 greater<int>(), greater<string>() 등으로 사용해요."
         },
         {
+          id: "s23-ch0-pred2",
+          type: "predict" as const,
+          title: "내림차순 결과 예측!",
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+int main() {
+    vector<int> v = {3, 1, 4, 1, 5};
+    sort(v.begin(), v.end(), greater<int>());
+    cout << v[0] << " " << v[1] << " " << v[4];
+    return 0;
+}`,
+          options: ["1 1 5", "5 4 1", "5 1 1", "3 1 4"],
+          answer: 1,
+          explanation: "greater<int>() 는 내림차순 → v = {5, 4, 3, 1, 1}. v[0]=5, v[1]=4, v[4]=1 → '5 4 1'."
+        },
+        {
+          id: "s23-ch0-practice2",
+          type: "practice" as const,
+          title: "✋ 처음부터 — 내림차순 + 상위 3 개 출력",
+          content: `**문제**: N 개의 정수가 주어질 때, **내림차순으로 정렬해서 가장 큰 3 개** 를 한 줄에 공백 구분으로 출력하세요.
+N < 3 이면 전체를 내림차순으로 출력.
+
+\`\`\`
+입력: 5
+      4 2 7 1 5
+출력: 7 5 4
+
+입력: 2
+      9 3
+출력: 9 3
+\`\`\`
+
+> 💡 \`greater<int>()\` 로 내림차순 정렬 후, 인덱스 \`min(3, N)\` 까지 출력.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    // 👇 N 개 입력, 내림차순 정렬, 가장 큰 3 개 (또는 전체) 출력
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    sort(v.begin(), v.end(), greater<int>());
+    int k = min(n, 3);
+    for (int i = 0; i < k; i++) {
+        if (i > 0) cout << " ";
+        cout << v[i];
+    }
+    return 0;
+}`,
+          hint: "sort(v.begin(), v.end(), greater<int>()) 로 내림차순. min(n, 3) 까지 출력 — N<3 인 경우 자동 처리.",
+          expectedOutput: `7 5 4`,
+          stdin: `5
+4 2 7 1 5`,
+        },
+        {
           id: "s23-ch0-q1",
           type: "quiz",
           title: "sort 헤더!",
@@ -132,6 +300,58 @@ sort()의 **세 번째 인자**로 "비교 기준"을 넣을 수 있어요.
           ],
           answer: 1,
           explanation: "**공식 답: `<algorithm>`**. `sort()` 는 정확히 이 헤더에 정의돼 있어요.\n\n💡 pair 때 \"`<vector>` 등에 자동으로 따라온다\" 고 한 거랑 헷갈렸을 수 있는데, 둘은 달라요:\n• **pair 는 *타입***: map, set 같은 STL 컨테이너가 *내부적으로* pair 를 쓰니까 헤더에 자동으로 끌려와요.\n• **sort 는 *함수***: 다른 STL 헤더가 sort 를 안 쓰니까, 따라오지 않아요. `<vector>` 만 적고 `sort()` 호출하면 `'sort' was not declared` 에러 나요.\n\n**규칙: 함수는 그 함수가 있는 공식 헤더를 명시적으로 include.** 타입은 운 좋게 따라오는 경우가 있는 정도."
+        },
+        {
+          id: "s23-ch0-practice3",
+          type: "practice" as const,
+          title: "✋ 처음부터 — 문자열 알파벳순 정렬",
+          content: `**문제**: N 개의 문자열이 주어질 때, **알파벳 오름차순** 으로 정렬해서 한 줄에 한 단어씩 출력하세요.
+
+\`\`\`
+입력: 4
+      banana apple cherry date
+출력: apple
+      banana
+      cherry
+      date
+\`\`\`
+
+> 💡 \`sort\` 는 int 뿐 아니라 **string vector 에도 그대로** 통해요 — 문자열은 사전순으로 자동 비교됨.`,
+          starterCode: `#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    // 👇 N 개 문자열 입력, 알파벳순 정렬, 한 줄에 한 개씩 출력
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<string> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    sort(v.begin(), v.end());
+    for (auto& s : v) cout << s << "\\n";
+    return 0;
+}`,
+          hint: "vector<string> 도 sort 그대로 통함. 출력은 한 줄에 한 개씩 (\\n).",
+          expectedOutput: `apple
+banana
+cherry
+date`,
+          stdin: `4
+banana apple cherry date`,
         }
       ]
     },
@@ -170,62 +390,129 @@ vector<pair<string, int>> students = {
         {
           id: "s23-ch1-syntax",
           type: "explain",
-          title: "🔧 람다(lambda) 문법",
-          content: `람다는 이름 없이 그 자리에서 바로 쓰는 **일회용 함수**예요.
-
-**파이썬 람다는 이미 알죠?**
-\`\`\`python
-# 파이썬: 콜론(:) 뒤에 바로 반환값
-lambda x: x * 2
-
-# sort에서: key= 뒤에 써요
-sorted(v, key=lambda x: -x)  # 내림차순
-\`\`\`
-
-**C++ 람다는 모양이 조금 달라요:**
-\`\`\`
-파이썬:  lambda x      : x * 2
-C++:     [](int x)     { return x * 2; }
-           ↑               ↑
-       항상 []로 시작    중괄호 안에 return
-\`\`\`
-
----
-
-**sort에서 람다는 특별해요 — 인자가 2개예요!**
-
-파이썬 sort의 \`key=\`는 값 하나를 변환하지만,
-C++ sort의 람다는 **두 값을 직접 비교**해요.
+          title: "🔧 람다(lambda) 문법 — 4 부분으로 분해",
+          content: `람다는 이름 없이 그 자리에서 바로 쓰는 **일회용 함수**예요. 처음 보면 외계어 같지만 **4 부분으로 쪼개면** 단순해요.
 
 \`\`\`cpp
 [](int a, int b) { return a > b; }
-       ↑     ↑              ↑
-   비교할 두 값       이 조건이 true면 a가 앞으로!
+↑↑   ↑              ↑
+1 2   3              4
 \`\`\`
 
-**규칙 예시:**
-\`\`\`
-a=9, b=5 → 9 > 5 = true  → 9가 앞으로 ✅
-a=2, b=8 → 2 > 8 = false → 8이 앞으로 ✅
-결과: 큰 수가 앞 → 내림차순!
-\`\`\`
+| 번호 | 부분 | 이름 | 역할 |
+|---|---|---|---|
+| 1 | \`[]\` | **capture 목록** | 바깥 변수 가져올 때 (지금은 빈 칸) |
+| 2 | \`(int a, int b)\` | **매개변수** | 일반 함수의 매개변수와 똑같음 |
+| 3 | \`{ ... }\` | **본문** | 함수 본문 — 일반 함수처럼 코드 |
+| 4 | \`return a > b\` | **반환값** | true/false 등 결과 |
 
-**실제로 적용하면:**
+> 💡 처음엔 \`[]\` 부분만 낯설어요. 나머지는 일반 함수랑 거의 똑같아요.
+
+### 일반 함수와 비교해보기
+
 \`\`\`cpp
-vector<int> v = {5, 2, 8, 1, 9};
+// 일반 함수 — 이름 있음
+bool compare(int a, int b) {
+    return a > b;
+}
 
-sort(v.begin(), v.end(), [](int a, int b) {
-    return a > b;  // a가 크면 a가 앞으로
-});
-// v = {9, 8, 5, 2, 1}  (내림차순)
+// 람다 — 이름 없음, 그 자리에서 정의
+[](int a, int b) { return a > b; }
+//   ↑              ↑
+//   매개변수 같음    본문도 같음
+\`\`\`
+
+**유일한 차이**: 일반 함수는 위쪽에 따로 선언, 람다는 **쓰는 그 자리에서** 즉석으로 만듦.
+
+### 파이썬과 비교
+
+\`\`\`python
+# 파이썬
+lambda x: x * 2
+
+# C++
+[](int x) { return x * 2; }
 \`\`\`
 
 | | 파이썬 🐍 | C++ ⚡ |
 |---|---|---|
-| 람다 모양 | \`lambda x: x*2\` | \`[](int x){ return x*2; }\` |
-| sort에서 | 값 1개 변환 (\`key=\`) | 두 값 비교 (a, b) |
+| 시작 표시 | \`lambda\` 키워드 | \`[]\` 대괄호 |
+| 매개변수 타입 | 없음 (동적) | 있음 (\`int\`, \`auto\` 등) |
+| 본문 표시 | \`:\` 콜론 뒤 식 | \`{}\` 중괄호 + \`return\` |
 
-💡 \`[]\`는 지금은 그냥 "람다 시작 표시"로 외우면 돼요. 항상 빈 대괄호예요!`
+### 다음 페이지 — sort 의 람다는 인자가 *2 개* 라는 핵심 규칙 👇`
+        },
+        {
+          id: "s23-ch1-sort-lambda",
+          type: "explain",
+          title: "🔧 sort 의 람다 — *두 값을 비교* 하는 게 핵심",
+          content: `파이썬 sort 의 \`key=\` 는 값 *하나* 를 변환했죠. **C++ sort 의 람다는 두 값을 직접 비교** 해요.
+
+\`\`\`cpp
+[](int a, int b) { return a > b; }
+       ↑     ↑              ↑
+   비교할 두 값      이 조건이 true 면 *a 가 앞으로*
+\`\`\`
+
+### 람다 결과의 의미
+
+> 🎯 **return true → a 가 앞으로 / return false → b 가 앞으로**
+
+이 한 가지 규칙만 외우면 모든 비교 람다가 풀려요.
+
+**예시 — 내림차순 (큰 게 앞):**
+\`\`\`
+a=9, b=5 → 9 > 5 = true   → 9 가 앞으로 ✅
+a=2, b=8 → 2 > 8 = false  → 8 이 앞으로 ✅
+결과: 큰 수가 앞 → 내림차순!
+\`\`\`
+
+**예시 — 오름차순 (작은 게 앞):**
+\`\`\`cpp
+[](int a, int b) { return a < b; }   // 비교 방향만 < 로
+\`\`\`
+
+### 실제로 sort 에 넣으면
+
+\`\`\`cpp
+vector<int> v = {5, 2, 8, 1, 9};
+
+sort(v.begin(), v.end(), [](int a, int b) {
+    return a > b;
+});
+// v = {9, 8, 5, 2, 1}  (내림차순)
+\`\`\`
+
+### 자주 보는 형태들
+
+| 람다 | 정렬 결과 |
+|---|---|
+| \`[](int a, int b){ return a < b; }\` | 오름차순 (sort 기본값) |
+| \`[](int a, int b){ return a > b; }\` | 내림차순 |
+| \`[](int a, int b){ return abs(a) < abs(b); }\` | 절댓값 오름차순 |
+| \`[](auto a, auto b){ return a.second < b.second; }\` | pair 의 second 기준 |
+
+> 💡 \`auto\` 매개변수: pair / struct 처럼 타입이 길면 \`auto\` 로 받으면 편함. 컴파일러가 알아서 추론.`
+        },
+        {
+          id: "s23-ch1-rule-pred",
+          type: "predict" as const,
+          title: "람다 return 규칙 빠른 적용",
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+int main() {
+    vector<int> v = {3, 1, 4, 1, 5};
+    sort(v.begin(), v.end(), [](int a, int b) {
+        return a < b;
+    });
+    cout << v[0] << " " << v[4];
+    return 0;
+}`,
+          options: ["1 5", "5 1", "3 5", "1 1"],
+          answer: 0,
+          explanation: "return a < b → a 가 작을 때 a 가 앞 → **오름차순**. 정렬 결과: {1, 1, 3, 4, 5}. v[0] = 1, v[4] = 5 → '1 5'."
         },
         {
           id: "s23-ch1-fb1",
@@ -346,6 +633,72 @@ int main() {
           explanation: "pair에서 두 번째 값은 .second예요. a.second < b.second면 a가 앞 → 오름차순이에요!"
         },
         {
+          id: "s23-ch1-pair-practice",
+          type: "practice" as const,
+          title: "✋ 처음부터 — pair 벡터 점수 내림차순 정렬",
+          content: `**문제**: N 명의 학생 (이름, 점수) 가 주어질 때, **점수 내림차순** 으로 정렬해서 한 줄에 한 명씩 \`이름 점수\` 형식으로 출력하세요.
+
+\`\`\`
+입력: 4
+      Alice 78
+      Bob 95
+      Carol 88
+      Dave 60
+출력: Bob 95
+      Carol 88
+      Alice 78
+      Dave 60
+\`\`\`
+
+> 💡 lambda 안에서 \`a.second > b.second\` — 점수 큰 학생이 앞으로. structured bindings (\`auto& [name, score] : v\`) 로 출력하면 깔끔.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<string, int>> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
+    // 👇 lambda 로 점수 (.second) 내림차순 정렬
+
+    // 👇 한 줄에 한 명씩 "이름 점수" 출력
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<string, int>> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
+    sort(v.begin(), v.end(), [](auto a, auto b) {
+        return a.second > b.second;
+    });
+    for (auto& [name, score] : v) {
+        cout << name << " " << score << "\\n";
+    }
+    return 0;
+}`,
+          hint: "sort(v.begin(), v.end(), [](auto a, auto b) { return a.second > b.second; }); — auto 매개변수로 pair 받기. 출력은 range-for + structured bindings.",
+          expectedOutput: `Bob 95
+Carol 88
+Alice 78
+Dave 60`,
+          stdin: `4
+Alice 78
+Bob 95
+Carol 88
+Dave 60`,
+        },
+        {
           id: "s23-ch1-must-lambda",
           type: "practice" as const,
           title: "🎯 lambda 가 *진짜 필요한* 순간 — 다중 기준 정렬",
@@ -421,6 +774,67 @@ Lee 95
 Kim 88
 Park 88
 Choi 72`
+        },
+        {
+          id: "s23-ch1-string-practice",
+          type: "practice" as const,
+          title: "✋ 처음부터 — 문자열 길이 기준 정렬 (lambda 는 string 에도 통함)",
+          content: `**문제**: N 개의 문자열이 주어질 때, **길이 오름차순** 으로 정렬하세요. 길이가 같으면 사전순으로.
+
+\`\`\`
+입력: 5
+      banana hi apple ok cat
+출력: hi
+      ok
+      cat
+      apple
+      banana
+\`\`\`
+
+> 💡 lambda 는 int, pair 뿐 아니라 **string 에도 똑같이 통해요.** \`s.length()\` 또는 \`s.size()\` 로 길이 비교. 같을 때는 string 의 \`<\` 가 사전순 비교.`,
+          starterCode: `#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<string> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    // 👇 lambda 로 길이 오름차순 정렬, 같으면 사전순
+
+    // 👇 한 줄에 한 단어씩 출력
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<string> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    sort(v.begin(), v.end(), [](const string& a, const string& b) {
+        if (a.length() != b.length()) return a.length() < b.length();
+        return a < b;
+    });
+    for (auto& s : v) cout << s << "\\n";
+    return 0;
+}`,
+          hint: "lambda: if (a.length() != b.length()) return a.length() < b.length(); return a < b; — 길이 다르면 길이 비교, 같으면 사전순. const string& 로 받으면 복사 안 됨.",
+          expectedOutput: `hi
+ok
+cat
+apple
+banana`,
+          stdin: `5
+banana hi apple ok cat`,
         }
       ]
     },
@@ -664,6 +1078,20 @@ lower_bound(v.begin(), v.end(), 5) - v.begin()  // 3
 | \`bisect.bisect_right(v, x)\` | \`upper_bound(v.begin(), v.end(), x) - v.begin()\` |`
         },
         {
+          id: "s23-ch2-quiz1",
+          type: "quiz",
+          title: "이진탐색의 전제 조건!",
+          content: "정렬되지 않은 벡터 \`v = {3, 1, 4, 1, 5}\` 에 대해 \`binary_search(v.begin(), v.end(), 4)\` 를 호출하면?",
+          options: [
+            "true 반환 (4 가 있으니까)",
+            "false 반환 (정렬 안 된 걸 자동 감지해서)",
+            "**예측 불가** — 이진탐색은 정렬된 배열에서만 동작 보장. 결과는 컴파일러/구현마다 다름",
+            "컴파일 에러"
+          ],
+          answer: 2,
+          explanation: "**`binary_search`, `lower_bound`, `upper_bound` 는 모두 *정렬된* 배열에서만 정확히 동작해요.** 정렬 안 된 배열에서 호출하면 컴파일은 되지만 결과는 *undefined behavior* — true / false / 엉뚱한 인덱스 등 어떤 결과든 나올 수 있음. 그래서 사용 전 반드시 `sort()` 먼저!"
+        },
+        {
           id: "s23-ch2-lb2",
           type: "explain",
           title: "🔍 케이스별로 완전 정리!",
@@ -809,6 +1237,63 @@ if (it != v.end() && *it == x) {
           explanation: "lower_bound는 찾는 값 이상의 첫 위치를 반복자로 반환해요. - v.begin()으로 인덱스로 변환해요. 4는 인덱스 2에 처음 등장하므로 결과는 2!"
         },
         {
+          id: "s23-ch2-practice1",
+          type: "practice" as const,
+          title: "✋ 처음부터 — binary_search 로 존재 확인",
+          content: `**문제**: **이미 정렬된** N 개의 정수가 주어지고, 그 다음 줄에 찾을 값 \`x\` 가 주어져요. \`x\` 가 배열에 있으면 \`Yes\`, 없으면 \`No\` 출력.
+
+\`\`\`
+입력: 5
+      1 3 5 7 9
+      5
+출력: Yes
+
+입력: 5
+      1 3 5 7 9
+      4
+출력: No
+\`\`\`
+
+> 💡 \`binary_search(v.begin(), v.end(), x)\` 는 **true / false** 반환. "있는지만" 알면 될 때 가장 간단한 함수.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    int x;
+    cin >> x;
+    // 👇 binary_search 로 x 존재 여부 확인 → "Yes" 또는 "No" 출력
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    int x;
+    cin >> x;
+    if (binary_search(v.begin(), v.end(), x)) cout << "Yes";
+    else cout << "No";
+    return 0;
+}`,
+          hint: "if (binary_search(v.begin(), v.end(), x)) cout << \"Yes\"; else cout << \"No\"; — 존재 여부만 필요할 땐 binary_search 가 가장 간단.",
+          expectedOutput: `Yes`,
+          stdin: `5
+1 3 5 7 9
+5`,
+        },
+        {
           id: "s23-ch2-pred1",
           type: "predict" as const,
           title: "lower_bound & upper_bound 출력 예측!",
@@ -826,6 +1311,69 @@ int main() {
           options: ["1 2", "2 2", "1 1", "2 1"],
           answer: 0,
           explanation: "lower_bound(4) → index 1 (첫 번째 4). upper_bound(4) → index 3 (6의 위치). hi - lo = 3 - 1 = 2 (4가 2개). 출력: 1 2"
+        },
+        {
+          id: "s23-ch2-practice2",
+          type: "practice" as const,
+          title: "✋ 처음부터 — X 가 몇 개인지 (upper - lower 패턴)",
+          content: `**문제**: **이미 정렬된** N 개의 정수가 주어지고, 그 다음 줄에 찾을 값 \`x\` 가 주어져요. \`x\` 가 배열에 **몇 개** 등장하는지 출력하세요.
+
+\`\`\`
+입력: 6
+      1 3 3 3 5 7
+      3
+출력: 3
+
+입력: 5
+      1 2 4 6 8
+      4
+출력: 1
+
+입력: 5
+      1 3 5 7 9
+      4
+출력: 0
+\`\`\`
+
+> 💡 \`upper_bound(...) - lower_bound(...)\` — chapter 의 핵심 응용 패턴. 두 반복자의 차이가 곧 개수.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    int x;
+    cin >> x;
+    // 👇 upper_bound - lower_bound 로 x 의 개수 출력
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    int x;
+    cin >> x;
+    auto lo = lower_bound(v.begin(), v.end(), x);
+    auto hi = upper_bound(v.begin(), v.end(), x);
+    cout << (hi - lo);
+    return 0;
+}`,
+          hint: "auto lo = lower_bound(v.begin(), v.end(), x); auto hi = upper_bound(v.begin(), v.end(), x); cout << (hi - lo); — 두 반복자의 차이가 개수. 없으면 hi == lo → 0.",
+          expectedOutput: `3`,
+          stdin: `6
+1 3 3 3 5 7
+3`,
         }
       ]
     },
@@ -868,6 +1416,158 @@ v.erase(unique(v.begin(), v.end()), v.end());
 | \`sorted(set(v))\` | \`sort + erase(unique(...))\` |
 
 💡 **sort → erase(unique(...), end())** 패턴을 세트로 외워두세요!`
+        },
+        {
+          id: "s23-ch3-unique-practice",
+          type: "practice" as const,
+          title: "✋ 처음부터 — 중복 제거 후 개수 출력",
+          content: `**문제**: N 개의 정수가 주어질 때, **중복 제거 후 서로 다른 정수의 개수** 를 출력하세요.
+
+\`\`\`
+입력: 8
+      3 1 4 1 5 9 2 6
+출력: 7
+
+입력: 5
+      2 2 2 2 2
+출력: 1
+\`\`\`
+
+> 💡 \`sort\` → \`erase(unique(...), end())\` 패턴 후 \`v.size()\` 출력. 한 줄로 끝.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    // 👇 sort + unique + erase 후 v.size() 출력
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    sort(v.begin(), v.end());
+    v.erase(unique(v.begin(), v.end()), v.end());
+    cout << v.size();
+    return 0;
+}`,
+          hint: "sort(v.begin(), v.end()); v.erase(unique(v.begin(), v.end()), v.end()); cout << v.size(); — sort 먼저 (unique 는 인접 중복만 제거).",
+          expectedOutput: `7`,
+          stdin: `8
+3 1 4 1 5 9 2 6`,
+        },
+        {
+          id: "s23-ch3-stable",
+          type: "explain",
+          title: "📊 stable_sort — 동점 시 원래 순서 보존",
+          content: `\`sort()\` 는 **빠른** 정렬이지만 한 가지 단점 있어요: **같은 값일 때 원래 순서가 보장 안 돼요.** 학생 데이터에선 이게 문제될 수 있어요.
+
+\`\`\`cpp
+vector<pair<string, int>> students = {
+    {"Alice", 90}, {"Bob", 80}, {"Carol", 90}, {"Dave", 80}
+};
+
+sort(students.begin(), students.end(), [](auto a, auto b) {
+    return a.second > b.second;   // 점수 내림차순
+});
+\`\`\`
+
+여기서 Alice (90), Carol (90) 의 순서가 **입력 순서대로 (Alice 먼저)** 보장될까? **sort 는 보장 안 함.** 컴파일러/구현마다 다르게 나올 수 있어요.
+
+### \`stable_sort\` — 같은 값이면 원래 순서 유지
+
+\`\`\`cpp
+stable_sort(students.begin(), students.end(), [](auto a, auto b) {
+    return a.second > b.second;
+});
+// → 동점 시 항상 입력 순서 유지 (Alice → Carol, Bob → Dave)
+\`\`\`
+
+| | sort | stable_sort |
+|---|---|---|
+| 속도 | 더 빠름 (O(N log N)) | 약간 느림 (O(N log² N)) |
+| 동점 시 | 순서 보장 X | 입력 순서 유지 ✅ |
+| 언제 | 동점 신경 안 쓸 때 | 동점 순서가 의미 있을 때 |
+
+> 💡 **순위표 / 안정성 필요한 데이터** 는 stable_sort. 일반 정렬은 sort. 99% 는 sort 면 충분.`
+        },
+        {
+          id: "s23-ch3-stable-practice",
+          type: "practice" as const,
+          title: "✋ 처음부터 — stable_sort 직접 써보기",
+          content: `**문제**: 학생 4 명 (이름, 점수). 점수 내림차순 정렬, **동점이면 입력 순서 유지**.
+
+\`\`\`
+입력: 4
+      Alice 90
+      Bob 80
+      Carol 90
+      Dave 80
+출력: Alice 90
+      Carol 90
+      Bob 80
+      Dave 80
+\`\`\`
+
+> 💡 \`stable_sort\` + lambda 로 점수 내림차순. 동점은 자동으로 입력 순서 유지됨.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<string, int>> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
+    // 👇 stable_sort 로 점수 내림차순 (동점은 입력 순서)
+
+    // 👇 한 줄에 한 명씩 "이름 점수" 출력
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<string, int>> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
+    stable_sort(v.begin(), v.end(), [](auto a, auto b) {
+        return a.second > b.second;
+    });
+    for (auto& [name, score] : v) {
+        cout << name << " " << score << "\\n";
+    }
+    return 0;
+}`,
+          hint: "stable_sort(v.begin(), v.end(), [](auto a, auto b) { return a.second > b.second; }); — sort 자리에 stable_sort 만 바꾸면 됨.",
+          expectedOutput: `Alice 90
+Carol 90
+Bob 80
+Dave 80`,
+          stdin: `4
+Alice 90
+Bob 80
+Carol 90
+Dave 80`,
         },
         {
           id: "s23-ch3-summary",

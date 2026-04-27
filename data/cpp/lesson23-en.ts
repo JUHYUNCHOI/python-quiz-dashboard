@@ -6,9 +6,9 @@ import { LessonData } from '../types'
 
 export const cppLesson23EnData: LessonData = {
   id: "cpp-23",
-  title: "sort Master",
+  title: "sort & Binary Search",
   emoji: "📊",
-  description: "sort basics + lambda + lower_bound — Master sorting!",
+  description: "sort basics + lambda + lower_bound — Master sorting and binary search together!",
   chapters: [
     // ============================================
     // Chapter 0: sort basics
@@ -19,10 +19,60 @@ export const cppLesson23EnData: LessonData = {
       emoji: "📊",
       steps: [
         {
+          id: "s23-ch0-toolbox",
+          type: "explain",
+          title: "🗂️ Data-bundling tools — at a glance",
+          content: `By now you've met **4 tools**: \`vector\`, \`pair\`, \`tuple\`, \`struct\`. They start to blur together. **Lock them down once with this table** — it'll serve you for years.
+
+### The 4 tools side by side
+
+| Tool | When to use | Example | Access |
+|---|---|---|---|
+| **vector** | **Same type**, many items (count varies) | scores of 30 students | \`v[i]\` |
+| **pair** | **Two values of different types**, paired | coordinate (x, y) / name+score | \`.first\` / \`.second\` |
+| **tuple** | **3+ values of different types**, brief use | (name, age, gpa) within one function | \`get<0>(t)\` or \`auto [...]\` |
+| **struct** | **Different types**, frequently used, names matter | game character (name, hp, mp) | \`.name\`, \`.hp\` |
+
+### 1-second decision tree
+
+\`\`\`
+Bundling multiple data into one variable?
+│
+├─ Same type, many items → vector
+│
+└─ Different types
+    ├─ Exactly 2 → pair
+    └─ 3 or more
+        ├─ Brief (within a function) → tuple
+        └─ Used often + names matter → struct
+\`\`\`
+
+### Combinations are common
+
+| Combo | Meaning | Example |
+|---|---|---|
+| \`vector<pair<...>>\` | **Many** paired bundles | N students' (name, score) — a sort staple |
+| \`vector<struct ...>\` | Roster of records | N game characters |
+| \`pair<int, string>\` | One paired bundle | (score, name) — sort key on score |
+
+### One-second rule
+
+> **Many people / items?** → start with **vector**.
+> **Just 2?** → **pair**.
+> **3+ and brief?** → **tuple**.
+> **Used often, names matter?** → **struct**.
+
+### What about this sort chapter?
+
+Almost everything uses \`vector<pair>\` — N students (vector) of (name, score) (pair). Glance at the table and the right answer surfaces: "ah, vector<pair>".
+
+Next page — how sort does it in one line 👇`,
+        },
+        {
           id: "s23-ch0-intro",
           type: "explain",
           title: "📊 sort() — sort it in one line",
-          content: `In the previous lesson we saw how pair's auto-comparison made "**a score sheet sorts itself with one line of \`sort\`**". This lesson is all about that \`sort\`.
+          content: `In the previous lesson we saw how pair's auto-comparison made "**a score sheet sorts itself with one line of** \`sort\`". This lesson is all about that \`sort\`.
 
 \`sort\` collapses the work of writing your own quicksort/mergesort into **one line**. It's one of the most-used STL functions in C++.
 
@@ -77,6 +127,53 @@ Next page — try sorting one yourself 👇`
           explanation: "sort() takes a start and end position! For vectors, use v.begin() and v.end()."
         },
         {
+          id: "s23-ch0-practice1",
+          type: "practice" as const,
+          title: "✋ From scratch — sort and print integers",
+          content: `**Problem**: Given N integers, sort them in ascending order and print them on one line, space-separated.
+
+\`\`\`
+Input:  5
+        4 2 7 1 5
+Output: 1 2 4 5 7
+\`\`\`
+
+> 💡 Write everything from #include to main. Read input → store in vector → sort → print.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    // 👇 Read N ints into a vector, sort, then print space-separated
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    sort(v.begin(), v.end());
+    for (int i = 0; i < n; i++) {
+        if (i > 0) cout << " ";
+        cout << v[i];
+    }
+    return 0;
+}`,
+          hint: "vector<int> v(n); for input, sort(v.begin(), v.end()), then for-loop print with space prefix (skip for first element).",
+          expectedOutput: `1 2 4 5 7`,
+          stdin: `5
+4 2 7 1 5`,
+        },
+        {
           id: "s23-ch0-pred1",
           type: "predict" as const,
           title: "Predict the sort Output!",
@@ -120,6 +217,77 @@ sort() accepts a **third argument** for the comparison rule.
           explanation: "Use greater<type>() for descending order! Match the type: greater<int>(), greater<string>(), etc."
         },
         {
+          id: "s23-ch0-pred2",
+          type: "predict" as const,
+          title: "Predict the descending sort output!",
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+int main() {
+    vector<int> v = {3, 1, 4, 1, 5};
+    sort(v.begin(), v.end(), greater<int>());
+    cout << v[0] << " " << v[1] << " " << v[4];
+    return 0;
+}`,
+          options: ["1 1 5", "5 4 1", "5 1 1", "3 1 4"],
+          answer: 1,
+          explanation: "greater<int>() sorts descending → v = {5, 4, 3, 1, 1}. v[0]=5, v[1]=4, v[4]=1 → '5 4 1'."
+        },
+        {
+          id: "s23-ch0-practice2",
+          type: "practice" as const,
+          title: "✋ From scratch — descending sort + top 3",
+          content: `**Problem**: Given N integers, sort in **descending order and print the top 3** on one line, space-separated.
+If N < 3, print everything in descending order.
+
+\`\`\`
+Input:  5
+        4 2 7 1 5
+Output: 7 5 4
+
+Input:  2
+        9 3
+Output: 9 3
+\`\`\`
+
+> 💡 Sort with \`greater<int>()\`, then print up to index \`min(3, N)\`.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    // 👇 Read N ints, sort descending, print top 3 (or all if N<3)
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    sort(v.begin(), v.end(), greater<int>());
+    int k = min(n, 3);
+    for (int i = 0; i < k; i++) {
+        if (i > 0) cout << " ";
+        cout << v[i];
+    }
+    return 0;
+}`,
+          hint: "sort with greater<int>(), then loop up to min(n, 3) — handles N<3 automatically.",
+          expectedOutput: `7 5 4`,
+          stdin: `5
+4 2 7 1 5`,
+        },
+        {
           id: "s23-ch0-q1",
           type: "quiz",
           title: "sort Header!",
@@ -132,6 +300,58 @@ sort() accepts a **third argument** for the comparison rule.
           ],
           answer: 1,
           explanation: "**Official answer: `<algorithm>`**. `sort()` lives exactly in this header.\n\n💡 You may be thinking back to the pair note (\"`<vector>` etc. pull pair in for free\") — that's a different case:\n• **pair is a *type***: STL containers like map / set use pair *internally*, so it gets pulled in transitively.\n• **sort is a *function***: other STL headers don't use sort internally, so it doesn't get pulled in. Including only `<vector>` and calling `sort()` gives `'sort' was not declared`.\n\n**Rule: for functions, explicitly include the official header.** Types just sometimes happen to come along for free."
+        },
+        {
+          id: "s23-ch0-practice3",
+          type: "practice" as const,
+          title: "✋ From scratch — sort strings alphabetically",
+          content: `**Problem**: Given N strings, sort them in **alphabetical order** and print one per line.
+
+\`\`\`
+Input:  4
+        banana apple cherry date
+Output: apple
+        banana
+        cherry
+        date
+\`\`\`
+
+> 💡 \`sort\` works on **string vectors too**, not just ints — strings auto-compare lexicographically.`,
+          starterCode: `#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    // 👇 Read N strings, sort alphabetically, print one per line
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<string> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    sort(v.begin(), v.end());
+    for (auto& s : v) cout << s << "\\n";
+    return 0;
+}`,
+          hint: "vector<string> works the same with sort. Print one per line (\\n).",
+          expectedOutput: `apple
+banana
+cherry
+date`,
+          stdin: `4
+banana apple cherry date`,
         }
       ]
     },
@@ -170,63 +390,129 @@ The tool for this is a **lambda**. Next page covers the syntax 👇`
         {
           id: "s23-ch1-syntax",
           type: "explain",
-          title: "🔧 Lambda Syntax",
-          content: `A lambda is a **disposable, anonymous function** — no name, written right where you need it.
-
-**You already know Python lambda!**
-\`\`\`python
-# Python: return value right after the colon
-lambda x: x * 2
-
-# In sort: written after key=
-sorted(v, key=lambda x: -x)  # descending
-\`\`\`
-
-**C++ lambda looks a bit different:**
-\`\`\`
-Python:  lambda x      : x * 2
-C++:     [](int x)     { return x * 2; }
-           ↑               ↑
-       always starts    return inside
-       with []          curly braces
-\`\`\`
-
----
-
-**In sort, lambda is special — it takes 2 arguments!**
-
-Python's \`key=\` transforms one value,
-but C++ sort's lambda **directly compares two values.**
+          title: "🔧 Lambda Syntax — broken into 4 parts",
+          content: `A lambda is a **disposable, anonymous function** — no name, written right where you need it. Looks alien at first, but breaking it into **4 parts** makes it simple.
 
 \`\`\`cpp
 [](int a, int b) { return a > b; }
-       ↑     ↑              ↑
-   two values to compare    if true, a goes first!
+↑↑   ↑              ↑
+1 2   3              4
 \`\`\`
 
-**Rule examples:**
-\`\`\`
-a=9, b=5 → 9 > 5 = true  → 9 goes first ✅
-a=2, b=8 → 2 > 8 = false → 8 goes first ✅
-Result: bigger numbers first → descending!
-\`\`\`
+| # | Part | Name | Role |
+|---|---|---|---|
+| 1 | \`[]\` | **capture list** | grabs outer variables (empty for now) |
+| 2 | \`(int a, int b)\` | **parameters** | same as a regular function's parameters |
+| 3 | \`{ ... }\` | **body** | function body — code like any other function |
+| 4 | \`return a > b\` | **return value** | result (true/false, etc.) |
 
-**In practice:**
+> 💡 Only \`[]\` is unfamiliar at first. The rest is essentially a regular function.
+
+### Side-by-side with a regular function
+
 \`\`\`cpp
-vector<int> v = {5, 2, 8, 1, 9};
+// Regular function — has a name
+bool compare(int a, int b) {
+    return a > b;
+}
 
-sort(v.begin(), v.end(), [](int a, int b) {
-    return a > b;  // if a is bigger, a goes first
-});
-// v = {9, 8, 5, 2, 1}  (descending)
+// Lambda — no name, defined right where used
+[](int a, int b) { return a > b; }
+//   ↑              ↑
+//   same params    same body
+\`\`\`
+
+**Only difference**: regular functions are declared up top; lambdas are **defined inline** at the call site.
+
+### Compared to Python
+
+\`\`\`python
+# Python
+lambda x: x * 2
+
+# C++
+[](int x) { return x * 2; }
 \`\`\`
 
 | | Python 🐍 | C++ ⚡ |
 |---|---|---|
-| Lambda shape | \`lambda x: x*2\` | \`[](int x){ return x*2; }\` |
-| In sort | transform 1 value (\`key=\`) | compare 2 values (a, b) |
+| Start marker | \`lambda\` keyword | \`[]\` brackets |
+| Parameter types | none (dynamic) | required (\`int\`, \`auto\`, etc.) |
+| Body marker | \`:\` then expression | \`{}\` braces + \`return\` |
 
-💡 Think of \`[]\` as just "the lambda start marker." Always empty brackets for now!`
+### Next page — the key rule for sort lambdas: *two parameters* 👇`
+        },
+        {
+          id: "s23-ch1-sort-lambda",
+          type: "explain",
+          title: "🔧 sort's lambda — *comparing two values* is the core",
+          content: `Python sort's \`key=\` transformed *one* value. **C++ sort's lambda compares two values directly.**
+
+\`\`\`cpp
+[](int a, int b) { return a > b; }
+       ↑     ↑              ↑
+   two values to compare    if true, *a goes first*
+\`\`\`
+
+### What the lambda's return means
+
+> 🎯 **return true → a goes first / return false → b goes first**
+
+Memorize this one rule and every comparison lambda makes sense.
+
+**Example — descending (bigger first):**
+\`\`\`
+a=9, b=5 → 9 > 5 = true   → 9 goes first ✅
+a=2, b=8 → 2 > 8 = false  → 8 goes first ✅
+Result: bigger numbers first → descending!
+\`\`\`
+
+**Example — ascending (smaller first):**
+\`\`\`cpp
+[](int a, int b) { return a < b; }   // just flip the comparison
+\`\`\`
+
+### Plug it into sort
+
+\`\`\`cpp
+vector<int> v = {5, 2, 8, 1, 9};
+
+sort(v.begin(), v.end(), [](int a, int b) {
+    return a > b;
+});
+// v = {9, 8, 5, 2, 1}  (descending)
+\`\`\`
+
+### Common forms you'll see
+
+| Lambda | Sort result |
+|---|---|
+| \`[](int a, int b){ return a < b; }\` | ascending (sort default) |
+| \`[](int a, int b){ return a > b; }\` | descending |
+| \`[](int a, int b){ return abs(a) < abs(b); }\` | absolute value ascending |
+| \`[](auto a, auto b){ return a.second < b.second; }\` | by pair's second |
+
+> 💡 \`auto\` parameters: when the type is long (pair / struct), \`auto\` is convenient — the compiler figures it out.`
+        },
+        {
+          id: "s23-ch1-rule-pred",
+          type: "predict" as const,
+          title: "Quick check — apply the lambda return rule",
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+int main() {
+    vector<int> v = {3, 1, 4, 1, 5};
+    sort(v.begin(), v.end(), [](int a, int b) {
+        return a < b;
+    });
+    cout << v[0] << " " << v[4];
+    return 0;
+}`,
+          options: ["1 5", "5 1", "3 5", "1 1"],
+          answer: 0,
+          explanation: "return a < b → a first when a is smaller → **ascending**. Sorted: {1, 1, 3, 4, 5}. v[0] = 1, v[4] = 5 → '1 5'."
         },
         {
           id: "s23-ch1-fb1",
@@ -347,6 +633,72 @@ int main() {
           explanation: "The second value in a pair is accessed with .second. a.second < b.second means a goes first → ascending order!"
         },
         {
+          id: "s23-ch1-pair-practice",
+          type: "practice" as const,
+          title: "✋ From scratch — pair vector sorted by score descending",
+          content: `**Problem**: Given N students (name, score), sort by **score descending** and print one per line as \`name score\`.
+
+\`\`\`
+Input:  4
+        Alice 78
+        Bob 95
+        Carol 88
+        Dave 60
+Output: Bob 95
+        Carol 88
+        Alice 78
+        Dave 60
+\`\`\`
+
+> 💡 In the lambda: \`a.second > b.second\` — bigger score goes first. Use structured bindings (\`auto& [name, score] : v\`) for clean output.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<string, int>> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
+    // 👇 Sort by .second descending using a lambda
+
+    // 👇 Print one per line as "name score"
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<string, int>> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
+    sort(v.begin(), v.end(), [](auto a, auto b) {
+        return a.second > b.second;
+    });
+    for (auto& [name, score] : v) {
+        cout << name << " " << score << "\\n";
+    }
+    return 0;
+}`,
+          hint: "sort(v.begin(), v.end(), [](auto a, auto b) { return a.second > b.second; }); — auto parameters take a pair. Print with range-for + structured bindings.",
+          expectedOutput: `Bob 95
+Carol 88
+Alice 78
+Dave 60`,
+          stdin: `4
+Alice 78
+Bob 95
+Carol 88
+Dave 60`,
+        },
+        {
           id: "s23-ch1-must-lambda",
           type: "practice" as const,
           title: "🎯 When lambda is *truly necessary* — multi-key sorting",
@@ -422,6 +774,67 @@ Lee 95
 Kim 88
 Park 88
 Choi 72`
+        },
+        {
+          id: "s23-ch1-string-practice",
+          type: "practice" as const,
+          title: "✋ From scratch — sort strings by length (lambda works on string too)",
+          content: `**Problem**: Given N strings, sort by **length ascending**, breaking ties alphabetically.
+
+\`\`\`
+Input:  5
+        banana hi apple ok cat
+Output: hi
+        ok
+        cat
+        apple
+        banana
+\`\`\`
+
+> 💡 Lambdas work the same on int, pair, **and string**. Use \`s.length()\` (or \`s.size()\`) to compare lengths; \`<\` on strings is lexicographic.`,
+          starterCode: `#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<string> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    // 👇 Sort by length ascending, then alphabetically on ties
+
+    // 👇 Print one per line
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<string> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    sort(v.begin(), v.end(), [](const string& a, const string& b) {
+        if (a.length() != b.length()) return a.length() < b.length();
+        return a < b;
+    });
+    for (auto& s : v) cout << s << "\\n";
+    return 0;
+}`,
+          hint: "lambda: if (a.length() != b.length()) return a.length() < b.length(); return a < b; — different lengths use length, same length falls back to alphabetical. const string& avoids copies.",
+          expectedOutput: `hi
+ok
+cat
+apple
+banana`,
+          stdin: `5
+banana hi apple ok cat`,
         }
       ]
     },
@@ -665,6 +1078,20 @@ lower_bound(v.begin(), v.end(), 5) - v.begin()  // 3
 | \`bisect.bisect_right(v, x)\` | \`upper_bound(v.begin(), v.end(), x) - v.begin()\` |`
         },
         {
+          id: "s23-ch2-quiz1",
+          type: "quiz",
+          title: "Binary search prerequisite!",
+          content: "Given an *unsorted* vector \`v = {3, 1, 4, 1, 5}\`, what does \`binary_search(v.begin(), v.end(), 4)\` return?",
+          options: [
+            "true (since 4 is in the vector)",
+            "false (auto-detects unsorted)",
+            "**Unpredictable** — binary search only works on *sorted* arrays. Result is implementation-defined / undefined behavior.",
+            "Compile error"
+          ],
+          answer: 2,
+          explanation: "**`binary_search`, `lower_bound`, and `upper_bound` only work correctly on *sorted* arrays.** Calling them on unsorted data compiles, but the result is *undefined behavior* — could be true, false, or anything. Always `sort()` first!"
+        },
+        {
           id: "s23-ch2-lb2",
           type: "explain",
           title: "🔍 All Three Cases Explained!",
@@ -810,6 +1237,63 @@ if (it != v.end() && *it == x) {
           explanation: "lower_bound returns an iterator to the first position ≥ the target value. Subtract v.begin() to get the index. 4 first appears at index 2!"
         },
         {
+          id: "s23-ch2-practice1",
+          type: "practice" as const,
+          title: "✋ From scratch — check existence with binary_search",
+          content: `**Problem**: An **already-sorted** vector of N ints is given, then a target value \`x\` on the next line. Print \`Yes\` if \`x\` is present, otherwise \`No\`.
+
+\`\`\`
+Input:  5
+        1 3 5 7 9
+        5
+Output: Yes
+
+Input:  5
+        1 3 5 7 9
+        4
+Output: No
+\`\`\`
+
+> 💡 \`binary_search(v.begin(), v.end(), x)\` returns **true / false**. The simplest function for "does it exist?" questions.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    int x;
+    cin >> x;
+    // 👇 Use binary_search to check if x exists → print "Yes" or "No"
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    int x;
+    cin >> x;
+    if (binary_search(v.begin(), v.end(), x)) cout << "Yes";
+    else cout << "No";
+    return 0;
+}`,
+          hint: "if (binary_search(v.begin(), v.end(), x)) cout << \"Yes\"; else cout << \"No\"; — for existence-only checks, binary_search is the cleanest.",
+          expectedOutput: `Yes`,
+          stdin: `5
+1 3 5 7 9
+5`,
+        },
+        {
           id: "s23-ch2-pred1",
           type: "predict" as const,
           title: "Predict lower_bound & upper_bound Output!",
@@ -827,6 +1311,69 @@ int main() {
           options: ["1 2", "2 2", "1 1", "2 1"],
           answer: 0,
           explanation: "lower_bound(4) → index 1 (first 4). upper_bound(4) → index 3 (position of 6). hi - lo = 3 - 1 = 2 (4 appears twice). Output: 1 2"
+        },
+        {
+          id: "s23-ch2-practice2",
+          type: "practice" as const,
+          title: "✋ From scratch — count occurrences (upper - lower pattern)",
+          content: `**Problem**: An **already-sorted** vector of N ints is given, then a target value \`x\` on the next line. Print **how many times** \`x\` appears in the array.
+
+\`\`\`
+Input:  6
+        1 3 3 3 5 7
+        3
+Output: 3
+
+Input:  5
+        1 2 4 6 8
+        4
+Output: 1
+
+Input:  5
+        1 3 5 7 9
+        4
+Output: 0
+\`\`\`
+
+> 💡 \`upper_bound(...) - lower_bound(...)\` — the chapter's core application pattern. The difference between the two iterators *is* the count.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    int x;
+    cin >> x;
+    // 👇 Print the count using upper_bound - lower_bound
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    int x;
+    cin >> x;
+    auto lo = lower_bound(v.begin(), v.end(), x);
+    auto hi = upper_bound(v.begin(), v.end(), x);
+    cout << (hi - lo);
+    return 0;
+}`,
+          hint: "auto lo = lower_bound(v.begin(), v.end(), x); auto hi = upper_bound(v.begin(), v.end(), x); cout << (hi - lo); — the iterator difference is the count. Missing → hi == lo → 0.",
+          expectedOutput: `3`,
+          stdin: `6
+1 3 3 3 5 7
+3`,
         }
       ]
     },
@@ -869,6 +1416,158 @@ Without sorting, {1, 3, 1} stays as 3 elements.
 | \`sorted(set(v))\` | \`sort + erase(unique(...))\` |
 
 💡 Memorize **sort → erase(unique(...), end())** as a pair!`
+        },
+        {
+          id: "s23-ch3-unique-practice",
+          type: "practice" as const,
+          title: "✋ From scratch — print count after dedup",
+          content: `**Problem**: Given N integers, print **how many distinct values** remain after deduplication.
+
+\`\`\`
+Input:  8
+        3 1 4 1 5 9 2 6
+Output: 7
+
+Input:  5
+        2 2 2 2 2
+Output: 1
+\`\`\`
+
+> 💡 \`sort\` → \`erase(unique(...), end())\` pattern, then print \`v.size()\`. One-liner after the setup.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    // 👇 sort + unique + erase, then print v.size()
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+    sort(v.begin(), v.end());
+    v.erase(unique(v.begin(), v.end()), v.end());
+    cout << v.size();
+    return 0;
+}`,
+          hint: "sort(v.begin(), v.end()); v.erase(unique(v.begin(), v.end()), v.end()); cout << v.size(); — sort first (unique only removes adjacent duplicates).",
+          expectedOutput: `7`,
+          stdin: `8
+3 1 4 1 5 9 2 6`,
+        },
+        {
+          id: "s23-ch3-stable",
+          type: "explain",
+          title: "📊 stable_sort — preserves original order on ties",
+          content: `\`sort()\` is **fast** but has one catch: **when values tie, the original order is not guaranteed.** For student-style data, that can be a problem.
+
+\`\`\`cpp
+vector<pair<string, int>> students = {
+    {"Alice", 90}, {"Bob", 80}, {"Carol", 90}, {"Dave", 80}
+};
+
+sort(students.begin(), students.end(), [](auto a, auto b) {
+    return a.second > b.second;   // score descending
+});
+\`\`\`
+
+Will Alice (90) and Carol (90) keep their **input order (Alice first)**? **sort doesn't guarantee it** — could vary by implementation.
+
+### \`stable_sort\` — keeps original order for equal elements
+
+\`\`\`cpp
+stable_sort(students.begin(), students.end(), [](auto a, auto b) {
+    return a.second > b.second;
+});
+// → ties always keep input order (Alice → Carol, Bob → Dave)
+\`\`\`
+
+| | sort | stable_sort |
+|---|---|---|
+| Speed | faster (O(N log N)) | slightly slower (O(N log² N)) |
+| On ties | order not guaranteed | input order preserved ✅ |
+| When | ties don't matter | tie order is meaningful |
+
+> 💡 Use stable_sort for **rankings or any data where stability matters**. Plain sort is enough 99% of the time.`
+        },
+        {
+          id: "s23-ch3-stable-practice",
+          type: "practice" as const,
+          title: "✋ From scratch — try stable_sort yourself",
+          content: `**Problem**: 4 students (name, score). Sort by score descending, **preserving input order on ties**.
+
+\`\`\`
+Input:  4
+        Alice 90
+        Bob 80
+        Carol 90
+        Dave 80
+Output: Alice 90
+        Carol 90
+        Bob 80
+        Dave 80
+\`\`\`
+
+> 💡 Use \`stable_sort\` + lambda for descending score. Ties auto-preserve input order.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<string, int>> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
+    // 👇 stable_sort with descending score (ties keep input order)
+
+    // 👇 Print one per line as "name score"
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<string, int>> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
+    stable_sort(v.begin(), v.end(), [](auto a, auto b) {
+        return a.second > b.second;
+    });
+    for (auto& [name, score] : v) {
+        cout << name << " " << score << "\\n";
+    }
+    return 0;
+}`,
+          hint: "stable_sort(v.begin(), v.end(), [](auto a, auto b) { return a.second > b.second; }); — just swap sort for stable_sort.",
+          expectedOutput: `Alice 90
+Carol 90
+Bob 80
+Dave 80`,
+          stdin: `4
+Alice 90
+Bob 80
+Carol 90
+Dave 80`,
         },
         {
           id: "s23-ch3-summary",
