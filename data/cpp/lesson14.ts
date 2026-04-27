@@ -105,6 +105,47 @@ int main() {
           explanation: "s1.age를 17로 설정한 뒤 20으로 덮어썼어요. 마지막으로 대입한 값이 남으니까 '김철수 20'이 출력돼요."
         },
         {
+          id: "ch1-bindings-preview",
+          type: "explain",
+          title: "📦 보너스 — struct 풀어 담기 (C++17)",
+          content: `지금까지 멤버 접근은 \`s1.name\`, \`s1.age\` 처럼 점(.) 으로 했어요. C++17 부터는 **멤버를 한 번에 변수로 풀어 담는 문법** 도 있어요:
+
+\`\`\`cpp
+Student s1 = {"김철수", 17};
+
+// 기존 방식
+cout << s1.name;     // 김철수
+cout << s1.age;      // 17
+
+// 새 방식 (C++17)
+auto [name, age] = s1;
+cout << name;        // 김철수
+cout << age;         // 17
+\`\`\`
+
+\`auto [name, age] = s1;\` 한 줄이:
+- \`name\`, \`age\` **두 변수를 새로 만들고**
+- struct 의 멤버를 각각 **자동으로 담아줘요**
+
+이 \`auto [...]\` 대괄호 문법을 **structured bindings** 라고 불러요. **"구조 (structure) 가 있는 데이터를 풀어서 변수에 묶어준다"** 는 뜻 — \`struct\` 라는 이름이랑 어원이 같아요.
+
+### 언제 쓰면 좋아요?
+
+\`\`\`cpp
+Student s = getTopStudent();
+
+// 멤버 여러 번 쓸 거면 풀어 담기가 깔끔
+auto [name, age] = s;
+if (age >= 18) cout << name << " 은 성인";
+else cout << name << " 은 미성년자";
+cout << name << " 의 나이: " << age;
+\`\`\`
+
+매번 \`s.name\`, \`s.age\` 적는 것보다 짧고, 변수 이름 본인이 정할 수 있어서 가독성 ↑.
+
+> 💡 **다음 레슨 (pair / tuple) 에서 같은 문법이 또 나와요.** \`auto [a, b] = pair;\`, \`auto [a, b, c] = tuple;\` — 한 번 손에 익혀두면 그때 자연스레 이어져요.`,
+        },
+        {
           id: "ch1-q1",
           type: "quiz",
           title: "점(.) 연산자!",

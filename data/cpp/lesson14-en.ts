@@ -105,6 +105,47 @@ int main() {
           explanation: "s1.age was set to 17 then overwritten with 20. The last assigned value wins — output is 'Emma 20'."
         },
         {
+          id: "ch1-bindings-preview",
+          type: "explain",
+          title: "📦 Bonus — Unpacking a struct (C++17)",
+          content: `So far we've accessed members with the dot: \`s1.name\`, \`s1.age\`. Since C++17, there's a way to **unpack all members into separate variables in one line**:
+
+\`\`\`cpp
+Student s1 = {"Emma", 17};
+
+// Old way
+cout << s1.name;     // Emma
+cout << s1.age;      // 17
+
+// New way (C++17)
+auto [name, age] = s1;
+cout << name;        // Emma
+cout << age;         // 17
+\`\`\`
+
+\`auto [name, age] = s1;\` does two things in one line:
+- **declares two new variables** \`name\`, \`age\`
+- **fills each with the matching struct member**
+
+The \`auto [...]\` square-bracket form is called **structured bindings** — meaning **"unpack a structured value (like a struct) and bind its parts to variables."** The name shares its root with \`struct\` itself.
+
+### When is this nice to have?
+
+\`\`\`cpp
+Student s = getTopStudent();
+
+// If you'll use the members several times, unpacking reads cleaner
+auto [name, age] = s;
+if (age >= 18) cout << name << " is an adult";
+else cout << name << " is a minor";
+cout << name << "'s age: " << age;
+\`\`\`
+
+Shorter than typing \`s.name\` / \`s.age\` over and over, and you get to choose the variable names — better readability.
+
+> 💡 **The same syntax shows up in the next lesson (pair / tuple).** \`auto [a, b] = pair;\`, \`auto [a, b, c] = tuple;\` — pick it up here once and it'll feel natural there.`,
+        },
+        {
           id: "ch1-q1",
           type: "quiz",
           title: "Dot operator!",

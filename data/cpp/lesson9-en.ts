@@ -829,7 +829,7 @@ int arr[1000001];   // pre-allocate up to 1M slots globally
 
 The actual speed difference is usually small, but CP code tends to favor **short, familiar patterns** as a convention.
 
-💡 Summary: **Regular programs → vector.** **Fixed size or CP code → array.** Being able to read both serves you well in real projects *and* problem solving.`
+💡 Summary: **Regular programs → vector.** **Fixed size or CP code → array.** Being able to read both serves you well in real projects **and** problem solving.`
         },
         {
           id: "ch2-fb2",

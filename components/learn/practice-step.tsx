@@ -47,22 +47,32 @@ export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId,
     setCopiedSkeleton(false)
     setCopiedFull(false)
     setStarterInjected(false)
-    // localStorage에 이미 저장된 코드가 있는지 확인
+    // localStorage에 이미 저장된 코드가 있는지 확인 (언어별 분리, EN 모드는 legacy 키 무시)
+    // 새 포맷 JSON {code, starter} 또는 legacy plain string 둘 다 지원
     if (step.id && typeof window !== "undefined") {
       try {
-        const storageKey = `cpp-runner-${userId ?? "anon"}-${lessonId ?? "x"}-${step.id}`
-        const saved = localStorage.getItem(storageKey)
-        const savedTrimmed = saved?.trim() ?? ""
-        // 저장된 코드가 BLANK_TEMPLATE 와 동일하면 "작성 안 함" 으로 간주 → starter 버튼 노출
+        const langSuffix = lang === "en" ? "en" : "ko"
+        const storageKey = `cpp-runner-${userId ?? "anon"}-${lessonId ?? "x"}-${step.id}-${langSuffix}`
+        const legacyKey = lang === "en" ? null : `cpp-runner-${userId ?? "anon"}-${lessonId ?? "x"}-${step.id}`
+        const raw = localStorage.getItem(storageKey) ?? (legacyKey ? localStorage.getItem(legacyKey) : null)
+        let savedCode = raw ?? ""
+        // 새 JSON 포맷이면 code 필드만 꺼내기
+        if (raw && raw.startsWith("{")) {
+          try {
+            const parsed = JSON.parse(raw) as { code?: string }
+            if (typeof parsed.code === "string") savedCode = parsed.code
+          } catch { /* legacy 로 fallback */ }
+        }
+        const savedTrimmed = savedCode.trim()
         const isBlankTemplate = savedTrimmed === BLANK_TEMPLATE.trim()
-        setHasSavedCode(!!saved && savedTrimmed.length > 0 && !savedTrimmed.startsWith("// 👉") && !isBlankTemplate)
+        setHasSavedCode(!!raw && savedTrimmed.length > 0 && !savedTrimmed.startsWith("// 👉") && !isBlankTemplate)
       } catch {
         setHasSavedCode(false)
       }
     } else {
       setHasSavedCode(false)
     }
-  }, [step.id, userId, lessonId])
+  }, [step.id, userId, lessonId, lang])
 
   useEffect(() => {
     if (isCompleted) setDone(true)
@@ -155,8 +165,9 @@ export function PracticeStep({ step, lang = "ko", onSuccess, onUnlock, lessonId,
         )}
 
         {/* 에디터 — starterCode 가 있으면 그걸 기본값으로 (입력 아닌 주어진 코드/데이터 포함 위함) */}
+        {/* key 에 lang 포함 — 언어 전환 시 re-mount 강제 (언어별 storage key 가 제대로 동작하도록) */}
         <CppRunner
-          key={step.id}
+          key={`${step.id}-${lang}`}
           initialCode={hasStarter ? skeleton : BLANK_TEMPLATE}
           forceCode={starterInjected ? skeleton : undefined}
           forceCodeVersion={starterKey}

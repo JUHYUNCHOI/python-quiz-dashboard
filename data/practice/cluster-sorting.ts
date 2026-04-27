@@ -962,5 +962,190 @@ int main() {
         solutionExplanation: "The comparator `a+b > b+a` orders numbers so that concatenating them produces the largest result. Example: `'3'+'30'='330'` vs `'30'+'3'='303'`; since 330>303, `'3'` comes first.",
       },
     },
+    {
+      id: "sort-016",
+      cluster: "sorting",
+      unlockAfter: "cpp-23",
+      difficulty: "쉬움",
+      title: "학생 명단 — 이름 알파벳순 정렬",
+      description: `N명의 학생 (이름, 점수) 가 주어질 때, **이름 알파벳 오름차순** 으로 정렬하여 한 줄에 한 명씩 \`이름 점수\` 형식으로 출력하세요.`,
+      constraints: "1 ≤ N ≤ 1000, 이름은 영문 소문자 1-20자, 0 ≤ 점수 ≤ 100",
+      initialCode: `#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<string, int>> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
+    // 👇 이름(first) 기준 오름차순 정렬 후 출력
+    return 0;
+}`,
+      testCases: [
+        { stdin: "4\ncarol 78\nalice 90\nbob 85\ndave 72", expectedOutput: "alice 90\nbob 85\ncarol 78\ndave 72", label: "기본" },
+        { stdin: "1\nzoe 50", expectedOutput: "zoe 50", label: "한 명" },
+        { stdin: "3\neve 70\nadam 90\nbeth 80", expectedOutput: "adam 90\nbeth 80\neve 70", label: "역순 입력" },
+      ],
+      hints: [
+        "pair 는 first 기준으로 자동 정렬 — 그냥 sort(v.begin(), v.end()) 한 줄!",
+        "lambda 안 써도 됨. pair<string, int> 의 first 가 string 이라 알파벳순 자동.",
+      ],
+      solutionCode: `#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<string, int>> v(n);
+    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
+    sort(v.begin(), v.end());
+    for (auto& [name, score] : v)
+        cout << name << " " << score << "\\n";
+    return 0;
+}`,
+      solutionExplanation: "pair 의 자동 비교가 first 먼저 → 이름이 first 면 sort 한 줄로 알파벳순 정렬됨. lambda 불필요. 출력은 range-for + structured bindings.",
+      en: {
+        title: "Roster — Sort Students by Name",
+        description: `Given N students with (name, score), sort them **alphabetically by name (ascending)** and print each on a line as \`name score\`.`,
+        constraints: "1 ≤ N ≤ 1000, names are lowercase English 1-20 chars, 0 ≤ score ≤ 100",
+        hints: [
+          "pair sorts by first by default — just sort(v.begin(), v.end()) does it!",
+          "No lambda needed. pair<string, int>'s first is a string, so alphabetical comes free.",
+        ],
+        solutionExplanation: "pair's auto-comparison goes first first — with name as first, sort gives you alphabetical order in one line. No lambda. Print with range-for + structured bindings.",
+      },
+    },
+    {
+      id: "sort-017",
+      cluster: "sorting",
+      unlockAfter: "cpp-23",
+      difficulty: "쉬움",
+      title: "좌표 정렬 — x, y 순서대로",
+      description: `N개의 2D 좌표 (x, y) 가 주어질 때, **x 오름차순, x가 같으면 y 오름차순** 으로 정렬해서 한 줄에 한 점씩 \`x y\` 형식으로 출력하세요.`,
+      constraints: "1 ≤ N ≤ 1000, -10000 ≤ x, y ≤ 10000",
+      initialCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<int, int>> points(n);
+    for (int i = 0; i < n; i++) cin >> points[i].first >> points[i].second;
+    // 👇 x 오름차순, x 같으면 y 오름차순으로 정렬 후 출력
+    return 0;
+}`,
+      testCases: [
+        { stdin: "5\n3 4\n1 1\n3 1\n1 -1\n2 0", expectedOutput: "1 -1\n1 1\n2 0\n3 1\n3 4", label: "기본 — x 동점 처리 포함" },
+        { stdin: "3\n0 0\n-1 5\n1 -2", expectedOutput: "-1 5\n0 0\n1 -2", label: "음수 좌표" },
+        { stdin: "1\n42 -7", expectedOutput: "42 -7", label: "한 점" },
+      ],
+      hints: [
+        "pair<int, int> 의 자동 비교가 정확히 'first 먼저, 같으면 second' → 그냥 sort 한 줄!",
+        "lambda 불필요. 백준/USACO 좌표 정렬 단골 패턴.",
+      ],
+      solutionCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<pair<int, int>> points(n);
+    for (int i = 0; i < n; i++) cin >> points[i].first >> points[i].second;
+    sort(points.begin(), points.end());
+    for (auto& [x, y] : points)
+        cout << x << " " << y << "\\n";
+    return 0;
+}`,
+      solutionExplanation: "이게 pair 의 자동 비교가 빛나는 순간 — '주(x), 부(y) 정렬' 이라는 흔한 요구사항이 sort 한 줄로 해결. 백준 11650번 (좌표 정렬) 같은 기본 문제에서 그대로 등장.",
+      en: {
+        title: "Sort Coordinates — by x, then y",
+        description: `Given N 2D coordinates (x, y), sort by **x ascending, breaking ties by y ascending** and print each as \`x y\` on a separate line.`,
+        constraints: "1 ≤ N ≤ 1000, -10000 ≤ x, y ≤ 10000",
+        hints: [
+          "pair<int, int>'s auto-comparison is exactly 'first first, then second on tie' → just sort!",
+          "No lambda. A staple coordinate-sort pattern in BOJ/USACO.",
+        ],
+        solutionExplanation: "This is where pair's auto-comparison shines — the common 'primary x, secondary y' sort drops to one line. Identical to BOJ 11650 (coordinate sort) and many introductory contest problems.",
+      },
+    },
+    {
+      id: "sort-018",
+      cluster: "sorting",
+      unlockAfter: "cpp-23",
+      difficulty: "보통",
+      title: "USACO 스타일 — 정렬 후 인접 점수 차이의 최댓값",
+      description: `N명의 학생 점수가 주어질 때, **정렬한 뒤 인접한 두 점수의 차이 중 최댓값** 을 출력하세요.
+
+예: 점수 \`{50, 90, 70, 60}\` → 정렬 후 \`{50, 60, 70, 90}\` → 인접 차이 \`{10, 10, 20}\` → 최댓값 **20**.
+
+USACO Bronze 에서 자주 보는 패턴: **'정렬 → 인접 처리'** 가 핵심.`,
+      constraints: "2 ≤ N ≤ 1000, 0 ≤ 각 점수 ≤ 100",
+      initialCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> scores(n);
+    for (int i = 0; i < n; i++) cin >> scores[i];
+    // 👇 정렬 + 인접 차이 중 최댓값 출력
+    return 0;
+}`,
+      testCases: [
+        { stdin: "4\n50 90 70 60", expectedOutput: "20", label: "기본" },
+        { stdin: "5\n1 100 50 25 75", expectedOutput: "25", label: "넓은 범위" },
+        { stdin: "2\n10 10", expectedOutput: "0", label: "동점" },
+        { stdin: "3\n5 5 5", expectedOutput: "0", label: "전부 같음" },
+      ],
+      hints: [
+        "1) sort 로 정렬, 2) for 루프로 v[i] - v[i-1] 의 최댓값 추적.",
+        "max(maxDiff, v[i] - v[i-1]) 패턴.",
+      ],
+      solutionCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> scores(n);
+    for (int i = 0; i < n; i++) cin >> scores[i];
+    sort(scores.begin(), scores.end());
+    int maxDiff = 0;
+    for (int i = 1; i < n; i++) {
+        maxDiff = max(maxDiff, scores[i] - scores[i-1]);
+    }
+    cout << maxDiff << "\\n";
+    return 0;
+}`,
+      solutionExplanation: "USACO Bronze 에서 거의 무조건 등장하는 '정렬 → 인접 처리' 2 단계 패턴. 정렬되지 않은 상태로는 인접 차이가 의미 없음. 정렬 후 인접 인덱스끼리 비교하는 게 핵심 트릭.",
+      en: {
+        title: "USACO-style — Max Adjacent Difference After Sort",
+        description: `Given N student scores, **sort them, then output the maximum difference between any two adjacent values**.
+
+Example: scores \`{50, 90, 70, 60}\` → sorted \`{50, 60, 70, 90}\` → adjacent diffs \`{10, 10, 20}\` → max is **20**.
+
+A common USACO Bronze pattern: **'sort → process adjacent'** is the core idea.`,
+        constraints: "2 ≤ N ≤ 1000, 0 ≤ each score ≤ 100",
+        hints: [
+          "1) sort the vector, 2) loop and track max of v[i] - v[i-1].",
+          "max(maxDiff, v[i] - v[i-1]) pattern.",
+        ],
+        solutionExplanation: "A classic USACO Bronze 'sort → process adjacent' two-step pattern. Adjacent differences are meaningless without sorting; sort first, then compare neighbors. This trick appears in countless contest problems.",
+      },
+    },
   ],
 }

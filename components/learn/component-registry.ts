@@ -498,6 +498,13 @@ const registry: Record<string, ComponentEntry> = {
     props: (_step: any, lang: string) => ({ lang }),
   },
 
+  // C++ 레슨 15: structured bindings 시각화 (pair/tuple → 변수 묶기)
+  structuredBindingsVisualizer: {
+    load: () => import("@/components/animations/structured-bindings-visualizer"),
+    exportName: "StructuredBindingsVisualizer",
+    props: (_step: any, lang: string) => ({ lang }),
+  },
+
   // C++ 레슨 11: string 메서드 인터랙티브 체험 (substr / find / replace)
   stringMethodVisualizer: {
     load: () => import("@/components/animations/string-method-visualizer"),

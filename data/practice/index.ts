@@ -13,6 +13,7 @@ export { simulationCluster } from "./cluster-simulation"
 export { functionsCluster } from "./cluster-functions"
 export { refsPtrsCluster } from "./cluster-refs-ptrs"
 export { structsCluster } from "./cluster-structs"
+export { pairTupleCluster } from "./cluster-pair-tuple"
 export { stackQueueCluster } from "./cluster-stackqueue"
 export { constructsCluster } from "./cluster-constructs"
 export { bankBruteforceCluster } from "./bank-bruteforce"
@@ -47,6 +48,7 @@ import { simulationCluster } from "./cluster-simulation"
 import { functionsCluster } from "./cluster-functions"
 import { refsPtrsCluster } from "./cluster-refs-ptrs"
 import { structsCluster } from "./cluster-structs"
+import { pairTupleCluster } from "./cluster-pair-tuple"
 import { stackQueueCluster } from "./cluster-stackqueue"
 import { constructsCluster } from "./cluster-constructs"
 import { bankBruteforceCluster } from "./bank-bruteforce"
@@ -92,6 +94,7 @@ export const ALL_CLUSTERS: PracticeCluster[] = [
   functionsCluster,
   refsPtrsCluster,
   structsCluster,
+  pairTupleCluster,
   stackQueueCluster,
   constructsCluster,
   // Python clusters (early — lessons 1–12)

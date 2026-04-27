@@ -331,7 +331,7 @@ int main() {
         {
           id: "ch1-lambda",
           type: "explain",
-          title: "🤔 What about searching by *condition* instead of an exact value?",
+          title: "🤔 What about searching by **condition** instead of an exact value?",
           content: `So far we've used \`find(...)\` for **exact matches**. But what if, in a list of student scores, you want to find:
 
 > "the **first score 70 or above**"
@@ -426,6 +426,66 @@ int main() {
 }`,
           hint: "count_if(scores.begin(), scores.end(), [](int x) { return x >= 60; }) — inside the lambda, just write the condition 'x >= 60'. Store the result or print directly.",
           expectedOutput: `4`
+        },
+        {
+          id: "ch1-stl-pattern",
+          type: "explain",
+          title: "🎯 One pattern for all of STL — `(begin, end, ...)`",
+          content: `You've seen find / count / accumulate / find_if / count_if. Step back and notice the pattern — STL gets a lot easier once you see it.
+
+### 1. STL functions all share one shape
+
+| Function | Shape |
+|---|---|
+| \`find(v.begin(), v.end(), val)\` | (begin, end, **what to find**) |
+| \`count(v.begin(), v.end(), val)\` | (begin, end, **what to count**) |
+| \`accumulate(v.begin(), v.end(), init)\` | (begin, end, **starting value**) |
+| \`find_if(v.begin(), v.end(), lambda)\` | (begin, end, **condition**) |
+| \`count_if(v.begin(), v.end(), lambda)\` | (begin, end, **condition**) |
+| \`sort(v.begin(), v.end())\` | (begin, end) — next lesson! |
+
+> 🎯 **\`(begin, end, …)\` is STL's shared language.** When you meet a new STL function, "it's probably (begin, end, something)" is a good first guess.
+
+### 2. Not just vector — string, array, set all work
+
+If a container has \`begin()\` / \`end()\`, it works:
+
+\`\`\`cpp
+string s = "hello";
+auto it = find(s.begin(), s.end(), 'e');     // find 'e' in a string
+cout << (it - s.begin());                     // 1
+
+array<int, 5> arr = {3, 1, 4, 1, 5};
+int sum = accumulate(arr.begin(), arr.end(), 0);  // C-style array OK too
+
+set<int> nums = {1, 2, 3, 4, 5};
+int cnt = count_if(nums.begin(), nums.end(), [](int x) { return x > 2; });
+\`\`\`
+
+> 💡 Learn it once, use it forever. **The container changes; the usage doesn't.**
+
+### 3. range-for is just iterator shorthand
+
+The everyday \`for (auto x : v)\` you write — it does **exactly the same thing** as an iterator loop:
+
+\`\`\`cpp
+// This
+for (int x : v) cout << x;
+
+// is exactly the same as
+for (auto it = v.begin(); it != v.end(); ++it) {
+    int x = *it;
+    cout << x;
+}
+\`\`\`
+
+The C++ compiler quietly fills in \`begin()\` / \`end()\` / \`*it\` / \`++it\` for you. So:
+- A container that works in range-for = a container that works with STL functions (both need begin/end)
+- They're not separate features — **same foundation, different surface**
+
+> 🎯 Bottom line: **understand iterator once → range-for + every STL function + every STL container clicks at once.**
+
+Next — comprehensive practice 👇`,
         },
         {
           id: "ch1-practice",
@@ -934,7 +994,7 @@ cout << accumulate(v.begin(), v.end(), 10);
 | \`upper_bound()\` | \`<algorithm>\` | iterator | **Yes** |
 | \`accumulate()\` | \`<numeric>\` | value | No |
 
-🚀 **Next lesson (cpp-18): stack & queue** — two ways of stacking and pulling out data. Bracket matching, BFS — these structures shine there. STL container adventure continues!`
+🚀 **Next lesson (21: stack & queue)** — two ways of stacking and pulling out data. Bracket matching, BFS — these structures shine there. STL container adventure continues!`
         }
       ]
     }

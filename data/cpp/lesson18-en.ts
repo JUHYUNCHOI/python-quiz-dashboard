@@ -234,7 +234,7 @@ q[0]              # front
         {
           id: "ch1-must-queue",
           type: "practice" as const,
-          title: "🎯 When queue is *truly necessary* — line at the cafe",
+          title: "🎯 When queue is **truly necessary** — line at the cafe",
           content: `queue's most natural use: "**process whoever arrived first**" — basically a real-world line. The same pattern is the heart of BFS and many bigger algorithms.
 
 **Problem**: 5 customers arrive at a cafe in order (Alice, Bob, Carol, David, Eve). The barista processes them one at a time, printing "Now serving: name". Service must be **in arrival order**.

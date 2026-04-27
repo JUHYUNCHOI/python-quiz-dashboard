@@ -636,17 +636,17 @@ switch (day) {
 | Menu number (1, 2, 3...) | ✅ **switch** | Clean branching |
 | Grade (A, B, C, D) | ✅ **switch** | char value branching |
 | Score range (above 90?) | ✅ **if** | Needs greater/less comparison |
-| Name comparison ("Kim"?) | ✅ **if** | Needs string comparison |
+| Name comparison ("Alice"?) | ✅ **if** | Needs string comparison |
 
 C++ rule: switch can **only** compare integers and chars.
 
 \`\`\`cpp
 // ❌ Compile error!
-switch (name) { case "Kim": ... }  // string not allowed
+switch (name) { case "Alice": ... }  // string not allowed
 switch (x) { case x > 10: ... }   // range not allowed
 \`\`\`
 
-💡 **Summary:** "Is this exactly 1? 2? 3?" → **switch** / "Above 90?" "Is name Kim?" → **if**`
+💡 **Summary:** "Is this exactly 1? 2? 3?" → **switch** / "Above 90?" "Is name Alice?" → **if**`
         },
         {
           id: "ch4-q1",

@@ -94,6 +94,58 @@ auto p3 = make_pair("Park", 77);             // auto 로 타입 생략
 > 💡 셋 이상 묶고 싶으면 곧 나올 \`tuple\`. 근데 실전에서 가장 많이 쓰는 건 pair 예요 — 좌표 (x,y), 이름-점수, 인덱스-거리 같은 "딱 두 개" 짝이 흔하니까요.`,
         },
         {
+          id: "ch1-pair-unpack",
+          type: "explain",
+          component: "structuredBindingsVisualizer",
+          title: "🎁 pair 풀어 담기 — \`.first/.second\` vs structured bindings",
+          content: `지금까지 pair 두 값을 \`.first\` / \`.second\` 로 꺼냈어요:
+
+\`\`\`cpp
+pair<string, int> p = {"Kim", 95};
+cout << p.first;    // "Kim"
+cout << p.second;   // 95
+\`\`\`
+
+여러 번 쓰거나 *의미 있는 이름* 으로 받고 싶을 때, **C++17 부터는 한 줄로 풀어 담을 수 있어요**:
+
+\`\`\`cpp
+auto [name, score] = p;
+cout << name;    // "Kim"
+cout << score;   // 95
+\`\`\`
+
+이게 \`auto\` 옆에 \`[name, score]\` — **structured bindings** 라고 불러요. "**구조** (structure) 가 있는 묶음 (pair / tuple / struct) 을 여러 변수에 **bind** 해주는 문법" — 이름의 어원이 그거예요.
+
+(어디서 들어본 것 같죠? 다음 챕터의 tuple 에서도 똑같이 등장해요. pair 에서 미리 손에 익혀두면 거기서 자연스럽게 이어져요.)
+
+### 어떤 걸 쓰지?
+
+| 패턴 | 언제 |
+|---|---|
+| \`p.first\`, \`p.second\` | 한두 번만 접근, 단순할 때 |
+| \`auto [name, score] = p;\` | 여러 번 사용 / *의미 있는 이름* 필요 ⭐ |
+| \`for (auto& [name, score] : v)\` | range-for 로 vector<pair> 순회 — 진짜 자주! ⭐⭐ |
+
+### 미리보기 — vector<pair> 순회 비교
+
+\`\`\`cpp
+vector<pair<string, int>> students = {{"Kim", 95}, {"Lee", 88}};
+
+// .first / .second 방식
+for (auto& s : students) {
+    cout << s.first << ": " << s.second << endl;
+}
+
+// structured bindings 방식 ⭐
+for (auto& [name, score] : students) {
+    cout << name << ": " << score << endl;
+    //      ↑ '.first 가 뭐였더라' 헤맬 일 없음
+}
+\`\`\`
+
+> 💡 다음 페이지부터 \`.first/.second\` 와 \`auto [name, score]\` 둘 다 자연스럽게 섞어 써요. 본인 편한 쪽 선택.`
+        },
+        {
           id: "ch1-pair-mini",
           type: "practice" as const,
           title: "✋ 잠깐 — 카페 메뉴에서 가장 비싼 음료 찾기",
@@ -179,7 +231,7 @@ tuple<string, int, double> t = {"Kim", 15, 3.8};
 
 값 꺼낼 땐 \`.first/.second\` 같은 이름이 더 이상 안 통해요 (셋 이상이니까). 대신 둘 중 골라 써요:
 
-**① 하나씩 꺼내기 — \`get<인덱스>(t)\`**
+**① 하나씩 꺼내기** — \`get<인덱스>(t)\`
 
 \`\`\`cpp
 cout << get<0>(t);   // "Kim"
@@ -320,7 +372,6 @@ int main() {
 \`\`\`
 studentA() → ("Kim", 3.8)
 studentB() → ("Lee", 3.5)
-기대 출력: Kim
 \`\`\`
 
 > 💡 두 번 \`auto [name, gpa] = func()\` 으로 받고, gpa 비교 후 이름 출력.`,
@@ -420,23 +471,9 @@ sort(scores.begin(), scores.end());
           title: "🎯 pair 가 *진짜 필요한* 순간 — 점수표 정렬",
           content: `방금 시뮬에서 본 것 — **vector 두 개로는 정렬이 깨져요.** 직접 코드로 확인해봐요.
 
-**문제**: 학생 5 명의 이름과 점수가 있어요. **점수 오름차순으로 정렬해서 출력**하세요.
+**문제**: 학생 5 명의 이름과 점수가 있어요. **점수 오름차순으로 정렬해서** \`이름 점수\` **형식으로 한 줄씩 출력** 하세요.
 
-\`\`\`
-입력 데이터:
-  Kim    95
-  Lee    72
-  Park   88
-  Choi   60
-  Han    81
-
-기대 출력 (점수 오름차순):
-  Choi 60
-  Lee 72
-  Han 81
-  Park 88
-  Kim 95
-\`\`\`
+입력: Kim 95 / Lee 72 / Park 88 / Choi 60 / Han 81
 
 > 💡 두 vector (\`names\`, \`scores\`) 따로 두면 한쪽만 정렬돼서 짝이 깨져요. **\`vector<pair<string, int>>\`** 로 묶어두면 \`sort\` 한 줄로 끝.`,
           starterCode: `#include <iostream>
@@ -506,14 +543,7 @@ Kim 95`
           title: "✋ 본격 — 80점 이상 학생만 골라 출력",
           content: `**상황**: 학생 5 명의 \`(이름, 점수)\` pair 가 있어요. **80 점 이상인 학생만** 한 줄에 한 명씩 \`이름 점수\` 형식으로 출력하세요.
 
-\`\`\`
 입력: Kim 72 / Lee 88 / Park 55 / Choi 95 / Han 81
-
-기대 출력:
-Lee 88
-Choi 95
-Han 81
-\`\`\`
 
 > 💡 패턴: range-for 로 돌면서 \`s.second >= 80\` 조건 체크 → 통과하면 \`s.first << " " << s.second\` 출력. **filter** 패턴이라고 불러요 — 데이터 다루는 기본기예요.`,
           starterCode: `#include <iostream>
@@ -568,10 +598,7 @@ Han 81`
           title: "✋ 본격 — 평균 점수 구하기",
           content: `**상황**: 같은 학생 5 명의 \`(이름, 점수)\` pair 에서 **평균 점수** 를 출력하세요. (정수 나눗셈 OK)
 
-\`\`\`
 입력: Kim 72 / Lee 88 / Park 55 / Choi 95 / Han 81
-기대 출력: 78
-\`\`\`
 
 > 💡 패턴: 합계 변수 만들고, range-for 로 돌면서 \`s.second\` 누적, 마지막에 학생 수로 나눠서 출력. **누적합 (accumulate) 패턴** — 자료 다루는 기본기 두 번째.`,
           starterCode: `#include <iostream>
@@ -669,7 +696,7 @@ for (pair<string, int>& s : students) {  // auto& 대신 직접 타입 명시
           title: "✋ 이름+점수 pair 벡터 만들기!",
           content: `이름과 점수를 pair로 묶어서 vector에 저장하고 출력해봐요!
 
-make_pair()나 중괄호 초기화를 사용해서 pair를 만들고, .first와 .second로 접근해봐요.`,
+> 💡 pair 만들기 / 꺼내기는 본인 편한 스타일로 OK — 중괄호 \`{a, b}\` 든 \`make_pair\` 든, \`.first/.second\` 든 \`auto [name, score]\` 든 결과는 같아요.`,
           starterCode: `#include <iostream>
 #include <string>
 #include <vector>
@@ -678,9 +705,9 @@ using namespace std;
 int main() {
     vector<pair<string, int>> students;
 
-    // push_back으로 {"Kim", 95}, {"Lee", 88}, make_pair("Park", 92) 추가
+    // 👇 push_back 으로 (Kim, 95), (Lee, 88), (Park, 92) 추가
 
-    // range-for로 s.first와 s.second 출력
+    // 👇 range-for 로 한 줄에 한 명씩 "이름: 점수" 출력
 
     return 0;
 }`,
@@ -694,15 +721,15 @@ int main() {
 
     students.push_back({"Kim", 95});
     students.push_back({"Lee", 88});
-    students.push_back(make_pair("Park", 92));
+    students.push_back({"Park", 92});
 
-    for (auto& s : students) {
-        cout << s.first << ": " << s.second << endl;
+    for (auto& [name, score] : students) {
+        cout << name << ": " << score << endl;
     }
 
     return 0;
 }`,
-          hint: "students.push_back({\"Kim\", 95}); 또는 make_pair(\"Kim\", 95)로 추가해요. 출력은 for (auto& s : students) { cout << s.first << \": \" << s.second << endl; }",
+          hint: "추가: students.push_back({\"Kim\", 95}); — 중괄호 init 한 가지로 다 가능. 출력: for (auto& [name, score] : students) cout << name << \": \" << score << endl; — structured bindings 쓰면 깔끔.",
           expectedOutput: `Kim: 95
 Lee: 88
 Park: 92`

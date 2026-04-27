@@ -198,7 +198,8 @@ export function PracticeRunner({ problem: rawProblem, onSuccess }: PracticeRunne
   const isEn = locale === "en"
   const problem = localizeProblem(rawProblem, locale)
   const lang = problem.language ?? "cpp"
-  const storageKey = `practice-code-${problem.id}`
+  // 언어별 분리 → KO/EN 캐시가 서로 안 섞이도록 (학생이 언어 바꿨을 때 옛 starter 가 표시되는 문제 방지)
+  const storageKey = `practice-code-${problem.id}-${isEn ? "en" : "ko"}`
 
   const [code, setCode] = useState(() => {
     const initial = localizeInitialCode(problem.initialCode ?? "", isEn)

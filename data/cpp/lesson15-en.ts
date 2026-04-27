@@ -94,6 +94,56 @@ All three give the same result, so pick whichever you like. The first form (\`{a
 > 💡 For 3+ values you'll meet \`tuple\` soon. But by far the most common case is "exactly two paired things" — coordinates (x,y), name-score, index-distance — which is why pair shows up far more in real code.`,
         },
         {
+          id: "ch1-pair-unpack",
+          type: "explain",
+          component: "structuredBindingsVisualizer",
+          title: "🎁 Unpacking a pair — \`.first/.second\` vs structured bindings",
+          content: `So far we've been pulling values out with \`.first\` and \`.second\`:
+
+\`\`\`cpp
+pair<string, int> p = {"Kim", 95};
+cout << p.first;    // "Kim"
+cout << p.second;   // 95
+\`\`\`
+
+When you'll use the values multiple times — or want *meaningful names* — **C++17 lets you unpack in one line**:
+
+\`\`\`cpp
+auto [name, score] = p;
+cout << name;    // "Kim"
+cout << score;   // 95
+\`\`\`
+
+That \`auto\` + \`[name, score]\` is called **structured bindings**. The name comes from "**bind**ing the parts of a *structured* bundle (pair / tuple / struct) to multiple variables." (Same syntax shows up again in the tuple chapter — practicing it here makes that transition smooth.)
+
+### Which to use?
+
+| Pattern | When |
+|---|---|
+| \`p.first\`, \`p.second\` | One or two accesses, simple |
+| \`auto [name, score] = p;\` | Many uses / want *meaningful names* ⭐ |
+| \`for (auto& [name, score] : v)\` | range-for over vector<pair> — extremely common! ⭐⭐ |
+
+### Preview — comparing vector<pair> iteration
+
+\`\`\`cpp
+vector<pair<string, int>> students = {{"Kim", 95}, {"Lee", 88}};
+
+// .first / .second style
+for (auto& s : students) {
+    cout << s.first << ": " << s.second << endl;
+}
+
+// structured bindings style ⭐
+for (auto& [name, score] : students) {
+    cout << name << ": " << score << endl;
+    //      ↑ no "wait, was that .first or .second?" moment
+}
+\`\`\`
+
+> 💡 The next pages mix both styles. Pick whichever reads better in context.`
+        },
+        {
           id: "ch1-pair-mini",
           type: "practice" as const,
           title: "✋ Quick — find the most expensive cafe drink",
@@ -179,7 +229,7 @@ tuple<string, int, double> t = {"Kim", 15, 3.8};
 
 \`.first/.second\` no longer cuts it (3+ values). Pick one of these:
 
-**① Read one at a time — \`get<index>(t)\`**
+**① Read one at a time** — \`get<index>(t)\`
 
 \`\`\`cpp
 cout << get<0>(t);   // "Kim"
@@ -320,7 +370,6 @@ int main() {
 \`\`\`
 studentA() → ("Kim", 3.8)
 studentB() → ("Lee", 3.5)
-Expected: Kim
 \`\`\`
 
 > 💡 Two \`auto [name, gpa] = func()\` calls, then compare gpa and print the matching name.`,
@@ -420,23 +469,9 @@ Next lesson (cpp-23) goes deep on \`sort\`. There you'll learn how to handle "sc
           title: "🎯 When pair is *truly necessary* — sorting a score sheet",
           content: `You just saw it in the simulator — **two separate vectors break when sorted.** Now confirm it in code.
 
-**Problem**: You have 5 students with names and scores. **Sort by score (ascending) and print.**
+**Problem**: You have 5 students with names and scores. **Sort by score (ascending) and print as** \`Name Score\` **lines.**
 
-\`\`\`
-Input data:
-  Kim    95
-  Lee    72
-  Park   88
-  Choi   60
-  Han    81
-
-Expected output (sorted by score):
-  Choi 60
-  Lee 72
-  Han 81
-  Park 88
-  Kim 95
-\`\`\`
+Input: Kim 95 / Lee 72 / Park 88 / Choi 60 / Han 81
 
 > 💡 With two separate vectors (\`names\`, \`scores\`), sorting one breaks the pairing. **\`vector<pair<string, int>>\`** keeps them as one unit, and \`sort\` just works in one line.`,
           starterCode: `#include <iostream>
@@ -501,6 +536,112 @@ Kim 95`
           explanation: "The second value (score) is accessed with .second. p[1] or p.score would be errors. The first is .first, the second is .second — pair doesn't give meaningful names to its two values."
         },
         {
+          id: "ch1-pair-filter",
+          type: "practice" as const,
+          title: "✋ Real practice — print only students scoring 80+",
+          content: `**Scenario**: 5 students with \`(name, score)\` pairs. Print **only those scoring 80 or above**, one per line, as \`Name Score\`.
+
+Input: Kim 72 / Lee 88 / Park 55 / Choi 95 / Han 81
+
+> 💡 Pattern: range-for through students, check \`s.second >= 80\`, print \`s.first << " " << s.second\` if it passes. This is the **filter** pattern — fundamental data-handling skill.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> students = {
+        {"Kim", 72},
+        {"Lee", 88},
+        {"Park", 55},
+        {"Choi", 95},
+        {"Han", 81}
+    };
+
+    // 👇 Print only students with score >= 80, one "Name Score" per line
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> students = {
+        {"Kim", 72},
+        {"Lee", 88},
+        {"Park", 55},
+        {"Choi", 95},
+        {"Han", 81}
+    };
+
+    for (auto& s : students) {
+        if (s.second >= 80) {
+            cout << s.first << " " << s.second << endl;
+        }
+    }
+
+    return 0;
+}`,
+          hint: "for (auto& s : students) { if (s.second >= 80) cout << s.first << \" \" << s.second << endl; } — range-for + condition + print on match.",
+          expectedOutput: `Lee 88
+Choi 95
+Han 81`
+        },
+        {
+          id: "ch1-pair-count",
+          type: "practice" as const,
+          title: "✋ Real practice — average score",
+          content: `**Scenario**: Same 5 students with \`(name, score)\` pairs. Print the **average score**. (Integer division is fine.)
+
+Input: Kim 72 / Lee 88 / Park 55 / Choi 95 / Han 81
+
+> 💡 Pattern: keep a running total, range-for to accumulate \`s.second\`, then divide by the student count. **Accumulate / sum pattern** — second fundamental skill.`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> students = {
+        {"Kim", 72},
+        {"Lee", 88},
+        {"Park", 55},
+        {"Choi", 95},
+        {"Han", 81}
+    };
+
+    // 👇 Print the average (sum / count)
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+    vector<pair<string, int>> students = {
+        {"Kim", 72},
+        {"Lee", 88},
+        {"Park", 55},
+        {"Choi", 95},
+        {"Han", 81}
+    };
+
+    int total = 0;
+    for (auto& s : students) total += s.second;
+    cout << total / (int)students.size();
+
+    return 0;
+}`,
+          hint: "int total = 0; for (auto& s : students) total += s.second; — accumulate. Then cout << total / (int)students.size(); — divide by count.",
+          expectedOutput: `78`
+        },
+        {
           id: "ch1-pred2",
           type: "predict" as const,
           title: "Predict the push_back output!",
@@ -553,7 +694,7 @@ for (pair<string, int>& s : students) {  // verbose!
           title: "✋ Build a Name+Score pair Vector!",
           content: `Store names and scores as pairs in a vector, then print them out!
 
-Use make_pair() or brace initialization to create pairs, and access them with .first and .second.`,
+> 💡 Use whatever style feels best — brace \`{a, b}\` or \`make_pair\`, \`.first/.second\` or \`auto [name, score]\`. They all work.`,
           starterCode: `#include <iostream>
 #include <string>
 #include <vector>
@@ -562,9 +703,9 @@ using namespace std;
 int main() {
     vector<pair<string, int>> students;
 
-    // Add {"Kim", 95}, {"Lee", 88}, make_pair("Park", 92) using push_back
+    // 👇 push_back (Kim, 95), (Lee, 88), (Park, 92)
 
-    // Use range-for to print s.first and s.second
+    // 👇 range-for to print one "name: score" per line
 
     return 0;
 }`,
@@ -578,15 +719,15 @@ int main() {
 
     students.push_back({"Kim", 95});
     students.push_back({"Lee", 88});
-    students.push_back(make_pair("Park", 92));
+    students.push_back({"Park", 92});
 
-    for (auto& s : students) {
-        cout << s.first << ": " << s.second << endl;
+    for (auto& [name, score] : students) {
+        cout << name << ": " << score << endl;
     }
 
     return 0;
 }`,
-          hint: "Use students.push_back({\"Kim\", 95}); or make_pair(\"Kim\", 95) to add pairs. To print: for (auto& s : students) { cout << s.first << \": \" << s.second << endl; }",
+          hint: "Add: students.push_back({\"Kim\", 95}); — brace init handles all three. Print: for (auto& [name, score] : students) cout << name << \": \" << score << endl; — structured bindings reads cleaner.",
           expectedOutput: `Kim: 95
 Lee: 88
 Park: 92`

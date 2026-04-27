@@ -33,7 +33,7 @@ export const cppLesson20EnData: LessonData = {
 // Did I forget any...? 😩
 \`\`\`
 
-In a 3-hour contest, writing 10 header lines per problem is wasted time. So contest folks use a *cheat-code* header:
+In a 3-hour contest, writing 10 header lines per problem is wasted time. So contest folks use a **cheat-code** header:
 
 \`\`\`cpp
 #include <bits/stdc++.h>   // pulls in basically all of STL
@@ -381,7 +381,7 @@ int main() {
         {
           id: "ch2-must-bitmask",
           type: "practice" as const,
-          title: "🎯 Where bitmasks *truly shine* — enumerate all subsets",
+          title: "🎯 Where bitmasks **truly shine** — enumerate all subsets",
           content: `One pattern where bit operations show their real power: **subset enumeration**.
 
 **Problem**: For \`n = 3\` (three elements \`A, B, C\`), print all **8 subsets**. Include the empty set.
