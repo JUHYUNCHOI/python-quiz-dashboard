@@ -688,7 +688,8 @@ function ProblemDetail({
           "md:overflow-y-auto",
           tab === "problem" ? "hidden md:block" : "block"
         )}>
-          <PracticeRunner problem={locProblem} onSuccess={handleSuccess} />
+          {/* key 에 locale 포함 — 언어 전환 시 re-mount 강제 (useState 초기값 재계산) */}
+          <PracticeRunner key={`${problem.id}-${locale}`} problem={locProblem} onSuccess={handleSuccess} />
         </div>
 
       </div>

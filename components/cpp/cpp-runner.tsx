@@ -143,15 +143,50 @@ export function CppRunner({
   forceCodeVersion,
 }: CppRunnerProps) {
   // userId 포함 → 사용자별 독립 저장 (선생님 코드가 학생에게 보이는 문제 방지)
-  const storageKey = stepId ? `cpp-runner-${userId ?? "anon"}-${lessonId ?? "x"}-${stepId}` : null
+  // 언어별 분리 → KO/EN 캐시가 서로 안 섞이도록 (학생이 언어 바꿨을 때 옛 starter 가 표시되는 문제 방지)
+  const lang = isEn ? "en" : "ko"
+  const storageKey = stepId ? `cpp-runner-${userId ?? "anon"}-${lessonId ?? "x"}-${stepId}-${lang}` : null
+  // legacy (언어 없는) 키는 KO 모드에서만 fallback — historical default 가 KO 였기 때문
+  // EN 모드에서는 절대 legacy 안 읽음 (옛 KO starter 가 EN 페이지에 떠버리는 버그 방지)
+  const legacyKey = !isEn && stepId ? `cpp-runner-${userId ?? "anon"}-${lessonId ?? "x"}-${stepId}` : null
 
   const [code, setCode] = useState(() => {
     if (!storageKey || typeof window === "undefined") return initialCode
     try {
-      const saved = localStorage.getItem(storageKey)
+      const raw = localStorage.getItem(storageKey) ?? (legacyKey ? localStorage.getItem(legacyKey) : null)
       // placeholder 코멘트나 빈 값이면 initialCode 사용 (이전 버전 마이그레이션)
-      if (!saved || saved.trim().startsWith("// 👉")) return initialCode
-      return saved
+      if (!raw || raw.trim().startsWith("// 👉")) return initialCode
+
+      // 새 포맷 (JSON {code, starter}) 또는 legacy (string code 만)
+      let cachedCode: string
+      let cachedStarter: string | null = null
+      if (raw.startsWith("{")) {
+        try {
+          const parsed = JSON.parse(raw) as { code?: string; starter?: string }
+          cachedCode = typeof parsed.code === "string" ? parsed.code : raw
+          cachedStarter = typeof parsed.starter === "string" ? parsed.starter : null
+        } catch {
+          cachedCode = raw
+        }
+      } else {
+        cachedCode = raw  // legacy format
+      }
+
+      // 언어 mismatch 감지: cached 코드의 한글 포함 여부와 현재 모드가 안 맞으면 stale 캐시
+      // (이전 버그로 -en 키에 KO 컨텐츠가, -ko 키에 EN 컨텐츠가 들어간 경우 자동 복구)
+      const hangul = /[\uac00-\ud7a3]/
+      const cachedHasHangul = hangul.test(cachedCode)
+      const initialHasHangul = hangul.test(initialCode)
+      if (isEn && cachedHasHangul) return initialCode  // EN 모드인데 cached 에 한글 → stale KO
+      if (!isEn && !cachedHasHangul && initialHasHangul) return initialCode  // KO 모드인데 cached 무한글 + initialCode 유한글 → stale EN
+
+      // Starter version 감지: cached starter !== current initialCode 면 starter 가 바뀐 것
+      // 학생이 starter 그대로 두고 안 건드렸으면 silently 새 starter 로 업데이트
+      // 학생이 수정했으면 그 코드 보존 (수동 reset 은 "초기화" 버튼)
+      if (cachedStarter !== null && cachedStarter !== initialCode && cachedCode === cachedStarter) {
+        return initialCode
+      }
+      return cachedCode
     } catch {
       return initialCode
     }
@@ -175,9 +210,9 @@ export function CppRunner({
     if (forceCode !== undefined && forceCodeVersion !== undefined && forceCodeVersion !== prevForceVersion.current) {
       prevForceVersion.current = forceCodeVersion
       setCode(forceCode)
-      // localStorage도 업데이트해서 새로고침해도 주입된 코드 유지
+      // localStorage도 업데이트해서 새로고침해도 주입된 코드 유지 (JSON 포맷)
       if (storageKey) {
-        try { localStorage.setItem(storageKey, forceCode) } catch {}
+        try { localStorage.setItem(storageKey, JSON.stringify({ code: forceCode, starter: initialCode })) } catch {}
       }
     }
   }, [forceCode, forceCodeVersion, storageKey])
@@ -218,11 +253,14 @@ export function CppRunner({
     fetchPrevGrade()
   }, [submissionMode, stepId]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // 코드 변경 시 localStorage 자동 저장
+  // 코드 변경 시 localStorage 자동 저장 — JSON 포맷 {code, starter}
+  // starter 필드: 현재 initialCode 를 함께 기록 → 다음 로드 시 starter 변경 감지에 사용
   useEffect(() => {
     if (!storageKey) return
-    try { localStorage.setItem(storageKey, code) } catch {}
-  }, [code, storageKey])
+    try {
+      localStorage.setItem(storageKey, JSON.stringify({ code, starter: initialCode }))
+    } catch {}
+  }, [code, storageKey, initialCode])
 
   const lineCount = initialCode.split("\n").length
   const editorMinHeight = minHeight ?? `${Math.max(280, lineCount * 28 + 64)}px`
