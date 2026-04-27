@@ -137,6 +137,138 @@ export const lessonCpp15: LessonData = {
         }
       },
 
+      // 🆕 structured bindings — 개념 이해 (코드 블록 + 예측)
+      {
+        type: "explain",
+        content: {
+          lines: [],
+          code: 'pair<string, int> p = {"Alice", 95};\nauto [name, score] = p;',
+          predict: {
+            question: "위 코드 이후 `name` 의 값은?",
+            options: ["\"Alice\"", "95", "p.first", "에러 (name 이라는 변수는 없음)"],
+            answer: 0,
+            feedback: "structured bindings 는 `auto [a, b] = p;` 한 줄로 **두 변수 (name, score) 를 새로 만들고** pair 의 .first / .second 를 순서대로 자동 담아줘요. → name = \"Alice\", score = 95."
+          },
+          en: {
+            predict: {
+              question: "After the code above, what is `name`?",
+              options: ["\"Alice\"", "95", "p.first", "Error (no variable called name)"],
+              feedback: "structured bindings creates two new variables (name, score) and auto-fills them with .first / .second in order. → name = \"Alice\", score = 95."
+            }
+          }
+        }
+      },
+
+      // 🆕 structured bindings — predict (출력 예측)
+      {
+        type: "explain",
+        content: {
+          lines: [],
+          code: 'pair<string, int> p = {"Bob", 88};\nauto [name, score] = p;\ncout << score << " " << name;',
+          predict: {
+            question: "출력 결과는?",
+            options: ["88 Bob", "Bob 88", "first second", "컴파일 에러"],
+            answer: 0,
+            feedback: "auto [name, score] = p; → name=\"Bob\", score=88. cout << score << \" \" << name; 순서대로 출력 → 88 Bob."
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["88 Bob", "Bob 88", "first second", "Compile error"],
+              feedback: "auto [name, score] = p; → name=\"Bob\", score=88. cout << score << \" \" << name; prints in that order → 88 Bob."
+            }
+          }
+        }
+      },
+
+      // 🆕 structured bindings — fill-blank (구조 떠올리기)
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "structured bindings 로 pair 의 두 값을 한 줄에 풀어 담으세요.",
+          guide: "auto [변수1, 변수2] = pair; — 변수 이름은 task 가 시키는 대로 (name, score).",
+          template: 'pair<string, int> p = {"Carol", 92};\nauto [___, ___] = p;\ncout << name << ":" << score;',
+          answer: "name",
+          blanksAnswer: ["name", "score"],
+          expect: 'pair<string, int> p = {"Carol", 92};\nauto [name, score] = p;\ncout << name << ":" << score;',
+          en: {
+            task: "Use structured bindings to unpack a pair's two values in one line.",
+            guide: "auto [var1, var2] = pair; — names per the task (name, score)."
+          }
+        }
+      },
+
+      // 🆕 auto vs auto& — predict (복사 동작 이해)
+      {
+        type: "explain",
+        content: {
+          lines: [],
+          code: 'pair<string, int> p = {"Alice", 95};\nauto [name, score] = p;\nname = "James";\ncout << p.first;',
+          predict: {
+            question: "출력 결과는?",
+            options: ["Alice", "James", "둘 다 출력", "에러"],
+            answer: 0,
+            feedback: "auto [name, score] = p; 는 **복사**. name 은 새 변수라 바꿔도 원본 p 는 그대로. → p.first 는 여전히 \"Alice\"."
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["Alice", "James", "both printed", "error"],
+              feedback: "auto [name, score] = p; **copies** values. name is a new variable, so changing it doesn't touch p. → p.first stays \"Alice\"."
+            }
+          }
+        }
+      },
+
+      // 🆕 auto vs auto& — predict (reference 동작 이해)
+      {
+        type: "explain",
+        content: {
+          lines: [],
+          code: 'pair<string, int> p = {"Alice", 95};\nauto& [name, score] = p;\nname = "James";\ncout << p.first;',
+          predict: {
+            question: "출력 결과는?",
+            options: ["Alice", "James", "둘 다 출력", "에러"],
+            answer: 1,
+            feedback: "auto& [name, score] = p; 는 **reference**. name 은 p.first 의 별명 (같은 자리 가리킴). name 바꾸면 p.first 도 바뀜. → \"James\"."
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["Alice", "James", "both printed", "error"],
+              feedback: "auto& [name, score] = p; is a **reference**. name aliases p.first (same slot). Changing name changes p.first too. → \"James\"."
+            }
+          }
+        }
+      },
+
+      // 🆕 auto vs auto& — quiz (range-for 정석 선택)
+      {
+        type: "quiz",
+        content: {
+          question: "vector<pair<string, int>> 를 range-for 로 순회할 때, **실전에서 거의 항상** 쓰는 형태는?",
+          options: [
+            "for (auto [name, score] : v) — 매번 복사",
+            "for (auto& [name, score] : v) — reference (복사 X)",
+            "for (pair<string,int> p : v) — 명시적 타입 + 복사",
+            "셋 다 동일하니 아무거나"
+          ],
+          answer: 1,
+          explanation: "range-for 에선 거의 항상 `auto&` — 매 원소를 복사하지 않고 가리키기만 해서 효율적. vector 안 데이터가 클수록 차이 커짐. 원본 수정도 가능 (필요 없으면 const auto& 도 OK).",
+          en: {
+            question: "When iterating vector<pair<string, int>> with range-for, which form is **almost always** used in practice?",
+            options: [
+              "for (auto [name, score] : v) — copies each",
+              "for (auto& [name, score] : v) — reference (no copy)",
+              "for (pair<string,int> p : v) — explicit type + copy",
+              "All equivalent, pick anything"
+            ],
+            explanation: "Almost always `auto&` in range-for — aliases each element instead of copying, so it's efficient. The bigger each element, the bigger the win. Lets you mutate too (use const auto& if you don't need to)."
+          }
+        }
+      },
+
       {
         type: "reward",
         content: {
@@ -248,6 +380,24 @@ export const lessonCpp15: LessonData = {
         }
       },
 
+      // 🆕 range-for + structured bindings — 실전에서 가장 많이 쓰는 패턴
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "range-for 와 structured bindings 로 vector<pair> 를 순회하며 \"이름:점수 \" 형식으로 출력하세요.",
+          guide: "for (auto& [변수1, 변수2] : 벡터) — 대괄호 안에 두 변수 이름. 그 안에서 그대로 변수 이름으로 사용.",
+          template: 'vector<pair<string, int>> v = {{"Alice", 90}, {"Bob", 80}};\nfor (auto& [___, ___] : v)\n    cout << name << ":" << score << " ";',
+          answer: "name",
+          blanksAnswer: ["name", "score"],
+          expect: 'vector<pair<string, int>> v = {{"Alice", 90}, {"Bob", 80}};\nfor (auto& [name, score] : v)\n    cout << name << ":" << score << " ";',
+          en: {
+            task: "Iterate vector<pair> with range-for + structured bindings, printing as \"name:score \".",
+            guide: "for (auto& [var1, var2] : vec) — two variable names in the brackets, then use them by name."
+          }
+        }
+      },
+
       {
         type: "reward",
         content: {
@@ -265,7 +415,8 @@ export const lessonCpp15: LessonData = {
             "pair는 < > == 비교 연산자 자동 지원",
             "비교 순서: first 먼저, 같으면 second",
             "vector<pair>를 sort()하면 first 기준 자동 정렬",
-            "점수+이름 묶어서 정렬할 때 아주 유용!"
+            "점수+이름 묶어서 정렬할 때 아주 유용!",
+            "range-for + structured bindings (`for (auto& [a, b] : v)`) 가 실전 정석"
           ],
           canDo: "pair끼리 비교하고 vector<pair>를 정렬할 수 있어요!",
           emoji: "🔍"
@@ -305,12 +456,52 @@ export const lessonCpp15: LessonData = {
           level: 2,
           task: "tuple에서 첫 번째 값을 꺼내요!",
           guide: "get<0>(t) 형태!",
-          template: 'tuple<string, int, double> t = {"홍길동", 20, 4.5};\ncout << ___<0>(t) << endl;',
+          template: 'tuple<string, int, double> t = {"Alice", 20, 4.5};\ncout << ___<0>(t) << endl;',
           answer: "get",
-          expect: 'tuple<string, int, double> t = {"홍길동", 20, 4.5};\ncout << get<0>(t) << endl;',
+          expect: 'tuple<string, int, double> t = {"Alice", 20, 4.5};\ncout << get<0>(t) << endl;',
           en: {
             task: "Get the first value from a tuple!",
             guide: "Use the form get<0>(t)!"
+          }
+        }
+      },
+
+      // 🆕 tuple structured bindings — fill-blank (세 변수 풀어 담기)
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "structured bindings 로 tuple 의 세 값을 한 줄에 풀어 담으세요. (get<0>, get<1>, get<2> 일일이 안 적어도 됨)",
+          guide: "auto [변수1, 변수2, 변수3] = tuple; — 변수 이름은 task 의 사용처에 맞게 (name, age, gpa).",
+          template: 'tuple<string, int, double> t = {"Alice", 20, 4.5};\nauto [___, ___, ___] = t;\ncout << name << "/" << age << "/" << gpa;',
+          answer: "name",
+          blanksAnswer: ["name", "age", "gpa"],
+          expect: 'tuple<string, int, double> t = {"Alice", 20, 4.5};\nauto [name, age, gpa] = t;\ncout << name << "/" << age << "/" << gpa;',
+          en: {
+            task: "Use structured bindings to unpack a tuple's three values in one line. (No more get<0>, get<1>, get<2> for each!)",
+            guide: "auto [v1, v2, v3] = tuple; — names matching what's used below (name, age, gpa)."
+          }
+        }
+      },
+
+      // 🆕 tuple structured bindings — predict (출력 결과 예측)
+      {
+        type: "explain",
+        content: {
+          lines: [],
+          code: 'tuple<string, int, double> t = {"Bob", 17, 3.8};\nauto [name, age, gpa] = t;\ncout << age << " " << gpa;',
+          predict: {
+            question: "출력 결과는?",
+            options: ["17 3.8", "3.8 17", "Bob 17", "컴파일 에러"],
+            answer: 0,
+            feedback: "auto [name, age, gpa] = t; → name=\"Bob\", age=17, gpa=3.8. cout << age << \" \" << gpa; 순서대로 → 17 3.8."
+          },
+          en: {
+            predict: {
+              question: "What's the output?",
+              options: ["17 3.8", "3.8 17", "Bob 17", "Compile error"],
+              feedback: "auto [name, age, gpa] = t; → name=\"Bob\", age=17, gpa=3.8. cout << age << \" \" << gpa; prints in that order → 17 3.8."
+            }
           }
         }
       },
@@ -406,31 +597,6 @@ export const lessonCpp15: LessonData = {
         }
       },
 
-      // errorQuiz: pair .first/.second vs get<>
-      {
-        type: "errorQuiz",
-        content: {
-          question: "pair에서 값을 꺼내는 코드 중 틀린 것은?",
-          code: 'pair<int, string> p = {42, "hello"};\ncout << get<0>(p) << endl;',
-          options: [
-            "get<0>() 는 tuple에서 사용하고, pair는 .first를 써야 함",
-            "pair는 초기화할 수 없음",
-            "아무 문제 없음 — get<0>()은 pair에서도 사용 가능"
-          ],
-          answer: 2,
-          explanation: "사실 get<0>(p)는 pair에서도 동작해요! 하지만 관례상 pair는 .first/.second를 쓰는 게 더 명확하고 읽기 쉬워요.",
-          en: {
-            question: "Which statement about this code that reads a value from a pair is wrong?",
-            options: [
-              "get<0>() is for tuples; pairs should use .first",
-              "pair cannot be initialized",
-              "No problem — get<0>() works on pairs too"
-            ],
-            explanation: "Actually, get<0>(p) works on pair too! But by convention, .first/.second is clearer and more readable for pairs."
-          }
-        }
-      },
-
       // practice: 처음부터 작성 — 최고점 학생 찾기
       {
         type: "practice",
@@ -453,14 +619,14 @@ export const lessonCpp15: LessonData = {
         type: "interleaving",
         content: {
           message: "잠깐! struct와 pair의 진짜 차이 — 멤버 *이름*",
-          task: "같은 데이터를 두 방식으로 표현했어요. **struct 와 pair 양쪽 모두 'name' 에 해당하는 부분에 접근**해서 \"홍길동\" 으로 설정하세요.\n\n👉 차이가 보이죠? struct 는 .name 처럼 *의미가 보이는* 이름, pair 는 .first / .second 처럼 *순서로만* 접근.",
-          template: "// struct 방식 — 의미 있는 이름\nstruct Student { string name; int age; };\nStudent s;\ns.___ = \"홍길동\";\n\n// pair 방식 — 순서로만\npair<string, int> p;\np.___ = \"홍길동\";",
+          task: "같은 데이터를 두 방식으로 표현했어요. **struct 와 pair 양쪽 모두 'name' 에 해당하는 부분에 접근**해서 \"Alice\" 로 설정하세요.\n\n👉 차이가 보이죠? struct 는 .name 처럼 **의미가 보이는** 이름, pair 는 .first / .second 처럼 **순서로만** 접근.",
+          template: "// struct — meaningful names\nstruct Student { string name; int age; };\nStudent s;\ns.___ = \"Alice\";\n\n// pair — by position only\npair<string, int> p;\np.___ = \"Alice\";",
           answer: "name",
           blanksAnswer: ["name", "first"],
-          expect: "// struct 방식 — 의미 있는 이름\nstruct Student { string name; int age; };\nStudent s;\ns.name = \"홍길동\";\n\n// pair 방식 — 순서로만\npair<string, int> p;\np.first = \"홍길동\";",
+          expect: "// struct — meaningful names\nstruct Student { string name; int age; };\nStudent s;\ns.name = \"Alice\";\n\n// pair — by position only\npair<string, int> p;\np.first = \"Alice\";",
           en: {
-            message: "Quick! The real difference between struct and pair — member *names*",
-            task: "Same data, two representations. **Set the 'name' equivalent to \"Hong\" in BOTH struct and pair.**\n\n👉 See the difference? struct uses meaningful names like .name; pair only uses .first / .second by position."
+            message: "Quick! The real difference between struct and pair — member **names**",
+            task: "Same data, two representations. **Set the 'name' equivalent to \"Alice\" in BOTH struct and pair.**\n\n👉 See the difference? struct uses meaningful names like .name; pair only uses .first / .second by position."
           }
         }
       },

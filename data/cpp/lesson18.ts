@@ -234,7 +234,7 @@ q[0]              # front
         {
           id: "ch1-must-queue",
           type: "practice" as const,
-          title: "🎯 queue 가 *진짜 필요한* 순간 — 줄 서기 시뮬",
+          title: "🎯 queue 가 **진짜 필요한** 순간 — 줄 서기 시뮬",
           content: `queue 의 가장 자연스러운 용도는 "**먼저 도착한 사람부터 처리**" — 줄 서기 그 자체예요. BFS 같은 큰 알고리즘의 핵심도 이거.
 
 **문제**: 카페에 손님 5 명이 차례로 도착해요 (Alice, Bob, Carol, David, Eve). 바리스타가 한 명씩 처리하면서 "Now serving: 이름" 을 출력하세요. **도착 순서대로** 처리되어야 해요.
@@ -250,7 +250,7 @@ Now serving: David
 Now serving: Eve
 \`\`\`
 
-> 💡 stack 으로 하면 *마지막에 도착한* Eve 부터 처리됨 — 새치기! queue 가 정답이에요. 코드는 \`while (!q.empty())\` + \`q.front()\` + \`q.pop()\` 패턴.`,
+> 💡 stack 으로 하면 **마지막에 도착한** Eve 부터 처리됨 — 새치기! queue 가 정답이에요. 코드는 \`while (!q.empty())\` + \`q.front()\` + \`q.pop()\` 패턴.`,
           starterCode: `#include <iostream>
 #include <queue>
 #include <string>

@@ -6,21 +6,32 @@ import { ChevronLeft, ChevronRight, RotateCcw } from "lucide-react"
 
 // =============================================================
 // structured bindings 시각화
-// pair 의 .first/.second 가 변수에 어떻게 "묶이는지" 단계별로
+// 각 piece 를 *한 단계씩* 변수에 바인딩 (1번째→1번째, 2번째→2번째)
 // =============================================================
 
-type Mode = "pair" | "tuple"
+type Mode = "struct" | "pair" | "tuple"
 
 interface ModeConfig {
   declaration: string
   bindingsCode: string
+  bundleVarName: string
   parts: { label: string; value: string; varName: string; color: string }[]
 }
 
 const CONFIGS: Record<Mode, ModeConfig> = {
+  struct: {
+    declaration: 'struct Student { string name; int score; };\nStudent s = {"Kim", 95};',
+    bindingsCode: 'auto [name, score] = s;',
+    bundleVarName: "s",
+    parts: [
+      { label: ".name",  value: '"Kim"', varName: "name",  color: "#7c3aed" },
+      { label: ".score", value: "95",     varName: "score", color: "#0891b2" },
+    ],
+  },
   pair: {
     declaration: 'pair<string, int> p = {"Kim", 95};',
     bindingsCode: 'auto [name, score] = p;',
+    bundleVarName: "p",
     parts: [
       { label: ".first",  value: '"Kim"', varName: "name",  color: "#7c3aed" },
       { label: ".second", value: "95",     varName: "score", color: "#0891b2" },
@@ -29,6 +40,7 @@ const CONFIGS: Record<Mode, ModeConfig> = {
   tuple: {
     declaration: 'tuple<string, int, double> t = {"Kim", 15, 3.8};',
     bindingsCode: 'auto [name, age, gpa] = t;',
+    bundleVarName: "t",
     parts: [
       { label: "<0>", value: '"Kim"', varName: "name", color: "#7c3aed" },
       { label: "<1>", value: "15",     varName: "age",  color: "#0891b2" },
@@ -37,47 +49,64 @@ const CONFIGS: Record<Mode, ModeConfig> = {
   },
 }
 
-const TOTAL_STEPS = 4
+// 단계 구성:
+// 0: 묶음만 보여줌
+// 1: bindings 코드 등장 + 빈 변수 슬롯
+// 2..(N+1): N 번째 piece → N 번째 변수 (한 번에 하나씩)
+// N+2: 완료
+function totalSteps(mode: Mode): number {
+  return 2 + CONFIGS[mode].parts.length + 1
+}
 
 export function StructuredBindingsVisualizer({ lang = "ko" }: { lang?: "ko" | "en" }) {
   const [mode, setMode] = useState<Mode>("pair")
   const [step, setStep] = useState(0)
   const isEn = lang === "en"
   const cfg = CONFIGS[mode]
+  const TOTAL = totalSteps(mode)
 
-  // step 0: 묶음 (pair/tuple) 만 보여줌
-  // step 1: bindings 코드 등장
-  // step 2: 화살표가 묶음 → 변수로 그어짐
-  // step 3: 변수 박스가 채워짐 + 결과
+  // 현재까지 바인딩된 piece 수: step 2 부터 1개씩 늘어남
+  const boundCount = Math.max(0, Math.min(cfg.parts.length, step - 1))
+  // 현재 *바인딩 중* 인 piece (활성): 2..(N+1) 단계에서만
+  const activeIdx = step >= 2 && step <= cfg.parts.length + 1 ? step - 2 : -1
   const showBindingsCode = step >= 1
-  const showArrows = step >= 2
-  const showVariables = step >= 3
+  const isComplete = step >= cfg.parts.length + 2
 
   const stepCaption = (() => {
     if (step === 0) {
-      if (isEn) return `Here's a ${mode} with ${cfg.parts.length} pieces. Each piece has a position label.`
-      return `${mode === "pair" ? "pair" : "tuple"} 가 ${cfg.parts.length} 개의 조각으로 이루어져 있어요. 각 조각엔 위치 라벨이 있어요.`
+      return isEn
+        ? `Here's a ${mode} with ${cfg.parts.length} pieces. Each piece sits at a position.`
+        : `${mode} 가 ${cfg.parts.length} 개의 조각으로 이루어져 있어요. 각 조각은 *위치* 가 정해져 있어요.`
     }
     if (step === 1) {
       return isEn
-        ? `Now the structured bindings line. \`auto [a, b, ...]\` declares new variables and links them to the bundle.`
-        : `이제 structured bindings 줄이 등장. \`auto [a, b, ...]\` 가 새 변수를 *선언* 하면서 묶음과 연결.`
+        ? `bindings line appears. \`auto [a, b, ...]\` declares new variables — the slots on the right are ready, but still empty.`
+        : `bindings 줄이 등장. \`auto [a, b, ...]\` 가 새 변수 *슬롯* 을 만들어요 — 아직은 비어있는 상태.`
     }
-    if (step === 2) {
+    if (step >= 2 && step <= cfg.parts.length + 1) {
+      const i = step - 2
+      const p = cfg.parts[i]
+      const ord = isEn
+        ? ["1st", "2nd", "3rd"][i]
+        : ["1번째", "2번째", "3번째"][i]
       return isEn
-        ? `Each piece is "bound" to a variable in order — first to first, second to second, ...`
-        : `각 조각이 변수에 *순서대로* "묶여요" — 첫 번째는 첫 번째 변수에, 두 번째는 두 번째에...`
+        ? `${ord} piece (${p.label} = ${p.value}) → ${ord} variable (${p.varName}). Same position, value flows in.`
+        : `**${ord} 조각** (${p.label} = ${p.value}) → **${ord} 변수** (${p.varName}). 같은 위치끼리 짝지어 값이 들어가요.`
     }
     return isEn
-      ? `Done. The variables now hold the values, with names you chose. Use them like any other variable.`
-      : `완료. 변수에 값이 들어갔고, *이름까지 자기가 정한* 거예요. 이제 일반 변수처럼 쓰면 끝.`
+      ? `Done. All pieces bound — variables now hold the values, with names you chose.`
+      : `완료. 모든 조각이 바인딩됐어요 — 변수에 값이 들어갔고, *이름은 본인이 정한 것* 으로.`
   })()
 
   return (
     <div className="space-y-3 select-none">
-      {/* 모드 선택 */}
-      <div className="flex justify-center gap-2">
-        {(["pair", "tuple"] as Mode[]).map((m) => (
+      {/* 모드 선택 — 같은 auto [...] 문법이 둘 다에 통한다는 게 핵심 */}
+      <div className="space-y-1">
+        <div className="text-[11px] text-slate-500 text-center font-medium">
+          {isEn ? "👇 Same syntax on both — that's why it's called structured bindings" : "👇 둘 다 같은 문법 — 그래서 이름이 structured bindings"}
+        </div>
+        <div className="flex justify-center gap-2">
+        {(["struct", "pair"] as Mode[]).map((m) => (
           <button
             key={m}
             onClick={() => { setMode(m); setStep(0) }}
@@ -90,15 +119,16 @@ export function StructuredBindingsVisualizer({ lang = "ko" }: { lang?: "ko" | "e
             {m}
           </button>
         ))}
+        </div>
       </div>
 
       {/* 진행 상태 */}
       <div className="flex items-center justify-between">
         <span className="text-xs text-slate-400 font-mono">
-          {isEn ? `Step ${step + 1} / ${TOTAL_STEPS}` : `${step + 1} / ${TOTAL_STEPS} 단계`}
+          {isEn ? `Step ${step + 1} / ${TOTAL}` : `${step + 1} / ${TOTAL} 단계`}
         </span>
         <div className="flex gap-1">
-          {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
+          {Array.from({ length: TOTAL }).map((_, i) => (
             <div
               key={i}
               className="rounded-full transition-all"
@@ -120,16 +150,17 @@ export function StructuredBindingsVisualizer({ lang = "ko" }: { lang?: "ko" | "e
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
           className="px-3 py-2 rounded-xl bg-violet-50 border border-violet-200 text-sm text-violet-900 leading-relaxed"
-        >
-          {stepCaption}
-        </motion.div>
+          dangerouslySetInnerHTML={{
+            __html: stepCaption.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>"),
+          }}
+        />
       </AnimatePresence>
 
       {/* 메인 시각화 */}
-      <div className="rounded-xl bg-slate-900 p-4 font-mono text-sm">
+      <div className="rounded-xl bg-white border-2 border-slate-200 p-4 font-mono text-sm">
         {/* 코드 라인 */}
-        <div className="text-slate-300 mb-4">
-          <div className="text-yellow-300">{cfg.declaration}</div>
+        <div className="mb-4 bg-slate-900 rounded-lg p-3">
+          <div className="text-yellow-300 whitespace-pre-line">{cfg.declaration}</div>
           <AnimatePresence>
             {showBindingsCode && (
               <motion.div
@@ -148,98 +179,125 @@ export function StructuredBindingsVisualizer({ lang = "ko" }: { lang?: "ko" | "e
         <div className="grid gap-4" style={{ gridTemplateColumns: "1fr 80px 1fr" }}>
           {/* 왼쪽: 묶음 (pair / tuple) */}
           <div>
-            <div className="text-[10px] text-slate-500 mb-1 text-center">
-              {mode === "pair" ? "p" : "t"}
+            <div className="text-[11px] text-slate-600 font-bold mb-1 text-center">
+              {cfg.bundleVarName}
             </div>
             <div className="space-y-1.5">
-              {cfg.parts.map((part, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-2 px-3 py-2 rounded-lg border-2 transition-all"
-                  style={{
-                    borderColor: part.color,
-                    background: `${part.color}15`,
-                  }}
-                >
-                  <span className="text-[11px] font-mono opacity-70" style={{ color: part.color }}>
-                    {part.label}
-                  </span>
-                  <span className="font-mono font-bold ml-auto" style={{ color: part.color }}>
-                    {part.value}
-                  </span>
-                </div>
-              ))}
+              {cfg.parts.map((part, i) => {
+                const isActive = i === activeIdx
+                const isBoundPast = i < boundCount && !isActive
+                return (
+                  <motion.div
+                    key={i}
+                    animate={
+                      isActive
+                        ? { scale: [1, 1.06, 1], boxShadow: [`0 0 0 0 ${part.color}00`, `0 0 0 8px ${part.color}55`, `0 0 0 0 ${part.color}00`] }
+                        : { scale: 1, boxShadow: `0 0 0 0 ${part.color}00` }
+                    }
+                    transition={{ duration: 0.6, repeat: isActive ? Infinity : 0 }}
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg border-2 transition-colors"
+                    style={{
+                      borderColor: part.color,
+                      background: isActive ? `${part.color}40` : isBoundPast ? `${part.color}25` : `${part.color}18`,
+                    }}
+                  >
+                    <span className="text-[11px] font-mono font-bold" style={{ color: part.color }}>
+                      {part.label}
+                    </span>
+                    <span className="font-mono font-bold ml-auto" style={{ color: part.color }}>
+                      {part.value}
+                    </span>
+                  </motion.div>
+                )
+              })}
             </div>
           </div>
 
-          {/* 가운데: 화살표 */}
+          {/* 가운데: 화살표 (한 번에 하나씩 등장) */}
           <div className="flex flex-col justify-around relative">
-            {cfg.parts.map((part, i) => (
-              <AnimatePresence key={i}>
-                {showArrows && (
-                  <motion.div
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ delay: i * 0.15 }}
-                    className="flex items-center justify-center text-2xl"
-                    style={{ color: part.color }}
-                  >
-                    →
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            ))}
+            {cfg.parts.map((part, i) => {
+              const arrowVisible = i < boundCount || i === activeIdx
+              const isActive = i === activeIdx
+              return (
+                <AnimatePresence key={i}>
+                  {arrowVisible && (
+                    <motion.div
+                      initial={{ opacity: 0, x: -16, scale: 0.6 }}
+                      animate={{ opacity: 1, x: 0, scale: isActive ? [1, 1.2, 1] : 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{
+                        duration: 0.4,
+                        scale: isActive ? { duration: 0.6, repeat: Infinity } : { duration: 0.2 },
+                      }}
+                      className="flex items-center justify-center text-3xl font-bold"
+                      style={{ color: part.color }}
+                    >
+                      →
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              )
+            })}
           </div>
 
-          {/* 오른쪽: 변수 */}
+          {/* 오른쪽: 변수 슬롯 (한 번에 하나씩 채워짐) */}
           <div>
-            <div className="text-[10px] text-slate-500 mb-1 text-center">
+            <div className="text-[11px] text-slate-600 font-bold mb-1 text-center">
               {isEn ? "new variables" : "새 변수"}
             </div>
             <div className="space-y-1.5">
-              {cfg.parts.map((part, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-2 px-3 py-2 rounded-lg border-2 transition-all"
-                  style={{
-                    borderColor: showVariables ? part.color : "#475569",
-                    background: showVariables ? `${part.color}15` : "transparent",
-                    opacity: showBindingsCode ? 1 : 0.3,
-                  }}
-                >
-                  <span className="text-[11px] font-mono" style={{ color: showVariables ? part.color : "#94a3b8" }}>
-                    {part.varName}
-                  </span>
-                  <span className="font-mono font-bold ml-auto" style={{ color: showVariables ? part.color : "#475569" }}>
-                    <AnimatePresence mode="wait">
-                      {showVariables ? (
-                        <motion.span
-                          key="filled"
-                          initial={{ opacity: 0, scale: 0.7 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: i * 0.1 }}
-                        >
-                          {part.value}
-                        </motion.span>
-                      ) : (
-                        <span className="text-slate-600">?</span>
-                      )}
-                    </AnimatePresence>
-                  </span>
-                </div>
-              ))}
+              {cfg.parts.map((part, i) => {
+                const isFilled = i < boundCount
+                const isActive = i === activeIdx
+                const isVisible = showBindingsCode
+                return (
+                  <motion.div
+                    key={i}
+                    animate={
+                      isActive
+                        ? { scale: [1, 1.06, 1], boxShadow: [`0 0 0 0 ${part.color}00`, `0 0 0 8px ${part.color}55`, `0 0 0 0 ${part.color}00`] }
+                        : { scale: 1, boxShadow: `0 0 0 0 ${part.color}00` }
+                    }
+                    transition={{ duration: 0.6, repeat: isActive ? Infinity : 0 }}
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg border-2 transition-colors"
+                    style={{
+                      borderColor: isFilled || isActive ? part.color : "#cbd5e1",
+                      background: isFilled ? `${part.color}25` : isActive ? `${part.color}40` : "#f8fafc",
+                      opacity: isVisible ? 1 : 0.4,
+                    }}
+                  >
+                    <span className="text-[11px] font-mono font-bold" style={{ color: isFilled || isActive ? part.color : "#64748b" }}>
+                      {part.varName}
+                    </span>
+                    <span className="font-mono font-bold ml-auto" style={{ color: isFilled ? part.color : "#94a3b8" }}>
+                      <AnimatePresence mode="wait">
+                        {isFilled ? (
+                          <motion.span
+                            key="filled"
+                            initial={{ opacity: 0, scale: 0.5 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                          >
+                            {part.value}
+                          </motion.span>
+                        ) : (
+                          <span className="text-slate-400">?</span>
+                        )}
+                      </AnimatePresence>
+                    </span>
+                  </motion.div>
+                )
+              })}
             </div>
           </div>
         </div>
 
         {/* 결과 메시지 */}
         <AnimatePresence>
-          {showVariables && (
+          {isComplete && (
             <motion.div
               initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mt-4 px-3 py-2 rounded-lg bg-emerald-900/40 border border-emerald-700 text-emerald-200 text-xs text-center"
+              className="mt-4 px-3 py-2 rounded-lg bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs text-center font-bold"
             >
               {isEn ? (
                 <>✅ Now you can use <code className="font-bold">{cfg.parts.map(p => p.varName).join(", ")}</code> directly.</>
@@ -271,8 +329,8 @@ export function StructuredBindingsVisualizer({ lang = "ko" }: { lang?: "ko" | "e
         </button>
 
         <button
-          onClick={() => setStep((s) => Math.min(TOTAL_STEPS - 1, s + 1))}
-          disabled={step === TOTAL_STEPS - 1}
+          onClick={() => setStep((s) => Math.min(TOTAL - 1, s + 1))}
+          disabled={step === TOTAL - 1}
           className="flex items-center gap-1 px-3 py-2 rounded-xl text-sm font-bold text-white bg-violet-600 hover:bg-violet-700 disabled:opacity-30 transition-all"
         >
           {isEn ? "Next" : "다음"}

@@ -229,7 +229,7 @@ tuple<string, int, double> t = {"Kim", 15, 3.8};
 
 \`.first/.second\` no longer cuts it (3+ values). Pick one of these:
 
-**① Read one at a time — \`get<index>(t)\`**
+**① Read one at a time** — \`get<index>(t)\`
 
 \`\`\`cpp
 cout << get<0>(t);   // "Kim"
@@ -469,7 +469,7 @@ Next lesson (cpp-23) goes deep on \`sort\`. There you'll learn how to handle "sc
           title: "🎯 When pair is *truly necessary* — sorting a score sheet",
           content: `You just saw it in the simulator — **two separate vectors break when sorted.** Now confirm it in code.
 
-**Problem**: You have 5 students with names and scores. **Sort by score (ascending) and print as \`Name Score\` lines.**
+**Problem**: You have 5 students with names and scores. **Sort by score (ascending) and print as** \`Name Score\` **lines.**
 
 Input: Kim 95 / Lee 72 / Park 88 / Choi 60 / Han 81
 

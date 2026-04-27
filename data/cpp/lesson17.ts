@@ -93,7 +93,7 @@ v = [10, 20, 30, 40, 50]
 - \`v.begin()\` → **첫 번째 원소** 를 가리킴
 - \`v.end()\` → **마지막 원소 다음** 자리. (마지막 자체가 아님 ⚠️)
 
-왜 마지막이 아니라 그 *다음* 일까요? **"여기까지" 라는 끝 신호**예요. \`[begin, end)\` — 시작은 포함, 끝은 제외. 파이썬 \`range(0, 5)\` 에서 5 가 안 들어가는 거랑 비슷해요.
+왜 마지막이 아니라 그 **다음** 일까요? **"여기까지" 라는 끝 신호**예요. \`[begin, end)\` — 시작은 포함, 끝은 제외. 파이썬 \`range(0, 5)\` 에서 5 가 안 들어가는 거랑 비슷해요.
 
 ### iterator 로 뭘 할 수 있나요?
 
@@ -331,7 +331,7 @@ int main() {
         {
           id: "ch1-lambda",
           type: "explain",
-          title: "🤔 정확한 값 말고 *조건* 으로 찾고 싶다면?",
+          title: "🤔 정확한 값 말고 **조건** 으로 찾고 싶다면?",
           content: `지금까지 \`find(...)\` 로 **정확한 값** 을 찾았어요. 그런데 학생들 점수에서 이런 걸 찾고 싶다면?
 
 > "**70점 이상인 첫 번째 점수** 찾기"
@@ -426,6 +426,66 @@ int main() {
 }`,
           hint: "count_if(scores.begin(), scores.end(), [](int x) { return x >= 60; }) — lambda 안에서 조건 'x >= 60' 만 적으면 끝. 결과를 int 변수에 받거나 바로 cout 으로 출력.",
           expectedOutput: `4`
+        },
+        {
+          id: "ch1-stl-pattern",
+          type: "explain",
+          title: "🎯 STL 한 패턴으로 정리 — `(begin, end, ...)`",
+          content: `find / count / accumulate / find_if / count_if 다 봤죠. 이쯤에서 한 발 물러서서 패턴을 보면 STL 가 갑자기 쉬워져요.
+
+### 1. STL 함수는 모양이 다 같아요
+
+| 함수 | 모양 |
+|---|---|
+| \`find(v.begin(), v.end(), 값)\` | (begin, end, **무엇을**) |
+| \`count(v.begin(), v.end(), 값)\` | (begin, end, **무엇을**) |
+| \`accumulate(v.begin(), v.end(), 초기값)\` | (begin, end, **시작값**) |
+| \`find_if(v.begin(), v.end(), 람다)\` | (begin, end, **조건**) |
+| \`count_if(v.begin(), v.end(), 람다)\` | (begin, end, **조건**) |
+| \`sort(v.begin(), v.end())\` | (begin, end) — 다음 레슨! |
+
+> 🎯 **\`(begin, end, …)\` 가 STL 의 공통 언어.** 새 함수 만나면 "이것도 (begin, end, 뭔가) 일 거야" 라고 짐작하면 거의 맞아요.
+
+### 2. vector 만 되는 게 아니에요 — string, array, set 도 OK
+
+\`begin()\` / \`end()\` 가 있는 컨테이너면 다 통해요:
+
+\`\`\`cpp
+string s = "hello";
+auto it = find(s.begin(), s.end(), 'e');     // string 에서 'e' 찾기
+cout << (it - s.begin());                     // 1
+
+array<int, 5> arr = {3, 1, 4, 1, 5};
+int sum = accumulate(arr.begin(), arr.end(), 0);  // C 배열도 OK
+
+set<int> nums = {1, 2, 3, 4, 5};
+int cnt = count_if(nums.begin(), nums.end(), [](int x) { return x > 2; });
+\`\`\`
+
+> 💡 한 번 익히면 평생 써먹어요. **컨테이너만 바뀌고 사용법은 그대로.**
+
+### 3. range-for 는 사실 iterator 의 줄임말
+
+매일 쓰는 \`for (auto x : v)\` — 이게 실제로 iterator 루프와 **완전히 같은 동작**이에요:
+
+\`\`\`cpp
+// 이거랑
+for (int x : v) cout << x;
+
+// 이거는 같은 일을 해요
+for (auto it = v.begin(); it != v.end(); ++it) {
+    int x = *it;
+    cout << x;
+}
+\`\`\`
+
+C++ 컴파일러가 \`begin()\` / \`end()\` / \`*it\` / \`++it\` 를 자동으로 깔아주는 거예요. 그래서:
+- range-for 가 되는 컨테이너 = STL 함수도 되는 컨테이너 (둘 다 begin/end 를 요구)
+- 둘이 별개의 기능이 아니라 **같은 기반의 다른 표면**
+
+> 🎯 정리: **iterator 한 가지만 이해하면, range-for + STL 함수 + 모든 STL 컨테이너가 한꺼번에 이해됨.**
+
+다음 페이지 — 종합 연습 👇`,
         },
         {
           id: "ch1-practice",
@@ -599,7 +659,7 @@ C++이 훨씬 간단하죠?
 
 이런 질문에 답해주는 게 \`lower_bound\` 와 \`upper_bound\`. 둘 다 이진탐색을 쓰니까 **빠르고**, 둘 다 **정렬된 데이터** 가 전제예요.
 
-### 두 함수의 차이는 *이상* vs *초과*
+### 두 함수의 차이는 **이상** vs **초과**
 
 \`\`\`cpp
 vector<int> v = {1, 3, 5, 5, 5, 7, 9};
@@ -935,7 +995,7 @@ cout << accumulate(v.begin(), v.end(), 10);
 | \`upper_bound()\` | \`<algorithm>\` | iterator | **예** |
 | \`accumulate()\` | \`<numeric>\` | 값 | 아니오 |
 
-🚀 **다음 레슨 (cpp-18): stack & queue** — 데이터를 **쌓고 꺼내는** 두 가지 방식. 괄호 짝 맞추기, BFS 같은 데서 진가가 드러나요. STL 컨테이너 어드벤처 계속!`
+🚀 **다음 레슨 (21번: stack & queue)** — 데이터를 **쌓고 꺼내는** 두 가지 방식. 괄호 짝 맞추기, BFS 같은 데서 진가가 드러나요. STL 컨테이너 어드벤처 계속!`
         }
       ]
     }

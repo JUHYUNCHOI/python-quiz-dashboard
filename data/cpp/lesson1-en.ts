@@ -144,7 +144,7 @@ It's the same concept as Python's \`import\`!
 | Python 🐍 | C++ ⚡ |
 |---|---|
 | \`import math\` | \`#include <cmath>\` |
-| *(print just works)* | \`#include <iostream>\` |
+| **(print just works)** | \`#include <iostream>\` |
 
 💡 Think of **#include as reaching into a toolbox**. Need output? Grab iostream. Need math? Grab cmath! 🧰
 

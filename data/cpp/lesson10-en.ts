@@ -92,7 +92,7 @@ for (int x : nums) {
 
 Wait, what? We clearly multiplied \`x\` by 10, but \`nums\` is unchanged. What went wrong?
 
-…Hold on, **doesn't this feel familiar?** Two lessons ago, in *References & Functions*:
+…Hold on, **doesn't this feel familiar?** Two lessons ago, in **References & Functions**:
 
 \`\`\`cpp
 void tryChange(int x) { x = 99; }       // original unchanged
