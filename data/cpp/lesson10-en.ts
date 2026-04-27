@@ -103,7 +103,7 @@ When a function parameter was \`int x\`, it was a **copy** — so changing it di
 
 **Yes — exactly.** \`x\` here is a copy of each \`nums\` element, so no matter how many times we do \`x = x * 10\`, the original sits untouched.
 
-Which means the fix is the same too — back then we wrote \`int& x\` to add \`&\`, so **here we just add \`&\` the same way**:
+Which means the fix is the same too — back then we wrote \`int& x\` to add \`&\`, so **here we just add** \`&\` **the same way**:
 
 \`\`\`cpp
 for (int& x : nums) {      // ← x is now an alias for each nums element (the original itself)
@@ -112,7 +112,7 @@ for (int& x : nums) {      // ← x is now an alias for each nums element (the o
 // nums is now {10, 20, 30} ✅
 \`\`\`
 
-> 💡 One-liner: **\`int x\` = copy, \`int& x\` = original.** The rule is identical for functions and for range-for.
+> 💡 One-liner: \`int x\` **= copy**, \`int& x\` **= original**. The rule is identical for functions and for range-for.
 
 And since \`&\` skips copying, it's also **faster**. The bigger the data, the bigger the difference.
 
@@ -171,7 +171,7 @@ int main() {
 
 But the moment you write \`&\`, a new problem appears: now you **can modify** the original. "I said I'd only read it — what if a stray \`x = 0\` slips in?" The compiler won't catch it.
 
-**That's where the lock comes in — \`const\`.** Keep \`&\`'s speed, drop the modification risk.
+**That's where the lock comes in** — \`const\`. Keep \`&\`'s speed, drop the modification risk.
 
 Remember const from Lesson 3? It was for values like PI that must never change:
 
@@ -388,7 +388,7 @@ So should we always use range-for + auto in 2D? Actually, no. Let's see the spli
           id: "ch2-2d-index-vs-rangefor",
           type: "explain",
           title: "🤔 So for 2D — range-for or indexed?",
-          content: `In 2D, **both styles get used.** What decides the natural choice is one thing — **do you need the position (\`i\`, \`j\`)?**
+          content: `In 2D, **both styles get used.** What decides the natural choice is one thing — **do you need the position** (\`i\`, \`j\`)?
 
 Range-for gives you the value but not the position. So:
 

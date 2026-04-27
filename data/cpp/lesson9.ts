@@ -962,7 +962,7 @@ while (cin >> x && x != 0) {
           id: "ch2-cin-sized",
           type: "explain",
           title: "⚠️ 미리 크기를 정한 vector에 cin은?",
-          content: `**\`vector<int> v(n);\`** 이나 **\`vector<int> v(5, 0);\`** 처럼 **미리 크기를 정한** vector는 이미 원소가 들어 있어요. 거기에 push_back을 또 하면 **뒤에 덧붙는** 거라 크기가 더 커져요.
+          content: `\`vector<int> v(n);\` 이나 \`vector<int> v(5, 0);\` 처럼 **미리 크기를 정한** vector는 이미 원소가 들어 있어요. 거기에 push_back을 또 하면 **뒤에 덧붙는** 거라 크기가 더 커져요.
 
 \`\`\`cpp
 vector<int> v(5, 0);   // {0, 0, 0, 0, 0}  크기 5

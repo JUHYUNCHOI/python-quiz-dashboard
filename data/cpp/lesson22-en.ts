@@ -200,7 +200,7 @@ Car car3;    // object 3
           title: "🔗 Use members with the dot (.)",
           content: `Now that you have an object, it's time to use it. To change \`myCar\`'s \`color\` or call \`forward()\`?
 
-**All you need is the dot \`.\`**
+**All you need is the dot** \`.\`
 
 {collapse:📐 Reference — here's what class Car looks like}
 \`\`\`cpp
@@ -790,14 +790,14 @@ That last line \`BankAccount acc("Emma", 1000);\` is all it takes — the moment
           component: "cppObjectCreateCtorBuilder",
           content: `Earlier we made objects like \`Car myCar;\`. But when there's a constructor, you need to **pass in values.**
 
-No \`=\` — just write the arguments inside **parentheses \`( )\`** — those values go straight to the constructor.`,
+No \`=\` — just write the arguments inside **parentheses** \`( )\` — those values go straight to the constructor.`,
           contentAfter: `**🐍 Compared to Python:**
 
 | | Python | C++ |
 |---|---|---|
 | Create object | \`acc = BankAccount("Emma", 1000)\` (with \`=\`) | \`BankAccount acc("Emma", 1000);\` (no \`=\`) |
 
-In C++, passing arguments through **parentheses \`( )\`** is the most common style — it feels like calling the constructor directly.`,
+In C++, passing arguments through **parentheses** \`( )\` is the most common style — it feels like calling the constructor directly.`,
         },
         {
           id: "ch3-pred1",

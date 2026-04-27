@@ -281,7 +281,7 @@ int main() {
 
 둘 다 **결과는 완전히 똑같아요!** 단지 타이핑이 줄어드는 거예요.
 
-⚠️ **앞으로 우리는 \`using namespace std;\`를 써서 코드를 깔끔하게 할게요!**
+⚠️ 앞으로 우리는 \`using namespace std;\` **를 써서 코드를 깔끔하게 할게요!**
 → \`std::cout\` 대신 \`cout\`, \`std::endl\` 대신 \`endl\`!`
         },
         {

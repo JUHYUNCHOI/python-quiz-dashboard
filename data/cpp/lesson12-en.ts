@@ -219,7 +219,7 @@ In C++, every type — \`int\`, \`double\`, \`string\`, structs — is copied by
           component: "callByRefVisualizer",
           content: `Want to actually change the original? Use a **reference (&)**!
 
-Step through the simulation below. With \`int& x\`, the parameter \`x\` becomes **another name (an alias) for \`num\`** — like one box with two name tags. Changing \`x\` changes \`num\` directly, because they ARE the same thing.`,
+Step through the simulation below. With \`int& x\`, the parameter \`x\` becomes **another name (an alias) for** \`num\` — like one box with two name tags. Changing \`x\` changes \`num\` directly, because they ARE the same thing.`,
           contentAfter: `A classic use case: the **swap function!**
 
 \`\`\`cpp
@@ -271,7 +271,7 @@ References (&) and pointers (*) serve a similar purpose but are different tools.
           id: "ch2-vector-ref",
           type: "explain",
           title: "📦 Vectors Can Be Passed by Reference Too!",
-          content: `So far we've used \`int&\` to pass integers by reference. **Vectors work the same way — just add \`&\`!**
+          content: `So far we've used \`int&\` to pass integers by reference. **Vectors work the same way — just add** \`&\`!
 
 \`\`\`cpp
 // No & → copy → original unchanged

@@ -104,7 +104,7 @@ cout << hero.level;  // 1
           id: "ch1-exp3",
           type: "explain",
           title: "🗡️ struct Item 설계 + string 심화",
-          content: `캐릭터가 아이템을 가질 수 있도록 아이템 타입도 만들어요. **근데 이건 class 가 아니라 \`struct\` 로 만들 거예요.** 왜?
+          content: `캐릭터가 아이템을 가질 수 있도록 아이템 타입도 만들어요. **근데 이건 class 가 아니라** \`struct\` **로 만들 거예요**. 왜?
 
 \`\`\`cpp
 struct Item {
@@ -487,7 +487,7 @@ int main() {
           title: "🗡️ Step 3 — 아이템 장착 시스템",
           content: `📍 **진행 상황**
 ✅ 만든 것: \`Character\` + \`printCharacter\` + \`vector<Character>\` 파티
-🎯 이번 Step: **드디어 \`struct Item\` 등판!** 캐릭터 인벤토리 + \`equip()\` 함수
+🎯 이번 Step: **드디어** \`struct Item\` **등판!** 캐릭터 인벤토리 + \`equip()\` 함수
 ⏭️ 다음 Step: 레벨업 + 전투 시스템
 
 ---

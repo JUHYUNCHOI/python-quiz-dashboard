@@ -882,7 +882,7 @@ But what if the vector was **created with a preset size**? Can we still use push
           id: "ch2-cin-sized",
           type: "explain",
           title: "⚠️ cin into a pre-sized vector?",
-          content: `When you create a vector like **\`vector<int> v(n);\`** or **\`vector<int> v(5, 0);\`**, it **already has elements inside.** Calling push_back on top of that **appends** more elements and grows the size.
+          content: `When you create a vector like \`vector<int> v(n);\` or \`vector<int> v(5, 0);\`, it **already has elements inside.** Calling push_back on top of that **appends** more elements and grows the size.
 
 \`\`\`cpp
 vector<int> v(5, 0);   // {0, 0, 0, 0, 0}  size 5

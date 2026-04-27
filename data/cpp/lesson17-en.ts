@@ -204,7 +204,7 @@ if (it != v.end()) { /* found */ }
           title: "✋ Quick — is this book in the library?",
           content: `**Scenario**: You want to check if "1984" is in the library's book list.
 
-Use \`find\` and print **\`Found\` if it exists, \`Not found\` otherwise**.
+Use \`find\` and print \`Found\` **if it exists**, \`Not found\` **otherwise**.
 
 > 💡 \`it != v.end()\` is the "found it" signal. A one-line if is enough.`,
           starterCode: `#include <iostream>

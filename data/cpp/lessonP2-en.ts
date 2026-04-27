@@ -103,7 +103,7 @@ cout << hero.level;  // 1
           id: "ch1-exp3",
           type: "explain",
           title: "🗡️ Designing struct Item + string operations",
-          content: `Characters can hold items too. **But this time we'll use \`struct\` instead of class.** Why?
+          content: `Characters can hold items too. **But this time we'll use** \`struct\` **instead of class**. Why?
 
 \`\`\`cpp
 struct Item {

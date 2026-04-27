@@ -282,7 +282,7 @@ int main() {
 
 Both produce **exactly the same result!** You just type less.
 
-⚠️ **From now on, we'll use \`using namespace std;\` to keep our code clean!**
+⚠️ From now on, we'll use \`using namespace std;\` **to keep our code clean!**
 → \`std::cout\` becomes \`cout\`, \`std::endl\` becomes \`endl\`!`
         },
         {
