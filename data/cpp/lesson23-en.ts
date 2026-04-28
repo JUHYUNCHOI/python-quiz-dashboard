@@ -112,6 +112,22 @@ arr + 5 → address of arr[5] (= one past last, marks "the end")
 Same role as v.begin() / v.end() for vectors.
 \`\`\`
 
+---
+
+### 💭 Keep in mind — sort needs to be able to *compare*
+
+The reason \`sort\` finishes the job in one line: it knows **which of two values comes first**.
+
+| Type | Auto-comparison? | sort one-liner? |
+|---|---|---|
+| \`int\`, \`string\` | ✅ obviously | ✅ |
+| \`pair\`, \`tuple\` | ✅ standard library defines it | ✅ |
+| \`struct\` (yours) | ❌ "which comes first?" — compiler has no idea | ❌ not directly |
+
+You **can** sort a \`struct\`, but it takes one extra step. Chapter 1 shows that solution (lambda).
+
+---
+
 Next page — try sorting one yourself 👇`
         },
         {

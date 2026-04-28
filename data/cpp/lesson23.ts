@@ -112,6 +112,22 @@ arr + 5 → arr[5] 주소 (= 마지막 다음, 끝 표시)
 vector 의 v.begin()/v.end() 랑 같은 역할이에요.
 \`\`\`
 
+---
+
+### 💭 한 가지 떠올려두기 — sort 는 *비교* 가 돼야 동작해요
+
+\`sort\` 가 한 줄로 끝낼 수 있는 이유는 **두 값 중 누가 앞인지 비교할 수 있기 때문**이에요.
+
+| 타입 | 자동 비교? | sort 한 줄? |
+|---|---|---|
+| \`int\`, \`string\` | ✅ 당연 | ✅ |
+| \`pair\`, \`tuple\` | ✅ 표준 라이브러리가 미리 정의 | ✅ |
+| \`struct\` (우리가 만든 거) | ❌ "이 둘 중 누가 앞?" 컴파일러 모름 | ❌ 그냥은 안 됨 |
+
+\`struct\` 도 정렬할 수는 있는데 한 단계가 더 필요해요. 챕터 1 에서 그 해결책 (lambda) 을 봐요.
+
+---
+
 다음 페이지 — 직접 정렬해봐요 👇`
         },
         {
@@ -382,10 +398,21 @@ vector<pair<string, int>> students = {
 
 \`greater<pair<string,int>>()\` 를 쓰면? \`pair\` 전체 (이름 + 점수) 가 비교돼요. 역시 우리가 원하는 게 아님.
 
-> 🎯 우리한테 필요한 건: **"비교 기준을 직접 알려주는" 방법.**
+### 그리고 \`struct\` 라면 더 막막해요
+
+챕터 0 마지막에서 "struct 는 자동 비교가 없다" 고 짚었었죠. 같은 데이터를 struct 로 만들면:
+
+\`\`\`cpp
+struct Student { string name; int score; };
+vector<Student> v = {{"Kim", 85}, {"Lee", 92}, {"Park", 78}};
+
+sort(v.begin(), v.end());  // ❌ 컴파일 에러! Student 끼리 어떻게 비교?
+\`\`\`
+
+> 🎯 두 경우 모두 우리한테 필요한 건: **"비교 기준을 직접 알려주는" 방법.**
 > "이 두 학생 중에 누가 앞에 와야 하는지, 내가 직접 정할게요" 라고 sort 한테 말할 수 있어야 해요.
 
-이럴 때 등장하는 게 **람다 (lambda)**. 다음 페이지에서 문법부터 봐요 👇`
+이럴 때 등장하는 게 **람다 (lambda)** — pair 의 second 기준 정렬도, struct 의 score 기준 정렬도, 같은 한 가지 도구로 해결해요. 다음 페이지에서 문법부터 봐요 👇`
         },
         {
           id: "s23-ch1-syntax",
@@ -490,6 +517,7 @@ sort(v.begin(), v.end(), [](int a, int b) {
 | \`[](int a, int b){ return a > b; }\` | 내림차순 |
 | \`[](int a, int b){ return abs(a) < abs(b); }\` | 절댓값 오름차순 |
 | \`[](auto a, auto b){ return a.second < b.second; }\` | pair 의 second 기준 |
+| \`[](auto a, auto b){ return a.score > b.score; }\` | struct 의 \`score\` 멤버 내림차순 |
 
 ### 💡 \`auto\` 매개변수 — pair/struct 정렬에 편함
 
@@ -500,6 +528,8 @@ sort(v.begin(), v.end(), [](auto a, auto b) {
     return a.second < b.second;   // 타입 안 적어도 OK
 });
 \`\`\`
+
+> 💡 **struct 도 똑같아요** — \`a.score\`, \`b.score\` 처럼 멤버 이름으로 비교. 자동 비교가 안 되는 struct 가 lambda 한 번이면 깔끔하게 정렬돼요.
 
 > 다음 페이지에서 위 규칙을 손으로 연습해 봐요.`
         },
