@@ -349,32 +349,6 @@ export const lessonCpp23: LessonData = {
         }
       },
 
-      // quiz: stable_sort
-      {
-        type: "quiz",
-        content: {
-          question: "stable_sort와 sort의 차이점은?",
-          options: [
-            "stable_sort는 내림차순만 지원한다",
-            "stable_sort는 동일한 값의 원래 순서를 보존한다",
-            "stable_sort는 <numeric> 헤더가 필요하다",
-            "stable_sort는 포인터 배열에서만 사용 가능하다"
-          ],
-          answer: 1,
-          explanation: "stable_sort는 같은 값이 있을 때 원래 순서를 유지해요! 이름-점수 묶음에서 점수 같으면 이름 순서 보존 시 유용!",
-          en: {
-            question: "What is the difference between stable_sort and sort?",
-            options: [
-              "stable_sort only supports descending order",
-              "stable_sort preserves the original order of equal elements",
-              "stable_sort requires the <numeric> header",
-              "stable_sort can only be used on pointer arrays"
-            ],
-            explanation: "stable_sort preserves the original order of equal elements! Useful when you want to keep the name order when scores are equal."
-          }
-        }
-      },
-
       // practice: 다중 조건 정렬
       {
         type: "practice",
