@@ -881,46 +881,51 @@ s.empty();         // true if empty
           id: "ch2-vs-sort-unique",
           type: "explain",
           title: "🤔 Then why \`vector + sort + unique\`? Set exists",
-          content: `In the sort lesson you learned the \`sort + unique + erase\` pattern. set also auto-dedups + auto-sorts — **what's the difference?**
+          content: `In the sort lesson you learned the \`sort + unique + erase\` pattern. set also auto-dedups + auto-sorts — **how do all three differ?**
 
-### Side by side
+> 💡 Why *three* options — \`set\` has a faster cousin \`unordered_set\` too (covered in detail on the next page). For now, think of it as "set without sorting, but faster."
 
-| Situation | \`set\` | \`vector + sort + unique\` |
-|---|---|---|
-| Add data **as it streams in** | ✅ one-line insert | ❌ re-sorting every time is wasteful |
-| Tidy **already-collected** data once | ❌ extra copy cost | ✅ one pass — fast |
-| Frequent "is it there?" lookup | ✅ count O(log n) | ❌ scans every time |
-| **Index access** \`v[i]\` | ❌ no | ✅ yes |
-| Memory efficiency | tree structure (slight overhead) | contiguous — tight & fast |
+### Three at a glance
+
+| Situation | \`set\` | \`unordered_set\` | \`vector + sort + unique\` |
+|---|---|---|---|
+| Add data **as it streams in** | ✅ O(log n) | ✅ **O(1) — fastest** | ❌ re-sorting wasteful |
+| Tidy **already-collected** data once | ❌ copy cost | ❌ copy cost | ✅ one pass — fast |
+| Frequent "is it there?" lookup | ✅ O(log n) | ✅ **O(1)** | ❌ scans every time |
+| Iterate in **sorted order** | ✅ auto-sorted | ❌ no order | ✅ already sorted |
+| **Index access** \`v[i]\` | ❌ no | ❌ no | ✅ yes |
 
 ### Decision rules
 
-**Case A — data *streams in* and you check duplicates as it arrives:**
+**Case A — streaming data, fast *insert/lookup* is the priority:**
 \`\`\`cpp
-set<int> seen;
+unordered_set<int> seen;       // fastest
 while (cin >> x) {
-    seen.insert(x);     // duplicates auto-ignored
-    if (seen.count(y)) ...   // fast lookup
+    seen.insert(x);
+    if (seen.count(y)) ...
 }
 \`\`\`
-→ **set wins.**
+→ Don't need sorted order? **unordered_set**. Need sorted too? **set**.
 
-**Case B — data is fully collected; dedup just once at the end:**
+**Case B — data fully collected, dedup once + index access:**
 \`\`\`cpp
 vector<int> v(n);
 for (int i = 0; i < n; i++) cin >> v[i];
 sort(v.begin(), v.end());
 v.erase(unique(v.begin(), v.end()), v.end());
-// then v[0], v[1]... index access freely
+// then v[0], v[1]... freely
 \`\`\`
-→ **vector + sort + unique wins.**
+→ **vector + sort + unique.**
 
-### One-line rule
+### One-line decisions
 
-> **Fast lookups while collecting**? → **set**
-> **One-time cleanup** + fast index/iteration after? → **vector + sort + unique**
+| Need | Pick |
+|---|---|
+| Fast insert/lookup, no order needed | **unordered_set** ⭐ usually fastest |
+| Fast insert/lookup + sorted order | **set** |
+| One-time cleanup + index access | **vector + sort + unique** |
 
-> 💡 Quick rule of thumb: "if it's the *data structure being designed*, use set; if it's the *final result*, use vector." Both come up often in competitive programming.`
+> 💡 Quick rule: "*data structure you're building up* → \`(unordered_)set\`. *Final result / index needed* → \`vector\`." All three show up often in competitive programming.`
         },
         {
           id: "ch2-fb1",
