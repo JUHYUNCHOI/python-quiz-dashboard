@@ -477,9 +477,13 @@ int cnt = count_if(nums.begin(), nums.end(), [](int x) { return x > 2; });
 
 > 💡 Learn it once, use it forever. **The container changes; the usage doesn't.**
 
-### 3. range-for is just iterator shorthand
-
-The everyday \`for (auto x : v)\` you write — it does **exactly the same thing** as an iterator loop:
+Next page — even more surprising: range-for is also just iterator shorthand 👇`,
+        },
+        {
+          id: "ch1-stl-pattern-rangefor",
+          type: "explain",
+          title: "💡 What range-for really is — iterator shorthand",
+          content: `The everyday \`for (auto x : v)\` you write — it does **exactly the same thing** as an iterator loop:
 
 \`\`\`cpp
 // This
@@ -492,11 +496,14 @@ for (auto it = v.begin(); it != v.end(); ++it) {
 }
 \`\`\`
 
-The C++ compiler quietly fills in \`begin()\` / \`end()\` / \`*it\` / \`++it\` for you. So:
+The C++ compiler quietly fills in \`begin()\` / \`end()\` / \`*it\` / \`++it\` for you.
+
+### What naturally follows
+
 - A container that works in range-for = a container that works with STL functions (both need begin/end)
 - They're not separate features — **same foundation, different surface**
 
-> 🎯 Bottom line: **understand iterator once → range-for + every STL function + every STL container clicks at once.**
+> 🎯 **Understand iterator once → range-for + every STL function + every STL container clicks at once.**
 
 Next — comprehensive practice 👇`,
         },

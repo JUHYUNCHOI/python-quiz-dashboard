@@ -444,7 +444,7 @@ int main() {
           id: "ch1-stl-pattern",
           type: "explain",
           title: "🎯 STL 한 패턴으로 정리 — `(begin, end, ...)`",
-          content: `find / count / accumulate / find_if / count_if 다 봤죠. 이쯤에서 한 발 물러서서 패턴을 보면 STL 가 갑자기 쉬워져요.
+          content: `find / count / accumulate / find_if / count_if 다 봤죠. 이쯤에서 한 발 물러서서 패턴을 보면 STL 이 갑자기 쉬워져요.
 
 ### 1. STL 함수는 모양이 다 같아요
 
@@ -477,9 +477,13 @@ int cnt = count_if(nums.begin(), nums.end(), [](int x) { return x > 2; });
 
 > 💡 한 번 익히면 평생 써먹어요. **컨테이너만 바뀌고 사용법은 그대로.**
 
-### 3. range-for 는 사실 iterator 의 줄임말
-
-매일 쓰는 \`for (auto x : v)\` — 이게 실제로 iterator 루프와 **완전히 같은 동작**이에요:
+다음 페이지 — 더 놀라운 사실: range-for 도 사실 iterator 의 줄임말 👇`,
+        },
+        {
+          id: "ch1-stl-pattern-rangefor",
+          type: "explain",
+          title: "💡 range-for 의 정체 — iterator 의 줄임말",
+          content: `매일 쓰는 \`for (auto x : v)\` — 이게 실제로 iterator 루프와 **완전히 같은 동작**이에요:
 
 \`\`\`cpp
 // 이거랑
@@ -492,11 +496,14 @@ for (auto it = v.begin(); it != v.end(); ++it) {
 }
 \`\`\`
 
-C++ 컴파일러가 \`begin()\` / \`end()\` / \`*it\` / \`++it\` 를 자동으로 깔아주는 거예요. 그래서:
+C++ 컴파일러가 \`begin()\` / \`end()\` / \`*it\` / \`++it\` 를 자동으로 깔아주는 거예요.
+
+### 그래서 자연스럽게 따라오는 것
+
 - range-for 가 되는 컨테이너 = STL 함수도 되는 컨테이너 (둘 다 begin/end 를 요구)
 - 둘이 별개의 기능이 아니라 **같은 기반의 다른 표면**
 
-> 🎯 정리: **iterator 한 가지만 이해하면, range-for + STL 함수 + 모든 STL 컨테이너가 한꺼번에 이해됨.**
+> 🎯 **iterator 한 가지만 이해하면, range-for + STL 함수 + 모든 STL 컨테이너가 한꺼번에 이해됨.**
 
 다음 페이지 — 종합 연습 👇`,
         },
