@@ -923,12 +923,13 @@ cout << it - v.begin();  // 3    ← convert to index!
         {
           id: "s23-ch2-lb",
           type: "explain",
-          title: "🔍 lower_bound / upper_bound — Find positions in a sorted array",
-          content: `Instead of writing binary search by hand every time, C++ provides two functions:
+          title: "🔍 binary_search / lower_bound / upper_bound — the binary search trio",
+          content: `Instead of writing binary search by hand every time, C++ provides **three functions** — same family:
 
 \`\`\`cpp
-lower_bound(v.begin(), v.end(), x);   // where x starts
-upper_bound(v.begin(), v.end(), x);   // one past where x ends
+binary_search(v.begin(), v.end(), x);  // is x in there? → true / false
+lower_bound (v.begin(), v.end(), x);   // where x starts
+upper_bound (v.begin(), v.end(), x);   // one past where x ends
 \`\`\`
 
 ⚠️ **Sorted arrays only!** (it's binary search inside)
@@ -946,10 +947,11 @@ lower_bound  upper_bound
 "3 starts"   "after 3 ends"
 \`\`\`
 
+- **binary_search(x)** → is \`x\` in the array? **true / false**
 - **lower_bound(x)** → first position where value **≥ x** = "where x starts"
 - **upper_bound(x)** → first position where value **> x** = "one past where x ends"
 
-> 💡 Don't dig deeper — the **picture + two-line description** is enough. Usage patterns on the next page.`
+> 💡 Don't dig deeper — the **picture + three-line description** is enough. Which one to use in which situation comes on the next page.`
         },
         {
           id: "s23-ch2-lb-missing",

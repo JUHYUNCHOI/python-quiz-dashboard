@@ -923,12 +923,13 @@ cout << it - v.begin();  // 3    ← 인덱스로 변환!
         {
           id: "s23-ch2-lb",
           type: "explain",
-          title: "🔍 lower_bound / upper_bound — 정렬된 배열에서 위치 찾기",
-          content: `방금 본 이진 탐색을 매번 직접 짜진 않아요. C++ 이 두 함수를 미리 만들어뒀어요:
+          title: "🔍 binary_search / lower_bound / upper_bound — 이진탐색 3 형제",
+          content: `방금 본 이진 탐색을 매번 직접 짜진 않아요. C++ 이 **세 함수** 를 미리 만들어뒀어요 — 같은 가족이에요:
 
 \`\`\`cpp
-lower_bound(v.begin(), v.end(), x);   // x 가 시작되는 위치
-upper_bound(v.begin(), v.end(), x);   // x 가 끝난 다음 위치
+binary_search(v.begin(), v.end(), x);  // x 가 있나? → true / false
+lower_bound (v.begin(), v.end(), x);   // x 가 시작되는 위치
+upper_bound (v.begin(), v.end(), x);   // x 가 끝난 다음 위치
 \`\`\`
 
 ⚠️ **반드시 정렬된 배열에서만!** (이진 탐색이라서)
@@ -946,10 +947,11 @@ lower_bound  upper_bound
 "3 시작"    "3 끝 다음"
 \`\`\`
 
+- **binary_search(x)** → \`x\` 가 배열 안에 있나? **true / false**
 - **lower_bound(x)** → \`x\` **이상(≥)** 의 첫 위치 = "x 가 시작되는 곳"
 - **upper_bound(x)** → \`x\` **초과(>)** 의 첫 위치 = "x 가 끝난 다음"
 
-> 💡 깊이 파지 말고 **그림 + 두 줄 설명** 만 기억해도 충분해요. 사용 패턴은 다음 페이지에서.`
+> 💡 깊이 파지 말고 **그림 + 세 줄 설명** 만 기억해도 충분해요. 어떤 상황에 어느 걸 쓰는지는 다음 페이지에서.`
         },
         {
           id: "s23-ch2-lb-missing",
