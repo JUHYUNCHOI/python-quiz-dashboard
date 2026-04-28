@@ -360,19 +360,24 @@ export function PythonRunner({
             </div>
           )}
 
-          {/* Syntax highlighted 배경 레이어 */}
+          {/* Syntax highlighted 배경 레이어
+              ⚠️ textarea 와 *완전히 동일한* 텍스트 메트릭 보장 — 안 그러면 커서 ≠ 글자 정렬 어긋남.
+              - whitespace-pre (no wrap) — 둘 다 wrap 안 함 → 가로 스크롤
+              - tabSize 4 — 탭 너비 통일 (Python 인덴테이션 안전)
+              - fontFeatureSettings off — 일부 monospace 폰트의 ligature 비활성 (글자 너비 보장) */}
           <div
             ref={highlightRef}
             aria-hidden="true"
-            className="absolute inset-0 font-mono p-3 md:p-4 overflow-hidden pointer-events-none text-[13px] md:text-[15px] leading-[1.8] whitespace-pre-wrap break-words"
-            style={{ minHeight }}
+            className="absolute inset-0 font-mono p-3 md:p-4 overflow-hidden pointer-events-none text-[13px] md:text-[15px] leading-[1.8]"
+            style={{ minHeight, tabSize: 4, fontFeatureSettings: '"liga" 0, "calt" 0' }}
           >
-            <pre className="font-mono text-[13px] md:text-[15px] leading-[1.8] m-0 p-0 whitespace-pre-wrap break-words">
+            <pre className="font-mono text-[13px] md:text-[15px] leading-[1.8] m-0 p-0 whitespace-pre" style={{ tabSize: 4 }}>
               {highlightedCode}
             </pre>
           </div>
 
-          {/* 투명 textarea (입력용) */}
+          {/* 투명 textarea (입력용)
+              wrap="off" — pre 와 동일하게 wrap 비활성. 긴 줄은 가로 스크롤. */}
           <textarea
             ref={textareaRef}
             value={code}
@@ -388,11 +393,12 @@ export function PythonRunner({
             onBlur={() => setIsFocused(false)}
             disabled={readOnly || isLoading}
             placeholder={t("Python 코드 입력...", "Enter Python code...")}
+            wrap="off"
             className={cn(
-              "w-full bg-transparent font-mono p-3 md:p-4 resize-none focus:outline-none placeholder:text-gray-600 relative z-10",
+              "w-full bg-transparent font-mono p-3 md:p-4 resize-none focus:outline-none placeholder:text-gray-600 relative z-10 whitespace-pre overflow-auto",
               "text-[13px] md:text-[15px] leading-[1.8] text-transparent caret-white selection:bg-blue-500/40"
             )}
-            style={{ minHeight }}
+            style={{ minHeight, tabSize: 4, fontFeatureSettings: '"liga" 0, "calt" 0' }}
             spellCheck={false}
           />
         </div>
