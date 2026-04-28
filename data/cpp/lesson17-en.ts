@@ -132,7 +132,7 @@ Try moving the cursor below to see how \`*it\`, \`begin()\`, and \`end()\` chang
         {
           id: "ch1-find",
           type: "explain",
-          title: "🔍 find() — Search for a Value!",
+          title: "🔍 find() — search for a value (usage)",
           content: `Time for the iterator we just learned to do real work. \`find()\` searches a vector for a specific value, and **returns its position as an iterator**.
 
 \`\`\`cpp
@@ -153,17 +153,30 @@ if (it != v.end()) {
 }
 \`\`\`
 
-**Key points:**
-- If found → returns an **iterator** pointing to that element
-- If not found → returns \`v.end()\`
-- Compare with \`v.end()\` to check if the value exists!
+### Key points
 
-Let's compare with Python:
+- Found → returns an **iterator** pointing to that element
+- Not found → returns **\`v.end()\`**
+- Compare with \`v.end()\` to check if the value exists
+
+⚠️ **Always check vs \`v.end()\` before using:**
+\`\`\`cpp
+auto it = find(v.begin(), v.end(), 42);
+if (it != v.end()) { /* found */ }
+\`\`\`
+
+> Next page — how this differs from Python's \`in\` / \`.index()\` + time complexity.`
+        },
+        {
+          id: "ch1-find-py",
+          type: "explain",
+          title: "🐍 find() vs Python — including time complexity",
+          content: `### Compared to Python
 
 **Python 🐍:**
 \`\`\`python
 lst = [10, 20, 30, 40, 50]
-if 30 in lst:          # check existence
+if 30 in lst:           # check existence
     idx = lst.index(30) # get index
 \`\`\`
 
@@ -181,13 +194,13 @@ if (it != v.end()) {         // check existence
 | \`lst.index(30)\` | \`it - v.begin()\` |
 | Raises ValueError if missing | Returns \`v.end()\` if missing |
 
-⚠️ **What if find() can't find the value?** It returns end(). Always check:
-\`\`\`cpp
-auto it = find(v.begin(), v.end(), 42);
-if (it != v.end()) { /* found */ }
-\`\`\`
+C++ gives both pieces of info (exists? where?) in one call — the iterator carries both.
 
-💡 \`find()\` searches linearly from front to back. Time complexity is **O(n)**!`
+### ⏱️ Time complexity
+
+\`find()\` searches **linearly from front to back** → **O(n)**.
+
+If the data is sorted, the next chapter's \`binary_search\` is much faster (O(log n)). For unsorted vectors, \`find()\` is the right call.`
         },
         {
           id: "ch1-pred1",
