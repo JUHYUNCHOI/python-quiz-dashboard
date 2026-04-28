@@ -954,6 +954,19 @@ lower_bound  upper_bound
 > 💡 깊이 파지 말고 **그림 + 세 줄 설명** 만 기억해도 충분해요. 어떤 상황에 어느 걸 쓰는지는 다음 페이지에서.`
         },
         {
+          id: "s23-ch2-trio-quiz",
+          type: "quiz" as const,
+          title: "3 형제 중 누구를 쓰지?",
+          content: "정렬된 \`vector<int> v\` 가 있어요. \"숫자 7 이 배열에 있는지 **있다 / 없다** 만 알면 돼\" 라면 셋 중 어느 걸 쓰는 게 가장 깔끔할까요?",
+          options: [
+            "`binary_search(v.begin(), v.end(), 7)`",
+            "`lower_bound(v.begin(), v.end(), 7)`",
+            "`upper_bound(v.begin(), v.end(), 7)`"
+          ],
+          answer: 0,
+          explanation: "**`binary_search`** 는 정확히 \"있나 / 없나\" 만 묻는 함수 — true / false 반환이라 가장 직관적이에요. lower_bound / upper_bound 는 *위치* 를 돌려주니까 \"있는지만\" 확인하기엔 한 단계 더 필요해요 (`lower_bound != upper_bound` 같은 식)."
+        },
+        {
           id: "s23-ch2-lb-missing",
           type: "explain",
           title: "🔍 없는 값을 찾으면?",
@@ -993,6 +1006,18 @@ cout << idx;  // 1
 \`\`\`
 
 > 💡 셋이 한 가족이지만 **돌려주는 게 달라서** 쓰임도 달라요. 다음 페이지에서 흔한 함정 하나 짚고 가요.`
+        },
+        {
+          id: "s23-ch2-patterns-fb",
+          type: "fillblank" as const,
+          title: "✋ 직접 — 5 가 몇 개?",
+          content: "정렬된 \`vector<int> v = {1, 2, 5, 5, 5, 7}\` 에서 **5 가 몇 개** 있는지 한 줄로 구해봐요. (upper-lower 패턴)",
+          code: "vector<int> v = {1, 2, 5, 5, 5, 7};\nint cnt = ___(v.begin(), v.end(), 5)\n        - ___(v.begin(), v.end(), 5);\ncout << cnt;  // 3",
+          fillBlanks: [
+            { id: 0, answer: "upper_bound", options: ["upper_bound", "lower_bound", "binary_search", "count"] },
+            { id: 1, answer: "lower_bound", options: ["lower_bound", "upper_bound", "binary_search", "count"] }
+          ],
+          explanation: "**\"끝 다음 - 시작\" = 개수.** upper_bound 가 끝 다음을 가리키고 lower_bound 가 시작을 가리켜요. 둘을 빼면 그 값의 개수. 5 는 인덱스 2,3,4 에 3 개 있으니 결과 3."
         },
         {
           id: "s23-ch2-lb-vs-count",
@@ -1059,137 +1084,32 @@ lower_bound(v.begin(), v.end(), 5) - v.begin()  // 3
           explanation: "**`binary_search`, `lower_bound`, `upper_bound` 는 모두 정렬된 배열에서만 정확히 동작해요.** 정렬 안 된 배열에서 호출하면 컴파일은 되지만 결과는 **undefined behavior** — true / false / 엉뚱한 인덱스 등 어떤 결과든 나올 수 있음. 그래서 사용 전 반드시 `sort()` 먼저!"
         },
         {
-          id: "s23-ch2-lb2",
-          type: "explain",
-          title: "🔍 케이스별로 완전 정리!",
-          content: `같은 배열 \`{1, 3, 3, 5, 7, 9}\`로 3가지 케이스를 비교해볼게요.
-
----
-
-**케이스 1: 값이 딱 하나 있을 때 (5 찾기)**
-
-\`\`\`
-{1,  3,  3,  5,  7,  9}
- 0   1   2   3   4   5
-             ↑   ↑
-       lower_bound upper_bound
-          (5)         (5)
-\`\`\`
-
-\`\`\`cpp
-lower_bound(v.begin(), v.end(), 5) - v.begin()  →  3  (5가 있는 위치)
-upper_bound(v.begin(), v.end(), 5) - v.begin()  →  4  (5 다음 위치)
-4 - 3 = 1  →  5가 1개
-\`\`\`
-
----
-
-**케이스 2: 값이 여러 개 있을 때 (3 찾기)**
-
-\`\`\`
-{1,  3,  3,  5,  7,  9}
- 0   1   2   3   4   5
-     ↑       ↑
-lower_bound  upper_bound
-   (3)          (3)
-\`\`\`
-
-\`\`\`cpp
-lower_bound(v.begin(), v.end(), 3) - v.begin()  →  1  (첫 번째 3)
-upper_bound(v.begin(), v.end(), 3) - v.begin()  →  3  (3이 끝난 다음)
-3 - 1 = 2  →  3이 2개
-\`\`\`
-
----
-
-**케이스 3: 값이 없을 때 (4 찾기)**
-
-\`\`\`
-{1,  3,  3,  5,  7,  9}
- 0   1   2   3   4   5
-             ↑
-    lower_bound(4) = upper_bound(4)  ← 둘이 같아요!
-\`\`\`
-
-\`\`\`cpp
-lower_bound(v.begin(), v.end(), 4) - v.begin()  →  3  (4 이상의 첫 값 = 5)
-upper_bound(v.begin(), v.end(), 4) - v.begin()  →  3  (4 초과의 첫 값 = 5)
-3 - 3 = 0  →  4가 0개 = 없음!
-\`\`\`
-
-**→ lower_bound == upper_bound이면 그 값은 배열에 없어요.**
-
----
-
-**📌 핵심 공식 정리**
-
-| 목적 | 코드 |
-|---|---|
-| 값의 첫 위치 | \`lower_bound(v.begin(), v.end(), x) - v.begin()\` |
-| 값이 몇 개? | \`upper_bound(...) - lower_bound(...)\` |
-| 값이 있는지? | \`lower_bound(...) != upper_bound(...)\` → 있음 |`
-        },
-        {
           id: "s23-ch2-lb3",
           type: "explain",
-          title: "🔍 끝을 넘어가는 경우",
-          content: `모든 값보다 크거나 작은 값을 찾으면 어떻게 될까요?
-
-\`\`\`cpp
+          title: "⚠️ 주의 — 모든 값보다 큰 값을 찾으면?",
+          content: `\`\`\`cpp
 vector<int> v = {1, 3, 5, 7, 9};
-//               0  1  2  3  4
+
+lower_bound(v.begin(), v.end(), 10) - v.begin();
+// → 5 (범위 *밖*, v[5] 는 존재 안 함!)
 \`\`\`
+
+찾는 값보다 큰 게 배열에 없으면 lower_bound 는 **\`v.end()\` 위치 (= 인덱스 \`v.size()\`)** 를 돌려줘요. 여길 그냥 \`v[5]\` 로 접근하면 잘못된 메모리 읽기 → 프로그램 폭발.
 
 ---
 
-**모든 값보다 큰 수 (10 찾기)**
+**안전하게 쓰는 패턴**
 
-\`\`\`
-{1,  3,  5,  7,  9,  [끝]}
- 0   1   2   3   4    5
-                      ↑
-    lower_bound(10) = upper_bound(10) = 5 (끝!)
-\`\`\`
-
-\`\`\`cpp
-lower_bound(v.begin(), v.end(), 10) - v.begin()  →  5  (범위를 벗어남!)
-upper_bound(v.begin(), v.end(), 10) - v.begin()  →  5
-\`\`\`
-
-⚠️ 인덱스 5는 \`v[5]\`가 없어요! **v.end()** 위치예요.
-반드시 \`idx < v.size()\` 확인 후 접근해요.
-
----
-
-**모든 값보다 작은 수 (0 찾기)**
-
-\`\`\`
-{1,  3,  5,  7,  9}
- 0   1   2   3   4
- ↑
-lower_bound(0) = upper_bound(0) = 0 (맨 앞!)
-\`\`\`
-
-\`\`\`cpp
-lower_bound(v.begin(), v.end(), 0) - v.begin()  →  0  (맨 앞)
-upper_bound(v.begin(), v.end(), 0) - v.begin()  →  0
-\`\`\`
-
----
-
-**안전하게 쓰는 패턴:**
 \`\`\`cpp
 auto it = lower_bound(v.begin(), v.end(), x);
 
-// 찾기 전에 항상 확인!
 if (it != v.end() && *it == x) {
-    // 값이 있을 때만
     int idx = it - v.begin();
-    cout << idx;
+    cout << idx;       // 진짜로 x 가 있을 때만
 }
 \`\`\`
 
-💡 \`*it\`는 it가 가리키는 값이에요. (it = 화살표, *it = 화살표가 가리키는 것)`
+> 💡 \`it != v.end()\` 로 **범위 안인지 확인** + \`*it == x\` 로 **정확히 그 값인지 확인**. 두 조건 모두 OK 일 때만 접근.`
         },
         {
           id: "s23-ch2-fb1",

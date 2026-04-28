@@ -954,6 +954,19 @@ lower_bound  upper_bound
 > 💡 Don't dig deeper — the **picture + three-line description** is enough. Which one to use in which situation comes on the next page.`
         },
         {
+          id: "s23-ch2-trio-quiz",
+          type: "quiz" as const,
+          title: "Which of the trio do you reach for?",
+          content: "You have a sorted \`vector<int> v\`. If you only need to know **whether 7 is in the array (yes / no)**, which one is the cleanest pick?",
+          options: [
+            "`binary_search(v.begin(), v.end(), 7)`",
+            "`lower_bound(v.begin(), v.end(), 7)`",
+            "`upper_bound(v.begin(), v.end(), 7)`"
+          ],
+          answer: 0,
+          explanation: "**`binary_search`** is the one that asks exactly \"is it there?\" — it returns true/false, the most direct answer. lower_bound and upper_bound return *positions*, so checking existence with them takes one extra step (e.g. `lower_bound != upper_bound`)."
+        },
+        {
           id: "s23-ch2-lb-missing",
           type: "explain",
           title: "🔍 What if the value isn't found?",
@@ -993,6 +1006,18 @@ cout << idx;  // 1
 \`\`\`
 
 > 💡 The trio is one family but they **return different things**, so they're used differently. Next page covers a common trap.`
+        },
+        {
+          id: "s23-ch2-patterns-fb",
+          type: "fillblank" as const,
+          title: "✋ Try it — how many 5s?",
+          content: "In the sorted \`vector<int> v = {1, 2, 5, 5, 5, 7}\`, find **how many 5s** there are in one line. (upper-lower pattern)",
+          code: "vector<int> v = {1, 2, 5, 5, 5, 7};\nint cnt = ___(v.begin(), v.end(), 5)\n        - ___(v.begin(), v.end(), 5);\ncout << cnt;  // 3",
+          fillBlanks: [
+            { id: 0, answer: "upper_bound", options: ["upper_bound", "lower_bound", "binary_search", "count"] },
+            { id: 1, answer: "lower_bound", options: ["lower_bound", "upper_bound", "binary_search", "count"] }
+          ],
+          explanation: "**\"one past end - start\" = count.** upper_bound points one past the last occurrence, lower_bound points to the first. Subtracting gives the number of times the value appears. 5 sits at indices 2, 3, 4 → 3 occurrences."
         },
         {
           id: "s23-ch2-lb-vs-count",
@@ -1059,137 +1084,32 @@ lower_bound(v.begin(), v.end(), 5) - v.begin()  // 3
           explanation: "**`binary_search`, `lower_bound`, and `upper_bound` only work correctly on sorted arrays.** Calling them on unsorted data compiles, but the result is **undefined behavior** — could be true, false, or anything. Always `sort()` first!"
         },
         {
-          id: "s23-ch2-lb2",
-          type: "explain",
-          title: "🔍 All Three Cases Explained!",
-          content: `Let's compare all 3 cases using \`{1, 3, 3, 5, 7, 9}\`.
-
----
-
-**Case 1: Value appears exactly once (finding 5)**
-
-\`\`\`
-{1,  3,  3,  5,  7,  9}
- 0   1   2   3   4   5
-             ↑   ↑
-       lower_bound upper_bound
-          (5)         (5)
-\`\`\`
-
-\`\`\`cpp
-lower_bound(v.begin(), v.end(), 5) - v.begin()  →  3  (position of 5)
-upper_bound(v.begin(), v.end(), 5) - v.begin()  →  4  (position after 5)
-4 - 3 = 1  →  5 appears 1 time
-\`\`\`
-
----
-
-**Case 2: Value appears multiple times (finding 3)**
-
-\`\`\`
-{1,  3,  3,  5,  7,  9}
- 0   1   2   3   4   5
-     ↑       ↑
-lower_bound  upper_bound
-   (3)          (3)
-\`\`\`
-
-\`\`\`cpp
-lower_bound(v.begin(), v.end(), 3) - v.begin()  →  1  (first 3)
-upper_bound(v.begin(), v.end(), 3) - v.begin()  →  3  (one past last 3)
-3 - 1 = 2  →  3 appears 2 times
-\`\`\`
-
----
-
-**Case 3: Value doesn't exist (finding 4)**
-
-\`\`\`
-{1,  3,  3,  5,  7,  9}
- 0   1   2   3   4   5
-             ↑
-    lower_bound(4) = upper_bound(4)  ← they're the same!
-\`\`\`
-
-\`\`\`cpp
-lower_bound(v.begin(), v.end(), 4) - v.begin()  →  3  (first value ≥ 4 = 5)
-upper_bound(v.begin(), v.end(), 4) - v.begin()  →  3  (first value > 4 = 5)
-3 - 3 = 0  →  4 appears 0 times = not found!
-\`\`\`
-
-**→ lower_bound == upper_bound means the value isn't in the array.**
-
----
-
-**📌 Key Formula Summary**
-
-| Goal | Code |
-|---|---|
-| First position of value | \`lower_bound(v.begin(), v.end(), x) - v.begin()\` |
-| How many of value? | \`upper_bound(...) - lower_bound(...)\` |
-| Does value exist? | \`lower_bound(...) != upper_bound(...)\` → exists |`
-        },
-        {
           id: "s23-ch2-lb3",
           type: "explain",
-          title: "🔍 When the Search Goes Out of Bounds",
-          content: `What happens when you search for a value bigger or smaller than everything?
-
-\`\`\`cpp
+          title: "⚠️ Watch out — what if the value is bigger than everything?",
+          content: `\`\`\`cpp
 vector<int> v = {1, 3, 5, 7, 9};
-//               0  1  2  3  4
+
+lower_bound(v.begin(), v.end(), 10) - v.begin();
+// → 5 (out of range, v[5] doesn't exist!)
 \`\`\`
+
+If nothing in the array is ≥ x, lower_bound returns the **\`v.end()\` position (= index \`v.size()\`)**. Reading \`v[5]\` here is reading invalid memory → crash territory.
 
 ---
 
-**Value bigger than all (finding 10)**
+**Safe usage pattern**
 
-\`\`\`
-{1,  3,  5,  7,  9,  [end]}
- 0   1   2   3   4    5
-                      ↑
-    lower_bound(10) = upper_bound(10) = 5 (past the end!)
-\`\`\`
-
-\`\`\`cpp
-lower_bound(v.begin(), v.end(), 10) - v.begin()  →  5  (out of range!)
-upper_bound(v.begin(), v.end(), 10) - v.begin()  →  5
-\`\`\`
-
-⚠️ Index 5 means \`v[5]\` doesn't exist! It's the **v.end()** position.
-Always check \`idx < v.size()\` before accessing.
-
----
-
-**Value smaller than all (finding 0)**
-
-\`\`\`
-{1,  3,  5,  7,  9}
- 0   1   2   3   4
- ↑
-lower_bound(0) = upper_bound(0) = 0 (at the front!)
-\`\`\`
-
-\`\`\`cpp
-lower_bound(v.begin(), v.end(), 0) - v.begin()  →  0  (at start)
-upper_bound(v.begin(), v.end(), 0) - v.begin()  →  0
-\`\`\`
-
----
-
-**Safe usage pattern:**
 \`\`\`cpp
 auto it = lower_bound(v.begin(), v.end(), x);
 
-// Always check before using!
 if (it != v.end() && *it == x) {
-    // only when value is found
     int idx = it - v.begin();
-    cout << idx;
+    cout << idx;       // only when x truly exists
 }
 \`\`\`
 
-💡 \`*it\` is the value that \`it\` points to. (it = arrow, *it = what the arrow points at)`
+> 💡 \`it != v.end()\` confirms **in range**, \`*it == x\` confirms **the exact value**. Both must hold before you access it.`
         },
         {
           id: "s23-ch2-fb1",
