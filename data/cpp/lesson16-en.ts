@@ -148,7 +148,9 @@ cout << scores["Alice"]; // Prints 0 — silently wrong
           id: "ch1-missing-key-safe",
           type: "explain",
           title: "✅ Safe reading + a useful application",
-          content: `### Two safe read patterns
+          content: `### Safe reading — check with \`count\` first
+
+\`count(key)\` returns **1** if the key exists, **0** if not. Check before accessing to avoid the auto-create trap.
 
 \`\`\`cpp
 map<string, int> scores;
@@ -157,17 +159,15 @@ scores["Alice"] = 95;
 // ❌ Dangerous — "Bob" doesn't exist, gets silently added as 0
 cout << scores["Bob"];  // Prints 0, adds "Bob":0 to map
 
-// ✅ Method 1 — check with count first
+// ✅ Check with count first
 if (scores.count("Bob") > 0) {
     cout << scores["Bob"];  // Only access if it exists
-}
-
-// ✅ Method 2 — use find
-auto it = scores.find("Bob");
-if (it != scores.end()) {
-    cout << it->second;  // it->second is the value
+} else {
+    cout << "missing";
 }
 \`\`\`
+
+> 💡 There's also a \`find\` function — faster and more powerful, but it needs the *iterator* concept which is properly covered in the **next lesson (STL search functions)**. For now, \`count\` is enough.
 
 ---
 
@@ -188,7 +188,7 @@ for (string w : words) {
 
 The auto-zero behavior means you don't need to **initialize before incrementing**. This is the heart of the **frequency map** pattern.
 
-> 💡 Summary: regular *reads* → use count/find safely. *Counting/accumulating* → exploit the auto-create behavior with \`[]\`.`
+> 💡 Summary: regular *reads* → use \`count\` safely. *Counting/accumulating* → exploit the auto-create behavior with \`[]\`.`
         },
         {
           id: "ch1-pred-missing",

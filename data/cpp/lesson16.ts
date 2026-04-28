@@ -148,7 +148,9 @@ cout << scores["Alice"]; // 0 출력 — 에러 없이 조용히 틀림
           id: "ch1-missing-key-safe",
           type: "explain",
           title: "✅ 안전하게 읽기 + 유용한 활용",
-          content: `### 안전한 읽기 패턴 두 가지
+          content: `### 안전한 읽기 — \`count\` 로 먼저 확인
+
+\`count(key)\` 는 키가 있으면 **1**, 없으면 **0** 을 돌려줘요. 이걸로 먼저 체크 후 접근하면 자동 생성 함정을 피할 수 있어요.
 
 \`\`\`cpp
 map<string, int> scores;
@@ -157,17 +159,15 @@ scores["Alice"] = 95;
 // ❌ 위험 — "Bob" 없으면 0 이 생겨버림
 cout << scores["Bob"];  // 0 출력 + "Bob": 0 자동 추가
 
-// ✅ 방법 1 — count 로 먼저 확인
+// ✅ count 로 먼저 확인
 if (scores.count("Bob") > 0) {
     cout << scores["Bob"];  // 있을 때만 접근
-}
-
-// ✅ 방법 2 — find 사용
-auto it = scores.find("Bob");
-if (it != scores.end()) {
-    cout << it->second;  // it->second 가 값
+} else {
+    cout << "없음";
 }
 \`\`\`
+
+> 💡 \`find\` 라는 함수도 있어요. 더 빠르고 강력하지만 *iterator* 라는 새 개념이 필요해서, **다음 레슨 (STL 탐색 함수) 에서** 본격적으로 배워요. 지금은 \`count\` 만 알아도 충분.
 
 ---
 
@@ -188,7 +188,7 @@ for (string w : words) {
 
 없는 키를 0 으로 만들어주는 특성 덕분에 **초기화 없이 바로 \`++\`** 가능. 빈도 카운트 (frequency map) 패턴의 핵심.
 
-> 💡 정리: 일반 *읽기* → count/find 로 안전하게. *카운트/누적* → \`[]\` 자동 생성 활용.`
+> 💡 정리: 일반 *읽기* → \`count\` 로 안전하게. *카운트/누적* → \`[]\` 자동 생성 활용.`
         },
         {
           id: "ch1-pred-missing",
