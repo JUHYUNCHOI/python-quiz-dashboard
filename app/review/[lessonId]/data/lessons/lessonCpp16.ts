@@ -224,7 +224,7 @@ export const lessonCpp16: LessonData = {
           answer: 0,
           explanation: "count() 는 0 또는 1 을 돌려줘서 \"있다/없다\" 질문에 가장 직관적이에요. find/end 비교는 iterator 다뤄야 해서 약간 복잡. m[key] != 0 은 위험 — 없는 키도 자동 생성되고 0 인 값이랑 구분 안 돼요.",
           en: {
-            question: "You only need to know whether a key *exists or not* in a map. Which is cleanest?",
+            question: "You only need to know whether a key exists or not in a map. Which is cleanest?",
             options: [
               "m.count(key) > 0",
               "m.find(key) != m.end()",

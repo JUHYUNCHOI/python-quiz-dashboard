@@ -618,7 +618,7 @@ export const lessonCpp15: LessonData = {
       {
         type: "interleaving",
         content: {
-          message: "잠깐! struct와 pair의 진짜 차이 — 멤버 *이름*",
+          message: "잠깐! struct와 pair의 진짜 차이 — 멤버 이름",
           task: "같은 데이터를 두 방식으로 표현했어요. **struct 와 pair 양쪽 모두 'name' 에 해당하는 부분에 접근**해서 \"Alice\" 로 설정하세요.\n\n👉 차이가 보이죠? struct 는 .name 처럼 **의미가 보이는** 이름, pair 는 .first / .second 처럼 **순서로만** 접근.",
           template: "// struct — meaningful names\nstruct Student { string name; int age; };\nStudent s;\ns.___ = \"Alice\";\n\n// pair — by position only\npair<string, int> p;\np.___ = \"Alice\";",
           answer: "name",
