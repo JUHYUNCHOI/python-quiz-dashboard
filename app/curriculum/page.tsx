@@ -243,7 +243,7 @@ export default function CurriculumPage() {
         { id: "cpp-18", title: t("21. stack & queue", "21. stack & queue"), description: t("LIFO/FIFO 자료구조, deque", "LIFO/FIFO data structures, deque"), duration: t("25분", "25 min"), hasQuiz: true },
         { id: "cpp-19", title: t("22. 파일 I/O & Fast I/O 📌 참고용", "22. File I/O & Fast I/O 📌 Reference"), description: t("나중에 필요할 때 돌아오기 — 지금 건너뛰어도 OK", "Come back when needed — fine to skip for now"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
         { id: "cpp-20", title: t("23. CP 실전 팁 📌 참고용", "23. CP Practical Tips 📌 Reference"), description: t("나중에 필요할 때 돌아오기 — 지금 건너뛰어도 OK", "Come back when needed — fine to skip for now"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
-        { id: "cpp-p3", title: t("🚀 다음 단계: 알고리즘", "🚀 Next Step: Algorithms"), description: t("C++ 도구 완료! 이제 알고리즘으로 넘어가요 →", "C++ tools complete! Time to move on to algorithms →"), duration: t("30분", "30 min"), isProject: true },
+        { id: "cpp-p3", title: t("🏆 USACO 모의전 (Part 3 종합)", "🏆 USACO Mock Contest (Part 3 Capstone)"), description: t("pair / sort / map / stack — 3 문제로 진짜 USACO 풀이 체험", "pair / sort / map / stack — 3 problems for real USACO experience"), duration: t("30분", "30 min"), isProject: true },
       ],
     },
   ]
