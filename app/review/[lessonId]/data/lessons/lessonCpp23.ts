@@ -579,22 +579,22 @@ export const lessonCpp23: LessonData = {
       {
         type: "quiz",
         content: {
-          question: "100 만 개 정수가 들어있는 정렬된 벡터에서 \"3 이 몇 개인가?\" 를 한 번만 계산할 거예요. 어떤 게 더 빠를까요?",
+          question: "100 만 개 정수가 들어있는 정렬된 벡터에서 \"3 이 몇 개인가?\" 를 한 번 계산하려고 해요. 어떤 게 더 빠를까요?",
           options: [
-            "count(v.begin(), v.end(), 3) — O(n)",
-            "upper_bound(...) - lower_bound(...) — O(log n)",
+            "count(v.begin(), v.end(), 3)",
+            "upper_bound(v.begin(), v.end(), 3) - lower_bound(v.begin(), v.end(), 3)",
             "둘 다 똑같음"
           ],
           answer: 1,
-          explanation: "이미 정렬돼 있다면 upper-lower 가 O(log n) 이라 압도적으로 빠름 (약 20 번 비교 vs 100 만 번 비교). count() 는 정렬 여부와 무관하게 처음부터 끝까지 훑어요.\n\n⚠️ 함정: 정렬이 안 돼 있으면 sort 부터 해야 하는데, sort 가 O(n log n) 이라 한 번만 셀 거면 그냥 count() 가 더 빠름.",
+          explanation: "count() 는 정렬 여부와 무관하게 처음부터 끝까지 훑어요 — 100 만 번 비교. 반면 upper_bound / lower_bound 는 이진 탐색이라 정렬된 배열에선 약 20 번 비교로 끝나요.\n\n⚠️ 함정: 만약 정렬이 안 돼 있으면 sort 부터 해야 하는데, sort 자체가 무거워서 한 번만 셀 거면 그냥 count() 가 더 빠름. 이미 정렬된 데이터에서 여러 번 셀 때 upper-lower 가 진짜 빛나요.",
           en: {
-            question: "In a sorted vector of 1M ints, you'll count occurrences of 3 once. Which is faster?",
+            question: "You'll count occurrences of 3 once in a sorted vector of 1M ints. Which is faster?",
             options: [
-              "count(v.begin(), v.end(), 3) — O(n)",
-              "upper_bound(...) - lower_bound(...) — O(log n)",
+              "count(v.begin(), v.end(), 3)",
+              "upper_bound(v.begin(), v.end(), 3) - lower_bound(v.begin(), v.end(), 3)",
               "Both the same"
             ],
-            explanation: "If already sorted, upper-lower is O(log n) — far faster (~20 comparisons vs 1M). count() always scans the whole array.\n\n⚠️ Trap: if not sorted, you'd need sort() first which is O(n log n) — for a single count, plain count() wins."
+            explanation: "count() scans the whole array regardless of sort — 1M comparisons. upper_bound / lower_bound use binary search on a sorted array — ~20 comparisons.\n\n⚠️ Trap: if the data weren't sorted, you'd need sort() first, and sort itself is heavy — for a single count, plain count() wins. upper-lower really shines when the data is already sorted and you'll query many times."
           }
         }
       },
