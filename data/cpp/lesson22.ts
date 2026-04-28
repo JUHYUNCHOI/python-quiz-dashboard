@@ -955,7 +955,7 @@ int main() {
           id: "ch4-struct-vs-class",
           type: "explain",
           title: "🤝 그런데 struct 랑 class, 뭐가 다르지?",
-          content: `여기까지 class 로 꽤 많은 걸 해봤어요 — 멤버 변수, 멤버 함수, 생성자, getter/setter, 캡슐화. 근데 문득 \`cpp-14\` 에서 배운 **struct** 가 생각나지 않아요? 둘이 진짜 뭐가 다르죠?
+          content: `여기까지 class 로 꽤 많은 걸 해봤어요 — 멤버 변수, 멤버 함수, 생성자, getter/setter, 캡슐화. 근데 문득 전에 배운 **struct** 가 생각나지 않아요? 둘이 진짜 뭐가 다르죠?
 
 **놀라운 사실** — \`struct\` 도 **멤버 함수** 를 가질 수 있어요. 문법이 거의 똑같아요.
 

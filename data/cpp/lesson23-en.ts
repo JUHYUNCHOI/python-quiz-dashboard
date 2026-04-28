@@ -994,7 +994,7 @@ cout << idx;  // 1
 
 ### 🤔 Wait — doesn't \`count()\` also count occurrences?
 
-Yes! The \`count()\` you saw in cpp-17 also counts:
+Yes! The \`count()\` you saw in the *STL search functions* lesson also counts:
 
 \`\`\`cpp
 int cnt = count(v.begin(), v.end(), 3);   // works even on unsorted data
