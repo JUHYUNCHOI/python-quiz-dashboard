@@ -566,25 +566,35 @@ int main() {
         {
           id: "ch2-intro",
           type: "explain",
-          title: "🎯 When you need faster search — binary_search()",
+          title: "🎯 Why we need faster search — binary_search concept",
           content: `Imagine searching for one student ID in a list of 1,000,000 students. With \`find()\`, what happens?
 
 \`find()\` checks **one by one from the front**. Worst case: 1 million comparisons. Heavy work even for a computer.
 
-But what if the IDs are **already sorted**? Think how you look up a word in a dictionary — you don't flip from "A" page by page. You open near the middle, decide "is my word before or after?", and only check that half. Then half again, and again. Fast.
+### Dictionary intuition
+
+But what if the IDs are **already sorted**? Think how you look up a word in a dictionary — you don't flip from "A" page by page. You open near the middle, decide "is my word before or after?", and only check that half. Then half again, and again. **Fast.**
 
 That's **binary search**. Cut the range **in half** each time.
+
+### The difference
 
 | Method | How | On 1M items |
 |---|---|---|
 | \`find()\` | One step at a time from the front | up to 1M comparisons |
-| \`binary_search()\` | Cuts in half each round | only ~20 comparisons |
+| \`binary_search()\` | Cuts in half each round | only **~20** comparisons |
 
-Massive difference, right? Catch: data must be **sorted**. Without sorting, you can't say "is my target before or after the middle" in the first place.
+Massive difference, right? With one prerequisite: data must be **sorted**. Without sorting, you can't say "is my target before or after the middle" in the first place.
 
-> 💡 Sorting itself costs time. So if you only search once, the sort cost may not be worth it. But if you'll search **many times**, the win adds up fast.
+> 💡 Sorting itself costs time. If you only search once, the sort cost may not be worth it. But if you'll search **many times**, the win adds up.
 
-\`\`\`cpp
+Next page — actual usage 👇`
+        },
+        {
+          id: "ch2-intro-usage",
+          type: "explain",
+          title: "🔧 binary_search usage + the must-sort rule",
+          content: `\`\`\`cpp
 #include <algorithm>
 #include <vector>
 using namespace std;
@@ -599,7 +609,7 @@ bool notFound = binary_search(v.begin(), v.end(), 6);
 // notFound = false
 \`\`\`
 
-**Important rule:** Data **MUST be sorted** before using \`binary_search()\`!
+### ⚠️ Key rule — sort first
 
 \`\`\`cpp
 vector<int> unsorted = {5, 3, 1, 9, 7};
@@ -610,7 +620,7 @@ bool ok = binary_search(unsorted.begin(), unsorted.end(), 5);
 // ok = true
 \`\`\`
 
-Let's compare with Python:
+### Compared to Python
 
 **Python 🐍:**
 \`\`\`python
@@ -626,14 +636,16 @@ found = (idx < len(lst) and lst[idx] == 7)  # True
 bool found = binary_search(v.begin(), v.end(), 7);  // True
 \`\`\`
 
-C++ is much simpler, right?
+C++ is much simpler.
 
-| Search Method | Time Complexity | Sorting Required? |
+### Summary
+
+| Search Method | Time | Sorting Required? |
 |---|---|---|
 | \`find()\` | O(n) | No |
 | \`binary_search()\` | O(log n) | **Yes!** |
 
-💡 If the data is sorted, always use \`binary_search()\` for efficiency!`
+> 💡 If the data is sorted, \`binary_search()\` is the efficient pick.`
         },
         {
           id: "ch2-fb1",

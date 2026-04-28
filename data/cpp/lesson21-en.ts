@@ -135,6 +135,49 @@ int main() {
           answer: 2,
           explanation: "`int arr[3][4]` has rows 0–2 and columns 0–3. `arr[3][0]` uses row index 3, which doesn't exist — that's out of bounds! The valid row range is 0 to 2 (3 rows total)."
         },
+        {
+          id: "ch1-practice",
+          type: "practice" as const,
+          title: "✋ Build a 2D array and print one cell",
+          content: `**Scenario**: Build a 3×3 2D array and print the value at the center (1, 1).
+
+\`\`\`
+Array:
+1 2 3
+4 5 6
+7 8 9
+
+Center cell (1,1) → 5
+\`\`\`
+
+> 💡 \`int grid[3][3] = {{1,2,3}, {4,5,6}, {7,8,9}};\` to declare + \`grid[1][1]\` to access.`,
+          starterCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    // 👇 Declare a 3x3 array grid (values: 1~9)
+
+
+    // 👇 Print the center cell grid[1][1]
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+using namespace std;
+
+int main() {
+    int grid[3][3] = {
+        {1, 2, 3},
+        {4, 5, 6},
+        {7, 8, 9}
+    };
+    cout << grid[1][1];
+    return 0;
+}`,
+          hint: "int grid[3][3] = {{1,2,3}, {4,5,6}, {7,8,9}}; / cout << grid[1][1];",
+          expectedOutput: "5"
+        },
       ]
     },
     {
