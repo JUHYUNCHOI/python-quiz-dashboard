@@ -58,9 +58,13 @@ cout << scores["Bob"];   // 87 — instant!
 
 Syntax: \`map<key_type, value_type>\`. Usage with \`scores[key]\` is almost identical to Python's dict.
 
-> 💡 One line: **map = "a fast lookup table that finds values by key."**
-
-### One difference from Python dict
+> 💡 One line: **map = "a fast lookup table that finds values by key."** Next page covers the *one* decisive difference from Python dict.`
+        },
+        {
+          id: "ch1-intro-sorted",
+          type: "explain",
+          title: "📌 Decisive difference from Python dict — auto-sort",
+          content: `Usage is nearly identical, but **storage order** is different.
 
 | Python dict 🐍 | C++ map ⚡ |
 |---|---|
@@ -68,15 +72,24 @@ Syntax: \`map<key_type, value_type>\`. Usage with \`scores[key]\` is almost iden
 | \`scores["key"] = val\` | \`scores["key"] = val;\` (same!) |
 | Preserves **insertion order** | **Auto-sorts by key** |
 
+### Example
+
 \`\`\`cpp
 map<string, int> scores;
 scores["Charlie"] = 92;
 scores["Alice"] = 95;
 scores["Bob"] = 87;
-// Iteration: Alice → Bob → Charlie (alphabetical)
+
+// Iterate — what order?
+for (auto& [k, v] : scores) {
+    cout << k << " ";
+}
+// Output: Alice Bob Charlie  (alphabetical!)
 \`\`\`
 
-C++ \`map\` **always keeps keys sorted**. There's a tradeoff to this — we'll compare with \`unordered_map\` later in this chapter.`
+Inserted as Charlie → Alice → Bob, but iteration is **alphabetical**. C++ \`map\` **always keeps keys sorted**.
+
+> 💡 This has a tradeoff. If you don't need sorting and want it faster? \`unordered_map\` — we'll compare shortly.`
         },
         {
           id: "ch1-fb1",
@@ -101,34 +114,41 @@ C++ \`map\` **always keeps keys sorted**. There's a tradeoff to this — we'll c
         {
           id: "ch1-missing-key",
           type: "explain",
-          title: "⚠️ What happens when you access a missing key with []?",
-          content: `C++ map behaves very differently from Python when you access a missing key with \`[]\`!
+          title: "⚠️ Accessing a missing key with [] — dangerous behavior",
+          content: `C++ map behaves very differently from Python when you access a missing key with \`[]\`. This is the trickiest part.
 
-**Python — missing key → immediate error**
+### Python — missing key → immediate error
+
 \`\`\`python
 d = {}
-print(d["missing"])  # KeyError: 'missing' — crashes right away
+print(d["missing"])  # KeyError — crashes right away
 \`\`\`
 
-**C++ map — missing key → silently creates it with 0**
+### C++ map — missing key → silently creates it with 0
+
 \`\`\`cpp
 map<string, int> m;
 cout << m["missing"];  // Prints 0 (no error!)
 cout << m.size();      // 1 — a key was just created!
 \`\`\`
 
-Why is this dangerous? Typos won't cause any errors:
+### Why dangerous? — silent typo bugs
+
 \`\`\`cpp
 scores["Aliec"] = 95;    // Typo! ("Aliec" instead of "Alice")
 cout << scores["Alice"]; // Prints 0 — silently wrong
 // Now the map has BOTH "Aliec": 95 AND "Alice": 0
 \`\`\`
 
-@Key: The moment you use \`[]\` on a missing key, it gets **auto-created with default value 0**. No error — which makes this a sneaky bug that's hard to track down!
+@Key: Using \`[]\` on a missing key **auto-creates** it with default value 0. No error — which makes this a sneaky bug that's hard to track down.
 
----
-
-**Always check before reading:**
+> Next page — how to *read* safely + when this behavior is actually *useful*.`
+        },
+        {
+          id: "ch1-missing-key-safe",
+          type: "explain",
+          title: "✅ Safe reading + a useful application",
+          content: `### Two safe read patterns
 
 \`\`\`cpp
 map<string, int> scores;
@@ -137,12 +157,12 @@ scores["Alice"] = 95;
 // ❌ Dangerous — "Bob" doesn't exist, gets silently added as 0
 cout << scores["Bob"];  // Prints 0, adds "Bob":0 to map
 
-// ✅ Safe — check with count first
+// ✅ Method 1 — check with count first
 if (scores.count("Bob") > 0) {
     cout << scores["Bob"];  // Only access if it exists
 }
 
-// ✅ Safe — use find
+// ✅ Method 2 — use find
 auto it = scores.find("Bob");
 if (it != scores.end()) {
     cout << it->second;  // it->second is the value
@@ -151,7 +171,9 @@ if (it != scores.end()) {
 
 ---
 
-💡 **But this behavior is actually useful for frequency counting!**
+### 💡 But this behavior is actually useful sometimes!
+
+**Counting word occurrences:**
 
 \`\`\`cpp
 map<string, int> freq;
@@ -164,7 +186,9 @@ for (string w : words) {
 // Result: apple=3, banana=1, cherry=1
 \`\`\`
 
-The auto-zero behavior means you don't need to initialize before incrementing!`
+The auto-zero behavior means you don't need to **initialize before incrementing**. This is the heart of the **frequency map** pattern.
+
+> 💡 Summary: regular *reads* → use count/find safely. *Counting/accumulating* → exploit the auto-create behavior with \`[]\`.`
         },
         {
           id: "ch1-pred-missing",
@@ -313,10 +337,10 @@ cherry: 1`
         {
           id: "ch2-intro",
           type: "explain",
-          title: "🎯 set — No Duplicates + Auto-Sorted!",
-          content: `You want to find only the unique scores from a list of exam results. With a vector? You'd have to manually check for duplicates. With set, just insert and it automatically removes duplicates + sorts!
+          title: "🎯 set — no duplicates + auto-sorted!",
+          content: `You want only the unique scores from a list of exam results. With a vector you'd have to check for duplicates manually. **With set, just insert and it auto-removes duplicates + sorts!**
 
-You've used Python's \`set\` before, right? C++ has \`set\` too!
+You've used Python's \`set\` before, right? C++ has \`set\` too:
 
 \`\`\`cpp
 #include <set>
@@ -331,16 +355,11 @@ nums.insert(5);
 // nums = {1, 3, 4, 5} — duplicates removed + auto-sorted!
 \`\`\`
 
-Let's compare with Python:
+### Compared to Python
 
-**Python 🐍:**
 \`\`\`python
 nums = set()
-nums.add(3)
-nums.add(1)
-nums.add(4)
-nums.add(1)  # Duplicate! Ignored
-nums.add(5)
+nums.add(3); nums.add(1); nums.add(4); nums.add(1); nums.add(5)
 # nums = {1, 3, 4, 5} — duplicates removed! (order NOT guaranteed)
 \`\`\`
 
@@ -348,14 +367,22 @@ nums.add(5)
 |---|---|
 | \`s = set()\` | \`set<int> s;\` |
 | \`s.add(x)\` | \`s.insert(x);\` |
-| \`s.remove(x)\` | \`s.erase(x);\` |
-| \`x in s\` | \`s.count(x) > 0\` |
-| No duplicates, NO guaranteed order | **No duplicates + auto-sorted!** |
-| \`len(s)\` | \`s.size()\` |
+| No duplicates, no guaranteed order | **No duplicates + auto-sorted!** |
 
-**Key Methods**
+C++ \`set\` is **auto-sorted ascending**, unlike Python's. (Same principle as map's auto-sorted keys.)
+
+> Next page — common set operations (insert / erase / search).`
+        },
+        {
+          id: "ch2-intro-methods",
+          type: "explain",
+          title: "🔧 set — key methods",
+          content: `Common set functions. Almost identical to map's pattern, so nothing new.
+
 \`\`\`cpp
-s.insert(10);      // Insert
+set<int> s;
+
+s.insert(10);      // Insert (ignored if already present)
 s.erase(10);       // Delete
 s.count(10);       // 1 if exists, 0 if not
 s.find(10);        // Returns iterator (end() if not found)
@@ -363,7 +390,17 @@ s.size();          // Number of elements
 s.empty();         // true if empty
 \`\`\`
 
-💡 Unlike Python's set, C++ \`set\` is **auto-sorted**! Always stored in ascending order.`
+### Python comparison
+
+| Python 🐍 | C++ set ⚡ |
+|---|---|
+| \`s.add(x)\` | \`s.insert(x);\` |
+| \`s.remove(x)\` | \`s.erase(x);\` |
+| \`x in s\` | \`s.count(x) > 0\` |
+| \`len(s)\` | \`s.size();\` |
+| \`not s\` | \`s.empty();\` |
+
+> 💡 Functions look almost identical to \`map\`'s. **The one difference** — set has only keys (no values), so set's find/count just tell you whether the value exists.`
         },
         {
           id: "ch2-fb1",
