@@ -850,6 +850,72 @@ public:
           ],
           explanation: "`seconds = s` — left side is the member variable (seconds), right side is the parameter (s). Think of it as 'store the received value into the member'!"
         },
+        {
+          id: "ch3-practice",
+          type: "practice" as const,
+          title: "✋ Student class — initialize via constructor",
+          content: `**Scenario**: Build a \`Student\` class to hold student info.
+
+**Requirements:**
+1. Member variables: \`name\` (string), \`age\` (int) — public
+2. **Constructor**: \`Student(string n, int a)\` — initialize name, age from parameters
+3. \`info()\` function: prints \`"name, age"\` (comma + space)
+
+\`\`\`
+Student s("Alice", 17);
+s.info();
+// Output: Alice, 17
+\`\`\`
+
+> 💡 Inside the constructor, \`name = n; age = a;\` stores values into members.`,
+          starterCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+class Student {
+public:
+    string name;
+    int age;
+
+    // 👇 Write the constructor: Student(string n, int a)
+
+
+    // 👇 info() — print "name, age"
+
+};
+
+int main() {
+    Student s("Alice", 17);
+    s.info();
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+class Student {
+public:
+    string name;
+    int age;
+
+    Student(string n, int a) {
+        name = n;
+        age = a;
+    }
+
+    void info() {
+        cout << name << ", " << age;
+    }
+};
+
+int main() {
+    Student s("Alice", 17);
+    s.info();
+    return 0;
+}`,
+          hint: "Student(string n, int a) { name = n; age = a; } / void info() { cout << name << \", \" << age; }",
+          expectedOutput: "Alice, 17"
+        },
       ]
     },
     // ============================================
