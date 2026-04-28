@@ -425,71 +425,6 @@ export const lessonCpp23: LessonData = {
         }
       },
 
-      // 🆕 sort + unique 패턴 — 중복 제거 (lesson chapter 3)
-      {
-        type: "explain",
-        content: {
-          lines: [],
-          code: 'vector<int> v = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3};\nsort(v.begin(), v.end());\nv.erase(unique(v.begin(), v.end()), v.end());\ncout << v.size();',
-          predict: {
-            question: "출력 결과는? (중복 제거 후 원소 개수)",
-            options: ["7", "10", "5", "9"],
-            answer: 0,
-            feedback: "정렬 후 v = {1, 1, 2, 3, 3, 4, 5, 5, 6, 9}. unique + erase 로 중복 제거 → {1, 2, 3, 4, 5, 6, 9} = 7 개."
-          },
-          en: {
-            predict: {
-              question: "What's the output? (count after dedup)",
-              options: ["7", "10", "5", "9"],
-              feedback: "After sort: {1, 1, 2, 3, 3, 4, 5, 5, 6, 9}. unique + erase removes duplicates → {1, 2, 3, 4, 5, 6, 9} = 7 elements."
-            }
-          }
-        }
-      },
-
-      // 🆕 sort + unique 빈칸 채우기
-      {
-        type: "practice",
-        content: {
-          level: 2,
-          task: "vector 의 중복을 제거하고 정렬된 결과를 만드세요. (sort → unique → erase 패턴)",
-          guide: "1) sort 먼저 (unique 는 인접 중복만 제거하니까!) 2) v.erase(unique(begin, end), end()) 으로 중복 잘라내기.",
-          template: 'vector<int> v = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3};\nsort(v.begin(), v.end());\nv.erase(___(v.begin(), v.end()), v.end());',
-          answer: "unique",
-          expect: 'vector<int> v = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3};\nsort(v.begin(), v.end());\nv.erase(unique(v.begin(), v.end()), v.end());',
-          en: {
-            task: "Remove duplicates from a vector and keep it sorted. (sort → unique → erase pattern)",
-            guide: "1) sort first (unique only removes adjacent duplicates!). 2) v.erase(unique(begin, end), end()) trims the duplicates."
-          }
-        }
-      },
-
-      // 🆕 sort + unique 핵심 이해 quiz
-      {
-        type: "quiz",
-        content: {
-          question: "`unique()` 만 호출하고 sort 안 하면 어떻게 될까요?",
-          options: [
-            "정상적으로 모든 중복 제거됨",
-            "**인접한** 중복만 제거됨 — {1, 3, 1, 3} 은 그대로 4 개",
-            "컴파일 에러",
-            "프로그램이 멈춤"
-          ],
-          answer: 1,
-          explanation: "`unique()` 는 **인접한** 중복만 제거해요. 정렬 안 하면 같은 값이 떨어져 있어서 중복으로 안 봐요. 그래서 **sort + unique 가 한 세트** 입니다.",
-          en: {
-            question: "What happens if you call `unique()` without sorting first?",
-            options: [
-              "All duplicates removed normally",
-              "Only **adjacent** duplicates removed — {1, 3, 1, 3} stays as 4 elements",
-              "Compile error",
-              "Program crashes"
-            ],
-            explanation: "`unique()` only removes **adjacent** duplicates. Without sorting, equal values aren't next to each other and won't be detected. That's why **sort + unique is a pair**."
-          }
-        }
-      },
-
       // ==================== CHAPTER 3: lower_bound 활용 ====================
       {
         type: "chapter",
@@ -577,6 +512,81 @@ export const lessonCpp23: LessonData = {
               options: ["2", "3", "5"],
               feedback: "5 appears at indices 2, 3, 4 — that's 3 occurrences! hi - lo = 3!"
             }
+          }
+        }
+      },
+
+      // ==================== CHAPTER 4: 심화 패턴 (sort + unique) ====================
+      {
+        type: "chapter",
+        content: {
+          num: 4,
+          title: "심화 패턴",
+          desc: "sort + unique — 벡터에서 중복 제거하기"
+        }
+      },
+
+      // sort + unique 패턴 — 중복 제거 (lesson chapter 3)
+      {
+        type: "explain",
+        content: {
+          lines: [],
+          code: 'vector<int> v = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3};\nsort(v.begin(), v.end());\nv.erase(unique(v.begin(), v.end()), v.end());\ncout << v.size();',
+          predict: {
+            question: "출력 결과는? (중복 제거 후 원소 개수)",
+            options: ["7", "10", "5", "9"],
+            answer: 0,
+            feedback: "정렬 후 v = {1, 1, 2, 3, 3, 4, 5, 5, 6, 9}. unique + erase 로 중복 제거 → {1, 2, 3, 4, 5, 6, 9} = 7 개."
+          },
+          en: {
+            predict: {
+              question: "What's the output? (count after dedup)",
+              options: ["7", "10", "5", "9"],
+              feedback: "After sort: {1, 1, 2, 3, 3, 4, 5, 5, 6, 9}. unique + erase removes duplicates → {1, 2, 3, 4, 5, 6, 9} = 7 elements."
+            }
+          }
+        }
+      },
+
+      // sort + unique 빈칸 채우기
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "vector 의 중복을 제거하고 정렬된 결과를 만드세요. (sort → unique → erase 패턴)",
+          guide: "1) sort 먼저 (unique 는 인접 중복만 제거하니까!) 2) v.erase(unique(begin, end), end()) 으로 중복 잘라내기.",
+          template: 'vector<int> v = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3};\nsort(v.begin(), v.end());\nv.erase(___(v.begin(), v.end()), v.end());',
+          answer: "unique",
+          expect: 'vector<int> v = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3};\nsort(v.begin(), v.end());\nv.erase(unique(v.begin(), v.end()), v.end());',
+          en: {
+            task: "Remove duplicates from a vector and keep it sorted. (sort → unique → erase pattern)",
+            guide: "1) sort first (unique only removes adjacent duplicates!). 2) v.erase(unique(begin, end), end()) trims the duplicates."
+          }
+        }
+      },
+
+      // sort + unique 핵심 이해 quiz
+      {
+        type: "quiz",
+        content: {
+          question: "`unique()` 만 호출하고 sort 안 하면 어떻게 될까요?",
+          options: [
+            "정상적으로 모든 중복 제거됨",
+            "**인접한** 중복만 제거됨 — {1, 3, 1, 3} 은 그대로 4 개",
+            "컴파일 에러",
+            "프로그램이 멈춤"
+          ],
+          answer: 1,
+          explanation: "`unique()` 는 **인접한** 중복만 제거해요. 정렬 안 하면 같은 값이 떨어져 있어서 중복으로 안 봐요. 그래서 **sort + unique 가 한 세트** 입니다.",
+          en: {
+            question: "What happens if you call `unique()` without sorting first?",
+            options: [
+              "All duplicates removed normally",
+              "Only **adjacent** duplicates removed — {1, 3, 1, 3} stays as 4 elements",
+              "Compile error",
+              "Program crashes"
+            ],
+            explanation: "`unique()` only removes **adjacent** duplicates. Without sorting, equal values aren't next to each other and won't be detected. That's why **sort + unique is a pair**."
           }
         }
       },
