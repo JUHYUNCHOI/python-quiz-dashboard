@@ -155,8 +155,8 @@ int main() {
         {
           id: "ch1-queue",
           type: "explain",
-          title: "📦 queue — First In, First Out (FIFO)!",
-          content: `A **queue** is like a line at a store — the **first one in comes out first**!
+          title: "📦 queue — First In, First Out (FIFO)",
+          content: `A **queue** is like a line at a store — **first one in comes out first**. The opposite of a stack — enter at the back, exit at the front.
 
 \`\`\`
 push 1 → [1]
@@ -165,6 +165,8 @@ push 3 → [1, 2, 3]
 pop    → [2, 3]      ← 1 comes out (the first one pushed!)
 front  → 2           ← check the front value
 \`\`\`
+
+Common in real life — bank lines, printer job queues. This rule is called **FIFO (First In First Out)**.
 
 In C++, use \`#include <queue>\`:
 
@@ -183,9 +185,27 @@ q.pop();           // removes 10 (front removed!)
 cout << q.front(); // 20
 \`\`\`
 
-Let's compare with Python:
+> Next page — function table + Python comparison + where queue truly shines.`
+        },
+        {
+          id: "ch1-queue-detail",
+          type: "explain",
+          title: "🔧 queue function reference + Python comparison",
+          content: `### Queue function reference
 
-**Python 🐍** — using \`collections.deque\` as a queue:
+| Function | Syntax | Description |
+|---|---|---|
+| push | \`q.push(x)\` | Add to back |
+| pop | \`q.pop()\` | Remove from front (**no return value!**) |
+| front | \`q.front()\` | Check front value |
+| back | \`q.back()\` | Check back value |
+| size | \`q.size()\` | Number of elements |
+| empty | \`q.empty()\` | Returns true if empty |
+
+### Compared to Python
+
+Python uses \`collections.deque\` as a queue:
+
 \`\`\`python
 from collections import deque
 q = deque()
@@ -198,22 +218,13 @@ q[0]              # front
 | Python 🐍 | C++ queue ⚡ |
 |---|---|
 | \`q.append(x)\` | \`q.push(x)\` |
-| \`q.popleft()\` → returns value | \`q.pop()\` → no return value! |
+| \`q.popleft()\` → returns value | \`q.pop()\` → no return value |
 | \`q[0]\` | \`q.front()\` |
 | \`q[-1]\` | \`q.back()\` |
 
-**Queue function reference**
+### 💡 Where queue truly shines — BFS
 
-| Function | Syntax | Description |
-|---|---|---|
-| push | \`q.push(x)\` | Add to back |
-| pop | \`q.pop()\` | Remove from front (no return value!) |
-| front | \`q.front()\` | Check front value |
-| back | \`q.back()\` | Check back value |
-| size | \`q.size()\` | Number of elements |
-| empty | \`q.empty()\` | Returns true if empty |
-
-💡 Queue is **essential for BFS (Breadth-First Search)**! You'll always need it for graph traversal.`
+Queue is **essential for BFS (Breadth-First Search)**. Graph/grid traversal that "spreads outward one step at a time" is exactly FIFO. You'll meet it again in Algorithm Lab.`
         },
         {
           id: "ch1-fb2",

@@ -155,18 +155,20 @@ int main() {
         {
           id: "ch1-queue",
           type: "explain",
-          title: "📦 queue — 선입선출(FIFO)!",
-          content: `**queue**는 줄 서기처럼 **먼저 넣은 것이 먼저 나오는** 자료구조예요!
+          title: "📦 queue — 선입선출 (FIFO)",
+          content: `**queue** 는 줄 서기처럼 **먼저 넣은 것이 먼저 나오는** 자료구조예요. stack 의 정반대 — 뒤에 들어가서 앞으로 나옴.
 
 \`\`\`
 push 1 → [1]
 push 2 → [1, 2]
 push 3 → [1, 2, 3]
-pop    → [2, 3]      ← 1이 나옴 (먼저 넣은 것!)
+pop    → [2, 3]      ← 1 이 나옴 (먼저 넣은 것!)
 front  → 2           ← 맨 앞 값 확인
 \`\`\`
 
-C++에서는 \`#include <queue>\`로 사용해요:
+은행 대기열, 프린터 작업 큐 같은 곳에서 흔히 보이는 패턴. 이걸 **FIFO (First In First Out)** 라고 불러요.
+
+C++ 에서는 \`#include <queue>\`:
 
 \`\`\`cpp
 #include <queue>
@@ -183,9 +185,27 @@ q.pop();           // 10 제거 (맨 앞 제거!)
 cout << q.front(); // 20
 \`\`\`
 
-파이썬과 비교해봐요:
+> 다음 페이지 — 함수 정리 + 파이썬 비교 + queue 가 진짜 빛나는 곳.`
+        },
+        {
+          id: "ch1-queue-detail",
+          type: "explain",
+          title: "🔧 queue 함수 정리 + 파이썬 비교",
+          content: `### queue 함수 표
 
-**파이썬 🐍** — \`collections.deque\`를 queue처럼 사용:
+| 함수 | 문법 | 설명 |
+|---|---|---|
+| push | \`q.push(x)\` | 뒤에 추가 |
+| pop | \`q.pop()\` | 앞에서 제거 (**리턴값 없음!**) |
+| front | \`q.front()\` | 맨 앞 값 확인 |
+| back | \`q.back()\` | 맨 뒤 값 확인 |
+| size | \`q.size()\` | 원소 개수 |
+| empty | \`q.empty()\` | 비어있으면 true |
+
+### 파이썬과 비교
+
+파이썬은 \`collections.deque\` 를 queue 처럼 사용해요:
+
 \`\`\`python
 from collections import deque
 q = deque()
@@ -198,22 +218,13 @@ q[0]              # front
 | 파이썬 🐍 | C++ queue ⚡ |
 |---|---|
 | \`q.append(x)\` | \`q.push(x)\` |
-| \`q.popleft()\` → 값 리턴 | \`q.pop()\` → 리턴값 없음! |
+| \`q.popleft()\` → 값 리턴 | \`q.pop()\` → 리턴값 없음 |
 | \`q[0]\` | \`q.front()\` |
 | \`q[-1]\` | \`q.back()\` |
 
-**queue 함수 정리**
+### 💡 queue 가 진짜 빛나는 곳 — BFS
 
-| 함수 | 문법 | 설명 |
-|---|---|---|
-| push | \`q.push(x)\` | 뒤에 추가 |
-| pop | \`q.pop()\` | 앞에서 제거 (리턴값 없음!) |
-| front | \`q.front()\` | 맨 앞 값 확인 |
-| back | \`q.back()\` | 맨 뒤 값 확인 |
-| size | \`q.size()\` | 원소 개수 |
-| empty | \`q.empty()\` | 비어있으면 true |
-
-💡 queue는 **BFS(너비 우선 탐색)**에 필수적인 자료구조예요! 그래프 탐색할 때 꼭 쓰여요.`
+queue 는 **BFS (너비 우선 탐색)** 의 필수 자료구조예요. 그래프/격자 탐색할 때 "한 칸씩 퍼져나가는" 동작이 정확히 FIFO. 알고리즘 랩에서 다시 만나요.`
         },
         {
           id: "ch1-fb2",
