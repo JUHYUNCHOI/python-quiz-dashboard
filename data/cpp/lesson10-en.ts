@@ -321,99 +321,6 @@ So \`auto\` doesn't mean "**no** type" — it means "**the compiler writes the t
           explanation: "9.99 has a decimal → double. 5 is a whole number → int. true is true/false → bool. auto looks at the right-hand value and takes its type."
         },
         {
-          id: "ch2-combo",
-          type: "explain",
-          title: "🔥 auto + range-for combo!",
-          content: `Using auto as your range-for variable means you don't have to spell out the type.
-
-\`\`\`cpp
-vector<int> nums = {1, 2, 3};
-
-for (int x : nums) ...     // explicit type
-for (auto x : nums) ...    // auto — compiler infers int
-\`\`\`
-
-> 💡 The three patterns from Chapter 1 — \`int x\` (copy) / \`int& x\` (modify) / \`const int& x\` (read big data) — work the exact same way with \`auto\`. Just swap \`int\` for \`auto\`: \`auto x\` / \`auto& x\` / \`const auto& x\`. No new rules to memorize.
-
-For a short type like \`int\`, the two look pretty similar. **But the longer the type gets, the more auto pays off.**
-
-We'll apply this to 2D vectors on the next page — that's where the difference really lands 👇`
-        },
-        {
-          id: "ch2-2d-rangefor",
-          type: "explain",
-          title: "✨ Where auto really shines — 2D vectors",
-          content: `As promised, let's apply this to 2D vectors. This is where auto really earns its keep.
-
-Same input task, three ways:
-
-\`\`\`cpp
-vector<vector<int>> grid(3, vector<int>(4, 0));
-
-// ① Index-based (what you've been doing)
-for (int i = 0; i < 3; i++)
-    for (int j = 0; j < 4; j++)
-        cin >> grid[i][j];
-
-// ② range-for + explicit type — must spell out the inner type too
-for (vector<int>& row : grid)
-    for (int& val : row)
-        cin >> val;
-
-// ③ range-for + auto — clean
-for (auto& row : grid)
-    for (auto& val : row)
-        cin >> val;
-\`\`\`
-
-Compare ② and ③. \`auto&\` collapses \`vector<int>&\` (and \`int&\`) into one short keyword. **This is what we meant by "auto shines as types get longer."**
-
-Each \`row\` in \`grid\` is a \`vector<int>\`, and each \`val\` inside is an \`int\` — auto figures it out.
-
-Output (read-only) is the same idea:
-
-\`\`\`cpp
-for (const auto& row : grid) {
-    for (const auto& val : row)
-        cout << val << " ";
-    cout << "\\n";
-}
-\`\`\`
-
-(Read-only, so \`const auto&\` — that pattern from Chapter 1.)
-
-So should we always use range-for + auto in 2D? Actually, no. Let's see the split on the next page 👇`,
-        },
-        {
-          id: "ch2-2d-index-vs-rangefor",
-          type: "explain",
-          title: "🤔 So for 2D — range-for or indexed?",
-          content: `In 2D, **both styles get used.** What decides the natural choice is one thing — **do you need the position** (\`i\`, \`j\`)?
-
-Range-for gives you the value but not the position. So:
-
-- "**Print only the diagonal**" → needs \`grid[i][i]\` → **indexed \`for\` is natural**
-- "**Sum of all elements**" → doesn't need positions → **range-for is cleaner**
-
-| Pattern | Position needed? | Natural choice |
-|---|---|---|
-| Diagonal \`grid[i][i]\` | ✅ | indexed \`for\` |
-| Adjacent cell \`grid[i+1][j]\` | ✅ | indexed \`for\` |
-| Border check \`i==0\` | ✅ | indexed \`for\` |
-| Simple input \`cin >> val\` | ❌ | range-for |
-| Total sum/count | ❌ | range-for |
-
-> ℹ️ Even patterns needing position can technically use range-for with an external counter. It just feels awkward, so people rarely do.
-
-### So what about contests like USACO?
-
-Position-handling 2D problems **come up often** in contests (neighbor checks, grid traversal, …), so you'll see indexed \`for\` loops a lot in contest code. (Not every 2D problem is like that — some are just input reading or total sums, where range-for is the more natural choice.)
-
-> 💡 Bottom line: **Need position? Indexed. Don't need it? Range-for.** Contests have lots of position-using problems, which is why indexed shows up frequently there.
-
-Next page — a tricky pitfall when using \`auto\` to make a vector.`,
-        },
-        {
           id: "ch2-vector-trap",
           type: "explain",
           title: "⚠️ auto can't replace vector<int> itself",
@@ -511,6 +418,99 @@ For competitive programming with large numbers, \`int\` overflows past ~2.1 bill
           options: ["60", "75", "45", "Error"],
           answer: 1,
           explanation: "First loop uses & so it modifies: {15, 25, 35}. Second loop sums: 15 + 25 + 35 = 75!"
+        },
+        {
+          id: "ch2-combo",
+          type: "explain",
+          title: "🔥 auto + range-for combo!",
+          content: `Using auto as your range-for variable means you don't have to spell out the type.
+
+\`\`\`cpp
+vector<int> nums = {1, 2, 3};
+
+for (int x : nums) ...     // explicit type
+for (auto x : nums) ...    // auto — compiler infers int
+\`\`\`
+
+> 💡 The three patterns from Chapter 1 — \`int x\` (copy) / \`int& x\` (modify) / \`const int& x\` (read big data) — work the exact same way with \`auto\`. Just swap \`int\` for \`auto\`: \`auto x\` / \`auto& x\` / \`const auto& x\`. No new rules to memorize.
+
+For a short type like \`int\`, the two look pretty similar. **But the longer the type gets, the more auto pays off.**
+
+We'll apply this to 2D vectors on the next page — that's where the difference really lands 👇`
+        },
+        {
+          id: "ch2-2d-rangefor",
+          type: "explain",
+          title: "✨ Where auto really shines — 2D vectors",
+          content: `As promised, let's apply this to 2D vectors. This is where auto really earns its keep.
+
+Same input task, three ways:
+
+\`\`\`cpp
+vector<vector<int>> grid(3, vector<int>(4, 0));
+
+// ① Index-based (what you've been doing)
+for (int i = 0; i < 3; i++)
+    for (int j = 0; j < 4; j++)
+        cin >> grid[i][j];
+
+// ② range-for + explicit type — must spell out the inner type too
+for (vector<int>& row : grid)
+    for (int& val : row)
+        cin >> val;
+
+// ③ range-for + auto — clean
+for (auto& row : grid)
+    for (auto& val : row)
+        cin >> val;
+\`\`\`
+
+Compare ② and ③. \`auto&\` collapses \`vector<int>&\` (and \`int&\`) into one short keyword. **This is what we meant by "auto shines as types get longer."**
+
+Each \`row\` in \`grid\` is a \`vector<int>\`, and each \`val\` inside is an \`int\` — auto figures it out.
+
+Output (read-only) is the same idea:
+
+\`\`\`cpp
+for (const auto& row : grid) {
+    for (const auto& val : row)
+        cout << val << " ";
+    cout << "\\n";
+}
+\`\`\`
+
+(Read-only, so \`const auto&\` — that pattern from Chapter 1.)
+
+So should we always use range-for + auto in 2D? Actually, no. Let's see the split on the next page 👇`,
+        },
+        {
+          id: "ch2-2d-index-vs-rangefor",
+          type: "explain",
+          title: "🤔 So for 2D — range-for or indexed?",
+          content: `In 2D, **both styles get used.** What decides the natural choice is one thing — **do you need the position** (\`i\`, \`j\`)?
+
+Range-for gives you the value but not the position. So:
+
+- "**Print only the diagonal**" → needs \`grid[i][i]\` → **indexed \`for\` is natural**
+- "**Sum of all elements**" → doesn't need positions → **range-for is cleaner**
+
+| Pattern | Position needed? | Natural choice |
+|---|---|---|
+| Diagonal \`grid[i][i]\` | ✅ | indexed \`for\` |
+| Adjacent cell \`grid[i+1][j]\` | ✅ | indexed \`for\` |
+| Border check \`i==0\` | ✅ | indexed \`for\` |
+| Simple input \`cin >> val\` | ❌ | range-for |
+| Total sum/count | ❌ | range-for |
+
+> ℹ️ Even patterns needing position can technically use range-for with an external counter. It just feels awkward, so people rarely do.
+
+### So what about contests like USACO?
+
+Position-handling 2D problems **come up often** in contests (neighbor checks, grid traversal, …), so you'll see indexed \`for\` loops a lot in contest code. (Not every 2D problem is like that — some are just input reading or total sums, where range-for is the more natural choice.)
+
+> 💡 Bottom line: **Need position? Indexed. Don't need it? Range-for.** Contests have lots of position-using problems, which is why indexed shows up frequently there.
+
+Time to write one yourself 👇`,
         },
         {
           id: "ch2-practice",
