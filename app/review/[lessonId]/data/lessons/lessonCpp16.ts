@@ -184,6 +184,58 @@ export const lessonCpp16: LessonData = {
         }
       },
 
+      // 🆕 map vs vector<pair> 결정 quiz
+      {
+        type: "quiz",
+        content: {
+          question: "학생들 점수표를 점수 내림차순으로 정렬해서 출력하려고 해요. 어떤 자료구조가 가장 적합할까요?",
+          options: [
+            "map<string, int>",
+            "vector<pair<string, int>> + sort",
+            "set<pair<string, int>>",
+            "unordered_map<string, int>"
+          ],
+          answer: 1,
+          explanation: "map은 키 (이름) 기준 자동 정렬만 됨 — 값 (점수) 기준으로 못 바꿔요. vector<pair> 로 묶고 sort 의 lambda 로 .second 기준 정렬해야 점수 순으로 나와요. 결정 규칙: \"이름 빠른 검색\" → map, \"점수 순 정렬\" → vector<pair>.",
+          en: {
+            question: "You want to sort student records by score (descending) and print them. Which container fits best?",
+            options: [
+              "map<string, int>",
+              "vector<pair<string, int>> + sort",
+              "set<pair<string, int>>",
+              "unordered_map<string, int>"
+            ],
+            explanation: "map only auto-sorts by key (name) — can't reorder by value (score). Use vector<pair> and sort with a lambda comparing .second. Rule: \"fast lookup by name\" → map, \"sort by score\" → vector<pair>."
+          }
+        }
+      },
+
+      // 🆕 count vs find 결정 quiz
+      {
+        type: "quiz",
+        content: {
+          question: "map 에서 \"이 키가 있는지 *있다/없다* 만\" 알면 돼요. 가장 깔끔한 방법은?",
+          options: [
+            "m.count(key) > 0",
+            "m.find(key) != m.end()",
+            "m[key] != 0",
+            "m.size() > 0"
+          ],
+          answer: 0,
+          explanation: "count() 는 0 또는 1 을 돌려줘서 \"있다/없다\" 질문에 가장 직관적이에요. find/end 비교는 iterator 다뤄야 해서 약간 복잡. m[key] != 0 은 위험 — 없는 키도 자동 생성되고 0 인 값이랑 구분 안 돼요.",
+          en: {
+            question: "You only need to know whether a key *exists or not* in a map. Which is cleanest?",
+            options: [
+              "m.count(key) > 0",
+              "m.find(key) != m.end()",
+              "m[key] != 0",
+              "m.size() > 0"
+            ],
+            explanation: "count() returns 0 or 1, the most direct yes/no answer. find/end requires handling iterators. m[key] != 0 is unsafe — auto-creates missing keys and can't distinguish from value 0."
+          }
+        }
+      },
+
       // 보상
       {
         type: "reward",
@@ -554,6 +606,24 @@ export const lessonCpp16: LessonData = {
           en: {
             task: "Count word frequencies using a map and print how many times \"apple\" appears",
             guide: "Use range-for to loop through each word and increment its count in the map by 1!"
+          }
+        }
+      },
+
+      // 🆕 Drill 2.5: map 순회 (구조적 바인딩)
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "점수 map 을 순회하며 \"이름: 점수\" 형식으로 한 줄씩 출력 — 구조적 바인딩 사용",
+          guide: "for (auto& [key, value] : m) 형태. map 은 키 알파벳 순으로 자동 정렬된 채 순회됨.",
+          template: "map<string, int> scores = {{\"Bob\",87}, {\"Alice\",95}, {\"Carol\",92}};\nfor (auto& [___, ___] : scores) {\n    cout << name << \": \" << score << endl;\n}",
+          blanksAnswer: ["name", "score"],
+          answer: "map<string, int> scores = {{\"Bob\",87}, {\"Alice\",95}, {\"Carol\",92}};\nfor (auto& [name, score] : scores) {\n    cout << name << \": \" << score << endl;\n}",
+          expect: "Alice: 95\nBob: 87\nCarol: 92",
+          en: {
+            task: "Iterate the score map and print 'name: score' per line — use structured bindings",
+            guide: "for (auto& [key, value] : m) form. map iterates in alphabetical key order automatically."
           }
         }
       },
