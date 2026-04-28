@@ -1008,7 +1008,33 @@ else cout << "not found";
 // ③ When you need the position — use lower_bound
 int idx = lower_bound(v.begin(), v.end(), 3) - v.begin();
 cout << idx;  // 1
-\`\`\``
+\`\`\`
+
+---
+
+### 🤔 Wait — doesn't \`count()\` also count occurrences?
+
+Yes! The \`count()\` you saw in cpp-17 also counts:
+
+\`\`\`cpp
+int cnt = count(v.begin(), v.end(), 3);   // works even on unsorted data
+\`\`\`
+
+**So what's the difference?**
+
+| | \`count()\` | \`upper - lower\` |
+|---|---|---|
+| Sorted required? | ❌ No | ✅ Must be sorted |
+| Speed | **O(n)** — scans everything | **O(log n)** — binary search |
+| Counting in 1M elements | 1,000,000 comparisons | ~20 comparisons |
+
+**Trap:** "So I'll just sort once and use upper-lower!" → ❌. \`sort\` itself is O(n log n) — for a *single* count, plain \`count()\` is faster.
+
+✅ **When upper-lower really shines:**
+- Data is *already* sorted
+- You need to count *many times* on the same data (sort once → each query is O(log n))
+
+Common in competitive programming; in everyday code \`count()\` is more typical.`
         },
         {
           id: "s23-ch2-lb-vs-bs",
