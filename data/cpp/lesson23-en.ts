@@ -991,13 +991,13 @@ lower_bound  upper_bound
 \`\`\`
 
 - **lower_bound** → first position where value **≥ x** = "where this value starts"
-- **upper_bound** → first position where value **> x** = "one past where value ends"
-
----
-
-**Why do we need** \`- v.begin()\`**?**
-
-\`lower_bound\` returns \`it\` — not an index number, but a
+- **upper_bound** → first position where value **> x** = "one past where value ends"`
+        },
+        {
+          id: "s23-ch2-lb-index",
+          type: "explain",
+          title: "📌 Why \`- v.begin()\`?",
+          content: `\`lower_bound\` returns \`it\` — not an index number, but a
 **memory address (an arrow pointing to a position).**
 Printing it directly gives something like \`0x7ff3a2b...\`
 
@@ -1012,13 +1012,13 @@ int idx = it - v.begin();  // formula! always convert to index this way
 cout << idx;  // 1
 \`\`\`
 
-💡 Memorize \`- v.begin()\` as a formula!
-
----
-
-**What happens when the value isn't found?**
-
-\`\`\`cpp
+💡 Memorize \`- v.begin()\` as a formula!`
+        },
+        {
+          id: "s23-ch2-lb-missing",
+          type: "explain",
+          title: "🔍 What if the value isn't found?",
+          content: `\`\`\`cpp
 vector<int> v = {1, 3, 5, 7, 9};
 
 // 4 doesn't exist
@@ -1034,7 +1034,7 @@ lower_bound(v.begin(), v.end(), 10) - v.begin() →  5  (past the end)
 
 ---
 
-**Usage Patterns**
+**3 Usage Patterns**
 
 \`\`\`cpp
 vector<int> v = {1, 3, 3, 5, 7, 9};
@@ -1051,13 +1051,13 @@ else cout << "not found";
 // ③ When you need the position — use lower_bound
 int idx = lower_bound(v.begin(), v.end(), 3) - v.begin();
 cout << idx;  // 1
-\`\`\`
-
----
-
-**binary_search() vs lower_bound — when to use which?**
-
-| | binary_search() | lower_bound() |
+\`\`\``
+        },
+        {
+          id: "s23-ch2-lb-vs-bs",
+          type: "explain",
+          title: "🆚 binary_search() vs lower_bound — when to use which?",
+          content: `| | binary_search() | lower_bound() |
 |---|---|---|
 | Returns | true / false | position (iterator) |
 | Use when | just checking existence | need position or count |

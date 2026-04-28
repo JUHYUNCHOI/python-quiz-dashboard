@@ -991,13 +991,13 @@ lower_bound  upper_bound
 \`\`\`
 
 - **lower_bound** → 값 **이상(≥)** 의 첫 위치 = "이 값이 시작되는 곳"
-- **upper_bound** → 값 **초과(>)** 의 첫 위치 = "이 값이 끝난 다음"
-
----
-
-**왜** \`- v.begin()\` **을 하는 거야?**
-
-\`lower_bound\`가 반환하는 \`it\`는 인덱스 번호가 아니라
+- **upper_bound** → 값 **초과(>)** 의 첫 위치 = "이 값이 끝난 다음"`
+        },
+        {
+          id: "s23-ch2-lb-index",
+          type: "explain",
+          title: "📌 왜 \`- v.begin()\` 을 하는 거야?",
+          content: `\`lower_bound\`가 반환하는 \`it\`는 인덱스 번호가 아니라
 **메모리 주소 (위치를 가리키는 화살표)** 예요.
 그냥 출력하면 \`0x7ff3a2b...\` 같은 이상한 숫자가 나와요.
 
@@ -1012,13 +1012,13 @@ int idx = it - v.begin();  // 공식! 항상 이렇게 인덱스로 변환
 cout << idx;  // 1
 \`\`\`
 
-💡 \`- v.begin()\`은 공식으로 외우세요!
-
----
-
-**없는 값을 찾으면?**
-
-\`\`\`cpp
+💡 \`- v.begin()\`은 공식으로 외우세요!`
+        },
+        {
+          id: "s23-ch2-lb-missing",
+          type: "explain",
+          title: "🔍 없는 값을 찾으면?",
+          content: `\`\`\`cpp
 vector<int> v = {1, 3, 5, 7, 9};
 
 // 4는 없음
@@ -1034,7 +1034,7 @@ lower_bound(v.begin(), v.end(), 10) - v.begin() →  5  (끝을 넘어감)
 
 ---
 
-**활용 패턴**
+**활용 패턴 3가지**
 
 \`\`\`cpp
 vector<int> v = {1, 3, 3, 5, 7, 9};
@@ -1051,13 +1051,13 @@ else cout << "없음";
 // ③ 값의 위치가 필요할 때 — lower_bound 사용
 int idx = lower_bound(v.begin(), v.end(), 3) - v.begin();
 cout << idx;  // 1
-\`\`\`
-
----
-
-**binary_search() vs lower_bound — 언제 뭘 써?**
-
-| | binary_search() | lower_bound() |
+\`\`\``
+        },
+        {
+          id: "s23-ch2-lb-vs-bs",
+          type: "explain",
+          title: "🆚 binary_search() vs lower_bound — 언제 뭘 써?",
+          content: `| | binary_search() | lower_bound() |
 |---|---|---|
 | 반환값 | true / false | 위치(반복자) |
 | 용도 | 있는지만 확인 | 위치·개수 필요할 때 |
