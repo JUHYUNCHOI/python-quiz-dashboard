@@ -42,12 +42,21 @@ export async function restoreFromCloud(userId: string) {
     }
 
     // 2. 완료 수업 + 퀴즈 복습 복원
-    if (lessonResult.status === "fulfilled" && lessonResult.value.data?.length) {
-      const allLessons = lessonResult.value.data
-      const learnLessons = allLessons.filter(l => l.progress_type === "learn" || !l.progress_type)
-      const quizLessons = allLessons.filter(l => l.progress_type === "quiz")
-      if (learnLessons.length) restoreCompletedLessons(learnLessons)
-      if (quizLessons.length) restoreCompletedQuizzes(quizLessons)
+    if (lessonResult.status === "fulfilled") {
+      const data = lessonResult.value.data
+      if (data?.length) {
+        const learnLessons = data.filter(l => l.progress_type === "learn" || !l.progress_type)
+        const quizLessons = data.filter(l => l.progress_type === "quiz")
+        if (learnLessons.length) restoreCompletedLessons(learnLessons)
+        if (quizLessons.length) restoreCompletedQuizzes(quizLessons)
+      } else if (lessonResult.value.error) {
+        console.error("[RestoreFromCloud] lesson_progress 쿼리 에러:",
+          lessonResult.value.error.message, lessonResult.value.error.code)
+      }
+      // data 가 빈 배열인 경우는 정상 (신규 학생) — 로그 안 남김
+    } else {
+      // Promise 자체가 reject 된 경우 (네트워크 에러 등)
+      console.error("[RestoreFromCloud] lesson_progress fetch rejected:", lessonResult.reason)
     }
 
     // 3. 활동 로그 복원 (quiz + lesson 날짜 → activity-log localStorage)
@@ -151,7 +160,9 @@ function restoreCompletedLessons(lessons: Record<string, unknown>[]) {
       existingSet.add(String(l.lesson_id))
     }
     localStorage.setItem("completedLessons", JSON.stringify(Array.from(existingSet)))
-  } catch {}
+  } catch (e) {
+    console.error("[RestoreFromCloud] completedLessons 저장 실패:", e)
+  }
 }
 
 /** lesson_progress (completed, quiz) → completedQuizzes localStorage
@@ -166,7 +177,9 @@ function restoreCompletedQuizzes(lessons: Record<string, unknown>[]) {
       existingSet.add(String(l.lesson_id))
     }
     localStorage.setItem("completedQuizzes", JSON.stringify(Array.from(existingSet)))
-  } catch {}
+  } catch (e) {
+    console.error("[RestoreFromCloud] completedQuizzes 저장 실패:", e)
+  }
 }
 
 /** quiz + lesson 날짜 → activity-log localStorage */
