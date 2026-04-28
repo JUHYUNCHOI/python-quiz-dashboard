@@ -8,8 +8,50 @@ export const cppLesson19EnData: LessonData = {
   id: "cpp-19",
   title: "File I/O & Fast I/O",
   emoji: "📁",
-  description: "Essential for USACO! File I/O and fast I/O",
+  description: "Reference — come back when you actually need it",
   chapters: [
+    // ============================================
+    // Chapter 0: Before you dive in (notice)
+    // ============================================
+    {
+      id: "ch0-notice",
+      title: "Before you dive in",
+      emoji: "📌",
+      steps: [
+        {
+          id: "ch0-notice",
+          type: "explain",
+          title: "📌 You don't need to memorize this *now*",
+          content: `This lesson is **reference material**. You don't need to spend time memorizing it now.
+
+### Why?
+
+The two topics — **File I/O** and **Fast I/O** — are all about *when* you use them. And that *when* is later, while solving real problems.
+
+| Tool | When you actually need it |
+|---|---|
+| **Fast I/O** (\`sync_with_stdio(false)\`) | When your algorithm code hits *Time Limit Exceeded* |
+| **File I/O** (\`ifstream\` / \`ofstream\` / \`freopen\`) | Old USACO problems with \`.in\` / \`.out\` files |
+
+Pre-learning these now means *forgetting them by the time you need them*. Setup-line-style content doesn't stick without context.
+
+### So when *should* you read it?
+
+- Algorithm Lab code times out → "wait, Fast I/O — let me grab that line." Come back here.
+- Hit an old USACO problem → "right, freopen." Come back here.
+
+Open this lesson at *that* moment and read just the page you need.
+
+### So now?
+
+- **Skip it** — the next lesson isn't gated on this
+- **Browse it if curious** — content is still here
+- **Don't try to memorize it** — without context, it's wasted effort
+
+> Move on to algorithms now. Come back when you actually need it — that's the real way to learn this.`
+        }
+      ]
+    },
     // ============================================
     // Chapter 1: File I/O
     // ============================================

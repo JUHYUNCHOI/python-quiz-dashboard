@@ -965,7 +965,7 @@ int main() {
           id: "ch4-struct-vs-class",
           type: "explain",
           title: "🤝 So what's actually different between struct and class?",
-          content: `You've done a lot with \`class\` by now — member variables, member functions, constructors, getters/setters, encapsulation. But remember **struct** from \`cpp-14\`? What actually separates these two?
+          content: `You've done a lot with \`class\` by now — member variables, member functions, constructors, getters/setters, encapsulation. But remember **struct** from earlier? What actually separates these two?
 
 **Surprise** — \`struct\` can also have **member functions**. The syntax is nearly identical.
 

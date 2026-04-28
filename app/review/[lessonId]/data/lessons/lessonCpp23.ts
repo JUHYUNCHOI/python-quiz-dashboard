@@ -267,27 +267,27 @@ export const lessonCpp23: LessonData = {
         }
       },
 
-      // errorQuiz: >= 대신 > 을 써야 함
+      // errorQuiz: 내림차순인데 비교 방향이 틀림
       {
         type: "errorQuiz",
         content: {
-          question: "이 comparator의 문제점은?",
-          code: 'sort(v.begin(), v.end(),\n    [](int a, int b) { return a >= b; });',
+          question: "내림차순 정렬을 원해요. 뭐가 잘못됐을까?",
+          code: '// 큰 수부터 출력하고 싶어요\nsort(v.begin(), v.end(),\n    [](int a, int b) { return a < b; });',
           options: [
-            ">= 대신 > 를 써야 해요 (같을 때 true 반환하면 안 됨)",
+            "비교 방향이 반대예요 — 내림차순은 `return a > b`",
             "람다 대신 함수 포인터를 써야 해요",
             "sort에서 람다를 사용할 수 없어요"
           ],
           answer: 0,
-          explanation: "comparator는 a == b 일 때 false를 반환해야 해요! >= 는 같을 때도 true → 정렬 동작 undefined behavior!",
+          explanation: "`return a < b` 는 **오름차순**이에요 (작은 게 앞). 내림차순은 큰 게 앞으로 가야 하니까 `return a > b` 로 바꿔야 해요.",
           en: {
-            question: "What is wrong with this comparator?",
+            question: "We want descending order. What's wrong?",
             options: [
-              "Should use > instead of >= (must not return true when equal)",
+              "The comparison direction is reversed — descending should be `return a > b`",
               "Should use a function pointer instead of a lambda",
               "Cannot use a lambda with sort"
             ],
-            explanation: "A comparator must return false when a == b! >= returns true even when equal → undefined behavior in sorting!"
+            explanation: "`return a < b` is **ascending** (smaller first). For descending, the bigger one should come first, so use `return a > b`."
           }
         }
       },
@@ -349,32 +349,6 @@ export const lessonCpp23: LessonData = {
         }
       },
 
-      // quiz: stable_sort
-      {
-        type: "quiz",
-        content: {
-          question: "stable_sort와 sort의 차이점은?",
-          options: [
-            "stable_sort는 내림차순만 지원한다",
-            "stable_sort는 동일한 값의 원래 순서를 보존한다",
-            "stable_sort는 <numeric> 헤더가 필요하다",
-            "stable_sort는 포인터 배열에서만 사용 가능하다"
-          ],
-          answer: 1,
-          explanation: "stable_sort는 같은 값이 있을 때 원래 순서를 유지해요! 이름-점수 묶음에서 점수 같으면 이름 순서 보존 시 유용!",
-          en: {
-            question: "What is the difference between stable_sort and sort?",
-            options: [
-              "stable_sort only supports descending order",
-              "stable_sort preserves the original order of equal elements",
-              "stable_sort requires the <numeric> header",
-              "stable_sort can only be used on pointer arrays"
-            ],
-            explanation: "stable_sort preserves the original order of equal elements! Useful when you want to keep the name order when scores are equal."
-          }
-        }
-      },
-
       // practice: 다중 조건 정렬
       {
         type: "practice",
@@ -423,13 +397,13 @@ export const lessonCpp23: LessonData = {
         type: "practice",
         content: {
           level: 3,
-          task: "처음부터 작성! 학생 정보 tuple<string, int, double> (이름, 나이, 학점) 벡터를 **학점 내림차순**, 동점이면 **나이 오름차순** 으로 정렬해서 1등의 이름만 출력하세요.\n\n입력: {{\"Alice\", 17, 3.8}, {\"Bob\", 16, 3.9}, {\"Carol\", 17, 3.9}}\n기대 출력: Carol",
+          task: "처음부터 작성! 학생 정보 tuple<string, int, double> (이름, 나이, 학점) 벡터를 **학점 내림차순**, 동점이면 **나이 오름차순** 으로 정렬해서 1등의 이름만 출력하세요.\n\n입력: {{\"Alice\", 17, 3.8}, {\"Bob\", 16, 3.9}, {\"Carol\", 17, 3.9}}\n기대 출력: Bob",
           guide: "auto [name, age, gpa] = student; 로 풀고, lambda comparator 에서 학점이 다르면 학점 비교, 같으면 나이 비교. 학점 내림차순 = a.gpa > b.gpa 또는 get<2>(a) > get<2>(b).",
           template: null,
           answer: 'vector<tuple<string, int, double>> v = {{"Alice", 17, 3.8}, {"Bob", 16, 3.9}, {"Carol", 17, 3.9}};\nsort(v.begin(), v.end(), [](auto& a, auto& b) {\n    auto [na, aa, ga] = a;\n    auto [nb, ab, gb] = b;\n    if (ga != gb) return ga > gb;\n    return aa < ab;\n});\nauto [name, age, gpa] = v[0];\ncout << name;',
-          expect: "Carol",
+          expect: "Bob",
           en: {
-            task: "Write from scratch! Given a vector<tuple<string, int, double>> of (name, age, gpa), sort by **gpa descending**, breaking ties by **age ascending**, then print just the top student's name.\n\nInput: {{\"Alice\", 17, 3.8}, {\"Bob\", 16, 3.9}, {\"Carol\", 17, 3.9}}\nExpected output: Carol",
+            task: "Write from scratch! Given a vector<tuple<string, int, double>> of (name, age, gpa), sort by **gpa descending**, breaking ties by **age ascending**, then print just the top student's name.\n\nInput: {{\"Alice\", 17, 3.8}, {\"Bob\", 16, 3.9}, {\"Carol\", 17, 3.9}}\nExpected output: Bob",
             guide: "Unpack with structured bindings: auto [name, age, gpa] = student;. In the lambda comparator, if gpa differs use gpa, otherwise use age. Descending gpa = a.gpa > b.gpa (or get<2>(a) > get<2>(b))."
           }
         }
@@ -451,78 +425,54 @@ export const lessonCpp23: LessonData = {
         }
       },
 
-      // 🆕 sort + unique 패턴 — 중복 제거 (lesson chapter 3)
-      {
-        type: "explain",
-        content: {
-          lines: [],
-          code: 'vector<int> v = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3};\nsort(v.begin(), v.end());\nv.erase(unique(v.begin(), v.end()), v.end());\ncout << v.size();',
-          predict: {
-            question: "출력 결과는? (중복 제거 후 원소 개수)",
-            options: ["7", "10", "5", "9"],
-            answer: 0,
-            feedback: "정렬 후 v = {1, 1, 2, 3, 3, 4, 5, 5, 6, 9}. unique + erase 로 중복 제거 → {1, 2, 3, 4, 5, 6, 9} = 7 개."
-          },
-          en: {
-            predict: {
-              question: "What's the output? (count after dedup)",
-              options: ["7", "10", "5", "9"],
-              feedback: "After sort: {1, 1, 2, 3, 3, 4, 5, 5, 6, 9}. unique + erase removes duplicates → {1, 2, 3, 4, 5, 6, 9} = 7 elements."
-            }
-          }
-        }
-      },
-
-      // 🆕 sort + unique 빈칸 채우기
-      {
-        type: "practice",
-        content: {
-          level: 2,
-          task: "vector 의 중복을 제거하고 정렬된 결과를 만드세요. (sort → unique → erase 패턴)",
-          guide: "1) sort 먼저 (unique 는 인접 중복만 제거하니까!) 2) v.erase(unique(begin, end), end()) 으로 중복 잘라내기.",
-          template: 'vector<int> v = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3};\nsort(v.begin(), v.end());\nv.erase(___(v.begin(), v.end()), v.end());',
-          answer: "unique",
-          expect: 'vector<int> v = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3};\nsort(v.begin(), v.end());\nv.erase(unique(v.begin(), v.end()), v.end());',
-          en: {
-            task: "Remove duplicates from a vector and keep it sorted. (sort → unique → erase pattern)",
-            guide: "1) sort first (unique only removes adjacent duplicates!). 2) v.erase(unique(begin, end), end()) trims the duplicates."
-          }
-        }
-      },
-
-      // 🆕 sort + unique 핵심 이해 quiz
-      {
-        type: "quiz",
-        content: {
-          question: "`unique()` 만 호출하고 sort 안 하면 어떻게 될까요?",
-          options: [
-            "정상적으로 모든 중복 제거됨",
-            "**인접한** 중복만 제거됨 — {1, 3, 1, 3} 은 그대로 4 개",
-            "컴파일 에러",
-            "프로그램이 멈춤"
-          ],
-          answer: 1,
-          explanation: "`unique()` 는 **인접한** 중복만 제거해요. 정렬 안 하면 같은 값이 떨어져 있어서 중복으로 안 봐요. 그래서 **sort + unique 가 한 세트** 입니다.",
-          en: {
-            question: "What happens if you call `unique()` without sorting first?",
-            options: [
-              "All duplicates removed normally",
-              "Only **adjacent** duplicates removed — {1, 3, 1, 3} stays as 4 elements",
-              "Compile error",
-              "Program crashes"
-            ],
-            explanation: "`unique()` only removes **adjacent** duplicates. Without sorting, equal values aren't next to each other and won't be detected. That's why **sort + unique is a pair**."
-          }
-        }
-      },
-
-      // ==================== CHAPTER 3: lower_bound 활용 ====================
+      // ==================== CHAPTER 3: 이진탐색 활용 (3 형제) ====================
       {
         type: "chapter",
         content: {
           num: 3,
-          title: "lower_bound 활용",
-          desc: "정렬된 배열에서 빠르게 위치/개수 찾기!"
+          title: "이진탐색 활용 (3 형제)",
+          desc: "binary_search / lower_bound / upper_bound — 정렬된 배열 빠르게 다루기"
+        }
+      },
+
+      // 🆕 trio quiz — 어느 함수 쓸까?
+      {
+        type: "quiz",
+        content: {
+          question: "정렬된 vector<int> v 에서 \"숫자 7 이 있는지 있다/없다 만\" 알면 돼요. 셋 중 어느 게 가장 깔끔할까요?",
+          options: [
+            "binary_search(v.begin(), v.end(), 7)",
+            "lower_bound(v.begin(), v.end(), 7)",
+            "upper_bound(v.begin(), v.end(), 7)"
+          ],
+          answer: 0,
+          explanation: "binary_search 는 정확히 \"있나/없나\" 를 묻는 함수 — true/false 반환이라 가장 직관적이에요. lower_bound / upper_bound 는 위치를 돌려주니까 한 단계 더 필요해요.",
+          en: {
+            question: "In a sorted vector<int> v, you only need whether 7 is there (yes/no). Which is the cleanest?",
+            options: [
+              "binary_search(v.begin(), v.end(), 7)",
+              "lower_bound(v.begin(), v.end(), 7)",
+              "upper_bound(v.begin(), v.end(), 7)"
+            ],
+            explanation: "binary_search answers exactly the yes/no question with true/false. lower_bound/upper_bound return positions, requiring an extra step."
+          }
+        }
+      },
+
+      // 🆕 binary_search 사용 — practice
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "정렬된 벡터에서 값 5 의 존재 여부 (true / false) 만 확인! 3 형제 중 어느 함수가 가장 깔끔할까요?",
+          guide: "값의 위치가 아니라 있나 없나 만 묻는 함수 — true / false 반환.",
+          template: 'vector<int> v = {1, 3, 5, 7, 9};\nbool found = ___(v.begin(), v.end(), 5);\ncout << (found ? "Yes" : "No");',
+          answer: "binary_search",
+          expect: 'vector<int> v = {1, 3, 5, 7, 9};\nbool found = binary_search(v.begin(), v.end(), 5);\ncout << (found ? "Yes" : "No");',
+          en: {
+            task: "Check just the presence (true/false) of value 5 in the sorted vector. Which of the trio is cleanest?",
+            guide: "The function that asks 'is it there?' (not where) — returns true/false."
+          }
         }
       },
 
@@ -603,6 +553,148 @@ export const lessonCpp23: LessonData = {
               options: ["2", "3", "5"],
               feedback: "5 appears at indices 2, 3, 4 — that's 3 occurrences! hi - lo = 3!"
             }
+          }
+        }
+      },
+
+      // 🆕 upper-lower 패턴 직접 — fillblank
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "정렬된 v = {1, 2, 5, 5, 5, 7} 에서 5 가 몇 개 인지 한 줄로 구하세요.",
+          guide: "\"끝 다음 위치\" 에서 \"시작 위치\" 를 빼면 그 값의 개수예요. 3 형제 중 두 함수의 차로!",
+          template: 'vector<int> v = {1, 2, 5, 5, 5, 7};\nint cnt = ___(v.begin(), v.end(), 5)\n        - ___(v.begin(), v.end(), 5);\ncout << cnt;',
+          answer: "upper_bound",
+          blanksAnswer: ["upper_bound", "lower_bound"],
+          expect: 'vector<int> v = {1, 2, 5, 5, 5, 7};\nint cnt = upper_bound(v.begin(), v.end(), 5)\n        - lower_bound(v.begin(), v.end(), 5);\ncout << cnt;',
+          en: {
+            task: "Count how many 5s are in sorted v = {1, 2, 5, 5, 5, 7} — in a single line.",
+            guide: "'one past end' minus 'start' gives the count. Use two of the trio!"
+          }
+        }
+      },
+
+      // 🆕 count() vs upper-lower 차이 quiz
+      {
+        type: "quiz",
+        content: {
+          question: "100 만 개 정수가 들어있는 정렬된 벡터에서 \"3 이 몇 개인가?\" 를 한 번 계산하려고 해요. 어떤 게 더 빠를까요?",
+          options: [
+            "count(v.begin(), v.end(), 3)",
+            "upper_bound(v.begin(), v.end(), 3) - lower_bound(v.begin(), v.end(), 3)",
+            "둘 다 똑같음"
+          ],
+          answer: 1,
+          explanation: "count() 는 정렬 여부와 무관하게 처음부터 끝까지 훑어요 — 100 만 번 비교. 반면 upper_bound / lower_bound 는 이진 탐색이라 정렬된 배열에선 약 20 번 비교로 끝나요.\n\n⚠️ 함정: 만약 정렬이 안 돼 있으면 sort 부터 해야 하는데, sort 자체가 무거워서 한 번만 셀 거면 그냥 count() 가 더 빠름. 이미 정렬된 데이터에서 여러 번 셀 때 upper-lower 가 진짜 빛나요.",
+          en: {
+            question: "You'll count occurrences of 3 once in a sorted vector of 1M ints. Which is faster?",
+            options: [
+              "count(v.begin(), v.end(), 3)",
+              "upper_bound(v.begin(), v.end(), 3) - lower_bound(v.begin(), v.end(), 3)",
+              "Both the same"
+            ],
+            explanation: "count() scans the whole array regardless of sort — 1M comparisons. upper_bound / lower_bound use binary search on a sorted array — ~20 comparisons.\n\n⚠️ Trap: if the data weren't sorted, you'd need sort() first, and sort itself is heavy — for a single count, plain count() wins. upper-lower really shines when the data is already sorted and you'll query many times."
+          }
+        }
+      },
+
+      // ==================== CHAPTER 4: 심화 패턴 (sort + unique) ====================
+      {
+        type: "chapter",
+        content: {
+          num: 4,
+          title: "심화 패턴",
+          desc: "sort + unique — 벡터에서 중복 제거하기"
+        }
+      },
+
+      // sort + unique 패턴 — 중복 제거 (lesson chapter 3)
+      {
+        type: "explain",
+        content: {
+          lines: [],
+          code: 'vector<int> v = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3};\nsort(v.begin(), v.end());\nv.erase(unique(v.begin(), v.end()), v.end());\ncout << v.size();',
+          predict: {
+            question: "출력 결과는? (중복 제거 후 원소 개수)",
+            options: ["7", "10", "5", "9"],
+            answer: 0,
+            feedback: "정렬 후 v = {1, 1, 2, 3, 3, 4, 5, 5, 6, 9}. unique + erase 로 중복 제거 → {1, 2, 3, 4, 5, 6, 9} = 7 개."
+          },
+          en: {
+            predict: {
+              question: "What's the output? (count after dedup)",
+              options: ["7", "10", "5", "9"],
+              feedback: "After sort: {1, 1, 2, 3, 3, 4, 5, 5, 6, 9}. unique + erase removes duplicates → {1, 2, 3, 4, 5, 6, 9} = 7 elements."
+            }
+          }
+        }
+      },
+
+      // sort + unique 빈칸 채우기
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "정렬된 벡터에서 중복을 진짜로 잘라내려면 어떤 함수가 빈칸에 들어가야 할까요?",
+          guide: "이 함수는 같은 값이 인접해 있을 때 앞쪽으로 모아주고 \"여기까지가 진짜 끝\" 위치를 돌려줘요. 그 위치부터 erase 로 잘라내는 패턴.",
+          template: 'vector<int> v = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3};\nsort(v.begin(), v.end());\nv.erase(___(v.begin(), v.end()), v.end());',
+          answer: "unique",
+          expect: 'vector<int> v = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3};\nsort(v.begin(), v.end());\nv.erase(unique(v.begin(), v.end()), v.end());',
+          en: {
+            task: "Which function fills the blank to truly trim duplicates from a sorted vector?",
+            guide: "It pushes equal adjacent values to the front and returns the position of the new logical end. erase trims from there to v.end()."
+          }
+        }
+      },
+
+      // 🆕 unique 만 호출하면? — 학생 자연 의문
+      {
+        type: "quiz",
+        content: {
+          question: "정렬된 v = {1, 1, 2, 3, 3} 에서 erase 없이 unique(v.begin(), v.end()) 만 호출하면 v.size() 는 얼마일까요?",
+          options: [
+            "3 — 중복이 제거돼서",
+            "5 — 크기는 그대로, 뒤쪽은 쓰레기 값",
+            "0 — 에러로 비워짐"
+          ],
+          answer: 1,
+          explanation: "unique 는 사실 벡터의 크기를 줄이지 않아요. 앞쪽으로 중복 없는 값들 (1, 2, 3) 을 모으고 \"여기까지가 진짜 끝\" 위치를 iterator 로 돌려줄 뿐이에요. 뒤쪽 (인덱스 3, 4) 에는 쓰레기 값이 남고 size() 는 여전히 5. 진짜로 줄이려면 erase 까지 해야 해요 — 그래서 erase(unique(...), v.end()) 가 한 세트.",
+          en: {
+            question: "In sorted v = {1, 1, 2, 3, 3}, if you call unique(v.begin(), v.end()) WITHOUT erase, what does v.size() return?",
+            options: [
+              "3 — duplicates are removed",
+              "5 — size unchanged, garbage values at the back",
+              "0 — error, vector emptied"
+            ],
+            explanation: "unique doesn't actually shrink the vector. It just moves the unique values (1, 2, 3) to the front and returns an iterator marking the new logical end. The back (indices 3, 4) contains leftover garbage and size() is still 5. To truly shrink it, you need erase — that's why erase(unique(...), v.end()) is the standard pair."
+          }
+        }
+      },
+
+      // sort + unique 핵심 이해 quiz
+      {
+        type: "quiz",
+        content: {
+          question: "정렬되지 않은 v = {1, 3, 1, 3} 에 erase(unique(...), v.end()) 패턴을 그대로 적용하면 결과는?",
+          options: [
+            "v = {1, 3} — 중복 모두 제거",
+            "v = {1, 3, 1, 3} — 인접한 중복만 제거되니까 그대로",
+            "컴파일 에러",
+            "프로그램이 멈춤"
+          ],
+          answer: 1,
+          explanation: "unique 는 인접한 중복만 제거해요. 정렬 안 하면 같은 값이 떨어져 있어서 중복으로 안 봐요. {1, 3, 1, 3} 에서 인접한 같은 값이 없으니 unique 는 아무것도 안 모으고 그대로. 그래서 sort + unique 가 한 세트.",
+          en: {
+            question: "What happens if you call erase(unique(...), v.end()) on unsorted v = {1, 3, 1, 3}?",
+            options: [
+              "v = {1, 3} — all duplicates removed",
+              "v = {1, 3, 1, 3} — only adjacent duplicates removed, so unchanged",
+              "Only **adjacent** duplicates removed — {1, 3, 1, 3} stays as 4 elements",
+              "Compile error",
+              "Program crashes"
+            ],
+            explanation: "unique only removes adjacent duplicates. Without sorting, equal values aren't next to each other and won't be detected. {1, 3, 1, 3} has no adjacent duplicates, so unique does nothing. That's why sort + unique is a pair."
           }
         }
       },

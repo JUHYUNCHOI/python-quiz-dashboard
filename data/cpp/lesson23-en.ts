@@ -112,6 +112,22 @@ arr + 5 → address of arr[5] (= one past last, marks "the end")
 Same role as v.begin() / v.end() for vectors.
 \`\`\`
 
+---
+
+### 💭 Keep in mind — sort needs to be able to *compare*
+
+The reason \`sort\` finishes the job in one line: it knows **which of two values comes first**.
+
+| Type | Auto-comparison? | sort one-liner? |
+|---|---|---|
+| \`int\`, \`string\` | ✅ obviously | ✅ |
+| \`pair\`, \`tuple\` | ✅ standard library defines it | ✅ |
+| \`struct\` (yours) | ❌ "which comes first?" — compiler has no idea | ❌ not directly |
+
+You **can** sort a \`struct\`, but it takes one extra step. Chapter 1 shows that solution (lambda).
+
+---
+
 Next page — try sorting one yourself 👇`
         },
         {
@@ -299,7 +315,7 @@ int main() {
             "#include <utility>"
           ],
           answer: 1,
-          explanation: "**Official answer: `<algorithm>`**. `sort()` lives exactly in this header.\n\n💡 You may be thinking back to the pair note (\"`<vector>` etc. pull pair in for free\") — that's a different case:\n• **pair is a *type***: STL containers like map / set use pair *internally*, so it gets pulled in transitively.\n• **sort is a *function***: other STL headers don't use sort internally, so it doesn't get pulled in. Including only `<vector>` and calling `sort()` gives `'sort' was not declared`.\n\n**Rule: for functions, explicitly include the official header.** Types just sometimes happen to come along for free."
+          explanation: "**Official answer: `<algorithm>`**. `sort()` lives exactly in this header.\n\n💡 You may be thinking back to the pair note (\"`<vector>` etc. pull pair in for free\") — that's a different case:\n• **pair is a type**: STL containers like map / set use pair internally, so it gets pulled in transitively.\n• **sort is a function**: other STL headers don't use sort internally, so it doesn't get pulled in. Including only `<vector>` and calling `sort()` gives `'sort' was not declared`.\n\n**Rule: for functions, explicitly include the official header.** Types just sometimes happen to come along for free."
         },
         {
           id: "s23-ch0-practice3",
@@ -383,7 +399,7 @@ We want to sort this **by score (second) descending**.
 \`greater<pair<string,int>>()\`? Compares the whole pair (name + score). Also not it.
 
 > 🎯 What we actually need: **a way to spell out the comparison ourselves.**
-> Something like, "for these two students, *I'll* tell sort which one comes first."
+> Something like, "for these two students, **I'll** tell sort which one comes first."
 
 The tool for this is a **lambda**. Next page covers the syntax 👇`
         },
@@ -440,36 +456,31 @@ lambda x: x * 2
 | Parameter types | none (dynamic) | required (\`int\`, \`auto\`, etc.) |
 | Body marker | \`:\` then expression | \`{}\` braces + \`return\` |
 
-### Next page — the key rule for sort lambdas: *two parameters* 👇`
+### Next page — the key rule for sort lambdas: **two parameters** 👇`
         },
         {
           id: "s23-ch1-sort-lambda",
           type: "explain",
-          title: "🔧 sort's lambda — *comparing two values* is the core",
-          content: `Python sort's \`key=\` transformed *one* value. **C++ sort's lambda compares two values directly.**
+          title: "🔧 sort's lambda — **comparing two values** is the core",
+          content: `Python sort's \`key=\` transformed **one** value. **C++ sort's lambda compares two values directly.**
 
 \`\`\`cpp
 [](int a, int b) { return a > b; }
        ↑     ↑              ↑
-   two values to compare    if true, *a goes first*
+   two values to compare    if true, **a goes first**
 \`\`\`
 
-### What the lambda's return means
+### Just memorize one rule
 
 > 🎯 **return true → a goes first / return false → b goes first**
 
-Memorize this one rule and every comparison lambda makes sense.
+This one line unlocks every comparison lambda.
 
 **Example — descending (bigger first):**
 \`\`\`
 a=9, b=5 → 9 > 5 = true   → 9 goes first ✅
 a=2, b=8 → 2 > 8 = false  → 8 goes first ✅
 Result: bigger numbers first → descending!
-\`\`\`
-
-**Example — ascending (smaller first):**
-\`\`\`cpp
-[](int a, int b) { return a < b; }   // just flip the comparison
 \`\`\`
 
 ### Plug it into sort
@@ -481,9 +492,13 @@ sort(v.begin(), v.end(), [](int a, int b) {
     return a > b;
 });
 // v = {9, 8, 5, 2, 1}  (descending)
-\`\`\`
-
-### Common forms you'll see
+\`\`\``
+        },
+        {
+          id: "s23-ch1-cheatsheet",
+          type: "explain",
+          title: "📋 Common lambda forms — cheatsheet",
+          content: `Sort lambdas boil down to a few patterns. Memorize these and you're set:
 
 | Lambda | Sort result |
 |---|---|
@@ -492,7 +507,17 @@ sort(v.begin(), v.end(), [](int a, int b) {
 | \`[](int a, int b){ return abs(a) < abs(b); }\` | absolute value ascending |
 | \`[](auto a, auto b){ return a.second < b.second; }\` | by pair's second |
 
-> 💡 \`auto\` parameters: when the type is long (pair / struct), \`auto\` is convenient — the compiler figures it out.`
+### 💡 \`auto\` parameters — handy for pair/struct sorting
+
+When sorting \`pair<string, int>\`, \`tuple<...>\`, or \`struct Student\`, the type can get long. \`auto\` lets the compiler infer it for you:
+
+\`\`\`cpp
+sort(v.begin(), v.end(), [](auto a, auto b) {
+    return a.second < b.second;   // no need to spell out the type
+});
+\`\`\`
+
+> Next page — practice the rule by hand.`
         },
         {
           id: "s23-ch1-rule-pred",
@@ -701,7 +726,7 @@ Dave 60`,
         {
           id: "s23-ch1-must-lambda",
           type: "practice" as const,
-          title: "🎯 When lambda is *truly necessary* — multi-key sorting",
+          title: "🎯 When lambda is **truly necessary** — multi-key sorting",
           content: `This problem genuinely cannot be solved without a lambda.
 
 **Problem**: 5 students with (name, score).
@@ -852,7 +877,9 @@ banana hi apple ok cat`,
           type: "animation" as const,
           title: "🔎 Linear Search — Checking One by One",
           component: "linearSearch",
-          content: `Imagine finding **"Kim"** in a phone book.
+          content: `You've now mastered sort. There's another big reason sorted data matters — **search becomes much faster.** Let's get into that.
+
+First, see what happens when data is **not** sorted. Imagine finding **"Kim"** in a phone book.
 
 The simplest approach: flip through **one page at a time** from page 1.
 
@@ -888,137 +915,89 @@ Press the button to follow along!`,
         {
           id: "s23-ch2-iter",
           type: "explain",
-          title: "📌 What Are begin() and end()?",
-          content: `We've been using \`v.begin()\` and \`v.end()\` with sort() — let's understand what they actually are.
+          title: "📌 Quick checkpoint — one formula for the next page",
+          content: `Before turning binary search into C++ code, just one formula to lock in.
 
-**begin() and end() are memory addresses (arrows pointing to positions).**
-
-\`\`\`
-vector<int> v = {10, 20, 30, 40, 50};
-
-Memory:  1000  1004  1008  1012  1016  1020
-Values:   10    20    30    40    50    ???
-
-v.begin() = 1000  (address where 10 lives)
-v.end()   = 1020  (address *after* 50, no value — never read this!)
-\`\`\`
-
-\`\`\`
-   10    20    30    40    50   [empty]
-    ↑                             ↑
- begin()                        end()
-(1000)                         (1020)
-\`\`\`
-
-### Why does sort take begin/end instead of indices?
-
-C++ functions like sort() take **addresses (arrows)** for "from where to where."
-
-\`\`\`cpp
-sort(v.begin(), v.end());
-//    ↑ from this address  ↑ up to (not including) this address
-\`\`\`
-
-But why addresses specifically? There are two reasons — see the next page 👇`
-        },
-        {
-          id: "s23-ch2-iter-benefits",
-          type: "explain",
-          title: "📌 Why addresses? — two benefits (especially *unification*)",
-          content: `**① The same sort works on every container — iterator unification** ⭐
-
-This is the real key. Once sort takes begin/end, it works **regardless of container type**:
-
-\`\`\`cpp
-sort(v.begin(), v.end());     // vector
-sort(arr, arr + n);           // raw array
-sort(lst.begin(), lst.end()); // list, deque, etc.
-// All handled by ONE sort function!
-\`\`\`
-
-If sort were "a function that takes a vector," you'd need separate \`sortVector\`, \`sortArray\`, \`sortList\`. Instead, by **unifying through the iterator interface**, one sort handles them all.
-
-This design runs through the entire STL. find / count / accumulate — every algorithm uses the \`(begin, end)\` pattern for the same reason: **one function, every container**.
-
-**② No copy — fast regardless of size**
-
-If you passed the vector itself, it'd be copied wholesale. A million elements = enormous copy cost. Passing just two addresses sidesteps that entirely.
-
-\`\`\`cpp
-sort(v);                   // (hypothetical) full vector copy — slow
-sort(v.begin(), v.end());  // just 2 addresses — always fast ✅
-\`\`\`
-
-### Bonus: subtracting two arrows gives the *distance (index)*
+We've been using \`v.begin()\`, \`v.end()\` with sort — they're just **markers pointing to positions** in the vector. (Same pattern you saw in the previous lesson, **STL search functions**, with \`find\` and \`count\`.)
 
 \`\`\`
    10    20    30    40    50
- 1000  1004  1008  1012  1016
-    ↑                ↑
- begin()             it  (points to 40, address 1012)
+    ↑                          ↑
+ begin()                      end() (one **past** the last spot)
+\`\`\`
 
-it - v.begin()  = (1012 - 1000) / 4 = 3  → index 3
+---
+
+### 🎯 The formula to memorize: \`it - v.begin()\` = index
+
+The next page's \`lower_bound\` returns a **position** (\`it\`), not an index number. To convert to an index, **one line**:
+
+\`\`\`
+   10    20    30    40    50
+    ↑                ↑
+ begin()             it  (points to 40)
+
+it - v.begin() = 3   → index 3!
 \`\`\`
 
 \`\`\`cpp
-auto it = v.begin() + 3;
-cout << *it;             // 40  (*it = value the arrow points to)
-cout << it - v.begin();  // 3   (convert to index)
+cout << *it;             // 40   ← *it is the value
+cout << it - v.begin();  // 3    ← convert to index!
 \`\`\`
 
-> 💡 **"Subtract two arrows = distance"** — this exact trick becomes idiomatic with \`lower_bound\` next.`
+> 💡 Don't try to deeply understand it — **just memorize the formula.** \`*it\` = value, \`it - v.begin()\` = index. Those two are all you need for lower_bound.`
         },
         {
           id: "s23-ch2-lb",
           type: "explain",
-          title: "🔍 lower_bound — Binary Search in One Line!",
-          content: `The binary search we just saw — C++ has a built-in function for it.
-That's \`lower_bound\` and \`upper_bound\`.
+          title: "🔍 binary_search / lower_bound / upper_bound — the binary search trio",
+          content: `Instead of writing binary search by hand every time, C++ provides **three functions** — same family:
 
-⚠️ **Only works on sorted arrays!** — built on binary search principles.
+\`\`\`cpp
+binary_search(v.begin(), v.end(), x);  // is x in there? → true / false
+lower_bound (v.begin(), v.end(), x);   // where x starts
+upper_bound (v.begin(), v.end(), x);   // one past where x ends
+\`\`\`
+
+⚠️ **Sorted arrays only!** (it's binary search inside)
 
 ---
 
-**lower_bound / upper_bound concept**
+**Picture it — finding value 3**
 
 \`\`\`
 {1,  3,  3,  5,  7,  9}
  0   1   2   3   4   5
      ↑       ↑
 lower_bound  upper_bound
-  (val=3)      (val=3)
+  (val=3)     (val=3)
 "3 starts"   "after 3 ends"
 \`\`\`
 
-- **lower_bound** → first position where value **≥ x** = "where this value starts"
-- **upper_bound** → first position where value **> x** = "one past where value ends"
+- **binary_search(x)** → is \`x\` in the array? **true / false**
+- **lower_bound(x)** → first position where value **≥ x** = "where x starts"
+- **upper_bound(x)** → first position where value **> x** = "one past where x ends"
 
----
-
-**Why do we need** \`- v.begin()\`**?**
-
-\`lower_bound\` returns \`it\` — not an index number, but a
-**memory address (an arrow pointing to a position).**
-Printing it directly gives something like \`0x7ff3a2b...\`
-
-\`it - v.begin()\` calculates "how many spots from the start."
-
-\`\`\`cpp
-vector<int> v = {1, 3, 3, 5, 7, 9};
-//               0  1  2  3  4  5
-
-auto it = lower_bound(v.begin(), v.end(), 3);
-int idx = it - v.begin();  // formula! always convert to index this way
-cout << idx;  // 1
-\`\`\`
-
-💡 Memorize \`- v.begin()\` as a formula!
-
----
-
-**What happens when the value isn't found?**
-
-\`\`\`cpp
+> 💡 Don't dig deeper — the **picture + three-line description** is enough. Which one to use in which situation comes on the next page.`
+        },
+        {
+          id: "s23-ch2-trio-quiz",
+          type: "quiz" as const,
+          title: "Which of the trio do you reach for?",
+          content: "You have a sorted \`vector<int> v\`. If you only need to know **whether 7 is in the array (yes / no)**, which one is the cleanest pick?",
+          options: [
+            "`binary_search(v.begin(), v.end(), 7)`",
+            "`lower_bound(v.begin(), v.end(), 7)`",
+            "`upper_bound(v.begin(), v.end(), 7)`"
+          ],
+          answer: 0,
+          explanation: "**`binary_search`** is the one that asks exactly \"is it there?\" — it returns true/false, the most direct answer. lower_bound and upper_bound return **positions**, so checking existence with them takes one extra step (e.g. `lower_bound != upper_bound`)."
+        },
+        {
+          id: "s23-ch2-lb-missing",
+          type: "explain",
+          title: "🔍 What if the value isn't found?",
+          content: `\`\`\`cpp
 vector<int> v = {1, 3, 5, 7, 9};
 
 // 4 doesn't exist
@@ -1030,13 +1009,13 @@ upper_bound(v.begin(), v.end(), 4) - v.begin() →  2  (first value > 4 = 5)
 lower_bound(v.begin(), v.end(), 10) - v.begin() →  5  (past the end)
 \`\`\`
 
-**→ lower_bound == upper_bound means the value isn't in the array!**
-
----
-
-**Usage Patterns**
-
-\`\`\`cpp
+**→ lower_bound == upper_bound means the value isn't in the array!**`
+        },
+        {
+          id: "s23-ch2-lb-patterns",
+          type: "explain",
+          title: "🎯 3 usage patterns",
+          content: `\`\`\`cpp
 vector<int> v = {1, 3, 3, 5, 7, 9};
 
 // ① How many 3s are there?
@@ -1053,11 +1032,51 @@ int idx = lower_bound(v.begin(), v.end(), 3) - v.begin();
 cout << idx;  // 1
 \`\`\`
 
----
+> 💡 The trio is one family but they **return different things**, so they're used differently. Next page covers a common trap.`
+        },
+        {
+          id: "s23-ch2-patterns-fb",
+          type: "fillblank" as const,
+          title: "✋ Try it — how many 5s?",
+          content: "In the sorted \`vector<int> v = {1, 2, 5, 5, 5, 7}\`, find **how many 5s** there are in one line. (upper-lower pattern)",
+          code: "vector<int> v = {1, 2, 5, 5, 5, 7};\nint cnt = ___(v.begin(), v.end(), 5)\n        - ___(v.begin(), v.end(), 5);\ncout << cnt;  // 3",
+          fillBlanks: [
+            { id: 0, answer: "upper_bound", options: ["upper_bound", "lower_bound", "binary_search", "count"] },
+            { id: 1, answer: "lower_bound", options: ["lower_bound", "upper_bound", "binary_search", "count"] }
+          ],
+          explanation: "**\"one past end - start\" = count.** upper_bound points one past the last occurrence, lower_bound points to the first. Subtracting gives the number of times the value appears. 5 sits at indices 2, 3, 4 → 3 occurrences."
+        },
+        {
+          id: "s23-ch2-lb-vs-count",
+          type: "explain",
+          title: "🤔 Wait — doesn't \`count()\` also count occurrences?",
+          content: `Yes! The \`count()\` from the **STL search functions** lesson also counts:
 
-**binary_search() vs lower_bound — when to use which?**
+\`\`\`cpp
+int cnt = count(v.begin(), v.end(), 3);   // works even on unsorted data
+\`\`\`
 
-| | binary_search() | lower_bound() |
+**So what's the difference?**
+
+| | \`count()\` | \`upper - lower\` |
+|---|---|---|
+| Sorted required? | ❌ No | ✅ Must be sorted |
+| Speed | **O(n)** — scans everything | **O(log n)** — binary search |
+| Counting in 1M elements | 1,000,000 comparisons | ~20 comparisons |
+
+**Trap:** "So I'll just sort once and use upper-lower!" → ❌. \`sort\` itself is O(n log n) — for a **single** count, plain \`count()\` is faster.
+
+✅ **When upper-lower really shines:**
+- Data is **already** sorted
+- You need to count **many times** on the same data (sort once → each query is O(log n))
+
+Common in competitive programming; in everyday code \`count()\` is more typical.`
+        },
+        {
+          id: "s23-ch2-lb-vs-bs",
+          type: "explain",
+          title: "🆚 binary_search() vs lower_bound — when to use which?",
+          content: `| | binary_search() | lower_bound() |
 |---|---|---|
 | Returns | true / false | position (iterator) |
 | Use when | just checking existence | need position or count |
@@ -1081,148 +1100,43 @@ lower_bound(v.begin(), v.end(), 5) - v.begin()  // 3
           id: "s23-ch2-quiz1",
           type: "quiz",
           title: "Binary search prerequisite!",
-          content: "Given an *unsorted* vector \`v = {3, 1, 4, 1, 5}\`, what does \`binary_search(v.begin(), v.end(), 4)\` return?",
+          content: "Given an **unsorted** vector \`v = {3, 1, 4, 1, 5}\`, what does \`binary_search(v.begin(), v.end(), 4)\` return?",
           options: [
             "true (since 4 is in the vector)",
             "false (auto-detects unsorted)",
-            "**Unpredictable** — binary search only works on *sorted* arrays. Result is implementation-defined / undefined behavior.",
+            "**Unpredictable** — binary search only works on sorted arrays. Result is implementation-defined / undefined behavior.",
             "Compile error"
           ],
           answer: 2,
-          explanation: "**`binary_search`, `lower_bound`, and `upper_bound` only work correctly on *sorted* arrays.** Calling them on unsorted data compiles, but the result is *undefined behavior* — could be true, false, or anything. Always `sort()` first!"
-        },
-        {
-          id: "s23-ch2-lb2",
-          type: "explain",
-          title: "🔍 All Three Cases Explained!",
-          content: `Let's compare all 3 cases using \`{1, 3, 3, 5, 7, 9}\`.
-
----
-
-**Case 1: Value appears exactly once (finding 5)**
-
-\`\`\`
-{1,  3,  3,  5,  7,  9}
- 0   1   2   3   4   5
-             ↑   ↑
-       lower_bound upper_bound
-          (5)         (5)
-\`\`\`
-
-\`\`\`cpp
-lower_bound(v.begin(), v.end(), 5) - v.begin()  →  3  (position of 5)
-upper_bound(v.begin(), v.end(), 5) - v.begin()  →  4  (position after 5)
-4 - 3 = 1  →  5 appears 1 time
-\`\`\`
-
----
-
-**Case 2: Value appears multiple times (finding 3)**
-
-\`\`\`
-{1,  3,  3,  5,  7,  9}
- 0   1   2   3   4   5
-     ↑       ↑
-lower_bound  upper_bound
-   (3)          (3)
-\`\`\`
-
-\`\`\`cpp
-lower_bound(v.begin(), v.end(), 3) - v.begin()  →  1  (first 3)
-upper_bound(v.begin(), v.end(), 3) - v.begin()  →  3  (one past last 3)
-3 - 1 = 2  →  3 appears 2 times
-\`\`\`
-
----
-
-**Case 3: Value doesn't exist (finding 4)**
-
-\`\`\`
-{1,  3,  3,  5,  7,  9}
- 0   1   2   3   4   5
-             ↑
-    lower_bound(4) = upper_bound(4)  ← they're the same!
-\`\`\`
-
-\`\`\`cpp
-lower_bound(v.begin(), v.end(), 4) - v.begin()  →  3  (first value ≥ 4 = 5)
-upper_bound(v.begin(), v.end(), 4) - v.begin()  →  3  (first value > 4 = 5)
-3 - 3 = 0  →  4 appears 0 times = not found!
-\`\`\`
-
-**→ lower_bound == upper_bound means the value isn't in the array.**
-
----
-
-**📌 Key Formula Summary**
-
-| Goal | Code |
-|---|---|
-| First position of value | \`lower_bound(v.begin(), v.end(), x) - v.begin()\` |
-| How many of value? | \`upper_bound(...) - lower_bound(...)\` |
-| Does value exist? | \`lower_bound(...) != upper_bound(...)\` → exists |`
+          explanation: "**`binary_search`, `lower_bound`, and `upper_bound` only work correctly on sorted arrays.** Calling them on unsorted data compiles, but the result is **undefined behavior** — could be true, false, or anything. Always `sort()` first!"
         },
         {
           id: "s23-ch2-lb3",
           type: "explain",
-          title: "🔍 When the Search Goes Out of Bounds",
-          content: `What happens when you search for a value bigger or smaller than everything?
-
-\`\`\`cpp
+          title: "⚠️ Watch out — what if the value is bigger than everything?",
+          content: `\`\`\`cpp
 vector<int> v = {1, 3, 5, 7, 9};
-//               0  1  2  3  4
+
+lower_bound(v.begin(), v.end(), 10) - v.begin();
+// → 5 (out of range, v[5] doesn't exist!)
 \`\`\`
+
+If nothing in the array is ≥ x, lower_bound returns the **\`v.end()\` position (= index \`v.size()\`)**. Reading \`v[5]\` here is reading invalid memory → crash territory.
 
 ---
 
-**Value bigger than all (finding 10)**
+**Safe usage pattern**
 
-\`\`\`
-{1,  3,  5,  7,  9,  [end]}
- 0   1   2   3   4    5
-                      ↑
-    lower_bound(10) = upper_bound(10) = 5 (past the end!)
-\`\`\`
-
-\`\`\`cpp
-lower_bound(v.begin(), v.end(), 10) - v.begin()  →  5  (out of range!)
-upper_bound(v.begin(), v.end(), 10) - v.begin()  →  5
-\`\`\`
-
-⚠️ Index 5 means \`v[5]\` doesn't exist! It's the **v.end()** position.
-Always check \`idx < v.size()\` before accessing.
-
----
-
-**Value smaller than all (finding 0)**
-
-\`\`\`
-{1,  3,  5,  7,  9}
- 0   1   2   3   4
- ↑
-lower_bound(0) = upper_bound(0) = 0 (at the front!)
-\`\`\`
-
-\`\`\`cpp
-lower_bound(v.begin(), v.end(), 0) - v.begin()  →  0  (at start)
-upper_bound(v.begin(), v.end(), 0) - v.begin()  →  0
-\`\`\`
-
----
-
-**Safe usage pattern:**
 \`\`\`cpp
 auto it = lower_bound(v.begin(), v.end(), x);
 
-// Always check before using!
 if (it != v.end() && *it == x) {
-    // only when value is found
     int idx = it - v.begin();
-    cout << idx;
+    cout << idx;       // only when x truly exists
 }
 \`\`\`
 
-💡 \`*it\` is the value that \`it\` points to. (it = arrow, *it = what the arrow points at)`
+> 💡 \`it != v.end()\` confirms **in range**, \`*it == x\` confirms **the exact value**. Both must hold before you access it.`
         },
         {
           id: "s23-ch2-fb1",
@@ -1335,7 +1249,7 @@ Input:  5
 Output: 0
 \`\`\`
 
-> 💡 \`upper_bound(...) - lower_bound(...)\` — the chapter's core application pattern. The difference between the two iterators *is* the count.`,
+> 💡 \`upper_bound(...) - lower_bound(...)\` — the chapter's core application pattern. The difference between the two iterators **is** the count.`,
           starterCode: `#include <iostream>
 #include <vector>
 #include <algorithm>
@@ -1390,7 +1304,7 @@ int main() {
           id: "s23-ch3-unique",
           type: "explain",
           title: "🧹 sort + unique — Removing Duplicates!",
-          content: `The most common C++ pattern for **removing duplicate values** from an array!
+          content: `You've seen sorting and searching. One last pattern that comes paired with sort — the standard C++ idiom for **removing duplicate values** from an array.
 
 \`\`\`cpp
 #include <algorithm>
@@ -1415,7 +1329,66 @@ Without sorting, {1, 3, 1} stays as 3 elements.
 |---|---|
 | \`sorted(set(v))\` | \`sort + erase(unique(...))\` |
 
-💡 Memorize **sort → erase(unique(...), end())** as a pair!`
+💡 Memorize **sort → erase(unique(...), end())** as a pair! Next page — *why* we need erase too.`
+        },
+        {
+          id: "s23-ch3-unique-detail",
+          type: "explain",
+          title: "🤔 Wait — why do we need \`erase\`? What if we only call \`unique\`?",
+          content: `Once you see what \`unique\` *actually* does, why \`erase\` is its partner becomes obvious.
+
+### What unique really does
+
+\`unique\` **doesn't shrink the vector.** It just moves unique values to the front and returns an iterator marking "this is where the real end is."
+
+\`\`\`
+v = {1, 1, 2, 3, 3, 4, 5, 5, 6, 9}   right after sort (size = 10)
+
+↓ auto it = unique(v.begin(), v.end());  ← no erase
+
+v = {1, 2, 3, 4, 5, 6, 9, ?, ?, ?}   size is still 10!
+                          ↑
+                          it points here
+                          past this is leftover garbage (meaningless)
+\`\`\`
+
+\`v.size()\` would still print 10. The first 7 are real; the last 3 are *traces* left in memory.
+
+---
+
+### Quick erase syntax refresher
+
+To **trim a range** from a vector, use \`erase(begin, end)\` — it cuts out everything between two iterators.
+
+\`\`\`cpp
+vector<int> v = {10, 20, 30, 40, 50};
+
+v.erase(v.begin() + 1, v.begin() + 4);
+//     ↑                ↑
+//   from here        up to (not including) here
+
+// Result: v = {10, 50}   (20, 30, 40 removed)
+\`\`\`
+
+| Form | Meaning |
+|---|---|
+| \`v.erase(it)\` | remove **the single element** at iterator \`it\` |
+| \`v.erase(start, end)\` | remove the **\`[start, end)\` range** entirely |
+
+---
+
+### Putting unique + erase together
+
+\`\`\`cpp
+v.erase( unique(v.begin(), v.end()),  v.end() );
+//        ↑                            ↑
+//   "real end" position (it)     vector's real end
+//          ───────  trim the garbage between  ───────
+\`\`\`
+
+erase from the *real end* (returned by unique) up to \`v.end()\` — that's the famous pattern.
+
+> 💡 Remember: \`unique\` only *moves things*, size stays. To truly shrink it, pair with \`erase\`.`
         },
         {
           id: "s23-ch3-unique-practice",

@@ -454,7 +454,7 @@ sort(scores.begin(), scores.end());
 
 ### This sets up the next lesson
 
-Next lesson (cpp-23) goes deep on \`sort\`. There you'll learn how to handle "score **descending**, name ascending" and other custom orderings using **lambda**. Today's pair + auto-sort is the launching pad.`
+The next lesson (*Sort & Binary Search*) goes deep on \`sort\`. There you'll learn how to handle "score **descending**, name ascending" and other custom orderings using **lambda**. Today's pair + auto-sort is the launching pad.`
         },
         {
           id: "ch1-question",
@@ -750,7 +750,7 @@ Park: 92`
     },
     // ============================================
     // Chapter 2: Review Quiz
-    // (sort is covered in cpp-23!)
+    // (sort is covered in the next lesson)
     // ============================================
     {
       id: "ch2",
@@ -818,7 +818,7 @@ else cout << "B";
 | Access | \`t[0]\`, \`t[1]\` | \`.first\`, \`.second\` |
 | Bundle 3+ values | tuple (any size) | \`tuple<T1,T2,T3>\` |
 
-🚀 **Next lesson (cpp-23)** covers **sort mastery** — custom sorting, lambdas, lower_bound, and more!`
+🚀 **Next lesson (*Sort & Binary Search*)** covers **sort in depth** — custom sorting, lambdas, lower_bound, and more!`
         }
       ]
     }

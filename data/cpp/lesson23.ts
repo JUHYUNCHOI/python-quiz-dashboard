@@ -112,6 +112,22 @@ arr + 5 → arr[5] 주소 (= 마지막 다음, 끝 표시)
 vector 의 v.begin()/v.end() 랑 같은 역할이에요.
 \`\`\`
 
+---
+
+### 💭 한 가지 떠올려두기 — sort 는 *비교* 가 돼야 동작해요
+
+\`sort\` 가 한 줄로 끝낼 수 있는 이유는 **두 값 중 누가 앞인지 비교할 수 있기 때문**이에요.
+
+| 타입 | 자동 비교? | sort 한 줄? |
+|---|---|---|
+| \`int\`, \`string\` | ✅ 당연 | ✅ |
+| \`pair\`, \`tuple\` | ✅ 표준 라이브러리가 미리 정의 | ✅ |
+| \`struct\` (우리가 만든 거) | ❌ "이 둘 중 누가 앞?" 컴파일러 모름 | ❌ 그냥은 안 됨 |
+
+\`struct\` 도 정렬할 수는 있는데 한 단계가 더 필요해요. 챕터 1 에서 그 해결책 (lambda) 을 봐요.
+
+---
+
 다음 페이지 — 직접 정렬해봐요 👇`
         },
         {
@@ -299,7 +315,7 @@ int main() {
             "#include <utility>"
           ],
           answer: 1,
-          explanation: "**공식 답: `<algorithm>`**. `sort()` 는 정확히 이 헤더에 정의돼 있어요.\n\n💡 pair 때 \"`<vector>` 등에 자동으로 따라온다\" 고 한 거랑 헷갈렸을 수 있는데, 둘은 달라요:\n• **pair 는 *타입***: map, set 같은 STL 컨테이너가 *내부적으로* pair 를 쓰니까 헤더에 자동으로 끌려와요.\n• **sort 는 *함수***: 다른 STL 헤더가 sort 를 안 쓰니까, 따라오지 않아요. `<vector>` 만 적고 `sort()` 호출하면 `'sort' was not declared` 에러 나요.\n\n**규칙: 함수는 그 함수가 있는 공식 헤더를 명시적으로 include.** 타입은 운 좋게 따라오는 경우가 있는 정도."
+          explanation: "**공식 답: `<algorithm>`**. `sort()` 는 정확히 이 헤더에 정의돼 있어요.\n\n💡 pair 때 \"`<vector>` 등에 자동으로 따라온다\" 고 한 거랑 헷갈렸을 수 있는데, 둘은 달라요:\n• **pair 는 타입**: map, set 같은 STL 컨테이너가 내부적으로 pair 를 쓰니까 헤더에 자동으로 끌려와요.\n• **sort 는 함수**: 다른 STL 헤더가 sort 를 안 쓰니까, 따라오지 않아요. `<vector>` 만 적고 `sort()` 호출하면 `'sort' was not declared` 에러 나요.\n\n**규칙: 함수는 그 함수가 있는 공식 헤더를 명시적으로 include.** 타입은 운 좋게 따라오는 경우가 있는 정도."
         },
         {
           id: "s23-ch0-practice3",
@@ -382,10 +398,21 @@ vector<pair<string, int>> students = {
 
 \`greater<pair<string,int>>()\` 를 쓰면? \`pair\` 전체 (이름 + 점수) 가 비교돼요. 역시 우리가 원하는 게 아님.
 
-> 🎯 우리한테 필요한 건: **"비교 기준을 직접 알려주는" 방법.**
+### 그리고 \`struct\` 라면 더 막막해요
+
+챕터 0 마지막에서 "struct 는 자동 비교가 없다" 고 짚었었죠. 같은 데이터를 struct 로 만들면:
+
+\`\`\`cpp
+struct Student { string name; int score; };
+vector<Student> v = {{"Kim", 85}, {"Lee", 92}, {"Park", 78}};
+
+sort(v.begin(), v.end());  // ❌ 컴파일 에러! Student 끼리 어떻게 비교?
+\`\`\`
+
+> 🎯 두 경우 모두 우리한테 필요한 건: **"비교 기준을 직접 알려주는" 방법.**
 > "이 두 학생 중에 누가 앞에 와야 하는지, 내가 직접 정할게요" 라고 sort 한테 말할 수 있어야 해요.
 
-이럴 때 등장하는 게 **람다 (lambda)**. 다음 페이지에서 문법부터 봐요 👇`
+이럴 때 등장하는 게 **람다 (lambda)** — pair 의 second 기준 정렬도, struct 의 score 기준 정렬도, 같은 한 가지 도구로 해결해요. 다음 페이지에서 문법부터 봐요 👇`
         },
         {
           id: "s23-ch1-syntax",
@@ -440,36 +467,31 @@ lambda x: x * 2
 | 매개변수 타입 | 없음 (동적) | 있음 (\`int\`, \`auto\` 등) |
 | 본문 표시 | \`:\` 콜론 뒤 식 | \`{}\` 중괄호 + \`return\` |
 
-### 다음 페이지 — sort 의 람다는 인자가 *2 개* 라는 핵심 규칙 👇`
+### 다음 페이지 — sort 의 람다는 인자가 **2 개** 라는 핵심 규칙 👇`
         },
         {
           id: "s23-ch1-sort-lambda",
           type: "explain",
-          title: "🔧 sort 의 람다 — *두 값을 비교* 하는 게 핵심",
-          content: `파이썬 sort 의 \`key=\` 는 값 *하나* 를 변환했죠. **C++ sort 의 람다는 두 값을 직접 비교** 해요.
+          title: "🔧 sort 의 람다 — **두 값을 비교** 하는 게 핵심",
+          content: `파이썬 sort 의 \`key=\` 는 값 **하나** 를 변환했죠. **C++ sort 의 람다는 두 값을 직접 비교** 해요.
 
 \`\`\`cpp
 [](int a, int b) { return a > b; }
        ↑     ↑              ↑
-   비교할 두 값      이 조건이 true 면 *a 가 앞으로*
+   비교할 두 값      이 조건이 true 면 **a 가 앞으로**
 \`\`\`
 
-### 람다 결과의 의미
+### 한 가지 규칙만 외우자
 
 > 🎯 **return true → a 가 앞으로 / return false → b 가 앞으로**
 
-이 한 가지 규칙만 외우면 모든 비교 람다가 풀려요.
+이 한 줄이면 모든 비교 람다가 풀려요.
 
 **예시 — 내림차순 (큰 게 앞):**
 \`\`\`
 a=9, b=5 → 9 > 5 = true   → 9 가 앞으로 ✅
 a=2, b=8 → 2 > 8 = false  → 8 이 앞으로 ✅
 결과: 큰 수가 앞 → 내림차순!
-\`\`\`
-
-**예시 — 오름차순 (작은 게 앞):**
-\`\`\`cpp
-[](int a, int b) { return a < b; }   // 비교 방향만 < 로
 \`\`\`
 
 ### 실제로 sort 에 넣으면
@@ -481,9 +503,13 @@ sort(v.begin(), v.end(), [](int a, int b) {
     return a > b;
 });
 // v = {9, 8, 5, 2, 1}  (내림차순)
-\`\`\`
-
-### 자주 보는 형태들
+\`\`\``
+        },
+        {
+          id: "s23-ch1-cheatsheet",
+          type: "explain",
+          title: "📋 자주 보는 람다 형태들 — 치트시트",
+          content: `정렬 람다는 결국 몇 가지 패턴의 변주예요. 외워두면 평생 써먹어요:
 
 | 람다 | 정렬 결과 |
 |---|---|
@@ -491,8 +517,21 @@ sort(v.begin(), v.end(), [](int a, int b) {
 | \`[](int a, int b){ return a > b; }\` | 내림차순 |
 | \`[](int a, int b){ return abs(a) < abs(b); }\` | 절댓값 오름차순 |
 | \`[](auto a, auto b){ return a.second < b.second; }\` | pair 의 second 기준 |
+| \`[](auto a, auto b){ return a.score > b.score; }\` | struct 의 \`score\` 멤버 내림차순 |
 
-> 💡 \`auto\` 매개변수: pair / struct 처럼 타입이 길면 \`auto\` 로 받으면 편함. 컴파일러가 알아서 추론.`
+### 💡 \`auto\` 매개변수 — pair/struct 정렬에 편함
+
+\`pair<string, int>\`, \`tuple<...>\`, \`struct Student\` 처럼 타입이 길어지면 매개변수에 \`auto\` 를 쓰면 편해요. 컴파일러가 알아서 추론:
+
+\`\`\`cpp
+sort(v.begin(), v.end(), [](auto a, auto b) {
+    return a.second < b.second;   // 타입 안 적어도 OK
+});
+\`\`\`
+
+> 💡 **struct 도 똑같아요** — \`a.score\`, \`b.score\` 처럼 멤버 이름으로 비교. 자동 비교가 안 되는 struct 가 lambda 한 번이면 깔끔하게 정렬돼요.
+
+> 다음 페이지에서 위 규칙을 손으로 연습해 봐요.`
         },
         {
           id: "s23-ch1-rule-pred",
@@ -701,7 +740,7 @@ Dave 60`,
         {
           id: "s23-ch1-must-lambda",
           type: "practice" as const,
-          title: "🎯 lambda 가 *진짜 필요한* 순간 — 다중 기준 정렬",
+          title: "🎯 lambda 가 **진짜 필요한** 순간 — 다중 기준 정렬",
           content: `이번 문제는 lambda 없이는 진짜 답이 없어요.
 
 **문제**: 학생 5 명의 (이름, 점수) 가 있어요.
@@ -852,7 +891,9 @@ banana hi apple ok cat`,
           type: "animation" as const,
           title: "🔎 선형 탐색 — 한 장씩 넘기기",
           component: "linearSearch",
-          content: `전화번호부에서 **"Kim"**을 찾는다고 해봐요.
+          content: `여기까지 sort 로 정렬을 마스터했어요. 정렬해두면 좋은 또 하나의 큰 이유 — **탐색이 훨씬 빨라져요.** 그 이야기를 시작해요.
+
+먼저 정렬돼 있지 **않은** 경우부터 봐요. 전화번호부에서 **"Kim"** 을 찾는다고 해봐요.
 
 가장 단순한 방법: **1페이지부터 한 장씩** 넘기며 확인해요.
 
@@ -888,137 +929,89 @@ banana hi apple ok cat`,
         {
           id: "s23-ch2-iter",
           type: "explain",
-          title: "📌 begin()과 end()가 뭐야?",
-          content: `sort() 에서 계속 \`v.begin()\`, \`v.end()\` 를 썼는데, 이게 정확히 뭔지 짚어볼 때예요.
+          title: "📌 잠깐 — 다음 페이지에서 쓸 공식 하나",
+          content: `이진 탐색을 C++ 코드로 옮기기 전에, 공식 하나만 챙기고 가요.
 
-**begin() 과 end() 는 메모리 주소 (위치를 가리키는 화살표) 예요.**
-
-\`\`\`
-vector<int> v = {10, 20, 30, 40, 50};
-
-메모리:  1000  1004  1008  1012  1016  1020
-값:       10    20    30    40    50    ???
-
-v.begin() = 1000  (10 이 있는 주소)
-v.end()   = 1020  (50 *다음* 주소, 값 없음 — 절대 읽으면 안 됨!)
-\`\`\`
-
-\`\`\`
-   10    20    30    40    50   [빈칸]
-    ↑                             ↑
- begin()                        end()
-(1000)                         (1020)
-\`\`\`
-
-### sort 가 인덱스 대신 begin/end 를 받는 이유
-
-C++ 의 함수들 (sort 등) 은 "어디서 어디까지" 를 **주소(화살표)** 로 받아요.
-
-\`\`\`cpp
-sort(v.begin(), v.end());
-//    ↑ 이 주소부터    ↑ 이 주소 직전까지 정렬
-\`\`\`
-
-왜 굳이 주소로 받을까요? 두 가지 이유가 있어요 — 다음 페이지에서 봐요 👇`
-        },
-        {
-          id: "s23-ch2-iter-benefits",
-          type: "explain",
-          title: "📌 왜 주소로? — 두 가지 이점 (특히 *통일성*)",
-          content: `**① 어떤 컨테이너에도 *같은* sort 가 통해요 — iterator 통일성** ⭐
-
-이게 진짜 핵심이에요. begin/end 만 받으면 sort 는 **컨테이너 종류와 무관** 하게 동작해요:
-
-\`\`\`cpp
-sort(v.begin(), v.end());     // vector
-sort(arr, arr + n);           // 배열 (raw array)
-sort(lst.begin(), lst.end()); // list 같은 다른 컨테이너
-// 전부 같은 sort 함수 한 개로 처리!
-\`\`\`
-
-만약 sort 가 "vector 를 받는 함수" 였다면 → \`sortVector\`, \`sortArray\`, \`sortList\` 따로 만들어야 했어요. 대신 **"iterator 라는 공통 인터페이스" 로 통일** 시켜서 sort 한 가지로 다 해결.
-
-이 사상이 STL 전체에 깔려있어요. find / count / accumulate 등 모든 STL 알고리즘이 \`(begin, end)\` 패턴을 쓰는 이유 — **하나의 함수로 모든 컨테이너 지원**.
-
-**② 복사 안 해서 빠름**
-
-벡터 자체를 함수에 넘기면 통째로 복사돼요. 100 만 개면 복사만 해도 어마어마한 시간 낭비. 주소 2 개만 넘기면 데이터 크기 상관없이 즉시.
-
-\`\`\`cpp
-sort(v);                   // (가상) 벡터 통째 복사 — 느림
-sort(v.begin(), v.end());  // 주소 2 개만 — 항상 빠름 ✅
-\`\`\`
-
-### 보너스: 두 화살표를 빼면 *거리(인덱스)* 가 나와요
+sort 에서 \`v.begin()\`, \`v.end()\` 를 계속 써왔죠? 그건 그냥 **벡터 안의 위치를 가리키는 표시** 예요. (전 레슨 **STL 탐색 함수** 에서 \`find\`, \`count\` 와 함께 봤던 그 패턴.)
 
 \`\`\`
    10    20    30    40    50
- 1000  1004  1008  1012  1016
-    ↑                ↑
- begin()             it  (40 을 가리킴, 주소 1012)
+    ↑                          ↑
+ begin()                      end() (마지막 **다음** 자리)
+\`\`\`
 
-it - v.begin()  = (1012 - 1000) / 4 = 3  → 인덱스 3
+---
+
+### 🎯 외울 공식: \`it - v.begin()\` = 인덱스
+
+다음 페이지의 \`lower_bound\` 는 위치(\`it\`)를 돌려줘요 — 인덱스 숫자가 아니라. 인덱스로 바꾸는 방법은 **딱 한 줄**:
+
+\`\`\`
+   10    20    30    40    50
+    ↑                ↑
+ begin()             it  (40 을 가리킴)
+
+it - v.begin() = 3   → 인덱스 3!
 \`\`\`
 
 \`\`\`cpp
-auto it = v.begin() + 3;
-cout << *it;             // 40  (*it = 화살표가 가리키는 값)
-cout << it - v.begin();  // 3  (인덱스로 변환)
+cout << *it;             // 40   ← *it 는 가리키는 값
+cout << it - v.begin();  // 3    ← 인덱스로 변환!
 \`\`\`
 
-> 💡 **"두 화살표를 빼면 거리"** — 이 트릭이 곧이어 \`lower_bound\` 에서 정석으로 쓰여요.`
+> 💡 깊이 이해하려 하지 말고 **공식처럼 외우세요.** \`*it\` = 값, \`it - v.begin()\` = 인덱스. 이 두 줄이면 lower_bound 끝.`
         },
         {
           id: "s23-ch2-lb",
           type: "explain",
-          title: "🔍 lower_bound — 이진 탐색을 한 줄로!",
-          content: `방금 본 이진 탐색, C++이 미리 만들어둔 함수가 있어요.
-바로 \`lower_bound\`와 \`upper_bound\`예요.
+          title: "🔍 binary_search / lower_bound / upper_bound — 이진탐색 3 형제",
+          content: `방금 본 이진 탐색을 매번 직접 짜진 않아요. C++ 이 **세 함수** 를 미리 만들어뒀어요 — 같은 가족이에요:
 
-⚠️ **정렬된 배열에서만 써요!** — 이진 탐색 원리로 만들어졌기 때문이에요.
+\`\`\`cpp
+binary_search(v.begin(), v.end(), x);  // x 가 있나? → true / false
+lower_bound (v.begin(), v.end(), x);   // x 가 시작되는 위치
+upper_bound (v.begin(), v.end(), x);   // x 가 끝난 다음 위치
+\`\`\`
+
+⚠️ **반드시 정렬된 배열에서만!** (이진 탐색이라서)
 
 ---
 
-**lower_bound / upper_bound 개념**
+**그림으로 보기 — 값 3 찾기**
 
 \`\`\`
 {1,  3,  3,  5,  7,  9}
  0   1   2   3   4   5
      ↑       ↑
 lower_bound  upper_bound
-  (값=3)       (값=3)
-"3 시작"      "3 끝 다음"
+  (값=3)      (값=3)
+"3 시작"    "3 끝 다음"
 \`\`\`
 
-- **lower_bound** → 값 **이상(≥)** 의 첫 위치 = "이 값이 시작되는 곳"
-- **upper_bound** → 값 **초과(>)** 의 첫 위치 = "이 값이 끝난 다음"
+- **binary_search(x)** → \`x\` 가 배열 안에 있나? **true / false**
+- **lower_bound(x)** → \`x\` **이상(≥)** 의 첫 위치 = "x 가 시작되는 곳"
+- **upper_bound(x)** → \`x\` **초과(>)** 의 첫 위치 = "x 가 끝난 다음"
 
----
-
-**왜** \`- v.begin()\` **을 하는 거야?**
-
-\`lower_bound\`가 반환하는 \`it\`는 인덱스 번호가 아니라
-**메모리 주소 (위치를 가리키는 화살표)** 예요.
-그냥 출력하면 \`0x7ff3a2b...\` 같은 이상한 숫자가 나와요.
-
-\`it - v.begin()\`은 "시작점에서 몇 칸 떨어져 있나"를 계산해요.
-
-\`\`\`cpp
-vector<int> v = {1, 3, 3, 5, 7, 9};
-//               0  1  2  3  4  5
-
-auto it = lower_bound(v.begin(), v.end(), 3);
-int idx = it - v.begin();  // 공식! 항상 이렇게 인덱스로 변환
-cout << idx;  // 1
-\`\`\`
-
-💡 \`- v.begin()\`은 공식으로 외우세요!
-
----
-
-**없는 값을 찾으면?**
-
-\`\`\`cpp
+> 💡 깊이 파지 말고 **그림 + 세 줄 설명** 만 기억해도 충분해요. 어떤 상황에 어느 걸 쓰는지는 다음 페이지에서.`
+        },
+        {
+          id: "s23-ch2-trio-quiz",
+          type: "quiz" as const,
+          title: "3 형제 중 누구를 쓰지?",
+          content: "정렬된 \`vector<int> v\` 가 있어요. \"숫자 7 이 배열에 있는지 **있다 / 없다** 만 알면 돼\" 라면 셋 중 어느 걸 쓰는 게 가장 깔끔할까요?",
+          options: [
+            "`binary_search(v.begin(), v.end(), 7)`",
+            "`lower_bound(v.begin(), v.end(), 7)`",
+            "`upper_bound(v.begin(), v.end(), 7)`"
+          ],
+          answer: 0,
+          explanation: "**`binary_search`** 는 정확히 \"있나 / 없나\" 만 묻는 함수 — true / false 반환이라 가장 직관적이에요. lower_bound / upper_bound 는 **위치** 를 돌려주니까 \"있는지만\" 확인하기엔 한 단계 더 필요해요 (`lower_bound != upper_bound` 같은 식)."
+        },
+        {
+          id: "s23-ch2-lb-missing",
+          type: "explain",
+          title: "🔍 없는 값을 찾으면?",
+          content: `\`\`\`cpp
 vector<int> v = {1, 3, 5, 7, 9};
 
 // 4는 없음
@@ -1030,19 +1023,19 @@ upper_bound(v.begin(), v.end(), 4) - v.begin() →  2  (4 초과의 첫 값 = 5)
 lower_bound(v.begin(), v.end(), 10) - v.begin() →  5  (끝을 넘어감)
 \`\`\`
 
-**→ lower == upper면 그 값은 배열에 없는 거예요!**
-
----
-
-**활용 패턴**
-
-\`\`\`cpp
+**→ lower == upper 면 그 값은 배열에 없는 거예요!**`
+        },
+        {
+          id: "s23-ch2-lb-patterns",
+          type: "explain",
+          title: "🎯 활용 패턴 3 가지",
+          content: `\`\`\`cpp
 vector<int> v = {1, 3, 3, 5, 7, 9};
 
-// ① 3이 몇 개인가?
+// ① 3 이 몇 개인가?
 int count = upper_bound(v.begin(), v.end(), 3)
           - lower_bound(v.begin(), v.end(), 3);
-// 3 - 1 = 2개!
+// 3 - 1 = 2 개!
 
 // ② 값이 있는지 확인 — binary_search() 사용 (더 간단!)
 if (binary_search(v.begin(), v.end(), 3)) cout << "있음";
@@ -1053,11 +1046,51 @@ int idx = lower_bound(v.begin(), v.end(), 3) - v.begin();
 cout << idx;  // 1
 \`\`\`
 
----
+> 💡 셋이 한 가족이지만 **돌려주는 게 달라서** 쓰임도 달라요. 다음 페이지에서 흔한 함정 하나 짚고 가요.`
+        },
+        {
+          id: "s23-ch2-patterns-fb",
+          type: "fillblank" as const,
+          title: "✋ 직접 — 5 가 몇 개?",
+          content: "정렬된 \`vector<int> v = {1, 2, 5, 5, 5, 7}\` 에서 **5 가 몇 개** 있는지 한 줄로 구해봐요. (upper-lower 패턴)",
+          code: "vector<int> v = {1, 2, 5, 5, 5, 7};\nint cnt = ___(v.begin(), v.end(), 5)\n        - ___(v.begin(), v.end(), 5);\ncout << cnt;  // 3",
+          fillBlanks: [
+            { id: 0, answer: "upper_bound", options: ["upper_bound", "lower_bound", "binary_search", "count"] },
+            { id: 1, answer: "lower_bound", options: ["lower_bound", "upper_bound", "binary_search", "count"] }
+          ],
+          explanation: "**\"끝 다음 - 시작\" = 개수.** upper_bound 가 끝 다음을 가리키고 lower_bound 가 시작을 가리켜요. 둘을 빼면 그 값의 개수. 5 는 인덱스 2,3,4 에 3 개 있으니 결과 3."
+        },
+        {
+          id: "s23-ch2-lb-vs-count",
+          type: "explain",
+          title: "🤔 잠깐 — 개수 세기는 \`count()\` 도 있지 않아?",
+          content: `맞아요. **STL 탐색 함수** 레슨에서 배운 \`count()\` 도 개수를 세요:
 
-**binary_search() vs lower_bound — 언제 뭘 써?**
+\`\`\`cpp
+int cnt = count(v.begin(), v.end(), 3);   // 정렬 안 되어 있어도 OK
+\`\`\`
 
-| | binary_search() | lower_bound() |
+**그럼 둘이 뭐가 달라요?**
+
+| | \`count()\` | \`upper - lower\` |
+|---|---|---|
+| 정렬 필요? | ❌ 아니요 | ✅ 정렬돼 있어야 함 |
+| 속도 | **O(n)** — 처음부터 끝까지 훑음 | **O(log n)** — 이진 탐색 |
+| 100 만 개 중 세기 | 100 만 번 비교 | 약 20 번 비교 |
+
+**함정:** "그럼 sort 한 번 하고 upper-lower 쓰면 되겠네!" → ❌. sort 자체가 O(n log n) 이라 **한 번만** 셀 거면 그냥 \`count()\` 가 더 빠름.
+
+✅ **upper-lower 가 빛나는 순간:**
+- 데이터가 **이미** 정렬돼 있을 때
+- 같은 데이터에서 **여러 번** 세야 할 때 (한 번 sort → 매 질의마다 O(log n))
+
+알고리즘 대회에선 자주 쓰는 패턴, 일반 코딩에선 \`count()\` 가 더 흔해요.`
+        },
+        {
+          id: "s23-ch2-lb-vs-bs",
+          type: "explain",
+          title: "🆚 binary_search() vs lower_bound — 언제 뭘 써?",
+          content: `| | binary_search() | lower_bound() |
 |---|---|---|
 | 반환값 | true / false | 위치(반복자) |
 | 용도 | 있는지만 확인 | 위치·개수 필요할 때 |
@@ -1089,140 +1122,35 @@ lower_bound(v.begin(), v.end(), 5) - v.begin()  // 3
             "컴파일 에러"
           ],
           answer: 2,
-          explanation: "**`binary_search`, `lower_bound`, `upper_bound` 는 모두 *정렬된* 배열에서만 정확히 동작해요.** 정렬 안 된 배열에서 호출하면 컴파일은 되지만 결과는 *undefined behavior* — true / false / 엉뚱한 인덱스 등 어떤 결과든 나올 수 있음. 그래서 사용 전 반드시 `sort()` 먼저!"
-        },
-        {
-          id: "s23-ch2-lb2",
-          type: "explain",
-          title: "🔍 케이스별로 완전 정리!",
-          content: `같은 배열 \`{1, 3, 3, 5, 7, 9}\`로 3가지 케이스를 비교해볼게요.
-
----
-
-**케이스 1: 값이 딱 하나 있을 때 (5 찾기)**
-
-\`\`\`
-{1,  3,  3,  5,  7,  9}
- 0   1   2   3   4   5
-             ↑   ↑
-       lower_bound upper_bound
-          (5)         (5)
-\`\`\`
-
-\`\`\`cpp
-lower_bound(v.begin(), v.end(), 5) - v.begin()  →  3  (5가 있는 위치)
-upper_bound(v.begin(), v.end(), 5) - v.begin()  →  4  (5 다음 위치)
-4 - 3 = 1  →  5가 1개
-\`\`\`
-
----
-
-**케이스 2: 값이 여러 개 있을 때 (3 찾기)**
-
-\`\`\`
-{1,  3,  3,  5,  7,  9}
- 0   1   2   3   4   5
-     ↑       ↑
-lower_bound  upper_bound
-   (3)          (3)
-\`\`\`
-
-\`\`\`cpp
-lower_bound(v.begin(), v.end(), 3) - v.begin()  →  1  (첫 번째 3)
-upper_bound(v.begin(), v.end(), 3) - v.begin()  →  3  (3이 끝난 다음)
-3 - 1 = 2  →  3이 2개
-\`\`\`
-
----
-
-**케이스 3: 값이 없을 때 (4 찾기)**
-
-\`\`\`
-{1,  3,  3,  5,  7,  9}
- 0   1   2   3   4   5
-             ↑
-    lower_bound(4) = upper_bound(4)  ← 둘이 같아요!
-\`\`\`
-
-\`\`\`cpp
-lower_bound(v.begin(), v.end(), 4) - v.begin()  →  3  (4 이상의 첫 값 = 5)
-upper_bound(v.begin(), v.end(), 4) - v.begin()  →  3  (4 초과의 첫 값 = 5)
-3 - 3 = 0  →  4가 0개 = 없음!
-\`\`\`
-
-**→ lower_bound == upper_bound이면 그 값은 배열에 없어요.**
-
----
-
-**📌 핵심 공식 정리**
-
-| 목적 | 코드 |
-|---|---|
-| 값의 첫 위치 | \`lower_bound(v.begin(), v.end(), x) - v.begin()\` |
-| 값이 몇 개? | \`upper_bound(...) - lower_bound(...)\` |
-| 값이 있는지? | \`lower_bound(...) != upper_bound(...)\` → 있음 |`
+          explanation: "**`binary_search`, `lower_bound`, `upper_bound` 는 모두 정렬된 배열에서만 정확히 동작해요.** 정렬 안 된 배열에서 호출하면 컴파일은 되지만 결과는 **undefined behavior** — true / false / 엉뚱한 인덱스 등 어떤 결과든 나올 수 있음. 그래서 사용 전 반드시 `sort()` 먼저!"
         },
         {
           id: "s23-ch2-lb3",
           type: "explain",
-          title: "🔍 끝을 넘어가는 경우",
-          content: `모든 값보다 크거나 작은 값을 찾으면 어떻게 될까요?
-
-\`\`\`cpp
+          title: "⚠️ 주의 — 모든 값보다 큰 값을 찾으면?",
+          content: `\`\`\`cpp
 vector<int> v = {1, 3, 5, 7, 9};
-//               0  1  2  3  4
+
+lower_bound(v.begin(), v.end(), 10) - v.begin();
+// → 5 (범위 **밖**, v[5] 는 존재 안 함!)
 \`\`\`
+
+찾는 값보다 큰 게 배열에 없으면 lower_bound 는 **\`v.end()\` 위치 (= 인덱스 \`v.size()\`)** 를 돌려줘요. 여길 그냥 \`v[5]\` 로 접근하면 잘못된 메모리 읽기 → 프로그램 폭발.
 
 ---
 
-**모든 값보다 큰 수 (10 찾기)**
+**안전하게 쓰는 패턴**
 
-\`\`\`
-{1,  3,  5,  7,  9,  [끝]}
- 0   1   2   3   4    5
-                      ↑
-    lower_bound(10) = upper_bound(10) = 5 (끝!)
-\`\`\`
-
-\`\`\`cpp
-lower_bound(v.begin(), v.end(), 10) - v.begin()  →  5  (범위를 벗어남!)
-upper_bound(v.begin(), v.end(), 10) - v.begin()  →  5
-\`\`\`
-
-⚠️ 인덱스 5는 \`v[5]\`가 없어요! **v.end()** 위치예요.
-반드시 \`idx < v.size()\` 확인 후 접근해요.
-
----
-
-**모든 값보다 작은 수 (0 찾기)**
-
-\`\`\`
-{1,  3,  5,  7,  9}
- 0   1   2   3   4
- ↑
-lower_bound(0) = upper_bound(0) = 0 (맨 앞!)
-\`\`\`
-
-\`\`\`cpp
-lower_bound(v.begin(), v.end(), 0) - v.begin()  →  0  (맨 앞)
-upper_bound(v.begin(), v.end(), 0) - v.begin()  →  0
-\`\`\`
-
----
-
-**안전하게 쓰는 패턴:**
 \`\`\`cpp
 auto it = lower_bound(v.begin(), v.end(), x);
 
-// 찾기 전에 항상 확인!
 if (it != v.end() && *it == x) {
-    // 값이 있을 때만
     int idx = it - v.begin();
-    cout << idx;
+    cout << idx;       // 진짜로 x 가 있을 때만
 }
 \`\`\`
 
-💡 \`*it\`는 it가 가리키는 값이에요. (it = 화살표, *it = 화살표가 가리키는 것)`
+> 💡 \`it != v.end()\` 로 **범위 안인지 확인** + \`*it == x\` 로 **정확히 그 값인지 확인**. 두 조건 모두 OK 일 때만 접근.`
         },
         {
           id: "s23-ch2-fb1",
@@ -1390,7 +1318,7 @@ int main() {
           id: "s23-ch3-unique",
           type: "explain",
           title: "🧹 sort + unique — 중복 제거 패턴!",
-          content: `배열에서 **중복된 값을 제거**하는 가장 흔한 C++ 패턴이에요!
+          content: `정렬과 탐색을 봤어요. 마지막으로 sort 와 짝꿍처럼 자주 쓰는 패턴 하나 — 배열에서 **중복된 값을 제거**하는 C++ 의 표준 패턴이에요.
 
 \`\`\`cpp
 #include <algorithm>
@@ -1415,7 +1343,66 @@ v.erase(unique(v.begin(), v.end()), v.end());
 |---|---|
 | \`sorted(set(v))\` | \`sort + erase(unique(...))\` |
 
-💡 **sort → erase(unique(...), end())** 패턴을 세트로 외워두세요!`
+💡 **sort → erase(unique(...), end())** 패턴을 세트로 외워두세요! 다음 페이지에서 *왜 erase 까지 필요한지* 한 번 짚고 가요.`
+        },
+        {
+          id: "s23-ch3-unique-detail",
+          type: "explain",
+          title: "🤔 잠깐 — 왜 \`erase\` 까지 필요해? \`unique\` 만 쓰면?",
+          content: `\`unique\` 의 *진짜* 동작을 알면 왜 \`erase\` 가 짝꿍인지 자연스럽게 이해돼요.
+
+### unique 의 진짜 동작
+
+\`unique\` 는 사실 **벡터 크기를 줄이지 않아요.** 앞쪽으로 중복 없는 값들을 모으고, "여기까지가 진짜 끝" 이라는 위치 (iterator) 만 돌려줘요.
+
+\`\`\`
+v = {1, 1, 2, 3, 3, 4, 5, 5, 6, 9}   sort 직후 (size = 10)
+
+↓ auto it = unique(v.begin(), v.end());  ← erase 안 함
+
+v = {1, 2, 3, 4, 5, 6, 9, ?, ?, ?}   size 는 여전히 10!
+                          ↑
+                          it 가 가리키는 위치
+                          여기부터 뒤는 쓰레기 값 (의미 없음)
+\`\`\`
+
+\`v.size()\` 를 출력해보면 여전히 10. 앞 7 개만 진짜고 나머지 3 개는 메모리에 남은 *흔적*.
+
+---
+
+### erase 문법 빠른 리마인더
+
+벡터에서 **구간 잘라내기** 는 \`erase(시작, 끝)\` 형태예요. 두 iterator 사이를 통째로 들어내는 거.
+
+\`\`\`cpp
+vector<int> v = {10, 20, 30, 40, 50};
+
+v.erase(v.begin() + 1, v.begin() + 4);
+//     ↑                ↑
+//   여기부터        여기 직전까지 (4 는 미포함)
+
+// 결과: v = {10, 50}   (20, 30, 40 제거)
+\`\`\`
+
+| 형태 | 의미 |
+|---|---|
+| \`v.erase(it)\` | iterator \`it\` 가 가리키는 **한 개** 제거 |
+| \`v.erase(시작, 끝)\` | \`[시작, 끝)\` **구간 통째로** 제거 |
+
+---
+
+### 그래서 erase + unique 합치면
+
+\`\`\`cpp
+v.erase( unique(v.begin(), v.end()),  v.end() );
+//        ↑                            ↑
+//   "진짜 끝" 위치 (it)           벡터의 진짜 끝
+//          ───────  이 사이의 쓰레기를 잘라냄  ───────
+\`\`\`
+
+unique 가 알려준 *진짜 끝* 부터 \`v.end()\` 까지 erase — 이게 그 유명한 패턴.
+
+> 💡 외울 거: \`unique\` 는 *모으기만* 함, 크기는 그대로. 진짜 줄이려면 \`erase\` 한 세트.`
         },
         {
           id: "s23-ch3-unique-practice",

@@ -17,6 +17,21 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
+/** restoreFromCloud 후 호출 — completedLessons 가 비어있으면 silent failure 의심하고 경고 */
+function verifyRestore(tag: string) {
+  try {
+    const raw = localStorage.getItem("completedLessons")
+    const arr: string[] = raw ? JSON.parse(raw) : []
+    if (arr.length === 0) {
+      console.warn(`${tag} restore 후 completedLessons 가 여전히 비어 있음. ` +
+        `Supabase 에 진도 데이터가 있는데 못 가져왔거나, 학생이 진짜로 신규 사용자입니다. ` +
+        `Network 탭에서 lesson_progress 쿼리 응답 확인 필요.`)
+    } else {
+      console.log(`${tag} restore OK — ${arr.length} 개 레슨 복원됨`)
+    }
+  } catch {}
+}
+
 /** 유저별 학습 데이터 localStorage 초기화 (계정 전환/로그아웃 시 호출) */
 function clearUserLocalStorage() {
   const fixedKeys = [
@@ -132,17 +147,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           // 로그인 시 양방향 동기화 (순차 실행: 업로드 완료 후 복원)
           if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
             const lastUserId = localStorage.getItem("last-user-id")
-            // lastUserId가 null이거나 다른 계정이면 → 로컬 데이터 클리어 후 클라우드 복원
-            // lastUserId가 null인 경우도 "다른 사용자" 취급 (남의 로컬 데이터 업로드 방지)
             const isSameUser = lastUserId === currentUser.id
             const isFirstLogin = lastUserId === null  // 이 기기에서 처음 로그인 (로그인 전 공부한 데이터 있을 수 있음)
 
-            if (isFirstLogin || (!isSameUser && !isFirstLogin)) {
-              // 처음 로그인이거나 다른 계정 전환:
-              // localStorage 업로드 없이 클라우드에서 복원만 (남의 데이터 오염 방지)
+            if (!isSameUser && !isFirstLogin) {
+              // 진짜 계정 전환 (다른 user_id 가 기록돼 있는 상태에서 새 사용자 로그인)
+              // → 이전 사용자 데이터 삭제 후 클라우드 복원
               clearUserLocalStorage()
               restoreFromCloud(currentUser.id)
                 .then(() => {
+                  verifyRestore("[AuthContext after-clear]")
+                  localStorage.setItem("last-migrated-at", Date.now().toString())
+                })
+                .catch((e) => { console.error("[AuthContext] restore failed:", e) })
+            } else if (isFirstLogin) {
+              // 🔒 이 기기 첫 로그인 (브라우저 캐시 비어 있거나 첫 방문):
+              // ⚠️ clearUserLocalStorage 호출하지 않음 — 이전엔 호출했는데, restore 실패 시
+              //    학생 데이터가 모두 사라지는 사고 발생. 이제 *클라우드에서 가져온 후*
+              //    merge 하는 방식 (restoreFromCloud 가 Set 기반 merge 함).
+              //    이전 사용자 데이터 오염 위험은 isFirstLogin 케이스에서 거의 없음
+              //    (last-user-id 가 진짜 null 인 경우는 새 기기/새 브라우저).
+              restoreFromCloud(currentUser.id)
+                .then(() => {
+                  verifyRestore("[AuthContext first-login]")
                   localStorage.setItem("last-migrated-at", Date.now().toString())
                 })
                 .catch((e) => { console.error("[AuthContext] restore failed:", e) })

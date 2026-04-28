@@ -63,7 +63,7 @@ type PartData = {
   title: string
   description: string
   comingSoon?: boolean
-  lessons: { id: number | string; title: string; description: string; duration: string; hasQuiz?: boolean; isProject?: boolean }[]
+  lessons: { id: number | string; title: string; description: string; duration: string; hasQuiz?: boolean; isProject?: boolean; optional?: boolean }[]
 }
 
 export default function CurriculumPage() {
@@ -241,9 +241,9 @@ export default function CurriculumPage() {
         { id: "cpp-16", title: "19. map & set", description: t("key-value 저장, 자동 정렬 컨테이너", "Key-value storage, auto-sorted containers"), duration: t("25분", "25 min"), hasQuiz: true },
         { id: "cpp-17", title: t("20. STL 탐색 함수", "20. STL Search Functions"), description: t("find, count_if, accumulate — 반복자 활용", "find, count_if, accumulate — using iterators"), duration: t("25분", "25 min"), hasQuiz: true },
         { id: "cpp-18", title: t("21. stack & queue", "21. stack & queue"), description: t("LIFO/FIFO 자료구조, deque", "LIFO/FIFO data structures, deque"), duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "cpp-19", title: t("22. 파일 I/O & Fast I/O", "22. File I/O & Fast I/O"), description: t("대회 필수 셋업 — freopen, sync_with_stdio", "Contest essentials — freopen, sync_with_stdio"), duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "cpp-20", title: t("23. CP 실전 팁", "23. CP Practical Tips"), description: t("bits/stdc++.h, typedef — 대회 코드 짧게 쓰기", "bits/stdc++.h, typedef — writing contest code faster"), duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "cpp-p3", title: t("🚀 다음 단계: 알고리즘", "🚀 Next Step: Algorithms"), description: t("C++ 도구 완료! 이제 알고리즘으로 넘어가요 →", "C++ tools complete! Time to move on to algorithms →"), duration: t("30분", "30 min"), isProject: true },
+        { id: "cpp-19", title: t("22. 파일 I/O & Fast I/O 📌 참고용", "22. File I/O & Fast I/O 📌 Reference"), description: t("나중에 필요할 때 돌아오기 — 지금 건너뛰어도 OK", "Come back when needed — fine to skip for now"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
+        { id: "cpp-20", title: t("23. CP 실전 팁 📌 참고용", "23. CP Practical Tips 📌 Reference"), description: t("나중에 필요할 때 돌아오기 — 지금 건너뛰어도 OK", "Come back when needed — fine to skip for now"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
+        { id: "cpp-p3", title: t("🏆 USACO 모의전 (Part 3 종합)", "🏆 USACO Mock Contest (Part 3 Capstone)"), description: t("pair / sort / map / stack — 3 문제로 진짜 USACO 풀이 체험", "pair / sort / map / stack — 3 problems for real USACO experience"), duration: t("30분", "30 min"), isProject: true },
       ],
     },
   ]
@@ -642,7 +642,7 @@ export default function CurriculumPage() {
   })
 
   // 학생: 순서대로만 열림 (완료한 곳 + 바로 다음 1개). 선생님: 전부 열림
-  // 프로젝트(isProject) 는 선택 사항 — 완료 안 해도 다음 레슨 잠그지 않음
+  // 프로젝트(isProject) 와 참고용(optional) 은 선택 사항 — 완료 안 해도 다음 레슨 잠그지 않음
   const unlockedLessons = new Set<number | string>()
   if (isTeacher || isPseudo) {
     // 선생님이거나 IGCSE 트랙이면 전부 열림
@@ -650,7 +650,7 @@ export default function CurriculumPage() {
   } else {
     for (const lesson of allLessons) {
       unlockedLessons.add(lesson.id)
-      if (lesson.isProject) continue // 프로젝트는 선택 — 잠금 판정에서 건너뜀
+      if (lesson.isProject || lesson.optional) continue // 프로젝트/참고용은 선택 — 잠금 판정에서 건너뜀
       if (!completedLessons.has(lesson.id)) break // 첫 미완료까지만
     }
   }

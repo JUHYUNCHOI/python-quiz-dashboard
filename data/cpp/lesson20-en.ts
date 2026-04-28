@@ -8,8 +8,50 @@ export const cppLesson20EnData: LessonData = {
   id: "cpp-20",
   title: "Competitive Programming Tips",
   emoji: "🏆",
-  description: "C++ tips you can use right away in USACO!",
+  description: "Reference — come back when you reach algorithms",
   chapters: [
+    // ============================================
+    // Chapter 0: Before you dive in (notice)
+    // ============================================
+    {
+      id: "ch0-notice",
+      title: "Before you dive in",
+      emoji: "📌",
+      steps: [
+        {
+          id: "ch0-notice",
+          type: "explain",
+          title: "📌 You don't need to memorize this *now*",
+          content: `This is also **reference material**.
+
+### Why?
+
+Most of this lesson is **small techniques you'll use while solving algorithm problems**:
+
+| Topic | When you actually need it |
+|---|---|
+| \`bits/stdc++.h\` | Once at the top of an algorithm solution (just *paste it*, no need to memorize) |
+| \`typedef\` / \`using\` | When long types like \`vector<vector<int>>\` show up repeatedly |
+| Macros (\`#define\`) | CP personal style. Not for students — fine to never use |
+| **Bit operations** | Covered in Algorithm Lab's bitmask / DP topics |
+| **Bitmask subsets** | Algorithm territory — you'll meet it via DP |
+| USACO templates | Old USACO style (modern USACO uses stdin/stdout) |
+
+### So when *should* you read it?
+
+- Algorithm Lab's bit operations topic → come back here
+- See macro/typedef-heavy CP code and feel lost → come back here
+
+### So now?
+
+- **Skip it** — the next step (cpp-p3 → algorithms) isn't gated
+- **Browse if curious** — content is still here
+- **Don't try to memorize** — without context, it's wasted
+
+> Move on to Algorithm Lab. The C++ techniques each topic needs will be re-introduced there in context.`
+        }
+      ]
+    },
     // ============================================
     // Chapter 1: Convenience Features
     // ============================================

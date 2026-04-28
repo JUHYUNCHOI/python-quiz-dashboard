@@ -63,28 +63,32 @@ const LESSON_MAP = [
   {
     pyRange: "Python 1~5레슨",
     pyRangeEn: "Python lessons 1–5",
-    cppLesson: "cpp-1 ~ cpp-5",
+    cppLesson: "C++ 1~5번 레슨",
+    cppLessonEn: "C++ lessons 1–5",
     desc: "변수, 타입, 입출력, 연산자",
     descEn: "Variables, types, I/O, operators",
   },
   {
     pyRange: "Python 11~14레슨",
     pyRangeEn: "Python lessons 11–14",
-    cppLesson: "cpp-6 ~ cpp-8",
+    cppLesson: "C++ 6~8번 레슨",
+    cppLessonEn: "C++ lessons 6–8",
     desc: "조건문, 반복문, 함수",
     descEn: "Conditionals, loops, functions",
   },
   {
     pyRange: "Python 15~26레슨",
     pyRangeEn: "Python lessons 15–26",
-    cppLesson: "cpp-9 ~ cpp-14",
+    cppLesson: "C++ 9~16번 레슨",
+    cppLessonEn: "C++ lessons 9–16",
     desc: "배열/벡터, 문자열, 클래스",
     descEn: "Arrays/vectors, strings, classes",
   },
   {
     pyRange: "Python 전체 완료",
     pyRangeEn: "Python fully complete",
-    cppLesson: "cpp-15 ~ cpp-20",
+    cppLesson: "C++ 17~23번 레슨",
+    cppLessonEn: "C++ lessons 17–23",
     desc: "알고리즘, 자료구조 심화, USACO 준비",
     descEn: "Algorithms, advanced structures, USACO prep",
   },
@@ -230,7 +234,7 @@ export function PythonToCppBridge({ onDismiss }: Props) {
                 </span>
                 <span className="text-[10px] text-gray-300 my-0.5">↓</span>
                 <span className="text-xs font-black text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">
-                  ⚡ {item.cppLesson}
+                  ⚡ {t(item.cppLesson, item.cppLessonEn)}
                 </span>
               </div>
               <div className="flex-1">
@@ -240,8 +244,8 @@ export function PythonToCppBridge({ onDismiss }: Props) {
           ))}
           <p className="text-[10px] text-gray-400 text-center pt-1">
             {t(
-              "💡 C++을 처음 배운다면 cpp-1부터 시작하세요!",
-              "💡 New to C++? Start from cpp-1!",
+              "💡 C++을 처음 배운다면 첫 번째 레슨부터 시작하세요!",
+              "💡 New to C++? Start from the first lesson!",
             )}
           </p>
         </div>

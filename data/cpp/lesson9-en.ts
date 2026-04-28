@@ -653,7 +653,7 @@ arr + 5 →  address 1020  → (past the last, no element)
 - \`arr + 1\` is **not** \`1001\` — it's \`1000 + sizeof(int)\`. C++ scales the offset by the element's size for you.
 - So \`arr + 5\` gives "the address five slots later" = the \`end()\` role.
 
-For now, just **feel it as an address-based trick**. Real pointer arithmetic is covered properly in **cpp-13 (Pointer Basics)**.
+For now, just **feel it as an address-based trick**. Real pointer arithmetic is covered properly in the **Pointer Basics** lesson.
 {/expand}
 
 So these two calls are **"the same thing written differently":**
@@ -698,7 +698,7 @@ vector<string> names = {"bob", "alice", "carol"};
 sort(names.begin(), names.end());  // alice, bob, carol
 \`\`\`
 
-💡 **Descending order**, **sorting structs**, and the internals of sorting algorithms are covered in **cpp-23 (Sort Master)**. Here you just need "how to use it."`
+💡 **Descending order**, **sorting structs**, and the internals of sorting algorithms are covered in the *Sort & Binary Search* lesson. Here you just need "how to use it."`
         },
         {
           id: "ch2-pred-sort",
@@ -756,7 +756,7 @@ for (int i = 0; i < v.size(); i++) {
 cout << sum;  // 100
 \`\`\`
 
-💡 A cleaner way to loop — **range-based for** — is coming in the next lesson (cpp-10)!`,
+💡 A cleaner way to loop — **range-based for** — is coming in the next lesson!`,
         },
         {
           id: "ch2-pred2",
@@ -813,7 +813,7 @@ int daysInMonth[12];   // ✅ natural (months 1-12)
 int diceCount[6];      // ✅ count of each die face
 \`\`\`
 
-For these **never-changing counts**, an array is shorter and cleaner than a vector. (2D arrays, which you'll meet in cpp-21, shine in fixed-size grid cases like an 8×8 chess board.)
+For these **never-changing counts**, an array is shorter and cleaner than a vector. (2D arrays, coming up next, shine in fixed-size grid cases like an 8×8 chess board.)
 
 **② Competitive programming (CP), where speed and brevity matter**
 
