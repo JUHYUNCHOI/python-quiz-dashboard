@@ -44,9 +44,13 @@ top    → 2           ← peek at the top
 
 Think of stacking plates — new ones go on top (push), and you remove from the top (pop). This rule has a name: **LIFO (Last In First Out)**.
 
-### How to use it in C++
-
-\`\`\`cpp
+> Next page — how to use it in C++ + how it differs from Python.`
+        },
+        {
+          id: "ch1-intro-usage",
+          type: "explain",
+          title: "🔧 C++ stack usage + Python comparison",
+          content: `\`\`\`cpp
 #include <stack>
 using namespace std;
 

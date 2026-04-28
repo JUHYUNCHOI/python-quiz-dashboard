@@ -44,9 +44,13 @@ top    → 2           ← 맨 위 값 확인
 
 접시 쌓기 떠올려요. 새 접시는 위에 올리고 (push), 꺼낼 때도 맨 위부터 (pop). 이 규칙을 **LIFO (Last In First Out)** 라고 불러요.
 
-### C++ 에서 쓰는 법
-
-\`\`\`cpp
+> 다음 페이지 — C++ 에서 어떻게 쓰는지 + 파이썬과 어떻게 다른지.`
+        },
+        {
+          id: "ch1-intro-usage",
+          type: "explain",
+          title: "🔧 C++ stack 사용법 + 파이썬 비교",
+          content: `\`\`\`cpp
 #include <stack>
 using namespace std;
 
