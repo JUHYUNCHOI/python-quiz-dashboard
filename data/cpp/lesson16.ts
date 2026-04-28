@@ -154,6 +154,54 @@ map 으로 점수 정렬하려면 결국 \`vector<pair>\` 로 옮겨서 sort 해
           explanation: "map은 키를 자동으로 정렬해요! 알파벳 순서로 apple → banana → cherry가 출력돼요. 삽입 순서와 상관없어요!"
         },
         {
+          id: "ch1-mini-basic",
+          type: "practice" as const,
+          title: "✋ 잠깐 — 학생 점수 map 만들기",
+          content: `**상황**: 학생 3 명의 점수가 미리 들어 있어요. **Dave 의 점수 78** 을 추가하고 **Bob 의 점수** 를 출력하세요.
+
+\`\`\`
+초기: Alice=95, Bob=87, Carol=92
+추가: Dave=78
+출력: 87  (Bob 의 점수)
+\`\`\`
+
+> 💡 추가: \`m["Dave"] = 78;\` / 조회: \`cout << m["Bob"];\`. 이 두 줄이면 끝.`,
+          starterCode: `#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+
+int main() {
+    map<string, int> scores;
+    scores["Alice"] = 95;
+    scores["Bob"] = 87;
+    scores["Carol"] = 92;
+
+    // 👇 Dave 의 점수 78 추가, Bob 의 점수 출력
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+
+int main() {
+    map<string, int> scores;
+    scores["Alice"] = 95;
+    scores["Bob"] = 87;
+    scores["Carol"] = 92;
+
+    scores["Dave"] = 78;
+    cout << scores["Bob"];
+
+    return 0;
+}`,
+          hint: "scores[\"Dave\"] = 78; / cout << scores[\"Bob\"];",
+          expectedOutput: `87`
+        },
+        {
           id: "ch1-missing-key",
           type: "explain",
           title: "⚠️ 없는 키를 [] 로 접근하면? — 위험한 동작",
@@ -941,26 +989,30 @@ v.erase(unique(v.begin(), v.end()), v.end());
         {
           id: "ch2-set-mini",
           type: "practice" as const,
-          title: "✋ 잠깐 — 출석한 학생 수 (중복 제외)",
-          content: `**상황**: 오늘 수업에 들어온 학생 이름이 중복 포함 8 번 호명됐어요. 실제 **서로 다른 학생 수** 는?
+          title: "✋ 잠깐 — 학생 명단에 있나 확인하기",
+          content: `**상황**: 학원 등록 학생 5 명 명단이 있어요. 사용자가 입력한 이름이 **명단에 있나** 확인하세요.
 
 \`\`\`
-호명: Alice, Bob, Alice, Carol, Bob, Alice, David, Carol
-실제 서로 다른 학생: 4 명
+명단: Alice, Bob, Carol, David, Eve
+입력: Carol → "있음"
+입력: Frank → "없음"
 \`\`\`
 
-set 에 다 넣고 \`size()\` 를 출력하세요.
+set 에 명단 넣고 \`count()\` 로 확인.
 
-> 💡 \`set\` 은 자동으로 중복 제거. 그냥 다 \`insert\` 하면 끝.`,
+> 💡 \`s.count(name) > 0\` → 있음 / \`== 0\` → 없음.
+> 💡 vector 에서 찾으려면 \`for\` 로 한 명씩 비교해야 하지만, set 은 \`count\` 한 줄.`,
           starterCode: `#include <iostream>
 #include <set>
 #include <string>
 using namespace std;
 
 int main() {
-    string names[] = {"Alice", "Bob", "Alice", "Carol", "Bob", "Alice", "David", "Carol"};
+    set<string> roster = {"Alice", "Bob", "Carol", "David", "Eve"};
+    string query;
+    cin >> query;
 
-    // 👇 set 에 다 insert 하고 set.size() 출력
+    // 👇 query 가 roster 에 있으면 "있음", 없으면 "없음"
 
 
     return 0;
@@ -971,16 +1023,18 @@ int main() {
 using namespace std;
 
 int main() {
-    string names[] = {"Alice", "Bob", "Alice", "Carol", "Bob", "Alice", "David", "Carol"};
+    set<string> roster = {"Alice", "Bob", "Carol", "David", "Eve"};
+    string query;
+    cin >> query;
 
-    set<string> attended;
-    for (auto& n : names) attended.insert(n);
-    cout << attended.size();
+    if (roster.count(query) > 0) cout << "있음";
+    else cout << "없음";
 
     return 0;
 }`,
-          hint: "set<string> attended; for (auto& n : names) attended.insert(n); cout << attended.size(); — set 이 알아서 중복 제거.",
-          expectedOutput: `4`
+          hint: "if (roster.count(query) > 0) cout << \"있음\"; else cout << \"없음\";",
+          expectedOutput: `있음`,
+          stdin: `Carol`,
         },
         {
           id: "ch2-unordered",
@@ -1020,37 +1074,6 @@ s.insert(4);
           options: ["5: 5 2 8 2 5 ", "3: 5 2 8 ", "3: 2 5 8 ", "5: 2 2 5 5 8 "],
           answer: 2,
           explanation: "set은 중복을 제거하고 자동 정렬해요! {5, 2, 8, 2, 5}에서 중복을 제거하면 {2, 5, 8}이고, 크기는 3이에요. 정렬된 순서로 2 5 8이 출력돼요!"
-        },
-        {
-          id: "ch2-compare",
-          type: "explain",
-          title: "🎯 map vs set vs unordered 총정리!",
-          content: `지금까지 배운 4가지 컨테이너를 한눈에 비교해봐요!
-
-| 컨테이너 | 용도 | 정렬 | 시간복잡도 | 파이썬 유사 |
-|---|---|---|---|---|
-| \`map\` | 키-값 쌍 | O (키 정렬) | O(log n) | — |
-| \`unordered_map\` | 키-값 쌍 | X | **O(1)** | **dict** |
-| \`set\` | 값만 (중복X) | O (자동 정렬) | O(log n) | — |
-| \`unordered_set\` | 값만 (중복X) | X | **O(1)** | **set** |
-
-**언제 뭘 쓸까?**
-
-1. **키-값 저장 + 정렬 필요** → \`map\`
-2. **키-값 저장 + 빠른 검색** → \`unordered_map\`
-3. **중복 제거 + 정렬 필요** → \`set\`
-4. **중복 제거 + 빠른 검색** → \`unordered_set\`
-
-\`\`\`cpp
-// 각각 필요한 #include
-#include <map>             // map
-#include <unordered_map>   // unordered_map
-#include <set>             // set
-#include <unordered_set>   // unordered_set
-\`\`\`
-
-💡 \`O(log n)\` vs \`O(1)\` — 원소가 많을수록 unordered 버전이 훨씬 빨라요!
-하지만 정렬된 순서가 필요하면 정렬 버전을 써야 해요.`
         },
         {
           id: "ch2-practice",
@@ -1119,6 +1142,37 @@ int main() {
       title: "set 퀴즈 & 정리",
       emoji: "🏆",
       steps: [
+        {
+          id: "ch2-compare",
+          type: "explain",
+          title: "🎯 map vs set vs unordered 총정리!",
+          content: `지금까지 배운 4가지 컨테이너를 한눈에 비교해봐요!
+
+| 컨테이너 | 용도 | 정렬 | 시간복잡도 | 파이썬 유사 |
+|---|---|---|---|---|
+| \`map\` | 키-값 쌍 | O (키 정렬) | O(log n) | — |
+| \`unordered_map\` | 키-값 쌍 | X | **O(1)** | **dict** |
+| \`set\` | 값만 (중복X) | O (자동 정렬) | O(log n) | — |
+| \`unordered_set\` | 값만 (중복X) | X | **O(1)** | **set** |
+
+**언제 뭘 쓸까?**
+
+1. **키-값 저장 + 정렬 필요** → \`map\`
+2. **키-값 저장 + 빠른 검색** → \`unordered_map\`
+3. **중복 제거 + 정렬 필요** → \`set\`
+4. **중복 제거 + 빠른 검색** → \`unordered_set\`
+
+\`\`\`cpp
+// 각각 필요한 #include
+#include <map>             // map
+#include <unordered_map>   // unordered_map
+#include <set>             // set
+#include <unordered_set>   // unordered_set
+\`\`\`
+
+💡 \`O(log n)\` vs \`O(1)\` — 원소가 많을수록 unordered 버전이 훨씬 빨라요!
+하지만 정렬된 순서가 필요하면 정렬 버전을 써야 해요.`
+        },
         {
           id: "ch6-q2",
           type: "quiz",

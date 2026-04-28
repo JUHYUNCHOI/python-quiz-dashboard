@@ -154,6 +154,54 @@ To sort a map by score you'd end up copying it into a \`vector<pair>\` and sorti
           explanation: "map automatically sorts by key! In alphabetical order: apple → banana → cherry. The insertion order doesn't matter!"
         },
         {
+          id: "ch1-mini-basic",
+          type: "practice" as const,
+          title: "✋ Quick — build a student-score map",
+          content: `**Scenario**: Three students' scores are pre-loaded. **Add Dave's score 78** and **print Bob's score**.
+
+\`\`\`
+Initial: Alice=95, Bob=87, Carol=92
+Add:     Dave=78
+Output:  87  (Bob's score)
+\`\`\`
+
+> 💡 Add: \`m["Dave"] = 78;\` / Read: \`cout << m["Bob"];\`. Two lines and you're done.`,
+          starterCode: `#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+
+int main() {
+    map<string, int> scores;
+    scores["Alice"] = 95;
+    scores["Bob"] = 87;
+    scores["Carol"] = 92;
+
+    // 👇 add Dave's score 78, then print Bob's score
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+
+int main() {
+    map<string, int> scores;
+    scores["Alice"] = 95;
+    scores["Bob"] = 87;
+    scores["Carol"] = 92;
+
+    scores["Dave"] = 78;
+    cout << scores["Bob"];
+
+    return 0;
+}`,
+          hint: "scores[\"Dave\"] = 78; / cout << scores[\"Bob\"];",
+          expectedOutput: `87`
+        },
+        {
           id: "ch1-missing-key",
           type: "explain",
           title: "⚠️ Accessing a missing key with [] — dangerous behavior",
@@ -941,26 +989,30 @@ v.erase(unique(v.begin(), v.end()), v.end());
         {
           id: "ch2-set-mini",
           type: "practice" as const,
-          title: "✋ Quick — distinct students attended",
-          content: `**Scenario**: A name was called 8 times in class today (with duplicates). How many **distinct students** showed up?
+          title: "✋ Quick — is the name on the roster?",
+          content: `**Scenario**: There's a roster of 5 enrolled students. Check whether a queried name is **on the roster**.
 
 \`\`\`
-Calls: Alice, Bob, Alice, Carol, Bob, Alice, David, Carol
-Distinct: 4
+Roster: Alice, Bob, Carol, David, Eve
+Input: Carol → "yes"
+Input: Frank → "no"
 \`\`\`
 
-Insert them all into a set and print \`size()\`.
+Put the roster into a set, use \`count()\` to check.
 
-> 💡 \`set\` deduplicates automatically. Just \`insert\` everything and done.`,
+> 💡 \`s.count(name) > 0\` → present / \`== 0\` → missing.
+> 💡 With a vector you'd \`for\`-loop and compare; with a set, one \`count\` call.`,
           starterCode: `#include <iostream>
 #include <set>
 #include <string>
 using namespace std;
 
 int main() {
-    string names[] = {"Alice", "Bob", "Alice", "Carol", "Bob", "Alice", "David", "Carol"};
+    set<string> roster = {"Alice", "Bob", "Carol", "David", "Eve"};
+    string query;
+    cin >> query;
 
-    // 👇 Insert all into a set and print set.size()
+    // 👇 if query is on the roster, "yes"; otherwise "no"
 
 
     return 0;
@@ -971,16 +1023,18 @@ int main() {
 using namespace std;
 
 int main() {
-    string names[] = {"Alice", "Bob", "Alice", "Carol", "Bob", "Alice", "David", "Carol"};
+    set<string> roster = {"Alice", "Bob", "Carol", "David", "Eve"};
+    string query;
+    cin >> query;
 
-    set<string> attended;
-    for (auto& n : names) attended.insert(n);
-    cout << attended.size();
+    if (roster.count(query) > 0) cout << "yes";
+    else cout << "no";
 
     return 0;
 }`,
-          hint: "set<string> attended; for (auto& n : names) attended.insert(n); cout << attended.size(); — set deduplicates by itself.",
-          expectedOutput: `4`
+          hint: "if (roster.count(query) > 0) cout << \"yes\"; else cout << \"no\";",
+          expectedOutput: `yes`,
+          stdin: `Carol`,
         },
         {
           id: "ch2-unordered",
@@ -1020,37 +1074,6 @@ Python's \`set\` is actually more similar to C++'s \`unordered_set\`!
           options: ["5: 5 2 8 2 5 ", "3: 5 2 8 ", "3: 2 5 8 ", "5: 2 2 5 5 8 "],
           answer: 2,
           explanation: "set removes duplicates and auto-sorts! From {5, 2, 8, 2, 5}, removing duplicates gives {2, 5, 8} with size 3. Printed in sorted order: 2 5 8!"
-        },
-        {
-          id: "ch2-compare",
-          type: "explain",
-          title: "🎯 map vs set vs unordered — Full Comparison!",
-          content: `Let's compare all four containers at a glance!
-
-| Container | Purpose | Sorted | Time Complexity | Python Equivalent |
-|---|---|---|---|---|
-| \`map\` | Key-value pairs | Yes (by key) | O(log n) | — |
-| \`unordered_map\` | Key-value pairs | No | **O(1)** | **dict** |
-| \`set\` | Values only (no dups) | Yes (auto-sorted) | O(log n) | — |
-| \`unordered_set\` | Values only (no dups) | No | **O(1)** | **set** |
-
-**When to use which?**
-
-1. **Key-value storage + need sorted order** → \`map\`
-2. **Key-value storage + need fast lookup** → \`unordered_map\`
-3. **Remove duplicates + need sorted order** → \`set\`
-4. **Remove duplicates + need fast lookup** → \`unordered_set\`
-
-\`\`\`cpp
-// Each requires its own #include
-#include <map>             // map
-#include <unordered_map>   // unordered_map
-#include <set>             // set
-#include <unordered_set>   // unordered_set
-\`\`\`
-
-💡 \`O(log n)\` vs \`O(1)\` — the more elements you have, the bigger the difference!
-But if you need sorted order, you must use the sorted version.`
         },
         {
           id: "ch2-practice",
@@ -1118,6 +1141,37 @@ int main() {
       title: "set Quiz & Summary",
       emoji: "🏆",
       steps: [
+        {
+          id: "ch2-compare",
+          type: "explain",
+          title: "🎯 map vs set vs unordered — Full Comparison!",
+          content: `Let's compare all four containers at a glance!
+
+| Container | Purpose | Sorted | Time Complexity | Python Equivalent |
+|---|---|---|---|---|
+| \`map\` | Key-value pairs | Yes (by key) | O(log n) | — |
+| \`unordered_map\` | Key-value pairs | No | **O(1)** | **dict** |
+| \`set\` | Values only (no dups) | Yes (auto-sorted) | O(log n) | — |
+| \`unordered_set\` | Values only (no dups) | No | **O(1)** | **set** |
+
+**When to use which?**
+
+1. **Key-value storage + need sorted order** → \`map\`
+2. **Key-value storage + need fast lookup** → \`unordered_map\`
+3. **Remove duplicates + need sorted order** → \`set\`
+4. **Remove duplicates + need fast lookup** → \`unordered_set\`
+
+\`\`\`cpp
+// Each requires its own #include
+#include <map>             // map
+#include <unordered_map>   // unordered_map
+#include <set>             // set
+#include <unordered_set>   // unordered_set
+\`\`\`
+
+💡 \`O(log n)\` vs \`O(1)\` — the more elements you have, the bigger the difference!
+But if you need sorted order, you must use the sorted version.`
+        },
         {
           id: "ch6-q2",
           type: "quiz",
