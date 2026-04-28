@@ -299,7 +299,7 @@ int main() {
             "#include <utility>"
           ],
           answer: 1,
-          explanation: "**Official answer: `<algorithm>`**. `sort()` lives exactly in this header.\n\n💡 You may be thinking back to the pair note (\"`<vector>` etc. pull pair in for free\") — that's a different case:\n• **pair is a *type***: STL containers like map / set use pair *internally*, so it gets pulled in transitively.\n• **sort is a *function***: other STL headers don't use sort internally, so it doesn't get pulled in. Including only `<vector>` and calling `sort()` gives `'sort' was not declared`.\n\n**Rule: for functions, explicitly include the official header.** Types just sometimes happen to come along for free."
+          explanation: "**Official answer: `<algorithm>`**. `sort()` lives exactly in this header.\n\n💡 You may be thinking back to the pair note (\"`<vector>` etc. pull pair in for free\") — that's a different case:\n• **pair is a type**: STL containers like map / set use pair internally, so it gets pulled in transitively.\n• **sort is a function**: other STL headers don't use sort internally, so it doesn't get pulled in. Including only `<vector>` and calling `sort()` gives `'sort' was not declared`.\n\n**Rule: for functions, explicitly include the official header.** Types just sometimes happen to come along for free."
         },
         {
           id: "s23-ch0-practice3",
@@ -440,18 +440,18 @@ lambda x: x * 2
 | Parameter types | none (dynamic) | required (\`int\`, \`auto\`, etc.) |
 | Body marker | \`:\` then expression | \`{}\` braces + \`return\` |
 
-### Next page — the key rule for sort lambdas: *two parameters* 👇`
+### Next page — the key rule for sort lambdas: **two parameters** 👇`
         },
         {
           id: "s23-ch1-sort-lambda",
           type: "explain",
-          title: "🔧 sort's lambda — *comparing two values* is the core",
-          content: `Python sort's \`key=\` transformed *one* value. **C++ sort's lambda compares two values directly.**
+          title: "🔧 sort's lambda — **comparing two values** is the core",
+          content: `Python sort's \`key=\` transformed **one** value. **C++ sort's lambda compares two values directly.**
 
 \`\`\`cpp
 [](int a, int b) { return a > b; }
        ↑     ↑              ↑
-   two values to compare    if true, *a goes first*
+   two values to compare    if true, **a goes first**
 \`\`\`
 
 ### What the lambda's return means
@@ -701,7 +701,7 @@ Dave 60`,
         {
           id: "s23-ch1-must-lambda",
           type: "practice" as const,
-          title: "🎯 When lambda is *truly necessary* — multi-key sorting",
+          title: "🎯 When lambda is **truly necessary** — multi-key sorting",
           content: `This problem genuinely cannot be solved without a lambda.
 
 **Problem**: 5 students with (name, score).
@@ -891,12 +891,12 @@ Press the button to follow along!`,
           title: "📌 Quick checkpoint — one formula for the next page",
           content: `Before turning binary search into C++ code, just one formula to lock in.
 
-We've been using \`v.begin()\`, \`v.end()\` with sort — they're just **markers pointing to positions** in the vector. (Same pattern you saw in the previous lesson, *STL search functions*, with \`find\` and \`count\`.)
+We've been using \`v.begin()\`, \`v.end()\` with sort — they're just **markers pointing to positions** in the vector. (Same pattern you saw in the previous lesson, **STL search functions**, with \`find\` and \`count\`.)
 
 \`\`\`
    10    20    30    40    50
     ↑                          ↑
- begin()                      end() (one *past* the last spot)
+ begin()                      end() (one **past** the last spot)
 \`\`\`
 
 ---
@@ -969,13 +969,13 @@ upper_bound(v.begin(), v.end(), 4) - v.begin() →  2  (first value > 4 = 5)
 lower_bound(v.begin(), v.end(), 10) - v.begin() →  5  (past the end)
 \`\`\`
 
-**→ lower_bound == upper_bound means the value isn't in the array!**
-
----
-
-**3 Usage Patterns**
-
-\`\`\`cpp
+**→ lower_bound == upper_bound means the value isn't in the array!**`
+        },
+        {
+          id: "s23-ch2-lb-patterns",
+          type: "explain",
+          title: "🎯 3 usage patterns",
+          content: `\`\`\`cpp
 vector<int> v = {1, 3, 3, 5, 7, 9};
 
 // ① How many 3s are there?
@@ -992,11 +992,13 @@ int idx = lower_bound(v.begin(), v.end(), 3) - v.begin();
 cout << idx;  // 1
 \`\`\`
 
----
-
-### 🤔 Wait — doesn't \`count()\` also count occurrences?
-
-Yes! The \`count()\` you saw in the *STL search functions* lesson also counts:
+> 💡 The trio is one family but they **return different things**, so they're used differently. Next page covers a common trap.`
+        },
+        {
+          id: "s23-ch2-lb-vs-count",
+          type: "explain",
+          title: "🤔 Wait — doesn't \`count()\` also count occurrences?",
+          content: `Yes! The \`count()\` from the **STL search functions** lesson also counts:
 
 \`\`\`cpp
 int cnt = count(v.begin(), v.end(), 3);   // works even on unsorted data
@@ -1010,11 +1012,11 @@ int cnt = count(v.begin(), v.end(), 3);   // works even on unsorted data
 | Speed | **O(n)** — scans everything | **O(log n)** — binary search |
 | Counting in 1M elements | 1,000,000 comparisons | ~20 comparisons |
 
-**Trap:** "So I'll just sort once and use upper-lower!" → ❌. \`sort\` itself is O(n log n) — for a *single* count, plain \`count()\` is faster.
+**Trap:** "So I'll just sort once and use upper-lower!" → ❌. \`sort\` itself is O(n log n) — for a **single** count, plain \`count()\` is faster.
 
 ✅ **When upper-lower really shines:**
-- Data is *already* sorted
-- You need to count *many times* on the same data (sort once → each query is O(log n))
+- Data is **already** sorted
+- You need to count **many times** on the same data (sort once → each query is O(log n))
 
 Common in competitive programming; in everyday code \`count()\` is more typical.`
         },
@@ -1046,15 +1048,15 @@ lower_bound(v.begin(), v.end(), 5) - v.begin()  // 3
           id: "s23-ch2-quiz1",
           type: "quiz",
           title: "Binary search prerequisite!",
-          content: "Given an *unsorted* vector \`v = {3, 1, 4, 1, 5}\`, what does \`binary_search(v.begin(), v.end(), 4)\` return?",
+          content: "Given an **unsorted** vector \`v = {3, 1, 4, 1, 5}\`, what does \`binary_search(v.begin(), v.end(), 4)\` return?",
           options: [
             "true (since 4 is in the vector)",
             "false (auto-detects unsorted)",
-            "**Unpredictable** — binary search only works on *sorted* arrays. Result is implementation-defined / undefined behavior.",
+            "**Unpredictable** — binary search only works on sorted arrays. Result is implementation-defined / undefined behavior.",
             "Compile error"
           ],
           answer: 2,
-          explanation: "**`binary_search`, `lower_bound`, and `upper_bound` only work correctly on *sorted* arrays.** Calling them on unsorted data compiles, but the result is *undefined behavior* — could be true, false, or anything. Always `sort()` first!"
+          explanation: "**`binary_search`, `lower_bound`, and `upper_bound` only work correctly on sorted arrays.** Calling them on unsorted data compiles, but the result is **undefined behavior** — could be true, false, or anything. Always `sort()` first!"
         },
         {
           id: "s23-ch2-lb2",
@@ -1300,7 +1302,7 @@ Input:  5
 Output: 0
 \`\`\`
 
-> 💡 \`upper_bound(...) - lower_bound(...)\` — the chapter's core application pattern. The difference between the two iterators *is* the count.`,
+> 💡 \`upper_bound(...) - lower_bound(...)\` — the chapter's core application pattern. The difference between the two iterators **is** the count.`,
           starterCode: `#include <iostream>
 #include <vector>
 #include <algorithm>

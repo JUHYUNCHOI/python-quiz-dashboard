@@ -299,7 +299,7 @@ int main() {
             "#include <utility>"
           ],
           answer: 1,
-          explanation: "**공식 답: `<algorithm>`**. `sort()` 는 정확히 이 헤더에 정의돼 있어요.\n\n💡 pair 때 \"`<vector>` 등에 자동으로 따라온다\" 고 한 거랑 헷갈렸을 수 있는데, 둘은 달라요:\n• **pair 는 *타입***: map, set 같은 STL 컨테이너가 *내부적으로* pair 를 쓰니까 헤더에 자동으로 끌려와요.\n• **sort 는 *함수***: 다른 STL 헤더가 sort 를 안 쓰니까, 따라오지 않아요. `<vector>` 만 적고 `sort()` 호출하면 `'sort' was not declared` 에러 나요.\n\n**규칙: 함수는 그 함수가 있는 공식 헤더를 명시적으로 include.** 타입은 운 좋게 따라오는 경우가 있는 정도."
+          explanation: "**공식 답: `<algorithm>`**. `sort()` 는 정확히 이 헤더에 정의돼 있어요.\n\n💡 pair 때 \"`<vector>` 등에 자동으로 따라온다\" 고 한 거랑 헷갈렸을 수 있는데, 둘은 달라요:\n• **pair 는 타입**: map, set 같은 STL 컨테이너가 내부적으로 pair 를 쓰니까 헤더에 자동으로 끌려와요.\n• **sort 는 함수**: 다른 STL 헤더가 sort 를 안 쓰니까, 따라오지 않아요. `<vector>` 만 적고 `sort()` 호출하면 `'sort' was not declared` 에러 나요.\n\n**규칙: 함수는 그 함수가 있는 공식 헤더를 명시적으로 include.** 타입은 운 좋게 따라오는 경우가 있는 정도."
         },
         {
           id: "s23-ch0-practice3",
@@ -440,18 +440,18 @@ lambda x: x * 2
 | 매개변수 타입 | 없음 (동적) | 있음 (\`int\`, \`auto\` 등) |
 | 본문 표시 | \`:\` 콜론 뒤 식 | \`{}\` 중괄호 + \`return\` |
 
-### 다음 페이지 — sort 의 람다는 인자가 *2 개* 라는 핵심 규칙 👇`
+### 다음 페이지 — sort 의 람다는 인자가 **2 개** 라는 핵심 규칙 👇`
         },
         {
           id: "s23-ch1-sort-lambda",
           type: "explain",
-          title: "🔧 sort 의 람다 — *두 값을 비교* 하는 게 핵심",
-          content: `파이썬 sort 의 \`key=\` 는 값 *하나* 를 변환했죠. **C++ sort 의 람다는 두 값을 직접 비교** 해요.
+          title: "🔧 sort 의 람다 — **두 값을 비교** 하는 게 핵심",
+          content: `파이썬 sort 의 \`key=\` 는 값 **하나** 를 변환했죠. **C++ sort 의 람다는 두 값을 직접 비교** 해요.
 
 \`\`\`cpp
 [](int a, int b) { return a > b; }
        ↑     ↑              ↑
-   비교할 두 값      이 조건이 true 면 *a 가 앞으로*
+   비교할 두 값      이 조건이 true 면 **a 가 앞으로**
 \`\`\`
 
 ### 람다 결과의 의미
@@ -701,7 +701,7 @@ Dave 60`,
         {
           id: "s23-ch1-must-lambda",
           type: "practice" as const,
-          title: "🎯 lambda 가 *진짜 필요한* 순간 — 다중 기준 정렬",
+          title: "🎯 lambda 가 **진짜 필요한** 순간 — 다중 기준 정렬",
           content: `이번 문제는 lambda 없이는 진짜 답이 없어요.
 
 **문제**: 학생 5 명의 (이름, 점수) 가 있어요.
@@ -891,12 +891,12 @@ banana hi apple ok cat`,
           title: "📌 잠깐 — 다음 페이지에서 쓸 공식 하나",
           content: `이진 탐색을 C++ 코드로 옮기기 전에, 공식 하나만 챙기고 가요.
 
-sort 에서 \`v.begin()\`, \`v.end()\` 를 계속 써왔죠? 그건 그냥 **벡터 안의 위치를 가리키는 표시** 예요. (전 레슨 *STL 탐색 함수* 에서 \`find\`, \`count\` 와 함께 봤던 그 패턴.)
+sort 에서 \`v.begin()\`, \`v.end()\` 를 계속 써왔죠? 그건 그냥 **벡터 안의 위치를 가리키는 표시** 예요. (전 레슨 **STL 탐색 함수** 에서 \`find\`, \`count\` 와 함께 봤던 그 패턴.)
 
 \`\`\`
    10    20    30    40    50
     ↑                          ↑
- begin()                      end() (마지막 *다음* 자리)
+ begin()                      end() (마지막 **다음** 자리)
 \`\`\`
 
 ---
@@ -969,19 +969,19 @@ upper_bound(v.begin(), v.end(), 4) - v.begin() →  2  (4 초과의 첫 값 = 5)
 lower_bound(v.begin(), v.end(), 10) - v.begin() →  5  (끝을 넘어감)
 \`\`\`
 
-**→ lower == upper면 그 값은 배열에 없는 거예요!**
-
----
-
-**활용 패턴 3가지**
-
-\`\`\`cpp
+**→ lower == upper 면 그 값은 배열에 없는 거예요!**`
+        },
+        {
+          id: "s23-ch2-lb-patterns",
+          type: "explain",
+          title: "🎯 활용 패턴 3 가지",
+          content: `\`\`\`cpp
 vector<int> v = {1, 3, 3, 5, 7, 9};
 
-// ① 3이 몇 개인가?
+// ① 3 이 몇 개인가?
 int count = upper_bound(v.begin(), v.end(), 3)
           - lower_bound(v.begin(), v.end(), 3);
-// 3 - 1 = 2개!
+// 3 - 1 = 2 개!
 
 // ② 값이 있는지 확인 — binary_search() 사용 (더 간단!)
 if (binary_search(v.begin(), v.end(), 3)) cout << "있음";
@@ -992,11 +992,13 @@ int idx = lower_bound(v.begin(), v.end(), 3) - v.begin();
 cout << idx;  // 1
 \`\`\`
 
----
-
-### 🤔 잠깐 — "개수 세기" 는 \`count()\` 도 있지 않아?
-
-맞아요. *STL 탐색 함수* 레슨에서 배운 \`count()\` 도 개수를 세요:
+> 💡 셋이 한 가족이지만 **돌려주는 게 달라서** 쓰임도 달라요. 다음 페이지에서 흔한 함정 하나 짚고 가요.`
+        },
+        {
+          id: "s23-ch2-lb-vs-count",
+          type: "explain",
+          title: "🤔 잠깐 — 개수 세기는 \`count()\` 도 있지 않아?",
+          content: `맞아요. **STL 탐색 함수** 레슨에서 배운 \`count()\` 도 개수를 세요:
 
 \`\`\`cpp
 int cnt = count(v.begin(), v.end(), 3);   // 정렬 안 되어 있어도 OK
@@ -1010,11 +1012,11 @@ int cnt = count(v.begin(), v.end(), 3);   // 정렬 안 되어 있어도 OK
 | 속도 | **O(n)** — 처음부터 끝까지 훑음 | **O(log n)** — 이진 탐색 |
 | 100 만 개 중 세기 | 100 만 번 비교 | 약 20 번 비교 |
 
-**함정:** "그럼 sort 한 번 하고 upper-lower 쓰면 되겠네!" → ❌. sort 자체가 O(n log n) 이라 *한 번만* 셀 거면 그냥 \`count()\` 가 더 빠름.
+**함정:** "그럼 sort 한 번 하고 upper-lower 쓰면 되겠네!" → ❌. sort 자체가 O(n log n) 이라 **한 번만** 셀 거면 그냥 \`count()\` 가 더 빠름.
 
 ✅ **upper-lower 가 빛나는 순간:**
-- 데이터가 *이미* 정렬돼 있을 때
-- 같은 데이터에서 *여러 번* 세야 할 때 (한 번 sort → 매 질의마다 O(log n))
+- 데이터가 **이미** 정렬돼 있을 때
+- 같은 데이터에서 **여러 번** 세야 할 때 (한 번 sort → 매 질의마다 O(log n))
 
 알고리즘 대회에선 자주 쓰는 패턴, 일반 코딩에선 \`count()\` 가 더 흔해요.`
         },
@@ -1054,7 +1056,7 @@ lower_bound(v.begin(), v.end(), 5) - v.begin()  // 3
             "컴파일 에러"
           ],
           answer: 2,
-          explanation: "**`binary_search`, `lower_bound`, `upper_bound` 는 모두 *정렬된* 배열에서만 정확히 동작해요.** 정렬 안 된 배열에서 호출하면 컴파일은 되지만 결과는 *undefined behavior* — true / false / 엉뚱한 인덱스 등 어떤 결과든 나올 수 있음. 그래서 사용 전 반드시 `sort()` 먼저!"
+          explanation: "**`binary_search`, `lower_bound`, `upper_bound` 는 모두 정렬된 배열에서만 정확히 동작해요.** 정렬 안 된 배열에서 호출하면 컴파일은 되지만 결과는 **undefined behavior** — true / false / 엉뚱한 인덱스 등 어떤 결과든 나올 수 있음. 그래서 사용 전 반드시 `sort()` 먼저!"
         },
         {
           id: "s23-ch2-lb2",
