@@ -737,10 +737,10 @@ cout << pq.top();
         {
           id: "ch3-simulation",
           type: "explain",
-          title: "🎮 LIFO vs FIFO — See the Difference!",
-          content: `Let's push the same data into both a stack and a queue, then see how differently they come out!
+          title: "🎮 LIFO vs FIFO — see the difference",
+          content: `Push the same data into both a stack and a queue, then see how differently they come out.
 
-**Push data in order: 1 → 2 → 3**
+### Push the same sequence: 1 → 2 → 3
 
 \`\`\`cpp
 // push into stack
@@ -766,9 +766,7 @@ push 2 → front [1, 2] back
 push 3 → front [1, 2, 3] back
 \`\`\`
 
----
-
-**Now pop everything out — what order do they come out in?**
+### Now pop everything out
 
 \`\`\`cpp
 // pop from stack
@@ -786,21 +784,32 @@ while (!q.empty()) {
 // Output: 1 2 3  ← same order as inserted! (FIFO)
 \`\`\`
 
-**stack**: 3 → 2 → 1 (last in comes out first)
-**queue**: 1 → 2 → 3 (first in comes out first)
+- **stack**: 3 → 2 → 1 (last in comes out first)
+- **queue**: 1 → 2 → 3 (first in comes out first)
 
----
-
-**Real-world analogies**
+> Next page — real-world analogies that pin down all 4 structures.`
+        },
+        {
+          id: "ch3-real-world",
+          type: "explain",
+          title: "🌍 Four data structures via real-world analogies",
+          content: `The 4 structures from this chapter — anchor them to everyday examples and they're hard to forget.
 
 | Data structure | Principle | Real-world example |
 |---|---|---|
-| stack (LIFO) | Last in → first out | Stacking plates, browser back button, undo |
-| queue (FIFO) | First in → first out | Waiting in line, printer queue, message processing |
-| deque | Insert/remove from both ends | Two-way line, card deck |
-| priority_queue | Highest priority first | ER triage order, task scheduling |
+| **stack** (LIFO) | Last in → first out | Stacking plates, browser back button, undo |
+| **queue** (FIFO) | First in → first out | Waiting in line, printer queue, message processing |
+| **deque** | Insert/remove from both ends | Two-way line, deck of cards |
+| **priority_queue** | Highest priority first | ER triage order, task scheduling |
 
-💡 How these data structures are used in actual algorithms (graph traversal, shortest path, etc.) is covered in the **Algorithm Lab**!`
+### Where they're used
+
+These structures are *the tools of algorithms*:
+- **stack** → DFS (depth-first search), bracket matching, reverse processing
+- **queue** → BFS (breadth-first search), simulation
+- **priority_queue** → Dijkstra (shortest path), priority job ordering
+
+> 💡 How they're used in real algorithms (graph traversal, shortest path, etc.) is covered in **Algorithm Lab**. Here the goal is just to *get the tools into your hands*.`
         },
         {
           id: "ch3-summary",

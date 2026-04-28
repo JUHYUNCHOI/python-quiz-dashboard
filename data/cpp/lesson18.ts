@@ -737,48 +737,46 @@ cout << pq.top();
         {
           id: "ch3-simulation",
           type: "explain",
-          title: "🎮 LIFO vs FIFO — 눈으로 비교!",
-          content: `stack과 queue에 같은 데이터를 순서대로 넣고 빼면 어떻게 다른지 직접 비교해봐요!
+          title: "🎮 LIFO vs FIFO — 눈으로 비교",
+          content: `stack 과 queue 에 같은 데이터를 순서대로 넣고 빼면 어떻게 다른지 직접 비교해봐요.
 
-**같은 데이터를 push: 1 → 2 → 3 순서로 넣기**
+### 같은 데이터를 push: 1 → 2 → 3 순서로 넣기
 
 \`\`\`cpp
-// stack에 push
+// stack 에 push
 stack<int> s;
 s.push(1); s.push(2); s.push(3);
 
-// queue에 push
+// queue 에 push
 queue<int> q;
 q.push(1); q.push(2); q.push(3);
 \`\`\`
 
-**stack의 내부 상태** (위가 top):
+**stack 의 내부 상태** (위가 top):
 \`\`\`
 push 1 → [1]           top = 1
 push 2 → [1, 2]        top = 2
 push 3 → [1, 2, 3]     top = 3
 \`\`\`
 
-**queue의 내부 상태** (→ 방향으로 이동):
+**queue 의 내부 상태** (→ 방향으로 이동):
 \`\`\`
 push 1 → front [1] back
 push 2 → front [1, 2] back
 push 3 → front [1, 2, 3] back
 \`\`\`
 
----
-
-**이제 꺼내면 (pop)?**
+### 이제 꺼내면 (pop)?
 
 \`\`\`cpp
-// stack에서 꺼내기
+// stack 에서 꺼내기
 while (!s.empty()) {
     cout << s.top() << " ";
     s.pop();
 }
 // 출력: 3 2 1  ← 역순! (LIFO)
 
-// queue에서 꺼내기
+// queue 에서 꺼내기
 while (!q.empty()) {
     cout << q.front() << " ";
     q.pop();
@@ -786,21 +784,32 @@ while (!q.empty()) {
 // 출력: 1 2 3  ← 넣은 순서대로! (FIFO)
 \`\`\`
 
-**stack**: 3 → 2 → 1 (마지막에 넣은 것이 먼저 나와요)
-**queue**: 1 → 2 → 3 (처음에 넣은 것이 먼저 나와요)
+- **stack**: 3 → 2 → 1 (마지막에 넣은 것이 먼저)
+- **queue**: 1 → 2 → 3 (처음에 넣은 것이 먼저)
 
----
-
-**실생활 비유**
+> 다음 페이지 — 실생활 비유로 4 가지 자료구조 한 번에 정리.`
+        },
+        {
+          id: "ch3-real-world",
+          type: "explain",
+          title: "🌍 실생활 비유로 자료구조 4 가지 정리",
+          content: `이 챕터에서 본 4 가지 자료구조 — 실생활 예시로 묶어 보면 평생 안 잊혀요.
 
 | 자료구조 | 원리 | 실생활 예시 |
 |---|---|---|
-| stack (LIFO) | 마지막 입력 → 먼저 출력 | 접시 쌓기, 뒤로가기 버튼, 실행 취소(undo) |
-| queue (FIFO) | 첫 입력 → 먼저 출력 | 줄서기, 프린터 대기열, 메시지 처리 |
-| deque | 앞뒤 모두 삽입/삭제 | 양방향 줄서기, 덱 카드 |
-| priority_queue | 우선순위 높은 것이 먼저 | 응급실 진료 순서, 작업 스케줄링 |
+| **stack** (LIFO) | 마지막 입력 → 먼저 출력 | 접시 쌓기, 뒤로가기 버튼, 실행 취소 (undo) |
+| **queue** (FIFO) | 첫 입력 → 먼저 출력 | 줄서기, 프린터 대기열, 메시지 처리 |
+| **deque** | 앞뒤 모두 삽입/삭제 | 양방향 줄서기, 덱 카드 |
+| **priority_queue** | 우선순위 높은 것이 먼저 | 응급실 진료 순서, 작업 스케줄링 |
 
-💡 이 자료구조들이 실제 알고리즘(그래프 탐색, 최단 경로 등)에서 어떻게 쓰이는지는 **알고리즘 랩**에서 다뤄요!`
+### 어디서 쓰이나?
+
+이 자료구조들은 *알고리즘의 도구* 예요:
+- **stack** → DFS (깊이 우선 탐색), 괄호 짝짓기, 역순 처리
+- **queue** → BFS (너비 우선 탐색), 시뮬레이션
+- **priority_queue** → 다익스트라 (최단 경로), 우선순위 작업
+
+> 💡 실제 알고리즘 (그래프 탐색, 최단 경로 등) 에서 어떻게 쓰는지는 **알고리즘 랩** 에서 자세히 다뤄요. 여기서는 *도구를 손에 익히는* 게 목적.`
         },
         {
           id: "ch3-summary",
