@@ -398,8 +398,10 @@ C++'s \`auto& [key, val]\` ≈ Python's \`key, val\`. Practically identical.
         {
           id: "ch3-iter-other",
           type: "explain",
-          title: "📖 (Reference) Two other iteration methods",
-          content: `Besides structured bindings, two more methods exist. **Rarely used** but you'll recognize them in others' code:
+          title: "📖 (Reference) Two other iteration methods — no need to memorize",
+          content: `> 📌 **No need to memorize this page.** When you see something unfamiliar in older code or someone else's code, *come back* and look. For now, scan once and move on.
+
+Besides structured bindings, two more methods exist. Both rarely used, but you'll recognize them in other code:
 
 ### Method 2: range-for + pair as-is
 
@@ -422,8 +424,23 @@ Manually handle \`begin()\`~\`end()\` iterators. \`it\` acts like a pointer to e
 for (auto it = scores.begin(); it != scores.end(); it++) {
     cout << it->first << ": " << it->second << endl;
 }
-// it->first = key,  it->second = value (arrow -> to access)
 \`\`\`
+
+### 🔧 First time seeing \`->\`? — arrow member access
+
+\`it->first\` is actually shorthand for \`(*it).first\`. Unpacking it:
+
+- \`*it\` = the pair that \`it\` points to (follow the arrow to get the value)
+- \`(*it).first\` = access the \`first\` member of that pair
+
+Writing \`(*it).\` every time is annoying, so \`->\` was created as a short version. **Whether iterator or pointer — \`->\` accesses the member of *what it points to*.**
+
+| Expression | Meaning |
+|---|---|
+| \`s.first\` | when s is *directly* a pair (dot) |
+| \`it->first\` | when it *points to* a pair (arrow) |
+
+> 💡 Worth knowing. STL functions like \`find()\` return iterators, so you'll meet \`->\` there.
 
 ### Frequency comparison
 
@@ -433,7 +450,7 @@ for (auto it = scores.begin(); it != scores.end(); it++) {
 | 2 (pair) | ⭐ Occasionally | Pre-C++17, pair itself needed |
 | 3 (iterator) | ⭐ Rarely | **Delete during iteration** etc. — next page |
 
-> 💡 Memorize Method 1 and start. Methods 2, 3 are "good to know they exist."`,
+> 💡 Memorize Method 1 only. \`->\` is worth knowing so \`find()\` etc. read naturally.`,
         },
         {
           id: "ch3-iter-erase",
