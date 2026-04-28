@@ -433,6 +433,18 @@ int main() {
 - First line: count of distinct values
 - Second line: the values (space-separated)`,
         constraints: "1 ≤ N ≤ 10000, -10000 ≤ each integer ≤ 10000",
+        initialCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    // 1) Read int n with cin
+    // 2) Declare vector v of size n
+    // 3) Read n elements into v with cin
+    // 4) Write your solution below
+    return 0;
+}`,
         hints: [
           "After sorting, use `unique()` to remove duplicates.",
           "`unique()` moves duplicates to the back and returns an iterator to the new end. Use `erase()` to trim the vector.",

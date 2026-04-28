@@ -560,27 +560,26 @@ int main() {
         {
           id: "ch3-iter",
           type: "explain",
-          title: "📖 map Iteration — 3 Ways",
-          content: `**How map stores its data**
+          title: "📖 map iteration — the most common way",
+          content: `**First: map is a collection of pairs**
 
-First, you need to know this — map stores each element internally as a **pair**!
+map stores each element internally as a **pair**:
 
 \`\`\`cpp
 map<string, int> scores = {{"Emma", 95}, {"Jake", 87}};
-// Internally stored as:
+// Internally:
 // pair<string, int>{"Emma", 95}
 // pair<string, int>{"Jake", 87}
 \`\`\`
 
-So when you iterate over a map, each element comes out as a **pair**. That's why you can access \`.first\` (key) and \`.second\` (value).
+So when you iterate, each element is a **pair**. That's why \`.first\` (key) and \`.second\` (value) work.
 
 ---
 
-**Iterating — 3 ways**
+### ⭐ Most common: structured bindings (C++17)
 
-**Method 1: Structured bindings — range-for (most common, C++17)**
+Unpack the pair directly into \`[key, val]\`:
 
-Unpacks the pair directly into \`[key, val]\`.
 \`\`\`cpp
 for (auto& [key, val] : scores) {
     cout << key << ": " << val << endl;
@@ -589,9 +588,29 @@ for (auto& [key, val] : scores) {
 // Jake: 87
 \`\`\`
 
-**Method 2: range-for + pair access**
+@Key: \`map\` **always sorts keys automatically**! Regardless of insertion order, output is in alphabetical/numerical order. Python dict preserves insertion order, but C++ map does not.
 
-Still a range-for, but receives the pair as-is and accesses via \`.first\`, \`.second\`.
+### Compared to Python
+
+\`\`\`python
+for key, val in scores.items():
+    print(f"{key}: {val}")
+\`\`\`
+
+C++'s \`auto& [key, val]\` ≈ Python's \`key, val\`. Practically identical.
+
+> 💡 In practice **this method alone is enough**. The next page covers the other two methods, but they're rarely used.`,
+        },
+        {
+          id: "ch3-iter-other",
+          type: "explain",
+          title: "📖 (Reference) Two other iteration methods",
+          content: `Besides structured bindings, two more methods exist. **Rarely used** but you'll recognize them in others' code:
+
+### Method 2: range-for + pair as-is
+
+Range-for, but keep the pair intact and access via \`.first\`, \`.second\`:
+
 \`\`\`cpp
 for (auto& p : scores) {
     cout << p.first << ": " << p.second << endl;
@@ -599,11 +618,12 @@ for (auto& p : scores) {
 // p.first = key,  p.second = value
 \`\`\`
 
-Methods 1 and 2 are **both range-for**! The difference is whether you unpack the pair (Method 1) or use it directly (Method 2).
+Methods 1 and 2 are **both range-for** — the difference is whether you unpack the pair (1) or use it directly (2).
 
-**Method 3: Direct iterator (traditional approach)**
+### Method 3: direct iterator
 
-Manually handles begin()~end() iterators. \`it\` acts like a pointer to each pair.
+Manually handle \`begin()\`~\`end()\` iterators. \`it\` acts like a pointer to each pair:
+
 \`\`\`cpp
 for (auto it = scores.begin(); it != scores.end(); it++) {
     cout << it->first << ": " << it->second << endl;
@@ -611,56 +631,50 @@ for (auto it = scores.begin(); it != scores.end(); it++) {
 // it->first = key,  it->second = value (arrow -> to access)
 \`\`\`
 
-@Key: \`map\` **always sorts keys automatically**! Regardless of insertion order, output is in alphabetical/numerical order. Python dict preserves insertion order, but C++ map does not.
+### Frequency comparison
 
-**How often is each method actually used?**
-
-| Method | Frequency | When to use |
+| Method | Frequency | When |
 |---|---|---|
-| Method 1 (structured bindings) | ⭐⭐⭐ Almost always | Modern C++17 code, competitive programming |
-| Method 2 (pair) | ⭐ Occasionally | Pre-C++17 code, when you need to pass the pair itself |
-| Method 3 (iterator) | ⭐ Rarely | When you need to delete during iteration or manipulate positions |
+| 1 (structured bindings) | ⭐⭐⭐ Almost always | Modern code, competitive programming |
+| 2 (pair) | ⭐ Occasionally | Pre-C++17, pair itself needed |
+| 3 (iterator) | ⭐ Rarely | **Delete during iteration** etc. — next page |
 
-The rare case where Method 3 is needed — **deleting elements while iterating**:
+> 💡 Memorize Method 1 and start. Methods 2, 3 are "good to know they exist."`,
+        },
+        {
+          id: "ch3-iter-erase",
+          type: "explain",
+          title: "⚠️ (Advanced) Deleting while iterating — iterator trap",
+          content: `The rare case where Method 3 (iterator) is *truly needed* — **erasing during iteration**.
 
-❌ **This causes a crash!**
+### ❌ This crashes!
+
 \`\`\`cpp
 for (auto it = m.begin(); it != m.end(); it++) {  // it++ in loop header
     if (it->second < 0) {
-        m.erase(it);  // it becomes invalid (dangling)...
+        m.erase(it);  // it becomes invalid...
     }
     // loop header runs it++ on invalid iterator → crash!
 }
 \`\`\`
 
-When you call \`erase(it)\`, that iterator becomes **invalid (dangling)**. It's like crossing out a row from a list and then trying to find "the next row" using the old row number — everything has shifted.
+When you call \`erase(it)\`, that iterator becomes **invalid (dangling)**. Like crossing out a row and trying to find "the next row" using the old row number — positions have shifted.
 
-✅ **The correct way:**
+### ✅ The correct way
+
 \`\`\`cpp
 for (auto it = m.begin(); it != m.end(); ) {  // no it++ in header!
     if (it->second < 0) {
-        it = m.erase(it);  // erase() RETURNS the next valid iterator!
+        it = m.erase(it);  // erase returns the next valid iterator
     } else {
         it++;              // only advance manually when NOT erasing
     }
 }
 \`\`\`
 
-**Key insight**: \`m.erase(it)\` deletes the element AND **returns the next valid iterator**!
-So \`it = m.erase(it)\` already moves you to the next element.
-That's why we skip \`it++\` after erasing — only the \`else\` branch advances the iterator.
+**Key:** \`m.erase(it)\` deletes the element AND **returns the next valid iterator**. So \`it = m.erase(it)\` already moves to the next element. That's why we skip \`it++\` when erasing — only the \`else\` branch advances.
 
-Compare with Python:
-
-**Python 🐍:**
-\`\`\`python
-for key, val in scores.items():
-    print(f"{key}: {val}")
-\`\`\`
-
-C++'s \`auto& [key, val]\` works just like Python's \`key, val\`!
-
-For competitive programming and everyday code, **knowing Method 1 is enough**. Think of Methods 2 and 3 as "good to know they exist."`,
+> 💡 This pattern is only needed when **erasing during iteration**. Otherwise Method 1 (structured bindings) is enough.`,
         },
         {
           id: "ch3-fb1",
@@ -686,10 +700,9 @@ For competitive programming and everyday code, **knowing Method 1 is enough**. T
         {
           id: "ch4-func",
           type: "explain",
-          title: "🔧 Key map Functions",
-          content: `Let's look at the most commonly used map functions!
+          title: "🔧 Key map functions — search · check · delete",
+          content: `The functions you'll use most often with map.
 
-**Search & Check Functions**
 \`\`\`cpp
 map<string, int> scores;
 scores["Emma"] = 95;
@@ -715,6 +728,8 @@ scores.erase("Jake");
 cout << scores.size() << endl;   // 1
 \`\`\`
 
+### Compared to Python
+
 | Python 🐍 | C++ map ⚡ |
 |---|---|
 | \`"key" in d\` | \`m.count("key") > 0\` |
@@ -723,48 +738,52 @@ cout << scores.size() << endl;   // 1
 | \`len(d)\` | \`m.size()\` |
 | \`not d\` | \`m.empty()\` |
 
-**count vs find — When to use which?**
+> Next page — both \`count\` and \`find\` look like "search" — *which one to use when* for cleanest code.`,
+        },
+        {
+          id: "ch4-func-cf",
+          type: "explain",
+          title: "🆚 count vs find — which one when?",
+          content: `Both "search" but they return different things, so usage differs.
 
-• \`m.count(key)\` — returns 1 if found, 0 if not (for simple existence checks)
-• \`m.find(key)\` — returns an iterator if found, end() if not (when you also need the value)
+| | \`m.count(key)\` | \`m.find(key)\` |
+|---|---|---|
+| Returns | 1 (found) / 0 (not) | iterator / \`m.end()\` (not) |
+| Use when | "is it there?" only | "if there, also use the value" |
 
 \`\`\`cpp
-// count — just checking if it exists
+// count — just check existence
 if (m.count("Emma") > 0) {
     cout << "Emma exists!";
 }
 
-// find — checking AND using the value
+// find — get the value too
 auto it = m.find("Emma");
 if (it != m.end()) {
-    cout << it->second;  // access the value too
+    cout << it->second;  // access value
 }
 \`\`\`
 
 ---
 
-**💡 Deleting while iterating — the easier way**
+### 💡 Deleting while iterating — the easiest pattern
 
-Deleting with an iterator while iterating is complex. Here's an easier alternative:
+The iterator approach (\`it = m.erase(it)\`) you saw earlier is correct but tricky. **Easier alternative**:
 
 \`\`\`cpp
-// ⚙️ Iterator method (complex)
-for (auto it = m.begin(); it != m.end(); ) {
-    if (it->second < 0) it = m.erase(it);
-    else it++;
-}
-
-// ✅ Collect then delete (easier!)
+// 1) Collect the keys to delete
 vector<string> toDelete;
-for (auto& [k, v] : m) {         // iterate conveniently with range-for
+for (auto& [k, v] : m) {
     if (v < 0) toDelete.push_back(k);
 }
-for (auto& k : toDelete) {        // delete after the loop finishes
+
+// 2) Delete after the loop finishes
+for (auto& k : toDelete) {
     m.erase(k);
 }
 \`\`\`
 
-Separating iteration and deletion keeps it safe and easy to read!`,
+Iteration and deletion are **separated** — no iterator-invalidation worries, and the code reads cleanly. This is the recommended approach for general cases.`,
         },
         {
           id: "ch4-pred1",
