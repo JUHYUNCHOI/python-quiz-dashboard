@@ -642,18 +642,12 @@ export default function CurriculumPage() {
   })
 
   // 학생: 순서대로만 열림 (완료한 곳 + 바로 다음 1개). 선생님: 전부 열림
-  // 프로젝트(isProject) 와 참고용(optional) 은 선택 사항 — 완료 안 해도 다음 레슨 잠그지 않음
+  // 잠금 시스템 제거 — 모든 레슨 항상 접근 가능 (소프트 진도)
+  // 이유: localStorage / Supabase 동기화 실패 시 학생이 자기 진도를 못 보는 사고 발생.
+  //       추천 순서는 시각적으로 표시 (체크마크 / 다음 추천 하이라이트) 하되 *잠그지는 않음*.
+  //       Duolingo / Khan Academy 같은 모던 학습 플랫폼 패턴.
   const unlockedLessons = new Set<number | string>()
-  if (isTeacher || isPseudo) {
-    // 선생님이거나 IGCSE 트랙이면 전부 열림
-    allLessons.forEach((l) => unlockedLessons.add(l.id))
-  } else {
-    for (const lesson of allLessons) {
-      unlockedLessons.add(lesson.id)
-      if (lesson.isProject || lesson.optional) continue // 프로젝트/참고용은 선택 — 잠금 판정에서 건너뜀
-      if (!completedLessons.has(lesson.id)) break // 첫 미완료까지만
-    }
-  }
+  allLessons.forEach((l) => unlockedLessons.add(l.id))
 
   const toggleCompletion = (id: number | string) => {
     const newCompleted = new Set(completedLessons)
@@ -1260,8 +1254,8 @@ export default function CurriculumPage() {
                 </p>
                 <p className="text-xs text-gray-500 mt-0.5">
                   {t(
-                    "처음부터 할 필요 없어요! 아는 레슨의 🔓 건너뛰기 버튼을 눌러 원하는 레슨부터 시작하세요.",
-                    "No need to start from scratch! Click 🔓 Skip on lessons you already know.",
+                    "처음부터 할 필요 없어요! 모든 레슨이 열려 있으니 원하는 곳부터 시작하세요.",
+                    "No need to start from scratch! All lessons are open — start wherever you'd like.",
                   )}
                 </p>
               </div>
