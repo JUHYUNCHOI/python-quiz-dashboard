@@ -267,27 +267,27 @@ export const lessonCpp23: LessonData = {
         }
       },
 
-      // errorQuiz: >= 대신 > 을 써야 함
+      // errorQuiz: 내림차순인데 비교 방향이 틀림
       {
         type: "errorQuiz",
         content: {
-          question: "이 comparator의 문제점은?",
-          code: 'sort(v.begin(), v.end(),\n    [](int a, int b) { return a >= b; });',
+          question: "내림차순 정렬을 원해요. 뭐가 잘못됐을까?",
+          code: '// 큰 수부터 출력하고 싶어요\nsort(v.begin(), v.end(),\n    [](int a, int b) { return a < b; });',
           options: [
-            ">= 대신 > 를 써야 해요 (같을 때 true 반환하면 안 됨)",
+            "비교 방향이 반대예요 — 내림차순은 `return a > b`",
             "람다 대신 함수 포인터를 써야 해요",
             "sort에서 람다를 사용할 수 없어요"
           ],
           answer: 0,
-          explanation: "comparator는 a == b 일 때 false를 반환해야 해요! >= 는 같을 때도 true → 정렬 동작 undefined behavior!",
+          explanation: "`return a < b` 는 **오름차순**이에요 (작은 게 앞). 내림차순은 큰 게 앞으로 가야 하니까 `return a > b` 로 바꿔야 해요.",
           en: {
-            question: "What is wrong with this comparator?",
+            question: "We want descending order. What's wrong?",
             options: [
-              "Should use > instead of >= (must not return true when equal)",
+              "The comparison direction is reversed — descending should be `return a > b`",
               "Should use a function pointer instead of a lambda",
               "Cannot use a lambda with sort"
             ],
-            explanation: "A comparator must return false when a == b! >= returns true even when equal → undefined behavior in sorting!"
+            explanation: "`return a < b` is **ascending** (smaller first). For descending, the bigger one should come first, so use `return a > b`."
           }
         }
       },
