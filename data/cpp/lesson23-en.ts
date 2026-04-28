@@ -888,85 +888,42 @@ Press the button to follow along!`,
         {
           id: "s23-ch2-iter",
           type: "explain",
-          title: "📌 What Are begin() and end()?",
-          content: `We've been using \`v.begin()\` and \`v.end()\` with sort() — let's understand what they actually are.
+          title: "📌 Quick refresher — `v.begin()`, `v.end()`",
+          content: `Before turning binary search into C++ code, one quick checkpoint.
 
-**begin() and end() are memory addresses (arrows pointing to positions).**
-
-\`\`\`
-vector<int> v = {10, 20, 30, 40, 50};
-
-Memory:  1000  1004  1008  1012  1016  1020
-Values:   10    20    30    40    50    ???
-
-v.begin() = 1000  (address where 10 lives)
-v.end()   = 1020  (address *after* 50, no value — never read this!)
-\`\`\`
+We've been using \`v.begin()\` and \`v.end()\` with sort. You actually saw these in **cpp-17 (STL search functions)** already. Quick reminder:
 
 \`\`\`
-   10    20    30    40    50   [empty]
+   10    20    30    40    50   [end]
     ↑                             ↑
  begin()                        end()
-(1000)                         (1020)
+(points to first)            (one past the last)
 \`\`\`
 
-### Why does sort take begin/end instead of indices?
+- \`v.begin()\` → an **arrow (iterator)** pointing to the first element
+- \`v.end()\` → one *past* the last position — the "stop here" marker
+- The \`[begin, end)\` pattern shows up everywhere in STL: sort, find, count_if, lower_bound …
 
-C++ functions like sort() take **addresses (arrows)** for "from where to where."
+---
 
-\`\`\`cpp
-sort(v.begin(), v.end());
-//    ↑ from this address  ↑ up to (not including) this address
-\`\`\`
+### 🎯 The one trick we'll need for lower_bound
 
-But why addresses specifically? There are two reasons — see the next page 👇`
-        },
-        {
-          id: "s23-ch2-iter-benefits",
-          type: "explain",
-          title: "📌 Why addresses? — two benefits (especially *unification*)",
-          content: `**① The same sort works on every container — iterator unification** ⭐
-
-This is the real key. Once sort takes begin/end, it works **regardless of container type**:
-
-\`\`\`cpp
-sort(v.begin(), v.end());     // vector
-sort(arr, arr + n);           // raw array
-sort(lst.begin(), lst.end()); // list, deque, etc.
-// All handled by ONE sort function!
-\`\`\`
-
-If sort were "a function that takes a vector," you'd need separate \`sortVector\`, \`sortArray\`, \`sortList\`. Instead, by **unifying through the iterator interface**, one sort handles them all.
-
-This design runs through the entire STL. find / count / accumulate — every algorithm uses the \`(begin, end)\` pattern for the same reason: **one function, every container**.
-
-**② No copy — fast regardless of size**
-
-If you passed the vector itself, it'd be copied wholesale. A million elements = enormous copy cost. Passing just two addresses sidesteps that entirely.
-
-\`\`\`cpp
-sort(v);                   // (hypothetical) full vector copy — slow
-sort(v.begin(), v.end());  // just 2 addresses — always fast ✅
-\`\`\`
-
-### Bonus: subtracting two arrows gives the *distance (index)*
+The next page's \`lower_bound\` **returns an iterator**. So how do you turn it into an index? One line:
 
 \`\`\`
    10    20    30    40    50
- 1000  1004  1008  1012  1016
     ↑                ↑
- begin()             it  (points to 40, address 1012)
+ begin()             it  (points to 40)
 
-it - v.begin()  = (1012 - 1000) / 4 = 3  → index 3
+it - v.begin() = 3   → 40 is at index 3!
 \`\`\`
 
 \`\`\`cpp
-auto it = v.begin() + 3;
-cout << *it;             // 40  (*it = value the arrow points to)
-cout << it - v.begin();  // 3   (convert to index)
+cout << *it;             // 40  (*it = the value the arrow points to)
+cout << it - v.begin();  // 3   (convert to index!)
 \`\`\`
 
-> 💡 **"Subtract two arrows = distance"** — this exact trick becomes idiomatic with \`lower_bound\` next.`
+> 💡 \`*it\` to get the value, \`it - v.begin()\` to get the index — those two are all you need to use lower_bound.`
         },
         {
           id: "s23-ch2-lb",
