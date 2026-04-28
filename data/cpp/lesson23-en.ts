@@ -1329,7 +1329,66 @@ Without sorting, {1, 3, 1} stays as 3 elements.
 |---|---|
 | \`sorted(set(v))\` | \`sort + erase(unique(...))\` |
 
-💡 Memorize **sort → erase(unique(...), end())** as a pair!`
+💡 Memorize **sort → erase(unique(...), end())** as a pair! Next page — *why* we need erase too.`
+        },
+        {
+          id: "s23-ch3-unique-detail",
+          type: "explain",
+          title: "🤔 Wait — why do we need \`erase\`? What if we only call \`unique\`?",
+          content: `Once you see what \`unique\` *actually* does, why \`erase\` is its partner becomes obvious.
+
+### What unique really does
+
+\`unique\` **doesn't shrink the vector.** It just moves unique values to the front and returns an iterator marking "this is where the real end is."
+
+\`\`\`
+v = {1, 1, 2, 3, 3, 4, 5, 5, 6, 9}   right after sort (size = 10)
+
+↓ auto it = unique(v.begin(), v.end());  ← no erase
+
+v = {1, 2, 3, 4, 5, 6, 9, ?, ?, ?}   size is still 10!
+                          ↑
+                          it points here
+                          past this is leftover garbage (meaningless)
+\`\`\`
+
+\`v.size()\` would still print 10. The first 7 are real; the last 3 are *traces* left in memory.
+
+---
+
+### Quick erase syntax refresher
+
+To **trim a range** from a vector, use \`erase(begin, end)\` — it cuts out everything between two iterators.
+
+\`\`\`cpp
+vector<int> v = {10, 20, 30, 40, 50};
+
+v.erase(v.begin() + 1, v.begin() + 4);
+//     ↑                ↑
+//   from here        up to (not including) here
+
+// Result: v = {10, 50}   (20, 30, 40 removed)
+\`\`\`
+
+| Form | Meaning |
+|---|---|
+| \`v.erase(it)\` | remove **the single element** at iterator \`it\` |
+| \`v.erase(start, end)\` | remove the **\`[start, end)\` range** entirely |
+
+---
+
+### Putting unique + erase together
+
+\`\`\`cpp
+v.erase( unique(v.begin(), v.end()),  v.end() );
+//        ↑                            ↑
+//   "real end" position (it)     vector's real end
+//          ───────  trim the garbage between  ───────
+\`\`\`
+
+erase from the *real end* (returned by unique) up to \`v.end()\` — that's the famous pattern.
+
+> 💡 Remember: \`unique\` only *moves things*, size stays. To truly shrink it, pair with \`erase\`.`
         },
         {
           id: "s23-ch3-unique-practice",
