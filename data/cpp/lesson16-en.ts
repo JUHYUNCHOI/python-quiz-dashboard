@@ -284,31 +284,6 @@ Python's \`dict\` is actually more similar to C++'s \`unordered_map\`!
 💡 In most cases, \`unordered_map\` is faster! Only use \`map\` when you need sorted keys.`
         },
         {
-          id: "ch1-question",
-          type: "explain",
-          title: "🙋 Question: Can't I just use a vector of pairs?",
-          content: `**"Can't I just use a vector of pairs?"**
-
-It looks similar, but there's a big difference!
-
-With a vector, you have to search from beginning to end to find a key (slow). With a map, you find it instantly by key (fast)!
-
-\`\`\`cpp
-// vector<pair> — searching is slow O(n)
-vector<pair<string, int>> v = {{"Emma", 95}, {"Jake", 87}};
-// To find "Jake", you have to check one by one
-for (auto& p : v) {
-    if (p.first == "Jake") { /* found it! */ }
-}
-
-// map — searching is fast O(log n)
-map<string, int> m = {{"Emma", 95}, {"Jake", 87}};
-cout << m["Jake"];  // Direct access! 87
-\`\`\`
-
-💡 The more data you have, the bigger map's advantage! With 1 million entries, a vector needs up to 1 million comparisons, but a map only needs about 20.`
-        },
-        {
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ Count Word Frequencies!",
@@ -368,6 +343,447 @@ cherry: 1`
         }
       ]
     },
+    // ============================================
+    // Chapter 3: map Iteration
+    // ============================================
+    {
+      id: "ch3",
+      title: "map Iteration",
+      emoji: "🔄",
+      steps: [
+        {
+          id: "ch3-iter",
+          type: "explain",
+          title: "📖 map iteration — the most common way",
+          content: `**First: map is a collection of pairs**
+
+map stores each element internally as a **pair**:
+
+\`\`\`cpp
+map<string, int> scores = {{"Emma", 95}, {"Jake", 87}};
+// Internally:
+// pair<string, int>{"Emma", 95}
+// pair<string, int>{"Jake", 87}
+\`\`\`
+
+So when you iterate, each element is a **pair**. That's why \`.first\` (key) and \`.second\` (value) work.
+
+---
+
+### ⭐ Most common: structured bindings (C++17)
+
+Unpack the pair directly into \`[key, val]\`:
+
+\`\`\`cpp
+for (auto& [key, val] : scores) {
+    cout << key << ": " << val << endl;
+}
+// Emma: 95
+// Jake: 87
+\`\`\`
+
+@Key: \`map\` **always sorts keys automatically**! Regardless of insertion order, output is in alphabetical/numerical order. Python dict preserves insertion order, but C++ map does not.
+
+### Compared to Python
+
+\`\`\`python
+for key, val in scores.items():
+    print(f"{key}: {val}")
+\`\`\`
+
+C++'s \`auto& [key, val]\` ≈ Python's \`key, val\`. Practically identical.
+
+> 💡 In practice **this method alone is enough**. The next page covers the other two methods, but they're rarely used.`,
+        },
+        {
+          id: "ch3-iter-other",
+          type: "explain",
+          title: "📖 (Reference) Two other iteration methods",
+          content: `Besides structured bindings, two more methods exist. **Rarely used** but you'll recognize them in others' code:
+
+### Method 2: range-for + pair as-is
+
+Range-for, but keep the pair intact and access via \`.first\`, \`.second\`:
+
+\`\`\`cpp
+for (auto& p : scores) {
+    cout << p.first << ": " << p.second << endl;
+}
+// p.first = key,  p.second = value
+\`\`\`
+
+Methods 1 and 2 are **both range-for** — the difference is whether you unpack the pair (1) or use it directly (2).
+
+### Method 3: direct iterator
+
+Manually handle \`begin()\`~\`end()\` iterators. \`it\` acts like a pointer to each pair:
+
+\`\`\`cpp
+for (auto it = scores.begin(); it != scores.end(); it++) {
+    cout << it->first << ": " << it->second << endl;
+}
+// it->first = key,  it->second = value (arrow -> to access)
+\`\`\`
+
+### Frequency comparison
+
+| Method | Frequency | When |
+|---|---|---|
+| 1 (structured bindings) | ⭐⭐⭐ Almost always | Modern code, competitive programming |
+| 2 (pair) | ⭐ Occasionally | Pre-C++17, pair itself needed |
+| 3 (iterator) | ⭐ Rarely | **Delete during iteration** etc. — next page |
+
+> 💡 Memorize Method 1 and start. Methods 2, 3 are "good to know they exist."`,
+        },
+        {
+          id: "ch3-iter-erase",
+          type: "explain",
+          title: "⚠️ (Advanced) Deleting while iterating — iterator trap",
+          content: `The rare case where Method 3 (iterator) is *truly needed* — **erasing during iteration**.
+
+### ❌ This crashes!
+
+\`\`\`cpp
+for (auto it = m.begin(); it != m.end(); it++) {  // it++ in loop header
+    if (it->second < 0) {
+        m.erase(it);  // it becomes invalid...
+    }
+    // loop header runs it++ on invalid iterator → crash!
+}
+\`\`\`
+
+When you call \`erase(it)\`, that iterator becomes **invalid (dangling)**. Like crossing out a row and trying to find "the next row" using the old row number — positions have shifted.
+
+### ✅ The correct way
+
+\`\`\`cpp
+for (auto it = m.begin(); it != m.end(); ) {  // no it++ in header!
+    if (it->second < 0) {
+        it = m.erase(it);  // erase returns the next valid iterator
+    } else {
+        it++;              // only advance manually when NOT erasing
+    }
+}
+\`\`\`
+
+**Key:** \`m.erase(it)\` deletes the element AND **returns the next valid iterator**. So \`it = m.erase(it)\` already moves to the next element. That's why we skip \`it++\` when erasing — only the \`else\` branch advances.
+
+> 💡 This pattern is only needed when **erasing during iteration**. Otherwise Method 1 (structured bindings) is enough.`,
+        },
+        {
+          id: "ch3-fb1",
+          type: "fillblank" as const,
+          title: "Fill in the blank",
+          content: "Iterate over a map using structured bindings!",
+          code: "map<string, int> scores = {{\"Emma\", 95}, {\"Jake\", 87}};\nfor (auto& ___ : scores) {\n    cout << key << \": \" << val << endl;\n}",
+          fillBlanks: [
+            { id: 0, answer: "[key, val]", options: ["[key, val]", "(key, val)", "key, val", "p.first, p.second"] }
+          ],
+          explanation: "Structured bindings from C++17! auto& [key, val] unpacks the pair directly. This is the most commonly used method."
+        },
+        {
+          id: "ch3-practice",
+          type: "practice" as const,
+          title: "✋ Print sum and average of scores",
+          content: `Iterate a \`map<string, int>\` of student scores and print the **sum** and **average**.
+
+\`\`\`
+Input:  4
+        Alice 90
+        Bob 85
+        Carol 92
+        Dave 78
+Output:
+sum: 345
+avg: 86.25
+\`\`\`
+
+> 💡 Use \`for (auto& [name, score] : m)\` to iterate, accumulate \`score\`. Average = \`(double)sum / n\`.`,
+          starterCode: `#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    map<string, int> scores;
+    for (int i = 0; i < n; i++) {
+        string name;
+        int s;
+        cin >> name >> s;
+        scores[name] = s;
+    }
+    // 👇 iterate with structured bindings, sum, then print average
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    map<string, int> scores;
+    for (int i = 0; i < n; i++) {
+        string name;
+        int s;
+        cin >> name >> s;
+        scores[name] = s;
+    }
+    int sum = 0;
+    for (auto& [name, score] : scores) {
+        sum += score;
+    }
+    cout << "sum: " << sum << endl;
+    cout << "avg: " << (double)sum / n << endl;
+    return 0;
+}`,
+          hint: "for (auto& [name, score] : scores) { sum += score; } then average = (double)sum / n.",
+          expectedOutput: `sum: 345
+avg: 86.25`,
+          stdin: `4
+Alice 90
+Bob 85
+Carol 92
+Dave 78`,
+        }
+      ]
+    },
+    // ============================================
+    // Chapter 4: map Functions
+    // ============================================
+    {
+      id: "ch4",
+      title: "map Functions",
+      emoji: "🔧",
+      steps: [
+        {
+          id: "ch4-func",
+          type: "explain",
+          title: "🔧 Key map functions — search · check · delete",
+          content: `The functions you'll use most often with map.
+
+\`\`\`cpp
+map<string, int> scores;
+scores["Emma"] = 95;
+scores["Jake"] = 87;
+
+// Check if a key exists
+if (scores.count("Emma") > 0) {
+    cout << "Emma exists!" << endl;
+}
+
+// Search with find (returns end() if not found)
+auto it = scores.find("Jake");
+if (it != scores.end()) {
+    cout << it->second << endl;  // 87
+}
+
+// Check the size
+cout << scores.size() << endl;   // 2
+cout << scores.empty() << endl;  // 0 (false, not empty)
+
+// Delete a key-value pair
+scores.erase("Jake");
+cout << scores.size() << endl;   // 1
+\`\`\`
+
+### Compared to Python
+
+| Python 🐍 | C++ map ⚡ |
+|---|---|
+| \`"key" in d\` | \`m.count("key") > 0\` |
+| \`d.get("key")\` | \`m.find("key")\` |
+| \`del d["key"]\` | \`m.erase("key")\` |
+| \`len(d)\` | \`m.size()\` |
+| \`not d\` | \`m.empty()\` |
+
+> Next page — both \`count\` and \`find\` look like "search" — *which one to use when* for cleanest code.`,
+        },
+        {
+          id: "ch4-func-cf",
+          type: "explain",
+          title: "🆚 count vs find — which one when?",
+          content: `Both "search" but they return different things, so usage differs.
+
+| | \`m.count(key)\` | \`m.find(key)\` |
+|---|---|---|
+| Returns | 1 (found) / 0 (not) | iterator / \`m.end()\` (not) |
+| Use when | "is it there?" only | "if there, also use the value" |
+
+\`\`\`cpp
+// count — just check existence
+if (m.count("Emma") > 0) {
+    cout << "Emma exists!";
+}
+
+// find — get the value too
+auto it = m.find("Emma");
+if (it != m.end()) {
+    cout << it->second;  // access value
+}
+\`\`\`
+
+---
+
+### 💡 Deleting while iterating — the easiest pattern
+
+The iterator approach (\`it = m.erase(it)\`) you saw earlier is correct but tricky. **Easier alternative**:
+
+\`\`\`cpp
+// 1) Collect the keys to delete
+vector<string> toDelete;
+for (auto& [k, v] : m) {
+    if (v < 0) toDelete.push_back(k);
+}
+
+// 2) Delete after the loop finishes
+for (auto& k : toDelete) {
+    m.erase(k);
+}
+\`\`\`
+
+Iteration and deletion are **separated** — no iterator-invalidation worries, and the code reads cleanly. This is the recommended approach for general cases.`,
+        },
+        {
+          id: "ch4-pred1",
+          type: "predict" as const,
+          title: "count vs size!",
+          code: `#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+int main() {
+    map<string, int> m;
+    m["a"] = 1;
+    m["b"] = 2;
+    cout << m.count("a") << endl;
+    cout << m.count("c") << endl;
+    cout << m.size() << endl;
+    return 0;
+}`,
+          options: ["1\n0\n2", "1\n1\n2", "2\n0\n2", "1\n0\n3"],
+          answer: 0,
+          explanation: "count() returns 1 if the key exists, 0 if not! 'a' exists → 1, 'c' doesn't → 0. size() is the number of elements in the map = 2."
+        },
+        {
+          id: "ch4-practice",
+          type: "practice" as const,
+          title: "✋ Safely look up a key",
+          content: `Student scores are in a \`map<string, int>\`. The user types a name — print the score if the name exists, otherwise print "missing".
+
+\`\`\`
+Input:  Alice
+Output: 95
+
+Input:  Zoe
+Output: missing
+\`\`\`
+
+> 💡 Use \`m.count(key) > 0\` to check first. Only access \`m[key]\` if found.
+> ⚠️ \`m["unknown"]\` direct access auto-creates the key with 0 — the trap!`,
+          starterCode: `#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+
+int main() {
+    map<string, int> scores = {
+        {"Alice", 95}, {"Bob", 87}, {"Carol", 92}
+    };
+    string query;
+    cin >> query;
+    // 👇 if query exists, print the score; otherwise "missing"
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+
+int main() {
+    map<string, int> scores = {
+        {"Alice", 95}, {"Bob", 87}, {"Carol", 92}
+    };
+    string query;
+    cin >> query;
+    if (scores.count(query) > 0) {
+        cout << scores[query];
+    } else {
+        cout << "missing";
+    }
+    return 0;
+}`,
+          hint: "if (scores.count(query) > 0) { cout << scores[query]; } else { cout << \"missing\"; }",
+          expectedOutput: `95`,
+          stdin: `Alice`,
+        }
+      ]
+    },
+    // ============================================
+    // Chapter 5: map Quiz
+    // ============================================
+    {
+      id: "ch5",
+      title: "map Quiz",
+      emoji: "📖",
+      steps: [
+        {
+          id: "ch5-q1",
+          type: "quiz",
+          title: "map declaration!",
+          content: `Which is the correct way to declare a map that stores student names (string) as keys and scores (int) as values?`,
+          options: [
+            "map<int, string> scores;",
+            "map<string, int> scores;",
+            "map scores<string, int>;",
+            "dict<string, int> scores;"
+          ],
+          answer: 1,
+          explanation: "Declare with map<key_type, value_type>! Name (string) is the key and score (int) is the value, so map<string, int> is correct. dict is Python!"
+        },
+        {
+          id: "ch5-q3",
+          type: "quiz",
+          title: "map vs unordered_map!",
+          content: "Which statement about `map` vs `unordered_map` is **correct**?",
+          options: [
+            "map is always faster than unordered_map",
+            "unordered_map sorts keys, map doesn't",
+            "map is O(log n), unordered_map is O(1) average",
+            "Both use #include <map>"
+          ],
+          answer: 2,
+          explanation: "map sorts keys with O(log n) operations, while unordered_map doesn't sort and has O(1) average! unordered_map needs #include <unordered_map>."
+        },
+        {
+          id: "ch5-q5",
+          type: "quiz",
+          title: "Accessing a missing key!",
+          content: `What is the output of this code?
+
+\`\`\`cpp
+map<string, int> m;
+m["apple"] = 3;
+cout << m["banana"] << endl;
+cout << m.size() << endl;
+\`\`\``,
+          options: [
+            "Error\n1",
+            "0\n1",
+            "0\n2",
+            "Error\n2"
+          ],
+          answer: 2,
+          explanation: "Accessing a missing key with [] auto-creates it with default value 0! \"banana\" is created as 0, so size becomes 2. This is a classic C++ map trap."
+        },
+      ]
+    },
+    // ============================================
     // ============================================
     // Chapter 2: set
     // ============================================
@@ -443,6 +859,51 @@ s.empty();         // true if empty
 | \`not s\` | \`s.empty();\` |
 
 > 💡 Functions look almost identical to \`map\`'s. **The one difference** — set has only keys (no values), so set's find/count just tell you whether the value exists.`
+        },
+        {
+          id: "ch2-vs-sort-unique",
+          type: "explain",
+          title: "🤔 Then why \`vector + sort + unique\`? Set exists",
+          content: `In the sort lesson you learned the \`sort + unique + erase\` pattern. set also auto-dedups + auto-sorts — **what's the difference?**
+
+### Side by side
+
+| Situation | \`set\` | \`vector + sort + unique\` |
+|---|---|---|
+| Add data **as it streams in** | ✅ one-line insert | ❌ re-sorting every time is wasteful |
+| Tidy **already-collected** data once | ❌ extra copy cost | ✅ one pass — fast |
+| Frequent "is it there?" lookup | ✅ count O(log n) | ❌ scans every time |
+| **Index access** \`v[i]\` | ❌ no | ✅ yes |
+| Memory efficiency | tree structure (slight overhead) | contiguous — tight & fast |
+
+### Decision rules
+
+**Case A — data *streams in* and you check duplicates as it arrives:**
+\`\`\`cpp
+set<int> seen;
+while (cin >> x) {
+    seen.insert(x);     // duplicates auto-ignored
+    if (seen.count(y)) ...   // fast lookup
+}
+\`\`\`
+→ **set wins.**
+
+**Case B — data is fully collected; dedup just once at the end:**
+\`\`\`cpp
+vector<int> v(n);
+for (int i = 0; i < n; i++) cin >> v[i];
+sort(v.begin(), v.end());
+v.erase(unique(v.begin(), v.end()), v.end());
+// then v[0], v[1]... index access freely
+\`\`\`
+→ **vector + sort + unique wins.**
+
+### One-line rule
+
+> **Fast lookups while collecting**? → **set**
+> **One-time cleanup** + fast index/iteration after? → **vector + sort + unique**
+
+> 💡 Quick rule of thumb: "if it's the *data structure being designed*, use set; if it's the *final result*, use vector." Both come up often in competitive programming.`
         },
         {
           id: "ch2-fb1",
@@ -628,325 +1089,6 @@ int main() {
         }
       ]
     },
-    // ============================================
-    // Chapter 3: map Iteration
-    // ============================================
-    {
-      id: "ch3",
-      title: "map Iteration",
-      emoji: "🔄",
-      steps: [
-        {
-          id: "ch3-iter",
-          type: "explain",
-          title: "📖 map iteration — the most common way",
-          content: `**First: map is a collection of pairs**
-
-map stores each element internally as a **pair**:
-
-\`\`\`cpp
-map<string, int> scores = {{"Emma", 95}, {"Jake", 87}};
-// Internally:
-// pair<string, int>{"Emma", 95}
-// pair<string, int>{"Jake", 87}
-\`\`\`
-
-So when you iterate, each element is a **pair**. That's why \`.first\` (key) and \`.second\` (value) work.
-
----
-
-### ⭐ Most common: structured bindings (C++17)
-
-Unpack the pair directly into \`[key, val]\`:
-
-\`\`\`cpp
-for (auto& [key, val] : scores) {
-    cout << key << ": " << val << endl;
-}
-// Emma: 95
-// Jake: 87
-\`\`\`
-
-@Key: \`map\` **always sorts keys automatically**! Regardless of insertion order, output is in alphabetical/numerical order. Python dict preserves insertion order, but C++ map does not.
-
-### Compared to Python
-
-\`\`\`python
-for key, val in scores.items():
-    print(f"{key}: {val}")
-\`\`\`
-
-C++'s \`auto& [key, val]\` ≈ Python's \`key, val\`. Practically identical.
-
-> 💡 In practice **this method alone is enough**. The next page covers the other two methods, but they're rarely used.`,
-        },
-        {
-          id: "ch3-iter-other",
-          type: "explain",
-          title: "📖 (Reference) Two other iteration methods",
-          content: `Besides structured bindings, two more methods exist. **Rarely used** but you'll recognize them in others' code:
-
-### Method 2: range-for + pair as-is
-
-Range-for, but keep the pair intact and access via \`.first\`, \`.second\`:
-
-\`\`\`cpp
-for (auto& p : scores) {
-    cout << p.first << ": " << p.second << endl;
-}
-// p.first = key,  p.second = value
-\`\`\`
-
-Methods 1 and 2 are **both range-for** — the difference is whether you unpack the pair (1) or use it directly (2).
-
-### Method 3: direct iterator
-
-Manually handle \`begin()\`~\`end()\` iterators. \`it\` acts like a pointer to each pair:
-
-\`\`\`cpp
-for (auto it = scores.begin(); it != scores.end(); it++) {
-    cout << it->first << ": " << it->second << endl;
-}
-// it->first = key,  it->second = value (arrow -> to access)
-\`\`\`
-
-### Frequency comparison
-
-| Method | Frequency | When |
-|---|---|---|
-| 1 (structured bindings) | ⭐⭐⭐ Almost always | Modern code, competitive programming |
-| 2 (pair) | ⭐ Occasionally | Pre-C++17, pair itself needed |
-| 3 (iterator) | ⭐ Rarely | **Delete during iteration** etc. — next page |
-
-> 💡 Memorize Method 1 and start. Methods 2, 3 are "good to know they exist."`,
-        },
-        {
-          id: "ch3-iter-erase",
-          type: "explain",
-          title: "⚠️ (Advanced) Deleting while iterating — iterator trap",
-          content: `The rare case where Method 3 (iterator) is *truly needed* — **erasing during iteration**.
-
-### ❌ This crashes!
-
-\`\`\`cpp
-for (auto it = m.begin(); it != m.end(); it++) {  // it++ in loop header
-    if (it->second < 0) {
-        m.erase(it);  // it becomes invalid...
-    }
-    // loop header runs it++ on invalid iterator → crash!
-}
-\`\`\`
-
-When you call \`erase(it)\`, that iterator becomes **invalid (dangling)**. Like crossing out a row and trying to find "the next row" using the old row number — positions have shifted.
-
-### ✅ The correct way
-
-\`\`\`cpp
-for (auto it = m.begin(); it != m.end(); ) {  // no it++ in header!
-    if (it->second < 0) {
-        it = m.erase(it);  // erase returns the next valid iterator
-    } else {
-        it++;              // only advance manually when NOT erasing
-    }
-}
-\`\`\`
-
-**Key:** \`m.erase(it)\` deletes the element AND **returns the next valid iterator**. So \`it = m.erase(it)\` already moves to the next element. That's why we skip \`it++\` when erasing — only the \`else\` branch advances.
-
-> 💡 This pattern is only needed when **erasing during iteration**. Otherwise Method 1 (structured bindings) is enough.`,
-        },
-        {
-          id: "ch3-fb1",
-          type: "fillblank" as const,
-          title: "Fill in the blank",
-          content: "Iterate over a map using structured bindings!",
-          code: "map<string, int> scores = {{\"Emma\", 95}, {\"Jake\", 87}};\nfor (auto& ___ : scores) {\n    cout << key << \": \" << val << endl;\n}",
-          fillBlanks: [
-            { id: 0, answer: "[key, val]", options: ["[key, val]", "(key, val)", "key, val", "p.first, p.second"] }
-          ],
-          explanation: "Structured bindings from C++17! auto& [key, val] unpacks the pair directly. This is the most commonly used method."
-        }
-      ]
-    },
-    // ============================================
-    // Chapter 4: map Functions
-    // ============================================
-    {
-      id: "ch4",
-      title: "map Functions",
-      emoji: "🔧",
-      steps: [
-        {
-          id: "ch4-func",
-          type: "explain",
-          title: "🔧 Key map functions — search · check · delete",
-          content: `The functions you'll use most often with map.
-
-\`\`\`cpp
-map<string, int> scores;
-scores["Emma"] = 95;
-scores["Jake"] = 87;
-
-// Check if a key exists
-if (scores.count("Emma") > 0) {
-    cout << "Emma exists!" << endl;
-}
-
-// Search with find (returns end() if not found)
-auto it = scores.find("Jake");
-if (it != scores.end()) {
-    cout << it->second << endl;  // 87
-}
-
-// Check the size
-cout << scores.size() << endl;   // 2
-cout << scores.empty() << endl;  // 0 (false, not empty)
-
-// Delete a key-value pair
-scores.erase("Jake");
-cout << scores.size() << endl;   // 1
-\`\`\`
-
-### Compared to Python
-
-| Python 🐍 | C++ map ⚡ |
-|---|---|
-| \`"key" in d\` | \`m.count("key") > 0\` |
-| \`d.get("key")\` | \`m.find("key")\` |
-| \`del d["key"]\` | \`m.erase("key")\` |
-| \`len(d)\` | \`m.size()\` |
-| \`not d\` | \`m.empty()\` |
-
-> Next page — both \`count\` and \`find\` look like "search" — *which one to use when* for cleanest code.`,
-        },
-        {
-          id: "ch4-func-cf",
-          type: "explain",
-          title: "🆚 count vs find — which one when?",
-          content: `Both "search" but they return different things, so usage differs.
-
-| | \`m.count(key)\` | \`m.find(key)\` |
-|---|---|---|
-| Returns | 1 (found) / 0 (not) | iterator / \`m.end()\` (not) |
-| Use when | "is it there?" only | "if there, also use the value" |
-
-\`\`\`cpp
-// count — just check existence
-if (m.count("Emma") > 0) {
-    cout << "Emma exists!";
-}
-
-// find — get the value too
-auto it = m.find("Emma");
-if (it != m.end()) {
-    cout << it->second;  // access value
-}
-\`\`\`
-
----
-
-### 💡 Deleting while iterating — the easiest pattern
-
-The iterator approach (\`it = m.erase(it)\`) you saw earlier is correct but tricky. **Easier alternative**:
-
-\`\`\`cpp
-// 1) Collect the keys to delete
-vector<string> toDelete;
-for (auto& [k, v] : m) {
-    if (v < 0) toDelete.push_back(k);
-}
-
-// 2) Delete after the loop finishes
-for (auto& k : toDelete) {
-    m.erase(k);
-}
-\`\`\`
-
-Iteration and deletion are **separated** — no iterator-invalidation worries, and the code reads cleanly. This is the recommended approach for general cases.`,
-        },
-        {
-          id: "ch4-pred1",
-          type: "predict" as const,
-          title: "count vs size!",
-          code: `#include <iostream>
-#include <map>
-#include <string>
-using namespace std;
-int main() {
-    map<string, int> m;
-    m["a"] = 1;
-    m["b"] = 2;
-    cout << m.count("a") << endl;
-    cout << m.count("c") << endl;
-    cout << m.size() << endl;
-    return 0;
-}`,
-          options: ["1\n0\n2", "1\n1\n2", "2\n0\n2", "1\n0\n3"],
-          answer: 0,
-          explanation: "count() returns 1 if the key exists, 0 if not! 'a' exists → 1, 'c' doesn't → 0. size() is the number of elements in the map = 2."
-        }
-      ]
-    },
-    // ============================================
-    // Chapter 5: map Quiz
-    // ============================================
-    {
-      id: "ch5",
-      title: "map Quiz",
-      emoji: "📖",
-      steps: [
-        {
-          id: "ch5-q1",
-          type: "quiz",
-          title: "map declaration!",
-          content: `Which is the correct way to declare a map that stores student names (string) as keys and scores (int) as values?`,
-          options: [
-            "map<int, string> scores;",
-            "map<string, int> scores;",
-            "map scores<string, int>;",
-            "dict<string, int> scores;"
-          ],
-          answer: 1,
-          explanation: "Declare with map<key_type, value_type>! Name (string) is the key and score (int) is the value, so map<string, int> is correct. dict is Python!"
-        },
-        {
-          id: "ch5-q3",
-          type: "quiz",
-          title: "map vs unordered_map!",
-          content: "Which statement about `map` vs `unordered_map` is **correct**?",
-          options: [
-            "map is always faster than unordered_map",
-            "unordered_map sorts keys, map doesn't",
-            "map is O(log n), unordered_map is O(1) average",
-            "Both use #include <map>"
-          ],
-          answer: 2,
-          explanation: "map sorts keys with O(log n) operations, while unordered_map doesn't sort and has O(1) average! unordered_map needs #include <unordered_map>."
-        },
-        {
-          id: "ch5-q5",
-          type: "quiz",
-          title: "Accessing a missing key!",
-          content: `What is the output of this code?
-
-\`\`\`cpp
-map<string, int> m;
-m["apple"] = 3;
-cout << m["banana"] << endl;
-cout << m.size() << endl;
-\`\`\``,
-          options: [
-            "Error\n1",
-            "0\n1",
-            "0\n2",
-            "Error\n2"
-          ],
-          answer: 2,
-          explanation: "Accessing a missing key with [] auto-creates it with default value 0! \"banana\" is created as 0, so size becomes 2. This is a classic C++ map trap."
-        },
-      ]
-    },
-    // ============================================
     // Chapter 6: set Quiz & Summary
     // ============================================
     {

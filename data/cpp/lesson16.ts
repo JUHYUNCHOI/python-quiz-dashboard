@@ -284,31 +284,6 @@ scores["Bob"] = 87;
 💡 대부분의 경우 \`unordered_map\`이 더 빨라요! 키 정렬이 필요할 때만 \`map\`을 써요.`
         },
         {
-          id: "ch1-question",
-          type: "explain",
-          title: "🙋 질문: 벡터에 pair를 넣어도 비슷하잖아?",
-          content: `**"벡터에 pair를 넣어도 비슷하잖아?"**
-
-비슷해 보이지만 큰 차이가 있어요!
-
-벡터는 키로 검색하려면 처음부터 끝까지 찾아야 해요(느림). map은 키로 바로 찾아요(빠름)!
-
-\`\`\`cpp
-// vector<pair> — 검색이 느려요 O(n)
-vector<pair<string, int>> v = {{"Alice", 95}, {"Bob", 87}};
-// "Bob"을 찾으려면 하나씩 확인해야 해요
-for (auto& p : v) {
-    if (p.first == "Bob") { /* 찾았다! */ }
-}
-
-// map — 검색이 빨라요 O(log n)
-map<string, int> m = {{"Alice", 95}, {"Bob", 87}};
-cout << m["Bob"];  // 바로 접근! 87
-\`\`\`
-
-💡 데이터가 많을수록 map의 장점이 커져요! 100만 개의 데이터에서 벡터는 최대 100만 번, map은 약 20번만 비교하면 돼요.`
-        },
-        {
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ 단어 빈도수 세기!",
@@ -366,6 +341,447 @@ cherry: 1`
           answer: 1,
           explanation: "C++ map은 키를 기준으로 자동 정렬해요! 삽입 순서는 유지하지 않아요. #include <map>이 필요하고, 키는 중복될 수 없어요."
         }
+      ]
+    },
+    // ============================================
+    // Chapter 3: map 순회
+    // ============================================
+    {
+      id: "ch3",
+      title: "map 순회",
+      emoji: "🔄",
+      steps: [
+        {
+          id: "ch3-iter",
+          type: "explain",
+          title: "📖 map 순회 — 가장 많이 쓰는 방법",
+          content: `**먼저 알아둘 것: map은 pair 의 모음**
+
+map 은 내부적으로 데이터를 **pair (쌍)** 로 저장해요:
+
+\`\`\`cpp
+map<string, int> scores = {{"Alice", 95}, {"Bob", 87}};
+// 내부적으로는:
+// pair<string, int>{"Alice", 95}
+// pair<string, int>{"Bob", 87}
+\`\`\`
+
+즉 map 을 순회하면 각 원소가 **pair** 로 나와요. 그래서 \`.first\` (키) 와 \`.second\` (값) 로 접근할 수 있는 거예요.
+
+---
+
+### ⭐ 가장 많이 쓰는 방법: 구조적 바인딩 (C++17)
+
+pair 를 \`[key, val]\` 로 바로 풀어서 쓰는 방법:
+
+\`\`\`cpp
+for (auto& [key, val] : scores) {
+    cout << key << ": " << val << endl;
+}
+// Alice: 95
+// Bob: 87
+\`\`\`
+
+@핵심: \`map\` 은 항상 **키 기준으로 자동 정렬**돼요! 삽입 순서와 상관없이 알파벳/숫자 순서로 출력. (파이썬 dict 는 삽입 순서 유지지만 C++ map 은 달라요.)
+
+### 파이썬과 비교
+
+\`\`\`python
+for key, val in scores.items():
+    print(f"{key}: {val}")
+\`\`\`
+
+C++ 의 \`auto& [key, val]\` = 파이썬의 \`key, val\`. 사실상 똑같아요.
+
+> 💡 일반적으로는 **이 방법만 알아도 충분**해요. 다음 페이지에서 다른 두 방법도 짚지만 거의 안 써요.`
+        },
+        {
+          id: "ch3-iter-other",
+          type: "explain",
+          title: "📖 (참고) 다른 두 가지 방법",
+          content: `구조적 바인딩 외에 두 가지 방법이 더 있어요. **거의 안 쓰지만** 다른 사람 코드에서 만나면 알아볼 수 있게:
+
+### 방법 2: range-for + pair 그대로
+
+range-for 로 받되 pair 를 풀지 않고 \`.first\`, \`.second\` 로 접근:
+
+\`\`\`cpp
+for (auto& p : scores) {
+    cout << p.first << ": " << p.second << endl;
+}
+// p.first = 키,  p.second = 값
+\`\`\`
+
+방법 1, 2 는 **둘 다 range-for** — 차이는 pair 를 풀어서 쓰냐 (1) 그대로 쓰냐 (2).
+
+### 방법 3: 이터레이터 직접
+
+\`begin()\` ~ \`end()\` 이터레이터를 직접 다루는 전통 방식. \`it\` 는 pair 를 가리키는 포인터처럼 동작:
+
+\`\`\`cpp
+for (auto it = scores.begin(); it != scores.end(); it++) {
+    cout << it->first << ": " << it->second << endl;
+}
+// it->first = 키,  it->second = 값 (화살표 -> 로 접근)
+\`\`\`
+
+### 사용 빈도 비교
+
+| 방법 | 빈도 | 언제? |
+|---|---|---|
+| 1 (구조적 바인딩) | ⭐⭐⭐ 거의 항상 | 현대 코드, 알고리즘 대회 |
+| 2 (pair) | ⭐ 가끔 | C++17 이전, pair 자체 다룰 때 |
+| 3 (이터레이터) | ⭐ 드물게 | **순회 중 삭제** 등 이터레이터 조작 필요할 때 — 다음 페이지에서 |
+
+> 💡 방법 1 만 외우고 시작. 2, 3 은 "이런 것도 있구나" 정도.`
+        },
+        {
+          id: "ch3-iter-erase",
+          type: "explain",
+          title: "⚠️ (심화) 순회하면서 삭제할 때 — 이터레이터 함정",
+          content: `방법 3 (이터레이터) 이 *진짜 필요한* 드문 경우 — **순회하면서 erase 할 때**.
+
+### ❌ 이렇게 하면 크래시!
+
+\`\`\`cpp
+for (auto it = m.begin(); it != m.end(); it++) {  // it++ 가 헤더에
+    if (it->second < 0) {
+        m.erase(it);  // it 가 무효가 되는데...
+    }
+    // 헤더에서 it++ 를 또 함 → 무효 포인터 건드려서 크래시!
+}
+\`\`\`
+
+\`erase()\` 를 하면 그 이터레이터는 **무효 (dangling)** 가 돼요. 지우기 전 번호로 다음 칸을 찾으려는 것과 같아요 — 번호가 다 바뀌어서 엉뚱한 곳을 가리킴.
+
+### ✅ 올바른 방법
+
+\`\`\`cpp
+for (auto it = m.begin(); it != m.end(); ) {  // 헤더에 it++ 없음!
+    if (it->second < 0) {
+        it = m.erase(it);  // erase 가 다음 유효 이터레이터 반환
+    } else {
+        it++;              // 삭제 안 할 때만 직접 ++
+    }
+}
+\`\`\`
+
+**핵심:** \`m.erase(it)\` 는 삭제하고 **다음 유효한 이터레이터를 반환** 해요. 그래서 \`it = m.erase(it)\` 한 줄이면 이미 다음 원소로 넘어간 셈. 삭제할 때는 \`it++\` 안 하고, 삭제 안 할 때만 \`else\` 에서 \`it++\`.
+
+> 💡 이 패턴은 **순회 중 삭제** 가 필요할 때만. 그게 아니면 방법 1 (구조적 바인딩) 으로 충분해요.`
+        },
+        {
+          id: "ch3-fb1",
+          type: "fillblank" as const,
+          title: "빈칸을 채워주세요",
+          content: "map을 구조적 바인딩으로 순회해요!",
+          code: "map<string, int> scores = {{\"Alice\", 95}, {\"Bob\", 87}};\nfor (auto& ___ : scores) {\n    cout << key << \": \" << val << endl;\n}",
+          fillBlanks: [
+            { id: 0, answer: "[key, val]", options: ["[key, val]", "(key, val)", "key, val", "p.first, p.second"] }
+          ],
+          explanation: "C++17 구조적 바인딩이에요! auto& [key, val]로 pair를 바로 풀어서 쓸 수 있어요. 가장 많이 쓰는 방법이에요."
+        },
+        {
+          id: "ch3-practice",
+          type: "practice" as const,
+          title: "✋ 점수 합계와 평균 출력",
+          content: `학생 점수표 \`map<string, int>\` 를 순회해서 **합계** 와 **평균** 을 출력해요.
+
+\`\`\`
+입력: 4
+      Alice 90
+      Bob 85
+      Carol 92
+      Dave 78
+출력:
+합계: 345
+평균: 86.25
+\`\`\`
+
+> 💡 \`for (auto& [name, score] : m)\` 로 순회하며 \`score\` 누적. 평균은 \`(double)sum / n\`.`,
+          starterCode: `#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    map<string, int> scores;
+    for (int i = 0; i < n; i++) {
+        string name;
+        int s;
+        cin >> name >> s;
+        scores[name] = s;
+    }
+    // 👇 구조적 바인딩으로 순회하며 합계 계산, 평균 출력
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <map>
+#include <string>
+#include <iomanip>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    map<string, int> scores;
+    for (int i = 0; i < n; i++) {
+        string name;
+        int s;
+        cin >> name >> s;
+        scores[name] = s;
+    }
+    int sum = 0;
+    for (auto& [name, score] : scores) {
+        sum += score;
+    }
+    cout << "합계: " << sum << endl;
+    cout << "평균: " << (double)sum / n << endl;
+    return 0;
+}`,
+          hint: "for (auto& [name, score] : scores) { sum += score; } 로 순회. 평균은 (double)sum / n.",
+          expectedOutput: `합계: 345
+평균: 86.25`,
+          stdin: `4
+Alice 90
+Bob 85
+Carol 92
+Dave 78`,
+        }
+      ]
+    },
+    // ============================================
+    // Chapter 4: map 함수들
+    // ============================================
+    {
+      id: "ch4",
+      title: "map 함수들",
+      emoji: "🔧",
+      steps: [
+        {
+          id: "ch4-func",
+          type: "explain",
+          title: "🔧 map 주요 함수들 — 검색·확인·삭제",
+          content: `map 에서 자주 쓰는 함수들이에요.
+
+\`\`\`cpp
+map<string, int> scores;
+scores["Alice"] = 95;
+scores["Bob"] = 87;
+
+// 키가 있는지 확인
+if (scores.count("Alice") > 0) {
+    cout << "Alice 있어요!" << endl;
+}
+
+// find 로 검색 (없으면 end() 반환)
+auto it = scores.find("Bob");
+if (it != scores.end()) {
+    cout << it->second << endl;  // 87
+}
+
+// 크기 확인
+cout << scores.size() << endl;   // 2
+cout << scores.empty() << endl;  // 0 (false, 비어있지 않음)
+
+// 키-값 삭제
+scores.erase("Bob");
+cout << scores.size() << endl;   // 1
+\`\`\`
+
+### 파이썬과 비교
+
+| 파이썬 🐍 | C++ map ⚡ |
+|---|---|
+| \`"key" in d\` | \`m.count("key") > 0\` |
+| \`d.get("key")\` | \`m.find("key")\` |
+| \`del d["key"]\` | \`m.erase("key")\` |
+| \`len(d)\` | \`m.size()\` |
+| \`not d\` | \`m.empty()\` |
+
+> 다음 페이지 — \`count\` 와 \`find\` 둘 다 "찾기" 같은데 *어떤 상황에 어느 거* 써야 깔끔한지 짚고 가요.`
+        },
+        {
+          id: "ch4-func-cf",
+          type: "explain",
+          title: "🆚 count vs find — 어떤 상황에 어느 거?",
+          content: `둘 다 "찾기" 인데 돌려주는 게 달라서 쓰임이 달라요.
+
+| | \`m.count(key)\` | \`m.find(key)\` |
+|---|---|---|
+| 반환값 | 1 (있음) / 0 (없음) | iterator / \`m.end()\` (없음) |
+| 용도 | "있는지만" 확인 | "있으면 값도" 사용 |
+
+\`\`\`cpp
+// count — 있는지만 확인
+if (m.count("Alice") > 0) {
+    cout << "Alice 있어요!";
+}
+
+// find — 있으면 값까지 같이
+auto it = m.find("Alice");
+if (it != m.end()) {
+    cout << it->second;  // 값 접근
+}
+\`\`\`
+
+---
+
+### 💡 순회 중 삭제 — 가장 쉬운 패턴
+
+이전에 본 \`it = m.erase(it)\` 이터레이터 방법은 정확하지만 복잡해요. **더 쉬운 대안**:
+
+\`\`\`cpp
+// 1) 지울 키만 모아두고
+vector<string> toDelete;
+for (auto& [k, v] : m) {
+    if (v < 0) toDelete.push_back(k);
+}
+
+// 2) 루프 끝난 다음 삭제
+for (auto& k : toDelete) {
+    m.erase(k);
+}
+\`\`\`
+
+순회와 삭제를 **분리** 하니까 이터레이터 무효화 걱정 없음. 코드도 읽기 쉬움. 일반적인 경우엔 이게 더 추천돼요.`
+        },
+        {
+          id: "ch4-pred1",
+          type: "predict" as const,
+          title: "count vs size!",
+          code: `#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+int main() {
+    map<string, int> m;
+    m["a"] = 1;
+    m["b"] = 2;
+    cout << m.count("a") << endl;
+    cout << m.count("c") << endl;
+    cout << m.size() << endl;
+    return 0;
+}`,
+          options: ["1\n0\n2", "1\n1\n2", "2\n0\n2", "1\n0\n3"],
+          answer: 0,
+          explanation: "count()는 키가 있으면 1, 없으면 0이에요! 'a'는 있어서 1, 'c'는 없어서 0. size()는 map의 원소 수 = 2에요."
+        },
+        {
+          id: "ch4-practice",
+          type: "practice" as const,
+          title: "✋ 키 안전하게 조회하기",
+          content: `학생 점수가 \`map<string, int>\` 에 들어 있어요. 사용자가 입력한 이름의 점수를 찾아서 출력하되, **없는 이름이면 "없음" 출력**.
+
+\`\`\`
+입력: Alice
+출력: 95
+
+입력: Zoe
+출력: 없음
+\`\`\`
+
+> 💡 \`m.count(key) > 0\` 로 먼저 확인. 있을 때만 \`m[key]\` 접근.
+> ⚠️ \`m["없는 이름"]\` 바로 접근하면 자동 생성돼서 0 출력 — 함정!`,
+          starterCode: `#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+
+int main() {
+    map<string, int> scores = {
+        {"Alice", 95}, {"Bob", 87}, {"Carol", 92}
+    };
+    string query;
+    cin >> query;
+    // 👇 query 가 있으면 점수 출력, 없으면 "없음"
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+
+int main() {
+    map<string, int> scores = {
+        {"Alice", 95}, {"Bob", 87}, {"Carol", 92}
+    };
+    string query;
+    cin >> query;
+    if (scores.count(query) > 0) {
+        cout << scores[query];
+    } else {
+        cout << "없음";
+    }
+    return 0;
+}`,
+          hint: "if (scores.count(query) > 0) { cout << scores[query]; } else { cout << \"없음\"; }",
+          expectedOutput: `95`,
+          stdin: `Alice`,
+        }
+      ]
+    },
+    // ============================================
+    // Chapter 5: map 정리 퀴즈
+    // ============================================
+    {
+      id: "ch5",
+      title: "map 퀴즈",
+      emoji: "📖",
+      steps: [
+        {
+          id: "ch5-q1",
+          type: "quiz",
+          title: "map 선언!",
+          content: `학생 이름(string)을 키로, 점수(int)를 값으로 저장하는 map의 올바른 선언은?`,
+          options: [
+            "map<int, string> scores;",
+            "map<string, int> scores;",
+            "map scores<string, int>;",
+            "dict<string, int> scores;"
+          ],
+          answer: 1,
+          explanation: "map<키타입, 값타입>으로 선언해요! 이름(string)이 키, 점수(int)가 값이니까 map<string, int>이 맞아요. dict는 파이썬이에요!"
+        },
+        {
+          id: "ch5-q3",
+          type: "quiz",
+          title: "map vs unordered_map!",
+          content: "`map`과 `unordered_map`의 차이로 **맞는** 것은?",
+          options: [
+            "map이 unordered_map보다 항상 빠르다",
+            "unordered_map은 키를 정렬하고 map은 정렬하지 않는다",
+            "map은 O(log n), unordered_map은 평균 O(1)이다",
+            "둘 다 #include <map>으로 사용한다"
+          ],
+          answer: 2,
+          explanation: "map은 키를 정렬하며 O(log n), unordered_map은 정렬하지 않고 평균 O(1)이에요! unordered_map은 #include <unordered_map>이 필요해요."
+        },
+        {
+          id: "ch5-q5",
+          type: "quiz",
+          title: "없는 키 접근!",
+          content: `다음 코드의 출력은?
+
+\`\`\`cpp
+map<string, int> m;
+m["apple"] = 3;
+cout << m["banana"] << endl;
+cout << m.size() << endl;
+\`\`\``,
+          options: [
+            "에러 발생\n1",
+            "0\n1",
+            "0\n2",
+            "에러 발생\n2"
+          ],
+          answer: 2,
+          explanation: "[]로 없는 키 접근 시 기본값 0으로 자동 생성돼요! banana가 새로 생겨서 size는 2가 돼요."
+        },
       ]
     },
     // ============================================
@@ -443,6 +859,51 @@ s.empty();         // 비어있으면 true
 | \`not s\` | \`s.empty();\` |
 
 > 💡 거의 \`map\` 과 똑같은 함수 이름. **차이는 단 하나** — set 은 키만 (값 없음), map 은 키-값. 그래서 set 의 find/count 는 그 값이 있는지만 알려줘요.`
+        },
+        {
+          id: "ch2-vs-sort-unique",
+          type: "explain",
+          title: "🤔 그럼 vector + sort + unique 는 왜? set 이 있는데",
+          content: `정렬 레슨에서 \`sort + unique + erase\` 패턴을 배웠죠. set 도 자동으로 중복 제거 + 정렬해주는데 — **둘이 뭐가 달라요?**
+
+### 한눈에 비교
+
+| 상황 | \`set\` | \`vector + sort + unique\` |
+|---|---|---|
+| 데이터 들어올 때마다 **실시간** 추가 | ✅ insert 한 줄 | ❌ 매번 sort 비효율 |
+| **이미 있는** 데이터 한 번만 정리 | ❌ 옮기는 비용 | ✅ 한 번만 처리 — 빠름 |
+| 자주 "있나?" 검색 | ✅ count O(log n) | ❌ 매번 훑음 |
+| **인덱스** 접근 \`v[i]\` | ❌ 안 됨 | ✅ 됨 |
+| 메모리 효율 | 트리 구조라 살짝 비쌈 | 연속 메모리 — 빠르고 가벼움 |
+
+### 결정 규칙
+
+**상황 A — 데이터가 *흘러 들어와요*. 매번 중복 체크하면서 모음:**
+\`\`\`cpp
+set<int> seen;
+while (cin >> x) {
+    seen.insert(x);     // 자동으로 중복 무시
+    if (seen.count(y)) ...   // 빠른 검색
+}
+\`\`\`
+→ **set 이 정답.**
+
+**상황 B — 데이터를 한꺼번에 받았어요. 마지막에 한 번만 중복 제거:**
+\`\`\`cpp
+vector<int> v(n);
+for (int i = 0; i < n; i++) cin >> v[i];
+sort(v.begin(), v.end());
+v.erase(unique(v.begin(), v.end()), v.end());
+// 이후 v[0], v[1]... 인덱스로 자유롭게
+\`\`\`
+→ **vector + sort + unique 가 정답.**
+
+### 한 줄 결정
+
+> **모으는 도중 빠른 검색** 이 중요? → **set**
+> **모은 후 *한 번만* 정리** + 인덱스/순회 빠름? → **vector + sort + unique**
+
+> 💡 간단 규칙: "이게 *설계되는 자료구조* 라면 set, *결과물* 이라면 vector". 알고리즘 대회에서는 둘 다 자주 등장.`
         },
         {
           id: "ch2-fb1",
@@ -626,324 +1087,6 @@ int main() {
           answer: 3,
           explanation: "set에는 push_back()이 없어요! insert()로 원소를 추가해요. set은 중복을 허용하지 않고, 원소가 자동 정렬돼요."
         }
-      ]
-    },
-    // ============================================
-    // Chapter 3: map 순회
-    // ============================================
-    {
-      id: "ch3",
-      title: "map 순회",
-      emoji: "🔄",
-      steps: [
-        {
-          id: "ch3-iter",
-          type: "explain",
-          title: "📖 map 순회 — 가장 많이 쓰는 방법",
-          content: `**먼저 알아둘 것: map은 pair 의 모음**
-
-map 은 내부적으로 데이터를 **pair (쌍)** 로 저장해요:
-
-\`\`\`cpp
-map<string, int> scores = {{"Alice", 95}, {"Bob", 87}};
-// 내부적으로는:
-// pair<string, int>{"Alice", 95}
-// pair<string, int>{"Bob", 87}
-\`\`\`
-
-즉 map 을 순회하면 각 원소가 **pair** 로 나와요. 그래서 \`.first\` (키) 와 \`.second\` (값) 로 접근할 수 있는 거예요.
-
----
-
-### ⭐ 가장 많이 쓰는 방법: 구조적 바인딩 (C++17)
-
-pair 를 \`[key, val]\` 로 바로 풀어서 쓰는 방법:
-
-\`\`\`cpp
-for (auto& [key, val] : scores) {
-    cout << key << ": " << val << endl;
-}
-// Alice: 95
-// Bob: 87
-\`\`\`
-
-@핵심: \`map\` 은 항상 **키 기준으로 자동 정렬**돼요! 삽입 순서와 상관없이 알파벳/숫자 순서로 출력. (파이썬 dict 는 삽입 순서 유지지만 C++ map 은 달라요.)
-
-### 파이썬과 비교
-
-\`\`\`python
-for key, val in scores.items():
-    print(f"{key}: {val}")
-\`\`\`
-
-C++ 의 \`auto& [key, val]\` = 파이썬의 \`key, val\`. 사실상 똑같아요.
-
-> 💡 일반적으로는 **이 방법만 알아도 충분**해요. 다음 페이지에서 다른 두 방법도 짚지만 거의 안 써요.`
-        },
-        {
-          id: "ch3-iter-other",
-          type: "explain",
-          title: "📖 (참고) 다른 두 가지 방법",
-          content: `구조적 바인딩 외에 두 가지 방법이 더 있어요. **거의 안 쓰지만** 다른 사람 코드에서 만나면 알아볼 수 있게:
-
-### 방법 2: range-for + pair 그대로
-
-range-for 로 받되 pair 를 풀지 않고 \`.first\`, \`.second\` 로 접근:
-
-\`\`\`cpp
-for (auto& p : scores) {
-    cout << p.first << ": " << p.second << endl;
-}
-// p.first = 키,  p.second = 값
-\`\`\`
-
-방법 1, 2 는 **둘 다 range-for** — 차이는 pair 를 풀어서 쓰냐 (1) 그대로 쓰냐 (2).
-
-### 방법 3: 이터레이터 직접
-
-\`begin()\` ~ \`end()\` 이터레이터를 직접 다루는 전통 방식. \`it\` 는 pair 를 가리키는 포인터처럼 동작:
-
-\`\`\`cpp
-for (auto it = scores.begin(); it != scores.end(); it++) {
-    cout << it->first << ": " << it->second << endl;
-}
-// it->first = 키,  it->second = 값 (화살표 -> 로 접근)
-\`\`\`
-
-### 사용 빈도 비교
-
-| 방법 | 빈도 | 언제? |
-|---|---|---|
-| 1 (구조적 바인딩) | ⭐⭐⭐ 거의 항상 | 현대 코드, 알고리즘 대회 |
-| 2 (pair) | ⭐ 가끔 | C++17 이전, pair 자체 다룰 때 |
-| 3 (이터레이터) | ⭐ 드물게 | **순회 중 삭제** 등 이터레이터 조작 필요할 때 — 다음 페이지에서 |
-
-> 💡 방법 1 만 외우고 시작. 2, 3 은 "이런 것도 있구나" 정도.`
-        },
-        {
-          id: "ch3-iter-erase",
-          type: "explain",
-          title: "⚠️ (심화) 순회하면서 삭제할 때 — 이터레이터 함정",
-          content: `방법 3 (이터레이터) 이 *진짜 필요한* 드문 경우 — **순회하면서 erase 할 때**.
-
-### ❌ 이렇게 하면 크래시!
-
-\`\`\`cpp
-for (auto it = m.begin(); it != m.end(); it++) {  // it++ 가 헤더에
-    if (it->second < 0) {
-        m.erase(it);  // it 가 무효가 되는데...
-    }
-    // 헤더에서 it++ 를 또 함 → 무효 포인터 건드려서 크래시!
-}
-\`\`\`
-
-\`erase()\` 를 하면 그 이터레이터는 **무효 (dangling)** 가 돼요. 지우기 전 번호로 다음 칸을 찾으려는 것과 같아요 — 번호가 다 바뀌어서 엉뚱한 곳을 가리킴.
-
-### ✅ 올바른 방법
-
-\`\`\`cpp
-for (auto it = m.begin(); it != m.end(); ) {  // 헤더에 it++ 없음!
-    if (it->second < 0) {
-        it = m.erase(it);  // erase 가 다음 유효 이터레이터 반환
-    } else {
-        it++;              // 삭제 안 할 때만 직접 ++
-    }
-}
-\`\`\`
-
-**핵심:** \`m.erase(it)\` 는 삭제하고 **다음 유효한 이터레이터를 반환** 해요. 그래서 \`it = m.erase(it)\` 한 줄이면 이미 다음 원소로 넘어간 셈. 삭제할 때는 \`it++\` 안 하고, 삭제 안 할 때만 \`else\` 에서 \`it++\`.
-
-> 💡 이 패턴은 **순회 중 삭제** 가 필요할 때만. 그게 아니면 방법 1 (구조적 바인딩) 으로 충분해요.`
-        },
-        {
-          id: "ch3-fb1",
-          type: "fillblank" as const,
-          title: "빈칸을 채워주세요",
-          content: "map을 구조적 바인딩으로 순회해요!",
-          code: "map<string, int> scores = {{\"Alice\", 95}, {\"Bob\", 87}};\nfor (auto& ___ : scores) {\n    cout << key << \": \" << val << endl;\n}",
-          fillBlanks: [
-            { id: 0, answer: "[key, val]", options: ["[key, val]", "(key, val)", "key, val", "p.first, p.second"] }
-          ],
-          explanation: "C++17 구조적 바인딩이에요! auto& [key, val]로 pair를 바로 풀어서 쓸 수 있어요. 가장 많이 쓰는 방법이에요."
-        }
-      ]
-    },
-    // ============================================
-    // Chapter 4: map 함수들
-    // ============================================
-    {
-      id: "ch4",
-      title: "map 함수들",
-      emoji: "🔧",
-      steps: [
-        {
-          id: "ch4-func",
-          type: "explain",
-          title: "🔧 map 주요 함수들 — 검색·확인·삭제",
-          content: `map 에서 자주 쓰는 함수들이에요.
-
-\`\`\`cpp
-map<string, int> scores;
-scores["Alice"] = 95;
-scores["Bob"] = 87;
-
-// 키가 있는지 확인
-if (scores.count("Alice") > 0) {
-    cout << "Alice 있어요!" << endl;
-}
-
-// find 로 검색 (없으면 end() 반환)
-auto it = scores.find("Bob");
-if (it != scores.end()) {
-    cout << it->second << endl;  // 87
-}
-
-// 크기 확인
-cout << scores.size() << endl;   // 2
-cout << scores.empty() << endl;  // 0 (false, 비어있지 않음)
-
-// 키-값 삭제
-scores.erase("Bob");
-cout << scores.size() << endl;   // 1
-\`\`\`
-
-### 파이썬과 비교
-
-| 파이썬 🐍 | C++ map ⚡ |
-|---|---|
-| \`"key" in d\` | \`m.count("key") > 0\` |
-| \`d.get("key")\` | \`m.find("key")\` |
-| \`del d["key"]\` | \`m.erase("key")\` |
-| \`len(d)\` | \`m.size()\` |
-| \`not d\` | \`m.empty()\` |
-
-> 다음 페이지 — \`count\` 와 \`find\` 둘 다 "찾기" 같은데 *어떤 상황에 어느 거* 써야 깔끔한지 짚고 가요.`
-        },
-        {
-          id: "ch4-func-cf",
-          type: "explain",
-          title: "🆚 count vs find — 어떤 상황에 어느 거?",
-          content: `둘 다 "찾기" 인데 돌려주는 게 달라서 쓰임이 달라요.
-
-| | \`m.count(key)\` | \`m.find(key)\` |
-|---|---|---|
-| 반환값 | 1 (있음) / 0 (없음) | iterator / \`m.end()\` (없음) |
-| 용도 | "있는지만" 확인 | "있으면 값도" 사용 |
-
-\`\`\`cpp
-// count — 있는지만 확인
-if (m.count("Alice") > 0) {
-    cout << "Alice 있어요!";
-}
-
-// find — 있으면 값까지 같이
-auto it = m.find("Alice");
-if (it != m.end()) {
-    cout << it->second;  // 값 접근
-}
-\`\`\`
-
----
-
-### 💡 순회 중 삭제 — 가장 쉬운 패턴
-
-이전에 본 \`it = m.erase(it)\` 이터레이터 방법은 정확하지만 복잡해요. **더 쉬운 대안**:
-
-\`\`\`cpp
-// 1) 지울 키만 모아두고
-vector<string> toDelete;
-for (auto& [k, v] : m) {
-    if (v < 0) toDelete.push_back(k);
-}
-
-// 2) 루프 끝난 다음 삭제
-for (auto& k : toDelete) {
-    m.erase(k);
-}
-\`\`\`
-
-순회와 삭제를 **분리** 하니까 이터레이터 무효화 걱정 없음. 코드도 읽기 쉬움. 일반적인 경우엔 이게 더 추천돼요.`
-        },
-        {
-          id: "ch4-pred1",
-          type: "predict" as const,
-          title: "count vs size!",
-          code: `#include <iostream>
-#include <map>
-#include <string>
-using namespace std;
-int main() {
-    map<string, int> m;
-    m["a"] = 1;
-    m["b"] = 2;
-    cout << m.count("a") << endl;
-    cout << m.count("c") << endl;
-    cout << m.size() << endl;
-    return 0;
-}`,
-          options: ["1\n0\n2", "1\n1\n2", "2\n0\n2", "1\n0\n3"],
-          answer: 0,
-          explanation: "count()는 키가 있으면 1, 없으면 0이에요! 'a'는 있어서 1, 'c'는 없어서 0. size()는 map의 원소 수 = 2에요."
-        }
-      ]
-    },
-    // ============================================
-    // Chapter 5: map 정리 퀴즈
-    // ============================================
-    {
-      id: "ch5",
-      title: "map 퀴즈",
-      emoji: "📖",
-      steps: [
-        {
-          id: "ch5-q1",
-          type: "quiz",
-          title: "map 선언!",
-          content: `학생 이름(string)을 키로, 점수(int)를 값으로 저장하는 map의 올바른 선언은?`,
-          options: [
-            "map<int, string> scores;",
-            "map<string, int> scores;",
-            "map scores<string, int>;",
-            "dict<string, int> scores;"
-          ],
-          answer: 1,
-          explanation: "map<키타입, 값타입>으로 선언해요! 이름(string)이 키, 점수(int)가 값이니까 map<string, int>이 맞아요. dict는 파이썬이에요!"
-        },
-        {
-          id: "ch5-q3",
-          type: "quiz",
-          title: "map vs unordered_map!",
-          content: "`map`과 `unordered_map`의 차이로 **맞는** 것은?",
-          options: [
-            "map이 unordered_map보다 항상 빠르다",
-            "unordered_map은 키를 정렬하고 map은 정렬하지 않는다",
-            "map은 O(log n), unordered_map은 평균 O(1)이다",
-            "둘 다 #include <map>으로 사용한다"
-          ],
-          answer: 2,
-          explanation: "map은 키를 정렬하며 O(log n), unordered_map은 정렬하지 않고 평균 O(1)이에요! unordered_map은 #include <unordered_map>이 필요해요."
-        },
-        {
-          id: "ch5-q5",
-          type: "quiz",
-          title: "없는 키 접근!",
-          content: `다음 코드의 출력은?
-
-\`\`\`cpp
-map<string, int> m;
-m["apple"] = 3;
-cout << m["banana"] << endl;
-cout << m.size() << endl;
-\`\`\``,
-          options: [
-            "에러 발생\n1",
-            "0\n1",
-            "0\n2",
-            "에러 발생\n2"
-          ],
-          answer: 2,
-          explanation: "[]로 없는 키 접근 시 기본값 0으로 자동 생성돼요! banana가 새로 생겨서 size는 2가 돼요."
-        },
       ]
     },
     // ============================================
