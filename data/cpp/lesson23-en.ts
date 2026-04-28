@@ -383,7 +383,7 @@ We want to sort this **by score (second) descending**.
 \`greater<pair<string,int>>()\`? Compares the whole pair (name + score). Also not it.
 
 > 🎯 What we actually need: **a way to spell out the comparison ourselves.**
-> Something like, "for these two students, *I'll* tell sort which one comes first."
+> Something like, "for these two students, **I'll** tell sort which one comes first."
 
 The tool for this is a **lambda**. Next page covers the syntax 👇`
         },
@@ -454,22 +454,17 @@ lambda x: x * 2
    two values to compare    if true, **a goes first**
 \`\`\`
 
-### What the lambda's return means
+### Just memorize one rule
 
 > 🎯 **return true → a goes first / return false → b goes first**
 
-Memorize this one rule and every comparison lambda makes sense.
+This one line unlocks every comparison lambda.
 
 **Example — descending (bigger first):**
 \`\`\`
 a=9, b=5 → 9 > 5 = true   → 9 goes first ✅
 a=2, b=8 → 2 > 8 = false  → 8 goes first ✅
 Result: bigger numbers first → descending!
-\`\`\`
-
-**Example — ascending (smaller first):**
-\`\`\`cpp
-[](int a, int b) { return a < b; }   // just flip the comparison
 \`\`\`
 
 ### Plug it into sort
@@ -481,9 +476,13 @@ sort(v.begin(), v.end(), [](int a, int b) {
     return a > b;
 });
 // v = {9, 8, 5, 2, 1}  (descending)
-\`\`\`
-
-### Common forms you'll see
+\`\`\``
+        },
+        {
+          id: "s23-ch1-cheatsheet",
+          type: "explain",
+          title: "📋 Common lambda forms — cheatsheet",
+          content: `Sort lambdas boil down to a few patterns. Memorize these and you're set:
 
 | Lambda | Sort result |
 |---|---|
@@ -492,7 +491,17 @@ sort(v.begin(), v.end(), [](int a, int b) {
 | \`[](int a, int b){ return abs(a) < abs(b); }\` | absolute value ascending |
 | \`[](auto a, auto b){ return a.second < b.second; }\` | by pair's second |
 
-> 💡 \`auto\` parameters: when the type is long (pair / struct), \`auto\` is convenient — the compiler figures it out.`
+### 💡 \`auto\` parameters — handy for pair/struct sorting
+
+When sorting \`pair<string, int>\`, \`tuple<...>\`, or \`struct Student\`, the type can get long. \`auto\` lets the compiler infer it for you:
+
+\`\`\`cpp
+sort(v.begin(), v.end(), [](auto a, auto b) {
+    return a.second < b.second;   // no need to spell out the type
+});
+\`\`\`
+
+> Next page — practice the rule by hand.`
         },
         {
           id: "s23-ch1-rule-pred",
@@ -852,7 +861,9 @@ banana hi apple ok cat`,
           type: "animation" as const,
           title: "🔎 Linear Search — Checking One by One",
           component: "linearSearch",
-          content: `Imagine finding **"Kim"** in a phone book.
+          content: `You've now mastered sort. There's another big reason sorted data matters — **search becomes much faster.** Let's get into that.
+
+First, see what happens when data is **not** sorted. Imagine finding **"Kim"** in a phone book.
 
 The simplest approach: flip through **one page at a time** from page 1.
 
@@ -964,7 +975,7 @@ lower_bound  upper_bound
             "`upper_bound(v.begin(), v.end(), 7)`"
           ],
           answer: 0,
-          explanation: "**`binary_search`** is the one that asks exactly \"is it there?\" — it returns true/false, the most direct answer. lower_bound and upper_bound return *positions*, so checking existence with them takes one extra step (e.g. `lower_bound != upper_bound`)."
+          explanation: "**`binary_search`** is the one that asks exactly \"is it there?\" — it returns true/false, the most direct answer. lower_bound and upper_bound return **positions**, so checking existence with them takes one extra step (e.g. `lower_bound != upper_bound`)."
         },
         {
           id: "s23-ch2-lb-missing",
@@ -1277,7 +1288,7 @@ int main() {
           id: "s23-ch3-unique",
           type: "explain",
           title: "🧹 sort + unique — Removing Duplicates!",
-          content: `The most common C++ pattern for **removing duplicate values** from an array!
+          content: `You've seen sorting and searching. One last pattern that comes paired with sort — the standard C++ idiom for **removing duplicate values** from an array.
 
 \`\`\`cpp
 #include <algorithm>

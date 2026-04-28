@@ -454,22 +454,17 @@ lambda x: x * 2
    비교할 두 값      이 조건이 true 면 **a 가 앞으로**
 \`\`\`
 
-### 람다 결과의 의미
+### 한 가지 규칙만 외우자
 
 > 🎯 **return true → a 가 앞으로 / return false → b 가 앞으로**
 
-이 한 가지 규칙만 외우면 모든 비교 람다가 풀려요.
+이 한 줄이면 모든 비교 람다가 풀려요.
 
 **예시 — 내림차순 (큰 게 앞):**
 \`\`\`
 a=9, b=5 → 9 > 5 = true   → 9 가 앞으로 ✅
 a=2, b=8 → 2 > 8 = false  → 8 이 앞으로 ✅
 결과: 큰 수가 앞 → 내림차순!
-\`\`\`
-
-**예시 — 오름차순 (작은 게 앞):**
-\`\`\`cpp
-[](int a, int b) { return a < b; }   // 비교 방향만 < 로
 \`\`\`
 
 ### 실제로 sort 에 넣으면
@@ -481,9 +476,13 @@ sort(v.begin(), v.end(), [](int a, int b) {
     return a > b;
 });
 // v = {9, 8, 5, 2, 1}  (내림차순)
-\`\`\`
-
-### 자주 보는 형태들
+\`\`\``
+        },
+        {
+          id: "s23-ch1-cheatsheet",
+          type: "explain",
+          title: "📋 자주 보는 람다 형태들 — 치트시트",
+          content: `정렬 람다는 결국 몇 가지 패턴의 변주예요. 외워두면 평생 써먹어요:
 
 | 람다 | 정렬 결과 |
 |---|---|
@@ -492,7 +491,17 @@ sort(v.begin(), v.end(), [](int a, int b) {
 | \`[](int a, int b){ return abs(a) < abs(b); }\` | 절댓값 오름차순 |
 | \`[](auto a, auto b){ return a.second < b.second; }\` | pair 의 second 기준 |
 
-> 💡 \`auto\` 매개변수: pair / struct 처럼 타입이 길면 \`auto\` 로 받으면 편함. 컴파일러가 알아서 추론.`
+### 💡 \`auto\` 매개변수 — pair/struct 정렬에 편함
+
+\`pair<string, int>\`, \`tuple<...>\`, \`struct Student\` 처럼 타입이 길어지면 매개변수에 \`auto\` 를 쓰면 편해요. 컴파일러가 알아서 추론:
+
+\`\`\`cpp
+sort(v.begin(), v.end(), [](auto a, auto b) {
+    return a.second < b.second;   // 타입 안 적어도 OK
+});
+\`\`\`
+
+> 다음 페이지에서 위 규칙을 손으로 연습해 봐요.`
         },
         {
           id: "s23-ch1-rule-pred",
@@ -852,7 +861,9 @@ banana hi apple ok cat`,
           type: "animation" as const,
           title: "🔎 선형 탐색 — 한 장씩 넘기기",
           component: "linearSearch",
-          content: `전화번호부에서 **"Kim"**을 찾는다고 해봐요.
+          content: `여기까지 sort 로 정렬을 마스터했어요. 정렬해두면 좋은 또 하나의 큰 이유 — **탐색이 훨씬 빨라져요.** 그 이야기를 시작해요.
+
+먼저 정렬돼 있지 **않은** 경우부터 봐요. 전화번호부에서 **"Kim"** 을 찾는다고 해봐요.
 
 가장 단순한 방법: **1페이지부터 한 장씩** 넘기며 확인해요.
 
@@ -964,7 +975,7 @@ lower_bound  upper_bound
             "`upper_bound(v.begin(), v.end(), 7)`"
           ],
           answer: 0,
-          explanation: "**`binary_search`** 는 정확히 \"있나 / 없나\" 만 묻는 함수 — true / false 반환이라 가장 직관적이에요. lower_bound / upper_bound 는 *위치* 를 돌려주니까 \"있는지만\" 확인하기엔 한 단계 더 필요해요 (`lower_bound != upper_bound` 같은 식)."
+          explanation: "**`binary_search`** 는 정확히 \"있나 / 없나\" 만 묻는 함수 — true / false 반환이라 가장 직관적이에요. lower_bound / upper_bound 는 **위치** 를 돌려주니까 \"있는지만\" 확인하기엔 한 단계 더 필요해요 (`lower_bound != upper_bound` 같은 식)."
         },
         {
           id: "s23-ch2-lb-missing",
@@ -1091,7 +1102,7 @@ lower_bound(v.begin(), v.end(), 5) - v.begin()  // 3
 vector<int> v = {1, 3, 5, 7, 9};
 
 lower_bound(v.begin(), v.end(), 10) - v.begin();
-// → 5 (범위 *밖*, v[5] 는 존재 안 함!)
+// → 5 (범위 **밖**, v[5] 는 존재 안 함!)
 \`\`\`
 
 찾는 값보다 큰 게 배열에 없으면 lower_bound 는 **\`v.end()\` 위치 (= 인덱스 \`v.size()\`)** 를 돌려줘요. 여길 그냥 \`v[5]\` 로 접근하면 잘못된 메모리 읽기 → 프로그램 폭발.
@@ -1277,7 +1288,7 @@ int main() {
           id: "s23-ch3-unique",
           type: "explain",
           title: "🧹 sort + unique — 중복 제거 패턴!",
-          content: `배열에서 **중복된 값을 제거**하는 가장 흔한 C++ 패턴이에요!
+          content: `정렬과 탐색을 봤어요. 마지막으로 sort 와 짝꿍처럼 자주 쓰는 패턴 하나 — 배열에서 **중복된 값을 제거**하는 C++ 의 표준 패턴이에요.
 
 \`\`\`cpp
 #include <algorithm>
