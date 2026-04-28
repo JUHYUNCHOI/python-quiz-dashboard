@@ -425,13 +425,54 @@ export const lessonCpp23: LessonData = {
         }
       },
 
-      // ==================== CHAPTER 3: lower_bound 활용 ====================
+      // ==================== CHAPTER 3: 이진탐색 활용 (3 형제) ====================
       {
         type: "chapter",
         content: {
           num: 3,
-          title: "lower_bound 활용",
-          desc: "정렬된 배열에서 빠르게 위치/개수 찾기!"
+          title: "이진탐색 활용 (3 형제)",
+          desc: "binary_search / lower_bound / upper_bound — 정렬된 배열 빠르게 다루기"
+        }
+      },
+
+      // 🆕 trio quiz — 어느 함수 쓸까?
+      {
+        type: "quiz",
+        content: {
+          question: "정렬된 \`vector<int> v\` 에서 \"숫자 7 이 있는지 **있다 / 없다** 만\" 알면 돼요. 셋 중 어느 게 가장 깔끔할까요?",
+          options: [
+            "`binary_search(v.begin(), v.end(), 7)`",
+            "`lower_bound(v.begin(), v.end(), 7)`",
+            "`upper_bound(v.begin(), v.end(), 7)`"
+          ],
+          answer: 0,
+          explanation: "**`binary_search`** 는 정확히 \"있나/없나\" 를 묻는 함수 — true/false 반환이라 가장 직관적이에요. lower_bound / upper_bound 는 *위치*를 돌려주니까 한 단계 더 필요해요.",
+          en: {
+            question: "In a sorted \`vector<int> v\`, you only need **whether 7 is there (yes/no)**. Which is the cleanest?",
+            options: [
+              "`binary_search(v.begin(), v.end(), 7)`",
+              "`lower_bound(v.begin(), v.end(), 7)`",
+              "`upper_bound(v.begin(), v.end(), 7)`"
+            ],
+            explanation: "**`binary_search`** answers exactly the yes/no question with true/false. lower_bound/upper_bound return positions, requiring an extra step."
+          }
+        }
+      },
+
+      // 🆕 binary_search 사용 — practice
+      {
+        type: "practice",
+        content: {
+          level: 1,
+          task: "binary_search 로 값 5 가 있는지 확인!",
+          guide: "binary_search 는 (begin, end, 값) 형태 — true / false 반환.",
+          template: 'vector<int> v = {1, 3, 5, 7, 9};\nbool found = ___(v.begin(), v.end(), 5);\ncout << (found ? "Yes" : "No");',
+          answer: "binary_search",
+          expect: 'vector<int> v = {1, 3, 5, 7, 9};\nbool found = binary_search(v.begin(), v.end(), 5);\ncout << (found ? "Yes" : "No");',
+          en: {
+            task: "Use binary_search to check if 5 is in the sorted vector.",
+            guide: "binary_search takes (begin, end, value) and returns true/false."
+          }
         }
       },
 
@@ -512,6 +553,48 @@ export const lessonCpp23: LessonData = {
               options: ["2", "3", "5"],
               feedback: "5 appears at indices 2, 3, 4 — that's 3 occurrences! hi - lo = 3!"
             }
+          }
+        }
+      },
+
+      // 🆕 upper-lower 패턴 직접 — fillblank
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "정렬된 \`v = {1, 2, 5, 5, 5, 7}\` 에서 5 가 몇 개인지 한 줄로 구하세요. (upper - lower 패턴)",
+          guide: "끝 다음 위치 - 시작 위치 = 개수. upper_bound 가 끝 다음, lower_bound 가 시작.",
+          template: 'vector<int> v = {1, 2, 5, 5, 5, 7};\nint cnt = ___(v.begin(), v.end(), 5)\n        - ___(v.begin(), v.end(), 5);\ncout << cnt;',
+          answer: "upper_bound",
+          blanksAnswer: ["upper_bound", "lower_bound"],
+          expect: 'vector<int> v = {1, 2, 5, 5, 5, 7};\nint cnt = upper_bound(v.begin(), v.end(), 5)\n        - lower_bound(v.begin(), v.end(), 5);\ncout << cnt;',
+          en: {
+            task: "Count how many 5s in sorted \`v = {1, 2, 5, 5, 5, 7}\` in one line. (upper - lower pattern)",
+            guide: "one-past-end - start = count. upper_bound = one past end, lower_bound = start."
+          }
+        }
+      },
+
+      // 🆕 count() vs upper-lower 차이 quiz
+      {
+        type: "quiz",
+        content: {
+          question: "100 만 개 정수가 들어있는 *정렬된* 벡터에서 \"3 이 몇 개인가?\" 를 한 번만 계산할 거예요. 어떤 게 더 빠를까요?",
+          options: [
+            "`count(v.begin(), v.end(), 3)` — O(n)",
+            "`upper_bound(...) - lower_bound(...)` — O(log n)",
+            "둘 다 똑같음"
+          ],
+          answer: 1,
+          explanation: "**이미 정렬돼 있다면** upper-lower 가 O(log n) 이라 압도적으로 빠름 (약 20 번 비교 vs 100 만 번 비교). count() 는 정렬 여부와 무관하게 처음부터 끝까지 훑어요.\n\n⚠️ 함정: 정렬이 안 돼 있으면 sort 부터 해야 하는데, sort 가 O(n log n) 이라 *한 번만* 셀 거면 그냥 count() 가 더 빠름.",
+          en: {
+            question: "In a *sorted* vector of 1M ints, you'll count occurrences of 3 *once*. Which is faster?",
+            options: [
+              "`count(v.begin(), v.end(), 3)` — O(n)",
+              "`upper_bound(...) - lower_bound(...)` — O(log n)",
+              "Both the same"
+            ],
+            explanation: "**If already sorted**, upper-lower is O(log n) — far faster (~20 comparisons vs 1M). count() always scans the whole array.\n\n⚠️ Trap: if not sorted, you'd need sort() first which is O(n log n) — for a *single* count, plain count() wins."
           }
         }
       },
