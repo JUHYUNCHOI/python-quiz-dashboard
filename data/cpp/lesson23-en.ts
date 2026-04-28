@@ -114,7 +114,7 @@ Same role as v.begin() / v.end() for vectors.
 
 ---
 
-### 💭 Keep in mind — sort needs to be able to *compare*
+### 💭 Keep in mind — sort needs to be able to **compare**
 
 The reason \`sort\` finishes the job in one line: it knows **which of two values comes first**.
 
@@ -1329,13 +1329,13 @@ Without sorting, {1, 3, 1} stays as 3 elements.
 |---|---|
 | \`sorted(set(v))\` | \`sort + erase(unique(...))\` |
 
-💡 Memorize **sort → erase(unique(...), end())** as a pair! Next page — *why* we need erase too.`
+💡 Memorize **sort → erase(unique(...), end())** as a pair! Next page — **why** we need erase too.`
         },
         {
           id: "s23-ch3-unique-detail",
           type: "explain",
           title: "🤔 Wait — why do we need \`erase\`? What if we only call \`unique\`?",
-          content: `Once you see what \`unique\` *actually* does, why \`erase\` is its partner becomes obvious.
+          content: `Once you see what \`unique\` **actually** does, why \`erase\` is its partner becomes obvious.
 
 ### What unique really does
 
@@ -1352,7 +1352,7 @@ v = {1, 2, 3, 4, 5, 6, 9, ?, ?, ?}   size is still 10!
                           past this is leftover garbage (meaningless)
 \`\`\`
 
-\`v.size()\` would still print 10. The first 7 are real; the last 3 are *traces* left in memory.
+\`v.size()\` would still print 10. The first 7 are real; the last 3 are **traces** left in memory.
 
 ---
 
@@ -1386,9 +1386,9 @@ v.erase( unique(v.begin(), v.end()),  v.end() );
 //          ───────  trim the garbage between  ───────
 \`\`\`
 
-erase from the *real end* (returned by unique) up to \`v.end()\` — that's the famous pattern.
+erase from the **real end** (returned by unique) up to \`v.end()\` — that's the famous pattern.
 
-> 💡 Remember: \`unique\` only *moves things*, size stays. To truly shrink it, pair with \`erase\`.`
+> 💡 Remember: \`unique\` only **moves things**, size stays. To truly shrink it, pair with \`erase\`.`
         },
         {
           id: "s23-ch3-unique-practice",

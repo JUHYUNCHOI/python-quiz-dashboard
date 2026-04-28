@@ -106,7 +106,7 @@ cout << p.first;    // "Kim"
 cout << p.second;   // 95
 \`\`\`
 
-여러 번 쓰거나 *의미 있는 이름* 으로 받고 싶을 때, **C++17 부터는 한 줄로 풀어 담을 수 있어요**:
+여러 번 쓰거나 **의미 있는 이름** 으로 받고 싶을 때, **C++17 부터는 한 줄로 풀어 담을 수 있어요**:
 
 \`\`\`cpp
 auto [name, score] = p;
@@ -123,7 +123,7 @@ cout << score;   // 95
 | 패턴 | 언제 |
 |---|---|
 | \`p.first\`, \`p.second\` | 한두 번만 접근, 단순할 때 |
-| \`auto [name, score] = p;\` | 여러 번 사용 / *의미 있는 이름* 필요 ⭐ |
+| \`auto [name, score] = p;\` | 여러 번 사용 / **의미 있는 이름** 필요 ⭐ |
 | \`for (auto& [name, score] : v)\` | range-for 로 vector<pair> 순회 — 진짜 자주! ⭐⭐ |
 
 ### 미리보기 — vector<pair> 순회 비교
@@ -327,7 +327,7 @@ queue<tuple<int, int, int>> q;   // (x, y, distance)
 getStudent() → ("Kim", 15, 3.8)   →  Kim: 자격 없음 (나이 부족)
 \`\`\`
 
-> 💡 함수 결과를 structured bindings 으로 받고 (\`auto [name, age, gpa] = ...\`), 조건 판단 후 출력. **각 값에 *이름* 이 붙어서 코드가 읽기 쉬워지는 게 structured bindings 의 진짜 가치.**`,
+> 💡 함수 결과를 structured bindings 으로 받고 (\`auto [name, age, gpa] = ...\`), 조건 판단 후 출력. **각 값에 **이름** 이 붙어서 코드가 읽기 쉬워지는 게 structured bindings 의 진짜 가치.**`,
           starterCode: `#include <iostream>
 #include <tuple>
 #include <string>
@@ -468,7 +468,7 @@ sort(scores.begin(), scores.end());
         {
           id: "ch1-must-pair",
           type: "practice" as const,
-          title: "🎯 pair 가 *진짜 필요한* 순간 — 점수표 정렬",
+          title: "🎯 pair 가 **진짜 필요한** 순간 — 점수표 정렬",
           content: `방금 시뮬에서 본 것 — **vector 두 개로는 정렬이 깨져요.** 직접 코드로 확인해봐요.
 
 **문제**: 학생 5 명의 이름과 점수가 있어요. **점수 오름차순으로 정렬해서** \`이름 점수\` **형식으로 한 줄씩 출력** 하세요.

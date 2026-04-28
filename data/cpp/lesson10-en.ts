@@ -653,7 +653,7 @@ cout << v[0] << v[1] << v[2];
 | \`for (auto& x : v)\` | No | ✅ | Modifying elements |
 | \`for (const auto& x : v)\` | No | ❌ | Reading big types |
 
-🚀 **Next lesson (*Strings in depth*)** — \`substr\`, \`find\`, \`replace\` and the rest of \`string\`'s real toolkit. The \`const string&\` pattern shows up everywhere there!`
+🚀 **Next lesson (**Strings in depth**)** — \`substr\`, \`find\`, \`replace\` and the rest of \`string\`'s real toolkit. The \`const string&\` pattern shows up everywhere there!`
         }
       ]
     }

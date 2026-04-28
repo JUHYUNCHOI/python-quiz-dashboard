@@ -58,7 +58,7 @@ cout << scores["Bob"];   // 87 — instant!
 
 Syntax: \`map<key_type, value_type>\`. Usage with \`scores[key]\` is almost identical to Python's dict.
 
-> 💡 One line: **map = "a fast lookup table that finds values by key."** Next page covers the *one* decisive difference from Python dict.`
+> 💡 One line: **map = "a fast lookup table that finds values by key."** Next page covers the **one** decisive difference from Python dict.`
         },
         {
           id: "ch1-intro-sorted",
@@ -232,7 +232,7 @@ cout << scores["Alice"]; // Prints 0 — silently wrong
 
 @Key: Using \`[]\` on a missing key **auto-creates** it with default value 0. No error — which makes this a sneaky bug that's hard to track down.
 
-> Next page — how to *read* safely + when this behavior is actually *useful*.`
+> Next page — how to **read** safely + when this behavior is actually **useful**.`
         },
         {
           id: "ch1-missing-key-safe",
@@ -257,7 +257,7 @@ if (scores.count("Bob") > 0) {
 }
 \`\`\`
 
-> 💡 There's also a \`find\` function — faster and more powerful, but it needs the *iterator* concept which is properly covered in the **next lesson (STL search functions)**. For now, \`count\` is enough.
+> 💡 There's also a \`find\` function — faster and more powerful, but it needs the **iterator** concept which is properly covered in the **next lesson (STL search functions)**. For now, \`count\` is enough.
 
 ---
 
@@ -278,7 +278,7 @@ for (string w : words) {
 
 The auto-zero behavior means you don't need to **initialize before incrementing**. This is the heart of the **frequency map** pattern.
 
-> 💡 Summary: regular *reads* → use \`count\` safely. *Counting/accumulating* → exploit the auto-create behavior with \`[]\`.`
+> 💡 Summary: regular **reads** → use \`count\` safely. *Counting/accumulating* → exploit the auto-create behavior with \`[]\`.`
         },
         {
           id: "ch1-pred-missing",
@@ -447,7 +447,7 @@ C++'s \`auto& [key, val]\` ≈ Python's \`key, val\`. Practically identical.
           id: "ch3-iter-other",
           type: "explain",
           title: "📖 (Reference) Two other iteration methods — no need to memorize",
-          content: `> 📌 **No need to memorize this page.** When you see something unfamiliar in older code or someone else's code, *come back* and look. For now, scan once and move on.
+          content: `> 📌 **No need to memorize this page.** When you see something unfamiliar in older code or someone else's code, **come back** and look. For now, scan once and move on.
 
 Besides structured bindings, two more methods exist. Both rarely used, but you'll recognize them in other code:
 
@@ -481,12 +481,12 @@ for (auto it = scores.begin(); it != scores.end(); it++) {
 - \`*it\` = the pair that \`it\` points to (follow the arrow to get the value)
 - \`(*it).first\` = access the \`first\` member of that pair
 
-Writing \`(*it).\` every time is annoying, so \`->\` was created as a short version. **Whether iterator or pointer — \`->\` accesses the member of *what it points to*.**
+Writing \`(*it).\` every time is annoying, so \`->\` was created as a short version. **Whether iterator or pointer — \`->\` accesses the member of **what it points to**.**
 
 | Expression | Meaning |
 |---|---|
-| \`s.first\` | when s is *directly* a pair (dot) |
-| \`it->first\` | when it *points to* a pair (arrow) |
+| \`s.first\` | when s is **directly** a pair (dot) |
+| \`it->first\` | when it **points to** a pair (arrow) |
 
 > 💡 Worth knowing. STL functions like \`find()\` return iterators, so you'll meet \`->\` there.
 
@@ -504,7 +504,7 @@ Writing \`(*it).\` every time is annoying, so \`->\` was created as a short vers
           id: "ch3-iter-erase",
           type: "explain",
           title: "⚠️ (Advanced) Deleting while iterating — iterator trap",
-          content: `The rare case where Method 3 (iterator) is *truly needed* — **erasing during iteration**.
+          content: `The rare case where Method 3 (iterator) is **truly needed** — **erasing during iteration**.
 
 ### ❌ This crashes!
 
@@ -666,7 +666,7 @@ cout << scores.size() << endl;   // 1
 | \`len(d)\` | \`m.size()\` |
 | \`not d\` | \`m.empty()\` |
 
-> Next page — both \`count\` and \`find\` look like "search" — *which one to use when* for cleanest code.`,
+> Next page — both \`count\` and \`find\` look like "search" — **which one to use when** for cleanest code.`,
         },
         {
           id: "ch4-func-cf",
@@ -931,7 +931,7 @@ s.empty();         // true if empty
           title: "🤔 Then why \`vector + sort + unique\`? Set exists",
           content: `In the sort lesson you learned the \`sort + unique + erase\` pattern. set also auto-dedups + auto-sorts — **how do all three differ?**
 
-> 💡 Why *three* options — \`set\` has a faster cousin \`unordered_set\` too (covered in detail on the next page). For now, think of it as "set without sorting, but faster."
+> 💡 Why **three** options — \`set\` has a faster cousin \`unordered_set\` too (covered in detail on the next page). For now, think of it as "set without sorting, but faster."
 
 ### Three at a glance
 

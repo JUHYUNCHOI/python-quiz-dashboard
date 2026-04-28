@@ -688,7 +688,7 @@ for (auto x : v) {
 | \`auto& x\` | X | O | 원본 수정 |
 | \`const auto& x\` | X | X | 큰 타입 읽기 |
 
-🚀 **다음 레슨 예고 (*문자열 심화*):** \`substr\`, \`find\`, \`replace\` 등 \`string\` 의 진짜 기능들. 그리고 거기서 \`const string&\` 패턴이 진짜 자주 등장해요!`
+🚀 **다음 레슨 예고 (**문자열 심화**):** \`substr\`, \`find\`, \`replace\` 등 \`string\` 의 진짜 기능들. 그리고 거기서 \`const string&\` 패턴이 진짜 자주 등장해요!`
         }
       ]
     }

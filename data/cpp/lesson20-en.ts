@@ -21,7 +21,7 @@ export const cppLesson20EnData: LessonData = {
         {
           id: "ch0-notice",
           type: "explain",
-          title: "📌 You don't need to memorize this *now*",
+          title: "📌 You don't need to memorize this **now**",
           content: `This is also **reference material**.
 
 ### Why?
@@ -30,14 +30,14 @@ Most of this lesson is **small techniques you'll use while solving algorithm pro
 
 | Topic | When you actually need it |
 |---|---|
-| \`bits/stdc++.h\` | Once at the top of an algorithm solution (just *paste it*, no need to memorize) |
+| \`bits/stdc++.h\` | Once at the top of an algorithm solution (just **paste it**, no need to memorize) |
 | \`typedef\` / \`using\` | When long types like \`vector<vector<int>>\` show up repeatedly |
 | Macros (\`#define\`) | CP personal style. Not for students — fine to never use |
 | **Bit operations** | Covered in Algorithm Lab's bitmask / DP topics |
 | **Bitmask subsets** | Algorithm territory — you'll meet it via DP |
 | USACO templates | Old USACO style (modern USACO uses stdin/stdout) |
 
-### So when *should* you read it?
+### So when **should** you read it?
 
 - Algorithm Lab's bit operations topic → come back here
 - See macro/typedef-heavy CP code and feel lost → come back here

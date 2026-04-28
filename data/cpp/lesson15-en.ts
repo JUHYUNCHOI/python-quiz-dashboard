@@ -106,7 +106,7 @@ cout << p.first;    // "Kim"
 cout << p.second;   // 95
 \`\`\`
 
-When you'll use the values multiple times — or want *meaningful names* — **C++17 lets you unpack in one line**:
+When you'll use the values multiple times — or want **meaningful names** — **C++17 lets you unpack in one line**:
 
 \`\`\`cpp
 auto [name, score] = p;
@@ -114,14 +114,14 @@ cout << name;    // "Kim"
 cout << score;   // 95
 \`\`\`
 
-That \`auto\` + \`[name, score]\` is called **structured bindings**. The name comes from "**bind**ing the parts of a *structured* bundle (pair / tuple / struct) to multiple variables." (Same syntax shows up again in the tuple chapter — practicing it here makes that transition smooth.)
+That \`auto\` + \`[name, score]\` is called **structured bindings**. The name comes from "**bind**ing the parts of a **structured** bundle (pair / tuple / struct) to multiple variables." (Same syntax shows up again in the tuple chapter — practicing it here makes that transition smooth.)
 
 ### Which to use?
 
 | Pattern | When |
 |---|---|
 | \`p.first\`, \`p.second\` | One or two accesses, simple |
-| \`auto [name, score] = p;\` | Many uses / want *meaningful names* ⭐ |
+| \`auto [name, score] = p;\` | Many uses / want **meaningful names** ⭐ |
 | \`for (auto& [name, score] : v)\` | range-for over vector<pair> — extremely common! ⭐⭐ |
 
 ### Preview — comparing vector<pair> iteration
@@ -325,7 +325,7 @@ If eligible, print \`Kim: eligible\`. Otherwise \`Kim: not eligible\`.
 getStudent() → ("Kim", 15, 3.8)   →  Kim: not eligible (age too low)
 \`\`\`
 
-> 💡 Receive with structured bindings (\`auto [name, age, gpa] = ...\`), then check the condition and print. **The real value of structured bindings: each piece gets a *name*, so the conditional reads naturally.**`,
+> 💡 Receive with structured bindings (\`auto [name, age, gpa] = ...\`), then check the condition and print. **The real value of structured bindings: each piece gets a **name**, so the conditional reads naturally.**`,
           starterCode: `#include <iostream>
 #include <tuple>
 #include <string>
@@ -466,7 +466,7 @@ The next lesson (*Sort & Binary Search*) goes deep on \`sort\`. There you'll lea
         {
           id: "ch1-must-pair",
           type: "practice" as const,
-          title: "🎯 When pair is *truly necessary* — sorting a score sheet",
+          title: "🎯 When pair is **truly necessary** — sorting a score sheet",
           content: `You just saw it in the simulator — **two separate vectors break when sorted.** Now confirm it in code.
 
 **Problem**: You have 5 students with names and scores. **Sort by score (ascending) and print as** \`Name Score\` **lines.**

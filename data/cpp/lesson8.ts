@@ -876,7 +876,7 @@ double area(double w, double h) {
 }
 
 // 함수 오버로딩: 삼각형 (세 변의 길이 3개 — 헤론 공식)
-// 힌트: s = (a+b+c)/2.0, 넓이 = sqrt(s*(s-a)*(s-b)*(s-c))
+// 힌트: s = (a+b+c)/2.0, 넓이 = sqrt(s**(s-a)**(s-b)*(s-c))
 double area(double a, double b, double c) {
 
 }
