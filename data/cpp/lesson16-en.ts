@@ -92,6 +92,48 @@ Inserted as Charlie → Alice → Bob, but iteration is **alphabetical**. C++ \`
 > 💡 This has a tradeoff. If you don't need sorting and want it faster? \`unordered_map\` — we'll compare shortly.`
         },
         {
+          id: "ch1-vs-vec-pair",
+          type: "explain",
+          title: "🤔 Then why \`vector<pair>\` at all? Map exists",
+          content: `Great question. If map is fast and convenient, why did we bother learning \`vector<pair<...>>\`? **They're good at different things.**
+
+### Side by side
+
+| Situation | \`map\` | \`vector<pair>\` |
+|---|---|---|
+| **Fast lookup** by name → score | ✅ O(log n) | ❌ scans linearly |
+| Sort by **value** (score) | ❌ key sort only | ✅ sort with any rule |
+| Allow duplicate keys (same name) | ❌ last write wins | ✅ all preserved |
+| Preserve insertion order | ❌ auto-alphabetical | ✅ as-is |
+| Index access \`v[0]\`, \`v[1]\` | ❌ no | ✅ yes |
+
+### Most common case where vector<pair> wins — sort by score
+
+Want to sort student records by **score, descending**?
+
+\`\`\`cpp
+// vector<pair> ✅ — one sort call
+vector<pair<string, int>> v = {{"Alice", 85}, {"Bob", 92}, {"Carol", 78}};
+sort(v.begin(), v.end(), [](auto a, auto b) {
+    return a.second > b.second;   // score descending
+});
+// v = {{Bob,92}, {Alice,85}, {Carol,78}}
+
+// map ❌ — only sorts by key (name), can't sort by value
+map<string, int> m = {{"Alice", 85}, {"Bob", 92}, {"Carol", 78}};
+// Always alphabetical: Alice → Bob → Carol  (can't reorder by score!)
+\`\`\`
+
+To sort a map by score you'd end up copying it into a \`vector<pair>\` and sorting there. So if the goal is sorting, just start with \`vector<pair>\`.
+
+### One-line rule
+
+> **"Look up by name fast"**? → **map**
+> **"Sort by score"** or **"deal with order"**? → **vector<pair>**
+
+> 💡 Often you need both. Use map for fast lookup, then copy to vector<pair> at the end to sort — totally common.`
+        },
+        {
           id: "ch1-fb1",
           type: "fillblank" as const,
           title: "Fill in the blank",

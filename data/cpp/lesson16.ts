@@ -92,6 +92,48 @@ for (auto& [k, v] : scores) {
 > 💡 이게 trade-off 가 있어요. 정렬이 필요 없고 더 빠른 게 좋다면? \`unordered_map\` — 잠시 후에 비교해서 봐요.`
         },
         {
+          id: "ch1-vs-vec-pair",
+          type: "explain",
+          title: "🤔 그럼 vector<pair> 는 왜 굳이? map 이 있는데",
+          content: `좋은 질문이에요. map 이 빠르고 편한데 왜 \`vector<pair<...>>\` 도 따로 배운 걸까요? **둘이 잘하는 게 달라요.**
+
+### 한눈에 비교
+
+| 상황 | \`map\` | \`vector<pair>\` |
+|---|---|---|
+| 이름 → 점수 **빠른 검색** | ✅ O(log n) | ❌ 처음부터 훑음 |
+| **값** (점수) 기준 정렬 | ❌ 키 정렬만 | ✅ sort 로 자유 |
+| 중복 키 허용 (동명이인) | ❌ 마지막 값만 남음 | ✅ 다 보존 |
+| 삽입 순서 유지 | ❌ 알파벳 자동 정렬 | ✅ 그대로 |
+| \`v[0]\`, \`v[1]\` 인덱스 접근 | ❌ 안 됨 | ✅ 됨 |
+
+### 가장 흔한 vector<pair> 가 이기는 케이스 — 점수 순으로 정렬
+
+학생들 점수표를 **점수 내림차순** 으로 정렬하려면?
+
+\`\`\`cpp
+// vector<pair> ✅ — sort 한 줄
+vector<pair<string, int>> v = {{"Alice", 85}, {"Bob", 92}, {"Carol", 78}};
+sort(v.begin(), v.end(), [](auto a, auto b) {
+    return a.second > b.second;   // 점수 내림차순
+});
+// v = {{Bob,92}, {Alice,85}, {Carol,78}}
+
+// map ❌ — 키 (이름) 기준으로만 정렬됨, 값 정렬 불가능
+map<string, int> m = {{"Alice", 85}, {"Bob", 92}, {"Carol", 78}};
+// 항상 알파벳: Alice → Bob → Carol  (점수 순으로 못 바꿈!)
+\`\`\`
+
+map 으로 점수 정렬하려면 결국 \`vector<pair>\` 로 옮겨서 sort 해야 해요. 그래서 정렬이 목적이면 처음부터 \`vector<pair>\`.
+
+### 한 줄 결정 규칙
+
+> **"이름 → 점수 빨리 찾기"** 가 목적? → **map**
+> **"점수 순 정렬"** 또는 **"순서대로 다루기"** 가 목적? → **vector<pair>**
+
+> 💡 둘 다 필요한 경우도 흔해요. map 으로 빨리 검색하다가 마지막에 vector<pair> 로 옮겨서 정렬, 같은 식.`
+        },
+        {
           id: "ch1-fb1",
           type: "fillblank" as const,
           title: "빈칸을 채워주세요",
