@@ -888,88 +888,68 @@ Press the button to follow along!`,
         {
           id: "s23-ch2-iter",
           type: "explain",
-          title: "📌 Quick refresher — `v.begin()`, `v.end()`",
-          content: `Before turning binary search into C++ code, one quick checkpoint.
+          title: "📌 Quick checkpoint — one formula for the next page",
+          content: `Before turning binary search into C++ code, just one formula to lock in.
 
-We've been using \`v.begin()\` and \`v.end()\` with sort. You actually saw these in **cpp-17 (STL search functions)** already. Quick reminder:
+We've been using \`v.begin()\`, \`v.end()\` with sort — they're just **markers pointing to positions** in the vector. (Same pattern you saw in the previous lesson, *STL search functions*, with \`find\` and \`count\`.)
 
 \`\`\`
-   10    20    30    40    50   [end]
-    ↑                             ↑
- begin()                        end()
-(points to first)            (one past the last)
+   10    20    30    40    50
+    ↑                          ↑
+ begin()                      end() (one *past* the last spot)
 \`\`\`
-
-- \`v.begin()\` → an **arrow (iterator)** pointing to the first element
-- \`v.end()\` → one *past* the last position — the "stop here" marker
-- The \`[begin, end)\` pattern shows up everywhere in STL: sort, find, count_if, lower_bound …
 
 ---
 
-### 🎯 The one trick we'll need for lower_bound
+### 🎯 The formula to memorize: \`it - v.begin()\` = index
 
-The next page's \`lower_bound\` **returns an iterator**. So how do you turn it into an index? One line:
+The next page's \`lower_bound\` returns a **position** (\`it\`), not an index number. To convert to an index, **one line**:
 
 \`\`\`
    10    20    30    40    50
     ↑                ↑
  begin()             it  (points to 40)
 
-it - v.begin() = 3   → 40 is at index 3!
+it - v.begin() = 3   → index 3!
 \`\`\`
 
 \`\`\`cpp
-cout << *it;             // 40  (*it = the value the arrow points to)
-cout << it - v.begin();  // 3   (convert to index!)
+cout << *it;             // 40   ← *it is the value
+cout << it - v.begin();  // 3    ← convert to index!
 \`\`\`
 
-> 💡 \`*it\` to get the value, \`it - v.begin()\` to get the index — those two are all you need to use lower_bound.`
+> 💡 Don't try to deeply understand it — **just memorize the formula.** \`*it\` = value, \`it - v.begin()\` = index. Those two are all you need for lower_bound.`
         },
         {
           id: "s23-ch2-lb",
           type: "explain",
-          title: "🔍 lower_bound — Binary Search in One Line!",
-          content: `The binary search we just saw — C++ has a built-in function for it.
-That's \`lower_bound\` and \`upper_bound\`.
+          title: "🔍 lower_bound / upper_bound — Find positions in a sorted array",
+          content: `Instead of writing binary search by hand every time, C++ provides two functions:
 
-⚠️ **Only works on sorted arrays!** — built on binary search principles.
+\`\`\`cpp
+lower_bound(v.begin(), v.end(), x);   // where x starts
+upper_bound(v.begin(), v.end(), x);   // one past where x ends
+\`\`\`
+
+⚠️ **Sorted arrays only!** (it's binary search inside)
 
 ---
 
-**lower_bound / upper_bound concept**
+**Picture it — finding value 3**
 
 \`\`\`
 {1,  3,  3,  5,  7,  9}
  0   1   2   3   4   5
      ↑       ↑
 lower_bound  upper_bound
-  (val=3)      (val=3)
+  (val=3)     (val=3)
 "3 starts"   "after 3 ends"
 \`\`\`
 
-- **lower_bound** → first position where value **≥ x** = "where this value starts"
-- **upper_bound** → first position where value **> x** = "one past where value ends"`
-        },
-        {
-          id: "s23-ch2-lb-index",
-          type: "explain",
-          title: "📌 Why \`- v.begin()\`?",
-          content: `\`lower_bound\` returns \`it\` — not an index number, but a
-**memory address (an arrow pointing to a position).**
-Printing it directly gives something like \`0x7ff3a2b...\`
+- **lower_bound(x)** → first position where value **≥ x** = "where x starts"
+- **upper_bound(x)** → first position where value **> x** = "one past where x ends"
 
-\`it - v.begin()\` calculates "how many spots from the start."
-
-\`\`\`cpp
-vector<int> v = {1, 3, 3, 5, 7, 9};
-//               0  1  2  3  4  5
-
-auto it = lower_bound(v.begin(), v.end(), 3);
-int idx = it - v.begin();  // formula! always convert to index this way
-cout << idx;  // 1
-\`\`\`
-
-💡 Memorize \`- v.begin()\` as a formula!`
+> 💡 Don't dig deeper — the **picture + two-line description** is enough. Usage patterns on the next page.`
         },
         {
           id: "s23-ch2-lb-missing",

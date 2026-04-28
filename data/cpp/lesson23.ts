@@ -888,88 +888,68 @@ banana hi apple ok cat`,
         {
           id: "s23-ch2-iter",
           type: "explain",
-          title: "📌 잠깐 — `v.begin()`, `v.end()` 빠르게 떠올리기",
-          content: `이진 탐색을 C++ 코드로 옮기기 전에, 한 가지만 짚고 가요.
+          title: "📌 잠깐 — 다음 페이지에서 쓸 공식 하나",
+          content: `이진 탐색을 C++ 코드로 옮기기 전에, 공식 하나만 챙기고 가요.
 
-sort 에서 계속 \`v.begin()\`, \`v.end()\` 를 써왔죠? 사실 **cpp-17 (STL 탐색 함수)** 에서 이미 배운 거예요. 빠르게 리마인드:
+sort 에서 \`v.begin()\`, \`v.end()\` 를 계속 써왔죠? 그건 그냥 **벡터 안의 위치를 가리키는 표시** 예요. (전 레슨 *STL 탐색 함수* 에서 \`find\`, \`count\` 와 함께 봤던 그 패턴.)
 
 \`\`\`
-   10    20    30    40    50   [end]
-    ↑                             ↑
- begin()                        end()
-(첫 칸을 가리킴)              (마지막 *다음* 칸)
+   10    20    30    40    50
+    ↑                          ↑
+ begin()                      end() (마지막 *다음* 자리)
 \`\`\`
-
-- \`v.begin()\` → 첫 원소를 가리키는 **화살표 (iterator)**
-- \`v.end()\` → 마지막 *다음* 자리 — "여기까지" 라는 끝 신호
-- \`[begin, end)\` 패턴은 sort, find, count_if, lower_bound … STL 어디서나 동일
 
 ---
 
-### 🎯 lower_bound 에서 쓸 한 가지 트릭
+### 🎯 외울 공식: \`it - v.begin()\` = 인덱스
 
-다음 페이지의 \`lower_bound\` 는 **iterator 를 반환** 해요. 그럼 인덱스로 어떻게 바꿀까요? 정답은 한 줄:
+다음 페이지의 \`lower_bound\` 는 위치(\`it\`)를 돌려줘요 — 인덱스 숫자가 아니라. 인덱스로 바꾸는 방법은 **딱 한 줄**:
 
 \`\`\`
    10    20    30    40    50
     ↑                ↑
  begin()             it  (40 을 가리킴)
 
-it - v.begin() = 3   → 40 은 인덱스 3!
+it - v.begin() = 3   → 인덱스 3!
 \`\`\`
 
 \`\`\`cpp
-cout << *it;             // 40  (*it = 화살표가 가리키는 값)
-cout << it - v.begin();  // 3   (인덱스로 변환!)
+cout << *it;             // 40   ← *it 는 가리키는 값
+cout << it - v.begin();  // 3    ← 인덱스로 변환!
 \`\`\`
 
-> 💡 \`*it\` 로 값 꺼내기, \`it - v.begin()\` 으로 인덱스 변환 — 이 두 가지만 챙기면 lower_bound 바로 쓸 수 있어요.`
+> 💡 깊이 이해하려 하지 말고 **공식처럼 외우세요.** \`*it\` = 값, \`it - v.begin()\` = 인덱스. 이 두 줄이면 lower_bound 끝.`
         },
         {
           id: "s23-ch2-lb",
           type: "explain",
-          title: "🔍 lower_bound — 이진 탐색을 한 줄로!",
-          content: `방금 본 이진 탐색, C++이 미리 만들어둔 함수가 있어요.
-바로 \`lower_bound\`와 \`upper_bound\`예요.
+          title: "🔍 lower_bound / upper_bound — 정렬된 배열에서 위치 찾기",
+          content: `방금 본 이진 탐색을 매번 직접 짜진 않아요. C++ 이 두 함수를 미리 만들어뒀어요:
 
-⚠️ **정렬된 배열에서만 써요!** — 이진 탐색 원리로 만들어졌기 때문이에요.
+\`\`\`cpp
+lower_bound(v.begin(), v.end(), x);   // x 가 시작되는 위치
+upper_bound(v.begin(), v.end(), x);   // x 가 끝난 다음 위치
+\`\`\`
+
+⚠️ **반드시 정렬된 배열에서만!** (이진 탐색이라서)
 
 ---
 
-**lower_bound / upper_bound 개념**
+**그림으로 보기 — 값 3 찾기**
 
 \`\`\`
 {1,  3,  3,  5,  7,  9}
  0   1   2   3   4   5
      ↑       ↑
 lower_bound  upper_bound
-  (값=3)       (값=3)
-"3 시작"      "3 끝 다음"
+  (값=3)      (값=3)
+"3 시작"    "3 끝 다음"
 \`\`\`
 
-- **lower_bound** → 값 **이상(≥)** 의 첫 위치 = "이 값이 시작되는 곳"
-- **upper_bound** → 값 **초과(>)** 의 첫 위치 = "이 값이 끝난 다음"`
-        },
-        {
-          id: "s23-ch2-lb-index",
-          type: "explain",
-          title: "📌 왜 \`- v.begin()\` 을 하는 거야?",
-          content: `\`lower_bound\`가 반환하는 \`it\`는 인덱스 번호가 아니라
-**메모리 주소 (위치를 가리키는 화살표)** 예요.
-그냥 출력하면 \`0x7ff3a2b...\` 같은 이상한 숫자가 나와요.
+- **lower_bound(x)** → \`x\` **이상(≥)** 의 첫 위치 = "x 가 시작되는 곳"
+- **upper_bound(x)** → \`x\` **초과(>)** 의 첫 위치 = "x 가 끝난 다음"
 
-\`it - v.begin()\`은 "시작점에서 몇 칸 떨어져 있나"를 계산해요.
-
-\`\`\`cpp
-vector<int> v = {1, 3, 3, 5, 7, 9};
-//               0  1  2  3  4  5
-
-auto it = lower_bound(v.begin(), v.end(), 3);
-int idx = it - v.begin();  // 공식! 항상 이렇게 인덱스로 변환
-cout << idx;  // 1
-\`\`\`
-
-💡 \`- v.begin()\`은 공식으로 외우세요!`
+> 💡 깊이 파지 말고 **그림 + 두 줄 설명** 만 기억해도 충분해요. 사용 패턴은 다음 페이지에서.`
         },
         {
           id: "s23-ch2-lb-missing",
