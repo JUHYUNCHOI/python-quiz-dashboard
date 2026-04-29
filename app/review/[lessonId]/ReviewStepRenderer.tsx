@@ -230,6 +230,15 @@ function normalizeCpp(s: string) {
   return normalize(s).replace(/std::/g, "")
 }
 
+// 텍스트 안의 **bold** 만 처리 (마크다운 라이브러리 없이 가볍게)
+function renderBold(text: string): React.ReactNode {
+  return (text || "").split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
+    part.startsWith("**") && part.endsWith("**")
+      ? <strong key={i} className="font-semibold text-gray-900">{part.slice(2, -2)}</strong>
+      : <span key={i}>{part}</span>
+  )
+}
+
 function isAnswerCorrect(
   input: string,
   content: PracticeContent | InterleavingContent,
@@ -290,6 +299,10 @@ function McqStep({
   const question = (E && content.en?.question) ? content.en.question : content.question
   const options = (E && content.en?.options?.length) ? content.en.options : content.options
   const explanation = (E && content.en?.explanation) ? content.en.explanation : content.explanation
+  // errorQuiz 의 code 도 en 우선
+  const code = "code" in content
+    ? ((E && (content.en as { code?: string } | undefined)?.code) ? (content.en as { code: string }).code : content.code)
+    : undefined
 
   const select = (i: number) => {
     if (answered) return
@@ -304,12 +317,12 @@ function McqStep({
 
   return (
     <div className="flex flex-col gap-3">
-      <p className="font-semibold text-gray-800 text-base leading-relaxed">{question}</p>
-      {"code" in content && content.code && (
+      <p className="font-semibold text-gray-800 text-base leading-relaxed">{renderBold(question)}</p>
+      {code && (
         <div className="rounded-xl bg-[#1a1b2e] px-4 py-3 font-mono text-sm overflow-x-auto leading-6 whitespace-pre-wrap">
           {language === "cpp"
-            ? highlightCpp(content.code, true)
-            : highlightPython(content.code, true)}
+            ? highlightCpp(code, true)
+            : highlightPython(code, true)}
         </div>
       )}
       <div className="flex flex-col gap-2">
@@ -359,7 +372,7 @@ function McqStep({
           <p className={cn("font-bold mb-1", isRight ? "text-emerald-700" : "text-red-600")}>
             {isRight ? t("✅ 정답!", "✅ Correct!") : t("❌ 오답!", "❌ Wrong!")}
           </p>
-          <p className="text-gray-600 leading-relaxed">{explanation}</p>
+          <p className="text-gray-600 leading-relaxed">{renderBold(explanation)}</p>
         </div>
       )}
     </div>
@@ -1004,7 +1017,7 @@ function PredictStep({
 
       {/* Prediction question */}
       <p className="text-base font-bold text-gray-900 mt-1">
-        {predictQuestion ?? t("결과가 뭘까?", "What will the output be?")}
+        {predictQuestion ? renderBold(predictQuestion) : t("결과가 뭘까?", "What will the output be?")}
       </p>
 
       <div className="flex flex-col gap-2.5">
@@ -1056,7 +1069,7 @@ function PredictStep({
             {isRight ? t("✅ 맞았어요!", "✅ Correct!") : t("❌ 틀렸어요!", "❌ Wrong!")}
           </p>
           {predictFeedback && (
-            <p className="text-gray-600">{predictFeedback}</p>
+            <p className="text-gray-600">{renderBold(predictFeedback)}</p>
           )}
           {(() => {
             const displayResult = (isEn && content.en?.result) ? content.en.result : content.result

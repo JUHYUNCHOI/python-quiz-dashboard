@@ -147,8 +147,8 @@ export const lessonCpp16: LessonData = {
       {
         type: "errorQuiz",
         content: {
-          question: "이 코드의 문제는 뭘까요?",
-          code: 'map<string, int> m;\ncout << m["hello"] << endl;\n// intent: error if "hello" key is missing',
+          question: "프로그래머는 \"hello 키가 없으면 에러를 내고 싶었어요\". 그런데 위 코드는 의도대로 동작할까요?",
+          code: 'map<string, int> m;\ncout << m["hello"] << endl;  // 없는 키니까 에러가 날까?',
           options: [
             "에러가 나지 않고 0이 출력된다 (키가 자동 생성됨!)",
             "컴파일 에러가 난다",
@@ -157,7 +157,8 @@ export const lessonCpp16: LessonData = {
           answer: 0,
           explanation: "map에서 없는 키를 []로 접근하면 기본값(0)이 자동으로 생성돼요! 의도치 않은 키가 추가될 수 있어요.",
           en: {
-            question: "What is the problem with this code?",
+            question: "The programmer wanted \"hello\" to cause an error if it's missing. Does the code above behave as intended?",
+            code: 'map<string, int> m;\ncout << m["hello"] << endl;  // does a missing key error out?',
             options: [
               "No error — 0 is printed (the key is automatically created!)",
               "Compile error",
@@ -216,7 +217,7 @@ export const lessonCpp16: LessonData = {
       {
         type: "quiz",
         content: {
-          question: "map 에서 \"이 키가 있는지 *있다/없다* 만\" 알면 돼요. 가장 깔끔한 방법은?",
+          question: "map 에서 \"이 키가 있는지 **있다/없다** 만\" 알면 돼요. 가장 깔끔한 방법은?",
           options: [
             "m.count(key) > 0",
             "m.find(key) != m.end()",
