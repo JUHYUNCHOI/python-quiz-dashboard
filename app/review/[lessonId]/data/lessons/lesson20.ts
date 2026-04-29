@@ -21,7 +21,13 @@ export const lesson20: LessonData = {
         lines: ["딕셔너리는 {키: 값} 형태로 만들어요!"],
         code: "student = {'이름': '민수', '나이': 15, '학년': 1}\nprint(student)",
         result: "{'이름': '민수', '나이': 15, '학년': 1}",
-        note: "사물함처럼 이름표(키)로 값을 찾을 수 있어요!"
+        note: "사물함처럼 이름표(키)로 값을 찾을 수 있어요!",
+        en: {
+          lines: ["Dictionaries use the {key: value} format!"],
+          code: "student = {'name': 'Tom', 'age': 15, 'grade': 1}\nprint(student)",
+          result: "{'name': 'Tom', 'age': 15, 'grade': 1}",
+          note: "Like a locker — find a value using its name tag (key)!"
+        }
       }
     },
     {
@@ -36,11 +42,13 @@ export const lesson20: LessonData = {
           feedback: "키를 넣으면 해당하는 값이 나와요!"
         },
         en: {
+          code: "student = {'name': 'Tom', 'age': 15}\n\n# Method 1: brackets\nprint(student['name'])\n\n# Method 2: get()\nprint(student.get('age'))",
           predict: {
             question: "What's the output?",
-            options: ["민수\\n15", "이름\\n나이", "{'이름': '민수'}\\n{'나이': 15}"],
+            options: ["Tom\n15", "name\nage", "{'name': 'Tom'}\n{'age': 15}"],
             feedback: "Providing the key retrieves the corresponding value!"
-          }
+          },
+          result: "Tom\n15"
         },
         result: "민수\n15"
       }
@@ -51,7 +59,13 @@ export const lesson20: LessonData = {
         lines: ["get()은 키가 없어도 에러가 안 나요!"],
         code: "student = {'이름': '민수'}\n\n# 대괄호: 없는 키 -> 에러!\n# print(student['주소'])  # KeyError!\n\n# get(): 없는 키 -> None\nprint(student.get('주소'))\nprint(student.get('주소', '정보 없음'))",
         result: "None\n정보 없음",
-        note: "get()의 두 번째 인자 = 기본값! 안전하게 쓸 수 있어요."
+        note: "get()의 두 번째 인자 = 기본값! 안전하게 쓸 수 있어요.",
+        en: {
+          lines: ["get() doesn't error even when the key is missing!"],
+          code: "student = {'name': 'Tom'}\n\n# Brackets: missing key -> error!\n# print(student['address'])  # KeyError!\n\n# get(): missing key -> None\nprint(student.get('address'))\nprint(student.get('address', 'Not found'))",
+          result: "None\nNot found",
+          note: "The 2nd argument to get() = default value! Safer to use."
+        }
       }
     },
     {
@@ -81,7 +95,9 @@ export const lesson20: LessonData = {
         en: {
           task: "Create a fruit price dictionary and print the price of 'apple'",
           guide: "Use {'key': value} format!",
-          hint: "prices = {'apple': 1000, 'banana': 500}"
+          hint: "prices = {'apple': 1000, 'banana': 500}",
+          template: "prices = {'apple': 1000, 'banana': 500}\nprint(prices[___])",
+          answer: "'apple'",
         }
       }
     },
@@ -147,7 +163,13 @@ export const lesson20: LessonData = {
         lines: ["새로운 키-값 추가하기!"],
         code: "student = {'이름': '민수'}\nstudent['나이'] = 15\nstudent['학년'] = 1\nprint(student)",
         result: "{'이름': '민수', '나이': 15, '학년': 1}",
-        note: "없는 키에 값을 넣으면 자동으로 추가!"
+        note: "없는 키에 값을 넣으면 자동으로 추가!",
+        en: {
+          lines: ["Add a new key-value pair!"],
+          code: "student = {'name': 'Tom'}\nstudent['age'] = 15\nstudent['grade'] = 1\nprint(student)",
+          result: "{'name': 'Tom', 'age': 15, 'grade': 1}",
+          note: "Assigning a value to a missing key adds it automatically!"
+        }
       }
     },
     {
@@ -162,11 +184,13 @@ export const lesson20: LessonData = {
           feedback: "있는 키에 값을 넣으면 덮어쓰기!"
         },
         en: {
+          code: "student = {'name': 'Tom', 'age': 15}\nstudent['age'] = 16\nprint(student)",
           predict: {
             question: "What will the value of age become?",
             options: ["15", "16", "[15, 16]", "Error"],
             feedback: "Assigning to an existing key overwrites the old value!"
-          }
+          },
+          result: "{'name': 'Tom', 'age': 16}"
         },
         result: "{'이름': '민수', '나이': 16}"
       }
@@ -177,7 +201,13 @@ export const lesson20: LessonData = {
         lines: ["del과 pop()으로 삭제!"],
         code: "student = {'이름': '민수', '나이': 15, '학년': 1}\n\n# del: 그냥 삭제\ndel student['학년']\nprint(student)\n\n# pop(): 삭제하면서 값 반환\nage = student.pop('나이')\nprint(f'삭제된 나이: {age}')\nprint(student)",
         result: "{'이름': '민수', '나이': 15}\n삭제된 나이: 15\n{'이름': '민수'}",
-        note: "del은 그냥 삭제, pop()은 삭제하면서 값을 돌려줘요!"
+        note: "del은 그냥 삭제, pop()은 삭제하면서 값을 돌려줘요!",
+        en: {
+          lines: ["Delete with del and pop()!"],
+          code: "student = {'name': 'Tom', 'age': 15, 'grade': 1}\n\n# del: just remove\ndel student['grade']\nprint(student)\n\n# pop(): remove and return the value\nage = student.pop('age')\nprint(f'Removed age: {age}')\nprint(student)",
+          result: "{'name': 'Tom', 'age': 15}\nRemoved age: 15\n{'name': 'Tom'}",
+          note: "del just removes; pop() removes and returns the value!"
+        }
       }
     },
     {
@@ -208,7 +238,11 @@ export const lesson20: LessonData = {
         en: {
           task: "Add 'school': 'middle school' to the dictionary and print",
           guide: "Use square brackets to specify the key and = to assign the value to add a new item!",
-          hint: "Put the key to add and the value in each blank!"
+          hint: "Put the key to add and the value in each blank!",
+          template: "info = {'name': 'Emma'}\ninfo[___] = ___\nprint(info)",
+          blanksAnswer: ["'school'", "'middle school'"],
+          answer: "info = {'name': 'Emma'}\ninfo['school'] = 'middle school'\nprint(info)",
+          expect: "{'name': 'Emma', 'school': 'middle school'}",
         }
       }
     },
@@ -226,7 +260,10 @@ export const lesson20: LessonData = {
         en: {
           task: "Remove the 'age' key with pop() and print the removed value",
           guide: "pop() removes and returns the value!",
-          hint: "removed = info.pop('age')"
+          hint: "removed = info.pop('age')",
+          template: "info = {'name': 'Tom', 'age': 15}\nremoved = info.___(___)\nprint(removed)",
+          blanksAnswer: ["pop", "'age'"],
+          answer: "info = {'name': 'Tom', 'age': 15}\nremoved = info.pop('age')\nprint(removed)",
         }
       }
     },
@@ -292,7 +329,13 @@ export const lesson20: LessonData = {
         lines: ["keys()로 키만 순회!"],
         code: "scores = {'국어': 90, '영어': 85, '수학': 95}\nfor subject in scores.keys():\n    print(subject)",
         result: "국어\n영어\n수학",
-        note: "keys()를 생략해도 기본으로 키를 순회해요!"
+        note: "keys()를 생략해도 기본으로 키를 순회해요!",
+        en: {
+          lines: ["Iterate over keys with keys()!"],
+          code: "scores = {'korean': 90, 'english': 85, 'math': 95}\nfor subject in scores.keys():\n    print(subject)",
+          result: "korean\nenglish\nmath",
+          note: "Even without keys(), the for loop iterates over keys by default!"
+        }
       }
     },
     {
@@ -307,11 +350,13 @@ export const lesson20: LessonData = {
           feedback: "values()는 값만 꺼내요!"
         },
         en: {
+          code: "scores = {'korean': 90, 'english': 85, 'math': 95}\nfor score in scores.values():\n    print(score)",
           predict: {
             question: "What's the output?",
-            options: ["국어\\n영어\\n수학", "90\\n85\\n95", "국어: 90\\n영어: 85\\n수학: 95"],
+            options: ["korean\nenglish\nmath", "90\n85\n95", "korean: 90\nenglish: 85\nmath: 95"],
             feedback: "values() retrieves only the values!"
-          }
+          },
+          result: "90\n85\n95"
         },
         result: "90\n85\n95"
       }
@@ -322,7 +367,13 @@ export const lesson20: LessonData = {
         lines: ["items()로 키와 값을 한 번에!"],
         code: "scores = {'국어': 90, '영어': 85, '수학': 95}\nfor subject, score in scores.items():\n    print(f'{subject}: {score}점')",
         result: "국어: 90점\n영어: 85점\n수학: 95점",
-        note: "items()는 (키, 값) 튜플을 돌려줘요! 언패킹 활용!"
+        note: "items()는 (키, 값) 튜플을 돌려줘요! 언패킹 활용!",
+        en: {
+          lines: ["Get keys and values together with items()!"],
+          code: "scores = {'korean': 90, 'english': 85, 'math': 95}\nfor subject, score in scores.items():\n    print(f'{subject}: {score} pts')",
+          result: "korean: 90 pts\nenglish: 85 pts\nmath: 95 pts",
+          note: "items() returns (key, value) tuples — handy with unpacking!"
+        }
       }
     },
     {
@@ -336,7 +387,10 @@ export const lesson20: LessonData = {
         expect: "민수: 100점",
         en: {
           message: "Tuple unpacking review!",
-          task: "Unpack tuple ('Minsu', 100) into name and score, then print"
+          task: "Unpack tuple ('Tom', 100) into name and score, then print",
+          template: "___, ___ = ('Tom', 100)\nprint(f'{name}: {score} pts')",
+          answer: "name, score = ('Tom', 100)\nprint(f'{name}: {score} pts')",
+          expect: "Tom: 100 pts",
         }
       }
     },
@@ -353,7 +407,8 @@ export const lesson20: LessonData = {
         en: {
           task: "Iterate over all values in the dictionary and print them",
           guide: "Put values() in the for loop!",
-          hint: "for v in ages.values(): print(v)"
+          hint: "for v in ages.values(): print(v)",
+          template: "ages = {'Tom': 15, 'Emma': 14, 'Sam': 16}\nfor age in ages.___():\n    print(age)",
         }
       }
     },
@@ -369,9 +424,12 @@ export const lesson20: LessonData = {
         answer: "ages = {'민수': 15, '영희': 14}\nfor name, age in ages.items():\n    print(f'{name}: {age}살')",
         expect: "민수: 15살\n영희: 14살",
         en: {
-          task: "Print in 'name: age years old' format using items()",
+          task: "Print in 'name: age yo' format using items()",
           guide: "items() returns key-value pairs so you can receive them in two variables in a for loop!",
-          hint: "Use f-string to print key and value in 'name: age years old' format!"
+          hint: "Use f-string to print key and value in 'name: age yo' format!",
+          template: "ages = {'Tom': 15, 'Emma': 14}\nfor ___, ___ in ages.items():\n    print(f'{name}: {age} yo')",
+          answer: "ages = {'Tom': 15, 'Emma': 14}\nfor name, age in ages.items():\n    print(f'{name}: {age} yo')",
+          expect: "Tom: 15 yo\nEmma: 14 yo",
         }
       }
     },
@@ -437,7 +495,13 @@ export const lesson20: LessonData = {
         lines: ["학생 성적을 딕셔너리로 관리!"],
         code: "scores = {'국어': 90, '영어': 85, '수학': 95}\n\n# 전체 합계\ntotal = sum(scores.values())\nprint(f'합계: {total}')\n\n# 평균\navg = total / len(scores)\nprint(f'평균: {avg:.1f}')",
         result: "합계: 270\n평균: 90.0",
-        note: "sum()과 len()을 딕셔너리에도 쓸 수 있어요!"
+        note: "sum()과 len()을 딕셔너리에도 쓸 수 있어요!",
+        en: {
+          lines: ["Manage student scores with a dictionary!"],
+          code: "scores = {'korean': 90, 'english': 85, 'math': 95}\n\n# Total sum\ntotal = sum(scores.values())\nprint(f'Total: {total}')\n\n# Average\navg = total / len(scores)\nprint(f'Average: {avg:.1f}')",
+          result: "Total: 270\nAverage: 90.0",
+          note: "sum() and len() work on dictionaries too!"
+        }
       }
     },
     {
@@ -452,11 +516,13 @@ export const lesson20: LessonData = {
           feedback: "'국어'는 있으니 True, '과학'은 없으니 False!"
         },
         en: {
+          code: "scores = {'korean': 90, 'english': 85}\n\nprint('korean' in scores)\nprint('science' in scores)",
           predict: {
             question: "What's the output?",
-            options: ["True\\nTrue", "True\\nFalse", "90\\nFalse"],
-            feedback: "'국어' exists so True, '과학' doesn't exist so False!"
-          }
+            options: ["True\nTrue", "True\nFalse", "90\nFalse"],
+            feedback: "'korean' exists so True, 'science' doesn't exist so False!"
+          },
+          result: "True\nFalse"
         },
         result: "True\nFalse"
       }
@@ -475,7 +541,10 @@ export const lesson20: LessonData = {
         en: {
           task: "Sum the values() of the score dictionary and print",
           guide: "Use sum() to get the total!",
-          hint: "sum(scores.values())"
+          hint: "sum(scores.values())",
+          template: "scores = {'korean': 80, 'english': 90, 'math': 100}\ntotal = ___(scores.___())\nprint(f'Total: {total}')",
+          answer: "scores = {'korean': 80, 'english': 90, 'math': 100}\ntotal = sum(scores.values())\nprint(f'Total: {total}')",
+          expect: "Total: 270",
         }
       }
     },
@@ -507,7 +576,10 @@ export const lesson20: LessonData = {
         en: {
           task: "Check if 'science' key exists; if not, add it with 90 points and print",
           guide: "Use the in operator to check if a key exists or not in a dictionary!",
-          hint: "The two blanks together form the 'does not exist' condition!"
+          hint: "The two blanks together form the 'does not exist' condition!",
+          template: "scores = {'korean': 80, 'english': 90}\nif 'science' ___ ___ scores:\n    scores['science'] = 90\nprint(scores)",
+          answer: "scores = {'korean': 80, 'english': 90}\nif 'science' not in scores:\n    scores['science'] = 90\nprint(scores)",
+          expect: "{'korean': 80, 'english': 90, 'science': 90}",
         }
       }
     },
@@ -581,7 +653,11 @@ export const lesson20: LessonData = {
         expect: "지민\n2",
         en: {
           task: "Create a student info dictionary and print the name and grade",
-          guide: "Put the key name as a string in square brackets to access the corresponding value!"
+          guide: "Put the key name as a string in square brackets to access the corresponding value!",
+          template: "student = {'name': 'Jamie', 'grade': 2, 'score': 90}\nprint(student[___])\nprint(student[___])",
+          blanksAnswer: ["'name'", "'grade'"],
+          answer: "student = {'name': 'Jamie', 'grade': 2, 'score': 90}\nprint(student['name'])\nprint(student['grade'])",
+          expect: "Jamie\n2",
         }
       }
     },
@@ -599,7 +675,11 @@ export const lesson20: LessonData = {
         expect: "없음",
         en: {
           task: "Add 'school', update 'score' to 95, and safely access missing key 'email' with get()",
-          guide: "Assigning to a key adds or updates it; get() returns a default value when the key is missing!"
+          guide: "Assigning to a key adds or updates it; get() returns a default value when the key is missing!",
+          template: "info = {'name': 'Tom', 'score': 80}\ninfo[___] = 'Hangang Middle'\ninfo['score'] = ___\nprint(info.get(___, 'none'))",
+          blanksAnswer: ["'school'", "95", "'email'"],
+          answer: "info = {'name': 'Tom', 'score': 80}\ninfo['school'] = 'Hangang Middle'\ninfo['score'] = 95\nprint(info.get('email', 'none'))",
+          expect: "none",
         }
       }
     },
@@ -616,8 +696,11 @@ export const lesson20: LessonData = {
         answer: "scores = {'국어': 90, '영어': 85, '수학': 95}\nfor subject, score in scores.items():\n    print(f'{subject}: {score}점')",
         expect: "국어: 90점\n영어: 85점\n수학: 95점",
         en: {
-          task: "Iterate with items() and print in 'subject: score점' format",
-          guide: "items() returns key-value pairs that you can receive in two variables in a for loop!"
+          task: "Iterate with items() and print in 'subject: score pts' format",
+          guide: "items() returns key-value pairs that you can receive in two variables in a for loop!",
+          template: "scores = {'korean': 90, 'english': 85, 'math': 95}\nfor ___, ___ in scores.___():\n    print(f'{subject}: {score} pts')",
+          answer: "scores = {'korean': 90, 'english': 85, 'math': 95}\nfor subject, score in scores.items():\n    print(f'{subject}: {score} pts')",
+          expect: "korean: 90 pts\nenglish: 85 pts\nmath: 95 pts",
         }
       }
     },
@@ -661,7 +744,12 @@ export const lesson20: LessonData = {
         en: {
           task: "Write from scratch! Print subjects with score >= 80, then print the overall average",
           guide: "Iterate key-value pairs with items(), check the condition, and calculate the average with sum()/len()!",
-          hint: "Iterate the dictionary with items() and print subjects above the threshold, then calculate the average at the end!"
+          hint: "Iterate the dictionary with items() and print subjects above the threshold, then calculate the average at the end!",
+          answer: "scores = {'korean': 90, 'english': 75, 'math': 85, 'science': 70}\nfor subject, score in scores.items():\n    if score >= 80:\n        print(subject)\navg = sum(scores.values()) / len(scores)\nprint(f'Average: {avg}')",
+          alternateAnswers: [
+            "scores={'korean':90,'english':75,'math':85,'science':70}\nfor s,v in scores.items():\n    if v>=80:print(s)\nprint(f'Average: {sum(scores.values())/len(scores)}')"
+          ],
+          expect: "korean\nmath\nAverage: 80.0",
         }
       }
     },

@@ -63,10 +63,12 @@ export interface PracticeContent {
     contextAfter?: string;
     sampleInput?: string;
     starterCode?: string;
+    stdin?: string;
     template?: string;
     answer?: string;
     alternateAnswers?: string[];
     blanksAnswer?: string[];
+    expect?: string;
   };
 }
 
@@ -121,10 +123,12 @@ export interface InterleavingContent {
     context?: string;
     contextHeader?: string;
     contextAfter?: string;
+    stdin?: string;
     template?: string;
     answer?: string;
     alternateAnswers?: string[];
     blanksAnswer?: string[];
+    expect?: string;
   };
 }
 

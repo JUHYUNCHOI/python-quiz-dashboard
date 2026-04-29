@@ -474,7 +474,9 @@ function PracticeStep({
 
     // ── 출력 기반 채점: template=null + expect 있을 때 ──────────────
     if (isFullCode && content.expect) {
-      const expectedOut = String(content.expect).trim()
+      // EN 모드면 en.expect 우선 사용 (한글 출력을 영문으로 번역해 둔 경우)
+      const enExpect = (content.en as { expect?: string } | undefined)?.expect
+      const expectedOut = String((isEn && enExpect) ? enExpect : content.expect).trim()
 
       // Python: 자체 runner로 실행 후 출력 비교
       // (runner가 제한적이므로 텍스트 비교를 안전망으로 사용)
@@ -527,7 +529,9 @@ function PracticeStep({
       if (language === "cpp") {
         setIsRunning(true)
         try {
-          const stdinVal = (content as { stdin?: string }).stdin
+          // EN 모드면 en.stdin 우선 사용 (영문 입력 데이터로 바꿔 둔 경우)
+          const enStdin = (content.en as { stdin?: string } | undefined)?.stdin
+          const stdinVal = (isEn && enStdin) ? enStdin : (content as { stdin?: string }).stdin
 
           // 학생이 #include / int main() 안 써도 자동으로 감싸서 컴파일
           const codeForPiston = isFullCode ? wrapCppCode(combined) : combined
@@ -986,14 +990,17 @@ function PredictStep({
         </div>
       )}
 
-      {/* Code */}
-      {content.code && (
-        <div className="rounded-xl bg-[#1a1b2e] px-4 py-3 font-mono text-sm overflow-x-auto leading-6 whitespace-pre-wrap">
-          {language === "cpp"
-            ? highlightCpp(content.code, true)
-            : highlightPython(content.code, true)}
-        </div>
-      )}
+      {/* Code — EN 번역본이 있으면 우선 사용 */}
+      {(() => {
+        const displayCode = (isEn && content.en?.code) ? content.en.code : content.code
+        return displayCode && (
+          <div className="rounded-xl bg-[#1a1b2e] px-4 py-3 font-mono text-sm overflow-x-auto leading-6 whitespace-pre-wrap">
+            {language === "cpp"
+              ? highlightCpp(displayCode, true)
+              : highlightPython(displayCode, true)}
+          </div>
+        )
+      })()}
 
       {/* Prediction question */}
       <p className="text-base font-bold text-gray-900 mt-1">
@@ -1051,11 +1058,14 @@ function PredictStep({
           {predictFeedback && (
             <p className="text-gray-600">{predictFeedback}</p>
           )}
-          {content.result && (
-            <p className="mt-1 text-xs text-gray-500">
-              {t("실제 결과:", "Actual output:")} <code className="font-mono bg-white px-1 rounded">{content.result}</code>
-            </p>
-          )}
+          {(() => {
+            const displayResult = (isEn && content.en?.result) ? content.en.result : content.result
+            return displayResult && (
+              <p className="mt-1 text-xs text-gray-500">
+                {t("실제 결과:", "Actual output:")} <code className="font-mono bg-white px-1 rounded">{displayResult}</code>
+              </p>
+            )
+          })()}
         </div>
       )}
     </div>
