@@ -197,7 +197,9 @@ export const lessonCpp18: LessonData = {
           expect: "if (s.empty()) {\n    cout << \"비어있다!\" << endl;\n}",
           en: {
             task: "Check whether a stack is empty!",
-            guide: "empty() returns true if the stack is empty!"
+            guide: "empty() returns true if the stack is empty!",
+            template: "if (s.___()) {\n    cout << \"empty!\" << endl;\n}",
+            expect: "if (s.empty()) {\n    cout << \"empty!\" << endl;\n}",
           }
         }
       },
@@ -455,7 +457,9 @@ export const lessonCpp18: LessonData = {
           expect: "dq.push_front(값);",
           en: {
             message: "Quick check! Do you remember the function that inserts at the front of a deque?",
-            task: "Write the function that inserts a value at the front of a deque!"
+            task: "Write the function that inserts a value at the front of a deque!",
+            template: "dq.___(value);",
+            expect: "dq.push_front(value);",
           }
         }
       },

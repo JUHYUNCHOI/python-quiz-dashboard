@@ -434,7 +434,9 @@ export const lessonCpp17: LessonData = {
           expect: "set<int> s = {1, 3, 5, 7};\nif (s.count(5)) {\n    cout << \"있어요!\" << endl;\n}",
           en: {
             message: "Quick! Remember how to check if a value exists in a set?",
-            task: "Complete the code to check if value 5 exists in a set using count!"
+            task: "Complete the code to check if value 5 exists in a set using count!",
+            template: "set<int> s = {1, 3, 5, 7};\nif (s.___(5)) {\n    cout << \"found!\" << endl;\n}",
+            expect: "set<int> s = {1, 3, 5, 7};\nif (s.count(5)) {\n    cout << \"found!\" << endl;\n}",
           }
         }
       },

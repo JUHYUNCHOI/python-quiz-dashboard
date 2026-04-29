@@ -436,7 +436,9 @@ export const lessonCpp16: LessonData = {
           expect: "if (s.count(5)) {\n    cout << \"있다!\" << endl;\n}",
           en: {
             task: "Check if the value 5 exists in the set!",
-            guide: "count(value) returns 1 if found, 0 if not!"
+            guide: "count(value) returns 1 if found, 0 if not!",
+            template: "if (s.___(5)) {\n    cout << \"found!\" << endl;\n}",
+            expect: "if (s.count(5)) {\n    cout << \"found!\" << endl;\n}",
           }
         }
       },
