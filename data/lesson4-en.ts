@@ -75,6 +75,87 @@ print(2 ** 3)   # Exponent → 8
           options: ["6", "8", "16", "24"],
           answer: 2,
           explanation: "2 ** 4 = 2 to the power of 4 = 2×2×2×2 = 16"
+        },
+        {
+          id: "modulo-uses",
+          type: "explain",
+          title: "🎯 The real charm of % — odd/even check",
+          content: `\`%\` (modulo) shines beyond simple division — it's the classic **odd/even check** tool.
+
+\`\`\`python
+n = 7
+print(n % 2)    # 1 — 1 if odd
+print(8 % 2)    # 0 — 0 if even
+\`\`\`
+
+### Many uses
+
+\`\`\`python
+# Odd/even
+n = 13
+if n % 2 == 0:
+    print("even")
+else:
+    print("odd")
+# → odd
+
+# Multiple of 3?
+if n % 3 == 0:
+    print("multiple of 3")
+
+# Clock (24-hour wrap → 0-23)
+hour = 25 % 24    # 1 — next day, 1 AM
+
+# Last digit
+n = 1234
+last_digit = n % 10   # 4
+\`\`\`
+
+> 🎯 One-liner: **\`% 2\` for parity, \`% N\` for multiples of N or wrapping (clocks, indices).**`
+        },
+        {
+          id: "try-modulo",
+          type: "tryit",
+          title: "🖥️ Try It — Count evens",
+          task: "From 1 to 10, count how many numbers are even!",
+          initialCode: "count = 0\nfor n in range(1, 11):\n    if n ___ 2 == 0:\n        count += 1\n\nprint(f\"even count: {count}\")",
+          expectedOutput: "even count: 5",
+          hint: "n % 2 == 0 means even.",
+          hint2: "if n % 2 == 0:"
+        },
+        {
+          id: "operator-priority",
+          type: "explain",
+          title: "📐 Operator precedence — don't forget parentheses",
+          content: `Just like math. Multiplication / division before addition / subtraction.
+
+\`\`\`python
+print(2 + 3 * 4)      # 14 (multiplication first)
+print((2 + 3) * 4)    # 20 (parentheses first)
+print(10 - 6 / 2)     # 7.0  (division first)
+print((10 - 6) / 2)   # 2.0
+\`\`\`
+
+### Precedence (high → low)
+
+1. \`( )\` — parentheses (highest)
+2. \`**\` — exponent
+3. \`*\`, \`/\`, \`//\`, \`%\` — multiplication/division
+4. \`+\`, \`-\` — addition/subtraction
+5. \`<\`, \`>\`, \`==\` etc. — comparison
+6. \`not\`
+7. \`and\`
+8. \`or\` — lowest
+
+> 💡 **When unsure, use parentheses generously.** Clearer for both computer and humans.
+
+\`\`\`python
+# Confusing ❌
+x = a + b * c < 100
+
+# Clear ✅
+x = (a + (b * c)) < 100
+\`\`\``
         }
       ]
     },
@@ -134,6 +215,55 @@ print(10 != 5)   # Not equal → True
           ],
           answer: 1,
           explanation: "= stores a value, == compares if two values are equal!"
+        },
+        {
+          id: "chained-compare",
+          type: "explain",
+          title: "🔗 Chained comparisons — 1 < x < 10 (math style!)",
+          content: `Other languages need \`x > 0 && x < 10\` (two writes), but **Python lets you chain like math**.
+
+\`\`\`python
+x = 5
+
+# Long form
+print(0 < x and x < 10)   # True
+
+# Python way — same as math
+print(0 < x < 10)         # True
+
+# Mixed comparisons OK
+print(0 <= x < 10)        # True
+print(1 < x < 10 < 100)   # True (3 in a row)
+\`\`\`
+
+### Use case — score grading
+
+\`\`\`python
+score = 85
+
+if 90 <= score <= 100:
+    grade = "A"
+elif 80 <= score < 90:
+    grade = "B"
+elif 70 <= score < 80:
+    grade = "C"
+else:
+    grade = "F"
+
+print(grade)   # B
+\`\`\`
+
+Reads naturally and code is shorter. One of Python's nicer features.`
+        },
+        {
+          id: "try-chained",
+          type: "tryit",
+          title: "🖥️ Try It — Chained comparison",
+          task: "Check if age is in range 13~19 (teen) in one line!",
+          initialCode: "age = 16\n\n# 13 to 19 inclusive (chained!)\nis_teen = ___ <= age <= ___\n\nprint(f\"teen? {is_teen}\")",
+          expectedOutput: "teen? True",
+          hint: "13 <= age <= 19",
+          hint2: "is_teen = 13 <= age <= 19"
         }
       ]
     },
@@ -178,6 +308,57 @@ print(not True)        # False
           options: ["True", "False", "Error", "TrueFalse"],
           answer: 0,
           explanation: "or returns True if even just one is True!"
+        },
+        {
+          id: "logic-real",
+          type: "explain",
+          title: "🎯 and / or in practice — combining conditions",
+          content: `\`and\` / \`or\` shine when **combining conditions**, not just single \`True/False\`.
+
+\`\`\`python
+age = 16
+has_id = True
+
+# Both must hold
+if age >= 18 and has_id:
+    print("entry allowed")
+else:
+    print("entry denied")
+
+# At least one
+day = "Sat"
+if day == "Sat" or day == "Sun":
+    print("weekend!")
+\`\`\`
+
+### not to flip
+
+\`\`\`python
+is_open = False
+if not is_open:
+    print("closed")
+\`\`\`
+
+### Truth table
+
+| A | B | A and B | A or B |
+|---|---|---|---|
+| T | T | T | T |
+| T | F | F | T |
+| F | T | F | T |
+| F | F | F | F |
+
+> 💡 **and** = "both", **or** = "any", **not** = "opposite".`
+        },
+        {
+          id: "try-logic-real",
+          type: "tryit",
+          title: "🖥️ Try It — Two pass conditions",
+          task: "If score ≥ 60 **AND** attendance ≥ 80% print 'pass', else 'fail'!",
+          initialCode: "score = 75\nattendance = 85   # %\n\n# Both must hold\nif score >= 60 ___ attendance >= 80:\n    print(\"pass\")\nelse:\n    print(\"fail\")",
+          expectedOutput: "pass",
+          hint: "Both = and",
+          hint2: "if score >= 60 and attendance >= 80:"
         }
       ]
     },
@@ -213,7 +394,7 @@ score += 10         # Short way (same meaning!)
         {
           id: "mission1",
           type: "mission",
-          title: "🏆 Final Mission!",
+          title: "🏆 Mission 1 — Price calculator",
           task: "Complete the price calculator! (unit price 15000 won, 3 items, 10% discount)",
           initialCode: "price = 15000\ncount = 3\n# Calculate the total\ntotal = ___\n# 10% discount\ndiscount = ___\n# Final price\nfinal = ___\n\nprint(f'Unit price: {price}')\nprint(f'Quantity: {count}')\nprint(f'Subtotal: {total}')\nprint(f'Discount: {discount}')\nprint(f'Final: {final}')",
           expectedOutput: "Unit price: 15000\nQuantity: 3\nSubtotal: 45000\nDiscount: 4500.0\nFinal: 40500.0",
@@ -221,15 +402,41 @@ score += 10         # Short way (same meaning!)
           hint2: "final = total - discount"
         },
         {
+          id: "mission2",
+          type: "mission",
+          title: "🏆 Mission 2 — BMI calc + grade",
+          task: "BMI = weight(kg) / (height(m))². Use ** and chained compare for grade. (input via stdin)",
+          initialCode: "weight = float(input(\"weight(kg): \"))\nheight = float(input(\"height(m): \"))\n\n# BMI (use ** exponent)\nbmi = weight / (height ___ 2)\n\n# Chained comparison for grade\nif bmi < 18.5:\n    grade = \"underweight\"\nelif ___ <= bmi < 25:\n    grade = \"normal\"\nelif 25 <= bmi < 30:\n    grade = \"overweight\"\nelse:\n    grade = \"obese\"\n\nprint(f\"BMI: {bmi:.1f}\")\nprint(f\"grade: {grade}\")",
+          expectedOutput: "BMI: 22.0\ngrade: normal",
+          stdin: "60\n1.65",
+          hint: "height ** 2 for square. 18.5 <= bmi < 25 chained.",
+          hint2: "bmi = weight / (height ** 2)\nelif 18.5 <= bmi < 25:"
+        },
+        {
+          id: "mission3",
+          type: "mission",
+          title: "🏆 Mission 3 — Seconds → HH:MM:SS",
+          task: "Convert seconds to 'HH:MM:SS' using // and %",
+          initialCode: "total_sec = int(input())\n\n# // and %\nhours = total_sec ___ 3600\nminutes = (total_sec % 3600) ___ 60\nseconds = total_sec ___ 60\n\nprint(f\"{hours:02d}:{minutes:02d}:{seconds:02d}\")",
+          expectedOutput: "01:30:25",
+          stdin: "5425",
+          hint: "1 hour = 3600 sec. // for quotient, % for remainder.",
+          hint2: "hours = total_sec // 3600\nminutes = (total_sec % 3600) // 60\nseconds = total_sec % 60"
+        },
+        {
           id: "complete",
           type: "explain",
           title: "🎉 Complete!",
           content: `## What We Learned Today
 
-✅ **Arithmetic Operators**: +, -, *, /, //, %, **
-✅ **Comparison Operators**: >, <, >=, <=, ==, !=
-✅ **Logical Operators**: and, or, not
-✅ **Compound Assignment**: +=, -=, *=, /=
+✅ **Arithmetic**: \`+\`, \`-\`, \`*\`, \`/\`, \`//\` (quotient), \`%\` (remainder), \`**\` (exponent)
+✅ \`%\` real charm — odd/even / multiples / clock wrap / last digit
+✅ **Operator precedence** — when unsure, use parens
+✅ **Comparison**: \`>\`, \`<\`, \`>=\`, \`<=\`, \`==\`, \`!=\`
+✅ **\`=\` vs \`==\`** — store vs compare
+✅ **Chained comparisons** — \`0 < x < 10\` math style
+✅ **Logical**: \`and\` (both), \`or\` (any), \`not\` (flip)
+✅ **Compound assignment**: \`+=\`, \`-=\`, \`*=\`, \`/=\`, \`//=\`, \`%=\`, \`**=\`
 
 Next time, we'll learn **string operations** to add and multiply text! 🚀`
         }
