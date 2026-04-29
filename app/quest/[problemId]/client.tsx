@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense, lazy } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Header } from "@/components/header"
-import { ChevronLeft, ChevronRight, CheckCircle, Loader2, ExternalLink, Columns2, X } from "lucide-react"
+import { ChevronLeft, ChevronRight, CheckCircle, Loader2, ExternalLink, Columns2, X, ZoomIn, ZoomOut } from "lucide-react"
 import { ALL_PROBLEMS, PROBLEM_MAP, PROBLEM_INDEX, getOriginalProblemUrl, type ProblemMeta } from "./data"
 import { PROBLEM_LOADERS } from "./loaders"
 import { useLanguage } from "@/contexts/language-context"
@@ -126,6 +126,7 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
   // 반반 스크린: 좌=튜토리얼, 우=USACO 원본 문제 iframe
   const [splitView, setSplitView] = useState(false)
   const [iframeBlocked, setIframeBlocked] = useState(false)
+  const [iframeZoom, setIframeZoom] = useState(1) // 0.5 ~ 1.5
 
   if (!lockChecked) return null
 
@@ -263,24 +264,49 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
           const isGoogleFallback = originalUrl.startsWith("https://www.google.com/search")
           return (
             <aside className="hidden md:flex flex-1 md:w-1/2 min-w-0 border-l-2 border-black bg-white flex-col">
-              <div className="flex items-center gap-2 px-3 py-1.5 border-b border-gray-300 bg-amber-50 flex-shrink-0">
-                <ExternalLink size={12} className="text-amber-700 flex-shrink-0" />
-                <span className="text-xs font-semibold text-gray-700 truncate flex-1">
-                  {t("원본 문제", "Original problem")} · {meta.section}
-                </span>
+              <div className="flex items-center gap-1.5 px-2 py-1.5 border-b border-gray-300 bg-amber-50 flex-shrink-0">
+                {/* URL 박스 — 클릭하면 새 탭에서 열림 */}
                 <a
                   href={originalUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[11px] font-semibold text-amber-700 hover:underline flex items-center gap-1"
-                  title={t("새 탭에서 열기", "Open in new tab")}
+                  className="flex-1 min-w-0 flex items-center gap-1.5 px-2 py-1 rounded-md bg-white border border-gray-300 hover:border-amber-400 hover:bg-amber-50 transition-colors group"
+                  title={t("새 탭에서 원본 문제 열기", "Open original in new tab")}
                 >
-                  <ExternalLink size={10} />
-                  {t("새 탭", "New tab")}
+                  <ExternalLink size={11} className="text-amber-700 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                  <span className="text-[11px] text-gray-600 truncate font-mono">{originalUrl.replace(/^https?:\/\//, "")}</span>
                 </a>
+                {/* Zoom 컨트롤 (iframe 모드에서만 의미 있음) */}
+                {!isGoogleFallback && !iframeBlocked && (
+                  <div className="flex items-center gap-0.5 flex-shrink-0 border border-gray-300 rounded-md bg-white">
+                    <button
+                      onClick={() => setIframeZoom(z => Math.max(0.5, +(z - 0.1).toFixed(2)))}
+                      disabled={iframeZoom <= 0.5}
+                      className="p-1 text-gray-600 hover:bg-amber-100 disabled:opacity-30 disabled:cursor-not-allowed rounded-l-md"
+                      title={t("축소", "Zoom out")}
+                    >
+                      <ZoomOut size={13} />
+                    </button>
+                    <button
+                      onClick={() => setIframeZoom(1)}
+                      className="px-1 text-[10px] font-semibold text-gray-600 hover:bg-amber-100 min-w-[2.5rem]"
+                      title={t("100% 로 리셋", "Reset to 100%")}
+                    >
+                      {Math.round(iframeZoom * 100)}%
+                    </button>
+                    <button
+                      onClick={() => setIframeZoom(z => Math.min(1.5, +(z + 0.1).toFixed(2)))}
+                      disabled={iframeZoom >= 1.5}
+                      className="p-1 text-gray-600 hover:bg-amber-100 disabled:opacity-30 disabled:cursor-not-allowed rounded-r-md"
+                      title={t("확대", "Zoom in")}
+                    >
+                      <ZoomIn size={13} />
+                    </button>
+                  </div>
+                )}
                 <button
                   onClick={() => setSplitView(false)}
-                  className="text-gray-500 hover:text-gray-800 p-0.5"
+                  className="text-gray-500 hover:text-gray-800 p-1 hover:bg-gray-200 rounded-md flex-shrink-0"
                   title={t("닫기", "Close")}
                 >
                   <X size={14} />
@@ -310,13 +336,23 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
                   </a>
                 </div>
               ) : (
-                <iframe
-                  key={meta.id}
-                  src={originalUrl}
-                  className="flex-1 w-full bg-white"
-                  onError={() => setIframeBlocked(true)}
-                  title={t("원본 문제", "Original problem")}
-                />
+                // transform: scale 로 확대/축소. iframe 자체 width/height 를 역수로 늘려서
+                // 컨테이너에 꽉 차게 맞춤 (스케일 후에도 빈 공간 안 생기게).
+                <div className="flex-1 overflow-hidden bg-white">
+                  <iframe
+                    key={meta.id}
+                    src={originalUrl}
+                    style={{
+                      width: `${100 / iframeZoom}%`,
+                      height: `${100 / iframeZoom}%`,
+                      transform: `scale(${iframeZoom})`,
+                      transformOrigin: "top left",
+                      border: 0,
+                    }}
+                    onError={() => setIframeBlocked(true)}
+                    title={t("원본 문제", "Original problem")}
+                  />
+                </div>
               )}
             </aside>
           )
