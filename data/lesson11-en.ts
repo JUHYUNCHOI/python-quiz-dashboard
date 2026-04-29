@@ -117,6 +117,16 @@ Press **▶ Run** or **▷ Step** to trace the execution.`,
           component: "codeTracePyNestedIfFalse",
         },
         {
+          id: "try-nested",
+          type: "tryit",
+          title: "🖥️ Try It Yourself — Nested if",
+          task: "Print 'Admin Menu' only when both logged_in and is_admin are True!",
+          initialCode: "logged_in = True\nis_admin = True\n# Both conditions must be True\nif ___:\n    if ___:\n        print('Admin Menu')",
+          expectedOutput: "Admin Menu",
+          hint: "Outer if checks first, then inner if checks!",
+          hint2: "if logged_in:\n    if is_admin:"
+        },
+        {
           id: "quiz2",
           type: "quiz",
           title: "❓ Quiz!",
@@ -170,6 +180,15 @@ Press **▶ Run** or **▷ Step** to trace the execution.`,
 
 Press **▶ Run** or **▷ Step** to trace the execution.`,
           component: "codeTracePyIfElseLow",
+        },
+        {
+          id: "predict-elif",
+          type: "predict",
+          title: "💭 If score=75, which branch?",
+          content: "What does this code print?\n\n```python\nscore = 75\nif score >= 90:\n    print('A')\nelif score >= 80:\n    print('B')\nelif score >= 70:\n    print('C')\nelse:\n    print('D')\n```",
+          options: ["A", "B", "C", "D"],
+          answer: 2,
+          explanation: "75 is below 90 and below 80, but 70 or above! So the third elif is the first to be true → prints 'C'. elif checks each branch top-down and stops at the first True one."
         },
         {
           id: "try3",

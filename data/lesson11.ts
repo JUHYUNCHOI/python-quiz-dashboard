@@ -117,6 +117,16 @@ else:
           component: "codeTracePyNestedIfFalse",
         },
         {
+          id: "try-nested",
+          type: "tryit",
+          title: "🖥️ 직접 해보기 — 중첩 if",
+          task: "logged_in 과 is_admin 둘 다 참일 때만 '관리자 메뉴' 출력!",
+          initialCode: "logged_in = True\nis_admin = True\n# 두 조건이 모두 참이어야 해요\nif ___:\n    if ___:\n        print('관리자 메뉴')",
+          expectedOutput: "관리자 메뉴",
+          hint: "바깥 if 가 먼저 검사, 통과하면 안쪽 if 검사!",
+          hint2: "if logged_in:\n    if is_admin:"
+        },
+        {
           id: "quiz2",
           type: "quiz",
           title: "❓ 퀴즈!",
@@ -170,6 +180,15 @@ else:
 
 **▶ 실행하기** 또는 **▷ 한 단계** 버튼을 눌러보세요.`,
           component: "codeTracePyIfElseLow",
+        },
+        {
+          id: "predict-elif",
+          type: "predict",
+          title: "💭 score=75 면 어느 가지로?",
+          content: "이 코드를 실행하면 무엇이 출력될까요?\n\n```python\nscore = 75\nif score >= 90:\n    print('A')\nelif score >= 80:\n    print('B')\nelif score >= 70:\n    print('C')\nelse:\n    print('D')\n```",
+          options: ["A", "B", "C", "D"],
+          answer: 2,
+          explanation: "75 는 90 미만, 80 미만이지만 70 이상! 그래서 세 번째 elif 가 처음으로 참 → 'C' 출력. elif 는 위에서부터 순서대로 검사하다가 처음 참이 되는 가지에서 멈춰요."
         },
         {
           id: "try3",
