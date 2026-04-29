@@ -301,40 +301,14 @@ print("HP: " + hp)  # ❌ Error! Can't add a number directly
           choices: ["name", "'Alice'", "greeting", "age"]
         },
         {
-          id: "fstring-explain",
-          type: "explain",
-          title: "✨ Printing with f-strings",
-          content: `Commas and + work, but they get messy with lots of variables!
-**f-strings** let you write it much more cleanly.
-
-\`\`\`python
-name = 'Hero'
-hp = 100
-
-# + method 😓
-print("Name: " + name)
-print("HP:", hp, "HP")
-
-# f-string method ✨
-print(f'Name: {name}, HP: {hp} HP')
-# → Name: Hero, HP: 100 HP
-\`\`\`
-
-Use the format \`f'...{variable}...'\` and the variable is automatically inserted!
-Numbers and strings both work — **just put them in curly braces**!
-
-💡 **This is just a preview!** We'll learn more about f-strings later.
-For now, just remember \`f'...{variable}...'\` and you're good!`
-        },
-        {
           id: "try4",
           type: "tryit",
-          title: "🖥️ Try It Yourself!",
-          task: "Print using f-string with name='Alice' and age=15!",
-          initialCode: "name = 'Alice'\nage = 15\n# Use f-string to print name and age\nprint(f'Name: {___}, Age: {___}')",
-          expectedOutput: "Name: Alice, Age: 15",
-          hint: "Put the variable names inside the curly braces!",
-          hint2: "print(f'Name: {name}, Age: {age}')"
+          title: "🖥️ Try It — Print two variables together",
+          task: "Use the name and age variables to print \"Alice 15\" on one line.",
+          initialCode: "name = 'Alice'\nage = 15\n# Use a comma to print two values with a space between them\nprint(___, ___)",
+          expectedOutput: "Alice 15",
+          hint: "Separating values with a comma in print adds a space automatically.",
+          hint2: "print(name, age)"
         }
       ]
     },
@@ -396,11 +370,11 @@ score = 0      # starting score
           id: "mission1",
           type: "mission",
           title: "🏆 Final Mission!",
-          task: "Complete the self-introduction! (Name: Alice, Age: 15, Hobby: gaming)",
-          initialCode: "name = 'Alice'\nage = ___\nhobby = 'gaming'\n\nprint(f'=== About Me ===')\nprint(f'Name: {name}')\nprint(f'Age: {___}')\nprint(f'Hobby: {hobby}')\nprint(f\"Happy {age}th birthday, {name}!\")",
-          expectedOutput: "=== About Me ===\nName: Alice\nAge: 15\nHobby: gaming\nHappy 15th birthday, Alice!",
-          hint: "Store 15 in age and use the variable in the f-string!",
-          hint2: "age = 15 / {age}"
+          task: "Use 3 variables to build an introduction card! (Name: Alice, Age: 15, Hobby: gaming)",
+          initialCode: "name = 'Alice'\nage = ___\nhobby = 'gaming'\n\n# Use a comma to chain text and variables in print\nprint('=== About Me ===')\nprint('Name:', name)\nprint('Age:', ___)\nprint('Hobby:', hobby)",
+          expectedOutput: "=== About Me ===\nName: Alice\nAge: 15\nHobby: gaming",
+          hint: "Store 15 in age, then drop the age variable into the second print blank.",
+          hint2: "age = 15 / age"
         },
         {
           id: "complete",
@@ -413,9 +387,10 @@ score = 0      # starting score
 ✅ Use the variable name to retrieve its value
 ✅ **Naming rules** — snake_case, no reserved words, use meaningful names
 ✅ **Comments** — add notes to code with \`#\`
-✅ Print easily with **f-strings**
+✅ Print variables by chaining with \`,\`
 
-Next time, we'll learn about **operators** to calculate and compare! 🚀`
+Next up: **operators** for calculation and comparison! 🚀
+(A neater way to print, \`f-string\`, is coming in lesson 8.)`
         }
       ]
     }

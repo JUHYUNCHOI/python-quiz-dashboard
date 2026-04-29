@@ -301,40 +301,14 @@ print("체력: " + hp)  # ❌ 에러! 숫자(int)는 바로 못 붙여요
           choices: ["name", "'홍길동'", "greeting", "age"]
         },
         {
-          id: "fstring-explain",
-          type: "explain",
-          title: "✨ f-string으로 출력하기",
-          content: `쉼표나 + 로도 출력할 수 있지만... 변수가 많아지면 불편해요!
-**f-string**을 쓰면 훨씬 깔끔하게 쓸 수 있어요.
-
-\`\`\`python
-name = '용사'
-hp = 100
-
-# + 방식 😓
-print("이름: " + name)
-print("체력:", hp, "HP")
-
-# f-string 방식 ✨
-print(f'이름: {name}, 체력: {hp} HP')
-# → 이름: 용사, 체력: 100 HP
-\`\`\`
-
-\`f'...{변수}...'\` 형태로 쓰면 변수가 자동으로 들어가요!
-숫자도 문자열도 **그냥 중괄호 안에** 넣으면 끝!
-
-💡 **지금은 맛보기!** f-string의 더 다양한 기능은 나중에 자세히 배울 거예요.
-지금은 \`f'...{변수}...'\` 이것만 기억하면 OK!`
-        },
-        {
           id: "try4",
           type: "tryit",
-          title: "🖥️ 직접 해보기!",
-          task: "name='홍길동', age=15로 f-string 출력해보세요!",
-          initialCode: "name = '홍길동'\nage = 15\n# f-string으로 이름과 나이를 출력하세요\nprint(f'이름: {___}, 나이: {___}')",
-          expectedOutput: "이름: 홍길동, 나이: 15",
-          hint: "중괄호 안에 변수 이름을 넣으세요!",
-          hint2: "print(f'이름: {name}, 나이: {age}')"
+          title: "🖥️ 직접 — 변수 두 개 이어 출력하기",
+          task: "name 과 age 변수를 사용해서 \"홍길동 15\" 형식으로 출력하세요!",
+          initialCode: "name = '홍길동'\nage = 15\n# 쉼표(,) 로 두 변수를 이어서 출력해보세요\nprint(___, ___)",
+          expectedOutput: "홍길동 15",
+          hint: "쉼표로 구분해 print 하면 자동으로 공백 한 칸이 들어가요.",
+          hint2: "print(name, age)"
         }
       ]
     },
@@ -396,11 +370,11 @@ score = 0      # 초기 점수
           id: "mission1",
           type: "mission",
           title: "🏆 최종 미션!",
-          task: "자기소개를 완성하세요! (이름: 홍길동, 나이: 15, 취미: 게임)",
-          initialCode: "name = '홍길동'\nage = ___\nhobby = '게임'\n\nprint(f'=== 자기소개 ===')\nprint(f'이름: {name}')\nprint(f'나이: {___}살')\nprint(f'취미: {hobby}')\nprint(f'{name}의 {age}살 생일을 축하해!')",
-          expectedOutput: "=== 자기소개 ===\n이름: 홍길동\n나이: 15살\n취미: 게임\n홍길동의 15살 생일을 축하해!",
-          hint: "age에 15를 저장하고 f-string에서 변수를 사용하세요!",
-          hint2: "age = 15 / {age}"
+          task: "변수 3 개로 자기소개 카드를 완성하세요! (이름: 홍길동, 나이: 15, 취미: 게임)",
+          initialCode: "name = '홍길동'\nage = ___\nhobby = '게임'\n\n# 쉼표로 변수와 글자를 이어서 출력해 보세요\nprint('=== 자기소개 ===')\nprint('이름:', name)\nprint('나이:', ___, '살')\nprint('취미:', hobby)",
+          expectedOutput: "=== 자기소개 ===\n이름: 홍길동\n나이: 15 살\n취미: 게임",
+          hint: "age 에 15 를 넣고, print 의 두 번째 빈칸에는 age 변수를 그대로 넣어요.",
+          hint2: "age = 15 / age"
         },
         {
           id: "complete",
@@ -413,9 +387,10 @@ score = 0      # 초기 점수
 ✅ 변수 이름으로 값을 꺼내 사용
 ✅ **변수 이름 규칙** — snake_case, 예약어 금지, 의미 있게
 ✅ **주석** — \`#\`으로 코드에 메모 달기
-✅ **f-string**으로 편하게 출력
+✅ \`print\` 에 변수를 \`,\` 로 이어 출력
 
-다음 시간에는 **연산자**를 배워서 계산하고 비교해봐요! 🚀`
+다음 시간에는 **연산자**를 배워서 계산하고 비교해봐요! 🚀
+(더 깔끔하게 출력하는 \`f-string\` 은 곧 lesson 8 에서 배워요.)`
         }
       ]
     }

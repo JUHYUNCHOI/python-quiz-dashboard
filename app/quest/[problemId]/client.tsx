@@ -4,8 +4,8 @@ import { useState, useEffect, Suspense, lazy } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Header } from "@/components/header"
-import { ChevronLeft, ChevronRight, CheckCircle, Loader2 } from "lucide-react"
-import { ALL_PROBLEMS, PROBLEM_MAP, PROBLEM_INDEX, type ProblemMeta } from "./data"
+import { ChevronLeft, ChevronRight, CheckCircle, Loader2, ExternalLink } from "lucide-react"
+import { ALL_PROBLEMS, PROBLEM_MAP, PROBLEM_INDEX, getOriginalProblemUrl, type ProblemMeta } from "./data"
 import { PROBLEM_LOADERS } from "./loaders"
 import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
@@ -165,6 +165,17 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
           <span className="text-gray-300 mx-1.5">·</span>
           <span className="text-xs font-semibold text-gray-700 truncate">{meta.sub}</span>
         </div>
+        {/* 원래 문제 — 외부 링크 (URL 명시 또는 Google fallback) */}
+        <a
+          href={getOriginalProblemUrl(meta)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex-shrink-0 flex items-center gap-1 text-[11px] font-semibold text-gray-500 hover:text-amber-700 px-2 py-1 rounded-md border border-gray-200 hover:border-amber-300 hover:bg-amber-50 transition-colors"
+          title={t("원래 문제 페이지로 이동", "Open original problem page")}
+        >
+          <ExternalLink size={11} />
+          <span className="hidden sm:inline">{t("원래 문제", "Original")}</span>
+        </a>
         {solved ? (
           <div className="flex items-center gap-1 bg-green-50 border border-green-300 rounded-full px-2 py-0.5 flex-shrink-0">
             <CheckCircle size={12} className="text-green-600" />

@@ -6,6 +6,19 @@ export interface ProblemMeta {
   title: string
   sub: string
   section: string
+  /** 원래 문제 URL (USACO/MCC 등). 없으면 자동으로 Google 검색 fallback 생성. */
+  url?: string
+}
+
+/** 원래 문제 URL — 명시 안 됐으면 Google 검색 fallback. */
+export function getOriginalProblemUrl(p: ProblemMeta): string {
+  if (p.url) return p.url
+  // 기본 fallback: Google 검색 — site:usaco.org 로 좁혀서 USACO 공식 페이지 우선 노출
+  if (p.section === "USACO") {
+    return `https://www.google.com/search?q=${encodeURIComponent(`USACO ${p.title} ${p.sub} site:usaco.org`)}`
+  }
+  // MCC 및 기타: 일반 검색
+  return `https://www.google.com/search?q=${encodeURIComponent(`${p.section} ${p.title} ${p.sub}`)}`
 }
 
 export const ALL_PROBLEMS: ProblemMeta[] = [
