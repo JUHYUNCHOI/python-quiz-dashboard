@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense, lazy } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Header } from "@/components/header"
-import { ChevronLeft, ChevronRight, CheckCircle, Loader2, ExternalLink, Columns2, X, ZoomIn, ZoomOut, Hand, MousePointer2 } from "lucide-react"
+import { ChevronLeft, ChevronRight, CheckCircle, Loader2, ExternalLink, Columns2, X, ZoomIn, ZoomOut, Hand } from "lucide-react"
 import { ALL_PROBLEMS, PROBLEM_MAP, PROBLEM_INDEX, getOriginalProblemUrl, type ProblemMeta } from "./data"
 import { PROBLEM_LOADERS } from "./loaders"
 import { useLanguage } from "@/contexts/language-context"
@@ -127,9 +127,32 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
   const [splitView, setSplitView] = useState(false)
   const [iframeBlocked, setIframeBlocked] = useState(false)
   const [iframeZoom, setIframeZoom] = useState(1) // 0.5 ~ 1.5
-  const [panMode, setPanMode] = useState(false) // 드래그로 iframe 화면 이동
   const [panOffset, setPanOffset] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
+  const [spaceHeld, setSpaceHeld] = useState(false) // Figma 스타일: 스페이스+드래그=pan
+
+  // 전역 스페이스바 리스너 — split view 켜져있을 때만
+  useEffect(() => {
+    if (!splitView) return
+    const onKeyDown = (e: KeyboardEvent) => {
+      // input/textarea 안에서 스페이스 입력 중이면 무시
+      const tag = (e.target as HTMLElement)?.tagName
+      if (tag === "INPUT" || tag === "TEXTAREA") return
+      if (e.code === "Space" && !e.repeat) {
+        e.preventDefault()
+        setSpaceHeld(true)
+      }
+    }
+    const onKeyUp = (e: KeyboardEvent) => {
+      if (e.code === "Space") setSpaceHeld(false)
+    }
+    window.addEventListener("keydown", onKeyDown)
+    window.addEventListener("keyup", onKeyUp)
+    return () => {
+      window.removeEventListener("keydown", onKeyDown)
+      window.removeEventListener("keyup", onKeyUp)
+    }
+  }, [splitView])
 
   if (!lockChecked) return null
 
@@ -279,27 +302,22 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
                   <ExternalLink size={11} className="text-amber-700 flex-shrink-0 group-hover:scale-110 transition-transform" />
                   <span className="text-[11px] text-gray-600 truncate font-mono">{originalUrl.replace(/^https?:\/\//, "")}</span>
                 </a>
-                {/* Zoom + Pan 컨트롤 (iframe 모드에서만 의미 있음) */}
+                {/* Zoom 컨트롤 + Space-drag 힌트 (iframe 모드에서만) */}
                 {!isGoogleFallback && !iframeBlocked && (
                   <>
-                    {/* Pan 모드 토글 — 켜면 iframe pointer-events off → 드래그로 화면 이동 */}
-                    <button
-                      onClick={() => {
-                        setPanMode(v => !v)
-                        if (panMode) setPanOffset({ x: 0, y: 0 }) // 끌 때 위치 리셋
-                      }}
-                      className={`flex items-center gap-1 px-1.5 py-1 rounded-md border text-[10px] font-semibold transition-colors flex-shrink-0 ${
-                        panMode
-                          ? "bg-amber-200 border-amber-500 text-amber-900"
-                          : "bg-white border-gray-300 text-gray-600 hover:bg-amber-50 hover:border-amber-300"
+                    <div
+                      className={`flex items-center gap-1 px-1.5 py-1 rounded-md text-[10px] font-semibold flex-shrink-0 transition-colors ${
+                        spaceHeld
+                          ? "bg-amber-200 text-amber-900 border border-amber-500"
+                          : "bg-white border border-gray-200 text-gray-500"
                       }`}
-                      title={panMode
-                        ? t("드래그 모드 끄기 (클릭 가능)", "Exit pan mode (clicks enabled)")
-                        : t("드래그 모드 켜기 (마우스로 이동)", "Pan mode (drag to move)")}
+                      title={t("Space 키 누른 채로 드래그하면 화면이 움직여요", "Hold Space + drag to pan")}
                     >
-                      {panMode ? <Hand size={13} /> : <MousePointer2 size={13} />}
-                      <span className="hidden lg:inline">{panMode ? t("이동", "Pan") : t("선택", "Click")}</span>
-                    </button>
+                      <Hand size={12} />
+                      <span className="hidden lg:inline">
+                        {spaceHeld ? t("이동 중", "Panning") : t("Space+드래그", "Space+drag")}
+                      </span>
+                    </div>
                     <div className="flex items-center gap-0.5 flex-shrink-0 border border-gray-300 rounded-md bg-white">
                       <button
                         onClick={() => setIframeZoom(z => Math.max(0.5, +(z - 0.1).toFixed(2)))}
@@ -364,9 +382,9 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
                 // 끄면 iframe 정상 (스크롤/클릭).
                 <div
                   className={`flex-1 overflow-hidden bg-white relative select-none ${
-                    panMode ? (isDragging ? "cursor-grabbing" : "cursor-grab") : ""
+                    spaceHeld ? (isDragging ? "cursor-grabbing" : "cursor-grab") : ""
                   }`}
-                  onMouseDown={panMode ? (e) => {
+                  onMouseDown={spaceHeld ? (e) => {
                     e.preventDefault()
                     setIsDragging(true)
                     const startX = e.clientX
@@ -396,7 +414,8 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
                       transform: `translate(${panOffset.x}px, ${panOffset.y}px) scale(${iframeZoom})`,
                       transformOrigin: "top left",
                       border: 0,
-                      pointerEvents: panMode ? "none" : "auto",
+                      // Space 누르고 있는 동안만 iframe 비활성화 → wrapper 가 mousedown 받음
+                      pointerEvents: spaceHeld ? "none" : "auto",
                     }}
                     onError={() => setIframeBlocked(true)}
                     title={t("원본 문제", "Original problem")}
