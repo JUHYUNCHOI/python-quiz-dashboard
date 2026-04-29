@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense, lazy } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Header } from "@/components/header"
-import { ChevronLeft, ChevronRight, CheckCircle, Loader2, ExternalLink } from "lucide-react"
+import { ChevronLeft, ChevronRight, CheckCircle, Loader2, ExternalLink, Columns2, X } from "lucide-react"
 import { ALL_PROBLEMS, PROBLEM_MAP, PROBLEM_INDEX, getOriginalProblemUrl, type ProblemMeta } from "./data"
 import { PROBLEM_LOADERS } from "./loaders"
 import { useLanguage } from "@/contexts/language-context"
@@ -123,6 +123,10 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
   // 동일하게 호출되도록 보장.
   const { solved, markSolved } = useQuestSolved(problemId)
 
+  // 반반 스크린: 좌=튜토리얼, 우=USACO 원본 문제 iframe
+  const [splitView, setSplitView] = useState(false)
+  const [iframeBlocked, setIframeBlocked] = useState(false)
+
   if (!lockChecked) return null
 
   // Sync synchronously so lazy-loaded App components initialize with correct lang
@@ -165,16 +169,31 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
           <span className="text-gray-300 mx-1.5">·</span>
           <span className="text-xs font-semibold text-gray-700 truncate">{meta.sub}</span>
         </div>
-        {/* 원래 문제 — 외부 링크 (URL 명시 또는 Google fallback) */}
+        {/* 원래 문제 — 반반 스크린 토글 (md 이상) + 새 탭 열기 */}
+        <button
+          onClick={() => {
+            setIframeBlocked(false)
+            setSplitView(v => !v)
+          }}
+          className={`hidden md:flex flex-shrink-0 items-center gap-1 text-[11px] font-semibold px-2 py-1 rounded-md border transition-colors ${
+            splitView
+              ? "bg-amber-100 border-amber-400 text-amber-800"
+              : "text-gray-500 hover:text-amber-700 border-gray-200 hover:border-amber-300 hover:bg-amber-50"
+          }`}
+          title={t("원본 문제를 옆에 띄우기", "Show original problem side-by-side")}
+        >
+          <Columns2 size={11} />
+          <span>{splitView ? t("닫기", "Close") : t("원래 문제", "Original")}</span>
+        </button>
         <a
           href={getOriginalProblemUrl(meta)}
           target="_blank"
           rel="noopener noreferrer"
           className="flex-shrink-0 flex items-center gap-1 text-[11px] font-semibold text-gray-500 hover:text-amber-700 px-2 py-1 rounded-md border border-gray-200 hover:border-amber-300 hover:bg-amber-50 transition-colors"
-          title={t("원래 문제 페이지로 이동", "Open original problem page")}
+          title={t("새 탭에서 원본 문제 열기", "Open original problem in new tab")}
         >
           <ExternalLink size={11} />
-          <span className="hidden sm:inline">{t("원래 문제", "Original")}</span>
+          <span className="md:hidden">{t("원래 문제", "Original")}</span>
         </a>
         {solved ? (
           <div className="flex items-center gap-1 bg-green-50 border border-green-300 rounded-full px-2 py-0.5 flex-shrink-0">
@@ -221,19 +240,76 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
         ) : <div className="flex-1" />}
       </div>
 
-      {/* Problem App — key=lang forces remount so useState initializer re-runs with new lang */}
-      <main className="flex-1">
-        {LazyComp ? (
-          <Suspense fallback={<ProblemLoadingSpinner />}>
-            <LazyComp key={lang} />
-          </Suspense>
-        ) : (
-          <div className="flex flex-col items-center justify-center gap-4 py-24 px-6 text-center">
-            <div className="text-5xl">🚧</div>
-            <div className="text-base font-bold text-gray-700">{t("튜토리얼 준비 중입니다", "Tutorial coming soon")}</div>
-          </div>
+      {/* Problem App + (옵션) 원본 문제 iframe 반반 스크린.
+          md 이상에서만 split. 모바일은 너무 좁아서 토글 버튼 자체를 숨김. */}
+      <div className="flex-1 flex min-h-0">
+        {/* key=lang forces remount so useState initializer re-runs with new lang */}
+        <main className={splitView ? "flex-1 md:w-1/2 min-w-0 overflow-auto" : "flex-1 min-w-0"}>
+          {LazyComp ? (
+            <Suspense fallback={<ProblemLoadingSpinner />}>
+              <LazyComp key={lang} />
+            </Suspense>
+          ) : (
+            <div className="flex flex-col items-center justify-center gap-4 py-24 px-6 text-center">
+              <div className="text-5xl">🚧</div>
+              <div className="text-base font-bold text-gray-700">{t("튜토리얼 준비 중입니다", "Tutorial coming soon")}</div>
+            </div>
+          )}
+        </main>
+
+        {splitView && (
+          <aside className="hidden md:flex flex-1 md:w-1/2 min-w-0 border-l-2 border-black bg-white flex-col">
+            <div className="flex items-center gap-2 px-3 py-1.5 border-b border-gray-300 bg-amber-50 flex-shrink-0">
+              <ExternalLink size={12} className="text-amber-700 flex-shrink-0" />
+              <span className="text-xs font-semibold text-gray-700 truncate flex-1">
+                {t("원본 문제", "Original problem")} · {meta.section}
+              </span>
+              <a
+                href={getOriginalProblemUrl(meta)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[11px] font-semibold text-amber-700 hover:underline flex items-center gap-1"
+                title={t("새 탭에서 열기", "Open in new tab")}
+              >
+                <ExternalLink size={10} />
+                {t("새 탭", "New tab")}
+              </a>
+              <button
+                onClick={() => setSplitView(false)}
+                className="text-gray-500 hover:text-gray-800 p-0.5"
+                title={t("닫기", "Close")}
+              >
+                <X size={14} />
+              </button>
+            </div>
+            {iframeBlocked ? (
+              <div className="flex-1 flex flex-col items-center justify-center gap-3 p-6 text-center">
+                <div className="text-3xl">🚫</div>
+                <div className="text-sm font-bold text-gray-700">
+                  {t("이 페이지는 옆에 띄울 수 없어요", "This page can't be embedded")}
+                </div>
+                <a
+                  href={getOriginalProblemUrl(meta)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs font-semibold text-amber-700 underline flex items-center gap-1"
+                >
+                  <ExternalLink size={11} />
+                  {t("새 탭에서 열기", "Open in new tab")}
+                </a>
+              </div>
+            ) : (
+              <iframe
+                key={meta.id}
+                src={getOriginalProblemUrl(meta)}
+                className="flex-1 w-full bg-white"
+                onError={() => setIframeBlocked(true)}
+                title={t("원본 문제", "Original problem")}
+              />
+            )}
+          </aside>
         )}
-      </main>
+      </div>
     </div>
   )
 }
