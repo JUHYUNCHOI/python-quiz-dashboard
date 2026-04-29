@@ -19,14 +19,10 @@ export const mapSetCluster: PracticeCluster = {
 형식: \`단어 횟수\` (한 줄에 하나씩)`,
       constraints: "1 ≤ N ≤ 100, 각 단어는 영문 소문자, 길이 1 이상 20 이하",
       initialCode: `#include <iostream>
-#include <string>
-#include <map>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
