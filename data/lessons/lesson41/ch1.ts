@@ -72,6 +72,20 @@ archer = Character('궁수', 90, 25)
       ],
       answer: 1,
       explanation: "클래스(틀)로 객체(붕어빵)를 찍어내요! 틀 하나로 여러 개를 만들 수 있어요!"
+    },
+    {
+      id: "ch1-4",
+      type: "predict",
+      title: "💭 어느 쪽이 30명도 거뜬?",
+      content: "30 명의 캐릭터를 만들 때 어느 쪽이 더 깔끔할까?\n\n**방법 A — 변수만 사용:**\n```python\nname1, hp1 = '용사', 100\nname2, hp2 = '마법사', 80\n# ... 28명 더\n```\n\n**방법 B — 클래스 사용:**\n```python\nclass Character:\n    def __init__(s, name, hp):\n        s.name = name\n        s.hp = hp\n\nhero = Character('용사', 100)\nmage = Character('마법사', 80)\n# ... 같은 패턴 28번\n```",
+      options: [
+        "A — 변수가 직관적이라 빠름",
+        "B — 같은 구조를 반복해서 깔끔",
+        "둘 다 비슷",
+        "A 가 더 짧음"
+      ],
+      answer: 1,
+      explanation: "B! 클래스를 한 번 정의하면 같은 패턴으로 30 명, 100 명도 한 줄씩 쉽게 만들어요. 변수 60 개를 일일이 관리할 필요 X."
     }
   ]
 }

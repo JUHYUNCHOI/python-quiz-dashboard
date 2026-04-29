@@ -142,6 +142,22 @@ hero는 누구? <__main__.Character object at 0x123abc>
       ],
       choices: ["class", "def", "__init__", "__main__", "s", "self", "dog"],
       expectedOutput: "멍멍이"
+    },
+    {
+      id: "ch2-6",
+      type: "tryit",
+      title: "✋ 직접 — Pet 클래스 만들기",
+      task: "이름과 나이를 가진 Pet 클래스를 완성해서 강아지 객체를 만들어 보세요!",
+      initialCode: `class Pet:
+    def __init__(s, name, age):
+        s.___ = name
+        s.age = ___
+
+dog = Pet('멍멍이', 3)
+print(f'{dog.name}: {dog.age}살')`,
+      expectedOutput: "멍멍이: 3살",
+      hint: "s.속성 = 매개변수 형태로 매개변수 값을 객체에 저장해요.",
+      hint2: "name / age"
     }
   ]
 }
