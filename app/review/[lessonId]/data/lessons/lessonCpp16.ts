@@ -658,19 +658,25 @@ export const lessonCpp16: LessonData = {
         type: "practice",
         content: {
           level: 3,
-          task: "처음부터 작성! 정수 5 개를 입력받아 **가장 많이 등장한 숫자** 와 **그 횟수** 를 한 줄에 (공백 한 칸으로 구분해) 출력해요.\n\n💡 풀이 흐름: map 으로 빈도 계산 → map 순회하며 최대 빈도 찾기",
+          task: "처음부터 작성! 정수 5 개를 입력받아, **가장 많이 등장한 숫자** 와 **그 숫자가 나온 횟수** 를 한 줄에 공백으로 구분해 출력해요.\n\n출력 형식: `숫자 횟수` (예: 어떤 숫자가 4 번 등장하면 그 숫자와 4 를 출력)\n\n💡 풀이 흐름: map 으로 빈도 계산 → map 순회하며 최대 빈도 찾기.\n💡 정렬된 순서가 필요 없으니 \\`unordered_map\\` 도 OK (평균 O(1) 로 더 빠름).",
           guide: "map<int, int> freq; 로 각 숫자의 등장 횟수를 세고, 두 번째 for 루프에서 p.second(횟수)가 최대인 항목을 추적해!",
           hint: "1) for 5번 cin >> x; freq[x]++;\n2) maxCnt = 0, maxVal = 0;\n3) for (auto p : freq) if (p.second > maxCnt) { maxCnt = p.second; maxVal = p.first; }\n4) cout << maxVal << \" \" << maxCnt;",
           template: null,
-          stdin: "3 1 3 2 3\n",
-          sampleInput: "3 1 3 2 3",
+          stdin: "9 1 9 2 9\n",
+          sampleInput: "9 1 9 2 9",
           answer: "map<int, int> freq;\nfor (int i = 0; i < 5; i++) {\n    int x;\n    cin >> x;\n    freq[x]++;\n}\nint maxVal = 0, maxCnt = 0;\nfor (auto p : freq) {\n    if (p.second > maxCnt) {\n        maxCnt = p.second;\n        maxVal = p.first;\n    }\n}\ncout << maxVal << \" \" << maxCnt << endl;",
           alternateAnswers: [
-            "map<int,int> freq;\nfor(int i=0;i<5;i++){int x;cin>>x;freq[x]++;}\nint maxVal=0,maxCnt=0;\nfor(auto p:freq)if(p.second>maxCnt){maxCnt=p.second;maxVal=p.first;}\ncout<<maxVal<<\" \"<<maxCnt<<endl;"
+            // 한 줄 압축
+            "map<int,int> freq;\nfor(int i=0;i<5;i++){int x;cin>>x;freq[x]++;}\nint maxVal=0,maxCnt=0;\nfor(auto p:freq)if(p.second>maxCnt){maxCnt=p.second;maxVal=p.first;}\ncout<<maxVal<<\" \"<<maxCnt<<endl;",
+            // unordered_map 버전 (정렬 불필요 — 더 빠름)
+            "unordered_map<int, int> freq;\nfor (int i = 0; i < 5; i++) {\n    int x;\n    cin >> x;\n    freq[x]++;\n}\nint maxVal = 0, maxCnt = 0;\nfor (auto p : freq) {\n    if (p.second > maxCnt) {\n        maxCnt = p.second;\n        maxVal = p.first;\n    }\n}\ncout << maxVal << \" \" << maxCnt << endl;",
+            "unordered_map<int,int> freq;\nfor(int i=0;i<5;i++){int x;cin>>x;freq[x]++;}\nint maxVal=0,maxCnt=0;\nfor(auto p:freq)if(p.second>maxCnt){maxCnt=p.second;maxVal=p.first;}\ncout<<maxVal<<\" \"<<maxCnt<<endl;",
+            // auto& / 구조 분해 변형
+            "unordered_map<int, int> freq;\nfor (int i = 0; i < 5; i++) { int x; cin >> x; freq[x]++; }\nint maxVal = 0, maxCnt = 0;\nfor (auto& [k, v] : freq) if (v > maxCnt) { maxCnt = v; maxVal = k; }\ncout << maxVal << \" \" << maxCnt << endl;",
           ],
-          expect: "3 3",
+          expect: "9 3",
           en: {
-            task: "Write from scratch! Read 5 integers and print the **most frequent number** and **its count** on one line, separated by a single space.\n\n💡 Plan: count frequencies with map → loop the map to find the max count.",
+            task: "Write from scratch! Read 5 integers, then print the **most frequent number** and **how many times it appeared** on one line, separated by a single space.\n\nFormat: `number count` (e.g. if some number appears 4 times, print that number and 4).\n\n💡 Plan: count frequencies with map → loop the map to find the max count.\n💡 Sorted order isn't needed, so \\`unordered_map\\` also works (avg O(1) — faster).",
             guide: "Use map<int, int> freq; to count each number's occurrences, then loop through all map entries to track the entry where p.second (count) is the largest!",
             hint: "1) for 5 times: cin >> x; freq[x]++;\n2) maxCnt = 0, maxVal = 0;\n3) for (auto p : freq) if (p.second > maxCnt) { maxCnt = p.second; maxVal = p.first; }\n4) cout << maxVal << \" \" << maxCnt;"
           }
