@@ -284,6 +284,43 @@ int main() {
           expectedOutput: "15",
         },
         {
+          id: "ch2-practice2",
+          type: "practice" as const,
+          title: "✋ Find max in a 2D array",
+          content: `Find the **largest value** in a 3×3 array and print it. Initialize max with grid[0][0] and use nested for loops!`,
+          starterCode: `#include <iostream>
+using namespace std;
+int main() {
+    int grid[3][3] = {
+        {3, 1, 4},
+        {1, 5, 9},
+        {2, 6, 5}
+    };
+    int mx = grid[0][0];
+    // Use nested for loops to update mx whenever you find a larger value
+
+    cout << mx;
+    return 0;
+}`,
+          code: `#include <iostream>
+using namespace std;
+int main() {
+    int grid[3][3] = {
+        {3, 1, 4},
+        {1, 5, 9},
+        {2, 6, 5}
+    };
+    int mx = grid[0][0];
+    for (int i = 0; i < 3; i++)
+        for (int j = 0; j < 3; j++)
+            if (grid[i][j] > mx) mx = grid[i][j];
+    cout << mx;
+    return 0;
+}`,
+          hint: "if (grid[i][j] > mx) mx = grid[i][j]; — compare each cell with mx and update if bigger.",
+          expectedOutput: "9",
+        },
+        {
           id: "ch2-q1",
           type: "quiz",
           title: "Nested Loop Count!",
@@ -462,6 +499,44 @@ int main() {
 }`,
           hint: "for (int i = 0; i < 2; i++) for (int j = 0; j < 3; j++) cin >> grid[i][j]; — same structure for output. Add cout << \"\\n\" after the inner loop ends!",
           expectedOutput: "1 2 3\n4 5 6",
+          stdin: "1 2 3\n4 5 6",
+        },
+        {
+          id: "ch3-practice2",
+          type: "practice" as const,
+          title: "✋ Print row sums",
+          content: `Read a 2×3 grid and print the **sum of each row** on its own line. (Input is in the panel below)`,
+          starterCode: `#include <iostream>
+#include <vector>
+using namespace std;
+int main() {
+    vector<vector<int>> grid(2, vector<int>(3, 0));
+    for (int i = 0; i < 2; i++)
+        for (int j = 0; j < 3; j++)
+            cin >> grid[i][j];
+
+    // For each row, compute its sum and print on its own line
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+using namespace std;
+int main() {
+    vector<vector<int>> grid(2, vector<int>(3, 0));
+    for (int i = 0; i < 2; i++)
+        for (int j = 0; j < 3; j++)
+            cin >> grid[i][j];
+
+    for (int i = 0; i < 2; i++) {
+        int sum = 0;
+        for (int j = 0; j < 3; j++) sum += grid[i][j];
+        cout << sum << "\n";
+    }
+    return 0;
+}`,
+          hint: "Inside the outer for, reset sum=0, accumulate that row in the inner for, then print after the inner loop!",
+          expectedOutput: "6\n15",
           stdin: "1 2 3\n4 5 6",
         },
         {

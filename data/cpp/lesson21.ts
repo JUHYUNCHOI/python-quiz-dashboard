@@ -296,6 +296,43 @@ int main() {
           expectedOutput: "15",
         },
         {
+          id: "ch2-practice2",
+          type: "practice" as const,
+          title: "✋ 2D 배열에서 최댓값 찾기",
+          content: `3×3 배열의 모든 원소 중 **가장 큰 값**을 찾아서 출력하세요. 첫 칸을 max 의 시작값으로 잡고 이중 for 문으로 비교!`,
+          starterCode: `#include <iostream>
+using namespace std;
+int main() {
+    int grid[3][3] = {
+        {3, 1, 4},
+        {1, 5, 9},
+        {2, 6, 5}
+    };
+    int mx = grid[0][0];
+    // 이중 for 문으로 mx 보다 큰 값을 만나면 갱신
+
+    cout << mx;
+    return 0;
+}`,
+          code: `#include <iostream>
+using namespace std;
+int main() {
+    int grid[3][3] = {
+        {3, 1, 4},
+        {1, 5, 9},
+        {2, 6, 5}
+    };
+    int mx = grid[0][0];
+    for (int i = 0; i < 3; i++)
+        for (int j = 0; j < 3; j++)
+            if (grid[i][j] > mx) mx = grid[i][j];
+    cout << mx;
+    return 0;
+}`,
+          hint: "if (grid[i][j] > mx) mx = grid[i][j]; — 매 칸을 mx 와 비교해서 더 크면 갱신.",
+          expectedOutput: "9",
+        },
+        {
           id: "ch2-q1",
           type: "quiz",
           title: "이중 for문!",
@@ -477,6 +514,44 @@ int main() {
 }`,
           hint: "for (int i = 0; i < 2; i++) for (int j = 0; j < 3; j++) cin >> grid[i][j]; — 출력도 같은 구조예요. 안쪽 for문 끝나고 cout << \"\\n\" 한 번 더!",
           expectedOutput: "1 2 3\n4 5 6",
+          stdin: "1 2 3\n4 5 6",
+        },
+        {
+          id: "ch3-practice2",
+          type: "practice" as const,
+          title: "✋ 각 행의 합 출력하기",
+          content: `2×3 격자가 들어와요. **각 행의 합**을 한 줄에 하나씩 출력하세요. (입력은 아래 패널)`,
+          starterCode: `#include <iostream>
+#include <vector>
+using namespace std;
+int main() {
+    vector<vector<int>> grid(2, vector<int>(3, 0));
+    for (int i = 0; i < 2; i++)
+        for (int j = 0; j < 3; j++)
+            cin >> grid[i][j];
+
+    // 각 행마다 합을 구해서 한 줄에 하나씩 출력
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+using namespace std;
+int main() {
+    vector<vector<int>> grid(2, vector<int>(3, 0));
+    for (int i = 0; i < 2; i++)
+        for (int j = 0; j < 3; j++)
+            cin >> grid[i][j];
+
+    for (int i = 0; i < 2; i++) {
+        int sum = 0;
+        for (int j = 0; j < 3; j++) sum += grid[i][j];
+        cout << sum << "\n";
+    }
+    return 0;
+}`,
+          hint: "바깥 for 안에서 sum=0 으로 초기화하고, 안쪽 for 로 그 행을 누적, 안쪽 끝나면 출력!",
+          expectedOutput: "6\n15",
           stdin: "1 2 3\n4 5 6",
         },
         {
