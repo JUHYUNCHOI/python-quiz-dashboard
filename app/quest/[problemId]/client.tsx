@@ -257,58 +257,70 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
           )}
         </main>
 
-        {splitView && (
-          <aside className="hidden md:flex flex-1 md:w-1/2 min-w-0 border-l-2 border-black bg-white flex-col">
-            <div className="flex items-center gap-2 px-3 py-1.5 border-b border-gray-300 bg-amber-50 flex-shrink-0">
-              <ExternalLink size={12} className="text-amber-700 flex-shrink-0" />
-              <span className="text-xs font-semibold text-gray-700 truncate flex-1">
-                {t("원본 문제", "Original problem")} · {meta.section}
-              </span>
-              <a
-                href={getOriginalProblemUrl(meta)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[11px] font-semibold text-amber-700 hover:underline flex items-center gap-1"
-                title={t("새 탭에서 열기", "Open in new tab")}
-              >
-                <ExternalLink size={10} />
-                {t("새 탭", "New tab")}
-              </a>
-              <button
-                onClick={() => setSplitView(false)}
-                className="text-gray-500 hover:text-gray-800 p-0.5"
-                title={t("닫기", "Close")}
-              >
-                <X size={14} />
-              </button>
-            </div>
-            {iframeBlocked ? (
-              <div className="flex-1 flex flex-col items-center justify-center gap-3 p-6 text-center">
-                <div className="text-3xl">🚫</div>
-                <div className="text-sm font-bold text-gray-700">
-                  {t("이 페이지는 옆에 띄울 수 없어요", "This page can't be embedded")}
-                </div>
+        {splitView && (() => {
+          const originalUrl = getOriginalProblemUrl(meta)
+          // Google 검색 fallback (url 필드 비어있을 때) → iframe 차단되므로 친절한 안내 UI
+          const isGoogleFallback = originalUrl.startsWith("https://www.google.com/search")
+          return (
+            <aside className="hidden md:flex flex-1 md:w-1/2 min-w-0 border-l-2 border-black bg-white flex-col">
+              <div className="flex items-center gap-2 px-3 py-1.5 border-b border-gray-300 bg-amber-50 flex-shrink-0">
+                <ExternalLink size={12} className="text-amber-700 flex-shrink-0" />
+                <span className="text-xs font-semibold text-gray-700 truncate flex-1">
+                  {t("원본 문제", "Original problem")} · {meta.section}
+                </span>
                 <a
-                  href={getOriginalProblemUrl(meta)}
+                  href={originalUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs font-semibold text-amber-700 underline flex items-center gap-1"
+                  className="text-[11px] font-semibold text-amber-700 hover:underline flex items-center gap-1"
+                  title={t("새 탭에서 열기", "Open in new tab")}
                 >
-                  <ExternalLink size={11} />
-                  {t("새 탭에서 열기", "Open in new tab")}
+                  <ExternalLink size={10} />
+                  {t("새 탭", "New tab")}
                 </a>
+                <button
+                  onClick={() => setSplitView(false)}
+                  className="text-gray-500 hover:text-gray-800 p-0.5"
+                  title={t("닫기", "Close")}
+                >
+                  <X size={14} />
+                </button>
               </div>
-            ) : (
-              <iframe
-                key={meta.id}
-                src={getOriginalProblemUrl(meta)}
-                className="flex-1 w-full bg-white"
-                onError={() => setIframeBlocked(true)}
-                title={t("원본 문제", "Original problem")}
-              />
-            )}
-          </aside>
-        )}
+              {isGoogleFallback || iframeBlocked ? (
+                <div className="flex-1 flex flex-col items-center justify-center gap-3 p-6 text-center">
+                  <div className="text-3xl">{isGoogleFallback ? "🔗" : "🚫"}</div>
+                  <div className="text-sm font-bold text-gray-700">
+                    {isGoogleFallback
+                      ? t("이 문제는 원본 링크가 아직 등록되지 않았어요", "Original link not registered yet")
+                      : t("이 페이지는 옆에 띄울 수 없어요", "This page can't be embedded")}
+                  </div>
+                  <div className="text-xs text-gray-500 max-w-xs">
+                    {isGoogleFallback
+                      ? t("Google에서 직접 검색해서 찾아볼 수 있어요.", "You can search Google to find it.")
+                      : t("새 탭에서 열어주세요.", "Open it in a new tab instead.")}
+                  </div>
+                  <a
+                    href={originalUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs font-semibold text-white bg-amber-500 hover:bg-amber-600 px-3 py-1.5 rounded-md flex items-center gap-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.2)]"
+                  >
+                    <ExternalLink size={11} />
+                    {isGoogleFallback ? t("Google 검색 열기", "Open Google search") : t("새 탭에서 열기", "Open in new tab")}
+                  </a>
+                </div>
+              ) : (
+                <iframe
+                  key={meta.id}
+                  src={originalUrl}
+                  className="flex-1 w-full bg-white"
+                  onError={() => setIframeBlocked(true)}
+                  title={t("원본 문제", "Original problem")}
+                />
+              )}
+            </aside>
+          )
+        })()}
       </div>
     </div>
   )
