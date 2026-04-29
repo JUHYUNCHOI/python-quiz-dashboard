@@ -922,9 +922,10 @@ function PracticeStep({
                 {actualOutput || t("(출력 없음)", "(no output)")}
               </pre>
               {displayExpect && !actualOutput.startsWith("컴파일 에러") && !actualOutput.startsWith("오류") && (
-                <p className="text-xs text-red-400 mt-1">
-                  {t("예상 출력:", "Expected:")} <code className="font-mono bg-red-100 px-1 rounded">{String(displayExpect)}</code>
-                </p>
+                <div className="mt-1">
+                  <p className="text-xs text-red-500 font-semibold mb-0.5">{t("예상 출력:", "Expected:")}</p>
+                  <pre className="font-mono text-xs text-red-700 bg-red-100 rounded px-2 py-1.5 whitespace-pre-wrap">{String(displayExpect)}</pre>
+                </div>
               )}
             </div>
           )}
