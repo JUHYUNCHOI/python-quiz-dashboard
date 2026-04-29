@@ -132,7 +132,7 @@ Try moving the cursor below to see how \`*it\`, \`begin()\`, and \`end()\` chang
         {
           id: "ch1-find",
           type: "explain",
-          title: "🔍 find() — Search for a Value!",
+          title: "🔍 find() — search for a value (usage)",
           content: `Time for the iterator we just learned to do real work. \`find()\` searches a vector for a specific value, and **returns its position as an iterator**.
 
 \`\`\`cpp
@@ -153,17 +153,30 @@ if (it != v.end()) {
 }
 \`\`\`
 
-**Key points:**
-- If found → returns an **iterator** pointing to that element
-- If not found → returns \`v.end()\`
-- Compare with \`v.end()\` to check if the value exists!
+### Key points
 
-Let's compare with Python:
+- Found → returns an **iterator** pointing to that element
+- Not found → returns **\`v.end()\`**
+- Compare with \`v.end()\` to check if the value exists
+
+⚠️ **Always check vs \`v.end()\` before using:**
+\`\`\`cpp
+auto it = find(v.begin(), v.end(), 42);
+if (it != v.end()) { /* found */ }
+\`\`\`
+
+> Next page — how this differs from Python's \`in\` / \`.index()\` + time complexity.`
+        },
+        {
+          id: "ch1-find-py",
+          type: "explain",
+          title: "🐍 find() vs Python — including time complexity",
+          content: `### Compared to Python
 
 **Python 🐍:**
 \`\`\`python
 lst = [10, 20, 30, 40, 50]
-if 30 in lst:          # check existence
+if 30 in lst:           # check existence
     idx = lst.index(30) # get index
 \`\`\`
 
@@ -181,13 +194,13 @@ if (it != v.end()) {         // check existence
 | \`lst.index(30)\` | \`it - v.begin()\` |
 | Raises ValueError if missing | Returns \`v.end()\` if missing |
 
-⚠️ **What if find() can't find the value?** It returns end(). Always check:
-\`\`\`cpp
-auto it = find(v.begin(), v.end(), 42);
-if (it != v.end()) { /* found */ }
-\`\`\`
+C++ gives both pieces of info (exists? where?) in one call — the iterator carries both.
 
-💡 \`find()\` searches linearly from front to back. Time complexity is **O(n)**!`
+### ⏱️ Time complexity
+
+\`find()\` searches **linearly from front to back** → **O(n)**.
+
+If the data is sorted, the next chapter's \`binary_search\` is much faster (O(log n)). For unsorted vectors, \`find()\` is the right call.`
         },
         {
           id: "ch1-pred1",
@@ -464,9 +477,13 @@ int cnt = count_if(nums.begin(), nums.end(), [](int x) { return x > 2; });
 
 > 💡 Learn it once, use it forever. **The container changes; the usage doesn't.**
 
-### 3. range-for is just iterator shorthand
-
-The everyday \`for (auto x : v)\` you write — it does **exactly the same thing** as an iterator loop:
+Next page — even more surprising: range-for is also just iterator shorthand 👇`,
+        },
+        {
+          id: "ch1-stl-pattern-rangefor",
+          type: "explain",
+          title: "💡 What range-for really is — iterator shorthand",
+          content: `The everyday \`for (auto x : v)\` you write — it does **exactly the same thing** as an iterator loop:
 
 \`\`\`cpp
 // This
@@ -479,11 +496,14 @@ for (auto it = v.begin(); it != v.end(); ++it) {
 }
 \`\`\`
 
-The C++ compiler quietly fills in \`begin()\` / \`end()\` / \`*it\` / \`++it\` for you. So:
+The C++ compiler quietly fills in \`begin()\` / \`end()\` / \`*it\` / \`++it\` for you.
+
+### What naturally follows
+
 - A container that works in range-for = a container that works with STL functions (both need begin/end)
 - They're not separate features — **same foundation, different surface**
 
-> 🎯 Bottom line: **understand iterator once → range-for + every STL function + every STL container clicks at once.**
+> 🎯 **Understand iterator once → range-for + every STL function + every STL container clicks at once.**
 
 Next — comprehensive practice 👇`,
         },
@@ -566,25 +586,35 @@ int main() {
         {
           id: "ch2-intro",
           type: "explain",
-          title: "🎯 When you need faster search — binary_search()",
+          title: "🎯 Why we need faster search — binary_search concept",
           content: `Imagine searching for one student ID in a list of 1,000,000 students. With \`find()\`, what happens?
 
 \`find()\` checks **one by one from the front**. Worst case: 1 million comparisons. Heavy work even for a computer.
 
-But what if the IDs are **already sorted**? Think how you look up a word in a dictionary — you don't flip from "A" page by page. You open near the middle, decide "is my word before or after?", and only check that half. Then half again, and again. Fast.
+### Dictionary intuition
+
+But what if the IDs are **already sorted**? Think how you look up a word in a dictionary — you don't flip from "A" page by page. You open near the middle, decide "is my word before or after?", and only check that half. Then half again, and again. **Fast.**
 
 That's **binary search**. Cut the range **in half** each time.
+
+### The difference
 
 | Method | How | On 1M items |
 |---|---|---|
 | \`find()\` | One step at a time from the front | up to 1M comparisons |
-| \`binary_search()\` | Cuts in half each round | only ~20 comparisons |
+| \`binary_search()\` | Cuts in half each round | only **~20** comparisons |
 
-Massive difference, right? Catch: data must be **sorted**. Without sorting, you can't say "is my target before or after the middle" in the first place.
+Massive difference, right? With one prerequisite: data must be **sorted**. Without sorting, you can't say "is my target before or after the middle" in the first place.
 
-> 💡 Sorting itself costs time. So if you only search once, the sort cost may not be worth it. But if you'll search **many times**, the win adds up fast.
+> 💡 Sorting itself costs time. If you only search once, the sort cost may not be worth it. But if you'll search **many times**, the win adds up.
 
-\`\`\`cpp
+Next page — actual usage 👇`
+        },
+        {
+          id: "ch2-intro-usage",
+          type: "explain",
+          title: "🔧 binary_search usage + the must-sort rule",
+          content: `\`\`\`cpp
 #include <algorithm>
 #include <vector>
 using namespace std;
@@ -599,7 +629,7 @@ bool notFound = binary_search(v.begin(), v.end(), 6);
 // notFound = false
 \`\`\`
 
-**Important rule:** Data **MUST be sorted** before using \`binary_search()\`!
+### ⚠️ Key rule — sort first
 
 \`\`\`cpp
 vector<int> unsorted = {5, 3, 1, 9, 7};
@@ -610,7 +640,7 @@ bool ok = binary_search(unsorted.begin(), unsorted.end(), 5);
 // ok = true
 \`\`\`
 
-Let's compare with Python:
+### Compared to Python
 
 **Python 🐍:**
 \`\`\`python
@@ -626,14 +656,16 @@ found = (idx < len(lst) and lst[idx] == 7)  # True
 bool found = binary_search(v.begin(), v.end(), 7);  // True
 \`\`\`
 
-C++ is much simpler, right?
+C++ is much simpler.
 
-| Search Method | Time Complexity | Sorting Required? |
+### Summary
+
+| Search Method | Time | Sorting Required? |
 |---|---|---|
 | \`find()\` | O(n) | No |
 | \`binary_search()\` | O(log n) | **Yes!** |
 
-💡 If the data is sorted, always use \`binary_search()\` for efficiency!`
+> 💡 If the data is sorted, \`binary_search()\` is the efficient pick.`
         },
         {
           id: "ch2-fb1",

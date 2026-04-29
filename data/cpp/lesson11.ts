@@ -435,6 +435,43 @@ Alice is 15 years old`
           explanation: "to_string(100)은 \"100\", to_string(200)은 \"200\"이에요. 문자열끼리 + 하면 이어붙이기! \"100200\"이 돼요."
         },
         {
+          id: "ch3-cheatsheet",
+          type: "explain",
+          title: "📋 string 명령어 한눈에",
+          content: `시험이나 문제 풀 때 옆에 띄워놓고 보세요.
+
+### 🧰 string 자주 쓰는 명령어
+
+| 명령 | 하는 일 |
+|---|---|
+| \`s.length()\` / \`s.size()\` | 길이 |
+| \`s.empty()\` | 비었나? |
+| \`s[i]\` | i 번째 문자 |
+| \`s + t\` / \`s += t\` | 이어붙이기 |
+| \`s.substr(pos, len)\` | 부분 문자열 |
+| \`s.find(t)\` | 위치 찾기 (없으면 \`string::npos\`) |
+| \`s.replace(pos, len, t)\` | 교체 |
+| \`s.insert(pos, t)\` | 삽입 |
+| \`s.erase(pos, len)\` | 삭제 |
+| \`stoi(s)\` / \`stod(s)\` | 숫자로 변환 |
+| \`to_string(n)\` | 숫자 → 문자열 |
+| \`getline(cin, s)\` | 한 줄 통째로 입력 |
+
+### 🔁 순회
+
+\`\`\`cpp
+for (char c : s) cout << c;
+for (int i = 0; i < (int)s.length(); i++) cout << s[i];
+\`\`\`
+
+> 💡 한 글자는 작은따옴표 \`'a'\`, 문자열은 큰따옴표 \`"a"\`. 섞으면 컴파일 에러!
+
+---
+
+> 📌 **전체 STL 치트시트 (PDF 다운로드 가능):**
+> 👉 [**\`/reference/cpp-stl#string\` 에서 보기**](/reference/cpp-stl#string)`
+        },
+        {
           id: "ch3-summary",
           type: "explain",
           title: "🎯 오늘 배운 것!",

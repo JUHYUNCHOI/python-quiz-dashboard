@@ -58,9 +58,13 @@ cout << scores["Bob"];   // 87 — instant!
 
 Syntax: \`map<key_type, value_type>\`. Usage with \`scores[key]\` is almost identical to Python's dict.
 
-> 💡 One line: **map = "a fast lookup table that finds values by key."**
-
-### One difference from Python dict
+> 💡 One line: **map = "a fast lookup table that finds values by key."** Next page covers the **one** decisive difference from Python dict.`
+        },
+        {
+          id: "ch1-intro-sorted",
+          type: "explain",
+          title: "📌 Decisive difference from Python dict — auto-sort",
+          content: `Usage is nearly identical, but **storage order** is different.
 
 | Python dict 🐍 | C++ map ⚡ |
 |---|---|
@@ -68,15 +72,66 @@ Syntax: \`map<key_type, value_type>\`. Usage with \`scores[key]\` is almost iden
 | \`scores["key"] = val\` | \`scores["key"] = val;\` (same!) |
 | Preserves **insertion order** | **Auto-sorts by key** |
 
+### Example
+
 \`\`\`cpp
 map<string, int> scores;
 scores["Charlie"] = 92;
 scores["Alice"] = 95;
 scores["Bob"] = 87;
-// Iteration: Alice → Bob → Charlie (alphabetical)
+
+// Iterate — what order?
+for (auto& [k, v] : scores) {
+    cout << k << " ";
+}
+// Output: Alice Bob Charlie  (alphabetical!)
 \`\`\`
 
-C++ \`map\` **always keeps keys sorted**. There's a tradeoff to this — we'll compare with \`unordered_map\` later in this chapter.`
+Inserted as Charlie → Alice → Bob, but iteration is **alphabetical**. C++ \`map\` **always keeps keys sorted**.
+
+> 💡 This has a tradeoff. If you don't need sorting and want it faster? \`unordered_map\` — we'll compare shortly.`
+        },
+        {
+          id: "ch1-vs-vec-pair",
+          type: "explain",
+          title: "🤔 Then why \`vector<pair>\` at all? Map exists",
+          content: `Great question. If map is fast and convenient, why did we bother learning \`vector<pair<...>>\`? **They're good at different things.**
+
+### Side by side
+
+| Situation | \`map\` | \`vector<pair>\` |
+|---|---|---|
+| **Fast lookup** by name → score | ✅ O(log n) | ❌ scans linearly |
+| Sort by **value** (score) | ❌ key sort only | ✅ sort with any rule |
+| Allow duplicate keys (same name) | ❌ last write wins | ✅ all preserved |
+| Preserve insertion order | ❌ auto-alphabetical | ✅ as-is |
+| Index access \`v[0]\`, \`v[1]\` | ❌ no | ✅ yes |
+
+### Most common case where vector<pair> wins — sort by score
+
+Want to sort student records by **score, descending**?
+
+\`\`\`cpp
+// vector<pair> ✅ — one sort call
+vector<pair<string, int>> v = {{"Alice", 85}, {"Bob", 92}, {"Carol", 78}};
+sort(v.begin(), v.end(), [](auto a, auto b) {
+    return a.second > b.second;   // score descending
+});
+// v = {{Bob,92}, {Alice,85}, {Carol,78}}
+
+// map ❌ — only sorts by key (name), can't sort by value
+map<string, int> m = {{"Alice", 85}, {"Bob", 92}, {"Carol", 78}};
+// Always alphabetical: Alice → Bob → Carol  (can't reorder by score!)
+\`\`\`
+
+To sort a map by score you'd end up copying it into a \`vector<pair>\` and sorting there. So if the goal is sorting, just start with \`vector<pair>\`.
+
+### One-line rule
+
+> **"Look up by name fast"**? → **map**
+> **"Sort by score"** or **"deal with order"**? → **vector<pair>**
+
+> 💡 Often you need both. Use map for fast lookup, then copy to vector<pair> at the end to sort — totally common.`
         },
         {
           id: "ch1-fb1",
@@ -99,36 +154,93 @@ C++ \`map\` **always keeps keys sorted**. There's a tradeoff to this — we'll c
           explanation: "map automatically sorts by key! In alphabetical order: apple → banana → cherry. The insertion order doesn't matter!"
         },
         {
-          id: "ch1-missing-key",
-          type: "explain",
-          title: "⚠️ What happens when you access a missing key with []?",
-          content: `C++ map behaves very differently from Python when you access a missing key with \`[]\`!
+          id: "ch1-mini-basic",
+          type: "practice" as const,
+          title: "✋ Quick — build a student-score map",
+          content: `**Scenario**: Three students' scores are pre-loaded. **Add Dave's score 78** and **print Bob's score**.
 
-**Python — missing key → immediate error**
-\`\`\`python
-d = {}
-print(d["missing"])  # KeyError: 'missing' — crashes right away
+\`\`\`
+Initial: Alice=95, Bob=87, Carol=92
+Add:     Dave=78
+Output:  87  (Bob's score)
 \`\`\`
 
-**C++ map — missing key → silently creates it with 0**
+> 💡 Add: \`m["Dave"] = 78;\` / Read: \`cout << m["Bob"];\`. Two lines and you're done.`,
+          starterCode: `#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+
+int main() {
+    map<string, int> scores;
+    scores["Alice"] = 95;
+    scores["Bob"] = 87;
+    scores["Carol"] = 92;
+
+    // 👇 add Dave's score 78, then print Bob's score
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+
+int main() {
+    map<string, int> scores;
+    scores["Alice"] = 95;
+    scores["Bob"] = 87;
+    scores["Carol"] = 92;
+
+    scores["Dave"] = 78;
+    cout << scores["Bob"];
+
+    return 0;
+}`,
+          hint: "scores[\"Dave\"] = 78; / cout << scores[\"Bob\"];",
+          expectedOutput: `87`
+        },
+        {
+          id: "ch1-missing-key",
+          type: "explain",
+          title: "⚠️ Accessing a missing key with [] — dangerous behavior",
+          content: `C++ map behaves very differently from Python when you access a missing key with \`[]\`. This is the trickiest part.
+
+### Python — missing key → immediate error
+
+\`\`\`python
+d = {}
+print(d["missing"])  # KeyError — crashes right away
+\`\`\`
+
+### C++ map — missing key → silently creates it with 0
+
 \`\`\`cpp
 map<string, int> m;
 cout << m["missing"];  // Prints 0 (no error!)
 cout << m.size();      // 1 — a key was just created!
 \`\`\`
 
-Why is this dangerous? Typos won't cause any errors:
+### Why dangerous? — silent typo bugs
+
 \`\`\`cpp
 scores["Aliec"] = 95;    // Typo! ("Aliec" instead of "Alice")
 cout << scores["Alice"]; // Prints 0 — silently wrong
 // Now the map has BOTH "Aliec": 95 AND "Alice": 0
 \`\`\`
 
-@Key: The moment you use \`[]\` on a missing key, it gets **auto-created with default value 0**. No error — which makes this a sneaky bug that's hard to track down!
+@Key: Using \`[]\` on a missing key **auto-creates** it with default value 0. No error — which makes this a sneaky bug that's hard to track down.
 
----
+> Next page — how to **read** safely + when this behavior is actually **useful**.`
+        },
+        {
+          id: "ch1-missing-key-safe",
+          type: "explain",
+          title: "✅ Safe reading + a useful application",
+          content: `### Safe reading — check with \`count\` first
 
-**Always check before reading:**
+\`count(key)\` returns **1** if the key exists, **0** if not. Check before accessing to avoid the auto-create trap.
 
 \`\`\`cpp
 map<string, int> scores;
@@ -137,21 +249,21 @@ scores["Alice"] = 95;
 // ❌ Dangerous — "Bob" doesn't exist, gets silently added as 0
 cout << scores["Bob"];  // Prints 0, adds "Bob":0 to map
 
-// ✅ Safe — check with count first
+// ✅ Check with count first
 if (scores.count("Bob") > 0) {
     cout << scores["Bob"];  // Only access if it exists
-}
-
-// ✅ Safe — use find
-auto it = scores.find("Bob");
-if (it != scores.end()) {
-    cout << it->second;  // it->second is the value
+} else {
+    cout << "missing";
 }
 \`\`\`
 
+> 💡 There's also a \`find\` function — faster and more powerful, but it needs the **iterator** concept which is properly covered in the **next lesson (STL search functions)**. For now, \`count\` is enough.
+
 ---
 
-💡 **But this behavior is actually useful for frequency counting!**
+### 💡 But this behavior is actually useful sometimes!
+
+**Counting word occurrences:**
 
 \`\`\`cpp
 map<string, int> freq;
@@ -164,7 +276,9 @@ for (string w : words) {
 // Result: apple=3, banana=1, cherry=1
 \`\`\`
 
-The auto-zero behavior means you don't need to initialize before incrementing!`
+The auto-zero behavior means you don't need to **initialize before incrementing**. This is the heart of the **frequency map** pattern.
+
+> 💡 Summary: regular **reads** → use \`count\` safely. *Counting/accumulating* → exploit the auto-create behavior with \`[]\`.`
         },
         {
           id: "ch1-pred-missing",
@@ -216,31 +330,6 @@ Python's \`dict\` is actually more similar to C++'s \`unordered_map\`!
 | Python Equivalent | — | **dict** |
 
 💡 In most cases, \`unordered_map\` is faster! Only use \`map\` when you need sorted keys.`
-        },
-        {
-          id: "ch1-question",
-          type: "explain",
-          title: "🙋 Question: Can't I just use a vector of pairs?",
-          content: `**"Can't I just use a vector of pairs?"**
-
-It looks similar, but there's a big difference!
-
-With a vector, you have to search from beginning to end to find a key (slow). With a map, you find it instantly by key (fast)!
-
-\`\`\`cpp
-// vector<pair> — searching is slow O(n)
-vector<pair<string, int>> v = {{"Emma", 95}, {"Jake", 87}};
-// To find "Jake", you have to check one by one
-for (auto& p : v) {
-    if (p.first == "Jake") { /* found it! */ }
-}
-
-// map — searching is fast O(log n)
-map<string, int> m = {{"Emma", 95}, {"Jake", 87}};
-cout << m["Jake"];  // Direct access! 87
-\`\`\`
-
-💡 The more data you have, the bigger map's advantage! With 1 million entries, a vector needs up to 1 million comparisons, but a map only needs about 20.`
         },
         {
           id: "ch1-practice",
@@ -303,253 +392,6 @@ cherry: 1`
       ]
     },
     // ============================================
-    // Chapter 2: set
-    // ============================================
-    {
-      id: "ch2",
-      title: "set — No Duplicates!",
-      emoji: "🎯",
-      steps: [
-        {
-          id: "ch2-intro",
-          type: "explain",
-          title: "🎯 set — No Duplicates + Auto-Sorted!",
-          content: `You want to find only the unique scores from a list of exam results. With a vector? You'd have to manually check for duplicates. With set, just insert and it automatically removes duplicates + sorts!
-
-You've used Python's \`set\` before, right? C++ has \`set\` too!
-
-\`\`\`cpp
-#include <set>
-using namespace std;
-
-set<int> nums;
-nums.insert(3);
-nums.insert(1);
-nums.insert(4);
-nums.insert(1);  // Duplicate! Ignored
-nums.insert(5);
-// nums = {1, 3, 4, 5} — duplicates removed + auto-sorted!
-\`\`\`
-
-Let's compare with Python:
-
-**Python 🐍:**
-\`\`\`python
-nums = set()
-nums.add(3)
-nums.add(1)
-nums.add(4)
-nums.add(1)  # Duplicate! Ignored
-nums.add(5)
-# nums = {1, 3, 4, 5} — duplicates removed! (order NOT guaranteed)
-\`\`\`
-
-| Python set 🐍 | C++ set ⚡ |
-|---|---|
-| \`s = set()\` | \`set<int> s;\` |
-| \`s.add(x)\` | \`s.insert(x);\` |
-| \`s.remove(x)\` | \`s.erase(x);\` |
-| \`x in s\` | \`s.count(x) > 0\` |
-| No duplicates, NO guaranteed order | **No duplicates + auto-sorted!** |
-| \`len(s)\` | \`s.size()\` |
-
-**Key Methods**
-\`\`\`cpp
-s.insert(10);      // Insert
-s.erase(10);       // Delete
-s.count(10);       // 1 if exists, 0 if not
-s.find(10);        // Returns iterator (end() if not found)
-s.size();          // Number of elements
-s.empty();         // true if empty
-\`\`\`
-
-💡 Unlike Python's set, C++ \`set\` is **auto-sorted**! Always stored in ascending order.`
-        },
-        {
-          id: "ch2-fb1",
-          type: "fillblank" as const,
-          title: "Fill in the blank",
-          content: "Add elements to the set!",
-          code: "#include <set>\nusing namespace std;\n\nset<int> s;\ns.___(10);\ns.___(20);\ns.___(10);  // Duplicate ignored!",
-          fillBlanks: [
-            { id: 0, answer: "insert", options: ["insert", "add", "push", "append"] }
-          ],
-          explanation: "To add elements to a C++ set, use insert()! It's like Python's add(). push_back and append don't work with set."
-        },
-        {
-          id: "ch2-set-mini",
-          type: "practice" as const,
-          title: "✋ Quick — distinct students attended",
-          content: `**Scenario**: A name was called 8 times in class today (with duplicates). How many **distinct students** showed up?
-
-\`\`\`
-Calls: Alice, Bob, Alice, Carol, Bob, Alice, David, Carol
-Distinct: 4
-\`\`\`
-
-Insert them all into a set and print \`size()\`.
-
-> 💡 \`set\` deduplicates automatically. Just \`insert\` everything and done.`,
-          starterCode: `#include <iostream>
-#include <set>
-#include <string>
-using namespace std;
-
-int main() {
-    string names[] = {"Alice", "Bob", "Alice", "Carol", "Bob", "Alice", "David", "Carol"};
-
-    // 👇 Insert all into a set and print set.size()
-
-
-    return 0;
-}`,
-          code: `#include <iostream>
-#include <set>
-#include <string>
-using namespace std;
-
-int main() {
-    string names[] = {"Alice", "Bob", "Alice", "Carol", "Bob", "Alice", "David", "Carol"};
-
-    set<string> attended;
-    for (auto& n : names) attended.insert(n);
-    cout << attended.size();
-
-    return 0;
-}`,
-          hint: "set<string> attended; for (auto& n : names) attended.insert(n); cout << attended.size(); — set deduplicates by itself.",
-          expectedOutput: `4`
-        },
-        {
-          id: "ch2-unordered",
-          type: "explain",
-          title: "🎯 unordered_set — Fast Without Sorting!",
-          content: `If \`set\` is too slow from sorting? Use \`unordered_set\`!
-
-\`\`\`cpp
-#include <unordered_set>
-using namespace std;
-
-unordered_set<int> s;
-s.insert(3);
-s.insert(1);
-s.insert(4);
-// Not sorted! But search is O(1) fast
-\`\`\`
-
-Python's \`set\` is actually more similar to C++'s \`unordered_set\`!
-(Python set also uses a hash table internally)
-
-| | set | unordered_set |
-|---|---|---|
-| Sorted | Yes (auto-sorted) | No (no order) |
-| Insert/Search | O(log n) | **O(1) average** |
-| Internal Structure | Binary Search Tree | Hash Table |
-| Header | \`<set>\` | \`<unordered_set>\` |
-| Python Equivalent | — | **set** |
-
-💡 Need sorted order? Use \`set\`. Only need fast lookup? Use \`unordered_set\`!`
-        },
-        {
-          id: "ch2-pred1",
-          type: "predict" as const,
-          title: "Predict the set output!",
-          code: "#include <iostream>\n#include <set>\nusing namespace std;\nint main() {\n    set<int> s;\n    s.insert(5);\n    s.insert(2);\n    s.insert(8);\n    s.insert(2);\n    s.insert(5);\n    cout << s.size() << \": \";\n    for (auto x : s) {\n        cout << x << \" \";\n    }\n    return 0;\n}",
-          options: ["5: 5 2 8 2 5 ", "3: 5 2 8 ", "3: 2 5 8 ", "5: 2 2 5 5 8 "],
-          answer: 2,
-          explanation: "set removes duplicates and auto-sorts! From {5, 2, 8, 2, 5}, removing duplicates gives {2, 5, 8} with size 3. Printed in sorted order: 2 5 8!"
-        },
-        {
-          id: "ch2-compare",
-          type: "explain",
-          title: "🎯 map vs set vs unordered — Full Comparison!",
-          content: `Let's compare all four containers at a glance!
-
-| Container | Purpose | Sorted | Time Complexity | Python Equivalent |
-|---|---|---|---|---|
-| \`map\` | Key-value pairs | Yes (by key) | O(log n) | — |
-| \`unordered_map\` | Key-value pairs | No | **O(1)** | **dict** |
-| \`set\` | Values only (no dups) | Yes (auto-sorted) | O(log n) | — |
-| \`unordered_set\` | Values only (no dups) | No | **O(1)** | **set** |
-
-**When to use which?**
-
-1. **Key-value storage + need sorted order** → \`map\`
-2. **Key-value storage + need fast lookup** → \`unordered_map\`
-3. **Remove duplicates + need sorted order** → \`set\`
-4. **Remove duplicates + need fast lookup** → \`unordered_set\`
-
-\`\`\`cpp
-// Each requires its own #include
-#include <map>             // map
-#include <unordered_map>   // unordered_map
-#include <set>             // set
-#include <unordered_set>   // unordered_set
-\`\`\`
-
-💡 \`O(log n)\` vs \`O(1)\` — the more elements you have, the bigger the difference!
-But if you need sorted order, you must use the sorted version.`
-        },
-        {
-          id: "ch2-practice",
-          type: "practice" as const,
-          title: "✋ Remove Duplicates & Sort!",
-          content: `Use a set to remove duplicates from the number array and print them in sorted order!`,
-          code: `#include <iostream>
-#include <set>
-using namespace std;
-
-int main() {
-    int arr[] = {4, 2, 7, 2, 9, 4, 1, 7, 3};
-
-    set<int> s;
-    for (auto x : arr) {
-        s.insert(x);
-    }
-
-    cout << "Count: " << s.size() << endl;
-    for (auto x : s) {
-        cout << x << " ";
-    }
-    cout << endl;
-
-    return 0;
-}`,
-          starterCode: `#include <iostream>
-#include <set>
-using namespace std;
-
-int main() {
-    int arr[] = {4, 2, 7, 2, 9, 4, 1, 7, 3};
-    set<int> s;
-
-    // Insert all elements of arr into s
-
-    // Print s.size() then print all elements
-
-    return 0;
-}`,
-          hint: "Use for(auto x : arr) { s.insert(x); } to insert. set auto-removes duplicates and auto-sorts! Use s.size() for count and range-for to print",
-          expectedOutput: `Count: 6
-1 2 3 4 7 9 `
-        },
-        {
-          id: "ch2-q1",
-          type: "quiz",
-          title: "set quiz!",
-          content: "Which statement about C++ `set` is **incorrect**?",
-          options: [
-            "It does not allow duplicate elements",
-            "Elements are automatically sorted",
-            "Use insert() to add elements",
-            "Use push_back() to add elements"
-          ],
-          answer: 3,
-          explanation: "set doesn't have push_back()! Use insert() to add elements. set doesn't allow duplicates and elements are auto-sorted."
-        }
-      ]
-    },
-    // ============================================
     // Chapter 3: map Iteration
     // ============================================
     {
@@ -560,27 +402,26 @@ int main() {
         {
           id: "ch3-iter",
           type: "explain",
-          title: "📖 map Iteration — 3 Ways",
-          content: `**How map stores its data**
+          title: "📖 map iteration — the most common way",
+          content: `**First: map is a collection of pairs**
 
-First, you need to know this — map stores each element internally as a **pair**!
+map stores each element internally as a **pair**:
 
 \`\`\`cpp
 map<string, int> scores = {{"Emma", 95}, {"Jake", 87}};
-// Internally stored as:
+// Internally:
 // pair<string, int>{"Emma", 95}
 // pair<string, int>{"Jake", 87}
 \`\`\`
 
-So when you iterate over a map, each element comes out as a **pair**. That's why you can access \`.first\` (key) and \`.second\` (value).
+So when you iterate, each element is a **pair**. That's why \`.first\` (key) and \`.second\` (value) work.
 
 ---
 
-**Iterating — 3 ways**
+### ⭐ Most common: structured bindings (C++17)
 
-**Method 1: Structured bindings — range-for (most common, C++17)**
+Unpack the pair directly into \`[key, val]\`:
 
-Unpacks the pair directly into \`[key, val]\`.
 \`\`\`cpp
 for (auto& [key, val] : scores) {
     cout << key << ": " << val << endl;
@@ -589,9 +430,31 @@ for (auto& [key, val] : scores) {
 // Jake: 87
 \`\`\`
 
-**Method 2: range-for + pair access**
+@Key: \`map\` **always sorts keys automatically**! Regardless of insertion order, output is in alphabetical/numerical order. Python dict preserves insertion order, but C++ map does not.
 
-Still a range-for, but receives the pair as-is and accesses via \`.first\`, \`.second\`.
+### Compared to Python
+
+\`\`\`python
+for key, val in scores.items():
+    print(f"{key}: {val}")
+\`\`\`
+
+C++'s \`auto& [key, val]\` ≈ Python's \`key, val\`. Practically identical.
+
+> 💡 In practice **this method alone is enough**. The next page covers the other two methods, but they're rarely used.`,
+        },
+        {
+          id: "ch3-iter-other",
+          type: "explain",
+          title: "📖 (Reference) Two other iteration methods — no need to memorize",
+          content: `> 📌 **No need to memorize this page.** When you see something unfamiliar in older code or someone else's code, **come back** and look. For now, scan once and move on.
+
+Besides structured bindings, two more methods exist. Both rarely used, but you'll recognize them in other code:
+
+### Method 2: range-for + pair as-is
+
+Range-for, but keep the pair intact and access via \`.first\`, \`.second\`:
+
 \`\`\`cpp
 for (auto& p : scores) {
     cout << p.first << ": " << p.second << endl;
@@ -599,68 +462,78 @@ for (auto& p : scores) {
 // p.first = key,  p.second = value
 \`\`\`
 
-Methods 1 and 2 are **both range-for**! The difference is whether you unpack the pair (Method 1) or use it directly (Method 2).
+Methods 1 and 2 are **both range-for** — the difference is whether you unpack the pair (1) or use it directly (2).
 
-**Method 3: Direct iterator (traditional approach)**
+### Method 3: direct iterator
 
-Manually handles begin()~end() iterators. \`it\` acts like a pointer to each pair.
+Manually handle \`begin()\`~\`end()\` iterators. \`it\` acts like a pointer to each pair:
+
 \`\`\`cpp
 for (auto it = scores.begin(); it != scores.end(); it++) {
     cout << it->first << ": " << it->second << endl;
 }
-// it->first = key,  it->second = value (arrow -> to access)
 \`\`\`
 
-@Key: \`map\` **always sorts keys automatically**! Regardless of insertion order, output is in alphabetical/numerical order. Python dict preserves insertion order, but C++ map does not.
+### 🔧 First time seeing \`->\`? — arrow member access
 
-**How often is each method actually used?**
+\`it->first\` is actually shorthand for \`(*it).first\`. Unpacking it:
 
-| Method | Frequency | When to use |
+- \`*it\` = the pair that \`it\` points to (follow the arrow to get the value)
+- \`(*it).first\` = access the \`first\` member of that pair
+
+Writing \`(*it).\` every time is annoying, so \`->\` was created as a short version. **Whether iterator or pointer — \`->\` accesses the member of **what it points to**.**
+
+| Expression | Meaning |
+|---|---|
+| \`s.first\` | when s is **directly** a pair (dot) |
+| \`it->first\` | when it **points to** a pair (arrow) |
+
+> 💡 Worth knowing. STL functions like \`find()\` return iterators, so you'll meet \`->\` there.
+
+### Frequency comparison
+
+| Method | Frequency | When |
 |---|---|---|
-| Method 1 (structured bindings) | ⭐⭐⭐ Almost always | Modern C++17 code, competitive programming |
-| Method 2 (pair) | ⭐ Occasionally | Pre-C++17 code, when you need to pass the pair itself |
-| Method 3 (iterator) | ⭐ Rarely | When you need to delete during iteration or manipulate positions |
+| 1 (structured bindings) | ⭐⭐⭐ Almost always | Modern code, competitive programming |
+| 2 (pair) | ⭐ Occasionally | Pre-C++17, pair itself needed |
+| 3 (iterator) | ⭐ Rarely | **Delete during iteration** etc. — next page |
 
-The rare case where Method 3 is needed — **deleting elements while iterating**:
+> 💡 Memorize Method 1 only. \`->\` is worth knowing so \`find()\` etc. read naturally.`,
+        },
+        {
+          id: "ch3-iter-erase",
+          type: "explain",
+          title: "⚠️ (Advanced) Deleting while iterating — iterator trap",
+          content: `The rare case where Method 3 (iterator) is **truly needed** — **erasing during iteration**.
 
-❌ **This causes a crash!**
+### ❌ This crashes!
+
 \`\`\`cpp
 for (auto it = m.begin(); it != m.end(); it++) {  // it++ in loop header
     if (it->second < 0) {
-        m.erase(it);  // it becomes invalid (dangling)...
+        m.erase(it);  // it becomes invalid...
     }
     // loop header runs it++ on invalid iterator → crash!
 }
 \`\`\`
 
-When you call \`erase(it)\`, that iterator becomes **invalid (dangling)**. It's like crossing out a row from a list and then trying to find "the next row" using the old row number — everything has shifted.
+When you call \`erase(it)\`, that iterator becomes **invalid (dangling)**. Like crossing out a row and trying to find "the next row" using the old row number — positions have shifted.
 
-✅ **The correct way:**
+### ✅ The correct way
+
 \`\`\`cpp
 for (auto it = m.begin(); it != m.end(); ) {  // no it++ in header!
     if (it->second < 0) {
-        it = m.erase(it);  // erase() RETURNS the next valid iterator!
+        it = m.erase(it);  // erase returns the next valid iterator
     } else {
         it++;              // only advance manually when NOT erasing
     }
 }
 \`\`\`
 
-**Key insight**: \`m.erase(it)\` deletes the element AND **returns the next valid iterator**!
-So \`it = m.erase(it)\` already moves you to the next element.
-That's why we skip \`it++\` after erasing — only the \`else\` branch advances the iterator.
+**Key:** \`m.erase(it)\` deletes the element AND **returns the next valid iterator**. So \`it = m.erase(it)\` already moves to the next element. That's why we skip \`it++\` when erasing — only the \`else\` branch advances.
 
-Compare with Python:
-
-**Python 🐍:**
-\`\`\`python
-for key, val in scores.items():
-    print(f"{key}: {val}")
-\`\`\`
-
-C++'s \`auto& [key, val]\` works just like Python's \`key, val\`!
-
-For competitive programming and everyday code, **knowing Method 1 is enough**. Think of Methods 2 and 3 as "good to know they exist."`,
+> 💡 This pattern is only needed when **erasing during iteration**. Otherwise Method 1 (structured bindings) is enough.`,
         },
         {
           id: "ch3-fb1",
@@ -672,6 +545,64 @@ For competitive programming and everyday code, **knowing Method 1 is enough**. T
             { id: 0, answer: "[key, val]", options: ["[key, val]", "(key, val)", "key, val", "p.first, p.second"] }
           ],
           explanation: "Structured bindings from C++17! auto& [key, val] unpacks the pair directly. This is the most commonly used method."
+        },
+        {
+          id: "ch3-practice",
+          type: "practice" as const,
+          title: "✋ Print sum and average of scores",
+          content: `Read N student scores into a \`map<string, int>\`, then print the **sum** and **average**.
+
+> 💡 Use \`for (auto& [name, score] : m)\` to iterate, accumulate \`score\`. Average = \`(double)sum / n\`.`,
+          starterCode: `#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    map<string, int> scores;
+    for (int i = 0; i < n; i++) {
+        string name;
+        int s;
+        cin >> name >> s;
+        scores[name] = s;
+    }
+    // 👇 iterate with structured bindings, sum, then print average
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    map<string, int> scores;
+    for (int i = 0; i < n; i++) {
+        string name;
+        int s;
+        cin >> name >> s;
+        scores[name] = s;
+    }
+    int sum = 0;
+    for (auto& [name, score] : scores) {
+        sum += score;
+    }
+    cout << "sum: " << sum << endl;
+    cout << "avg: " << (double)sum / n << endl;
+    return 0;
+}`,
+          hint: "for (auto& [name, score] : scores) { sum += score; } then average = (double)sum / n.",
+          expectedOutput: `sum: 345
+avg: 86.25`,
+          stdin: `4
+Alice 90
+Bob 85
+Carol 92
+Dave 78`,
         }
       ]
     },
@@ -686,10 +617,9 @@ For competitive programming and everyday code, **knowing Method 1 is enough**. T
         {
           id: "ch4-func",
           type: "explain",
-          title: "🔧 Key map Functions",
-          content: `Let's look at the most commonly used map functions!
+          title: "🔧 Key map functions — search · check · delete",
+          content: `The functions you'll use most often with map.
 
-**Search & Check Functions**
 \`\`\`cpp
 map<string, int> scores;
 scores["Emma"] = 95;
@@ -715,6 +645,8 @@ scores.erase("Jake");
 cout << scores.size() << endl;   // 1
 \`\`\`
 
+### Compared to Python
+
 | Python 🐍 | C++ map ⚡ |
 |---|---|
 | \`"key" in d\` | \`m.count("key") > 0\` |
@@ -723,48 +655,52 @@ cout << scores.size() << endl;   // 1
 | \`len(d)\` | \`m.size()\` |
 | \`not d\` | \`m.empty()\` |
 
-**count vs find — When to use which?**
+> Next page — both \`count\` and \`find\` look like "search" — **which one to use when** for cleanest code.`,
+        },
+        {
+          id: "ch4-func-cf",
+          type: "explain",
+          title: "🆚 count vs find — which one when?",
+          content: `Both "search" but they return different things, so usage differs.
 
-• \`m.count(key)\` — returns 1 if found, 0 if not (for simple existence checks)
-• \`m.find(key)\` — returns an iterator if found, end() if not (when you also need the value)
+| | \`m.count(key)\` | \`m.find(key)\` |
+|---|---|---|
+| Returns | 1 (found) / 0 (not) | iterator / \`m.end()\` (not) |
+| Use when | "is it there?" only | "if there, also use the value" |
 
 \`\`\`cpp
-// count — just checking if it exists
+// count — just check existence
 if (m.count("Emma") > 0) {
     cout << "Emma exists!";
 }
 
-// find — checking AND using the value
+// find — get the value too
 auto it = m.find("Emma");
 if (it != m.end()) {
-    cout << it->second;  // access the value too
+    cout << it->second;  // access value
 }
 \`\`\`
 
 ---
 
-**💡 Deleting while iterating — the easier way**
+### 💡 Deleting while iterating — the easiest pattern
 
-Deleting with an iterator while iterating is complex. Here's an easier alternative:
+The iterator approach (\`it = m.erase(it)\`) you saw earlier is correct but tricky. **Easier alternative**:
 
 \`\`\`cpp
-// ⚙️ Iterator method (complex)
-for (auto it = m.begin(); it != m.end(); ) {
-    if (it->second < 0) it = m.erase(it);
-    else it++;
-}
-
-// ✅ Collect then delete (easier!)
+// 1) Collect the keys to delete
 vector<string> toDelete;
-for (auto& [k, v] : m) {         // iterate conveniently with range-for
+for (auto& [k, v] : m) {
     if (v < 0) toDelete.push_back(k);
 }
-for (auto& k : toDelete) {        // delete after the loop finishes
+
+// 2) Delete after the loop finishes
+for (auto& k : toDelete) {
     m.erase(k);
 }
 \`\`\`
 
-Separating iteration and deletion keeps it safe and easy to read!`,
+Iteration and deletion are **separated** — no iterator-invalidation worries, and the code reads cleanly. This is the recommended approach for general cases.`,
         },
         {
           id: "ch4-pred1",
@@ -786,6 +722,51 @@ int main() {
           options: ["1\n0\n2", "1\n1\n2", "2\n0\n2", "1\n0\n3"],
           answer: 0,
           explanation: "count() returns 1 if the key exists, 0 if not! 'a' exists → 1, 'c' doesn't → 0. size() is the number of elements in the map = 2."
+        },
+        {
+          id: "ch4-practice",
+          type: "practice" as const,
+          title: "✋ Safely look up a key",
+          content: `Look up the typed name's score in a \`map<string, int>\`. **If the name is missing, print "missing".**
+
+> 💡 Use \`m.count(key) > 0\` to check first. Only access \`m[key]\` if found.
+> ⚠️ \`m["unknown"]\` direct access auto-creates the key with 0 — the trap!`,
+          starterCode: `#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+
+int main() {
+    map<string, int> scores = {
+        {"Alice", 95}, {"Bob", 87}, {"Carol", 92}
+    };
+    string query;
+    cin >> query;
+    // 👇 if query exists, print the score; otherwise "missing"
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+
+int main() {
+    map<string, int> scores = {
+        {"Alice", 95}, {"Bob", 87}, {"Carol", 92}
+    };
+    string query;
+    cin >> query;
+    if (scores.count(query) > 0) {
+        cout << scores[query];
+    } else {
+        cout << "missing";
+    }
+    return 0;
+}`,
+          hint: "if (scores.count(query) > 0) { cout << scores[query]; } else { cout << \"missing\"; }",
+          expectedOutput: `95`,
+          stdin: `Alice`,
         }
       ]
     },
@@ -849,6 +830,300 @@ cout << m.size() << endl;
       ]
     },
     // ============================================
+    // ============================================
+    // Chapter 2: set
+    // ============================================
+    {
+      id: "ch2",
+      title: "set — No Duplicates!",
+      emoji: "🎯",
+      steps: [
+        {
+          id: "ch2-intro",
+          type: "explain",
+          title: "🎯 set — no duplicates + auto-sorted!",
+          content: `You want only the unique scores from a list of exam results. With a vector you'd have to check for duplicates manually. **With set, just insert and it auto-removes duplicates + sorts!**
+
+You've used Python's \`set\` before, right? C++ has \`set\` too:
+
+\`\`\`cpp
+#include <set>
+using namespace std;
+
+set<int> nums;
+nums.insert(3);
+nums.insert(1);
+nums.insert(4);
+nums.insert(1);  // Duplicate! Ignored
+nums.insert(5);
+// nums = {1, 3, 4, 5} — duplicates removed + auto-sorted!
+\`\`\`
+
+### Compared to Python
+
+\`\`\`python
+nums = set()
+nums.add(3); nums.add(1); nums.add(4); nums.add(1); nums.add(5)
+# nums = {1, 3, 4, 5} — duplicates removed! (order NOT guaranteed)
+\`\`\`
+
+| Python set 🐍 | C++ set ⚡ |
+|---|---|
+| \`s = set()\` | \`set<int> s;\` |
+| \`s.add(x)\` | \`s.insert(x);\` |
+| No duplicates, no guaranteed order | **No duplicates + auto-sorted!** |
+
+C++ \`set\` is **auto-sorted ascending**, unlike Python's. (Same principle as map's auto-sorted keys.)
+
+> Next page — common set operations (insert / erase / search).`
+        },
+        {
+          id: "ch2-intro-methods",
+          type: "explain",
+          title: "🔧 set — key methods",
+          content: `Common set functions. Almost identical to map's pattern, so nothing new.
+
+\`\`\`cpp
+set<int> s;
+
+s.insert(10);      // Insert (ignored if already present)
+s.erase(10);       // Delete
+s.count(10);       // 1 if exists, 0 if not
+s.find(10);        // Returns iterator (end() if not found)
+s.size();          // Number of elements
+s.empty();         // true if empty
+\`\`\`
+
+### Python comparison
+
+| Python 🐍 | C++ set ⚡ |
+|---|---|
+| \`s.add(x)\` | \`s.insert(x);\` |
+| \`s.remove(x)\` | \`s.erase(x);\` |
+| \`x in s\` | \`s.count(x) > 0\` |
+| \`len(s)\` | \`s.size();\` |
+| \`not s\` | \`s.empty();\` |
+
+> 💡 Functions look almost identical to \`map\`'s. **The one difference** — set has only keys (no values), so set's find/count just tell you whether the value exists.`
+        },
+        {
+          id: "ch2-vs-sort-unique",
+          type: "explain",
+          title: "🤔 Then why \`vector + sort + unique\`? Set exists",
+          content: `In the sort lesson you learned the \`sort + unique + erase\` pattern. set also auto-dedups + auto-sorts — **how do all three differ?**
+
+> 💡 Why **three** options — \`set\` has a faster cousin \`unordered_set\` too (covered in detail on the next page). For now, think of it as "set without sorting, but faster."
+
+### Three at a glance
+
+| Situation | \`set\` | \`unordered_set\` | \`vector + sort + unique\` |
+|---|---|---|---|
+| Add data **as it streams in** | ✅ O(log n) | ✅ **O(1) — fastest** | ❌ re-sorting wasteful |
+| Tidy **already-collected** data once | ❌ copy cost | ❌ copy cost | ✅ one pass — fast |
+| Frequent "is it there?" lookup | ✅ O(log n) | ✅ **O(1)** | ❌ scans every time |
+| Iterate in **sorted order** | ✅ auto-sorted | ❌ no order | ✅ already sorted |
+| **Index access** \`v[i]\` | ❌ no | ❌ no | ✅ yes |
+
+### Decision rules
+
+**Case A — streaming data, fast *insert/lookup* is the priority:**
+\`\`\`cpp
+unordered_set<int> seen;       // fastest
+while (cin >> x) {
+    seen.insert(x);
+    if (seen.count(y)) ...
+}
+\`\`\`
+→ Don't need sorted order? **unordered_set**. Need sorted too? **set**.
+
+**Case B — data fully collected, dedup once + index access:**
+\`\`\`cpp
+vector<int> v(n);
+for (int i = 0; i < n; i++) cin >> v[i];
+sort(v.begin(), v.end());
+v.erase(unique(v.begin(), v.end()), v.end());
+// then v[0], v[1]... freely
+\`\`\`
+→ **vector + sort + unique.**
+
+### One-line decisions
+
+| Need | Pick |
+|---|---|
+| Fast insert/lookup, no order needed | **unordered_set** ⭐ usually fastest |
+| Fast insert/lookup + sorted order | **set** |
+| One-time cleanup + index access | **vector + sort + unique** |
+
+---
+
+### 📌 For now, just remember this
+
+> **"Need a unique collection? Use \`set\` or \`unordered_set\`"** — that one rule is enough to get going.
+>
+> \`vector + sort + unique\` is a card you'll pull out **later in USACO-style problems when you need sorted results with index access**. For now, just know it exists — you'll meet it again when you actually need it.
+>
+> 🎯 **Memorize (now):** how to use \`set\`, \`unordered_set\`
+> 📖 **Reference (later):** \`vector + sort + unique\``
+        },
+        {
+          id: "ch2-fb1",
+          type: "fillblank" as const,
+          title: "Fill in the blank",
+          content: "Add elements to the set!",
+          code: "#include <set>\nusing namespace std;\n\nset<int> s;\ns.___(10);\ns.___(20);\ns.___(10);  // Duplicate ignored!",
+          fillBlanks: [
+            { id: 0, answer: "insert", options: ["insert", "add", "push", "append"] }
+          ],
+          explanation: "To add elements to a C++ set, use insert()! It's like Python's add(). push_back and append don't work with set."
+        },
+        {
+          id: "ch2-set-mini",
+          type: "practice" as const,
+          title: "✋ Quick — is the name on the roster?",
+          content: `**Scenario**: There's a roster of 5 enrolled students. Check whether a queried name is **on the roster**.
+
+\`\`\`
+Roster: Alice, Bob, Carol, David, Eve
+Input: Carol → "yes"
+Input: Frank → "no"
+\`\`\`
+
+Put the roster into a set, use \`count()\` to check.
+
+> 💡 \`s.count(name) > 0\` → present / \`== 0\` → missing.
+> 💡 With a vector you'd \`for\`-loop and compare; with a set, one \`count\` call.`,
+          starterCode: `#include <iostream>
+#include <set>
+#include <string>
+using namespace std;
+
+int main() {
+    set<string> roster = {"Alice", "Bob", "Carol", "David", "Eve"};
+    string query;
+    cin >> query;
+
+    // 👇 if query is on the roster, "yes"; otherwise "no"
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <set>
+#include <string>
+using namespace std;
+
+int main() {
+    set<string> roster = {"Alice", "Bob", "Carol", "David", "Eve"};
+    string query;
+    cin >> query;
+
+    if (roster.count(query) > 0) cout << "yes";
+    else cout << "no";
+
+    return 0;
+}`,
+          hint: "if (roster.count(query) > 0) cout << \"yes\"; else cout << \"no\";",
+          expectedOutput: `yes`,
+          stdin: `Carol`,
+        },
+        {
+          id: "ch2-unordered",
+          type: "explain",
+          title: "🎯 unordered_set — Fast Without Sorting!",
+          content: `If \`set\` is too slow from sorting? Use \`unordered_set\`!
+
+\`\`\`cpp
+#include <unordered_set>
+using namespace std;
+
+unordered_set<int> s;
+s.insert(3);
+s.insert(1);
+s.insert(4);
+// Not sorted! But search is O(1) fast
+\`\`\`
+
+Python's \`set\` is actually more similar to C++'s \`unordered_set\`!
+(Python set also uses a hash table internally)
+
+| | set | unordered_set |
+|---|---|---|
+| Sorted | Yes (auto-sorted) | No (no order) |
+| Insert/Search | O(log n) | **O(1) average** |
+| Internal Structure | Binary Search Tree | Hash Table |
+| Header | \`<set>\` | \`<unordered_set>\` |
+| Python Equivalent | — | **set** |
+
+💡 Need sorted order? Use \`set\`. Only need fast lookup? Use \`unordered_set\`!`
+        },
+        {
+          id: "ch2-pred1",
+          type: "predict" as const,
+          title: "Predict the set output!",
+          code: "#include <iostream>\n#include <set>\nusing namespace std;\nint main() {\n    set<int> s;\n    s.insert(5);\n    s.insert(2);\n    s.insert(8);\n    s.insert(2);\n    s.insert(5);\n    cout << s.size() << \": \";\n    for (auto x : s) {\n        cout << x << \" \";\n    }\n    return 0;\n}",
+          options: ["5: 5 2 8 2 5 ", "3: 5 2 8 ", "3: 2 5 8 ", "5: 2 2 5 5 8 "],
+          answer: 2,
+          explanation: "set removes duplicates and auto-sorts! From {5, 2, 8, 2, 5}, removing duplicates gives {2, 5, 8} with size 3. Printed in sorted order: 2 5 8!"
+        },
+        {
+          id: "ch2-practice",
+          type: "practice" as const,
+          title: "✋ Remove Duplicates & Sort!",
+          content: `Use a set to remove duplicates from the number array and print them in sorted order!`,
+          code: `#include <iostream>
+#include <set>
+using namespace std;
+
+int main() {
+    int arr[] = {4, 2, 7, 2, 9, 4, 1, 7, 3};
+
+    set<int> s;
+    for (auto x : arr) {
+        s.insert(x);
+    }
+
+    cout << "Count: " << s.size() << endl;
+    for (auto x : s) {
+        cout << x << " ";
+    }
+    cout << endl;
+
+    return 0;
+}`,
+          starterCode: `#include <iostream>
+#include <set>
+using namespace std;
+
+int main() {
+    int arr[] = {4, 2, 7, 2, 9, 4, 1, 7, 3};
+    set<int> s;
+
+    // Insert all elements of arr into s
+
+    // Print s.size() then print all elements
+
+    return 0;
+}`,
+          hint: "Use for(auto x : arr) { s.insert(x); } to insert. set auto-removes duplicates and auto-sorts! Use s.size() for count and range-for to print",
+          expectedOutput: `Count: 6
+1 2 3 4 7 9 `
+        },
+        {
+          id: "ch2-q1",
+          type: "quiz",
+          title: "set quiz!",
+          content: "Which statement about C++ `set` is **incorrect**?",
+          options: [
+            "It does not allow duplicate elements",
+            "Elements are automatically sorted",
+            "Use insert() to add elements",
+            "Use push_back() to add elements"
+          ],
+          answer: 3,
+          explanation: "set doesn't have push_back()! Use insert() to add elements. set doesn't allow duplicates and elements are auto-sorted."
+        }
+      ]
+    },
     // Chapter 6: set Quiz & Summary
     // ============================================
     {
@@ -856,6 +1131,37 @@ cout << m.size() << endl;
       title: "set Quiz & Summary",
       emoji: "🏆",
       steps: [
+        {
+          id: "ch2-compare",
+          type: "explain",
+          title: "🎯 map vs set vs unordered — Full Comparison!",
+          content: `Let's compare all four containers at a glance!
+
+| Container | Purpose | Sorted | Time Complexity | Python Equivalent |
+|---|---|---|---|---|
+| \`map\` | Key-value pairs | Yes (by key) | O(log n) | — |
+| \`unordered_map\` | Key-value pairs | No | **O(1)** | **dict** |
+| \`set\` | Values only (no dups) | Yes (auto-sorted) | O(log n) | — |
+| \`unordered_set\` | Values only (no dups) | No | **O(1)** | **set** |
+
+**When to use which?**
+
+1. **Key-value storage + need sorted order** → \`map\`
+2. **Key-value storage + need fast lookup** → \`unordered_map\`
+3. **Remove duplicates + need sorted order** → \`set\`
+4. **Remove duplicates + need fast lookup** → \`unordered_set\`
+
+\`\`\`cpp
+// Each requires its own #include
+#include <map>             // map
+#include <unordered_map>   // unordered_map
+#include <set>             // set
+#include <unordered_set>   // unordered_set
+\`\`\`
+
+💡 \`O(log n)\` vs \`O(1)\` — the more elements you have, the bigger the difference!
+But if you need sorted order, you must use the sorted version.`
+        },
         {
           id: "ch6-q2",
           type: "quiz",
@@ -897,6 +1203,51 @@ for (auto& x : s) {
           ],
           answer: 1,
           explanation: "set auto-sorts its elements! Strings are sorted alphabetically: apple → banana → cherry."
+        },
+        {
+          id: "ch6-cheatsheet",
+          type: "explain",
+          title: "📋 map & set commands at a glance",
+          content: `Keep this open while solving problems.
+
+### 🗺️ map / unordered_map
+
+| Command | What it does |
+|---|---|
+| \`m["key"] = val\` | Insert / overwrite (⚠️ auto-creates missing key) |
+| \`m.insert({k, v})\` | Insert (no overwrite if exists) |
+| \`m.count(key)\` | ✅ Safe existence check (1 or 0) |
+| \`m.find(key)\` | Iterator (\`m.end()\` if missing) |
+| \`m.at(key)\` | ✅ Returns value — throws if missing |
+| \`m.erase(key)\` | Erase key |
+| \`m.size()\` / \`m.empty()\` | Size / empty? |
+
+> 💡 Don't need sorted order? \`unordered_map\` is O(1) avg — faster.
+
+### 🎯 set / unordered_set
+
+| Command | What it does |
+|---|---|
+| \`s.insert(x)\` | Insert (duplicates ignored) |
+| \`s.count(x)\` | 1 if present, 0 if not |
+| \`s.find(x)\` | Iterator (\`s.end()\` if missing) |
+| \`s.erase(x)\` | Erase x |
+| \`*s.begin()\` / \`*s.rbegin()\` | Min / max (set only) |
+| \`s.lower_bound(x)\` / \`s.upper_bound(x)\` | First ≥ x / first > x (set only) |
+
+### 🔁 Iteration (C++17 structured binding)
+
+\`\`\`cpp
+for (auto& [key, val] : m) {
+    cout << key << " -> " << val << "\\n";
+}
+for (int x : s) cout << x << " ";    // set iterates ascending
+\`\`\`
+
+---
+
+> 📌 **Full STL cheatsheet (downloadable as PDF):**
+> 👉 [**Open \`/reference/cpp-stl#map\`**](/reference/cpp-stl#map)`
         },
         {
           id: "ch6-summary",

@@ -293,22 +293,95 @@ export function PythonRunner({
     }
   }, [code, isPyodideReady, expectedOutput, onSuccess, onError, attempts, hint])
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const textarea = textareaRef.current
+    if (!textarea) return
+    const start = textarea.selectionStart
+    const end = textarea.selectionEnd
+    const val = textarea.value
+
     // Shift+Enter 또는 Ctrl/Cmd+Enter로 실행
     if (e.key === "Enter" && (e.shiftKey || e.ctrlKey || e.metaKey) && code.trim()) {
       e.preventDefault()
       runCode()
+      return
     }
+
     // Tab 키로 들여쓰기
     if (e.key === "Tab") {
       e.preventDefault()
-      const textarea = textareaRef.current
-      if (textarea) {
-        const start = textarea.selectionStart
-        const end = textarea.selectionEnd
-        const newCode = code.substring(0, start) + "    " + code.substring(end)
-        setCode(newCode)
-        setTimeout(() => { textarea.selectionStart = textarea.selectionEnd = start + 4 }, 0)
+      const newCode = val.substring(0, start) + "    " + val.substring(end)
+      setCode(newCode)
+      setTimeout(() => { textarea.selectionStart = textarea.selectionEnd = start + 4 }, 0)
+      return
+    }
+
+    // Enter — 자동 들여쓰기 (직전 줄과 같은 indent + 콜론 끝나면 추가 indent)
+    if (e.key === "Enter") {
+      e.preventDefault()
+      const lineStart = val.lastIndexOf("\n", start - 1) + 1
+      const currentLine = val.slice(lineStart, start)
+      const indent = currentLine.match(/^(\s*)/)?.[1] ?? ""
+      const extraIndent = currentLine.trimEnd().endsWith(":") ? "    " : ""
+      const newVal = val.slice(0, start) + "\n" + indent + extraIndent + val.slice(start)
+      const newCursor = start + 1 + indent.length + extraIndent.length
+      setCode(newVal)
+      requestAnimationFrame(() => {
+        textarea.selectionStart = textarea.selectionEnd = newCursor
+      })
+      return
+    }
+
+    // 자동 괄호 닫기
+    const pairs: Record<string, string> = { "(": ")", "[": "]", "{": "}", '"': '"', "'": "'" }
+    if (pairs[e.key]) {
+      // 따옴표는 같은 따옴표 바로 다음이면 건너뛰기
+      if ((e.key === '"' || e.key === "'") && val[start] === e.key) {
+        e.preventDefault()
+        requestAnimationFrame(() => {
+          textarea.selectionStart = textarea.selectionEnd = start + 1
+        })
+        return
+      }
+      e.preventDefault()
+      const open = e.key
+      const close = pairs[open]
+      const selected = val.slice(start, end)
+      const newVal = val.slice(0, start) + open + selected + close + val.slice(end)
+      setCode(newVal)
+      requestAnimationFrame(() => {
+        if (selected) {
+          textarea.selectionStart = start + 1
+          textarea.selectionEnd = end + 1
+        } else {
+          textarea.selectionStart = textarea.selectionEnd = start + 1
+        }
+      })
+      return
+    }
+
+    // 닫는 괄호 입력 — 다음 위치에 같은 닫는 괄호 있으면 건너뛰기
+    if ([")", "]", "}"].includes(e.key) && val[start] === e.key) {
+      e.preventDefault()
+      requestAnimationFrame(() => {
+        textarea.selectionStart = textarea.selectionEnd = start + 1
+      })
+      return
+    }
+
+    // Backspace — 빈 짝 사이면 둘 다 지우기
+    if (e.key === "Backspace" && start === end && start > 0) {
+      const before = val[start - 1]
+      const after = val[start]
+      const matches: Record<string, string> = { "(": ")", "[": "]", "{": "}", '"': '"', "'": "'" }
+      if (matches[before] === after) {
+        e.preventDefault()
+        const newVal = val.slice(0, start - 1) + val.slice(start + 1)
+        setCode(newVal)
+        requestAnimationFrame(() => {
+          textarea.selectionStart = textarea.selectionEnd = start - 1
+        })
+        return
       }
     }
   }
@@ -360,19 +433,24 @@ export function PythonRunner({
             </div>
           )}
 
-          {/* Syntax highlighted 배경 레이어 */}
+          {/* Syntax highlighted 배경 레이어
+              ⚠️ textarea 와 *완전히 동일한* 텍스트 메트릭 보장 — 안 그러면 커서 ≠ 글자 정렬 어긋남.
+              - whitespace-pre (no wrap) — 둘 다 wrap 안 함 → 가로 스크롤
+              - tabSize 4 — 탭 너비 통일 (Python 인덴테이션 안전)
+              - fontFeatureSettings off — 일부 monospace 폰트의 ligature 비활성 (글자 너비 보장) */}
           <div
             ref={highlightRef}
             aria-hidden="true"
-            className="absolute inset-0 font-mono p-3 md:p-4 overflow-hidden pointer-events-none text-[13px] md:text-[15px] leading-[1.8] whitespace-pre-wrap break-words"
-            style={{ minHeight }}
+            className="absolute inset-0 font-mono p-3 md:p-4 overflow-hidden pointer-events-none text-[13px] md:text-[15px] leading-[1.8]"
+            style={{ minHeight, tabSize: 4, fontFeatureSettings: '"liga" 0, "calt" 0' }}
           >
-            <pre className="font-mono text-[13px] md:text-[15px] leading-[1.8] m-0 p-0 whitespace-pre-wrap break-words">
+            <pre className="font-mono text-[13px] md:text-[15px] leading-[1.8] m-0 p-0 whitespace-pre" style={{ tabSize: 4 }}>
               {highlightedCode}
             </pre>
           </div>
 
-          {/* 투명 textarea (입력용) */}
+          {/* 투명 textarea (입력용)
+              wrap="off" — pre 와 동일하게 wrap 비활성. 긴 줄은 가로 스크롤. */}
           <textarea
             ref={textareaRef}
             value={code}
@@ -388,11 +466,12 @@ export function PythonRunner({
             onBlur={() => setIsFocused(false)}
             disabled={readOnly || isLoading}
             placeholder={t("Python 코드 입력...", "Enter Python code...")}
+            wrap="off"
             className={cn(
-              "w-full bg-transparent font-mono p-3 md:p-4 resize-none focus:outline-none placeholder:text-gray-600 relative z-10",
+              "w-full bg-transparent font-mono p-3 md:p-4 resize-none focus:outline-none placeholder:text-gray-600 relative z-10 whitespace-pre overflow-auto",
               "text-[13px] md:text-[15px] leading-[1.8] text-transparent caret-white selection:bg-blue-500/40"
             )}
-            style={{ minHeight }}
+            style={{ minHeight, tabSize: 4, fontFeatureSettings: '"liga" 0, "calt" 0' }}
             spellCheck={false}
           />
         </div>

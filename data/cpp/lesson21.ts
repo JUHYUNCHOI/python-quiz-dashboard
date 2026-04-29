@@ -140,6 +140,40 @@ int main() {
           answer: 2,
           explanation: "`int arr[3][4]` 는 행 0~2, 열 0~3 까지 유효해요. `arr[3][0]` 은 행 인덱스 3 인데 행은 2 까지밖에 없어서 범위 밖! 행은 총 3 개 (0,1,2) 라는 점 잊지 마세요."
         },
+        {
+          id: "ch1-practice",
+          type: "practice" as const,
+          title: "✋ 2D 배열 만들고 한 칸 출력",
+          content: `**3 행 3 열짜리 2D 배열** 을 1~9 값으로 만들고, **가운데 칸** (행 1, 열 1) 의 값을 출력하세요.
+
+> 💡 \`int grid[3][3] = {{1,2,3}, {4,5,6}, {7,8,9}};\` 로 선언 + \`grid[1][1]\` 로 접근.`,
+          starterCode: `#include <iostream>
+using namespace std;
+
+int main() {
+    // 👇 3행 3열 배열 grid 선언 (값: 1~9)
+
+
+    // 👇 가운데 칸 grid[1][1] 출력
+
+
+    return 0;
+}`,
+          code: `#include <iostream>
+using namespace std;
+
+int main() {
+    int grid[3][3] = {
+        {1, 2, 3},
+        {4, 5, 6},
+        {7, 8, 9}
+    };
+    cout << grid[1][1];
+    return 0;
+}`,
+          hint: "int grid[3][3] = {{1,2,3}, {4,5,6}, {7,8,9}}; / cout << grid[1][1];",
+          expectedOutput: "5"
+        },
       ]
     },
     // ============================================

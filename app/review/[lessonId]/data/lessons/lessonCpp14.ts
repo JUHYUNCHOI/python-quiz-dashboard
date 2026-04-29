@@ -523,7 +523,8 @@ export const lessonCpp14: LessonData = {
             guide: 'struct Student { string name; int score; }; — in declaration order (name, score)!',
             context: 'struct Student {\n    string name;\n    int score;\n};\n\nStudent students[3];',
             answer: '"Jake"',
-            blanksAnswer: ['"Jake"', "87"]
+            blanksAnswer: ['"Jake"', "87"],
+            expect: 'students[1] = {"Jake", 87};',
           }
         }
       },

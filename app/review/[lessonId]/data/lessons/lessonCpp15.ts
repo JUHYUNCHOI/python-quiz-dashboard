@@ -21,7 +21,11 @@ export const lessonCpp15: LessonData = {
         content: {
           lines: [],
           code: 'pair<string, int> p1 = {"영희", 88};     // 중괄호 초기화\nauto p2 = make_pair("민수", 92);          // make_pair 사용',
-          note: "make_pair는 타입을 안 써도 알아서 추론!"
+          note: "make_pair는 타입을 안 써도 알아서 추론!",
+          en: {
+            code: 'pair<string, int> p1 = {"Emma", 88};     // brace initialization\nauto p2 = make_pair("Tom", 92);           // using make_pair',
+            note: "make_pair infers the types automatically!"
+          }
         }
       },
 
@@ -58,7 +62,8 @@ export const lessonCpp15: LessonData = {
           expect: 'pair<string, int> student("철수", 95);',
           en: {
             task: "Declare a pair that combines string and int!",
-            guide: "Use the form: pair<type1, type2>"
+            guide: "Use the form: pair<type1, type2>",
+            template: 'pair<___, ___> student("Tom", 95);',
           }
         }
       },
@@ -131,8 +136,10 @@ export const lessonCpp15: LessonData = {
           blanksAnswer: ["make_pair", "second"],
           expect: '100',
           en: {
-            task: "Bundle Cheolsu's HP 100 as a pair, then print just the HP.",
-            guide: "auto + function call to build a pair. Use .first / .second for members."
+            task: "Bundle character Tom's HP 100 as a pair, then print just the HP.",
+            guide: "auto + function call to build a pair. Use .first / .second for members.",
+            template: 'auto p = ___("Tom", 100);\ncout << p.___;',
+            answer: 'auto p = make_pair("Tom", 100);\ncout << p.second;',
           }
         }
       },
@@ -618,7 +625,7 @@ export const lessonCpp15: LessonData = {
       {
         type: "interleaving",
         content: {
-          message: "잠깐! struct와 pair의 진짜 차이 — 멤버 *이름*",
+          message: "잠깐! struct와 pair의 진짜 차이 — 멤버 이름",
           task: "같은 데이터를 두 방식으로 표현했어요. **struct 와 pair 양쪽 모두 'name' 에 해당하는 부분에 접근**해서 \"Alice\" 로 설정하세요.\n\n👉 차이가 보이죠? struct 는 .name 처럼 **의미가 보이는** 이름, pair 는 .first / .second 처럼 **순서로만** 접근.",
           template: "// struct — meaningful names\nstruct Student { string name; int age; };\nStudent s;\ns.___ = \"Alice\";\n\n// pair — by position only\npair<string, int> p;\np.___ = \"Alice\";",
           answer: "name",

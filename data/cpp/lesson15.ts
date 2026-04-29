@@ -106,7 +106,7 @@ cout << p.first;    // "Kim"
 cout << p.second;   // 95
 \`\`\`
 
-여러 번 쓰거나 *의미 있는 이름* 으로 받고 싶을 때, **C++17 부터는 한 줄로 풀어 담을 수 있어요**:
+여러 번 쓰거나 **의미 있는 이름** 으로 받고 싶을 때, **C++17 부터는 한 줄로 풀어 담을 수 있어요**:
 
 \`\`\`cpp
 auto [name, score] = p;
@@ -123,7 +123,7 @@ cout << score;   // 95
 | 패턴 | 언제 |
 |---|---|
 | \`p.first\`, \`p.second\` | 한두 번만 접근, 단순할 때 |
-| \`auto [name, score] = p;\` | 여러 번 사용 / *의미 있는 이름* 필요 ⭐ |
+| \`auto [name, score] = p;\` | 여러 번 사용 / **의미 있는 이름** 필요 ⭐ |
 | \`for (auto& [name, score] : v)\` | range-for 로 vector<pair> 순회 — 진짜 자주! ⭐⭐ |
 
 ### 미리보기 — vector<pair> 순회 비교
@@ -327,7 +327,7 @@ queue<tuple<int, int, int>> q;   // (x, y, distance)
 getStudent() → ("Kim", 15, 3.8)   →  Kim: 자격 없음 (나이 부족)
 \`\`\`
 
-> 💡 함수 결과를 structured bindings 으로 받고 (\`auto [name, age, gpa] = ...\`), 조건 판단 후 출력. **각 값에 *이름* 이 붙어서 코드가 읽기 쉬워지는 게 structured bindings 의 진짜 가치.**`,
+> 💡 함수 결과를 structured bindings 으로 받고 (\`auto [name, age, gpa] = ...\`), 조건 판단 후 출력. **각 값에 **이름** 이 붙어서 코드가 읽기 쉬워지는 게 structured bindings 의 진짜 가치.**`,
           starterCode: `#include <iostream>
 #include <tuple>
 #include <string>
@@ -468,7 +468,7 @@ sort(scores.begin(), scores.end());
         {
           id: "ch1-must-pair",
           type: "practice" as const,
-          title: "🎯 pair 가 *진짜 필요한* 순간 — 점수표 정렬",
+          title: "🎯 pair 가 **진짜 필요한** 순간 — 점수표 정렬",
           content: `방금 시뮬에서 본 것 — **vector 두 개로는 정렬이 깨져요.** 직접 코드로 확인해봐요.
 
 **문제**: 학생 5 명의 이름과 점수가 있어요. **점수 오름차순으로 정렬해서** \`이름 점수\` **형식으로 한 줄씩 출력** 하세요.
@@ -792,6 +792,49 @@ else cout << "B";
           ],
           answer: 0,
           explanation: "pair 비교는 first를 먼저 비교해요. 둘 다 first가 1로 같으니 second를 비교해요. 10 > 5이므로 a > b는 true! A가 출력돼요."
+        },
+        {
+          id: "ch2-cheatsheet",
+          type: "explain",
+          title: "📋 pair / tuple 명령어 한눈에",
+          content: `시험이나 문제 풀 때 옆에 띄워놓고 보세요.
+
+### 🧰 pair / tuple 자주 쓰는 명령어
+
+| 명령 | 하는 일 |
+|---|---|
+| \`p.first\` / \`p.second\` | pair 의 두 값 |
+| \`get<0>(t)\`, \`get<1>(t)\` | tuple 의 i 번째 값 |
+| \`auto [a, b] = p;\` | 구조 분해 (C++17) |
+| \`auto& [a, b] = p;\` | 참조로 분해 — 수정 가능 |
+| \`p1 < p2\` | 사전식 비교 (first 먼저, 같으면 second) |
+| \`tie(a, b) = p;\` | tuple 분해 (C++11) |
+| \`make_pair(a, b)\` | pair 만들기 (타입 추론) |
+
+### 📦 선언
+
+\`\`\`cpp
+pair<int, string> p = {1, "Alice"};
+pair<int, int> coord(3, 5);
+tuple<int, string, double> t = {1, "Bob", 95.5};
+auto p = make_pair(1, "Alice");
+\`\`\`
+
+### 🔁 vector<pair> 순회
+
+\`\`\`cpp
+vector<pair<int, string>> people;
+for (auto& [age, name] : people) {
+    cout << name << " is " << age << "\\n";
+}
+\`\`\`
+
+> 💡 pair 는 자동으로 first 기준 정렬됨 — \`sort()\` 와 함께 쓰면 편해요.
+
+---
+
+> 📌 **전체 STL 치트시트 (PDF 다운로드 가능):**
+> 👉 [**\`/reference/cpp-stl#pair\` 에서 보기**](/reference/cpp-stl#pair)`
         },
         {
           id: "ch2-summary",

@@ -50,11 +50,20 @@ print(hero.hp)`,
           feedback: "hero.name은 '용사', hero.hp는 100!"
         },
         en: {
+          code: `class Character:
+    def __init__(s, name, hp):
+        s.name = name
+        s.hp = hp
+
+hero = Character('Hero', 100)
+print(hero.name)
+print(hero.hp)`,
           predict: {
             question: "What's the output?",
-            options: ["용사\\n100", "Character\\n100", "Error", "name\\nhp"],
-            feedback: "hero.name is '용사', hero.hp is 100!"
-          }
+            options: ["Hero\n100", "Character\n100", "Error", "name\nhp"],
+            feedback: "hero.name is 'Hero', hero.hp is 100!"
+          },
+          result: "Hero\n100"
         },
         result: "용사\n100"
       }
@@ -80,7 +89,7 @@ print(hero.hp)`,
             "When an object is created (when Character() is called)",
             "When print() is called"
           ],
-          explanation: "It runs automatically when you create an object like Character('용사', 100)!"
+          explanation: "It runs automatically when you create an object like Character('Hero', 100)!"
         }
       }
     },
@@ -100,7 +109,21 @@ mage = Character('마법사', 80, 35)
 print(f'{hero.name}: HP {hero.hp}')
 print(f'{mage.name}: HP {mage.hp}')`,
         result: "용사: HP 100\n마법사: HP 80",
-        note: "각 객체는 독립적! 서로 영향 없음!"
+        note: "각 객체는 독립적! 서로 영향 없음!",
+        en: {
+          code: `class Character:
+    def __init__(s, name, hp, atk):
+        s.name = name
+        s.hp = hp
+        s.atk = atk
+
+hero = Character('Hero', 100, 20)
+mage = Character('Mage', 80, 35)
+print(f'{hero.name}: HP {hero.hp}')
+print(f'{mage.name}: HP {mage.hp}')`,
+          result: "Hero: HP 100\nMage: HP 80",
+          note: "Each object is independent — they don't affect each other!"
+        }
       }
     },
 
@@ -123,11 +146,20 @@ print(hero.hp)`,
           feedback: "100 - 30 = 70! 속성 값을 직접 바꿀 수 있어요!"
         },
         en: {
+          code: `class Character:
+    def __init__(s, name, hp):
+        s.name = name
+        s.hp = hp
+
+hero = Character('Hero', 100)
+hero.hp = hero.hp - 30
+print(hero.hp)`,
           predict: {
             question: "What's the output?",
             options: ["100", "70", "30", "Error"],
             feedback: "100 - 30 = 70! Attribute values can be changed directly!"
-          }
+          },
+          result: "70"
         },
         result: "70"
       }
@@ -153,11 +185,21 @@ print(a.hp, b.hp)`,
           feedback: "a와 b는 서로 다른 객체! a.hp만 줄어들어요!"
         },
         en: {
+          code: `class Character:
+    def __init__(s, name, hp):
+        s.name = name
+        s.hp = hp
+
+a = Character('Hero', 100)
+b = Character('Mage', 80)
+a.hp = a.hp - 20
+print(a.hp, b.hp)`,
           predict: {
             question: "What's the output?",
             options: ["80 80", "100 80", "80 60", "80 80"],
             feedback: "a and b are separate objects! Only a.hp decreases!"
-          }
+          },
+          result: "80 80"
         },
         result: "80 80"
       }
@@ -176,7 +218,9 @@ print(a.hp, b.hp)`,
         en: {
           task: "Fill in the blank!",
           guide: "Create an item using the Item class",
-          hint: "Create an object using the class name!"
+          hint: "Create an object using the class name!",
+          template: "class Item:\n    def __init__(s, name, price):\n        s.name = name\n        s.price = price\n\nsword = ___('Sword', 500)\nprint(sword.name)",
+          expect: "Sword",
         },
         alternateAnswers: [],
         expect: "검"
@@ -195,7 +239,9 @@ print(a.hp, b.hp)`,
         en: {
           task: "Fill in the blank!",
           guide: "How do you access an object's attribute?",
-          hint: "Access attributes using a dot (.)!"
+          hint: "Access attributes using a dot (.)!",
+          template: "class Pet:\n    def __init__(s, name, age):\n        s.name = name\n        s.age = age\n\ndog = Pet('Buddy', 3)\nprint(dog.___)",
+          expect: "Buddy",
         },
         alternateAnswers: [],
         expect: "멍멍이"
@@ -235,11 +281,19 @@ print(apple.name)`,
           feedback: "apple 객체의 name은 '사과'!"
         },
         en: {
+          code: `class Fruit:
+    def __init__(s, name):
+        s.name = name
+
+apple = Fruit('apple')
+banana = Fruit('banana')
+print(apple.name)`,
           predict: {
             question: "What's the output?",
-            options: ["사과", "바나나", "Fruit", "Error"],
-            feedback: "The name of the apple object is '사과'!"
-          }
+            options: ["apple", "banana", "Fruit", "Error"],
+            feedback: "The name of the apple object is 'apple'!"
+          },
+          result: "apple"
         },
         result: "사과"
       }
@@ -263,11 +317,19 @@ print(f'{s1.name}: {s1.grade}학년')`,
           feedback: "name='영희', grade=2 순서대로 저장!"
         },
         en: {
+          code: `class Student:
+    def __init__(s, name, grade):
+        s.name = name
+        s.grade = grade
+
+s1 = Student('Emma', 2)
+print(f'{s1.name}: grade {s1.grade}')`,
           predict: {
             question: "What's the output?",
-            options: ["영희: 2학년", "2: 영희학년", "Student: 2학년", "Error"],
-            feedback: "name='영희', grade=2 stored in order!"
-          }
+            options: ["Emma: grade 2", "2: Emma grade", "Student: grade 2", "Error"],
+            feedback: "name='Emma' and grade=2 are stored in order!"
+          },
+          result: "Emma: grade 2"
         },
         result: "영희: 2학년"
       }
@@ -290,11 +352,18 @@ print(hero.name)`,
           feedback: "s.name을 안 했으니 hero에 name 속성이 없어요!"
         },
         en: {
+          code: `class Character:
+    def __init__(s, name):
+        name = name  # not s.name!
+
+hero = Character('Hero')
+print(hero.name)`,
           predict: {
             question: "What's the output?",
-            options: ["용사", "name", "None", "Error (AttributeError)"],
+            options: ["Hero", "name", "None", "Error (AttributeError)"],
             feedback: "s.name was never set, so hero has no name attribute!"
-          }
+          },
+          result: "AttributeError: 'Character' object has no attribute 'name'"
         },
         isError: true,
         result: "AttributeError: 'Character' object has no attribute 'name'"
@@ -340,7 +409,10 @@ print(hero.name)`,
         en: {
           task: "Fill in the 2 blanks!",
           guide: "Complete the Monster class",
-          hint: "Use the pattern s.attribute = parameter!"
+          hint: "Use the pattern s.attribute = parameter!",
+          template: "class Monster:\n    def __init__(s, name, hp):\n        ___ = name\n        ___ = hp\n\nslime = Monster('Slime', 30)\nprint(f'{slime.name}: HP {slime.hp}')",
+          answer: "class Monster:\n    def __init__(s, name, hp):\n        s.name = name\n        s.hp = hp\n\nslime = Monster('Slime', 30)\nprint(f'{slime.name}: HP {slime.hp}')",
+          expect: "Slime: HP 30",
         },
         alternateAnswers: [],
         expect: "슬라임: HP 30"
@@ -360,7 +432,10 @@ print(hero.name)`,
         en: {
           task: "Fill in the 3 blanks!",
           guide: "Build a class from scratch!",
-          hint: "class, __init__, s!"
+          hint: "class, __init__, s!",
+          template: "___ Book:\n    def ___(s, title, author):\n        ___.title = title\n        s.author = author\n\nb = Book('Harry Potter', 'J.K. Rowling')\nprint(f'{b.title} - {b.author}')",
+          answer: "class Book:\n    def __init__(s, title, author):\n        s.title = title\n        s.author = author\n\nb = Book('Harry Potter', 'J.K. Rowling')\nprint(f'{b.title} - {b.author}')",
+          expect: "Harry Potter - J.K. Rowling",
         },
         alternateAnswers: [],
         expect: "해리포터 - J.K.롤링"
@@ -413,7 +488,10 @@ print(hero.name)`,
         expect: "뽀삐",
         en: {
           task: "Complete the Dog class __init__ and create a dog object",
-          guide: "class ClassName: def __init__(s, ...): s.attr = value"
+          guide: "class ClassName: def __init__(s, ...): s.attr = value",
+          template: "class Dog:\n    def ___(s, name, age):\n        s.___ = name\n        s.age = age\n\ndog = Dog('Poppy', 3)\nprint(dog.name)",
+          answer: "class Dog:\n    def __init__(s, name, age):\n        s.name = name\n        s.age = age\n\ndog = Dog('Poppy', 3)\nprint(dog.name)",
+          expect: "Poppy",
         }
       }
     },
@@ -431,7 +509,10 @@ print(hero.name)`,
         expect: "현대: 휘발유\n현대: 전기",
         en: {
           task: "Create two Car objects and print each one's brand and fuel",
-          guide: "Car(brand, fuel); access with obj.attribute"
+          guide: "Car(brand, fuel); access with obj.attribute",
+          template: "class Car:\n    def __init__(s, brand, fuel):\n        s.brand = brand\n        s.fuel = fuel\n\nc1 = Car('Hyundai', 'gasoline')\nc2 = Car('Hyundai', 'electric')\nprint(f'{c1.___}: {c1.___}')\nprint(f'{c2.___}: {c2.___}')",
+          answer: "class Car:\n    def __init__(s, brand, fuel):\n        s.brand = brand\n        s.fuel = fuel\n\nc1 = Car('Hyundai', 'gasoline')\nc2 = Car('Hyundai', 'electric')\nprint(f'{c1.brand}: {c1.fuel}')\nprint(f'{c2.brand}: {c2.fuel}')",
+          expect: "Hyundai: gasoline\nHyundai: electric",
         }
       }
     },
@@ -449,7 +530,9 @@ print(hero.name)`,
         expect: "70",
         en: {
           task: "Create a Player object, reduce hp by 30, and print current hp",
-          guide: "obj.attribute = new value to modify"
+          guide: "obj.attribute = new value to modify",
+          template: "class Player:\n    def __init__(s, name, hp):\n        s.name = name\n        s.hp = hp\n\np = Player('Hero', 100)\np.___ = p.___ - ___\nprint(p.hp)",
+          answer: "class Player:\n    def __init__(s, name, hp):\n        s.name = name\n        s.hp = hp\n\np = Player('Hero', 100)\np.hp = p.hp - 30\nprint(p.hp)",
         }
       }
     },
@@ -491,9 +574,14 @@ print(hero.name)`,
         ],
         expect: "영희",
         en: {
-          task: "Write from scratch! Create Student class (name, score)\nCreate s1(Minsu, 85) and s2(Younghee, 92), print the name of the higher scorer",
+          task: "Write from scratch! Create Student class (name, score)\nCreate s1(Tom, 85) and s2(Emma, 92), print the name of the higher scorer",
           guide: "class Student; s1 = Student(...); if s1.score > s2.score: print(s1.name)",
-          hint: "class Student:\n    def __init__(s, name, score):\n        s.name = name\n        s.score = score\n\ns1 = Student('민수', 85)\ns2 = Student('영희', 92)\nif s1.score > s2.score:\n    print(s1.name)\nelse:\n    print(s2.name)"
+          hint: "class Student:\n    def __init__(s, name, score):\n        s.name = name\n        s.score = score\n\ns1 = Student('Tom', 85)\ns2 = Student('Emma', 92)\nif s1.score > s2.score:\n    print(s1.name)\nelse:\n    print(s2.name)",
+          answer: "class Student:\n    def __init__(s, name, score):\n        s.name = name\n        s.score = score\n\ns1 = Student('Tom', 85)\ns2 = Student('Emma', 92)\nif s1.score > s2.score:\n    print(s1.name)\nelse:\n    print(s2.name)",
+          alternateAnswers: [
+            "class Student:\n    def __init__(s,n,sc):\n        s.name=n\n        s.score=sc\ns1=Student('Tom',85)\ns2=Student('Emma',92)\nprint(s1.name if s1.score>s2.score else s2.name)"
+          ],
+          expect: "Emma",
         }
       }
     },

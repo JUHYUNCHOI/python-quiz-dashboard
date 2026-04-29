@@ -20,9 +20,7 @@ export const part1ComboCluster: PracticeCluster = {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -72,9 +70,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -128,9 +124,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -178,9 +172,7 @@ Format: \`N x i = result\``,
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -232,9 +224,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -297,9 +287,7 @@ N=4 예시:
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -361,13 +349,10 @@ Example for N=4:
 \`cout << fixed << setprecision(1) << avg;\` 처럼 \`fixed\`와 \`setprecision(N)\`을 함께 씁니다. \`N\`이 소수점 아래 자릿수예요.`,
       constraints: "1 ≤ N ≤ 100, 0 ≤ 점수 ≤ 100",
       initialCode: `#include <iostream>
-#include <iomanip>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [

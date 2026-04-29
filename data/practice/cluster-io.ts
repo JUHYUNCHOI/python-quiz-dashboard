@@ -23,9 +23,7 @@ export const ioCluster: PracticeCluster = {
 using namespace std;
 
 int main() {
-    int a, b;
-    // cin으로 a, b를 입력받으세요
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -75,13 +73,10 @@ int main() {
 - 두 번째 줄: 평균 (소수점 첫째 자리까지)`,
       constraints: "0 ≤ A, B, C ≤ 1000",
       initialCode: `#include <iostream>
-#include <iomanip>
 using namespace std;
 
 int main() {
-    int a, b, c;
-    // cin으로 a, b, c를 입력받으세요
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -132,14 +127,10 @@ int main() {
 형식: \`안녕하세요, [이름]님! 내년에는 [나이+1]살이 되시는군요.\``,
       constraints: "이름은 영문 또는 한글, 최대 20자. 1 ≤ 나이 ≤ 120",
       initialCode: `#include <iostream>
-#include <string>
 using namespace std;
 
 int main() {
-    string name;
-    int age;
-    // cin으로 name, age를 입력받으세요
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -193,9 +184,7 @@ Note: the Korean characters in the output (안녕하세요, 님!, 내년에는, 
 using namespace std;
 
 int main() {
-    int w, h;
-    // cin으로 w, h를 입력받으세요
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -246,9 +235,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int seconds;
-    // cin으로 seconds를 입력받으세요
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -298,13 +285,10 @@ Note: the Korean labels (시간, 분, 초) in the output must be printed exactly
       description: `첫 줄에 정수 N이 주어지고, 두 번째 줄에 공백을 포함한 문장이 주어질 때, 문장을 그대로 출력하세요.`,
       constraints: "1 ≤ N ≤ 100, 문장은 최대 100자",
       initialCode: `#include <iostream>
-#include <string>
 using namespace std;
 
 int main() {
-    int n;
-    string line;
-    // cin으로 n을 입력받은 뒤, getline으로 문장을 읽어보세요
+
     return 0;
 }`,
       testCases: [
@@ -355,13 +339,10 @@ int main() {
 소수점 둘째 자리까지 출력하세요.`,
       constraints: "-273.15 ≤ C ≤ 10000",
       initialCode: `#include <iostream>
-#include <iomanip>
 using namespace std;
 
 int main() {
-    double c;
-    // cin으로 c를 입력받으세요
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -416,9 +397,7 @@ Print to two decimal places.`,
 using namespace std;
 
 int main() {
-    int price, paid;
-    // cin으로 price, paid를 입력받으세요
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -472,13 +451,10 @@ Output order: count of 50-won, count of 10-won, count of 1-won`,
 BMI = 몸무게 / (키 × 키)`,
       constraints: "1 ≤ 몸무게 ≤ 500, 0.5 ≤ 키 ≤ 3.0",
       initialCode: `#include <iostream>
-#include <iomanip>
 using namespace std;
 
 int main() {
-    double weight, height;
-    // cin으로 weight, height를 입력받으세요
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -527,9 +503,7 @@ BMI = weight / (height × height)`,
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -584,14 +558,10 @@ int main() {
 동점자가 있을 경우 먼저 입력된 학생의 이름을 출력합니다.`,
       constraints: "1 ≤ N ≤ 100, 0 ≤ 점수 ≤ 100, 이름은 공백 없는 영문자",
       initialCode: `#include <iostream>
-#include <string>
-#include <iomanip>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [

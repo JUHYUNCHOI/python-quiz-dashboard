@@ -19,14 +19,10 @@ export const mapSetCluster: PracticeCluster = {
 형식: \`단어 횟수\` (한 줄에 하나씩)`,
       constraints: "1 ≤ N ≤ 100, 각 단어는 영문 소문자, 길이 1 이상 20 이하",
       initialCode: `#include <iostream>
-#include <string>
-#include <map>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -79,13 +75,10 @@ Format: \`word count\` (one per line)`,
       description: `N개의 정수가 주어질 때, 중복을 제거하고 오름차순으로 출력하세요.`,
       constraints: "1 ≤ N ≤ 1000, -1000 ≤ 각 정수 ≤ 1000",
       initialCode: `#include <iostream>
-#include <set>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -140,20 +133,10 @@ int main() {
 각 쿼리에 대해 해당 정수가 집합에 있으면 \`YES\`, 없으면 \`NO\`를 출력하세요.`,
       constraints: "1 ≤ N, Q ≤ 100000, -1000000 ≤ 정수 ≤ 1000000",
       initialCode: `#include <iostream>
-#include <set>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    set<int> s;
-    for (int i = 0; i < n; i++) {
-        int x; cin >> x;
-        s.insert(x);
-    }
-    int q;
-    cin >> q;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -207,13 +190,10 @@ int main() {
 빈도가 같은 숫자가 여럿이면 가장 작은 것을 출력하세요.`,
       constraints: "1 ≤ N ≤ 1000, 1 ≤ 각 정수 ≤ 1000",
       initialCode: `#include <iostream>
-#include <map>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -269,20 +249,10 @@ int main() {
 공통 원소가 없으면 \`NONE\`을 출력하세요.`,
       constraints: "1 ≤ N, M ≤ 1000, 1 ≤ 각 정수 ≤ 10000",
       initialCode: `#include <iostream>
-#include <set>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    set<int> a;
-    for (int i = 0; i < n; i++) {
-        int x; cin >> x;
-        a.insert(x);
-    }
-    int m;
-    cin >> m;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -349,14 +319,10 @@ int main() {
 형식: \`이름 최고점수\``,
       constraints: "1 ≤ N ≤ 100, 각 이름은 영문 소문자, 0 ≤ 점수 ≤ 100",
       initialCode: `#include <iostream>
-#include <string>
-#include <map>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -412,14 +378,10 @@ Format: \`name best_score\``,
 없으면 \`NONE\`을 출력하세요.`,
       constraints: "1 ≤ N ≤ 10000, 1 ≤ 각 정수 ≤ 100000",
       initialCode: `#include <iostream>
-#include <map>
-#include <set>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -482,15 +444,10 @@ int main() {
 **예시:** \`apple banana apple\` → \`apple 2\`, \`banana 1\``,
       constraints: "1 ≤ N ≤ 100",
       initialCode: `#include <iostream>
-#include <unordered_map>
-#include <vector>
-#include <string>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       scaffoldCode: `#include <iostream>
@@ -567,15 +524,10 @@ int main() {
 (애너그램: 같은 문자들을 재배열한 단어)`,
       constraints: "1 ≤ N ≤ 1000, 각 단어는 영문 소문자, 길이 1 이상 20 이하",
       initialCode: `#include <iostream>
-#include <string>
-#include <map>
-#include <algorithm>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -629,13 +581,10 @@ int main() {
 배열에 중복 원소가 있을 수 있습니다.`,
       constraints: "1 ≤ N ≤ 100000, -100000 ≤ 각 정수, K ≤ 100000",
       initialCode: `#include <iostream>
-#include <map>
 using namespace std;
 
 int main() {
-    int n, k;
-    cin >> n >> k;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -691,15 +640,10 @@ int main() {
 - 중앙값 (중앙값: 정렬했을 때 가운데 값, N이 짝수면 가운데 두 값의 평균)`,
       constraints: "1 ≤ N ≤ 1000, 0 ≤ 점수 ≤ 100",
       initialCode: `#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <iomanip>
 using namespace std;
 
 int main() {
-    // 1) int n 을 cin 으로 입력받기
-    // 2) 크기 n 의 정수 벡터 scores 선언하고 n 개의 원소 읽기
-    // 3) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -762,15 +706,10 @@ int main() {
 없는 이름이면 \`NOT FOUND\`를 출력하세요.`,
       constraints: "1 ≤ N, Q ≤ 100000, 이름과 번호는 각각 최대 20자",
       initialCode: `#include <iostream>
-#include <string>
-#include <map>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    map<string, string> phonebook;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -835,13 +774,10 @@ int main() {
 \`100: X명\``,
       constraints: "1 ≤ N ≤ 1000, 0 ≤ 점수 ≤ 100",
       initialCode: `#include <iostream>
-#include <map>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [

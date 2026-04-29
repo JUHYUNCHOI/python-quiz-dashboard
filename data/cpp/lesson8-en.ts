@@ -892,7 +892,7 @@ double area(double w, double h) {
 }
 
 // Overload 3: triangle (3 sides — Heron's formula)
-// Hint: s = (a+b+c)/2.0, area = sqrt(s*(s-a)*(s-b)*(s-c))
+// Hint: s = (a+b+c)/2.0, area = sqrt(s**(s-a)**(s-b)*(s-c))
 double area(double a, double b, double c) {
 
 }

@@ -479,7 +479,9 @@ export const lessonCpp11: LessonData = {
           expect: 'string s = "hello world";\nif (s.find("world") != string::npos) {\n    cout << "찾았어요!" << endl;\n}',
           en: {
             task: "Complete the code to check if \"hello world\" contains \"world\"!",
-            guide: "If find returns something other than npos, it was found!"
+            guide: "If find returns something other than npos, it was found!",
+            template: 'string s = "hello world";\nif (s.find("world") != string::___) {\n    cout << "found!" << endl;\n}',
+            expect: 'string s = "hello world";\nif (s.find("world") != string::npos) {\n    cout << "found!" << endl;\n}',
           }
         }
       },

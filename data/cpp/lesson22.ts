@@ -843,6 +843,66 @@ public:
           ],
           explanation: "`seconds = s` — 왼쪽은 멤버 변수(seconds), 오른쪽은 매개변수(s). '받은 값을 멤버에 저장해' 라는 뜻이에요!"
         },
+        {
+          id: "ch3-practice",
+          type: "practice" as const,
+          title: "✋ Student 클래스 — 생성자로 초기화",
+          content: `\`Student\` 클래스를 완성해요. main 에서 \`Student s("Alice", 17); s.info();\` 호출 시 \`Alice, 17\` 가 나와야 함.
+
+**요구사항:**
+1. 멤버 변수: \`name\` (string), \`age\` (int) — public
+2. **생성자**: \`Student(string n, int a)\` — name, age 를 매개변수 값으로 초기화
+3. \`info()\` 함수: \`"이름, 나이"\` 형식으로 출력 (콤마+공백)
+
+> 💡 생성자 안에서 \`name = n; age = a;\` 로 멤버에 저장.`,
+          starterCode: `#include <iostream>
+#include <string>
+using namespace std;
+
+class Student {
+public:
+    string name;
+    int age;
+
+    // 👇 생성자 작성: Student(string n, int a)
+
+
+    // 👇 info() 함수 — "name, age" 출력
+
+};
+
+int main() {
+    Student s("Alice", 17);
+    s.info();
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <string>
+using namespace std;
+
+class Student {
+public:
+    string name;
+    int age;
+
+    Student(string n, int a) {
+        name = n;
+        age = a;
+    }
+
+    void info() {
+        cout << name << ", " << age;
+    }
+};
+
+int main() {
+    Student s("Alice", 17);
+    s.info();
+    return 0;
+}`,
+          hint: "Student(string n, int a) { name = n; age = a; } / void info() { cout << name << \", \" << age; }",
+          expectedOutput: "Alice, 17"
+        },
       ]
     },
     {

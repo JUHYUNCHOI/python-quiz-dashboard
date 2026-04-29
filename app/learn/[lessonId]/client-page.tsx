@@ -2,6 +2,7 @@
 
 import { useState, useEffect, use, useCallback, useRef } from "react"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { RequireAuth } from "@/components/require-auth"
 import { ChevronRight, ChevronLeft, X, Lock, PartyPopper, RotateCcw, LogIn, Pencil, Code2 } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -939,6 +940,17 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                 <ChevronRight className={cn("w-3.5 h-3.5 transition-transform", showChapterList && "rotate-90")} />
               </button>
               <div className="flex items-center gap-2">
+                {currentProgrammingLang === "cpp" && (
+                  <Link
+                    href="/reference/cpp-stl"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-colors"
+                    title={t("STL 치트시트 (새 탭)", "STL Cheatsheet (new tab)")}
+                  >
+                    📋 <span>{t("치트시트", "Cheatsheet")}</span>
+                  </Link>
+                )}
                 {hasVariants && <LibraryToggle variant={variant} setVariant={handleVariantChange} />}
                 <SoundToggle isMuted={isMuted} onToggle={toggleMute} />
                 {effectiveTeacher && (

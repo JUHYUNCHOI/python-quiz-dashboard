@@ -28,9 +28,7 @@ export const conditionalsCluster: PracticeCluster = {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -77,9 +75,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -126,9 +122,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int a, b, c;
-    cin >> a >> b >> c;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -182,9 +176,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -244,11 +236,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    switch (n) {
-        // 각 case를 채우세요
-    }
+
     return 0;
 }`,
       testCases: [
@@ -309,10 +297,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int a, b;
-    cin >> a >> b;
-    int result = // 삼항 연산자로 채우세요
-    cout << result << endl;
+
     return 0;
 }`,
       testCases: [
@@ -363,9 +348,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int y;
-    cin >> y;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -414,9 +397,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -462,9 +443,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int a, b;
-    cin >> a >> b;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -510,9 +489,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -566,9 +543,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int m;
-    cin >> m;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -623,9 +598,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int a, b, c;
-    cin >> a >> b >> c;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -680,9 +653,7 @@ int main() {
 using namespace std;
 
 int main() {
-    char c;
-    cin >> c;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -737,9 +708,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int y, m;
-    cin >> y >> m;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -792,10 +761,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int a, b, c;
-    cin >> a >> b >> c;
-    // 여기에 코드를 작성하세요
-    // sort() 사용 금지: if-else와 swap으로만 해결하세요
+
     return 0;
 }`,
       testCases: [
@@ -844,9 +810,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int a, b, c;
-    cin >> a >> b >> c;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -902,9 +866,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int l, r, x;
-    cin >> l >> r >> x;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -959,14 +921,10 @@ int main() {
 형식: \`[이름]: [등급]\``,
       constraints: "0 ≤ 점수 ≤ 100, 이름은 영문 최대 20자",
       initialCode: `#include <iostream>
-#include <string>
 using namespace std;
 
 int main() {
-    string name;
-    int score;
-    cin >> name >> score;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -1030,11 +988,7 @@ A == B이면 둘 중 아무 값이나 출력해도 됩니다.
 using namespace std;
 
 int main() {
-    int a, b;
-    cin >> a >> b;
-    // 삼항 연산자를 사용하세요: 조건 ? 값1 : 값2
-    int result = /* 여기를 채우세요 */;
-    cout << result << endl;
+
     return 0;
 }`,
       testCases: [
@@ -1085,13 +1039,10 @@ int main() {
 \`조건1 ? 값1 : (조건2 ? 값2 : 값3)\``,
       constraints: "-1000 ≤ N ≤ 1000",
       initialCode: `#include <iostream>
-#include <string>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       scaffoldCode: `#include <iostream>
@@ -1160,12 +1111,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    switch (n) {
-        case 1: cout << "Monday" << endl; break;
-        // 나머지를 채우세요
-    }
+
     return 0;
 }`,
       testCases: [
@@ -1231,14 +1177,7 @@ case 5: cout << "spring"; break;
 using namespace std;
 
 int main() {
-    int m;
-    cin >> m;
-    switch (m) {
-        case 3:
-        case 4:
-        case 5: cout << "spring" << endl; break;
-        // 나머지 계절을 채우세요
-    }
+
     return 0;
 }`,
       testCases: [
@@ -1303,12 +1242,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int a, b;
-    char op;
-    cin >> a >> b >> op;
-    switch (op) {
-        // 각 연산자 case를 작성하세요
-    }
+
     return 0;
 }`,
       testCases: [

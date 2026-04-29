@@ -60,7 +60,9 @@ export const lessonCpp6: LessonData = {
           expect: 'if (x > 0) {\n    cout << "양수" << endl;\n}',
           en: {
             task: "Complete the if statement that prints 'positive' when x > 0!",
-            guide: "Use the form: if (condition) { ... }"
+            guide: "Use the form: if (condition) { ... }",
+            template: '___(x > 0) {\n    cout << "positive" << endl;\n}',
+            expect: 'if (x > 0) {\n    cout << "positive" << endl;\n}',
           }
         }
       },
@@ -78,7 +80,9 @@ export const lessonCpp6: LessonData = {
           expect: 'if (age < 19) {\n    cout << "미성년" << endl;\n}',
           en: {
             task: "Fill in the condition to print 'minor' when age is under 19!",
-            guide: "if (condition) { ... } — what goes in the condition?"
+            guide: "if (condition) { ... } — what goes in the condition?",
+            template: 'if (___) {\n    cout << "minor" << endl;\n}',
+            expect: 'if (age < 19) {\n    cout << "minor" << endl;\n}',
           }
         }
       },
@@ -146,7 +150,9 @@ export const lessonCpp6: LessonData = {
           expect: 'if (score >= 60) {\n    cout << "합격" << endl;\n} else {\n    cout << "불합격" << endl;\n}',
           en: {
             task: "Use else to also print 'fail'!",
-            guide: "Add else { ... } after the if block!"
+            guide: "Add else { ... } after the if block!",
+            template: 'if (score >= 60) {\n    cout << "pass" << endl;\n} ___ {\n    cout << "fail" << endl;\n}',
+            expect: 'if (score >= 60) {\n    cout << "pass" << endl;\n} else {\n    cout << "fail" << endl;\n}',
           }
         }
       },
@@ -322,7 +328,9 @@ export const lessonCpp6: LessonData = {
           expect: 'case 1:\n    cout << "하나" << endl;\n    break;',
           en: {
             task: "Fill in the missing keyword in the switch statement!",
-            guide: "This keyword must be added at the end of each case!"
+            guide: "This keyword must be added at the end of each case!",
+            template: 'case 1:\n    cout << "one" << endl;\n    ___;',
+            expect: 'case 1:\n    cout << "one" << endl;\n    break;',
           }
         }
       },
@@ -375,7 +383,9 @@ export const lessonCpp6: LessonData = {
           expect: 'case 1:\n    cout << "하나" << endl;\n    break;',
           en: {
             message: "Wait! Do you remember the important keyword in switch?",
-            task: "What keyword must be written at the end of a case?"
+            task: "What keyword must be written at the end of a case?",
+            template: 'case 1:\n    cout << "one" << endl;\n    ___;',
+            expect: 'case 1:\n    cout << "one" << endl;\n    break;',
           }
         }
       },

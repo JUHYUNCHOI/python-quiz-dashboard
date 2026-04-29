@@ -90,6 +90,34 @@ export function AlgoTopicPage({ topic }: AlgoTopicPageProps) {
         </div>
       </div>
 
+      {/* 선수 학습 안내 (cpp-18 등) */}
+      {topic.prerequisite && (
+        <div className="max-w-[1400px] mx-auto px-4 pt-4">
+          <div className="rounded-xl border-2 border-amber-200 bg-amber-50 px-4 py-3 flex items-start gap-3">
+            <span className="text-2xl shrink-0">📚</span>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-bold text-amber-900 mb-1">
+                {lang === "en"
+                  ? `Helpful first: lesson "${topic.prerequisite.titleEn ?? topic.prerequisite.title}"`
+                  : `먼저 보면 좋아요: "${topic.prerequisite.title}" 레슨`}
+              </p>
+              <p className="text-sm text-amber-800 leading-relaxed">
+                {lang === "en"
+                  ? (topic.prerequisite.reasonEn ?? topic.prerequisite.reason)
+                  : topic.prerequisite.reason}
+              </p>
+              <a
+                href={`/learn/${topic.prerequisite.lessonId}`}
+                className="inline-flex items-center gap-1 mt-2 text-xs font-bold text-amber-900 bg-amber-100 hover:bg-amber-200 border border-amber-300 rounded-md px-2.5 py-1 transition-colors"
+              >
+                {lang === "en" ? "→ Open lesson" : "→ 레슨 열기"}
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* 알고리즘 랩 컨텐츠 */}
       <div className="max-w-[1400px] mx-auto">
         <AlgoViewer topicId={topic.id} codeTrack={codeTrack} />

@@ -106,7 +106,9 @@ export const lessonCpp2: LessonData = {
           expect: 'std::cout << "점수: " << 100 << std::endl;',
           en: {
             task: 'Print "Score: 100"!',
-            guide: "Chain string and number together with <<"
+            guide: "Chain string and number together with <<",
+            template: 'std::cout << "Score: " ___ 100 << std::endl;',
+            expect: 'std::cout << "Score: " << 100 << std::endl;',
           }
         }
       },
@@ -175,7 +177,9 @@ export const lessonCpp2: LessonData = {
           expect: 'std::cout << "이름\\t나이" << std::endl;',
           en: {
             task: "Separate name and age with a tab!",
-            guide: "The tab character is \\t!"
+            guide: "The tab character is \\t!",
+            template: 'std::cout << "name___age" << std::endl;',
+            expect: 'std::cout << "name\\tage" << std::endl;',
           }
         }
       },

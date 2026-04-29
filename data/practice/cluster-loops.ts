@@ -23,9 +23,7 @@ export const loopsCluster: PracticeCluster = {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -80,13 +78,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int n, sum = 0;
-    while (true) {
-        cin >> n;
-        // 0이면 종료
-        // 아니면 sum에 더하기
-    }
-    cout << sum << endl;
+
     return 0;
 }`,
       testCases: [
@@ -122,13 +114,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int n, sum = 0;
-    while (true) {
-        cin >> n;
-        // if 0, stop
-        // otherwise add to sum
-    }
-    cout << sum << endl;
+
     return 0;
 }`,
         hints: [
@@ -157,11 +143,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    do {
-        // 여기에 코드를 작성하세요
-    } while (/* 조건 */);
+
     return 0;
 }`,
       testCases: [
@@ -195,11 +177,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    do {
-        // write your code here
-    } while (/* condition */);
+
     return 0;
 }`,
         hints: [
@@ -228,12 +206,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    for (int i = 1; i <= n; i++) {
-        if (i % 3 == 0) continue;  // 3의 배수면 건너뛰기
-        // 나머지 출력
-    }
+
     return 0;
 }`,
       testCases: [
@@ -282,9 +255,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int n, m;
-    cin >> n >> m;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -332,9 +303,7 @@ N! = 1 × 2 × 3 × … × N`,
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -389,9 +358,7 @@ N=3일 때:
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -442,9 +409,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -496,9 +461,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -543,9 +506,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -596,9 +557,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -649,9 +608,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int a, b;
-    cin >> a >> b;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -700,9 +657,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -756,9 +711,7 @@ F(1)=1, F(2)=1, F(N)=F(N-1)+F(N-2)`,
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -813,9 +766,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int a, b;
-    cin >> a >> b;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -866,9 +817,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int n, m;
-    cin >> n >> m;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -917,9 +866,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -967,9 +914,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -1023,9 +968,7 @@ int main() {
 using namespace std;
 
 int main() {
-    long long n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -1078,9 +1021,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -1142,9 +1083,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -1194,13 +1133,10 @@ int main() {
       description: `양의 정수 N을 2진수로 변환하여 출력하세요.`,
       constraints: "1 ≤ N ≤ 1000000",
       initialCode: `#include <iostream>
-#include <string>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -1254,9 +1190,7 @@ N이 1이면 "1"을 출력하세요.`,
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -1321,9 +1255,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -1379,8 +1311,7 @@ int main() {
 using namespace std;
 
 int main() {
-    int x, sum = 0;
-    // while과 cin을 함께 사용해보세요
+
     return 0;
 }`,
       testCases: [

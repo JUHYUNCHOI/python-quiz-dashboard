@@ -230,6 +230,15 @@ function normalizeCpp(s: string) {
   return normalize(s).replace(/std::/g, "")
 }
 
+// 텍스트 안의 **bold** 만 처리 (마크다운 라이브러리 없이 가볍게)
+function renderBold(text: string): React.ReactNode {
+  return (text || "").split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
+    part.startsWith("**") && part.endsWith("**")
+      ? <strong key={i} className="font-semibold text-gray-900">{part.slice(2, -2)}</strong>
+      : <span key={i}>{part}</span>
+  )
+}
+
 function isAnswerCorrect(
   input: string,
   content: PracticeContent | InterleavingContent,
@@ -290,6 +299,10 @@ function McqStep({
   const question = (E && content.en?.question) ? content.en.question : content.question
   const options = (E && content.en?.options?.length) ? content.en.options : content.options
   const explanation = (E && content.en?.explanation) ? content.en.explanation : content.explanation
+  // errorQuiz 의 code 도 en 우선
+  const code = "code" in content
+    ? ((E && (content.en as { code?: string } | undefined)?.code) ? (content.en as { code: string }).code : content.code)
+    : undefined
 
   const select = (i: number) => {
     if (answered) return
@@ -304,12 +317,12 @@ function McqStep({
 
   return (
     <div className="flex flex-col gap-3">
-      <p className="font-semibold text-gray-800 text-base leading-relaxed">{question}</p>
-      {"code" in content && content.code && (
+      <p className="font-semibold text-gray-800 text-base leading-relaxed">{renderBold(question)}</p>
+      {code && (
         <div className="rounded-xl bg-[#1a1b2e] px-4 py-3 font-mono text-sm overflow-x-auto leading-6 whitespace-pre-wrap">
           {language === "cpp"
-            ? highlightCpp(content.code, true)
-            : highlightPython(content.code, true)}
+            ? highlightCpp(code, true)
+            : highlightPython(code, true)}
         </div>
       )}
       <div className="flex flex-col gap-2">
@@ -359,7 +372,7 @@ function McqStep({
           <p className={cn("font-bold mb-1", isRight ? "text-emerald-700" : "text-red-600")}>
             {isRight ? t("✅ 정답!", "✅ Correct!") : t("❌ 오답!", "❌ Wrong!")}
           </p>
-          <p className="text-gray-600 leading-relaxed">{explanation}</p>
+          <p className="text-gray-600 leading-relaxed">{renderBold(explanation)}</p>
         </div>
       )}
     </div>
@@ -416,11 +429,13 @@ function PracticeStep({
   const isEn = curLang === "en"
 
   const isFullCode = content.template === null
-  // EN 템플릿 우선 사용 (없으면 KO fallback)
-  const enContent = content.en as { template?: string; answer?: string; alternateAnswers?: string[] } | undefined
+  // EN 템플릿/expect 우선 사용 (없으면 KO fallback)
+  const enContent = content.en as { template?: string; answer?: string; alternateAnswers?: string[]; expect?: string } | undefined
   const rawTemplateBase = (!isFullCode && isEn && enContent?.template)
     ? enContent.template
     : content.template
+  // EN 모드면 en.expect 우선 — 채점/표시 모두에 사용
+  const displayExpect = (isEn && enContent?.expect) ? enContent.expect : content.expect
   // { before, after } 객체 형식을 인라인 빈칸 문자열로 정규화
   const rawTemplate = (typeof rawTemplateBase === "object" && rawTemplateBase !== null && "before" in rawTemplateBase)
     ? `${(rawTemplateBase as { before: string; after: string }).before}___${(rawTemplateBase as { before: string; after: string }).after}`
@@ -474,7 +489,7 @@ function PracticeStep({
 
     // ── 출력 기반 채점: template=null + expect 있을 때 ──────────────
     if (isFullCode && content.expect) {
-      const expectedOut = String(content.expect).trim()
+      const expectedOut = String(displayExpect).trim()
 
       // Python: 자체 runner로 실행 후 출력 비교
       // (runner가 제한적이므로 텍스트 비교를 안전망으로 사용)
@@ -527,7 +542,9 @@ function PracticeStep({
       if (language === "cpp") {
         setIsRunning(true)
         try {
-          const stdinVal = (content as { stdin?: string }).stdin
+          // EN 모드면 en.stdin 우선 사용 (영문 입력 데이터로 바꿔 둔 경우)
+          const enStdin = (content.en as { stdin?: string } | undefined)?.stdin
+          const stdinVal = (isEn && enStdin) ? enStdin : (content as { stdin?: string }).stdin
 
           // 학생이 #include / int main() 안 써도 자동으로 감싸서 컴파일
           const codeForPiston = isFullCode ? wrapCppCode(combined) : combined
@@ -667,10 +684,30 @@ function PracticeStep({
         )}
       </p>
 
+      {/* 예시 입력 — 전체 코드 작성 시, sampleInput 또는 stdin 이 있으면 보여줌 */}
+      {isFullCode && result === "idle" && (() => {
+        const enSample = (content.en as { sampleInput?: string; stdin?: string } | undefined)
+        const sample = (isEn && enSample?.sampleInput) ? enSample.sampleInput
+          : (content as { sampleInput?: string }).sampleInput
+            ?? ((isEn && enSample?.stdin) ? enSample.stdin : (content as { stdin?: string }).stdin)
+        return sample && (
+          <div className="rounded-xl overflow-hidden border-2 border-sky-400 shadow-sm">
+            <div className="bg-sky-500 px-3 py-1.5 flex items-center gap-1.5">
+              <span className="text-[11px] text-white font-bold tracking-wide">
+                {isEn ? "▶ Sample input" : "▶ 예시 입력"}
+              </span>
+            </div>
+            <div className="bg-gray-900 px-4 py-3 font-mono text-base text-white whitespace-pre-wrap leading-7">
+              {sample}
+            </div>
+          </div>
+        )
+      })()}
+
       {/* 목표 출력 — 빈칸 연습이거나 expect가 정답과 같으면 숨김 (정답 노출 방지) */}
-      {isFullCode && "expect" in content && content.expect && result === "idle" &&
-       "answer" in content && String(content.expect).trim() !== String(content.answer ?? "").trim() &&
-       !task?.includes("↓") && !task?.includes(String(content.expect)) && (
+      {isFullCode && "expect" in content && displayExpect && result === "idle" &&
+       "answer" in content && String(displayExpect).trim() !== String((isEn && enContent?.answer) ? enContent.answer : content.answer ?? "").trim() &&
+       !task?.includes("↓") && !task?.includes(String(displayExpect)) && (
         <div className="rounded-xl overflow-hidden border-2 border-emerald-400 shadow-sm">
           <div className="bg-emerald-500 px-3 py-1.5 flex items-center gap-1.5">
             <span className="text-[11px] text-white font-bold tracking-wide">
@@ -678,7 +715,7 @@ function PracticeStep({
             </span>
           </div>
           <div className="bg-gray-900 px-4 py-3 font-mono text-base font-bold text-white whitespace-pre-wrap leading-7">
-            {String(content.expect)}
+            {String(displayExpect)}
           </div>
         </div>
       )}
@@ -869,8 +906,8 @@ function PracticeStep({
       {result === "correct" && (
         <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3">
           <p className="text-emerald-700 font-bold text-sm">✅ {t("정답!", "Correct!")}</p>
-          {content.expect && (
-            <pre className="mt-1 font-mono text-xs text-emerald-800 whitespace-pre-wrap">{content.expect}</pre>
+          {displayExpect && (
+            <pre className="mt-1 font-mono text-xs text-emerald-800 whitespace-pre-wrap">{displayExpect}</pre>
           )}
         </div>
       )}
@@ -884,10 +921,11 @@ function PracticeStep({
               <pre className="font-mono text-xs text-red-700 bg-red-100 rounded px-2 py-1.5 whitespace-pre-wrap">
                 {actualOutput || t("(출력 없음)", "(no output)")}
               </pre>
-              {content.expect && !actualOutput.startsWith("컴파일 에러") && !actualOutput.startsWith("오류") && (
-                <p className="text-xs text-red-400 mt-1">
-                  {t("예상 출력:", "Expected:")} <code className="font-mono bg-red-100 px-1 rounded">{String(content.expect)}</code>
-                </p>
+              {displayExpect && !actualOutput.startsWith("컴파일 에러") && !actualOutput.startsWith("오류") && (
+                <div className="mt-1">
+                  <p className="text-xs text-red-500 font-semibold mb-0.5">{t("예상 출력:", "Expected:")}</p>
+                  <pre className="font-mono text-xs text-red-700 bg-red-100 rounded px-2 py-1.5 whitespace-pre-wrap">{String(displayExpect)}</pre>
+                </div>
               )}
             </div>
           )}
@@ -986,18 +1024,21 @@ function PredictStep({
         </div>
       )}
 
-      {/* Code */}
-      {content.code && (
-        <div className="rounded-xl bg-[#1a1b2e] px-4 py-3 font-mono text-sm overflow-x-auto leading-6 whitespace-pre-wrap">
-          {language === "cpp"
-            ? highlightCpp(content.code, true)
-            : highlightPython(content.code, true)}
-        </div>
-      )}
+      {/* Code — EN 번역본이 있으면 우선 사용 */}
+      {(() => {
+        const displayCode = (isEn && content.en?.code) ? content.en.code : content.code
+        return displayCode && (
+          <div className="rounded-xl bg-[#1a1b2e] px-4 py-3 font-mono text-sm overflow-x-auto leading-6 whitespace-pre-wrap">
+            {language === "cpp"
+              ? highlightCpp(displayCode, true)
+              : highlightPython(displayCode, true)}
+          </div>
+        )
+      })()}
 
       {/* Prediction question */}
       <p className="text-base font-bold text-gray-900 mt-1">
-        {predictQuestion ?? t("결과가 뭘까?", "What will the output be?")}
+        {predictQuestion ? renderBold(predictQuestion) : t("결과가 뭘까?", "What will the output be?")}
       </p>
 
       <div className="flex flex-col gap-2.5">
@@ -1028,7 +1069,10 @@ function PredictStep({
                 isCorrect && answered ? "text-emerald-700 font-semibold" :
                 isSelected && answered ? "text-red-700 font-normal" : "text-gray-800 font-normal"
               )}>
-                {opt}
+                {/* 옵션 문자열에 리터럴 "\n"(백슬래시+n) 또는 실제 개행이 섞여 있을 수 있음 → 둘 다 줄바꿈으로 */}
+                {opt.split(/\\n|\n/).map((line, li, arr) => (
+                  <span key={li}>{line}{li < arr.length - 1 && <br />}</span>
+                ))}
               </span>
               {answered && isCorrect && <Check className="w-4 h-4 text-emerald-500 ml-auto shrink-0" />}
               {answered && isSelected && !isCorrect && <X className="w-4 h-4 text-red-400 ml-auto shrink-0" />}
@@ -1046,13 +1090,16 @@ function PredictStep({
             {isRight ? t("✅ 맞았어요!", "✅ Correct!") : t("❌ 틀렸어요!", "❌ Wrong!")}
           </p>
           {predictFeedback && (
-            <p className="text-gray-600">{predictFeedback}</p>
+            <p className="text-gray-600">{renderBold(predictFeedback)}</p>
           )}
-          {content.result && (
-            <p className="mt-1 text-xs text-gray-500">
-              {t("실제 결과:", "Actual output:")} <code className="font-mono bg-white px-1 rounded">{content.result}</code>
-            </p>
-          )}
+          {(() => {
+            const displayResult = (isEn && content.en?.result) ? content.en.result : content.result
+            return displayResult && (
+              <p className="mt-1 text-xs text-gray-500">
+                {t("실제 결과:", "Actual output:")} <code className="font-mono bg-white px-1 rounded">{displayResult}</code>
+              </p>
+            )
+          })()}
         </div>
       )}
     </div>

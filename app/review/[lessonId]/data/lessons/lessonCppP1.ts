@@ -120,7 +120,9 @@ export const lessonCppP1: LessonData = {
           expect: "if (guess < answer) {\n    cout << \"더 크게!\" << \"\\n\";\n}",
           en: {
             task: "Write the condition for when the guess is smaller than the answer!",
-            guide: "If guess is less than answer, print 'Go higher!'"
+            guide: "If guess is less than answer, print 'Go higher!'",
+            template: "if (guess ___ answer) {\n    cout << \"Go higher!\" << \"\\n\";\n}",
+            expect: "if (guess < answer) {\n    cout << \"Go higher!\" << \"\\n\";\n}",
           }
         }
       },

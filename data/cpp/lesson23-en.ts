@@ -114,7 +114,7 @@ Same role as v.begin() / v.end() for vectors.
 
 ---
 
-### 💭 Keep in mind — sort needs to be able to *compare*
+### 💭 Keep in mind — sort needs to be able to **compare**
 
 The reason \`sort\` finishes the job in one line: it knows **which of two values comes first**.
 
@@ -1329,13 +1329,13 @@ Without sorting, {1, 3, 1} stays as 3 elements.
 |---|---|
 | \`sorted(set(v))\` | \`sort + erase(unique(...))\` |
 
-💡 Memorize **sort → erase(unique(...), end())** as a pair! Next page — *why* we need erase too.`
+💡 Memorize **sort → erase(unique(...), end())** as a pair! Next page — **why** we need erase too.`
         },
         {
           id: "s23-ch3-unique-detail",
           type: "explain",
           title: "🤔 Wait — why do we need \`erase\`? What if we only call \`unique\`?",
-          content: `Once you see what \`unique\` *actually* does, why \`erase\` is its partner becomes obvious.
+          content: `Once you see what \`unique\` **actually** does, why \`erase\` is its partner becomes obvious.
 
 ### What unique really does
 
@@ -1352,7 +1352,7 @@ v = {1, 2, 3, 4, 5, 6, 9, ?, ?, ?}   size is still 10!
                           past this is leftover garbage (meaningless)
 \`\`\`
 
-\`v.size()\` would still print 10. The first 7 are real; the last 3 are *traces* left in memory.
+\`v.size()\` would still print 10. The first 7 are real; the last 3 are **traces** left in memory.
 
 ---
 
@@ -1386,9 +1386,9 @@ v.erase( unique(v.begin(), v.end()),  v.end() );
 //          ───────  trim the garbage between  ───────
 \`\`\`
 
-erase from the *real end* (returned by unique) up to \`v.end()\` — that's the famous pattern.
+erase from the **real end** (returned by unique) up to \`v.end()\` — that's the famous pattern.
 
-> 💡 Remember: \`unique\` only *moves things*, size stays. To truly shrink it, pair with \`erase\`.`
+> 💡 Remember: \`unique\` only **moves things**, size stays. To truly shrink it, pair with \`erase\`.`
         },
         {
           id: "s23-ch3-unique-practice",
@@ -1542,10 +1542,196 @@ Bob 80
 Carol 90
 Dave 80`,
         },
+      ]
+    },
+
+    // ============================================
+    // Chapter 4: Lambda + general STL algorithms
+    // ============================================
+    {
+      id: "s23-ch4",
+      title: "Lambda + General STL Algorithms",
+      emoji: "🔍",
+      steps: [
         {
-          id: "s23-ch3-summary",
+          id: "s23-ch4-intro",
           type: "explain",
-          title: "🎉 Lesson 23 Complete! sort Master!",
+          title: "🤔 Does sort's lambda work elsewhere?",
+          content: `Remember the lambda comparator you passed to \`sort\`?
+
+\`\`\`cpp
+sort(v.begin(), v.end(), [](int a, int b) { return a > b; });
+\`\`\`
+
+That pattern — \`(begin, end, lambda)\` — works for almost every function in \`<algorithm>\`. Beyond sorting:
+
+- "**How many elements satisfy a condition?**" → \`count_if\`
+- "**First element that satisfies a condition?**" → \`find_if\`
+- "**Sum of all elements?**" → \`accumulate\` (in \`<numeric>\`)
+
+> 💡 **Why bother?**
+> You can always write a for loop, but these functions make the **intent clear in one line**. Seeing \`count_if(..., cond)\` immediately tells the reader "we're counting things matching a condition." Big readability win in code reviews and competitions.`
+        },
+        {
+          id: "s23-ch4-count-if",
+          type: "explain",
+          title: "🔢 count_if — count matches",
+          content: `**Problem:** How many students scored 80 or higher?
+
+### Old way (for loop)
+\`\`\`cpp
+int cnt = 0;
+for (int x : scores) {
+    if (x >= 80) cnt++;
+}
+\`\`\`
+
+### \`count_if\` one-liner
+\`\`\`cpp
+int cnt = count_if(scores.begin(), scores.end(),
+                   [](int x){ return x >= 80; });
+\`\`\`
+
+### Argument structure (same as sort)
+| Position | Meaning |
+|---|---|
+| 1st | Start iterator (\`v.begin()\`) |
+| 2nd | End iterator (\`v.end()\`) |
+| 3rd | **Predicate (lambda returning bool)** — true → counted |
+
+> 💡 **Difference from \`count\`?**
+> - \`count(b, e, x)\` — count elements **equal to x**
+> - \`count_if(b, e, pred)\` — count elements **matching the predicate** (much more flexible)`
+        },
+        {
+          id: "s23-ch4-count-if-predict",
+          type: "predict" as const,
+          title: "Predict the output",
+          content: `\`\`\`cpp
+vector<int> v = {10, 25, 30, 45, 50, 65};
+int cnt = count_if(v.begin(), v.end(),
+                   [](int x){ return x % 5 == 0 && x > 30; });
+cout << cnt;
+\`\`\`
+
+What is cnt?`,
+          options: ["4", "3", "2", "5"],
+          answer: 1,
+          explanation: "Multiples of 5 strictly greater than 30: 45, 50, 65 → 3. (10, 25, 30 fail the > 30 part.)"
+        },
+        {
+          id: "s23-ch4-find-if",
+          type: "explain",
+          title: "🎯 find_if — first match",
+          content: `**Problem:** Find the first even number in a vector.
+
+\`\`\`cpp
+vector<int> v = {3, 7, 4, 9, 6};
+auto it = find_if(v.begin(), v.end(),
+                  [](int x){ return x % 2 == 0; });
+
+if (it != v.end()) {
+    cout << *it;        // 4
+} else {
+    cout << "not found";
+}
+\`\`\`
+
+### Key pattern
+- \`find_if\` returns an **iterator** (not a value)
+- If not found, returns \`v.end()\` → check with \`!= v.end()\`
+- To use the value, dereference: \`*it\`
+- For an index: \`it - v.begin()\`
+
+> 💡 **Difference from \`find\`?**
+> - \`find(b, e, x)\` — find the **value x** itself
+> - \`find_if(b, e, pred)\` — find the **first element matching the predicate**`
+        },
+        {
+          id: "s23-ch4-accumulate",
+          type: "explain",
+          title: "➕ accumulate — sum (or product, or anything)",
+          content: `**Problem:** Score sum and average.
+
+\`\`\`cpp
+#include <numeric>     // ⚠️ Not <algorithm> — <numeric>!
+
+vector<int> v = {10, 20, 30, 40};
+
+int sum = accumulate(v.begin(), v.end(), 0);
+//                                       ↑ initial value (sum starts at 0)
+cout << sum;     // 100
+\`\`\`
+
+### Tweak the initial value to do more
+\`\`\`cpp
+// Sum: start at 0
+accumulate(v.begin(), v.end(), 0);          // 100
+
+// Product: start at 1, pass multiplies as the 4th arg
+#include <functional>
+accumulate(v.begin(), v.end(), 1, multiplies<int>());   // 10*20*30*40 = 240000
+
+// Custom via lambda: sum of squares
+accumulate(v.begin(), v.end(), 0,
+           [](int acc, int x){ return acc + x * x; });   // 100+400+900+1600 = 3000
+\`\`\`
+
+### Average in one line
+\`\`\`cpp
+double avg = (double)accumulate(v.begin(), v.end(), 0) / v.size();
+\`\`\`
+
+> ⚠️ Don't forget \`#include <numeric>\`. This catches a lot of people the first time.`
+        },
+        {
+          id: "s23-ch4-practice",
+          type: "practice" as const,
+          title: "✋ From scratch — count high scorers + total",
+          content: `**Problem:** Read 5 student scores, then print:
+1. How many scored 80 or higher
+2. The total sum
+
+on one line, separated by a single space.
+
+> 💡 \`count_if\` for #1, \`accumulate\` for #2 — each one line.
+> ⚠️ \`accumulate\` needs \`<numeric>\`!`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <numeric>
+using namespace std;
+
+int main() {
+    vector<int> scores(5);
+    for (int i = 0; i < 5; i++) cin >> scores[i];
+    // 👇 count of scores >= 80, total sum, print on one line
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <numeric>
+using namespace std;
+
+int main() {
+    vector<int> scores(5);
+    for (int i = 0; i < 5; i++) cin >> scores[i];
+    int high = count_if(scores.begin(), scores.end(),
+                        [](int x){ return x >= 80; });
+    int total = accumulate(scores.begin(), scores.end(), 0);
+    cout << high << " " << total << endl;
+    return 0;
+}`,
+          hint: "count_if(scores.begin(), scores.end(), [](int x){ return x >= 80; }); + accumulate(scores.begin(), scores.end(), 0); — two lines, done.",
+          expectedOutput: `3 380`,
+          stdin: `90 65 80 75 70`,
+        },
+        {
+          id: "s23-ch4-summary",
+          type: "explain",
+          title: "🎉 Lesson 23 Complete! sort + STL algorithms!",
           content: `## 🏆 Lesson 23 Done! Amazing work!
 
 ### 📊 sort Basics
@@ -1567,6 +1753,13 @@ Dave 80`,
 
 ### 🧹 Advanced Pattern
 - **sort + erase(unique(...), end())**: remove duplicates (memorize as a set!)
+- **stable_sort**: preserve original order on ties
+
+### 🔍 Lambda + general STL algorithms ⭐ NEW
+- **count_if(b, e, pred)** — count elements matching a predicate
+- **find_if(b, e, pred)** — first iterator matching a predicate
+- **accumulate(b, e, init)** — sum / product / custom fold (\`<numeric>\` required)
+- Same shape as sort: \`(begin, end, lambda)\`
 
 ### 🐍 Key Differences from Python!
 | Feature | Python 🐍 | C++ ⚡ |
@@ -1575,8 +1768,11 @@ Dave 80`,
 | Sort criterion | \`key=\` (transform 1 value) | comparison function (compare 2) |
 | Binary search | \`bisect_left/right\` | \`lower_bound/upper_bound\` |
 | Remove dups | \`sorted(set(v))\` | \`sort + erase(unique)\` |
+| Conditional count | \`sum(1 for x in v if x>=80)\` | \`count_if(b, e, pred)\` |
+| Sum | \`sum(v)\` | \`accumulate(b, e, 0)\` |
 
-🚀 Next up: **map & set** — containers that stay sorted like magic!`
+🚀 Next up: **map & set** — containers that stay sorted like magic!
+   Then straight to **🏆 USACO Mock Contest (cpp-p3)** — the real deal!`
         }
       ]
     }

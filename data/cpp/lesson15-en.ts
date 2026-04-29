@@ -106,7 +106,7 @@ cout << p.first;    // "Kim"
 cout << p.second;   // 95
 \`\`\`
 
-When you'll use the values multiple times — or want *meaningful names* — **C++17 lets you unpack in one line**:
+When you'll use the values multiple times — or want **meaningful names** — **C++17 lets you unpack in one line**:
 
 \`\`\`cpp
 auto [name, score] = p;
@@ -114,14 +114,14 @@ cout << name;    // "Kim"
 cout << score;   // 95
 \`\`\`
 
-That \`auto\` + \`[name, score]\` is called **structured bindings**. The name comes from "**bind**ing the parts of a *structured* bundle (pair / tuple / struct) to multiple variables." (Same syntax shows up again in the tuple chapter — practicing it here makes that transition smooth.)
+That \`auto\` + \`[name, score]\` is called **structured bindings**. The name comes from "**bind**ing the parts of a **structured** bundle (pair / tuple / struct) to multiple variables." (Same syntax shows up again in the tuple chapter — practicing it here makes that transition smooth.)
 
 ### Which to use?
 
 | Pattern | When |
 |---|---|
 | \`p.first\`, \`p.second\` | One or two accesses, simple |
-| \`auto [name, score] = p;\` | Many uses / want *meaningful names* ⭐ |
+| \`auto [name, score] = p;\` | Many uses / want **meaningful names** ⭐ |
 | \`for (auto& [name, score] : v)\` | range-for over vector<pair> — extremely common! ⭐⭐ |
 
 ### Preview — comparing vector<pair> iteration
@@ -325,7 +325,7 @@ If eligible, print \`Kim: eligible\`. Otherwise \`Kim: not eligible\`.
 getStudent() → ("Kim", 15, 3.8)   →  Kim: not eligible (age too low)
 \`\`\`
 
-> 💡 Receive with structured bindings (\`auto [name, age, gpa] = ...\`), then check the condition and print. **The real value of structured bindings: each piece gets a *name*, so the conditional reads naturally.**`,
+> 💡 Receive with structured bindings (\`auto [name, age, gpa] = ...\`), then check the condition and print. **The real value of structured bindings: each piece gets a **name**, so the conditional reads naturally.**`,
           starterCode: `#include <iostream>
 #include <tuple>
 #include <string>
@@ -466,7 +466,7 @@ The next lesson (*Sort & Binary Search*) goes deep on \`sort\`. There you'll lea
         {
           id: "ch1-must-pair",
           type: "practice" as const,
-          title: "🎯 When pair is *truly necessary* — sorting a score sheet",
+          title: "🎯 When pair is **truly necessary** — sorting a score sheet",
           content: `You just saw it in the simulator — **two separate vectors break when sorted.** Now confirm it in code.
 
 **Problem**: You have 5 students with names and scores. **Sort by score (ascending) and print as** \`Name Score\` **lines.**
@@ -791,6 +791,49 @@ else cout << "B";
           ],
           answer: 0,
           explanation: "pair comparison checks first values first. Both have first = 1, so it compares second values. 10 > 5, so a > b is true! A is printed."
+        },
+        {
+          id: "ch2-cheatsheet",
+          type: "explain",
+          title: "📋 pair / tuple commands at a glance",
+          content: `Keep this open while solving problems.
+
+### 🧰 Most-used pair / tuple commands
+
+| Command | What it does |
+|---|---|
+| \`p.first\` / \`p.second\` | Two values of pair |
+| \`get<0>(t)\`, \`get<1>(t)\` | i-th value of tuple |
+| \`auto [a, b] = p;\` | Structured binding (C++17) |
+| \`auto& [a, b] = p;\` | Bind by reference — mutable |
+| \`p1 < p2\` | Lexicographic compare (first then second) |
+| \`tie(a, b) = p;\` | Unpack tuple (C++11) |
+| \`make_pair(a, b)\` | Build pair (type inference) |
+
+### 📦 Declaration
+
+\`\`\`cpp
+pair<int, string> p = {1, "Alice"};
+pair<int, int> coord(3, 5);
+tuple<int, string, double> t = {1, "Bob", 95.5};
+auto p = make_pair(1, "Alice");
+\`\`\`
+
+### 🔁 Iterating vector<pair>
+
+\`\`\`cpp
+vector<pair<int, string>> people;
+for (auto& [age, name] : people) {
+    cout << name << " is " << age << "\\n";
+}
+\`\`\`
+
+> 💡 pair sorts by first then second automatically — handy with \`sort()\`.
+
+---
+
+> 📌 **Full STL cheatsheet (downloadable as PDF):**
+> 👉 [**Open \`/reference/cpp-stl#pair\`**](/reference/cpp-stl#pair)`
         },
         {
           id: "ch2-summary",

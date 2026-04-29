@@ -17,14 +17,10 @@ export const stackQueueCluster: PracticeCluster = {
       description: `N개의 정수를 스택에 넣고, 스택에서 꺼내 역순으로 출력하세요.`,
       constraints: "1 ≤ N ≤ 100, -10000 ≤ 각 정수 ≤ 10000",
       initialCode: `#include <iostream>
-#include <stack>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    stack<int> st;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -76,15 +72,10 @@ int main() {
       description: `N명이 줄 서 있습니다. 각 사람은 이름과 처리 시간이 주어집니다. 앞에서부터 순서대로 처리할 때, 각 사람의 처리 완료 시각을 출력하세요. (처음 시각은 0)`,
       constraints: "1 ≤ N ≤ 20, 1 ≤ 처리 시간 ≤ 100, 이름은 영문 최대 20자",
       initialCode: `#include <iostream>
-#include <string>
-#include <queue>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    queue<pair<string,int>> q;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -142,18 +133,10 @@ int main() {
 T개의 테스트케이스가 주어집니다.`,
       constraints: "1 ≤ T ≤ 20, 1 ≤ 문자열 길이 ≤ 100, '(' ')' 및 다른 문자 포함 가능 (다른 문자는 무시)",
       initialCode: `#include <iostream>
-#include <string>
-#include <stack>
 using namespace std;
 
 int main() {
-    int t;
-    cin >> t;
-    while (t--) {
-        string s;
-        cin >> s;
-        // 여기에 코드를 작성하세요
-    }
+
     return 0;
 }`,
       testCases: [
@@ -217,20 +200,10 @@ int main() {
 M번째로 인쇄되는 문서의 원래 위치(0-based)를 출력하세요.`,
       constraints: "1 ≤ N ≤ 100, 1 ≤ M ≤ N, 1 ≤ 우선순위 ≤ 9",
       initialCode: `#include <iostream>
-#include <queue>
-#include <algorithm>
 using namespace std;
 
 int main() {
-    int n, m;
-    cin >> n >> m;
-    queue<pair<int,int>> q;  // {priority, original_index}
-    for (int i = 0; i < n; i++) {
-        int p;
-        cin >> p;
-        q.push({p, i});
-    }
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -313,29 +286,10 @@ T개의 명령을 처리한 후 deque의 모든 원소를 앞에서부터 출력
 **deque는 앞·뒤 모두 O(1)** — vector는 앞 삽입이 O(n)이므로 이 상황엔 deque가 적합합니다.`,
       constraints: "1 ≤ T ≤ 20",
       initialCode: `#include <iostream>
-#include <deque>
-#include <string>
 using namespace std;
 
 int main() {
-    int t;
-    cin >> t;
-    deque<int> dq;  // deque 사용
-    while (t--) {
-        string cmd;
-        cin >> cmd;
-        if (cmd == "PB") {
-            int x; cin >> x;
-            // push_back 사용
-        } else if (cmd == "PF") {
-            int x; cin >> x;
-            // push_front 사용
-        } else {
-            // pop_front 사용, 비어있으면 -1
-        }
-    }
-    for (int x : dq) cout << x << " ";
-    cout << "\\n";
+
     return 0;
 }`,
       testCases: [
@@ -395,21 +349,10 @@ int main() {
       description: `N개의 정수가 순서대로 들어옵니다. 매번 가장 최근 K개 정수의 평균을 소수점 둘째 자리까지 출력하세요. (K개 미만이면 지금까지 들어온 수의 평균)`,
       constraints: "1 ≤ K ≤ N ≤ 1000, -10000 ≤ 각 정수 ≤ 10000",
       initialCode: `#include <iostream>
-#include <deque>
-#include <iomanip>
 using namespace std;
 
 int main() {
-    int n, k;
-    cin >> n >> k;
-    deque<int> dq;
-    long long sum = 0;
-    cout << fixed << setprecision(2);
-    for (int i = 0; i < n; i++) {
-        int x;
-        cin >> x;
-        // 여기에 코드를 작성하세요
-    }
+
     return 0;
 }`,
       testCases: [
@@ -465,18 +408,10 @@ int main() {
       description: `N개의 정수가 하나씩 들어올 때, 매번 지금까지 들어온 수 중 K번째로 큰 수를 출력하세요. K개 미만이면 -1을 출력하세요.`,
       constraints: "1 ≤ K ≤ N ≤ 1000, -10000 ≤ 각 정수 ≤ 10000",
       initialCode: `#include <iostream>
-#include <queue>
 using namespace std;
 
 int main() {
-    int n, k;
-    cin >> n >> k;
-    priority_queue<int, vector<int>, greater<int>> pq;  // min-heap
-    for (int i = 0; i < n; i++) {
-        int x;
-        cin >> x;
-        // 여기에 코드를 작성하세요
-    }
+
     return 0;
 }`,
       testCases: [
@@ -526,19 +461,10 @@ int main() {
       description: `N개의 탑이 일렬로 서 있고 높이가 주어집니다. 각 탑은 왼쪽 방향으로 레이저를 쏩니다. 레이저는 자신보다 높거나 같은 탑을 처음 만나면 수신됩니다. 각 탑에 대해 레이저를 수신하는 탑의 번호(1-based)를 출력하세요. 없으면 0을 출력합니다.`,
       constraints: "1 ≤ N ≤ 1000, 1 ≤ 높이 ≤ 10000",
       initialCode: `#include <iostream>
-#include <stack>
-#include <vector>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<int> h(n);
-    for (int i = 0; i < n; i++) cin >> h[i];
-    vector<int> ans(n, 0);
-    stack<int> st;  // 인덱스를 저장
-    // 여기에 코드를 작성하세요
-    for (int i = 0; i < n; i++) cout << ans[i] << "\\n";
+
     return 0;
 }`,
       testCases: [
@@ -592,16 +518,10 @@ int main() {
 (작업은 시작 시각 0부터 처리, 마감 기한 내에 완료되어야 함 — 완료 시각 ≤ 마감 기한)`,
       constraints: "1 ≤ N ≤ 100, 1 ≤ 소요시간 ≤ 100, 1 ≤ 마감기한 ≤ 1000",
       initialCode: `#include <iostream>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<pair<int,int>> tasks(n);  // {deadline, duration}
-    for (int i = 0; i < n; i++) cin >> tasks[i].second >> tasks[i].first;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -661,17 +581,10 @@ int main() {
 모든 명령 처리 후 덱 내용을 앞에서부터 공백으로 구분하여 출력하세요.`,
       constraints: "1 ≤ 명령 수 ≤ 30, -1000 ≤ x ≤ 1000, 제거 시 덱이 비어있지 않음을 보장",
       initialCode: `#include <iostream>
-#include <deque>
-#include <string>
 using namespace std;
 
 int main() {
-    deque<int> dq;
-    string cmd;
-    while (cin >> cmd && cmd != "END") {
-        // 여기에 코드를 작성하세요
-    }
-    // 덱 내용 출력
+
     return 0;
 }`,
       testCases: [
@@ -751,15 +664,10 @@ After all commands, print the deque contents front to back, space-separated.`,
       description: `문자열을 입력받아 스택을 이용해 역순으로 출력하세요.`,
       constraints: "1 ≤ 문자열 길이 ≤ 1000, 영문자와 숫자로만 구성",
       initialCode: `#include <iostream>
-#include <stack>
-#include <string>
 using namespace std;
 
 int main() {
-    string s;
-    cin >> s;
-    stack<char> st;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -826,15 +734,10 @@ int main() {
 남은 카드들을 버려진 순서대로 출력하세요.`,
       constraints: "1 ≤ N ≤ 100",
       initialCode: `#include <iostream>
-#include <deque>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    deque<int> dq;
-    for (int i = 1; i <= n; i++) dq.push_back(i);
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -911,17 +814,10 @@ Print the discarded cards in order.`,
 각 MIN 호출 결과를 출력하세요.`,
       constraints: "1 ≤ 연산 수 ≤ 1000, -10000 ≤ x ≤ 10000, POP/MIN 시 스택이 비어있지 않음을 보장",
       initialCode: `#include <iostream>
-#include <stack>
-#include <string>
 using namespace std;
 
 int main() {
-    stack<int> st;
-    stack<int> minSt;  // 보조 스택: 최솟값 추적
-    string cmd;
-    while (cin >> cmd && cmd != "END") {
-        // 여기에 코드를 작성하세요
-    }
+
     return 0;
 }`,
       testCases: [
@@ -994,21 +890,10 @@ Print the result of each MIN call.`,
 중앙값: 정렬 시 가운데 값. 원소가 짝수 개이면 두 중간값 중 작은 값을 출력합니다.`,
       constraints: "1 ≤ N ≤ 1000, -10000 ≤ 각 정수 ≤ 10000",
       initialCode: `#include <iostream>
-#include <queue>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 최대힙: 중앙값 이하의 수들
-    priority_queue<int> lower;
-    // 최소힙: 중앙값 초과의 수들
-    priority_queue<int, vector<int>, greater<int>> upper;
-    for (int i = 0; i < n; i++) {
-        int x;
-        cin >> x;
-        // 여기에 코드를 작성하세요
-    }
+
     return 0;
 }`,
       testCases: [
@@ -1078,17 +963,10 @@ int main() {
 윈도우는 [0..K-1], [1..K], [2..K+1], ... 순으로 이동합니다.`,
       constraints: "1 ≤ K ≤ N ≤ 100000, -10000 ≤ 각 정수 ≤ 10000",
       initialCode: `#include <iostream>
-#include <deque>
-#include <vector>
 using namespace std;
 
 int main() {
-    int n, k;
-    cin >> n >> k;
-    vector<int> a(n);
-    for (int i = 0; i < n; i++) cin >> a[i];
-    deque<int> dq;  // 인덱스를 저장 (단조 감소 덱)
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [

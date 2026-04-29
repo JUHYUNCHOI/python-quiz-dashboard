@@ -114,7 +114,7 @@ vector 의 v.begin()/v.end() 랑 같은 역할이에요.
 
 ---
 
-### 💭 한 가지 떠올려두기 — sort 는 *비교* 가 돼야 동작해요
+### 💭 한 가지 떠올려두기 — sort 는 **비교** 가 돼야 동작해요
 
 \`sort\` 가 한 줄로 끝낼 수 있는 이유는 **두 값 중 누가 앞인지 비교할 수 있기 때문**이에요.
 
@@ -1343,13 +1343,13 @@ v.erase(unique(v.begin(), v.end()), v.end());
 |---|---|
 | \`sorted(set(v))\` | \`sort + erase(unique(...))\` |
 
-💡 **sort → erase(unique(...), end())** 패턴을 세트로 외워두세요! 다음 페이지에서 *왜 erase 까지 필요한지* 한 번 짚고 가요.`
+💡 **sort → erase(unique(...), end())** 패턴을 세트로 외워두세요! 다음 페이지에서 **왜 erase 까지 필요한지** 한 번 짚고 가요.`
         },
         {
           id: "s23-ch3-unique-detail",
           type: "explain",
           title: "🤔 잠깐 — 왜 \`erase\` 까지 필요해? \`unique\` 만 쓰면?",
-          content: `\`unique\` 의 *진짜* 동작을 알면 왜 \`erase\` 가 짝꿍인지 자연스럽게 이해돼요.
+          content: `\`unique\` 의 **진짜** 동작을 알면 왜 \`erase\` 가 짝꿍인지 자연스럽게 이해돼요.
 
 ### unique 의 진짜 동작
 
@@ -1366,7 +1366,7 @@ v = {1, 2, 3, 4, 5, 6, 9, ?, ?, ?}   size 는 여전히 10!
                           여기부터 뒤는 쓰레기 값 (의미 없음)
 \`\`\`
 
-\`v.size()\` 를 출력해보면 여전히 10. 앞 7 개만 진짜고 나머지 3 개는 메모리에 남은 *흔적*.
+\`v.size()\` 를 출력해보면 여전히 10. 앞 7 개만 진짜고 나머지 3 개는 메모리에 남은 **흔적**.
 
 ---
 
@@ -1400,9 +1400,9 @@ v.erase( unique(v.begin(), v.end()),  v.end() );
 //          ───────  이 사이의 쓰레기를 잘라냄  ───────
 \`\`\`
 
-unique 가 알려준 *진짜 끝* 부터 \`v.end()\` 까지 erase — 이게 그 유명한 패턴.
+unique 가 알려준 **진짜 끝** 부터 \`v.end()\` 까지 erase — 이게 그 유명한 패턴.
 
-> 💡 외울 거: \`unique\` 는 *모으기만* 함, 크기는 그대로. 진짜 줄이려면 \`erase\` 한 세트.`
+> 💡 외울 거: \`unique\` 는 **모으기만** 함, 크기는 그대로. 진짜 줄이려면 \`erase\` 한 세트.`
         },
         {
           id: "s23-ch3-unique-practice",
@@ -1556,10 +1556,198 @@ Bob 80
 Carol 90
 Dave 80`,
         },
+      ]
+    },
+
+    // ============================================
+    // Chapter 4: 람다와 STL 일반 알고리즘
+    //   sort 에서 익힌 람다를 다른 algorithm 함수에도 적용.
+    //   count_if / find_if / accumulate — STL 의 단골들.
+    // ============================================
+    {
+      id: "s23-ch4",
+      title: "람다 + STL 일반 알고리즘",
+      emoji: "🔍",
+      steps: [
         {
-          id: "s23-ch3-summary",
+          id: "s23-ch4-intro",
           type: "explain",
-          title: "🎉 레슨 23 완료! sort 마스터!",
+          title: "🤔 sort 의 람다, 다른 데서도 통할까?",
+          content: `\`sort\` 에 람다 비교 함수 넣었던 거 기억나죠?
+
+\`\`\`cpp
+sort(v.begin(), v.end(), [](int a, int b) { return a > b; });
+\`\`\`
+
+이 패턴 — \`(begin, end, 람다)\` — 사실 \`<algorithm>\` 의 거의 모든 함수에 통해요. 정렬 외에도:
+
+- "**조건을 만족하는 원소가 몇 개?**" → \`count_if\`
+- "**조건을 만족하는 첫 원소는?**" → \`find_if\`
+- "**모든 원소를 다 더하면?**" → \`accumulate\` (\`<numeric>\`)
+
+> 💡 **왜 알아둘 가치가 있나요?**
+> for 루프로 직접 짜도 되긴 하는데, 위 함수들은 **의도가 한 줄에 드러남**. \`count_if(..., 조건)\` 보면 "아, 조건 맞는 거 세는구나" 가 즉시 보임. 코드 리뷰/대회에서 가독성 큼.`
+        },
+        {
+          id: "s23-ch4-count-if",
+          type: "explain",
+          title: "🔢 count_if — 조건 맞는 원소 개수",
+          content: `**문제:** 점수 벡터에서 80 점 이상이 몇 명?
+
+### 옛날 방식 (for 루프)
+\`\`\`cpp
+int cnt = 0;
+for (int x : scores) {
+    if (x >= 80) cnt++;
+}
+\`\`\`
+
+### \`count_if\` 한 줄
+\`\`\`cpp
+int cnt = count_if(scores.begin(), scores.end(),
+                   [](int x){ return x >= 80; });
+\`\`\`
+
+### 인자 구조 (sort 와 똑같음)
+| 자리 | 의미 |
+|---|---|
+| 1 번째 | 시작 iterator (\`v.begin()\`) |
+| 2 번째 | 끝 iterator (\`v.end()\`) |
+| 3 번째 | **bool 리턴 람다** — true 면 카운트 |
+
+> 💡 **\`count\` 와 차이?**
+> - \`count(b, e, x)\` — **값 x 와 같은 것** 만 셈
+> - \`count_if(b, e, pred)\` — **조건 (람다)** 을 만족하는 것 셈 (훨씬 유연)`
+        },
+        {
+          id: "s23-ch4-count-if-predict",
+          type: "predict" as const,
+          title: "출력 예측",
+          content: `\`\`\`cpp
+vector<int> v = {10, 25, 30, 45, 50, 65};
+int cnt = count_if(v.begin(), v.end(),
+                   [](int x){ return x % 5 == 0 && x > 30; });
+cout << cnt;
+\`\`\`
+
+cnt 값은?`,
+          options: ["4", "3", "2", "5"],
+          answer: 1,
+          explanation: "5 의 배수이면서 30 보다 큰 것: 45, 50, 65 → 3 개. (10, 25, 30 은 30 초과 조건 X.)"
+        },
+        {
+          id: "s23-ch4-find-if",
+          type: "explain",
+          title: "🎯 find_if — 조건 맞는 첫 원소",
+          content: `**문제:** 벡터에서 첫 번째 짝수 찾기.
+
+\`\`\`cpp
+vector<int> v = {3, 7, 4, 9, 6};
+auto it = find_if(v.begin(), v.end(),
+                  [](int x){ return x % 2 == 0; });
+
+if (it != v.end()) {
+    cout << *it;        // 4
+} else {
+    cout << "없음";
+}
+\`\`\`
+
+### 핵심 패턴
+- \`find_if\` 는 **iterator** 를 돌려줘요 (값 X)
+- 못 찾으면 \`v.end()\` 반환 → \`!= v.end()\` 로 체크
+- 값을 쓰려면 \`*it\` (역참조)
+- 인덱스가 필요하면 \`it - v.begin()\`
+
+> 💡 **\`find\` 와 차이?**
+> - \`find(b, e, x)\` — **값 x 자체** 찾기
+> - \`find_if(b, e, pred)\` — **조건 (람다)** 만족 첫 원소 찾기`
+        },
+        {
+          id: "s23-ch4-accumulate",
+          type: "explain",
+          title: "➕ accumulate — 다 더하기 (또는 다 곱하기)",
+          content: `**문제:** 점수 합계, 평균 구하기.
+
+\`\`\`cpp
+#include <numeric>     // ⚠️ <algorithm> 아니라 <numeric>!
+
+vector<int> v = {10, 20, 30, 40};
+
+int sum = accumulate(v.begin(), v.end(), 0);
+//                                       ↑ 시작값 (sum 의 초깃값 0)
+cout << sum;     // 100
+\`\`\`
+
+### 시작값을 잘 설정하면 응용 가능
+\`\`\`cpp
+// 합계: 시작 0
+accumulate(v.begin(), v.end(), 0);          // 100
+
+// 곱: 시작 1, 4 번째 인자에 곱셈 함수
+#include <functional>
+accumulate(v.begin(), v.end(), 1, multiplies<int>());   // 10*20*30*40 = 240000
+
+// 람다로 커스텀: 제곱의 합
+accumulate(v.begin(), v.end(), 0,
+           [](int acc, int x){ return acc + x * x; });   // 100+400+900+1600 = 3000
+\`\`\`
+
+### 평균 한 줄
+\`\`\`cpp
+double avg = (double)accumulate(v.begin(), v.end(), 0) / v.size();
+\`\`\`
+
+> ⚠️ **\`<numeric>\` 헤더** 따로 \`#include\` 필요. 자주 까먹어서 컴파일 에러 일 위!`
+        },
+        {
+          id: "s23-ch4-practice",
+          type: "practice" as const,
+          title: "✋ 처음부터 — 80 점 이상 학생 수 + 합계",
+          content: `**문제:** 학생 5 명 점수를 입력받아:
+1. 80 점 이상인 학생 수
+2. 전체 합계
+
+를 한 줄에 공백으로 구분해 출력.
+
+> 💡 \`count_if\` 로 1 번, \`accumulate\` 로 2 번. 둘 다 한 줄로 해결 가능.
+> ⚠️ \`accumulate\` 는 \`<numeric>\` 필요!`,
+          starterCode: `#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <numeric>
+using namespace std;
+
+int main() {
+    vector<int> scores(5);
+    for (int i = 0; i < 5; i++) cin >> scores[i];
+    // 👇 80 점 이상 개수, 합계 구해서 한 줄에 출력
+
+    return 0;
+}`,
+          code: `#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <numeric>
+using namespace std;
+
+int main() {
+    vector<int> scores(5);
+    for (int i = 0; i < 5; i++) cin >> scores[i];
+    int high = count_if(scores.begin(), scores.end(),
+                        [](int x){ return x >= 80; });
+    int total = accumulate(scores.begin(), scores.end(), 0);
+    cout << high << " " << total << endl;
+    return 0;
+}`,
+          hint: "count_if(scores.begin(), scores.end(), [](int x){ return x >= 80; }); + accumulate(scores.begin(), scores.end(), 0); — 두 줄로 끝.",
+          expectedOutput: `3 380`,
+          stdin: `90 65 80 75 70`,
+        },
+        {
+          id: "s23-ch4-summary",
+          type: "explain",
+          title: "🎉 레슨 23 완료! sort + STL 알고리즘 마스터!",
           content: `## 🏆 레슨 23 완료! 대단해요!
 
 ### 📊 sort 기초
@@ -1581,6 +1769,13 @@ Dave 80`,
 
 ### 🧹 심화 패턴
 - **sort + erase(unique(...), end())**: 중복 제거 (세트로 외울 것!)
+- **stable_sort**: 동점 원래 순서 유지
+
+### 🔍 람다 + STL 일반 알고리즘 ⭐ 신규
+- **count_if(b, e, pred)** — 조건 맞는 원소 개수
+- **find_if(b, e, pred)** — 조건 맞는 첫 원소 (iterator)
+- **accumulate(b, e, init)** — 합계/곱/커스텀 누적 (\`<numeric>\` 필요)
+- 패턴이 sort 와 똑같음: \`(begin, end, 람다)\`
 
 ### 🐍 파이썬과의 핵심 차이!
 | 기능 | 파이썬 🐍 | C++ ⚡ |
@@ -1589,8 +1784,11 @@ Dave 80`,
 | 정렬 기준 | \`key=\` (값 1개 변환) | 비교 함수 (두 값 직접 비교) |
 | 이진 탐색 | \`bisect_left/right\` | \`lower_bound/upper_bound\` |
 | 중복 제거 | \`sorted(set(v))\` | \`sort + erase(unique)\` |
+| 조건 카운트 | \`sum(1 for x in v if x>=80)\` | \`count_if(b, e, pred)\` |
+| 합계 | \`sum(v)\` | \`accumulate(b, e, 0)\` |
 
-🚀 다음은 **map & set** — 자동으로 정렬되는 마법의 컨테이너!`
+🚀 다음은 **map & set** — 자동으로 정렬되는 마법의 컨테이너!
+   그 다음 바로 **🏆 USACO 모의전 (cpp-p3)** — 이제 진짜 실전!`
         }
       ]
     }

@@ -21,7 +21,7 @@ export const cppLesson20Data: LessonData = {
         {
           id: "ch0-notice",
           type: "explain",
-          title: "📌 이 레슨은 *지금* 외울 필요 없어요",
+          title: "📌 이 레슨은 **지금** 외울 필요 없어요",
           content: `이 레슨도 **참고용** 이에요.
 
 ### 왜?
@@ -30,7 +30,7 @@ export const cppLesson20Data: LessonData = {
 
 | 주제 | 언제 진짜 필요? |
 |---|---|
-| \`bits/stdc++.h\` | 알고리즘 문제 풀이 첫 줄에 한 번 (외우는 게 아니라 *복붙*) |
+| \`bits/stdc++.h\` | 알고리즘 문제 풀이 첫 줄에 한 번 (외우는 게 아니라 **복붙**) |
 | \`typedef\` / \`using\` | \`vector<vector<int>>\` 같은 긴 타입 자주 쓸 때 |
 | 매크로 (\`#define\`) | CP 개인 취향. 학생용 아님 — 안 써도 됨 |
 | **비트 연산** | 알고리즘 랩의 비트마스크 / DP 토픽에서 다뤄요 |
@@ -39,7 +39,7 @@ export const cppLesson20Data: LessonData = {
 
 ### 그럼 언제 봐야 하나?
 
-- 알고리즘 랩 가서 *비트 연산* 토픽 만나면 그때 *돌아와서* 보면 됨
+- 알고리즘 랩 가서 **비트 연산** 토픽 만나면 그때 **돌아와서** 보면 됨
 - 옛날 USACO 문제에서 매크로/typedef 패턴 보고 헷갈리면 그때
 
 ### 그래서 지금?

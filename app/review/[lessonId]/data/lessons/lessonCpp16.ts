@@ -51,14 +51,14 @@ export const lessonCpp16: LessonData = {
           code: 'map<string, int> m;\nm["apple"] = 3;\ncout << m["banana"] << endl;\ncout << m.size() << endl;',
           predict: {
             question: "출력 결과는?",
-            options: ["에러 발생", "0\\n2", "0\\n1"],
+            options: ["에러 발생", "0\n2", "0\n1"],
             answer: 1,
             feedback: "없는 키를 []로 접근하면 기본값(int는 0)이 자동 생성돼요! 그래서 size가 2!"
           },
           en: {
             predict: {
               question: "What's the output?",
-              options: ["Error", "0\\n2", "0\\n1"],
+              options: ["Error", "0\n2", "0\n1"],
               feedback: "Accessing a missing key with [] auto-creates it with the default value (0 for int)! So the size becomes 2!"
             }
           }
@@ -95,8 +95,10 @@ export const lessonCpp16: LessonData = {
           blanksAnswer: ['"철수"', '95'],
           expect: 'scores["철수"] = 95;',
           en: {
-            task: 'Insert value 95 with key "Cheolsu" into the map!',
-            guide: 'Use the form: mapName["key"] = value;'
+            task: 'Insert value 95 with key "Tom" into the map!',
+            guide: 'Use the form: mapName["key"] = value;',
+            answer: '"Tom"',
+            blanksAnswer: ['"Tom"', '95'],
           }
         }
       },
@@ -145,8 +147,8 @@ export const lessonCpp16: LessonData = {
       {
         type: "errorQuiz",
         content: {
-          question: "이 코드의 문제는 뭘까요?",
-          code: 'map<string, int> m;\ncout << m["hello"] << endl;\n// intent: error if "hello" key is missing',
+          question: "프로그래머는 \"hello 키가 없으면 에러를 내고 싶었어요\". 그런데 위 코드는 의도대로 동작할까요?",
+          code: 'map<string, int> m;\ncout << m["hello"] << endl;  // 없는 키니까 에러가 날까?',
           options: [
             "에러가 나지 않고 0이 출력된다 (키가 자동 생성됨!)",
             "컴파일 에러가 난다",
@@ -155,7 +157,8 @@ export const lessonCpp16: LessonData = {
           answer: 0,
           explanation: "map에서 없는 키를 []로 접근하면 기본값(0)이 자동으로 생성돼요! 의도치 않은 키가 추가될 수 있어요.",
           en: {
-            question: "What is the problem with this code?",
+            question: "The programmer wanted \"hello\" to cause an error if it's missing. Does the code above behave as intended?",
+            code: 'map<string, int> m;\ncout << m["hello"] << endl;  // does a missing key error out?',
             options: [
               "No error — 0 is printed (the key is automatically created!)",
               "Compile error",
@@ -180,6 +183,58 @@ export const lessonCpp16: LessonData = {
           en: {
             task: 'Find the key "apple" in the map!',
             guide: "Use the form: find(key) != end()"
+          }
+        }
+      },
+
+      // 🆕 map vs vector<pair> 결정 quiz
+      {
+        type: "quiz",
+        content: {
+          question: "학생들 점수표를 점수 내림차순으로 정렬해서 출력하려고 해요. 어떤 자료구조가 가장 적합할까요?",
+          options: [
+            "map<string, int>",
+            "vector<pair<string, int>> + sort",
+            "set<pair<string, int>>",
+            "unordered_map<string, int>"
+          ],
+          answer: 1,
+          explanation: "map은 키 (이름) 기준 자동 정렬만 됨 — 값 (점수) 기준으로 못 바꿔요. vector<pair> 로 묶고 sort 의 lambda 로 .second 기준 정렬해야 점수 순으로 나와요. 결정 규칙: \"이름 빠른 검색\" → map, \"점수 순 정렬\" → vector<pair>.",
+          en: {
+            question: "You want to sort student records by score (descending) and print them. Which container fits best?",
+            options: [
+              "map<string, int>",
+              "vector<pair<string, int>> + sort",
+              "set<pair<string, int>>",
+              "unordered_map<string, int>"
+            ],
+            explanation: "map only auto-sorts by key (name) — can't reorder by value (score). Use vector<pair> and sort with a lambda comparing .second. Rule: \"fast lookup by name\" → map, \"sort by score\" → vector<pair>."
+          }
+        }
+      },
+
+      // 🆕 count vs find 결정 quiz
+      {
+        type: "quiz",
+        content: {
+          question: "map 에서 \"이 키가 있는지 **있다/없다** 만\" 알면 돼요. 가장 깔끔한 방법은?",
+          options: [
+            "m.count(key) > 0",
+            "m.find(key) != m.end()",
+            "m[key] != 0",
+            "m.size() > 0"
+          ],
+          answer: 0,
+          explanation: "count() 는 0 또는 1 을 돌려줘서 \"있다/없다\" 질문에 가장 직관적이에요. find/end 비교는 iterator 다뤄야 해서 약간 복잡. m[key] != 0 은 위험 — 없는 키도 자동 생성되고 0 인 값이랑 구분 안 돼요.",
+          en: {
+            question: "You only need to know whether a key exists or not in a map. Which is cleanest?",
+            options: [
+              "m.count(key) > 0",
+              "m.find(key) != m.end()",
+              "m[key] != 0",
+              "m.size() > 0"
+            ],
+            explanation: "count() returns 0 or 1, the most direct yes/no answer. find/end requires handling iterators. m[key] != 0 is unsafe — auto-creates missing keys and can't distinguish from value 0."
           }
         }
       },
@@ -381,7 +436,9 @@ export const lessonCpp16: LessonData = {
           expect: "if (s.count(5)) {\n    cout << \"있다!\" << endl;\n}",
           en: {
             task: "Check if the value 5 exists in the set!",
-            guide: "count(value) returns 1 if found, 0 if not!"
+            guide: "count(value) returns 1 if found, 0 if not!",
+            template: "if (s.___(5)) {\n    cout << \"found!\" << endl;\n}",
+            expect: "if (s.count(5)) {\n    cout << \"found!\" << endl;\n}",
           }
         }
       },
@@ -527,15 +584,15 @@ export const lessonCpp16: LessonData = {
         type: "practice",
         content: {
           level: 1,
-          task: "map<string, int>을 선언하고 \"apple\"=3, \"banana\"=5를 넣고 \"apple\" 값을 출력해요",
-          guide: "map의 꺾쇠 안에 키 타입과 값 타입을 순서대로 넣고, []로 값을 읽어봐!",
+          task: "과일 이름 → 가격(정수) 을 저장하는 map 을 만들고, 두 과일을 넣은 뒤 사과의 가격을 출력해요.",
+          guide: "꺾쇠 < > 안에 키 타입과 값 타입을 순서대로! 가격이 정수면 값 타입은 뭘까요?",
           template: "map<string, ___> m;\nm[\"apple\"] = 3;\nm[\"banana\"] = 5;\ncout << m[___] << endl;",
           blanksAnswer: ["int", "\"apple\""],
           answer: "map<string, int> m;\nm[\"apple\"] = 3;\nm[\"banana\"] = 5;\ncout << m[\"apple\"] << endl;",
           expect: "3",
           en: {
-            task: "Declare map<string,int>, insert \"apple\"=3, \"banana\"=5, then print \"apple\" value",
-            guide: "Put the key type and value type in angle brackets in order, and use [] to read values!"
+            task: "Build a map of fruit name → price (integer). Insert two fruits, then print the apple's price.",
+            guide: "Inside <  >, put the key type then the value type. If prices are integers, what type goes there?"
           }
         }
       },
@@ -550,10 +607,30 @@ export const lessonCpp16: LessonData = {
           template: "vector<string> words = {\"apple\",\"banana\",\"apple\",\"cherry\",\"apple\"};\nmap<string, int> freq;\nfor (___ w : words) {\n    ___[w]++;\n}\ncout << freq[\"apple\"] << endl;",
           blanksAnswer: ["auto", "freq"],
           answer: "vector<string> words = {\"apple\",\"banana\",\"apple\",\"cherry\",\"apple\"};\nmap<string, int> freq;\nfor (auto w : words) {\n    freq[w]++;\n}\ncout << freq[\"apple\"] << endl;",
+          // 빈칸은 inputs.join(", ") 로 비교됨 — auto& / const auto& 도 허용 (더 좋은 답)
+          alternateAnswers: ["auto&, freq", "const auto&, freq"],
           expect: "3",
           en: {
             task: "Count word frequencies using a map and print how many times \"apple\" appears",
             guide: "Use range-for to loop through each word and increment its count in the map by 1!"
+          }
+        }
+      },
+
+      // 🆕 Drill 2.5: map 순회 (구조적 바인딩)
+      {
+        type: "practice",
+        content: {
+          level: 2,
+          task: "점수 map 을 순회하며 \"이름: 점수\" 형식으로 한 줄씩 출력 — 구조적 바인딩 사용",
+          guide: "for (auto& [key, value] : m) 형태. map 은 키 알파벳 순으로 자동 정렬된 채 순회됨.",
+          template: "map<string, int> scores = {{\"Bob\",87}, {\"Alice\",95}, {\"Carol\",92}};\nfor (auto& [___, ___] : scores) {\n    cout << name << \": \" << score << endl;\n}",
+          blanksAnswer: ["name", "score"],
+          answer: "map<string, int> scores = {{\"Bob\",87}, {\"Alice\",95}, {\"Carol\",92}};\nfor (auto& [name, score] : scores) {\n    cout << name << \": \" << score << endl;\n}",
+          expect: "Alice: 95\nBob: 87\nCarol: 92",
+          en: {
+            task: "Iterate the score map and print 'name: score' per line — use structured bindings",
+            guide: "for (auto& [key, value] : m) form. map iterates in alphabetical key order automatically."
           }
         }
       },
@@ -581,19 +658,27 @@ export const lessonCpp16: LessonData = {
         type: "practice",
         content: {
           level: 3,
-          task: "처음부터 작성! 정수 5개를 입력받아 가장 많이 등장한 숫자와 그 횟수를 출력해요\n(map으로 빈도 계산 → 최대 빈도 찾기)",
-          guide: "map으로 각 숫자의 등장 횟수를 세고, map의 모든 항목을 순회해서 가장 큰 횟수를 찾아!",
-          hint: "map을 먼저 채운 뒤, 두 번째 for 루프에서 p.second(횟수)가 최대인 항목을 추적해봐!",
+          task: "처음부터 작성! 정수 5 개를 입력받아, **가장 많이 등장한 숫자** 와 **그 숫자가 나온 횟수** 를 한 줄에 공백으로 구분해 출력해요.\n\n출력 형식: `숫자 횟수` (예: 어떤 숫자가 4 번 등장하면 그 숫자와 4 를 출력)\n\n💡 풀이 흐름: map 으로 빈도 계산 → map 순회하며 최대 빈도 찾기.\n💡 정렬된 순서가 필요 없으니 \\`unordered_map\\` 도 OK (평균 O(1) 로 더 빠름).",
+          guide: "map<int, int> freq; 로 각 숫자의 등장 횟수를 세고, 두 번째 for 루프에서 p.second(횟수)가 최대인 항목을 추적해!",
+          hint: "1) for 5번 cin >> x; freq[x]++;\n2) maxCnt = 0, maxVal = 0;\n3) for (auto p : freq) if (p.second > maxCnt) { maxCnt = p.second; maxVal = p.first; }\n4) cout << maxVal << \" \" << maxCnt;",
           template: null,
+          stdin: "9 1 9 2 9\n",
+          sampleInput: "9 1 9 2 9",
           answer: "map<int, int> freq;\nfor (int i = 0; i < 5; i++) {\n    int x;\n    cin >> x;\n    freq[x]++;\n}\nint maxVal = 0, maxCnt = 0;\nfor (auto p : freq) {\n    if (p.second > maxCnt) {\n        maxCnt = p.second;\n        maxVal = p.first;\n    }\n}\ncout << maxVal << \" \" << maxCnt << endl;",
           alternateAnswers: [
-            "map<int,int> freq;\nfor(int i=0;i<5;i++){int x;cin>>x;freq[x]++;}\nint maxVal=0,maxCnt=0;\nfor(auto p:freq)if(p.second>maxCnt){maxCnt=p.second;maxVal=p.first;}\ncout<<maxVal<<\" \"<<maxCnt<<endl;"
+            // 한 줄 압축
+            "map<int,int> freq;\nfor(int i=0;i<5;i++){int x;cin>>x;freq[x]++;}\nint maxVal=0,maxCnt=0;\nfor(auto p:freq)if(p.second>maxCnt){maxCnt=p.second;maxVal=p.first;}\ncout<<maxVal<<\" \"<<maxCnt<<endl;",
+            // unordered_map 버전 (정렬 불필요 — 더 빠름)
+            "unordered_map<int, int> freq;\nfor (int i = 0; i < 5; i++) {\n    int x;\n    cin >> x;\n    freq[x]++;\n}\nint maxVal = 0, maxCnt = 0;\nfor (auto p : freq) {\n    if (p.second > maxCnt) {\n        maxCnt = p.second;\n        maxVal = p.first;\n    }\n}\ncout << maxVal << \" \" << maxCnt << endl;",
+            "unordered_map<int,int> freq;\nfor(int i=0;i<5;i++){int x;cin>>x;freq[x]++;}\nint maxVal=0,maxCnt=0;\nfor(auto p:freq)if(p.second>maxCnt){maxCnt=p.second;maxVal=p.first;}\ncout<<maxVal<<\" \"<<maxCnt<<endl;",
+            // auto& / 구조 분해 변형
+            "unordered_map<int, int> freq;\nfor (int i = 0; i < 5; i++) { int x; cin >> x; freq[x]++; }\nint maxVal = 0, maxCnt = 0;\nfor (auto& [k, v] : freq) if (v > maxCnt) { maxCnt = v; maxVal = k; }\ncout << maxVal << \" \" << maxCnt << endl;",
           ],
-          expect: "3 3",
+          expect: "9 3",
           en: {
-            task: "Write from scratch! Read 5 integers, print the most frequent number and its count\n(use map for frequency → find max frequency)",
-            guide: "Use a map to count each number's occurrences, then loop through all map entries to find the highest count!",
-            hint: "Fill the map first, then in a second for loop, track the entry where p.second (count) is the largest!"
+            task: "Write from scratch! Read 5 integers, then print the **most frequent number** and **how many times it appeared** on one line, separated by a single space.\n\nFormat: `number count` (e.g. if some number appears 4 times, print that number and 4).\n\n💡 Plan: count frequencies with map → loop the map to find the max count.\n💡 Sorted order isn't needed, so \\`unordered_map\\` also works (avg O(1) — faster).",
+            guide: "Use map<int, int> freq; to count each number's occurrences, then loop through all map entries to track the entry where p.second (count) is the largest!",
+            hint: "1) for 5 times: cin >> x; freq[x]++;\n2) maxCnt = 0, maxVal = 0;\n3) for (auto p : freq) if (p.second > maxCnt) { maxCnt = p.second; maxVal = p.first; }\n4) cout << maxVal << \" \" << maxCnt;"
           }
         }
       },
@@ -603,19 +688,21 @@ export const lessonCpp16: LessonData = {
         type: "practice",
         content: {
           level: 3,
-          task: "처음부터 작성! 단어 5개를 입력받아 중복을 제거한 후\n알파벳 순서대로 한 줄씩 출력해요 (set이 자동 정렬!)",
-          guide: "set에 insert()로 단어를 넣으면 중복이 자동 제거되고, 순회하면 알파벳 순서로 나와!",
-          hint: "입력받은 단어를 하나씩 set에 insert()하고, 다시 range-for로 순회해서 출력해봐!",
+          task: "처음부터 작성! 단어 5 개를 입력받아 **중복을 제거** 한 뒤 **알파벳 순서대로 한 줄에 하나씩** 출력해요.\n\n💡 set 에 넣기만 하면 중복 제거 + 자동 정렬이 한 방에!",
+          guide: "set에 insert()로 단어를 넣으면 중복이 자동 제거되고, range-for 로 순회하면 알파벳 순서로 나와! 한 줄에 하나씩이니까 endl (또는 \"\\n\") 로 줄바꿈.",
+          hint: "1) for 5번: cin >> w; s.insert(w);\n2) for (auto w : s) cout << w << endl;  ← endl 빠뜨리면 한 줄로 붙어 나와요!",
           template: null,
+          stdin: "cherry apple banana apple cherry\n",
+          sampleInput: "cherry apple banana apple cherry",
           answer: "set<string> s;\nfor (int i = 0; i < 5; i++) {\n    string w;\n    cin >> w;\n    s.insert(w);\n}\nfor (auto w : s) {\n    cout << w << endl;\n}",
           alternateAnswers: [
             "set<string> s;\nfor(int i=0;i<5;i++){string w;cin>>w;s.insert(w);}\nfor(auto w:s)cout<<w<<endl;"
           ],
           expect: "apple\nbanana\ncherry",
           en: {
-            task: "Write from scratch! Read 5 words, remove duplicates\nthen print in alphabetical order (set auto-sorts!)",
-            guide: "Inserting words into a set automatically removes duplicates, and iterating gives them in alphabetical order!",
-            hint: "Insert each input word into the set with insert(), then iterate with range-for to print them!"
+            task: "Write from scratch! Read 5 words, **remove duplicates**, then print **one per line in alphabetical order**.\n\n💡 Inserting into a set both dedups and auto-sorts in one shot!",
+            guide: "Inserting words into a set automatically removes duplicates, and iterating with range-for gives them in alphabetical order! Use endl (or \"\\n\") to put each word on its own line.",
+            hint: "1) for 5 times: cin >> w; s.insert(w);\n2) for (auto w : s) cout << w << endl;  ← without endl, the words run together on one line!"
           }
         }
       },
