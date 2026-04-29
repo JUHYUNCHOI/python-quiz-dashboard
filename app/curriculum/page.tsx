@@ -3,7 +3,7 @@
 import { Header } from "@/components/header"
 import { BottomNav } from "@/components/bottom-nav"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, Fragment } from "react"
 import { useSearchParams } from "next/navigation"
 import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
@@ -1403,9 +1403,60 @@ export default function CurriculumPage() {
                             ? Math.round((inProgressData!.visited / inProgressData!.total) * 100)
                             : null
 
+                          // 🎉 cpp-16 직후 — 메인 트랙 졸업 마일스톤 카드
+                          // (cpp-17 이 첫 optional 레슨이라 그 직전에 노출)
+                          const showMainTrackMilestone = isCpp && lesson.id === "cpp-17" && part.id === "cpp-part3"
+                          const cpp16Done = completedLessons.has("cpp-16")
+
                           return (
+                            <Fragment key={lesson.id}>
+                              {showMainTrackMilestone && (
+                                <div className="rounded-2xl border-4 border-black bg-gradient-to-br from-emerald-50 via-amber-50 to-orange-50 p-4 sm:p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                  <div className="flex items-start gap-3">
+                                    <div className="text-3xl shrink-0">{cpp16Done ? "🎉" : "🎯"}</div>
+                                    <div className="flex-1 min-w-0">
+                                      <h3 className="font-black text-base sm:text-lg text-gray-900 mb-1">
+                                        {cpp16Done
+                                          ? t("메인 트랙 완료! 이제 실전으로 가요", "Main track complete! Time for the real thing")
+                                          : t("여기까지가 메인 트랙이에요", "This is where the main track ends")}
+                                      </h3>
+                                      <p className="text-xs sm:text-sm text-gray-700 leading-relaxed mb-3">
+                                        {t(
+                                          "cpp-16 (map & set) 까지면 USACO Bronze 80% 를 풀 수 있어요. 아래는 심화/참고용 — 필요할 때 와도 OK!",
+                                          "After cpp-16 (map & set) you can solve ~80% of USACO Bronze. Lessons below are for reference — come back when needed!"
+                                        )}
+                                      </p>
+                                      <div className="flex flex-wrap gap-2">
+                                        <Link
+                                          href="/learn/cpp-p3"
+                                          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs sm:text-sm font-bold border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+                                        >
+                                          🏆 {t("USACO 모의전 (cpp-p3)", "USACO Mock (cpp-p3)")}
+                                        </Link>
+                                        <Link
+                                          href="/coding-bank"
+                                          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white text-xs sm:text-sm font-bold border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+                                        >
+                                          🌟 {t("코딩 뱅크 (100 문제)", "Coding Bank (100 problems)")}
+                                        </Link>
+                                        <Link
+                                          href="/algo"
+                                          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-purple-500 hover:bg-purple-600 text-white text-xs sm:text-sm font-bold border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+                                        >
+                                          🧠 {t("Algorithm Lab", "Algorithm Lab")}
+                                        </Link>
+                                      </div>
+                                      <p className="text-[11px] text-gray-500 mt-2.5">
+                                        {t(
+                                          "↓ cpp-17 ~ cpp-20 은 각 알고리즘 토픽 시작 직전 5 분만 훑고 와도 충분해요.",
+                                          "↓ cpp-17 ~ cpp-20: a 5-minute skim before each algorithm topic is plenty."
+                                        )}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
                             <div
-                              key={lesson.id}
                               id={`lesson-${lesson.id}`}
                               className={`rounded-xl p-3 sm:p-4 border-2 transition-all ${
                                 isLocked
@@ -1663,6 +1714,7 @@ export default function CurriculumPage() {
                                 </div>
                               </div>
                             </div>
+                            </Fragment>
                           )
                         })}
                       </div>

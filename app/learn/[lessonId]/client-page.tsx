@@ -704,6 +704,47 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                 return null
               })()}
 
+              {/* 🎉 cpp-16 또는 cpp-ck5 (map/set 연습) 완료 — 메인 트랙 졸업 CTA */}
+              {(lessonId === "cpp-16" || lessonId === "cpp-ck5") && (
+                <div className="bg-gradient-to-br from-emerald-50 via-amber-50 to-orange-50 border-2 border-amber-300 rounded-2xl p-4 text-left space-y-3">
+                  <div>
+                    <p className="text-base font-black text-amber-900">🎉 {t("메인 트랙 완료!", "Main Track Complete!")}</p>
+                    <p className="text-sm text-amber-800 mt-1 leading-relaxed">
+                      {t(
+                        "cpp-16 까지면 USACO Bronze 80% 를 풀 수 있어요. 이제 실전!",
+                        "After cpp-16 you can solve ~80% of USACO Bronze. Time for the real thing!"
+                      )}
+                    </p>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <button
+                      onClick={() => { localStorage.removeItem(progressKey); router.push(`/learn/cpp-p3`) }}
+                      className="w-full py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-1.5"
+                    >
+                      🏆 {t("USACO 모의전 (cpp-p3)", "USACO Mock (cpp-p3)")} →
+                    </button>
+                    <button
+                      onClick={() => router.push("/coding-bank")}
+                      className="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-1.5"
+                    >
+                      🌟 {t("코딩 뱅크 100 문제", "Coding Bank (100 problems)")} →
+                    </button>
+                    <button
+                      onClick={() => router.push("/algo")}
+                      className="w-full py-2.5 bg-purple-500 hover:bg-purple-600 text-white rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-1.5"
+                    >
+                      🧠 {t("Algorithm Lab", "Algorithm Lab")} →
+                    </button>
+                  </div>
+                  <p className="text-[11px] text-amber-700/80 italic leading-relaxed">
+                    {t(
+                      "💡 cpp-17 / 18 / 19 / 20 은 심화/참고용 — 알고리즘 진행 중 필요할 때 잠깐 와서 봐도 OK.",
+                      "💡 cpp-17 / 18 / 19 / 20 are reference only — drop in for 5 minutes when you need them during algorithm topics."
+                    )}
+                  </p>
+                </div>
+              )}
+
               {/* 다음 레슨 바로 가기 / 트랙 완주 안내 (연습 클러스터 없는 경우) */}
               {!ALL_CLUSTERS.find(c => String(c.unlockAfter) === String(lessonId)) && (() => {
                 const nextId = getNextLessonId(lessonId)
@@ -712,9 +753,17 @@ export default function PracticePage({ params }: { params: Promise<{ lessonId: s
                   return (
                     <button
                       onClick={() => { localStorage.removeItem(progressKey); router.push(`/learn/${nextId}`) }}
-                      className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white rounded-xl font-bold text-base transition-all"
+                      className={cn(
+                        "w-full py-3 rounded-xl font-bold text-base transition-all",
+                        // 메인 트랙 졸업 CTA 가 위에 있으면 다음 레슨 버튼은 secondary 스타일
+                        (lessonId === "cpp-16" || lessonId === "cpp-ck5")
+                          ? "bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-300"
+                          : "bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white"
+                      )}
                     >
-                      {t("다음 레슨으로 →", "Next Lesson →")}
+                      {(lessonId === "cpp-16" || lessonId === "cpp-ck5")
+                        ? t("그래도 다음 레슨 보기 →", "Or continue to next lesson →")
+                        : t("다음 레슨으로 →", "Next Lesson →")}
                     </button>
                   )
                 }
