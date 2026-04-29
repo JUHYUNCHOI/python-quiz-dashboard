@@ -17,15 +17,10 @@ export const sortingCluster: PracticeCluster = {
       description: `N개의 정수가 주어질 때, 오름차순으로 정렬하여 출력하세요.`,
       constraints: "1 ≤ N ≤ 1000, -10000 ≤ 각 정수 ≤ 10000",
       initialCode: `#include <iostream>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
 int main() {
-    // 1) int n 을 cin 으로 입력받기
-    // 2) 크기 n 의 벡터 v 선언
-    // 3) n 개의 원소를 cin 으로 v 에 읽기
-    // 4) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -76,15 +71,10 @@ int main() {
       description: `N개의 정수가 주어질 때, 내림차순으로 정렬하여 출력하세요.`,
       constraints: "1 ≤ N ≤ 1000, -10000 ≤ 각 정수 ≤ 10000",
       initialCode: `#include <iostream>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
 int main() {
-    // 1) int n 을 cin 으로 입력받기
-    // 2) 크기 n 의 벡터 v 선언
-    // 3) n 개의 원소를 cin 으로 v 에 읽기
-    // 4) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -136,16 +126,10 @@ int main() {
 절댓값이 같으면 음수를 먼저 출력하세요.`,
       constraints: "1 ≤ N ≤ 1000, -10000 ≤ 각 정수 ≤ 10000",
       initialCode: `#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <cmath>
 using namespace std;
 
 int main() {
-    // 1) int n 을 cin 으로 입력받기
-    // 2) 크기 n 의 벡터 v 선언
-    // 3) n 개의 원소를 cin 으로 v 에 읽기
-    // 4) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -201,15 +185,10 @@ int main() {
 길이가 같으면 사전순으로 정렬하세요.`,
       constraints: "1 ≤ N ≤ 1000, 각 문자열은 영문 소문자, 길이 1 이상 50 이하",
       initialCode: `#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
 int main() {
-    // 1) int n 을 cin 으로 입력받기
-    // 2) 크기 n 의 문자열 벡터 v 선언하고 n 개의 문자열 읽기
-    // 3) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -265,17 +244,10 @@ int main() {
 점수가 같으면 이름 알파벳 순으로 정렬하세요.`,
       constraints: "1 ≤ N ≤ 1000, 이름은 영문 소문자, 0 ≤ 점수 ≤ 100",
       initialCode: `#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<pair<string, int>> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -327,14 +299,10 @@ int main() {
       description: `N개의 정수가 주어질 때, 정렬했을 때 K번째로 작은 수를 출력하세요. (1-based)`,
       constraints: "1 ≤ K ≤ N ≤ 1000, -10000 ≤ 각 정수 ≤ 10000",
       initialCode: `#include <iostream>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
 int main() {
-    // 1) int n, k 를 cin 으로 입력받기
-    // 2) 크기 n 의 벡터 v 선언하고 n 개의 원소 읽기
-    // 3) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -385,15 +353,10 @@ int main() {
 - 두 번째 줄: 수들 (공백 구분)`,
       constraints: "1 ≤ N ≤ 10000, -10000 ≤ 각 정수 ≤ 10000",
       initialCode: `#include <iostream>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
 int main() {
-    // 1) int n 을 cin 으로 입력받기
-    // 2) 크기 n 의 벡터 v 선언
-    // 3) n 개의 원소를 cin 으로 v 에 읽기
-    // 4) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -434,15 +397,10 @@ int main() {
 - Second line: the values (space-separated)`,
         constraints: "1 ≤ N ≤ 10000, -10000 ≤ each integer ≤ 10000",
         initialCode: `#include <iostream>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
 int main() {
-    // 1) Read int n with cin
-    // 2) Declare vector v of size n
-    // 3) Read n elements into v with cin
-    // 4) Write your solution below
+
     return 0;
 }`,
         hints: [
@@ -462,17 +420,10 @@ int main() {
 나이가 같으면 입력 순서를 유지하세요. (stable sort)`,
       constraints: "1 ≤ N ≤ 1000, 1 ≤ 나이 ≤ 100, 이름은 영문 최대 20자",
       initialCode: `#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<pair<string, int>> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -524,16 +475,10 @@ int main() {
 병합된 구간의 수와 각 구간을 왼쪽 끝점 기준 오름차순으로 출력하세요.`,
       constraints: "1 ≤ N ≤ 1000, 0 ≤ l ≤ r ≤ 10000",
       initialCode: `#include <iostream>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<pair<int,int>> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -593,15 +538,10 @@ int main() {
 출력 형식: "이름 반번호 점수" (한 줄에 하나)`,
       constraints: "1 ≤ N ≤ 1000, 1 ≤ 반 번호 ≤ 100, 0 ≤ 점수 ≤ 100, 이름은 영문 소문자 최대 20자",
       initialCode: `#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요 (struct를 사용하면 편리합니다)
+
     return 0;
 }`,
       testCases: [
@@ -664,15 +604,10 @@ Output format: "name class_number score" (one per line)`,
 N이 홀수이면 가운데 값, 짝수이면 가운데 두 값 중 작은 값을 출력합니다.`,
       constraints: "1 ≤ N ≤ 100, -10000 ≤ 각 정수 ≤ 10000",
       initialCode: `#include <iostream>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
 int main() {
-    // 1) int n 을 cin 으로 입력받기
-    // 2) 크기 n 의 벡터 v 선언
-    // 3) n 개의 원소를 cin 으로 v 에 읽기
-    // 4) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -721,14 +656,10 @@ int main() {
 (값이 같은 원소가 있으면 원래 인덱스가 작은 것이 먼저 오도록 정렬)`,
       constraints: "1 ≤ N ≤ 100, -10000 ≤ 각 정수 ≤ 10000",
       initialCode: `#include <iostream>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -784,16 +715,10 @@ int main() {
 한 회의가 끝나는 동시에 다음 회의를 시작할 수 있습니다.`,
       constraints: "1 ≤ N ≤ 1000, 0 ≤ 시작 시간 < 끝 시간 ≤ 100000",
       initialCode: `#include <iostream>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<pair<int,int>> meetings(n);
-    for (int i = 0; i < n; i++) cin >> meetings[i].first >> meetings[i].second;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -851,15 +776,10 @@ int main() {
 예: [4, 2, 2, 3, 5] → 정렬+중복제거 → [2, 3, 4, 5] → 연속 4개`,
       constraints: "1 ≤ N ≤ 1000, -10000 ≤ 각 정수 ≤ 10000",
       initialCode: `#include <iostream>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
 int main() {
-    // 1) int n 을 cin 으로 입력받기
-    // 2) 크기 n 의 벡터 v 선언
-    // 3) n 개의 원소를 cin 으로 v 에 읽기
-    // 4) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -916,16 +836,10 @@ Example: [4, 2, 2, 3, 5] → sort+dedup → [2, 3, 4, 5] → length 4`,
       description: `N개의 비음수 정수가 주어질 때, 이 수들을 이어 붙여 만들 수 있는 가장 큰 수를 출력하세요.`,
       constraints: "1 ≤ N ≤ 100, 0 ≤ 각 정수 ≤ 1000",
       initialCode: `#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
 int main() {
-    // 1) int n 을 cin 으로 입력받기
-    // 2) 크기 n 의 벡터 v 선언
-    // 3) n 개의 원소를 cin 으로 v 에 읽기
-    // 4) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -983,17 +897,10 @@ int main() {
       description: `N명의 학생 (이름, 점수) 가 주어질 때, **이름 알파벳 오름차순** 으로 정렬하여 한 줄에 한 명씩 \`이름 점수\` 형식으로 출력하세요.`,
       constraints: "1 ≤ N ≤ 1000, 이름은 영문 소문자 1-20자, 0 ≤ 점수 ≤ 100",
       initialCode: `#include <iostream>
-#include <vector>
-#include <string>
-#include <algorithm>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<pair<string, int>> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
-    // 👇 이름(first) 기준 오름차순 정렬 후 출력
+
     return 0;
 }`,
       testCases: [
@@ -1042,16 +949,10 @@ int main() {
       description: `N개의 2D 좌표 (x, y) 가 주어질 때, **x 오름차순, x가 같으면 y 오름차순** 으로 정렬해서 한 줄에 한 점씩 \`x y\` 형식으로 출력하세요.`,
       constraints: "1 ≤ N ≤ 1000, -10000 ≤ x, y ≤ 10000",
       initialCode: `#include <iostream>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<pair<int, int>> points(n);
-    for (int i = 0; i < n; i++) cin >> points[i].first >> points[i].second;
-    // 👇 x 오름차순, x 같으면 y 오름차순으로 정렬 후 출력
+
     return 0;
 }`,
       testCases: [
@@ -1103,16 +1004,10 @@ int main() {
 USACO Bronze 에서 자주 보는 패턴: **'정렬 → 인접 처리'** 가 핵심.`,
       constraints: "2 ≤ N ≤ 1000, 0 ≤ 각 점수 ≤ 100",
       initialCode: `#include <iostream>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<int> scores(n);
-    for (int i = 0; i < n; i++) cin >> scores[i];
-    // 👇 정렬 + 인접 차이 중 최댓값 출력
+
     return 0;
 }`,
       testCases: [

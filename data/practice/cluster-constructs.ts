@@ -31,17 +31,9 @@ export const constructsCluster: PracticeCluster = {
 vector 선언 방법: \`vector<int> v(n);\``,
       constraints: "1 ≤ N ≤ 100, -1000 ≤ 각 원소 ≤ 1000",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // vector<int> 선언 (크기 n)
-
-    // n개 입력
-
-    // 공백 구분 출력
 
     return 0;
 }`,
@@ -79,17 +71,9 @@ int main() {
 Declaration: \`vector<int> v(n);\``,
         constraints: "1 ≤ N ≤ 100, -1000 ≤ each element ≤ 1000",
         initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // declare vector<int> of size n
-
-    // read n values
-
-    // print space-separated
 
     return 0;
 }`,
@@ -113,17 +97,9 @@ int main() {
 초기화 방법: \`vector<int> v(n, 0);\``,
       constraints: "1 ≤ N ≤ 50, 0 ≤ M ≤ N, 모든 인덱스는 0-based이고 유효함",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    int n, m;
-    cin >> n >> m;
-    // 크기 n, 초기값 0으로 벡터 선언
-
-    // m개의 인덱스를 읽어서 해당 위치를 1로 변경
-
-    // 출력 (공백 구분)
 
     return 0;
 }`,
@@ -163,17 +139,9 @@ int main() {
 Syntax: \`vector<int> v(n, 0);\``,
         constraints: "1 ≤ N ≤ 50, 0 ≤ M ≤ N, all indices are 0-based and valid",
         initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    int n, m;
-    cin >> n >> m;
-    // declare vector of size n, all zeros
-
-    // read m indices and set each to 1
-
-    // print space-separated
 
     return 0;
 }`,
@@ -199,11 +167,6 @@ pair 선언: \`pair<int,int> p = {a, b};\`  또는  \`make_pair(a, b)\``,
 using namespace std;
 
 int main() {
-    int a, b;
-    cin >> a >> b;
-    // pair<int,int> 선언
-
-    // first * second 출력
 
     return 0;
 }`,
@@ -237,11 +200,6 @@ Declare: \`pair<int,int> p = {a, b};\`  or  \`make_pair(a, b)\``,
 using namespace std;
 
 int main() {
-    int a, b;
-    cin >> a >> b;
-    // declare pair<int,int>
-
-    // output first * second
 
     return 0;
 }`,
@@ -265,17 +223,9 @@ int main() {
 추가: \`pts.push_back({x, y});\``,
       constraints: "1 ≤ N ≤ 100, 0 ≤ x, y ≤ 1000",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // vector<pair<int,int>> 선언
-
-    // n개 (x, y) 입력 후 push_back
-
-    // 한 줄씩 출력
 
     return 0;
 }`,
@@ -312,17 +262,9 @@ Declare: \`vector<pair<int,int>> pts;\`
 Add: \`pts.push_back({x, y});\``,
         constraints: "1 ≤ N ≤ 100, 0 ≤ x, y ≤ 1000",
         initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // declare vector<pair<int,int>>
-
-    // read n (x, y) pairs and push_back
-
-    // print each pair on its own line
 
     return 0;
 }`,
@@ -347,17 +289,9 @@ int main() {
 선언: \`vector<vector<int>> grid(n, vector<int>(m));\``,
       constraints: "1 ≤ N, M ≤ 10, 0 ≤ 각 원소 ≤ 100",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    int n, m;
-    cin >> n >> m;
-    // vector<vector<int>> 선언 (n행 m열)
-
-    // 입력
-
-    // 출력 (각 행을 공백 구분, 행 사이 줄바꿈)
 
     return 0;
 }`,
@@ -399,17 +333,9 @@ int main() {
 Declaration: \`vector<vector<int>> grid(n, vector<int>(m));\``,
         constraints: "1 ≤ N, M ≤ 10, 0 ≤ each element ≤ 100",
         initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    int n, m;
-    cin >> n >> m;
-    // declare vector<vector<int>> with n rows and m columns
-
-    // read input
-
-    // print (space-separated within rows, newline between rows)
 
     return 0;
 }`,
@@ -433,17 +359,9 @@ int main() {
 선언: \`vector<vector<int>> grid(n, vector<int>(m, -1));\``,
       constraints: "1 ≤ N, M ≤ 10, 1 ≤ K ≤ 20, 0 ≤ 값 ≤ 100",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    int n, m, k;
-    cin >> n >> m >> k;
-    // n×m 격자를 -1로 초기화
-
-    // k개 명령 처리: r c val → grid[r][c] = val
-
-    // 출력
 
     return 0;
 }`,
@@ -484,17 +402,9 @@ int main() {
 Declaration: \`vector<vector<int>> grid(n, vector<int>(m, -1));\``,
         constraints: "1 ≤ N, M ≤ 10, 1 ≤ K ≤ 20, 0 ≤ value ≤ 100",
         initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    int n, m, k;
-    cin >> n >> m >> k;
-    // declare n×m grid initialized to -1
-
-    // process k updates: r c val → grid[r][c] = val
-
-    // print
 
     return 0;
 }`,
@@ -515,21 +425,10 @@ int main() {
       description: `N개의 정수를 입력받아, **양수인 것만** (값, 인덱스) 쌍으로 vector에 push_back하고, 저장된 쌍의 개수와 내용을 출력하세요.`,
       constraints: "1 ≤ N ≤ 50, -100 ≤ 각 원소 ≤ 100",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<pair<int,int>> result;
-    for (int i = 0; i < n; i++) {
-        int x; cin >> x;
-        // x가 양수면 {x, i} push_back
 
-    }
-    cout << result.size() << '\\n';
-    for (auto& p : result)
-        cout << p.first << ' ' << p.second << '\\n';
     return 0;
 }`,
       testCases: [
@@ -582,19 +481,10 @@ int main() {
 함수 원형: \`pair<int,int> minmax_pair(vector<int>& v)\``,
       constraints: "1 ≤ N ≤ 100, -1000 ≤ 각 원소 ≤ 1000",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
-// pair<int,int> minmax_pair 함수를 작성하세요
-// first = 최솟값, second = 최댓값
-
-
 int main() {
-    int n; cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    auto result = minmax_pair(v);
-    cout << result.first << ' ' << result.second << '\\n';
+
     return 0;
 }`,
       testCases: [
@@ -636,19 +526,10 @@ int main() {
 Signature: \`pair<int,int> minmax_pair(vector<int>& v)\``,
         constraints: "1 ≤ N ≤ 100, -1000 ≤ each element ≤ 1000",
         initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
-// Write the minmax_pair function here
-// first = minimum, second = maximum
-
-
 int main() {
-    int n; cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    auto result = minmax_pair(v);
-    cout << result.first << ' ' << result.second << '\\n';
+
     return 0;
 }`,
         hints: [
@@ -676,20 +557,9 @@ int main() {
 선형 탐색으로 해결하세요.`,
       constraints: "1 ≤ N ≤ 100, 1 ≤ 번호 ≤ 1000, 0 ≤ 점수, T ≤ 100",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    int n, t;
-    cin >> n >> t;
-    vector<pair<int,int>> v(n);
-    for (int i = 0; i < n; i++)
-        cin >> v[i].first >> v[i].second;
-
-    // 최고 점수를 받은 사람 찾기 (동점이면 번호가 작은 사람)
-
-    // T 이상 점수 받은 사람 수 세기
-
 
     return 0;
 }`,
@@ -756,17 +626,9 @@ Solve with a linear scan.`,
       description: `N×M 격자를 0으로 초기화한 뒤, **테두리(첫 행·마지막 행·첫 열·마지막 열)** 만 1로 바꿔 출력하세요.`,
       constraints: "3 ≤ N, M ≤ 10",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    int n, m;
-    cin >> n >> m;
-    // n×m 격자 0으로 초기화
-
-    // 테두리를 1로 설정
-
-    // 출력
 
     return 0;
 }`,
@@ -805,17 +667,9 @@ int main() {
         description: `Initialize an N×M grid to 0, then set only the **border cells** (first/last row and first/last column) to 1 and print.`,
         constraints: "3 ≤ N, M ≤ 10",
         initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    int n, m;
-    cin >> n >> m;
-    // initialize n×m grid to 0
-
-    // set border cells to 1
-
-    // print
 
     return 0;
 }`,
@@ -844,24 +698,9 @@ tuple 선언: \`vector<tuple<int,int,int>> students;\`
 값 접근: \`get<0>(t)\`, \`get<1>(t)\`, \`get<2>(t)\``,
       constraints: "1 ≤ N ≤ 100, 1 ≤ 학번 ≤ 1000, 0 ≤ 각 점수 ≤ 100",
       initialCode: `#include <iostream>
-#include <vector>
-#include <tuple>
 using namespace std;
 
 int main() {
-    int n; cin >> n;
-    vector<tuple<int,int,int>> students; // (학번, 수학, 영어)
-    for (int i = 0; i < n; i++) {
-        int id, math, eng;
-        cin >> id >> math >> eng;
-        students.push_back({id, math, eng});
-    }
-    // 1) 합계 최고 학생 찾기 (타이브레이크: 수학 높은 사람, 그래도 같으면 학번 작은 사람)
-
-    // 2) 수학 평균 (정수 나눗셈)
-
-    // 3) 수학·영어 모두 80 이상인 학생 수
-
 
     return 0;
 }`,

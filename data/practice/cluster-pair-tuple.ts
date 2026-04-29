@@ -21,17 +21,10 @@ main 에서 두 정수 \`a b\` 를 입력받아 \`divmod\` 호출 후 \`몫 나�
 > 💡 함수가 **두 값을 한 번에 반환** 하려면 pair 가 정석. 변수 두 개 따로 반환하는 건 C++ 에서 불가능 — pair 의 진짜 강제 use case.`,
       constraints: "-10000 ≤ a ≤ 10000, 1 ≤ b ≤ 10000",
       initialCode: `#include <iostream>
-#include <utility>
 using namespace std;
 
-// 👇 함수 작성: pair<int, int> divmod(int a, int b) — 본문 직접 채우기
-//    힌트: pair 반환은 return {값1, 값2}; 형태
-
-
 int main() {
-    int a, b;
-    cin >> a >> b;
-    // 👇 divmod(a, b) 호출 + structured bindings 로 풀어 "몫 나머지" 출력
+
     return 0;
 }`,
       testCases: [
@@ -70,17 +63,10 @@ In main, read two integers \`a b\`, call \`divmod\`, and print \`quotient remain
 > 💡 To return **two values at once**, pair is the canonical answer. C++ doesn't allow returning two separate variables — this is pair's truly mandatory use case.`,
         constraints: "-10000 ≤ a ≤ 10000, 1 ≤ b ≤ 10000",
         initialCode: `#include <iostream>
-#include <utility>
 using namespace std;
 
-// 👇 Write the function: pair<int, int> divmod(int a, int b) — fill in the body
-//    Hint: return a pair with: return {value1, value2};
-
-
 int main() {
-    int a, b;
-    cin >> a >> b;
-    // 👇 Call divmod(a, b) + unpack with structured bindings + print "quotient remainder"
+
     return 0;
 }`,
         hints: [
@@ -104,20 +90,10 @@ main 에서 N 개의 정수를 입력받아 함수 호출 후 \`min max\` 출력
 > 💡 두 값을 한 함수에서 같이 구하면 두 번 순회 안 해도 되어 효율적. 두 결과를 한 묶음으로 반환 = pair.`,
       constraints: "1 ≤ N ≤ 1000, -10000 ≤ 각 정수 ≤ 10000",
       initialCode: `#include <iostream>
-#include <vector>
-#include <utility>
 using namespace std;
 
-// 👇 함수 작성: pair<int, int> minmax(const vector<int>& v)
-//    한 번 순회로 min, max 같이 추적해서 pair 로 반환
-
-
 int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    // 👇 minmax 호출 + 풀어서 "min max" 출력
+
     return 0;
 }`,
       testCases: [
@@ -165,20 +141,10 @@ In main, read N integers, call the function, and print \`min max\`.
 > 💡 Computing both in one function avoids two passes — efficient. Returning both as one bundle = pair.`,
         constraints: "1 ≤ N ≤ 1000, -10000 ≤ each integer ≤ 10000",
         initialCode: `#include <iostream>
-#include <vector>
-#include <utility>
 using namespace std;
 
-// 👇 Write the function: pair<int, int> minmax(const vector<int>& v)
-//    Track min and max in one pass, return them as a pair
-
-
 int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    // 👇 Call minmax + unpack + print "min max"
+
     return 0;
 }`,
         hints: [
@@ -202,18 +168,10 @@ int main() {
 > 💡 평균 계산엔 점수만 필요하지만 출력엔 이름이 필요 — 점수와 이름이 짝꿍으로 묶여 있어야 매칭이 안 깨져요. **\`vector<pair<string, int>>\` 사용**.`,
       constraints: "1 ≤ N ≤ 1000, 이름은 영문 1-20자, 0 ≤ 점수 ≤ 100",
       initialCode: `#include <iostream>
-#include <string>
-#include <vector>
-#include <utility>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<pair<string, int>> students(n);
-    for (int i = 0; i < n; i++) cin >> students[i].first >> students[i].second;
-    // 👇 1) 평균 계산 후 출력
-    // 👇 2) 평균 이상 학생 이름 출력 (입력 순서)
+
     return 0;
 }`,
       testCases: [
@@ -259,18 +217,10 @@ int main() {
 > 💡 Averaging needs only scores, but output needs names — keep them paired so the matching can't drift. **Use \`vector<pair<string, int>>\`**.`,
         constraints: "1 ≤ N ≤ 1000, names are 1-20 English chars, 0 ≤ score ≤ 100",
         initialCode: `#include <iostream>
-#include <string>
-#include <vector>
-#include <utility>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<pair<string, int>> students(n);
-    for (int i = 0; i < n; i++) cin >> students[i].first >> students[i].second;
-    // 👇 1) Compute the average and print it
-    // 👇 2) Print names of students at or above the average (input order)
+
     return 0;
 }`,
         hints: [
@@ -292,17 +242,10 @@ int main() {
 > 💡 평행 vector 로도 풀 수 있지만 **\`vector<pair<string, int>>\` 사용** — 이름·점수 짝꿍 유지 패턴 익히기. 다음 챕터 (sort) 에서 진가 발휘.`,
       constraints: "1 ≤ N ≤ 1000, 이름은 영문 1-20자, 0 ≤ 점수 ≤ 100",
       initialCode: `#include <iostream>
-#include <string>
-#include <vector>
-#include <utility>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<pair<string, int>> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
-    // 👇 80 점 이상만 한 줄에 하나씩 출력
+
     return 0;
 }`,
       testCases: [
@@ -338,17 +281,10 @@ int main() {
 > 💡 Parallel vectors would work, but **use \`vector<pair<string, int>>\`** — practice the bonded-pair pattern. The next chapter (sort) is where it really shines.`,
         constraints: "1 ≤ N ≤ 1000, name is 1-20 English letters, 0 ≤ score ≤ 100",
         initialCode: `#include <iostream>
-#include <string>
-#include <vector>
-#include <utility>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<pair<string, int>> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
-    // 👇 Print only students with score >= 80, one per line
+
     return 0;
 }`,
         hints: [
@@ -370,17 +306,10 @@ int main() {
 > 💡 평행 vector 로도 풀 수 있지만 **\`vector<pair<string, int>>\` 사용** — pair 째로 best 트래커에 담으면 이름·점수 짝꿍이 자동으로 같이 갱신돼요. 다음 챕터 (sort) 에서 진가 발휘.`,
       constraints: "1 ≤ N ≤ 1000, 이름은 영문 1-20자, 0 ≤ 점수 ≤ 100",
       initialCode: `#include <iostream>
-#include <string>
-#include <vector>
-#include <utility>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<pair<string, int>> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
-    // 👇 최고 점수 학생 이름 출력 (single-pass max tracking)
+
     return 0;
 }`,
       testCases: [
@@ -419,17 +348,10 @@ On ties, print the **earliest-entered** student.
 > 💡 Parallel vectors would work, but **use \`vector<pair<string, int>>\`** — keeping the whole pair in a tracker means name and score never drift apart. The next chapter (sort) is where it really shines.`,
         constraints: "1 ≤ N ≤ 1000, name is 1-20 English letters, 0 ≤ score ≤ 100",
         initialCode: `#include <iostream>
-#include <string>
-#include <vector>
-#include <utility>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<pair<string, int>> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i].first >> v[i].second;
-    // 👇 Print the name of the top-scoring student (single-pass max tracking)
+
     return 0;
 }`,
         hints: [
@@ -449,28 +371,10 @@ int main() {
 N개의 정수가 주어질 때, 이 함수를 호출하고 **structured bindings 로 풀어** 한 줄에 \`합 최대 최소\` 출력하세요.`,
       constraints: "1 ≤ N ≤ 1000, -10000 ≤ 각 정수 ≤ 10000",
       initialCode: `#include <iostream>
-#include <vector>
-#include <tuple>
-#include <algorithm>
 using namespace std;
 
-tuple<int, int, int> analyze(const vector<int>& v) {
-    int sum = 0;
-    int mx = v[0], mn = v[0];
-    for (int x : v) {
-        sum += x;
-        mx = max(mx, x);
-        mn = min(mn, x);
-    }
-    return {sum, mx, mn};
-}
-
 int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    // 👇 analyze(v) 호출 + structured bindings 로 풀기 + 한 줄 출력
+
     return 0;
 }`,
       testCases: [
@@ -515,28 +419,10 @@ int main() {
 Given N integers, call the function, **unpack with structured bindings**, and print \`sum max min\` on one line.`,
         constraints: "1 ≤ N ≤ 1000, -10000 ≤ each integer ≤ 10000",
         initialCode: `#include <iostream>
-#include <vector>
-#include <tuple>
-#include <algorithm>
 using namespace std;
 
-tuple<int, int, int> analyze(const vector<int>& v) {
-    int sum = 0;
-    int mx = v[0], mn = v[0];
-    for (int x : v) {
-        sum += x;
-        mx = max(mx, x);
-        mn = min(mn, x);
-    }
-    return {sum, mx, mn};
-}
-
 int main() {
-    int n;
-    cin >> n;
-    vector<int> v(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    // 👇 Call analyze(v) + unpack with structured bindings + print one line
+
     return 0;
 }`,
         hints: [
@@ -560,17 +446,10 @@ int main() {
 > 💡 좌표 (x, y) 는 pair 의 가장 자연스러운 용도 — 분리하면 "x 가 어느 점의 x 인지" 추적 어려움. **\`vector<pair<int, int>>\` 사용**.`,
       constraints: "1 ≤ N ≤ 1000, -10000 ≤ x, y ≤ 10000",
       initialCode: `#include <iostream>
-#include <vector>
-#include <utility>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<pair<int, int>> points(n);
-    for (int i = 0; i < n; i++) cin >> points[i].first >> points[i].second;
-    // 👇 원점에서 가장 가까운 점 찾기
-    //    거리² = x*x + y*y (제곱근 X — 비교만 하면 충분)
+
     return 0;
 }`,
       testCases: [
@@ -618,17 +497,10 @@ On ties, the **earliest-entered** point wins.
 > 💡 Coordinates (x, y) are pair's most natural fit — splitting them makes it hard to track which x belongs to which point. **Use \`vector<pair<int, int>>\`**.`,
         constraints: "1 ≤ N ≤ 1000, -10000 ≤ x, y ≤ 10000",
         initialCode: `#include <iostream>
-#include <vector>
-#include <utility>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<pair<int, int>> points(n);
-    for (int i = 0; i < n; i++) cin >> points[i].first >> points[i].second;
-    // 👇 Find the point closest to the origin
-    //    distance² = x*x + y*y (no sqrt needed — comparison is enough)
+
     return 0;
 }`,
         hints: [

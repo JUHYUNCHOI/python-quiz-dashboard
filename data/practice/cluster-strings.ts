@@ -17,13 +17,10 @@ export const stringsCluster: PracticeCluster = {
       description: `문자열이 주어질 때, 그 길이를 출력하세요.`,
       constraints: "문자열은 영문 소문자로만 구성, 길이 1 이상 100 이하",
       initialCode: `#include <iostream>
-#include <string>
 using namespace std;
 
 int main() {
-    string s;
-    cin >> s;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -64,13 +61,10 @@ int main() {
       description: `문자열이 주어질 때, 첫 번째 문자와 마지막 문자를 공백으로 구분하여 출력하세요.`,
       constraints: "문자열은 영문으로만 구성, 길이 1 이상 100 이하",
       initialCode: `#include <iostream>
-#include <string>
 using namespace std;
 
 int main() {
-    string s;
-    cin >> s;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -113,13 +107,10 @@ int main() {
       description: `문자열이 주어질 때, 뒤집은 문자열을 출력하세요.`,
       constraints: "문자열은 영문 소문자로만 구성, 길이 1 이상 50 이하",
       initialCode: `#include <iostream>
-#include <string>
 using namespace std;
 
 int main() {
-    string s;
-    cin >> s;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -165,14 +156,10 @@ int main() {
       description: `문자열과 문자 하나가 주어질 때, 문자열에서 해당 문자가 몇 번 등장하는지 출력하세요.`,
       constraints: "문자열 길이 1 이상 1000 이하, 문자는 영문 소문자",
       initialCode: `#include <iostream>
-#include <string>
 using namespace std;
 
 int main() {
-    string s;
-    char c;
-    cin >> s >> c;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -220,14 +207,10 @@ int main() {
       description: `문자열 S와 시작 인덱스 i, 길이 l이 주어질 때, S에서 인덱스 i부터 l개의 문자를 추출하여 출력하세요.`,
       constraints: "문자열 길이 1 이상 100 이하, 0 ≤ i, i+l ≤ 문자열 길이",
       initialCode: `#include <iostream>
-#include <string>
 using namespace std;
 
 int main() {
-    string s;
-    int i, l;
-    cin >> s >> i >> l;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -273,13 +256,10 @@ int main() {
 T가 S에 없으면 \`-1\`을 출력하세요.`,
       constraints: "S 길이 1 이상 1000 이하, T 길이 1 이상 100 이하",
       initialCode: `#include <iostream>
-#include <string>
 using namespace std;
 
 int main() {
-    string s, t;
-    cin >> s >> t;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -334,16 +314,10 @@ find()와 조합해 모든 등장 위치를 찾아 교체하세요.
 **예시:** S=\`"hello world hello"\`, A=\`"hello"\`, B=\`"hi"\` → \`"hi world hi"\``,
       constraints: "S의 길이 ≤ 100, A 길이 ≥ 1",
       initialCode: `#include <iostream>
-#include <string>
 using namespace std;
 
 int main() {
-    string s, a, b;
-    getline(cin, s);
-    getline(cin, a);
-    getline(cin, b);
-    // 여기에 코드를 작성하세요
-    cout << s << "\\n";
+
     return 0;
 }`,
       scaffoldCode: `#include <iostream>
@@ -417,14 +391,10 @@ int main() {
 **s.compare(t)** — s < t면 음수, s > t면 양수, 같으면 0을 반환합니다.`,
       constraints: "각 문자열 길이 ≤ 50, 소문자만 사용",
       initialCode: `#include <iostream>
-#include <string>
 using namespace std;
 
 int main() {
-    string a, b;
-    cin >> a >> b;
-    int result = a.compare(b);  // compare 사용
-    // result로 출력 결정
+
     return 0;
 }`,
       testCases: [
@@ -471,13 +441,10 @@ int main() {
       description: `영문 문자열이 주어질 때, 대문자는 소문자로, 소문자는 대문자로 변환하여 출력하세요.`,
       constraints: "문자열은 영문자로만 구성, 길이 1 이상 100 이하",
       initialCode: `#include <iostream>
-#include <string>
 using namespace std;
 
 int main() {
-    string s;
-    cin >> s;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -527,14 +494,10 @@ int main() {
 단어 사이에 연속된 공백이 있을 수 있습니다.`,
       constraints: "문장 길이 1 이상 200 이하",
       initialCode: `#include <iostream>
-#include <string>
-#include <sstream>
 using namespace std;
 
 int main() {
-    string line;
-    getline(cin, line);
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -584,13 +547,10 @@ There may be consecutive spaces between words.`,
 팰린드롬이면 \`YES\`, 아니면 \`NO\`를 출력하세요.`,
       constraints: "문자열은 영문 소문자로만 구성, 길이 1 이상 1000 이하",
       initialCode: `#include <iostream>
-#include <string>
 using namespace std;
 
 int main() {
-    string s;
-    cin >> s;
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -641,12 +601,10 @@ Print \`YES\` if it is a palindrome, \`NO\` otherwise.`,
       description: `문자열 S, 찾을 문자열 from, 바꿀 문자열 to가 주어질 때, S에서 from을 모두 to로 교체한 결과를 출력하세요.`,
       constraints: "S 길이 1 이상 1000 이하, from 길이 1 이상 50 이하",
       initialCode: `#include <iostream>
-#include <string>
 using namespace std;
 
 int main() {
-    // 1) getline 으로 세 줄 입력받기: s, from, to
-    // 2) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -697,14 +655,10 @@ int main() {
 길이가 같은 단어가 여럿이면 먼저 등장한 것을 출력하세요.`,
       constraints: "단어 수 1 이상 100 이하, 각 단어 길이 1 이상 50 이하",
       initialCode: `#include <iostream>
-#include <string>
-#include <sstream>
 using namespace std;
 
 int main() {
-    string line;
-    getline(cin, line);
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [
@@ -755,14 +709,10 @@ If multiple words share the maximum length, print the one that appears first.`,
       description: `공백으로 구분된 숫자 문자열들이 한 줄로 주어질 때, 각 문자열을 정수로 변환하여 합계를 출력하세요.`,
       constraints: "숫자 개수 1 이상 50 이하, 각 숫자 -10000 이상 10000 이하",
       initialCode: `#include <iostream>
-#include <string>
-#include <sstream>
 using namespace std;
 
 int main() {
-    string line;
-    getline(cin, line);
-    // 여기에 코드를 작성하세요
+
     return 0;
 }`,
       testCases: [

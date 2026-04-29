@@ -17,13 +17,9 @@ export const gridCluster: PracticeCluster = {
       description: `N×M 격자가 주어질 때, 모든 원소의 합을 출력하세요.`,
       constraints: "1 ≤ N, M ≤ 100, 0 ≤ 각 원소 ≤ 100",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    int n, m;
-    cin >> n >> m;
-    // 2D 벡터 선언하고 입력받기
 
     return 0;
 }`,
@@ -76,13 +72,9 @@ int main() {
       description: `N×M 격자가 주어질 때, 각 행의 합을 한 줄에 하나씩 출력하세요.`,
       constraints: "1 ≤ N, M ≤ 100, 0 ≤ 각 원소 ≤ 100",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    int n, m;
-    cin >> n >> m;
-    // 2D 벡터 선언하고 입력받기
 
     return 0;
 }`,
@@ -134,13 +126,9 @@ int main() {
       description: `N×N 정방 격자가 주어질 때, 주대각선(좌상 → 우하) 원소의 합을 출력하세요.`,
       constraints: "1 ≤ N ≤ 100, 0 ≤ 각 원소 ≤ 100",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    // 2D 벡터 선언하고 입력받기
 
     return 0;
 }`,
@@ -191,17 +179,10 @@ int main() {
 (N이 홀수일 때 중심 원소 grid[N/2][N/2]는 한 번만 셉니다)`,
       constraints: "1 ≤ N ≤ 100 (홀수), -100 ≤ 각 원소 ≤ 100",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<vector<int>> grid(n, vector<int>(n));
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++)
-            cin >> grid[i][j];
-    // Write your code here
+
     return 0;
 }`,
       testCases: [
@@ -255,14 +236,10 @@ int main() {
       description: `N×M 격자가 주어질 때, 각 열의 최댓값을 공백으로 구분하여 출력하세요.`,
       constraints: "1 ≤ N, M ≤ 100, -1000 ≤ 각 원소 ≤ 1000",
       initialCode: `#include <iostream>
-#include <vector>
-#include <climits>
 using namespace std;
 
 int main() {
-    // 1) int n, m 을 cin 으로 입력받기
-    // 2) n×m 크기의 2D 벡터 grid 선언하고 모든 원소 읽기
-    // 3) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -317,13 +294,10 @@ int main() {
       description: `N×M 격자가 주어질 때, 테두리(가장자리)에 있는 원소들의 합을 출력하세요.`,
       constraints: "2 ≤ N, M ≤ 100, 0 ≤ 각 원소 ≤ 100",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    // 1) int n, m 을 cin 으로 입력받기
-    // 2) n×m 크기의 2D 벡터 grid 선언하고 모든 원소 읽기
-    // 3) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -375,17 +349,10 @@ int main() {
       description: `N×N 격자가 주어질 때, 시계 방향으로 90도 회전한 결과를 출력하세요.`,
       constraints: "1 ≤ N ≤ 50, 0 ≤ 각 원소 ≤ 9",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
-    vector<vector<int>> grid(n, vector<int>(n));
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++)
-            cin >> grid[i][j];
-    // Write your code here
+
     return 0;
 }`,
       testCases: [
@@ -444,13 +411,9 @@ int main() {
 K가 없으면 \`NOT FOUND\`를 출력하세요.`,
       constraints: "1 ≤ N, M ≤ 100, 0 ≤ 각 원소 ≤ 100, 0 ≤ K ≤ 100",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    int n, m, k;
-    cin >> n >> m >> k;
-    // Declare a 2D vector and read input
 
     return 0;
 }`,
@@ -509,13 +472,10 @@ If K is not found, output \`NOT FOUND\`.`,
 격자 밖은 0으로 처리합니다.`,
       constraints: "1 ≤ N, M ≤ 50, 0 ≤ 각 원소 ≤ 100",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    // 1) int n, m 을 cin 으로 입력받기
-    // 2) n×m 크기의 2D 벡터 grid 선언하고 모든 원소 읽기
-    // 3) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -578,17 +538,10 @@ Cells outside the grid are treated as 0.`,
 격자 가장자리 셀은 격자 밖을 이웃으로 갖지 않으므로, 존재하는 이웃보다만 크면 됩니다.`,
       constraints: "2 ≤ N, M ≤ 50, 1 ≤ 각 원소 ≤ 10000",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    int n, m;
-    cin >> n >> m;
-    vector<vector<int>> g(n, vector<int>(m));
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < m; j++)
-            cin >> g[i][j];
-    // Write your code here
+
     return 0;
 }`,
       testCases: [
@@ -653,13 +606,10 @@ Edge cells have no out-of-grid neighbors, so they only need to be greater than t
       description: `N×M 격자에서 0이 있는 셀의 같은 행과 열을 모두 0으로 만든 결과를 출력하세요.`,
       constraints: "1 ≤ N, M ≤ 50, 0 ≤ 각 원소 ≤ 100",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    // 1) int n, m 을 cin 으로 입력받기
-    // 2) n×m 크기의 2D 벡터 grid 선언하고 모든 원소 읽기
-    // 3) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -719,13 +669,10 @@ int main() {
       description: `N×M 격자가 주어질 때, 외곽에서 안쪽으로 나선형(시계 방향)으로 원소를 출력하세요.`,
       constraints: "1 ≤ N, M ≤ 20, 1 ≤ 각 원소 ≤ 100",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    // 1) int n, m 을 cin 으로 입력받기
-    // 2) n×m 크기의 2D 벡터 grid 선언하고 모든 원소 읽기
-    // 3) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -788,17 +735,10 @@ int main() {
       description: `N×N 격자와 회전 횟수 K가 주어질 때, 격자를 시계 방향으로 90도 K번 회전한 결과를 출력하세요.`,
       constraints: "1 ≤ N ≤ 50, 0 ≤ K ≤ 3",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    int n, k;
-    cin >> n >> k;
-    vector<vector<int>> g(n, vector<int>(n));
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++)
-            cin >> g[i][j];
-    // Write your code here
+
     return 0;
 }`,
       testCases: [
@@ -863,13 +803,10 @@ int main() {
       description: `N×M 격자가 주어질 때, 전치 행렬(행과 열을 바꾼 M×N 격자)을 출력하세요.`,
       constraints: "1 ≤ N, M ≤ 100, 0 ≤ 각 원소 ≤ 100",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    // 1) int n, m 을 cin 으로 입력받기
-    // 2) n×m 크기의 2D 벡터 grid 선언하고 모든 원소 읽기
-    // 3) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -922,13 +859,10 @@ int main() {
       description: `N×M 격자가 주어질 때, 가장 바깥 테두리를 시계 방향으로 한 칸 회전한 결과를 출력하세요.`,
       constraints: "2 ≤ N, M ≤ 20, 0 ≤ 각 원소 ≤ 9",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    // 1) int n, m 을 cin 으로 입력받기
-    // 2) n×m 크기의 2D 벡터 grid 선언하고 모든 원소 읽기
-    // 3) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [

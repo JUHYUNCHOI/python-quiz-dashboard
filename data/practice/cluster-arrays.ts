@@ -20,14 +20,10 @@ export const arraysCluster: PracticeCluster = {
       description: `N개의 정수가 주어질 때, 가장 큰 수를 출력하세요.`,
       constraints: "1 ≤ N ≤ 100, -1000 ≤ 각 원소 ≤ 1000",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    // 1) int n 을 cin 으로 입력받기
-    // 2) 크기 n 의 벡터 v 선언
-    // 3) n 개의 원소를 cin 으로 v 에 읽기
-    // 4) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -83,14 +79,10 @@ int main() {
 **예시:** 입력 \`3 5 -1 2 -1 -1 4\` → \`4\` (3 추가→5 추가→5제거→2 추가→2제거→3제거→4 추가)`,
       constraints: "1 ≤ N ≤ 20, -100 ≤ 각 수 ≤ 100 (0 제외)",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    // 1) int n 을 cin 으로 입력받기
-    // 2) vector<int> v 선언 (빈 벡터)
-    // 3) n 번 반복하며 x 입력: 양수면 push_back, 음수면 pop_back (비어있지 않을 때만)
-    // 4) v 의 원소를 공백으로 구분해 출력
+
     return 0;
 }`,
       testCases: [
@@ -148,14 +140,10 @@ int main() {
 - 두 번째 줄: 평균 (소수점 이하 버림)`,
       constraints: "1 ≤ N ≤ 100, 0 ≤ 각 원소 ≤ 1000",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    // 1) int n 을 cin 으로 입력받기
-    // 2) 크기 n 의 벡터 v 선언
-    // 3) n 개의 원소를 cin 으로 v 에 읽기
-    // 4) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -203,14 +191,10 @@ int main() {
       description: `N개의 정수가 주어질 때, 역순으로 출력하세요. 각 수는 공백으로 구분합니다.`,
       constraints: "1 ≤ N ≤ 100",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    // 1) int n 을 cin 으로 입력받기
-    // 2) 크기 n 의 벡터 v 선언
-    // 3) n 개의 원소를 cin 으로 v 에 읽기
-    // 4) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -259,14 +243,10 @@ int main() {
       description: `N개의 서로 다른 정수가 주어질 때, 두 번째로 큰 수를 출력하세요.`,
       constraints: "2 ≤ N ≤ 100, -1000 ≤ 각 원소 ≤ 1000, 모든 원소는 서로 다름",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    // 1) int n 을 cin 으로 입력받기
-    // 2) 크기 n 의 벡터 v 선언
-    // 3) n 개의 원소를 cin 으로 v 에 읽기
-    // 4) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -317,13 +297,10 @@ int main() {
       description: `N개의 정수와 목표값 T가 주어질 때, 합이 T가 되는 쌍 (i, j)의 수를 출력하세요. (i < j)`,
       constraints: "2 ≤ N ≤ 100, -1000 ≤ 각 원소 ≤ 1000, -2000 ≤ T ≤ 2000",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    // 1) int n, t 를 cin 으로 입력받기
-    // 2) 크기 n 의 벡터 v 선언하고 n 개의 원소 읽기
-    // 3) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -372,14 +349,10 @@ int main() {
       description: `N개의 정수가 주어질 때, 가장 작은 수를 출력하세요.`,
       constraints: "1 ≤ N ≤ 100, -1000 ≤ 각 원소 ≤ 1000",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    // 1) int n 을 cin 으로 입력받기
-    // 2) 크기 n 의 벡터 v 선언
-    // 3) n 개의 원소를 cin 으로 v 에 읽기
-    // 4) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -427,13 +400,10 @@ int main() {
       description: `N개의 정수와 목표값 K가 주어질 때, 배열에서 K가 몇 번 등장하는지 출력하세요.`,
       constraints: "1 ≤ N ≤ 100, -1000 ≤ 각 원소, K ≤ 1000",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    // 1) int n, k 를 cin 으로 입력받기
-    // 2) 크기 n 의 벡터 v 선언하고 n 개의 원소 읽기
-    // 3) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -479,14 +449,10 @@ int main() {
       description: `N개의 정수가 주어질 때, 각 원소를 2배로 만들어 공백으로 구분하여 출력하세요.`,
       constraints: "1 ≤ N ≤ 100, -500 ≤ 각 원소 ≤ 500",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    // 1) int n 을 cin 으로 입력받기
-    // 2) 크기 n 의 벡터 v 선언
-    // 3) n 개의 원소를 cin 으로 v 에 읽기
-    // 4) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -533,14 +499,10 @@ int main() {
       description: `N개의 정수가 주어질 때, 양수의 개수와 음수의 개수를 공백으로 구분하여 출력하세요. (0은 양수도 음수도 아닙니다)`,
       constraints: "1 ≤ N ≤ 100, -1000 ≤ 각 원소 ≤ 1000",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    // 1) int n 을 cin 으로 입력받기
-    // 2) 크기 n 의 벡터 v 선언
-    // 3) n 개의 원소를 cin 으로 v 에 읽기
-    // 4) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -589,13 +551,10 @@ int main() {
       description: `N개의 정수와 목표값 K가 주어질 때, K가 배열에 있으면 \`YES\`, 없으면 \`NO\`를 출력하세요.`,
       constraints: "1 ≤ N ≤ 100, -1000 ≤ 각 원소, K ≤ 1000",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    // 1) int n, k 를 cin 으로 입력받기
-    // 2) 크기 n 의 벡터 v 선언하고 n 개의 원소 읽기
-    // 3) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -643,14 +602,10 @@ int main() {
 예) [1, 2, 3, 4, 5] → [5, 1, 2, 3, 4]`,
       constraints: "2 ≤ N ≤ 100",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    // 1) int n 을 cin 으로 입력받기
-    // 2) 크기 n 의 벡터 v 선언
-    // 3) n 개의 원소를 cin 으로 v 에 읽기
-    // 4) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -703,14 +658,10 @@ int main() {
       description: `N개의 정수가 주어질 때, 가장 큰 수의 인덱스(0-based)를 출력하세요. 최댓값이 여러 개이면 가장 첫 번째 인덱스를 출력합니다.`,
       constraints: "1 ≤ N ≤ 100, -1000 ≤ 각 원소 ≤ 1000",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    // 1) int n 을 cin 으로 입력받기
-    // 2) 크기 n 의 벡터 v 선언
-    // 3) n 개의 원소를 cin 으로 v 에 읽기
-    // 4) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -758,13 +709,10 @@ int main() {
       description: `두 배열 A, B가 주어질 때 (같은 크기 N), 같은 인덱스의 원소를 더한 배열 C를 출력하세요.`,
       constraints: "1 ≤ N ≤ 100, -1000 ≤ 각 원소 ≤ 1000",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    // 1) int n 을 cin 으로 입력받기
-    // 2) 크기 n 의 벡터 a, b 선언하고 각각 n 개의 원소 읽기 (a 먼저, b 다음)
-    // 3) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -812,14 +760,10 @@ int main() {
       description: `N개의 정수가 주어질 때, 배열이 오름차순으로 정렬되어 있으면 \`YES\`, 아니면 \`NO\`를 출력하세요.`,
       constraints: "2 ≤ N ≤ 100, -1000 ≤ 각 원소 ≤ 1000",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    // 1) int n 을 cin 으로 입력받기
-    // 2) 크기 n 의 벡터 v 선언
-    // 3) n 개의 원소를 cin 으로 v 에 읽기
-    // 4) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -865,14 +809,10 @@ int main() {
       description: `N개의 정수와 K가 주어질 때, K번째로 작은 수를 출력하세요. (중복 포함, 1-indexed)`,
       constraints: "1 ≤ K ≤ N ≤ 100, -1000 ≤ 각 원소 ≤ 1000",
       initialCode: `#include <iostream>
-#include <vector>
-#include <algorithm>
 using namespace std;
 
 int main() {
-    // 1) int n, k 를 cin 으로 입력받기
-    // 2) 크기 n 의 벡터 v 선언하고 n 개의 원소 읽기
-    // 3) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -921,14 +861,10 @@ int main() {
 P[i] = A[0] + A[1] + ... + A[i]`,
       constraints: "1 ≤ N ≤ 100, -1000 ≤ 각 원소 ≤ 1000",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    // 1) int n 을 cin 으로 입력받기
-    // 2) 크기 n 의 벡터 v 선언
-    // 3) n 개의 원소를 cin 으로 v 에 읽기
-    // 4) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -979,14 +915,10 @@ int main() {
       description: `N개의 정수가 주어질 때, 연속된 부분 배열의 합 중 최댓값을 출력하세요. (최소 1개 이상 선택)`,
       constraints: "1 ≤ N ≤ 100, -1000 ≤ 각 원소 ≤ 1000",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    // 1) int n 을 cin 으로 입력받기
-    // 2) 크기 n 의 벡터 v 선언
-    // 3) n 개의 원소를 cin 으로 v 에 읽기
-    // 4) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -1037,14 +969,10 @@ int main() {
       description: `N개의 정수가 주어질 때, 중복된 원소가 있으면 \`YES\`, 없으면 \`NO\`를 출력하세요.`,
       constraints: "2 ≤ N ≤ 100, -1000 ≤ 각 원소 ≤ 1000",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    // 1) int n 을 cin 으로 입력받기
-    // 2) 크기 n 의 벡터 v 선언
-    // 3) n 개의 원소를 cin 으로 v 에 읽기
-    // 4) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -1094,13 +1022,10 @@ int main() {
       description: `두 개의 오름차순 정렬된 배열 A(크기 N)와 B(크기 M)를 하나의 정렬된 배열로 병합하여 출력하세요.`,
       constraints: "1 ≤ N, M ≤ 50, -1000 ≤ 각 원소 ≤ 1000",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    // 1) n (필요시 m) 을 cin 으로 입력받기
-    // 2) 크기가 맞는 벡터 선언 후 원소를 cin 으로 읽기
-    // 3) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
@@ -1156,13 +1081,10 @@ int main() {
       description: `N개의 정수와 윈도우 크기 K가 주어질 때, 크기 K인 윈도우를 왼쪽부터 오른쪽으로 한 칸씩 이동하면서 각 윈도우의 최댓값을 출력하세요.`,
       constraints: "1 ≤ K ≤ N ≤ 1000, -10000 ≤ 각 정수 ≤ 10000",
       initialCode: `#include <iostream>
-#include <vector>
 using namespace std;
 
 int main() {
-    // 1) int n, k 를 cin 으로 입력받기
-    // 2) 크기 n 의 벡터 v 선언하고 n 개의 원소 읽기
-    // 3) 아래에 문제 해결 코드 작성
+
     return 0;
 }`,
       testCases: [
