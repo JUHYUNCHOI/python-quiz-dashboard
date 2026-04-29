@@ -139,16 +139,7 @@ int main() {
           id: "ch1-practice",
           type: "practice" as const,
           title: "✋ Build a 2D array and print one cell",
-          content: `**Scenario**: Build a 3×3 2D array and print the value at the center (1, 1).
-
-\`\`\`
-Array:
-1 2 3
-4 5 6
-7 8 9
-
-Center cell (1,1) → 5
-\`\`\`
+          content: `Build a **3×3 2D array** with values 1~9 and print the **center cell** (row 1, col 1).
 
 > 💡 \`int grid[3][3] = {{1,2,3}, {4,5,6}, {7,8,9}};\` to declare + \`grid[1][1]\` to access.`,
           starterCode: `#include <iostream>

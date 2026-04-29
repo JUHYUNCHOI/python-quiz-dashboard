@@ -293,22 +293,95 @@ export function PythonRunner({
     }
   }, [code, isPyodideReady, expectedOutput, onSuccess, onError, attempts, hint])
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const textarea = textareaRef.current
+    if (!textarea) return
+    const start = textarea.selectionStart
+    const end = textarea.selectionEnd
+    const val = textarea.value
+
     // Shift+Enter 또는 Ctrl/Cmd+Enter로 실행
     if (e.key === "Enter" && (e.shiftKey || e.ctrlKey || e.metaKey) && code.trim()) {
       e.preventDefault()
       runCode()
+      return
     }
+
     // Tab 키로 들여쓰기
     if (e.key === "Tab") {
       e.preventDefault()
-      const textarea = textareaRef.current
-      if (textarea) {
-        const start = textarea.selectionStart
-        const end = textarea.selectionEnd
-        const newCode = code.substring(0, start) + "    " + code.substring(end)
-        setCode(newCode)
-        setTimeout(() => { textarea.selectionStart = textarea.selectionEnd = start + 4 }, 0)
+      const newCode = val.substring(0, start) + "    " + val.substring(end)
+      setCode(newCode)
+      setTimeout(() => { textarea.selectionStart = textarea.selectionEnd = start + 4 }, 0)
+      return
+    }
+
+    // Enter — 자동 들여쓰기 (직전 줄과 같은 indent + 콜론 끝나면 추가 indent)
+    if (e.key === "Enter") {
+      e.preventDefault()
+      const lineStart = val.lastIndexOf("\n", start - 1) + 1
+      const currentLine = val.slice(lineStart, start)
+      const indent = currentLine.match(/^(\s*)/)?.[1] ?? ""
+      const extraIndent = currentLine.trimEnd().endsWith(":") ? "    " : ""
+      const newVal = val.slice(0, start) + "\n" + indent + extraIndent + val.slice(start)
+      const newCursor = start + 1 + indent.length + extraIndent.length
+      setCode(newVal)
+      requestAnimationFrame(() => {
+        textarea.selectionStart = textarea.selectionEnd = newCursor
+      })
+      return
+    }
+
+    // 자동 괄호 닫기
+    const pairs: Record<string, string> = { "(": ")", "[": "]", "{": "}", '"': '"', "'": "'" }
+    if (pairs[e.key]) {
+      // 따옴표는 같은 따옴표 바로 다음이면 건너뛰기
+      if ((e.key === '"' || e.key === "'") && val[start] === e.key) {
+        e.preventDefault()
+        requestAnimationFrame(() => {
+          textarea.selectionStart = textarea.selectionEnd = start + 1
+        })
+        return
+      }
+      e.preventDefault()
+      const open = e.key
+      const close = pairs[open]
+      const selected = val.slice(start, end)
+      const newVal = val.slice(0, start) + open + selected + close + val.slice(end)
+      setCode(newVal)
+      requestAnimationFrame(() => {
+        if (selected) {
+          textarea.selectionStart = start + 1
+          textarea.selectionEnd = end + 1
+        } else {
+          textarea.selectionStart = textarea.selectionEnd = start + 1
+        }
+      })
+      return
+    }
+
+    // 닫는 괄호 입력 — 다음 위치에 같은 닫는 괄호 있으면 건너뛰기
+    if ([")", "]", "}"].includes(e.key) && val[start] === e.key) {
+      e.preventDefault()
+      requestAnimationFrame(() => {
+        textarea.selectionStart = textarea.selectionEnd = start + 1
+      })
+      return
+    }
+
+    // Backspace — 빈 짝 사이면 둘 다 지우기
+    if (e.key === "Backspace" && start === end && start > 0) {
+      const before = val[start - 1]
+      const after = val[start]
+      const matches: Record<string, string> = { "(": ")", "[": "]", "{": "}", '"': '"', "'": "'" }
+      if (matches[before] === after) {
+        e.preventDefault()
+        const newVal = val.slice(0, start - 1) + val.slice(start + 1)
+        setCode(newVal)
+        requestAnimationFrame(() => {
+          textarea.selectionStart = textarea.selectionEnd = start - 1
+        })
+        return
       }
     }
   }

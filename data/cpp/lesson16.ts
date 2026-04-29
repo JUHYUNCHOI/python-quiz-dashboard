@@ -550,18 +550,7 @@ for (auto it = m.begin(); it != m.end(); ) {  // 헤더에 it++ 없음!
           id: "ch3-practice",
           type: "practice" as const,
           title: "✋ 점수 합계와 평균 출력",
-          content: `학생 점수표 \`map<string, int>\` 를 순회해서 **합계** 와 **평균** 을 출력해요.
-
-\`\`\`
-입력: 4
-      Alice 90
-      Bob 85
-      Carol 92
-      Dave 78
-출력:
-합계: 345
-평균: 86.25
-\`\`\`
+          content: `N 명의 학생 점수를 \`map<string, int>\` 에 받아서, **합계** 와 **평균** 을 출력하세요.
 
 > 💡 \`for (auto& [name, score] : m)\` 로 순회하며 \`score\` 누적. 평균은 \`(double)sum / n\`.`,
           starterCode: `#include <iostream>
@@ -739,15 +728,7 @@ int main() {
           id: "ch4-practice",
           type: "practice" as const,
           title: "✋ 키 안전하게 조회하기",
-          content: `학생 점수가 \`map<string, int>\` 에 들어 있어요. 사용자가 입력한 이름의 점수를 찾아서 출력하되, **없는 이름이면 "없음" 출력**.
-
-\`\`\`
-입력: Alice
-출력: 95
-
-입력: Zoe
-출력: 없음
-\`\`\`
+          content: `\`map<string, int>\` 에서 입력받은 이름의 점수를 찾아 출력. **없는 이름이면 "없음"** 출력.
 
 > 💡 \`m.count(key) > 0\` 로 먼저 확인. 있을 때만 \`m[key]\` 접근.
 > ⚠️ \`m["없는 이름"]\` 바로 접근하면 자동 생성돼서 0 출력 — 함정!`,

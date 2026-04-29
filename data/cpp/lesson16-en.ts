@@ -550,18 +550,7 @@ for (auto it = m.begin(); it != m.end(); ) {  // no it++ in header!
           id: "ch3-practice",
           type: "practice" as const,
           title: "✋ Print sum and average of scores",
-          content: `Iterate a \`map<string, int>\` of student scores and print the **sum** and **average**.
-
-\`\`\`
-Input:  4
-        Alice 90
-        Bob 85
-        Carol 92
-        Dave 78
-Output:
-sum: 345
-avg: 86.25
-\`\`\`
+          content: `Read N student scores into a \`map<string, int>\`, then print the **sum** and **average**.
 
 > 💡 Use \`for (auto& [name, score] : m)\` to iterate, accumulate \`score\`. Average = \`(double)sum / n\`.`,
           starterCode: `#include <iostream>
@@ -738,15 +727,7 @@ int main() {
           id: "ch4-practice",
           type: "practice" as const,
           title: "✋ Safely look up a key",
-          content: `Student scores are in a \`map<string, int>\`. The user types a name — print the score if the name exists, otherwise print "missing".
-
-\`\`\`
-Input:  Alice
-Output: 95
-
-Input:  Zoe
-Output: missing
-\`\`\`
+          content: `Look up the typed name's score in a \`map<string, int>\`. **If the name is missing, print "missing".**
 
 > 💡 Use \`m.count(key) > 0\` to check first. Only access \`m[key]\` if found.
 > ⚠️ \`m["unknown"]\` direct access auto-creates the key with 0 — the trap!`,

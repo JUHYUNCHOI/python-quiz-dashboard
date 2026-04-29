@@ -854,18 +854,12 @@ public:
           id: "ch3-practice",
           type: "practice" as const,
           title: "✋ Student class — initialize via constructor",
-          content: `**Scenario**: Build a \`Student\` class to hold student info.
+          content: `Complete the \`Student\` class. In main, calling \`Student s("Alice", 17); s.info();\` should print \`Alice, 17\`.
 
 **Requirements:**
 1. Member variables: \`name\` (string), \`age\` (int) — public
 2. **Constructor**: \`Student(string n, int a)\` — initialize name, age from parameters
 3. \`info()\` function: prints \`"name, age"\` (comma + space)
-
-\`\`\`
-Student s("Alice", 17);
-s.info();
-// Output: Alice, 17
-\`\`\`
 
 > 💡 Inside the constructor, \`name = n; age = a;\` stores values into members.`,
           starterCode: `#include <iostream>

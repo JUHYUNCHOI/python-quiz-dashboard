@@ -847,18 +847,12 @@ public:
           id: "ch3-practice",
           type: "practice" as const,
           title: "✋ Student 클래스 — 생성자로 초기화",
-          content: `**상황**: 학생 정보를 담는 \`Student\` 클래스를 완성해요.
+          content: `\`Student\` 클래스를 완성해요. main 에서 \`Student s("Alice", 17); s.info();\` 호출 시 \`Alice, 17\` 가 나와야 함.
 
 **요구사항:**
 1. 멤버 변수: \`name\` (string), \`age\` (int) — public
 2. **생성자**: \`Student(string n, int a)\` — name, age 를 매개변수 값으로 초기화
 3. \`info()\` 함수: \`"이름, 나이"\` 형식으로 출력 (콤마+공백)
-
-\`\`\`
-Student s("Alice", 17);
-s.info();
-// 출력: Alice, 17
-\`\`\`
 
 > 💡 생성자 안에서 \`name = n; age = a;\` 로 멤버에 저장.`,
           starterCode: `#include <iostream>
