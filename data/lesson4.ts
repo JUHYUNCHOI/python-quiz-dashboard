@@ -75,6 +75,87 @@ print(2 ** 3)   # 거듭제곱 → 8
           options: ["6", "8", "16", "24"],
           answer: 2,
           explanation: "2 ** 4 = 2의 4승 = 2×2×2×2 = 16"
+        },
+        {
+          id: "modulo-uses",
+          type: "explain",
+          title: "🎯 % 의 진짜 매력 — 홀짝 검사",
+          content: `\`%\` (나머지) 가 단순 계산보다 더 중요한 이유는 **홀짝 검사** 의 단골이기 때문이에요.
+
+\`\`\`python
+n = 7
+print(n % 2)    # 1 — 홀수면 1
+print(8 % 2)    # 0 — 짝수면 0
+\`\`\`
+
+### 다양한 활용
+
+\`\`\`python
+# 홀짝 판별
+n = 13
+if n % 2 == 0:
+    print("짝수")
+else:
+    print("홀수")
+# → 홀수
+
+# 3 의 배수?
+if n % 3 == 0:
+    print("3 의 배수")
+
+# 시계 (24 시간 → 0~23)
+hour = 25 % 24    # 1 — 다음날 1 시
+
+# 마지막 자릿수
+n = 1234
+last_digit = n % 10   # 4
+\`\`\`
+
+> 🎯 한 줄: **\`% 2\` 는 짝/홀, \`% N\` 은 N 의 배수 검사 + 순환 (시계, 인덱스 wrap).**`
+        },
+        {
+          id: "try-modulo",
+          type: "tryit",
+          title: "🖥️ 직접 해보기 — 홀짝 카운트",
+          task: "1~10 까지 숫자 중 짝수가 몇 개인지 출력하세요!",
+          initialCode: "count = 0\nfor n in range(1, 11):\n    if n ___ 2 == 0:\n        count += 1\n\nprint(f\"짝수 개수: {count}\")",
+          expectedOutput: "짝수 개수: 5",
+          hint: "n % 2 == 0 이 짝수 검사.",
+          hint2: "if n % 2 == 0:"
+        },
+        {
+          id: "operator-priority",
+          type: "explain",
+          title: "📐 연산자 우선순위 — 괄호 잊지 말기",
+          content: `수학과 같아요. 곱셈 / 나눗셈이 덧셈 / 뺄셈보다 먼저.
+
+\`\`\`python
+print(2 + 3 * 4)      # 14 (곱셈 먼저)
+print((2 + 3) * 4)    # 20 (괄호 먼저)
+print(10 - 6 / 2)     # 7.0  (나눗셈 먼저)
+print((10 - 6) / 2)   # 2.0
+\`\`\`
+
+### 우선순위 표 (높음 → 낮음)
+
+1. \`( )\` — 괄호 (가장 우선)
+2. \`**\` — 거듭제곱
+3. \`*\`, \`/\`, \`//\`, \`%\` — 곱셈/나눗셈류
+4. \`+\`, \`-\` — 덧셈/뺄셈
+5. \`<\`, \`>\`, \`==\` 등 — 비교
+6. \`not\`
+7. \`and\`
+8. \`or\` — 가장 늦게
+
+> 💡 **헷갈리면 괄호 친절히 써요.** 컴퓨터한테도 사람한테도 명확.
+
+\`\`\`python
+# 헷갈림 ❌
+x = a + b * c < 100
+
+# 명확 ✅
+x = (a + (b * c)) < 100
+\`\`\``
         }
       ]
     },
@@ -134,6 +215,55 @@ print(10 != 5)   # 다르다 → True
           ],
           answer: 1,
           explanation: "= 는 값을 저장, == 는 두 값이 같은지 비교!"
+        },
+        {
+          id: "chained-compare",
+          type: "explain",
+          title: "🔗 비교 연쇄 — 1 < x < 10 (수학처럼!)",
+          content: `다른 언어는 \`x > 0 && x < 10\` 처럼 두 번 써야 하지만, **파이썬은 수학처럼 연쇄 가능**.
+
+\`\`\`python
+x = 5
+
+# 길게
+print(0 < x and x < 10)   # True
+
+# 파이썬 식 — 수학과 똑같이
+print(0 < x < 10)         # True
+
+# 다른 비교도 가능
+print(0 <= x < 10)        # True
+print(1 < x < 10 < 100)   # True (3 단)
+\`\`\`
+
+### 활용 — 점수 등급
+
+\`\`\`python
+score = 85
+
+if 90 <= score <= 100:
+    grade = "A"
+elif 80 <= score < 90:
+    grade = "B"
+elif 70 <= score < 80:
+    grade = "C"
+else:
+    grade = "F"
+
+print(grade)   # B
+\`\`\`
+
+읽기에도 자연스럽고 코드도 짧아져요. 파이썬 의 멋있는 기능 중 하나.`
+        },
+        {
+          id: "try-chained",
+          type: "tryit",
+          title: "🖥️ 직접 해보기 — 비교 연쇄",
+          task: "나이가 13~19 (10대) 인지 한 줄에 검사하세요!",
+          initialCode: "age = 16\n\n# 13 이상 19 이하 (연쇄 비교!)\nis_teen = ___ <= age <= ___\n\nprint(f\"10대? {is_teen}\")",
+          expectedOutput: "10대? True",
+          hint: "13 <= age <= 19",
+          hint2: "is_teen = 13 <= age <= 19"
         }
       ]
     },
@@ -178,6 +308,57 @@ print(not True)        # False
           options: ["True", "False", "에러", "TrueFalse"],
           answer: 0,
           explanation: "or는 하나만 True여도 True!"
+        },
+        {
+          id: "logic-real",
+          type: "explain",
+          title: "🎯 and / or 실전 — 조건 합치기",
+          content: `\`and\` / \`or\` 는 단독 \`True/False\` 보다 **두 조건 합칠 때** 진가가 나와요.
+
+\`\`\`python
+age = 16
+has_id = True
+
+# 둘 다 만족해야
+if age >= 18 and has_id:
+    print("입장 가능")
+else:
+    print("입장 불가")
+
+# 하나라도 만족하면
+day = "토"
+if day == "토" or day == "일":
+    print("주말!")
+\`\`\`
+
+### not 으로 뒤집기
+
+\`\`\`python
+is_open = False
+if not is_open:
+    print("닫혀있음")
+\`\`\`
+
+### 진리표
+
+| A | B | A and B | A or B |
+|---|---|---|---|
+| T | T | T | T |
+| T | F | F | T |
+| F | T | F | T |
+| F | F | F | F |
+
+> 💡 **and** = "둘 다", **or** = "하나라도", **not** = "반대".`
+        },
+        {
+          id: "try-logic-real",
+          type: "tryit",
+          title: "🖥️ 직접 해보기 — 합격 조건 두 가지",
+          task: "점수 60 이상 **그리고** 출석 80% 이상이면 '합격', 아니면 '불합격' 출력!",
+          initialCode: "score = 75\nattendance = 85   # 출석률 %\n\n# 두 조건 다 만족\nif score >= 60 ___ attendance >= 80:\n    print(\"합격\")\nelse:\n    print(\"불합격\")",
+          expectedOutput: "합격",
+          hint: "둘 다 만족 = and",
+          hint2: "if score >= 60 and attendance >= 80:"
         }
       ]
     },
@@ -213,7 +394,7 @@ score += 10         # 짧은 방법 (같은 의미!)
         {
           id: "mission1",
           type: "mission",
-          title: "🏆 최종 미션!",
+          title: "🏆 미션 1 — 가격 계산기",
           task: "가격 계산기를 완성하세요! (단가 15000원, 3개, 10% 할인)",
           initialCode: "price = 15000\ncount = 3\n# 합계를 계산하세요\ntotal = ___\n# 10% 할인 계산\ndiscount = ___\n# 최종 가격\nfinal = ___\n\nprint(f'단가: {price}원')\nprint(f'수량: {count}개')\nprint(f'합계: {total}원')\nprint(f'할인: {discount}원')\nprint(f'최종: {final}원')",
           expectedOutput: "단가: 15000원\n수량: 3개\n합계: 45000원\n할인: 4500.0원\n최종: 40500.0원",
@@ -221,17 +402,43 @@ score += 10         # 짧은 방법 (같은 의미!)
           hint2: "final = total - discount"
         },
         {
+          id: "mission2",
+          type: "mission",
+          title: "🏆 미션 2 — BMI 계산 + 등급 판정",
+          task: "BMI = 몸무게(kg) / (키(m))² 계산하고 비교 연쇄로 등급 출력. (입력은 stdin)",
+          initialCode: "weight = float(input(\"몸무게(kg): \"))\nheight = float(input(\"키(m): \"))\n\n# BMI 계산 (** 거듭제곱 활용)\nbmi = weight / (height ___ 2)\n\n# 비교 연쇄로 등급\nif bmi < 18.5:\n    grade = \"저체중\"\nelif ___ <= bmi < 25:\n    grade = \"정상\"\nelif 25 <= bmi < 30:\n    grade = \"과체중\"\nelse:\n    grade = \"비만\"\n\nprint(f\"BMI: {bmi:.1f}\")\nprint(f\"등급: {grade}\")",
+          expectedOutput: "BMI: 22.0\n등급: 정상",
+          stdin: "60\n1.65",
+          hint: "height ** 2 거듭제곱. 18.5 <= bmi < 25 비교 연쇄.",
+          hint2: "bmi = weight / (height ** 2)\nelif 18.5 <= bmi < 25:"
+        },
+        {
+          id: "mission3",
+          type: "mission",
+          title: "🏆 미션 3 — 시간 변환 (초 → 시:분:초)",
+          task: "초 단위 시간을 받아 'HH:MM:SS' 형식으로 출력하세요. (// 와 % 활용)",
+          initialCode: "total_sec = int(input())\n\n# // 와 % 사용\nhours = total_sec ___ 3600\nminutes = (total_sec % 3600) ___ 60\nseconds = total_sec ___ 60\n\nprint(f\"{hours:02d}:{minutes:02d}:{seconds:02d}\")",
+          expectedOutput: "01:30:25",
+          stdin: "5425",
+          hint: "1 시간 = 3600 초. // 로 몫, % 로 나머지.",
+          hint2: "hours = total_sec // 3600\nminutes = (total_sec % 3600) // 60\nseconds = total_sec % 60"
+        },
+        {
           id: "complete",
           type: "explain",
           title: "🎉 완료!",
           content: `## 오늘 배운 것
 
-✅ **산술 연산자**: +, -, *, /, //, %, **
-✅ **비교 연산자**: >, <, >=, <=, ==, !=
-✅ **논리 연산자**: and, or, not
-✅ **복합 대입**: +=, -=, *=, /=
+✅ **산술 연산자**: \`+\`, \`-\`, \`*\`, \`/\`, \`//\` (몫), \`%\` (나머지), \`**\` (거듭제곱)
+✅ \`%\` 의 진짜 매력 — 홀짝 검사 / N 의 배수 / 시계 순환 / 마지막 자릿수
+✅ **연산자 우선순위** — 헷갈리면 괄호 친절히
+✅ **비교 연산자**: \`>\`, \`<\`, \`>=\`, \`<=\`, \`==\`, \`!=\`
+✅ **\`=\` vs \`==\`** — 저장 vs 비교
+✅ **비교 연쇄** — \`0 < x < 10\` 수학처럼
+✅ **논리 연산자**: \`and\` (둘 다), \`or\` (하나라도), \`not\` (반대)
+✅ **복합 대입**: \`+=\`, \`-=\`, \`*=\`, \`/=\`, \`//=\`, \`%=\`, \`**=\`
 
-다음 시간에는 **문자열 연산**을 배워서 글자를 더하고 곱해봐요! 🚀`
+다음 시간에는 **문자열 연산** 을 배워서 글자를 더하고 곱해봐요! 🚀`
         }
       ]
     }
