@@ -80,6 +80,25 @@ export const lesson25Data: LessonData = {
           ],
           answer: 1,
           explanation: "Deque = Double-Ended Queue! 양쪽 끝이 열린 큐예요."
+        },
+        {
+          id: "pred-both-ends",
+          type: "predict",
+          title: "💭 양쪽으로 다 넣고 빼면?",
+          code: "from collections import deque\nd = deque([2, 3])\nd.appendleft(1)    # 왼쪽 끝에 추가\nd.append(4)        # 오른쪽 끝에 추가\nprint(list(d))",
+          options: ["[1, 2, 3, 4]", "[4, 3, 2, 1]", "[2, 3, 1, 4]", "[1, 4, 2, 3]"],
+          answer: 0,
+          explanation: "appendleft 로 왼쪽에 1, append 로 오른쪽에 4 → [1, 2, 3, 4]. deque 는 양쪽 끝에 O(1) 로 추가/삭제 가능."
+        },
+        {
+          id: "try-rotate",
+          type: "tryit",
+          title: "✋ 직접 — 양쪽 끝 다루기",
+          task: "deque [1, 2, 3, 4, 5] 에서 왼쪽 끝 / 오른쪽 끝 한 번씩 빼서 출력하세요.",
+          initialCode: "from collections import deque\nd = deque([1, 2, 3, 4, 5])\n\n# 왼쪽 끝 하나 빼기\nleft = d.___()\n# 오른쪽 끝 하나 빼기\nright = d.___()\n\nprint(left, right)",
+          expectedOutput: "1 5",
+          hint: "왼쪽에서 빼는 함수와 오른쪽에서 빼는 함수가 따로 있어요.",
+          hint2: "popleft() / pop()"
         }
       ]
     },

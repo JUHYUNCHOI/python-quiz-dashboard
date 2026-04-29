@@ -153,7 +153,7 @@ print("Age: " + str(age))  # ✅ Age: 15
           type: "tryit",
           title: "🖥️ Try It Yourself!",
           task: "Connect the score with a string and print it!",
-          initialCode: "score = 100\n# Use str() to convert number to string and connect\nprint(\"Score: \" + ___(score) + \" pts\")",
+          initialCode: "score = 100\n# You need a function that converts a number to a string\nprint(\"Score: \" + ___(score) + \" pts\")",
           expectedOutput: "Score: 100 pts",
           hint: "Use str() to convert numbers to strings!",
           hint2: "str(score)"
@@ -163,7 +163,7 @@ print("Age: " + str(age))  # ✅ Age: 15
           type: "mission",
           title: "🎯 Mission!",
           task: "Connect the name and age to print 'Tom is 15 years old'!",
-          initialCode: "name = \"Tom\"\nage = 15\n# Use str() to convert number and connect!\nprint(name + \" is \" + ___(age) + \" years old\")",
+          initialCode: "name = \"Tom\"\nage = 15\n# Convert the number first, then use + to connect\nprint(name + \" is \" + ___(age) + \" years old\")",
           expectedOutput: "Tom is 15 years old",
           hint: "Use str() to convert numbers to strings!",
           hint2: "str(age)"

@@ -74,6 +74,25 @@ export const lesson24Data: LessonData = {
           options: ["C→B→A", "A→B→C", "B→A→C", "랜덤"],
           answer: 1,
           explanation: "FIFO! 먼저 넣은 A가 먼저 나와요. A→B→C"
+        },
+        {
+          id: "pred-fifo",
+          type: "predict",
+          title: "💭 줄 서기 — 누가 먼저 나올까?",
+          code: "from collections import deque\nq = deque()\nq.append('🐶')   # enqueue\nq.append('🐱')\nq.append('🐰')\nprint(q.popleft())   # dequeue: ?",
+          options: ["🐶", "🐱", "🐰", "에러"],
+          answer: 0,
+          explanation: "FIFO! 먼저 줄 선 🐶 가 먼저 나와요. 새치기 없음."
+        },
+        {
+          id: "try-fifo",
+          type: "tryit",
+          title: "✋ 직접 — 큐로 손님 처리",
+          task: "deque 에 손님 3 명 (Alice, Bob, Carol) 을 줄 세우고, 한 명씩 차례로 처리하는 코드!",
+          initialCode: "from collections import deque\nq = deque()\n\n# 손님 3 명을 큐에 차례로 추가\nq.___('Alice')\nq.___('Bob')\nq.___('Carol')\n\n# 첫 번째 손님부터 처리 — 두 번 처리해 보세요\nprint(q.___())\nprint(q.___())",
+          expectedOutput: "Alice\nBob",
+          hint: "추가는 .append, 앞에서 빼는 건 .popleft (FIFO)",
+          hint2: "append / append / append / popleft / popleft"
         }
       ]
     },
@@ -102,6 +121,20 @@ dequeue(): [1,2,3] → [2,3] (1 반환)
 - **front**: 맨 앞 확인 (제거 안 함)
 - **isEmpty**: 비었는지 확인
 - **size**: 개수 확인`
+        },
+        {
+          id: "pred-list-slow",
+          type: "predict",
+          title: "💭 리스트로 큐 만들면 어떨까?",
+          content: "리스트로 큐를 만든다면:\n```python\nqueue = []\nqueue.append(item)   # 추가\nqueue.pop(0)         # 맨 앞 제거\n```\n원소가 1 만 개일 때 \\`pop(0)\\` 한 번 부르는 데 걸리는 시간은?",
+          options: [
+            "O(1) — 즉시",
+            "O(log n) — 빠름",
+            "O(n) — 뒤 원소 모두 한 칸씩 당겨야 함",
+            "리스트라서 안 됨"
+          ],
+          answer: 2,
+          explanation: "pop(0) 은 맨 앞 원소를 빼고 **나머지 모두 한 칸씩 앞으로 당겨야** 해서 O(n). 큐로 쓰기엔 느림! 그래서 다음 페이지에서 deque 가 등장."
         },
         {
           id: "deque-explain",

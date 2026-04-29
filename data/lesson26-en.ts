@@ -56,6 +56,30 @@ In coding interviews:
           options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
           answer: 2,
           explanation: "A list checks each element one by one from start to end, so it's O(n)!"
+        },
+        {
+          id: "quiz-pick",
+          type: "quiz",
+          title: "🎯 Which structure?",
+          content: "You have a dictionary of 100,000 words and need to quickly check **whether a word is in it**. Best structure?",
+          options: [
+            "list",
+            "tuple",
+            "set",
+            "stack"
+          ],
+          answer: 2,
+          explanation: "set! O(1) average. list / tuple are O(n) — too slow at scale. set is hash-based, near-instant lookup."
+        },
+        {
+          id: "try-pick-ds",
+          type: "tryit",
+          title: "✋ Try it — pick the right structure",
+          task: "Check whether 'Bob' is in a list of 5 names — but pick a structure that makes the lookup fast.",
+          initialCode: "names = ['Alice', 'Bob', 'Carol', 'Dave', 'Eve']\n\n# Convert to a structure that gives fast membership check\nlookup = ___(names)\n\n# Check membership with 'in'\nprint('Bob' ___ lookup)",
+          expectedOutput: "True",
+          hint: "Converting to a set makes 'in' average O(1). Use the 'in' keyword.",
+          hint2: "set / in"
         }
       ]
     },
@@ -218,6 +242,16 @@ counts = Counter(text)
 
 5. **Vocabulary book** (English → Spanish)
    → Dictionary`
+        },
+        {
+          id: "try-recent",
+          type: "tryit",
+          title: "✋ Try it — keep only the most recent 3",
+          task: "Track items as the user views them, but keep **only the most recent 3** automatically. (Use deque's maxlen option.)",
+          initialCode: "from collections import deque\n\n# Create a deque limited to length 3\nrecent = deque(___=3)\n\nrecent.append('A')\nrecent.append('B')\nrecent.append('C')\nrecent.append('D')   # Adding past capacity auto-pops the oldest\nrecent.append('E')\n\nprint(list(recent))",
+          expectedOutput: "['C', 'D', 'E']",
+          hint: "Pass maxlen=N when constructing a deque — older items drop out automatically when you exceed N.",
+          hint2: "deque(maxlen=3)"
         }
       ]
     },

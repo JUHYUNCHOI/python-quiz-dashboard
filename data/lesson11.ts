@@ -93,7 +93,7 @@ else:
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "점수가 60점 이상이면 '합격', 아니면 '불합격' 출력!",
-          initialCode: "score = 75\n# 60점 이상이면 '합격', 아니면 '불합격'\nif ___:\n    print('합격')\nelse:\n    print('불합격')",
+          initialCode: "score = 75\n# 합격 / 불합격을 가르는 조건을 적어보세요\nif ___:\n    print('합격')\nelse:\n    print('불합격')",
           expectedOutput: "합격",
           hint: "score가 60 이상인 조건을 쓰세요!",
           hint2: "if score >= 60:"

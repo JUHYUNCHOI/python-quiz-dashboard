@@ -153,7 +153,7 @@ print("나이: " + str(age))  # ✅ 나이: 15
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "점수를 문자열과 연결해서 출력하세요!",
-          initialCode: "score = 100\n# str()로 숫자를 문자열로 바꿔서 연결하세요\nprint(\"점수: \" + ___(score) + \"점\")",
+          initialCode: "score = 100\n# 숫자를 문자열로 바꾸는 함수가 필요해요\nprint(\"점수: \" + ___(score) + \"점\")",
           expectedOutput: "점수: 100점",
           hint: "str()로 숫자를 문자열로 변환!",
           hint2: "str(score)"
@@ -163,7 +163,7 @@ print("나이: " + str(age))  # ✅ 나이: 15
           type: "mission",
           title: "🎯 미션!",
           task: "이름과 나이를 연결해서 '철수는 15살입니다' 출력하세요!",
-          initialCode: "name = \"철수\"\nage = 15\n# str()로 숫자를 문자열로 변환해서 연결!\nprint(name + \"는 \" + ___(age) + \"살입니다\")",
+          initialCode: "name = \"철수\"\nage = 15\n# 숫자를 문자열로 바꿔서 + 로 연결\nprint(name + \"는 \" + ___(age) + \"살입니다\")",
           expectedOutput: "철수는 15살입니다",
           hint: "str()로 숫자를 문자열로 변환!",
           hint2: "str(age)"

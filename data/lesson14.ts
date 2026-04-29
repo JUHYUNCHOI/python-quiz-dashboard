@@ -62,7 +62,7 @@ count가 3에서 0까지 줄어드는 과정을 한 단계씩 봐요.
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "1부터 5까지 출력하세요!",
-          initialCode: "num = 1\n# num이 5 이하인 동안 반복\nwhile ___:\n    print(num)\n    num = num + 1",
+          initialCode: "num = 1\n# 언제까지 반복할지 조건을 적어보세요\nwhile ___:\n    print(num)\n    num = num + 1",
           expectedOutput: "1\n2\n3\n4\n5",
           hint: "num이 5 이하인 조건을 쓰세요!",
           hint2: "while num <= 5:"
@@ -210,7 +210,7 @@ while money > 0:     # 돈이 있는 동안
           type: "tryit",
           title: "🖥️ 합이 100 넘을 때까지!",
           task: "1부터 더해서 합이 100을 넘으면 멈추세요!",
-          initialCode: "total = 0\nnum = 1\n\n# 합계가 100 이하인 동안 반복\nwhile ___:\n    total = total + num\n    num = num + 1\n\nprint(f\"합계: {total}\")\nprint(f\"마지막 숫자: {num - 1}\")",
+          initialCode: "total = 0\nnum = 1\n\n# 합계가 어떤 한계를 넘기 전까지만 반복하세요\nwhile ___:\n    total = total + num\n    num = num + 1\n\nprint(f\"합계: {total}\")\nprint(f\"마지막 숫자: {num - 1}\")",
           expectedOutput: "합계: 105\n마지막 숫자: 14",
           hint: "total이 100 이하인 조건을 쓰세요!",
           hint2: "while total <= 100:"

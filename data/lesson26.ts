@@ -56,6 +56,30 @@ export const lesson26Data: LessonData = {
           options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
           answer: 2,
           explanation: "리스트는 처음부터 끝까지 하나씩 확인해서 O(n)이에요!"
+        },
+        {
+          id: "quiz-pick",
+          type: "quiz",
+          title: "🎯 어떤 자료구조?",
+          content: "100,000 개 단어가 들어있는 사전에서 **\"이 단어가 사전에 있는지\"** 를 빠르게 확인하고 싶어요. 가장 적합한 자료구조는?",
+          options: [
+            "리스트 (list)",
+            "튜플 (tuple)",
+            "집합 (set)",
+            "스택 (stack)"
+          ],
+          answer: 2,
+          explanation: "set! O(1) 평균. 리스트/튜플은 O(n) 이라 큰 사전에선 느림. set 은 hash 기반이라 즉시 확인 가능."
+        },
+        {
+          id: "try-pick-ds",
+          type: "tryit",
+          title: "✋ 직접 — 상황에 맞는 자료구조 고르기",
+          task: "이름 5 명 중에 'Bob' 이 있는지 빠르게 확인해 보세요. 어떤 자료구조 + 연산을 쓸까?",
+          initialCode: "names = ['Alice', 'Bob', 'Carol', 'Dave', 'Eve']\n\n# 빠른 확인을 위해 적절한 자료구조로 변환\nlookup = ___(names)\n\n# 'Bob' 이 들어있는지 in 으로 확인\nprint('Bob' ___ lookup)",
+          expectedOutput: "True",
+          hint: "list 를 set 으로 바꾸면 in 검사가 O(1) 평균이 돼요. 'in' 키워드로 멤버십 확인.",
+          hint2: "set / in"
         }
       ]
     },
@@ -218,6 +242,16 @@ counts = Counter(text)
 
 5. **단어장** (영어 → 한국어)
    → 딕셔너리`
+        },
+        {
+          id: "try-recent",
+          type: "tryit",
+          title: "✋ 직접 — 최근 본 5 개만 유지",
+          task: "사용자가 본 상품을 차례로 추가하는데, **항상 마지막 3 개만** 보관되게 만들어 보세요. (deque 의 maxlen 옵션 활용)",
+          initialCode: "from collections import deque\n\n# 길이가 3 으로 제한된 deque 만들기\nrecent = deque(___=3)\n\nrecent.append('A')\nrecent.append('B')\nrecent.append('C')\nrecent.append('D')   # 추가하면 가장 오래된 게 자동으로 빠져요\nrecent.append('E')\n\nprint(list(recent))",
+          expectedOutput: "['C', 'D', 'E']",
+          hint: "deque 생성 시 maxlen 옵션을 주면 그 길이를 넘는 만큼 자동으로 앞에서 빠져요.",
+          hint2: "deque(maxlen=3)"
         }
       ]
     },

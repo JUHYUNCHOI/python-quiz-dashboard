@@ -80,6 +80,25 @@ Deque: <- Both ->     [   ]
           ],
           answer: 1,
           explanation: "Deque = Double-Ended Queue! A queue that is open on both ends."
+        },
+        {
+          id: "pred-both-ends",
+          type: "predict",
+          title: "\ud83d\udcad Add to both ends \u2014 what's the order?",
+          code: "from collections import deque\nd = deque([2, 3])\nd.appendleft(1)    # add to the left end\nd.append(4)        # add to the right end\nprint(list(d))",
+          options: ["[1, 2, 3, 4]", "[4, 3, 2, 1]", "[2, 3, 1, 4]", "[1, 4, 2, 3]"],
+          answer: 0,
+          explanation: "appendleft puts 1 on the left, append puts 4 on the right \u2192 [1, 2, 3, 4]. Deque supports O(1) add/remove on both ends."
+        },
+        {
+          id: "try-rotate",
+          type: "tryit",
+          title: "\u270b Try it \u2014 handle both ends",
+          task: "From a deque of [1, 2, 3, 4, 5], pop one from the left and one from the right, then print them.",
+          initialCode: "from collections import deque\nd = deque([1, 2, 3, 4, 5])\n\n# Take one from the left end\nleft = d.___()\n# Take one from the right end\nright = d.___()\n\nprint(left, right)",
+          expectedOutput: "1 5",
+          hint: "Different methods for left vs right.",
+          hint2: "popleft() / pop()"
         }
       ]
     },

@@ -69,6 +69,16 @@ pop():    [1,2,3] → [1,2] (3 반환)
 - **size**: 개수 확인`
         },
         {
+          id: "try-ops",
+          type: "tryit",
+          title: "✋ 스택 기본 연산 직접 — push, pop, peek",
+          task: "스택에 1, 2, 3 을 차례로 push 하고, pop 한 다음 맨 위 값을 확인해 보세요!",
+          initialCode: "stack = []\n# 1, 2, 3 차례로 맨 위에 추가\nstack.___(1)\nstack.___(2)\nstack.___(3)\n\n# 맨 위 하나 제거\nstack.___()\n\n# 지금 맨 위에 있는 값을 출력 (인덱스로 마지막 원소)\nprint(stack[___])",
+          expectedOutput: "2",
+          hint: "추가는 .append, 제거는 .pop, 마지막 원소는 인덱스 -1 로!",
+          hint2: "append / append / append / pop / -1"
+        },
+        {
           id: "quiz1",
           type: "quiz",
           title: "❓ 퀴즈!",
@@ -81,6 +91,15 @@ pop():    [1,2,3] → [1,2] (3 반환)
           ],
           answer: 1,
           explanation: "LIFO = Last In, First Out! 마지막에 들어간 게 먼저 나와요."
+        },
+        {
+          id: "pred-lifo",
+          type: "predict",
+          title: "💭 누가 먼저 나올까?",
+          code: "stack = []\nstack.append('🍎')   # push\nstack.append('🍌')\nstack.append('🍇')\nprint(stack.pop())     # ?",
+          options: ["🍎", "🍌", "🍇", "에러"],
+          answer: 2,
+          explanation: "LIFO! 마지막에 push 된 🍇 가 먼저 pop 돼요. 사과가 가장 아래라 마지막에 나옴."
         }
       ]
     },

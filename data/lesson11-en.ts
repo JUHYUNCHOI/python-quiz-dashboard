@@ -93,7 +93,7 @@ else:
           type: "tryit",
           title: "🖥️ Try It Yourself!",
           task: "If score is 60 or above, print 'Pass'; otherwise print 'Fail'!",
-          initialCode: "score = 75\n# If 60 or above print 'Pass', otherwise 'Fail'\nif ___:\n    print('Pass')\nelse:\n    print('Fail')",
+          initialCode: "score = 75\n# Write the condition that decides Pass vs Fail\nif ___:\n    print('Pass')\nelse:\n    print('Fail')",
           expectedOutput: "Pass",
           hint: "Write a condition that checks if score is 60 or above!",
           hint2: "if score >= 60:"

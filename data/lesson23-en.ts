@@ -69,6 +69,16 @@ pop():    [1,2,3] → [1,2] (returns 3)
 - **size**: Get the number of items`
         },
         {
+          id: "try-ops",
+          type: "tryit",
+          title: "✋ Try the basic stack ops — push, pop, peek",
+          task: "Push 1, 2, 3 onto a stack, then pop once, then print the new top!",
+          initialCode: "stack = []\n# Add 1, 2, 3 to the top in order\nstack.___(1)\nstack.___(2)\nstack.___(3)\n\n# Remove the top one\nstack.___()\n\n# Print the value now sitting on top (use the last-element index)\nprint(stack[___])",
+          expectedOutput: "2",
+          hint: "Add with .append, remove with .pop. The last element is at index -1.",
+          hint2: "append / append / append / pop / -1"
+        },
+        {
           id: "quiz1",
           type: "quiz",
           title: "❓ Quiz!",
@@ -81,6 +91,15 @@ pop():    [1,2,3] → [1,2] (returns 3)
           ],
           answer: 1,
           explanation: "LIFO = Last In, First Out! The last item added comes out first."
+        },
+        {
+          id: "pred-lifo",
+          type: "predict",
+          title: "💭 Which one comes out first?",
+          code: "stack = []\nstack.append('🍎')   # push\nstack.append('🍌')\nstack.append('🍇')\nprint(stack.pop())     # ?",
+          options: ["🍎", "🍌", "🍇", "Error"],
+          answer: 2,
+          explanation: "LIFO! The last pushed (🍇) pops first. Apple is at the bottom — it comes out last."
         }
       ]
     },
