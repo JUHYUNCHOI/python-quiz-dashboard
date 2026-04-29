@@ -73,7 +73,7 @@ export function makeExchangeCh1(E) {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🥛</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#2563eb" }}>Milk Exchange</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2025 Bronze #2</div>
+          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Feb 2024 Bronze #2</div>
         </div>),
     },
 

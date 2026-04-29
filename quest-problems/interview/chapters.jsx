@@ -78,7 +78,7 @@ export function makeInterviewCh1(E) {
         <div style={{ padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🐄</div>
           <div style={{ fontSize: 16, fontWeight: 800, color: "#059669" }}>Bessie's Interview</div>
-          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Jan 2025 Bronze #2</div>
+          <div style={{ fontSize: 12, color: C.dim, marginTop: 4 }}>USACO Open 2024 Silver #1</div>
           <div style={{ marginTop: 12, background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 12, padding: 12, fontSize: 13, color: C.text, lineHeight: 1.8 }}>
             {t(E,
               "K counters, N cows in line. Each cow goes to the first available counter. Find all possible counters for the last cow!",
