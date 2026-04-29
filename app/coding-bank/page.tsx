@@ -19,7 +19,7 @@ import {
   Filter,
 } from "lucide-react"
 import type { CodingBankProblem } from "@/data/coding-bank"
-import { CODING_BANK_PROBLEMS } from "@/data/coding-bank"
+import { CODING_BANK_PROBLEMS, STARTER_PICKS } from "@/data/coding-bank"
 import { PracticeRunner } from "@/components/practice/practice-runner"
 import type { PracticeProblem } from "@/data/practice/types"
 
@@ -243,6 +243,67 @@ function ProblemList({
           </div>
         </div>
       )}
+
+      {/* 🌟 첫 추천 문제 — 필터 없을 때만 노출, 다 풀면 자동 숨김 */}
+      {(() => {
+        const noFilter = categoryFilter === "all" && diffFilter === "all"
+        if (!noFilter) return null
+        const starterProblems = STARTER_PICKS
+          .map((id) => problems.find((p) => p.id === id))
+          .filter((p): p is CodingBankProblem => !!p)
+        if (starterProblems.length === 0) return null
+        const allStarterSolved = starterProblems.every((p) => solvedSet.has(p.id))
+        if (allStarterSolved) return null  // 다 풀었으면 일반 그리드만
+        const starterSolvedCount = starterProblems.filter((p) => solvedSet.has(p.id)).length
+
+        return (
+          <div className="rounded-2xl border-2 border-amber-300 bg-gradient-to-br from-amber-50 to-orange-50 p-4 mb-2">
+            <div className="flex items-baseline justify-between gap-2 mb-2">
+              <h2 className="text-base font-bold text-amber-900">
+                🌟 {t("처음 풀어볼 만한 문제", "Good first problems")}
+              </h2>
+              <span className="text-xs font-bold text-amber-800">
+                {starterSolvedCount} / {starterProblems.length}
+              </span>
+            </div>
+            <p className="text-xs text-amber-800/80 mb-3 leading-relaxed">
+              {t(
+                "cpp-16 (map & set) 까지 배운 도구만으로 풀 수 있어요. 카테고리 골고루 한 번씩 해보면 감이 와요.",
+                "Solvable with what you learned up through cpp-16 (map & set). One from each category gives a good feel for the bank."
+              )}
+            </p>
+            <div className="flex flex-col gap-2">
+              {starterProblems.map((problem) => {
+                const solved = solvedSet.has(problem.id)
+                const localTitle = lang === "ko" ? problem.title : problem.en.title
+                const catLabel =
+                  lang === "ko" ? CATEGORY_LABELS[problem.category].ko : CATEGORY_LABELS[problem.category].en
+                return (
+                  <button
+                    key={problem.id}
+                    onClick={() => onSelect(problem)}
+                    className={cn(
+                      "rounded-xl border-2 px-3 py-2.5 text-left transition-all flex items-center gap-3",
+                      solved
+                        ? "border-emerald-300 bg-emerald-50/50 hover:bg-emerald-50"
+                        : "border-amber-200 bg-white hover:border-amber-400 hover:shadow-sm"
+                    )}
+                  >
+                    <span className="text-base shrink-0">{solved ? "✅" : "▶️"}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-gray-900 text-sm leading-tight">{localTitle}</p>
+                      <div className="flex flex-wrap items-center gap-1.5 mt-1">
+                        <span className={cn("text-[11px] px-1.5 py-0.5 rounded font-medium border", CATEGORY_COLORS[problem.category])}>{catLabel}</span>
+                        <span className={cn("text-[11px] px-1.5 py-0.5 rounded font-medium border", DIFFICULTY_COLORS[problem.difficulty])}>{diffLabel(problem.difficulty)}</span>
+                      </div>
+                    </div>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        )
+      })()}
 
       {/* 결과 없음 */}
       {filtered.length === 0 && (
