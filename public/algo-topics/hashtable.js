@@ -158,6 +158,15 @@ const hashTableTopic = {
                 <p class="hero-sub">키 하나로 값을 즉시 찾는 마법 같은 자료구조를 배워봅시다!</p>
             </div>
 
+            <!-- 시작 전 — 도구 준비 (cpp-16 map/set, unordered) -->
+            <div class="concept-section" style="border-left: 4px solid #fbbf24; background: #fffbeb;">
+                <div class="concept-section-title"><span class="section-num" style="background:#fbbf24">📌</span> 시작 전 — 도구 준비</div>
+                <div class="analogy-box">
+                    C++ 에선 해시 테이블이 <strong>std::unordered_map</strong> / <strong>std::unordered_set</strong> 으로 들어있어요. 사용법은 <a href="/learn/cpp-16" style="color:#b45309;text-decoration:underline;font-weight:bold;">레슨 19 (map &amp; set)</a> 에서 배웠어요. 익숙하지 않다면 5 분만 훑고 와도 OK — 삽입 / 조회 / count() 정도만 보면 돼요.<br><br>
+                    이 토픽은 해시 함수가 <strong>내부적으로 어떻게 동작하는지</strong> 와 충돌 처리 같은 원리를 배우는 곳이에요.
+                </div>
+            </div>
+
             <div class="concept-section">
                 <div class="concept-section-title"><span class="section-num">1</span> 해시 테이블이란?</div>
                 <div class="analogy-box">

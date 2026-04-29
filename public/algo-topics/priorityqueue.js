@@ -139,6 +139,14 @@ var priorityQueueTopic = {
                 <p class="hero-sub">가장 중요한 것부터 먼저 꺼내는 특별한 줄서기입니다</p>\
             </div>\
 \
+            <!-- 시작 전 — 도구 준비 (cpp-18 priority_queue) -->\
+            <div class="concept-section" style="border-left: 4px solid #fbbf24; background: #fffbeb;">\
+                <div class="concept-section-title"><span class="section-num" style="background:#fbbf24">📌</span> 시작 전 — 도구 준비</div>\
+                <div class="analogy-box">\
+                    C++ 의 <strong>std::priority_queue</strong> 사용법이 처음이라면 <a href="/learn/cpp-18" style="color:#b45309;text-decoration:underline;font-weight:bold;">레슨 18 (stack &amp; queue)</a> 의 priority_queue 부분만 5 분 훑고 와도 충분해요. push / pop / top 함수 사용법만 보면 OK.\
+                </div>\
+            </div>\
+\
             <div class="concept-section">\
                 <div class="concept-section-title"><span class="section-num">1</span> 우선순위 큐란?</div>\
                 <div class="analogy-box">\

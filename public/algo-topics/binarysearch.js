@@ -140,6 +140,15 @@ const binarySearchTopic = {
                 <p class="hero-sub">절반씩 버리면, 아무리 많은 데이터에서도 빠르게 찾을 수 있습니다</p>
             </div>
 
+            <!-- 시작 전 — 도구 준비 (cpp-23 sort + STL binary_search) -->
+            <div class="concept-section" style="border-left: 4px solid #fbbf24; background: #fffbeb;">
+                <div class="concept-section-title"><span class="section-num" style="background:#fbbf24">📌</span> 시작 전 — 도구 준비</div>
+                <div class="analogy-box">
+                    이분 탐색은 <strong>정렬된 데이터</strong>가 전제예요. C++ 의 <code>sort()</code> + <code>binary_search()</code> / <code>lower_bound()</code> / <code>upper_bound()</code> 가 익숙하지 않다면 <a href="/learn/cpp-23" style="color:#b45309;text-decoration:underline;font-weight:bold;">레슨 18 (sort 마스터)</a> 의 ch2 만 5 분 훑고 와도 충분해요.<br><br>
+                    이 토픽에선 직접 mid = (lo+hi)/2 형태로 짜는 패턴까지 배워요 — STL 만으로 안 풀리는 "조건 만족하는 첫 위치" 같은 문제를 위해.
+                </div>
+            </div>
+
             <div class="concept-section">
                 <div class="concept-section-title"><span class="section-num">1</span> 이분 탐색이란?</div>
                 <div class="analogy-box">
