@@ -1028,7 +1028,10 @@ function PredictStep({
                 isCorrect && answered ? "text-emerald-700 font-semibold" :
                 isSelected && answered ? "text-red-700 font-normal" : "text-gray-800 font-normal"
               )}>
-                {opt}
+                {/* 옵션 문자열에 리터럴 "\n"(백슬래시+n) 또는 실제 개행이 섞여 있을 수 있음 → 둘 다 줄바꿈으로 */}
+                {opt.split(/\\n|\n/).map((line, li, arr) => (
+                  <span key={li}>{line}{li < arr.length - 1 && <br />}</span>
+                ))}
               </span>
               {answered && isCorrect && <Check className="w-4 h-4 text-emerald-500 ml-auto shrink-0" />}
               {answered && isSelected && !isCorrect && <X className="w-4 h-4 text-red-400 ml-auto shrink-0" />}

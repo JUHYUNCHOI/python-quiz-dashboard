@@ -51,14 +51,14 @@ export const lessonCpp16: LessonData = {
           code: 'map<string, int> m;\nm["apple"] = 3;\ncout << m["banana"] << endl;\ncout << m.size() << endl;',
           predict: {
             question: "출력 결과는?",
-            options: ["에러 발생", "0\\n2", "0\\n1"],
+            options: ["에러 발생", "0\n2", "0\n1"],
             answer: 1,
             feedback: "없는 키를 []로 접근하면 기본값(int는 0)이 자동 생성돼요! 그래서 size가 2!"
           },
           en: {
             predict: {
               question: "What's the output?",
-              options: ["Error", "0\\n2", "0\\n1"],
+              options: ["Error", "0\n2", "0\n1"],
               feedback: "Accessing a missing key with [] auto-creates it with the default value (0 for int)! So the size becomes 2!"
             }
           }
