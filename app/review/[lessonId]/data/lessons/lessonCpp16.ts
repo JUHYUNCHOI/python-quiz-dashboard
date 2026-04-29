@@ -95,8 +95,10 @@ export const lessonCpp16: LessonData = {
           blanksAnswer: ['"철수"', '95'],
           expect: 'scores["철수"] = 95;',
           en: {
-            task: 'Insert value 95 with key "Cheolsu" into the map!',
-            guide: 'Use the form: mapName["key"] = value;'
+            task: 'Insert value 95 with key "Tom" into the map!',
+            guide: 'Use the form: mapName["key"] = value;',
+            answer: '"Tom"',
+            blanksAnswer: ['"Tom"', '95'],
           }
         }
       },
