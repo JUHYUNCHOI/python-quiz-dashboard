@@ -157,7 +157,7 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
 
       {/* Breadcrumb: USACO · Dec 2024 Bronze #2 + done button */}
       <div className="bg-white border-b-2 border-black px-3 py-2 sticky top-[57px] z-30 flex items-center gap-2">
-        <Link href="/quest" className="text-gray-400 hover:text-gray-700 flex-shrink-0">
+        <Link href="/quest" className="text-gray-400 hover:text-gray-700 flex-shrink-0" title={t("문제 목록", "Problem list")}>
           <ChevronLeft size={18} />
         </Link>
         <div className="flex-1 min-w-0">
@@ -180,6 +180,36 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
         )}
       </div>
 
+      {/* Prev / Next problem — 위쪽으로 이동. App 내부의 step ←→ 와 헷갈리지 않도록.
+          이전엔 페이지 하단에 있어서 App 의 fixed bottom nav (step 이동) 와 한 화면에 같이 노출 → 학생 혼동. */}
+      <div className="bg-amber-50/40 border-b border-amber-200 px-3 py-2 flex gap-2">
+        {prevProblem ? (
+          <button
+            onClick={() => router.push(`/quest/${prevProblem.id}`)}
+            className="flex-1 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-amber-300 bg-white text-xs font-semibold text-gray-700 hover:bg-amber-50 transition-colors min-w-0"
+          >
+            <ChevronLeft size={14} className="flex-shrink-0 text-amber-600" />
+            <div className="text-left min-w-0">
+              <div className="text-[9px] text-gray-400 font-medium leading-none">{t("이전 문제", "Prev problem")}</div>
+              <div className="truncate leading-tight">{prevProblem.title}</div>
+            </div>
+          </button>
+        ) : <div className="flex-1" />}
+
+        {nextProblem ? (
+          <button
+            onClick={() => router.push(`/quest/${nextProblem.id}`)}
+            className="flex-1 flex items-center justify-end gap-1.5 px-2.5 py-1.5 rounded-lg border border-amber-300 bg-white text-xs font-semibold text-gray-700 hover:bg-amber-50 transition-colors min-w-0"
+          >
+            <div className="text-right min-w-0">
+              <div className="text-[9px] text-gray-400 font-medium leading-none">{t("다음 문제", "Next problem")}</div>
+              <div className="truncate leading-tight">{nextProblem.title}</div>
+            </div>
+            <ChevronRight size={14} className="flex-shrink-0 text-amber-600" />
+          </button>
+        ) : <div className="flex-1" />}
+      </div>
+
       {/* Problem App — key=lang forces remount so useState initializer re-runs with new lang */}
       <main className="flex-1">
         {LazyComp ? (
@@ -192,35 +222,6 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
             <div className="text-base font-bold text-gray-700">{t("튜토리얼 준비 중입니다", "Tutorial coming soon")}</div>
           </div>
         )}
-
-        {/* Prev / Next problem — below App's own step nav */}
-        <div className="flex gap-3 px-4 pt-3 pb-6 bg-white border-t-2 border-black" style={{ paddingBottom: "max(1.5rem, env(safe-area-inset-bottom))" }}>
-          {prevProblem ? (
-            <button
-              onClick={() => router.push(`/quest/${prevProblem.id}`)}
-              className="flex-1 flex items-center gap-2 px-3 py-2.5 rounded-xl border-2 border-black bg-white text-sm font-bold text-gray-700 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-none transition-all"
-            >
-              <ChevronLeft size={16} className="flex-shrink-0" />
-              <div className="text-left min-w-0">
-                <div className="text-[10px] text-gray-400 font-medium">{t("이전 문제", "Prev problem")}</div>
-                <div className="truncate text-xs font-bold">{prevProblem.title}</div>
-              </div>
-            </button>
-          ) : <div className="flex-1" />}
-
-          {nextProblem ? (
-            <button
-              onClick={() => router.push(`/quest/${nextProblem.id}`)}
-              className="flex-1 flex items-center justify-end gap-2 px-3 py-2.5 rounded-xl border-2 border-black bg-white text-sm font-bold text-gray-700 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-none transition-all"
-            >
-              <div className="text-right min-w-0">
-                <div className="text-[10px] text-gray-400 font-medium">{t("다음 문제", "Next problem")}</div>
-                <div className="truncate text-xs font-bold">{nextProblem.title}</div>
-              </div>
-              <ChevronRight size={16} className="flex-shrink-0" />
-            </button>
-          ) : <div className="flex-1" />}
-        </div>
       </main>
     </div>
   )
