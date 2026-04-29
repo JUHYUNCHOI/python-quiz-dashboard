@@ -658,7 +658,7 @@ export const lessonCpp16: LessonData = {
         type: "practice",
         content: {
           level: 3,
-          task: "처음부터 작성! 정수 5개를 공백으로 구분해 입력받아, **가장 많이 등장한 숫자**와 **그 횟수**를 한 줄에 (공백 한 칸으로) 출력해요.\n\n예: 입력 `3 1 3 2 3` → 출력 `3 3` (3 이 3 번 등장)\n\n💡 풀이 흐름: map 으로 빈도 계산 → map 순회하며 최대 빈도 찾기",
+          task: "처음부터 작성! 정수 5 개를 입력받아 **가장 많이 등장한 숫자** 와 **그 횟수** 를 한 줄에 (공백 한 칸으로 구분해) 출력해요.\n\n💡 풀이 흐름: map 으로 빈도 계산 → map 순회하며 최대 빈도 찾기",
           guide: "map<int, int> freq; 로 각 숫자의 등장 횟수를 세고, 두 번째 for 루프에서 p.second(횟수)가 최대인 항목을 추적해!",
           hint: "1) for 5번 cin >> x; freq[x]++;\n2) maxCnt = 0, maxVal = 0;\n3) for (auto p : freq) if (p.second > maxCnt) { maxCnt = p.second; maxVal = p.first; }\n4) cout << maxVal << \" \" << maxCnt;",
           template: null,
@@ -670,7 +670,7 @@ export const lessonCpp16: LessonData = {
           ],
           expect: "3 3",
           en: {
-            task: "Write from scratch! Read 5 integers (space-separated) and print the **most frequent number** and **its count** on one line, separated by a single space.\n\nExample: input `3 1 3 2 3` → output `3 3` (3 appears 3 times)\n\n💡 Plan: count frequencies with map → loop the map to find the max count.",
+            task: "Write from scratch! Read 5 integers and print the **most frequent number** and **its count** on one line, separated by a single space.\n\n💡 Plan: count frequencies with map → loop the map to find the max count.",
             guide: "Use map<int, int> freq; to count each number's occurrences, then loop through all map entries to track the entry where p.second (count) is the largest!",
             hint: "1) for 5 times: cin >> x; freq[x]++;\n2) maxCnt = 0, maxVal = 0;\n3) for (auto p : freq) if (p.second > maxCnt) { maxCnt = p.second; maxVal = p.first; }\n4) cout << maxVal << \" \" << maxCnt;"
           }
@@ -682,9 +682,9 @@ export const lessonCpp16: LessonData = {
         type: "practice",
         content: {
           level: 3,
-          task: "처음부터 작성! 단어 5개를 공백으로 구분해 입력받아, **중복을 제거** 한 뒤 **알파벳 순서대로 한 줄씩** 출력해요.\n\n예: 입력 `cherry apple banana apple cherry` → 출력\n```\napple\nbanana\ncherry\n```\n\n💡 set 에 넣기만 하면 중복 제거 + 자동 정렬이 한 방에!",
-          guide: "set에 insert()로 단어를 넣으면 중복이 자동 제거되고, range-for 로 순회하면 알파벳 순서로 나와!",
-          hint: "1) for 5번: cin >> w; s.insert(w);\n2) for (auto w : s) cout << w << endl;",
+          task: "처음부터 작성! 단어 5 개를 입력받아 **중복을 제거** 한 뒤 **알파벳 순서대로 한 줄에 하나씩** 출력해요.\n\n💡 set 에 넣기만 하면 중복 제거 + 자동 정렬이 한 방에!",
+          guide: "set에 insert()로 단어를 넣으면 중복이 자동 제거되고, range-for 로 순회하면 알파벳 순서로 나와! 한 줄에 하나씩이니까 endl (또는 \"\\n\") 로 줄바꿈.",
+          hint: "1) for 5번: cin >> w; s.insert(w);\n2) for (auto w : s) cout << w << endl;  ← endl 빠뜨리면 한 줄로 붙어 나와요!",
           template: null,
           stdin: "cherry apple banana apple cherry\n",
           sampleInput: "cherry apple banana apple cherry",
@@ -694,9 +694,9 @@ export const lessonCpp16: LessonData = {
           ],
           expect: "apple\nbanana\ncherry",
           en: {
-            task: "Write from scratch! Read 5 words (space-separated), **remove duplicates**, then print **one per line in alphabetical order**.\n\nExample: input `cherry apple banana apple cherry` → output\n```\napple\nbanana\ncherry\n```\n\n💡 Inserting into a set both dedups and auto-sorts in one shot!",
-            guide: "Inserting words into a set automatically removes duplicates, and iterating with range-for gives them in alphabetical order!",
-            hint: "1) for 5 times: cin >> w; s.insert(w);\n2) for (auto w : s) cout << w << endl;"
+            task: "Write from scratch! Read 5 words, **remove duplicates**, then print **one per line in alphabetical order**.\n\n💡 Inserting into a set both dedups and auto-sorts in one shot!",
+            guide: "Inserting words into a set automatically removes duplicates, and iterating with range-for gives them in alphabetical order! Use endl (or \"\\n\") to put each word on its own line.",
+            hint: "1) for 5 times: cin >> w; s.insert(w);\n2) for (auto w : s) cout << w << endl;  ← without endl, the words run together on one line!"
           }
         }
       },
