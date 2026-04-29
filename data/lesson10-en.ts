@@ -31,7 +31,13 @@ When you run it:
 \`\`\`
 What is your name? Alice
 Hello, Alice!
-\`\`\``
+\`\`\`
+
+### Why is this important?
+
+Programs we've built so far used **fixed values** — \`name = "Alice"\` was hardcoded, so anyone else needed to edit the code to use it.
+
+**With \`input()\`**, the same code works for everyone. It starts feeling like a real "program".`
         },
         {
           id: "concept",
@@ -48,7 +54,22 @@ answer = input('Your question here')
 3. The typed value is stored in the answer variable!
 
 ⚠️ **Note:** input() doesn't work in web environments!
-So in our exercises, we'll practice by assigning values directly to variables.`
+So in our exercises, we'll practice by assigning values directly to variables, or use the stdin (input) panel.
+
+### Prompt options
+
+\`\`\`python
+# Option 1) no prompt
+data = input()           # user types
+
+# Option 2) with prompt
+data = input('Name: ')   # shows "Name: " inline
+
+# Option 3) prompt + newline (readability)
+data = input('Enter your name:\\n')
+\`\`\`
+
+> 💡 The most common style is ending with \`': '\` (colon + space).`
         },
         {
           id: "try1",
@@ -129,6 +150,80 @@ age = int(input('Age: '))
           hint2: "a = int(a_str)"
         },
         {
+          id: "multi-input",
+          type: "explain",
+          title: "🎯 Multiple values on one line — input().split()",
+          content: `For input like \`3 5 7\` on one line:
+
+\`\`\`python
+# Input: 3 5 7
+data = input().split()
+print(data)        # ['3', '5', '7']  ← list of strings
+\`\`\`
+
+\`split()\` separates by whitespace (covered in lesson 18).
+
+### Read as integers — map(int, ...)
+
+\`\`\`python
+# Input: 3 5 7
+nums = list(map(int, input().split()))
+print(nums)        # [3, 5, 7]  ← list of ints!
+print(sum(nums))   # 15
+\`\`\`
+
+### Receive into known variables
+
+\`\`\`python
+# Input: 25 17
+a, b = map(int, input().split())
+print(a + b)       # 42 — sum directly
+\`\`\`
+
+> 🎯 Almost all coding-test inputs use this. Memorize the pattern — it's a lifelong tool.`
+        },
+        {
+          id: "try-multi-input",
+          type: "tryit",
+          title: "🖥️ Try It — Two ints, multiplied",
+          task: "Read two ints on one line and print their product. (input: 7 8)",
+          initialCode: "# Two ints on one line\na, b = map(int, input().___())\n\nprint(f\"{a} x {b} = {a * b}\")",
+          expectedOutput: "7 x 8 = 56",
+          stdin: "7 8",
+          hint: "input().split() then map(int, ...).",
+          hint2: "a, b = map(int, input().split())"
+        },
+        {
+          id: "input-strip",
+          type: "explain",
+          title: "🧹 Hidden whitespace in user input",
+          content: `Users may accidentally add spaces around their input.
+
+\`\`\`python
+# User types "  Alice  " (extra spaces)
+name = input()
+print(f"[{name}]")   # [  Alice  ]   ← spaces kept
+\`\`\`
+
+\`.strip()\` removes leading/trailing whitespace — safer.
+
+\`\`\`python
+name = input().strip()
+print(f"[{name}]")   # [Alice]   ← clean
+\`\`\`
+
+### Common input cleanup patterns
+
+\`\`\`python
+name  = input("Name: ").strip()       # string + cleanup
+age   = int(input("Age: "))            # int
+score = float(input("Score: "))        # float
+nums  = list(map(int, input().split()))  # multiple ints
+\`\`\`
+
+> 💡 \`strip()\` was covered in lesson 6 (string methods). Pairs well with \`.lower()\` / \`.upper()\` for input normalization.`
+        },
+        {
           id: "quiz2",
           type: "quiz",
           title: "❓ Quiz!",
@@ -178,6 +273,51 @@ print(f'Height: {height}cm')
           options: ["3", "3.14", "Error", "'3'"],
           answer: 2,
           explanation: "int() can't directly convert a decimal string! You need to use float() first."
+        },
+        {
+          id: "float-trap",
+          type: "explain",
+          title: "⚠️ float ↔ int conversion traps",
+          content: `\`int(input())\` errors on \`"3.14"\`. Two-step:
+
+\`\`\`python
+# ❌ Direct int doesn't work
+int("3.14")        # ValueError
+
+# ✅ Through float to int
+int(float("3.14"))  # 3 — decimal truncated (NOT rounded!)
+
+# To round properly
+round(float("3.14"))   # 3
+round(float("3.78"))   # 4
+\`\`\`
+
+### int truncation vs round
+
+| Value | int(float(x)) | round(float(x)) |
+|---|---|---|
+| "3.14" | 3 | 3 |
+| "3.78" | **3** (truncate) | **4** (round) |
+| "-2.5" | -2 (toward 0) | -2 (banker's) |
+| "2.5"  | 2 (truncate) | 2 (banker's) |
+
+> 🎯 **int truncates toward zero**, round does proper rounding. Pick based on intent.
+
+### Safe int conversion function
+
+\`\`\`python
+def safe_int(s, default=0):
+    try:
+        return int(float(s))
+    except ValueError:
+        return default
+
+print(safe_int("42"))        # 42
+print(safe_int("3.14"))      # 3
+print(safe_int("hello"))     # 0 (fallback)
+\`\`\`
+
+(try/except is covered in detail in lesson 37)`
         }
       ]
     },
@@ -189,12 +329,34 @@ print(f'Height: {height}cm')
         {
           id: "mission1",
           type: "mission",
-          title: "🏆 Final Mission!",
+          title: "🏆 Mission 1 — Total price",
           task: "Calculate the total price from item price and quantity!",
           initialCode: "# Assume we received these from input()\nprice_str = '12'\ncount_str = '3'\n\n# Convert to integers\nprice = ___(price_str)\ncount = ___(count_str)\n\n# Calculate total price\ntotal = ___\n\nprint(f'{count} pizzas')\nprint(f'Total price: ${total}')",
           expectedOutput: "3 pizzas\nTotal price: $36",
           hint: "Convert with int() then multiply!",
           hint2: "int(price_str) / price * count"
+        },
+        {
+          id: "mission2",
+          type: "mission",
+          title: "🏆 Mission 2 — Self-introduction card",
+          task: "Read name, age, height with input() and print a card. (input is 3 stdin lines)",
+          initialCode: "name = input(\"Name: \").___()       # cleanup spaces\nage = ___(input(\"Age: \"))           # int\nheight = ___(input(\"Height(cm): \"))  # float\n\n# Print card\nprint(\"=\" * 20)\nprint(f\"Name: {name}\")\nprint(f\"Age: {age} (next year: {age + 1})\")\nprint(f\"Height: {height}cm ({height/100:.2f}m)\")\nprint(\"=\" * 20)",
+          expectedOutput: "====================\nName: Alice\nAge: 15 (next year: 16)\nHeight: 175.5cm (1.76m)\n====================",
+          stdin: "Alice\n15\n175.5",
+          hint: "name uses strip(), age int(), height float().",
+          hint2: "name = input().strip()\nage = int(input())\nheight = float(input())"
+        },
+        {
+          id: "mission3",
+          type: "mission",
+          title: "🏆 Mission 3 — Score average",
+          task: "Read 5 space-separated scores and print **average, max, min**.",
+          initialCode: "# map + split pattern\nscores = list(map(___, input().split()))\n\nprint(f\"input: {scores}\")\nprint(f\"avg: {sum(scores) / len(scores):.1f}\")\nprint(f\"max: {max(scores)}\")\nprint(f\"min: {min(scores)}\")",
+          expectedOutput: "input: [85, 92, 78, 95, 67]\navg: 83.4\nmax: 95\nmin: 67",
+          stdin: "85 92 78 95 67",
+          hint: "list(map(int, input().split())) pattern.",
+          hint2: "scores = list(map(int, input().split()))"
         },
         {
           id: "complete",
@@ -203,9 +365,14 @@ print(f'Height: {height}cm')
           content: `## What We Learned Today
 
 ✅ Getting user input with \`input()\`
-✅ input() **always returns a string**!
-✅ Converting to numbers with \`int()\` and \`float()\`
-✅ Making **interactive programs**!
+✅ input() **always returns a string**
+✅ Converting to numbers with \`int()\` / \`float()\`
+✅ **input().split()** for multiple values on one line
+✅ **map(int, input().split())** — coding-test classic
+✅ \`a, b = map(int, input().split())\` — direct unpacking
+✅ \`.strip()\` for input cleanup
+✅ float ↔ int conversion traps (use \`int(float(s))\` for decimal strings)
+✅ \`int\` truncate vs \`round\` proper rounding
 
 💡 **Tip:** Try running real input() code in a terminal or IDE!
 
