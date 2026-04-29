@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense, lazy } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Header } from "@/components/header"
-import { ChevronLeft, ChevronRight, CheckCircle, Loader2, ExternalLink, Columns2, X, ZoomIn, ZoomOut } from "lucide-react"
+import { ChevronLeft, ChevronRight, CheckCircle, Loader2, ExternalLink, Columns2, X, ZoomIn, ZoomOut, Hand, MousePointer2 } from "lucide-react"
 import { ALL_PROBLEMS, PROBLEM_MAP, PROBLEM_INDEX, getOriginalProblemUrl, type ProblemMeta } from "./data"
 import { PROBLEM_LOADERS } from "./loaders"
 import { useLanguage } from "@/contexts/language-context"
@@ -127,6 +127,9 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
   const [splitView, setSplitView] = useState(false)
   const [iframeBlocked, setIframeBlocked] = useState(false)
   const [iframeZoom, setIframeZoom] = useState(1) // 0.5 ~ 1.5
+  const [panMode, setPanMode] = useState(false) // 드래그로 iframe 화면 이동
+  const [panOffset, setPanOffset] = useState({ x: 0, y: 0 })
+  const [isDragging, setIsDragging] = useState(false)
 
   if (!lockChecked) return null
 
@@ -276,33 +279,53 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
                   <ExternalLink size={11} className="text-amber-700 flex-shrink-0 group-hover:scale-110 transition-transform" />
                   <span className="text-[11px] text-gray-600 truncate font-mono">{originalUrl.replace(/^https?:\/\//, "")}</span>
                 </a>
-                {/* Zoom 컨트롤 (iframe 모드에서만 의미 있음) */}
+                {/* Zoom + Pan 컨트롤 (iframe 모드에서만 의미 있음) */}
                 {!isGoogleFallback && !iframeBlocked && (
-                  <div className="flex items-center gap-0.5 flex-shrink-0 border border-gray-300 rounded-md bg-white">
+                  <>
+                    {/* Pan 모드 토글 — 켜면 iframe pointer-events off → 드래그로 화면 이동 */}
                     <button
-                      onClick={() => setIframeZoom(z => Math.max(0.5, +(z - 0.1).toFixed(2)))}
-                      disabled={iframeZoom <= 0.5}
-                      className="p-1 text-gray-600 hover:bg-amber-100 disabled:opacity-30 disabled:cursor-not-allowed rounded-l-md"
-                      title={t("축소", "Zoom out")}
+                      onClick={() => {
+                        setPanMode(v => !v)
+                        if (panMode) setPanOffset({ x: 0, y: 0 }) // 끌 때 위치 리셋
+                      }}
+                      className={`flex items-center gap-1 px-1.5 py-1 rounded-md border text-[10px] font-semibold transition-colors flex-shrink-0 ${
+                        panMode
+                          ? "bg-amber-200 border-amber-500 text-amber-900"
+                          : "bg-white border-gray-300 text-gray-600 hover:bg-amber-50 hover:border-amber-300"
+                      }`}
+                      title={panMode
+                        ? t("드래그 모드 끄기 (클릭 가능)", "Exit pan mode (clicks enabled)")
+                        : t("드래그 모드 켜기 (마우스로 이동)", "Pan mode (drag to move)")}
                     >
-                      <ZoomOut size={13} />
+                      {panMode ? <Hand size={13} /> : <MousePointer2 size={13} />}
+                      <span className="hidden lg:inline">{panMode ? t("이동", "Pan") : t("선택", "Click")}</span>
                     </button>
-                    <button
-                      onClick={() => setIframeZoom(1)}
-                      className="px-1 text-[10px] font-semibold text-gray-600 hover:bg-amber-100 min-w-[2.5rem]"
-                      title={t("100% 로 리셋", "Reset to 100%")}
-                    >
-                      {Math.round(iframeZoom * 100)}%
-                    </button>
-                    <button
-                      onClick={() => setIframeZoom(z => Math.min(1.5, +(z + 0.1).toFixed(2)))}
-                      disabled={iframeZoom >= 1.5}
-                      className="p-1 text-gray-600 hover:bg-amber-100 disabled:opacity-30 disabled:cursor-not-allowed rounded-r-md"
-                      title={t("확대", "Zoom in")}
-                    >
-                      <ZoomIn size={13} />
-                    </button>
-                  </div>
+                    <div className="flex items-center gap-0.5 flex-shrink-0 border border-gray-300 rounded-md bg-white">
+                      <button
+                        onClick={() => setIframeZoom(z => Math.max(0.5, +(z - 0.1).toFixed(2)))}
+                        disabled={iframeZoom <= 0.5}
+                        className="p-1 text-gray-600 hover:bg-amber-100 disabled:opacity-30 disabled:cursor-not-allowed rounded-l-md"
+                        title={t("축소", "Zoom out")}
+                      >
+                        <ZoomOut size={13} />
+                      </button>
+                      <button
+                        onClick={() => { setIframeZoom(1); setPanOffset({ x: 0, y: 0 }) }}
+                        className="px-1 text-[10px] font-semibold text-gray-600 hover:bg-amber-100 min-w-[2.5rem]"
+                        title={t("100% + 위치 리셋", "Reset zoom & position")}
+                      >
+                        {Math.round(iframeZoom * 100)}%
+                      </button>
+                      <button
+                        onClick={() => setIframeZoom(z => Math.min(1.5, +(z + 0.1).toFixed(2)))}
+                        disabled={iframeZoom >= 1.5}
+                        className="p-1 text-gray-600 hover:bg-amber-100 disabled:opacity-30 disabled:cursor-not-allowed rounded-r-md"
+                        title={t("확대", "Zoom in")}
+                      >
+                        <ZoomIn size={13} />
+                      </button>
+                    </div>
+                  </>
                 )}
                 <button
                   onClick={() => setSplitView(false)}
@@ -336,18 +359,44 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
                   </a>
                 </div>
               ) : (
-                // transform: scale 로 확대/축소. iframe 자체 width/height 를 역수로 늘려서
-                // 컨테이너에 꽉 차게 맞춤 (스케일 후에도 빈 공간 안 생기게).
-                <div className="flex-1 overflow-hidden bg-white">
+                // transform: scale 로 확대/축소 + translate 로 드래그 pan.
+                // panMode 켜면 iframe pointer-events: none → mousedown 이 wrapper 에 떨어져 드래그 가능.
+                // 끄면 iframe 정상 (스크롤/클릭).
+                <div
+                  className={`flex-1 overflow-hidden bg-white relative select-none ${
+                    panMode ? (isDragging ? "cursor-grabbing" : "cursor-grab") : ""
+                  }`}
+                  onMouseDown={panMode ? (e) => {
+                    e.preventDefault()
+                    setIsDragging(true)
+                    const startX = e.clientX
+                    const startY = e.clientY
+                    const startOffset = { ...panOffset }
+                    const onMove = (ev: MouseEvent) => {
+                      setPanOffset({
+                        x: startOffset.x + (ev.clientX - startX),
+                        y: startOffset.y + (ev.clientY - startY),
+                      })
+                    }
+                    const onUp = () => {
+                      setIsDragging(false)
+                      window.removeEventListener("mousemove", onMove)
+                      window.removeEventListener("mouseup", onUp)
+                    }
+                    window.addEventListener("mousemove", onMove)
+                    window.addEventListener("mouseup", onUp)
+                  } : undefined}
+                >
                   <iframe
                     key={meta.id}
                     src={originalUrl}
                     style={{
                       width: `${100 / iframeZoom}%`,
                       height: `${100 / iframeZoom}%`,
-                      transform: `scale(${iframeZoom})`,
+                      transform: `translate(${panOffset.x}px, ${panOffset.y}px) scale(${iframeZoom})`,
                       transformOrigin: "top left",
                       border: 0,
+                      pointerEvents: panMode ? "none" : "auto",
                     }}
                     onError={() => setIframeBlocked(true)}
                     title={t("원본 문제", "Original problem")}
