@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense, lazy } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Header } from "@/components/header"
-import { ChevronLeft, ChevronRight, CheckCircle, Loader2, ExternalLink, Columns2, X, ZoomIn, ZoomOut, Hand } from "lucide-react"
+import { ChevronLeft, ChevronRight, CheckCircle, Loader2, ExternalLink, Columns2, X, ZoomIn, ZoomOut } from "lucide-react"
 import { ALL_PROBLEMS, PROBLEM_MAP, PROBLEM_INDEX, getOriginalProblemUrl, type ProblemMeta } from "./data"
 import { PROBLEM_LOADERS } from "./loaders"
 import { useLanguage } from "@/contexts/language-context"
@@ -127,32 +127,6 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
   const [splitView, setSplitView] = useState(false)
   const [iframeBlocked, setIframeBlocked] = useState(false)
   const [iframeZoom, setIframeZoom] = useState(1) // 0.5 ~ 1.5
-  const [panOffset, setPanOffset] = useState({ x: 0, y: 0 })
-  const [isDragging, setIsDragging] = useState(false)
-  const [spaceHeld, setSpaceHeld] = useState(false) // Figma 스타일: 스페이스+드래그=pan
-
-  // 전역 스페이스바 리스너 — split view 켜져있을 때만
-  useEffect(() => {
-    if (!splitView) return
-    const onKeyDown = (e: KeyboardEvent) => {
-      // input/textarea 안에서 스페이스 입력 중이면 무시
-      const tag = (e.target as HTMLElement)?.tagName
-      if (tag === "INPUT" || tag === "TEXTAREA") return
-      if (e.code === "Space" && !e.repeat) {
-        e.preventDefault()
-        setSpaceHeld(true)
-      }
-    }
-    const onKeyUp = (e: KeyboardEvent) => {
-      if (e.code === "Space") setSpaceHeld(false)
-    }
-    window.addEventListener("keydown", onKeyDown)
-    window.addEventListener("keyup", onKeyUp)
-    return () => {
-      window.removeEventListener("keydown", onKeyDown)
-      window.removeEventListener("keyup", onKeyUp)
-    }
-  }, [splitView])
 
   if (!lockChecked) return null
 
@@ -302,48 +276,33 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
                   <ExternalLink size={11} className="text-amber-700 flex-shrink-0 group-hover:scale-110 transition-transform" />
                   <span className="text-[11px] text-gray-600 truncate font-mono">{originalUrl.replace(/^https?:\/\//, "")}</span>
                 </a>
-                {/* Zoom 컨트롤 + Space-drag 힌트 (iframe 모드에서만) */}
+                {/* Zoom 컨트롤 */}
                 {!isGoogleFallback && !iframeBlocked && (
-                  <>
-                    <div
-                      className={`flex items-center gap-1 px-1.5 py-1 rounded-md text-[10px] font-semibold flex-shrink-0 transition-colors ${
-                        spaceHeld
-                          ? "bg-amber-200 text-amber-900 border border-amber-500"
-                          : "bg-white border border-gray-200 text-gray-500"
-                      }`}
-                      title={t("Space 키 누른 채로 드래그하면 화면이 움직여요", "Hold Space + drag to pan")}
+                  <div className="flex items-center gap-0.5 flex-shrink-0 border border-gray-300 rounded-md bg-white">
+                    <button
+                      onClick={() => setIframeZoom(z => Math.max(0.5, +(z - 0.1).toFixed(2)))}
+                      disabled={iframeZoom <= 0.5}
+                      className="p-1 text-gray-600 hover:bg-amber-100 disabled:opacity-30 disabled:cursor-not-allowed rounded-l-md"
+                      title={t("축소", "Zoom out")}
                     >
-                      <Hand size={12} />
-                      <span className="hidden lg:inline">
-                        {spaceHeld ? t("이동 중", "Panning") : t("Space+드래그", "Space+drag")}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-0.5 flex-shrink-0 border border-gray-300 rounded-md bg-white">
-                      <button
-                        onClick={() => setIframeZoom(z => Math.max(0.5, +(z - 0.1).toFixed(2)))}
-                        disabled={iframeZoom <= 0.5}
-                        className="p-1 text-gray-600 hover:bg-amber-100 disabled:opacity-30 disabled:cursor-not-allowed rounded-l-md"
-                        title={t("축소", "Zoom out")}
-                      >
-                        <ZoomOut size={13} />
-                      </button>
-                      <button
-                        onClick={() => { setIframeZoom(1); setPanOffset({ x: 0, y: 0 }) }}
-                        className="px-1 text-[10px] font-semibold text-gray-600 hover:bg-amber-100 min-w-[2.5rem]"
-                        title={t("100% + 위치 리셋", "Reset zoom & position")}
-                      >
-                        {Math.round(iframeZoom * 100)}%
-                      </button>
-                      <button
-                        onClick={() => setIframeZoom(z => Math.min(1.5, +(z + 0.1).toFixed(2)))}
-                        disabled={iframeZoom >= 1.5}
-                        className="p-1 text-gray-600 hover:bg-amber-100 disabled:opacity-30 disabled:cursor-not-allowed rounded-r-md"
-                        title={t("확대", "Zoom in")}
-                      >
-                        <ZoomIn size={13} />
-                      </button>
-                    </div>
-                  </>
+                      <ZoomOut size={13} />
+                    </button>
+                    <button
+                      onClick={() => setIframeZoom(1)}
+                      className="px-1 text-[10px] font-semibold text-gray-600 hover:bg-amber-100 min-w-[2.5rem]"
+                      title={t("100% 로 리셋", "Reset to 100%")}
+                    >
+                      {Math.round(iframeZoom * 100)}%
+                    </button>
+                    <button
+                      onClick={() => setIframeZoom(z => Math.min(1.5, +(z + 0.1).toFixed(2)))}
+                      disabled={iframeZoom >= 1.5}
+                      className="p-1 text-gray-600 hover:bg-amber-100 disabled:opacity-30 disabled:cursor-not-allowed rounded-r-md"
+                      title={t("확대", "Zoom in")}
+                    >
+                      <ZoomIn size={13} />
+                    </button>
+                  </div>
                 )}
                 <button
                   onClick={() => setSplitView(false)}
@@ -377,49 +336,35 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
                   </a>
                 </div>
               ) : (
-                // transform: scale 로 확대/축소 + translate 로 드래그 pan.
-                // panMode 켜면 iframe pointer-events: none → mousedown 이 wrapper 에 떨어져 드래그 가능.
-                // 끄면 iframe 정상 (스크롤/클릭).
-                <div
-                  className={`flex-1 overflow-hidden bg-white relative select-none ${
-                    spaceHeld ? (isDragging ? "cursor-grabbing" : "cursor-grab") : ""
-                  }`}
-                  onMouseDown={spaceHeld ? (e) => {
-                    e.preventDefault()
-                    setIsDragging(true)
-                    const startX = e.clientX
-                    const startY = e.clientY
-                    const startOffset = { ...panOffset }
-                    const onMove = (ev: MouseEvent) => {
-                      setPanOffset({
-                        x: startOffset.x + (ev.clientX - startX),
-                        y: startOffset.y + (ev.clientY - startY),
-                      })
-                    }
-                    const onUp = () => {
-                      setIsDragging(false)
-                      window.removeEventListener("mousemove", onMove)
-                      window.removeEventListener("mouseup", onUp)
-                    }
-                    window.addEventListener("mousemove", onMove)
-                    window.addEventListener("mouseup", onUp)
-                  } : undefined}
-                >
-                  <iframe
-                    key={meta.id}
-                    src={originalUrl}
+                // 확대 시 scrollWrapper 가 자동으로 스크롤바 띄움 → 모두가 아는 패턴.
+                // 별도 pan 모드/단축키 없이 휠/트랙패드/스크롤바로 자연스럽게 이동.
+                //
+                // 레이아웃 트릭:
+                //   sizedBox: zoom 비율로 layout 크기 늘림 (zoom>1 일 때 wrapper 보다 커짐)
+                //   iframe: sizedBox 안에 100%×100% 로 넣고 transform: scale(zoom) 으로 시각 확대
+                //   → 결과적으로 iframe 시각 크기 = sizedBox layout 크기 → wrapper 가 정확히 그만큼 스크롤
+                <div className="flex-1 overflow-auto bg-white">
+                  <div
                     style={{
-                      width: `${100 / iframeZoom}%`,
-                      height: `${100 / iframeZoom}%`,
-                      transform: `translate(${panOffset.x}px, ${panOffset.y}px) scale(${iframeZoom})`,
-                      transformOrigin: "top left",
-                      border: 0,
-                      // Space 누르고 있는 동안만 iframe 비활성화 → wrapper 가 mousedown 받음
-                      pointerEvents: spaceHeld ? "none" : "auto",
+                      width: `${iframeZoom * 100}%`,
+                      height: `${iframeZoom * 100}%`,
+                      // zoom < 1 일 때는 sizedBox 가 wrapper 보다 작아서 빈 공간 생김 → 그대로 OK
                     }}
-                    onError={() => setIframeBlocked(true)}
-                    title={t("원본 문제", "Original problem")}
-                  />
+                  >
+                    <iframe
+                      key={meta.id}
+                      src={originalUrl}
+                      style={{
+                        width: `${100 / iframeZoom}%`,
+                        height: `${100 / iframeZoom}%`,
+                        transform: `scale(${iframeZoom})`,
+                        transformOrigin: "top left",
+                        border: 0,
+                      }}
+                      onError={() => setIframeBlocked(true)}
+                      title={t("원본 문제", "Original problem")}
+                    />
+                  </div>
                 </div>
               )}
             </aside>
