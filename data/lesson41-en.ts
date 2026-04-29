@@ -252,6 +252,26 @@ print(f'{dog.name}: {dog.age} years old')`,
           expectedOutput: "Buddy: 3 years old",
           hint: "Store each parameter on the object using s.attr = parameter.",
           hint2: "name / age"
+        },
+        {
+          id: "ch2-7",
+          type: "mission",
+          title: "🏆 Mission — Dog class from scratch",
+          task: "No blanks this time! Build a Dog class (with name and breed) and create snoopy = Dog('snoopy', 'Beagle'), then print 'snoopy: Beagle'.",
+          initialCode: `# 1) Define Dog class (two attributes: name, breed)
+# 2) snoopy = Dog('snoopy', 'Beagle')
+# 3) Print as 'snoopy: Beagle'
+
+`,
+          expectedOutput: "snoopy: Beagle",
+          hint: "class then __init__(s, name, breed). Inside: s.name = name, s.breed = breed.",
+          hint2: `class Dog:
+    def __init__(s, name, breed):
+        s.name = name
+        s.breed = breed
+
+snoopy = Dog('snoopy', 'Beagle')
+print(f'{snoopy.name}: {snoopy.breed}')`
         }
       ]
     },
@@ -398,6 +418,31 @@ print(a.hp, b.hp)`,
           options: ["50 50", "100 100", "50 100", "Error"],
           answer: 2,
           explanation: "a and b are completely separate objects! Only a.hp becomes 50 — b.hp is still 100. Changing one object's attribute never affects another object."
+        },
+        {
+          id: "ch3-6",
+          type: "mission",
+          title: "🏆 Mission — Two students, independent scores",
+          task: "Build a Student class, create two students, raise the first one's score by 10, then print both. See for yourself that they're independent.",
+          initialCode: `# 1) Student class — name and score
+# 2) alice = Student('Alice', 85)
+#    bob   = Student('Bob', 90)
+# 3) Raise alice's score by 10
+# 4) Print 'Alice: 95' and 'Bob: 90' (two lines)
+
+`,
+          expectedOutput: "Alice: 95\nBob: 90",
+          hint: "obj.attr = obj.attr + 10 raises only that one. Don't touch bob — he stays 90.",
+          hint2: `class Student:
+    def __init__(s, name, score):
+        s.name = name
+        s.score = score
+
+alice = Student('Alice', 85)
+bob = Student('Bob', 90)
+alice.score = alice.score + 10
+print(f'{alice.name}: {alice.score}')
+print(f'{bob.name}: {bob.score}')`
         }
       ]
     },

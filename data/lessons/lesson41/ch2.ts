@@ -158,6 +158,26 @@ print(f'{dog.name}: {dog.age}살')`,
       expectedOutput: "멍멍이: 3살",
       hint: "s.속성 = 매개변수 형태로 매개변수 값을 객체에 저장해요.",
       hint2: "name / age"
+    },
+    {
+      id: "ch2-7",
+      type: "mission",
+      title: "🏆 미션 — Dog 클래스 처음부터",
+      task: "빈칸 없이 처음부터! Dog 클래스를 만들고 (이름 name, 견종 breed), snoopy = Dog('snoopy', 'Beagle') 객체로 'snoopy: Beagle' 출력하세요.",
+      initialCode: `# 1) Dog 클래스 정의 (name, breed 두 속성)
+# 2) snoopy = Dog('snoopy', 'Beagle')
+# 3) 'snoopy: Beagle' 형태로 출력
+
+`,
+      expectedOutput: "snoopy: Beagle",
+      hint: "class 다음에 __init__(s, name, breed). 안에서 s.name = name, s.breed = breed.",
+      hint2: `class Dog:
+    def __init__(s, name, breed):
+        s.name = name
+        s.breed = breed
+
+snoopy = Dog('snoopy', 'Beagle')
+print(f'{snoopy.name}: {snoopy.breed}')`
     }
   ]
 }

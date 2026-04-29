@@ -391,31 +391,35 @@ while True:               # while + try-except
           explanation: "Read with 'r', and use try-except since the file might not exist!"
         },
         {
+          id: "ch5-mission",
+          type: "mission",
+          title: "🏆 Final Mission — Build a Healing Item",
+          task: "Write a heal() function. It adds 30 to HP, but caps at 100 (use min())! Then print 'HP recovered! Current HP: ___' after healing.",
+          initialCode: "character = {'name': 'Hero', 'HP': 80}\n\n# Build the heal() function:\n# - add 30 to HP, but cap at 100 using min()\n# - print 'HP recovered! Current HP: ___'\n\n\nheal()",
+          expectedOutput: "HP recovered! Current HP: 100",
+          hint: "min(100, x) returns the smaller of x and 100. If HP is 80, 80+30=110, but min caps it at 100.",
+          hint2: "def heal():\n    character['HP'] = min(100, character['HP'] + 30)\n    print(f'HP recovered! Current HP: {character[\"HP\"]}')"
+        },
+        {
           id: "ch5-2",
           type: "explain",
-          title: "How can we make the game more fun?",
-          content: `The basic game is done... But there's only one monster type, no healing... What are some ways to make it **more fun**?
+          title: "Want to challenge yourself further?",
+          content: `You built the healing item! For more fun, here are some challenges to try:
 
 ### Challenge 1: Multiple Monster Types
 \`\`\`python
 monsters = ['Goblin', 'Orc', 'Dragon']
 monster = random.choice(monsters)
 \`\`\`
+Use random.choice so a different monster appears each time!
 
-### Challenge 2: Healing Items
-\`\`\`python
-def heal():
-    character['HP'] = min(100, character['HP'] + 30)
-    print(f'HP recovered! Current HP: {character["HP"]}')
-\`\`\`
-
-### Challenge 3: Monster Counterattack
-The monster attacks back, reducing your HP!
+### Challenge 2: Monster Counterattack
+The monster attacks back, reducing your HP! In the while loop, decrease the character's HP too.
 
 ---
 **Next lesson:** Part 6 Problem Set 20!
 
-@Key point: Use random.choice, min(), etc. to **expand the game**! Try these challenges yourself!`
+@Key point: Even after building a game, you can keep **expanding** it with random.choice, while loops, and function decomposition!`
         }
       ]
     }
