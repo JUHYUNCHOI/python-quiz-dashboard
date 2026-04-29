@@ -658,19 +658,21 @@ export const lessonCpp16: LessonData = {
         type: "practice",
         content: {
           level: 3,
-          task: "처음부터 작성! 정수 5개를 입력받아 가장 많이 등장한 숫자와 그 횟수를 출력해요\n(map으로 빈도 계산 → 최대 빈도 찾기)",
-          guide: "map으로 각 숫자의 등장 횟수를 세고, map의 모든 항목을 순회해서 가장 큰 횟수를 찾아!",
-          hint: "map을 먼저 채운 뒤, 두 번째 for 루프에서 p.second(횟수)가 최대인 항목을 추적해봐!",
+          task: "처음부터 작성! 정수 5개를 공백으로 구분해 입력받아, **가장 많이 등장한 숫자**와 **그 횟수**를 한 줄에 (공백 한 칸으로) 출력해요.\n\n예: 입력 `3 1 3 2 3` → 출력 `3 3` (3 이 3 번 등장)\n\n💡 풀이 흐름: map 으로 빈도 계산 → map 순회하며 최대 빈도 찾기",
+          guide: "map<int, int> freq; 로 각 숫자의 등장 횟수를 세고, 두 번째 for 루프에서 p.second(횟수)가 최대인 항목을 추적해!",
+          hint: "1) for 5번 cin >> x; freq[x]++;\n2) maxCnt = 0, maxVal = 0;\n3) for (auto p : freq) if (p.second > maxCnt) { maxCnt = p.second; maxVal = p.first; }\n4) cout << maxVal << \" \" << maxCnt;",
           template: null,
+          stdin: "3 1 3 2 3\n",
+          sampleInput: "3 1 3 2 3",
           answer: "map<int, int> freq;\nfor (int i = 0; i < 5; i++) {\n    int x;\n    cin >> x;\n    freq[x]++;\n}\nint maxVal = 0, maxCnt = 0;\nfor (auto p : freq) {\n    if (p.second > maxCnt) {\n        maxCnt = p.second;\n        maxVal = p.first;\n    }\n}\ncout << maxVal << \" \" << maxCnt << endl;",
           alternateAnswers: [
             "map<int,int> freq;\nfor(int i=0;i<5;i++){int x;cin>>x;freq[x]++;}\nint maxVal=0,maxCnt=0;\nfor(auto p:freq)if(p.second>maxCnt){maxCnt=p.second;maxVal=p.first;}\ncout<<maxVal<<\" \"<<maxCnt<<endl;"
           ],
           expect: "3 3",
           en: {
-            task: "Write from scratch! Read 5 integers, print the most frequent number and its count\n(use map for frequency → find max frequency)",
-            guide: "Use a map to count each number's occurrences, then loop through all map entries to find the highest count!",
-            hint: "Fill the map first, then in a second for loop, track the entry where p.second (count) is the largest!"
+            task: "Write from scratch! Read 5 integers (space-separated) and print the **most frequent number** and **its count** on one line, separated by a single space.\n\nExample: input `3 1 3 2 3` → output `3 3` (3 appears 3 times)\n\n💡 Plan: count frequencies with map → loop the map to find the max count.",
+            guide: "Use map<int, int> freq; to count each number's occurrences, then loop through all map entries to track the entry where p.second (count) is the largest!",
+            hint: "1) for 5 times: cin >> x; freq[x]++;\n2) maxCnt = 0, maxVal = 0;\n3) for (auto p : freq) if (p.second > maxCnt) { maxCnt = p.second; maxVal = p.first; }\n4) cout << maxVal << \" \" << maxCnt;"
           }
         }
       },
@@ -680,19 +682,21 @@ export const lessonCpp16: LessonData = {
         type: "practice",
         content: {
           level: 3,
-          task: "처음부터 작성! 단어 5개를 입력받아 중복을 제거한 후\n알파벳 순서대로 한 줄씩 출력해요 (set이 자동 정렬!)",
-          guide: "set에 insert()로 단어를 넣으면 중복이 자동 제거되고, 순회하면 알파벳 순서로 나와!",
-          hint: "입력받은 단어를 하나씩 set에 insert()하고, 다시 range-for로 순회해서 출력해봐!",
+          task: "처음부터 작성! 단어 5개를 공백으로 구분해 입력받아, **중복을 제거** 한 뒤 **알파벳 순서대로 한 줄씩** 출력해요.\n\n예: 입력 `cherry apple banana apple cherry` → 출력\n```\napple\nbanana\ncherry\n```\n\n💡 set 에 넣기만 하면 중복 제거 + 자동 정렬이 한 방에!",
+          guide: "set에 insert()로 단어를 넣으면 중복이 자동 제거되고, range-for 로 순회하면 알파벳 순서로 나와!",
+          hint: "1) for 5번: cin >> w; s.insert(w);\n2) for (auto w : s) cout << w << endl;",
           template: null,
+          stdin: "cherry apple banana apple cherry\n",
+          sampleInput: "cherry apple banana apple cherry",
           answer: "set<string> s;\nfor (int i = 0; i < 5; i++) {\n    string w;\n    cin >> w;\n    s.insert(w);\n}\nfor (auto w : s) {\n    cout << w << endl;\n}",
           alternateAnswers: [
             "set<string> s;\nfor(int i=0;i<5;i++){string w;cin>>w;s.insert(w);}\nfor(auto w:s)cout<<w<<endl;"
           ],
           expect: "apple\nbanana\ncherry",
           en: {
-            task: "Write from scratch! Read 5 words, remove duplicates\nthen print in alphabetical order (set auto-sorts!)",
-            guide: "Inserting words into a set automatically removes duplicates, and iterating gives them in alphabetical order!",
-            hint: "Insert each input word into the set with insert(), then iterate with range-for to print them!"
+            task: "Write from scratch! Read 5 words (space-separated), **remove duplicates**, then print **one per line in alphabetical order**.\n\nExample: input `cherry apple banana apple cherry` → output\n```\napple\nbanana\ncherry\n```\n\n💡 Inserting into a set both dedups and auto-sorts in one shot!",
+            guide: "Inserting words into a set automatically removes duplicates, and iterating with range-for gives them in alphabetical order!",
+            hint: "1) for 5 times: cin >> w; s.insert(w);\n2) for (auto w : s) cout << w << endl;"
           }
         }
       },

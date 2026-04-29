@@ -684,6 +684,26 @@ function PracticeStep({
         )}
       </p>
 
+      {/* 예시 입력 — 전체 코드 작성 시, sampleInput 또는 stdin 이 있으면 보여줌 */}
+      {isFullCode && result === "idle" && (() => {
+        const enSample = (content.en as { sampleInput?: string; stdin?: string } | undefined)
+        const sample = (isEn && enSample?.sampleInput) ? enSample.sampleInput
+          : (content as { sampleInput?: string }).sampleInput
+            ?? ((isEn && enSample?.stdin) ? enSample.stdin : (content as { stdin?: string }).stdin)
+        return sample && (
+          <div className="rounded-xl overflow-hidden border-2 border-sky-400 shadow-sm">
+            <div className="bg-sky-500 px-3 py-1.5 flex items-center gap-1.5">
+              <span className="text-[11px] text-white font-bold tracking-wide">
+                {isEn ? "▶ Sample input" : "▶ 예시 입력"}
+              </span>
+            </div>
+            <div className="bg-gray-900 px-4 py-3 font-mono text-base text-white whitespace-pre-wrap leading-7">
+              {sample}
+            </div>
+          </div>
+        )
+      })()}
+
       {/* 목표 출력 — 빈칸 연습이거나 expect가 정답과 같으면 숨김 (정답 노출 방지) */}
       {isFullCode && "expect" in content && displayExpect && result === "idle" &&
        "answer" in content && String(displayExpect).trim() !== String((isEn && enContent?.answer) ? enContent.answer : content.answer ?? "").trim() &&
