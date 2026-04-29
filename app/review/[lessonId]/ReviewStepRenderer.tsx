@@ -416,11 +416,13 @@ function PracticeStep({
   const isEn = curLang === "en"
 
   const isFullCode = content.template === null
-  // EN 템플릿 우선 사용 (없으면 KO fallback)
-  const enContent = content.en as { template?: string; answer?: string; alternateAnswers?: string[] } | undefined
+  // EN 템플릿/expect 우선 사용 (없으면 KO fallback)
+  const enContent = content.en as { template?: string; answer?: string; alternateAnswers?: string[]; expect?: string } | undefined
   const rawTemplateBase = (!isFullCode && isEn && enContent?.template)
     ? enContent.template
     : content.template
+  // EN 모드면 en.expect 우선 — 채점/표시 모두에 사용
+  const displayExpect = (isEn && enContent?.expect) ? enContent.expect : content.expect
   // { before, after } 객체 형식을 인라인 빈칸 문자열로 정규화
   const rawTemplate = (typeof rawTemplateBase === "object" && rawTemplateBase !== null && "before" in rawTemplateBase)
     ? `${(rawTemplateBase as { before: string; after: string }).before}___${(rawTemplateBase as { before: string; after: string }).after}`
@@ -474,9 +476,7 @@ function PracticeStep({
 
     // ── 출력 기반 채점: template=null + expect 있을 때 ──────────────
     if (isFullCode && content.expect) {
-      // EN 모드면 en.expect 우선 사용 (한글 출력을 영문으로 번역해 둔 경우)
-      const enExpect = (content.en as { expect?: string } | undefined)?.expect
-      const expectedOut = String((isEn && enExpect) ? enExpect : content.expect).trim()
+      const expectedOut = String(displayExpect).trim()
 
       // Python: 자체 runner로 실행 후 출력 비교
       // (runner가 제한적이므로 텍스트 비교를 안전망으로 사용)
@@ -672,9 +672,9 @@ function PracticeStep({
       </p>
 
       {/* 목표 출력 — 빈칸 연습이거나 expect가 정답과 같으면 숨김 (정답 노출 방지) */}
-      {isFullCode && "expect" in content && content.expect && result === "idle" &&
-       "answer" in content && String(content.expect).trim() !== String(content.answer ?? "").trim() &&
-       !task?.includes("↓") && !task?.includes(String(content.expect)) && (
+      {isFullCode && "expect" in content && displayExpect && result === "idle" &&
+       "answer" in content && String(displayExpect).trim() !== String((isEn && enContent?.answer) ? enContent.answer : content.answer ?? "").trim() &&
+       !task?.includes("↓") && !task?.includes(String(displayExpect)) && (
         <div className="rounded-xl overflow-hidden border-2 border-emerald-400 shadow-sm">
           <div className="bg-emerald-500 px-3 py-1.5 flex items-center gap-1.5">
             <span className="text-[11px] text-white font-bold tracking-wide">
@@ -682,7 +682,7 @@ function PracticeStep({
             </span>
           </div>
           <div className="bg-gray-900 px-4 py-3 font-mono text-base font-bold text-white whitespace-pre-wrap leading-7">
-            {String(content.expect)}
+            {String(displayExpect)}
           </div>
         </div>
       )}
@@ -873,8 +873,8 @@ function PracticeStep({
       {result === "correct" && (
         <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3">
           <p className="text-emerald-700 font-bold text-sm">✅ {t("정답!", "Correct!")}</p>
-          {content.expect && (
-            <pre className="mt-1 font-mono text-xs text-emerald-800 whitespace-pre-wrap">{content.expect}</pre>
+          {displayExpect && (
+            <pre className="mt-1 font-mono text-xs text-emerald-800 whitespace-pre-wrap">{displayExpect}</pre>
           )}
         </div>
       )}
@@ -888,9 +888,9 @@ function PracticeStep({
               <pre className="font-mono text-xs text-red-700 bg-red-100 rounded px-2 py-1.5 whitespace-pre-wrap">
                 {actualOutput || t("(출력 없음)", "(no output)")}
               </pre>
-              {content.expect && !actualOutput.startsWith("컴파일 에러") && !actualOutput.startsWith("오류") && (
+              {displayExpect && !actualOutput.startsWith("컴파일 에러") && !actualOutput.startsWith("오류") && (
                 <p className="text-xs text-red-400 mt-1">
-                  {t("예상 출력:", "Expected:")} <code className="font-mono bg-red-100 px-1 rounded">{String(content.expect)}</code>
+                  {t("예상 출력:", "Expected:")} <code className="font-mono bg-red-100 px-1 rounded">{String(displayExpect)}</code>
                 </p>
               )}
             </div>
