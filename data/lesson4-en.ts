@@ -62,7 +62,7 @@ print(2 ** 3)   # Exponent → 8
           type: "tryit",
           title: "🖥️ Try It!",
           task: "Print the remainder of 17 divided by 5!",
-          initialCode: "# Use the % operator for remainder\nprint(17 ___ 5)",
+          initialCode: "# Recall the operator that returns the remainder of a division\nprint(17 ___ 5)",
           expectedOutput: "2",
           hint: "Use the % symbol for remainder",
           hint2: "print(17 % 5)"

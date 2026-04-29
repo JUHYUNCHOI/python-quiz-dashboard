@@ -62,7 +62,7 @@ print(2 ** 3)   # 거듭제곱 → 8
           type: "tryit",
           title: "🖥️ 직접 해보기!",
           task: "17을 5로 나눈 나머지를 출력하세요!",
-          initialCode: "# 나머지 연산자 %를 사용하세요\nprint(17 ___ 5)",
+          initialCode: "# 나눗셈 결과의 나머지를 구하는 연산자를 떠올려봐!\nprint(17 ___ 5)",
           expectedOutput: "2",
           hint: "나머지는 % 기호예요",
           hint2: "print(17 % 5)"
