@@ -607,6 +607,8 @@ export const lessonCpp16: LessonData = {
           template: "vector<string> words = {\"apple\",\"banana\",\"apple\",\"cherry\",\"apple\"};\nmap<string, int> freq;\nfor (___ w : words) {\n    ___[w]++;\n}\ncout << freq[\"apple\"] << endl;",
           blanksAnswer: ["auto", "freq"],
           answer: "vector<string> words = {\"apple\",\"banana\",\"apple\",\"cherry\",\"apple\"};\nmap<string, int> freq;\nfor (auto w : words) {\n    freq[w]++;\n}\ncout << freq[\"apple\"] << endl;",
+          // 빈칸은 inputs.join(", ") 로 비교됨 — auto& / const auto& 도 허용 (더 좋은 답)
+          alternateAnswers: ["auto&, freq", "const auto&, freq"],
           expect: "3",
           en: {
             task: "Count word frequencies using a map and print how many times \"apple\" appears",
