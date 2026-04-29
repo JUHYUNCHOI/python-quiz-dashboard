@@ -474,6 +474,43 @@ Alice is 15 years old`
           explanation: "to_string(100) gives \"100\" and to_string(200) gives \"200\". String + string means concatenation, so the result is \"100200\"!"
         },
         {
+          id: "ch3-cheatsheet",
+          type: "explain",
+          title: "📋 string commands at a glance",
+          content: `Keep this open while solving problems.
+
+### 🧰 Most-used string commands
+
+| Command | What it does |
+|---|---|
+| \`s.length()\` / \`s.size()\` | Length |
+| \`s.empty()\` | Is it empty? |
+| \`s[i]\` | i-th character |
+| \`s + t\` / \`s += t\` | Concatenate |
+| \`s.substr(pos, len)\` | Substring |
+| \`s.find(t)\` | Find position (\`string::npos\` if missing) |
+| \`s.replace(pos, len, t)\` | Replace |
+| \`s.insert(pos, t)\` | Insert |
+| \`s.erase(pos, len)\` | Erase |
+| \`stoi(s)\` / \`stod(s)\` | Parse number |
+| \`to_string(n)\` | Number → string |
+| \`getline(cin, s)\` | Read whole line |
+
+### 🔁 Iteration
+
+\`\`\`cpp
+for (char c : s) cout << c;
+for (int i = 0; i < (int)s.length(); i++) cout << s[i];
+\`\`\`
+
+> 💡 Single char uses \`'a'\` (single quotes); string uses \`"a"\` (double). Mixing them won't compile!
+
+---
+
+> 📌 **Full STL cheatsheet (downloadable as PDF):**
+> 👉 [**Open \`/reference/cpp-stl#string\`**](/reference/cpp-stl#string)`
+        },
+        {
           id: "ch3-summary",
           type: "explain",
           title: "🎯 What You Learned Today!",

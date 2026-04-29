@@ -1067,6 +1067,48 @@ cout << v[2] << " " << v.size();
           explanation: "v.at(i) throws an exception if out of bounds! Safer than v[i]."
         },
         {
+          id: "ch3-cheatsheet",
+          type: "explain",
+          title: "📋 vector commands at a glance",
+          content: `Keep this open while solving problems.
+
+### 🧰 Most-used vector commands
+
+| Command | What it does |
+|---|---|
+| \`v.push_back(x)\` | Add x to end |
+| \`v.pop_back()\` | Remove last |
+| \`v.size()\` | Number of elements |
+| \`v.empty()\` | Is it empty? |
+| \`v[i]\` / \`v.at(i)\` | i-th element (at bounds-checks) |
+| \`v.front()\` / \`v.back()\` | First / last element |
+| \`v.clear()\` | Remove all |
+
+### 📦 Declaration
+
+\`\`\`cpp
+vector<int> v;                    // empty
+vector<int> v(5);                 // size 5, filled with 0
+vector<int> v = {1, 2, 3};        // initial values
+vector<vector<int>> g(n, vector<int>(m, 0));  // 2D
+\`\`\`
+
+### 🔁 Iteration
+
+\`\`\`cpp
+for (int x : v) cout << x;          // by value
+for (auto& x : v) x *= 2;            // by reference (mutable)
+for (int i = 0; i < (int)v.size(); i++) ... // with index
+\`\`\`
+
+---
+
+> 📌 **Full STL cheatsheet (downloadable as PDF):**
+> 👉 [**Open \`/reference/cpp-stl\`**](/reference/cpp-stl#vector)
+>
+> vector / string / map / set / stack / queue and more on one page. Print it for your desk, or save as PDF to keep on a second monitor while coding.`
+        },
+        {
           id: "ch3-summary",
           type: "explain",
           title: "🎯 What You Learned Today!",

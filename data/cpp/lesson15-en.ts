@@ -793,6 +793,49 @@ else cout << "B";
           explanation: "pair comparison checks first values first. Both have first = 1, so it compares second values. 10 > 5, so a > b is true! A is printed."
         },
         {
+          id: "ch2-cheatsheet",
+          type: "explain",
+          title: "📋 pair / tuple commands at a glance",
+          content: `Keep this open while solving problems.
+
+### 🧰 Most-used pair / tuple commands
+
+| Command | What it does |
+|---|---|
+| \`p.first\` / \`p.second\` | Two values of pair |
+| \`get<0>(t)\`, \`get<1>(t)\` | i-th value of tuple |
+| \`auto [a, b] = p;\` | Structured binding (C++17) |
+| \`auto& [a, b] = p;\` | Bind by reference — mutable |
+| \`p1 < p2\` | Lexicographic compare (first then second) |
+| \`tie(a, b) = p;\` | Unpack tuple (C++11) |
+| \`make_pair(a, b)\` | Build pair (type inference) |
+
+### 📦 Declaration
+
+\`\`\`cpp
+pair<int, string> p = {1, "Alice"};
+pair<int, int> coord(3, 5);
+tuple<int, string, double> t = {1, "Bob", 95.5};
+auto p = make_pair(1, "Alice");
+\`\`\`
+
+### 🔁 Iterating vector<pair>
+
+\`\`\`cpp
+vector<pair<int, string>> people;
+for (auto& [age, name] : people) {
+    cout << name << " is " << age << "\\n";
+}
+\`\`\`
+
+> 💡 pair sorts by first then second automatically — handy with \`sort()\`.
+
+---
+
+> 📌 **Full STL cheatsheet (downloadable as PDF):**
+> 👉 [**Open \`/reference/cpp-stl#pair\`**](/reference/cpp-stl#pair)`
+        },
+        {
           id: "ch2-summary",
           type: "explain",
           title: "🎉 Lesson Summary!",

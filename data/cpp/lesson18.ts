@@ -812,6 +812,64 @@ while (!q.empty()) {
 > 💡 실제 알고리즘 (그래프 탐색, 최단 경로 등) 에서 어떻게 쓰는지는 **알고리즘 랩** 에서 자세히 다뤄요. 여기서는 *도구를 손에 익히는* 게 목적.`
         },
         {
+          id: "ch3-cheatsheet",
+          type: "explain",
+          title: "📋 stack / queue / priority_queue 명령어 한눈에",
+          content: `시험이나 문제 풀 때 옆에 띄워놓고 보세요.
+
+### 📚 stack (LIFO)
+
+| 명령 | 하는 일 |
+|---|---|
+| \`st.push(x)\` | x 위에 쌓기 |
+| \`st.top()\` | 맨 위 값 (제거 X) |
+| \`st.pop()\` | 맨 위 제거 (값 안 줌!) |
+| \`st.size()\` / \`st.empty()\` | 개수 / 비었나? |
+
+> ⚠️ 값을 쓰려면 항상 \`top()\` → \`pop()\` 두 줄.
+
+### 🚶 queue (FIFO)
+
+| 명령 | 하는 일 |
+|---|---|
+| \`q.push(x)\` | 뒤에 추가 |
+| \`q.front()\` / \`q.back()\` | 앞/뒤 값 (제거 X) |
+| \`q.pop()\` | 앞에서 제거 |
+| \`q.size()\` / \`q.empty()\` | 개수 / 비었나? |
+
+### ⛰️ priority_queue (힙)
+
+| 명령 | 하는 일 |
+|---|---|
+| \`pq.push(x)\` | 추가 |
+| \`pq.top()\` | 최댓값 (또는 최솟값) 보기 |
+| \`pq.pop()\` | 최댓값 (또는 최솟값) 제거 |
+| \`pq.size()\` / \`pq.empty()\` | 개수 / 비었나? |
+
+### 📦 선언
+
+\`\`\`cpp
+stack<int> st;
+queue<int> q;
+priority_queue<int> pq;                              // max-heap
+priority_queue<int, vector<int>, greater<int>> pq;   // min-heap
+\`\`\`
+
+### 🔁 비울 때까지 처리하기
+
+\`\`\`cpp
+while (!st.empty()) {
+    int x = st.top(); st.pop();
+    // 처리...
+}
+\`\`\`
+
+---
+
+> 📌 **전체 STL 치트시트 (PDF 다운로드 가능):**
+> 👉 [**\`/reference/cpp-stl#stack\` 에서 보기**](/reference/cpp-stl#stack)`
+        },
+        {
           id: "ch3-summary",
           type: "explain",
           title: "🎉 레슨 18 완료!",

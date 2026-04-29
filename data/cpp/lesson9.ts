@@ -1186,6 +1186,48 @@ cout << v[2] << " " << v.size();
           explanation: "v.at(i)는 범위를 벗어나면 에러(exception)를 던져요! v[i]보다 안전해요."
         },
         {
+          id: "ch3-cheatsheet",
+          type: "explain",
+          title: "📋 vector 명령어 한눈에",
+          content: `시험이나 문제 풀 때 옆에 띄워놓고 보세요.
+
+### 🧰 vector 자주 쓰는 명령어
+
+| 명령 | 하는 일 |
+|---|---|
+| \`v.push_back(x)\` | 끝에 x 추가 |
+| \`v.pop_back()\` | 끝 원소 제거 |
+| \`v.size()\` | 원소 개수 |
+| \`v.empty()\` | 비었나? |
+| \`v[i]\` / \`v.at(i)\` | i 번째 원소 (at 은 범위 체크) |
+| \`v.front()\` / \`v.back()\` | 첫/마지막 원소 |
+| \`v.clear()\` | 전부 제거 |
+
+### 📦 선언
+
+\`\`\`cpp
+vector<int> v;                    // 빈 벡터
+vector<int> v(5);                 // 크기 5, 0 으로 채움
+vector<int> v = {1, 2, 3};        // 초기값
+vector<vector<int>> g(n, vector<int>(m, 0));  // 2D
+\`\`\`
+
+### 🔁 순회
+
+\`\`\`cpp
+for (int x : v) cout << x;          // 값 복사
+for (auto& x : v) x *= 2;            // 참조로 수정
+for (int i = 0; i < (int)v.size(); i++) ... // 인덱스
+\`\`\`
+
+---
+
+> 📌 **전체 STL 치트시트 (PDF 다운로드 가능):**
+> 👉 [**\`/reference/cpp-stl\` 페이지에서 보기**](/reference/cpp-stl#vector)
+>
+> vector / string / map / set / stack / queue 등 자주 쓰는 컨테이너 한 페이지에 모아놨어요. 인쇄해서 책상 옆에 붙여놓아도 좋고, PDF 로 저장해서 코드 짤 때 옆 모니터에 띄워놓아도 좋아요.`
+        },
+        {
           id: "ch3-summary",
           type: "explain",
           title: "🎯 오늘 배운 것!",

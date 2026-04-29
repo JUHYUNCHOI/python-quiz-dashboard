@@ -794,6 +794,49 @@ else cout << "B";
           explanation: "pair 비교는 first를 먼저 비교해요. 둘 다 first가 1로 같으니 second를 비교해요. 10 > 5이므로 a > b는 true! A가 출력돼요."
         },
         {
+          id: "ch2-cheatsheet",
+          type: "explain",
+          title: "📋 pair / tuple 명령어 한눈에",
+          content: `시험이나 문제 풀 때 옆에 띄워놓고 보세요.
+
+### 🧰 pair / tuple 자주 쓰는 명령어
+
+| 명령 | 하는 일 |
+|---|---|
+| \`p.first\` / \`p.second\` | pair 의 두 값 |
+| \`get<0>(t)\`, \`get<1>(t)\` | tuple 의 i 번째 값 |
+| \`auto [a, b] = p;\` | 구조 분해 (C++17) |
+| \`auto& [a, b] = p;\` | 참조로 분해 — 수정 가능 |
+| \`p1 < p2\` | 사전식 비교 (first 먼저, 같으면 second) |
+| \`tie(a, b) = p;\` | tuple 분해 (C++11) |
+| \`make_pair(a, b)\` | pair 만들기 (타입 추론) |
+
+### 📦 선언
+
+\`\`\`cpp
+pair<int, string> p = {1, "Alice"};
+pair<int, int> coord(3, 5);
+tuple<int, string, double> t = {1, "Bob", 95.5};
+auto p = make_pair(1, "Alice");
+\`\`\`
+
+### 🔁 vector<pair> 순회
+
+\`\`\`cpp
+vector<pair<int, string>> people;
+for (auto& [age, name] : people) {
+    cout << name << " is " << age << "\\n";
+}
+\`\`\`
+
+> 💡 pair 는 자동으로 first 기준 정렬됨 — \`sort()\` 와 함께 쓰면 편해요.
+
+---
+
+> 📌 **전체 STL 치트시트 (PDF 다운로드 가능):**
+> 👉 [**\`/reference/cpp-stl#pair\` 에서 보기**](/reference/cpp-stl#pair)`
+        },
+        {
           id: "ch2-summary",
           type: "explain",
           title: "🎉 오늘 배운 것 정리!",

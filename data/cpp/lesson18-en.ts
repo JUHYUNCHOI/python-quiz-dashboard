@@ -812,6 +812,64 @@ These structures are *the tools of algorithms*:
 > 💡 How they're used in real algorithms (graph traversal, shortest path, etc.) is covered in **Algorithm Lab**. Here the goal is just to *get the tools into your hands*.`
         },
         {
+          id: "ch3-cheatsheet",
+          type: "explain",
+          title: "📋 stack / queue / priority_queue at a glance",
+          content: `Keep this open while solving problems.
+
+### 📚 stack (LIFO)
+
+| Command | What it does |
+|---|---|
+| \`st.push(x)\` | Push x on top |
+| \`st.top()\` | Peek top (no remove) |
+| \`st.pop()\` | Pop top (returns nothing!) |
+| \`st.size()\` / \`st.empty()\` | Size / empty? |
+
+> ⚠️ To use the value, always \`top()\` then \`pop()\` — two lines.
+
+### 🚶 queue (FIFO)
+
+| Command | What it does |
+|---|---|
+| \`q.push(x)\` | Push to back |
+| \`q.front()\` / \`q.back()\` | Peek front/back (no remove) |
+| \`q.pop()\` | Pop from front |
+| \`q.size()\` / \`q.empty()\` | Size / empty? |
+
+### ⛰️ priority_queue (heap)
+
+| Command | What it does |
+|---|---|
+| \`pq.push(x)\` | Push |
+| \`pq.top()\` | Peek max (or min) |
+| \`pq.pop()\` | Pop max (or min) |
+| \`pq.size()\` / \`pq.empty()\` | Size / empty? |
+
+### 📦 Declaration
+
+\`\`\`cpp
+stack<int> st;
+queue<int> q;
+priority_queue<int> pq;                              // max-heap
+priority_queue<int, vector<int>, greater<int>> pq;   // min-heap
+\`\`\`
+
+### 🔁 Drain until empty
+
+\`\`\`cpp
+while (!st.empty()) {
+    int x = st.top(); st.pop();
+    // process...
+}
+\`\`\`
+
+---
+
+> 📌 **Full STL cheatsheet (downloadable as PDF):**
+> 👉 [**Open \`/reference/cpp-stl#stack\`**](/reference/cpp-stl#stack)`
+        },
+        {
           id: "ch3-summary",
           type: "explain",
           title: "🎉 Lesson 18 Complete!",

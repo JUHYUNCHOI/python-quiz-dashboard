@@ -954,7 +954,16 @@ v.erase(unique(v.begin(), v.end()), v.end());
 | 빠른 추가/검색 + 정렬된 순서 | **set** |
 | 한 번만 정리 + 인덱스 접근 | **vector + sort + unique** |
 
-> 💡 간단 규칙: "**수집 중인 자료구조** 라면 \`(unordered_)set\`, *결과물 / 인덱스 필요* 라면 \`vector\`". 알고리즘 대회에서 셋 다 자주 등장.`
+---
+
+### 📌 지금은 이렇게만 기억해도 OK
+
+> **"중복 없는 모음이 필요하면 \`set\` / \`unordered_set\` 둘 중 하나"** — 이거 하나만 챙겨가도 충분해요.
+>
+> \`vector + sort + unique\` 는 **나중에 USACO 같은 대회 문제에서 "정렬된 결과를 인덱스로 접근하고 싶을 때"** 꺼내는 카드예요. 지금은 "이런 방법도 있구나" 정도로만 알아두고, 실제로 필요해질 때 다시 만나게 될 거예요.
+>
+> 🎯 **외울 것 (지금):** \`set\`, \`unordered_set\` 사용법
+> 📖 **참고만 (나중에):** \`vector + sort + unique\``
         },
         {
           id: "ch2-fb1",
@@ -1195,6 +1204,51 @@ for (auto& x : s) {
           ],
           answer: 1,
           explanation: "set은 원소를 자동 정렬해요! 문자열도 알파벳 순서로 정렬되니까 apple → banana → cherry 순서로 출력돼요."
+        },
+        {
+          id: "ch6-cheatsheet",
+          type: "explain",
+          title: "📋 map & set 명령어 한눈에",
+          content: `시험이나 문제 풀 때 옆에 띄워놓고 보세요.
+
+### 🗺️ map / unordered_map
+
+| 명령 | 하는 일 |
+|---|---|
+| \`m["key"] = val\` | 추가/덮어쓰기 (⚠️ 없는 key 읽어도 자동 생성) |
+| \`m.insert({k, v})\` | 추가 (이미 있으면 무시) |
+| \`m.count(key)\` | ✅ 안전한 존재 확인 (1 또는 0) |
+| \`m.find(key)\` | iterator (없으면 \`m.end()\`) |
+| \`m.at(key)\` | ✅ 값 반환 — 없으면 예외 |
+| \`m.erase(key)\` | key 삭제 |
+| \`m.size()\` / \`m.empty()\` | 개수 / 비었나? |
+
+> 💡 정렬 순서 필요 없으면 \`unordered_map\` 이 평균 O(1) 로 더 빠름.
+
+### 🎯 set / unordered_set
+
+| 명령 | 하는 일 |
+|---|---|
+| \`s.insert(x)\` | 추가 (중복 무시) |
+| \`s.count(x)\` | 있으면 1, 없으면 0 |
+| \`s.find(x)\` | iterator (없으면 \`s.end()\`) |
+| \`s.erase(x)\` | x 삭제 |
+| \`*s.begin()\` / \`*s.rbegin()\` | 최솟값 / 최댓값 (set 만) |
+| \`s.lower_bound(x)\` / \`s.upper_bound(x)\` | x 이상 / x 초과 첫 원소 (set 만) |
+
+### 🔁 순회 (C++17 구조 분해)
+
+\`\`\`cpp
+for (auto& [key, val] : m) {
+    cout << key << " -> " << val << "\\n";
+}
+for (int x : s) cout << x << " ";    // set 은 자동 오름차순
+\`\`\`
+
+---
+
+> 📌 **전체 STL 치트시트 (PDF 다운로드 가능):**
+> 👉 [**\`/reference/cpp-stl#map\` 에서 보기**](/reference/cpp-stl#map)`
         },
         {
           id: "ch6-summary",

@@ -868,6 +868,14 @@ export default function CurriculumPage() {
                   <p className="text-gray-600 text-sm sm:text-base">
                     {isPseudo ? t("수도코드, SQL, Logic Gates까지! 📄", "Pseudocode, SQL, Logic Gates & more! 📄") : isCpp ? t("파이썬을 아는 학생을 위한 C++ 입문! ⚡", "C++ for Python students! ⚡") : t("웹에서 바로 배우는 파이썬! 🚀", "Learn Python on the web! 🚀")}
                   </p>
+                  {isCpp && (
+                    <Link
+                      href="/reference/cpp-stl"
+                      className="inline-flex items-center gap-1.5 mt-2 px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-xs font-bold text-blue-700 border border-blue-200 transition-colors"
+                    >
+                      📋 {t("STL 치트시트 보기 / PDF 다운로드", "STL Cheatsheet / Download PDF")}
+                    </Link>
+                  )}
                 </div>
               </div>
               

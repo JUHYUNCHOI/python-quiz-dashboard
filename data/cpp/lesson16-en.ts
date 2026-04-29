@@ -954,7 +954,16 @@ v.erase(unique(v.begin(), v.end()), v.end());
 | Fast insert/lookup + sorted order | **set** |
 | One-time cleanup + index access | **vector + sort + unique** |
 
-> 💡 Quick rule: "*data structure you're building up* → \`(unordered_)set\`. *Final result / index needed* → \`vector\`." All three show up often in competitive programming.`
+---
+
+### 📌 For now, just remember this
+
+> **"Need a unique collection? Use \`set\` or \`unordered_set\`"** — that one rule is enough to get going.
+>
+> \`vector + sort + unique\` is a card you'll pull out **later in USACO-style problems when you need sorted results with index access**. For now, just know it exists — you'll meet it again when you actually need it.
+>
+> 🎯 **Memorize (now):** how to use \`set\`, \`unordered_set\`
+> 📖 **Reference (later):** \`vector + sort + unique\``
         },
         {
           id: "ch2-fb1",
@@ -1194,6 +1203,51 @@ for (auto& x : s) {
           ],
           answer: 1,
           explanation: "set auto-sorts its elements! Strings are sorted alphabetically: apple → banana → cherry."
+        },
+        {
+          id: "ch6-cheatsheet",
+          type: "explain",
+          title: "📋 map & set commands at a glance",
+          content: `Keep this open while solving problems.
+
+### 🗺️ map / unordered_map
+
+| Command | What it does |
+|---|---|
+| \`m["key"] = val\` | Insert / overwrite (⚠️ auto-creates missing key) |
+| \`m.insert({k, v})\` | Insert (no overwrite if exists) |
+| \`m.count(key)\` | ✅ Safe existence check (1 or 0) |
+| \`m.find(key)\` | Iterator (\`m.end()\` if missing) |
+| \`m.at(key)\` | ✅ Returns value — throws if missing |
+| \`m.erase(key)\` | Erase key |
+| \`m.size()\` / \`m.empty()\` | Size / empty? |
+
+> 💡 Don't need sorted order? \`unordered_map\` is O(1) avg — faster.
+
+### 🎯 set / unordered_set
+
+| Command | What it does |
+|---|---|
+| \`s.insert(x)\` | Insert (duplicates ignored) |
+| \`s.count(x)\` | 1 if present, 0 if not |
+| \`s.find(x)\` | Iterator (\`s.end()\` if missing) |
+| \`s.erase(x)\` | Erase x |
+| \`*s.begin()\` / \`*s.rbegin()\` | Min / max (set only) |
+| \`s.lower_bound(x)\` / \`s.upper_bound(x)\` | First ≥ x / first > x (set only) |
+
+### 🔁 Iteration (C++17 structured binding)
+
+\`\`\`cpp
+for (auto& [key, val] : m) {
+    cout << key << " -> " << val << "\\n";
+}
+for (int x : s) cout << x << " ";    // set iterates ascending
+\`\`\`
+
+---
+
+> 📌 **Full STL cheatsheet (downloadable as PDF):**
+> 👉 [**Open \`/reference/cpp-stl#map\`**](/reference/cpp-stl#map)`
         },
         {
           id: "ch6-summary",
