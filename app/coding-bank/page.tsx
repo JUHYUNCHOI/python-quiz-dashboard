@@ -81,13 +81,13 @@ function LockScreen({ t }: { t: (ko: string, en: string) => string }) {
         </h2>
         <p className="text-gray-500 text-sm mt-2 max-w-xs mx-auto">
           {t(
-            "C++ Part 3 프로젝트(cpp-p3)를 완료하면 잠금이 해제됩니다.",
-            "Complete the C++ Part 3 project (cpp-p3) to unlock Coding Bank."
+            "map & set 레슨(cpp-16)을 완료하면 잠금이 해제됩니다.",
+            "Complete the map & set lesson (cpp-16) to unlock Coding Bank."
           )}
         </p>
       </div>
       <div className="rounded-xl border-2 border-black bg-yellow-50 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] px-5 py-3 text-sm font-semibold text-gray-800">
-        🔒 cpp-p3 {t("완료 후 해금", "required to unlock")}
+        🔒 cpp-16 {t("완료 후 해금", "required to unlock")}
       </div>
     </div>
   )
@@ -339,7 +339,7 @@ function ProblemDetail({
   const adaptedProblem: PracticeProblem = {
     id: problem.id,
     cluster: "coding-bank",
-    unlockAfter: "cpp-p3",
+    unlockAfter: "cpp-16",
     difficulty: problem.difficulty,
     title: problem.title,
     description: "",
@@ -597,7 +597,7 @@ function CodingBankContent() {
       const completed = JSON.parse(
         localStorage.getItem("completedLessons") || "[]"
       ) as string[]
-      setIsUnlocked(completed.includes("cpp-p3") || isTeacher)
+      setIsUnlocked(completed.includes("cpp-16") || completed.includes("cpp-p3") || isTeacher)
     } catch {
       setIsUnlocked(isTeacher)
     }

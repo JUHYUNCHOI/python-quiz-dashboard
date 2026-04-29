@@ -239,8 +239,8 @@ export default function CurriculumPage() {
         { id: "cpp-15", title: t("17. pair & tuple", "17. pair & tuple"), description: t("두 값을 묶는 상자 — .first/.second 접근", "Bundle two values — .first/.second access"), duration: t("20분", "20 min"), hasQuiz: true },
         { id: "cpp-23", title: t("18. sort 마스터", "18. sort Master"), description: t("sort(), 람다로 커스텀 정렬, stable_sort", "sort(), custom sorting with lambda, stable_sort"), duration: t("25분", "25 min"), hasQuiz: true },
         { id: "cpp-16", title: "19. map & set", description: t("key-value 저장, 자동 정렬 컨테이너", "Key-value storage, auto-sorted containers"), duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "cpp-17", title: t("20. STL 탐색 함수", "20. STL Search Functions"), description: t("find, count_if, accumulate — 반복자 활용", "find, count_if, accumulate — using iterators"), duration: t("25분", "25 min"), hasQuiz: true },
-        { id: "cpp-18", title: t("21. stack & queue", "21. stack & queue"), description: t("LIFO/FIFO 자료구조, deque", "LIFO/FIFO data structures, deque"), duration: t("25분", "25 min"), hasQuiz: true },
+        { id: "cpp-17", title: t("20. STL 탐색 함수 📌 참고용", "20. STL Search Functions 📌 Reference"), description: t("이미 다른 레슨에서 대부분 다룸 — 정리/심화로 보면 OK", "Mostly covered in earlier lessons — view as a recap/extension"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
+        { id: "cpp-18", title: t("21. stack & queue 📌 참고용", "21. stack & queue 📌 Reference"), description: t("Algorithm Lab 의 BFS/DFS 시작 직전에 돌아와서 보기", "Come back here right before starting BFS/DFS in Algorithm Lab"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
         { id: "cpp-19", title: t("22. 파일 I/O & Fast I/O 📌 참고용", "22. File I/O & Fast I/O 📌 Reference"), description: t("나중에 필요할 때 돌아오기 — 지금 건너뛰어도 OK", "Come back when needed — fine to skip for now"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
         { id: "cpp-20", title: t("23. CP 실전 팁 📌 참고용", "23. CP Practical Tips 📌 Reference"), description: t("나중에 필요할 때 돌아오기 — 지금 건너뛰어도 OK", "Come back when needed — fine to skip for now"), duration: t("25분", "25 min"), hasQuiz: true, optional: true },
         { id: "cpp-p3", title: t("🏆 USACO 모의전 (Part 3 종합)", "🏆 USACO Mock Contest (Part 3 Capstone)"), description: t("pair / sort / map / stack — 3 문제로 진짜 USACO 풀이 체험", "pair / sort / map / stack — 3 problems for real USACO experience"), duration: t("30분", "30 min"), isProject: true },
@@ -696,6 +696,16 @@ export default function CurriculumPage() {
   }
 
   const getNextLesson = () => {
+    // 1차 패스: optional 레슨은 건너뜀 (메인 트랙 우선)
+    for (const part of curriculumData) {
+      for (const lesson of part.lessons) {
+        if (lesson.optional) continue
+        if (!completedLessons.has(lesson.id)) {
+          return { lesson, part }
+        }
+      }
+    }
+    // 2차 패스: 메인 트랙 다 끝났으면 그제야 optional 도 추천
     for (const part of curriculumData) {
       for (const lesson of part.lessons) {
         if (!completedLessons.has(lesson.id)) {
@@ -869,12 +879,20 @@ export default function CurriculumPage() {
                     {isPseudo ? t("수도코드, SQL, Logic Gates까지! 📄", "Pseudocode, SQL, Logic Gates & more! 📄") : isCpp ? t("파이썬을 아는 학생을 위한 C++ 입문! ⚡", "C++ for Python students! ⚡") : t("웹에서 바로 배우는 파이썬! 🚀", "Learn Python on the web! 🚀")}
                   </p>
                   {isCpp && (
-                    <Link
-                      href="/reference/cpp-stl"
-                      className="inline-flex items-center gap-1.5 mt-2 px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-xs font-bold text-blue-700 border border-blue-200 transition-colors"
-                    >
-                      📋 {t("STL 치트시트 보기 / PDF 다운로드", "STL Cheatsheet / Download PDF")}
-                    </Link>
+                    <div className="mt-2 flex flex-wrap items-center gap-2">
+                      <Link
+                        href="/reference/cpp-stl"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-xs font-bold text-blue-700 border border-blue-200 transition-colors"
+                      >
+                        📋 {t("STL 치트시트 / PDF 다운로드", "STL Cheatsheet / Download PDF")}
+                      </Link>
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 text-xs font-bold text-amber-800 border border-amber-200">
+                        🎯 {t("메인 트랙: cpp-1 ~ cpp-16 + 정렬", "Main track: cpp-1 ~ cpp-16 + sort")}
+                      </span>
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-50 text-xs font-bold text-gray-600 border border-gray-200">
+                        📌 {t("참고 트랙: cpp-17 ~ 20 (필요할 때)", "Reference: cpp-17 ~ 20 (as needed)")}
+                      </span>
+                    </div>
                   )}
                 </div>
               </div>
