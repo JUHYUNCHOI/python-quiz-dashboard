@@ -587,7 +587,9 @@ int main() {
           id: "ch2-intro",
           type: "explain",
           title: "🎯 Why we need faster search — binary_search concept",
-          content: `Imagine searching for one student ID in a list of 1,000,000 students. With \`find()\`, what happens?
+          content: `> 📌 **Seen this before?** Binary search was covered in depth in **Lesson 18 (sort mastery)** ch2 — the \`binary_search\` / \`lower_bound\` / \`upper_bound\` trio, how they work, and the off-by-one traps. This chapter pairs it with \`find()\` so you see **the whole STL search toolbox** together. The sort lesson is where the deep practice lives.
+
+Imagine searching for one student ID in a list of 1,000,000 students. With \`find()\`, what happens?
 
 \`find()\` checks **one by one from the front**. Worst case: 1 million comparisons. Heavy work even for a computer.
 
