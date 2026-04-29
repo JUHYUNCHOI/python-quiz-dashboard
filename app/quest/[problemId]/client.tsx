@@ -117,6 +117,12 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
     setLockChecked(true)
   }, [profile, router])
 
+  // ⚠️ 모든 hook 호출은 early return 앞에 있어야 함 (Rules of Hooks).
+  // useQuestSolved 가 아래에 있던 시절: lockChecked=false → return null → hook 개수
+  // 줄어듦 → "change in the order of Hooks" 에러 발생. 위로 끌어올려서 매 렌더
+  // 동일하게 호출되도록 보장.
+  const { solved, markSolved } = useQuestSolved(problemId)
+
   if (!lockChecked) return null
 
   // Sync synchronously so lazy-loaded App components initialize with correct lang
@@ -127,7 +133,6 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
   const idx = PROBLEM_INDEX.get(problemId) ?? -1
   const prevProblem = idx > 0 ? ALL_PROBLEMS[idx - 1] : null
   const nextProblem = idx < ALL_PROBLEMS.length - 1 ? ALL_PROBLEMS[idx + 1] : null
-  const { solved, markSolved } = useQuestSolved(problemId)
 
   if (!meta) {
     return (
