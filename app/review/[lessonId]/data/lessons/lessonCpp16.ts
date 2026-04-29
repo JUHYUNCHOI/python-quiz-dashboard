@@ -584,15 +584,15 @@ export const lessonCpp16: LessonData = {
         type: "practice",
         content: {
           level: 1,
-          task: "map<string, int>을 선언하고 \"apple\"=3, \"banana\"=5를 넣고 \"apple\" 값을 출력해요",
-          guide: "map의 꺾쇠 안에 키 타입과 값 타입을 순서대로 넣고, []로 값을 읽어봐!",
+          task: "과일 이름 → 가격(정수) 을 저장하는 map 을 만들고, 두 과일을 넣은 뒤 사과의 가격을 출력해요.",
+          guide: "꺾쇠 < > 안에 키 타입과 값 타입을 순서대로! 가격이 정수면 값 타입은 뭘까요?",
           template: "map<string, ___> m;\nm[\"apple\"] = 3;\nm[\"banana\"] = 5;\ncout << m[___] << endl;",
           blanksAnswer: ["int", "\"apple\""],
           answer: "map<string, int> m;\nm[\"apple\"] = 3;\nm[\"banana\"] = 5;\ncout << m[\"apple\"] << endl;",
           expect: "3",
           en: {
-            task: "Declare map<string,int>, insert \"apple\"=3, \"banana\"=5, then print \"apple\" value",
-            guide: "Put the key type and value type in angle brackets in order, and use [] to read values!"
+            task: "Build a map of fruit name → price (integer). Insert two fruits, then print the apple's price.",
+            guide: "Inside <  >, put the key type then the value type. If prices are integers, what type goes there?"
           }
         }
       },
