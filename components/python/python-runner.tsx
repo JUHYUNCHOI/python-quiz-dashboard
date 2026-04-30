@@ -197,8 +197,10 @@ export function PythonRunner({
   // 줄 수 기반 minHeight 계산 (C++ runner 와 동일 패턴)
   // ⚠️ useEffect 로 style.height 동적 변경하면 두 레이어 어긋나 커서 정렬 깨짐.
   // 그래서 render 시점에 한 번 계산해서 두 레이어 style 에 동시 적용.
+  // minHeight prop 은 floor — 코드 줄 수가 많으면 그만큼 늘어남.
   const lineCount = useMemo(() => code.split("\n").length, [code])
-  const editorMinHeight = minHeight ?? `${Math.max(100, lineCount * 28 + 32)}px`
+  const minPx = minHeight ? parseInt(minHeight) : 100
+  const editorMinHeight = `${Math.max(minPx, lineCount * 28 + 32)}px`
 
   const runCode = useCallback(async () => {
     if (!isPyodideReady || !pyodideInstance) {
