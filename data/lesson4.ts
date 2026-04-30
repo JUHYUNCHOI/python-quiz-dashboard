@@ -261,10 +261,10 @@ print(0 < x < 10)   # True — 수학 부등식 그대로
           id: "try-chained",
           type: "tryit",
           title: "🖥️ 직접 해보기 — 점수 비교",
-          task: "점수가 60 점 이상인지, 100 점인지 두 가지를 따로 비교해서 True/False 출력!",
-          initialCode: "score = 75\n\n# 1) 60 점 이상인가? (>=)\npass_check = score ___ 60\n\n# 2) 100 점인가? (==)\nperfect = score ___ 100\n\nprint('합격선 통과?', pass_check)\nprint('만점?', perfect)",
+          task: "점수가 60 점 이상인지, 정확히 100 점인지 두 가지 비교를 한 후 True/False 를 출력하세요!",
+          initialCode: "score = 75\n\n# 60 점 이상인가?\npass_check = score __ 60\n\n# 정확히 100 점인가?\nperfect = score __ 100\n\nprint('합격선 통과?', pass_check)\nprint('만점?', perfect)",
           expectedOutput: "합격선 통과? True\n만점? False",
-          hint: ">= 와 == 두 비교 연산자 사용.",
+          hint: "'이상' 과 '같다' 비교에 쓰는 두 가지 연산자!",
           hint2: "pass_check = score >= 60\nperfect = score == 100"
         }
       ]
@@ -301,6 +301,58 @@ print(not True)        # False
           expectedOutput: "True",
           hint: "둘 다 True면 and 결과도 True!",
           hint2: "print((10 > 5) and (3 < 7))"
+        },
+        {
+          id: "is-not-explain",
+          type: "explain",
+          title: "🔎 \`is\`, \`is not\`, \`not\` — 또 다른 비교",
+          content: `### \`is\` / \`is not\` — '같은 것인가?' 검사
+
+\`==\` 가 **값이 같은지** 묻는다면, \`is\` 는 **완전히 같은 것인지** (같은 자리에 있는 그것인지) 검사해요.
+
+가장 자주 쓰는 곳: **\`None\` 인지 확인할 때**.
+
+\`\`\`python
+x = None
+
+print(x is None)        # True   ← 'x 가 None 이다' 검사 — 권장
+print(x is not None)    # False  ← 반대 — 'x 가 None 이 아니다'
+
+print(x == None)        # True 도 됨 — 다만 is 가 더 정확
+\`\`\`
+
+> 💡 **\`x is None\`** 가 파이썬 권장 스타일. \`== None\` 도 동작은 하지만 \`is None\` 이 더 명확.
+
+### \`not\` — 앞에 붙여서 뒤집기
+
+\`not\` 은 한 값 **앞에** 붙어서 True/False 를 뒤집어요.
+
+\`\`\`python
+print(not True)         # False
+print(not False)        # True
+print(not (5 > 3))      # False  ← 5 > 3 = True 의 반대
+\`\`\`
+
+### \`not in\` — 미리보기 (lesson 5+ 에서 자세히)
+
+문자열, 리스트 안에 **없는지** 검사. (in 의 반대)
+
+\`\`\`python
+print('a' not in 'hello')   # True   ← 'a' 없음
+print(7 not in [1, 2, 3])   # True   ← 7 없음
+\`\`\`
+
+> 🎯 정리: **is = '그 자체인가?', not = '반대', not in = 'in 의 반대'.**`
+        },
+        {
+          id: "try-is-not",
+          type: "tryit",
+          title: "🖥️ 직접 해보기 — None 검사 + 뒤집기",
+          task: "name 이 None 인지 검사하고, 그 결과를 한 번 뒤집어 출력하세요!",
+          initialCode: "name = None\n\n# name 이 None 인지\ncheck = name __ None\n\n# check 의 반대값\nopposite = __ check\n\nprint('None?', check)\nprint('None 아님?', opposite)",
+          expectedOutput: "None? True\nNone 아님? False",
+          hint: "None 검사는 == 보다 권장되는 두 글자 연산자가 있어요. 뒤집기는 한 단어.",
+          hint2: "check = name is None\nopposite = not check"
         },
         {
           id: "quiz3",

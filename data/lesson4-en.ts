@@ -261,10 +261,10 @@ print(0 < x < 10)   # True — math inequality directly
           id: "try-chained",
           type: "tryit",
           title: "🖥️ Try It — Score comparison",
-          task: "Check separately if a score is 60+ and if it's a perfect 100. Print True/False for each!",
-          initialCode: "score = 75\n\n# 1) 60 or higher? (>=)\npass_check = score ___ 60\n\n# 2) Perfect 100? (==)\nperfect = score ___ 100\n\nprint('passing?', pass_check)\nprint('perfect?', perfect)",
+          task: "Check if score is 60 or higher, and if it's exactly 100. Print True/False for each!",
+          initialCode: "score = 75\n\n# 60 or higher?\npass_check = score __ 60\n\n# Exactly 100?\nperfect = score __ 100\n\nprint('passing?', pass_check)\nprint('perfect?', perfect)",
           expectedOutput: "passing? True\nperfect? False",
-          hint: "Use >= and == — two comparison operators.",
+          hint: "Two comparison operators — one for 'or higher', one for 'equals'.",
           hint2: "pass_check = score >= 60\nperfect = score == 100"
         }
       ]
@@ -301,6 +301,58 @@ print(not True)        # False
           expectedOutput: "True",
           hint: "If both are True, the and result is also True!",
           hint2: "print((10 > 5) and (3 < 7))"
+        },
+        {
+          id: "is-not-explain",
+          type: "explain",
+          title: "🔎 \`is\`, \`is not\`, \`not\` — More comparisons",
+          content: `### \`is\` / \`is not\` — "is it the same one?"
+
+While \`==\` checks if **values are equal**, \`is\` checks if it's **the very same object**.
+
+The most common use: **checking for \`None\`**.
+
+\`\`\`python
+x = None
+
+print(x is None)        # True   ← "x is None" check — recommended
+print(x is not None)    # False  ← opposite — "x is not None"
+
+print(x == None)        # True too — but 'is' is more precise
+\`\`\`
+
+> 💡 **\`x is None\`** is the Pythonic style. \`== None\` works but \`is None\` is clearer.
+
+### \`not\` — flip in front
+
+Put \`not\` **in front** of a value to flip True/False.
+
+\`\`\`python
+print(not True)         # False
+print(not False)        # True
+print(not (5 > 3))      # False  ← opposite of (5 > 3) which is True
+\`\`\`
+
+### \`not in\` — preview (covered more in lesson 5+)
+
+Check if something is **not in** a string or list. (opposite of in)
+
+\`\`\`python
+print('a' not in 'hello')   # True   ← no 'a'
+print(7 not in [1, 2, 3])   # True   ← no 7
+\`\`\`
+
+> 🎯 Summary: **is = "the very same?", not = "opposite", not in = "opposite of in".**`
+        },
+        {
+          id: "try-is-not",
+          type: "tryit",
+          title: "🖥️ Try It — None check + flip",
+          task: "Check whether name is None, then flip that result. Print both!",
+          initialCode: "name = None\n\n# Is name None?\ncheck = name __ None\n\n# Opposite of check\nopposite = __ check\n\nprint('None?', check)\nprint('not None?', opposite)",
+          expectedOutput: "None? True\nnot None? False",
+          hint: "Recommended None check uses a 2-letter operator (not ==). Flip uses one word.",
+          hint2: "check = name is None\nopposite = not check"
         },
         {
           id: "quiz3",
