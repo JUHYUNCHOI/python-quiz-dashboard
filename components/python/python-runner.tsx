@@ -194,16 +194,20 @@ export function PythonRunner({
     }
   }, [])
 
-  // 자동 크기 조절 — content 따라 textarea + highlight 높이 늘리기
-  // (minHeight 가 floor, content 가 더 길면 그만큼 늘어남, 가로 스크롤만 남음)
+  // 자동 크기 조절 — 줄 수 기반 정확한 계산 (textarea + highlight 동시 동일하게)
+  // ⚠️ scrollHeight 사용 시 textarea/highlight 가 미세하게 어긋나 커서 정렬 깨짐 →
+  // 줄 수를 직접 세서 같은 px 값 한 번에 적용.
   useEffect(() => {
     const ta = textareaRef.current
     const hl = highlightRef.current
     if (!ta || !hl) return
-    // 일단 height 리셋해서 정확한 scrollHeight 측정
-    ta.style.height = "auto"
-    const minPx = parseInt(minHeight) || 220
-    const contentH = Math.max(minPx, ta.scrollHeight)
+    const lineCount = code.split("\n").length
+    // text-[15px] + leading-[1.8] = 27px per line. padding p-4 = 16px * 2 = 32px.
+    // 13px (모바일) 기준에선 약간 작아도 크게 문제 X.
+    const lineH = 27
+    const padding = 32
+    const minPx = parseInt(minHeight) || 100
+    const contentH = Math.max(minPx, lineCount * lineH + padding)
     ta.style.height = `${contentH}px`
     hl.style.height = `${contentH}px`
   }, [code, minHeight])
