@@ -245,52 +245,20 @@ print(10 != 5)   # Not equal → True
         {
           id: "chained-compare",
           type: "explain",
-          title: "🔗 Chained comparisons — Math inequalities, written as code",
-          content: `You've seen this in math class:
-
-> **\`0 < x < 10\`** — "x is greater than 0 and less than 10"
-
-One-line inequality. **Python lets you write it that way in code!**
+          title: "🔗 Chained comparisons — Math inequalities, in code",
+          content: `Remember math class inequalities like \`0 < x < 10\`? **Python lets you write that as code, directly.**
 
 \`\`\`python
 x = 5
 
-# Math inequality, directly in Python
-print(0 < x < 10)         # True
+print(0 < x < 10)         # True — math inequality directly
+print(70 <= 85 <= 90)     # False — 85 is greater than 90
+print(0 <= x < 10)        # True — 0 or more, less than 10
 \`\`\`
 
-### Other languages can't
+> 🎯 Typical use: **range checks** like "is the score 70~90?" or "is the age 13~19?".
 
-C++ / Java need two separate comparisons:
-
-\`\`\`python
-# Long form — two comparisons joined with and
-print(0 < x and x < 10)   # True (same meaning, longer)
-\`\`\`
-
-Same meaning, but the Python form is shorter and reads like math.
-
-### Various inequalities
-
-\`\`\`python
-print(0 <= x < 10)        # True (0 or more, less than 10)
-print(1 < x < 10 < 100)   # True (3 in a row works too)
-\`\`\`
-
-### When? — checking if a value falls in a range
-
-Things like "is the score between 70 and 90?" or "is the age 13~19 (teen)?" — typical **range checks**.
-
-\`\`\`python
-print(0 < 5 < 10)      # True
-print(0 < 15 < 10)     # False — 15 is greater than 10
-print(70 <= 85 <= 90)  # False — 85 is greater than 90
-print(70 <= 75 <= 90)  # True
-\`\`\`
-
-> 🎯 One-liner: **The math inequality \`a < x < b\` works as Python code, exactly as you'd write it.**
-
-(Conditionals come in lesson 11 — you'll combine these results with \`if\`.)`
+(Other languages need \`0 < x and x < 10\` — two comparisons. Python does it in one line.)`
         },
         {
           id: "try-chained",
