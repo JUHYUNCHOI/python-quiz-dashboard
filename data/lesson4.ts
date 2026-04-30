@@ -261,10 +261,10 @@ print(0 < x < 10)   # True — 수학 부등식 그대로
           id: "try-chained",
           type: "tryit",
           title: "🖥️ 직접 해보기 — 점수 비교",
-          task: "점수가 60 점 이상인지, 정확히 100 점인지 두 가지 비교를 한 후 True/False 를 출력하세요!",
-          initialCode: "score = 75\n\n# 60 점 이상인가?\npass_check = score __ 60\n\n# 정확히 100 점인가?\nperfect = score __ 100\n\nprint('합격선 통과?', pass_check)\nprint('만점?', perfect)",
-          expectedOutput: "합격선 통과? True\n만점? False",
-          hint: "'이상' 과 '같다' 비교에 쓰는 두 가지 연산자!",
+          task: "점수가 60 점 이상인지, 정확히 100 점인지 두 가지를 비교해 True/False 를 출력하세요!",
+          initialCode: "score = 75\npass_check = score __ 60\nperfect = score __ 100\nprint('합격선?', pass_check)\nprint('만점?', perfect)",
+          expectedOutput: "합격선? True\n만점? False",
+          hint: "첫 줄은 '이상', 둘째 줄은 '같다' — 두 비교 연산자.",
           hint2: "pass_check = score >= 60\nperfect = score == 100"
         }
       ]
@@ -348,10 +348,10 @@ print(7 not in [1, 2, 3])   # True   ← 7 없음
           id: "try-is-not",
           type: "tryit",
           title: "🖥️ 직접 해보기 — None 검사 + 뒤집기",
-          task: "name 이 None 인지 검사하고, 그 결과를 한 번 뒤집어 출력하세요!",
-          initialCode: "name = None\n\n# name 이 None 인지\ncheck = name __ None\n\n# check 의 반대값\nopposite = __ check\n\nprint('None?', check)\nprint('None 아님?', opposite)",
-          expectedOutput: "None? True\nNone 아님? False",
-          hint: "None 검사는 == 보다 권장되는 두 글자 연산자가 있어요. 뒤집기는 한 단어.",
+          task: "name 이 None 인지 검사하고, 그 결과를 뒤집어 출력하세요!",
+          initialCode: "name = None\ncheck = name __ None\nopposite = __ check\nprint('None?', check)\nprint('아님?', opposite)",
+          expectedOutput: "None? True\n아님? False",
+          hint: "첫 줄은 None 검사 — == 보다 권장되는 두 글자. 둘째 줄은 뒤집기 — 한 단어.",
           hint2: "check = name is None\nopposite = not check"
         },
         {

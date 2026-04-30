@@ -262,9 +262,9 @@ print(0 < x < 10)   # True — math inequality directly
           type: "tryit",
           title: "🖥️ Try It — Score comparison",
           task: "Check if score is 60 or higher, and if it's exactly 100. Print True/False for each!",
-          initialCode: "score = 75\n\n# 60 or higher?\npass_check = score __ 60\n\n# Exactly 100?\nperfect = score __ 100\n\nprint('passing?', pass_check)\nprint('perfect?', perfect)",
+          initialCode: "score = 75\npass_check = score __ 60\nperfect = score __ 100\nprint('passing?', pass_check)\nprint('perfect?', perfect)",
           expectedOutput: "passing? True\nperfect? False",
-          hint: "Two comparison operators — one for 'or higher', one for 'equals'.",
+          hint: "First line is 'or higher', second is 'equals' — two comparison operators.",
           hint2: "pass_check = score >= 60\nperfect = score == 100"
         }
       ]
@@ -349,9 +349,9 @@ print(7 not in [1, 2, 3])   # True   ← no 7
           type: "tryit",
           title: "🖥️ Try It — None check + flip",
           task: "Check whether name is None, then flip that result. Print both!",
-          initialCode: "name = None\n\n# Is name None?\ncheck = name __ None\n\n# Opposite of check\nopposite = __ check\n\nprint('None?', check)\nprint('not None?', opposite)",
-          expectedOutput: "None? True\nnot None? False",
-          hint: "Recommended None check uses a 2-letter operator (not ==). Flip uses one word.",
+          initialCode: "name = None\ncheck = name __ None\nopposite = __ check\nprint('None?', check)\nprint('not?', opposite)",
+          expectedOutput: "None? True\nnot? False",
+          hint: "First line: None check — 2-letter operator preferred over ==. Second: flip with one word.",
           hint2: "check = name is None\nopposite = not check"
         },
         {
