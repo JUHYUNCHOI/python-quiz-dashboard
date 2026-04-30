@@ -280,7 +280,7 @@ print(0 < x < 10)   # True — math inequality directly
           title: "🔗 Combining conditions — and, or, not",
           content: `Listen carefully to your parent's instructions. Two names can sound similar but **mean different things**:
 
-### 👫 Alice **and** Bob, go wash your hands! → Both must do it
+### 👫 "Alice and Bob, go wash your hands!"
 
 Just Alice washing isn't enough. **Both** must wash.
 
@@ -293,7 +293,7 @@ bob_washed = False
 print(alice_washed and bob_washed)   # False ← Bob didn't wash
 \`\`\`
 
-### 👬 Alice **or** Bob, please close the door! → Either is fine
+### 👬 "Alice or Bob, please close the door!"
 
 Either one can do it. Just **one** is enough.
 
@@ -306,7 +306,7 @@ bob_closed = True
 print(alice_closed or bob_closed)    # True ← Bob did it, OK
 \`\`\`
 
-### 🚫 not — flip with "not"
+### 🚫 not — flip the value
 
 \`\`\`python
 print(not True)    # False  ← opposite of True
