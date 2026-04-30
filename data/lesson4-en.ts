@@ -64,9 +64,9 @@ print(10 % 3)   # 1           ← remainder only (%)
 - Double slash \`//\` is that "3" (quotient)
 - Percent \`%\` is that "1" (remainder)
 
-### Exponent — double star
+### Exponent (two stars)
 
-Math's **power**, written as two stars \`**\`. \`a ** b\` = "multiply a by itself b times".
+Math's **power**. Stick two stars together.
 
 \`\`\`python
 print(2 ** 3)   # 8     ← 2 × 2 × 2
@@ -75,13 +75,15 @@ print(5 ** 2)   # 25    ← 5 × 5
 print(10 ** 3)  # 1000  ← 10 × 10 × 10
 \`\`\`
 
-> 🎯 One-liner: **a \\*\\* b = a multiplied by itself b times.**
+How to read: \`2 ** 3\` means "multiply 2 by itself 3 times" — i.e. \`2 × 2 × 2 = 8\`.
 
-⚠️ Single star \`*\` is multiplication — **two** stars \`**\` together = exponent. Easy to mix up!
+> 🎯 One-liner: **Two stars** together = exponent. Multiply the left number by itself N times (N = right number).
+
+⚠️ **One** star = multiply, **two** stars = exponent. Easy to mix up!
 
 \`\`\`python
 2 * 4    # 8   ← multiply (once)
-2 ** 4   # 16  ← exponent (4 times)
+2 ** 4   # 16  ← exponent (four times)
 \`\`\``
         },
         {
