@@ -194,23 +194,11 @@ export function PythonRunner({
     }
   }, [])
 
-  // 자동 크기 조절 — 줄 수 기반 정확한 계산 (textarea + highlight 동시 동일하게)
-  // ⚠️ scrollHeight 사용 시 textarea/highlight 가 미세하게 어긋나 커서 정렬 깨짐 →
-  // 줄 수를 직접 세서 같은 px 값 한 번에 적용.
-  useEffect(() => {
-    const ta = textareaRef.current
-    const hl = highlightRef.current
-    if (!ta || !hl) return
-    const lineCount = code.split("\n").length
-    // text-[15px] + leading-[1.8] = 27px per line. padding p-4 = 16px * 2 = 32px.
-    // 13px (모바일) 기준에선 약간 작아도 크게 문제 X.
-    const lineH = 27
-    const padding = 32
-    const minPx = parseInt(minHeight) || 100
-    const contentH = Math.max(minPx, lineCount * lineH + padding)
-    ta.style.height = `${contentH}px`
-    hl.style.height = `${contentH}px`
-  }, [code, minHeight])
+  // 줄 수 기반 minHeight 계산 (C++ runner 와 동일 패턴)
+  // ⚠️ useEffect 로 style.height 동적 변경하면 두 레이어 어긋나 커서 정렬 깨짐.
+  // 그래서 render 시점에 한 번 계산해서 두 레이어 style 에 동시 적용.
+  const lineCount = useMemo(() => code.split("\n").length, [code])
+  const editorMinHeight = minHeight ?? `${Math.max(100, lineCount * 28 + 32)}px`
 
   const runCode = useCallback(async () => {
     if (!isPyodideReady || !pyodideInstance) {
@@ -460,7 +448,7 @@ export function PythonRunner({
             ref={highlightRef}
             aria-hidden="true"
             className="absolute inset-0 font-mono p-3 md:p-4 overflow-hidden pointer-events-none text-[13px] md:text-[15px] leading-[1.8]"
-            style={{ minHeight, tabSize: 4, fontFeatureSettings: '"liga" 0, "calt" 0' }}
+            style={{ minHeight: editorMinHeight, tabSize: 4, fontFeatureSettings: '"liga" 0, "calt" 0' }}
           >
             <pre className="font-mono text-[13px] md:text-[15px] leading-[1.8] m-0 p-0 whitespace-pre" style={{ tabSize: 4 }}>
               {highlightedCode}
@@ -489,7 +477,7 @@ export function PythonRunner({
               "w-full bg-transparent font-mono p-3 md:p-4 resize-none focus:outline-none placeholder:text-gray-600 relative z-10 whitespace-pre overflow-auto",
               "text-[13px] md:text-[15px] leading-[1.8] text-transparent caret-white selection:bg-blue-500/40"
             )}
-            style={{ minHeight, tabSize: 4, fontFeatureSettings: '"liga" 0, "calt" 0' }}
+            style={{ minHeight: editorMinHeight, tabSize: 4, fontFeatureSettings: '"liga" 0, "calt" 0' }}
             spellCheck={false}
           />
         </div>

@@ -449,8 +449,9 @@ print(not False)   # True
           task: "(10 > 5) and (3 < 7) 의 결과를 출력하세요!",
           initialCode: "print((10 > 5) ___ (3 < 7))",
           expectedOutput: "True",
-          hint: "둘 다 True면 and 결과도 True!",
-          hint2: "print((10 > 5) and (3 < 7))"
+          hint: "둘 다 True면 결과도 True 가 되는 연산자!",
+          hint2: "and",
+          choices: ["and", "or", "not", "xor"]
         },
         {
           id: "is-not-explain",
