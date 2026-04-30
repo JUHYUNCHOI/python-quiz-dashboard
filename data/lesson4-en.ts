@@ -42,7 +42,7 @@ print(10 / 3)   # 3.3333333333333335
           initialCode: "# Calculate 19000 * 3\nprint(___)",
           expectedOutput: "57000",
           hint: "Use the * symbol for multiplication",
-          hint2: "print(19000 * 3)"
+          hint2: "19000 * 3"
         },
         {
           id: "special-explain",
@@ -93,8 +93,9 @@ How to read: \`2 ** 3\` means "multiply 2 by itself 3 times" — i.e. \`2 × 2 �
           task: "Print the remainder when 17 is divided by 5!",
           initialCode: "# 17 divided by 5: quotient 3, remainder is?\nprint(17 ___ 5)",
           expectedOutput: "2",
-          hint: "Use the operator for remainder",
-          hint2: "print(17 % 5)"
+          hint: "The operator that gives what's left over!",
+          hint2: "%",
+          choices: ["%", "/", "//", "*", "**"]
         },
         {
           id: "try-quotient",
@@ -104,7 +105,8 @@ How to read: \`2 ** 3\` means "multiply 2 by itself 3 times" — i.e. \`2 × 2 �
           initialCode: "candy = 23\npeople = 4\nprint(candy ___ people)",
           expectedOutput: "5",
           hint: "Each person's share = quotient. The double-slash operator!",
-          hint2: "print(candy // people)"
+          hint2: "//",
+          choices: ["//", "/", "%", "**", "*"]
         },
         {
           id: "modulo-uses",
@@ -148,7 +150,8 @@ print(20 % 5)   # 0 — 20 is a multiple of 5
           initialCode: "# Get the ones-digit and print it\nprint(5678 ___ 10)",
           expectedOutput: "8",
           hint: "There's an operator that gives the remainder of a division.",
-          hint2: "print(5678 % 10)"
+          hint2: "%",
+          choices: ["%", "/", "//", "**"]
         },
         {
           id: "power-explain",
@@ -269,8 +272,9 @@ print(10 <= 5)   # Less or equal → False
           task: "Print the result of 100 > 50!",
           initialCode: "print(100 ___ 50)",
           expectedOutput: "True",
-          hint: "> compares if something is greater",
-          hint2: "print(100 > 50)"
+          hint: "The symbol that checks 'is greater than'!",
+          hint2: ">",
+          choices: [">", "<", ">=", "<=", "==", "!="]
         },
         {
           id: "equal-explain",

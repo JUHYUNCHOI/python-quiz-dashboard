@@ -42,7 +42,7 @@ print(10 / 3)   # 3.3333333333333335
           initialCode: "# 19000 * 3을 계산하세요\nprint(___)",
           expectedOutput: "57000",
           hint: "곱하기는 * 기호예요",
-          hint2: "print(19000 * 3)"
+          hint2: "19000 * 3"
         },
         {
           id: "special-explain",
@@ -99,7 +99,8 @@ print(100 % 7)   # 2 — 2 페이지 남음
           initialCode: "# 17 을 5 로 나누면 몫 3, 나머지는 몇?\nprint(17 ___ 5)",
           expectedOutput: "2",
           hint: "남는 수를 구하는 연산자!",
-          hint2: "print(17 % 5)"
+          hint2: "%",
+          choices: ["%", "/", "//", "*", "**"]
         },
         {
           id: "try-quotient",
@@ -109,7 +110,8 @@ print(100 % 7)   # 2 — 2 페이지 남음
           initialCode: "candy = 23\npeople = 4\nprint(candy ___ people)",
           expectedOutput: "5",
           hint: "한 명당 받는 수 = 몫. 슬래시 두 번 쓰는 연산자!",
-          hint2: "print(candy // people)"
+          hint2: "//",
+          choices: ["//", "/", "%", "**", "*"]
         },
         {
           id: "modulo-uses",
@@ -153,7 +155,8 @@ print(20 % 5)   # 0 — 20 은 5 의 배수
           initialCode: "# 일의 자리 숫자를 구해서 출력해보세요\nprint(5678 ___ 10)",
           expectedOutput: "8",
           hint: "10 으로 나눈 나머지를 구하는 연산자가 있어요.",
-          hint2: "print(5678 % 10)"
+          hint2: "%",
+          choices: ["%", "/", "//", "**"]
         },
         {
           id: "power-explain",
@@ -298,8 +301,9 @@ print(10 > 10)    # False  ← '크다' 는 같은 건 안 됨
           task: "100 > 50 의 결과를 출력하세요!",
           initialCode: "print(100 ___ 50)",
           expectedOutput: "True",
-          hint: "> 는 '크다'를 비교해요",
-          hint2: "print(100 > 50)"
+          hint: "'크다' 를 검사하는 부호!",
+          hint2: ">",
+          choices: [">", "<", ">=", "<=", "==", "!="]
         },
         {
           id: "equal-explain",
