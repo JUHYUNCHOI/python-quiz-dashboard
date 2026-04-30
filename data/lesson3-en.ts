@@ -194,42 +194,90 @@ When you assign a new value to the same variable, it gets overwritten!`
         {
           id: "rules-explain",
           type: "explain",
-          title: "📋 Variable Naming Rules",
-          content: `### ✅ Valid Names
+          title: "📋 Variable Naming Rules — At a Glance",
+          content: `### 4-row summary (memorize just this!)
+
+| | Rule | OK | NG |
+|---|---|---|---|
+| 1 | **Letters, digits, \`_\`** only | \`player_hp\`, \`name1\` | \`my-name\` (hyphen) / \`my name\` (space) |
+| 2 | **First char must be letter or \`_\`** | \`_temp\`, \`score\` | \`2score\` (digit first) |
+| 3 | **No reserved keywords** | \`my_if\` | \`if\`, \`for\`, \`print\` |
+| 4 | **Case-sensitive** | \`age\` ≠ \`Age\` | (mistake → different var) |
+
+> 🎯 One-liner: **letters/digits/_, first char a letter or _, no keywords.**
+
+---
+
+### Detail — Rule 1: allowed characters
+
 \`\`\`python
+# ✅ OK — only letters, digits, _
 name = 'Alice'
 player_hp = 100
 score2 = 50
+
+# ❌ NG
+my-name = 'Lee'   # hyphen looks like minus operator
+my name = 'Lee'   # space splits into two words
+my@name = 'Lee'   # special chars like @ not allowed
 \`\`\`
 
-### ❌ Invalid Names
+### Detail — Rule 2: first character
+
+A digit can't lead. The interpreter would be confused: "is this a variable or a number?"
+
 \`\`\`python
-2score = 50    # Starts with a number ❌
-my-name = 'Lee'  # Hyphen (-) ❌
-my name = 'Lee'  # Space ❌
+2score = 50    # ❌
+score2 = 50    # ✅ digit AFTER a letter is fine
+_temp = 0      # ✅ leading _ is fine
 \`\`\`
 
-### 🐍 snake_case — Python Convention
-When using multiple words, connect them with **underscores (_)**!
+### Detail — Rule 3: no reserved keywords
+
+Words Python already uses for syntax. Can't be variable names.
+
 \`\`\`python
-player_name = 'Alice'  # ✅ Recommended (snake_case)
-playerName = 'Alice'   # △ camelCase — not recommended in Python
+if = 10        # ❌ if is a conditional keyword
+for = 5        # ❌ for is a loop keyword
+print = 3      # ❌ built-in function — possible but never do this
 \`\`\`
 
-### 🚫 Reserved Keywords Can't Be Variable Names
+**Common keywords**: \`if\`, \`else\`, \`for\`, \`while\`, \`and\`, \`or\`, \`not\`, \`True\`, \`False\`, \`None\`, \`return\`, \`def\`, \`class\`, \`import\`
+
+### Detail — Rule 4: case sensitive
+
 \`\`\`python
-if = 10    # ❌ — if is a Python keyword
-for = 5    # ❌ — for is too
-print = 3  # ❌ — avoid built-in names too!
+age = 15
+print(Age)   # ❌ NameError — Age was never created (capital A!)
 \`\`\`
 
-Python keywords: \`if\`, \`for\`, \`while\`, \`and\`, \`or\`, \`not\`, \`True\`, \`False\`, \`None\`
+→ \`age\` and \`Age\` are **completely different variables**. A typo in case creates a different variable.
 
-### 💡 Use Meaningful Names!
+---
+
+### 🐍 Convention (not a rule but recommended) — snake_case
+
+The rules are met, but for **readability** there's a Python style guide.
+
+\`\`\`python
+player_name = 'Alice'   # ✅ snake_case — Python style
+playerName = 'Alice'    # △ camelCase — works, but not Pythonic
+PLAYERNAME = 'Alice'    # △ ALL CAPS = "constant, never changes"
+\`\`\`
+
+For multi-word names, use **lowercase + \`_\`**.
+
+### 💡 Use Meaningful Names
+
 \`\`\`python
 x = 100          # 😕 What is this?
-player_hp = 100  # ✅ Oh, it's the player's health!
-\`\`\``
+player_hp = 100  # ✅ Player's health!
+
+a = 5500
+latte_price = 5500   # ✅ Still understandable a month later
+\`\`\`
+
+> 🎯 The computer treats \`x\` and \`player_hp\` the same. The convention is **for the human (you, a month from now) reading it**.`
         },
         {
           id: "quiz3",
@@ -263,31 +311,46 @@ player_hp = 100  # ✅ Oh, it's the player's health!
         {
           id: "concat-explain",
           type: "explain",
-          title: "🔗 Ways to Print Variables",
-          content: `There are a few ways to print variables in Python!
+          title: "🔗 Another way to print — \\+ concatenation",
+          content: `In the previous chapter you saw printing text + variables with **commas (,)** (\`print("Name:", name)\`).
 
-### Method 1: Using commas (,)
+Here's **another option** — \`+\` for concatenation. Knowing both lets you pick the right tool.
+
 \`\`\`python
 name = 'Alice'
-hp = 100
-print("Name:", name)        # Name: Alice
-print("HP:", hp, "HP")      # HP: 100 HP
-\`\`\`
-Commas automatically add a **space** between values.
-
----
-
-### Method 2: String concatenation with +
-\`\`\`python
-name = 'Alice'
-print("Hello, " + name + "!")  # Hello, Alice!
+print("Hello, " + name + "!")   # Hello, Alice!
 \`\`\`
 
-⚠️ + only works between **strings**!
+### Comma vs \\+ — differences
+
+| | Comma \`,\` | Plus \`+\` |
+|---|---|---|
+| Space | **automatic** between values | you add \`" "\` yourself |
+| Number var | OK | ❌ Error (need str()) |
+| Common use | quick debug print | precise message building |
+
+\`\`\`python
+name = 'Alice'; hp = 100
+
+# Comma — auto space
+print("Name:", name)        # Name: Alice (space between)
+
+# + concat — manual space
+print("Name: " + name)      # Name: Alice (space inside ": ")
+\`\`\`
+
+### ⚠️ \\+ trap — strings only!
+
 \`\`\`python
 hp = 100
-print("HP: " + hp)  # ❌ Error! Can't add a number directly
-\`\`\``
+print("HP: " + hp)        # ❌ TypeError! Can't add number directly
+print("HP: " + str(hp))   # ✅ Convert with str() first
+print("HP:", hp)          # ✅ Comma takes numbers fine
+\`\`\`
+
+> 🎯 One-liner: **Quick print → comma; precise message → \\+ (don't forget str()).**
+
+(Later in lesson 8 you'll learn **f-string** which is even cleaner than both.)`
         },
         {
           id: "try_concat",
