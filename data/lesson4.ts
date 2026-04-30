@@ -256,15 +256,39 @@ x = (a + (b * c)) < 100
         {
           id: "compare-explain",
           type: "explain",
-          title: "⚖️ 비교하기",
-          content: `두 값을 비교하면 **True** 또는 **False**가 나와요!
+          title: "⚖️ 두 값을 비교해보자!",
+          content: `프로그램은 항상 **결정** 을 해야 해요:
+
+> 🎮 "체력이 0 보다 큰가? → 살아있다"
+> 🛒 "가격이 5000 원 이하인가? → 살 수 있다"
+> 📝 "점수가 80 이상인가? → A 등급"
+
+이런 **비교** 의 결과는 항상 두 가지 — **True** (참, 맞다) 또는 **False** (거짓, 아니다).
+
+### 비교 연산자 4 가지
+
+| 기호 | 뜻 | 예시 |
+|---|---|---|
+| \`>\` | 크다 | \`10 > 5\` → True |
+| \`<\` | 작다 | \`10 < 5\` → False |
+| \`>=\` | 크거나 같다 (이상) | \`10 >= 10\` → True |
+| \`<=\` | 작거나 같다 (이하) | \`10 <= 5\` → False |
+
+### 직접 봐요
 
 \`\`\`python
-print(10 > 5)    # 크다 → True
-print(10 < 5)    # 작다 → False
-print(10 >= 10)  # 크거나 같다 → True
-print(10 <= 5)   # 작거나 같다 → False
-\`\`\``
+print(10 > 5)     # True   ← 10 이 5 보다 크니까
+print(3 > 7)      # False  ← 3 은 7 보다 작으니까
+print(10 >= 10)   # True   ← 같은 것도 '이상' 에 들어감
+print(10 > 10)    # False  ← '크다' 는 같은 건 안 됨
+\`\`\`
+
+### 💡 \`>=\` 와 \`>\` 차이
+
+- \`>=\` (이상): "**같거나** 더 큰" — 같은 것 OK
+- \`>\` (초과): "**더 큰**" — 같은 것 X
+
+비슷하지만 같은 값일 때 결과가 달라요.`
         },
         {
           id: "try3",
@@ -279,17 +303,51 @@ print(10 <= 5)   # 작거나 같다 → False
         {
           id: "equal-explain",
           type: "explain",
-          title: "🟰 같다 / 다르다",
-          content: `**같다**는 \`==\` (등호 2개!)
-**다르다**는 \`!=\`
+          title: "🟰 같다 / 다르다 — \\=\\= 와 !=",
+          content: `"두 값이 **같은지** / **다른지**" 도 자주 검사해요:
+
+> 🔑 "비밀번호가 1234 와 같은가?"
+> 🎲 "주사위 결과가 6 인가?"
+> 🚪 "정답이 'apple' 과 같은가?"
 
 \`\`\`python
-print(10 == 10)  # 같다 → True
-print(10 == 5)   # 같다 → False
-print(10 != 5)   # 다르다 → True
+print(10 == 10)   # True   ← 같다
+print(10 == 5)    # False  ← 같지 않다
+print(10 != 5)    # True   ← 다르다
+print(10 != 10)   # False  ← 다르지 않다 (같음)
 \`\`\`
 
-⚠️ \`=\`는 저장, \`==\`는 비교!`
+### ⚠️ 가장 헷갈리는 함정 — \\= 한 개 vs \\=\\= 두 개
+
+| 기호 | 뜻 |
+|---|---|
+| \`=\` | **저장** — 변수에 값 넣기 (\`x = 10\`) |
+| \`==\` | **비교** — 두 값이 같은지 묻기 (\`x == 10\`) |
+
+\`\`\`python
+x = 10        # 저장 — x 라는 상자에 10 을 넣어요
+print(x == 10)   # 비교 — x 가 10 과 같은가? → True
+\`\`\`
+
+**규칙: 등호 한 개는 "넣기", 두 개는 "묻기".** 외워두면 편해요!
+
+### 문자열도 비교 가능
+
+\`\`\`python
+print("apple" == "apple")  # True
+print("apple" == "Apple")  # False — 대문자 / 소문자 다름
+print("hi" != "bye")       # True — 다름
+\`\`\``
+        },
+        {
+          id: "try-equal",
+          type: "tryit",
+          title: "🖥️ 직접 해보기 — 같은가?",
+          task: "비밀번호 입력값이 '1234' 와 같은지 검사해서 True/False 출력!",
+          initialCode: "input_pw = '1234'\nresult = input_pw __ '1234'\nprint(result)",
+          expectedOutput: "True",
+          hint: "'같다' 비교는 등호 두 개.",
+          hint2: "result = input_pw == '1234'"
         },
         {
           id: "quiz2",
@@ -340,19 +398,62 @@ print(0 < x < 10)   # True — 수학 부등식 그대로
         {
           id: "logic-explain",
           type: "explain",
-          title: "🔗 and, or, not",
-          content: `여러 조건을 합칠 수 있어요!
+          title: "🔗 조건 합치기 — and, or, not",
+          content: `한 가지 조건만 쓰는 건 부족할 때가 있어요:
+
+> 🎢 "13 살 **이상이고** 130cm **이상이면** 탈 수 있다"
+> 🎬 "주말 **이거나** 공휴일이면** 영화 보러 간다"
+> 🌙 "**바깥이 어둡지 않으면** 산책 간다"
+
+이렇게 **여러 조건** 을 합치거나 **반대로** 만들 때 쓰는 도구가 \`and\`, \`or\`, \`not\`.
+
+### \`and\` — "둘 다" 만족해야
 
 \`\`\`python
-# and: 둘 다 True여야 True
-print(True and True)   # True
-print(True and False)  # False
+print(True  and True)    # True   ← 둘 다 참
+print(True  and False)   # False  ← 하나라도 거짓이면 False
+print(False and True)    # False
+print(False and False)   # False
+\`\`\`
 
-# or: 하나만 True면 True
-print(True or False)   # True
+> 🎯 \`and\` = "**그리고**, 둘 다 만족해야"
 
-# not: 반대로
-print(not True)        # False
+### \`or\` — "하나라도" 만족하면
+
+\`\`\`python
+print(True  or True)    # True
+print(True  or False)   # True   ← 하나만 맞아도 True
+print(False or True)    # True
+print(False or False)   # False  ← 둘 다 거짓일 때만 False
+\`\`\`
+
+> 🎯 \`or\` = "**또는**, 하나라도 만족하면"
+
+### \`not\` — 반대로 뒤집기
+
+\`\`\`python
+print(not True)    # False
+print(not False)   # True
+\`\`\`
+
+> 🎯 \`not\` = "**아니다**, 반대로"
+
+### 일상 예시
+
+\`\`\`python
+age = 15
+height = 140
+
+# 놀이기구: 13 살 이상 AND 130cm 이상
+print(age >= 13 and height >= 130)   # True
+
+# 영화: 주말 OR 공휴일
+day = "토"
+print(day == "토" or day == "일")    # True
+
+# 산책: 어둡지 않으면 (반대)
+is_dark = False
+print(not is_dark)                    # True
 \`\`\``
         },
         {
