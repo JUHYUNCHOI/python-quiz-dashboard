@@ -194,6 +194,20 @@ export function PythonRunner({
     }
   }, [])
 
+  // 자동 크기 조절 — content 따라 textarea + highlight 높이 늘리기
+  // (minHeight 가 floor, content 가 더 길면 그만큼 늘어남, 가로 스크롤만 남음)
+  useEffect(() => {
+    const ta = textareaRef.current
+    const hl = highlightRef.current
+    if (!ta || !hl) return
+    // 일단 height 리셋해서 정확한 scrollHeight 측정
+    ta.style.height = "auto"
+    const minPx = parseInt(minHeight) || 220
+    const contentH = Math.max(minPx, ta.scrollHeight)
+    ta.style.height = `${contentH}px`
+    hl.style.height = `${contentH}px`
+  }, [code, minHeight])
+
   const runCode = useCallback(async () => {
     if (!isPyodideReady || !pyodideInstance) {
       setError("Python 로딩 중...")
