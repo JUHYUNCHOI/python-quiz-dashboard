@@ -245,30 +245,27 @@ print(10 != 5)   # 다르다 → True
         {
           id: "chained-compare",
           type: "explain",
-          title: "🔗 비교 연쇄 — 수학 부등식처럼",
-          content: `수학 시간의 부등식 \`0 < x < 10\` 기억나죠? **파이썬은 이걸 그대로 코드로 쓸 수 있어요.**
+          title: "📌 참고 — 비교 연쇄",
+          content: `수학 시간의 부등식 \`0 < x < 10\` 처럼 **파이썬은 비교를 한 줄에 연쇄** 할 수 있어요.
 
 \`\`\`python
 x = 5
-
-print(0 < x < 10)         # True — 수학 부등식 그대로
-print(70 <= 85 <= 90)     # False — 85 가 90 보다 큼
-print(0 <= x < 10)        # True — 0 이상, 10 미만
+print(0 < x < 10)   # True — 수학 부등식 그대로
 \`\`\`
 
-> 🎯 "점수가 70~90 인가?", "나이가 13~19 인가?" 같은 **범위 검사** 단골 표현.
+> 🎯 "점수가 70~90 인가?" 같은 **범위 검사** 에 자주 쓰여요.
 
-(다른 언어는 \`0 < x and x < 10\` 처럼 두 번 써야 해요. 파이썬은 한 줄로 OK.)`
+⚠️ 지금 단계에선 **있다는 것만** 알아두면 OK. 자세한 사용은 **lesson 11 (조건문)** 에서 \`if\` 와 함께 자연스럽게 배워요.`
         },
         {
           id: "try-chained",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — 비교 연쇄",
-          task: "나이가 13 이상 19 이하 (10대) 인지 한 줄에 검사해서 True/False 출력!",
-          initialCode: "age = 16\n\n# 13 이상 19 이하 (연쇄 비교)\nis_teen = ___ <= age <= ___\n\nprint('10대?', is_teen)",
-          expectedOutput: "10대? True",
-          hint: "13 <= age <= 19",
-          hint2: "is_teen = 13 <= age <= 19"
+          title: "🖥️ 직접 해보기 — 점수 비교",
+          task: "점수가 60 점 이상인지, 100 점인지 두 가지를 따로 비교해서 True/False 출력!",
+          initialCode: "score = 75\n\n# 1) 60 점 이상인가? (>=)\npass_check = score ___ 60\n\n# 2) 100 점인가? (==)\nperfect = score ___ 100\n\nprint('합격선 통과?', pass_check)\nprint('만점?', perfect)",
+          expectedOutput: "합격선 통과? True\n만점? False",
+          hint: ">= 와 == 두 비교 연산자 사용.",
+          hint2: "pass_check = score >= 60\nperfect = score == 100"
         }
       ]
     },

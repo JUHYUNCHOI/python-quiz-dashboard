@@ -245,30 +245,27 @@ print(10 != 5)   # Not equal → True
         {
           id: "chained-compare",
           type: "explain",
-          title: "🔗 Chained comparisons — Math inequalities, in code",
-          content: `Remember math class inequalities like \`0 < x < 10\`? **Python lets you write that as code, directly.**
+          title: "📌 Note — Chained comparison",
+          content: `Like math inequalities (\`0 < x < 10\`), **Python lets you chain comparisons** on one line.
 
 \`\`\`python
 x = 5
-
-print(0 < x < 10)         # True — math inequality directly
-print(70 <= 85 <= 90)     # False — 85 is greater than 90
-print(0 <= x < 10)        # True — 0 or more, less than 10
+print(0 < x < 10)   # True — math inequality directly
 \`\`\`
 
-> 🎯 Typical use: **range checks** like "is the score 70~90?" or "is the age 13~19?".
+> 🎯 Typical use: **range checks** like "is the score between 70 and 90?".
 
-(Other languages need \`0 < x and x < 10\` — two comparisons. Python does it in one line.)`
+⚠️ For now, just **know it exists**. You'll see it in action in **lesson 11 (conditionals)** with \`if\`.`
         },
         {
           id: "try-chained",
           type: "tryit",
-          title: "🖥️ Try It — Chained comparison",
-          task: "Check if age is between 13 and 19 (teen) in one line, then print True/False!",
-          initialCode: "age = 16\n\n# 13 to 19 inclusive (chained)\nis_teen = ___ <= age <= ___\n\nprint('teen?', is_teen)",
-          expectedOutput: "teen? True",
-          hint: "13 <= age <= 19",
-          hint2: "is_teen = 13 <= age <= 19"
+          title: "🖥️ Try It — Score comparison",
+          task: "Check separately if a score is 60+ and if it's a perfect 100. Print True/False for each!",
+          initialCode: "score = 75\n\n# 1) 60 or higher? (>=)\npass_check = score ___ 60\n\n# 2) Perfect 100? (==)\nperfect = score ___ 100\n\nprint('passing?', pass_check)\nprint('perfect?', perfect)",
+          expectedOutput: "passing? True\nperfect? False",
+          hint: "Use >= and == — two comparison operators.",
+          hint2: "pass_check = score >= 60\nperfect = score == 100"
         }
       ]
     },
