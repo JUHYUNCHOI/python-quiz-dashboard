@@ -278,13 +278,13 @@ print(0 < x < 10)   # True — math inequality directly
           id: "logic-explain",
           type: "explain",
           title: "🔗 Combining conditions — and, or, not",
-          content: `Listen carefully to your parent's instructions. Two names can sound similar but **mean different things**:
+          content: `Listen carefully to instructions. Two names can sound similar but **mean different things**:
 
-### 👫 "Alice and Bob, go wash your hands!"
+### 🔴 and — "Both must do it"
 
-Just Alice washing isn't enough. **Both** must wash.
+> 👫 "Alice **and** Bob, go wash your hands!"
 
-→ This is **and**: **both** must be True.
+If only Alice washes, that's not enough. Both must wash.
 
 \`\`\`python
 alice_washed = True
@@ -293,11 +293,11 @@ bob_washed = False
 print(alice_washed and bob_washed)   # False ← Bob didn't wash
 \`\`\`
 
-### 👬 "Alice or Bob, please close the door!"
+### 🔵 or — "Either one is enough"
 
-Either one can do it. Just **one** is enough.
+> 👬 "Alice **or** Bob, please close the door!"
 
-→ This is **or**: **at least one** is True.
+Either can do it. Just one is enough.
 
 \`\`\`python
 alice_closed = False
@@ -306,24 +306,43 @@ bob_closed = True
 print(alice_closed or bob_closed)    # True ← Bob did it, OK
 \`\`\`
 
-### 🚫 not — flip the value
+### 🟢 not — Flip the value
+
+> 🌙 "If it's **not** dark, let's go for a walk!"
 
 \`\`\`python
 print(not True)    # False  ← opposite of True
 print(not False)   # True   ← opposite of False
 
-is_open = False
-print(not is_open)   # True ← opposite of "is closed"
+is_dark = False
+print(not is_dark)   # True ← opposite of "is dark"
 \`\`\`
 
-### Summary table
+---
 
-| | True and True | True and False | False and False |
-|---|---|---|---|
-| **and** (both) | True | False | False |
-| **or** (either) | True | True | False |
+### 🎯 The easy way to remember — don't memorize 4 cases
 
-> 🎯 **and** = both must hold / **or** = at least one holds / **not** = opposite
+**and** (both): result is True ONLY when **True and True**. Everything else is False.
+
+| Case | Result |
+|---|---|
+| ✅ True **and** True | **True** ← only this one |
+| True and False | False |
+| False and True | False |
+| False and False | False |
+
+**or** (either): result is False ONLY when **False or False**. Everything else is True.
+
+| Case | Result |
+|---|---|
+| True or True | True |
+| True or False | True |
+| False or True | True |
+| ❌ False **or** False | **False** ← only this one |
+
+> 🎯 One-line memory hooks:
+> - **and** is strict — needs **both True** to be True
+> - **or** is generous — only False if **both False**
 
 ### More everyday examples
 
@@ -337,10 +356,6 @@ print(age >= 13 and height >= 130)   # True
 # Holiday: Saturday OR Sunday (either one)
 day = "Sat"
 print(day == "Sat" or day == "Sun")  # True
-
-# Walk: not dark (flip)
-is_dark = False
-print(not is_dark)                    # True
 \`\`\``
         },
         {
