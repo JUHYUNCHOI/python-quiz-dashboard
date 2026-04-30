@@ -108,46 +108,46 @@ print(10 ** 3)  # 1000  ← 10 × 10 × 10
         {
           id: "modulo-uses",
           type: "explain",
-          title: "🎯 % 의 진짜 매력 — 홀짝 검사",
-          content: `\`%\` (나머지) 가 단순 계산보다 더 중요한 이유는 **홀짝 검사** 의 단골이기 때문이에요.
+          title: "🎯 % 의 진짜 매력 — 홀짝 신호",
+          content: `\`%\` (나머지) 가 단순 계산보다 더 중요한 이유는 **홀짝 신호** 로 자주 쓰이기 때문이에요.
 
 \`\`\`python
-n = 7
-print(n % 2)    # 1 — 홀수면 1
+print(7 % 2)    # 1 — 홀수면 1
 print(8 % 2)    # 0 — 짝수면 0
 \`\`\`
 
-### 다양한 활용
+→ 어떤 수든 \`% 2\` 결과는 **0 (짝수) 또는 1 (홀수)** 둘 중 하나. 나중에 조건문 (lesson 11) 배우면 이걸로 짝/홀 분기 가능.
+
+### 또 다른 활용 — 마지막 자릿수
 
 \`\`\`python
-# 홀짝 판별
-n = 13
-if n % 2 == 0:
-    print("짝수")
-else:
-    print("홀수")
-# → 홀수
-
-# 3 의 배수?
-if n % 3 == 0:
-    print("3 의 배수")
-
-# 마지막 자릿수
-n = 1234
-last_digit = n % 10   # 4
+print(1234 % 10)   # 4 — 1234 의 일의 자리
+print(567 % 10)    # 7 — 567 의 일의 자리
 \`\`\`
 
-> 🎯 한 줄: **\`% 2\` 는 짝/홀 검사, \`% N\` 은 N 의 배수인지 검사.**`
+\`% 10\` = "10 으로 나눈 나머지" = "일의 자리 숫자" 가 돼요.
+
+### N 의 배수 신호
+
+\`\`\`python
+print(15 % 3)   # 0 — 15 는 3 의 배수
+print(15 % 4)   # 3 — 15 는 4 의 배수 아님
+print(20 % 5)   # 0 — 20 은 5 의 배수
+\`\`\`
+
+\`% N\` 결과가 \`0\` 이면 **N 의 배수**, \`0\` 이 아니면 **배수 아님**.
+
+> 🎯 한 줄: **% 2 는 짝/홀 신호, % N 은 N 의 배수 신호 (결과 0 = 배수).**`
         },
         {
           id: "try-modulo",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — 홀짝 카운트",
-          task: "1~10 까지 숫자 중 짝수가 몇 개인지 출력하세요!",
-          initialCode: "count = 0\nfor n in range(1, 11):\n    if n ___ 2 == 0:\n        count += 1\n\nprint(f\"짝수 개수: {count}\")",
-          expectedOutput: "짝수 개수: 5",
-          hint: "n % 2 == 0 이 짝수 검사.",
-          hint2: "if n % 2 == 0:"
+          title: "🖥️ 직접 해보기 — 일의 자리",
+          task: "5678 을 10 으로 나눴을 때의 나머지를 출력하세요. (그게 일의 자리예요!)",
+          initialCode: "# 일의 자리 숫자를 구해서 출력해보세요\nprint(5678 ___ 10)",
+          expectedOutput: "8",
+          hint: "10 으로 나눈 나머지를 구하는 연산자가 있어요.",
+          hint2: "print(5678 % 10)"
         },
         {
           id: "operator-priority",
@@ -245,48 +245,47 @@ print(10 != 5)   # 다르다 → True
         {
           id: "chained-compare",
           type: "explain",
-          title: "🔗 비교 연쇄 — 1 < x < 10 (수학처럼!)",
-          content: `다른 언어는 \`x > 0 && x < 10\` 처럼 두 번 써야 하지만, **파이썬은 수학처럼 연쇄 가능**.
+          title: "🔗 비교 연쇄 — 어떤 값이 범위 안에 있나?",
+          content: `**값이 두 숫자 사이에 있나** 를 검사할 때가 자주 있어요. 예: "이 학생 점수가 70 점 이상 90 점 미만 인가?" — **두 조건을 한 번에** 보고 싶은 거죠.
+
+보통은 \`x > 0\` 과 \`x < 10\` 두 비교를 따로 해야 해요. 파이썬은 **수학 부등식처럼 한 줄에 연쇄** 가능!
 
 \`\`\`python
 x = 5
 
-# 길게
+# 길게 — 두 비교 따로
 print(0 < x and x < 10)   # True
 
-# 파이썬 식 — 수학과 똑같이
-print(0 < x < 10)         # True
-
-# 다른 비교도 가능
-print(0 <= x < 10)        # True
-print(1 < x < 10 < 100)   # True (3 단)
+# 파이썬 식 — 수학 부등식 그대로
+print(0 < x < 10)         # True (← 같은 의미, 더 짧음)
 \`\`\`
 
-### 활용 — 점수 등급
+> 🎯 한 줄: **"\`a < x < b\` 는 'x 가 a 보다 크고 b 보다 작은가?' 한 번에."**
+
+### 다양한 부등식
 
 \`\`\`python
-score = 85
-
-if 90 <= score <= 100:
-    grade = "A"
-elif 80 <= score < 90:
-    grade = "B"
-elif 70 <= score < 80:
-    grade = "C"
-else:
-    grade = "F"
-
-print(grade)   # B
+print(0 <= x < 10)        # True (0 이상, 10 미만)
+print(1 < x < 10 < 100)   # True (3 단도 가능)
 \`\`\`
 
-읽기에도 자연스럽고 코드도 짧아져요. 파이썬 의 멋있는 기능 중 하나.`
+### 결과는 True / False
+
+\`\`\`python
+print(0 < 5 < 10)      # True
+print(0 < 15 < 10)     # False — 15 가 10 보다 큼
+print(70 <= 85 <= 90)  # False — 85 가 90 보다 큼
+print(70 <= 75 <= 90)  # True
+\`\`\`
+
+읽기에도 자연스럽고 코드도 짧아져요. (조건문은 lesson 11 에서 배워요 — 이 결과를 if 와 같이 쓰는 식으로.)`
         },
         {
           id: "try-chained",
           type: "tryit",
           title: "🖥️ 직접 해보기 — 비교 연쇄",
-          task: "나이가 13~19 (10대) 인지 한 줄에 검사하세요!",
-          initialCode: "age = 16\n\n# 13 이상 19 이하 (연쇄 비교!)\nis_teen = ___ <= age <= ___\n\nprint(f\"10대? {is_teen}\")",
+          task: "나이가 13 이상 19 이하 (10대) 인지 한 줄에 검사해서 True/False 출력!",
+          initialCode: "age = 16\n\n# 13 이상 19 이하 (연쇄 비교)\nis_teen = ___ <= age <= ___\n\nprint('10대?', is_teen)",
           expectedOutput: "10대? True",
           hint: "13 <= age <= 19",
           hint2: "is_teen = 13 <= age <= 19"
@@ -341,28 +340,30 @@ print(not True)        # False
           title: "🎯 and / or 실전 — 조건 합치기",
           content: `\`and\` / \`or\` 는 단독 \`True/False\` 보다 **두 조건 합칠 때** 진가가 나와요.
 
+### 두 조건 모두 만족? — and
+
 \`\`\`python
 age = 16
 has_id = True
 
-# 둘 다 만족해야
-if age >= 18 and has_id:
-    print("입장 가능")
-else:
-    print("입장 불가")
-
-# 하나라도 만족하면
-day = "토"
-if day == "토" or day == "일":
-    print("주말!")
+# age >= 18 (False) AND has_id (True) = False
+print(age >= 18 and has_id)   # False
 \`\`\`
 
-### not 으로 뒤집기
+### 하나라도 만족? — or
+
+\`\`\`python
+day = "토"
+
+# 토요일 OR 일요일 — 하나만 맞아도 True
+print(day == "토" or day == "일")   # True
+\`\`\`
+
+### 반대로 뒤집기 — not
 
 \`\`\`python
 is_open = False
-if not is_open:
-    print("닫혀있음")
+print(not is_open)   # True — False 의 반대
 \`\`\`
 
 ### 진리표
@@ -374,17 +375,19 @@ if not is_open:
 | F | T | F | T |
 | F | F | F | F |
 
-> 💡 **and** = "둘 다", **or** = "하나라도", **not** = "반대".`
+> 💡 **and** = "둘 다", **or** = "하나라도", **not** = "반대".
+
+(나중에 조건문 — lesson 11 — 에서 이 결과들을 if 와 함께 쓰는 법 배워요.)`
         },
         {
           id: "try-logic-real",
           type: "tryit",
-          title: "🖥️ 직접 해보기 — 합격 조건 두 가지",
-          task: "점수 60 이상 **그리고** 출석 80% 이상이면 '합격', 아니면 '불합격' 출력!",
-          initialCode: "score = 75\nattendance = 85   # 출석률 %\n\n# 두 조건 다 만족\nif score >= 60 ___ attendance >= 80:\n    print(\"합격\")\nelse:\n    print(\"불합격\")",
-          expectedOutput: "합격",
+          title: "🖥️ 직접 해보기 — 두 조건 동시에",
+          task: "점수 60 이상 **그리고** 출석 80% 이상인지 한 줄로 검사해서 True/False 출력!",
+          initialCode: "score = 75\nattendance = 85   # 출석률 %\n\n# 두 조건 동시에 만족하는지 한 줄에\nresult = score >= 60 ___ attendance >= 80\n\nprint(result)",
+          expectedOutput: "True",
           hint: "둘 다 만족 = and",
-          hint2: "if score >= 60 and attendance >= 80:"
+          hint2: "result = score >= 60 and attendance >= 80"
         }
       ]
     },
@@ -422,30 +425,28 @@ score += 10         # 짧은 방법 (같은 의미!)
           type: "mission",
           title: "🏆 미션 1 — 가격 계산기",
           task: "가격 계산기를 완성하세요! (단가 15000원, 3개, 10% 할인)",
-          initialCode: "price = 15000\ncount = 3\n# 합계를 계산하세요\ntotal = ___\n# 10% 할인 계산\ndiscount = ___\n# 최종 가격\nfinal = ___\n\nprint(f'단가: {price}원')\nprint(f'수량: {count}개')\nprint(f'합계: {total}원')\nprint(f'할인: {discount}원')\nprint(f'최종: {final}원')",
-          expectedOutput: "단가: 15000원\n수량: 3개\n합계: 45000원\n할인: 4500.0원\n최종: 40500.0원",
+          initialCode: "price = 15000\ncount = 3\n# 합계를 계산하세요\ntotal = ___\n# 10% 할인 계산\ndiscount = ___\n# 최종 가격\nfinal = ___\n\nprint('단가:', price, '원')\nprint('수량:', count, '개')\nprint('합계:', total, '원')\nprint('할인:', discount, '원')\nprint('최종:', final, '원')",
+          expectedOutput: "단가: 15000 원\n수량: 3 개\n합계: 45000 원\n할인: 4500.0 원\n최종: 40500.0 원",
           hint: "total = price * count, discount = total * 0.1",
           hint2: "final = total - discount"
         },
         {
           id: "mission2",
           type: "mission",
-          title: "🏆 미션 2 — BMI 계산 + 등급 판정",
-          task: "BMI = 몸무게(kg) / (키(m))² 계산하고 비교 연쇄로 등급 출력. (입력은 stdin)",
-          initialCode: "weight = float(input(\"몸무게(kg): \"))\nheight = float(input(\"키(m): \"))\n\n# BMI 계산 (** 거듭제곱 활용)\nbmi = weight / (height ___ 2)\n\n# 비교 연쇄로 등급\nif bmi < 18.5:\n    grade = \"저체중\"\nelif ___ <= bmi < 25:\n    grade = \"정상\"\nelif 25 <= bmi < 30:\n    grade = \"과체중\"\nelse:\n    grade = \"비만\"\n\nprint(f\"BMI: {bmi:.1f}\")\nprint(f\"등급: {grade}\")",
-          expectedOutput: "BMI: 22.0\n등급: 정상",
-          stdin: "60\n1.65",
-          hint: "height ** 2 거듭제곱. 18.5 <= bmi < 25 비교 연쇄.",
-          hint2: "bmi = weight / (height ** 2)\nelif 18.5 <= bmi < 25:"
+          title: "🏆 미션 2 — BMI 계산",
+          task: "몸무게 60kg, 키 1.65m 의 BMI 를 거듭제곱 연산자로 계산하세요. (BMI = 몸무게 / 키²)",
+          initialCode: "weight = 60      # kg\nheight = 1.65    # m\n\n# 거듭제곱 (별표 두 개) 으로 키² 계산\nbmi = weight / (height ___ 2)\n\nprint(\"BMI:\", round(bmi, 1))",
+          expectedOutput: "BMI: 22.0",
+          hint: "height ** 2 거듭제곱.",
+          hint2: "bmi = weight / (height ** 2)"
         },
         {
           id: "mission3",
           type: "mission",
-          title: "🏆 미션 3 — 시간 변환 (초 → 시:분:초)",
-          task: "초 단위 시간을 받아 'HH:MM:SS' 형식으로 출력하세요. (// 와 % 활용)",
-          initialCode: "total_sec = int(input())\n\n# // 와 % 사용\nhours = total_sec ___ 3600\nminutes = (total_sec % 3600) ___ 60\nseconds = total_sec ___ 60\n\nprint(f\"{hours:02d}:{minutes:02d}:{seconds:02d}\")",
-          expectedOutput: "01:30:25",
-          stdin: "5425",
+          title: "🏆 미션 3 — 초를 시간/분/초로 분해",
+          task: "5425 초를 시간/분/초 단위로 분해해 각각 출력하세요. (// 와 % 활용)",
+          initialCode: "total_sec = 5425\n\n# // 와 % 사용\nhours = total_sec ___ 3600        # 시간 (몫)\nminutes = (total_sec % 3600) ___ 60   # 남은 초 → 분 (몫)\nseconds = total_sec ___ 60        # 마지막 초 (나머지)\n\nprint(\"시:\", hours)\nprint(\"분:\", minutes)\nprint(\"초:\", seconds)",
+          expectedOutput: "시: 1\n분: 30\n초: 25",
           hint: "1 시간 = 3600 초. // 로 몫, % 로 나머지.",
           hint2: "hours = total_sec // 3600\nminutes = (total_sec % 3600) // 60\nseconds = total_sec % 60"
         },

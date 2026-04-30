@@ -108,49 +108,46 @@ How to read: \`2 ** 3\` means "multiply 2 by itself 3 times" — i.e. \`2 × 2 �
         {
           id: "modulo-uses",
           type: "explain",
-          title: "🎯 The real charm of % — odd/even check",
-          content: `\`%\` (modulo) shines beyond simple division — it's the classic **odd/even check** tool.
+          title: "🎯 The real charm of % — parity signal",
+          content: `\`%\` (modulo) shines beyond simple division — it's the classic **parity signal**.
 
 \`\`\`python
-n = 7
-print(n % 2)    # 1 — 1 if odd
+print(7 % 2)    # 1 — 1 if odd
 print(8 % 2)    # 0 — 0 if even
 \`\`\`
 
-### Many uses
+→ Any number's \`% 2\` is **0 (even) or 1 (odd)**. Once you learn conditionals (lesson 11), you'll use this to branch.
+
+### Another use — last digit
 
 \`\`\`python
-# Odd/even
-n = 13
-if n % 2 == 0:
-    print("even")
-else:
-    print("odd")
-# → odd
-
-# Multiple of 3?
-if n % 3 == 0:
-    print("multiple of 3")
-
-# Clock (24-hour wrap → 0-23)
-hour = 25 % 24    # 1 — next day, 1 AM
-
-# Last digit
-n = 1234
-last_digit = n % 10   # 4
+print(1234 % 10)   # 4 — ones-digit of 1234
+print(567 % 10)    # 7 — ones-digit of 567
 \`\`\`
 
-> 🎯 One-liner: **\`% 2\` for parity, \`% N\` for multiples of N or wrapping (clocks, indices).**`
+\`% 10\` = "remainder when divided by 10" = "the ones digit".
+
+### Multiple-of-N signal
+
+\`\`\`python
+print(15 % 3)   # 0 — 15 is a multiple of 3
+print(15 % 4)   # 3 — 15 is NOT a multiple of 4
+print(20 % 5)   # 0 — 20 is a multiple of 5
+\`\`\`
+
+\`% N == 0\` means "multiple of N"; non-zero means "not a multiple".
+
+> 🎯 One-liner: **% 2 = parity signal, % N = multiple-of-N signal (0 = yes).**`
         },
         {
           id: "try-modulo",
           type: "tryit",
-          title: "🖥️ Try It — Count evens",
-          task: "From 1 to 10, count how many numbers are even!",
-          initialCode: "count = 0\nfor n in range(1, 11):\n    if n ___ 2 == 0:\n        count += 1\n\nprint(f\"even count: {count}\")",
-          expectedOutput: "even count: 5",
-          hint: "n % 2 == 0 means even.",
-          hint2: "if n % 2 == 0:"
+          title: "🖥️ Try It — Ones digit",
+          task: "Print the remainder when 5678 is divided by 10. (That's the ones-digit!)",
+          initialCode: "# Get the ones-digit and print it\nprint(5678 ___ 10)",
+          expectedOutput: "8",
+          hint: "There's an operator that gives the remainder of a division.",
+          hint2: "print(5678 % 10)"
         },
         {
           id: "operator-priority",
@@ -248,48 +245,47 @@ print(10 != 5)   # Not equal → True
         {
           id: "chained-compare",
           type: "explain",
-          title: "🔗 Chained comparisons — 1 < x < 10 (math style!)",
-          content: `Other languages need \`x > 0 && x < 10\` (two writes), but **Python lets you chain like math**.
+          title: "🔗 Chained comparisons — Is a value in a range?",
+          content: `You'll often need to check **whether a value falls between two numbers**. Example: "Is this score between 70 and 90?" — checking **two conditions at once**.
+
+Normally you'd write \`x > 0\` AND \`x < 10\` as two separate comparisons. Python lets you **chain them like a math inequality**!
 
 \`\`\`python
 x = 5
 
-# Long form
+# Long form — two comparisons
 print(0 < x and x < 10)   # True
 
-# Python way — same as math
-print(0 < x < 10)         # True
-
-# Mixed comparisons OK
-print(0 <= x < 10)        # True
-print(1 < x < 10 < 100)   # True (3 in a row)
+# Python way — math inequality directly
+print(0 < x < 10)         # True (same meaning, shorter)
 \`\`\`
 
-### Use case — score grading
+> 🎯 One-liner: **"\`a < x < b\` answers 'is x greater than a AND less than b?' in one shot."**
+
+### Various inequalities
 
 \`\`\`python
-score = 85
-
-if 90 <= score <= 100:
-    grade = "A"
-elif 80 <= score < 90:
-    grade = "B"
-elif 70 <= score < 80:
-    grade = "C"
-else:
-    grade = "F"
-
-print(grade)   # B
+print(0 <= x < 10)        # True (0 or more, less than 10)
+print(1 < x < 10 < 100)   # True (3 in a row works too)
 \`\`\`
 
-Reads naturally and code is shorter. One of Python's nicer features.`
+### Result is True / False
+
+\`\`\`python
+print(0 < 5 < 10)      # True
+print(0 < 15 < 10)     # False — 15 is greater than 10
+print(70 <= 85 <= 90)  # False — 85 is greater than 90
+print(70 <= 75 <= 90)  # True
+\`\`\`
+
+Reads naturally and code is shorter. (Conditionals come in lesson 11 — you'll combine these results with \`if\`.)`
         },
         {
           id: "try-chained",
           type: "tryit",
           title: "🖥️ Try It — Chained comparison",
-          task: "Check if age is in range 13~19 (teen) in one line!",
-          initialCode: "age = 16\n\n# 13 to 19 inclusive (chained!)\nis_teen = ___ <= age <= ___\n\nprint(f\"teen? {is_teen}\")",
+          task: "Check if age is between 13 and 19 (teen) in one line, then print True/False!",
+          initialCode: "age = 16\n\n# 13 to 19 inclusive (chained)\nis_teen = ___ <= age <= ___\n\nprint('teen?', is_teen)",
           expectedOutput: "teen? True",
           hint: "13 <= age <= 19",
           hint2: "is_teen = 13 <= age <= 19"
@@ -344,28 +340,30 @@ print(not True)        # False
           title: "🎯 and / or in practice — combining conditions",
           content: `\`and\` / \`or\` shine when **combining conditions**, not just single \`True/False\`.
 
+### Both conditions? — and
+
 \`\`\`python
 age = 16
 has_id = True
 
-# Both must hold
-if age >= 18 and has_id:
-    print("entry allowed")
-else:
-    print("entry denied")
-
-# At least one
-day = "Sat"
-if day == "Sat" or day == "Sun":
-    print("weekend!")
+# age >= 18 (False) AND has_id (True) = False
+print(age >= 18 and has_id)   # False
 \`\`\`
 
-### not to flip
+### Either one? — or
+
+\`\`\`python
+day = "Sat"
+
+# Saturday OR Sunday — true if either matches
+print(day == "Sat" or day == "Sun")   # True
+\`\`\`
+
+### Flip with not
 
 \`\`\`python
 is_open = False
-if not is_open:
-    print("closed")
+print(not is_open)   # True — opposite of False
 \`\`\`
 
 ### Truth table
@@ -377,17 +375,19 @@ if not is_open:
 | F | T | F | T |
 | F | F | F | F |
 
-> 💡 **and** = "both", **or** = "any", **not** = "opposite".`
+> 💡 **and** = "both", **or** = "any", **not** = "opposite".
+
+(In lesson 11 — conditionals — you'll combine these results with \`if\`.)`
         },
         {
           id: "try-logic-real",
           type: "tryit",
-          title: "🖥️ Try It — Two pass conditions",
-          task: "If score ≥ 60 **AND** attendance ≥ 80% print 'pass', else 'fail'!",
-          initialCode: "score = 75\nattendance = 85   # %\n\n# Both must hold\nif score >= 60 ___ attendance >= 80:\n    print(\"pass\")\nelse:\n    print(\"fail\")",
-          expectedOutput: "pass",
+          title: "🖥️ Try It — Two conditions at once",
+          task: "Check if score ≥ 60 AND attendance ≥ 80% in one line, then print True/False!",
+          initialCode: "score = 75\nattendance = 85   # %\n\n# Are both conditions met?\nresult = score >= 60 ___ attendance >= 80\n\nprint(result)",
+          expectedOutput: "True",
           hint: "Both = and",
-          hint2: "if score >= 60 and attendance >= 80:"
+          hint2: "result = score >= 60 and attendance >= 80"
         }
       ]
     },
@@ -424,8 +424,8 @@ score += 10         # Short way (same meaning!)
           id: "mission1",
           type: "mission",
           title: "🏆 Mission 1 — Price calculator",
-          task: "Complete the price calculator! (unit price 15000 won, 3 items, 10% discount)",
-          initialCode: "price = 15000\ncount = 3\n# Calculate the total\ntotal = ___\n# 10% discount\ndiscount = ___\n# Final price\nfinal = ___\n\nprint(f'Unit price: {price}')\nprint(f'Quantity: {count}')\nprint(f'Subtotal: {total}')\nprint(f'Discount: {discount}')\nprint(f'Final: {final}')",
+          task: "Complete the price calculator! (unit price 15000, 3 items, 10% discount)",
+          initialCode: "price = 15000\ncount = 3\n# Calculate the total\ntotal = ___\n# 10% discount\ndiscount = ___\n# Final price\nfinal = ___\n\nprint('Unit price:', price)\nprint('Quantity:', count)\nprint('Subtotal:', total)\nprint('Discount:', discount)\nprint('Final:', final)",
           expectedOutput: "Unit price: 15000\nQuantity: 3\nSubtotal: 45000\nDiscount: 4500.0\nFinal: 40500.0",
           hint: "total = price * count, discount = total * 0.1",
           hint2: "final = total - discount"
@@ -433,22 +433,20 @@ score += 10         # Short way (same meaning!)
         {
           id: "mission2",
           type: "mission",
-          title: "🏆 Mission 2 — BMI calc + grade",
-          task: "BMI = weight(kg) / (height(m))². Use ** and chained compare for grade. (input via stdin)",
-          initialCode: "weight = float(input(\"weight(kg): \"))\nheight = float(input(\"height(m): \"))\n\n# BMI (use ** exponent)\nbmi = weight / (height ___ 2)\n\n# Chained comparison for grade\nif bmi < 18.5:\n    grade = \"underweight\"\nelif ___ <= bmi < 25:\n    grade = \"normal\"\nelif 25 <= bmi < 30:\n    grade = \"overweight\"\nelse:\n    grade = \"obese\"\n\nprint(f\"BMI: {bmi:.1f}\")\nprint(f\"grade: {grade}\")",
-          expectedOutput: "BMI: 22.0\ngrade: normal",
-          stdin: "60\n1.65",
-          hint: "height ** 2 for square. 18.5 <= bmi < 25 chained.",
-          hint2: "bmi = weight / (height ** 2)\nelif 18.5 <= bmi < 25:"
+          title: "🏆 Mission 2 — BMI calculation",
+          task: "Compute BMI for weight 60kg, height 1.65m using exponent. (BMI = weight / height²)",
+          initialCode: "weight = 60      # kg\nheight = 1.65    # m\n\n# Use exponent (two stars) for height squared\nbmi = weight / (height ___ 2)\n\nprint(\"BMI:\", round(bmi, 1))",
+          expectedOutput: "BMI: 22.0",
+          hint: "height ** 2 for the square.",
+          hint2: "bmi = weight / (height ** 2)"
         },
         {
           id: "mission3",
           type: "mission",
-          title: "🏆 Mission 3 — Seconds → HH:MM:SS",
-          task: "Convert seconds to 'HH:MM:SS' using // and %",
-          initialCode: "total_sec = int(input())\n\n# // and %\nhours = total_sec ___ 3600\nminutes = (total_sec % 3600) ___ 60\nseconds = total_sec ___ 60\n\nprint(f\"{hours:02d}:{minutes:02d}:{seconds:02d}\")",
-          expectedOutput: "01:30:25",
-          stdin: "5425",
+          title: "🏆 Mission 3 — Break seconds into h/m/s",
+          task: "Break 5425 seconds into hours, minutes, seconds and print each. (use // and %)",
+          initialCode: "total_sec = 5425\n\n# // and %\nhours = total_sec ___ 3600        # hours (quotient)\nminutes = (total_sec % 3600) ___ 60   # remaining seconds → minutes (quotient)\nseconds = total_sec ___ 60        # final seconds (remainder)\n\nprint(\"hours:\", hours)\nprint(\"minutes:\", minutes)\nprint(\"seconds:\", seconds)",
+          expectedOutput: "hours: 1\nminutes: 30\nseconds: 25",
           hint: "1 hour = 3600 sec. // for quotient, % for remainder.",
           hint2: "hours = total_sec // 3600\nminutes = (total_sec % 3600) // 60\nseconds = total_sec % 60"
         },
