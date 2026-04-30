@@ -114,7 +114,7 @@ print(100 % 7)   # 2 — 2 페이지 남음
         {
           id: "power-explain",
           type: "explain",
-          title: "🔢 거듭제곱 — 별표 두 개 (\\*\\*)",
+          title: "🔢 거듭제곱 — 별표 두 개",
           content: `같은 숫자를 **여러 번 곱하는** 일이 자주 있어요. 예:
 
 > 종이 한 장을 반으로 접고, 또 접고, 또 접고... **10 번 접으면 몇 겹**?
@@ -303,7 +303,7 @@ print(10 > 10)    # False  ← '크다' 는 같은 건 안 됨
         {
           id: "equal-explain",
           type: "explain",
-          title: "🟰 같다 / 다르다 — \\=\\= 와 !=",
+          title: "🟰 같다와 다르다",
           content: `"두 값이 **같은지** / **다른지**" 도 자주 검사해요:
 
 > 🔑 "비밀번호가 1234 와 같은가?"
@@ -517,47 +517,24 @@ print(7 not in [1, 2, 3])   # True   ← 7 없음
         {
           id: "logic-real",
           type: "explain",
-          title: "🎯 and / or 실전 — 조건 합치기",
-          content: `\`and\` / \`or\` 는 단독 \`True/False\` 보다 **두 조건 합칠 때** 진가가 나와요.
-
-### 두 조건 모두 만족? — and
+          title: "🎯 비교 결과를 and / or 로 합치기",
+          content: `진짜 자주 쓰는 패턴 — **비교 결과** (\`>=\` 같은 거) 를 \`and\` / \`or\` 로 묶기.
 
 \`\`\`python
 age = 16
-has_id = True
+height = 140
 
-# age >= 18 (False) AND has_id (True) = False
-print(age >= 18 and has_id)   # False
-\`\`\`
+# 놀이기구: 13 살 이상 그리고 130cm 이상 (둘 다)
+print(age >= 13 and height >= 130)    # True
 
-### 하나라도 만족? — or
-
-\`\`\`python
+# 휴일: 토 또는 일 (하나만)
 day = "토"
-
-# 토요일 OR 일요일 — 하나만 맞아도 True
-print(day == "토" or day == "일")   # True
+print(day == "토" or day == "일")      # True
 \`\`\`
 
-### 반대로 뒤집기 — not
+비교 한 번 → True/False, 그걸 \`and\` / \`or\` 로 묶으면 두 조건 한꺼번에 검사.
 
-\`\`\`python
-is_open = False
-print(not is_open)   # True — False 의 반대
-\`\`\`
-
-### 진리표
-
-| A | B | A and B | A or B |
-|---|---|---|---|
-| T | T | T | T |
-| T | F | F | T |
-| F | T | F | T |
-| F | F | F | F |
-
-> 💡 **and** = "둘 다", **or** = "하나라도", **not** = "반대".
-
-(나중에 조건문 — lesson 11 — 에서 이 결과들을 if 와 함께 쓰는 법 배워요.)`
+(조건문은 lesson 11 에서 — 이 결과로 \`if\` 분기.)`
         },
         {
           id: "try-logic-real",

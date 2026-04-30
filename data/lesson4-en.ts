@@ -432,47 +432,24 @@ print(7 not in [1, 2, 3])   # True   ← no 7
         {
           id: "logic-real",
           type: "explain",
-          title: "🎯 and / or in practice — combining conditions",
-          content: `\`and\` / \`or\` shine when **combining conditions**, not just single \`True/False\`.
-
-### Both conditions? — and
+          title: "🎯 Combining comparisons with and / or",
+          content: `The pattern you'll really use — wrap **comparison results** (\`>=\` etc) with \`and\` / \`or\`.
 
 \`\`\`python
 age = 16
-has_id = True
+height = 140
 
-# age >= 18 (False) AND has_id (True) = False
-print(age >= 18 and has_id)   # False
-\`\`\`
+# Ride: 13 or older AND 130cm+ (both)
+print(age >= 13 and height >= 130)   # True
 
-### Either one? — or
-
-\`\`\`python
+# Holiday: Saturday OR Sunday (either)
 day = "Sat"
-
-# Saturday OR Sunday — true if either matches
-print(day == "Sat" or day == "Sun")   # True
+print(day == "Sat" or day == "Sun")  # True
 \`\`\`
 
-### Flip with not
+Each comparison gives True/False, then \`and\` / \`or\` combines them into a single check.
 
-\`\`\`python
-is_open = False
-print(not is_open)   # True — opposite of False
-\`\`\`
-
-### Truth table
-
-| A | B | A and B | A or B |
-|---|---|---|---|
-| T | T | T | T |
-| T | F | F | T |
-| F | T | F | T |
-| F | F | F | F |
-
-> 💡 **and** = "both", **or** = "any", **not** = "opposite".
-
-(In lesson 11 — conditionals — you'll combine these results with \`if\`.)`
+(Conditionals are in lesson 11 — that's where you branch on these results with \`if\`.)`
         },
         {
           id: "try-logic-real",
