@@ -106,7 +106,8 @@ When you use the variable name, the value inside comes out!`
           type: "explain",
           title: "🏷️ Printing Text and Variables Together",
           content: `Just printing a variable value can be confusing — what does it mean?
-Use a **comma (,)** to print a label and a variable together!
+
+> 💡 Remember **lesson 1** where \`print('Result:', 100)\` printed multiple values with **commas (,)**? The same trick works for variables.
 
 \`\`\`python
 name = 'Alice'
@@ -118,7 +119,7 @@ print("Age:", age)            # Age: 15
 print("Score:", score, "pts") # Score: 95 pts
 \`\`\`
 
-Values separated by commas automatically get a **space** between them!`
+Comma-separated values automatically get a **space** between them (same as in lesson 1).`
         },
         {
           id: "try_label1",
@@ -340,6 +341,8 @@ print("Name: " + name)      # Name: Alice (space inside ": ")
 \`\`\`
 
 ### ⚠️ \\+ trap — strings only!
+
+> 💡 Remember from **lesson 2** that \`'Score: ' + 95\` raised \`TypeError\`? Same applies to variables. A number variable can't be \\+ to a string directly → use \`str()\`.
 
 \`\`\`python
 hp = 100
