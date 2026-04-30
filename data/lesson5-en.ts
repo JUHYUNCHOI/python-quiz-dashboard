@@ -83,6 +83,8 @@ print(a + b + c)  # Python
           title: "📏 len() — String length",
           content: `\`len()\` gives the number of characters in a string.
 
+> 💡 \`len\` is short for **\`length\`**. Easy to remember once you know!
+
 \`\`\`python
 text = "hello"
 print(len(text))   # 5

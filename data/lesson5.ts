@@ -83,6 +83,8 @@ print(a + b + c)  # 파이썬
           title: "📏 len() — 문자열 길이",
           content: `\`len()\` 으로 문자열의 글자 수 (길이) 를 알 수 있어요.
 
+> 💡 \`len\` 은 영어 **\`length\` (길이)** 의 줄임말이에요. 영단어 약자라 쉽게 외워져요!
+
 \`\`\`python
 text = "hello"
 print(len(text))   # 5
