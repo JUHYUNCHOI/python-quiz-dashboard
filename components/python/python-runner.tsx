@@ -78,7 +78,7 @@ export function PythonRunner({
   onError,
   readOnly = false,
   showExpectedOutput = false,
-  minHeight = "100px",
+  minHeight = "220px",
   requireCodeChange = true,
   storageKey,
   isStepDone = false,

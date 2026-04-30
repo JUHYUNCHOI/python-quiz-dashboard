@@ -117,7 +117,7 @@ export function BlankCodeRunner({
   hint = "",
   hint2 = "",
   onSuccess,
-  minHeight = "140px",
+  minHeight = "220px",
   storageKey,
   isStepDone = false,
   choices = [],

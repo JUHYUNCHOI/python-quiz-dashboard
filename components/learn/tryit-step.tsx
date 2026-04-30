@@ -68,7 +68,7 @@ export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onS
             hint2={step.hint2}
             choices={step.choices}
             onSuccess={onSuccess}
-            minHeight={step.type === "mission" ? "160px" : "140px"}
+            minHeight={step.type === "mission" ? "280px" : "220px"}
             isStepDone={isCompleted}
           />
         ) : (
@@ -81,7 +81,7 @@ export function TryItStep({ step, isCompleted, hintLevel, onHintLevelChange, onS
             hint={step.hint}
             onSuccess={onSuccess}
             showExpectedOutput={step.type === "mission"}
-            minHeight={step.type === "mission" ? "160px" : "140px"}
+            minHeight={step.type === "mission" ? "280px" : "220px"}
             requireCodeChange={false}
             isStepDone={isCompleted}
             requireCorrect={step.type === "mission"}
