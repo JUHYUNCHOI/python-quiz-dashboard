@@ -37,7 +37,7 @@ print(10 / 3)   # 3.3333333333333335
         {
           id: "try1",
           type: "tryit",
-          title: "🖥️ Try It!",
+          title: "🖥️ Try It — Multiply",
           task: "Calculate and print 19000 * 3!",
           initialCode: "# Calculate 19000 * 3\nprint(___)",
           expectedOutput: "57000",
@@ -89,21 +89,22 @@ How to read: \`2 ** 3\` means "multiply 2 by itself 3 times" — i.e. \`2 × 2 �
         {
           id: "try2",
           type: "tryit",
-          title: "🖥️ Try It!",
-          task: "Print the remainder of 17 divided by 5!",
-          initialCode: "# Recall the operator that returns the remainder of a division\nprint(17 ___ 5)",
+          title: "🖥️ Try It — Remainder",
+          task: "Print the remainder when 17 is divided by 5!",
+          initialCode: "# 17 divided by 5: quotient 3, remainder is?\nprint(17 ___ 5)",
           expectedOutput: "2",
-          hint: "Use the % symbol for remainder",
+          hint: "Use the operator for remainder",
           hint2: "print(17 % 5)"
         },
         {
-          id: "quiz1",
-          type: "quiz",
-          title: "❓ Quiz!",
-          content: "What is the result of 2 ** 4?",
-          options: ["6", "8", "16", "24"],
-          answer: 2,
-          explanation: "2 ** 4 = 2 to the power of 4 = 2×2×2×2 = 16"
+          id: "try-quotient",
+          type: "tryit",
+          title: "🖥️ Try It — Quotient",
+          task: "23 candies for 4 people. How many does each get? (print the quotient)",
+          initialCode: "candy = 23\npeople = 4\nprint(candy ___ people)",
+          expectedOutput: "5",
+          hint: "Each person's share = quotient. The double-slash operator!",
+          hint2: "print(candy // people)"
         },
         {
           id: "modulo-uses",
@@ -148,6 +149,63 @@ print(20 % 5)   # 0 — 20 is a multiple of 5
           expectedOutput: "8",
           hint: "There's an operator that gives the remainder of a division.",
           hint2: "print(5678 % 10)"
+        },
+        {
+          id: "power-explain",
+          type: "explain",
+          title: "🔢 Exponent — two stars",
+          content: `You'll often need to multiply the same number **many times**. Example:
+
+> Fold a piece of paper in half, again, again... **after 10 folds, how many layers**?
+
+Answer: 2 multiplied 10 times = **1024 layers**!
+
+That's an **exponent** — written with two stars.
+
+\`\`\`python
+print(2 ** 1)   # 2     ← 2 once
+print(2 ** 2)   # 4     ← 2 × 2 (twice)
+print(2 ** 3)   # 8     ← 2 × 2 × 2 (three times)
+print(2 ** 10)  # 1024  ← 2 multiplied 10 times!
+\`\`\`
+
+### Other numbers
+
+\`\`\`python
+print(5 ** 2)    # 25    ← 5 × 5
+print(3 ** 4)    # 81    ← 3 × 3 × 3 × 3
+print(10 ** 3)   # 1000  ← 10 × 10 × 10 (10 cubed)
+\`\`\`
+
+How to read: \`a ** b\` is "a multiplied by itself b times". Same as math's \`a^b\`.
+
+### ⚠️ One star vs two stars
+
+\`\`\`python
+print(2 * 4)    # 8   ← multiply (once)
+print(2 ** 4)   # 16  ← exponent (4 times)
+\`\`\`
+
+One star = multiply. Two stars = exponent. Totally different meanings!`
+        },
+        {
+          id: "try-power",
+          type: "tryit",
+          title: "🖥️ Try It — Exponent",
+          task: "What's the area of a square with side 6cm? (6 squared)",
+          initialCode: "side = 6\n# Area of a square = side × side (= side squared)\narea = side __ 2\nprint(area)",
+          expectedOutput: "36",
+          hint: "Two stars for exponent.",
+          hint2: "area = side ** 2"
+        },
+        {
+          id: "quiz1",
+          type: "quiz",
+          title: "❓ Quiz!",
+          content: "What is the result of 2 ** 4?",
+          options: ["6", "8", "16", "24"],
+          answer: 2,
+          explanation: "2 ** 4 = 2 to the power of 4 = 2×2×2×2 = 16"
         },
         {
           id: "operator-priority",
@@ -206,7 +264,7 @@ print(10 <= 5)   # Less or equal → False
         {
           id: "try3",
           type: "tryit",
-          title: "🖥️ Try It!",
+          title: "🖥️ Try It — Greater than",
           task: "Print the result of 100 > 50!",
           initialCode: "print(100 ___ 50)",
           expectedOutput: "True",
@@ -216,17 +274,51 @@ print(10 <= 5)   # Less or equal → False
         {
           id: "equal-explain",
           type: "explain",
-          title: "🟰 Equal / Not Equal",
-          content: `**Equal** is \`==\` (two equal signs!)
-**Not equal** is \`!=\`
+          title: "🟰 Equal and Not Equal",
+          content: `Often we check whether two values are **equal** / **not equal**:
+
+> 🔑 "Is the password equal to 1234?"
+> 🎲 "Is the dice result a 6?"
+> 🚪 "Is the answer equal to 'apple'?"
 
 \`\`\`python
-print(10 == 10)  # Equal → True
-print(10 == 5)   # Equal → False
-print(10 != 5)   # Not equal → True
+print(10 == 10)   # True   ← equal
+print(10 == 5)    # False  ← not equal
+print(10 != 5)    # True   ← different
+print(10 != 10)   # False  ← not different (equal)
 \`\`\`
 
-⚠️ \`=\` is for assignment, \`==\` is for comparison!`
+### ⚠️ Most confusing trap — \\= one vs \\=\\= two
+
+| Symbol | Meaning |
+|---|---|
+| \`=\` | **Assignment** — store a value (\`x = 10\`) |
+| \`==\` | **Comparison** — ask if equal (\`x == 10\`) |
+
+\`\`\`python
+x = 10            # assign — put 10 in x
+print(x == 10)    # compare — is x equal to 10? → True
+\`\`\`
+
+**Rule: one equals = "put", two equals = "ask".** Easy mnemonic!
+
+### String comparison too
+
+\`\`\`python
+print("apple" == "apple")  # True
+print("apple" == "Apple")  # False — case differs
+print("hi" != "bye")       # True — different
+\`\`\``
+        },
+        {
+          id: "try-equal",
+          type: "tryit",
+          title: "🖥️ Try It — Equal?",
+          task: "Check if input password equals '1234' and print True/False!",
+          initialCode: "input_pw = '1234'\nresult = input_pw __ '1234'\nprint(result)",
+          expectedOutput: "True",
+          hint: "'Equal' uses two equals signs.",
+          hint2: "result = input_pw == '1234'"
         },
         {
           id: "quiz2",
@@ -361,12 +453,13 @@ print(day == "Sat" or day == "Sun")  # True
         {
           id: "try4",
           type: "tryit",
-          title: "🖥️ Try It!",
+          title: "🖥️ Try It — and connector",
           task: "Print the result of (10 > 5) and (3 < 7)!",
           initialCode: "print((10 > 5) ___ (3 < 7))",
           expectedOutput: "True",
-          hint: "If both are True, the and result is also True!",
-          hint2: "print((10 > 5) and (3 < 7))"
+          hint: "Connect them with the operator that needs both True!",
+          hint2: "and",
+          choices: ["and", "or", "not", "xor"]
         },
         {
           id: "is-not-explain",
@@ -485,7 +578,7 @@ score += 10         # Short way (same meaning!)
         {
           id: "try5",
           type: "tryit",
-          title: "🖥️ Try It!",
+          title: "🖥️ Try It — Compound assignment",
           task: "Start with hp = 100, apply hp -= 30, then print it!",
           initialCode: "hp = 100\nhp ___ 30\nprint(hp)",
           expectedOutput: "70",
