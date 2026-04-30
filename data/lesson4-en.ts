@@ -354,10 +354,11 @@ print(0 < x < 10)   # True — math inequality directly
           type: "tryit",
           title: "🖥️ Try It — Score comparison",
           task: "Check if score is 60 or higher, and if it's exactly 100. Print True/False for each!",
-          initialCode: "score = 75\npass_check = score __ 60\nperfect = score __ 100\nprint('passing?', pass_check)\nprint('perfect?', perfect)",
+          initialCode: "score = 75\npass_check = score ___ 60\nperfect = score ___ 100\nprint('passing?', pass_check)\nprint('perfect?', perfect)",
           expectedOutput: "passing? True\nperfect? False",
-          hint: "First line is 'or higher', second is 'equals' — two comparison operators.",
-          hint2: "pass_check = score >= 60\nperfect = score == 100"
+          hint: "First blank is 'or higher', second is 'equals'.",
+          hint2: ">= / ==",
+          choices: [">=", "==", "<=", "!=", ">", "<"]
         }
       ]
     },
@@ -508,10 +509,11 @@ print(7 not in [1, 2, 3])   # True   ← no 7
           type: "tryit",
           title: "🖥️ Try It — None check + flip",
           task: "Check whether name is None, then flip that result. Print both!",
-          initialCode: "name = None\ncheck = name __ None\nopposite = __ check\nprint('None?', check)\nprint('not?', opposite)",
+          initialCode: "name = None\ncheck = name ___ None\nopposite = ___ check\nprint('None?', check)\nprint('not?', opposite)",
           expectedOutput: "None? True\nnot? False",
-          hint: "First line: None check — 2-letter operator preferred over ==. Second: flip with one word.",
-          hint2: "check = name is None\nopposite = not check"
+          hint: "First blank: 2-letter None check. Second: one word to flip.",
+          hint2: "is / not",
+          choices: ["is", "not", "==", "!=", "is not"]
         },
         {
           id: "quiz3",
@@ -549,10 +551,11 @@ Each comparison gives True/False, then \`and\` / \`or\` combines them into a sin
           type: "tryit",
           title: "🖥️ Try It — Two conditions at once",
           task: "Check if score ≥ 60 AND attendance ≥ 80% in one line, then print True/False!",
-          initialCode: "score = 75\nattendance = 85   # %\n\n# Are both conditions met?\nresult = score >= 60 ___ attendance >= 80\n\nprint(result)",
+          initialCode: "score = 75\nattendance = 85\nresult = score >= 60 ___ attendance >= 80\nprint(result)",
           expectedOutput: "True",
-          hint: "Both = and",
-          hint2: "result = score >= 60 and attendance >= 80"
+          hint: "The operator that needs both conditions to be True!",
+          hint2: "and",
+          choices: ["and", "or", "not", "xor"]
         }
       ]
     },

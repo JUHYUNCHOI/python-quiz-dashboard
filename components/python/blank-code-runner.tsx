@@ -117,13 +117,17 @@ export function BlankCodeRunner({
   hint = "",
   hint2 = "",
   onSuccess,
-  minHeight = "220px",
+  minHeight = "100px",
   storageKey,
   isStepDone = false,
   choices = [],
 }: BlankCodeRunnerProps) {
   const blanks = parseBlanks(initialCode)
   const answers = hint2 ? parseAnswers(hint2) : []
+  // 줄 수 기반 minHeight (코드 길이에 맞게 자동 grow, 세로 스크롤 X)
+  const lineCount = initialCode.split("\n").length
+  const minPx = parseInt(minHeight) || 100
+  const computedMinHeight = `${Math.max(minPx, lineCount * 28 + 32)}px`
 
   const lsKey = storageKey ? `blank-runner-${storageKey}` : null
 
@@ -530,7 +534,7 @@ export function BlankCodeRunner({
           </span>
         </div>
 
-        <div className="font-mono p-3 md:p-4 text-[13px] md:text-[15px] overflow-x-auto" style={{ minHeight }}>
+        <div className="font-mono p-3 md:p-4 text-[13px] md:text-[15px] overflow-x-auto" style={{ minHeight: computedMinHeight }}>
           {renderCodeWithBlanks()}
         </div>
       </div>

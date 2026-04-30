@@ -383,10 +383,11 @@ print(0 < x < 10)   # True — 수학 부등식 그대로
           type: "tryit",
           title: "🖥️ 직접 해보기 — 점수 비교",
           task: "점수가 60 점 이상인지, 정확히 100 점인지 두 가지를 비교해 True/False 를 출력하세요!",
-          initialCode: "score = 75\npass_check = score __ 60\nperfect = score __ 100\nprint('합격선?', pass_check)\nprint('만점?', perfect)",
+          initialCode: "score = 75\npass_check = score ___ 60\nperfect = score ___ 100\nprint('합격선?', pass_check)\nprint('만점?', perfect)",
           expectedOutput: "합격선? True\n만점? False",
-          hint: "첫 줄은 '이상', 둘째 줄은 '같다' — 두 비교 연산자.",
-          hint2: "pass_check = score >= 60\nperfect = score == 100"
+          hint: "첫 빈칸은 '이상', 둘째 빈칸은 '같다'.",
+          hint2: ">= / ==",
+          choices: [">=", "==", "<=", "!=", ">", "<"]
         }
       ]
     },
@@ -500,10 +501,11 @@ print(7 not in [1, 2, 3])   # True   ← 7 없음
           type: "tryit",
           title: "🖥️ 직접 해보기 — None 검사 + 뒤집기",
           task: "name 이 None 인지 검사하고, 그 결과를 뒤집어 출력하세요!",
-          initialCode: "name = None\ncheck = name __ None\nopposite = __ check\nprint('None?', check)\nprint('아님?', opposite)",
+          initialCode: "name = None\ncheck = name ___ None\nopposite = ___ check\nprint('None?', check)\nprint('아님?', opposite)",
           expectedOutput: "None? True\n아님? False",
-          hint: "첫 줄은 None 검사 — == 보다 권장되는 두 글자. 둘째 줄은 뒤집기 — 한 단어.",
-          hint2: "check = name is None\nopposite = not check"
+          hint: "첫 빈칸은 None 검사용 두 글자, 둘째는 뒤집는 한 단어.",
+          hint2: "is / not",
+          choices: ["is", "not", "==", "!=", "is not"]
         },
         {
           id: "quiz3",
@@ -541,10 +543,11 @@ print(day == "토" or day == "일")      # True
           type: "tryit",
           title: "🖥️ 직접 해보기 — 두 조건 동시에",
           task: "점수 60 이상 **그리고** 출석 80% 이상인지 한 줄로 검사해서 True/False 출력!",
-          initialCode: "score = 75\nattendance = 85   # 출석률 %\n\n# 두 조건 동시에 만족하는지 한 줄에\nresult = score >= 60 ___ attendance >= 80\n\nprint(result)",
+          initialCode: "score = 75\nattendance = 85\nresult = score >= 60 ___ attendance >= 80\nprint(result)",
           expectedOutput: "True",
-          hint: "둘 다 만족 = and",
-          hint2: "result = score >= 60 and attendance >= 80"
+          hint: "둘 다 만족하는 연산자!",
+          hint2: "and",
+          choices: ["and", "or", "not", "xor"]
         }
       ]
     },
