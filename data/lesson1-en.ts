@@ -56,16 +56,20 @@ print('Hello!')
         },
         {
           id: "try2",
-          type: "explain",
-          title: "🌍 Any Language Works!",
-          content: `Python can print **any language** — not just English!\n\n\`\`\`python\nprint('안녕하세요!')  # Korean\nprint('Bonjour!')     # French\nprint('こんにちは!')  # Japanese\n\`\`\`\n\nAs long as it's inside quotes, Python prints it!`
+          type: "tryit",
+          title: "🖥️ Other languages too!",
+          task: "Print 'Bonjour!' (French for hello!).",
+          initialCode: "print(___)",
+          expectedOutput: "Bonjour!",
+          hint: "Any language works inside quotes!",
+          hint2: "print('Bonjour!')"
         },
         {
           id: "quiz1",
           type: "quiz",
           title: "❓ Quiz!",
-          content: "What is the output of `print('파이썬')`?",
-          options: ["print('파이썬')", "'파이썬'", "파이썬", "Error"],
+          content: "What is the output of `print('Python')`?",
+          options: ["print('Python')", "'Python'", "Python", "Error"],
           answer: 2,
           explanation: "Only the content inside the quotes gets printed!"
         }
@@ -109,6 +113,23 @@ Python automatically calculates and displays the result! 🧮`
           expectedOutput: "300",
           hint: "Calculate directly inside print()!",
           hint2: "print(100 + 200)"
+        },
+        {
+          id: "comment-explain",
+          type: "explain",
+          title: "💬 What is that # symbol?",
+          content: `Did you spot the **#** symbol in the code? That's a **comment**!
+
+\`\`\`python
+# Calculate and print 100 + 200
+print(100 + 200)   # Result: 300
+\`\`\`
+
+- Anything after **#** is **completely ignored** by Python
+- It doesn't run, doesn't print
+- It's a **note for humans** reading the code 📝
+
+You'll see this often in lesson code. **When you see \`#\`, just read it as "this is a note!"** and move on!`
         },
         {
           id: "quiz2",
