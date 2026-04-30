@@ -371,8 +371,8 @@ print(day == "Sat" or day == "Sun")  # True
         {
           id: "is-not-explain",
           type: "explain",
-          title: "🔎 \`is\`, \`is not\`, \`not\` — More comparisons",
-          content: `### \`is\` / \`is not\` — "is it the same one?"
+          title: "🔎 is, is not, not — More comparisons",
+          content: `### is / is not — "is it the same one?"
 
 While \`==\` checks if **values are equal**, \`is\` checks if it's **the very same object**.
 
@@ -387,9 +387,9 @@ print(x is not None)    # False  ← opposite — "x is not None"
 print(x == None)        # True too — but 'is' is more precise
 \`\`\`
 
-> 💡 **\`x is None\`** is the Pythonic style. \`== None\` works but \`is None\` is clearer.
+> 💡 \`x is None\` is the Pythonic style. \`== None\` works but \`is None\` is clearer.
 
-### \`not\` — flip in front
+### not — flip in front
 
 Put \`not\` **in front** of a value to flip True/False.
 
@@ -399,7 +399,7 @@ print(not False)        # True
 print(not (5 > 3))      # False  ← opposite of (5 > 3) which is True
 \`\`\`
 
-### \`not in\` — preview (covered more in lesson 5+)
+### not in — preview (covered more in lesson 5+)
 
 Check if something is **not in** a string or list. (opposite of in)
 

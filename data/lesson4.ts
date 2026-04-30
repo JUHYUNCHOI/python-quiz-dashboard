@@ -399,85 +399,48 @@ print(0 < x < 10)   # True — 수학 부등식 그대로
           id: "logic-explain",
           type: "explain",
           title: "🔗 조건 합치기 — and, or, not",
-          content: `엄마가 시키시는 말 잘 들어보세요. 똑같이 두 사람 이름이 나와도 **느낌이 다르죠**?
+          content: `엄마 말씀 들어보세요. 두 사람 이름이 같이 나와도 의미가 달라요.
 
-### 🔴 and — "둘 다 해야"
+### 🔴 and — 둘 다 해야
 
-> 👫 "민수 **그리고** 영희, 손 닦고 와!"
-
-민수 한 명만 닦으면 안 돼요. 둘 다 닦아야 끝나요.
+> 👫 "민수 **그리고** 영희, 손 닦고 와!" → 둘 다 닦아야 끝.
 
 \`\`\`python
-민수_손닦음 = True
-영희_손닦음 = False
-
-print(민수_손닦음 and 영희_손닦음)   # False ← 영희 안 닦았으니
+print(True  and True)    # True   ← 둘 다 ✅
+print(True  and False)   # False  ← 한 명 빠짐
 \`\`\`
 
-### 🔵 or — "한 명만 해도 OK"
+### 🔵 or — 한 명만 해도
 
-> 👬 "민수 **또는** 영희, 문 닫아줘!"
-
-누가 닫아도 돼요. 한 명만 닫으면 끝.
+> 👬 "민수 **또는** 영희, 문 닫아줘!" → 한 명만 닫으면 끝.
 
 \`\`\`python
-민수_문닫음 = False
-영희_문닫음 = True
-
-print(민수_문닫음 or 영희_문닫음)    # True ← 영희가 닫았으니 OK
+print(True  or False)   # True   ← 한 명만 해도 OK
+print(False or False)   # False  ← 둘 다 안 했을 때만 X
 \`\`\`
 
-### 🟢 not — 반대로 뒤집기
+### 🟢 not — 반대로
 
-> 🌙 "어둡지 **않으면** 산책 가자!"
+> 🌙 "어둡지 **않으면** 산책!"
 
 \`\`\`python
-print(not True)    # False  ← True 의 반대
-print(not False)   # True   ← False 의 반대
-
-is_dark = False
-print(not is_dark)   # True ← '어둡다' 의 반대 = '안 어둡다'
+print(not True)    # False
+print(not False)   # True
 \`\`\`
 
 ---
 
-### 🎯 외우기 쉬운 핵심 — 4 가지 경우 다 외울 필요 X
+### 🎯 외우는 한 줄
 
-**and** (둘 다) 의 결과 — **True and True** 일 때만 True. 나머지는 다 False.
+- **and 는 까다로워요** — 둘 다 True 여야 True
+- **or 는 너그러워요** — 둘 다 False 일 때만 False
 
-| 상황 | 결과 |
-|---|---|
-| ✅ True **and** True | **True** ← 이거 하나만 |
-| True and False | False |
-| False and True | False |
-| False and False | False |
+| 입력 | True / True | True / False | False / True | False / False |
+|---|---|---|---|---|
+| 🔴 **and** | **True** | False | False | False |
+| 🔵 **or**  | True | True | True | **False** |
 
-**or** (하나라도) 의 결과 — **False or False** 일 때만 False. 나머지는 다 True.
-
-| 상황 | 결과 |
-|---|---|
-| True or True | True |
-| True or False | True |
-| False or True | True |
-| ❌ False **or** False | **False** ← 이거 하나만 |
-
-> 🎯 외우는 한 줄:
-> - **and** 는 까다로워요 — **둘 다 True** 여야만 True
-> - **or** 는 너그러워요 — **둘 다 False** 일 때만 False
-
-### 더 많은 일상 예시
-
-\`\`\`python
-age = 15
-height = 140
-
-# 놀이기구: 13 살 이상 그리고 130cm 이상 (둘 다)
-print(age >= 13 and height >= 130)   # True
-
-# 휴일: 토 또는 일 (한 가지만)
-day = "토"
-print(day == "토" or day == "일")    # True
-\`\`\``
+\`and\` 줄에 True 는 딱 하나, \`or\` 줄에 False 는 딱 하나. 그 한 칸만 기억하면 끝.`
         },
         {
           id: "try4",
@@ -492,10 +455,10 @@ print(day == "토" or day == "일")    # True
         {
           id: "is-not-explain",
           type: "explain",
-          title: "🔎 \`is\`, \`is not\`, \`not\` — 또 다른 비교",
-          content: `### \`is\` / \`is not\` — '같은 것인가?' 검사
+          title: "🔎 is, is not, not — 또 다른 비교",
+          content: `### is / is not — "같은 것인가?" 검사
 
-\`==\` 가 **값이 같은지** 묻는다면, \`is\` 는 **완전히 같은 것인지** (같은 자리에 있는 그것인지) 검사해요.
+\`==\` 가 **값이 같은지** 묻는다면, \`is\` 는 **완전히 같은 것인지** 검사해요.
 
 가장 자주 쓰는 곳: **\`None\` 인지 확인할 때**.
 
@@ -508,9 +471,9 @@ print(x is not None)    # False  ← 반대 — 'x 가 None 이 아니다'
 print(x == None)        # True 도 됨 — 다만 is 가 더 정확
 \`\`\`
 
-> 💡 **\`x is None\`** 가 파이썬 권장 스타일. \`== None\` 도 동작은 하지만 \`is None\` 이 더 명확.
+> 💡 \`x is None\` 가 파이썬 권장 스타일. \`== None\` 도 동작은 하지만 \`is None\` 이 더 명확.
 
-### \`not\` — 앞에 붙여서 뒤집기
+### not — 앞에 붙여서 뒤집기
 
 \`not\` 은 한 값 **앞에** 붙어서 True/False 를 뒤집어요.
 
@@ -520,7 +483,7 @@ print(not False)        # True
 print(not (5 > 3))      # False  ← 5 > 3 = True 의 반대
 \`\`\`
 
-### \`not in\` — 미리보기 (lesson 5+ 에서 자세히)
+### not in — 미리보기 (lesson 5+ 에서 자세히)
 
 문자열, 리스트 안에 **없는지** 검사. (in 의 반대)
 
