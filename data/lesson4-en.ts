@@ -584,11 +584,12 @@ score += 10         # Short way (same meaning!)
           id: "try5",
           type: "tryit",
           title: "🖥️ Try It — Compound assignment",
-          task: "Start with hp = 100, apply hp -= 30, then print it!",
+          task: "Start with hp = 100, subtract 30 and store back to hp, then print!",
           initialCode: "hp = 100\nhp ___ 30\nprint(hp)",
           expectedOutput: "70",
-          hint: "-= subtracts and saves the result",
-          hint2: "hp = 100\nhp -= 30\nprint(hp)"
+          hint: "Compound operator that subtracts and stores!",
+          hint2: "-=",
+          choices: ["-=", "+=", "*=", "/=", "="]
         },
         {
           id: "mission1",

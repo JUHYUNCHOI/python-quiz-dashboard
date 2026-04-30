@@ -576,11 +576,12 @@ score += 10         # 짧은 방법 (같은 의미!)
           id: "try5",
           type: "tryit",
           title: "🖥️ 직접 해보기 — 복합 대입",
-          task: "hp = 100에서 hp -= 30 후 출력하세요!",
+          task: "hp = 100 에서 30 을 빼서 다시 hp 에 저장 후 출력하세요!",
           initialCode: "hp = 100\nhp ___ 30\nprint(hp)",
           expectedOutput: "70",
-          hint: "-= 는 빼고 저장해요",
-          hint2: "hp = 100\nhp -= 30\nprint(hp)"
+          hint: "빼고 저장하는 복합 대입 연산자!",
+          hint2: "-=",
+          choices: ["-=", "+=", "*=", "/=", "="]
         },
         {
           id: "mission1",
