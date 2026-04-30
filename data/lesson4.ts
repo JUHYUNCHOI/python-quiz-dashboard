@@ -399,55 +399,63 @@ print(0 < x < 10)   # True — 수학 부등식 그대로
           id: "logic-explain",
           type: "explain",
           title: "🔗 조건 합치기 — and, or, not",
-          content: `한 가지 조건만 쓰는 건 부족할 때가 있어요:
+          content: `엄마가 시키시는 말 잘 들어보세요. 똑같이 두 사람 이름이 나와도 **느낌이 다르죠**?
 
-> 🎢 "13 살 **이상이고** 130cm **이상이면** 탈 수 있다"
-> 🎬 "주말 **이거나** 공휴일이면** 영화 보러 간다"
-> 🌙 "**바깥이 어둡지 않으면** 산책 간다"
+### 👫 민수 **그리고** 영희 손 닦고 와! → 둘 다 해야
 
-이렇게 **여러 조건** 을 합치거나 **반대로** 만들 때 쓰는 도구가 \`and\`, \`or\`, \`not\`.
+민수 한 명만 닦으면 안 돼요. **둘 다** 닦아야 해요.
 
-### \`and\` — "둘 다" 만족해야
+→ 이게 **and** (그리고): **둘 다** 만족해야 True.
 
 \`\`\`python
-print(True  and True)    # True   ← 둘 다 참
-print(True  and False)   # False  ← 하나라도 거짓이면 False
-print(False and True)    # False
-print(False and False)   # False
+민수_손닦음 = True
+영희_손닦음 = False
+
+print(민수_손닦음 and 영희_손닦음)   # False ← 영희 안 닦았으니
 \`\`\`
 
-> 🎯 \`and\` = "**그리고**, 둘 다 만족해야"
+### 👬 민수 **또는** 영희가 문 닫아줘! → 한 명만 해도 OK
 
-### \`or\` — "하나라도" 만족하면
+누가 닫아도 돼요. **한 명만** 닫으면 끝.
+
+→ 이게 **or** (또는): **하나라도** 만족하면 True.
 
 \`\`\`python
-print(True  or True)    # True
-print(True  or False)   # True   ← 하나만 맞아도 True
-print(False or True)    # True
-print(False or False)   # False  ← 둘 다 거짓일 때만 False
+민수_문닫음 = False
+영희_문닫음 = True
+
+print(민수_문닫음 or 영희_문닫음)    # True ← 영희가 닫았으니 OK
 \`\`\`
 
-> 🎯 \`or\` = "**또는**, 하나라도 만족하면"
-
-### \`not\` — 반대로 뒤집기
+### 🚫 not — "아니다" 로 뒤집기
 
 \`\`\`python
-print(not True)    # False
-print(not False)   # True
+print(not True)    # False  ← True 의 반대
+print(not False)   # True   ← False 의 반대
+
+is_open = False
+print(not is_open)   # True ← '닫혀있다' 의 반대 = '열려있지 않다'
 \`\`\`
 
-> 🎯 \`not\` = "**아니다**, 반대로"
+### 정리표
 
-### 일상 예시
+| | True and True | True and False | False and False |
+|---|---|---|---|
+| **and** (그리고) | True | False | False |
+| **or** (또는) | True | True | False |
+
+> 🎯 **and** = 둘 다 만족해야 / **or** = 하나라도 만족하면 / **not** = 반대로
+
+### 더 많은 일상 예시
 
 \`\`\`python
 age = 15
 height = 140
 
-# 놀이기구: 13 살 이상 AND 130cm 이상
+# 놀이기구: 13 살 이상 그리고 130cm 이상 (둘 다)
 print(age >= 13 and height >= 130)   # True
 
-# 영화: 주말 OR 공휴일
+# 휴일: 토 또는 일 (한 가지만)
 day = "토"
 print(day == "토" or day == "일")    # True
 

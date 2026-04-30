@@ -277,19 +277,70 @@ print(0 < x < 10)   # True — math inequality directly
         {
           id: "logic-explain",
           type: "explain",
-          title: "🔗 and, or, not",
-          content: `You can combine multiple conditions!
+          title: "🔗 Combining conditions — and, or, not",
+          content: `Listen carefully to your parent's instructions. Two names can sound similar but **mean different things**:
+
+### 👫 Alice **and** Bob, go wash your hands! → Both must do it
+
+Just Alice washing isn't enough. **Both** must wash.
+
+→ This is **and**: **both** must be True.
 
 \`\`\`python
-# and: Both must be True for True
-print(True and True)   # True
-print(True and False)  # False
+alice_washed = True
+bob_washed = False
 
-# or: Only one needs to be True for True
-print(True or False)   # True
+print(alice_washed and bob_washed)   # False ← Bob didn't wash
+\`\`\`
 
-# not: Reverses the value
-print(not True)        # False
+### 👬 Alice **or** Bob, please close the door! → Either is fine
+
+Either one can do it. Just **one** is enough.
+
+→ This is **or**: **at least one** is True.
+
+\`\`\`python
+alice_closed = False
+bob_closed = True
+
+print(alice_closed or bob_closed)    # True ← Bob did it, OK
+\`\`\`
+
+### 🚫 not — flip with "not"
+
+\`\`\`python
+print(not True)    # False  ← opposite of True
+print(not False)   # True   ← opposite of False
+
+is_open = False
+print(not is_open)   # True ← opposite of "is closed"
+\`\`\`
+
+### Summary table
+
+| | True and True | True and False | False and False |
+|---|---|---|---|
+| **and** (both) | True | False | False |
+| **or** (either) | True | True | False |
+
+> 🎯 **and** = both must hold / **or** = at least one holds / **not** = opposite
+
+### More everyday examples
+
+\`\`\`python
+age = 15
+height = 140
+
+# Ride: 13 or older AND 130cm or taller (both)
+print(age >= 13 and height >= 130)   # True
+
+# Holiday: Saturday OR Sunday (either one)
+day = "Sat"
+print(day == "Sat" or day == "Sun")  # True
+
+# Walk: not dark (flip)
+is_dark = False
+print(not is_dark)                    # True
 \`\`\``
         },
         {
