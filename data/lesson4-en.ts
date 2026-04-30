@@ -47,14 +47,41 @@ print(10 / 3)   # 3.3333333333333335
         {
           id: "special-explain",
           type: "explain",
-          title: "🔢 Special Operators",
-          content: `### Division-Related Operators
+          title: "🔢 Special Operators — //, %, **",
+          content: `Beyond \`+ - * /\`, there are **3 more** common operators.
+
+### Division partners — \`//\` (quotient), \`%\` (remainder)
+
+While \`/\` gives the full division result, these split it into **quotient** and **remainder**.
 
 \`\`\`python
-print(10 / 3)   # Division → 3.333...
-print(10 // 3)  # Quotient only → 3
-print(10 % 3)   # Remainder only → 1
-print(2 ** 3)   # Exponent → 8
+print(10 / 3)   # 3.333...   ← regular division (decimal)
+print(10 // 3)  # 3           ← quotient only
+print(10 % 3)   # 1           ← remainder only
+\`\`\`
+
+10 ÷ 3 = 3 remainder 1.
+- \`//\` is that "3"
+- \`%\` is that "1"
+
+### Exponent — \`**\`
+
+Math's **power**. \`a ** b\` = "multiply a by itself b times".
+
+\`\`\`python
+print(2 ** 3)   # 8     ← 2 × 2 × 2
+print(2 ** 4)   # 16    ← 2 × 2 × 2 × 2
+print(5 ** 2)   # 25    ← 5 × 5
+print(10 ** 3)  # 1000  ← 10 × 10 × 10
+\`\`\`
+
+> 🎯 One-liner: **\`a ** b\` = a multiplied by itself b times.**
+
+⚠️ \`*\` (single) is multiplication — **two** \`*\` together = exponent. Easy to mix up!
+
+\`\`\`python
+2 * 4    # 8   ← multiply (once)
+2 ** 4   # 16  ← exponent (4 times)
 \`\`\``
         },
         {
