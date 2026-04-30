@@ -125,9 +125,10 @@ export function BlankCodeRunner({
   const blanks = parseBlanks(initialCode)
   const answers = hint2 ? parseAnswers(hint2) : []
   // 줄 수 기반 minHeight (코드 길이에 맞게 자동 grow, 세로 스크롤 X)
+  // 줄당 32px + padding 48px (PythonRunner 와 동일)
   const lineCount = initialCode.split("\n").length
   const minPx = parseInt(minHeight) || 100
-  const computedMinHeight = `${Math.max(minPx, lineCount * 28 + 32)}px`
+  const computedMinHeight = `${Math.max(minPx, lineCount * 32 + 48)}px`
 
   const lsKey = storageKey ? `blank-runner-${storageKey}` : null
 

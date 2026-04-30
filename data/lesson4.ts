@@ -198,10 +198,11 @@ print(2 ** 4)   # 16  ← 거듭제곱 (네 번 곱)
           type: "tryit",
           title: "🖥️ 직접 해보기 — 거듭제곱",
           task: "한 변이 6cm 인 정사각형의 넓이는? (6 의 제곱)",
-          initialCode: "side = 6\n# 정사각형 넓이 = 한 변 × 한 변 (= 한 변의 제곱)\narea = side __ 2\nprint(area)",
+          initialCode: "side = 6\narea = side ___ 2\nprint(area)",
           expectedOutput: "36",
-          hint: "별표 두 개로 거듭제곱.",
-          hint2: "area = side ** 2"
+          hint: "거듭제곱은 별표 두 개를 붙여요.",
+          hint2: "**",
+          choices: ["**", "*", "+", "//"]
         },
         {
           id: "quiz1",
@@ -344,10 +345,11 @@ print("hi" != "bye")       # True — 다름
           type: "tryit",
           title: "🖥️ 직접 해보기 — 같은가?",
           task: "비밀번호 입력값이 '1234' 와 같은지 검사해서 True/False 출력!",
-          initialCode: "input_pw = '1234'\nresult = input_pw __ '1234'\nprint(result)",
+          initialCode: "input_pw = '1234'\nresult = input_pw ___ '1234'\nprint(result)",
           expectedOutput: "True",
           hint: "'같다' 비교는 등호 두 개.",
-          hint2: "result = input_pw == '1234'"
+          hint2: "==",
+          choices: ["==", "=", "!=", ">=", "<="]
         },
         {
           id: "quiz2",

@@ -193,10 +193,11 @@ One star = multiply. Two stars = exponent. Totally different meanings!`
           type: "tryit",
           title: "🖥️ Try It — Exponent",
           task: "What's the area of a square with side 6cm? (6 squared)",
-          initialCode: "side = 6\n# Area of a square = side × side (= side squared)\narea = side __ 2\nprint(area)",
+          initialCode: "side = 6\narea = side ___ 2\nprint(area)",
           expectedOutput: "36",
-          hint: "Two stars for exponent.",
-          hint2: "area = side ** 2"
+          hint: "Exponent uses two stars together.",
+          hint2: "**",
+          choices: ["**", "*", "+", "//"]
         },
         {
           id: "quiz1",
@@ -315,10 +316,11 @@ print("hi" != "bye")       # True — different
           type: "tryit",
           title: "🖥️ Try It — Equal?",
           task: "Check if input password equals '1234' and print True/False!",
-          initialCode: "input_pw = '1234'\nresult = input_pw __ '1234'\nprint(result)",
+          initialCode: "input_pw = '1234'\nresult = input_pw ___ '1234'\nprint(result)",
           expectedOutput: "True",
           hint: "'Equal' uses two equals signs.",
-          hint2: "result = input_pw == '1234'"
+          hint2: "==",
+          choices: ["==", "=", "!=", ">=", "<="]
         },
         {
           id: "quiz2",
