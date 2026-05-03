@@ -1,7 +1,127 @@
+import { useState, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#2563eb";
+
+/* ═══════════════════════════════════════════════════════════════
+   ExchangeSim — visualize milk redistribution
+   ═══════════════════════════════════════════════════════════════ */
+const _EX_PRESETS = [
+  [5, 3, 8, 4],       // total=20, avg=5, extra=0
+  [2, 4, 6, 8, 10],   // total=30, avg=6, extra=0
+  [1, 2, 3],          // total=6, avg=2, extra=0
+  [3, 3, 1, 1, 1],    // total=9, avg=1, extra=4 → wait avg=1 extra=4? 9/5=1 r=4. so 4 cows get 2, 1 gets 1
+  [5, 7, 8],          // total=20, avg=6, extra=2
+];
+
+export function ExchangeSim({ E }) {
+  const [pi, setPi] = useState(3);
+  const [si, setSi] = useState(0);
+  const milk = _EX_PRESETS[pi];
+  const N = milk.length;
+  const total = milk.reduce((a,b) => a+b, 0);
+  const avg = Math.floor(total / N);
+  const extra = total % N;
+  const result = [];
+  for (let i = 0; i < extra; i++) result.push(avg + 1);
+  for (let i = 0; i < N - extra; i++) result.push(avg);
+
+  // Phases: 0 = start (show original), 1 = compute total, 2 = compute avg/extra, 3 = result
+  const cur = Math.min(si, 3);
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        {_EX_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => { setPi(i); setSi(0); }} style={{
+            padding: "4px 8px", borderRadius: 8, border: `2px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 10, fontWeight: 800, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>[{p.join(",")}]</button>
+        ))}
+      </div>
+
+      {/* Bars */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", alignItems: "flex-end", marginBottom: 12, height: 90 }}>
+        {(cur < 3 ? milk : result).map((v, i) => (
+          <div key={i} style={{ textAlign: "center" }}>
+            <div style={{ fontSize: 11, fontWeight: 900, color: A, fontFamily: "'JetBrains Mono',monospace" }}>{v}</div>
+            <div style={{
+              width: 30, height: Math.max(8, v * 6), borderRadius: "4px 4px 0 0",
+              background: cur === 3 ? "#16a34a" : A, opacity: 0.8,
+              transition: "all .3s",
+            }} />
+          </div>
+        ))}
+      </div>
+
+      <div style={{ background: "#f8fafc", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, color: C.text, fontFamily: "'JetBrains Mono',monospace", textAlign: "center", lineHeight: 1.8 }}>
+        {cur === 0 && t(E, "Start — milk amounts before redistribution.", "시작 — 재분배 전 우유.")}
+        {cur === 1 && (<>total = {milk.join(" + ")} = <b style={{ color: A }}>{total}</b></>)}
+        {cur === 2 && (<>avg = total // N = <b style={{ color: A }}>{avg}</b>, extra = total % N = <b style={{ color: A }}>{extra}</b></>)}
+        {cur === 3 && (<>{t(E, `Final: ${extra} cows get ${avg + 1}, ${N - extra} cows get ${avg}.`, `최종: ${extra}마리는 ${avg + 1}, ${N - extra}마리는 ${avg}.`)}</>)}
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
+        <button onClick={() => setSi(Math.max(0, cur - 1))} disabled={cur === 0} style={{
+          background: cur === 0 ? "#e5e7eb" : "#fff", border: `2px solid ${cur === 0 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800, color: cur === 0 ? "#b0b5c3" : A,
+          cursor: cur === 0 ? "default" : "pointer",
+        }}>←</button>
+        <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>{cur + 1} / 4</span>
+        <button onClick={() => setSi(Math.min(3, cur + 1))} disabled={cur === 3} style={{
+          background: cur === 3 ? "#e5e7eb" : A, border: `2px solid ${cur === 3 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800,
+          color: cur === 3 ? "#b0b5c3" : "#fff", cursor: cur === 3 ? "default" : "pointer",
+        }}>→</button>
+      </div>
+    </div>
+  );
+}
+
+export function ExchangeRunner({ E }) {
+  const [milkIn, setMilkIn] = useState("5 3 8 4");
+  const [result, setResult] = useState(null);
+
+  const run = () => {
+    const milk = milkIn.trim().split(/\s+/).map(Number);
+    if (milk.some(isNaN) || milk.length === 0) {
+      setResult({ error: t(E, "Invalid: enter positive integers.", "잘못된 입력: 양의 정수.") });
+      return;
+    }
+    const total = milk.reduce((a,b) => a+b, 0);
+    const N = milk.length;
+    const avg = Math.floor(total / N);
+    const extra = total % N;
+    const out = [];
+    for (let i = 0; i < extra; i++) out.push(avg + 1);
+    for (let i = 0; i < N - extra; i++) out.push(avg);
+    setResult({ done: true, total, avg, extra, out });
+  };
+
+  return (
+    <div style={{ padding: 14 }}>
+      <input value={milkIn} onChange={e => setMilkIn(e.target.value)} placeholder="milk amounts"
+        style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: A, marginBottom: 10, boxSizing: "border-box" }} />
+      <button onClick={run} style={{
+        width: "100%", padding: "10px 0", borderRadius: 10, border: "none", cursor: "pointer",
+        fontSize: 14, fontWeight: 800, marginBottom: 10, background: A, color: "#fff",
+      }}>▶ {t(E, "Compute", "계산")}</button>
+      {result?.error && (<div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px", color: "#7f1d1d", fontSize: 12, fontWeight: 700 }}>{result.error}</div>)}
+      {result?.done && (
+        <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: "10px 12px", color: "#15803d", fontSize: 13, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.8 }}>
+          total = {result.total}, avg = {result.avg}, extra = {result.extra}<br/>
+          → [{result.out.join(", ")}]
+        </div>
+      )}
+      <div style={{ marginTop: 12, background: "#f8fafc", borderRadius: 8, padding: "8px 10px", fontSize: 10, color: C.dim, lineHeight: 1.6 }}>
+        <div style={{ fontWeight: 800, color: C.text, marginBottom: 4 }}>{t(E, "⏱ USACO Time Estimate", "⏱ USACO 시간 추정")}</div>
+        <div>O(N) per test case — pure math, no simulation needed.</div>
+      </div>
+    </div>
+  );
+}
 
 /* ──────────────────────────────────────────────────────────────
    Section 1: Input + Setup

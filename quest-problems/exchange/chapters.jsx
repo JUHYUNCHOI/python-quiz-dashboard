@@ -441,6 +441,12 @@ export function makeExchangeCh2(E, lang = "py") {
       question: t(E, "25 % 7 = ?", "25 % 7 = ?"),
       answer: 4,
     },
+    {
+      type: "sim",
+      narr: t(E,
+        "Pick a milk distribution. Step through total → avg/extra → final result.",
+        "우유 분배를 고르고 total → avg/extra → 결과를 단계별로."),
+    },
     // 2-9 progressive code
     {
       type: "progressive",
@@ -448,6 +454,12 @@ export function makeExchangeCh2(E, lang = "py") {
         "Now build the solution step by step. Each section reveals one piece of the algorithm.",
         "이제 솔루션을 단계별로 만들어보자. 각 섹션마다 알고리즘 한 조각씩."),
       sections: getExchangeSections(E),
+    },
+    {
+      type: "runner",
+      narr: t(E,
+        "Try your own milk amounts.",
+        "직접 우유 양 시도."),
     },
   ];
 }

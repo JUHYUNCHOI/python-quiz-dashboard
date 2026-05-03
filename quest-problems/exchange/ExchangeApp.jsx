@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
-import { ExchangeProgressiveCode, downloadExchangePDF, getExchangeSections } from "./components";
+import { ExchangeProgressiveCode, downloadExchangePDF, getExchangeSections, ExchangeSim, ExchangeRunner } from "./components";
 import { makeExchangeCh1, makeExchangeCh2 } from "./chapters";
 
 const A = "#2563eb";
@@ -75,6 +75,8 @@ export default function ExchangeApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "progressive") return <ExchangeProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "sim") return <ExchangeSim E={E} />;
+    if (step.type === "runner") return <ExchangeRunner E={E} />;
     return null;
   };
 
