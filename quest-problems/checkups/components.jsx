@@ -1,8 +1,187 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#dc2626";
+
+/* ═══════════════════════════════════════════════════════════════
+   CheckupsSim — match a[i] vs b[i], plus Counter-based max
+   ═══════════════════════════════════════════════════════════════ */
+const _CK_PRESETS = [
+  { a: [1,2,3,1], b: [1,3,2,1] },
+  { a: [3,3,3,3,3], b: [3,3,1,1,1] },
+  { a: [1,1,2,3], b: [3,2,1,1] },
+];
+
+export function CheckupsSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [si, setSi] = useState(0);
+  const { a, b } = _CK_PRESETS[pi];
+  const N = a.length;
+  const totalSteps = N + 2;
+  const cur = Math.min(si, totalSteps - 1);
+
+  let curMatches = 0;
+  for (let i = 0; i <= Math.min(cur, N - 1); i++) if (a[i] === b[i]) curMatches++;
+
+  const isCounterStep = cur >= N;
+  const counterA = {}; const counterB = {};
+  for (const x of a) counterA[x] = (counterA[x] || 0) + 1;
+  for (const x of b) counterB[x] = (counterB[x] || 0) + 1;
+  const allKeys = [...new Set([...Object.keys(counterA), ...Object.keys(counterB)])].sort((x,y) => +x-+y);
+  let maxMatches = 0;
+  for (const k of allKeys) maxMatches += Math.min(counterA[k] || 0, counterB[k] || 0);
+  const showResult = cur === totalSteps - 1;
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        {_CK_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => { setPi(i); setSi(0); }} style={{
+            padding: "4px 8px", borderRadius: 8, border: `2px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 11, fontWeight: 800, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>case {i+1}</button>
+        ))}
+      </div>
+
+      {!isCounterStep && (
+        <>
+          <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 6, fontWeight: 700 }}>
+            {t(E, `Step ${cur + 1}: check position i = ${cur}`, `${cur + 1}단계: 위치 i = ${cur} 확인`)}
+          </div>
+          {[a, b].map((row, ri) => (
+            <div key={ri} style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 4 }}>
+              {row.map((v, idx) => {
+                const checked = idx <= cur;
+                const isCur = idx === cur;
+                const isMatch = checked && a[idx] === b[idx];
+                return (
+                  <div key={idx} style={{
+                    width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
+                    borderRadius: 6, fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+                    background: isMatch ? "#dcfce7" : (isCur ? "#fef3c7" : (checked ? "#fff" : "#f3f4f6")),
+                    border: `2px solid ${isMatch ? "#16a34a" : (isCur ? "#f59e0b" : (checked ? "#cbd5e1" : "#e5e7eb"))}`,
+                    color: isMatch ? "#15803d" : (checked ? C.text : "#9ca3af"),
+                  }}>{v}</div>
+                );
+              })}
+            </div>
+          ))}
+          <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginTop: 6 }}>
+            {t(E, `Current matches so far: ${curMatches}`, `지금까지 일치 수: ${curMatches}`)}
+          </div>
+        </>
+      )}
+
+      {isCounterStep && (
+        <div style={{ background: "#eff6ff", border: "2px solid #93c5fd", borderRadius: 10, padding: "10px 14px", marginBottom: 10 }}>
+          <div style={{ fontSize: 12, fontWeight: 800, color: "#1e3a8a", marginBottom: 8 }}>
+            {t(E, "Counter approach: max possible matches", "Counter 접근: 최대 가능 일치")}
+          </div>
+          <div style={{ fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text, lineHeight: 1.8 }}>
+            {allKeys.map(k => (
+              <div key={k}>
+                breed {k}: count_a={counterA[k] || 0}, count_b={counterB[k] || 0} → min = {Math.min(counterA[k] || 0, counterB[k] || 0)}
+              </div>
+            ))}
+            <div style={{ marginTop: 6, fontWeight: 800, color: "#1e3a8a" }}>max_match = {maxMatches}</div>
+          </div>
+        </div>
+      )}
+
+      {showResult && (
+        <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: "10px 14px", textAlign: "center", fontSize: 13, color: "#15803d", fontWeight: 800 }}>
+          {t(E, `✅ Output: current = ${curMatches}, max = ${maxMatches}`, `✅ 출력: 현재 = ${curMatches}, 최대 = ${maxMatches}`)}
+        </div>
+      )}
+
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10, marginTop: 12 }}>
+        <button onClick={() => setSi(Math.max(0, cur - 1))} disabled={cur === 0} style={{
+          background: cur === 0 ? "#e5e7eb" : "#fff", border: `2px solid ${cur === 0 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800, color: cur === 0 ? "#b0b5c3" : A,
+          cursor: cur === 0 ? "default" : "pointer",
+        }}>←</button>
+        <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>{cur + 1} / {totalSteps}</span>
+        <button onClick={() => setSi(Math.min(totalSteps - 1, cur + 1))} disabled={cur === totalSteps - 1} style={{
+          background: cur === totalSteps - 1 ? "#e5e7eb" : A, border: `2px solid ${cur === totalSteps - 1 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800,
+          color: cur === totalSteps - 1 ? "#b0b5c3" : "#fff", cursor: cur === totalSteps - 1 ? "default" : "pointer",
+        }}>→</button>
+      </div>
+    </div>
+  );
+}
+
+export function CheckupsRunner({ E }) {
+  const [aIn, setAIn] = useState("1 2 3 1");
+  const [bIn, setBIn] = useState("1 3 2 1");
+  const [running, setRunning] = useState(false);
+  const [result, setResult] = useState(null);
+  const [liveI, setLiveI] = useState(-1);
+  const [liveCur, setLiveCur] = useState(0);
+  const alive = useRef(false);
+
+  const run = () => {
+    const a = aIn.trim().split(/\s+/).map(Number);
+    const b = bIn.trim().split(/\s+/).map(Number);
+    if (a.some(isNaN) || b.some(isNaN) || a.length !== b.length || a.length === 0) {
+      setResult({ error: t(E, "Invalid: a and b must be same-length integer arrays.", "잘못된 입력: a와 b는 같은 길이 정수 배열.") });
+      return;
+    }
+    setRunning(true); setResult(null); setLiveI(-1); setLiveCur(0);
+    alive.current = true;
+    let i = 0; let cur = 0;
+    const tick = () => {
+      if (!alive.current) { setRunning(false); return; }
+      if (i >= a.length) {
+        const cA = {}, cB = {};
+        for (const x of a) cA[x] = (cA[x] || 0) + 1;
+        for (const x of b) cB[x] = (cB[x] || 0) + 1;
+        let max = 0;
+        for (const k in cA) max += Math.min(cA[k], cB[k] || 0);
+        setResult({ done: true, current: cur, max });
+        setRunning(false); return;
+      }
+      if (a[i] === b[i]) cur++;
+      setLiveI(i); setLiveCur(cur);
+      i++;
+      const delay = a.length <= 20 ? 200 : 30;
+      setTimeout(tick, delay);
+    };
+    setTimeout(tick, 100);
+  };
+  const stop = () => { alive.current = false; };
+
+  return (
+    <div style={{ padding: 14 }}>
+      <input value={aIn} onChange={e => setAIn(e.target.value)} disabled={running} placeholder="a (FJ)"
+        style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: A, marginBottom: 8, boxSizing: "border-box" }} />
+      <input value={bIn} onChange={e => setBIn(e.target.value)} disabled={running} placeholder="b (Bessie)"
+        style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: A, marginBottom: 10, boxSizing: "border-box" }} />
+      <button onClick={running ? stop : run} style={{
+        width: "100%", padding: "10px 0", borderRadius: 10, border: "none", cursor: "pointer",
+        fontSize: 14, fontWeight: 800, marginBottom: 10,
+        background: A, color: "#fff",
+      }}>{running ? t(E, "⏹ Stop", "⏹ 중지") : t(E, "▶ Run", "▶ 실행")}</button>
+      {(running || result?.done) && (
+        <div style={{ background: "#f8fafc", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, color: C.text, fontFamily: "'JetBrains Mono',monospace" }}>
+          i = {liveI}, current matches = {liveCur}
+        </div>
+      )}
+      {result?.error && (<div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px", color: "#7f1d1d", fontSize: 12, fontWeight: 700 }}>{result.error}</div>)}
+      {result?.done && (
+        <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: "10px 12px", color: "#15803d", fontSize: 13, fontWeight: 800 }}>
+          ✅ current = {result.current}<br/>max = {result.max}
+        </div>
+      )}
+      <div style={{ marginTop: 12, background: "#f8fafc", borderRadius: 8, padding: "8px 10px", fontSize: 10, color: C.dim, lineHeight: 1.6 }}>
+        <div style={{ fontWeight: 800, color: C.text, marginBottom: 4 }}>{t(E, "⏱ USACO Time Estimate", "⏱ USACO 시간 추정")}</div>
+        <div>O(N) per test case · trivially fast</div>
+      </div>
+    </div>
+  );
+}
 
 const CK_INPUT_PY = [
   "import sys",

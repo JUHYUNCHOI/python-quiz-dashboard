@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
-import { CheckupsProgressiveCode, downloadCheckupsPDF, getCheckupsSections } from "./components";
+import { CheckupsProgressiveCode, downloadCheckupsPDF, getCheckupsSections, CheckupsSim, CheckupsRunner } from "./components";
 import { makeCheckupsCh1, makeCheckupsCh2 } from "./chapters";
 
 const A = "#dc2626";
@@ -76,6 +76,8 @@ export default function CheckupsApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "progressive") return <CheckupsProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "sim") return <CheckupsSim E={E} />;
+    if (step.type === "runner") return <CheckupsRunner E={E} />;
     return null;
   };
 

@@ -107,6 +107,12 @@ export function makeCheckupsCh1(E) {
       question: t(E, "Matches at same positions?", "같은 위치에서 일치 수?"),
       answer: 2,
     },
+    {
+      type: "sim",
+      narr: t(E,
+        "Step through both phases: scanning a[i] vs b[i] for current matches, then Counter-based max.",
+        "두 단계 따라가기: a[i] vs b[i] 스캔 (현재 일치), 그 다음 Counter 기반 최대."),
+    },
   ];
 }
 
@@ -149,6 +155,12 @@ export function makeCheckupsCh2(E, lang = "py") {
         "Let's build the solution step by step. Each section reveals one piece of the algorithm.",
         "솔루션을 단계별로 만들어보자. 각 섹션마다 알고리즘 한 조각씩."),
       sections: getCheckupsSections(E),
+    },
+    {
+      type: "runner",
+      narr: t(E,
+        "Try your own a, b arrays. Live scan + Counter-based max.",
+        "직접 a, b 배열 시도. 실시간 스캔 + Counter 기반 최대."),
     },
   ];
 }
