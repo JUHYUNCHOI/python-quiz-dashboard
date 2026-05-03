@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getLonelyPhotoSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -98,7 +99,7 @@ export function makeLonelyPhotoCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: ⚡ 코드 (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeLonelyPhotoCh2(E) {
+export function makeLonelyPhotoCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
@@ -117,14 +118,13 @@ export function makeLonelyPhotoCh2(E) {
           </div>
         </div>),
     },
-    // 2-2: Code
+    // 2-2: Progressive code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the O(N) solution!",
-        "O(N) 풀이 코드야!"),
-      label: t(E, "Python Solution", "Python \ud480\uc774"),
-      code: SOLUTION_CODE,
+        "Now build the run-length scan step by step.",
+        "구간 길이 스캔을 단계별로 만들자."),
+      sections: getLonelyPhotoSections(E),
     },
   ];
 }
