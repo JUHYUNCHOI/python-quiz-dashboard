@@ -92,6 +92,12 @@ export function makeLonelyPhotoCh1(E) {
         "길이3: GHG(H외로움), HGH(G외로움), GHG(H외로움). 길이4: GHGH(x), HGHG(x). 길이5: GHGHG(x). 답: 3."),
       answer: 3,
     },
+    {
+      type: "sim",
+      narr: t(E,
+        "For each i, see same-type run + opp_left/opp_right + the count formula contribution.",
+        "각 i마다 같은 타입 구간 + opp_left/opp_right + 카운트 공식 기여."),
+    },
   ];
 }
 
@@ -125,6 +131,12 @@ export function makeLonelyPhotoCh2(E, lang = "py") {
         "Now build the run-length scan step by step.",
         "구간 길이 스캔을 단계별로 만들자."),
       sections: getLonelyPhotoSections(E),
+    },
+    {
+      type: "runner",
+      narr: t(E,
+        "Try your own G/H string.",
+        "직접 G/H 문자열 시도."),
     },
   ];
 }

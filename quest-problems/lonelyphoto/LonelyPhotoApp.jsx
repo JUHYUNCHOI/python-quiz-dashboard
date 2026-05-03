@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
-import { LonelyPhotoProgressiveCode, downloadLonelyPhotoPDF, getLonelyPhotoSections } from "./components";
+import { LonelyPhotoProgressiveCode, downloadLonelyPhotoPDF, getLonelyPhotoSections, LonelyPhotoSim, LonelyPhotoRunner } from "./components";
 import { makeLonelyPhotoCh1, makeLonelyPhotoCh2 } from "./chapters";
 
 const A = "#2563eb";
@@ -75,6 +75,8 @@ export default function LonelyPhotoApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "progressive") return <LonelyPhotoProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "sim") return <LonelyPhotoSim E={E} />;
+    if (step.type === "runner") return <LonelyPhotoRunner E={E} />;
     return null;
   };
 

@@ -1,7 +1,128 @@
+import { useState, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#2563eb";
+
+/* ═══════════════════════════════════════════════════════════════
+   LonelyPhotoSim — for each i: highlight same-type run + opp counts
+   ═══════════════════════════════════════════════════════════════ */
+const _LP_PRESETS = ["GHGHG", "GHHHG", "HGGGGH", "GHGHGHG"];
+
+export function LonelyPhotoSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [si, setSi] = useState(0);
+  const s = _LP_PRESETS[pi];
+  const N = s.length;
+  const cur = Math.min(si, N - 1);
+
+  // for current i: count left/right same-type runs
+  let left = 0;
+  for (let j = cur - 1; j >= 0 && s[j] === s[cur]; j--) left++;
+  let right = 0;
+  for (let j = cur + 1; j < N && s[j] === s[cur]; j++) right++;
+  const oppLeft = cur - left;
+  const oppRight = (N - 1 - cur) - right;
+  const contribution = oppLeft * oppRight + Math.max(0, oppLeft - 1) + Math.max(0, oppRight - 1);
+
+  // running total
+  let runningTotal = 0;
+  for (let i = 0; i <= cur; i++) {
+    let l = 0; for (let j = i - 1; j >= 0 && s[j] === s[i]; j--) l++;
+    let r = 0; for (let j = i + 1; j < N && s[j] === s[i]; j++) r++;
+    const ol = i - l;
+    const or_ = (N - 1 - i) - r;
+    runningTotal += ol * or_ + Math.max(0, ol - 1) + Math.max(0, or_ - 1);
+  }
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12 }}>
+        {_LP_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => { setPi(i); setSi(0); }} style={{
+            padding: "4px 10px", borderRadius: 8, border: `2px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>{p}</button>
+        ))}
+      </div>
+
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 8 }}>
+        {s.split("").map((ch, idx) => {
+          const isCur = idx === cur;
+          const inSameRun = (idx >= cur - left && idx <= cur + right);
+          const isOppLeft = idx < cur - left;
+          const isOppRight = idx > cur + right;
+          return (
+            <div key={idx} style={{
+              width: 32, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
+              borderRadius: 6, fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+              background: isCur ? "#fef3c7" : (inSameRun ? "#dbeafe" : (isOppLeft ? "#dcfce7" : (isOppRight ? "#fee2e2" : "#fff"))),
+              border: `2px solid ${isCur ? "#f59e0b" : (inSameRun ? A : (isOppLeft ? "#16a34a" : (isOppRight ? "#dc2626" : "#e5e7eb")))}`,
+              color: C.text,
+            }}>{ch}</div>
+          );
+        })}
+      </div>
+      <div style={{ textAlign: "center", fontSize: 10, color: C.dim, marginBottom: 12 }}>
+        🟡 = i ({cur}) · 🔵 = same run · 🟢 = opp_left ({oppLeft}) · 🔴 = opp_right ({oppRight})
+      </div>
+
+      <div style={{ background: "#eff6ff", border: "1.5px solid #93c5fd", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text, lineHeight: 1.7 }}>
+        i = {cur}, s[i] = '{s[cur]}'<br/>
+        opp_left × opp_right = {oppLeft} × {oppRight} = {oppLeft * oppRight}<br/>
+        + max(0, opp_left − 1) = {Math.max(0, oppLeft - 1)}<br/>
+        + max(0, opp_right − 1) = {Math.max(0, oppRight - 1)}<br/>
+        <b style={{ color: A }}>contribution = {contribution}</b><br/>
+        <span style={{ color: C.dim }}>running total = {runningTotal}</span>
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
+        <button onClick={() => setSi(Math.max(0, cur - 1))} disabled={cur === 0} style={{
+          background: cur === 0 ? "#e5e7eb" : "#fff", border: `2px solid ${cur === 0 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800, color: cur === 0 ? "#b0b5c3" : A,
+          cursor: cur === 0 ? "default" : "pointer",
+        }}>←</button>
+        <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>{cur + 1} / {N}</span>
+        <button onClick={() => setSi(Math.min(N - 1, cur + 1))} disabled={cur === N - 1} style={{
+          background: cur === N - 1 ? "#e5e7eb" : A, border: `2px solid ${cur === N - 1 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800,
+          color: cur === N - 1 ? "#b0b5c3" : "#fff", cursor: cur === N - 1 ? "default" : "pointer",
+        }}>→</button>
+      </div>
+    </div>
+  );
+}
+
+export function LonelyPhotoRunner({ E }) {
+  const [sIn, setSIn] = useState("GHGHG");
+  const [result, setResult] = useState(null);
+  const run = () => {
+    const s = sIn.trim().toUpperCase();
+    if (!s.match(/^[GH]+$/)) {
+      setResult({ error: t(E, "Invalid: only G/H characters.", "잘못된 입력: G/H만.") });
+      return;
+    }
+    const N = s.length;
+    let total = 0;
+    for (let i = 0; i < N; i++) {
+      let l = 0; for (let j = i - 1; j >= 0 && s[j] === s[i]; j--) l++;
+      let r = 0; for (let j = i + 1; j < N && s[j] === s[i]; j++) r++;
+      const ol = i - l, or_ = (N - 1 - i) - r;
+      total += ol * or_ + Math.max(0, ol - 1) + Math.max(0, or_ - 1);
+    }
+    setResult({ done: true, total });
+  };
+  return (
+    <div style={{ padding: 14 }}>
+      <input value={sIn} onChange={e => setSIn(e.target.value)} placeholder="G/H string"
+        style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: A, marginBottom: 10, boxSizing: "border-box" }} />
+      <button onClick={run} style={{ width: "100%", padding: "10px 0", borderRadius: 10, border: "none", cursor: "pointer", fontSize: 14, fontWeight: 800, marginBottom: 10, background: A, color: "#fff" }}>▶ {t(E, "Compute", "계산")}</button>
+      {result?.error && (<div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px", color: "#7f1d1d", fontSize: 12, fontWeight: 700 }}>{result.error}</div>)}
+      {result?.done && (<div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: "10px 12px", color: "#15803d", fontSize: 16, fontWeight: 900, textAlign: "center" }}>✅ {result.total}</div>)}
+    </div>
+  );
+}
 
 /* Section 1: input */
 const LP_INPUT_PY = [
