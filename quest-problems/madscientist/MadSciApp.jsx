@@ -94,15 +94,20 @@ export default function MadSciApp(props = {}) {
 
       {/* Tabs */}
       <div style={{ display: "flex", gap: 3, marginBottom: 12, overflowX: "auto", paddingBottom: 4 }}>
-        {TABS.map((label, i) =>
-          <button key={i} onClick={() => changeTab(i)} style={{
-            flex: "0 0 auto", borderRadius: 8, padding: "6px 10px", cursor: "pointer",
-            fontSize: 12, fontWeight: 700, whiteSpace: "nowrap",
-            background: i === tab ? A : "transparent",
-            border: `1.5px solid ${i === tab ? A : C.border}`,
-            color: i === tab ? "#fff" : C.dim,
-          }}>{label}</button>
-        )}
+        {TABS.map((label, i) => {
+          const isCurrent = i === tab;
+          const isVisited = visitedTabs.has(i) && !isCurrent;
+          return (
+            <button key={i} onClick={() => changeTab(i)} style={{
+              flex: "0 0 auto", borderRadius: 8, padding: "6px 10px", cursor: "pointer",
+              fontSize: 12, fontWeight: 700, whiteSpace: "nowrap",
+              background: isCurrent ? A : (isVisited ? `${A}20` : "transparent"),
+              border: `1.5px solid ${isCurrent ? A : (isVisited ? `${A}60` : C.border)}`,
+              color: isCurrent ? "#fff" : (isVisited ? A : C.dim),
+              display: "flex", alignItems: "center", gap: 4,
+            }}>{isVisited && <span style={{ fontSize: 10 }}>✓</span>}{label}</button>
+          );
+        })}
       </div>
 
       {/* Narration */}
