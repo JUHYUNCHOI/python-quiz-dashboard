@@ -7,9 +7,20 @@ import {
   makeCh1, makePatternSteps, makeBruteSteps, makeOptSteps, getOptSections,
 } from "./chapters";
 
-export default function RoundingApp() {
+export default function RoundingApp(props = {}) {
+  const propLang = props.lang;
   // --- Language ---
-  const [lang, setLang] = useState(() => typeof window !== "undefined" && (window._questLang === "en" || window.localStorage?.getItem("language") === "en") ? "en" : "ko");
+  // 부모(client.tsx)가 useLanguage 의 lang 을 prop 으로 넘겨줘서 동기화 보장.
+  // fallback: window._questLang / localStorage.language (구버전 호환)
+  const [lang, setLang] = useState(() => {
+    if (propLang === "ko" || propLang === "en") return propLang;
+    if (typeof window !== "undefined") {
+      if (window._questLang === "en") return "en";
+      if (window._questLang === "ko") return "ko";
+      if (window.localStorage?.getItem("language") === "en") return "en";
+    }
+    return "ko";
+  });
   const E = lang === "en";
   // 코드 언어 — 인앱 코드 + PDF 모두 적용 (Python / C++)
   const [codeLang, setCodeLang] = useState("py");
