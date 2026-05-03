@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
-import { WalkFenceProgressiveCode, downloadWalkFencePDF, getWalkFenceSections } from "./components";
+import { WalkFenceProgressiveCode, downloadWalkFencePDF, getWalkFenceSections, WalkFenceSim } from "./components";
 import { makeWalkCh1, makeWalkCh2 } from "./chapters";
 
 const A = "#059669";
@@ -75,6 +75,7 @@ export default function WalkFenceApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "progressive") return <WalkFenceProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "sim") return <WalkFenceSim E={E} />;
     return null;
   };
 

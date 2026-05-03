@@ -1,8 +1,126 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#16a34a";
+
+/* ═══════════════════════════════════════════════════════════════
+   WalkFenceSim — visualize fence + cow walking shorter perimeter
+   ═══════════════════════════════════════════════════════════════ */
+const _WF_PRESETS = [
+  { posts: [[0,0],[4,0],[4,3],[0,3]], cow: [[0,0],[0,3]] },           // square
+  { posts: [[0,0],[4,0],[4,3],[2,3],[2,5],[0,5]], cow: [[0,0],[2,5]] }, // L shape
+  { posts: [[0,0],[6,0],[6,4],[0,4]], cow: [[2,0],[6,2]] },            // rectangle
+];
+
+export function WalkFenceSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [stage, setStage] = useState(0); // 0 = show fence, 1 = show cow points + perimeter
+  const preset = _WF_PRESETS[pi];
+  const posts = preset.posts;
+  const P = posts.length;
+
+  // compute perimeter + cumulative
+  let perimeter = 0;
+  const cum = [0];
+  for (let i = 0; i < P; i++) {
+    const j = (i + 1) % P;
+    const d = Math.abs(posts[j][0] - posts[i][0]) + Math.abs(posts[j][1] - posts[i][1]);
+    perimeter += d;
+    cum.push(perimeter);
+  }
+  // Position of cow points on perimeter
+  const findPos = (x, y) => {
+    for (let i = 0; i < P; i++) {
+      const j = (i + 1) % P;
+      const px = posts[i][0], py = posts[i][1];
+      const qx = posts[j][0], qy = posts[j][1];
+      if (px === qx && qx === x && Math.min(py, qy) <= y && y <= Math.max(py, qy)) return cum[i] + Math.abs(y - py);
+      if (py === qy && qy === y && Math.min(px, qx) <= x && x <= Math.max(px, qx)) return cum[i] + Math.abs(x - px);
+    }
+    return -1;
+  };
+  const d1 = findPos(preset.cow[0][0], preset.cow[0][1]);
+  const d2 = findPos(preset.cow[1][0], preset.cow[1][1]);
+  const diff = Math.abs(d1 - d2);
+  const shorter = Math.min(diff, perimeter - diff);
+
+  // SVG dimensions
+  const minX = Math.min(...posts.map(p => p[0])) - 1;
+  const maxX = Math.max(...posts.map(p => p[0])) + 1;
+  const minY = Math.min(...posts.map(p => p[1])) - 1;
+  const maxY = Math.max(...posts.map(p => p[1])) + 1;
+  const W = 320; const H = 200;
+  const sx = (x) => ((x - minX) / (maxX - minX)) * W;
+  const sy = (y) => H - ((y - minY) / (maxY - minY)) * H;
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12 }}>
+        {_WF_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => { setPi(i); setStage(0); }} style={{
+            padding: "4px 10px", borderRadius: 8, border: `2px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>case {i+1}</button>
+        ))}
+      </div>
+
+      <svg width={W} height={H} style={{ display: "block", margin: "0 auto", background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 8 }}>
+        <polygon
+          points={posts.map(p => `${sx(p[0])},${sy(p[1])}`).join(" ")}
+          fill="none" stroke={A} strokeWidth="2.5"
+        />
+        {posts.map((p, i) => (
+          <circle key={i} cx={sx(p[0])} cy={sy(p[1])} r="4" fill={A} />
+        ))}
+        {stage >= 1 && (
+          <>
+            <circle cx={sx(preset.cow[0][0])} cy={sy(preset.cow[0][1])} r="6" fill="#3b82f6" />
+            <text x={sx(preset.cow[0][0])} y={sy(preset.cow[0][1]) - 10} fontSize="10" fill="#3b82f6" textAnchor="middle" fontWeight="800">A</text>
+            <circle cx={sx(preset.cow[1][0])} cy={sy(preset.cow[1][1])} r="6" fill="#dc2626" />
+            <text x={sx(preset.cow[1][0])} y={sy(preset.cow[1][1]) - 10} fontSize="10" fill="#dc2626" textAnchor="middle" fontWeight="800">B</text>
+          </>
+        )}
+      </svg>
+
+      <div style={{ background: "#f0fdf4", border: `1.5px solid #86efac`, borderRadius: 10, padding: "10px 12px", marginTop: 10, marginBottom: 10, fontSize: 12, color: C.text, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.7 }}>
+        {stage === 0 && (<>perimeter = {perimeter} ({P} posts, total fence length)</>)}
+        {stage === 1 && (
+          <>
+            A position on perimeter = {d1}<br/>
+            B position on perimeter = {d2}<br/>
+            |d1 − d2| = {diff} · perimeter − diff = {perimeter - diff}<br/>
+            <b style={{ color: "#16a34a" }}>shorter = {shorter}</b>
+          </>
+        )}
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
+        <button onClick={() => setStage(Math.max(0, stage - 1))} disabled={stage === 0} style={{
+          background: stage === 0 ? "#e5e7eb" : "#fff", border: `2px solid ${stage === 0 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800, color: stage === 0 ? "#b0b5c3" : A,
+          cursor: stage === 0 ? "default" : "pointer",
+        }}>←</button>
+        <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>{stage + 1} / 2</span>
+        <button onClick={() => setStage(Math.min(1, stage + 1))} disabled={stage === 1} style={{
+          background: stage === 1 ? "#e5e7eb" : A, border: `2px solid ${stage === 1 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800,
+          color: stage === 1 ? "#b0b5c3" : "#fff", cursor: stage === 1 ? "default" : "pointer",
+        }}>→</button>
+      </div>
+    </div>
+  );
+}
+
+export function WalkFenceRunner({ E }) {
+  return (
+    <div style={{ padding: 14, fontSize: 12, color: C.dim, lineHeight: 1.6, textAlign: "center" }}>
+      {t(E, "Use the Sim above to try different fence shapes and cow positions. (A custom fence runner needs structured input — see code section.)",
+            "위의 Sim에서 다양한 울타리 모양과 소 위치를 시도해봐. (커스텀 울타리 runner는 구조화된 입력 필요 — 코드 섹션 참고.)")}
+    </div>
+  );
+}
 
 /* Section 1: read posts */
 const WF_INPUT_PY = [

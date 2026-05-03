@@ -82,6 +82,12 @@ export function makeWalkCh1(E) {
       question: t(E, "Shorter distance?", "더 짧은 거리?"),
       answer: 2,
     },
+    {
+      type: "sim",
+      narr: t(E,
+        "3 fence shapes, 2 stages each: see total perimeter, then cow points + shorter side.",
+        "3가지 울타리 모양, 각 2단계: 총 둘레, 소 위치 + 짧은 쪽."),
+    },
   ];
 }
 
