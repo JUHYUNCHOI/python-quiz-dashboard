@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getCheckupsSections } from "./components";
 
 export const SOLUTION_CODE = [
   "N = int(input())",
@@ -109,7 +110,7 @@ export function makeCheckupsCh1(E) {
   ];
 }
 
-export function makeCheckupsCh2(E) {
+export function makeCheckupsCh2(E, lang = "py") {
   return [
     {
       type: "reveal",
@@ -143,10 +144,11 @@ export function makeCheckupsCh2(E) {
       explain: t(E, "Dictionary gives O(1) lookup and increment. Counter is Python's built-in frequency map!", "딕셔너리는 O(1) 조회와 증가. Counter는 파이썬 내장 빈도맵!"),
     },
     {
-      type: "code",
-      narr: t(E, "Clean and simple solution!", "깔끔하고 간단한 솔루션!"),
-      label: t(E, "💻 Complete Solution", "💻 전체 솔루션"),
-      code: SOLUTION_CODE,
+      type: "progressive",
+      narr: t(E,
+        "Let's build the solution step by step. Each section reveals one piece of the algorithm.",
+        "솔루션을 단계별로 만들어보자. 각 섹션마다 알고리즘 한 조각씩."),
+      sections: getCheckupsSections(E),
     },
   ];
 }
