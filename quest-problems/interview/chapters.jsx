@@ -173,6 +173,12 @@ export function makeInterviewCh2(E) {
         "힙 push/pop은 O(log K), N번 수행 → O(N log K). 힙 없이: 매번 K개 스캔 → O(NK)"),
     },
     {
+      type: "sim",
+      narr: t(E,
+        "Step through the assignment. N=5, K=2, times=[3,5,2,4,1]. Watch how each cow goes to the earliest-free counter.",
+        "배정 단계별로 따라가봐. N=5, K=2, times=[3,5,2,4,1]. 각 소가 가장 먼저 빈 카운터로 가는 걸 봐."),
+    },
+    {
       type: "input",
       narr: t(E,
         "N=6, K=3, times=[2,3,1,4,2,1]. Heap after first 3: [(2,0),(3,1),(1,2)]. Pop min (1,2), cow4→C3, push (1+4=5,2). Pop min (2,0), cow5→C1, push (2+2=4,0). Pop min (3,1), cow6→C2. Bessie goes to counter...?",
@@ -232,6 +238,12 @@ export function makeInterviewCh3(E, lang = "py") {
         "풀이 코드 — 부분별로 읽어봐. 헤더에서 Python ↔ C++ 토글."),
       sections: getInterviewSections(E),
       _legacyCode: SOLUTION_CODE,
+    },
+    {
+      type: "runner",
+      narr: t(E,
+        "Try it yourself. Enter N, K, times — watch the live assignment, see which counter Bessie ends at.",
+        "직접 돌려봐. N, K, times 입력 — 실시간 배정을 보고 베시가 어느 카운터로 가는지 확인."),
     },
   ];
 }

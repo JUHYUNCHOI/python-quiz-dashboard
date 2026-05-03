@@ -1,8 +1,210 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#059669";
+
+/* ═══════════════════════════════════════════════════════════════
+   InterviewSim — counters as cells, cows assigned one by one
+   ═══════════════════════════════════════════════════════════════ */
+function _simulate(N, K, times) {
+  const counters = Array.from({ length: K }, () => 0);
+  const trace = [];
+  for (let i = 0; i < Math.min(K, N); i++) {
+    counters[i] = times[i];
+    trace.push({ cow: i, counter: i, counters: [...counters], starts: 0, finish: counters[i], isInitial: true });
+  }
+  for (let i = K; i < N; i++) {
+    let pick = 0;
+    for (let c = 1; c < K; c++) if (counters[c] < counters[pick]) pick = c;
+    const start = counters[pick];
+    counters[pick] = start + times[i];
+    trace.push({ cow: i, counter: pick, counters: [...counters], starts: start, finish: counters[pick], isInitial: false });
+  }
+  return trace;
+}
+
+const _PRESET = { N: 5, K: 2, times: [3, 5, 2, 4, 1] };
+
+export function InterviewSim({ E }) {
+  const { N, K, times } = _PRESET;
+  const trace = _simulate(N, K, times);
+  const [si, setSi] = useState(0);
+  const cur = Math.min(si, trace.length - 1);
+  const step = trace[cur];
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ background: "#f8fafc", borderRadius: 10, padding: "10px 12px", marginBottom: 12, fontSize: 12, color: C.dim, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>
+        N = {N}, K = {K}, times = [{times.join(", ")}]
+      </div>
+
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 12 }}>
+        {step.counters.map((finish, c) => (
+          <div key={c} style={{
+            border: `2.5px solid ${c === step.counter ? "#f59e0b" : A}`,
+            background: c === step.counter ? "#fef3c7" : "#ecfdf5",
+            borderRadius: 10, padding: "8px 14px", minWidth: 80, textAlign: "center",
+          }}>
+            <div style={{ fontSize: 10, color: C.dim, fontWeight: 700 }}>
+              {t(E, "Counter", "카운터")} {c + 1}
+            </div>
+            <div style={{ fontSize: 18, fontWeight: 900, color: c === step.counter ? "#92400e" : A, fontFamily: "'JetBrains Mono',monospace" }}>
+              {finish === 0 ? "—" : `t=${finish}`}
+            </div>
+            <div style={{ fontSize: 9, color: C.dim }}>{t(E, "free at", "사용 가능 시각")}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{
+        background: step.cow === N - 1 ? "#fef3c7" : "#fff",
+        border: `2px solid ${step.cow === N - 1 ? "#f59e0b" : C.border}`,
+        borderRadius: 10, padding: "10px 14px", marginBottom: 12,
+      }}>
+        <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
+          {t(E, `Step ${cur + 1}: Cow ${step.cow + 1} (time ${times[step.cow]})`, `${cur + 1}단계: 소 ${step.cow + 1} (시간 ${times[step.cow]})`)}
+          {step.cow === N - 1 && <span style={{ marginLeft: 8, color: "#92400e", fontWeight: 900 }}>← {t(E, "Bessie!", "베시!")}</span>}
+        </div>
+        <div style={{ fontSize: 13, color: C.text, fontFamily: "'JetBrains Mono',monospace" }}>
+          {step.isInitial
+            ? t(E, `→ Counter ${step.counter + 1} (initial). Starts at 0, finishes at ${step.finish}.`,
+                  `→ 카운터 ${step.counter + 1} (초기). 0 시작, ${step.finish} 종료.`)
+            : t(E, `→ Counter ${step.counter + 1} earliest free (${step.starts}). Starts ${step.starts}, finishes ${step.finish}.`,
+                  `→ 카운터 ${step.counter + 1}이 가장 빨리 빔 (${step.starts}). ${step.starts} 시작, ${step.finish} 종료.`)}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
+        <button onClick={() => setSi(Math.max(0, cur - 1))} disabled={cur === 0} style={{
+          background: cur === 0 ? "#e5e7eb" : "#fff", border: `2px solid ${cur === 0 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800,
+          color: cur === 0 ? "#b0b5c3" : A, cursor: cur === 0 ? "default" : "pointer",
+        }}>←</button>
+        <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>
+          {cur + 1} / {trace.length}
+        </span>
+        <button onClick={() => setSi(Math.min(trace.length - 1, cur + 1))} disabled={cur === trace.length - 1} style={{
+          background: cur === trace.length - 1 ? "#e5e7eb" : A, border: `2px solid ${cur === trace.length - 1 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800,
+          color: cur === trace.length - 1 ? "#b0b5c3" : "#fff", cursor: cur === trace.length - 1 ? "default" : "pointer",
+        }}>→</button>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   InterviewRunner — student inputs N, K, times — live assignment
+   ═══════════════════════════════════════════════════════════════ */
+export function InterviewRunner({ E }) {
+  const [nInput, setNInput] = useState("5");
+  const [kInput, setKInput] = useState("2");
+  const [tInput, setTInput] = useState("3 5 2 4 1");
+  const [running, setRunning] = useState(false);
+  const [result, setResult] = useState(null);
+  const [liveCow, setLiveCow] = useState(0);
+  const [liveCounters, setLiveCounters] = useState([]);
+  const alive = useRef(false);
+
+  const run = () => {
+    const N = parseInt(nInput);
+    const K = parseInt(kInput);
+    const times = tInput.trim().split(/\s+/).map(Number);
+    if (!N || !K || N < K || K < 1 || times.length !== N || times.some(x => isNaN(x) || x <= 0)) {
+      setResult({ error: t(E, "Invalid: need N ≥ K ≥ 1 and N positive times.", "잘못된 입력: N ≥ K ≥ 1, N 개의 양수 times.") });
+      return;
+    }
+    setRunning(true); setResult(null);
+    setLiveCow(0); setLiveCounters(new Array(K).fill(0));
+    alive.current = true;
+
+    const counters = new Array(K).fill(0);
+    let i = 0;
+    let bessieCounter = -1;
+
+    const tick = () => {
+      if (!alive.current) {
+        setResult({ stopped: true, lastCow: i });
+        setRunning(false);
+        return;
+      }
+      if (i >= N) {
+        setResult({ done: true, counters: [...counters], bessieCounter });
+        setRunning(false);
+        return;
+      }
+      let pick;
+      if (i < K) pick = i;
+      else {
+        pick = 0;
+        for (let c = 1; c < K; c++) if (counters[c] < counters[pick]) pick = c;
+      }
+      if (i < K) counters[pick] = times[i];
+      else counters[pick] += times[i];
+      if (i === N - 1) bessieCounter = pick;
+      setLiveCow(i); setLiveCounters([...counters]);
+      i++;
+      const delay = N <= 10 ? 400 : (N <= 100 ? 30 : 5);
+      setTimeout(tick, delay);
+    };
+    setTimeout(tick, 100);
+  };
+  const stop = () => { alive.current = false; };
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 2fr", gap: 6, marginBottom: 10 }}>
+        <input value={nInput} onChange={e => setNInput(e.target.value)} disabled={running} placeholder="N" style={{ padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: A, textAlign: "center" }} />
+        <input value={kInput} onChange={e => setKInput(e.target.value)} disabled={running} placeholder="K" style={{ padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: A, textAlign: "center" }} />
+        <input value={tInput} onChange={e => setTInput(e.target.value)} disabled={running} placeholder="times" style={{ padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: A }} />
+      </div>
+      <button onClick={running ? stop : run} style={{
+        width: "100%", padding: "10px 0", borderRadius: 10, border: "none", cursor: "pointer",
+        fontSize: 14, fontWeight: 800, marginBottom: 10,
+        background: running ? "#dc2626" : A, color: "#fff",
+      }}>
+        {running ? t(E, "⏹ Stop", "⏹ 중지") : t(E, "▶ Run assignment", "▶ 배정 실행")}
+      </button>
+
+      {(running || result?.done) && (
+        <div style={{ background: "#f8fafc", borderRadius: 10, padding: "10px 12px", marginBottom: 10 }}>
+          <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 6 }}>
+            {running ? t(E, `assigning cow ${liveCow + 1}`, `소 ${liveCow + 1} 배정 중`) : t(E, "final state", "최종 상태")}
+          </div>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "center" }}>
+            {liveCounters.map((f, c) => (
+              <div key={c} style={{
+                minWidth: 60, padding: "4px 8px", borderRadius: 6, border: `1.5px solid ${A}`, background: "#ecfdf5",
+                fontSize: 11, fontWeight: 800, color: A, textAlign: "center", fontFamily: "'JetBrains Mono',monospace",
+              }}>C{c+1}: {f === 0 ? "—" : f}</div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {result?.error && (
+        <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px", color: "#7f1d1d", fontSize: 12, fontWeight: 700 }}>{result.error}</div>
+      )}
+      {result?.done && (
+        <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: "10px 12px", color: "#15803d", fontSize: 13, fontWeight: 800 }}>
+          {t(E, `✅ Bessie went to counter ${result.bessieCounter + 1}.`, `✅ 베시는 카운터 ${result.bessieCounter + 1}로 갔어.`)}
+        </div>
+      )}
+      {result?.stopped && (
+        <div style={{ background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10, padding: "10px 12px", color: "#92400e", fontSize: 12, fontWeight: 700 }}>
+          {t(E, `⏹ Stopped at cow ${result.lastCow + 1}`, `⏹ 소 ${result.lastCow + 1}에서 중지`)}
+        </div>
+      )}
+
+      <div style={{ marginTop: 12, background: "#f8fafc", borderRadius: 8, padding: "8px 10px", fontSize: 10, color: C.dim, lineHeight: 1.6 }}>
+        <div style={{ fontWeight: 800, color: C.text, marginBottom: 4 }}>{t(E, "⏱ USACO Time Estimate", "⏱ USACO 시간 추정")}</div>
+        <div>O(N log K) with min-heap · C++ ≈ 10⁸ ops/sec</div>
+        <div>N = 10⁵, K = 100 → ~1ms · N = 10⁶, K = 1000 → ~20ms</div>
+      </div>
+    </div>
+  );
+}
 
 /* ═══════════════════════════════════════════════════════════════
    getInterviewSections — 단계별 코드 + Python/C++ + reasoning

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
-import { InterviewProgressiveCode, downloadInterviewPDF, getInterviewSections } from "./components";
+import { InterviewProgressiveCode, downloadInterviewPDF, getInterviewSections, InterviewSim, InterviewRunner } from "./components";
 import { makeInterviewCh1, makeInterviewCh2, makeInterviewCh3 } from "./chapters";
 
 const A = "#059669";
@@ -77,6 +77,8 @@ export default function InterviewApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "progressive") return <InterviewProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "sim") return <InterviewSim E={E} />;
+    if (step.type === "runner") return <InterviewRunner E={E} />;
     return null;
   };
 
