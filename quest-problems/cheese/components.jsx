@@ -532,6 +532,156 @@ export function CheeseProgressiveCode({ E, lang = "py", sections }) {
 
 
 /* ================================================================
+   getCheeseBruteSections — 첫 아이디어 (3D 배열 + 매 query 다 검사)
+   ================================================================ */
+
+const CB_INPUT_PY = [
+  "import sys",
+  "input = sys.stdin.readline",
+  "",
+  "N, Q = map(int, input().split())",
+  "",
+  "# 3D 큐브: cheese[x][y][z] = True 면 거기 블록 있음",
+  "cheese = [[[True]*N for _ in range(N)] for _ in range(N)]",
+];
+const CB_INPUT_CPP = [
+  "#include <bits/stdc++.h>",
+  "using namespace std;",
+  "",
+  "int main() {",
+  "    ios::sync_with_stdio(false);",
+  "    cin.tie(nullptr);",
+  "",
+  "    int N, Q;",
+  "    cin >> N >> Q;",
+  "",
+  "    // 3D 큐브: cheese[x][y][z] = true 면 거기 블록 있음",
+  "    vector<vector<vector<bool>>> cheese(N,",
+  "        vector<vector<bool>>(N, vector<bool>(N, true)));",
+];
+
+const CB_CARVE_PY = [
+  "for _ in range(Q):",
+  "    x, y, z = map(int, input().split())",
+  "    cheese[x][y][z] = False   # 블록 빼기",
+  "    count = 0",
+];
+const CB_CARVE_CPP = [
+  "    while (Q--) {",
+  "        int x, y, z;",
+  "        cin >> x >> y >> z;",
+  "        cheese[x][y][z] = false;   // 블록 빼기",
+  "        int count = 0;",
+];
+
+const CB_SCAN_PY = [
+  "    # 🐌 3 방향 × N² 줄 × N 칸 = O(N³) per query — TLE 원인!",
+  "",
+  "    # z-방향: (x,y) 고정, z 변함",
+  "    for x_ in range(N):",
+  "        for y_ in range(N):",
+  "            if all(not cheese[x_][y_][z_] for z_ in range(N)):",
+  "                count += 1",
+  "",
+  "    # x-방향: (y,z) 고정, x 변함",
+  "    for y_ in range(N):",
+  "        for z_ in range(N):",
+  "            if all(not cheese[x_][y_][z_] for x_ in range(N)):",
+  "                count += 1",
+  "",
+  "    # y-방향: (x,z) 고정, y 변함",
+  "    for x_ in range(N):",
+  "        for z_ in range(N):",
+  "            if all(not cheese[x_][y_][z_] for y_ in range(N)):",
+  "                count += 1",
+];
+const CB_SCAN_CPP = [
+  "        // 🐌 3 방향 × N² 줄 × N 칸 = O(N³) per query — TLE 원인!",
+  "",
+  "        // z-방향: (x,y) 고정, z 변함",
+  "        for (int x_ = 0; x_ < N; x_++)",
+  "            for (int y_ = 0; y_ < N; y_++) {",
+  "                bool empty = true;",
+  "                for (int z_ = 0; z_ < N; z_++)",
+  "                    if (cheese[x_][y_][z_]) { empty = false; break; }",
+  "                if (empty) count++;",
+  "            }",
+  "",
+  "        // x-방향, y-방향도 똑같이 (생략 — 같은 패턴 반복)",
+  "        // ...",
+];
+
+const CB_OUTPUT_PY = [
+  "    print(count)",
+];
+const CB_OUTPUT_CPP = [
+  "        cout << count << \"\\n\";",
+  "    }",
+  "    return 0;",
+  "}",
+];
+
+export function getCheeseBruteSections(E) {
+  return [
+    {
+      label: t(E, "📦 1. Input + 3D Cube Init", "📦 1. 입력 + 3D 큐브 초기화"),
+      color: "#94a3b8",
+      py: CB_INPUT_PY, cpp: CB_INPUT_CPP,
+      why: [
+        t(E, "N = cube size, Q = number of carve queries.", "N = 큐브 크기, Q = 제거 쿼리 수."),
+        t(E, "3D array of bool: cheese[x][y][z] tracks if block exists. All start True.", "3D bool 배열: cheese[x][y][z] 가 블록 존재 여부. 다 True 시작."),
+      ],
+      pyOnly: [
+        t(E, "Triple list comprehension creates N×N×N array. Memory: N³ booleans.",
+            "3 중 리스트 컴프리헨션으로 N×N×N 배열. 메모리: N³ bool."),
+      ],
+      cppOnly: [
+        t(E, "vector<vector<vector<bool>>> — packed 1 bit/bool, but 2D would be enough if we use flags differently.",
+            "vector<vector<vector<bool>>> — bool 당 1 비트 packed. 2D 로도 가능."),
+        t(E, "N=1000 → 10⁹ bits = 125MB. Tight! May need to use vector<vector<int>> or different structure.",
+            "N=1000 → 10⁹ 비트 = 125MB. 빡빡함! vector<vector<int>> 등 다른 구조 필요할 수도."),
+      ],
+    },
+    {
+      label: t(E, "🍰 2. Per-Query: Carve One Block", "🍰 2. 매 쿼리: 블록 1 개 빼기"),
+      color: "#0891b2",
+      py: CB_CARVE_PY, cpp: CB_CARVE_CPP,
+      why: [
+        t(E, "Read (x, y, z) for the block to carve. Set cheese[x][y][z] = false.", "(x, y, z) 읽고 cheese[x][y][z] = false 로 설정."),
+        t(E, "Reset count = 0 because we're recomputing from scratch every query (the brute approach).", "count = 0 리셋 — 매 쿼리마다 전부 재계산하는 게 brute 의 핵심."),
+        t(E, "This is the WASTE — only 1 block changed, but we throw away all previous knowledge.", "이게 낭비 — 블록 1 개만 바뀌었는데 이전 정보 다 버림."),
+      ],
+    },
+    {
+      label: t(E, "🐌 3. Brute Scan (THE TLE)", "🐌 3. 전수 검사 (TLE 원인!)"),
+      color: "#dc2626",
+      py: CB_SCAN_PY, cpp: CB_SCAN_CPP,
+      why: [
+        t(E, "Three direction loops: z-axis rows, x-axis rows, y-axis rows. Each direction has N² rows.", "3 방향 루프: z-축 줄, x-축 줄, y-축 줄. 방향당 N² 줄."),
+        t(E, "For each row: check N cells one by one. all() / inner loop = O(N).", "각 줄마다 N 칸 하나씩 체크. all() / 안쪽 루프 = O(N)."),
+        t(E, "Per query: 3 × N² × N = 3N³ operations. For N=1000: 3 × 10⁹ ops/query.", "쿼리당: 3 × N² × N = 3N³ 연산. N=1000: 쿼리당 3×10⁹ 연산."),
+        t(E, "Total: Q × 3N³. For Q=200K, N=1000: 6×10¹⁴ ops → ~70 days on USACO judge.", "전체: Q × 3N³. Q=20만, N=1000: 6×10¹⁴ 연산 → USACO 채점기에서 약 70 일."),
+      ],
+      pyOnly: [
+        t(E, "all(not cheese[...] for z_ in range(N)) — Python idiom for 'all False'.", "all(not cheese[...] for z_ in range(N)) — '모두 False' 의 Python idiom."),
+      ],
+      cppOnly: [
+        t(E, "Manual inner loop with early break — slightly faster than scanning all N cells if first one is non-empty.", "수동 안쪽 루프 + early break — 첫 칸이 비어있지 않으면 N 칸 다 안 봐도 됨."),
+      ],
+    },
+    {
+      label: t(E, "📤 4. Output", "📤 4. 출력"),
+      color: "#94a3b8",
+      py: CB_OUTPUT_PY, cpp: CB_OUTPUT_CPP,
+      why: [
+        t(E, "Output count after each carve — problem requires Q lines, one per query.", "각 carve 후 count 출력 — 문제는 쿼리당 한 줄, 총 Q 줄 요구."),
+      ],
+    },
+  ];
+}
+
+
+/* ================================================================
    getCheeseSections — Python/C++ 코드 + 설명 (인앱 + PDF 공용)
    ================================================================ */
 

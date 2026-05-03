@@ -1,6 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { highlight } from "@/components/quest/shared";
-import { getCheeseSections } from "./components";
+import { getCheeseSections, getCheeseBruteSections } from "./components";
 
 /* ================================================================
    HELPERS
@@ -641,6 +641,15 @@ export function makeCheeseCh4(E) {
               "N=1000, Q=20만: 쿼리당 = 300만 줄 × 1000칸 = 30억 연산. 1억 ops/sec → 쿼리당 30초 × 20만 = ~70 일. 😱")}
           </div>
         </div>),
+    },
+
+    // 4-3-code: brute 코드 자체 (progressive — 단계별)
+    {
+      type: "progressive",
+      narr: t(E,
+        "OK so it's slow. What does the code actually look like? Read it part by part.",
+        "느리다는 건 알겠고. 그럼 코드는 어떻게 생겼을까? 부분별로 읽어봐."),
+      sections: getCheeseBruteSections(E),
     },
 
     // 4-3a: 🔑 1차 개선 사고 디딤돌 — 학생이 자기 머리로 발견
