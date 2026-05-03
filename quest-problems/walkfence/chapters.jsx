@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getWalkFenceSections } from "./components";
 
 export const SOLUTION_CODE = [
   "N, P = map(int, input().split())",
@@ -84,7 +85,7 @@ export function makeWalkCh1(E) {
   ];
 }
 
-export function makeWalkCh2(E) {
+export function makeWalkCh2(E, lang = "py") {
   return [
     {
       type: "reveal",
@@ -92,10 +93,11 @@ export function makeWalkCh2(E) {
       content: (<div style={{ padding: 16, textAlign: "center" }}><div style={{ fontSize: 28, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace", color: C.text }}>O(NP)</div></div>),
     },
     {
-      type: "code",
-      narr: t(E, "Find position on perimeter, compute shortest path!", "둘레 위 위치 찾고 최단 경로 계산!"),
-      label: t(E, "💻 Complete Solution", "💻 전체 솔루션"),
-      code: SOLUTION_CODE,
+      type: "progressive",
+      narr: t(E,
+        "Now build the perimeter walker step by step.",
+        "둘레 거리 계산기를 단계별로 만들자."),
+      sections: getWalkFenceSections(E),
     },
   ];
 }
