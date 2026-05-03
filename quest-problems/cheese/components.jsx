@@ -104,36 +104,74 @@ export function Cube3D({ N, carved, E }) {
   );
 }
 
-/* --- Brute Force Runner --- */
+/* --- Brute Force Runner — async per-query + live + stop preserves --- */
 export function CheeseBruteRunner({ E }) {
   const [N, setN] = useState(3);
   const [running, setRunning] = useState(false);
   const [result, setResult] = useState(null);
-  const [elapsed, setElapsed] = useState(0);
+  // 라이브 표시
+  const [liveQ, setLiveQ] = useState(0);
+  const [liveCount, setLiveCount] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const alive = useRef(false);
+  const startTimeRef = useRef(0);
+
+  // 시간/숫자 포맷
+  const fmtTime = (sec) => {
+    if (sec < 1) return `${(sec * 1000).toFixed(0)}ms`;
+    if (sec < 60) return `${sec.toFixed(1)}s`;
+    if (sec < 3600) return `${(sec / 60).toFixed(1)}분`;
+    if (sec < 86400) return `${(sec / 3600).toFixed(1)}시간`;
+    return `${(sec / 86400).toFixed(1)}일`;
+  };
+  // USACO 추정: 쿼리당 O(N³) × Q
+  const estimateUSACO = (N, Q) => {
+    const opsPerQuery = 3 * N * N * N;       // 3 방향 × N² 줄 × N 칸
+    const totalOps = opsPerQuery * Q;
+    return totalOps / 1e8;                   // C++ 1억 ops/sec
+  };
 
   const run = () => {
     if (N < 2 || N > 50) return;
-    setRunning(true); setResult(null);
-    const t0 = performance.now();
-    // Brute: random Q removals, check all lines each time
-    const Q = Math.min(N * N * N, 30);
+    setRunning(true); setResult(null); setProgress(0);
+    setLiveQ(0); setLiveCount(0);
+    alive.current = true;
+    startTimeRef.current = performance.now();
+
+    // Q = 모든 셀의 30% 정도 제거 (작은 N 에서도 의미 있고, 큰 N 에서는 충분히 느림)
+    const Q = Math.min(Math.max(Math.floor(N * N * N * 0.3), 5), 200);
+
+    // 모든 셀 셔플
     const allCells = [];
     for (let x = 0; x < N; x++)
       for (let y = 0; y < N; y++)
         for (let z = 0; z < N; z++) allCells.push([x,y,z]);
-    // shuffle
     for (let i = allCells.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [allCells[i], allCells[j]] = [allCells[j], allCells[i]];
     }
-    const carved = [];
+
     const answers = [];
     const isC = new Set();
-    for (let q = 0; q < Q; q++) {
+    let q = 0;
+
+    const finish = (partial) => {
+      const elapsed = performance.now() - startTimeRef.current;
+      setRunning(false);
+      setResult({
+        N, Q, completedQ: q, answers,
+        lastAnswer: answers.length > 0 ? answers[answers.length - 1] : 0,
+        elapsedMs: elapsed, partial,
+      });
+      alive.current = false;
+    };
+
+    const tick = () => {
+      if (!alive.current) { finish(true); return; }
+
+      // 한 쿼리 처리 (실제 brute 일 작업)
       const [x,y,z] = allCells[q];
-      carved.push([x,y,z]);
       isC.add(`${x},${y},${z}`);
-      // Brute: check all 3N² lines
       let count = 0;
       for (let a = 0; a < N; a++)
         for (let b = 0; b < N; b++) {
@@ -154,12 +192,16 @@ export function CheeseBruteRunner({ E }) {
           if (ok) count++;
         }
       answers.push(count);
-    }
-    const ms = performance.now() - t0;
-    setElapsed(ms);
-    setResult({ Q, answers, lastAnswer: answers[answers.length - 1] });
-    setRunning(false);
+      q++;
+      setLiveQ(q); setLiveCount(count); setProgress(Math.floor(q / Q * 100));
+
+      if (q >= Q) { finish(false); return; }
+      // 쿼리 사이 16ms 딜레이 — 학생이 진행 체감
+      setTimeout(tick, 16);
+    };
+    setTimeout(tick, 50);
   };
+  const stop = () => { alive.current = false; };
 
   return (
     <div style={{ padding: "12px 8px" }}>
@@ -167,31 +209,127 @@ export function CheeseBruteRunner({ E }) {
         <span style={{ fontSize: 13, fontWeight: 700, color: C.dim }}>N =</span>
         <input type="number" min={2} max={50} value={N}
           onChange={e => { setN(+e.target.value); setResult(null); }}
+          disabled={running}
           style={{ width: 60, padding: "6px 8px", borderRadius: 8, border: `2px solid ${C.border}`,
             fontSize: 16, fontWeight: 800, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }} />
-        <button onClick={run} disabled={running || N < 2 || N > 50} style={{
-          padding: "8px 20px", borderRadius: 10, border: "none",
-          background: running ? "#e5e7eb" : "linear-gradient(135deg,#fbbf24,#d97706)",
-          color: "#fff", fontSize: 14, fontWeight: 800, cursor: running ? "default" : "pointer",
-        }}>{running ? "..." : E ? "Run Brute!" : "브루트 실행!"}</button>
+        <button
+          onClick={running ? stop : run}
+          disabled={!running && (N < 2 || N > 50)}
+          style={{
+            padding: "8px 20px", borderRadius: 10, border: "none",
+            background: running ? "#dc2626" : "linear-gradient(135deg,#fbbf24,#d97706)",
+            color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer",
+          }}>
+          {running ? (E ? "⏹ Stop" : "⏹ 중지") : (E ? "▶ Run Brute" : "▶ 브루트 실행")}
+        </button>
       </div>
+
       {N > 20 && <div style={{ textAlign: "center", fontSize: 12, color: C.carry, fontWeight: 700, marginBottom: 8 }}>
-        {E ? "⚠️ N>20 may be slow!" : "⚠️ N>20이면 느릴 수 있어!"}
+        {E ? "⚠️ N>20 will be slow — that's the point! Try Stop midway." : "⚠️ N>20 이면 느려져 — 그게 포인트! 중간에 Stop 눌러봐."}
       </div>}
+
+      {/* 실행 중 라이브 표시 */}
+      {running && (
+        <div style={{ marginBottom: 12 }}>
+          <div style={{ height: 8, background: "#e5e7eb", borderRadius: 4, overflow: "hidden" }}>
+            <div style={{ height: "100%", background: "#d97706", borderRadius: 4, width: `${progress}%`, transition: "width .1s" }} />
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6, fontSize: 11, fontFamily: "'JetBrains Mono',monospace", color: C.dim, fontWeight: 700 }}>
+            <span>{t(E, "query", "쿼리")} <span style={{ color: "#d97706", fontWeight: 900 }}>{liveQ}</span></span>
+            <span>{t(E, "current count", "현재 답")}: <span style={{ color: "#d97706", fontWeight: 900 }}>{liveCount}</span></span>
+            <span>{progress}%</span>
+          </div>
+        </div>
+      )}
+
+      {/* 결과 */}
       {result && (
-        <div style={{ textAlign: "center" }}>
-          <div style={{ fontSize: 13, color: C.dim, marginBottom: 4 }}>
-            {E ? `${result.Q} removals in` : `${result.Q}번 제거 →`}{" "}
-            <span style={{ fontWeight: 800, color: elapsed > 100 ? C.no : C.ok }}>{elapsed.toFixed(1)}ms</span>
+        <div>
+          <div style={{ textAlign: "center", padding: "12px 0", marginBottom: 10 }}>
+            {result.partial ? (
+              <div style={{ fontSize: 11, color: "#dc2626", fontWeight: 800, letterSpacing: 0.5 }}>
+                ⏸ {t(E, `STOPPED at query ${result.completedQ} of ${result.Q}`,
+                       `${result.completedQ} / ${result.Q} 번째 쿼리에서 중지`)}
+              </div>
+            ) : (
+              <div style={{ fontSize: 11, color: "#10b981", fontWeight: 800 }}>
+                ✓ {t(E, `${result.Q} queries completed`, `${result.Q} 쿼리 전부 완료`)}
+              </div>
+            )}
+            <div style={{ fontSize: 32, fontWeight: 900, color: "#d97706", fontFamily: "'JetBrains Mono',monospace", marginTop: 4 }}>
+              {result.lastAnswer}
+            </div>
+            <div style={{ fontSize: 11, color: C.dim }}>{t(E, "last answer (rods that fit)", "마지막 답 (들어가는 막대 수)")}</div>
           </div>
-          <div style={{ fontSize: 11, color: C.dim }}>
-            {E ? `Final answer: ${result.lastAnswer}` : `최종 답: ${result.lastAnswer}`}
+
+          {/* 실제 브라우저 시간 */}
+          <div style={{
+            background: "#fff", border: `2px solid ${result.elapsedMs > 500 ? "#dc2626" : "#10b981"}`, borderRadius: 10,
+            padding: "10px 14px", marginBottom: 10,
+            display: "flex", justifyContent: "space-between", alignItems: "center",
+          }}>
+            <div>
+              <div style={{ fontSize: 10, fontWeight: 800, color: C.dim, letterSpacing: 0.5 }}>
+                ⏱️ {t(E, "BROWSER TIME", "브라우저 측정 시간")}
+              </div>
+              <div style={{ fontSize: 18, fontWeight: 900, color: result.elapsedMs > 500 ? "#dc2626" : "#10b981", fontFamily: "'JetBrains Mono',monospace" }}>
+                {fmtTime(result.elapsedMs / 1000)}
+              </div>
+            </div>
+            <div style={{ fontSize: 10, color: C.dim, textAlign: "right", lineHeight: 1.5, maxWidth: 180 }}>
+              {t(E, "Includes 16ms/query animation. Pure brute is faster but still O(QN³).",
+                  "쿼리당 16ms 애니메이션 포함. 순수 brute 는 더 빠르지만 여전히 O(QN³).")}
+            </div>
           </div>
-          {elapsed > 100 && (
-            <div style={{ marginTop: 6, fontSize: 12, color: C.no, fontWeight: 700 }}>
-              {E ? "Imagine N=1000 with 200K queries... 💀" : "N=1000에 20만 쿼리면... 💀"}
-            </div>)}
-        </div>)}
+
+          {/* USACO 추정 */}
+          <div style={{
+            background: "linear-gradient(135deg, #fef2f2, #fff)", border: `2px solid #dc2626`, borderRadius: 10,
+            padding: "10px 14px", marginBottom: 10,
+          }}>
+            <div style={{ fontSize: 10, fontWeight: 800, color: "#dc2626", letterSpacing: 0.5, marginBottom: 6 }}>
+              🏆 {t(E, "ON USACO JUDGE — REAL ESTIMATE", "USACO 채점기 — 실제 추정")}
+            </div>
+            <table style={{ width: "100%", fontSize: 12, fontFamily: "'JetBrains Mono',monospace", borderCollapse: "collapse" }}>
+              <tbody>
+                {[
+                  { N: result.N, Q: result.Q, label: t(E, "your run", "지금 실행") },
+                  { N: 100, Q: 200000, label: "N=100 max Q" },
+                  { N: 1000, Q: 200000, label: "N=1000 (max!)" },
+                ].map((row, i) => {
+                  const sec = estimateUSACO(row.N, row.Q);
+                  const tle = sec > 2;
+                  return (
+                    <tr key={i} style={{ borderTop: i > 0 ? "1px solid #fee2e2" : "none" }}>
+                      <td style={{ padding: "4px 0", fontWeight: 700, color: C.dim }}>N={row.N} · Q={row.Q.toLocaleString()}</td>
+                      <td style={{ padding: "4px 6px", fontSize: 10, color: C.dim }}>{row.label}</td>
+                      <td style={{ padding: "4px 0", textAlign: "right", fontWeight: 800, color: tle ? "#dc2626" : "#10b981" }}>
+                        {fmtTime(sec)}
+                      </td>
+                      <td style={{ padding: "4px 0 4px 6px", textAlign: "right", fontWeight: 800, color: tle ? "#dc2626" : "#10b981", minWidth: 32 }}>
+                        {tle ? "TLE" : "✓"}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            <div style={{ marginTop: 6, fontSize: 10, color: C.dim, lineHeight: 1.5 }}>
+              {t(E,
+                "Estimate: 3N³ ops per query × Q / 10⁸ ops/sec (C++).",
+                "추정: 쿼리당 3N³ 연산 × Q / 1억 ops/sec (C++).")}
+            </div>
+          </div>
+
+          {result.partial && (
+            <div style={{ padding: "10px 12px", background: C.carryBg, borderRadius: 8, fontSize: 12, color: C.carry, fontWeight: 700, textAlign: "center" }}>
+              {t(E,
+                "Felt slow? On the real judge it'd be way slower. We need a smarter approach!",
+                "느렸지? 실제 채점기에선 훨씬 느려. 더 똑똑한 방법 필요!")}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
