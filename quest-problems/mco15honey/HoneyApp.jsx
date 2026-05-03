@@ -49,7 +49,7 @@ export default function HoneyApp() {
   };
 
   const isBlocked = (step.type === "quiz" && step.answered == null) || (step.type === "input" && !step.solved);
-  const canNext = !isBlocked && cur < steps.length - 1;
+  const canNext = cur < steps.length - 1;  // isBlocked 무시 — 자유 진행
   const next = () => { if (canNext) { setSi(cur + 1); window.scrollTo({ top: 0, behavior: "smooth" }); } };
   const prev = () => { setSi(Math.max(0, cur - 1)); window.scrollTo({ top: 0, behavior: "smooth" }); };
 
@@ -62,7 +62,7 @@ export default function HoneyApp() {
   };
 
   return (
-    <div style={{ maxWidth: 440, margin: "0 auto" }}>
+    <div style={{ maxWidth: "min(820px, 100%)", margin: "0 auto" }}>
       {/* Header */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
         <h1 style={{ fontSize: 16, fontWeight: 800, color: A, margin: 0, fontFamily: "'Jua',sans-serif" }}>{"\ud83c\udf6f"} Honey</h1>
@@ -104,10 +104,10 @@ export default function HoneyApp() {
 
       {/* Fixed bottom navigation */}
       <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: C.bg, padding: "6px 16px 12px", zIndex: 100 }}>
-        <div style={{ maxWidth: 440, margin: "0 auto" }}>
+        <div style={{ maxWidth: "min(820px, 100%)", margin: "0 auto" }}>
           {isBlocked && (
             <div style={{ textAlign: "center", fontSize: 13, color: C.carry, fontWeight: 700, marginBottom: 4, animation: "pulse 1.5s ease infinite" }}>
-              {E ? "\ud83d\udc46 Answer first!" : "\ud83d\udc46 \uba3c\uc800 \ub2f5\ud574\ubd10!"}
+              {E ? "\ud83d\udca1 Tip: try answering above" : "\ud83d\udca1 \ud301: \uc704\uc5d0\uc11c \ub2f5\ud574\ubcf4\uba74 \uc88b\uc544\uc694"}
             </div>
           )}
           <div style={{ display: "flex", gap: 8, justifyContent: "center", alignItems: "center" }}>

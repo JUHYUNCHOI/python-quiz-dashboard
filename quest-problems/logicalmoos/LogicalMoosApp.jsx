@@ -20,7 +20,7 @@ export default function LogicalMoosApp() {
   const handleAnswer = i => { if (step.answered != null) return; const u = [...states[tab]]; u[cur] = { ...u[cur], answered: i }; setters[tab](u); };
   const handleSolve = () => { const u = [...states[tab]]; u[cur] = { ...u[cur], solved: true }; setters[tab](u); };
   const isBlocked = (step.type === "quiz" && step.answered == null) || (step.type === "input" && !step.solved);
-  const canNext = !isBlocked && cur < steps.length - 1;
+  const canNext = cur < steps.length - 1;  // isBlocked 무시 — 자유 진행
   const next = () => { if (canNext) { setSi(cur + 1); window.scrollTo({ top: 0, behavior: "smooth" }); } };
   const prev = () => { setSi(Math.max(0, cur - 1)); window.scrollTo({ top: 0, behavior: "smooth" }); };
   const renderContent = () => {
@@ -31,7 +31,7 @@ export default function LogicalMoosApp() {
     return null;
   };
   return (
-    <div style={{ maxWidth: 440, margin: "0 auto" }}>
+    <div style={{ maxWidth: "min(820px, 100%)", margin: "0 auto" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
         <h1 style={{ fontSize: 16, fontWeight: 800, color: A, margin: 0, fontFamily: "'Jua',sans-serif" }}>🧠 Logical Moos</h1>
         <div style={{ display: "flex", gap: 2, background: C.card, borderRadius: 8, border: `1.5px solid ${C.border}`, padding: 2 }}>
@@ -45,8 +45,8 @@ export default function LogicalMoosApp() {
       <div style={{ background: C.card, borderRadius: 14, border: `2px solid ${C.border}`, marginBottom: 10, boxShadow: "0 2px 10px rgba(0,0,0,.04)", overflow: "hidden" }}>{renderContent()}</div>
       <div style={{ height: 70 }} />
       <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: C.bg, padding: "6px 16px 12px", zIndex: 100 }}>
-        <div style={{ maxWidth: 440, margin: "0 auto" }}>
-          {isBlocked && <div style={{ textAlign: "center", fontSize: 13, color: C.carry, fontWeight: 700, marginBottom: 4, animation: "pulse 1.5s ease infinite" }}>{E ? "👆 Answer first!" : "👆 먼저 답해봐!"}</div>}
+        <div style={{ maxWidth: "min(820px, 100%)", margin: "0 auto" }}>
+          {isBlocked && <div style={{ textAlign: "center", fontSize: 13, color: C.carry, fontWeight: 700, marginBottom: 4, animation: "pulse 1.5s ease infinite" }}>{E ? "💡 Tip: try answering above" : "💡 팁: 위에서 답해보면 좋아요"}</div>}
           <div style={{ display: "flex", gap: 8, justifyContent: "center", alignItems: "center" }}>
             <button onClick={prev} disabled={cur === 0} style={{ background: cur === 0 ? "#e5e7eb" : C.card, border: `2px solid ${cur === 0 ? "#e5e7eb" : A}`, borderRadius: 9, padding: "10px 22px", fontSize: 14, fontWeight: 800, cursor: cur === 0 ? "default" : "pointer", color: cur === 0 ? "#b0b5c3" : A }}>←</button>
             <span style={{ fontSize: 12, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", minWidth: 56, textAlign: "center" }}>{cur + 1}/{steps.length}</span>
