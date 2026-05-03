@@ -78,6 +78,12 @@ export function makeMajorityCh1(E) {
         "각 쌍을 확인: (1,1), (1,2), (2,3), (3,3)"),
       answer: 2,
     },
+    {
+      type: "sim",
+      narr: t(E,
+        "Pick a preset and step through the adjacent-pair scan. Watch which values get added to the result set.",
+        "프리셋을 골라 인접 쌍 스캔을 한 단계씩. 어떤 값이 결과 집합에 추가되는지 봐."),
+    },
   ];
 }
 
@@ -111,6 +117,12 @@ export function makeMajorityCh2(E, lang = "py") {
         "Now build the linear scan step by step.",
         "선형 스캔을 단계별로 만들자."),
       sections: getMajoritySections(E),
+    },
+    {
+      type: "runner",
+      narr: t(E,
+        "Try your own array. Enter space-separated values, see live scan and final output.",
+        "직접 배열 시도. 공백 구분 값 입력, 실시간 스캔과 최종 출력 확인."),
     },
   ];
 }

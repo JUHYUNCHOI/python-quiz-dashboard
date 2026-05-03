@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
-import { MajorityProgressiveCode, downloadMajorityPDF, getMajoritySections } from "./components";
+import { MajorityProgressiveCode, downloadMajorityPDF, getMajoritySections, MajoritySim, MajorityRunner } from "./components";
 import { makeMajorityCh1, makeMajorityCh2 } from "./chapters";
 
 const A = "#dc2626";
@@ -75,6 +75,8 @@ export default function MajorityApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "progressive") return <MajorityProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "sim") return <MajoritySim E={E} />;
+    if (step.type === "runner") return <MajorityRunner E={E} />;
     return null;
   };
 

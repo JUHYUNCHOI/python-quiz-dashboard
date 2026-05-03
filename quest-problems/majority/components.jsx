@@ -1,8 +1,173 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
 
-const A = "#0ea5e9";
+const A = "#dc2626";
+
+/* ═══════════════════════════════════════════════════════════════
+   MajoritySim — visualize adjacent pair scan
+   ═══════════════════════════════════════════════════════════════ */
+const _MJ_PRESETS = [
+  { name: "[1,2,2,2,3]", arr: [1,2,2,2,3] },
+  { name: "[1,1,2,3,3]", arr: [1,1,2,3,3] },
+  { name: "[1,2,3,4,5]", arr: [1,2,3,4,5] },
+  { name: "[2,2,1,1,3,3]", arr: [2,2,1,1,3,3] },
+];
+
+export function MajoritySim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [si, setSi] = useState(0);
+  const arr = _MJ_PRESETS[pi].arr;
+  // trace: each step examines pair (i, i+1)
+  const found = new Set();
+  const trace = [];
+  for (let i = 0; i < arr.length - 1; i++) {
+    const match = arr[i] === arr[i+1];
+    if (match) found.add(arr[i]);
+    trace.push({ i, match, foundSoFar: new Set(found) });
+  }
+  trace.push({ i: -1, foundSoFar: new Set(found), done: true });
+  const cur = Math.min(si, trace.length - 1);
+  const step = trace[cur];
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        {_MJ_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => { setPi(i); setSi(0); }} style={{
+            padding: "4px 8px", borderRadius: 8, border: `2px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 11, fontWeight: 800, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>{p.name}</button>
+        ))}
+      </div>
+
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 12 }}>
+        {arr.map((v, idx) => {
+          const inPair = idx === step.i || idx === step.i + 1;
+          const isMatch = inPair && step.match;
+          return (
+            <div key={idx} style={{
+              width: 38, height: 44, display: "flex", alignItems: "center", justifyContent: "center",
+              borderRadius: 8, fontSize: 16, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+              background: isMatch ? "#dcfce7" : (inPair ? "#fef3c7" : "#fff"),
+              border: `2.5px solid ${isMatch ? "#16a34a" : (inPair ? "#f59e0b" : "#e5e7eb")}`,
+              color: isMatch ? "#15803d" : (inPair ? "#92400e" : C.text),
+              transition: "all .2s",
+            }}>{v}</div>
+          );
+        })}
+      </div>
+
+      <div style={{
+        background: step.done ? (step.foundSoFar.size > 0 ? "#dcfce7" : "#fef2f2") : "#fff",
+        border: `1.5px solid ${step.done ? (step.foundSoFar.size > 0 ? "#86efac" : "#fca5a5") : C.border}`,
+        borderRadius: 10, padding: "10px 14px", marginBottom: 10, fontSize: 13, color: C.text, textAlign: "center",
+      }}>
+        {step.done ? (
+          step.foundSoFar.size > 0 ? (
+            <div>
+              <div style={{ fontWeight: 800, color: "#15803d" }}>{t(E, "✅ Done. Output:", "✅ 완료. 출력:")}</div>
+              <div style={{ fontFamily: "'JetBrains Mono',monospace", color: "#15803d", fontWeight: 800, marginTop: 4 }}>
+                {[...step.foundSoFar].sort((a,b) => a-b).join(", ")}
+              </div>
+            </div>
+          ) : (
+            <div style={{ color: "#7f1d1d", fontWeight: 800 }}>{t(E, "❌ No adjacent pair → output -1", "❌ 인접 쌍 없음 → -1 출력")}</div>
+          )
+        ) : (
+          <div>
+            {t(E, `i = ${step.i}: pair (${arr[step.i]}, ${arr[step.i+1]}) → ${step.match ? "match!" : "different"}`,
+                  `i = ${step.i}: 쌍 (${arr[step.i]}, ${arr[step.i+1]}) → ${step.match ? "일치!" : "다름"}`)}
+            <div style={{ fontSize: 11, color: C.dim, marginTop: 4 }}>
+              {t(E, `Found so far: {${[...step.foundSoFar].sort((a,b)=>a-b).join(", ")}}`,
+                    `지금까지 찾은 값: {${[...step.foundSoFar].sort((a,b)=>a-b).join(", ")}}`)}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
+        <button onClick={() => setSi(Math.max(0, cur - 1))} disabled={cur === 0} style={{
+          background: cur === 0 ? "#e5e7eb" : "#fff", border: `2px solid ${cur === 0 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800, color: cur === 0 ? "#b0b5c3" : A,
+          cursor: cur === 0 ? "default" : "pointer",
+        }}>←</button>
+        <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>{cur + 1} / {trace.length}</span>
+        <button onClick={() => setSi(Math.min(trace.length - 1, cur + 1))} disabled={cur === trace.length - 1} style={{
+          background: cur === trace.length - 1 ? "#e5e7eb" : A, border: `2px solid ${cur === trace.length - 1 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800,
+          color: cur === trace.length - 1 ? "#b0b5c3" : "#fff", cursor: cur === trace.length - 1 ? "default" : "pointer",
+        }}>→</button>
+      </div>
+    </div>
+  );
+}
+
+/* MajorityRunner — input array, see live scan */
+export function MajorityRunner({ E }) {
+  const [input, setInput] = useState("1 2 2 2 3");
+  const [running, setRunning] = useState(false);
+  const [result, setResult] = useState(null);
+  const [liveI, setLiveI] = useState(-1);
+  const [liveFound, setLiveFound] = useState([]);
+  const alive = useRef(false);
+
+  const run = () => {
+    const arr = input.trim().split(/\s+/).map(Number);
+    if (arr.some(isNaN) || arr.length < 2) {
+      setResult({ error: t(E, "Invalid: enter integers, at least 2.", "잘못된 입력: 정수 2개 이상.") });
+      return;
+    }
+    setRunning(true); setResult(null); setLiveI(-1); setLiveFound([]);
+    alive.current = true;
+    const found = new Set();
+    let i = 0;
+    const tick = () => {
+      if (!alive.current) { setRunning(false); return; }
+      if (i >= arr.length - 1) {
+        const sorted = [...found].sort((a,b) => a-b);
+        setResult({ done: true, found: sorted });
+        setRunning(false);
+        return;
+      }
+      if (arr[i] === arr[i+1]) found.add(arr[i]);
+      setLiveI(i); setLiveFound([...found].sort((a,b)=>a-b));
+      i++;
+      const delay = arr.length <= 20 ? 250 : 30;
+      setTimeout(tick, delay);
+    };
+    setTimeout(tick, 100);
+  };
+  const stop = () => { alive.current = false; };
+
+  return (
+    <div style={{ padding: 14 }}>
+      <input value={input} onChange={e => setInput(e.target.value)} disabled={running} placeholder="space-separated array"
+        style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: A, marginBottom: 10, boxSizing: "border-box" }} />
+      <button onClick={running ? stop : run} style={{
+        width: "100%", padding: "10px 0", borderRadius: 10, border: "none", cursor: "pointer",
+        fontSize: 14, fontWeight: 800, marginBottom: 10,
+        background: running ? "#dc2626" : A, color: "#fff",
+      }}>{running ? t(E, "⏹ Stop", "⏹ 중지") : t(E, "▶ Run scan", "▶ 스캔 실행")}</button>
+      {(running || result?.done) && (
+        <div style={{ background: "#f8fafc", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, color: C.text, fontFamily: "'JetBrains Mono',monospace" }}>
+          <div>i = {liveI}, found = {`{${liveFound.join(", ")}}`}</div>
+        </div>
+      )}
+      {result?.error && (<div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px", color: "#7f1d1d", fontSize: 12, fontWeight: 700 }}>{result.error}</div>)}
+      {result?.done && (
+        <div style={{ background: result.found.length > 0 ? "#dcfce7" : "#fef2f2", border: `2px solid ${result.found.length > 0 ? "#16a34a" : "#dc2626"}`, borderRadius: 10, padding: "10px 12px", color: result.found.length > 0 ? "#15803d" : "#7f1d1d", fontSize: 13, fontWeight: 800 }}>
+          {result.found.length > 0 ? `✅ ${result.found.join(", ")}` : "❌ -1"}
+        </div>
+      )}
+      <div style={{ marginTop: 12, background: "#f8fafc", borderRadius: 8, padding: "8px 10px", fontSize: 10, color: C.dim, lineHeight: 1.6 }}>
+        <div style={{ fontWeight: 800, color: C.text, marginBottom: 4 }}>{t(E, "⏱ USACO Time Estimate", "⏱ USACO 시간 추정")}</div>
+        <div>O(N) per test case · trivially fast</div>
+      </div>
+    </div>
+  );
+}
 
 /* Section 1: Read input */
 const MJ_INPUT_PY = [
