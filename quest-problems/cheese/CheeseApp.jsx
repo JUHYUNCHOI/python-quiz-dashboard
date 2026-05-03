@@ -103,7 +103,7 @@ export default function CheeseApp(props = {}) {
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "cheeseSim2") return <CheeseSim2 E={E} />;
     if (step.type === "cheeseRunner") return <CheeseBruteRunner E={E} />;
-    if (step.type === "progressive") return <CheeseProgressiveCode E={E} sections={step.sections} />;
+    if (step.type === "progressive") return <CheeseProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
     return null;
   };
 

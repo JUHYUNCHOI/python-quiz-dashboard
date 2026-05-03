@@ -93,7 +93,7 @@ export default function MooApp(props = {}) {
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "mooSim") return <MooSim E={E} />;
     if (step.type === "mooRunner") return <MooBruteRunner E={E} />;
-    if (step.type === "progressive") return <MooProgressiveCode E={E} sections={step.sections} />;
+    if (step.type === "progressive") return <MooProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
     return null;
   };
 

@@ -473,84 +473,59 @@ export function CheeseSim2({ E }) {
    ProgressiveCode — 인터랙티브 코드 뷰어
    섹션 버튼 + Python/C++ 토글 + "왜 이렇게?" + PDF 다운로드 (위젯 내부)
    ================================================================ */
-export function CheeseProgressiveCode({ E, sections }) {
-  const [active, setActive] = useState(null);
-  const [lang, setLang] = useState("py");
-  const cur = active !== null ? sections[active] : null;
-  const code = cur ? (lang === "py" ? cur.py : cur.cpp) : null;
-
-  const downloadPDF = () => downloadCheesePDF(E, sections, lang);
-
+/* ProgressiveCode — 수직 스택 (위→아래 step by step). lang prop from header. */
+export function CheeseProgressiveCode({ E, lang = "py", sections }) {
+  const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   return (
     <div style={{ padding: 14 }}>
-      {/* 상단: 언어 토글 + PDF */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, gap: 8, flexWrap: "wrap" }}>
-        <div style={{ display: "flex", gap: 2, background: "#fff", borderRadius: 8, border: `1.5px solid ${C.border}`, padding: 2 }}>
-          {[["py","🐍 Python"],["cpp","💻 C++"]].map(([v, label]) => (
-            <button key={v} onClick={() => setLang(v)} style={{
-              background: lang === v ? "#d97706" : "transparent", border: "none", borderRadius: 6,
-              padding: "5px 12px", cursor: "pointer", fontSize: 12, fontWeight: 800,
-              color: lang === v ? "#fff" : C.dim,
-            }}>{label}</button>
-          ))}
-        </div>
-        <button onClick={downloadPDF} style={{
-          background: "#fff", border: `1.5px solid #d97706`, borderRadius: 8,
-          padding: "6px 12px", cursor: "pointer", fontSize: 12, fontWeight: 800, color: "#d97706",
-        }}>📄 {t(E, "Download PDF", "PDF 다운로드")}</button>
+      <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 14, textAlign: "center" }}>
+        {t(E, `Showing ${langLabel} (change via header dropdown ↑)`,
+            `${langLabel} 표시 중 (위 헤더 dropdown 으로 변경)`)}
       </div>
 
-      {/* 섹션 선택 */}
-      <div style={{ display: "flex", gap: 6, marginBottom: 12, flexWrap: "wrap", justifyContent: "center" }}>
-        {sections.map((s, i) => {
-          const isActive = i === active;
-          return (
-            <button
-              key={i}
-              onClick={() => setActive(i)}
-              style={{
-                padding: "8px 12px", borderRadius: 8,
-                border: `2px solid ${isActive ? s.color : C.border}`,
-                background: isActive ? s.color : "#fff",
-                color: isActive ? "#fff" : s.color || C.dim,
-                fontWeight: 800, fontSize: 12, cursor: "pointer",
-              }}
-            >
-              {s.label}
-            </button>
-          );
-        })}
-      </div>
-
-      {!cur && (
-        <div style={{
-          textAlign: "center", padding: "40px 20px", color: C.dim, fontSize: 13,
-          background: "#fff", border: `1.5px dashed ${C.border}`, borderRadius: 10,
-        }}>
-          👆 {t(E, "Click a section above to see code + reasoning.",
-                  "위 버튼 눌러서 코드 + 이유 확인해봐요.")}
-        </div>
-      )}
-
-      {cur && (
-        <>
-          <div style={{
-            background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10,
-            padding: "10px 12px", marginBottom: 10,
-          }}>
-            <div style={{ fontSize: 11, color: C.dim, fontWeight: 800, marginBottom: 6, letterSpacing: 0.5 }}>
-              💡 {t(E, "Why this way?", "왜 이렇게?")}
-            </div>
-            {cur.why.map((line, i) => (
-              <div key={i} style={{ fontSize: 12.5, color: C.text, lineHeight: 1.65, marginBottom: 4, display: "flex", gap: 6 }}>
-                <span style={{ color: cur.color, fontWeight: 800, flexShrink: 0 }}>•</span>
-                <span>{line}</span>
+      {sections.map((s, i) => {
+        const code = lang === "py" ? s.py : s.cpp;
+        const langSpecific = lang === "py" ? (s.pyOnly || []) : (s.cppOnly || []);
+        return (
+          <div key={i} style={{ marginBottom: 18 }}>
+            <div style={{
+              background: s.color, color: "#fff",
+              padding: "8px 14px", borderRadius: "10px 10px 0 0",
+              fontSize: 14, fontWeight: 800,
+            }}>{s.label}</div>
+            <div style={{
+              background: "#fff", border: `1.5px solid ${C.border}`, borderTop: "none",
+              padding: "10px 12px",
+            }}>
+              <div style={{ fontSize: 11, color: C.dim, fontWeight: 800, marginBottom: 6, letterSpacing: 0.5 }}>
+                💡 {t(E, "Why this way?", "왜 이렇게?")}
               </div>
-            ))}
+              {s.why.map((line, j) => (
+                <div key={`w${j}`} style={{ fontSize: 12.5, color: C.text, lineHeight: 1.65, marginBottom: 4, display: "flex", gap: 6 }}>
+                  <span style={{ color: s.color, fontWeight: 800, flexShrink: 0 }}>•</span>
+                  <span>{line}</span>
+                </div>
+              ))}
+              {langSpecific.length > 0 && (
+                <div style={{ marginTop: 8, paddingTop: 8, borderTop: `1px dashed ${C.border}` }}>
+                  <div style={{ fontSize: 10, color: C.dim, fontWeight: 800, marginBottom: 4, letterSpacing: 0.5 }}>
+                    {langLabel} {t(E, "specific:", "전용:")}
+                  </div>
+                  {langSpecific.map((line, j) => (
+                    <div key={`l${j}`} style={{ fontSize: 12.5, color: C.text, lineHeight: 1.65, marginBottom: 4, display: "flex", gap: 6 }}>
+                      <span style={{ color: lang === "py" ? "#16a34a" : "#0891b2", fontWeight: 800, flexShrink: 0 }}>▸</span>
+                      <span>{line}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div style={{ borderRadius: "0 0 10px 10px", overflow: "hidden" }}>
+              <CodeBlock lines={code} />
+            </div>
           </div>
-          <CodeBlock lines={code} />
-        </>
-      )}
+        );
+      })}
     </div>
   );
 }
@@ -655,21 +630,22 @@ export function getCheeseSections(E) {
       color: "#0891b2",
       py: CHEESE_COUNTERS_PY, cpp: CHEESE_COUNTERS_CPP,
       why: [
-        t(E,
-          "One counter per row direction. xy → z-axis rows. yz → x-axis. xz → y-axis.",
-          "방향당 카운터 1 개. xy → z-축 줄. yz → x-축. xz → y-축."),
-        t(E,
-          "Why three? A block sits on exactly 3 rows (one per direction). Update = 3 increments.",
-          "왜 3 개? 블록 1 개가 정확히 3 줄에 걸침 (방향당 1). 업데이트 = +1 세 번."),
-        t(E,
-          "Python defaultdict(int): keys auto-init to 0. Saves 'if key not in dict' check.",
-          "Python defaultdict(int): 키가 없으면 자동 0. 'if key not in' 체크 생략."),
-        t(E,
-          "C++: 2D vector(N, vector<int>(N, 0)). N up to 1000 → 1M ints × 3 = 12MB. Fits.",
-          "C++: 2D vector(N, vector<int>(N, 0)). N 1000 → 100만 int × 3 = 12MB. OK."),
-        t(E,
-          "Could use map<pair<int,int>, int> in C++ but 2D array is faster + simpler here.",
-          "C++ 에서 map<pair<int,int>, int> 도 가능하지만 2D 배열이 더 빠르고 깔끔."),
+        t(E, "One counter per row direction. xy → z-axis rows. yz → x-axis. xz → y-axis.",
+            "방향당 카운터 1 개. xy → z-축 줄. yz → x-축. xz → y-축."),
+        t(E, "Why three? A block sits on exactly 3 rows (one per direction). Update = 3 increments.",
+            "왜 3 개? 블록 1 개가 정확히 3 줄에 걸침 (방향당 1). 업데이트 = +1 세 번."),
+      ],
+      pyOnly: [
+        t(E, "defaultdict(int): keys auto-init to 0 — clean syntax 'mydict[(x,y)] += 1'.",
+            "defaultdict(int): 키 자동 0 초기화 — 'mydict[(x,y)] += 1' 깔끔한 문법."),
+        t(E, "Tuple keys (x,y) — Python dicts handle tuple keys natively.",
+            "튜플 키 (x,y) — Python dict 가 튜플 키 native 지원."),
+      ],
+      cppOnly: [
+        t(E, "2D vector(N, vector<int>(N, 0)) — fixed N×N grid, faster than map<pair<int,int>>.",
+            "2D vector(N, vector<int>(N, 0)) — 고정 N×N 격자, map<pair<int,int>> 보다 빠름."),
+        t(E, "Memory: N=1000 → 1M ints × 3 = 12MB. Fits comfortably.",
+            "메모리: N=1000 → 100만 int × 3 = 12MB. 여유롭게 들어감."),
       ],
     },
     {
@@ -677,21 +653,24 @@ export function getCheeseSections(E) {
       color: "#16a34a",
       py: CHEESE_LOOP_PY, cpp: CHEESE_LOOP_CPP,
       why: [
-        t(E,
-          "Per query: read (x,y,z), update 3 counters, check if any reached N, print total.",
-          "쿼리마다: (x,y,z) 읽고, 카운터 3 개 +1, N 도달 체크, 총합 출력."),
-        t(E,
-          "++xy[x][y] increments AND returns the new value — combine increment + N-check in one line.",
-          "++xy[x][y] 는 증가 + 새 값 반환을 한 번에 — 증가 + N 체크가 한 줄."),
-        t(E,
-          "count is cumulative — once a row opens, it stays open. So we just keep adding.",
-          "count 는 누적 — 한 번 뚫린 줄은 계속 뚫린 상태. 그래서 더하기만 함."),
-        t(E,
-          "Each block is unique — counter hits N exactly once per row. No 'already counted' check needed.",
-          "각 블록은 유일 — 카운터가 줄마다 N 에 정확히 한 번 도달. '이미 카운트' 체크 불필요."),
-        t(E,
-          "Print count every iteration (not just at end) — problem asks for answer after EACH removal.",
-          "매 반복마다 count 출력 (마지막만 X) — 문제가 각 제거 후 답을 요구."),
+        t(E, "Per query: read (x,y,z), update 3 counters, check if any reached N, print total.",
+            "쿼리마다: (x,y,z) 읽고, 카운터 3 개 +1, N 도달 체크, 총합 출력."),
+        t(E, "count is cumulative — once a row opens, it stays open. So we just keep adding.",
+            "count 는 누적 — 한 번 뚫린 줄은 계속 뚫린 상태. 그래서 더하기만 함."),
+        t(E, "Each block is unique — counter hits N exactly once per row. No 'already counted' check needed.",
+            "각 블록은 유일 — 카운터가 줄마다 N 에 정확히 한 번 도달. '이미 카운트' 체크 불필요."),
+        t(E, "Print count every iteration (not just at end) — problem asks for answer after EACH removal.",
+            "매 반복마다 count 출력 (마지막만 X) — 문제가 각 제거 후 답을 요구."),
+      ],
+      pyOnly: [
+        t(E, "Loop with [(xy,(x,y)), ...] — DRY: same 3-line update repeated for all 3 directions.",
+            "[(xy,(x,y)), ...] 루프 — DRY: 같은 3줄 업데이트를 3 방향에 반복."),
+      ],
+      cppOnly: [
+        t(E, "++xy[x][y] increments AND returns the new value — combine increment + N-check in one line.",
+            "++xy[x][y] 는 증가 + 새 값 반환을 한 번에 — 증가 + N 체크가 한 줄."),
+        t(E, "Three explicit lines (one per direction) — easier to read than a generic loop.",
+            "방향당 한 줄씩 명시적 — 제너릭 루프보다 읽기 쉬움."),
       ],
     },
     {

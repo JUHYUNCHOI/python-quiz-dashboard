@@ -471,9 +471,22 @@ export function getMooSections(E) {
       color: A,
       py: MOO_INPUT_PY, cpp: MOO_INPUT_CPP,
       why: [
-        t(E, "n = string length, f = threshold (count of moo to qualify).", "n = 문자열 길이, f = moo 개수 기준치."),
-        t(E, "Read string as a list (Python) or string (C++) so we can mutate during trials.", "Python 은 list, C++ 은 string 으로 — 시도 중 변경 가능."),
-        t(E, "Fast input (sys.stdin.readline / ios::sync_with_stdio false). N up to 20,000.", "빠른 입력 — N 이 20,000 까지 가능."),
+        t(E, "n = string length, f = threshold (count of moo to qualify).",
+            "n = 문자열 길이, f = moo 개수 기준치."),
+        t(E, "Read string as mutable so we can try changing letters during trials.",
+            "문자열은 변경 가능하게 읽어야 — 시도하면서 글자 바꿀 수 있게."),
+      ],
+      pyOnly: [
+        t(E, "list(input()) — Python strings are immutable; converting to list lets us do string[i] = c.",
+            "list(input()) — Python 문자열은 변경 불가니까 리스트로 변환해야 string[i] = c 가능."),
+        t(E, "sys.stdin.readline + defaultdict from collections (auto-init keys to 0).",
+            "sys.stdin.readline 으로 빠른 입력 + defaultdict 가 키를 자동 0 으로 초기화."),
+      ],
+      cppOnly: [
+        t(E, "std::string is mutable in C++ — direct s[i] = c works without conversion.",
+            "C++ string 은 변경 가능 — 변환 없이 s[i] = c 바로 가능."),
+        t(E, "ios::sync_with_stdio(false) + cin.tie(nullptr) — Fast I/O, essential for N=20K.",
+            "ios::sync_with_stdio(false) + cin.tie(nullptr) — Fast I/O, N=20K 에 필수."),
       ],
     },
     {
@@ -481,10 +494,26 @@ export function getMooSections(E) {
       color: "#0891b2",
       py: MOO_PRECOUNT_PY, cpp: MOO_PRECOUNT_CPP,
       why: [
-        t(E, "Scan original string ONCE → count every moo pattern (3-letter ABB where A≠B).", "원본을 한 번만 훑어 → 모든 moo 패턴 (ABB, A≠B) 카운트."),
-        t(E, "isMoo helper: a != b AND b == c. 'moo' / 'baa' / 'tee' all match.", "isMoo 헬퍼: a != b AND b == c. 'moo' / 'baa' / 'tee' 다 해당."),
-        t(E, "defaultdict(int) auto-starts each key at 0 — no 'if not in' check.", "defaultdict(int) 가 모든 키 자동 0 시작 — 'if not in' 체크 생략."),
-        t(E, "C++ uses map<string, int> for sorted output later.", "C++ 은 정렬 출력 위해 map<string, int>."),
+        t(E, "Scan original string ONCE → count every moo pattern (3-letter ABB where A≠B).",
+            "원본을 한 번만 훑어 → 모든 moo 패턴 (ABB, A≠B) 카운트."),
+        t(E, "isMoo helper: a != b AND b == c. 'moo' / 'baa' / 'tee' all match.",
+            "isMoo 헬퍼: a != b AND b == c. 'moo' / 'baa' / 'tee' 다 해당."),
+        t(E, "Why pre-count? So later we can update incrementally (just ±1 per change).",
+            "왜 미리 셈? 나중에 변경 시 ±1 만 하면 되도록 (incremental 업데이트)."),
+      ],
+      pyOnly: [
+        t(E, "defaultdict(int) — accessing non-existent key auto-returns 0. No 'if key not in dict' check.",
+            "defaultdict(int) — 없는 키 접근 시 자동 0. 'if key not in dict' 체크 생략."),
+        t(E, "Slicing: string[i:i+3] gives a 3-char substring. Concatenate for dict key.",
+            "슬라이싱: string[i:i+3] 으로 3 글자 부분문자열. dict 키로 이어 붙이기."),
+      ],
+      cppOnly: [
+        t(E, "map<string, int> uses red-black tree → keys are stored in sorted order automatically.",
+            "map<string, int> 은 RB-tree 기반 → 키가 자동으로 정렬돼 저장됨."),
+        t(E, "s.substr(i, 3) extracts 3-char substring starting at i. Used as map key.",
+            "s.substr(i, 3) 으로 i 부터 3 글자 추출. map 키로 사용."),
+        t(E, "Bonus: when we output result later, map iteration is already alphabetical — no sort needed.",
+            "보너스: 나중에 result 출력 시 map 순회가 이미 알파벳순 — 따로 정렬 불필요."),
       ],
     },
     {
@@ -492,12 +521,30 @@ export function getMooSections(E) {
       color: "#16a34a",
       py: MOO_TRY_PY, cpp: MOO_TRY_CPP,
       why: [
-        t(E, "For each pos: only 3 windows contain pos (idx = pos-2, pos-1, pos). NOT N!", "각 pos: pos 포함 윈도우 정확히 3 개 (idx = pos-2, pos-1, pos). N 개가 아님!"),
-        t(E, "🔴 REMOVE: subtract 3 windows' contribution from mydict.", "🔴 빼기: 3 윈도우 기여를 mydict 에서 빼기."),
-        t(E, "🟡 TRY 26 letters: temporarily add new contribution, check ≥ f, IMMEDIATELY undo.", "🟡 26 글자 시도: 임시로 더하고, ≥ f 체크 후 즉시 되돌리기."),
-        t(E, "Why immediately undo? Next letter trial needs clean state — without previous trial mixed in.", "왜 즉시 되돌림? 다음 시도가 깨끗한 상태 필요 — 이전 시도 카운트 섞이지 않게."),
-        t(E, "🟢 RESTORE: add back the 3 original windows so mydict isn't permanently changed.", "🟢 복원: 원래 3 윈도우 다시 더해 mydict 영구 변경 방지."),
-        t(E, "Total: N × 26 × 3 = 78N. Down from 26N² brute. ~6,667× speedup at N=20,000.", "총: N × 26 × 3 = 78N. 브루트 26N² 에서 ~6,667 배 빠름 (N=20,000)."),
+        t(E, "For each pos: only 3 windows contain pos (idx = pos-2, pos-1, pos). NOT N!",
+            "각 pos: pos 포함 윈도우 정확히 3 개 (idx = pos-2, pos-1, pos). N 개가 아님!"),
+        t(E, "🔴 REMOVE: subtract 3 windows' contribution from the count dict.",
+            "🔴 빼기: 3 윈도우 기여를 카운트 dict 에서 빼기."),
+        t(E, "🟡 TRY 26 letters: temporarily add new contribution, check ≥ f, IMMEDIATELY undo.",
+            "🟡 26 글자 시도: 임시로 더하고, ≥ f 체크 후 즉시 되돌리기."),
+        t(E, "Why immediately undo? Next letter trial needs clean state — without previous trial mixed in.",
+            "왜 즉시 되돌림? 다음 시도가 깨끗한 상태 필요 — 이전 시도 카운트 섞이지 않게."),
+        t(E, "🟢 RESTORE: add back the 3 original windows so the dict isn't permanently changed.",
+            "🟢 복원: 원래 3 윈도우 다시 더해 dict 영구 변경 방지."),
+        t(E, "Total: N × 26 × 3 = 78N. Down from 26N² brute. ~6,667× speedup at N=20,000.",
+            "총: N × 26 × 3 = 78N. 브루트 26N² 에서 ~6,667 배 빠름 (N=20,000)."),
+      ],
+      pyOnly: [
+        t(E, "list(string[idx:idx+3]) creates a fresh copy — modifying t doesn't affect string.",
+            "list(string[idx:idx+3]) 로 새 복사본 — t 수정해도 string 영향 없음."),
+        t(E, "t[pos - idx] = c: change the right offset within the 3-letter window.",
+            "t[pos - idx] = c: 3 글자 윈도우 내에서 올바른 오프셋 변경."),
+      ],
+      cppOnly: [
+        t(E, "We modify s[pos] directly (faster than copying), then restore at end of inner loop.",
+            "s[pos] 를 직접 변경 (복사보다 빠름), 안쪽 루프 끝에서 복원."),
+        t(E, "set<string> ensures distinct moos (problem allows multiple positions to yield same key).",
+            "set<string> 으로 중복 제거 (여러 위치에서 같은 moo 키 나올 수 있음)."),
       ],
     },
     {
@@ -505,76 +552,89 @@ export function getMooSections(E) {
       color: A,
       py: MOO_FULL_PY, cpp: MOO_FULL_CPP,
       why: [
-        t(E, "Sort result alphabetically (problem requires sorted output).", "결과 사전순 정렬 (문제 요구)."),
-        t(E, "Output: count first, then each moo on its own line.", "출력: 개수 먼저, 그 다음 각 moo 한 줄씩."),
-        t(E, "Time: O(78N). For N=20,000: 1.56M ops — instant. Brute would take ~104s.", "시간: O(78N). N=20,000 에서 156만 연산 — 즉시. 브루트는 ~104초."),
+        t(E, "Sort result alphabetically (problem requires sorted output).",
+            "결과 사전순 정렬 (문제 요구)."),
+        t(E, "Output format: count K first, then K moos on separate lines.",
+            "출력 형식: 개수 K 먼저, 그 다음 각 moo 한 줄씩."),
+        t(E, "Time: O(78N). For N=20,000: 1.56M ops — instant. Brute would take ~104s.",
+            "시간: O(78N). N=20,000 에서 156만 연산 — 즉시. 브루트는 ~104초."),
+      ],
+      pyOnly: [
+        t(E, "sorted(result) returns a list in alphabetical order. Then '\\n'.join() for output.",
+            "sorted(result) 로 알파벳 정렬 리스트. '\\n'.join() 으로 출력."),
+      ],
+      cppOnly: [
+        t(E, "set<string> already iterates in alphabetical order — no extra sort step.",
+            "set<string> 이 이미 알파벳순 순회 — 추가 sort 불필요."),
       ],
     },
   ];
 }
 
 
-export function MooProgressiveCode({ E, sections }) {
-  const [active, setActive] = useState(null);
-  const [lang, setLang] = useState("py");
-  const cur = active !== null ? sections[active] : null;
-  const code = cur ? (lang === "py" ? cur.py : cur.cpp) : null;
+/* ProgressiveCode — 수직 스택 (위→아래 step by step 자연스럽게 읽기).
+   lang prop 은 헤더에서. 위젯 내부 toggle/PDF 제거.
+   reasoning: cur.why (공통) + cur.pyOnly / cur.cppOnly (언어별). */
+export function MooProgressiveCode({ E, lang = "py", sections }) {
+  const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
 
   return (
     <div style={{ padding: 14 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, gap: 8, flexWrap: "wrap" }}>
-        <div style={{ display: "flex", gap: 2, background: "#fff", borderRadius: 8, border: `1.5px solid ${C.border}`, padding: 2 }}>
-          {[["py","🐍 Python"],["cpp","💻 C++"]].map(([v, label]) => (
-            <button key={v} onClick={() => setLang(v)} style={{
-              background: lang === v ? A : "transparent", border: "none", borderRadius: 6,
-              padding: "5px 12px", cursor: "pointer", fontSize: 12, fontWeight: 800,
-              color: lang === v ? "#fff" : C.dim,
-            }}>{label}</button>
-          ))}
-        </div>
-        <button onClick={() => downloadMooPDF(E, sections, lang)} style={{
-          background: "#fff", border: `1.5px solid ${A}`, borderRadius: 8,
-          padding: "6px 12px", cursor: "pointer", fontSize: 12, fontWeight: 800, color: A,
-        }}>📄 {t(E, "Download PDF", "PDF 다운로드")}</button>
+      {/* 현재 언어 표시 */}
+      <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 14, textAlign: "center" }}>
+        {t(E, `Showing ${langLabel} (change via header dropdown ↑)`,
+            `${langLabel} 표시 중 (위 헤더 dropdown 으로 변경)`)}
       </div>
 
-      <div style={{ display: "flex", gap: 6, marginBottom: 12, flexWrap: "wrap", justifyContent: "center" }}>
-        {sections.map((s, i) => {
-          const isActive = i === active;
-          return (
-            <button key={i} onClick={() => setActive(i)} style={{
-              padding: "8px 12px", borderRadius: 8,
-              border: `2px solid ${isActive ? s.color : C.border}`,
-              background: isActive ? s.color : "#fff",
-              color: isActive ? "#fff" : s.color || C.dim,
-              fontWeight: 800, fontSize: 12, cursor: "pointer",
-            }}>{s.label}</button>
-          );
-        })}
-      </div>
+      {/* 모든 섹션을 수직으로 스택 — 위→아래 자연스레 읽기 */}
+      {sections.map((s, i) => {
+        const code = lang === "py" ? s.py : s.cpp;
+        const langSpecific = lang === "py" ? (s.pyOnly || []) : (s.cppOnly || []);
+        return (
+          <div key={i} style={{ marginBottom: 18 }}>
+            {/* 섹션 헤더 */}
+            <div style={{
+              background: s.color, color: "#fff",
+              padding: "8px 14px", borderRadius: "10px 10px 0 0",
+              fontSize: 14, fontWeight: 800,
+            }}>{s.label}</div>
 
-      {!cur && (
-        <div style={{ textAlign: "center", padding: "40px 20px", color: C.dim, fontSize: 13, background: "#fff", border: `1.5px dashed ${C.border}`, borderRadius: 10 }}>
-          👆 {t(E, "Click a section above to see code + reasoning.", "위 버튼 눌러서 코드 + 이유 확인.")}
-        </div>
-      )}
-
-      {cur && (
-        <>
-          <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 12px", marginBottom: 10 }}>
-            <div style={{ fontSize: 11, color: C.dim, fontWeight: 800, marginBottom: 6, letterSpacing: 0.5 }}>
-              💡 {t(E, "Why this way?", "왜 이렇게?")}
-            </div>
-            {cur.why.map((line, i) => (
-              <div key={i} style={{ fontSize: 12.5, color: C.text, lineHeight: 1.65, marginBottom: 4, display: "flex", gap: 6 }}>
-                <span style={{ color: cur.color, fontWeight: 800, flexShrink: 0 }}>•</span>
-                <span>{line}</span>
+            {/* "왜 이렇게?" reasoning */}
+            <div style={{
+              background: "#fff", border: `1.5px solid ${C.border}`, borderTop: "none",
+              padding: "10px 12px",
+            }}>
+              <div style={{ fontSize: 11, color: C.dim, fontWeight: 800, marginBottom: 6, letterSpacing: 0.5 }}>
+                💡 {t(E, "Why this way?", "왜 이렇게?")}
               </div>
-            ))}
+              {s.why.map((line, j) => (
+                <div key={`w${j}`} style={{ fontSize: 12.5, color: C.text, lineHeight: 1.65, marginBottom: 4, display: "flex", gap: 6 }}>
+                  <span style={{ color: s.color, fontWeight: 800, flexShrink: 0 }}>•</span>
+                  <span>{line}</span>
+                </div>
+              ))}
+              {langSpecific.length > 0 && (
+                <div style={{ marginTop: 8, paddingTop: 8, borderTop: `1px dashed ${C.border}` }}>
+                  <div style={{ fontSize: 10, color: C.dim, fontWeight: 800, marginBottom: 4, letterSpacing: 0.5 }}>
+                    {langLabel} {t(E, "specific:", "전용:")}
+                  </div>
+                  {langSpecific.map((line, j) => (
+                    <div key={`l${j}`} style={{ fontSize: 12.5, color: C.text, lineHeight: 1.65, marginBottom: 4, display: "flex", gap: 6 }}>
+                      <span style={{ color: lang === "py" ? "#16a34a" : "#0891b2", fontWeight: 800, flexShrink: 0 }}>▸</span>
+                      <span>{line}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* 코드 — 같이 붙어 있음 */}
+            <div style={{ borderRadius: "0 0 10px 10px", overflow: "hidden" }}>
+              <CodeBlock lines={code} />
+            </div>
           </div>
-          <CodeBlock lines={code} />
-        </>
-      )}
+        );
+      })}
     </div>
   );
 }

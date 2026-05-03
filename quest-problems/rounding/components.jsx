@@ -1101,86 +1101,57 @@ ${sections.map(s => {
      - 각 섹션마다 "왜 이렇게?" 설명
      - PDF 다운로드 (브라우저 print → Save as PDF)
    ================================================================ */
-export function ProgressiveCode({ E, sections }) {
-  const [active, setActive] = useState(null);     // null = 아직 안 누름
-  const [lang, setLang] = useState("py");         // "py" or "cpp"
-  const cur = active !== null ? sections[active] : null;
-  const code = cur ? (lang === "py" ? cur.py : cur.cpp) : null;
-
-  const downloadPDF = () => downloadFullPDF(E, sections, lang);
-
+export function ProgressiveCode({ E, lang = "py", sections }) {
+  const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
   return (
     <div style={{ padding: 14 }}>
-      {/* 상단: 언어 토글 + PDF 다운로드 */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, gap: 8, flexWrap: "wrap" }}>
-        <div style={{ display: "flex", gap: 2, background: "#fff", borderRadius: 8, border: `1.5px solid ${C.border}`, padding: 2 }}>
-          {[["py","🐍 Python"],["cpp","💻 C++"]].map(([v, label]) => (
-            <button key={v} onClick={() => setLang(v)} style={{
-              background: lang === v ? C.accent : "transparent", border: "none", borderRadius: 6,
-              padding: "5px 12px", cursor: "pointer", fontSize: 12, fontWeight: 800,
-              color: lang === v ? "#fff" : C.dim,
-            }}>{label}</button>
-          ))}
-        </div>
-        <button onClick={downloadPDF} style={{
-          background: "#fff", border: `1.5px solid ${C.accentBd}`, borderRadius: 8,
-          padding: "6px 12px", cursor: "pointer", fontSize: 12, fontWeight: 800, color: C.accent,
-        }}>📄 {t(E, "Download PDF", "PDF 다운로드")}</button>
+      <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 14, textAlign: "center" }}>
+        {t(E, `Showing ${langLabel} (change via header dropdown ↑)`,
+            `${langLabel} 표시 중 (위 헤더 dropdown 으로 변경)`)}
       </div>
-
-      {/* 섹션 선택 버튼들 */}
-      <div style={{ display: "flex", gap: 6, marginBottom: 12, flexWrap: "wrap", justifyContent: "center" }}>
-        {sections.map((s, i) => {
-          const isActive = i === active;
-          return (
-            <button
-              key={i}
-              onClick={() => setActive(i)}
-              style={{
-                padding: "8px 12px", borderRadius: 8,
-                border: `2px solid ${isActive ? s.color : C.border}`,
-                background: isActive ? s.color : "#fff",
-                color: isActive ? "#fff" : s.color || C.dim,
-                fontWeight: 800, fontSize: 12, cursor: "pointer",
-                transition: "all .15s",
-              }}
-            >
-              {s.label}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* 활성 섹션 내용 */}
-      {!cur && (
-        <div style={{
-          textAlign: "center", padding: "40px 20px", color: C.dim, fontSize: 13,
-          background: "#fff", border: `1.5px dashed ${C.border}`, borderRadius: 10,
-        }}>
-          👆 {t(E, "Click a button above to see that part of the code.",
-                  "위 버튼 눌러서 코드 부분을 확인해봐요.")}
-        </div>
-      )}
-
-      {cur && (
-        <>
-          <div style={{
-            background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10,
-            padding: "10px 12px", marginBottom: 10,
-          }}>
-            <div style={{ fontSize: 11, color: C.dim, fontWeight: 800, marginBottom: 6, letterSpacing: 0.5 }}>
-              💡 {t(E, "Why this way?", "왜 이렇게?")}
-            </div>
-            {cur.why.map((line, i) => (
-              <div key={i} style={{ fontSize: 12.5, color: C.text, lineHeight: 1.65, marginBottom: 4, display: "flex", gap: 6 }}>
-                <span style={{ color: cur.color, fontWeight: 800, flexShrink: 0 }}>•</span>
-                <span>{line}</span>
+      {sections.map((s, i) => {
+        const code = lang === "py" ? s.py : s.cpp;
+        const langSpecific = lang === "py" ? (s.pyOnly || []) : (s.cppOnly || []);
+        return (
+          <div key={i} style={{ marginBottom: 18 }}>
+            <div style={{
+              background: s.color, color: "#fff",
+              padding: "8px 14px", borderRadius: "10px 10px 0 0",
+              fontSize: 14, fontWeight: 800,
+            }}>{s.label}</div>
+            <div style={{
+              background: "#fff", border: `1.5px solid ${C.border}`, borderTop: "none",
+              padding: "10px 12px",
+            }}>
+              <div style={{ fontSize: 11, color: C.dim, fontWeight: 800, marginBottom: 6, letterSpacing: 0.5 }}>
+                💡 {t(E, "Why this way?", "왜 이렇게?")}
               </div>
-            ))}
+              {s.why.map((line, j) => (
+                <div key={`w${j}`} style={{ fontSize: 12.5, color: C.text, lineHeight: 1.65, marginBottom: 4, display: "flex", gap: 6 }}>
+                  <span style={{ color: s.color, fontWeight: 800, flexShrink: 0 }}>•</span>
+                  <span>{line}</span>
+                </div>
+              ))}
+              {langSpecific.length > 0 && (
+                <div style={{ marginTop: 8, paddingTop: 8, borderTop: `1px dashed ${C.border}` }}>
+                  <div style={{ fontSize: 10, color: C.dim, fontWeight: 800, marginBottom: 4, letterSpacing: 0.5 }}>
+                    {langLabel} {t(E, "specific:", "전용:")}
+                  </div>
+                  {langSpecific.map((line, j) => (
+                    <div key={`l${j}`} style={{ fontSize: 12.5, color: C.text, lineHeight: 1.65, marginBottom: 4, display: "flex", gap: 6 }}>
+                      <span style={{ color: lang === "py" ? "#16a34a" : "#0891b2", fontWeight: 800, flexShrink: 0 }}>▸</span>
+                      <span>{line}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div style={{ borderRadius: "0 0 10px 10px", overflow: "hidden" }}>
+              <CodeBlock lines={code} />
+            </div>
           </div>
-          <CodeBlock lines={code} />
-        </>
-      )}
+        );
+      })}
     </div>
   );
 }

@@ -162,7 +162,7 @@ export default function RoundingApp(props = {}) {
     if (step.type === "compare3") return <CodeCompare3 E={E} />;
     if (step.type === "runner")   return <BruteRunner E={E} />;
     if (step.type === "scale")    return <SpeedScale E={E} />;
-    if (step.type === "progressive") return <ProgressiveCode E={E} sections={step.sections} />;
+    if (step.type === "progressive") return <ProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
 
     return null;
   };
