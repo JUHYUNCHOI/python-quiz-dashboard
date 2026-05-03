@@ -1,8 +1,89 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#7c5cfc";
+
+/* ═══════════════════════════════════════════════════════════════
+   Mooin3Sim — for each j in [l+1, r-1], find best i and k
+   ═══════════════════════════════════════════════════════════════ */
+const _M3_PRESETS = [
+  { s: "abbab", l: 0, r: 4 },
+  { s: "abacaba", l: 0, r: 6 },
+  { s: "aaabbb", l: 0, r: 5 },
+];
+
+export function Mooin3Sim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [j, setJ] = useState(2);
+  const preset = _M3_PRESETS[pi];
+  const s = preset.s;
+  const l = preset.l, r = preset.r;
+  // ensure j in valid range
+  const validJ = Math.max(l + 1, Math.min(r - 1, j));
+
+  // find best i (farthest left with s[i] != s[j])
+  let bestI = -1;
+  for (let i = l; i < validJ; i++) if (s[i] !== s[validJ]) { bestI = i; break; }
+  // find best k (farthest right with s[k] == s[j])
+  let bestK = -1;
+  for (let k = r; k > validJ; k--) if (s[k] === s[validJ]) { bestK = k; break; }
+  const product = (bestI >= 0 && bestK >= 0) ? (validJ - bestI) * (bestK - validJ) : -1;
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12 }}>
+        {_M3_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => { setPi(i); setJ(p.l + 1); }} style={{
+            padding: "4px 10px", borderRadius: 8, border: `2px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>"{p.s}"</button>
+        ))}
+      </div>
+
+      <div style={{ display: "flex", gap: 4, justifyContent: "center", marginBottom: 6 }}>
+        {s.split("").map((ch, idx) => {
+          const isJ = idx === validJ;
+          const isI = idx === bestI;
+          const isK = idx === bestK;
+          const inRange = idx >= l && idx <= r;
+          return (
+            <div key={idx} style={{
+              width: 30, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
+              borderRadius: 6, fontSize: 14, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+              background: isJ ? "#fef3c7" : (isI ? "#dbeafe" : (isK ? "#dcfce7" : (inRange ? "#fff" : "#f3f4f6"))),
+              border: `2px solid ${isJ ? "#f59e0b" : (isI ? "#3b82f6" : (isK ? "#16a34a" : (inRange ? "#cbd5e1" : "#e5e7eb")))}`,
+              color: inRange ? C.text : "#9ca3af",
+            }}>{ch}</div>
+          );
+        })}
+      </div>
+      <div style={{ textAlign: "center", fontSize: 10, color: C.dim, marginBottom: 12 }}>
+        🟡 = j ({validJ}) · 🔵 = best i ({bestI}) · 🟢 = best k ({bestK})
+      </div>
+
+      {/* j slider */}
+      <div style={{ background: "#f8fafc", borderRadius: 10, padding: "8px 12px", marginBottom: 10, fontSize: 12, color: C.text, fontFamily: "'JetBrains Mono',monospace" }}>
+        <div style={{ marginBottom: 6 }}>j = {validJ}</div>
+        <input type="range" min={l + 1} max={r - 1} value={validJ} onChange={e => setJ(parseInt(e.target.value))} style={{ width: "100%" }} />
+      </div>
+
+      <div style={{ background: product >= 0 ? "#dcfce7" : "#fef2f2", border: `2px solid ${product >= 0 ? "#16a34a" : "#dc2626"}`, borderRadius: 10, padding: "10px 12px", color: product >= 0 ? "#15803d" : "#7f1d1d", fontSize: 13, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", textAlign: "center" }}>
+        {product >= 0 ? `(j − i) × (k − j) = ${validJ - bestI} × ${bestK - validJ} = ${product}` : t(E, "no valid (i, j, k) for this j", "이 j에 대해 유효 (i, j, k) 없음")}
+      </div>
+    </div>
+  );
+}
+
+export function Mooin3Runner({ E }) {
+  return (
+    <div style={{ padding: 14, fontSize: 12, color: C.dim, lineHeight: 1.6, textAlign: "center" }}>
+      {t(E, "Use the Sim above to drag j and watch best i and k. Per-query brute force is in the code section.",
+            "위 Sim에서 j를 드래그하며 best i, k 변화 관찰. 쿼리당 brute force는 코드 섹션 참고.")}
+    </div>
+  );
+}
 
 /* Section 1: Input — string + queries */
 const M3_INPUT_PY = [

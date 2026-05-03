@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
-import { Mooin3ProgressiveCode, downloadMooin3PDF, getMooin3Sections } from "./components";
+import { Mooin3ProgressiveCode, downloadMooin3PDF, getMooin3Sections, Mooin3Sim } from "./components";
 import { makeMooin3Ch1, makeMooin3Ch2 } from "./chapters";
 
 const A = "#7c5cfc";
@@ -75,6 +75,7 @@ export default function Mooin3App(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "progressive") return <Mooin3ProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "sim") return <Mooin3Sim E={E} />;
     return null;
   };
 

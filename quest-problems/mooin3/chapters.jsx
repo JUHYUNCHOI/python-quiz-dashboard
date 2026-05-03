@@ -80,6 +80,12 @@ export function makeMooin3Ch1(E) {
       question: t(E, "Max value for s='abba', range [1,4]?", "s='abba', 범위 [1,4]의 최대값?"),
       answer: 1,
     },
+    {
+      type: "sim",
+      narr: t(E,
+        "Drag j and watch how best i (left, different) and best k (right, same) shift. Product (j-i)(k-j) shown live.",
+        "j를 드래그하면서 best i (왼쪽, 다름)와 best k (오른쪽, 같음)가 어떻게 변하는지 봐. 곱 (j-i)(k-j) 실시간."),
+    },
   ];
 }
 
