@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
-import { PresentsProgressiveCode, downloadPresentsPDF, getPresentsSections } from "./components";
+import { PresentsProgressiveCode, downloadPresentsPDF, getPresentsSections, PresentsSim, PresentsRunner } from "./components";
 import { makePresentsCh1, makePresentsCh2 } from "./chapters";
 
 const A = "#8b5cf6";
@@ -75,6 +75,8 @@ export default function PresentsApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "progressive") return <PresentsProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "sim") return <PresentsSim E={E} />;
+    if (step.type === "runner") return <PresentsRunner E={E} />;
     return null;
   };
 

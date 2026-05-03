@@ -1,8 +1,167 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#8b5cf6";
+
+/* ═══════════════════════════════════════════════════════════════
+   PresentsSim — stack with queries, find target then pop
+   ═══════════════════════════════════════════════════════════════ */
+const _PR_PRESETS = [
+  { stack: [3, 1, 4, 2], queries: [4, 2] },
+  { stack: [5, 3, 1, 4, 2], queries: [1, 2, 3] },
+  { stack: [10, 20, 30], queries: [30, 20, 10] },
+];
+
+export function PresentsSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [si, setSi] = useState(0);
+  const preset = _PR_PRESETS[pi];
+
+  // For each query: 2 sub-steps (find + pop). So total = 2 * |queries|.
+  const totalSteps = 2 * preset.queries.length;
+  const cur = Math.min(si, totalSteps - 1);
+
+  // Reconstruct stack at this step
+  let stack = [...preset.stack];
+  let qIdx = 0;
+  const isFind = cur % 2 === 0;
+  const fullQ = Math.floor(cur / 2);
+  for (let q = 0; q < fullQ; q++) {
+    const t = preset.queries[q];
+    const idx = stack.indexOf(t);
+    if (idx !== -1) stack.splice(idx, 1);
+  }
+  qIdx = fullQ;
+  const target = preset.queries[qIdx];
+  const targetIdx = stack.indexOf(target);
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12 }}>
+        {_PR_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => { setPi(i); setSi(0); }} style={{
+            padding: "4px 10px", borderRadius: 8, border: `2px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>case {i+1}</button>
+        ))}
+      </div>
+
+      <div style={{ background: "#f8fafc", borderRadius: 10, padding: "8px 12px", marginBottom: 10, fontSize: 11, color: C.dim, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>
+        {t(E, `Query ${qIdx + 1}/${preset.queries.length}: find ${target}`, `쿼리 ${qIdx + 1}/${preset.queries.length}: ${target} 찾기`)}
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "center", marginBottom: 12 }}>
+        {stack.map((v, idx) => {
+          const isTarget = v === target;
+          const isAbove = idx < targetIdx;
+          return (
+            <div key={`${idx}-${v}`} style={{
+              width: 80, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
+              borderRadius: 8, fontSize: 16, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+              background: isFind ? (isTarget ? "#dcfce7" : (isAbove ? "#fef3c7" : "#fff")) : (isTarget && cur % 2 === 1 ? "#fee2e2" : "#fff"),
+              border: `2px solid ${isFind ? (isTarget ? "#16a34a" : (isAbove ? "#f59e0b" : "#e5e7eb")) : (isTarget && cur % 2 === 1 ? "#dc2626" : "#e5e7eb")}`,
+              color: isFind ? (isTarget ? "#15803d" : (isAbove ? "#92400e" : C.text)) : C.text,
+              opacity: !isFind && isTarget && cur % 2 === 1 ? 0.4 : 1,
+              transition: "all .25s",
+            }}>{v}</div>
+          );
+        })}
+      </div>
+
+      <div style={{ background: "#ede9fe", border: `1.5px solid ${A}`, borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 12, color: C.text, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.6, textAlign: "center" }}>
+        {isFind ? (
+          targetIdx >= 0 ? (
+            t(E, `Found ${target} at index ${targetIdx} → ${targetIdx} presents above must be removed.`,
+                  `${target}을 인덱스 ${targetIdx}에서 찾음 → 위에 ${targetIdx}개 제거 필요.`)
+          ) : t(E, "Not found?!", "못 찾음?!")
+        ) : (
+          t(E, `Output: ${targetIdx >= 0 ? targetIdx : "?"}. Then pop ${target} from stack.`,
+                `출력: ${targetIdx >= 0 ? targetIdx : "?"}. ${target}을 스택에서 제거.`)
+        )}
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
+        <button onClick={() => setSi(Math.max(0, cur - 1))} disabled={cur === 0} style={{
+          background: cur === 0 ? "#e5e7eb" : "#fff", border: `2px solid ${cur === 0 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800, color: cur === 0 ? "#b0b5c3" : A,
+          cursor: cur === 0 ? "default" : "pointer",
+        }}>←</button>
+        <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>{cur + 1} / {totalSteps}</span>
+        <button onClick={() => setSi(Math.min(totalSteps - 1, cur + 1))} disabled={cur === totalSteps - 1} style={{
+          background: cur === totalSteps - 1 ? "#e5e7eb" : A, border: `2px solid ${cur === totalSteps - 1 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800,
+          color: cur === totalSteps - 1 ? "#b0b5c3" : "#fff", cursor: cur === totalSteps - 1 ? "default" : "pointer",
+        }}>→</button>
+      </div>
+    </div>
+  );
+}
+
+export function PresentsRunner({ E }) {
+  const [stackIn, setStackIn] = useState("3 1 4 2");
+  const [queriesIn, setQueriesIn] = useState("4 2");
+  const [running, setRunning] = useState(false);
+  const [results, setResults] = useState([]);
+  const alive = useRef(false);
+
+  const run = () => {
+    const stack = stackIn.trim().split(/\s+/).map(Number);
+    const queries = queriesIn.trim().split(/\s+/).map(Number);
+    if (stack.some(isNaN) || queries.some(isNaN)) {
+      setResults([{ error: t(E, "Invalid input.", "잘못된 입력.") }]);
+      return;
+    }
+    setRunning(true); setResults([]);
+    alive.current = true;
+    const cur = [...stack];
+    const out = [];
+    let i = 0;
+    const tick = () => {
+      if (!alive.current || i >= queries.length) {
+        setRunning(false);
+        return;
+      }
+      const target = queries[i];
+      const idx = cur.indexOf(target);
+      if (idx >= 0) {
+        out.push(`Q${i+1}: ${target} → ${idx}`);
+        cur.splice(idx, 1);
+      } else {
+        out.push(`Q${i+1}: ${target} not found`);
+      }
+      setResults([...out]);
+      i++;
+      const delay = queries.length <= 10 ? 350 : 50;
+      setTimeout(tick, delay);
+    };
+    setTimeout(tick, 100);
+  };
+  const stop = () => { alive.current = false; };
+
+  return (
+    <div style={{ padding: 14 }}>
+      <input value={stackIn} onChange={e => setStackIn(e.target.value)} disabled={running} placeholder="stack (top first)"
+        style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: A, marginBottom: 8, boxSizing: "border-box" }} />
+      <input value={queriesIn} onChange={e => setQueriesIn(e.target.value)} disabled={running} placeholder="queries"
+        style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: A, marginBottom: 10, boxSizing: "border-box" }} />
+      <button onClick={running ? stop : run} style={{
+        width: "100%", padding: "10px 0", borderRadius: 10, border: "none", cursor: "pointer",
+        fontSize: 14, fontWeight: 800, marginBottom: 10, background: A, color: "#fff",
+      }}>{running ? t(E, "⏹ Stop", "⏹ 중지") : t(E, "▶ Run", "▶ 실행")}</button>
+      {results.length > 0 && (
+        <div style={{ background: "#f8fafc", borderRadius: 10, padding: "10px 12px", fontSize: 13, color: C.text, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.6 }}>
+          {results.map((r, i) => (<div key={i}>{r.error ? <span style={{ color: "#dc2626" }}>{r.error}</span> : r}</div>))}
+        </div>
+      )}
+      <div style={{ marginTop: 12, background: "#f8fafc", borderRadius: 8, padding: "8px 10px", fontSize: 10, color: C.dim, lineHeight: 1.6 }}>
+        <div style={{ fontWeight: 800, color: C.text, marginBottom: 4 }}>{t(E, "⏱ USACO Time Estimate", "⏱ USACO 시간 추정")}</div>
+        <div>O(N · Q) — fine for Bronze sizes.</div>
+      </div>
+    </div>
+  );
+}
 
 /* Section 1: Input */
 const PR_INPUT_PY = [

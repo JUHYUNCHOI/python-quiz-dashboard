@@ -79,6 +79,12 @@ export function makePresentsCh1(E) {
       question: t(E, "Stack [4,2], find 2. Presents above?", "스택 [4,2], 2를 찾기. 위의 개수?"),
       answer: 1,
     },
+    {
+      type: "sim",
+      narr: t(E,
+        "Step through find + pop for each query. Yellow = above target, green = target.",
+        "쿼리마다 찾기 + 제거 단계. 노랑 = 타겟 위, 초록 = 타겟."),
+    },
   ];
 }
 
@@ -105,6 +111,12 @@ export function makePresentsCh2(E, lang = "py") {
         "Now build the simulation step by step. Each section reveals one piece.",
         "시뮬레이션을 단계별로 만들어보자. 각 섹션마다 한 조각씩."),
       sections: getPresentsSections(E),
+    },
+    {
+      type: "runner",
+      narr: t(E,
+        "Try your own stack and queries.",
+        "직접 스택과 쿼리 시도."),
     },
   ];
 }
