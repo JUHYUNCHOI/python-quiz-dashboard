@@ -89,6 +89,12 @@ export function makeHpsCh1(E) {
       hint: t(E, "Need one symbol that beats Rock (Paper) and one that beats Paper (Scissors)", "바위를 이기는 기호(보)와 보를 이기는 기호(가위) 필요"),
       answer: 5,
     },
+    {
+      type: "sim",
+      narr: t(E,
+        "Pick Bessie's (a, b) and Elsie's (s1, s2). See if Bessie can guarantee a win.",
+        "베시 (a, b), 엘시 (s1, s2) 골라서 베시가 승리 보장 가능한지 확인."),
+    },
   ];
 }
 

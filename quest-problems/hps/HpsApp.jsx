@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
-import { HpsProgressiveCode, downloadHpsPDF, getHpsSections } from "./components";
+import { HpsProgressiveCode, downloadHpsPDF, getHpsSections, HpsSim } from "./components";
 import { makeHpsCh1, makeHpsCh2 } from "./chapters";
 
 const A = "#059669";
@@ -75,6 +75,7 @@ export default function HpsApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "progressive") return <HpsProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "sim") return <HpsSim E={E} />;
     return null;
   };
 

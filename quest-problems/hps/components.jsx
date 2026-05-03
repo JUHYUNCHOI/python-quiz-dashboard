@@ -1,8 +1,98 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#059669";
+
+/* ═══════════════════════════════════════════════════════════════
+   HpsSim — show beats matrix + try Bessie pair vs Elsie pair
+   ═══════════════════════════════════════════════════════════════ */
+const _HPS_BEATS = ["011", "101", "110"];   // 3 symbols, classic rock-paper-scissors-ish
+const _HPS_NAMES = ["Rock", "Paper", "Scissors"];
+
+export function HpsSim({ E }) {
+  const [a, setA] = useState(0);
+  const [b, setB] = useState(1);
+  const [s1, setS1] = useState(2);
+  const [s2, setS2] = useState(1);
+  const N = 3;
+  const beats = _HPS_BEATS;
+  const pairBeats = (a, b, x) => beats[a][x] === "1" || beats[b][x] === "1";
+  const winS1 = pairBeats(a, b, s1);
+  const winS2 = pairBeats(a, b, s2);
+  const winsAll = winS1 && winS2;
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ background: "#f8fafc", borderRadius: 10, padding: "10px 12px", marginBottom: 12, fontSize: 11, color: C.dim, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }}>
+        beats[i][j] = '1' if i beats j ({_HPS_NAMES[0]}={beats[0]}, {_HPS_NAMES[1]}={beats[1]}, {_HPS_NAMES[2]}={beats[2]})
+      </div>
+
+      <div style={{ marginBottom: 10 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>Bessie's pair (a, b):</div>
+        <div style={{ display: "flex", gap: 6 }}>
+          {[0,1,2].map(i => (
+            <button key={`a${i}`} onClick={() => setA(i)} style={{
+              flex: 1, padding: "6px 0", borderRadius: 8, border: `2px solid ${i === a ? A : C.border}`,
+              background: i === a ? A : "transparent", color: i === a ? "#fff" : C.dim,
+              fontSize: 11, fontWeight: 800, cursor: "pointer",
+            }}>a={_HPS_NAMES[i][0]}</button>
+          ))}
+        </div>
+        <div style={{ display: "flex", gap: 6, marginTop: 4 }}>
+          {[0,1,2].map(i => (
+            <button key={`b${i}`} onClick={() => setB(i)} style={{
+              flex: 1, padding: "6px 0", borderRadius: 8, border: `2px solid ${i === b ? A : C.border}`,
+              background: i === b ? A : "transparent", color: i === b ? "#fff" : C.dim,
+              fontSize: 11, fontWeight: 800, cursor: "pointer",
+            }}>b={_HPS_NAMES[i][0]}</button>
+          ))}
+        </div>
+      </div>
+      <div>
+        <div style={{ fontSize: 11, fontWeight: 700, color: C.dim, marginBottom: 4 }}>Elsie's pair (s1, s2):</div>
+        <div style={{ display: "flex", gap: 6 }}>
+          {[0,1,2].map(i => (
+            <button key={`s1${i}`} onClick={() => setS1(i)} style={{
+              flex: 1, padding: "6px 0", borderRadius: 8, border: `2px solid ${i === s1 ? "#dc2626" : C.border}`,
+              background: i === s1 ? "#dc2626" : "transparent", color: i === s1 ? "#fff" : C.dim,
+              fontSize: 11, fontWeight: 800, cursor: "pointer",
+            }}>s1={_HPS_NAMES[i][0]}</button>
+          ))}
+        </div>
+        <div style={{ display: "flex", gap: 6, marginTop: 4 }}>
+          {[0,1,2].map(i => (
+            <button key={`s2${i}`} onClick={() => setS2(i)} style={{
+              flex: 1, padding: "6px 0", borderRadius: 8, border: `2px solid ${i === s2 ? "#dc2626" : C.border}`,
+              background: i === s2 ? "#dc2626" : "transparent", color: i === s2 ? "#fff" : C.dim,
+              fontSize: 11, fontWeight: 800, cursor: "pointer",
+            }}>s2={_HPS_NAMES[i][0]}</button>
+          ))}
+        </div>
+      </div>
+
+      <div style={{
+        marginTop: 14, padding: "10px 12px", borderRadius: 10,
+        background: winsAll ? "#dcfce7" : "#fef2f2",
+        border: `2px solid ${winsAll ? "#16a34a" : "#dc2626"}`,
+        fontSize: 12, fontFamily: "'JetBrains Mono',monospace", color: C.text, lineHeight: 1.7,
+      }}>
+        {t(E, `Can Bessie's (a, b) beat Elsie's s1 (${_HPS_NAMES[s1]})?`, `베시 (a, b)가 엘시 s1 (${_HPS_NAMES[s1]})을 이길 수 있나?`)} <b style={{ color: winS1 ? "#16a34a" : "#dc2626" }}>{winS1 ? "✓" : "✗"}</b><br/>
+        {t(E, `Can Bessie's (a, b) beat Elsie's s2 (${_HPS_NAMES[s2]})?`, `베시 (a, b)가 엘시 s2 (${_HPS_NAMES[s2]})을 이길 수 있나?`)} <b style={{ color: winS2 ? "#16a34a" : "#dc2626" }}>{winS2 ? "✓" : "✗"}</b><br/>
+        <b style={{ color: winsAll ? "#16a34a" : "#dc2626" }}>{winsAll ? t(E, "✅ This pair WINS!", "✅ 이 쌍은 승리!") : t(E, "❌ This pair LOSES", "❌ 이 쌍은 패배")}</b>
+      </div>
+    </div>
+  );
+}
+
+export function HpsRunner({ E }) {
+  return (
+    <div style={{ padding: 14, fontSize: 12, color: C.dim, lineHeight: 1.6, textAlign: "center" }}>
+      {t(E, "Use the Sim above to try different pair combinations. The brute force counts all (a, b) pairs.",
+            "위 Sim에서 다양한 쌍 조합 시도. brute force는 모든 (a, b) 쌍을 셈.")}
+    </div>
+  );
+}
 
 /* Section 1: Input + chart */
 const HP_INPUT_PY = [
