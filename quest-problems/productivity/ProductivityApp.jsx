@@ -18,13 +18,15 @@ export default function ProductivityApp(props = {}) {
   });
   const E = lang === "en";
   const [tab, setTab] = useState(0);
+  const [visitedTabs, setVisitedTabs] = useState(() => new Set([0]));
   const [si, setSi] = useState(0);
   const [ch1Q, setCh1Q] = useState(() => makeProdCh1(false));
   const [ch2Q, setCh2Q] = useState(() => makeProdCh2(false));
   const TABS = E ? ["📋 Problem", "⚡ Code"] : ["📋 문제", "⚡ 코드"];
   const setters = { 0: setCh1Q, 1: setCh2Q }, states = { 0: ch1Q, 1: ch2Q }, makers = { 0: makeProdCh1, 1: makeProdCh2 };
   const switchLang = nl => { const ne = nl === "en"; setLang(nl); setSi(0); for (const k of [0,1]) setters[k](makers[k](ne)); };
-  const changeTab = idx => { setTab(idx); setSi(0); setters[idx](makers[idx](E)); };
+  const changeTab = idx => { setTab(idx); setSi(0);
+    setVisitedTabs(prev => { const n = new Set(prev); n.add(idx); return n; }); setters[idx](makers[idx](E)); };
   useEffect(() => {
     if ((propLang === "ko" || propLang === "en") && propLang !== lang) switchLang(propLang);
     // eslint-disable-next-line react-hooks/exhaustive-deps

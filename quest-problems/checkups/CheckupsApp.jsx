@@ -18,6 +18,7 @@ export default function CheckupsApp(props = {}) {
   });
   const E = lang === "en";
   const [tab, setTab] = useState(0);
+  const [visitedTabs, setVisitedTabs] = useState(() => new Set([0]));
   const [si, setSi] = useState(0);
 
   const [ch1Q, setCh1Q] = useState(() => makeCheckupsCh1(false));
@@ -33,7 +34,8 @@ export default function CheckupsApp(props = {}) {
     const ne = nl === "en"; setLang(nl); setSi(0);
     for (const k of [0,1]) setters[k](makers[k](ne));
   };
-  const changeTab = idx => { setTab(idx); setSi(0); setters[idx](makers[idx](E)); };
+  const changeTab = idx => { setTab(idx); setSi(0);
+    setVisitedTabs(prev => { const n = new Set(prev); n.add(idx); return n; }); setters[idx](makers[idx](E)); };
   useEffect(() => {
     if ((propLang === "ko" || propLang === "en") && propLang !== lang) switchLang(propLang);
     // eslint-disable-next-line react-hooks/exhaustive-deps

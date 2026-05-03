@@ -19,6 +19,7 @@ export default function WordApp(props = {}) {
   });
   const E = lang === "en";
   const [tab, setTab] = useState(0);
+  const [visitedTabs, setVisitedTabs] = useState(() => new Set([0]));
   const [si, setSi] = useState(0);
 
   const [ch1Q, setCh1Q] = useState(() => makeWordCh1(false));
@@ -39,6 +40,7 @@ export default function WordApp(props = {}) {
   };
   const changeTab = idx => {
     setTab(idx); setSi(0);
+    setVisitedTabs(prev => { const n = new Set(prev); n.add(idx); return n; });
     setters[idx](makers[idx](E));
   };
   useEffect(() => {
