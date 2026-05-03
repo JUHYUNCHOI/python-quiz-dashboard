@@ -129,24 +129,72 @@ export function makeCheeseCh1(E) {
           </div>
         </div>),
     },
-    // 1-2: 막대 = 막대 비유
+    // 1-2: 막대 도입 + 관찰 (직접 보고 추론)
     {
       type: "reveal",
       narr: t(E,
-        "After each removal, we check: can we slide a long rod through the cheese? The rod is 1×1×N — it goes through the entire cube!",
-        "블록을 뺄 때마다 확인해: 긴 막대를 치즈에 쭉 통과시킬 수 있을까? 막대는 1×1×N — 큐브를 관통하는 길이야!"),
+        "We try to slide a 1×1×N rod through one row. Look at these 4 cases — which one does the rod fit?",
+        "1×1×N 막대를 한 줄로 밀어 넣으려고 해. 4 가지 경우를 봐 — 어느 줄에 들어갈까?"),
       content: (
         <div style={{ padding: 16 }}>
-          <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 14, padding: 14, textAlign: "center" }}>
-            <div style={{ fontSize: 32, marginBottom: 8 }}>📏</div>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#92400e", marginBottom: 8 }}>
-              {t(E, "Rod = 1×1×N brick", "📏 막대 (1×1×N brick)")}
+          {/* 막대 정의 */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 14, fontSize: 13, color: C.text }}>
+            <span>{t(E, "Rod (N=3):", "막대 (N=3):")}</span>
+            <div style={{ display: "inline-block", width: 96, height: 14, background: "linear-gradient(180deg, #94a3b8, #64748b)", borderRadius: 3, border: "1px solid #475569" }} />
+          </div>
+
+          {/* 4 케이스 — 학생이 관찰 */}
+          <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: 12, marginBottom: 10 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 8, textAlign: "center", letterSpacing: 0.3 }}>
+              {t(E, "👀 OBSERVE — which row lets the rod through?", "👀 관찰 — 어느 줄에 막대가 들어갈까?")}
             </div>
-            <div style={{ fontSize: 13, color: C.text, lineHeight: 1.8 }}>
-              {t(E,
-                "It only fits if an entire row of N cells is empty — even one cheese block left = no fit!",
-                "N칸짜리 줄이 통째로 비어야 들어가 — 치즈가 1개라도 남으면 못 넣어!")}
-            </div>
+            {[
+              { cells: ["cheese", "cheese", "cheese"], works: false, lbl: t(E, "all 3 cheese blocks", "치즈 3 개 다 있음") },
+              { cells: ["empty",  "cheese", "cheese"], works: false, lbl: t(E, "1 empty, 2 cheese",   "1 칸 비어 있음") },
+              { cells: ["empty",  "empty",  "cheese"], works: false, lbl: t(E, "2 empty, 1 cheese",   "2 칸 비어 있음") },
+              { cells: ["empty",  "empty",  "empty" ], works: true,  lbl: t(E, "all 3 empty",         "3 칸 모두 비어 있음") },
+            ].map((row, i) => (
+              <div key={i} style={{
+                display: "flex", alignItems: "center", gap: 10, padding: "8px 6px",
+                borderBottom: i < 3 ? `1px solid #f1f5f9` : "none",
+                background: row.works ? "#ecfdf5" : "transparent",
+                borderRadius: 6,
+              }}>
+                {/* row of cells */}
+                <div style={{ display: "flex", gap: 2 }}>
+                  {row.cells.map((c, j) => (
+                    <div key={j} style={{
+                      width: 28, height: 28, borderRadius: 4,
+                      background: c === "cheese" ? "#fde047" : "#fff",
+                      border: `2px solid ${c === "cheese" ? "#ca8a04" : "#cbd5e1"}`,
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      fontSize: 14,
+                    }}>
+                      {c === "cheese" ? "🧀" : ""}
+                    </div>
+                  ))}
+                </div>
+                {/* rod attempt — visually positioned */}
+                <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                  <div style={{
+                    width: 30, height: 8,
+                    background: row.works ? "linear-gradient(180deg, #6ee7b7, #10b981)" : "linear-gradient(180deg, #94a3b8, #64748b)",
+                    borderRadius: 2,
+                  }} />
+                  <span style={{ fontSize: 16, fontWeight: 900, color: row.works ? "#10b981" : "#dc2626" }}>
+                    {row.works ? "✓" : "✗"}
+                  </span>
+                </div>
+                <span style={{ fontSize: 11, color: C.dim, flex: 1 }}>{row.lbl}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* 추론 유도 */}
+          <div style={{ padding: "10px 12px", background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 8, fontSize: 13, color: "#92400e", lineHeight: 1.7, textAlign: "center", fontWeight: 700 }}>
+            🤔 {t(E,
+              "Notice the pattern? Only the LAST one works. Next page: how many cells must be empty?",
+              "패턴 보였지? 마지막 줄만 들어가. 다음 페이지: 몇 칸이 비어야 할까?")}
           </div>
         </div>),
     },
