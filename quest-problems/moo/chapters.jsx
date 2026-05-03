@@ -1,5 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { BRUTE_CODE, OPT_CODE, MiniCode } from "./helpers";
+import { getMooSections } from "./components";
 
 export { isMoo, findAllMoos, bruteSolve } from "./helpers";
 
@@ -56,6 +57,63 @@ export function makeMooCh1(E) {
         t(E, "The position of the typo", "오타 위치"),
       ], correct: 0,
       explain: t(E, "All possible moos that could reach the threshold! We collect them ALL.", "기준치에 도달할 수 있는 모든 moo! 전부 수집!"),
+    },
+
+    // 1-6: 입출력 형식 + 제약 (USACO 원문)
+    { type: "reveal",
+      narr: t(E, "Actual problem format: read N (string length) and F (threshold), then the string. Output count + sorted moos.",
+              "실제 문제 형식: N (문자열 길이) 와 F (기준치) 입력, 그 다음 문자열. 출력은 개수 + 정렬된 moo들."),
+      content: (<div style={{ padding: 16 }}>
+        <div style={{ marginBottom: 12 }}>
+          <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "INPUT", "입력")}</div>
+          <div style={{ background: "#ede9fe", border: "2px solid #c4b5fd", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7 }}>
+            <div><span style={{ color: "#5b21b6", fontWeight: 800 }}>N F</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(first line)", "(첫 줄)")}</span></div>
+            <div><span style={{ color: "#5b21b6", fontWeight: 800 }}>S</span> <span style={{ color: C.dim, fontSize: 11 }}>{t(E, "(lowercase string of length N)", "(길이 N 의 소문자 문자열)")}</span></div>
+          </div>
+        </div>
+        <div style={{ marginBottom: 12 }}>
+          <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "OUTPUT", "출력")}</div>
+          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: "10px 14px", fontSize: 13, lineHeight: 1.7 }}>
+            {t(E, "K (count of distinct qualifying moos), then K moos sorted alphabetically.",
+                "K (≥ F 인 distinct moo 개수), 그 다음 정렬된 moo K 개.")}
+          </div>
+        </div>
+        <div>
+          <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4 }}>{t(E, "CONSTRAINTS", "제약")}</div>
+          <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 12, lineHeight: 1.9 }}>
+            <div>3 ≤ N ≤ 20,000</div>
+            <div style={{ color: C.dim, fontSize: 11, marginTop: 2 }}>{t(E, "S = lowercase letters only", "S = 소문자만")}</div>
+          </div>
+        </div>
+      </div>),
+    },
+
+    // 1-7: Sample I/O 미리보기 — sim 탭과 다리
+    { type: "reveal",
+      narr: t(E, "Here's the sample input/output we'll explore in the Sim tab:",
+              "다음 시뮬 탭에서 직접 가지고 놀 샘플 입출력:"),
+      content: (<div style={{ padding: 16 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "INPUT", "입력")}</div>
+            <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#f8fafc" }}>
+              <div><span style={{ color: "#fbbf24" }}>10</span> <span style={{ color: "#fbbf24" }}>2</span> <span style={{ color: "#94a3b8", fontSize: 10 }}>{t(E, "// N=10, F=2", "// N=10, F=2")}</span></div>
+              <div>zzmoozzmoo</div>
+            </div>
+          </div>
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: C.dim, marginBottom: 4, textAlign: "center" }}>{t(E, "OUTPUT", "출력")}</div>
+            <div style={{ background: "#0f172a", borderRadius: 10, padding: "10px 14px", fontFamily: "'JetBrains Mono',monospace", fontSize: 13, lineHeight: 1.7, color: "#f8fafc" }}>
+              <div>1</div>
+              <div style={{ color: "#34d399", fontWeight: 900 }}>moo</div>
+            </div>
+          </div>
+        </div>
+        <div style={{ marginTop: 12, padding: "10px 12px", background: "#fef3c7", border: "1.5px solid #fbbf24", borderRadius: 10, fontSize: 12, color: "#92400e", lineHeight: 1.7, fontWeight: 600 }}>
+          🤔 {t(E, "Why is the answer just 'moo' and not 'oo?' patterns? In the Sim tab, try changing letters and see which patterns reach 2.",
+                  "왜 답이 'moo' 만이고 다른 패턴은 없을까? 시뮬 탭에서 글자 바꿔보면서 어떤 패턴이 2번 도달하는지 보자.")}
+        </div>
+      </div>),
     },
   ];
 }
@@ -232,7 +290,7 @@ export function makeMooCh4(E) {
   ];
 }
 
-export function makeMooCh5(E) {
+export function makeMooCh5(E, lang = "py") {
   return [
     { type: "reveal",
       narr: t(E, "We need to store moo counts — like a notebook. 'moo' appears 3 times? Write it down! Python has defaultdict(int) for this — it auto-starts at 0.", "moo 카운트를 저장해야 해 — 공책처럼. 'moo'가 3번? 적어둬! Python에 defaultdict(int)가 있어 — 자동으로 0에서 시작!"),
@@ -269,9 +327,10 @@ export function makeMooCh5(E) {
         <div style={{ marginTop: 8, fontSize: 12, color: C.accent, fontWeight: 700, textAlign: "center" }}>+1 → check → -1 = {t(E, "clean state for next trial!", "다음 시도를 위한 깨끗한 상태!")} ✨</div>
       </div>),
     },
-    { type: "code",
-      narr: t(E, "Here's the full optimized code! Read it section by section — you already understand every part:", "최적화된 전체 코드! 섹션별로 읽어봐 — 이미 모든 부분을 이해하고 있어:"),
-      code: OPT_CODE, label: t(E, "Show optimized code", "최적화 코드 보기"),
+    { type: "progressive",
+      narr: t(E, "Pick a part to see code + reasoning. Toggle Python ↔ C++. Save as PDF for later.",
+              "버튼 눌러서 부분별 코드 + 이유 확인. Python ↔ C++ 토글. PDF 저장 가능."),
+      sections: getMooSections(E),
     },
     { type: "reveal",
       narr: t(E, "That's it! The whole insight: don't rescan everything — only update the 3 windows that actually changed. Remove → Try → Restore! 🎉", "이게 전부야! 핵심: 전부 다시 스캔하지 마 — 실제로 바뀐 3개 윈도우만 업데이트. 빼기 → 시도 → 복원! 🎉"),

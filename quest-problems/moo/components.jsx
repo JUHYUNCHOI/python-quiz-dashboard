@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
-import { isMoo, findAllMoos, bruteSolve } from "./chapters";
+import { CodeBlock } from "@/components/quest/shared";
+import { isMoo, findAllMoos } from "./helpers";
+
+const A = "#7c5cfc";
 
 /* ═══════════════════════════════════════════════════════════════
-   MooSim — Interactive moo pattern finder
+   MooSim — Interactive moo pattern finder (unchanged from original)
    ═══════════════════════════════════════════════════════════════ */
 export function MooSim({ E }) {
   const PRESETS = ["zzmoozzmoo", "momoobaaaaaqqqcqq", "ooo", "aabbcc"];
@@ -30,7 +33,6 @@ export function MooSim({ E }) {
 
   return (
     <div style={{ padding: "12px 8px" }}>
-      {/* Presets */}
       <div style={{ display: "flex", gap: 4, marginBottom: 10, flexWrap: "wrap", justifyContent: "center" }}>
         {PRESETS.map((p, i) => (
           <button key={i} onClick={() => { setStr(p); setEditPos(null); }}
@@ -40,17 +42,14 @@ export function MooSim({ E }) {
               background: str === p ? C.accentBg : C.card,
               color: str === p ? C.accent : C.dim, cursor: "pointer",
               fontFamily: "'JetBrains Mono',monospace",
-            }}>
-            {p.length > 10 ? p.slice(0, 8) + "\u2026" : p}
-          </button>
+            }}>{p.length > 10 ? p.slice(0, 8) + "…" : p}</button>
         ))}
       </div>
 
-      {/* Custom input */}
       <div style={{ display: "flex", gap: 6, marginBottom: 12, justifyContent: "center" }}>
         <input value={str}
           onChange={e => { setStr(e.target.value.replace(/[^a-z]/g, "")); setEditPos(null); }}
-          placeholder={E ? "type lowercase letters" : "\uc18c\ubb38\uc790 \uc785\ub825"}
+          placeholder={E ? "type lowercase letters" : "소문자 입력"}
           style={{
             flex: 1, maxWidth: 240, padding: "6px 10px", borderRadius: 8,
             border: `2px solid ${C.border}`, fontSize: 13,
@@ -58,7 +57,6 @@ export function MooSim({ E }) {
           }} />
       </div>
 
-      {/* Clickable characters */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: 3, justifyContent: "center", marginBottom: 12, padding: "0 4px" }}>
         {arr.map((ch, i) => (
           <div key={i} style={{ position: "relative" }}>
@@ -75,14 +73,13 @@ export function MooSim({ E }) {
         ))}
       </div>
 
-      {/* Edit picker */}
       {editPos !== null && (
         <div style={{
           background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 10,
           padding: "10px 14px", marginBottom: 12, textAlign: "center",
         }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: "#92400e", marginBottom: 6 }}>
-            {t(E, `Change position ${editPos} (${arr[editPos]}):`, `\uc704\uce58 ${editPos} (${arr[editPos]}) \ubc14\uafb8\uae30:`)}
+            {t(E, `Change position ${editPos} (${arr[editPos]}):`, `위치 ${editPos} (${arr[editPos]}) 바꾸기:`)}
           </div>
           <div style={{ display: "flex", gap: 3, flexWrap: "wrap", justifyContent: "center" }}>
             {"abcdefghijklmnopqrstuvwxyz".split("").map(c => (
@@ -98,14 +95,13 @@ export function MooSim({ E }) {
         </div>
       )}
 
-      {/* Moo list */}
       <div style={{ background: C.card, borderRadius: 10, border: `1.5px solid ${C.border}`, padding: 12 }}>
         <div style={{ fontSize: 13, fontWeight: 700, color: C.text, marginBottom: 6 }}>
-          {t(E, `Moos found: ${mooList.length}`, `\ubc1c\uacac\ub41c Moo: ${mooList.length}\uac1c`)}
+          {t(E, `Moos found: ${mooList.length}`, `발견된 Moo: ${mooList.length}개`)}
         </div>
         {mooList.length === 0 ? (
           <div style={{ fontSize: 12, color: C.dim }}>
-            {t(E, "No moo patterns in this string.", "\uc774 \ubb38\uc790\uc5f4\uc5d0 moo \ud328\ud134\uc774 \uc5c6\uc5b4.")}
+            {t(E, "No moo patterns in this string.", "이 문자열에 moo 패턴이 없어.")}
           </div>
         ) : (
           <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
@@ -117,9 +113,7 @@ export function MooSim({ E }) {
                 fontFamily: "'JetBrains Mono',monospace",
                 fontSize: 13, fontWeight: 700,
                 color: count >= 2 ? C.ok : C.accent,
-              }}>
-                {key} ×{count}
-              </div>
+              }}>{key} ×{count}</div>
             ))}
           </div>
         )}
@@ -130,30 +124,76 @@ export function MooSim({ E }) {
 
 
 /* ═══════════════════════════════════════════════════════════════
-   MooBruteRunner
+   MooBruteRunner — async + live + stop preserves + USACO 추정
    ═══════════════════════════════════════════════════════════════ */
 export function MooBruteRunner({ E }) {
   const [N, setN] = useState(50);
   const [F, setF] = useState(2);
   const [running, setRunning] = useState(false);
   const [result, setResult] = useState(null);
-  const [elapsed, setElapsed] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [livePos, setLivePos] = useState(0);
+  const [liveCount, setLiveCount] = useState(0);
+  const alive = useRef(false);
+  const startRef = useRef(0);
+
+  const fmtTime = (sec) => {
+    if (sec < 1) return `${(sec * 1000).toFixed(0)}ms`;
+    if (sec < 60) return `${sec.toFixed(1)}s`;
+    if (sec < 3600) return `${(sec / 60).toFixed(1)}분`;
+    return `${(sec / 3600).toFixed(1)}시간`;
+  };
+  const estUSACO = (n) => (26 * n * n) / 1e8;
 
   const run = () => {
     if (N < 3 || N > 5000) return;
-    setRunning(true); setResult(null);
-    setTimeout(() => {
-      const chars = "abcdefghij";
-      let s = "";
-      for (let i = 0; i < N; i++) s += chars[Math.floor(Math.random() * chars.length)];
-      const t0 = performance.now();
-      const res = bruteSolve(s, F);
-      const ms = performance.now() - t0;
-      setElapsed(ms);
-      setResult({ count: res.length, sample: res.slice(0, 5) });
+    setRunning(true); setResult(null); setProgress(0);
+    setLivePos(0); setLiveCount(0);
+    alive.current = true;
+    startRef.current = performance.now();
+
+    const chars = "abcdefghij";
+    let s = "";
+    for (let i = 0; i < N; i++) s += chars[Math.floor(Math.random() * chars.length)];
+    const arr = s.split("");
+
+    const result = new Set();
+    const orig = findAllMoos(arr);
+    for (const [k, v] of Object.entries(orig)) if (v >= F) result.add(k);
+
+    let pos = 0;
+    const finish = (partial) => {
+      const elapsed = performance.now() - startRef.current;
+      const sorted = [...result].sort();
       setRunning(false);
-    }, 50);
+      setResult({
+        N, F, count: sorted.length, sample: sorted.slice(0, 5),
+        elapsedMs: elapsed, partial, completedPos: pos,
+      });
+      alive.current = false;
+    };
+
+    const tick = () => {
+      if (!alive.current) { finish(true); return; }
+      const oc = arr[pos];
+      for (let ci = 0; ci < 26; ci++) {
+        const c = String.fromCharCode(97 + ci);
+        if (c === oc) continue;
+        arr[pos] = c;
+        const moos = findAllMoos(arr);
+        for (const [k, v] of Object.entries(moos)) if (v >= F) result.add(k);
+        arr[pos] = oc;
+      }
+      pos++;
+      setProgress(Math.floor(pos / N * 100));
+      setLivePos(pos);
+      setLiveCount(result.size);
+      if (pos >= N) { finish(false); return; }
+      setTimeout(tick, 16);
+    };
+    setTimeout(tick, 50);
   };
+  const stop = () => { alive.current = false; };
 
   return (
     <div style={{ padding: "12px 8px" }}>
@@ -161,44 +201,567 @@ export function MooBruteRunner({ E }) {
         <span style={{ fontSize: 13, fontWeight: 700, color: C.dim }}>N =</span>
         <input type="number" min={3} max={5000} value={N}
           onChange={e => { setN(+e.target.value); setResult(null); }}
+          disabled={running}
           style={{ width: 70, padding: "6px 8px", borderRadius: 8, border: `2px solid ${C.border}`,
             fontSize: 16, fontWeight: 800, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }} />
         <span style={{ fontSize: 13, fontWeight: 700, color: C.dim }}>F =</span>
         <input type="number" min={1} max={100} value={F}
           onChange={e => { setF(+e.target.value); setResult(null); }}
+          disabled={running}
           style={{ width: 50, padding: "6px 8px", borderRadius: 8, border: `2px solid ${C.border}`,
             fontSize: 16, fontWeight: 800, textAlign: "center", fontFamily: "'JetBrains Mono',monospace" }} />
       </div>
       <div style={{ textAlign: "center", marginBottom: 8 }}>
-        <button onClick={run} disabled={running || N < 3 || N > 5000} style={{
-          padding: "8px 24px", borderRadius: 10, border: "none",
-          background: running ? "#e5e7eb" : "linear-gradient(135deg,#818cf8,#6366f1)",
-          color: "#fff", fontSize: 14, fontWeight: 800, cursor: running ? "default" : "pointer",
-        }}>{running ? "\u23f3 ..." : E ? "Run Brute!" : "\ube0c\ub8e8\ud2b8 \uc2e4\ud589!"}</button>
+        <button
+          onClick={running ? stop : run}
+          disabled={!running && (N < 3 || N > 5000)}
+          style={{
+            padding: "8px 24px", borderRadius: 10, border: "none",
+            background: running ? "#dc2626" : "linear-gradient(135deg,#818cf8,#6366f1)",
+            color: "#fff", fontSize: 14, fontWeight: 800, cursor: "pointer",
+          }}>
+          {running ? (E ? "⏹ Stop" : "⏹ 중지") : (E ? "▶ Run Brute" : "▶ 브루트 실행")}
+        </button>
       </div>
       {N > 500 && <div style={{ textAlign: "center", fontSize: 12, color: C.carry, fontWeight: 700, marginBottom: 8 }}>
-        {E ? "\u26a0\ufe0f N>500 may be slow!" : "\u26a0\ufe0f N>500\uc774\uba74 \ub290\ub9b4 \uc218 \uc788\uc5b4!"}
+        {E ? "⚠️ N>500 will be slow — that's the point! Try Stop midway." : "⚠️ N>500 이면 느려져 — 그게 포인트! 중간에 Stop 눌러봐."}
       </div>}
-      {result && (
-        <div style={{ textAlign: "center" }}>
-          <div style={{ fontSize: 13, color: C.dim, marginBottom: 4 }}>
-            {E ? `Found ${result.count} moos in` : `${result.count}\uac1c moo \ubc1c\uacac \u2192`}{" "}
-            <span style={{ fontWeight: 800, color: elapsed > 200 ? C.no : elapsed > 50 ? C.carry : C.ok }}>
-              {elapsed < 1000 ? `${elapsed.toFixed(1)}ms` : `${(elapsed / 1000).toFixed(1)}s`}
-            </span>
+
+      {running && (
+        <div style={{ marginBottom: 12 }}>
+          <div style={{ height: 8, background: "#e5e7eb", borderRadius: 4, overflow: "hidden" }}>
+            <div style={{ height: "100%", background: A, borderRadius: 4, width: `${progress}%`, transition: "width .1s" }} />
           </div>
-          {result.sample.length > 0 && (
-            <div style={{ fontSize: 11, color: C.dim, fontFamily: "'JetBrains Mono',monospace" }}>
-              {result.sample.join(", ")}{result.count > 5 ? "\u2026" : ""}
+          <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6, fontSize: 11, fontFamily: "'JetBrains Mono',monospace", color: C.dim, fontWeight: 700 }}>
+            <span>{t(E, "position", "위치")} <span style={{ color: A, fontWeight: 900 }}>{livePos}/{N}</span></span>
+            <span>{t(E, "moos found", "발견 moo")}: <span style={{ color: A, fontWeight: 900 }}>{liveCount}</span></span>
+            <span>{progress}%</span>
+          </div>
+        </div>
+      )}
+
+      {result && (
+        <div>
+          <div style={{ textAlign: "center", padding: "12px 0", marginBottom: 10 }}>
+            {result.partial ? (
+              <div style={{ fontSize: 11, color: "#dc2626", fontWeight: 800, letterSpacing: 0.5 }}>
+                ⏸ {t(E, `STOPPED at position ${result.completedPos} of ${result.N}`,
+                       `${result.completedPos} / ${result.N} 위치에서 중지`)}
+              </div>
+            ) : (
+              <div style={{ fontSize: 11, color: "#10b981", fontWeight: 800 }}>
+                ✓ {t(E, `${result.N} positions × 26 letters checked`, `${result.N} 위치 × 26 글자 전부 확인`)}
+              </div>
+            )}
+            <div style={{ fontSize: 32, fontWeight: 900, color: A, fontFamily: "'JetBrains Mono',monospace", marginTop: 4 }}>
+              {result.count}
             </div>
-          )}
-          {elapsed > 200 && (
-            <div style={{ marginTop: 6, fontSize: 12, color: C.no, fontWeight: 700 }}>
-              {E ? "Imagine N=20,000 with brute force... \ud83d\udc80" : "N=20,000\uc744 \ube0c\ub8e8\ud2b8\ud3ec\uc2a4\ub85c... \ud83d\udc80"}
+            <div style={{ fontSize: 11, color: C.dim }}>{t(E, "distinct moos found (≥ F)", "≥ F 인 distinct moo 개수")}</div>
+            {result.sample.length > 0 && (
+              <div style={{ fontSize: 11, color: C.dim, fontFamily: "'JetBrains Mono',monospace", marginTop: 4 }}>
+                {result.sample.join(", ")}{result.count > 5 ? "…" : ""}
+              </div>
+            )}
+          </div>
+
+          <div style={{
+            background: "#fff", border: `2px solid ${result.elapsedMs > 500 ? "#dc2626" : "#10b981"}`, borderRadius: 10,
+            padding: "10px 14px", marginBottom: 10,
+            display: "flex", justifyContent: "space-between", alignItems: "center",
+          }}>
+            <div>
+              <div style={{ fontSize: 10, fontWeight: 800, color: C.dim, letterSpacing: 0.5 }}>
+                ⏱️ {t(E, "BROWSER TIME", "브라우저 측정 시간")}
+              </div>
+              <div style={{ fontSize: 18, fontWeight: 900, color: result.elapsedMs > 500 ? "#dc2626" : "#10b981", fontFamily: "'JetBrains Mono',monospace" }}>
+                {fmtTime(result.elapsedMs / 1000)}
+              </div>
             </div>
-          )}
+            <div style={{ fontSize: 10, color: C.dim, textAlign: "right", lineHeight: 1.5, maxWidth: 180 }}>
+              {t(E, "Pure brute is faster but still O(26N²).", "순수 brute 는 더 빠르지만 여전히 O(26N²).")}
+            </div>
+          </div>
+
+          <div style={{
+            background: "linear-gradient(135deg, #fef2f2, #fff)", border: `2px solid #dc2626`, borderRadius: 10,
+            padding: "10px 14px",
+          }}>
+            <div style={{ fontSize: 10, fontWeight: 800, color: "#dc2626", letterSpacing: 0.5, marginBottom: 6 }}>
+              🏆 {t(E, "ON USACO JUDGE — REAL ESTIMATE", "USACO 채점기 — 실제 추정")}
+            </div>
+            <table style={{ width: "100%", fontSize: 12, fontFamily: "'JetBrains Mono',monospace", borderCollapse: "collapse" }}>
+              <tbody>
+                {[
+                  { N: result.N, label: t(E, "your N", "지금 N") },
+                  { N: 5000, label: "5,000" },
+                  { N: 20000, label: "20,000 (max!)" },
+                ].map((row, i) => {
+                  const sec = estUSACO(row.N);
+                  const tle = sec > 2;
+                  return (
+                    <tr key={i} style={{ borderTop: i > 0 ? "1px solid #fee2e2" : "none" }}>
+                      <td style={{ padding: "4px 0", fontWeight: 700, color: C.dim }}>N = {row.N.toLocaleString()}</td>
+                      <td style={{ padding: "4px 6px", fontSize: 10, color: C.dim }}>{row.label}</td>
+                      <td style={{ padding: "4px 0", textAlign: "right", fontWeight: 800, color: tle ? "#dc2626" : "#10b981" }}>
+                        {fmtTime(sec)}
+                      </td>
+                      <td style={{ padding: "4px 0 4px 6px", textAlign: "right", fontWeight: 800, color: tle ? "#dc2626" : "#10b981", minWidth: 32 }}>
+                        {tle ? "TLE" : "✓"}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            <div style={{ marginTop: 6, fontSize: 10, color: C.dim, lineHeight: 1.5 }}>
+              {t(E, "Estimate: 26 × N² ops / 10⁸ ops/sec (C++).", "추정: 26 × N² 연산 / 1억 ops/sec (C++).")}
+            </div>
+          </div>
         </div>
       )}
     </div>
   );
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   getMooSections — Python + C++ + reasoning
+   ═══════════════════════════════════════════════════════════════ */
+
+const MOO_INPUT_PY = [
+  "import sys",
+  "from collections import defaultdict",
+  "input = sys.stdin.readline",
+  "",
+  "n, f = map(int, input().split())",
+  "string = list(input().strip())",
+];
+const MOO_INPUT_CPP = [
+  "#include <bits/stdc++.h>",
+  "using namespace std;",
+  "",
+  "int main() {",
+  "    ios::sync_with_stdio(false);",
+  "    cin.tie(nullptr);",
+  "",
+  "    int n, f;",
+  "    cin >> n >> f;",
+  "    string s; cin >> s;",
+];
+
+const MOO_PRECOUNT_PY = [
+  "def isMoo(a, b, c):",
+  "    return a != b and b == c",
+  "",
+  "mydict = defaultdict(int)",
+  "for i in range(n - 2):",
+  "    if isMoo(string[i], string[i+1], string[i+2]):",
+  "        key = string[i] + string[i+1] + string[i+2]",
+  "        mydict[key] += 1",
+];
+const MOO_PRECOUNT_CPP = [
+  "    auto isMoo = [](char a, char b, char c) {",
+  "        return a != b && b == c;",
+  "    };",
+  "",
+  "    map<string, int> mydict;",
+  "    for (int i = 0; i + 2 < n; i++) {",
+  "        if (isMoo(s[i], s[i+1], s[i+2])) {",
+  "            string key = s.substr(i, 3);",
+  "            mydict[key]++;",
+  "        }",
+  "    }",
+];
+
+const MOO_TRY_PY = [
+  "result = set()",
+  "alphabet = 'abcdefghijklmnopqrstuvwxyz'",
+  "",
+  "for pos in range(n):",
+  "    minIdx = max(pos - 2, 0)",
+  "    maxIdx = min(n - 3, pos)",
+  "",
+  "    # 🔴 REMOVE: 영향받는 3 윈도우 카운트 빼기",
+  "    for idx in range(minIdx, maxIdx + 1):",
+  "        t = string[idx:idx+3]",
+  "        if isMoo(t[0], t[1], t[2]):",
+  "            mydict[t[0]+t[1]+t[2]] -= 1",
+  "",
+  "    # 🟡 TRY 26 letters",
+  "    for c in alphabet:",
+  "        for idx in range(minIdx, maxIdx + 1):",
+  "            t = list(string[idx:idx+3])",
+  "            t[pos - idx] = c",
+  "            if isMoo(t[0], t[1], t[2]):",
+  "                key = t[0]+t[1]+t[2]",
+  "                mydict[key] += 1",
+  "                if mydict[key] >= f:",
+  "                    result.add(key)",
+  "                mydict[key] -= 1",
+  "",
+  "    # 🟢 RESTORE: 원래 윈도우 복원",
+  "    for idx in range(minIdx, maxIdx + 1):",
+  "        t = string[idx:idx+3]",
+  "        if isMoo(t[0], t[1], t[2]):",
+  "            mydict[t[0]+t[1]+t[2]] += 1",
+];
+const MOO_TRY_CPP = [
+  "    set<string> result;",
+  "",
+  "    for (int pos = 0; pos < n; pos++) {",
+  "        int minIdx = max(pos - 2, 0);",
+  "        int maxIdx = min(n - 3, pos);",
+  "",
+  "        // 🔴 REMOVE",
+  "        for (int idx = minIdx; idx <= maxIdx; idx++)",
+  "            if (isMoo(s[idx], s[idx+1], s[idx+2]))",
+  "                mydict[s.substr(idx, 3)]--;",
+  "",
+  "        // 🟡 TRY 26 letters",
+  "        char orig = s[pos];",
+  "        for (char c = 'a'; c <= 'z'; c++) {",
+  "            s[pos] = c;",
+  "            for (int idx = minIdx; idx <= maxIdx; idx++) {",
+  "                if (isMoo(s[idx], s[idx+1], s[idx+2])) {",
+  "                    string key = s.substr(idx, 3);",
+  "                    mydict[key]++;",
+  "                    if (mydict[key] >= f) result.insert(key);",
+  "                    mydict[key]--;",
+  "                }",
+  "            }",
+  "        }",
+  "        s[pos] = orig;",
+  "",
+  "        // 🟢 RESTORE",
+  "        for (int idx = minIdx; idx <= maxIdx; idx++)",
+  "            if (isMoo(s[idx], s[idx+1], s[idx+2]))",
+  "                mydict[s.substr(idx, 3)]++;",
+  "    }",
+];
+
+const MOO_OUTPUT_PY = [
+  "result = sorted(result)",
+  "print(len(result))",
+  "print('\\n'.join(result))",
+];
+const MOO_OUTPUT_CPP = [
+  "    cout << result.size() << \"\\n\";",
+  "    for (auto& m : result) cout << m << \"\\n\";",
+  "    return 0;",
+  "}",
+];
+
+const MOO_FULL_PY = [
+  ...MOO_INPUT_PY, "",
+  ...MOO_PRECOUNT_PY, "",
+  ...MOO_TRY_PY, "",
+  ...MOO_OUTPUT_PY,
+];
+const MOO_FULL_CPP = [
+  ...MOO_INPUT_CPP, "",
+  ...MOO_PRECOUNT_CPP, "",
+  ...MOO_TRY_CPP, "",
+  ...MOO_OUTPUT_CPP,
+];
+
+export function getMooSections(E) {
+  return [
+    {
+      label: t(E, "📦 1. Input + Setup", "📦 1. 입력 + 셋업"),
+      color: A,
+      py: MOO_INPUT_PY, cpp: MOO_INPUT_CPP,
+      why: [
+        t(E, "n = string length, f = threshold (count of moo to qualify).", "n = 문자열 길이, f = moo 개수 기준치."),
+        t(E, "Read string as a list (Python) or string (C++) so we can mutate during trials.", "Python 은 list, C++ 은 string 으로 — 시도 중 변경 가능."),
+        t(E, "Fast input (sys.stdin.readline / ios::sync_with_stdio false). N up to 20,000.", "빠른 입력 — N 이 20,000 까지 가능."),
+      ],
+    },
+    {
+      label: t(E, "📊 2. Pre-count moos", "📊 2. moo 미리 세기"),
+      color: "#0891b2",
+      py: MOO_PRECOUNT_PY, cpp: MOO_PRECOUNT_CPP,
+      why: [
+        t(E, "Scan original string ONCE → count every moo pattern (3-letter ABB where A≠B).", "원본을 한 번만 훑어 → 모든 moo 패턴 (ABB, A≠B) 카운트."),
+        t(E, "isMoo helper: a != b AND b == c. 'moo' / 'baa' / 'tee' all match.", "isMoo 헬퍼: a != b AND b == c. 'moo' / 'baa' / 'tee' 다 해당."),
+        t(E, "defaultdict(int) auto-starts each key at 0 — no 'if not in' check.", "defaultdict(int) 가 모든 키 자동 0 시작 — 'if not in' 체크 생략."),
+        t(E, "C++ uses map<string, int> for sorted output later.", "C++ 은 정렬 출력 위해 map<string, int>."),
+      ],
+    },
+    {
+      label: t(E, "🔄 3. Remove → Try → Restore", "🔄 3. 빼기 → 시도 → 복원"),
+      color: "#16a34a",
+      py: MOO_TRY_PY, cpp: MOO_TRY_CPP,
+      why: [
+        t(E, "For each pos: only 3 windows contain pos (idx = pos-2, pos-1, pos). NOT N!", "각 pos: pos 포함 윈도우 정확히 3 개 (idx = pos-2, pos-1, pos). N 개가 아님!"),
+        t(E, "🔴 REMOVE: subtract 3 windows' contribution from mydict.", "🔴 빼기: 3 윈도우 기여를 mydict 에서 빼기."),
+        t(E, "🟡 TRY 26 letters: temporarily add new contribution, check ≥ f, IMMEDIATELY undo.", "🟡 26 글자 시도: 임시로 더하고, ≥ f 체크 후 즉시 되돌리기."),
+        t(E, "Why immediately undo? Next letter trial needs clean state — without previous trial mixed in.", "왜 즉시 되돌림? 다음 시도가 깨끗한 상태 필요 — 이전 시도 카운트 섞이지 않게."),
+        t(E, "🟢 RESTORE: add back the 3 original windows so mydict isn't permanently changed.", "🟢 복원: 원래 3 윈도우 다시 더해 mydict 영구 변경 방지."),
+        t(E, "Total: N × 26 × 3 = 78N. Down from 26N² brute. ~6,667× speedup at N=20,000.", "총: N × 26 × 3 = 78N. 브루트 26N² 에서 ~6,667 배 빠름 (N=20,000)."),
+      ],
+    },
+    {
+      label: t(E, "🎯 4. Output + Full Code", "🎯 4. 출력 + 전체 코드"),
+      color: A,
+      py: MOO_FULL_PY, cpp: MOO_FULL_CPP,
+      why: [
+        t(E, "Sort result alphabetically (problem requires sorted output).", "결과 사전순 정렬 (문제 요구)."),
+        t(E, "Output: count first, then each moo on its own line.", "출력: 개수 먼저, 그 다음 각 moo 한 줄씩."),
+        t(E, "Time: O(78N). For N=20,000: 1.56M ops — instant. Brute would take ~104s.", "시간: O(78N). N=20,000 에서 156만 연산 — 즉시. 브루트는 ~104초."),
+      ],
+    },
+  ];
+}
+
+
+export function MooProgressiveCode({ E, sections }) {
+  const [active, setActive] = useState(null);
+  const [lang, setLang] = useState("py");
+  const cur = active !== null ? sections[active] : null;
+  const code = cur ? (lang === "py" ? cur.py : cur.cpp) : null;
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, gap: 8, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", gap: 2, background: "#fff", borderRadius: 8, border: `1.5px solid ${C.border}`, padding: 2 }}>
+          {[["py","🐍 Python"],["cpp","💻 C++"]].map(([v, label]) => (
+            <button key={v} onClick={() => setLang(v)} style={{
+              background: lang === v ? A : "transparent", border: "none", borderRadius: 6,
+              padding: "5px 12px", cursor: "pointer", fontSize: 12, fontWeight: 800,
+              color: lang === v ? "#fff" : C.dim,
+            }}>{label}</button>
+          ))}
+        </div>
+        <button onClick={() => downloadMooPDF(E, sections, lang)} style={{
+          background: "#fff", border: `1.5px solid ${A}`, borderRadius: 8,
+          padding: "6px 12px", cursor: "pointer", fontSize: 12, fontWeight: 800, color: A,
+        }}>📄 {t(E, "Download PDF", "PDF 다운로드")}</button>
+      </div>
+
+      <div style={{ display: "flex", gap: 6, marginBottom: 12, flexWrap: "wrap", justifyContent: "center" }}>
+        {sections.map((s, i) => {
+          const isActive = i === active;
+          return (
+            <button key={i} onClick={() => setActive(i)} style={{
+              padding: "8px 12px", borderRadius: 8,
+              border: `2px solid ${isActive ? s.color : C.border}`,
+              background: isActive ? s.color : "#fff",
+              color: isActive ? "#fff" : s.color || C.dim,
+              fontWeight: 800, fontSize: 12, cursor: "pointer",
+            }}>{s.label}</button>
+          );
+        })}
+      </div>
+
+      {!cur && (
+        <div style={{ textAlign: "center", padding: "40px 20px", color: C.dim, fontSize: 13, background: "#fff", border: `1.5px dashed ${C.border}`, borderRadius: 10 }}>
+          👆 {t(E, "Click a section above to see code + reasoning.", "위 버튼 눌러서 코드 + 이유 확인.")}
+        </div>
+      )}
+
+      {cur && (
+        <>
+          <div style={{ background: "#fff", border: `1.5px solid ${C.border}`, borderRadius: 10, padding: "10px 12px", marginBottom: 10 }}>
+            <div style={{ fontSize: 11, color: C.dim, fontWeight: 800, marginBottom: 6, letterSpacing: 0.5 }}>
+              💡 {t(E, "Why this way?", "왜 이렇게?")}
+            </div>
+            {cur.why.map((line, i) => (
+              <div key={i} style={{ fontSize: 12.5, color: C.text, lineHeight: 1.65, marginBottom: 4, display: "flex", gap: 6 }}>
+                <span style={{ color: cur.color, fontWeight: 800, flexShrink: 0 }}>•</span>
+                <span>{line}</span>
+              </div>
+            ))}
+          </div>
+          <CodeBlock lines={code} />
+        </>
+      )}
+    </div>
+  );
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   downloadMooPDF
+   ═══════════════════════════════════════════════════════════════ */
+
+const PY_KEYWORDS = ["def","return","for","if","else","elif","while","import","from","in","range","not","and","or","True","False","None","print","int","len","str","continue","break","sys","map","input","set","sorted","join","list","max","min"];
+const CPP_KEYWORDS = ["int","long","double","float","void","char","bool","return","if","else","for","while","do","break","continue","struct","class","public","private","namespace","using","const","auto","true","false","nullptr","main","sizeof","static","string","ios","cin","cout","endl","to_string","size","include","vector","map","set","substr","max","min"];
+
+function highlightHTML(line, lang) {
+  const escHTML = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const keywords = lang === "py" ? PY_KEYWORDS : CPP_KEYWORDS;
+  let comment = ""; let rest = line;
+  if (lang === "py") {
+    const i = rest.indexOf("#"); if (i >= 0) { comment = rest.slice(i); rest = rest.slice(0, i); }
+  } else {
+    const i = rest.indexOf("//"); if (i >= 0) { comment = rest.slice(i); rest = rest.slice(0, i); }
+  }
+  let out = ""; let work = rest;
+  if (lang === "cpp") {
+    const ppm = work.match(/^(\s*)(#\w+)/);
+    if (ppm) { out += escHTML(ppm[1]) + `<span style="color:#c084fc;">${escHTML(ppm[2])}</span>`; work = work.slice(ppm[0].length); }
+  }
+  const re = /(\b\w+\b|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\d+|[^\w\s]|\s+)/g;
+  let m;
+  while ((m = re.exec(work)) !== null) {
+    const tok = m[0];
+    if (keywords.includes(tok)) out += `<span style="color:#c084fc;">${escHTML(tok)}</span>`;
+    else if (/^\d+$/.test(tok)) out += `<span style="color:#fbbf24;">${escHTML(tok)}</span>`;
+    else if (/^["']/.test(tok)) out += `<span style="color:#34d399;">${escHTML(tok)}</span>`;
+    else out += `<span style="color:#f8fafc;">${escHTML(tok)}</span>`;
+  }
+  if (comment) out += `<span style="color:#94a3b8;font-style:italic;">${escHTML(comment)}</span>`;
+  return out;
+}
+function highlightCode(lines, lang) {
+  return lines.map((line, i) => {
+    const num = String(i + 1).padStart(2, " ");
+    return `<span style="color:#475569;display:inline-block;width:24px;text-align:right;margin-right:10px;user-select:none;">${num}</span>${highlightHTML(line, lang) || "&nbsp;"}`;
+  }).join("\n");
+}
+
+export function downloadMooPDF(E, sections, lang = "py") {
+  const win = window.open("", "_blank");
+  if (!win) { alert(t(E, "Pop-up blocked.", "팝업 차단됨.")); return; }
+  const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const langLabel = lang === "py" ? "🐍 Python" : "💻 C++";
+  const fileTitle = t(E, "It's Mooin' Time — Full Study Guide", "🐄 It's Mooin' Time — 종합 풀이 노트");
+  const codeBlock = (lines) => `<pre>${highlightCode(lines, lang)}</pre>`;
+  const sectionCode = (s) => codeBlock(lang === "py" ? s.py : s.cpp);
+
+  const html = `<!doctype html>
+<html><head><meta charset="utf-8"><title>${fileTitle}</title>
+<style>
+  @page { margin: 14mm; }
+  body { font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; color: #1f2937; line-height: 1.55; max-width: 820px; margin: 0 auto; padding: 12px; font-size: 13px; }
+  h1 { font-size: 22px; margin: 0 0 4px; color: ${A}; }
+  .sub { color: #6b7280; font-size: 12px; margin-bottom: 18px; }
+  h2 { font-size: 17px; padding: 8px 12px; border-radius: 8px; margin: 22px 0 10px; background: ${A}; color: white; }
+  h3 { font-size: 14px; margin: 14px 0 6px; color: ${A}; }
+  .why { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 8px 12px; margin: 8px 0; font-size: 12px; page-break-inside: avoid; }
+  .why b { color: ${A}; }
+  .why ul { margin: 4px 0 0; padding-left: 18px; }
+  pre { background: #0f172a; padding: 10px 14px; border-radius: 8px; font-family: "JetBrains Mono", monospace; font-size: 11.5px; overflow-x: auto; white-space: pre; word-break: keep-all; page-break-inside: avoid; margin: 8px 0 12px; line-height: 1.55; }
+  pre span { font-family: inherit; }
+  .lang-tag { display: inline-block; background: ${A}; color: white; padding: 3px 10px; border-radius: 5px; font-size: 12px; margin-left: 8px; vertical-align: middle; font-weight: 800; }
+  table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: 12px; page-break-inside: avoid; }
+  th, td { border: 1px solid #e5e7eb; padding: 5px 8px; text-align: left; }
+  th { background: #ede9fe; color: #5b21b6; font-weight: 800; }
+  .hint { background: #fef3c7; border: 1px solid #fbbf24; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #92400e; }
+  .box { background: #ede9fe; border: 1.5px solid #c4b5fd; border-radius: 8px; padding: 10px 12px; margin: 8px 0; }
+  .box.ok { background: #ecfdf5; border-color: #6ee7b7; }
+  .box.no { background: #fef2f2; border-color: #fca5a5; }
+  @media print { body { padding: 0; } .hint { display: none; } h2, h3 { page-break-after: avoid; } }
+</style></head><body>
+
+<div class="hint">📄 ${t(E, "In the print dialog, choose 'Save as PDF' as the destination.", "인쇄 창에서 'PDF로 저장' 선택.")}</div>
+
+<h1>${fileTitle} <span class="lang-tag">${langLabel}</span></h1>
+<div class="sub">USACO 2024 December Bronze · ${t(E, "Self-contained walkthrough", "독립 학습용")}</div>
+
+<h2>1. ${t(E, "Problem", "문제")}</h2>
+<p>${t(E,
+  "A length-N string of lowercase letters contains 'moo'-like patterns: 3-letter ABB where A≠B (e.g., 'moo', 'baa', 'tee'). Bessie says the recording may have AT MOST 1 typo. Find all moo patterns that appear ≥ F times — either in the original string OR after changing exactly one letter somewhere.",
+  "길이 N 의 소문자 문자열에 'moo' 같은 패턴: ABB (A≠B) 형태 3 글자 (예: 'moo', 'baa', 'tee'). Bessie 가 녹음에 최대 1 글자 오타 가능하다고 함. F 번 이상 나오는 모든 moo 패턴 찾기 — 원본 그대로 OR 정확히 1 글자 바꾼 후.")}</p>
+
+<h3>${t(E, "Input / Output", "입출력")}</h3>
+<table>
+  <tr><th>${t(E, "Input", "입력")}</th><th>${t(E, "Output", "출력")}</th></tr>
+  <tr><td>N F (first line)<br>S (lowercase string)</td><td>K (count of distinct qualifying moos)<br>${t(E, "Then K moos sorted alphabetically", "그 다음 정렬된 moo K 개")}</td></tr>
+</table>
+<p>${t(E, "Constraints: 3 ≤ N ≤ 20,000.", "제약: 3 ≤ N ≤ 20,000.")}</p>
+
+<h3>${t(E, "Sample I/O", "예제 입출력")}</h3>
+<table>
+  <tr><th>${t(E, "Input", "입력")}</th><th>${t(E, "Output", "출력")}</th></tr>
+  <tr><td><pre style="margin:0;background:#0f172a;color:#f8fafc;font-size:11px;">10 2
+zzmoozzmoo</pre></td><td><pre style="margin:0;background:#0f172a;color:#f8fafc;font-size:11px;">1
+moo</pre></td></tr>
+</table>
+<p>${t(E, "'moo' appears twice (≥ F=2). Even with 1 letter change, no other pattern reaches 2.", "'moo' 가 2 번 (≥ F=2). 1 글자 바꿔도 새로 2 번 도달 패턴 없음.")}</p>
+
+<h2>2. ${t(E, "Brute Force (TLE)", "브루트 포스 (TLE)")}</h2>
+<p>${t(E, "Direct: for each of N positions, try all 26 letters, then re-scan the entire string for moos. O(26N²).", "직접: N 위치마다 26 글자 시도, 매번 전체 재스캔. O(26N²).")}</p>
+
+${codeBlock([
+  "import sys",
+  "from collections import defaultdict",
+  "input = sys.stdin.readline",
+  "",
+  "n, f = map(int, input().split())",
+  "s = list(input().strip())",
+  "result = set()",
+  "",
+  "def is_moo(a, b, c): return a != b and b == c",
+  "",
+  "def count_all(arr):",
+  "    moos = defaultdict(int)",
+  "    for i in range(len(arr) - 2):",
+  "        if is_moo(arr[i], arr[i+1], arr[i+2]):",
+  "            moos[arr[i] + arr[i+1] + arr[i+2]] += 1",
+  "    return moos",
+  "",
+  "for k, v in count_all(s).items():",
+  "    if v >= f: result.add(k)",
+  "",
+  "for pos in range(n):",
+  "    orig = s[pos]",
+  "    for c in 'abcdefghijklmnopqrstuvwxyz':",
+  "        if c == orig: continue",
+  "        s[pos] = c",
+  "        for k, v in count_all(s).items():",
+  "            if v >= f: result.add(k)",
+  "        s[pos] = orig",
+])}
+
+<div class="box no">
+  <b>${t(E, "Why TLE?", "왜 TLE?")}</b>
+  ${t(E, "N=20,000: 26 × 4×10⁸ = ~10¹⁰ ops. At 10⁸ ops/sec → ~100 sec. TLE.", "N=20,000: 26 × 4×10⁸ = ~10¹⁰ 연산. 1억 ops/sec → ~100 초. TLE.")}
+</div>
+
+<h2>3. ${t(E, "Pattern: Remove → Try → Restore", "패턴: 빼기 → 시도 → 복원")}</h2>
+
+<div class="box ok">
+  <b>💡 ${t(E, "Key insight", "핵심 통찰")}</b>:
+  ${t(E, "Changing 1 letter at position pos affects ONLY 3 windows (those containing pos). The other N-3 windows don't change.", "위치 pos 의 1 글자를 바꾸면 영향받는 윈도우는 정확히 3 개 (pos 포함). 나머지 N-3 윈도우는 안 변함.")}
+</div>
+
+<h3>${t(E, "Why exactly 3?", "왜 정확히 3?")}</h3>
+<p>${t(E, "Position pos can be the 1st, 2nd, or 3rd letter of a 3-letter window. So 3 windows include pos: starting at idx = pos-2, pos-1, pos.", "위치 pos 는 윈도우의 1번째, 2번째, 3번째 글자가 될 수 있음. 그래서 idx = pos-2, pos-1, pos 에서 시작하는 3 윈도우.")}</p>
+
+<h3>${t(E, "Strategy", "전략")}</h3>
+<ol>
+  <li><b>${t(E, "Pre-count", "미리 세기")}</b>: ${t(E, "scan original ONCE, store moo counts in dict.", "원본 한 번 스캔, dict 에 카운트 저장.")}</li>
+  <li><b>${t(E, "For each pos:", "각 pos 마다:")}</b>
+    <ul>
+      <li>🔴 ${t(E, "REMOVE: subtract 3 windows", "빼기: 3 윈도우 빼기")}</li>
+      <li>🟡 ${t(E, "TRY 26 letters: temp add, check ≥ f, immediately undo", "26 글자: 임시 더하고 체크, 즉시 되돌리기")}</li>
+      <li>🟢 ${t(E, "RESTORE: add back 3 windows", "복원: 3 윈도우 다시 더하기")}</li>
+    </ul>
+  </li>
+</ol>
+
+<div class="box">
+  <b>${t(E, "Time complexity", "시간복잡도")}:</b>
+  ${t(E, "N positions × 26 letters × 3 windows = 78N. For N=20,000 → 1.56M ops. Instant.", "N × 26 × 3 = 78N. N=20,000 → 156만 연산. 즉시.")}
+  <br>${t(E, "Speedup: 26N² / 78N = N/3 ≈ 6,667× faster.", "속도: 26N² / 78N = N/3 ≈ 6,667 배.")}
+</div>
+
+<h2>4. ${t(E, "Optimal Code (4 sections)", "최적 코드 (4 부분)")}</h2>
+${sections.map(s => `
+  <h3 style="background:${s.color}20;color:${s.color};padding:6px 10px;border-radius:6px;">${s.label}</h3>
+  <div class="why">
+    <b>💡 ${t(E, "Why this way?", "왜 이렇게?")}</b>
+    <ul>${s.why.map(w => `<li>${esc(w)}</li>`).join("")}</ul>
+  </div>
+  ${sectionCode(s)}
+`).join("")}
+
+<div style="margin-top:30px;font-size:10px;color:#94a3b8;text-align:center;border-top:1px solid #e5e7eb;padding-top:8px;">
+  © Coderin · 코드린 · ${t(E, "Generated for offline study", "오프라인 학습용 출력")}
+</div>
+</body></html>`;
+  win.document.write(html);
+  win.document.close();
+  setTimeout(() => { win.focus(); win.print(); }, 500);
 }
