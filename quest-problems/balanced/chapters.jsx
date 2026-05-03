@@ -138,6 +138,12 @@ export function makeBalancedCh2(E) {
       question: t(E, "2 × min(0, 100) = ?", "2 × min(0, 100) = ?"),
       answer: 0,
     },
+    {
+      type: "sim",
+      narr: t(E,
+        "Try different (N, M). Coloured brackets show which ones get matched. Greyed-out are leftovers.",
+        "다양한 (N, M) 시도. 색깔 괄호 = 매칭됨. 회색 = 남는 것."),
+    },
   ];
 }
 
@@ -171,6 +177,12 @@ export function makeBalancedCh3(E, lang = "py") {
         "The simplest USACO solution you'll ever see! 😄 Toggle Python ↔ C++ in header.",
         "가장 간단한 USACO 솔루션! 😄 헤더에서 Python ↔ C++ 토글."),
       sections: getBalancedSections(E),
+    },
+    {
+      type: "runner",
+      narr: t(E,
+        "Run it on multiple test cases yourself. Format: T on line 1, then T lines of 'N M'.",
+        "여러 테스트 케이스를 직접 실행. 형식: 1줄에 T, 그 다음 T줄 'N M'."),
     },
   ];
 }

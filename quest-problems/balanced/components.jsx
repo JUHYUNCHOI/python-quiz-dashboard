@@ -1,8 +1,171 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#f97316";
+
+/* ═══════════════════════════════════════════════════════════════
+   BalancedSim — visualize '(' × N + ')' × M and which pairs match
+   ═══════════════════════════════════════════════════════════════ */
+const _BAL_PRESETS = [
+  { N: 3, M: 2 },   // (((    ))
+  { N: 1, M: 5 },   // (    )))))
+  { N: 4, M: 4 },   // ((((    ))))
+  { N: 5, M: 3 },   // (((((    )))
+];
+
+export function BalancedSim({ E }) {
+  const [pi, setPi] = useState(2);
+  const { N, M } = _BAL_PRESETS[pi];
+  const pairs = Math.min(N, M);
+  const ans = 2 * pairs;
+
+  // matched indices: pair i (0-based) matches '(' at index (N - pairs + i) with ')' at index (N + i)
+  const matched = new Set();
+  for (let i = 0; i < pairs; i++) {
+    matched.add(N - pairs + i);   // '(' index in full string
+    matched.add(N + i);           // ')' index in full string
+  }
+
+  const chars = [];
+  for (let i = 0; i < N; i++) chars.push("(");
+  for (let i = 0; i < M; i++) chars.push(")");
+
+  // For each '(' that matched, draw an arc to its matched ')'
+  // We'll just colour-code matched chars
+
+  return (
+    <div style={{ padding: 14 }}>
+      {/* preset selector */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        {_BAL_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => setPi(i)} style={{
+            padding: "5px 10px", borderRadius: 8, border: `2px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>
+            N={p.N}, M={p.M}
+          </button>
+        ))}
+      </div>
+
+      {/* bracket string */}
+      <div style={{ display: "flex", gap: 3, justifyContent: "center", marginBottom: 6, flexWrap: "wrap" }}>
+        {chars.map((ch, i) => {
+          const isMatched = matched.has(i);
+          const isOpen = ch === "(";
+          return (
+            <div key={i} style={{
+              width: 28, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
+              borderRadius: 6, fontSize: 18, fontWeight: 900, fontFamily: "'JetBrains Mono',monospace",
+              background: isMatched ? (isOpen ? "#fef3c7" : "#dbeafe") : "#f3f4f6",
+              border: `2px solid ${isMatched ? (isOpen ? "#f59e0b" : "#3b82f6") : "#d1d5db"}`,
+              color: isMatched ? (isOpen ? "#92400e" : "#1e3a8a") : "#9ca3af",
+            }}>
+              {ch}
+            </div>
+          );
+        })}
+      </div>
+
+      <div style={{ textAlign: "center", fontSize: 11, color: C.dim, marginBottom: 12 }}>
+        {t(E, "Coloured = matched (counts toward answer). Greyed = leftover.",
+              "색깔 = 매칭됨 (답에 포함). 회색 = 남은 것.")}
+      </div>
+
+      {/* result box */}
+      <div style={{
+        background: "#fff7ed", border: `2px solid ${A}`, borderRadius: 10, padding: "10px 14px", textAlign: "center",
+      }}>
+        <div style={{ fontSize: 12, color: C.dim, fontWeight: 700, marginBottom: 4 }}>
+          min({N}, {M}) = {pairs} {t(E, "pairs", "쌍")}
+        </div>
+        <div style={{ fontSize: 22, fontWeight: 900, color: A, fontFamily: "'JetBrains Mono',monospace" }}>
+          2 × {pairs} = {ans}
+        </div>
+        <div style={{ fontSize: 11, color: C.dim, marginTop: 4 }}>
+          {t(E, "= longest balanced subsequence length", "= 가장 긴 균형 부분수열 길이")}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BalancedRunner — student inputs T queries, see results live
+   ═══════════════════════════════════════════════════════════════ */
+export function BalancedRunner({ E }) {
+  const [input, setInput] = useState("3\n3 2\n1 5\n5 3");
+  const [running, setRunning] = useState(false);
+  const [results, setResults] = useState([]);
+  const alive = useRef(false);
+
+  const run = () => {
+    const lines = input.trim().split("\n");
+    const T = parseInt(lines[0]);
+    if (!T || T < 1 || lines.length < T + 1) {
+      setResults([{ error: t(E, "Invalid: line 1 = T, then T lines of 'N M'.", "잘못된 입력: 1줄 = T, 그 다음 T줄 'N M'.") }]);
+      return;
+    }
+    setRunning(true); setResults([]);
+    alive.current = true;
+    let i = 0;
+    const out = [];
+    const tick = () => {
+      if (!alive.current || i >= T) {
+        setRunning(false);
+        return;
+      }
+      const parts = lines[i + 1].trim().split(/\s+/).map(Number);
+      if (parts.length !== 2 || parts.some(isNaN)) {
+        out.push({ test: i + 1, error: true, line: lines[i + 1] });
+      } else {
+        const [N, M] = parts;
+        out.push({ test: i + 1, N, M, ans: 2 * Math.min(N, M) });
+      }
+      setResults([...out]);
+      i++;
+      setTimeout(tick, 200);
+    };
+    setTimeout(tick, 100);
+  };
+  const stop = () => { alive.current = false; };
+
+  return (
+    <div style={{ padding: 14 }}>
+      <textarea value={input} onChange={e => setInput(e.target.value)} disabled={running} rows={5}
+        placeholder="T&#10;N1 M1&#10;N2 M2&#10;..."
+        style={{
+          width: "100%", padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`,
+          fontSize: 13, fontFamily: "'JetBrains Mono',monospace", color: A, marginBottom: 10,
+          resize: "vertical", boxSizing: "border-box",
+        }} />
+      <button onClick={running ? stop : run} style={{
+        width: "100%", padding: "10px 0", borderRadius: 10, border: "none", cursor: "pointer",
+        fontSize: 14, fontWeight: 800, marginBottom: 10,
+        background: running ? "#dc2626" : A, color: "#fff",
+      }}>
+        {running ? t(E, "⏹ Stop", "⏹ 중지") : t(E, "▶ Run", "▶ 실행")}
+      </button>
+      {results.length > 0 && (
+        <div style={{ background: "#f8fafc", borderRadius: 10, padding: "10px 12px" }}>
+          <div style={{ fontSize: 11, color: C.dim, fontWeight: 700, marginBottom: 6 }}>
+            {t(E, "Output:", "출력:")}
+          </div>
+          {results.map((r, i) => (
+            <div key={i} style={{ fontSize: 13, fontFamily: "'JetBrains Mono',monospace", color: r.error ? "#dc2626" : A, fontWeight: 800, lineHeight: 1.6 }}>
+              {r.error ? `Test ${r.test}: bad input` : (r.test ? `Test ${r.test}: 2 × min(${r.N}, ${r.M}) = ${r.ans}` : r.error)}
+            </div>
+          ))}
+        </div>
+      )}
+      <div style={{ marginTop: 12, background: "#f8fafc", borderRadius: 8, padding: "8px 10px", fontSize: 10, color: C.dim, lineHeight: 1.6 }}>
+        <div style={{ fontWeight: 800, color: C.text, marginBottom: 4 }}>{t(E, "⏱ USACO Time Estimate", "⏱ USACO 시간 추정")}</div>
+        <div>O(1) per query · trivially fast even for T = 10⁶</div>
+      </div>
+    </div>
+  );
+}
 
 const BAL_PY = [
   "import sys",

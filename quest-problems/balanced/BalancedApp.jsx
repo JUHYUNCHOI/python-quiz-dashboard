@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
-import { BalancedProgressiveCode, downloadBalancedPDF, getBalancedSections } from "./components";
+import { BalancedProgressiveCode, downloadBalancedPDF, getBalancedSections, BalancedSim, BalancedRunner } from "./components";
 import { makeBalancedCh1, makeBalancedCh2, makeBalancedCh3 } from "./chapters";
 
 const A = "#f97316";
@@ -77,6 +77,8 @@ export default function BalancedApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "progressive") return <BalancedProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "sim") return <BalancedSim E={E} />;
+    if (step.type === "runner") return <BalancedRunner E={E} />;
     return null;
   };
 
