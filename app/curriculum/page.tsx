@@ -577,7 +577,7 @@ export default function CurriculumPage() {
   const cppLessonsDone = cppLessonIds.filter(id => completedLessons.has(id)).length
   const practiceUnlocked = isTeacher || cppLessonsDone >= 8
   const algoUnlocked = isTeacher || practiceProblemsDone >= 40
-  const questUnlocked = isTeacher || algoTopicsDone >= 8
+  const questUnlocked = true   // CodeQuest 잠금 해제 — 전체 학생에게 공개
 
   // Python 진도가 없으면 C++ 탭에 힌트 표시 (차단은 아님)
   const pythonLessonIds = pythonCurriculumData.flatMap(p => p.lessons.map(l => String(l.id)))
@@ -591,7 +591,7 @@ export default function CurriculumPage() {
   const pyPracticeGoal = 40
   const pyPracticeUnlocked = isTeacher || pythonLessonsDone >= 15
   const pyAlgoUnlocked = isTeacher || pyPracticeDone >= pyPracticeGoal
-  const pyQuestUnlocked = isTeacher || algoTopicsDone >= 8
+  const pyQuestUnlocked = true   // CodeQuest 잠금 해제 — 전체 학생에게 공개
 
   const handleCourseChange = (course: CourseType) => {
     if (course === "cpp" && !hasPythonProgress) {
