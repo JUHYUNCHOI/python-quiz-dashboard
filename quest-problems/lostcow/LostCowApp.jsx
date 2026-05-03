@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { C, t } from "@/components/quest/theme";
 import { Narration, Quiz, NumInput, CodeBlock } from "@/components/quest/shared";
-import { LostCowProgressiveCode, downloadLostCowPDF, getLostCowSections } from "./components";
+import { LostCowProgressiveCode, downloadLostCowPDF, getLostCowSections, LostCowSim, LostCowRunner } from "./components";
 import { makeLostCowCh1, makeLostCowCh2 } from "./chapters";
 
 const A = "#dc2626";
@@ -75,6 +75,8 @@ export default function LostCowApp(props = {}) {
     if (step.type === "reveal") return <div style={{ padding: 16 }}>{step.content}</div>;
     if (step.type === "code") return <div style={{ padding: 14 }}><CodeBlock lines={step.code} /></div>;
     if (step.type === "progressive") return <LostCowProgressiveCode E={E} lang={codeLang} sections={step.sections} />;
+    if (step.type === "sim") return <LostCowSim E={E} />;
+    if (step.type === "runner") return <LostCowRunner E={E} />;
     return null;
   };
 

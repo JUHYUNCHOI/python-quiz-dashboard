@@ -87,6 +87,12 @@ export function makeLostCowCh1(E) {
         "3->4 (거리 1), 4->1 (거리 3), 1->6 (거리 5). 합 = 1+3+5 = 9."),
       answer: 9,
     },
+    {
+      type: "sim",
+      narr: t(E,
+        "Pick a (x, y) pair below and step through FJ's zigzag walk on the number line.",
+        "아래에서 (x, y) 골라서 FJ의 지그재그 걷기를 한 다리씩 따라가봐."),
+    },
   ];
 }
 
@@ -120,6 +126,12 @@ export function makeLostCowCh2(E, lang = "py") {
         "Now build the zigzag simulation step by step.",
         "지그재그 시뮬레이션을 단계별로 만들자."),
       sections: getLostCowSections(E),
+    },
+    {
+      type: "runner",
+      narr: t(E,
+        "Run it yourself — enter x and y, watch the legs unfold.",
+        "직접 실행 — x, y 입력하고 다리들이 펼쳐지는 걸 봐."),
     },
   ];
 }

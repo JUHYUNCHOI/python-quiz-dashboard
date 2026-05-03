@@ -1,7 +1,243 @@
+import { useState, useRef } from "react";
 import { C, t } from "@/components/quest/theme";
 import { CodeBlock } from "@/components/quest/shared";
 
 const A = "#dc2626";
+
+/* ═══════════════════════════════════════════════════════════════
+   LostCowSim — visualize FJ zigzagging on a number line
+   ═══════════════════════════════════════════════════════════════ */
+function _buildLegs(x, y, maxLegs = 30) {
+  const legs = [];   // each leg: { from, to, dir, step, dist, foundY }
+  let pos = x;
+  let direction = 1;
+  let step = 1;
+  let total = 0;
+  for (let n = 0; n < maxLegs; n++) {
+    const target = pos + direction * step;
+    const lo = Math.min(pos, target), hi = Math.max(pos, target);
+    if (lo <= y && y <= hi) {
+      total += Math.abs(y - pos);
+      legs.push({ from: pos, to: y, dir: direction, step, dist: Math.abs(y - pos), foundY: true, totalAfter: total });
+      return legs;
+    }
+    total += step;
+    legs.push({ from: pos, to: target, dir: direction, step, dist: step, foundY: false, totalAfter: total });
+    pos = target;
+    direction *= -1;
+    step *= 2;
+  }
+  return legs;
+}
+
+const _LC_PRESETS = [
+  { x: 3, y: 6 },
+  { x: 5, y: -2 },
+  { x: 0, y: 7 },
+  { x: 10, y: 3 },
+];
+
+export function LostCowSim({ E }) {
+  const [pi, setPi] = useState(0);
+  const [legIdx, setLegIdx] = useState(0);
+  const { x, y } = _LC_PRESETS[pi];
+  const legs = _buildLegs(x, y);
+  const cur = Math.min(legIdx, legs.length - 1);
+
+  // Compute axis range based on all positions touched so far
+  const positions = [x, y];
+  for (let i = 0; i <= cur; i++) {
+    positions.push(legs[i].to);
+  }
+  const minX = Math.min(...positions) - 2;
+  const maxX = Math.max(...positions) + 2;
+  const range = maxX - minX;
+  const W = 360;
+  const H = 100;
+  const px = (val) => ((val - minX) / range) * W;
+
+  const totalSoFar = cur >= 0 ? legs[cur].totalAfter : 0;
+  const finalLeg = legs[cur];
+
+  return (
+    <div style={{ padding: 14 }}>
+      {/* preset selector */}
+      <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 12, flexWrap: "wrap" }}>
+        {_LC_PRESETS.map((p, i) => (
+          <button key={i} onClick={() => { setPi(i); setLegIdx(0); }} style={{
+            padding: "4px 8px", borderRadius: 8, border: `2px solid ${i === pi ? A : C.border}`,
+            background: i === pi ? A : "transparent", color: i === pi ? "#fff" : C.dim,
+            fontSize: 11, fontWeight: 800, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          }}>
+            x={p.x}, y={p.y}
+          </button>
+        ))}
+      </div>
+
+      {/* number line */}
+      <svg width={W} height={H} style={{ display: "block", margin: "0 auto" }}>
+        {/* axis */}
+        <line x1={0} y1={H/2} x2={W} y2={H/2} stroke="#cbd5e1" strokeWidth="2" />
+        {/* tick marks at integer positions if range small enough */}
+        {range <= 30 && Array.from({ length: maxX - minX + 1 }, (_, k) => minX + k).map(v => (
+          <g key={v}>
+            <line x1={px(v)} y1={H/2 - 4} x2={px(v)} y2={H/2 + 4} stroke="#cbd5e1" strokeWidth="1" />
+            <text x={px(v)} y={H/2 + 18} fontSize="9" fill="#94a3b8" textAnchor="middle">{v}</text>
+          </g>
+        ))}
+        {/* legs traversed */}
+        {legs.slice(0, cur + 1).map((leg, i) => {
+          const arcHeight = 25 + (i % 2) * 10;
+          const yArc = leg.dir > 0 ? H/2 - arcHeight : H/2 + arcHeight;
+          const cx = (px(leg.from) + px(leg.to)) / 2;
+          const dStr = `M ${px(leg.from)} ${H/2} Q ${cx} ${yArc} ${px(leg.to)} ${H/2}`;
+          const isCurrent = i === cur;
+          return (
+            <g key={i}>
+              <path d={dStr} stroke={isCurrent ? A : "#9ca3af"} strokeWidth={isCurrent ? 2.5 : 1.5} fill="none" />
+              {isCurrent && (
+                <text x={cx} y={yArc - 3} fontSize="10" fill={A} textAnchor="middle" fontWeight="800">
+                  {leg.dir > 0 ? "+" : "−"}{leg.step}
+                </text>
+              )}
+            </g>
+          );
+        })}
+        {/* x marker (start) */}
+        <circle cx={px(x)} cy={H/2} r="5" fill="#3b82f6" />
+        <text x={px(x)} y={H/2 - 14} fontSize="10" fill="#3b82f6" textAnchor="middle" fontWeight="800">x</text>
+        {/* y marker (cow) */}
+        <circle cx={px(y)} cy={H/2} r="5" fill="#16a34a" />
+        <text x={px(y)} y={H/2 - 14} fontSize="10" fill="#16a34a" textAnchor="middle" fontWeight="800">🐄 y</text>
+        {/* current position */}
+        {cur >= 0 && (
+          <circle cx={px(finalLeg.to)} cy={H/2} r="4" fill={A} />
+        )}
+      </svg>
+
+      <div style={{ background: "#fef2f2", border: `1.5px solid #fca5a5`, borderRadius: 10, padding: "8px 12px", marginTop: 10, marginBottom: 10, textAlign: "center", fontSize: 13, color: A, fontWeight: 800 }}>
+        {finalLeg.foundY
+          ? t(E, `🐄 Found! Total walked = ${totalSoFar}`, `🐄 찾음! 총 거리 = ${totalSoFar}`)
+          : t(E, `Leg ${cur + 1}: ${finalLeg.dir > 0 ? "+" : "−"}${finalLeg.step} → pos = ${finalLeg.to}, total = ${totalSoFar}`,
+                `${cur + 1}번째 다리: ${finalLeg.dir > 0 ? "+" : "−"}${finalLeg.step} → 위치 = ${finalLeg.to}, 누적 = ${totalSoFar}`)}
+      </div>
+
+      {/* nav */}
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 10 }}>
+        <button onClick={() => setLegIdx(Math.max(0, cur - 1))} disabled={cur === 0} style={{
+          background: cur === 0 ? "#e5e7eb" : "#fff", border: `2px solid ${cur === 0 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800,
+          color: cur === 0 ? "#b0b5c3" : A, cursor: cur === 0 ? "default" : "pointer",
+        }}>←</button>
+        <span style={{ fontSize: 11, color: C.dim, fontWeight: 700, fontFamily: "'JetBrains Mono',monospace" }}>
+          {cur + 1} / {legs.length}
+        </span>
+        <button onClick={() => setLegIdx(Math.min(legs.length - 1, cur + 1))} disabled={cur === legs.length - 1} style={{
+          background: cur === legs.length - 1 ? "#e5e7eb" : A, border: `2px solid ${cur === legs.length - 1 ? "#e5e7eb" : A}`,
+          borderRadius: 8, padding: "5px 14px", fontSize: 13, fontWeight: 800,
+          color: cur === legs.length - 1 ? "#b0b5c3" : "#fff", cursor: cur === legs.length - 1 ? "default" : "pointer",
+        }}>→</button>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LostCowRunner — input x, y, see total distance live
+   ═══════════════════════════════════════════════════════════════ */
+export function LostCowRunner({ E }) {
+  const [xInput, setXInput] = useState("3");
+  const [yInput, setYInput] = useState("6");
+  const [running, setRunning] = useState(false);
+  const [result, setResult] = useState(null);
+  const [livePos, setLivePos] = useState(0);
+  const [liveTotal, setLiveTotal] = useState(0);
+  const [liveLeg, setLiveLeg] = useState(0);
+  const alive = useRef(false);
+
+  const run = () => {
+    const x = parseInt(xInput);
+    const y = parseInt(yInput);
+    if (isNaN(x) || isNaN(y)) {
+      setResult({ error: t(E, "Invalid: x and y must be integers.", "잘못된 입력: x, y는 정수.") });
+      return;
+    }
+    if (x === y) {
+      setResult({ done: true, total: 0, legs: 0 });
+      return;
+    }
+    setRunning(true); setResult(null);
+    setLivePos(x); setLiveTotal(0); setLiveLeg(0);
+    alive.current = true;
+
+    let pos = x;
+    let direction = 1;
+    let step = 1;
+    let total = 0;
+    let legCount = 0;
+
+    const tick = () => {
+      if (!alive.current) {
+        setResult({ stopped: true, lastTotal: total, lastLeg: legCount });
+        setRunning(false); return;
+      }
+      const target = pos + direction * step;
+      const lo = Math.min(pos, target), hi = Math.max(pos, target);
+      if (lo <= y && y <= hi) {
+        total += Math.abs(y - pos);
+        legCount++;
+        setLivePos(y); setLiveTotal(total); setLiveLeg(legCount);
+        setResult({ done: true, total, legs: legCount });
+        setRunning(false);
+        return;
+      }
+      total += step;
+      pos = target;
+      direction *= -1;
+      step *= 2;
+      legCount++;
+      setLivePos(pos); setLiveTotal(total); setLiveLeg(legCount);
+      setTimeout(tick, 350);
+    };
+    setTimeout(tick, 100);
+  };
+  const stop = () => { alive.current = false; };
+
+  return (
+    <div style={{ padding: 14 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 10 }}>
+        <input value={xInput} onChange={e => setXInput(e.target.value)} disabled={running} placeholder="x"
+          style={{ padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: A, textAlign: "center" }} />
+        <input value={yInput} onChange={e => setYInput(e.target.value)} disabled={running} placeholder="y"
+          style={{ padding: "8px 10px", borderRadius: 8, border: `2px solid ${C.border}`, fontSize: 14, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", color: A, textAlign: "center" }} />
+      </div>
+      <button onClick={running ? stop : run} style={{
+        width: "100%", padding: "10px 0", borderRadius: 10, border: "none", cursor: "pointer",
+        fontSize: 14, fontWeight: 800, marginBottom: 10,
+        background: running ? "#dc2626" : A, color: "#fff",
+      }}>
+        {running ? t(E, "⏹ Stop", "⏹ 중지") : t(E, "▶ Run zigzag", "▶ 지그재그 실행")}
+      </button>
+      {(running || result?.done) && (
+        <div style={{ background: "#fef2f2", borderRadius: 10, padding: "10px 12px", marginBottom: 10, fontSize: 13, color: A, fontWeight: 800, fontFamily: "'JetBrains Mono',monospace", textAlign: "center" }}>
+          {t(E, `Leg ${liveLeg} · pos = ${livePos} · total = ${liveTotal}`, `${liveLeg}번째 다리 · 위치 = ${livePos} · 누적 = ${liveTotal}`)}
+        </div>
+      )}
+      {result?.error && (
+        <div style={{ background: "#fef2f2", border: "1.5px solid #fca5a5", borderRadius: 10, padding: "10px 12px", color: "#7f1d1d", fontSize: 12, fontWeight: 700 }}>{result.error}</div>
+      )}
+      {result?.done && (
+        <div style={{ background: "#dcfce7", border: "2px solid #16a34a", borderRadius: 10, padding: "10px 12px", color: "#15803d", fontSize: 13, fontWeight: 800 }}>
+          {t(E, `✅ Total distance = ${result.total} (in ${result.legs} legs)`, `✅ 총 거리 = ${result.total} (${result.legs}개 다리)`)}
+        </div>
+      )}
+      <div style={{ marginTop: 12, background: "#f8fafc", borderRadius: 8, padding: "8px 10px", fontSize: 10, color: C.dim, lineHeight: 1.6 }}>
+        <div style={{ fontWeight: 800, color: C.text, marginBottom: 4 }}>{t(E, "⏱ USACO Time Estimate", "⏱ USACO 시간 추정")}</div>
+        <div>O(log |x − y|) per query · trivially fast</div>
+      </div>
+    </div>
+  );
+}
 
 /* Section 1: input */
 const LC_INPUT_PY = [
