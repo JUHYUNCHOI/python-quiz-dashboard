@@ -110,16 +110,11 @@ Fair question. vector can do it. But \`stack\` makes the **intent obvious**. Any
           id: "ch1-stack-mini",
           type: "practice" as const,
           title: "✋ Quick — print numbers in reverse with a stack",
-          content: `**Scenario**: You receive 5 numbers and want to print them in **reverse order** (last first).
-
-\`\`\`
-Input:  1 2 3 4 5
-Output: 5 4 3 2 1
-\`\`\`
+          content: `**Scenario**: You receive 5 numbers (the \`nums\` array in the starter code) and want to print them in **reverse order** (last first).
 
 stack's LIFO does this in one shot — push them all, then loop \`top\` + \`pop\` until empty.
 
-> 💡 \`while (!s.empty()) { cout << s.top() << " "; s.pop(); }\` — this skeleton is the core.`,
+> 💡 \`while (!s.empty()) { cout << s.top() << " "; s.pop(); }\` — this skeleton is the core. Target output is in the box below.`,
           starterCode: `#include <iostream>
 #include <stack>
 using namespace std;

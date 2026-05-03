@@ -215,12 +215,7 @@ int main() {
           title: "✋ 템플릿 직접 작성",
           content: `**미션**: 위 템플릿 그대로 써서, **N 입력받고 N+1 출력**.
 
-\`\`\`
-입력: 5
-출력: 6
-\`\`\`
-
-> 💡 헤더 + namespace + Fast I/O 두 줄 + cin/cout`,
+> 💡 헤더 + namespace + Fast I/O 두 줄 + cin/cout. 입력/정답은 아래 박스 참고.`,
           starterCode: `// 템플릿을 직접 써봐요
 // 1. #include <bits/stdc++.h>
 // 2. using namespace std;

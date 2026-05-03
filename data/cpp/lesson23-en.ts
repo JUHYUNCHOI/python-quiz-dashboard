@@ -148,13 +148,7 @@ Next page — try sorting one yourself 👇`
           title: "✋ From scratch — sort and print integers",
           content: `**Problem**: Given N integers, sort them in ascending order and print them on one line, space-separated.
 
-\`\`\`
-Input:  5
-        4 2 7 1 5
-Output: 1 2 4 5 7
-\`\`\`
-
-> 💡 Write everything from #include to main. Read input → store in vector → sort → print.`,
+> 💡 Write everything from #include to main. Read input → store in vector → sort → print. Input / target output in the boxes below.`,
           starterCode: `#include <iostream>
 #include <vector>
 #include <algorithm>
@@ -654,19 +648,7 @@ int main() {
           title: "✋ From scratch — pair vector sorted by score descending",
           content: `**Problem**: Given N students (name, score), sort by **score descending** and print one per line as \`name score\`.
 
-\`\`\`
-Input:  4
-        Alice 78
-        Bob 95
-        Carol 88
-        Dave 60
-Output: Bob 95
-        Carol 88
-        Alice 78
-        Dave 60
-\`\`\`
-
-> 💡 In the lambda: \`a.second > b.second\` — bigger score goes first. Use structured bindings (\`auto& [name, score] : v\`) for clean output.`,
+> 💡 In the lambda: \`a.second > b.second\` — bigger score goes first. Use structured bindings (\`auto& [name, score] : v\`) for clean output. Input / target output in the boxes below.`,
           starterCode: `#include <iostream>
 #include <vector>
 #include <string>
@@ -797,17 +779,7 @@ Choi 72`
           title: "✋ From scratch — sort strings by length (lambda works on string too)",
           content: `**Problem**: Given N strings, sort by **length ascending**, breaking ties alphabetically.
 
-\`\`\`
-Input:  5
-        banana hi apple ok cat
-Output: hi
-        ok
-        cat
-        apple
-        banana
-\`\`\`
-
-> 💡 Lambdas work the same on int, pair, **and string**. Use \`s.length()\` (or \`s.size()\`) to compare lengths; \`<\` on strings is lexicographic.`,
+> 💡 Lambdas work the same on int, pair, **and string**. Use \`s.length()\` (or \`s.size()\`) to compare lengths; \`<\` on strings is lexicographic. Input / target output in the boxes below.`,
           starterCode: `#include <iostream>
 #include <string>
 #include <vector>
@@ -1473,19 +1445,7 @@ stable_sort(students.begin(), students.end(), [](auto a, auto b) {
           title: "✋ From scratch — try stable_sort yourself",
           content: `**Problem**: 4 students (name, score). Sort by score descending, **preserving input order on ties**.
 
-\`\`\`
-Input:  4
-        Alice 90
-        Bob 80
-        Carol 90
-        Dave 80
-Output: Alice 90
-        Carol 90
-        Bob 80
-        Dave 80
-\`\`\`
-
-> 💡 Use \`stable_sort\` + lambda for descending score. Ties auto-preserve input order.`,
+> 💡 Use \`stable_sort\` + lambda for descending score. Ties auto-preserve input order. Input / target output in the boxes below.`,
           starterCode: `#include <iostream>
 #include <vector>
 #include <string>

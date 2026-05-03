@@ -148,13 +148,7 @@ vector 의 v.begin()/v.end() 랑 같은 역할이에요.
           title: "✋ 처음부터 — 정수 정렬 후 출력",
           content: `**문제**: N 개의 정수가 주어질 때, 오름차순으로 정렬해서 한 줄에 공백 구분으로 출력하세요.
 
-\`\`\`
-입력: 5
-      4 2 7 1 5
-출력: 1 2 4 5 7
-\`\`\`
-
-> 💡 #include 부터 main 까지 직접 작성. 입력 → vector 에 담기 → sort → 출력.`,
+> 💡 #include 부터 main 까지 직접 작성. 입력 → vector 에 담기 → sort → 출력. 입력/정답은 아래 박스 참고.`,
           starterCode: `#include <iostream>
 #include <vector>
 #include <algorithm>
@@ -668,19 +662,7 @@ int main() {
           title: "✋ 처음부터 — pair 벡터 점수 내림차순 정렬",
           content: `**문제**: N 명의 학생 (이름, 점수) 가 주어질 때, **점수 내림차순** 으로 정렬해서 한 줄에 한 명씩 \`이름 점수\` 형식으로 출력하세요.
 
-\`\`\`
-입력: 4
-      Alice 78
-      Bob 95
-      Carol 88
-      Dave 60
-출력: Bob 95
-      Carol 88
-      Alice 78
-      Dave 60
-\`\`\`
-
-> 💡 lambda 안에서 \`a.second > b.second\` — 점수 큰 학생이 앞으로. structured bindings (\`auto& [name, score] : v\`) 로 출력하면 깔끔.`,
+> 💡 lambda 안에서 \`a.second > b.second\` — 점수 큰 학생이 앞으로. structured bindings (\`auto& [name, score] : v\`) 로 출력하면 깔끔. 입력/정답은 아래 박스 참고.`,
           starterCode: `#include <iostream>
 #include <vector>
 #include <string>
@@ -811,17 +793,7 @@ Choi 72`
           title: "✋ 처음부터 — 문자열 길이 기준 정렬 (lambda 는 string 에도 통함)",
           content: `**문제**: N 개의 문자열이 주어질 때, **길이 오름차순** 으로 정렬하세요. 길이가 같으면 사전순으로.
 
-\`\`\`
-입력: 5
-      banana hi apple ok cat
-출력: hi
-      ok
-      cat
-      apple
-      banana
-\`\`\`
-
-> 💡 lambda 는 int, pair 뿐 아니라 **string 에도 똑같이 통해요.** \`s.length()\` 또는 \`s.size()\` 로 길이 비교. 같을 때는 string 의 \`<\` 가 사전순 비교.`,
+> 💡 lambda 는 int, pair 뿐 아니라 **string 에도 똑같이 통해요.** \`s.length()\` 또는 \`s.size()\` 로 길이 비교. 같을 때는 string 의 \`<\` 가 사전순 비교. 입력/정답은 아래 박스 참고.`,
           starterCode: `#include <iostream>
 #include <string>
 #include <vector>
@@ -1487,19 +1459,7 @@ stable_sort(students.begin(), students.end(), [](auto a, auto b) {
           title: "✋ 처음부터 — stable_sort 직접 써보기",
           content: `**문제**: 학생 4 명 (이름, 점수). 점수 내림차순 정렬, **동점이면 입력 순서 유지**.
 
-\`\`\`
-입력: 4
-      Alice 90
-      Bob 80
-      Carol 90
-      Dave 80
-출력: Alice 90
-      Carol 90
-      Bob 80
-      Dave 80
-\`\`\`
-
-> 💡 \`stable_sort\` + lambda 로 점수 내림차순. 동점은 자동으로 입력 순서 유지됨.`,
+> 💡 \`stable_sort\` + lambda 로 점수 내림차순. 동점은 자동으로 입력 순서 유지됨. 입력/정답은 아래 박스 참고.`,
           starterCode: `#include <iostream>
 #include <vector>
 #include <string>
