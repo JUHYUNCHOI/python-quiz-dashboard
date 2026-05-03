@@ -323,16 +323,7 @@ int main() {
           title: "✋ 처음부터 — 문자열 알파벳순 정렬",
           content: `**문제**: N 개의 문자열이 주어질 때, **알파벳 오름차순** 으로 정렬해서 한 줄에 한 단어씩 출력하세요.
 
-\`\`\`
-입력: 4
-      banana apple cherry date
-출력: apple
-      banana
-      cherry
-      date
-\`\`\`
-
-> 💡 \`sort\` 는 int 뿐 아니라 **string vector 에도 그대로** 통해요 — 문자열은 사전순으로 자동 비교됨.`,
+> 💡 \`sort\` 는 int 뿐 아니라 **string vector 에도 그대로** 통해요 — 문자열은 사전순으로 자동 비교됨. 입력/정답은 아래 박스 참고.`,
           starterCode: `#include <iostream>
 #include <string>
 #include <vector>

@@ -323,16 +323,7 @@ int main() {
           title: "✋ From scratch — sort strings alphabetically",
           content: `**Problem**: Given N strings, sort them in **alphabetical order** and print one per line.
 
-\`\`\`
-Input:  4
-        banana apple cherry date
-Output: apple
-        banana
-        cherry
-        date
-\`\`\`
-
-> 💡 \`sort\` works on **string vectors too**, not just ints — strings auto-compare lexicographically.`,
+> 💡 \`sort\` works on **string vectors too**, not just ints — strings auto-compare lexicographically. Input / target output are in the boxes below.`,
           starterCode: `#include <iostream>
 #include <string>
 #include <vector>
