@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getExchangeSections } from "./components";
 
 export const SOLUTION_CODE = [
   "N = int(input())",
@@ -275,8 +276,21 @@ export function makeExchangeCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: 🔍 왜 이게 맞는지 (8 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeExchangeCh2(E) {
+export function makeExchangeCh2(E, lang = "py") {
   return [
+    // 2-0 알고리즘 요약 (코드 탭 시작)
+    {
+      type: "reveal",
+      narr: t(E,
+        "Recap: total stays the same, so after enough rounds milk splits as evenly as possible. Code is just: total → avg → extra → output.",
+        "정리: 총량은 그대로니까 충분한 라운드 후 우유는 가능한 균등하게 분배. 코드는 단순: total → avg → extra → 출력."),
+      content: (
+        <div style={{ padding: 16, textAlign: "center" }}>
+          <div style={{ background: "#dbeafe", border: "2px solid #93c5fd", borderRadius: 12, padding: 14, fontSize: 14, fontWeight: 800, color: "#2563eb" }}>
+            {t(E, "No simulation. Pure math: O(N).", "시뮬 없음. 순수 수학: O(N).")}
+          </div>
+        </div>),
+    },
     // 2-1 회전의 본질
     {
       type: "reveal",
@@ -426,6 +440,14 @@ export function makeExchangeCh2(E) {
         "N=7, 합계=25. avg = 25 // 7 = 3. extra = 25 % 7 = ?"),
       question: t(E, "25 % 7 = ?", "25 % 7 = ?"),
       answer: 4,
+    },
+    // 2-9 progressive code
+    {
+      type: "progressive",
+      narr: t(E,
+        "Now build the solution step by step. Each section reveals one piece of the algorithm.",
+        "이제 솔루션을 단계별로 만들어보자. 각 섹션마다 알고리즘 한 조각씩."),
+      sections: getExchangeSections(E),
     },
   ];
 }
