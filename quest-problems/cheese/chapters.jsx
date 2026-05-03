@@ -690,6 +690,79 @@ export function makeCheeseCh4(E) {
         </div>),
     },
 
+    // 4-3a: 🔑 1차 개선 사고 디딤돌 — 학생이 자기 머리로 발견
+    {
+      type: "quiz",
+      narr: t(E,
+        "Wait — every carve, we re-check ALL 3N² rows. But only ONE block changed. Did all rows really change?",
+        "잠깐 — 매번 carve 마다 모든 3N² 줄을 다시 검사해. 근데 변한 건 블록 1 개뿐이야. 정말 모든 줄이 바뀌었을까?"),
+      question: t(E,
+        "When you carve 1 block, how many rows could possibly change their state?",
+        "블록 1 개를 빼면, 상태가 바뀔 수 있는 줄은 최대 몇 개?"),
+      hint: t(E,
+        "Picture the block — it sits on rows going in 3 directions (left↔right, front↔back, up↔down).",
+        "그 블록 머릿속에 그려봐 — 왼↔오, 앞↔뒤, 위↔아래 3 방향 줄 위에 있어."),
+      options: [
+        t(E, "All 3N² rows might change", "전체 3N² 줄 다 바뀔 수 있음"),
+        t(E, "N rows (one per axis)", "N 줄 (축마다 1)"),
+        t(E, "Just 3 rows — one per direction!", "딱 3 줄 — 방향마다 1!"),
+        t(E, "Just 1 row", "1 줄만"),
+      ], correct: 2,
+      explain: t(E,
+        "EXACTLY 3 rows. So we're wasting time re-checking 3N² − 3 rows that didn't change. Big idea: only check those 3.",
+        "정확히 3 줄. 그러면 안 변한 3N² − 3 줄을 다시 검사하는 게 시간 낭비. 핵심 아이디어: 그 3 줄만 검사."),
+    },
+
+    // 4-3b: 두 번째 디딤돌 — "이전 답을 어떻게 기억?"
+    {
+      type: "quiz",
+      narr: t(E,
+        "Great — only check the 3 affected rows. But to know if a row is empty, we still need its current state. How do we remember each row's state without re-scanning?",
+        "좋아 — 영향받는 3 줄만 검사. 근데 줄이 비었는지 알려면 그 줄의 현재 상태가 필요해. 매번 다시 스캔하지 않고 줄별 상태를 어떻게 기억?"),
+      question: t(E,
+        "What's the smallest piece of info per row that tells us 'is this row empty yet?'",
+        "줄마다 '이 줄 다 비었나?' 를 알려주는 가장 작은 정보는?"),
+      hint: t(E,
+        "We don't need to remember WHICH cells are empty — just HOW MANY have been carved.",
+        "어떤 칸이 비었는지 기억할 필요 X — 몇 개 빠졌는지만 세면 됨."),
+      options: [
+        t(E, "List of every carved cell", "빠진 칸 좌표 전부"),
+        t(E, "True/False for each cell (N items)", "각 칸의 True/False (N 개)"),
+        t(E, "Just one number: count of carved cells in that row", "한 숫자: 그 줄에서 빠진 칸 개수"),
+        t(E, "The first empty position", "처음 비는 위치"),
+      ], correct: 2,
+      explain: t(E,
+        "Just ONE number per row! When count = N, the whole row is empty. Increment 3 counters per carve, check if any hit N. That's it.",
+        "줄마다 숫자 1 개! count = N 이면 전체 빔. carve 마다 카운터 3 개 +1, N 도달 체크. 그게 다야."),
+    },
+
+    // 4-3c: 디딤돌 마무리 — "그게 카운터 트릭!"
+    {
+      type: "reveal",
+      narr: t(E,
+        "You just designed the algorithm yourself! Two insights chained: (1) only 3 rows change per carve, (2) one number per row is enough.",
+        "방금 알고리즘을 직접 설계한 거야! 두 통찰의 연결: (1) 한 번에 3 줄만 변함, (2) 줄마다 숫자 1 개면 충분."),
+      content: (
+        <div style={{ padding: 16 }}>
+          <div style={{ background: "linear-gradient(135deg,#fef3c7,#fde68a)", border: "2px solid #f59e0b", borderRadius: 14, padding: 16, marginBottom: 12 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#92400e", marginBottom: 10, textAlign: "center" }}>
+              🔑 {t(E, "Your idea, step by step", "내가 떠올린 아이디어, 단계별로")}
+            </div>
+            <div style={{ fontSize: 13, lineHeight: 2.2, color: "#78350f" }}>
+              <div>① {t(E, "Brute checks 3N² rows per carve → too slow", "브루트는 carve 당 3N² 줄 검사 → 너무 느려")}</div>
+              <div>② {t(E, "BUT only 3 rows actually change per carve", "근데 carve 마다 진짜 변하는 건 3 줄")}</div>
+              <div>③ {t(E, "So: track each row's state separately, only update 3", "그래서: 줄별 상태를 따로 추적, 3 개만 업데이트")}</div>
+              <div>④ {t(E, "Row state = ONE number (carved count). Done.", "줄 상태 = 숫자 1 개 (빠진 개수). 끝.")}</div>
+            </div>
+          </div>
+          <div style={{ background: "#ecfdf5", border: "2px solid #6ee7b7", borderRadius: 10, padding: 12, fontSize: 13, color: "#065f46", lineHeight: 1.7, textAlign: "center", fontWeight: 700 }}>
+            ✨ {t(E,
+              "This is the 'counter trick'. Next tab: see why it's exactly correct, then write the code.",
+              "이게 '카운터 트릭'. 다음 탭: 왜 정확히 맞는지 보고, 코드 작성.")}
+          </div>
+        </div>),
+    },
+
     // 4-4: 비교 — 한눈에
     {
       type: "reveal",
