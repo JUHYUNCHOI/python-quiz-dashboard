@@ -435,71 +435,19 @@ export function makeCheeseCh3(E) {
         </div>),
     },
 
-    // 3-2: 불편함 유도 — "큰 큐브면 어떡해?"
-    {
-      type: "quiz",
-      narr: t(E,
-        "That was a tiny 2×2×2 cube with only 12 rows. But real problems have N=1000! That's 3 MILLION rows! Should we check all of them every time we remove one block?",
-        "이건 2×2×2 작은 큐브라서 줄이 12개뿐이었어. 근데 실제 문제는 N=1000! 줄이 300만 개야! 블록 1개 뺄 때마다 300만 개를 전부 확인해야 할까?"),
-      question: t(E,
-        "N=1000: 3 million rows. Check ALL of them after every single removal?",
-        "N=1000: 300만 줄. 블록 1개 뺄 때마다 전부 확인?"),
-      options: [
-        t(E, "That sounds crazy slow! There must be a better way!", "그건 미친 듯이 느릴 거야! 더 좋은 방법이 있을 거야!"),
-        t(E, "Sure, just check them all", "그냥 다 확인하면 되지"),
-      ], correct: 0,
-      explain: t(E,
-        "Right! Checking 3 million rows × 200,000 times = way too slow. Let's find a shortcut! 🏎️",
-        "맞아! 300만 줄 × 20만 번 = 너무 느려. 지름길을 찾자! 🏎️"),
-    },
-
-    // 3-3: 핵심 질문 — 블록 1개가 영향 주는 줄은?
-    {
-      type: "quiz",
-      narr: t(E,
-        "Here's the key question: when you remove ONE block, how many rows could possibly change? Think about it — the block sits on rows going left-right, front-back, and up-down.",
-        "핵심 질문: 블록 1개를 빼면, 변할 수 있는 줄은 최대 몇 개야? 생각해봐 — 그 블록은 왼오, 앞뒤, 위아래 방향의 줄 위에 있어."),
-      question: t(E,
-        "Removing 1 block can affect at most how many rows?",
-        "블록 1개를 빼면 최대 몇 개 줄이 영향받아?"),
-      options: ["1", "2", "3", "N"], correct: 2,
-      explain: t(E,
-        "Only 3! One row per direction. The other 2,999,997 rows don't change at all! 💡",
-        "3개뿐! 방향마다 1줄씩. 나머지 2,999,997줄은 전혀 안 바뀌어! 💡"),
-    },
-
-    // 3-4: 아하 모먼트 — 3개만 보면 된다!
-    {
-      type: "quiz",
-      narr: t(E,
-        "So out of 3 million rows, only 3 change! What if we just tracked those 3 instead of checking everything?",
-        "300만 줄 중에 3개만 바뀌잖아! 전부 확인하는 대신 그 3개만 추적하면 되지 않을까?"),
-      question: t(E,
-        "What should we keep track of for each row?",
-        "각 줄마다 뭘 기록해두면 좋을까?"),
-      options: [
-        t(E, "How many blocks have been removed from this row", "이 줄에서 제거된 블록 수"),
-        t(E, "The coordinates of every block", "모든 블록의 좌표"),
-        t(E, "Whether it's half empty", "절반이 비었는지"),
-      ], correct: 0,
-      explain: t(E,
-        "Count removals on each row! When count = N → the row is fully empty → rod fits! We call this a 'counter'.",
-        "각 줄에서 제거된 수를 세! 그 수 = N이면 → 줄이 전부 빔 → 막대 들어감! 이걸 '카운터'라고 불러."),
-    },
-
-    // 3-5: 카운터 개념 정리 — 쉬운 말로
+    // 3-2: 검증 모드 진입 — 브루트 챕터에서 발견한 카운터, 정말 맞나?
     {
       type: "reveal",
       narr: t(E,
-        "Let's call it a 'counter' — like a tally. Each row starts at 0. Every time a block is removed from that row, counter goes up by 1. When it hits N, the row is clear!",
-        "'카운터'라고 부르자 — 획수 세는 것처럼! 각 줄은 0에서 시작. 블록이 빠질 때마다 +1. N에 도달하면 그 줄은 비었어!"),
+        "From the Brute tab you discovered: ① only 3 rows change per carve, ② row state = one number (carved count). Now let's verify by hand that this counter trick is exactly correct.",
+        "브루트 탭에서 발견한 것: ① carve 마다 3 줄만 변함, ② 줄 상태 = 숫자 1 개 (빠진 개수). 이제 손으로 검증 — 카운터 트릭이 정확한지."),
       content: (
-        <div style={{ padding: 16, textAlign: "center" }}>
-          <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 14, padding: 16 }}>
-            <div style={{ fontSize: 14, fontWeight: 800, color: "#92400e", marginBottom: 10 }}>
-              {t(E, "Counter = Tally marks per row", "카운터 = 줄마다 세는 획수")}
+        <div style={{ padding: 16 }}>
+          <div style={{ background: "#fffbeb", border: "2px solid #fde68a", borderRadius: 14, padding: 16, marginBottom: 12 }}>
+            <div style={{ fontSize: 14, fontWeight: 800, color: "#92400e", marginBottom: 10, textAlign: "center" }}>
+              📏 {t(E, "Counter rule", "카운터 규칙")}
             </div>
-            <div style={{ display: "flex", justifyContent: "center", gap: 12, fontFamily: "'JetBrains Mono',monospace" }}>
+            <div style={{ display: "flex", justifyContent: "center", gap: 12, fontFamily: "'JetBrains Mono',monospace", marginBottom: 8 }}>
               {[0, 1, 2].map(v => (
                 <div key={v} style={{
                   width: 48, height: 48, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center",
@@ -510,9 +458,14 @@ export function makeCheeseCh3(E) {
                 }}>{v}</div>
               ))}
             </div>
-            <div style={{ fontSize: 12, color: C.dim, marginTop: 8 }}>
-              {t(E, "N=2: when counter hits 2 → row is clear! 📏", "N=2: 카운터가 2가 되면 → 줄이 뚫려! 📏")}
+            <div style={{ fontSize: 12, color: C.dim, textAlign: "center" }}>
+              {t(E, "N=2: counter hits 2 → row is clear → +1 to total!", "N=2: 카운터가 2 도달 → 줄 빔 → 총합 +1!")}
             </div>
+          </div>
+          <div style={{ background: "#ecfdf5", border: "1.5px solid #6ee7b7", borderRadius: 8, padding: 10, fontSize: 12, color: "#065f46", lineHeight: 1.7, textAlign: "center", fontWeight: 700 }}>
+            {t(E,
+              "Next: walk through 5 carves on N=2 by hand, watching counters reach N.",
+              "다음: N=2 에서 5 번 carve 를 손으로 따라가며 카운터가 N 도달하는 걸 봐요.")}
           </div>
         </div>),
     },
