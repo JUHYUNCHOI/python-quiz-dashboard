@@ -325,6 +325,174 @@ export function MooBruteRunner({ E }) {
 
 
 /* ═══════════════════════════════════════════════════════════════
+   getMooBruteSections — 첫 아이디어 (브루트) 단계별 코드
+   ═══════════════════════════════════════════════════════════════ */
+
+const BR_INPUT_PY = [
+  "import sys",
+  "input = sys.stdin.readline",
+  "",
+  "n, f = map(int, input().split())",
+  "s = list(input().strip())",
+  "result = set()",
+];
+const BR_INPUT_CPP = [
+  "#include <bits/stdc++.h>",
+  "using namespace std;",
+  "",
+  "int main() {",
+  "    ios::sync_with_stdio(false);",
+  "    cin.tie(nullptr);",
+  "",
+  "    int n, f;",
+  "    cin >> n >> f;",
+  "    string s; cin >> s;",
+  "    set<string> result;",
+];
+
+const BR_HELPERS_PY = [
+  "def is_moo(a, b, c):",
+  "    return a != b and b == c",
+  "",
+  "def count_all(arr):",
+  "    moos = {}",
+  "    for i in range(len(arr) - 2):",
+  "        if is_moo(arr[i], arr[i+1], arr[i+2]):",
+  "            key = arr[i] + arr[i+1] + arr[i+2]",
+  "            moos[key] = moos.get(key, 0) + 1",
+  "    return moos",
+];
+const BR_HELPERS_CPP = [
+  "    auto isMoo = [](char a, char b, char c) {",
+  "        return a != b && b == c;",
+  "    };",
+  "",
+  "    auto countAll = [&](const string& str) {",
+  "        map<string, int> moos;",
+  "        for (int i = 0; i + 2 < (int)str.size(); i++) {",
+  "            if (isMoo(str[i], str[i+1], str[i+2])) {",
+  "                moos[str.substr(i, 3)]++;",
+  "            }",
+  "        }",
+  "        return moos;",
+  "    };",
+];
+
+const BR_LOOP_PY = [
+  "# 원본 문자열에 이미 있는 moo 등록",
+  "for k, v in count_all(s).items():",
+  "    if v >= f:",
+  "        result.add(k)",
+  "",
+  "# 🐌 매 위치 × 26 글자 시도 — TLE 원인!",
+  "for pos in range(n):",
+  "    orig = s[pos]",
+  "    for c in 'abcdefghijklmnopqrstuvwxyz':",
+  "        if c == orig: continue",
+  "        s[pos] = c",
+  "        # 매번 전체 문자열 재스캔 (N 칸)",
+  "        for k, v in count_all(s).items():",
+  "            if v >= f:",
+  "                result.add(k)",
+  "        s[pos] = orig",
+];
+const BR_LOOP_CPP = [
+  "    // 원본 문자열에 이미 있는 moo 등록",
+  "    for (auto& [k, v] : countAll(s))",
+  "        if (v >= f) result.insert(k);",
+  "",
+  "    // 🐌 매 위치 × 26 글자 시도 — TLE 원인!",
+  "    for (int pos = 0; pos < n; pos++) {",
+  "        char orig = s[pos];",
+  "        for (char c = 'a'; c <= 'z'; c++) {",
+  "            if (c == orig) continue;",
+  "            s[pos] = c;",
+  "            // 매번 전체 문자열 재스캔 (N 칸)",
+  "            for (auto& [k, v] : countAll(s))",
+  "                if (v >= f) result.insert(k);",
+  "            s[pos] = orig;",
+  "        }",
+  "    }",
+];
+
+const BR_OUTPUT_PY = [
+  "result = sorted(result)",
+  "print(len(result))",
+  "print('\\n'.join(result))",
+];
+const BR_OUTPUT_CPP = [
+  "    cout << result.size() << \"\\n\";",
+  "    for (auto& m : result) cout << m << \"\\n\";",
+  "    return 0;",
+  "}",
+];
+
+export function getMooBruteSections(E) {
+  return [
+    {
+      label: t(E, "📦 1. Input + Setup", "📦 1. 입력 + 셋업"),
+      color: "#94a3b8",
+      py: BR_INPUT_PY, cpp: BR_INPUT_CPP,
+      why: [
+        t(E, "n = string length, f = threshold (count of moo to qualify).", "n = 문자열 길이, f = moo 개수 기준치."),
+        t(E, "result is a SET — auto-dedupe (same moo found via different positions = once).", "result 는 SET — 중복 자동 제거 (다른 위치에서 같은 moo 발견해도 1 번)."),
+      ],
+      pyOnly: [
+        t(E, "list(input()) — Python strings are immutable; need list to mutate during trials.", "list(input()) — Python 문자열은 변경 불가, 시도 중 변경 위해 리스트 필요."),
+      ],
+      cppOnly: [
+        t(E, "std::string is mutable in C++ — direct s[pos] = c works.", "C++ string 은 변경 가능 — s[pos] = c 바로 가능."),
+      ],
+    },
+    {
+      label: t(E, "🔧 2. Helpers (is_moo + count_all)", "🔧 2. 헬퍼 함수 (is_moo + count_all)"),
+      color: "#0891b2",
+      py: BR_HELPERS_PY, cpp: BR_HELPERS_CPP,
+      why: [
+        t(E, "isMoo: a != b AND b == c. Defines what counts as a moo.", "isMoo: a != b AND b == c. moo 의 정의."),
+        t(E, "count_all: scan ENTIRE string, count every moo pattern. O(N).", "count_all: 전체 문자열 훑어 모든 moo 카운트. O(N)."),
+        t(E, "This is the bottleneck — we'll call count_all 26N times in the loop below!", "이게 병목 — 아래 루프에서 count_all 을 26N 번 호출!"),
+      ],
+      pyOnly: [
+        t(E, "Plain dict with .get(key, 0) for safe defaults. (defaultdict is faster but same idea.)", "기본 dict + .get(key, 0) 안전 기본값. (defaultdict 더 빠르지만 같은 아이디어)"),
+      ],
+      cppOnly: [
+        t(E, "Lambdas with [&] capture for cleaner local helpers.", "[&] 캡처 람다로 로컬 헬퍼 깔끔하게."),
+        t(E, "map<string, int> auto-initializes to 0 on first access via [].", "map<string, int> 은 [] 첫 접근 시 자동 0 초기화."),
+      ],
+    },
+    {
+      label: t(E, "🐌 3. Trial Loop (THE TLE)", "🐌 3. 시도 루프 (TLE 원인!)"),
+      color: "#dc2626",
+      py: BR_LOOP_PY, cpp: BR_LOOP_CPP,
+      why: [
+        t(E, "First: register moos already in original string (no change needed).", "먼저: 원본에 이미 있는 moo 등록 (변경 불필요)."),
+        t(E, "Then: for each of N positions, try all 26 letters — that's 26N trials.", "그 다음: N 위치마다 26 글자 시도 — 총 26N 시도."),
+        t(E, "Each trial calls count_all → O(N) work → Total: 26N × N = 26N² operations.", "각 시도마다 count_all 호출 → O(N) → 총 26N × N = 26N² 연산."),
+        t(E, "Restore s[pos] = orig after each trial — keeps state clean.", "각 시도 후 s[pos] = orig 복원 — 상태 깨끗하게 유지."),
+        t(E, "For N=20,000: 26 × 4×10⁸ = ~10¹⁰ ops → TLE on USACO judge.", "N=20,000: 26 × 4×10⁸ = ~10¹⁰ 연산 → USACO 채점기에서 TLE."),
+      ],
+    },
+    {
+      label: t(E, "📤 4. Sort + Output", "📤 4. 정렬 + 출력"),
+      color: "#94a3b8",
+      py: BR_OUTPUT_PY, cpp: BR_OUTPUT_CPP,
+      why: [
+        t(E, "Sort result alphabetically (problem requires sorted output).", "결과 사전순 정렬 (문제 요구)."),
+        t(E, "Output: count K first, then K moos on separate lines.", "출력: 개수 K 먼저, 그 다음 각 moo 한 줄씩."),
+      ],
+      pyOnly: [
+        t(E, "sorted(result) returns a new sorted list. '\\n'.join() for output.", "sorted(result) 로 정렬 리스트. '\\n'.join() 으로 출력."),
+      ],
+      cppOnly: [
+        t(E, "set<string> already iterates in alphabetical order — no extra sort step.", "set<string> 이 이미 알파벳순 순회 — 추가 sort 불필요."),
+      ],
+    },
+  ];
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
    getMooSections — Python + C++ + reasoning
    ═══════════════════════════════════════════════════════════════ */
 

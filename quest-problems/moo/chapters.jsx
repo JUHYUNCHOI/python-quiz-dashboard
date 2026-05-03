@@ -1,6 +1,6 @@
 import { C, t } from "@/components/quest/theme";
 import { BRUTE_CODE, OPT_CODE, MiniCode } from "./helpers";
-import { getMooSections } from "./components";
+import { getMooSections, getMooBruteSections } from "./components";
 
 export { isMoo, findAllMoos, bruteSolve } from "./helpers";
 
@@ -169,9 +169,10 @@ export function makeMooCh3(E) {
       hint: t(E, "10,400,000,000 ÷ 100,000,000 = ?", "10,400,000,000 ÷ 100,000,000 = ?"),
       answer: 104,
     },
-    { type: "code",
-      narr: t(E, "Here's the brute force code — simple but painfully slow:", "브루트포스 코드 — 단순하지만 고통스럽게 느려:"),
-      code: BRUTE_CODE, label: t(E, "Show brute force code", "브루트포스 코드 보기"),
+    { type: "progressive",
+      narr: t(E, "Brute force code — read it part by part. Notice how the inner loop calls count_all 26N times — that's the TLE.",
+              "브루트포스 코드 — 부분별로 읽어봐. 안쪽 루프가 count_all 을 26N 번 호출하는 게 TLE 원인."),
+      sections: getMooBruteSections(E),
     },
     { type: "reveal",
       narr: t(E, "104 seconds! 😱 But remember from the simulator — changing 1 letter only affects 3 windows, not N. There MUST be a better way!", "104초! 😱 근데 시뮬레이터에서 봤잖아 — 1글자 바꾸면 3개 윈도우만 영향, N개가 아니라. 더 좋은 방법이 있을 거야!"),
