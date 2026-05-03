@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getMajoritySections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -84,7 +85,7 @@ export function makeMajorityCh1(E) {
 /* ═══════════════════════════════════════════════════════════════
    Chapter 2: ⚡ 코드 (2 steps)
    ═══════════════════════════════════════════════════════════════ */
-export function makeMajorityCh2(E) {
+export function makeMajorityCh2(E, lang = "py") {
   return [
     // 2-1: Complexity reveal
     {
@@ -103,14 +104,13 @@ export function makeMajorityCh2(E) {
           </div>
         </div>),
     },
-    // 2-2: Code
+    // 2-2: Progressive code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the full solution. Clean and simple!",
-        "전체 코드야. 깔끔하고 간단해!"),
-      label: t(E, "Python Solution", "Python 풀이"),
-      code: SOLUTION_CODE,
+        "Now build the linear scan step by step.",
+        "선형 스캔을 단계별로 만들자."),
+      sections: getMajoritySections(E),
     },
   ];
 }
