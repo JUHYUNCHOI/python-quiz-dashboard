@@ -49,17 +49,10 @@ export const SIM_CASES = [
 // ═══════════════════════════════════════════════
 export function makeCh1(E) {
   return [
-    // 1-1: 문제 설명 + 구체 예시 (x=48)
+    // 1-1: 문제 설명 + 구체 예시 (x=48). 타이틀/USACO 메타는 breadcrumb 와 중복이라 제거.
     { type: "reveal", narr: t(E, "Two cows (Bessie and Elsie) have different rounding methods. The same number can give different answers — and we count how many such numbers exist.", "두 소 (Bessie 와 Elsie) 의 반올림 방식이 서로 달라서, 같은 수에 대해 답이 다르게 나올 수 있어요. 그런 수가 몇 개인지 세는 문제예요."),
       content: (
         <div style={{ padding: 16 }}>
-          {/* 제목 */}
-          <div style={{ textAlign: "center", marginBottom: 16 }}>
-            <div style={{ fontSize: 32, marginBottom: 2 }}>🏆</div>
-            <div style={{ fontSize: 17, fontWeight: 900, color: C.accent }}>Roundabout Rounding</div>
-            <div style={{ fontSize: 11, color: C.dim, marginTop: 2 }}>USACO 2024 December Bronze #1</div>
-          </div>
-
           {/* 구체 예시 — x=48 */}
           <div style={{ background: "#fff7ed", border: `2px solid #fdba74`, borderRadius: 12, padding: 14, marginBottom: 14 }}>
             <div style={{ fontSize: 12, fontWeight: 800, color: "#c2410c", marginBottom: 8 }}>📌 {t(E, "Example", "예시")}</div>

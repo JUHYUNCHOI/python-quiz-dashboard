@@ -189,41 +189,41 @@ export default function QuestProblemClient({ problemId }: { problemId: string })
             <span className="text-xs font-bold text-green-700">{t("완료", "Done")}</span>
           </div>
         ) : (
+          /* Done — 처음엔 회색 outline 으로 약하게. 학생이 완료해야 강조됨. */
           <button
             onClick={markSolved}
-            className="flex-shrink-0 text-xs font-bold px-2.5 py-1 rounded-full border-2 border-black bg-green-400 text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
+            className="flex-shrink-0 text-xs font-semibold px-2 py-0.5 rounded-full border border-gray-300 bg-white text-gray-500 hover:border-green-400 hover:text-green-600 transition-colors"
+            title={t("문제 끝까지 풀면 클릭", "Click after finishing")}
           >
-            ✅ {t("완료", "Done")}
+            {t("완료", "Done")}
           </button>
         )}
       </div>
 
-      {/* Prev / Next problem — 위쪽으로 이동. App 내부의 step ←→ 와 헷갈리지 않도록.
-          이전엔 페이지 하단에 있어서 App 의 fixed bottom nav (step 이동) 와 한 화면에 같이 노출 → 학생 혼동. */}
-      <div className="bg-amber-50/40 border-b border-amber-200 px-3 py-2 flex gap-2">
+      {/* Prev / Next problem — 단정한 인라인 띠. 한 줄, 작은 폰트, 약한 색.
+          시작 전에 너무 두드러지면 진행 동력을 약하게 하므로 톤 다운. */}
+      <div className="border-b border-gray-200 px-3 py-1 flex items-center gap-2 text-[11px] text-gray-400">
         {prevProblem ? (
           <button
             onClick={() => router.push(`/quest/${prevProblem.id}`)}
-            className="flex-1 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-amber-300 bg-white text-xs font-semibold text-gray-700 hover:bg-amber-50 transition-colors min-w-0"
+            className="flex items-center gap-0.5 hover:text-gray-700 transition-colors min-w-0 truncate"
+            title={prevProblem.title}
           >
-            <ChevronLeft size={14} className="flex-shrink-0 text-amber-600" />
-            <div className="text-left min-w-0">
-              <div className="text-[9px] text-gray-400 font-medium leading-none">{t("이전 문제", "Prev problem")}</div>
-              <div className="truncate leading-tight">{prevProblem.title}</div>
-            </div>
+            <ChevronLeft size={12} />
+            <span className="truncate">{prevProblem.title}</span>
           </button>
         ) : <div className="flex-1" />}
+
+        <div className="flex-1" />
 
         {nextProblem ? (
           <button
             onClick={() => router.push(`/quest/${nextProblem.id}`)}
-            className="flex-1 flex items-center justify-end gap-1.5 px-2.5 py-1.5 rounded-lg border border-amber-300 bg-white text-xs font-semibold text-gray-700 hover:bg-amber-50 transition-colors min-w-0"
+            className="flex items-center gap-0.5 hover:text-gray-700 transition-colors min-w-0 truncate"
+            title={nextProblem.title}
           >
-            <div className="text-right min-w-0">
-              <div className="text-[9px] text-gray-400 font-medium leading-none">{t("다음 문제", "Next problem")}</div>
-              <div className="truncate leading-tight">{nextProblem.title}</div>
-            </div>
-            <ChevronRight size={14} className="flex-shrink-0 text-amber-600" />
+            <span className="truncate">{nextProblem.title}</span>
+            <ChevronRight size={12} />
           </button>
         ) : <div className="flex-1" />}
       </div>

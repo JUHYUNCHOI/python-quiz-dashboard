@@ -12,10 +12,14 @@ export function GlobalTeacherEditorButton() {
   const [open, setOpen] = useState(false)
 
   const isTeacher = profile?.role === "teacher"
-  // /learn 페이지는 헤더에 전용 버튼이 있으므로 중복 제외
+  // /learn 페이지는 헤더에 전용 버튼이 있으므로 중복 제외.
+  // /teach 페이지는 선생님 자료(스크립트) 전용이라 에디터 필요 없음 — 화면 깨끗하게.
+  // /quest/[problemId] 도 학생용 화면이라 에디터 floating 버튼이 콘텐츠와 겹쳐 혼동 유발 → 제외.
   const isLearnPage = pathname?.startsWith("/learn")
+  const isTeachPage = pathname?.startsWith("/teach")
+  const isQuestProblemPage = pathname?.startsWith("/quest/") && pathname !== "/quest"
 
-  if (isLoading || !isTeacher || isLearnPage) return null
+  if (isLoading || !isTeacher || isLearnPage || isTeachPage || isQuestProblemPage) return null
 
   return (
     <>

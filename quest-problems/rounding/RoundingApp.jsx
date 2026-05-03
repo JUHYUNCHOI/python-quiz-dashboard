@@ -30,9 +30,20 @@ export default function RoundingApp(props = {}) {
     setBruteQ(prev => makeBruteSteps(E, codeLang).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
   }, [codeLang, E]);
 
+  // 글로벌 헤더 언어 prop 변경 → 인앱 lang 동기화
+  useEffect(() => {
+    if ((propLang === "ko" || propLang === "en") && propLang !== lang) {
+      switchLang(propLang);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [propLang]);
+
   // --- Navigation ---
   const [tab, setTab] = useState(0);
   const [si, setSi]   = useState(0);
+
+  // 학생이 가본 적 있는 탭 — 탭 라벨에 ✓ 표시 용
+  const [visitedTabs, setVisitedTabs] = useState(() => new Set([0]));
 
   // --- Quiz state (mutable copies for answered tracking) ---
   const [patternQ, setPatternQ] = useState(() => makePatternSteps(false));
@@ -64,6 +75,7 @@ export default function RoundingApp(props = {}) {
   };
   const changeTab = idx => {
     setTab(idx); setSi(0);
+    setVisitedTabs(prev => { const n = new Set(prev); n.add(idx); return n; });
     // 탭 순서: 0=문제, 1=풀어보기, 2=패턴, 3=최적화
     if (idx === 1) setBruteQ(makeBruteSteps(E, codeLang));
     if (idx === 2) setPatternQ(makePatternSteps(E));
@@ -155,15 +167,41 @@ export default function RoundingApp(props = {}) {
     return null;
   };
 
+  // PDF / 코드 언어 컨트롤은 코드가 등장하는 탭(풀어보기·최적화)에서만 의미 있음
+  const showCodeControls = tab === 1 || tab === 3;
+
   return (
     <div>
       <div style={{ maxWidth: "min(820px, 100%)", margin: "0 auto", padding: "0 12px" }}>
-        {/* --- Header + PDF + Language toggle --- */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, gap: 8 }}>
-          <h1 style={{ fontSize: 16, fontWeight: 800, color: C.accent, margin: 0, fontFamily: "'Jua',sans-serif" }}>🔄 Roundabout Rounding</h1>
-          <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-            {/* 코드 언어 선택 — 인앱 + PDF 모두 영향 */}
-            <div style={{ display: "flex", gap: 0, alignItems: "stretch" }}>
+        {/* --- 상단 progress bar — 수업 페이지와 위치 일치 --- */}
+        <div style={{ height: 3, background: "#e5e7eb", borderRadius: 2, marginTop: 8, marginBottom: 10, overflow: "hidden" }}>
+          <div style={{ height: "100%", background: C.accent, borderRadius: 2, width: `${((cur + 1) / steps.length) * 100}%`, transition: "width .3s" }} />
+        </div>
+
+        {/* --- 탭 + (조건부) 코드 컨트롤 한 줄에 --- */}
+        <div style={{ display: "flex", gap: 8, marginBottom: 12, alignItems: "center" }}>
+          <div style={{ display: "flex", gap: 3, overflowX: "auto", paddingBottom: 4, flex: 1 }}>
+            {TABS.map((label, i) => {
+              const isCurrent = i === tab;
+              const isVisited = visitedTabs.has(i) && !isCurrent;
+              return (
+                <button key={i} onClick={() => changeTab(i)} style={{
+                  flex: "0 0 auto", borderRadius: 8, padding: "6px 10px", cursor: "pointer",
+                  fontSize: 12, fontWeight: 700, whiteSpace: "nowrap",
+                  background: isCurrent ? C.accent : (isVisited ? C.okBg : "transparent"),
+                  border: `1.5px solid ${isCurrent ? C.accent : (isVisited ? C.okBd : C.border)}`,
+                  color: isCurrent ? "#fff" : (isVisited ? C.ok : C.dim),
+                  display: "flex", alignItems: "center", gap: 4,
+                }}>
+                  {isVisited && <span style={{ fontSize: 10 }}>✓</span>}
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+
+          {showCodeControls && (
+            <div style={{ display: "flex", gap: 0, alignItems: "stretch", flexShrink: 0 }}>
               <select
                 value={codeLang}
                 onChange={e => setCodeLang(e.target.value)}
@@ -178,8 +216,7 @@ export default function RoundingApp(props = {}) {
               </select>
               <button
                 onClick={() => downloadFullPDF(E, getOptSections(E), codeLang)}
-                title={t(E, "Download full study guide (problem + brute + pattern + optimal)",
-                            "전체 풀이 다운로드 (문제 + 브루트 + 패턴 + 최적화)")}
+                title={t(E, "Download full study guide", "전체 풀이 PDF 다운로드")}
                 style={{
                   background: C.accent, color: "#fff", border: `1.5px solid ${C.accent}`,
                   borderRadius: "0 8px 8px 0",
@@ -189,29 +226,11 @@ export default function RoundingApp(props = {}) {
                 📄 PDF
               </button>
             </div>
-            <div style={{ display: "flex", gap: 2, background: C.card, borderRadius: 8, border: `1.5px solid ${C.border}`, padding: 2 }}>
-              {[["ko","🇰🇷"],["en","🇺🇸"]].map(([v, flag]) => (
-                <button key={v} onClick={() => switchLang(v)} style={{
-                  background: lang === v ? C.accent : "transparent", border: "none", borderRadius: 6,
-                  padding: "4px 8px", cursor: "pointer", fontSize: 14, color: lang === v ? "#fff" : C.dim,
-                }}>{flag}</button>
-              ))}
-            </div>
-          </div>
+          )}
         </div>
 
-        {/* --- Tab navigation --- */}
-        <div style={{ display: "flex", gap: 3, marginBottom: 12, overflowX: "auto", paddingBottom: 4 }}>
-          {TABS.map((label, i) => (
-            <button key={i} onClick={() => changeTab(i)} style={{
-              flex: "0 0 auto", borderRadius: 8, padding: "6px 10px", cursor: "pointer",
-              fontSize: 12, fontWeight: 700, whiteSpace: "nowrap",
-              background: i === tab ? C.accent : "transparent",
-              border: `1.5px solid ${i === tab ? C.accent : C.border}`,
-              color: i === tab ? "#fff" : C.dim,
-            }}>{label}</button>
-          ))}
-        </div>
+        {/* 언어 토글 (한국어/영어) — 글로벌 헤더에 이미 있으니 자체 토글 제거.
+            switchLang 은 글로벌 lang prop 변경 시 useEffect 에서 호출됨. */}
 
         {/* --- Narration --- */}
         {step.narr && <Narration key={`${tab}-${cur}-${lang}`} text={step.narr} color={nc.c} bg={nc.bg} bd={nc.bd} />}
@@ -255,9 +274,7 @@ export default function RoundingApp(props = {}) {
               color: !canNext ? "#b0b5c3" : "#fff",
             }}>→</button>
           </div>
-          <div style={{ marginTop: 6, height: 3, background: "#e5e7eb", borderRadius: 2 }}>
-            <div style={{ height: "100%", background: C.accent, borderRadius: 2, width: `${((cur + 1) / steps.length) * 100}%`, transition: "width .3s" }} />
-          </div>
+          {/* progress bar 는 상단으로 이동 (수업과 일치) — 여기선 제거 */}
         </div>
       </div>
     </div>
