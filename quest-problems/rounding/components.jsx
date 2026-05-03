@@ -256,11 +256,13 @@ export function BruteRunner({ E }) {
   const [results, setResults] = useState(null);
   const [progress, setProgress] = useState(0);
   const alive = useRef(false);
+  const startTimeRef = useRef(0);
 
   const run = () => {
     const N = Math.min(Math.max(parseInt(n) || 10, 10), 100000);
     setN(N); setRunning(true); setResults(null); setProgress(0);
     alive.current = true;
+    startTimeRef.current = performance.now();
     const found = []; let idx = 2;
     const tick = () => {
       if (!alive.current) { setRunning(false); return; }
@@ -272,12 +274,36 @@ export function BruteRunner({ E }) {
         }
       }
       setProgress(Math.floor((idx - 2) / (N - 1) * 100));
-      if (idx > N) { setRunning(false); setResults({ found, total: found.length, N }); alive.current = false; }
+      if (idx > N) {
+        const elapsed = performance.now() - startTimeRef.current;
+        setRunning(false);
+        setResults({ found, total: found.length, N, elapsedMs: elapsed });
+        alive.current = false;
+      }
       else setTimeout(tick, N > 5000 ? 1 : 16);
     };
     setTimeout(tick, 50);
   };
   const stop = () => { alive.current = false; setRunning(false); };
+
+  // USACO 추정: 브라우저는 setTimeout 으로 인해 인위적으로 늦어졌으니
+  // CPU 연산 시간만 추정 — N 당 ~10 연산 (Bessie + Elsie 각각의 자릿수 루프)
+  // C++ 가 1억 ops/sec 라고 보면 N=10^9 에서 ~10×10^9 / 10^8 = 100 초 / 쿼리
+  const estimateUSACO = (N) => {
+    const opsPerN = 10;
+    const cppOpsPerSec = 1e8;
+    const queries = 10;
+    const secondsPerQuery = (N * opsPerN) / cppOpsPerSec;
+    const totalSeconds = secondsPerQuery * queries;
+    return totalSeconds;
+  };
+  const fmtTime = (sec) => {
+    if (sec < 1) return `${(sec * 1000).toFixed(0)}ms`;
+    if (sec < 60) return `${sec.toFixed(1)}s`;
+    if (sec < 3600) return `${(sec / 60).toFixed(1)}분`;
+    if (sec < 86400) return `${(sec / 3600).toFixed(1)}시간`;
+    return `${(sec / 86400).toFixed(1)}일`;
+  };
 
   return (
     <div style={{ padding: 16 }}>
@@ -311,7 +337,66 @@ export function BruteRunner({ E }) {
           <div style={{ textAlign: "center", padding: "12px 0", marginBottom: 10 }}>
             <div style={{ fontSize: 11, color: C.dim, fontWeight: 700 }}>{t(E, `2 ~ ${results.N} checked`, `2 ~ ${results.N} 확인 완료`)}</div>
             <div style={{ fontSize: 36, fontWeight: 900, color: C.accent, fontFamily: "'JetBrains Mono',monospace" }}>{results.total}</div>
-            <div style={{ fontSize: 12, color: C.dim }}>{t(E, "different results", "개 발견")}</div>
+            <div style={{ fontSize: 12, color: C.dim }}>{t(E, "different x found", "개 (답이 다른 x)")}</div>
+          </div>
+
+          {/* 실제 측정 시간 (브라우저) — 가장 명확한 timing 신호 */}
+          <div style={{
+            background: "#fff", border: `2px solid ${results.elapsedMs > 500 ? C.no : C.okBd}`, borderRadius: 10,
+            padding: "10px 14px", marginBottom: 10,
+            display: "flex", justifyContent: "space-between", alignItems: "center",
+          }}>
+            <div>
+              <div style={{ fontSize: 10, fontWeight: 800, color: C.dim, letterSpacing: 0.5 }}>
+                ⏱️ {t(E, "BROWSER TIME (this run)", "브라우저 측정 시간")}
+              </div>
+              <div style={{ fontSize: 18, fontWeight: 900, color: results.elapsedMs > 500 ? C.no : C.ok, fontFamily: "'JetBrains Mono',monospace" }}>
+                {fmtTime(results.elapsedMs / 1000)}
+              </div>
+            </div>
+            <div style={{ fontSize: 10, color: C.dim, textAlign: "right", lineHeight: 1.5, maxWidth: 180 }}>
+              {t(E, "JS animation overhead included — actual brute work is faster.",
+                  "setTimeout 애니메이션 시간 포함 — 순수 brute 연산은 더 빠름.")}
+            </div>
+          </div>
+
+          {/* USACO 채점기 추정 (실제 제출 시) */}
+          <div style={{
+            background: "linear-gradient(135deg, #fef2f2, #fff)", border: `2px solid ${C.noBd}`, borderRadius: 10,
+            padding: "10px 14px", marginBottom: 10,
+          }}>
+            <div style={{ fontSize: 10, fontWeight: 800, color: C.no, letterSpacing: 0.5, marginBottom: 6 }}>
+              🏆 {t(E, "ON USACO JUDGE — REAL ESTIMATE", "USACO 채점기 — 실제 추정")}
+            </div>
+            <table style={{ width: "100%", fontSize: 12, fontFamily: "'JetBrains Mono',monospace", borderCollapse: "collapse" }}>
+              <tbody>
+                {[
+                  { N: results.N, label: t(E, "your N", "지금 N") },
+                  { N: 1_000_000, label: "10⁶" },
+                  { N: 1_000_000_000, label: "10⁹ (max)" },
+                ].map((row, i) => {
+                  const sec = estimateUSACO(row.N);
+                  const tle = sec > 2;
+                  return (
+                    <tr key={i} style={{ borderTop: i > 0 ? "1px solid #fee2e2" : "none" }}>
+                      <td style={{ padding: "4px 0", fontWeight: 700, color: C.dim }}>N = {row.N.toLocaleString()}</td>
+                      <td style={{ padding: "4px 6px", fontSize: 10, color: C.dim }}>{row.label}</td>
+                      <td style={{ padding: "4px 0", textAlign: "right", fontWeight: 800, color: tle ? C.no : C.ok }}>
+                        {fmtTime(sec)}
+                      </td>
+                      <td style={{ padding: "4px 0 4px 6px", textAlign: "right", fontWeight: 800, color: tle ? C.no : C.ok, minWidth: 32 }}>
+                        {tle ? "TLE" : "✓"}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            <div style={{ marginTop: 6, fontSize: 10, color: C.dim, lineHeight: 1.5 }}>
+              {t(E,
+                "Estimate: ~10 ops per x × 10 queries / 10⁸ ops/sec (typical C++ throughput).",
+                "추정: x 당 ~10 연산 × 10 쿼리 / 1억 ops/sec (C++ 대략 처리량).")}
+            </div>
           </div>
 
           {results.found.length > 0 && (
@@ -343,8 +428,9 @@ export function BruteRunner({ E }) {
           )}
 
           {results.N >= 5000 && (
-            <div style={{ marginTop: 10, padding: "8px 12px", background: C.carryBg, borderRadius: 8, fontSize: 12, color: C.carry, fontWeight: 700, textAlign: "center" }}>
-              {t(E, "Feel the slowness? That's why we need O(log N)!", "느려지는 거 느껴져? 이래서 O(log N)이 필요해!")}
+            <div style={{ marginTop: 10, padding: "10px 12px", background: C.carryBg, borderRadius: 8, fontSize: 12, color: C.carry, fontWeight: 700, textAlign: "center" }}>
+              {t(E, "Even if browser runs fast — at N=10⁹ on judge, this brute is HOPELESSLY slow.",
+                  "브라우저는 빨라도 — N=10⁹ 채점기에선 이 brute 는 절망적으로 느림.")}
             </div>
           )}
         </div>
