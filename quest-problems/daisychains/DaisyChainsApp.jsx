@@ -42,8 +42,9 @@ export default function DaisyChainsApp(props = {}) {
   const makers  = { 0: makeDaisyCh1, 1: makeDaisyCh2, 2: (e) => makeDaisyCh3(e, codeLang) };
 
   const switchLang = nl => {
-    const ne = nl === "en"; setLang(nl); setSi(0);
-    for (const k of [0, 1, 2]) setters[k](makers[k](ne));
+    const ne = nl === "en"; setLang(nl);
+    // Preserve current step + answered/solved state across language change
+    for (const k of [0, 1, 2]) setters[k](prev => makers[k](ne).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
   };
   const changeTab = idx => {
     setTab(idx); setSi(0);

@@ -42,8 +42,9 @@ export default function WhereAmIApp(props = {}) {
   const makers  = { 0: makeWhereAmICh1, 1: makeWhereAmICh2, 2: (e) => makeWhereAmICh3(e, codeLang) };
 
   const switchLang = nl => {
-    const ne = nl === "en"; setLang(nl); setSi(0);
-    for (const k of [0, 1, 2]) setters[k](makers[k](ne));
+    const ne = nl === "en"; setLang(nl);
+    // Preserve current step + answered/solved state across language change
+    for (const k of [0, 1, 2]) setters[k](prev => makers[k](ne).map((s, i) => ({ ...s, answered: prev[i]?.answered, solved: prev[i]?.solved })));
   };
   const changeTab = idx => {
     setTab(idx); setSi(0);
