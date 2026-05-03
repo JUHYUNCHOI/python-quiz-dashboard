@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getPalindromeSections } from "./components";
 
 /* ================================================================
    SOLUTION CODE
@@ -115,7 +116,7 @@ export function makePalindromeCh1(E) {
 /* ================================================================
    Chapter 2: Code (2 steps)
    ================================================================ */
-export function makePalindromeCh2(E) {
+export function makePalindromeCh2(E, lang = "py") {
   return [
     // 2-1: Strategy reveal
     {
@@ -140,14 +141,13 @@ export function makePalindromeCh2(E) {
           </div>
         </div>),
     },
-    // 2-2: Solution code
+    // 2-2: Progressive code
     {
-      type: "code",
+      type: "progressive",
       narr: t(E,
-        "Here's the solution! Check if S is a palindrome first, then use game theory.",
-        "풀이 코드야! 먼저 S가 회문인지 확인하고, 게임 이론을 써."),
-      label: t(E, "Palindrome Game Solution", "회문 게임 풀이"),
-      code: SOLUTION_CODE,
+        "Now build the game-theory DP step by step.",
+        "게임 이론 DP를 단계별로 만들자."),
+      sections: getPalindromeSections(E),
     },
   ];
 }
