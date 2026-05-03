@@ -21,34 +21,33 @@ export const cppLesson19EnData: LessonData = {
         {
           id: "ch0-notice",
           type: "explain",
-          title: "📌 You don't need to memorize this **now**",
-          content: `This lesson is **reference material**. You don't need to spend time memorizing it now.
+          title: "⚡ Fast I/O — must learn before algorithms",
+          content: `This lesson is **part of the main track**. You should hit this once before moving on to algorithms (BFS/DFS, DP, etc.).
 
-### Why?
+### Why now?
 
-The two topics — **File I/O** and **Fast I/O** — are all about **when** you use them. And that **when** is later, while solving real problems.
+Algorithm problems often have **hundreds of thousands** of input lines. Plain \`cin >> x\` will hit **Time Limit Exceeded**. Adding just two lines at the top of main makes it ~3-5× faster:
 
-| Tool | When you actually need it |
-|---|---|
-| **Fast I/O** (\`sync_with_stdio(false)\`) | When your algorithm code hits **Time Limit Exceeded** |
-| **File I/O** (\`ifstream\` / \`ofstream\` / \`freopen\`) | Old USACO problems with \`.in\` / \`.out\` files |
+\`\`\`cpp
+ios::sync_with_stdio(false);
+cin.tie(nullptr);
+\`\`\`
 
-Pre-learning these now means **forgetting them by the time you need them**. Setup-line-style content doesn't stick without context.
+This is **Fast I/O**. Almost every USACO / Codeforces / Baekjoon solution starts with this. Skip it now and you'll be confused later when you see it everywhere.
 
-### So when **should** you read it?
+### What this lesson covers
 
-- Algorithm Lab code times out → "wait, Fast I/O — let me grab that line." Come back here.
-- Hit an old USACO problem → "right, freopen." Come back here.
+| Tool | When to use | Importance |
+|---|---|---|
+| ⚡ **Fast I/O** (\`sync_with_stdio(false)\`) | Almost all algorithm problems | 🔥 Essential |
+| 📄 **File I/O** (\`ifstream\` / \`freopen\`) | Old USACO with \`.in\` / \`.out\` files | Nice to know |
 
-Open this lesson at **that** moment and read just the page you need.
+**Memorize Fast I/O before moving on.** File I/O you can revisit when you meet the official USACO judge — but a quick first read here builds the intuition.
 
-### So now?
+### Order
 
-- **Skip it** — the next lesson isn't gated on this
-- **Browse it if curious** — content is still here
-- **Don't try to memorize it** — without context, it's wasted effort
-
-> Move on to algorithms now. Come back when you actually need it — that's the real way to learn this.`
+1. File I/O (freopen, getline) — quick skim
+2. **Fast I/O — the key part. Memorize this.**`
         }
       ]
     },
