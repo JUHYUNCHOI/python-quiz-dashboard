@@ -1,4 +1,5 @@
 import { C, t } from "@/components/quest/theme";
+import { getMooin3Sections } from "./components";
 
 export const SOLUTION_CODE = [
   "N, Q = map(int, input().split())",
@@ -82,7 +83,7 @@ export function makeMooin3Ch1(E) {
   ];
 }
 
-export function makeMooin3Ch2(E) {
+export function makeMooin3Ch2(E, lang = "py") {
   return [
     {
       type: "reveal",
@@ -96,10 +97,11 @@ export function makeMooin3Ch2(E) {
         </div>),
     },
     {
-      type: "code",
-      narr: t(E, "Fix middle, maximize distances!", "중간 고정, 거리 최대화!"),
-      label: t(E, "💻 Complete Solution", "💻 전체 솔루션"),
-      code: SOLUTION_CODE,
+      type: "progressive",
+      narr: t(E,
+        "Now build the brute-force solution step by step.",
+        "완전탐색을 단계별로 만들자."),
+      sections: getMooin3Sections(E),
     },
   ];
 }
